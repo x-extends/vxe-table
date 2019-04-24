@@ -25,9 +25,8 @@ A powerful table component.
 ## Table 表格
 
 ```html
-<xe-table
-  :data.sync="tableData">
-  <xe-column-checkbox prop="checked" width="60"></xe-column-checkbox>
+<xe-table :data.sync="tableData">
+  <xe-column-checkbox width="60"></xe-column-checkbox>
   <xe-column-cell prop="name" label="Name"></xe-column-cell>
   <xe-column-cell prop="address" label="Address"></xe-column-cell>
 </xe-table>
@@ -166,3 +165,37 @@ A powerful table component.
 | 事件名 | 说明 | 参数 |
 |------|------|-----|
 | change | 当选择项发生变化时会触发该事件 | selection, row |
+
+## Example
+
+```html
+<template>
+  <div>
+    <xe-table :data.sync="tableData">
+      <xe-column-checkbox width="60"></xe-column-checkbox>
+      <xe-column-cell prop="name" label="Name"></xe-column-cell>
+      <xe-column-cell prop="sex" label="Sex"></xe-column-cell>
+      <xe-column-cell prop="address" label="Address"></xe-column-cell>
+    </xe-table>
+  </div>
+</template>
+
+<script>
+export default {
+  data () {
+    return {
+      tableData: [{
+        date: 1551322088449,
+        name: 'Xu Liangzhan',
+        sex: 'Man',
+        address: 'Address'
+      }]
+    }
+  }
+}
+</script>
+```
+
+## License
+
+Copyright (c) 2017-present, Xu Liangzhan
