@@ -1,11 +1,11 @@
-# vvxe-table
+# vxe-table
 
 A powerful table component.
 一个功能更加强大、高扩展性、高性能的表格组件
 
 ## Docs
 
-[https://xuliangzhan.github.io/vvxe-table/](https://xuliangzhan.github.io/vvxe-table/)
+[https://xuliangzhan.github.io/vxe-table/](https://xuliangzhan.github.io/vxe-table/)
 
 ## API
 
