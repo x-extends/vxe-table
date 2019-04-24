@@ -6,10 +6,10 @@
 
 * [xe-table 功能组件](user-content-table-表格)
   * [column-cell 基本列](user-content-cell-基本列)
-  * **column-group 分组列**
-  * **column-index 索引列**
-  * **column-radio 单选列**
-  * **column-checkbox 多选列**
+  * [column-group 分组列](user-content-group-分组列)
+  * [column-index 索引列](user-content-index-索引列)
+  * [column-radio 单选列](user-content-radio-单选列)
+  * [column-checkbox 多选列](user-content-checkbox-多选列)
   * column-sort 排序列
   * column-filter 筛选列
   * column-expand 展开列
