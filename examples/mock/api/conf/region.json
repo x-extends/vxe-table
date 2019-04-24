@@ -1,0 +1,788 @@
+[
+  {
+    "value": 1,
+    "label": "北京",
+    "children": [
+      {
+        "value": 1,
+        "label": "北京市",
+        "children": [
+          {
+            "value": 1,
+            "label": "东城区"
+          },
+          {
+            "value": 2,
+            "label": "西城区"
+          },
+          {
+            "value": 3,
+            "label": "崇文区"
+          },
+          {
+            "value": 4,
+            "label": "宣武区"
+          },
+          {
+            "value": 5,
+            "label": "朝阳区"
+          },
+          {
+            "value": 6,
+            "label": "丰台区"
+          },
+          {
+            "value": 7,
+            "label": "石景山区"
+          },
+          {
+            "value": 8,
+            "label": "海淀区"
+          },
+          {
+            "value": 9,
+            "label": "门头沟区"
+          },
+          {
+            "value": 10,
+            "label": "房山区"
+          },
+          {
+            "value": 11,
+            "label": "通州区"
+          },
+          {
+            "value": 12,
+            "label": "顺义区"
+          },
+          {
+            "value": 13,
+            "label": "昌平区"
+          },
+          {
+            "value": 14,
+            "label": "大兴区"
+          },
+          {
+            "value": 15,
+            "label": "怀柔区"
+          },
+          {
+            "value": 16,
+            "label": "平谷区"
+          },
+          {
+            "value": 17,
+            "label": "密云县"
+          },
+          {
+            "value": 18,
+            "label": "延庆县"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "value": 9,
+    "label": "上海",
+    "children": [
+      {
+        "value": 73,
+        "label": "上海市",
+        "children": [
+          {
+            "value": 719,
+            "label": "黄浦区"
+          },
+          {
+            "value": 720,
+            "label": "卢湾区"
+          },
+          {
+            "value": 721,
+            "label": "徐汇区"
+          },
+          {
+            "value": 722,
+            "label": "长宁区"
+          },
+          {
+            "value": 723,
+            "label": "静安区"
+          },
+          {
+            "value": 724,
+            "label": "普陀区"
+          },
+          {
+            "value": 725,
+            "label": "闸北区"
+          },
+          {
+            "value": 726,
+            "label": "虹口区"
+          },
+          {
+            "value": 727,
+            "label": "杨浦区"
+          },
+          {
+            "value": 728,
+            "label": "闵行区"
+          },
+          {
+            "value": 729,
+            "label": "宝山区"
+          },
+          {
+            "value": 730,
+            "label": "嘉定区"
+          },
+          {
+            "value": 731,
+            "label": "浦东新区"
+          },
+          {
+            "value": 732,
+            "label": "金山区"
+          },
+          {
+            "value": 733,
+            "label": "松江区"
+          },
+          {
+            "value": 734,
+            "label": "青浦区"
+          },
+          {
+            "value": 735,
+            "label": "南汇区"
+          },
+          {
+            "value": 736,
+            "label": "奉贤区"
+          },
+          {
+            "value": 737,
+            "label": "崇明县"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "value": 19,
+    "label": "广东",
+    "children": [
+      {
+        "value": 197,
+        "label": "广州市",
+        "children": [
+          {
+            "value": 1747,
+            "label": "东山区"
+          },
+          {
+            "value": 1748,
+            "label": "荔湾区"
+          },
+          {
+            "value": 1749,
+            "label": "越秀区"
+          },
+          {
+            "value": 1750,
+            "label": "海珠区"
+          },
+          {
+            "value": 1751,
+            "label": "天河区"
+          },
+          {
+            "value": 1752,
+            "label": "芳村区"
+          },
+          {
+            "value": 1753,
+            "label": "白云区"
+          },
+          {
+            "value": 1754,
+            "label": "黄埔区"
+          },
+          {
+            "value": 1755,
+            "label": "番禺区"
+          },
+          {
+            "value": 1756,
+            "label": "花都区"
+          },
+          {
+            "value": 1757,
+            "label": "增城市"
+          },
+          {
+            "value": 1758,
+            "label": "从化市"
+          }
+        ]
+      },
+      {
+        "value": 198,
+        "label": "韶关市",
+        "children": [
+          {
+            "value": 1759,
+            "label": "武江区"
+          },
+          {
+            "value": 1760,
+            "label": "浈江区"
+          },
+          {
+            "value": 1761,
+            "label": "曲江区"
+          },
+          {
+            "value": 1762,
+            "label": "始兴县"
+          },
+          {
+            "value": 1763,
+            "label": "仁化县"
+          },
+          {
+            "value": 1764,
+            "label": "翁源县"
+          },
+          {
+            "value": 1765,
+            "label": "乳源瑶族自治县"
+          },
+          {
+            "value": 1766,
+            "label": "新丰县"
+          },
+          {
+            "value": 1767,
+            "label": "乐昌市"
+          },
+          {
+            "value": 1768,
+            "label": "南雄市"
+          }
+        ]
+      },
+      {
+        "value": 199,
+        "label": "深圳市",
+        "children": [
+          {
+            "value": 1769,
+            "label": "罗湖区"
+          },
+          {
+            "value": 1770,
+            "label": "福田区"
+          },
+          {
+            "value": 1771,
+            "label": "南山区"
+          },
+          {
+            "value": 1772,
+            "label": "宝安区"
+          },
+          {
+            "value": 1773,
+            "label": "龙岗区"
+          },
+          {
+            "value": 1774,
+            "label": "盐田区"
+          }
+        ]
+      },
+      {
+        "value": 200,
+        "label": "珠海市",
+        "children": [
+          {
+            "value": 1775,
+            "label": "香洲区"
+          },
+          {
+            "value": 1776,
+            "label": "斗门区"
+          },
+          {
+            "value": 1777,
+            "label": "金湾区"
+          }
+        ]
+      },
+      {
+        "value": 201,
+        "label": "汕头市",
+        "children": [
+          {
+            "value": 1778,
+            "label": "龙湖区"
+          },
+          {
+            "value": 1779,
+            "label": "金平区"
+          },
+          {
+            "value": 1780,
+            "label": "濠江区"
+          },
+          {
+            "value": 1781,
+            "label": "潮阳区"
+          },
+          {
+            "value": 1782,
+            "label": "潮南区"
+          },
+          {
+            "value": 1783,
+            "label": "澄海区"
+          },
+          {
+            "value": 1784,
+            "label": "南澳县"
+          }
+        ]
+      },
+      {
+        "value": 202,
+        "label": "佛山市",
+        "children": [
+          {
+            "value": 1785,
+            "label": "禅城区"
+          },
+          {
+            "value": 1786,
+            "label": "南海区"
+          },
+          {
+            "value": 1787,
+            "label": "顺德区"
+          },
+          {
+            "value": 1788,
+            "label": "三水区"
+          },
+          {
+            "value": 1789,
+            "label": "高明区"
+          }
+        ]
+      },
+      {
+        "value": 203,
+        "label": "江门市",
+        "children": [
+          {
+            "value": 1790,
+            "label": "蓬江区"
+          },
+          {
+            "value": 1791,
+            "label": "江海区"
+          },
+          {
+            "value": 1792,
+            "label": "新会区"
+          },
+          {
+            "value": 1793,
+            "label": "台山市"
+          },
+          {
+            "value": 1794,
+            "label": "开平市"
+          },
+          {
+            "value": 1795,
+            "label": "鹤山市"
+          },
+          {
+            "value": 1796,
+            "label": "恩平市"
+          }
+        ]
+      },
+      {
+        "value": 204,
+        "label": "湛江市",
+        "children": [
+          {
+            "value": 1797,
+            "label": "赤坎区"
+          },
+          {
+            "value": 1798,
+            "label": "霞山区"
+          },
+          {
+            "value": 1799,
+            "label": "坡头区"
+          },
+          {
+            "value": 1800,
+            "label": "麻章区"
+          },
+          {
+            "value": 1801,
+            "label": "遂溪县"
+          },
+          {
+            "value": 1802,
+            "label": "徐闻县"
+          },
+          {
+            "value": 1803,
+            "label": "廉江市"
+          },
+          {
+            "value": 1804,
+            "label": "雷州市"
+          },
+          {
+            "value": 1805,
+            "label": "吴川市"
+          }
+        ]
+      },
+      {
+        "value": 205,
+        "label": "茂名市",
+        "children": [
+          {
+            "value": 1806,
+            "label": "茂南区"
+          },
+          {
+            "value": 1807,
+            "label": "茂港区"
+          },
+          {
+            "value": 1808,
+            "label": "电白县"
+          },
+          {
+            "value": 1809,
+            "label": "高州市"
+          },
+          {
+            "value": 1810,
+            "label": "化州市"
+          },
+          {
+            "value": 1811,
+            "label": "信宜市"
+          }
+        ]
+      },
+      {
+        "value": 206,
+        "label": "肇庆市",
+        "children": [
+          {
+            "value": 1812,
+            "label": "端州区"
+          },
+          {
+            "value": 1813,
+            "label": "鼎湖区"
+          },
+          {
+            "value": 1814,
+            "label": "广宁县"
+          },
+          {
+            "value": 1815,
+            "label": "怀集县"
+          },
+          {
+            "value": 1816,
+            "label": "封开县"
+          },
+          {
+            "value": 1817,
+            "label": "德庆县"
+          },
+          {
+            "value": 1818,
+            "label": "高要市"
+          },
+          {
+            "value": 1819,
+            "label": "四会市"
+          }
+        ]
+      },
+      {
+        "value": 207,
+        "label": "惠州市",
+        "children": [
+          {
+            "value": 1820,
+            "label": "惠城区"
+          },
+          {
+            "value": 1821,
+            "label": "惠阳区"
+          },
+          {
+            "value": 1822,
+            "label": "博罗县"
+          },
+          {
+            "value": 1823,
+            "label": "惠东县"
+          },
+          {
+            "value": 1824,
+            "label": "龙门县"
+          }
+        ]
+      },
+      {
+        "value": 208,
+        "label": "梅州市",
+        "children": [
+          {
+            "value": 1825,
+            "label": "梅江区"
+          },
+          {
+            "value": 1826,
+            "label": "梅县"
+          },
+          {
+            "value": 1827,
+            "label": "大埔县"
+          },
+          {
+            "value": 1828,
+            "label": "丰顺县"
+          },
+          {
+            "value": 1829,
+            "label": "五华县"
+          },
+          {
+            "value": 1830,
+            "label": "平远县"
+          },
+          {
+            "value": 1831,
+            "label": "蕉岭县"
+          },
+          {
+            "value": 1832,
+            "label": "兴宁市"
+          }
+        ]
+      },
+      {
+        "value": 209,
+        "label": "汕尾市",
+        "children": [
+          {
+            "value": 1833,
+            "label": "城区"
+          },
+          {
+            "value": 1834,
+            "label": "海丰县"
+          },
+          {
+            "value": 1835,
+            "label": "陆河县"
+          },
+          {
+            "value": 1836,
+            "label": "陆丰市"
+          }
+        ]
+      },
+      {
+        "value": 210,
+        "label": "河源市",
+        "children": [
+          {
+            "value": 1837,
+            "label": "源城区"
+          },
+          {
+            "value": 1838,
+            "label": "紫金县"
+          },
+          {
+            "value": 1839,
+            "label": "龙川县"
+          },
+          {
+            "value": 1840,
+            "label": "连平县"
+          },
+          {
+            "value": 1841,
+            "label": "和平县"
+          },
+          {
+            "value": 1842,
+            "label": "东源县"
+          }
+        ]
+      },
+      {
+        "value": 211,
+        "label": "阳江市",
+        "children": [
+          {
+            "value": 1843,
+            "label": "江城区"
+          },
+          {
+            "value": 1844,
+            "label": "阳西县"
+          },
+          {
+            "value": 1845,
+            "label": "阳东县"
+          },
+          {
+            "value": 1846,
+            "label": "阳春市"
+          }
+        ]
+      },
+      {
+        "value": 212,
+        "label": "清远市",
+        "children": [
+          {
+            "value": 1847,
+            "label": "清城区"
+          },
+          {
+            "value": 1848,
+            "label": "佛冈县"
+          },
+          {
+            "value": 1849,
+            "label": "阳山县"
+          },
+          {
+            "value": 1850,
+            "label": "连山壮族瑶族自治县"
+          },
+          {
+            "value": 1851,
+            "label": "连南瑶族自治县"
+          },
+          {
+            "value": 1852,
+            "label": "清新县"
+          },
+          {
+            "value": 1853,
+            "label": "英德市"
+          },
+          {
+            "value": 1854,
+            "label": "连州市"
+          }
+        ]
+      },
+      {
+        "value": 213,
+        "label": "东莞市",
+        "children": []
+      },
+      {
+        "value": 214,
+        "label": "中山市",
+        "children": []
+      },
+      {
+        "value": 215,
+        "label": "潮州市",
+        "children": [
+          {
+            "value": 1855,
+            "label": "湘桥区"
+          },
+          {
+            "value": 1856,
+            "label": "潮安县"
+          },
+          {
+            "value": 1857,
+            "label": "饶平县"
+          }
+        ]
+      },
+      {
+        "value": 216,
+        "label": "揭阳市",
+        "children": [
+          {
+            "value": 1858,
+            "label": "榕城区"
+          },
+          {
+            "value": 1859,
+            "label": "揭东县"
+          },
+          {
+            "value": 1860,
+            "label": "揭西县"
+          },
+          {
+            "value": 1861,
+            "label": "惠来县"
+          },
+          {
+            "value": 1862,
+            "label": "普宁市"
+          }
+        ]
+      },
+      {
+        "value": 217,
+        "label": "云浮市",
+        "children": [
+          {
+            "value": 1863,
+            "label": "云城区"
+          },
+          {
+            "value": 1864,
+            "label": "新兴县"
+          },
+          {
+            "value": 1865,
+            "label": "郁南县"
+          },
+          {
+            "value": 1866,
+            "label": "云安县"
+          },
+          {
+            "value": 1867,
+            "label": "罗定市"
+          }
+        ]
+      }
+    ]
+  }
+]

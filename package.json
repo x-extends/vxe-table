@@ -1,0 +1,75 @@
+{
+  "name": "vxe-table",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A powerful table component.",
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint",
+    "lib": "vue-cli-service build --target lib --name index --dest lib src/index.js"
+  },
+  "files": [
+    "lib",
+    "types",
+    "src"
+  ],
+  "main": "lib/index.common.js",
+  "style": "lib/index.css",
+  "unpkg": "lib/index.umd.js",
+  "jsdelivr": "lib/index.umd.js",
+  "typings": "types/index.d.ts",
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "^3.6.0",
+    "@vue/cli-plugin-eslint": "^3.6.0",
+    "@vue/cli-service": "^3.6.0",
+    "@vue/eslint-config-standard": "^4.0.0",
+    "babel-eslint": "^10.0.1",
+    "core-js": "^2.6.5",
+    "element-ui": "^2.7.2",
+    "eslint": "^5.16.0",
+    "eslint-plugin-vue": "^5.0.0",
+    "iview": "^3.4.0",
+    "node-sass": "^4.9.0",
+    "sass-loader": "^7.1.0",
+    "vue": "^2.6.10",
+    "vue-router": "^3.0.3",
+    "vue-template-compiler": "^2.6.10",
+    "xe-ajax": "^3.5.3",
+    "xe-ajax-mock": "^1.7.10",
+    "xe-utils": "^1.8.19"
+  },
+  "peerDependencies": {
+    "vue": "^2.6.10",
+    "xe-utils": "^1.8.19"
+  },
+  "postcss": {
+    "plugins": {
+      "autoprefixer": {}
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xuliangzhan/vxe-table.git"
+  },
+  "keywords": [
+    "vxe-table",
+    "vxe-editable",
+    "vue table",
+    "vue editable"
+  ],
+  "author": {
+    "name": "Xu Liangzhan",
+    "email": "xu_liangzhan@163.com"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/xuliangzhan/vxe-table/issues"
+  },
+  "homepage": "https://github.com/xuliangzhan/vxe-table#readme",
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not ie <= 8"
+  ]
+}
