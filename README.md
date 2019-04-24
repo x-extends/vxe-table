@@ -5,11 +5,11 @@
 ## API
 
 * xe-table 功能组件
-  1 column-cell 基本列
-  2 column-group 分组列
-  3 column-index 索引列
-  4 column-radio 单选列
-  5 column-checkbox 多选列
+  * **column-cell 基本列**
+  * **column-group 分组列**
+  * **column-index 索引列**
+  * **column-radio 单选列**
+  * **column-checkbox 多选列**
   * column-sort 排序列
   * column-filter 筛选列
   * column-expand 展开列
