@@ -1,5 +1,6 @@
 # vxe-table
 
+A powerful table component.
 一个功能更加强大、高扩展性、高性能的表格组件
 
 ## Docs
