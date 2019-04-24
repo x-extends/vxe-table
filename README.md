@@ -24,6 +24,15 @@ A powerful table component.
 
 ## Table 表格
 
+```html
+<xe-table
+  :data.sync="tableData">
+  <xe-column-checkbox prop="checked" width="60"></xe-column-checkbox>
+  <xe-column-cell prop="name" label="Name"></xe-column-cell>
+  <xe-column-cell prop="address" label="Address"></xe-column-cell>
+</xe-table>
+```
+
 ### Table Attributes 参数
 
 | 参数 | 说明 | 类型 | 可选值 | 默认值 |
@@ -58,6 +67,10 @@ A powerful table component.
 
 ## Cell 基本列
 
+```html
+<xe-column-cell prop="name" label="Name"></xe-column-cell>
+```
+
 ### Cell Attributes 参数
 
 | 参数 | 说明 | 类型 | 可选值 | 默认值 |
@@ -77,6 +90,13 @@ A powerful table component.
 
 ## Group 分组列
 
+```html
+<xe-column-group label="Group name">
+  <xe-column-cell prop="name" label="Name"></xe-column-cell>
+  <xe-column-cell prop="address" label="Address"></xe-column-cell>
+</xe-column-group>
+```
+
 ### Group Attributes 参数
 
 | 参数 | 说明 | 类型 | 可选值 | 默认值 |
@@ -84,6 +104,10 @@ A powerful table component.
 | label | 分组列标题 | String | — | — |
 
 ## Index 索引列
+
+```html
+<xe-column-index width="60"></xe-column-index>
+```
 
 ### Index Attributes 参数
 
@@ -98,6 +122,10 @@ A powerful table component.
 | indexMethod | 只对 type=index 有效，自定义索引方法 Function({row, rowIndex, column, columnIndex}) | Function | — | — |
 
 ## Radio 单选列
+
+```html
+<xe-column-radio width="60"></xe-column-radio>
+```
 
 ### Radio Attributes 参数
 
@@ -117,6 +145,10 @@ A powerful table component.
 | change | 当选择项发生变化时会触发该事件 | row |
 
 ## Checkbox 多选列
+
+```html
+<xe-column-checkbox width="60"></xe-column-checkbox>
+```
 
 ## Checkbox Attributes 参数
 
