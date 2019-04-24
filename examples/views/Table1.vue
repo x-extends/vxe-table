@@ -66,7 +66,7 @@ export default {
     }
   },
   created () {
-    let list = window.CACHE_DATA_LIST.slice(0, 1000)
+    let list = window.CACHE_DATA_LIST.slice(0, 500)
     this.tableData = list
   },
   methods: {
