@@ -1,6 +1,6 @@
 {
   "name": "vxe-table",
-  "version": "0.1.0",
+  "version": "0.0.1",
   "private": true,
   "description": "A powerful table component.",
   "scripts": {
