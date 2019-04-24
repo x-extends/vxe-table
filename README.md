@@ -2,6 +2,10 @@
 
 一个功能更加强大、高扩展性、高性能的表格组件
 
+## Docs
+
+[https://xuliangzhan.github.io/vxe-table/](https://xuliangzhan.github.io/vxe-table/)
+
 ## API
 
 * [xe-table 功能组件](#table-表格)
