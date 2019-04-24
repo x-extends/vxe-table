@@ -1,7 +1,7 @@
 import HandleFunc from '../tool/handle.js'
 
 export default {
-  name: 'XeColumnGroup',
+  name: 'VxeColumnGroup',
   props: {
     // 分组列标题
     label: String

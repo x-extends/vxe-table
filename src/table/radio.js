@@ -1,7 +1,7 @@
 import HandleFunc from '../tool/handle.js'
 
 export default {
-  name: 'XeColumnRadio',
+  name: 'VxeColumnRadio',
   props: {
     // 列标题
     label: String,
@@ -53,7 +53,7 @@ export default {
       let options = {
         attrs: {
           type: this.type,
-          name: `xe-radio--${$table.id}`
+          name: `vxe-radio--${$table.id}`
         }
       }
       if (!params.isHidden) {
@@ -69,7 +69,7 @@ export default {
       }
       return [
         h('label', {
-          class: ['xe-radio']
+          class: ['vxe-radio']
         }, [
           h('input', options),
           h('span')

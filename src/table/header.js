@@ -92,7 +92,7 @@ export default {
       })
     )
     return h('div', {
-      class: [fixedType ? `xe-table--fixed-${fixedType}-header-wrapper` : 'xe-table--header-wrapper']
+      class: [fixedType ? `vxe-table--fixed-${fixedType}-header-wrapper` : 'vxe-table--header-wrapper']
     }, [
       h('table', {
         attrs: {
@@ -108,7 +108,7 @@ export default {
         h('thead', headerColumn.map(cols => {
           let renderRows = []
           cols.forEach((column, columnIndex) => {
-            let thClss = ['xe-header-column']
+            let thClss = ['vxe-header-column']
             let fixedHiddenColumn = fixedType && column.fixed !== fixedType && column.type !== 'group'
             if (column.headerAlign) {
               thClss.push(`align--${column.headerAlign}`)
@@ -127,7 +127,7 @@ export default {
                   key: columnIndex
                 }, [
                   h('div', {
-                    class: ['xe-cell']
+                    class: ['vxe-cell']
                   }, column.renderHeader(h, { $table, column, columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn }))
                 ])
               )
@@ -142,11 +142,11 @@ export default {
             })
           )
           return h('tr', {
-            class: ['xe-header-row']
+            class: ['vxe-header-row']
           }, renderRows)
         })),
         h('div', {
-          class: ['xe-table--repair'],
+          class: ['vxe-table--repair'],
           style: {
             width: tableWidth === null ? tableWidth : `${tableWidth}px`
           }

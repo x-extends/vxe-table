@@ -13,7 +13,7 @@ function renderFixed (h, $table, fixedType) {
   }
   console.log(111)
   return h('div', {
-    class: [`xe-table--fixed-${fixedType}-wrapper`, 'scrolling--none'],
+    class: [`vxe-table--fixed-${fixedType}-wrapper`, 'scrolling--none'],
     style,
     ref: `fixedTable`
   }, [
@@ -44,7 +44,7 @@ function renderFixed (h, $table, fixedType) {
 }
 
 export default {
-  name: 'XeTable',
+  name: 'VxeTable',
   props: {
     /** 基本属性 */
     // 数据
@@ -170,7 +170,7 @@ export default {
     let { leftList, rightList } = columnStore
     let renderBody = [
       h('div', {
-        class: ['xe-table-hidden-column'],
+        class: ['vxe-table-hidden-column'],
         ref: 'hideColumn'
       }, this.$slots.default)
     ]
@@ -221,7 +221,7 @@ export default {
       )
     }
     return h('div', {
-      class: ['xe-table', size ? `t--size-${size}` : '', {
+      class: ['vxe-table', size ? `t--size-${size}` : '', {
         't--stripe': stripe,
         't--border': border,
         't--highlight': highlightCurrentRow
@@ -300,7 +300,7 @@ export default {
       this.tableColumn = leftList.concat(centerList).concat(rightList)
       Object.assign(this.columnStore, { leftList, centerList, rightList })
       if ((isColspan && this.isGroup) || (rightIndex && rightIndex !== this.tableColumn.length)) {
-        throw new Error('[xe-table] Fixed column must to the left and right sides.')
+        throw new Error('[vxe-table] Fixed column must to the left and right sides.')
       }
     },
     /**

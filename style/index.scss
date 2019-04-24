@@ -1,9 +1,9 @@
 /*table*/
-.xe-table {
+.vxe-table {
   position: relative;
   color: #606266;
-  border-right: 1px solid $xe-table-border-color;
-  border-left: 1px solid $xe-table-border-color;
+  border-right: 1px solid $vxe-table-border-color;
+  border-left: 1px solid $vxe-table-border-color;
   font-size: 14px;
   font-family: Helvetica Neue,Helvetica,PingFang SC,Hiragino Sans GB,Microsoft YaHei,\\5FAE\8F6F\96C5\9ED1,Arial,sans-serif;
   &:after {
@@ -13,7 +13,7 @@
     left: 0;
     width: 100%;
     height: 1px;
-    background-color: $xe-table-border-color;
+    background-color: $vxe-table-border-color;
   }
   *, :after, :before {
     box-sizing: border-box
@@ -22,52 +22,52 @@
     border-spacing: 0;
     border-collapse: separate;
   }
-  .xe-table-hidden-column {
+  .vxe-table-hidden-column {
     display: none;
   }
-  .xe-table--header-wrapper,
-  .xe-table--fixed-left-header-wrapper,
-  .xe-table--fixed-right-header-wrapper {
+  .vxe-table--header-wrapper,
+  .vxe-table--fixed-left-header-wrapper,
+  .vxe-table--fixed-right-header-wrapper {
     position: relative;
     overflow: hidden;
-    border-top: 1px solid $xe-table-border-color;
-    .xe-table--repair {
+    border-top: 1px solid $vxe-table-border-color;
+    .vxe-table--repair {
       position: absolute;
       bottom: 0;
       left: 0;
       height: 1px;
-      background-color: $xe-table-border-color;
+      background-color: $vxe-table-border-color;
     }
   }
-  .xe-header-row {
-    background-color: $xe-table-header-background-color;
+  .vxe-header-row {
+    background-color: $vxe-table-header-background-color;
   }
-  .xe-table--body-wrapper,
-  .xe-table--fixed-left-body-wrapper,
-  .xe-table--fixed-right-body-wrapper {
+  .vxe-table--body-wrapper,
+  .vxe-table--fixed-left-body-wrapper,
+  .vxe-table--fixed-right-body-wrapper {
     overflow: auto;
   }
-  .xe-body--row {
-    background: $xe-table-background-color;
+  .vxe-body--row {
+    background: $vxe-table-background-color;
     &.row--hover {
-      background-color: $xe-table-row-hover-background-color;
+      background-color: $vxe-table-row-hover-background-color;
     }
     &.row--selected {
-      background-color: $xe-table-row-selected-background-color;
+      background-color: $vxe-table-row-selected-background-color;
     }
-    .xe-body--column {
-      border-bottom: 1px solid $xe-table-border-color;
+    .vxe-body--column {
+      border-bottom: 1px solid $vxe-table-border-color;
     }
   }
   &.t--stripe {
-    .xe-body--row {
+    .vxe-body--row {
       &:nth-child(2n) {
-        background: $xe-table-striped-background-color;
+        background: $vxe-table-striped-background-color;
       }
     }
   }
-  .xe-header-column,
-  .xe-body--column {
+  .vxe-header-column,
+  .vxe-body--column {
     padding: 12px 0;
     line-height: 23px;
     text-align: left;
@@ -79,35 +79,35 @@
     }
   }
   &.t--border {
-    .xe-header-column,
-    .xe-body--column {
-      border-right: 1px solid $xe-table-border-color;
+    .vxe-header-column,
+    .vxe-body--column {
+      border-right: 1px solid $vxe-table-border-color;
     }
-    .xe-header-column {
-      border-bottom: 1px solid $xe-table-border-color;
+    .vxe-header-column {
+      border-bottom: 1px solid $vxe-table-border-color;
     }
   }
   &.t--size-medium {
-    .xe-header-column,
-    .xe-body--column {
+    .vxe-header-column,
+    .vxe-body--column {
       padding: 10px 0;
     }
   }
   &.t--size-small {
     font-size: 12px;
-    .xe-header-column,
-    .xe-body--column {
+    .vxe-header-column,
+    .vxe-body--column {
       padding: 8px 0;
     }
   }
   &.t--size-mini {
     font-size: 12px;
-    .xe-header-column,
-    .xe-body--column {
+    .vxe-header-column,
+    .vxe-body--column {
       padding: 6px 0;
     }
   }
-  .xe-cell {
+  .vxe-cell {
     white-space: normal;
     word-break: break-all;
     padding: 0 10px;
@@ -122,48 +122,48 @@
   .fixed-hidden {
     visibility: hidden;
   }
-  .xe-table--fixed-left-wrapper,
-  .xe-table--fixed-right-wrapper {
+  .vxe-table--fixed-left-wrapper,
+  .vxe-table--fixed-right-wrapper {
     width: 100%;
     position: absolute;
     top: 0;
     z-index: 1;
     overflow: hidden;
   }
-  .xe-table--fixed-left-wrapper {
+  .vxe-table--fixed-left-wrapper {
     left: 0;
     width: 200px;
     &.scrolling--middle {
       box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.12);
     }
   }
-  .xe-table--fixed-right-wrapper {
+  .vxe-table--fixed-right-wrapper {
     right: 0;
     &.scrolling--middle {
       box-shadow: -2px 2px 6px rgba(0, 0, 0, 0.12);
     }
   }
-  .xe-table--fixed-left-header-wrapper,
-  .xe-table--fixed-right-header-wrapper,
-  .xe-table--fixed-left-body-wrapper,
-  .xe-table--fixed-right-body-wrapper {
+  .vxe-table--fixed-left-header-wrapper,
+  .vxe-table--fixed-right-header-wrapper,
+  .vxe-table--fixed-left-body-wrapper,
+  .vxe-table--fixed-right-body-wrapper {
     position: absolute;
     top: 0;
     overflow-x: hidden;
   }
-  .xe-table--fixed-left-header-wrapper,
-  .xe-table--fixed-left-body-wrapper {
+  .vxe-table--fixed-left-header-wrapper,
+  .vxe-table--fixed-left-body-wrapper {
     left: 0;
   }
-  .xe-table--fixed-right-header-wrapper,
-  .xe-table--fixed-right-body-wrapper {
+  .vxe-table--fixed-right-header-wrapper,
+  .vxe-table--fixed-right-body-wrapper {
     right: 0;
     overflow-y: auto;
   }
 }
 
-.xe-checkbox,
-.xe-radio {
+.vxe-checkbox,
+.vxe-radio {
   display: inline-block;
   cursor: pointer;
   > input {
@@ -173,7 +173,7 @@
       display: inline-block;
       width: 14px;
       height: 14px;
-      border: 1px solid $xe-input-border-color;
+      border: 1px solid $vxe-input-border-color;
       background-color: #fff;
       &:before {
         content: "";
@@ -183,14 +183,14 @@
       }
     }
     &:checked+span {
-      background-color: $xe-primary-color;
-      border-color: $xe-primary-color;
+      background-color: $vxe-primary-color;
+      border-color: $vxe-primary-color;
     }
   }
 }
 
 /*checkbox*/
-.xe-checkbox {
+.vxe-checkbox {
   > input {
     &+span {
       border-radius: 2px;
@@ -209,7 +209,7 @@
 }
 
 /*radio*/
-.xe-radio {
+.vxe-radio {
   > input {
     &+span {
       border-radius: 50%;

@@ -5,8 +5,8 @@ function renderColumn (h, $table, fixedType, row, rowIndex, column, columnIndex)
   let { $listeners: tableListeners, border, highlightCurrentRow } = $table
   let { align, ellipsis, showTitle, showTooltip, renderWidth } = column
   let fixedHiddenColumn = fixedType && column.fixed !== fixedType
-  let tdClss = ['xe-body--column']
-  let cellClss = ['xe-cell']
+  let tdClss = ['vxe-body--column']
+  let cellClss = ['vxe-cell']
   let tdOns = {}
   if (align) {
     tdClss.push(`align--${align}`)
@@ -105,7 +105,7 @@ export default {
       this.renderTable(h, $table, fixedType)
     )
     return h('div', {
-      class: [fixedType ? `xe-table--fixed-${fixedType}-body-wrapper` : 'xe-table--body-wrapper'],
+      class: [fixedType ? `vxe-table--fixed-${fixedType}-body-wrapper` : 'vxe-table--body-wrapper'],
       attrs: {
         fixed: fixedType
       },
@@ -131,7 +131,7 @@ export default {
     renderTable (h, $table, fixedType) {
       let { highlightHoverRow, rowKey, tableData, tableWidth, selectRow, hoverRow } = $table
       return h('table', {
-        class: ['xe-table--body'],
+        class: ['vxe-table--body'],
         attrs: {
           cellspacing: 0,
           cellpadding: 0,
@@ -160,7 +160,7 @@ export default {
             }
           }
           return h('tr', {
-            class: ['xe-body--row', {
+            class: ['vxe-body--row', {
               'row--selected': row === selectRow,
               'row--hover': row === hoverRow
             }],

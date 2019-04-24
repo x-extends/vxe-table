@@ -1,7 +1,7 @@
 import HandleFunc from '../tool/handle.js'
 
 export default {
-  name: 'XeColumnIndex',
+  name: 'VxeColumnIndex',
   props: {
     // 列标题
     label: { type: String, default: '#' },

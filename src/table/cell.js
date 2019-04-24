@@ -2,7 +2,7 @@ import XEUtils from 'xe-utils'
 import HandleFunc from '../tool/handle.js'
 
 export default {
-  name: 'XeColumnCell',
+  name: 'VxeColumnCell',
   props: {
     // 列属性
     prop: String,

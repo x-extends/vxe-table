@@ -2,7 +2,7 @@ import XEUtils from 'xe-utils'
 import HandleFunc from '../tool/handle.js'
 
 export default {
-  name: 'XeColumnCheckbox',
+  name: 'VxeColumnCheckbox',
   props: {
     // 列属性（如果配置了该字段绑定，性能则会提高一倍）
     prop: String,
@@ -61,7 +61,7 @@ export default {
       }
       return [
         h('label', {
-          class: ['xe-checkbox']
+          class: ['vxe-checkbox']
         }, [
           h('input', options),
           h('span')
@@ -92,7 +92,7 @@ export default {
       }
       return [
         h('label', {
-          class: ['xe-checkbox']
+          class: ['vxe-checkbox']
         }, [
           h('input', options),
           h('span')
@@ -122,7 +122,7 @@ export default {
       }
       return [
         h('label', {
-          class: ['xe-checkbox']
+          class: ['vxe-checkbox']
         }, [
           h('input', options),
           h('span')

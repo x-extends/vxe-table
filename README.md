@@ -1,15 +1,15 @@
-# vxe-table
+# vvxe-table
 
 A powerful table component.
 一个功能更加强大、高扩展性、高性能的表格组件
 
 ## Docs
 
-[https://xuliangzhan.github.io/vxe-table/](https://xuliangzhan.github.io/vxe-table/)
+[https://xuliangzhan.github.io/vvxe-table/](https://xuliangzhan.github.io/vvxe-table/)
 
 ## API
 
-* [xe-table 功能组件](#table-表格)
+* [vxe-table 功能组件](#table-表格)
   * [column-cell 基本列](#cell-基本列)
   * [column-group 分组列](#group-分组列)
   * [column-index 索引列](#index-索引列)
@@ -25,11 +25,11 @@ A powerful table component.
 ## Table 表格
 
 ```html
-<xe-table :data.sync="tableData">
-  <xe-column-checkbox width="60"></xe-column-checkbox>
-  <xe-column-cell prop="name" label="Name"></xe-column-cell>
-  <xe-column-cell prop="address" label="Address"></xe-column-cell>
-</xe-table>
+<vxe-table :data.sync="tableData">
+  <vxe-column-checkbox width="60"></vxe-column-checkbox>
+  <vxe-column-cell prop="name" label="Name"></vxe-column-cell>
+  <vxe-column-cell prop="address" label="Address"></vxe-column-cell>
+</vxe-table>
 ```
 
 ### Table Attributes 参数
@@ -67,7 +67,7 @@ A powerful table component.
 ## Cell 基本列
 
 ```html
-<xe-column-cell prop="name" label="Name"></xe-column-cell>
+<vxe-column-cell prop="name" label="Name"></vxe-column-cell>
 ```
 
 ### Cell Attributes 参数
@@ -90,10 +90,10 @@ A powerful table component.
 ## Group 分组列
 
 ```html
-<xe-column-group label="Group name">
-  <xe-column-cell prop="name" label="Name"></xe-column-cell>
-  <xe-column-cell prop="address" label="Address"></xe-column-cell>
-</xe-column-group>
+<vxe-column-group label="Group name">
+  <vxe-column-cell prop="name" label="Name"></vxe-column-cell>
+  <vxe-column-cell prop="address" label="Address"></vxe-column-cell>
+</vxe-column-group>
 ```
 
 ### Group Attributes 参数
@@ -105,7 +105,7 @@ A powerful table component.
 ## Index 索引列
 
 ```html
-<xe-column-index width="60"></xe-column-index>
+<vxe-column-index width="60"></vxe-column-index>
 ```
 
 ### Index Attributes 参数
@@ -123,7 +123,7 @@ A powerful table component.
 ## Radio 单选列
 
 ```html
-<xe-column-radio width="60"></xe-column-radio>
+<vxe-column-radio width="60"></vxe-column-radio>
 ```
 
 ### Radio Attributes 参数
@@ -146,7 +146,7 @@ A powerful table component.
 ## Checkbox 多选列
 
 ```html
-<xe-column-checkbox width="60"></xe-column-checkbox>
+<vxe-column-checkbox width="60"></vxe-column-checkbox>
 ```
 
 ## Checkbox Attributes 参数
@@ -171,12 +171,12 @@ A powerful table component.
 ```html
 <template>
   <div>
-    <xe-table :data.sync="tableData">
-      <xe-column-checkbox width="60"></xe-column-checkbox>
-      <xe-column-cell prop="name" label="Name"></xe-column-cell>
-      <xe-column-cell prop="sex" label="Sex"></xe-column-cell>
-      <xe-column-cell prop="address" label="Address"></xe-column-cell>
-    </xe-table>
+    <vxe-table :data.sync="tableData">
+      <vxe-column-checkbox width="60"></vxe-column-checkbox>
+      <vxe-column-cell prop="name" label="Name"></vxe-column-cell>
+      <vxe-column-cell prop="sex" label="Sex"></vxe-column-cell>
+      <vxe-column-cell prop="address" label="Address"></vxe-column-cell>
+    </vxe-table>
   </div>
 </template>
 
