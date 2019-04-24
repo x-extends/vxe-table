@@ -19,7 +19,7 @@
 
 ## Table 表格
 
-### xe-table Attributes
+### Attributes
 
 | 参数 | 说明 | 类型 | 可选值 | 默认值 |
 |------|------|-----|------|-----|
@@ -37,7 +37,7 @@
 | *row-key* | 行数据的 Key | String | — | — |
 | *auto-width* | 列宽是否自动计算（如果关闭将不会自动计算列宽，需要手动调用 computeWidth 方法） | Boolean | — | true |
 
-### xe-table Events
+### Events
 
 | 事件名 | 说明 | 参数 |
 |------|------|-----|
@@ -45,7 +45,7 @@
 | cell-click | 当某个单元格被点击时会触发该事件 | {row,rowIndex,column,columnIndex,cell},event |
 | cell-dblclick | 当某个单元格被双击时会触发该事件 | {row,rowIndex,column,columnIndex,cell},event |
 
-### xe-table Methods
+### Methods
 
 | 方法名 | 描述 | 参数 |
 |------|------|-----|
@@ -53,7 +53,7 @@
 
 ## Cell 基本列
 
-### xe-column-cell Attributes
+### Attributes
 
 | 参数 | 说明 | 类型 | 可选值 | 默认值 |
 |------|------|-----|------|-----|
@@ -72,7 +72,7 @@
 
 ## Group 分组列
 
-### xe-column-group Attributes
+### Attributes
 
 | 参数 | 说明 | 类型 | 可选值 | 默认值 |
 |------|------|-----|------|-----|
@@ -80,7 +80,7 @@
 
 ## Index 索引列
 
-## xe-column-index Attributes
+## Attributes
 
 | 参数 | 说明 | 类型 | 可选值 | 默认值 |
 |------|------|-----|------|-----|
@@ -94,7 +94,7 @@
 
 ## Radio 单选列
 
-### xe-column-radio Attributes
+### Attributes
 
 | 参数 | 说明 | 类型 | 可选值 | 默认值 |
 |------|------|-----|------|-----|
@@ -105,7 +105,7 @@
 | align | 列对其方式 | String | — | center |
 | header-align | 表头对齐方式 | String | — | center |
 
-### xe-column-radio Events
+### Events
 
 | 事件名 | 说明 | 参数 |
 |------|------|-----|
@@ -113,7 +113,7 @@
 
 ## Checkbox 多选列
 
-## xe-column-checkbox Attributes
+## Attributes
 
 | 参数 | 说明 | 类型 | 可选值 | 默认值 |
 |------|------|-----|------|-----|
@@ -124,7 +124,7 @@
 | align | 列对其方式 | String | — | center |
 | header-align | 表头对齐方式 | String | — | center |
 
-### xe-column-checkbox Events
+### Events
 
 | 事件名 | 说明 | 参数 |
 |------|------|-----|
