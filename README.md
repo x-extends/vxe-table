@@ -1,6 +1,6 @@
 # vxe-table
 
-A very powerful table component.
+A very powerful Vue table component.
 
 ## Docs
 
