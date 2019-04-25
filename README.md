@@ -14,7 +14,7 @@ A very powerful table component.
   * [column-index 索引列](#index-索引列)
   * [column-radio 单选列](#radio-单选列)
   * [column-checkbox 多选列](#checkbox-多选列)
-  * [column-sort 排序列](#checkbox-排序列)
+  * [column-sort 排序列](#sort-排序列)
   * column-filter 筛选列
   * column-expand 展开列
   * column-tree 树形列
