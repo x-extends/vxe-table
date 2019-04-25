@@ -21,11 +21,7 @@ A very powerful Vue table component.
   * column-edit 编辑列
   * column-excel Excel 列
 
-***
-
 ## Table 表格
-
-***
 
 ```html
 <vxe-table :data.sync="tableData">
