@@ -1,6 +1,6 @@
 /*primary color*/
 $vxe-primary-color: #409eff;
-$vxe-primary-background-color: #409eff;
+$vxe-primary-background-color: $vxe-primary-color;
 
 /*input color*/
 $vxe-input-border-color: #dcdfe6;
@@ -8,7 +8,9 @@ $vxe-input-border-color: #dcdfe6;
 /*table color*/
 $vxe-table-header-background-color: #f8f8f9;
 $vxe-table-border-color: #e8eaec;
-$vxe-table-background-color: #fff;
+$vxe-table-background-color: #ffffff;
 $vxe-table-striped-background-color: #fafafa;
 $vxe-table-row-hover-background-color: #f5f7fa;
 $vxe-table-row-selected-background-color: #ecf5ff;
+$vxe-table-column-sort-border-color: #c0c4cc;
+$vxe-table-column-sort-border-hover-color: #515A6E;

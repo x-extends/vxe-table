@@ -10,6 +10,12 @@ const HandleFunc = {
   isScale (val) {
     return val && /^\d+%$/.test(val)
   },
+  // 触发事件
+  emitEvent (_vm, type, args) {
+    if (_vm.$listeners[type]) {
+      _vm.$emit.apply(_vm, [].concat.apply([type], args))
+    }
+  },
   getColumnList (columns) {
     let result = []
     columns.forEach(column => {
@@ -37,11 +43,13 @@ const HandleFunc = {
       showTooltip: _vm.showOverflowTooltip,
       indexMethod: _vm.indexMethod,
       formatter: _vm.formatter,
+      sortBy: _vm.sortBy,
       // 渲染属性
       visible: true,
       level: 1,
       rowSpan: 1,
       colSpan: 1,
+      order: null,
       renderWidth: 0,
       children: _vm.children,
       renderHeader: renderHeader || _vm.renderHeader,

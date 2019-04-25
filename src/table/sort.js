@@ -2,7 +2,7 @@ import XEUtils from 'xe-utils'
 import HandleFunc from '../tool/handle.js'
 
 export default {
-  name: 'VxeColumnCell',
+  name: 'VxeColumnSort',
   props: {
     // 列属性
     prop: String,
@@ -25,14 +25,16 @@ export default {
     // 当内容过长显示为省略号并用 tooltip 显示完整内容
     showOverflowTooltip: Boolean,
     // 格式化显示内容
-    formatter: Function
+    formatter: Function,
+    // 自定义排序的属性
+    sortBy: [String, Array]
   },
   inject: [
     '$table'
   ],
   data () {
     return {
-      type: 'cell',
+      type: 'sort',
       columnConfig: null
     }
   },
@@ -50,12 +52,33 @@ export default {
      * 渲染表头
      */
     renderHeader (h, params) {
-      let { $scopedSlots } = this
-      if ($scopedSlots && $scopedSlots.header) {
-        return $scopedSlots.header(params)
-      }
+      let { column } = params
       return [
-        h('span', params.column.label)
+        h('span', column.label),
+        h('span', {
+          class: ['vxe-sort-wrapper']
+        }, [
+          h('i', {
+            class: ['vxe-sort--asc', {
+              'sort--active': column.order === 'asc'
+            }],
+            on: {
+              click: evnt => {
+                this.changeEvent(evnt, column, params, 'asc')
+              }
+            }
+          }),
+          h('i', {
+            class: ['vxe-sort--desc', {
+              'sort--active': column.order === 'desc'
+            }],
+            on: {
+              click: evnt => {
+                this.changeEvent(evnt, column, params, 'desc')
+              }
+            }
+          })
+        ])
       ]
     },
     /**
@@ -75,6 +98,13 @@ export default {
       return [
         h('span', cellValue)
       ]
+    },
+    changeEvent (evnt, column, params, order) {
+      let { $table } = this
+      if (column.order !== order) {
+        $table.rowSortEvent(evnt, params, order)
+        HandleFunc.emitEvent(this, 'change', [{ column, order }])
+      }
     }
   }
 }

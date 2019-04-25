@@ -86,7 +86,7 @@ export default {
         options.on = {
           change: evnt => {
             $table.checkboxRowEvent(evnt, params)
-            this.$emit('change', $table.selection, row)
+            HandleFunc.emitEvent(this, 'change', [$table.selection, row])
           }
         }
       }

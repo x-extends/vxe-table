@@ -63,7 +63,7 @@ export default {
         options.on = {
           change: evnt => {
             $table.redioRowEvent(evnt, params)
-            this.$emit('change', row)
+            HandleFunc.emitEvent(this, 'change', [row])
           }
         }
       }

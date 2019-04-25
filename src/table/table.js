@@ -1,8 +1,7 @@
-<script>
+import XEUtils from 'xe-utils'
 import TableBody from './body'
 import TableHeader from './header'
 import HandleFunc from '../tool/handle.js'
-import XEUtils from 'xe-utils'
 
 function renderFixed (h, $table, fixedType) {
   let { tableData, tableColumn, collectColumn, isGroup, height, headerHeight, scrollYWidth, scrollXHeight, columnStore } = $table
@@ -11,7 +10,6 @@ function renderFixed (h, $table, fixedType) {
     height: `${customHeight + headerHeight - scrollXHeight}px`,
     width: `${columnStore[`${fixedType}List`].reduce((previous, column) => previous + column.renderWidth, fixedType === 'right' ? scrollYWidth + 1 : 0)}px`
   }
-  console.log(111)
   return h('div', {
     class: [`vxe-table--fixed-${fixedType}-wrapper`, 'scrolling--none'],
     style,
@@ -55,6 +53,8 @@ export default {
     stripe: Boolean,
     // 是否带有纵向边框
     border: Boolean,
+    // 是否显示默认效果
+    animat: { type: Boolean, default: true },
     // 表格的尺寸
     size: String,
     // 列的宽度是否自撑开
@@ -166,7 +166,7 @@ export default {
     })
   },
   render (h) {
-    let { tableData, tableColumn, collectColumn, isGroup, border, stripe, highlightHoverRow, size, columnStore } = this
+    let { tableData, tableColumn, collectColumn, isGroup, animat, border, stripe, highlightHoverRow, size, columnStore } = this
     let { leftList, rightList } = columnStore
     let renderBody = [
       h('div', {
@@ -222,6 +222,7 @@ export default {
     }
     return h('div', {
       class: ['vxe-table', size ? `t--size-${size}` : '', {
+        't--animat': animat,
         't--stripe': stripe,
         't--border': border,
         't--highlight': highlightHoverRow
@@ -238,9 +239,16 @@ export default {
       this.selectRow = null
       this.hoverRow = null
     },
+    clearSort () {
+      this.tableColumn.forEach(column => {
+        column.order = null
+      })
+      this.tableData = this.data || []
+    },
     reload (data) {
       this.clearSelection()
       this.clearSelectRow()
+      this.clearSort()
       this.tableData = data || []
       let rest = this.$nextTick()
       if (this.autoWidth) {
@@ -457,7 +465,7 @@ export default {
       }
       this.selection = value ? Array.from(this.tableData) : []
       this.isAllSelected = value
-      this.$emit('select-all', this.selection)
+      HandleFunc.emitEvent(this, 'select-all', [this.selection])
     },
     /**
      * 单选，行选中事件
@@ -468,29 +476,30 @@ export default {
     /**
      * 行 hover 事件
      */
-    rowHoverEvent (event, { row }) {
+    rowHoverEvent (evnt, { row }) {
       this.hoverRow = row
     },
     /**
      * 列点击事件
      */
-    colClickEvent (event, params) {
-      if (this.highlightCurrentRow) {
-        this.selectRow = params.row
-      }
-      this.$emit('cell-click', params, event)
+    colClickEvent (evnt, params) {
+      HandleFunc.emitEvent(this, 'cell-click', [params, evnt])
     },
     /**
      * 列双击点击事件
      */
-    colDblclickEvent (event, params) {
-      this.$emit('cell-dblclick', params, event)
+    colDblclickEvent (evnt, params) {
+      HandleFunc.emitEvent(this, 'cell-dblclick', [params, evnt])
+    },
+    /**
+     * 排序事件
+     */
+    rowSortEvent (evnt, { column }, order) {
+      let prop = column.property
+      let rest = XEUtils.sortBy(this.tableData, prop)
+      column.order = order
+      this.tableData = order === 'desc' ? rest.reverse() : rest
+      HandleFunc.emitEvent(this, 'sort-change', [{ column, prop, order }])
     }
   }
 }
-</script>
-
-<style lang="scss">
-@import '../../style/variable.scss';
-@import '../../style/index.scss';
-</style>

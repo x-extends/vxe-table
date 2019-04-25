@@ -47,7 +47,7 @@
       <vxe-column-cell prop="age" label="年龄"></vxe-column-cell>
       <vxe-column-cell prop="sex" label="性别"></vxe-column-cell>
       <vxe-column-cell prop="rate" label="评分"></vxe-column-cell>
-      <vxe-column-cell prop="date" label="日期"></vxe-column-cell>
+      <vxe-column-sort prop="date" label="日期" @change="changeEvnet"></vxe-column-sort>
       <vxe-column-cell prop="address" label="地址">
         <template v-slot="{ row }">
           <span>{{ row.address }}</span>
@@ -76,6 +76,9 @@ export default {
       return rowIndex * 2
     },
     dblclickEvent (params) {
+
+    },
+    changeEvnet (params) {
 
     }
   }
