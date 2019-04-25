@@ -14,8 +14,6 @@ A very powerful Vue table component.
   * [column-index 索引列](#index-索引列)
   * [column-radio 单选列](#radio-单选列)
   * [column-checkbox 多选列](#checkbox-多选列)
-  * [column-sort 排序列](#sort-排序列)
-  * column-filter 筛选列
   * column-expand 展开列
   * column-tree 树形列
   * column-edit 编辑列
@@ -88,6 +86,10 @@ A very powerful Vue table component.
 | show-overflow-title | 当内容过长显示为省略号并用原生的 title 显示完整内容 | Boolean | — | false |
 | show-overflow-tooltip | 当内容过长显示为省略号并用 tooltip 显示完整内容 | Boolean | — | false |
 | formatter | 格式化显示内容 Function({cellValue, row, rowIndex, column, columnIndex}) | Function | — | — |
+| sortBy | 自定义排序的属性 | String/Array | — | — |
+| filters | 配置筛选条件数组 | Array | — | — |
+| filterMultiple | 筛选是否允许多选 | Boolean | — | true |
+| filterMethod | 自定义筛选方法 | Function | — | — |
 
 ### Cell Scoped Slot
 
@@ -187,37 +189,6 @@ A very powerful Vue table component.
 | 事件名 | 说明 | 参数 |
 |------|------|-----|
 | change | 当选择项发生变化时会触发该事件 | selection, row |
-
-## Sort 排序列
-
-### Sort Attributes
-
-| 参数 | 说明 | 类型 | 可选值 | 默认值 |
-|------|------|-----|------|-----|
-| prop | 列属性 | String | — | — |
-| label | 列标题 | String | — | — |
-| width | 列宽度 | String | — | — |
-| minWidth | 最小列宽度，把剩余宽度按比例分配 | String | — | — |
-| fixed | 将列固定在左侧或者右侧 | String | — | left |
-| align | 列对其方式 | String | — | left |
-| header-align | 表头对齐方式 | String | — | — |
-| ellipsis | 当内容过长时显示为省略号 | Boolean | — | false |
-| show-overflow-title | 当内容过长显示为省略号并用原生的 title 显示完整内容 | Boolean | — | false |
-| show-overflow-tooltip | 当内容过长显示为省略号并用 tooltip 显示完整内容 | Boolean | — | false |
-| formatter | 格式化显示内容 Function({cellValue, row, rowIndex, column, columnIndex}) | Function | — | — |
-| sortBy | 自定义排序的属性 | String/Array | — | — |
-
-### Sort Events
-
-| 事件名 | 说明 | 参数 |
-|------|------|-----|
-| change | 当排序条件发生变化时会触发该事件 | {column, order} |
-
-### Sort Scoped Slot
-
-| name | 说明 |
-|------|------|
-| — | 自定义显示内容，参数为 { row, rowIndex, column, columnIndex } |
 
 ## Example
 

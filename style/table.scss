@@ -19,9 +19,17 @@
     box-sizing: border-box
   }
   &.t--animat {
+    .vxe-checkbox,
+    .vxe-radio {
+      > input {
+        &:checked+span {
+          transition: background-color .2s ease-in-out;
+        }
+      }
+    }
     .vxe-sort-wrapper {
-      .vxe-sort--asc,
-      .vxe-sort--desc {
+      .vxe-sort--asc-icon,
+      .vxe-sort--desc-icon {
         &:before {
           transition: border .2s ease-in-out;
         }
@@ -177,11 +185,14 @@
     right: 0;
     overflow-y: auto;
   }
+
+  /*排序*/
   .vxe-sort-wrapper {
+    padding: 0 2px;
     vertical-align: middle;
     display: inline-block;
-    .vxe-sort--asc,
-    .vxe-sort--desc {
+    .vxe-sort--asc-icon,
+    .vxe-sort--desc-icon {
       position: relative;
       display: block;
       width: 18px;
@@ -194,14 +205,14 @@
         border: 5px solid transparent;
       }
     }
-    .vxe-sort--asc {
+    .vxe-sort--asc-icon {
       &:before {
         top: 0;
-        border-bottom-color: $vxe-table-column-sort-border-color;
+        border-bottom-color: $vxe-table-column-icon-border-color;
       }
       &:hover {
         &:before {
-          border-bottom-color: $vxe-table-column-sort-border-hover-color;
+          border-bottom-color: $vxe-table-column-icon-border-hover-color;
         }
       }
       &.sort--active {
@@ -210,20 +221,52 @@
         }
       }
     }
-    .vxe-sort--desc {
+    .vxe-sort--desc-icon {
       &:before {
         bottom: 2px;
-        border-top-color: $vxe-table-column-sort-border-color;
+        border-top-color: $vxe-table-column-icon-border-color;
       }
       &:hover {
         &:before {
-          border-top-color: $vxe-table-column-sort-border-hover-color;
+          border-top-color: $vxe-table-column-icon-border-hover-color;
         }
       }
       &.sort--active {
         &:before {
           border-top-color: $vxe-primary-color;
         }
+      }
+    }
+  }
+
+  /*筛选*/
+  .vxe-filter-wrapper {
+    padding: 0 2px;
+    vertical-align: middle;
+    display: inline-block;
+    .vxe-filter--icon {
+      position: relative;
+      display: block;
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+      &:before,
+      &:after {
+        content: "";
+        position: absolute;
+      }
+      &:before {
+        top: 3px;
+        left: 3px;
+        border: 6px solid transparent;
+        border-top-color: $vxe-table-column-icon-border-color;
+      }
+      &:after {
+        left: 8px;
+        top: 6px;
+        width: 2px;
+        height: 8px;
+        background-color: $vxe-table-column-icon-border-color;
       }
     }
   }

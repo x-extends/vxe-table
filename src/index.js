@@ -4,7 +4,6 @@ import ColumnGroup from './table/group'
 import ColumnIndex from './table/index'
 import ColumnRadio from './table/radio'
 import ColumnCheckbox from './table/checkbox'
-import ColumnSort from './table/sort'
 
 /**
  * 引入样式方式：
@@ -27,8 +26,7 @@ const components = [
   ColumnGroup,
   ColumnIndex,
   ColumnRadio,
-  ColumnCheckbox,
-  ColumnSort
+  ColumnCheckbox
 ]
 
 const install = function (Vue) {
