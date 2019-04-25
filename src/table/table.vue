@@ -166,7 +166,7 @@ export default {
     })
   },
   render (h) {
-    let { tableData, tableColumn, collectColumn, isGroup, border, stripe, highlightCurrentRow, size, columnStore } = this
+    let { tableData, tableColumn, collectColumn, isGroup, border, stripe, highlightHoverRow, size, columnStore } = this
     let { leftList, rightList } = columnStore
     let renderBody = [
       h('div', {
@@ -224,7 +224,7 @@ export default {
       class: ['vxe-table', size ? `t--size-${size}` : '', {
         't--stripe': stripe,
         't--border': border,
-        't--highlight': highlightCurrentRow
+        't--highlight': highlightHoverRow
       }]
     }, renderBody)
   },

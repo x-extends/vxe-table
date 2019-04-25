@@ -30,8 +30,12 @@ export default {
      * 渲染表头
      */
     renderHeader (h, params) {
+      let { $scopedSlots } = this
+      if ($scopedSlots && $scopedSlots.header) {
+        return $scopedSlots.header(params)
+      }
       return [
-        h('span', this.label)
+        h('span', params.column.label)
       ]
     },
     /**

@@ -1,6 +1,9 @@
 import XEUtils from 'xe-utils'
 import HandleFunc from '../tool/handle.js'
 
+/**
+ * 渲染列
+ */
 function renderColumn (h, $table, fixedType, row, rowIndex, column, columnIndex) {
   let { $listeners: tableListeners, border, highlightCurrentRow } = $table
   let { align, ellipsis, showTitle, showTooltip, renderWidth } = column
@@ -9,17 +12,17 @@ function renderColumn (h, $table, fixedType, row, rowIndex, column, columnIndex)
   let cellClss = ['vxe-cell']
   let tdOns = {}
   if (align) {
-    tdClss.push(`align--${align}`)
+    tdClss.push(`col--${align}`)
   }
   if (fixedHiddenColumn) {
     tdClss.push('fixed-hidden')
   }
   if (showTitle) {
-    cellClss.push('cell--title')
+    cellClss.push('c--title')
   } else if (showTooltip) {
-    cellClss.push('cell--tooltip')
+    cellClss.push('c--tooltip')
   } else if (ellipsis) {
-    cellClss.push('cell--ellipsis')
+    cellClss.push('c--ellipsis')
   }
   // 事件监听
   if (highlightCurrentRow || tableListeners['cell-click']) {
@@ -129,7 +132,8 @@ export default {
       return cols
     },
     renderTable (h, $table, fixedType) {
-      let { highlightHoverRow, rowKey, tableData, tableWidth, selectRow, hoverRow } = $table
+      let { highlightHoverRow, rowKey, tableData, tableWidth, selectRow, hoverRow, columnStore } = $table
+      let { leftList, rightList } = columnStore
       return h('table', {
         class: ['vxe-table--body'],
         attrs: {
@@ -150,7 +154,7 @@ export default {
             }
           })
           let on = null
-          if (highlightHoverRow) {
+          if (highlightHoverRow && (leftList.length || rightList.length)) {
             on = {
               mouseover (evnt) {
                 if (row !== hoverRow) {

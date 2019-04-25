@@ -111,7 +111,7 @@ export default {
             let thClss = ['vxe-header-column']
             let fixedHiddenColumn = fixedType && column.fixed !== fixedType && column.type !== 'group'
             if (column.headerAlign) {
-              thClss.push(`align--${column.headerAlign}`)
+              thClss.push(`col--${column.headerAlign}`)
             }
             if (fixedHiddenColumn) {
               thClss.push('fixed-hidden')

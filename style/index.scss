@@ -59,6 +59,13 @@
       border-bottom: 1px solid $vxe-table-border-color;
     }
   }
+  &.t--highlight {
+    .vxe-body--row {
+      &:hover {
+        background-color: $vxe-table-row-hover-background-color;
+      }
+    }
+  }
   &.t--stripe {
     .vxe-body--row {
       &:nth-child(2n) {
@@ -71,10 +78,10 @@
     padding: 12px 0;
     line-height: 23px;
     text-align: left;
-    &.align--center {
+    &.col--center {
       text-align: center;
     }
-    &.align--right {
+    &.col--right {
       text-align: right;
     }
   }
@@ -111,9 +118,9 @@
     white-space: normal;
     word-break: break-all;
     padding: 0 10px;
-    &.cell--ellipsis,
-    &.cell--title,
-    &.cell--tooltip {
+    &.c--ellipsis,
+    &.c--title,
+    &.c--tooltip {
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -170,7 +177,7 @@
     display: none;
     &+span {
       position: relative;
-      display: inline-block;
+      display: block;
       width: 14px;
       height: 14px;
       border: 1px solid $vxe-input-border-color;

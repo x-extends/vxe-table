@@ -48,7 +48,6 @@
       <vxe-column-cell prop="sex" label="性别"></vxe-column-cell>
       <vxe-column-cell prop="rate" label="评分"></vxe-column-cell>
       <vxe-column-cell prop="date" label="日期"></vxe-column-cell>
-      <vxe-column-cell prop="phone" label="手机"></vxe-column-cell>
       <vxe-column-cell prop="address" label="地址">
         <template v-slot="{ row }">
           <span>{{ row.address }}</span>
@@ -66,7 +65,7 @@ export default {
     }
   },
   created () {
-    let list = window.CACHE_DATA_LIST.slice(0, 500)
+    let list = window.CACHE_DATA_LIST.slice(0, 1000)
     this.tableData = list
   },
   methods: {

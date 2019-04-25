@@ -46,7 +46,7 @@ A powerful table component.
 | loading | 表格是否加载中 | Boolean | — | false |
 | show-header | 是否显示表头 | Boolean | — | true |
 | highlight-current-row | 是否要高亮当前选中行 | Boolean | — | false |
-| highlight-hover-row | 鼠标移到行是否要高亮显示（如果关闭会更流畅） | Boolean | — | true |
+| highlight-hover-row | 鼠标移到行是否要高亮显示 | Boolean | — | true |
 | row-key | 行数据的 Key | String | — | — |
 | auto-width | 列宽是否自动计算（如果关闭将不会自动计算列宽，需要手动调用 computeWidth 方法） | Boolean | — | true |
 
@@ -87,6 +87,13 @@ A powerful table component.
 | formatter | 格式化显示内容 Function({cellValue, row, rowIndex, column, columnIndex}) | Function | — | — |
 | indexMethod | 只对 type=index 有效，自定义索引方法 Function({row, rowIndex, column, columnIndex}) | Function | — | — |
 
+### Cell Scoped Slot
+
+| name | 说明 |
+|------|------|
+| — | 自定义显示内容，参数为 { row, rowIndex, column, columnIndex } |
+| header | 自定义表头的内容，参数为 { column, columnIndex } |
+
 ## Group 分组列
 
 ```html
@@ -101,6 +108,12 @@ A powerful table component.
 | 参数 | 说明 | 类型 | 可选值 | 默认值 |
 |------|------|-----|------|-----|
 | label | 分组列标题 | String | — | — |
+
+### Group Scoped Slot
+
+| name | 说明 |
+|------|------|
+| header | 自定义表头的内容，参数为 { column, columnIndex } |
 
 ## Index 索引列
 
@@ -119,6 +132,13 @@ A powerful table component.
 | align | 列对其方式 | String | — | left |
 | header-align | 表头对齐方式 | String | — | — |
 | indexMethod | 只对 type=index 有效，自定义索引方法 Function({row, rowIndex, column, columnIndex}) | Function | — | — |
+
+### Index Scoped Slot
+
+| name | 说明 |
+|------|------|
+| — | 自定义显示内容，参数为 { row, rowIndex, column, columnIndex } |
+| header | 自定义表头的内容，参数为 { column, columnIndex } |
 
 ## Radio 单选列
 
