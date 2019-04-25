@@ -31,7 +31,7 @@ A very powerful Vue table component.
 </vxe-table>
 ```
 
-### Table Attributes 参数
+### Table Attributes
 
 | 参数 | 说明 | 类型 | 可选值 | 默认值 |
 |------|------|-----|------|-----|
@@ -49,7 +49,7 @@ A very powerful Vue table component.
 | row-key | 行数据的 Key | String | — | — |
 | auto-width | 列宽是否自动计算（如果关闭将不会自动计算列宽） | Boolean | — | true |
 
-### Table Events 事件
+### Table Events
 
 | 事件名 | 说明 | 参数 |
 |------|------|-----|
@@ -57,7 +57,7 @@ A very powerful Vue table component.
 | cell-click | 当某个单元格被点击时会触发该事件 | {row,rowIndex,column,columnIndex,cell},event |
 | cell-dblclick | 当某个单元格被双击时会触发该事件 | {row,rowIndex,column,columnIndex,cell},event |
 
-### Table Methods 方法
+### Table Methods
 
 | 方法名 | 描述 | 参数 |
 |------|------|-----|
@@ -105,7 +105,7 @@ A very powerful Vue table component.
 </vxe-column-group>
 ```
 
-### Group Attributes 参数
+### Group Attributes
 
 | 参数 | 说明 | 类型 | 可选值 | 默认值 |
 |------|------|-----|------|-----|
@@ -123,7 +123,7 @@ A very powerful Vue table component.
 <vxe-column-index width="60"></vxe-column-index>
 ```
 
-### Index Attributes 参数
+### Index Attributes
 
 | 参数 | 说明 | 类型 | 可选值 | 默认值 |
 |------|------|-----|------|-----|
@@ -148,7 +148,7 @@ A very powerful Vue table component.
 <vxe-column-radio width="60"></vxe-column-radio>
 ```
 
-### Radio Attributes 参数
+### Radio Attributes
 
 | 参数 | 说明 | 类型 | 可选值 | 默认值 |
 |------|------|-----|------|-----|
@@ -171,7 +171,7 @@ A very powerful Vue table component.
 <vxe-column-checkbox width="60"></vxe-column-checkbox>
 ```
 
-## Checkbox Attributes 参数
+## Checkbox Attributes
 
 | 参数 | 说明 | 类型 | 可选值 | 默认值 |
 |------|------|-----|------|-----|
@@ -182,7 +182,7 @@ A very powerful Vue table component.
 | align | 列对其方式 | String | — | center |
 | header-align | 表头对齐方式 | String | — | center |
 
-### Checkbox Events 事件
+### Checkbox Events
 
 | 事件名 | 说明 | 参数 |
 |------|------|-----|
@@ -190,7 +190,7 @@ A very powerful Vue table component.
 
 ## Sort 排序列
 
-### Sort Attributes 参数
+### Sort Attributes
 
 | 参数 | 说明 | 类型 | 可选值 | 默认值 |
 |------|------|-----|------|-----|
@@ -207,7 +207,7 @@ A very powerful Vue table component.
 | formatter | 格式化显示内容 Function({cellValue, row, rowIndex, column, columnIndex}) | Function | — | — |
 | sortBy | 自定义排序的属性 | String/Array | — | — |
 
-### Sort Events 事件
+### Sort Events
 
 | 事件名 | 说明 | 参数 |
 |------|------|-----|
