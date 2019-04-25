@@ -31,7 +31,7 @@ A very powerful Vue table component.
 </vxe-table>
 ```
 
-### Table Attributes
+### -- Table Attributes
 
 | 参数 | 说明 | 类型 | 可选值 | 默认值 |
 |------|------|-----|------|-----|
@@ -49,7 +49,7 @@ A very powerful Vue table component.
 | row-key | 行数据的 Key | String | — | — |
 | auto-width | 列宽是否自动计算（如果关闭将不会自动计算列宽） | Boolean | — | true |
 
-### Table Events
+### -- Table Events
 
 | 事件名 | 说明 | 参数 |
 |------|------|-----|
@@ -57,7 +57,7 @@ A very powerful Vue table component.
 | cell-click | 当某个单元格被点击时会触发该事件 | {row,rowIndex,column,columnIndex,cell},event |
 | cell-dblclick | 当某个单元格被双击时会触发该事件 | {row,rowIndex,column,columnIndex,cell},event |
 
-### Table Methods
+### -- Table Methods
 
 | 方法名 | 描述 | 参数 |
 |------|------|-----|
