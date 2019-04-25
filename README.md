@@ -47,7 +47,7 @@ A very powerful Vue table component.
 | highlight-current-row | 是否要高亮当前选中行 | Boolean | — | false |
 | highlight-hover-row | 鼠标移到行是否要高亮显示 | Boolean | — | true |
 | row-key | 行数据的 Key | String | — | — |
-| auto-width | 列宽是否自动计算（如果关闭将不会自动计算列宽，需要手动调用 computeWidth 方法） | Boolean | — | true |
+| auto-width | 列宽是否自动计算（如果关闭将不会自动计算列宽） | Boolean | — | true |
 
 ### Table Events 事件
 
@@ -65,6 +65,7 @@ A very powerful Vue table component.
 | clearSelection | 用于多选表格，清空用户的选择 | — |
 | clearSelectRow | 用于单选表格，清空用户的选择 | — |
 | clearSort | 用于清空排序条件，数据会恢复成未排序的状态 | — |
+| computeWidth | 重新计算并更新列宽 | — |
 
 ## Cell 基本列
 
