@@ -13,8 +13,8 @@ A very powerful Vue table component.
 * [vxe-table 功能点](#table-表格)
   * [基础](https://jsrun.net/VrXKp/play)
   * [尺寸](https://jsrun.net/PmXKp/play)
-  * [斑马线条纹](#table-column)
-  * [带边框](#table-column)
+  * [斑马线条纹](https://jsrun.net/zrXKp/play)
+  * [带边框](https://jsrun.net/QrXKp/play)
   * 单元格样式
   * 列宽拖动
   * 流体高度
