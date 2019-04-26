@@ -4,7 +4,7 @@ A very powerful Vue table component.
 
 ## API
 
-* [功能点](#table-表格)
+* [vxe-table 功能点：](#table-表格)
   * [基础](#cell-基本列)
   * [尺寸](#cell-基本列)
   * [斑马纹](#cell-基本列)
