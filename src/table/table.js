@@ -1,7 +1,7 @@
 import XEUtils from 'xe-utils'
 import TableBody from './body'
 import TableHeader from './header'
-import HandleFunc from '../tool/handle.js'
+import Tools from './tools'
 
 function renderFixed (h, $table, fixedType) {
   let { tableData, tableColumn, collectColumn, isGroup, height, headerHeight, scrollYWidth, scrollXHeight, scrollRightToLeft, scrollLeftToRight, columnStore } = $table
@@ -164,7 +164,7 @@ export default {
   },
   created () {
     this.reload(this.data).then(() => {
-      this.tableColumn = HandleFunc.getColumnList(this.collectColumn)
+      this.tableColumn = Tools.getColumnList(this.collectColumn)
       if (this.customs) {
         this.mergeCustomColumn(this.customs)
       }
@@ -329,13 +329,13 @@ export default {
       let autoList = []
       this.tableColumn.forEach(column => {
         if (column.visible) {
-          if (HandleFunc.isScale(column.width)) {
+          if (Tools.isScale(column.width)) {
             scaleList.push(column)
-          } else if (HandleFunc.isPx(column.width)) {
+          } else if (Tools.isPx(column.width)) {
             pxList.push(column)
-          } else if (HandleFunc.isScale(column.minWidth)) {
+          } else if (Tools.isScale(column.minWidth)) {
             scaleMinList.push(column)
-          } else if (HandleFunc.isPx(column.minWidth)) {
+          } else if (Tools.isPx(column.minWidth)) {
             pxMinList.push(column)
           } else {
             autoList.push(column)
@@ -485,7 +485,7 @@ export default {
       }
       this.selection = value ? Array.from(this.tableData) : []
       this.isAllSelected = value
-      HandleFunc.emitEvent(this, 'select-all', [this.selection])
+      Tools.emitEvent(this, 'select-all', [this.selection])
     },
     /**
      * 单选，行选中事件
@@ -503,13 +503,13 @@ export default {
      * 列点击事件
      */
     colClickEvent (evnt, params) {
-      HandleFunc.emitEvent(this, 'cell-click', [params, evnt])
+      Tools.emitEvent(this, 'cell-click', [params, evnt])
     },
     /**
      * 列双击点击事件
      */
     colDblclickEvent (evnt, params) {
-      HandleFunc.emitEvent(this, 'cell-dblclick', [params, evnt])
+      Tools.emitEvent(this, 'cell-dblclick', [params, evnt])
     },
     /**
      * 排序事件
@@ -519,7 +519,7 @@ export default {
       let rest = XEUtils.sortBy(this.tableData, prop)
       column.order = order
       this.tableData = order === 'desc' ? rest.reverse() : rest
-      HandleFunc.emitEvent(this, 'sort-change', [{ column, prop, order }])
+      Tools.emitEvent(this, 'sort-change', [{ column, prop, order }])
     }
   }
 }

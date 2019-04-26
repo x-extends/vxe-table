@@ -1,6 +1,6 @@
 {
   "name": "vxe-table",
-  "version": "0.0.1",
+  "version": "0.0.1-beta.1",
   "private": true,
   "description": "A very powerful Vue table component.",
   "scripts": {
@@ -64,7 +64,8 @@
     "vxe-table",
     "vxe-editable",
     "vue table",
-    "vue editable"
+    "vue editable",
+    "vue excel"
   ],
   "author": {
     "name": "Xu Liangzhan",

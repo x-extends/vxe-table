@@ -1,8 +1,7 @@
 import XEUtils from 'xe-utils'
 
-const browse = XEUtils.browse()
-const HandleFunc = {
-  browse,
+const Tools = {
+  browse: XEUtils.browse(),
   wheelType: /Firefox/i.test(navigator.userAgent) ? 'DOMMouseScroll' : 'mousewheel',
   isPx (val) {
     return val && /^\d+(px)?$/.test(val)
@@ -16,11 +15,12 @@ const HandleFunc = {
       _vm.$emit.apply(_vm, [].concat.apply([type], args))
     }
   },
+  // 获取所有的列，排除分组
   getColumnList (columns) {
     let result = []
     columns.forEach(column => {
       if (column.children && column.children.length) {
-        result.push.apply(result, HandleFunc.getColumnList(column.children))
+        result.push.apply(result, Tools.getColumnList(column.children))
       } else {
         result.push(column)
       }
@@ -70,4 +70,4 @@ const HandleFunc = {
   }
 }
 
-export default HandleFunc
+export default Tools

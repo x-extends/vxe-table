@@ -1,4 +1,4 @@
-import HandleFunc from '../tool/handle.js'
+import Tools from './tools'
 
 export default {
   name: 'VxeColumnIndex',
@@ -32,10 +32,10 @@ export default {
     }
   },
   created () {
-    this.columnConfig = HandleFunc.getColumnConfig(this)
+    this.columnConfig = Tools.getColumnConfig(this)
   },
   mounted () {
-    HandleFunc.assemColumn(this)
+    Tools.assemColumn(this)
   },
   render (h) {
     return h('div')

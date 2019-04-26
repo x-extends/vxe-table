@@ -1,5 +1,5 @@
 import XEUtils from 'xe-utils'
-import HandleFunc from '../tool/handle.js'
+import Tools from './tools'
 
 /**
  * 渲染列
@@ -197,7 +197,7 @@ export default {
         // 避免 IE 卡顿
         if (leftElem || rightElem) {
           clearTimeout(updateLeftScrollingTimeput)
-          updateLeftScrollingTimeput = setTimeout($table.checkScrolling, HandleFunc.browse.msie ? 300 : 20)
+          updateLeftScrollingTimeput = setTimeout($table.checkScrolling, Tools.browse.msie ? 300 : 20)
         }
         syncBodyScroll(bodyElem.scrollTop, leftElem, rightElem)
       }

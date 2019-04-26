@@ -1,5 +1,5 @@
 import XEUtils from 'xe-utils'
-import HandleFunc from '../tool/handle.js'
+import Tools from './tools'
 
 export default {
   name: 'VxeTableColumn',
@@ -73,10 +73,10 @@ export default {
           opts.renderHeader = this.renderFilterHeader
         }
     }
-    this.columnConfig = HandleFunc.getColumnConfig(this, opts)
+    this.columnConfig = Tools.getColumnConfig(this, opts)
   },
   mounted () {
-    HandleFunc.assemColumn(this)
+    Tools.assemColumn(this)
   },
   render (h) {
     return h('div', this.$slots.default)
@@ -163,7 +163,7 @@ export default {
         options.on = {
           change: evnt => {
             $table.redioRowEvent(evnt, params)
-            HandleFunc.emitEvent(this, 'change', [row])
+            Tools.emitEvent(this, 'change', [row])
           }
         }
       }
@@ -222,7 +222,7 @@ export default {
         options.on = {
           change: evnt => {
             $table.checkRowEvent(evnt, params)
-            HandleFunc.emitEvent(this, 'change', [$table.selection, row])
+            Tools.emitEvent(this, 'change', [$table.selection, row])
           }
         }
       }
