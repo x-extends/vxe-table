@@ -197,9 +197,7 @@ export default {
         // 避免 IE 卡顿
         if (leftElem || rightElem) {
           clearTimeout(updateLeftScrollingTimeput)
-          updateLeftScrollingTimeput = setTimeout(() => {
-            HandleFunc.checkScrolling(bodyElem, leftBody, rightBody)
-          }, HandleFunc.browse.msie ? 300 : 20)
+          updateLeftScrollingTimeput = setTimeout($table.checkScrolling, HandleFunc.browse.msie ? 300 : 20)
         }
         syncBodyScroll(bodyElem.scrollTop, leftElem, rightElem)
       }

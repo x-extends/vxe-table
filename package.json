@@ -28,7 +28,7 @@
     "@vue/cli-service": "^3.6.0",
     "@vue/eslint-config-standard": "^4.0.0",
     "babel-eslint": "^10.0.1",
-    "element-ui": "^2.7.2",
+    "element-ui": "^2.8.2",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
     "gulp": "^4.0.1",

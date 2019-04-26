@@ -4,14 +4,17 @@ import TableHeader from './header'
 import HandleFunc from '../tool/handle.js'
 
 function renderFixed (h, $table, fixedType) {
-  let { tableData, tableColumn, collectColumn, isGroup, height, headerHeight, scrollYWidth, scrollXHeight, columnStore } = $table
+  let { tableData, tableColumn, collectColumn, isGroup, height, headerHeight, scrollYWidth, scrollXHeight, scrollRightToLeft, scrollLeftToRight, columnStore } = $table
   let customHeight = isNaN(height) ? 0 : parseFloat(height)
+  let isRightFixed = fixedType === 'right'
   let style = {
     height: `${customHeight + headerHeight - scrollXHeight}px`,
-    width: `${columnStore[`${fixedType}List`].reduce((previous, column) => previous + column.renderWidth, fixedType === 'right' ? scrollYWidth + 1 : 0)}px`
+    width: `${columnStore[`${fixedType}List`].reduce((previous, column) => previous + column.renderWidth, isRightFixed ? scrollYWidth + 1 : 0)}px`
   }
   return h('div', {
-    class: [`vxe-table--fixed-${fixedType}-wrapper`, 'scrolling--none'],
+    class: [`vxe-table--fixed-${fixedType}-wrapper`, {
+      'scrolling--middle': isRightFixed ? scrollRightToLeft : scrollLeftToRight
+    }],
     style,
     ref: `fixedTable`
   }, [
@@ -106,6 +109,10 @@ export default {
       scrollYWidth: 0,
       // 横向滚动条的高度
       scrollXHeight: 0,
+      // 左侧固定列是否向右滚动了
+      scrollLeftToRight: false,
+      // 右侧固定列是否向左滚动了
+      scrollRightToLeft: false,
       // 是否全选
       isAllSelected: false,
       // 多选属性，有选中且非全选状态
@@ -427,9 +434,22 @@ export default {
         this.headerHeight = headerElem.offsetHeight
       }
       if (this.overflowX) {
-        HandleFunc.checkScrolling(bodyElem, this.$refs.leftBody, this.$refs.rightBody)
+        this.checkScrolling()
       }
       return tableWidth
+    },
+    /**
+     * 处理固定列的显示状态
+     */
+    checkScrolling () {
+      let { tableBody, leftBody, rightBody } = this.$refs
+      let bodyElem = tableBody.$el
+      if (leftBody) {
+        this.scrollLeftToRight = bodyElem.scrollLeft > 0
+      }
+      if (rightBody) {
+        this.scrollRightToLeft = bodyElem.clientWidth < bodyElem.scrollWidth - bodyElem.scrollLeft
+      }
     },
     /**
      * 多选，行选中事件

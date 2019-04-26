@@ -67,24 +67,6 @@ const HandleFunc = {
     } else {
       $table.collectColumn.splice([].indexOf.call($table.$refs.hideColumn.children, _vm.$el), 0, columnConfig)
     }
-  },
-  // 处理固定列的显示状态
-  checkScrolling (bodyElem, leftBody, rightBody) {
-    if (leftBody) {
-      HandleFunc.updateScrolling(leftBody.$el.parentNode, bodyElem.scrollLeft)
-    }
-    if (rightBody) {
-      HandleFunc.updateScrolling(rightBody.$el.parentNode, bodyElem.clientWidth < bodyElem.scrollWidth - bodyElem.scrollLeft)
-    }
-  },
-  updateScrolling (wrapperElem, isMiddle) {
-    let className = wrapperElem.className
-    if (isMiddle) {
-      className = className.replace('scrolling--none', 'scrolling--middle')
-    } else {
-      className = className.replace('scrolling--middle', 'scrolling--none')
-    }
-    wrapperElem.className = className
   }
 }
 
