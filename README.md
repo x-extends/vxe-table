@@ -2,10 +2,6 @@
 
 A very powerful Vue table component.
 
-## Docs
-
-[https://xuliangzhan.github.io/vxe-table/](https://xuliangzhan.github.io/vxe-table/)
-
 ## API
 
 * [功能点](#table-表格)
@@ -13,18 +9,22 @@ A very powerful Vue table component.
   * [尺寸](#cell-基本列)
   * [斑马纹](#cell-基本列)
   * [带边框](#cell-基本列)
+  * 行和列样式
+  * 列宽拖动
   * [固定表头](#cell-基本列)
   * [固定列](#cell-基本列)
   * [固定表头和列](#cell-基本列)
   * [表头分组](#cell-基本列)
-  * [索引](#cell-基本列)
+  * [序号](#cell-基本列)
   * [单选](#cell-基本列)
   * [多选](#cell-基本列)
   * [排序](#cell-基本列)
   * [筛选](#cell-基本列)
-  * [动态列](#cell-基本列)
   * 合并行或列
   * 导出 cvs
+  * 右键菜单
+  * [自定义列](#cell-基本列)
+  * 加载中
   * 展开行
   * 树形
   * 编辑列
