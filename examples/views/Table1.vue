@@ -23,6 +23,7 @@
 
     <vxe-table
       height="300"
+      border
       :data.sync="tableData">
       <vxe-table-column label="分组">
         <vxe-table-column prop="name" label="名称" min-width="200"></vxe-table-column>
