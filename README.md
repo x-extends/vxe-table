@@ -21,11 +21,13 @@ A very powerful Vue table component.
   * [排序](#cell-基本列)
   * [筛选](#cell-基本列)
   * 合并行或列
+  * 表尾汇总
   * 导出 cvs
   * 右键菜单
   * [自定义列](#cell-基本列)
   * 加载中
   * 展开行
+  * 自定义模板
   * 树形
   * 编辑列
   * Excel 列
