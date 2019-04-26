@@ -2,7 +2,7 @@
 
 A very powerful Vue table component.
 
-## API
+## Features
 
 * [vxe-table 功能点](#table-表格)
   * [基础](#table-column)
@@ -37,7 +37,9 @@ A very powerful Vue table component.
   * 可编辑 - 键盘导航
   * 可编辑 - Excel
 
-## Table
+## API
+
+### Table
 
 ```html
 <vxe-table :data.sync="tableData">
@@ -47,7 +49,7 @@ A very powerful Vue table component.
 </vxe-table>
 ```
 
-### Table Attributes
+#### Table Attributes
 
 | 参数 | 说明 | 类型 | 可选值 | 默认值 |
 |------|------|-----|------|-----|
@@ -65,7 +67,7 @@ A very powerful Vue table component.
 | row-key | 行数据的 Key | String | — | — |
 | auto-width | 自动计算列宽（如果关闭，需要手动调用 computeWidth 方法） | Boolean | — | true |
 
-### Table Events
+#### Table Events
 
 | 事件名 | 说明 | 参数 |
 |------|------|-----|
@@ -73,7 +75,7 @@ A very powerful Vue table component.
 | cell-click | 当某个单元格被点击时会触发该事件 | {row,rowIndex,column,columnIndex,cell},event |
 | cell-dblclick | 当某个单元格被双击时会触发该事件 | {row,rowIndex,column,columnIndex,cell},event |
 
-### Table Methods
+#### Table Methods
 
 | 方法名 | 描述 | 参数 |
 |------|------|-----|
@@ -83,13 +85,13 @@ A very powerful Vue table component.
 | clearSort | 用于清空排序条件，数据会恢复成未排序的状态 | — |
 | computeWidth | 重新计算并更新列宽 | — |
 
-## Table-column
+### Table-column
 
 ```html
 <vxe-table-column prop="name" label="Name"></vxe-table-column>
 ```
 
-### Table-column Attributes 参数
+#### Table-column Attributes 参数
 
 | 参数 | 说明 | 类型 | 可选值 | 默认值 |
 |------|------|-----|------|-----|
@@ -112,7 +114,7 @@ A very powerful Vue table component.
 | filterMultiple | 只对 filters 有效，筛选是否允许多选 | Boolean | — | true |
 | filterMethod | 只对 filters 有效，自定义筛选方法 | Function | — | — |
 
-### Table-column Scoped Slot
+#### Table-column Scoped Slot
 
 | name | 说明 |
 |------|------|
