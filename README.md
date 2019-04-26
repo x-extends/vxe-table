@@ -186,7 +186,8 @@ export default {
           sex: 'Man',
           date: '2019-05-01',
           time: 1556677810888,
-          address: 'shenzhen'
+          region: 'ShenZhen',
+          address: 'address abc123'
         }
       ]
     }
