@@ -26,12 +26,12 @@ A very powerful Vue table component.
   * [单选](https://jsrun.net/9rXKp/play)
   * [多选](https://jsrun.net/erXKp/play)
   * [排序](https://jsrun.net/QrXKp/play)
-  * [筛选](#table-column)
+  * [筛选](https://jsrun.net/drXKp/play)
   * 合并行或列
   * 表尾汇总
   * 导出 CVS
   * 快捷菜单
-  * [自定义列](#table-column)
+  * [自定义列](https://jsrun.net/PrXKp/play)
   * 加载中
   * 展开行
   * 滚动渲染
