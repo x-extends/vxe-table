@@ -18,14 +18,14 @@ A very powerful Vue table component.
   * 单元格样式
   * 列宽拖动
   * 流体高度
-  * [固定表头](#table-column)
-  * [固定列](#table-column)
-  * [固定表头和列](#table-column)
-  * [表头分组](#table-column)
-  * [单选](#table-column)
-  * [单选](#table-column)
-  * [多选](#table-column)
-  * [排序](#table-column)
+  * [固定表头](https://jsrun.net/JrXKp/play)
+  * [固定列](https://jsrun.net/TrXKp/play)
+  * [固定表头和列](https://jsrun.net/8rXKp/play)
+  * [表头分组](https://jsrun.net/7rXKp/play)
+  * [序号](https://jsrun.net/xrXKp/play)
+  * [单选](https://jsrun.net/9rXKp/play)
+  * [多选](https://jsrun.net/erXKp/play)
+  * [排序](https://jsrun.net/QrXKp/play)
   * [筛选](#table-column)
   * 合并行或列
   * 表尾汇总
@@ -181,6 +181,8 @@ export default {
     return {
       tableData: [
         {
+          id: 10001,
+          checked: false,
           name: 'test1',
           role: 'developer',
           sex: 'Man',
