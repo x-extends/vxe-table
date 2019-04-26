@@ -11,8 +11,8 @@ A very powerful Vue table component.
 ## Features
 
 * [vxe-table 功能点](#table-表格)
-  * [基础](#table-column)
-  * [尺寸](#table-column)
+  * [基础](https://jsrun.net/VrXKp/play)
+  * [尺寸](https://jsrun.net/PmXKp/play)
   * [斑马线条纹](#table-column)
   * [带边框](#table-column)
   * 单元格样式
@@ -22,7 +22,7 @@ A very powerful Vue table component.
   * [固定列](#table-column)
   * [固定表头和列](#table-column)
   * [表头分组](#table-column)
-  * [序号](#table-column)
+  * [单选](#table-column)
   * [单选](#table-column)
   * [多选](#table-column)
   * [排序](#table-column)
@@ -35,7 +35,7 @@ A very powerful Vue table component.
   * 加载中
   * 展开行
   * 滚动渲染
-  * 自定义模板和格式化内容
+  * 自定义模板与格式化内容
   * 树形
   * 可编辑
   * 可编辑 - 增/删/改/查/还原
@@ -98,7 +98,7 @@ Vue.use(VXETable)
 | height | 初始化完整表格数据 | String | — | — |
 | stripe | 是否带有斑马纹 | Boolean | — | false |
 | border | 是否带有纵向边框 | Boolean | — | false |
-| size | 表格的尺寸 | String | — | — |
+| size | 表格的尺寸 | String | medium / small / mini | — |
 | fit | 列的宽度是否自撑开 | Boolean | — | true |
 | loading | 表格是否加载中 | Boolean | — | false |
 | show-header | 是否显示表头 | Boolean | — | true |
@@ -179,12 +179,16 @@ Vue.use(VXETable)
 export default {
   data () {
     return {
-      tableData: [{
-        date: 1551322088449,
-        name: 'Xu Liangzhan',
-        sex: 'Man',
-        address: 'Address'
-      }]
+      tableData: [
+        {
+          name: 'test1',
+          role: 'developer',
+          sex: 'Man',
+          date: '2019-05-01',
+          time: 1556677810888,
+          address: 'shenzhen'
+        }
+      ]
     }
   }
 }
