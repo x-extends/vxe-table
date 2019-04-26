@@ -37,6 +37,40 @@ A very powerful Vue table component.
   * 可编辑 - 键盘导航
   * 可编辑 - Excel
 
+## Installing
+
+```shell
+npm install xe-utils vxe-table
+```
+
+Get on [unpkg](https://unpkg.com/vxe-table/) and [cdnjs](https://cdn.jsdelivr.net/npm/vxe-table/)
+
+```HTML
+<!-- 引入样式 -->
+<link rel="stylesheet" href="https://unpkg.com/vxe-table/lib/index.css">
+<!-- 引入脚本 -->
+<script src="https://unpkg.com/xe-utils"></script>
+<script src="https://unpkg.com/vxe-table"></script>
+```
+
+```javascript
+import Vue from 'vue'
+import VXETable from 'vxe-table'
+
+// Case 1. 引入默认的主题样式
+import 'vxe-table/lib/index.css'
+
+// Case 2. 自定义的主题颜色（复制 style/variable.scss 到自己的项目中，修改颜色变量，然后引入）
+// @import 'assets/style/vxe-table/variable.scss';
+// @import 'vxe-table/style/table.scss';
+
+// Case 3. 重写主题样式（复制 style/table.scss 到项目中自行修改）
+// @import 'assets/style/vxe-table/variable.scss';
+// @import 'assets/style/vxe-table/table.scss';
+
+Vue.use(VXETable)
+```
+
 ## API
 
 ### Table

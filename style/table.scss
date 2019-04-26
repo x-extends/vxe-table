@@ -87,7 +87,7 @@
   &.t--stripe {
     .vxe-body--row {
       &:nth-child(2n) {
-        background: $vxe-table-striped-background-color;
+        background: $vxe-table-row-striped-background-color;
       }
     }
   }
