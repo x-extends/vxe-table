@@ -4,11 +4,11 @@ import TableHeader from './header'
 import Tools from './tools'
 
 function renderFixed (h, $table, fixedType) {
-  let { tableData, tableColumn, collectColumn, isGroup, height, headerHeight, scrollYWidth, scrollXHeight, scrollRightToLeft, scrollLeftToRight, columnStore } = $table
+  let { tableData, tableColumn, collectColumn, isGroup, height, headerHeight, tableHeight, scrollYWidth, scrollXHeight, scrollRightToLeft, scrollLeftToRight, columnStore } = $table
   let customHeight = isNaN(height) ? 0 : parseFloat(height)
   let isRightFixed = fixedType === 'right'
   let style = {
-    height: `${customHeight + headerHeight - scrollXHeight}px`,
+    height: `${(customHeight || tableHeight) + headerHeight - scrollXHeight}px`,
     width: `${columnStore[`${fixedType}List`].reduce((previous, column) => previous + column.renderWidth, isRightFixed ? scrollYWidth + 1 : 0)}px`
   }
   return h('div', {
@@ -99,6 +99,8 @@ export default {
       tableData: [],
       // 表格宽度
       tableWidth: 0,
+      // 表格高度
+      tableHeight: 0,
       // 表头高度
       headerHeight: 0,
       // 是否存在纵向滚动条
@@ -425,11 +427,13 @@ export default {
           }
         }
       })
+      let tableHeight = bodyElem.offsetHeight
       this.scrollYWidth = bodyElem.offsetWidth - bodyWidth
-      this.scrollXHeight = bodyElem.offsetHeight - bodyElem.clientHeight - 1
+      this.scrollXHeight = tableHeight - bodyElem.clientHeight - 1
       this.overflowY = this.scrollYWidth > 0
       this.overflowX = tableWidth > bodyWidth
       this.tableWidth = tableWidth
+      this.tableHeight = tableHeight
       if (headerElem) {
         this.headerHeight = headerElem.offsetHeight
       }
@@ -503,6 +507,9 @@ export default {
      * 列点击事件
      */
     colClickEvent (evnt, params) {
+      if (this.highlightCurrentRow) {
+        this.selectRow = params.row
+      }
       Tools.emitEvent(this, 'cell-click', [params, evnt])
     },
     /**

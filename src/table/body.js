@@ -75,7 +75,7 @@ function syncBodyScroll (scrollTop, elem1, elem2) {
       if (elem2) {
         elem2.onscroll = elem2._onscroll
       }
-    }, 50)
+    }, 300)
   }
 }
 
@@ -97,12 +97,12 @@ export default {
   },
   render (h) {
     let { $parent: $table, fixedType } = this
-    let { height, scrollXHeight } = $table
+    let { height, tableHeight, scrollXHeight } = $table
     let customHeight = isNaN(height) ? 0 : parseFloat(height)
     let wrappers = []
     let style = {}
     if (customHeight) {
-      style.height = `${fixedType ? customHeight - scrollXHeight : customHeight}px`
+      style.height = `${fixedType ? (customHeight || tableHeight) - scrollXHeight : customHeight}px`
     }
     wrappers.push(
       this.renderTable(h, $table, fixedType)
