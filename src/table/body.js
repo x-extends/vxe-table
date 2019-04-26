@@ -15,7 +15,7 @@ function renderColumn (h, $table, fixedType, row, rowIndex, column, columnIndex)
     tdClss.push(`col--${align}`)
   }
   if (fixedHiddenColumn) {
-    tdClss.push('fixed-hidden')
+    tdClss.push('fixed--hidden')
   }
   if (showTitle) {
     cellClss.push('c--title')

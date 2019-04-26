@@ -114,7 +114,7 @@ export default {
               thClss.push(`col--${column.headerAlign}`)
             }
             if (fixedHiddenColumn) {
-              thClss.push('fixed-hidden')
+              thClss.push('fixed--hidden')
             }
             if (column.visible) {
               renderRows.push(
