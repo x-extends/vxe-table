@@ -132,7 +132,7 @@ export default {
   computed: {
     // 是否使用了分组表头
     isGroup () {
-      return this.collectColumn.some(column => column.type === 'group')
+      return this.collectColumn.some(column => column.children && column.children.length)
     },
     visibleColumn () {
       return this.tableColumn.filter(column => column.visible)
@@ -434,7 +434,7 @@ export default {
     /**
      * 多选，行选中事件
      */
-    checkboxRowEvent (evnt, { row, column }) {
+    checkRowEvent (evnt, { row, column }) {
       let value = event.target.checked
       let { property } = column
       if (property) {
@@ -454,10 +454,10 @@ export default {
     /**
      * 多选，选中所有事件
      */
-    checkboxAllEvent (evnt) {
+    checkAllEvent (evnt) {
       let value = event.target.checked
-      let checkbox = this.tableColumn.find(column => column.type === 'checkbox')
-      let property = checkbox.property
+      let column = this.tableColumn.find(column => column.type === 'selection')
+      let property = column.property
       if (property) {
         this.tableData.forEach(item => {
           XEUtils.set(item, property, value)

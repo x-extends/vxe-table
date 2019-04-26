@@ -1,7 +1,7 @@
 const getAllColumns = (columns) => {
   const result = []
   columns.forEach((column) => {
-    if (column.children) {
+    if (column.children && column.children.length) {
       result.push(column)
       result.push.apply(result, getAllColumns(column.children))
     } else {
@@ -20,7 +20,7 @@ const convertToRows = (originColumns) => {
         maxLevel = column.level
       }
     }
-    if (column.children) {
+    if (column.children && column.children.length) {
       let colSpan = 0
       column.children.forEach((subColumn) => {
         traverse(subColumn, column)
@@ -45,10 +45,10 @@ const convertToRows = (originColumns) => {
   const allColumns = getAllColumns(originColumns)
 
   allColumns.forEach((column) => {
-    if (!column.children) {
-      column.rowSpan = maxLevel - column.level + 1
-    } else {
+    if (column.children && column.children.length) {
       column.rowSpan = 1
+    } else {
+      column.rowSpan = maxLevel - column.level + 1
     }
     rows[column.level - 1].push(column)
   })
@@ -109,7 +109,7 @@ export default {
           let renderRows = []
           cols.forEach((column, columnIndex) => {
             let thClss = ['vxe-header-column']
-            let fixedHiddenColumn = fixedType && column.fixed !== fixedType && column.type !== 'group'
+            let fixedHiddenColumn = fixedType && column.fixed !== fixedType && (!column.children || !column.children.length)
             if (column.headerAlign) {
               thClss.push(`col--${column.headerAlign}`)
             }

@@ -23,7 +23,7 @@
     .vxe-radio {
       > input {
         &:checked+span {
-          transition: background-color .2s ease-in-out;
+          transition: background-color .1s ease-in-out;
         }
       }
     }
@@ -267,6 +267,14 @@
         width: 2px;
         height: 8px;
         background-color: $vxe-table-column-icon-border-color;
+      }
+      &:hover {
+        &:before {
+          border-top-color: $vxe-table-column-icon-border-hover-color;
+        }
+        &:after {
+          background-color: $vxe-table-column-icon-border-hover-color;
+        }
       }
     }
   }

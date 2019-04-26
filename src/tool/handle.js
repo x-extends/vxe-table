@@ -19,7 +19,7 @@ const HandleFunc = {
   getColumnList (columns) {
     let result = []
     columns.forEach(column => {
-      if (column.children) {
+      if (column.children && column.children.length) {
         result.push.apply(result, HandleFunc.getColumnList(column.children))
       } else {
         result.push(column)
@@ -51,21 +51,24 @@ const HandleFunc = {
       colSpan: 1,
       order: null,
       renderWidth: 0,
-      children: _vm.children,
       renderHeader: renderHeader || _vm.renderHeader,
       renderCell: renderCell || _vm.renderCell
     }
   },
-  // 有序的组装列配置
+  // 组装列配置
   assemColumn (_vm) {
     let { $table, $parent, columnConfig } = _vm
-    let children = $parent.children
-    if (children) {
-      children.splice([].indexOf.call($parent.$el.children, _vm.$el), 0, columnConfig)
+    let parentColumnConfig = $parent.columnConfig
+    if (parentColumnConfig && $parent.$children.length > 0) {
+      if (!parentColumnConfig.children) {
+        parentColumnConfig.children = []
+      }
+      parentColumnConfig.children.splice([].indexOf.call($parent.$el.children, _vm.$el), 0, columnConfig)
     } else {
       $table.collectColumn.splice([].indexOf.call($table.$refs.hideColumn.children, _vm.$el), 0, columnConfig)
     }
   },
+  // 处理固定列的显示状态
   checkScrolling (bodyElem, leftBody, rightBody) {
     if (leftBody) {
       HandleFunc.updateScrolling(leftBody.$el.parentNode, bodyElem.scrollLeft)

@@ -8,24 +8,24 @@ A very powerful Vue table component.
 
 ## API
 
-* [vxe-table 功能组件](#table-表格)
-  * [column-cell 基本列](#cell-基本列)
-  * [column-group 分组列](#group-分组列)
-  * [column-index 索引列](#index-索引列)
-  * [column-radio 单选列](#radio-单选列)
-  * [column-checkbox 多选列](#checkbox-多选列)
-  * column-expand 展开列
-  * column-tree 树形列
-  * column-edit 编辑列
-  * column-excel Excel 列
+* [vxe-table 功能点](#table-表格)
+  * [基本列](#cell-基本列)
+  * [多级表头](#cell-基本列)
+  * [索引列](#cell-基本列)
+  * [单选列](#cell-基本列)
+  * [多选列](#cell-基本列)
+  * 展开列
+  * 树形列
+  * 编辑列
+  * Excel 列
 
-## Table 表格
+## Table
 
 ```html
 <vxe-table :data.sync="tableData">
-  <vxe-column-checkbox width="60"></vxe-column-checkbox>
-  <vxe-column-cell prop="name" label="Name"></vxe-column-cell>
-  <vxe-column-cell prop="address" label="Address"></vxe-column-cell>
+  <vxe-table-column type="selection" width="60"></vxe-table-column>
+  <vxe-table-column prop="name" label="Name"></vxe-table-column>
+  <vxe-table-column prop="address" label="Address"></vxe-table-column>
 </vxe-table>
 ```
 
@@ -51,7 +51,7 @@ A very powerful Vue table component.
 
 | 事件名 | 说明 | 参数 |
 |------|------|-----|
-| select-all | 当手动勾选全选 Checkbox 时触发的事件 | selection |
+| select-all | 只对 type=selection 有效，当手动勾选全选时触发的事件 | selection |
 | cell-click | 当某个单元格被点击时会触发该事件 | {row,rowIndex,column,columnIndex,cell},event |
 | cell-dblclick | 当某个单元格被双击时会触发该事件 | {row,rowIndex,column,columnIndex,cell},event |
 
@@ -65,16 +65,17 @@ A very powerful Vue table component.
 | clearSort | 用于清空排序条件，数据会恢复成未排序的状态 | — |
 | computeWidth | 重新计算并更新列宽 | — |
 
-## Cell 基本列
+## Table-column
 
 ```html
-<vxe-column-cell prop="name" label="Name"></vxe-column-cell>
+<vxe-table-column prop="name" label="Name"></vxe-table-column>
 ```
 
-### Cell Attributes 参数
+### Table-column Attributes 参数
 
 | 参数 | 说明 | 类型 | 可选值 | 默认值 |
 |------|------|-----|------|-----|
+| type | 列的类型 | String | index / selection / radio | — |
 | prop | 列属性 | String | — | — |
 | label | 列标题 | String | — | — |
 | width | 列宽度 | String | — | — |
@@ -86,109 +87,19 @@ A very powerful Vue table component.
 | show-overflow-title | 当内容过长显示为省略号并用原生的 title 显示完整内容 | Boolean | — | false |
 | show-overflow-tooltip | 当内容过长显示为省略号并用 tooltip 显示完整内容 | Boolean | — | false |
 | formatter | 格式化显示内容 Function({cellValue, row, rowIndex, column, columnIndex}) | Function | — | — |
-| sortBy | 自定义排序的属性 | String/Array | — | — |
-| filters | 配置筛选条件数组 | Array | — | — |
-| filterMultiple | 筛选是否允许多选 | Boolean | — | true |
-| filterMethod | 自定义筛选方法 | Function | — | — |
-
-### Cell Scoped Slot
-
-| name | 说明 |
-|------|------|
-| — | 自定义显示内容，参数为 { row, rowIndex, column, columnIndex } |
-| header | 自定义表头的内容，参数为 { column, columnIndex } |
-
-## Group 分组列
-
-```html
-<vxe-column-group label="Group name">
-  <vxe-column-cell prop="name" label="Name"></vxe-column-cell>
-  <vxe-column-cell prop="address" label="Address"></vxe-column-cell>
-</vxe-column-group>
-```
-
-### Group Attributes
-
-| 参数 | 说明 | 类型 | 可选值 | 默认值 |
-|------|------|-----|------|-----|
-| label | 分组列标题 | String | — | — |
-
-### Group Scoped Slot
-
-| name | 说明 |
-|------|------|
-| header | 自定义表头的内容，参数为 { column, columnIndex } |
-
-## Index 索引列
-
-```html
-<vxe-column-index width="60"></vxe-column-index>
-```
-
-### Index Attributes
-
-| 参数 | 说明 | 类型 | 可选值 | 默认值 |
-|------|------|-----|------|-----|
-| label | 列标题 | String | — | # |
-| width | 列宽度 | String | — | — |
-| minWidth | 最小列宽度，把剩余宽度按比例分配 | String | — | — |
-| fixed | 将列固定在左侧或者右侧 | String | — | left |
-| align | 列对其方式 | String | — | left |
-| header-align | 表头对齐方式 | String | — | — |
 | indexMethod | 只对 type=index 有效，自定义索引方法 Function({row, rowIndex, column, columnIndex}) | Function | — | — |
+| sortable | 是否允许列排序 | Boolean | — | — |
+| sortBy | 只对 sortable 有效，自定义排序的属性 | String/Array | — | — |
+| filters | 配置筛选条件数组 | Array | — | — |
+| filterMultiple | 只对 filters 有效，筛选是否允许多选 | Boolean | — | true |
+| filterMethod | 只对 filters 有效，自定义筛选方法 | Function | — | — |
 
-### Index Scoped Slot
+### Table-column Scoped Slot
 
 | name | 说明 |
 |------|------|
 | — | 自定义显示内容，参数为 { row, rowIndex, column, columnIndex } |
 | header | 自定义表头的内容，参数为 { column, columnIndex } |
-
-## Radio 单选列
-
-```html
-<vxe-column-radio width="60"></vxe-column-radio>
-```
-
-### Radio Attributes
-
-| 参数 | 说明 | 类型 | 可选值 | 默认值 |
-|------|------|-----|------|-----|
-| label | 列标题 | String | — | — |
-| width | 列宽度 | String | — | — |
-| minWidth | 最小列宽度，把剩余宽度按比例分配 | String | — | — |
-| fixed | 将列固定在左侧或者右侧 | String | — | left |
-| align | 列对其方式 | String | — | center |
-| header-align | 表头对齐方式 | String | — | center |
-
-### Events 事件
-
-| 事件名 | 说明 | 参数 |
-|------|------|-----|
-| change | 当选择项发生变化时会触发该事件 | row |
-
-## Checkbox 多选列
-
-```html
-<vxe-column-checkbox width="60"></vxe-column-checkbox>
-```
-
-## Checkbox Attributes
-
-| 参数 | 说明 | 类型 | 可选值 | 默认值 |
-|------|------|-----|------|-----|
-| prop | 列属性（如果设置了则会绑定双向同步）| String | — | — |
-| width | 列宽度 | String | — | — |
-| minWidth | 最小列宽度，把剩余宽度按比例分配 | String | — | — |
-| fixed | 将列固定在左侧或者右侧 | String | — | left |
-| align | 列对其方式 | String | — | center |
-| header-align | 表头对齐方式 | String | — | center |
-
-### Checkbox Events
-
-| 事件名 | 说明 | 参数 |
-|------|------|-----|
-| change | 当选择项发生变化时会触发该事件 | selection, row |
 
 ## Example
 
@@ -196,10 +107,10 @@ A very powerful Vue table component.
 <template>
   <div>
     <vxe-table :data.sync="tableData">
-      <vxe-column-checkbox width="60"></vxe-column-checkbox>
-      <vxe-column-cell prop="name" label="Name"></vxe-column-cell>
-      <vxe-column-cell prop="sex" label="Sex"></vxe-column-cell>
-      <vxe-column-cell prop="address" label="Address"></vxe-column-cell>
+      <vxe-table-column type="index" width="60"></vxe-table-column>
+      <vxe-table-column prop="name" label="Name"></vxe-table-column>
+      <vxe-table-column prop="sex" label="Sex"></vxe-table-column>
+      <vxe-table-column prop="address" label="Address"></vxe-table-column>
     </vxe-table>
   </div>
 </template>

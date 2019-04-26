@@ -1,9 +1,5 @@
 import Table from './table/table'
-import ColumnCell from './table/cell'
-import ColumnGroup from './table/group'
-import ColumnIndex from './table/index'
-import ColumnRadio from './table/radio'
-import ColumnCheckbox from './table/checkbox'
+import TableColumn from './table/column'
 
 /**
  * 引入样式方式：
@@ -22,11 +18,7 @@ if (process.env.NODE_ENV !== 'development') {
 
 const components = [
   Table,
-  ColumnCell,
-  ColumnGroup,
-  ColumnIndex,
-  ColumnRadio,
-  ColumnCheckbox
+  TableColumn
 ]
 
 const install = function (Vue) {
