@@ -5,32 +5,37 @@ A very powerful Vue table component.
 ## API
 
 * [vxe-table 功能点](#table-表格)
-  * [基础](#cell-基本列)
-  * [尺寸](#cell-基本列)
-  * [斑马纹](#cell-基本列)
-  * [带边框](#cell-基本列)
-  * 行和列样式
+  * [基础](#table-column)
+  * [尺寸](#table-column)
+  * [斑马线条纹](#table-column)
+  * [带边框](#table-column)
+  * 单元格样式
   * 列宽拖动
-  * [固定表头](#cell-基本列)
-  * [固定列](#cell-基本列)
-  * [固定表头和列](#cell-基本列)
-  * [表头分组](#cell-基本列)
-  * [序号](#cell-基本列)
-  * [单选](#cell-基本列)
-  * [多选](#cell-基本列)
-  * [排序](#cell-基本列)
-  * [筛选](#cell-基本列)
+  * 流体高度
+  * [固定表头](#table-column)
+  * [固定列](#table-column)
+  * [固定表头和列](#table-column)
+  * [表头分组](#table-column)
+  * [序号](#table-column)
+  * [单选](#table-column)
+  * [多选](#table-column)
+  * [排序](#table-column)
+  * [筛选](#table-column)
   * 合并行或列
   * 表尾汇总
-  * 导出 cvs
-  * 右键菜单
-  * [自定义列](#cell-基本列)
+  * 导出 CVS
+  * 快捷菜单
+  * [自定义列](#table-column)
   * 加载中
   * 展开行
-  * 自定义模板
+  * 滚动渲染
+  * 自定义模板和格式化内容
   * 树形
-  * 编辑列
-  * Excel 列
+  * 可编辑
+  * 可编辑 - 增/删/改/查/还原
+  * 可编辑 - 校验
+  * 可编辑 - 键盘导航
+  * 可编辑 - Excel
 
 ## Table
 
@@ -58,7 +63,7 @@ A very powerful Vue table component.
 | highlight-current-row | 是否要高亮当前选中行 | Boolean | — | false |
 | highlight-hover-row | 鼠标移到行是否要高亮显示 | Boolean | — | true |
 | row-key | 行数据的 Key | String | — | — |
-| auto-width | 列宽是否自动计算（如果关闭将不会自动计算列宽） | Boolean | — | true |
+| auto-width | 自动计算列宽（如果关闭，需要手动调用 computeWidth 方法） | Boolean | — | true |
 
 ### Table Events
 
