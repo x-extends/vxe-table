@@ -3,6 +3,9 @@ import TableBody from './body'
 import TableHeader from './header'
 import Tools from './tools'
 
+/**
+ * 渲染浮固定列
+ */
 function renderFixed (h, $table, fixedType) {
   let { tableData, tableColumn, collectColumn, isGroup, height, headerHeight, tableHeight, scrollYWidth, scrollXHeight, scrollRightToLeft, scrollLeftToRight, columnStore } = $table
   let customHeight = isNaN(height) ? 0 : parseFloat(height)
@@ -56,8 +59,6 @@ export default {
     stripe: Boolean,
     // 是否带有纵向边框
     border: Boolean,
-    // 是否显示默认效果
-    animat: { type: Boolean, default: true },
     // 表格的尺寸
     size: String,
     // 列的宽度是否自撑开
@@ -77,7 +78,9 @@ export default {
     // 行数据的 Key
     rowKey: [String, Number],
     // 列宽是否自动响应计算
-    autoWidth: { type: Boolean, default: true }
+    autoWidth: { type: Boolean, default: true },
+    // 性能优化的配置项
+    optimized: [Object, Boolean]
   },
   components: {
     TableBody,
@@ -125,6 +128,13 @@ export default {
       selectRow: null,
       // 当前 hover 行
       hoverRow: null,
+      // 当前选中的筛选列
+      filterStore: {
+        options: [],
+        column: null,
+        multiple: false,
+        visible: false
+      },
       // 存放列相关的信息
       columnStore: {
         leftList: [],
@@ -139,6 +149,16 @@ export default {
     }
   },
   computed: {
+    // 优化的参数
+    optimizeConfig () {
+      let isAll = this.optimized === true
+      return Object.assign({
+        // 关闭所有显示效果
+        animat: !isAll,
+        // 如果设置了则不允许换行 ellipsis、title、tooltip
+        overflow: isAll ? 'title' : null
+      }, this.optimized)
+    },
     // 是否使用了分组表头
     isGroup () {
       return this.collectColumn.some(column => column.children && column.children.length)
@@ -174,35 +194,48 @@ export default {
       this.$nextTick(() => this.computeWidth(true))
     })
   },
+  mounted () {
+    document.body.appendChild(this.$refs.filterWrapper)
+  },
+  destroyed () {
+    let filterWrapper = this.$refs.filterWrapper
+    if (filterWrapper && filterWrapper.parentNode) {
+      filterWrapper.parentNode.removeChild(filterWrapper)
+    }
+  },
   render (h) {
-    let { tableData, tableColumn, collectColumn, isGroup, animat, border, stripe, highlightHoverRow, size, columnStore } = this
+    let { _e, tableData, tableColumn, collectColumn, isGroup, showHeader, border, stripe, highlightHoverRow, size, overflowX, optimizeConfig, columnStore, filterStore } = this
     let { leftList, rightList } = columnStore
-    let renderBody = [
+    return h('div', {
+      class: ['vxe-table', size ? `t--size-${size}` : '', {
+        't--animat': optimizeConfig.animat,
+        't--stripe': stripe,
+        't--border': border,
+        't--highlight': highlightHoverRow
+      }]
+    }, [
+      /**
+       * 隐藏列
+       */
       h('div', {
         class: ['vxe-table-hidden-column'],
         ref: 'hideColumn'
-      }, this.$slots.default)
-    ]
-    /**
-     * 渲染表头
-     */
-    if (this.showHeader) {
-      renderBody.push(
-        h('table-header', {
-          ref: 'tableHeader',
-          props: {
-            tableData,
-            tableColumn,
-            collectColumn,
-            isGroup
-          }
-        })
-      )
-    }
-    /**
-     * 渲染内容
-     */
-    renderBody.push(
+      }, this.$slots.default),
+      /**
+       * 主头部
+       */
+      showHeader ? h('table-header', {
+        ref: 'tableHeader',
+        props: {
+          tableData,
+          tableColumn,
+          collectColumn,
+          isGroup
+        }
+      }) : _e(),
+      /**
+       * 主内容
+       */
       h('table-body', {
         ref: 'tableBody',
         props: {
@@ -211,32 +244,29 @@ export default {
           collectColumn,
           isGroup
         }
-      })
-    )
-    /**
-     * 渲染左侧固定列
-     */
-    if (leftList && leftList.length) {
-      renderBody.push(
-        renderFixed(h, this, 'left')
-      )
-    }
-    /**
-     * 渲染右侧固定列
-     */
-    if (rightList && rightList.length) {
-      renderBody.push(
-        renderFixed(h, this, 'right')
-      )
-    }
-    return h('div', {
-      class: ['vxe-table', size ? `t--size-${size}` : '', {
-        't--animat': animat,
-        't--stripe': stripe,
-        't--border': border,
-        't--highlight': highlightHoverRow
-      }]
-    }, renderBody)
+      }),
+      /**
+       * 左侧固定列
+       */
+      leftList && leftList.length && overflowX ? renderFixed(h, this, 'left') : _e(),
+      /**
+       * 右侧固定列
+       */
+      rightList && rightList.length && overflowX ? renderFixed(h, this, 'right') : _e(),
+      /**
+       * 筛选容器
+       */
+      h('div', {
+        class: ['vxe-table--filter-wrapper'],
+        ref: 'filterWrapper'
+      }, [
+        h('ul', {
+          class: ['ff']
+        }, filterStore.options.map(item => {
+          return h('li')
+        }))
+      ])
+    ])
   },
   methods: {
     clearSelection () {
@@ -254,10 +284,19 @@ export default {
       })
       this.tableData = this.data || []
     },
+    clearFilter () {
+      Object.assign(this.filterStore, {
+        options: [],
+        column: null,
+        multiple: false,
+        visible: false
+      })
+    },
     reload (data) {
       this.clearSelection()
       this.clearSelectRow()
       this.clearSort()
+      this.clearFilter()
       this.tableData = data || []
       let rest = this.$nextTick()
       if (this.autoWidth) {
@@ -521,12 +560,24 @@ export default {
     /**
      * 排序事件
      */
-    rowSortEvent (evnt, { column }, order) {
-      let prop = column.property
-      let rest = XEUtils.sortBy(this.tableData, prop)
-      column.order = order
-      this.tableData = order === 'desc' ? rest.reverse() : rest
-      Tools.emitEvent(this, 'sort-change', [{ column, prop, order }])
+    rowSortEvent (evnt, column, params, order) {
+      if (column.order !== order) {
+        let prop = column.property
+        let rest = XEUtils.sortBy(this.tableData, prop)
+        column.order = order
+        this.tableData = order === 'desc' ? rest.reverse() : rest
+        Tools.emitEvent(this, 'sort-change', [{ column, prop, order }])
+      }
+    },
+    /**
+     * 筛选事件
+     */
+    filterEvent (evnt, column, params) {
+      let filterStore = this.filterStore
+      filterStore.multiple = column.multiple
+      filterStore.options = column.filters
+      filterStore.column = column
+      filterStore.visible = true
     }
   }
 }

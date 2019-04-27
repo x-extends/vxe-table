@@ -39,7 +39,9 @@ export default {
     // 筛选是否允许多选
     filterMultiple: { type: Boolean, default: true },
     // 自定义筛选方法
-    filterMethod: Function
+    filterMethod: Function,
+    // 列的 key
+    columnKey: [String, Number]
   },
   inject: [
     '$table'
@@ -248,7 +250,7 @@ export default {
           checked: XEUtils.get(row, column.property)
         }
         options.on = {
-          change: evnt => {
+          change (evnt) {
             $table.checkRowEvent(evnt, params)
           }
         }
@@ -267,6 +269,7 @@ export default {
      * 排序
      */
     renderSortHeader (h, params) {
+      let { $table } = this
       let { column } = params
       return [
         h('span', column.label),
@@ -278,8 +281,8 @@ export default {
               'sort--active': column.order === 'asc'
             }],
             on: {
-              click: evnt => {
-                this.handleSortEvent(evnt, column, params, 'asc')
+              click (evnt) {
+                $table.rowSortEvent(evnt, column, params, 'asc')
               }
             }
           }),
@@ -288,24 +291,20 @@ export default {
               'sort--active': column.order === 'desc'
             }],
             on: {
-              click: evnt => {
-                this.handleSortEvent(evnt, column, params, 'desc')
+              click (evnt) {
+                $table.rowSortEvent(evnt, column, params, 'desc')
               }
             }
           })
         ])
       ]
     },
-    handleSortEvent (evnt, column, params, order) {
-      if (column.order !== order) {
-        this.$table.rowSortEvent(evnt, params, order)
-      }
-    },
 
     /**
      * 筛选
      */
     renderFilterHeader (h, params) {
+      let { $table } = this
       let { column } = params
       return [
         h('span', column.label),
@@ -315,16 +314,13 @@ export default {
           h('i', {
             class: ['vxe-filter--icon'],
             on: {
-              click: evnt => {
-                this.handleFilterEvent(evnt, column, params)
+              click (evnt) {
+                $table.filterEvent(evnt, column, params)
               }
             }
           })
         ])
       ]
-    },
-    handleFilterEvent (evnt, column, params) {
-
     }
   }
 }

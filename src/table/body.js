@@ -5,26 +5,15 @@ import Tools from './tools'
  * 渲染列
  */
 function renderColumn (h, $table, fixedType, row, rowIndex, column, columnIndex) {
-  let { $listeners: tableListeners, border, highlightCurrentRow } = $table
-  let { align, ellipsis, showTitle, showTooltip, renderWidth } = column
-  let fixedHiddenColumn = fixedType && column.fixed !== fixedType
-  let tdClss = ['vxe-body--column']
-  let cellClss = ['vxe-cell']
+  let { $listeners: tableListeners, border, highlightCurrentRow, overflowX, optimizeConfig } = $table
+  let { align, ellipsis, showTitle, showTooltip, renderWidth, columnKey } = column
+  let { overflow } = optimizeConfig
+  let fixedHiddenColumn = fixedType ? column.fixed !== fixedType : overflowX && column.fixed
+  let isShowTitle = showTitle || overflow === 'title'
+  let isShowTooltip = showTooltip || overflow === 'tooltip'
+  let isEllipsis = ellipsis || overflow === 'ellipsis'
   let tdOns = {}
-  if (align) {
-    tdClss.push(`col--${align}`)
-  }
-  if (fixedHiddenColumn) {
-    tdClss.push('fixed--hidden')
-  }
-  if (showTitle) {
-    cellClss.push('c--title')
-  } else if (showTooltip) {
-    cellClss.push('c--tooltip')
-  } else if (ellipsis) {
-    cellClss.push('c--ellipsis')
-  }
-  // 事件监听
+  // 优化事件绑定
   if (highlightCurrentRow || tableListeners['cell-click']) {
     tdOns.click = evnt => {
       $table.colClickEvent(evnt, { row, rowIndex, column, columnIndex, cell: evnt.currentTarget })
@@ -36,17 +25,24 @@ function renderColumn (h, $table, fixedType, row, rowIndex, column, columnIndex)
     }
   }
   return h('td', {
-    class: tdClss,
-    key: columnIndex,
+    class: ['vxe-body--column', {
+      [`col--${align}`]: align,
+      'fixed--hidden': fixedHiddenColumn
+    }],
+    key: columnKey || columnIndex,
     on: tdOns
-  }, [
+  }, !fixedType && fixedHiddenColumn ? [] : [
     h('div', {
-      class: cellClss,
+      class: ['vxe-cell', {
+        'c--title': isShowTitle,
+        'c--tooltip': isShowTooltip,
+        'c--ellipsis': isEllipsis
+      }],
       attrs: {
         title: showTitle ? XEUtils.get(row, column.property) : null
       },
       style: {
-        width: ellipsis || showTitle || showTooltip ? `${border ? renderWidth - 1 : renderWidth}px` : null
+        width: isShowTitle || isShowTooltip || isEllipsis ? `${border ? renderWidth - 1 : renderWidth}px` : null
       }
     }, column.renderCell(h, { $table, row, rowIndex, column, columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn }))
   ])
@@ -54,6 +50,8 @@ function renderColumn (h, $table, fixedType, row, rowIndex, column, columnIndex)
 
 /**
  * 同步滚动条
+ * scroll 方式：可以使固定列与内容保持一致的滚动效果，处理相对复杂
+ * mousewheel 方式：对于同步滚动效果就略差了
  */
 var scrollProcessTimeout
 var updateLeftScrollingTimeput
@@ -96,45 +94,28 @@ export default {
     this.$el.onscroll = null
   },
   render (h) {
-    let { $parent: $table, fixedType } = this
-    let { height, tableHeight, scrollXHeight } = $table
+    let { _e, $parent: $table, fixedType } = this
+    let { highlightHoverRow, rowKey, height, tableData, tableColumn, tableHeight, tableWidth, scrollXHeight, selectRow, hoverRow, overflowX, columnStore, optimizeConfig } = $table
+    let { leftList, rightList } = columnStore
+    let { overflow } = optimizeConfig
     let customHeight = isNaN(height) ? 0 : parseFloat(height)
-    let wrappers = []
     let style = {}
     if (customHeight) {
       style.height = `${fixedType ? (customHeight || tableHeight) - scrollXHeight : customHeight}px`
     }
-    wrappers.push(
-      this.renderTable(h, $table, fixedType)
-    )
+    // 如果是使用优化模式
+    if (fixedType && overflow) {
+      tableColumn = tableColumn.filter(column => column.fixed === fixedType)
+      tableWidth = tableColumn.reduce((previous, column) => previous + column.renderWidth, 0)
+    }
     return h('div', {
       class: [fixedType ? `vxe-table--fixed-${fixedType}-body-wrapper` : 'vxe-table--body-wrapper'],
       attrs: {
         fixed: fixedType
       },
       style
-    }, wrappers)
-  },
-  methods: {
-    renderCols (h, $table, fixedType) {
-      let cols = []
-      this.tableColumn.forEach((column, columnIndex) => {
-        if (column.visible) {
-          cols.push(
-            h('col', {
-              attrs: {
-                width: column.renderWidth
-              }
-            })
-          )
-        }
-      })
-      return cols
-    },
-    renderTable (h, $table, fixedType) {
-      let { highlightHoverRow, rowKey, tableData, tableWidth, selectRow, hoverRow, columnStore } = $table
-      let { leftList, rightList } = columnStore
-      return h('table', {
+    }, [
+      h('table', {
         class: ['vxe-table--body'],
         attrs: {
           cellspacing: 0,
@@ -145,16 +126,29 @@ export default {
           width: tableWidth === null ? tableWidth : `${tableWidth}px`
         }
       }, [
-        h('colgroup', this.renderCols(h, $table, fixedType)),
+        /**
+         * 列宽
+         */
+        h('colgroup', tableColumn.map(column => {
+          return column.visible ? h('col', {
+            attrs: {
+              width: column.renderWidth
+            }
+          }) : _e()
+        })),
+        /**
+         * 内容
+         */
         h('tbody', tableData.map((row, rowIndex) => {
           let renderRows = []
-          this.tableColumn.forEach((column, columnIndex) => {
+          tableColumn.forEach((column, columnIndex) => {
             if (column.visible) {
               renderRows.push(renderColumn(h, $table, fixedType, row, rowIndex, column, columnIndex))
             }
           })
+          // 优化事件绑定
           let on = null
-          if (highlightHoverRow && (leftList.length || rightList.length)) {
+          if (highlightHoverRow && (leftList.length || rightList.length) && overflowX) {
             on = {
               mouseover (evnt) {
                 if (row !== hoverRow) {
@@ -173,7 +167,9 @@ export default {
           }, renderRows)
         }))
       ])
-    },
+    ])
+  },
+  methods: {
     /**
      * 滚动处理
      * 如果存在列固定左侧，同步更新滚动状态

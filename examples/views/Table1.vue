@@ -13,8 +13,8 @@
       <vxe-table-column prop="address" label="地址"></vxe-table-column>
     </vxe-table> -->
 
-    <!-- <vxe-table
-      height="200"
+    <vxe-table
+      height="300"
       border
       :data.sync="tableData"
       :customs.sync="customColumns">
@@ -22,16 +22,16 @@
       <vxe-table-column prop="name" label="名称" min-width="200"></vxe-table-column>
       <vxe-table-column prop="date" label="日期" min-width="200"></vxe-table-column>
       <vxe-table-column prop="age" label="年龄" width="200"></vxe-table-column>
-      <vxe-table-column prop="sex" label="性别" width="200"></vxe-table-column>
+      <vxe-table-column prop="sex" label="性别" width="200" :filters="[]"></vxe-table-column>
       <vxe-table-column prop="address" label="地址" width="300" fixed="right"></vxe-table-column>
-    </vxe-table> -->
+    </vxe-table>
 
     <!-- <vxe-table
       height="300"
       border
       :data.sync="tableData">
       <vxe-table-column label="分组">
-        <vxe-table-column prop="name" label="名称" min-width="200"></vxe-table-column>
+        <vxe-table-column prop="name" label="名称" min-width="200" fixed="left"></vxe-table-column>
         <vxe-table-column prop="date" label="日期" min-width="200"></vxe-table-column>
         <vxe-table-column label="分组2">
           <vxe-table-column prop="name" label="名称" min-width="200"></vxe-table-column>
@@ -46,8 +46,9 @@
       <vxe-table-column prop="sex" label="性别" width="200"></vxe-table-column>
     </vxe-table> -->
 
-    <vxe-table
+    <!-- <vxe-table
       border
+      height="400"
       :data.sync="tableData">
       <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
       <vxe-table-column type="radio" width="60"></vxe-table-column>
@@ -62,7 +63,7 @@
           <span>{{ row.address }}</span>
         </template>
       </vxe-table-column>
-    </vxe-table>
+    </vxe-table> -->
   </div>
 </template>
 
@@ -70,7 +71,8 @@
 export default {
   data () {
     return {
-      tableData: []
+      tableData: [],
+      customColumns: []
     }
   },
   created () {

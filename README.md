@@ -106,6 +106,7 @@ Vue.use(VXETable)
 | highlight-hover-row | 鼠标移到行是否要高亮显示 | Boolean | — | true |
 | row-key | 行数据的 Key | String | — | — |
 | auto-width | 自动计算列宽（如果关闭，需要手动调用 computeWidth 方法） | Boolean | — | true |
+| optimized | 性能优化的配置项 | Object/Boolean | — | {animat: true, overflow: 'title'} |
 
 #### Table Events
 
@@ -139,7 +140,7 @@ Vue.use(VXETable)
 | prop | 列属性 | String | — | — |
 | label | 列标题 | String | — | — |
 | width | 列宽度 | String | — | — |
-| minWidth | 最小列宽度，把剩余宽度按比例分配 | String | — | — |
+| min-width | 最小列宽度，把剩余宽度按比例分配 | String | — | — |
 | fixed | 将列固定在左侧或者右侧 | String | — | left |
 | align | 列对其方式 | String | — | left |
 | header-align | 表头对齐方式 | String | — | — |
@@ -147,12 +148,13 @@ Vue.use(VXETable)
 | show-overflow-title | 当内容过长显示为省略号并用原生的 title 显示完整内容 | Boolean | — | false |
 | show-overflow-tooltip | 当内容过长显示为省略号并用 tooltip 显示完整内容 | Boolean | — | false |
 | formatter | 格式化显示内容 Function({cellValue, row, rowIndex, column, columnIndex}) | Function | — | — |
-| indexMethod | 只对 type=index 有效，自定义索引方法 Function({row, rowIndex, column, columnIndex}) | Function | — | — |
+| index-method | 只对 type=index 有效，自定义索引方法 Function({row, rowIndex, column, columnIndex}) | Function | — | — |
 | sortable | 是否允许列排序 | Boolean | — | — |
 | sortBy | 只对 sortable 有效，自定义排序的属性 | String/Array | — | — |
 | filters | 配置筛选条件数组 | Array | — | — |
-| filterMultiple | 只对 filters 有效，筛选是否允许多选 | Boolean | — | true |
-| filterMethod | 只对 filters 有效，自定义筛选方法 | Function | — | — |
+| filter-multiple | 只对 filters 有效，筛选是否允许多选 | Boolean | — | true |
+| filter-method | 只对 filters 有效，自定义筛选方法 | Function | — | — |
+| column-key | 列的 key | [String, Number] | — | — |
 
 #### Table-column Scoped Slot
 

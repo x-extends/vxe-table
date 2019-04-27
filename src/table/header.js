@@ -70,27 +70,8 @@ export default {
     }
   },
   render (h) {
-    let { $parent: $table, fixedType, headerColumn } = this
+    let { _e, $parent: $table, fixedType, headerColumn, tableColumn } = this
     let { tableWidth, scrollYWidth } = $table
-    let renderCols = []
-    this.tableColumn.forEach((column, columnIndex) => {
-      if (column.visible) {
-        renderCols.push(
-          h('col', {
-            attrs: {
-              width: column.renderWidth
-            }
-          })
-        )
-      }
-    })
-    renderCols.push(
-      h('col', {
-        attrs: {
-          width: scrollYWidth
-        }
-      })
-    )
     return h('div', {
       class: [fixedType ? `vxe-table--fixed-${fixedType}-header-wrapper` : 'vxe-table--header-wrapper']
     }, [
@@ -104,47 +85,58 @@ export default {
           width: tableWidth === null ? tableWidth : `${tableWidth + scrollYWidth}px`
         }
       }, [
-        h('colgroup', renderCols),
-        h('thead', headerColumn.map(cols => {
-          let renderRows = []
-          cols.forEach((column, columnIndex) => {
-            let thClss = ['vxe-header-column']
-            let fixedHiddenColumn = fixedType && column.fixed !== fixedType && (!column.children || !column.children.length)
-            if (column.headerAlign) {
-              thClss.push(`col--${column.headerAlign}`)
+        /**
+         * 列宽
+         */
+        h('colgroup', tableColumn.map((column, columnIndex) => {
+          return column.visible ? h('col', {
+            attrs: {
+              width: column.renderWidth
             }
-            if (fixedHiddenColumn) {
-              thClss.push('fixed--hidden')
-            }
-            if (column.visible) {
-              renderRows.push(
-                h('th', {
-                  class: thClss,
-                  attrs: {
-                    colspan: column.colSpan,
-                    rowspan: column.rowSpan
-                  },
-                  key: columnIndex
-                }, [
-                  h('div', {
-                    class: ['vxe-cell']
-                  }, column.renderHeader(h, { $table, column, columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn }))
-                ])
-              )
+          }) : _e()
+        }).concat([
+          h('col', {
+            attrs: {
+              width: scrollYWidth
             }
           })
-          renderRows.push(
+        ])),
+        /**
+         * 头部
+         */
+        h('thead', headerColumn.map(cols => {
+          return h('tr', {
+            class: ['vxe-header-row']
+          }, cols.map((column, columnIndex) => {
+            let fixedHiddenColumn = fixedType && column.fixed !== fixedType && (!column.children || !column.children.length)
+            return column.visible ? h('th', {
+              class: ['vxe-header-column', {
+                [`col--${column.headerAlign}`]: column.headerAlign,
+                'fixed--hidden': fixedHiddenColumn
+              }],
+              attrs: {
+                colspan: column.colSpan,
+                rowspan: column.rowSpan
+              },
+              key: columnIndex
+            }, [
+              h('div', {
+                class: ['vxe-cell']
+              }, column.renderHeader(h, { $table, column, columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn }))
+            ]) : _e()
+          }).concat([
             h('th', {
               class: ['col--gutter'],
               style: {
                 width: `${scrollYWidth}px`
-              }
+              },
+              key: 'c_gutt'
             })
-          )
-          return h('tr', {
-            class: ['vxe-header-row']
-          }, renderRows)
+          ]))
         })),
+        /**
+         * 其他
+         */
         h('div', {
           class: ['vxe-table--repair'],
           style: {

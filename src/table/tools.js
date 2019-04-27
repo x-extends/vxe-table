@@ -2,7 +2,6 @@ import XEUtils from 'xe-utils'
 
 const Tools = {
   browse: XEUtils.browse(),
-  wheelType: /Firefox/i.test(navigator.userAgent) ? 'DOMMouseScroll' : 'mousewheel',
   isPx (val) {
     return val && /^\d+(px)?$/.test(val)
   },
