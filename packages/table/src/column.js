@@ -1,5 +1,5 @@
 import XEUtils from 'xe-utils'
-import Tools from './tools'
+import Tools from '../../../src/tools'
 
 export default {
   name: 'VxeTableColumn',
@@ -163,9 +163,8 @@ export default {
           checked: row === selectRow
         }
         options.on = {
-          change: evnt => {
-            $table.redioRowEvent(evnt, params)
-            Tools.emitEvent(this, 'change', [row])
+          change (evnt) {
+            $table.triggerRowEvent(evnt, params)
           }
         }
       }
@@ -174,7 +173,9 @@ export default {
           class: ['vxe-radio']
         }, [
           h('input', options),
-          h('span')
+          h('span', {
+            class: ['radio--icon']
+          })
         ])
       ]
     },
@@ -196,16 +197,20 @@ export default {
         }
         options.on = {
           change (evnt) {
-            $table.checkAllEvent(evnt.target.checked)
+            $table.triggerCheckAllEvent(evnt, evnt.target.checked)
           }
         }
       }
       return [
         h('label', {
-          class: ['vxe-checkbox']
+          class: ['vxe-checkbox', {
+            'is--indeterminate': $table.isIndeterminate
+          }]
         }, [
           h('input', options),
-          h('span')
+          h('span', {
+            class: ['checkbox--icon']
+          })
         ])
       ]
     },
@@ -222,9 +227,8 @@ export default {
           checked: $table.selection.indexOf(row) > -1
         }
         options.on = {
-          change: evnt => {
-            $table.checkRowEvent(evnt, params)
-            Tools.emitEvent(this, 'change', [$table.selection, row])
+          change (evnt) {
+            $table.triggerCheckRowEvent(evnt, evnt.target.checked, params)
           }
         }
       }
@@ -233,7 +237,9 @@ export default {
           class: ['vxe-checkbox']
         }, [
           h('input', options),
-          h('span')
+          h('span', {
+            class: ['checkbox--icon']
+          })
         ])
       ]
     },
@@ -251,7 +257,7 @@ export default {
         }
         options.on = {
           change (evnt) {
-            $table.checkRowEvent(evnt, params)
+            $table.triggerCheckRowEvent(evnt, evnt.target.checked, params)
           }
         }
       }
@@ -260,7 +266,9 @@ export default {
           class: ['vxe-checkbox']
         }, [
           h('input', options),
-          h('span')
+          h('span', {
+            class: ['checkbox--icon']
+          })
         ])
       ]
     },
@@ -282,7 +290,7 @@ export default {
             }],
             on: {
               click (evnt) {
-                $table.rowSortEvent(evnt, column, params, 'asc')
+                $table.triggerSortEvent(evnt, column, params, 'asc')
               }
             }
           }),
@@ -292,7 +300,7 @@ export default {
             }],
             on: {
               click (evnt) {
-                $table.rowSortEvent(evnt, column, params, 'desc')
+                $table.triggerSortEvent(evnt, column, params, 'desc')
               }
             }
           })
@@ -315,7 +323,7 @@ export default {
             class: ['vxe-filter--icon'],
             on: {
               click (evnt) {
-                $table.filterEvent(evnt, column, params)
+                $table.triggerFilterEvent(evnt, column, params)
               }
             }
           })

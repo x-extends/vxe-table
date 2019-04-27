@@ -42,7 +42,12 @@ const Tools = {
       showTooltip: _vm.showOverflowTooltip,
       indexMethod: _vm.indexMethod,
       formatter: _vm.formatter,
+      sortable: _vm.sortable,
       sortBy: _vm.sortBy,
+      filters: _vm.filters,
+      filterMultiple: _vm.filterMultiple,
+      filterMethod: _vm.filterMethod,
+      columnKey: _vm.columnKey,
       // 渲染属性
       visible: true,
       level: 1,
@@ -66,6 +71,12 @@ const Tools = {
     } else {
       $table.collectColumn.splice([].indexOf.call($table.$refs.hideColumn.children, _vm.$el), 0, columnConfig)
     }
+  },
+  getDocScrollTop () {
+    return document.documentElement.scrollTop || document.body.scrollTop
+  },
+  getDocScrollLeft () {
+    return document.documentElement.scrollLeft || document.body.scrollLeft
   }
 }
 

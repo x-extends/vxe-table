@@ -1,3 +1,6 @@
+import VxeRadio from '../../radio'
+import VxeCheckbox from '../../checkbox'
+
 const getAllColumns = (columns) => {
   const result = []
   columns.forEach((column) => {
@@ -64,6 +67,10 @@ export default {
     fixedType: String,
     isGroup: Boolean
   },
+  components: {
+    VxeRadio,
+    VxeCheckbox
+  },
   computed: {
     headerColumn () {
       return this.isGroup ? convertToRows(this.collectColumn) : [this.tableColumn]
@@ -129,8 +136,7 @@ export default {
               class: ['col--gutter'],
               style: {
                 width: `${scrollYWidth}px`
-              },
-              key: 'c_gutt'
+              }
             })
           ]))
         })),

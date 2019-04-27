@@ -1,5 +1,5 @@
 import XEUtils from 'xe-utils'
-import Tools from './tools'
+import Tools from '../../../src/tools'
 
 /**
  * 渲染列
@@ -16,12 +16,12 @@ function renderColumn (h, $table, fixedType, row, rowIndex, column, columnIndex)
   // 优化事件绑定
   if (highlightCurrentRow || tableListeners['cell-click']) {
     tdOns.click = evnt => {
-      $table.colClickEvent(evnt, { row, rowIndex, column, columnIndex, cell: evnt.currentTarget })
+      $table.triggerCellClickEvent(evnt, { row, rowIndex, column, columnIndex, cell: evnt.currentTarget })
     }
   }
   if (tableListeners['cell-dblclick']) {
     tdOns.dblclick = evnt => {
-      $table.colDblclickEvent(evnt, { row, rowIndex, column, columnIndex, cell: evnt.currentTarget })
+      $table.triggerCellDBLClickEvent(evnt, { row, rowIndex, column, columnIndex, cell: evnt.currentTarget })
     }
   }
   return h('td', {
@@ -129,30 +129,25 @@ export default {
         /**
          * 列宽
          */
-        h('colgroup', tableColumn.map(column => {
+        h('colgroup', tableColumn.map((column, columnIndex) => {
           return column.visible ? h('col', {
             attrs: {
               width: column.renderWidth
-            }
+            },
+            key: columnIndex
           }) : _e()
         })),
         /**
          * 内容
          */
         h('tbody', tableData.map((row, rowIndex) => {
-          let renderRows = []
-          tableColumn.forEach((column, columnIndex) => {
-            if (column.visible) {
-              renderRows.push(renderColumn(h, $table, fixedType, row, rowIndex, column, columnIndex))
-            }
-          })
           // 优化事件绑定
           let on = null
           if (highlightHoverRow && (leftList.length || rightList.length) && overflowX) {
             on = {
               mouseover (evnt) {
                 if (row !== hoverRow) {
-                  $table.rowHoverEvent(evnt, { row, rowIndex })
+                  $table.triggerHoverEvent(evnt, { row, rowIndex })
                 }
               }
             }
@@ -164,7 +159,9 @@ export default {
             }],
             key: rowKey ? XEUtils.get(row, rowKey) : rowIndex,
             on
-          }, renderRows)
+          }, tableColumn.map((column, columnIndex) => {
+            return column.visible ? renderColumn(h, $table, fixedType, row, rowIndex, column, columnIndex) : _e()
+          }))
         }))
       ])
     ])

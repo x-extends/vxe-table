@@ -19,10 +19,12 @@
       :data.sync="tableData"
       :customs.sync="customColumns">
       <vxe-table-column type="index"></vxe-table-column>
+      <vxe-table-column type="radio" width="60"></vxe-table-column>
+      <vxe-table-column type="selection" prop="checked" width="60"></vxe-table-column>
       <vxe-table-column prop="name" label="名称" min-width="200"></vxe-table-column>
       <vxe-table-column prop="date" label="日期" min-width="200"></vxe-table-column>
       <vxe-table-column prop="age" label="年龄" width="200"></vxe-table-column>
-      <vxe-table-column prop="sex" label="性别" width="200" :filters="[]"></vxe-table-column>
+      <vxe-table-column prop="sex" label="性别" width="200" :filters="[{label: '男', value: '1'}, {label: '女', value: '0'}]"></vxe-table-column>
       <vxe-table-column prop="address" label="地址" width="300" fixed="right"></vxe-table-column>
     </vxe-table>
 
@@ -76,6 +78,7 @@ export default {
     }
   },
   created () {
+    window.test = this
     let list = window.CACHE_DATA_LIST.slice(0, 100)
     this.tableData = list
   },

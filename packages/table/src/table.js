@@ -1,7 +1,8 @@
 import XEUtils from 'xe-utils'
 import TableBody from './body'
 import TableHeader from './header'
-import Tools from './tools'
+import Tools from '../../../src/tools'
+import VxeCheckbox from '../../checkbox'
 
 /**
  * 渲染浮固定列
@@ -84,7 +85,8 @@ export default {
   },
   components: {
     TableBody,
-    TableHeader
+    TableHeader,
+    VxeCheckbox
   },
   provide () {
     return {
@@ -130,6 +132,9 @@ export default {
       hoverRow: null,
       // 当前选中的筛选列
       filterStore: {
+        isAllSelected: false,
+        isIndeterminate: false,
+        style: null,
         options: [],
         column: null,
         multiple: false,
@@ -204,10 +209,10 @@ export default {
     }
   },
   render (h) {
-    let { _e, tableData, tableColumn, collectColumn, isGroup, showHeader, border, stripe, highlightHoverRow, size, overflowX, optimizeConfig, columnStore, filterStore } = this
+    let { _e, tableData, tableColumn, collectColumn, isGroup, showHeader, border, stripe, highlightHoverRow, size, overflowX, optimizeConfig, columnStore, filterStore, confirmFilterEvent, cancelFilterEvent, filterCheckAllEvent, filterOptionCheckEvent } = this
     let { leftList, rightList } = columnStore
     return h('div', {
-      class: ['vxe-table', size ? `t--size-${size}` : '', {
+      class: ['vxe-table', size ? `size--${size}` : '', {
         't--animat': optimizeConfig.animat,
         't--stripe': stripe,
         't--border': border,
@@ -257,14 +262,62 @@ export default {
        * 筛选容器
        */
       h('div', {
-        class: ['vxe-table--filter-wrapper'],
+        class: ['vxe-table--filter-wrapper', {
+          't--animat': optimizeConfig.animat,
+          'filter--active': filterStore.visible
+        }],
+        style: filterStore.style,
         ref: 'filterWrapper'
       }, [
         h('ul', {
-          class: ['ff']
-        }, filterStore.options.map(item => {
-          return h('li')
-        }))
+          class: ['vxe-table--filter-body']
+        }, [
+          h('li', {
+            class: ['vxe-table--filter-option']
+          }, [
+            h('vxe-checkbox', {
+              props: {
+                value: filterStore.isAllSelected,
+                indeterminate: filterStore.isIndeterminate
+              },
+              on: {
+                change (value, evnt) {
+                  filterCheckAllEvent(evnt, value)
+                }
+              }
+            }, '全部')
+          ])
+        ].concat(filterStore.options.map((item, index) => {
+          return h('li', {
+            class: ['vxe-table--filter-option'],
+            key: index
+          }, [
+            h('vxe-checkbox', {
+              props: {
+                value: item.checked
+              },
+              on: {
+                change (value, evnt) {
+                  filterOptionCheckEvent(evnt, value, item)
+                }
+              }
+            }, item.label)
+          ])
+        }))),
+        h('div', {
+          class: ['vxe-table--filter-footer']
+        }, [
+          h('button', {
+            on: {
+              click: confirmFilterEvent
+            }
+          }, '确认'),
+          h('button', {
+            on: {
+              click: cancelFilterEvent
+            }
+          }, '取消')
+        ])
       ])
     ])
   },
@@ -286,6 +339,9 @@ export default {
     },
     clearFilter () {
       Object.assign(this.filterStore, {
+        isAllSelected: false,
+        isIndeterminate: false,
+        style: null,
         options: [],
         column: null,
         multiple: false,
@@ -497,8 +553,7 @@ export default {
     /**
      * 多选，行选中事件
      */
-    checkRowEvent (evnt, { row, column }) {
-      let value = event.target.checked
+    triggerCheckRowEvent (evnt, value, { row, column }) {
       let { property } = column
       if (property) {
         XEUtils.set(row, property, value)
@@ -517,8 +572,7 @@ export default {
     /**
      * 多选，选中所有事件
      */
-    checkAllEvent (evnt) {
-      let value = event.target.checked
+    triggerCheckAllEvent (evnt, value) {
       let column = this.tableColumn.find(column => column.type === 'selection')
       let property = column.property
       if (property) {
@@ -528,24 +582,25 @@ export default {
       }
       this.selection = value ? Array.from(this.tableData) : []
       this.isAllSelected = value
+      this.isIndeterminate = false
       Tools.emitEvent(this, 'select-all', [this.selection])
     },
     /**
      * 单选，行选中事件
      */
-    redioRowEvent (evnt, { row, column }) {
+    triggerRowEvent (evnt, { row, column }) {
       this.selectRow = row
     },
     /**
      * 行 hover 事件
      */
-    rowHoverEvent (evnt, { row }) {
+    triggerHoverEvent (evnt, { row }) {
       this.hoverRow = row
     },
     /**
      * 列点击事件
      */
-    colClickEvent (evnt, params) {
+    triggerCellClickEvent (evnt, params) {
       if (this.highlightCurrentRow) {
         this.selectRow = params.row
       }
@@ -554,13 +609,13 @@ export default {
     /**
      * 列双击点击事件
      */
-    colDblclickEvent (evnt, params) {
+    triggerCellDBLClickEvent (evnt, params) {
       Tools.emitEvent(this, 'cell-dblclick', [params, evnt])
     },
     /**
      * 排序事件
      */
-    rowSortEvent (evnt, column, params, order) {
+    triggerSortEvent (evnt, column, params, order) {
       if (column.order !== order) {
         let prop = column.property
         let rest = XEUtils.sortBy(this.tableData, prop)
@@ -572,12 +627,49 @@ export default {
     /**
      * 筛选事件
      */
-    filterEvent (evnt, column, params) {
+    triggerFilterEvent (evnt, column, params) {
       let filterStore = this.filterStore
-      filterStore.multiple = column.multiple
-      filterStore.options = column.filters
-      filterStore.column = column
-      filterStore.visible = true
+      if (filterStore.column === column) {
+        this.clearFilter()
+      } else {
+        let top = evnt.clientY + Tools.getDocScrollTop()
+        let left = evnt.clientX + Tools.getDocScrollLeft()
+        Object.assign(filterStore, {
+          style: {
+            top: `${top}px`,
+            left: `${left}px`
+          },
+          multiple: column.filterMultiple,
+          options: column.filters.map(({ label, value }) => {
+            return { label, value, checked: false }
+          }),
+          column: column,
+          visible: true
+        })
+      }
+    },
+    // 全部筛选事件
+    filterCheckAllEvent (evnt, value) {
+      let filterStore = this.filterStore
+      filterStore.options.forEach(item => {
+        item.checked = value
+      })
+      filterStore.isIndeterminate = false
+    },
+    // 筛选选项勾选事件
+    filterOptionCheckEvent (evnt, value, item) {
+      let filterStore = this.filterStore
+      item.checked = value
+      filterStore.isAllSelected = filterStore.options.every(item => item.checked)
+      filterStore.isIndeterminate = !this.isAllSelected && filterStore.options.some(item => item.checked)
+    },
+    // 确认筛选
+    confirmFilterEvent (evnt) {
+      this.clearFilter()
+    },
+    // 取消筛选
+    cancelFilterEvent (evnt) {
+      this.clearFilter()
     }
   }
 }

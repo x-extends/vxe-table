@@ -1,23 +1,13 @@
-/*table*/
-.vxe-table {
-  position: relative;
-  color: #606266;
-  border-right: 1px solid $vxe-table-border-color;
-  border-left: 1px solid $vxe-table-border-color;
-  font-size: 14px;
-  font-family: Helvetica Neue,Helvetica,PingFang SC,Hiragino Sans GB,Microsoft YaHei,\\5FAE\8F6F\96C5\9ED1,Arial,sans-serif;
-  &:after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 1px;
-    background-color: $vxe-table-border-color;
-  }
+.vxe-table,
+.vxe-table--filter-wrapper,
+.vxe-checkbox {
   *, :after, :before {
-    box-sizing: border-box
+    box-sizing: border-box;
   }
+}
+
+.vxe-table,
+.vxe-table--filter-wrapper {
   &.t--animat {
     .vxe-checkbox,
     .vxe-radio {
@@ -35,6 +25,25 @@
         }
       }
     }
+  }
+}
+
+/*table*/
+.vxe-table {
+  position: relative;
+  color: $vxe-font-color;
+  border-right: 1px solid $vxe-table-border-color;
+  border-left: 1px solid $vxe-table-border-color;
+  font-size: 14px;
+  font-family: $vxe-font-family;
+  &:after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background-color: $vxe-table-border-color;
   }
   table {
     border-spacing: 0;
@@ -112,20 +121,20 @@
       border-bottom: 1px solid $vxe-table-border-color;
     }
   }
-  &.t--size-medium {
+  &.size--medium {
     .vxe-header-column,
     .vxe-body--column {
       padding: 10px 0;
     }
   }
-  &.t--size-small {
+  &.size--small {
     font-size: 12px;
     .vxe-header-column,
     .vxe-body--column {
       padding: 8px 0;
     }
   }
-  &.t--size-mini {
+  &.size--mini {
     font-size: 12px;
     .vxe-header-column,
     .vxe-body--column {
@@ -280,46 +289,119 @@
   }
 }
 
+/*筛选容器*/
+.vxe-table--filter-wrapper {
+  display: none;
+  position: absolute;
+  max-width: 400px;
+  min-width: 100px;
+  border-radius: 2px;
+  color: $vxe-font-color;
+  background-color: #fff;
+  border: 1px solid $vxe-table-popup-border-color;
+  box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
+  font-size: 13px;
+  font-family: $vxe-font-family;
+  &.filter--active {
+    display: block;
+  }
+  .vxe-table--filter-body {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    max-height: 240px;
+    padding: 10px 10px 0 10px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    .vxe-table--filter-option {
+      margin-bottom: 8px;
+      .vxe-checkbox {
+        display: block;
+      }
+    }
+  }
+  .vxe-table--filter-footer {
+    border-top: 1px solid #ebeef5;
+    padding: 8px;
+    button {
+      background: transparent;
+      padding: 0 3px;
+      border: 0;
+      font-size: 13px;
+      color: $vxe-font-color;
+      cursor: pointer;
+      &:focus {
+        outline: none;
+      }
+      &:hover {
+        color: $vxe-primary-color;
+      }
+    }
+  }
+}
+
 .vxe-checkbox,
 .vxe-radio {
   display: inline-block;
+  user-select: none;
   cursor: pointer;
   > input {
     display: none;
-    &+span {
+    &+.radio--icon,
+    &+.checkbox--icon {
       position: relative;
-      display: block;
+      display: inline-block;
       width: 14px;
       height: 14px;
       border: 1px solid $vxe-input-border-color;
       background-color: #fff;
+      vertical-align: middle;
       &:before {
         content: "";
         position: absolute;
-        box-sizing: content-box;
         border: 1px solid #fff;
       }
     }
-    &:checked+span {
+    &:checked+.radio--icon,
+    &:checked+.checkbox--icon {
       background-color: $vxe-primary-color;
       border-color: $vxe-primary-color;
     }
+  }
+  .checkbox--label {
+    padding-left: 5px;
+    vertical-align: middle;
   }
 }
 
 /*checkbox*/
 .vxe-checkbox {
+  &.is--indeterminate {
+    > input {
+      &+.checkbox--icon {
+        background-color: $vxe-primary-color;
+        border-color: $vxe-primary-color;
+        &:before {
+          top: 50%;
+          height: 0;
+          width: 100%;
+          transform: translateY(-50%) scale(.5);
+        }
+      }
+    }
+  }
   > input {
-    &+span {
+    &+.checkbox--icon {
       border-radius: 2px;
+    }
+    &:checked+.checkbox--icon {
       &:before {
-        border: 1px solid #fff;
-        border-left: 0;
-        border-top: 0;
-        height: 7px;
-        width: 3px;
+        height: 8px;
+        width: 4px;
         left: 4px;
         top: 1px;
+        border-left: 0;
+        border-top: 0;
         transform: rotate(45deg);
       }
     }
@@ -329,7 +411,7 @@
 /*radio*/
 .vxe-radio {
   > input {
-    &+span {
+    &+.radio--icon {
       border-radius: 50%;
       &:before {
         background-color: #fff;

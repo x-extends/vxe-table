@@ -1,7 +1,7 @@
-import Table from './table/table'
-import TableColumn from './table/column'
+import Table from '../packages/table'
+import TableColumn from '../packages/table-column'
 
-import './style/index.scss'
+import '../style/index.scss'
 
 const components = [
   Table,
@@ -19,5 +19,7 @@ if (typeof window !== 'undefined' && window.Vue) {
 }
 
 export default {
-  install
+  install,
+  Table,
+  TableColumn
 }
