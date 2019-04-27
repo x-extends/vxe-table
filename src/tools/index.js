@@ -44,7 +44,7 @@ const Tools = {
       formatter: _vm.formatter,
       sortable: _vm.sortable,
       sortBy: _vm.sortBy,
-      filters: _vm.filters,
+      filters: (_vm.filters || []).map(({ label, value }) => ({ label, value, checked: false })),
       filterMultiple: _vm.filterMultiple,
       filterMethod: _vm.filterMethod,
       columnKey: _vm.columnKey,
@@ -77,6 +77,9 @@ const Tools = {
   },
   getDocScrollLeft () {
     return document.documentElement.scrollLeft || document.body.scrollLeft
+  },
+  hasClass (elem, cls) {
+    return elem && elem.className && elem.className.split && elem.className.split(' ').indexOf(cls) > -1
   }
 }
 

@@ -2,6 +2,7 @@ import XEUtils from 'xe-utils'
 import TableBody from './body'
 import TableHeader from './header'
 import Tools from '../../../src/tools'
+import GlobalEvent from './event'
 import VxeCheckbox from '../../checkbox'
 
 /**
@@ -100,8 +101,10 @@ export default {
       collectColumn: [],
       // 渲染的列
       tableColumn: [],
-      // 渲染的数据
+      // 渲染中的数据
       tableData: [],
+      // 完整数据
+      tableFullData: [],
       // 表格宽度
       tableWidth: 0,
       // 表格高度
@@ -190,6 +193,7 @@ export default {
     }
   },
   created () {
+    GlobalEvent.on(this, 'click', this.handleGlobalClickEvent)
     this.reload(this.data).then(() => {
       this.tableColumn = Tools.getColumnList(this.collectColumn)
       if (this.customs) {
@@ -207,9 +211,10 @@ export default {
     if (filterWrapper && filterWrapper.parentNode) {
       filterWrapper.parentNode.removeChild(filterWrapper)
     }
+    GlobalEvent.off(this, 'click')
   },
   render (h) {
-    let { _e, tableData, tableColumn, collectColumn, isGroup, showHeader, border, stripe, highlightHoverRow, size, overflowX, optimizeConfig, columnStore, filterStore, confirmFilterEvent, cancelFilterEvent, filterCheckAllEvent, filterOptionCheckEvent } = this
+    let { _e, tableData, tableColumn, collectColumn, isGroup, showHeader, border, stripe, highlightHoverRow, size, overflowX, optimizeConfig, columnStore, filterStore, confirmFilterEvent, resetFilterEvent, filterCheckAllEvent, filterOptionCheckEvent } = this
     let { leftList, rightList } = columnStore
     return h('div', {
       class: ['vxe-table', size ? `size--${size}` : '', {
@@ -308,15 +313,21 @@ export default {
           class: ['vxe-table--filter-footer']
         }, [
           h('button', {
+            class: {
+              'is--disabled': !filterStore.isAllSelected && !filterStore.isIndeterminate
+            },
+            attrs: {
+              disabled: !filterStore.isAllSelected && !filterStore.isIndeterminate
+            },
             on: {
               click: confirmFilterEvent
             }
-          }, '确认'),
+          }, '筛选'),
           h('button', {
             on: {
-              click: cancelFilterEvent
+              click: resetFilterEvent
             }
-          }, '取消')
+          }, '重置')
         ])
       ])
     ])
@@ -335,9 +346,10 @@ export default {
       this.tableColumn.forEach(column => {
         column.order = null
       })
-      this.tableData = this.data || []
+      this.tableFullData = this.data || []
+      this.tableData = this.tableFullData
     },
-    clearFilter () {
+    clearFilter (force) {
       Object.assign(this.filterStore, {
         isAllSelected: false,
         isIndeterminate: false,
@@ -353,7 +365,8 @@ export default {
       this.clearSelectRow()
       this.clearSort()
       this.clearFilter()
-      this.tableData = data || []
+      this.tableFullData = data || []
+      this.tableData = this.tableFullData
       let rest = this.$nextTick()
       if (this.autoWidth) {
         return rest.then(this.computeWidth)
@@ -551,6 +564,34 @@ export default {
       }
     },
     /**
+     * 全局点击事件处理
+     */
+    handleGlobalClickEvent (evnt) {
+      if (this.hasEventTargetNode(evnt, this.$el, 'vxe-filter-wrapper')) {
+        // 如果点击了筛选按钮
+      } else if (this.hasEventTargetNode(evnt, this.$refs.filterWrapper)) {
+        // 如果点击筛选容器
+      } else {
+        this.clostFilter()
+      }
+    },
+    /**
+     * 检查触发源是否属于目标节点
+     */
+    hasEventTargetNode (evnt, container, cls) {
+      let flag
+      let target = evnt.target
+      while (target && target.nodeType && target !== document) {
+        if (Tools.hasClass(target, cls)) {
+          flag = true
+        } else if (target === container) {
+          return cls ? flag : true
+        }
+        target = target.parentNode
+      }
+      return false
+    },
+    /**
      * 多选，行选中事件
      */
     triggerCheckRowEvent (evnt, value, { row, column }) {
@@ -629,23 +670,25 @@ export default {
      */
     triggerFilterEvent (evnt, column, params) {
       let filterStore = this.filterStore
-      if (filterStore.column === column) {
-        this.clearFilter()
+      if (filterStore.visible) {
+        filterStore.visible = false
       } else {
         let top = evnt.clientY + Tools.getDocScrollTop()
         let left = evnt.clientX + Tools.getDocScrollLeft()
-        Object.assign(filterStore, {
-          style: {
-            top: `${top}px`,
-            left: `${left}px`
-          },
-          multiple: column.filterMultiple,
-          options: column.filters.map(({ label, value }) => {
-            return { label, value, checked: false }
-          }),
-          column: column,
-          visible: true
-        })
+        if (!filterStore.column || filterStore.column !== column) {
+          Object.assign(filterStore, {
+            multiple: column.filterMultiple,
+            options: column.filters,
+            column: column
+          })
+        }
+        filterStore.style = {
+          top: `${top}px`,
+          left: `${left}px`
+        }
+        filterStore.visible = true
+        filterStore.isAllSelected = filterStore.options.every(item => item.checked)
+        filterStore.isIndeterminate = !this.isAllSelected && filterStore.options.some(item => item.checked)
       }
     },
     // 全部筛选事件
@@ -654,6 +697,7 @@ export default {
       filterStore.options.forEach(item => {
         item.checked = value
       })
+      filterStore.isAllSelected = value
       filterStore.isIndeterminate = false
     },
     // 筛选选项勾选事件
@@ -665,11 +709,39 @@ export default {
     },
     // 确认筛选
     confirmFilterEvent (evnt) {
-      this.clearFilter()
+      let { isAllSelected, isIndeterminate, column, options } = this.filterStore
+      if (isAllSelected || isIndeterminate) {
+        if (isAllSelected) {
+          this.tableData = this.tableFullData
+        } else {
+          let property = column.property
+          let valueList = []
+          options.forEach(item => {
+            if (item.checked) {
+              valueList.push(item.value)
+            }
+          })
+          if (column.filterMethod) {
+
+          } else {
+            this.tableData = this.tableFullData.filter(row => valueList.indexOf(XEUtils.get(row, property)) > -1)
+          }
+        }
+        this.clostFilter()
+      }
     },
-    // 取消筛选
-    cancelFilterEvent (evnt) {
-      this.clearFilter()
+    // 取消
+    clostFilter (evnt) {
+      this.filterStore.isAllSelected = false
+      this.filterStore.isIndeterminate = false
+      this.filterStore.visible = false
+    },
+    // 重置筛选
+    resetFilterEvent (evnt) {
+      this.filterStore.options.forEach(item => {
+        item.checked = false
+      })
+      this.clostFilter()
     }
   }
 }

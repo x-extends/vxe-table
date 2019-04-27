@@ -1,5 +1,3 @@
-import Tools from '../../../src/tools'
-
 export default {
   name: 'VxeCheckbox',
   props: {
@@ -12,7 +10,8 @@ export default {
   render (h) {
     return h('label', {
       class: ['vxe-checkbox', this.size ? `size--${this.size}` : '', {
-        'is--indeterminate': this.indeterminate
+        'is--indeterminate': this.indeterminate,
+        'is--disabled': this.disabled
       }]
     }, [
       h('input', {
@@ -24,9 +23,11 @@ export default {
         },
         on: {
           change: evnt => {
-            let value = evnt.target.checked
-            this.$emit('input', value)
-            Tools.emitEvent(this, 'change', [value, evnt])
+            if (!this.disabled) {
+              let value = evnt.target.checked
+              this.$emit('input', value)
+              this.$emit('change', value, evnt)
+            }
           }
         }
       }),
@@ -35,7 +36,7 @@ export default {
       }),
       this.$slots.default ? h('span', {
         class: ['checkbox--label']
-      }, this.$slots.default) : null
+      }, this.$slots.default) : this._e()
     ])
   }
 }

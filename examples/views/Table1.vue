@@ -18,8 +18,7 @@
       border
       :data.sync="tableData"
       :customs.sync="customColumns">
-      <vxe-table-column type="index"></vxe-table-column>
-      <vxe-table-column type="radio" width="60"></vxe-table-column>
+      <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column type="selection" prop="checked" width="60"></vxe-table-column>
       <vxe-table-column prop="name" label="名称" min-width="200"></vxe-table-column>
       <vxe-table-column prop="date" label="日期" min-width="200"></vxe-table-column>

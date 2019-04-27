@@ -336,6 +336,10 @@
       &:hover {
         color: $vxe-primary-color;
       }
+      &.is--disabled {
+        color: #c0c4cc;
+        cursor: not-allowed;
+      }
     }
   }
 }

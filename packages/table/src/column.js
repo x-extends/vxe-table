@@ -67,11 +67,11 @@ export default {
         opts.renderCell = this.prop ? this.renderSelectionCellByProp : this.renderSelectionCell
         break
       default:
-        if (this.filters && this.sortable) {
+        if (this.filters && this.filters.length && this.sortable) {
 
         } else if (this.sortable) {
           opts.renderHeader = this.renderSortHeader
-        } else if (this.filters) {
+        } else if (this.filters && this.filters.length) {
           opts.renderHeader = this.renderFilterHeader
         }
     }

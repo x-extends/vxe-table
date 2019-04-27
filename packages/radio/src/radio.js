@@ -8,7 +8,9 @@ export default {
   },
   render (h) {
     return h('label', {
-      class: ['vxe-radio', this.size ? `size--${this.size}` : '']
+      class: ['vxe-radio', this.size ? `size--${this.size}` : '', {
+        'is--disabled': this.disabled
+      }]
     }, [
       h('input', {
         attrs: {
@@ -20,9 +22,11 @@ export default {
         },
         on: {
           change: evnt => {
-            let value = evnt.target.checked
-            this.$emit('input', value)
-            this.$emit('change', value, evnt)
+            if (!this.disabled) {
+              let value = evnt.target.checked
+              this.$emit('input', value)
+              this.$emit('change', value, evnt)
+            }
           }
         }
       }),
@@ -31,7 +35,7 @@ export default {
       }),
       this.$slots.default ? h('span', {
         class: ['checkbox--label']
-      }, this.$slots.default) : null
+      }, this.$slots.default) : this._e()
     ])
   }
 }
