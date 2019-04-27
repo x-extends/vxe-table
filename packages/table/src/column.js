@@ -68,7 +68,7 @@ export default {
         break
       default:
         if (this.filters && this.filters.length && this.sortable) {
-
+          opts.renderHeader = this.renderSortAndFilterHeader
         } else if (this.sortable) {
           opts.renderHeader = this.renderSortHeader
         } else if (this.filters && this.filters.length) {
@@ -274,13 +274,22 @@ export default {
     },
 
     /**
+     * 排序和筛选
+     */
+    renderSortAndFilterHeader (h, params) {
+      return [h('span', params.column.label)].concat(this.renderSortIcon(h, params)).concat(this.renderFilterIcon(h, params))
+    },
+
+    /**
      * 排序
      */
     renderSortHeader (h, params) {
+      return [h('span', params.column.label)].concat(this.renderSortIcon(h, params))
+    },
+    renderSortIcon (h, params) {
       let { $table } = this
       let { column } = params
       return [
-        h('span', column.label),
         h('span', {
           class: ['vxe-sort-wrapper']
         }, [
@@ -312,10 +321,11 @@ export default {
      * 筛选
      */
     renderFilterHeader (h, params) {
+      return [h('span', params.column.label)].concat(this.renderFilterIcon(h, params))
+    },
+    renderFilterIcon (h, params) {
       let { $table } = this
-      let { column } = params
       return [
-        h('span', column.label),
         h('span', {
           class: ['vxe-filter-wrapper']
         }, [
@@ -323,7 +333,7 @@ export default {
             class: ['vxe-filter--icon'],
             on: {
               click (evnt) {
-                $table.triggerFilterEvent(evnt, column, params)
+                $table.triggerFilterEvent(evnt, params.column, params)
               }
             }
           })

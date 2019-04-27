@@ -194,6 +194,7 @@ export default {
   },
   created () {
     GlobalEvent.on(this, 'click', this.handleGlobalClickEvent)
+    GlobalEvent.on(this, 'blur', this.handleGlobalBlurEvent)
     this.reload(this.data).then(() => {
       this.tableColumn = Tools.getColumnList(this.collectColumn)
       if (this.customs) {
@@ -212,6 +213,7 @@ export default {
       filterWrapper.parentNode.removeChild(filterWrapper)
     }
     GlobalEvent.off(this, 'click')
+    GlobalEvent.off(this, 'blur')
   },
   render (h) {
     let { _e, tableData, tableColumn, collectColumn, isGroup, showHeader, border, stripe, highlightHoverRow, size, overflowX, optimizeConfig, columnStore, filterStore, confirmFilterEvent, resetFilterEvent, filterCheckAllEvent, filterOptionCheckEvent } = this
@@ -567,29 +569,35 @@ export default {
      * 全局点击事件处理
      */
     handleGlobalClickEvent (evnt) {
-      if (this.hasEventTargetNode(evnt, this.$el, 'vxe-filter-wrapper')) {
+      if (this.getEventTargetNode(evnt, this.$el, 'vxe-filter-wrapper').status) {
         // 如果点击了筛选按钮
-      } else if (this.hasEventTargetNode(evnt, this.$refs.filterWrapper)) {
+      } else if (this.getEventTargetNode(evnt, this.$refs.filterWrapper).status) {
         // 如果点击筛选容器
       } else {
         this.clostFilter()
       }
     },
     /**
+     * 窗口失焦事件
+     */
+    handleGlobalBlurEvent (evnt) {
+      this.clostFilter()
+    },
+    /**
      * 检查触发源是否属于目标节点
      */
-    hasEventTargetNode (evnt, container, cls) {
-      let flag
+    getEventTargetNode (evnt, container, queryCls) {
+      let targetElem
       let target = evnt.target
       while (target && target.nodeType && target !== document) {
-        if (Tools.hasClass(target, cls)) {
-          flag = true
+        if (Tools.hasClass(target, queryCls)) {
+          targetElem = target
         } else if (target === container) {
-          return cls ? flag : true
+          return { status: queryCls ? !!targetElem : true, container, targetElem: targetElem }
         }
         target = target.parentNode
       }
-      return false
+      return { status: false }
     },
     /**
      * 多选，行选中事件
@@ -670,11 +678,10 @@ export default {
      */
     triggerFilterEvent (evnt, column, params) {
       let filterStore = this.filterStore
-      if (filterStore.visible) {
+      if (filterStore.column === column && filterStore.visible) {
         filterStore.visible = false
       } else {
-        let top = evnt.clientY + Tools.getDocScrollTop()
-        let left = evnt.clientX + Tools.getDocScrollLeft()
+        let { top, left } = Tools.getOffset(evnt.target)
         if (!filterStore.column || filterStore.column !== column) {
           Object.assign(filterStore, {
             multiple: column.filterMultiple,
@@ -682,13 +689,21 @@ export default {
             column: column
           })
         }
-        filterStore.style = {
-          top: `${top}px`,
-          left: `${left}px`
-        }
-        filterStore.visible = true
-        filterStore.isAllSelected = filterStore.options.every(item => item.checked)
-        filterStore.isIndeterminate = !this.isAllSelected && filterStore.options.some(item => item.checked)
+        Object.assign(filterStore, {
+          style: {
+            top: `${top + evnt.target.clientHeight + 6}px`,
+            left: `${left}px`
+          },
+          visible: true,
+          isAllSelected: filterStore.options.every(item => item.checked),
+          isIndeterminate: !this.isAllSelected && filterStore.options.some(item => item.checked)
+        })
+        this.$nextTick(() => {
+          filterStore.style = {
+            top: `${top + evnt.target.clientHeight + 6}px`,
+            left: `${left - this.$refs.filterWrapper.clientWidth / 2 + 10}px`
+          }
+        })
       }
     },
     // 全部筛选事件
@@ -709,24 +724,27 @@ export default {
     },
     // 确认筛选
     confirmFilterEvent (evnt) {
-      let { isAllSelected, isIndeterminate, column, options } = this.filterStore
+      let { tableColumn, tableFullData } = this
+      let { isAllSelected, isIndeterminate } = this.filterStore
       if (isAllSelected || isIndeterminate) {
-        if (isAllSelected) {
-          this.tableData = this.tableFullData
-        } else {
-          let property = column.property
-          let valueList = []
-          options.forEach(item => {
-            if (item.checked) {
-              valueList.push(item.value)
+        this.tableData = tableFullData.filter(row => {
+          return tableColumn.every(column => {
+            let { property, filters, filterMethod } = column
+            if (filters && filters.length) {
+              let valueList = []
+              filters.forEach(item => {
+                if (item.checked) {
+                  valueList.push(item.value)
+                }
+              })
+              if (valueList.length) {
+                let a = filterMethod ? valueList.some(value => filterMethod({ value, row, column })) : valueList.indexOf(XEUtils.get(row, property)) > -1
+                return a
+              }
             }
+            return true
           })
-          if (column.filterMethod) {
-
-          } else {
-            this.tableData = this.tableFullData.filter(row => valueList.indexOf(XEUtils.get(row, property)) > -1)
-          }
-        }
+        })
         this.clostFilter()
       }
     },

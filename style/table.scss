@@ -112,6 +112,19 @@
       text-align: right;
     }
   }
+  .vxe-header-column {
+    &.filter--active {
+      .vxe-filter--icon,
+      .vxe-filter--icon:hover {
+        &:before {
+          border-top-color: $vxe-primary-color;
+        }
+        &:after {
+          background-color: $vxe-primary-color;
+        }
+      }
+    }
+  }
   &.t--border {
     .vxe-header-column,
     .vxe-body--column {

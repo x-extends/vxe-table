@@ -72,15 +72,32 @@ const Tools = {
       $table.collectColumn.splice([].indexOf.call($table.$refs.hideColumn.children, _vm.$el), 0, columnConfig)
     }
   },
-  getDocScrollTop () {
+  getDomScrollTop () {
     return document.documentElement.scrollTop || document.body.scrollTop
   },
-  getDocScrollLeft () {
+  getDomScrollLeft () {
     return document.documentElement.scrollLeft || document.body.scrollLeft
   },
   hasClass (elem, cls) {
     return elem && elem.className && elem.className.split && elem.className.split(' ').indexOf(cls) > -1
+  },
+  /**
+   * 获取绝对位置
+   */
+  getOffset (elem) {
+    return getNodeOffset(elem, { left: 0, top: 0 })
   }
+}
+
+function getNodeOffset (elem, rest) {
+  if (elem) {
+    rest.top += elem.offsetTop
+    rest.left += elem.offsetLeft
+    if (elem.offsetParent) {
+      return getNodeOffset(elem.offsetParent, rest)
+    }
+  }
+  return rest
 }
 
 export default Tools

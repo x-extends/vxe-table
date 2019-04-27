@@ -22,6 +22,7 @@ const GlobalEvent = {
 // document.addEventListener('keydown', GlobalEvent.trigger, false)
 // document.addEventListener('contextmenu', GlobalEvent.trigger, false)
 window.addEventListener('click', GlobalEvent.trigger, false)
+window.addEventListener('blur', GlobalEvent.trigger, false)
 // window.addEventListener(wheelName, GlobalEvent.trigger, false)
 
 export default GlobalEvent

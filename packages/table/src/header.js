@@ -119,7 +119,8 @@ export default {
             return column.visible ? h('th', {
               class: ['vxe-header-column', {
                 [`col--${column.headerAlign}`]: column.headerAlign,
-                'fixed--hidden': fixedHiddenColumn
+                'fixed--hidden': fixedHiddenColumn,
+                'filter--active': column.filters.some(item => item.checked)
               }],
               attrs: {
                 colspan: column.colSpan,

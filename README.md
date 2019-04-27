@@ -153,7 +153,7 @@ Vue.use(VXETable)
 | sortBy | 只对 sortable 有效，自定义排序的属性 | String/Array | — | — |
 | filters | 配置筛选条件数组 | Array | — | — |
 | filter-multiple | 只对 filters 有效，筛选是否允许多选 | Boolean | — | true |
-| filter-method | 只对 filters 有效，自定义筛选方法 | Function | — | — |
+| filter-method | 只对 filters 有效，自定义筛选方法 Function({value, row, column}) | Function | — | — |
 | column-key | 列的 key | [String, Number] | — | — |
 
 #### Table-column Scoped Slot
