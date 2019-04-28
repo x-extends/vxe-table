@@ -128,6 +128,7 @@ Vue.use(VXETable)
 | clearSelection | 用于多选表格，清空用户的选择 | — |
 | clearSelectRow | 用于单选表格，清空用户的选择 | — |
 | clearSort | 用于清空排序条件，数据会恢复成未排序的状态 | — |
+| clearFilter | 用于清空筛选条件，数据会恢复成未筛选的状态 | — |
 | computeWidth | 重新计算并更新列宽 | — |
 
 ### Table-column
