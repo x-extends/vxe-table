@@ -165,8 +165,8 @@ Vue.use(VXETable)
 
 | name | 说明 |
 |------|------|
-| — | 自定义显示内容，参数为 { row, rowIndex, column, columnIndex } |
-| header | 自定义表头的内容，参数为 { column, columnIndex } |
+| — | 自定义显示内容，参数为 { row, rowIndex, column, columnIndex, fixed, isHidden } |
+| header | 自定义表头的内容，参数为 { column, columnIndex, fixed, isHidden } |
 
 ## Example
 
