@@ -32,7 +32,7 @@
     </vxe-table> -->
 
     <vxe-table
-      height="300"
+      max-height="300"
       border
       :data.sync="tableData"
       :customs.sync="customColumns"
@@ -46,7 +46,7 @@
       <vxe-table-column prop="address" label="地址" width="300" fixed="right"></vxe-table-column>
     </vxe-table>
 
-    <vxe-table
+    <!-- <vxe-table
       height="300"
       border
       :data.sync="tableData">
@@ -64,11 +64,10 @@
         <vxe-table-column prop="date" label="日期" min-width="200"></vxe-table-column>
       </vxe-table-column>
       <vxe-table-column prop="sex" label="性别" width="200"></vxe-table-column>
-    </vxe-table>
+    </vxe-table> -->
 
     <!-- <vxe-table
       border
-      height="400"
       :data.sync="tableData">
       <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
       <vxe-table-column type="radio" width="60"></vxe-table-column>
@@ -97,7 +96,7 @@ export default {
   },
   created () {
     window.test = this
-    let list = window.CACHE_DATA_LIST.slice(0, 100)
+    let list = window.CACHE_DATA_LIST.slice(0, 5)
     this.tableData = list
   },
   methods: {

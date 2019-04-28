@@ -16,7 +16,7 @@ A very powerful Vue table component.
 * [带边框](https://jsrun.net/QrXKp/play)
 * [单元格样式](https://jsrun.net/EmXKp/play)
 * [列宽拖动](https://jsrun.net/5AXKp/play)
-* 流体高度
+* [流体高度](https://jsrun.net/smXKp/play)
 * [固定表头](https://jsrun.net/JrXKp/play)
 * [固定列](https://jsrun.net/TrXKp/play)
 * [固定表头和列](https://jsrun.net/8rXKp/play)
@@ -99,8 +99,8 @@ Vue.use(VXETable)
 |------|------|-----|------|-----|
 | data | 显示的数据 | Array | — | — |
 | customs | 初始化绑定动态列 | Array | — | — |
-| height | 表格的高度 | String | — | — |
-| maxHeight | 表格的最大高度 | String | — | — |
+| height | 表格的高度 | Number | — | — |
+| maxHeight | 表格的最大高度 | Number | — | — |
 | stripe | 是否带有斑马纹 | Boolean | — | false |
 | border | 是否带有纵向边框 | Boolean | — | false |
 | size | 表格的尺寸 | String | medium / small / mini | — |

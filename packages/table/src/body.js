@@ -95,13 +95,15 @@ export default {
   },
   render (h) {
     let { _e, $parent: $table, fixedType } = this
-    let { highlightHoverRow, rowKey, height, rowClassName, tableData, tableColumn, tableHeight, tableWidth, scrollXHeight, selectRow, hoverRow, overflowX, columnStore, optimizeConfig } = $table
+    let { highlightHoverRow, rowKey, maxHeight, height, rowClassName, tableData, tableColumn, tableHeight, tableWidth, scrollXHeight, selectRow, hoverRow, overflowX, columnStore, optimizeConfig } = $table
     let { leftList, rightList } = columnStore
     let { overflow } = optimizeConfig
-    let customHeight = isNaN(height) ? 0 : parseFloat(height)
+    let customHeight = XEUtils.toNumber(height)
     let style = {}
     if (customHeight) {
       style.height = `${fixedType ? (customHeight || tableHeight) - scrollXHeight : customHeight}px`
+    } else if (maxHeight) {
+      style['max-height'] = `${XEUtils.toNumber(maxHeight)}px`
     }
     // 如果是使用优化模式
     if (fixedType && overflow) {

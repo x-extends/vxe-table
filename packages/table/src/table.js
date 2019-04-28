@@ -58,9 +58,9 @@ export default {
     // 初始化绑定动态列
     customs: Array,
     // 表格的高度
-    height: String,
+    height: [Number, String],
     // 表格的最大高度
-    maxHeight: String,
+    maxHeight: [Number, String],
     // 是否带有斑马纹
     stripe: Boolean,
     // 是否带有纵向边框

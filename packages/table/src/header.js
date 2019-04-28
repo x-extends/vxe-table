@@ -74,7 +74,7 @@ export default {
   },
   render (h) {
     let { _e, $parent: $table, fixedType, headerColumn, tableColumn, resizeMousedown } = this
-    let { headerRowClassName, headerCellClassName, tableWidth, scrollYWidth } = $table
+    let { border, headerRowClassName, headerCellClassName, tableWidth, scrollYWidth } = $table
     return h('div', {
       class: [fixedType ? `vxe-table--fixed-${fixedType}-header-wrapper` : 'vxe-table--header-wrapper']
     }, [
@@ -128,7 +128,7 @@ export default {
               h('div', {
                 class: ['vxe-cell']
               }, column.renderHeader(h, { $table, column, columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn })),
-              !isGroup ? h('div', {
+              border && !fixedType && !isGroup ? h('div', {
                 class: ['vxe-resize'],
                 on: {
                   mousedown: evnt => {
