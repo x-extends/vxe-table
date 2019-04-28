@@ -79,6 +79,12 @@ import 'vxe-table/lib/index.css'
 // @import 'assets/style/vxe-table/table.scss';
 
 Vue.use(VXETable)
+
+// 支持设置全部默认参数
+// Vue.use(VXETable， {
+//   size: 'small,
+//   optimized: false
+// })
 ```
 
 ## API

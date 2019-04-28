@@ -4,6 +4,7 @@ import TableHeader from './header'
 import Tools from '../../../src/tools'
 import GlobalEvent from './event'
 import VxeCheckbox from '../../checkbox'
+import DefaultOptions from '../../../src/conf'
 
 /**
  * 渲染浮固定列
@@ -66,7 +67,7 @@ export default {
     // 是否带有纵向边框
     border: Boolean,
     // 表格的尺寸
-    size: String,
+    size: { type: String, default: () => DefaultOptions.size },
     // 列的宽度是否自撑开
     fit: { type: Boolean, default: true },
     // 表格是否加载中
@@ -92,7 +93,7 @@ export default {
     // 列宽是否自动响应计算
     autoWidth: { type: Boolean, default: true },
     // 性能优化的配置项
-    optimized: [Object, Boolean]
+    optimized: { type: [Object, Boolean], default: () => DefaultOptions.optimized }
   },
   components: {
     TableBody,
