@@ -5,7 +5,7 @@ import Tools from '../../../src/tools'
  * 渲染列
  */
 function renderColumn (h, $table, fixedType, row, rowIndex, column, columnIndex) {
-  let { $listeners: tableListeners, border, highlightCurrentRow, overflowX, optimizeConfig } = $table
+  let { $listeners: tableListeners, border, highlightCurrentRow, cellClassName, overflowX, optimizeConfig } = $table
   let { align, ellipsis, showTitle, showTooltip, renderWidth, columnKey } = column
   let { overflow } = optimizeConfig
   let fixedHiddenColumn = fixedType ? column.fixed !== fixedType : overflowX && column.fixed
@@ -28,7 +28,7 @@ function renderColumn (h, $table, fixedType, row, rowIndex, column, columnIndex)
     class: ['vxe-body--column', {
       [`col--${align}`]: align,
       'fixed--hidden': fixedHiddenColumn
-    }],
+    }, cellClassName ? XEUtils.isFunction(cellClassName) ? cellClassName({ row, rowIndex, column, columnIndex }) : cellClassName : ''],
     key: columnKey || columnIndex,
     on: tdOns
   }, !fixedType && fixedHiddenColumn ? [] : [
@@ -95,7 +95,7 @@ export default {
   },
   render (h) {
     let { _e, $parent: $table, fixedType } = this
-    let { highlightHoverRow, rowKey, height, tableData, tableColumn, tableHeight, tableWidth, scrollXHeight, selectRow, hoverRow, overflowX, columnStore, optimizeConfig } = $table
+    let { highlightHoverRow, rowKey, height, rowClassName, tableData, tableColumn, tableHeight, tableWidth, scrollXHeight, selectRow, hoverRow, overflowX, columnStore, optimizeConfig } = $table
     let { leftList, rightList } = columnStore
     let { overflow } = optimizeConfig
     let customHeight = isNaN(height) ? 0 : parseFloat(height)
@@ -156,7 +156,7 @@ export default {
             class: ['vxe-body--row', {
               'row--selected': row === selectRow,
               'row--hover': row === hoverRow
-            }],
+            }, rowClassName ? XEUtils.isFunction(rowClassName) ? rowClassName({ row, rowIndex }) : rowClassName : ''],
             key: rowKey ? XEUtils.get(row, rowKey) : rowIndex,
             on
           }, tableColumn.map((column, columnIndex) => {

@@ -73,6 +73,14 @@ export default {
     highlightCurrentRow: Boolean,
     // 鼠标移到行是否要高亮显示
     highlightHoverRow: { type: Boolean, default: true },
+    // 给行附加 className
+    rowClassName: [String, Function],
+    // 给单元格附加 className
+    cellClassName: [String, Function],
+    // 给表头的行附加 className
+    headerRowClassName: [String, Function],
+    // 给表头的单元格附加 className
+    headerCellClassName: [String, Function],
     // 初始化绑定动态列
     customs: Array,
 
@@ -668,6 +676,9 @@ export default {
       if (column.order !== order) {
         let prop = column.property
         let rest = XEUtils.sortBy(this.tableData, prop)
+        this.tableColumn.forEach(column => {
+          column.order = null
+        })
         column.order = order
         this.tableData = order === 'desc' ? rest.reverse() : rest
         Tools.emitEvent(this, 'sort-change', [{ column, prop, order }])

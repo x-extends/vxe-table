@@ -13,6 +13,24 @@
       <vxe-table-column prop="address" label="地址"></vxe-table-column>
     </vxe-table> -->
 
+    <!-- <vxe-table
+      height="300"
+      border
+      :highlight-hover-row="false"
+      :headerCellClassName="headerCellClassName"
+      :rowClassName="rowClassName"
+      :cellClassName="cellClassName"
+      :data.sync="tableData"
+      :customs.sync="customColumns">
+      <vxe-table-column type="index" width="60"></vxe-table-column>
+      <vxe-table-column type="selection" prop="checked" width="60"></vxe-table-column>
+      <vxe-table-column prop="name" label="名称" min-width="200"></vxe-table-column>
+      <vxe-table-column prop="date" label="日期" sortable min-width="200"></vxe-table-column>
+      <vxe-table-column prop="age" label="年龄" sortable width="200" :filters="[{label: '30', value: 30}, {label: 28, value: 28}, {label: 27, value: 27}, {label: 26, value: 26}]" :filterMethod="filterMethod"></vxe-table-column>
+      <vxe-table-column prop="sex" label="性别" width="200" :filters="[{label: '男', value: '1'}, {label: '女', value: '0'}]"></vxe-table-column>
+      <vxe-table-column prop="address" label="地址" width="300" fixed="right"></vxe-table-column>
+    </vxe-table> -->
+
     <vxe-table
       height="300"
       border
@@ -96,7 +114,45 @@ export default {
     },
     filterMethod ({ value, row, column }) {
       return row.age === value
+    },
+    headerCellClassName ({ column, columnIndex }) {
+      if (column.property === 'name') {
+        return 'col-blue'
+      }
+    },
+    rowClassName ({ row, rowIndex }) {
+      if ([2, 3, 5, 9, 20, 21].includes(rowIndex)) {
+        return 'row-green'
+      }
+    },
+    cellClassName ({ row, rowIndex, column, columnIndex }) {
+      if (column.property === 'age') {
+        if (row.age >= 30) {
+          return 'col-red'
+        } else if (row.age === 26) {
+          return 'col-orange'
+        }
+      }
     }
   }
 }
 </script>
+
+<style>
+.vxe-table .vxe-body--row.row-green {
+  background-color: #187;
+  color: #fff;
+}
+.vxe-table .vxe-header-column.col-blue {
+  background-color: #2db7f5;
+  color: #fff;
+}
+.vxe-table .vxe-body--column.col-red {
+  background-color: red;
+  color: #fff;
+}
+.vxe-table .vxe-body--column.col-orange {
+  background-color: #f60;
+  color: #fff;
+}
+</style>

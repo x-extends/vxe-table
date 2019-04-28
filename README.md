@@ -15,7 +15,7 @@ A very powerful Vue table component.
   * [尺寸](https://jsrun.net/PmXKp/play)
   * [斑马线条纹](https://jsrun.net/zrXKp/play)
   * [带边框](https://jsrun.net/QrXKp/play)
-  * 单元格样式
+  * [单元格样式](https://jsrun.net/EmXKp/play)
   * 列宽拖动
   * 流体高度
   * [固定表头](https://jsrun.net/JrXKp/play)
@@ -104,6 +104,10 @@ Vue.use(VXETable)
 | show-header | 是否显示表头 | Boolean | — | true |
 | highlight-current-row | 是否要高亮当前选中行 | Boolean | — | false |
 | highlight-hover-row | 鼠标移到行是否要高亮显示 | Boolean | — | true |
+| row-class-name | 给行附加 className，也可以是函数 Function({row, rowIndex}) | String/Function | — | — |
+| cell-class-name | 给单元格附加 className，也可以是函数 Function({row, rowIndex, column, columnIndex}) | String/Function | — | — |
+| header-row-class-name | 给表头的行附加 className，也可以是函数 Function({row, rowIndex}) | String/Function | — | — |
+| header-cell-class-name | 给表头的单元格附加 className，也可以是函数 Function({row, rowIndex, column, columnIndex}) | String/Function | — | — |
 | row-key | 行数据的 Key | String | — | — |
 | auto-width | 自动计算列宽（如果关闭，需要手动调用 computeWidth 方法） | Boolean | — | true |
 | optimized | 性能优化的配置项 | Object/Boolean | — | {animat: true, overflow: 'title'} |

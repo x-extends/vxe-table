@@ -1,5 +1,4 @@
-import VxeRadio from '../../radio'
-import VxeCheckbox from '../../checkbox'
+import XEUtils from 'xe-utils'
 
 const getAllColumns = (columns) => {
   const result = []
@@ -67,10 +66,6 @@ export default {
     fixedType: String,
     isGroup: Boolean
   },
-  components: {
-    VxeRadio,
-    VxeCheckbox
-  },
   computed: {
     headerColumn () {
       return this.isGroup ? convertToRows(this.collectColumn) : [this.tableColumn]
@@ -78,7 +73,7 @@ export default {
   },
   render (h) {
     let { _e, $parent: $table, fixedType, headerColumn, tableColumn } = this
-    let { tableWidth, scrollYWidth } = $table
+    let { headerRowClassName, headerCellClassName, tableWidth, scrollYWidth } = $table
     return h('div', {
       class: [fixedType ? `vxe-table--fixed-${fixedType}-header-wrapper` : 'vxe-table--header-wrapper']
     }, [
@@ -111,9 +106,9 @@ export default {
         /**
          * 头部
          */
-        h('thead', headerColumn.map(cols => {
+        h('thead', headerColumn.map((cols, rowIndex) => {
           return h('tr', {
-            class: ['vxe-header-row']
+            class: ['vxe-header-row', headerRowClassName ? XEUtils.isFunction(headerRowClassName) ? headerRowClassName({ rowIndex }) : headerRowClassName : '']
           }, cols.map((column, columnIndex) => {
             let fixedHiddenColumn = fixedType && column.fixed !== fixedType && (!column.children || !column.children.length)
             return column.visible ? h('th', {
@@ -121,7 +116,7 @@ export default {
                 [`col--${column.headerAlign}`]: column.headerAlign,
                 'fixed--hidden': fixedHiddenColumn,
                 'filter--active': column.filters.some(item => item.checked)
-              }],
+              }, headerCellClassName ? XEUtils.isFunction(headerCellClassName) ? headerCellClassName({ rowIndex, column, columnIndex }) : headerCellClassName : ''],
               attrs: {
                 colspan: column.colSpan,
                 rowspan: column.rowSpan
