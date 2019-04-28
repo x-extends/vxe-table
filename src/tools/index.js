@@ -11,7 +11,7 @@ const Tools = {
   // 触发事件
   emitEvent (_vm, type, args) {
     if (_vm.$listeners[type]) {
-      _vm.$emit.apply(_vm, [].concat.apply([type], args))
+      _vm.$emit.apply(_vm, [type].concat(args))
     }
   },
   // 获取所有的列，排除分组

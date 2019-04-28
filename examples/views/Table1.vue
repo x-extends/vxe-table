@@ -35,7 +35,8 @@
       height="300"
       border
       :data.sync="tableData"
-      :customs.sync="customColumns">
+      :customs.sync="customColumns"
+      @select-change="selectChangeEvent">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column type="selection" prop="checked" width="60"></vxe-table-column>
       <vxe-table-column prop="name" label="名称" min-width="200"></vxe-table-column>
@@ -133,6 +134,9 @@ export default {
           return 'col-orange'
         }
       }
+    },
+    selectChangeEvent (row, selection, checked) {
+      console.log(selection)
     }
   }
 }

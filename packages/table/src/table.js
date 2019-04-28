@@ -611,20 +611,25 @@ export default {
      * 多选，行选中事件
      */
     triggerCheckRowEvent (evnt, value, { row, column }) {
+      let { $listeners, selection, tableData } = this
       let { property } = column
       if (property) {
         XEUtils.set(row, property, value)
-        this.isAllSelected = this.tableData.every(item => XEUtils.get(item, property))
-        this.isIndeterminate = !this.isAllSelected && this.tableData.some(item => XEUtils.get(item, property))
+        this.isAllSelected = tableData.every(item => XEUtils.get(item, property))
+        this.isIndeterminate = !this.isAllSelected && tableData.some(item => XEUtils.get(item, property))
+        if ($listeners['select-change']) {
+          selection = tableData.filter(item => XEUtils.get(item, property))
+        }
       } else {
         if (value) {
-          this.selection.push(row)
+          selection.push(row)
         } else {
-          XEUtils.remove(this.selection, item => item === row)
+          XEUtils.remove(selection, item => item === row)
         }
-        this.isAllSelected = this.tableData.length === this.selection.length
-        this.isIndeterminate = !this.isAllSelected && this.selection.length
+        this.isAllSelected = tableData.length === selection.length
+        this.isIndeterminate = !this.isAllSelected && selection.length
       }
+      Tools.emitEvent(this, 'select-change', [row, selection, value])
     },
     /**
      * 多选，选中所有事件
@@ -640,13 +645,14 @@ export default {
       this.selection = value ? Array.from(this.tableData) : []
       this.isAllSelected = value
       this.isIndeterminate = false
-      Tools.emitEvent(this, 'select-all', [this.selection])
+      Tools.emitEvent(this, 'select-all', [this.selection, value])
     },
     /**
      * 单选，行选中事件
      */
-    triggerRowEvent (evnt, { row, column }) {
+    triggerRowEvent (evnt, { row }) {
       this.selectRow = row
+      Tools.emitEvent(this, 'select-change', [row])
     },
     /**
      * 行 hover 事件
