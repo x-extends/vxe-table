@@ -10,38 +10,37 @@ A very powerful Vue table component.
 
 ## Features
 
-* [vxe-table 功能点](#api)
-  * [基础](https://jsrun.net/VrXKp/play)
-  * [尺寸](https://jsrun.net/PmXKp/play)
-  * [斑马线条纹](https://jsrun.net/zrXKp/play)
-  * [带边框](https://jsrun.net/QrXKp/play)
-  * [单元格样式](https://jsrun.net/EmXKp/play)
-  * 列宽拖动
-  * 流体高度
-  * [固定表头](https://jsrun.net/JrXKp/play)
-  * [固定列](https://jsrun.net/TrXKp/play)
-  * [固定表头和列](https://jsrun.net/8rXKp/play)
-  * [表头分组](https://jsrun.net/7rXKp/play)
-  * [序号](https://jsrun.net/xrXKp/play)
-  * [单选](https://jsrun.net/9rXKp/play)
-  * [多选](https://jsrun.net/erXKp/play)
-  * [排序](https://jsrun.net/QrXKp/play)
-  * [筛选](https://jsrun.net/drXKp/play)
-  * 合并行或列
-  * 表尾汇总
-  * 导出 CVS
-  * 快捷菜单
-  * [自定义列](https://jsrun.net/PrXKp/play)
-  * 加载中
-  * 展开行
-  * 滚动渲染
-  * [自定义模板与格式化内容](https://jsrun.net/FrXKp/play)
-  * 树形
-  * 可编辑
-  * 可编辑 - 增/删/改/查/还原
-  * 可编辑 - 校验
-  * 可编辑 - 键盘导航
-  * 可编辑 - Excel
+* [基础](https://jsrun.net/VrXKp/play)
+* [尺寸](https://jsrun.net/PmXKp/play)
+* [斑马线条纹](https://jsrun.net/zrXKp/play)
+* [带边框](https://jsrun.net/QrXKp/play)
+* [单元格样式](https://jsrun.net/EmXKp/play)
+* 列宽拖动
+* 流体高度
+* [固定表头](https://jsrun.net/JrXKp/play)
+* [固定列](https://jsrun.net/TrXKp/play)
+* [固定表头和列](https://jsrun.net/8rXKp/play)
+* [表头分组](https://jsrun.net/7rXKp/play)
+* [序号](https://jsrun.net/xrXKp/play)
+* [单选](https://jsrun.net/9rXKp/play)
+* [多选](https://jsrun.net/erXKp/play)
+* [排序](https://jsrun.net/QrXKp/play)
+* [筛选](https://jsrun.net/drXKp/play)
+* 合并行或列
+* 表尾汇总
+* 导出 CVS
+* 快捷菜单
+* [自定义列](https://jsrun.net/PrXKp/play)
+* 加载中
+* 展开行
+* 滚动渲染
+* [自定义模板与格式化内容](https://jsrun.net/FrXKp/play)
+* 树形
+* 可编辑
+* 可编辑 - 增/删/改/查/还原
+* 可编辑 - 校验
+* 可编辑 - 键盘导航
+* 可编辑 - Excel
 
 ## Installing
 
