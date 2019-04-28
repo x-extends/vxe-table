@@ -127,8 +127,8 @@ Vue.use(VXETable)
 
 | 事件名 | 说明 | 参数 |
 |------|------|-----|
-| select-all | 只对 type=selection 有效，当手动勾选全选时触发的事件 | selection,checked |
-| select-change | 只对 type=selection/radio 有效，当手动勾选时触发的事件 | row,selection,checked |
+| select-all | 只对 type=selection 有效，当手动勾选全选时触发的事件 | {selection,checked},event |
+| select-change | 只对 type=selection/radio 有效，当手动勾选时触发的事件 | {selection,checked,row,column},event |
 | cell-click | 当某个单元格被点击时会触发该事件 | {row,rowIndex,column,columnIndex,cell},event |
 | cell-dblclick | 当某个单元格被双击时会触发该事件 | {row,rowIndex,column,columnIndex,cell},event |
 

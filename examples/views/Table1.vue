@@ -134,7 +134,7 @@ export default {
         }
       }
     },
-    selectChangeEvent (row, selection, checked) {
+    selectChangeEvent ({ row, selection, checked }) {
       console.log(selection)
     }
   }

@@ -652,7 +652,7 @@ export default {
         this.isAllSelected = tableData.length === selection.length
         this.isIndeterminate = !this.isAllSelected && selection.length
       }
-      Tools.emitEvent(this, 'select-change', [row, selection, value])
+      Tools.emitEvent(this, 'select-change', [{ row, column, selection, checked: value }, evnt])
     },
     /**
      * 多选，选中所有事件
@@ -668,14 +668,14 @@ export default {
       this.selection = value ? Array.from(this.tableData) : []
       this.isAllSelected = value
       this.isIndeterminate = false
-      Tools.emitEvent(this, 'select-all', [this.selection, value])
+      Tools.emitEvent(this, 'select-all', [{ selection: this.selection, checked: value }, evnt])
     },
     /**
      * 单选，行选中事件
      */
     triggerRowEvent (evnt, { row }) {
       this.selectRow = row
-      Tools.emitEvent(this, 'select-change', [row])
+      Tools.emitEvent(this, 'select-change', [{ row }, evnt])
     },
     /**
      * 行 hover 事件
