@@ -10,7 +10,7 @@ A very powerful Vue table component.
 
 ## Features
 
-* [vxe-table 功能点](#table-表格)
+* [vxe-table 功能点](#api)
   * [基础](https://jsrun.net/VrXKp/play)
   * [尺寸](https://jsrun.net/PmXKp/play)
   * [斑马线条纹](https://jsrun.net/zrXKp/play)
