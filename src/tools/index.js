@@ -1,7 +1,9 @@
 import XEUtils from 'xe-utils'
 
+var columnId = 0
+const browse = XEUtils.browse()
 const Tools = {
-  browse: XEUtils.browse(),
+  browse,
   isPx (val) {
     return val && /^\d+(px)?$/.test(val)
   },
@@ -29,6 +31,7 @@ const Tools = {
   getColumnConfig (_vm, { renderHeader, renderCell } = {}) {
     return {
       // 基本属性
+      id: `col--${_vm.$table.id}_${++columnId}`,
       type: _vm.type,
       property: _vm.prop,
       label: _vm.label,
@@ -88,7 +91,83 @@ const Tools = {
    */
   getOffset (elem, container) {
     return getNodeOffset(elem, container, { left: 0, top: 0 })
+  },
+  getCsvContent (opts, oData, oColumns, tableElem) {
+    let isOriginal = opts.original
+    let { columns, datas } = getCsvData(opts, oData, oColumns, tableElem)
+    let content = '\ufeff'
+    if (opts.isHeader) {
+      content += columns.map(column => column.label).join(',') + '\n'
+    }
+    datas.forEach((record, rowIndex) => {
+      if (isOriginal) {
+        content += columns.map(column => {
+          if (column.type === 'index') {
+            return column.index ? column.index(rowIndex) : rowIndex + 1
+          }
+          return XEUtils.get(record, column.property) || ''
+        }).join(',') + '\n'
+      } else {
+        content += columns.map(column => record[column.id]).join(',') + '\n'
+      }
+    })
+    return content
+  },
+  downloadCsc (opts, content) {
+    if (!opts.download) {
+      return Promise.resolve(content)
+    }
+    if (navigator.msSaveBlob && window.Blob) {
+      navigator.msSaveBlob(new Blob([content], { type: 'text/csv' }), opts.filename)
+    } else if (browse['-ms']) {
+      var win = window.top.open('about:blank', '_blank')
+      win.document.charset = 'utf-8'
+      win.document.write(content)
+      win.document.close()
+      win.document.execCommand('SaveAs', opts.filename)
+      win.close()
+    } else {
+      var linkElem = document.createElement('a')
+      linkElem.target = '_blank'
+      linkElem.download = opts.filename
+      linkElem.href = getCsvUrl(opts, content)
+      document.body.appendChild(linkElem)
+      linkElem.click()
+      document.body.removeChild(linkElem)
+    }
   }
+}
+
+function getCsvLabelData (columns, oData, tableElem) {
+  let trElemList = tableElem.querySelectorAll('.vxe-table--body-wrapper .vxe-body--row')
+  return Array.from(trElemList).map(trElem => {
+    let item = {}
+    columns.forEach(column => {
+      let cell = trElem.querySelector(`.${column.id}`)
+      item[column.id] = cell ? cell.innerText.trim() : ''
+    })
+    return item
+  })
+}
+
+function getCsvData (opts, oData, oColumns, tableElem) {
+  let isOriginal = opts.original
+  let columns = opts.columns ? opts.columns : oColumns
+  if (opts.columnFilterMethod) {
+    columns = columns.filter(opts.columnFilterMethod)
+  }
+  let datas = opts.data ? opts.data : (isOriginal ? oData : getCsvLabelData(columns, oData, tableElem))
+  if (opts.dataFilterMethod) {
+    datas = datas.filter(opts.dataFilterMethod)
+  }
+  return { columns, datas }
+}
+
+function getCsvUrl (opts, content) {
+  if (window.Blob && window.URL && window.URL.createObjectURL && !browse.safari) {
+    return URL.createObjectURL(new Blob([content], { type: 'text/csv' }))
+  }
+  return `data:attachment/csv;charset=utf-8,${encodeURIComponent(content)}`
 }
 
 function getNodeOffset (elem, container, rest) {

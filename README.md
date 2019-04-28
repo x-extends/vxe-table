@@ -28,7 +28,7 @@ A very powerful Vue table component.
 * [筛选](https://jsrun.net/drXKp/play)
 * 合并行或列
 * 表尾汇总
-* 导出 CVS
+* [导出 CVS](https://jsrun.net/cmXKp/play)
 * 快捷菜单
 * [自定义列](https://jsrun.net/PrXKp/play)
 * 加载中

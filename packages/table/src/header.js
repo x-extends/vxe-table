@@ -114,7 +114,7 @@ export default {
             let isGroup = column.children && column.children.length
             let fixedHiddenColumn = fixedType && column.fixed !== fixedType && !isGroup
             return column.visible ? h('th', {
-              class: ['vxe-header-column', {
+              class: ['vxe-header-column', column.id, {
                 [`col--${column.headerAlign}`]: column.headerAlign,
                 'fixed--hidden': fixedHiddenColumn,
                 'filter--active': column.filters.some(item => item.checked)
@@ -166,7 +166,7 @@ export default {
       let resizeBarElem = $table.$refs.resizeBar
       let pos = Tools.getOffset(targetElem, $el)
       let dragMinLeft = pos.left - targetElem.parentNode.clientWidth + targetElem.clientWidth + 36
-      let dragPosLeft = pos.left + 4
+      let dragPosLeft = pos.left + 6
       let dragClientX = evnt.clientX
       let domMousemove = document.onmousemove
       let domMouseup = document.onmouseup

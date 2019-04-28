@@ -1,5 +1,6 @@
 <template>
   <div>
+
     <!-- <vxe-table
       height="200"
       border
@@ -31,7 +32,9 @@
       <vxe-table-column prop="address" label="地址" width="300" fixed="right"></vxe-table-column>
     </vxe-table> -->
 
+    <button @click="$refs.vTable.exportCsv()">导出</button>
     <vxe-table
+      ref="vTable"
       max-height="300"
       border
       :data.sync="tableData"

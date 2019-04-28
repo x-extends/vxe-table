@@ -5,10 +5,10 @@ import Tools from '../../../src/tools'
  * 渲染列
  */
 function renderColumn (h, $table, fixedType, row, rowIndex, column, columnIndex) {
-  let { $listeners: tableListeners, border, highlightCurrentRow, cellClassName, overflowX, optimizeConfig } = $table
+  let { $listeners: tableListeners, border, highlightCurrentRow, cellClassName, optimizeConfig } = $table
   let { align, ellipsis, showTitle, showTooltip, renderWidth, columnKey } = column
   let { overflow } = optimizeConfig
-  let fixedHiddenColumn = fixedType ? column.fixed !== fixedType : overflowX && column.fixed
+  let fixedHiddenColumn = fixedType && column.fixed !== fixedType
   let isShowTitle = showTitle || overflow === 'title'
   let isShowTooltip = showTooltip || overflow === 'tooltip'
   let isEllipsis = ellipsis || overflow === 'ellipsis'
@@ -25,7 +25,7 @@ function renderColumn (h, $table, fixedType, row, rowIndex, column, columnIndex)
     }
   }
   return h('td', {
-    class: ['vxe-body--column', {
+    class: ['vxe-body--column', column.id, {
       [`col--${align}`]: align,
       'fixed--hidden': fixedHiddenColumn
     }, cellClassName ? XEUtils.isFunction(cellClassName) ? cellClassName({ row, rowIndex, column, columnIndex }) : cellClassName : ''],

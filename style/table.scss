@@ -334,7 +334,6 @@
 .vxe-table--filter-wrapper {
   display: none;
   position: absolute;
-  max-width: 400px;
   min-width: 100px;
   border-radius: 2px;
   color: $vxe-font-color;
@@ -358,6 +357,12 @@
       margin-bottom: 8px;
       .vxe-checkbox {
         display: block;
+        .checkbox--label {
+          max-width: 360px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
       }
     }
   }
@@ -416,6 +421,7 @@
   .checkbox--label {
     padding-left: 5px;
     vertical-align: middle;
+    display: inline-block;
   }
 }
 

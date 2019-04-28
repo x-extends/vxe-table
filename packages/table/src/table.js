@@ -800,6 +800,27 @@ export default {
         item.checked = false
       })
       this.clostFilter()
+    },
+    /**
+     * 导出 csv 文件
+     */
+    exportCsv (options) {
+      let opts = Object.assign({
+        filename: 'table.csv',
+        original: false,
+        isHeader: false,
+        download: true,
+        data: null,
+        columns: null,
+        columnFilterMethod: column => ['index', 'selection', 'radio'].indexOf(column.type) === -1 && column.property,
+        dataFilterMethod: null
+      }, options)
+      if (opts.filename.indexOf('.csv') === -1) {
+        opts.filename += '.csv'
+      }
+      let columns = this.tableColumn
+      let oData = this.tableFullData
+      return Tools.downloadCsc(opts, Tools.getCsvContent(opts, oData, columns, this.$el))
     }
   }
 }
