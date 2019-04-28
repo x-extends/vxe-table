@@ -113,6 +113,7 @@
     }
   }
   .vxe-header-column {
+    position: relative;
     &.filter--active {
       .vxe-filter--icon,
       .vxe-filter--icon:hover {
@@ -123,6 +124,16 @@
           background-color: $vxe-primary-color;
         }
       }
+    }
+    .vxe-resize {
+      position: absolute;
+      right: -7px;
+      top: 0;
+      width: 14px;
+      height: 100%;
+      z-index: 1;
+      user-select: none;
+      cursor: col-resize;
     }
   }
   &.t--border {
@@ -261,6 +272,23 @@
     }
   }
 
+  /*列宽线*/
+  .vxe-table--resize-bar {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1px;
+    height: 100%;
+    z-index: 4;
+    &:before {
+      content: "";
+      display: block;
+      height: 100%;
+      background-color: $vxe-table-border-color;
+    }
+  }
+
   /*筛选*/
   .vxe-filter-wrapper {
     padding: 0 2px;
@@ -334,7 +362,7 @@
     }
   }
   .vxe-table--filter-footer {
-    border-top: 1px solid #ebeef5;
+    border-top: 1px solid $vxe-table-popup-border-color;
     padding: 8px;
     button {
       background: transparent;

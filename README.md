@@ -15,7 +15,7 @@ A very powerful Vue table component.
 * [斑马线条纹](https://jsrun.net/zrXKp/play)
 * [带边框](https://jsrun.net/QrXKp/play)
 * [单元格样式](https://jsrun.net/EmXKp/play)
-* 列宽拖动
+* [列宽拖动](https://jsrun.net/5AXKp/play)
 * 流体高度
 * [固定表头](https://jsrun.net/JrXKp/play)
 * [固定列](https://jsrun.net/TrXKp/play)
@@ -37,7 +37,12 @@ A very powerful Vue table component.
 * [自定义模板与格式化内容](https://jsrun.net/FrXKp/play)
 * 树形
 * 可编辑
-* 可编辑 - 增/删/改/查/还原
+* 可编辑 - 手动触发
+* 可编辑 - 点击触发
+* 可编辑 - 双击触发
+* 可编辑 - 增/删/改/查/还
+* 可编辑 - 显示状态
+* 可编辑 - 禁用编辑
 * 可编辑 - 校验
 * 可编辑 - 键盘导航
 * 可编辑 - Excel
@@ -94,7 +99,8 @@ Vue.use(VXETable)
 |------|------|-----|------|-----|
 | data | 显示的数据 | Array | — | — |
 | customs | 初始化绑定动态列 | Array | — | — |
-| height | 初始化完整表格数据 | String | — | — |
+| height | 表格的高度 | String | — | — |
+| maxHeight | 表格的最大高度 | String | — | — |
 | stripe | 是否带有斑马纹 | Boolean | — | false |
 | border | 是否带有纵向边框 | Boolean | — | false |
 | size | 表格的尺寸 | String | medium / small / mini | — |
@@ -109,7 +115,7 @@ Vue.use(VXETable)
 | header-cell-class-name | 给表头的单元格附加 className，也可以是函数 Function({row, rowIndex, column, columnIndex}) | String/Function | — | — |
 | row-key | 行数据的 Key | String | — | — |
 | auto-width | 自动计算列宽（如果关闭，需要手动调用 computeWidth 方法） | Boolean | — | true |
-| optimized | 性能优化的配置项 | Object/Boolean | — | {animat: true, overflow: 'title'} |
+| optimized | 优化的配置项 | Object/Boolean | — | {animat: true, overflow: 'title'} |
 
 #### Table Events
 

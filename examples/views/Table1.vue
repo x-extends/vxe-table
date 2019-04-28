@@ -46,7 +46,7 @@
       <vxe-table-column prop="address" label="地址" width="300" fixed="right"></vxe-table-column>
     </vxe-table>
 
-    <!-- <vxe-table
+    <vxe-table
       height="300"
       border
       :data.sync="tableData">
@@ -64,7 +64,7 @@
         <vxe-table-column prop="date" label="日期" min-width="200"></vxe-table-column>
       </vxe-table-column>
       <vxe-table-column prop="sex" label="性别" width="200"></vxe-table-column>
-    </vxe-table> -->
+    </vxe-table>
 
     <!-- <vxe-table
       border

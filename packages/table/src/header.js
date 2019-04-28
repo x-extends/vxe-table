@@ -1,4 +1,5 @@
 import XEUtils from 'xe-utils'
+import Tools from '../../../src/tools'
 
 const getAllColumns = (columns) => {
   const result = []
@@ -72,7 +73,7 @@ export default {
     }
   },
   render (h) {
-    let { _e, $parent: $table, fixedType, headerColumn, tableColumn } = this
+    let { _e, $parent: $table, fixedType, headerColumn, tableColumn, resizeMousedown } = this
     let { headerRowClassName, headerCellClassName, tableWidth, scrollYWidth } = $table
     return h('div', {
       class: [fixedType ? `vxe-table--fixed-${fixedType}-header-wrapper` : 'vxe-table--header-wrapper']
@@ -109,8 +110,9 @@ export default {
         h('thead', headerColumn.map((cols, rowIndex) => {
           return h('tr', {
             class: ['vxe-header-row', headerRowClassName ? XEUtils.isFunction(headerRowClassName) ? headerRowClassName({ rowIndex }) : headerRowClassName : '']
-          }, cols.map((column, columnIndex) => {
-            let fixedHiddenColumn = fixedType && column.fixed !== fixedType && (!column.children || !column.children.length)
+          }, cols.map((column, columnIndex, list) => {
+            let isGroup = column.children && column.children.length
+            let fixedHiddenColumn = fixedType && column.fixed !== fixedType && !isGroup
             return column.visible ? h('th', {
               class: ['vxe-header-column', {
                 [`col--${column.headerAlign}`]: column.headerAlign,
@@ -125,7 +127,15 @@ export default {
             }, [
               h('div', {
                 class: ['vxe-cell']
-              }, column.renderHeader(h, { $table, column, columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn }))
+              }, column.renderHeader(h, { $table, column, columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn })),
+              !isGroup ? h('div', {
+                class: ['vxe-resize'],
+                on: {
+                  mousedown: evnt => {
+                    resizeMousedown(evnt, column)
+                  }
+                }
+              }) : _e()
             ]) : _e()
           }).concat([
             h('th', {
@@ -147,5 +157,37 @@ export default {
         })
       ])
     ])
+  },
+  methods: {
+    resizeMousedown (evnt, column) {
+      let { $parent: $table, $el } = this
+      let targetElem = evnt.target
+      let dragLeft = 0
+      let resizeBarElem = $table.$refs.resizeBar
+      let pos = Tools.getOffset(targetElem, $el)
+      let dragMinLeft = pos.left - targetElem.parentNode.clientWidth + targetElem.clientWidth + 36
+      let dragPosLeft = pos.left + 4
+      let dragClientX = evnt.clientX
+      let domMousemove = document.onmousemove
+      let domMouseup = document.onmouseup
+      let updateEvent = function (evnt) {
+        evnt.preventDefault()
+        let offsetX = evnt.clientX - dragClientX
+        let left = dragPosLeft + offsetX
+        dragLeft = left < dragMinLeft ? dragMinLeft : left
+        resizeBarElem.style.left = `${dragLeft}px`
+      }
+      resizeBarElem.style.display = 'block'
+      document.onmousemove = updateEvent
+      document.onmouseup = function (evnt) {
+        document.onmousemove = domMousemove
+        document.onmouseup = domMouseup
+        column.resizeWidth = column.renderWidth - (dragPosLeft - dragLeft)
+        resizeBarElem.style.display = 'none'
+        $table.analyColumnWidth()
+        $table.computeWidth()
+      }
+      updateEvent(evnt)
+    }
   }
 }

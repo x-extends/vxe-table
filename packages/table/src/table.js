@@ -55,8 +55,12 @@ export default {
     /** 基本属性 */
     // 数据
     data: Array,
+    // 初始化绑定动态列
+    customs: Array,
     // 表格的高度
     height: String,
+    // 表格的最大高度
+    maxHeight: String,
     // 是否带有斑马纹
     stripe: Boolean,
     // 是否带有纵向边框
@@ -81,8 +85,6 @@ export default {
     headerRowClassName: [String, Function],
     // 给表头的单元格附加 className
     headerCellClassName: [String, Function],
-    // 初始化绑定动态列
-    customs: Array,
 
     /** 高级属性 */
     // 行数据的 Key
@@ -156,6 +158,7 @@ export default {
         leftList: [],
         centerList: [],
         rightList: [],
+        resizeList: [],
         pxList: [],
         pxMinList: [],
         scaleList: [],
@@ -224,7 +227,7 @@ export default {
     GlobalEvent.off(this, 'blur')
   },
   render (h) {
-    let { _e, tableData, tableColumn, collectColumn, isGroup, showHeader, border, stripe, highlightHoverRow, size, overflowX, optimizeConfig, columnStore, filterStore, confirmFilterEvent, resetFilterEvent, filterCheckAllEvent, filterOptionCheckEvent } = this
+    let { _e, tableData, tableColumn, collectColumn, isGroup, showHeader, border, stripe, highlightHoverRow, size, overflowX, scrollXHeight, optimizeConfig, columnStore, filterStore, confirmFilterEvent, resetFilterEvent, filterCheckAllEvent, filterOptionCheckEvent } = this
     let { leftList, rightList } = columnStore
     return h('div', {
       class: ['vxe-table', size ? `size--${size}` : '', {
@@ -273,6 +276,16 @@ export default {
        * 右侧固定列
        */
       rightList && rightList.length && overflowX ? renderFixed(h, this, 'right') : _e(),
+      /**
+       * 列宽线
+       */
+      h('div', {
+        class: ['vxe-table--resize-bar'],
+        style: {
+          'padding-bottom': `${scrollXHeight}px`
+        },
+        ref: 'resizeBar'
+      }),
       /**
        * 筛选容器
        */
@@ -442,6 +455,7 @@ export default {
      * 指定列宽的列进行拆分
      */
     analyColumnWidth () {
+      let resizeList = []
       let pxList = []
       let pxMinList = []
       let scaleList = []
@@ -449,20 +463,22 @@ export default {
       let autoList = []
       this.tableColumn.forEach(column => {
         if (column.visible) {
-          if (Tools.isScale(column.width)) {
-            scaleList.push(column)
+          if (column.resizeWidth) {
+            resizeList.push(column)
           } else if (Tools.isPx(column.width)) {
             pxList.push(column)
-          } else if (Tools.isScale(column.minWidth)) {
-            scaleMinList.push(column)
+          } else if (Tools.isScale(column.width)) {
+            scaleList.push(column)
           } else if (Tools.isPx(column.minWidth)) {
             pxMinList.push(column)
+          } else if (Tools.isScale(column.minWidth)) {
+            scaleMinList.push(column)
           } else {
             autoList.push(column)
           }
         }
       })
-      Object.assign(this.columnStore, { pxList, pxMinList, scaleList, scaleMinList, autoList })
+      Object.assign(this.columnStore, { resizeList, pxList, pxMinList, scaleList, scaleMinList, autoList })
     },
     /**
      * 计算单元格列宽，动态分配可用剩余空间
@@ -494,8 +510,8 @@ export default {
       let minCellWidth = 40 // 列宽最少限制 40px
       let remainWidth = bodyWidth
       let { fit, columnStore } = this
-      let { pxMinList, pxList, scaleList, scaleMinList, autoList } = columnStore
-      // 固定宽
+      let { resizeList, pxMinList, pxList, scaleList, scaleMinList, autoList } = columnStore
+      // 最小宽
       pxMinList.forEach(column => {
         let minWidth = parseInt(column.minWidth)
         tableWidth += minWidth
@@ -514,9 +530,15 @@ export default {
         tableWidth += scaleWidth
         column.renderWidth = scaleWidth
       })
-      // 最小宽
+      // 固定宽
       pxList.forEach(column => {
         let width = parseInt(column.width)
+        tableWidth += width
+        column.renderWidth = width
+      })
+      // 调整了列宽
+      resizeList.forEach(column => {
+        let width = parseInt(column.resizeWidth)
         tableWidth += width
         column.renderWidth = width
       })

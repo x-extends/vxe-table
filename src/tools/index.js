@@ -55,6 +55,8 @@ const Tools = {
       colSpan: 1,
       order: null,
       renderWidth: 0,
+      resizeWidth: 0,
+      renderLeft: 0,
       renderHeader: renderHeader || _vm.renderHeader,
       renderCell: renderCell || _vm.renderCell
     }
@@ -82,19 +84,19 @@ const Tools = {
     return elem && elem.className && elem.className.split && elem.className.split(' ').indexOf(cls) > -1
   },
   /**
-   * 获取绝对位置
+   * 获取元素绝对位置
    */
-  getOffset (elem) {
-    return getNodeOffset(elem, { left: 0, top: 0 })
+  getOffset (elem, container) {
+    return getNodeOffset(elem, container, { left: 0, top: 0 })
   }
 }
 
-function getNodeOffset (elem, rest) {
+function getNodeOffset (elem, container, rest) {
   if (elem) {
     rest.top += elem.offsetTop
     rest.left += elem.offsetLeft
-    if (elem.offsetParent) {
-      return getNodeOffset(elem.offsetParent, rest)
+    if (container && (elem === container || elem.offsetParent === container) ? 0 : elem.offsetParent) {
+      return getNodeOffset(elem.offsetParent, container, rest)
     }
   }
   return rest
