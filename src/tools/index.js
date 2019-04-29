@@ -88,6 +88,9 @@ const Tools = {
   hasClass (elem, cls) {
     return elem && elem.className && elem.className.split && elem.className.split(' ').indexOf(cls) > -1
   },
+  hasChildrenList (item) {
+    return item && item.children && item.children.length > 0
+  },
   /**
    * 获取元素绝对位置
    */

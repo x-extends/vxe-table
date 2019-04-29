@@ -200,7 +200,7 @@ export default {
     },
     // 是否使用了分组表头
     isGroup () {
-      return this.collectColumn.some(column => column.children && column.children.length)
+      return this.collectColumn.some(column => Tools.hasChildrenList(column))
     },
     visibleColumn () {
       return this.tableColumn.filter(column => column.visible)
@@ -219,6 +219,15 @@ export default {
     },
     ctxMenuConfig () {
       return Object.assign({}, this.contextMenu)
+    },
+    ctxMenuList () {
+      let rest = []
+      this.ctxMenuStore.list.forEach(list => {
+        list.forEach(item => {
+          rest.push(item)
+        })
+      })
+      return rest
     }
   },
   watch: {
@@ -242,6 +251,8 @@ export default {
     GlobalEvent.on(this, 'click', this.handleGlobalClickEvent)
     GlobalEvent.on(this, 'blur', this.handleGlobalBlurEvent)
     GlobalEvent.on(this, 'contextmenu', this.handleContextmenuEvent)
+    GlobalEvent.on(this, 'mousewheel', this.handleMousewheelEvent)
+    GlobalEvent.on(this, 'keydown', this.handleKeydownEvent)
     this.reload(this.data).then(() => {
       this.tableColumn = Tools.getColumnList(this.collectColumn)
       if (this.customs) {
@@ -262,6 +273,8 @@ export default {
     GlobalEvent.off(this, 'click')
     GlobalEvent.off(this, 'blur')
     GlobalEvent.off(this, 'contextmenu')
+    GlobalEvent.off(this, 'mousewheel')
+    GlobalEvent.off(this, 'keydown')
   },
   render (h) {
     let { _e, id, tableData, tableColumn, collectColumn, isGroup, isFilter, isCtxMenu, loading, showHeader, resizable, border, stripe, highlightHoverRow, size, overflowX, scrollXHeight, optimizeConfig, columnStore, filterStore, ctxMenuStore } = this
@@ -627,6 +640,60 @@ export default {
       this.closeContextMenu()
     },
     /**
+     * 全局滚动事件
+     */
+    handleMousewheelEvent (evnt) {
+      this.closeContextMenu()
+    },
+    /**
+     * 全局键盘事件
+     */
+    handleKeydownEvent (evnt) {
+      let keyCode = evnt.keyCode
+      let isEsc = keyCode === 27
+      let isEnter = keyCode === 13
+      let isSpacebar = keyCode === 32
+      let isLeftArrow = keyCode === 37
+      let isUpArrow = keyCode === 38
+      let isRightArrow = keyCode === 39
+      let isDwArrow = keyCode === 40
+      if (isEsc) {
+        // 如果按下 Esc 键，关闭快捷菜单、筛选
+        this.closeContextMenu()
+        this.closeFilter()
+      } else if (this.isCtxMenu) {
+        // 如果配置了右键菜单; 支持方向键操作、回车
+        let { ctxMenuStore } = this
+        if (ctxMenuStore.visible && (isEnter || isSpacebar || isLeftArrow || isUpArrow || isRightArrow || isDwArrow)) {
+          evnt.preventDefault()
+          evnt.stopPropagation()
+          if (ctxMenuStore.showChild && Tools.hasChildrenList(ctxMenuStore.selected)) {
+            this.moveCtxMenu(evnt, keyCode, ctxMenuStore, 'selectChild', 37, false, ctxMenuStore.selected.children)
+          } else {
+            this.moveCtxMenu(evnt, keyCode, ctxMenuStore, 'selected', 39, true, this.ctxMenuList)
+          }
+        }
+      }
+    },
+    // 处理菜单的移动
+    moveCtxMenu (evnt, keyCode, ctxMenuStore, key, operKey, operRest, menuList) {
+      let selectIndex = XEUtils.findIndexOf(menuList, item => ctxMenuStore[key] === item)
+      if (keyCode === operKey) {
+        if (operRest && Tools.hasChildrenList(ctxMenuStore.selected)) {
+          ctxMenuStore.showChild = true
+        } else {
+          ctxMenuStore.showChild = false
+          ctxMenuStore.selectChild = null
+        }
+      } else if (keyCode === 38) {
+        ctxMenuStore[key] = menuList[selectIndex - 1] || menuList[menuList.length - 1]
+      } else if (keyCode === 40) {
+        ctxMenuStore[key] = menuList[selectIndex + 1] || menuList[0]
+      } else if (ctxMenuStore[key] && (keyCode === 13 || keyCode === 32)) {
+        this.ctxMenuLinkEvent(evnt, ctxMenuStore[key])
+      }
+    },
+    /**
      * 快捷菜单事件处理
      */
     handleContextmenuEvent (evnt) {
@@ -710,7 +777,7 @@ export default {
       ctxMenuStore.selected = item
       ctxMenuStore.selectChild = child
       if (!child) {
-        ctxMenuStore.showChild = item.children && item.children.length > 0
+        ctxMenuStore.showChild = Tools.hasChildrenList(item)
       }
     },
     ctxMenuMouseoutEvent (evnt, item, child) {
