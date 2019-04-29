@@ -223,6 +223,7 @@
     }
   }
   .vxe-table--loading {
+    display: none;
     position: absolute;
     width: 100%;
     height: 100%;
@@ -237,20 +238,22 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-    }
-    .spinner--bounce1, .spinner--bounce2 {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      background-color: $vxe-primary-color;
-      opacity: 0.6;
-      position: absolute;
-      top: 0;
-      left: 0;
-      animation: bounce 2.0s infinite ease-in-out;
-    }
-    .spinner--bounce2 {
-      animation-delay: -1.0s;
+      &:before,
+      &:after {
+        content: "";
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        background-color: $vxe-primary-color;
+        opacity: 0.6;
+        position: absolute;
+        top: 0;
+        left: 0;
+        animation: bounce 2.0s infinite ease-in-out;
+      }
+      &:after {
+        animation-delay: -1.0s;
+      }
     }
     @keyframes bounce {
       0%, 100% {

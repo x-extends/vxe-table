@@ -47,7 +47,7 @@
       <vxe-table-column prop="address" label="地址" width="300" fixed="right"></vxe-table-column>
     </vxe-table> -->
 
-    <!-- <button @click="$refs.vTable.exportCsv()">导出</button>
+    <button @click="$refs.vTable.exportCsv()">导出</button>
     <vxe-table
       ref="vTable"
       max-height="300"
@@ -66,7 +66,7 @@
       <vxe-table-column prop="age" label="年龄" sortable width="200" :filters="[{label: '30', value: 30}, {label: 28, value: 28}, {label: 27, value: 27}, {label: 26, value: 26}]" :filterMethod="filterMethod"></vxe-table-column>
       <vxe-table-column prop="sex" label="性别" width="200" :filters="[{label: '男', value: '1'}, {label: '女', value: '0'}]"></vxe-table-column>
       <vxe-table-column prop="address" label="地址" width="300" fixed="right"></vxe-table-column>
-    </vxe-table> -->
+    </vxe-table>
 
     <!-- <vxe-table
       height="300"

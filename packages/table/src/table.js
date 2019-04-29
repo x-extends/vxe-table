@@ -205,11 +205,17 @@ export default {
     visibleColumn () {
       return this.tableColumn.filter(column => column.visible)
     },
+    isFilter () {
+      return this.visibleColumn.some(column => column.filters && column.filters.length)
+    },
     headerCtxMenu () {
       return this.ctxMenuConfig.header && this.ctxMenuConfig.header.options ? this.ctxMenuConfig.header.options : []
     },
     bodyCtxMenu () {
       return this.ctxMenuConfig.body && this.ctxMenuConfig.body.options ? this.ctxMenuConfig.body.options : []
+    },
+    isCtxMenu () {
+      return this.headerCtxMenu.length || this.bodyCtxMenu.length
     },
     ctxMenuConfig () {
       return Object.assign({}, this.contextMenu)
@@ -258,7 +264,7 @@ export default {
     GlobalEvent.off(this, 'contextmenu')
   },
   render (h) {
-    let { _e, id, tableData, tableColumn, collectColumn, isGroup, loading, showHeader, resizable, border, stripe, highlightHoverRow, size, overflowX, scrollXHeight, optimizeConfig, columnStore, filterStore, ctxMenuStore } = this
+    let { _e, id, tableData, tableColumn, collectColumn, isGroup, isFilter, isCtxMenu, loading, showHeader, resizable, border, stripe, highlightHoverRow, size, overflowX, scrollXHeight, optimizeConfig, columnStore, filterStore, ctxMenuStore } = this
     let { leftList, rightList } = columnStore
     return h('div', {
       class: ['vxe-table', size ? `size--${size}` : '', {
@@ -317,20 +323,19 @@ export default {
         },
         ref: 'resizeBar'
       }) : _e(),
-      loading ? h('div', {
-        class: ['vxe-table--loading']
+      /**
+       * 加载中
+       */
+      h('div', {
+        class: ['vxe-table--loading'],
+        style: {
+          display: loading ? 'block' : 'none'
+        }
       }, [
         h('div', {
           class: 'vxe-table--spinner'
-        }, [
-          h('div', {
-            class: 'spinner--bounce1'
-          }),
-          h('div', {
-            class: 'spinner--bounce2'
-          })
-        ])
-      ]) : _e(),
+        })
+      ]),
       h('div', {
         class: [`vxe-table${id}-wrapper`],
         ref: 'tableWrapper'
@@ -338,22 +343,22 @@ export default {
         /**
          * 筛选
          */
-        h('table-filter', {
+        isFilter ? h('table-filter', {
           props: {
             optimizeConfig,
             filterStore
           },
           ref: 'filterWrapper'
-        }),
+        }) : null,
         /**
          * 快捷菜单
          */
-        h('table-context-menu', {
+        isCtxMenu ? h('table-context-menu', {
           props: {
             ctxMenuStore
           },
           ref: 'ctxWrapper'
-        })
+        }) : null
       ])
     ])
   },
@@ -625,8 +630,8 @@ export default {
      * 快捷菜单事件处理
      */
     handleContextmenuEvent (evnt) {
-      let { headerCtxMenu, bodyCtxMenu, ctxMenuConfig } = this
-      if (headerCtxMenu.length || bodyCtxMenu.length) {
+      let { isCtxMenu, ctxMenuConfig } = this
+      if (isCtxMenu) {
         // 右键头部
         let headeWrapperNode = this.getEventTargetNode(evnt, this.$el, 'vxe-table--header-wrapper')
         if (headeWrapperNode.flag) {
@@ -641,6 +646,7 @@ export default {
         }
       }
       this.closeContextMenu()
+      this.closeFilter()
     },
     /**
      * 显示快捷菜单
@@ -654,8 +660,7 @@ export default {
         } else if (options && options.length) {
           if (!visibleMethod || visibleMethod(params, evnt)) {
             evnt.preventDefault()
-            let scrollTop = document.documentElement.scrollTop || document.body.scrollTop
-            let scrollLeft = document.documentElement.scrollLeft || document.body.scrollLeft
+            let { scrollTop, scrollLeft, visibleHeight, visibleWidth } = Tools.getDomNode()
             let top = evnt.clientY + scrollTop
             let left = evnt.clientX + scrollLeft
             Object.assign(ctxMenuStore, {
@@ -667,13 +672,11 @@ export default {
               }
             })
             this.$nextTick(() => {
-              let viewHeight = document.documentElement.clientHeight || document.body.clientHeight
-              let viewWidth = document.documentElement.clientWidth || document.body.clientWidth
               let ctxElem = this.$refs.ctxWrapper.$el
               let clientHeight = ctxElem.clientHeight
               let clientWidth = ctxElem.clientWidth
-              let offsetTop = evnt.clientY + clientHeight - viewHeight
-              let offsetLeft = evnt.clientX + clientWidth - viewWidth
+              let offsetTop = evnt.clientY + clientHeight - visibleHeight
+              let offsetLeft = evnt.clientX + clientWidth - visibleWidth
               if (offsetTop > -10) {
                 ctxMenuStore.style.top = `${top - clientHeight}px`
               }
@@ -686,6 +689,7 @@ export default {
           }
         }
       }
+      this.closeFilter()
     },
     /**
      * 关闭快捷菜单

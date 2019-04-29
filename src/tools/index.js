@@ -77,10 +77,12 @@ const Tools = {
       $table.collectColumn.splice([].indexOf.call($table.$refs.hideColumn.children, _vm.$el), 0, columnConfig)
     }
   },
-  getDomScrollPos () {
+  getDomNode () {
     return {
       scrollTop: document.documentElement.scrollTop || document.body.scrollTop,
-      scrollLeft: document.documentElement.scrollLeft || document.body.scrollLeft
+      scrollLeft: document.documentElement.scrollLeft || document.body.scrollLeft,
+      visibleHeight: document.documentElement.clientHeight || document.body.clientHeight,
+      visibleWidth: document.documentElement.clientWidth || document.body.clientWidth
     }
   },
   hasClass (elem, cls) {
