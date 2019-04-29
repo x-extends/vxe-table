@@ -221,7 +221,8 @@ Vue.use(VXETable)
 ```html
 <template>
   <div>
-    <vxe-table :data.sync="tableData">
+    <button @click="$refs.vTable.exportCsv()">Export.cvs</button>
+    <vxe-table ref="vTable" :data.sync="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column prop="name" label="Name"></vxe-table-column>
       <vxe-table-column prop="sex" label="Sex"></vxe-table-column>
