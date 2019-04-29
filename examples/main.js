@@ -7,7 +7,7 @@ import './mock'
 
 Vue.config.productionTip = false
 
-// 后台异步生成70万数据，为了避免大量运算卡主页面，生成大约需要15秒左右
+// 后台异步生成10万数据，为了避免大量运算卡主页面，生成大约需要15秒左右
 var list = window.CACHE_DATA_LIST = []
 var currTime = Date.now()
 var fullIndex = 0

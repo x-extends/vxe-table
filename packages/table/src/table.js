@@ -15,7 +15,7 @@ function renderFixed (h, $table, fixedType) {
   let customHeight = isNaN(height) ? 0 : parseFloat(height)
   let isRightFixed = fixedType === 'right'
   let style = {
-    height: `${(customHeight || tableHeight) + headerHeight - scrollXHeight}px`,
+    height: `${(customHeight ? customHeight - headerHeight : tableHeight) + headerHeight - scrollXHeight}px`,
     width: `${columnStore[`${fixedType}List`].reduce((previous, column) => previous + column.renderWidth, isRightFixed ? scrollYWidth + 1 : 0)}px`
   }
   return h('div', {

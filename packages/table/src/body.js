@@ -105,13 +105,13 @@ export default {
   },
   render (h) {
     let { _e, $parent: $table, fixedType } = this
-    let { highlightHoverRow, rowKey, maxHeight, height, rowClassName, tableData, tableColumn, tableHeight, tableWidth, scrollXHeight, selectRow, hoverRow, overflowX, columnStore, optimizeConfig } = $table
+    let { highlightHoverRow, rowKey, maxHeight, height, rowClassName, tableData, tableColumn, headerHeight, tableHeight, tableWidth, scrollXHeight, selectRow, hoverRow, overflowX, columnStore, optimizeConfig } = $table
     let { leftList, rightList } = columnStore
     let { overflow } = optimizeConfig
     let customHeight = XEUtils.toNumber(height)
     let style = {}
     if (customHeight) {
-      style.height = `${fixedType ? (customHeight || tableHeight) - scrollXHeight : customHeight}px`
+      style.height = `${fixedType ? (customHeight ? customHeight - headerHeight : tableHeight) - scrollXHeight : customHeight - headerHeight}px`
     } else if (maxHeight) {
       style['max-height'] = `${XEUtils.toNumber(maxHeight)}px`
     }

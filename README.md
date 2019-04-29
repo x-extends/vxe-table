@@ -142,7 +142,7 @@ Vue.use(VXETable)
 |------|------|-----|-----|-----|
 | animat | 表格动画效果开关（关闭后视觉效果更快） | Boolean | — | true |
 | overflow | 设置所有行不允许换行（设置后对于固定列能大幅提升性能） | String | ellipsis / title / tooltip | — |
-| renderer | 渲染方式 | String | fast（性能最快，滚动效果略差） / moderate（性能居中，不影响效果） | — |
+| renderSize | 设置为滚动渲染方式，每次渲染的条数 | String | scroll（性能快，滚动效果略差） | — |
 
 #### Table Events
 

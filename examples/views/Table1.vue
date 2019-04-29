@@ -32,10 +32,10 @@
       <vxe-table-column prop="address" label="地址" width="300" fixed="right"></vxe-table-column>
     </vxe-table> -->
 
-    <vxe-table
+    <!-- <vxe-table
       height="300"
       border
-      :span-method="colspanMethod"
+      :loading="loading"
       :data.sync="tableData"
       :customs.sync="customColumns">
       <vxe-table-column type="index" width="60"></vxe-table-column>
@@ -45,7 +45,7 @@
       <vxe-table-column prop="age" label="年龄" sortable width="200" :filters="[{label: '30', value: 30}, {label: 28, value: 28}, {label: 27, value: 27}, {label: 26, value: 26}]" :filterMethod="filterMethod"></vxe-table-column>
       <vxe-table-column prop="sex" label="性别" width="200" :filters="[{label: '男', value: '1'}, {label: '女', value: '0'}]"></vxe-table-column>
       <vxe-table-column prop="address" label="地址" width="300" fixed="right"></vxe-table-column>
-    </vxe-table>
+    </vxe-table> -->
 
     <!-- <button @click="$refs.vTable.exportCsv()">导出</button>
     <vxe-table
@@ -91,8 +91,9 @@
       <vxe-table-column prop="sex" label="性别" width="200"></vxe-table-column>
     </vxe-table> -->
 
-    <!-- <vxe-table
+    <vxe-table
       border
+      height="400"
       :data.sync="tableData">
       <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
       <vxe-table-column type="radio" width="60"></vxe-table-column>
@@ -107,7 +108,7 @@
           <span>{{ row.address }}</span>
         </template>
       </vxe-table-column>
-    </vxe-table> -->
+    </vxe-table>
   </div>
 </template>
 
@@ -166,8 +167,12 @@ export default {
   },
   created () {
     window.test = this
-    let list = window.CACHE_DATA_LIST.slice(0, 5)
-    this.tableData = list
+    this.loading = true
+    setTimeout(() => {
+      let list = window.CACHE_DATA_LIST.slice(0, 8)
+      this.tableData = list
+      this.loading = false
+    }, 1000)
   },
   methods: {
     formatterPhone ({ cellValue }) {
