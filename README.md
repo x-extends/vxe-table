@@ -29,11 +29,11 @@ A very powerful Vue table component.
 * [合并行或列](https://jsrun.net/5jXKp/play)
 * 表尾汇总
 * [导出 CVS](https://jsrun.net/cmXKp/play)
-* [快捷菜单](https://jsrun.net/VjXKp/play)
 * [自定义列](https://jsrun.net/PrXKp/play)
 * [加载中](https://jsrun.net/GjXKp/play)
 * [格式化内容](https://jsrun.net/FrXKp/play)
 * [自定义模板](https://jsrun.net/DjXKp/play)
+* [快捷菜单](https://jsrun.net/VjXKp/play)
 * 滚动渲染
 * 展开行
 * 树形
