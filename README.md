@@ -126,15 +126,23 @@ Vue.use(VXETable)
 | context-menu | 快捷菜单配置 | Object | — | {header, body} |
 | row-key | 行数据的 Key | String | — | — |
 | auto-width | 自动计算列宽（如果关闭，需要手动调用 computeWidth 方法） | Boolean | — | true |
-| optimized | 优化的配置项 | Object/Boolean | — | {animat: true, overflow: 'title'} |
+| optimized | 优化的配置项 | Object/Boolean | — | Object |
 
-快捷菜单配置项说明（配合 context-menu-link 事件使用）：
+context-menu 快捷菜单配置项说明（配合 context-menu-link 事件使用）：
 
-| 属性 | 描述 | 类型 | 参数 |
-|------|------|-----|-----|
-| disabled | 是否禁用表格头部右键 | Boolean | — |
-| options | 表格头部菜单配置 | Array | { code, name, prefixIcon, suffixIcon, disabled } |
-| visibleMethod | 该函数 Function({row, rowIndex, column, columnIndex}, event) 的返回值用来决定是否允许显示右键菜单 | Function | — |
+| 属性 | 描述 | 类型 | 可选值 | 参数 |
+|------|------|-----|-----|-----|
+| disabled | 是否禁用表格头部右键 | Boolean | — | — |
+| options | 表格头部菜单配置 | Array | — | { code, name, prefixIcon, suffixIcon, disabled } |
+| visibleMethod | 该函数 Function({row, rowIndex, column, columnIndex}, event) 的返回值用来决定是否允许显示右键菜单 | Function | — | — |
+
+optimized 优化配置项说明：
+
+| 属性 | 描述 | 类型 | 可选值 | 参数 |
+|------|------|-----|-----|-----|
+| animat | 表格动画效果开关（关闭后视觉效果更快） | Boolean | — | true |
+| overflow | 设置所有行不允许换行（设置后对于固定列能大幅提升性能） | String | ellipsis / title / tooltip | — |
+| renderer | 渲染方式 | String | fast（性能最快，滚动效果略差） / moderate（性能居中，不影响效果） | — |
 
 #### Table Events
 
@@ -156,6 +164,20 @@ Vue.use(VXETable)
 | clearSort | 用于清空排序条件，数据会恢复成未排序的状态 | — |
 | clearFilter | 用于清空筛选条件，数据会恢复成未筛选的状态 | — |
 | computeWidth | 重新计算并更新列宽 | — |
+| exportCsv| 将表格数据导出为 .csv 文件，说明：支持IE9+、Edge、Chrome、Firefox 等常用浏览器。IE11以下可能存在中文乱码问题，部分浏览器需要手动修改后缀名为 .csv | options |
+
+exportCsv 参数说明：
+
+| 属性 | 描述 | 类型 | 可选值 | 默认值 |
+|------|------|-----|-----|-----|
+| filename | 文件名 | String | — | table.csv |
+| original | 是否导出源数据 | Boolean | — | false |
+| isHeader | 是否显示表头 | Boolean | — | false |
+| download | 是否马上下载，如果设置为 false 则通过返回结果为内容的 Promise | Boolean | — | true |
+| data | 自定义数据 | Array | — | — |
+| columns | 自定义列 | Array | — | — |
+| columnFilterMethod | 列过滤方法，该函数 Function(row,index,list) 的返回值用来决定该列是否导出 | Function | — | — |
+| dataFilterMethod | 数据过滤方法，该函数 Function(row,index,list) 的返回值用来决定该数据是否导出 | Function | — | — |
 
 ### Table-column
 

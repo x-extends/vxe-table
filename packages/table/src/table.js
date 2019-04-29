@@ -192,7 +192,7 @@ export default {
     optimizeConfig () {
       let isAll = this.optimized === true
       return Object.assign({
-        // 关闭所有显示效果
+        // 显示效果开关
         animat: !isAll,
         // 如果设置了则不允许换行 ellipsis、title、tooltip
         overflow: isAll ? 'title' : null
