@@ -89,6 +89,8 @@ export default {
     headerRowClassName: [String, Function],
     // 给表头的单元格附加 className
     headerCellClassName: [String, Function],
+    // 合并行或列
+    spanMethod: Function,
     // 快捷菜单
     contextMenu: { type: Object, default: () => DefaultOptions.contextMenu },
     /** 高级属性 */

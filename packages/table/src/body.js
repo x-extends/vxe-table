@@ -5,7 +5,7 @@ import Tools from '../../../src/tools'
  * 渲染列
  */
 function renderColumn (h, $table, fixedType, row, rowIndex, column, columnIndex) {
-  let { $listeners: tableListeners, border, highlightCurrentRow, cellClassName, optimizeConfig } = $table
+  let { $listeners: tableListeners, border, highlightCurrentRow, cellClassName, spanMethod, optimizeConfig } = $table
   let { align, ellipsis, showTitle, showTooltip, renderWidth, columnKey } = column
   let { overflow } = optimizeConfig
   let fixedHiddenColumn = fixedType && column.fixed !== fixedType
@@ -13,6 +13,7 @@ function renderColumn (h, $table, fixedType, row, rowIndex, column, columnIndex)
   let isShowTooltip = showTooltip || overflow === 'tooltip'
   let isEllipsis = ellipsis || overflow === 'ellipsis'
   let tdOns = {}
+  let attrs = null
   // 优化事件绑定
   if (highlightCurrentRow || tableListeners['cell-click']) {
     tdOns.click = evnt => {
@@ -24,12 +25,21 @@ function renderColumn (h, $table, fixedType, row, rowIndex, column, columnIndex)
       $table.triggerCellDBLClickEvent(evnt, { row, rowIndex, column, columnIndex, cell: evnt.currentTarget })
     }
   }
+  // 合并行或列
+  if (spanMethod) {
+    let { rowspan = 1, colspan = 1 } = spanMethod({ row, rowIndex, column, columnIndex }) || {}
+    if (!rowspan || !colspan) {
+      return null
+    }
+    attrs = { rowspan, colspan }
+  }
   return h('td', {
     class: ['vxe-body--column', column.id, {
       [`col--${align}`]: align,
       'fixed--hidden': fixedHiddenColumn
     }, cellClassName ? XEUtils.isFunction(cellClassName) ? cellClassName({ row, rowIndex, column, columnIndex }) : cellClassName : ''],
     key: columnKey || columnIndex,
+    attrs,
     on: tdOns
   }, !fixedType && fixedHiddenColumn ? [] : [
     h('div', {

@@ -26,7 +26,7 @@ A very powerful Vue table component.
 * [多选](https://jsrun.net/erXKp/play)
 * [排序](https://jsrun.net/QrXKp/play)
 * [筛选](https://jsrun.net/drXKp/play)
-* 合并行或列
+* [合并行或列](https://jsrun.net/5jXKp/edit/play)
 * 表尾汇总
 * [导出 CVS](https://jsrun.net/cmXKp/play)
 * [快捷菜单](https://jsrun.net/VjXKp/play)
@@ -121,6 +121,7 @@ Vue.use(VXETable)
 | cell-class-name | 给单元格附加 className，也可以是函数 Function({row, rowIndex, column, columnIndex}) | String/Function | — | — |
 | header-row-class-name | 给表头的行附加 className，也可以是函数 Function({row, rowIndex}) | String/Function | — | — |
 | header-cell-class-name | 给表头的单元格附加 className，也可以是函数 Function({row, rowIndex, column, columnIndex}) | String/Function | — | — |
+| span-method | 合并行或列，该函数 Function({row, rowIndex, column, columnIndex}) 返回计算后的值 | Object | — | { rowspan: 1, colspan: 1} |
 | context-menu | 快捷菜单配置 | Object | — | {header, body} |
 | row-key | 行数据的 Key | String | — | — |
 | auto-width | 自动计算列宽（如果关闭，需要手动调用 computeWidth 方法） | Boolean | — | true |
