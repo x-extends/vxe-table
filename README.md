@@ -128,7 +128,7 @@ Vue.use(VXETable)
 | auto-width | 自动计算列宽（如果关闭，需要手动调用 computeWidth 方法） | Boolean | — | true |
 | optimized | 优化的配置项 | Object/Boolean | — | Object |
 
-context-menu 快捷菜单配置项说明（配合 context-menu-link 事件使用）：
+##### context-menu 快捷菜单配置项说明（配合 context-menu-link 事件使用）
 
 | 属性 | 描述 | 类型 | 可选值 | 参数 |
 |------|------|-----|-----|-----|
@@ -136,7 +136,7 @@ context-menu 快捷菜单配置项说明（配合 context-menu-link 事件使用
 | options | 表格头部菜单配置 | Array | — | { code, name, prefixIcon, suffixIcon, disabled } |
 | visibleMethod | 该函数 Function({row, rowIndex, column, columnIndex}, event) 的返回值用来决定是否允许显示右键菜单 | Function | — | — |
 
-optimized 优化配置项说明：
+##### optimized 优化配置项说明
 
 | 属性 | 描述 | 类型 | 可选值 | 参数 |
 |------|------|-----|-----|-----|
@@ -164,9 +164,9 @@ optimized 优化配置项说明：
 | clearSort | 用于清空排序条件，数据会恢复成未排序的状态 | — |
 | clearFilter | 用于清空筛选条件，数据会恢复成未筛选的状态 | — |
 | computeWidth | 重新计算并更新列宽 | — |
-| exportCsv| 将表格数据导出为 .csv 文件，说明：支持IE9+、Edge、Chrome、Firefox 等常用浏览器。IE11以下可能存在中文乱码问题，部分浏览器需要手动修改后缀名为 .csv | options |
+| exportCsv| 将表格数据导出为 .csv 文件，说明：支持IE9+、Edge、Chrome、Firefox 等常用浏览器。IE11以下可能存在中文乱码问题，部分浏览器需要手动修改后缀名为 .csv | [options](#exportcsv-参数说明) |
 
-##### exportCsv 参数说明：
+##### exportCsv 参数说明
 
 | 属性 | 描述 | 类型 | 可选值 | 默认值 |
 |------|------|-----|-----|-----|
