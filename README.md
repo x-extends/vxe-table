@@ -123,10 +123,10 @@ Vue.use(VXETable)
 | header-row-class-name | 给表头的行附加 className，也可以是函数 Function({row, rowIndex}) | String/Function | — | — |
 | header-cell-class-name | 给表头的单元格附加 className，也可以是函数 Function({row, rowIndex, column, columnIndex}) | String/Function | — | — |
 | span-method | 合并行或列，该函数 Function({row, rowIndex, column, columnIndex}) 返回计算后的值 | Object | — | { rowspan: 1, colspan: 1} |
-| context-menu | 快捷菜单配置 | Object | — | {header, body} |
+| context-menu | 快捷菜单配置 | Object | — | [{header, body}](#context-menu-快捷菜单配置项说明配合-context-menu-link-事件使用) |
 | row-key | 行数据的 Key | String | — | — |
 | auto-width | 自动计算列宽（如果关闭，需要手动调用 computeWidth 方法） | Boolean | — | true |
-| optimized | 优化的配置项 | Object/Boolean | — | Object |
+| optimized | 优化的配置项 | Object/Boolean | — | [options](#optimized-优化配置项说明) |
 
 ##### context-menu 快捷菜单配置项说明（配合 context-menu-link 事件使用）
 
