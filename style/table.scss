@@ -123,7 +123,7 @@
         }
       }
     }
-    .vxe-resize {
+    .vxe-resizable {
       position: absolute;
       right: -7px;
       top: 0;
@@ -216,6 +216,52 @@
     }
   }
 
+  /*加载中*/
+  &.t--loading {
+    .vxe-table--loading {
+      display: block;
+    }
+  }
+  .vxe-table--loading {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 99;
+    opacity: .6;
+    background-color: #fff;
+    .vxe-table--spinner {
+      width: 60px;
+      height: 60px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    .spinner--bounce1, .spinner--bounce2 {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background-color: $vxe-primary-color;
+      opacity: 0.6;
+      position: absolute;
+      top: 0;
+      left: 0;
+      animation: bounce 2.0s infinite ease-in-out;
+    }
+    .spinner--bounce2 {
+      animation-delay: -1.0s;
+    }
+    @keyframes bounce {
+      0%, 100% {
+        transform: scale(0.0);
+      } 50% {
+        transform: scale(1.0);
+      }
+    }
+  }
+
   /*排序*/
   .vxe-sort-wrapper {
     padding: 0 2px;
@@ -270,7 +316,7 @@
   }
 
   /*列宽线*/
-  .vxe-table--resize-bar {
+  .vxe-table--resizable-bar {
     display: none;
     position: absolute;
     top: 0;

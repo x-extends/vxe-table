@@ -63,6 +63,8 @@ export default {
     height: [Number, String],
     // 表格的最大高度
     maxHeight: [Number, String],
+    // 是否允许拖动列宽调整大小
+    resizable: Boolean,
     // 是否带有斑马纹
     stripe: Boolean,
     // 是否带有纵向边框
@@ -254,7 +256,7 @@ export default {
     GlobalEvent.off(this, 'contextmenu')
   },
   render (h) {
-    let { _e, id, tableData, tableColumn, collectColumn, isGroup, showHeader, border, stripe, highlightHoverRow, size, overflowX, scrollXHeight, optimizeConfig, columnStore, filterStore, ctxMenuStore } = this
+    let { _e, id, tableData, tableColumn, collectColumn, isGroup, loading, showHeader, resizable, border, stripe, highlightHoverRow, size, overflowX, scrollXHeight, optimizeConfig, columnStore, filterStore, ctxMenuStore } = this
     let { leftList, rightList } = columnStore
     return h('div', {
       class: ['vxe-table', size ? `size--${size}` : '', {
@@ -306,13 +308,27 @@ export default {
       /**
        * 列宽线
        */
-      h('div', {
-        class: ['vxe-table--resize-bar'],
+      resizable ? h('div', {
+        class: ['vxe-table--resizable-bar'],
         style: {
           'padding-bottom': `${scrollXHeight}px`
         },
         ref: 'resizeBar'
-      }),
+      }) : _e(),
+      loading ? h('div', {
+        class: ['vxe-table--loading']
+      }, [
+        h('div', {
+          class: 'vxe-table--spinner'
+        }, [
+          h('div', {
+            class: 'spinner--bounce1'
+          }),
+          h('div', {
+            class: 'spinner--bounce2'
+          })
+        ])
+      ]) : _e(),
       h('div', {
         class: [`vxe-table${id}-wrapper`],
         ref: 'tableWrapper'
@@ -790,7 +806,7 @@ export default {
       Tools.emitEvent(this, 'cell-dblclick', [params, evnt])
     },
     /**
-     * 排序事件
+     * 点击排序事件
      */
     triggerSortEvent (evnt, column, params, order) {
       if (column.order !== order) {
@@ -805,7 +821,7 @@ export default {
       }
     },
     /**
-     * 筛选事件
+     * 点击筛选事件
      */
     triggerFilterEvent (evnt, column, params) {
       let filterStore = this.filterStore
@@ -832,22 +848,6 @@ export default {
           }
         })
       }
-    },
-    // 全部筛选事件
-    filterCheckAllEvent (evnt, value) {
-      let filterStore = this.filterStore
-      filterStore.options.forEach(item => {
-        item.checked = value
-      })
-      filterStore.isAllSelected = value
-      filterStore.isIndeterminate = false
-    },
-    // 筛选选项勾选事件
-    filterOptionCheckEvent (evnt, value, item) {
-      let filterStore = this.filterStore
-      item.checked = value
-      filterStore.isAllSelected = filterStore.options.every(item => item.checked)
-      filterStore.isIndeterminate = !this.isAllSelected && filterStore.options.some(item => item.checked)
     },
     // 确认筛选
     confirmFilterEvent (evnt) {

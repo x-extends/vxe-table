@@ -31,7 +31,7 @@ A very powerful Vue table component.
 * [导出 CVS](https://jsrun.net/cmXKp/play)
 * [快捷菜单](https://jsrun.net/VjXKp/play)
 * [自定义列](https://jsrun.net/PrXKp/play)
-* 加载中
+* [加载中](https://jsrun.net/GjXKp/play)
 * 展开行
 * 滚动渲染
 * [自定义模板与格式化内容](https://jsrun.net/FrXKp/play)
@@ -82,9 +82,9 @@ Vue.use(VXETable)
 
 // 支持设置全部默认参数
 // Vue.use(VXETable， {
-//   size: 'small, // 默认表格尺寸
-//   optimized: false, // 默认优化配置项
-//   contextMenu: null // 默认快捷菜单
+//   size: 'small, // 全局表格尺寸
+//   optimized: false, // 全局优化配置项
+//   contextMenu: null // 全局快捷菜单
 // })
 ```
 
@@ -108,6 +108,7 @@ Vue.use(VXETable)
 | customs | 初始化绑定动态列 | Array | — | — |
 | height | 表格的高度 | Number | — | — |
 | maxHeight | 表格的最大高度 | Number | — | — |
+| resizable | 是否允许拖动列宽调整大小 | Boolean | — | false |
 | stripe | 是否带有斑马纹 | Boolean | — | false |
 | border | 是否带有纵向边框 | Boolean | — | false |
 | size | 表格的尺寸 | String | medium / small / mini | — |

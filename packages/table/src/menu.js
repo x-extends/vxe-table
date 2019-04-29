@@ -3,8 +3,8 @@ export default {
     ctxMenuStore: Object
   },
   render (h) {
-    let { _e, ctxMenuStore } = this
     let $table = this.$parent
+    let { _e, ctxMenuStore } = this
     return h('div', {
       class: ['vxe-table--ctxmenu-wrapper', {
         show: ctxMenuStore.visible

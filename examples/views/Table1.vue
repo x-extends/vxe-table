@@ -37,6 +37,8 @@
       ref="vTable"
       max-height="300"
       border
+      resizable
+      :loading="loading"
       :data.sync="tableData"
       :customs.sync="customColumns"
       :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}}"
@@ -98,6 +100,7 @@
 export default {
   data () {
     return {
+      loading: false,
       tableData: [],
       customColumns: [],
       headerMenus: [

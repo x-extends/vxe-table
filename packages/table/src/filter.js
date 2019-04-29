@@ -10,7 +10,7 @@ export default {
   },
   render (h) {
     let $table = this.$parent
-    let { filterStore, optimizeConfig } = this
+    let { filterStore, optimizeConfig, filterCheckAllEvent, filterOptionCheckEvent } = this
     return h('div', {
       class: ['vxe-table--filter-wrapper', {
         't--animat': optimizeConfig.animat,
@@ -31,7 +31,7 @@ export default {
             },
             on: {
               change (value, evnt) {
-                $table.filterCheckAllEvent(evnt, value)
+                filterCheckAllEvent(evnt, value)
               }
             }
           }, '全部')
@@ -47,7 +47,7 @@ export default {
             },
             on: {
               change (value, evnt) {
-                $table.filterOptionCheckEvent(evnt, value, item)
+                filterOptionCheckEvent(evnt, value, item)
               }
             }
           }, item.label)
@@ -74,5 +74,23 @@ export default {
         }, '重置')
       ])
     ] : [])
+  },
+  methods: {
+    // 全部筛选事件
+    filterCheckAllEvent (evnt, value) {
+      let filterStore = this.filterStore
+      filterStore.options.forEach(item => {
+        item.checked = value
+      })
+      filterStore.isAllSelected = value
+      filterStore.isIndeterminate = false
+    },
+    // 筛选选项勾选事件
+    filterOptionCheckEvent (evnt, value, item) {
+      let filterStore = this.filterStore
+      item.checked = value
+      filterStore.isAllSelected = filterStore.options.every(item => item.checked)
+      filterStore.isIndeterminate = !filterStore.isAllSelected && filterStore.options.some(item => item.checked)
+    }
   }
 }
