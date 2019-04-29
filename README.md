@@ -29,7 +29,7 @@ A very powerful Vue table component.
 * 合并行或列
 * 表尾汇总
 * [导出 CVS](https://jsrun.net/cmXKp/play)
-* 快捷菜单
+* [快捷菜单](https://jsrun.net/VjXKp/play)
 * [自定义列](https://jsrun.net/PrXKp/play)
 * 加载中
 * 展开行
@@ -82,8 +82,9 @@ Vue.use(VXETable)
 
 // 支持设置全部默认参数
 // Vue.use(VXETable， {
-//   size: 'small,
-//   optimized: false
+//   size: 'small, // 默认表格尺寸
+//   optimized: false, // 默认优化配置项
+//   contextMenu: null // 默认快捷菜单
 // })
 ```
 
@@ -119,9 +120,18 @@ Vue.use(VXETable)
 | cell-class-name | 给单元格附加 className，也可以是函数 Function({row, rowIndex, column, columnIndex}) | String/Function | — | — |
 | header-row-class-name | 给表头的行附加 className，也可以是函数 Function({row, rowIndex}) | String/Function | — | — |
 | header-cell-class-name | 给表头的单元格附加 className，也可以是函数 Function({row, rowIndex, column, columnIndex}) | String/Function | — | — |
+| context-menu | 快捷菜单配置 | Object | — | {header, body} |
 | row-key | 行数据的 Key | String | — | — |
 | auto-width | 自动计算列宽（如果关闭，需要手动调用 computeWidth 方法） | Boolean | — | true |
 | optimized | 优化的配置项 | Object/Boolean | — | {animat: true, overflow: 'title'} |
+
+快捷菜单配置项说明（配合 context-menu-link 事件使用）：
+
+| 属性 | 描述 | 类型 | 参数 |
+|------|------|-----|-----|
+| disabled | 是否禁用表格头部右键 | Boolean | — |
+| options | 表格头部菜单配置 | Array | { code, name, prefixIcon, suffixIcon, disabled } |
+| visibleMethod | 该函数 Function({row, rowIndex, column, columnIndex}, event) 的返回值用来决定是否允许显示右键菜单 | Function | — |
 
 #### Table Events
 
@@ -131,6 +141,7 @@ Vue.use(VXETable)
 | select-change | 只对 type=selection/radio 有效，当手动勾选时触发的事件 | {selection,checked,row,column},event |
 | cell-click | 当某个单元格被点击时会触发该事件 | {row,rowIndex,column,columnIndex,cell},event |
 | cell-dblclick | 当某个单元格被双击时会触发该事件 | {row,rowIndex,column,columnIndex,cell},event |
+| context-menu-link | 当点击上下文菜单后触发 | menu,event |
 
 #### Table Methods
 

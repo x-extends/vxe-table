@@ -111,7 +111,7 @@ export default {
       tableWidth = tableColumn.reduce((previous, column) => previous + column.renderWidth, 0)
     }
     return h('div', {
-      class: [fixedType ? `vxe-table--fixed-${fixedType}-body-wrapper` : 'vxe-table--body-wrapper'],
+      class: ['vxe-table--body-wrapper', fixedType ? `fixed--${fixedType}-wrapper` : 'body--wrapper'],
       attrs: {
         fixed: fixedType
       },
@@ -134,6 +134,7 @@ export default {
         h('colgroup', tableColumn.map((column, columnIndex) => {
           return column.visible ? h('col', {
             attrs: {
+              name: column.id,
               width: column.renderWidth
             },
             key: columnIndex

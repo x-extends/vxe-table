@@ -39,7 +39,9 @@
       border
       :data.sync="tableData"
       :customs.sync="customColumns"
-      @select-change="selectChangeEvent">
+      :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}}"
+      @select-change="selectChangeEvent"
+      @context-menu-link="contextMenuLinkEvent">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column type="selection" prop="checked" width="60"></vxe-table-column>
       <vxe-table-column prop="name" label="名称" min-width="200"></vxe-table-column>
@@ -49,10 +51,13 @@
       <vxe-table-column prop="address" label="地址" width="300" fixed="right"></vxe-table-column>
     </vxe-table>
 
-    <!-- <vxe-table
+    <vxe-table
       height="300"
       border
-      :data.sync="tableData">
+      :data.sync="tableData"
+      :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}}"
+      @select-change="selectChangeEvent"
+      @context-menu-link="contextMenuLinkEvent">
       <vxe-table-column label="分组">
         <vxe-table-column prop="name" label="名称" min-width="200" fixed="left"></vxe-table-column>
         <vxe-table-column prop="date" label="日期" min-width="200"></vxe-table-column>
@@ -67,7 +72,7 @@
         <vxe-table-column prop="date" label="日期" min-width="200"></vxe-table-column>
       </vxe-table-column>
       <vxe-table-column prop="sex" label="性别" width="200"></vxe-table-column>
-    </vxe-table> -->
+    </vxe-table>
 
     <!-- <vxe-table
       border
@@ -94,7 +99,51 @@ export default {
   data () {
     return {
       tableData: [],
-      customColumns: []
+      customColumns: [],
+      headerMenus: [
+        [
+          {
+            code: 'exportAll',
+            name: '导出所有.cvs'
+          }
+        ]
+      ],
+      bodyMenus: [
+        [
+          {
+            code: 'copy',
+            name: '复制'
+          },
+          {
+            code: 'paste',
+            name: '粘贴'
+          },
+          {
+            name: '更多功能',
+            children: [
+              {
+                code: 'paste',
+                name: '粘贴'
+              },
+              {
+                code: 'paste',
+                name: '粘贴'
+              }
+            ]
+          }
+        ],
+        [
+          {
+            code: 'export',
+            name: '导出行'
+          },
+          {
+            code: 'print',
+            name: '打印',
+            disabled: true
+          }
+        ]
+      ]
     }
   },
   created () {
@@ -139,6 +188,9 @@ export default {
     },
     selectChangeEvent ({ row, selection, checked }) {
       console.log(selection)
+    },
+    contextMenuLinkEvent (menu, event) {
+
     }
   }
 }

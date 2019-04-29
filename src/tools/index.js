@@ -77,11 +77,11 @@ const Tools = {
       $table.collectColumn.splice([].indexOf.call($table.$refs.hideColumn.children, _vm.$el), 0, columnConfig)
     }
   },
-  getDomScrollTop () {
-    return document.documentElement.scrollTop || document.body.scrollTop
-  },
-  getDomScrollLeft () {
-    return document.documentElement.scrollLeft || document.body.scrollLeft
+  getDomScrollPos () {
+    return {
+      scrollTop: document.documentElement.scrollTop || document.body.scrollTop,
+      scrollLeft: document.documentElement.scrollLeft || document.body.scrollLeft
+    }
   },
   hasClass (elem, cls) {
     return elem && elem.className && elem.className.split && elem.className.split(' ').indexOf(cls) > -1
@@ -89,7 +89,7 @@ const Tools = {
   /**
    * 获取元素绝对位置
    */
-  getOffset (elem, container) {
+  getOffsetPos (elem, container) {
     return getNodeOffset(elem, container, { left: 0, top: 0 })
   },
   getCsvContent (opts, oData, oColumns, tableElem) {
@@ -139,7 +139,7 @@ const Tools = {
 }
 
 function getCsvLabelData (columns, oData, tableElem) {
-  let trElemList = tableElem.querySelectorAll('.vxe-table--body-wrapper .vxe-body--row')
+  let trElemList = tableElem.querySelectorAll('.vxe-table--body-wrapper.body--wrapper .vxe-body--row')
   return Array.from(trElemList).map(trElem => {
     let item = {}
     columns.forEach(column => {

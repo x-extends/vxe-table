@@ -76,7 +76,7 @@ export default {
     let { _e, $parent: $table, fixedType, headerColumn, tableColumn, resizeMousedown } = this
     let { border, headerRowClassName, headerCellClassName, tableWidth, scrollYWidth } = $table
     return h('div', {
-      class: [fixedType ? `vxe-table--fixed-${fixedType}-header-wrapper` : 'vxe-table--header-wrapper']
+      class: ['vxe-table--header-wrapper', fixedType ? `fixed--${fixedType}-wrapper` : 'body--wrapper']
     }, [
       h('table', {
         attrs: {
@@ -94,6 +94,7 @@ export default {
         h('colgroup', tableColumn.map((column, columnIndex) => {
           return column.visible ? h('col', {
             attrs: {
+              name: column.id,
               width: column.renderWidth
             }
           }) : _e()
@@ -164,7 +165,7 @@ export default {
       let targetElem = evnt.target
       let dragLeft = 0
       let resizeBarElem = $table.$refs.resizeBar
-      let pos = Tools.getOffset(targetElem, $el)
+      let pos = Tools.getOffsetPos(targetElem, $el)
       let dragMinLeft = pos.left - targetElem.parentNode.clientWidth + targetElem.clientWidth + 36
       let dragPosLeft = pos.left + 6
       let dragClientX = evnt.clientX

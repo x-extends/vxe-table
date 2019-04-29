@@ -3,8 +3,9 @@ import TableBody from './body'
 import TableHeader from './header'
 import Tools from '../../../src/tools'
 import GlobalEvent from './event'
-import VxeCheckbox from '../../checkbox'
 import DefaultOptions from '../../../src/conf'
+import TableFilter from './filter'
+import TableContextMenu from './menu'
 
 /**
  * 渲染浮固定列
@@ -86,7 +87,8 @@ export default {
     headerRowClassName: [String, Function],
     // 给表头的单元格附加 className
     headerCellClassName: [String, Function],
-
+    // 快捷菜单
+    contextMenu: { type: Object, default: () => DefaultOptions.contextMenu },
     /** 高级属性 */
     // 行数据的 Key
     rowKey: [String, Number],
@@ -98,7 +100,8 @@ export default {
   components: {
     TableBody,
     TableHeader,
-    VxeCheckbox
+    TableFilter,
+    TableContextMenu
   },
   provide () {
     return {
@@ -165,6 +168,18 @@ export default {
         scaleList: [],
         scaleMinList: [],
         autoList: []
+      },
+      // 存放快捷菜单的信息
+      ctxMenuStore: {
+        selected: null,
+        visible: false,
+        showChild: false,
+        selectChild: null,
+        list: [],
+        style: {
+          top: 0,
+          left: 0
+        }
       }
     }
   },
@@ -185,6 +200,15 @@ export default {
     },
     visibleColumn () {
       return this.tableColumn.filter(column => column.visible)
+    },
+    headerCtxMenu () {
+      return this.ctxMenuConfig.header && this.ctxMenuConfig.header.options ? this.ctxMenuConfig.header.options : []
+    },
+    bodyCtxMenu () {
+      return this.ctxMenuConfig.body && this.ctxMenuConfig.body.options ? this.ctxMenuConfig.body.options : []
+    },
+    ctxMenuConfig () {
+      return Object.assign({}, this.contextMenu)
     }
   },
   watch: {
@@ -207,6 +231,7 @@ export default {
   created () {
     GlobalEvent.on(this, 'click', this.handleGlobalClickEvent)
     GlobalEvent.on(this, 'blur', this.handleGlobalBlurEvent)
+    GlobalEvent.on(this, 'contextmenu', this.handleContextmenuEvent)
     this.reload(this.data).then(() => {
       this.tableColumn = Tools.getColumnList(this.collectColumn)
       if (this.customs) {
@@ -217,18 +242,19 @@ export default {
     })
   },
   mounted () {
-    document.body.appendChild(this.$refs.filterWrapper)
+    document.body.appendChild(this.$refs.tableWrapper)
   },
   destroyed () {
-    let filterWrapper = this.$refs.filterWrapper
-    if (filterWrapper && filterWrapper.parentNode) {
-      filterWrapper.parentNode.removeChild(filterWrapper)
+    let tableWrapper = this.$refs.tableWrapper
+    if (tableWrapper && tableWrapper.parentNode) {
+      tableWrapper.parentNode.removeChild(tableWrapper)
     }
     GlobalEvent.off(this, 'click')
     GlobalEvent.off(this, 'blur')
+    GlobalEvent.off(this, 'contextmenu')
   },
   render (h) {
-    let { _e, tableData, tableColumn, collectColumn, isGroup, showHeader, border, stripe, highlightHoverRow, size, overflowX, scrollXHeight, optimizeConfig, columnStore, filterStore, confirmFilterEvent, resetFilterEvent, filterCheckAllEvent, filterOptionCheckEvent } = this
+    let { _e, id, tableData, tableColumn, collectColumn, isGroup, showHeader, border, stripe, highlightHoverRow, size, overflowX, scrollXHeight, optimizeConfig, columnStore, filterStore, ctxMenuStore } = this
     let { leftList, rightList } = columnStore
     return h('div', {
       class: ['vxe-table', size ? `size--${size}` : '', {
@@ -287,72 +313,29 @@ export default {
         },
         ref: 'resizeBar'
       }),
-      /**
-       * 筛选容器
-       */
       h('div', {
-        class: ['vxe-table--filter-wrapper', {
-          't--animat': optimizeConfig.animat,
-          'filter--active': filterStore.visible
-        }],
-        style: filterStore.style,
-        ref: 'filterWrapper'
+        class: [`vxe-table${id}-wrapper`],
+        ref: 'tableWrapper'
       }, [
-        h('ul', {
-          class: ['vxe-table--filter-body']
-        }, [
-          h('li', {
-            class: ['vxe-table--filter-option']
-          }, [
-            h('vxe-checkbox', {
-              props: {
-                value: filterStore.isAllSelected,
-                indeterminate: filterStore.isIndeterminate
-              },
-              on: {
-                change (value, evnt) {
-                  filterCheckAllEvent(evnt, value)
-                }
-              }
-            }, '全部')
-          ])
-        ].concat(filterStore.options.map((item, index) => {
-          return h('li', {
-            class: ['vxe-table--filter-option'],
-            key: index
-          }, [
-            h('vxe-checkbox', {
-              props: {
-                value: item.checked
-              },
-              on: {
-                change (value, evnt) {
-                  filterOptionCheckEvent(evnt, value, item)
-                }
-              }
-            }, item.label)
-          ])
-        }))),
-        h('div', {
-          class: ['vxe-table--filter-footer']
-        }, [
-          h('button', {
-            class: {
-              'is--disabled': !filterStore.isAllSelected && !filterStore.isIndeterminate
-            },
-            attrs: {
-              disabled: !filterStore.isAllSelected && !filterStore.isIndeterminate
-            },
-            on: {
-              click: confirmFilterEvent
-            }
-          }, '筛选'),
-          h('button', {
-            on: {
-              click: resetFilterEvent
-            }
-          }, '重置')
-        ])
+        /**
+         * 筛选
+         */
+        h('table-filter', {
+          props: {
+            optimizeConfig,
+            filterStore
+          },
+          ref: 'filterWrapper'
+        }),
+        /**
+         * 快捷菜单
+         */
+        h('table-context-menu', {
+          props: {
+            ctxMenuStore
+          },
+          ref: 'ctxWrapper'
+        })
       ])
     ])
   },
@@ -600,19 +583,127 @@ export default {
      * 全局点击事件处理
      */
     handleGlobalClickEvent (evnt) {
-      if (this.getEventTargetNode(evnt, this.$el, 'vxe-filter-wrapper').status) {
-        // 如果点击了筛选按钮
-      } else if (this.getEventTargetNode(evnt, this.$refs.filterWrapper).status) {
-        // 如果点击筛选容器
-      } else {
-        this.clostFilter()
+      if (this.$refs.filterWrapper) {
+        if (this.getEventTargetNode(evnt, this.$el, 'vxe-filter-wrapper').flag) {
+          // 如果点击了筛选按钮
+        } else if (this.getEventTargetNode(evnt, this.$refs.filterWrapper.$el).flag) {
+          // 如果点击筛选容器
+        } else {
+          this.closeFilter()
+        }
+      }
+      if (this.$refs.ctxWrapper && !this.getEventTargetNode(evnt, this.$refs.ctxWrapper.$el).flag) {
+        this.closeContextMenu()
       }
     },
     /**
-     * 窗口失焦事件
+     * 窗口失焦事件处理
      */
     handleGlobalBlurEvent (evnt) {
-      this.clostFilter()
+      this.closeFilter()
+      this.closeContextMenu()
+    },
+    /**
+     * 快捷菜单事件处理
+     */
+    handleContextmenuEvent (evnt) {
+      let { headerCtxMenu, bodyCtxMenu, ctxMenuConfig } = this
+      if (headerCtxMenu.length || bodyCtxMenu.length) {
+        // 右键头部
+        let headeWrapperNode = this.getEventTargetNode(evnt, this.$el, 'vxe-table--header-wrapper')
+        if (headeWrapperNode.flag) {
+          this.openContextMenu(evnt, ctxMenuConfig.header, { })
+          return
+        }
+        // 右键内容
+        let bodyWrapperNode = this.getEventTargetNode(evnt, this.$el, 'vxe-table--body-wrapper')
+        if (bodyWrapperNode.flag) {
+          this.openContextMenu(evnt, ctxMenuConfig.body, { })
+          return
+        }
+      }
+      this.closeContextMenu()
+    },
+    /**
+     * 显示快捷菜单
+     */
+    openContextMenu (evnt, config, params) {
+      if (config) {
+        let { ctxMenuStore } = this
+        let { options, visibleMethod, disabled } = config
+        if (disabled) {
+          evnt.preventDefault()
+        } else if (options && options.length) {
+          if (!visibleMethod || visibleMethod(params, evnt)) {
+            evnt.preventDefault()
+            let scrollTop = document.documentElement.scrollTop || document.body.scrollTop
+            let scrollLeft = document.documentElement.scrollLeft || document.body.scrollLeft
+            let top = evnt.clientY + scrollTop
+            let left = evnt.clientX + scrollLeft
+            Object.assign(ctxMenuStore, {
+              visible: true,
+              list: options,
+              style: {
+                top: `${top}px`,
+                left: `${left}px`
+              }
+            })
+            this.$nextTick(() => {
+              let viewHeight = document.documentElement.clientHeight || document.body.clientHeight
+              let viewWidth = document.documentElement.clientWidth || document.body.clientWidth
+              let ctxElem = this.$refs.ctxWrapper.$el
+              let clientHeight = ctxElem.clientHeight
+              let clientWidth = ctxElem.clientWidth
+              let offsetTop = evnt.clientY + clientHeight - viewHeight
+              let offsetLeft = evnt.clientX + clientWidth - viewWidth
+              if (offsetTop > -10) {
+                ctxMenuStore.style.top = `${top - clientHeight}px`
+              }
+              if (offsetLeft > -10) {
+                ctxMenuStore.style.left = `${left - clientWidth}px`
+              }
+            })
+          } else {
+            this.closeContextMenu()
+          }
+        }
+      }
+    },
+    /**
+     * 关闭快捷菜单
+     */
+    closeContextMenu () {
+      Object.assign(this.ctxMenuStore, {
+        list: [],
+        visible: false,
+        selected: null,
+        selectChild: null,
+        showChild: false
+      })
+    },
+    ctxMenuMouseoverEvent (evnt, item, child) {
+      let ctxMenuStore = this.ctxMenuStore
+      evnt.preventDefault()
+      evnt.stopPropagation()
+      ctxMenuStore.selected = item
+      ctxMenuStore.selectChild = child
+      if (!child) {
+        ctxMenuStore.showChild = item.children && item.children.length > 0
+      }
+    },
+    ctxMenuMouseoutEvent (evnt, item, child) {
+      let ctxMenuStore = this.ctxMenuStore
+      if (!item.children) {
+        ctxMenuStore.selected = null
+      }
+      ctxMenuStore.selectChild = null
+    },
+    /**
+     * 快捷菜单点击事件
+     */
+    ctxMenuLinkEvent (evnt, menu) {
+      Tools.emitEvent(this, 'context-menu-link', [menu, evnt])
+      this.closeContextMenu()
     },
     /**
      * 检查触发源是否属于目标节点
@@ -624,11 +715,11 @@ export default {
         if (Tools.hasClass(target, queryCls)) {
           targetElem = target
         } else if (target === container) {
-          return { status: queryCls ? !!targetElem : true, container, targetElem: targetElem }
+          return { flag: queryCls ? !!targetElem : true, container, targetElem: targetElem }
         }
         target = target.parentNode
       }
-      return { status: false }
+      return { flag: false }
     },
     /**
      * 多选，行选中事件
@@ -721,27 +812,23 @@ export default {
       if (filterStore.column === column && filterStore.visible) {
         filterStore.visible = false
       } else {
-        let { top, left } = Tools.getOffset(evnt.target)
-        if (!filterStore.column || filterStore.column !== column) {
-          Object.assign(filterStore, {
-            multiple: column.filterMultiple,
-            options: column.filters,
-            column: column
-          })
-        }
+        let { top, left } = Tools.getOffsetPos(evnt.target)
         Object.assign(filterStore, {
+          multiple: column.filterMultiple,
+          options: column.filters,
+          column: column,
           style: {
             top: `${top + evnt.target.clientHeight + 6}px`,
             left: `${left}px`
           },
-          visible: true,
-          isAllSelected: filterStore.options.every(item => item.checked),
-          isIndeterminate: !this.isAllSelected && filterStore.options.some(item => item.checked)
+          visible: true
         })
+        filterStore.isAllSelected = filterStore.options.every(item => item.checked)
+        filterStore.isIndeterminate = !this.isAllSelected && filterStore.options.some(item => item.checked)
         this.$nextTick(() => {
           filterStore.style = {
             top: `${top + evnt.target.clientHeight + 6}px`,
-            left: `${left - this.$refs.filterWrapper.clientWidth / 2 + 10}px`
+            left: `${left - this.$refs.filterWrapper.$el.clientWidth / 2 + 10}px`
           }
         })
       }
@@ -785,21 +872,24 @@ export default {
             return true
           })
         })
-        this.clostFilter()
+        this.closeFilter()
       }
     },
-    // 取消
-    clostFilter (evnt) {
-      this.filterStore.isAllSelected = false
-      this.filterStore.isIndeterminate = false
-      this.filterStore.visible = false
+    // 关闭筛选
+    closeFilter (evnt) {
+      Object.assign(this.filterStore, {
+        isAllSelected: false,
+        isIndeterminate: false,
+        options: [],
+        visible: false
+      })
     },
     // 重置筛选
     resetFilterEvent (evnt) {
       this.filterStore.options.forEach(item => {
         item.checked = false
       })
-      this.clostFilter()
+      this.closeFilter()
     },
     /**
      * 导出 csv 文件

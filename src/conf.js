@@ -1,6 +1,7 @@
 const DefaultOptions = {
   size: null,
-  optimized: false
+  optimized: false,
+  contextMenu: null
 }
 
 export default DefaultOptions
