@@ -32,9 +32,9 @@ A very powerful Vue table component.
 * [快捷菜单](https://jsrun.net/VjXKp/play)
 * [自定义列](https://jsrun.net/PrXKp/play)
 * [加载中](https://jsrun.net/GjXKp/play)
-* 展开行
-* 滚动渲染
 * [自定义模板与格式化内容](https://jsrun.net/FrXKp/play)
+* 滚动渲染
+* 展开行
 * 树形
 * 可编辑
 * 可编辑 - 手动触发
