@@ -1,3 +1,4 @@
+import GlobalConfig from '../../../src/conf'
 import VxeCheckbox from '../../checkbox'
 
 export default {
@@ -34,7 +35,7 @@ export default {
                 filterCheckAllEvent(evnt, value)
               }
             }
-          }, '全部')
+          }, GlobalConfig.i18n('vxe.table.allFilter'))
         ])
       ].concat(filterStore.options.map((item, index) => {
         return h('li', {
@@ -66,12 +67,12 @@ export default {
           on: {
             click: $table.confirmFilterEvent
           }
-        }, '筛选'),
+        }, GlobalConfig.i18n('vxe.table.confirmFilter')),
         h('button', {
           on: {
             click: $table.resetFilterEvent
           }
-        }, '重置')
+        }, GlobalConfig.i18n('vxe.table.resetFilter'))
       ])
     ] : [])
   },

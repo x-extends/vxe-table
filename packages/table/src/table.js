@@ -3,7 +3,7 @@ import TableBody from './body'
 import TableHeader from './header'
 import Tools from '../../../src/tools'
 import GlobalEvent from './event'
-import DefaultOptions from '../../../src/conf'
+import GlobalConfig from '../../../src/conf'
 import TableFilter from './filter'
 import TableContextMenu from './menu'
 
@@ -70,7 +70,7 @@ export default {
     // 是否带有纵向边框
     border: Boolean,
     // 表格的尺寸
-    size: { type: String, default: () => DefaultOptions.size },
+    size: { type: String, default: () => GlobalConfig.size },
     // 列的宽度是否自撑开
     fit: { type: Boolean, default: true },
     // 表格是否加载中
@@ -80,7 +80,7 @@ export default {
     // 是否要高亮当前选中行
     highlightCurrentRow: Boolean,
     // 鼠标移到行是否要高亮显示
-    highlightHoverRow: { type: Boolean, default: true },
+    highlightHoverRow: Boolean,
     // 给行附加 className
     rowClassName: [String, Function],
     // 给单元格附加 className
@@ -92,14 +92,14 @@ export default {
     // 合并行或列
     spanMethod: Function,
     // 快捷菜单
-    contextMenu: { type: Object, default: () => DefaultOptions.contextMenu },
+    contextMenu: { type: Object, default: () => GlobalConfig.contextMenu },
     /** 高级属性 */
     // 行数据的 Key
     rowKey: [String, Number],
     // 列宽是否自动响应计算
     autoWidth: { type: Boolean, default: true },
     // 性能优化的配置项
-    optimized: { type: [Object, Boolean], default: () => DefaultOptions.optimized }
+    optimized: { type: [Object, Boolean], default: () => GlobalConfig.optimized }
   },
   components: {
     TableBody,
@@ -840,6 +840,13 @@ export default {
       Tools.emitEvent(this, 'select-change', [{ row, column, selection, checked: value }, evnt])
     },
     /**
+     * 多选，切换某一行的选中状态
+     */
+    toggleRowSelection (row, checked) {
+      let column = this.tableColumn.find(column => column.type === 'selection')
+      this.triggerCheckRowEvent(null, checked, { row, column })
+    },
+    /**
      * 多选，选中所有事件
      */
     triggerCheckAllEvent (evnt, value) {
@@ -856,11 +863,23 @@ export default {
       Tools.emitEvent(this, 'select-all', [{ selection: this.selection, checked: value }, evnt])
     },
     /**
+     * 多选，切换所有行的选中状态
+     */
+    toggleAllSelection () {
+      this.triggerCheckAllEvent(null, !this.isAllSelected)
+    },
+    /**
      * 单选，行选中事件
      */
     triggerRowEvent (evnt, { row }) {
       this.selectRow = row
       Tools.emitEvent(this, 'select-change', [{ row }, evnt])
+    },
+    /**
+     * 单选，设置某一行为选中状态，如果调不加参数，则会取消目前高亮行的选中状态
+     */
+    setCurrentRow (row) {
+      this.selectRow = row
     },
     /**
      * 行 hover 事件

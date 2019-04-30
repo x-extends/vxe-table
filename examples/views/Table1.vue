@@ -35,6 +35,7 @@
     <!-- <vxe-table
       height="300"
       border
+      highlight-hover-row
       :loading="loading"
       :data.sync="tableData"
       :customs.sync="customColumns">
@@ -53,6 +54,7 @@
       max-height="300"
       border
       resizable
+      highlight-hover-row
       :loading="loading"
       :data.sync="tableData"
       :customs.sync="customColumns"
@@ -93,6 +95,7 @@
 
     <vxe-table
       border
+      highlight-hover-row
       height="400"
       :data.sync="tableData">
       <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>

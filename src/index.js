@@ -1,6 +1,6 @@
 import Table from '../packages/table'
 import TableColumn from '../packages/table-column'
-import DefaultOptions from './conf'
+import GlobalConfig from './conf'
 
 import '../style/index.scss'
 
@@ -11,7 +11,7 @@ const components = [
 
 const install = function (Vue, options) {
   if (!install.installed) {
-    Object.assign(DefaultOptions, options)
+    Object.assign(GlobalConfig, options)
     components.map(component => Vue.component(component.name, component))
   }
 }

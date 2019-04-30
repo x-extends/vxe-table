@@ -67,7 +67,33 @@ Get on [unpkg](https://unpkg.com/vxe-table/) and [cdnjs](https://cdn.jsdelivr.ne
 ```javascript
 import Vue from 'vue'
 import VXETable from 'vxe-table'
+import 'vxe-table/lib/index.css'
 
+Vue.use(VXETable)
+```
+
+## Global config
+
+```javascript
+import Vue from 'vue'
+import VXETable from 'vxe-table'
+import 'vxe-table/lib/index.css'
+
+Vue.use(VXETable, {
+  size: 'small,
+  contextMenu: null,
+  optimized: {
+    scroll: {
+      gt: 500,
+      size: 100
+    }
+  }
+})
+```
+
+## Theme
+
+```javascript
 // Case 1. 引入默认的样式
 import 'vxe-table/lib/index.css'
 
@@ -78,23 +104,36 @@ import 'vxe-table/lib/index.css'
 // Case 3. 重写主题样式（复制 style/table.scss 到项目中自行修改）
 // @import 'assets/style/vxe-table/variable.scss';
 // @import 'assets/style/vxe-table/table.scss';
+```
 
-Vue.use(VXETable)
+## I18n
 
-// 支持设置全部默认参数
-// Vue.use(VXETable, {
-//   // 全局表格尺寸
-//   size: 'small,
-//   // 全局快捷菜单
-//   contextMenu: null,
-//   // 全局优化配置项
-//   optimized: {
-//     scroll: {
-//       gt: 500,
-//       size: 100
-//     }
-//   }
-// })
+```javascript
+import Vue from 'vue'
+import VueI18n from 'vxe-i18n'
+import VXETable from 'vxe-table'
+import zhCNLocat from 'vxe-table/lib/locale/lang/zh_CN'
+import enLocat from 'vxe-table/lib/locale/lang/zh_CN'
+
+const messages = {
+  zh_CN: {
+    ...zhCNLocat
+  },
+  en: {
+    ...enLocat
+  }
+}
+
+const i18n = new VueI18n({
+  locale: 'zh_CN',
+  messages,
+})
+
+Vue.use(VXETable, {
+  i18n: (key, value) => i18n.t(key, value)
+})
+
+new Vue({ i18n }).$mount('#app')
 ```
 
 ## API
@@ -125,7 +164,7 @@ Vue.use(VXETable)
 | loading | 表格是否加载中 | Boolean | — | false |
 | show-header | 是否显示表头 | Boolean | — | true |
 | highlight-current-row | 是否要高亮当前选中行 | Boolean | — | false |
-| highlight-hover-row | 鼠标移到行是否要高亮显示 | Boolean | — | true |
+| highlight-hover-row | 鼠标移到行是否要高亮显示 | Boolean | — | false |
 | row-class-name | 给行附加 className，也可以是函数 Function({row, rowIndex}) | String/Function | — | — |
 | cell-class-name | 给单元格附加 className，也可以是函数 Function({row, rowIndex, column, columnIndex}) | String/Function | — | — |
 | header-row-class-name | 给表头的行附加 className，也可以是函数 Function({row, rowIndex}) | String/Function | — | — |
@@ -167,8 +206,11 @@ Vue.use(VXETable)
 | 方法名 | 描述 | 参数 |
 |------|------|-----|
 | reload | 初始化数据 | data |
-| clearSelection | 用于多选表格，清空用户的选择 | — |
 | clearSelectRow | 用于单选表格，清空用户的选择 | — |
+| setCurrentRow | 用于单选表格，设置某一行为选中状态，如果第二个参数为空，则会取消目前高亮行的选中状态 | row? |
+| clearSelection | 用于多选表格，清空用户的选择 | — |
+| toggleRowSelection | 用于多选表格，切换某一行的选中状态，第二个参数则是设置这一行选中与否 | row,checked |
+| toggleAllSelection | 用于多选表格，切换所有行的选中状态 | — |
 | clearSort | 用于清空排序条件，数据会恢复成未排序的状态 | — |
 | clearFilter | 用于清空筛选条件，数据会恢复成未筛选的状态 | — |
 | computeWidth | 重新计算并更新列宽 | — |
