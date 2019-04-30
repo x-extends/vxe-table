@@ -429,23 +429,61 @@ export default {
       let scroll = optimizeConfig.scroll
       let tableFullData = data || []
       let scrollLoad = scroll && scroll.gt && scroll.gt < tableFullData.length
-      this.clearSelection()
-      this.clearSelectRow()
-      this.clearSort()
-      this.clearFilter()
+      if (scrollLoad) {
+        Object.assign(scrollStore, {
+          startIndex: 0,
+          visibleIndex: 0,
+          renderSize: scroll.rSize,
+          offsetSize: scroll.oSize
+        })
+      }
       this.tableFullData = tableFullData
       this.scrollLoad = scrollLoad
-      this.tableData = scrollLoad ? tableFullData.slice(0, scroll.rSize) : tableFullData
+      this.tableData = this.getTableData()
       let rest = this.$nextTick()
       if (autoWidth) {
         rest = rest.then(computeWidth)
       }
       if (scrollLoad) {
-        scrollStore.startIndex = 0
-        scrollStore.visibleIndex = 0
         rest = rest.then(computeScrollLoad)
       }
       return rest
+    },
+    /**
+     * 获取全量的表格数据
+     * 如果存在筛选条件，继续处理
+     * 如果存在排序，继续处理
+     */
+    getTableData () {
+      let { tableColumn, tableFullData, scrollLoad, scrollStore } = this
+      let { isAllSelected, isIndeterminate } = this.filterStore
+      let column = this.tableColumn.find(column => column.order)
+      let tableData = tableFullData
+      if (isAllSelected || isIndeterminate) {
+        tableData = tableData.filter(row => {
+          return tableColumn.every(column => {
+            let { property, filters, filterMethod } = column
+            if (filters && filters.length) {
+              let valueList = []
+              filters.forEach(item => {
+                if (item.checked) {
+                  valueList.push(item.value)
+                }
+              })
+              if (valueList.length) {
+                let a = filterMethod ? valueList.some(value => filterMethod({ value, row, column })) : valueList.indexOf(XEUtils.get(row, property)) > -1
+                return a
+              }
+            }
+            return true
+          })
+        })
+      }
+      if (column && column.order) {
+        let rest = XEUtils.sortBy(tableData, column.property)
+        tableData = column.order === 'desc' ? rest.reverse() : rest
+      }
+      return scrollLoad ? tableData.slice(scrollStore.startIndex, scrollStore.startIndex + scrollStore.renderSize) : tableData
     },
     /**
      * 动态列处理
@@ -935,12 +973,11 @@ export default {
     triggerSortEvent (evnt, column, params, order) {
       if (column.order !== order) {
         let prop = column.property
-        let rest = XEUtils.sortBy(this.tableData, prop)
         this.tableColumn.forEach(column => {
           column.order = null
         })
         column.order = order
-        this.tableData = order === 'desc' ? rest.reverse() : rest
+        this.tableData = this.getTableData()
         UtilTools.emitEvent(this, 'sort-change', [{ column, prop, order }])
       }
     },
@@ -975,29 +1012,8 @@ export default {
     },
     // 确认筛选
     confirmFilterEvent (evnt) {
-      let { tableColumn, tableFullData } = this
-      let { isAllSelected, isIndeterminate } = this.filterStore
-      if (isAllSelected || isIndeterminate) {
-        this.tableData = tableFullData.filter(row => {
-          return tableColumn.every(column => {
-            let { property, filters, filterMethod } = column
-            if (filters && filters.length) {
-              let valueList = []
-              filters.forEach(item => {
-                if (item.checked) {
-                  valueList.push(item.value)
-                }
-              })
-              if (valueList.length) {
-                let a = filterMethod ? valueList.some(value => filterMethod({ value, row, column })) : valueList.indexOf(XEUtils.get(row, property)) > -1
-                return a
-              }
-            }
-            return true
-          })
-        })
-        this.closeFilter()
-      }
+      this.tableData = this.getTableData()
+      this.closeFilter()
     },
     // 关闭筛选
     closeFilter (evnt) {
@@ -1052,8 +1068,7 @@ export default {
     }, DomTools.browse.msie ? 100 : 40, { leading: false, trailing: true }),
     // 计算滚动渲染相关数据
     computeScrollLoad () {
-      let { optimizeConfig, scrollStore } = this
-      let scroll = optimizeConfig.scroll
+      let { scrollStore } = this
       let tableBodyElem = this.$refs.tableBody.$el
       let tableHeader = this.$refs.tableHeader
       let firstTrElem = tableBodyElem.querySelector('tbody>tr')
@@ -1063,15 +1078,13 @@ export default {
       if (firstTrElem) {
         scrollStore.rowHeight = firstTrElem.clientHeight
       }
-      scrollStore.renderSize = scroll.rSize
-      scrollStore.offsetSize = scroll.oSize
       scrollStore.visibleSize = Math.ceil(tableBodyElem.clientHeight / scrollStore.rowHeight)
       this.updateScrollSpace()
     },
     // 更新滚动上下空间大小
     updateScrollSpace () {
       let { tableFullData, scrollStore } = this
-      this.tableData = tableFullData.slice(scrollStore.startIndex, scrollStore.startIndex + scrollStore.renderSize)
+      this.tableData = this.getTableData()
       scrollStore.topSpaceHeight = scrollStore.startIndex * scrollStore.rowHeight
       scrollStore.bottomSpaceHeight = (tableFullData.length - (scrollStore.startIndex + scrollStore.renderSize)) * scrollStore.rowHeight
     },
@@ -1096,7 +1109,7 @@ export default {
         opts.original = true
       }
       let columns = this.tableColumn
-      let oData = this.tableFullData
+      let oData = this.getTableData()
       return ExportTools.downloadCsc(opts, ExportTools.getCsvContent(opts, oData, columns, this.$el))
     }
   }
