@@ -155,6 +155,12 @@
     .vxe-body--column {
       padding: 10px 0;
     }
+    .vxe-table--loading {
+      .vxe-table--spinner {
+        width: 50px;
+        height: 50px;
+      }
+    }
   }
   &.size--small {
     font-size: 12px;
@@ -162,12 +168,24 @@
     .vxe-body--column {
       padding: 8px 0;
     }
+    .vxe-table--loading {
+      .vxe-table--spinner {
+        width: 44px;
+        height: 44px;
+      }
+    }
   }
   &.size--mini {
     font-size: 12px;
     .vxe-header-column,
     .vxe-body--column {
       padding: 6px 0;
+    }
+    .vxe-table--loading {
+      .vxe-table--spinner {
+        width: 38px;
+        height: 38px;
+      }
     }
   }
   .vxe-cell {
@@ -237,10 +255,10 @@
     top: 0;
     left: 0;
     z-index: 99;
-    background-color: rgba(0, 0, 0, 0.6);
+    background-color: $vxe-loading-background-color;
     .vxe-table--spinner {
-      width: 60px;
-      height: 60px;
+      width: 56px;
+      height: 56px;
       position: absolute;
       top: 50%;
       left: 50%;
@@ -451,8 +469,8 @@
   z-index: 88;
   font-size: 12px;
   background-color: #FFF;
-  border: 1px solid #C6C6C6;
-  box-shadow: 2px 2px 4px -2px #666;
+  border: 1px solid $vxe-table-popup-border-color;
+  box-shadow: 2px 2px 4px -2px rgba(0,0,0,.1);
   padding: 0 1px;
   user-select: none;
   color: $vxe-font-color;
@@ -478,7 +496,7 @@
         border-color:#C5C5C5;
       }
       &.link--disabled {
-        color: #B1B1B1;
+        color: $vxe-disabled-color;
         &.link--active {
           border-color:#C0C1C2;
           background-color: #EEEEEE;

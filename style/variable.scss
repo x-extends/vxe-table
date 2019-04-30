@@ -4,6 +4,7 @@ $vxe-font-color: #606266;
 
 /*primary color*/
 $vxe-primary-color: #409eff;
+$vxe-disabled-color: #B1B1B1;
 
 /*input/radio/checkbox color*/
 $vxe-input-border-color: #dcdfe6;
@@ -24,3 +25,6 @@ $vxe-table-row-selected-background-color: #ecf5ff;
 /*table column*/
 $vxe-table-column-icon-border-color: #c0c4cc;
 $vxe-table-column-icon-border-hover-color: #515A6E;
+
+/*loading*/
+$vxe-loading-background-color: rgba(0, 0, 0, 0.6);

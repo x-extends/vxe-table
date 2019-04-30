@@ -1,5 +1,5 @@
 import XEUtils from 'xe-utils'
-import Tools from '../../../src/tools'
+import DomTools from '../../../src/tools/dom'
 
 const getAllColumns = (columns) => {
   const result = []
@@ -165,7 +165,7 @@ export default {
       let targetElem = evnt.target
       let dragLeft = 0
       let resizeBarElem = $table.$refs.resizeBar
-      let pos = Tools.getOffsetPos(targetElem, $el)
+      let pos = DomTools.getOffsetPos(targetElem, $el)
       let dragMinLeft = pos.left - targetElem.parentNode.clientWidth + targetElem.clientWidth + 36
       let dragPosLeft = pos.left + 6
       let dragClientX = evnt.clientX

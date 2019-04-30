@@ -1,5 +1,5 @@
 import XEUtils from 'xe-utils'
-import Tools from '../../../src/tools'
+import UtilTools from '../../../src/tools/utils'
 
 export default {
   name: 'VxeTableColumn',
@@ -75,10 +75,10 @@ export default {
           opts.renderHeader = this.renderFilterHeader
         }
     }
-    this.columnConfig = Tools.getColumnConfig(this, opts)
+    this.columnConfig = UtilTools.getColumnConfig(this, opts)
   },
   mounted () {
-    Tools.assemColumn(this)
+    UtilTools.assemColumn(this)
   },
   render (h) {
     return h('div', this.$slots.default)
@@ -126,10 +126,13 @@ export default {
     },
     renderIndexCell (h, params) {
       let cellValue
-      let { $scopedSlots, indexMethod } = this
+      let { $scopedSlots, $table, indexMethod } = this
       let { row, rowIndex, column, columnIndex } = params
       if ($scopedSlots && $scopedSlots.default) {
         return $scopedSlots.default(params)
+      }
+      if ($table.scrollLoad) {
+        rowIndex += $table.scrollStore.startIndex
       }
       cellValue = rowIndex + 1
       if (indexMethod) {

@@ -1,5 +1,5 @@
 import XEUtils from 'xe-utils'
-import Tools from '../../../src/tools'
+import DomTools from '../../../src/tools/dom'
 
 /**
  * 渲染列
@@ -60,8 +60,8 @@ function renderColumn (h, $table, fixedType, row, rowIndex, column, columnIndex)
 
 /**
  * 同步滚动条
- * scroll 方式：可以使固定列与内容保持一致的滚动效果，处理相对复杂
- * mousewheel 方式：对于同步滚动效果就略差了
+ * scroll 方式：可以使固定列与内容保持一致的滚动效果，处理相对麻烦
+ * mousewheel 方式：对于同步滚动效果就略差了，左右滚动，内容跟随即可
  */
 var scrollProcessTimeout
 var updateLeftScrollingTimeput
@@ -105,7 +105,7 @@ export default {
   },
   render (h) {
     let { _e, $parent: $table, fixedType } = this
-    let { highlightHoverRow, rowKey, maxHeight, height, rowClassName, tableData, tableColumn, headerHeight, tableHeight, tableWidth, scrollXHeight, selectRow, hoverRow, overflowX, columnStore, optimizeConfig } = $table
+    let { highlightHoverRow, rowKey, maxHeight, height, rowClassName, tableData, tableColumn, headerHeight, tableHeight, tableWidth, scrollStore, scrollLoad, scrollXHeight, selectRow, hoverRow, overflowX, columnStore, optimizeConfig } = $table
     let { leftList, rightList } = columnStore
     let { overflow } = optimizeConfig
     let customHeight = XEUtils.toNumber(height)
@@ -127,6 +127,12 @@ export default {
       },
       style
     }, [
+      scrollLoad ? h('div', {
+        class: ['vxe-body--top-space'],
+        style: {
+          height: `${scrollStore.topSpaceHeight}px`
+        }
+      }) : null,
       h('table', {
         class: ['vxe-table--body'],
         attrs: {
@@ -176,7 +182,13 @@ export default {
             return column.visible ? renderColumn(h, $table, fixedType, row, rowIndex, column, columnIndex) : _e()
           }))
         }))
-      ])
+      ]),
+      scrollLoad ? h('div', {
+        class: ['vxe-body--bottom-space'],
+        style: {
+          height: `${scrollStore.bottomSpaceHeight}px`
+        }
+      }) : null
     ])
   },
   methods: {
@@ -187,6 +199,7 @@ export default {
      */
     scrollEvent (evnt) {
       let { $parent: $table, fixedType } = this
+      let { scrollLoad } = $table
       let { tableHeader, tableBody, leftBody, rightBody } = $table.$refs
       let headerElem = tableHeader.$el
       let bodyElem = tableBody.$el
@@ -203,9 +216,12 @@ export default {
         // 避免 IE 卡顿
         if (leftElem || rightElem) {
           clearTimeout(updateLeftScrollingTimeput)
-          updateLeftScrollingTimeput = setTimeout($table.checkScrolling, Tools.browse.msie ? 300 : 20)
+          updateLeftScrollingTimeput = setTimeout($table.checkScrolling, DomTools.browse.msie ? 300 : 20)
         }
         syncBodyScroll(bodyElem.scrollTop, leftElem, rightElem)
+      }
+      if (scrollLoad) {
+        $table.triggerSrcollEvent(evnt)
       }
     }
   }

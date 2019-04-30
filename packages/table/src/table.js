@@ -1,7 +1,9 @@
 import XEUtils from 'xe-utils'
 import TableBody from './body'
 import TableHeader from './header'
-import Tools from '../../../src/tools'
+import UtilTools from '../../../src/tools/utils'
+import DomTools from '../../../src/tools/dom'
+import ExportTools from '../../../src/tools/export'
 import GlobalEvent from './event'
 import GlobalConfig from '../../../src/conf'
 import TableFilter from './filter'
@@ -129,6 +131,8 @@ export default {
       tableHeight: 0,
       // 表头高度
       headerHeight: 0,
+      // 是否滚动方式加载
+      scrollLoad: false,
       // 是否存在纵向滚动条
       overflowY: true,
       // 是否存在横向滚动条
@@ -184,6 +188,17 @@ export default {
           top: 0,
           left: 0
         }
+      },
+      // 存放滚动渲染相关的信息
+      scrollStore: {
+        renderSize: 0,
+        visibleSize: 0,
+        offsetSize: 0,
+        rowHeight: 0,
+        startIndex: 0,
+        visibleIndex: 0,
+        topSpaceHeight: 0,
+        bottomSpaceHeight: 0
       }
     }
   },
@@ -199,13 +214,14 @@ export default {
         // 默认大于 500 条时自动使用滚动渲染
         scroll: {
           gt: 500,
-          size: 100
+          oSize: 30,
+          rSize: 120
         }
       }, this.optimized)
     },
     // 是否使用了分组表头
     isGroup () {
-      return this.collectColumn.some(column => Tools.hasChildrenList(column))
+      return this.collectColumn.some(column => UtilTools.hasChildrenList(column))
     },
     visibleColumn () {
       return this.tableColumn.filter(column => column.visible)
@@ -259,7 +275,7 @@ export default {
     GlobalEvent.on(this, 'mousewheel', this.handleMousewheelEvent)
     GlobalEvent.on(this, 'keydown', this.handleKeydownEvent)
     this.reload(this.data).then(() => {
-      this.tableColumn = Tools.getColumnList(this.collectColumn)
+      this.tableColumn = UtilTools.getColumnList(this.collectColumn)
       if (this.customs) {
         this.mergeCustomColumn(this.customs)
       }
@@ -336,9 +352,9 @@ export default {
        */
       resizable ? h('div', {
         class: ['vxe-table--resizable-bar'],
-        style: {
+        style: overflowX ? {
           'padding-bottom': `${scrollXHeight}px`
-        },
+        } : null,
         ref: 'resizeBar'
       }) : _e(),
       /**
@@ -409,15 +425,25 @@ export default {
       })
     },
     reload (data) {
+      let { autoWidth, scrollStore, optimizeConfig, computeWidth, computeScrollLoad } = this
+      let scroll = optimizeConfig.scroll
+      let tableFullData = data || []
+      let scrollLoad = scroll && scroll.gt && scroll.gt < tableFullData.length
       this.clearSelection()
       this.clearSelectRow()
       this.clearSort()
       this.clearFilter()
-      this.tableFullData = data || []
-      this.tableData = this.tableFullData
+      this.tableFullData = tableFullData
+      this.scrollLoad = scrollLoad
+      this.tableData = scrollLoad ? tableFullData.slice(0, scroll.rSize) : tableFullData
       let rest = this.$nextTick()
-      if (this.autoWidth) {
-        return rest.then(this.computeWidth)
+      if (autoWidth) {
+        rest = rest.then(computeWidth)
+      }
+      if (scrollLoad) {
+        scrollStore.startIndex = 0
+        scrollStore.visibleIndex = 0
+        rest = rest.then(computeScrollLoad)
       }
       return rest
     },
@@ -490,13 +516,13 @@ export default {
         if (column.visible) {
           if (column.resizeWidth) {
             resizeList.push(column)
-          } else if (Tools.isPx(column.width)) {
+          } else if (DomTools.isPx(column.width)) {
             pxList.push(column)
-          } else if (Tools.isScale(column.width)) {
+          } else if (DomTools.isScale(column.width)) {
             scaleList.push(column)
-          } else if (Tools.isPx(column.minWidth)) {
+          } else if (DomTools.isPx(column.minWidth)) {
             pxMinList.push(column)
-          } else if (Tools.isScale(column.minWidth)) {
+          } else if (DomTools.isScale(column.minWidth)) {
             scaleMinList.push(column)
           } else {
             autoList.push(column)
@@ -512,20 +538,18 @@ export default {
     computeWidth (refull) {
       let tableBody = this.$refs.tableBody
       let tableHeader = this.$refs.tableHeader
-      if (tableBody) {
-        let bodyElem = tableBody.$el
-        let headerElem = tableHeader ? tableHeader.$el : null
-        let bodyWidth = bodyElem.clientWidth
-        let tableWidth = this.autoCellWidth(headerElem, bodyElem, bodyWidth)
-        if (refull === true) {
-          // 初始化时需要在列计算之后再执行优化运算，达到最优显示效果
-          this.$nextTick(() => {
-            bodyWidth = bodyElem.clientWidth
-            if (bodyWidth !== tableWidth) {
-              this.autoCellWidth(headerElem, bodyElem, bodyWidth)
-            }
-          })
-        }
+      let bodyElem = tableBody.$el
+      let headerElem = tableHeader ? tableHeader.$el : null
+      let bodyWidth = bodyElem.clientWidth
+      let tableWidth = this.autoCellWidth(headerElem, bodyElem, bodyWidth)
+      if (refull === true) {
+        // 初始化时需要在列计算之后再执行优化运算，达到最优显示效果
+        this.$nextTick(() => {
+          bodyWidth = bodyElem.clientWidth
+          if (bodyWidth !== tableWidth) {
+            this.autoCellWidth(headerElem, bodyElem, bodyWidth)
+          }
+        })
       }
     },
     // 列宽计算
@@ -594,7 +618,7 @@ export default {
       })
       let tableHeight = bodyElem.offsetHeight
       this.scrollYWidth = bodyElem.offsetWidth - bodyWidth
-      this.scrollXHeight = tableHeight - bodyElem.clientHeight - 1
+      this.scrollXHeight = Math.max(tableHeight - bodyElem.clientHeight - 1, 0)
       this.overflowY = this.scrollYWidth > 0
       this.overflowX = tableWidth > bodyWidth
       this.tableWidth = tableWidth
@@ -672,7 +696,7 @@ export default {
         if (ctxMenuStore.visible && (isEnter || isSpacebar || isLeftArrow || isUpArrow || isRightArrow || isDwArrow)) {
           evnt.preventDefault()
           evnt.stopPropagation()
-          if (ctxMenuStore.showChild && Tools.hasChildrenList(ctxMenuStore.selected)) {
+          if (ctxMenuStore.showChild && UtilTools.hasChildrenList(ctxMenuStore.selected)) {
             this.moveCtxMenu(evnt, keyCode, ctxMenuStore, 'selectChild', 37, false, ctxMenuStore.selected.children)
           } else {
             this.moveCtxMenu(evnt, keyCode, ctxMenuStore, 'selected', 39, true, this.ctxMenuList)
@@ -684,7 +708,7 @@ export default {
     moveCtxMenu (evnt, keyCode, ctxMenuStore, key, operKey, operRest, menuList) {
       let selectIndex = XEUtils.findIndexOf(menuList, item => ctxMenuStore[key] === item)
       if (keyCode === operKey) {
-        if (operRest && Tools.hasChildrenList(ctxMenuStore.selected)) {
+        if (operRest && UtilTools.hasChildrenList(ctxMenuStore.selected)) {
           ctxMenuStore.showChild = true
         } else {
           ctxMenuStore.showChild = false
@@ -732,12 +756,15 @@ export default {
         } else if (options && options.length) {
           if (!visibleMethod || visibleMethod(params, evnt)) {
             evnt.preventDefault()
-            let { scrollTop, scrollLeft, visibleHeight, visibleWidth } = Tools.getDomNode()
+            let { scrollTop, scrollLeft, visibleHeight, visibleWidth } = DomTools.getDomNode()
             let top = evnt.clientY + scrollTop
             let left = evnt.clientX + scrollLeft
             Object.assign(ctxMenuStore, {
               visible: true,
               list: options,
+              selected: null,
+              selectChild: null,
+              showChild: false,
               style: {
                 top: `${top}px`,
                 left: `${left}px`
@@ -782,7 +809,7 @@ export default {
       ctxMenuStore.selected = item
       ctxMenuStore.selectChild = child
       if (!child) {
-        ctxMenuStore.showChild = Tools.hasChildrenList(item)
+        ctxMenuStore.showChild = UtilTools.hasChildrenList(item)
       }
     },
     ctxMenuMouseoutEvent (evnt, item, child) {
@@ -796,7 +823,7 @@ export default {
      * 快捷菜单点击事件
      */
     ctxMenuLinkEvent (evnt, menu) {
-      Tools.emitEvent(this, 'context-menu-link', [menu, evnt])
+      UtilTools.emitEvent(this, 'context-menu-link', [menu, evnt])
       this.closeContextMenu()
     },
     /**
@@ -806,7 +833,7 @@ export default {
       let targetElem
       let target = evnt.target
       while (target && target.nodeType && target !== document) {
-        if (Tools.hasClass(target, queryCls)) {
+        if (DomTools.hasClass(target, queryCls)) {
           targetElem = target
         } else if (target === container) {
           return { flag: queryCls ? !!targetElem : true, container, targetElem: targetElem }
@@ -837,7 +864,7 @@ export default {
         this.isAllSelected = tableData.length === selection.length
         this.isIndeterminate = !this.isAllSelected && selection.length
       }
-      Tools.emitEvent(this, 'select-change', [{ row, column, selection, checked: value }, evnt])
+      UtilTools.emitEvent(this, 'select-change', [{ row, column, selection, checked: value }, evnt])
     },
     /**
      * 多选，切换某一行的选中状态
@@ -860,7 +887,7 @@ export default {
       this.selection = value ? Array.from(this.tableData) : []
       this.isAllSelected = value
       this.isIndeterminate = false
-      Tools.emitEvent(this, 'select-all', [{ selection: this.selection, checked: value }, evnt])
+      UtilTools.emitEvent(this, 'select-all', [{ selection: this.selection, checked: value }, evnt])
     },
     /**
      * 多选，切换所有行的选中状态
@@ -873,7 +900,7 @@ export default {
      */
     triggerRowEvent (evnt, { row }) {
       this.selectRow = row
-      Tools.emitEvent(this, 'select-change', [{ row }, evnt])
+      UtilTools.emitEvent(this, 'select-change', [{ row }, evnt])
     },
     /**
      * 单选，设置某一行为选中状态，如果调不加参数，则会取消目前高亮行的选中状态
@@ -894,13 +921,13 @@ export default {
       if (this.highlightCurrentRow) {
         this.selectRow = params.row
       }
-      Tools.emitEvent(this, 'cell-click', [params, evnt])
+      UtilTools.emitEvent(this, 'cell-click', [params, evnt])
     },
     /**
      * 列双击点击事件
      */
     triggerCellDBLClickEvent (evnt, params) {
-      Tools.emitEvent(this, 'cell-dblclick', [params, evnt])
+      UtilTools.emitEvent(this, 'cell-dblclick', [params, evnt])
     },
     /**
      * 点击排序事件
@@ -914,7 +941,7 @@ export default {
         })
         column.order = order
         this.tableData = order === 'desc' ? rest.reverse() : rest
-        Tools.emitEvent(this, 'sort-change', [{ column, prop, order }])
+        UtilTools.emitEvent(this, 'sort-change', [{ column, prop, order }])
       }
     },
     /**
@@ -925,7 +952,7 @@ export default {
       if (filterStore.column === column && filterStore.visible) {
         filterStore.visible = false
       } else {
-        let { top, left } = Tools.getOffsetPos(evnt.target)
+        let { top, left } = DomTools.getOffsetPos(evnt.target)
         Object.assign(filterStore, {
           multiple: column.filterMultiple,
           options: column.filters,
@@ -989,6 +1016,60 @@ export default {
       this.closeFilter()
     },
     /**
+     * 滚动渲染事件处理
+     */
+    triggerSrcollEvent: XEUtils.debounce(function (evnt) {
+      let { tableFullData, scrollStore } = this
+      let { startIndex, renderSize, offsetSize, visibleSize, rowHeight } = scrollStore
+      let scrollBodyElem = evnt.target
+      let scrollTop = scrollBodyElem.scrollTop
+      let toVisibleIndex = Math.ceil(scrollTop / rowHeight)
+      if (scrollStore.visibleIndex !== toVisibleIndex) {
+        let isReload, preloadSize
+        let isTop = scrollStore.visibleIndex > toVisibleIndex
+        if (isTop) {
+          preloadSize = renderSize - offsetSize
+          isReload = toVisibleIndex - offsetSize <= startIndex
+        } else {
+          preloadSize = offsetSize
+          isReload = toVisibleIndex + visibleSize + offsetSize >= startIndex + renderSize
+        }
+        if (isReload) {
+          scrollStore.visibleIndex = toVisibleIndex
+          scrollStore.startIndex = Math.min(Math.max(toVisibleIndex - preloadSize, 0), tableFullData.length - renderSize)
+          this.updateScrollSpace()
+          this.$nextTick(() => {
+            scrollBodyElem.scrollTop = scrollTop
+          })
+        }
+      }
+    }, DomTools.browse.msie ? 100 : 40, { leading: false, trailing: true }),
+    // 计算滚动渲染相关数据
+    computeScrollLoad () {
+      let { optimizeConfig, scrollStore } = this
+      let scroll = optimizeConfig.scroll
+      let tableBodyElem = this.$refs.tableBody.$el
+      let tableHeader = this.$refs.tableHeader
+      let firstTrElem = tableBodyElem.querySelector('tbody>tr')
+      if (!firstTrElem) {
+        firstTrElem = tableHeader.$el.querySelector('thead>tr')
+      }
+      if (firstTrElem) {
+        scrollStore.rowHeight = firstTrElem.clientHeight
+      }
+      scrollStore.renderSize = scroll.rSize
+      scrollStore.offsetSize = scroll.oSize
+      scrollStore.visibleSize = Math.ceil(tableBodyElem.clientHeight / scrollStore.rowHeight)
+      this.updateScrollSpace()
+    },
+    // 更新滚动上下空间大小
+    updateScrollSpace () {
+      let { tableFullData, scrollStore } = this
+      this.tableData = tableFullData.slice(scrollStore.startIndex, scrollStore.startIndex + scrollStore.renderSize)
+      scrollStore.topSpaceHeight = scrollStore.startIndex * scrollStore.rowHeight
+      scrollStore.bottomSpaceHeight = (tableFullData.length - (scrollStore.startIndex + scrollStore.renderSize)) * scrollStore.rowHeight
+    },
+    /**
      * 导出 csv 文件
      */
     exportCsv (options) {
@@ -1007,7 +1088,7 @@ export default {
       }
       let columns = this.tableColumn
       let oData = this.tableFullData
-      return Tools.downloadCsc(opts, Tools.getCsvContent(opts, oData, columns, this.$el))
+      return ExportTools.downloadCsc(opts, ExportTools.getCsvContent(opts, oData, columns, this.$el))
     }
   }
 }

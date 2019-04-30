@@ -1,4 +1,14 @@
 import Vue from 'vue'
-import VxeTable from '../../src'
+import VXETable from '../../src'
 
-Vue.use(VxeTable)
+Vue.use(VXETable, {
+  size: null,
+  contextMenu: null,
+  optimized: {
+    scroll: {
+      gt: 500,
+      oSize: 20,
+      rSize: 100
+    }
+  }
+})

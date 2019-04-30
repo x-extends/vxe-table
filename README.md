@@ -80,12 +80,13 @@ import VXETable from 'vxe-table'
 import 'vxe-table/lib/index.css'
 
 Vue.use(VXETable, {
-  size: 'small,
+  size: 'small',
   contextMenu: null,
   optimized: {
     scroll: {
       gt: 500,
-      size: 100
+      oSize: 30,
+      rSize: 120
     }
   }
 })
