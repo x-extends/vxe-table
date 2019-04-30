@@ -59,20 +59,40 @@
   .vxe-table-hidden-column {
     display: none;
   }
-  .vxe-table--header-wrapper {
+  .vxe-table--header-wrapper,
+  .vxe-table--footer-wrapper {
     position: relative;
     overflow: hidden;
     border-top: 1px solid $vxe-table-border-color;
     .vxe-table--repair {
       position: absolute;
-      bottom: 0;
       left: 0;
       height: 1px;
       background-color: $vxe-table-border-color;
     }
   }
-  .vxe-header-row {
+  .vxe-table--header-wrapper {
+    .vxe-table--repair {
+      bottom: 0;
+    }
+  }
+  .vxe-table--footer-wrapper {
+    overflow-x: auto;
+    .vxe-table--repair {
+      top: 0;
+    }
+  }
+  &.show--foot {
+    .vxe-table--body-wrapper {
+      overflow-x: hidden;
+    }
+  }
+  .vxe-header--row {
     background-color: $vxe-table-header-background-color;
+  }
+  .vxe-body--row,
+  .vxe-footer--row {
+    background-color: $vxe-table-background-color;
   }
   .vxe-table--body-wrapper,
   .vxe-table--fixed-left-body-wrapper,
@@ -80,12 +100,16 @@
     overflow: auto;
   }
   .vxe-body--row {
-    background-color: $vxe-table-background-color;
     &.row--hover {
       background-color: $vxe-table-row-hover-background-color;
     }
     &.row--selected {
       background-color: $vxe-table-row-selected-background-color;
+    }
+    &:last-child {
+      .vxe-body--column {
+        border-bottom: 0;
+      }
     }
     .vxe-body--column {
       border-bottom: 1px solid $vxe-table-border-color;
@@ -105,8 +129,9 @@
       }
     }
   }
-  .vxe-header-column,
-  .vxe-body--column {
+  .vxe-header--column,
+  .vxe-body--column,
+  .vxe-footer--column {
     padding: 12px 0;
     line-height: 23px;
     text-align: left;
@@ -117,7 +142,7 @@
       text-align: right;
     }
   }
-  .vxe-header-column {
+  .vxe-header--column {
     position: relative;
     &.filter--active {
       .vxe-filter--icon,
@@ -142,17 +167,20 @@
     }
   }
   &.t--border {
-    .vxe-header-column,
-    .vxe-body--column {
+    .vxe-header--column,
+    .vxe-body--column,
+    .vxe-footer--column {
       border-right: 1px solid $vxe-table-border-color;
     }
-    .vxe-header-column {
+    .vxe-header--column,
+    .vxe-footer--column {
       border-bottom: 1px solid $vxe-table-border-color;
     }
   }
   &.size--medium {
-    .vxe-header-column,
-    .vxe-body--column {
+    .vxe-header--column,
+    .vxe-body--column,
+    .vxe-footer--column {
       padding: 10px 0;
     }
     .vxe-table--loading {
@@ -164,8 +192,9 @@
   }
   &.size--small {
     font-size: 12px;
-    .vxe-header-column,
-    .vxe-body--column {
+    .vxe-header--column,
+    .vxe-body--column,
+    .vxe-footer--column {
       padding: 8px 0;
     }
     .vxe-table--loading {
@@ -177,8 +206,9 @@
   }
   &.size--mini {
     font-size: 12px;
-    .vxe-header-column,
-    .vxe-body--column {
+    .vxe-header--column,
+    .vxe-body--column,
+    .vxe-footer--column {
       padding: 6px 0;
     }
     .vxe-table--loading {
@@ -225,7 +255,8 @@
     }
   }
   .vxe-table--header-wrapper,
-  .vxe-table--body-wrapper {
+  .vxe-table--body-wrapper,
+  .vxe-table--footer-wrapper {
     &.fixed--left-wrapper,
     &.fixed--right-wrapper {
       position: absolute;

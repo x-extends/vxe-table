@@ -1,6 +1,7 @@
 import XEUtils from 'xe-utils'
-import TableBody from './body'
 import TableHeader from './header'
+import TableBody from './body'
+import TableFooter from './footer'
 import UtilTools from '../../../src/tools/utils'
 import DomTools from '../../../src/tools/dom'
 import ExportTools from '../../../src/tools/export'
@@ -12,12 +13,12 @@ import TableContextMenu from './menu'
 /**
  * 渲染浮固定列
  */
-function renderFixed (h, $table, fixedType) {
-  let { tableData, tableColumn, collectColumn, isGroup, height, headerHeight, tableHeight, scrollYWidth, scrollXHeight, scrollRightToLeft, scrollLeftToRight, columnStore } = $table
+function renderFixed (h, $table, fixedType, footerData) {
+  let { tableData, tableColumn, collectColumn, isGroup, height, headerHeight, footerHeight, showHeader, showFooter, tableHeight, scrollYWidth, scrollXHeight, scrollRightToLeft, scrollLeftToRight, columnStore } = $table
   let customHeight = isNaN(height) ? 0 : parseFloat(height)
   let isRightFixed = fixedType === 'right'
   let style = {
-    height: `${(customHeight ? customHeight - headerHeight : tableHeight) + headerHeight - scrollXHeight}px`,
+    height: `${(customHeight ? customHeight - headerHeight - footerHeight : tableHeight) + headerHeight + footerHeight - scrollXHeight}px`,
     width: `${columnStore[`${fixedType}List`].reduce((previous, column) => previous + column.renderWidth, isRightFixed ? scrollYWidth + 1 : 0)}px`
   }
   return h('div', {
@@ -27,7 +28,7 @@ function renderFixed (h, $table, fixedType) {
     style,
     ref: `fixedTable`
   }, [
-    h('table-header', {
+    showHeader ? h('table-header', {
       props: {
         fixedType,
         tableData,
@@ -36,7 +37,7 @@ function renderFixed (h, $table, fixedType) {
         isGroup
       },
       ref: `${fixedType}Header`
-    }),
+    }) : null,
     h('table-body', {
       style: {
         top: `${headerHeight}px`
@@ -49,7 +50,18 @@ function renderFixed (h, $table, fixedType) {
         isGroup
       },
       ref: `${fixedType}Body`
-    })
+    }),
+    showFooter ? h('table-footer', {
+      style: {
+        top: `${customHeight ? customHeight - footerHeight : tableHeight}px`
+      },
+      props: {
+        fixedType,
+        footerData,
+        tableColumn
+      },
+      ref: `${fixedType}Footer`
+    }) : null
   ])
 }
 
@@ -83,6 +95,10 @@ export default {
     highlightCurrentRow: Boolean,
     // 鼠标移到行是否要高亮显示
     highlightHoverRow: Boolean,
+    // 是否显示表尾合计
+    showFooter: Boolean,
+    // 表尾合计的计算方法
+    footerMethod: Function,
     // 给行附加 className
     rowClassName: [String, Function],
     // 给单元格附加 className
@@ -91,10 +107,15 @@ export default {
     headerRowClassName: [String, Function],
     // 给表头的单元格附加 className
     headerCellClassName: [String, Function],
+    // 给表尾的行附加 className
+    footerRowClassName: [String, Function],
+    // 给表尾的单元格附加 className
+    footerCellClassName: [String, Function],
     // 合并行或列
     spanMethod: Function,
     // 快捷菜单
     contextMenu: { type: Object, default: () => GlobalConfig.contextMenu },
+
     /** 高级属性 */
     // 行数据的 Key
     rowKey: [String, Number],
@@ -104,8 +125,9 @@ export default {
     optimized: { type: [Object, Boolean], default: () => GlobalConfig.optimized }
   },
   components: {
-    TableBody,
     TableHeader,
+    TableBody,
+    TableFooter,
     TableFilter,
     TableContextMenu
   },
@@ -131,6 +153,8 @@ export default {
       tableHeight: 0,
       // 表头高度
       headerHeight: 0,
+      // 表尾高度
+      footerHeight: 0,
       // 是否滚动方式加载
       scrollLoad: false,
       // 是否存在纵向滚动条
@@ -298,10 +322,13 @@ export default {
     GlobalEvent.off(this, 'keydown')
   },
   render (h) {
-    let { _e, id, tableData, tableColumn, collectColumn, isGroup, isFilter, isCtxMenu, loading, showHeader, resizable, border, stripe, highlightHoverRow, size, overflowX, scrollXHeight, optimizeConfig, columnStore, filterStore, ctxMenuStore } = this
+    let { _e, id, tableData, tableColumn, collectColumn, isGroup, isFilter, isCtxMenu, loading, showHeader, resizable, border, stripe, highlightHoverRow, size, showFooter, footerMethod, overflowX, scrollXHeight, optimizeConfig, columnStore, filterStore, ctxMenuStore } = this
     let { leftList, rightList } = columnStore
+    let footerData = showFooter && footerMethod && tableColumn.length ? footerMethod({ columns: tableColumn, data: tableData }) : ['-']
     return h('div', {
       class: ['vxe-table', size ? `size--${size}` : '', {
+        'show--head': showHeader,
+        'show--foot': showFooter,
         't--animat': optimizeConfig.animat,
         't--stripe': stripe,
         't--border': border,
@@ -340,13 +367,24 @@ export default {
         }
       }),
       /**
+       * 底部汇总
+       */
+      showFooter ? h('table-footer', {
+        props: {
+          footerData,
+          footerMethod,
+          tableColumn
+        },
+        ref: 'tableFooter'
+      }) : _e(),
+      /**
        * 左侧固定列
        */
-      leftList && leftList.length && overflowX ? renderFixed(h, this, 'left') : _e(),
+      leftList && leftList.length && overflowX ? renderFixed(h, this, 'left', footerData) : _e(),
       /**
        * 右侧固定列
        */
-      rightList && rightList.length && overflowX ? renderFixed(h, this, 'right') : _e(),
+      rightList && rightList.length && overflowX ? renderFixed(h, this, 'right', footerData) : _e(),
       /**
        * 列宽线
        */
@@ -576,22 +614,24 @@ export default {
     computeWidth (refull) {
       let tableBody = this.$refs.tableBody
       let tableHeader = this.$refs.tableHeader
+      let tableFooter = this.$refs.tableFooter
       let bodyElem = tableBody.$el
       let headerElem = tableHeader ? tableHeader.$el : null
+      let footerElem = tableFooter ? tableFooter.$el : null
       let bodyWidth = bodyElem.clientWidth
-      let tableWidth = this.autoCellWidth(headerElem, bodyElem, bodyWidth)
+      let tableWidth = this.autoCellWidth(headerElem, bodyElem, footerElem, bodyWidth)
       if (refull === true) {
         // 初始化时需要在列计算之后再执行优化运算，达到最优显示效果
         this.$nextTick(() => {
           bodyWidth = bodyElem.clientWidth
           if (bodyWidth !== tableWidth) {
-            this.autoCellWidth(headerElem, bodyElem, bodyWidth)
+            this.autoCellWidth(headerElem, bodyElem, footerElem, bodyWidth)
           }
         })
       }
     },
     // 列宽计算
-    autoCellWidth (headerElem, bodyElem, bodyWidth) {
+    autoCellWidth (headerElem, bodyElem, footerElem, bodyWidth) {
       let meanWidth
       let tableWidth = 0
       let minCellWidth = 40 // 列宽最少限制 40px
@@ -656,13 +696,20 @@ export default {
       })
       let tableHeight = bodyElem.offsetHeight
       this.scrollYWidth = bodyElem.offsetWidth - bodyWidth
-      this.scrollXHeight = Math.max(tableHeight - bodyElem.clientHeight - 1, 0)
       this.overflowY = this.scrollYWidth > 0
-      this.overflowX = tableWidth > bodyWidth
       this.tableWidth = tableWidth
       this.tableHeight = tableHeight
       if (headerElem) {
         this.headerHeight = headerElem.offsetHeight
+      }
+      if (footerElem) {
+        let footerHeight = footerElem.offsetHeight
+        this.scrollXHeight = Math.max(footerHeight - footerElem.clientHeight - 1, 0)
+        this.overflowX = tableWidth > footerElem.clientWidth
+        this.footerHeight = footerHeight
+      } else {
+        this.scrollXHeight = Math.max(tableHeight - bodyElem.clientHeight - 1, 0)
+        this.overflowX = tableWidth > bodyWidth
       }
       if (this.overflowX) {
         this.checkScrolling()
@@ -977,7 +1024,10 @@ export default {
           column.order = null
         })
         column.order = order
-        this.tableData = this.getTableData()
+        // 如果是服务端排序，则跳过本地排序处理
+        if (column.sortable !== 'custom') {
+          this.tableData = this.getTableData()
+        }
         UtilTools.emitEvent(this, 'sort-change', [{ column, prop, order }])
       }
     },
@@ -1095,7 +1145,7 @@ export default {
       let opts = Object.assign({
         filename: 'table.csv',
         original: false,
-        isHeader: false,
+        isHeader: true,
         download: true,
         data: null,
         columns: null,

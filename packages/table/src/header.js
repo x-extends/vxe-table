@@ -110,12 +110,12 @@ export default {
          */
         h('thead', headerColumn.map((cols, rowIndex) => {
           return h('tr', {
-            class: ['vxe-header-row', headerRowClassName ? XEUtils.isFunction(headerRowClassName) ? headerRowClassName({ rowIndex }) : headerRowClassName : '']
+            class: ['vxe-header--row', headerRowClassName ? XEUtils.isFunction(headerRowClassName) ? headerRowClassName({ rowIndex }) : headerRowClassName : '']
           }, cols.map((column, columnIndex, list) => {
             let isGroup = column.children && column.children.length
             let fixedHiddenColumn = fixedType && column.fixed !== fixedType && !isGroup
             return column.visible ? h('th', {
-              class: ['vxe-header-column', column.id, {
+              class: ['vxe-header--column', column.id, {
                 [`col--${column.headerAlign}`]: column.headerAlign,
                 'fixed--hidden': fixedHiddenColumn,
                 'filter--active': column.filters.some(item => item.checked)
@@ -146,17 +146,17 @@ export default {
               }
             })
           ]))
-        })),
-        /**
-         * 其他
-         */
-        h('div', {
-          class: ['vxe-table--repair'],
-          style: {
-            width: tableWidth === null ? tableWidth : `${tableWidth}px`
-          }
-        })
-      ])
+        }))
+      ]),
+      /**
+       * 其他
+       */
+      h('div', {
+        class: ['vxe-table--repair'],
+        style: {
+          width: tableWidth === null ? tableWidth : `${tableWidth}px`
+        }
+      })
     ])
   },
   methods: {

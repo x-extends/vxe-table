@@ -2,8 +2,10 @@
   <div>
 
     <!-- <vxe-table
-      height="200"
+      height="300"
       border
+      footer
+      :footer-method="footerMethod"
       :data.sync="tableData"
       :customs.sync="customColumns">
       <vxe-table-column type="index"></vxe-table-column>
@@ -17,13 +19,16 @@
     <!-- <vxe-table
       height="300"
       border
+      footer
+      :footer-method="footerMethod"
       :highlight-hover-row="false"
       :headerCellClassName="headerCellClassName"
       :rowClassName="rowClassName"
       :cellClassName="cellClassName"
+      :footerCellClassName="footerCellClassName"
       :data.sync="tableData"
       :customs.sync="customColumns">
-      <vxe-table-column type="index" width="60"></vxe-table-column>
+      <vxe-table-column type="index" width="100"></vxe-table-column>
       <vxe-table-column type="selection" prop="checked" width="60"></vxe-table-column>
       <vxe-table-column prop="name" label="名称" min-width="200"></vxe-table-column>
       <vxe-table-column prop="date" label="日期" sortable min-width="200"></vxe-table-column>
@@ -96,6 +101,8 @@
     <vxe-table
       border
       resizable
+      show-footer
+      :footer-method="footerMethod"
       height="400"
       :data.sync="tableData">
       <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
@@ -112,10 +119,31 @@
         </template>
       </vxe-table-column>
     </vxe-table>
+
+    <!-- <vxe-table
+      border
+      resizable
+      height="400"
+      :data.sync="tableData">
+      <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
+      <vxe-table-column type="radio" width="60"></vxe-table-column>
+      <vxe-table-column type="selection" prop="checked" width="60"></vxe-table-column>
+      <vxe-table-column prop="name" label="名称" width="400"></vxe-table-column>
+      <vxe-table-column prop="age" label="年龄" width="400"></vxe-table-column>
+      <vxe-table-column prop="sex" label="性别" width="400"></vxe-table-column>
+      <vxe-table-column prop="rate" label="评分" width="400" :filters="[]"></vxe-table-column>
+      <vxe-table-column prop="date" label="日期" width="400" sortable></vxe-table-column>
+      <vxe-table-column prop="address" label="地址" width="300" fixed="right">
+        <template v-slot="{ row }">
+          <span>{{ row.address }}</span>
+        </template>
+      </vxe-table-column>
+    </vxe-table> -->
   </div>
 </template>
 
 <script>
+import XEUtils from 'xe-utils'
 export default {
   data () {
     return {
@@ -172,7 +200,7 @@ export default {
     window.test = this
     this.loading = true
     setTimeout(() => {
-      let list = window.CACHE_DATA_LIST.slice(0, 2000)
+      let list = window.CACHE_DATA_LIST.slice(0, 100)
       this.tableData = list
       this.loading = false
     }, 1000)
@@ -190,12 +218,43 @@ export default {
     changeEvnet (params) {
 
     },
+    footerMethod ({ columns, data }) {
+      return [
+        columns.map((column, columnIndex) => {
+          if (columnIndex === 0) {
+            return '平均'
+          }
+          if (['age', 'rate'].includes(column.property)) {
+            return XEUtils.mean(data, column.property)
+          }
+          return '-'
+        }),
+        columns.map((column, columnIndex) => {
+          if (columnIndex === 0) {
+            return '和值'
+          }
+          if (['age', 'rate'].includes(column.property)) {
+            return XEUtils.sum(data, column.property)
+          }
+          return '-'
+        })
+      ]
+    },
     filterMethod ({ value, row, column }) {
       return row.age === value
     },
-    headerCellClassName ({ column, columnIndex }) {
+    headerCellClassName ({ rowIndex, column, columnIndex }) {
       if (column.property === 'name') {
         return 'col-blue'
+      }
+    },
+    footerCellClassName ({ rowIndex, column, columnIndex }) {
+      if (columnIndex === 0) {
+        if (rowIndex === 0) {
+          return 'col-blue'
+        } else {
+          return 'col-red'
+        }
       }
     },
     rowClassName ({ row, rowIndex }) {
@@ -257,11 +316,13 @@ export default {
   background-color: #187;
   color: #fff;
 }
-.vxe-table .vxe-header-column.col-blue {
+.vxe-table .vxe-header--column.col-blue,
+.vxe-table .vxe-footer--column.col-blue {
   background-color: #2db7f5;
   color: #fff;
 }
-.vxe-table .vxe-body--column.col-red {
+.vxe-table .vxe-body--column.col-red,
+.vxe-table .vxe-footer--column.col-red {
   background-color: red;
   color: #fff;
 }

@@ -170,6 +170,8 @@ new Vue({ i18n }).$mount('#app')
 | cell-class-name | 给单元格附加 className，也可以是函数 Function({row, rowIndex, column, columnIndex}) | String/Function | — | — |
 | header-row-class-name | 给表头的行附加 className，也可以是函数 Function({row, rowIndex}) | String/Function | — | — |
 | header-cell-class-name | 给表头的单元格附加 className，也可以是函数 Function({row, rowIndex, column, columnIndex}) | String/Function | — | — |
+| show-footer | 是否显示表尾合计 | Boolean | — | — |
+| footer-method | 表尾合计的计算方法 Function({columns, data}) | Function | — | — |
 | span-method | 合并行或列，该函数 Function({row, rowIndex, column, columnIndex}) 返回计算后的值 | Object | — | { rowspan: 1, colspan: 1} |
 | context-menu | 快捷菜单配置 | Object | — | [{header, body}](#context-menu-快捷菜单配置项说明配合-context-menu-link-事件使用) |
 | row-key | 行数据的 Key | String | — | — |
@@ -254,7 +256,7 @@ new Vue({ i18n }).$mount('#app')
 | show-overflow-tooltip | 当内容过长显示为省略号并用 tooltip 显示完整内容 | Boolean | — | false |
 | formatter | 格式化显示内容 Function({cellValue, row, rowIndex, column, columnIndex}) | Function | — | — |
 | index-method | 只对 type=index 有效，自定义索引方法 Function({row, rowIndex, column, columnIndex}) | Function | — | — |
-| sortable | 是否允许列排序 | Boolean | — | — |
+| sortable | 是否允许列排序，如果是服务端排序需要设置为custom | Boolean | — | — |
 | sortBy | 只对 sortable 有效，自定义排序的属性 | String/Array | — | — |
 | filters | 配置筛选条件数组 | Array | — | — |
 | filter-multiple | 只对 filters 有效，筛选是否允许多选 | Boolean | — | true |

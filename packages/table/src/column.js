@@ -31,7 +31,7 @@ export default {
     // 自定义索引方法
     indexMethod: Function,
     // 是否允许排序
-    sortable: Boolean,
+    sortable: [Boolean, String],
     // 自定义排序的属性
     sortBy: [String, Array],
     // 配置筛选条件数组
