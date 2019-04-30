@@ -34,7 +34,7 @@ A very powerful Vue table component.
 * [格式化内容](https://jsrun.net/FrXKp)
 * [自定义模板](https://jsrun.net/DjXKp)
 * [快捷菜单](https://jsrun.net/VjXKp)
-* 滚动渲染
+* [滚动渲染](https://jsrun.net/XRXKp)
 * 展开行
 * 树形
 * 可编辑
