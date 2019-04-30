@@ -201,7 +201,7 @@ export default {
       let { $parent: $table, fixedType } = this
       let { scrollLoad } = $table
       let { tableHeader, tableBody, leftBody, rightBody } = $table.$refs
-      let headerElem = tableHeader.$el
+      let headerElem = tableHeader ? tableHeader.$el : null
       let bodyElem = tableBody.$el
       let leftElem = leftBody ? leftBody.$el : null
       let rightElem = rightBody ? rightBody.$el : null

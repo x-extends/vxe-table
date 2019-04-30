@@ -120,9 +120,10 @@
       </vxe-table-column>
     </vxe-table>
 
-    <!-- <vxe-table
+    <vxe-table
       border
       resizable
+      :show-header="false"
       height="400"
       :data.sync="tableData">
       <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
@@ -138,7 +139,7 @@
           <span>{{ row.address }}</span>
         </template>
       </vxe-table-column>
-    </vxe-table> -->
+    </vxe-table>
   </div>
 </template>
 

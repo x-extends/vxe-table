@@ -6,19 +6,14 @@ export default {
     tableColumn: Array,
     fixedType: String
   },
-  mounted () {
-    this.$el.onscroll = this.scrollEvent
-    this.$el._onscroll = this.scrollEvent
-  },
-  destroyed () {
-    this.$el._onscroll = null
-    this.$el.onscroll = null
-  },
   render (h) {
     let { _e, $parent: $table, fixedType, tableColumn, footerData } = this
     let { footerRowClassName, footerCellClassName, tableWidth, scrollYWidth } = $table
     return h('div', {
-      class: ['vxe-table--footer-wrapper', fixedType ? `fixed--${fixedType}-wrapper` : 'footer--wrapper']
+      class: ['vxe-table--footer-wrapper', fixedType ? `fixed--${fixedType}-wrapper` : 'footer--wrapper'],
+      on: {
+        scroll: this.scrollEvent
+      }
     }, [
       h('table', {
         attrs: {
