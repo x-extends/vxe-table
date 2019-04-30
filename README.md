@@ -168,8 +168,10 @@ new Vue({ i18n }).$mount('#app')
 | highlight-hover-row | 鼠标移到行是否要高亮显示 | Boolean | — | false |
 | row-class-name | 给行附加 className，也可以是函数 Function({row, rowIndex}) | String/Function | — | — |
 | cell-class-name | 给单元格附加 className，也可以是函数 Function({row, rowIndex, column, columnIndex}) | String/Function | — | — |
-| header-row-class-name | 给表头的行附加 className，也可以是函数 Function({row, rowIndex}) | String/Function | — | — |
-| header-cell-class-name | 给表头的单元格附加 className，也可以是函数 Function({row, rowIndex, column, columnIndex}) | String/Function | — | — |
+| header-row-class-name | 给表头的行附加 className，也可以是函数 Function({rowIndex}) | String/Function | — | — |
+| header-cell-class-name | 给表头的单元格附加 className，也可以是函数 Function({rowIndex, column, columnIndex}) | String/Function | — | — |
+| footer-row-class-name | 给表尾的行附加 className，也可以是函数 Function({rowIndex}) | String/Function | — | — |
+| footer-cell-class-name | 给表尾的单元格附加 className，也可以是函数 Function({rowIndex, column, columnIndex}) | String/Function | — | — |
 | show-footer | 是否显示表尾合计 | Boolean | — | — |
 | footer-method | 表尾合计的计算方法 Function({columns, data}) | Function | — | — |
 | span-method | 合并行或列，该函数 Function({row, rowIndex, column, columnIndex}) 返回计算后的值 | Object | — | { rowspan: 1, colspan: 1} |
