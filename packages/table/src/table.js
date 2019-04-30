@@ -1016,6 +1016,12 @@ export default {
       this.closeFilter()
     },
     /**
+     * 是否启用了滚动渲染
+     */
+    isScrollLoad () {
+      return this.scrollLoad
+    },
+    /**
      * 滚动渲染事件处理
      */
     triggerSrcollEvent: XEUtils.debounce(function (evnt) {
@@ -1085,6 +1091,9 @@ export default {
       }, options)
       if (opts.filename.indexOf('.csv') === -1) {
         opts.filename += '.csv'
+      }
+      if (this.scrollLoad) {
+        opts.original = true
       }
       let columns = this.tableColumn
       let oData = this.tableFullData

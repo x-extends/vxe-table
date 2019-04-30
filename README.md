@@ -215,6 +215,7 @@ new Vue({ i18n }).$mount('#app')
 | clearSort | 用于清空排序条件，数据会恢复成未排序的状态 | — |
 | clearFilter | 用于清空筛选条件，数据会恢复成未筛选的状态 | — |
 | computeWidth | 重新计算并更新列宽 | — |
+| isScrollLoad | 判断是否启用了滚动渲染 | — |
 | exportCsv| 将表格数据导出为 .csv 文件，说明：支持IE9+、Edge、Chrome、Firefox 等常用浏览器。IE11以下可能存在中文乱码问题，部分浏览器需要手动修改后缀名为 .csv | [options](#exportcsv-参数说明) |
 
 ##### exportCsv 参数说明
