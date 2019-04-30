@@ -36,7 +36,7 @@ A very powerful Vue table component.
 * [快捷菜单](https://jsrun.net/VjXKp)
 * [滚动渲染](https://jsrun.net/XRXKp)
 * 展开行
-* 树形
+* 树形结构
 * 可编辑
 * 可编辑 - 手动触发
 * 可编辑 - 点击触发

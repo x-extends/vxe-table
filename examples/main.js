@@ -2,8 +2,10 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 
+import './plugins/element.js'
 import './plugins/index.js'
 import './mock'
+// import './plugins/iview.js'
 
 Vue.config.productionTip = false
 

@@ -19,7 +19,7 @@ module.exports = {
       entry: 'examples/main.js',
       template: 'public/index.html',
       filename: 'index.html',
-      title: 'vue table.'
+      title: 'vxe-table'
     }
   },
   chainWebpack (config) {
