@@ -27,7 +27,7 @@ A very powerful Vue table component.
 * [排序](https://jsrun.net/QrXKp)
 * [筛选](https://jsrun.net/drXKp)
 * [合并行或列](https://jsrun.net/5jXKp)
-* 表尾汇总
+* [表尾合计](https://jsrun.net/dmXKp)
 * [导出 CVS](https://jsrun.net/cmXKp)
 * [自定义列](https://jsrun.net/PrXKp)
 * [加载中](https://jsrun.net/GjXKp)
