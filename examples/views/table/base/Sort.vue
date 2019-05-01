@@ -1,28 +1,31 @@
 <template>
   <div>
-    <p>斑马线条纹</p>
+    <p>通过给需要排序功能的列加上 sortable 属性可以支持排序，还可以通过设置 sort-by 多字段进行排序</p>
 
     <vxe-table
-      stripe
+      border
+      highlight-hover-row
+      height="300"
       :data.sync="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
-      <vxe-table-column prop="name" label="Name"></vxe-table-column>
+      <vxe-table-column prop="name" label="Name" sortable></vxe-table-column>
       <vxe-table-column prop="sex" label="Sex"></vxe-table-column>
       <vxe-table-column prop="date" label="Date"></vxe-table-column>
-      <vxe-table-column prop="address" label="Address"></vxe-table-column>
+      <vxe-table-column prop="time" label="Time" sortable></vxe-table-column>
     </vxe-table>
 
-    <p>使用 highlight-hover-row 属性启用 hover 行高亮</p>
+    <p>配置 sort-by 多个字段组合排序</p>
 
     <vxe-table
-      stripe
+      border
       highlight-hover-row
+      height="300"
       :data.sync="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
-      <vxe-table-column prop="name" label="Name"></vxe-table-column>
+      <vxe-table-column prop="name" label="Name" sortable></vxe-table-column>
       <vxe-table-column prop="sex" label="Sex"></vxe-table-column>
       <vxe-table-column prop="date" label="Date"></vxe-table-column>
-      <vxe-table-column prop="address" label="Address"></vxe-table-column>
+      <vxe-table-column prop="time" label="Time" sortable :sort-by="['time', 'name']"></vxe-table-column>
     </vxe-table>
   </div>
 </template>
@@ -35,7 +38,7 @@ export default {
     }
   },
   created () {
-    let list = window.CACHE_DATA_LIST.slice(0, 6)
+    let list = window.CACHE_DATA_LIST.slice(0, 50)
     this.tableData = list
   }
 }

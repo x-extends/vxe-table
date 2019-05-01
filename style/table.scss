@@ -43,14 +43,20 @@
   font-size: 14px;
   color: $vxe-font-color;
   font-family: $vxe-font-family;
+  &:before,
   &:after {
     content: "";
     position: absolute;
-    bottom: 0;
     left: 0;
     width: 100%;
     height: 1px;
     background-color: $vxe-table-border-color;
+  }
+  &:before {
+    top: 0;
+  }
+  &:after {
+    bottom: 0;
   }
   table {
     border-spacing: 0;
@@ -78,6 +84,7 @@
   }
   .vxe-table--footer-wrapper {
     overflow-x: auto;
+    margin-top: -1px;
     .vxe-table--repair {
       top: 0;
     }
@@ -105,11 +112,6 @@
     }
     &.row--selected {
       background-color: $vxe-table-row-selected-background-color;
-    }
-    &:last-child {
-      .vxe-body--column {
-        border-bottom: 0;
-      }
     }
     .vxe-body--column {
       border-bottom: 1px solid $vxe-table-border-color;

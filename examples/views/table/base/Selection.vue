@@ -1,24 +1,25 @@
 <template>
   <div>
-    <p>斑马线条纹</p>
+    <p>使用默认方式，勾选全部事件select-all，勾选事件select-change</p>
 
     <vxe-table
-      stripe
+      border
+      height="300"
       :data.sync="tableData">
-      <vxe-table-column type="index" width="60"></vxe-table-column>
+      <vxe-table-column type="selection" width="60"></vxe-table-column>
       <vxe-table-column prop="name" label="Name"></vxe-table-column>
       <vxe-table-column prop="sex" label="Sex"></vxe-table-column>
       <vxe-table-column prop="date" label="Date"></vxe-table-column>
       <vxe-table-column prop="address" label="Address"></vxe-table-column>
     </vxe-table>
 
-    <p>使用 highlight-hover-row 属性启用 hover 行高亮</p>
+    <p>使用 prop 绑定方式，支持设置默认值</p>
 
     <vxe-table
-      stripe
-      highlight-hover-row
+      border
+      height="300"
       :data.sync="tableData">
-      <vxe-table-column type="index" width="60"></vxe-table-column>
+      <vxe-table-column prop="checked" type="selection" width="60"></vxe-table-column>
       <vxe-table-column prop="name" label="Name"></vxe-table-column>
       <vxe-table-column prop="sex" label="Sex"></vxe-table-column>
       <vxe-table-column prop="date" label="Date"></vxe-table-column>
@@ -35,7 +36,7 @@ export default {
     }
   },
   created () {
-    let list = window.CACHE_DATA_LIST.slice(0, 6)
+    let list = window.CACHE_DATA_LIST.slice(0, 50)
     this.tableData = list
   }
 }

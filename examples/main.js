@@ -5,6 +5,7 @@ import router from './router'
 import './plugins/element.js'
 import './plugins/index.js'
 import './mock'
+import XEUtils from 'xe-utils'
 // import './plugins/iview.js'
 
 Vue.config.productionTip = false
@@ -21,8 +22,11 @@ function mockData () {
     list.push({
       id: fullIndex,
       name: 'name_' + fullIndex,
+      key: 'home.label.key' + index,
+      language: index % 2 === 0 ? 'zh_CN' : 'en_US',
       checked: false,
       date: currTime,
+      time: currTime + XEUtils.random(100, 10000),
       sex: index % 3 ? '0' : '1',
       age: index % 4 === 0 ? 30 : index % 3 === 0 ? 28 : index % 2 === 0 ? 26 : 24,
       region: index % 4 === 0 ? [19, 199, 1773] : index % 3 === 0 ? [9, 73, 719] : [1, 1, 5],

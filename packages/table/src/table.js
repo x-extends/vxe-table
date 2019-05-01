@@ -293,19 +293,22 @@ export default {
     }
   },
   created () {
-    GlobalEvent.on(this, 'click', this.handleGlobalClickEvent)
-    GlobalEvent.on(this, 'blur', this.handleGlobalBlurEvent)
-    GlobalEvent.on(this, 'contextmenu', this.handleContextmenuEvent)
-    GlobalEvent.on(this, 'mousewheel', this.handleMousewheelEvent)
-    GlobalEvent.on(this, 'keydown', this.handleKeydownEvent)
-    this.reload(this.data).then(() => {
+    this.reload(this.data, true).then(() => {
       this.tableColumn = UtilTools.getColumnList(this.collectColumn)
       if (this.customs) {
         this.mergeCustomColumn(this.customs)
       }
       this.refreshColumn()
-      this.$nextTick(() => this.computeWidth(true))
+      this.$nextTick(() => {
+        this.computeScrollLoad()
+        this.computeWidth(true)
+      })
     })
+    GlobalEvent.on(this, 'click', this.handleGlobalClickEvent)
+    GlobalEvent.on(this, 'blur', this.handleGlobalBlurEvent)
+    GlobalEvent.on(this, 'contextmenu', this.handleContextmenuEvent)
+    GlobalEvent.on(this, 'mousewheel', this.handleMousewheelEvent)
+    GlobalEvent.on(this, 'keydown', this.handleKeydownEvent)
   },
   mounted () {
     document.body.appendChild(this.$refs.tableWrapper)
@@ -462,7 +465,7 @@ export default {
         visible: false
       })
     },
-    reload (data) {
+    reload (data, init) {
       let { autoWidth, scrollStore, optimizeConfig, computeWidth, computeScrollLoad } = this
       let scroll = optimizeConfig.scroll
       let tableFullData = data || []
@@ -479,10 +482,10 @@ export default {
       this.scrollLoad = scrollLoad
       this.tableData = this.getTableData()
       let rest = this.$nextTick()
-      if (autoWidth) {
+      if (!init && autoWidth) {
         rest = rest.then(computeWidth)
       }
-      if (scrollLoad) {
+      if (!init && scrollLoad) {
         rest = rest.then(computeScrollLoad)
       }
       return rest
@@ -1122,7 +1125,7 @@ export default {
       let tableBodyElem = this.$refs.tableBody.$el
       let tableHeader = this.$refs.tableHeader
       let firstTrElem = tableBodyElem.querySelector('tbody>tr')
-      if (!firstTrElem) {
+      if (!firstTrElem && tableHeader) {
         firstTrElem = tableHeader.$el.querySelector('thead>tr')
       }
       if (firstTrElem) {

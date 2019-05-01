@@ -1,9 +1,10 @@
 <template>
   <div>
-    <p>斑马线条纹</p>
+    <p>隐藏头部</p>
 
     <vxe-table
-      stripe
+      height="300"
+      :show-header="false"
       :data.sync="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column prop="name" label="Name"></vxe-table-column>
@@ -12,11 +13,11 @@
       <vxe-table-column prop="address" label="Address"></vxe-table-column>
     </vxe-table>
 
-    <p>使用 highlight-hover-row 属性启用 hover 行高亮</p>
+    <p>当纵向内容过多时，出现横向滚动条</p>
 
     <vxe-table
-      stripe
-      highlight-hover-row
+      height="200"
+      :show-header="false"
       :data.sync="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column prop="name" label="Name"></vxe-table-column>

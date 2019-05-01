@@ -1,27 +1,18 @@
 <template>
   <div>
-    <p>斑马线条纹</p>
+    <p>通过设置 resizable 属性可以支持列宽拖动</p>
 
     <vxe-table
-      stripe
-      :data.sync="tableData">
-      <vxe-table-column type="index" width="60"></vxe-table-column>
-      <vxe-table-column prop="name" label="Name"></vxe-table-column>
-      <vxe-table-column prop="sex" label="Sex"></vxe-table-column>
-      <vxe-table-column prop="date" label="Date"></vxe-table-column>
-      <vxe-table-column prop="address" label="Address"></vxe-table-column>
-    </vxe-table>
-
-    <p>使用 highlight-hover-row 属性启用 hover 行高亮</p>
-
-    <vxe-table
-      stripe
+      border
+      resizable
       highlight-hover-row
+      height="400"
       :data.sync="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column prop="name" label="Name"></vxe-table-column>
       <vxe-table-column prop="sex" label="Sex"></vxe-table-column>
       <vxe-table-column prop="date" label="Date"></vxe-table-column>
+      <vxe-table-column prop="time" label="Time"></vxe-table-column>
       <vxe-table-column prop="address" label="Address"></vxe-table-column>
     </vxe-table>
   </div>

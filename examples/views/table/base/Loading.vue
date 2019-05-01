@@ -1,25 +1,29 @@
 <template>
   <div>
-    <p>斑马线条纹</p>
+    <p>通过设置 loading 属性可以使用自带的加载效果</p>
 
     <vxe-table
-      stripe
+      border
+      highlight-hover-row
+      height="300"
       :data.sync="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
-      <vxe-table-column prop="name" label="Name"></vxe-table-column>
+      <vxe-table-column prop="name" label="Name" sortable></vxe-table-column>
       <vxe-table-column prop="sex" label="Sex"></vxe-table-column>
       <vxe-table-column prop="date" label="Date"></vxe-table-column>
       <vxe-table-column prop="address" label="Address"></vxe-table-column>
     </vxe-table>
 
-    <p>使用 highlight-hover-row 属性启用 hover 行高亮</p>
+    <p>加载中</p>
 
     <vxe-table
-      stripe
+      border
       highlight-hover-row
+      height="300"
+      :loading="loading"
       :data.sync="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
-      <vxe-table-column prop="name" label="Name"></vxe-table-column>
+      <vxe-table-column prop="name" label="Name" sortable></vxe-table-column>
       <vxe-table-column prop="sex" label="Sex"></vxe-table-column>
       <vxe-table-column prop="date" label="Date"></vxe-table-column>
       <vxe-table-column prop="address" label="Address"></vxe-table-column>
@@ -35,8 +39,12 @@ export default {
     }
   },
   created () {
-    let list = window.CACHE_DATA_LIST.slice(0, 6)
-    this.tableData = list
+    this.loading = true
+    setTimeout(() => {
+      let list = window.CACHE_DATA_LIST.slice(0, 50)
+      this.tableData = list
+      this.loading = false
+    }, 3000)
   }
 }
 </script>

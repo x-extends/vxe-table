@@ -1,46 +1,39 @@
 <template>
   <div>
-    <p>可以设置大小尺寸：medium / small / mini<p/>
+    <p>使用 highlight-current-row 方式；选项改变触发事件select-change</p>
 
     <vxe-table
+      border
+      highlight-current-row
+      height="300"
       :data.sync="tableData">
-      <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column prop="name" label="Name"></vxe-table-column>
       <vxe-table-column prop="sex" label="Sex"></vxe-table-column>
       <vxe-table-column prop="date" label="Date"></vxe-table-column>
       <vxe-table-column prop="address" label="Address"></vxe-table-column>
     </vxe-table>
 
-    <p>设置大小为 medium</p>
+    <p>使用 radio 方式</p>
 
     <vxe-table
-      size="medium"
+      border
+      height="300"
       :data.sync="tableData">
-      <vxe-table-column type="index" width="60"></vxe-table-column>
+      <vxe-table-column type="radio" width="60"></vxe-table-column>
       <vxe-table-column prop="name" label="Name"></vxe-table-column>
       <vxe-table-column prop="sex" label="Sex"></vxe-table-column>
       <vxe-table-column prop="date" label="Date"></vxe-table-column>
       <vxe-table-column prop="address" label="Address"></vxe-table-column>
     </vxe-table>
 
-    <p>设置大小为 small</p>
+    <p>当然也可以两种方式同时使用</p>
 
     <vxe-table
-      size="small"
+      border
+      highlight-current-row
+      height="300"
       :data.sync="tableData">
-      <vxe-table-column type="index" width="60"></vxe-table-column>
-      <vxe-table-column prop="name" label="Name"></vxe-table-column>
-      <vxe-table-column prop="sex" label="Sex"></vxe-table-column>
-      <vxe-table-column prop="date" label="Date"></vxe-table-column>
-      <vxe-table-column prop="address" label="Address"></vxe-table-column>
-    </vxe-table>
-
-    <p>设置大小为 mini</p>
-
-    <vxe-table
-      size="mini"
-      :data.sync="tableData">
-      <vxe-table-column type="index" width="60"></vxe-table-column>
+      <vxe-table-column type="radio" width="60"></vxe-table-column>
       <vxe-table-column prop="name" label="Name"></vxe-table-column>
       <vxe-table-column prop="sex" label="Sex"></vxe-table-column>
       <vxe-table-column prop="date" label="Date"></vxe-table-column>
@@ -57,7 +50,7 @@ export default {
     }
   },
   created () {
-    let list = window.CACHE_DATA_LIST.slice(0, 4)
+    let list = window.CACHE_DATA_LIST.slice(0, 6)
     this.tableData = list
   }
 }
