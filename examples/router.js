@@ -32,6 +32,7 @@ import TableExport from './views/table/advanced/Export.vue'
 import TableMenu from './views/table/advanced/Menu.vue'
 
 import TableScroll from './views/table/scroll/Scroll.vue'
+import TableScrollSize from './views/table/scroll/ScrollSize.vue'
 
 Vue.use(Router)
 
@@ -184,6 +185,11 @@ export default new Router({
       path: '/table/scroll/scroll',
       name: 'TableScroll',
       component: TableScroll
+    },
+    {
+      path: '/table/scroll/scrollSize/:size',
+      name: 'TableScrollSize',
+      component: TableScrollSize
     }
   ]
 })

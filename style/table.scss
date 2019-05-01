@@ -38,7 +38,6 @@
 /*table*/
 .vxe-table {
   position: relative;
-  border-right: 1px solid $vxe-table-border-color;
   border-left: 1px solid $vxe-table-border-color;
   font-size: 14px;
   color: $vxe-font-color;
@@ -57,6 +56,9 @@
   }
   &:after {
     bottom: 0;
+  }
+  &.scroll--y {
+    border-right: 1px solid $vxe-table-border-color;
   }
   table {
     border-spacing: 0;

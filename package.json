@@ -1,6 +1,6 @@
 {
   "name": "vxe-table",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "A very powerful Vue table component.",
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -33,6 +33,7 @@
     "gulp-rename": "^1.4.0",
     "gulp-uglify": "^3.0.2",
     "gulp-umd": "^2.0.0",
+    "highlight.js": "^9.15.6",
     "iview": "^3.4.0",
     "node-sass": "^4.9.0",
     "sass-loader": "^7.1.0",

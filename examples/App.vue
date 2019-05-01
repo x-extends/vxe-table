@@ -20,6 +20,7 @@
         </ul>
       </div>
       <div class="body">
+        <a v-if="demoLink" class="todemo" :href="demoLink" target="_blank">在线运行</a>
         <router-view/>
       </div>
     </div>
@@ -58,120 +59,140 @@ export default {
           children: [
             {
               lable: '基础',
+              demoUrl: 'https://jsrun.net/VrXKp',
               locat: {
                 name: 'TableBasic'
               }
             },
             {
               lable: '尺寸',
+              demoUrl: 'https://jsrun.net/PmXKp',
               locat: {
                 name: 'TableSize'
               }
             },
             {
               lable: '斑马线条纹',
+              demoUrl: 'https://jsrun.net/zrXKp',
               locat: {
                 name: 'TableStripe'
               }
             },
             {
               lable: '带边框',
+              demoUrl: 'https://jsrun.net/QrXKp',
               locat: {
                 name: 'TableBorder'
               }
             },
             {
               lable: '单元格样式',
+              demoUrl: 'https://jsrun.net/EmXKp',
               locat: {
                 name: 'TableStyle'
               }
             },
             {
               lable: '隐藏头部',
+              demoUrl: 'https://jsrun.net/7mXKp',
               locat: {
                 name: 'TableHeader'
               }
             },
             {
               lable: '列宽拖动',
+              demoUrl: 'https://jsrun.net/5AXKp',
               locat: {
                 name: 'TableResizable'
               }
             },
             {
               lable: '流体高度',
+              demoUrl: 'https://jsrun.net/smXKp',
               locat: {
                 name: 'TableMaxHeight'
               }
             },
             {
               lable: '固定表头',
+              demoUrl: 'https://jsrun.net/JrXKp',
               locat: {
                 name: 'TableHeight'
               }
             },
             {
               lable: '固定列',
+              demoUrl: 'https://jsrun.net/TrXKp',
               locat: {
                 name: 'TableFixed'
               }
             },
             {
               lable: '固定表头和列',
+              demoUrl: 'https://jsrun.net/8rXKp',
               locat: {
                 name: 'TableFixedFull'
               }
             },
             {
               lable: '表头分组',
+              demoUrl: 'https://jsrun.net/7rXKp',
               locat: {
                 name: 'TableGroup'
               }
             },
             {
               lable: '序号',
+              demoUrl: 'https://jsrun.net/xrXKp',
               locat: {
                 name: 'TableIndex'
               }
             },
             {
               lable: '单选',
+              demoUrl: 'https://jsrun.net/9rXKp',
               locat: {
                 name: 'TableRadio'
               }
             },
             {
               lable: '多选',
+              demoUrl: 'https://jsrun.net/erXKp',
               locat: {
                 name: 'TableSelection'
               }
             },
             {
               lable: '排序',
+              demoUrl: 'https://jsrun.net/crXKp',
               locat: {
                 name: 'TableSort'
               }
             },
             {
               lable: '筛选',
+              demoUrl: 'https://jsrun.net/drXKp',
               locat: {
                 name: 'TableFilter'
               }
             },
             {
               lable: '加载中',
+              demoUrl: 'https://jsrun.net/GjXKp',
               locat: {
                 name: 'TableLoading'
               }
             },
             {
               lable: '格式化内容',
+              demoUrl: 'https://jsrun.net/FrXKp',
               locat: {
                 name: 'TableFormat'
               }
             },
             {
               lable: '自定义模板',
+              demoUrl: 'https://jsrun.net/DjXKp',
               locat: {
                 name: 'TableTemplate'
               }
@@ -185,30 +206,35 @@ export default {
           children: [
             {
               lable: '合并行或列',
+              demoUrl: 'https://jsrun.net/5jXKp',
               locat: {
                 name: 'TableSpan'
               }
             },
             {
               lable: '表尾合计',
+              demoUrl: 'https://jsrun.net/dmXKp',
               locat: {
                 name: 'TableFooter'
               }
             },
             {
               lable: '自定义列',
+              demoUrl: 'https://jsrun.net/PrXKp',
               locat: {
                 name: 'TableCustom'
               }
             },
             {
               lable: '导出.cvs',
+              demoUrl: 'https://jsrun.net/cmXKp',
               locat: {
                 name: 'TableExport'
               }
             },
             {
               lable: '快捷菜单',
+              demoUrl: 'https://jsrun.net/VjXKp',
               locat: {
                 name: 'TableMenu'
               }
@@ -226,13 +252,6 @@ export default {
               locat: {
                 name: 'TableInstall'
               }
-            },
-            {
-              lable: '使用 sortablejs 实现行排序',
-              disabled: true,
-              locat: {
-                name: 'TableInstall'
-              }
             }
           ]
         },
@@ -243,29 +262,36 @@ export default {
           children: [
             {
               lable: '滚动渲染',
+              demoUrl: 'https://jsrun.net/XRXKp',
               locat: {
                 name: 'TableScroll'
               }
             },
             {
               lable: '加载 1 万条数据',
-              disabled: true,
               locat: {
-                name: 'TableInstall'
+                name: 'TableScrollSize',
+                params: {
+                  size: 10000
+                }
               }
             },
             {
               lable: '加载 10 万条数据',
-              disabled: true,
               locat: {
-                name: 'TableInstall'
+                name: 'TableScrollSize',
+                params: {
+                  size: 100000
+                }
               }
             },
             {
-              lable: '加载 50 万条数据',
-              disabled: true,
+              lable: '加载 20 万条数据',
               locat: {
-                name: 'TableInstall'
+                name: 'TableScrollSize',
+                params: {
+                  size: 200000
+                }
               }
             }
           ]
@@ -400,14 +426,53 @@ export default {
               }
             }
           ]
+        },
+        {
+          lable: '与第三方库集成',
+          expand: false,
+          children: [
+            {
+              lable: '集成 element-ui',
+              disabled: true,
+              locat: {
+                name: 'TableInstall'
+              }
+            },
+            {
+              lable: '集成 iview',
+              disabled: true,
+              locat: {
+                name: 'TableInstall'
+              }
+            },
+            {
+              lable: '集成 sortablejs 实现行排序',
+              disabled: true,
+              locat: {
+                name: 'TableInstall'
+              }
+            }
+          ]
         }
       ]
     }
   },
+  computed: {
+    demoLink () {
+      let group = this.tableList.find(item => item.expand)
+      if (group && group.children) {
+        let selected = group.children.find(item => item.locat && item.locat.name === this.$route.name)
+        if (selected) {
+          return selected.demoUrl
+        }
+      }
+      return null
+    }
+  },
   created () {
-    let selected = this.tableList.find(item => item.value === this.$route.path.split('/')[2])
-    if (selected) {
-      selected.expand = true
+    let group = this.tableList.find(item => item.value === this.$route.path.split('/')[2])
+    if (group) {
+      group.expand = true
     }
   },
   methods: {
@@ -477,6 +542,7 @@ ul {
     user-select: none;
     padding-top: 15px;
     border-right: 1px solid #dcdfe6;
+    overflow: hidden;
     .nav-menu {
       font-size: 16px;
       color: #333;
@@ -520,9 +586,19 @@ ul {
     }
   }
   > .body {
+    position: relative;
     flex-grow: 1;
-    overflow: auto;
+    overflow: hidden;
     padding: 15px 0 0 25px;
+    .todemo {
+      position: absolute;
+      top: 10px;
+      right: 0;
+      font-size: 16px;
+      color: #409eff;
+      cursor: pointer;
+      user-select: none;
+    }
   }
 }
 </style>

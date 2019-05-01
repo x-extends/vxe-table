@@ -8,6 +8,10 @@
 
 A very powerful Vue table component.
 
+## Docs
+
+[查看文档](https://xuliangzhan.github.io/vxe-table/)
+
 ## Features
 
 * [基础](https://jsrun.net/VrXKp)

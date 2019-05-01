@@ -313,11 +313,15 @@ export default {
   mounted () {
     document.body.appendChild(this.$refs.tableWrapper)
   },
-  destroyed () {
+  beforeDestroy () {
     let tableWrapper = this.$refs.tableWrapper
     if (tableWrapper && tableWrapper.parentNode) {
       tableWrapper.parentNode.removeChild(tableWrapper)
     }
+    this.closeFilter()
+    this.closeContextMenu()
+  },
+  destroyed () {
     GlobalEvent.off(this, 'click')
     GlobalEvent.off(this, 'blur')
     GlobalEvent.off(this, 'contextmenu')
@@ -325,13 +329,15 @@ export default {
     GlobalEvent.off(this, 'keydown')
   },
   render (h) {
-    let { _e, id, tableData, tableColumn, collectColumn, isGroup, isFilter, isCtxMenu, loading, showHeader, resizable, border, stripe, highlightHoverRow, size, showFooter, footerMethod, overflowX, scrollXHeight, optimizeConfig, columnStore, filterStore, ctxMenuStore } = this
+    let { _e, id, tableData, tableColumn, collectColumn, isGroup, isFilter, isCtxMenu, loading, showHeader, resizable, border, stripe, highlightHoverRow, size, showFooter, footerMethod, overflowX, overflowY, scrollXHeight, optimizeConfig, columnStore, filterStore, ctxMenuStore } = this
     let { leftList, rightList } = columnStore
     let footerData = showFooter && footerMethod && tableColumn.length ? footerMethod({ columns: tableColumn, data: tableData }) : ['-']
     return h('div', {
       class: ['vxe-table', size ? `size--${size}` : '', {
         'show--head': showHeader,
         'show--foot': showFooter,
+        'scroll--y': overflowY,
+        'scroll--x': overflowX,
         't--animat': optimizeConfig.animat,
         't--stripe': stripe,
         't--border': border,
