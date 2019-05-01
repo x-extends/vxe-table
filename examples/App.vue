@@ -20,7 +20,7 @@
         </ul>
       </div>
       <div class="body">
-        <a v-if="demoLink" class="todemo" :href="demoLink" target="_blank">在线运行</a>
+        <a v-if="demoLink" class="link todemo" :href="demoLink" target="_blank">在线运行</a>
         <router-view/>
       </div>
     </div>
@@ -595,9 +595,6 @@ ul {
       top: 10px;
       right: 0;
       font-size: 16px;
-      color: #409eff;
-      cursor: pointer;
-      user-select: none;
     }
   }
 }
