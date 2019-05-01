@@ -8,10 +8,6 @@
 
 A very powerful Vue table component.
 
-## Docs
-
-[查看文档](https://xuliangzhan.github.io/vxe-table/)
-
 ## Features
 
 * [基础](https://jsrun.net/VrXKp)
@@ -51,6 +47,10 @@ A very powerful Vue table component.
 * 可编辑 - 校验
 * 可编辑 - 键盘导航
 * 可编辑 - Excel
+
+## Docs
+
+[查看文档](https://xuliangzhan.github.io/vxe-table/)
 
 ## Installing
 

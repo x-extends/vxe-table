@@ -20,3 +20,15 @@
     </pre>
   </div>
 </template>
+
+<script>
+import hljs from 'highlight.js'
+
+export default {
+  mounted () {
+    this.$el.querySelectorAll('pre').forEach((block) => {
+      hljs.highlightBlock(block)
+    })
+  }
+}
+</script>
