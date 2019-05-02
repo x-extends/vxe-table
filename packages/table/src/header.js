@@ -73,7 +73,7 @@ export default {
     }
   },
   render (h) {
-    let { _e, $parent: $table, fixedType, headerColumn, tableColumn, resizeMousedown } = this
+    let { $parent: $table, fixedType, headerColumn, tableColumn, resizeMousedown } = this
     let { resizable, border, headerRowClassName, headerCellClassName, tableWidth, scrollYWidth } = $table
     return h('div', {
       class: ['vxe-table--header-wrapper', fixedType ? `fixed--${fixedType}-wrapper` : 'body--wrapper']
@@ -96,8 +96,9 @@ export default {
             attrs: {
               name: column.id,
               width: column.renderWidth
-            }
-          }) : _e()
+            },
+            key: columnIndex
+          }) : null
         }).concat([
           h('col', {
             attrs: {
@@ -124,7 +125,7 @@ export default {
                 colspan: column.colSpan,
                 rowspan: column.rowSpan
               },
-              key: columnIndex
+              key: column.columnKey || columnIndex
             }, [
               h('div', {
                 class: ['vxe-cell']
@@ -136,16 +137,16 @@ export default {
                     resizeMousedown(evnt, column)
                   }
                 }
-              }) : _e()
-            ]) : _e()
-          }).concat([
+              }) : null
+            ]) : null
+          }).concat(scrollYWidth ? [
             h('th', {
               class: ['col--gutter'],
               style: {
                 width: `${scrollYWidth}px`
               }
             })
-          ]))
+          ] : []))
         }))
       ]),
       /**

@@ -1,6 +1,8 @@
 .vxe-table,
 .vxe-table--filter-wrapper,
+.vxe-table--tooltip-wrapper,
 .vxe-checkbox {
+  box-sizing: border-box;
   *, :after, :before {
     box-sizing: border-box;
   }
@@ -173,6 +175,18 @@
     .vxe-body--column,
     .vxe-footer--column {
       border-right: 1px solid $vxe-table-border-color;
+      &:last-child {
+        border-right-color: #fff;
+      }
+    }
+    &.scroll--y {
+      .vxe-header--column,
+      .vxe-body--column,
+      .vxe-footer--column {
+        &:last-child {
+          border-right: 1px solid $vxe-table-border-color;
+        }
+      }
     }
     .vxe-header--column,
     .vxe-footer--column {
@@ -591,6 +605,25 @@
   &.show {
     display: block;
   }
+}
+
+/*tppltip*/
+.vxe-table--tooltip-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 99;
+  font-size: 12px;
+  max-width: 400px;
+  border-radius: 4px;
+  padding: 8px 12px;
+  white-space: normal;
+  word-break: break-all;
+  background-color: #FFF;
+  border: 1px solid $vxe-table-popup-border-color;
+  box-shadow: 2px 2px 4px -2px rgba(0,0,0,.2);
+  color: $vxe-font-color;
+  font-family: $vxe-font-family;
 }
 
 .vxe-checkbox,

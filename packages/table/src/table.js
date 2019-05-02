@@ -14,7 +14,7 @@ import TableContextMenu from './menu'
  * 渲染浮固定列
  */
 function renderFixed (h, $table, fixedType, footerData) {
-  let { tableData, tableColumn, collectColumn, isGroup, height, headerHeight, footerHeight, showHeader, showFooter, tableHeight, scrollYWidth, scrollXHeight, scrollRightToLeft, scrollLeftToRight, columnStore } = $table
+  let { tableData, tableColumn, visibleColumn, collectColumn, isGroup, height, headerHeight, footerHeight, showHeader, showFooter, tableHeight, scrollYWidth, scrollXHeight, scrollRightToLeft, scrollLeftToRight, columnStore } = $table
   let customHeight = isNaN(height) ? 0 : parseFloat(height)
   let isRightFixed = fixedType === 'right'
   let style = {
@@ -33,6 +33,7 @@ function renderFixed (h, $table, fixedType, footerData) {
         fixedType,
         tableData,
         tableColumn,
+        visibleColumn,
         collectColumn,
         isGroup
       },
@@ -46,6 +47,7 @@ function renderFixed (h, $table, fixedType, footerData) {
         fixedType,
         tableData,
         tableColumn,
+        visibleColumn,
         collectColumn,
         isGroup
       },
@@ -58,7 +60,8 @@ function renderFixed (h, $table, fixedType, footerData) {
       props: {
         fixedType,
         footerData,
-        tableColumn
+        tableColumn,
+        visibleColumn
       },
       ref: `${fixedType}Footer`
     }) : null
@@ -208,10 +211,7 @@ export default {
         showChild: false,
         selectChild: null,
         list: [],
-        style: {
-          top: 0,
-          left: 0
-        }
+        style: null
       },
       // 存放滚动渲染相关的信息
       scrollStore: {
@@ -223,6 +223,14 @@ export default {
         visibleIndex: 0,
         topSpaceHeight: 0,
         bottomSpaceHeight: 0
+      },
+      // 存放 tooltip 相关信息
+      tooltipStore: {
+        visible: false,
+        row: null,
+        column: null,
+        content: null,
+        style: null
       }
     }
   },
@@ -234,7 +242,7 @@ export default {
         // 显示效果开关
         animat: !isAll,
         // 如果设置了则不允许换行 ellipsis、title、tooltip
-        overflow: isAll ? 'title' : null,
+        overflow: isAll ? 'tooltip' : null,
         // 默认大于 500 条时自动使用滚动渲染
         scroll: {
           gt: 500,
@@ -289,6 +297,7 @@ export default {
       this.analyColumnWidth()
     },
     visibleColumn () {
+      this.analyColumnWidth()
       this.$nextTick(() => this.computeWidth())
     }
   },
@@ -329,7 +338,7 @@ export default {
     GlobalEvent.off(this, 'keydown')
   },
   render (h) {
-    let { _e, id, tableData, tableColumn, collectColumn, isGroup, isFilter, isCtxMenu, loading, showHeader, resizable, border, stripe, highlightHoverRow, size, showFooter, footerMethod, overflowX, overflowY, scrollXHeight, optimizeConfig, columnStore, filterStore, ctxMenuStore } = this
+    let { _e, id, tableData, tableColumn, visibleColumn, collectColumn, isGroup, isFilter, isCtxMenu, loading, showHeader, resizable, border, stripe, highlightHoverRow, size, showFooter, footerMethod, overflowX, overflowY, scrollXHeight, optimizeConfig, columnStore, filterStore, ctxMenuStore, tooltipStore } = this
     let { leftList, rightList } = columnStore
     let footerData = showFooter && footerMethod && tableColumn.length ? footerMethod({ columns: tableColumn, data: tableData }) : ['-']
     return h('div', {
@@ -359,6 +368,7 @@ export default {
         props: {
           tableData,
           tableColumn,
+          visibleColumn,
           collectColumn,
           isGroup
         }
@@ -371,6 +381,7 @@ export default {
         props: {
           tableData,
           tableColumn,
+          visibleColumn,
           collectColumn,
           isGroup
         }
@@ -382,7 +393,8 @@ export default {
         props: {
           footerData,
           footerMethod,
-          tableColumn
+          tableColumn,
+          visibleColumn
         },
         ref: 'tableFooter'
       }) : _e(),
@@ -439,7 +451,22 @@ export default {
             ctxMenuStore
           },
           ref: 'ctxWrapper'
-        }) : null
+        }) : null,
+        /**
+         * tooltip
+         */
+        tooltipStore.visible ? h('div', {
+          class: ['vxe-table--tooltip-wrapper'],
+          style: tooltipStore.style,
+          ref: 'tipWrapper'
+        }, [
+          h('span', {
+            class: ['vxe-table--tooltip-content']
+          }, tooltipStore.content),
+          h('span', {
+            class: ['vxe-table--tooltip-arrow']
+          })
+        ]) : null
       ])
     ])
   },
@@ -943,6 +970,56 @@ export default {
       return { flag: false }
     },
     /**
+     * 触发 tooltip 事件
+     */
+    triggerTooltipEvent (evnt, { row, column }) {
+      let cell = evnt.currentTarget
+      let wrapperElem = cell.children[0]
+      if (wrapperElem.scrollWidth > wrapperElem.clientWidth) {
+        let { tooltipStore, $refs } = this
+        if (tooltipStore.column !== column || tooltipStore.row !== row || !tooltipStore.visible) {
+          let { top, left } = DomTools.getOffsetPos(cell)
+          let { scrollTop, scrollLeft, visibleWidth } = DomTools.getDomNode()
+          Object.assign(tooltipStore, {
+            row,
+            column,
+            content: XEUtils.get(row, column.property),
+            visible: true
+          })
+          this.$nextTick().then(() => {
+            let tipWrapperElem = $refs.tipWrapper
+            tooltipStore.style = {
+              width: `${tipWrapperElem.offsetWidth}px`,
+              height: `${tipWrapperElem.offsetHeight}px`,
+              top: `${top - tipWrapperElem.offsetHeight - 6}px`,
+              left: `${left - 6}px`
+            }
+            return this.$nextTick()
+          }).then(() => {
+            let tipWrapperElem = $refs.tipWrapper
+            let offsetHeight = tipWrapperElem.offsetHeight
+            let offsetWidth = tipWrapperElem.offsetWidth
+            if (top - offsetHeight < scrollTop) {
+              tooltipStore.style.top = `${top + cell.offsetHeight + 6}px`
+            }
+            if (left + offsetWidth > scrollLeft + visibleWidth) {
+              tooltipStore.style.left = `${scrollLeft + visibleWidth - offsetWidth - 6}px`
+            }
+          })
+        }
+      }
+    },
+    // 关闭 tooltip
+    clostTooltip () {
+      Object.assign(this.tooltipStore, {
+        row: null,
+        column: null,
+        content: null,
+        style: null,
+        visible: false
+      })
+    },
+    /**
      * 多选，行选中事件
      */
     triggerCheckRowEvent (evnt, value, { row, column }) {
@@ -1050,17 +1127,19 @@ export default {
      * 点击筛选事件
      */
     triggerFilterEvent (evnt, column, params) {
-      let filterStore = this.filterStore
+      let { $refs, filterStore } = this
       if (filterStore.column === column && filterStore.visible) {
         filterStore.visible = false
       } else {
-        let { top, left } = DomTools.getOffsetPos(evnt.target)
+        let targetElem = evnt.target
+        let filterWrapperElem = $refs.filterWrapper
+        let { top, left } = DomTools.getOffsetPos(targetElem)
         Object.assign(filterStore, {
           multiple: column.filterMultiple,
           options: column.filters,
           column: column,
           style: {
-            top: `${top + evnt.target.clientHeight + 6}px`,
+            top: `${top + targetElem.clientHeight + 6}px`,
             left: `${left}px`
           },
           visible: true
@@ -1069,8 +1148,8 @@ export default {
         filterStore.isIndeterminate = !this.isAllSelected && filterStore.options.some(item => item.checked)
         this.$nextTick(() => {
           filterStore.style = {
-            top: `${top + evnt.target.clientHeight + 6}px`,
-            left: `${left - this.$refs.filterWrapper.$el.clientWidth / 2 + 10}px`
+            top: `${top + targetElem.clientHeight + 6}px`,
+            left: `${left - filterWrapperElem.$el.clientWidth / 2 + 10}px`
           }
         })
       }

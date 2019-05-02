@@ -236,8 +236,8 @@ new Vue({ i18n }).$mount('#app')
 | download | 是否马上下载，如果设置为 false 则通过返回结果为内容的 Promise | Boolean | — | true |
 | data | 自定义数据 | Array | — | — |
 | columns | 自定义列 | Array | — | — |
-| columnFilterMethod | 列过滤方法，该函数 Function(row,index,list) 的返回值用来决定该列是否导出 | Function | — | — |
-| dataFilterMethod | 数据过滤方法，该函数 Function(row,index,list) 的返回值用来决定该数据是否导出 | Function | — | — |
+| columnFilterMethod | 列过滤方法，该函数 Function(column,index) 的返回值用来决定该列是否导出 | Function | — | — |
+| dataFilterMethod | 数据过滤方法，该函数 Function(row,index) 的返回值用来决定该数据是否导出 | Function | — | — |
 
 ### Table-column
 
@@ -258,7 +258,7 @@ new Vue({ i18n }).$mount('#app')
 | align | 列对其方式 | String | — | left |
 | header-align | 表头对齐方式 | String | — | — |
 | ellipsis | 当内容过长时显示为省略号 | Boolean | — | false |
-| show-overflow-title | 当内容过长显示为省略号并用原生的 title 显示完整内容 | Boolean | — | false |
+| show-overflow-title | 当内容过长显示为省略号和原生的 title 显示内容 | Boolean | — | false |
 | show-overflow-tooltip | 当内容过长显示为省略号并用 tooltip 显示完整内容 | Boolean | — | false |
 | formatter | 格式化显示内容 Function({cellValue, row, rowIndex, column, columnIndex}) | Function | — | — |
 | index-method | 只对 type=index 有效，自定义索引方法 Function({row, rowIndex, column, columnIndex}) | Function | — | — |

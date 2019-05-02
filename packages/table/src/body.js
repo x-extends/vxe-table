@@ -4,7 +4,7 @@ import DomTools from '../../../src/tools/dom'
 /**
  * 渲染列
  */
-function renderColumn (h, $table, fixedType, row, rowIndex, column, columnIndex) {
+function renderColumn (h, _vm, $table, fixedType, row, rowIndex, column, columnIndex) {
   let { $listeners: tableListeners, border, highlightCurrentRow, cellClassName, spanMethod, optimizeConfig } = $table
   let { align, ellipsis, showTitle, showTooltip, renderWidth, columnKey } = column
   let { overflow } = optimizeConfig
@@ -12,9 +12,15 @@ function renderColumn (h, $table, fixedType, row, rowIndex, column, columnIndex)
   let isShowTitle = showTitle || overflow === 'title'
   let isShowTooltip = showTooltip || overflow === 'tooltip'
   let isEllipsis = ellipsis || overflow === 'ellipsis'
-  let tdOns = {}
   let attrs = null
+  let tdOns = {}
   // 优化事件绑定
+  if (isShowTooltip) {
+    tdOns.mouseover = evnt => {
+      $table.triggerTooltipEvent(evnt, { row, rowIndex, column, columnIndex })
+    }
+    tdOns.mouseout = $table.clostTooltip
+  }
   if (highlightCurrentRow || tableListeners['cell-click']) {
     tdOns.click = evnt => {
       $table.triggerCellClickEvent(evnt, { row, rowIndex, column, columnIndex, cell: evnt.currentTarget })
@@ -179,7 +185,7 @@ export default {
             key: rowKey ? XEUtils.get(row, rowKey) : rowIndex,
             on
           }, tableColumn.map((column, columnIndex) => {
-            return column.visible ? renderColumn(h, $table, fixedType, row, rowIndex, column, columnIndex) : _e()
+            return column.visible ? renderColumn(h, this, $table, fixedType, row, rowIndex, column, columnIndex) : _e()
           }))
         }))
       ]),

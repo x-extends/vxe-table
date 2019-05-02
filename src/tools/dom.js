@@ -1,6 +1,8 @@
 import XEUtils from 'xe-utils'
 
 const browse = XEUtils.browse()
+const htmlElem = document.querySelector('html')
+const bodyElem = document.body
 
 const DomTools = {
   browse,
@@ -22,7 +24,7 @@ const DomTools = {
     }
   },
   /**
-   * 获取元素绝对位置
+   * 获取元素相对于 document 的位置
    */
   getOffsetPos (elem, container) {
     return getNodeOffset(elem, container, { left: 0, top: 0 })
@@ -31,8 +33,13 @@ const DomTools = {
 
 function getNodeOffset (elem, container, rest) {
   if (elem) {
+    let parentElem = elem.parentNode
     rest.top += elem.offsetTop
     rest.left += elem.offsetLeft
+    if (parentElem && parentElem !== htmlElem && parentElem !== bodyElem) {
+      rest.top -= parentElem.scrollTop
+      rest.left -= parentElem.scrollLeft
+    }
     if (container && (elem === container || elem.offsetParent === container) ? 0 : elem.offsetParent) {
       return getNodeOffset(elem.offsetParent, container, rest)
     }
