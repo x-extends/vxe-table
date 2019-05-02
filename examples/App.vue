@@ -2,7 +2,7 @@
   <div id="app">
     <header class="header">
       <img class="logo" src="./assets/logo.png">
-      <h1 class="title"><a href="https://github.com/xuliangzhan/vxe-table">VXE-Table</a></h1>
+      <h1 class="title"><a href="https://github.com/xuliangzhan/vxe-table">vxe-table</a></h1>
       <span class="desc">一个性能更优、功能更强的 Vue 表格组件</span>
     </header>
     <div class="container">
@@ -24,6 +24,9 @@
         <router-view/>
       </div>
     </div>
+    <footer>
+      <p class="copyright">github <a class="link" href="https://github.com/xuliangzhan/vxe-table">vxe-table</a> Copyright (c) 2019-present, Xu Liangzhan</p>
+    </footer>
   </div>
 </template>
 
@@ -268,7 +271,7 @@ export default {
               }
             },
             {
-              lable: '1 万条 + 自动换行',
+              lable: '1 万条',
               locat: {
                 name: 'TableScrollSize',
                 params: {
@@ -492,7 +495,6 @@ export default {
 #app {
   width: 1200px;
   margin: 0 auto;
-  padding-bottom: 20px;
   font-family: Helvetica Neue,Helvetica,PingFang SC,Hiragino Sans GB,Microsoft YaHei,\\5FAE\8F6F\96C5\9ED1,Arial,sans-serif;
   * {
     box-sizing: border-box;
@@ -537,11 +539,12 @@ ul {
 }
 .container {
   display: flex;
+  border-bottom: 1px solid #dcdfe6;
   > .aside {
     width: 220px;
     flex-shrink: 0;
     user-select: none;
-    padding-top: 15px;
+    padding: 15px 0 25px 0;
     border-right: 1px solid #dcdfe6;
     overflow: hidden;
     .nav-menu {
@@ -590,7 +593,7 @@ ul {
     position: relative;
     flex-grow: 1;
     overflow: hidden;
-    padding: 15px 0 0 25px;
+    padding: 15px 0 25px 25px;
     .todemo {
       position: absolute;
       top: 10px;
@@ -598,5 +601,10 @@ ul {
       font-size: 16px;
     }
   }
+}
+footer {
+  font-size: 12px;
+  color: #333;
+  text-align: center;
 }
 </style>

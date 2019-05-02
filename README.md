@@ -317,4 +317,4 @@ export default {
 
 ## License
 
-Copyright (c) 2017-present, Xu Liangzhan
+Copyright (c) 2019-present, Xu Liangzhan
