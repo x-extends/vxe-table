@@ -35,7 +35,7 @@ A very powerful Vue table component.
 * [自定义模板](https://jsrun.net/DjXKp)
 * [快捷菜单](https://jsrun.net/VjXKp)
 * [滚动渲染](https://jsrun.net/XRXKp)
-* 展开行
+* [展开行](https://jsrun.net/eRXKp)
 * 树形结构
 * 可编辑
 * 可编辑 - 手动触发
@@ -250,7 +250,7 @@ new Vue({ i18n }).$mount('#app')
 
 | 参数 | 说明 | 类型 | 可选值 | 默认值 |
 |------|------|-----|------|-----|
-| type | 列的类型 | String | index / selection / radio | — |
+| type | 列的类型 | String | index / selection / radio / expand | — |
 | prop | 列属性 | String | — | — |
 | label | 列标题 | String | — | — |
 | width | 列宽度 | String | — | — |

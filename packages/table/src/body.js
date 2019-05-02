@@ -64,6 +64,65 @@ function renderColumn (h, _vm, $table, fixedType, row, rowIndex, column, columnI
   ])
 }
 
+function renderRows (h, _vm, $table, fixedType) {
+  let { highlightHoverRow, rowKey, rowClassName, tableData, tableColumn, selectRow, hoverRow, overflowX, columnStore, expandeds } = $table
+  let { leftList, rightList } = columnStore
+  let rows = []
+  tableData.forEach((row, rowIndex) => {
+    // 优化事件绑定
+    let on = null
+    if (highlightHoverRow && (leftList.length || rightList.length) && overflowX) {
+      on = {
+        mouseover (evnt) {
+          if (row !== hoverRow) {
+            $table.triggerHoverEvent(evnt, { row, rowIndex })
+          }
+        }
+      }
+    }
+    rows.push(
+      h('tr', {
+        class: ['vxe-body--row', {
+          'row--selected': row === selectRow,
+          'row--hover': row === hoverRow
+        }, rowClassName ? XEUtils.isFunction(rowClassName) ? rowClassName({ row, rowIndex }) : rowClassName : ''],
+        key: rowKey ? XEUtils.get(row, rowKey) : rowIndex,
+        on
+      }, tableColumn.map((column, columnIndex) => {
+        return column.visible ? renderColumn(h, _vm, $table, fixedType, row, rowIndex, column, columnIndex) : null
+      }))
+    )
+    // 如果行被展开了
+    if (expandeds.indexOf(row) > -1) {
+      let columnIndex = XEUtils.findIndexOf(tableColumn, column => column.type === 'expand')
+      let column = tableColumn[columnIndex]
+      if (column) {
+        rows.push(
+          h('tr', {
+            class: ['vxe-body--expanded-row'],
+            key: `expand_${rowIndex}`,
+            on
+          }, [
+            h('td', {
+              class: ['vxe-body--expanded-column'],
+              attrs: {
+                colspan: tableColumn.length
+              }
+            }, [
+              h('div', {
+                class: ['vxe-body--expanded-cell']
+              }, [
+                column.renderData(h, { $table, row, rowIndex, column, columnIndex, fixed: fixedType })
+              ])
+            ])
+          ])
+        )
+      }
+    }
+  })
+  return rows
+}
+
 /**
  * 同步滚动条
  * scroll 方式：可以使固定列与内容保持一致的滚动效果，处理相对麻烦
@@ -111,8 +170,7 @@ export default {
   },
   render (h) {
     let { _e, $parent: $table, fixedType } = this
-    let { highlightHoverRow, rowKey, maxHeight, height, rowClassName, tableData, tableColumn, headerHeight, showFooter, footerHeight, tableHeight, tableWidth, scrollStore, scrollLoad, scrollXHeight, selectRow, hoverRow, overflowX, columnStore, optimizeConfig } = $table
-    let { leftList, rightList } = columnStore
+    let { maxHeight, height, tableColumn, headerHeight, showFooter, footerHeight, tableHeight, tableWidth, scrollStore, scrollLoad, scrollXHeight, optimizeConfig } = $table
     let { overflow } = optimizeConfig
     let customHeight = XEUtils.toNumber(height)
     let style = {}
@@ -165,29 +223,7 @@ export default {
         /**
          * 内容
          */
-        h('tbody', tableData.map((row, rowIndex) => {
-          // 优化事件绑定
-          let on = null
-          if (highlightHoverRow && (leftList.length || rightList.length) && overflowX) {
-            on = {
-              mouseover (evnt) {
-                if (row !== hoverRow) {
-                  $table.triggerHoverEvent(evnt, { row, rowIndex })
-                }
-              }
-            }
-          }
-          return h('tr', {
-            class: ['vxe-body--row', {
-              'row--selected': row === selectRow,
-              'row--hover': row === hoverRow
-            }, rowClassName ? XEUtils.isFunction(rowClassName) ? rowClassName({ row, rowIndex }) : rowClassName : ''],
-            key: rowKey ? XEUtils.get(row, rowKey) : rowIndex,
-            on
-          }, tableColumn.map((column, columnIndex) => {
-            return column.visible ? renderColumn(h, this, $table, fixedType, row, rowIndex, column, columnIndex) : _e()
-          }))
-        }))
+        h('tbody', renderRows(h, this, $table, fixedType))
       ]),
       scrollLoad ? h('div', {
         class: ['vxe-body--bottom-space'],

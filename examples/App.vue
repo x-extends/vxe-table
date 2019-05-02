@@ -241,9 +241,9 @@ export default {
             },
             {
               lable: '展开行',
-              disabled: true,
+              demoUrl: 'https://jsrun.net/eRXKp',
               locat: {
-                name: 'TableInstall'
+                name: 'TableExpand'
               }
             },
             {

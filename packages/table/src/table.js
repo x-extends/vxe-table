@@ -178,6 +178,8 @@ export default {
       selection: [],
       // 单选属性
       selectRow: null,
+      // 已展开的行
+      expandeds: [],
       // 当前 hover 行
       hoverRow: null,
       // 当前选中的筛选列
@@ -562,7 +564,7 @@ export default {
         let rest = XEUtils.sortBy(tableData, column.property)
         tableData = column.order === 'desc' ? rest.reverse() : rest
       }
-      return scrollLoad ? tableData.slice(scrollStore.startIndex, scrollStore.startIndex + scrollStore.renderSize) : tableData
+      return scrollLoad ? tableData.slice(scrollStore.startIndex, scrollStore.startIndex + scrollStore.renderSize) : tableData.slice(0)
     },
     /**
      * 动态列处理
@@ -1180,6 +1182,19 @@ export default {
         item.checked = false
       })
       this.closeFilter()
+    },
+    /**
+     * 展开行事件
+     */
+    triggerExpandRowEvent (evnt, { row }) {
+      let { expandeds } = this
+      let index = XEUtils.findIndexOf(expandeds, item => item === row)
+      if (index > -1) {
+        expandeds.splice(index, 1)
+      } else {
+        expandeds.push(row)
+      }
+      this.$nextTick(() => this.computeWidth())
     },
     /**
      * 是否启用了滚动渲染

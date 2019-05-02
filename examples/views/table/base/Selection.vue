@@ -13,7 +13,7 @@
       <vxe-table-column prop="address" label="Address"></vxe-table-column>
     </vxe-table>
 
-    <p>使用 prop 绑定方式，支持设置默认值</p>
+    <p>使用 prop 绑定方式</p>
 
     <vxe-table
       border

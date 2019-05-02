@@ -66,6 +66,10 @@ export default {
         opts.renderHeader = this.renderSelectionHeader
         opts.renderCell = this.prop ? this.renderSelectionCellByProp : this.renderSelectionCell
         break
+      case 'expand':
+        opts.renderCell = this.renderExpandCell
+        opts.renderData = this.renderExpandData
+        break
       default:
         if (this.filters && this.filters.length && this.sortable) {
           opts.renderHeader = this.renderSortAndFilterHeader
@@ -277,10 +281,43 @@ export default {
     },
 
     /**
+     * 展开行
+     */
+    renderExpandCell (h, params) {
+      let { $table } = this
+      return [
+        h('span', {
+          class: ['vxe-table--expanded', {
+            'expand--active': $table.expandeds.indexOf(params.row) > -1
+          }],
+          on: {
+            click (evnt) {
+              $table.triggerExpandRowEvent(evnt, params)
+            }
+          }
+        }, [
+          h('i', {
+            class: ['vxe-table--expand-icon']
+          })
+        ])
+      ]
+    },
+    renderExpandData (h, params) {
+      let { $scopedSlots } = this
+      if ($scopedSlots && $scopedSlots.default) {
+        return $scopedSlots.default(params)
+      }
+      return []
+    },
+
+    /**
      * 排序和筛选
      */
     renderSortAndFilterHeader (h, params) {
-      return [h('span', params.column.label)].concat(this.renderSortIcon(h, params)).concat(this.renderFilterIcon(h, params))
+      return [
+        h('span', params.column.label)
+      ].concat(this.renderSortIcon(h, params))
+        .concat(this.renderFilterIcon(h, params))
     },
 
     /**

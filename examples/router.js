@@ -30,6 +30,7 @@ import TableFooter from './views/table/advanced/Footer.vue'
 import TableCustom from './views/table/advanced/Custom.vue'
 import TableExport from './views/table/advanced/Export.vue'
 import TableMenu from './views/table/advanced/Menu.vue'
+import TableExpand from './views/table/advanced/Expand.vue'
 
 import TableScroll from './views/table/scroll/Scroll.vue'
 import TableScrollSize from './views/table/scroll/ScrollSize.vue'
@@ -188,6 +189,11 @@ export default new Router({
       path: '/table/advanced/menu',
       name: 'TableMenu',
       component: TableMenu
+    },
+    {
+      path: '/table/advanced/expand',
+      name: 'TableExpand',
+      component: TableExpand
     },
     {
       path: '/table/scroll/scroll',

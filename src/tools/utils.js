@@ -20,7 +20,7 @@ const UtilTools = {
     })
     return result
   },
-  getColumnConfig (_vm, { renderHeader, renderCell } = {}) {
+  getColumnConfig (_vm, { renderHeader, renderCell, renderData } = {}) {
     return {
       // 基本属性
       id: `col--${_vm.$table.id}_${++columnId}`,
@@ -53,7 +53,8 @@ const UtilTools = {
       resizeWidth: 0,
       renderLeft: 0,
       renderHeader: renderHeader || _vm.renderHeader,
-      renderCell: renderCell || _vm.renderCell
+      renderCell: renderCell || _vm.renderCell,
+      renderData: renderData
     }
   },
   // 组装列配置
