@@ -55,17 +55,20 @@ export default {
         }
       }
     },
-    rowspanMethod ({ row, rowIndex, column, columnIndex }) {
-      if (columnIndex === 1) {
-        if (rowIndex % 2 === 0) {
-          return {
-            rowspan: 2,
-            colspan: 1
-          }
-        } else {
+    rowspanMethod ({ row, rowIndex, column, columnIndex, data }) {
+      let prevRow = data[rowIndex - 1]
+      let nextRow = data[rowIndex + 1]
+      if (column.property === 'key') {
+        if (prevRow && prevRow.key === row.key) {
           return {
             rowspan: 0,
             colspan: 0
+          }
+        }
+        if (nextRow && nextRow.key === row.key) {
+          return {
+            rowspan: 2,
+            colspan: 1
           }
         }
       }

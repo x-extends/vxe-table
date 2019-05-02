@@ -386,20 +386,6 @@ export default {
               locat: {
                 name: 'TableInstall'
               }
-            },
-            {
-              lable: '渲染 element-ui 组件',
-              disabled: true,
-              locat: {
-                name: 'TableInstall'
-              }
-            },
-            {
-              lable: '渲染 iview 组件',
-              disabled: true,
-              locat: {
-                name: 'TableInstall'
-              }
             }
           ]
         },
@@ -420,36 +406,29 @@ export default {
               locat: {
                 name: 'TableInstall'
               }
-            },
-            {
-              lable: '行高拖动',
-              disabled: true,
-              locat: {
-                name: 'TableInstall'
-              }
             }
           ]
         },
         {
-          lable: '与第三方库集成',
+          lable: '其他组件库',
           expand: false,
           children: [
             {
-              lable: '集成 element-ui',
+              lable: '使用 element-ui',
               disabled: true,
               locat: {
                 name: 'TableInstall'
               }
             },
             {
-              lable: '集成 iview',
+              lable: '使用 iview',
               disabled: true,
               locat: {
                 name: 'TableInstall'
               }
             },
             {
-              lable: '集成 sortablejs 实现行排序',
+              lable: '使用 sortablejs 实现行排序',
               disabled: true,
               locat: {
                 name: 'TableInstall'

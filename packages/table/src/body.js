@@ -5,7 +5,7 @@ import DomTools from '../../../src/tools/dom'
  * 渲染列
  */
 function renderColumn (h, _vm, $table, fixedType, row, rowIndex, column, columnIndex) {
-  let { $listeners: tableListeners, border, highlightCurrentRow, cellClassName, spanMethod, optimizeConfig } = $table
+  let { $listeners: tableListeners, tableData, border, highlightCurrentRow, cellClassName, spanMethod, optimizeConfig } = $table
   let { align, ellipsis, showTitle, showTooltip, renderWidth, columnKey } = column
   let { overflow } = optimizeConfig
   let fixedHiddenColumn = fixedType && column.fixed !== fixedType
@@ -17,23 +17,23 @@ function renderColumn (h, _vm, $table, fixedType, row, rowIndex, column, columnI
   // 优化事件绑定
   if (isShowTooltip) {
     tdOns.mouseover = evnt => {
-      $table.triggerTooltipEvent(evnt, { row, rowIndex, column, columnIndex })
+      $table.triggerTooltipEvent(evnt, { row, rowIndex, column, columnIndex, data: tableData })
     }
     tdOns.mouseout = $table.clostTooltip
   }
   if (highlightCurrentRow || tableListeners['cell-click']) {
     tdOns.click = evnt => {
-      $table.triggerCellClickEvent(evnt, { row, rowIndex, column, columnIndex, cell: evnt.currentTarget })
+      $table.triggerCellClickEvent(evnt, { row, rowIndex, column, columnIndex, data: tableData, cell: evnt.currentTarget })
     }
   }
   if (tableListeners['cell-dblclick']) {
     tdOns.dblclick = evnt => {
-      $table.triggerCellDBLClickEvent(evnt, { row, rowIndex, column, columnIndex, cell: evnt.currentTarget })
+      $table.triggerCellDBLClickEvent(evnt, { row, rowIndex, column, columnIndex, data: tableData, cell: evnt.currentTarget })
     }
   }
   // 合并行或列
   if (spanMethod) {
-    let { rowspan = 1, colspan = 1 } = spanMethod({ row, rowIndex, column, columnIndex }) || {}
+    let { rowspan = 1, colspan = 1 } = spanMethod({ row, rowIndex, column, columnIndex, data: tableData }) || {}
     if (!rowspan || !colspan) {
       return null
     }
@@ -43,7 +43,7 @@ function renderColumn (h, _vm, $table, fixedType, row, rowIndex, column, columnI
     class: ['vxe-body--column', column.id, {
       [`col--${align}`]: align,
       'fixed--hidden': fixedHiddenColumn
-    }, cellClassName ? XEUtils.isFunction(cellClassName) ? cellClassName({ row, rowIndex, column, columnIndex }) : cellClassName : ''],
+    }, cellClassName ? XEUtils.isFunction(cellClassName) ? cellClassName({ row, rowIndex, column, columnIndex, data: tableData }) : cellClassName : ''],
     key: columnKey || columnIndex,
     attrs,
     on: tdOns
@@ -60,7 +60,7 @@ function renderColumn (h, _vm, $table, fixedType, row, rowIndex, column, columnI
       style: {
         width: isShowTitle || isShowTooltip || isEllipsis ? `${border ? renderWidth - 1 : renderWidth}px` : null
       }
-    }, column.renderCell(h, { $table, row, rowIndex, column, columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn }))
+    }, column.renderCell(h, { $table, row, rowIndex, column, columnIndex, data: tableData, fixed: fixedType, isHidden: fixedHiddenColumn }))
   ])
 }
 
@@ -85,7 +85,7 @@ function renderRows (h, _vm, $table, fixedType) {
         class: ['vxe-body--row', {
           'row--selected': row === selectRow,
           'row--hover': row === hoverRow
-        }, rowClassName ? XEUtils.isFunction(rowClassName) ? rowClassName({ row, rowIndex }) : rowClassName : ''],
+        }, rowClassName ? XEUtils.isFunction(rowClassName) ? rowClassName({ row, rowIndex, data: tableData }) : rowClassName : ''],
         key: rowKey ? XEUtils.get(row, rowKey) : rowIndex,
         on
       }, tableColumn.map((column, columnIndex) => {
@@ -112,7 +112,7 @@ function renderRows (h, _vm, $table, fixedType) {
               h('div', {
                 class: ['vxe-body--expanded-cell']
               }, [
-                column.renderData(h, { $table, row, rowIndex, column, columnIndex, fixed: fixedType })
+                column.renderData(h, { $table, row, rowIndex, column, columnIndex, data: tableData, fixed: fixedType })
               ])
             ])
           ])

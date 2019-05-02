@@ -170,15 +170,15 @@ new Vue({ i18n }).$mount('#app')
 | show-header | 是否显示表头 | Boolean | — | true |
 | highlight-current-row | 是否要高亮当前选中行 | Boolean | — | false |
 | highlight-hover-row | 鼠标移到行是否要高亮显示 | Boolean | — | false |
-| row-class-name | 给行附加 className，也可以是函数 Function({row, rowIndex}) | String/Function | — | — |
-| cell-class-name | 给单元格附加 className，也可以是函数 Function({row, rowIndex, column, columnIndex}) | String/Function | — | — |
+| row-class-name | 给行附加 className，也可以是函数 Function({row, rowIndex, data}) | String/Function | — | — |
+| cell-class-name | 给单元格附加 className，也可以是函数 Function({row, rowIndex, column, columnIndex, data}) | String/Function | — | — |
 | header-row-class-name | 给表头的行附加 className，也可以是函数 Function({rowIndex}) | String/Function | — | — |
 | header-cell-class-name | 给表头的单元格附加 className，也可以是函数 Function({rowIndex, column, columnIndex}) | String/Function | — | — |
 | footer-row-class-name | 给表尾的行附加 className，也可以是函数 Function({rowIndex}) | String/Function | — | — |
 | footer-cell-class-name | 给表尾的单元格附加 className，也可以是函数 Function({rowIndex, column, columnIndex}) | String/Function | — | — |
 | show-footer | 是否显示表尾合计 | Boolean | — | — |
 | footer-method | 表尾合计的计算方法 Function({columns, data}) | Function | — | — |
-| span-method | 合并行或列，该函数 Function({row, rowIndex, column, columnIndex}) 返回计算后的值 | Object | — | { rowspan: 1, colspan: 1} |
+| span-method | 合并行或列，该函数 Function({row, rowIndex, column, columnIndex, data}) 返回计算后的值 | Object | — | { rowspan: 1, colspan: 1} |
 | context-menu | 开启快捷菜单 | Object | — | [{header, body, footer}](#context-menu-快捷菜单配置项说明配合-context-menu-link-事件使用) |
 | edit-config | 开启编辑模式 | Object | — | [options](#edit-config-配置项说明) |
 | edit-rules | 配置数据校验的规则 | Object | — | [options](#edit-rules-校验规则配置项说明) |
@@ -227,8 +227,8 @@ new Vue({ i18n }).$mount('#app')
 |------|------|-----|
 | select-all | 只对 type=selection 有效，当手动勾选全选时触发的事件 | {selection,checked},event |
 | select-change | 只对 type=selection/radio 有效，当手动勾选时触发的事件 | {selection,checked,row,column},event |
-| cell-click | 当某个单元格被点击时会触发该事件 | {row,rowIndex,column,columnIndex,cell},event |
-| cell-dblclick | 当某个单元格被双击时会触发该事件 | {row,rowIndex,column,columnIndex,cell},event |
+| cell-click | 当某个单元格被点击时会触发该事件 | {row,rowIndex,column,columnIndex,data,cell},event |
+| cell-dblclick | 当某个单元格被双击时会触发该事件 | {row,rowIndex,column,columnIndex,data,cell},event |
 | context-menu-link | 当点击上下文菜单后触发 | menu,event |
 
 #### Table Methods
