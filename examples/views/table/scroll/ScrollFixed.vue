@@ -3,11 +3,11 @@
     <p>加载 {{ $route.params.size }} 条，左右固定列</p>
 
     <vxe-table
+      ref="vTable"
       border
       resizable
       height="600"
-      :loading="loading"
-      :data.sync="tableData">
+      :loading="loading">
       <vxe-table-column type="index" width="100" fixed="left"></vxe-table-column>
       <vxe-table-column prop="name" label="Name" sortable width="200"></vxe-table-column>
       <vxe-table-column prop="age" label="Age" width="200"></vxe-table-column>
@@ -37,19 +37,20 @@
 export default {
   data () {
     return {
-      loading: false,
-      tableData: []
+      loading: false
     }
   },
   created () {
     this.loading = true
-    this.tableData = []
-    setTimeout(() => {
-      let size = this.$route.params.size
-      let list = window.CACHE_DATA_LIST.slice(0, size)
-      this.tableData = list
-      this.loading = false
-    }, 500)
+    this.$nextTick(() => {
+      this.$refs.vTable.reload([])
+      setTimeout(() => {
+        let size = this.$route.params.size
+        let list = window.CACHE_DATA_LIST.slice(0, size)
+        this.$refs.vTable.reload(list)
+        this.loading = false
+      }, 500)
+    })
   }
 }
 </script>

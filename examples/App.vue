@@ -493,6 +493,7 @@ export default {
   width: 1200px;
   margin: 0 auto;
   padding-bottom: 20px;
+  font-family: Helvetica Neue,Helvetica,PingFang SC,Hiragino Sans GB,Microsoft YaHei,\\5FAE\8F6F\96C5\9ED1,Arial,sans-serif;
   * {
     box-sizing: border-box;
   }

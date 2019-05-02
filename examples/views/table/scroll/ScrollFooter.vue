@@ -3,6 +3,7 @@
     <p>加载 {{ $route.params.size }} 条，左右固定列，表尾合计</p>
 
     <vxe-table
+      ref="vTable"
       border
       resizable
       show-footer
@@ -10,7 +11,6 @@
       :footer-method="footerMethod"
       :footer-cell-class-name="footerCellClassName"
       :loading="loading"
-      :data.sync="tableData"
       :optimized="{overflow: 'tooltip'}">
       <vxe-table-column type="index" width="100" fixed="left"></vxe-table-column>
       <vxe-table-column prop="name" label="Name" sortable width="200"></vxe-table-column>
@@ -43,19 +43,20 @@ import XEUtils from 'xe-utils'
 export default {
   data () {
     return {
-      loading: false,
-      tableData: []
+      loading: false
     }
   },
   created () {
     this.loading = true
-    this.tableData = []
-    setTimeout(() => {
-      let size = this.$route.params.size
-      let list = window.CACHE_DATA_LIST.slice(0, size)
-      this.tableData = list
-      this.loading = false
-    }, 500)
+    this.$nextTick(() => {
+      this.$refs.vTable.reload([])
+      setTimeout(() => {
+        let size = this.$route.params.size
+        let list = window.CACHE_DATA_LIST.slice(0, size)
+        this.$refs.vTable.reload(list)
+        this.loading = false
+      }, 500)
+    })
   },
   methods: {
     footerCellClassName ({ rowIndex, column, columnIndex }) {

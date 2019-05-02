@@ -148,8 +148,6 @@ export default {
       tableColumn: [],
       // 渲染中的数据
       tableData: [],
-      // 完整数据
-      tableFullData: [],
       // 表格宽度
       tableWidth: 0,
       // 表格高度
@@ -524,7 +522,14 @@ export default {
       return rest
     },
     /**
-     * 获取全量的表格数据
+     * 获取表格所有数据
+     */
+    getRecords (rowIndex) {
+      let list = this.tableFullData
+      return arguments.length ? list[rowIndex] : list
+    },
+    /**
+     * 获取处理后的表格数据
      * 如果存在筛选条件，继续处理
      * 如果存在排序，继续处理
      */
@@ -975,7 +980,8 @@ export default {
     triggerTooltipEvent (evnt, { row, column }) {
       let cell = evnt.currentTarget
       let wrapperElem = cell.children[0]
-      if (wrapperElem.scrollWidth > wrapperElem.clientWidth) {
+      let content = XEUtils.get(row, column.property)
+      if (content && wrapperElem.scrollWidth > wrapperElem.clientWidth) {
         let { tooltipStore, $refs } = this
         if (tooltipStore.column !== column || tooltipStore.row !== row || !tooltipStore.visible) {
           let { top, left } = DomTools.getOffsetPos(cell)
@@ -1209,7 +1215,7 @@ export default {
           })
         }
       }
-    }, DomTools.browse.msie ? 100 : 20, { leading: false, trailing: true }),
+    }, DomTools.browse.msie ? 40 : 20, { leading: false, trailing: true }),
     // 计算滚动渲染相关数据
     computeScrollLoad () {
       let { scrollStore } = this

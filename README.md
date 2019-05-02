@@ -215,6 +215,7 @@ new Vue({ i18n }).$mount('#app')
 | 方法名 | 描述 | 参数 |
 |------|------|-----|
 | reload | 初始化数据 | data |
+| getRecords | 获取表格数据 | rowIndex? |
 | clearSelectRow | 用于单选表格，清空用户的选择 | — |
 | setCurrentRow | 用于单选表格，设置某一行为选中状态，如果第二个参数为空，则会取消目前高亮行的选中状态 | row? |
 | clearSelection | 用于多选表格，清空用户的选择 | — |
