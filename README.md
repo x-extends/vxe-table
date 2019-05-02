@@ -179,14 +179,16 @@ new Vue({ i18n }).$mount('#app')
 | show-footer | 是否显示表尾合计 | Boolean | — | — |
 | footer-method | 表尾合计的计算方法 Function({columns, data}) | Function | — | — |
 | span-method | 合并行或列，该函数 Function({row, rowIndex, column, columnIndex}) 返回计算后的值 | Object | — | { rowspan: 1, colspan: 1} |
-| context-menu | 快捷菜单配置 | Object | — | [{header, body, footer}](#context-menu-快捷菜单配置项说明配合-context-menu-link-事件使用) |
+| context-menu | 开启快捷菜单 | Object | — | [{header, body, footer}](#context-menu-快捷菜单配置项说明配合-context-menu-link-事件使用) |
+| edit-config | 开启编辑模式 | Object | — | [options](#edit-config-配置项说明) |
+| edit-rules | 配置数据校验的规则 | Object | — | [options](#edit-rules-校验规则配置项说明) |
 | row-key | 行数据的 Key | String | — | — |
 | auto-width | 自动计算列宽（如果关闭，需要手动调用 computeWidth 方法） | Boolean | — | true |
 | optimized | 优化的配置项 | Object/Boolean | — | [options](#optimized-优化配置项说明) |
 
 ##### context-menu 快捷菜单配置项说明（配合 context-menu-link 事件使用）
 
-| 属性 | 描述 | 类型 | 可选值 | 参数 |
+| 属性 | 描述 | 类型 | 可选值 | 默认值 |
 |------|------|-----|-----|-----|
 | disabled | 是否禁用表格头部右键 | Boolean | — | — |
 | options | 表格头部菜单配置 | Array | — | { code, name, prefixIcon, suffixIcon, disabled } |
@@ -194,11 +196,30 @@ new Vue({ i18n }).$mount('#app')
 
 ##### optimized 优化配置项说明
 
-| 属性 | 描述 | 类型 | 可选值 | 参数 |
+| 属性 | 描述 | 类型 | 可选值 | 默认值 |
 |------|------|-----|-----|-----|
 | animat | 表格动画效果开关（关闭后视觉效果更快） | Boolean | — | true |
 | overflow | 设置所有行不允许换行（设置后对于固定列能大幅提升性能） | String | ellipsis / title / tooltip | — |
 | scroll | 滚动渲染配置 | Object | — | {gt: 500, size: 100} |
+
+##### edit-config 配置项说明
+
+| 属性 | 描述 | 类型 | 可选值 | 默认值 |
+|------|------|-----|-----|-----|
+| trigger | 触发方式 | String | manual（手动触发方式，只能用于 mode=row） / click（点击触发编辑） / dblclick（双击触发编辑） | click |
+| mode | 编辑模式 | String | cell（单元格编辑模式） / row（行编辑模式） | cell |
+
+##### edit-rules 校验规则配置项说明
+
+| 属性 | 描述 | 类型 | 可选值 | 默认值 |
+|------|------|-----|-----|-----|
+| required | 是否必填 | Boolean | — | — |
+| min  | 校验值最小长度（如果 type=number 则比较值大小） | Number | — | — |
+| max  | 校验值最大长度（如果 type=number 则比较值大小） | Number | — | — |
+| type | 类型校验 | String | number / string | string |
+| pattern | 正则校验 | RegExp | — | — |
+| validator  | 自定义校验方法 | Function(rule, value, callback) | — | — |
+| trigger  | 触发校验方式 | String | blur / change | change |
 
 #### Table Events
 
@@ -250,7 +271,7 @@ new Vue({ i18n }).$mount('#app')
 
 | 参数 | 说明 | 类型 | 可选值 | 默认值 |
 |------|------|-----|------|-----|
-| type | 列的类型 | String | index / selection / radio / expand | — |
+| type | 列的类型 | String | index / selection / radio / expand / edit | — |
 | prop | 列属性 | String | — | — |
 | label | 列标题 | String | — | — |
 | width | 列宽度 | String | — | — |
@@ -268,7 +289,7 @@ new Vue({ i18n }).$mount('#app')
 | filters | 配置筛选条件数组 | Array | — | — |
 | filter-multiple | 只对 filters 有效，筛选是否允许多选 | Boolean | — | true |
 | filter-method | 只对 filters 有效，自定义筛选方法 Function({value, row, column}) | Function | — | — |
-| column-key | 列的 key | [String, Number] | — | — |
+| column-key | 列的 key | String/Number | — | — |
 
 #### Table-column Scoped Slot
 
@@ -276,6 +297,7 @@ new Vue({ i18n }).$mount('#app')
 |------|------|
 | — | 自定义显示内容，参数为 { row, rowIndex, column, columnIndex, fixed, isHidden } |
 | header | 自定义表头的内容，参数为 { column, columnIndex, fixed, isHidden } |
+| edit | 自定义可编辑组件模板，参数为 { column, columnIndex, fixed, isHidden } |
 
 ## Example
 

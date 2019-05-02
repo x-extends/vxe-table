@@ -19,7 +19,7 @@ module.exports = {
       entry: 'examples/main.js',
       template: 'public/index.html',
       filename: 'index.html',
-      title: 'vxe-table'
+      title: 'vxe-table 表格'
     }
   },
   chainWebpack (config) {

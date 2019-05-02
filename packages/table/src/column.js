@@ -41,7 +41,9 @@ export default {
     // 自定义筛选方法
     filterMethod: Function,
     // 列的 key
-    columnKey: [String, Number]
+    columnKey: [String, Number],
+    // 可编辑列
+    edit: [Object, Boolean]
   },
   inject: [
     '$table'
@@ -52,6 +54,7 @@ export default {
     }
   },
   created () {
+    let { $table } = this
     let opts = {}
     switch (this.type) {
       case 'index':
@@ -69,6 +72,10 @@ export default {
       case 'expand':
         opts.renderCell = this.renderExpandCell
         opts.renderData = this.renderExpandData
+        break
+      case 'edit':
+        opts.renderHeader = this.renderEditHeader
+        opts.renderCell = $table.editConfig && $table.editConfig.mode === 'cell' ? this.renderCellEdit : this.renderRowEdit
         break
       default:
         if (this.filters && this.filters.length && this.sortable) {
@@ -378,6 +385,65 @@ export default {
             }
           })
         ])
+      ]
+    },
+
+    /**
+     * 可编辑
+     */
+    renderEditHeader (h, params) {
+      let { sortable, filters } = this
+      return [
+        h('span', params.column.label)
+      ].concat(sortable ? this.renderSortIcon(h, params) : [])
+        .concat(filters && filters.length ? this.renderFilterIcon(h, params) : [])
+    },
+    // 行格编辑模式
+    renderRowEdit (h, params) {
+      let cellValue
+      let { $table, $scopedSlots, formatter } = this
+      let { editStore } = $table
+      let { actived } = editStore
+      let { row, rowIndex, column, columnIndex } = params
+      if (actived && actived.row === row) {
+        if ($scopedSlots && $scopedSlots.edit) {
+          return $scopedSlots.edit(params)
+        }
+        return h('input')
+      }
+      if ($scopedSlots && $scopedSlots.default) {
+        return $scopedSlots.default(params)
+      }
+      cellValue = XEUtils.get(row, column.property)
+      if (formatter) {
+        cellValue = formatter({ cellValue, row, rowIndex, column, columnIndex })
+      }
+      return [
+        h('span', cellValue)
+      ]
+    },
+    // 单元格编辑模式
+    renderCellEdit (h, params) {
+      let cellValue
+      let { $table, $scopedSlots, formatter } = this
+      let { editStore } = $table
+      let { actived } = editStore
+      let { row, rowIndex, column, columnIndex } = params
+      if (actived && actived.row === row && actived.column === column) {
+        if ($scopedSlots && $scopedSlots.edit) {
+          return $scopedSlots.edit(params)
+        }
+        return h('input')
+      }
+      if ($scopedSlots && $scopedSlots.default) {
+        return $scopedSlots.default(params)
+      }
+      cellValue = XEUtils.get(row, column.property)
+      if (formatter) {
+        cellValue = formatter({ cellValue, row, rowIndex, column, columnIndex })
+      }
+      return [
+        h('span', cellValue)
       ]
     }
   }

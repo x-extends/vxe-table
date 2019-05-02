@@ -116,8 +116,12 @@ export default {
     footerCellClassName: [String, Function],
     // 合并行或列
     spanMethod: Function,
-    // 快捷菜单
+    // 开启快捷菜单
     contextMenu: { type: Object, default: () => GlobalConfig.contextMenu },
+    // 开启编辑模式
+    editConfig: Object,
+    // 配置数据校验的规则
+    editRules: Object,
 
     /** 高级属性 */
     // 行数据的 Key
@@ -231,6 +235,19 @@ export default {
         column: null,
         content: null,
         style: null
+      },
+      // 存放可编辑相关信息
+      editStore: {
+        selected: {
+          row: null,
+          column: null
+        },
+        actived: {
+          row: null,
+          column: null
+        },
+        insertList: [],
+        removeList: []
       }
     }
   },
