@@ -258,8 +258,8 @@ new Vue({ i18n }).$mount('#app')
 | download | 是否马上下载，如果设置为 false 则通过返回结果为内容的 Promise | Boolean | — | true |
 | data | 自定义数据 | Array | — | — |
 | columns | 自定义列 | Array | — | — |
-| columnFilterMethod | 列过滤方法，该函数 Function(column,index) 的返回值用来决定该列是否导出 | Function | — | — |
-| dataFilterMethod | 数据过滤方法，该函数 Function(row,index) 的返回值用来决定该数据是否导出 | Function | — | — |
+| columnFilterMethod | 列过滤方法，该函数 Function(column,columnIndex) 的返回值用来决定该列是否导出 | Function | — | — |
+| dataFilterMethod | 数据过滤方法，该函数 Function(row,rowIndex) 的返回值用来决定该数据是否导出 | Function | — | — |
 
 ### Table-column
 
