@@ -10,7 +10,7 @@
       <vxe-table-column prop="name" label="Name"></vxe-table-column>
       <vxe-table-column prop="sex" label="Sex"></vxe-table-column>
       <vxe-table-column prop="date" label="Date"></vxe-table-column>
-      <vxe-table-column prop="address" label="Address"></vxe-table-column>
+      <vxe-table-column prop="address" label="Address" show-overflow-tooltip></vxe-table-column>
     </vxe-table>
 
     <p>当纵向内容过多时，出现横向滚动条</p>
@@ -23,7 +23,7 @@
       <vxe-table-column prop="name" label="Name"></vxe-table-column>
       <vxe-table-column prop="sex" label="Sex"></vxe-table-column>
       <vxe-table-column prop="date" label="Date"></vxe-table-column>
-      <vxe-table-column prop="address" label="Address"></vxe-table-column>
+      <vxe-table-column prop="address" label="Address" show-overflow-tooltip></vxe-table-column>
     </vxe-table>
   </div>
 </template>

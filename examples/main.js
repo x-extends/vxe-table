@@ -33,7 +33,7 @@ function mockData () {
       age: index % 4 === 0 ? 30 : index % 3 === 0 ? 28 : index % 2 === 0 ? 26 : 24,
       region: index % 4 === 0 ? [19, 199, 1773] : index % 3 === 0 ? [9, 73, 719] : [1, 1, 5],
       rate: index % 4 === 0 ? 4 : index % 3 === 0 ? 3 : index % 2 === 0 ? 2 : 1,
-      address: `地址 地址地址 地址地址地址${index}`,
+      address: `地址 地址地址 地址地址 址地址址地址 址地址 址地址址地址址地址 地址${index}`,
       updateTime: currTime,
       createTime: currTime
     })

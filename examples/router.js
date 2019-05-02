@@ -33,6 +33,8 @@ import TableMenu from './views/table/advanced/Menu.vue'
 
 import TableScroll from './views/table/scroll/Scroll.vue'
 import TableScrollSize from './views/table/scroll/ScrollSize.vue'
+import TableScrollFixed from './views/table/scroll/ScrollFixed.vue'
+import TableScrollFooter from './views/table/scroll/ScrollFooter.vue'
 
 Vue.use(Router)
 
@@ -40,6 +42,12 @@ export default new Router({
   mode: 'hash',
   base: process.env.BASE_URL,
   routes: [
+    {
+      path: '*',
+      redirect: {
+        name: 'TableInstall'
+      }
+    },
     {
       path: '/',
       redirect: {
@@ -190,6 +198,16 @@ export default new Router({
       path: '/table/scroll/scrollSize/:size',
       name: 'TableScrollSize',
       component: TableScrollSize
+    },
+    {
+      path: '/table/scroll/scrollFixed/:size',
+      name: 'TableScrollFixed',
+      component: TableScrollFixed
+    },
+    {
+      path: '/table/scroll/scrollFooter/:size',
+      name: 'TableScrollFooter',
+      component: TableScrollFooter
     }
   ]
 })

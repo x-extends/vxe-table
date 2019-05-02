@@ -1,12 +1,15 @@
 <template>
   <div>
-    <p>右键快捷菜单</p>
+    <p>右键快捷菜单，支持表头菜单、内容菜单、表尾菜单</p>
+    <p>配置项 {header, body, footer}</p>
 
     <vxe-table
       border
+      show-footer
       highlight-hover-row
+      :footer-method="footerMethod"
       :data.sync="tableData"
-      :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}}"
+      :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}, footer: {options: footerMenus}}"
       @context-menu-link="contextMenuLinkEvent">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column prop="name" label="Name" sortable></vxe-table-column>
@@ -18,6 +21,8 @@
 </template>
 
 <script>
+import XEUtils from 'xe-utils'
+
 export default {
   data () {
     return {
@@ -47,9 +52,49 @@ export default {
             name: '删除'
           },
           {
+            code: 'filter',
+            name: '筛选',
+            children: [
+              {
+                code: 'clearFilter',
+                name: '清除筛选'
+              },
+              {
+                code: 'filterSelect',
+                name: '按所选单元格的值筛选'
+              }
+            ]
+          },
+          {
+            code: 'sort',
+            name: '排序',
+            children: [
+              {
+                code: 'clearSort',
+                name: '清除排序'
+              },
+              {
+                code: 'sortAsc',
+                name: '升序'
+              },
+              {
+                code: 'sortDesc',
+                name: '倒序'
+              }
+            ]
+          },
+          {
             code: 'print',
             name: '打印',
             disabled: true
+          }
+        ]
+      ],
+      footerMenus: [
+        [
+          {
+            code: 'exportAll',
+            name: '刷新'
           }
         ]
       ]
@@ -62,6 +107,19 @@ export default {
   methods: {
     contextMenuLinkEvent (menu) {
       alert(menu.name)
+    },
+    footerMethod ({ columns, data }) {
+      return [
+        columns.map((column, columnIndex) => {
+          if (columnIndex === 0) {
+            return '平均'
+          }
+          if (['age', 'rate'].includes(column.property)) {
+            return XEUtils.mean(data, column.property)
+          }
+          return '-'
+        })
+      ]
     }
   }
 }

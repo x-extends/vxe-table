@@ -268,7 +268,7 @@ export default {
               }
             },
             {
-              lable: '加载 1 万条数据',
+              lable: '1 万条 + 自动换行',
               locat: {
                 name: 'TableScrollSize',
                 params: {
@@ -277,18 +277,18 @@ export default {
               }
             },
             {
-              lable: '加载 10 万条数据',
+              lable: '10 万条 + 固定列',
               locat: {
-                name: 'TableScrollSize',
+                name: 'TableScrollFixed',
                 params: {
                   size: 100000
                 }
               }
             },
             {
-              lable: '加载 20 万条数据',
+              lable: '20 万条 + 表尾合计',
               locat: {
-                name: 'TableScrollSize',
+                name: 'TableScrollFooter',
                 params: {
                   size: 200000
                 }

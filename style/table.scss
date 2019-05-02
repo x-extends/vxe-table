@@ -442,7 +442,7 @@
   color: $vxe-font-color;
   background-color: #fff;
   border: 1px solid $vxe-table-popup-border-color;
-  box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
+  box-shadow: 0 2px 12px 0 rgba(0,0,0,.2);
   font-size: 13px;
   font-family: $vxe-font-family;
   &.filter--active {
@@ -503,7 +503,7 @@
   font-size: 12px;
   background-color: #FFF;
   border: 1px solid $vxe-table-popup-border-color;
-  box-shadow: 2px 2px 4px -2px rgba(0,0,0,.1);
+  box-shadow: 2px 2px 4px -2px rgba(0,0,0,.2);
   padding: 0 1px;
   user-select: none;
   color: $vxe-font-color;
@@ -542,7 +542,8 @@
     .vxe-ctxmenu--link {
       display: block;
       padding: 0 30px;
-      width: 100px;
+      min-width: 80px;
+      max-width: 120px;
       line-height: 26px;
       .vxe-ctxmenu--link-prefix,
       .vxe-ctxmenu--link-suffix {
@@ -571,6 +572,12 @@
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+      }
+    }
+    .vxe-table--ctxmenu-clild-wrapper {
+      .vxe-ctxmenu--link {
+        max-width: 160px;
+        padding: 0 20px 0 30px;
       }
     }
   }

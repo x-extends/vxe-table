@@ -9,7 +9,7 @@
       <vxe-table-column prop="name" label="Name" sortable></vxe-table-column>
       <vxe-table-column prop="sex" label="Sex"></vxe-table-column>
       <vxe-table-column prop="time" label="Time" :formatter="formatTime"></vxe-table-column>
-      <vxe-table-column prop="address" label="Address"></vxe-table-column>
+      <vxe-table-column prop="address" label="Address" show-overflow-tooltip></vxe-table-column>
     </vxe-table>
   </div>
 </template>

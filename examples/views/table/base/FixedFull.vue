@@ -11,7 +11,7 @@
       <vxe-table-column prop="role" label="Role" width="300"></vxe-table-column>
       <vxe-table-column prop="sex" label="Sex" width="300"></vxe-table-column>
       <vxe-table-column prop="date" label="Date" width="300"></vxe-table-column>
-      <vxe-table-column prop="address" label="Address" fixed="right" width="300"></vxe-table-column>
+      <vxe-table-column prop="address" label="Address" fixed="right" width="300" show-overflow-tooltip></vxe-table-column>
     </vxe-table>
 
     <p>使用 optimized 参数可以使固定列的节点减到最少，并将所有单元格设置为禁止换行</p>
@@ -26,7 +26,7 @@
       <vxe-table-column prop="role" label="Role" width="300"></vxe-table-column>
       <vxe-table-column prop="sex" label="Sex" width="300"></vxe-table-column>
       <vxe-table-column prop="date" label="Date" width="300"></vxe-table-column>
-      <vxe-table-column prop="address" label="Address" fixed="right" width="300"></vxe-table-column>
+      <vxe-table-column prop="address" label="Address" fixed="right" width="300" show-overflow-tooltip></vxe-table-column>
     </vxe-table>
   </div>
 </template>

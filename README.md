@@ -179,7 +179,7 @@ new Vue({ i18n }).$mount('#app')
 | show-footer | 是否显示表尾合计 | Boolean | — | — |
 | footer-method | 表尾合计的计算方法 Function({columns, data}) | Function | — | — |
 | span-method | 合并行或列，该函数 Function({row, rowIndex, column, columnIndex}) 返回计算后的值 | Object | — | { rowspan: 1, colspan: 1} |
-| context-menu | 快捷菜单配置 | Object | — | [{header, body}](#context-menu-快捷菜单配置项说明配合-context-menu-link-事件使用) |
+| context-menu | 快捷菜单配置 | Object | — | [{header, body, footer}](#context-menu-快捷菜单配置项说明配合-context-menu-link-事件使用) |
 | row-key | 行数据的 Key | String | — | — |
 | auto-width | 自动计算列宽（如果关闭，需要手动调用 computeWidth 方法） | Boolean | — | true |
 | optimized | 优化的配置项 | Object/Boolean | — | [options](#optimized-优化配置项说明) |

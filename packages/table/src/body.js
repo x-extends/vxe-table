@@ -49,7 +49,7 @@ function renderColumn (h, $table, fixedType, row, rowIndex, column, columnIndex)
         'c--ellipsis': isEllipsis
       }],
       attrs: {
-        title: showTitle ? XEUtils.get(row, column.property) : null
+        title: isShowTitle ? XEUtils.get(row, column.property) : null
       },
       style: {
         width: isShowTitle || isShowTooltip || isEllipsis ? `${border ? renderWidth - 1 : renderWidth}px` : null

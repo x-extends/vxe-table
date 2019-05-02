@@ -10,7 +10,7 @@
       <vxe-table-column prop="role" label="Role" width="300"></vxe-table-column>
       <vxe-table-column prop="sex" label="Sex" width="300"></vxe-table-column>
       <vxe-table-column prop="date" label="Date" width="300"></vxe-table-column>
-      <vxe-table-column prop="address" label="Address" fixed="right" width="300"></vxe-table-column>
+      <vxe-table-column prop="address" label="Address" fixed="right" width="300" show-overflow-tooltip></vxe-table-column>
     </vxe-table>
 
     <p>如果列宽足够的情况下，固定列不会浮动</p>
@@ -23,7 +23,7 @@
       <vxe-table-column prop="role" label="Role"></vxe-table-column>
       <vxe-table-column prop="sex" label="Sex"></vxe-table-column>
       <vxe-table-column prop="date" label="Date"></vxe-table-column>
-      <vxe-table-column prop="address" label="Address" fixed="right" width="300"></vxe-table-column>
+      <vxe-table-column prop="address" label="Address" fixed="right" width="300" show-overflow-tooltip></vxe-table-column>
     </vxe-table>
   </div>
 </template>

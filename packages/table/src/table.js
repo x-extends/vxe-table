@@ -834,6 +834,12 @@ export default {
           this.openContextMenu(evnt, ctxMenuConfig.body, { })
           return
         }
+        // 右键表尾
+        let footerWrapperNode = this.getEventTargetNode(evnt, this.$el, 'vxe-table--footer-wrapper')
+        if (footerWrapperNode.flag) {
+          this.openContextMenu(evnt, ctxMenuConfig.footer, { })
+          return
+        }
       }
       this.closeContextMenu()
       this.closeFilter()
@@ -1124,7 +1130,7 @@ export default {
           })
         }
       }
-    }, DomTools.browse.msie ? 100 : 40, { leading: false, trailing: true }),
+    }, DomTools.browse.msie ? 100 : 20, { leading: false, trailing: true }),
     // 计算滚动渲染相关数据
     computeScrollLoad () {
       let { scrollStore } = this
