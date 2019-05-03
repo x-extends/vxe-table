@@ -3,7 +3,7 @@
     <header class="header">
       <img class="logo" src="./assets/logo.png">
       <h1 class="title"><a href="https://github.com/xuliangzhan/vxe-table">vxe-table</a></h1>
-      <span class="desc">一个性能更优、功能更强的 Vue 表格组件</span>
+      <span class="desc">一个性能优越、功能更强的 Vue 表格组件</span>
     </header>
     <div class="container">
       <div class="aside">
@@ -250,6 +250,13 @@ export default {
               }
             },
             {
+              lable: '配置的方式',
+              demoUrl: 'https://jsrun.net/5RXKp',
+              locat: {
+                name: 'TableConfig'
+              }
+            },
+            {
               lable: '树形结构',
               disabled: true,
               locat: {
@@ -301,27 +308,25 @@ export default {
         },
         {
           lable: '可编辑表格',
+          value: 'edit',
           expand: false,
           children: [
             {
               lable: '手动触发',
-              disabled: true,
               locat: {
-                name: 'TableInstall'
+                name: 'TableEditManual'
               }
             },
             {
               lable: '点击触发',
-              disabled: true,
               locat: {
-                name: 'TableInstall'
+                name: 'TableEditClick'
               }
             },
             {
               lable: '双击触发',
-              disabled: true,
               locat: {
-                name: 'TableInstall'
+                name: 'TableEditDBLClick'
               }
             },
             {
@@ -353,7 +358,7 @@ export default {
               }
             },
             {
-              lable: '显示状态',
+              lable: '编辑状态',
               disabled: true,
               locat: {
                 name: 'TableInstall'
@@ -391,13 +396,13 @@ export default {
         },
         {
           lable: 'Excel 表格',
+          value: 'excel',
           expand: false,
           children: [
             {
-              lable: '基础',
-              disabled: true,
+              lable: '单元格编辑',
               locat: {
-                name: 'TableInstall'
+                name: 'TableExcelCell'
               }
             },
             {

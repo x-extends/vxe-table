@@ -43,7 +43,7 @@ export default {
     // 列的 key
     columnKey: [String, Number],
     // 可编辑列
-    edit: [Object, Boolean]
+    editRender: [Object, Boolean]
   },
   inject: [
     '$table'
@@ -54,36 +54,57 @@ export default {
     }
   },
   created () {
-    let { $table } = this
+    let {
+      $table,
+      type,
+      prop,
+      sortable,
+      filters,
+      editRender,
+      renderIndexHeader,
+      renderIndexCell,
+      renderRadioHeader,
+      renderRadioCell,
+      renderSelectionHeader,
+      renderSelectionCellByProp,
+      renderSelectionCell,
+      renderExpandCell,
+      renderExpandData,
+      renderEditHeader,
+      renderCellEdit,
+      renderRowEdit,
+      renderSortAndFilterHeader,
+      renderSortHeader,
+      renderFilterHeader
+    } = this
     let opts = {}
-    switch (this.type) {
+    switch (type) {
       case 'index':
-        opts.renderHeader = this.renderIndexHeader
-        opts.renderCell = this.renderIndexCell
+        opts.renderHeader = renderIndexHeader
+        opts.renderCell = renderIndexCell
         break
       case 'radio':
-        opts.renderHeader = this.renderRadioHeader
-        opts.renderCell = this.renderRadioCell
+        opts.renderHeader = renderRadioHeader
+        opts.renderCell = renderRadioCell
         break
       case 'selection':
-        opts.renderHeader = this.renderSelectionHeader
-        opts.renderCell = this.prop ? this.renderSelectionCellByProp : this.renderSelectionCell
+        opts.renderHeader = renderSelectionHeader
+        opts.renderCell = prop ? renderSelectionCellByProp : renderSelectionCell
         break
       case 'expand':
-        opts.renderCell = this.renderExpandCell
-        opts.renderData = this.renderExpandData
-        break
-      case 'edit':
-        opts.renderHeader = this.renderEditHeader
-        opts.renderCell = $table.editConfig && $table.editConfig.mode === 'cell' ? this.renderCellEdit : this.renderRowEdit
+        opts.renderCell = renderExpandCell
+        opts.renderData = renderExpandData
         break
       default:
-        if (this.filters && this.filters.length && this.sortable) {
-          opts.renderHeader = this.renderSortAndFilterHeader
-        } else if (this.sortable) {
-          opts.renderHeader = this.renderSortHeader
-        } else if (this.filters && this.filters.length) {
-          opts.renderHeader = this.renderFilterHeader
+        if (editRender) {
+          opts.renderHeader = renderEditHeader
+          opts.renderCell = $table.editConfig && $table.editConfig.mode === 'cell' ? renderCellEdit : renderRowEdit
+        } else if (filters && filters.length && this.sortable) {
+          opts.renderHeader = renderSortAndFilterHeader
+        } else if (sortable) {
+          opts.renderHeader = renderSortHeader
+        } else if (filters && filters.length) {
+          opts.renderHeader = renderFilterHeader
         }
     }
     this.columnConfig = UtilTools.getColumnConfig(this, opts)
@@ -400,51 +421,61 @@ export default {
     },
     // 行格编辑模式
     renderRowEdit (h, params) {
-      let cellValue
-      let { $table, $scopedSlots, formatter } = this
+      let { $table, $scopedSlots } = this
       let { editStore } = $table
       let { actived } = editStore
-      let { row, rowIndex, column, columnIndex } = params
+      let { row, column } = params
       if (actived && actived.row === row) {
         if ($scopedSlots && $scopedSlots.edit) {
           return $scopedSlots.edit(params)
         }
-        return h('input')
+        return [
+          h('input', {
+            class: ['vxe-input'],
+            attrs: {
+              type: 'text'
+            },
+            domProps: {
+              value: XEUtils.get(row, column.property)
+            },
+            on: {
+              input (evnt) {
+                XEUtils.set(row, column.property, evnt.target.value)
+              }
+            }
+          })
+        ]
       }
-      if ($scopedSlots && $scopedSlots.default) {
-        return $scopedSlots.default(params)
-      }
-      cellValue = XEUtils.get(row, column.property)
-      if (formatter) {
-        cellValue = formatter({ cellValue, row, rowIndex, column, columnIndex })
-      }
-      return [
-        h('span', cellValue)
-      ]
+      return this.renderCell(h, params)
     },
     // 单元格编辑模式
     renderCellEdit (h, params) {
-      let cellValue
-      let { $table, $scopedSlots, formatter } = this
+      let { $table, $scopedSlots } = this
       let { editStore } = $table
       let { actived } = editStore
-      let { row, rowIndex, column, columnIndex } = params
+      let { row, column } = params
       if (actived && actived.row === row && actived.column === column) {
         if ($scopedSlots && $scopedSlots.edit) {
           return $scopedSlots.edit(params)
         }
-        return h('input')
+        return [
+          h('input', {
+            class: ['vxe-input'],
+            attrs: {
+              type: 'text'
+            },
+            domProps: {
+              value: XEUtils.get(row, column.property)
+            },
+            on: {
+              input (evnt) {
+                XEUtils.set(row, column.property, evnt.target.value)
+              }
+            }
+          })
+        ]
       }
-      if ($scopedSlots && $scopedSlots.default) {
-        return $scopedSlots.default(params)
-      }
-      cellValue = XEUtils.get(row, column.property)
-      if (formatter) {
-        cellValue = formatter({ cellValue, row, rowIndex, column, columnIndex })
-      }
-      return [
-        h('span', cellValue)
-      ]
+      return this.renderCell(h, params)
     }
   }
 }

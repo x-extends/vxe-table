@@ -6,7 +6,7 @@ import UtilTools from '../../../src/tools/utils'
 import DomTools from '../../../src/tools/dom'
 import ExportTools from '../../../src/tools/export'
 import GlobalEvent from './event'
-import GlobalConfig from '../../../src/conf'
+import TableProps from './props'
 import TableFilter from './filter'
 import TableContextMenu from './menu'
 
@@ -14,7 +14,24 @@ import TableContextMenu from './menu'
  * 渲染浮固定列
  */
 function renderFixed (h, $table, fixedType, footerData) {
-  let { tableData, tableColumn, visibleColumn, collectColumn, isGroup, height, headerHeight, footerHeight, showHeader, showFooter, tableHeight, scrollYWidth, scrollXHeight, scrollRightToLeft, scrollLeftToRight, columnStore } = $table
+  let {
+    tableData,
+    tableColumn,
+    visibleColumn,
+    collectColumn,
+    isGroup,
+    height,
+    headerHeight,
+    footerHeight,
+    showHeader,
+    showFooter,
+    tableHeight,
+    scrollYWidth,
+    scrollXHeight,
+    scrollRightToLeft,
+    scrollLeftToRight,
+    columnStore
+  } = $table
   let customHeight = isNaN(height) ? 0 : parseFloat(height)
   let isRightFixed = fixedType === 'right'
   let style = {
@@ -70,67 +87,7 @@ function renderFixed (h, $table, fixedType, footerData) {
 
 export default {
   name: 'VxeTable',
-  props: {
-    /** 基本属性 */
-    // 数据
-    data: Array,
-    // 初始化绑定动态列
-    customs: Array,
-    // 表格的高度
-    height: [Number, String],
-    // 表格的最大高度
-    maxHeight: [Number, String],
-    // 是否允许拖动列宽调整大小
-    resizable: Boolean,
-    // 是否带有斑马纹
-    stripe: Boolean,
-    // 是否带有纵向边框
-    border: Boolean,
-    // 表格的尺寸
-    size: { type: String, default: () => GlobalConfig.size },
-    // 列的宽度是否自撑开
-    fit: { type: Boolean, default: true },
-    // 表格是否加载中
-    loading: Boolean,
-    // 是否显示表头
-    showHeader: { type: Boolean, default: true },
-    // 是否要高亮当前选中行
-    highlightCurrentRow: Boolean,
-    // 鼠标移到行是否要高亮显示
-    highlightHoverRow: Boolean,
-    // 是否显示表尾合计
-    showFooter: Boolean,
-    // 表尾合计的计算方法
-    footerMethod: Function,
-    // 给行附加 className
-    rowClassName: [String, Function],
-    // 给单元格附加 className
-    cellClassName: [String, Function],
-    // 给表头的行附加 className
-    headerRowClassName: [String, Function],
-    // 给表头的单元格附加 className
-    headerCellClassName: [String, Function],
-    // 给表尾的行附加 className
-    footerRowClassName: [String, Function],
-    // 给表尾的单元格附加 className
-    footerCellClassName: [String, Function],
-    // 合并行或列
-    spanMethod: Function,
-    // 开启快捷菜单
-    contextMenu: { type: Object, default: () => GlobalConfig.contextMenu },
-    // 开启编辑模式
-    editConfig: Object,
-    // 配置数据校验的规则
-    editRules: Object,
-
-    /** 高级属性 */
-    // 行数据的 Key
-    rowKey: [String, Number],
-    // 列宽是否自动响应计算
-    autoWidth: { type: Boolean, default: true },
-    // 性能优化的配置项
-    optimized: { type: [Object, Boolean], default: () => GlobalConfig.optimized }
-  },
+  props: TableProps,
   components: {
     TableHeader,
     TableBody,
@@ -355,7 +312,34 @@ export default {
     GlobalEvent.off(this, 'keydown')
   },
   render (h) {
-    let { _e, id, tableData, tableColumn, visibleColumn, collectColumn, isGroup, isFilter, isCtxMenu, loading, showHeader, resizable, border, stripe, highlightHoverRow, size, showFooter, footerMethod, overflowX, overflowY, scrollXHeight, optimizeConfig, columnStore, filterStore, ctxMenuStore, tooltipStore } = this
+    let {
+      _e,
+      id,
+      tableData,
+      tableColumn,
+      visibleColumn,
+      collectColumn,
+      isGroup,
+      isFilter,
+      isCtxMenu,
+      loading,
+      showHeader,
+      resizable,
+      border,
+      stripe,
+      highlightHoverRow,
+      size,
+      showFooter,
+      footerMethod,
+      overflowX,
+      overflowY,
+      scrollXHeight,
+      optimizeConfig,
+      columnStore,
+      filterStore,
+      ctxMenuStore,
+      tooltipStore
+    } = this
     let { leftList, rightList } = columnStore
     let footerData = showFooter && footerMethod && tableColumn.length ? footerMethod({ columns: tableColumn, data: tableData }) : ['-']
     return h('div', {
@@ -1118,18 +1102,85 @@ export default {
     },
     /**
      * 列点击事件
+     * 如果是单击模式，则激活为编辑状态
+     * 如果是双击模式，则单击后选中状态
      */
     triggerCellClickEvent (evnt, params) {
-      if (this.highlightCurrentRow) {
+      let { highlightCurrentRow, editConfig, editStore } = this
+      let { actived } = editStore
+      let { row, column } = params
+      if (highlightCurrentRow) {
         this.selectRow = params.row
+      }
+      if (editConfig) {
+        if (editConfig.trigger === 'click') {
+          this.handleActived(params, evnt)
+        } else if (editConfig.trigger === 'dblclick') {
+          if (actived.row === row && actived.column === column) {
+            // 如果已经是激活状态
+          } else {
+            this.handleSelected(params, evnt)
+          }
+        }
       }
       UtilTools.emitEvent(this, 'cell-click', [params, evnt])
     },
     /**
      * 列双击点击事件
+     * 如果是双击模式，则激活为编辑状态
      */
     triggerCellDBLClickEvent (evnt, params) {
+      let { editConfig } = this
+      if (editConfig && editConfig.trigger === 'dblclick') {
+        this.handleActived(params, evnt)
+      }
       UtilTools.emitEvent(this, 'cell-dblclick', [params, evnt])
+    },
+    /**
+     * 处理激活编辑
+     */
+    handleActived (params, evnt) {
+      let { editStore } = this
+      let { selected, actived } = editStore
+      let { row, column } = params
+      if (actived.row !== row || actived.column !== column) {
+        selected.row = null
+        selected.column = null
+        actived.row = row
+        actived.column = column
+      }
+    },
+    /**
+     * 处理选中列
+     */
+    handleSelected (params, evnt) {
+      let { editStore } = this
+      let { selected, actived } = editStore
+      let { row, column } = params
+      if (selected.row !== row || selected.column !== column) {
+        actived.row = null
+        actived.column = null
+        selected.row = row
+        selected.column = column
+      }
+    },
+    /**
+     * 只对 mode=cell 有效，激活行编辑
+     */
+    setActiveRow (row) {
+
+    },
+    /**
+     * 只对 mode=row 有效，激活单元格编辑
+     */
+    setActiveCell (row, prop) {
+
+    },
+    /**
+     * 只对 trigger=dblclick 有效，选中单元格
+     */
+    setSelectCell (row, prop) {
+
     },
     /**
      * 点击排序事件

@@ -30,12 +30,19 @@ import TableFooter from './views/table/advanced/Footer.vue'
 import TableCustom from './views/table/advanced/Custom.vue'
 import TableExport from './views/table/advanced/Export.vue'
 import TableMenu from './views/table/advanced/Menu.vue'
+import TableConfig from './views/table/advanced/Config.vue'
 import TableExpand from './views/table/advanced/Expand.vue'
 
 import TableScroll from './views/table/scroll/Scroll.vue'
 import TableScrollSize from './views/table/scroll/ScrollSize.vue'
 import TableScrollFixed from './views/table/scroll/ScrollFixed.vue'
 import TableScrollFooter from './views/table/scroll/ScrollFooter.vue'
+
+import TableEditManual from './views/table/edit/Manual.vue'
+import TableEditClick from './views/table/edit/Click.vue'
+import TableEditDBLClick from './views/table/edit/DBLClick.vue'
+
+import TableExcelCell from './views/table/excel/Cell.vue'
 
 Vue.use(Router)
 
@@ -196,6 +203,11 @@ export default new Router({
       component: TableExpand
     },
     {
+      path: '/table/advanced/config',
+      name: 'TableConfig',
+      component: TableConfig
+    },
+    {
       path: '/table/scroll/scroll',
       name: 'TableScroll',
       component: TableScroll
@@ -214,6 +226,26 @@ export default new Router({
       path: '/table/scroll/scrollFooter/:size',
       name: 'TableScrollFooter',
       component: TableScrollFooter
+    },
+    {
+      path: '/table/edit/manual',
+      name: 'TableEditManual',
+      component: TableEditManual
+    },
+    {
+      path: '/table/edit/click',
+      name: 'TableEditClick',
+      component: TableEditClick
+    },
+    {
+      path: '/table/edit/dblclick',
+      name: 'TableEditDBLClick',
+      component: TableEditDBLClick
+    },
+    {
+      path: '/table/excel/cell',
+      name: 'TableExcelCell',
+      component: TableExcelCell
     }
   ]
 })

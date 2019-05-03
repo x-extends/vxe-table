@@ -271,7 +271,8 @@ new Vue({ i18n }).$mount('#app')
 
 | 参数 | 说明 | 类型 | 可选值 | 默认值 |
 |------|------|-----|------|-----|
-| type | 列的类型 | String | index / selection / radio / expand / edit | — |
+| type | 列的类型 | String | index / selection / radio / expand | — |
+| edit-render | 列编辑配置项 | Object/Boolean | — | — |
 | prop | 列属性 | String | — | — |
 | label | 列标题 | String | — | — |
 | width | 列宽度 | String | — | — |

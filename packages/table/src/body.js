@@ -5,8 +5,9 @@ import DomTools from '../../../src/tools/dom'
  * 渲染列
  */
 function renderColumn (h, _vm, $table, fixedType, row, rowIndex, column, columnIndex) {
-  let { $listeners: tableListeners, tableData, border, highlightCurrentRow, cellClassName, spanMethod, optimizeConfig } = $table
-  let { align, ellipsis, showTitle, showTooltip, renderWidth, columnKey } = column
+  let { $listeners: tableListeners, tableData, border, highlightCurrentRow, cellClassName, spanMethod, optimizeConfig, editConfig, editStore } = $table
+  let { editRender, align, ellipsis, showTitle, showTooltip, renderWidth, columnKey } = column
+  let { selected, actived } = editStore
   let { overflow } = optimizeConfig
   let fixedHiddenColumn = fixedType && column.fixed !== fixedType
   let isShowTitle = showTitle || overflow === 'title'
@@ -14,6 +15,7 @@ function renderColumn (h, _vm, $table, fixedType, row, rowIndex, column, columnI
   let isEllipsis = ellipsis || overflow === 'ellipsis'
   let attrs = null
   let tdOns = {}
+  let triggerDblclick = (editRender && editConfig && editConfig.trigger === 'dblclick')
   // 优化事件绑定
   if (isShowTooltip) {
     tdOns.mouseover = evnt => {
@@ -21,12 +23,12 @@ function renderColumn (h, _vm, $table, fixedType, row, rowIndex, column, columnI
     }
     tdOns.mouseout = $table.clostTooltip
   }
-  if (highlightCurrentRow || tableListeners['cell-click']) {
+  if ((editRender && editConfig && editConfig.trigger !== 'manual') || highlightCurrentRow || tableListeners['cell-click']) {
     tdOns.click = evnt => {
       $table.triggerCellClickEvent(evnt, { row, rowIndex, column, columnIndex, data: tableData, cell: evnt.currentTarget })
     }
   }
-  if (tableListeners['cell-dblclick']) {
+  if (triggerDblclick || tableListeners['cell-dblclick']) {
     tdOns.dblclick = evnt => {
       $table.triggerCellDBLClickEvent(evnt, { row, rowIndex, column, columnIndex, data: tableData, cell: evnt.currentTarget })
     }
@@ -42,6 +44,9 @@ function renderColumn (h, _vm, $table, fixedType, row, rowIndex, column, columnI
   return h('td', {
     class: ['vxe-body--column', column.id, {
       [`col--${align}`]: align,
+      'col--edit': editRender,
+      'edit--selected': editRender && selected && selected.row === row && selected.column === column,
+      'edit--actived': editRender && actived && actived.row === row && actived.column === column,
       'fixed--hidden': fixedHiddenColumn
     }, cellClassName ? XEUtils.isFunction(cellClassName) ? cellClassName({ row, rowIndex, column, columnIndex, data: tableData }) : cellClassName : ''],
     key: columnKey || columnIndex,
@@ -169,7 +174,7 @@ export default {
     this.$el.onscroll = null
   },
   render (h) {
-    let { _e, $parent: $table, fixedType } = this
+    let { $parent: $table, fixedType } = this
     let { maxHeight, height, tableColumn, headerHeight, showFooter, footerHeight, tableHeight, tableWidth, scrollStore, scrollLoad, scrollXHeight, optimizeConfig } = $table
     let { overflow } = optimizeConfig
     let customHeight = XEUtils.toNumber(height)
@@ -218,7 +223,7 @@ export default {
               width: column.renderWidth
             },
             key: columnIndex
-          }) : _e()
+          }) : null
         })),
         /**
          * 内容

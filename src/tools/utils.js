@@ -43,7 +43,7 @@ const UtilTools = {
       filterMultiple: _vm.filterMultiple,
       filterMethod: _vm.filterMethod,
       columnKey: _vm.columnKey,
-      edit: _vm.edit ? Object.assign({}, _vm.edit) : _vm.edit,
+      editRender: _vm.editRender ? Object.assign({}, _vm.editRender) : _vm.editRender,
       // 渲染属性
       visible: true,
       level: 1,

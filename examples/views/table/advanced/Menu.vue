@@ -93,8 +93,8 @@ export default {
       footerMenus: [
         [
           {
-            code: 'exportAll',
-            name: '刷新'
+            code: 'clearAll',
+            name: '清空数据'
           }
         ]
       ]
