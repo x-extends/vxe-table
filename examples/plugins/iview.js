@@ -3,8 +3,7 @@ import iView from 'iview'
 import 'iview/dist/styles/iview.css'
 
 Vue.use(iView, {
-  transfer: true,
-  size: 'large'
+  transfer: true
 })
 
 Vue.use(iView)

@@ -8,7 +8,13 @@ export default {
   },
   render (h) {
     let { _e, $parent: $table, fixedType, tableColumn, footerData } = this
-    let { footerRowClassName, footerCellClassName, tableWidth, scrollYWidth } = $table
+    let { footerRowClassName, footerCellClassName, tableWidth, scrollYWidth, optimizeConfig } = $table
+    let { overflow } = optimizeConfig
+    // 如果是使用优化模式
+    if (fixedType && overflow) {
+      tableColumn = tableColumn.filter(column => column.fixed === fixedType)
+      tableWidth = tableColumn.reduce((previous, column) => previous + column.renderWidth, 0)
+    }
     return h('div', {
       class: ['vxe-table--footer-wrapper', fixedType ? `fixed--${fixedType}-wrapper` : 'footer--wrapper'],
       on: {

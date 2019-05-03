@@ -1,6 +1,7 @@
 .vxe-table,
 .vxe-table--filter-wrapper,
 .vxe-table--tooltip-wrapper,
+.vxe-table--ctxmenu-wrapper,
 .vxe-checkbox {
   box-sizing: border-box;
   *, :after, :before {
@@ -481,6 +482,15 @@
   .vxe-body--expanded-cell {
     padding: 20px 50px;
   }
+
+  /*可编辑*/
+  .vxe-body--column {
+    &.col--edit {
+      &.edit--actived {
+        padding: 0;
+      }
+    }
+  }
 }
 
 /*筛选容器*/
@@ -592,9 +602,10 @@
     .vxe-ctxmenu--link {
       display: block;
       padding: 0 30px;
-      min-width: 80px;
-      max-width: 120px;
+      min-width: 120px;
+      max-width: 180px;
       line-height: 26px;
+      color: $vxe-font-color;
       .vxe-ctxmenu--link-prefix,
       .vxe-ctxmenu--link-suffix {
         position: absolute;
@@ -626,7 +637,7 @@
     }
     .vxe-table--ctxmenu-clild-wrapper {
       .vxe-ctxmenu--link {
-        max-width: 160px;
+        max-width: 180px;
         padding: 0 20px 0 30px;
       }
     }

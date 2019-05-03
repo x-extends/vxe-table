@@ -272,7 +272,7 @@ new Vue({ i18n }).$mount('#app')
 | 参数 | 说明 | 类型 | 可选值 | 默认值 |
 |------|------|-----|------|-----|
 | type | 列的类型 | String | index / selection / radio / expand | — |
-| edit-render | 列编辑配置项 | Object/Boolean | — | — |
+| edit-render | 列编辑配置项 | Object/Boolean | — | [options](#edit-render-配置项说明) |
 | prop | 列属性 | String | — | — |
 | label | 列标题 | String | — | — |
 | width | 列宽度 | String | — | — |
@@ -291,6 +291,13 @@ new Vue({ i18n }).$mount('#app')
 | filter-multiple | 只对 filters 有效，筛选是否允许多选 | Boolean | — | true |
 | filter-method | 只对 filters 有效，自定义筛选方法 Function({value, row, column}) | Function | — | — |
 | column-key | 列的 key | String/Number | — | — |
+
+##### edit-render 配置项说明
+
+| 属性 | 描述 | 类型 | 可选值 | 默认值 |
+|------|------|-----|-----|-----|
+| type | 渲染类型 | String | default（组件触发后可视） / visible（组件一直可视） | default |
+| autofocus | 该组件被激活后是否自动获得焦点 | Boolean | — | — |
 
 #### Table-column Scoped Slot
 

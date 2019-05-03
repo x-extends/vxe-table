@@ -1,11 +1,11 @@
 <template>
   <div id="app">
-    <header class="header">
+    <header class="page-header">
       <img class="logo" src="./assets/logo.png">
       <h1 class="title"><a href="https://github.com/xuliangzhan/vxe-table">vxe-table</a></h1>
       <span class="desc">一个性能优越、功能更强的 Vue 表格组件</span>
     </header>
-    <div class="container">
+    <div class="page-container">
       <div class="aside">
         <ul class="nav-menu">
           <li v-for="(item, index) in tableList" :key="index">
@@ -24,7 +24,7 @@
         <router-view/>
       </div>
     </div>
-    <footer>
+    <footer class="page-footer">
       <p class="copyright">github <a class="link" href="https://github.com/xuliangzhan/vxe-table">vxe-table</a> Copyright (c) 2019-present, Xu Liangzhan</p>
     </footer>
   </div>
@@ -420,16 +420,14 @@ export default {
           children: [
             {
               lable: '使用 element-ui',
-              disabled: true,
               locat: {
-                name: 'TableInstall'
+                name: 'TableOtherElement'
               }
             },
             {
               lable: '使用 iview',
-              disabled: true,
               locat: {
-                name: 'TableInstall'
+                name: 'TableOtherIview'
               }
             },
             {
@@ -474,121 +472,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-#app {
-  width: 1200px;
-  margin: 0 auto;
-  font-family: Helvetica Neue,Helvetica,PingFang SC,Hiragino Sans GB,Microsoft YaHei,\\5FAE\8F6F\96C5\9ED1,Arial,sans-serif;
-  * {
-    box-sizing: border-box;
-  }
-}
-ul {
-  padding: 0;
-  margin: 0;
-  list-style: none;
-}
-.header {
-  box-sizing: border-box;
-  border-bottom: 1px solid #dcdfe6;
-  &:after {
-    content: "";
-    display: block;
-    clear: both;
-    visibility: hidden;
-  }
-  .logo {
-    float: left;
-    width: 30px;
-    height: 30px;
-    margin: 12px 4px 0 0;
-    border-radius: 50%;
-  }
-  .title {
-    font-size: 22px;
-    a {
-      color: #409eff;
-      text-decoration: none;
-      cursor: pointer;
-    }
-    float: left;
-  }
-  .desc {
-    float: right;
-    font-size: 14px;
-    color: #333;
-    margin-top: 30px;
-  }
-}
-.container {
-  display: flex;
-  border-bottom: 1px solid #dcdfe6;
-  > .aside {
-    width: 220px;
-    flex-shrink: 0;
-    user-select: none;
-    padding: 15px 0 25px 0;
-    border-right: 1px solid #dcdfe6;
-    overflow: hidden;
-    .nav-menu {
-      font-size: 16px;
-      color: #333;
-      text-decoration: none;
-      font-weight: 700;
-      .nav-link {
-        height: 40px;
-        line-height: 40px;
-      }
-    }
-    .nav-child-menu {
-      font-size: 14px;
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      font-weight: 400;
-      > li {
-        padding-left: 15px;
-      }
-      .nav-link {
-        display: block;
-        height: 30px;
-        line-height: 30px;
-        &.router-link-exact-active,
-        &:hover {
-          color: #409eff;
-        }
-        &.router-link-exact-active {
-          border-right: 2px solid #409eff;
-        }
-        &.disabled {
-          color: #c0c4cc;
-          cursor: not-allowed;
-        }
-      }
-    }
-    .nav-link {
-      color: #444;
-      cursor: pointer;
-      text-decoration: none;
-    }
-  }
-  > .body {
-    position: relative;
-    flex-grow: 1;
-    overflow: hidden;
-    padding: 15px 0 25px 25px;
-    .todemo {
-      position: absolute;
-      top: 10px;
-      right: 0;
-      font-size: 16px;
-    }
-  }
-}
-footer {
-  font-size: 12px;
-  color: #333;
-  text-align: center;
-}
-</style>

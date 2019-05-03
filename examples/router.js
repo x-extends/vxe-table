@@ -44,6 +44,9 @@ import TableEditDBLClick from './views/table/edit/DBLClick.vue'
 
 import TableExcelCell from './views/table/excel/Cell.vue'
 
+import TableOtherElement from './views/table/other/Element.vue'
+import TableOtherIview from './views/table/other/Iview.vue'
+
 Vue.use(Router)
 
 export default new Router({
@@ -246,6 +249,16 @@ export default new Router({
       path: '/table/excel/cell',
       name: 'TableExcelCell',
       component: TableExcelCell
+    },
+    {
+      path: '/table/other/element',
+      name: 'TableOtherElement',
+      component: TableOtherElement
+    },
+    {
+      path: '/table/other/iview',
+      name: 'TableOtherIview',
+      component: TableOtherIview
     }
   ]
 })

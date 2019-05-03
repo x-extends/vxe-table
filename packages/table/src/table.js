@@ -211,19 +211,20 @@ export default {
   computed: {
     // 优化的参数
     optimizeConfig () {
-      let isAll = this.optimized === true
+      let { optimized, editConfig } = this
+      let isAll = optimized === true
       return Object.assign({
         // 显示效果开关
         animat: !isAll,
         // 如果设置了则不允许换行 ellipsis、title、tooltip
-        overflow: isAll ? 'tooltip' : null,
+        overflow: isAll || editConfig ? 'tooltip' : null,
         // 默认大于 500 条时自动使用滚动渲染
         scroll: {
           gt: 500,
           oSize: 30,
           rSize: 120
         }
-      }, this.optimized)
+      }, optimized)
     },
     // 是否使用了分组表头
     isGroup () {
@@ -338,10 +339,11 @@ export default {
       columnStore,
       filterStore,
       ctxMenuStore,
-      tooltipStore
+      tooltipStore,
+      getRecords
     } = this
     let { leftList, rightList } = columnStore
-    let footerData = showFooter && footerMethod && tableColumn.length ? footerMethod({ columns: tableColumn, data: tableData }) : ['-']
+    let footerData = showFooter && footerMethod && tableColumn.length ? footerMethod({ columns: tableColumn, data: getRecords() }) : ['-']
     return h('div', {
       class: ['vxe-table', size ? `size--${size}` : '', {
         'show--head': showHeader,
@@ -461,10 +463,10 @@ export default {
           style: tooltipStore.style,
           ref: 'tipWrapper'
         }, [
-          h('span', {
+          h('div', {
             class: ['vxe-table--tooltip-content']
           }, tooltipStore.content),
-          h('span', {
+          h('div', {
             class: ['vxe-table--tooltip-arrow']
           })
         ]) : null
@@ -981,6 +983,14 @@ export default {
      * 触发 tooltip 事件
      */
     triggerTooltipEvent (evnt, { row, column }) {
+      let { editConfig, editStore } = this
+      let { actived } = editStore
+      if (editConfig) {
+        if ((editConfig.mode === 'row' && actived.row === row) ||
+        (actived.row === row && actived.column === column)) {
+          return
+        }
+      }
       let cell = evnt.currentTarget
       let wrapperElem = cell.children[0]
       let content = XEUtils.get(row, column.property)
@@ -998,10 +1008,12 @@ export default {
           this.$nextTick().then(() => {
             let tipWrapperElem = $refs.tipWrapper
             tooltipStore.style = {
-              width: `${tipWrapperElem.offsetWidth}px`,
-              height: `${tipWrapperElem.offsetHeight}px`,
+              width: `${tipWrapperElem.offsetWidth + 2}px`,
               top: `${top - tipWrapperElem.offsetHeight - 6}px`,
               left: `${left - 6}px`
+            }
+            if (tipWrapperElem.offsetWidth < cell.offsetWidth) {
+              tooltipStore.style.left = `${left + Math.floor((cell.offsetWidth - tipWrapperElem.offsetWidth) / 2) - 6}px`
             }
             return this.$nextTick()
           }).then(() => {

@@ -425,26 +425,12 @@ export default {
       let { editStore } = $table
       let { actived } = editStore
       let { row, column } = params
-      if (actived && actived.row === row) {
+      let { editRender } = column
+      if (editRender.type === 'visible' || (actived && actived.row === row)) {
         if ($scopedSlots && $scopedSlots.edit) {
           return $scopedSlots.edit(params)
         }
-        return [
-          h('input', {
-            class: ['vxe-input'],
-            attrs: {
-              type: 'text'
-            },
-            domProps: {
-              value: XEUtils.get(row, column.property)
-            },
-            on: {
-              input (evnt) {
-                XEUtils.set(row, column.property, evnt.target.value)
-              }
-            }
-          })
-        ]
+        return editRender.name ? this.renderCustomEdit(h, params) : this.renderDefaultEdit(h, params)
       }
       return this.renderCell(h, params)
     },
@@ -454,28 +440,40 @@ export default {
       let { editStore } = $table
       let { actived } = editStore
       let { row, column } = params
-      if (actived && actived.row === row && actived.column === column) {
+      let { editRender } = column
+      if (editRender.type === 'visible' || (actived && actived.row === row && actived.column === column)) {
         if ($scopedSlots && $scopedSlots.edit) {
           return $scopedSlots.edit(params)
         }
-        return [
-          h('input', {
-            class: ['vxe-input'],
-            attrs: {
-              type: 'text'
-            },
-            domProps: {
-              value: XEUtils.get(row, column.property)
-            },
-            on: {
-              input (evnt) {
-                XEUtils.set(row, column.property, evnt.target.value)
-              }
-            }
-          })
-        ]
+        return editRender.name ? this.renderCustomEdit(h, params) : this.renderDefaultEdit(h, params)
       }
       return this.renderCell(h, params)
+    },
+    renderDefaultEdit (h, params) {
+      let { row, column } = params
+      return [
+        h('input', {
+          class: ['vxe-input'],
+          attrs: {
+            type: 'text'
+          },
+          domProps: {
+            value: XEUtils.get(row, column.property)
+          },
+          on: {
+            input (evnt) {
+              XEUtils.set(row, column.property, evnt.target.value)
+            }
+          }
+        })
+      ]
+    },
+    renderCustomEdit (h, params) {
+      let { column } = params
+      let { editRender } = column
+      return [
+        h(editRender.name)
+      ]
     }
   }
 }

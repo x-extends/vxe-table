@@ -5,14 +5,14 @@ import router from './router'
 import './assets/style/layout.scss'
 import './plugins/highlight.js'
 import './plugins/element.js'
-import './plugins/xetable.js'
+import './plugins/iview.js'
+import './plugins/vxetable.js'
 import './mock'
 import XEUtils from 'xe-utils'
-// import './plugins/iview.js'
 
 Vue.config.productionTip = false
 
-// 后台异步生成10万数据，为了避免大量运算卡主页面，生成大约需要15秒左右
+// 后台异步生成20万数据，为了避免大量运算卡主页面
 var list = window.CACHE_DATA_LIST = []
 var currTime = Date.now()
 var fullIndex = 0
@@ -27,12 +27,15 @@ function mockData () {
       key: 'home.label.key' + (index % 2 === 0 ? index - 1 : index),
       language: index % 2 === 0 ? 'zh_CN' : 'en_US',
       checked: false,
-      date: currTime,
+      flag: index % 2 === 0,
+      date: new Date(currTime),
+      date1: new Date(currTime),
+      date2: '09:00:00',
       time: currTime + XEUtils.random(100, 10000),
       sex: index % 3 ? '0' : '1',
-      age: index % 4 === 0 ? 30 : index % 3 === 0 ? 28 : index % 2 === 0 ? 26 : 24,
+      age: XEUtils.random(18, 35),
       region: index % 4 === 0 ? [19, 199, 1773] : index % 3 === 0 ? [9, 73, 719] : [1, 1, 5],
-      rate: index % 4 === 0 ? 4 : index % 3 === 0 ? 3 : index % 2 === 0 ? 2 : 1,
+      rate: XEUtils.random(0, 5),
       address: `地址 地址地址 地址地址 址地址址地址 址地址 址地址  址地址 址地址  址地址 址地址址地址址地址 地址${index}`,
       updateTime: currTime,
       createTime: currTime

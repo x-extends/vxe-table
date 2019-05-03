@@ -1,4 +1,126 @@
-.link {
-  color: #409eff;
-  text-decoration: none;
+#app {
+  width: 1200px;
+  color: #000;
+  margin: 0 auto;
+  font-family: Helvetica Neue,Helvetica,PingFang SC,Hiragino Sans GB,Microsoft YaHei,\\5FAE\8F6F\96C5\9ED1,Arial,sans-serif;
+  * {
+    box-sizing: border-box;
+  }
+  ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+  .link {
+    color: #409eff;
+    text-decoration: none;
+  }
+  p {
+    margin: 14px 0;
+    font-size: 14px;
+  }
+}
+
+.page-header {
+  box-sizing: border-box;
+  border-bottom: 1px solid #dcdfe6;
+  &:after {
+    content: "";
+    display: block;
+    clear: both;
+    visibility: hidden;
+  }
+  .logo {
+    float: left;
+    width: 30px;
+    height: 30px;
+    margin: 12px 4px 0 0;
+    border-radius: 50%;
+  }
+  .title {
+    font-size: 22px;
+    padding: 10px 0;
+    a {
+      color: #409eff;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    float: left;
+  }
+  .desc {
+    float: right;
+    font-size: 14px;
+    color: #333;
+    margin-top: 30px;
+  }
+}
+.page-container {
+  display: flex;
+  border-bottom: 1px solid #dcdfe6;
+  > .aside {
+    width: 220px;
+    flex-shrink: 0;
+    user-select: none;
+    padding: 15px 0 25px 0;
+    border-right: 1px solid #dcdfe6;
+    overflow: hidden;
+    .nav-menu {
+      font-size: 16px;
+      color: #333;
+      text-decoration: none;
+      font-weight: 700;
+      .nav-link {
+        height: 40px;
+        line-height: 40px;
+      }
+    }
+    .nav-child-menu {
+      font-size: 14px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      font-weight: 400;
+      > li {
+        padding-left: 15px;
+      }
+      .nav-link {
+        display: block;
+        height: 30px;
+        line-height: 30px;
+        &.router-link-exact-active,
+        &:hover {
+          color: #409eff;
+        }
+        &.router-link-exact-active {
+          border-right: 2px solid #409eff;
+        }
+        &.disabled {
+          color: #c0c4cc;
+          cursor: not-allowed;
+        }
+      }
+    }
+    .nav-link {
+      color: #444;
+      cursor: pointer;
+      text-decoration: none;
+    }
+  }
+  > .body {
+    position: relative;
+    flex-grow: 1;
+    overflow: hidden;
+    padding: 15px 0 25px 25px;
+    .todemo {
+      position: absolute;
+      top: 10px;
+      right: 0;
+      font-size: 16px;
+    }
+  }
+}
+.page-footer {
+  font-size: 12px;
+  color: #333;
+  text-align: center;
 }
