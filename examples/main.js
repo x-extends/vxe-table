@@ -31,6 +31,7 @@ function mockData () {
       date: new Date(currTime),
       date1: new Date(currTime),
       date2: '09:00:00',
+      date3: XEUtils.toDateString(currTime, 'yyyy-MM-dd'),
       time: currTime + XEUtils.random(100, 10000),
       sex: index % 3 ? '0' : '1',
       age: XEUtils.random(18, 35),

@@ -45,6 +45,7 @@ import TableEditInsert from './views/table/edit/Insert.vue'
 import TableEditRemove from './views/table/edit/Remove.vue'
 import TableEditRevert from './views/table/edit/Revert.vue'
 import TableEditStatus from './views/table/edit/Status.vue'
+import TableEditTemplate from './views/table/edit/Template.vue'
 
 import TableExcelCell from './views/table/excel/Cell.vue'
 
@@ -270,6 +271,11 @@ export default new Router({
       path: '/table/edit/status',
       name: 'TableEditStatus',
       component: TableEditStatus
+    },
+    {
+      path: '/table/edit/template',
+      name: 'TableEditTemplate',
+      component: TableEditTemplate
     },
     {
       path: '/table/excel/cell',

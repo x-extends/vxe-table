@@ -6,7 +6,7 @@
       ref="xTable"
       border
       :data.sync="tableData"
-      :edit-config="{trigger: 'click', mode: 'cell'}">
+      :edit-config="{trigger: 'click', mode: 'cell', showStatus: true}">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column prop="name" label="Name" :edit-render="{type: 'default'}"></vxe-table-column>
       <vxe-table-column prop="sex" label="Sex" :edit-render="{type: 'default'}"></vxe-table-column>
