@@ -231,9 +231,10 @@ new Vue({ i18n }).$mount('#app')
 |------|------|-----|
 | select-all | 只对 type=selection 有效，当手动勾选全选时触发的事件 | {selection,checked},event |
 | select-change | 只对 type=selection/radio 有效，当手动勾选时触发的事件 | {selection,checked,row,column},event |
-| cell-click | 当某个单元格被点击时会触发该事件 | {row,rowIndex,column,columnIndex,data,cell},event |
-| cell-dblclick | 当某个单元格被双击时会触发该事件 | {row,rowIndex,column,columnIndex,data,cell},event |
+| cell-click | 当某个单元格被点击时会触发该事件 | {row,rowIndex,column,columnIndex,cell},event |
+| cell-dblclick | 当某个单元格被双击时会触发该事件 | {row,rowIndex,column,columnIndex,cell},event |
 | context-menu-link | 当点击上下文菜单后触发 | menu,event |
+| edit-disabled | 当点击后单元格如果是禁用状态时会触发该事件 | {row,rowIndex,column,columnIndex,cell},event |
 
 #### Table Methods
 

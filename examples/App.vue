@@ -356,9 +356,8 @@ export default {
             },
             {
               lable: '禁用编辑',
-              disabled: true,
               locat: {
-                name: 'TableInstall'
+                name: 'TableEditDisable'
               }
             },
             {

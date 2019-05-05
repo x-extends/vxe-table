@@ -1039,8 +1039,7 @@ export default {
       let { editConfig, editStore } = this
       let { actived } = editStore
       if (editConfig) {
-        if ((editConfig.mode === 'row' && actived.row === row) ||
-        (actived.row === row && actived.column === column)) {
+        if ((editConfig.mode === 'row' && actived.row === row) || (actived.row === row && actived.column === column)) {
           return
         }
       }
@@ -1205,17 +1204,23 @@ export default {
      * 处理激活编辑
      */
     handleActived (params, evnt) {
-      let { editStore } = this
+      let { editStore, editConfig } = this
+      let { activeMethod } = editConfig
       let { selected, actived } = editStore
       let { row, column } = params
       if (actived.row !== row || actived.column !== column) {
-        selected.row = null
-        selected.column = null
-        actived.row = row
-        actived.column = column
-        this.$nextTick(() => {
-          this.handleFocus(params, evnt)
-        })
+        // 判断是否禁用编辑
+        if (!activeMethod || activeMethod(params)) {
+          selected.row = null
+          selected.column = null
+          actived.row = row
+          actived.column = column
+          this.$nextTick(() => {
+            this.handleFocus(params, evnt)
+          })
+        } else {
+          UtilTools.emitEvent(this, 'edit-disabled', [params, evnt])
+        }
       }
     },
     /**
@@ -1262,7 +1267,7 @@ export default {
      */
     setActiveRow (row) {
       let { $refs, id, tableData, visibleColumn, handleActived, editConfig } = this
-      if (row && editConfig && editConfig.mode === 'row') {
+      if (row && editConfig.mode === 'row') {
         let rowIndex = XEUtils.findIndexOf(tableData, item => item === row)
         if (rowIndex > -1) {
           let column = visibleColumn.find(column => column.editRender)
@@ -1276,7 +1281,7 @@ export default {
      */
     setActiveCell (row, prop) {
       let { $refs, id, tableData, visibleColumn, handleActived, editConfig } = this
-      if (row && prop && editConfig && editConfig.mode === 'cell') {
+      if (row && prop && editConfig.mode === 'cell') {
         let rowIndex = XEUtils.findIndexOf(tableData, item => item === row)
         if (rowIndex > -1 && prop) {
           let column = visibleColumn.find(column => column.property === prop)
@@ -1290,7 +1295,7 @@ export default {
      */
     setSelectCell (row, prop) {
       let { editConfig } = this
-      if (row && prop && editConfig && editConfig.trigger !== 'manual') {
+      if (row && prop && editConfig.trigger !== 'manual') {
 
       }
     },
