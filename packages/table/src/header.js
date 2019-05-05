@@ -111,7 +111,7 @@ export default {
          */
         h('thead', headerColumn.map((cols, rowIndex) => {
           return h('tr', {
-            class: ['vxe-header--row', headerRowClassName ? XEUtils.isFunction(headerRowClassName) ? headerRowClassName({ rowIndex }) : headerRowClassName : '']
+            class: ['vxe-header--row', headerRowClassName ? XEUtils.isFunction(headerRowClassName) ? headerRowClassName({ $table, rowIndex }) : headerRowClassName : '']
           }, cols.map((column, columnIndex, list) => {
             let isGroup = column.children && column.children.length
             let fixedHiddenColumn = fixedType && column.fixed !== fixedType && !isGroup
@@ -120,7 +120,7 @@ export default {
                 [`col--${column.headerAlign}`]: column.headerAlign,
                 'fixed--hidden': fixedHiddenColumn,
                 'filter--active': column.filters.some(item => item.checked)
-              }, headerCellClassName ? XEUtils.isFunction(headerCellClassName) ? headerCellClassName({ rowIndex, column, columnIndex }) : headerCellClassName : ''],
+              }, headerCellClassName ? XEUtils.isFunction(headerCellClassName) ? headerCellClassName({ $table, rowIndex, column, columnIndex }) : headerCellClassName : ''],
               attrs: {
                 colspan: column.colSpan,
                 rowspan: column.rowSpan

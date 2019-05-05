@@ -19,23 +19,23 @@ function renderColumn (h, _vm, $table, fixedType, row, rowIndex, column, columnI
   // 优化事件绑定
   if (isShowTooltip) {
     tdOns.mouseover = evnt => {
-      $table.triggerTooltipEvent(evnt, { row, rowIndex, column, columnIndex, data: getRecords() })
+      $table.triggerTooltipEvent(evnt, { $table, row, rowIndex, column, columnIndex, data: getRecords() })
     }
     tdOns.mouseout = $table.clostTooltip
   }
   if ((editRender && editConfig && editConfig.trigger !== 'manual') || highlightCurrentRow || tableListeners['cell-click']) {
     tdOns.click = evnt => {
-      $table.triggerCellClickEvent(evnt, { row, rowIndex, column, columnIndex, data: getRecords(), cell: evnt.currentTarget })
+      $table.triggerCellClickEvent(evnt, { $table, row, rowIndex, column, columnIndex, data: getRecords(), cell: evnt.currentTarget })
     }
   }
   if (triggerDblclick || tableListeners['cell-dblclick']) {
     tdOns.dblclick = evnt => {
-      $table.triggerCellDBLClickEvent(evnt, { row, rowIndex, column, columnIndex, data: getRecords(), cell: evnt.currentTarget })
+      $table.triggerCellDBLClickEvent(evnt, { $table, row, rowIndex, column, columnIndex, data: getRecords(), cell: evnt.currentTarget })
     }
   }
   // 合并行或列
   if (spanMethod) {
-    let { rowspan = 1, colspan = 1 } = spanMethod({ row, rowIndex, column, columnIndex, data: getRecords() }) || {}
+    let { rowspan = 1, colspan = 1 } = spanMethod({ $table, row, rowIndex, column, columnIndex, data: getRecords() }) || {}
     if (!rowspan || !colspan) {
       return null
     }
@@ -49,7 +49,7 @@ function renderColumn (h, _vm, $table, fixedType, row, rowIndex, column, columnI
       'edit--selected': editRender && selected && selected.row === row && selected.column === column,
       'edit--actived': editRender && actived && actived.row === row && actived.column === column,
       'fixed--hidden': fixedHiddenColumn
-    }, cellClassName ? XEUtils.isFunction(cellClassName) ? cellClassName({ row, rowIndex, column, columnIndex, data: getRecords() }) : cellClassName : ''],
+    }, cellClassName ? XEUtils.isFunction(cellClassName) ? cellClassName({ $table, row, rowIndex, column, columnIndex, data: getRecords() }) : cellClassName : ''],
     key: columnKey || columnIndex,
     attrs,
     on: tdOns
@@ -91,7 +91,7 @@ function renderRows (h, _vm, $table, fixedType, tableColumn) {
         class: ['vxe-body--row', `row--${id}_${rowIndex}`, {
           'row--selected': row === selectRow,
           'row--hover': row === hoverRow
-        }, rowClassName ? XEUtils.isFunction(rowClassName) ? rowClassName({ row, rowIndex, data: getRecords() }) : rowClassName : ''],
+        }, rowClassName ? XEUtils.isFunction(rowClassName) ? rowClassName({ $table, row, rowIndex, data: getRecords() }) : rowClassName : ''],
         key: rowKey ? XEUtils.get(row, rowKey) : rowIndex,
         on
       }, tableColumn.map((column, columnIndex) => {

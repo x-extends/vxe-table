@@ -803,11 +803,11 @@ export default {
       }
       if (footerElem) {
         let footerHeight = footerElem.offsetHeight
-        this.scrollXHeight = Math.max(footerHeight - footerElem.clientHeight - 1, 0)
+        this.scrollXHeight = Math.max(footerHeight - footerElem.clientHeight, 0)
         this.overflowX = tableWidth > footerElem.clientWidth
         this.footerHeight = footerHeight
       } else {
-        this.scrollXHeight = Math.max(tableHeight - bodyElem.clientHeight - 1, 0)
+        this.scrollXHeight = Math.max(tableHeight - bodyElem.clientHeight, 0)
         this.overflowX = tableWidth > bodyWidth
       }
       if (this.overflowX) {

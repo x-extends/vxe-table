@@ -24,6 +24,8 @@
         transition: all .2s ease-in-out;
       }
     }
+    .vxe-header--column,
+    .vxe-body--column,
     .vxe-body--row {
       transition: background-color .2s ease-in-out;
     }
@@ -574,13 +576,14 @@
 
   /*excel*/
   &.vxe-excel {
-    $excel-column-height: 24px;
-    $excel-column-border-width: 2px;
-    $excel-column-border-colir: #217346;
     .vxe-header--column {
       padding: 4px 0;
       font-size: 12px;
       cursor: default;
+    }
+    .vxe-excel--column-selected {
+      background-color: #E6E6E6;
+      color: $excel-primary-color;
     }
     .vxe-body--column {
       padding: 0;
@@ -602,13 +605,17 @@
           .vxe-textarea,
           .vxe-textarea:focus {
             border-radius: 0;
-            border: $excel-column-border-width solid $excel-column-border-colir;
+            border: $excel-column-border-width solid $excel-primary-color;
           }
         }
       }
       &:first-child {
         background-color: #f8f8f9;
         cursor: default;
+        &.vxe-excel--row-selected {
+          color: $excel-primary-color;
+          background-color: #E6E6E6;
+        }
         .vxe-cell {
           padding: 0;
         }
@@ -617,7 +624,7 @@
         .vxe-cell {
           padding: 0 2px;
           line-height: $excel-column-height - $excel-column-border-width * 3;
-          border: $excel-column-border-width solid $excel-column-border-colir;
+          border: $excel-column-border-width solid $excel-primary-color;
         }
       }
       &.edit--actived {

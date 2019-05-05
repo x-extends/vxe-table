@@ -101,11 +101,13 @@ function buildColumns (h, columns) {
   return columns ? columns.map(props => h('vxe-table-column', { props }, buildColumns(h, props.children))) : []
 }
 
-function buildProps (props = {}) {
+function buildProps (h, _vm, props = {}) {
   let { editConfig, contextMenu } = props
   return Object.assign({}, props, {
     border: true,
     resizable: true,
+    headerCellClassName: _vm.handleHeaderCellClassName,
+    cellClassName: _vm.handleCellClassName,
     contextMenu: Object.assign({}, contextMenu, excelContextMenu),
     editConfig: editConfig ? Object.assign({}, excelEditConfig, editConfig) : excelEditConfig
   })
@@ -124,8 +126,24 @@ export default {
   render (h) {
     return h('vxe-table', {
       class: 'vxe-excel',
-      props: buildProps(this.$props),
+      props: buildProps(h, this, this.$props),
       on: this.$listeners
     }, buildColumns(h, this.columns))
+  },
+  methods: {
+    handleHeaderCellClassName ({ column, $table }) {
+      let { editStore } = $table
+      let { selected, actived } = editStore
+      if (selected.column === column || actived.column === column) {
+        return 'vxe-excel--column-selected'
+      }
+    },
+    handleCellClassName ({ row, columnIndex, $table }) {
+      let { editStore } = $table
+      let { selected, actived } = editStore
+      if (columnIndex === 0 && (selected.row === row || actived.row === row)) {
+        return 'vxe-excel--row-selected'
+      }
+    }
   }
 }
