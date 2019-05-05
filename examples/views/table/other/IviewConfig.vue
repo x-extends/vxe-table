@@ -3,12 +3,7 @@
     <p>使用配置式的插件</p>
 
     <pre>
-      <code>
-        import VXETable from 'vxe-table'
-        import VXETableIViewPlugin from 'vxe-table/lib/plugins/iview'
-
-        VXETable.setup(VXETableIViewPlugin)
-      </code>
+      <code class="javascript">{{ demoCodes[0] }}</code>
     </pre>
 
     <p>使用 edit-render 简化配置</p>
@@ -24,15 +19,22 @@
       :edit-config="{trigger: 'click', mode: 'cell'}">
       <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
       <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
-      <vxe-table-column prop="name" label="Input"  min-width="140" :edit-render="{name: 'Input'}"></vxe-table-column>
-      <vxe-table-column prop="age" label="InputNumber"  width="140" :edit-render="{name: 'InputNumber', props: {max: 35, min: 18}}"></vxe-table-column>
-      <vxe-table-column prop="sex" label="Select"  width="140" :edit-render="{name: 'Select', options: sexList}"></vxe-table-column>
-      <vxe-table-column prop="region" label="Cascader"  width="200" :edit-render="{name: 'Cascader', props: {data: regionList}}"> </vxe-table-column>
-      <vxe-table-column prop="date" label="DatePicker"  width="200" :edit-render="{name: 'DatePicker', props: {type: 'date', format: 'yyyy/MM/dd'}}"></vxe-table-column>
-      <vxe-table-column prop="date2" label="TimePicker"  width="200" :edit-render="{name: 'TimePicker', props: {type: 'time'}}"></vxe-table-column>
+      <vxe-table-column prop="name" label="Input" min-width="140" :edit-render="{name: 'Input'}"></vxe-table-column>
+      <vxe-table-column prop="age" label="InputNumber" width="140" :edit-render="{name: 'InputNumber', props: {max: 35, min: 18}}"></vxe-table-column>
+      <vxe-table-column prop="sex" label="Select" width="140" :edit-render="{name: 'Select', options: sexList}"></vxe-table-column>
+      <vxe-table-column prop="region" label="Cascader" width="200" :edit-render="{name: 'Cascader', props: {data: regionList}}"> </vxe-table-column>
+      <vxe-table-column prop="date" label="DatePicker" width="200" :edit-render="{name: 'DatePicker', props: {type: 'date', format: 'yyyy/MM/dd'}}"></vxe-table-column>
+      <vxe-table-column prop="date2" label="TimePicker" width="200" :edit-render="{name: 'TimePicker', props: {type: 'time'}}"></vxe-table-column>
       <vxe-table-column prop="rate" label="Rate" width="200" :edit-render="{name: 'Rate', type: 'visible'}"></vxe-table-column>
       <vxe-table-column prop="flag" label="iSwitch" width="100" fixed="right" :edit-render="{name: 'iSwitch', type: 'visible'}"></vxe-table-column>
     </vxe-table>
+
+    <p>调用代码</p>
+
+    <pre>
+      <code class="xml">{{ demoCodes[1] }}</code>
+      <code class="javascript">{{ demoCodes[2] }}</code>
+    </pre>
   </div>
 </template>
 
@@ -47,7 +49,49 @@ export default {
       loading: false,
       tableData: [],
       sexList: [],
-      regionList: []
+      regionList: [],
+      demoCodes: [
+        `
+        import VXETable from 'vxe-table'
+        import VXETableIViewPlugin from 'vxe-table/lib/plugins/iview'
+
+        VXETable.setup(VXETableIViewPlugin)
+        `,
+        `
+        <vxe-table
+          border
+          show-footer
+          class="vxe-table-iview"
+          height="600"
+          :loading="loading"
+          :data.sync="tableData"
+          :footer-method="footerMethod"
+          :edit-config="{trigger: 'click', mode: 'cell'}">
+          <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
+          <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
+          <vxe-table-column prop="name" label="Input"  min-width="140" :edit-render="{name: 'Input'}"></vxe-table-column>
+          <vxe-table-column prop="age" label="InputNumber"  width="140" :edit-render="{name: 'InputNumber', props: {max: 35, min: 18}}"></vxe-table-column>
+          <vxe-table-column prop="sex" label="Select"  width="140" :edit-render="{name: 'Select', options: sexList}"></vxe-table-column>
+          <vxe-table-column prop="region" label="Cascader"  width="200" :edit-render="{name: 'Cascader', props: {data: regionList}}"> </vxe-table-column>
+          <vxe-table-column prop="date" label="DatePicker"  width="200" :edit-render="{name: 'DatePicker', props: {type: 'date', format: 'yyyy/MM/dd'}}"></vxe-table-column>
+          <vxe-table-column prop="date2" label="TimePicker"  width="200" :edit-render="{name: 'TimePicker', props: {type: 'time'}}"></vxe-table-column>
+          <vxe-table-column prop="rate" label="Rate" width="200" :edit-render="{name: 'Rate', type: 'visible'}"></vxe-table-column>
+          <vxe-table-column prop="flag" label="iSwitch" width="100" fixed="right" :edit-render="{name: 'iSwitch', type: 'visible'}"></vxe-table-column>
+        </vxe-table>
+        `,
+        `
+        export default {
+          data () {
+            return {
+              loading: false,
+              tableData: [],
+              sexList: [],
+              regionList: []
+            }
+          }
+        }
+        `
+      ]
     }
   },
   created () {
@@ -61,7 +105,7 @@ export default {
     this.findRegionList()
   },
   mounted () {
-    this.$el.querySelectorAll('pre').forEach((block) => {
+    this.$el.querySelectorAll('pre code').forEach((block) => {
       hljs.highlightBlock(block)
     })
   },

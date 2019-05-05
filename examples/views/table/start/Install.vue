@@ -3,7 +3,7 @@
     <h3>npm 安装</h3>
     <p>推荐使用 npm 的方式安装，它能更好地和 <a class="link" href="https://webpack.js.org/">webpack</a> 打包工具配合使用。</p>
     <pre>
-      <code>
+      <code >
         npm install vxe-table
       </code>
     </pre>
@@ -26,7 +26,7 @@ import hljs from 'highlight.js'
 
 export default {
   mounted () {
-    this.$el.querySelectorAll('pre').forEach((block) => {
+    this.$el.querySelectorAll('pre code').forEach((block) => {
       hljs.highlightBlock(block)
     })
   }

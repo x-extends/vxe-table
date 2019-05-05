@@ -49,7 +49,7 @@
         </template>
         <template v-slot="{ row }">{{ formatDate(row.date1, 'yyyy-MM-dd HH:mm:ss') }}</template>
       </vxe-table-column>
-      <vxe-table-column prop="date2" label="ElTimePicker"  width="200" :edit-render="{type: 'default'}">
+      <vxe-table-column prop="date2" label="ElTimePicker" width="200" :edit-render="{type: 'default'}">
         <template v-slot:edit="{ row }">
           <el-time-select v-model="row.date2" :picker-options="{start: '08:30', step: '00:15', end: '18:30'}">
         </el-time-select>
@@ -66,12 +66,20 @@
         </template>
       </vxe-table-column>
     </vxe-table>
+
+    <p>调用代码</p>
+
+    <pre>
+      <code class="xml">{{ demoCodes[0] }}</code>
+      <code class="javascript">{{ demoCodes[1] }}</code>
+    </pre>
   </div>
 </template>
 
 <script>
 import XEUtils from 'xe-utils'
 import XEAjax from 'xe-ajax'
+import hljs from 'highlight.js'
 
 export default {
   data () {
@@ -79,7 +87,87 @@ export default {
       loading: false,
       tableData: [],
       sexList: [],
-      regionList: []
+      regionList: [],
+      demoCodes: [
+        `
+        <vxe-table
+          border
+          show-footer
+          class="vxe-table-element"
+          height="600"
+          :loading="loading"
+          :data.sync="tableData"
+          :footer-method="footerMethod"
+          :edit-config="{trigger: 'click', mode: 'cell'}">
+          <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
+          <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
+          <vxe-table-column prop="name" label="ElInput" min-width="140" :edit-render="{type: 'default'}">
+            <template v-slot:edit="{ row }">
+              <el-input v-model="row.name"></el-input>
+            </template>
+          </vxe-table-column>
+          <vxe-table-column prop="age" label="ElInputNumber"  width="140" :edit-render="{type: 'default'}">
+            <template v-slot:edit="{ row }">
+              <el-input-number v-model="row.age" :max="35" :min="18"></el-input-number>
+            </template>
+          </vxe-table-column>
+          <vxe-table-column prop="sex" label="ElSelect" width="140" :edit-render="{type: 'default'}">
+            <template v-slot:edit="{ row }">
+              <el-select v-model="row.sex">
+                <el-option v-for="item in sexList" :key="item.value" :label="item.label" :value="item.value"></el-option>
+              </el-select>
+            </template>
+            <template v-slot="{ row }">{{ getSelectLabel(row.sex, sexList) }}</template>
+          </vxe-table-column>
+          <vxe-table-column prop="region" label="ElCascader" width="200" :edit-render="{type: 'default'}">
+            <template v-slot:edit="{ row }">
+              <el-cascader v-model="row.region" :options="regionList"></el-cascader>
+            </template>
+            <template v-slot="{ row }">{{ getCascaderLabel(row.region, regionList) }}</template>
+          </vxe-table-column>
+          <vxe-table-column prop="date" label="ElDatePicker" width="200" :edit-render="{type: 'default'}">
+            <template v-slot:edit="{ row }">
+              <el-date-picker v-model="row.date" type="date" format="yyyy/MM/dd"></el-date-picker>
+            </template>
+            <template v-slot="{ row }">{{ formatDate(row.date, 'yyyy/MM/dd') }}</template>
+          </vxe-table-column>
+          <vxe-table-column prop="date1" label="ElDatePicker" width="220" :edit-render="{type: 'default'}">
+            <template v-slot:edit="{ row }">
+              <el-date-picker v-model="row.date1" type="datetime" format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+            </template>
+            <template v-slot="{ row }">{{ formatDate(row.date1, 'yyyy-MM-dd HH:mm:ss') }}</template>
+          </vxe-table-column>
+          <vxe-table-column prop="date2" label="ElTimePicker" width="200" :edit-render="{type: 'default'}">
+            <template v-slot:edit="{ row }">
+              <el-time-select v-model="row.date2" :picker-options="{start: '08:30', step: '00:15', end: '18:30'}">
+            </el-time-select>
+            </template>
+          </vxe-table-column>
+          <vxe-table-column prop="rate" label="ElRate" width="200" :edit-render="{type: 'visible'}">
+            <template v-slot:edit="{ row }">
+              <el-rate v-model="row.rate"></el-rate>
+            </template>
+          </vxe-table-column>
+          <vxe-table-column prop="flag" label="ElSwitch" width="100" fixed="right" :edit-render="{type: 'visible'}">
+            <template v-slot:edit="{ row }">
+              <el-switch v-model="row.flag"></el-switch>
+            </template>
+          </vxe-table-column>
+        </vxe-table>
+        `,
+        `
+        export default {
+          data () {
+            return {
+              loading: false,
+              tableData: [],
+              sexList: [],
+              regionList: []
+            }
+          }
+        }
+        `
+      ]
     }
   },
   created () {
@@ -91,6 +179,11 @@ export default {
     }, 500)
     this.findSexList()
     this.findRegionList()
+  },
+  mounted () {
+    this.$el.querySelectorAll('pre code').forEach((block) => {
+      hljs.highlightBlock(block)
+    })
   },
   methods: {
     findSexList () {

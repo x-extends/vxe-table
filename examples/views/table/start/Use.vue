@@ -3,7 +3,7 @@
     <h3>全局参数</h3>
     <p>修改默认的全局配置</p>
     <pre>
-      <code>
+      <code >
         import Vue from 'vue'
         import VXETable from 'vxe-table'
         import 'vxe-table/lib/index.css'
@@ -24,7 +24,7 @@
     <h3>主题</h3>
     <p>修改默认的主题颜色</p>
     <pre>
-      <code>
+      <code >
         // Case 1. 引入默认的样式
         import 'vxe-table/lib/index.css'
 
@@ -40,7 +40,7 @@
     <h3>国际化</h3>
     <p>修改默认的国际化信息</p>
     <pre>
-      <code>
+      <code >
         import Vue from 'vue'
         import VueI18n from 'vxe-i18n'
         import VXETable from 'vxe-table'
@@ -76,7 +76,7 @@ import hljs from 'highlight.js'
 
 export default {
   mounted () {
-    this.$el.querySelectorAll('pre').forEach((block) => {
+    this.$el.querySelectorAll('pre code').forEach((block) => {
       hljs.highlightBlock(block)
     })
   }

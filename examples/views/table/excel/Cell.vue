@@ -7,10 +7,18 @@
       :columns="columns"
       :data.sync="tableData">
     </vxe-excel>
+
+    <p>调用代码</p>
+
+    <pre>
+      <code class="xml">{{ demoCodes[0] }}</code>
+    </pre>
   </div>
 </template>
 
 <script>
+import hljs from 'highlight.js'
+
 export default {
   data () {
     let columns = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P']
@@ -40,8 +48,22 @@ export default {
           item[name.toLowerCase()] = ''
         })
         return item
-      })
+      }),
+      demoCodes: [
+        `
+        <vxe-excel
+          max-height="600"
+          :columns="columns"
+          :data.sync="tableData">
+        </vxe-excel
+        `
+      ]
     }
+  },
+  mounted () {
+    this.$el.querySelectorAll('pre code').forEach((block) => {
+      hljs.highlightBlock(block)
+    })
   }
 }
 </script>
