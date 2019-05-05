@@ -45,6 +45,7 @@ function renderColumn (h, _vm, $table, fixedType, row, rowIndex, column, columnI
     class: ['vxe-body--column', column.id, {
       [`col--${align}`]: align,
       'col--edit': editRender,
+      'edit--visible': editRender && editRender.type === 'visible',
       'edit--selected': editRender && selected && selected.row === row && selected.column === column,
       'edit--actived': editRender && actived && actived.row === row && actived.column === column,
       'fixed--hidden': fixedHiddenColumn
@@ -70,7 +71,7 @@ function renderColumn (h, _vm, $table, fixedType, row, rowIndex, column, columnI
 }
 
 function renderRows (h, _vm, $table, fixedType, tableColumn) {
-  let { highlightHoverRow, rowKey, rowClassName, getRecords, tableData, selectRow, hoverRow, overflowX, columnStore, expandeds } = $table
+  let { highlightHoverRow, id, rowKey, rowClassName, getRecords, tableData, selectRow, hoverRow, overflowX, columnStore, expandeds } = $table
   let { leftList, rightList } = columnStore
   let rows = []
   tableData.forEach((row, rowIndex) => {
@@ -87,7 +88,7 @@ function renderRows (h, _vm, $table, fixedType, tableColumn) {
     }
     rows.push(
       h('tr', {
-        class: ['vxe-body--row', {
+        class: ['vxe-body--row', `row--${id}_${rowIndex}`, {
           'row--selected': row === selectRow,
           'row--hover': row === hoverRow
         }, rowClassName ? XEUtils.isFunction(rowClassName) ? rowClassName({ row, rowIndex, data: getRecords() }) : rowClassName : ''],

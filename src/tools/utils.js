@@ -1,4 +1,5 @@
-// 全局键值
+import XEUtils from 'xe-utils'
+
 var columnId = 0
 
 const UtilTools = {
@@ -19,6 +20,12 @@ const UtilTools = {
       }
     })
     return result
+  },
+  getCellValue (row, prop) {
+    return XEUtils.get(row, prop)
+  },
+  setCellValue (row, prop, value) {
+    return XEUtils.set(row, prop, value)
   },
   getColumnConfig (_vm, { renderHeader, renderCell, renderData } = {}) {
     return {
@@ -43,7 +50,7 @@ const UtilTools = {
       filterMultiple: _vm.filterMultiple,
       filterMethod: _vm.filterMethod,
       columnKey: _vm.columnKey,
-      editRender: _vm.editRender ? Object.assign({}, _vm.editRender) : _vm.editRender,
+      editRender: _vm.editRender,
       // 渲染属性
       visible: true,
       level: 1,

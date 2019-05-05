@@ -38,7 +38,14 @@ function mockData () {
       rate: XEUtils.random(0, 5),
       address: `地址 地址地址 地址地址 址地址址地址 址地址 址地址  址地址 址地址  址地址 址地址址地址址地址 地址${index}`,
       updateTime: currTime,
-      createTime: currTime
+      createTime: currTime,
+      info: {
+        name2: 'name2_' + fullIndex,
+        more: {
+          sex2: index % 3 ? '0' : '1',
+          age2: XEUtils.random(18, 35)
+        }
+      }
     })
   }
   if (fullIndex < size) {

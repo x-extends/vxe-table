@@ -27,6 +27,11 @@
     .vxe-body--row {
       transition: background-color .2s ease-in-out;
     }
+    .vxe-input--wrapper {
+      .vxe-input {
+        transition: border .2s ease-in-out;
+      }
+    }
   }
 }
 .vxe-table,
@@ -211,6 +216,10 @@
         height: 50px;
       }
     }
+    .vxe-input--wrapper {
+      height: 36px;
+      line-height: 36px;
+    }
   }
   &.size--small {
     font-size: 12px;
@@ -224,6 +233,10 @@
         width: 44px;
         height: 44px;
       }
+    }
+    .vxe-input--wrapper {
+      height: 32px;
+      line-height: 32px;
     }
   }
   &.size--mini {
@@ -239,6 +252,10 @@
         height: 38px;
       }
     }
+    .vxe-input--wrapper {
+      height: 28px;
+      line-height: 28px;
+    }
   }
   .vxe-cell {
     white-space: normal;
@@ -251,7 +268,7 @@
       text-overflow: ellipsis;
       white-space: nowrap;
     }
-    .vxe-input {
+    .vxe-input--wrapper {
       width: 100%;
     }
   }
@@ -484,10 +501,32 @@
   }
 
   /*可编辑*/
-  .vxe-body--column {
-    &.col--edit {
-      &.edit--actived {
-        padding: 0;
+  &.vxe-editable {
+    .vxe-body--column {
+      line-height: 1;
+      &.col--edit {
+        &.edit--actived {
+          padding: 0;
+        }
+      }
+    }
+    .vxe-body--column {
+      height: 48px;
+      padding: 0;
+    }
+    &.size--medium {
+      .vxe-body--column {
+        height: 44px;
+      }
+    }
+    &.size--small {
+      .vxe-body--column {
+        height: 40px;
+      }
+    }
+    &.size--mini {
+      .vxe-body--column {
+        height: 36px;
       }
     }
   }
@@ -757,5 +796,30 @@
         transform: translate(-50%,-50%);
       }
     }
+  }
+}
+
+/*input*/
+.vxe-input--wrapper {
+  height: 40px;
+  line-height: 40px;
+  .vxe-input,
+  .vxe-textarea {
+    outline: 0;
+    padding: 0 2px;
+    height: 100%;
+    width: 100%;
+    color: $vxe-font-color;
+    border: 1px solid $vxe-input-border-color;
+    &:focus {
+      border: 1px solid $vxe-primary-color;
+    }
+  }
+  .vxe-input {
+    border-radius: 4px;
+    background-color: #FFF;
+  }
+  .vxe-textarea {
+    resize: none;
   }
 }

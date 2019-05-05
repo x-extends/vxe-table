@@ -1,5 +1,5 @@
-import XEUtils from 'xe-utils'
 import UtilTools from '../../../src/tools/utils'
+import GlobalConfig from '../../../src/conf'
 
 export default {
   name: 'VxeTableColumn',
@@ -43,7 +43,7 @@ export default {
     // 列的 key
     columnKey: [String, Number],
     // 可编辑列
-    editRender: [Object, Boolean]
+    editRender: Object
   },
   inject: [
     '$table'
@@ -135,7 +135,7 @@ export default {
       if ($scopedSlots && $scopedSlots.default) {
         return $scopedSlots.default(params)
       }
-      cellValue = XEUtils.get(row, column.property)
+      cellValue = UtilTools.getCellValue(row, column.property)
       if (formatter) {
         cellValue = formatter({ cellValue, row, rowIndex, column, columnIndex })
       }
@@ -288,7 +288,7 @@ export default {
       }
       if (!isHidden) {
         options.domProps = {
-          checked: XEUtils.get(row, column.property)
+          checked: UtilTools.getCellValue(row, column.property)
         }
         options.on = {
           change (evnt) {
@@ -421,58 +421,85 @@ export default {
     },
     // 行格编辑模式
     renderRowEdit (h, params) {
-      let { $table, $scopedSlots } = this
+      let { $table, $scopedSlots, editRender } = this
       let { editStore } = $table
       let { actived } = editStore
-      let { row, column } = params
-      let { editRender } = column
+      let { row } = params
       if (editRender.type === 'visible' || (actived && actived.row === row)) {
         if ($scopedSlots && $scopedSlots.edit) {
           return $scopedSlots.edit(params)
         }
-        return editRender.name ? this.renderCustomEdit(h, params) : this.renderDefaultEdit(h, params)
+        return this.renderCompEdit(h, params, editRender.name)
       }
       return this.renderCell(h, params)
     },
     // 单元格编辑模式
     renderCellEdit (h, params) {
-      let { $table, $scopedSlots } = this
+      let { $table, $scopedSlots, editRender } = this
+      let { renderMap = {} } = GlobalConfig
       let { editStore } = $table
       let { actived } = editStore
       let { row, column } = params
-      let { editRender } = column
+      let compConf = renderMap[editRender.name]
       if (editRender.type === 'visible' || (actived && actived.row === row && actived.column === column)) {
         if ($scopedSlots && $scopedSlots.edit) {
           return $scopedSlots.edit(params)
         }
-        return editRender.name ? this.renderCustomEdit(h, params) : this.renderDefaultEdit(h, params)
+        return this.renderCompEdit(h, params, editRender.name)
       }
-      return this.renderCell(h, params)
+      return compConf && compConf.formatLabel ? compConf.formatLabel(UtilTools.getCellValue(row, column.property), editRender) : this.renderCell(h, params)
+    },
+    renderCompEdit (h, params, name) {
+      return !name || name === 'input' || name === 'textarea' ? this.renderDefaultEdit(h, params) : this.renderCustomEdit(h, params)
     },
     renderDefaultEdit (h, params) {
+      let { editRender } = this
       let { row, column } = params
+      let { name = 'input', attrs } = editRender
+      if (name === 'input') {
+        attrs = Object.assign({ type: 'text' }, attrs)
+      }
       return [
-        h('input', {
-          class: ['vxe-input'],
-          attrs: {
-            type: 'text'
-          },
-          domProps: {
-            value: XEUtils.get(row, column.property)
-          },
-          on: {
-            input (evnt) {
-              XEUtils.set(row, column.property, evnt.target.value)
+        h('div', {
+          class: ['vxe-input--wrapper']
+        }, [
+          h(name, {
+            class: [`vxe-${name}`],
+            attrs,
+            domProps: {
+              value: UtilTools.getCellValue(row, column.property)
+            },
+            on: {
+              input (evnt) {
+                UtilTools.setCellValue(row, column.property, evnt.target.value)
+              }
             }
-          }
-        })
+          })
+        ])
       ]
     },
     renderCustomEdit (h, params) {
-      let { column } = params
-      let { editRender } = column
+      let { $table, editRender } = this
+      let { row, column } = params
+      let { props } = editRender
+      let { renderMap = {} } = GlobalConfig
+      let compConf = renderMap[editRender.name]
+      if (compConf && compConf.render) {
+        return compConf.render(h, editRender, params)
+      }
+      if ($table.size) {
+        props = Object.assign({ size: $table.size }, props)
+      }
       return [
-        h(editRender.name)
+        h(editRender.name, {
+          props,
+          model: {
+            value: UtilTools.getCellValue(row, column.property),
+            callback (value) {
+              UtilTools.setCellValue(row, column.property, value)
+            }
+          }
+        })
       ]
     }
   }

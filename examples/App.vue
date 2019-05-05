@@ -3,7 +3,7 @@
     <header class="page-header">
       <img class="logo" src="./assets/logo.png">
       <h1 class="title"><a href="https://github.com/xuliangzhan/vxe-table">vxe-table</a></h1>
-      <span class="desc">一个性能优越、功能更强的 Vue 表格组件</span>
+      <span class="desc">一个性能更优、功能更强的 Vue 表格组件</span>
     </header>
     <div class="page-container">
       <div class="aside">
@@ -20,6 +20,7 @@
         </ul>
       </div>
       <div class="body">
+        <a class="link tosrc" href="https://github.com/xuliangzhan/vxe-table/tree/master/examples/views/table" target="_blank">查看代码</a>
         <a v-if="demoLink" class="link todemo" :href="demoLink" target="_blank">在线运行</a>
         <router-view/>
       </div>
@@ -266,7 +267,7 @@ export default {
           ]
         },
         {
-          lable: '大数据表格',
+          lable: '海量数据',
           value: 'scroll',
           expand: false,
           children: [
@@ -415,19 +416,31 @@ export default {
           ]
         },
         {
-          lable: '其他组件库',
+          lable: '集成渲染',
           expand: false,
           children: [
             {
-              lable: '使用 element-ui',
+              lable: '与 element-ui 集成',
               locat: {
                 name: 'TableOtherElement'
               }
             },
             {
-              lable: '使用 iview',
+              lable: '使用 element-ui 配置式插件',
+              locat: {
+                name: 'TableOtherElementConfig'
+              }
+            },
+            {
+              lable: '与 iview 集成',
               locat: {
                 name: 'TableOtherIview'
+              }
+            },
+            {
+              lable: '使用 iview 配置式插件',
+              locat: {
+                name: 'TableOtherIviewConfig'
               }
             },
             {

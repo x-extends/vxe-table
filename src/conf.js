@@ -5,6 +5,7 @@ const GlobalConfig = {
   size: null,
   optimized: false,
   contextMenu: null,
+  renderMap: null,
   i18n: (key, value) => XEUtils.get(zhCNLocat, key)
 }
 

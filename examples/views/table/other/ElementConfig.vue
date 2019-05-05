@@ -1,63 +1,36 @@
 <template>
   <div>
-    <p>自定义渲染 iview 组件</p>
+    <p>使用配置式的插件</p>
+
+    <pre>
+      <code>
+        import VXETable from 'vxe-table'
+        import VXETableElementPlugin from 'vxe-table/lib/plugins/element'
+
+        VXETable.setup(VXETableElementPlugin)
+      </code>
+    </pre>
+
+    <p>使用 edit-render 简化配置</p>
 
     <vxe-table
       border
-      show-footer
-      class="vxe-table-iview"
+      class="vxe-table-element"
       height="400"
       :loading="loading"
       :data.sync="tableData"
-      :footer-method="footerMethod"
       :edit-config="{trigger: 'click', mode: 'cell'}">
       <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
       <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
-      <vxe-table-column prop="name" label="Input"  min-width="140" :edit-render="{type: 'default'}">
-        <template v-slot:edit="{ row }">
-          <Input v-model="row.name"/>
-        </template>
-      </vxe-table-column>
-      <vxe-table-column prop="age" label="InputNumber"  width="140" :edit-render="{type: 'default'}">
-        <template v-slot:edit="{ row }">
-          <InputNumber v-model="row.age" :max="35" :min="18"></InputNumber>
-        </template>
-      </vxe-table-column>
-      <vxe-table-column prop="sex" label="Select"  width="140" :edit-render="{type: 'default'}">
-        <template v-slot:edit="{ row }">
-          <Select v-model="row.sex">
-            <Option v-for="item in sexList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-          </Select>
-        </template>
-        <template v-slot="{ row }">{{ getSelectLabel(row.sex, sexList) }}</template>
-      </vxe-table-column>
-      <vxe-table-column prop="region" label="Cascader"  width="200" :edit-render="{type: 'default'}">
-        <template v-slot:edit="{ row }">
-          <Cascader v-model="row.region" :data="regionList"></Cascader>
-        </template>
-        <template v-slot="{ row }">{{ getCascaderLabel(row.region, regionList) }}</template>
-      </vxe-table-column>
-      <vxe-table-column prop="date" label="DatePicker"  width="200" :edit-render="{type: 'default'}">
-        <template v-slot:edit="{ row }">
-          <DatePicker v-model="row.date" type="date" format="yyyy/MM/dd"></DatePicker>
-        </template>
-        <template v-slot="{ row }">{{ formatDate(row.date, 'yyyy/MM/dd') }}</template>
-      </vxe-table-column>
-      <vxe-table-column prop="date2" label="TimePicker"  width="200" :edit-render="{type: 'default'}">
-        <template v-slot:edit="{ row }">
-          <TimePicker v-model="row.date2" type="time"></TimePicker>
-        </template>
-      </vxe-table-column>
-      <vxe-table-column prop="rate" label="Rate" width="200" :edit-render="{type: 'visible'}">
-        <template v-slot:edit="{ row }">
-          <Rate v-model="row.rate" />
-        </template>
-      </vxe-table-column>
-      <vxe-table-column prop="flag" label="iSwitch" width="100" fixed="right" :edit-render="{type: 'visible'}">
-        <template v-slot:edit="{ row }">
-          <iSwitch v-model="row.flag"/>
-        </template>
-      </vxe-table-column>
+      <vxe-table-column prop="name" label="ElInput" min-width="140" :edit-render="{name: 'ElInput'}"></vxe-table-column>
+      <vxe-table-column prop="age" label="ElInputNumber"  width="140" :edit-render="{name: 'ElInputNumber', props: {max: 35, min: 18}}"></vxe-table-column>
+      <vxe-table-column prop="sex" label="ElSelect" width="140" :edit-render="{name: 'ElSelect', options: sexList}"></vxe-table-column>
+      <vxe-table-column prop="region" label="ElCascader" width="200" :edit-render="{name: 'ElCascader', props: {options: regionList}}"></vxe-table-column>
+      <vxe-table-column prop="date" label="ElDatePicker" width="200" :edit-render="{name: 'ElDatePicker', props: {type: 'date', format: 'yyyy/MM/dd'}}"></vxe-table-column>
+      <vxe-table-column prop="date1" label="DateTimePicker" width="220" :edit-render="{name: 'ElDatePicker', props: {type: 'datetime', format: 'yyyy-MM-dd HH:mm:ss'}}"></vxe-table-column>
+      <vxe-table-column prop="date2" label="ElTimeSelect"  width="200" :edit-render="{name: 'ElTimeSelect', props: {pickerOptions: {start: '08:30', step: '00:15', end: '18:30'}}}"></vxe-table-column>
+      <vxe-table-column prop="rate" label="ElRate" width="200" :edit-render="{name: 'ElRate', type: 'visible'}"></vxe-table-column>
+      <vxe-table-column prop="flag" label="ElSwitch" width="100" fixed="right" :edit-render="{name: 'ElSwitch', type: 'visible'}"></vxe-table-column>
     </vxe-table>
   </div>
 </template>
@@ -155,12 +128,12 @@ export default {
 </script>
 
 <style>
-/*使用 iview 需要覆盖以下样式*/
-.vxe-table-iview .vxe-cell > .ivu-input-wrapper,
-.vxe-table-iview .vxe-cell > .ivu-input-number,
-.vxe-table-iview .vxe-cell > .ivu-select,
-.vxe-table-iview .vxe-cell > .ivu-cascader,
-.vxe-table-iview .vxe-cell > .ivu-date-picker-editor {
+/*使用 element-ui 需要覆盖以下样式*/
+.vxe-table-element .vxe-cell > .el-input,
+.vxe-table-element .vxe-cell > .el-input-number,
+.vxe-table-element .vxe-cell > .el-select,
+.vxe-table-element .vxe-cell > .el-cascader,
+.vxe-table-element .vxe-cell > .el-date-editor {
   width: 100%;
 }
 </style>

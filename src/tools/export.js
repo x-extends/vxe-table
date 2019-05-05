@@ -1,4 +1,4 @@
-import XEUtils from 'xe-utils'
+import UtilTools from './utils'
 import DomTools from './dom'
 
 const ExportTools = {
@@ -15,7 +15,7 @@ const ExportTools = {
           if (column.type === 'index') {
             return column.index ? column.index(rowIndex) : rowIndex + 1
           }
-          return XEUtils.get(record, column.property) || ''
+          return UtilTools.getCellValue(record, column.property) || ''
         }).join(',') + '\n'
       } else {
         content += columns.map(column => record[column.id]).join(',') + '\n'

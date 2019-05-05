@@ -111,9 +111,15 @@
     flex-grow: 1;
     overflow: hidden;
     padding: 15px 0 25px 25px;
+    .tosrc {
+      position: absolute;
+      top: 15px;
+      right: 80px;
+      font-size: 16px;
+    }
     .todemo {
       position: absolute;
-      top: 10px;
+      top: 15px;
       right: 0;
       font-size: 16px;
     }

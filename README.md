@@ -84,8 +84,13 @@ import VXETable from 'vxe-table'
 import 'vxe-table/lib/index.css'
 
 Vue.use(VXETable, {
+  // 默认尺寸
   size: 'small',
+  // 全局快捷菜单
   contextMenu: null,
+  // 自定义渲染配置
+  render: null,
+  // 优化配置项
   optimized: {
     scroll: {
       gt: 500,
@@ -297,7 +302,7 @@ new Vue({ i18n }).$mount('#app')
 | 属性 | 描述 | 类型 | 可选值 | 默认值 |
 |------|------|-----|-----|-----|
 | type | 渲染类型 | String | default（组件触发后可视） / visible（组件一直可视） | default |
-| autofocus | 该组件被激活后是否自动获得焦点 | Boolean | — | — |
+| name | 渲染的组件名 | String | — | input |
 
 #### Table-column Scoped Slot
 

@@ -9,6 +9,7 @@ import GlobalEvent from './event'
 import TableProps from './props'
 import TableFilter from './filter'
 import TableContextMenu from './menu'
+import GlobalConfig from '../../../src/conf'
 
 /**
  * 渲染浮固定列
@@ -330,6 +331,7 @@ export default {
       stripe,
       highlightHoverRow,
       size,
+      editConfig,
       showFooter,
       footerMethod,
       overflowX,
@@ -346,6 +348,7 @@ export default {
     let footerData = showFooter && footerMethod && tableColumn.length ? footerMethod({ columns: tableColumn, data: getRecords() }) : ['-']
     return h('div', {
       class: ['vxe-table', size ? `size--${size}` : '', {
+        'vxe-editable': editConfig,
         'show--head': showHeader,
         'show--foot': showFooter,
         'scroll--y': overflowY,
@@ -555,7 +558,7 @@ export default {
                 }
               })
               if (valueList.length) {
-                let a = filterMethod ? valueList.some(value => filterMethod({ value, row, column })) : valueList.indexOf(XEUtils.get(row, property)) > -1
+                let a = filterMethod ? valueList.some(value => filterMethod({ value, row, column })) : valueList.indexOf(UtilTools.getCellValue(row, property)) > -1
                 return a
               }
             }
@@ -993,7 +996,7 @@ export default {
       }
       let cell = evnt.currentTarget
       let wrapperElem = cell.children[0]
-      let content = XEUtils.get(row, column.property)
+      let content = UtilTools.getCellValue(row, column.property)
       if (content && wrapperElem.scrollWidth > wrapperElem.clientWidth) {
         let { tooltipStore, $refs } = this
         if (tooltipStore.column !== column || tooltipStore.row !== row || !tooltipStore.visible) {
@@ -1002,7 +1005,7 @@ export default {
           Object.assign(tooltipStore, {
             row,
             column,
-            content: XEUtils.get(row, column.property),
+            content: UtilTools.getCellValue(row, column.property),
             visible: true
           })
           this.$nextTick().then(() => {
@@ -1047,11 +1050,11 @@ export default {
       let { $listeners, selection, tableData } = this
       let { property } = column
       if (property) {
-        XEUtils.set(row, property, value)
-        this.isAllSelected = tableData.every(item => XEUtils.get(item, property))
-        this.isIndeterminate = !this.isAllSelected && tableData.some(item => XEUtils.get(item, property))
+        UtilTools.setCellValue(row, property, value)
+        this.isAllSelected = tableData.every(item => UtilTools.getCellValue(item, property))
+        this.isIndeterminate = !this.isAllSelected && tableData.some(item => UtilTools.getCellValue(item, property))
         if ($listeners['select-change']) {
-          selection = tableData.filter(item => XEUtils.get(item, property))
+          selection = tableData.filter(item => UtilTools.getCellValue(item, property))
         }
       } else {
         if (value) {
@@ -1079,7 +1082,7 @@ export default {
       let property = column.property
       if (property) {
         this.tableData.forEach(item => {
-          XEUtils.set(item, property, value)
+          UtilTools.setCellValue(item, property, value)
         })
       }
       this.selection = value ? Array.from(this.tableData) : []
@@ -1160,6 +1163,9 @@ export default {
         selected.column = null
         actived.row = row
         actived.column = column
+        this.$nextTick(() => {
+          this.handleFocus(params, evnt)
+        })
       }
     },
     /**
@@ -1177,16 +1183,53 @@ export default {
       }
     },
     /**
+     * 处理聚焦
+     */
+    handleFocus (params, evnt) {
+      let { column, cell } = params
+      let { editRender } = column
+      let { renderMap = {} } = GlobalConfig
+      let compRender = renderMap[editRender.name]
+      let inputElem
+      // 自定义的处理
+      if (compRender) {
+        if (compRender.autofocus) {
+          inputElem = cell.querySelector(compRender.autofocus)
+        }
+      } else {
+        // 内置的处理
+        inputElem = cell.querySelector('input.vxe-input')
+        if (!inputElem) {
+          inputElem = cell.querySelector('textarea.vxe-textarea')
+        }
+      }
+      if (inputElem) {
+        inputElem.focus()
+      }
+    },
+    /**
      * 只对 mode=cell 有效，激活行编辑
      */
     setActiveRow (row) {
-
+      let { $refs, id, tableData, visibleColumn, handleActived } = this
+      let rowIndex = XEUtils.findIndexOf(tableData, item => item === row)
+      if (rowIndex > -1) {
+        let column = visibleColumn.find(column => column.editRender)
+        let cell = $refs.tableBody.$el.querySelector(`.vxe-body--row.row--${id}_${rowIndex} .${column.id}`)
+        handleActived({ row, column, cell })
+      }
     },
     /**
      * 只对 mode=row 有效，激活单元格编辑
      */
     setActiveCell (row, prop) {
-
+      let { $refs, id, tableData, visibleColumn, handleActived } = this
+      let rowIndex = XEUtils.findIndexOf(tableData, item => item === row)
+      if (rowIndex > -1 && prop) {
+        let column = visibleColumn.find(column => column.property === prop)
+        let cell = $refs.tableBody.$el.querySelector(`.vxe-body--row.row--${id}_${rowIndex} .${column.id}`)
+        handleActived({ row, column, cell })
+      }
     },
     /**
      * 只对 trigger=dblclick 有效，选中单元格
