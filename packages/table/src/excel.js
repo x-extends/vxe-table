@@ -105,6 +105,7 @@ function buildProps (props = {}) {
   let { editConfig, contextMenu } = props
   return Object.assign({}, props, {
     border: true,
+    resizable: true,
     contextMenu: Object.assign({}, contextMenu, excelContextMenu),
     editConfig: editConfig ? Object.assign({}, excelEditConfig, editConfig) : excelEditConfig
   })

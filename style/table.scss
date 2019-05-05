@@ -218,7 +218,6 @@
     }
     .vxe-input--wrapper {
       height: 36px;
-      line-height: 36px;
     }
   }
   &.size--small {
@@ -236,7 +235,6 @@
     }
     .vxe-input--wrapper {
       height: 32px;
-      line-height: 32px;
     }
   }
   &.size--mini {
@@ -254,7 +252,6 @@
     }
     .vxe-input--wrapper {
       height: 28px;
-      line-height: 28px;
     }
   }
   .vxe-cell {
@@ -587,11 +584,10 @@
       cursor: cell;
       .vxe-cell {
         height: $excel-column-height;
-        line-height: $excel-column-height;
+        line-height: $excel-column-height - $excel-column-border-width;
         padding: 0 4px;
         .vxe-input--wrapper {
           height: $excel-column-height;
-          line-height: $excel-column-height - $excel-column-border-width;
           .vxe-input,
           .vxe-textarea {
             height: 100%;
@@ -614,17 +610,14 @@
       }
       &.edit--selected {
         .vxe-cell {
-          line-height: $excel-column-height - $excel-column-border-width;
           padding: 0 2px;
+          line-height: $excel-column-height - $excel-column-border-width * 3;
           border: $excel-column-border-width solid $excel-column-border-colir;
         }
       }
       &.edit--actived {
         .vxe-cell {
           padding: 0;
-          .vxe-input {
-            line-height: $excel-column-height - $excel-column-border-width * 2;
-          }
         }
       }
     }
@@ -901,7 +894,6 @@
 /*input*/
 .vxe-input--wrapper {
   height: 40px;
-  line-height: 40px;
   .vxe-input,
   .vxe-textarea {
     outline: 0;

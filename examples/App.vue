@@ -405,6 +405,7 @@ export default {
         },
         {
           lable: '集成渲染',
+          value: 'other',
           expand: false,
           children: [
             {

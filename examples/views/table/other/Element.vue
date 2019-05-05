@@ -85,7 +85,7 @@ export default {
   created () {
     this.loading = true
     setTimeout(() => {
-      let list = window.CACHE_DATA_LIST.slice(0, 50)
+      let list = window.CACHE_DATA_LIST.slice(0, 100)
       this.tableData = list
       this.loading = false
     }, 500)

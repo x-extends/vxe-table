@@ -183,7 +183,8 @@ export default {
     if (customHeight) {
       style.height = `${fixedType ? (customHeight ? customHeight - headerHeight - footerHeight : tableHeight) - (showFooter ? 0 : scrollXHeight) : customHeight - headerHeight - footerHeight}px`
     } else if (maxHeight) {
-      style['max-height'] = `${XEUtils.toNumber(maxHeight)}px`
+      maxHeight = XEUtils.toNumber(maxHeight)
+      style['max-height'] = `${fixedType ? maxHeight - (showFooter ? 0 : scrollXHeight) : maxHeight}px`
     }
     // 如果是使用优化模式
     if (fixedType && overflow) {
