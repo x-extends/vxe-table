@@ -5,7 +5,13 @@ const GlobalConfig = {
   size: null,
   optimized: false,
   contextMenu: null,
-  renderMap: null,
+  renderMap: {},
+  iconMap: {
+    sortAsc: 'vxe-sort--asc-icon',
+    sortDesc: 'vxe-sort--desc-icon',
+    filter: 'vxe-filter--icon',
+    edit: 'vxe-edit--icon'
+  },
   i18n: (key, value) => XEUtils.get(zhCNLocat, key)
 }
 

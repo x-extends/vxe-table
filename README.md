@@ -88,8 +88,6 @@ Vue.use(VXETable, {
   size: 'small',
   // 全局快捷菜单
   contextMenu: null,
-  // 自定义渲染配置
-  render: null,
   // 优化配置项
   optimized: {
     scroll: {
@@ -213,6 +211,7 @@ new Vue({ i18n }).$mount('#app')
 |------|------|-----|-----|-----|
 | trigger | 触发方式 | String | manual（手动触发方式，只能用于 mode=row） / click（点击触发编辑） / dblclick（双击触发编辑） | click |
 | mode | 编辑模式 | String | cell（单元格编辑模式） / row（行编辑模式） | cell |
+| showIcon | 是否显示列头编辑图标 | Boolean | — | true |
 
 ##### edit-rules 校验规则配置项说明
 

@@ -268,6 +268,9 @@
       text-overflow: ellipsis;
       white-space: nowrap;
     }
+    > span {
+      vertical-align: middle;
+    }
     .vxe-input--wrapper {
       width: 100%;
     }
@@ -502,6 +505,42 @@
 
   /*可编辑*/
   &.vxe-editable {
+    .vxe-header--column {
+      .vxe-edit--icon {
+        position: relative;
+        width: 11px;
+        height: 11px;
+        display: inline-block;
+        border-radius: 2px;
+        border: 1px solid $vxe-font-color;
+        vertical-align: middle;
+        margin-right: 6px;
+        &:before,
+        &:after {
+          content: "";
+          position: absolute;
+          background-color: #fff;
+        }
+        &:before {
+          content: "";
+          position: absolute;
+          top: -1px;
+          right: -1px;
+          width: 6px;
+          height: 6px;
+        }
+        &:after {
+          left: 2px;
+          top: 1px;
+          width: 10px;
+          height: 3px;
+          border-radius: 2px;
+          border: 1px solid $vxe-font-color;
+          transform: rotate(-45deg);
+          z-index: 1;
+        }
+      }
+    }
     .vxe-body--column {
       line-height: 1;
       &.col--edit {
@@ -527,6 +566,66 @@
     &.size--mini {
       .vxe-body--column {
         height: 36px;
+      }
+    }
+  }
+
+  /*excel*/
+  &.vxe-excel {
+    $excel-column-height: 22px;
+    $excel-column-border-width: 2px;
+    $excel-column-border-colir: #217346;
+    .vxe-header--column {
+      padding: 4px 0;
+      font-size: 12px;
+      cursor: default;
+    }
+    .vxe-body--column {
+      padding: 0;
+      height: inherit;
+      line-height: inherit;
+      cursor: cell;
+      .vxe-cell {
+        height: $excel-column-height;
+        line-height: $excel-column-height;
+        padding: 0 4px;
+        .vxe-input--wrapper {
+          height: $excel-column-height;
+          line-height: $excel-column-height - $excel-column-border-width;
+          .vxe-input,
+          .vxe-textarea {
+            height: 100%;
+          }
+          .vxe-input,
+          .vxe-input:focus,
+          .vxe-textarea,
+          .vxe-textarea:focus {
+            border-radius: 0;
+            border: $excel-column-border-width solid $excel-column-border-colir;
+          }
+        }
+      }
+      &:first-child {
+        background-color: #f8f8f9;
+        cursor: default;
+        .vxe-cell {
+          padding: 0;
+        }
+      }
+      &.edit--selected {
+        .vxe-cell {
+          line-height: $excel-column-height - $excel-column-border-width;
+          padding: 0 2px;
+          border: $excel-column-border-width solid $excel-column-border-colir;
+        }
+      }
+      &.edit--actived {
+        .vxe-cell {
+          padding: 0;
+          .vxe-input {
+            line-height: $excel-column-height - $excel-column-border-width * 2;
+          }
+        }
       }
     }
   }

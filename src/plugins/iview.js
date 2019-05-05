@@ -46,7 +46,10 @@ var VXETableIViewPlugin = {
     Cascader: {
       formatLabel: function (cellValue, editRender) {
         var props = editRender.props || {}
-        return Handles.getCascaderLabel(cellValue, props.data, props)
+        var values = cellValue || []
+        var labels = []
+        Handles.matchCascaderData(0, props.data, values, labels)
+        return labels.join(` ${props.separator || '/'} `)
       }
     },
     DatePicker: {

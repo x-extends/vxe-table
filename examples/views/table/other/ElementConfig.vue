@@ -15,9 +15,11 @@
 
     <vxe-table
       border
+      show-footer
       class="vxe-table-element"
-      height="400"
+      height="600"
       :loading="loading"
+      :footer-method="footerMethod"
       :data.sync="tableData"
       :edit-config="{trigger: 'click', mode: 'cell'}">
       <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>

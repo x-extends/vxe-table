@@ -34,13 +34,6 @@ function formatSelectLabel (cellValue, editRender) {
   return item ? item[labelProp] : null
 }
 
-function getCascaderLabel (cellValue, list, props) {
-  var values = cellValue || []
-  var labels = []
-  matchCascaderData(0, list, values, labels)
-  return labels.join(` ${props.separator || '/'} `)
-}
-
 function formatDatePickerLabel (cellValue, editRender) {
   var props = editRender.props || {}
   switch (props.type) {
@@ -63,5 +56,5 @@ function formatDatePickerLabel (cellValue, editRender) {
 export default {
   formatSelectLabel,
   formatDatePickerLabel,
-  getCascaderLabel
+  matchCascaderData
 }

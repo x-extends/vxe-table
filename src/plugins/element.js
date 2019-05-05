@@ -46,7 +46,10 @@ var VXETableElementPlugin = {
     ElCascader: {
       formatLabel: function (cellValue, editRender) {
         var props = editRender.props || {}
-        return Handles.getCascaderLabel(cellValue, props.options, props)
+        var values = cellValue || []
+        var labels = []
+        Handles.matchCascaderData(0, props.options, values, labels)
+        return (props.showAllLevels === false ? labels.slice(labels.length - 1, labels.length) : labels).join(` ${props.separator || '/'} `)
       }
     },
     ElDatePicker: {

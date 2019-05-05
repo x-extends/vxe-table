@@ -17,7 +17,7 @@
       border
       show-footer
       class="vxe-table-iview"
-      height="400"
+      height="600"
       :loading="loading"
       :data.sync="tableData"
       :footer-method="footerMethod"

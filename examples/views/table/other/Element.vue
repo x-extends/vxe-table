@@ -6,7 +6,7 @@
       border
       show-footer
       class="vxe-table-element"
-      height="400"
+      height="600"
       :loading="loading"
       :data.sync="tableData"
       :footer-method="footerMethod"

@@ -130,3 +130,16 @@
   color: #333;
   text-align: center;
 }
+
+.btn {
+  outline: 0;
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid #dcdfe6;
+  color: #606266;
+  background-color: #fff;
+  cursor: pointer;
+  &:active {
+    border-color: #3a8ee6;
+  }
+}

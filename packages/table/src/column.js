@@ -355,6 +355,7 @@ export default {
       return [h('span', params.column.label)].concat(this.renderSortIcon(h, params))
     },
     renderSortIcon (h, params) {
+      let { iconMap } = GlobalConfig
       let { $table } = this
       let { column } = params
       return [
@@ -362,7 +363,7 @@ export default {
           class: ['vxe-sort-wrapper']
         }, [
           h('i', {
-            class: ['vxe-sort--asc-icon', {
+            class: [iconMap.sortAsc, {
               'sort--active': column.order === 'asc'
             }],
             on: {
@@ -372,7 +373,7 @@ export default {
             }
           }),
           h('i', {
-            class: ['vxe-sort--desc-icon', {
+            class: [iconMap.sortDesc, {
               'sort--active': column.order === 'desc'
             }],
             on: {
@@ -392,13 +393,14 @@ export default {
       return [h('span', params.column.label)].concat(this.renderFilterIcon(h, params))
     },
     renderFilterIcon (h, params) {
+      let { iconMap } = GlobalConfig
       let { $table } = this
       return [
         h('span', {
           class: ['vxe-filter-wrapper']
         }, [
           h('i', {
-            class: ['vxe-filter--icon'],
+            class: [iconMap.filter],
             on: {
               click (evnt) {
                 $table.triggerFilterEvent(evnt, params.column, params)
@@ -413,8 +415,13 @@ export default {
      * 可编辑
      */
     renderEditHeader (h, params) {
-      let { sortable, filters } = this
+      let { iconMap } = GlobalConfig
+      let { $table, sortable, filters } = this
+      let { editConfig = {} } = $table
       return [
+        editConfig.showIcon === false ? null : h('i', {
+          class: iconMap.edit
+        }),
         h('span', params.column.label)
       ].concat(sortable ? this.renderSortIcon(h, params) : [])
         .concat(filters && filters.length ? this.renderFilterIcon(h, params) : [])
