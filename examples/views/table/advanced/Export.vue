@@ -2,9 +2,9 @@
   <div>
     <p>通过调用 exportCsv 函数可以直接将表格导出为 .cvs 格式的文件；</p>
 
-    <button @click="exportCsvEvent">默认导出</button>
+    <button class="btn" @click="exportCsvEvent">默认导出</button>
     <vxe-table
-      ref="vTable1"
+      ref="xTable1"
       highlight-hover-row
       height="300"
       :data.sync="tableData">
@@ -17,9 +17,9 @@
 
     <p>配置 columnFilterMethod 参数过滤指定列</p>
 
-    <button @click="exportCsvEvent2">导出指定列 [name,sex]</button>
+    <button class="btn" @click="exportCsvEvent2">导出指定列 [name,sex]</button>
     <vxe-table
-      ref="vTable2"
+      ref="xTable2"
       highlight-hover-row
       height="300"
       :data.sync="tableData">
@@ -32,9 +32,9 @@
 
     <p>配置 dataFilterMethod 参数过滤指定行</p>
 
-    <button @click="exportCsvEvent3">导出指定第10-20行</button>
+    <button class="btn" @click="exportCsvEvent3">导出指定第10-20行</button>
     <vxe-table
-      ref="vTable3"
+      ref="xTable3"
       highlight-hover-row
       height="300"
       :data.sync="tableData">
@@ -47,9 +47,9 @@
 
     <p>不导出表头，指定文件名，导出源数据,格式化数据</p>
 
-    <button @click="exportCsvEvent4">完整配置</button>
+    <button class="btn" @click="exportCsvEvent4">完整配置</button>
     <vxe-table
-      ref="vTable4"
+      ref="xTable4"
       highlight-hover-row
       height="300"
       :data.sync="tableData">
@@ -77,20 +77,20 @@ export default {
   },
   methods: {
     exportCsvEvent () {
-      this.$refs.vTable1.exportCsv()
+      this.$refs.xTable1.exportCsv()
     },
     exportCsvEvent2 () {
-      this.$refs.vTable2.exportCsv({
+      this.$refs.xTable2.exportCsv({
         columnFilterMethod: column => ['name', 'sex'].includes(column.property)
       })
     },
     exportCsvEvent3 () {
-      this.$refs.vTable3.exportCsv({
+      this.$refs.xTable3.exportCsv({
         dataFilterMethod: (row, rowIndex) => rowIndex >= 9 && rowIndex < 20
       })
     },
     exportCsvEvent4 () {
-      this.$refs.vTable1.exportCsv({
+      this.$refs.xTable1.exportCsv({
         filename: '自定义文件名.cvs',
         original: true,
         isHeader: false,

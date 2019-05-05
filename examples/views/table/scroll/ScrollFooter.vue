@@ -3,7 +3,7 @@
     <p>加载 {{ $route.params.size }} 条，左右固定列，表尾合计</p>
 
     <vxe-table
-      ref="vTable"
+      ref="xTable"
       border
       resizable
       show-footer
@@ -49,11 +49,11 @@ export default {
   created () {
     this.loading = true
     this.$nextTick(() => {
-      this.$refs.vTable.reload([])
+      this.$refs.xTable.reload([])
       setTimeout(() => {
         let size = this.$route.params.size
         let list = window.CACHE_DATA_LIST.slice(0, size)
-        this.$refs.vTable.reload(list)
+        this.$refs.xTable.reload(list)
         this.loading = false
       }, 500)
     })

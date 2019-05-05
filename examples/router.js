@@ -41,6 +41,10 @@ import TableScrollFooter from './views/table/scroll/ScrollFooter.vue'
 import TableEditManual from './views/table/edit/Manual.vue'
 import TableEditClick from './views/table/edit/Click.vue'
 import TableEditDBLClick from './views/table/edit/DBLClick.vue'
+import TableEditInsert from './views/table/edit/Insert.vue'
+import TableEditRemove from './views/table/edit/Remove.vue'
+import TableEditRevert from './views/table/edit/Revert.vue'
+import TableEditStatus from './views/table/edit/Status.vue'
 
 import TableExcelCell from './views/table/excel/Cell.vue'
 
@@ -246,6 +250,26 @@ export default new Router({
       path: '/table/edit/dblclick',
       name: 'TableEditDBLClick',
       component: TableEditDBLClick
+    },
+    {
+      path: '/table/edit/insert',
+      name: 'TableEditInsert',
+      component: TableEditInsert
+    },
+    {
+      path: '/table/edit/remove',
+      name: 'TableEditRemove',
+      component: TableEditRemove
+    },
+    {
+      path: '/table/edit/revert',
+      name: 'TableEditRevert',
+      component: TableEditRevert
+    },
+    {
+      path: '/table/edit/status',
+      name: 'TableEditStatus',
+      component: TableEditStatus
     },
     {
       path: '/table/excel/cell',

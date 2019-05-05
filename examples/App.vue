@@ -332,37 +332,26 @@ export default {
             },
             {
               lable: '插入数据',
-              disabled: true,
               locat: {
-                name: 'TableInstall'
+                name: 'TableEditInsert'
               }
             },
             {
               lable: '删除数据',
-              disabled: true,
               locat: {
-                name: 'TableInstall'
-              }
-            },
-            {
-              lable: '修改数据',
-              disabled: true,
-              locat: {
-                name: 'TableInstall'
+                name: 'TableEditRemove'
               }
             },
             {
               lable: '还原数据',
-              disabled: true,
               locat: {
-                name: 'TableInstall'
+                name: 'TableEditRevert'
               }
             },
             {
               lable: '编辑状态',
-              disabled: true,
               locat: {
-                name: 'TableInstall'
+                name: 'TableEditStatus'
               }
             },
             {

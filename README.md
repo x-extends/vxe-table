@@ -240,6 +240,9 @@ new Vue({ i18n }).$mount('#app')
 | 方法名 | 描述 | 参数 |
 |------|------|-----|
 | reload | 初始化数据 | data |
+| insert | 从第一行新增一行新数据 | record |
+| insertAt | 第二个参数 row 从指定位置新增一条数据； null 从第一行新增一行新数据；-1 从最后新增一条数据 | record,row |
+| remove | 删除指定行数据，指定 row 或 [row, ...] 删除多条数据 | rows |
 | getRecords | 获取表格数据 | rowIndex? |
 | clearSelectRow | 用于单选表格，清空用户的选择 | — |
 | setCurrentRow | 用于单选表格，设置某一行为选中状态，如果第二个参数为空，则会取消目前高亮行的选中状态 | row? |
@@ -248,6 +251,9 @@ new Vue({ i18n }).$mount('#app')
 | toggleAllSelection | 用于多选表格，切换所有行的选中状态 | — |
 | clearSort | 用于清空排序条件，数据会恢复成未排序的状态 | — |
 | clearFilter | 用于清空筛选条件，数据会恢复成未筛选的状态 | — |
+| setActiveRow | 只对 mode=cell 有效，激活行编辑 | row |
+| setActiveCell | 只对 mode=row 有效，激活单元格编辑 | row,prop |
+| setSelectCell | 只对 trigger!=manual 有效，选中单元格 | row,prop |
 | computeWidth | 重新计算并更新列宽 | — |
 | isScrollLoad | 判断是否启用了滚动渲染 | — |
 | exportCsv| 将表格数据导出为 .csv 文件，说明：支持IE9+、Edge、Chrome、Firefox 等常用浏览器。IE11以下可能存在中文乱码问题，部分浏览器需要手动修改后缀名为 .csv | [options](#exportcsv-参数说明) |

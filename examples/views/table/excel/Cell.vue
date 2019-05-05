@@ -3,7 +3,6 @@
     <p>使用 vxe-excel 渲染 Excel 表格</p>
 
     <vxe-excel
-      border
       :columns="columns"
       :data.sync="tableData">
     </vxe-excel>

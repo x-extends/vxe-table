@@ -529,6 +529,56 @@ export default {
       }
       return rest
     },
+    insert (record) {
+      this.insertAt(record)
+    },
+    /**
+     * 从指定行插入数据
+     */
+    insertAt (record, row) {
+      let { tableData } = this
+      let newRecord = record
+      if (arguments.length === 1) {
+        tableData.unshift(newRecord)
+      } else {
+        if (row === -1) {
+          tableData.push(newRecord)
+        } else {
+          let rowIndex = XEUtils.findIndexOf(tableData, item => item === row)
+          tableData.splice(rowIndex, 0, newRecord)
+        }
+      }
+    },
+    /**
+     * 删除指定行数据
+     * 支持删除一行
+     * 支持删除多行
+     */
+    remove (rows) {
+      let { tableData } = this
+      if (rows && !XEUtils.isArray(rows)) {
+        rows = [rows]
+      }
+      if (rows.length) {
+        XEUtils.remove(tableData, item => rows.indexOf(item) > -1)
+      }
+    },
+    /**
+     * 还原数据
+     * 支持还原整个表格
+     * 支持还原一行
+     * 支持还原多行
+     * 支持还原指定单元格
+     */
+    revert (rows, prop) {
+      if (arguments.length) {
+        if (rows && !XEUtils.isArray(rows)) {
+          rows = [rows]
+        }
+      } else {
+
+      }
+    },
     /**
      * 获取表格所有数据
      */
@@ -1211,31 +1261,38 @@ export default {
      * 只对 mode=cell 有效，激活行编辑
      */
     setActiveRow (row) {
-      let { $refs, id, tableData, visibleColumn, handleActived } = this
-      let rowIndex = XEUtils.findIndexOf(tableData, item => item === row)
-      if (rowIndex > -1) {
-        let column = visibleColumn.find(column => column.editRender)
-        let cell = $refs.tableBody.$el.querySelector(`.vxe-body--row.row--${id}_${rowIndex} .${column.id}`)
-        handleActived({ row, column, cell })
+      let { $refs, id, tableData, visibleColumn, handleActived, editConfig } = this
+      if (row && editConfig && editConfig.mode === 'row') {
+        let rowIndex = XEUtils.findIndexOf(tableData, item => item === row)
+        if (rowIndex > -1) {
+          let column = visibleColumn.find(column => column.editRender)
+          let cell = $refs.tableBody.$el.querySelector(`.vxe-body--row.row--${id}_${rowIndex} .${column.id}`)
+          handleActived({ row, column, cell })
+        }
       }
     },
     /**
      * 只对 mode=row 有效，激活单元格编辑
      */
     setActiveCell (row, prop) {
-      let { $refs, id, tableData, visibleColumn, handleActived } = this
-      let rowIndex = XEUtils.findIndexOf(tableData, item => item === row)
-      if (rowIndex > -1 && prop) {
-        let column = visibleColumn.find(column => column.property === prop)
-        let cell = $refs.tableBody.$el.querySelector(`.vxe-body--row.row--${id}_${rowIndex} .${column.id}`)
-        handleActived({ row, column, cell })
+      let { $refs, id, tableData, visibleColumn, handleActived, editConfig } = this
+      if (row && prop && editConfig && editConfig.mode === 'cell') {
+        let rowIndex = XEUtils.findIndexOf(tableData, item => item === row)
+        if (rowIndex > -1 && prop) {
+          let column = visibleColumn.find(column => column.property === prop)
+          let cell = $refs.tableBody.$el.querySelector(`.vxe-body--row.row--${id}_${rowIndex} .${column.id}`)
+          handleActived({ row, column, cell })
+        }
       }
     },
     /**
      * 只对 trigger=dblclick 有效，选中单元格
      */
     setSelectCell (row, prop) {
+      let { editConfig } = this
+      if (row && prop && editConfig && editConfig.trigger !== 'manual') {
 
+      }
     },
     /**
      * 点击排序事件

@@ -104,6 +104,7 @@ function buildColumns (h, columns) {
 function buildProps (props = {}) {
   let { editConfig, contextMenu } = props
   return Object.assign({}, props, {
+    border: true,
     contextMenu: Object.assign({}, contextMenu, excelContextMenu),
     editConfig: editConfig ? Object.assign({}, excelEditConfig, editConfig) : excelEditConfig
   })
