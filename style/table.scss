@@ -203,6 +203,11 @@
     .vxe-footer--column{
       border-bottom: 1px solid $vxe-table-border-color;
     }
+    .vxe-table--fixed-left-wrapper {
+      .vxe-body--column{
+        border-right-color: $vxe-table-border-color;
+      }
+    }
   }
   &.size--medium {
     .vxe-header--column,

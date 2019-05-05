@@ -3,7 +3,7 @@
     <p>使用 vxe-excel 渲染 Excel 表格</p>
 
     <vxe-excel
-      max-height="400"
+      max-height="600"
       :columns="columns"
       :data.sync="tableData">
     </vxe-excel>
