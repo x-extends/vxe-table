@@ -403,30 +403,30 @@ export default {
           ]
         },
         {
-          lable: '集成渲染',
+          lable: '集成',
           value: 'other',
           expand: false,
           children: [
             {
-              lable: '与 element-ui 集成',
+              lable: '自定义渲染 element-ui 组件',
               locat: {
                 name: 'TableOtherElement'
               }
             },
             {
-              lable: '使用 element-ui 配置式插件',
+              lable: 'vxe-table-plugin-element 插件',
               locat: {
                 name: 'TableOtherElementConfig'
               }
             },
             {
-              lable: '与 iview 集成',
+              lable: '自定义渲染 iview 组件',
               locat: {
                 name: 'TableOtherIview'
               }
             },
             {
-              lable: '使用 iview 配置式插件',
+              lable: 'vxe-table-plugin-iview 插件',
               locat: {
                 name: 'TableOtherIviewConfig'
               }

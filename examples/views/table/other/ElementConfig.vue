@@ -1,12 +1,12 @@
 <template>
   <div>
-    <p>使用配置式的插件</p>
+    <p>使用 vxe-table-plugin-element 配置式的插件</p>
 
     <pre>
       <code class="javascript">{{ demoCodes[0] }}</code>
     </pre>
 
-    <p>使用 edit-render 简化配置</p>
+    <p>配置如下</p>
 
     <vxe-table
       border
@@ -54,9 +54,9 @@ export default {
       demoCodes: [
         `
           import VXETable from 'vxe-table'
-          import VXETableElementPlugin from 'vxe-table/lib/plugins/element'
+          import VXETablePluginElement from 'vxe-table-plugin-element'
 
-          VXETable.setup(VXETableElementPlugin)
+          VXETable.setup(VXETablePluginElement)
         `,
         `
           <vxe-table

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>自定义渲染 element-ui 组件</p>
+    <p>自定义渲染 element-ui 组件，使用插槽 edit slot</p>
 
     <vxe-table
       border

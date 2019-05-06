@@ -10,43 +10,34 @@ A very powerful Vue table component.
 
 ## Features
 
-* [基础](https://jsrun.net/VrXKp)
-* [尺寸](https://jsrun.net/PmXKp)
-* [斑马线条纹](https://jsrun.net/zrXKp)
-* [带边框](https://jsrun.net/QrXKp)
-* [单元格样式](https://jsrun.net/EmXKp)
-* [列宽拖动](https://jsrun.net/5AXKp)
-* [流体高度](https://jsrun.net/smXKp)
-* [固定表头](https://jsrun.net/JrXKp)
-* [固定列](https://jsrun.net/TrXKp)
-* [固定表头和列](https://jsrun.net/8rXKp)
-* [表头分组](https://jsrun.net/7rXKp)
-* [序号](https://jsrun.net/xrXKp)
-* [单选](https://jsrun.net/9rXKp)
-* [多选](https://jsrun.net/erXKp)
-* [排序](https://jsrun.net/QrXKp)
-* [筛选](https://jsrun.net/drXKp)
-* [合并行或列](https://jsrun.net/5jXKp)
-* [表尾合计](https://jsrun.net/dmXKp)
-* [导出 CVS](https://jsrun.net/cmXKp)
-* [自定义列](https://jsrun.net/PrXKp)
-* [加载中](https://jsrun.net/GjXKp)
-* [格式化内容](https://jsrun.net/FrXKp)
-* [自定义模板](https://jsrun.net/DjXKp)
-* [快捷菜单](https://jsrun.net/VjXKp)
-* [滚动渲染](https://jsrun.net/XRXKp)
-* [展开行](https://jsrun.net/eRXKp)
-* 树形结构
-* 可编辑
-* 可编辑 - 手动触发
-* 可编辑 - 点击触发
-* 可编辑 - 双击触发
-* 可编辑 - 增/删/改/查/还
-* 可编辑 - 显示状态
-* 可编辑 - 禁用编辑
-* 可编辑 - 校验
-* 可编辑 - 键盘导航
-* 可编辑 - Excel
+* 基础
+* 尺寸
+* 斑马线条纹
+* 带边框
+* 单元格样式
+* 列宽拖动
+* 流体高度
+* 固定表头
+* 固定列
+* 固定表头和列
+* 表头分组
+* 序号
+* 单选
+* 多选
+* 排序
+* 筛选
+* 合并行或列
+* 表尾合计
+* 导出 CVS
+* 自定义列
+* 加载中
+* 格式化内容
+* 自定义模板
+* 快捷菜单
+* 滚动渲染
+* 展开行
+* 可编辑表格
+* Excel 表格
 
 ## Docs
 

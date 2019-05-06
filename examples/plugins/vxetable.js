@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VXETable from '../../src'
-import VXETableElementPlugin from '../../src/plugins/element'
-import VXETableIViewPlugin from '../../src/plugins/iview'
+import VXETableElementPlugin from 'vxe-table-plugin-element'
+import VXETableIViewPlugin from 'vxe-table-plugin-iview'
 
 Vue.use(VXETable, {
   size: null,
