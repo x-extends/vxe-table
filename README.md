@@ -176,6 +176,7 @@ new Vue({ i18n }).$mount('#app')
 | row-key | 行数据的 Key | String | — | — |
 | context-menu | 开启快捷菜单 | Object | — | [{header, body, footer}](#context-menu-快捷菜单配置项说明配合-context-menu-link-事件使用) |
 | mouse-config | 鼠标相关配置项 | Object | — | options(#mouse-config-鼠标相关配置项说明) |
+| Keyboard-config | 键盘相关配置项 | Object | — | options(#Keyboard-config-键盘相关配置项说明) |
 | edit-config | 开启编辑模式 | Object | — | [options](#edit-config-配置项说明) |
 | edit-rules | 配置数据校验的规则 | Object | — | [options](#edit-rules-校验规则配置项说明) |
 | auto-width | 自动计算列宽（如果关闭，需要手动调用 computeWidth 方法） | Boolean | — | true |
@@ -203,6 +204,23 @@ new Vue({ i18n }).$mount('#app')
 |------|------|-----|-----|-----|
 | selected | 开启左键选中功能 | Boolean | — | false |
 | checked | 开启鼠标移动单元格批量选中功能 | Boolean | — | false |
+
+##### keyboard-config 键盘相关配置项说明
+
+| 属性 | 描述 | 类型 | 可选值 | 默认值 |
+|------|------|-----|-----|-----|
+| isArrow | 开启方向键导航 | Boolean | — | false |
+| isTab | 开启 Tab 键切换 | Boolean | — | false |
+
+###### Keyboard navigation
+
+| 属性 | 描述 |
+|------|------|
+| Arrow Up ↑ | 移动到当前活动单元格上面的单元格 |
+| Arrow Down ↓ | 移动到当前活动单元格下面的单元格 |
+| Arrow Left ← | 移动到当前活动单元格左边的单元格 |
+| Arrow Right → | 移动到当前活动单元格右边的单元格 |
+| Tab | 移动到当前活动单元格的右侧单元格，如果到最后一列且存在下一行，则从下一行开始移动 |
 
 ##### edit-config 配置项说明
 
@@ -307,7 +325,7 @@ new Vue({ i18n }).$mount('#app')
 | 属性 | 描述 | 类型 | 可选值 | 默认值 |
 |------|------|-----|-----|-----|
 | type | 渲染类型 | String | default（组件触发后可视） / visible（组件一直可视） | default |
-| name | 渲染的组件名 | String | — | input |
+| name | 渲染的组件名 | String | input / textarea | input |
 
 #### Table-column Scoped Slot
 

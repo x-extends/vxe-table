@@ -18,7 +18,7 @@
           <el-input v-model="row.name"></el-input>
         </template>
       </vxe-table-column>
-      <vxe-table-column prop="age" label="ElInputNumber"  width="140" :edit-render="{type: 'default'}">
+      <vxe-table-column prop="age" label="ElInputNumber"  width="160" :edit-render="{type: 'default'}">
         <template v-slot:edit="{ row }">
           <el-input-number v-model="row.age" :max="35" :min="18"></el-input-number>
         </template>
