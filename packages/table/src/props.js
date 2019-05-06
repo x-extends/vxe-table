@@ -50,16 +50,18 @@ export default {
   /** 高级属性 */
   // 行数据的 Key
   rowKey: [String, Number],
-  // 开启快捷菜单
+  // 快捷菜单配置项
   contextMenu: { type: Object, default: () => GlobalConfig.contextMenu },
-  // 鼠标相关配置项
+  // 鼠标配置项
   mouseConfig: Object,
-  // 开启编辑模式
+  // 按键配置项
+  keyboardConfig: Object,
+  // 编辑配置项
   editConfig: Object,
-  // 配置数据校验的规则
+  // 校验规则配置项
   editRules: Object,
   // 列宽是否自动响应计算
   autoWidth: { type: Boolean, default: true },
-  // 性能优化的配置项
+  // 优化配置项
   optimized: { type: [Object, Boolean], default: () => GlobalConfig.optimized }
 }

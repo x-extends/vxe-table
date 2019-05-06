@@ -174,13 +174,12 @@ new Vue({ i18n }).$mount('#app')
 | footer-method | 表尾合计的计算方法 Function({columns, data}) | Function | — | — |
 | span-method | 合并行或列，该函数 Function({row, rowIndex, column, columnIndex, data}) 返回计算后的值 | Object | — | { rowspan: 1, colspan: 1} |
 | row-key | 行数据的 Key | String | — | — |
-| context-menu | 开启快捷菜单 | Object | — | [{header, body, footer}](#context-menu-快捷菜单配置项说明配合-context-menu-link-事件使用) |
-| mouse-config | 鼠标相关配置项 | Object | — | options(#mouse-config-鼠标相关配置项说明) |
-| Keyboard-config | 键盘相关配置项 | Object | — | options(#Keyboard-config-键盘相关配置项说明) |
-| edit-config | 开启编辑模式 | Object | — | [options](#edit-config-配置项说明) |
-| edit-rules | 配置数据校验的规则 | Object | — | [options](#edit-rules-校验规则配置项说明) |
-| auto-width | 自动计算列宽（如果关闭，需要手动调用 computeWidth 方法） | Boolean | — | true |
-| optimized | 优化的配置项 | Object/Boolean | — | [options](#optimized-优化配置项说明) |
+| context-menu | 快捷菜单配置项 | Object | — | [{header, body, footer}](#context-menu-快捷菜单配置项说明配合-context-menu-link-事件使用) |
+| mouse-config | 鼠标配置项 | Object | — | options(#mouse-config-鼠标相关配置项说明) |
+| Keyboard-config | 按键配置项 | Object | — | options(#Keyboard-config-键盘相关配置项说明) |
+| edit-config | 可编辑配置项 | Object | — | [options](#edit-config-可编辑配置项说明) |
+| edit-rules | 校验规则配置项 | Object | — | [options](#edit-rules-校验规则配置项说明) |
+| optimized | 优化配置项 | Object/Boolean | — | [options](#optimized-优化配置项说明) |
 
 ##### context-menu 快捷菜单配置项说明（配合 context-menu-link 事件使用）
 
@@ -194,8 +193,9 @@ new Vue({ i18n }).$mount('#app')
 
 | 属性 | 描述 |
 |------|------|
-| Arrow Up ↑ | 移动到上下文菜单中的上一个选项 |
-| Arrow Down ↓ | 移动到上下文菜单中的下一个选项 |
+| Arrow Up ↑ | 移动到上一个菜单选项 |
+| Arrow Down ↓ | 移动到下一个菜单选项 |
+| Arrow Down → | 打开右侧的二级菜单 |
 | Enter | 选中当前菜单选项 |
 | Spacebar | 选中当前菜单选项 |
 
@@ -220,6 +220,7 @@ new Vue({ i18n }).$mount('#app')
 |------|------|-----|-----|-----|
 | isArrow | 开启方向键导航 | Boolean | — | false |
 | isTab | 开启 Tab 键切换 | Boolean | — | false |
+| isEdit | 开启任意键进入编辑（功能键除外） | Boolean | — | false |
 
 ###### keyboard-config 快捷键说明
 
@@ -240,7 +241,7 @@ new Vue({ i18n }).$mount('#app')
 | Ctrl + V | 粘贴选中的单元格内容 |
 | Ctrl + A | 选中所有单元格 |
 
-##### edit-config 配置项说明
+##### edit-config 可编辑配置项说明
 
 | 属性 | 描述 | 类型 | 可选值 | 默认值 |
 |------|------|-----|-----|-----|
