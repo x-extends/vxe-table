@@ -52,7 +52,7 @@ export default {
       this.$refs.xTable.reload([])
       setTimeout(() => {
         let size = this.$route.params.size
-        let list = window.CACHE_DATA_LIST.slice(0, size)
+        let list = window.MOCK_DATA_LIST.slice(0, size)
         this.$refs.xTable.reload(list)
         this.loading = false
       }, 500)

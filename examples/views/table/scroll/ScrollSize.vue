@@ -29,7 +29,7 @@ export default {
     this.tableData = []
     setTimeout(() => {
       let size = this.$route.params.size
-      let list = window.CACHE_DATA_LIST.slice(0, size)
+      let list = window.MOCK_DATA_LIST.slice(0, size)
       this.tableData = list
       this.loading = false
     }, 500)

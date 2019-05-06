@@ -66,6 +66,9 @@ export default {
             return {
               tableData: []
             }
+          },
+          created () {
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
           }
         }
         `,
@@ -87,6 +90,9 @@ export default {
             return {
               tableData: []
             }
+          },
+          created () {
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
           }
         }
         `
@@ -94,7 +100,7 @@ export default {
     }
   },
   created () {
-    let list = window.CACHE_DATA_LIST.slice(0, 6)
+    let list = window.MOCK_DATA_LIST.slice(0, 6)
     this.tableData = list
   },
   mounted () {

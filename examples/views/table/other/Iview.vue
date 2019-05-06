@@ -150,6 +150,9 @@ export default {
               sexList: [],
               regionList: []
             }
+          },
+          created () {
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 100)
           }
         }
         `
@@ -159,7 +162,7 @@ export default {
   created () {
     this.loading = true
     setTimeout(() => {
-      let list = window.CACHE_DATA_LIST.slice(0, 100)
+      let list = window.MOCK_DATA_LIST.slice(0, 100)
       this.tableData = list
       this.loading = false
     }, 500)

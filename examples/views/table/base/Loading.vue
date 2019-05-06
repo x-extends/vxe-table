@@ -41,7 +41,7 @@ export default {
   created () {
     this.loading = true
     setTimeout(() => {
-      let list = window.CACHE_DATA_LIST.slice(0, 50)
+      let list = window.MOCK_DATA_LIST.slice(0, 50)
       this.tableData = list
       this.loading = false
     }, 3000)

@@ -13,7 +13,7 @@ import XEUtils from 'xe-utils'
 Vue.config.productionTip = false
 
 // 后台异步生成20万数据，为了避免大量运算卡主页面
-var list = window.CACHE_DATA_LIST = []
+var list = window.MOCK_DATA_LIST = []
 var currTime = Date.now()
 var fullIndex = 0
 var size = 200000

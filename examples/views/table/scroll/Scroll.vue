@@ -72,6 +72,10 @@ export default {
               tableData: [],
               tableData2: []
             }
+          },
+          created () {
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 200)
+            this.tableData2 = window.MOCK_DATA_LIST.slice(0, 1000)
           }
         }
         `,
@@ -94,6 +98,10 @@ export default {
               tableData: [],
               tableData2: []
             }
+          },
+          created () {
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 200)
+            this.tableData2 = window.MOCK_DATA_LIST.slice(0, 1000)
           }
         }
         `
@@ -101,9 +109,9 @@ export default {
     }
   },
   created () {
-    let list = window.CACHE_DATA_LIST.slice(0, 200)
+    let list = window.MOCK_DATA_LIST.slice(0, 200)
     this.tableData = list
-    this.tableData2 = window.CACHE_DATA_LIST.slice(0, 1000)
+    this.tableData2 = window.MOCK_DATA_LIST.slice(0, 1000)
   },
   mounted () {
     this.$el.querySelectorAll('pre code').forEach((block) => {

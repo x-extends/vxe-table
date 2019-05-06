@@ -57,7 +57,7 @@ export default {
     }
   },
   created () {
-    let list = window.CACHE_DATA_LIST.slice(0, 4)
+    let list = window.MOCK_DATA_LIST.slice(0, 4)
     this.tableData = list
   }
 }

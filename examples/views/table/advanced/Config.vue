@@ -175,7 +175,7 @@ export default {
     }
   },
   created () {
-    let list = window.CACHE_DATA_LIST.slice(0, 100)
+    let list = window.MOCK_DATA_LIST.slice(0, 100)
     this.tableData = list
   },
   methods: {

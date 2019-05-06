@@ -39,9 +39,9 @@ export default {
     }
   },
   created () {
-    let list = window.CACHE_DATA_LIST.slice(0, 50)
+    let list = window.MOCK_DATA_LIST.slice(0, 50)
     this.tableData = list
-    this.tableData2 = window.CACHE_DATA_LIST.slice(0, 2)
+    this.tableData2 = window.MOCK_DATA_LIST.slice(0, 2)
   }
 }
 </script>
