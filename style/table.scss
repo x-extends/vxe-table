@@ -571,6 +571,7 @@
 
   /*excel*/
   &.vxe-excel {
+    color: $vxe-excel-font-color;
     border-color: $vxe-excel-column-border-color;
     &.t--border {
       .vxe-header--column,
@@ -627,6 +628,7 @@
           .vxe-input,
           .vxe-textarea {
             height: 100%;
+            color: $vxe-excel-font-color;
           }
           .vxe-input,
           .vxe-input:focus,

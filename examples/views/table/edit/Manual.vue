@@ -1,23 +1,5 @@
 <template>
   <div>
-    <p>设置 edit-config={trigger: 'manual', mode: 'cell'} 启用单元格编辑的功能</p>
-
-    <vxe-table
-      ref="xTable1"
-      border
-      :data.sync="tableData"
-      :edit-config="{trigger: 'manual', mode: 'cell'}">
-      <vxe-table-column type="index" width="60"></vxe-table-column>
-      <vxe-table-column prop="name" label="Name" :edit-render="{type: 'default'}"></vxe-table-column>
-      <vxe-table-column prop="sex" label="Sex" :edit-render="{type: 'default'}"></vxe-table-column>
-      <vxe-table-column prop="date" label="Date" :edit-render="{type: 'default'}"></vxe-table-column>
-      <vxe-table-column label="操作">
-        <template v-slot="{ row }">
-          <button class="btn" @click="$refs.xTable1.setActiveCell(row, 'name')">编辑</button>
-        </template>
-      </vxe-table-column>
-    </vxe-table>
-
     <p>设置 edit-config={trigger: 'manual', mode: 'row'} 启用行编辑的功能</p>
 
     <vxe-table
@@ -36,19 +18,62 @@
         </template>
       </vxe-table-column>
     </vxe-table>
+
+    <p>调用代码</p>
+
+    <pre>
+      <code class="xml">{{ demoCodes[0] }}</code>
+      <code class="javascript">{{ demoCodes[1] }}</code>
+    </pre>
   </div>
 </template>
 
 <script>
+import hljs from 'highlight.js'
+
 export default {
   data () {
     return {
-      tableData: []
+      tableData: [],
+      demoCodes: [
+        `
+        <vxe-table
+          ref="xTable2"
+          border
+          :data.sync="tableData"
+          :edit-config="{trigger: 'manual', mode: 'row'}">
+          <vxe-table-column type="index" width="60"></vxe-table-column>
+          <vxe-table-column prop="name" label="Name" :edit-render="{type: 'default'}"></vxe-table-column>
+          <vxe-table-column prop="sex" label="Sex" :edit-render="{type: 'default'}"></vxe-table-column>
+          <vxe-table-column prop="date" label="Date" :edit-render="{type: 'default'}"></vxe-table-column>
+          <vxe-table-column prop="address" label="Address" show-overflow-tooltip :edit-render="{type: 'default'}"></vxe-table-column>
+          <vxe-table-column label="操作">
+            <template v-slot="{ row }">
+              <button class="btn" @click="$refs.xTable2.setActiveRow(row)">编辑</button>
+            </template>
+          </vxe-table-column>
+        </vxe-table>
+        `,
+        `
+        export default {
+          data () {
+            return {
+              tableData: []
+            }
+          }
+        }
+        `
+      ]
     }
   },
   created () {
     let list = window.CACHE_DATA_LIST.slice(0, 6)
     this.tableData = list
+  },
+  mounted () {
+    this.$el.querySelectorAll('pre code').forEach((block) => {
+      hljs.highlightBlock(block)
+    })
   }
 }
 </script>
