@@ -5,10 +5,12 @@ import DomTools from '../../../src/tools/dom'
  * 渲染列
  */
 function renderColumn (h, _vm, $table, fixedType, row, rowIndex, column, columnIndex) {
-  let { $listeners: tableListeners, getRecords, border, highlightCurrentRow, cellClassName, spanMethod, optimizeConfig, editConfig, editStore } = $table
+  let { $listeners: tableListeners, getRecords, border, highlightCurrentRow, cellClassName, spanMethod, optimizeConfig, mouseConfig, editConfig, editStore } = $table
   let { editRender, align, ellipsis, showTitle, showTooltip, renderWidth, columnKey } = column
-  let { selected, actived } = editStore
+  let { checked, selected, actived } = editStore
   let { overflow } = optimizeConfig
+  let isMouseSelected = mouseConfig && mouseConfig.selected
+  let isMouseChecked = mouseConfig && mouseConfig.checked
   let fixedHiddenColumn = fixedType && column.fixed !== fixedType
   let isShowTitle = showTitle || overflow === 'title'
   let isShowTooltip = showTooltip || overflow === 'tooltip'
@@ -22,6 +24,9 @@ function renderColumn (h, _vm, $table, fixedType, row, rowIndex, column, columnI
       $table.triggerTooltipEvent(evnt, { $table, row, rowIndex, column, columnIndex, data: getRecords() })
     }
     tdOns.mouseout = $table.clostTooltip
+  }
+  tdOns.mousedown = evnt => {
+    $table.triggerCellMousedownEvent(evnt, { $table, row, rowIndex, column, columnIndex, data: getRecords(), cell: evnt.currentTarget })
   }
   if ((editRender && editConfig && editConfig.trigger !== 'manual') || highlightCurrentRow || tableListeners['cell-click']) {
     tdOns.click = evnt => {
@@ -45,9 +50,14 @@ function renderColumn (h, _vm, $table, fixedType, row, rowIndex, column, columnI
     class: ['vxe-body--column', column.id, {
       [`col--${align}`]: align,
       'col--edit': editRender,
+      'col--checked': isMouseChecked && checked.rows.indexOf(row) > -1 && checked.columns.indexOf(column) > -1,
+      'col--checked-top': isMouseChecked && checked.rows.indexOf(row) === 0 && checked.columns.indexOf(column) > -1,
+      'col--checked-bottom': isMouseChecked && checked.rows.indexOf(row) === checked.rows.length - 1 && checked.columns.indexOf(column) > -1,
+      'col--checked-left': isMouseChecked && checked.rows.indexOf(row) > -1 && checked.columns.indexOf(column) === 0,
+      'col--checked-right': isMouseChecked && checked.rows.indexOf(row) > -1 && checked.columns.indexOf(column) === checked.columns.length - 1,
+      'col--selected': isMouseSelected && editRender && selected.row === row && selected.column === column,
+      'col--actived': editRender && actived.row === row && actived.column === column,
       'edit--visible': editRender && editRender.type === 'visible',
-      'edit--selected': editRender && selected && selected.row === row && selected.column === column,
-      'edit--actived': editRender && actived && actived.row === row && actived.column === column,
       'fixed--hidden': fixedHiddenColumn
     }, cellClassName ? XEUtils.isFunction(cellClassName) ? cellClassName({ $table, row, rowIndex, column, columnIndex, data: getRecords() }) : cellClassName : ''],
     key: columnKey || columnIndex,
@@ -66,7 +76,13 @@ function renderColumn (h, _vm, $table, fixedType, row, rowIndex, column, columnI
       style: {
         width: isShowTitle || isShowTooltip || isEllipsis ? `${border ? renderWidth - 1 : renderWidth}px` : null
       }
-    }, column.renderCell(h, { $table, row, rowIndex, column, columnIndex, data: getRecords(), fixed: fixedType, isHidden: fixedHiddenColumn }))
+    }, column.renderCell(h, { $table, row, rowIndex, column, columnIndex, data: getRecords(), fixed: fixedType, isHidden: fixedHiddenColumn })),
+    isMouseChecked ? h('span', {
+      class: 'vxe-body--column-ft-checked'
+    }) : null,
+    isMouseChecked ? h('span', {
+      class: 'vxe-body--column-rb-checked'
+    }) : null
   ])
 }
 

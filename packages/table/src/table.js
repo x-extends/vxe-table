@@ -196,10 +196,17 @@ export default {
       },
       // 存放可编辑相关信息
       editStore: {
+        // 所有选中
+        checked: {
+          rows: [],
+          columns: []
+        },
+        // 选中源
         selected: {
           row: null,
           column: null
         },
+        // 激活
         actived: {
           row: null,
           column: null
@@ -1165,26 +1172,65 @@ export default {
       this.hoverRow = row
     },
     /**
+     * 选中事件
+     */
+    triggerCellMousedownEvent (evnt, params) {
+      let { $el, tableData, visibleColumn, editStore, editConfig, getEventTargetNode, handleChecked } = this
+      let { checked, actived } = editStore
+      let { row, column, cell } = params
+      let { button } = evnt
+      let isLeftBtn = button === 0
+      let isRightBtn = button === 2
+      if (isLeftBtn || isRightBtn) {
+        if (editConfig && editConfig.trigger === 'dblclick') {
+          if (actived.row === row && actived.column === column) {
+            // 如果已经是激活状态
+          } else {
+            if (isLeftBtn) {
+              evnt.preventDefault()
+              evnt.stopPropagation()
+              this.handleSelected(params, evnt)
+              let domMousemove = document.onmousemove
+              let domMouseup = document.onmouseup
+              let start = DomTools.getCellIndexs(cell)
+              let updateEvent = XEUtils.throttle(function (evnt) {
+                evnt.preventDefault()
+                let { flag, targetElem } = getEventTargetNode(evnt, $el, 'vxe-body--column')
+                if (flag) {
+                  handleChecked(params, start, DomTools.getCellIndexs(targetElem), evnt)
+                }
+              }, DomTools.browse.msie ? 80 : 40, { leading: true, trailing: true })
+              document.onmousemove = updateEvent
+              document.onmouseup = function (evnt) {
+                document.onmousemove = domMousemove
+                document.onmouseup = domMouseup
+              }
+              updateEvent(evnt)
+            } else if (isRightBtn) {
+              // 如果不在所有选中的范围之内则重新选中
+              let select = DomTools.getCellIndexs(cell)
+              if (checked.rows.indexOf(tableData[select.rowIndex]) === -1 || checked.columns.indexOf(visibleColumn[select.columnIndex]) === -1) {
+                this.handleSelected(params, evnt)
+                handleChecked(params, select, select, evnt)
+              }
+            }
+          }
+        }
+      }
+    },
+    /**
      * 列点击事件
      * 如果是单击模式，则激活为编辑状态
      * 如果是双击模式，则单击后选中状态
      */
     triggerCellClickEvent (evnt, params) {
-      let { highlightCurrentRow, editConfig, editStore } = this
-      let { actived } = editStore
-      let { row, column } = params
+      let { highlightCurrentRow, editConfig } = this
       if (highlightCurrentRow) {
         this.selectRow = params.row
       }
       if (editConfig) {
         if (editConfig.trigger === 'click') {
           this.handleActived(params, evnt)
-        } else if (editConfig.trigger === 'dblclick') {
-          if (actived.row === row && actived.column === column) {
-            // 如果已经是激活状态
-          } else {
-            this.handleSelected(params, evnt)
-          }
         }
       }
       UtilTools.emitEvent(this, 'cell-click', [params, evnt])
@@ -1195,8 +1241,10 @@ export default {
      */
     triggerCellDBLClickEvent (evnt, params) {
       let { editConfig } = this
-      if (editConfig && editConfig.trigger === 'dblclick') {
-        this.handleActived(params, evnt)
+      if (editConfig) {
+        if (editConfig.trigger === 'dblclick') {
+          this.handleActived(params, evnt)
+        }
       }
       UtilTools.emitEvent(this, 'cell-dblclick', [params, evnt])
     },
@@ -1206,11 +1254,13 @@ export default {
     handleActived (params, evnt) {
       let { editStore, editConfig } = this
       let { activeMethod } = editConfig
-      let { selected, actived } = editStore
+      let { checked, selected, actived } = editStore
       let { row, column } = params
       if (actived.row !== row || actived.column !== column) {
         // 判断是否禁用编辑
         if (!activeMethod || activeMethod(params)) {
+          checked.rows = []
+          checked.columns = []
           selected.row = null
           selected.column = null
           actived.row = row
@@ -1224,17 +1274,38 @@ export default {
       }
     },
     /**
-     * 处理选中列
+     * 处理选中源
      */
     handleSelected (params, evnt) {
       let { editStore } = this
-      let { selected, actived } = editStore
+      let { checked, selected, actived } = editStore
       let { row, column } = params
       if (selected.row !== row || selected.column !== column) {
+        checked.rows = []
+        checked.columns = []
         actived.row = null
         actived.column = null
         selected.row = row
         selected.column = column
+      }
+    },
+    /**
+     * 处理所有选中
+     */
+    handleChecked (params, start, end, evnt) {
+      let { tableData, visibleColumn, editStore } = this
+      let { checked } = editStore
+      let { rowIndex: sRowIndex, columnIndex: sColumnIndex } = start
+      let { rowIndex: eRowIndex, columnIndex: eColumnIndex } = end
+      if (sRowIndex < eRowIndex) {
+        checked.rows = tableData.slice(sRowIndex, eRowIndex + 1)
+      } else {
+        checked.rows = tableData.slice(eRowIndex, sRowIndex + 1)
+      }
+      if (sColumnIndex < eColumnIndex) {
+        checked.columns = visibleColumn.slice(Math.max(sColumnIndex, 1), eColumnIndex + 1)
+      } else {
+        checked.columns = visibleColumn.slice(Math.max(eColumnIndex, 1), sColumnIndex + 1)
       }
     },
     /**

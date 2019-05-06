@@ -85,24 +85,19 @@
     position: relative;
     overflow: hidden;
     border-top: 1px solid $vxe-table-border-color;
-    .vxe-table--repair {
-      position: absolute;
-      left: 0;
-      height: 1px;
-      background-color: $vxe-table-border-color;
-    }
   }
   .vxe-table--header-wrapper {
     .vxe-table--repair {
+      position: absolute;
+      left: 0;
       bottom: 0;
+      height: 1px;
+      background-color: $vxe-table-border-color;
     }
   }
   .vxe-table--footer-wrapper {
     overflow-x: auto;
     margin-top: -1px;
-    .vxe-table--repair {
-      top: 0;
-    }
   }
   &.show--foot {
     .vxe-table--body-wrapper {
@@ -548,7 +543,7 @@
     .vxe-body--column {
       line-height: 1;
       &.col--edit {
-        &.edit--actived {
+        &.col--actived {
           padding: 0;
         }
       }
@@ -576,14 +571,42 @@
 
   /*excel*/
   &.vxe-excel {
+    border-color: $vxe-excel-column-border-color;
+    &.t--border {
+      .vxe-header--column,
+      .vxe-body--column {
+        border-right-color: $vxe-excel-column-border-color;
+        border-bottom-color: $vxe-excel-column-border-color;
+      }
+    }
+    .body--wrapper {
+      .vxe-header--column {
+        &:last-child {
+          border-right-color: $vxe-excel-header-background-color;
+        }
+      }
+      .vxe-body--column {
+        &:last-child {
+          border-right-color: #fff;
+        }
+      }
+    }
     .vxe-header--column {
       padding: 4px 0;
       font-size: 12px;
       cursor: default;
     }
     .vxe-excel--column-selected {
-      background-color: #E6E6E6;
-      color: $excel-primary-color;
+      background-color: $vxe-excel-header-selected-background-color;
+      color: $vxe-excel-primary-color;
+    }
+    .vxe-table--header-wrapper {
+      .vxe-table--repair {
+        background-color: $vxe-excel-column-border-color;
+      }
+    }
+    .vxe-header--row {
+      background-color: $vxe-excel-header-background-color;
     }
     .vxe-body--column {
       padding: 0;
@@ -591,11 +614,11 @@
       line-height: inherit;
       cursor: cell;
       .vxe-cell {
-        height: $excel-column-height;
-        line-height: $excel-column-height - $excel-column-border-width;
-        padding: 0 4px;
+        height: $vxe-excel-column-height;
+        line-height: $vxe-excel-column-height - $vxe-excel-column-border-width;
+        padding: 0 #{$vxe-excel-column-border-width + 2px};
         .vxe-input--wrapper {
-          height: $excel-column-height;
+          height: $vxe-excel-column-height;
           .vxe-input,
           .vxe-textarea {
             height: 100%;
@@ -605,31 +628,84 @@
           .vxe-textarea,
           .vxe-textarea:focus {
             border-radius: 0;
-            border: $excel-column-border-width solid $excel-primary-color;
+            border: $vxe-excel-column-border-width solid $vxe-excel-primary-color;
           }
         }
       }
       &:first-child {
-        background-color: #f8f8f9;
+        background-color: $vxe-excel-header-background-color;
         cursor: default;
         &.vxe-excel--row-selected {
-          color: $excel-primary-color;
-          background-color: #E6E6E6;
+          color: $vxe-excel-primary-color;
+          background-color: $vxe-excel-header-selected-background-color;
         }
+      }
+      &.col--selected {
+        &.col--checked {
+          background-color: #fff;
+        }
+      }
+      &.col--actived {
         .vxe-cell {
           padding: 0;
         }
       }
-      &.edit--selected {
-        .vxe-cell {
-          padding: 0 2px;
-          line-height: $excel-column-height - $excel-column-border-width * 3;
-          border: $excel-column-border-width solid $excel-primary-color;
+      &.col--checked {
+        background-color: rgba(0, 0, 0, 0.2);
+        transition: none;
+        border-color: #A5A5A5;
+        position: relative;
+        &.col--checked-left {
+          .vxe-body--column-ft-checked {
+            &:after {
+              content: "";
+              top: 0;
+              left: 0;
+              position: absolute;
+              height: calc(100% + #{$vxe-excel-column-border-width - 1px});
+              width: $vxe-excel-column-border-width;
+              background-color: $vxe-excel-primary-color;
+            }
+          }
         }
-      }
-      &.edit--actived {
-        .vxe-cell {
-          padding: 0;
+        &.col--checked-top {
+          .vxe-body--column-ft-checked {
+            &:before {
+              content: "";
+              top: 0;
+              left: 0;
+              position: absolute;
+              width: calc(100% + #{$vxe-excel-column-border-width - 1px});
+              height: $vxe-excel-column-border-width;
+              background-color: $vxe-excel-primary-color;
+            }
+          }
+        }
+        &.col--checked-right {
+          .vxe-body--column-rb-checked {
+            &:after {
+              content: "";
+              top: 0;
+              right: 0;
+              position: absolute;
+              height: calc(100% + #{$vxe-excel-column-border-width - 1px});
+              width: $vxe-excel-column-border-width;
+              background-color: $vxe-excel-primary-color;
+            }
+          }
+        }
+        &.col--checked-bottom {
+          .vxe-body--column-rb-checked {
+            &:before {
+              content: "";
+              bottom: 0;
+              left: 0;
+              position: absolute;
+              width: calc(100% + #{$vxe-excel-column-border-width - 1px});
+              height: $vxe-excel-column-border-width;
+              background-color: $vxe-excel-primary-color;
+            }
+          }
         }
       }
     }

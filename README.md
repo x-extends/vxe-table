@@ -182,10 +182,11 @@ new Vue({ i18n }).$mount('#app')
 | show-footer | 是否显示表尾合计 | Boolean | — | — |
 | footer-method | 表尾合计的计算方法 Function({columns, data}) | Function | — | — |
 | span-method | 合并行或列，该函数 Function({row, rowIndex, column, columnIndex, data}) 返回计算后的值 | Object | — | { rowspan: 1, colspan: 1} |
+| row-key | 行数据的 Key | String | — | — |
 | context-menu | 开启快捷菜单 | Object | — | [{header, body, footer}](#context-menu-快捷菜单配置项说明配合-context-menu-link-事件使用) |
+| mouse-config | 鼠标相关配置项 | Object | — | options(#mouse-config-鼠标相关配置项说明) |
 | edit-config | 开启编辑模式 | Object | — | [options](#edit-config-配置项说明) |
 | edit-rules | 配置数据校验的规则 | Object | — | [options](#edit-rules-校验规则配置项说明) |
-| row-key | 行数据的 Key | String | — | — |
 | auto-width | 自动计算列宽（如果关闭，需要手动调用 computeWidth 方法） | Boolean | — | true |
 | optimized | 优化的配置项 | Object/Boolean | — | [options](#optimized-优化配置项说明) |
 
@@ -204,6 +205,13 @@ new Vue({ i18n }).$mount('#app')
 | animat | 表格动画效果开关（关闭后视觉效果更快） | Boolean | — | true |
 | overflow | 设置所有行不允许换行（设置后对于固定列能大幅提升性能） | String | ellipsis / title / tooltip | — |
 | scroll | 滚动渲染配置 | Object | — | {gt: 500, size: 100} |
+
+##### mouse-config 鼠标相关配置项说明
+
+| 属性 | 描述 | 类型 | 可选值 | 默认值 |
+|------|------|-----|-----|-----|
+| selected | 开启左键选中功能 | Boolean | — | false |
+| checked | 开启鼠标移动单元格批量选中功能 | Boolean | — | false |
 
 ##### edit-config 配置项说明
 

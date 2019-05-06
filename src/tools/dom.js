@@ -28,6 +28,12 @@ const DomTools = {
    */
   getOffsetPos (elem, container) {
     return getNodeOffset(elem, container, { left: 0, top: 0 })
+  },
+  getCellIndexs (cell) {
+    let trElem = cell.parentNode
+    let columnIndex = [].indexOf.call(trElem.children, cell)
+    let rowIndex = [].indexOf.call(trElem.parentNode.children, trElem)
+    return { rowIndex, columnIndex }
   }
 }
 

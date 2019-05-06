@@ -46,16 +46,18 @@ export default {
   footerCellClassName: [String, Function],
   // 合并行或列
   spanMethod: Function,
-  // 开启快捷菜单
-  contextMenu: { type: Object, default: () => GlobalConfig.contextMenu },
-  // 开启编辑模式
-  editConfig: Object,
-  // 配置数据校验的规则
-  editRules: Object,
 
   /** 高级属性 */
   // 行数据的 Key
   rowKey: [String, Number],
+  // 开启快捷菜单
+  contextMenu: { type: Object, default: () => GlobalConfig.contextMenu },
+  // 鼠标相关配置项
+  mouseConfig: Object,
+  // 开启编辑模式
+  editConfig: Object,
+  // 配置数据校验的规则
+  editRules: Object,
   // 列宽是否自动响应计算
   autoWidth: { type: Boolean, default: true },
   // 性能优化的配置项

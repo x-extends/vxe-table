@@ -109,6 +109,7 @@ function buildProps (h, _vm, props = {}) {
     headerCellClassName: _vm.handleHeaderCellClassName,
     cellClassName: _vm.handleCellClassName,
     contextMenu: Object.assign({}, contextMenu, excelContextMenu),
+    mouseConfig: { selected: true, checked: true },
     editConfig: editConfig ? Object.assign({}, excelEditConfig, editConfig) : excelEditConfig
   })
 }
@@ -131,18 +132,22 @@ export default {
     }, buildColumns(h, this.columns))
   },
   methods: {
-    handleHeaderCellClassName ({ column, $table }) {
+    handleHeaderCellClassName ({ column, columnIndex, $table }) {
       let { editStore } = $table
       let { selected, actived } = editStore
-      if (selected.column === column || actived.column === column) {
-        return 'vxe-excel--column-selected'
+      if (columnIndex > 0) {
+        if (selected.column === column || actived.column === column) {
+          return 'vxe-excel--column-selected'
+        }
       }
     },
-    handleCellClassName ({ row, columnIndex, $table }) {
+    handleCellClassName ({ row, column, columnIndex, $table }) {
       let { editStore } = $table
       let { selected, actived } = editStore
-      if (columnIndex === 0 && (selected.row === row || actived.row === row)) {
-        return 'vxe-excel--row-selected'
+      if (columnIndex === 0) {
+        if (selected.row === row || actived.row === row) {
+          return 'vxe-excel--row-selected'
+        }
       }
     }
   }

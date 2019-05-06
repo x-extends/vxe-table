@@ -1,1 +1,1 @@
-import 'highlight.js/styles/color-brewer.css'
+import 'highlight.js/styles/androidstudio.css'
