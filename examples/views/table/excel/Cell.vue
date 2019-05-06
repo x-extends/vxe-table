@@ -12,6 +12,7 @@
 
     <pre>
       <code class="xml">{{ demoCodes[0] }}</code>
+      <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
   </div>
 </template>
@@ -53,9 +54,17 @@ export default {
         `
         <vxe-excel
           max-height="600"
-          :columns="columns"
           :data.sync="tableData">
         </vxe-excel
+        `,
+        `
+        export default {
+          data () {
+            return {
+              tableData: []
+            }
+          }
+        }
         `
       ]
     }

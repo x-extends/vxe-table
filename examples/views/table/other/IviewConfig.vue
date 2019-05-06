@@ -4,6 +4,7 @@
 
     <pre>
       <code class="javascript">{{ demoCodes[0] }}</code>
+      <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
 
     <p>配置如下</p>
@@ -32,8 +33,8 @@
     <p>调用代码</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[1] }}</code>
-      <code class="javascript">{{ demoCodes[2] }}</code>
+      <code class="xml">{{ demoCodes[2] }}</code>
+      <code class="javascript">{{ demoCodes[3] }}</code>
     </pre>
   </div>
 </template>
@@ -51,6 +52,9 @@ export default {
       sexList: [],
       regionList: [],
       demoCodes: [
+        `
+        npm install vxe-table-plugin-element
+        `,
         `
         import VXETable from 'vxe-table'
         import VXETablePluginIView from 'vxe-table-plugin-iview'
