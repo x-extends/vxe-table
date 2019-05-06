@@ -175,8 +175,8 @@ new Vue({ i18n }).$mount('#app')
 | span-method | 合并行或列，该函数 Function({row, rowIndex, column, columnIndex, data}) 返回计算后的值 | Object | — | { rowspan: 1, colspan: 1} |
 | row-key | 行数据的 Key | String | — | — |
 | context-menu | 快捷菜单配置项 | Object | — | [{header, body, footer}](#context-menu-快捷菜单配置项说明配合-context-menu-link-事件使用) |
-| mouse-config | 鼠标配置项 | Object | — | options(#mouse-config-鼠标相关配置项说明) |
-| Keyboard-config | 按键配置项 | Object | — | options(#Keyboard-config-键盘相关配置项说明) |
+| mouse-config | 鼠标配置项 | Object | — | [options](#mouse-config-鼠标相关配置项说明) |
+| Keyboard-config | 按键配置项 | Object | — | [options](#Keyboard-config-键盘相关配置项说明) |
 | edit-config | 可编辑配置项 | Object | — | [options](#edit-config-可编辑配置项说明) |
 | edit-rules | 校验规则配置项 | Object | — | [options](#edit-rules-校验规则配置项说明) |
 | optimized | 优化配置项 | Object/Boolean | — | [options](#optimized-优化配置项说明) |
