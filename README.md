@@ -190,6 +190,15 @@ new Vue({ i18n }).$mount('#app')
 | options | 表格头部菜单配置 | Array | — | { code, name, prefixIcon, suffixIcon, disabled } |
 | visibleMethod | 该函数 Function({row, rowIndex, column, columnIndex}, event) 的返回值用来决定是否允许显示右键菜单 | Function | — | — |
 
+###### context-menu 快捷键说明
+
+| 属性 | 描述 |
+|------|------|
+| Arrow Up ↑ | 移动到上下文菜单中的上一个选项 |
+| Arrow Down ↓ | 移动到上下文菜单中的下一个选项 |
+| Enter | 选中当前菜单选项 |
+| Spacebar | 选中当前菜单选项 |
+
 ##### optimized 优化配置项说明
 
 | 属性 | 描述 | 类型 | 可选值 | 默认值 |
@@ -212,7 +221,7 @@ new Vue({ i18n }).$mount('#app')
 | isArrow | 开启方向键导航 | Boolean | — | false |
 | isTab | 开启 Tab 键切换 | Boolean | — | false |
 
-###### Keyboard navigation
+###### keyboard-config 快捷键说明
 
 | 属性 | 描述 |
 |------|------|
@@ -221,6 +230,15 @@ new Vue({ i18n }).$mount('#app')
 | Arrow Left ← | 移动到当前活动单元格左边的单元格 |
 | Arrow Right → | 移动到当前活动单元格右边的单元格 |
 | Tab | 移动到当前活动单元格的右侧单元格，如果到最后一列且存在下一行，则从下一行开始移动 |
+| Enter | 取消编辑并移动到当前活动单元格下面的单元格 |
+| Backspace | 清空内容 |
+| Delete | 清空内容 |
+| F2 | 激活单元格编辑 |
+| Esc | 取消单元格编辑 |
+| Ctrl + C | 复制选中的单元格内容 |
+| Ctrl + X | 剪贴选中的单元格内容 |
+| Ctrl + V | 粘贴选中的单元格内容 |
+| Ctrl + A | 选中所有单元格 |
 
 ##### edit-config 配置项说明
 
