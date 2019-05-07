@@ -1,12 +1,12 @@
 <template>
   <div>
-    <p>设置 edit-config={trigger: 'click', mode: 'cell', showStatus: false} 关闭编辑状态显示功能</p>
+    <p>设置 edit-config={trigger: 'click', mode: 'cell', showStatus: true} 开启编辑状态显示功能</p>
 
     <vxe-table
       ref="xTable"
       border
       :data.sync="tableData"
-      :edit-config="{trigger: 'click', mode: 'cell', showStatus: false}">
+      :edit-config="{trigger: 'click', mode: 'cell', showStatus: true}">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column prop="name" label="Name" :edit-render="{type: 'default'}"></vxe-table-column>
       <vxe-table-column prop="sex" label="Sex" :edit-render="{type: 'default'}"></vxe-table-column>

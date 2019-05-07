@@ -50,10 +50,10 @@ function renderColumn (h, _vm, $table, fixedType, row, rowIndex, column, columnI
     attrs = { rowspan, colspan }
   }
   // 如果显示状态
-  if (editConfig && !(editConfig.showStatus === false)) {
+  if (editConfig && editConfig.showStatus) {
     let oRowIndex = getRecords().indexOf(row)
     let oRow = tableSourceData[oRowIndex]
-    isDirty = oRow && UtilTools.getCellValue(oRow, column.property) !== UtilTools.getCellValue(row, column.property)
+    isDirty = oRow && !XEUtils.isEqual(UtilTools.getCellValue(oRow, column.property), UtilTools.getCellValue(row, column.property))
   }
   return h('td', {
     class: ['vxe-body--column', column.id, {

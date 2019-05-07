@@ -250,7 +250,7 @@ new Vue({ i18n }).$mount('#app')
 | trigger | 触发方式 | String | manual（手动触发方式，只能用于 mode=row） / click（点击触发编辑） / dblclick（双击触发编辑） | click |
 | mode | 编辑模式 | String | cell（单元格编辑模式） / row（行编辑模式） | cell |
 | showIcon | 是否显示列头编辑图标 | Boolean | — | true |
-| showStatus | 是否显示单元格值的修改状态 | Boolean | — | true |
+| showStatus | 是否显示单元格值的修改状态 | Boolean | — | false |
 
 ##### edit-rules 校验规则配置项说明
 
