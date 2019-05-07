@@ -215,7 +215,7 @@ new Vue({ i18n }).$mount('#app')
 |------|------|-----|-----|-----|
 | animat | 表格动画效果开关（关闭后视觉效果更快） | Boolean | — | true |
 | overflow | 设置所有行不允许换行（设置后对于固定列能大幅提升性能） | String | ellipsis / title / tooltip | — |
-| scrollY | 纵向滚动Y渲染配置 | Object | — | {gt: 500, oSize: 30, rSize: 100} |
+| scrollY | 纵向 Y 滚动渲染配置 | Object | — | {gt: 500, oSize: 30, rSize: 100} |
 
 ##### mouse-config 鼠标相关配置项说明
 
