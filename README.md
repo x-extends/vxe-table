@@ -282,6 +282,7 @@ new Vue({ i18n }).$mount('#app')
 | reload | 初始化数据 | data |
 | insert | 从第一行新增一行新数据 | record |
 | insertAt | 第二个参数 row 从指定位置新增一条数据； null 从第一行新增一行新数据；-1 从最后新增一条数据 | record,row |
+| revert | 还原更改，还原指定行 row 或者整个表格的数据 | row?rows?,prop? |
 | remove | 删除指定行数据，指定 row 或 [row, ...] 删除多条数据 | rows |
 | getRecords | 获取表格数据 | rowIndex? |
 | clearSelectRow | 用于单选表格，清空用户的选择 | — |
