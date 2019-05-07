@@ -5,12 +5,13 @@ import DomTools from '../../../src/tools/dom'
  * 渲染列
  */
 function renderColumn (h, _vm, $table, fixedType, row, rowIndex, column, columnIndex) {
-  let { $listeners: tableListeners, getRecords, border, highlightCurrentRow, cellClassName, spanMethod, optimizeConfig, mouseConfig, editConfig, editStore } = $table
+  let { $listeners: tableListeners, getRecords, border, highlightCurrentRow, cellClassName, spanMethod, optimizeConfig, keyboardConfig, mouseConfig, editConfig, editStore } = $table
   let { editRender, align, ellipsis, showTitle, showTooltip, renderWidth, columnKey } = column
-  let { checked, selected, actived } = editStore
+  let { checked, selected, actived, copyed } = editStore
   let { overflow } = optimizeConfig
   let isMouseSelected = mouseConfig && mouseConfig.selected
   let isMouseChecked = mouseConfig && mouseConfig.checked
+  let isKeyboardCut = keyboardConfig && keyboardConfig.isCut
   let fixedHiddenColumn = fixedType && column.fixed !== fixedType
   let isShowTitle = showTitle || overflow === 'title'
   let isShowTooltip = showTooltip || overflow === 'tooltip'
@@ -56,6 +57,11 @@ function renderColumn (h, _vm, $table, fixedType, row, rowIndex, column, columnI
       'col--checked-left': isMouseChecked && checked.rows.indexOf(row) > -1 && checked.columns.indexOf(column) === 0,
       'col--checked-right': isMouseChecked && checked.rows.indexOf(row) > -1 && checked.columns.indexOf(column) === checked.columns.length - 1,
       'col--selected': isMouseSelected && editRender && selected.row === row && selected.column === column,
+      'col--copyed': isKeyboardCut && copyed.rows.indexOf(row) > -1 && copyed.columns.indexOf(column) > -1,
+      'col--copyed-top': isKeyboardCut && copyed.rows.indexOf(row) === 0 && copyed.columns.indexOf(column) > -1,
+      'col--copyed-bottom': isKeyboardCut && copyed.rows.indexOf(row) === copyed.rows.length - 1 && copyed.columns.indexOf(column) > -1,
+      'col--copyed-left': isKeyboardCut && copyed.rows.indexOf(row) > -1 && copyed.columns.indexOf(column) === 0,
+      'col--copyed-right': isKeyboardCut && copyed.rows.indexOf(row) > -1 && copyed.columns.indexOf(column) === copyed.columns.length - 1,
       'col--actived': editRender && actived.row === row && actived.column === column,
       'edit--visible': editRender && editRender.type === 'visible',
       'fixed--hidden': fixedHiddenColumn
@@ -78,10 +84,16 @@ function renderColumn (h, _vm, $table, fixedType, row, rowIndex, column, columnI
       }
     }, column.renderCell(h, { $table, row, rowIndex, column, columnIndex, data: getRecords(), fixed: fixedType, isHidden: fixedHiddenColumn })),
     isMouseChecked ? h('span', {
-      class: 'vxe-body--column-ft-checked'
+      class: 'vxe-body--column-checked-lt'
     }) : null,
     isMouseChecked ? h('span', {
-      class: 'vxe-body--column-rb-checked'
+      class: 'vxe-body--column-checked-rb'
+    }) : null,
+    isKeyboardCut ? h('span', {
+      class: 'vxe-body--column-copyed-lt'
+    }) : null,
+    isKeyboardCut ? h('span', {
+      class: 'vxe-body--column-copyed-rb'
     }) : null
   ])
 }

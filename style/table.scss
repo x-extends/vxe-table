@@ -541,16 +541,16 @@
       }
     }
     .vxe-body--column {
-      line-height: 1;
+      height: 48px;
+      padding: 0;
       &.col--edit {
         &.col--actived {
           padding: 0;
         }
       }
-    }
-    .vxe-body--column {
-      height: 48px;
-      padding: 0;
+      &.col--selected {
+        box-shadow: inset 0 0 4px $vxe-primary-color;
+      }
     }
     &.size--medium {
       .vxe-body--column {
@@ -617,7 +617,6 @@
     .vxe-body--column {
       padding: 0;
       height: inherit;
-      line-height: inherit;
       cursor: cell;
       .vxe-cell {
         height: $vxe-excel-column-height;
@@ -648,6 +647,7 @@
         }
       }
       &.col--selected {
+        box-shadow: none;
         &.col--checked {
           background-color: #fff;
         }
@@ -657,65 +657,150 @@
           padding: 0;
         }
       }
+      &.col--checked,
+      &.col--copyed {
+        transition: none;
+        position: relative;
+      }
       &.col--checked {
         background-color: rgba(0, 0, 0, 0.2);
-        transition: none;
         border-color: #A5A5A5;
-        position: relative;
-        &.col--checked-left {
-          .vxe-body--column-ft-checked {
-            &:after {
-              content: "";
-              top: 0;
-              left: 0;
-              position: absolute;
-              height: calc(100% + #{$vxe-excel-column-border-width - 1px});
-              width: $vxe-excel-column-border-width;
-              background-color: $vxe-excel-primary-color;
-            }
+        .vxe-body--column-checked-lt,
+        .vxe-body--column-checked-rb {
+          &:before,
+          &:after {
+            background: $vxe-excel-primary-color;
           }
         }
-        &.col--checked-top {
-          .vxe-body--column-ft-checked {
-            &:before {
-              content: "";
-              top: 0;
-              left: 0;
-              position: absolute;
-              width: calc(100% + #{$vxe-excel-column-border-width - 1px});
-              height: $vxe-excel-column-border-width;
-              background-color: $vxe-excel-primary-color;
-            }
+      }
+      &.col--copyed {
+        .vxe-body--column-copyed-lt,
+        .vxe-body--column-copyed-rb {
+          &:before,
+          &:after {
+            background: repeating-linear-gradient(135deg, transparent, transparent 3px, $vxe-excel-primary-color 3px, $vxe-excel-primary-color 9px);
+            animation: shine 1s infinite linear;
           }
         }
-        &.col--checked-right {
-          .vxe-body--column-rb-checked {
-            &:after {
-              content: "";
-              top: 0;
-              right: 0;
-              position: absolute;
-              height: calc(100% + #{$vxe-excel-column-border-width - 1px});
-              width: $vxe-excel-column-border-width;
-              background-color: $vxe-excel-primary-color;
-            }
+      }
+      %checked-left-after {
+        content: "";
+        top: 1px - $vxe-excel-column-border-width;
+        left: 1px - $vxe-excel-column-border-width;
+        position: absolute;
+        height: calc(100% + #{$vxe-excel-column-border-width});
+        width: $vxe-excel-column-border-width;
+      }
+      &.col--checked-left {
+        .vxe-body--column-checked-lt {
+          &:after {
+            @extend %checked-left-after;
           }
         }
-        &.col--checked-bottom {
-          .vxe-body--column-rb-checked {
-            &:before {
-              content: "";
-              bottom: 0;
-              left: 0;
-              position: absolute;
-              width: calc(100% + #{$vxe-excel-column-border-width - 1px});
-              height: $vxe-excel-column-border-width;
-              background-color: $vxe-excel-primary-color;
-            }
+      }
+      &.col--copyed-left {
+        .vxe-body--column-checked-lt {
+          &:after {
+            left: -$vxe-excel-column-border-width;
+          }
+        }
+        .vxe-body--column-copyed-lt {
+          &:after {
+            @extend %checked-left-after;
+          }
+        }
+      }
+      %checked-top-before {
+        content: "";
+        top: 1px - $vxe-excel-column-border-width;
+        left: 1px - $vxe-excel-column-border-width;
+        position: absolute;
+        width: calc(100% + #{$vxe-excel-column-border-width});
+        height: $vxe-excel-column-border-width;
+      }
+      &.col--checked-top {
+        .vxe-body--column-checked-lt {
+          &:before {
+            @extend %checked-top-before;
+          }
+        }
+      }
+      &.col--copyed-top {
+        .vxe-body--column-checked-lt {
+          &:before {
+            top: -$vxe-excel-column-border-width;
+          }
+        }
+        .vxe-body--column-copyed-lt {
+          &:before {
+            @extend %checked-top-before;
+          }
+        }
+      }
+      %checked-right-after {
+        content: "";
+        top: 1px - $vxe-excel-column-border-width;
+        right: 1px - $vxe-excel-column-border-width;
+        position: absolute;
+        height: calc(100% + #{$vxe-excel-column-border-width});
+        width: $vxe-excel-column-border-width;
+      }
+      &.col--checked-right {
+        .vxe-body--column-checked-rb {
+          &:after {
+            @extend %checked-right-after;
+          }
+        }
+      }
+      &.col--copyed-right {
+        .vxe-body--column-checked-rb {
+          &:after {
+            right: -$vxe-excel-column-border-width;
+          }
+        }
+        .vxe-body--column-copyed-rb {
+          &:after {
+            @extend %checked-right-after;
+          }
+        }
+      }
+      %checked-bottom-before {
+        content: "";
+        bottom: 1px - $vxe-excel-column-border-width;
+        left: 1px - $vxe-excel-column-border-width;
+        position: absolute;
+        width: calc(100% + #{$vxe-excel-column-border-width});
+        height: $vxe-excel-column-border-width;
+      }
+      &.col--checked-bottom {
+        .vxe-body--column-checked-rb {
+          &:before {
+            @extend %checked-bottom-before;
+          }
+        }
+      }
+      &.col--copyed-bottom {
+        .vxe-body--column-checked-rb {
+          &:before {
+            bottom: -$vxe-excel-column-border-width;
+          }
+        }
+        .vxe-body--column-copyed-rb {
+          &:before {
+            @extend %checked-bottom-before;
           }
         }
       }
     }
+  }
+}
+
+@keyframes shine {
+  0% {
+    background-position: -1px -1px;
+  }
+  100% {
+    background-position: -12px -12px;
   }
 }
 

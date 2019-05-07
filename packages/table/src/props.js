@@ -63,5 +63,7 @@ export default {
   // 列宽是否自动响应计算
   autoWidth: { type: Boolean, default: true },
   // 优化配置项
-  optimized: { type: [Object, Boolean], default: () => GlobalConfig.optimized }
+  optimized: { type: [Object, Boolean], default: () => GlobalConfig.optimized },
+  // 用于重写选中编辑处理逻辑
+  selectEditMethod: Function
 }

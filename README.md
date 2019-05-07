@@ -180,6 +180,7 @@ new Vue({ i18n }).$mount('#app')
 | edit-config | 可编辑配置项 | Object | — | [options](#edit-config-可编辑配置项说明) |
 | edit-rules | 校验规则配置项 | Object | — | [options](#edit-rules-校验规则配置项说明) |
 | optimized | 优化配置项 | Object/Boolean | — | [options](#optimized-优化配置项说明) |
+| selectEditMethod | 只对 Keyboard-config={isEdit: true} 有效，用于重写选中编辑处理逻辑，该函数 Function({row, rowIndex, column, columnIndex, cell}, event) 可以返回 false 来阻止默认行为 | Function | — | — |
 
 ##### context-menu 快捷菜单配置项说明（配合 context-menu-link 事件使用）
 
@@ -218,8 +219,9 @@ new Vue({ i18n }).$mount('#app')
 
 | 属性 | 描述 | 类型 | 可选值 | 默认值 |
 |------|------|-----|-----|-----|
-| isArrow | 开启方向键导航 | Boolean | — | false |
-| isTab | 开启 Tab 键切换 | Boolean | — | false |
+| isArrow | 开启方向键功能 | Boolean | — | false |
+| isTab | 开启 Tab 键功能 | Boolean | — | false |
+| isCut | 开启复制粘贴功能 | Boolean | — | false |
 | isEdit | 开启任意键进入编辑（功能键除外） | Boolean | — | false |
 
 ###### keyboard-config 快捷键说明
@@ -230,10 +232,10 @@ new Vue({ i18n }).$mount('#app')
 | Arrow Down ↓ | 移动到当前活动单元格下面的单元格 |
 | Arrow Left ← | 移动到当前活动单元格左边的单元格 |
 | Arrow Right → | 移动到当前活动单元格右边的单元格 |
-| Tab | 移动到当前活动单元格的右侧单元格，如果到最后一列且存在下一行，则从下一行开始移动 |
+| Tab | 移动到当前选中或活动单元格的右侧单元格，如果到最后一列且存在下一行，则从下一行开始移动 |
 | Enter | 取消编辑并移动到当前活动单元格下面的单元格 |
-| Backspace | 清空内容 |
 | Delete | 清空内容 |
+| Backspace | 清空内容并激活选中单元格为编辑状态 |
 | F2 | 激活单元格编辑 |
 | Esc | 取消单元格编辑 |
 | Ctrl + C | 复制选中的单元格内容 |

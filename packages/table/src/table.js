@@ -206,6 +206,11 @@ export default {
           row: null,
           column: null
         },
+        // 已复制源
+        copyed: {
+          rows: [],
+          columns: []
+        },
         // 激活
         actived: {
           row: null,
@@ -869,31 +874,152 @@ export default {
      * 全局键盘事件
      */
     handleKeydownEvent (evnt) {
+      let params
+      let { selectEditMethod, isCtxMenu, ctxMenuStore, editStore, mouseConfig = {}, keyboardConfig = {} } = this
+      let { selected, actived } = editStore
       let keyCode = evnt.keyCode
-      let isEsc = keyCode === 27
+      let isBack = keyCode === 8
+      let isTab = keyCode === 9
       let isEnter = keyCode === 13
+      let isEsc = keyCode === 27
       let isSpacebar = keyCode === 32
       let isLeftArrow = keyCode === 37
       let isUpArrow = keyCode === 38
       let isRightArrow = keyCode === 39
       let isDwArrow = keyCode === 40
+      let isDel = keyCode === 46
+      let isF2 = keyCode === 113
+      let isCtrlKey = evnt.ctrlKey
+      let operArrow = isLeftArrow || isUpArrow || isRightArrow || isDwArrow
+      let operCtxMenu = isCtxMenu && ctxMenuStore.visible && (isEnter || isSpacebar || operArrow)
       if (isEsc) {
-        // 如果按下 Esc 键，关闭快捷菜单、筛选
+        // 如果按下了 Esc 键，关闭快捷菜单、筛选
         this.closeContextMenu()
         this.closeFilter()
-      } else if (this.isCtxMenu) {
+        // 如果是激活编辑状态，则取消编辑
+        if (actived.row || actived.column) {
+          params = actived.args
+          this.closeActived()
+          // 如果配置了选中功能，则为选中状态
+          if (mouseConfig.selected) {
+            this.handleSelected(params, evnt)
+          }
+        }
+      } else if (operCtxMenu) {
         // 如果配置了右键菜单; 支持方向键操作、回车
-        let { ctxMenuStore } = this
-        if (ctxMenuStore.visible && (isEnter || isSpacebar || isLeftArrow || isUpArrow || isRightArrow || isDwArrow)) {
+        evnt.preventDefault()
+        if (ctxMenuStore.showChild && UtilTools.hasChildrenList(ctxMenuStore.selected)) {
+          this.moveCtxMenu(evnt, keyCode, ctxMenuStore, 'selectChild', 37, false, ctxMenuStore.selected.children)
+        } else {
+          this.moveCtxMenu(evnt, keyCode, ctxMenuStore, 'selected', 39, true, this.ctxMenuList)
+        }
+      } else if (isF2) {
+        // 如果按下了 F2 键
+        if (selected.row && selected.column) {
+          this.handleActived(selected.args, evnt)
+        }
+      } else if (operArrow && keyboardConfig.isArray) {
+        // 如果按下了方向键
+        if (selected.row && selected.column) {
           evnt.preventDefault()
-          evnt.stopPropagation()
-          if (ctxMenuStore.showChild && UtilTools.hasChildrenList(ctxMenuStore.selected)) {
-            this.moveCtxMenu(evnt, keyCode, ctxMenuStore, 'selectChild', 37, false, ctxMenuStore.selected.children)
-          } else {
-            this.moveCtxMenu(evnt, keyCode, ctxMenuStore, 'selected', 39, true, this.ctxMenuList)
+          this.moveSelected(selected.args, isLeftArrow, isUpArrow, isRightArrow, isDwArrow, evnt)
+        }
+      } else if (isTab && keyboardConfig.isTab) {
+        // 如果按下了 Tab 键切换
+        if (selected.row || selected.column) {
+          evnt.preventDefault()
+          this.moveTabSelected(selected.args, evnt)
+        } else if (actived.row || actived.column) {
+          evnt.preventDefault()
+          this.moveTabSelected(actived.args, evnt)
+        }
+      } else if (isDel || isBack) {
+        // 如果是删除键
+        if (selected.row || selected.column) {
+          UtilTools.setCellValue(selected.row, selected.column.property, null)
+          if (isBack) {
+            this.handleActived(selected.args, evnt)
+          }
+        }
+      } else if (keyboardConfig.isCut && isCtrlKey && keyCode === 67) {
+        // 如果开启复制功能
+        this.handleCopyed()
+      } else if (keyboardConfig.isEdit && !isCtrlKey && ((keyCode >= 48 && keyCode <= 57) || (keyCode >= 65 && keyCode <= 90) || (keyCode >= 96 && keyCode <= 111) || (keyCode >= 186 && keyCode <= 192) || (keyCode >= 219 && keyCode <= 222) || keyCode === 32)) {
+        // 如果是按下非功能键之外允许直接编辑
+        if (selected.row || selected.column) {
+          if (!selectEditMethod || !(selectEditMethod(selected.args, evnt) === false)) {
+            UtilTools.setCellValue(selected.row, selected.column.property, null)
+            this.handleActived(selected.args, evnt)
           }
         }
       }
+    },
+    // 处理 Tab 键移动
+    moveTabSelected (params, evnt) {
+      let { $refs, tableData, visibleColumn, handleSelected } = this
+      let { rowIndex, columnIndex } = params
+      let nextRow
+      let nextRowIndex
+      let nextColumn
+      let nextColumnIndex
+      for (let index = columnIndex + 1; index < visibleColumn.length; index++) {
+        if (visibleColumn[index].editRender) {
+          nextColumnIndex = index
+          nextColumn = visibleColumn[index]
+          break
+        }
+      }
+      if (!nextColumn && rowIndex < tableData.length - 1) {
+        // 如果找不到从下一行开始找，如果一行都找不到就不需要继续找了，可能不存在可编辑的列
+        nextRowIndex = rowIndex + 1
+        nextRow = tableData[nextRowIndex]
+        for (let index = 0; index < visibleColumn.length; index++) {
+          if (visibleColumn[index].editRender) {
+            nextColumnIndex = index
+            nextColumn = visibleColumn[index]
+            break
+          }
+        }
+      }
+      if (nextColumn) {
+        if (nextRow) {
+          params.rowIndex = nextRowIndex
+          params.row = nextRow
+        }
+        params.columnIndex = nextColumnIndex
+        params.column = nextColumn
+        params.cell = DomTools.getCell(params, $refs.tableBody.$el)
+        handleSelected(params, evnt)
+      }
+    },
+    // 处理方向键移动
+    moveSelected (params, isLeftArrow, isUpArrow, isRightArrow, isDwArrow, evnt) {
+      let { $refs, tableData, visibleColumn, handleSelected } = this
+      if (isUpArrow && params.rowIndex) {
+        params.rowIndex -= 1
+        params.row = tableData[params.rowIndex]
+      } else if (isDwArrow && params.rowIndex < tableData.length - 1) {
+        params.rowIndex += 1
+        params.row = tableData[params.rowIndex]
+      } else if (isLeftArrow && params.columnIndex) {
+        for (let len = params.columnIndex - 1; len >= 0; len--) {
+          if (visibleColumn[len].editRender) {
+            params.columnIndex = len
+            params.column = visibleColumn[len]
+            break
+          }
+        }
+      } else if (isRightArrow && params.columnIndex) {
+        for (let index = params.columnIndex + 1; index < visibleColumn.length; index++) {
+          if (visibleColumn[index].editRender) {
+            params.columnIndex = index
+            params.column = visibleColumn[index]
+            break
+          }
+        }
+      }
+      params.cell = DomTools.getCell(params, $refs.tableBody.$el)
+      handleSelected(params, evnt)
     },
     // 处理菜单的移动
     moveCtxMenu (evnt, keyCode, ctxMenuStore, key, operKey, operRest, menuList) {
@@ -1175,7 +1301,7 @@ export default {
      * 选中事件
      */
     triggerCellMousedownEvent (evnt, params) {
-      let { $el, tableData, visibleColumn, editStore, editConfig, getEventTargetNode, handleChecked } = this
+      let { $el, tableData, visibleColumn, editStore, editConfig, getEventTargetNode, handleSelected, handleChecked } = this
       let { checked, actived } = editStore
       let { row, column, cell } = params
       let { button } = evnt
@@ -1205,13 +1331,11 @@ export default {
                 document.onmousemove = domMousemove
                 document.onmouseup = domMouseup
               }
-              updateEvent(evnt)
             } else if (isRightBtn) {
               // 如果不在所有选中的范围之内则重新选中
               let select = DomTools.getCellIndexs(cell)
               if (checked.rows.indexOf(tableData[select.rowIndex]) === -1 || checked.columns.indexOf(visibleColumn[select.columnIndex]) === -1) {
-                this.handleSelected(params, evnt)
-                handleChecked(params, select, select, evnt)
+                handleSelected(params, evnt)
               }
             }
           }
@@ -1254,15 +1378,19 @@ export default {
     handleActived (params, evnt) {
       let { editStore, editConfig } = this
       let { activeMethod } = editConfig
-      let { checked, selected, actived } = editStore
+      let { copyed, checked, selected, actived } = editStore
       let { row, column } = params
       if (actived.row !== row || actived.column !== column) {
         // 判断是否禁用编辑
         if (!activeMethod || activeMethod(params)) {
+          copyed.rows = []
+          copyed.columns = []
           checked.rows = []
           checked.columns = []
+          selected.args = null
           selected.row = null
           selected.column = null
+          actived.args = params
           actived.row = row
           actived.column = column
           this.$nextTick(() => {
@@ -1274,19 +1402,36 @@ export default {
       }
     },
     /**
+     * 关闭编辑状态
+     */
+    closeActived () {
+      let { editStore } = this
+      let { actived } = editStore
+      actived.args = null
+      actived.row = null
+      actived.column = null
+    },
+    /**
      * 处理选中源
      */
     handleSelected (params, evnt) {
-      let { editStore } = this
+      let { mouseConfig = {}, editStore } = this
       let { checked, selected, actived } = editStore
       let { row, column } = params
       if (selected.row !== row || selected.column !== column) {
         checked.rows = []
         checked.columns = []
+        actived.args = null
         actived.row = null
         actived.column = null
+        selected.args = params
         selected.row = row
         selected.column = column
+      }
+      // 如果配置了批量选中功能，则为批量选中状态
+      if (mouseConfig.checked) {
+        let select = DomTools.getCellIndexs(params.cell)
+        this.handleChecked(params, select, select, evnt)
       }
     },
     /**
@@ -1307,6 +1452,15 @@ export default {
       } else {
         checked.columns = visibleColumn.slice(Math.max(eColumnIndex, 1), sColumnIndex + 1)
       }
+    },
+    /**
+     * 处理复制
+     */
+    handleCopyed (params, evnt) {
+      let { editStore } = this
+      let { copyed, checked } = editStore
+      copyed.rows = checked.rows
+      copyed.columns = checked.columns
     },
     /**
      * 处理聚焦

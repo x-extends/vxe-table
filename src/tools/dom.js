@@ -34,6 +34,11 @@ const DomTools = {
     let columnIndex = [].indexOf.call(trElem.children, cell)
     let rowIndex = [].indexOf.call(trElem.parentNode.children, trElem)
     return { rowIndex, columnIndex }
+  },
+  getCell ({ rowIndex, column }, tableElem) {
+    let tBodyElem = tableElem.querySelector('.vxe-table--body>tbody')
+    let trElem = tBodyElem.children[rowIndex]
+    return trElem.querySelector(`.${column.id}`)
   }
 }
 

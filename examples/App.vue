@@ -369,9 +369,8 @@ export default {
             },
             {
               lable: '键盘导航',
-              disabled: true,
               locat: {
-                name: 'TableInstall'
+                name: 'TableEditKeyboard'
               }
             },
             {
