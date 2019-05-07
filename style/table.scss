@@ -551,6 +551,18 @@
       &.col--selected {
         box-shadow: inset 0 0 4px $vxe-primary-color;
       }
+      &.col--dirty {
+        position: relative;
+        &:before {
+          content: "";
+          top: -5px;
+          left: -5px;
+          position: absolute;
+          border: 5px solid;
+          border-color: transparent #f56c6c transparent transparent;
+          transform: rotate(45deg);
+        }
+      }
     }
     &.size--medium {
       .vxe-body--column {

@@ -94,7 +94,8 @@ const excelContextMenu = {
 const excelEditConfig = {
   trigger: 'dblclick',
   mode: 'cell',
-  showIcon: false
+  showIcon: false,
+  showStatus: false
 }
 
 function buildColumns (h, columns) {

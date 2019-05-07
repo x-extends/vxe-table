@@ -1,11 +1,12 @@
 import XEUtils from 'xe-utils'
 import DomTools from '../../../src/tools/dom'
+import UtilTools from '../../../src/tools/utils'
 
 /**
  * 渲染列
  */
 function renderColumn (h, _vm, $table, fixedType, row, rowIndex, column, columnIndex) {
-  let { $listeners: tableListeners, getRecords, border, highlightCurrentRow, cellClassName, spanMethod, optimizeConfig, keyboardConfig, mouseConfig, editConfig, editStore } = $table
+  let { $listeners: tableListeners, tableSourceData, getRecords, border, highlightCurrentRow, cellClassName, spanMethod, optimizeConfig, keyboardConfig, mouseConfig, editConfig, editStore } = $table
   let { editRender, align, ellipsis, showTitle, showTooltip, renderWidth, columnKey } = column
   let { checked, selected, actived, copyed } = editStore
   let { overflow } = optimizeConfig
@@ -16,6 +17,7 @@ function renderColumn (h, _vm, $table, fixedType, row, rowIndex, column, columnI
   let isShowTitle = showTitle || overflow === 'title'
   let isShowTooltip = showTooltip || overflow === 'tooltip'
   let isEllipsis = ellipsis || overflow === 'ellipsis'
+  let isDirty
   let attrs = null
   let tdOns = {}
   let triggerDblclick = (editRender && editConfig && editConfig.trigger === 'dblclick')
@@ -47,6 +49,12 @@ function renderColumn (h, _vm, $table, fixedType, row, rowIndex, column, columnI
     }
     attrs = { rowspan, colspan }
   }
+  // 如果显示状态
+  if (editConfig && !(editConfig.showStatus === false)) {
+    let oRowIndex = getRecords().indexOf(row)
+    let oRow = tableSourceData[oRowIndex]
+    isDirty = oRow && UtilTools.getCellValue(oRow, column.property) !== UtilTools.getCellValue(row, column.property)
+  }
   return h('td', {
     class: ['vxe-body--column', column.id, {
       [`col--${align}`]: align,
@@ -63,6 +71,7 @@ function renderColumn (h, _vm, $table, fixedType, row, rowIndex, column, columnI
       'col--copyed-left': isKeyboardCut && copyed.rows.indexOf(row) > -1 && copyed.columns.indexOf(column) === 0,
       'col--copyed-right': isKeyboardCut && copyed.rows.indexOf(row) > -1 && copyed.columns.indexOf(column) === copyed.columns.length - 1,
       'col--actived': editRender && actived.row === row && actived.column === column,
+      'col--dirty': isDirty,
       'edit--visible': editRender && editRender.type === 'visible',
       'fixed--hidden': fixedHiddenColumn
     }, cellClassName ? XEUtils.isFunction(cellClassName) ? cellClassName({ $table, row, rowIndex, column, columnIndex, data: getRecords() }) : cellClassName : ''],

@@ -3,7 +3,7 @@
     <p>设置 edit-config={trigger: 'manual', mode: 'row'} 启用行编辑的功能</p>
 
     <vxe-table
-      ref="xTable2"
+      ref="xTable"
       border
       :data.sync="tableData"
       :edit-config="{trigger: 'manual', mode: 'row'}">
@@ -14,7 +14,13 @@
       <vxe-table-column prop="address" label="Address" show-overflow-tooltip :edit-render="{type: 'default'}"></vxe-table-column>
       <vxe-table-column label="操作">
         <template v-slot="{ row }">
-          <button class="btn" @click="$refs.xTable2.setActiveRow(row)">编辑</button>
+          <template v-if="$refs.xTable.hasActiveRow(row)">
+            <button class="btn">保存</button>
+            <button class="btn">取消</button>
+          </template>
+          <template v-else>
+            <button class="btn" @click="$refs.xTable.setActiveRow(row)">编辑</button>
+          </template>
         </template>
       </vxe-table-column>
     </vxe-table>
@@ -38,7 +44,7 @@ export default {
       demoCodes: [
         `
         <vxe-table
-          ref="xTable2"
+          ref="xTable"
           border
           :data.sync="tableData"
           :edit-config="{trigger: 'manual', mode: 'row'}">
@@ -49,7 +55,13 @@ export default {
           <vxe-table-column prop="address" label="Address" show-overflow-tooltip :edit-render="{type: 'default'}"></vxe-table-column>
           <vxe-table-column label="操作">
             <template v-slot="{ row }">
-              <button class="btn" @click="$refs.xTable2.setActiveRow(row)">编辑</button>
+              <template v-if="$refs.xTable.hasActiveRow(row)">
+                <button class="btn">保存</button>
+                <button class="btn">取消</button>
+              </template>
+              <template v-else>
+                <button class="btn" @click="$refs.xTable.setActiveRow(row)">编辑</button>
+              </template>
             </template>
           </vxe-table-column>
         </vxe-table>

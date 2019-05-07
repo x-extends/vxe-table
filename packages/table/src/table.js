@@ -494,10 +494,12 @@ export default {
       this.isAllSelected = false
       this.isIndeterminate = false
       this.selection = []
+      return this.$nextTick()
     },
     clearSelectRow () {
       this.selectRow = null
       this.hoverRow = null
+      return this.$nextTick()
     },
     clearSort () {
       this.tableColumn.forEach(column => {
@@ -505,6 +507,7 @@ export default {
       })
       this.tableFullData = this.data || []
       this.tableData = this.tableFullData
+      return this.$nextTick()
     },
     clearFilter (force) {
       Object.assign(this.filterStore, {
@@ -516,6 +519,7 @@ export default {
         multiple: false,
         visible: false
       })
+      return this.$nextTick()
     },
     reload (data, init) {
       let { autoWidth, scrollStore, optimizeConfig, computeWidth, computeScrollLoad } = this
@@ -530,6 +534,9 @@ export default {
           offsetSize: scroll.oSize
         })
       }
+      // 原始数据
+      this.tableSourceData = XEUtils.clone(tableFullData, true)
+      // 全量数据
       this.tableFullData = tableFullData
       this.scrollLoad = scrollLoad
       this.tableData = this.getTableData()
@@ -543,7 +550,7 @@ export default {
       return rest
     },
     insert (record) {
-      this.insertAt(record)
+      return this.insertAt(record)
     },
     /**
      * 从指定行插入数据
@@ -561,6 +568,7 @@ export default {
           tableData.splice(rowIndex, 0, newRecord)
         }
       }
+      return this.$nextTick().then(() => ({ row: newRecord }))
     },
     /**
      * 删除指定行数据
@@ -575,6 +583,7 @@ export default {
       if (rows.length) {
         XEUtils.remove(tableData, item => rows.indexOf(item) > -1)
       }
+      return this.$nextTick()
     },
     /**
      * 还原数据
@@ -584,13 +593,25 @@ export default {
      * 支持还原指定单元格
      */
     revert (rows, prop) {
+      let { tableSourceData, tableFullData } = this
       if (arguments.length) {
         if (rows && !XEUtils.isArray(rows)) {
           rows = [rows]
         }
-      } else {
-
+        rows.forEach(row => {
+          let rowIndex = XEUtils.findIndexOf(tableFullData, item => item === row)
+          let oRow = tableSourceData[rowIndex]
+          if (oRow && row) {
+            if (prop) {
+              UtilTools.setCellValue(row, prop, UtilTools.getCellValue(oRow, prop))
+            } else {
+              XEUtils.destructuring(row, oRow)
+            }
+          }
+        })
+        return this.$nextTick()
       }
+      return this.reload(tableSourceData)
     },
     /**
      * 获取表格所有数据
@@ -1409,6 +1430,11 @@ export default {
           UtilTools.emitEvent(this, 'edit-disabled', [params, evnt])
         }
       }
+    },
+    hasActiveRow (row) {
+      let { editStore } = this
+      let { actived } = editStore
+      return actived.row === row
     },
     /**
      * 关闭编辑状态
