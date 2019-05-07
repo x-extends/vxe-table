@@ -208,6 +208,7 @@ export default {
         },
         // 已复制源
         copyed: {
+          cut: false,
           rows: [],
           columns: []
         },
@@ -888,6 +889,9 @@ export default {
       let isRightArrow = keyCode === 39
       let isDwArrow = keyCode === 40
       let isDel = keyCode === 46
+      let isC = keyCode === 67
+      let isV = keyCode === 86
+      let isX = keyCode === 88
       let isF2 = keyCode === 113
       let isCtrlKey = evnt.ctrlKey
       let operArrow = isLeftArrow || isUpArrow || isRightArrow || isDwArrow
@@ -941,9 +945,13 @@ export default {
             this.handleActived(selected.args, evnt)
           }
         }
-      } else if (keyboardConfig.isCut && isCtrlKey && keyCode === 67) {
+      } else if (keyboardConfig.isCut && isCtrlKey && (isX || isC || isV)) {
         // 如果开启复制功能
-        this.handleCopyed()
+        if (isX || isC) {
+          this.handleCopyed(isX, evnt)
+        } else if (isV) {
+          this.handlePaste(evnt)
+        }
       } else if (keyboardConfig.isEdit && !isCtrlKey && ((keyCode >= 48 && keyCode <= 57) || (keyCode >= 65 && keyCode <= 90) || (keyCode >= 96 && keyCode <= 111) || (keyCode >= 186 && keyCode <= 192) || (keyCode >= 219 && keyCode <= 222) || keyCode === 32)) {
         // 如果是按下非功能键之外允许直接编辑
         if (selected.row || selected.column) {
@@ -1323,7 +1331,7 @@ export default {
                 evnt.preventDefault()
                 let { flag, targetElem } = getEventTargetNode(evnt, $el, 'vxe-body--column')
                 if (flag) {
-                  handleChecked(params, start, DomTools.getCellIndexs(targetElem), evnt)
+                  handleChecked(start, DomTools.getCellIndexs(targetElem), evnt)
                 }
               }, DomTools.browse.msie ? 80 : 40, { leading: true, trailing: true })
               document.onmousemove = updateEvent
@@ -1383,6 +1391,7 @@ export default {
       if (actived.row !== row || actived.column !== column) {
         // 判断是否禁用编辑
         if (!activeMethod || activeMethod(params)) {
+          copyed.cut = false
           copyed.rows = []
           copyed.columns = []
           checked.rows = []
@@ -1431,13 +1440,13 @@ export default {
       // 如果配置了批量选中功能，则为批量选中状态
       if (mouseConfig.checked) {
         let select = DomTools.getCellIndexs(params.cell)
-        this.handleChecked(params, select, select, evnt)
+        this.handleChecked(select, select, evnt)
       }
     },
     /**
      * 处理所有选中
      */
-    handleChecked (params, start, end, evnt) {
+    handleChecked (start, end, evnt) {
       let { tableData, visibleColumn, editStore } = this
       let { checked } = editStore
       let { rowIndex: sRowIndex, columnIndex: sColumnIndex } = start
@@ -1456,11 +1465,40 @@ export default {
     /**
      * 处理复制
      */
-    handleCopyed (params, evnt) {
+    handleCopyed (cut, evnt) {
       let { editStore } = this
       let { copyed, checked } = editStore
+      copyed.cut = cut
       copyed.rows = checked.rows
       copyed.columns = checked.columns
+    },
+    /**
+     * 处理粘贴
+     */
+    handlePaste (evnt) {
+      let { tableData, visibleColumn, editStore } = this
+      let { copyed, selected } = editStore
+      let { rows, columns } = copyed
+      if (rows.length && columns.length && selected.row && selected.column) {
+        let { rowIndex, columnIndex } = selected.args
+        let start = { rowIndex, columnIndex }
+        let end = {
+          rowIndex: rowIndex + rows.length - 1,
+          columnIndex: columnIndex + columns.length - 1
+        }
+        rows.forEach((row, rIndex) => {
+          let offsetRow = tableData[rowIndex + rIndex]
+          if (offsetRow) {
+            columns.forEach((column, cIndex) => {
+              let offsetColumn = visibleColumn[columnIndex + cIndex]
+              if (offsetColumn) {
+                UtilTools.setCellValue(offsetRow, offsetColumn.property, UtilTools.getCellValue(row, column.property))
+              }
+            })
+          }
+        })
+        this.handleChecked(start, end, evnt)
+      }
     },
     /**
      * 处理聚焦
