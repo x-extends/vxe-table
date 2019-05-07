@@ -8,7 +8,7 @@
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column prop="name" label="Name"></vxe-table-column>
       <vxe-table-column prop="sex" label="Sex"></vxe-table-column>
-      <vxe-table-column prop="date" label="Date"></vxe-table-column>
+      <vxe-table-column prop="age" label="Age"></vxe-table-column>
       <vxe-table-column prop="address" label="Address" show-overflow-tooltip></vxe-table-column>
     </vxe-table>
 
@@ -21,7 +21,7 @@
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column prop="name" label="Name"></vxe-table-column>
       <vxe-table-column prop="sex" label="Sex"></vxe-table-column>
-      <vxe-table-column prop="date" label="Date"></vxe-table-column>
+      <vxe-table-column prop="age" label="Age"></vxe-table-column>
       <vxe-table-column prop="address" label="Address" show-overflow-tooltip></vxe-table-column>
     </vxe-table>
   </div>

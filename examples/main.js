@@ -24,6 +24,7 @@ function mockData () {
     list.push({
       id: fullIndex,
       name: 'name_' + fullIndex,
+      role: 'role_' + fullIndex,
       key: 'home.label.key' + (index % 2 === 0 ? index - 1 : index),
       language: index % 2 === 0 ? 'zh_CN' : 'en_US',
       checked: false,

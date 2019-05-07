@@ -79,6 +79,15 @@ Vue.use(VXETable, {
   size: 'small',
   // 全局快捷菜单
   contextMenu: null,
+  // 自定义组件渲染
+  renderMap: {},
+  // 自定义图标配置
+  iconMap: {
+    sortAsc: 'vxe-sort--asc-icon',
+    sortDesc: 'vxe-sort--desc-icon',
+    filter: 'vxe-filter--icon',
+    edit: 'vxe-edit--icon'
+  },
   // 优化配置项
   optimized: {
     scroll: {
@@ -284,7 +293,11 @@ new Vue({ i18n }).$mount('#app')
 | insertAt | 第二个参数 row 从指定位置新增一条数据； null 从第一行新增一行新数据；-1 从最后新增一条数据 | record,row |
 | revert | 还原更改，还原指定行 row 或者整个表格的数据 | row?rows?,prop? |
 | remove | 删除指定行数据，指定 row 或 [row, ...] 删除多条数据 | rows |
-| getRecords | 获取表格数据 | rowIndex? |
+| getAllRecords | 获取表格数据集合 | — |
+| getRecords | 获取表格数据，也可以指定索引获取某条数据 | index |
+| getInsertRecords | 获取新增数据 | — |
+| getRemoveRecords | 获取已删除数据 | — |
+| getUpdateRecords| 获取已修改数据 | — |
 | clearSelectRow | 用于单选表格，清空用户的选择 | — |
 | setCurrentRow | 用于单选表格，设置某一行为选中状态，如果第二个参数为空，则会取消目前高亮行的选中状态 | row? |
 | clearSelection | 用于多选表格，清空用户的选择 | — |
@@ -349,6 +362,7 @@ new Vue({ i18n }).$mount('#app')
 |------|------|-----|-----|-----|
 | type | 渲染类型 | String | default（组件触发后可视） / visible（组件一直可视） | default |
 | name | 渲染的组件名 | String | input / textarea | input |
+| autofocus | 如果是自定义渲染可以指定聚焦的 class | String | — | — |
 
 #### Table-column Scoped Slot
 

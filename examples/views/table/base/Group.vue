@@ -14,7 +14,7 @@
         <vxe-table-column prop="role" label="Role"></vxe-table-column>
         <vxe-table-column label="详细信息">
           <vxe-table-column prop="sex" label="Sex"></vxe-table-column>
-          <vxe-table-column prop="date" label="Date"></vxe-table-column>
+          <vxe-table-column prop="age" label="Age"></vxe-table-column>
         </vxe-table-column>
       </vxe-table-column>
       <vxe-table-column prop="address" label="Address" show-overflow-tooltip></vxe-table-column>

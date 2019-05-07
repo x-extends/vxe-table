@@ -10,7 +10,7 @@
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column prop="name" label="Name" sortable :filters="[{label: 'id大于10', value: 10}, {label: 'id大于40', value: 40}]" :filterMethod="filterMethod"></vxe-table-column>
       <vxe-table-column prop="sex" label="Sex" sortable :filters="[{label: 'Man', value: '1'}, {label: 'Woman', value: '0'}]"></vxe-table-column>
-      <vxe-table-column prop="date" label="Date"></vxe-table-column>
+      <vxe-table-column prop="age" label="Age"></vxe-table-column>
       <vxe-table-column prop="time" label="Time" sortable></vxe-table-column>
     </vxe-table>
   </div>

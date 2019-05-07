@@ -11,7 +11,7 @@
       <vxe-table-column type="index" width="100"></vxe-table-column>
       <vxe-table-column prop="name" label="Name" sortable></vxe-table-column>
       <vxe-table-column prop="sex" label="Sex"></vxe-table-column>
-      <vxe-table-column prop="date" label="Date"></vxe-table-column>
+      <vxe-table-column prop="age" label="Age"></vxe-table-column>
       <vxe-table-column prop="address" label="Address" show-overflow-tooltip></vxe-table-column>
     </vxe-table>
 
@@ -32,7 +32,7 @@
       <vxe-table-column type="index" width="100"></vxe-table-column>
       <vxe-table-column prop="name" label="Name" sortable></vxe-table-column>
       <vxe-table-column prop="sex" label="Sex"></vxe-table-column>
-      <vxe-table-column prop="date" label="Date"></vxe-table-column>
+      <vxe-table-column prop="age" label="Age"></vxe-table-column>
       <vxe-table-column prop="address" label="Address" show-overflow-tooltip></vxe-table-column>
     </vxe-table>
 
@@ -61,7 +61,7 @@ export default {
           <vxe-table-column type="index" width="100"></vxe-table-column>
           <vxe-table-column prop="name" label="Name" sortable></vxe-table-column>
           <vxe-table-column prop="sex" label="Sex"></vxe-table-column>
-          <vxe-table-column prop="date" label="Date"></vxe-table-column>
+          <vxe-table-column prop="age" label="Age"></vxe-table-column>
           <vxe-table-column prop="address" label="Address" show-overflow-tooltip></vxe-table-column>
         </vxe-table>
         `,
@@ -87,7 +87,7 @@ export default {
           <vxe-table-column type="index" width="100"></vxe-table-column>
           <vxe-table-column prop="name" label="Name" sortable></vxe-table-column>
           <vxe-table-column prop="sex" label="Sex"></vxe-table-column>
-          <vxe-table-column prop="date" label="Date"></vxe-table-column>
+          <vxe-table-column prop="age" label="Age"></vxe-table-column>
           <vxe-table-column prop="address" label="Address" show-overflow-tooltip></vxe-table-column>
         </vxe-table>
         `,

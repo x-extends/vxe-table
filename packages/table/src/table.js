@@ -481,7 +481,7 @@ export default {
         }, [
           h('div', {
             class: ['vxe-table--tooltip-content']
-          }, tooltipStore.content),
+          }, '' + tooltipStore.content),
           h('div', {
             class: ['vxe-table--tooltip-arrow']
           })
@@ -534,6 +534,8 @@ export default {
           offsetSize: scroll.oSize
         })
       }
+      this.insertList = []
+      this.removeList = []
       // 原始数据
       this.tableSourceData = XEUtils.clone(tableFullData, true)
       // 全量数据
@@ -556,7 +558,7 @@ export default {
      * 从指定行插入数据
      */
     insertAt (record, row) {
-      let { tableData } = this
+      let { tableData, insertList } = this
       let newRecord = record
       if (arguments.length === 1) {
         tableData.unshift(newRecord)
@@ -568,6 +570,7 @@ export default {
           tableData.splice(rowIndex, 0, newRecord)
         }
       }
+      insertList.push(newRecord)
       return this.$nextTick().then(() => ({ row: newRecord }))
     },
     /**
@@ -576,14 +579,16 @@ export default {
      * 支持删除多行
      */
     remove (rows) {
-      let { tableData } = this
+      let { tableData, removeList } = this
+      let rest = []
       if (rows && !XEUtils.isArray(rows)) {
         rows = [rows]
       }
       if (rows.length) {
-        XEUtils.remove(tableData, item => rows.indexOf(item) > -1)
+        rest = XEUtils.remove(tableData, item => rows.indexOf(item) > -1)
       }
-      return this.$nextTick()
+      removeList.push.apply(removeList, rest)
+      return this.$nextTick(() => rest)
     },
     /**
      * 还原数据
@@ -619,6 +624,44 @@ export default {
     getRecords (rowIndex) {
       let list = this.tableFullData
       return arguments.length ? list[rowIndex] : list
+    },
+    /**
+     * 获取表格数据集合
+     */
+    getAllRecords () {
+      return {
+        records: this.getRecords(),
+        selecteds: this.getSelecteds(),
+        insertRecords: this.getInsertRecords(),
+        removeRecords: this.getRemoveRecords(),
+        updateRecords: this.getUpdateRecords()
+      }
+    },
+    /**
+     * 获取新增数据
+     */
+    getInsertRecords () {
+      return this.insertList
+    },
+    /**
+     * 获取删除数据
+     */
+    getRemoveRecords () {
+      return this.removeList
+    },
+    /**
+     * 获取更新数据
+     */
+    getUpdateRecords () {
+      let { tableSourceData, tableFullData, visibleColumn } = this
+      let updateRecords = []
+      tableFullData.forEach((row, rowIndex) => {
+        let oRow = tableSourceData[rowIndex]
+        if (oRow && visibleColumn.some(column => !XEUtils.isEqual(UtilTools.getCellValue(oRow, column.property), UtilTools.getCellValue(row, column.property)))) {
+          updateRecords.push(row)
+        }
+      })
+      return updateRecords
     },
     /**
      * 获取处理后的表格数据
@@ -1535,16 +1578,22 @@ export default {
       let { renderMap = {} } = GlobalConfig
       let compRender = renderMap[editRender.name]
       let inputElem
-      // 自定义的处理
-      if (compRender) {
-        if (compRender.autofocus) {
-          inputElem = cell.querySelector(compRender.autofocus)
-        }
-      } else {
+      // 如果指定了聚焦 class
+      if (editRender.autofocus) {
+        inputElem = cell.querySelector(editRender.autofocus)
+      }
+      if (!inputElem) {
+        // 自定义的处理
+        if (compRender) {
+          if (compRender.autofocus) {
+            inputElem = cell.querySelector(compRender.autofocus)
+          }
+        } else {
         // 内置的处理
-        inputElem = cell.querySelector('input.vxe-input')
-        if (!inputElem) {
-          inputElem = cell.querySelector('textarea.vxe-textarea')
+          inputElem = cell.querySelector('input.vxe-input')
+          if (!inputElem) {
+            inputElem = cell.querySelector('textarea.vxe-textarea')
+          }
         }
       }
       if (inputElem) {
