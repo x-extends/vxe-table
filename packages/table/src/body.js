@@ -213,7 +213,7 @@ export default {
   },
   render (h) {
     let { $parent: $table, fixedType } = this
-    let { maxHeight, height, tableColumn, headerHeight, showFooter, footerHeight, tableHeight, tableWidth, scrollYStore, scrollLoad, scrollXHeight, optimizeConfig } = $table
+    let { maxHeight, height, tableColumn, headerHeight, showFooter, footerHeight, tableHeight, tableWidth, scrollYStore, scrollYLoad, scrollXHeight, optimizeConfig } = $table
     let { overflow } = optimizeConfig
     let customHeight = XEUtils.toNumber(height)
     let style = {}
@@ -235,7 +235,7 @@ export default {
       },
       style
     }, [
-      scrollLoad ? h('div', {
+      scrollYLoad ? h('div', {
         class: ['vxe-body--top-space'],
         style: {
           height: `${scrollYStore.topSpaceHeight}px`
@@ -269,7 +269,7 @@ export default {
          */
         h('tbody', renderRows(h, this, $table, fixedType, tableColumn))
       ]),
-      scrollLoad ? h('div', {
+      scrollYLoad ? h('div', {
         class: ['vxe-body--bottom-space'],
         style: {
           height: `${scrollYStore.bottomSpaceHeight}px`
@@ -285,7 +285,7 @@ export default {
      */
     scrollEvent (evnt) {
       let { $parent: $table, fixedType } = this
-      let { scrollLoad } = $table
+      let { scrollYLoad } = $table
       let { tableHeader, tableBody, leftBody, rightBody } = $table.$refs
       let headerElem = tableHeader ? tableHeader.$el : null
       let bodyElem = tableBody.$el
@@ -306,7 +306,7 @@ export default {
         }
         syncBodyScroll(bodyElem.scrollTop, leftElem, rightElem)
       }
-      if (scrollLoad) {
+      if (scrollYLoad) {
         $table.triggerSrcollEvent(evnt)
       }
     }

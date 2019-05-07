@@ -118,8 +118,8 @@ export default {
       headerHeight: 0,
       // 表尾高度
       footerHeight: 0,
-      // 是否滚动方式加载
-      scrollLoad: false,
+      // 是否纵向 Y 滚动方式加载
+      scrollYLoad: false,
       // 是否存在纵向滚动条
       overflowY: true,
       // 是否存在横向滚动条
@@ -175,7 +175,7 @@ export default {
         list: [],
         style: null
       },
-      // 存放纵向滚动Y渲染相关的信息
+      // 存放纵向 Y 滚动渲染相关的信息
       scrollYStore: {
         renderSize: 0,
         visibleSize: 0,
@@ -481,7 +481,7 @@ export default {
         }, [
           h('div', {
             class: ['vxe-table--tooltip-content']
-          }, '' + tooltipStore.content),
+          }, UtilTools.formatText(tooltipStore.content)),
           h('div', {
             class: ['vxe-table--tooltip-arrow']
           })
@@ -525,8 +525,8 @@ export default {
       let { autoWidth, scrollYStore, optimizeConfig, computeWidth, computeScrollLoad } = this
       let { scrollY } = optimizeConfig
       let tableFullData = data || []
-      let scrollLoad = scrollY && scrollY.gt && scrollY.gt < tableFullData.length
-      if (scrollLoad) {
+      let scrollYLoad = scrollY && scrollY.gt && scrollY.gt < tableFullData.length
+      if (scrollYLoad) {
         Object.assign(scrollYStore, {
           startIndex: 0,
           visibleIndex: 0,
@@ -540,13 +540,13 @@ export default {
       this.tableSourceData = XEUtils.clone(tableFullData, true)
       // 全量数据
       this.tableFullData = tableFullData
-      this.scrollLoad = scrollLoad
+      this.scrollYLoad = scrollYLoad
       this.tableData = this.getTableData()
       let rest = this.$nextTick()
       if (!init && autoWidth) {
         rest = rest.then(computeWidth)
       }
-      if (!init && scrollLoad) {
+      if (!init && scrollYLoad) {
         rest = rest.then(computeScrollLoad)
       }
       return rest
@@ -669,7 +669,7 @@ export default {
      * 如果存在排序，继续处理
      */
     getTableData () {
-      let { tableColumn, tableFullData, scrollLoad, scrollYStore } = this
+      let { tableColumn, tableFullData, scrollYLoad, scrollYStore } = this
       let { isAllSelected, isIndeterminate } = this.filterStore
       let column = this.tableColumn.find(column => column.order)
       let tableData = tableFullData
@@ -697,7 +697,7 @@ export default {
         let rest = XEUtils.sortBy(tableData, column.property)
         tableData = column.order === 'desc' ? rest.reverse() : rest
       }
-      return scrollLoad ? tableData.slice(scrollYStore.startIndex, scrollYStore.startIndex + scrollYStore.renderSize) : tableData.slice(0)
+      return scrollYLoad ? tableData.slice(scrollYStore.startIndex, scrollYStore.startIndex + scrollYStore.renderSize) : tableData.slice(0)
     },
     /**
      * 动态列处理
@@ -1722,8 +1722,8 @@ export default {
     /**
      * 是否启用了滚动渲染
      */
-    isScrollLoad () {
-      return this.scrollLoad
+    isScrollYLoad () {
+      return this.scrollYLoad
     },
     /**
      * 滚动渲染事件处理
@@ -1793,7 +1793,7 @@ export default {
       if (opts.filename.indexOf('.csv') === -1) {
         opts.filename += '.csv'
       }
-      if (this.scrollLoad) {
+      if (this.scrollYLoad) {
         opts.original = true
       }
       let columns = this.tableColumn

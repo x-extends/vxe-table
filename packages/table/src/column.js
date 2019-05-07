@@ -125,7 +125,7 @@ export default {
         return $scopedSlots.header(params)
       }
       return [
-        h('span', '' + params.column.label)
+        h('span', UtilTools.formatText(params.column.label))
       ]
     },
     renderCell (h, params) {
@@ -140,7 +140,7 @@ export default {
         cellValue = formatter({ cellValue, row, rowIndex, column, columnIndex })
       }
       return [
-        h('span', '' + cellValue)
+        h('span', UtilTools.formatText(cellValue))
       ]
     },
 
@@ -153,7 +153,7 @@ export default {
         return $scopedSlots.header(params)
       }
       return [
-        h('span', '' + (params.column.label || '#'))
+        h('span', UtilTools.formatText(params.column.label || '#'))
       ]
     },
     renderIndexCell (h, params) {
@@ -163,7 +163,7 @@ export default {
       if ($scopedSlots && $scopedSlots.default) {
         return $scopedSlots.default(params)
       }
-      if ($table.scrollLoad) {
+      if ($table.scrollYLoad) {
         rowIndex += $table.scrollYStore.startIndex
       }
       cellValue = rowIndex + 1
@@ -171,7 +171,7 @@ export default {
         cellValue = indexMethod({ row, rowIndex, column, columnIndex })
       }
       return [
-        h('span', '' + cellValue)
+        h('span', UtilTools.formatText(cellValue))
       ]
     },
 
@@ -180,7 +180,7 @@ export default {
      */
     renderRadioHeader (h, params) {
       return [
-        h('span', '' + params.column.label)
+        h('span', UtilTools.formatText(params.column.label))
       ]
     },
     renderRadioCell (h, params) {
@@ -343,7 +343,7 @@ export default {
      */
     renderSortAndFilterHeader (h, params) {
       return [
-        h('span', '' + params.column.label)
+        h('span', UtilTools.formatText(params.column.label))
       ].concat(this.renderSortIcon(h, params))
         .concat(this.renderFilterIcon(h, params))
     },
@@ -352,7 +352,7 @@ export default {
      * 排序
      */
     renderSortHeader (h, params) {
-      return [h('span', '' + params.column.label)].concat(this.renderSortIcon(h, params))
+      return [h('span', UtilTools.formatText(params.column.label))].concat(this.renderSortIcon(h, params))
     },
     renderSortIcon (h, params) {
       let { iconMap } = GlobalConfig
@@ -390,7 +390,7 @@ export default {
      * 筛选
      */
     renderFilterHeader (h, params) {
-      return [h('span', '' + params.column.label)].concat(this.renderFilterIcon(h, params))
+      return [h('span', UtilTools.formatText(params.column.label))].concat(this.renderFilterIcon(h, params))
     },
     renderFilterIcon (h, params) {
       let { iconMap } = GlobalConfig
@@ -422,7 +422,7 @@ export default {
         editConfig.showIcon === false ? null : h('i', {
           class: iconMap.edit
         }),
-        h('span', '' + params.column.label)
+        h('span', UtilTools.formatText(params.column.label))
       ].concat(sortable ? this.renderSortIcon(h, params) : [])
         .concat(filters && filters.length ? this.renderFilterIcon(h, params) : [])
     },
