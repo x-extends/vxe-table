@@ -1,6 +1,6 @@
 ---
 name: Bug report
-about: 提 Bug
+about: 有 Bug
 title: ''
 labels: bug
 assignees: ''
