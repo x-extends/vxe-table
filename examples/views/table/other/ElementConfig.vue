@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>使用 vxe-table-plugin-element 配置式的插件</p>
+    <p>使用 vxe-table-plugin-element 配置式的插件，并加上 class=vxe-table-element 或者自行实现样式调整</p>
 
     <pre>
       <code class="javascript">{{ demoCodes[0] }}</code>
@@ -59,6 +59,7 @@ export default {
         `
         import VXETable from 'vxe-table'
         import VXETablePluginElement from 'vxe-table-plugin-element'
+        import 'vxe-table-plugin-element/dist/style.css'
 
         VXETable.setup(VXETablePluginElement)
         `,
@@ -180,14 +181,3 @@ export default {
   }
 }
 </script>
-
-<style>
-/*使用 element-ui 需要覆盖以下样式*/
-.vxe-table-element .vxe-cell > .el-input,
-.vxe-table-element .vxe-cell > .el-input-number,
-.vxe-table-element .vxe-cell > .el-select,
-.vxe-table-element .vxe-cell > .el-cascader,
-.vxe-table-element .vxe-cell > .el-date-editor {
-  width: 100%;
-}
-</style>

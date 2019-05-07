@@ -252,12 +252,12 @@ export default {
 </script>
 
 <style>
-/*使用 element-ui 需要覆盖以下样式*/
-.vxe-table-element .vxe-cell > .el-input,
+/*注意：需要自行实现 element-ui 需要覆盖以下样式*/
+/* .vxe-table-element .vxe-cell > .el-input,
 .vxe-table-element .vxe-cell > .el-input-number,
 .vxe-table-element .vxe-cell > .el-select,
 .vxe-table-element .vxe-cell > .el-cascader,
 .vxe-table-element .vxe-cell > .el-date-editor {
   width: 100%;
-}
+} */
 </style>

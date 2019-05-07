@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>使用 vxe-table-plugin-iview 配置式的插件</p>
+    <p>使用 vxe-table-plugin-iview 配置式的插件，并加上 class=vxe-table-iview 或者自行实现样式调整</p>
 
     <pre>
       <code class="javascript">{{ demoCodes[0] }}</code>
@@ -58,6 +58,7 @@ export default {
         `
         import VXETable from 'vxe-table'
         import VXETablePluginIView from 'vxe-table-plugin-iview'
+        import 'vxe-table-plugin-iview/dist/style.css'
 
         VXETable.setup(VXETablePluginIView)
         `,
@@ -178,14 +179,3 @@ export default {
   }
 }
 </script>
-
-<style>
-/*使用 iview 需要覆盖以下样式*/
-.vxe-table-iview .vxe-cell > .ivu-input-wrapper,
-.vxe-table-iview .vxe-cell > .ivu-input-number,
-.vxe-table-iview .vxe-cell > .ivu-select,
-.vxe-table-iview .vxe-cell > .ivu-cascader,
-.vxe-table-iview .vxe-cell > .ivu-date-picker-editor {
-  width: 100%;
-}
-</style>

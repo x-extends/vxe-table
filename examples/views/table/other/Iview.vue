@@ -238,12 +238,12 @@ export default {
 </script>
 
 <style>
-/*使用 iview 需要覆盖以下样式*/
-.vxe-table-iview .vxe-cell > .ivu-input-wrapper,
+/*注意：需要自行实现 iview 需要覆盖以下样式*/
+/* .vxe-table-iview .vxe-cell > .ivu-input-wrapper,
 .vxe-table-iview .vxe-cell > .ivu-input-number,
 .vxe-table-iview .vxe-cell > .ivu-select,
 .vxe-table-iview .vxe-cell > .ivu-cascader,
 .vxe-table-iview .vxe-cell > .ivu-date-picker-editor {
   width: 100%;
-}
+} */
 </style>
