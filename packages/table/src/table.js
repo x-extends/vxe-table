@@ -175,8 +175,8 @@ export default {
         list: [],
         style: null
       },
-      // 存放滚动渲染相关的信息
-      scrollStore: {
+      // 存放纵向滚动Y渲染相关的信息
+      scrollYStore: {
         renderSize: 0,
         visibleSize: 0,
         offsetSize: 0,
@@ -233,7 +233,7 @@ export default {
         // 如果设置了则不允许换行 ellipsis、title、tooltip
         overflow: isAll || editConfig ? 'tooltip' : null,
         // 默认大于 500 条时自动使用滚动渲染
-        scroll: {
+        scrollY: {
           gt: 500,
           oSize: 30,
           rSize: 120
@@ -522,16 +522,16 @@ export default {
       return this.$nextTick()
     },
     reload (data, init) {
-      let { autoWidth, scrollStore, optimizeConfig, computeWidth, computeScrollLoad } = this
-      let scroll = optimizeConfig.scroll
+      let { autoWidth, scrollYStore, optimizeConfig, computeWidth, computeScrollLoad } = this
+      let { scrollY } = optimizeConfig
       let tableFullData = data || []
-      let scrollLoad = scroll && scroll.gt && scroll.gt < tableFullData.length
+      let scrollLoad = scrollY && scrollY.gt && scrollY.gt < tableFullData.length
       if (scrollLoad) {
-        Object.assign(scrollStore, {
+        Object.assign(scrollYStore, {
           startIndex: 0,
           visibleIndex: 0,
-          renderSize: scroll.rSize,
-          offsetSize: scroll.oSize
+          renderSize: scrollY.rSize,
+          offsetSize: scrollY.oSize
         })
       }
       this.insertList = []
@@ -669,7 +669,7 @@ export default {
      * 如果存在排序，继续处理
      */
     getTableData () {
-      let { tableColumn, tableFullData, scrollLoad, scrollStore } = this
+      let { tableColumn, tableFullData, scrollLoad, scrollYStore } = this
       let { isAllSelected, isIndeterminate } = this.filterStore
       let column = this.tableColumn.find(column => column.order)
       let tableData = tableFullData
@@ -697,7 +697,7 @@ export default {
         let rest = XEUtils.sortBy(tableData, column.property)
         tableData = column.order === 'desc' ? rest.reverse() : rest
       }
-      return scrollLoad ? tableData.slice(scrollStore.startIndex, scrollStore.startIndex + scrollStore.renderSize) : tableData.slice(0)
+      return scrollLoad ? tableData.slice(scrollYStore.startIndex, scrollYStore.startIndex + scrollYStore.renderSize) : tableData.slice(0)
     },
     /**
      * 动态列处理
@@ -1729,14 +1729,14 @@ export default {
      * 滚动渲染事件处理
      */
     triggerSrcollEvent: XEUtils.debounce(function (evnt) {
-      let { tableFullData, scrollStore } = this
-      let { startIndex, renderSize, offsetSize, visibleSize, rowHeight } = scrollStore
+      let { tableFullData, scrollYStore } = this
+      let { startIndex, renderSize, offsetSize, visibleSize, rowHeight } = scrollYStore
       let scrollBodyElem = evnt.target
       let scrollTop = scrollBodyElem.scrollTop
       let toVisibleIndex = Math.ceil(scrollTop / rowHeight)
-      if (scrollStore.visibleIndex !== toVisibleIndex) {
+      if (scrollYStore.visibleIndex !== toVisibleIndex) {
         let isReload, preloadSize
-        let isTop = scrollStore.visibleIndex > toVisibleIndex
+        let isTop = scrollYStore.visibleIndex > toVisibleIndex
         if (isTop) {
           preloadSize = renderSize - offsetSize
           isReload = toVisibleIndex - offsetSize <= startIndex
@@ -1745,8 +1745,8 @@ export default {
           isReload = toVisibleIndex + visibleSize + offsetSize >= startIndex + renderSize
         }
         if (isReload) {
-          scrollStore.visibleIndex = toVisibleIndex
-          scrollStore.startIndex = Math.min(Math.max(toVisibleIndex - preloadSize, 0), tableFullData.length - renderSize)
+          scrollYStore.visibleIndex = toVisibleIndex
+          scrollYStore.startIndex = Math.min(Math.max(toVisibleIndex - preloadSize, 0), tableFullData.length - renderSize)
           this.updateScrollSpace()
           this.$nextTick(() => {
             scrollBodyElem.scrollTop = scrollTop
@@ -1756,7 +1756,7 @@ export default {
     }, DomTools.browse.msie ? 40 : 20, { leading: false, trailing: true }),
     // 计算滚动渲染相关数据
     computeScrollLoad () {
-      let { scrollStore } = this
+      let { scrollYStore } = this
       let tableBodyElem = this.$refs.tableBody.$el
       let tableHeader = this.$refs.tableHeader
       let firstTrElem = tableBodyElem.querySelector('tbody>tr')
@@ -1764,17 +1764,17 @@ export default {
         firstTrElem = tableHeader.$el.querySelector('thead>tr')
       }
       if (firstTrElem) {
-        scrollStore.rowHeight = firstTrElem.clientHeight
+        scrollYStore.rowHeight = firstTrElem.clientHeight
       }
-      scrollStore.visibleSize = Math.ceil(tableBodyElem.clientHeight / scrollStore.rowHeight)
+      scrollYStore.visibleSize = Math.ceil(tableBodyElem.clientHeight / scrollYStore.rowHeight)
       this.updateScrollSpace()
     },
     // 更新滚动上下空间大小
     updateScrollSpace () {
-      let { tableFullData, scrollStore } = this
+      let { tableFullData, scrollYStore } = this
       this.tableData = this.getTableData()
-      scrollStore.topSpaceHeight = scrollStore.startIndex * scrollStore.rowHeight
-      scrollStore.bottomSpaceHeight = (tableFullData.length - (scrollStore.startIndex + scrollStore.renderSize)) * scrollStore.rowHeight
+      scrollYStore.topSpaceHeight = scrollYStore.startIndex * scrollYStore.rowHeight
+      scrollYStore.bottomSpaceHeight = (tableFullData.length - (scrollYStore.startIndex + scrollYStore.renderSize)) * scrollYStore.rowHeight
     },
     /**
      * 导出 csv 文件

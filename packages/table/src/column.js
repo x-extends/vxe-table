@@ -164,7 +164,7 @@ export default {
         return $scopedSlots.default(params)
       }
       if ($table.scrollLoad) {
-        rowIndex += $table.scrollStore.startIndex
+        rowIndex += $table.scrollYStore.startIndex
       }
       cellValue = rowIndex + 1
       if (indexMethod) {

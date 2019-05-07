@@ -213,7 +213,7 @@ export default {
   },
   render (h) {
     let { $parent: $table, fixedType } = this
-    let { maxHeight, height, tableColumn, headerHeight, showFooter, footerHeight, tableHeight, tableWidth, scrollStore, scrollLoad, scrollXHeight, optimizeConfig } = $table
+    let { maxHeight, height, tableColumn, headerHeight, showFooter, footerHeight, tableHeight, tableWidth, scrollYStore, scrollLoad, scrollXHeight, optimizeConfig } = $table
     let { overflow } = optimizeConfig
     let customHeight = XEUtils.toNumber(height)
     let style = {}
@@ -238,7 +238,7 @@ export default {
       scrollLoad ? h('div', {
         class: ['vxe-body--top-space'],
         style: {
-          height: `${scrollStore.topSpaceHeight}px`
+          height: `${scrollYStore.topSpaceHeight}px`
         }
       }) : null,
       h('table', {
@@ -272,7 +272,7 @@ export default {
       scrollLoad ? h('div', {
         class: ['vxe-body--bottom-space'],
         style: {
-          height: `${scrollStore.bottomSpaceHeight}px`
+          height: `${scrollYStore.bottomSpaceHeight}px`
         }
       }) : null
     ])

@@ -15,7 +15,6 @@
       <vxe-table-column type="index" width="100" fixed="left"></vxe-table-column>
       <vxe-table-column prop="name" label="Name" sortable width="200"></vxe-table-column>
       <vxe-table-column prop="sex" label="Sex" width="200"></vxe-table-column>
-      <vxe-table-column prop="date" label="Date" width="200"></vxe-table-column>
       <vxe-table-column prop="rate" label="Rate" width="200"></vxe-table-column>
       <vxe-table-column prop="region" label="Region" width="200"></vxe-table-column>
       <vxe-table-column prop="time" label="Time" width="200"></vxe-table-column>

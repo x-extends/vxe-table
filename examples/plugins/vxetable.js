@@ -9,7 +9,7 @@ Vue.use(VXETable, {
   size: null,
   contextMenu: null,
   optimized: {
-    scroll: {
+    scrollY: {
       gt: 500,
       oSize: 20,
       rSize: 100
