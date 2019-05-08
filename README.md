@@ -215,8 +215,18 @@ new Vue({ i18n }).$mount('#app')
 |------|------|-----|-----|-----|
 | animat | 表格动画效果开关（关闭后视觉效果更快） | Boolean | — | true |
 | overflow | 设置所有行不允许换行（设置后对于固定列能大幅提升性能） | String | ellipsis / title / tooltip | — |
-| scrollX | 横向 X 滚动渲染配置 | Object | — | {gt: 60, oSize: 5, rSize: 16} |
-| scrollY | 纵向 Y 滚动渲染配置 | Object | — | {gt: 500, oSize: 30, rSize: 100} |
+| scrollX | 横向 X 滚动渲染配置 | Object | — | [{gt: 60, oSize: 5, rSize: 16}](#scrollXY-滚动渲染配置项说明) |
+| scrollY | 纵向 Y 滚动渲染配置 | Object | — | [{gt: 500, oSize: 30, rSize: 100}](#scrollXY-滚动渲染配置项说明) |
+
+###### scrollXY 滚动渲染配置项说明
+
+| 属性 | 描述 | 类型 | 可选值 | 默认值 |
+|------|------|-----|-----|-----|
+| gt | 指定大于多少范围时自动启动滚动渲染 | Number | — | — |
+| oSize | 超过指定阈值重新渲染 | Number | — | — |
+| rSize | 每次渲染条数 | Number | — | — |
+| vSize | 指定可视区域条数，默认自动计算 | Number | — | — |
+| rHeight | 指定行高，默认自动计算 | Number | — | — |
 
 ##### mouse-config 鼠标相关配置项说明
 
