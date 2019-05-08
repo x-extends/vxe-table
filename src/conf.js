@@ -1,11 +1,12 @@
 import XEUtils from 'xe-utils'
 import zhCNLocat from '../lib/locale/lang/zh-CN'
+import renderMap from '../packages/table/src/render'
 
 const GlobalConfig = {
   size: null,
   optimized: false,
   contextMenu: null,
-  renderMap: {},
+  renderMap,
   iconMap: {
     sortAsc: 'vxe-sort--asc-icon',
     sortDesc: 'vxe-sort--desc-icon',

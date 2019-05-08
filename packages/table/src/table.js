@@ -1642,16 +1642,10 @@ export default {
         inputElem = cell.querySelector(editRender.autofocus)
       }
       if (!inputElem) {
-        // 自定义的处理
+        // 渲染器的聚焦处理
         if (compRender) {
           if (compRender.autofocus) {
             inputElem = cell.querySelector(compRender.autofocus)
-          }
-        } else {
-        // 内置的处理
-          inputElem = cell.querySelector('input.vxe-input')
-          if (!inputElem) {
-            inputElem = cell.querySelector('textarea.vxe-textarea')
           }
         }
       }

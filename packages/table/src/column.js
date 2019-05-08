@@ -428,86 +428,25 @@ export default {
     },
     // 行格编辑模式
     renderRowEdit (h, params) {
-      let { $table, $scopedSlots, editRender } = this
-      let { editStore } = $table
-      let { actived } = editStore
-      let { row } = params
-      if (editRender.type === 'visible' || (actived && actived.row === row)) {
-        if ($scopedSlots && $scopedSlots.edit) {
-          return $scopedSlots.edit(params)
-        }
-        return this.renderCompEdit(h, params, editRender.name)
-      }
-      return this.renderCell(h, params)
+      let { actived } = this.$table.editStore
+      return this.runRenderer(h, params, actived && actived.row === params.row)
     },
     // 单元格编辑模式
     renderCellEdit (h, params) {
-      let { $table, $scopedSlots, editRender } = this
+      let { actived } = this.$table.editStore
+      return this.runRenderer(h, params, actived && actived.row === params.row && actived.column === params.column)
+    },
+    runRenderer (h, params, isEdit) {
+      let { $scopedSlots, editRender } = this
       let { renderMap = {} } = GlobalConfig
-      let { editStore } = $table
-      let { actived } = editStore
-      let { row, column } = params
       let compConf = renderMap[editRender.name]
-      if (editRender.type === 'visible' || (actived && actived.row === row && actived.column === column)) {
+      if (editRender.type === 'visible' || isEdit) {
         if ($scopedSlots && $scopedSlots.edit) {
           return $scopedSlots.edit(params)
         }
-        return this.renderCompEdit(h, params, editRender.name)
+        return compConf && compConf.renderEdit ? compConf.renderEdit(h, editRender, params) : [h('span')]
       }
-      return compConf && compConf.formatLabel ? compConf.formatLabel(UtilTools.getCellValue(row, column.property), editRender) : this.renderCell(h, params)
-    },
-    renderCompEdit (h, params, name) {
-      return !name || name === 'input' || name === 'textarea' ? this.renderDefaultEdit(h, params) : this.renderCustomEdit(h, params)
-    },
-    renderDefaultEdit (h, params) {
-      let { editRender } = this
-      let { row, column } = params
-      let { name = 'input', attrs } = editRender
-      if (name === 'input') {
-        attrs = Object.assign({ type: 'text' }, attrs)
-      }
-      return [
-        h('div', {
-          class: ['vxe-input--wrapper']
-        }, [
-          h(name, {
-            class: [`vxe-${name}`],
-            attrs,
-            domProps: {
-              value: UtilTools.getCellValue(row, column.property)
-            },
-            on: {
-              input (evnt) {
-                UtilTools.setCellValue(row, column.property, evnt.target.value)
-              }
-            }
-          })
-        ])
-      ]
-    },
-    renderCustomEdit (h, params) {
-      let { $table, editRender } = this
-      let { row, column } = params
-      let { props } = editRender
-      let { renderMap = {} } = GlobalConfig
-      let compConf = renderMap[editRender.name]
-      if (compConf && compConf.render) {
-        return compConf.render(h, editRender, params)
-      }
-      if ($table.size) {
-        props = Object.assign({ size: $table.size }, props)
-      }
-      return [
-        h(editRender.name, {
-          props,
-          model: {
-            value: UtilTools.getCellValue(row, column.property),
-            callback (value) {
-              UtilTools.setCellValue(row, column.property, value)
-            }
-          }
-        })
-      ]
+      return compConf && compConf.renderCell ? compConf.renderCell(h, editRender, params) : this.renderCell(h, params)
     }
   }
 }
