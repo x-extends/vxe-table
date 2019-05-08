@@ -28,26 +28,26 @@ function renderColumn (h, _vm, $table, fixedType, row, rowIndex, column, columnI
   // 优化事件绑定
   if (isShowTooltip) {
     tdOns.mouseover = evnt => {
-      $table.triggerTooltipEvent(evnt, { $table, row, rowIndex, column, columnIndex })
+      $table.triggerTooltipEvent(evnt, { $table, row, rowIndex, column, columnIndex, fixed: fixedType })
     }
     tdOns.mouseout = $table.clostTooltip
   }
   tdOns.mousedown = evnt => {
-    $table.triggerCellMousedownEvent(evnt, { $table, row, rowIndex, column, columnIndex, cell: evnt.currentTarget })
+    $table.triggerCellMousedownEvent(evnt, { $table, row, rowIndex, column, columnIndex, fixed: fixedType, cell: evnt.currentTarget })
   }
   if ((editRender && editConfig && editConfig.trigger !== 'manual') || highlightCurrentRow || tableListeners['cell-click']) {
     tdOns.click = evnt => {
-      $table.triggerCellClickEvent(evnt, { $table, row, rowIndex, column, columnIndex, cell: evnt.currentTarget })
+      $table.triggerCellClickEvent(evnt, { $table, row, rowIndex, column, columnIndex, fixed: fixedType, cell: evnt.currentTarget })
     }
   }
   if (triggerDblclick || tableListeners['cell-dblclick']) {
     tdOns.dblclick = evnt => {
-      $table.triggerCellDBLClickEvent(evnt, { $table, row, rowIndex, column, columnIndex, cell: evnt.currentTarget })
+      $table.triggerCellDBLClickEvent(evnt, { $table, row, rowIndex, column, columnIndex, fixed: fixedType, cell: evnt.currentTarget })
     }
   }
   // 合并行或列
   if (spanMethod) {
-    let { rowspan = 1, colspan = 1 } = spanMethod({ $table, row, rowIndex, column, columnIndex }) || {}
+    let { rowspan = 1, colspan = 1 } = spanMethod({ $table, row, rowIndex, column, columnIndex, fixed: fixedType }) || {}
     if (!rowspan || !colspan) {
       return null
     }
@@ -78,7 +78,7 @@ function renderColumn (h, _vm, $table, fixedType, row, rowIndex, column, columnI
       'col--dirty': isDirty,
       'edit--visible': editRender && editRender.type === 'visible',
       'fixed--hidden': fixedHiddenColumn
-    }, cellClassName ? XEUtils.isFunction(cellClassName) ? cellClassName({ $table, row, rowIndex, column, columnIndex }) : cellClassName : ''],
+    }, cellClassName ? XEUtils.isFunction(cellClassName) ? cellClassName({ $table, row, rowIndex, column, columnIndex, fixed: fixedType }) : cellClassName : ''],
     key: columnKey || columnIndex,
     attrs,
     on: tdOns

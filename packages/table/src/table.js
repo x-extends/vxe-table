@@ -392,7 +392,7 @@ export default {
       getRecords
     } = this
     let { leftList, rightList } = columnStore
-    let footerData = showFooter && footerMethod && tableColumn.length ? footerMethod({ columns: tableColumn, data: getRecords() }) : ['-']
+    let footerData = showFooter && footerMethod && visibleColumn.length ? footerMethod({ columns: visibleColumn, data: getRecords() }) : ['-']
     return h('div', {
       class: ['vxe-table', size ? `size--${size}` : '', {
         'vxe-editable': editConfig,

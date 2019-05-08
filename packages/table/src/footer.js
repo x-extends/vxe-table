@@ -67,7 +67,7 @@ export default {
          */
         h('tfoot', footerData.map((list, rowIndex) => {
           return h('tr', {
-            class: ['vxe-footer--row', footerRowClassName ? XEUtils.isFunction(footerRowClassName) ? footerRowClassName({ rowIndex }) : footerRowClassName : '']
+            class: ['vxe-footer--row', footerRowClassName ? XEUtils.isFunction(footerRowClassName) ? footerRowClassName({ rowIndex, fixed: fixedType }) : footerRowClassName : '']
           }, tableColumn.map((column, columnIndex) => {
             let isGroup = column.children && column.children.length
             let fixedHiddenColumn = fixedType && column.fixed !== fixedType && !isGroup
@@ -76,7 +76,7 @@ export default {
                 [`col--${column.headerAlign}`]: column.headerAlign,
                 'fixed--hidden': fixedHiddenColumn,
                 'filter--active': column.filters.some(item => item.checked)
-              }, footerCellClassName ? XEUtils.isFunction(footerCellClassName) ? footerCellClassName({ rowIndex, column, columnIndex }) : footerCellClassName : ''],
+              }, footerCellClassName ? XEUtils.isFunction(footerCellClassName) ? footerCellClassName({ rowIndex, column, columnIndex, fixed: fixedType }) : footerCellClassName : ''],
               attrs: {
                 colspan: column.colSpan,
                 rowspan: column.rowSpan
@@ -85,7 +85,7 @@ export default {
             }, [
               h('div', {
                 class: ['vxe-cell']
-              }, list[columnIndex])
+              }, list[fixedType === 'right' ? list.length - tableColumn.length + columnIndex : columnIndex])
             ])
           }).concat([
             h('td', {
