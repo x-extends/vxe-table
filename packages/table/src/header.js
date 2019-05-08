@@ -63,6 +63,7 @@ export default {
   props: {
     tableData: Array,
     tableColumn: Array,
+    visibleColumn: Array,
     collectColumn: Array,
     fixedType: String,
     isGroup: Boolean

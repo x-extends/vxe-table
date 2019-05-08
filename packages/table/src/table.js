@@ -104,8 +104,10 @@ export default {
   data () {
     return {
       id: XEUtils.uniqueId(),
-      // 完整列配置
+      // 列分组配置
       collectColumn: [],
+      // 完整所有列
+      tableFullColumn: [],
       // 渲染的列
       tableColumn: [],
       // 渲染中的数据
@@ -175,6 +177,17 @@ export default {
         list: [],
         style: null
       },
+      // 存放横向 X 滚动渲染相关的信息
+      scrollXStore: {
+        renderSize: 0,
+        visibleSize: 0,
+        offsetSize: 0,
+        rowHeight: 0,
+        startIndex: 0,
+        visibleIndex: 0,
+        leftSpaceWidth: 0,
+        rightSpaceWidth: 0
+      },
       // 存放纵向 Y 滚动渲染相关的信息
       scrollYStore: {
         renderSize: 0,
@@ -232,11 +245,17 @@ export default {
         animat: !isAll,
         // 如果设置了则不允许换行 ellipsis、title、tooltip
         overflow: isAll || editConfig ? 'tooltip' : null,
-        // 默认大于 500 条时自动使用滚动渲染
+        // 默认列大于 500 条时自动使用横向 X 滚动渲染
+        scrollX: {
+          gt: 500,
+          oSize: 20,
+          rSize: 80
+        },
+        // 默认数据大于 500 条时自动使用纵向 Y 滚动渲染
         scrollY: {
           gt: 500,
-          oSize: 30,
-          rSize: 120
+          oSize: 20,
+          rSize: 80
         }
       }, optimized)
     },
@@ -245,10 +264,10 @@ export default {
       return this.collectColumn.some(column => UtilTools.hasChildrenList(column))
     },
     visibleColumn () {
-      return this.tableColumn.filter(column => column.visible)
+      return this.tableFullColumn ? this.tableFullColumn.filter(column => column.visible) : []
     },
     isFilter () {
-      return this.visibleColumn.some(column => column.filters && column.filters.length)
+      return this.tableColumn.some(column => column.filters && column.filters.length)
     },
     headerCtxMenu () {
       return this.ctxMenuConfig.header && this.ctxMenuConfig.header.options ? this.ctxMenuConfig.header.options : []
@@ -286,13 +305,13 @@ export default {
       this.analyColumnWidth()
     },
     visibleColumn () {
-      this.analyColumnWidth()
+      this.refreshColumn()
       this.$nextTick(() => this.computeWidth())
     }
   },
   created () {
     this.reload(this.data, true).then(() => {
-      this.tableColumn = UtilTools.getColumnList(this.collectColumn)
+      this.tableFullColumn = UtilTools.getColumnList(this.collectColumn)
       if (this.customs) {
         this.mergeCustomColumn(this.customs)
       }
@@ -502,7 +521,7 @@ export default {
       return this.$nextTick()
     },
     clearSort () {
-      this.tableColumn.forEach(column => {
+      this.tableFullColumn.forEach(column => {
         column.order = null
       })
       this.tableFullData = this.data || []
@@ -669,13 +688,13 @@ export default {
      * 如果存在排序，继续处理
      */
     getTableData () {
-      let { tableColumn, tableFullData, scrollYLoad, scrollYStore } = this
+      let { visibleColumn, tableFullData, scrollYLoad, scrollYStore } = this
       let { isAllSelected, isIndeterminate } = this.filterStore
-      let column = this.tableColumn.find(column => column.order)
+      let column = this.visibleColumn.find(column => column.order)
       let tableData = tableFullData
       if (isAllSelected || isIndeterminate) {
         tableData = tableData.filter(row => {
-          return tableColumn.every(column => {
+          return visibleColumn.every(column => {
             let { property, filters, filterMethod } = column
             if (filters && filters.length) {
               let valueList = []
@@ -704,11 +723,11 @@ export default {
      */
     mergeCustomColumn (customColumns) {
       this.isUpdateCustoms = true
-      this.tableColumn.map(column => {
+      this.tableFullColumn.forEach(column => {
         let item = customColumns.find(item => column.property && item.prop === column.property)
         column.visible = item ? !!item.visible : true
       })
-      this.$emit('update:customs', this.tableColumn)
+      this.$emit('update:customs', this.tableFullColumn)
     },
     /**
      * 刷新列信息
@@ -722,37 +741,41 @@ export default {
       let rightIndex = 0
       let centerList = []
       let rightList = []
-      this.tableColumn.forEach((column, columnIndex) => {
-        if (column.fixed === 'left') {
-          if (!isColspan) {
-            if (columnIndex - letIndex !== 0) {
-              isColspan = true
-            } else {
-              letIndex++
+      let { isGroup, columnStore } = this
+      this.tableFullColumn.forEach((column, columnIndex) => {
+        if (column.visible) {
+          if (column.fixed === 'left') {
+            if (!isColspan) {
+              if (columnIndex - letIndex !== 0) {
+                isColspan = true
+              } else {
+                letIndex++
+              }
             }
+            leftList.push(column)
+          } else if (column.fixed === 'right') {
+            if (!isColspan) {
+              if (!rightIndex) {
+                rightIndex = columnIndex
+              }
+              if (columnIndex - rightIndex !== 0) {
+                isColspan = true
+              } else {
+                rightIndex++
+              }
+            }
+            rightList.push(column)
+          } else {
+            centerList.push(column)
           }
-          leftList.push(column)
-        } else if (column.fixed === 'right') {
-          if (!isColspan) {
-            if (!rightIndex) {
-              rightIndex = columnIndex
-            }
-            if (columnIndex - rightIndex !== 0) {
-              isColspan = true
-            } else {
-              rightIndex++
-            }
-          }
-          rightList.push(column)
-        } else {
-          centerList.push(column)
         }
       })
-      this.tableColumn = leftList.concat(centerList).concat(rightList)
-      Object.assign(this.columnStore, { leftList, centerList, rightList })
-      if ((isColspan && this.isGroup) || (rightIndex && rightIndex !== this.tableColumn.length)) {
+      let tableColumn = leftList.concat(centerList).concat(rightList)
+      Object.assign(columnStore, { leftList, centerList, rightList })
+      if ((isColspan && isGroup) || (rightIndex && rightIndex !== tableColumn.length)) {
         throw new Error('[vxe-table] Fixed column must to the left and right sides.')
       }
+      this.tableColumn = tableColumn
     },
     /**
      * 指定列宽的列进行拆分
@@ -764,7 +787,7 @@ export default {
       let scaleList = []
       let scaleMinList = []
       let autoList = []
-      this.tableColumn.forEach(column => {
+      this.tableFullColumn.forEach(column => {
         if (column.visible) {
           if (column.resizeWidth) {
             resizeList.push(column)
@@ -1325,14 +1348,14 @@ export default {
      * 多选，切换某一行的选中状态
      */
     toggleRowSelection (row, checked) {
-      let column = this.tableColumn.find(column => column.type === 'selection')
+      let column = this.visibleColumn.find(column => column.type === 'selection')
       this.triggerCheckRowEvent(null, checked, { row, column })
     },
     /**
      * 多选，选中所有事件
      */
     triggerCheckAllEvent (evnt, value) {
-      let column = this.tableColumn.find(column => column.type === 'selection')
+      let column = this.visibleColumn.find(column => column.type === 'selection')
       let property = column.property
       if (property) {
         this.tableData.forEach(item => {
@@ -1643,7 +1666,7 @@ export default {
     triggerSortEvent (evnt, column, params, order) {
       if (column.order !== order) {
         let prop = column.property
-        this.tableColumn.forEach(column => {
+        this.tableFullColumn.forEach(column => {
           column.order = null
         })
         column.order = order
@@ -1796,7 +1819,7 @@ export default {
       if (this.scrollYLoad) {
         opts.original = true
       }
-      let columns = this.tableColumn
+      let columns = this.visibleColumn
       let oData = this.getTableData()
       return ExportTools.downloadCsc(opts, ExportTools.getCsvContent(opts, oData, columns, this.$el))
     }

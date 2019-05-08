@@ -4,6 +4,7 @@ export default {
   props: {
     footerData: Array,
     tableColumn: Array,
+    visibleColumn: Array,
     fixedType: String
   },
   render (h) {

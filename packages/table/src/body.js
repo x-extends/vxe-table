@@ -6,7 +6,7 @@ import UtilTools from '../../../src/tools/utils'
  * 渲染列
  */
 function renderColumn (h, _vm, $table, fixedType, row, rowIndex, column, columnIndex) {
-  let { $listeners: tableListeners, tableSourceData, getRecords, border, highlightCurrentRow, cellClassName, spanMethod, optimizeConfig, keyboardConfig, mouseConfig, editConfig, editStore } = $table
+  let { $listeners: tableListeners, tableSourceData, getRecords, scrollYLoad, border, highlightCurrentRow, cellClassName, spanMethod, optimizeConfig, keyboardConfig, mouseConfig, editConfig, editStore } = $table
   let { editRender, align, ellipsis, showTitle, showTooltip, renderWidth, columnKey } = column
   let { checked, selected, actived, copyed } = editStore
   let { overflow } = optimizeConfig
@@ -21,6 +21,10 @@ function renderColumn (h, _vm, $table, fixedType, row, rowIndex, column, columnI
   let attrs = null
   let tdOns = {}
   let triggerDblclick = (editRender && editConfig && editConfig.trigger === 'dblclick')
+  // 滚动的渲染不支持动态行高
+  if (scrollYLoad && !(isShowTitle || isShowTooltip || isEllipsis)) {
+    isEllipsis = true
+  }
   // 优化事件绑定
   if (isShowTooltip) {
     tdOns.mouseover = evnt => {
@@ -199,6 +203,7 @@ export default {
   props: {
     tableData: Array,
     tableColumn: Array,
+    visibleColumn: Array,
     collectColumn: Array,
     fixedType: String,
     isGroup: Boolean
