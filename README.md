@@ -79,7 +79,7 @@ Vue.use(VXETable, {
   size: 'small',
   // 全局快捷菜单
   contextMenu: null,
-  // 自定义组件渲染
+  // 自定义渲染器
   renderMap: {},
   // 自定义图标配置
   iconMap: {
@@ -215,6 +215,7 @@ new Vue({ i18n }).$mount('#app')
 |------|------|-----|-----|-----|
 | animat | 表格动画效果开关（关闭后视觉效果更快） | Boolean | — | true |
 | overflow | 设置所有行不允许换行（设置后对于固定列能大幅提升性能） | String | ellipsis / title / tooltip | — |
+| scrollX | 横向 X 滚动渲染配置 | Object | — | {gt: 60, oSize: 5, rSize: 16} |
 | scrollY | 纵向 Y 滚动渲染配置 | Object | — | {gt: 500, oSize: 30, rSize: 100} |
 
 ##### mouse-config 鼠标相关配置项说明
