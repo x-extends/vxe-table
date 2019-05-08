@@ -10,6 +10,7 @@ const funs = [
   'revert',
   'remove',
   'getRecords',
+  'getColumns',
   'clearSelectRow',
   'setCurrentRow',
   'clearSelection',
@@ -21,6 +22,7 @@ const funs = [
   'setActiveCell',
   'setSelectCell',
   'computeWidth',
+  'isScrollXLoad',
   'isScrollYLoad',
   'exportCsv'
 ]

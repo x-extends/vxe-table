@@ -13,14 +13,22 @@ import XEUtils from 'xe-utils'
 Vue.config.productionTip = false
 
 // 后台异步生成20万数据，为了避免大量运算卡主页面
+var columns = window.MOCK_COLUMN_LIST = []
 var list = window.MOCK_DATA_LIST = []
 var currTime = Date.now()
 var fullIndex = 0
-var size = 200000
+var size = 100000
 function mockData () {
-  for (var index = 0; index < 1000; index++) {
+  for (var index = 0; index < 1500; index++) {
     currTime += 5000
     fullIndex++
+    if (columns.length < 10000) {
+      columns.push({
+        prop: 'name',
+        label: 'cloumn_' + fullIndex,
+        width: 160
+      })
+    }
     list.push({
       id: fullIndex,
       name: 'name_' + fullIndex,

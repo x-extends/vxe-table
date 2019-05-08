@@ -87,6 +87,7 @@
     border-top: 1px solid $vxe-table-border-color;
   }
   .vxe-table--header-wrapper {
+    background-color: $vxe-table-header-background-color;
     .vxe-table--repair {
       position: absolute;
       left: 0;
@@ -103,9 +104,6 @@
     .vxe-table--body-wrapper {
       overflow-x: hidden;
     }
-  }
-  .vxe-header--row {
-    background-color: $vxe-table-header-background-color;
   }
   .vxe-body--row,
   .vxe-footer--row {
@@ -314,6 +312,11 @@
       right: 0;
       overflow-y: auto;
     }
+  }
+  .vxe-body--x-space {
+    width: 100%;
+    height: 1px;
+    margin-bottom: -1px;
   }
 
   /*加载中*/
@@ -619,12 +622,10 @@
       color: $vxe-excel-primary-color;
     }
     .vxe-table--header-wrapper {
+      background-color: $vxe-excel-header-background-color;
       .vxe-table--repair {
         background-color: $vxe-excel-column-border-color;
       }
-    }
-    .vxe-header--row {
-      background-color: $vxe-excel-header-background-color;
     }
     .vxe-body--column {
       padding: 0;
@@ -653,7 +654,7 @@
       &:first-child {
         background-color: $vxe-excel-header-background-color;
         cursor: default;
-        &.vxe-excel--row-selected {
+        &.vxe-excel--index-selected {
           color: $vxe-excel-primary-color;
           background-color: $vxe-excel-header-selected-background-color;
         }

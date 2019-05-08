@@ -55,7 +55,8 @@ export default {
         }
       }
     },
-    rowspanMethod ({ row, rowIndex, column, columnIndex, data }) {
+    rowspanMethod ({ row, rowIndex, column, columnIndex }) {
+      let data = this.tableData
       let prevRow = data[rowIndex - 1]
       let nextRow = data[rowIndex + 1]
       if (column.property === 'key') {

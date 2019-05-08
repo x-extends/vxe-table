@@ -35,9 +35,10 @@ function renderFixed (h, $table, fixedType, footerData) {
   } = $table
   let customHeight = isNaN(height) ? 0 : parseFloat(height)
   let isRightFixed = fixedType === 'right'
+  let fixedColumn = columnStore[`${fixedType}List`]
   let style = {
     height: `${(customHeight ? customHeight - headerHeight - footerHeight : tableHeight) + headerHeight + footerHeight - scrollXHeight}px`,
-    width: `${columnStore[`${fixedType}List`].reduce((previous, column) => previous + column.renderWidth, isRightFixed ? scrollYWidth + 1 : 0)}px`
+    width: `${fixedColumn.reduce((previous, column) => previous + column.renderWidth, isRightFixed ? scrollYWidth + 1 : 0)}px`
   }
   return h('div', {
     class: [`vxe-table--fixed-${fixedType}-wrapper`, {
@@ -53,6 +54,7 @@ function renderFixed (h, $table, fixedType, footerData) {
         tableColumn,
         visibleColumn,
         collectColumn,
+        fixedColumn,
         isGroup
       },
       ref: `${fixedType}Header`
@@ -67,6 +69,7 @@ function renderFixed (h, $table, fixedType, footerData) {
         tableColumn,
         visibleColumn,
         collectColumn,
+        fixedColumn,
         isGroup
       },
       ref: `${fixedType}Body`
@@ -79,7 +82,8 @@ function renderFixed (h, $table, fixedType, footerData) {
         fixedType,
         footerData,
         tableColumn,
-        visibleColumn
+        visibleColumn,
+        fixedColumn
       },
       ref: `${fixedType}Footer`
     }) : null
@@ -120,6 +124,8 @@ export default {
       headerHeight: 0,
       // 表尾高度
       footerHeight: 0,
+      // 是否横向 X 滚动方式加载
+      scrollXLoad: false,
       // 是否纵向 Y 滚动方式加载
       scrollYLoad: false,
       // 是否存在纵向滚动条
@@ -245,17 +251,20 @@ export default {
         animat: !isAll,
         // 如果设置了则不允许换行 ellipsis、title、tooltip
         overflow: isAll || editConfig ? 'tooltip' : null,
-        // 默认列大于 500 条时自动使用横向 X 滚动渲染
+        // 默认列大于 80 条时自动使用横向 X 滚动渲染
         scrollX: {
-          gt: 500,
-          oSize: 20,
-          rSize: 80
+          gt: 60,
+          oSize: 5,
+          rSize: 16,
+          vSize: 0
         },
         // 默认数据大于 500 条时自动使用纵向 Y 滚动渲染
         scrollY: {
           gt: 500,
-          oSize: 20,
-          rSize: 80
+          oSize: 15,
+          rSize: 60,
+          vSize: 0,
+          rHeight: 0
         }
       }, optimized)
     },
@@ -301,12 +310,18 @@ export default {
       }
       this.isUpdateCustoms = false
     },
+    collectColumn (value) {
+      this.tableFullColumn = UtilTools.getColumnList(value)
+    },
     tableColumn () {
       this.analyColumnWidth()
     },
     visibleColumn () {
       this.refreshColumn()
-      this.$nextTick(() => this.computeWidth())
+      this.$nextTick(() => {
+        this.computeScrollLoad()
+        this.computeWidth()
+      })
     }
   },
   created () {
@@ -585,7 +600,7 @@ export default {
         if (row === -1) {
           tableData.push(newRecord)
         } else {
-          let rowIndex = XEUtils.findIndexOf(tableData, item => item === row)
+          let rowIndex = tableData.indexOf(row)
           tableData.splice(rowIndex, 0, newRecord)
         }
       }
@@ -623,7 +638,7 @@ export default {
           rows = [rows]
         }
         rows.forEach(row => {
-          let rowIndex = XEUtils.findIndexOf(tableFullData, item => item === row)
+          let rowIndex = tableFullData.indexOf(row)
           let oRow = tableSourceData[rowIndex]
           if (oRow && row) {
             if (prop) {
@@ -636,6 +651,13 @@ export default {
         return this.$nextTick()
       }
       return this.reload(tableSourceData)
+    },
+    /**
+     * 获取表格所有列
+     */
+    getColumns (columnIndex) {
+      let columns = this.visibleColumn
+      return arguments.length ? columns[columnIndex] : columns
     },
     /**
      * 获取表格所有数据
@@ -741,8 +763,9 @@ export default {
       let rightIndex = 0
       let centerList = []
       let rightList = []
-      let { isGroup, columnStore } = this
-      this.tableFullColumn.forEach((column, columnIndex) => {
+      let { tableFullColumn, isGroup, columnStore, scrollXStore, optimizeConfig } = this
+      let { scrollX } = optimizeConfig
+      tableFullColumn.forEach((column, columnIndex) => {
         if (column.visible) {
           if (column.fixed === 'left') {
             if (!isColspan) {
@@ -770,12 +793,23 @@ export default {
           }
         }
       })
-      let tableColumn = leftList.concat(centerList).concat(rightList)
+      let visibleColumn = leftList.concat(centerList).concat(rightList)
+      let scrollXLoad = scrollX && scrollX.gt && scrollX.gt < tableFullColumn.length
       Object.assign(columnStore, { leftList, centerList, rightList })
-      if ((isColspan && isGroup) || (rightIndex && rightIndex !== tableColumn.length)) {
+      if ((isColspan && isGroup) || (rightIndex && rightIndex !== visibleColumn.length)) {
         throw new Error('[vxe-table] Fixed column must to the left and right sides.')
       }
-      this.tableColumn = tableColumn
+      if (scrollXLoad) {
+        Object.assign(scrollXStore, {
+          startIndex: 0,
+          visibleIndex: 0,
+          renderSize: scrollX.rSize,
+          offsetSize: scrollX.oSize
+        })
+        visibleColumn = visibleColumn.slice(scrollXStore.startIndex, scrollXStore.startIndex + scrollXStore.renderSize)
+      }
+      this.scrollXLoad = scrollXLoad
+      this.tableColumn = visibleColumn
     },
     /**
      * 指定列宽的列进行拆分
@@ -1629,7 +1663,7 @@ export default {
     setActiveRow (row) {
       let { $refs, id, tableData, visibleColumn, handleActived, editConfig } = this
       if (row && editConfig.mode === 'row') {
-        let rowIndex = XEUtils.findIndexOf(tableData, item => item === row)
+        let rowIndex = tableData.indexOf(row)
         if (rowIndex > -1) {
           let column = visibleColumn.find(column => column.editRender)
           let cell = $refs.tableBody.$el.querySelector(`.vxe-body--row.row--${id}_${rowIndex} .${column.id}`)
@@ -1643,7 +1677,7 @@ export default {
     setActiveCell (row, prop) {
       let { $refs, id, tableData, visibleColumn, handleActived, editConfig } = this
       if (row && prop && editConfig.mode === 'cell') {
-        let rowIndex = XEUtils.findIndexOf(tableData, item => item === row)
+        let rowIndex = tableData.indexOf(row)
         if (rowIndex > -1 && prop) {
           let column = visibleColumn.find(column => column.property === prop)
           let cell = $refs.tableBody.$el.querySelector(`.vxe-body--row.row--${id}_${rowIndex} .${column.id}`)
@@ -1734,7 +1768,7 @@ export default {
      */
     triggerExpandRowEvent (evnt, { row }) {
       let { expandeds } = this
-      let index = XEUtils.findIndexOf(expandeds, item => item === row)
+      let index = expandeds.indexOf(row)
       if (index > -1) {
         expandeds.splice(index, 1)
       } else {
@@ -1743,15 +1777,62 @@ export default {
       this.$nextTick(() => this.computeWidth())
     },
     /**
-     * 是否启用了滚动渲染
+     * 是否启用了横向 X 滚动渲染
+     */
+    isScrollXLoad () {
+      return this.scrollXLoad
+    },
+    /**
+     * 是否启用了纵向 Y 滚动渲染
      */
     isScrollYLoad () {
       return this.scrollYLoad
     },
     /**
-     * 滚动渲染事件处理
+     * 横向 Y 滚动渲染事件处理
      */
-    triggerSrcollEvent: XEUtils.debounce(function (evnt) {
+    triggerScrollXEvent (evnt) {
+      let { $refs, visibleColumn, scrollXStore } = this
+      let { startIndex, renderSize, offsetSize, visibleSize } = scrollXStore
+      let scrollBodyElem = $refs.tableBody.$el
+      let scrollLeft = scrollBodyElem.scrollLeft
+      let toVisibleIndex = 0
+      let width = 0
+      for (let index = 0; index < visibleColumn.length; index++) {
+        width += visibleColumn[index].renderWidth
+        if (scrollLeft < width) {
+          toVisibleIndex = index
+          break
+        }
+      }
+      if (scrollXStore.visibleIndex !== toVisibleIndex) {
+        let isReload, preloadSize
+        let isLeft = scrollXStore.visibleIndex > toVisibleIndex
+        if (isLeft) {
+          preloadSize = renderSize - offsetSize
+          isReload = toVisibleIndex - offsetSize <= startIndex
+        } else {
+          preloadSize = offsetSize
+          isReload = toVisibleIndex + visibleSize + offsetSize >= startIndex + renderSize
+        }
+        // 如果渲染数量不充足，直接从当前页开始渲染
+        if (renderSize < visibleSize * 3) {
+          preloadSize = 0
+        }
+        if (isReload) {
+          scrollXStore.visibleIndex = toVisibleIndex
+          scrollXStore.startIndex = Math.min(Math.max(toVisibleIndex - preloadSize, 0), visibleColumn.length - renderSize)
+          this.updateScrollXSpace()
+          this.$nextTick(() => {
+            scrollBodyElem.scrollLeft = scrollLeft
+          })
+        }
+      }
+    },
+    /**
+     * 纵向 Y 滚动渲染事件处理
+     */
+    triggerScrollYEvent: XEUtils.debounce(function (evnt) {
       let { tableFullData, scrollYStore } = this
       let { startIndex, renderSize, offsetSize, visibleSize, rowHeight } = scrollYStore
       let scrollBodyElem = evnt.target
@@ -1767,10 +1848,14 @@ export default {
           preloadSize = offsetSize
           isReload = toVisibleIndex + visibleSize + offsetSize >= startIndex + renderSize
         }
+        // 如果渲染数量不充足，直接从当前页开始渲染
+        if (renderSize < visibleSize * 3) {
+          preloadSize = 0
+        }
         if (isReload) {
           scrollYStore.visibleIndex = toVisibleIndex
           scrollYStore.startIndex = Math.min(Math.max(toVisibleIndex - preloadSize, 0), tableFullData.length - renderSize)
-          this.updateScrollSpace()
+          this.updateScrollYSpace()
           this.$nextTick(() => {
             scrollBodyElem.scrollTop = scrollTop
           })
@@ -1779,21 +1864,42 @@ export default {
     }, DomTools.browse.msie ? 40 : 20, { leading: false, trailing: true }),
     // 计算滚动渲染相关数据
     computeScrollLoad () {
-      let { scrollYStore } = this
+      let { scrollXLoad, scrollYLoad, scrollYStore, scrollXStore, visibleColumn, optimizeConfig } = this
+      let { scrollX, scrollY } = optimizeConfig
       let tableBodyElem = this.$refs.tableBody.$el
       let tableHeader = this.$refs.tableHeader
-      let firstTrElem = tableBodyElem.querySelector('tbody>tr')
-      if (!firstTrElem && tableHeader) {
-        firstTrElem = tableHeader.$el.querySelector('thead>tr')
+      // 计算 X 逻辑
+      if (scrollXLoad) {
+        // 无法预知，默认取前 10 条平均宽度进行运算
+        scrollXStore.visibleSize = scrollX.vSize || Math.ceil(tableBodyElem.clientWidth / (visibleColumn.slice(0, 10).reduce((previous, column) => previous + column.renderWidth, 0) / 10))
+        this.updateScrollXSpace()
       }
-      if (firstTrElem) {
-        scrollYStore.rowHeight = firstTrElem.clientHeight
+      // 计算 Y 逻辑
+      if (scrollYLoad) {
+        if (scrollY.rHeight) {
+          scrollYStore.rowHeight = scrollY.rHeight
+        } else {
+          let firstTrElem = tableBodyElem.querySelector('tbody>tr')
+          if (!firstTrElem && tableHeader) {
+            firstTrElem = tableHeader.$el.querySelector('thead>tr')
+          }
+          if (firstTrElem) {
+            scrollYStore.rowHeight = firstTrElem.clientHeight
+          }
+        }
+        scrollYStore.visibleSize = scrollY.vSize || Math.ceil(tableBodyElem.clientHeight / scrollYStore.rowHeight)
+        this.updateScrollYSpace()
       }
-      scrollYStore.visibleSize = Math.ceil(tableBodyElem.clientHeight / scrollYStore.rowHeight)
-      this.updateScrollSpace()
     },
-    // 更新滚动上下空间大小
-    updateScrollSpace () {
+    // 更新 X 滚动上下剩余空间大小
+    updateScrollXSpace () {
+      let { visibleColumn, scrollXStore } = this
+      this.tableColumn = visibleColumn.slice(scrollXStore.startIndex, scrollXStore.startIndex + scrollXStore.renderSize)
+      scrollXStore.leftSpaceWidth = visibleColumn.slice(0, scrollXStore.startIndex).reduce((previous, column) => previous + column.renderWidth, 0)
+      scrollXStore.rightSpaceWidth = visibleColumn.slice(scrollXStore.startIndex + scrollXStore.renderSize, visibleColumn.length).reduce((previous, column) => previous + column.renderWidth, 0)
+    },
+    // 更新 Y 滚动上下剩余空间大小
+    updateScrollYSpace () {
       let { tableFullData, scrollYStore } = this
       this.tableData = this.getTableData()
       scrollYStore.topSpaceHeight = scrollYStore.startIndex * scrollYStore.rowHeight

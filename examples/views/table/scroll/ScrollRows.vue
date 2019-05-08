@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>加载 {{ $route.params.size }} 条，左右固定列</p>
+    <p>加载 1 万行，左右固定列</p>
 
     <vxe-table
       ref="xTable"
@@ -44,8 +44,7 @@ export default {
     this.$nextTick(() => {
       this.$refs.xTable.reload([])
       setTimeout(() => {
-        let size = this.$route.params.size
-        let list = window.MOCK_DATA_LIST.slice(0, size)
+        let list = window.MOCK_DATA_LIST.slice(0, 10000)
         this.$refs.xTable.reload(list)
         this.loading = false
       }, 500)

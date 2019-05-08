@@ -1,6 +1,7 @@
 <template>
   <div>
-    <p>加载 {{ $route.params.size }} 条，左右固定列，表尾合计</p>
+    <p>加载 10 万行 1 万列，左右固定列，表尾合计</p>
+    <p>实际渲染速度受以下影响：固定列、底部合计、数据运算量</p>
 
     <vxe-table
       ref="xTable"
@@ -10,28 +11,10 @@
       height="600"
       :footer-method="footerMethod"
       :footer-cell-class-name="footerCellClassName"
-      :loading="loading"
-      :optimized="{overflow: 'tooltip'}">
+      :loading="loading">
       <vxe-table-column type="index" width="100" fixed="left"></vxe-table-column>
-      <vxe-table-column prop="name" label="Name" sortable width="200"></vxe-table-column>
-      <vxe-table-column prop="sex" label="Sex" width="200"></vxe-table-column>
-      <vxe-table-column prop="rate" label="Rate" width="200"></vxe-table-column>
-      <vxe-table-column prop="region" label="Region" width="200"></vxe-table-column>
-      <vxe-table-column prop="time" label="Time" width="200"></vxe-table-column>
-      <vxe-table-column prop="address" label="Address" width="300"></vxe-table-column>
-      <vxe-table-column prop="updateTime" label="UpdateTime" width="200"></vxe-table-column>
-      <vxe-table-column prop="createTime" label="CreateTime" width="200"></vxe-table-column>
-      <vxe-table-column prop="attr1" label="Attr1" width="200"></vxe-table-column>
-      <vxe-table-column prop="attr2" label="Attr2" width="200"></vxe-table-column>
-      <vxe-table-column prop="attr3" label="Attr3" width="200"></vxe-table-column>
-      <vxe-table-column prop="attr4" label="Attr4" width="200"></vxe-table-column>
-      <vxe-table-column prop="attr5" label="Attr5" width="200"></vxe-table-column>
-      <vxe-table-column prop="attr6" label="Attr6" width="200"></vxe-table-column>
-      <vxe-table-column prop="attr7" label="Attr7" width="200"></vxe-table-column>
-      <vxe-table-column prop="attr8" label="Attr8" width="200"></vxe-table-column>
-      <vxe-table-column prop="attr9" label="Attr9" width="200"></vxe-table-column>
-      <vxe-table-column prop="createTime" label="CreateTime" width="200"></vxe-table-column>
-      <vxe-table-column prop="age" label="Age" width="200" fixed="right"></vxe-table-column>
+      <vxe-table-column v-for="(item, index) in tableColumn" :key="index" prop="name" :label="`column_${index}`" width="200"></vxe-table-column>
+      <vxe-table-column prop="createTime" label="CreateTime" width="200" fixed="right"></vxe-table-column>
     </vxe-table>
   </div>
 </template>
@@ -42,7 +25,8 @@ import XEUtils from 'xe-utils'
 export default {
   data () {
     return {
-      loading: false
+      loading: false,
+      tableColumn: []
     }
   },
   created () {
@@ -50,9 +34,9 @@ export default {
     this.$nextTick(() => {
       this.$refs.xTable.reload([])
       setTimeout(() => {
-        let size = this.$route.params.size
-        let list = window.MOCK_DATA_LIST.slice(0, size)
-        this.$refs.xTable.reload(list)
+        let list = window.MOCK_DATA_LIST.slice(0, 100000)
+        this.tableColumn = window.MOCK_DATA_LIST.slice(0, 10000)
+        this.$nextTick(() => this.$refs.xTable.reload(list))
         this.loading = false
       }, 500)
     })

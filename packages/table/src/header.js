@@ -65,20 +65,34 @@ export default {
     tableColumn: Array,
     visibleColumn: Array,
     collectColumn: Array,
+    fixedColumn: Array,
     fixedType: String,
     isGroup: Boolean
   },
   computed: {
     headerColumn () {
-      return this.isGroup ? convertToRows(this.collectColumn) : [this.tableColumn]
+      return this.isGroup ? convertToRows(this.collectColumn) : [this.$parent.scrollXLoad && this.fixedType ? this.fixedColumn : this.tableColumn]
     }
   },
   render (h) {
-    let { $parent: $table, fixedType, headerColumn, tableColumn, resizeMousedown } = this
-    let { resizable, border, headerRowClassName, headerCellClassName, tableWidth, scrollYWidth } = $table
+    let { $parent: $table, fixedType, headerColumn, tableColumn, resizeMousedown, fixedColumn } = this
+    let { resizable, border, headerRowClassName, headerCellClassName, tableWidth, scrollXLoad, scrollXStore, scrollYWidth } = $table
+    // 如果是使用优化模式
+    if (scrollXLoad) {
+      if (fixedType) {
+        tableColumn = fixedColumn
+      }
+      tableWidth = tableColumn.reduce((previous, column) => previous + column.renderWidth, 0)
+    }
     return h('div', {
       class: ['vxe-table--header-wrapper', fixedType ? `fixed--${fixedType}-wrapper` : 'body--wrapper']
     }, [
+      !fixedType && scrollXLoad ? h('div', {
+        class: ['vxe-body--x-space'],
+        style: {
+          width: `${$table.tableWidth + scrollYWidth}px`
+        }
+      }) : null,
       h('table', {
         attrs: {
           cellspacing: 0,
@@ -86,20 +100,21 @@ export default {
           border: 0
         },
         style: {
-          width: tableWidth === null ? tableWidth : `${tableWidth + scrollYWidth}px`
+          width: tableWidth === null ? tableWidth : `${tableWidth + scrollYWidth}px`,
+          'margin-left': fixedType ? null : `${scrollXStore.leftSpaceWidth}px`
         }
       }, [
         /**
          * 列宽
          */
         h('colgroup', tableColumn.map((column, columnIndex) => {
-          return column.visible ? h('col', {
+          return h('col', {
             attrs: {
               name: column.id,
               width: column.renderWidth
             },
             key: columnIndex
-          }) : null
+          })
         }).concat([
           h('col', {
             attrs: {
@@ -116,7 +131,7 @@ export default {
           }, cols.map((column, columnIndex, list) => {
             let isGroup = column.children && column.children.length
             let fixedHiddenColumn = fixedType && column.fixed !== fixedType && !isGroup
-            return column.visible ? h('th', {
+            return h('th', {
               class: ['vxe-header--column', column.id, {
                 [`col--${column.headerAlign}`]: column.headerAlign,
                 'fixed--hidden': fixedHiddenColumn,
@@ -139,7 +154,7 @@ export default {
                   }
                 }
               }) : null
-            ]) : null
+            ])
           }).concat(scrollYWidth ? [
             h('th', {
               class: ['col--gutter'],

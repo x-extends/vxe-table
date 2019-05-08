@@ -148,7 +148,7 @@ export default {
       let { selected, actived } = editStore
       if (columnIndex === 0) {
         if (selected.row === row || actived.row === row) {
-          return 'vxe-excel--row-selected'
+          return 'vxe-excel--index-selected'
         }
       }
     }

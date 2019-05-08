@@ -5,15 +5,21 @@ export default {
     footerData: Array,
     tableColumn: Array,
     visibleColumn: Array,
+    fixedColumn: Array,
     fixedType: String
   },
   render (h) {
-    let { _e, $parent: $table, fixedType, tableColumn, footerData } = this
-    let { footerRowClassName, footerCellClassName, tableWidth, scrollYWidth, optimizeConfig } = $table
+    let { $parent: $table, fixedType, fixedColumn, tableColumn, footerData } = this
+    let { footerRowClassName, footerCellClassName, tableWidth, scrollYWidth, scrollXLoad, scrollXStore, optimizeConfig } = $table
     let { overflow } = optimizeConfig
     // 如果是使用优化模式
     if (fixedType && overflow) {
-      tableColumn = tableColumn.filter(column => column.fixed === fixedType)
+      tableColumn = fixedColumn
+      tableWidth = tableColumn.reduce((previous, column) => previous + column.renderWidth, 0)
+    } else if (scrollXLoad) {
+      if (fixedType) {
+        tableColumn = fixedColumn
+      }
       tableWidth = tableColumn.reduce((previous, column) => previous + column.renderWidth, 0)
     }
     return h('div', {
@@ -22,6 +28,12 @@ export default {
         scroll: this.scrollEvent
       }
     }, [
+      !fixedType && scrollXLoad ? h('div', {
+        class: ['vxe-body--x-space'],
+        style: {
+          width: `${$table.tableWidth}px`
+        }
+      }) : null,
       h('table', {
         attrs: {
           cellspacing: 0,
@@ -29,19 +41,20 @@ export default {
           border: 0
         },
         style: {
-          width: tableWidth === null ? tableWidth : `${tableWidth + scrollYWidth}px`
+          width: tableWidth === null ? tableWidth : `${tableWidth + scrollYWidth}px`,
+          'margin-left': fixedType ? null : `${scrollXStore.leftSpaceWidth}px`
         }
       }, [
         /**
          * 列宽
          */
         h('colgroup', tableColumn.map((column, columnIndex) => {
-          return column.visible ? h('col', {
+          return h('col', {
             attrs: {
               name: column.id,
               width: column.renderWidth
             }
-          }) : _e()
+          })
         }).concat([
           h('col', {
             attrs: {
@@ -58,7 +71,7 @@ export default {
           }, tableColumn.map((column, columnIndex) => {
             let isGroup = column.children && column.children.length
             let fixedHiddenColumn = fixedType && column.fixed !== fixedType && !isGroup
-            return column.visible ? h('td', {
+            return h('td', {
               class: ['vxe-footer--column', column.id, {
                 [`col--${column.headerAlign}`]: column.headerAlign,
                 'fixed--hidden': fixedHiddenColumn,
@@ -73,7 +86,7 @@ export default {
               h('div', {
                 class: ['vxe-cell']
               }, list[columnIndex])
-            ]) : _e()
+            ])
           }).concat([
             h('td', {
               class: ['col--gutter'],

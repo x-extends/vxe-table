@@ -279,30 +279,27 @@ export default {
               }
             },
             {
-              lable: '1 万条',
+              lable: '1 万行',
               locat: {
-                name: 'TableScrollSize',
-                params: {
-                  size: 10000
-                }
+                name: 'TableScrollRows'
               }
             },
             {
-              lable: '10 万条 + 固定列',
+              lable: '10 万行 + 更复杂渲染',
               locat: {
-                name: 'TableScrollFixed',
-                params: {
-                  size: 100000
-                }
+                name: 'TableScrollFullRows'
               }
             },
             {
-              lable: '20 万条 + 表尾合计',
+              lable: '1 万行 1 万列',
               locat: {
-                name: 'TableScrollFooter',
-                params: {
-                  size: 200000
-                }
+                name: 'TableScrollCols'
+              }
+            },
+            {
+              lable: '10 万行 1 万列 + 更复杂渲染',
+              locat: {
+                name: 'TableScrollFullCols'
               }
             }
           ]

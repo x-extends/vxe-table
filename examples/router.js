@@ -34,9 +34,10 @@ import TableConfig from './views/table/advanced/Config.vue'
 import TableExpand from './views/table/advanced/Expand.vue'
 
 import TableScroll from './views/table/scroll/Scroll.vue'
-import TableScrollSize from './views/table/scroll/ScrollSize.vue'
-import TableScrollFixed from './views/table/scroll/ScrollFixed.vue'
-import TableScrollFooter from './views/table/scroll/ScrollFooter.vue'
+import TableScrollRows from './views/table/scroll/ScrollRows.vue'
+import TableScrollFullRows from './views/table/scroll/ScrollFullRows.vue'
+import TableScrollCols from './views/table/scroll/ScrollCols.vue'
+import TableScrollFullCols from './views/table/scroll/ScrollFullCols.vue'
 
 import TableEditManual from './views/table/edit/Manual.vue'
 import TableEditClick from './views/table/edit/Click.vue'
@@ -225,19 +226,24 @@ export default new Router({
       component: TableScroll
     },
     {
-      path: '/table/scroll/scrollSize/:size',
-      name: 'TableScrollSize',
-      component: TableScrollSize
+      path: '/table/scroll/rows',
+      name: 'TableScrollRows',
+      component: TableScrollRows
     },
     {
-      path: '/table/scroll/scrollFixed/:size',
-      name: 'TableScrollFixed',
-      component: TableScrollFixed
+      path: '/table/scroll/fullRows',
+      name: 'TableScrollFullRows',
+      component: TableScrollFullRows
     },
     {
-      path: '/table/scroll/scrollFooter/:size',
-      name: 'TableScrollFooter',
-      component: TableScrollFooter
+      path: '/table/scroll/cols',
+      name: 'TableScrollCols',
+      component: TableScrollCols
+    },
+    {
+      path: '/table/scroll/fullCols',
+      name: 'TableScrollFullCols',
+      component: TableScrollFullCols
     },
     {
       path: '/table/edit/manual',

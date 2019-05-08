@@ -294,7 +294,8 @@ new Vue({ i18n }).$mount('#app')
 | revert | 还原更改，还原指定行 row 或者整个表格的数据 | row?rows?,prop? |
 | remove | 删除指定行数据，指定 row 或 [row, ...] 删除多条数据 | rows |
 | getAllRecords | 获取表格数据集合 | — |
-| getRecords | 获取表格数据，也可以指定索引获取某条数据 | index |
+| getRecords | 获取表格所有数据，也可以指定索引获取数据 | rowIndex |
+| getColumns | 获取表格所有列，也可以指定索引获取列 | columnIndex |
 | getInsertRecords | 获取新增数据 | — |
 | getRemoveRecords | 获取已删除数据 | — |
 | getUpdateRecords| 获取已修改数据 | — |
@@ -309,6 +310,7 @@ new Vue({ i18n }).$mount('#app')
 | setActiveCell | 只对 mode=row 有效，激活单元格编辑 | row,prop |
 | setSelectCell | 只对 trigger!=manual 有效，选中单元格 | row,prop |
 | computeWidth | 重新计算并更新列宽 | — |
+| isScrollXLoad | 判断是否启用了横向 X 滚动渲染 | — |
 | isScrollYLoad | 判断是否启用了纵向 Y 滚动渲染 | — |
 | exportCsv| 将表格数据导出为 .csv 文件，说明：支持IE9+、Edge、Chrome、Firefox 等常用浏览器。IE11以下可能存在中文乱码问题，部分浏览器需要手动修改后缀名为 .csv | [options](#exportcsv-参数说明) |
 
