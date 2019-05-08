@@ -11,7 +11,7 @@
       <vxe-table-column type="index" width="100"></vxe-table-column>
       <vxe-table-column prop="name" label="Name" sortable width="100"></vxe-table-column>
       <vxe-table-column prop="sex" label="Sex" width="100"></vxe-table-column>
-      <vxe-table-column prop="age" label="Age" width="100"></vxe-table-column>
+      <vxe-table-column prop="age" label="Age"></vxe-table-column>
     </vxe-table>
   </div>
 </template>
