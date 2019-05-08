@@ -505,6 +505,31 @@
     padding: 20px 50px;
   }
 
+  /*固定列*/
+  &.fixed--left,
+  &.fixed--right,
+  &.vxe-editable {
+    .vxe-body--column {
+      height: 48px;
+      line-height: inherit;
+    }
+    &.size--medium {
+      .vxe-body--column {
+        height: 44px;
+      }
+    }
+    &.size--small {
+      .vxe-body--column {
+        height: 40px;
+      }
+    }
+    &.size--mini {
+      .vxe-body--column {
+        height: 36px;
+      }
+    }
+  }
+
   /*可编辑*/
   &.vxe-editable {
     .vxe-header--column {
@@ -544,7 +569,6 @@
       }
     }
     .vxe-body--column {
-      height: 48px;
       padding: 0;
       &.col--edit {
         &.col--actived {
@@ -565,21 +589,6 @@
           border-color: transparent #f56c6c transparent transparent;
           transform: rotate(45deg);
         }
-      }
-    }
-    &.size--medium {
-      .vxe-body--column {
-        height: 44px;
-      }
-    }
-    &.size--small {
-      .vxe-body--column {
-        height: 40px;
-      }
-    }
-    &.size--mini {
-      .vxe-body--column {
-        height: 36px;
       }
     }
   }

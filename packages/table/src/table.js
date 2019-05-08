@@ -400,6 +400,8 @@ export default {
         'show--foot': showFooter,
         'scroll--y': overflowY,
         'scroll--x': overflowX,
+        'fixed--left': leftList.length,
+        'fixed--right': rightList.length,
         't--animat': optimizeConfig.animat,
         't--stripe': stripe,
         't--border': border,
