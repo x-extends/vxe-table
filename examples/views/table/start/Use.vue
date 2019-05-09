@@ -8,17 +8,34 @@
         import VXETable from 'vxe-table'
         import 'vxe-table/lib/index.css'
 
-        Vue.use(VXETable, {
-          size: 'small',
-          contextMenu: null,
-          optimized: {
-            scroll: {
-              gt: 500,
-              oSize: 30,
-              rSize: 120
-            }
+       Vue.use(VXETable, {
+        // 默认尺寸
+        size: 'small',
+        // 全局快捷菜单
+        contextMenu: null,
+        // 自定义渲染器
+        renderMap: {},
+        // 自定义图标配置
+        iconMap: {
+          sortAsc: 'vxe-sort--asc-icon',
+          sortDesc: 'vxe-sort--desc-icon',
+          filter: 'vxe-filter--icon',
+          edit: 'vxe-edit--icon'
+        },
+        // 优化配置项
+        optimized: {
+          scrollX: {
+            gt: 60,
+            oSize: 5,
+            rSize: 16
+          },
+          scrollY: {
+            gt: 500,
+            oSize: 20,
+            rSize: 80
           }
-        })
+        }
+      })
       </code>
     </pre>
     <h3>主题</h3>

@@ -90,10 +90,15 @@ Vue.use(VXETable, {
   },
   // 优化配置项
   optimized: {
+    scrollX: {
+      gt: 60,
+      oSize: 5,
+      rSize: 16
+    },
     scrollY: {
       gt: 500,
-      oSize: 30,
-      rSize: 120
+      oSize: 20,
+      rSize: 80
     }
   }
 })

@@ -4,7 +4,7 @@ import UtilTools from '../../../src/tools/utils'
  * 内置渲染器
  * 只支持 input 和 textarea
  */
-function defaultRender (h, attrs, editRender, params) {
+function defaultRenderer (h, attrs, editRender, params) {
   let { row, column } = params
   let { name } = editRender
   return [
@@ -31,13 +31,13 @@ const renderMap = {
   input: {
     autofocus: 'input.vxe-input',
     renderEdit (h, editRender, params) {
-      return defaultRender(h, { type: 'text' }, editRender, params)
+      return defaultRenderer(h, { type: 'text' }, editRender, params)
     }
   },
   textarea: {
     autofocus: 'input.vxe-textarea',
     renderEdit (h, editRender, params) {
-      return defaultRender(h, null, editRender, params)
+      return defaultRenderer(h, null, editRender, params)
     }
   }
 }

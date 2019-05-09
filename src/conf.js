@@ -1,6 +1,6 @@
 import XEUtils from 'xe-utils'
 import zhCNLocat from '../lib/locale/lang/zh-CN'
-import renderMap from '../packages/table/src/render'
+import renderMap from '../packages/table/src/renderer'
 
 const GlobalConfig = {
   size: null,
