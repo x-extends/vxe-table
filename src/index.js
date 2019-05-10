@@ -4,7 +4,7 @@ import TableConfig from './components/table-config'
 import ExcelTable from './components/excel'
 import GlobalConfig from './conf'
 
-import '../style/index.scss'
+import './style/index.scss'
 
 const components = [
   Table,
