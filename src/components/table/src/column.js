@@ -1,5 +1,5 @@
-import UtilTools from '../../../src/tools/utils'
-import GlobalConfig from '../../../src/conf'
+import UtilTools from '../../../tools/utils'
+import GlobalConfig from '../../../conf'
 
 export default {
   name: 'VxeTableColumn',

@@ -1,6 +1,6 @@
 import XEUtils from 'xe-utils'
-import DomTools from '../../../src/tools/dom'
-import UtilTools from '../../../src/tools/utils'
+import DomTools from '../../../tools/dom'
+import UtilTools from '../../../tools/utils'
 
 /**
  * 渲染列

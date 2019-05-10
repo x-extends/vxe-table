@@ -1,4 +1,4 @@
-import UtilTools from '../../../src/tools/utils'
+import UtilTools from '../../../tools/utils'
 
 /**
  * 内置渲染器

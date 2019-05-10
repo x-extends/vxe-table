@@ -1,4 +1,4 @@
-import GlobalConfig from '../../../src/conf'
+import GlobalConfig from '../../../conf'
 
 export default {
 /** 基本属性 */

@@ -1,7 +1,7 @@
-import Table from '../packages/table'
-import TableColumn from '../packages/table-column'
-import TableConfig from '../packages/table-config'
-import ExcelTable from '../packages/excel'
+import Table from './components/table'
+import TableColumn from './components/table-column'
+import TableConfig from './components/table-config'
+import ExcelTable from './components/excel'
 import GlobalConfig from './conf'
 
 import '../style/index.scss'

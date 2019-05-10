@@ -1,4 +1,4 @@
-import GlobalConfig from '../../../src/conf'
+import GlobalConfig from '../../../conf'
 import VxeCheckbox from '../../checkbox'
 
 export default {

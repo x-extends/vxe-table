@@ -2,14 +2,14 @@ import XEUtils from 'xe-utils'
 import TableHeader from './header'
 import TableBody from './body'
 import TableFooter from './footer'
-import UtilTools from '../../../src/tools/utils'
-import DomTools from '../../../src/tools/dom'
-import ExportTools from '../../../src/tools/export'
+import UtilTools from '../../../tools/utils'
+import DomTools from '../../../tools/dom'
+import ExportTools from '../../../tools/export'
 import GlobalEvent from './event'
 import TableProps from './props'
 import TableFilter from './filter'
 import TableContextMenu from './menu'
-import GlobalConfig from '../../../src/conf'
+import GlobalConfig from '../../../conf'
 
 /**
  * 渲染浮固定列
@@ -968,6 +968,8 @@ export default {
      * 全局点击事件处理
      */
     handleGlobalClickEvent (evnt) {
+      let { editStore, ctxMenuStore } = this
+      let { actived } = editStore
       if (this.$refs.filterWrapper) {
         if (this.getEventTargetNode(evnt, this.$el, 'vxe-filter-wrapper').flag) {
           // 如果点击了筛选按钮
@@ -977,7 +979,14 @@ export default {
           this.closeFilter()
         }
       }
-      if (this.$refs.ctxWrapper && !this.getEventTargetNode(evnt, this.$refs.ctxWrapper.$el).flag) {
+      // 如果已激活了编辑状态
+      if (actived.row) {
+        if (!this.getEventTargetNode(evnt, this.$el, 'vxe-body--column').flag) {
+          this.clearActived()
+        }
+      }
+      // 如果配置了快捷菜单且，点击了其他地方则关闭
+      if (ctxMenuStore.visible && this.$refs.ctxWrapper && !this.getEventTargetNode(evnt, this.$refs.ctxWrapper.$el).flag) {
         this.closeContextMenu()
       }
     },
@@ -1509,19 +1518,14 @@ export default {
     handleActived (params, evnt) {
       let { editStore, editConfig } = this
       let { activeMethod } = editConfig
-      let { copyed, checked, selected, actived } = editStore
+      let { actived } = editStore
       let { row, column } = params
       if (actived.row !== row || actived.column !== column) {
         // 判断是否禁用编辑
         if (!activeMethod || activeMethod(params)) {
-          copyed.cut = false
-          copyed.rows = []
-          copyed.columns = []
-          checked.rows = []
-          checked.columns = []
-          selected.args = null
-          selected.row = null
-          selected.column = null
+          this.clearCopyed()
+          this.clearChecked()
+          this.clearSelected()
           actived.args = params
           actived.row = row
           actived.column = column
@@ -1549,18 +1553,24 @@ export default {
       actived.column = null
     },
     /**
+     * 清除所选中源状态
+     */
+    clearSelected () {
+      let { editStore } = this
+      let { selected } = editStore
+      selected.row = null
+      selected.column = null
+    },
+    /**
      * 处理选中源
      */
     handleSelected (params, evnt) {
       let { mouseConfig = {}, editStore } = this
-      let { checked, selected, actived } = editStore
+      let { selected } = editStore
       let { row, column } = params
       if (selected.row !== row || selected.column !== column) {
-        checked.rows = []
-        checked.columns = []
-        actived.args = null
-        actived.row = null
-        actived.column = null
+        this.clearChecked()
+        this.clearActived()
         selected.args = params
         selected.row = row
         selected.column = column
@@ -1570,6 +1580,15 @@ export default {
         let select = DomTools.getCellIndexs(params.cell)
         this.handleChecked(select, select, evnt)
       }
+    },
+    /**
+     * 清除所有选中状态
+     */
+    clearChecked () {
+      let { editStore } = this
+      let { checked } = editStore
+      checked.rows = []
+      checked.columns = []
     },
     /**
      * 处理所有选中
@@ -1589,6 +1608,16 @@ export default {
       } else {
         checked.columns = visibleColumn.slice(Math.max(eColumnIndex, 1), sColumnIndex + 1)
       }
+    },
+    /**
+     * 清空已复制的内容
+     */
+    clearCopyed () {
+      let { editStore } = this
+      let { copyed } = editStore
+      copyed.cut = false
+      copyed.rows = []
+      copyed.columns = []
     },
     /**
      * 处理复制
@@ -1652,6 +1681,16 @@ export default {
       if (inputElem) {
         inputElem.focus()
       }
+    },
+    /**
+     * 清除激活的编辑
+     */
+    clearActived () {
+      let { editStore } = this
+      let { actived } = editStore
+      actived.args = null
+      actived.row = null
+      actived.column = null
     },
     /**
      * 只对 mode=cell 有效，激活行编辑

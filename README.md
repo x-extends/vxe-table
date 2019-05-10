@@ -36,6 +36,7 @@ A very powerful Vue table component.
 * 快捷菜单
 * 滚动渲染
 * 展开行
+* 数据校验
 * 可编辑表格
 * Excel 表格
 
@@ -307,24 +308,28 @@ new Vue({ i18n }).$mount('#app')
 | reload | 初始化数据 | data |
 | insert | 从第一行新增一行新数据 | record |
 | insertAt | 第二个参数 row 从指定位置新增一条数据； null 从第一行新增一行新数据；-1 从最后新增一条数据 | record,row |
-| revert | 还原更改，还原指定行 row 或者整个表格的数据 | row?rows?,prop? |
+| revert | 还原更改，还原指定行 row 或者整个表格的数据 | rows?,prop? |
 | remove | 删除指定行数据，指定 row 或 [row, ...] 删除多条数据 | rows |
-| getAllRecords | 获取表格数据集合 | — |
 | getRecords | 获取表格所有数据，也可以指定索引获取数据 | rowIndex |
 | getColumns | 获取表格所有列，也可以指定索引获取列 | columnIndex |
+| getAllRecords | 获取表格数据集合 | — |
 | getInsertRecords | 获取新增数据 | — |
 | getRemoveRecords | 获取已删除数据 | — |
 | getUpdateRecords| 获取已修改数据 | — |
-| clearSelectRow | 用于单选表格，清空用户的选择 | — |
 | setCurrentRow | 用于单选表格，设置某一行为选中状态，如果第二个参数为空，则会取消目前高亮行的选中状态 | row? |
-| clearSelection | 用于多选表格，清空用户的选择 | — |
-| toggleRowSelection | 用于多选表格，切换某一行的选中状态，第二个参数则是设置这一行选中与否 | row,checked |
-| toggleAllSelection | 用于多选表格，切换所有行的选中状态 | — |
-| clearSort | 用于清空排序条件，数据会恢复成未排序的状态 | — |
-| clearFilter | 用于清空筛选条件，数据会恢复成未筛选的状态 | — |
 | setActiveRow | 只对 mode=cell 有效，激活行编辑 | row |
 | setActiveCell | 只对 mode=row 有效，激活单元格编辑 | row,prop |
 | setSelectCell | 只对 trigger!=manual 有效，选中单元格 | row,prop |
+| toggleRowSelection | 用于多选表格，切换某一行的选中状态，第二个参数则是设置这一行选中与否 | row,checked |
+| toggleAllSelection | 用于多选表格，切换所有行的选中状态 | — |
+| clearSelectRow | 用于单选表格，清空用户的选择 | — |
+| clearSelection | 用于多选表格，清空用户的选择 | — |
+| clearSort | 清空排序条件，数据会恢复成未排序的状态 | — |
+| clearFilter | 清空筛选条件，数据会恢复成未筛选的状态 | — |
+| clearChecked | 清除单元格批量选中状态 | — |
+| clearSelected | 清除单元格选中状态 | — |
+| clearActivedd | 清除单元格激活状态 | — |
+| clearCopyed | 清空已复制的内容 | — |
 | computeWidth | 重新计算并更新列宽 | — |
 | isScrollXLoad | 判断是否启用了横向 X 滚动渲染 | — |
 | isScrollYLoad | 判断是否启用了纵向 Y 滚动渲染 | — |
@@ -379,7 +384,7 @@ new Vue({ i18n }).$mount('#app')
 | 属性 | 描述 | 类型 | 可选值 | 默认值 |
 |------|------|-----|-----|-----|
 | type | 渲染类型 | String | default（组件触发后可视） / visible（组件一直可视） | default |
-| name | 渲染的组件名 | String | input / textarea | input |
+| name | 支持渲染的组件 | String | input / textarea | input |
 | autofocus | 如果是自定义渲染可以指定聚焦的 class | String | — | — |
 
 #### Table-column Scoped Slot

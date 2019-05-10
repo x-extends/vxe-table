@@ -1,5 +1,5 @@
 import XEUtils from 'xe-utils'
-import DomTools from '../../../src/tools/dom'
+import DomTools from '../../../tools/dom'
 
 const getAllColumns = (columns) => {
   const result = []
