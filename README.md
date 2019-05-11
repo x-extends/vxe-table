@@ -411,7 +411,7 @@ new Vue({ i18n }).$mount('#app')
 | header | 自定义表头的内容，参数为 { column, columnIndex, fixed, isHidden } |
 | edit | 自定义可编辑组件模板，参数为 { column, columnIndex, fixed, isHidden } |
 
-## plugin
+## Plugins
 
 * [vxe-table-plugin-element](https://github.com/xuliangzhan/vxe-table-plugin-element) 用于集成 element-ui 简化渲染配置
 * [vxe-table-plugin-iview](https://github.com/xuliangzhan/vxe-table-plugin-iview) 用于集成 iview 简化渲染配置
