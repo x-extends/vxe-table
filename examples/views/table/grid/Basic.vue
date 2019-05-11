@@ -3,6 +3,7 @@
     <p>使用 vxe-grid 配置的方式渲染表格，这对一些动态渲染的场景非常有用，完全使用数据进行配置</p>
 
     <vxe-grid
+      border
       height="300"
       :columns="tableColumn"
       :data.sync="tableData"></vxe-grid>
@@ -101,6 +102,7 @@ export default {
       demoCodes: [
         `
         <vxe-grid
+          border
           height="300"
           :columns="tableColumn"
           :data.sync="tableData"></vxe-grid>
