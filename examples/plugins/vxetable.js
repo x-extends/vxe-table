@@ -5,17 +5,7 @@ import VXETableIViewPlugin from 'vxe-table-plugin-iview'
 import 'vxe-table-plugin-element/dist/style.css'
 import 'vxe-table-plugin-iview/dist/style.css'
 
-Vue.use(VXETable, {
-  size: null,
-  contextMenu: null,
-  optimized: {
-    scrollY: {
-      gt: 500,
-      oSize: 20,
-      rSize: 100
-    }
-  }
-})
+Vue.use(VXETable)
 
 VXETable.setup(VXETableElementPlugin)
 VXETable.setup(VXETableIViewPlugin)

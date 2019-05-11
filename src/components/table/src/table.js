@@ -261,8 +261,8 @@ export default {
         // 默认数据大于 500 条时自动使用纵向 Y 滚动渲染
         scrollY: {
           gt: 500,
-          oSize: 15,
-          rSize: 60,
+          oSize: 20,
+          rSize: 100,
           vSize: 0,
           rHeight: 0
         }
