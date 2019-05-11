@@ -636,8 +636,48 @@
         background-color: $vxe-excel-column-border-color;
       }
     }
+    // 修复边缘
+    .vxe-body--row {
+      &:first-child {
+        .vxe-body--column {
+          &.col--checked-top {
+            .vxe-body--column-checked-lt {
+              &:before {
+                top: 0;
+              }
+            }
+          }
+        }
+      }
+      &:last-child {
+        .col--checked {
+          .vxe-body--column-checked-corner {
+            bottom: -1px;
+          }
+        }
+      }
+    }
+    .vxe-body--column {
+      &:nth-child(2) {
+        &.col--checked-left {
+          .vxe-body--column-checked-lt {
+            &:after {
+              left: 0;
+            }
+          }
+        }
+      }
+      &:last-child {
+        &.col--checked {
+          .vxe-body--column-checked-corner {
+            right: -1px;
+          }
+        }
+      }
+    }
     .vxe-body--column {
       padding: 0;
+      transition: none;
       height: inherit;
       cursor: cell;
       .vxe-cell {
@@ -680,19 +720,32 @@
         }
       }
       &.col--checked,
+      &.col--checked-temp,
       &.col--copyed {
-        transition: none;
         position: relative;
       }
       &.col--checked {
         background-color: rgba(0, 0, 0, 0.2);
         border-color: #A5A5A5;
+      }
+      &.col--checked,
+      &.col--checked-temp {
         .vxe-body--column-checked-lt,
         .vxe-body--column-checked-rb {
           &:before,
           &:after {
             background: $vxe-excel-primary-color;
           }
+        }
+        .vxe-body--column-checked-corner {
+          position: absolute;
+          right: -$vxe-excel-column-border-width;
+          bottom: -$vxe-excel-column-border-width;
+          width: $vxe-excel-column-border-width * 4;
+          height: $vxe-excel-column-border-width * 4;
+          border: 1px solid #fff;
+          background-color: $vxe-excel-primary-color;
+          cursor: crosshair;
         }
       }
       &.col--copyed {
@@ -713,7 +766,8 @@
         height: calc(100% + #{$vxe-excel-column-border-width});
         width: $vxe-excel-column-border-width;
       }
-      &.col--checked-left {
+      &.col--checked-left,
+      &.col--checked-temp-left {
         .vxe-body--column-checked-lt {
           &:after {
             @extend %checked-left-after;
@@ -740,7 +794,8 @@
         width: calc(100% + #{$vxe-excel-column-border-width});
         height: $vxe-excel-column-border-width;
       }
-      &.col--checked-top {
+      &.col--checked-top,
+      &.col--checked-temp-top {
         .vxe-body--column-checked-lt {
           &:before {
             @extend %checked-top-before;
@@ -767,7 +822,8 @@
         height: calc(100% + #{$vxe-excel-column-border-width});
         width: $vxe-excel-column-border-width;
       }
-      &.col--checked-right {
+      &.col--checked-right,
+      &.col--checked-temp-right {
         .vxe-body--column-checked-rb {
           &:after {
             @extend %checked-right-after;
@@ -794,7 +850,8 @@
         width: calc(100% + #{$vxe-excel-column-border-width});
         height: $vxe-excel-column-border-width;
       }
-      &.col--checked-bottom {
+      &.col--checked-bottom,
+      &.col--checked-temp-bottom {
         .vxe-body--column-checked-rb {
           &:before {
             @extend %checked-bottom-before;

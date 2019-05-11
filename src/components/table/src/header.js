@@ -1,5 +1,6 @@
 import XEUtils from 'xe-utils'
 import DomTools from '../../../tools/dom'
+import UtilTools from '../../../tools/utils'
 
 const getAllColumns = (columns) => {
   const result = []
@@ -76,7 +77,7 @@ export default {
   },
   render (h) {
     let { $parent: $table, fixedType, headerColumn, tableColumn, resizeMousedown, fixedColumn } = this
-    let { resizable, border, headerRowClassName, headerCellClassName, tableWidth, scrollXLoad, scrollXStore, scrollYWidth } = $table
+    let { $listeners: tableListeners, resizable, border, headerRowClassName, headerCellClassName, tableWidth, scrollXLoad, scrollXStore, scrollYWidth } = $table
     // 如果是使用优化模式
     if (scrollXLoad) {
       if (fixedType) {
@@ -131,6 +132,12 @@ export default {
           }, cols.map((column, columnIndex, list) => {
             let isGroup = column.children && column.children.length
             let fixedHiddenColumn = fixedType && column.fixed !== fixedType && !isGroup
+            let thOns = {}
+            if (tableListeners['header-cell-click']) {
+              thOns.click = evnt => {
+                UtilTools.emitEvent($table, 'header-cell-click', [{ $table, rowIndex, column, columnIndex, fixed: fixedType, cell: evnt.currentTarget }, evnt])
+              }
+            }
             return h('th', {
               class: ['vxe-header--column', column.id, {
                 [`col--${column.headerAlign}`]: column.headerAlign,
@@ -141,6 +148,7 @@ export default {
                 colspan: column.colSpan,
                 rowspan: column.rowSpan
               },
+              on: thOns,
               key: column.columnKey || columnIndex
             }, [
               h('div', {

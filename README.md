@@ -308,6 +308,7 @@ new Vue({ i18n }).$mount('#app')
 | select-change | 只对 type=selection/radio 有效，当手动勾选时触发的事件 | {selection,checked,row,column},event |
 | cell-click | 单元格被点击时会触发该事件 | {row,rowIndex,column,columnIndex,cell},event |
 | cell-dblclick | 单元格被双击时会触发该事件 | {row,rowIndex,column,columnIndex,cell},event |
+| header-cell-click | 表头的单元格被点击时会触发该事件 | {column,columnIndex,cell},event |
 | context-menu-link | 当点击上下文菜单后触发 | menu,event |
 | clear-actived | 单元格编辑状态下被清除时会触发该事件 | {row,rowIndex,column,columnIndex,cell},event |
 | edit-actived | 单元格被激活编辑时会触发该事件 | {row,rowIndex,column,columnIndex,cell},event |

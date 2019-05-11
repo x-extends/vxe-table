@@ -130,7 +130,11 @@ export default {
     return h('vxe-table', {
       class: 'vxe-excel',
       props: buildProps(h, this, this.$props),
-      on: this.$listeners
+      on: {
+        'cell-click': this.cellClickEvent,
+        'header-cell-click': this.headerCellClickEvent,
+        ...this.$listeners
+      }
     }, buildColumns(h, this.columns))
   },
   methods: {
@@ -150,6 +154,32 @@ export default {
         if (selected.row === row || actived.row === row) {
           return 'vxe-excel--index-selected'
         }
+      }
+    },
+    cellClickEvent ({ row, rowIndex, columnIndex, $table }, evnt) {
+      let { $refs, visibleColumn, handleSelected, handleChecked } = $table
+      if (columnIndex === 0) {
+        columnIndex += 1
+        let tableBodyElem = $refs.tableBody.$el
+        let column = visibleColumn[columnIndex]
+        let trElemList = tableBodyElem.querySelectorAll('.vxe-body--row')
+        let trElem = trElemList[rowIndex]
+        let cell = trElem.querySelector(`.${column.id}`)
+        handleSelected({ row, rowIndex, column, columnIndex, cell, $table }, evnt)
+        handleChecked({ rowIndex, columnIndex }, { rowIndex, columnIndex: visibleColumn.length - 1 }, evnt)
+      }
+    },
+    headerCellClickEvent ({ column, columnIndex, $table }, evnt) {
+      let { $refs, tableData, handleSelected, handleChecked } = $table
+      if (tableData.length) {
+        let tableBodyElem = $refs.tableBody.$el
+        let rowIndex = 0
+        let row = tableData[rowIndex]
+        let trElemList = tableBodyElem.querySelectorAll('.vxe-body--row')
+        let trElem = trElemList[rowIndex]
+        let cell = trElem.querySelector(`.${column.id}`)
+        handleSelected({ row, rowIndex, column, columnIndex, cell, $table }, evnt)
+        handleChecked({ rowIndex, columnIndex }, { rowIndex: tableData.length - 1, columnIndex }, evnt)
       }
     }
   }

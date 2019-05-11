@@ -2,6 +2,17 @@ import XEUtils from 'xe-utils'
 import DomTools from '../../../tools/dom'
 import UtilTools from '../../../tools/utils'
 
+// 处理选中位置
+function handleLocation (obj, rows, columns, row, column) {
+  let rowIndex = rows.indexOf(row)
+  let columnIndex = columns.indexOf(column)
+  obj.active = rowIndex > -1 && columnIndex > -1
+  obj.top = rowIndex === 0 && columnIndex > -1
+  obj.bottom = rowIndex === rows.length - 1 && columnIndex > -1
+  obj.left = rowIndex > -1 && columnIndex === 0
+  obj.right = rowIndex > -1 && columnIndex === columns.length - 1
+}
+
 /**
  * 渲染列
  */
@@ -17,9 +28,11 @@ function renderColumn (h, _vm, $table, fixedType, row, rowIndex, column, columnI
   let isShowTitle = showTitle || showOverflow === 'title'
   let isShowTooltip = showTooltip || showOverflow === 'tooltip'
   let isEllipsis = ellipsis || showOverflow === 'ellipsis'
-  let isDirty
-  let attrs = null
+  let attrs, isDirty
   let tdOns = {}
+  let checkedLocat = {}
+  let checkedTLocat = {}
+  let copyedLocat = {}
   let triggerDblclick = (editRender && editConfig && editConfig.trigger === 'dblclick')
   // 滚动的渲染不支持动态行高
   if (scrollYLoad && !(isShowTitle || isShowTooltip || isEllipsis)) {
@@ -59,21 +72,36 @@ function renderColumn (h, _vm, $table, fixedType, row, rowIndex, column, columnI
     let oRow = tableSourceData[oRowIndex]
     isDirty = oRow && !XEUtils.isEqual(UtilTools.getCellValue(oRow, column.property), UtilTools.getCellValue(row, column.property))
   }
+  // 批量选中处理
+  if (!fixedType) {
+    if (isMouseChecked) {
+      handleLocation(checkedLocat, checked.rows, checked.columns, row, column)
+      handleLocation(checkedTLocat, checked.tRows, checked.tColumns, row, column)
+    }
+    if (isKeyboardCut) {
+      handleLocation(copyedLocat, copyed.rows, copyed.columns, row, column)
+    }
+  }
   return h('td', {
     class: ['vxe-body--column', column.id, {
       [`col--${align}`]: align,
       'col--edit': editRender,
-      'col--checked': isMouseChecked && !fixedType && checked.rows.indexOf(row) > -1 && checked.columns.indexOf(column) > -1,
-      'col--checked-top': isMouseChecked && !fixedType && checked.rows.indexOf(row) === 0 && checked.columns.indexOf(column) > -1,
-      'col--checked-bottom': isMouseChecked && !fixedType && checked.rows.indexOf(row) === checked.rows.length - 1 && checked.columns.indexOf(column) > -1,
-      'col--checked-left': isMouseChecked && !fixedType && checked.rows.indexOf(row) > -1 && checked.columns.indexOf(column) === 0,
-      'col--checked-right': isMouseChecked && !fixedType && checked.rows.indexOf(row) > -1 && checked.columns.indexOf(column) === checked.columns.length - 1,
+      'col--checked': checkedLocat.active,
+      'col--checked-top': checkedLocat.top,
+      'col--checked-bottom': checkedLocat.bottom,
+      'col--checked-left': checkedLocat.left,
+      'col--checked-right': checkedLocat.right,
+      'col--checked-temp': checkedTLocat.active,
+      'col--checked-temp-top': checkedTLocat.top,
+      'col--checked-temp-bottom': checkedTLocat.bottom,
+      'col--checked-temp-left': checkedTLocat.left,
+      'col--checked-temp-right': checkedTLocat.right,
       'col--selected': isMouseSelected && editRender && selected.row === row && selected.column === column,
-      'col--copyed': isKeyboardCut && !fixedType && copyed.rows.indexOf(row) > -1 && copyed.columns.indexOf(column) > -1,
-      'col--copyed-top': isKeyboardCut && !fixedType && copyed.rows.indexOf(row) === 0 && copyed.columns.indexOf(column) > -1,
-      'col--copyed-bottom': isKeyboardCut && !fixedType && copyed.rows.indexOf(row) === copyed.rows.length - 1 && copyed.columns.indexOf(column) > -1,
-      'col--copyed-left': isKeyboardCut && !fixedType && copyed.rows.indexOf(row) > -1 && copyed.columns.indexOf(column) === 0,
-      'col--copyed-right': isKeyboardCut && !fixedType && copyed.rows.indexOf(row) > -1 && copyed.columns.indexOf(column) === copyed.columns.length - 1,
+      'col--copyed': copyedLocat.active,
+      'col--copyed-top': copyedLocat.top,
+      'col--copyed-bottom': copyedLocat.bottom,
+      'col--copyed-left': copyedLocat.left,
+      'col--copyed-right': copyedLocat.right,
       'col--actived': editRender && actived.row === row && actived.column === column,
       'col--dirty': isDirty,
       'edit--visible': editRender && editRender.type === 'visible',
@@ -107,6 +135,14 @@ function renderColumn (h, _vm, $table, fixedType, row, rowIndex, column, columnI
     }) : null,
     isKeyboardCut && !fixedType ? h('span', {
       class: 'vxe-body--column-copyed-rb'
+    }) : null,
+    checkedLocat.bottom && checkedLocat.right ? h('span', {
+      class: 'vxe-body--column-checked-corner',
+      on: {
+        mousedown (evnt) {
+          $table.triggerCornerMousedownEvent({ $table, row, rowIndex, column, columnIndex, fixed: fixedType, cell: evnt.target.parentNode }, evnt)
+        }
+      }
     }) : null
   ])
 }

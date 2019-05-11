@@ -218,7 +218,9 @@ export default {
         // 所有选中
         checked: {
           rows: [],
-          columns: []
+          columns: [],
+          tRows: [],
+          tColumns: []
         },
         // 选中源
         selected: {
@@ -1517,6 +1519,42 @@ export default {
       }
     },
     /**
+     * 边角事件
+     */
+    triggerCornerMousedownEvent (params, evnt) {
+      evnt.preventDefault()
+      evnt.stopPropagation()
+      let { $el, tableData, visibleColumn, editStore, editConfig, getEventTargetNode, handleTempChecked } = this
+      let { checked } = editStore
+      let { button } = evnt
+      let isLeftBtn = button === 0
+      let isRightBtn = button === 2
+      if (isLeftBtn || isRightBtn) {
+        if (editConfig && checked.rows.length && editConfig.trigger === 'dblclick') {
+          let domMousemove = document.onmousemove
+          let domMouseup = document.onmouseup
+          let start = {
+            rowIndex: tableData.indexOf(checked.rows[0]),
+            columnIndex: visibleColumn.indexOf(checked.columns[0])
+          }
+          let updateEvent = XEUtils.throttle(function (evnt) {
+            evnt.preventDefault()
+            let { flag, targetElem } = getEventTargetNode(evnt, $el, 'vxe-body--column')
+            if (flag) {
+              handleTempChecked(start, DomTools.getCellIndexs(targetElem), evnt)
+            }
+          }, DomTools.browse.msie ? 80 : 40, { leading: true, trailing: true })
+          document.onmousemove = updateEvent
+          document.onmouseup = function (evnt) {
+            document.onmousemove = domMousemove
+            document.onmouseup = domMouseup
+            checked.rows = checked.tRows
+            checked.columns = checked.tColumns
+          }
+        }
+      }
+    },
+    /**
      * 列点击事件
      * 如果是单击模式，则激活为编辑状态
      * 如果是双击模式，则单击后选中状态
@@ -1628,6 +1666,8 @@ export default {
       let { checked } = editStore
       checked.rows = []
       checked.columns = []
+      checked.tRows = []
+      checked.tColumns = []
     },
     /**
      * 处理所有选中
@@ -1637,15 +1677,52 @@ export default {
       let { checked } = editStore
       let { rowIndex: sRowIndex, columnIndex: sColumnIndex } = start
       let { rowIndex: eRowIndex, columnIndex: eColumnIndex } = end
+      checked.tRows = []
+      checked.tColumns = []
       if (sRowIndex < eRowIndex) {
+        // 向下
         checked.rows = tableData.slice(sRowIndex, eRowIndex + 1)
       } else {
+        // 向上
         checked.rows = tableData.slice(eRowIndex, sRowIndex + 1)
       }
       if (sColumnIndex < eColumnIndex) {
+        // 向右
         checked.columns = visibleColumn.slice(Math.max(sColumnIndex, 1), eColumnIndex + 1)
       } else {
+        // 向左
         checked.columns = visibleColumn.slice(Math.max(eColumnIndex, 1), sColumnIndex + 1)
+      }
+    },
+    /**
+     * 处理所有选中的临时选中
+     */
+    handleTempChecked (start, end, evnt) {
+      let { tableData, visibleColumn, editStore } = this
+      let { checked } = editStore
+      let { rows, tRows, columns, tColumns } = checked
+      let { rowIndex: sRowIndex, columnIndex: sColumnIndex } = start
+      let { rowIndex: eRowIndex, columnIndex: eColumnIndex } = end
+      if (tRows.length > rows.length) {
+        eColumnIndex = visibleColumn.indexOf(columns[columns.length - 1])
+      } else if (tColumns.length > columns.length) {
+        eRowIndex = tableData.indexOf(rows[rows.length - 1])
+      }
+      if (sRowIndex < eRowIndex) {
+        // 向下
+        checked.tRows = tableData.slice(sRowIndex, eRowIndex + 1)
+      } else {
+        // 向上
+        sRowIndex += rows.length
+        checked.tRows = tableData.slice(eRowIndex, sRowIndex)
+      }
+      if (sColumnIndex < eColumnIndex) {
+        // 向右
+        checked.tColumns = visibleColumn.slice(Math.max(sColumnIndex, 1), eColumnIndex + 1)
+      } else {
+        // 向左
+        sColumnIndex += columns.length
+        checked.tColumns = visibleColumn.slice(Math.max(eColumnIndex, 1), sColumnIndex)
       }
     },
     /**
