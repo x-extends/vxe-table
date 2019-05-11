@@ -56,8 +56,10 @@ import TableExcelCell from './views/table/excel/Cell.vue'
 
 import TableOtherElement from './views/table/other/Element.vue'
 import TableOtherElementConfig from './views/table/other/ElementConfig.vue'
+import TableOtherElementPage from './views/table/other/ElementPage.vue'
 import TableOtherIview from './views/table/other/Iview.vue'
 import TableOtherIviewConfig from './views/table/other/IviewConfig.vue'
+import TableOtherIviewPage from './views/table/other/IviewPage.vue'
 
 Vue.use(Router)
 
@@ -318,6 +320,11 @@ export default new Router({
       component: TableOtherElementConfig
     },
     {
+      path: '/table/other/elementPage',
+      name: 'TableOtherElementPage',
+      component: TableOtherElementPage
+    },
+    {
       path: '/table/other/iview',
       name: 'TableOtherIview',
       component: TableOtherIview
@@ -326,6 +333,11 @@ export default new Router({
       path: '/table/other/iviewConfig',
       name: 'TableOtherIviewConfig',
       component: TableOtherIviewConfig
+    },
+    {
+      path: '/table/other/iviewPage',
+      name: 'TableOtherIviewPage',
+      component: TableOtherIviewPage
     }
   ]
 })

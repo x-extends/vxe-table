@@ -419,27 +419,39 @@ export default {
           expand: false,
           children: [
             {
-              lable: '自定义渲染 element-ui 组件',
+              lable: 'element-ui 自定义渲染',
               locat: {
                 name: 'TableOtherElement'
               }
             },
             {
-              lable: 'vxe-table-plugin-element 插件',
+              lable: 'element-ui 配置式插件',
               locat: {
                 name: 'TableOtherElementConfig'
               }
             },
             {
-              lable: '自定义渲染 iview 组件',
+              lable: 'element-ui 使用分页',
+              locat: {
+                name: 'TableOtherElementPage'
+              }
+            },
+            {
+              lable: 'iview 自定义渲染',
               locat: {
                 name: 'TableOtherIview'
               }
             },
             {
-              lable: 'vxe-table-plugin-iview 插件',
+              lable: 'iview 配置式插件',
               locat: {
                 name: 'TableOtherIviewConfig'
+              }
+            },
+            {
+              lable: 'iview 使用分页',
+              locat: {
+                name: 'TableOtherIviewPage'
               }
             },
             {

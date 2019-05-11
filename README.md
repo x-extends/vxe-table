@@ -41,6 +41,18 @@ A very powerful Vue table component.
 * 全键盘操作
 * Excel 表格
 
+## Components
+
+* vxe-table
+* vxe-table-column
+* vxe-grid
+* vxe-excel
+
+## plugin
+
+* [vxe-table-plugin-element](https://github.com/xuliangzhan/vxe-table-plugin-element) 用于集成 element-ui 简化渲染配置
+* [vxe-table-plugin-iview](https://github.com/xuliangzhan/vxe-table-plugin-iview) 用于集成 iview 简化渲染配置
+
 ## Docs
 
 [查看文档](https://xuliangzhan.github.io/vxe-table/)

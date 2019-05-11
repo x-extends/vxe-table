@@ -11,12 +11,10 @@
 
     <vxe-table
       border
-      show-footer
       class="vxe-table-iview"
       height="600"
       :loading="loading"
       :data.sync="tableData"
-      :footer-method="footerMethod"
       :edit-config="{trigger: 'click', mode: 'cell'}">
       <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
       <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
@@ -40,7 +38,6 @@
 </template>
 
 <script>
-import XEUtils from 'xe-utils'
 import XEAjax from 'xe-ajax'
 import hljs from 'highlight.js'
 
@@ -129,52 +126,6 @@ export default {
         this.regionList = data
         return data
       })
-    },
-    formatDate (value, format) {
-      return XEUtils.toDateString(value, format)
-    },
-    getSelectLabel (value, list, valueProp = 'value', labelProp = 'label') {
-      let item = XEUtils.find(list, item => item[valueProp] === value)
-      return item ? item[labelProp] : null
-    },
-    getCascaderLabel (value, list) {
-      let values = value || []
-      let labels = []
-      let matchCascaderData = function (index, list) {
-        let val = values[index]
-        if (list && values.length > index) {
-          list.forEach(item => {
-            if (item.value === val) {
-              labels.push(item.label)
-              matchCascaderData(++index, item.children)
-            }
-          })
-        }
-      }
-      matchCascaderData(0, list)
-      return labels.join(' / ')
-    },
-    footerMethod ({ columns, data }) {
-      return [
-        columns.map((column, columnIndex) => {
-          if (columnIndex === 0) {
-            return '平均'
-          }
-          if (['age', 'rate'].includes(column.property)) {
-            return XEUtils.mean(data, column.property)
-          }
-          return '-'
-        }),
-        columns.map((column, columnIndex) => {
-          if (columnIndex === 0) {
-            return '和值'
-          }
-          if (['age', 'rate'].includes(column.property)) {
-            return XEUtils.sum(data, column.property)
-          }
-          return '-'
-        })
-      ]
     }
   }
 }
