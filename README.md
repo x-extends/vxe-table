@@ -92,6 +92,7 @@ Vue.use(VXETable, {
   },
   // 优化配置项
   optimized: {
+    allOverflow: 'tooltip',
     scrollX: {
       gt: 60,
       oSize: 5,
