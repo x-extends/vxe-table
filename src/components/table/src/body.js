@@ -9,14 +9,14 @@ function renderColumn (h, _vm, $table, fixedType, row, rowIndex, column, columnI
   let { $listeners: tableListeners, tableSourceData, getRecords, scrollYLoad, border, highlightCurrentRow, cellClassName, spanMethod, optimizeConfig, keyboardConfig, mouseConfig, editConfig, editStore } = $table
   let { editRender, align, ellipsis, showTitle, showTooltip, renderWidth, columnKey } = column
   let { checked, selected, actived, copyed } = editStore
-  let { overflow } = optimizeConfig
+  let { allOverflow } = optimizeConfig
   let isMouseSelected = mouseConfig && mouseConfig.selected
   let isMouseChecked = mouseConfig && mouseConfig.checked
   let isKeyboardCut = keyboardConfig && keyboardConfig.isCut
   let fixedHiddenColumn = fixedType && column.fixed !== fixedType
-  let isShowTitle = showTitle || overflow === 'title'
-  let isShowTooltip = showTooltip || overflow === 'tooltip'
-  let isEllipsis = ellipsis || overflow === 'ellipsis'
+  let isShowTitle = showTitle || allOverflow === 'title'
+  let isShowTooltip = showTooltip || allOverflow === 'tooltip'
+  let isEllipsis = ellipsis || allOverflow === 'ellipsis'
   let isDirty
   let attrs = null
   let tdOns = {}
@@ -220,7 +220,7 @@ export default {
   render (h) {
     let { $parent: $table, fixedColumn, fixedType } = this
     let { maxHeight, height, tableColumn, headerHeight, showFooter, footerHeight, tableHeight, tableWidth, scrollXStore, scrollXLoad, scrollYStore, scrollYLoad, scrollXHeight, optimizeConfig } = $table
-    let { overflow } = optimizeConfig
+    let { allOverflow } = optimizeConfig
     let customHeight = XEUtils.toNumber(height)
     let style = {}
     if (customHeight) {
@@ -230,7 +230,7 @@ export default {
       style['max-height'] = `${fixedType ? maxHeight - headerHeight - (showFooter ? 0 : scrollXHeight) : maxHeight - headerHeight}px`
     }
     // 如果是使用优化模式
-    if (fixedType && overflow) {
+    if (fixedType && allOverflow) {
       tableColumn = fixedColumn
       tableWidth = tableColumn.reduce((previous, column) => previous + column.renderWidth, 0)
     } else if (scrollXLoad) {

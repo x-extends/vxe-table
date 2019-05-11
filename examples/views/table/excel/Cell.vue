@@ -1,6 +1,7 @@
 <template>
   <div>
     <p>使用 vxe-excel 渲染 Excel 表格</p>
+    <p>快捷键：方向键、Tab 键、Esc 键、F2 键、Del、Back 键、Ctrl 复制粘贴</p>
 
     <vxe-excel
       max-height="600"

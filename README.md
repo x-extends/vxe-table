@@ -36,8 +36,9 @@ A very powerful Vue table component.
 * 快捷菜单
 * 滚动渲染
 * 展开行
-* 数据校验
 * 可编辑表格
+* 数据校验
+* 全键盘操作
 * Excel 表格
 
 ## Docs
@@ -220,7 +221,7 @@ new Vue({ i18n }).$mount('#app')
 | 属性 | 描述 | 类型 | 可选值 | 默认值 |
 |------|------|-----|-----|-----|
 | animat | 表格动画效果开关（关闭后视觉效果更快） | Boolean | — | true |
-| overflow | 设置所有行不允许换行（设置后对于固定列能大幅提升性能） | String | ellipsis / title / tooltip | — |
+| allOverflow | 设置所有行不允许换行（设置后对于固定列能大幅提升性能） | String | ellipsis / title / tooltip | — |
 | scrollX | 横向 X 滚动渲染配置 | Object | — | [{gt: 60, oSize: 5, rSize: 16}](#scrollXY-滚动渲染配置项说明) |
 | scrollY | 纵向 Y 滚动渲染配置 | Object | — | [{gt: 500, oSize: 30, rSize: 100}](#scrollXY-滚动渲染配置项说明) |
 
@@ -277,6 +278,7 @@ new Vue({ i18n }).$mount('#app')
 | mode | 编辑模式 | String | cell（单元格编辑模式） / row（行编辑模式） | cell |
 | showIcon | 是否显示列头编辑图标 | Boolean | — | true |
 | showStatus | 是否显示单元格值的修改状态 | Boolean | — | false |
+| autoClear | 当点击非编辑列之后，是否自动清除单元格的激活状态 | Boolean | — | true |
 
 ##### edit-rules 校验规则配置项说明
 
@@ -296,9 +298,11 @@ new Vue({ i18n }).$mount('#app')
 |------|------|-----|
 | select-all | 只对 type=selection 有效，当手动勾选全选时触发的事件 | {selection,checked},event |
 | select-change | 只对 type=selection/radio 有效，当手动勾选时触发的事件 | {selection,checked,row,column},event |
-| cell-click | 当某个单元格被点击时会触发该事件 | {row,rowIndex,column,columnIndex,cell},event |
-| cell-dblclick | 当某个单元格被双击时会触发该事件 | {row,rowIndex,column,columnIndex,cell},event |
+| cell-click | 单元格被点击时会触发该事件 | {row,rowIndex,column,columnIndex,cell},event |
+| cell-dblclick | 单元格被双击时会触发该事件 | {row,rowIndex,column,columnIndex,cell},event |
 | context-menu-link | 当点击上下文菜单后触发 | menu,event |
+| clear-actived | 单元格编辑状态下被清除时会触发该事件 | {row,rowIndex,column,columnIndex,cell},event |
+| edit-actived | 单元格被激活编辑时会触发该事件 | {row,rowIndex,column,columnIndex,cell},event |
 | edit-disabled | 当点击后单元格如果是禁用状态时会触发该事件 | {row,rowIndex,column,columnIndex,cell},event |
 
 #### Table Methods
@@ -316,14 +320,18 @@ new Vue({ i18n }).$mount('#app')
 | getInsertRecords | 获取新增数据 | — |
 | getRemoveRecords | 获取已删除数据 | — |
 | getUpdateRecords| 获取已修改数据 | — |
-| setCurrentRow | 用于单选表格，设置某一行为选中状态，如果第二个参数为空，则会取消目前高亮行的选中状态 | row? |
 | setActiveRow | 只对 mode=cell 有效，激活行编辑 | row |
 | setActiveCell | 只对 mode=row 有效，激活单元格编辑 | row,prop |
 | setSelectCell | 只对 trigger!=manual 有效，选中单元格 | row,prop |
-| toggleRowSelection | 用于多选表格，切换某一行的选中状态，第二个参数则是设置这一行选中与否 | row,checked |
+| setExpandRow | 设置展开行，二个参数设置这一行展开与否 | rows,checked |
+| setCurrentRow | 用于单选表格，设置某一行为选中状态，第二个参数为选中与否 | row?,checked |
+| setSelection | 用于多选表格，设置行为选中状态，第二个参数为选中与否 | rows,checked |
+| toggleRowSelection | 用于多选表格，切换某一行的选中状态 | row |
 | toggleAllSelection | 用于多选表格，切换所有行的选中状态 | — |
-| clearSelectRow | 用于单选表格，清空用户的选择 | — |
+| toggleRowExpansion | 用于可展开表格，切换展开行 | row |
+| clearCurrentRow | 用于单选表格，清空用户的选择 | — |
 | clearSelection | 用于多选表格，清空用户的选择 | — |
+| clearExpand | 清空展开行，数据会恢复成未展开的状态 | — |
 | clearSort | 清空排序条件，数据会恢复成未排序的状态 | — |
 | clearFilter | 清空筛选条件，数据会恢复成未筛选的状态 | — |
 | clearChecked | 清除单元格批量选中状态 | — |

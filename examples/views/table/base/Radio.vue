@@ -10,7 +10,7 @@
       <vxe-table-column prop="name" label="Name"></vxe-table-column>
       <vxe-table-column prop="sex" label="Sex"></vxe-table-column>
       <vxe-table-column prop="age" label="Age"></vxe-table-column>
-      <vxe-table-column prop="address" label="Address"></vxe-table-column>
+      <vxe-table-column prop="address" label="Address" show-overflow-tooltip></vxe-table-column>
     </vxe-table>
 
     <p>使用 radio 方式</p>
@@ -23,12 +23,14 @@
       <vxe-table-column prop="name" label="Name"></vxe-table-column>
       <vxe-table-column prop="sex" label="Sex"></vxe-table-column>
       <vxe-table-column prop="age" label="Age"></vxe-table-column>
-      <vxe-table-column prop="address" label="Address"></vxe-table-column>
+      <vxe-table-column prop="address" label="Address" show-overflow-tooltip></vxe-table-column>
     </vxe-table>
 
     <p>当然也可以两种方式同时使用</p>
 
+    <button class="btn" @click="$refs.xTable.setCurrentRow(tableData[1])">设置第二行选中</button>
     <vxe-table
+      ref="xTable"
       border
       highlight-current-row
       height="300"

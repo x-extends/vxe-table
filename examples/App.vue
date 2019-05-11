@@ -365,7 +365,7 @@ export default {
               }
             },
             {
-              lable: '键盘导航',
+              lable: '全键盘操作',
               locat: {
                 name: 'TableEditKeyboard'
               }

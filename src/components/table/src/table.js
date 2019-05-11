@@ -250,7 +250,7 @@ export default {
         // 显示效果开关
         animat: !isAll,
         // 如果设置了则不允许换行 ellipsis、title、tooltip
-        overflow: isAll || editConfig ? 'tooltip' : null,
+        allOverflow: isAll || editConfig ? 'tooltip' : null,
         // 默认列大于 80 条时自动使用横向 X 滚动渲染
         scrollX: {
           gt: 60,
@@ -532,7 +532,7 @@ export default {
       this.selection = []
       return this.$nextTick()
     },
-    clearSelectRow () {
+    clearCurrentRow () {
       this.selectRow = null
       this.hoverRow = null
       return this.$nextTick()
@@ -594,8 +594,8 @@ export default {
      * 从指定行插入数据
      */
     insertAt (record, row) {
-      let { tableData, insertList } = this
-      let newRecord = record
+      let { tableData, insertList, defineProperty } = this
+      let newRecord = defineProperty(record)
       if (arguments.length === 1) {
         tableData.unshift(newRecord)
       } else {
@@ -608,6 +608,15 @@ export default {
       }
       insertList.push(newRecord)
       return this.$nextTick().then(() => ({ row: newRecord }))
+    },
+    defineProperty (record) {
+      let recordItem = Object.assign({}, record)
+      this.visibleColumn.forEach(column => {
+        if (column.property && !XEUtils.has(recordItem, column.property)) {
+          XEUtils.set(recordItem, column.property, null)
+        }
+      })
+      return recordItem
     },
     /**
      * 删除指定行数据
@@ -968,7 +977,7 @@ export default {
      * 全局点击事件处理
      */
     handleGlobalClickEvent (evnt) {
-      let { editStore, ctxMenuStore } = this
+      let { editStore, ctxMenuStore, editConfig = {} } = this
       let { actived } = editStore
       if (this.$refs.filterWrapper) {
         if (this.getEventTargetNode(evnt, this.$el, 'vxe-filter-wrapper').flag) {
@@ -981,8 +990,17 @@ export default {
       }
       // 如果已激活了编辑状态
       if (actived.row) {
-        if (!this.getEventTargetNode(evnt, this.$el, 'vxe-body--column').flag) {
-          this.clearActived()
+        if (!(editConfig.autoClear === false)) {
+          // 如果手动调用了激活单元格，避免触发源被移除后导致重复关闭
+          if (!this.lastActivedTime || this.lastActivedTime + 50 < Date.now()) {
+            if (!this.getEventTargetNode(evnt, this.$el).flag) {
+              // 如果点击了当前表格之外
+              this.clearActived(evnt)
+            } else if (!this.getEventTargetNode(evnt, this.$el, 'col--edit').flag) {
+              // 如果点击了非编辑列
+              this.clearActived(evnt)
+            }
+          }
         }
       }
       // 如果配置了快捷菜单且，点击了其他地方则关闭
@@ -1035,7 +1053,7 @@ export default {
         // 如果是激活编辑状态，则取消编辑
         if (actived.row || actived.column) {
           params = actived.args
-          this.closeActived()
+          this.clearActived(evnt)
           // 如果配置了选中功能，则为选中状态
           if (mouseConfig.selected) {
             this.handleSelected(params, evnt)
@@ -1296,7 +1314,7 @@ export default {
       let targetElem
       let target = evnt.target
       while (target && target.nodeType && target !== document) {
-        if (DomTools.hasClass(target, queryCls)) {
+        if (queryCls && DomTools.hasClass(target, queryCls)) {
           targetElem = target
         } else if (target === container) {
           return { flag: queryCls ? !!targetElem : true, container, targetElem: targetElem }
@@ -1365,10 +1383,18 @@ export default {
         visible: false
       })
     },
+    setSelection (rows, value) {
+      let column = this.visibleColumn.find(column => column.type === 'selection')
+      if (rows && !XEUtils.isArray(rows)) {
+        rows = [rows]
+      }
+      rows.forEach(row => this.setCheckRowEvent(null, { row, column }, !!value))
+      return this.$nextTick()
+    },
     /**
      * 多选，行选中事件
      */
-    triggerCheckRowEvent (evnt, value, { row, column }) {
+    setCheckRowEvent (evnt, { row, column }, value) {
       let { $listeners, selection, tableData } = this
       let { property } = column
       if (property) {
@@ -1380,7 +1406,9 @@ export default {
         }
       } else {
         if (value) {
-          selection.push(row)
+          if (selection.indexOf(row) === -1) {
+            selection.push(row)
+          }
         } else {
           XEUtils.remove(selection, item => item === row)
         }
@@ -1392,9 +1420,12 @@ export default {
     /**
      * 多选，切换某一行的选中状态
      */
-    toggleRowSelection (row, checked) {
+    toggleRowSelection (row) {
+      let { selection } = this
       let column = this.visibleColumn.find(column => column.type === 'selection')
-      this.triggerCheckRowEvent(null, checked, { row, column })
+      let { property } = column
+      this.setCheckRowEvent(null, { row, column }, property ? !!row[property] : selection.indexOf(row) === -1)
+      return this.$nextTick()
     },
     /**
      * 多选，选中所有事件
@@ -1417,6 +1448,7 @@ export default {
      */
     toggleAllSelection () {
       this.triggerCheckAllEvent(null, !this.isAllSelected)
+      return this.$nextTick()
     },
     /**
      * 单选，行选中事件
@@ -1424,12 +1456,14 @@ export default {
     triggerRowEvent (evnt, { row }) {
       this.selectRow = row
       UtilTools.emitEvent(this, 'select-change', [{ row }, evnt])
+      return this.$nextTick()
     },
     /**
      * 单选，设置某一行为选中状态，如果调不加参数，则会取消目前高亮行的选中状态
      */
     setCurrentRow (row) {
       this.selectRow = row
+      return this.$nextTick()
     },
     /**
      * 行 hover 事件
@@ -1523,19 +1557,34 @@ export default {
       if (actived.row !== row || actived.column !== column) {
         // 判断是否禁用编辑
         if (!activeMethod || activeMethod(params)) {
-          this.clearCopyed()
-          this.clearChecked()
-          this.clearSelected()
+          this.clearCopyed(evnt)
+          this.clearChecked(evnt)
+          this.clearSelected(evnt)
+          this.clearActived(evnt)
           actived.args = params
           actived.row = row
           actived.column = column
           this.$nextTick(() => {
             this.handleFocus(params, evnt)
           })
+          UtilTools.emitEvent(this, 'edit-actived', [params, evnt])
         } else {
           UtilTools.emitEvent(this, 'edit-disabled', [params, evnt])
         }
       }
+    },
+    /**
+     * 清除激活的编辑
+     */
+    clearActived (evnt) {
+      let { editStore } = this
+      let { actived } = editStore
+      if (actived.row || actived.column) {
+        UtilTools.emitEvent(this, 'clear-actived', [actived.args, evnt])
+      }
+      actived.args = null
+      actived.row = null
+      actived.column = null
     },
     hasActiveRow (row) {
       let { editStore } = this
@@ -1543,19 +1592,9 @@ export default {
       return actived.row === row
     },
     /**
-     * 关闭编辑状态
-     */
-    closeActived () {
-      let { editStore } = this
-      let { actived } = editStore
-      actived.args = null
-      actived.row = null
-      actived.column = null
-    },
-    /**
      * 清除所选中源状态
      */
-    clearSelected () {
+    clearSelected (evnt) {
       let { editStore } = this
       let { selected } = editStore
       selected.row = null
@@ -1569,8 +1608,8 @@ export default {
       let { selected } = editStore
       let { row, column } = params
       if (selected.row !== row || selected.column !== column) {
-        this.clearChecked()
-        this.clearActived()
+        this.clearChecked(evnt)
+        this.clearActived(evnt)
         selected.args = params
         selected.row = row
         selected.column = column
@@ -1584,7 +1623,7 @@ export default {
     /**
      * 清除所有选中状态
      */
-    clearChecked () {
+    clearChecked (evnt) {
       let { editStore } = this
       let { checked } = editStore
       checked.rows = []
@@ -1683,16 +1722,6 @@ export default {
       }
     },
     /**
-     * 清除激活的编辑
-     */
-    clearActived () {
-      let { editStore } = this
-      let { actived } = editStore
-      actived.args = null
-      actived.row = null
-      actived.column = null
-    },
-    /**
      * 只对 mode=cell 有效，激活行编辑
      */
     setActiveRow (row) {
@@ -1703,8 +1732,10 @@ export default {
           let column = visibleColumn.find(column => column.editRender)
           let cell = $refs.tableBody.$el.querySelector(`.vxe-body--row.row--${id}_${rowIndex} .${column.id}`)
           handleActived({ row, column, cell })
+          this.lastActivedTime = Date.now()
         }
       }
+      return this.$nextTick()
     },
     /**
      * 只对 mode=row 有效，激活单元格编辑
@@ -1717,8 +1748,10 @@ export default {
           let column = visibleColumn.find(column => column.property === prop)
           let cell = $refs.tableBody.$el.querySelector(`.vxe-body--row.row--${id}_${rowIndex} .${column.id}`)
           handleActived({ row, column, cell })
+          this.lastActivedTime = Date.now()
         }
       }
+      return this.$nextTick()
     },
     /**
      * 只对 trigger=dblclick 有效，选中单元格
@@ -1802,14 +1835,41 @@ export default {
      * 展开行事件
      */
     triggerExpandRowEvent (evnt, { row }) {
+      return this.toggleRowExpansion(row)
+    },
+    /**
+     * 切换展开行
+     */
+    toggleRowExpansion (row) {
+      return this.setExpandRow(row)
+    },
+    /**
+     * 设置展开行，二个参数设置这一行展开与否
+     * 支持单行
+     * 支持多行
+     */
+    setExpandRow (rows, expanded) {
       let { expandeds } = this
-      let index = expandeds.indexOf(row)
-      if (index > -1) {
-        expandeds.splice(index, 1)
-      } else {
-        expandeds.push(row)
+      let isToggle = arguments.length === 1
+      if (rows && !XEUtils.isArray(rows)) {
+        rows = [rows]
       }
-      this.$nextTick(() => this.computeWidth())
+      rows.forEach(row => {
+        let index = expandeds.indexOf(row)
+        if (index > -1) {
+          if (isToggle || !expanded) {
+            expandeds.splice(index, 1)
+          }
+        } else {
+          if (isToggle || expanded) {
+            expandeds.push(row)
+          }
+        }
+      })
+      return this.$nextTick(() => this.computeWidth())
+    },
+    clearExpand () {
+      this.expandeds = []
     },
     /**
      * 是否启用了横向 X 滚动渲染
