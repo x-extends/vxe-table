@@ -38,7 +38,7 @@ funs.forEach(name => {
 })
 
 export default {
-  name: 'VxeTableConfig',
+  name: 'VxeGrid',
   props: {
     columns: Array,
     ...TableProps

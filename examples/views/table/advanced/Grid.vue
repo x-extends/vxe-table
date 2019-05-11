@@ -1,24 +1,24 @@
 <template>
   <div>
-    <p>使用 vxe-table-config 配置的方式渲染表格，这对一些动态渲染的场景非常有用，完全使用数据进行配置</p>
+    <p>使用 vxe-grid 配置的方式渲染表格，这对一些动态渲染的场景非常有用，完全使用数据进行配置</p>
 
-    <vxe-table-config
+    <vxe-grid
       height="300"
       :columns="tableColumn"
-      :data.sync="tableData"></vxe-table-config>
+      :data.sync="tableData"></vxe-grid>
 
     <p>分组表头</p>
 
-    <vxe-table-config
+    <vxe-grid
       border
       stripe
       height="300"
       :columns="tableColumn2"
-      :data.sync="tableData"></vxe-table-config>
+      :data.sync="tableData"></vxe-grid>
 
     <p>表尾合计</p>
 
-    <vxe-table-config
+    <vxe-grid
       border
       stripe
       show-footer
@@ -26,21 +26,7 @@
       :footer-method="footerMethod"
       :columns="tableColumn3"
       :data.sync="tableData"
-      @cell-click="cellClickEvent"></vxe-table-config>
-
-    <p>快捷菜单</p>
-
-    <vxe-table-config
-      border
-      stripe
-      show-footer
-      height="300"
-      :footer-method="footerMethod"
-      :columns="tableColumn3"
-      :data.sync="tableData"
-      :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}, footer: {options: footerMenus}}"
-      @cell-click="cellClickEvent"
-      @context-menu-link="contextMenuLinkEvent"></vxe-table-config>
+      @cell-click="cellClickEvent"></vxe-grid>
   </div>
 </template>
 
@@ -101,8 +87,9 @@ export default {
           ]
         },
         {
-          prop: 'date',
-          label: 'Date'
+          prop: 'address',
+          label: 'Address',
+          showOverflowTooltip: true
         }
       ],
       tableColumn3: [
@@ -134,43 +121,6 @@ export default {
           width: 200
         }
       ],
-      headerMenus: [
-        [
-          {
-            code: 'exportAll',
-            name: '导出所有.cvs'
-          }
-        ]
-      ],
-      bodyMenus: [
-        [
-          {
-            code: 'remove',
-            name: '删除'
-          },
-          {
-            code: 'filter',
-            name: '筛选'
-          },
-          {
-            code: 'sort',
-            name: '排序'
-          },
-          {
-            code: 'print',
-            name: '打印',
-            disabled: true
-          }
-        ]
-      ],
-      footerMenus: [
-        [
-          {
-            code: 'clearAll',
-            name: '清空数据'
-          }
-        ]
-      ],
       tableData: []
     }
   },
@@ -181,9 +131,6 @@ export default {
   methods: {
     cellClickEvent ({ row }) {
       console.log(row)
-    },
-    contextMenuLinkEvent (menu) {
-      alert(menu.name)
     },
     footerMethod ({ columns, data }) {
       return [

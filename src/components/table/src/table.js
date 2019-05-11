@@ -250,7 +250,7 @@ export default {
         // 显示效果开关
         animat: !isAll,
         // 如果设置了则不允许换行 ellipsis、title、tooltip
-        allOverflow: isAll || editConfig ? 'tooltip' : null,
+        showOverflow: isAll || editConfig ? 'tooltip' : null,
         // 默认列大于 80 条时自动使用横向 X 滚动渲染
         scrollX: {
           gt: 60,

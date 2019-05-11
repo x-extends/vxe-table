@@ -254,7 +254,7 @@ export default {
               lable: '配置的方式',
               demoUrl: 'https://jsrun.net/5RXKp',
               locat: {
-                name: 'TableConfig'
+                name: 'TableGrid'
               }
             },
             {

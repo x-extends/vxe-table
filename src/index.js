@@ -1,6 +1,6 @@
 import Table from './components/table'
 import TableColumn from './components/table-column'
-import TableConfig from './components/table-config'
+import TableConfig from './components/table-grid'
 import ExcelTable from './components/excel'
 import GlobalConfig from './conf'
 
