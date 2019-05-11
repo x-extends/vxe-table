@@ -29,7 +29,7 @@ A very powerful Vue table component.
 * 合并行或列
 * 表尾合计
 * 导出 CVS
-* 自定义列
+* 显示/隐藏列
 * 加载中
 * 格式化内容
 * 自定义模板

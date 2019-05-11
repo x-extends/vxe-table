@@ -342,9 +342,8 @@ export default {
      * 排序和筛选
      */
     renderSortAndFilterHeader (h, params) {
-      return [
-        h('span', UtilTools.formatText(params.column.label))
-      ].concat(this.renderSortIcon(h, params))
+      return this.renderHeader(h, params)
+        .concat(this.renderSortIcon(h, params))
         .concat(this.renderFilterIcon(h, params))
     },
 
@@ -352,7 +351,7 @@ export default {
      * 排序
      */
     renderSortHeader (h, params) {
-      return [h('span', UtilTools.formatText(params.column.label))].concat(this.renderSortIcon(h, params))
+      return this.renderHeader(h, params).concat(this.renderSortIcon(h, params))
     },
     renderSortIcon (h, params) {
       let { iconMap } = GlobalConfig
@@ -390,7 +389,7 @@ export default {
      * 筛选
      */
     renderFilterHeader (h, params) {
-      return [h('span', UtilTools.formatText(params.column.label))].concat(this.renderFilterIcon(h, params))
+      return this.renderHeader(h, params).concat(this.renderFilterIcon(h, params))
     },
     renderFilterIcon (h, params) {
       let { iconMap } = GlobalConfig
@@ -421,9 +420,9 @@ export default {
       return [
         editConfig.showIcon === false ? null : h('i', {
           class: iconMap.edit
-        }),
-        h('span', UtilTools.formatText(params.column.label))
-      ].concat(sortable ? this.renderSortIcon(h, params) : [])
+        })
+      ].concat(this.renderHeader(h, params))
+        .concat(sortable ? this.renderSortIcon(h, params) : [])
         .concat(filters && filters.length ? this.renderFilterIcon(h, params) : [])
     },
     // 行格编辑模式

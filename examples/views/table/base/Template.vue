@@ -11,7 +11,11 @@
           <a href="https://github.com/xuliangzhan/vxe-table">{{ row.name }}</a>
         </template>
       </vxe-table-column>
-      <vxe-table-column prop="sex" label="Sex"></vxe-table-column>
+      <vxe-table-column prop="sex" label="Sex">
+        <template v-slot:header="{ column }">
+          <span style="color: red;">自定义头</span>
+        </template>
+      </vxe-table-column>
       <vxe-table-column prop="time" label="Time"></vxe-table-column>
       <vxe-table-column prop="address" label="Address" show-overflow-tooltip></vxe-table-column>
     </vxe-table>

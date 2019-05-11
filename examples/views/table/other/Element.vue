@@ -12,13 +12,22 @@
       :footer-method="footerMethod"
       :edit-config="{trigger: 'click', mode: 'cell'}">
       <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
-      <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
+      <vxe-table-column type="index" width="80" fixed="left">
+        <template v-slot:header="{ column }">
+          <span>序号</span>
+          <i class="el-icon-question"></i>
+        </template>
+      </vxe-table-column>
       <vxe-table-column prop="name" label="ElInput" min-width="140" :edit-render="{type: 'default'}">
         <template v-slot:edit="{ row }">
           <el-input v-model="row.name"></el-input>
         </template>
       </vxe-table-column>
       <vxe-table-column prop="age" label="ElInputNumber"  width="160" :edit-render="{type: 'default'}">
+        <template v-slot:header="{ column }">
+          <span>{{ column.label }}</span>
+          <i class="el-icon-warning"></i>
+        </template>
         <template v-slot:edit="{ row }">
           <el-input-number v-model="row.age" :max="35" :min="18"></el-input-number>
         </template>
@@ -100,13 +109,22 @@ export default {
           :footer-method="footerMethod"
           :edit-config="{trigger: 'click', mode: 'cell'}">
           <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
-          <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
+          <vxe-table-column type="index" width="80" fixed="left">
+            <template v-slot:header="{ column }">
+              <span>序号</span>
+              <i class="el-icon-question"></i>
+            </template>
+          </vxe-table-column>
           <vxe-table-column prop="name" label="ElInput" min-width="140" :edit-render="{type: 'default'}">
             <template v-slot:edit="{ row }">
               <el-input v-model="row.name"></el-input>
             </template>
           </vxe-table-column>
-          <vxe-table-column prop="age" label="ElInputNumber"  width="140" :edit-render="{type: 'default'}">
+          <vxe-table-column prop="age" label="ElInputNumber"  width="160" :edit-render="{type: 'default'}">
+            <template v-slot:header="{ column }">
+              <span>{{ column.label }}</span>
+              <i class="el-icon-warning"></i>
+            </template>
             <template v-slot:edit="{ row }">
               <el-input-number v-model="row.age" :max="35" :min="18"></el-input-number>
             </template>

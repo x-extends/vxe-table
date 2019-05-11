@@ -12,13 +12,22 @@
       :footer-method="footerMethod"
       :edit-config="{trigger: 'click', mode: 'cell'}">
       <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
-      <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
+      <vxe-table-column type="index" width="80" fixed="left">
+        <template v-slot:header="{ column }">
+          <span>序号</span>
+          <Icon type="md-help-circle" />
+        </template>
+      </vxe-table-column>
       <vxe-table-column prop="name" label="Input"  min-width="140" :edit-render="{type: 'default'}">
         <template v-slot:edit="{ row }">
           <Input v-model="row.name"/>
         </template>
       </vxe-table-column>
       <vxe-table-column prop="age" label="InputNumber" width="140" :edit-render="{type: 'default'}">
+        <template v-slot:header="{ column }">
+          <span>{{ column.label }}</span>
+          <Icon type="md-alert" />
+        </template>
         <template v-slot:edit="{ row }">
           <InputNumber v-model="row.age" :max="35" :min="18"></InputNumber>
         </template>
