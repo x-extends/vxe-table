@@ -32,10 +32,18 @@
 
 <script>
 import XEUtils from 'xe-utils'
+import XEAjax from 'xe-ajax'
 
 export default {
   data () {
     return {
+      dataConfig: {
+        data: () => XEAjax.getJSON('/api')
+      },
+      pageConfig: {
+        pageSize: 10,
+        pageSizes: [10, 15, 20, 50, 100]
+      },
       tableColumn: [
         {
           type: 'index',

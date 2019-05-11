@@ -251,13 +251,6 @@ export default {
               }
             },
             {
-              lable: '配置的方式',
-              demoUrl: 'https://jsrun.net/5RXKp',
-              locat: {
-                name: 'TableGrid'
-              }
-            },
-            {
               lable: '树形结构',
               disabled: true,
               locat: {
@@ -267,12 +260,34 @@ export default {
           ]
         },
         {
-          lable: '海量数据',
+          lable: 'Grid 表格',
+          value: 'grid',
+          expand: false,
+          children: [
+            {
+              lable: '基础',
+              demoUrl: 'https://jsrun.net/5RXKp',
+              locat: {
+                name: 'GridBasic'
+              }
+            },
+            {
+              lable: '分页',
+              demoUrl: 'https://jsrun.net/5RXKp',
+              disabled: true,
+              locat: {
+                name: 'GridPage'
+              }
+            }
+          ]
+        },
+        {
+          lable: 'Big 表格',
           value: 'scroll',
           expand: false,
           children: [
             {
-              lable: '滚动渲染',
+              lable: '海量数据',
               demoUrl: 'https://jsrun.net/XRXKp',
               locat: {
                 name: 'TableScroll'
@@ -305,7 +320,7 @@ export default {
           ]
         },
         {
-          lable: '可编辑表格',
+          lable: 'Edit 表格',
           value: 'edit',
           expand: false,
           children: [

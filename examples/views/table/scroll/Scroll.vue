@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>滚动渲染</p>
+    <p>海量数据</p>
     <p>大数据不建议使用双向绑定的 data 属性（vue 监听会大数据会短暂的卡顿），建议使用 reload 函数</p>
 
     <vxe-table
@@ -28,6 +28,7 @@
     <vxe-table
       border
       height="300"
+      :loading="loading"
       :data.sync="tableData2">
       <vxe-table-column type="index" width="100"></vxe-table-column>
       <vxe-table-column prop="name" label="Name" sortable></vxe-table-column>
@@ -49,6 +50,7 @@ import hljs from 'highlight.js'
 export default {
   data () {
     return {
+      loading: false,
       tableData: [],
       tableData2: [],
       demoCodes: [
@@ -111,7 +113,11 @@ export default {
   created () {
     let list = window.MOCK_DATA_LIST.slice(0, 200)
     this.tableData = list
-    this.tableData2 = window.MOCK_DATA_LIST.slice(0, 1000)
+    this.loading = true
+    setTimeout(() => {
+      this.tableData2 = window.MOCK_DATA_LIST.slice(0, 10000)
+      this.loading = false
+    }, 200)
   },
   mounted () {
     this.$el.querySelectorAll('pre code').forEach((block) => {

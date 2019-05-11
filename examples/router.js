@@ -30,8 +30,10 @@ import TableFooter from './views/table/advanced/Footer.vue'
 import TableCustom from './views/table/advanced/Custom.vue'
 import TableExport from './views/table/advanced/Export.vue'
 import TableMenu from './views/table/advanced/Menu.vue'
-import TableGrid from './views/table/advanced/Grid.vue'
 import TableExpand from './views/table/advanced/Expand.vue'
+
+import GridBasic from './views/table/grid/Basic.vue'
+import GridPage from './views/table/grid/Page.vue'
 
 import TableScroll from './views/table/scroll/Scroll.vue'
 import TableScrollRows from './views/table/scroll/ScrollRows.vue'
@@ -216,9 +218,14 @@ export default new Router({
       component: TableExpand
     },
     {
-      path: '/table/advanced/grid',
-      name: 'TableGrid',
-      component: TableGrid
+      path: '/table/grid/basic',
+      name: 'GridBasic',
+      component: GridBasic
+    },
+    {
+      path: '/table/grid/page',
+      name: 'GridPage',
+      component: GridPage
     },
     {
       path: '/table/scroll/scroll',

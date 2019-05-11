@@ -17,9 +17,10 @@ var columns = window.MOCK_COLUMN_LIST = []
 var list = window.MOCK_DATA_LIST = []
 var currTime = Date.now()
 var fullIndex = 0
-var size = 100000
+var size = 200000
 function mockData () {
-  for (var index = 0; index < 1500; index++) {
+  let len = fullIndex === 0 ? 10000 : 1500
+  for (var index = 0; index < len; index++) {
     currTime += 5000
     fullIndex++
     if (columns.length < 10000) {
@@ -59,7 +60,7 @@ function mockData () {
     })
   }
   if (fullIndex < size) {
-    setTimeout(mockData, 20)
+    setTimeout(mockData, 10)
   }
 }
 
