@@ -6,7 +6,6 @@
       border
       resizable
       highlight-hover-row
-      height="400"
       :data.sync="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column prop="name" label="Name"></vxe-table-column>

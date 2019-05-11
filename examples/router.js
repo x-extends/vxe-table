@@ -61,6 +61,8 @@ import TableOtherIview from './views/table/other/Iview.vue'
 import TableOtherIviewConfig from './views/table/other/IviewConfig.vue'
 import TableOtherIviewPage from './views/table/other/IviewPage.vue'
 
+import TableAPI from './views/table/api/Table.vue'
+
 Vue.use(Router)
 
 export default new Router({
@@ -338,6 +340,11 @@ export default new Router({
       path: '/table/other/iviewPage',
       name: 'TableOtherIviewPage',
       component: TableOtherIviewPage
+    },
+    {
+      path: '/table/api',
+      name: 'TableAPI',
+      component: TableAPI
     }
   ]
 })

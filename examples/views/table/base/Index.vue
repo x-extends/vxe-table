@@ -5,7 +5,6 @@
     <vxe-table
       border
       highlight-hover-row
-      height="300"
       :data.sync="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column prop="name" label="Name" sortable></vxe-table-column>

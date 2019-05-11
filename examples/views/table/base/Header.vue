@@ -3,7 +3,6 @@
     <p>隐藏头部</p>
 
     <vxe-table
-      height="300"
       :show-header="false"
       :data.sync="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
@@ -16,7 +15,6 @@
     <p>当纵向内容过多时，出现横向滚动条</p>
 
     <vxe-table
-      height="200"
       :show-header="false"
       :data.sync="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>

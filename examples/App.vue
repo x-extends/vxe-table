@@ -57,7 +57,7 @@ export default {
           ]
         },
         {
-          lable: '基本表格',
+          lable: '基本功能',
           value: 'base',
           expand: false,
           children: [
@@ -459,6 +459,19 @@ export default {
               disabled: true,
               locat: {
                 name: 'TableInstall'
+              }
+            }
+          ]
+        },
+        {
+          lable: 'API',
+          value: 'api',
+          expand: false,
+          children: [
+            {
+              lable: 'vxe-table',
+              locat: {
+                name: 'TableAPI'
               }
             }
           ]
