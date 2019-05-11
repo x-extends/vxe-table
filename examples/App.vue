@@ -223,7 +223,7 @@ export default {
               }
             },
             {
-              lable: '自定义列',
+              lable: '显示/隐藏列',
               demoUrl: 'https://jsrun.net/PrXKp',
               locat: {
                 name: 'TableCustom'
