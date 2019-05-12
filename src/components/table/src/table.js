@@ -1004,6 +1004,7 @@ export default {
      * 全局按下事件处理
      */
     handleGlobalMousedownEvent (evnt) {
+      console.log(111)
       let { editStore, ctxMenuStore, editConfig = {} } = this
       let { actived } = editStore
       if (this.$refs.filterWrapper) {
@@ -1541,6 +1542,8 @@ export default {
                 document.onmousemove = domMousemove
                 document.onmouseup = domMouseup
               }
+              this.closeFilter()
+              this.closeContextMenu()
             } else if (isRightBtn) {
               // 如果不在所有选中的范围之内则重新选中
               let select = DomTools.getCellIndexs(cell)
