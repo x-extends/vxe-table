@@ -374,9 +374,8 @@ export default {
             },
             {
               lable: '数据校验',
-              disabled: true,
               locat: {
-                name: 'TableInstall'
+                name: 'TableEditValid'
               }
             },
             {

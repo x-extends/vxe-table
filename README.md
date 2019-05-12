@@ -313,6 +313,7 @@ new Vue({ i18n }).$mount('#app')
 | clear-actived | 单元格编辑状态下被清除时会触发该事件 | {row,rowIndex,column,columnIndex,cell},event |
 | edit-actived | 单元格被激活编辑时会触发该事件 | {row,rowIndex,column,columnIndex,cell},event |
 | edit-disabled | 当点击后单元格如果是禁用状态时会触发该事件 | {row,rowIndex,column,columnIndex,cell},event |
+| valid-error | 当数据校验不通过时会触发该事件 | {row,rowIndex,column,columnIndex,cell} |
 
 #### Table Methods
 
@@ -350,6 +351,8 @@ new Vue({ i18n }).$mount('#app')
 | computeWidth | 重新计算并更新列宽 | — |
 | isScrollXLoad | 判断是否启用了横向 X 滚动渲染 | — |
 | isScrollYLoad | 判断是否启用了纵向 Y 滚动渲染 | — |
+| validateRow | 对表格某一行进行校验的方法，参数为行数据和一个回调函数。该回调函数会在校验结束后被调用，并传入两个参数：（是否校验成功，最近一列未通过校验的字段）。若不传入回调函数，则会返回一个 promise | row,callback |
+| validate | 对整个表格进行校验的方法，参数为一个回调函数。该回调函数会在校验结束后被调用，并传入两个参数：（是否校验成功，最近一列未通过校验的字段）。若不传入回调函数，则会返回一个 promise | callback |
 | exportCsv| 将表格数据导出为 .csv 文件，说明：支持IE9+、Edge、Chrome、Firefox 等常用浏览器。IE11以下可能存在中文乱码问题，部分浏览器需要手动修改后缀名为 .csv | [options](#exportcsv-参数说明) |
 
 ##### exportCsv 参数说明

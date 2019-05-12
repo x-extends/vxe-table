@@ -263,7 +263,7 @@ export default {
         }
         options.on = {
           change (evnt) {
-            $table.triggerCheckRowEvent(evnt, evnt.target.checked, params)
+            $table.triggerCheckRowEvent(evnt, params, evnt.target.checked)
           }
         }
       }
@@ -292,7 +292,7 @@ export default {
         }
         options.on = {
           change (evnt) {
-            $table.triggerCheckRowEvent(evnt, evnt.target.checked, params)
+            $table.triggerCheckRowEvent(evnt, params, evnt.target.checked)
           }
         }
       }

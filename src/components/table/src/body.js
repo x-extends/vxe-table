@@ -17,7 +17,7 @@ function handleLocation (obj, rows, columns, row, column) {
  * 渲染列
  */
 function renderColumn (h, _vm, $table, fixedType, row, rowIndex, column, columnIndex) {
-  let { $listeners: tableListeners, tableSourceData, getRecords, scrollYLoad, border, highlightCurrentRow, cellClassName, spanMethod, optimizeConfig, keyboardConfig, mouseConfig, editConfig, editStore } = $table
+  let { $listeners: tableListeners, tableSourceData, getRecords, scrollYLoad, border, highlightCurrentRow, cellClassName, spanMethod, optimizeConfig, keyboardConfig, mouseConfig, editConfig, editStore, validStore } = $table
   let { editRender, align, ellipsis, showTitle, showTooltip, renderWidth, columnKey } = column
   let { checked, selected, actived, copyed } = editStore
   let { showOverflow } = optimizeConfig
@@ -104,6 +104,7 @@ function renderColumn (h, _vm, $table, fixedType, row, rowIndex, column, columnI
       'col--copyed-right': copyedLocat.right,
       'col--actived': editRender && actived.row === row && actived.column === column,
       'col--dirty': isDirty,
+      'col--valid-error': validStore.row === row && validStore.column === column,
       'edit--visible': editRender && editRender.type === 'visible',
       'fixed--hidden': fixedHiddenColumn
     }, cellClassName ? XEUtils.isFunction(cellClassName) ? cellClassName({ $table, row, rowIndex, column, columnIndex, fixed: fixedType }) : cellClassName : ''],

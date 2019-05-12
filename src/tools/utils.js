@@ -22,7 +22,7 @@ const UtilTools = {
     return result
   },
   formatText (value) {
-    return '' + (value === void 0 ? '' : value)
+    return '' + (value === null || value === void 0 ? '' : value)
   },
   getCellValue (row, prop) {
     return XEUtils.get(row, prop)

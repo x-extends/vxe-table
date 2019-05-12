@@ -240,6 +240,14 @@ export default {
         },
         insertList: [],
         removeList: []
+      },
+      // 存放数据校验相关信息
+      validStore: {
+        visible: false,
+        row: null,
+        column: null,
+        rule: null,
+        style: null
       }
     }
   },
@@ -338,7 +346,7 @@ export default {
         this.computeWidth(true)
       })
     })
-    GlobalEvent.on(this, 'click', this.handleGlobalClickEvent)
+    GlobalEvent.on(this, 'mousedown', this.handleGlobalMousedownEvent)
     GlobalEvent.on(this, 'blur', this.handleGlobalBlurEvent)
     GlobalEvent.on(this, 'contextmenu', this.handleContextmenuEvent)
     GlobalEvent.on(this, 'mousewheel', this.handleMousewheelEvent)
@@ -391,6 +399,7 @@ export default {
       filterStore,
       ctxMenuStore,
       tooltipStore,
+      validStore,
       getRecords
     } = this
     let { leftList, rightList } = columnStore
@@ -522,6 +531,21 @@ export default {
           }, UtilTools.formatText(tooltipStore.content)),
           h('div', {
             class: ['vxe-table--tooltip-arrow']
+          })
+        ]) : null,
+        /**
+         * valid error
+         */
+        validStore.visible ? h('div', {
+          class: ['vxe-table--valid-error-wrapper'],
+          style: validStore.style,
+          ref: 'validWrapper'
+        }, [
+          h('div', {
+            class: ['vxe-table--valid-error-content']
+          }, UtilTools.formatText(validStore.rule.message)),
+          h('div', {
+            class: ['vxe-table--valid-error-arrow']
           })
         ]) : null
       ])
@@ -976,9 +1000,9 @@ export default {
       }
     },
     /**
-     * 全局点击事件处理
+     * 全局按下事件处理
      */
-    handleGlobalClickEvent (evnt) {
+    handleGlobalMousedownEvent (evnt) {
       let { editStore, ctxMenuStore, editConfig = {} } = this
       let { actived } = editStore
       if (this.$refs.filterWrapper) {
@@ -994,13 +1018,16 @@ export default {
       if (actived.row) {
         if (!(editConfig.autoClear === false)) {
           // 如果手动调用了激活单元格，避免触发源被移除后导致重复关闭
-          if (!this.lastActivedTime || this.lastActivedTime + 50 < Date.now()) {
-            if (!this.getEventTargetNode(evnt, this.$el).flag) {
-              // 如果点击了当前表格之外
-              this.clearActived(evnt)
-            } else if (!this.getEventTargetNode(evnt, this.$el, 'col--edit').flag) {
+          if (!this.lastCallTime || this.lastCallTime + 50 < Date.now()) {
+            if (
               // 如果点击了非编辑列
-              this.clearActived(evnt)
+              !this.getEventTargetNode(evnt, this.$el, 'col--edit').flag ||
+              // 如果点击了当前表格之外
+              !this.getEventTargetNode(evnt, this.$el).flag
+            ) {
+              this.triggerValidate().then(() => {
+                this.clearActived(evnt)
+              }).catch(e => e)
             }
           }
         }
@@ -1352,24 +1379,28 @@ export default {
           })
           this.$nextTick().then(() => {
             let tipWrapperElem = $refs.tipWrapper
-            tooltipStore.style = {
-              width: `${tipWrapperElem.offsetWidth + 2}px`,
-              top: `${top - tipWrapperElem.offsetHeight - 6}px`,
-              left: `${left - 6}px`
+            if (tipWrapperElem) {
+              tooltipStore.style = {
+                width: `${tipWrapperElem.offsetWidth + 2}px`,
+                top: `${top - tipWrapperElem.offsetHeight - 6}px`,
+                left: `${left - 6}px`
+              }
+              if (tipWrapperElem.offsetWidth < cell.offsetWidth) {
+                tooltipStore.style.left = `${left + Math.floor((cell.offsetWidth - tipWrapperElem.offsetWidth) / 2) - 6}px`
+              }
+              return this.$nextTick()
             }
-            if (tipWrapperElem.offsetWidth < cell.offsetWidth) {
-              tooltipStore.style.left = `${left + Math.floor((cell.offsetWidth - tipWrapperElem.offsetWidth) / 2) - 6}px`
-            }
-            return this.$nextTick()
           }).then(() => {
             let tipWrapperElem = $refs.tipWrapper
-            let offsetHeight = tipWrapperElem.offsetHeight
-            let offsetWidth = tipWrapperElem.offsetWidth
-            if (top - offsetHeight < scrollTop) {
-              tooltipStore.style.top = `${top + cell.offsetHeight + 6}px`
-            }
-            if (left + offsetWidth > scrollLeft + visibleWidth) {
-              tooltipStore.style.left = `${scrollLeft + visibleWidth - offsetWidth - 6}px`
+            if (tipWrapperElem) {
+              let offsetHeight = tipWrapperElem.offsetHeight
+              let offsetWidth = tipWrapperElem.offsetWidth
+              if (top - offsetHeight < scrollTop) {
+                tooltipStore.style.top = `${top + cell.offsetHeight + 6}px`
+              }
+              if (left + offsetWidth > scrollLeft + visibleWidth) {
+                tooltipStore.style.left = `${scrollLeft + visibleWidth - offsetWidth - 6}px`
+              }
             }
           })
         }
@@ -1390,13 +1421,13 @@ export default {
       if (rows && !XEUtils.isArray(rows)) {
         rows = [rows]
       }
-      rows.forEach(row => this.setCheckRowEvent(null, { row, column }, !!value))
+      rows.forEach(row => this.triggerCheckRowEvent(null, { row, column }, !!value))
       return this.$nextTick()
     },
     /**
      * 多选，行选中事件
      */
-    setCheckRowEvent (evnt, { row, column }, value) {
+    triggerCheckRowEvent (evnt, { row, column }, value) {
       let { $listeners, selection, tableData } = this
       let { property } = column
       if (property) {
@@ -1426,7 +1457,7 @@ export default {
       let { selection } = this
       let column = this.visibleColumn.find(column => column.type === 'selection')
       let { property } = column
-      this.setCheckRowEvent(null, { row, column }, property ? !!row[property] : selection.indexOf(row) === -1)
+      this.triggerCheckRowEvent(null, { row, column }, property ? !!row[property] : selection.indexOf(row) === -1)
       return this.$nextTick()
     },
     /**
@@ -1560,13 +1591,18 @@ export default {
      * 如果是双击模式，则单击后选中状态
      */
     triggerCellClickEvent (evnt, params) {
-      let { highlightCurrentRow, editConfig } = this
+      let { highlightCurrentRow, editStore, editConfig } = this
+      let { actived } = editStore
       if (highlightCurrentRow) {
         this.selectRow = params.row
       }
       if (editConfig) {
         if (editConfig.trigger === 'click') {
-          this.handleActived(params, evnt)
+          if (!actived.args || evnt.currentTarget !== actived.args.cell) {
+            this.triggerValidate().then(() => {
+              this.handleActived(params, evnt)
+            }).catch(e => e)
+          }
         }
       }
       UtilTools.emitEvent(this, 'cell-click', [params, evnt])
@@ -1576,10 +1612,15 @@ export default {
      * 如果是双击模式，则激活为编辑状态
      */
     triggerCellDBLClickEvent (evnt, params) {
-      let { editConfig } = this
+      let { editStore, editConfig } = this
+      let { actived } = editStore
       if (editConfig) {
         if (editConfig.trigger === 'dblclick') {
-          this.handleActived(params, evnt)
+          if (!actived.args || evnt.currentTarget !== actived.args.cell) {
+            this.triggerValidate().then(() => {
+              this.handleActived(params, evnt)
+            }).catch(e => e)
+          }
         }
       }
       UtilTools.emitEvent(this, 'cell-dblclick', [params, evnt])
@@ -1609,7 +1650,12 @@ export default {
         } else {
           UtilTools.emitEvent(this, 'edit-disabled', [params, evnt])
         }
+      } else {
+        setTimeout(() => {
+          this.handleFocus(params, evnt)
+        })
       }
+      return this.$nextTick()
     },
     /**
      * 清除激活的编辑
@@ -1623,6 +1669,7 @@ export default {
       actived.args = null
       actived.row = null
       actived.column = null
+      return this.$nextTick()
     },
     hasActiveRow (row) {
       let { editStore } = this
@@ -1637,6 +1684,7 @@ export default {
       let { selected } = editStore
       selected.row = null
       selected.column = null
+      return this.$nextTick()
     },
     /**
      * 处理选中源
@@ -1645,18 +1693,21 @@ export default {
       let { mouseConfig = {}, editStore } = this
       let { selected } = editStore
       let { row, column } = params
-      if (selected.row !== row || selected.column !== column) {
-        this.clearChecked(evnt)
-        this.clearActived(evnt)
-        selected.args = params
-        selected.row = row
-        selected.column = column
-      }
-      // 如果配置了批量选中功能，则为批量选中状态
-      if (mouseConfig.checked) {
-        let select = DomTools.getCellIndexs(params.cell)
-        this.handleChecked(select, select, evnt)
-      }
+      return this.triggerValidate().then(() => {
+        if (selected.row !== row || selected.column !== column) {
+          this.clearChecked(evnt)
+          this.clearActived(evnt)
+          selected.args = params
+          selected.row = row
+          selected.column = column
+        }
+        // 如果配置了批量选中功能，则为批量选中状态
+        if (mouseConfig.checked) {
+          let select = DomTools.getCellIndexs(params.cell)
+          this.handleChecked(select, select, evnt)
+        }
+        return this.$nextTick()
+      }).catch(e => e)
     },
     /**
      * 清除所有选中状态
@@ -1668,6 +1719,7 @@ export default {
       checked.columns = []
       checked.tRows = []
       checked.tColumns = []
+      return this.$nextTick()
     },
     /**
      * 处理所有选中
@@ -1809,7 +1861,7 @@ export default {
           let column = visibleColumn.find(column => column.editRender)
           let cell = $refs.tableBody.$el.querySelector(`.vxe-body--row.row--${id}_${rowIndex} .${column.id}`)
           handleActived({ row, column, cell })
-          this.lastActivedTime = Date.now()
+          this.lastCallTime = Date.now()
         }
       }
       return this.$nextTick()
@@ -1825,7 +1877,7 @@ export default {
           let column = visibleColumn.find(column => column.property === prop)
           let cell = $refs.tableBody.$el.querySelector(`.vxe-body--row.row--${id}_${rowIndex} .${column.id}`)
           handleActived({ row, column, cell })
-          this.lastActivedTime = Date.now()
+          this.lastCallTime = Date.now()
         }
       }
       return this.$nextTick()
@@ -2076,6 +2128,236 @@ export default {
       this.tableData = this.getTableData()
       scrollYStore.topSpaceHeight = scrollYStore.startIndex * scrollYStore.rowHeight
       scrollYStore.bottomSpaceHeight = (tableFullData.length - (scrollYStore.startIndex + scrollYStore.renderSize)) * scrollYStore.rowHeight
+    },
+    /**
+     * 对表格某一行进行校验的方法
+     * 返回 Promise 对象，或者使用回调方式
+     */
+    validateRow (row, cb) {
+      this.lastCallTime = Date.now()
+      this.clearValidate()
+      return new Promise((resolve, reject) => {
+        this.validRowRules('all', row)
+          .then(() => {
+            let valid = true
+            if (cb) {
+              cb(valid)
+            }
+            resolve(true)
+          }).catch((params) => {
+            let valid = false
+            let { rule, column } = params
+            this.handleValidError(params)
+            if (cb) {
+              cb(valid, { [column.property]: [new Error(rule.message)] })
+              resolve(valid)
+            } else {
+              reject(valid)
+            }
+          })
+      })
+    },
+    triggerValidate (cb) {
+      let { editConfig, editStore, editRules, validStore } = this
+      let { actived } = editStore
+      let type = validStore.visible ? 'all' : 'blur'
+      this.clearValidate()
+      if (actived.row && !XEUtils.isEmpty(editRules)) {
+        let { row, column, cell } = actived.args
+        if (editConfig.mode === 'row') {
+          return this.validRowRules(type, row)
+            .catch(params => {
+              this.handleValidError(params)
+              return Promise.reject(params)
+            })
+        } else {
+          return this.validCellRules(type, row, column).catch(rule => {
+            let rest = { rule, row, column, cell }
+            this.handleValidError(rest)
+            return Promise.reject(rest)
+          })
+        }
+      }
+      return Promise.resolve()
+    },
+    /**
+     * 对整个表格数据进行校验
+     * 返回 Promise 对象，或者使用回调方式
+     */
+    validate (cb) {
+      let { $refs, editRules, tableData } = this
+      let validPromise = Promise.resolve(true)
+      this.lastCallTime = Date.now()
+      this.clearValidate()
+      if (!XEUtils.isEmpty(editRules)) {
+        let columns = this.getColumns()
+        tableData.forEach((row, rowIndex) => {
+          columns.forEach((column, columnIndex) => {
+            if (XEUtils.has(editRules, column.property)) {
+              validPromise = validPromise.then(() => new Promise((resolve, reject) => {
+                this.validCellRules('all', row, column)
+                  .then(resolve)
+                  .catch(rule => {
+                    let rest = { rule, rowIndex, row, columnIndex, column, cell: DomTools.getCell({ rowIndex, column }, $refs.tableBody.$el) }
+                    return reject(rest)
+                  })
+              }))
+            }
+          })
+        })
+        return validPromise.then(() => {
+          let valid = true
+          if (cb) {
+            cb(valid)
+          }
+          return true
+        }).catch(params => {
+          let valid = false
+          let { rule, column } = params
+          this.handleValidError(params)
+          if (cb) {
+            cb(valid, { [column.property]: [new Error(rule.message)] })
+          }
+          return cb ? Promise.resolve(valid) : Promise.reject(valid)
+        })
+      } else {
+        let valid = true
+        if (cb) {
+          cb(valid)
+        }
+      }
+      return validPromise
+    },
+    validRowRules (type, row) {
+      let { $refs, tableData, editRules } = this
+      let rowIndex = tableData.indexOf(row)
+      let validPromise = Promise.resolve()
+      if (!XEUtils.isEmpty(editRules)) {
+        this.getColumns().forEach((column, columnIndex) => {
+          if (XEUtils.has(editRules, column.property)) {
+            validPromise = validPromise.then(() => new Promise((resolve, reject) => {
+              this.validCellRules('all', row, column)
+                .then(resolve)
+                .catch(rule => {
+                  let rest = { rule, row, column, cell: DomTools.getCell({ rowIndex, column }, $refs.tableBody.$el) }
+                  return reject(rest)
+                })
+            }))
+          }
+        })
+      }
+      return validPromise
+    },
+    /**
+     * 校验数据
+     * 按表格行、列顺序依次校验（同步或异步）
+     * 校验规则根据索引顺序依次校验，如果是异步则会等待校验完成才会继续校验下一列
+     * 如果校验失败则，触发回调或者Promise，结果返回一个 Boolean 值
+     * 如果是传回调方式这返回一个 Boolean 值和校验不通过列的错误消息
+     *
+     * 参数：required=Boolean 是否必填，min=Number 最小长度，max=Number 最大长度，validator=Function(rule, value, callback) 自定义校验，trigger=blur|change 触发方式
+     */
+    validCellRules (type, row, column) {
+      let { editRules } = this
+      let { property } = column
+      let validPromise = Promise.resolve()
+      if (property && !XEUtils.isEmpty(editRules)) {
+        let rules = XEUtils.get(editRules, property)
+        let value = XEUtils.get(row, property)
+        if (rules) {
+          for (let rIndex = 0; rIndex < rules.length; rIndex++) {
+            validPromise = validPromise.then(() => new Promise((resolve, reject) => {
+              let rule = rules[rIndex]
+              let isRequired = rule.required === true
+              if ((type === 'all' || !rule.trigger || rule.trigger === 'change' || type === rule.trigger) && (isRequired || value)) {
+                if (XEUtils.isFunction(rule.validator)) {
+                  rule.validator(rule, value, e => {
+                    if (XEUtils.isError(e)) {
+                      let cusRule = { type: 'custom', message: e.message, rule }
+                      return reject(cusRule)
+                    }
+                    return resolve()
+                  })
+                } else {
+                  let restVal
+                  let isNumber = rule.type === 'number'
+                  let isEmpty = value === null || value === undefined || value === ''
+                  if (isNumber) {
+                    restVal = XEUtils.toNumber(value)
+                  } else {
+                    restVal = isEmpty ? '' : '' + value
+                  }
+                  if (isRequired && isEmpty) {
+                    reject(rule)
+                  } else if (value &&
+                    ((isNumber && isNaN(value)) ||
+                    (XEUtils.isRegExp(rule.pattern) && !rule.pattern.test(value)) ||
+                    (XEUtils.isNumber(rule.min) && (isNumber ? restVal < rule.min : restVal.length < rule.min)) ||
+                    (XEUtils.isNumber(rule.max) && (isNumber ? restVal > rule.max : restVal.length > rule.max)))
+                  ) {
+                    reject(rule)
+                  } else {
+                    resolve()
+                  }
+                }
+              } else {
+                resolve()
+              }
+            }))
+          }
+        }
+      }
+      return validPromise
+    },
+    clearValidate () {
+      let { validStore } = this
+      Object.assign(validStore, {
+        visible: false,
+        row: null,
+        column: null,
+        rule: null,
+        style: null
+      })
+    },
+    handleValidError (params) {
+      let { $refs, validStore } = this
+      let { rule, row, column, cell } = params
+      this.handleActived(params, { type: 'valid-error', trigger: 'call' }).then(() => {
+        let { top, left } = DomTools.getOffsetPos(cell)
+        let { scrollTop, scrollLeft, visibleWidth, visibleHeight } = DomTools.getDomNode()
+        Object.assign(validStore, {
+          row,
+          column,
+          rule,
+          visible: true
+        })
+        this.$nextTick().then(() => {
+          let validWrapperElem = $refs.validWrapper
+          if (validWrapperElem) {
+            validStore.style = {
+              top: `${top + cell.offsetHeight}px`,
+              left: `${left - 6}px`
+            }
+            if (validWrapperElem.offsetWidth < cell.offsetWidth) {
+              validStore.style.left = `${left + Math.floor((cell.offsetWidth - validWrapperElem.offsetWidth) / 2) - 6}px`
+            }
+            return this.$nextTick()
+          }
+        }).then(() => {
+          let validWrapperElem = $refs.validWrapper
+          if (validWrapperElem) {
+            let offsetHeight = validWrapperElem.offsetHeight
+            let offsetWidth = validWrapperElem.offsetWidth
+            if (top + cell.offsetHeight + offsetHeight > scrollTop + visibleHeight) {
+              validStore.style.top = `${top - offsetHeight}px`
+            }
+            if (left + offsetWidth > scrollLeft + visibleWidth) {
+              validStore.style.left = `${scrollLeft + visibleWidth - offsetWidth - 6}px`
+            }
+          }
+        })
+        UtilTools.emitEvent(this, 'valid-error', [params])
+      })
     },
     /**
      * 导出 csv 文件

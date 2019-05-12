@@ -530,6 +530,17 @@
     }
   }
 
+  // 校验不通过
+  .vxe-body--column {
+    &.col--valid-error {
+      .vxe-input--wrapper {
+        > .vxe-input {
+          border-color: #f56c6c;
+        }
+      }
+    }
+  }
+
   /*可编辑*/
   &.vxe-editable {
     .vxe-header--column {
@@ -1045,7 +1056,8 @@
 }
 
 /*tppltip*/
-.vxe-table--tooltip-wrapper {
+.vxe-table--tooltip-wrapper,
+.vxe-table--valid-error-wrapper {
   position: absolute;
   top: 0;
   left: 0;
@@ -1061,6 +1073,12 @@
   box-shadow: 2px 2px 4px -2px rgba(0,0,0,.2);
   color: $vxe-font-color;
   font-family: $vxe-font-family;
+}
+
+/*valid error*/
+.vxe-table--valid-error-wrapper {
+  background-color: #f56c6c;
+  color: #fff;
 }
 
 .vxe-checkbox,
