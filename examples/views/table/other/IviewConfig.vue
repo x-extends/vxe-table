@@ -75,11 +75,12 @@ export default {
         npm install vxe-table-plugin-element
         `,
         `
+        import Vue from 'vue'
         import VXETable from 'vxe-table'
         import VXETablePluginIView from 'vxe-table-plugin-iview'
         import 'vxe-table-plugin-iview/dist/style.css'
 
-        VXETable.setup(VXETablePluginIView)
+        Vue.use(VXETable, VXETablePluginIView)
         `,
         `
         <vxe-table
