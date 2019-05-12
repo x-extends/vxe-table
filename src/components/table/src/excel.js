@@ -165,8 +165,9 @@ export default {
         let trElemList = tableBodyElem.querySelectorAll('.vxe-body--row')
         let trElem = trElemList[rowIndex]
         let cell = trElem.querySelector(`.${column.id}`)
-        handleSelected({ row, rowIndex, column, columnIndex, cell, $table }, evnt)
-        handleChecked({ rowIndex, columnIndex }, { rowIndex, columnIndex: visibleColumn.length - 1 }, evnt)
+        handleSelected({ row, rowIndex, column, columnIndex, cell, $table }, evnt).then(() => {
+          handleChecked({ rowIndex, columnIndex }, { rowIndex, columnIndex: visibleColumn.length - 1 }, evnt)
+        })
       }
     },
     headerCellClickEvent ({ column, columnIndex, $table }, evnt) {
@@ -178,8 +179,9 @@ export default {
         let trElemList = tableBodyElem.querySelectorAll('.vxe-body--row')
         let trElem = trElemList[rowIndex]
         let cell = trElem.querySelector(`.${column.id}`)
-        handleSelected({ row, rowIndex, column, columnIndex, cell, $table }, evnt)
-        handleChecked({ rowIndex, columnIndex }, { rowIndex: tableData.length - 1, columnIndex }, evnt)
+        handleSelected({ row, rowIndex, column, columnIndex, cell, $table }, evnt).then(() => {
+          handleChecked({ rowIndex, columnIndex }, { rowIndex: tableData.length - 1, columnIndex }, evnt)
+        })
       }
     }
   }
