@@ -18,10 +18,12 @@
       :edit-config="{trigger: 'click', mode: 'cell'}">
       <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
       <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
-      <vxe-table-column prop="name" label="ElInput" min-width="140" :edit-render="{name: 'ElInput'}"></vxe-table-column>
+      <vxe-table-column prop="name" label="ElInput" min-width="140" :edit-render="{name: 'ElInput', events: {change: nameChangeEvent}}"></vxe-table-column>
       <vxe-table-column prop="age" label="ElInputNumber" width="160" :edit-render="{name: 'ElInputNumber', props: {max: 35, min: 18}}"></vxe-table-column>
       <vxe-table-column prop="sex" label="ElSelect" width="140" :edit-render="{name: 'ElSelect', options: sexList}"></vxe-table-column>
-      <vxe-table-column prop="region" label="ElCascader" width="200" :edit-render="{name: 'ElCascader', props: {options: regionList}}"></vxe-table-column>
+      <vxe-table-column prop="sex1" label="ElSelect" width="140" :edit-render="{name: 'ElSelect', options: sexList, props: {multiple: true, clearable: true}}"></vxe-table-column>
+      <vxe-table-column prop="sex2" label="ElSelect" width="140" :edit-render="{name: 'ElSelect', optionGroups: sexGroupList, props: {clearable: true}}"></vxe-table-column>
+      <vxe-table-column prop="region" label="ElCascader" width="200" :edit-render="{name: 'ElCascader', props: {options: regionList}, events: {change: regionChangeEvent}}"></vxe-table-column>
       <vxe-table-column prop="date" label="ElDatePicker" width="200" :edit-render="{name: 'ElDatePicker', props: {type: 'date', format: 'yyyy/MM/dd'}}"></vxe-table-column>
       <vxe-table-column prop="date1" label="DateTimePicker" width="220" :edit-render="{name: 'ElDatePicker', props: {type: 'datetime', format: 'yyyy-MM-dd HH:mm:ss'}}"></vxe-table-column>
       <vxe-table-column prop="date2" label="ElTimeSelect" width="200" :edit-render="{name: 'ElTimeSelect', props: {pickerOptions: {start: '08:30', step: '00:15', end: '18:30'}}}"></vxe-table-column>
@@ -49,6 +51,26 @@ export default {
       tableData: [],
       sexList: [],
       regionList: [],
+      sexGroupList: [
+        {
+          label: '分组1',
+          options: [
+            {
+              label: '男',
+              value: '1'
+            }
+          ]
+        },
+        {
+          label: '分组2',
+          options: [
+            {
+              label: '女',
+              value: '0'
+            }
+          ]
+        }
+      ],
       demoCodes: [
         `
         npm install vxe-table-plugin-element
@@ -61,27 +83,27 @@ export default {
         VXETable.setup(VXETablePluginElement)
         `,
         `
-          <vxe-table
-            border
-            show-footer
-            class="vxe-table-element"
-            height="600"
-            :loading="loading"
-            :footer-method="footerMethod"
-            :data.sync="tableData"
-            :edit-config="{trigger: 'click', mode: 'cell'}">
-            <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
-            <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
-            <vxe-table-column prop="name" label="ElInput" min-width="140" :edit-render="{name: 'ElInput'}"></vxe-table-column>
-            <vxe-table-column prop="age" label="ElInputNumber" width="140" :edit-render="{name: 'ElInputNumber', props: {max: 35, min: 18}}"></vxe-table-column>
-            <vxe-table-column prop="sex" label="ElSelect" width="140" :edit-render="{name: 'ElSelect', options: sexList}"></vxe-table-column>
-            <vxe-table-column prop="region" label="ElCascader" width="200" :edit-render="{name: 'ElCascader', props: {options: regionList}}"></vxe-table-column>
-            <vxe-table-column prop="date" label="ElDatePicker" width="200" :edit-render="{name: 'ElDatePicker', props: {type: 'date', format: 'yyyy/MM/dd'}}"></vxe-table-column>
-            <vxe-table-column prop="date1" label="DateTimePicker" width="220" :edit-render="{name: 'ElDatePicker', props: {type: 'datetime', format: 'yyyy-MM-dd HH:mm:ss'}}"></vxe-table-column>
-            <vxe-table-column prop="date2" label="ElTimeSelect" width="200" :edit-render="{name: 'ElTimeSelect', props: {pickerOptions: {start: '08:30', step: '00:15', end: '18:30'}}}"></vxe-table-column>
-            <vxe-table-column prop="rate" label="ElRate" width="200" :edit-render="{name: 'ElRate', type: 'visible'}"></vxe-table-column>
-            <vxe-table-column prop="flag" label="ElSwitch" width="100" fixed="right" :edit-render="{name: 'ElSwitch', type: 'visible'}"></vxe-table-column>
-          </vxe-table>
+        <vxe-table
+          border
+          class="vxe-table-element"
+          height="600"
+          :loading="loading"
+          :data.sync="tableData"
+          :edit-config="{trigger: 'click', mode: 'cell'}">
+          <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
+          <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
+          <vxe-table-column prop="name" label="ElInput" min-width="140" :edit-render="{name: 'ElInput', events: {change: nameChangeEvent}}"></vxe-table-column>
+          <vxe-table-column prop="age" label="ElInputNumber" width="160" :edit-render="{name: 'ElInputNumber', props: {max: 35, min: 18}}"></vxe-table-column>
+          <vxe-table-column prop="sex" label="ElSelect" width="140" :edit-render="{name: 'ElSelect', options: sexList}"></vxe-table-column>
+          <vxe-table-column prop="sex1" label="ElSelect" width="140" :edit-render="{name: 'ElSelect', options: sexList, props: {multiple: true, clearable: true}}"></vxe-table-column>
+          <vxe-table-column prop="sex2" label="ElSelect" width="140" :edit-render="{name: 'ElSelect', optionGroups: sexGroupList, props: {clearable: true}}"></vxe-table-column>
+          <vxe-table-column prop="region" label="ElCascader" width="200" :edit-render="{name: 'ElCascader', props: {options: regionList}, events: {change: regionChangeEvent}}"></vxe-table-column>
+          <vxe-table-column prop="date" label="ElDatePicker" width="200" :edit-render="{name: 'ElDatePicker', props: {type: 'date', format: 'yyyy/MM/dd'}}"></vxe-table-column>
+          <vxe-table-column prop="date1" label="DateTimePicker" width="220" :edit-render="{name: 'ElDatePicker', props: {type: 'datetime', format: 'yyyy-MM-dd HH:mm:ss'}}"></vxe-table-column>
+          <vxe-table-column prop="date2" label="ElTimeSelect" width="200" :edit-render="{name: 'ElTimeSelect', props: {pickerOptions: {start: '08:30', step: '00:15', end: '18:30'}}}"></vxe-table-column>
+          <vxe-table-column prop="rate" label="ElRate" width="200" :edit-render="{name: 'ElRate', type: 'visible'}"></vxe-table-column>
+          <vxe-table-column prop="flag" label="ElSwitch" width="100" fixed="right" :edit-render="{name: 'ElSwitch', type: 'visible'}"></vxe-table-column>
+        </vxe-table>
         `,
         `
         export default {
@@ -90,11 +112,39 @@ export default {
               loading: false,
               tableData: [],
               sexList: [],
-              regionList: []
+              regionList: [],
+              sexGroupList: [
+                {
+                  label: '分组1',
+                  options: [
+                    {
+                      label: '男',
+                      value: '1'
+                    }
+                  ]
+                },
+                {
+                  label: '分组2',
+                  options: [
+                    {
+                      label: '女',
+                      value: '0'
+                    }
+                  ]
+                }
+              ]
             }
           },
           created () {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 100)
+          },
+          methods: {
+            nameChangeEvent ({ row }, value) {
+              console.log(value)
+            },
+            regionChangeEvent ({ row }, value) {
+              console.log(value)
+            }
           }
         }
         `
@@ -128,6 +178,12 @@ export default {
         this.regionList = data
         return data
       })
+    },
+    nameChangeEvent ({ row }, value) {
+      console.log(value)
+    },
+    regionChangeEvent ({ row }, value) {
+      console.log(value)
     }
   }
 }

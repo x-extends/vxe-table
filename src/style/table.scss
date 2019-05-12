@@ -165,6 +165,19 @@
         }
       }
     }
+    .vxe-required-icon {
+      display: inline-block;
+      color: #f56c6c;
+      line-height: 16px;
+      font-size: 16px;
+      vertical-align: middle;
+      &:before {
+        content: "*";
+        width: 10px;
+        height: 8px;
+        display: block;
+      }
+    }
     .vxe-resizable {
       position: absolute;
       right: -7px;

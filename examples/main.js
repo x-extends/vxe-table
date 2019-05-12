@@ -44,6 +44,8 @@ function mockData () {
       date3: XEUtils.toDateString(currTime, 'yyyy-MM-dd'),
       time: currTime + XEUtils.random(100, 10000),
       sex: index % 3 ? '0' : '1',
+      sex1: [index % 3 ? '0' : '1'],
+      sex2: index % 3 ? '0' : '1',
       age: XEUtils.random(18, 35),
       region: index % 4 === 0 ? [19, 199, 1773] : index % 3 === 0 ? [9, 73, 719] : [1, 1, 5],
       rate: XEUtils.random(0, 5),

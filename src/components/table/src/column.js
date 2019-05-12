@@ -1,3 +1,4 @@
+import XEUtils from 'xe-utils'
 import UtilTools from '../../../tools/utils'
 import GlobalConfig from '../../../conf'
 
@@ -416,9 +417,19 @@ export default {
     renderEditHeader (h, params) {
       let { iconMap } = GlobalConfig
       let { $table, sortable, filters } = this
-      let { editConfig = {} } = $table
+      let { editRules, editConfig } = $table
+      let isRequired
+      if (editRules) {
+        let columnRules = XEUtils.get(editRules, params.column.property)
+        if (columnRules) {
+          isRequired = columnRules.some(rule => rule.required)
+        }
+      }
       return [
-        editConfig.showIcon === false ? null : h('i', {
+        isRequired ? h('i', {
+          class: 'vxe-required-icon'
+        }) : null,
+        editConfig && editConfig.showIcon === false ? null : h('i', {
           class: iconMap.edit
         })
       ].concat(this.renderHeader(h, params))

@@ -10,6 +10,7 @@ import TableProps from './props'
 import TableFilter from './filter'
 import TableContextMenu from './menu'
 import GlobalConfig from '../../../conf'
+import EventInterceptor from '../../../interceptor'
 
 /**
  * 渲染浮固定列
@@ -1019,15 +1020,17 @@ export default {
         if (!(editConfig.autoClear === false)) {
           // 如果手动调用了激活单元格，避免触发源被移除后导致重复关闭
           if (!this.lastCallTime || this.lastCallTime + 50 < Date.now()) {
-            if (
-              // 如果点击了非编辑列
-              !this.getEventTargetNode(evnt, this.$el, 'col--edit').flag ||
-              // 如果点击了当前表格之外
-              !this.getEventTargetNode(evnt, this.$el).flag
-            ) {
-              this.triggerValidate().then(() => {
-                this.clearActived(evnt)
-              }).catch(e => e)
+            if (!EventInterceptor.clearActiveds.some(func => func(actived.args, evnt) === false)) {
+              if (
+                // 如果点击了非编辑列
+                !this.getEventTargetNode(evnt, this.$el, 'col--edit').flag ||
+                // 如果点击了当前表格之外
+                !this.getEventTargetNode(evnt, this.$el).flag
+              ) {
+                this.triggerValidate().then(() => {
+                  this.clearActived(evnt)
+                }).catch(e => e)
+              }
             }
           }
         }

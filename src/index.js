@@ -3,6 +3,7 @@ import TableColumn from './components/table-column'
 import TableConfig from './components/table-grid'
 import ExcelTable from './components/excel'
 import GlobalConfig from './conf'
+import EventInterceptor from './interceptor'
 
 import './style/index.scss'
 
@@ -31,6 +32,7 @@ function install (Vue, options) {
   if (!install.installed) {
     setup(options)
     components.map(component => Vue.component(component.name, component))
+    Array.from(arguments).slice(1).map(plugin => plugin(GlobalConfig, EventInterceptor))
   }
 }
 

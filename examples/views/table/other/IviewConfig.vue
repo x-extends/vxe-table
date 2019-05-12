@@ -18,10 +18,12 @@
       :edit-config="{trigger: 'click', mode: 'cell'}">
       <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
       <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
-      <vxe-table-column prop="name" label="Input" min-width="140" :edit-render="{name: 'Input'}"></vxe-table-column>
+      <vxe-table-column prop="name" label="Input" min-width="140" :edit-render="{name: 'Input', events: {'on-change': nameChangeEvent}}"></vxe-table-column>
       <vxe-table-column prop="age" label="InputNumber" width="140" :edit-render="{name: 'InputNumber', props: {max: 35, min: 18}}"></vxe-table-column>
       <vxe-table-column prop="sex" label="Select" width="140" :edit-render="{name: 'Select', options: sexList}"></vxe-table-column>
-      <vxe-table-column prop="region" label="Cascader" width="200" :edit-render="{name: 'Cascader', props: {data: regionList}}"> </vxe-table-column>
+      <vxe-table-column prop="sex1" label="Select" width="140" :edit-render="{name: 'Select', options: sexList, props: {multiple: true, clearable: true}}"></vxe-table-column>
+      <vxe-table-column prop="sex2" label="Select" width="140" :edit-render="{name: 'Select', options: sexList, optionGroups: sexGroupList, props: {clearable: true}}"></vxe-table-column>
+      <vxe-table-column prop="region" label="Cascader" width="200" :edit-render="{name: 'Cascader', props: {data: regionList}, events: {'on-change': regionChangeEvent}}"> </vxe-table-column>
       <vxe-table-column prop="date" label="DatePicker" width="200" :edit-render="{name: 'DatePicker', props: {type: 'date', format: 'yyyy/MM/dd'}}"></vxe-table-column>
       <vxe-table-column prop="date2" label="TimePicker" width="200" :edit-render="{name: 'TimePicker', props: {type: 'time'}}"></vxe-table-column>
       <vxe-table-column prop="rate" label="Rate" width="200" :edit-render="{name: 'Rate', type: 'visible'}"></vxe-table-column>
@@ -48,6 +50,26 @@ export default {
       tableData: [],
       sexList: [],
       regionList: [],
+      sexGroupList: [
+        {
+          label: '分组1',
+          options: [
+            {
+              label: '男',
+              value: '1'
+            }
+          ]
+        },
+        {
+          label: '分组2',
+          options: [
+            {
+              label: '女',
+              value: '0'
+            }
+          ]
+        }
+      ],
       demoCodes: [
         `
         npm install vxe-table-plugin-element
@@ -62,21 +84,21 @@ export default {
         `
         <vxe-table
           border
-          show-footer
           class="vxe-table-iview"
           height="600"
           :loading="loading"
           :data.sync="tableData"
-          :footer-method="footerMethod"
           :edit-config="{trigger: 'click', mode: 'cell'}">
           <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
           <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
-          <vxe-table-column prop="name" label="Input"  min-width="140" :edit-render="{name: 'Input'}"></vxe-table-column>
-          <vxe-table-column prop="age" label="InputNumber"  width="140" :edit-render="{name: 'InputNumber', props: {max: 35, min: 18}}"></vxe-table-column>
-          <vxe-table-column prop="sex" label="Select"  width="140" :edit-render="{name: 'Select', options: sexList}"></vxe-table-column>
-          <vxe-table-column prop="region" label="Cascader"  width="200" :edit-render="{name: 'Cascader', props: {data: regionList}}"> </vxe-table-column>
-          <vxe-table-column prop="date" label="DatePicker"  width="200" :edit-render="{name: 'DatePicker', props: {type: 'date', format: 'yyyy/MM/dd'}}"></vxe-table-column>
-          <vxe-table-column prop="date2" label="TimePicker"  width="200" :edit-render="{name: 'TimePicker', props: {type: 'time'}}"></vxe-table-column>
+          <vxe-table-column prop="name" label="Input" min-width="140" :edit-render="{name: 'Input', events: {'on-change': nameChangeEvent}}"></vxe-table-column>
+          <vxe-table-column prop="age" label="InputNumber" width="140" :edit-render="{name: 'InputNumber', props: {max: 35, min: 18}}"></vxe-table-column>
+          <vxe-table-column prop="sex" label="Select" width="140" :edit-render="{name: 'Select', options: sexList}"></vxe-table-column>
+          <vxe-table-column prop="sex1" label="Select" width="140" :edit-render="{name: 'Select', options: sexList, props: {multiple: true, clearable: true}}"></vxe-table-column>
+          <vxe-table-column prop="sex2" label="Select" width="140" :edit-render="{name: 'Select', options: sexList, optionGroups: sexGroupList, props: {clearable: true}}"></vxe-table-column>
+          <vxe-table-column prop="region" label="Cascader" width="200" :edit-render="{name: 'Cascader', props: {data: regionList}, events: {'on-change': regionChangeEvent}}"> </vxe-table-column>
+          <vxe-table-column prop="date" label="DatePicker" width="200" :edit-render="{name: 'DatePicker', props: {type: 'date', format: 'yyyy/MM/dd'}}"></vxe-table-column>
+          <vxe-table-column prop="date2" label="TimePicker" width="200" :edit-render="{name: 'TimePicker', props: {type: 'time'}}"></vxe-table-column>
           <vxe-table-column prop="rate" label="Rate" width="200" :edit-render="{name: 'Rate', type: 'visible'}"></vxe-table-column>
           <vxe-table-column prop="flag" label="iSwitch" width="100" fixed="right" :edit-render="{name: 'iSwitch', type: 'visible'}"></vxe-table-column>
         </vxe-table>
@@ -88,11 +110,39 @@ export default {
               loading: false,
               tableData: [],
               sexList: [],
-              regionList: []
+              regionList: [],
+              sexGroupList: [
+                {
+                  label: '分组1',
+                  options: [
+                    {
+                      label: '男',
+                      value: '1'
+                    }
+                  ]
+                },
+                {
+                  label: '分组2',
+                  options: [
+                    {
+                      label: '女',
+                      value: '0'
+                    }
+                  ]
+                }
+              ]
             }
           },
           created () {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 100)
+          },
+          methods: {
+            nameChangeEvent ({ row }, event) {
+              console.log(event)
+            },
+            regionChangeEvent ({ row }, value, selectedData) {
+              console.log(value)
+            }
           }
         }
         `
@@ -126,6 +176,12 @@ export default {
         this.regionList = data
         return data
       })
+    },
+    nameChangeEvent ({ row }, event) {
+      console.log(event)
+    },
+    regionChangeEvent ({ row }, value, selectedData) {
+      console.log(value)
     }
   }
 }

@@ -5,7 +5,4 @@ import VXETableIViewPlugin from 'vxe-table-plugin-iview'
 import 'vxe-table-plugin-element/dist/style.css'
 import 'vxe-table-plugin-iview/dist/style.css'
 
-Vue.use(VXETable)
-
-VXETable.setup(VXETableElementPlugin)
-VXETable.setup(VXETableIViewPlugin)
+Vue.use(VXETable, VXETableElementPlugin, VXETableIViewPlugin)
