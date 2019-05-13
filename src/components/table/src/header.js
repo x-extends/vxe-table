@@ -211,7 +211,7 @@ export default {
         column.resizeWidth = column.renderWidth - (dragPosLeft - dragLeft)
         resizeBarElem.style.display = 'none'
         $table.analyColumnWidth()
-        $table.computeWidth()
+        $table.recalculate()
       }
       updateEvent(evnt)
     }

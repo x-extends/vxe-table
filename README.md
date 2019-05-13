@@ -204,7 +204,8 @@ new Vue({ i18n }).$mount('#app')
 | edit-config | 可编辑配置项 | Object | — | [options](#edit-config-可编辑配置项说明) |
 | edit-rules | 校验规则配置项 | Object | — | [options](#edit-rules-校验规则配置项说明) |
 | optimized | 优化配置项 | Object/Boolean | — | [options](#optimized-优化配置项说明) |
-| selectEditMethod | 只对 Keyboard-config={isEdit: true} 有效，用于重写选中编辑处理逻辑，该函数 Function({row, rowIndex, column, columnIndex, cell}, event) 可以返回 false 来阻止默认行为 | Function | — | — |
+| auto-width | 是否自动计算列宽（如果关闭了需要手动调用 recalculate 函数） | Object/Boolean | — | [options](#optimized-优化配置项说明) |
+| auto-resize | 是否自动监听父容器大小，并自动调整表格宽度 | Object/Boolean | — | [options](#optimized-优化配置项说明) |
 
 ##### context-menu 快捷菜单配置项说明（配合 context-menu-link 事件使用）
 
@@ -258,6 +259,7 @@ new Vue({ i18n }).$mount('#app')
 | isTab | 开启 Tab 键功能 | Boolean | — | false |
 | isCut | 开启复制粘贴功能 | Boolean | — | false |
 | isEdit | 开启任意键进入编辑（功能键除外） | Boolean | — | false |
+| editMethod | 只对 isEdit=true 有效，用于重写选中编辑处理逻辑，该函数 Function({row, rowIndex, column, columnIndex, cell}, event) 可以返回 false 来阻止默认行为 | Function | — | — |
 
 ###### keyboard-config 快捷键说明
 
@@ -348,7 +350,7 @@ new Vue({ i18n }).$mount('#app')
 | clearSelected | 清除单元格选中状态 | — |
 | clearActivedd | 清除单元格激活状态 | — |
 | clearCopyed | 清空已复制的内容 | — |
-| computeWidth | 重新计算并更新列宽 | — |
+| recalculate | 重新计算并更新列宽 | — |
 | isScrollXLoad | 判断是否启用了横向 X 滚动渲染 | — |
 | isScrollYLoad | 判断是否启用了纵向 Y 滚动渲染 | — |
 | validateRow | 对表格某一行进行校验的方法，参数为行数据和一个回调函数。该回调函数会在校验结束后被调用，并传入两个参数：（是否校验成功，最近一列未通过校验的字段）。若不传入回调函数，则会返回一个 promise | row,callback |

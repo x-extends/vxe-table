@@ -23,6 +23,7 @@ document.addEventListener('keydown', GlobalEvent.trigger, false)
 document.addEventListener('contextmenu', GlobalEvent.trigger, false)
 window.addEventListener('mousedown', GlobalEvent.trigger, false)
 window.addEventListener('blur', GlobalEvent.trigger, false)
+window.addEventListener('resize', GlobalEvent.trigger, false)
 window.addEventListener(wheelName, GlobalEvent.trigger, false)
 
 export default GlobalEvent

@@ -60,8 +60,10 @@ export default {
   editConfig: Object,
   // 校验规则配置项
   editRules: Object,
-  // 列宽是否自动响应计算
+  // 是否自动计算列宽
   autoWidth: { type: Boolean, default: true },
+  // 是否自动监听父容器大小，并自动调整表格宽度
+  autoResize: { type: Boolean, default: true },
   // 优化配置项
   optimized: { type: [Object, Boolean], default: () => GlobalConfig.optimized },
   // 用于重写选中编辑处理逻辑

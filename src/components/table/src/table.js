@@ -6,6 +6,7 @@ import UtilTools from '../../../tools/utils'
 import DomTools from '../../../tools/dom'
 import ExportTools from '../../../tools/export'
 import GlobalEvent from './event'
+import ResizeEvent from './resize'
 import TableProps from './props'
 import TableFilter from './filter'
 import TableContextMenu from './menu'
@@ -331,7 +332,7 @@ export default {
       this.refreshColumn()
       this.$nextTick(() => {
         this.computeScrollLoad()
-        this.computeWidth()
+        this.recalculate()
       })
     }
   },
@@ -344,16 +345,20 @@ export default {
       this.refreshColumn()
       this.$nextTick(() => {
         this.computeScrollLoad()
-        this.computeWidth(true)
+        this.recalculate(true)
       })
     })
     GlobalEvent.on(this, 'mousedown', this.handleGlobalMousedownEvent)
     GlobalEvent.on(this, 'blur', this.handleGlobalBlurEvent)
-    GlobalEvent.on(this, 'contextmenu', this.handleContextmenuEvent)
-    GlobalEvent.on(this, 'mousewheel', this.handleMousewheelEvent)
-    GlobalEvent.on(this, 'keydown', this.handleKeydownEvent)
+    GlobalEvent.on(this, 'contextmenu', this.handleGlobalContextmenuEvent)
+    GlobalEvent.on(this, 'mousewheel', this.handleGlobalMousewheelEvent)
+    GlobalEvent.on(this, 'keydown', this.handleGlobalKeydownEvent)
+    GlobalEvent.on(this, 'resize', this.handleGlobalResizeEvent)
   },
   mounted () {
+    if (this.autoResize && this.autoWidth) {
+      ResizeEvent.on(this, this.$el.parentNode, this.recalculate)
+    }
     document.body.appendChild(this.$refs.tableWrapper)
   },
   beforeDestroy () {
@@ -363,13 +368,15 @@ export default {
     }
     this.closeFilter()
     this.closeContextMenu()
+    ResizeEvent.off(this, this.$el.parentNode)
   },
   destroyed () {
-    GlobalEvent.off(this, 'click')
+    GlobalEvent.off(this, 'mousedown')
     GlobalEvent.off(this, 'blur')
     GlobalEvent.off(this, 'contextmenu')
     GlobalEvent.off(this, 'mousewheel')
     GlobalEvent.off(this, 'keydown')
+    GlobalEvent.off(this, 'resize')
   },
   render (h) {
     let {
@@ -585,7 +592,7 @@ export default {
       return this.$nextTick()
     },
     reload (data, init) {
-      let { autoWidth, scrollYStore, optimizeConfig, computeWidth, computeScrollLoad } = this
+      let { autoWidth, scrollYStore, optimizeConfig, recalculate, computeScrollLoad } = this
       let { scrollY } = optimizeConfig
       let tableFullData = data || []
       let scrollYLoad = scrollY && scrollY.gt && scrollY.gt < tableFullData.length
@@ -607,7 +614,7 @@ export default {
       this.tableData = this.getTableData()
       let rest = this.$nextTick()
       if (!init && autoWidth) {
-        rest = rest.then(computeWidth)
+        rest = rest.then(recalculate)
       }
       if (!init && scrollYLoad) {
         rest = rest.then(computeScrollLoad)
@@ -882,7 +889,7 @@ export default {
      * 计算单元格列宽，动态分配可用剩余空间
      * 支持 width=? width=?px width=?% min-width=? min-width=?px min-width=?%
      */
-    computeWidth (refull) {
+    recalculate (refull) {
       let tableBody = this.$refs.tableBody
       let tableHeader = this.$refs.tableHeader
       let tableFooter = this.$refs.tableFooter
@@ -1004,7 +1011,6 @@ export default {
      * 全局按下事件处理
      */
     handleGlobalMousedownEvent (evnt) {
-      console.log(111)
       let { editStore, ctxMenuStore, editConfig = {} } = this
       let { actived } = editStore
       if (this.$refs.filterWrapper) {
@@ -1051,15 +1057,15 @@ export default {
     /**
      * 全局滚动事件
      */
-    handleMousewheelEvent (evnt) {
+    handleGlobalMousewheelEvent (evnt) {
       this.closeContextMenu()
     },
     /**
      * 全局键盘事件
      */
-    handleKeydownEvent (evnt) {
+    handleGlobalKeydownEvent (evnt) {
       let params
-      let { selectEditMethod, isCtxMenu, ctxMenuStore, editStore, mouseConfig = {}, keyboardConfig = {} } = this
+      let { isCtxMenu, ctxMenuStore, editStore, mouseConfig = {}, keyboardConfig = {} } = this
       let { selected, actived } = editStore
       let keyCode = evnt.keyCode
       let isBack = keyCode === 8
@@ -1138,7 +1144,7 @@ export default {
       } else if (keyboardConfig.isEdit && !isCtrlKey && ((keyCode >= 48 && keyCode <= 57) || (keyCode >= 65 && keyCode <= 90) || (keyCode >= 96 && keyCode <= 111) || (keyCode >= 186 && keyCode <= 192) || (keyCode >= 219 && keyCode <= 222) || keyCode === 32)) {
         // 如果是按下非功能键之外允许直接编辑
         if (selected.row || selected.column) {
-          if (!selectEditMethod || !(selectEditMethod(selected.args, evnt) === false)) {
+          if (!keyboardConfig.editMethod || !(keyboardConfig.editMethod(selected.args, evnt) === false)) {
             UtilTools.setCellValue(selected.row, selected.column.property, null)
             this.handleActived(selected.args, evnt)
           }
@@ -1230,10 +1236,13 @@ export default {
         this.ctxMenuLinkEvent(evnt, ctxMenuStore[key])
       }
     },
+    handleGlobalResizeEvent () {
+      this.recalculate()
+    },
     /**
      * 快捷菜单事件处理
      */
-    handleContextmenuEvent (evnt) {
+    handleGlobalContextmenuEvent (evnt) {
       let { isCtxMenu, ctxMenuConfig } = this
       if (isCtxMenu) {
         // 右键头部
@@ -2001,7 +2010,7 @@ export default {
           }
         }
       })
-      return this.$nextTick(() => this.computeWidth())
+      return this.$nextTick(() => this.recalculate())
     },
     clearExpand () {
       this.expandeds = []

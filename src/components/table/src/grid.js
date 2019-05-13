@@ -21,7 +21,7 @@ const funs = [
   'setActiveRow',
   'setActiveCell',
   'setSelectCell',
-  'computeWidth',
+  'recalculate',
   'isScrollXLoad',
   'isScrollYLoad',
   'exportCsv'
