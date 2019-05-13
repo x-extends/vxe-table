@@ -2,14 +2,14 @@
   <div>
     <p>加载 1 万行 1 万列</p>
 
-    <vxe-table-config
+    <vxe-grid
       border
       resizable
       height="600"
       :columns="tableColumn"
       :loading="loading"
       :data.sync="tableData">
-    </vxe-table-config>
+    </vxe-grid>
   </div>
 </template>
 
