@@ -1,6 +1,5 @@
 import XEUtils from 'xe-utils'
 import DomTools from '../../../tools/dom'
-import UtilTools from '../../../tools/utils'
 
 // 处理选中位置
 function handleLocation (obj, rows, columns, row, column) {
@@ -17,7 +16,7 @@ function handleLocation (obj, rows, columns, row, column) {
  * 渲染列
  */
 function renderColumn (h, _vm, $table, fixedType, row, rowIndex, column, columnIndex) {
-  let { $listeners: tableListeners, tableSourceData, getRecords, scrollYLoad, border, highlightCurrentRow, cellClassName, spanMethod, optimizeConfig, keyboardConfig, mouseConfig, editConfig, editStore, validStore } = $table
+  let { $listeners: tableListeners, scrollYLoad, border, highlightCurrentRow, cellClassName, spanMethod, optimizeConfig, keyboardConfig, mouseConfig, editConfig, editStore, validStore } = $table
   let { editRender, align, ellipsis, showTitle, showTooltip, renderWidth, columnKey } = column
   let { checked, selected, actived, copyed } = editStore
   let { showOverflow } = optimizeConfig
@@ -68,9 +67,7 @@ function renderColumn (h, _vm, $table, fixedType, row, rowIndex, column, columnI
   }
   // 如果显示状态
   if (editConfig && editConfig.showStatus) {
-    let oRowIndex = getRecords().indexOf(row)
-    let oRow = tableSourceData[oRowIndex]
-    isDirty = oRow && !XEUtils.isEqual(UtilTools.getCellValue(oRow, column.property), UtilTools.getCellValue(row, column.property))
+    isDirty = $table.hasRowChange(row, column.property)
   }
   // 批量选中处理
   if (!fixedType) {

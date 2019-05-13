@@ -697,6 +697,15 @@ export default {
       }
       return this.reload(tableSourceData)
     },
+    hasRowChange (row, prop) {
+      let { tableFullData, tableSourceData } = this
+      let oRowIndex = tableFullData.indexOf(row)
+      let oRow = tableSourceData[oRowIndex]
+      if (arguments.length > 1) {
+        return oRow && !XEUtils.isEqual(UtilTools.getCellValue(oRow, prop), UtilTools.getCellValue(row, prop))
+      }
+      return oRow && !XEUtils.isEqual(oRow, row)
+    },
     /**
      * 获取表格所有列
      */
@@ -1090,7 +1099,7 @@ export default {
         this.closeContextMenu()
         this.closeFilter()
         // 如果是激活编辑状态，则取消编辑
-        if (actived.row || actived.column) {
+        if (actived.row) {
           params = actived.args
           this.clearActived(evnt)
           // 如果配置了选中功能，则为选中状态
@@ -1098,6 +1107,9 @@ export default {
             this.handleSelected(params, evnt)
           }
         }
+      } else if (isEnter && (selected.row || actived.row)) {
+        // 如果是激活状态，退则出到下一行
+        this.moveSelected(selected.row ? selected.args : actived.args, isLeftArrow, isUpArrow, isRightArrow, true, evnt)
       } else if (operCtxMenu) {
         // 如果配置了右键菜单; 支持方向键操作、回车
         evnt.preventDefault()
@@ -1647,7 +1659,7 @@ export default {
       let { editStore, editConfig } = this
       let { activeMethod } = editConfig
       let { actived } = editStore
-      let { row, column } = params
+      let { row, column, cell } = params
       if (actived.row !== row || actived.column !== column) {
         // 判断是否禁用编辑
         if (!activeMethod || activeMethod(params)) {
@@ -1655,6 +1667,7 @@ export default {
           this.clearChecked(evnt)
           this.clearSelected(evnt)
           this.clearActived(evnt)
+          column.renderHeight = cell.offsetHeight
           actived.args = params
           actived.row = row
           actived.column = column

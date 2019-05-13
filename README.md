@@ -332,6 +332,7 @@ new Vue({ i18n }).$mount('#app')
 | getInsertRecords | 获取新增数据 | — |
 | getRemoveRecords | 获取已删除数据 | — |
 | getUpdateRecords| 获取已修改数据 | — |
+| hasRowChange | 检查行或列数据是否发生改变 | row,pro? |
 | setActiveRow | 只对 mode=cell 有效，激活行编辑 | row |
 | setActiveCell | 只对 mode=row 有效，激活单元格编辑 | row,prop |
 | setSelectCell | 只对 trigger!=manual 有效，选中单元格 | row,prop |

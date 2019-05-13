@@ -61,6 +61,7 @@ const UtilTools = {
       colSpan: 1,
       order: null,
       renderWidth: 0,
+      renderHeight: 0,
       resizeWidth: 0,
       renderLeft: 0,
       renderHeader: renderHeader || _vm.renderHeader,

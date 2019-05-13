@@ -103,7 +103,7 @@ function buildColumns (h, columns) {
 }
 
 function buildProps (h, _vm, props = {}) {
-  let { editConfig, contextMenu } = props
+  let { editConfig, contextMenu, optimized } = props
   return Object.assign({}, props, {
     border: true,
     resizable: true,
@@ -112,7 +112,8 @@ function buildProps (h, _vm, props = {}) {
     contextMenu: Object.assign({}, contextMenu, excelContextMenu),
     mouseConfig: { selected: true, checked: true },
     keyboardConfig: { isArray: true, isTab: true, isCut: true, isEdit: true },
-    editConfig: editConfig ? Object.assign({}, excelEditConfig, editConfig) : excelEditConfig
+    editConfig: editConfig ? Object.assign({}, excelEditConfig, editConfig) : excelEditConfig,
+    optimized: Object.assign({ showOverflow: null }, optimized)
   })
 }
 
@@ -125,6 +126,18 @@ export default {
   components: {
     VxeTable,
     VxeTableColumn
+  },
+  provide () {
+    return {
+      $excel: this
+    }
+  },
+  data () {
+    return {
+      excelStore: {
+        uploadRows: []
+      }
+    }
   },
   render (h) {
     return h('vxe-table', {

@@ -703,20 +703,18 @@
       padding: 0;
       transition: none;
       height: inherit;
+      line-height: 24px;
       cursor: cell;
       .vxe-cell {
-        height: $vxe-excel-column-height;
-        line-height: $vxe-excel-column-height - $vxe-excel-column-border-width;
         padding: 0 #{$vxe-excel-column-border-width + 2px};
         .vxe-input--wrapper {
-          height: $vxe-excel-column-height;
-          .vxe-input,
+          height: inherit;
+          position: relative;
           .vxe-textarea {
-            height: 100%;
+            position: absolute;
             color: $vxe-excel-font-color;
+            overflow: hidden;
           }
-          .vxe-input,
-          .vxe-input:focus,
           .vxe-textarea,
           .vxe-textarea:focus {
             border-radius: 0;

@@ -40,7 +40,7 @@ export default {
           width: 76,
           headerAlign: 'center',
           editRender: {
-            name: 'input'
+            name: 'cell'
           }
         }
       })),
