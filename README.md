@@ -204,8 +204,8 @@ new Vue({ i18n }).$mount('#app')
 | edit-config | 可编辑配置项 | Object | — | [options](#edit-config-可编辑配置项说明) |
 | edit-rules | 校验规则配置项 | Object | — | [options](#edit-rules-校验规则配置项说明) |
 | optimized | 优化配置项 | Object/Boolean | — | [options](#optimized-优化配置项说明) |
-| auto-width | 是否自动计算列宽（如果关闭了需要手动调用 recalculate 函数） | Object/Boolean | — | [options](#optimized-优化配置项说明) |
-| auto-resize | 是否自动监听父容器大小，并自动调整表格宽度 | Object/Boolean | — | [options](#optimized-优化配置项说明) |
+| auto-width | 是否自动计算列宽（如果关闭了需要手动调用 recalculate 函数） | Boolean | — | true |
+| auto-resize | 是否自动监听父容器大小，并自动调整表格宽度 | Boolean | — | true |
 
 ##### context-menu 快捷菜单配置项说明（配合 context-menu-link 事件使用）
 
