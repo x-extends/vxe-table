@@ -16,7 +16,7 @@ const ResizeEvent = {
       addListener()
     }
     if (!eventStore.some(item => item.comp === comp && item.target === target)) {
-      eventStore.push({ comp, target, cb, width: target.clientWidth, height: target.clientHeight })
+      eventStore.push({ comp, target, cb, width: target.clientWidth })
     }
   },
   off (comp, target) {
@@ -25,12 +25,10 @@ const ResizeEvent = {
   handle () {
     if (eventStore.length) {
       eventStore.forEach(item => {
-        let { comp, target, cb, width, height } = item
+        let { comp, target, cb, width } = item
         let clientWidth = target.clientWidth
-        let clientHeight = target.clientHeight
-        if (width !== clientWidth || height !== clientHeight) {
+        if (clientWidth && width !== clientWidth) {
           item.width = clientWidth
-          item.height = clientHeight
           cb.call(comp, { type: 'resize', target, currentTarget: target })
         }
       })
