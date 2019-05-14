@@ -102,8 +102,10 @@
     margin-top: -1px;
   }
   &.show--foot {
-    .vxe-table--body-wrapper {
-      overflow-x: hidden;
+    &.scroll--x {
+      .vxe-table--body-wrapper {
+        overflow-x: scroll;
+      }
     }
   }
   .vxe-body--row,
@@ -113,7 +115,8 @@
   .vxe-table--body-wrapper,
   .vxe-table--fixed-left-body-wrapper,
   .vxe-table--fixed-right-body-wrapper {
-    overflow: auto;
+    overflow-y: auto;
+    overflow-x: auto;
   }
   .vxe-body--row {
     &.row--hover {
@@ -317,7 +320,6 @@
     &.fixed--right-wrapper {
       position: absolute;
       top: 0;
-      overflow-x: hidden;
     }
     &.fixed--left-wrapper {
       left: 0;

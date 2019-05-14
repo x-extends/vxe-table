@@ -4,7 +4,7 @@
 
     <vxe-table
       border
-      max-height="300"
+      max-height="400"
       :span-method="colspanMethod"
       :data.sync="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
@@ -19,7 +19,7 @@
     <vxe-table
       ref="xTable"
       border
-      max-height="300"
+      max-height="400"
       :span-method="rowspanMethod"
       :data.sync="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>

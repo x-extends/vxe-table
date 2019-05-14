@@ -106,17 +106,17 @@ function buildColumns (h, columns) {
 }
 
 function buildProps (h, _vm, props = {}) {
-  let { editConfig, contextMenu, optimized } = props
+  let { editConfig, contextMenu } = props
   return Object.assign({}, props, {
     border: true,
     resizable: true,
+    showOverflow: false,
     headerCellClassName: _vm.handleHeaderCellClassName,
     cellClassName: _vm.handleCellClassName,
     contextMenu: Object.assign({}, contextMenu, excelContextMenu),
     mouseConfig: { selected: true, checked: true },
     keyboardConfig: { isArray: true, isTab: true, isCut: true, isEdit: true },
-    editConfig: editConfig ? Object.assign({}, excelEditConfig, editConfig) : excelEditConfig,
-    optimized: Object.assign({ showOverflow: null }, optimized)
+    editConfig: editConfig ? Object.assign({}, excelEditConfig, editConfig) : excelEditConfig
   })
 }
 

@@ -5,6 +5,7 @@ import renderMap from './components/table/src/renderer'
 const GlobalConfig = {
   size: null,
   optimized: false,
+  showOverflow: null,
   contextMenu: null,
   tooltipTheme: 'dark',
   renderMap,

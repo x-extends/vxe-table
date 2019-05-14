@@ -6,7 +6,7 @@
     <vxe-table
       ref="xTable1"
       highlight-hover-row
-      height="300"
+      height="400"
       :data.sync="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column prop="name" label="Name"></vxe-table-column>
@@ -21,7 +21,7 @@
     <vxe-table
       ref="xTable2"
       highlight-hover-row
-      height="300"
+      height="400"
       :data.sync="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column prop="name" label="Name"></vxe-table-column>
@@ -36,7 +36,7 @@
     <vxe-table
       ref="xTable3"
       highlight-hover-row
-      height="300"
+      height="400"
       :data.sync="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column prop="name" label="Name"></vxe-table-column>
@@ -51,7 +51,7 @@
     <vxe-table
       ref="xTable4"
       highlight-hover-row
-      height="300"
+      height="400"
       :data.sync="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column prop="name" label="Name"></vxe-table-column>

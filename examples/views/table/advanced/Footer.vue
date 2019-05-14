@@ -7,7 +7,7 @@
       border
       highlight-hover-row
       show-footer
-      height="300"
+      height="400"
       :footer-method="footerMethod"
       :data.sync="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
@@ -23,7 +23,7 @@
       class="mytable-footer"
       border
       show-footer
-      height="300"
+      height="400"
       :footer-method="footerMethod"
       :footer-cell-class-name="footerCellClassName"
       :data.sync="tableData">
@@ -40,7 +40,8 @@
       class="mytable-footer"
       border
       show-footer
-      height="300"
+      height="400"
+      show-overflow="tooltip"
       :footer-method="footerMethod"
       :footer-cell-class-name="footerCellClassName"
       :data.sync="tableData">
@@ -63,7 +64,7 @@ export default {
     }
   },
   created () {
-    let list = window.MOCK_DATA_LIST.slice(0, 6)
+    let list = window.MOCK_DATA_LIST.slice(0, 50)
     this.tableData = list
   },
   methods: {

@@ -16,10 +16,9 @@ function handleLocation (obj, rows, columns, row, column) {
  * 渲染列
  */
 function renderColumn (h, _vm, $table, fixedType, row, rowIndex, column, columnIndex) {
-  let { $listeners: tableListeners, tableData, scrollYLoad, border, highlightCurrentRow, cellClassName, spanMethod, optimizeConfig, keyboardConfig, mouseConfig, editConfig, editStore, validStore } = $table
+  let { $listeners: tableListeners, tableData, scrollYLoad, border, highlightCurrentRow, showOverflow, cellClassName, spanMethod, keyboardConfig, mouseConfig, editConfig, editStore, validStore } = $table
   let { editRender, align, ellipsis, showTitle, showTooltip, renderWidth, columnKey } = column
   let { checked, selected, actived, copyed } = editStore
-  let { showOverflow } = optimizeConfig
   let isMouseSelected = mouseConfig && mouseConfig.selected
   let isMouseChecked = mouseConfig && mouseConfig.checked
   let isKeyboardCut = keyboardConfig && keyboardConfig.isCut
@@ -253,8 +252,7 @@ export default {
   },
   render (h) {
     let { $parent: $table, fixedColumn, fixedType } = this
-    let { maxHeight, height, tableColumn, headerHeight, showFooter, footerHeight, tableHeight, tableWidth, scrollXStore, scrollXLoad, scrollYStore, scrollYLoad, scrollXHeight, optimizeConfig } = $table
-    let { showOverflow } = optimizeConfig
+    let { maxHeight, height, tableColumn, headerHeight, showFooter, showOverflow, footerHeight, tableHeight, tableWidth, scrollXStore, scrollXLoad, scrollYStore, scrollYLoad, scrollXHeight } = $table
     let customHeight = XEUtils.toNumber(height)
     let style = {}
     if (customHeight) {

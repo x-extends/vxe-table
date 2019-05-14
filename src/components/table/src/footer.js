@@ -10,7 +10,7 @@ export default {
   },
   render (h) {
     let { $parent: $table, fixedType, fixedColumn, tableColumn, footerData } = this
-    let { footerRowClassName, footerCellClassName, tableWidth, scrollYWidth, scrollXLoad, scrollXStore, optimizeConfig } = $table
+    let { footerRowClassName, footerCellClassName, tableWidth, scrollYWidth, scrollXHeight, scrollXLoad, scrollXStore, optimizeConfig } = $table
     let { overflow } = optimizeConfig
     // 如果是使用优化模式
     if (fixedType && overflow) {
@@ -24,6 +24,9 @@ export default {
     }
     return h('div', {
       class: ['vxe-table--footer-wrapper', fixedType ? `fixed--${fixedType}-wrapper` : 'footer--wrapper'],
+      style: {
+        'margin-top': `${-scrollXHeight - 1}px`
+      },
       on: {
         scroll: this.scrollEvent
       }

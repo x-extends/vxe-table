@@ -92,7 +92,6 @@ Vue.use(VXETable, {
   },
   // 优化配置项
   optimized: {
-    showOverflow: 'tooltip',
     scrollX: {
       gt: 60,
       oSize: 5,
@@ -208,6 +207,7 @@ new Vue({ i18n }).$mount('#app')
 | footer-method | 表尾合计的计算方法 Function({columns, data}) | Function | — | — |
 | span-method | 合并行或列，该函数 Function({row, rowIndex, column, columnIndex, data}) 返回计算后的值 | Object | — | { rowspan: 1, colspan: 1} |
 | tooltipTheme | 列 tooltip 的主题，可选值为 dark 或 light | String | — | dark |
+| showOverflow | 设置所有行不允许换行（如果是固定列建议设置该值） | String | ellipsis / title / tooltip | — |
 | row-key | 行数据的 Key | String | — | — |
 | auto-resize | 是否自动根据父容器大小调整表格宽度 | Boolean | — | false |
 | auto-width | 是否自动计算列宽（如果关闭了需要手动调用 recalculate 函数） | Boolean | — | true |
@@ -241,7 +241,6 @@ new Vue({ i18n }).$mount('#app')
 | 属性 | 描述 | 类型 | 可选值 | 默认值 |
 |------|------|-----|-----|-----|
 | animat | 表格动画效果开关（关闭后视觉效果更快） | Boolean | — | true |
-| showOverflow | 设置所有行不允许换行（设置后对于固定列能大幅提升性能） | String | ellipsis / title / tooltip | — |
 | scrollX | 横向 X 滚动渲染配置 | Object | — | [{gt: 60, oSize: 5, rSize: 16}](#scrollXY-滚动渲染配置项说明) |
 | scrollY | 纵向 Y 滚动渲染配置 | Object | — | [{gt: 500, oSize: 30, rSize: 100}](#scrollXY-滚动渲染配置项说明) |
 

@@ -5,28 +5,30 @@
     <vxe-table
       border
       height="300"
+      show-overflow="tooltip"
       :data.sync="tableData">
       <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
       <vxe-table-column prop="name" label="Name" width="300"></vxe-table-column>
       <vxe-table-column prop="role" label="Role" width="300"></vxe-table-column>
       <vxe-table-column prop="sex" label="Sex" width="300"></vxe-table-column>
       <vxe-table-column prop="date" label="Date" width="300"></vxe-table-column>
-      <vxe-table-column prop="address" label="Address" fixed="right" width="300" show-overflow-tooltip></vxe-table-column>
+      <vxe-table-column prop="address" label="Address" fixed="right" width="300"></vxe-table-column>
     </vxe-table>
 
-    <p>使用 optimized 参数可以使固定列的节点减到最少，并将所有单元格设置为禁止换行</p>
+    <p>固定列建议设置 showOverflow 该值，禁用自动换行，大幅提升渲染速度</p>
 
     <vxe-table
       border
       optimized
       height="300"
+      show-overflow="tooltip"
       :data.sync="tableData">
       <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
       <vxe-table-column prop="name" label="Name" width="300"></vxe-table-column>
       <vxe-table-column prop="role" label="Role" width="300"></vxe-table-column>
       <vxe-table-column prop="sex" label="Sex" width="300"></vxe-table-column>
       <vxe-table-column prop="date" label="Date" width="300"></vxe-table-column>
-      <vxe-table-column prop="address" label="Address" fixed="right" width="300" show-overflow-tooltip></vxe-table-column>
+      <vxe-table-column prop="address" label="Address" fixed="right" width="300"></vxe-table-column>
     </vxe-table>
   </div>
 </template>

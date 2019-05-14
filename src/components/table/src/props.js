@@ -48,6 +48,8 @@ export default {
   spanMethod: Function,
   // 列 tooltip 的主题，可选值为 dark 或 light
   tooltipTheme: { type: String, default: () => GlobalConfig.tooltipTheme },
+  // 设置所有行不允许换行（如果是固定列建议设置该值）
+  showOverflow: { type: String, default: () => GlobalConfig.showOverflow },
 
   /** 高级属性 */
   // 行数据的 Key
