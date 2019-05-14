@@ -67,7 +67,5 @@ export default {
   // 校验规则配置项
   editRules: Object,
   // 优化配置项
-  optimized: { type: [Object, Boolean], default: () => GlobalConfig.optimized },
-  // 用于重写选中编辑处理逻辑
-  selectEditMethod: Function
+  optimized: { type: [Object, Boolean], default: () => GlobalConfig.optimized }
 }
