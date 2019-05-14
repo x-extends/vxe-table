@@ -10,7 +10,7 @@ function addListener () {
 }
 
 const ResizeEvent = {
-  delay: 500,
+  delay: 250,
   on (comp, target, cb) {
     if (!eventStore.length) {
       addListener()
