@@ -6,7 +6,7 @@ import './assets/style/layout.scss'
 import './plugins/highlight.js'
 import './plugins/element.js'
 import './plugins/iview.js'
-import './plugins/vxetable.js'
+import './plugins/xtable.js'
 import './mock'
 import XEUtils from 'xe-utils'
 
