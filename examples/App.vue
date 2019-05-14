@@ -402,13 +402,6 @@ export default {
               locat: {
                 name: 'TableExcelCell'
               }
-            },
-            {
-              lable: '单元格拖拽',
-              disabled: true,
-              locat: {
-                name: 'TableInstall'
-              }
             }
           ]
         },
