@@ -17,6 +17,7 @@
     <p>合并行</p>
 
     <vxe-table
+      ref="xTable"
       border
       max-height="300"
       :span-method="rowspanMethod"
@@ -40,7 +41,7 @@ export default {
     this.tableData = list
   },
   methods: {
-    colspanMethod ({ row, rowIndex, column, columnIndex }) {
+    colspanMethod ({ row, rowIndex, column, columnIndex, data }) {
       if (rowIndex % 2 === 0) {
         if (columnIndex === 2) {
           return {
@@ -55,8 +56,7 @@ export default {
         }
       }
     },
-    rowspanMethod ({ row, rowIndex, column, columnIndex }) {
-      let data = this.tableData
+    rowspanMethod ({ row, rowIndex, column, columnIndex, data }) {
       let prevRow = data[rowIndex - 1]
       let nextRow = data[rowIndex + 1]
       if (column.property === 'key') {

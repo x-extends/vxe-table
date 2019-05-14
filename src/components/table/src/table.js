@@ -796,15 +796,15 @@ export default {
      * 如果存在排序，继续处理
      */
     getTableData () {
-      let { visibleColumn, tableFullData, scrollYLoad, scrollYStore } = this
-      let { isAllSelected, isIndeterminate } = this.filterStore
+      let { visibleColumn, tableFullData, scrollYLoad, scrollYStore, filterStore } = this
+      let { visible, isAllSelected, isIndeterminate } = filterStore
       let column = this.visibleColumn.find(column => column.order)
       let tableData = tableFullData
       if (isAllSelected || isIndeterminate) {
         tableData = tableData.filter(row => {
           return visibleColumn.every(column => {
             let { property, filters, filterMethod } = column
-            if (filters && filters.length) {
+            if ((visible ? column !== filterStore.column : column) && filters && filters.length) {
               let valueList = []
               filters.forEach(item => {
                 if (item.checked) {
@@ -2028,6 +2028,7 @@ export default {
     },
     // 确认筛选
     confirmFilterEvent (evnt) {
+      this.filterStore.visible = false
       this.tableData = this.getTableData()
       this.closeFilter()
     },
@@ -2045,7 +2046,7 @@ export default {
       this.filterStore.options.forEach(item => {
         item.checked = false
       })
-      this.closeFilter()
+      this.confirmFilterEvent(evnt)
     },
     /**
      * 展开行事件

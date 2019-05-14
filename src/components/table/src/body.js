@@ -16,7 +16,7 @@ function handleLocation (obj, rows, columns, row, column) {
  * 渲染列
  */
 function renderColumn (h, _vm, $table, fixedType, row, rowIndex, column, columnIndex) {
-  let { $listeners: tableListeners, scrollYLoad, border, highlightCurrentRow, cellClassName, spanMethod, optimizeConfig, keyboardConfig, mouseConfig, editConfig, editStore, validStore } = $table
+  let { $listeners: tableListeners, tableData, scrollYLoad, border, highlightCurrentRow, cellClassName, spanMethod, optimizeConfig, keyboardConfig, mouseConfig, editConfig, editStore, validStore } = $table
   let { editRender, align, ellipsis, showTitle, showTooltip, renderWidth, columnKey } = column
   let { checked, selected, actived, copyed } = editStore
   let { showOverflow } = optimizeConfig
@@ -59,7 +59,7 @@ function renderColumn (h, _vm, $table, fixedType, row, rowIndex, column, columnI
   }
   // 合并行或列
   if (spanMethod) {
-    let { rowspan = 1, colspan = 1 } = spanMethod({ $table, row, rowIndex, column, columnIndex, fixed: fixedType }) || {}
+    let { rowspan = 1, colspan = 1 } = spanMethod({ $table, row, rowIndex, column, columnIndex, fixed: fixedType, data: tableData }) || {}
     if (!rowspan || !colspan) {
       return null
     }

@@ -198,8 +198,8 @@ new Vue({ i18n }).$mount('#app')
 | show-header | 是否显示表头 | Boolean | — | true |
 | highlight-current-row | 是否要高亮当前选中行 | Boolean | — | false |
 | highlight-hover-row | 鼠标移到行是否要高亮显示 | Boolean | — | false |
-| row-class-name | 给行附加 className，也可以是函数 Function({row, rowIndex, data}) | String/Function | — | — |
-| cell-class-name | 给单元格附加 className，也可以是函数 Function({row, rowIndex, column, columnIndex, data}) | String/Function | — | — |
+| row-class-name | 给行附加 className，也可以是函数 Function({row, rowIndex}) | String/Function | — | — |
+| cell-class-name | 给单元格附加 className，也可以是函数 Function({row, rowIndex, column, columnIndex}) | String/Function | — | — |
 | header-row-class-name | 给表头的行附加 className，也可以是函数 Function({rowIndex}) | String/Function | — | — |
 | header-cell-class-name | 给表头的单元格附加 className，也可以是函数 Function({rowIndex, column, columnIndex}) | String/Function | — | — |
 | footer-row-class-name | 给表尾的行附加 className，也可以是函数 Function({rowIndex}) | String/Function | — | — |
@@ -337,7 +337,8 @@ new Vue({ i18n }).$mount('#app')
 | insertAt | 第二个参数 row 从指定位置新增一条数据； null 从第一行新增一行新数据；-1 从最后新增一条数据 | record,row |
 | revert | 还原更改，还原指定行 row 或者整个表格的数据 | rows?,prop? |
 | remove | 删除指定行数据，指定 row 或 [row, ...] 删除多条数据 | rows |
-| getRecords | 获取表格所有数据，也可以指定索引获取数据 | rowIndex |
+| getTableData | 获取表格实际渲染中的数据，也可以指定索引获取数据 | rowIndex |
+| getRecords | 获取表格所有数据，和 data 属性一致行为，也可以指定索引获取数据 | rowIndex |
 | getColumns | 获取表格所有列，也可以指定索引获取列 | columnIndex |
 | getAllRecords | 获取表格数据集合 | — |
 | getInsertRecords | 获取新增数据 | — |
