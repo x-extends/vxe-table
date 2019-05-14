@@ -334,8 +334,8 @@ new Vue({ i18n }).$mount('#app')
 |------|------|-----|
 | load | 加载化数据 | data |
 | reload | 重新初始化数据，恢复初始状态 | data |
-| insert | 从第一行新增一行新数据 | record |
-| insertAt | 第二个参数 row 从指定位置新增一条数据； null 从第一行新增一行新数据；-1 从最后新增一条数据 | record,row |
+| insert | 从第一行新增一行或多行新数据 | records |
+| insertAt | 从指定位置插入一行或多行；第二个参数：row 指定位置、null 从第一行插入、-1 从最后插入 | records,row |
 | revert | 还原更改，还原指定行 row 或者整个表格的数据 | rows?,prop? |
 | remove | 删除指定行数据，指定 row 或 [row, ...] 删除多条数据 | rows |
 | getRecords | 获取表格所有数据，和 data 属性一致行为，也可以指定索引获取数据 | rowIndex |

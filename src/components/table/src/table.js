@@ -636,27 +636,30 @@ export default {
         }
       })
     },
-    insert (record) {
-      return this.insertAt(record)
+    insert (records) {
+      return this.insertAt(records)
     },
     /**
      * 从指定行插入数据
      */
-    insertAt (record, row) {
+    insertAt (records, row) {
       let { tableData, insertList, defineProperty } = this
-      let newRecord = defineProperty(record)
+      if (records && !XEUtils.isArray(records)) {
+        records = [records]
+      }
+      let newRecords = records.map(record => defineProperty(record))
       if (arguments.length === 1) {
-        tableData.unshift(newRecord)
+        tableData.unshift.apply(tableData, newRecords)
       } else {
         if (row === -1) {
-          tableData.push(newRecord)
+          tableData.push.apply(tableData, newRecords)
         } else {
           let rowIndex = tableData.indexOf(row)
-          tableData.splice(rowIndex, 0, newRecord)
+          tableData.splice.apply(tableData, [rowIndex, 0].concat(newRecords))
         }
       }
-      insertList.push(newRecord)
-      return this.$nextTick().then(() => ({ row: newRecord }))
+      insertList.push(newRecords)
+      return this.$nextTick().then(() => ({ row: newRecords.length ? newRecords[0] : null, rows: newRecords }))
     },
     defineProperty (record) {
       let recordItem = Object.assign({}, record)
