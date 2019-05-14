@@ -398,7 +398,7 @@ export default {
           expand: false,
           children: [
             {
-              lable: '单元格编辑',
+              lable: '单元格',
               locat: {
                 name: 'TableExcelCell'
               }
@@ -447,7 +447,7 @@ export default {
               }
             },
             {
-              lable: '使用 sortablejs 实现行排序',
+              lable: '使用 sortablejs 拖拽行排序',
               disabled: true,
               locat: {
                 name: 'TableInstall'
