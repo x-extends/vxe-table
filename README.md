@@ -121,11 +121,11 @@ Case 2. 自定义表格颜色（修改局部颜色变量）
 ```scss
 // 引入变量
 @import 'vxe-table/src/style/variable.scss';
-// 覆盖变量
-$vxe-table-background-color: #4f6475;
-$vxe-table-border-color: #6f849a;
-$vxe-table-header-background-color: #465869;
-$vxe-font-color: #ccc;
+// 局部覆盖
+$vxe-font-color: #606266;
+$vxe-table-header-background-color: #f8f8f9;
+$vxe-table-border-color: #e8eaec;
+$vxe-table-background-color: #ffffff;
 // 引入样式
 @import 'vxe-table/src/style/table.scss';
 ```
