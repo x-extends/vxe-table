@@ -16,7 +16,7 @@
     "describe2": "{{ random.repeat('用户信息',4,10) }}",
     "describe3": "{{ random.repeat('用户信息',6,20) }}",
     "seq|number": "{{ $index }}",
-    "date|number": "{{ random.time('2019-01-01 00:00:00','2019-02-20 23:59:59', 'yyyy-MM-dd HH:mm:ss') }}",
+    "date": "{{ random.date('2019-01-01 00:00:00','2019-02-20 23:59:59', 'yyyy-MM-ddTHH:mm:ss.000+0800') }}",
     "createTime|number": "{{ random.time('2019-01-01 00:00:00','2019-02-20 23:59:59', 'yyyy-MM-dd HH:mm:ss') }}",
     "updateTime|number": "{{ random.time('2019-01-01 00:00:00','2019-02-20 23:59:59', 'yyyy-MM-dd HH:mm:ss') }}",
     "attr1": null,

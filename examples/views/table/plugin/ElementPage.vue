@@ -20,11 +20,11 @@
     <vxe-table
       border
       class="vxe-table-element"
-      max-height="460"
+      height="460"
       size="small"
       :loading="loading"
       :data.sync="tableData"
-      :edit-config="{trigger: 'click', mode: 'cell'}">
+      :edit-config="{trigger: 'click', mode: 'row'}">
       <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
       <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
       <vxe-table-column prop="name" label="ElInput" min-width="140" :edit-render="{name: 'ElInput'}"></vxe-table-column>
@@ -95,11 +95,11 @@ export default {
           <vxe-table
             border
             class="vxe-table-element"
-            max-height="460"
+            height="460"
             size="small"
             :loading="loading"
             :data.sync="tableData"
-            :edit-config="{trigger: 'click', mode: 'cell'}">
+            :edit-config="{trigger: 'click', mode: 'row'}">
             <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
             <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
             <vxe-table-column prop="name" label="ElInput" min-width="140" :edit-render="{name: 'ElInput'}"></vxe-table-column>
