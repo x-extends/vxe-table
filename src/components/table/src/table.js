@@ -317,7 +317,7 @@ export default {
   },
   watch: {
     data (value) {
-      this.reload(value)
+      this.load(value)
     },
     customs (value) {
       if (!this.isUpdateCustoms) {
@@ -340,7 +340,7 @@ export default {
     }
   },
   created () {
-    this.reload(this.data, true).then(() => {
+    this.load(this.data, true).then(() => {
       this.tableFullColumn = UtilTools.getColumnList(this.collectColumn)
       if (this.customs) {
         this.mergeCustomColumn(this.customs)
@@ -596,7 +596,7 @@ export default {
       })
       return this.$nextTick()
     },
-    reload (data, init) {
+    load (data, init) {
       let { autoWidth, scrollYStore, optimizeConfig, recalculate, computeScrollLoad } = this
       let { scrollY } = optimizeConfig
       let tableFullData = data || []
@@ -625,6 +625,16 @@ export default {
         rest = rest.then(computeScrollLoad)
       }
       return rest
+    },
+    reload (data) {
+      return this.load(data).then(() => {
+        let tableBody = this.$refs.tableBody
+        let tableBodyElem = tableBody ? tableBody.$el : null
+        if (tableBodyElem) {
+          tableBodyElem.scrollTop = 0
+          tableBodyElem.scrollLeft = 0
+        }
+      })
     },
     insert (record) {
       return this.insertAt(record)
@@ -700,7 +710,7 @@ export default {
         })
         return this.$nextTick()
       }
-      return this.reload(tableSourceData)
+      return this.load(tableSourceData)
     },
     /**
      * 清空单元格内容

@@ -1,7 +1,7 @@
 <template>
   <div>
     <p>海量数据</p>
-    <p>大数据不建议使用双向绑定的 data 属性（vue 监听会大数据会短暂的卡顿），建议使用 reload 函数</p>
+    <p>大数据不建议使用双向绑定的 data 属性（vue 监听会大数据会短暂的卡顿），建议使用 load 函数</p>
 
     <vxe-table
       border

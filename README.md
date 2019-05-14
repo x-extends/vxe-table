@@ -332,7 +332,8 @@ new Vue({ i18n }).$mount('#app')
 
 | 方法名 | 描述 | 参数 |
 |------|------|-----|
-| reload | 初始化数据 | data |
+| load | 加载化数据 | data |
+| reload | 重新初始化数据，恢复初始状态 | data |
 | insert | 从第一行新增一行新数据 | record |
 | insertAt | 第二个参数 row 从指定位置新增一条数据； null 从第一行新增一行新数据；-1 从最后新增一条数据 | record,row |
 | revert | 还原更改，还原指定行 row 或者整个表格的数据 | rows?,prop? |
