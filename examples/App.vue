@@ -454,20 +454,20 @@ export default {
               }
             }
           ]
-        },
-        {
-          lable: 'API',
-          value: 'api',
-          expand: false,
-          children: [
-            {
-              lable: 'vxe-table',
-              locat: {
-                name: 'TableAPI'
-              }
-            }
-          ]
         }
+        // {
+        //   lable: 'API',
+        //   value: 'api',
+        //   expand: false,
+        //   children: [
+        //     {
+        //       lable: 'vxe-table',
+        //       locat: {
+        //         name: 'TableAPI'
+        //       }
+        //     }
+        //   ]
+        // }
       ]
     }
   },
