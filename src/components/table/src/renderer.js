@@ -1,3 +1,4 @@
+import XEUtils from 'xe-utils'
 import UtilTools from '../../../tools/utils'
 import DomTools from '../../../tools/dom'
 
@@ -107,7 +108,7 @@ const renderMap = {
       return [
         h('span', {
           domProps: {
-            innerHTML: UtilTools.formatText(UtilTools.getCellValue(row, column.property)).replace(/\n/g, '<br>')
+            innerHTML: XEUtils.escape(UtilTools.getCellValue(row, column.property)).replace(/\n/g, '<br>')
           }
         })
       ]
