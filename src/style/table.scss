@@ -195,7 +195,7 @@
     .vxe-footer--column {
       border-right: 1px solid $vxe-table-border-color;
       &:last-child {
-        border-right-color: #fff;
+        border-right-color: $vxe-table-border-color;
       }
     }
     &.scroll--y {
@@ -641,7 +641,7 @@
       }
       .vxe-body--column {
         &:last-child {
-          border-right-color: #fff;
+          border-right-color: $vxe-table-border-color;
         }
       }
     }

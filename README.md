@@ -113,11 +113,11 @@ Vue.use(VXETable, {
 // Case 1. 引入默认的样式
 import 'vxe-table/lib/index.css'
 
-// Case 2. 自定义表格颜色（复制 style/variable.scss 到自己的项目中，修改颜色变量，然后引入）
+// Case 2. 自定义表格颜色（复制 src/style/variable.scss 到自己的项目中，修改颜色变量，然后引入）
 // @import 'assets/style/vxe-table/variable.scss';
 // @import 'vxe-table/style/table.scss';
 
-// Case 3. 重写主题样式（复制 style/table.scss 到项目中自行修改）
+// Case 3. 重写主题样式（复制 src/style/table.scss 到项目中自行修改）
 // @import 'assets/style/vxe-table/variable.scss';
 // @import 'assets/style/vxe-table/table.scss';
 ```
@@ -199,7 +199,7 @@ new Vue({ i18n }).$mount('#app')
 | span-method | 合并行或列，该函数 Function({row, rowIndex, column, columnIndex, data}) 返回计算后的值 | Object | — | { rowspan: 1, colspan: 1} |
 | tooltipTheme | 列 tooltip 的主题，可选值为 dark 或 light | String | — | dark |
 | row-key | 行数据的 Key | String | — | — |
-| auto-resize | 是否自动监听父容器大小，并自动调整表格宽度 | Boolean | — | false |
+| auto-resize | 是否自动根据父容器大小调整表格宽度 | Boolean | — | false |
 | auto-width | 是否自动计算列宽（如果关闭了需要手动调用 recalculate 函数） | Boolean | — | true |
 | context-menu | 快捷菜单配置项 | Object | — | [{header, body, footer}](#context-menu-快捷菜单配置项说明配合-context-menu-link-事件使用) |
 | mouse-config | 鼠标配置项 | Object | — | [options](#mouse-config-鼠标相关配置项说明) |
