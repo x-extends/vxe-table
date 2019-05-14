@@ -197,6 +197,7 @@ new Vue({ i18n }).$mount('#app')
 | show-footer | 是否显示表尾合计 | Boolean | — | — |
 | footer-method | 表尾合计的计算方法 Function({columns, data}) | Function | — | — |
 | span-method | 合并行或列，该函数 Function({row, rowIndex, column, columnIndex, data}) 返回计算后的值 | Object | — | { rowspan: 1, colspan: 1} |
+| tooltipTheme | 列 tooltip 的主题，可选值为 dark 或 light | String | — | dark |
 | row-key | 行数据的 Key | String | — | — |
 | auto-resize | 是否自动监听父容器大小，并自动调整表格宽度 | Boolean | — | false |
 | auto-width | 是否自动计算列宽（如果关闭了需要手动调用 recalculate 函数） | Boolean | — | true |

@@ -6,6 +6,7 @@ const GlobalConfig = {
   size: null,
   optimized: false,
   contextMenu: null,
+  tooltipTheme: 'dark',
   renderMap,
   iconMap: {
     sortAsc: 'vxe-sort--asc-icon',

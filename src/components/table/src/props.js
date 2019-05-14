@@ -46,6 +46,8 @@ export default {
   footerCellClassName: [String, Function],
   // 合并行或列
   spanMethod: Function,
+  // 列 tooltip 的主题，可选值为 dark 或 light
+  tooltipTheme: { type: String, default: () => GlobalConfig.tooltipTheme },
 
   /** 高级属性 */
   // 行数据的 Key

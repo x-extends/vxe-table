@@ -213,7 +213,9 @@ export default {
         row: null,
         column: null,
         content: null,
-        style: null
+        style: null,
+        arrowStyle: null,
+        placement: null
       },
       // 存放可编辑相关信息
       editStore: {
@@ -249,7 +251,8 @@ export default {
         row: null,
         column: null,
         rule: null,
-        style: null
+        style: null,
+        placement: null
       }
     }
   },
@@ -396,6 +399,7 @@ export default {
       stripe,
       highlightHoverRow,
       size,
+      tooltipTheme,
       editConfig,
       showFooter,
       footerMethod,
@@ -530,7 +534,7 @@ export default {
          * tooltip
          */
         tooltipStore.visible ? h('div', {
-          class: ['vxe-table--tooltip-wrapper'],
+          class: ['vxe-table--tooltip-wrapper', `theme--${tooltipTheme}`, `placement--${tooltipStore.placement}`],
           style: tooltipStore.style,
           ref: 'tipWrapper'
         }, [
@@ -538,14 +542,15 @@ export default {
             class: ['vxe-table--tooltip-content']
           }, UtilTools.formatText(tooltipStore.content)),
           h('div', {
-            class: ['vxe-table--tooltip-arrow']
+            class: ['vxe-table--tooltip-arrow'],
+            style: tooltipStore.arrowStyle
           })
         ]) : null,
         /**
          * valid error
          */
         validStore.visible ? h('div', {
-          class: ['vxe-table--valid-error-wrapper'],
+          class: ['vxe-table--valid-error-wrapper', `placement--${validStore.placement}`],
           style: validStore.style,
           ref: 'validWrapper'
         }, [
@@ -1429,22 +1434,23 @@ export default {
         if (tooltipStore.column !== column || tooltipStore.row !== row || !tooltipStore.visible) {
           let { top, left } = DomTools.getOffsetPos(cell)
           let { scrollTop, scrollLeft, visibleWidth } = DomTools.getDomNode()
+          let tipLeft = left
           Object.assign(tooltipStore, {
             row,
             column,
             content: UtilTools.getCellValue(row, column.property),
-            visible: true
+            visible: true,
+            placement: 'top',
+            arrowStyle: { left: '50%' }
           })
           this.$nextTick().then(() => {
             let tipWrapperElem = $refs.tipWrapper
             if (tipWrapperElem) {
+              tipLeft = left + Math.floor((cell.offsetWidth - tipWrapperElem.offsetWidth) / 2)
               tooltipStore.style = {
                 width: `${tipWrapperElem.offsetWidth + 2}px`,
                 top: `${top - tipWrapperElem.offsetHeight - 6}px`,
-                left: `${left - 6}px`
-              }
-              if (tipWrapperElem.offsetWidth < cell.offsetWidth) {
-                tooltipStore.style.left = `${left + Math.floor((cell.offsetWidth - tipWrapperElem.offsetWidth) / 2) - 6}px`
+                left: `${tipLeft}px`
               }
               return this.$nextTick()
             }
@@ -1454,10 +1460,19 @@ export default {
               let offsetHeight = tipWrapperElem.offsetHeight
               let offsetWidth = tipWrapperElem.offsetWidth
               if (top - offsetHeight < scrollTop) {
+                tooltipStore.placement = 'bottom'
                 tooltipStore.style.top = `${top + cell.offsetHeight + 6}px`
               }
-              if (left + offsetWidth > scrollLeft + visibleWidth) {
-                tooltipStore.style.left = `${scrollLeft + visibleWidth - offsetWidth - 6}px`
+              if (tipLeft < scrollLeft + 6) {
+                // 超出左边界
+                tipLeft = scrollLeft + 6
+                tooltipStore.arrowStyle.left = `${left > tipLeft + 16 ? left - tipLeft + 16 : 16}px`
+                tooltipStore.style.left = `${tipLeft}px`
+              } else if (left + offsetWidth > scrollLeft + visibleWidth) {
+                // 超出右边界
+                tipLeft = scrollLeft + visibleWidth - offsetWidth - 6
+                tooltipStore.arrowStyle.left = `${offsetWidth - Math.max(Math.floor((tipLeft + offsetWidth - left) / 2), 22)}px`
+                tooltipStore.style.left = `${tipLeft}px`
               }
             }
           })
@@ -1471,7 +1486,8 @@ export default {
         column: null,
         content: null,
         style: null,
-        visible: false
+        visible: false,
+        placement: null
       })
     },
     setSelection (rows, value) {
@@ -2387,7 +2403,8 @@ export default {
         row: null,
         column: null,
         rule: null,
-        style: null
+        style: null,
+        placement: null
       })
     },
     handleValidError (params) {
@@ -2400,17 +2417,15 @@ export default {
           row,
           column,
           rule,
-          visible: true
+          visible: true,
+          placement: 'bottom'
         })
         this.$nextTick().then(() => {
           let validWrapperElem = $refs.validWrapper
           if (validWrapperElem) {
             validStore.style = {
               top: `${top + cell.offsetHeight}px`,
-              left: `${left - 6}px`
-            }
-            if (validWrapperElem.offsetWidth < cell.offsetWidth) {
-              validStore.style.left = `${left + Math.floor((cell.offsetWidth - validWrapperElem.offsetWidth) / 2) - 6}px`
+              left: `${left + Math.floor((cell.offsetWidth - validWrapperElem.offsetWidth) / 2)}px`
             }
             return this.$nextTick()
           }
@@ -2420,6 +2435,7 @@ export default {
             let offsetHeight = validWrapperElem.offsetHeight
             let offsetWidth = validWrapperElem.offsetWidth
             if (top + cell.offsetHeight + offsetHeight > scrollTop + visibleHeight) {
+              validStore.placement = 'top'
               validStore.style.top = `${top - offsetHeight}px`
             }
             if (left + offsetWidth > scrollLeft + visibleWidth) {
