@@ -53,6 +53,7 @@
 /*table*/
 .vxe-table {
   position: relative;
+  overflow: hidden;
   border-left: 1px solid $vxe-table-border-color;
   border-right: 1px solid $vxe-table-border-color;
   font-size: 14px;

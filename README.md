@@ -109,17 +109,32 @@ Vue.use(VXETable, {
 
 ## Theme
 
+Case 1. 默认的样式
+
 ```javascript
-// Case 1. 引入默认的样式
+import VXETable from 'vxe-table'
 import 'vxe-table/lib/index.css'
+```
 
-// Case 2. 自定义表格颜色（复制 src/style/variable.scss 到自己的项目中，修改颜色变量，然后引入）
-// @import 'assets/style/vxe-table/variable.scss';
-// @import 'vxe-table/style/table.scss';
+Case 2. 自定义表格颜色（复制 src/style/variable.scss 到自己的项目中，修改颜色变量，然后引入）
 
-// Case 3. 重写主题样式（复制 src/style/table.scss 到项目中自行修改）
-// @import 'assets/style/vxe-table/variable.scss';
-// @import 'assets/style/vxe-table/table.scss';
+```scss
+// 引入变量
+@import 'vxe-table/src/style/variable.scss';
+// 覆盖变量
+$vxe-table-background-color: #4f6475;
+$vxe-table-border-color: #6f849a;
+$vxe-table-header-background-color: #465869;
+$vxe-font-color: #ccc;
+// 引入样式
+@import 'vxe-table/src/style/table.scss';
+```
+
+Case 3. 重写主题样式（复制 src/style/table.scss 到项目中自行修改）
+
+```scss
+@import 'assets/style/vxe-table/variable.scss';
+@import 'assets/style/vxe-table/table.scss';
 ```
 
 ## I18n
