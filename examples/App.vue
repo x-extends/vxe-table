@@ -249,7 +249,14 @@ export default {
               locat: {
                 name: 'TableExpand'
               }
-            },
+            }
+          ]
+        },
+        {
+          lable: 'Tree 表格',
+          value: 'tree',
+          expand: false,
+          children: [
             {
               lable: '树形结构',
               disabled: true,
@@ -406,7 +413,7 @@ export default {
           ]
         },
         {
-          lable: '集成',
+          lable: 'UI 集成',
           value: 'other',
           expand: false,
           children: [
@@ -417,33 +424,9 @@ export default {
               }
             },
             {
-              lable: 'element-ui 配置式插件',
-              locat: {
-                name: 'TableOtherElementConfig'
-              }
-            },
-            {
-              lable: 'element-ui 使用分页',
-              locat: {
-                name: 'TableOtherElementPage'
-              }
-            },
-            {
               lable: 'iview 自定义渲染',
               locat: {
                 name: 'TableOtherIview'
-              }
-            },
-            {
-              lable: 'iview 配置式插件',
-              locat: {
-                name: 'TableOtherIviewConfig'
-              }
-            },
-            {
-              lable: 'iview 使用分页',
-              locat: {
-                name: 'TableOtherIviewPage'
               }
             },
             {
@@ -451,6 +434,37 @@ export default {
               disabled: true,
               locat: {
                 name: 'TableInstall'
+              }
+            }
+          ]
+        },
+        {
+          lable: 'Plugin 插件',
+          value: 'plugin',
+          expand: false,
+          children: [
+            {
+              lable: 'element-ui 配置式插件',
+              locat: {
+                name: 'TablePluginElementConfig'
+              }
+            },
+            {
+              lable: 'element-ui 配置式插件 + 分页',
+              locat: {
+                name: 'TablePluginElementPage'
+              }
+            },
+            {
+              lable: 'iview 配置式插件',
+              locat: {
+                name: 'TablePluginIviewConfig'
+              }
+            },
+            {
+              lable: 'iview 配置式插件 + 分页',
+              locat: {
+                name: 'TablePluginIviewPage'
               }
             }
           ]

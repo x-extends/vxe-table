@@ -56,11 +56,12 @@ import TableEditTemplate from './views/table/edit/Template.vue'
 import TableExcelCell from './views/table/excel/Cell.vue'
 
 import TableOtherElement from './views/table/other/Element.vue'
-import TableOtherElementConfig from './views/table/other/ElementConfig.vue'
-import TableOtherElementPage from './views/table/other/ElementPage.vue'
 import TableOtherIview from './views/table/other/Iview.vue'
-import TableOtherIviewConfig from './views/table/other/IviewConfig.vue'
-import TableOtherIviewPage from './views/table/other/IviewPage.vue'
+
+import TablePluginElementConfig from './views/table/plugin/ElementConfig.vue'
+import TablePluginElementPage from './views/table/plugin/ElementPage.vue'
+import TablePluginIviewConfig from './views/table/plugin/IviewConfig.vue'
+import TablePluginIviewPage from './views/table/plugin/IviewPage.vue'
 
 import TableAPI from './views/table/api/Table.vue'
 
@@ -323,29 +324,29 @@ export default new Router({
       component: TableOtherElement
     },
     {
-      path: '/table/other/elementConfig',
-      name: 'TableOtherElementConfig',
-      component: TableOtherElementConfig
-    },
-    {
-      path: '/table/other/elementPage',
-      name: 'TableOtherElementPage',
-      component: TableOtherElementPage
-    },
-    {
       path: '/table/other/iview',
       name: 'TableOtherIview',
       component: TableOtherIview
     },
     {
-      path: '/table/other/iviewConfig',
-      name: 'TableOtherIviewConfig',
-      component: TableOtherIviewConfig
+      path: '/table/plugin/elementConfig',
+      name: 'TablePluginElementConfig',
+      component: TablePluginElementConfig
     },
     {
-      path: '/table/other/iviewPage',
-      name: 'TableOtherIviewPage',
-      component: TableOtherIviewPage
+      path: '/table/plugin/elementPage',
+      name: 'TablePluginElementPage',
+      component: TablePluginElementPage
+    },
+    {
+      path: '/table/plugin/iviewConfig',
+      name: 'TablePluginIviewConfig',
+      component: TablePluginIviewConfig
+    },
+    {
+      path: '/table/plugin/iviewPage',
+      name: 'TablePluginIviewPage',
+      component: TablePluginIviewPage
     },
     {
       path: '/table/api',
