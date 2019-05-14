@@ -1,4 +1,5 @@
 export default [
+  'load',
   'reload',
   'insert',
   'insertAt',
