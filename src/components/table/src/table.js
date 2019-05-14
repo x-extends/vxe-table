@@ -40,7 +40,7 @@ function renderFixed (h, $table, fixedType, footerData) {
   let fixedColumn = columnStore[`${fixedType}List`]
   let style = {
     height: `${(customHeight ? customHeight - headerHeight - footerHeight : tableHeight) + headerHeight + footerHeight - scrollXHeight}px`,
-    width: `${fixedColumn.reduce((previous, column) => previous + column.renderWidth, isRightFixed ? scrollYWidth + 1 : 0)}px`
+    width: `${fixedColumn.reduce((previous, column) => previous + column.renderWidth, isRightFixed ? scrollYWidth : 0)}px`
   }
   return h('div', {
     class: [`vxe-table--fixed-${fixedType}-wrapper`, {
