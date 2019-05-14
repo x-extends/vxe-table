@@ -1320,7 +1320,7 @@ export default {
           if (!visibleMethod || visibleMethod(params, evnt)) {
             evnt.preventDefault()
             let { scrollTop, scrollLeft, visibleHeight, visibleWidth } = DomTools.getDomNode()
-            let { targetElem } = this.getEventTargetNode(evnt, this.$el, 'vxe-body--column')
+            let { targetElem } = this.getEventTargetNode(evnt, this.$el, `vxe-${type}--column`)
             let { rowIndex, columnIndex } = DomTools.getCellIndexs(targetElem)
             let row = tableData[rowIndex]
             let column = visibleColumn[columnIndex]
