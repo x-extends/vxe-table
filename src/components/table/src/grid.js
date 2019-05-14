@@ -1,31 +1,9 @@
 import VxeTable from './table'
 import VxeTableColumn from './column'
 import TableProps from './props'
+import funs from './func'
 
 const methods = {}
-const funs = [
-  'reload',
-  'insert',
-  'insertAt',
-  'revert',
-  'remove',
-  'getRecords',
-  'getColumns',
-  'clearSelectRow',
-  'setCurrentRow',
-  'clearSelection',
-  'toggleRowSelection',
-  'toggleAllSelection',
-  'clearSort',
-  'clearFilter',
-  'setActiveRow',
-  'setActiveCell',
-  'setSelectCell',
-  'recalculate',
-  'isScrollXLoad',
-  'isScrollYLoad',
-  'exportCsv'
-]
 
 function buildColumns (h, columns) {
   return columns ? columns.map(props => h('vxe-table-column', { props }, buildColumns(h, props.children))) : []

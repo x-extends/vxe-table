@@ -697,6 +697,33 @@ export default {
       }
       return this.reload(tableSourceData)
     },
+    /**
+     * 清空单元格内容
+     * 支持清空整个表格内容
+     * 支持清空一行内容
+     * 支持清空多行内容
+     * 支持清空指定单元格内容
+     */
+    clearData (rows, prop) {
+      let { tableSourceData, visibleColumn } = this
+      if (!arguments.length) {
+        rows = tableSourceData
+      } else if (rows && !XEUtils.isArray(rows)) {
+        rows = [rows]
+      }
+      if (prop) {
+        rows.forEach(row => UtilTools.setCellValue(row, prop, null))
+      } else {
+        rows.forEach(row => {
+          visibleColumn.forEach(column => {
+            if (column.property) {
+              UtilTools.setCellValue(row, column.property, null)
+            }
+          })
+        })
+      }
+      return this.$nextTick()
+    },
     hasRowChange (row, prop) {
       let { tableFullData, tableSourceData } = this
       let oRowIndex = tableFullData.indexOf(row)
@@ -1255,24 +1282,24 @@ export default {
      * 快捷菜单事件处理
      */
     handleGlobalContextmenuEvent (evnt) {
-      let { isCtxMenu, ctxMenuConfig } = this
+      let { isCtxMenu } = this
       if (isCtxMenu) {
         // 右键头部
         let headeWrapperNode = this.getEventTargetNode(evnt, this.$el, 'vxe-table--header-wrapper')
         if (headeWrapperNode.flag) {
-          this.openContextMenu(evnt, ctxMenuConfig.header, { })
+          this.openContextMenu(evnt, 'header', { })
           return
         }
         // 右键内容
         let bodyWrapperNode = this.getEventTargetNode(evnt, this.$el, 'vxe-table--body-wrapper')
         if (bodyWrapperNode.flag) {
-          this.openContextMenu(evnt, ctxMenuConfig.body, { })
+          this.openContextMenu(evnt, 'body', { })
           return
         }
         // 右键表尾
         let footerWrapperNode = this.getEventTargetNode(evnt, this.$el, 'vxe-table--footer-wrapper')
         if (footerWrapperNode.flag) {
-          this.openContextMenu(evnt, ctxMenuConfig.footer, { })
+          this.openContextMenu(evnt, 'footer', { })
           return
         }
       }
@@ -1282,9 +1309,10 @@ export default {
     /**
      * 显示快捷菜单
      */
-    openContextMenu (evnt, config, params) {
+    openContextMenu (evnt, type, params) {
+      let { tableData, visibleColumn, ctxMenuStore, ctxMenuConfig } = this
+      let config = ctxMenuConfig[type]
       if (config) {
-        let { ctxMenuStore } = this
         let { options, visibleMethod, disabled } = config
         if (disabled) {
           evnt.preventDefault()
@@ -1292,9 +1320,14 @@ export default {
           if (!visibleMethod || visibleMethod(params, evnt)) {
             evnt.preventDefault()
             let { scrollTop, scrollLeft, visibleHeight, visibleWidth } = DomTools.getDomNode()
+            let { targetElem } = this.getEventTargetNode(evnt, this.$el, 'vxe-body--column')
+            let { rowIndex, columnIndex } = DomTools.getCellIndexs(targetElem)
+            let row = tableData[rowIndex]
+            let column = visibleColumn[columnIndex]
             let top = evnt.clientY + scrollTop
             let left = evnt.clientX + scrollLeft
             Object.assign(ctxMenuStore, {
+              args: { type, row, rowIndex, column, columnIndex, cell: targetElem, $table: this },
               visible: true,
               list: options,
               selected: null,
@@ -1358,7 +1391,7 @@ export default {
      * 快捷菜单点击事件
      */
     ctxMenuLinkEvent (evnt, menu) {
-      UtilTools.emitEvent(this, 'context-menu-link', [menu, evnt])
+      UtilTools.emitEvent(this, 'context-menu-link', [menu, this.ctxMenuStore.args, evnt])
       this.closeContextMenu()
     },
     /**
@@ -1831,7 +1864,7 @@ export default {
     handlePaste (evnt) {
       let { tableData, visibleColumn, editStore } = this
       let { copyed, selected } = editStore
-      let { rows, columns } = copyed
+      let { cut, rows, columns } = copyed
       if (rows.length && columns.length && selected.row && selected.column) {
         let { rowIndex, columnIndex } = selected.args
         let start = { rowIndex, columnIndex }
@@ -1847,9 +1880,15 @@ export default {
               if (offsetColumn) {
                 UtilTools.setCellValue(offsetRow, offsetColumn.property, UtilTools.getCellValue(row, column.property))
               }
+              if (cut) {
+                UtilTools.setCellValue(row, column.property, null)
+              }
             })
           }
         })
+        if (cut) {
+          this.clearCopyed()
+        }
         this.handleChecked(start, end, evnt)
       }
     },
@@ -1923,9 +1962,13 @@ export default {
      * 点击排序事件
      */
     triggerSortEvent (evnt, column, params, order) {
-      if (column.order !== order) {
-        let prop = column.property
-        this.tableFullColumn.forEach(column => {
+      this.sort(column.property, order)
+    },
+    sort (prop, order) {
+      let { visibleColumn, tableFullColumn } = this
+      let column = visibleColumn.find(item => item.property === prop)
+      if (order && column.order !== order) {
+        tableFullColumn.forEach(column => {
           column.order = null
         })
         column.order = order

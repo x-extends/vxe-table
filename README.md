@@ -198,14 +198,14 @@ new Vue({ i18n }).$mount('#app')
 | footer-method | 表尾合计的计算方法 Function({columns, data}) | Function | — | — |
 | span-method | 合并行或列，该函数 Function({row, rowIndex, column, columnIndex, data}) 返回计算后的值 | Object | — | { rowspan: 1, colspan: 1} |
 | row-key | 行数据的 Key | String | — | — |
+| auto-resize | 是否自动监听父容器大小，并自动调整表格宽度 | Boolean | — | false |
+| auto-width | 是否自动计算列宽（如果关闭了需要手动调用 recalculate 函数） | Boolean | — | true |
 | context-menu | 快捷菜单配置项 | Object | — | [{header, body, footer}](#context-menu-快捷菜单配置项说明配合-context-menu-link-事件使用) |
 | mouse-config | 鼠标配置项 | Object | — | [options](#mouse-config-鼠标相关配置项说明) |
 | Keyboard-config | 按键配置项 | Object | — | [options](#Keyboard-config-键盘相关配置项说明) |
 | edit-config | 可编辑配置项 | Object | — | [options](#edit-config-可编辑配置项说明) |
 | edit-rules | 校验规则配置项 | Object | — | [options](#edit-rules-校验规则配置项说明) |
 | optimized | 优化配置项 | Object/Boolean | — | [options](#optimized-优化配置项说明) |
-| auto-width | 是否自动计算列宽（如果关闭了需要手动调用 recalculate 函数） | Boolean | — | true |
-| auto-resize | 是否自动监听父容器大小，并自动调整表格宽度 | Boolean | — | true |
 
 ##### context-menu 快捷菜单配置项说明（配合 context-menu-link 事件使用）
 
@@ -311,7 +311,7 @@ new Vue({ i18n }).$mount('#app')
 | cell-click | 单元格被点击时会触发该事件 | {row,rowIndex,column,columnIndex,cell},event |
 | cell-dblclick | 单元格被双击时会触发该事件 | {row,rowIndex,column,columnIndex,cell},event |
 | header-cell-click | 表头的单元格被点击时会触发该事件 | {column,columnIndex,cell},event |
-| context-menu-link | 当点击上下文菜单后触发 | menu,event |
+| context-menu-link | 当点击快捷菜单后触发 | menu,{type,row,rowIndex,column,columnIndex,cell},event |
 | clear-actived | 单元格编辑状态下被清除时会触发该事件 | {row,rowIndex,column,columnIndex,cell},event |
 | edit-actived | 单元格被激活编辑时会触发该事件 | {row,rowIndex,column,columnIndex,cell},event |
 | edit-disabled | 当点击后单元格如果是禁用状态时会触发该事件 | {row,rowIndex,column,columnIndex,cell},event |
@@ -351,9 +351,11 @@ new Vue({ i18n }).$mount('#app')
 | clearSelected | 清除单元格选中状态 | — |
 | clearActivedd | 清除单元格激活状态 | — |
 | clearCopyed | 清空已复制的内容 | — |
+| clearData | 清空单元格内容 | rows,prop |
 | recalculate | 重新计算并更新列宽 | — |
 | isScrollXLoad | 判断是否启用了横向 X 滚动渲染 | — |
 | isScrollYLoad | 判断是否启用了纵向 Y 滚动渲染 | — |
+| sort | 手动对 Table 进行排序 | prop,order |
 | validateRow | 对表格某一行进行校验的方法，参数为行数据和一个回调函数。该回调函数会在校验结束后被调用，并传入两个参数：（是否校验成功，最近一列未通过校验的字段）。若不传入回调函数，则会返回一个 promise | row,callback |
 | validate | 对整个表格进行校验的方法，参数为一个回调函数。该回调函数会在校验结束后被调用，并传入两个参数：（是否校验成功，最近一列未通过校验的字段）。若不传入回调函数，则会返回一个 promise | callback |
 | exportCsv| 将表格数据导出为 .csv 文件，说明：支持IE9+、Edge、Chrome、Firefox 等常用浏览器。IE11以下可能存在中文乱码问题，部分浏览器需要手动修改后缀名为 .csv | [options](#exportcsv-参数说明) |

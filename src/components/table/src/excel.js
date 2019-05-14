@@ -1,6 +1,7 @@
 import VxeTable from './table'
 import VxeTableColumn from './column'
 import TableProps from './props'
+import funs from './func'
 
 const excelContextMenu = {
   header: {
@@ -48,20 +49,20 @@ const excelContextMenu = {
         }
       ],
       [
-        {
-          code: 'filter',
-          name: '筛选',
-          children: [
-            {
-              code: 'clearFilter',
-              name: '清除筛选'
-            },
-            {
-              code: 'filterSelect',
-              name: '按所选单元格的值筛选'
-            }
-          ]
-        },
+        // {
+        //   code: 'filter',
+        //   name: '筛选',
+        //   children: [
+        //     {
+        //       code: 'clearFilter',
+        //       name: '清除筛选'
+        //     },
+        //     {
+        //       code: 'filterSelect',
+        //       name: '按所选单元格的值筛选'
+        //     }
+        //   ]
+        // },
         {
           code: 'sort',
           name: '排序',
@@ -91,6 +92,8 @@ const excelContextMenu = {
   }
 }
 
+const methods = {}
+
 const excelEditConfig = {
   trigger: 'dblclick',
   mode: 'cell',
@@ -117,6 +120,12 @@ function buildProps (h, _vm, props = {}) {
   })
 }
 
+funs.forEach(name => {
+  methods[name] = function () {
+    this.$refs.xTable[name].apply(this.$refs.xTable[name], arguments)
+  }
+})
+
 export default {
   name: 'VxeExcel',
   props: {
@@ -126,11 +135,6 @@ export default {
   components: {
     VxeTable,
     VxeTableColumn
-  },
-  provide () {
-    return {
-      $excel: this
-    }
   },
   data () {
     return {
@@ -144,13 +148,16 @@ export default {
       class: 'vxe-excel',
       props: buildProps(h, this, this.$props),
       on: {
+        ...this.$listeners,
         'cell-click': this.cellClickEvent,
         'header-cell-click': this.headerCellClickEvent,
-        ...this.$listeners
-      }
+        'context-menu-link': this.contextMenuLinkEvent
+      },
+      ref: 'xTable'
     }, buildColumns(h, this.columns))
   },
   methods: {
+    ...methods,
     handleHeaderCellClassName ({ column, columnIndex, $table }) {
       let { editStore } = $table
       let { selected, actived } = editStore
@@ -195,6 +202,45 @@ export default {
         handleSelected({ row, rowIndex, column, columnIndex, cell, $table }, evnt).then(() => {
           handleChecked({ rowIndex, columnIndex }, { rowIndex: tableData.length - 1, columnIndex }, evnt)
         })
+      }
+    },
+    contextMenuLinkEvent (menu, { row, column }, evnt) {
+      let xTable = this.$refs.xTable
+      let { property } = column
+      switch (menu.code) {
+        case 'clip':
+          xTable.handleCopyed(true, evnt)
+          break
+        case 'copy':
+          xTable.handleCopyed(false, evnt)
+          break
+        case 'paste':
+          xTable.handlePaste(evnt)
+          break
+        case 'insert':
+          xTable.insertAt({}, row)
+          break
+        case 'remove':
+          xTable.remove(row)
+          break
+        case 'clearData':
+          xTable.clearData(row, property)
+          break
+        case 'clearFilter':
+          xTable.clearFilter()
+          break
+        case 'clearSort':
+          xTable.clearSort()
+          break
+        case 'sortAsc':
+          xTable.sort(property, 'asc')
+          break
+        case 'sortDesc':
+          xTable.sort(property, 'desc')
+          break
+        case 'exportAll':
+          xTable.exportCsv({ isHeader: false })
+          break
       }
     }
   }

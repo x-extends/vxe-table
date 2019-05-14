@@ -107,7 +107,7 @@ const renderMap = {
       return [
         h('span', {
           domProps: {
-            innerHTML: UtilTools.getCellValue(row, column.property).replace(/\n/g, '<br>')
+            innerHTML: UtilTools.formatText(UtilTools.getCellValue(row, column.property)).replace(/\n/g, '<br>')
           }
         })
       ]

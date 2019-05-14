@@ -10,7 +10,7 @@ function addListener () {
 }
 
 const ResizeEvent = {
-  delay: 1000,
+  delay: 500,
   on (comp, target, cb) {
     if (!eventStore.length) {
       addListener()
@@ -24,8 +24,13 @@ const ResizeEvent = {
   },
   handle () {
     if (eventStore.length) {
-      eventStore.forEach(({ comp, target, cb, width, height }) => {
-        if (width !== target.clientWidth || height !== target.clientHeight) {
+      eventStore.forEach(item => {
+        let { comp, target, cb, width, height } = item
+        let clientWidth = target.clientWidth
+        let clientHeight = target.clientHeight
+        if (width !== clientWidth || height !== clientHeight) {
+          item.width = clientWidth
+          item.height = clientHeight
           cb.call(comp, { type: 'resize', target, currentTarget: target })
         }
       })

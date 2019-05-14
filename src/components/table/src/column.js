@@ -47,7 +47,6 @@ export default {
     editRender: Object
   },
   inject: [
-    '$excel',
     '$table'
   ],
   data () {
@@ -448,10 +447,10 @@ export default {
       return this.runRenderer(h, params, actived && actived.row === params.row && actived.column === params.column)
     },
     runRenderer (h, params, isEdit) {
-      let { $scopedSlots, editRender, $excel, $table } = this
+      let { $scopedSlots, editRender, $table } = this
       let { renderMap = {} } = GlobalConfig
       let compConf = renderMap[editRender.name]
-      let context = { $excel, $table, $column: this }
+      let context = { $excel: $table.$parent, $table, $column: this }
       if (editRender.type === 'visible' || isEdit) {
         if ($scopedSlots && $scopedSlots.edit) {
           return $scopedSlots.edit(params)
