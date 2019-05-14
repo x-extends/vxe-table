@@ -116,7 +116,7 @@ import VXETable from 'vxe-table'
 import 'vxe-table/lib/index.css'
 ```
 
-Case 2. 自定义表格颜色（复制 src/style/variable.scss 到自己的项目中，修改颜色变量，然后引入）
+Case 2. 自定义表格颜色（修改局部颜色变量）
 
 ```scss
 // 引入变量
