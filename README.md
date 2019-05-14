@@ -130,12 +130,7 @@ $vxe-font-color: #ccc;
 @import 'vxe-table/src/style/table.scss';
 ```
 
-Case 3. 重写主题样式（复制 src/style/table.scss 到项目中自行修改）
-
-```scss
-@import 'assets/style/vxe-table/variable.scss';
-@import 'assets/style/vxe-table/table.scss';
-```
+Case 3. 重写主题样式（复制 src/style/variable.scss 和 src/style/table.scss 到项目中自行修改）
 
 ## I18n
 
