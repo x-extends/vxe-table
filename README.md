@@ -378,7 +378,7 @@ new Vue({ i18n }).$mount('#app')
 |------|------|-----|-----|-----|
 | filename | 文件名 | String | — | table.csv |
 | original | 是否导出源数据 | Boolean | — | false |
-| isHeader | 是否显示表头 | Boolean | — | false |
+| isHeader | 是否显示表头 | Boolean | — | true |
 | download | 是否马上下载，如果设置为 false 则通过返回结果为内容的 Promise | Boolean | — | true |
 | data | 自定义数据 | Array | — | — |
 | columns | 自定义列 | Array | — | — |
@@ -442,8 +442,8 @@ new Vue({ i18n }).$mount('#app')
 ```html
 <template>
   <div>
-    <button @click="$refs.vTable.exportCsv()">Export.cvs</button>
-    <vxe-table ref="vTable" :data.sync="tableData">
+    <button @click="$refs.xTable.exportCsv()">Export.cvs</button>
+    <vxe-table ref="xTable" :data.sync="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column prop="name" label="Name"></vxe-table-column>
       <vxe-table-column prop="sex" label="Sex"></vxe-table-column>
