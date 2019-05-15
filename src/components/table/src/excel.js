@@ -110,7 +110,7 @@ function buildProps (h, _vm, props = {}) {
   return Object.assign({}, props, {
     border: true,
     resizable: true,
-    showOverflow: false,
+    showOverflow: null,
     headerCellClassName: _vm.handleHeaderCellClassName,
     cellClassName: _vm.handleCellClassName,
     contextMenu: Object.assign({}, contextMenu, excelContextMenu),

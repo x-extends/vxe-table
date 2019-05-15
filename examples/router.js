@@ -32,6 +32,8 @@ import TableExport from './views/table/advanced/Export.vue'
 import TableMenu from './views/table/advanced/Menu.vue'
 import TableExpand from './views/table/advanced/Expand.vue'
 
+import TableTreeBasic from './views/table/tree/Basic.vue'
+
 import GridBasic from './views/table/grid/Basic.vue'
 import GridPage from './views/table/grid/Page.vue'
 
@@ -222,6 +224,11 @@ export default new Router({
       path: '/table/advanced/expand',
       name: 'TableExpand',
       component: TableExpand
+    },
+    {
+      path: '/table/tree/basic',
+      name: 'TableTreeBasic',
+      component: TableTreeBasic
     },
     {
       path: '/table/grid/basic',

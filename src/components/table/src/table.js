@@ -39,7 +39,7 @@ function renderFixed (h, $table, fixedType, footerData) {
   let isRightFixed = fixedType === 'right'
   let fixedColumn = columnStore[`${fixedType}List`]
   let style = {
-    height: `${(customHeight ? customHeight - headerHeight - footerHeight : tableHeight) + headerHeight + footerHeight - scrollXHeight}px`,
+    height: `${(customHeight ? customHeight - headerHeight - footerHeight : tableHeight) + headerHeight + footerHeight - scrollXHeight * (showFooter ? 2 : 1)}px`,
     width: `${fixedColumn.reduce((previous, column) => previous + column.renderWidth, isRightFixed ? scrollYWidth : 0)}px`
   }
   return h('div', {
@@ -269,15 +269,15 @@ export default {
         // 默认列大于 80 条时自动使用横向 X 滚动渲染
         scrollX: {
           gt: 60,
-          oSize: 5,
+          oSize: 6,
           rSize: 16,
           vSize: 0
         },
         // 默认数据大于 500 条时自动使用纵向 Y 滚动渲染
         scrollY: {
           gt: 500,
-          oSize: 20,
-          rSize: 100,
+          oSize: 25,
+          rSize: 70,
           vSize: 0,
           rHeight: 0
         }
@@ -619,7 +619,7 @@ export default {
       this.tableData = this.getTableData()
       let rest = this.$nextTick()
       if (!init && autoWidth) {
-        rest = rest.then(recalculate)
+        rest = rest.then(() => (requestAnimationFrame || setTimeout)(recalculate))
       }
       if (!init && scrollYLoad) {
         rest = rest.then(computeScrollLoad)

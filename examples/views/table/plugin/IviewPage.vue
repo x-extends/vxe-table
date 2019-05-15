@@ -198,7 +198,7 @@ export default {
     this.findRegionList()
   },
   mounted () {
-    this.$el.querySelectorAll('pre code').forEach((block) => {
+    Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
       hljs.highlightBlock(block)
     })
   },

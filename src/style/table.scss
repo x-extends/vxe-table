@@ -84,7 +84,8 @@
   .vxe-table--header-wrapper,
   .vxe-table--footer-wrapper {
     position: relative;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: hidden;
     border-top: 1px solid $vxe-table-border-color;
   }
   .vxe-table--header-wrapper {
@@ -98,8 +99,11 @@
     }
   }
   .vxe-table--footer-wrapper {
-    overflow-x: auto;
     margin-top: -1px;
+    background-color: $vxe-table-background-color;
+    &.footer--wrapper{
+      overflow-x: auto;
+    }
   }
   &.show--foot {
     &.scroll--x {
@@ -108,8 +112,7 @@
       }
     }
   }
-  .vxe-body--row,
-  .vxe-footer--row {
+  .vxe-body--row {
     background-color: $vxe-table-background-color;
   }
   .vxe-table--body-wrapper,
@@ -281,9 +284,6 @@
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-    }
-    > span {
-      vertical-align: middle;
     }
     .vxe-input--wrapper {
       width: 100%;

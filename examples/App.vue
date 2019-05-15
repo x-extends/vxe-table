@@ -3,7 +3,7 @@
     <header class="page-header">
       <img class="logo" src="./assets/logo.jpg">
       <h1 class="title"><a href="https://github.com/xuliangzhan/vxe-table">vxe-table</a></h1>
-      <span class="desc">一个性能更优、功能更强的 Vue 表格组件</span>
+      <span class="desc">一个功能更加强大的 Vue 表格组件</span>
     </header>
     <div class="page-container">
       <div class="aside">
@@ -261,7 +261,7 @@ export default {
               lable: '树形结构',
               disabled: true,
               locat: {
-                name: 'TableInstall'
+                name: 'TableTreeBasic'
               }
             }
           ]

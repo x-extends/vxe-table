@@ -125,9 +125,7 @@ export default {
       if ($scopedSlots && $scopedSlots.header) {
         return $scopedSlots.header(params)
       }
-      return [
-        h('span', UtilTools.formatText(params.column.label))
-      ]
+      return UtilTools.formatText(params.column.label)
     },
     renderCell (h, params) {
       let cellValue
@@ -140,9 +138,7 @@ export default {
       if (formatter) {
         cellValue = formatter({ cellValue, row, rowIndex, column, columnIndex })
       }
-      return [
-        h('span', UtilTools.formatText(cellValue))
-      ]
+      return UtilTools.formatText(cellValue)
     },
 
     /**
@@ -153,9 +149,7 @@ export default {
       if ($scopedSlots && $scopedSlots.header) {
         return $scopedSlots.header(params)
       }
-      return [
-        h('span', UtilTools.formatText(params.column.label || '#'))
-      ]
+      return UtilTools.formatText(params.column.label || '#')
     },
     renderIndexCell (h, params) {
       let cellValue
@@ -171,18 +165,14 @@ export default {
       if (indexMethod) {
         cellValue = indexMethod({ row, rowIndex, column, columnIndex })
       }
-      return [
-        h('span', UtilTools.formatText(cellValue))
-      ]
+      return UtilTools.formatText(cellValue)
     },
 
     /**
      * 单选
      */
     renderRadioHeader (h, params) {
-      return [
-        h('span', UtilTools.formatText(params.column.label))
-      ]
+      return UtilTools.formatText(params.column.label)
     },
     renderRadioCell (h, params) {
       let { $table } = this
@@ -455,7 +445,7 @@ export default {
         if ($scopedSlots && $scopedSlots.edit) {
           return $scopedSlots.edit(params)
         }
-        return compConf && compConf.renderEdit ? compConf.renderEdit(h, editRender, params, context) : [h('span')]
+        return compConf && compConf.renderEdit ? compConf.renderEdit(h, editRender, params, context) : []
       }
       return compConf && compConf.renderCell ? compConf.renderCell(h, editRender, params, context) : this.renderCell(h, params)
     }
