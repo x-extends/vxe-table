@@ -364,6 +364,10 @@ new Vue({ i18n }).$mount('#app')
 | clearActivedd | 清除单元格激活状态 | — |
 | clearCopyed | 清空已复制的内容 | — |
 | clearData | 清空单元格内容 | rows,prop |
+| clearScroll | 清除滚动相关信息，还原到初始状态 | — |
+| closeFilter | 手动关闭筛选面板 | — |
+| clostTooltip | 手动关闭 tooltip 提示 | — |
+| closeContextMenu | 手动关闭快捷菜单 | — |
 | recalculate | 重新计算并更新列宽 | — |
 | isScrollXLoad | 判断是否启用了横向 X 滚动渲染 | — |
 | isScrollYLoad | 判断是否启用了纵向 Y 滚动渲染 | — |

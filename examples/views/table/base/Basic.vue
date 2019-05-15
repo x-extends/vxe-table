@@ -17,9 +17,6 @@
       <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
 
-    <p>ellipsis 当内容超过时显示为省略号</p>
-    <p>show-overflow-title 当内容超过时显示为省略号和原生 title 显示</p>
-    <p>show-overflow 当内容超过隐藏时显示为省略号并 tooltip 显示</p>
     <p>使用 highlight-hover-row 属性启用 hover 行高亮</p>
 
     <vxe-table

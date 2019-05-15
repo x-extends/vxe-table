@@ -122,7 +122,7 @@ function buildProps (h, _vm, props = {}) {
 
 funs.forEach(name => {
   methods[name] = function () {
-    this.$refs.xTable[name].apply(this.$refs.xTable[name], arguments)
+    return this.$refs.xTable[name].apply(this.$refs.xTable[name], arguments)
   }
 })
 

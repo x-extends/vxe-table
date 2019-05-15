@@ -2062,7 +2062,7 @@ export default {
     confirmFilterEvent (evnt) {
       this.filterStore.visible = false
       if (this.scrollXLoad || this.scrollYLoad) {
-        this.clearScrollLoad()
+        this.clearScroll()
         this.computeScrollLoad()
       } else {
         this.tableData = this.getTableData().tableData
@@ -2256,7 +2256,7 @@ export default {
       scrollYStore.topSpaceHeight = Math.max(scrollYStore.startIndex * scrollYStore.rowHeight, 0)
       scrollYStore.bottomSpaceHeight = Math.max((fullData.length - (scrollYStore.startIndex + scrollYStore.renderSize)) * scrollYStore.rowHeight, 0)
     },
-    clearScrollLoad () {
+    clearScroll () {
       Object.assign(this.scrollXStore, {
         visibleSize: 0,
         startIndex: 0,
@@ -2272,9 +2272,14 @@ export default {
       this.$nextTick(() => {
         let tableBody = this.$refs.tableBody
         let tableBodyElem = tableBody ? tableBody.$el : null
+        let tableFooter = this.$refs.tableFooter
+        let tableFooterElem = tableFooter ? tableFooter.$el : null
         if (tableBodyElem) {
           tableBodyElem.scrollTop = 0
           tableBodyElem.scrollLeft = 0
+        }
+        if (tableFooterElem) {
+          tableFooterElem.scrollLeft = 0
         }
       })
     },

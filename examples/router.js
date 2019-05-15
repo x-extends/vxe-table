@@ -3,9 +3,9 @@ import Router from 'vue-router'
 
 import TableInstall from './views/table/start/Install.vue'
 import TableUse from './views/table/start/Use.vue'
-
 import TableBasic from './views/table/base/Basic.vue'
 import TableSize from './views/table/base/Size.vue'
+import TableOverflow from './views/table/base/Overflow.vue'
 import TableStripe from './views/table/base/Stripe.vue'
 import TableBorder from './views/table/base/Border.vue'
 import TableStyle from './views/table/base/Style.vue'
@@ -104,6 +104,11 @@ export default new Router({
       path: '/table/base/size',
       name: 'TableSize',
       component: TableSize
+    },
+    {
+      path: '/table/base/overflow',
+      name: 'TableOverflow',
+      component: TableOverflow
     },
     {
       path: '/table/base/stripe',

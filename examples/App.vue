@@ -76,6 +76,12 @@ export default {
               }
             },
             {
+              lable: '内容显示省略号',
+              locat: {
+                name: 'TableOverflow'
+              }
+            },
+            {
               lable: '斑马线条纹',
               demoUrl: 'https://jsrun.net/zrXKp',
               locat: {
