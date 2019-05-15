@@ -601,6 +601,8 @@ export default {
       let { scrollY } = optimizeConfig
       let tableFullData = data || []
       let scrollYLoad = scrollY && scrollY.gt && scrollY.gt < tableFullData.length
+      this.insertList = []
+      this.removeList = []
       if (scrollYLoad) {
         Object.assign(scrollYStore, {
           startIndex: 0,
@@ -609,14 +611,12 @@ export default {
           offsetSize: scrollY.oSize
         })
       }
-      this.insertList = []
-      this.removeList = []
       // 原始数据
       this.tableSourceData = XEUtils.clone(tableFullData, true)
       // 全量数据
       this.tableFullData = tableFullData
       this.scrollYLoad = scrollYLoad
-      this.tableData = this.getTableData()
+      this.tableData = this.getTableData().tableData
       let rest = this.$nextTick()
       if (!init && autoWidth) {
         rest = rest.then(() => (requestAnimationFrame || setTimeout)(recalculate))
@@ -713,7 +713,7 @@ export default {
         })
         return this.$nextTick()
       }
-      return this.load(tableSourceData)
+      return this.reload(tableSourceData)
     },
     /**
      * 清空单元格内容
@@ -804,40 +804,46 @@ export default {
       return updateRecords
     },
     /**
+     * 获取处理后全量的表格数据
+     * 如果存在筛选条件，继续处理
+     */
+    getTableFullData () {
+      let { visibleColumn, tableFullData } = this
+      let column = this.visibleColumn.find(column => column.order)
+      let tableData = tableFullData
+      let filterColumn = visibleColumn.filter(({ filters }) => filters && filters.length)
+      tableData = tableData.filter(row => {
+        return filterColumn.every(column => {
+          let { property, filters, filterMethod } = column
+          if (filters && filters.length) {
+            let valueList = []
+            filters.forEach(item => {
+              if (item.checked) {
+                valueList.push(item.value)
+              }
+            })
+            if (valueList.length) {
+              return filterMethod ? valueList.some(value => filterMethod({ value, row, column })) : valueList.indexOf(UtilTools.getCellValue(row, property)) > -1
+            }
+          }
+          return true
+        })
+      })
+      if (column && column.order) {
+        let rest = XEUtils.sortBy(tableData, column.property)
+        tableData = column.order === 'desc' ? rest.reverse() : rest
+      }
+      return tableData
+    },
+    /**
      * 获取处理后的表格数据
      * 如果存在筛选条件，继续处理
      * 如果存在排序，继续处理
      */
     getTableData () {
-      let { visibleColumn, tableFullData, scrollYLoad, scrollYStore, filterStore } = this
-      let { visible, isAllSelected, isIndeterminate } = filterStore
-      let column = this.visibleColumn.find(column => column.order)
-      let tableData = tableFullData
-      if (isAllSelected || isIndeterminate) {
-        tableData = tableData.filter(row => {
-          return visibleColumn.every(column => {
-            let { property, filters, filterMethod } = column
-            if ((visible ? column !== filterStore.column : column) && filters && filters.length) {
-              let valueList = []
-              filters.forEach(item => {
-                if (item.checked) {
-                  valueList.push(item.value)
-                }
-              })
-              if (valueList.length) {
-                let a = filterMethod ? valueList.some(value => filterMethod({ value, row, column })) : valueList.indexOf(UtilTools.getCellValue(row, property)) > -1
-                return a
-              }
-            }
-            return true
-          })
-        })
-      }
-      if (column && column.order) {
-        let rest = XEUtils.sortBy(tableData, column.property)
-        tableData = column.order === 'desc' ? rest.reverse() : rest
-      }
-      return scrollYLoad ? tableData.slice(scrollYStore.startIndex, scrollYStore.startIndex + scrollYStore.renderSize) : tableData.slice(0)
+      let { scrollYLoad, scrollYStore } = this
+      let fullData = this.getTableFullData()
+      return { fullData, tableData: scrollYLoad ? fullData.slice(scrollYStore.startIndex, scrollYStore.startIndex + scrollYStore.renderSize) : fullData.slice(0) }
     },
     /**
      * 动态列处理
@@ -2003,7 +2009,7 @@ export default {
         column.order = order
         // 如果是服务端排序，则跳过本地排序处理
         if (column.sortable !== 'custom') {
-          this.tableData = this.getTableData()
+          this.tableData = this.getTableData().tableData
         }
         UtilTools.emitEvent(this, 'sort-change', [{ column, prop, order }])
       }
@@ -2042,7 +2048,12 @@ export default {
     // 确认筛选
     confirmFilterEvent (evnt) {
       this.filterStore.visible = false
-      this.tableData = this.getTableData()
+      if (this.scrollXLoad || this.scrollYLoad) {
+        this.clearScrollLoad()
+        this.computeScrollLoad()
+      } else {
+        this.tableData = this.getTableData().tableData
+      }
       this.closeFilter()
     },
     // 关闭筛选
@@ -2225,10 +2236,33 @@ export default {
     },
     // 更新 Y 滚动上下剩余空间大小
     updateScrollYSpace () {
-      let { tableFullData, scrollYStore } = this
-      this.tableData = this.getTableData()
-      scrollYStore.topSpaceHeight = scrollYStore.startIndex * scrollYStore.rowHeight
-      scrollYStore.bottomSpaceHeight = (tableFullData.length - (scrollYStore.startIndex + scrollYStore.renderSize)) * scrollYStore.rowHeight
+      let { scrollYStore } = this
+      let { fullData, tableData } = this.getTableData()
+      this.tableData = tableData
+      scrollYStore.topSpaceHeight = Math.max(scrollYStore.startIndex * scrollYStore.rowHeight, 0)
+      scrollYStore.bottomSpaceHeight = Math.max((fullData.length - (scrollYStore.startIndex + scrollYStore.renderSize)) * scrollYStore.rowHeight, 0)
+    },
+    clearScrollLoad () {
+      Object.assign(this.scrollXStore, {
+        visibleSize: 0,
+        startIndex: 0,
+        leftSpaceWidth: 0,
+        rightSpaceWidth: 0
+      })
+      Object.assign(this.scrollYStore, {
+        visibleSize: 0,
+        startIndex: 0,
+        topSpaceHeight: 0,
+        bottomSpaceHeight: 0
+      })
+      this.$nextTick(() => {
+        let tableBody = this.$refs.tableBody
+        let tableBodyElem = tableBody ? tableBody.$el : null
+        if (tableBodyElem) {
+          tableBodyElem.scrollTop = 0
+          tableBodyElem.scrollLeft = 0
+        }
+      })
     },
     /**
      * 对表格某一行进行校验的方法
@@ -2481,7 +2515,7 @@ export default {
         opts.original = true
       }
       let columns = this.visibleColumn
-      let oData = this.getTableData()
+      let oData = this.getTableData().fullData
       return ExportTools.downloadCsc(opts, ExportTools.getCsvContent(opts, oData, columns, this.$el))
     }
   }

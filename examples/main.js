@@ -24,11 +24,21 @@ function mockData () {
     currTime += 5000
     fullIndex++
     if (columns.length < 10000) {
-      columns.push({
+      let colItem = {
         prop: 'name',
         label: 'cloumn_' + fullIndex,
         width: 160
-      })
+      }
+      if (fullIndex < 3) {
+        colItem.sortable = true
+      } else if (fullIndex === 4) {
+        colItem.filters = [
+          { label: 'id < 100', value: 100 },
+          { label: 'id < 2000', value: 2000 }
+        ]
+        colItem.filterMethod = ({ value, row, column }) => row.id < value
+      }
+      columns.push(colItem)
     }
     list.push({
       id: fullIndex,

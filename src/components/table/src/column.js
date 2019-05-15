@@ -125,7 +125,7 @@ export default {
       if ($scopedSlots && $scopedSlots.header) {
         return $scopedSlots.header(params)
       }
-      return UtilTools.formatText(params.column.label)
+      return [UtilTools.formatText(params.column.label)]
     },
     renderCell (h, params) {
       let cellValue
@@ -138,7 +138,7 @@ export default {
       if (formatter) {
         cellValue = formatter({ cellValue, row, rowIndex, column, columnIndex })
       }
-      return UtilTools.formatText(cellValue)
+      return [UtilTools.formatText(cellValue)]
     },
 
     /**
@@ -149,7 +149,7 @@ export default {
       if ($scopedSlots && $scopedSlots.header) {
         return $scopedSlots.header(params)
       }
-      return UtilTools.formatText(params.column.label || '#')
+      return [UtilTools.formatText(params.column.label || '#')]
     },
     renderIndexCell (h, params) {
       let cellValue
@@ -165,7 +165,7 @@ export default {
       if (indexMethod) {
         cellValue = indexMethod({ row, rowIndex, column, columnIndex })
       }
-      return UtilTools.formatText(cellValue)
+      return [UtilTools.formatText(cellValue)]
     },
 
     /**
