@@ -13,7 +13,7 @@
       <vxe-table-column prop="name" label="Name" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column prop="sex" label="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column prop="date" label="Date"></vxe-table-column>
-      <vxe-table-column prop="address" label="Address" show-overflow-tooltip :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column prop="address" label="Address" show-overflow :edit-render="{name: 'input'}"></vxe-table-column>
     </vxe-table>
 
     <p>调用代码</p>
@@ -44,7 +44,7 @@ export default {
           <vxe-table-column prop="name" label="Name" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column prop="sex" label="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column prop="date" label="Date"></vxe-table-column>
-          <vxe-table-column prop="address" label="Address" show-overflow-tooltip :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column prop="address" label="Address" show-overflow :edit-render="{name: 'input'}"></vxe-table-column>
         </vxe-table>
         `,
         `

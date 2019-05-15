@@ -17,7 +17,7 @@
         </template>
       </vxe-table-column>
       <vxe-table-column prop="time" label="Time"></vxe-table-column>
-      <vxe-table-column prop="address" label="Address" show-overflow-tooltip></vxe-table-column>
+      <vxe-table-column prop="address" label="Address" show-overflow></vxe-table-column>
     </vxe-table>
   </div>
 </template>

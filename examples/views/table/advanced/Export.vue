@@ -12,7 +12,7 @@
       <vxe-table-column prop="name" label="Name"></vxe-table-column>
       <vxe-table-column prop="sex" label="Sex"></vxe-table-column>
       <vxe-table-column prop="age" label="Age"></vxe-table-column>
-      <vxe-table-column prop="address" label="Address" show-overflow-tooltip></vxe-table-column>
+      <vxe-table-column prop="address" label="Address" show-overflow></vxe-table-column>
     </vxe-table>
 
     <p>配置 columnFilterMethod 参数过滤指定列</p>
@@ -27,7 +27,7 @@
       <vxe-table-column prop="name" label="Name"></vxe-table-column>
       <vxe-table-column prop="sex" label="Sex"></vxe-table-column>
       <vxe-table-column prop="age" label="Age"></vxe-table-column>
-      <vxe-table-column prop="address" label="Address" show-overflow-tooltip></vxe-table-column>
+      <vxe-table-column prop="address" label="Address" show-overflow></vxe-table-column>
     </vxe-table>
 
     <p>配置 dataFilterMethod 参数过滤指定行</p>
@@ -42,7 +42,7 @@
       <vxe-table-column prop="name" label="Name"></vxe-table-column>
       <vxe-table-column prop="sex" label="Sex"></vxe-table-column>
       <vxe-table-column prop="age" label="Age"></vxe-table-column>
-      <vxe-table-column prop="address" label="Address" show-overflow-tooltip></vxe-table-column>
+      <vxe-table-column prop="address" label="Address" show-overflow></vxe-table-column>
     </vxe-table>
 
     <p>不导出表头，指定文件名，导出源数据,格式化数据</p>
@@ -57,7 +57,7 @@
       <vxe-table-column prop="name" label="Name"></vxe-table-column>
       <vxe-table-column prop="sex" label="Sex"></vxe-table-column>
       <vxe-table-column prop="age" label="Age"></vxe-table-column>
-      <vxe-table-column prop="address" label="Address" show-overflow-tooltip></vxe-table-column>
+      <vxe-table-column prop="address" label="Address" show-overflow></vxe-table-column>
     </vxe-table>
   </div>
 </template>

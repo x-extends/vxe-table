@@ -53,12 +53,13 @@ export default {
         },
         {
           prop: 'sex',
-          label: 'Sex'
+          label: 'Sex',
+          showHeaderOverflow: true
         },
         {
           prop: 'address',
           label: 'Address',
-          showOverflowTooltip: true
+          showOverflow: true
         }
       ],
       tableColumn2: [
@@ -95,7 +96,7 @@ export default {
         {
           prop: 'address',
           label: 'Address',
-          showOverflowTooltip: true
+          showOverflow: true
         }
       ],
       tableData: [],
@@ -127,7 +128,7 @@ export default {
                 {
                   prop: 'address',
                   label: 'Address',
-                  showOverflowTooltip: true
+                  showOverflow: true
                 }
               ]
             }
@@ -185,7 +186,7 @@ export default {
                 {
                   prop: 'address',
                   label: 'Address',
-                  showOverflowTooltip: true
+                  showOverflow: true
                 }
               ]
             }

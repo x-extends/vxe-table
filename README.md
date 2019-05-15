@@ -191,23 +191,24 @@ new Vue({ i18n }).$mount('#app')
 | resizable | 是否允许拖动列宽调整大小 | Boolean | — | false |
 | stripe | 是否带有斑马纹 | Boolean | — | false |
 | border | 是否带有纵向边框 | Boolean | — | false |
-| size | 表格的尺寸 | String | medium / small / mini | — |
+| size | 表格的尺寸 | String | medium,small,mini | — |
 | fit | 列的宽度是否自撑开 | Boolean | — | true |
 | loading | 表格是否加载中 | Boolean | — | false |
 | show-header | 是否显示表头 | Boolean | — | true |
 | highlight-current-row | 是否要高亮当前选中行 | Boolean | — | false |
 | highlight-hover-row | 鼠标移到行是否要高亮显示 | Boolean | — | false |
-| row-class-name | 给行附加 className，也可以是函数 Function({row, rowIndex}) | String/Function | — | — |
-| cell-class-name | 给单元格附加 className，也可以是函数 Function({row, rowIndex, column, columnIndex}) | String/Function | — | — |
-| header-row-class-name | 给表头的行附加 className，也可以是函数 Function({rowIndex}) | String/Function | — | — |
-| header-cell-class-name | 给表头的单元格附加 className，也可以是函数 Function({rowIndex, column, columnIndex}) | String/Function | — | — |
-| footer-row-class-name | 给表尾的行附加 className，也可以是函数 Function({rowIndex}) | String/Function | — | — |
-| footer-cell-class-name | 给表尾的单元格附加 className，也可以是函数 Function({rowIndex, column, columnIndex}) | String/Function | — | — |
+| row-class-name | 给行附加 className，也可以是函数 Function({row, rowIndex}) | String,Function | — | — |
+| cell-class-name | 给单元格附加 className，也可以是函数 Function({row, rowIndex, column, columnIndex}) | String,Function | — | — |
+| header-row-class-name | 给表头的行附加 className，也可以是函数 Function({rowIndex}) | String,Function | — | — |
+| header-cell-class-name | 给表头的单元格附加 className，也可以是函数 Function({rowIndex, column, columnIndex}) | String,Function | — | — |
+| footer-row-class-name | 给表尾的行附加 className，也可以是函数 Function({rowIndex}) | String,Function | — | — |
+| footer-cell-class-name | 给表尾的单元格附加 className，也可以是函数 Function({rowIndex, column, columnIndex}) | String,Function | — | — |
 | show-footer | 是否显示表尾合计 | Boolean | — | — |
 | footer-method | 表尾合计的计算方法 Function({columns, data}) | Function | — | — |
 | span-method | 合并行或列，该函数 Function({row, rowIndex, column, columnIndex, data}) 返回计算后的值 | Object | — | { rowspan: 1, colspan: 1} |
 | tooltipTheme | 列 tooltip 的主题，可选值为 dark 或 light | String | — | dark |
-| showOverflow | 设置所有行不允许换行（如果是固定列建议设置该值） | String | ellipsis / title / tooltip | — |
+| showAllOverflow | 设置所有内容过长时显示为省略号（如果是固定列建议设置该值） | Boolean,String | ellipsis,title,tooltip | — |
+| showHeaderAllOverflow | 设置表头所有内容过长时显示为省略号 | Boolean,String | ellipsis,title,tooltip | — |
 | row-key | 行数据的 Key | String | — | — |
 | auto-resize | 是否自动根据父容器大小调整表格宽度 | Boolean | — | false |
 | auto-width | 是否自动计算列宽（如果关闭了需要手动调用 recalculate 函数） | Boolean | — | true |
@@ -216,7 +217,7 @@ new Vue({ i18n }).$mount('#app')
 | Keyboard-config | 按键配置项 | Object | — | [options](#Keyboard-config-键盘相关配置项说明) |
 | edit-config | 可编辑配置项 | Object | — | [options](#edit-config-可编辑配置项说明) |
 | edit-rules | 校验规则配置项 | Object | — | [options](#edit-rules-校验规则配置项说明) |
-| optimized | 优化配置项 | Object/Boolean | — | [options](#optimized-优化配置项说明) |
+| optimized | 优化配置项 | Object,Boolean | — | [options](#optimized-优化配置项说明) |
 
 ##### context-menu 快捷菜单配置项说明（配合 context-menu-link 事件使用）
 
@@ -294,8 +295,8 @@ new Vue({ i18n }).$mount('#app')
 
 | 属性 | 描述 | 类型 | 可选值 | 默认值 |
 |------|------|-----|-----|-----|
-| trigger | 触发方式 | String | manual（手动触发方式，只能用于 mode=row） / click（点击触发编辑） / dblclick（双击触发编辑） | click |
-| mode | 编辑模式 | String | cell（单元格编辑模式） / row（行编辑模式） | cell |
+| trigger | 触发方式 | String | manual（手动触发方式，只能用于 mode=row）,click（点击触发编辑）,dblclick（双击触发编辑） | click |
+| mode | 编辑模式 | String | cell（单元格编辑模式）,row（行编辑模式） | cell |
 | showIcon | 是否显示列头编辑图标 | Boolean | — | true |
 | showStatus | 是否显示单元格值的修改状态 | Boolean | — | false |
 | autoClear | 当点击非编辑列之后，是否自动清除单元格的激活状态 | Boolean | — | true |
@@ -307,17 +308,17 @@ new Vue({ i18n }).$mount('#app')
 | required | 是否必填 | Boolean | — | — |
 | min  | 校验值最小长度（如果 type=number 则比较值大小） | Number | — | — |
 | max  | 校验值最大长度（如果 type=number 则比较值大小） | Number | — | — |
-| type | 类型校验 | String | number / string | string |
+| type | 类型校验 | String | number,string | string |
 | pattern | 正则校验 | RegExp | — | — |
 | validator  | 自定义校验方法 | Function(rule, value, callback) | — | — |
-| trigger  | 触发校验方式 | String | blur / change | change |
+| trigger  | 触发校验方式 | String | blur,change | change |
 
 #### Table Events
 
 | 事件名 | 说明 | 参数 |
 |------|------|-----|
 | select-all | 只对 type=selection 有效，当手动勾选全选时触发的事件 | {selection,checked},event |
-| select-change | 只对 type=selection/radio 有效，当手动勾选时触发的事件 | {selection,checked,row,column},event |
+| select-change | 只对 type=selection,radio 有效，当手动勾选时触发的事件 | {selection,checked,row,column},event |
 | cell-click | 单元格被点击时会触发该事件 | {row,rowIndex,column,columnIndex,cell},event |
 | cell-dblclick | 单元格被双击时会触发该事件 | {row,rowIndex,column,columnIndex,cell},event |
 | header-cell-click | 表头的单元格被点击时会触发该事件 | {column,columnIndex,cell},event |
@@ -394,8 +395,8 @@ new Vue({ i18n }).$mount('#app')
 
 | 参数 | 说明 | 类型 | 可选值 | 默认值 |
 |------|------|-----|------|-----|
-| type | 列的类型 | String | index / selection / radio / expand | — |
-| edit-render | 列编辑配置项 | Object/Boolean | — | [options](#edit-render-配置项说明) |
+| type | 列的类型 | String | index,selection,radio,expand | — |
+| edit-render | 列编辑配置项 | Object,Boolean | — | [options](#edit-render-配置项说明) |
 | prop | 列属性 | String | — | — |
 | label | 列标题 | String | — | — |
 | width | 列宽度 | String | — | — |
@@ -403,24 +404,23 @@ new Vue({ i18n }).$mount('#app')
 | fixed | 将列固定在左侧或者右侧 | String | — | left |
 | align | 列对其方式 | String | — | left |
 | header-align | 表头对齐方式 | String | — | — |
-| ellipsis | 当内容过长时显示为省略号 | Boolean | — | false |
-| show-overflow-title | 当内容过长显示为省略号和原生的 title 显示内容 | Boolean | — | false |
-| show-overflow-tooltip | 当内容过长显示为省略号并用 tooltip 显示完整内容 | Boolean | — | false |
+| show-overflow | 当内容过长时显示为省略号 | String,Boolean | ellipsis,title,tooltip | — |
+| show-header-overflow | 当表头内容过长时显示为省略号 | String,Boolean | — | ellipsis,title,tooltip |
 | formatter | 格式化显示内容 Function({cellValue, row, rowIndex, column, columnIndex}) | Function | — | — |
 | index-method | 只对 type=index 有效，自定义索引方法 Function({row, rowIndex, column, columnIndex}) | Function | — | — |
 | sortable | 是否允许列排序，如果是服务端排序需要设置为custom | Boolean | — | — |
-| sortBy | 只对 sortable 有效，自定义排序的属性 | String/Array | — | — |
+| sortBy | 只对 sortable 有效，自定义排序的属性 | String,Array | — | — |
 | filters | 配置筛选条件数组 | Array | — | — |
 | filter-multiple | 只对 filters 有效，筛选是否允许多选 | Boolean | — | true |
 | filter-method | 只对 filters 有效，自定义筛选方法 Function({value, row, column}) | Function | — | — |
-| column-key | 列的 key | String/Number | — | — |
+| column-key | 列的 key | String,Number | — | — |
 
 ##### edit-render 配置项说明
 
 | 属性 | 描述 | 类型 | 可选值 | 默认值 |
 |------|------|-----|-----|-----|
-| type | 渲染类型 | String | default（组件触发后可视） / visible（组件一直可视） | default |
-| name | 支持渲染的组件 | String | input / textarea | input |
+| type | 渲染类型 | String | default（组件触发后可视）,visible（组件一直可视） | default |
+| name | 支持渲染的组件 | String | input,textarea | input |
 | autofocus | 如果是自定义渲染可以指定聚焦的 class | String | — | — |
 
 #### Table-column Scoped Slot

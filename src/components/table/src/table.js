@@ -265,7 +265,7 @@ export default {
         // 显示效果开关
         animat: !isAll,
         // 如果设置了则不允许换行 ellipsis、title、tooltip
-        showOverflow: isAll || editConfig ? 'tooltip' : null,
+        showAllOverflow: isAll || editConfig ? 'tooltip' : null,
         // 默认列大于 80 条时自动使用横向 X 滚动渲染
         scrollX: {
           gt: 60,
@@ -1118,6 +1118,7 @@ export default {
      * 全局滚动事件
      */
     handleGlobalMousewheelEvent (evnt) {
+      this.clostTooltip()
       this.closeContextMenu()
     },
     /**
@@ -1435,67 +1436,79 @@ export default {
       return { flag: false }
     },
     /**
+     * 触发表头 tooltip 事件
+     */
+    triggerHeaderTooltipEvent (evnt, { column }) {
+      let { tooltipStore } = this
+      if (tooltipStore.column !== column || !tooltipStore.visible) {
+        this.showTooltip(evnt, column.label, column)
+      }
+    },
+    /**
      * 触发 tooltip 事件
      */
     triggerTooltipEvent (evnt, { row, column }) {
-      let { editConfig, editStore } = this
+      let { editConfig, editStore, tooltipStore } = this
       let { actived } = editStore
       if (editConfig) {
         if ((editConfig.mode === 'row' && actived.row === row) || (actived.row === row && actived.column === column)) {
           return
         }
       }
+      if (tooltipStore.column !== column || tooltipStore.row !== row || !tooltipStore.visible) {
+        this.showTooltip(evnt, UtilTools.getCellValue(row, column.property), column, row)
+      }
+    },
+    // 显示 tooltip
+    showTooltip (evnt, content, column, row) {
       let cell = evnt.currentTarget
       let wrapperElem = cell.children[0]
-      let content = UtilTools.getCellValue(row, column.property)
       if (content && wrapperElem.scrollWidth > wrapperElem.clientWidth) {
         let { tooltipStore, $refs } = this
-        if (tooltipStore.column !== column || tooltipStore.row !== row || !tooltipStore.visible) {
-          let { top, left } = DomTools.getOffsetPos(cell)
-          let { scrollTop, scrollLeft, visibleWidth } = DomTools.getDomNode()
-          let tipLeft = left
-          Object.assign(tooltipStore, {
-            row,
-            column,
-            content: UtilTools.getCellValue(row, column.property),
-            visible: true,
-            placement: 'top',
-            arrowStyle: { left: '50%' }
-          })
-          this.$nextTick().then(() => {
-            let tipWrapperElem = $refs.tipWrapper
-            if (tipWrapperElem) {
-              tipLeft = left + Math.floor((cell.offsetWidth - tipWrapperElem.offsetWidth) / 2)
-              tooltipStore.style = {
-                width: `${tipWrapperElem.offsetWidth + 2}px`,
-                top: `${top - tipWrapperElem.offsetHeight - 6}px`,
-                left: `${tipLeft}px`
-              }
-              return this.$nextTick()
+        let { top, left } = DomTools.getOffsetPos(cell)
+        let { scrollTop, scrollLeft, visibleWidth } = DomTools.getDomNode()
+        let tipLeft = left
+        Object.assign(tooltipStore, {
+          row,
+          column,
+          content,
+          visible: true,
+          placement: 'top',
+          arrowStyle: { left: '50%' }
+        })
+        this.$nextTick().then(() => {
+          let tipWrapperElem = $refs.tipWrapper
+          if (tipWrapperElem) {
+            tipLeft = left + Math.floor((cell.offsetWidth - tipWrapperElem.offsetWidth) / 2)
+            tooltipStore.style = {
+              width: `${tipWrapperElem.offsetWidth + 2}px`,
+              top: `${top - tipWrapperElem.offsetHeight - 6}px`,
+              left: `${tipLeft}px`
             }
-          }).then(() => {
-            let tipWrapperElem = $refs.tipWrapper
-            if (tipWrapperElem) {
-              let offsetHeight = tipWrapperElem.offsetHeight
-              let offsetWidth = tipWrapperElem.offsetWidth
-              if (top - offsetHeight < scrollTop) {
-                tooltipStore.placement = 'bottom'
-                tooltipStore.style.top = `${top + cell.offsetHeight + 6}px`
-              }
-              if (tipLeft < scrollLeft + 6) {
-                // 超出左边界
-                tipLeft = scrollLeft + 6
-                tooltipStore.arrowStyle.left = `${left > tipLeft + 16 ? left - tipLeft + 16 : 16}px`
-                tooltipStore.style.left = `${tipLeft}px`
-              } else if (left + offsetWidth > scrollLeft + visibleWidth) {
-                // 超出右边界
-                tipLeft = scrollLeft + visibleWidth - offsetWidth - 6
-                tooltipStore.arrowStyle.left = `${offsetWidth - Math.max(Math.floor((tipLeft + offsetWidth - left) / 2), 22)}px`
-                tooltipStore.style.left = `${tipLeft}px`
-              }
+            return this.$nextTick()
+          }
+        }).then(() => {
+          let tipWrapperElem = $refs.tipWrapper
+          if (tipWrapperElem) {
+            let offsetHeight = tipWrapperElem.offsetHeight
+            let offsetWidth = tipWrapperElem.offsetWidth
+            if (top - offsetHeight < scrollTop) {
+              tooltipStore.placement = 'bottom'
+              tooltipStore.style.top = `${top + cell.offsetHeight + 6}px`
             }
-          })
-        }
+            if (tipLeft < scrollLeft + 6) {
+              // 超出左边界
+              tipLeft = scrollLeft + 6
+              tooltipStore.arrowStyle.left = `${left > tipLeft + 16 ? left - tipLeft + 16 : 16}px`
+              tooltipStore.style.left = `${tipLeft}px`
+            } else if (left + offsetWidth > scrollLeft + visibleWidth) {
+              // 超出右边界
+              tipLeft = scrollLeft + visibleWidth - offsetWidth - 6
+              tooltipStore.arrowStyle.left = `${offsetWidth - Math.max(Math.floor((tipLeft + offsetWidth - left) / 2), 22)}px`
+              tooltipStore.style.left = `${tipLeft}px`
+            }
+          }
+        })
       }
     },
     // 关闭 tooltip
@@ -2164,6 +2177,7 @@ export default {
           })
         }
       }
+      this.clostTooltip()
     },
     /**
      * 纵向 Y 滚动渲染事件处理

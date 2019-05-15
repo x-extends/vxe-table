@@ -22,11 +22,9 @@ export default {
     // 表头对齐方式
     headerAlign: String,
     // 当内容过长时显示为省略号
-    ellipsis: Boolean,
-    // 当内容过长显示为省略号并用原生的 title 显示完整内容
-    showOverflowTitle: Boolean,
-    // 当内容过长显示为省略号并用 tooltip 显示完整内容
-    showOverflowTooltip: Boolean,
+    showOverflow: [Boolean, String],
+    // 当表头内容过长时显示为省略号
+    showHeaderOverflow: [Boolean, String],
     // 格式化显示内容
     formatter: Function,
     // 自定义索引方法

@@ -11,7 +11,7 @@
       <vxe-table-column prop="name" label="Name" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column prop="sex" label="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column prop="date" label="Date" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column prop="address" label="Address" show-overflow-tooltip :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column prop="address" label="Address" show-overflow :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column label="操作">
         <template v-slot="{ row }">
           <template v-if="$refs.xTable.hasActiveRow(row)">
@@ -52,7 +52,7 @@ export default {
           <vxe-table-column prop="name" label="Name" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column prop="sex" label="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column prop="date" label="Date" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column prop="address" label="Address" show-overflow-tooltip :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column prop="address" label="Address" show-overflow :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column label="操作">
             <template v-slot="{ row }">
               <template v-if="$refs.xTable.hasActiveRow(row)">

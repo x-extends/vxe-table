@@ -17,7 +17,7 @@
           <vxe-table-column prop="age" label="Age"></vxe-table-column>
         </vxe-table-column>
       </vxe-table-column>
-      <vxe-table-column prop="address" label="Address" show-overflow-tooltip></vxe-table-column>
+      <vxe-table-column prop="address" label="Address" show-overflow></vxe-table-column>
     </vxe-table>
 
     <p>如果使用了分组表头情，则需要按组来设置固定列</p>
@@ -38,7 +38,7 @@
           <vxe-table-column prop="date" label="Date" width="300"></vxe-table-column>
         </vxe-table-column>
       </vxe-table-column>
-      <vxe-table-column prop="address" label="Address" width="300" fixed="right" show-overflow-tooltip></vxe-table-column>
+      <vxe-table-column prop="address" label="Address" width="300" fixed="right" show-overflow></vxe-table-column>
     </vxe-table>
   </div>
 </template>

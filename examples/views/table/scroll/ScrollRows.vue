@@ -15,7 +15,7 @@
       <vxe-table-column prop="rate" label="Rate" width="200"></vxe-table-column>
       <vxe-table-column prop="region" label="Region" width="200"></vxe-table-column>
       <vxe-table-column prop="time" label="Time" width="200"></vxe-table-column>
-      <vxe-table-column prop="address" label="Address" width="300" show-overflow-tooltip></vxe-table-column>
+      <vxe-table-column prop="address" label="Address" width="300" show-overflow></vxe-table-column>
       <vxe-table-column prop="updateTime" label="UpdateTime" width="200"></vxe-table-column>
       <vxe-table-column prop="createTime" label="CreateTime" width="200"></vxe-table-column>
       <vxe-table-column prop="attr1" label="Attr1" width="200"></vxe-table-column>

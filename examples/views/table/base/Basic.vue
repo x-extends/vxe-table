@@ -19,7 +19,7 @@
 
     <p>ellipsis 当内容超过时显示为省略号</p>
     <p>show-overflow-title 当内容超过时显示为省略号和原生 title 显示</p>
-    <p>show-overflow-tooltip 当内容超过隐藏时显示为省略号并 tooltip 显示</p>
+    <p>show-overflow 当内容超过隐藏时显示为省略号并 tooltip 显示</p>
     <p>使用 highlight-hover-row 属性启用 hover 行高亮</p>
 
     <vxe-table
@@ -29,7 +29,7 @@
       <vxe-table-column prop="name" label="Name"></vxe-table-column>
       <vxe-table-column prop="sex" label="Sex"></vxe-table-column>
       <vxe-table-column prop="age" label="Age"></vxe-table-column>
-      <vxe-table-column prop="address" label="Address" show-overflow-tooltip></vxe-table-column>
+      <vxe-table-column prop="address" label="Address" show-overflow></vxe-table-column>
     </vxe-table>
 
     <p>调用代码</p>
@@ -78,7 +78,7 @@ export default {
           <vxe-table-column prop="name" label="Name"></vxe-table-column>
           <vxe-table-column prop="sex" label="Sex"></vxe-table-column>
           <vxe-table-column prop="age" label="Age"></vxe-table-column>
-          <vxe-table-column prop="address" label="Address" show-overflow-tooltip></vxe-table-column>
+          <vxe-table-column prop="address" label="Address" show-overflow></vxe-table-column>
         </vxe-table>
         `,
         `

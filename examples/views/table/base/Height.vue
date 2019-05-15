@@ -10,7 +10,7 @@
       <vxe-table-column prop="name" label="Name"></vxe-table-column>
       <vxe-table-column prop="sex" label="Sex"></vxe-table-column>
       <vxe-table-column prop="age" label="Age"></vxe-table-column>
-      <vxe-table-column prop="address" label="Address" show-overflow-tooltip></vxe-table-column>
+      <vxe-table-column prop="address" label="Address" show-overflow></vxe-table-column>
     </vxe-table>
   </div>
 </template>

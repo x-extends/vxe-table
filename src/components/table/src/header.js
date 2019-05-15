@@ -77,7 +77,7 @@ export default {
   },
   render (h) {
     let { $parent: $table, fixedType, headerColumn, tableColumn, resizeMousedown, fixedColumn } = this
-    let { $listeners: tableListeners, resizable, border, headerRowClassName, headerCellClassName, tableWidth, scrollXLoad, scrollXStore, scrollYWidth } = $table
+    let { $listeners: tableListeners, resizable, border, headerRowClassName, headerCellClassName, showHeaderAllOverflow, tableWidth, scrollXLoad, scrollXStore, scrollYWidth } = $table
     // 如果是使用优化模式
     if (scrollXLoad) {
       if (fixedType) {
@@ -130,9 +130,19 @@ export default {
           return h('tr', {
             class: ['vxe-header--row', headerRowClassName ? XEUtils.isFunction(headerRowClassName) ? headerRowClassName({ $table, rowIndex, fixed: fixedType }) : headerRowClassName : '']
           }, cols.map((column, columnIndex, list) => {
+            let { columnKey, showHeaderOverflow, headerAlign, renderWidth } = column
             let isGroup = column.children && column.children.length
             let fixedHiddenColumn = fixedType && column.fixed !== fixedType && !isGroup
+            let showEllipsis = (showHeaderOverflow || showHeaderAllOverflow) === 'ellipsis'
+            let showTitle = (showHeaderOverflow || showHeaderAllOverflow) === 'title'
+            let showTooltip = showHeaderOverflow === true || (showHeaderOverflow || showHeaderAllOverflow) === 'tooltip'
             let thOns = {}
+            if (showTooltip) {
+              thOns.mouseover = evnt => {
+                $table.triggerHeaderTooltipEvent(evnt, { $table, column, columnIndex, fixed: fixedType })
+              }
+              thOns.mouseout = $table.clostTooltip
+            }
             if (tableListeners['header-cell-click']) {
               thOns.click = evnt => {
                 UtilTools.emitEvent($table, 'header-cell-click', [{ $table, rowIndex, column, columnIndex, fixed: fixedType, cell: evnt.currentTarget }, evnt])
@@ -140,7 +150,7 @@ export default {
             }
             return h('th', {
               class: ['vxe-header--column', column.id, {
-                [`col--${column.headerAlign}`]: column.headerAlign,
+                [`col--${headerAlign}`]: headerAlign,
                 'fixed--hidden': fixedHiddenColumn,
                 'filter--active': column.filters.some(item => item.checked)
               }, headerCellClassName ? XEUtils.isFunction(headerCellClassName) ? headerCellClassName({ $table, rowIndex, column, columnIndex, fixed: fixedType }) : headerCellClassName : ''],
@@ -149,10 +159,20 @@ export default {
                 rowspan: column.rowSpan
               },
               on: thOns,
-              key: column.columnKey || columnIndex
+              key: columnKey || columnIndex
             }, [
               h('div', {
-                class: ['vxe-cell']
+                class: ['vxe-cell', {
+                  'c--title': showTitle,
+                  'c--tooltip': showTooltip,
+                  'c--ellipsis': showEllipsis
+                }],
+                attrs: {
+                  title: showTitle ? column.label : null
+                },
+                style: {
+                  width: showTitle || showTooltip || showEllipsis ? `${border ? renderWidth - 1 : renderWidth}px` : null
+                }
               }, column.renderHeader(h, { $table, column, columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn })),
               border && resizable && !fixedType && !isGroup ? h('div', {
                 class: ['vxe-resizable'],

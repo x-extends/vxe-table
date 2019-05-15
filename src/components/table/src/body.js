@@ -16,16 +16,16 @@ function handleLocation (obj, rows, columns, row, column) {
  * 渲染列
  */
 function renderColumn (h, _vm, $table, fixedType, row, rowIndex, column, columnIndex) {
-  let { $listeners: tableListeners, tableData, scrollYLoad, border, highlightCurrentRow, showOverflow, cellClassName, spanMethod, keyboardConfig, mouseConfig, editConfig, editStore, validStore } = $table
-  let { editRender, align, ellipsis, showTitle, showTooltip, renderWidth, columnKey } = column
+  let { $listeners: tableListeners, tableData, scrollXLoad, scrollYLoad, border, highlightCurrentRow, showAllOverflow, cellClassName, spanMethod, keyboardConfig, mouseConfig, editConfig, editStore, validStore } = $table
+  let { editRender, align, showOverflow, renderWidth, columnKey } = column
   let { checked, selected, actived, copyed } = editStore
   let isMouseSelected = mouseConfig && mouseConfig.selected
   let isMouseChecked = mouseConfig && mouseConfig.checked
   let isKeyboardCut = keyboardConfig && keyboardConfig.isCut
   let fixedHiddenColumn = fixedType && column.fixed !== fixedType
-  let isShowTitle = showTitle || showOverflow === 'title'
-  let isShowTooltip = showTooltip || showOverflow === 'tooltip'
-  let isEllipsis = ellipsis || showOverflow === 'ellipsis'
+  let showEllipsis = (showOverflow || showAllOverflow) === 'ellipsis'
+  let showTitle = (showOverflow || showAllOverflow) === 'title'
+  let showTooltip = showOverflow === true || (showOverflow || showAllOverflow) === 'tooltip'
   let attrs, isDirty
   let tdOns = {}
   let checkedLocat = {}
@@ -33,11 +33,11 @@ function renderColumn (h, _vm, $table, fixedType, row, rowIndex, column, columnI
   let copyedLocat = {}
   let triggerDblclick = (editRender && editConfig && editConfig.trigger === 'dblclick')
   // 滚动的渲染不支持动态行高
-  if (scrollYLoad && !(isShowTitle || isShowTooltip || isEllipsis)) {
-    isEllipsis = true
+  if ((scrollXLoad || scrollYLoad) && !(showTitle || showTooltip || showEllipsis)) {
+    showEllipsis = true
   }
   // 优化事件绑定
-  if (isShowTooltip) {
+  if (showTooltip) {
     tdOns.mouseover = evnt => {
       $table.triggerTooltipEvent(evnt, { $table, row, rowIndex, column, columnIndex, fixed: fixedType })
     }
@@ -110,15 +110,15 @@ function renderColumn (h, _vm, $table, fixedType, row, rowIndex, column, columnI
   }, !fixedType && fixedHiddenColumn ? [] : [
     h('div', {
       class: ['vxe-cell', {
-        'c--title': isShowTitle,
-        'c--tooltip': isShowTooltip,
-        'c--ellipsis': isEllipsis
+        'c--title': showTitle,
+        'c--tooltip': showTooltip,
+        'c--ellipsis': showEllipsis
       }],
       attrs: {
-        title: isShowTitle ? XEUtils.get(row, column.property) : null
+        title: showTitle ? XEUtils.get(row, column.property) : null
       },
       style: {
-        width: isShowTitle || isShowTooltip || isEllipsis ? `${border ? renderWidth - 1 : renderWidth}px` : null
+        width: showTitle || showTooltip || showEllipsis ? `${border ? renderWidth - 1 : renderWidth}px` : null
       }
     }, column.renderCell(h, { $table, row, rowIndex, column, columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn })),
     isMouseChecked && !fixedType ? h('span', {
@@ -252,7 +252,7 @@ export default {
   },
   render (h) {
     let { $parent: $table, fixedColumn, fixedType } = this
-    let { maxHeight, height, tableColumn, headerHeight, showFooter, showOverflow, footerHeight, tableHeight, tableWidth, scrollXStore, scrollXLoad, scrollYStore, scrollYLoad, scrollXHeight } = $table
+    let { maxHeight, height, tableColumn, headerHeight, showFooter, showAllOverflow, footerHeight, tableHeight, tableWidth, scrollXStore, scrollXLoad, scrollYStore, scrollYLoad, scrollXHeight } = $table
     let customHeight = XEUtils.toNumber(height)
     let style = {}
     if (customHeight) {
@@ -262,7 +262,7 @@ export default {
       style['max-height'] = `${fixedType ? maxHeight - headerHeight - (showFooter ? 0 : scrollXHeight) : maxHeight - headerHeight}px`
     }
     // 如果是使用优化模式
-    if (fixedType && showOverflow) {
+    if (fixedType && showAllOverflow) {
       tableColumn = fixedColumn
       tableWidth = tableColumn.reduce((previous, column) => previous + column.renderWidth, 0)
     } else if (scrollXLoad) {

@@ -60,7 +60,7 @@ export default {
         {
           prop: 'address',
           label: 'Address',
-          showOverflowTooltip: true
+          showOverflow: true
         }
       ],
       tableColumn2: [
@@ -97,7 +97,7 @@ export default {
         {
           prop: 'address',
           label: 'Address',
-          showOverflowTooltip: true
+          showOverflow: true
         }
       ],
       tableColumn3: [
@@ -120,7 +120,7 @@ export default {
           prop: 'address',
           label: 'Address',
           width: 300,
-          showOverflowTooltip: true
+          showOverflow: true
         },
         {
           prop: 'rate',
