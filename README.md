@@ -405,7 +405,7 @@ new Vue({ i18n }).$mount('#app')
 | align | 列对其方式 | String | — | left |
 | header-align | 表头对齐方式 | String | — | — |
 | show-overflow | 当内容过长时显示为省略号 | String,Boolean | ellipsis,title,tooltip | — |
-| show-header-overflow | 当表头内容过长时显示为省略号 | String,Boolean | — | ellipsis,title,tooltip |
+| show-header-overflow | 当表头内容过长时显示为省略号 | String,Boolean | ellipsis,title,tooltip | — |
 | formatter | 格式化显示内容 Function({cellValue, row, rowIndex, column, columnIndex}) | Function | — | — |
 | index-method | 只对 type=index 有效，自定义索引方法 Function({row, rowIndex, column, columnIndex}) | Function | — | — |
 | sortable | 是否允许列排序，如果是服务端排序需要设置为custom | Boolean | — | — |
