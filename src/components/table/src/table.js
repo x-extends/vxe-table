@@ -659,7 +659,7 @@ export default {
         }
       }
       insertList.push(newRecords)
-      return this.$nextTick().then(() => ({ row: newRecords.length ? newRecords[0] : null, rows: newRecords }))
+      return this.$nextTick().then(() => ({ row: newRecords.length ? newRecords[newRecords.length - 1] : null, rows: newRecords }))
     },
     defineProperty (record) {
       let recordItem = Object.assign({}, record)
@@ -685,7 +685,7 @@ export default {
         rest = XEUtils.remove(tableData, item => rows.indexOf(item) > -1)
       }
       removeList.push.apply(removeList, rest)
-      return this.$nextTick(() => rest)
+      return this.$nextTick(() => ({ row: rows.length ? rows[rows.length - 1] : null, rows: rest }))
     },
     /**
      * 还原数据
@@ -960,13 +960,14 @@ export default {
       let tableWidth = this.autoCellWidth(headerElem, bodyElem, footerElem, bodyWidth)
       if (refull === true) {
         // 初始化时需要在列计算之后再执行优化运算，达到最优显示效果
-        this.$nextTick(() => {
+        return this.$nextTick(() => {
           bodyWidth = bodyElem.clientWidth
           if (bodyWidth !== tableWidth) {
             this.autoCellWidth(headerElem, bodyElem, footerElem, bodyWidth)
           }
         })
       }
+      return this.$nextTick()
     },
     // 列宽计算
     autoCellWidth (headerElem, bodyElem, footerElem, bodyWidth) {
@@ -1394,6 +1395,7 @@ export default {
         selectChild: null,
         showChild: false
       })
+      return this.$nextTick()
     },
     ctxMenuMouseoverEvent (evnt, item, child) {
       let ctxMenuStore = this.ctxMenuStore
@@ -1476,7 +1478,7 @@ export default {
           placement: 'top',
           arrowStyle: { left: '50%' }
         })
-        this.$nextTick().then(() => {
+        return this.$nextTick().then(() => {
           let tipWrapperElem = $refs.tipWrapper
           if (tipWrapperElem) {
             tipLeft = left + Math.floor((cell.offsetWidth - tipWrapperElem.offsetWidth) / 2)
@@ -1510,6 +1512,7 @@ export default {
           }
         })
       }
+      return this.$nextTick()
     },
     // 关闭 tooltip
     clostTooltip () {
@@ -1521,6 +1524,7 @@ export default {
         visible: false,
         placement: null
       })
+      return this.$nextTick()
     },
     setSelection (rows, value) {
       let column = this.visibleColumn.find(column => column.type === 'selection')
@@ -1895,6 +1899,7 @@ export default {
       copyed.cut = false
       copyed.rows = []
       copyed.columns = []
+      return this.$nextTick()
     },
     /**
      * 处理复制
@@ -2001,10 +2006,17 @@ export default {
      * 只对 trigger=dblclick 有效，选中单元格
      */
     setSelectCell (row, prop) {
-      let { editConfig } = this
+      let { $refs, id, tableData, editConfig, visibleColumn } = this
       if (row && prop && editConfig.trigger !== 'manual') {
-
+        let column = visibleColumn.find(column => column.property === prop)
+        let rowIndex = tableData.indexOf(row)
+        if (rowIndex > -1 && column) {
+          let cell = $refs.tableBody.$el.querySelector(`.vxe-body--row.row--${id}_${rowIndex} .${column.id}`)
+          let params = { row, rowIndex, column, columnIndex: visibleColumn.indexOf(column), cell }
+          this.handleSelected(params, {})
+        }
       }
+      return this.$nextTick()
     },
     /**
      * 点击排序事件
@@ -2026,6 +2038,7 @@ export default {
         }
         UtilTools.emitEvent(this, 'sort-change', [{ column, prop, order }])
       }
+      return this.$nextTick()
     },
     /**
      * 点击筛选事件
@@ -2077,6 +2090,7 @@ export default {
         options: [],
         visible: false
       })
+      return this.$nextTick()
     },
     // 重置筛选
     resetFilterEvent (evnt) {
@@ -2120,10 +2134,11 @@ export default {
           }
         }
       })
-      return this.$nextTick(() => this.recalculate())
+      return this.$nextTick()
     },
     clearExpand () {
       this.expandeds = []
+      return this.$nextTick()
     },
     /**
      * 是否启用了横向 X 滚动渲染
@@ -2282,6 +2297,7 @@ export default {
           tableFooterElem.scrollLeft = 0
         }
       })
+      return this.$nextTick()
     },
     /**
      * 对表格某一行进行校验的方法
@@ -2464,8 +2480,7 @@ export default {
       return validPromise
     },
     clearValidate () {
-      let { validStore } = this
-      Object.assign(validStore, {
+      Object.assign(this.validStore, {
         visible: false,
         row: null,
         column: null,
@@ -2473,6 +2488,7 @@ export default {
         style: null,
         placement: null
       })
+      return this.$nextTick()
     },
     handleValidError (params) {
       let { $refs, validStore } = this
