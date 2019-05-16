@@ -1,3 +1,4 @@
+import XEUtils from 'xe-utils'
 import Table from './components/table'
 import TableColumn from './components/table-column'
 import TableConfig from './components/table-grid'
@@ -30,9 +31,15 @@ function setup (options = {}) {
 
 function install (Vue, options) {
   if (!install.installed) {
-    setup(options)
+    if (XEUtils.isPlainObject(options)) {
+      setup(options)
+    }
     components.map(component => Vue.component(component.name, component))
-    Array.from(arguments).slice(1).map(plugin => plugin(GlobalConfig, EventInterceptor))
+    Array.from(arguments).slice(1).forEach(plugin => {
+      if (plugin && plugin.install) {
+        plugin.install(GlobalConfig, EventInterceptor)
+      }
+    })
   }
 }
 
