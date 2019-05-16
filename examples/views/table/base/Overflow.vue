@@ -37,9 +37,9 @@ export default {
           highlight-hover-row
           :data.sync="tableData">
           <vxe-table-column type="index" width="60"></vxe-table-column>
-          <vxe-table-column prop="name" label="Name"></vxe-table-column>
-          <vxe-table-column prop="sex" label="Sex"></vxe-table-column>
-          <vxe-table-column prop="age" label="Age"></vxe-table-column>
+          <vxe-table-column prop="address" label="超过隐藏时显示为省略号————————————" show-header-overflow="ellipsis" show-overflow="ellipsis"></vxe-table-column>
+          <vxe-table-column prop="date" label="内容超过隐藏时显示为省略号并用原生 title 显示" show-overflow="title"></vxe-table-column>
+          <vxe-table-column prop="age" label="表头超过隐藏时显示为省略号并 tooltip 显示——————————————" show-header-overflow></vxe-table-column>
           <vxe-table-column prop="address" label="Address" show-overflow></vxe-table-column>
         </vxe-table>
         `,
