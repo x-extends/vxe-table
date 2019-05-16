@@ -1075,9 +1075,9 @@ export default {
       let { editStore, ctxMenuStore, editConfig = {} } = this
       let { actived } = editStore
       if (this.$refs.filterWrapper) {
-        if (this.getEventTargetNode(evnt, this.$el, 'vxe-filter-wrapper').flag) {
+        if (DomTools.getEventTargetNode(evnt, this.$el, 'vxe-filter-wrapper').flag) {
           // 如果点击了筛选按钮
-        } else if (this.getEventTargetNode(evnt, this.$refs.filterWrapper.$el).flag) {
+        } else if (DomTools.getEventTargetNode(evnt, this.$refs.filterWrapper.$el).flag) {
           // 如果点击筛选容器
         } else {
           this.closeFilter()
@@ -1091,9 +1091,9 @@ export default {
             if (!EventInterceptor.clearActiveds.some(func => func(actived.args, evnt) === false)) {
               if (
                 // 如果点击了非编辑列
-                !this.getEventTargetNode(evnt, this.$el, 'col--edit').flag ||
+                !DomTools.getEventTargetNode(evnt, this.$el, 'col--edit').flag ||
                 // 如果点击了当前表格之外
-                !this.getEventTargetNode(evnt, this.$el).flag
+                !DomTools.getEventTargetNode(evnt, this.$el).flag
               ) {
                 this.triggerValidate().then(() => {
                   this.clearActived(evnt)
@@ -1104,7 +1104,7 @@ export default {
         }
       }
       // 如果配置了快捷菜单且，点击了其他地方则关闭
-      if (ctxMenuStore.visible && this.$refs.ctxWrapper && !this.getEventTargetNode(evnt, this.$refs.ctxWrapper.$el).flag) {
+      if (ctxMenuStore.visible && this.$refs.ctxWrapper && !DomTools.getEventTargetNode(evnt, this.$refs.ctxWrapper.$el).flag) {
         this.closeContextMenu()
       }
     },
@@ -1311,19 +1311,19 @@ export default {
       let { isCtxMenu } = this
       if (isCtxMenu) {
         // 右键头部
-        let headeWrapperNode = this.getEventTargetNode(evnt, this.$el, 'vxe-table--header-wrapper')
+        let headeWrapperNode = DomTools.getEventTargetNode(evnt, this.$el, 'vxe-table--header-wrapper')
         if (headeWrapperNode.flag) {
           this.openContextMenu(evnt, 'header', { })
           return
         }
         // 右键内容
-        let bodyWrapperNode = this.getEventTargetNode(evnt, this.$el, 'vxe-table--body-wrapper')
+        let bodyWrapperNode = DomTools.getEventTargetNode(evnt, this.$el, 'vxe-table--body-wrapper')
         if (bodyWrapperNode.flag) {
           this.openContextMenu(evnt, 'body', { })
           return
         }
         // 右键表尾
-        let footerWrapperNode = this.getEventTargetNode(evnt, this.$el, 'vxe-table--footer-wrapper')
+        let footerWrapperNode = DomTools.getEventTargetNode(evnt, this.$el, 'vxe-table--footer-wrapper')
         if (footerWrapperNode.flag) {
           this.openContextMenu(evnt, 'footer', { })
           return
@@ -1346,7 +1346,7 @@ export default {
           if (!visibleMethod || visibleMethod(params, evnt)) {
             evnt.preventDefault()
             let { scrollTop, scrollLeft, visibleHeight, visibleWidth } = DomTools.getDomNode()
-            let { targetElem } = this.getEventTargetNode(evnt, this.$el, `vxe-${type}--column`)
+            let { targetElem } = DomTools.getEventTargetNode(evnt, this.$el, `vxe-${type}--column`)
             let { rowIndex, columnIndex } = DomTools.getCellIndexs(targetElem)
             let row = tableData[rowIndex]
             let column = visibleColumn[columnIndex]
@@ -1420,22 +1420,6 @@ export default {
     ctxMenuLinkEvent (evnt, menu) {
       UtilTools.emitEvent(this, 'context-menu-link', [menu, this.ctxMenuStore.args, evnt])
       this.closeContextMenu()
-    },
-    /**
-     * 检查触发源是否属于目标节点
-     */
-    getEventTargetNode (evnt, container, queryCls) {
-      let targetElem
-      let target = evnt.target
-      while (target && target.nodeType && target !== document) {
-        if (queryCls && DomTools.hasClass(target, queryCls)) {
-          targetElem = target
-        } else if (target === container) {
-          return { flag: queryCls ? !!targetElem : true, container, targetElem: targetElem }
-        }
-        target = target.parentNode
-      }
-      return { flag: false }
     },
     /**
      * 触发表头 tooltip 事件
@@ -1618,7 +1602,7 @@ export default {
      * 选中事件
      */
     triggerCellMousedownEvent (evnt, params) {
-      let { $el, tableData, visibleColumn, editStore, editConfig, getEventTargetNode, handleSelected, handleChecked } = this
+      let { $el, tableData, visibleColumn, editStore, editConfig, handleSelected, handleChecked } = this
       let { checked, actived } = editStore
       let { row, column, cell } = params
       let { button } = evnt
@@ -1638,7 +1622,7 @@ export default {
               let start = DomTools.getCellIndexs(cell)
               let updateEvent = XEUtils.throttle(function (evnt) {
                 evnt.preventDefault()
-                let { flag, targetElem } = getEventTargetNode(evnt, $el, 'vxe-body--column')
+                let { flag, targetElem } = DomTools.getEventTargetNode(evnt, $el, 'vxe-body--column')
                 if (flag) {
                   handleChecked(start, DomTools.getCellIndexs(targetElem), evnt)
                 }
@@ -1667,7 +1651,7 @@ export default {
     triggerCornerMousedownEvent (params, evnt) {
       evnt.preventDefault()
       evnt.stopPropagation()
-      let { $el, tableData, visibleColumn, editStore, editConfig, getEventTargetNode, handleTempChecked } = this
+      let { $el, tableData, visibleColumn, editStore, editConfig, handleTempChecked } = this
       let { checked } = editStore
       let { button } = evnt
       let isLeftBtn = button === 0
@@ -1682,7 +1666,7 @@ export default {
           }
           let updateEvent = XEUtils.throttle(function (evnt) {
             evnt.preventDefault()
-            let { flag, targetElem } = getEventTargetNode(evnt, $el, 'vxe-body--column')
+            let { flag, targetElem } = DomTools.getEventTargetNode(evnt, $el, 'vxe-body--column')
             if (flag) {
               handleTempChecked(start, DomTools.getCellIndexs(targetElem), evnt)
             }
@@ -2533,6 +2517,7 @@ export default {
      * 导出 csv 文件
      */
     exportCsv (options) {
+      let { visibleColumn, scrollXLoad, scrollYLoad } = this
       let opts = Object.assign({
         filename: 'table.csv',
         original: false,
@@ -2546,10 +2531,10 @@ export default {
       if (opts.filename.indexOf('.csv') === -1) {
         opts.filename += '.csv'
       }
-      if (this.scrollYLoad) {
+      if (scrollXLoad || scrollYLoad) {
         opts.original = true
       }
-      let columns = this.visibleColumn
+      let columns = visibleColumn
       let oData = this.getTableData().fullData
       return ExportTools.downloadCsc(opts, ExportTools.getCsvContent(opts, oData, columns, this.$el))
     }

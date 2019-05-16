@@ -361,7 +361,7 @@ new Vue({ i18n }).$mount('#app')
 | clearFilter | 清空筛选条件，数据会恢复成未筛选的状态 | — |
 | clearChecked | 清除单元格批量选中状态 | — |
 | clearSelected | 清除单元格选中状态 | — |
-| clearActivedd | 清除单元格激活状态 | — |
+| clearActived | 清除单元格激活状态 | — |
 | clearCopyed | 清空已复制的内容 | — |
 | clearData | 清空单元格内容 | rows,prop |
 | clearScroll | 清除滚动相关信息，还原到初始状态 | — |
@@ -371,7 +371,7 @@ new Vue({ i18n }).$mount('#app')
 | recalculate | 重新计算并更新列宽 | — |
 | isScrollXLoad | 判断是否启用了横向 X 滚动渲染 | — |
 | isScrollYLoad | 判断是否启用了纵向 Y 滚动渲染 | — |
-| sort | 手动对 Table 进行排序 | prop,order |
+| sort | 手动对表格进行排序 | prop,order |
 | validateRow | 对表格某一行进行校验的方法，参数为行数据和一个回调函数。该回调函数会在校验结束后被调用，并传入两个参数：（是否校验成功，最近一列未通过校验的字段）。若不传入回调函数，则会返回一个 promise | row,callback |
 | validate | 对整个表格进行校验的方法，参数为一个回调函数。该回调函数会在校验结束后被调用，并传入两个参数：（是否校验成功，最近一列未通过校验的字段）。若不传入回调函数，则会返回一个 promise | callback |
 | exportCsv| 将表格数据导出为 .csv 文件，说明：支持IE9+、Edge、Chrome、Firefox 等常用浏览器。IE11以下可能存在中文乱码问题，部分浏览器需要手动修改后缀名为 .csv | [options](#exportcsv-参数说明) |
@@ -381,12 +381,12 @@ new Vue({ i18n }).$mount('#app')
 | 属性 | 描述 | 类型 | 可选值 | 默认值 |
 |------|------|-----|-----|-----|
 | filename | 文件名 | String | — | table.csv |
-| original | 是否导出源数据 | Boolean | — | false |
+| original | 是否导出源数据（滚动渲染启用后默认是 true） | Boolean | — | false |
 | isHeader | 是否显示表头 | Boolean | — | true |
 | download | 是否马上下载，如果设置为 false 则通过返回结果为内容的 Promise | Boolean | — | true |
 | data | 自定义数据 | Array | — | — |
 | columns | 自定义列 | Array | — | — |
-| columnFilterMethod | 列过滤方法，该函数 Function(column,columnIndex) 的返回值用来决定该列是否导出 | Function | — | — |
+| columnFilterMethod | 列过滤方法，该函数 Function(column,columnIndex) 的返回值用来决定该列是否导出 | Function | — | 默认过滤掉 type=index,selection,radio 和 prop 为空的列 |
 | dataFilterMethod | 数据过滤方法，该函数 Function(row,rowIndex) 的返回值用来决定该数据是否导出 | Function | — | — |
 
 ### Table-column

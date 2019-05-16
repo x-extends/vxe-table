@@ -24,6 +24,22 @@ const DomTools = {
     }
   },
   /**
+   * 检查触发源是否属于目标节点
+   */
+  getEventTargetNode (evnt, container, queryCls) {
+    let targetElem
+    let target = evnt.target
+    while (target && target.nodeType && target !== document) {
+      if (queryCls && DomTools.hasClass(target, queryCls)) {
+        targetElem = target
+      } else if (target === container) {
+        return { flag: queryCls ? !!targetElem : true, container, targetElem: targetElem }
+      }
+      target = target.parentNode
+    }
+    return { flag: false }
+  },
+  /**
    * 获取元素相对于 document 的位置
    */
   getOffsetPos (elem, container) {
