@@ -151,17 +151,13 @@ export default {
     },
     renderIndexCell (h, params) {
       let cellValue
-      let { $scopedSlots, $table, indexMethod } = this
-      let { row, rowIndex, column, columnIndex } = params
+      let { $scopedSlots, indexMethod } = this
       if ($scopedSlots && $scopedSlots.default) {
         return $scopedSlots.default(params)
       }
-      if ($table.scrollYLoad) {
-        rowIndex += $table.scrollYStore.startIndex
-      }
-      cellValue = rowIndex + 1
+      cellValue = params.rowIndex + 1
       if (indexMethod) {
-        cellValue = indexMethod({ row, rowIndex, column, columnIndex })
+        cellValue = indexMethod(params)
       }
       return [UtilTools.formatText(cellValue)]
     },

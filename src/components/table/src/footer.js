@@ -110,11 +110,11 @@ export default {
      */
     scrollEvent (evnt) {
       let { $parent: $table } = this
-      let { scrollXLoad, scrollYLoad, triggerScrollXEvent, triggerScrollYEvent } = $table
-      let { tableHeader, tableBody, tableFooter } = $table.$refs
-      let headerElem = tableHeader.$el
-      let bodyElem = tableBody.$el
-      let footerElem = tableFooter.$el
+      let { $refs, scrollXLoad, triggerScrollXEvent } = $table
+      let tableHeader = $refs.tableHeader
+      let headerElem = tableHeader ? tableHeader.$el : null
+      let bodyElem = $refs.tableBody.$el
+      let footerElem = $refs.tableFooter.$el
       if (headerElem) {
         headerElem.scrollLeft = footerElem.scrollLeft
       }
@@ -123,9 +123,6 @@ export default {
       }
       if (scrollXLoad) {
         triggerScrollXEvent(evnt)
-      }
-      if (scrollYLoad) {
-        triggerScrollYEvent(evnt)
       }
     }
   }

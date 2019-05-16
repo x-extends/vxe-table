@@ -49,9 +49,9 @@ export default {
   // 列 tooltip 的主题，可选值为 dark 或 light
   tooltipTheme: { type: String, default: () => GlobalConfig.tooltipTheme },
   // 设置所有内容过长时显示为省略号
-  showAllOverflow: { type: String, default: () => GlobalConfig.showAllOverflow },
+  showAllOverflow: { type: [Boolean, String], default: () => GlobalConfig.showAllOverflow },
   // 设置表头所有内容过长时显示为省略号
-  showHeaderAllOverflow: { type: String, default: () => GlobalConfig.showHeaderAllOverflow },
+  showHeaderAllOverflow: { type: [Boolean, String], default: () => GlobalConfig.showHeaderAllOverflow },
 
   /** 高级属性 */
   // 行数据的 Key

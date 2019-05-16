@@ -135,7 +135,7 @@ export default {
             let fixedHiddenColumn = fixedType && column.fixed !== fixedType && !isGroup
             let showEllipsis = (showHeaderOverflow || showHeaderAllOverflow) === 'ellipsis'
             let showTitle = (showHeaderOverflow || showHeaderAllOverflow) === 'title'
-            let showTooltip = showHeaderOverflow === true || (showHeaderOverflow || showHeaderAllOverflow) === 'tooltip'
+            let showTooltip = showHeaderOverflow === true || showHeaderOverflow === 'tooltip' || showHeaderAllOverflow === true || showHeaderAllOverflow === 'tooltip'
             let thOns = {}
             if (showTooltip) {
               thOns.mouseover = evnt => {

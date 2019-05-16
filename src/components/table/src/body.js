@@ -25,7 +25,7 @@ function renderColumn (h, _vm, $table, fixedType, row, rowIndex, column, columnI
   let fixedHiddenColumn = fixedType && column.fixed !== fixedType
   let showEllipsis = (showOverflow || showAllOverflow) === 'ellipsis'
   let showTitle = (showOverflow || showAllOverflow) === 'title'
-  let showTooltip = showOverflow === true || (showOverflow || showAllOverflow) === 'tooltip'
+  let showTooltip = showOverflow === true || showOverflow === 'tooltip' || showAllOverflow === true || showAllOverflow === 'tooltip'
   let attrs, isDirty
   let tdOns = {}
   let checkedLocat = {}
@@ -145,12 +145,15 @@ function renderColumn (h, _vm, $table, fixedType, row, rowIndex, column, columnI
 }
 
 function renderRows (h, _vm, $table, fixedType, tableColumn) {
-  let { highlightHoverRow, id, rowKey, rowClassName, tableData, selectRow, hoverRow, overflowX, columnStore, expandeds } = $table
+  let { highlightHoverRow, id, rowKey, rowClassName, tableData, selectRow, hoverRow, scrollYLoad, overflowX, columnStore, scrollYStore, expandeds } = $table
   let { leftList, rightList } = columnStore
   let rows = []
   tableData.forEach((row, rowIndex) => {
     // 优化事件绑定
     let on = null
+    if (scrollYLoad) {
+      rowIndex += scrollYStore.startIndex
+    }
     if (highlightHoverRow && (leftList.length || rightList.length) && overflowX) {
       on = {
         mouseover (evnt) {
@@ -335,8 +338,8 @@ export default {
      */
     scrollEvent (evnt) {
       let { $parent: $table, fixedType } = this
-      let { scrollXLoad, scrollYLoad, triggerScrollXEvent, triggerScrollYEvent } = $table
-      let { tableHeader, tableBody, leftBody, rightBody } = $table.$refs
+      let { $refs, scrollXLoad, scrollYLoad, triggerScrollXEvent, triggerScrollYEvent } = $table
+      let { tableHeader, tableBody, leftBody, rightBody } = $refs
       let headerElem = tableHeader ? tableHeader.$el : null
       let bodyElem = tableBody.$el
       let leftElem = leftBody ? leftBody.$el : null

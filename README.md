@@ -207,8 +207,8 @@ new Vue({ i18n }).$mount('#app')
 | footer-method | 表尾合计的计算方法 Function({columns, data}) | Function | — | — |
 | span-method | 合并行或列，该函数 Function({row, rowIndex, column, columnIndex, data}) 返回计算后的值 | Object | — | { rowspan: 1, colspan: 1} |
 | tooltipTheme | 列 tooltip 的主题，可选值为 dark 或 light | String | — | dark |
-| showAllOverflow | 设置所有内容过长时显示为省略号（如果是固定列建议设置该值） | Boolean,String | ellipsis,title,tooltip | — |
-| showHeaderAllOverflow | 设置表头所有内容过长时显示为省略号 | Boolean,String | ellipsis,title,tooltip | — |
+| show-all-overflow | 设置所有内容过长时显示为省略号（如果是固定列建议设置该值） | Boolean,String | ellipsis,title,tooltip | — |
+| show-header-all-overflow | 设置表头所有内容过长时显示为省略号 | Boolean,String | ellipsis,title,tooltip | — |
 | row-key | 行数据的 Key | String | — | — |
 | auto-resize | 是否自动根据父容器大小调整表格宽度 | Boolean | — | false |
 | auto-width | 是否自动计算列宽（如果关闭了需要手动调用 recalculate 函数） | Boolean | — | true |

@@ -1219,11 +1219,12 @@ export default {
     // 处理 Tab 键移动
     moveTabSelected (params, evnt) {
       let { $refs, tableData, visibleColumn, handleSelected } = this
-      let { rowIndex, columnIndex } = params
       let nextRow
       let nextRowIndex
       let nextColumn
       let nextColumnIndex
+      let rowIndex = tableData.indexOf(params.row)
+      let columnIndex = visibleColumn.indexOf(params.column)
       for (let index = columnIndex + 1; index < visibleColumn.length; index++) {
         if (visibleColumn[index].editRender) {
           nextColumnIndex = index
