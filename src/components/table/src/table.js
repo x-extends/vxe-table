@@ -2424,7 +2424,7 @@ export default {
             validPromise = validPromise.then(() => new Promise((resolve, reject) => {
               let rule = rules[rIndex]
               let isRequired = rule.required === true
-              if ((type === 'all' || !rule.trigger || rule.trigger === 'change' || type === rule.trigger) && (isRequired || value)) {
+              if ((type === 'all' || !rule.trigger || rule.trigger === 'change' || type === rule.trigger) && (isRequired || value || rule.validator)) {
                 if (XEUtils.isFunction(rule.validator)) {
                   rule.validator(rule, value, e => {
                     if (XEUtils.isError(e)) {
