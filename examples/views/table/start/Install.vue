@@ -7,6 +7,33 @@
         npm install vxe-table
       </code>
     </pre>
+    <pre>
+      <code >
+        import Vue from 'vue'
+        import VXETable from 'vxe-table'
+        import 'vxe-table/lib/index.css'
+
+        Vue.use(VXETable)
+      </code>
+    </pre>
+    <p>或者</p>
+    <pre>
+      <code >
+        import Vue from 'vue'
+        import {
+          Table,
+          TableColumn,
+          Grid,
+          Excel
+        } from 'vxe-table'
+        import 'vxe-table/lib/index.css'
+
+        Vue.use(Table)
+        Vue.use(TableColumn)
+        Vue.use(Grid)
+        Vue.use(Excel)
+      </code>
+    </pre>
     <h3>CDN</h3>
     <p>可以通过 <a class="link" href="https://unpkg.com/vxe-table/">unpkg</a> 或 <a class="link" href="https://cdn.jsdelivr.net/npm/vxe-table/">cdnjs</a> 获取到最新版本的资源，并在页面上引入即可</p>
     <pre>
