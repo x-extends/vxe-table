@@ -1,8 +1,8 @@
 import XEUtils from 'xe-utils'
 import Table from './components/table'
 import TableColumn from './components/table-column'
-import TableConfig from './components/table-grid'
-import ExcelTable from './components/excel'
+import Grid from './components/table-grid'
+import Excel from './components/excel'
 import GlobalConfig from './conf'
 import EventInterceptor from './interceptor'
 
@@ -11,8 +11,8 @@ import './style/index.scss'
 const components = [
   Table,
   TableColumn,
-  TableConfig,
-  ExcelTable
+  Grid,
+  Excel
 ]
 
 function setup (options = {}) {
@@ -35,12 +35,16 @@ function install (Vue, options) {
       setup(options)
     }
     components.map(component => Vue.component(component.name, component))
-    Array.from(arguments).slice(1).forEach(plugin => {
-      if (plugin && plugin.install) {
-        plugin.install(GlobalConfig, EventInterceptor)
-      }
-    })
+    use.apply(null, Array.from(arguments).slice(1))
   }
+}
+
+function use () {
+  Array.from(arguments).forEach(plugin => {
+    if (plugin && plugin.install) {
+      plugin.install(GlobalConfig, EventInterceptor)
+    }
+  })
 }
 
 if (typeof window !== 'undefined' && window.Vue) {
@@ -49,7 +53,10 @@ if (typeof window !== 'undefined' && window.Vue) {
 
 export default {
   install,
+  use,
   setup,
   Table,
-  TableColumn
+  TableColumn,
+  Grid,
+  Excel
 }
