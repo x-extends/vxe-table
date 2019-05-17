@@ -16,6 +16,22 @@
       <vxe-table-column prop="age" label="Age"></vxe-table-column>
       <vxe-table-column prop="address" label="Address" show-overflow></vxe-table-column>
     </vxe-table>
+
+    <p>通过 cell-click 事件点击改变颜色</p>
+
+    <vxe-table
+      border
+      class="mytable-style"
+      :cell-class-name="cellClassName2"
+      :data.sync="tableData"
+      @cell-click="cellClickEvent2">
+      <vxe-table-column type="index" width="60"></vxe-table-column>
+      <vxe-table-column prop="name" label="Name"></vxe-table-column>
+      <vxe-table-column prop="sex" label="Sex"></vxe-table-column>
+      <vxe-table-column prop="age" label="Age"></vxe-table-column>
+      <vxe-table-column prop="age" label="Age"></vxe-table-column>
+      <vxe-table-column prop="address" label="Address" show-overflow></vxe-table-column>
+    </vxe-table>
   </div>
 </template>
 
@@ -23,7 +39,9 @@
 export default {
   data () {
     return {
-      tableData: []
+      tableData: [],
+      selectRow: null,
+      selectColumn: null
     }
   },
   created () {
@@ -49,6 +67,15 @@ export default {
           return 'col-orange'
         }
       }
+    },
+    cellClassName2 ({ row, column }) {
+      if (row === this.selectRow & column === this.selectColumn) {
+        return 'col-orange'
+      }
+    },
+    cellClickEvent2 ({ row, column }) {
+      this.selectRow = row
+      this.selectColumn = column
     }
   }
 }
