@@ -152,6 +152,8 @@ export default {
       selectRow: null,
       // 已展开的行
       expandeds: [],
+      // 已展开树节点
+      treeExpandeds: [],
       // 当前 hover 行
       hoverRow: null,
       // 当前选中的筛选列
@@ -340,7 +342,20 @@ export default {
     }
   },
   created () {
+    let { scrollYStore, optimizeConfig } = this
+    let { scrollY } = optimizeConfig
+    if (scrollY) {
+      Object.assign(scrollYStore, {
+        startIndex: 0,
+        visibleIndex: 0,
+        renderSize: scrollY.rSize,
+        offsetSize: scrollY.oSize
+      })
+    }
     this.load(this.data, true).then(() => {
+      if (this.treeConfig && !(this.rowKey || this.treeConfig.key)) {
+        throw new Error('[vxe-table] Tree table must have a unique primary key.')
+      }
       this.tableFullColumn = UtilTools.getColumnList(this.collectColumn)
       if (this.customs) {
         this.mergeCustomColumn(this.customs)
@@ -597,20 +612,12 @@ export default {
       return this.$nextTick()
     },
     load (data, init) {
-      let { autoWidth, scrollYStore, optimizeConfig, recalculate, computeScrollLoad } = this
+      let { autoWidth, optimizeConfig, recalculate, computeScrollLoad } = this
       let { scrollY } = optimizeConfig
       let tableFullData = data || []
       let scrollYLoad = scrollY && scrollY.gt && scrollY.gt < tableFullData.length
       this.insertList = []
       this.removeList = []
-      if (scrollYLoad) {
-        Object.assign(scrollYStore, {
-          startIndex: 0,
-          visibleIndex: 0,
-          renderSize: scrollY.rSize,
-          offsetSize: scrollY.oSize
-        })
-      }
       // 原始数据
       this.tableSourceData = XEUtils.clone(tableFullData, true)
       // 全量数据
@@ -627,14 +634,12 @@ export default {
       return rest
     },
     reload (data) {
-      return this.load(data).then(() => {
-        let tableBody = this.$refs.tableBody
-        let tableBodyElem = tableBody ? tableBody.$el : null
-        if (tableBodyElem) {
-          tableBodyElem.scrollTop = 0
-          tableBodyElem.scrollLeft = 0
-        }
-      })
+      this.clearScroll()
+      this.clearSort()
+      this.clearFilter()
+      this.clearRowExpand()
+      this.clearTreeExpand()
+      return this.load(data)
     },
     insert (records) {
       return this.insertAt(records)
@@ -2087,21 +2092,21 @@ export default {
     /**
      * 展开行事件
      */
-    triggerExpandRowEvent (evnt, { row }) {
+    triggerRowExpandEvent (evnt, { row }) {
       return this.toggleRowExpansion(row)
     },
     /**
      * 切换展开行
      */
     toggleRowExpansion (row) {
-      return this.setExpandRow(row)
+      return this.setRowExpansion(row)
     },
     /**
      * 设置展开行，二个参数设置这一行展开与否
      * 支持单行
      * 支持多行
      */
-    setExpandRow (rows, expanded) {
+    setRowExpansion (rows, expanded) {
       let { expandeds } = this
       let isToggle = arguments.length === 1
       if (rows && !XEUtils.isArray(rows)) {
@@ -2121,8 +2126,49 @@ export default {
       })
       return this.$nextTick()
     },
-    clearExpand () {
+    clearRowExpand () {
       this.expandeds = []
+      return this.$nextTick()
+    },
+    /**
+     * 展开行事件
+     */
+    triggerTreeExpandEvent (evnt, { row }) {
+      return this.toggleTreeExpansion(row)
+    },
+    /**
+     * 切换展开行
+     */
+    toggleTreeExpansion (row) {
+      return this.setTreeExpansion(row)
+    },
+    /**
+     * 设置展开树形节点，二个参数设置这一行展开与否
+     * 支持单行
+     * 支持多行
+     */
+    setTreeExpansion (rows, expanded) {
+      let { treeExpandeds } = this
+      let isToggle = arguments.length === 1
+      if (rows && !XEUtils.isArray(rows)) {
+        rows = [rows]
+      }
+      rows.forEach(row => {
+        let index = treeExpandeds.indexOf(row)
+        if (index > -1) {
+          if (isToggle || !expanded) {
+            treeExpandeds.splice(index, 1)
+          }
+        } else {
+          if (isToggle || expanded) {
+            treeExpandeds.push(row)
+          }
+        }
+      })
+      return this.$nextTick()
+    },
+    clearTreeExpand () {
+      this.treeExpandeds = []
       return this.$nextTick()
     },
     /**

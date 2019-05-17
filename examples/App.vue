@@ -236,7 +236,7 @@ export default {
               }
             },
             {
-              lable: '导出.cvs',
+              lable: '导出.csv',
               demoUrl: 'https://jsrun.net/cmXKp',
               locat: {
                 name: 'TableExport'
@@ -264,7 +264,20 @@ export default {
           expand: false,
           children: [
             {
-              lable: '树形结构',
+              lable: '基本树形',
+              locat: {
+                name: 'TableTreeBasic'
+              }
+            },
+            {
+              lable: '多选树形',
+              disabled: true,
+              locat: {
+                name: 'TableTreeBasic'
+              }
+            },
+            {
+              lable: '复杂树形',
               disabled: true,
               locat: {
                 name: 'TableTreeBasic'
@@ -285,7 +298,7 @@ export default {
               }
             },
             {
-              lable: '分页',
+              lable: '带分页',
               demoUrl: 'https://jsrun.net/5RXKp',
               disabled: true,
               locat: {
@@ -474,20 +487,20 @@ export default {
               }
             }
           ]
+        },
+        {
+          lable: 'API',
+          value: 'api',
+          expand: false,
+          children: [
+            {
+              lable: 'vxe-table',
+              locat: {
+                name: 'TableAPI'
+              }
+            }
+          ]
         }
-        // {
-        //   lable: 'API',
-        //   value: 'api',
-        //   expand: false,
-        //   children: [
-        //     {
-        //       lable: 'vxe-table',
-        //       locat: {
-        //         name: 'TableAPI'
-        //       }
-        //     }
-        //   ]
-        // }
       ]
     }
   },

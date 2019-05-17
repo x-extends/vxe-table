@@ -70,7 +70,7 @@ export default {
          */
         h('tfoot', footerData.map((list, rowIndex) => {
           return h('tr', {
-            class: ['vxe-footer--row', footerRowClassName ? XEUtils.isFunction(footerRowClassName) ? footerRowClassName({ rowIndex, fixed: fixedType }) : footerRowClassName : '']
+            class: ['vxe-footer--row', footerRowClassName ? XEUtils.isFunction(footerRowClassName) ? footerRowClassName({ footIndex: rowIndex, fixed: fixedType }) : footerRowClassName : '']
           }, tableColumn.map((column, columnIndex) => {
             let isGroup = column.children && column.children.length
             let fixedHiddenColumn = fixedType && column.fixed !== fixedType && !isGroup
@@ -79,7 +79,7 @@ export default {
                 [`col--${column.headerAlign}`]: column.headerAlign,
                 'fixed--hidden': fixedHiddenColumn,
                 'filter--active': column.filters.some(item => item.checked)
-              }, footerCellClassName ? XEUtils.isFunction(footerCellClassName) ? footerCellClassName({ rowIndex, column, columnIndex, fixed: fixedType }) : footerCellClassName : ''],
+              }, footerCellClassName ? XEUtils.isFunction(footerCellClassName) ? footerCellClassName({ footIndex: rowIndex, column, columnIndex, fixed: fixedType }) : footerCellClassName : ''],
               attrs: {
                 colspan: column.colSpan,
                 rowspan: column.rowSpan

@@ -7,6 +7,7 @@
     <button class="btn" @click="getInsertEvent">获取新增</button>
     <button class="btn" @click="getRemoveEvent">获取删除</button>
     <button class="btn" @click="getUpdateEvent">获取修改</button>
+    <button class="btn" @click="exportCsvEvent">导出.csv</button>
     <vxe-excel
       ref="xExcel"
       max-height="600"
@@ -124,6 +125,9 @@ export default {
     getUpdateEvent () {
       let updateRecords = this.$refs.xExcel.getUpdateRecords()
       alert(updateRecords.length)
+    },
+    exportCsvEvent () {
+      this.$refs.xExcel.exportCsv()
     }
   }
 }

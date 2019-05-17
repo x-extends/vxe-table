@@ -1,6 +1,6 @@
 {
   "name": "vxe-table",
-  "version": "0.4.6",
+  "version": "0.5.0",
   "description": "A very powerful Vue table component.",
   "scripts": {
     "serve": "vue-cli-service serve",

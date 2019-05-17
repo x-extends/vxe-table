@@ -15,6 +15,8 @@
       <vxe-table-column prop="address" label="Address" show-overflow></vxe-table-column>
     </vxe-table>
 
+    <p>调用代码</p>
+
     <pre>
       <code class="xml">{{ demoCodes[0] }}</code>
       <code class="javascript">{{ demoCodes[1] }}</code>
@@ -36,6 +38,8 @@
       <vxe-table-column prop="age" label="Age"></vxe-table-column>
       <vxe-table-column prop="address" label="Address" show-overflow></vxe-table-column>
     </vxe-table>
+
+    <p>调用代码</p>
 
     <pre>
       <code class="xml">{{ demoCodes[2] }}</code>

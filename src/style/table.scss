@@ -34,6 +34,11 @@
         transition: border .2s ease-in-out;
       }
     }
+    .vxe-tree-wrapper {
+      .vxe-tree--node-icon {
+        transition: transform .2s ease-in-out;
+      }
+    }
   }
 }
 .vxe-table,
@@ -450,6 +455,37 @@
       display: block;
       height: 100%;
       background-color: $vxe-table-border-color;
+    }
+  }
+
+  /*树形节点*/
+  .vxe-tree--indent {
+    display: inline-block;
+  }
+  .vxe-tree-wrapper {
+    display: inline-block;
+    vertical-align: middle;
+    width: 20px;
+    cursor: pointer;
+    &.active {
+      .vxe-tree--node-icon {
+        transform: rotate(90deg);
+      }
+    }
+    .vxe-tree--node-icon {
+      position: relative;
+      width: 14px;
+      height: 14px;
+      display: inline-block;
+      vertical-align: middle;
+      &:before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 4px;
+        border: 6px solid transparent;
+        border-left-color: $vxe-table-column-icon-border-color;
+      }
     }
   }
 

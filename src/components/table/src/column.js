@@ -39,9 +39,11 @@ export default {
     filterMultiple: { type: Boolean, default: true },
     // 自定义筛选方法
     filterMethod: Function,
+    // 指定为树节点
+    treeNode: Boolean,
     // 列的 key
     columnKey: [String, Number],
-    // 可编辑列
+    // 列编辑配置项
     editRender: Object
   },
   inject: [
@@ -53,57 +55,39 @@ export default {
     }
   },
   created () {
-    let {
-      $table,
-      type,
-      prop,
-      sortable,
-      filters,
-      editRender,
-      renderIndexHeader,
-      renderIndexCell,
-      renderRadioHeader,
-      renderRadioCell,
-      renderSelectionHeader,
-      renderSelectionCellByProp,
-      renderSelectionCell,
-      renderExpandCell,
-      renderExpandData,
-      renderEditHeader,
-      renderCellEdit,
-      renderRowEdit,
-      renderSortAndFilterHeader,
-      renderSortHeader,
-      renderFilterHeader
-    } = this
-    let opts = {}
+    let { $table, type, prop, sortable, filters, editRender } = this
+    let { treeConfig } = $table
+    let isTreeNode = treeConfig && this.treeNode
+    let opts = {
+      renderCell: isTreeNode ? this.renderTreeCell : this.renderCell
+    }
     switch (type) {
       case 'index':
-        opts.renderHeader = renderIndexHeader
-        opts.renderCell = renderIndexCell
+        opts.renderHeader = this.renderIndexHeader
+        opts.renderCell = isTreeNode ? this.renderTreeIndexCell : this.renderIndexCell
         break
       case 'radio':
-        opts.renderHeader = renderRadioHeader
-        opts.renderCell = renderRadioCell
+        opts.renderHeader = this.renderRadioHeader
+        opts.renderCell = isTreeNode ? this.renderTreeRadioCell : this.renderRadioCell
         break
       case 'selection':
-        opts.renderHeader = renderSelectionHeader
-        opts.renderCell = prop ? renderSelectionCellByProp : renderSelectionCell
+        opts.renderHeader = this.renderSelectionHeader
+        opts.renderCell = prop ? (isTreeNode ? this.renderTreeSelectionCellByProp : this.renderSelectionCellByProp) : (isTreeNode ? this.renderTreeSelectionCell : this.renderSelectionCell)
         break
       case 'expand':
-        opts.renderCell = renderExpandCell
-        opts.renderData = renderExpandData
+        opts.renderCell = this.renderExpandCell
+        opts.renderData = this.renderExpandData
         break
       default:
         if (editRender) {
-          opts.renderHeader = renderEditHeader
-          opts.renderCell = $table.editConfig && $table.editConfig.mode === 'cell' ? renderCellEdit : renderRowEdit
-        } else if (filters && filters.length && this.sortable) {
-          opts.renderHeader = renderSortAndFilterHeader
+          opts.renderHeader = this.renderEditHeader
+          opts.renderCell = $table.editConfig && $table.editConfig.mode === 'cell' ? (isTreeNode ? this.renderTreeCellEdit : this.renderCellEdit) : (isTreeNode ? this.renderTreeRadioCell : this.renderRowEdit)
+        } else if (filters && filters.length && sortable) {
+          opts.renderHeader = this.renderSortAndFilterHeader
         } else if (sortable) {
-          opts.renderHeader = renderSortHeader
+          opts.renderHeader = this.renderSortHeader
         } else if (filters && filters.length) {
-          opts.renderHeader = renderFilterHeader
+          opts.renderHeader = this.renderFilterHeader
         }
     }
     this.columnConfig = UtilTools.getColumnConfig(this, opts)
@@ -138,6 +122,42 @@ export default {
       }
       return [UtilTools.formatText(cellValue)]
     },
+    renderTreeCell (h, params) {
+      return this.renderTreeIcon(h, params).concat(this.renderCell(h, params))
+    },
+
+    /**
+     * 树节点
+     */
+    renderTreeIcon (h, params) {
+      let { iconMap } = GlobalConfig
+      let { $table } = params
+      let { treeConfig, treeExpandeds } = $table
+      let { row, level } = params
+      let rowChildren = row[treeConfig.children]
+      return [
+        h('span', {
+          class: 'vxe-tree--indent',
+          style: {
+            width: `${level * (treeConfig.indent || 16)}px`
+          }
+        }),
+        h('span', {
+          class: ['vxe-tree-wrapper', {
+            active: treeExpandeds.indexOf(row) > -1
+          }],
+          on: {
+            click (evnt) {
+              $table.triggerTreeExpandEvent(evnt, params)
+            }
+          }
+        }, rowChildren && rowChildren.length ? [
+          h('i', {
+            class: iconMap.tree
+          })
+        ] : [])
+      ]
+    },
 
     /**
      * 索引
@@ -150,16 +170,14 @@ export default {
       return [UtilTools.formatText(params.column.label || '#')]
     },
     renderIndexCell (h, params) {
-      let cellValue
       let { $scopedSlots, indexMethod } = this
       if ($scopedSlots && $scopedSlots.default) {
         return $scopedSlots.default(params)
       }
-      cellValue = params.rowIndex + 1
-      if (indexMethod) {
-        cellValue = indexMethod(params)
-      }
-      return [UtilTools.formatText(cellValue)]
+      return [UtilTools.formatText(indexMethod ? indexMethod(params) : params.seq)]
+    },
+    renderTreeIndexCell (h, params) {
+      return this.renderTreeIcon(h, params).concat(this.renderIndexCell(h, params))
     },
 
     /**
@@ -198,6 +216,9 @@ export default {
           })
         ])
       ]
+    },
+    renderTreeRadioCell (h, params) {
+      return this.renderTreeIcon(h, params).concat(this.renderRadioCell(h, params))
     },
 
     /**
@@ -263,6 +284,9 @@ export default {
         ])
       ]
     },
+    renderTreeSelectionCell (h, params) {
+      return this.renderTreeIcon(h, params).concat(this.renderSelectionCell(h, params))
+    },
     renderSelectionCellByProp (h, params) {
       let { $table } = this
       let { row, column, isHidden } = params
@@ -292,6 +316,9 @@ export default {
         ])
       ]
     },
+    renderTreeSelectionCellByProp (h, params) {
+      return this.renderTreeIcon(h, params).concat(this.renderSelectionCellByProp(h, params))
+    },
 
     /**
      * 展开行
@@ -305,7 +332,7 @@ export default {
           }],
           on: {
             click (evnt) {
-              $table.triggerExpandRowEvent(evnt, params)
+              $table.triggerRowExpandEvent(evnt, params)
             }
           }
         }, [
@@ -425,10 +452,16 @@ export default {
       let { actived } = this.$table.editStore
       return this.runRenderer(h, params, actived && actived.row === params.row)
     },
+    renderTreeRowEdit (h, params) {
+      return this.renderTreeIcon(h, params).concat(this.renderRowEdit(h, params))
+    },
     // 单元格编辑模式
     renderCellEdit (h, params) {
       let { actived } = this.$table.editStore
       return this.runRenderer(h, params, actived && actived.row === params.row && actived.column === params.column)
+    },
+    renderTreeCellEdit (h, params) {
+      return this.renderTreeIcon(h, params).concat(this.renderCellEdit(h, params))
     },
     runRenderer (h, params, isEdit) {
       let { $scopedSlots, editRender, $table } = this

@@ -51,6 +51,7 @@ const UtilTools = {
       filters: (_vm.filters || []).map(({ label, value }) => ({ label, value, checked: false })),
       filterMultiple: _vm.filterMultiple,
       filterMethod: _vm.filterMethod,
+      treeNode: _vm.treeNode,
       columnKey: _vm.columnKey,
       editRender: _vm.editRender,
       // 渲染属性

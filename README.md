@@ -28,7 +28,7 @@ A very powerful Vue table component.
 * 筛选
 * 合并行或列
 * 表尾合计
-* 导出 CVS
+* 导出 CSV
 * 显示/隐藏列
 * 加载中
 * 格式化内容
@@ -197,21 +197,22 @@ new Vue({ i18n }).$mount('#app')
 | show-header | 是否显示表头 | Boolean | — | true |
 | highlight-current-row | 是否要高亮当前选中行 | Boolean | — | false |
 | highlight-hover-row | 鼠标移到行是否要高亮显示 | Boolean | — | false |
-| row-class-name | 给行附加 className，也可以是函数 Function({row, rowIndex}) | String,Function | — | — |
-| cell-class-name | 给单元格附加 className，也可以是函数 Function({row, rowIndex, column, columnIndex}) | String,Function | — | — |
-| header-row-class-name | 给表头的行附加 className，也可以是函数 Function({rowIndex}) | String,Function | — | — |
-| header-cell-class-name | 给表头的单元格附加 className，也可以是函数 Function({rowIndex, column, columnIndex}) | String,Function | — | — |
-| footer-row-class-name | 给表尾的行附加 className，也可以是函数 Function({rowIndex}) | String,Function | — | — |
-| footer-cell-class-name | 给表尾的单元格附加 className，也可以是函数 Function({rowIndex, column, columnIndex}) | String,Function | — | — |
+| row-class-name | 给行附加 className，也可以是函数 Function({seq, row, rowIndex}) | String,Function | — | — |
+| cell-class-name | 给单元格附加 className，也可以是函数 Function({seq, row, rowIndex, column, columnIndex}) | String,Function | — | — |
+| header-row-class-name | 给表头的行附加 className，也可以是函数 Function({headIndex}) | String,Function | — | — |
+| header-cell-class-name | 给表头的单元格附加 className，也可以是函数 Function({headIndex, column, columnIndex}) | String,Function | — | — |
+| footer-row-class-name | 给表尾的行附加 className，也可以是函数 Function({footIndex}) | String,Function | — | — |
+| footer-cell-class-name | 给表尾的单元格附加 className，也可以是函数 Function({footIndex, column, columnIndex}) | String,Function | — | — |
 | show-footer | 是否显示表尾合计 | Boolean | — | — |
 | footer-method | 表尾合计的计算方法 Function({columns, data}) | Function | — | — |
-| span-method | 合并行或列，该函数 Function({row, rowIndex, column, columnIndex, data}) 返回计算后的值 | Object | — | { rowspan: 1, colspan: 1} |
+| span-method | 合并行或列，该函数 Function({seq, row, rowIndex, column, columnIndex, data}) 返回计算后的值 | Object | — | { rowspan: 1, colspan: 1} |
 | tooltipTheme | 列 tooltip 的主题，可选值为 dark 或 light | String | — | dark |
 | show-all-overflow | 设置所有内容过长时显示为省略号（如果是固定列建议设置该值） | Boolean,String | ellipsis,title,tooltip | — |
 | show-header-all-overflow | 设置表头所有内容过长时显示为省略号 | Boolean,String | ellipsis,title,tooltip | — |
 | row-key | 行数据的 Key | String | — | — |
 | auto-resize | 是否自动根据父容器大小调整表格宽度 | Boolean | — | false |
 | auto-width | 是否自动计算列宽（如果关闭了需要手动调用 recalculate 函数） | Boolean | — | true |
+| tree-config | 树形结构配置项 | Object | — | [options](#tree-config-树形结构配置项说明) |
 | context-menu | 快捷菜单配置项 | Object | — | [{header, body, footer}](#context-menu-快捷菜单配置项说明配合-context-menu-link-事件使用) |
 | mouse-config | 鼠标配置项 | Object | — | [options](#mouse-config-鼠标相关配置项说明) |
 | Keyboard-config | 按键配置项 | Object | — | [options](#Keyboard-config-键盘相关配置项说明) |
@@ -255,6 +256,14 @@ new Vue({ i18n }).$mount('#app')
 | vSize | 指定可视区域条数，默认自动计算 | Number |
 | rHeight | 指定行高，默认自动计算 | Number |
 
+##### tree-config 树形结构配置项说明
+
+| 属性 | 描述 | 类型 | 可选值 | 默认值 |
+|------|------|-----|-----|-----|
+| key | 树节点数据中的唯一主键 | String | — | — |
+| children | 树子节点的属性 | String | — | children |
+| indent | 树节点的缩进 | Number | — | 16 |
+
 ##### mouse-config 鼠标相关配置项说明
 
 | 属性 | 描述 | 类型 | 可选值 | 默认值 |
@@ -270,7 +279,7 @@ new Vue({ i18n }).$mount('#app')
 | isTab | 开启 Tab 键功能 | Boolean | — | false |
 | isCut | 开启复制粘贴功能 | Boolean | — | false |
 | isEdit | 开启任意键进入编辑（功能键除外） | Boolean | — | false |
-| editMethod | 只对 isEdit=true 有效，用于重写选中编辑处理逻辑，该函数 Function({row, rowIndex, column, columnIndex, cell}, event) 可以返回 false 来阻止默认行为 | Function | — | — |
+| editMethod | 只对 isEdit=true 有效，用于重写选中编辑处理逻辑，该函数 Function({seq, row, rowIndex, column, columnIndex, cell}, event) 可以返回 false 来阻止默认行为 | Function | — | — |
 
 ###### keyboard-config 快捷键说明
 
@@ -295,6 +304,7 @@ new Vue({ i18n }).$mount('#app')
 
 | 属性 | 描述 | 类型 | 可选值 | 默认值 |
 |------|------|-----|-----|-----|
+| key | 数据中的唯一主键 | String | — | — |
 | trigger | 触发方式 | String | manual（手动触发方式，只能用于 mode=row）,click（点击触发编辑）,dblclick（双击触发编辑） | click |
 | mode | 编辑模式 | String | cell（单元格编辑模式）,row（行编辑模式） | cell |
 | showIcon | 是否显示列头编辑图标 | Boolean | — | true |
@@ -348,15 +358,18 @@ new Vue({ i18n }).$mount('#app')
 | setActiveRow | 只对 mode=cell 有效，激活行编辑 | row |
 | setActiveCell | 只对 mode=row 有效，激活单元格编辑 | row,prop |
 | setSelectCell | 只对 trigger!=manual 有效，选中单元格 | row,prop |
-| setExpandRow | 设置展开行，二个参数设置这一行展开与否 | rows,checked |
+| setRowExpansion | 设置展开行，二个参数设置这一行展开与否 | rows,checked |
+| setTreeExpansion | 设置展开树形节点，二个参数设置这一行展开与否 | rows,checked |
 | setCurrentRow | 用于单选表格，设置某一行为选中状态，第二个参数为选中与否 | row?,checked |
 | setSelection | 用于多选表格，设置行为选中状态，第二个参数为选中与否 | rows,checked |
 | toggleRowSelection | 用于多选表格，切换某一行的选中状态 | row |
 | toggleAllSelection | 用于多选表格，切换所有行的选中状态 | — |
 | toggleRowExpansion | 用于可展开表格，切换展开行 | row |
+| toggleTreeExpansion | 用于可树形表格，切换展开树形节点 | row |
 | clearCurrentRow | 用于单选表格，清空用户的选择 | — |
 | clearSelection | 用于多选表格，清空用户的选择 | — |
-| clearExpand | 清空展开行，数据会恢复成未展开的状态 | — |
+| clearRowExpand | 清空展开行状态，数据会恢复成未展开的状态 | — |
+| clearTreeExpand | 清空树形节点的展开状态，数据会恢复成未展开的状态 | — |
 | clearSort | 清空排序条件，数据会恢复成未排序的状态 | — |
 | clearFilter | 清空筛选条件，数据会恢复成未筛选的状态 | — |
 | clearChecked | 清除单元格批量选中状态 | — |
@@ -400,7 +413,6 @@ new Vue({ i18n }).$mount('#app')
 | 参数 | 说明 | 类型 | 可选值 | 默认值 |
 |------|------|-----|------|-----|
 | type | 列的类型 | String | index,selection,radio,expand | — |
-| edit-render | 列编辑配置项 | Object,Boolean | — | [options](#edit-render-配置项说明) |
 | prop | 列属性 | String | — | — |
 | label | 列标题 | String | — | — |
 | width | 列宽度 | String | — | — |
@@ -410,14 +422,16 @@ new Vue({ i18n }).$mount('#app')
 | header-align | 表头对齐方式 | String | — | — |
 | show-overflow | 当内容过长时显示为省略号 | String,Boolean | ellipsis,title,tooltip | — |
 | show-header-overflow | 当表头内容过长时显示为省略号 | String,Boolean | ellipsis,title,tooltip | — |
-| formatter | 格式化显示内容 Function({cellValue, row, rowIndex, column, columnIndex}) | Function | — | — |
-| index-method | 只对 type=index 有效，自定义索引方法 Function({row, rowIndex, column, columnIndex}) | Function | — | — |
+| formatter | 格式化显示内容 Function({cellValue, seq, row, rowIndex, column, columnIndex}) | Function | — | — |
+| index-method | 只对 type=index 有效，自定义索引方法 Function({seq, row, rowIndex, column, columnIndex}) | Function | — | — |
 | sortable | 是否允许列排序，如果是服务端排序需要设置为custom | Boolean | — | — |
 | sortBy | 只对 sortable 有效，自定义排序的属性 | String,Array | — | — |
 | filters | 配置筛选条件数组 | Array | — | — |
 | filter-multiple | 只对 filters 有效，筛选是否允许多选 | Boolean | — | true |
 | filter-method | 只对 filters 有效，自定义筛选方法 Function({value, row, column}) | Function | — | — |
+| tree-node | 指定为树节点 | Boolean | — | false |
 | column-key | 列的 key | String,Number | — | — |
+| edit-render | 列编辑配置项 | Object,Boolean | — | [options](#edit-render-配置项说明) |
 
 ##### edit-render 配置项说明
 

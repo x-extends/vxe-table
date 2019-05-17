@@ -14,7 +14,8 @@ const GlobalConfig = {
     sortAsc: 'vxe-sort--asc-icon',
     sortDesc: 'vxe-sort--desc-icon',
     filter: 'vxe-filter--icon',
-    edit: 'vxe-edit--icon'
+    edit: 'vxe-edit--icon',
+    tree: 'vxe-tree--node-icon'
   },
   i18n: (key, value) => XEUtils.get(zhCNLocat, key)
 }
