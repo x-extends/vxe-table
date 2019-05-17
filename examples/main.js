@@ -52,6 +52,8 @@ function mockData () {
       date1: new Date(currTime),
       date2: '09:00:00',
       date3: XEUtils.toDateString(currTime, 'yyyy-MM-dd'),
+      date4: new Date(currTime),
+      date5: '09:00',
       time: currTime + XEUtils.random(100, 10000),
       sex: index % 3 ? '0' : '1',
       sex1: [index % 3 ? '0' : '1'],
