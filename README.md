@@ -36,6 +36,7 @@ A very powerful Vue table component.
 * 快捷菜单
 * 滚动渲染
 * 展开行
+* 树形表格
 * 可编辑表格
 * 数据校验
 * 全键盘操作
