@@ -271,9 +271,8 @@ export default {
             },
             {
               lable: '多选树形',
-              disabled: true,
               locat: {
-                name: 'TableTreeBasic'
+                name: 'TableTreeSelection'
               }
             },
             {

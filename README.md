@@ -363,6 +363,7 @@ new Vue({ i18n }).$mount('#app')
 | setTreeExpansion | 设置展开树形节点，二个参数设置这一行展开与否 | rows,checked |
 | setCurrentRow | 用于单选表格，设置某一行为选中状态，第二个参数为选中与否 | row?,checked |
 | setSelection | 用于多选表格，设置行为选中状态，第二个参数为选中与否 | rows,checked |
+| setAllSelection | 用于多选表格，设置所有行的选中状态 | checked |
 | toggleRowSelection | 用于多选表格，切换某一行的选中状态 | row |
 | toggleAllSelection | 用于多选表格，切换所有行的选中状态 | — |
 | toggleRowExpansion | 用于可展开表格，切换展开行 | row |

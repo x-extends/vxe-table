@@ -1,11 +1,12 @@
 <template>
   <div>
-    <p>树表格，通过配置 tree-config 和指定列 tree-node 属性来开启树表格</p>
+    <p>多选树表格</p>
 
     <vxe-table
       :tree-config="{key: 'id', children: 'children'}"
       :data.sync="tableData">
-      <vxe-table-column prop="name" label="Name" tree-node></vxe-table-column>
+      <vxe-table-column prop="checked" type="selection" width="120" tree-node></vxe-table-column>
+      <vxe-table-column prop="name" label="Name"></vxe-table-column>
       <vxe-table-column prop="size" label="Size"></vxe-table-column>
       <vxe-table-column prop="type" label="Type"></vxe-table-column>
       <vxe-table-column prop="date" label="Date"></vxe-table-column>
@@ -136,7 +137,8 @@ export default {
         <vxe-table
           :tree-config="{key: 'id', children: 'children'}"
           :data.sync="tableData">
-          <vxe-table-column prop="name" label="Name" tree-node></vxe-table-column>
+          <vxe-table-column type="selection" tree-node></vxe-table-column>
+          <vxe-table-column prop="name" label="Name"></vxe-table-column>
           <vxe-table-column prop="size" label="Size"></vxe-table-column>
           <vxe-table-column prop="type" label="Type"></vxe-table-column>
           <vxe-table-column prop="date" label="Date"></vxe-table-column>

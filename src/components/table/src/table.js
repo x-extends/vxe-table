@@ -154,6 +154,8 @@ export default {
       expandeds: [],
       // 已展开树节点
       treeExpandeds: [],
+      // 树节点不确定状态的列表
+      treeIndeterminates: [],
       // 当前 hover 行
       hoverRow: null,
       // 当前选中的筛选列
@@ -580,17 +582,6 @@ export default {
     ])
   },
   methods: {
-    clearSelection () {
-      this.isAllSelected = false
-      this.isIndeterminate = false
-      this.selection = []
-      return this.$nextTick()
-    },
-    clearCurrentRow () {
-      this.selectRow = null
-      this.hoverRow = null
-      return this.$nextTick()
-    },
     clearSort () {
       this.tableFullColumn.forEach(column => {
         column.order = null
@@ -1517,26 +1508,42 @@ export default {
       return this.$nextTick()
     },
     setSelection (rows, value) {
-      let column = this.visibleColumn.find(column => column.type === 'selection')
       if (rows && !XEUtils.isArray(rows)) {
         rows = [rows]
       }
-      rows.forEach(row => this.triggerCheckRowEvent(null, { row, column }, !!value))
+      rows.forEach(row => this.triggerCheckRowEvent({}, { row }, !!value))
       return this.$nextTick()
     },
     /**
      * 多选，行选中事件
+     * value 选中true 不选false 不确定-1
      */
-    triggerCheckRowEvent (evnt, { row, column }, value) {
-      let { $listeners, selection, tableData } = this
-      let { property } = column
-      if (property) {
-        UtilTools.setCellValue(row, property, value)
-        this.isAllSelected = tableData.every(item => UtilTools.getCellValue(item, property))
-        this.isIndeterminate = !this.isAllSelected && tableData.some(item => UtilTools.getCellValue(item, property))
-        if ($listeners['select-change']) {
-          selection = tableData.filter(item => UtilTools.getCellValue(item, property))
+    triggerCheckRowEvent (evnt, { row }, value) {
+      let { selection, tableData, treeConfig, treeIndeterminates } = this
+      if (treeConfig) {
+        if (value === -1) {
+          treeIndeterminates.push(row)
+          XEUtils.remove(selection, item => item === row)
+        } else {
+          // 更新子节点状态
+          XEUtils.eachTree([row], item => {
+            if (value) {
+              if (selection.indexOf(item) === -1) {
+                selection.push(item)
+              }
+            } else {
+              XEUtils.remove(selection, select => select === item)
+            }
+          }, treeConfig)
+          XEUtils.remove(treeIndeterminates, item => item === row)
         }
+        // 如果存在父节点，更新父节点状态
+        let matchObj = XEUtils.findTree(tableData, item => item === row, treeConfig)
+        if (matchObj.parent) {
+          let selectItems = matchObj.items.filter(item => selection.indexOf(item) > -1)
+          return this.triggerCheckRowEvent(evnt, { row: matchObj.parent }, selectItems.length === matchObj.items.length ? true : (selectItems.length || value === -1 ? -1 : false))
+        }
+        this.isAllSelected = tableData.every(item => selection.indexOf(item) > -1)
       } else {
         if (value) {
           if (selection.indexOf(row) === -1) {
@@ -1546,34 +1553,38 @@ export default {
           XEUtils.remove(selection, item => item === row)
         }
         this.isAllSelected = tableData.length === selection.length
-        this.isIndeterminate = !this.isAllSelected && selection.length
       }
-      UtilTools.emitEvent(this, 'select-change', [{ row, column, selection, checked: value }, evnt])
+      this.isIndeterminate = !this.isAllSelected && selection.length
+      UtilTools.emitEvent(this, 'select-change', [{ row, selection, checked: value }, evnt])
     },
     /**
      * 多选，切换某一行的选中状态
      */
     toggleRowSelection (row) {
       let { selection } = this
-      let column = this.visibleColumn.find(column => column.type === 'selection')
-      let { property } = column
-      this.triggerCheckRowEvent(null, { row, column }, property ? !!row[property] : selection.indexOf(row) === -1)
+      this.triggerCheckRowEvent(null, { row }, selection.indexOf(row) === -1)
       return this.$nextTick()
+    },
+    setAllSelection (value) {
+      let { tableData, treeConfig } = this
+      let selection = []
+      if (value) {
+        if (treeConfig) {
+          XEUtils.eachTree(tableData, item => selection.push(item), treeConfig)
+        } else {
+          selection = tableData.slice(0)
+        }
+      }
+      this.selection = selection
+      this.isAllSelected = value
+      this.isIndeterminate = false
+      this.treeIndeterminates = []
     },
     /**
      * 多选，选中所有事件
      */
     triggerCheckAllEvent (evnt, value) {
-      let column = this.visibleColumn.find(column => column.type === 'selection')
-      let property = column.property
-      if (property) {
-        this.tableData.forEach(item => {
-          UtilTools.setCellValue(item, property, value)
-        })
-      }
-      this.selection = value ? Array.from(this.tableData) : []
-      this.isAllSelected = value
-      this.isIndeterminate = false
+      this.setAllSelection(value)
       UtilTools.emitEvent(this, 'select-all', [{ selection: this.selection, checked: value }, evnt])
     },
     /**
@@ -1581,6 +1592,13 @@ export default {
      */
     toggleAllSelection () {
       this.triggerCheckAllEvent(null, !this.isAllSelected)
+      return this.$nextTick()
+    },
+    clearSelection () {
+      this.isAllSelected = false
+      this.isIndeterminate = false
+      this.selection = []
+      this.treeIndeterminates = []
       return this.$nextTick()
     },
     /**
@@ -1596,6 +1614,11 @@ export default {
      */
     setCurrentRow (row) {
       this.selectRow = row
+      return this.$nextTick()
+    },
+    clearCurrentRow () {
+      this.selectRow = null
+      this.hoverRow = null
       return this.$nextTick()
     },
     /**

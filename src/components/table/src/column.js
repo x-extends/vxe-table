@@ -55,7 +55,7 @@ export default {
     }
   },
   created () {
-    let { $table, type, prop, sortable, filters, editRender } = this
+    let { $table, type, sortable, filters, editRender } = this
     let { treeConfig } = $table
     let isTreeNode = treeConfig && this.treeNode
     let opts = {
@@ -72,7 +72,7 @@ export default {
         break
       case 'selection':
         opts.renderHeader = this.renderSelectionHeader
-        opts.renderCell = prop ? (isTreeNode ? this.renderTreeSelectionCellByProp : this.renderSelectionCellByProp) : (isTreeNode ? this.renderTreeSelectionCell : this.renderSelectionCell)
+        opts.renderCell = isTreeNode ? this.renderTreeSelectionCell : this.renderSelectionCell
         break
       case 'expand':
         opts.renderCell = this.renderExpandCell
@@ -275,7 +275,9 @@ export default {
       }
       return [
         h('label', {
-          class: ['vxe-checkbox']
+          class: ['vxe-checkbox', {
+            'is--indeterminate': $table.treeIndeterminates.indexOf(row) > -1
+          }]
         }, [
           h('input', options),
           h('span', {
@@ -286,38 +288,6 @@ export default {
     },
     renderTreeSelectionCell (h, params) {
       return this.renderTreeIcon(h, params).concat(this.renderSelectionCell(h, params))
-    },
-    renderSelectionCellByProp (h, params) {
-      let { $table } = this
-      let { row, column, isHidden } = params
-      let options = {
-        attrs: {
-          type: 'checkbox'
-        }
-      }
-      if (!isHidden) {
-        options.domProps = {
-          checked: UtilTools.getCellValue(row, column.property)
-        }
-        options.on = {
-          change (evnt) {
-            $table.triggerCheckRowEvent(evnt, params, evnt.target.checked)
-          }
-        }
-      }
-      return [
-        h('label', {
-          class: ['vxe-checkbox']
-        }, [
-          h('input', options),
-          h('span', {
-            class: ['checkbox--icon']
-          })
-        ])
-      ]
-    },
-    renderTreeSelectionCellByProp (h, params) {
-      return this.renderTreeIcon(h, params).concat(this.renderSelectionCellByProp(h, params))
     },
 
     /**

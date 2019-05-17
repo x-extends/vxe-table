@@ -33,6 +33,7 @@ import TableMenu from './views/table/advanced/Menu.vue'
 import TableExpand from './views/table/advanced/Expand.vue'
 
 import TableTreeBasic from './views/table/tree/Basic.vue'
+import TableTreeSelection from './views/table/tree/Selection.vue'
 
 import GridBasic from './views/table/grid/Basic.vue'
 import GridPage from './views/table/grid/Page.vue'
@@ -234,6 +235,11 @@ export default new Router({
       path: '/table/tree/basic',
       name: 'TableTreeBasic',
       component: TableTreeBasic
+    },
+    {
+      path: '/table/tree/selection',
+      name: 'TableTreeSelection',
+      component: TableTreeSelection
     },
     {
       path: '/table/grid/basic',
