@@ -5,7 +5,7 @@
     <vxe-table
       :tree-config="{key: 'id', children: 'children'}"
       :data.sync="tableData">
-      <vxe-table-column prop="checked" type="selection" width="120" tree-node></vxe-table-column>
+      <vxe-table-column type="selection" width="120" tree-node></vxe-table-column>
       <vxe-table-column prop="name" label="Name"></vxe-table-column>
       <vxe-table-column prop="size" label="Size"></vxe-table-column>
       <vxe-table-column prop="type" label="Type"></vxe-table-column>
