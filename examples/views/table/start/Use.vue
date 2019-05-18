@@ -3,7 +3,7 @@
     <h3>全局参数</h3>
     <p>修改默认的全局配置</p>
     <pre>
-      <code >
+      <code class="javascript">
         import Vue from 'vue'
         import VXETable from 'vxe-table'
         import 'vxe-table/lib/index.css'
@@ -36,7 +36,7 @@
     </pre>
     <p>通过 setup 函数设置</p>
     <pre>
-      <code >
+      <code class="javascript">
         import Vue from 'vue'
         import VXETable from 'vxe-table'
         import 'vxe-table/lib/index.css'
@@ -71,9 +71,9 @@
     <h3>主题</h3>
     <p>修改默认的主题颜色</p>
     <pre>
-      <code >
+      <code class="scss">
         // Case 1. 引入默认的样式
-        import 'vxe-table/lib/index.css'
+        @import 'vxe-table/lib/index.css';
 
         // Case 2. 自定义表格颜色（复制 style/variable.scss 到自己的项目中，修改颜色变量，然后引入）
         // @import 'assets/style/vxe-table/variable.scss';
@@ -87,7 +87,7 @@
     <h3>国际化</h3>
     <p>修改默认的国际化信息</p>
     <pre>
-      <code >
+      <code class="javascript">
         import Vue from 'vue'
         import VueI18n from 'vxe-i18n'
         import VXETable from 'vxe-table'
