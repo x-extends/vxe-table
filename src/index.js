@@ -3,6 +3,7 @@ import Table from './components/table'
 import TableColumn from './components/table-column'
 import Grid from './components/grid'
 import Excel from './components/excel'
+import Pagination from './components/pagination'
 import GlobalConfig from './conf'
 import EventInterceptor from './interceptor'
 
@@ -12,7 +13,8 @@ const components = [
   Table,
   TableColumn,
   Grid,
-  Excel
+  Excel,
+  Pagination
 ]
 
 function setup (options = {}) {

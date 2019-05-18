@@ -109,7 +109,7 @@ class Helper {
         rest = rest.reverse()
       }
       response.body = {
-        page: { pageSize, currentPage, totalResult },
+        page: { pageSize, currentPage, totalResult, total: totalResult },
         result: rest.slice((currentPage - 1) * pageSize, currentPage * pageSize)
       }
       return response

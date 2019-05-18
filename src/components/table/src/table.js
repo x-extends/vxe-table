@@ -617,7 +617,7 @@ export default {
       this.tableData = this.getTableData().tableData
       let rest = this.$nextTick()
       if (!init && autoWidth) {
-        rest = rest.then(() => (requestAnimationFrame || setTimeout)(recalculate))
+        rest = rest.then(() => setTimeout(recalculate))
       }
       if (!init && scrollYLoad) {
         rest = rest.then(computeScrollLoad)
@@ -949,19 +949,21 @@ export default {
       let tableBody = this.$refs.tableBody
       let tableHeader = this.$refs.tableHeader
       let tableFooter = this.$refs.tableFooter
-      let bodyElem = tableBody.$el
+      let bodyElem = tableBody ? tableBody.$el : null
       let headerElem = tableHeader ? tableHeader.$el : null
       let footerElem = tableFooter ? tableFooter.$el : null
-      let bodyWidth = bodyElem.clientWidth
-      let tableWidth = this.autoCellWidth(headerElem, bodyElem, footerElem, bodyWidth)
-      if (refull === true) {
+      if (bodyElem) {
+        let bodyWidth = bodyElem.clientWidth
+        let tableWidth = this.autoCellWidth(headerElem, bodyElem, footerElem, bodyWidth)
+        if (refull === true) {
         // 初始化时需要在列计算之后再执行优化运算，达到最优显示效果
-        return this.$nextTick(() => {
-          bodyWidth = bodyElem.clientWidth
-          if (bodyWidth !== tableWidth) {
-            this.autoCellWidth(headerElem, bodyElem, footerElem, bodyWidth)
-          }
-        })
+          return this.$nextTick(() => {
+            bodyWidth = bodyElem.clientWidth
+            if (bodyWidth !== tableWidth) {
+              this.autoCellWidth(headerElem, bodyElem, footerElem, bodyWidth)
+            }
+          })
+        }
       }
       return this.$nextTick()
     },
@@ -1056,12 +1058,14 @@ export default {
      */
     checkScrolling () {
       let { tableBody, leftBody, rightBody } = this.$refs
-      let bodyElem = tableBody.$el
-      if (leftBody) {
-        this.scrollLeftToRight = bodyElem.scrollLeft > 0
-      }
-      if (rightBody) {
-        this.scrollRightToLeft = bodyElem.clientWidth < bodyElem.scrollWidth - bodyElem.scrollLeft
+      let bodyElem = tableBody ? tableBody.$el : null
+      if (bodyElem) {
+        if (leftBody) {
+          this.scrollLeftToRight = bodyElem.scrollLeft > 0
+        }
+        if (rightBody) {
+          this.scrollRightToLeft = bodyElem.clientWidth < bodyElem.scrollWidth - bodyElem.scrollLeft
+        }
       }
     },
     /**

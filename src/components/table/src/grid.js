@@ -1,7 +1,9 @@
 import VxeTable from './table'
 import VxeTableColumn from './column'
+import VxePagination from '../../pagination'
 import TableProps from './props'
 import funs from './func'
+import UtilTools from '../../../tools/utils'
 
 const methods = {}
 
@@ -19,18 +21,40 @@ export default {
   name: 'VxeGrid',
   props: {
     columns: Array,
+    pages: Object,
     ...TableProps
   },
   components: {
     VxeTable,
-    VxeTableColumn
+    VxeTableColumn,
+    VxePagination
   },
   render (h) {
-    return h('vxe-table', {
-      props: this.$props,
-      on: this.$listeners,
-      ref: 'xTable'
-    }, buildColumns(h, this.columns))
+    let { $listeners, $props, columns, pages, size } = this
+    return h('div', {
+      class: 'vxe-grid'
+    }, [
+      h('vxe-table', {
+        props: $props,
+        on: $listeners,
+        ref: 'xTable'
+      }, buildColumns(h, columns)),
+      pages ? h('vxe-pagination', {
+        props: Object.assign({ size }, pages),
+        on: {
+          'current-change': this.currentChangeEvent,
+          'size-change': this.sizeChangeEvent
+        }
+      }) : null
+    ])
   },
-  methods
+  methods: {
+    ...methods,
+    currentChangeEvent (currentPage) {
+      UtilTools.emitEvent(this, 'current-page-change', [currentPage])
+    },
+    sizeChangeEvent (pageSize) {
+      UtilTools.emitEvent(this, 'page-size-change', [pageSize])
+    }
+  }
 }

@@ -1,157 +1,185 @@
 <template>
   <div>
-    <p>使用 vxe-grid 配置的方式渲染表格，这对一些动态渲染的场景非常有用，完全使用数据进行配置</p>
+    <p>通过配置 pages 参数开启分页功能</p>
 
     <vxe-grid
-      height="300"
+      border
+      height="530"
+      :loading="loading"
+      :pages="tablePage"
       :columns="tableColumn"
-      :data.sync="tableData"></vxe-grid>
-
-    <p>分组表头</p>
-
-    <vxe-grid
-      border
-      stripe
-      height="300"
-      :columns="tableColumn2"
-      :data.sync="tableData"></vxe-grid>
-
-    <p>表尾合计</p>
-
-    <vxe-grid
-      border
-      stripe
-      show-footer
-      height="300"
-      :footer-method="footerMethod"
-      :columns="tableColumn3"
       :data.sync="tableData"
-      @cell-click="cellClickEvent"></vxe-grid>
+      @current-page-change="handleCurrentChange"
+      @page-size-change="handleSizeChange"></vxe-grid>
+
+    <p>调用代码</p>
+
+    <pre>
+      <code class="xml">{{ demoCodes[0] }}</code>
+      <code class="javascript">{{ demoCodes[1] }}</code>
+    </pre>
   </div>
 </template>
 
 <script>
-import XEUtils from 'xe-utils'
 import XEAjax from 'xe-ajax'
+import hljs from 'highlight.js'
 
 export default {
   data () {
     return {
-      dataConfig: {
-        data: () => XEAjax.getJSON('/api')
-      },
-      pageConfig: {
-        pageSize: 10,
-        pageSizes: [10, 15, 20, 50, 100]
+      loading: false,
+      tablePage: {
+        total: 0,
+        currentPage: 1,
+        pageSize: 10
       },
       tableColumn: [
         {
           type: 'index',
-          width: 60
+          width: 50
+        },
+        {
+          type: 'selection',
+          width: 50
         },
         {
           prop: 'name',
           label: 'Name'
         },
         {
-          prop: 'sex',
-          label: 'Sex'
+          prop: 'nickname',
+          label: 'Nickname'
         },
         {
-          prop: 'address',
-          label: 'Address',
+          prop: 'role',
+          label: 'Role'
+        },
+        {
+          prop: 'describe',
+          label: 'Describe',
           showOverflow: true
         }
       ],
-      tableColumn2: [
-        {
-          type: 'index',
-          width: 60
-        },
-        {
-          label: '基本信息',
-          children: [
-            {
-              prop: 'name',
-              label: 'Name'
-            },
-            {
-              label: '其他信息',
-              children: [
+      tableData: [],
+      demoCodes: [
+        `
+        <vxe-grid
+          border
+          height="530"
+          :loading="loading"
+          :pages="tablePage"
+          :columns="tableColumn"
+          :data.sync="tableData"
+          @current-page-change="handleCurrentChange"
+          @page-size-change="handleSizeChange"></vxe-grid>
+        `,
+        `
+        export default {
+          data () {
+            return {
+              loading: false,
+              tablePage: {
+                total: 0,
+                currentPage: 1,
+                pageSize: 10
+              },
+              tableColumn: [
                 {
-                  prop: 'rate',
-                  label: 'Rate'
+                  type: 'index',
+                  width: 50
                 },
                 {
-                  prop: 'age',
-                  label: 'Age'
+                  type: 'selection',
+                  width: 50
+                },
+                {
+                  prop: 'name',
+                  label: 'Name'
+                },
+                {
+                  prop: 'nickname',
+                  label: 'Nickname'
+                },
+                {
+                  prop: 'role',
+                  label: 'Role'
+                },
+                {
+                  prop: 'describe',
+                  label: 'Describe',
+                  showOverflow: true
                 }
-              ]
-            },
-            {
-              prop: 'sex',
-              label: 'Sex'
+              ],
+              tableData: []
             }
-          ]
-        },
-        {
-          prop: 'address',
-          label: 'Address',
-          showOverflow: true
+          },
+          created () {
+            this.findList()
+          },
+          methods: {
+            findList () {
+              // 模拟后台接口
+              this.loading = true
+              XEAjax.doGet(\`/api/user/page/list/\${this.tablePage.pageSize}/\${this.tablePage.currentPage}\`, this.formData).then(response => {
+                let { page, result } = response.data
+                this.tableData = result
+                this.tablePage.total = page.total
+                this.loading = false
+              }).catch(e => {
+                this.loading = false
+              })
+            },
+            searchEvent () {
+              this.tablePage.currentPage = 1
+              this.findList()
+            },
+            handleSizeChange (pageSize) {
+              this.tablePage.pageSize = pageSize
+              this.searchEvent()
+            },
+            handleCurrentChange (currentPage) {
+              this.tablePage.currentPage = currentPage
+              this.findList()
+            }
+          }
         }
-      ],
-      tableColumn3: [
-        {
-          type: 'index',
-          fixed: 'left',
-          width: 60
-        },
-        {
-          prop: 'name',
-          label: 'Name',
-          width: 400
-        },
-        {
-          prop: 'age',
-          label: 'Age',
-          width: 300
-        },
-        {
-          prop: 'address',
-          label: 'Address',
-          width: 300,
-          showOverflow: true
-        },
-        {
-          prop: 'rate',
-          label: 'Rate',
-          fixed: 'right',
-          width: 200
-        }
-      ],
-      tableData: []
+        `
+      ]
     }
   },
   created () {
-    let list = window.MOCK_DATA_LIST.slice(0, 100)
-    this.tableData = list
+    this.findList()
+  },
+  mounted () {
+    Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
+      hljs.highlightBlock(block)
+    })
   },
   methods: {
-    cellClickEvent ({ row }) {
-      console.log(row)
+    findList () {
+      // 模拟后台接口
+      this.loading = true
+      XEAjax.doGet(`/api/user/page/list/${this.tablePage.pageSize}/${this.tablePage.currentPage}`, this.formData).then(response => {
+        let { page, result } = response.data
+        this.tableData = result
+        this.tablePage.total = page.total
+        this.loading = false
+      }).catch(e => {
+        this.loading = false
+      })
     },
-    footerMethod ({ columns, data }) {
-      return [
-        columns.map((column, columnIndex) => {
-          if (columnIndex === 0) {
-            return '和值'
-          }
-          if (['age', 'rate'].includes(column.property)) {
-            return XEUtils.sum(data, column.property)
-          }
-          return '-'
-        })
-      ]
+    searchEvent () {
+      this.tablePage.currentPage = 1
+      this.findList()
+    },
+    handleSizeChange (pageSize) {
+      this.tablePage.pageSize = pageSize
+      this.searchEvent()
+    },
+    handleCurrentChange (currentPage) {
+      this.tablePage.currentPage = currentPage
+      this.findList()
     }
   }
 }

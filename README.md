@@ -170,6 +170,7 @@ new Vue({ i18n }).$mount('#app')
 * vxe-table-column
 * vxe-grid
 * vxe-excel
+* vxe-pagination
 
 ### Table
 
@@ -181,7 +182,7 @@ new Vue({ i18n }).$mount('#app')
 </vxe-table>
 ```
 
-#### Table Attributes
+#### Table Attributes 参数
 
 | 参数 | 说明 | 类型 | 可选值 | 默认值 |
 |------|------|-----|------|-----|
@@ -324,7 +325,7 @@ new Vue({ i18n }).$mount('#app')
 | validator  | 自定义校验方法 | Function(rule, value, callback) | — | — |
 | trigger  | 触发校验方式 | String | blur,change | change |
 
-#### Table Events
+#### Table Events 事件
 
 | 事件名 | 说明 | 参数 |
 |------|------|-----|
@@ -339,7 +340,7 @@ new Vue({ i18n }).$mount('#app')
 | edit-disabled | 当点击后单元格如果是禁用状态时会触发该事件 | {row,rowIndex,column,columnIndex,cell},event |
 | valid-error | 当数据校验不通过时会触发该事件 | {row,rowIndex,column,columnIndex,cell} |
 
-#### Table Methods
+#### Table Methods 方法
 
 | 方法名 | 描述 | 参数 |
 |------|------|-----|
@@ -389,9 +390,9 @@ new Vue({ i18n }).$mount('#app')
 | sort | 手动对表格进行排序 | prop,order |
 | validateRow | 对表格某一行进行校验的方法，参数为行数据和一个回调函数。该回调函数会在校验结束后被调用，并传入两个参数：（是否校验成功，最近一列未通过校验的字段）。若不传入回调函数，则会返回一个 promise | row,callback |
 | validate | 对整个表格进行校验的方法，参数为一个回调函数。该回调函数会在校验结束后被调用，并传入两个参数：（是否校验成功，最近一列未通过校验的字段）。若不传入回调函数，则会返回一个 promise | callback |
-| exportCsv| 将表格数据导出为 .csv 文件，说明：支持IE9+、Edge、Chrome、Firefox 等常用浏览器。IE11以下可能存在中文乱码问题，部分浏览器需要手动修改后缀名为 .csv | [options](#exportcsv-参数说明) |
+| exportCsv| 将表格数据导出为 .csv 文件，说明：支持IE9+、Edge、Chrome、Firefox 等常用浏览器。IE11以下可能存在中文乱码问题，部分浏览器需要手动修改后缀名为 .csv | [options](#exportcsv-导出参数说明) |
 
-##### exportCsv 参数说明
+##### exportCsv 导出参数说明
 
 | 属性 | 描述 | 类型 | 可选值 | 默认值 |
 |------|------|-----|-----|-----|
@@ -450,6 +451,31 @@ new Vue({ i18n }).$mount('#app')
 | — | 自定义显示内容，参数为 { row, rowIndex, column, columnIndex, fixed, isHidden } |
 | header | 自定义表头的内容，参数为 { column, columnIndex, fixed, isHidden } |
 | edit | 自定义可编辑组件模板，参数为 { column, columnIndex, fixed, isHidden } |
+
+### Pagination
+
+```html
+<vxe-pagination prop="name" label="Name"></vxe-pagination>
+```
+
+#### Pagination Attributes 参数
+
+| 参数 | 说明 | 类型 | 可选值 | 默认值 |
+|------|------|-----|------|-----|
+| size | 表格的尺寸 | Number | medium,small,mini | — |
+| currentPage | 当前页 | Number | — | 1 |
+| pageSize | 每页大小 | Number | — | 10 |
+| total | 总条数 | Number | — | 0 |
+| pagerCount | 显示页码按钮的数量 | Number | — | 7 |
+| pageSizes | 每页大小选项列表 | Array | — | [10, 15, 20, 50, 100] |
+| background | 带背景颜色 | Boolean | — | false |
+
+#### Pagination Events 事件
+
+| 事件名 | 说明 | 参数 |
+|------|------|-----|
+| current-change | 当前页发生改变时会触发该事件 | currentPage |
+| size-change | 每页大小发生改变时会触发该事件 | pageSize |
 
 ## Plugins
 

@@ -299,7 +299,6 @@ export default {
             {
               lable: '带分页',
               demoUrl: 'https://jsrun.net/5RXKp',
-              disabled: true,
               locat: {
                 name: 'GridPage'
               }
@@ -496,6 +495,12 @@ export default {
               lable: 'vxe-table',
               locat: {
                 name: 'TableAPI'
+              }
+            },
+            {
+              lable: 'vxe-grid',
+              locat: {
+                name: 'GridAPI'
               }
             }
           ]

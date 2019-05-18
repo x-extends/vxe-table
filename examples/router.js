@@ -67,6 +67,7 @@ import TablePluginIviewConfig from './views/table/plugin/IviewConfig.vue'
 import TablePluginIviewPage from './views/table/plugin/IviewPage.vue'
 
 import TableAPI from './views/table/api/Table.vue'
+import GridAPI from './views/table/api/Grid.vue'
 
 Vue.use(Router)
 
@@ -370,6 +371,11 @@ export default new Router({
       path: '/table/api',
       name: 'TableAPI',
       component: TableAPI
+    },
+    {
+      path: '/grid/api',
+      name: 'GridAPI',
+      component: GridAPI
     }
   ]
 })

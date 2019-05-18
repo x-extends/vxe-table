@@ -45,7 +45,7 @@ export default {
       tableColumn: [
         {
           type: 'index',
-          width: 60
+          width: 50
         },
         {
           prop: 'name',
@@ -65,7 +65,7 @@ export default {
       tableColumn2: [
         {
           type: 'index',
-          width: 60
+          width: 50
         },
         {
           label: '基本信息',
@@ -115,7 +115,7 @@ export default {
               tableColumn: [
                 {
                   type: 'index',
-                  width: 60
+                  width: 50
                 },
                 {
                   prop: 'name',
@@ -155,7 +155,7 @@ export default {
               tableColumn: [
                 {
                   type: 'index',
-                  width: 60
+                  width: 50
                 },
                 {
                   label: '基本信息',
