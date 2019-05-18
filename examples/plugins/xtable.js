@@ -5,7 +5,7 @@ import VXETablePluginIView from 'vxe-table-plugin-iview'
 import 'vxe-table-plugin-element/dist/style.css'
 import 'vxe-table-plugin-iview/dist/style.css'
 
-Vue.use(VXETable, {
+VXETable.setup({
   scrollX: {
     gt: 60,
     oSize: 6,
@@ -19,4 +19,8 @@ Vue.use(VXETable, {
     vSize: 0,
     rHeight: 0
   }
-}, VXETablePluginElement, VXETablePluginIView)
+})
+
+Vue.use(VXETable)
+VXETable.use(VXETablePluginElement)
+VXETable.use(VXETablePluginIView)

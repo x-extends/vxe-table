@@ -1,6 +1,5 @@
 import VxeTable from './table'
 import VxeTableColumn from './column'
-import VxePagination from '../../pagination'
 import TableProps from './props'
 import funs from './func'
 import UtilTools from '../../../tools/utils'
@@ -26,8 +25,7 @@ export default {
   },
   components: {
     VxeTable,
-    VxeTableColumn,
-    VxePagination
+    VxeTableColumn
   },
   render (h) {
     let { $listeners, $props, columns, pages, size } = this

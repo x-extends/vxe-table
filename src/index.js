@@ -4,6 +4,8 @@ import TableColumn from './components/table-column'
 import Grid from './components/grid'
 import Excel from './components/excel'
 import Pagination from './components/pagination'
+import Checkbox from './components/checkbox'
+import Radio from './components/radio'
 import GlobalConfig from './conf'
 import EventInterceptor from './interceptor'
 
@@ -14,7 +16,9 @@ const components = [
   TableColumn,
   Grid,
   Excel,
-  Pagination
+  Pagination,
+  Checkbox,
+  Radio
 ]
 
 function setup (options = {}) {

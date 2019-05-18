@@ -80,10 +80,6 @@ import 'vxe-table/lib/index.css'
 Vue.use(VXETable, {
   // 默认尺寸
   size: 'small',
-  // 全局快捷菜单
-  contextMenu: null,
-  // 自定义渲染器
-  renderMap: {},
   // 自定义图标配置
   iconMap: {
     sortAsc: 'vxe-sort--asc-icon',

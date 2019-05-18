@@ -7,10 +7,7 @@
       <span class="menu-btn">
         <i class="icon-menu"></i>
         <div class="menu-wrapper">
-          <label v-for="(column,index) in allColumnList" :key="index">
-            <input type="checkbox" v-model="column.visible">
-            <span>{{ column.label }}</span>
-          </label>
+          <vxe-checkbox class="checkbox-item" v-model="column.visible" v-for="(column,index) in allColumnList" :key="index">{{ column.label }}</vxe-checkbox>
         </div>
       </span>
     </div>
@@ -68,21 +65,18 @@ export default {
 .menu-wrapper {
   display: none;
   position: absolute;
-  width: 60px;
+  width: 80px;
   top: 16px;
   right: 0;
   z-index: 9;
   background-color: #fff;
   font-size: 14px;
+  padding: 4px 10px;
   user-select: none;
-  > label {
+  border: 1px solid #e8eaec;
+  .checkbox-item {
     display: block;
-    line-height: 20px;
-    cursor: pointer;
-    > input {
-      vertical-align: middle;
-      margin-right: 4px;
-    }
+    margin: 4px 0;
   }
 }
 .icon-menu {

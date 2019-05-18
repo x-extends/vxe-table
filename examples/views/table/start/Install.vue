@@ -24,7 +24,9 @@
           Table,
           TableColumn,
           Grid,
-          Excel
+          Excel,
+          Pagination,
+          Checkbox
         } from 'vxe-table'
         import 'vxe-table/lib/index.css'
 
@@ -32,6 +34,8 @@
         Vue.use(TableColumn)
         Vue.use(Grid)
         Vue.use(Excel)
+        Vue.use(Pagination)
+        Vue.use(Checkbox)
       </code>
     </pre>
     <h3>CDN</h3>
