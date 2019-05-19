@@ -18,7 +18,7 @@
       <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
 
-    <p>默认展开所有行，通过 expand-config 参数设置默认展开树节点</p>
+    <p>默认展开所有树节点，通过 expand-config 参数设置默认展开树节点</p>
 
     <vxe-table
       :data.sync="tableData"
