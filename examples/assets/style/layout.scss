@@ -1,4 +1,4 @@
-#app {
+.page-container {
   width: 1200px;
   color: #000;
   margin: 0 auto;
@@ -7,7 +7,6 @@
     box-sizing: border-box;
   }
   ul {
-    padding: 0;
     list-style: none;
   }
   .link {

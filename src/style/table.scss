@@ -1518,7 +1518,6 @@
   }
   .page--sizes {
     position: relative;
-    list-style-type: none;
     border-radius: 4px;
     padding: 0;
     border: 1px solid $vxe-input-border-color;
@@ -1528,9 +1527,6 @@
     transition: border .2s ease-in-out;
     &.is--show {
       border: 1px solid $vxe-primary-color;
-      .size--select {
-        display: block;
-      }
     }
     &:before {
       content: "";
@@ -1550,27 +1546,6 @@
       line-height: 26px;
       display: block;
     }
-    .size--select {
-      display: none;
-      position: absolute;
-      margin: 0;
-      top: 30px;
-      left: -1px;
-      min-width: 50px;
-      background-color: #fff;
-      border-radius: 4px;
-      border: 1px solid $vxe-primary-color;
-      .size--option {
-        padding: 0 15px;
-        &:hover {
-          color: $vxe-primary-color;
-        }
-        &.is--active {
-          color: #fff;
-          background-color: $vxe-primary-color;
-        }
-      }
-    }
   }
   .page--jump .page--goto {
     border-radius: 4px;
@@ -1588,6 +1563,35 @@
       width: 42px;
       margin: 0 5px;
       text-align: center;
+    }
+  }
+}
+.vxe-pagination-size--select {
+  display: none;
+  position: absolute;
+  margin: 0;
+  padding: 4px 0;
+  min-width: 50px;
+  background-color: #fff;
+  list-style-type: none;
+  border-radius: 4px;
+  font-size: $vxe-font-size;
+  color: $vxe-font-color;
+  font-family: $vxe-font-family;
+  border: 1px solid $vxe-primary-color;
+  &.is--show {
+    display: block;
+  }
+  .size--option {
+    padding: 0 15px;
+    white-space: nowrap;
+    cursor: pointer;
+    &:hover {
+      color: $vxe-primary-color;
+    }
+    &.is--active {
+      font-weight: 700;
+      color: $vxe-primary-color;
     }
   }
 }

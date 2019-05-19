@@ -22,7 +22,8 @@ export default {
   },
   data () {
     return {
-      showSizes: false
+      showSizes: false,
+      panelStyle: null
     }
   },
   computed: {
@@ -39,11 +40,20 @@ export default {
   created () {
     GlobalEvent.on(this, 'mousedown', this.handleGlobalMousedownEvent)
   },
+  mounted () {
+    document.body.appendChild(this.$refs.sizePanel)
+  },
+  beforeDestroy () {
+    let sizePanel = this.$refs.sizePanel
+    if (sizePanel && sizePanel.parentNode) {
+      sizePanel.parentNode.removeChild(sizePanel)
+    }
+  },
   destroyed () {
     GlobalEvent.off(this, 'mousedown')
   },
   render (h) {
-    let { size, background, currentPage, pageSize, pageSizes, total, pageCount, showSizes } = this
+    let { panelStyle, size, background, currentPage, pageSize, pageSizes, total, pageCount, showSizes } = this
     return h('div', {
       class: ['vxe-pagination', {
         'p--background': background,
@@ -70,29 +80,15 @@ export default {
         }
       }),
       h('span', {
-        class: ['page--sizes', {
-          'is--show': showSizes
-        }],
-        ref: 'sizePanel'
+        class: 'page--sizes',
+        ref: 'sizeBtn'
       }, [
         h('span', {
           class: 'size--content',
           on: {
             click: this.toggleSizePanel
           }
-        }, pageSize),
-        h('ul', {
-          class: 'size--select'
-        }, pageSizes.map(size => {
-          return h('li', {
-            class: ['size--option', {
-              'is--active': size === pageSize
-            }],
-            on: {
-              click: () => this.sizeChangeEvent(size)
-            }
-          }, size)
-        }))
+        }, `${pageSize} 条/页`)
       ]),
       h('span', {
         class: 'page--jump'
@@ -122,7 +118,23 @@ export default {
         h('span', {
           class: 'page--total'
         }, `共 ${total} 条`)
-      ])
+      ]),
+      h('ul', {
+        class: ['vxe-pagination-size--select', {
+          'is--show': showSizes
+        }],
+        style: panelStyle,
+        ref: 'sizePanel'
+      }, pageSizes.map(size => {
+        return h('li', {
+          class: ['size--option', {
+            'is--active': size === pageSize
+          }],
+          on: {
+            click: () => this.sizeChangeEvent(size)
+          }
+        }, `${size} 条/页`)
+      }))
     ])
   },
   methods: {
@@ -191,7 +203,7 @@ export default {
     },
     handleGlobalMousedownEvent (evnt) {
       if (this.showSizes && !DomTools.getEventTargetNode(evnt, this.$refs.sizePanel).flag) {
-        this.showSizes = false
+        this.hideSizePanel()
       }
     },
     prevPageEvent () {
@@ -217,10 +229,50 @@ export default {
         this.$emit('update:pageSize', pageSize)
         UtilTools.emitEvent(this, 'size-change', [pageSize])
       }
-      this.showSizes = false
+      this.hideSizePanel()
     },
     toggleSizePanel () {
-      this.showSizes = !this.showSizes
+      if (this.showSizes) {
+        this.hideSizePanel()
+      } else {
+        this.showSizePanel()
+      }
+    },
+    hideSizePanel () {
+      this.showSizes = false
+    },
+    showSizePanel () {
+      let { $refs } = this
+      let sizeBtnElem = $refs.sizeBtn
+      let { left, top } = DomTools.getOffsetPos(sizeBtnElem)
+      let { scrollTop, scrollLeft, visibleWidth, visibleHeight } = DomTools.getDomNode()
+      this.panelStyle = {
+        left: `${left}px`,
+        top: `${top + sizeBtnElem.offsetHeight + 6}px`
+      }
+      this.showSizes = true
+      this.$nextTick().then(() => {
+        let sizePanelElem = $refs.sizePanel
+        if (sizePanelElem) {
+          this.panelStyle = {
+            top: `${top + sizeBtnElem.offsetHeight + 6}px`,
+            left: `${left + Math.floor((sizeBtnElem.offsetWidth - sizePanelElem.offsetWidth) / 2)}px`
+          }
+          return this.$nextTick()
+        }
+      }).then(() => {
+        let sizePanelElem = $refs.sizePanel
+        if (sizePanelElem) {
+          let offsetHeight = sizePanelElem.offsetHeight
+          let offsetWidth = sizePanelElem.offsetWidth
+          if (top + sizeBtnElem.offsetHeight + offsetHeight > scrollTop + visibleHeight) {
+            this.panelStyle.top = `${top - offsetHeight - 6}px`
+          }
+          if (left + offsetWidth > scrollLeft + visibleWidth) {
+            this.panelStyle.left = `${scrollLeft + visibleWidth - offsetWidth - 6}px`
+          }
+        }
+      })
     }
   }
 }
