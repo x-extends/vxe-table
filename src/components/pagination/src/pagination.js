@@ -1,5 +1,7 @@
 import UtilTools from '../../../tools/utils'
+import GlobalEvent from '../../../tools/event'
 import XEUtils from 'xe-utils'
+import DomTools from '../../../tools/dom'
 
 export default {
   name: 'VxePagination',
@@ -18,6 +20,11 @@ export default {
     // 带背景颜色
     background: Boolean
   },
+  data () {
+    return {
+      showSizes: false
+    }
+  },
   computed: {
     pageCount () {
       return Math.max(Math.ceil(this.total / this.pageSize), 1)
@@ -29,8 +36,14 @@ export default {
       return Math.floor((this.pagerCount - 2) / 2)
     }
   },
+  created () {
+    GlobalEvent.on(this, 'mousedown', this.handleGlobalMousedownEvent)
+  },
+  destroyed () {
+    GlobalEvent.off(this, 'mousedown')
+  },
   render (h) {
-    let { size, background, currentPage, pageSize, pageSizes, total, pageCount } = this
+    let { size, background, currentPage, pageSize, pageSizes, total, pageCount, showSizes } = this
     return h('div', {
       class: ['vxe-pagination', {
         'p--background': background,
@@ -56,21 +69,31 @@ export default {
           click: this.nextPageEvent
         }
       }),
-      h('select', {
-        class: 'page--sizes',
-        on: {
-          change: this.sizeChangeEvent
-        }
-      }, pageSizes.map(value => {
-        return h('option', {
-          attrs: {
-            value
-          },
-          domProps: {
-            selected: value === pageSize
+      h('span', {
+        class: ['page--sizes', {
+          'is--show': showSizes
+        }],
+        ref: 'sizePanel'
+      }, [
+        h('span', {
+          class: 'size--content',
+          on: {
+            click: this.toggleSizePanel
           }
-        }, value)
-      })),
+        }, pageSize),
+        h('ul', {
+          class: 'size--select'
+        }, pageSizes.map(size => {
+          return h('li', {
+            class: ['size--option', {
+              'is--active': size === pageSize
+            }],
+            on: {
+              click: () => this.sizeChangeEvent(size)
+            }
+          }, size)
+        }))
+      ]),
       h('span', {
         class: 'page--jump'
       }, [
@@ -166,6 +189,11 @@ export default {
       }
       return nums
     },
+    handleGlobalMousedownEvent (evnt) {
+      if (this.showSizes && !DomTools.getEventTargetNode(evnt, this.$refs.sizePanel).flag) {
+        this.showSizes = false
+      }
+    },
     prevPageEvent () {
       let { currentPage } = this
       if (currentPage > 1) {
@@ -184,12 +212,15 @@ export default {
         UtilTools.emitEvent(this, 'current-change', [currentPage])
       }
     },
-    sizeChangeEvent (evnt) {
-      let pageSize = XEUtils.toNumber(evnt.target.value)
+    sizeChangeEvent (pageSize) {
       if (pageSize !== this.pageSize) {
         this.$emit('update:pageSize', pageSize)
         UtilTools.emitEvent(this, 'size-change', [pageSize])
       }
+      this.showSizes = false
+    },
+    toggleSizePanel () {
+      this.showSizes = !this.showSizes
     }
   }
 }

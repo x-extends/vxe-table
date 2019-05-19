@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" @click="clickEvent">
     <header class="page-header">
       <img class="logo" src="./assets/logo.jpg">
       <h1 class="title"><a href="https://github.com/xuliangzhan/vxe-table">vxe-table</a></h1>
@@ -270,6 +270,12 @@ export default {
               }
             },
             {
+              lable: '单选树形',
+              locat: {
+                name: 'TableTreeRadio'
+              }
+            },
+            {
               lable: '多选树形',
               locat: {
                 name: 'TableTreeSelection'
@@ -527,6 +533,19 @@ export default {
     }
   },
   methods: {
+    clickEvent (evnt) {
+      let pElem = evnt.target
+      if (pElem && pElem.className === 'demo-code') {
+        let nextElem = pElem.nextSibling
+        if (nextElem && nextElem.tagName.toLowerCase() === 'pre') {
+          if (nextElem.className.indexOf('is-show') > -1) {
+            nextElem.className = ''
+          } else {
+            nextElem.className = 'is-show'
+          }
+        }
+      }
+    },
     linkEvent (item) {
       this.tableList.forEach(group => {
         if (item !== group) {

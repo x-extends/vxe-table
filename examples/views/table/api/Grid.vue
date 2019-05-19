@@ -2,13 +2,14 @@
   <div>
     <vxe-table
       border
+      highlight-hover-row
       :data="tableData"
       :tree-config="{key: 'id', children: 'list'}">
-      <vxe-table-column prop="name" label="属性" tree-node></vxe-table-column>
+      <vxe-table-column prop="name" label="属性" width="220" tree-node></vxe-table-column>
       <vxe-table-column prop="desc" label="说明"></vxe-table-column>
       <vxe-table-column prop="type" label="类型"></vxe-table-column>
       <vxe-table-column prop="enum" label="可选值"></vxe-table-column>
-      <vxe-table-column prop="default" label="默认值"></vxe-table-column>
+      <vxe-table-column prop="defVal" label="默认值"></vxe-table-column>
     </vxe-table>
   </div>
 </template>

@@ -5,6 +5,7 @@
 
     <vxe-table
       border
+      show-all-overflow
       :data.sync="tableData"
       :mouse-config="{selected: true}"
       :keyboard-config="{isArray: true, isTab: true, isEdit: true}"
@@ -13,10 +14,10 @@
       <vxe-table-column prop="name" label="Name" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column prop="sex" label="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column prop="date" label="Date"></vxe-table-column>
-      <vxe-table-column prop="address" label="Address" show-overflow :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column prop="address" label="Address" :edit-render="{name: 'input'}"></vxe-table-column>
     </vxe-table>
 
-    <p>调用代码</p>
+    <p class="demo-code">显示代码</p>
 
     <pre>
       <code class="xml">{{ demoCodes[0] }}</code>

@@ -48,7 +48,7 @@
       :total="pageVO.totalResult">
     </el-pagination>
 
-    <p>调用代码</p>
+    <p class="demo-code">显示代码</p>
 
     <pre>
       <code class="xml">{{ demoCodes[0] }}</code>

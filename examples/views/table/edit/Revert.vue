@@ -6,6 +6,7 @@
     <vxe-table
       ref="xTable"
       border
+      show-all-overflow
       :data.sync="tableData"
       :edit-config="{trigger: 'click', mode: 'cell'}">
       <vxe-table-column type="index" width="60"></vxe-table-column>
@@ -19,7 +20,7 @@
       </vxe-table-column>
     </vxe-table>
 
-    <p>调用代码</p>
+    <p class="demo-code">显示代码</p>
 
     <pre>
       <code class="xml">{{ demoCodes[0] }}</code>

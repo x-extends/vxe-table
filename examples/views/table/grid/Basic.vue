@@ -8,7 +8,7 @@
       :columns="tableColumn"
       :data.sync="tableData"></vxe-grid>
 
-    <p>调用代码</p>
+    <p class="demo-code">显示代码</p>
 
     <pre>
       <code class="xml">{{ demoCodes[0] }}</code>
@@ -26,7 +26,7 @@
       :columns="tableColumn2"
       :data.sync="tableData"></vxe-grid>
 
-    <p>调用代码</p>
+    <p class="demo-code">显示代码</p>
 
     <pre>
       <code class="xml">{{ demoCodes[2] }}</code>

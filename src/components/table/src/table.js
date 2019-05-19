@@ -5,7 +5,7 @@ import TableFooter from './footer'
 import UtilTools from '../../../tools/utils'
 import DomTools from '../../../tools/dom'
 import ExportTools from '../../../tools/export'
-import GlobalEvent from './event'
+import GlobalEvent from '../../../tools/event'
 import ResizeEvent from './resize'
 import TableProps from './props'
 import TableFilter from './filter'
@@ -1720,10 +1720,12 @@ export default {
      * 如果是双击模式，则单击后选中状态
      */
     triggerCellClickEvent (evnt, params) {
-      let { highlightCurrentRow, editStore, editConfig } = this
+      let { $el, highlightCurrentRow, editStore, editConfig } = this
       let { actived } = editStore
       if (highlightCurrentRow) {
-        this.selectRow = params.row
+        if (!DomTools.getEventTargetNode(evnt, $el, 'vxe-tree-wrapper').flag) {
+          this.selectRow = params.row
+        }
       }
       if (editConfig) {
         if (editConfig.trigger === 'click') {

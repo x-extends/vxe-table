@@ -11,7 +11,7 @@
       <vxe-table-column prop="date" label="Date"></vxe-table-column>
     </vxe-table>
 
-    <p>调用代码</p>
+    <p class="demo-code">显示代码</p>
 
     <pre>
       <code class="xml">{{ demoCodes[0] }}</code>

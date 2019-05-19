@@ -34,6 +34,7 @@ import TableExpand from './views/table/advanced/Expand.vue'
 
 import TableTreeBasic from './views/table/tree/Basic.vue'
 import TableTreeSelection from './views/table/tree/Selection.vue'
+import TableTreeRadio from './views/table/tree/Radio.vue'
 
 import GridBasic from './views/table/grid/Basic.vue'
 import GridPage from './views/table/grid/Page.vue'
@@ -241,6 +242,11 @@ export default new Router({
       path: '/table/tree/selection',
       name: 'TableTreeSelection',
       component: TableTreeSelection
+    },
+    {
+      path: '/table/tree/radio',
+      name: 'TableTreeRadio',
+      component: TableTreeRadio
     },
     {
       path: '/table/grid/basic',

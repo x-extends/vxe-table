@@ -6,6 +6,7 @@ import Excel from './components/excel'
 import Pagination from './components/pagination'
 import Checkbox from './components/checkbox'
 import Radio from './components/radio'
+import Input from './components/input'
 import GlobalConfig from './conf'
 import EventInterceptor from './interceptor'
 
@@ -18,7 +19,8 @@ const components = [
   Excel,
   Pagination,
   Checkbox,
-  Radio
+  Radio,
+  Input
 ]
 
 function setup (options = {}) {

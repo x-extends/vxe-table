@@ -364,7 +364,7 @@ export default {
         // 避免 IE 卡顿
         if (leftElem || rightElem) {
           clearTimeout(updateLeftScrollingTimeput)
-          updateLeftScrollingTimeput = setTimeout($table.checkScrolling, DomTools.browse.msie ? 300 : 20)
+          updateLeftScrollingTimeput = setTimeout($table.checkScrolling, DomTools.browse.msie ? 200 : 10)
         }
         syncBodyScroll(bodyElem.scrollTop, leftElem, rightElem)
       }

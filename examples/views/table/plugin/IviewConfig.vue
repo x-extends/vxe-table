@@ -30,7 +30,7 @@
       <vxe-table-column prop="rate" label="Rate" width="200" fixed="right" :edit-render="{name: 'Rate', type: 'visible'}"></vxe-table-column>
     </vxe-table>
 
-    <p>调用代码</p>
+    <p class="demo-code">显示代码</p>
 
     <pre>
       <code class="xml">{{ demoCodes[2] }}</code>

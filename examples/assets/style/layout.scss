@@ -142,3 +142,19 @@
     border-color: #3a8ee6;
   }
 }
+
+.demo-code {
+  cursor: pointer;
+  color: #409eff;
+  font-weight: bold;
+  text-align: center;
+  &:before {
+    content: ">> ";
+  }
+  &+pre {
+    display: none;
+    &.is-show {
+      display: block;
+    }
+  }
+}

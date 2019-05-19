@@ -28,7 +28,7 @@ export default {
     VxeTableColumn
   },
   render (h) {
-    let { $listeners, $props, columns, pages, size } = this
+    let { $listeners, $props, columns, pages, size, loading } = this
     return h('div', {
       class: 'vxe-grid'
     }, [
@@ -38,6 +38,9 @@ export default {
         ref: 'xTable'
       }, buildColumns(h, columns)),
       pages ? h('vxe-pagination', {
+        class: ['vxe-grid--pagination', {
+          'is--loading': loading
+        }],
         props: Object.assign({ size }, pages),
         on: {
           'current-change': this.currentChangeEvent,
