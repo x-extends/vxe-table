@@ -134,23 +134,24 @@ export default {
       let { $table } = params
       let { treeConfig, treeExpandeds } = $table
       let { row, level } = params
-      let rowChildren = row[treeConfig.children]
+      let { children, indent, trigger } = treeConfig
+      let rowChildren = row[children]
+      let on = {}
+      if (!trigger || trigger === 'default') {
+        on.click = evnt => $table.triggerTreeExpandEvent(evnt, params)
+      }
       return [
         h('span', {
           class: 'vxe-tree--indent',
           style: {
-            width: `${level * (treeConfig.indent || 16)}px`
+            width: `${level * (indent || 16)}px`
           }
         }),
         h('span', {
           class: ['vxe-tree-wrapper', {
             active: treeExpandeds.indexOf(row) > -1
           }],
-          on: {
-            click (evnt) {
-              $table.triggerTreeExpandEvent(evnt, params)
-            }
-          }
+          on
         }, rowChildren && rowChildren.length ? [
           h('i', {
             class: iconMap.tree

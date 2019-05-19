@@ -1720,12 +1720,15 @@ export default {
      * 如果是双击模式，则单击后选中状态
      */
     triggerCellClickEvent (evnt, params) {
-      let { $el, highlightCurrentRow, editStore, editConfig } = this
+      let { $el, highlightCurrentRow, editStore, treeConfig, editConfig } = this
       let { actived } = editStore
       if (highlightCurrentRow) {
         if (!DomTools.getEventTargetNode(evnt, $el, 'vxe-tree-wrapper').flag) {
           this.selectRow = params.row
         }
+      }
+      if (treeConfig && (treeConfig.trigger === 'row' || (params.column.treeNode && treeConfig.trigger === 'cell'))) {
+        this.triggerTreeExpandEvent(evnt, params)
       }
       if (editConfig) {
         if (editConfig.trigger === 'click') {
@@ -2177,20 +2180,24 @@ export default {
      * 支持多行
      */
     setTreeExpansion (rows, expanded) {
-      let { treeExpandeds } = this
+      let { treeExpandeds, treeConfig } = this
+      let { children } = treeConfig
       let isToggle = arguments.length === 1
       if (rows && !XEUtils.isArray(rows)) {
         rows = [rows]
       }
       rows.forEach(row => {
-        let index = treeExpandeds.indexOf(row)
-        if (index > -1) {
-          if (isToggle || !expanded) {
-            treeExpandeds.splice(index, 1)
-          }
-        } else {
-          if (isToggle || expanded) {
-            treeExpandeds.push(row)
+        let rowChildren = row[children]
+        if (rowChildren && rowChildren.length) {
+          let index = treeExpandeds.indexOf(row)
+          if (index > -1) {
+            if (isToggle || !expanded) {
+              treeExpandeds.splice(index, 1)
+            }
+          } else {
+            if (isToggle || expanded) {
+              treeExpandeds.push(row)
+            }
           }
         }
       })

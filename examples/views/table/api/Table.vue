@@ -1,15 +1,14 @@
 <template>
   <div>
     <vxe-table
-      border
       highlight-hover-row
       :data="tableData"
-      :tree-config="{key: 'id', children: 'list'}">
-      <vxe-table-column prop="name" label="属性" width="220" tree-node></vxe-table-column>
+      :tree-config="{key: 'id', children: 'list', trigger: 'cell'}">
+      <vxe-table-column prop="name" label="属性" width="280" tree-node></vxe-table-column>
       <vxe-table-column prop="desc" label="说明"></vxe-table-column>
-      <vxe-table-column prop="type" label="类型"></vxe-table-column>
-      <vxe-table-column prop="enum" label="可选值"></vxe-table-column>
-      <vxe-table-column prop="defVal" label="默认值"></vxe-table-column>
+      <vxe-table-column prop="type" label="类型" width="140"></vxe-table-column>
+      <vxe-table-column prop="enum" label="可选值" width="180"></vxe-table-column>
+      <vxe-table-column prop="defVal" label="默认值或参数" width="180"></vxe-table-column>
     </vxe-table>
   </div>
 </template>
@@ -394,6 +393,14 @@ export default {
                 enum: '',
                 defVal: '16',
                 list: []
+              },
+              {
+                name: 'trigger',
+                desc: '触发方式',
+                type: 'String',
+                enum: 'default（点击图标触发）,cell（点击单元格触发）,row（点击行触发）',
+                defVal: 'default',
+                list: []
               }
             ]
           },
@@ -429,6 +436,309 @@ export default {
                 list: contextMenuApi
               }
             ]
+          },
+          {
+            name: 'mouse-config',
+            desc: '鼠标配置项',
+            type: 'Object',
+            enum: '',
+            defVal: '',
+            list: [
+              {
+                name: 'selected',
+                desc: '开启左键选中功能',
+                type: 'Boolean',
+                enum: '',
+                defVal: 'false',
+                list: []
+              },
+              {
+                name: 'checked',
+                desc: '开启鼠标移动单元格批量选中功能',
+                type: 'Boolean',
+                enum: '',
+                defVal: 'false',
+                list: []
+              }
+            ]
+          },
+          {
+            name: 'Keyboard-config',
+            desc: '按键配置项',
+            type: 'Object',
+            enum: '',
+            defVal: '',
+            list: [
+              {
+                name: 'isArrow',
+                desc: '开启方向键功能',
+                type: 'Boolean',
+                enum: '',
+                defVal: 'false',
+                list: []
+              },
+              {
+                name: 'isTab',
+                desc: '开启 Tab 键功能',
+                type: 'Boolean',
+                enum: '',
+                defVal: 'false',
+                list: []
+              },
+              {
+                name: 'isCut',
+                desc: '开启复制粘贴功能',
+                type: 'Boolean',
+                enum: '',
+                defVal: 'false',
+                list: []
+              },
+              {
+                name: 'isEdit',
+                desc: '开启任意键进入编辑（功能键除外）',
+                type: 'Boolean',
+                enum: '',
+                defVal: 'false',
+                list: []
+              },
+              {
+                name: 'editMethod',
+                desc: '只对 isEdit=true 有效，用于重写选中编辑处理逻辑，该函数 Function({seq, row, rowIndex, column, columnIndex, cell}, event) 可以返回 false 来阻止默认行为',
+                type: 'Function',
+                enum: '',
+                defVal: '',
+                list: []
+              }
+            ]
+          },
+          {
+            name: 'edit-config',
+            desc: '可编辑配置项',
+            type: 'Object',
+            enum: '',
+            defVal: '',
+            list: [
+              {
+                name: 'key',
+                desc: '数据中的唯一主键',
+                type: 'String',
+                enum: '',
+                defVal: '',
+                list: []
+              },
+              {
+                name: 'trigger',
+                desc: '触发方式',
+                type: 'String',
+                enum: 'manual（手动触发方式，只能用于 mode=row）,click（点击触发编辑）,dblclick（双击触发编辑）',
+                defVal: 'click',
+                list: []
+              },
+              {
+                name: 'mode',
+                desc: '编辑模式',
+                type: 'String',
+                enum: 'cell（单元格编辑模式）,row（行编辑模式）',
+                defVal: 'cell',
+                list: []
+              },
+              {
+                name: 'showIcon',
+                desc: '是否显示列头编辑图标',
+                type: 'Boolean',
+                enum: '',
+                defVal: 'true',
+                list: []
+              },
+              {
+                name: 'showStatus',
+                desc: '是否显示单元格值的修改状态',
+                type: 'Boolean',
+                enum: '',
+                defVal: 'false',
+                list: []
+              },
+              {
+                name: 'autoClear',
+                desc: '当点击非编辑列之后，是否自动清除单元格的激活状态',
+                type: 'Boolean',
+                enum: '',
+                defVal: 'true',
+                list: []
+              }
+            ]
+          },
+          {
+            name: 'edit-rules',
+            desc: '校验规则配置项',
+            type: 'Object',
+            enum: '',
+            defVal: '',
+            list: [
+              {
+                name: 'required',
+                desc: '是否必填',
+                type: 'Boolean',
+                enum: '',
+                defVal: 'false',
+                list: []
+              },
+              {
+                name: 'min',
+                desc: '校验值最小长度（如果 type=number 则比较值大小）',
+                type: 'Number',
+                enum: '',
+                defVal: '',
+                list: []
+              },
+              {
+                name: 'max',
+                desc: '校验值最大长度（如果 type=number 则比较值大小）',
+                type: 'Number',
+                enum: '',
+                defVal: '',
+                list: []
+              },
+              {
+                name: 'type',
+                desc: '数据校验的类型',
+                type: 'String',
+                enum: 'number,string',
+                defVal: 'string',
+                list: []
+              },
+              {
+                name: 'pattern',
+                desc: '正则校验',
+                type: 'RegExp',
+                enum: '',
+                defVal: '',
+                list: []
+              },
+              {
+                name: 'validator',
+                desc: '自定义校验方法，Function(rule, value, callback)',
+                type: 'Function',
+                enum: '',
+                defVal: '',
+                list: []
+              },
+              {
+                name: 'trigger',
+                desc: '触发校验方式',
+                type: 'String',
+                enum: 'blur,change',
+                defVal: 'change',
+                list: []
+              }
+            ]
+          },
+          {
+            name: 'optimized',
+            desc: '优化配置项',
+            type: 'Object',
+            enum: '',
+            defVal: '',
+            list: [
+              {
+                name: 'animat',
+                desc: '表格动画效果开关（关闭后视觉效果更快）',
+                type: 'Object',
+                enum: '',
+                defVal: 'true',
+                list: []
+              },
+              {
+                name: 'scrollX',
+                desc: '横向 X 滚动渲染配置',
+                type: 'Object',
+                enum: '',
+                defVal: '',
+                list: [
+                  {
+                    name: 'gt',
+                    desc: '指定大于多少范围时自动启动滚动渲染',
+                    type: 'Number',
+                    enum: '',
+                    defVal: '60',
+                    list: []
+                  },
+                  {
+                    name: 'oSize',
+                    desc: '超过指定阈值重新渲染',
+                    type: 'Number',
+                    enum: '',
+                    defVal: '6',
+                    list: []
+                  },
+                  {
+                    name: 'rSize',
+                    desc: '每次渲染条数',
+                    type: 'Number',
+                    enum: '',
+                    defVal: '16',
+                    list: []
+                  },
+                  {
+                    name: 'vSize',
+                    desc: '指定可视区域条数，默认自动计算',
+                    type: 'Number',
+                    enum: '',
+                    defVal: '',
+                    list: []
+                  }
+                ]
+              },
+              {
+                name: 'scrollY',
+                desc: '纵向 Y 滚动渲染配置',
+                type: 'Object',
+                enum: '',
+                defVal: '',
+                list: [
+                  {
+                    name: 'gt',
+                    desc: '指定大于多少范围时自动启动滚动渲染',
+                    type: 'Number',
+                    enum: '',
+                    defVal: '500',
+                    list: []
+                  },
+                  {
+                    name: 'oSize',
+                    desc: '超过指定阈值重新渲染',
+                    type: 'Number',
+                    enum: '',
+                    defVal: '25',
+                    list: []
+                  },
+                  {
+                    name: 'rSize',
+                    desc: '每次渲染条数',
+                    type: 'Number',
+                    enum: '',
+                    defVal: '70',
+                    list: []
+                  },
+                  {
+                    name: 'vSize',
+                    desc: '指定可视区域条数，默认自动计算',
+                    type: 'Number',
+                    enum: '',
+                    defVal: '',
+                    list: []
+                  },
+                  {
+                    name: 'rHeight',
+                    desc: '指定行高，默认自动计算',
+                    type: 'Number',
+                    enum: '',
+                    defVal: '',
+                    list: []
+                  }
+                ]
+              }
+            ]
           }
         ]
       },
@@ -446,7 +756,80 @@ export default {
         type: '',
         enum: '',
         defVal: '',
-        list: []
+        list: [
+          {
+            name: 'select-all',
+            desc: '只对 type=selection 有效，当手动勾选全选时触发的事件',
+            type: '',
+            enum: '',
+            defVal: '{selection,checked},event',
+            list: []
+          },
+          {
+            name: 'select-change',
+            desc: '只对 type=selection,radio 有效，当手动勾选时触发的事件',
+            type: '',
+            enum: '',
+            defVal: '{selection,checked,row,column},event',
+            list: []
+          },
+          {
+            name: 'cell-click',
+            desc: '单元格被点击时会触发该事件',
+            type: '',
+            enum: '',
+            defVal: '{row,rowIndex,column,columnIndex,cell},event',
+            list: []
+          },
+          {
+            name: 'cell-dblclick',
+            desc: '单元格被双击时会触发该事件',
+            type: '',
+            enum: '',
+            defVal: '{row,rowIndex,column,columnIndex,cell},event',
+            list: []
+          },
+          {
+            name: 'context-menu-link',
+            desc: '当点击快捷菜单后触发',
+            type: '',
+            enum: '',
+            defVal: 'menu,{type,row,rowIndex,column,columnIndex,cell},event',
+            list: []
+          },
+          {
+            name: 'clear-actived',
+            desc: '单元格编辑状态下被清除时会触发该事件',
+            type: '',
+            enum: '',
+            defVal: '{row,rowIndex,column,columnIndex,cell},event',
+            list: []
+          },
+          {
+            name: 'edit-actived',
+            desc: '单元格被激活编辑时会触发该事件',
+            type: '',
+            enum: '',
+            defVal: '{row,rowIndex,column,columnIndex,cell},event',
+            list: []
+          },
+          {
+            name: 'edit-disabled',
+            desc: '当点击后单元格如果是禁用状态时会触发该事件',
+            type: '',
+            enum: '',
+            defVal: '{row,rowIndex,column,columnIndex,cell},event',
+            list: []
+          },
+          {
+            name: 'valid-error',
+            desc: '当数据校验不通过时会触发该事件',
+            type: '',
+            enum: '',
+            defVal: '{rule,row,rowIndex,column,columnIndex,cell}',
+            list: []
+          }
+        ]
       },
       {
         name: 'Methods',
@@ -454,7 +837,449 @@ export default {
         type: '',
         enum: '',
         defVal: '',
-        list: []
+        list: [
+          {
+            name: 'load()',
+            desc: '加载化数据',
+            type: '',
+            enum: '',
+            defVal: 'data',
+            list: []
+          },
+          {
+            name: 'reload()',
+            desc: '加载化数据，恢复初始状态',
+            type: '',
+            enum: '',
+            defVal: 'data',
+            list: []
+          },
+          {
+            name: 'insert(records)',
+            desc: '从第一行新增一行或多行新数据',
+            type: '',
+            enum: '',
+            defVal: 'records',
+            list: []
+          },
+          {
+            name: 'insertAt(records,row)',
+            desc: '从指定位置插入一行或多行；第二个参数：row 指定位置、null 从第一行插入、-1 从最后插入',
+            type: '',
+            enum: '',
+            defVal: 'records,row',
+            list: []
+          },
+          {
+            name: 'revert(rows,prop)',
+            desc: '还原更改，还原指定行 row 或者整个表格的数据',
+            type: '',
+            enum: '',
+            defVal: 'rows?,prop?',
+            list: []
+          },
+          {
+            name: 'remove(rows)',
+            desc: '删除指定行数据，指定 row 或 [row, ...] 删除多条数据',
+            type: '',
+            enum: '',
+            defVal: 'rows',
+            list: []
+          },
+          {
+            name: 'getRecords(rowIndex)',
+            desc: '获取表格所有数据，和 data 属性一致行为，也可以指定索引获取数据',
+            type: '',
+            enum: '',
+            defVal: 'rowIndex?',
+            list: []
+          },
+          {
+            name: 'getColumns(columnIndex)',
+            desc: '获取表格所有列，也可以指定索引获取列',
+            type: '',
+            enum: '',
+            defVal: 'columnIndex?',
+            list: []
+          },
+          {
+            name: 'getAllRecords()',
+            desc: '获取表格数据集合',
+            type: '',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'getInsertRecords()',
+            desc: '获取新增数据',
+            type: '',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'getRemoveRecords()',
+            desc: '获取已删除数据',
+            type: '',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'getUpdateRecords()',
+            desc: '获取已修改数据',
+            type: '',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'hasRowChange(row,prop)',
+            desc: '检查行或列数据是否发生改变',
+            type: '',
+            enum: '',
+            defVal: 'row,prop?',
+            list: []
+          },
+          {
+            name: 'setActiveRow(row)',
+            desc: '只对 mode=cell 有效，激活行编辑',
+            type: '',
+            enum: '',
+            defVal: 'row',
+            list: []
+          },
+          {
+            name: 'setActiveCell(row,prop)',
+            desc: '只对 mode=row 有效，激活单元格编辑',
+            type: '',
+            enum: '',
+            defVal: 'row,prop',
+            list: []
+          },
+          {
+            name: 'setSelectCell(row,prop)',
+            desc: '只对 trigger!=manual 有效，选中单元格',
+            type: '',
+            enum: '',
+            defVal: 'row,prop',
+            list: []
+          },
+          {
+            name: 'setRowExpansion',
+            desc: '设置展开行，二个参数设置这一行展开与否',
+            type: '',
+            enum: '',
+            defVal: 'rows,checked(rows,checked)',
+            list: []
+          },
+          {
+            name: 'setTreeExpansion(rows,checked)',
+            desc: '设置展开树形节点，二个参数设置这一行展开与否',
+            type: '',
+            enum: '',
+            defVal: 'rows,checked',
+            list: []
+          },
+          {
+            name: 'setCurrentRow(rows,checked)',
+            desc: '用于单选表格，设置某一行为选中状态，第二个参数为选中与否',
+            type: '',
+            enum: '',
+            defVal: 'rows,checked',
+            list: []
+          },
+          {
+            name: 'setSelection(rows,checked)',
+            desc: '用于多选表格，设置行为选中状态，第二个参数为选中与否',
+            type: '',
+            enum: '',
+            defVal: 'rows,checked',
+            list: []
+          },
+          {
+            name: 'setAllSelection(checked)',
+            desc: '用于多选表格，设置所有行的选中状态',
+            type: '',
+            enum: '',
+            defVal: 'checked',
+            list: []
+          },
+          {
+            name: 'toggleRowSelection(row)',
+            desc: '用于多选表格，切换某一行的选中状态',
+            type: '',
+            enum: '',
+            defVal: 'row',
+            list: []
+          },
+          {
+            name: 'toggleAllSelection()',
+            desc: '用于多选表格，切换所有行的选中状态',
+            type: '',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'toggleRowExpansion(row)',
+            desc: '用于可展开表格，切换展开行',
+            type: '',
+            enum: '',
+            defVal: 'row',
+            list: []
+          },
+          {
+            name: 'toggleTreeExpansion(row)',
+            desc: '用于可树形表格，切换展开树形节点',
+            type: '',
+            enum: '',
+            defVal: 'row',
+            list: []
+          },
+          {
+            name: 'clearCurrentRow()',
+            desc: '用于单选表格，清空用户的选择',
+            type: '',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'clearSelection()',
+            desc: '用于多选表格，清空用户的选择',
+            type: '',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'clearRowExpand()',
+            desc: '清空展开行状态，数据会恢复成未展开的状态',
+            type: '',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'clearTreeExpand()',
+            desc: '清空树形节点的展开状态，数据会恢复成未展开的状态',
+            type: '',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'clearSort()',
+            desc: '清空排序条件，数据会恢复成未排序的状态',
+            type: '',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'clearFilter()',
+            desc: '清空筛选条件，数据会恢复成未筛选的状态',
+            type: '',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'clearChecked()',
+            desc: '清除单元格批量选中状态',
+            type: '',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'clearSelected()',
+            desc: '清除单元格选中状态',
+            type: '',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'clearActived()',
+            desc: '清除单元格激活状态',
+            type: '',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'clearCopyed()',
+            desc: '清空已复制的内容',
+            type: '',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'clearData()',
+            desc: '清空单元格内容',
+            type: '',
+            enum: '',
+            defVal: 'rows?,prop?',
+            list: []
+          },
+          {
+            name: 'clearScroll()',
+            desc: '清除滚动相关信息，还原到初始状态',
+            type: '',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'closeFilter()',
+            desc: '手动关闭筛选面板',
+            type: '',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'clostTooltip()',
+            desc: '手动关闭 tooltip 提示',
+            type: '',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'closeContextMenu()',
+            desc: '手动关闭快捷菜单',
+            type: '',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'recalculate',
+            desc: '重新计算并更新列宽',
+            type: '',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'isScrollXLoad()',
+            desc: '判断是否启用了横向 X 滚动渲染',
+            type: '',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'isScrollYLoad()',
+            desc: '判断是否启用了纵向 Y 滚动渲染',
+            type: '',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'sort(prop,order)',
+            desc: '手动对表格进行排序',
+            type: '',
+            enum: '',
+            defVal: 'prop,order',
+            list: []
+          },
+          {
+            name: 'validateRow(row,callback)',
+            desc: '对表格某一行进行校验的方法，参数为行数据和一个回调函数。该回调函数会在校验结束后被调用，并传入两个参数：（是否校验成功，最近一列未通过校验的字段）。若不传入回调函数，则会返回一个 promise',
+            type: '',
+            enum: '',
+            defVal: 'row,callback?',
+            list: []
+          },
+          {
+            name: 'validate(callback)',
+            desc: '对整个表格进行校验的方法，参数为一个回调函数。该回调函数会在校验结束后被调用，并传入两个参数：（是否校验成功，最近一列未通过校验的字段）。若不传入回调函数，则会返回一个 promise',
+            type: '',
+            enum: '',
+            defVal: 'callback?',
+            list: []
+          },
+          {
+            name: 'exportCsv(options)',
+            desc: '将表格数据导出为 .csv 文件，说明：支持IE9+、Edge、Chrome、Firefox 等常用浏览器。IE11以下可能存在中文乱码问题，部分浏览器需要手动修改后缀名为 .csv',
+            type: 'Object',
+            enum: '',
+            defVal: 'options',
+            list: [
+              {
+                name: 'filename',
+                desc: '文件名',
+                type: 'String',
+                enum: '',
+                defVal: 'table.csv',
+                list: []
+              },
+              {
+                name: 'original',
+                desc: '是否导出源数据（滚动渲染启用后默认是 true）',
+                type: 'Boolean',
+                enum: '',
+                defVal: 'false',
+                list: []
+              },
+              {
+                name: 'isHeader',
+                desc: '是否显示表头',
+                type: 'Boolean',
+                enum: '',
+                defVal: 'true',
+                list: []
+              },
+              {
+                name: 'download',
+                desc: '是否马上下载，如果设置为 false 则通过返回结果为内容的 Promise',
+                type: 'Boolean',
+                enum: '',
+                defVal: 'true',
+                list: []
+              },
+              {
+                name: 'data',
+                desc: '自定义数据',
+                type: 'Array',
+                enum: '',
+                defVal: '',
+                list: []
+              },
+              {
+                name: 'columns',
+                desc: '自定义列',
+                type: 'Array',
+                enum: '',
+                defVal: '',
+                list: []
+              },
+              {
+                name: 'columnFilterMethod',
+                desc: '列过滤方法，该函数 Function(column,columnIndex) 的返回值用来决定该列是否导出',
+                type: 'Function',
+                enum: '',
+                defVal: '默认过滤掉 type=index,selection,radio 和 prop 为空的列',
+                list: []
+              },
+              {
+                name: 'dataFilterMethod',
+                desc: '数据过滤方法，该函数 Function(row,rowIndex) 的返回值用来决定该数据是否导出',
+                type: 'Function',
+                enum: '',
+                defVal: '',
+                list: []
+              }
+            ]
+          }
+        ]
       }
     ]
     let index = 1

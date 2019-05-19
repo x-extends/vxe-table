@@ -1,7 +1,5 @@
-.page-container {
-  width: 1200px;
+body {
   color: #000;
-  margin: 0 auto;
   font-family: Helvetica Neue,Helvetica,PingFang SC,Hiragino Sans GB,Microsoft YaHei,\\5FAE\8F6F\96C5\9ED1,Arial,sans-serif;
   * {
     box-sizing: border-box;
@@ -20,7 +18,8 @@
 }
 
 .page-header {
-  width: 1200px;
+  max-width: 1400px;
+  min-width: 1200px;
   margin: 0 auto;
   box-sizing: border-box;
   border-bottom: 1px solid #dcdfe6;
@@ -56,6 +55,9 @@
 }
 .page-container {
   display: flex;
+  max-width: 1400px;
+  min-width: 1200px;
+  margin: 0 auto;
   border-bottom: 1px solid #dcdfe6;
   > .aside {
     width: 220px;
@@ -126,6 +128,7 @@
   }
 }
 .page-footer {
+  padding: 14px 0;
   font-size: 12px;
   color: #333;
   text-align: center;

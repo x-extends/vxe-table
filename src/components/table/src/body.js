@@ -16,7 +16,7 @@ function handleLocation (obj, rows, columns, row, column) {
  * 渲染列
  */
 function renderColumn (h, _vm, $table, seq, fixedType, rowLevel, row, rowIndex, column, columnIndex) {
-  let { $listeners: tableListeners, tableData, scrollXLoad, scrollYLoad, border, highlightCurrentRow, showAllOverflow, cellClassName, spanMethod, keyboardConfig, mouseConfig, editConfig, editStore, validStore } = $table
+  let { $listeners: tableListeners, tableData, scrollXLoad, scrollYLoad, border, highlightCurrentRow, showAllOverflow, cellClassName, spanMethod, keyboardConfig, treeConfig, mouseConfig, editConfig, editStore, validStore } = $table
   let { editRender, align, showOverflow, renderWidth, columnKey } = column
   let { checked, selected, actived, copyed } = editStore
   let isMouseSelected = mouseConfig && mouseConfig.selected
@@ -46,7 +46,10 @@ function renderColumn (h, _vm, $table, seq, fixedType, rowLevel, row, rowIndex, 
   tdOns.mousedown = evnt => {
     $table.triggerCellMousedownEvent(evnt, { $table, seq, row, rowIndex, column, columnIndex, fixed: fixedType, level: rowLevel, cell: evnt.currentTarget })
   }
-  if ((editRender && editConfig && editConfig.trigger !== 'manual') || highlightCurrentRow || tableListeners['cell-click']) {
+  if (highlightCurrentRow ||
+    tableListeners['cell-click'] ||
+    (editRender && editConfig && editConfig.trigger !== 'manual') ||
+    (treeConfig && (treeConfig.trigger === 'row' || (column.treeNode && treeConfig.trigger === 'cell')))) {
     tdOns.click = evnt => {
       $table.triggerCellClickEvent(evnt, { $table, row, rowIndex, column, columnIndex, fixed: fixedType, level: rowLevel, cell: evnt.currentTarget })
     }
