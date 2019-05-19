@@ -3,7 +3,7 @@
     <vxe-table
       highlight-hover-row
       :data="tableData"
-      :tree-config="{key: 'id', children: 'list', trigger: 'cell'}">
+      :tree-config="{key: 'id', children: 'list', expandRowKeys: defaultExpandRowKeys, trigger: 'cell'}">
       <vxe-table-column prop="name" label="属性" width="280" tree-node></vxe-table-column>
       <vxe-table-column prop="desc" label="说明"></vxe-table-column>
       <vxe-table-column prop="type" label="类型" width="140"></vxe-table-column>
@@ -19,7 +19,8 @@ import XEUtils from 'xe-utils'
 export default {
   data () {
     return {
-      tableData: []
+      tableData: [],
+      defaultExpandRowKeys: []
     }
   },
   created () {
@@ -364,6 +365,47 @@ export default {
             list: []
           },
           {
+            name: 'expand-config',
+            desc: '展开行配置项',
+            type: 'Object',
+            enum: '',
+            defVal: '',
+            list: [
+              {
+                name: 'key',
+                desc: '行数据中的唯一主键',
+                type: 'String',
+                enum: '',
+                defVal: '',
+                list: []
+              },
+              {
+                name: 'expandAll',
+                desc: '默认展开所有行',
+                type: 'Boolean',
+                enum: '',
+                defVal: 'false',
+                list: []
+              },
+              {
+                name: 'expandRowKeys',
+                desc: '默认展开指定行',
+                type: 'Array',
+                enum: '',
+                defVal: '',
+                list: []
+              },
+              {
+                name: 'trigger',
+                desc: '触发方式',
+                type: 'String',
+                enum: 'default（点击按钮触发）,cell（点击单元格触发）,row（点击行触发）',
+                defVal: 'default',
+                list: []
+              }
+            ]
+          },
+          {
             name: 'tree-config',
             desc: '树形结构配置项',
             type: 'Object',
@@ -372,7 +414,7 @@ export default {
             list: [
               {
                 name: 'key',
-                desc: '树节点数据中的唯一主键',
+                desc: '行数据中的唯一主键',
                 type: 'String',
                 enum: '',
                 defVal: '',
@@ -398,7 +440,7 @@ export default {
                 name: 'trigger',
                 desc: '触发方式',
                 type: 'String',
-                enum: 'default（点击图标触发）,cell（点击单元格触发）,row（点击行触发）',
+                enum: 'default（点击按钮触发）,cell（点击单元格触发）,row（点击行触发）',
                 defVal: 'default',
                 list: []
               }
@@ -520,7 +562,7 @@ export default {
             list: [
               {
                 name: 'key',
-                desc: '数据中的唯一主键',
+                desc: '行数据中的唯一主键',
                 type: 'String',
                 enum: '',
                 defVal: '',
@@ -1286,6 +1328,7 @@ export default {
     XEUtils.eachTree(apis, item => {
       item.id = index++
     })
+    this.defaultExpandRowKeys = apis.filter(item => item.list && item.list.length).map(item => item.id)
     this.tableData = apis
   }
 }

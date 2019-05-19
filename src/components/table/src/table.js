@@ -321,7 +321,7 @@ export default {
   },
   watch: {
     data (value) {
-      this.load(value)
+      this.load(value).then(this.handleDefaultExpand)
     },
     customs (value) {
       if (!this.isUpdateCustoms) {
@@ -344,7 +344,7 @@ export default {
     }
   },
   created () {
-    let { scrollYStore, optimizeConfig } = this
+    let { scrollYStore, optimizeConfig, rowKey, treeConfig } = this
     let { scrollY } = optimizeConfig
     if (scrollY) {
       Object.assign(scrollYStore, {
@@ -355,7 +355,7 @@ export default {
       })
     }
     this.load(this.data, true).then(() => {
-      if (this.treeConfig && !(this.rowKey || this.treeConfig.key)) {
+      if (treeConfig && !(rowKey || treeConfig.key)) {
         throw new Error('[vxe-table] Tree table must have a unique primary key.')
       }
       this.tableFullColumn = UtilTools.getColumnList(this.collectColumn)
@@ -363,6 +363,7 @@ export default {
         this.mergeCustomColumn(this.customs)
       }
       this.refreshColumn()
+      this.handleDefaultExpand()
       this.$nextTick(() => {
         this.computeScrollLoad()
         this.recalculate(true)
@@ -630,7 +631,7 @@ export default {
       this.clearFilter()
       this.clearRowExpand()
       this.clearTreeExpand()
-      return this.load(data)
+      return this.load(data).then(this.handleDefaultExpand)
     },
     insert (records) {
       return this.insertAt(records)
@@ -840,6 +841,14 @@ export default {
       let { scrollYLoad, scrollYStore } = this
       let fullData = this.getTableFullData()
       return { fullData, tableData: scrollYLoad ? fullData.slice(scrollYStore.startIndex, scrollYStore.startIndex + scrollYStore.renderSize) : fullData.slice(0) }
+    },
+    handleDefaultExpand () {
+      if (this.expandConfig) {
+        this.handleDefaultRowExpand()
+      }
+      if (this.treeConfig) {
+        this.handleDefaultTreeExpand()
+      }
     },
     /**
      * 动态列处理
@@ -2134,6 +2143,24 @@ export default {
       return this.setRowExpansion(row)
     },
     /**
+     * 处理默认展开行
+     */
+    handleDefaultRowExpand () {
+      let { rowKey, expandConfig, tableFullData } = this
+      if (expandConfig) {
+        let { key, expandAll, expandRowKeys } = expandConfig
+        let property = rowKey || key
+        if (expandAll) {
+          this.expandeds = tableFullData.slice(0)
+        } else if (expandRowKeys) {
+          if (!property) {
+            throw new Error('[vxe-table] Expand rows must have a unique primary key.')
+          }
+          this.expandeds = expandRowKeys.map(rowKey => tableFullData.find(item => rowKey === item[property]))
+        }
+      }
+    },
+    /**
      * 设置展开行，二个参数设置这一行展开与否
      * 支持单行
      * 支持多行
@@ -2173,6 +2200,36 @@ export default {
      */
     toggleTreeExpansion (row) {
       return this.setTreeExpansion(row)
+    },
+    /**
+     * 处理默认展开树节点
+     */
+    handleDefaultTreeExpand () {
+      let { rowKey, treeConfig, tableFullData } = this
+      if (treeConfig) {
+        let { key, expandAll, expandRowKeys } = treeConfig
+        let { children } = treeConfig
+        let property = rowKey || key
+        let treeExpandeds = []
+        if (expandAll) {
+          XEUtils.filterTree(tableFullData, row => {
+            let rowChildren = row[children]
+            if (rowChildren && rowChildren.length) {
+              treeExpandeds.push(row)
+            }
+          }, treeConfig)
+          this.treeExpandeds = treeExpandeds
+        } else if (expandRowKeys) {
+          expandRowKeys.forEach(rowKey => {
+            let matchObj = XEUtils.findTree(tableFullData, item => rowKey === item[property], treeConfig)
+            let rowChildren = matchObj ? matchObj.item[children] : 0
+            if (rowChildren) {
+              treeExpandeds.push(matchObj.item)
+            }
+          })
+          this.treeExpandeds = treeExpandeds
+        }
+      }
     },
     /**
      * 设置展开树形节点，二个参数设置这一行展开与否

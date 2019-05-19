@@ -60,7 +60,9 @@ export default {
   autoResize: Boolean,
   // 是否自动计算列宽
   autoWidth: { type: Boolean, default: true },
-  // 树表格配项
+  // 展开行配置项
+  expandConfig: Object,
+  // 树形结构配置项
   treeConfig: Object,
   // 快捷菜单配置项
   contextMenu: { type: Object, default: () => GlobalConfig.contextMenu },

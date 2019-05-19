@@ -210,6 +210,7 @@ new Vue({ i18n }).$mount('#app')
 | row-key | 行数据的 Key | String | — | — |
 | auto-resize | 是否自动根据父容器大小调整表格宽度 | Boolean | — | false |
 | auto-width | 是否自动计算列宽（如果关闭了需要手动调用 recalculate 函数） | Boolean | — | true |
+| expand-config | 展开行配置项 | Object | — | [options](#expand-config-展开行配置项说明) |
 | tree-config | 树形结构配置项 | Object | — | [options](#tree-config-树形结构配置项说明) |
 | context-menu | 快捷菜单配置项 | Object | — | [{header, body, footer}](#context-menu-快捷菜单配置项说明配合-context-menu-link-事件使用) |
 | mouse-config | 鼠标配置项 | Object | — | [options](#mouse-config-鼠标相关配置项说明) |
@@ -254,6 +255,14 @@ new Vue({ i18n }).$mount('#app')
 | vSize | 指定可视区域条数，默认自动计算 | Number |
 | rHeight | 指定行高，默认自动计算 | Number |
 
+##### expand-config 展开行配置项说明
+
+| 属性 | 描述 | 类型 | 可选值 | 默认值 |
+|------|------|-----|-----|-----|
+| key | 行数据中的唯一主键 | String | — | — |
+| expandAll | 默认展开所有行 | Boolean | — | false |
+| expandRowKeys | 设置 key 数组，默认展开指定行 | Array | — | — |
+
 ##### tree-config 树形结构配置项说明
 
 | 属性 | 描述 | 类型 | 可选值 | 默认值 |
@@ -261,6 +270,8 @@ new Vue({ i18n }).$mount('#app')
 | key | 树节点数据中的唯一主键 | String | — | — |
 | children | 树子节点的属性 | String | — | children |
 | indent | 树节点的缩进 | Number | — | 16 |
+| expandAll | 默认展开所有节点 | Boolean | — | false |
+| expandRowKeys | 设置 key 数组，默认展开指定节点 | Array | — | — |
 
 ##### mouse-config 鼠标相关配置项说明
 
