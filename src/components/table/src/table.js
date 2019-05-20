@@ -1532,7 +1532,7 @@ export default {
      * value 选中true 不选false 不确定-1
      */
     triggerCheckRowEvent (evnt, { row }, value) {
-      let { selection, tableData, treeConfig, treeIndeterminates } = this
+      let { selection, tableFullData, treeConfig, treeIndeterminates } = this
       if (treeConfig) {
         if (value === -1) {
           treeIndeterminates.push(row)
@@ -1551,12 +1551,12 @@ export default {
           XEUtils.remove(treeIndeterminates, item => item === row)
         }
         // 如果存在父节点，更新父节点状态
-        let matchObj = XEUtils.findTree(tableData, item => item === row, treeConfig)
+        let matchObj = XEUtils.findTree(tableFullData, item => item === row, treeConfig)
         if (matchObj.parent) {
           let selectItems = matchObj.items.filter(item => selection.indexOf(item) > -1)
           return this.triggerCheckRowEvent(evnt, { row: matchObj.parent }, selectItems.length === matchObj.items.length ? true : (selectItems.length || value === -1 ? -1 : false))
         }
-        this.isAllSelected = tableData.every(item => selection.indexOf(item) > -1)
+        this.isAllSelected = tableFullData.every(item => selection.indexOf(item) > -1)
       } else {
         if (value) {
           if (selection.indexOf(row) === -1) {
@@ -1565,7 +1565,7 @@ export default {
         } else {
           XEUtils.remove(selection, item => item === row)
         }
-        this.isAllSelected = tableData.length === selection.length
+        this.isAllSelected = tableFullData.length === selection.length
       }
       this.isIndeterminate = !this.isAllSelected && selection.length
       UtilTools.emitEvent(this, 'select-change', [{ row, selection, checked: value }, evnt])
@@ -1579,13 +1579,13 @@ export default {
       return this.$nextTick()
     },
     setAllSelection (value) {
-      let { tableData, treeConfig } = this
+      let { tableFullData, treeConfig } = this
       let selection = []
       if (value) {
         if (treeConfig) {
-          XEUtils.eachTree(tableData, item => selection.push(item), treeConfig)
+          XEUtils.eachTree(tableFullData, item => selection.push(item), treeConfig)
         } else {
-          selection = tableData.slice(0)
+          selection = tableFullData.slice(0)
         }
       }
       this.selection = selection

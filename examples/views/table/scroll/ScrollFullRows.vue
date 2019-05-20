@@ -13,6 +13,7 @@
       :footer-cell-class-name="footerCellClassName"
       :loading="loading"
       :optimized="{overflow: 'tooltip'}">
+      <vxe-table-column type="selection" width="100" fixed="left"></vxe-table-column>
       <vxe-table-column type="index" width="100" fixed="left"></vxe-table-column>
       <vxe-table-column prop="name" label="Name" sortable width="200"></vxe-table-column>
       <vxe-table-column prop="sex" label="Sex" width="200"></vxe-table-column>

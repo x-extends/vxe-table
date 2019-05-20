@@ -12,6 +12,7 @@
       :footer-method="footerMethod"
       :footer-cell-class-name="footerCellClassName"
       :loading="loading">
+      <vxe-table-column type="selection" width="100" fixed="left"></vxe-table-column>
       <vxe-table-column type="index" width="100" fixed="left"></vxe-table-column>
       <vxe-table-column v-for="(item, index) in tableColumn" :key="index" prop="name" :label="`column_${index}`" width="200"></vxe-table-column>
       <vxe-table-column prop="rate" label="Rate" width="200" fixed="right"></vxe-table-column>
