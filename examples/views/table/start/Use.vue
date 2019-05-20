@@ -16,12 +16,13 @@
             sortAsc: 'vxe-sort--asc-icon',
             sortDesc: 'vxe-sort--desc-icon',
             filter: 'vxe-filter--icon',
-            edit: 'vxe-edit--icon'
+            edit: 'vxe-edit--icon',
+            tree: 'vxe-tree--node-icon'
           },
-          // 优化配置项
+          // 全局优化配置项
           optimized: {
             scrollX: {
-              gt: 60,
+              gt: 40,
               oSize: 5,
               rSize: 16
             },
