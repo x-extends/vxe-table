@@ -832,6 +832,22 @@ export default {
             list: []
           },
           {
+            name: 'sort-change',
+            desc: '当排序条件发生变化时会触发该事件',
+            type: '',
+            enum: '',
+            defVal: '{column,prop,order}',
+            list: []
+          },
+          {
+            name: 'filter-change',
+            desc: '当筛选条件发生变化时会触发该事件',
+            type: '',
+            enum: '',
+            defVal: '{column,prop,values}',
+            list: []
+          },
+          {
             name: 'context-menu-link',
             desc: '当点击快捷菜单后触发',
             type: '',

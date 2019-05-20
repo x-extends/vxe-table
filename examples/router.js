@@ -38,6 +38,7 @@ import TableTreeRadio from './views/table/tree/Radio.vue'
 
 import GridBasic from './views/table/grid/Basic.vue'
 import GridPage from './views/table/grid/Page.vue'
+import GridFull from './views/table/grid/Full.vue'
 
 import TableScroll from './views/table/scroll/Scroll.vue'
 import TableScrollRows from './views/table/scroll/ScrollRows.vue'
@@ -257,6 +258,11 @@ export default new Router({
       path: '/table/grid/page',
       name: 'GridPage',
       component: GridPage
+    },
+    {
+      path: '/table/grid/full',
+      name: 'GridFull',
+      component: GridFull
     },
     {
       path: '/table/scroll/scroll',

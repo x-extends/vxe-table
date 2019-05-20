@@ -819,7 +819,7 @@ export default {
                 valueList.push(item.value)
               }
             })
-            if (valueList.length) {
+            if (valueList.length && filterMethod !== 'custom') {
               return filterMethod ? valueList.some(value => filterMethod({ value, row, column })) : valueList.indexOf(UtilTools.getCellValue(row, property)) > -1
             }
           }
@@ -2104,24 +2104,36 @@ export default {
     },
     // 确认筛选
     confirmFilterEvent (evnt) {
-      this.filterStore.visible = false
-      if (this.scrollXLoad || this.scrollYLoad) {
+      let { filterStore, scrollXLoad, scrollYLoad } = this
+      let { column } = filterStore
+      let valueList = []
+      column.filters.forEach(item => {
+        if (item.checked) {
+          valueList.push(item.value)
+        }
+      })
+      filterStore.visible = false
+      if (scrollXLoad || scrollYLoad) {
         this.clearScroll()
         this.computeScrollLoad()
       } else {
-        this.tableData = this.getTableData().tableData
+        // 如果是服务端筛选，则跳过本地筛选处理
+        if (column.filterMethod !== 'custom') {
+          this.tableData = this.getTableData().tableData
+        }
+        UtilTools.emitEvent(this, 'filter-change', [{ column, prop: column.property, values: valueList }])
       }
       this.closeFilter()
     },
     // 关闭筛选
     closeFilter (evnt) {
-      Object.assign(this.filterStore, {
-        isAllSelected: false,
-        isIndeterminate: false,
-        options: [],
-        visible: false
-      })
-      return this.$nextTick()
+      // Object.assign(this.filterStore, {
+      //   isAllSelected: false,
+      //   isIndeterminate: false,
+      //   options: [],
+      //   visible: false
+      // })
+      // return this.$nextTick()
     },
     // 重置筛选
     resetFilterEvent (evnt) {

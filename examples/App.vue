@@ -304,9 +304,14 @@ export default {
             },
             {
               lable: '带分页',
-              demoUrl: 'https://jsrun.net/5RXKp',
               locat: {
                 name: 'GridPage'
+              }
+            },
+            {
+              lable: '完整功能',
+              locat: {
+                name: 'GridFull'
               }
             }
           ]

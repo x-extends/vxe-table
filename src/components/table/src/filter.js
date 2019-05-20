@@ -11,7 +11,60 @@ export default {
   },
   render (h) {
     let $table = this.$parent
-    let { filterStore, optimizeConfig, filterCheckAllEvent, filterOptionCheckEvent } = this
+    let { filterStore, optimizeConfig, filterCheckAllEvent, filterOptionRadioEvent, filterOptionCheckEvent } = this
+    let { multiple } = filterStore
+    let filterRens = [
+      h('li', {
+        class: ['vxe-table--filter-option', {
+          'is--active': !filterStore.options.some(item => item.checked)
+        }]
+      }, [
+        multiple ? h('vxe-checkbox', {
+          props: {
+            value: filterStore.isAllSelected,
+            indeterminate: filterStore.isIndeterminate
+          },
+          on: {
+            change (value, evnt) {
+              filterCheckAllEvent(evnt, value)
+            }
+          }
+        }, GlobalConfig.i18n('vxe.table.allFilter')) : h('span', {
+          class: 'vxe-table--filter-label',
+          on: {
+            click: $table.resetFilterEvent
+          }
+        }, GlobalConfig.i18n('vxe.table.allFilter'))
+      ])
+    ]
+    filterStore.options.forEach((item, index) => {
+      filterRens.push(
+        h('li', {
+          class: ['vxe-table--filter-option', {
+            'is--active': item.checked
+          }],
+          key: index
+        }, [
+          multiple ? h('vxe-checkbox', {
+            props: {
+              value: item.checked
+            },
+            on: {
+              change (value, evnt) {
+                filterOptionCheckEvent(evnt, value, item)
+              }
+            }
+          }, item.label) : h('span', {
+            class: 'vxe-table--filter-label',
+            on: {
+              click (evnt) {
+                filterOptionRadioEvent(evnt, !item.checked, item)
+              }
+            }
+          }, item.label)
+        ])
+      )
+    })
     return h('div', {
       class: ['vxe-table--filter-wrapper', {
         't--animat': optimizeConfig.animat,
@@ -21,40 +74,8 @@ export default {
     }, filterStore.visible ? [
       h('ul', {
         class: ['vxe-table--filter-body']
-      }, [
-        h('li', {
-          class: ['vxe-table--filter-option']
-        }, [
-          h('vxe-checkbox', {
-            props: {
-              value: filterStore.isAllSelected,
-              indeterminate: filterStore.isIndeterminate
-            },
-            on: {
-              change (value, evnt) {
-                filterCheckAllEvent(evnt, value)
-              }
-            }
-          }, GlobalConfig.i18n('vxe.table.allFilter'))
-        ])
-      ].concat(filterStore.options.map((item, index) => {
-        return h('li', {
-          class: ['vxe-table--filter-option'],
-          key: index
-        }, [
-          h('vxe-checkbox', {
-            props: {
-              value: item.checked
-            },
-            on: {
-              change (value, evnt) {
-                filterOptionCheckEvent(evnt, value, item)
-              }
-            }
-          }, item.label)
-        ])
-      }))),
-      h('div', {
+      }, filterRens),
+      multiple ? h('div', {
         class: ['vxe-table--filter-footer']
       }, [
         h('button', {
@@ -73,7 +94,7 @@ export default {
             click: $table.resetFilterEvent
           }
         }, GlobalConfig.i18n('vxe.table.resetFilter'))
-      ])
+      ]) : null
     ] : [])
   },
   methods: {
@@ -88,8 +109,20 @@ export default {
     },
     // 筛选选项勾选事件
     filterOptionCheckEvent (evnt, value, item) {
-      let filterStore = this.filterStore
       item.checked = value
+      this.checkOptions()
+    },
+    // 筛选选项单选事件
+    filterOptionRadioEvent (evnt, value, item) {
+      this.filterStore.options.forEach(item => {
+        item.checked = false
+      })
+      item.checked = value
+      this.checkOptions()
+      this.$parent.confirmFilterEvent()
+    },
+    checkOptions () {
+      let { filterStore } = this
       filterStore.isAllSelected = filterStore.options.every(item => item.checked)
       filterStore.isIndeterminate = !filterStore.isAllSelected && filterStore.options.some(item => item.checked)
     }

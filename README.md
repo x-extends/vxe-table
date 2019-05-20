@@ -438,7 +438,7 @@ new Vue({ i18n }).$mount('#app')
 | sortBy | 只对 sortable 有效，自定义排序的属性 | String,Array | — | — |
 | filters | 配置筛选条件数组 | Array | — | — |
 | filter-multiple | 只对 filters 有效，筛选是否允许多选 | Boolean | — | true |
-| filter-method | 只对 filters 有效，自定义筛选方法 Function({value, row, column}) | Function | — | — |
+| filter-method | 只对 filters 有效，自定义筛选方法 Function({value, row, column})，如果是服务端排序需要设置为custom | String,Function | — | — |
 | tree-node | 指定为树节点 | Boolean | — | false |
 | column-key | 列的 key | String,Number | — | — |
 | edit-render | 列编辑配置项 | Object,Boolean | — | [options](#edit-render-配置项说明) |

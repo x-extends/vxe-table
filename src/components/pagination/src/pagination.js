@@ -2,6 +2,7 @@ import UtilTools from '../../../tools/utils'
 import GlobalEvent from '../../../tools/event'
 import XEUtils from 'xe-utils'
 import DomTools from '../../../tools/dom'
+import GlobalConfig from '../../../conf'
 
 export default {
   name: 'VxePagination',
@@ -88,12 +89,12 @@ export default {
           on: {
             click: this.toggleSizePanel
           }
-        }, `${pageSize} 条/页`)
+        }, `${pageSize}${GlobalConfig.i18n('vxe.pagination.pagesize')}`)
       ]),
       h('span', {
         class: 'page--jump'
       }, [
-        h('span', '前往'),
+        h('span', GlobalConfig.i18n('vxe.pagination.goto')),
         h('input', {
           class: 'page--goto',
           domProps: {
@@ -114,10 +115,10 @@ export default {
             }
           }
         }),
-        h('span', '页'),
+        h('span', GlobalConfig.i18n('vxe.pagination.pageClassifier')),
         h('span', {
           class: 'page--total'
-        }, `共 ${total} 条`)
+        }, XEUtils.template(GlobalConfig.i18n('vxe.pagination.total'), { total }))
       ]),
       h('ul', {
         class: ['vxe-pagination-size--select', {
@@ -133,7 +134,7 @@ export default {
           on: {
             click: () => this.sizeChangeEvent(size)
           }
-        }, `${size} 条/页`)
+        }, `${size}${GlobalConfig.i18n('vxe.pagination.pagesize')}`)
       }))
     ])
   },

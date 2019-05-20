@@ -1,14 +1,16 @@
 <template>
   <div>
-    <p>通过配置 pages 参数开启分页功能</p>
+    <p>固定列、服务端排序、服务端筛选、服务端分页</p>
 
     <vxe-grid
       border
-      height="530"
+      height="548"
       :loading="loading"
       :pages="tablePage"
       :columns="tableColumn"
       :data.sync="tableData"
+      @sort-change="sortChangeEvent"
+      @filter-change="filterChangeEvent"
       @current-page-change="handleCurrentChange"
       @page-size-change="handleSizeChange"></vxe-grid>
 
@@ -30,37 +32,67 @@ export default {
     return {
       loading: false,
       formData: {
-
+        sort: '',
+        order: ''
       },
       tablePage: {
         total: 0,
         currentPage: 1,
-        pageSize: 10
+        pageSize: 10,
+        background: true
       },
       tableColumn: [
         {
-          type: 'index',
-          width: 50
+          type: 'selection',
+          width: 50,
+          fixed: 'left'
         },
         {
-          type: 'selection',
-          width: 50
+          type: 'index',
+          width: 50,
+          fixed: 'left'
+        },
+        {
+          prop: 'id',
+          label: 'ID',
+          width: 100,
+          sortable: 'custom'
         },
         {
           prop: 'name',
-          label: 'Name'
+          label: 'Name',
+          width: 300,
+          sortable: 'custom'
         },
         {
           prop: 'nickname',
-          label: 'Nickname'
+          label: 'Nickname',
+          sortable: 'custom',
+          width: 300
+        },
+        {
+          prop: 'age',
+          label: 'Age',
+          sortable: 'custom',
+          width: 100
         },
         {
           prop: 'role',
-          label: 'Role'
+          label: 'Role',
+          sortable: 'custom',
+          width: 200,
+          filters: [
+            { label: '前端', value: '前端' },
+            { label: '后端', value: '后端' },
+            { label: '测试', value: '测试' }
+          ],
+          filterMultiple: false,
+          filterMethod: 'custom'
         },
         {
           prop: 'describe',
           label: 'Describe',
+          width: 300,
           showOverflow: true
         }
       ],
@@ -69,11 +101,13 @@ export default {
         `
         <vxe-grid
           border
-          height="530"
+          height="548"
           :loading="loading"
           :pages="tablePage"
           :columns="tableColumn"
           :data.sync="tableData"
+          @sort-change="sortChangeEvent"
+          @filter-change="filterChangeEvent"
           @current-page-change="handleCurrentChange"
           @page-size-change="handleSizeChange"></vxe-grid>
         `,
@@ -82,39 +116,71 @@ export default {
           data () {
             return {
               loading: false,
+              formData: {
+                sort: '',
+                order: ''
+              },
               tablePage: {
                 total: 0,
                 currentPage: 1,
-                pageSize: 10
+                pageSize: 10,
+                background: true
               },
               tableColumn: [
                 {
-                  type: 'index',
-                  width: 50
+                  type: 'selection',
+                  width: 50,
+                  fixed: 'left'
                 },
                 {
-                  type: 'selection',
-                  width: 50
+                  type: 'index',
+                  width: 50,
+                  fixed: 'left'
+                },
+                {
+                  prop: 'id',
+                  label: 'ID',
+                  width: 100,
+                  sortable: 'custom'
                 },
                 {
                   prop: 'name',
-                  label: 'Name'
+                  label: 'Name',
+                  width: 300,
+                  sortable: 'custom'
                 },
                 {
                   prop: 'nickname',
-                  label: 'Nickname'
+                  label: 'Nickname',
+                  sortable: 'custom',
+                  width: 300
+                },
+                {
+                  prop: 'age',
+                  label: 'Age',
+                  sortable: 'custom',
+                  width: 100
                 },
                 {
                   prop: 'role',
-                  label: 'Role'
+                  label: 'Role',
+                  sortable: 'custom',
+                  width: 200,
+                  filters: [
+                    { label: '前端', value: '前端' },
+                    { label: '后端', value: '后端' },
+                    { label: '测试', value: '测试' }
+                  ],
+                  filterMultiple: false,
+                  filterMethod: 'custom'
                 },
                 {
                   prop: 'describe',
                   label: 'Describe',
+                  width: 300,
                   showOverflow: true
                 }
-              ],
-              tableData: []
+              ]
             }
           },
           created () {
@@ -144,6 +210,17 @@ export default {
             handleCurrentChange (currentPage) {
               this.tablePage.currentPage = currentPage
               this.findList()
+            },
+            sortChangeEvent ({ column, prop, order }) {
+              this.formData.sort = prop
+              this.formData.order = order
+              this.findList()
+            },
+            filterChangeEvent ({ column, prop, values }) {
+              this.formData = {
+                [prop]: values[0]
+              }
+              this.searchEvent()
             }
           }
         }
@@ -183,6 +260,17 @@ export default {
     handleCurrentChange (currentPage) {
       this.tablePage.currentPage = currentPage
       this.findList()
+    },
+    sortChangeEvent ({ column, prop, order }) {
+      this.formData.sort = prop
+      this.formData.order = order
+      this.findList()
+    },
+    filterChangeEvent ({ column, prop, values }) {
+      this.formData = {
+        [prop]: values[0]
+      }
+      this.searchEvent()
     }
   }
 }

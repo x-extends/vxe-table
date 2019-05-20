@@ -953,7 +953,7 @@
 .vxe-table--filter-wrapper {
   display: none;
   position: absolute;
-  min-width: 100px;
+  min-width: 80px;
   border-radius: 2px;
   color: $vxe-font-color;
   background-color: #fff;
@@ -974,6 +974,17 @@
     overflow-y: auto;
     .vxe-table--filter-option {
       margin-bottom: 8px;
+      &:hover {
+        .vxe-table--filter-label {
+          color: $vxe-primary-color;
+        }
+      }
+      &.is--active {
+        .vxe-table--filter-label {
+          font-weight: 700;
+          color: $vxe-primary-color;
+        }
+      }
       .vxe-checkbox {
         display: block;
         .checkbox--label {
@@ -982,6 +993,14 @@
           text-overflow: ellipsis;
           white-space: nowrap;
         }
+      }
+      .vxe-table--filter-label {
+        display: block;
+        max-width: 360px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        cursor: pointer;
       }
     }
   }
@@ -1473,13 +1492,14 @@
     padding: 0;
     display: inline-block;
     text-align: center;
+    height: 26px;
+    line-height: 26px;
     .page--jump-prev,
     .page--num-btn,
     .page--jump-next {
       display: inline-block;
       margin: 0 2px;
-      height: 26px;
-      line-height: 26px;
+      vertical-align: middle;
       &:hover,
       &.is--active {
         color: $vxe-primary-color;
@@ -1488,32 +1508,66 @@
     .page--jump-prev,
     .page--jump-next {
       width: 26px;
+      height: 100%;
       text-align: center;
-      &:before {
+      position: relative;
+      &:before,
+      &:after {
         content: "...";
+        position: absolute;
+        top: 0;
+        left: 7px;
+        font-size: 16px;
         font-weight: 700;
       }
     }
     .page--jump-prev {
       &:hover {
-        &:before {
-          content: "<<";
-          font-size: 14px;
+        &:before,
+        &:after {
+          content: " ";
+          top: 9px;
+          width: 7px;
+          height: 7px;
           font-weight: inherit;
+          border-color: $vxe-primary-color transparent transparent $vxe-primary-color;
+          border-width: 1px;
+          border-style: solid;
+          transform: rotate(-45deg);
+        }
+        &:before {
+          left: 8px;
+        }
+        &:after {
+          left: 12px;
         }
       }
     }
     .page--jump-next {
       &:hover {
-        &:before {
-          content: ">>";
-          font-size: 14px;
+        &:before,
+        &:after {
+          content: " ";
+          top: 9px;
+          width: 7px;
+          height: 7px;
           font-weight: inherit;
+          border-width: 1px;
+          border-style: solid;
+          border-color: $vxe-primary-color $vxe-primary-color transparent transparent;
+          transform: rotate(45deg);
+        }
+        &:before {
+          left: 6px;
+        }
+        &:after {
+          left: 10px;
         }
       }
     }
     .page--num-btn {
       min-width: 26px;
+      vertical-align: middle;
     }
   }
   .page--sizes {

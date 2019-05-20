@@ -37,8 +37,8 @@ export default {
     filters: Array,
     // 筛选是否允许多选
     filterMultiple: { type: Boolean, default: true },
-    // 自定义筛选方法
-    filterMethod: Function,
+    // 自定义筛选方法，如果是服务端排序需要设置为custom
+    filterMethod: [String, Function],
     // 指定为树节点
     treeNode: Boolean,
     // 列的 key
