@@ -6,6 +6,7 @@
       ref="xTable"
       border
       resizable
+      show-all-overflow
       height="600"
       :loading="loading">
       <vxe-table-column type="index" width="100" fixed="left"></vxe-table-column>

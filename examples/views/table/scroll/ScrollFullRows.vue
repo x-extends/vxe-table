@@ -1,19 +1,20 @@
 <template>
   <div>
     <p>加载 10 万行，左右固定列，表尾合计</p>
-    <p>实际渲染速度受以下影响：固定列、底部合计、数据运算量、任何双向的数据或函数都会影响加载速度</p>
+    <p>实际渲染速度受以下影响：多选、固定列、底部合计、数据运算量、任何双向的数据或函数都会影响加载速度</p>
 
     <vxe-table
       ref="xTable"
       border
       resizable
       show-footer
+      show-all-overflow
       height="600"
       :footer-method="footerMethod"
       :footer-cell-class-name="footerCellClassName"
       :loading="loading"
       :optimized="{overflow: 'tooltip'}">
-      <vxe-table-column type="selection" width="100" fixed="left"></vxe-table-column>
+      <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
       <vxe-table-column type="index" width="100" fixed="left"></vxe-table-column>
       <vxe-table-column prop="name" label="Name" sortable width="200"></vxe-table-column>
       <vxe-table-column prop="sex" label="Sex" width="200"></vxe-table-column>

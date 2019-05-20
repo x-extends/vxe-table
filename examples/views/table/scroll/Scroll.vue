@@ -29,6 +29,7 @@
 
     <vxe-table
       border
+      show-all-overflow
       height="300"
       :loading="loading"
       :data.sync="tableData2">
@@ -88,6 +89,7 @@ export default {
         `
         <vxe-table
           border
+          show-all-overflow
           height="300"
           :data.sync="tableData2">
           <vxe-table-column type="index" width="100"></vxe-table-column>

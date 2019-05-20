@@ -259,12 +259,14 @@ export default {
     renderSelectionCell (h, params) {
       let { $table } = this
       let { row, isHidden } = params
+      let indeterminate = false
       let options = {
         attrs: {
           type: 'checkbox'
         }
       }
       if (!isHidden) {
+        indeterminate = $table.treeIndeterminates.indexOf(row) > -1
         options.domProps = {
           checked: $table.selection.indexOf(row) > -1
         }
@@ -277,7 +279,7 @@ export default {
       return [
         h('label', {
           class: ['vxe-checkbox', {
-            'is--indeterminate': $table.treeIndeterminates.indexOf(row) > -1
+            'is--indeterminate': indeterminate
           }]
         }, [
           h('input', options),
@@ -296,10 +298,15 @@ export default {
      */
     renderExpandCell (h, params) {
       let { $table } = this
+      let { isHidden } = params
+      let expandActive = false
+      if (!isHidden) {
+        expandActive = $table.expandeds.indexOf(params.row) > -1
+      }
       return [
         h('span', {
           class: ['vxe-table--expanded', {
-            'expand--active': $table.expandeds.indexOf(params.row) > -1
+            'expand--active': expandActive
           }],
           on: {
             click (evnt) {

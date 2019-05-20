@@ -22,10 +22,11 @@ function renderColumn (h, _vm, $table, seq, fixedType, rowLevel, row, rowIndex, 
   let isMouseSelected = mouseConfig && mouseConfig.selected
   let isMouseChecked = mouseConfig && mouseConfig.checked
   let isKeyboardCut = keyboardConfig && keyboardConfig.isCut
-  let fixedHiddenColumn = fixedType && column.fixed !== fixedType
+  let fixedHiddenColumn = fixedType ? column.fixed !== fixedType : column.fixed
   let showEllipsis = (showOverflow || showAllOverflow) === 'ellipsis'
   let showTitle = (showOverflow || showAllOverflow) === 'title'
   let showTooltip = showOverflow === true || showOverflow === 'tooltip' || showAllOverflow === true || showAllOverflow === 'tooltip'
+  let hasEllipsis = showTitle || showTooltip || showEllipsis
   let attrs, isDirty
   let tdOns = {}
   let checkedLocat = {}
@@ -33,8 +34,8 @@ function renderColumn (h, _vm, $table, seq, fixedType, rowLevel, row, rowIndex, 
   let copyedLocat = {}
   let triggerDblclick = (editRender && editConfig && editConfig.trigger === 'dblclick')
   // 滚动的渲染不支持动态行高
-  if ((scrollXLoad || scrollYLoad) && !(showTitle || showTooltip || showEllipsis)) {
-    showEllipsis = true
+  if ((scrollXLoad || scrollYLoad) && !hasEllipsis) {
+    showEllipsis = hasEllipsis = true
   }
   // 优化事件绑定
   if (showTooltip) {
@@ -110,7 +111,7 @@ function renderColumn (h, _vm, $table, seq, fixedType, rowLevel, row, rowIndex, 
     key: columnKey || columnIndex,
     attrs,
     on: tdOns
-  }, !fixedType && fixedHiddenColumn ? [] : [
+  }, showAllOverflow && fixedHiddenColumn ? [] : [
     h('div', {
       class: ['vxe-cell', {
         'c--title': showTitle,
@@ -121,7 +122,7 @@ function renderColumn (h, _vm, $table, seq, fixedType, rowLevel, row, rowIndex, 
         title: showTitle ? XEUtils.get(row, column.property) : null
       },
       style: {
-        width: showTitle || showTooltip || showEllipsis ? `${border ? renderWidth - 1 : renderWidth}px` : null
+        width: hasEllipsis ? `${border ? renderWidth - 1 : renderWidth}px` : null
       }
     }, column.renderCell(h, { $table, seq, row, rowIndex, column, columnIndex, fixed: fixedType, level: rowLevel, isHidden: fixedHiddenColumn })),
     isMouseChecked && !fixedType ? h('span', {
