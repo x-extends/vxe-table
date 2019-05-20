@@ -93,8 +93,5 @@
     "> 1%",
     "last 2 versions",
     "not ie <= 8"
-  ],
-  "dependencies": {
-    "babel-preset-es2015": "^6.24.1"
-  }
+  ]
 }
