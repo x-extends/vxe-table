@@ -2,6 +2,8 @@
   <div>
     <p>海量数据</p>
     <p>大数据不建议使用双向绑定的 data 属性（vue 监听会大数据会短暂的卡顿），建议使用 load 函数</p>
+    <p>实际渲染速度受以下影响：多选(超严重)、固定列(严重)、底部合计(中度)、数据运算量(轻度)、任何双向的数据或函数都会影响加载速度</p>
+    <p>数据超大情况下必须使用：show-all-overflow,show-header-all-overflow 参数以及调整好 optimized：scrollX,scrollY 适合的参数可以更加流畅</p>
 
     <vxe-table
       border

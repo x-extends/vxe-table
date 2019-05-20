@@ -9,7 +9,8 @@
       height="600"
       :columns="tableColumn"
       :loading="loading"
-      :data.sync="tableData">
+      :data.sync="tableData"
+      :optimized="{scrollX: {gt: 20, oSize: 4, rSize: 8}, scrollY: {gt: 500, oSize: 15, rSize: 40}}">
     </vxe-grid>
   </div>
 </template>
