@@ -3,7 +3,6 @@
     <p>海量数据</p>
     <p>大数据不建议使用双向绑定的 data 属性（vue 监听会大数据会短暂的卡顿），建议使用 load 函数</p>
     <p>实际渲染速度受以下影响：多选(超严重)、固定列(严重)、底部合计(中度)、数据运算量(轻度)、任何双向的数据或函数都会影响加载速度</p>
-    <p>数据超大情况下必须使用：show-all-overflow,show-header-all-overflow 参数以及调整好 optimized：scrollX,scrollY 适合的参数可以更加流畅</p>
 
     <vxe-table
       border
@@ -25,9 +24,8 @@
     </pre>
 
     <p>高级配置项</p>
-    <p>参数 scrollY: {gt: 500, oSize: 30, rSize: 120}，当超过 500 条时自动启用滚动渲染</p>
-    <p>gt大于条数时启用，oSize低于剩余条数重新渲染r，Size渲染条数</p>
-    <p>优点可以流畅支持海量数据；缺点是通过滚动条拖动过快时无法实时显示效果</p>
+    <p>参数 scrollX: {gt: 16, oSize: 4, rSize: 10},scrollY: {gt: 500, oSize: 30, rSize: 80}，当数据量过大时请调整到适合的参数可以使渲染更快</p>
+    <p>数据超大情况下必须使用：show-all-overflow,show-header-all-overflow 参数以及调整好 optimized：scrollX,scrollY 适合的参数可以更加流畅</p>
 
     <vxe-table
       border
