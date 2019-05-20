@@ -2075,13 +2075,17 @@ export default {
      * 点击筛选事件
      */
     triggerFilterEvent (evnt, column, params) {
-      let { $refs, filterStore } = this
+      let { $refs, filterStore, overflowX } = this
       if (filterStore.column === column && filterStore.visible) {
         filterStore.visible = false
       } else {
         let targetElem = evnt.target
+        let bodyElem = $refs.tableBody.$el
         let filterWrapperElem = $refs.filterWrapper
         let { top, left } = DomTools.getOffsetPos(targetElem)
+        if (overflowX) {
+          left -= bodyElem.scrollLeft
+        }
         Object.assign(filterStore, {
           multiple: column.filterMultiple,
           options: column.filters,
