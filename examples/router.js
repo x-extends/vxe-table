@@ -70,6 +70,11 @@ import TablePluginIviewPage from './views/table/plugin/IviewPage.vue'
 
 import TableAPI from './views/table/api/Table.vue'
 import GridAPI from './views/table/api/Grid.vue'
+import ExcelAPI from './views/table/api/Excel.vue'
+import PaginationAPI from './views/table/api//Pagination.vue'
+import RadioAPI from './views/table/api/Radio.vue'
+import CheckboxAPI from './views/table/api/Checkbox.vue'
+import InputAPI from './views/table/api/Input.vue'
 
 Vue.use(Router)
 
@@ -388,6 +393,31 @@ export default new Router({
       path: '/grid/api',
       name: 'GridAPI',
       component: GridAPI
+    },
+    {
+      path: '/excel/api',
+      name: 'ExcelAPI',
+      component: ExcelAPI
+    },
+    {
+      path: '/pagination/api',
+      name: 'PaginationAPI',
+      component: PaginationAPI
+    },
+    {
+      path: '/radio/api',
+      name: 'RadioAPI',
+      component: RadioAPI
+    },
+    {
+      path: '/checkbox/api',
+      name: 'CheckboxAPI',
+      component: CheckboxAPI
+    },
+    {
+      path: '/input/api',
+      name: 'InputAPI',
+      component: InputAPI
     }
   ]
 })

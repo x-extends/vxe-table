@@ -46,24 +46,7 @@ export default {
         type: '',
         enum: '',
         defVal: '',
-        list: [
-          {
-            name: 'current-page-change',
-            desc: '当前页发生改变时会触发该事件',
-            type: '',
-            enum: '',
-            defVal: '',
-            list: []
-          },
-          {
-            name: 'page-size-change',
-            desc: '每页大小发生改变时会触发该事件',
-            type: '',
-            enum: '',
-            defVal: '',
-            list: []
-          }
-        ]
+        list: []
       },
       {
         name: 'Methods',

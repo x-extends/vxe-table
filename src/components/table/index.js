@@ -1,7 +1,8 @@
-import Table from './src/table'
+import VxeTable from './src/table'
 
-Table.install = function (Vue) {
-  Vue.component(Table.name, Table)
+VxeTable.install = function (Vue) {
+  Vue.component(VxeTable.name, VxeTable)
 }
 
-export default Table
+export const Table = VxeTable
+export default VxeTable

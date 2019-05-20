@@ -1,7 +1,8 @@
-import Excel from '../table/src/excel'
+import VxeExcel from '../table/src/excel'
 
-Excel.install = function (Vue) {
-  Vue.component(Excel.name, Excel)
+VxeExcel.install = function (Vue) {
+  Vue.component(VxeExcel.name, VxeExcel)
 }
 
-export default Excel
+export const Excel = VxeExcel
+export default VxeExcel

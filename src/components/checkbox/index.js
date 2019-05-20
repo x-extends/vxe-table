@@ -1,7 +1,8 @@
-import Checkbox from './src/checkbox'
+import VxeCheckbox from './src/checkbox'
 
-Checkbox.install = function (Vue) {
-  Vue.component(Checkbox.name, Checkbox)
+VxeCheckbox.install = function (Vue) {
+  Vue.component(VxeCheckbox.name, VxeCheckbox)
 }
 
-export default Checkbox
+export const Checkbox = VxeCheckbox
+export default VxeCheckbox

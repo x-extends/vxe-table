@@ -68,6 +68,7 @@ import Vue from 'vue'
 import VXETable from 'vxe-table'
 import 'vxe-table/lib/index.css'
 
+// 默认安装 Table,TableColumn,Grid,Excel,Pagination,Checkbox
 Vue.use(VXETable)
 ```
 
@@ -160,14 +161,6 @@ new Vue({ i18n }).$mount('#app')
 ```
 
 ## API
-
-## Components
-
-* vxe-table
-* vxe-table-column
-* vxe-grid
-* vxe-excel
-* vxe-pagination
 
 ### Table
 
@@ -333,86 +326,6 @@ new Vue({ i18n }).$mount('#app')
 | validator  | 自定义校验方法 | Function(rule, value, callback) | — | — |
 | trigger  | 触发校验方式 | String | blur,change | change |
 
-#### Table Events 事件
-
-| 事件名 | 说明 | 参数 |
-|------|------|-----|
-| select-all | 只对 type=selection 有效，当手动勾选全选时触发的事件 | {selection,checked},event |
-| select-change | 只对 type=selection,radio 有效，当手动勾选时触发的事件 | {selection,checked,row,column},event |
-| cell-click | 单元格被点击时会触发该事件 | {row,rowIndex,column,columnIndex,cell},event |
-| cell-dblclick | 单元格被双击时会触发该事件 | {row,rowIndex,column,columnIndex,cell},event |
-| header-cell-click | 表头的单元格被点击时会触发该事件 | {column,columnIndex,cell},event |
-| context-menu-link | 当点击快捷菜单后触发 | menu,{type,row,rowIndex,column,columnIndex,cell},event |
-| clear-actived | 单元格编辑状态下被清除时会触发该事件 | {row,rowIndex,column,columnIndex,cell},event |
-| edit-actived | 单元格被激活编辑时会触发该事件 | {row,rowIndex,column,columnIndex,cell},event |
-| edit-disabled | 当点击后单元格如果是禁用状态时会触发该事件 | {row,rowIndex,column,columnIndex,cell},event |
-| valid-error | 当数据校验不通过时会触发该事件 | {row,rowIndex,column,columnIndex,cell} |
-
-#### Table Methods 方法
-
-| 方法名 | 描述 | 参数 |
-|------|------|-----|
-| load | 加载化数据 | data |
-| reload | 重新初始化数据，恢复初始状态 | data |
-| insert | 从第一行新增一行或多行新数据 | records |
-| insertAt | 从指定位置插入一行或多行；第二个参数：row 指定位置、null 从第一行插入、-1 从最后插入 | records,row |
-| revert | 还原更改，还原指定行 row 或者整个表格的数据 | rows?,prop? |
-| remove | 删除指定行数据，指定 row 或 [row, ...] 删除多条数据 | rows |
-| getRecords | 获取表格所有数据，和 data 属性一致行为，也可以指定索引获取数据 | rowIndex |
-| getColumns | 获取表格所有列，也可以指定索引获取列 | columnIndex |
-| getAllRecords | 获取表格数据集合 | — |
-| getInsertRecords | 获取新增数据 | — |
-| getRemoveRecords | 获取已删除数据 | — |
-| getUpdateRecords| 获取已修改数据 | — |
-| hasRowChange | 检查行或列数据是否发生改变 | row,pro? |
-| setActiveRow | 只对 mode=cell 有效，激活行编辑 | row |
-| setActiveCell | 只对 mode=row 有效，激活单元格编辑 | row,prop |
-| setSelectCell | 只对 trigger!=manual 有效，选中单元格 | row,prop |
-| setRowExpansion | 设置展开行，二个参数设置这一行展开与否 | rows,checked |
-| setTreeExpansion | 设置展开树形节点，二个参数设置这一行展开与否 | rows,checked |
-| setCurrentRow | 用于单选表格，设置某一行为选中状态，第二个参数为选中与否 | row?,checked |
-| setSelection | 用于多选表格，设置行为选中状态，第二个参数为选中与否 | rows,checked |
-| setAllSelection | 用于多选表格，设置所有行的选中状态 | checked |
-| toggleRowSelection | 用于多选表格，切换某一行的选中状态 | row |
-| toggleAllSelection | 用于多选表格，切换所有行的选中状态 | — |
-| toggleRowExpansion | 用于可展开表格，切换展开行 | row |
-| toggleTreeExpansion | 用于可树形表格，切换展开树形节点 | row |
-| clearCurrentRow | 用于单选表格，清空用户的选择 | — |
-| clearSelection | 用于多选表格，清空用户的选择 | — |
-| clearRowExpand | 清空展开行状态，数据会恢复成未展开的状态 | — |
-| clearTreeExpand | 清空树形节点的展开状态，数据会恢复成未展开的状态 | — |
-| clearSort | 清空排序条件，数据会恢复成未排序的状态 | — |
-| clearFilter | 清空筛选条件，数据会恢复成未筛选的状态 | — |
-| clearChecked | 清除单元格批量选中状态 | — |
-| clearSelected | 清除单元格选中状态 | — |
-| clearActived | 清除单元格激活状态 | — |
-| clearCopyed | 清空已复制的内容 | — |
-| clearData | 清空单元格内容 | rows,prop |
-| clearScroll | 清除滚动相关信息，还原到初始状态 | — |
-| closeFilter | 手动关闭筛选面板 | — |
-| clostTooltip | 手动关闭 tooltip 提示 | — |
-| closeContextMenu | 手动关闭快捷菜单 | — |
-| recalculate | 重新计算并更新列宽 | — |
-| isScrollXLoad | 判断是否启用了横向 X 滚动渲染 | — |
-| isScrollYLoad | 判断是否启用了纵向 Y 滚动渲染 | — |
-| sort | 手动对表格进行排序 | prop,order |
-| validateRow | 对表格某一行进行校验的方法，参数为行数据和一个回调函数。该回调函数会在校验结束后被调用，并传入两个参数：（是否校验成功，最近一列未通过校验的字段）。若不传入回调函数，则会返回一个 promise | row,callback |
-| validate | 对整个表格进行校验的方法，参数为一个回调函数。该回调函数会在校验结束后被调用，并传入两个参数：（是否校验成功，最近一列未通过校验的字段）。若不传入回调函数，则会返回一个 promise | callback |
-| exportCsv| 将表格数据导出为 .csv 文件，说明：支持IE9+、Edge、Chrome、Firefox 等常用浏览器。IE11以下可能存在中文乱码问题，部分浏览器需要手动修改后缀名为 .csv | [options](#exportcsv-导出参数说明) |
-
-##### exportCsv 导出参数说明
-
-| 属性 | 描述 | 类型 | 可选值 | 默认值 |
-|------|------|-----|-----|-----|
-| filename | 文件名 | String | — | table.csv |
-| original | 是否导出源数据（滚动渲染启用后默认是 true） | Boolean | — | false |
-| isHeader | 是否显示表头 | Boolean | — | true |
-| download | 是否马上下载，如果设置为 false 则通过返回结果为内容的 Promise | Boolean | — | true |
-| data | 自定义数据 | Array | — | — |
-| columns | 自定义列 | Array | — | — |
-| columnFilterMethod | 列过滤方法，该函数 Function(column,columnIndex) 的返回值用来决定该列是否导出 | Function | — | 默认过滤掉 type=index,selection,radio 和 prop 为空的列 |
-| dataFilterMethod | 数据过滤方法，该函数 Function(row,rowIndex) 的返回值用来决定该数据是否导出 | Function | — | — |
-
 ### Table-column
 
 ```html
@@ -460,31 +373,6 @@ new Vue({ i18n }).$mount('#app')
 | header | 自定义表头的内容，参数为 { column, columnIndex, fixed, isHidden } |
 | edit | 自定义可编辑组件模板，参数为 { column, columnIndex, fixed, isHidden } |
 
-### Pagination
-
-```html
-<vxe-pagination prop="name" label="Name"></vxe-pagination>
-```
-
-#### Pagination Attributes 参数
-
-| 参数 | 说明 | 类型 | 可选值 | 默认值 |
-|------|------|-----|------|-----|
-| size | 表格的尺寸 | Number | medium,small,mini | — |
-| currentPage | 当前页 | Number | — | 1 |
-| pageSize | 每页大小 | Number | — | 10 |
-| total | 总条数 | Number | — | 0 |
-| pagerCount | 显示页码按钮的数量 | Number | — | 7 |
-| pageSizes | 每页大小选项列表 | Array | — | [10, 15, 20, 50, 100] |
-| background | 带背景颜色 | Boolean | — | false |
-
-#### Pagination Events 事件
-
-| 事件名 | 说明 | 参数 |
-|------|------|-----|
-| current-change | 当前页发生改变时会触发该事件 | currentPage |
-| size-change | 每页大小发生改变时会触发该事件 | pageSize |
-
 ## Plugins
 
 * [vxe-table-plugin-element](https://github.com/xuliangzhan/vxe-table-plugin-element) 用于集成 element-ui 简化渲染配置
@@ -495,7 +383,6 @@ new Vue({ i18n }).$mount('#app')
 ```html
 <template>
   <div>
-    <button @click="$refs.xTable.exportCsv()">Export.cvs</button>
     <vxe-table ref="xTable" :data.sync="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column prop="name" label="Name"></vxe-table-column>
@@ -512,13 +399,9 @@ export default {
       tableData: [
         {
           id: 10001,
-          checked: false,
           name: 'test1',
           role: 'developer',
           sex: 'Man',
-          date: '2019-05-01',
-          time: 1556677810888,
-          region: 'ShenZhen',
           address: 'address abc123'
         }
       ]

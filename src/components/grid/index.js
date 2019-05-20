@@ -1,7 +1,8 @@
-import Grid from '../table/src/grid'
+import VxeGrid from '../table/src/grid'
 
-Grid.install = function (Vue) {
-  Vue.component(Grid.name, Grid)
+VxeGrid.install = function (Vue) {
+  Vue.component(VxeGrid.name, VxeGrid)
 }
 
-export default Grid
+export const Grid = VxeGrid
+export default VxeGrid

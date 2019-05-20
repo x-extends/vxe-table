@@ -513,6 +513,36 @@ export default {
               locat: {
                 name: 'GridAPI'
               }
+            },
+            {
+              lable: 'vxe-excel',
+              locat: {
+                name: 'ExcelAPI'
+              }
+            },
+            {
+              lable: 'vxe-pagination',
+              locat: {
+                name: 'PaginationAPI'
+              }
+            },
+            {
+              lable: 'vxe-radio',
+              locat: {
+                name: 'RadioAPI'
+              }
+            },
+            {
+              lable: 'vxe-checkbox',
+              locat: {
+                name: 'CheckboxAPI'
+              }
+            },
+            {
+              lable: 'vxe-input',
+              locat: {
+                name: 'InputAPI'
+              }
             }
           ]
         }

@@ -20,9 +20,7 @@ const components = [
   Grid,
   Excel,
   Pagination,
-  Checkbox,
-  Radio,
-  Input
+  Checkbox
 ]
 
 function setup (options = {}) {
@@ -69,5 +67,9 @@ export default {
   Table,
   TableColumn,
   Grid,
-  Excel
+  Excel,
+  Pagination,
+  Checkbox,
+  Radio,
+  Input
 }

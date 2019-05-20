@@ -13,6 +13,7 @@
         import VXETable from 'vxe-table'
         import 'vxe-table/lib/index.css'
 
+        // 默认安装 Table,TableColumn,Grid,Excel,Pagination,Checkbox
         Vue.use(VXETable)
       </code>
     </pre>
@@ -20,13 +21,15 @@
     <pre>
       <code class="javascript">
         import Vue from 'vue'
-        import {
+        import VXETable, {
           Table,
           TableColumn,
           Grid,
           Excel,
           Pagination,
-          Checkbox
+          Checkbox,
+          Radio,
+          Input
         } from 'vxe-table'
         import 'vxe-table/lib/index.css'
 
@@ -36,6 +39,13 @@
         Vue.use(Excel)
         Vue.use(Pagination)
         Vue.use(Checkbox)
+        Vue.use(Radio)
+        Vue.use(Input)
+
+        // 设置全局默认参数
+        VXETable.setup({
+          size: 'small'
+        })
       </code>
     </pre>
     <h3>CDN</h3>

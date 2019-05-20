@@ -1,7 +1,8 @@
-import Pagination from './src/pagination'
+import VxePagination from './src/pagination'
 
-Pagination.install = function (Vue) {
-  Vue.component(Pagination.name, Pagination)
+VxePagination.install = function (Vue) {
+  Vue.component(VxePagination.name, VxePagination)
 }
 
-export default Pagination
+export const Pagination = VxePagination
+export default VxePagination
