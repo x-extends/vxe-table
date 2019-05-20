@@ -12,6 +12,8 @@ import EventInterceptor from './interceptor'
 
 import './style/index.scss'
 
+const installedPlugins = []
+
 const components = [
   Table,
   TableColumn,
@@ -38,19 +40,20 @@ function setup (options = {}) {
 }
 
 function install (Vue, options) {
-  if (!install.installed) {
-    if (XEUtils.isPlainObject(options)) {
-      setup(options)
-    }
-    components.map(component => Vue.component(component.name, component))
-    use.apply(null, Array.from(arguments).slice(1))
+  if (XEUtils.isPlainObject(options)) {
+    setup(options)
   }
+  components.map(component => Vue.component(component.name, component))
+  use.apply(null, Array.from(arguments).slice(1))
 }
 
 function use () {
   Array.from(arguments).forEach(plugin => {
     if (plugin && plugin.install) {
-      plugin.install(GlobalConfig, EventInterceptor)
+      if (installedPlugins.indexOf(plugin) === -1) {
+        plugin.install(GlobalConfig, EventInterceptor)
+        installedPlugins.push(plugin)
+      }
     }
   })
 }
