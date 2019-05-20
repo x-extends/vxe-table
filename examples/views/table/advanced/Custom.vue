@@ -29,7 +29,7 @@
     <pre>
       <code class="xml">{{ demoCodes[0] }}</code>
       <code class="javascript">{{ demoCodes[1] }}</code>
-      <code class="css">{{ demoCodes[2] }}</code>
+      <code class="scss">{{ demoCodes[2] }}</code>
     </pre>
   </div>
 </template>
@@ -69,7 +69,8 @@ export default {
         export default {
           data () {
             return {
-              tableData: []
+              tableData: [],
+              customColumns: []
             }
           },
           created () {
