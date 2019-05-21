@@ -9,29 +9,7 @@
         import 'vxe-table/lib/index.css'
 
         Vue.use(VXETable, {
-          // 默认尺寸
-          size: 'small',
-          // 自定义图标配置
-          iconMap: {
-            sortAsc: 'vxe-sort--asc-icon',
-            sortDesc: 'vxe-sort--desc-icon',
-            filter: 'vxe-filter--icon',
-            edit: 'vxe-edit--icon',
-            tree: 'vxe-tree--node-icon'
-          },
-          // 全局优化配置项
-          optimized: {
-            scrollX: {
-              gt: 40,
-              oSize: 5,
-              rSize: 16
-            },
-            scrollY: {
-              gt: 500,
-              oSize: 20,
-              rSize: 80
-            }
-          }
+          size: 'small'
         })
       </code>
     </pre>
@@ -51,15 +29,28 @@
             sortAsc: 'vxe-sort--asc-icon',
             sortDesc: 'vxe-sort--desc-icon',
             filter: 'vxe-filter--icon',
-            edit: 'vxe-edit--icon'
+            edit: 'vxe-edit--icon',
+            tree: 'vxe-tree--node-icon'
           },
-          // 优化配置项
+          // 所有内容超过隐藏
+          showAllOverflow: null,
+          // 所有表头内容超过隐藏
+          showHeaderAllOverflow: null,
+          // 默认快捷菜单
+          contextMenu: null,
+          // 默认 tooltip 主题样式
+          tooltipTheme: 'dark',
+          // 默认优化配置项
           optimized: {
+            // 显示表格效果
+            animat: true,
+            // 横向 X 滚动渲染
             scrollX: {
-              gt: 60,
+              gt: 40,
               oSize: 5,
               rSize: 16
             },
+            // 自行 Y 滚动渲染
             scrollY: {
               gt: 500,
               oSize: 20,

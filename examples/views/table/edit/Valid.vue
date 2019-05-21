@@ -53,6 +53,7 @@ export default {
         <vxe-table
           ref="xTable"
           border
+          show-all-overflow
           :data.sync="tableData"
           :edit-rules="validRules"
           :edit-config="{trigger: 'click', mode: 'cell', showStatus: true}">

@@ -75,5 +75,5 @@ export default {
   // 校验规则配置项
   editRules: Object,
   // 优化配置项
-  optimized: { type: [Object, Boolean], default: () => GlobalConfig.optimized }
+  optimized: Object
 }

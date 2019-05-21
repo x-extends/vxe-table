@@ -47,6 +47,7 @@ export default {
         <vxe-table
           ref="xTable"
           border
+          show-all-overflow
           :data.sync="tableData"
           :edit-config="{trigger: 'manual', mode: 'row'}">
           <vxe-table-column type="index" width="60"></vxe-table-column>

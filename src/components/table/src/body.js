@@ -1,5 +1,6 @@
 import XEUtils from 'xe-utils'
 import DomTools from '../../../tools/dom'
+import GlobalConfig from '../../../conf'
 
 // 处理选中位置
 function handleLocation (obj, rows, columns, row, column) {
@@ -268,7 +269,7 @@ export default {
   },
   render (h) {
     let { $parent: $table, fixedColumn, fixedType } = this
-    let { maxHeight, height, tableData, tableColumn, headerHeight, showFooter, showAllOverflow, footerHeight, tableHeight, tableWidth, scrollXStore, scrollXLoad, scrollYStore, scrollYLoad, scrollXHeight } = $table
+    let { maxHeight, height, loading, tableData, tableColumn, headerHeight, showFooter, showAllOverflow, footerHeight, tableHeight, tableWidth, scrollXStore, scrollXLoad, scrollYStore, scrollYLoad, scrollXHeight } = $table
     let customHeight = XEUtils.toNumber(height)
     let style = {}
     if (customHeight) {
@@ -335,6 +336,13 @@ export default {
          */
         h('tbody', renderRows(h, this, $table, 0, fixedType, tableData, tableColumn))
       ]),
+      !loading && !tableData.length ? h('div', {
+        class: 'vxe-table--empty-block'
+      }, [
+        h('span', {
+          class: 'vxe-table--empty-text'
+        }, $table.$slots.empty || GlobalConfig.i18n('vxe.table.emptyText'))
+      ]) : null,
       scrollYLoad ? h('div', {
         class: ['vxe-body--bottom-space'],
         style: {

@@ -187,6 +187,12 @@ export default {
               }
             },
             {
+              lable: '空数据',
+              locat: {
+                name: 'TableEmpty'
+              }
+            },
+            {
               lable: '加载中',
               demoUrl: 'https://jsrun.net/GjXKp',
               locat: {

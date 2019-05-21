@@ -95,6 +95,9 @@ export default {
   mounted () {
     UtilTools.assemColumn(this)
   },
+  destroyed () {
+    UtilTools.destroyColumn(this)
+  },
   render (h) {
     return h('div', this.$slots.default)
   },

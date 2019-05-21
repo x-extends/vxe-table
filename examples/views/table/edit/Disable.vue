@@ -36,6 +36,7 @@ export default {
         <vxe-table
           ref="xTable"
           border
+          show-all-overflow
           :data.sync="tableData"
           :edit-config="{trigger: 'click', mode: 'cell', activeMethod}"
           @edit-disabled="editDisabledEvent">

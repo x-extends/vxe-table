@@ -37,6 +37,7 @@ export default {
         `
         <vxe-table
           border
+          show-all-overflow
           :data.sync="tableData"
           :mouse-config="{selected: true}"
           :keyboard-config="{isArray: true, isTab: true, isEdit: true}"

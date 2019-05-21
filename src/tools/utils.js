@@ -82,6 +82,14 @@ const UtilTools = {
       $table.collectColumn.splice([].indexOf.call($table.$refs.hideColumn.children, _vm.$el), 0, columnConfig)
     }
   },
+  // 销毁列
+  destroyColumn (_vm) {
+    let { $table, columnConfig } = _vm
+    let matchObj = XEUtils.findTree($table.collectColumn, column => column === columnConfig)
+    if (matchObj) {
+      matchObj.items.splice(matchObj.index, 1)
+    }
+  },
   hasChildrenList (item) {
     return item && item.children && item.children.length > 0
   }

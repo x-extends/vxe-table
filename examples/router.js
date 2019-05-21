@@ -21,6 +21,7 @@ import TableRadio from './views/table/base/Radio.vue'
 import TableSelection from './views/table/base/Selection.vue'
 import TableSort from './views/table/base/Sort.vue'
 import TableFilter from './views/table/base/Filter.vue'
+import TableEmpty from './views/table/base/Empty.vue'
 import TableLoading from './views/table/base/Loading.vue'
 import TableFormat from './views/table/base/Format.vue'
 import TableTemplate from './views/table/base/Template.vue'
@@ -193,6 +194,11 @@ export default new Router({
       path: '/table/base/filter',
       name: 'TableFilter',
       component: TableFilter
+    },
+    {
+      path: '/table/base/empty',
+      name: 'TableEmpty',
+      component: TableEmpty
     },
     {
       path: '/table/base/loading',

@@ -2,7 +2,7 @@
   <div>
     <p>加载 10 万行 1 万列，左右固定列，表尾合计</p>
     <p>实际渲染速度受以下影响：多选(超严重)、固定列(中度)、底部合计(中度)、数据运算量(轻度)、任何双向的数据或函数都会影响加载速度</p>
-    <p>数据超大情况下必须使用：show-all-overflow,show-header-all-overflow 参数以及调整好 optimized：scrollX,scrollY 适合的参数可以更加流畅</p>
+    <p>数据超大情况下必须使用：show-all-overflow,show-header-all-overflow 参数以及调整好 optimized：{scrollX,scrollY} 适合的参数可以更加流畅</p>
 
     <vxe-table
       ref="xTable"

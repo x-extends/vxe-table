@@ -19,6 +19,7 @@
 
     <vxe-table
       border
+      show-all-overflow
       class="vxe-table-element"
       height="460"
       size="small"
@@ -94,6 +95,7 @@ export default {
 
           <vxe-table
             border
+            show-all-overflow
             class="vxe-table-element"
             height="460"
             size="small"

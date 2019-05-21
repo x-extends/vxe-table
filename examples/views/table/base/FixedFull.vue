@@ -19,7 +19,6 @@
 
     <vxe-table
       border
-      optimized
       height="300"
       show-all-overflow
       :data.sync="tableData">

@@ -4,6 +4,7 @@
 
     <vxe-table
       border
+      show-all-overflow
       show-footer
       class="vxe-table-iview"
       height="600"
@@ -94,6 +95,7 @@ export default {
         `
         <vxe-table
           border
+          show-all-overflow
           show-footer
           class="vxe-table-iview"
           height="600"

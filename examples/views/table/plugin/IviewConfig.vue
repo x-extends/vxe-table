@@ -11,6 +11,7 @@
 
     <vxe-table
       border
+      show-all-overflow
       class="vxe-table-iview"
       height="600"
       :loading="loading"
@@ -85,6 +86,7 @@ export default {
         `
         <vxe-table
           border
+          show-all-overflow
           class="vxe-table-iview"
           height="600"
           :loading="loading"

@@ -263,29 +263,7 @@ export default {
   computed: {
     // 优化的参数
     optimizeConfig () {
-      let { optimized, editConfig } = this
-      let isAll = optimized === true
-      return Object.assign({
-        // 显示效果开关
-        animat: !isAll,
-        // 如果设置了则不允许换行 ellipsis、title、tooltip
-        showAllOverflow: isAll || editConfig ? 'tooltip' : null,
-        // 默认列大于 80 条时自动使用横向 X 滚动渲染
-        scrollX: {
-          gt: 60,
-          oSize: 6,
-          rSize: 16,
-          vSize: 0
-        },
-        // 默认数据大于 500 条时自动使用纵向 Y 滚动渲染
-        scrollY: {
-          gt: 500,
-          oSize: 25,
-          rSize: 70,
-          vSize: 0,
-          rHeight: 0
-        }
-      }, optimized)
+      return Object.assign({}, GlobalConfig.optimized, this.optimized)
     },
     // 是否使用了分组表头
     isGroup () {

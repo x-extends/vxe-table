@@ -790,7 +790,16 @@ export default {
         type: '',
         enum: '',
         defVal: '',
-        list: []
+        list: [
+          {
+            name: 'empty',
+            desc: '空数据时显示的文本内容',
+            type: '',
+            enum: '',
+            defVal: '暂无数据',
+            list: []
+          }
+        ]
       },
       {
         name: 'Events',

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>通过 customs 来初始化绑定内部列变量，prop:属性,visible:默认是否显示；</p>
+    <p>通过 customs 来初始化绑定内部列变量，prop:属性,visible:默认是否显示；可使用的属性{property,label,visible}</p>
     <p>该功能对于列比较多的表格非常有用，可以轻松实现强大的显示/隐藏列的配置功能</p>
 
     <div class="table-oper">
