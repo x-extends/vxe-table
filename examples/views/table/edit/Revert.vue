@@ -3,12 +3,14 @@
     <p>调用 revert 还原数据</p>
 
     <button class="btn" @click="$refs.xTable.revert()">还原全部</button>
+    <button class="btn" @click="$refs.xTable.removeSelecteds()">删除选中</button>
     <vxe-table
       ref="xTable"
       border
       show-all-overflow
       :data.sync="tableData"
       :edit-config="{trigger: 'click', mode: 'cell'}">
+      <vxe-table-column type="selection" width="60"></vxe-table-column>
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column prop="name" label="Name" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column prop="sex" label="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
@@ -39,12 +41,14 @@ export default {
       demoCodes: [
         `
         <button class="btn" @click="$refs.xTable.revert()">还原全部</button>
+        <button class="btn" @click="$refs.xTable.removeSelecteds()">删除选中</button>
         <vxe-table
           ref="xTable"
           border
           show-all-overflow
           :data.sync="tableData"
           :edit-config="{trigger: 'click', mode: 'cell'}">
+          <vxe-table-column type="selection" width="60"></vxe-table-column>
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column prop="name" label="Name" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column prop="sex" label="Sex" :edit-render="{name: 'input'}"></vxe-table-column>

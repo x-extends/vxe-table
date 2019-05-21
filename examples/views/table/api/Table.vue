@@ -1002,6 +1002,14 @@ export default {
             list: []
           },
           {
+            name: 'getSelectRecords()',
+            desc: '获取已选中数据',
+            type: '',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
             name: 'hasRowChange(row,prop)',
             desc: '检查行或列数据是否发生改变',
             type: '',

@@ -299,7 +299,10 @@ export default {
   },
   watch: {
     data (value) {
-      this.load(value).then(this.handleDefaultExpand)
+      if (!this.isUpdateData) {
+        this.load(value).then(this.handleDefaultExpand)
+      }
+      this.isUpdateData = false
     },
     customs (value) {
       if (!this.isUpdateCustoms) {
@@ -646,16 +649,31 @@ export default {
      * 支持删除多行
      */
     remove (rows) {
-      let { tableData, removeList } = this
+      let { tableData, tableFullData, removeList, selection } = this
       let rest = []
-      if (rows && !XEUtils.isArray(rows)) {
-        rows = [rows]
-      }
-      if (rows.length) {
-        rest = XEUtils.remove(tableData, item => rows.indexOf(item) > -1)
+      this.isUpdateData = true
+      if (rows) {
+        if (!XEUtils.isArray(rows)) {
+          rows = [rows]
+        }
+        if (rows.length) {
+          rest = XEUtils.remove(tableFullData, item => rows.indexOf(item) > -1)
+        }
       }
       removeList.push.apply(removeList, rest)
-      return this.$nextTick(() => ({ row: rows.length ? rows[rows.length - 1] : null, rows: rest }))
+      XEUtils.remove(tableData, item => rest.indexOf(item) > -1)
+      XEUtils.remove(selection, item => rest.indexOf(item) > -1)
+      this.checkSelectionStatus()
+      return this.$nextTick().then(() => ({ row: rows && rows.length ? rows[rows.length - 1] : null, rows: rest }))
+    },
+    /**
+     * 删除选中数据
+     */
+    removeSelecteds () {
+      return this.remove(this.selection).then(params => {
+        this.selection = []
+        return params
+      })
     },
     /**
      * 还原数据
@@ -758,6 +776,13 @@ export default {
      */
     getRemoveRecords () {
       return this.removeList
+    },
+    /**
+     * 获取选中数据
+     */
+    getSelectionRecords () {
+      let { tableFullData, selection } = this
+      return tableFullData.filter(item => selection.indexOf(item) > -1)
     },
     /**
      * 获取更新数据
@@ -940,7 +965,7 @@ export default {
         let tableWidth = this.autoCellWidth(headerElem, bodyElem, footerElem, bodyWidth)
         if (refull === true) {
           // 初始化时需要在列计算之后再执行优化运算，达到最优显示效果
-          return this.$nextTick(() => {
+          return this.$nextTick().then(() => {
             bodyWidth = bodyElem.clientWidth
             if (bodyWidth !== tableWidth) {
               this.autoCellWidth(headerElem, bodyElem, footerElem, bodyWidth)
@@ -1533,7 +1558,6 @@ export default {
           let selectItems = matchObj.items.filter(item => selection.indexOf(item) > -1)
           return this.triggerCheckRowEvent(evnt, { row: matchObj.parent }, selectItems.length === matchObj.items.length ? true : (selectItems.length || value === -1 ? -1 : false))
         }
-        this.isAllSelected = tableFullData.every(item => selection.indexOf(item) > -1)
       } else {
         if (value) {
           if (selection.indexOf(row) === -1) {
@@ -1542,10 +1566,14 @@ export default {
         } else {
           XEUtils.remove(selection, item => item === row)
         }
-        this.isAllSelected = tableFullData.length === selection.length
       }
+      this.checkSelectionStatus()
+      UtilTools.emitEvent(this, 'select-change', [{ row, selection: this.getSelectionRecords(), checked: value }, evnt])
+    },
+    checkSelectionStatus () {
+      let { tableFullData, selection, treeConfig } = this
+      this.isAllSelected = selection.length && (treeConfig ? tableFullData.every(item => selection.indexOf(item) > -1) : tableFullData.length === selection.length)
       this.isIndeterminate = !this.isAllSelected && selection.length
-      UtilTools.emitEvent(this, 'select-change', [{ row, selection, checked: value }, evnt])
     },
     /**
      * 多选，切换某一行的选中状态
@@ -1575,7 +1603,7 @@ export default {
      */
     triggerCheckAllEvent (evnt, value) {
       this.setAllSelection(value)
-      UtilTools.emitEvent(this, 'select-all', [{ selection: this.selection, checked: value }, evnt])
+      UtilTools.emitEvent(this, 'select-all', [{ selection: this.getSelectionRecords(), checked: value }, evnt])
     },
     /**
      * 多选，切换所有行的选中状态

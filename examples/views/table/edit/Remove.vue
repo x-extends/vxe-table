@@ -3,13 +3,16 @@
     <p>调用 remove 删除指定行数据</p>
 
     <button class="btn" @click="$refs.xTable.remove(tableData[1])">删除第2行</button>
+    <button class="btn" @click="$refs.xTable.removeSelecteds()">删除选中</button>
     <button class="btn" @click="getRemoveEvent">获取删除</button>
+    <button class="btn" @click="getSelectionEvent">获取选中</button>
     <vxe-table
       ref="xTable"
       border
       show-all-overflow
       :data.sync="tableData"
       :edit-config="{trigger: 'click', mode: 'cell'}">
+      <vxe-table-column type="selection" width="60"></vxe-table-column>
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column prop="name" label="Name" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column prop="sex" label="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
@@ -35,13 +38,16 @@ export default {
       demoCodes: [
         `
         <button class="btn" @click="$refs.xTable.remove(tableData[1])">删除第2行</button>
+        <button class="btn" @click="$refs.xTable.removeSelecteds()">删除选中</button>
         <button class="btn" @click="getRemoveEvent">获取删除</button>
+        <button class="btn" @click="getSelectionEvent">获取选中</button>
         <vxe-table
           ref="xTable"
           border
           show-all-overflow
           :data.sync="tableData"
           :edit-config="{trigger: 'click', mode: 'cell'}">
+          <vxe-table-column type="selection" width="60"></vxe-table-column>
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column prop="name" label="Name" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column prop="sex" label="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
@@ -62,6 +68,10 @@ export default {
             getRemoveEvent () {
               let removeRecords = this.$refs.xTable.getRemoveRecords()
               alert(removeRecords.length)
+            },
+            getSelectionEvent () {
+              let removeRecords = this.$refs.xTable.getSelectionRecords()
+              alert(removeRecords.length)
             }
           }
         }
@@ -81,6 +91,10 @@ export default {
   methods: {
     getRemoveEvent () {
       let removeRecords = this.$refs.xTable.getRemoveRecords()
+      alert(removeRecords.length)
+    },
+    getSelectionEvent () {
+      let removeRecords = this.$refs.xTable.getSelectionRecords()
       alert(removeRecords.length)
     }
   }
