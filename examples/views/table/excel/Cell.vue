@@ -1,7 +1,6 @@
 <template>
   <div>
     <p>使用 vxe-excel 渲染 Excel 表格</p>
-    <p>快捷键：方向键、Tab 键、Esc 键、F2 键、Del、Back 键、Ctrl 复制粘贴</p>
 
     <button class="btn" @click="getValidEvent">获取有效数据</button>
     <button class="btn" @click="getInsertEvent">获取新增</button>
@@ -14,6 +13,25 @@
       :columns="columns"
       :data.sync="tableData">
     </vxe-excel>
+
+    <pre>
+      <code>
+        | Arrow Up ↑ | 移动到当前活动单元格上面的单元格 |
+        | Arrow Down ↓ | 移动到当前活动单元格下面的单元格 |
+        | Arrow Left ← | 移动到当前活动单元格左边的单元格 |
+        | Arrow Right → | 移动到当前活动单元格右边的单元格 |
+        | Tab | 移动到当前选中或活动单元格的右侧单元格，如果到最后一列且存在下一行，则从下一行开始移动 |
+        | Enter | 取消编辑并移动到当前活动单元格下面的单元格 |
+        | Delete | 清空内容 |
+        | Backspace | 清空内容并激活选中单元格为编辑状态 |
+        | F2 | 激活单元格编辑 |
+        | Esc | 取消单元格编辑 |
+        | Ctrl + C | 复制选中的单元格内容 |
+        | Ctrl + X | 剪贴选中的单元格内容 |
+        | Ctrl + V | 粘贴选中的单元格内容 |
+        | Ctrl + A | 选中所有单元格 |
+      </code>
+    </pre>
 
     <p class="demo-code">显示代码</p>
 

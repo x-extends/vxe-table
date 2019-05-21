@@ -515,6 +515,12 @@ export default {
               }
             },
             {
+              lable: 'vxe-table-column',
+              locat: {
+                name: 'TableColumnAPI'
+              }
+            },
+            {
               lable: 'vxe-grid',
               locat: {
                 name: 'GridAPI'

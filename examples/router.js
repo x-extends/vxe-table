@@ -70,6 +70,7 @@ import TablePluginIviewConfig from './views/table/plugin/IviewConfig.vue'
 import TablePluginIviewPage from './views/table/plugin/IviewPage.vue'
 
 import TableAPI from './views/table/api/Table.vue'
+import TableColumnAPI from './views/table/api/TableColumn.vue'
 import GridAPI from './views/table/api/Grid.vue'
 import ExcelAPI from './views/table/api/Excel.vue'
 import PaginationAPI from './views/table/api//Pagination.vue'
@@ -394,6 +395,11 @@ export default new Router({
       path: '/table/api',
       name: 'TableAPI',
       component: TableAPI
+    },
+    {
+      path: '/tableColumn/api',
+      name: 'TableColumnAPI',
+      component: TableColumnAPI
     },
     {
       path: '/grid/api',

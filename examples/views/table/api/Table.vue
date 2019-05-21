@@ -342,7 +342,7 @@ export default {
           },
           {
             name: 'row-key',
-            desc: '行数据的 Key，Vue 虚拟 DOM 中 key 属性',
+            desc: '行数据的 Key，对应行渲染中虚拟 DOM 的 key 属性（非特殊情况下不需要使用）',
             type: 'Number,String',
             enum: '',
             defVal: '',

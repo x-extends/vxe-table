@@ -17,6 +17,21 @@
       <vxe-table-column prop="address" label="Address" :edit-render="{name: 'input'}"></vxe-table-column>
     </vxe-table>
 
+    <pre>
+      <code>
+        | Arrow Up ↑ | 移动到当前活动单元格上面的单元格 |
+        | Arrow Down ↓ | 移动到当前活动单元格下面的单元格 |
+        | Arrow Left ← | 移动到当前活动单元格左边的单元格 |
+        | Arrow Right → | 移动到当前活动单元格右边的单元格 |
+        | Tab | 移动到当前选中或活动单元格的右侧单元格，如果到最后一列且存在下一行，则从下一行开始移动 |
+        | Enter | 取消编辑并移动到当前活动单元格下面的单元格 |
+        | Delete | 清空内容 |
+        | Backspace | 清空内容并激活选中单元格为编辑状态 |
+        | F2 | 激活单元格编辑 |
+        | Esc | 取消单元格编辑 |
+      </code>
+    </pre>
+
     <p class="demo-code">显示代码</p>
 
     <pre>

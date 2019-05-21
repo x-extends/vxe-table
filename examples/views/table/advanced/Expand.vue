@@ -96,6 +96,7 @@ export default {
   data () {
     return {
       tableData: [],
+      tableData2: [],
       demoCodes: [
         `
         <button class="btn" @click="$refs.xTable.toggleRowExpansion(tableData[1])">切换第二行展开</button>
@@ -150,7 +151,7 @@ export default {
         <vxe-table
           ref="xTable"
           border
-          :data.sync="tableData"
+          :data.sync="tableData2"
           :expand-config="{key: 'id', expandAll: true}">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column type="expand" width="60">
@@ -184,11 +185,11 @@ export default {
         export default {
           data () {
             return {
-              tableData: []
+              tableData2: []
             }
           },
           created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
+            this.tableData2 = window.MOCK_DATA_LIST.slice(0, 3)
           }
         }
         `
@@ -196,8 +197,8 @@ export default {
     }
   },
   created () {
-    let list = window.MOCK_DATA_LIST.slice(0, 6)
-    this.tableData = list
+    this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
+    this.tableData = window.MOCK_DATA_LIST.slice(0, 3)
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
