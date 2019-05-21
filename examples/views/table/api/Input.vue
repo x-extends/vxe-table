@@ -30,7 +30,16 @@ export default {
         type: '',
         enum: '',
         defVal: '',
-        list: []
+        list: [
+          {
+            name: 'value,v-model',
+            desc: '绑定值',
+            type: '',
+            enum: '',
+            defVal: '',
+            list: []
+          }
+        ]
       },
       {
         name: 'Slots',
@@ -46,7 +55,16 @@ export default {
         type: '',
         enum: '',
         defVal: '',
-        list: []
+        list: [
+          {
+            name: 'change',
+            desc: '在值发生改变时触发该事件',
+            type: '',
+            enum: '',
+            defVal: 'value',
+            list: []
+          }
+        ]
       },
       {
         name: 'Methods',
