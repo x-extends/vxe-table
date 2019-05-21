@@ -56,7 +56,6 @@ export default {
     },
     sizeChangeEvent (pageSize) {
       UtilTools.emitEvent(this, 'page-size-change', [pageSize])
-      this.$refs.xTable.clearScroll()
     }
   }
 }
