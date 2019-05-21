@@ -315,10 +315,7 @@ export default {
     },
     visibleColumn () {
       this.refreshColumn()
-      this.$nextTick(() => {
-        this.computeScrollLoad()
-        this.recalculate()
-      })
+      this.$nextTick(this.recalculate)
     }
   },
   created () {
@@ -342,10 +339,7 @@ export default {
       }
       this.refreshColumn()
       this.handleDefaultExpand()
-      this.$nextTick(() => {
-        this.computeScrollLoad()
-        this.recalculate(true)
-      })
+      this.$nextTick(() => this.recalculate(true))
     })
     GlobalEvent.on(this, 'mousedown', this.handleGlobalMousedownEvent)
     GlobalEvent.on(this, 'blur', this.handleGlobalBlurEvent)
@@ -595,11 +589,12 @@ export default {
       this.scrollYLoad = scrollYLoad
       this.tableData = this.getTableData().tableData
       let rest = this.$nextTick()
-      if (!init && autoWidth) {
-        rest = rest.then(() => setTimeout(recalculate))
-      }
-      if (!init && scrollYLoad) {
-        rest = rest.then(computeScrollLoad)
+      if (!init) {
+        if (autoWidth) {
+          rest = rest.then(() => setTimeout(recalculate))
+        } else if (scrollYLoad) {
+          rest = rest.then(computeScrollLoad)
+        }
       }
       return rest
     },
@@ -933,9 +928,10 @@ export default {
      * 支持 width=? width=?px width=?% min-width=? min-width=?px min-width=?%
      */
     recalculate (refull) {
-      let tableBody = this.$refs.tableBody
-      let tableHeader = this.$refs.tableHeader
-      let tableFooter = this.$refs.tableFooter
+      let { $refs, scrollXLoad, scrollYLoad } = this
+      let tableBody = $refs.tableBody
+      let tableHeader = $refs.tableHeader
+      let tableFooter = $refs.tableFooter
       let bodyElem = tableBody ? tableBody.$el : null
       let headerElem = tableHeader ? tableHeader.$el : null
       let footerElem = tableFooter ? tableFooter.$el : null
@@ -943,7 +939,7 @@ export default {
         let bodyWidth = bodyElem.clientWidth
         let tableWidth = this.autoCellWidth(headerElem, bodyElem, footerElem, bodyWidth)
         if (refull === true) {
-        // 初始化时需要在列计算之后再执行优化运算，达到最优显示效果
+          // 初始化时需要在列计算之后再执行优化运算，达到最优显示效果
           return this.$nextTick(() => {
             bodyWidth = bodyElem.clientWidth
             if (bodyWidth !== tableWidth) {
@@ -951,6 +947,9 @@ export default {
             }
           })
         }
+      }
+      if (scrollXLoad || scrollYLoad) {
+        this.computeScrollLoad()
       }
       return this.$nextTick()
     },
