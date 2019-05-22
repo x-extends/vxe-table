@@ -392,7 +392,7 @@ export default {
       stripe,
       highlightHoverRow,
       size,
-      tooltipTheme,
+      tooltipConfig,
       editConfig,
       showFooter,
       footerMethod,
@@ -527,7 +527,7 @@ export default {
          * tooltip
          */
         tooltipStore.visible ? h('div', {
-          class: ['vxe-table--tooltip-wrapper', `theme--${tooltipTheme}`, `placement--${tooltipStore.placement}`],
+          class: ['vxe-table--tooltip-wrapper', `theme--${tooltipConfig ? tooltipConfig.theme : 'dark'}`, `placement--${tooltipStore.placement}`],
           style: tooltipStore.style,
           ref: 'tipWrapper'
         }, [
@@ -617,7 +617,7 @@ export default {
      */
     insertAt (records, row) {
       let { tableData, insertList, defineProperty } = this
-      if (records && !XEUtils.isArray(records)) {
+      if (!XEUtils.isArray(records)) {
         records = [records]
       }
       let newRecords = records.map(record => defineProperty(record))
@@ -1100,14 +1100,30 @@ export default {
           // 如果手动调用了激活单元格，避免触发源被移除后导致重复关闭
           if (!this.lastCallTime || this.lastCallTime + 50 < Date.now()) {
             if (!EventInterceptor.clearActiveds.some(func => func(actived.args, evnt) === false)) {
+              let isClear
+              let isReadonlyCol = !DomTools.getEventTargetNode(evnt, this.$el, 'col--edit').flag
+              // row 方式
+              if (editConfig.mode === 'row') {
+                let rowNode = DomTools.getEventTargetNode(evnt, this.$el, 'vxe-body--row')
+                let isOtherRow = rowNode.flag ? rowNode.targetElem !== actived.args.cell.parentNode : 0
+                if (editConfig.trigger === 'manual') {
+                  // manual 触发，如果点击了不同行
+                  isClear = isOtherRow
+                } else {
+                  // click,dblclick 触发，如果点击了不同行的非编辑列
+                  isClear = isOtherRow && isReadonlyCol
+                }
+              } else {
+                // cell 方式，如果是非编辑列
+                isClear = isReadonlyCol
+              }
               if (
-                // 如果点击了非编辑列
-                !DomTools.getEventTargetNode(evnt, this.$el, 'col--edit').flag ||
+                isClear ||
                 // 如果点击了当前表格之外
                 !DomTools.getEventTargetNode(evnt, this.$el).flag
               ) {
                 this.triggerValidate().then(() => {
-                  this.clearActived(evnt)
+                  setTimeout(() => this.clearActived(evnt), 100)
                 }).catch(e => e)
               }
             }
@@ -1657,7 +1673,7 @@ export default {
       let isRightBtn = button === 2
       if (isLeftBtn || isRightBtn) {
         if (editConfig && editConfig.trigger === 'dblclick') {
-          if (actived.row === row && actived.column === column) {
+          if ((editConfig.mode === 'row' && actived.row === row) || (actived.row === row && actived.column === column)) {
             // 如果已经是激活状态
           } else {
             if (isLeftBtn) {
@@ -1781,7 +1797,7 @@ export default {
       let { activeMethod } = editConfig
       let { actived } = editStore
       let { row, column, cell } = params
-      if (actived.row !== row || actived.column !== column) {
+      if (editConfig.mode === 'row' ? actived.row !== row : (actived.row !== row || actived.column !== column)) {
         // 判断是否禁用编辑
         if (!activeMethod || activeMethod(params)) {
           this.clearCopyed(evnt)
@@ -2448,6 +2464,26 @@ export default {
         }
       })
       return this.$nextTick()
+    },
+    /**
+     * 更新列状态
+     * 如果组件值 v-model 发生 change 时，调用改函数用于更新某一列编辑状态
+     * 如果单元格配置了校验规则，则会进行校验
+     */
+    updateStatus (scope) {
+      return this.$nextTick().then(() => {
+        let { $refs, tableData, editRules } = this
+        if (scope && $refs.tableBody && !XEUtils.isEmpty(editRules)) {
+          let { row, column } = scope
+          let rowIndex = tableData.indexOf(row)
+          let cell = DomTools.getCell({ rowIndex, column }, $refs.tableBody.$el)
+          if (cell) {
+            return this.validCellRules('change', row, column)
+              .then(() => this.clearValidate())
+              .catch(rule => this.handleValidError({ rule, row, column, cell }))
+          }
+        }
+      })
     },
     /**
      * 对表格某一行进行校验的方法

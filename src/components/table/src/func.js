@@ -42,6 +42,7 @@ export default [
   'clostTooltip',
   'closeContextMenu',
   'recalculate',
+  'updateStatus',
   'isScrollXLoad',
   'isScrollYLoad',
   'sort',

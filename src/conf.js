@@ -25,8 +25,8 @@ const GlobalConfig = {
   showAllOverflow: null,
   showHeaderAllOverflow: null,
   contextMenu: null,
-  tooltipTheme: 'dark',
   renderMap,
+  tooltipConfig: null,
   iconMap: {
     sortAsc: 'vxe-sort--asc-icon',
     sortDesc: 'vxe-sort--desc-icon',

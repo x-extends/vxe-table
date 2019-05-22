@@ -317,14 +317,6 @@ export default {
             list: []
           },
           {
-            name: 'tooltip-theme',
-            desc: '列 tooltip 的主题，可选值为 dark 或 light',
-            type: 'String',
-            enum: '',
-            defVal: 'dark',
-            list: []
-          },
-          {
             name: 'show-all-overflow',
             desc: '设置所有内容过长时显示为省略号（如果是固定列建议设置该值，提升渲染速度）',
             type: 'Boolean,String',
@@ -363,6 +355,23 @@ export default {
             enum: '',
             defVal: 'true',
             list: []
+          },
+          {
+            name: 'tooltip-config',
+            desc: 'tooltip 配置项',
+            type: 'Boolean',
+            enum: '',
+            defVal: 'true',
+            list: [
+              {
+                name: 'theme',
+                desc: '列 tooltip 的主题',
+                type: 'String',
+                enum: 'dark,light',
+                defVal: 'dark',
+                list: []
+              }
+            ]
           },
           {
             name: 'expand-config',
@@ -1234,8 +1243,16 @@ export default {
             list: []
           },
           {
-            name: 'recalculate',
+            name: 'recalculate()',
             desc: '重新计算并更新列宽',
+            type: '',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'updateStatus(scope)',
+            desc: '更新单元格状态（只对 showStatus=true 并且使用自定义渲染时，当值发生改变时才需要调用）',
             type: '',
             enum: '',
             defVal: '',

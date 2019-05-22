@@ -16,11 +16,11 @@
       <vxe-table-column label="操作">
         <template v-slot="{ row }">
           <template v-if="$refs.xTable.hasActiveRow(row)">
-            <button class="btn">保存</button>
-            <button class="btn">取消</button>
+            <button class="btn" @click="saveRowEvent(row)">保存</button>
+            <button class="btn" @click="cancelRowEvent(row)">取消</button>
           </template>
           <template v-else>
-            <button class="btn" @click="$refs.xTable.setActiveRow(row)">编辑</button>
+            <button class="btn" @click="editRowEvent(row)">编辑</button>
           </template>
         </template>
       </vxe-table-column>
@@ -54,15 +54,15 @@ export default {
           <vxe-table-column prop="name" label="Name" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column prop="sex" label="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column prop="date" label="Date" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column prop="address" label="Address" show-overflow :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column prop="address" label="Address" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column label="操作">
             <template v-slot="{ row }">
               <template v-if="$refs.xTable.hasActiveRow(row)">
-                <button class="btn">保存</button>
-                <button class="btn">取消</button>
+                <button class="btn" @click="saveRowEvent(row)">保存</button>
+                <button class="btn" @click="cancelRowEvent(row)">取消</button>
               </template>
               <template v-else>
-                <button class="btn" @click="$refs.xTable.setActiveRow(row)">编辑</button>
+                <button class="btn" @click="editRowEvent(row)">编辑</button>
               </template>
             </template>
           </vxe-table-column>
@@ -77,6 +77,18 @@ export default {
           },
           created () {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
+          },
+          methods: {
+            editRowEvent (row) {
+              this.$refs.xTable.setActiveRow(row)
+            },
+            saveRowEvent (row) {
+              console.log('success')
+              this.cancelRowEvent()
+            },
+            cancelRowEvent (row) {
+              this.$refs.xTable.clearActived()
+            }
           }
         }
         `
@@ -84,13 +96,24 @@ export default {
     }
   },
   created () {
-    let list = window.MOCK_DATA_LIST.slice(0, 6)
-    this.tableData = list
+    this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
       hljs.highlightBlock(block)
     })
+  },
+  methods: {
+    editRowEvent (row) {
+      this.$refs.xTable.setActiveRow(row)
+    },
+    saveRowEvent (row) {
+      console.log('success')
+      this.$refs.xTable.clearActived()
+    },
+    cancelRowEvent (row) {
+      this.$refs.xTable.clearActived()
+    }
   }
 }
 </script>

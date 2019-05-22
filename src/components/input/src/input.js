@@ -17,7 +17,8 @@ export default {
     }
     return h('div', {
       class: ['vxe-input--wrapper', {
-        [`size--${size}`]: size
+        [`size--${size}`]: size,
+        'is--disabled': this.disabled
       }]
     }, [
       h('input', {

@@ -9,7 +9,7 @@ const rowHeight = 24
  * 只支持 input 和 textarea
  */
 function defaultRenderer (h, attrs, editRender, params) {
-  let { row, column } = params
+  let { $table, row, column } = params
   let { name } = editRender
   return [
     h('div', {
@@ -24,6 +24,7 @@ function defaultRenderer (h, attrs, editRender, params) {
         on: {
           input (evnt) {
             UtilTools.setCellValue(row, column.property, evnt.target.value)
+            $table.updateStatus(params)
           }
         }
       })

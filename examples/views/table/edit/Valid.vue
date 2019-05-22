@@ -41,6 +41,9 @@ export default {
         name: [
           { required: true, message: '名称必须填写', trigger: 'change' },
           { min: 3, max: 50, message: '名称长度在 3 到 50 个字符', trigger: 'change' }
+        ],
+        sex: [
+          { required: true, message: '性别必须填写', trigger: 'change' }
         ]
       },
       demoCodes: [
@@ -73,6 +76,9 @@ export default {
                 name: [
                   { required: true, message: '名称必须填写', trigger: 'change' },
                   { min: 3, max: 50, message: '名称长度在 3 到 50 个字符', trigger: 'change' }
+                ],
+                sex: [
+                  { required: true, message: '性别必须填写', trigger: 'change' }
                 ]
               }
             }
@@ -88,7 +94,14 @@ export default {
               })
             },
             insertEvent () {
-              this.$refs.xTable.insert()
+              this.$refs.xTable.insert().then(({ row }) => {
+                // 插入一条数据并触发校验
+                this.$refs.xTable.validateRow(row, valid => {
+                  if (valid) {
+
+                  }
+                })
+              })
             },
             getInsertEvent () {
               let insertRecords = this.$refs.xTable.getInsertRecords()
@@ -125,7 +138,14 @@ export default {
       })
     },
     insertEvent () {
-      this.$refs.xTable.insert()
+      this.$refs.xTable.insert().then(({ row }) => {
+        // 插入一条数据并触发校验
+        this.$refs.xTable.validateRow(row, valid => {
+          if (valid) {
+
+          }
+        })
+      })
     },
     getInsertEvent () {
       let insertRecords = this.$refs.xTable.getInsertRecords()

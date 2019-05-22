@@ -46,8 +46,6 @@ export default {
   footerCellClassName: [String, Function],
   // 合并行或列
   spanMethod: Function,
-  // 列 tooltip 的主题，可选值为 dark 或 light
-  tooltipTheme: { type: String, default: () => GlobalConfig.tooltipTheme },
   // 设置所有内容过长时显示为省略号
   showAllOverflow: { type: [Boolean, String], default: () => GlobalConfig.showAllOverflow },
   // 设置表头所有内容过长时显示为省略号
@@ -60,6 +58,8 @@ export default {
   autoResize: Boolean,
   // 是否自动计算列宽
   autoWidth: { type: Boolean, default: true },
+  // tooltip 配置项
+  tooltipConfig: { type: Object, default: () => GlobalConfig.tooltipConfig },
   // 展开行配置项
   expandConfig: Object,
   // 树形结构配置项

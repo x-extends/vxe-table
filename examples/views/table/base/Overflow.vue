@@ -9,7 +9,7 @@
       highlight-hover-row
       :data.sync="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
-      <vxe-table-column prop="address" label="超过隐藏时显示为省略号————————————" show-header-overflow="ellipsis" show-overflow="ellipsis"></vxe-table-column>
+      <vxe-table-column prop="address" label="超过隐藏时显示为省略号————————————" show-header-overflow show-overflow></vxe-table-column>
       <vxe-table-column prop="date" label="内容超过隐藏时显示为省略号并用原生 title 显示" show-overflow="title"></vxe-table-column>
       <vxe-table-column prop="age" label="表头超过隐藏时显示为省略号并 tooltip 显示——————————————" show-header-overflow></vxe-table-column>
       <vxe-table-column prop="address" label="Address" show-overflow></vxe-table-column>
@@ -20,6 +20,26 @@
     <pre>
       <code class="xml">{{ demoCodes[0] }}</code>
       <code class="javascript">{{ demoCodes[1] }}</code>
+    </pre>
+
+    <p>使用 light 主题，通过 tooltip-config 参数配置</p>
+
+    <vxe-table
+      highlight-hover-row
+      :data.sync="tableData"
+      :tooltip-config="{theme: 'light'}">
+      <vxe-table-column type="index" width="60"></vxe-table-column>
+      <vxe-table-column prop="address" label="超过隐藏时显示为省略号————————————" show-header-overflow show-overflow></vxe-table-column>
+      <vxe-table-column prop="date" label="内容超过隐藏时显示为省略号并用原生 title 显示" show-overflow="title"></vxe-table-column>
+      <vxe-table-column prop="age" label="表头超过隐藏时显示为省略号并 tooltip 显示——————————————" show-header-overflow></vxe-table-column>
+      <vxe-table-column prop="address" label="Address" show-overflow></vxe-table-column>
+    </vxe-table>
+
+    <p class="demo-code">显示代码</p>
+
+    <pre>
+      <code class="xml">{{ demoCodes[2] }}</code>
+      <code class="javascript">{{ demoCodes[3] }}</code>
     </pre>
   </div>
 </template>
@@ -37,7 +57,31 @@ export default {
           highlight-hover-row
           :data.sync="tableData">
           <vxe-table-column type="index" width="60"></vxe-table-column>
-          <vxe-table-column prop="address" label="超过隐藏时显示为省略号————————————" show-header-overflow="ellipsis" show-overflow="ellipsis"></vxe-table-column>
+          <vxe-table-column prop="address" label="超过隐藏时显示为省略号————————————" show-header-overflow show-overflow></vxe-table-column>
+          <vxe-table-column prop="date" label="内容超过隐藏时显示为省略号并用原生 title 显示" show-overflow="title"></vxe-table-column>
+          <vxe-table-column prop="age" label="表头超过隐藏时显示为省略号并 tooltip 显示——————————————" show-header-overflow></vxe-table-column>
+          <vxe-table-column prop="address" label="Address" show-overflow></vxe-table-column>
+        </vxe-table>
+        `,
+        `
+        export default {
+          data () {
+            return {
+              tableData: []
+            }
+          },
+          created () {
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
+          }
+        }
+        `,
+        `
+        <vxe-table
+          highlight-hover-row
+          :data.sync="tableData"
+          :tooltip-config="{theme: 'light'}">
+          <vxe-table-column type="index" width="60"></vxe-table-column>
+          <vxe-table-column prop="address" label="超过隐藏时显示为省略号————————————" show-header-overflow show-overflow></vxe-table-column>
           <vxe-table-column prop="date" label="内容超过隐藏时显示为省略号并用原生 title 显示" show-overflow="title"></vxe-table-column>
           <vxe-table-column prop="age" label="表头超过隐藏时显示为省略号并 tooltip 显示——————————————" show-header-overflow></vxe-table-column>
           <vxe-table-column prop="address" label="Address" show-overflow></vxe-table-column>
