@@ -58,11 +58,11 @@
     "webpack-cli": "^3.3.1",
     "xe-ajax": "^3.5.3",
     "xe-ajax-mock": "^1.7.10",
-    "xe-utils": "^1.8.25"
+    "xe-utils": "^1.8.26"
   },
   "peerDependencies": {
     "vue": "^2.6.10",
-    "xe-utils": "^1.8.25"
+    "xe-utils": "^1.8.26"
   },
   "postcss": {
     "plugins": {

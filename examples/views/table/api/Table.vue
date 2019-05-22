@@ -1051,11 +1051,11 @@ export default {
             list: []
           },
           {
-            name: 'setRowExpansion',
+            name: 'setRowExpansion(rows,checked)',
             desc: '设置展开行，二个参数设置这一行展开与否',
             type: '',
             enum: '',
-            defVal: 'rows,checked(rows,checked)',
+            defVal: 'rows,checked',
             list: []
           },
           {
