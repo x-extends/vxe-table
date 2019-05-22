@@ -38,6 +38,22 @@ export default {
             enum: '',
             defVal: '',
             list: []
+          },
+          {
+            name: 'disabled',
+            desc: '是否禁用',
+            type: 'Boolean',
+            enum: '',
+            defVal: 'false',
+            list: []
+          },
+          {
+            name: 'name',
+            desc: '原生 name 属性',
+            type: 'String',
+            enum: '',
+            defVal: '',
+            list: []
           }
         ]
       },
