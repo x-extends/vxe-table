@@ -80,28 +80,7 @@ import VXETable from 'vxe-table'
 import 'vxe-table/lib/index.css'
 
 Vue.use(VXETable, {
-  // 默认尺寸
-  size: 'small',
-  // 自定义图标配置
-  iconMap: {
-    sortAsc: 'vxe-sort--asc-icon',
-    sortDesc: 'vxe-sort--desc-icon',
-    filter: 'vxe-filter--icon',
-    edit: 'vxe-edit--icon'
-  },
-  // 优化配置项
-  optimized: {
-    scrollX: {
-      gt: 60,
-      oSize: 5,
-      rSize: 16
-    },
-    scrollY: {
-      gt: 500,
-      oSize: 20,
-      rSize: 80
-    }
-  }
+  size: 'small'
 })
 ```
 

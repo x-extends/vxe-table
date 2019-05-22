@@ -54,8 +54,10 @@ export default {
     this.$nextTick(() => {
       this.$refs.xTable.reload([])
       setTimeout(() => {
-        let list = window.MOCK_DATA_LIST.slice(0, 100000)
-        this.$refs.xTable.reload(list)
+        if (this.$refs.xTable) {
+          let list = window.MOCK_DATA_LIST.slice(0, 100000)
+          this.$refs.xTable.reload(list)
+        }
         this.loading = false
       }, 500)
     })

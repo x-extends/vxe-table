@@ -357,6 +357,13 @@ export default {
               locat: {
                 name: 'TableScrollFullCols'
               }
+            },
+            {
+              lable: '无限滚动',
+              disabled: true,
+              locat: {
+                name: 'TableScroll'
+              }
             }
           ]
         },

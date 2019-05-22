@@ -29,8 +29,7 @@ export default {
     this.loading = true
     this.tableData = []
     setTimeout(() => {
-      let list = window.MOCK_DATA_LIST.slice(0, 10000)
-      this.tableData = list
+      this.tableData = window.MOCK_DATA_LIST.slice(0, 10000)
       this.tableColumn = window.MOCK_COLUMN_LIST.slice(0, 10000)
       this.loading = false
     }, 500)

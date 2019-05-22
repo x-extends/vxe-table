@@ -117,8 +117,7 @@ export default {
     }
   },
   created () {
-    let list = window.MOCK_DATA_LIST.slice(0, 200)
-    this.tableData = list
+    this.tableData = window.MOCK_DATA_LIST.slice(0, 200)
     this.loading = true
     setTimeout(() => {
       this.tableData2 = window.MOCK_DATA_LIST.slice(0, 10000)

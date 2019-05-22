@@ -2315,18 +2315,19 @@ export default {
         }
       }
       if (scrollXStore.visibleIndex !== toVisibleIndex) {
-        let isReload, preloadSize
+        let isReload
+        let preloadSize = 0
         let isLeft = scrollXStore.visibleIndex > toVisibleIndex
+        // 如果渲染数量不充足
+        let isTooLow = renderSize < visibleSize * 3
+        // 除去可视条数剩余数量
+        let residueSize = renderSize - visibleSize
         if (isLeft) {
-          preloadSize = renderSize - offsetSize
+          preloadSize = residueSize - (isTooLow ? Math.floor(residueSize / 2) : Math.floor(renderSize > visibleSize * 6 ? visibleSize * 3 : visibleSize * 1.5))
           isReload = toVisibleIndex - offsetSize <= startIndex
         } else {
-          preloadSize = offsetSize
+          preloadSize = isTooLow ? Math.floor(residueSize / 2) : Math.floor(renderSize > visibleSize * 6 ? visibleSize * 3 : visibleSize * 1.5)
           isReload = toVisibleIndex + visibleSize + offsetSize >= startIndex + renderSize
-        }
-        // 如果渲染数量不充足，直接从当前页开始渲染
-        if (renderSize < visibleSize * 3) {
-          preloadSize = 0
         }
         if (isReload) {
           scrollXStore.visibleIndex = toVisibleIndex
@@ -2377,29 +2378,32 @@ export default {
     computeScrollLoad () {
       let { scrollXLoad, scrollYLoad, scrollYStore, scrollXStore, visibleColumn, optimizeConfig } = this
       let { scrollX, scrollY } = optimizeConfig
-      let tableBodyElem = this.$refs.tableBody.$el
+      let tableBody = this.$refs.tableBody
+      let tableBodyElem = tableBody ? tableBody.$el : null
       let tableHeader = this.$refs.tableHeader
-      // 计算 X 逻辑
-      if (scrollXLoad) {
+      if (tableBodyElem) {
+        // 计算 X 逻辑
+        if (scrollXLoad) {
         // 无法预知，默认取前 10 条平均宽度进行运算
-        scrollXStore.visibleSize = scrollX.vSize || Math.ceil(tableBodyElem.clientWidth / (visibleColumn.slice(0, 10).reduce((previous, column) => previous + column.renderWidth, 0) / 10))
-        this.updateScrollXSpace()
-      }
-      // 计算 Y 逻辑
-      if (scrollYLoad) {
-        if (scrollY.rHeight) {
-          scrollYStore.rowHeight = scrollY.rHeight
-        } else {
-          let firstTrElem = tableBodyElem.querySelector('tbody>tr')
-          if (!firstTrElem && tableHeader) {
-            firstTrElem = tableHeader.$el.querySelector('thead>tr')
-          }
-          if (firstTrElem) {
-            scrollYStore.rowHeight = firstTrElem.clientHeight
-          }
+          scrollXStore.visibleSize = scrollX.vSize || Math.ceil(tableBodyElem.clientWidth / (visibleColumn.slice(0, 10).reduce((previous, column) => previous + column.renderWidth, 0) / 10))
+          this.updateScrollXSpace()
         }
-        scrollYStore.visibleSize = scrollY.vSize || Math.ceil(tableBodyElem.clientHeight / scrollYStore.rowHeight)
-        this.updateScrollYSpace()
+        // 计算 Y 逻辑
+        if (scrollYLoad) {
+          if (scrollY.rHeight) {
+            scrollYStore.rowHeight = scrollY.rHeight
+          } else {
+            let firstTrElem = tableBodyElem.querySelector('tbody>tr')
+            if (!firstTrElem && tableHeader) {
+              firstTrElem = tableHeader.$el.querySelector('thead>tr')
+            }
+            if (firstTrElem) {
+              scrollYStore.rowHeight = firstTrElem.clientHeight
+            }
+          }
+          scrollYStore.visibleSize = scrollY.vSize || Math.ceil(tableBodyElem.clientHeight / scrollYStore.rowHeight)
+          this.updateScrollYSpace()
+        }
       }
     },
     // 更新 X 滚动上下剩余空间大小
