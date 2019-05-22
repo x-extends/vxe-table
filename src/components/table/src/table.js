@@ -2349,18 +2349,19 @@ export default {
       let scrollTop = scrollBodyElem.scrollTop
       let toVisibleIndex = Math.ceil(scrollTop / rowHeight)
       if (scrollYStore.visibleIndex !== toVisibleIndex) {
-        let isReload, preloadSize
+        let isReload
+        let preloadSize = 0
         let isTop = scrollYStore.visibleIndex > toVisibleIndex
+        // 如果渲染数量不充足
+        let isTooLow = renderSize < visibleSize * 3
+        // 除去可视条数剩余数量
+        let residueSize = renderSize - visibleSize
         if (isTop) {
-          preloadSize = renderSize - offsetSize
+          preloadSize = residueSize - (isTooLow ? Math.floor(residueSize / 2) : Math.floor(renderSize > visibleSize * 6 ? visibleSize * 3 : visibleSize * 1.5))
           isReload = toVisibleIndex - offsetSize <= startIndex
         } else {
-          preloadSize = offsetSize
+          preloadSize = isTooLow ? Math.floor(residueSize / 2) : Math.floor(renderSize > visibleSize * 6 ? visibleSize * 3 : visibleSize * 1.5)
           isReload = toVisibleIndex + visibleSize + offsetSize >= startIndex + renderSize
-        }
-        // 如果渲染数量不充足，直接从当前页开始渲染
-        if (renderSize < visibleSize * 3) {
-          preloadSize = 0
         }
         if (isReload) {
           scrollYStore.visibleIndex = toVisibleIndex

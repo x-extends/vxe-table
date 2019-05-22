@@ -15,7 +15,7 @@
       :footer-method="footerMethod"
       :footer-cell-class-name="footerCellClassName"
       :loading="loading"
-      :optimized="{scrollX: {gt: 20, oSize: 4, rSize: 8}, scrollY: {gt: 500, oSize: 15, rSize: 40}}">
+      :optimized="{scrollX: {gt: 20, oSize: 4, rSize: 8}, scrollY: {gt: 500, oSize: 20, rSize: 50}}">
       <vxe-table-column type="index" width="100" fixed="left"></vxe-table-column>
       <vxe-table-column v-for="(item, index) in tableColumn" :key="index" prop="name" :label="`column_${index}`" width="200"></vxe-table-column>
       <vxe-table-column prop="rate" label="Rate" width="200" fixed="right"></vxe-table-column>

@@ -1,13 +1,13 @@
 <template>
   <div>
-    <p>设置 edit-config 的 activeMethod 方法判断是否禁用</p>
+    <p>设置 edit-config 的 activeMethod 方法判断单元格是否禁用</p>
 
     <vxe-table
       ref="xTable"
       border
       show-all-overflow
       :data.sync="tableData"
-      :edit-config="{trigger: 'click', mode: 'cell', activeMethod}"
+      :edit-config="{trigger: 'click', mode: 'cell', activeMethod: activeCellMethod}"
       @edit-disabled="editDisabledEvent">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column prop="name" label="Name" :edit-render="{name: 'input'}"></vxe-table-column>
@@ -20,6 +20,28 @@
     <pre>
       <code class="xml">{{ demoCodes[0] }}</code>
       <code class="javascript">{{ demoCodes[1] }}</code>
+    </pre>
+
+    <P>禁用行编辑</P>
+
+    <vxe-table
+      ref="xTable"
+      border
+      show-all-overflow
+      :data.sync="tableData"
+      :edit-config="{trigger: 'click', mode: 'row', activeMethod: activeRowMethod}"
+      @edit-disabled="editDisabledEvent">
+      <vxe-table-column type="index" width="60"></vxe-table-column>
+      <vxe-table-column prop="name" label="Name" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column prop="sex" label="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column prop="date" label="Date" :edit-render="{name: 'input'}"></vxe-table-column>
+    </vxe-table>
+
+    <p class="demo-code">显示代码</p>
+
+    <pre>
+      <code class="xml">{{ demoCodes[2] }}</code>
+      <code class="javascript">{{ demoCodes[3] }}</code>
     </pre>
   </div>
 </template>
@@ -38,7 +60,7 @@ export default {
           border
           show-all-overflow
           :data.sync="tableData"
-          :edit-config="{trigger: 'click', mode: 'cell', activeMethod}"
+          :edit-config="{trigger: 'click', mode: 'cell', activeMethod: activeCellMethod}"
           @edit-disabled="editDisabledEvent">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column prop="name" label="Name" :edit-render="{name: 'input'}"></vxe-table-column>
@@ -57,10 +79,50 @@ export default {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
           },
           methods: {
-            activeMethod ({ row, rowIndex }) {
+            activeCellMethod ({ column, columnIndex }) {
+              return columnIndex !== 1
+            },
+            activeRowMethod ({ row, rowIndex }) {
               return rowIndex !== 1
             },
-            editDisabledEvent () {
+            editDisabledEvent ({ row, column }) {
+              alert('禁止编辑')
+            }
+          }
+        }
+        `,
+        `
+        <vxe-table
+          ref="xTable"
+          border
+          show-all-overflow
+          :data.sync="tableData"
+          :edit-config="{trigger: 'click', mode: 'row', , activeMethod: activeRowMethod}"
+          @edit-disabled="editDisabledEvent">
+          <vxe-table-column type="index" width="60"></vxe-table-column>
+          <vxe-table-column prop="name" label="Name" :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column prop="sex" label="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column prop="date" label="Date" :edit-render="{name: 'input'}"></vxe-table-column>
+        </vxe-table>
+        `,
+        `
+        export default {
+          data () {
+            return {
+              tableData: []
+            }
+          },
+          created () {
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
+          },
+          methods: {
+            activeCellMethod ({ column, columnIndex }) {
+              return columnIndex !== 1
+            },
+            activeRowMethod ({ row, rowIndex }) {
+              return rowIndex !== 1
+            },
+            editDisabledEvent ({ row, column }) {
               alert('禁止编辑')
             }
           }
@@ -79,10 +141,13 @@ export default {
     })
   },
   methods: {
-    activeMethod ({ row, rowIndex }) {
+    activeCellMethod ({ column, columnIndex }) {
+      return columnIndex !== 1
+    },
+    activeRowMethod ({ row, rowIndex }) {
       return rowIndex !== 1
     },
-    editDisabledEvent () {
+    editDisabledEvent ({ row, column }) {
       alert('禁止编辑')
     }
   }
