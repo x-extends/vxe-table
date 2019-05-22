@@ -1123,7 +1123,7 @@ export default {
                 !DomTools.getEventTargetNode(evnt, this.$el).flag
               ) {
                 this.triggerValidate().then(() => {
-                  setTimeout(() => this.clearActived(evnt), 100)
+                  this.clearActived(evnt)
                 }).catch(e => e)
               }
             }
