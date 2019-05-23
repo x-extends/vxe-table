@@ -3,6 +3,15 @@ import XEUtils from 'xe-utils'
 var columnId = 0
 
 const UtilTools = {
+  getRowId ($table, row, rowIndex) {
+    let { rowKey, treeConfig, expandeds } = $table
+    if (!rowKey) {
+      if (treeConfig || expandeds) {
+        rowKey = (treeConfig || expandeds).key
+      }
+    }
+    return rowKey ? XEUtils.get(row, rowKey) : rowIndex
+  },
   // 触发事件
   emitEvent (_vm, type, args) {
     if (_vm.$listeners[type]) {

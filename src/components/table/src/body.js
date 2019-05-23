@@ -1,6 +1,7 @@
 import XEUtils from 'xe-utils'
 import DomTools from '../../../tools/dom'
 import GlobalConfig from '../../../conf'
+import UtilTools from '../../../tools/utils'
 
 // 处理选中位置
 function handleLocation (obj, rows, columns, row, column) {
@@ -168,7 +169,7 @@ function renderRows (h, _vm, $table, rowLevel, fixedType, tableData, tableColumn
     }
     rows.push(
       h('tr', {
-        class: ['vxe-body--row', `row--${id}_${rowIndex}`, {
+        class: ['vxe-body--row', `row--${id}_${UtilTools.getRowId($table, row, rowIndex)}`, {
           [`row--level-${rowLevel}`]: treeConfig,
           'row--selected': row === selectRow,
           'row--hover': row === hoverRow
