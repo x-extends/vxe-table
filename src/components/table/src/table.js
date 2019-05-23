@@ -2631,7 +2631,7 @@ export default {
      * 参数：required=Boolean 是否必填，min=Number 最小长度，max=Number 最大长度，validator=Function(rule, value, callback) 自定义校验，trigger=blur|change 触发方式
      */
     validCellRules (type, row, column) {
-      let { editRules } = this
+      let { editRules, tableFullData, visibleColumn } = this
       let { property } = column
       let validPromise = Promise.resolve()
       if (property && !XEUtils.isEmpty(editRules)) {
@@ -2650,7 +2650,7 @@ export default {
                       return reject(cusRule)
                     }
                     return resolve()
-                  })
+                  }, { rules, row, column, rowIndex: tableFullData.indexOf(row), columnIndex: visibleColumn.indexOf(column), $table: this })
                 } else {
                   let restVal
                   let isNumber = rule.type === 'number'
