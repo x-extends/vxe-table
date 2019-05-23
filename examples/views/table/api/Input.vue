@@ -6,9 +6,9 @@
       :tree-config="{key: 'id', children: 'list', expandRowKeys: defaultExpandRowKeys, trigger: 'cell'}">
       <vxe-table-column prop="name" label="属性" width="280" tree-node></vxe-table-column>
       <vxe-table-column prop="desc" label="说明"></vxe-table-column>
-      <vxe-table-column prop="type" label="类型" width="140"></vxe-table-column>
+      <vxe-table-column prop="type" label="类型 / 返回类型" width="160"></vxe-table-column>
       <vxe-table-column prop="enum" label="可选值" width="180"></vxe-table-column>
-      <vxe-table-column prop="defVal" label="默认值或参数" width="180"></vxe-table-column>
+      <vxe-table-column prop="defVal" label="默认值 / 参数" width="180"></vxe-table-column>
     </vxe-table>
   </div>
 </template>

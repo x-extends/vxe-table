@@ -2183,18 +2183,16 @@ export default {
      * 处理默认展开行
      */
     handleDefaultRowExpand () {
-      let { rowKey, expandConfig, tableFullData } = this
-      if (expandConfig) {
-        let { key, expandAll, expandRowKeys } = expandConfig
+      let { rowKey, expandConfig = {}, tableFullData } = this
+      let { key, expandAll, expandRowKeys } = expandConfig
+      if (expandAll) {
+        this.expandeds = tableFullData.slice(0)
+      } else if (expandRowKeys) {
         let property = rowKey || key
-        if (expandAll) {
-          this.expandeds = tableFullData.slice(0)
-        } else if (expandRowKeys) {
-          if (!property) {
-            throw new Error('[vxe-table] Expand rows must have a unique primary key.')
-          }
-          this.expandeds = expandRowKeys.map(rowKey => tableFullData.find(item => rowKey === item[property]))
+        if (!property) {
+          throw new Error('[vxe-table] Expand rows must have a unique primary key.')
         }
+        this.expandeds = expandRowKeys.map(rowKey => tableFullData.find(item => rowKey === item[property]))
       }
     },
     /**
@@ -2203,23 +2201,32 @@ export default {
      * 支持多行
      */
     setRowExpansion (rows, expanded) {
-      let { expandeds } = this
+      let { expandeds, expandConfig = {} } = this
       let isToggle = arguments.length === 1
-      if (rows && !XEUtils.isArray(rows)) {
-        rows = [rows]
-      }
-      rows.forEach(row => {
-        let index = expandeds.indexOf(row)
-        if (index > -1) {
-          if (isToggle || !expanded) {
-            expandeds.splice(index, 1)
-          }
-        } else {
-          if (isToggle || expanded) {
-            expandeds.push(row)
-          }
+      if (rows) {
+        if (!XEUtils.isArray(rows)) {
+          rows = [rows]
         }
-      })
+        if (expandConfig.accordion) {
+          rows.slice(rows.length - 1, rows.length)
+        }
+        rows.forEach(row => {
+          let index = expandeds.indexOf(row)
+          if (expandConfig.accordion) {
+            // 只能同时展开一个
+            expandeds.length = 0
+          }
+          if (index > -1) {
+            if (isToggle || !expanded) {
+              expandeds.splice(index, 1)
+            }
+          } else {
+            if (isToggle || expanded) {
+              expandeds.push(row)
+            }
+          }
+        })
+      }
       return this.$nextTick()
     },
     clearRowExpand () {
@@ -2274,27 +2281,37 @@ export default {
      * 支持多行
      */
     setTreeExpansion (rows, expanded) {
-      let { treeExpandeds, treeConfig } = this
+      let { tableFullData, treeExpandeds, treeConfig } = this
       let { children } = treeConfig
       let isToggle = arguments.length === 1
-      if (rows && !XEUtils.isArray(rows)) {
-        rows = [rows]
-      }
-      rows.forEach(row => {
-        let rowChildren = row[children]
-        if (rowChildren && rowChildren.length) {
-          let index = treeExpandeds.indexOf(row)
-          if (index > -1) {
-            if (isToggle || !expanded) {
-              treeExpandeds.splice(index, 1)
+      if (rows) {
+        if (!XEUtils.isArray(rows)) {
+          rows = [rows]
+        }
+        if (treeConfig.accordion) {
+          rows.slice(rows.length - 1, rows.length)
+        }
+        rows.forEach(row => {
+          let rowChildren = row[children]
+          if (rowChildren && rowChildren.length) {
+            let index = treeExpandeds.indexOf(row)
+            if (treeConfig.accordion) {
+              // 同一级只能展开一个
+              let matchObj = XEUtils.findTree(tableFullData, item => item === row, treeConfig)
+              XEUtils.remove(treeExpandeds, item => matchObj.items.indexOf(item) > -1)
             }
-          } else {
-            if (isToggle || expanded) {
-              treeExpandeds.push(row)
+            if (index > -1) {
+              if (isToggle || !expanded) {
+                treeExpandeds.splice(index, 1)
+              }
+            } else {
+              if (isToggle || expanded) {
+                treeExpandeds.push(row)
+              }
             }
           }
-        }
-      })
+        })
+      }
       return this.$nextTick()
     },
     clearTreeExpand () {

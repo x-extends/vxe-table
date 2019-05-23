@@ -6,9 +6,9 @@
       :tree-config="{key: 'id', children: 'list', expandRowKeys: defaultExpandRowKeys, trigger: 'cell'}">
       <vxe-table-column prop="name" label="属性" width="280" tree-node></vxe-table-column>
       <vxe-table-column prop="desc" label="说明"></vxe-table-column>
-      <vxe-table-column prop="type" label="类型" width="140"></vxe-table-column>
+      <vxe-table-column prop="type" label="类型 / 返回类型" width="160"></vxe-table-column>
       <vxe-table-column prop="enum" label="可选值" width="180"></vxe-table-column>
-      <vxe-table-column prop="defVal" label="默认值或参数" width="180"></vxe-table-column>
+      <vxe-table-column prop="defVal" label="默认值 / 参数" width="180"></vxe-table-column>
     </vxe-table>
   </div>
 </template>
@@ -405,6 +405,14 @@ export default {
                 list: []
               },
               {
+                name: 'accordion',
+                desc: '对于同一级的节点，每次只能展开一个',
+                type: 'Boolean',
+                enum: '',
+                defVal: 'false',
+                list: []
+              },
+              {
                 name: 'trigger',
                 desc: '触发方式',
                 type: 'String',
@@ -443,6 +451,30 @@ export default {
                 type: 'Number',
                 enum: '',
                 defVal: '16',
+                list: []
+              },
+              {
+                name: 'expandAll',
+                desc: '默认展开所有子孙树节点',
+                type: 'Boolean',
+                enum: '',
+                defVal: 'false',
+                list: []
+              },
+              {
+                name: 'expandRowKeys',
+                desc: '默认展开指定树节点',
+                type: 'Array',
+                enum: '',
+                defVal: '',
+                list: []
+              },
+              {
+                name: 'accordion',
+                desc: '对于同一级的节点，每次只能展开一个',
+                type: 'Boolean',
+                enum: '',
+                defVal: 'false',
                 list: []
               },
               {
@@ -917,7 +949,7 @@ export default {
           {
             name: 'load()',
             desc: '加载化数据',
-            type: '',
+            type: 'Promise',
             enum: '',
             defVal: 'data',
             list: []
@@ -925,7 +957,7 @@ export default {
           {
             name: 'reload()',
             desc: '加载化数据，恢复初始状态',
-            type: '',
+            type: 'Promise',
             enum: '',
             defVal: 'data',
             list: []
@@ -933,7 +965,7 @@ export default {
           {
             name: 'insert(records)',
             desc: '从第一行新增一行或多行新数据',
-            type: '',
+            type: 'Promise<{row, rows}>',
             enum: '',
             defVal: 'records',
             list: []
@@ -941,7 +973,7 @@ export default {
           {
             name: 'insertAt(records,row)',
             desc: '从指定位置插入一行或多行；第二个参数：row 指定位置、null 从第一行插入、-1 从最后插入',
-            type: '',
+            type: 'Promise<{row, rows}>',
             enum: '',
             defVal: 'records,row',
             list: []
@@ -949,7 +981,7 @@ export default {
           {
             name: 'revert(rows,prop)',
             desc: '还原更改，还原指定行 row 或者整个表格的数据',
-            type: '',
+            type: 'Promise',
             enum: '',
             defVal: 'rows?,prop?',
             list: []
@@ -957,7 +989,7 @@ export default {
           {
             name: 'remove(rows)',
             desc: '删除指定行数据，指定 row 或 [row, ...] 删除多条数据',
-            type: '',
+            type: 'Promise<{row, rows}>',
             enum: '',
             defVal: 'rows',
             list: []
@@ -965,7 +997,7 @@ export default {
           {
             name: 'getRecords(rowIndex)',
             desc: '获取表格所有数据，和 data 属性一致行为，也可以指定索引获取数据',
-            type: '',
+            type: 'Array',
             enum: '',
             defVal: 'rowIndex?',
             list: []
@@ -973,7 +1005,7 @@ export default {
           {
             name: 'getColumns(columnIndex)',
             desc: '获取表格所有列，也可以指定索引获取列',
-            type: '',
+            type: 'Array',
             enum: '',
             defVal: 'columnIndex?',
             list: []
@@ -981,7 +1013,7 @@ export default {
           {
             name: 'getAllRecords()',
             desc: '获取表格数据集合',
-            type: '',
+            type: 'Array<{records, selecteds, insertRecords, removeRecords, updateRecords}>',
             enum: '',
             defVal: '',
             list: []
@@ -989,7 +1021,7 @@ export default {
           {
             name: 'getInsertRecords()',
             desc: '获取新增数据',
-            type: '',
+            type: 'Array',
             enum: '',
             defVal: '',
             list: []
@@ -997,7 +1029,7 @@ export default {
           {
             name: 'getRemoveRecords()',
             desc: '获取已删除数据',
-            type: '',
+            type: 'Array',
             enum: '',
             defVal: '',
             list: []
@@ -1005,7 +1037,7 @@ export default {
           {
             name: 'getUpdateRecords()',
             desc: '获取已修改数据',
-            type: '',
+            type: 'Array',
             enum: '',
             defVal: '',
             list: []
@@ -1013,7 +1045,7 @@ export default {
           {
             name: 'getSelectRecords()',
             desc: '获取已选中数据',
-            type: '',
+            type: 'Array',
             enum: '',
             defVal: '',
             list: []
@@ -1021,7 +1053,7 @@ export default {
           {
             name: 'hasRowChange(row,prop)',
             desc: '检查行或列数据是否发生改变',
-            type: '',
+            type: 'Boolean',
             enum: '',
             defVal: 'row,prop?',
             list: []
@@ -1029,7 +1061,7 @@ export default {
           {
             name: 'setActiveRow(row)',
             desc: '只对 mode=cell 有效，激活行编辑',
-            type: '',
+            type: 'Promise',
             enum: '',
             defVal: 'row',
             list: []
@@ -1037,7 +1069,7 @@ export default {
           {
             name: 'setActiveCell(row,prop)',
             desc: '只对 mode=row 有效，激活单元格编辑',
-            type: '',
+            type: 'Promise',
             enum: '',
             defVal: 'row,prop',
             list: []
@@ -1045,7 +1077,7 @@ export default {
           {
             name: 'setSelectCell(row,prop)',
             desc: '只对 trigger!=manual 有效，选中单元格',
-            type: '',
+            type: 'Promise',
             enum: '',
             defVal: 'row,prop',
             list: []
@@ -1053,7 +1085,7 @@ export default {
           {
             name: 'setRowExpansion(rows,checked)',
             desc: '设置展开行，二个参数设置这一行展开与否',
-            type: '',
+            type: 'Promise',
             enum: '',
             defVal: 'rows,checked',
             list: []
@@ -1061,7 +1093,7 @@ export default {
           {
             name: 'setTreeExpansion(rows,checked)',
             desc: '设置展开树形节点，二个参数设置这一行展开与否',
-            type: '',
+            type: 'Promise',
             enum: '',
             defVal: 'rows,checked',
             list: []
@@ -1069,7 +1101,7 @@ export default {
           {
             name: 'setCurrentRow(rows,checked)',
             desc: '用于单选表格，设置某一行为选中状态，第二个参数为选中与否',
-            type: '',
+            type: 'Promise',
             enum: '',
             defVal: 'rows,checked',
             list: []
@@ -1077,7 +1109,7 @@ export default {
           {
             name: 'setSelection(rows,checked)',
             desc: '用于多选表格，设置行为选中状态，第二个参数为选中与否',
-            type: '',
+            type: 'Promise',
             enum: '',
             defVal: 'rows,checked',
             list: []
@@ -1085,7 +1117,7 @@ export default {
           {
             name: 'setAllSelection(checked)',
             desc: '用于多选表格，设置所有行的选中状态',
-            type: '',
+            type: 'Promise',
             enum: '',
             defVal: 'checked',
             list: []
@@ -1093,7 +1125,7 @@ export default {
           {
             name: 'toggleRowSelection(row)',
             desc: '用于多选表格，切换某一行的选中状态',
-            type: '',
+            type: 'Promise',
             enum: '',
             defVal: 'row',
             list: []
@@ -1101,7 +1133,7 @@ export default {
           {
             name: 'toggleAllSelection()',
             desc: '用于多选表格，切换所有行的选中状态',
-            type: '',
+            type: 'Promise',
             enum: '',
             defVal: '',
             list: []
@@ -1109,7 +1141,7 @@ export default {
           {
             name: 'toggleRowExpansion(row)',
             desc: '用于可展开表格，切换展开行',
-            type: '',
+            type: 'Promise',
             enum: '',
             defVal: 'row',
             list: []
@@ -1117,7 +1149,7 @@ export default {
           {
             name: 'toggleTreeExpansion(row)',
             desc: '用于可树形表格，切换展开树形节点',
-            type: '',
+            type: 'Promise',
             enum: '',
             defVal: 'row',
             list: []
@@ -1125,7 +1157,7 @@ export default {
           {
             name: 'clearCurrentRow()',
             desc: '用于单选表格，清空用户的选择',
-            type: '',
+            type: 'Promise',
             enum: '',
             defVal: '',
             list: []
@@ -1133,7 +1165,7 @@ export default {
           {
             name: 'clearSelection()',
             desc: '用于多选表格，清空用户的选择',
-            type: '',
+            type: 'Promise',
             enum: '',
             defVal: '',
             list: []
@@ -1141,7 +1173,7 @@ export default {
           {
             name: 'clearRowExpand()',
             desc: '清空展开行状态，数据会恢复成未展开的状态',
-            type: '',
+            type: 'Promise',
             enum: '',
             defVal: '',
             list: []
@@ -1149,7 +1181,7 @@ export default {
           {
             name: 'clearTreeExpand()',
             desc: '清空树形节点的展开状态，数据会恢复成未展开的状态',
-            type: '',
+            type: 'Promise',
             enum: '',
             defVal: '',
             list: []
@@ -1157,7 +1189,7 @@ export default {
           {
             name: 'clearSort()',
             desc: '清空排序条件，数据会恢复成未排序的状态',
-            type: '',
+            type: 'Promise',
             enum: '',
             defVal: '',
             list: []
@@ -1165,7 +1197,7 @@ export default {
           {
             name: 'clearFilter()',
             desc: '清空筛选条件，数据会恢复成未筛选的状态',
-            type: '',
+            type: 'Promise',
             enum: '',
             defVal: '',
             list: []
@@ -1173,7 +1205,7 @@ export default {
           {
             name: 'clearChecked()',
             desc: '清除单元格批量选中状态',
-            type: '',
+            type: 'Promise',
             enum: '',
             defVal: '',
             list: []
@@ -1181,7 +1213,7 @@ export default {
           {
             name: 'clearSelected()',
             desc: '清除单元格选中状态',
-            type: '',
+            type: 'Promise',
             enum: '',
             defVal: '',
             list: []
@@ -1189,7 +1221,7 @@ export default {
           {
             name: 'clearActived()',
             desc: '清除单元格激活状态',
-            type: '',
+            type: 'Promise',
             enum: '',
             defVal: '',
             list: []
@@ -1197,7 +1229,7 @@ export default {
           {
             name: 'clearCopyed()',
             desc: '清空已复制的内容',
-            type: '',
+            type: 'Promise',
             enum: '',
             defVal: '',
             list: []
@@ -1205,7 +1237,7 @@ export default {
           {
             name: 'clearData()',
             desc: '清空单元格内容',
-            type: '',
+            type: 'Promise',
             enum: '',
             defVal: 'rows?,prop?',
             list: []
@@ -1213,7 +1245,7 @@ export default {
           {
             name: 'clearScroll()',
             desc: '清除滚动相关信息，还原到初始状态',
-            type: '',
+            type: 'Promise',
             enum: '',
             defVal: '',
             list: []
@@ -1221,7 +1253,7 @@ export default {
           {
             name: 'closeFilter()',
             desc: '手动关闭筛选面板',
-            type: '',
+            type: 'Promise',
             enum: '',
             defVal: '',
             list: []
@@ -1229,7 +1261,7 @@ export default {
           {
             name: 'clostTooltip()',
             desc: '手动关闭 tooltip 提示',
-            type: '',
+            type: 'Promise',
             enum: '',
             defVal: '',
             list: []
@@ -1237,7 +1269,7 @@ export default {
           {
             name: 'closeContextMenu()',
             desc: '手动关闭快捷菜单',
-            type: '',
+            type: 'Promise',
             enum: '',
             defVal: '',
             list: []
@@ -1245,7 +1277,7 @@ export default {
           {
             name: 'recalculate()',
             desc: '重新计算并更新列宽',
-            type: '',
+            type: 'Promise',
             enum: '',
             defVal: '',
             list: []
@@ -1253,7 +1285,7 @@ export default {
           {
             name: 'updateStatus(scope)',
             desc: '更新单元格状态（只对 showStatus=true 并且使用自定义渲染时，当值发生改变时才需要调用）',
-            type: '',
+            type: 'Promise',
             enum: '',
             defVal: '',
             list: []
@@ -1261,7 +1293,7 @@ export default {
           {
             name: 'isScrollXLoad()',
             desc: '判断是否启用了横向 X 滚动渲染',
-            type: '',
+            type: 'Boolean',
             enum: '',
             defVal: '',
             list: []
@@ -1269,7 +1301,7 @@ export default {
           {
             name: 'isScrollYLoad()',
             desc: '判断是否启用了纵向 Y 滚动渲染',
-            type: '',
+            type: 'Boolean',
             enum: '',
             defVal: '',
             list: []
@@ -1277,7 +1309,7 @@ export default {
           {
             name: 'sort(prop,order)',
             desc: '手动对表格进行排序',
-            type: '',
+            type: 'Promise',
             enum: '',
             defVal: 'prop,order',
             list: []
@@ -1285,7 +1317,7 @@ export default {
           {
             name: 'validateRow(row,callback)',
             desc: '对表格某一行进行校验的方法，参数为行数据和一个回调函数。该回调函数会在校验结束后被调用，并传入两个参数：（是否校验成功，最近一列未通过校验的字段）。若不传入回调函数，则会返回一个 promise',
-            type: '',
+            type: 'Promise',
             enum: '',
             defVal: 'row,callback?',
             list: []
@@ -1293,7 +1325,7 @@ export default {
           {
             name: 'validate(callback)',
             desc: '对整个表格进行校验的方法，参数为一个回调函数。该回调函数会在校验结束后被调用，并传入两个参数：（是否校验成功，最近一列未通过校验的字段）。若不传入回调函数，则会返回一个 promise',
-            type: '',
+            type: 'Promise',
             enum: '',
             defVal: 'callback?',
             list: []
@@ -1301,7 +1333,7 @@ export default {
           {
             name: 'exportCsv(options)',
             desc: '将表格数据导出为 .csv 文件，说明：支持IE9+、Edge、Chrome、Firefox 等常用浏览器。IE11以下可能存在中文乱码问题，部分浏览器需要手动修改后缀名为 .csv',
-            type: 'Object',
+            type: 'Promise',
             enum: '',
             defVal: 'options',
             list: [
