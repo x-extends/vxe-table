@@ -22,7 +22,7 @@
       <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
 
-    <P>配合自定义渲染，第三行name禁止编辑禁</P>
+    <P>配合自定义渲染，第三行name禁止编辑禁 age 小于 26</P>
 
     <vxe-table
       ref="xTable"
@@ -36,9 +36,9 @@
           <input type="text" v-model="row.name">
         </template>
       </vxe-table-column>
-      <vxe-table-column prop="sex" label="Sex" :edit-render="{type: 'default'}">
-        <template v-slot:edit="{ row }">
-          <input type="sex" v-model="row.name" :disabled="row.disabled">
+      <vxe-table-column prop="age" label="Age" :edit-render="{type: 'default'}">
+        <template v-slot:edit="scope">
+          <input type="text" v-model="scope.row.name" :disabled="disableMethod(scope)">
         </template>
       </vxe-table-column>
       <vxe-table-column prop="date" label="Date" :edit-render="{type: 'default'}">
@@ -146,11 +146,7 @@ export default {
   },
   created () {
     let list = window.MOCK_DATA_LIST.slice(0, 6)
-    this.tableData = list.map((item, index) => {
-      return Object.assign({
-        disabled: index === 2
-      }, item)
-    })
+    this.tableData = list
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
@@ -160,6 +156,9 @@ export default {
   methods: {
     activeRowMethod ({ row, rowIndex }) {
       return rowIndex !== 1
+    },
+    disableMethod ({ row, column }) {
+      return column.property === 'age' && row.age < 26
     },
     editDisabledEvent ({ row, column }) {
       alert('禁止编辑')
