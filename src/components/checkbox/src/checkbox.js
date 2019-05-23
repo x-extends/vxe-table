@@ -8,25 +8,27 @@ export default {
     size: String
   },
   render (h) {
+    let { disabled, size, indeterminate, value } = this
     return h('label', {
-      class: ['vxe-checkbox', this.size ? `size--${this.size}` : '', {
-        'is--indeterminate': this.indeterminate,
-        'is--disabled': this.disabled
+      class: ['vxe-checkbox', size ? `size--${size}` : '', {
+        'is--indeterminate': indeterminate,
+        'is--disabled': disabled
       }]
     }, [
       h('input', {
         attrs: {
-          type: 'checkbox'
+          type: 'checkbox',
+          disabled
         },
         domProps: {
-          checked: this.value
+          checked: value
         },
         on: {
           change: evnt => {
             if (!this.disabled) {
-              let value = evnt.target.checked
-              this.$emit('input', value)
-              this.$emit('change', value, evnt)
+              let checked = evnt.target.checked
+              this.$emit('input', checked)
+              this.$emit('change', checked, evnt)
             }
           }
         }

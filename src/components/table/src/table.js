@@ -841,6 +841,9 @@ export default {
       return { fullData, tableData: scrollYLoad ? fullData.slice(scrollYStore.startIndex, scrollYStore.startIndex + scrollYStore.renderSize) : fullData.slice(0) }
     },
     handleDefaultExpand () {
+      if (this.selectConfig) {
+        this.handleDefaultRowChecked()
+      }
       if (this.expandConfig) {
         this.handleDefaultRowExpand()
       }
@@ -1538,6 +1541,22 @@ export default {
       })
       return this.$nextTick()
     },
+    /**
+     * 处理默认勾选
+     */
+    handleDefaultRowChecked () {
+      let { rowKey, selectConfig = {}, tableFullData } = this
+      let { key, checkAll, checkRowKeys } = selectConfig
+      if (checkAll) {
+        this.setAllSelection(true)
+      } else if (checkRowKeys) {
+        let property = rowKey || key
+        if (!property) {
+          throw new Error('[vxe-table] Checked rows must have a unique primary key.')
+        }
+        this.setSelection(checkRowKeys.map(rowKey => tableFullData.find(item => rowKey === item[property])), true)
+      }
+    },
     setSelection (rows, value) {
       if (rows && !XEUtils.isArray(rows)) {
         rows = [rows]
@@ -1550,63 +1569,124 @@ export default {
      * value 选中true 不选false 不确定-1
      */
     triggerCheckRowEvent (evnt, { row }, value) {
-      let { selection, tableFullData, treeConfig, treeIndeterminates } = this
-      if (treeConfig) {
-        if (value === -1) {
-          treeIndeterminates.push(row)
-          XEUtils.remove(selection, item => item === row)
-        } else {
-          // 更新子节点状态
-          XEUtils.eachTree([row], item => {
-            if (value) {
-              if (selection.indexOf(item) === -1) {
-                selection.push(item)
-              }
+      let { selection, tableFullData, selectConfig = {}, treeConfig, treeIndeterminates } = this
+      let { prop: property, selectMethod } = selectConfig
+      if (selectMethod && selectMethod({ row, rowIndex: tableFullData.indexOf(row) })) {
+        if (property) {
+          if (treeConfig) {
+            if (value === -1) {
+              treeIndeterminates.push(row)
+              UtilTools.setCellValue(row, property, false)
             } else {
-              XEUtils.remove(selection, select => select === item)
+              // 更新子节点状态
+              XEUtils.eachTree([row], item => UtilTools.setCellValue(item, property, value), treeConfig)
+              XEUtils.remove(treeIndeterminates, item => item === row)
             }
-          }, treeConfig)
-          XEUtils.remove(treeIndeterminates, item => item === row)
-        }
-        // 如果存在父节点，更新父节点状态
-        let matchObj = XEUtils.findTree(tableFullData, item => item === row, treeConfig)
-        if (matchObj.parent) {
-          let selectItems = matchObj.items.filter(item => selection.indexOf(item) > -1)
-          return this.triggerCheckRowEvent(evnt, { row: matchObj.parent }, selectItems.length === matchObj.items.length ? true : (selectItems.length || value === -1 ? -1 : false))
-        }
-      } else {
-        if (value) {
-          if (selection.indexOf(row) === -1) {
-            selection.push(row)
+            // 如果存在父节点，更新父节点状态
+            let matchObj = XEUtils.findTree(tableFullData, item => item === row, treeConfig)
+            if (matchObj.parent) {
+              let selectItems = matchObj.items.filter(item => UtilTools.getCellValue(item, property))
+              return this.triggerCheckRowEvent(evnt, { row: matchObj.parent }, selectItems.length === matchObj.items.length ? true : (selectItems.length || value === -1 ? -1 : false))
+            }
+          } else {
+            UtilTools.setCellValue(row, property, value)
           }
         } else {
-          XEUtils.remove(selection, item => item === row)
+          if (treeConfig) {
+            if (value === -1) {
+              treeIndeterminates.push(row)
+              XEUtils.remove(selection, item => item === row)
+            } else {
+              // 更新子节点状态
+              XEUtils.eachTree([row], item => {
+                if (value) {
+                  if (selection.indexOf(item) === -1) {
+                    selection.push(item)
+                  }
+                } else {
+                  XEUtils.remove(selection, select => select === item)
+                }
+              }, treeConfig)
+              XEUtils.remove(treeIndeterminates, item => item === row)
+            }
+            // 如果存在父节点，更新父节点状态
+            let matchObj = XEUtils.findTree(tableFullData, item => item === row, treeConfig)
+            if (matchObj.parent) {
+              let selectItems = matchObj.items.filter(item => selection.indexOf(item) > -1)
+              return this.triggerCheckRowEvent(evnt, { row: matchObj.parent }, selectItems.length === matchObj.items.length ? true : (selectItems.length || value === -1 ? -1 : false))
+            }
+          } else {
+            if (value) {
+              if (selection.indexOf(row) === -1) {
+                selection.push(row)
+              }
+            } else {
+              XEUtils.remove(selection, item => item === row)
+            }
+          }
         }
+        this.checkSelectionStatus()
+        UtilTools.emitEvent(this, 'select-change', [{ row, selection: this.getSelectionRecords(), checked: value }, evnt])
       }
-      this.checkSelectionStatus()
-      UtilTools.emitEvent(this, 'select-change', [{ row, selection: this.getSelectionRecords(), checked: value }, evnt])
     },
     checkSelectionStatus () {
-      let { tableFullData, selection, treeConfig } = this
-      this.isAllSelected = selection.length && (treeConfig ? tableFullData.every(item => selection.indexOf(item) > -1) : tableFullData.length === selection.length)
-      this.isIndeterminate = !this.isAllSelected && selection.length
+      let { tableFullData, selectConfig = {}, selection, treeConfig } = this
+      let { prop: property, selectMethod } = selectConfig
+      if (property) {
+        if (selectMethod) {
+          this.isAllSelected = tableFullData.every((row, rowIndex) => !selectMethod({ row, rowIndex }) || UtilTools.getCellValue(row, property))
+        } else {
+          this.isAllSelected = tableFullData.every((row, rowIndex) => UtilTools.getCellValue(row, property))
+        }
+        this.isIndeterminate = !this.isAllSelected && tableFullData.some(item => UtilTools.getCellValue(item, property))
+      } else {
+        if (selectMethod) {
+          this.isAllSelected = tableFullData.every((row, rowIndex) => !selectMethod({ row, rowIndex }) || selection.indexOf(row) > -1)
+        } else {
+          this.isAllSelected = selection.length && (treeConfig ? tableFullData.every((row, rowIndex) => selection.indexOf(row) > -1) : tableFullData.length === selection.length)
+        }
+        this.isIndeterminate = !this.isAllSelected && selection.length
+      }
     },
     /**
      * 多选，切换某一行的选中状态
      */
     toggleRowSelection (row) {
-      let { selection } = this
-      this.triggerCheckRowEvent(null, { row }, selection.indexOf(row) === -1)
+      let { selectConfig = {}, selection } = this
+      let { prop: property } = selectConfig
+      this.triggerCheckRowEvent(null, { row }, property ? !UtilTools.getCellValue(row, property) : selection.indexOf(row) === -1)
       return this.$nextTick()
     },
     setAllSelection (value) {
-      let { tableFullData, treeConfig } = this
+      let { tableFullData, selectConfig = {}, treeConfig } = this
+      let { prop: property, selectMethod } = selectConfig
       let selection = []
-      if (value) {
+      if (property) {
+        let updateValue = (row, rowIndex) => {
+          if (!selectMethod || selectMethod({ row, rowIndex })) {
+            UtilTools.setCellValue(row, property, value)
+          }
+        }
         if (treeConfig) {
-          XEUtils.eachTree(tableFullData, item => selection.push(item), treeConfig)
+          XEUtils.eachTree(tableFullData, updateValue, treeConfig)
         } else {
-          selection = tableFullData.slice(0)
+          tableFullData.forEach(updateValue)
+        }
+      } else {
+        if (value) {
+          if (treeConfig) {
+            XEUtils.eachTree(tableFullData, (row, rowIndex) => {
+              if (!selectMethod || selectMethod({ row, rowIndex })) {
+                selection.push(row)
+              }
+            }, treeConfig)
+          } else {
+            if (selectMethod) {
+              selection = tableFullData.filter((row, rowIndex) => selectMethod({ row, rowIndex }))
+            } else {
+              selection = tableFullData.slice(0)
+            }
+          }
         }
       }
       this.selection = selection
@@ -1629,6 +1709,15 @@ export default {
       return this.$nextTick()
     },
     clearSelection () {
+      let { tableFullData, selectConfig = {}, treeConfig } = this
+      let { prop: property } = selectConfig
+      if (property) {
+        if (treeConfig) {
+          XEUtils.eachTree(tableFullData, item => UtilTools.setCellValue(item, property, false), treeConfig)
+        } else {
+          tableFullData.forEach(item => UtilTools.setCellValue(item, property, false))
+        }
+      }
       this.isAllSelected = false
       this.isIndeterminate = false
       this.selection = []

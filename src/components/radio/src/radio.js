@@ -7,25 +7,27 @@ export default {
     size: String
   },
   render (h) {
+    let { disabled, size, value, name } = this
     return h('label', {
-      class: ['vxe-radio', this.size ? `size--${this.size}` : '', {
-        'is--disabled': this.disabled
+      class: ['vxe-radio', size ? `size--${size}` : '', {
+        'is--disabled': disabled
       }]
     }, [
       h('input', {
         attrs: {
           type: 'radio',
-          name: this.name
+          name,
+          disabled
         },
         domProps: {
-          checked: this.value
+          checked: value
         },
         on: {
           change: evnt => {
-            if (!this.disabled) {
-              let value = evnt.target.checked
-              this.$emit('input', value)
-              this.$emit('change', value, evnt)
+            if (!disabled) {
+              let checked = evnt.target.checked
+              this.$emit('input', checked)
+              this.$emit('change', checked, evnt)
             }
           }
         }

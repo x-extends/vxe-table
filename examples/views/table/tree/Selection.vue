@@ -5,7 +5,7 @@
     <vxe-table
       :tree-config="{key: 'id', children: 'children'}"
       :data.sync="tableData">
-      <vxe-table-column type="selection" width="120" tree-node></vxe-table-column>
+      <vxe-table-column type="selection" prop="checked" width="120" tree-node></vxe-table-column>
       <vxe-table-column prop="name" label="Name"></vxe-table-column>
       <vxe-table-column prop="size" label="Size"></vxe-table-column>
       <vxe-table-column prop="type" label="Type"></vxe-table-column>
@@ -34,13 +34,15 @@ export default {
           size: '53k',
           type: '',
           date: '2019-05-16',
+          checked: false,
           children: [
             {
               id: '11000',
               name: '文件 11000',
               size: '11k',
               type: 'js',
-              date: '2019-05-16'
+              date: '2019-05-16',
+              checked: false
             },
             {
               id: '12000',
@@ -48,6 +50,7 @@ export default {
               size: '22k',
               type: '',
               date: '2019-05-16',
+              checked: false,
               children: [
                 {
                   id: '12100',
@@ -55,13 +58,15 @@ export default {
                   size: '60k',
                   type: 'js',
                   date: '2019-05-16',
+                  checked: false,
                   children: [
                     {
                       id: '12110',
                       name: '文件 12110',
                       size: '100k',
                       type: 'js',
-                      date: '2019-05-16'
+                      date: '2019-05-16',
+                      checked: false
                     }
                   ]
                 },
@@ -70,7 +75,8 @@ export default {
                   name: '文件 122000',
                   size: '80k',
                   type: 'js',
-                  date: '2019-05-16'
+                  date: '2019-05-16',
+                  checked: false
                 }
               ]
             }
@@ -81,7 +87,8 @@ export default {
           name: '文件 20000',
           size: '66k',
           type: 'js',
-          date: '2019-05-16'
+          date: '2019-05-16',
+          checked: false
         },
         {
           id: '30000',
@@ -89,6 +96,7 @@ export default {
           size: '3k',
           type: '',
           date: '2019-05-16',
+          checked: false,
           children: [
             {
               id: '31000',
@@ -96,20 +104,23 @@ export default {
               size: '9k',
               type: '',
               date: '2019-05-16',
+              checked: false,
               children: [
                 {
                   id: '31100',
                   name: '文件 31100',
                   size: '1k',
                   type: 'js',
-                  date: '2019-05-16'
+                  date: '2019-05-16',
+                  checked: false
                 },
                 {
                   id: '31200',
                   name: '文件 31200',
                   size: '224k',
                   type: 'js',
-                  date: '2019-05-16'
+                  date: '2019-05-16',
+                  checked: false
                 }
               ]
             },
@@ -119,13 +130,33 @@ export default {
               size: '33k',
               type: '',
               date: '2019-05-16',
+              checked: false,
               children: [
                 {
                   id: '32100',
                   name: '文件 32100',
                   size: '35k',
                   type: 'js',
-                  date: '2019-05-16'
+                  date: '2019-05-16',
+                  checked: false
+                }
+              ]
+            },
+            {
+              id: '33000',
+              name: '文件夹 33000',
+              size: '33k',
+              type: '',
+              date: '2019-05-16',
+              checked: false,
+              children: [
+                {
+                  id: '33100',
+                  name: '文件 33100',
+                  size: '35k',
+                  type: 'js',
+                  date: '2019-05-16',
+                  checked: false
                 }
               ]
             }

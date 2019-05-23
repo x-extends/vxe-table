@@ -58,6 +58,8 @@ export default {
   autoResize: Boolean,
   // 是否自动计算列宽
   autoWidth: { type: Boolean, default: true },
+  // 多选配置项
+  selectConfig: Object,
   // tooltip 配置项
   tooltipConfig: { type: Object, default: () => GlobalConfig.tooltipConfig },
   // 展开行配置项

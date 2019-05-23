@@ -5,7 +5,7 @@ import GlobalConfig from '../../../conf'
 export default {
   name: 'VxeTableColumn',
   props: {
-    // 渲染类型 index,radio,selection
+    // 渲染类型 index,radio,selection,expand
     type: String,
     // 列属性
     prop: String,
@@ -56,7 +56,7 @@ export default {
   },
   created () {
     let { $table, type, sortable, filters, editRender } = this
-    let { treeConfig } = $table
+    let { selectConfig, treeConfig } = $table
     let isTreeNode = treeConfig && this.treeNode
     let opts = {
       renderCell: isTreeNode ? this.renderTreeCell : this.renderCell
@@ -72,7 +72,7 @@ export default {
         break
       case 'selection':
         opts.renderHeader = this.renderSelectionHeader
-        opts.renderCell = isTreeNode ? this.renderTreeSelectionCell : this.renderSelectionCell
+        opts.renderCell = selectConfig && selectConfig.prop ? (isTreeNode ? this.renderTreeSelectionCellByProp : this.renderSelectionCellByProp) : (isTreeNode ? this.renderTreeSelectionCell : this.renderSelectionCell)
         break
       case 'expand':
         opts.renderCell = this.renderExpandCell
@@ -230,6 +230,7 @@ export default {
      */
     renderSelectionHeader (h, params) {
       let { $table } = this
+      let { selectConfig } = $table
       let { isHidden } = params
       let options = {
         attrs: {
@@ -247,29 +248,39 @@ export default {
         }
       }
       return [
-        h('label', {
-          class: ['vxe-checkbox', {
-            'is--indeterminate': $table.isIndeterminate
-          }]
-        }, [
-          h('input', options),
-          h('span', {
-            class: ['checkbox--icon']
-          })
-        ])
+        selectConfig && selectConfig.showCheckAll === false ? h('span')
+          : h('label', {
+            class: ['vxe-checkbox', {
+              'is--indeterminate': $table.isIndeterminate
+            }]
+          }, [
+            h('input', options),
+            h('span', {
+              class: ['checkbox--icon']
+            })
+          ])
       ]
     },
     renderSelectionCell (h, params) {
       let { $table } = this
+      let { selectConfig = {}, treeConfig, treeIndeterminates } = $table
+      let { selectMethod } = selectConfig
       let { row, isHidden } = params
       let indeterminate = false
+      let isDisabled = !!selectMethod
       let options = {
         attrs: {
           type: 'checkbox'
         }
       }
       if (!isHidden) {
-        indeterminate = $table.treeIndeterminates.indexOf(row) > -1
+        if (selectMethod) {
+          isDisabled = !selectMethod(params)
+          options.attrs.disabled = isDisabled
+        }
+        if (treeConfig) {
+          indeterminate = treeIndeterminates.indexOf(row) > -1
+        }
         options.domProps = {
           checked: $table.selection.indexOf(row) > -1
         }
@@ -282,7 +293,8 @@ export default {
       return [
         h('label', {
           class: ['vxe-checkbox', {
-            'is--indeterminate': indeterminate
+            'is--indeterminate': indeterminate,
+            'is--disabled': isDisabled
           }]
         }, [
           h('input', options),
@@ -294,6 +306,52 @@ export default {
     },
     renderTreeSelectionCell (h, params) {
       return this.renderTreeIcon(h, params).concat(this.renderSelectionCell(h, params))
+    },
+    renderSelectionCellByProp (h, params) {
+      let { $table } = this
+      let { selectConfig = {}, treeConfig, treeIndeterminates } = $table
+      let { selectMethod } = selectConfig
+      let { row, isHidden } = params
+      let indeterminate = false
+      let isDisabled = !!selectMethod
+      let options = {
+        attrs: {
+          type: 'checkbox'
+        }
+      }
+      if (!isHidden) {
+        if (selectMethod) {
+          isDisabled = !selectMethod(params)
+          options.attrs.disabled = isDisabled
+        }
+        if (treeConfig) {
+          indeterminate = treeIndeterminates.indexOf(row) > -1
+        }
+        options.domProps = {
+          checked: UtilTools.getCellValue(row, selectConfig.prop)
+        }
+        options.on = {
+          change (evnt) {
+            $table.triggerCheckRowEvent(evnt, params, evnt.target.checked)
+          }
+        }
+      }
+      return [
+        h('label', {
+          class: ['vxe-checkbox', {
+            'is--indeterminate': indeterminate,
+            'is--disabled': isDisabled
+          }]
+        }, [
+          h('input', options),
+          h('span', {
+            class: ['checkbox--icon']
+          })
+        ])
+      ]
+    },
+    renderTreeSelectionCellByProp (h, params) {
+      return this.renderTreeIcon(h, params).concat(this.renderSelectionCellByProp(h, params))
     },
 
     /**

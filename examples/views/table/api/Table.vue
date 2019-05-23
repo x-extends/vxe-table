@@ -125,7 +125,7 @@ export default {
       },
       {
         name: 'visibleMethod',
-        desc: '该函数 Function({row, rowIndex, column, columnIndex}, event) 的返回值用来决定是否允许显示右键菜单',
+        desc: '该函数 Function({row, rowIndex, column, columnIndex}) 的返回值用来决定是否允许显示右键菜单',
         type: 'Function',
         enum: '',
         defVal: '',
@@ -357,11 +357,68 @@ export default {
             list: []
           },
           {
+            name: 'select-config',
+            desc: '多选配置项',
+            type: 'Object',
+            enum: '',
+            defVal: '',
+            list: [
+              {
+                name: 'key',
+                desc: '行数据中的唯一主键',
+                type: 'String',
+                enum: '',
+                defVal: '',
+                list: []
+              },
+              {
+                name: 'prop',
+                desc: '绑定选中属性，如果设置了渲染可以达到最快（建议数据量大时使用）',
+                type: 'String',
+                enum: '',
+                defVal: '',
+                list: []
+              },
+              {
+                name: 'showCheckAll',
+                desc: '是否显示全选复选框',
+                type: 'Boolean',
+                enum: '',
+                defVal: 'true',
+                list: []
+              },
+              {
+                name: 'checkAll',
+                desc: '默认勾选所有',
+                type: 'Boolean',
+                enum: '',
+                defVal: 'false',
+                list: []
+              },
+              {
+                name: 'checkRowKeys',
+                desc: '默认勾选开指定行（需要设置 rowKey | key）',
+                type: 'Array',
+                enum: '',
+                defVal: '',
+                list: []
+              },
+              {
+                name: 'selectMethod',
+                desc: '是否允许勾选的方法，该方法 Function({row, rowIndex}) 的返回值用来决定这一行的 CheckBox 是否可以勾选',
+                type: 'Function',
+                enum: '',
+                defVal: '',
+                list: []
+              }
+            ]
+          },
+          {
             name: 'tooltip-config',
             desc: 'tooltip 配置项',
-            type: 'Boolean',
+            type: 'Object',
             enum: '',
-            defVal: 'true',
+            defVal: '',
             list: [
               {
                 name: 'theme',
@@ -398,7 +455,7 @@ export default {
               },
               {
                 name: 'expandRowKeys',
-                desc: '默认展开指定行',
+                desc: '默认展开指定行（需要设置 rowKey | key）',
                 type: 'Array',
                 enum: '',
                 defVal: '',
@@ -426,7 +483,7 @@ export default {
             name: 'tree-config',
             desc: '树形结构配置项',
             type: 'Object',
-            enum: '',
+            enum: '必须设置 rowKey 或 key',
             defVal: '',
             list: [
               {
@@ -586,7 +643,7 @@ export default {
               },
               {
                 name: 'editMethod',
-                desc: '只对 isEdit=true 有效，用于重写选中编辑处理逻辑，该函数 Function({seq, row, rowIndex, column, columnIndex, cell}, event) 可以返回 false 来阻止默认行为',
+                desc: '只对 isEdit=true 有效，用于重写选中编辑处理逻辑，该函数 Function({seq, row, rowIndex, column, columnIndex, cell}) 可以返回 false 来阻止默认行为',
                 type: 'Function',
                 enum: '',
                 defVal: '',

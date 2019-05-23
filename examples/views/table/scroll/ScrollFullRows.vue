@@ -1,7 +1,8 @@
 <template>
   <div>
     <p>加载 10 万行，左右固定列，表尾合计</p>
-    <p>实际渲染速度受以下影响：多选(超严重)、固定列(中度)、底部合计(中度)、数据运算量(轻度)、任何双向的数据或函数都会影响加载速度</p>
+    <p>实际渲染速度受以下影响：多选(严重)、固定列(中度)、底部合计(中度)、数据运算量(轻度)、任何双向的数据或函数都会影响加载速度</p>
+    <p>对于多选 type="selection" 当数据量海量时应该绑定 prop 属性渲染速度可以提升10倍以上</p>
     <p>数据超大情况下必须使用：show-all-overflow,show-header-all-overflow 参数以及调整好 optimized：{scrollX,scrollY} 适合的参数可以更加流畅</p>
 
     <vxe-table
@@ -14,6 +15,7 @@
       :footer-method="footerMethod"
       :footer-cell-class-name="footerCellClassName"
       :loading="loading"
+      :select-config="{prop: 'checked'}"
       :optimized="{scrollY: {gt: 500, oSize: 20, rSize: 50}}">
       <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
       <vxe-table-column type="index" width="100" fixed="left"></vxe-table-column>

@@ -1259,13 +1259,47 @@
       &:before {
         content: "";
         position: absolute;
-        border: 1px solid #fff;
       }
     }
     &:checked+.radio--icon,
     &:checked+.checkbox--icon {
       background-color: $vxe-primary-color;
       border-color: $vxe-primary-color;
+      &:before {
+        border-width: 1px;
+        border-style: solid;
+        border-color: #fff;
+      }
+    }
+  }
+  &.is--indeterminate {
+    > input {
+      &+.radio--icon,
+      &+.checkbox--icon {
+        &:before {
+          border-width: 1px;
+          border-style: solid;
+          border-color: #fff;
+        }
+      }
+    }
+  }
+  &.is--disabled {
+    cursor: not-allowed;
+    > input {
+      &+.radio--icon,
+      &+.checkbox--icon {
+        border-color: $vxe-input-border-color;
+        background-color: $vxe-input-disabled-color;
+        &:before {
+          border-color: #c0c4cc;
+        }
+      }
+      &:checked+.radio--icon,
+      &:checked+.checkbox--icon {
+        border-color: $vxe-input-border-color;
+        background-color: $vxe-input-disabled-color;
+      }
     }
   }
   .checkbox--label {
