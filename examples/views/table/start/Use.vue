@@ -50,7 +50,7 @@
               oSize: 5,
               rSize: 16
             },
-            // 自行 Y 滚动渲染
+            // 纵向 Y 滚动渲染
             scrollY: {
               gt: 500,
               oSize: 20,
