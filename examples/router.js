@@ -54,7 +54,8 @@ import TableEditInsert from './views/table/edit/Insert.vue'
 import TableEditRemove from './views/table/edit/Remove.vue'
 import TableEditRevert from './views/table/edit/Revert.vue'
 import TableEditStatus from './views/table/edit/Status.vue'
-import TableEditDisable from './views/table/edit/Disable.vue'
+import TableEditCellDisable from './views/table/edit/CellDisable.vue'
+import TableEditRowDisable from './views/table/edit/RowDisable.vue'
 import TableEditKeyboard from './views/table/edit/Keyboard.vue'
 import TableEditValid from './views/table/edit/Valid.vue'
 import TableEditTemplate from './views/table/edit/Template.vue'
@@ -337,9 +338,14 @@ export default new Router({
       component: TableEditStatus
     },
     {
-      path: '/table/edit/disable',
-      name: 'TableEditDisable',
-      component: TableEditDisable
+      path: '/table/edit/cellDisable',
+      name: 'TableEditCellDisable',
+      component: TableEditCellDisable
+    },
+    {
+      path: '/table/edit/rowDisable',
+      name: 'TableEditRowDisable',
+      component: TableEditRowDisable
     },
     {
       path: '/table/edit/keyboard',

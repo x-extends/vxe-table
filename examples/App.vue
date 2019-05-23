@@ -415,9 +415,15 @@ export default {
               }
             },
             {
-              lable: '禁用编辑',
+              lable: 'cell 禁用编辑',
               locat: {
-                name: 'TableEditDisable'
+                name: 'TableEditCellDisable'
+              }
+            },
+            {
+              lable: 'row 禁用编辑',
+              locat: {
+                name: 'TableEditRowDisable'
               }
             },
             {

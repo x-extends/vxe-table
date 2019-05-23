@@ -7,7 +7,7 @@
       border
       show-all-overflow
       :data.sync="tableData"
-      :edit-config="{trigger: 'click', mode: 'cell', activeMethod: activeCellMethod}"
+      :edit-config="{trigger: 'click', mode: 'row', activeMethod: activeRowMethod}"
       @edit-disabled="editDisabledEvent">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column prop="name" label="Name" :edit-render="{name: 'input'}"></vxe-table-column>
@@ -22,19 +22,30 @@
       <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
 
-    <P>禁用行编辑</P>
+    <P>配合自定义渲染，第三行name禁止编辑禁</P>
 
     <vxe-table
       ref="xTable"
       border
       show-all-overflow
       :data.sync="tableData"
-      :edit-config="{trigger: 'click', mode: 'row', activeMethod: activeRowMethod}"
-      @edit-disabled="editDisabledEvent">
+      :edit-config="{trigger: 'click', mode: 'row'}">
       <vxe-table-column type="index" width="60"></vxe-table-column>
-      <vxe-table-column prop="name" label="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column prop="sex" label="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column prop="date" label="Date" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column prop="name" label="Name" :edit-render="{type: 'default'}">
+        <template v-slot:edit="{ row }">
+          <input type="text" v-model="row.name">
+        </template>
+      </vxe-table-column>
+      <vxe-table-column prop="sex" label="Sex" :edit-render="{type: 'default'}">
+        <template v-slot:edit="{ row }">
+          <input type="sex" v-model="row.name" :disabled="row.disabled">
+        </template>
+      </vxe-table-column>
+      <vxe-table-column prop="date" label="Date" :edit-render="{type: 'default'}">
+        <template v-slot:edit="{ row }">
+          <input type="date" v-model="row.name">
+        </template>
+      </vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">显示代码</p>
@@ -60,7 +71,7 @@ export default {
           border
           show-all-overflow
           :data.sync="tableData"
-          :edit-config="{trigger: 'click', mode: 'cell', activeMethod: activeCellMethod}"
+          :edit-config="{trigger: 'click', mode: 'row', activeMethod: activeRowMethod}"
           @edit-disabled="editDisabledEvent">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column prop="name" label="Name" :edit-render="{name: 'input'}"></vxe-table-column>
@@ -79,9 +90,6 @@ export default {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
           },
           methods: {
-            activeCellMethod ({ column, columnIndex }) {
-              return columnIndex !== 1
-            },
             activeRowMethod ({ row, rowIndex }) {
               return rowIndex !== 1
             },
@@ -97,12 +105,23 @@ export default {
           border
           show-all-overflow
           :data.sync="tableData"
-          :edit-config="{trigger: 'click', mode: 'row', , activeMethod: activeRowMethod}"
-          @edit-disabled="editDisabledEvent">
+          :edit-config="{trigger: 'click', mode: 'row'}">
           <vxe-table-column type="index" width="60"></vxe-table-column>
-          <vxe-table-column prop="name" label="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column prop="sex" label="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column prop="date" label="Date" :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column prop="name" label="Name" :edit-render="{type: 'default'}">
+            <template v-slot:edit="{ row }">
+              <input type="text" v-model="row.name">
+            </template>
+          </vxe-table-column>
+          <vxe-table-column prop="sex" label="Sex" :edit-render="{type: 'default'}">
+            <template v-slot:edit="{ row }">
+              <input type="sex" v-model="row.name" :disabled="row.disabled">
+            </template>
+          </vxe-table-column>
+          <vxe-table-column prop="date" label="Date" :edit-render="{type: 'default'}">
+            <template v-slot:edit="{ row }">
+              <input type="date" v-model="row.name">
+            </template>
+          </vxe-table-column>
         </vxe-table>
         `,
         `
@@ -113,18 +132,12 @@ export default {
             }
           },
           created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
-          },
-          methods: {
-            activeCellMethod ({ column, columnIndex }) {
-              return columnIndex !== 1
-            },
-            activeRowMethod ({ row, rowIndex }) {
-              return rowIndex !== 1
-            },
-            editDisabledEvent ({ row, column }) {
-              alert('禁止编辑')
-            }
+            let list = window.MOCK_DATA_LIST.slice(0, 6)
+            this.tableData = list.map((item, index) => {
+              return Object.assign({
+                disabled: index === 2
+              }, item)
+            })
           }
         }
         `
@@ -133,7 +146,11 @@ export default {
   },
   created () {
     let list = window.MOCK_DATA_LIST.slice(0, 6)
-    this.tableData = list
+    this.tableData = list.map((item, index) => {
+      return Object.assign({
+        disabled: index === 2
+      }, item)
+    })
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
@@ -141,9 +158,6 @@ export default {
     })
   },
   methods: {
-    activeCellMethod ({ column, columnIndex }) {
-      return columnIndex !== 1
-    },
     activeRowMethod ({ row, rowIndex }) {
       return rowIndex !== 1
     },
