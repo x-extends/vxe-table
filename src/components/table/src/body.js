@@ -17,13 +17,13 @@ function handleLocation (obj, rows, columns, row, column) {
  * 渲染列
  */
 function renderColumn (h, _vm, $table, seq, fixedType, rowLevel, row, rowIndex, column, columnIndex) {
-  let { $listeners: tableListeners, tableData, scrollXLoad, scrollYLoad, border, highlightCurrentRow, showAllOverflow, cellClassName, spanMethod, keyboardConfig, treeConfig, mouseConfig, editConfig, editStore, validStore } = $table
+  let { $listeners: tableListeners, tableData, overflowX, scrollXLoad, scrollYLoad, border, highlightCurrentRow, showAllOverflow, cellClassName, spanMethod, keyboardConfig, treeConfig, mouseConfig, editConfig, editStore, validStore } = $table
   let { editRender, align, showOverflow, renderWidth, columnKey } = column
   let { checked, selected, actived, copyed } = editStore
   let isMouseSelected = mouseConfig && mouseConfig.selected
   let isMouseChecked = mouseConfig && mouseConfig.checked
   let isKeyboardCut = keyboardConfig && keyboardConfig.isCut
-  let fixedHiddenColumn = fixedType ? column.fixed !== fixedType : column.fixed
+  let fixedHiddenColumn = fixedType ? column.fixed !== fixedType : column.fixed && overflowX
   let showEllipsis = (showOverflow || showAllOverflow) === 'ellipsis'
   let showTitle = (showOverflow || showAllOverflow) === 'title'
   let showTooltip = showOverflow === true || showOverflow === 'tooltip' || showAllOverflow === true || showAllOverflow === 'tooltip'
