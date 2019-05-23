@@ -372,7 +372,7 @@ export default {
                 list: []
               },
               {
-                name: 'prop',
+                name: 'checkProp',
                 desc: '绑定选中属性，如果设置了渲染可以达到最快（建议数据量大时使用）',
                 type: 'String',
                 enum: '',

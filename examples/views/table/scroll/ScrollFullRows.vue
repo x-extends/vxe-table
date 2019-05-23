@@ -15,7 +15,7 @@
       :footer-method="footerMethod"
       :footer-cell-class-name="footerCellClassName"
       :loading="loading"
-      :select-config="{prop: 'checked'}"
+      :select-config="{checkProp: 'checked'}"
       :optimized="{scrollY: {gt: 500, oSize: 20, rSize: 50}}">
       <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
       <vxe-table-column type="index" width="100" fixed="left"></vxe-table-column>

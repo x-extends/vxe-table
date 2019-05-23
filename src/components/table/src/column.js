@@ -72,7 +72,7 @@ export default {
         break
       case 'selection':
         opts.renderHeader = this.renderSelectionHeader
-        opts.renderCell = selectConfig && selectConfig.prop ? (isTreeNode ? this.renderTreeSelectionCellByProp : this.renderSelectionCellByProp) : (isTreeNode ? this.renderTreeSelectionCell : this.renderSelectionCell)
+        opts.renderCell = selectConfig && selectConfig.checkProp ? (isTreeNode ? this.renderTreeSelectionCellByProp : this.renderSelectionCellByProp) : (isTreeNode ? this.renderTreeSelectionCell : this.renderSelectionCell)
         break
       case 'expand':
         opts.renderCell = this.renderExpandCell
@@ -310,7 +310,7 @@ export default {
     renderSelectionCellByProp (h, params) {
       let { $table } = this
       let { selectConfig = {}, treeConfig, treeIndeterminates } = $table
-      let { selectMethod } = selectConfig
+      let { checkProp: property, selectMethod } = selectConfig
       let { row, isHidden } = params
       let indeterminate = false
       let isDisabled = !!selectMethod
@@ -328,7 +328,7 @@ export default {
           indeterminate = treeIndeterminates.indexOf(row) > -1
         }
         options.domProps = {
-          checked: UtilTools.getCellValue(row, selectConfig.prop)
+          checked: UtilTools.getCellValue(row, property)
         }
         options.on = {
           change (evnt) {

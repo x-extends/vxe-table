@@ -1570,8 +1570,8 @@ export default {
      */
     triggerCheckRowEvent (evnt, { row }, value) {
       let { selection, tableFullData, selectConfig = {}, treeConfig, treeIndeterminates } = this
-      let { prop: property, selectMethod } = selectConfig
-      if (selectMethod && selectMethod({ row, rowIndex: tableFullData.indexOf(row) })) {
+      let { checkProp: property, selectMethod } = selectConfig
+      if (!selectMethod || selectMethod({ row, rowIndex: tableFullData.indexOf(row) })) {
         if (property) {
           if (treeConfig) {
             if (value === -1) {
@@ -1631,7 +1631,7 @@ export default {
     },
     checkSelectionStatus () {
       let { tableFullData, selectConfig = {}, selection, treeConfig } = this
-      let { prop: property, selectMethod } = selectConfig
+      let { checkProp: property, selectMethod } = selectConfig
       if (property) {
         if (selectMethod) {
           this.isAllSelected = tableFullData.every((row, rowIndex) => !selectMethod({ row, rowIndex }) || UtilTools.getCellValue(row, property))
@@ -1653,13 +1653,13 @@ export default {
      */
     toggleRowSelection (row) {
       let { selectConfig = {}, selection } = this
-      let { prop: property } = selectConfig
+      let { checkProp: property } = selectConfig
       this.triggerCheckRowEvent(null, { row }, property ? !UtilTools.getCellValue(row, property) : selection.indexOf(row) === -1)
       return this.$nextTick()
     },
     setAllSelection (value) {
       let { tableFullData, selectConfig = {}, treeConfig } = this
-      let { prop: property, selectMethod } = selectConfig
+      let { checkProp: property, selectMethod } = selectConfig
       let selection = []
       if (property) {
         let updateValue = (row, rowIndex) => {
@@ -1710,7 +1710,7 @@ export default {
     },
     clearSelection () {
       let { tableFullData, selectConfig = {}, treeConfig } = this
-      let { prop: property } = selectConfig
+      let { checkProp: property } = selectConfig
       if (property) {
         if (treeConfig) {
           XEUtils.eachTree(tableFullData, item => UtilTools.setCellValue(item, property, false), treeConfig)

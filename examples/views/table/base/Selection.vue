@@ -37,7 +37,7 @@
       <vxe-table-column prop="address" label="Address" show-overflow></vxe-table-column>
     </vxe-table>
 
-    <p>多选表格，通过配置 select-config 参数，使用渲染最快的 prop 绑定方式</p>
+    <p>多选表格，通过配置 select-config 参数，使用渲染最快的属性绑定方式</p>
 
     <button class="btn" @click="$refs.xTable3.toggleRowSelection(tableData[1])">切换第二行选中</button>
     <button class="btn" @click="$refs.xTable3.setSelection([tableData[2], tableData[3]], true)">设置第三、四行选中</button>
@@ -48,7 +48,7 @@
       border
       height="300"
       :data.sync="tableData"
-      :select-config="{prop: 'checked'}">
+      :select-config="{checkProp: 'checked'}">
       <vxe-table-column type="selection" width="60"></vxe-table-column>
       <vxe-table-column prop="name" label="Name"></vxe-table-column>
       <vxe-table-column prop="sex" label="Sex"></vxe-table-column>
