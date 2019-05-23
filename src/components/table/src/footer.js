@@ -80,10 +80,6 @@ export default {
                 'fixed--hidden': fixedHiddenColumn,
                 'filter--active': column.filters.some(item => item.checked)
               }, footerCellClassName ? XEUtils.isFunction(footerCellClassName) ? footerCellClassName({ footIndex: rowIndex, column, columnIndex, fixed: fixedType }) : footerCellClassName : ''],
-              attrs: {
-                colspan: column.colSpan,
-                rowspan: column.rowSpan
-              },
               key: columnIndex
             }, [
               h('div', {

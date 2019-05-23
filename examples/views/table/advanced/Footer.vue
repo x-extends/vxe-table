@@ -46,8 +46,10 @@
       :footer-cell-class-name="footerCellClassName"
       :data.sync="tableData">
       <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
-      <vxe-table-column prop="name" label="Name" min-width="600" sortable></vxe-table-column>
-      <vxe-table-column prop="age" label="Age" min-width="600"></vxe-table-column>
+      <vxe-table-column label="基本信息">
+        <vxe-table-column prop="name" label="Name" min-width="600" sortable></vxe-table-column>
+        <vxe-table-column prop="age" label="Age" min-width="600"></vxe-table-column>
+      </vxe-table-column>
       <vxe-table-column prop="date" label="Date" min-width="600"></vxe-table-column>
       <vxe-table-column prop="rate" label="Rate" width="200" fixed="right"></vxe-table-column>
     </vxe-table>
