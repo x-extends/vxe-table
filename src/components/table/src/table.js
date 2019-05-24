@@ -591,6 +591,7 @@ export default {
       this.tableFullData = tableFullData
       this.scrollYLoad = scrollYLoad
       this.tableData = this.getTableData().tableData
+      this.checkSelectionStatus()
       let rest = this.$nextTick()
       if (!init) {
         if (autoWidth) {
@@ -605,6 +606,7 @@ export default {
       this.clearScroll()
       this.clearSort()
       this.clearFilter()
+      this.clearSelection()
       this.clearRowExpand()
       this.clearTreeExpand()
       return this.load(data).then(this.handleDefaultExpand)
@@ -759,7 +761,7 @@ export default {
     getAllRecords () {
       return {
         records: this.getRecords(),
-        selecteds: this.getSelecteds(),
+        selecteds: this.getSelectionRecords(),
         insertRecords: this.getInsertRecords(),
         removeRecords: this.getRemoveRecords(),
         updateRecords: this.getUpdateRecords()
@@ -1449,7 +1451,7 @@ export default {
      * 快捷菜单点击事件
      */
     ctxMenuLinkEvent (evnt, menu) {
-      UtilTools.emitEvent(this, 'context-menu-link', [menu, this.ctxMenuStore.args, evnt])
+      UtilTools.emitEvent(this, 'context-menu-link', [Object.assign({ menu }, this.ctxMenuStore.args), evnt])
       this.closeContextMenu()
     },
     /**
@@ -1630,22 +1632,22 @@ export default {
       }
     },
     checkSelectionStatus () {
-      let { tableFullData, selectConfig = {}, selection, treeConfig } = this
+      let { tableFullData, selectConfig = {}, selection } = this
       let { checkProp: property, selectMethod } = selectConfig
       if (property) {
-        if (selectMethod) {
-          this.isAllSelected = tableFullData.every((row, rowIndex) => !selectMethod({ row, rowIndex }) || UtilTools.getCellValue(row, property))
-        } else {
-          this.isAllSelected = tableFullData.every((row, rowIndex) => UtilTools.getCellValue(row, property))
-        }
-        this.isIndeterminate = !this.isAllSelected && tableFullData.some(item => UtilTools.getCellValue(item, property))
+        this.isAllSelected = tableFullData.every(
+          selectMethod
+            ? (row, rowIndex) => !selectMethod({ row, rowIndex }) || UtilTools.getCellValue(row, property)
+            : row => UtilTools.getCellValue(row, property)
+        )
+        this.isIndeterminate = !this.isAllSelected && tableFullData.some(row => UtilTools.getCellValue(row, property))
       } else {
-        if (selectMethod) {
-          this.isAllSelected = tableFullData.every((row, rowIndex) => !selectMethod({ row, rowIndex }) || selection.indexOf(row) > -1)
-        } else {
-          this.isAllSelected = selection.length && (treeConfig ? tableFullData.every((row, rowIndex) => selection.indexOf(row) > -1) : tableFullData.length === selection.length)
-        }
-        this.isIndeterminate = !this.isAllSelected && selection.length
+        this.isAllSelected = tableFullData.every(
+          selectMethod
+            ? (row, rowIndex) => !selectMethod({ row, rowIndex }) || selection.indexOf(row) > -1
+            : row => selection.indexOf(row) > -1
+        )
+        this.isIndeterminate = !this.isAllSelected && tableFullData.some(row => selection.indexOf(row) > -1)
       }
     },
     /**

@@ -215,7 +215,7 @@ export default {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
           },
           methods: {
-            contextMenuLinkEvent (menu) {
+            contextMenuLinkEvent ({ menu }) {
               alert(menu.name)
             },
             footerMethod ({ columns, data }) {
@@ -247,7 +247,7 @@ export default {
     })
   },
   methods: {
-    contextMenuLinkEvent (menu) {
+    contextMenuLinkEvent ({ menu }) {
       alert(menu.name)
     },
     footerMethod ({ columns, data }) {

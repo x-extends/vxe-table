@@ -1,11 +1,18 @@
+%boxSizing {
+  box-sizing: border-box;
+}
 .vxe-table,
 .vxe-table--filter-wrapper,
 .vxe-table--tooltip-wrapper,
 .vxe-table--ctxmenu-wrapper,
-.vxe-checkbox {
-  box-sizing: border-box;
-  *, :after, :before {
-    box-sizing: border-box;
+.vxe-table--valid-error-wrapper,
+.vxe-checkbox,
+.vxe-radio,
+.vxe-input--wrapper,
+.vxe-pagination {
+  @extend %boxSizing;
+  *, *:after, *:before {
+    @extend %boxSizing;
   }
 }
 

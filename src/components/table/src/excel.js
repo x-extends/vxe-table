@@ -204,7 +204,7 @@ export default {
         })
       }
     },
-    contextMenuLinkEvent (menu, { row, column }, evnt) {
+    contextMenuLinkEvent ({ menu, row, column }, evnt) {
       let xTable = this.$refs.xTable
       let { property } = column
       switch (menu.code) {

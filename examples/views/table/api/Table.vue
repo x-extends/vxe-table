@@ -959,7 +959,7 @@ export default {
             desc: '当点击快捷菜单后触发',
             type: '',
             enum: '',
-            defVal: 'menu,{type,row,rowIndex,column,columnIndex,cell},event',
+            defVal: '{menu,type,row,rowIndex,column,columnIndex,cell},event',
             list: []
           },
           {
