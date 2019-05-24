@@ -611,7 +611,7 @@ export default {
       return this.$nextTick()
     },
     load (data, init) {
-      let { autoWidth, optimizeConfig, recalculate } = this
+      let { height, maxHeight, autoWidth, optimizeConfig, recalculate } = this
       let { scrollY } = optimizeConfig
       let tableFullData = data || []
       let scrollYLoad = scrollY && scrollY.gt && scrollY.gt < tableFullData.length
@@ -622,6 +622,9 @@ export default {
       // 全量数据
       this.tableFullData = tableFullData
       this.scrollYLoad = scrollYLoad
+      if (scrollYLoad && !(height || maxHeight)) {
+        throw new Error('[vxe-table] The height/max-height must be set for the scroll load.')
+      }
       this.tableData = this.getTableData().tableData
       this.checkSelectionStatus()
       let rest = this.$nextTick()

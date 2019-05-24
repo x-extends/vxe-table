@@ -209,6 +209,7 @@ export default {
       let { $parent: $table, $el } = this
       let targetElem = evnt.target
       let dragLeft = 0
+      let tableBodyElem = $table.$refs.tableBody.$el
       let resizeBarElem = $table.$refs.resizeBar
       let pos = DomTools.getOffsetPos(targetElem, $el)
       let dragMinLeft = pos.left - targetElem.parentNode.clientWidth + targetElem.clientWidth + 36
@@ -221,7 +222,7 @@ export default {
         let offsetX = evnt.clientX - dragClientX
         let left = dragPosLeft + offsetX
         dragLeft = left < dragMinLeft ? dragMinLeft : left
-        resizeBarElem.style.left = `${dragLeft}px`
+        resizeBarElem.style.left = `${dragLeft - tableBodyElem.scrollLeft}px`
       }
       resizeBarElem.style.display = 'block'
       document.onmousemove = updateEvent
