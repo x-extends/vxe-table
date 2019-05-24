@@ -205,13 +205,6 @@ export default {
               locat: {
                 name: 'TableFormat'
               }
-            },
-            {
-              lable: '自定义模板',
-              demoUrl: 'https://jsrun.net/DjXKp',
-              locat: {
-                name: 'TableTemplate'
-              }
             }
           ]
         },
@@ -220,6 +213,13 @@ export default {
           value: 'advanced',
           expand: false,
           children: [
+            {
+              lable: '自定义模板',
+              demoUrl: 'https://jsrun.net/DjXKp',
+              locat: {
+                name: 'TableTemplate'
+              }
+            },
             {
               lable: '合并行或列',
               demoUrl: 'https://jsrun.net/5jXKp',

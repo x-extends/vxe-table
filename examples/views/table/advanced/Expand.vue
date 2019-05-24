@@ -13,25 +13,36 @@
       :expand-config="{key: 'id'}">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column type="expand" width="60">
-        <template v-slot="{ row }">
-          <ul>
-            <li>
-              <span>ID：</span>
-              <span>{{ row.id }}</span>
-            </li>
-            <li>
-              <span>Name：</span>
-              <span>{{ row.name }}</span>
-            </li>
-            <li>
-              <span>UpdateTime：</span>
-              <span>{{ row.updateTime }}</span>
-            </li>
-            <li>
-              <span>CreateTime：</span>
-              <span>{{ row.createTime }}</span>
-            </li>
-          </ul>
+        <template v-slot="{ row, rowIndex }">
+          <template v-if="rowIndex === 1">
+            <vxe-table
+              border
+              :data.sync="tableData"
+              :expand-config="{key: 'id'}">
+              <vxe-table-column prop="role" label="Role"></vxe-table-column>
+              <vxe-table-column prop="age" label="Age"></vxe-table-column>
+            </vxe-table>
+          </template>
+          <template v-else>
+            <ul>
+              <li>
+                <span>ID：</span>
+                <span>{{ row.id }}</span>
+              </li>
+              <li>
+                <span>Name：</span>
+                <span>{{ row.name }}</span>
+              </li>
+              <li>
+                <span>UpdateTime：</span>
+                <span>{{ row.updateTime }}</span>
+              </li>
+              <li>
+                <span>CreateTime：</span>
+                <span>{{ row.createTime }}</span>
+              </li>
+            </ul>
+          </template>
         </template>
       </vxe-table-column>
       <vxe-table-column prop="name" label="Name"></vxe-table-column>
@@ -111,25 +122,36 @@ export default {
           :expand-config="{key: 'id'}">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column type="expand" width="60">
-            <template v-slot="{ row }">
-              <ul>
-                <li>
-                  <span>ID：</span>
-                  <span>{{ row.id }}</span>
-                </li>
-                <li>
-                  <span>Name：</span>
-                  <span>{{ row.name }}</span>
-                </li>
-                <li>
-                  <span>UpdateTime：</span>
-                  <span>{{ row.updateTime }}</span>
-                </li>
-                <li>
-                  <span>CreateTime：</span>
-                  <span>{{ row.createTime }}</span>
-                </li>
-              </ul>
+            <template v-slot="{ row, rowIndex }">
+              <template v-if="rowIndex === 1">
+                <vxe-table
+                  border
+                  :data.sync="tableData"
+                  :expand-config="{key: 'id'}">
+                  <vxe-table-column prop="role" label="Role"></vxe-table-column>
+                  <vxe-table-column prop="age" label="Age"></vxe-table-column>
+                </vxe-table>
+              </template>
+              <template v-else>
+                <ul>
+                  <li>
+                    <span>ID：</span>
+                    <span>{{ row.id }}</span>
+                  </li>
+                  <li>
+                    <span>Name：</span>
+                    <span>{{ row.name }}</span>
+                  </li>
+                  <li>
+                    <span>UpdateTime：</span>
+                    <span>{{ row.updateTime }}</span>
+                  </li>
+                  <li>
+                    <span>CreateTime：</span>
+                    <span>{{ row.createTime }}</span>
+                  </li>
+                </ul>
+              </template>
             </template>
           </vxe-table-column>
           <vxe-table-column prop="name" label="Name"></vxe-table-column>
