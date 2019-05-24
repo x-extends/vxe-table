@@ -373,7 +373,7 @@ export default {
               },
               {
                 name: 'checkProp',
-                desc: '绑定选中属性，如果设置了该属性渲染速度可以提升到最快（建议数据量大时使用）',
+                desc: '绑定选中属性，如果设置了该属性渲染速度可以提升n倍（建议数据量大时使用）',
                 type: 'String',
                 enum: '',
                 defVal: '',
