@@ -22,7 +22,7 @@
     <vxe-table
       highlight-hover-row
       :data.sync="tableData">
-      <vxe-table-column type="index" width="60"></vxe-table-column>
+      <vxe-table-column type="index" label="序号" width="60"></vxe-table-column>
       <vxe-table-column prop="name" label="Name"></vxe-table-column>
       <vxe-table-column prop="sex" label="Sex"></vxe-table-column>
       <vxe-table-column prop="age" label="Age"></vxe-table-column>
@@ -71,7 +71,7 @@ export default {
         <vxe-table
           highlight-hover-row
           :data.sync="tableData">
-          <vxe-table-column type="index" width="60"></vxe-table-column>
+          <vxe-table-column type="index" label="序号" width="60"></vxe-table-column>
           <vxe-table-column prop="name" label="Name"></vxe-table-column>
           <vxe-table-column prop="sex" label="Sex"></vxe-table-column>
           <vxe-table-column prop="age" label="Age"></vxe-table-column>

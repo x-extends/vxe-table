@@ -42,7 +42,7 @@ const UtilTools = {
   getColumnConfig (_vm, { renderHeader, renderCell, renderData } = {}) {
     return {
       // 基本属性
-      id: `col--${_vm.$table.id}_${++columnId}`,
+      id: `col--${++columnId}`,
       type: _vm.type,
       property: _vm.prop,
       label: _vm.label,
@@ -75,13 +75,16 @@ const UtilTools = {
       renderLeft: 0,
       renderHeader: renderHeader || _vm.renderHeader,
       renderCell: renderCell || _vm.renderCell,
-      renderData: renderData
+      renderData: renderData,
+      // 内部属性
+      $slots: {}
     }
   },
   // 组装列配置
   assemColumn (_vm) {
     let { $table, $parent, columnConfig } = _vm
     let parentColumnConfig = $parent.columnConfig
+    columnConfig.slots = _vm.$scopedSlots
     if (parentColumnConfig && $parent.$children.length > 0) {
       if (!parentColumnConfig.children) {
         parentColumnConfig.children = []

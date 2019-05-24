@@ -1,10 +1,11 @@
 <template>
   <div>
     <p>加载 10 万行 1 万列，左右固定列，表尾合计</p>
-    <p>实际渲染速度受以下影响：多选(超严重)、固定列(中度)、底部合计(中度)、数据运算量(轻度)、任何双向的数据或函数都会影响加载速度</p>
+    <p>大数据不建议使用双向绑定的 data 属性（vue 监听会大数据会短暂的卡顿），建议使用 load/reload 函数</p>
+    <p>对于多选 type="selection" 当数据量海量时应该绑定 prop 属性渲染速度可以提升10倍以上</p>
     <p>数据超大情况下必须使用：show-all-overflow,show-header-all-overflow 参数以及调整好 optimized：{scrollX,scrollY} 适合的参数可以更加流畅</p>
 
-    <vxe-table
+    <vxe-grid
       ref="xTable"
       border
       resizable
@@ -15,11 +16,10 @@
       :footer-method="footerMethod"
       :footer-cell-class-name="footerCellClassName"
       :loading="loading"
+      :columns="tableColumn"
+      :select-config="{checkProp: 'checked'}"
       :optimized="{scrollX: {gt: 20, oSize: 4, rSize: 8}, scrollY: {gt: 500, oSize: 20, rSize: 50}}">
-      <vxe-table-column type="index" width="100" fixed="left"></vxe-table-column>
-      <vxe-table-column v-for="(item, index) in tableColumn" :key="index" prop="name" :label="`column_${index}`" width="200"></vxe-table-column>
-      <vxe-table-column prop="rate" label="Rate" width="200" fixed="right"></vxe-table-column>
-    </vxe-table>
+    </vxe-grid>
   </div>
 </template>
 
@@ -39,12 +39,12 @@ export default {
       this.$refs.xTable.reload([])
       setTimeout(() => {
         if (this.$refs.xTable) {
-          let list = window.MOCK_DATA_LIST.slice(0, 100000)
-          this.tableColumn = window.MOCK_DATA_LIST.slice(0, 10000)
-          this.$refs.xTable.reload(list)
+          this._tableData = window.MOCK_DATA_LIST.slice(0, 100000)
+          this.tableColumn = window.MOCK_COLUMN_LIST.slice(0, 10000)
+          this.$refs.xTable.reload(this._tableData)
         }
         this.loading = false
-      }, 500)
+      }, 300)
     })
   },
   methods: {

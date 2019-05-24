@@ -261,6 +261,38 @@ export default {
     }
   },
   computed: {
+    /**
+     * 获取处理后全量的表格数据
+     * 如果存在筛选条件，继续处理
+     */
+    afterFullData () {
+      let { visibleColumn, tableFullData } = this
+      let column = this.visibleColumn.find(column => column.order)
+      let tableData = tableFullData
+      let filterColumn = visibleColumn.filter(({ filters }) => filters && filters.length)
+      tableData = tableData.filter(row => {
+        return filterColumn.every(column => {
+          let { property, filters, filterMethod } = column
+          if (filters && filters.length) {
+            let valueList = []
+            filters.forEach(item => {
+              if (item.checked) {
+                valueList.push(item.value)
+              }
+            })
+            if (valueList.length && filterMethod !== 'custom') {
+              return filterMethod ? valueList.some(value => filterMethod({ value, row, column })) : valueList.indexOf(UtilTools.getCellValue(row, property)) > -1
+            }
+          }
+          return true
+        })
+      })
+      if (column && column.order) {
+        let rest = XEUtils.sortBy(tableData, column.property)
+        tableData = column.order === 'desc' ? rest.reverse() : rest
+      }
+      return tableData
+    },
     // 优化的参数
     optimizeConfig () {
       return Object.assign({}, GlobalConfig.optimized, this.optimized)
@@ -318,7 +350,7 @@ export default {
     },
     visibleColumn () {
       this.refreshColumn()
-      this.$nextTick(this.recalculate)
+      this.$nextTick(() => this.recalculate(true))
     }
   },
   created () {
@@ -579,7 +611,7 @@ export default {
       return this.$nextTick()
     },
     load (data, init) {
-      let { autoWidth, optimizeConfig, recalculate, computeScrollLoad } = this
+      let { autoWidth, optimizeConfig, recalculate } = this
       let { scrollY } = optimizeConfig
       let tableFullData = data || []
       let scrollYLoad = scrollY && scrollY.gt && scrollY.gt < tableFullData.length
@@ -595,9 +627,7 @@ export default {
       let rest = this.$nextTick()
       if (!init) {
         if (autoWidth) {
-          rest = rest.then(() => setTimeout(recalculate))
-        } else if (scrollYLoad) {
-          rest = rest.then(computeScrollLoad)
+          rest = rest.then(recalculate)
         }
       }
       return rest
@@ -633,7 +663,7 @@ export default {
           tableData.splice.apply(tableData, [rowIndex, 0].concat(newRecords))
         }
       }
-      insertList.push(newRecords)
+      insertList.splice.apply(insertList, newRecords)
       return this.$nextTick().then(() => ({ row: newRecords.length ? newRecords[newRecords.length - 1] : null, rows: newRecords }))
     },
     defineProperty (record) {
@@ -801,45 +831,13 @@ export default {
       return updateRecords
     },
     /**
-     * 获取处理后全量的表格数据
-     * 如果存在筛选条件，继续处理
-     */
-    getTableFullData () {
-      let { visibleColumn, tableFullData } = this
-      let column = this.visibleColumn.find(column => column.order)
-      let tableData = tableFullData
-      let filterColumn = visibleColumn.filter(({ filters }) => filters && filters.length)
-      tableData = tableData.filter(row => {
-        return filterColumn.every(column => {
-          let { property, filters, filterMethod } = column
-          if (filters && filters.length) {
-            let valueList = []
-            filters.forEach(item => {
-              if (item.checked) {
-                valueList.push(item.value)
-              }
-            })
-            if (valueList.length && filterMethod !== 'custom') {
-              return filterMethod ? valueList.some(value => filterMethod({ value, row, column })) : valueList.indexOf(UtilTools.getCellValue(row, property)) > -1
-            }
-          }
-          return true
-        })
-      })
-      if (column && column.order) {
-        let rest = XEUtils.sortBy(tableData, column.property)
-        tableData = column.order === 'desc' ? rest.reverse() : rest
-      }
-      return tableData
-    },
-    /**
      * 获取处理后的表格数据
      * 如果存在筛选条件，继续处理
      * 如果存在排序，继续处理
      */
     getTableData () {
       let { scrollYLoad, scrollYStore } = this
-      let fullData = this.getTableFullData()
+      let fullData = this.afterFullData
       return { fullData, tableData: scrollYLoad ? fullData.slice(scrollYStore.startIndex, scrollYStore.startIndex + scrollYStore.renderSize) : fullData.slice(0) }
     },
     handleDefaultExpand () {
@@ -1572,8 +1570,8 @@ export default {
      */
     triggerCheckRowEvent (evnt, { row }, value) {
       let { selection, tableFullData, selectConfig = {}, treeConfig, treeIndeterminates } = this
-      let { checkProp: property, selectMethod } = selectConfig
-      if (!selectMethod || selectMethod({ row, rowIndex: tableFullData.indexOf(row) })) {
+      let { checkProp: property, checkMethod } = selectConfig
+      if (!checkMethod || checkMethod({ row, rowIndex: tableFullData.indexOf(row) })) {
         if (property) {
           if (treeConfig) {
             if (value === -1) {
@@ -1632,22 +1630,22 @@ export default {
       }
     },
     checkSelectionStatus () {
-      let { tableFullData, selectConfig = {}, selection } = this
-      let { checkProp: property, selectMethod } = selectConfig
+      let { tableFullData, selectConfig = {}, selection, treeIndeterminates } = this
+      let { checkProp: property, checkMethod } = selectConfig
       if (property) {
-        this.isAllSelected = tableFullData.every(
-          selectMethod
-            ? (row, rowIndex) => !selectMethod({ row, rowIndex }) || UtilTools.getCellValue(row, property)
+        this.isAllSelected = tableFullData.length && tableFullData.every(
+          checkMethod
+            ? (row, rowIndex) => !checkMethod({ row, rowIndex }) || UtilTools.getCellValue(row, property)
             : row => UtilTools.getCellValue(row, property)
         )
-        this.isIndeterminate = !this.isAllSelected && tableFullData.some(row => UtilTools.getCellValue(row, property))
+        this.isIndeterminate = !this.isAllSelected && tableFullData.some(row => UtilTools.getCellValue(row, property) || treeIndeterminates.indexOf(row) > -1)
       } else {
-        this.isAllSelected = tableFullData.every(
-          selectMethod
-            ? (row, rowIndex) => !selectMethod({ row, rowIndex }) || selection.indexOf(row) > -1
+        this.isAllSelected = tableFullData.length && tableFullData.every(
+          checkMethod
+            ? (row, rowIndex) => !checkMethod({ row, rowIndex }) || selection.indexOf(row) > -1
             : row => selection.indexOf(row) > -1
         )
-        this.isIndeterminate = !this.isAllSelected && tableFullData.some(row => selection.indexOf(row) > -1)
+        this.isIndeterminate = !this.isAllSelected && tableFullData.some(row => treeIndeterminates.indexOf(row) > -1 || selection.indexOf(row) > -1)
       }
     },
     /**
@@ -1661,11 +1659,11 @@ export default {
     },
     setAllSelection (value) {
       let { tableFullData, selectConfig = {}, treeConfig } = this
-      let { checkProp: property, selectMethod } = selectConfig
+      let { checkProp: property, checkMethod } = selectConfig
       let selection = []
       if (property) {
         let updateValue = (row, rowIndex) => {
-          if (!selectMethod || selectMethod({ row, rowIndex })) {
+          if (!checkMethod || checkMethod({ row, rowIndex })) {
             UtilTools.setCellValue(row, property, value)
           }
         }
@@ -1678,13 +1676,13 @@ export default {
         if (value) {
           if (treeConfig) {
             XEUtils.eachTree(tableFullData, (row, rowIndex) => {
-              if (!selectMethod || selectMethod({ row, rowIndex })) {
+              if (!checkMethod || checkMethod({ row, rowIndex })) {
                 selection.push(row)
               }
             }, treeConfig)
           } else {
-            if (selectMethod) {
-              selection = tableFullData.filter((row, rowIndex) => selectMethod({ row, rowIndex }))
+            if (checkMethod) {
+              selection = tableFullData.filter((row, rowIndex) => checkMethod({ row, rowIndex }))
             } else {
               selection = tableFullData.slice(0)
             }

@@ -3,12 +3,10 @@ import VxeTableColumn from './column'
 import TableProps from './props'
 import funs from './func'
 import UtilTools from '../../../tools/utils'
+import CellMethods from './cell'
+import XEUtils from 'xe-utils'
 
 const methods = {}
-
-function buildColumns (h, columns) {
-  return columns ? columns.map(props => h('vxe-table-column', { props }, buildColumns(h, props.children))) : []
-}
 
 funs.forEach(name => {
   methods[name] = function () {
@@ -27,8 +25,18 @@ export default {
     VxeTable,
     VxeTableColumn
   },
+  watch: {
+    columns () {
+      this.buildColumn()
+    }
+  },
+  mounted () {
+    if (this.columns && this.columns.length) {
+      this.buildColumn()
+    }
+  },
   render (h) {
-    let { $listeners, $props, columns, pages, size, loading } = this
+    let { $slots, $listeners, $props, pages, size, loading } = this
     return h('div', {
       class: 'vxe-grid'
     }, [
@@ -36,7 +44,7 @@ export default {
         props: $props,
         on: $listeners,
         ref: 'xTable'
-      }, buildColumns(h, columns)),
+      }, $slots.default),
       pages ? h('vxe-pagination', {
         class: ['vxe-grid--pagination', {
           'is--loading': loading
@@ -51,6 +59,10 @@ export default {
   },
   methods: {
     ...methods,
+    buildColumn () {
+      let $table = this.$refs.xTable
+      $table.collectColumn = XEUtils.mapTree(this.columns, column => CellMethods.createColumn($table, column), this.treeConfig)
+    },
     currentChangeEvent (currentPage) {
       UtilTools.emitEvent(this, 'current-page-change', [currentPage])
     },

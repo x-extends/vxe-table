@@ -19,7 +19,7 @@
       border
       height="300"
       :data.sync="tableData2">
-      <vxe-table-column type="index" width="60" :index-method="indexMethod"></vxe-table-column>
+      <vxe-table-column type="index" label="序号" width="60" :index-method="indexMethod"></vxe-table-column>
       <vxe-table-column prop="name" label="Name" sortable></vxe-table-column>
       <vxe-table-column prop="sex" label="Sex"></vxe-table-column>
       <vxe-table-column prop="age" label="Age"></vxe-table-column>

@@ -29,6 +29,13 @@ function mockData () {
         label: 'cloumn_' + fullIndex,
         width: 160
       }
+      if (fullIndex === 1) {
+        colItem.type = 'selection'
+        colItem.width = 60
+      }
+      if (fullIndex < 3) {
+        colItem.fixed = 'left'
+      }
       if (fullIndex < 3) {
         colItem.sortable = true
       } else if (fullIndex === 4) {

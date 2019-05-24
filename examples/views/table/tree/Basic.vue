@@ -23,7 +23,8 @@
     <vxe-table
       :data.sync="tableData"
       :tree-config="{key: 'id', children: 'children', expandAll: true}">
-      <vxe-table-column prop="name" label="Name" tree-node></vxe-table-column>
+      <vxe-table-column type="index" width="120" label="序号" tree-node></vxe-table-column>
+      <vxe-table-column prop="name" label="Name"></vxe-table-column>
       <vxe-table-column prop="size" label="Size"></vxe-table-column>
       <vxe-table-column prop="type" label="Type"></vxe-table-column>
       <vxe-table-column prop="date" label="Date"></vxe-table-column>
@@ -277,7 +278,8 @@ export default {
         <vxe-table
           :data.sync="tableData"
           :tree-config="{key: 'id', children: 'children', expandAll: true}">
-          <vxe-table-column prop="name" label="Name" tree-node></vxe-table-column>
+          <vxe-table-column type="index" width="120" label="序号" tree-node></vxe-table-column>
+          <vxe-table-column prop="name" label="Name"></vxe-table-column>
           <vxe-table-column prop="size" label="Size"></vxe-table-column>
           <vxe-table-column prop="type" label="Type"></vxe-table-column>
           <vxe-table-column prop="date" label="Date"></vxe-table-column>

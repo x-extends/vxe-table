@@ -373,18 +373,10 @@ export default {
               },
               {
                 name: 'checkProp',
-                desc: '绑定选中属性，如果设置了渲染可以达到最快（建议数据量大时使用）',
+                desc: '绑定选中属性，如果设置了该属性渲染速度可以提升到最快（建议数据量大时使用）',
                 type: 'String',
                 enum: '',
                 defVal: '',
-                list: []
-              },
-              {
-                name: 'showCheckAll',
-                desc: '是否显示全选复选框',
-                type: 'Boolean',
-                enum: '',
-                defVal: 'true',
                 list: []
               },
               {
@@ -404,7 +396,7 @@ export default {
                 list: []
               },
               {
-                name: 'selectMethod',
+                name: 'checkMethod',
                 desc: '是否允许勾选的方法，该方法 Function({row, rowIndex}) 的返回值用来决定这一行的 CheckBox 是否可以勾选',
                 type: 'Function',
                 enum: '',
@@ -1005,7 +997,7 @@ export default {
         list: [
           {
             name: 'load()',
-            desc: '加载化数据',
+            desc: '加载数据',
             type: 'Promise',
             enum: '',
             defVal: 'data',
@@ -1013,7 +1005,7 @@ export default {
           },
           {
             name: 'reload()',
-            desc: '加载化数据，恢复初始状态',
+            desc: '加载数据并恢复到初始状态',
             type: 'Promise',
             enum: '',
             defVal: 'data',

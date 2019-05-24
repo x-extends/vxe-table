@@ -155,9 +155,12 @@ function renderRows (h, _vm, $table, rowLevel, fixedType, tableData, tableColumn
   let { leftList, rightList } = columnStore
   let rows = []
   tableData.forEach((row, rowIndex) => {
-    // 优化事件绑定
+    if (scrollYLoad) {
+      rowIndex = scrollYStore.startIndex + rowIndex
+    }
     let on = null
-    let seq = (scrollYLoad ? scrollYStore.startIndex + 1 : 1) + rowIndex
+    let seq = rowIndex + 1
+    // 优化事件绑定
     if (highlightHoverRow && (leftList.length || rightList.length) && overflowX) {
       on = {
         mouseover (evnt) {
@@ -337,7 +340,7 @@ export default {
          */
         h('tbody', renderRows(h, this, $table, 0, fixedType, tableData, tableColumn))
       ]),
-      !loading && !tableData.length ? h('div', {
+      !fixedType && !loading && !tableData.length ? h('div', {
         class: 'vxe-table--empty-block'
       }, [
         h('span', {
@@ -377,7 +380,7 @@ export default {
         // 避免 IE 卡顿
         if (leftElem || rightElem) {
           clearTimeout(updateLeftScrollingTimeput)
-          updateLeftScrollingTimeput = setTimeout($table.checkScrolling, DomTools.browse.msie ? 200 : 10)
+          updateLeftScrollingTimeput = setTimeout($table.checkScrolling, DomTools.browse.msie ? 200 : 20)
         }
         syncBodyScroll(bodyElem.scrollTop, leftElem, rightElem)
       }
