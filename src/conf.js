@@ -17,7 +17,7 @@ const GlobalConfig = {
     scrollY: {
       gt: 500,
       oSize: 25,
-      rSize: 70,
+      rSize: 100,
       vSize: 0,
       rHeight: 0
     }
