@@ -18,7 +18,7 @@
       :loading="loading"
       :columns="tableColumn"
       :select-config="{checkProp: 'checked'}"
-      :optimized="{scrollX: {gt: 20, oSize: 4, rSize: 8}, scrollY: {gt: 500, oSize: 20, rSize: 50}}">
+      :optimized="{scrollX: {gt: 20, oSize: 4, rSize: 8}, scrollY: {gt: 500, oSize: 20, rSize: 70}}">
     </vxe-grid>
   </div>
 </template>
