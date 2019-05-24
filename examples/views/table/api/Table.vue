@@ -997,7 +997,7 @@ export default {
         list: [
           {
             name: 'load()',
-            desc: '加载数据',
+            desc: '加载数据（对于表格数据需要重载、局部递增场景下可能会用到）',
             type: 'Promise',
             enum: '',
             defVal: 'data',
@@ -1005,7 +1005,7 @@ export default {
           },
           {
             name: 'reload()',
-            desc: '加载数据并恢复到初始状态',
+            desc: '加载数据并恢复到初始状态（对于表格数据需要重载、局部递增场景下可能会用到）',
             type: 'Promise',
             enum: '',
             defVal: 'data',
@@ -1013,7 +1013,7 @@ export default {
           },
           {
             name: 'insert(records)',
-            desc: '从第一行新增一行或多行新数据',
+            desc: '往表格插入数据，从第一行新增一行或多行新数据',
             type: 'Promise<{row, rows}>',
             enum: '',
             defVal: 'records',
@@ -1021,7 +1021,7 @@ export default {
           },
           {
             name: 'insertAt(records,row)',
-            desc: '从指定位置插入一行或多行；第二个参数：row 指定位置、null 从第一行插入、-1 从最后插入',
+            desc: '往表格插入数据，从指定位置插入一行或多行；第二个参数：row 指定位置、null 从第一行插入、-1 从最后插入',
             type: 'Promise<{row, rows}>',
             enum: '',
             defVal: 'records,row',
