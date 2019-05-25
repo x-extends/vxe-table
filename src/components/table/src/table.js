@@ -585,6 +585,14 @@ export default {
       })
       return this.$nextTick()
     },
+    clearAll () {
+      this.clearScroll()
+      this.clearSort()
+      this.clearFilter()
+      this.clearSelection()
+      this.clearRowExpand()
+      this.clearTreeExpand()
+    },
     /// ///////////////// 废弃
     load (datas) {
       console.error('[vxe-table] This method is discard, use the loadData(datas) method.')
@@ -636,14 +644,6 @@ export default {
     reloadColumn (columns) {
       this.clearAll()
       return this.loadColumn(columns)
-    },
-    clearAll () {
-      this.clearScroll()
-      this.clearSort()
-      this.clearFilter()
-      this.clearSelection()
-      this.clearRowExpand()
-      this.clearTreeExpand()
     },
     // 更新数据真实的 key Map
     updateKeyMap (datas, key) {
