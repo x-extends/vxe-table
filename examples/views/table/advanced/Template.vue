@@ -1,14 +1,20 @@
 <template>
   <div>
     <p>使用 template 自定义模板；可以实现自定义任意内容及 html 元素</p>
+    <p>相关参数 {seq: 序号, rowIndex: 获取 data 中的行索引, row: 获取 data 中行数据, column: 列, columnIndex: 列索引}</p>
 
     <vxe-table
       border
       :data.sync="tableData">
-      <vxe-table-column type="index" width="60"></vxe-table-column>
+      <vxe-table-column type="index" width="80">
+        <template v-slot="{ seq }">
+          <span>seq= {{ seq }}</span>
+        </template>
+      </vxe-table-column>
       <vxe-table-column prop="name" label="Name" sortable>
-        <template v-slot="{ row }">
-          <a href="https://github.com/xuliangzhan/vxe-table">{{ row.name }}</a>
+        <template v-slot="{ rowIndex, columnIndex }">
+          <span>rowIndex= {{ rowIndex }}</span>
+          <span>columnIndex= {{ columnIndex }}</span>
         </template>
       </vxe-table-column>
       <vxe-table-column prop="sex" label="Sex">
@@ -56,10 +62,15 @@ export default {
         <vxe-table
           border
           :data.sync="tableData">
-          <vxe-table-column type="index" width="60"></vxe-table-column>
+          <vxe-table-column type="index" width="80">
+            <template v-slot="{ seq }">
+              <span>seq= {{ seq }}</span>
+            </template>
+          </vxe-table-column>
           <vxe-table-column prop="name" label="Name" sortable>
-            <template v-slot="{ row }">
-              <a href="https://github.com/xuliangzhan/vxe-table">{{ row.name }}</a>
+            <template v-slot="{ rowIndex, columnIndex }">
+              <span>rowIndex= {{ rowIndex }}</span>
+              <span>columnIndex= {{ columnIndex }}</span>
             </template>
           </vxe-table-column>
           <vxe-table-column prop="sex" label="Sex">
@@ -70,6 +81,9 @@ export default {
           <vxe-table-column prop="time" label="Time">
             <template v-slot:header="{ column }">
               <input type="text" placeholder="这样也行">
+            </template>
+            <template v-slot="{ row }">
+              <span>{{ formatDate(row.time) }}</span>
             </template>
           </vxe-table-column>
           <vxe-table-column prop="address" label="Address" show-overflow>
