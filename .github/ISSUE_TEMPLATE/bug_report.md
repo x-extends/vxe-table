@@ -1,7 +1,7 @@
 ---
 name: Bug report
 about: 有 Bug
-title: '如果相关信息提供不详细的可能不会进行答复及解决！'
+title: '如果描述不明确、相关信息提供不详细的可能不会及时进行答复及解决！'
 labels: bug
 assignees: ''
 
