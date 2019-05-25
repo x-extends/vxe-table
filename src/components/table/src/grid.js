@@ -3,8 +3,6 @@ import VxeTableColumn from './column'
 import TableProps from './props'
 import funs from './func'
 import UtilTools from '../../../tools/utils'
-import CellMethods from './cell'
-import XEUtils from 'xe-utils'
 
 const methods = {}
 
@@ -26,13 +24,13 @@ export default {
     VxeTableColumn
   },
   watch: {
-    columns () {
-      this.buildColumn()
+    columns (value) {
+      this.$refs.xTable.loadColumn(value)
     }
   },
   mounted () {
     if (this.columns && this.columns.length) {
-      this.buildColumn()
+      this.$refs.xTable.loadColumn(this.columns)
     }
   },
   render (h) {
@@ -59,10 +57,6 @@ export default {
   },
   methods: {
     ...methods,
-    buildColumn () {
-      let $table = this.$refs.xTable
-      $table.collectColumn = XEUtils.mapTree(this.columns, column => CellMethods.createColumn($table, column), this.treeConfig)
-    },
     currentChangeEvent (currentPage) {
       UtilTools.emitEvent(this, 'current-page-change', [currentPage])
     },

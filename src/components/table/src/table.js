@@ -12,6 +12,7 @@ import TableFilter from './filter'
 import TableContextMenu from './menu'
 import GlobalConfig from '../../../conf'
 import EventInterceptor from '../../../interceptor'
+import CellMethods from './cell'
 
 /**
  * 渲染浮固定列
@@ -303,7 +304,7 @@ export default {
   watch: {
     data (value) {
       if (!this.isUpdateData) {
-        this.load(value).then(this.handleDefaultExpand)
+        this.loadData(value).then(this.handleDefaultExpand)
       }
       this.isUpdateData = false
     },
@@ -320,10 +321,6 @@ export default {
     },
     tableColumn () {
       this.analyColumnWidth()
-    },
-    visibleColumn () {
-      this.refreshColumn()
-      this.$nextTick(() => this.recalculate(true))
     }
   },
   created () {
@@ -340,7 +337,7 @@ export default {
     this.afterFullData = []
     this.fullDataKeyMap = new Map()
     this.fullColumnKeyMap = new Map()
-    this.load(this.data, true).then(() => {
+    this.loadData(this.data, true).then(() => {
       if (treeConfig && !(rowKey || treeConfig.key)) {
         throw new Error('[vxe-table] Tree table must have a unique primary key.')
       }
@@ -350,7 +347,6 @@ export default {
       }
       this.refreshColumn()
       this.handleDefaultExpand()
-      this.$nextTick(() => this.recalculate(true))
     })
     GlobalEvent.on(this, 'mousedown', this.handleGlobalMousedownEvent)
     GlobalEvent.on(this, 'blur', this.handleGlobalBlurEvent)
@@ -589,10 +585,20 @@ export default {
       })
       return this.$nextTick()
     },
-    load (data, init) {
+    /// ///////////////// 废弃
+    load (datas) {
+      console.error('[vxe-table] This method is discard, use the loadData(datas) method.')
+      return this.loadData(datas)
+    },
+    reload (datas) {
+      console.error('[vxe-table] This method is discard, use the reloadData(datas) method.')
+      return this.reloadData(datas)
+    },
+    /// ////////////////// 废弃
+    loadData (datas, init) {
       let { height, maxHeight, autoWidth, optimizeConfig, recalculate } = this
       let { scrollY } = optimizeConfig
-      let tableFullData = data || []
+      let tableFullData = datas || []
       let scrollYLoad = scrollY && scrollY.gt && scrollY.gt < tableFullData.length
       this.insertList = []
       this.removeList = []
@@ -615,14 +621,29 @@ export default {
       }
       return rest
     },
-    reload (data) {
+    reloadData (datas) {
+      this.clearAll()
+      return this.loadData(datas).then(this.handleDefaultExpand)
+    },
+    loadColumn (columns) {
+      let collectColumn = XEUtils.mapTree(columns, column => CellMethods.createColumn(this, column), { children: 'children' })
+      this.collectColumn = collectColumn
+      this.tableFullColumn = UtilTools.getColumnList(collectColumn)
+      this.updateKeyMap(columns, 'fullColumnKeyMap')
+      this.refreshColumn()
+      return this.$nextTick()
+    },
+    reloadColumn (columns) {
+      this.clearAll()
+      return this.loadColumn(columns)
+    },
+    clearAll () {
       this.clearScroll()
       this.clearSort()
       this.clearFilter()
       this.clearSelection()
       this.clearRowExpand()
       this.clearTreeExpand()
-      return this.load(data).then(this.handleDefaultExpand)
     },
     // 更新数据真实的 key Map
     updateKeyMap (datas, key) {
@@ -736,7 +757,7 @@ export default {
         })
         return this.$nextTick()
       }
-      return this.reload(tableSourceData)
+      return this.reloadData(tableSourceData)
     },
     /**
      * 清空单元格内容
@@ -957,6 +978,7 @@ export default {
       }
       this.scrollXLoad = scrollXLoad
       this.tableColumn = visibleColumn
+      return this.$nextTick(() => this.recalculate(true))
     },
     /**
      * 指定列宽的列进行拆分

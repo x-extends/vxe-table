@@ -44,11 +44,11 @@ export default {
   created () {
     this.loading = true
     this.$nextTick(() => {
-      this.$refs.xTable.reload([])
+      this.$refs.xTable.reloadData([])
       setTimeout(() => {
         if (this.$refs.xTable) {
           this.tableData = window.MOCK_DATA_LIST.slice(0, 10000)
-          this.$refs.xTable.reload(this.tableData)
+          this.$refs.xTable.reloadData(this.tableData)
         }
         this.loading = false
       }, 500)

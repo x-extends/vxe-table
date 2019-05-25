@@ -7,12 +7,13 @@
       <span class="menu-btn">
         <i class="icon-menu"></i>
         <div class="menu-wrapper">
-          <vxe-checkbox class="checkbox-item" v-model="column.visible" v-for="(column,index) in allColumnList" :key="index">{{ column.label }}</vxe-checkbox>
+          <vxe-checkbox class="checkbox-item" v-model="column.visible" v-for="(column,index) in allColumnList" :key="index" @change="$refs.xTable.refreshColumn()">{{ column.label }}</vxe-checkbox>
         </div>
       </span>
     </div>
 
     <vxe-table
+      ref="xTable"
       border
       height="400"
       :data.sync="tableData"

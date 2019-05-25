@@ -1,7 +1,7 @@
 <template>
   <div>
     <p>加载 10 万行 1 万列，左右固定列，表尾合计</p>
-    <p>大数据不建议使用双向绑定的 data 属性（vue 监听会大数据会短暂的卡顿），建议使用 load/reload 函数</p>
+    <p>大数据不建议使用双向绑定的 data 属性（vue 监听会大数据会短暂的卡顿），建议使用 loadData/reloadData 函数</p>
     <p>对于多选 type="selection" 当数据量海量时应该绑定 checkProp 属性渲染速度可以提升n倍以上</p>
     <p>数据超大情况下必须使用：show-all-overflow,show-header-all-overflow 参数以及调整好 optimized：{scrollX,scrollY} 适合的参数可以更加流畅</p>
 
@@ -36,12 +36,12 @@ export default {
   created () {
     this.loading = true
     this.$nextTick(() => {
-      this.$refs.xTable.reload([])
+      this.$refs.xTable.reloadData([])
       setTimeout(() => {
         if (this.$refs.xTable) {
           this.tableData = window.MOCK_DATA_LIST.slice(0, 100000)
           this.tableColumn = window.MOCK_COLUMN_LIST.slice(0, 10000)
-          this.$refs.xTable.reload(this.tableData)
+          this.$refs.xTable.reloadData(this.tableData)
         }
         this.loading = false
       }, 300)

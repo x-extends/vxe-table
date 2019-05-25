@@ -1012,19 +1012,35 @@ export default {
         defVal: '',
         list: [
           {
-            name: 'load()',
+            name: 'loadData(datas)',
             desc: '加载数据（对于表格数据需要重载、局部递增场景下可能会用到）',
             type: 'Promise',
             enum: '',
-            defVal: 'data',
+            defVal: 'datas',
             list: []
           },
           {
-            name: 'reload()',
+            name: 'reloadData(datas)',
             desc: '加载数据并恢复到初始状态（对于表格数据需要重载、局部递增场景下可能会用到）',
             type: 'Promise',
             enum: '',
-            defVal: 'data',
+            defVal: 'datas',
+            list: []
+          },
+          {
+            name: 'loadColumn(columns)',
+            desc: '加载列配置（对于表格列需要重载、局部递增场景下可能会用到）',
+            type: 'Promise',
+            enum: '',
+            defVal: 'columns',
+            list: []
+          },
+          {
+            name: 'reloadColumn(columns)',
+            desc: '加载列配置并恢复到初始状态（对于表格列需要重载、局部递增场景下可能会用到）',
+            type: 'Promise',
+            enum: '',
+            defVal: 'columns',
             list: []
           },
           {
@@ -1057,6 +1073,14 @@ export default {
             type: 'Promise<{row, rows}>',
             enum: '',
             defVal: 'rows',
+            list: []
+          },
+          {
+            name: 'refreshColumn()',
+            desc: '刷新列配置（对于显示/隐藏列场景下可能会用到）',
+            type: 'Promise>',
+            enum: '',
+            defVal: '',
             list: []
           },
           {
