@@ -1060,14 +1060,6 @@ export default {
             list: []
           },
           {
-            name: 'getIndex(row)',
-            desc: '根据 row 获取 data 中的索引',
-            type: 'Number',
-            enum: '',
-            defVal: '',
-            list: []
-          },
-          {
             name: 'getRecords(rowIndex)',
             desc: '获取表格所有数据，和 data 属性一致行为，也可以指定索引获取数据',
             type: 'Array',
@@ -1076,11 +1068,27 @@ export default {
             list: []
           },
           {
+            name: 'getRowIndex(row)',
+            desc: '根据 row 获取数据中的索引',
+            type: 'Number',
+            enum: '',
+            defVal: 'row',
+            list: []
+          },
+          {
             name: 'getColumns(columnIndex)',
             desc: '获取表格所有列，也可以指定索引获取列',
             type: 'Array',
             enum: '',
             defVal: 'columnIndex?',
+            list: []
+          },
+          {
+            name: 'getColumnIndex(column)',
+            desc: '根据 column 获取列中的索引',
+            type: 'Number',
+            enum: '',
+            defVal: 'column',
             list: []
           },
           {

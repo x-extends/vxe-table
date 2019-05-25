@@ -314,7 +314,9 @@ export default {
       this.isUpdateCustoms = false
     },
     collectColumn (value) {
-      this.tableFullColumn = UtilTools.getColumnList(value)
+      let tableFullColumn = UtilTools.getColumnList(value)
+      this.tableFullColumn = tableFullColumn
+      this.updateKeyMap(tableFullColumn, 'fullColumnKeyMap')
     },
     tableColumn () {
       this.analyColumnWidth()
@@ -337,6 +339,7 @@ export default {
     }
     this.afterFullData = []
     this.fullDataKeyMap = new Map()
+    this.fullColumnKeyMap = new Map()
     this.load(this.data, true).then(() => {
       if (treeConfig && !(rowKey || treeConfig.key)) {
         throw new Error('[vxe-table] Tree table must have a unique primary key.')
@@ -369,6 +372,7 @@ export default {
     }
     this.afterFullData.length = 0
     this.fullDataKeyMap.clear()
+    this.fullColumnKeyMap.clear()
     this.closeFilter()
     this.closeContextMenu()
     ResizeEvent.off(this, this.$el.parentNode)
@@ -624,7 +628,7 @@ export default {
     updateKeyMap (datas, key) {
       let keyMap = this[key]
       keyMap.clear()
-      datas.forEach((row, rowIndex) => keyMap.set(row, rowIndex))
+      datas.forEach((item, index) => keyMap.set(item, index))
     },
     getIndex (row) {
       let { tableFullData, fullDataKeyMap, treeConfig } = this
@@ -632,6 +636,13 @@ export default {
         return fullDataKeyMap.get(row)
       }
       return treeConfig ? XEUtils.findTree(tableFullData, item => item === row, treeConfig) : -1
+    },
+    getColumnIndex (column) {
+      let { fullColumnKeyMap } = this
+      if (fullColumnKeyMap && fullColumnKeyMap.has(column)) {
+        return fullColumnKeyMap.get(column)
+      }
+      return -1
     },
     insert (records) {
       return this.insertAt(records)

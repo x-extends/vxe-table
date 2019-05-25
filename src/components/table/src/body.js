@@ -151,7 +151,7 @@ function renderColumn (h, _vm, $table, seq, fixedType, rowLevel, row, rowIndex, 
 }
 
 function renderRows (h, _vm, $table, rowLevel, fixedType, tableData, tableColumn) {
-  let { highlightHoverRow, id, fullDataKeyMap, rowKey, rowClassName, selectRow, hoverRow, treeConfig, treeExpandeds, scrollYLoad, overflowX, scrollXLoad, columnStore, scrollXStore, scrollYStore, expandeds } = $table
+  let { highlightHoverRow, id, fullDataKeyMap, fullColumnKeyMap, rowKey, rowClassName, selectRow, hoverRow, treeConfig, treeExpandeds, scrollYLoad, overflowX, columnStore, scrollYStore, expandeds } = $table
   let { leftList, rightList } = columnStore
   let rows = []
   tableData.forEach((row, rowIndex) => {
@@ -182,9 +182,7 @@ function renderRows (h, _vm, $table, rowLevel, fixedType, tableData, tableColumn
         key: rowKey || treeConfig ? UtilTools.getCellValue(row, rowKey || treeConfig.key) : rowIndex,
         on
       }, tableColumn.map((column, columnIndex) => {
-        if (scrollXLoad) {
-          columnIndex += scrollXStore.startIndex
-        }
+        columnIndex = fullColumnKeyMap.get(column)
         return renderColumn(h, _vm, $table, seq, fixedType, rowLevel, row, rowIndex, column, columnIndex)
       }))
     )
@@ -196,8 +194,8 @@ function renderRows (h, _vm, $table, rowLevel, fixedType, tableData, tableColumn
     } else if (expandeds.length) {
       // 如果行被展开了
       if (expandeds.indexOf(row) > -1) {
-        let columnIndex = XEUtils.findIndexOf(tableColumn, column => column.type === 'expand')
-        let column = tableColumn[columnIndex]
+        let column = tableColumn.find(column => column.type === 'expand')
+        let columnIndex = fullColumnKeyMap.get(column)
         if (column) {
           rows.push(
             h('tr', {
