@@ -985,6 +985,22 @@ export default {
             enum: '',
             defVal: '{rule,row,rowIndex,column,columnIndex,cell}',
             list: []
+          },
+          {
+            name: 'body-scroll',
+            desc: '内容滚动时会触发该事件',
+            type: '',
+            enum: '',
+            defVal: '{fixed,scrollTop,scrollLeft},event',
+            list: []
+          },
+          {
+            name: 'footer-scroll',
+            desc: '表尾滚动时会触发该事件',
+            type: '',
+            enum: '',
+            defVal: '{fixed,scrollLeft},event',
+            list: []
           }
         ]
       },
@@ -1041,6 +1057,14 @@ export default {
             type: 'Promise<{row, rows}>',
             enum: '',
             defVal: 'rows',
+            list: []
+          },
+          {
+            name: 'getIndex(row)',
+            desc: '根据 row 获取 data 中的索引',
+            type: 'Number',
+            enum: '',
+            defVal: '',
             list: []
           },
           {

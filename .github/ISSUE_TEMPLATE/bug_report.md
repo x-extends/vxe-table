@@ -1,14 +1,13 @@
 ---
 name: Bug report
 about: 有 Bug
-title: ''
+title: '如果相关信息提供不详细的可能不会进行答复及解决！'
 labels: bug
 assignees: ''
 
 ---
 
 **问题描述 Describe the bug**
-
 
 **重现问题的步骤 To Reproduce**
 

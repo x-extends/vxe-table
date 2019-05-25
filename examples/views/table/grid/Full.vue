@@ -49,7 +49,7 @@ export default {
         },
         {
           type: 'index',
-          width: 50,
+          width: 60,
           fixed: 'left'
         },
         {

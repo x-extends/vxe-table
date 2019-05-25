@@ -78,7 +78,7 @@ export default {
   render (h) {
     let { $parent: $table, fixedType, headerColumn, tableColumn, resizeMousedown, fixedColumn } = this
     let { $listeners: tableListeners, resizable, border, headerRowClassName, headerCellClassName, showHeaderAllOverflow, tableWidth, scrollXLoad, scrollXStore, scrollYWidth } = $table
-    // 如果是使用优化模式
+    // 横向滚动渲染
     if (scrollXLoad) {
       if (fixedType) {
         tableColumn = fixedColumn

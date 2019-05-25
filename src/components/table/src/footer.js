@@ -1,4 +1,5 @@
 import XEUtils from 'xe-utils'
+import UtilTools from '../../../tools/utils'
 
 export default {
   props: {
@@ -105,21 +106,23 @@ export default {
      * 如果存在列固定右侧，同步更新滚动状态
      */
     scrollEvent (evnt) {
-      let { $parent: $table } = this
+      let { $parent: $table, fixedType } = this
       let { $refs, scrollXLoad, triggerScrollXEvent } = $table
       let tableHeader = $refs.tableHeader
       let headerElem = tableHeader ? tableHeader.$el : null
       let bodyElem = $refs.tableBody.$el
       let footerElem = $refs.tableFooter.$el
+      let scrollLeft = footerElem.scrollLeft
       if (headerElem) {
-        headerElem.scrollLeft = footerElem.scrollLeft
+        headerElem.scrollLeft = scrollLeft
       }
       if (bodyElem) {
-        bodyElem.scrollLeft = footerElem.scrollLeft
+        bodyElem.scrollLeft = scrollLeft
       }
       if (scrollXLoad) {
         triggerScrollXEvent(evnt)
       }
+      UtilTools.emitEvent($table, 'footer-scroll', [{ fixed: fixedType, scrollLeft }, evnt])
     }
   }
 }

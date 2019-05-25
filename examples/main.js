@@ -33,12 +33,15 @@ function mockData () {
         colItem.type = 'selection'
         colItem.width = 60
       }
-      if (fullIndex < 3) {
-        colItem.fixed = 'left'
+      if (fullIndex === 2) {
+        colItem.type = 'index'
+        colItem.label = '序号'
+        colItem.width = 100
       }
-      if (fullIndex < 3) {
+      if (fullIndex < 4) {
+        colItem.fixed = 'left'
         colItem.sortable = true
-      } else if (fullIndex === 4) {
+      } else if (fullIndex === 5) {
         colItem.filters = [
           { label: 'id < 100', value: 100 },
           { label: 'id < 2000', value: 2000 }

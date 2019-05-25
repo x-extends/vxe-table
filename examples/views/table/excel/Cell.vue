@@ -1,12 +1,14 @@
 <template>
   <div>
     <p>使用 vxe-excel 渲染 Excel 表格</p>
+    <p>注意：暂时只能支持少量数据</p>
 
     <button class="btn" @click="getValidEvent">获取有效数据</button>
     <button class="btn" @click="getInsertEvent">获取新增</button>
     <button class="btn" @click="getRemoveEvent">获取删除</button>
     <button class="btn" @click="getUpdateEvent">获取修改</button>
     <button class="btn" @click="exportCsvEvent">导出.csv</button>
+    <input type="file" @change="fileChangeEvent" accept=".csv,.xls,.xlsx">
     <vxe-excel
       ref="xExcel"
       max-height="600"
@@ -44,6 +46,7 @@
 
 <script>
 import hljs from 'highlight.js'
+import XLSX from 'xlsx'
 
 export default {
   data () {
@@ -59,7 +62,7 @@ export default {
         }
       ].concat(columns.map(name => {
         return {
-          prop: name.toLowerCase(),
+          prop: name,
           label: name,
           width: 76,
           headerAlign: 'center',
@@ -71,12 +74,18 @@ export default {
       tableData: Array.from(new Array(20)).map(() => {
         let item = {}
         columns.forEach(name => {
-          item[name.toLowerCase()] = ''
+          item[name] = ''
         })
         return item
       }),
       demoCodes: [
         `
+        <button class="btn" @click="getValidEvent">获取有效数据</button>
+        <button class="btn" @click="getInsertEvent">获取新增</button>
+        <button class="btn" @click="getRemoveEvent">获取删除</button>
+        <button class="btn" @click="getUpdateEvent">获取修改</button>
+        <button class="btn" @click="exportCsvEvent">导出.csv</button>
+        <input type="file" @change="fileChangeEvent" accept=".csv,.xls,.xlsx">
         <vxe-excel
           ref="xExcel"
           max-height="600"
@@ -93,13 +102,12 @@ export default {
                 {
                   type: 'index',
                   width: 50,
-                  fixed: 'left',
                   align: 'center',
                   headerAlign: 'center'
                 }
               ].concat(columns.map(name => {
                 return {
-                  prop: name.toLowerCase(),
+                  prop: name,
                   label: name,
                   width: 76,
                   headerAlign: 'center',
@@ -111,10 +119,59 @@ export default {
               tableData: Array.from(new Array(20)).map(() => {
                 let item = {}
                 columns.forEach(name => {
-                  item[name.toLowerCase()] = ''
+                  item[name] = ''
                 })
                 return item
               })
+            }
+          },
+          methods: {
+            getValidEvent () {
+              let validRecords = this.$refs.xExcel.getRecords().filter(item => Object.keys(item).some(key => item[key]))
+              alert(validRecords.length)
+            },
+            getInsertEvent () {
+              let insertRecords = this.$refs.xExcel.getInsertRecords()
+              alert(insertRecords.length)
+            },
+            getRemoveEvent () {
+              let removeRecords = this.$refs.xExcel.getRemoveRecords()
+              alert(removeRecords.length)
+            },
+            getUpdateEvent () {
+              let updateRecords = this.$refs.xExcel.getUpdateRecords()
+              alert(updateRecords.length)
+            },
+            exportCsvEvent () {
+              this.$refs.xExcel.exportCsv()
+            },
+            fileChangeEvent (evnt) {
+              let files = evnt.target.files
+              let fileReader = new FileReader()
+              fileReader.onload = (ev) => {
+                let data = ev.target.result
+                let workbook = XLSX.read(data, { type: 'binary' })
+                let keys = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+                let csvData = XLSX.utils.sheet_to_csv(workbook.Sheets.Sheet1)
+                let tableData = csvData.split('\\n').map(vRow => {
+                  let vCols = vRow.split(',')
+                  let item = {}
+                  vCols.forEach((val, cIndex) => {
+                    let kIndex = Math.floor(cIndex / 26)
+                    let lIndex = cIndex % 26
+                    let key
+                    if (kIndex) {
+                      key = \`\${keys[kIndex]}\${keys[lIndex]}\`
+                    } else {
+                      key = keys[lIndex]
+                    }
+                    item[key] = val
+                  })
+                  return item
+                })
+                this.tableData = tableData
+              }
+              fileReader.readAsBinaryString(files[0])
             }
           }
         }
@@ -146,6 +203,34 @@ export default {
     },
     exportCsvEvent () {
       this.$refs.xExcel.exportCsv()
+    },
+    fileChangeEvent (evnt) {
+      let files = evnt.target.files
+      let fileReader = new FileReader()
+      fileReader.onload = (ev) => {
+        let data = ev.target.result
+        let workbook = XLSX.read(data, { type: 'binary' })
+        let keys = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+        let csvData = XLSX.utils.sheet_to_csv(workbook.Sheets.Sheet1)
+        let tableData = csvData.split('\n').map(vRow => {
+          let vCols = vRow.split(',')
+          let item = {}
+          vCols.forEach((val, cIndex) => {
+            let kIndex = Math.floor(cIndex / 26)
+            let lIndex = cIndex % 26
+            let key
+            if (kIndex) {
+              key = `${keys[kIndex]}${keys[lIndex]}`
+            } else {
+              key = keys[lIndex]
+            }
+            item[key] = val
+          })
+          return item
+        })
+        this.tableData = tableData
+      }
+      fileReader.readAsBinaryString(files[0])
     }
   }
 }

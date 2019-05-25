@@ -47,8 +47,8 @@ export default {
       this.$refs.xTable.reload([])
       setTimeout(() => {
         if (this.$refs.xTable) {
-          let list = window.MOCK_DATA_LIST.slice(0, 10000)
-          this.$refs.xTable.reload(list)
+          this.tableData = window.MOCK_DATA_LIST.slice(0, 10000)
+          this.$refs.xTable.reload(this.tableData)
         }
         this.loading = false
       }, 500)

@@ -1,5 +1,5 @@
 {
-  "!return|array(5-50)": {
+  "!return|array(15-120)": {
     "id|number": "{{ $index+1 }}",
     "name": "{{ random.repeat(['前端', '后端', '测试', '项目经理', '设计'],1) }}_{{ $index }}",
     "describe": "{{ random.repeat('角色描述',4,50) }}",

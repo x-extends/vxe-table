@@ -39,7 +39,7 @@ function renderColumn (h, _vm, $table, seq, fixedType, rowLevel, row, rowIndex, 
   if ((scrollXLoad || scrollYLoad) && !hasEllipsis) {
     showEllipsis = hasEllipsis = true
   }
-  // 优化事件绑定
+  // 事件绑定
   if (showTooltip) {
     tdOns.mouseover = evnt => {
       $table.triggerTooltipEvent(evnt, { $table, seq, row, rowIndex, column, columnIndex, fixed: fixedType, level: rowLevel })
@@ -71,11 +71,11 @@ function renderColumn (h, _vm, $table, seq, fixedType, rowLevel, row, rowIndex, 
     attrs = { rowspan, colspan }
   }
   // 如果显示状态
-  if (editConfig && editConfig.showStatus) {
+  if (!fixedHiddenColumn && editConfig && editConfig.showStatus) {
     isDirty = $table.hasRowChange(row, column.property)
   }
   // 批量选中处理
-  if (!fixedType) {
+  if (!fixedHiddenColumn && !fixedType) {
     if (isMouseChecked) {
       handleLocation(checkedLocat, checked.rows, checked.columns, row, column)
       handleLocation(checkedTLocat, checked.tRows, checked.tColumns, row, column)
@@ -121,7 +121,7 @@ function renderColumn (h, _vm, $table, seq, fixedType, rowLevel, row, rowIndex, 
         'c--ellipsis': showEllipsis
       }],
       attrs: {
-        title: showTitle ? XEUtils.get(row, column.property) : null
+        title: showTitle ? UtilTools.getCellValue(row, column.property) : null
       },
       style: {
         width: hasEllipsis ? `${border ? renderWidth - 1 : renderWidth}px` : null
@@ -151,16 +151,18 @@ function renderColumn (h, _vm, $table, seq, fixedType, rowLevel, row, rowIndex, 
 }
 
 function renderRows (h, _vm, $table, rowLevel, fixedType, tableData, tableColumn) {
-  let { highlightHoverRow, id, rowKey, rowClassName, selectRow, hoverRow, treeConfig, treeExpandeds, scrollYLoad, overflowX, scrollXLoad, columnStore, scrollXStore, scrollYStore, expandeds } = $table
+  let { highlightHoverRow, id, fullDataKeyMap, rowKey, rowClassName, selectRow, hoverRow, treeConfig, treeExpandeds, scrollYLoad, overflowX, scrollXLoad, columnStore, scrollXStore, scrollYStore, expandeds } = $table
   let { leftList, rightList } = columnStore
   let rows = []
   tableData.forEach((row, rowIndex) => {
-    if (scrollYLoad) {
-      rowIndex = scrollYStore.startIndex + rowIndex
-    }
     let on = null
     let seq = rowIndex + 1
-    // 优化事件绑定
+    if (scrollYLoad) {
+      seq += scrollYStore.startIndex
+    }
+    // 确保任何情况下 rowIndex 都精准指向真实 data 索引
+    rowIndex = fullDataKeyMap.get(row)
+    // 事件绑定
     if (highlightHoverRow && (leftList.length || rightList.length) && overflowX) {
       on = {
         mouseover (evnt) {
@@ -177,7 +179,7 @@ function renderRows (h, _vm, $table, rowLevel, fixedType, tableData, tableColumn
           'row--selected': row === selectRow,
           'row--hover': row === hoverRow
         }, rowClassName ? XEUtils.isFunction(rowClassName) ? rowClassName({ $table, seq, row, rowIndex }) : rowClassName : ''],
-        key: rowKey || treeConfig ? XEUtils.get(row, rowKey || treeConfig.key) : rowIndex,
+        key: rowKey || treeConfig ? UtilTools.getCellValue(row, rowKey || treeConfig.key) : rowIndex,
         on
       }, tableColumn.map((column, columnIndex) => {
         if (scrollXLoad) {
@@ -249,7 +251,7 @@ function syncBodyScroll (scrollTop, elem1, elem2) {
       if (elem2) {
         elem2.onscroll = elem2._onscroll
       }
-    }, 200)
+    }, 100)
   }
 }
 
@@ -267,7 +269,7 @@ export default {
     this.$el.onscroll = this.scrollEvent
     this.$el._onscroll = this.scrollEvent
   },
-  destroyed () {
+  beforeDestroy () {
     this.$el._onscroll = null
     this.$el.onscroll = null
   },
@@ -369,20 +371,24 @@ export default {
       let bodyElem = tableBody.$el
       let leftElem = leftBody ? leftBody.$el : null
       let rightElem = rightBody ? rightBody.$el : null
-      if (fixedType === 'left') {
-        syncBodyScroll(leftElem.scrollTop, bodyElem, rightElem)
-      } else if (fixedType === 'right') {
-        syncBodyScroll(rightElem.scrollTop, bodyElem, leftElem)
+      let scrollTop = bodyElem.scrollTop
+      let scrollLeft = bodyElem.scrollLeft
+      if (leftElem && fixedType === 'left') {
+        scrollTop = leftElem.scrollTop
+        syncBodyScroll(scrollTop, bodyElem, rightElem)
+      } else if (rightElem && fixedType === 'right') {
+        scrollTop = rightElem.scrollTop
+        syncBodyScroll(scrollTop, bodyElem, leftElem)
       } else {
         if (headerElem) {
           headerElem.scrollLeft = bodyElem.scrollLeft
         }
-        // 避免 IE 卡顿
+        // 缓解 IE 卡顿
         if (leftElem || rightElem) {
           clearTimeout(updateLeftScrollingTimeput)
           updateLeftScrollingTimeput = setTimeout($table.checkScrolling, DomTools.browse.msie ? 200 : 20)
+          syncBodyScroll(scrollTop, leftElem, rightElem)
         }
-        syncBodyScroll(bodyElem.scrollTop, leftElem, rightElem)
       }
       if (scrollXLoad) {
         triggerScrollXEvent(evnt)
@@ -390,6 +396,7 @@ export default {
       if (scrollYLoad) {
         triggerScrollYEvent(evnt)
       }
+      UtilTools.emitEvent($table, 'body-scroll', [{ fixed: fixedType, scrollTop, scrollLeft }, evnt])
     }
   }
 }

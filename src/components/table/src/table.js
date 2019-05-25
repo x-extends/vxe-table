@@ -116,6 +116,9 @@ export default {
       tableFullColumn: [],
       // 渲染的列
       tableColumn: [],
+      // 完整数据
+      // tableFullData: [],
+      // afterFullData: [],
       // 渲染中的数据
       tableData: [],
       // 表格宽度
@@ -261,38 +264,6 @@ export default {
     }
   },
   computed: {
-    /**
-     * 获取处理后全量的表格数据
-     * 如果存在筛选条件，继续处理
-     */
-    afterFullData () {
-      let { visibleColumn, tableFullData } = this
-      let column = this.visibleColumn.find(column => column.order)
-      let tableData = tableFullData
-      let filterColumn = visibleColumn.filter(({ filters }) => filters && filters.length)
-      tableData = tableData.filter(row => {
-        return filterColumn.every(column => {
-          let { property, filters, filterMethod } = column
-          if (filters && filters.length) {
-            let valueList = []
-            filters.forEach(item => {
-              if (item.checked) {
-                valueList.push(item.value)
-              }
-            })
-            if (valueList.length && filterMethod !== 'custom') {
-              return filterMethod ? valueList.some(value => filterMethod({ value, row, column })) : valueList.indexOf(UtilTools.getCellValue(row, property)) > -1
-            }
-          }
-          return true
-        })
-      })
-      if (column && column.order) {
-        let rest = XEUtils.sortBy(tableData, column.property)
-        tableData = column.order === 'desc' ? rest.reverse() : rest
-      }
-      return tableData
-    },
     // 优化的参数
     optimizeConfig () {
       return Object.assign({}, GlobalConfig.optimized, this.optimized)
@@ -364,6 +335,8 @@ export default {
         offsetSize: scrollY.oSize
       })
     }
+    this.afterFullData = []
+    this.fullDataKeyMap = new Map()
     this.load(this.data, true).then(() => {
       if (treeConfig && !(rowKey || treeConfig.key)) {
         throw new Error('[vxe-table] Tree table must have a unique primary key.')
@@ -394,6 +367,8 @@ export default {
     if (tableWrapper && tableWrapper.parentNode) {
       tableWrapper.parentNode.removeChild(tableWrapper)
     }
+    this.afterFullData.length = 0
+    this.fullDataKeyMap.clear()
     this.closeFilter()
     this.closeContextMenu()
     ResizeEvent.off(this, this.$el.parentNode)
@@ -595,7 +570,7 @@ export default {
         column.order = null
       })
       this.tableFullData = this.data || []
-      this.tableData = this.tableFullData
+      this.tableData = this.getTableData(true).tableData
       return this.$nextTick()
     },
     clearFilter (force) {
@@ -625,7 +600,8 @@ export default {
       if (scrollYLoad && !(height || maxHeight)) {
         throw new Error('[vxe-table] The height/max-height must be set for the scroll load.')
       }
-      this.tableData = this.getTableData().tableData
+      this.tableData = this.getTableData(true).tableData
+      this.updateKeyMap(tableFullData, 'fullDataKeyMap')
       this.checkSelectionStatus()
       let rest = this.$nextTick()
       if (!init) {
@@ -643,6 +619,19 @@ export default {
       this.clearRowExpand()
       this.clearTreeExpand()
       return this.load(data).then(this.handleDefaultExpand)
+    },
+    // 更新数据真实的 key Map
+    updateKeyMap (datas, key) {
+      let keyMap = this[key]
+      keyMap.clear()
+      datas.forEach((row, rowIndex) => keyMap.set(row, rowIndex))
+    },
+    getIndex (row) {
+      let { tableFullData, fullDataKeyMap, treeConfig } = this
+      if (fullDataKeyMap && fullDataKeyMap.has(row)) {
+        return fullDataKeyMap.get(row)
+      }
+      return treeConfig ? XEUtils.findTree(tableFullData, item => item === row, treeConfig) : -1
     },
     insert (records) {
       return this.insertAt(records)
@@ -834,13 +823,46 @@ export default {
       return updateRecords
     },
     /**
+     * 获取处理后全量的表格数据
+     * 如果存在筛选条件，继续处理
+     */
+    updateAfterFullData () {
+      let { visibleColumn, tableFullData } = this
+      let column = this.visibleColumn.find(column => column.order)
+      let tableData = tableFullData
+      let filterColumn = visibleColumn.filter(({ filters }) => filters && filters.length)
+      tableData = tableData.filter(row => {
+        return filterColumn.every(column => {
+          let { property, filters, filterMethod } = column
+          if (filters && filters.length) {
+            let valueList = []
+            filters.forEach(item => {
+              if (item.checked) {
+                valueList.push(item.value)
+              }
+            })
+            if (valueList.length && filterMethod !== 'custom') {
+              return filterMethod ? valueList.some(value => filterMethod({ value, row, column })) : valueList.indexOf(UtilTools.getCellValue(row, property)) > -1
+            }
+          }
+          return true
+        })
+      })
+      if (column && column.order) {
+        let rest = XEUtils.sortBy(tableData, column.property)
+        tableData = column.order === 'desc' ? rest.reverse() : rest
+      }
+      this.afterFullData = tableData
+      return tableData
+    },
+    /**
      * 获取处理后的表格数据
      * 如果存在筛选条件，继续处理
      * 如果存在排序，继续处理
      */
-    getTableData () {
+    getTableData (force) {
       let { scrollYLoad, scrollYStore } = this
-      let fullData = this.afterFullData
+      let fullData = force ? this.updateAfterFullData() : this.afterFullData
       return { fullData, tableData: scrollYLoad ? fullData.slice(scrollYStore.startIndex, scrollYStore.startIndex + scrollYStore.renderSize) : fullData.slice(0) }
     },
     handleDefaultExpand () {
@@ -1842,7 +1864,7 @@ export default {
      * 如果是双击模式，则单击后选中状态
      */
     triggerCellClickEvent (evnt, params) {
-      let { $el, highlightCurrentRow, editStore, treeConfig, editConfig } = this
+      let { $el, highlightCurrentRow, editRules, editStore, treeConfig, editConfig } = this
       let { actived } = editStore
       if (highlightCurrentRow) {
         if (!DomTools.getEventTargetNode(evnt, $el, 'vxe-tree-wrapper').flag) {
@@ -1855,9 +1877,13 @@ export default {
       if (editConfig) {
         if (editConfig.trigger === 'click') {
           if (!actived.args || evnt.currentTarget !== actived.args.cell) {
-            this.triggerValidate().then(() => {
+            if (editRules) {
               this.handleActived(params, evnt)
-            }).catch(e => e)
+            } else {
+              this.triggerValidate().then(() => {
+                this.handleActived(params, evnt)
+              }).catch(e => e)
+            }
           }
         }
       }
@@ -1947,10 +1973,10 @@ export default {
      * 处理选中源
      */
     handleSelected (params, evnt) {
-      let { mouseConfig = {}, editStore } = this
+      let { mouseConfig = {}, editRules, editStore } = this
       let { selected } = editStore
       let { row, column } = params
-      return this.triggerValidate().then(() => {
+      let selectMethod = () => {
         if (selected.row !== row || selected.column !== column) {
           this.clearChecked(evnt)
           this.clearActived(evnt)
@@ -1964,7 +1990,8 @@ export default {
           this.handleChecked(select, select, evnt)
         }
         return this.$nextTick()
-      }).catch(e => e)
+      }
+      return editRules ? Promise.resolve() : this.triggerValidate().then(selectMethod).catch(e => e)
     },
     /**
      * 清除所有选中状态
@@ -2178,7 +2205,7 @@ export default {
         column.order = order
         // 如果是服务端排序，则跳过本地排序处理
         if (column.sortable !== 'custom') {
-          this.tableData = this.getTableData().tableData
+          this.tableData = this.getTableData(true).tableData
         }
         UtilTools.emitEvent(this, 'sort-change', [{ column, prop, order }])
       }
@@ -2236,7 +2263,7 @@ export default {
       } else {
         // 如果是服务端筛选，则跳过本地筛选处理
         if (column.filterMethod !== 'custom') {
-          this.tableData = this.getTableData().tableData
+          this.tableData = this.getTableData(true).tableData
         }
         UtilTools.emitEvent(this, 'filter-change', [{ column, prop: column.property, values: valueList }])
       }
@@ -2627,7 +2654,7 @@ export default {
       let { actived } = editStore
       let type = validStore.visible ? 'all' : 'blur'
       this.clearValidate()
-      if (actived.row && !XEUtils.isEmpty(editRules)) {
+      if (actived.row && editRules) {
         let { row, column, cell } = actived.args
         if (editConfig.mode === 'row') {
           return this.validRowRules(type, row)
