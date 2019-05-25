@@ -1,13 +1,14 @@
 ---
 name: Bug report
 about: 有 Bug
-title: '如果描述不明确、相关信息提供不详细的可能不会及时进行答复及解决！'
+title: '请将问题描述清楚、并提供相关报错信息，否则将不会及时帮你解决！！！'
 labels: bug
 assignees: ''
 
 ---
 
 **问题描述 Describe the bug**
+
 
 **重现问题的步骤 To Reproduce**
 
