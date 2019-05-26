@@ -2341,7 +2341,9 @@ export default {
      * 展开行事件
      */
     triggerRowExpandEvent (evnt, { row }) {
-      return this.toggleRowExpansion(row)
+      let rest = this.toggleRowExpansion(row)
+      UtilTools.emitEvent(this, 'toggle-expand-change', [{ row, rowIndex: this.fullDataKeyMap.get(row), $table: this }, evnt])
+      return rest
     },
     /**
      * 切换展开行
@@ -2404,13 +2406,15 @@ export default {
       return this.$nextTick()
     },
     /**
-     * 展开行事件
+     * 展开树节点事件
      */
     triggerTreeExpandEvent (evnt, { row }) {
-      return this.toggleTreeExpansion(row)
+      let rest = this.toggleTreeExpansion(row)
+      UtilTools.emitEvent(this, 'toggle-tree-change', [{ row, rowIndex: this.fullDataKeyMap.get(row), $table: this }, evnt])
+      return rest
     },
     /**
-     * 切换展开行
+     * 切换/展开树节点
      */
     toggleTreeExpansion (row) {
       return this.setTreeExpansion(row)

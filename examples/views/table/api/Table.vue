@@ -475,12 +475,12 @@ export default {
             name: 'tree-config',
             desc: '树形结构配置项',
             type: 'Object',
-            enum: '必须设置 rowKey 或 key',
+            enum: '',
             defVal: '',
             list: [
               {
                 name: 'key',
-                desc: '行数据中的唯一主键',
+                desc: '行数据中的唯一主键（需要设置 rowKey 或 key）',
                 type: 'String',
                 enum: '',
                 defVal: '',
@@ -749,7 +749,7 @@ export default {
               },
               {
                 name: 'validator',
-                desc: '自定义校验方法，Function(rule, value, callback)',
+                desc: '自定义校验方法，Function(rule, value, callback, {rules,row,column,rowIndex,columnIndex})',
                 type: 'Function',
                 enum: '',
                 defVal: '',
@@ -947,6 +947,22 @@ export default {
             list: []
           },
           {
+            name: 'toggle-expand-change',
+            desc: '当行展开或收起时会触发该事件',
+            type: '',
+            enum: '',
+            defVal: '{row,rowIndex},event',
+            list: []
+          },
+          {
+            name: 'toggle-tree-change',
+            desc: '当树节点展开或收起时会触发该事件',
+            type: '',
+            enum: '',
+            defVal: '{row,rowIndex},event',
+            list: []
+          },
+          {
             name: 'context-menu-link',
             desc: '当点击快捷菜单后触发',
             type: '',
@@ -1073,14 +1089,6 @@ export default {
             type: 'Promise<{row, rows}>',
             enum: '',
             defVal: 'rows',
-            list: []
-          },
-          {
-            name: 'refreshColumn()',
-            desc: '刷新列配置（对于显示/隐藏列场景下可能会用到）',
-            type: 'Promise>',
-            enum: '',
-            defVal: '',
             list: []
           },
           {
@@ -1391,6 +1399,14 @@ export default {
             name: 'recalculate()',
             desc: '重新计算并更新列宽',
             type: 'Promise',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'refreshColumn()',
+            desc: '刷新列配置（对于显示/隐藏列场景下可能会用到）',
+            type: 'Promise>',
             enum: '',
             defVal: '',
             list: []
