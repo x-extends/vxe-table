@@ -57,7 +57,8 @@ import TableEditStatus from './views/table/edit/Status.vue'
 import TableEditCellDisable from './views/table/edit/CellDisable.vue'
 import TableEditRowDisable from './views/table/edit/RowDisable.vue'
 import TableEditKeyboard from './views/table/edit/Keyboard.vue'
-import TableEditValid from './views/table/edit/Valid.vue'
+import TableEditCellValid from './views/table/edit/CellValid.vue'
+import TableEditRowValid from './views/table/edit/RowValid.vue'
 import TableEditTemplate from './views/table/edit/Template.vue'
 
 import TableExcelCell from './views/table/excel/Cell.vue'
@@ -358,9 +359,14 @@ export default new Router({
       component: TableEditTemplate
     },
     {
-      path: '/table/edit/valid',
-      name: 'TableEditValid',
-      component: TableEditValid
+      path: '/table/edit/cellValid',
+      name: 'TableEditCellValid',
+      component: TableEditCellValid
+    },
+    {
+      path: '/table/edit/rowValid',
+      name: 'TableEditRowValid',
+      component: TableEditRowValid
     },
     {
       path: '/table/excel/cell',

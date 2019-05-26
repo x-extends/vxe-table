@@ -415,21 +415,27 @@ export default {
               }
             },
             {
-              lable: 'cell 禁用编辑',
+              lable: '禁用编辑 cell',
               locat: {
                 name: 'TableEditCellDisable'
               }
             },
             {
-              lable: 'row 禁用编辑',
+              lable: '禁用编辑 row',
               locat: {
                 name: 'TableEditRowDisable'
               }
             },
             {
-              lable: '数据校验',
+              lable: '数据校验 cell',
               locat: {
-                name: 'TableEditValid'
+                name: 'TableEditCellValid'
+              }
+            },
+            {
+              lable: '数据校验 row',
+              locat: {
+                name: 'TableEditRowValid'
               }
             },
             {

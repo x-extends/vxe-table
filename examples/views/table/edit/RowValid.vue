@@ -13,7 +13,8 @@
       show-all-overflow
       :data.sync="tableData"
       :edit-rules="validRules"
-      :edit-config="{trigger: 'click', mode: 'cell', showStatus: true}">
+      :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
+      :keyboard-config="{isArray: true, isTab: true}">
       <vxe-table-column type="selection" width="60"></vxe-table-column>
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column prop="name" label="Name" :edit-render="{name: 'input'}"></vxe-table-column>
@@ -59,7 +60,7 @@ export default {
           show-all-overflow
           :data.sync="tableData"
           :edit-rules="validRules"
-          :edit-config="{trigger: 'click', mode: 'cell', showStatus: true}">
+          :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">
           <vxe-table-column type="selection" width="60"></vxe-table-column>
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column prop="name" label="Name" :edit-render="{name: 'input'}"></vxe-table-column>

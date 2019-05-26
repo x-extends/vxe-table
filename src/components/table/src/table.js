@@ -1306,7 +1306,7 @@ export default {
     },
     // 处理 Tab 键移动
     moveTabSelected (params, evnt) {
-      let { $refs, tableData, visibleColumn, handleSelected } = this
+      let { $refs, tableData, visibleColumn, editConfig } = this
       let nextRow
       let nextRowIndex
       let nextColumn
@@ -1336,11 +1336,19 @@ export default {
         if (nextRow) {
           params.rowIndex = nextRowIndex
           params.row = nextRow
+        } else {
+          params.rowIndex = rowIndex
         }
         params.columnIndex = nextColumnIndex
         params.column = nextColumn
         params.cell = DomTools.getCell(params, $refs.tableBody.$el)
-        handleSelected(params, evnt)
+        if (editConfig) {
+          if (editConfig.trigger === 'click') {
+            this.handleActived(params, evnt)
+          } else if (editConfig.trigger === 'dblclick') {
+            this.handleSelected(params, evnt)
+          }
+        }
       }
     },
     // 处理方向键移动
@@ -1951,6 +1959,7 @@ export default {
       if (editConfig.mode === 'row' ? actived.row !== row : (actived.row !== row || actived.column !== column)) {
         // 判断是否禁用编辑
         if (!activeMethod || activeMethod(params)) {
+          this.clearValidate()
           this.clearCopyed(evnt)
           this.clearChecked(evnt)
           this.clearSelected(evnt)
@@ -1967,6 +1976,8 @@ export default {
           UtilTools.emitEvent(this, 'edit-disabled', [params, evnt])
         }
       } else {
+        column.renderHeight = cell.offsetHeight
+        actived.args = params
         setTimeout(() => {
           this.handleFocus(params, evnt)
         })
@@ -2024,7 +2035,7 @@ export default {
         }
         return this.$nextTick()
       }
-      return editRules ? Promise.resolve() : this.triggerValidate().then(selectMethod).catch(e => e)
+      return editRules ? this.triggerValidate().then(selectMethod).catch(e => e) : selectMethod()
     },
     /**
      * 清除所有选中状态
