@@ -1,1 +1,1 @@
-import 'highlight.js/styles/androidstudio.css'
+import 'highlight.js/styles/default.css'
