@@ -955,8 +955,8 @@ export default {
             list: []
           },
           {
-            name: 'clear-actived',
-            desc: '单元格编辑状态下被清除时会触发该事件',
+            name: 'edit-closed',
+            desc: '单元格编辑状态下被关闭时会触发该事件',
             type: '',
             enum: '',
             defVal: '{row,rowIndex,column,columnIndex,cell},event',
@@ -1350,6 +1350,14 @@ export default {
           {
             name: 'clearScroll()',
             desc: '清除滚动相关信息，还原到初始状态',
+            type: 'Promise',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'clearAll()',
+            desc: '清除表格所有条件，还原到初始状态',
             type: 'Promise',
             enum: '',
             defVal: '',

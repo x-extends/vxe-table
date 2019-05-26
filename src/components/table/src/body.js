@@ -51,7 +51,7 @@ function renderColumn (h, _vm, $table, seq, fixedType, rowLevel, row, rowIndex, 
   }
   if (highlightCurrentRow ||
     tableListeners['cell-click'] ||
-    (editRender && editConfig && editConfig.trigger !== 'manual') ||
+    (editRender && editConfig) ||
     (treeConfig && (treeConfig.trigger === 'row' || (column.treeNode && treeConfig.trigger === 'cell')))) {
     tdOns.click = evnt => {
       $table.triggerCellClickEvent(evnt, { $table, row, rowIndex, column, columnIndex, fixed: fixedType, level: rowLevel, cell: evnt.currentTarget })

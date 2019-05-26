@@ -589,6 +589,7 @@ export default {
       this.clearScroll()
       this.clearSort()
       this.clearFilter()
+      this.clearCurrentRow()
       this.clearSelection()
       this.clearRowExpand()
       this.clearTreeExpand()
@@ -1907,12 +1908,13 @@ export default {
     triggerCellClickEvent (evnt, params) {
       let { $el, highlightCurrentRow, editRules, editStore, treeConfig, editConfig } = this
       let { actived } = editStore
+      let { column, columnIndex } = params
       if (highlightCurrentRow) {
         if (!DomTools.getEventTargetNode(evnt, $el, 'vxe-tree-wrapper').flag) {
           this.selectRow = params.row
         }
       }
-      if (treeConfig && (treeConfig.trigger === 'row' || (params.column.treeNode && treeConfig.trigger === 'cell'))) {
+      if (treeConfig && (treeConfig.trigger === 'row' || (column.treeNode && treeConfig.trigger === 'cell'))) {
         this.triggerTreeExpandEvent(evnt, params)
       }
       if (editConfig) {
@@ -1925,6 +1927,11 @@ export default {
                 this.handleActived(params, evnt)
               }).catch(e => e)
             }
+          }
+        } else {
+          if (actived.row) {
+            actived.args.column = column
+            actived.args.columnIndex = columnIndex
           }
         }
       }
@@ -1991,7 +1998,7 @@ export default {
       let { editStore } = this
       let { actived } = editStore
       if (actived.row || actived.column) {
-        UtilTools.emitEvent(this, 'clear-actived', [actived.args, evnt])
+        UtilTools.emitEvent(this, 'edit-closed', [actived.args, evnt])
       }
       actived.args = null
       actived.row = null

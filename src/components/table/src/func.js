@@ -44,6 +44,7 @@ export default [
   'clearCopyed',
   'clearData',
   'clearScroll',
+  'clearAll',
   'closeFilter',
   'clostTooltip',
   'closeContextMenu',
