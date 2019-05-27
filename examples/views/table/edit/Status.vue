@@ -2,9 +2,9 @@
   <div>
     <p>设置 edit-config={trigger: 'click', mode: 'cell', showStatus: true} 开启编辑状态显示功能</p>
 
-    <button class="btn" @click="getInsertEvent">获取新增</button>
-    <button class="btn" @click="getRemoveEvent">获取删除</button>
-    <button class="btn" @click="getUpdateEvent">获取修改</button>
+    <vxe-button @click="getInsertEvent">获取新增</vxe-button>
+    <vxe-button @click="getRemoveEvent">获取删除</vxe-button>
+    <vxe-button @click="getUpdateEvent">获取修改</vxe-button>
     <vxe-table
       ref="xTable"
       border
@@ -35,9 +35,9 @@ export default {
       tableData: [],
       demoCodes: [
         `
-        <button class="btn" @click="getInsertEvent">获取新增</button>
-        <button class="btn" @click="getRemoveEvent">获取删除</button>
-        <button class="btn" @click="getUpdateEvent">获取修改</button>
+        <vxe-button @click="getInsertEvent">获取新增</vxe-button>
+        <vxe-button @click="getRemoveEvent">获取删除</vxe-button>
+        <vxe-button @click="getUpdateEvent">获取修改</vxe-button>
         <vxe-table
           ref="xTable"
           border

@@ -3,6 +3,9 @@ import XEUtils from 'xe-utils'
 var columnId = 0
 
 const UtilTools = {
+  getSize ({ size, $parent }) {
+    return size || ($parent && ['medium', 'small', 'mini'].indexOf($parent.size) > -1 ? $parent.size : null)
+  },
   getRowId ($table, row, rowIndex) {
     let { rowKey, treeConfig, expandeds } = $table
     if (!rowKey) {

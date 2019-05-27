@@ -67,6 +67,7 @@ export default {
     visibleColumn: Array,
     collectColumn: Array,
     fixedColumn: Array,
+    size: String,
     fixedType: String,
     isGroup: Boolean
   },

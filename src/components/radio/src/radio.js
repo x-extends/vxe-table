@@ -6,10 +6,16 @@ export default {
     name: String,
     size: String
   },
+  computed: {
+    vSize () {
+      return this.size || this.$parent.size || this.$parent.vSize
+    }
+  },
   render (h) {
-    let { disabled, size, value, name } = this
+    let { $slots, disabled, vSize, value, name } = this
     return h('label', {
-      class: ['vxe-radio', size ? `size--${size}` : '', {
+      class: ['vxe-radio', {
+        [`size--${vSize}`]: vSize,
         'is--disabled': disabled
       }]
     }, [
@@ -35,9 +41,9 @@ export default {
       h('span', {
         class: ['radio--icon']
       }),
-      this.$slots.default ? h('span', {
+      $slots.default ? h('span', {
         class: ['checkbox--label']
-      }, this.$slots.default) : this._e()
+      }, $slots.default) : null
     ])
   }
 }

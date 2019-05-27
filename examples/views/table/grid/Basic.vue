@@ -43,61 +43,28 @@ export default {
   data () {
     return {
       tableColumn: [
-        {
-          type: 'index',
-          width: 50
-        },
-        {
-          prop: 'name',
-          label: 'Name'
-        },
-        {
-          prop: 'sex',
-          label: 'Sex',
-          showHeaderOverflow: true
-        },
-        {
-          prop: 'address',
-          label: 'Address',
-          showOverflow: true
-        }
+        { type: 'index', width: 50 },
+        { prop: 'name', label: 'Name' },
+        { prop: 'sex', label: 'Sex', showHeaderOverflow: true },
+        { prop: 'address', label: 'Address', showOverflow: true }
       ],
       tableColumn2: [
-        {
-          type: 'index',
-          width: 50
-        },
+        { type: 'index', width: 50 },
         {
           label: '基本信息',
           children: [
-            {
-              prop: 'name',
-              label: 'Name'
-            },
+            { prop: 'name', label: 'Name' },
             {
               label: '其他信息',
               children: [
-                {
-                  prop: 'rate',
-                  label: 'Rate'
-                },
-                {
-                  prop: 'age',
-                  label: 'Age'
-                }
+                { prop: 'rate', label: 'Rate' },
+                { prop: 'age', label: 'Age' }
               ]
             },
-            {
-              prop: 'sex',
-              label: 'Sex'
-            }
+            { prop: 'sex', label: 'Sex' }
           ]
         },
-        {
-          prop: 'address',
-          label: 'Address',
-          showOverflow: true
-        }
+        { prop: 'address', label: 'Address', showOverflow: true }
       ],
       tableData: [],
       demoCodes: [
@@ -113,23 +80,10 @@ export default {
           data () {
             return {
               tableColumn: [
-                {
-                  type: 'index',
-                  width: 50
-                },
-                {
-                  prop: 'name',
-                  label: 'Name'
-                },
-                {
-                  prop: 'sex',
-                  label: 'Sex'
-                },
-                {
-                  prop: 'address',
-                  label: 'Address',
-                  showOverflow: true
-                }
+                { type: 'index', width: 50 },
+                { prop: 'name', label: 'Name' },
+                { prop: 'sex', label: 'Sex', showHeaderOverflow: true },
+                { prop: 'address', label: 'Address', showOverflow: true }
               ]
             }
           },
@@ -152,42 +106,23 @@ export default {
         export default {
           data () {
             return {
-              tableColumn: [
-                {
-                  type: 'index',
-                  width: 50
-                },
+              tableColumn2: [
+                { type: 'index', width: 50 },
                 {
                   label: '基本信息',
                   children: [
-                    {
-                      prop: 'name',
-                      label: 'Name'
-                    },
+                    { prop: 'name', label: 'Name' },
                     {
                       label: '其他信息',
                       children: [
-                        {
-                          prop: 'rate',
-                          label: 'Rate'
-                        },
-                        {
-                          prop: 'age',
-                          label: 'Age'
-                        }
+                        { prop: 'rate', label: 'Rate' },
+                        { prop: 'age', label: 'Age' }
                       ]
                     },
-                    {
-                      prop: 'sex',
-                      label: 'Sex'
-                    }
+                    { prop: 'sex', label: 'Sex' }
                   ]
                 },
-                {
-                  prop: 'address',
-                  label: 'Address',
-                  showOverflow: true
-                }
+                { prop: 'address', label: 'Address', showOverflow: true }
               ]
             }
           },

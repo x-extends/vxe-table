@@ -7,6 +7,7 @@ export default {
     tableColumn: Array,
     visibleColumn: Array,
     fixedColumn: Array,
+    size: String,
     fixedType: String
   },
   render (h) {

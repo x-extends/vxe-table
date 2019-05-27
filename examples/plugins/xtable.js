@@ -2,10 +2,16 @@ import Vue from 'vue'
 import VXETable from '../../src'
 import VXETablePluginElement from 'vxe-table-plugin-element'
 import VXETablePluginIView from 'vxe-table-plugin-iview'
+import TableToolbar from '../../src/components/table-toolbar'
+import Input from '../../src/components/input'
+import Button from '../../src/components/button'
 import 'vxe-table-plugin-element/dist/style.css'
 import 'vxe-table-plugin-iview/dist/style.css'
 
 Vue.use(VXETable)
+Vue.use(TableToolbar)
+Vue.use(Input)
+Vue.use(Button)
 
 VXETable.use(VXETablePluginElement)
 VXETable.use(VXETablePluginIView)

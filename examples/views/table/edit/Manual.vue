@@ -16,11 +16,11 @@
       <vxe-table-column label="操作">
         <template v-slot="{ row }">
           <template v-if="$refs.xTable.hasActiveRow(row)">
-            <button class="btn" @click="saveRowEvent(row)">保存</button>
-            <button class="btn" @click="cancelRowEvent(row)">取消</button>
+            <vxe-button @click="saveRowEvent(row)">保存</vxe-button>
+            <vxe-button @click="cancelRowEvent(row)">取消</vxe-button>
           </template>
           <template v-else>
-            <button class="btn" @click="editRowEvent(row)">编辑</button>
+            <vxe-button @click="editRowEvent(row)">编辑</vxe-button>
           </template>
         </template>
       </vxe-table-column>
@@ -58,11 +58,11 @@ export default {
           <vxe-table-column label="操作">
             <template v-slot="{ row }">
               <template v-if="$refs.xTable.hasActiveRow(row)">
-                <button class="btn" @click="saveRowEvent(row)">保存</button>
-                <button class="btn" @click="cancelRowEvent(row)">取消</button>
+                <vxe-button @click="saveRowEvent(row)">保存</vxe-button>
+                <vxe-button @click="cancelRowEvent(row)">取消</vxe-button>
               </template>
               <template v-else>
-                <button class="btn" @click="editRowEvent(row)">编辑</button>
+                <vxe-button @click="editRowEvent(row)">编辑</vxe-button>
               </template>
             </template>
           </vxe-table-column>

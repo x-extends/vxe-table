@@ -82,7 +82,8 @@ export default {
         import VXETablePluginElement from 'vxe-table-plugin-element'
         import 'vxe-table-plugin-element/dist/style.css'
 
-        Vue.use(VXETable, VXETablePluginElement)
+        Vue.use(VXETable)
+        VXETable.use(VXETablePluginElement)
         `,
         `
         <vxe-table

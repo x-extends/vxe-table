@@ -28,6 +28,9 @@ export default {
     }
   },
   computed: {
+    vSize () {
+      return this.size || this.$parent.size || this.$parent.vSize
+    },
     pageCount () {
       return Math.max(Math.ceil(this.total / this.pageSize), 1)
     },
@@ -54,11 +57,11 @@ export default {
     GlobalEvent.off(this, 'mousedown')
   },
   render (h) {
-    let { panelStyle, size, background, currentPage, pageSize, pageSizes, total, pageCount, showSizes } = this
+    let { panelStyle, vSize, background, currentPage, pageSize, pageSizes, total, pageCount, showSizes } = this
     return h('div', {
       class: ['vxe-pagination', {
         'p--background': background,
-        [`size--${size}`]: size
+        [`size--${vSize}`]: vSize
       }]
     }, [
       h('span', {
@@ -126,15 +129,15 @@ export default {
         }],
         style: panelStyle,
         ref: 'sizePanel'
-      }, pageSizes.map(size => {
+      }, pageSizes.map(num => {
         return h('li', {
           class: ['size--option', {
-            'is--active': size === pageSize
+            'is--active': num === pageSize
           }],
           on: {
-            click: () => this.sizeChangeEvent(size)
+            click: () => this.sizeChangeEvent(num)
           }
-        }, `${size}${GlobalConfig.i18n('vxe.pagination.pagesize')}`)
+        }, `${num}${GlobalConfig.i18n('vxe.pagination.pagesize')}`)
       }))
     ])
   },

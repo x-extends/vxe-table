@@ -25,7 +25,7 @@ const GlobalConfig = {
   showAllOverflow: null,
   showHeaderAllOverflow: null,
   contextMenu: null,
-  renderMap,
+  renderMap, // 渲染器
   tooltipConfig: null,
   iconMap: {
     sortAsc: 'vxe-sort--asc-icon',

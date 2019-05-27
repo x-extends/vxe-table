@@ -21,10 +21,14 @@
         <template v-slot:header="{ column }">
           <span style="color: red;">我要自定义头</span>
         </template>
+        <template v-slot="{ row }">
+          <vxe-button type="text">编辑</vxe-button>
+          <vxe-button type="text">删除</vxe-button>
+        </template>
       </vxe-table-column>
       <vxe-table-column prop="time" label="Time">
         <template v-slot:header="{ column }">
-          <input type="text" placeholder="这样也行">
+          <vxe-input placeholder="这样也行" size="mini"></vxe-input>
         </template>
         <template v-slot="{ row }">
           <span>{{ formatDate(row.time) }}</span>
@@ -77,10 +81,14 @@ export default {
             <template v-slot:header="{ column }">
               <span style="color: red;">我要自定义头</span>
             </template>
+            <template v-slot="{ row }">
+              <vxe-button type="text">编辑</vxe-button>
+              <vxe-button type="text">删除</vxe-button>
+            </template>
           </vxe-table-column>
           <vxe-table-column prop="time" label="Time">
             <template v-slot:header="{ column }">
-              <input type="text" placeholder="这样也行">
+              <vxe-input placeholder="这样也行" size="mini"></vxe-input>
             </template>
             <template v-slot="{ row }">
               <span>{{ formatDate(row.time) }}</span>

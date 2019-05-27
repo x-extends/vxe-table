@@ -1126,7 +1126,7 @@ export default {
           {
             name: 'getAllRecords()',
             desc: '获取表格数据集合',
-            type: 'Array<{records, selecteds, insertRecords, removeRecords, updateRecords}>',
+            type: 'Array<{insertRecords, removeRecords, updateRecords}>',
             enum: '',
             defVal: '',
             list: []

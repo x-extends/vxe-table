@@ -315,9 +315,28 @@ export default {
               }
             },
             {
-              label: '完整功能',
+              label: '数据代理',
               locat: {
-                name: 'GridFull'
+                name: 'GridProxy'
+              }
+            },
+            {
+              label: '完整查询',
+              locat: {
+                name: 'GridFullQuery'
+              }
+            },
+            {
+              label: '可编辑',
+              locat: {
+                name: 'GridEdit'
+              }
+            },
+            {
+              label: '带工具栏',
+              disabled: true,
+              locat: {
+                name: 'GridToolbar'
               }
             }
           ]

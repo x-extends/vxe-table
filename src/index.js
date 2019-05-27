@@ -1,12 +1,14 @@
 import XEUtils from 'xe-utils'
 import Table from './components/table'
 import TableColumn from './components/table-column'
+import TableToolbar from './components/table-toolbar'
 import Grid from './components/grid'
 import Excel from './components/excel'
 import Pagination from './components/pagination'
 import Checkbox from './components/checkbox'
 import Radio from './components/radio'
 import Input from './components/input'
+import Button from './components/button'
 import GlobalConfig from './conf'
 import EventInterceptor from './interceptor'
 
@@ -17,6 +19,7 @@ const installedPlugins = []
 const components = [
   Table,
   TableColumn,
+  TableToolbar,
   Grid,
   Excel,
   Pagination,
@@ -42,18 +45,15 @@ function install (Vue, options) {
     setup(options)
   }
   components.map(component => Vue.component(component.name, component))
-  use.apply(null, Array.from(arguments).slice(1))
 }
 
-function use () {
-  Array.from(arguments).forEach(plugin => {
-    if (plugin && plugin.install) {
-      if (installedPlugins.indexOf(plugin) === -1) {
-        plugin.install(GlobalConfig, EventInterceptor)
-        installedPlugins.push(plugin)
-      }
+function use (Plugin, options) {
+  if (Plugin && Plugin.install) {
+    if (installedPlugins.indexOf(Plugin) === -1) {
+      Plugin.install(GlobalConfig, EventInterceptor, options)
+      installedPlugins.push(Plugin)
     }
-  })
+  }
 }
 
 if (typeof window !== 'undefined' && window.Vue) {
@@ -66,10 +66,12 @@ export default {
   setup,
   Table,
   TableColumn,
+  TableToolbar,
   Grid,
   Excel,
   Pagination,
   Checkbox,
   Radio,
-  Input
+  Input,
+  Button
 }

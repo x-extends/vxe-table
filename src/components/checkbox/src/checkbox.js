@@ -7,10 +7,16 @@ export default {
     name: String,
     size: String
   },
+  computed: {
+    vSize () {
+      return this.size || this.$parent.size || this.$parent.vSize
+    }
+  },
   render (h) {
-    let { disabled, size, indeterminate, value } = this
+    let { disabled, vSize, indeterminate, value } = this
     return h('label', {
-      class: ['vxe-checkbox', size ? `size--${size}` : '', {
+      class: ['vxe-checkbox', {
+        [`size--${vSize}`]: vSize,
         'is--indeterminate': indeterminate,
         'is--disabled': disabled
       }]
@@ -38,7 +44,7 @@ export default {
       }),
       this.$slots.default ? h('span', {
         class: ['checkbox--label']
-      }, this.$slots.default) : this._e()
+      }, this.$slots.default) : null
     ])
   }
 }

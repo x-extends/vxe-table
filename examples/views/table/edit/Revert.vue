@@ -2,8 +2,8 @@
   <div>
     <p>调用 revert 还原数据</p>
 
-    <button class="btn" @click="$refs.xTable.revert()">还原全部</button>
-    <button class="btn" @click="$refs.xTable.removeSelecteds()">删除选中</button>
+    <vxe-button @click="$refs.xTable.revert()">还原全部</vxe-button>
+    <vxe-button @click="$refs.xTable.removeSelecteds()">删除选中</vxe-button>
     <vxe-table
       ref="xTable"
       border
@@ -17,7 +17,7 @@
       <vxe-table-column prop="age" label="Age" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column label="操作">
         <template v-slot="{ row }">
-          <button class="btn" @click="$refs.xTable.revert(row)">还原行</button>
+          <vxe-button @click="$refs.xTable.revert(row)">还原</vxe-button>
         </template>
       </vxe-table-column>
     </vxe-table>
@@ -40,8 +40,8 @@ export default {
       tableData: [],
       demoCodes: [
         `
-        <button class="btn" @click="$refs.xTable.revert()">还原全部</button>
-        <button class="btn" @click="$refs.xTable.removeSelecteds()">删除选中</button>
+        <vxe-button @click="$refs.xTable.revert()">还原全部</vxe-button>
+        <vxe-button @click="$refs.xTable.removeSelecteds()">删除选中</vxe-button>
         <vxe-table
           ref="xTable"
           border
@@ -55,9 +55,10 @@ export default {
           <vxe-table-column prop="age" label="Age" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column label="操作">
             <template v-slot="{ row }">
-              <button class="btn" @click="$refs.xTable.revert(row)">还原行</button>
+              <vxe-button @click="$refs.xTable.revert(row)">还原</vxe-button>
             </template>
           </vxe-table-column>
+        </vxe-table>
         `,
         `
         export default {

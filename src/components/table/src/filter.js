@@ -1,13 +1,9 @@
 import GlobalConfig from '../../../conf'
-import VxeCheckbox from '../../checkbox'
 
 export default {
   props: {
     filterStore: Object,
     optimizeConfig: Object
-  },
-  components: {
-    VxeCheckbox
   },
   render (h) {
     let $table = this.$parent
@@ -19,22 +15,38 @@ export default {
           'is--active': !filterStore.options.some(item => item.checked)
         }]
       }, [
-        multiple ? h('vxe-checkbox', {
-          props: {
-            value: filterStore.isAllSelected,
-            indeterminate: filterStore.isIndeterminate
-          },
-          on: {
-            change (value, evnt) {
-              filterCheckAllEvent(evnt, value)
+        multiple
+          ? h('label', {
+            class: ['vxe-checkbox', {
+              'is--indeterminate': filterStore.isIndeterminate
+            }]
+          }, [
+            h('input', {
+              attrs: {
+                type: 'checkbox'
+              },
+              domProps: {
+                checked: filterStore.isAllSelected
+              },
+              on: {
+                change (evnt) {
+                  filterCheckAllEvent(evnt, evnt.target.checked)
+                }
+              }
+            }),
+            h('span', {
+              class: ['checkbox--icon']
+            }),
+            h('span', {
+              class: ['checkbox--label']
+            }, GlobalConfig.i18n('vxe.table.allFilter'))
+          ])
+          : h('span', {
+            class: 'vxe-table--filter-label',
+            on: {
+              click: $table.resetFilterEvent
             }
-          }
-        }, GlobalConfig.i18n('vxe.table.allFilter')) : h('span', {
-          class: 'vxe-table--filter-label',
-          on: {
-            click: $table.resetFilterEvent
-          }
-        }, GlobalConfig.i18n('vxe.table.allFilter'))
+          }, GlobalConfig.i18n('vxe.table.allFilter'))
       ])
     ]
     filterStore.options.forEach((item, index) => {
@@ -45,23 +57,38 @@ export default {
           }],
           key: index
         }, [
-          multiple ? h('vxe-checkbox', {
-            props: {
-              value: item.checked
-            },
-            on: {
-              change (value, evnt) {
-                filterOptionCheckEvent(evnt, value, item)
+          multiple
+            ? h('label', {
+              class: 'vxe-checkbox'
+            }, [
+              h('input', {
+                attrs: {
+                  type: 'checkbox'
+                },
+                domProps: {
+                  checked: item.checked
+                },
+                on: {
+                  change (evnt) {
+                    filterOptionCheckEvent(evnt, evnt.target.checked, item)
+                  }
+                }
+              }),
+              h('span', {
+                class: ['checkbox--icon']
+              }),
+              h('span', {
+                class: ['checkbox--label']
+              }, item.label)
+            ])
+            : h('span', {
+              class: 'vxe-table--filter-label',
+              on: {
+                click (evnt) {
+                  filterOptionRadioEvent(evnt, !item.checked, item)
+                }
               }
-            }
-          }, item.label) : h('span', {
-            class: 'vxe-table--filter-label',
-            on: {
-              click (evnt) {
-                filterOptionRadioEvent(evnt, !item.checked, item)
-              }
-            }
-          }, item.label)
+            }, item.label)
         ])
       )
     })

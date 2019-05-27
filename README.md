@@ -45,6 +45,7 @@ A very powerful Vue table component.
 * 树形表格
 * 可编辑表格
 * 数据校验
+* 数据代理
 * 全键盘操作
 * Excel 表格
 

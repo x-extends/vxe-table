@@ -25,6 +25,7 @@ function renderFixed (h, $table, fixedType, footerData) {
     collectColumn,
     isGroup,
     height,
+    vSize,
     headerHeight,
     footerHeight,
     showHeader,
@@ -57,6 +58,7 @@ function renderFixed (h, $table, fixedType, footerData) {
         tableColumn,
         visibleColumn,
         collectColumn,
+        size: vSize,
         fixedColumn,
         isGroup
       },
@@ -73,6 +75,7 @@ function renderFixed (h, $table, fixedType, footerData) {
         visibleColumn,
         collectColumn,
         fixedColumn,
+        size: vSize,
         isGroup
       },
       ref: `${fixedType}Body`
@@ -86,6 +89,7 @@ function renderFixed (h, $table, fixedType, footerData) {
         footerData,
         tableColumn,
         visibleColumn,
+        size: vSize,
         fixedColumn
       },
       ref: `${fixedType}Footer`
@@ -265,6 +269,9 @@ export default {
     }
   },
   computed: {
+    vSize () {
+      return this.size || this.$parent.size || this.$parent.vSize
+    },
     // 优化的参数
     optimizeConfig () {
       return Object.assign({}, GlobalConfig.optimized, this.optimized)
@@ -398,7 +405,7 @@ export default {
       border,
       stripe,
       highlightHoverRow,
-      size,
+      vSize,
       tooltipConfig,
       editConfig,
       showFooter,
@@ -417,7 +424,7 @@ export default {
     let { leftList, rightList } = columnStore
     let footerData = showFooter && footerMethod && visibleColumn.length ? footerMethod({ columns: visibleColumn, data: getRecords() }) : ['-']
     return h('div', {
-      class: ['vxe-table', size ? `size--${size}` : '', {
+      class: ['vxe-table', vSize ? `size--${vSize}` : '', {
         'vxe-editable': editConfig,
         'show--head': showHeader,
         'show--foot': showFooter,
@@ -448,6 +455,7 @@ export default {
           tableColumn,
           visibleColumn,
           collectColumn,
+          size: vSize,
           isGroup
         }
       }) : _e(),
@@ -461,6 +469,7 @@ export default {
           tableColumn,
           visibleColumn,
           collectColumn,
+          size: vSize,
           isGroup
         }
       }),
@@ -472,7 +481,8 @@ export default {
           footerData,
           footerMethod,
           tableColumn,
-          visibleColumn
+          visibleColumn,
+          size: vSize
         },
         ref: 'tableFooter'
       }) : _e(),
@@ -605,12 +615,12 @@ export default {
     },
     /// ////////////////// 废弃
     loadData (datas, init) {
-      let { height, maxHeight, autoWidth, optimizeConfig, recalculate } = this
+      let { height, maxHeight, autoWidth, editStore, optimizeConfig, recalculate } = this
       let { scrollY } = optimizeConfig
       let tableFullData = datas || []
       let scrollYLoad = scrollY && scrollY.gt && scrollY.gt < tableFullData.length
-      this.insertList = []
-      this.removeList = []
+      editStore.insertList = []
+      editStore.removeList = []
       // 原始数据
       this.tableSourceData = XEUtils.clone(tableFullData, true)
       // 全量数据
@@ -673,7 +683,7 @@ export default {
      * 从指定行插入数据
      */
     insertAt (records, row) {
-      let { tableData, insertList, defineProperty } = this
+      let { tableData, editStore, defineProperty } = this
       if (!XEUtils.isArray(records)) {
         records = [records]
       }
@@ -688,7 +698,7 @@ export default {
           tableData.splice.apply(tableData, [rowIndex, 0].concat(newRecords))
         }
       }
-      insertList.splice.apply(insertList, newRecords)
+      [].push.apply(editStore.insertList, newRecords)
       return this.$nextTick().then(() => ({ row: newRecords.length ? newRecords[newRecords.length - 1] : null, rows: newRecords }))
     },
     defineProperty (record) {
@@ -706,7 +716,7 @@ export default {
      * 支持删除多行
      */
     remove (rows) {
-      let { tableData, tableFullData, removeList, selection } = this
+      let { tableData, tableFullData, editStore, selection } = this
       let rest = []
       this.isUpdateData = true
       if (rows) {
@@ -717,7 +727,7 @@ export default {
           rest = XEUtils.remove(tableFullData, item => rows.indexOf(item) > -1)
         }
       }
-      removeList.push.apply(removeList, rest)
+      [].push.apply(editStore.removeList, rest)
       XEUtils.remove(tableData, item => rest.indexOf(item) > -1)
       XEUtils.remove(selection, item => rest.indexOf(item) > -1)
       this.checkSelectionStatus()
@@ -815,8 +825,6 @@ export default {
      */
     getAllRecords () {
       return {
-        records: this.getRecords(),
-        selecteds: this.getSelectionRecords(),
         insertRecords: this.getInsertRecords(),
         removeRecords: this.getRemoveRecords(),
         updateRecords: this.getUpdateRecords()
@@ -826,13 +834,13 @@ export default {
      * 获取新增数据
      */
     getInsertRecords () {
-      return this.insertList
+      return this.editStore.insertList
     },
     /**
      * 获取删除数据
      */
     getRemoveRecords () {
-      return this.removeList
+      return this.editStore.removeList
     },
     /**
      * 获取选中数据
@@ -2310,7 +2318,6 @@ export default {
       filterStore.visible = false
       if (scrollXLoad || scrollYLoad) {
         this.clearScroll()
-        this.computeScrollLoad()
       } else {
         // 如果是服务端筛选，则跳过本地筛选处理
         if (column.filterMethod !== 'custom') {
@@ -2319,6 +2326,7 @@ export default {
         UtilTools.emitEvent(this, 'filter-change', [{ column, prop: column.property, values: valueList }])
       }
       this.closeFilter()
+      this.$nextTick(this.recalculate)
     },
     // 关闭筛选
     closeFilter (evnt) {

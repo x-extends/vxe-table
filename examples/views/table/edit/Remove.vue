@@ -2,10 +2,10 @@
   <div>
     <p>调用 remove 删除指定行数据</p>
 
-    <button class="btn" @click="$refs.xTable.remove(tableData[1])">删除第2行</button>
-    <button class="btn" @click="$refs.xTable.removeSelecteds()">删除选中</button>
-    <button class="btn" @click="getRemoveEvent">获取删除</button>
-    <button class="btn" @click="getSelectionEvent">获取选中</button>
+    <vxe-button @click="$refs.xTable.remove(tableData[1])">删除第2行</vxe-button>
+    <vxe-button @click="$refs.xTable.removeSelecteds()">删除选中</vxe-button>
+    <vxe-button @click="getRemoveEvent">获取删除</vxe-button>
+    <vxe-button @click="getSelectionEvent">获取选中</vxe-button>
     <vxe-table
       ref="xTable"
       border
@@ -37,10 +37,10 @@ export default {
       tableData: [],
       demoCodes: [
         `
-        <button class="btn" @click="$refs.xTable.remove(tableData[1])">删除第2行</button>
-        <button class="btn" @click="$refs.xTable.removeSelecteds()">删除选中</button>
-        <button class="btn" @click="getRemoveEvent">获取删除</button>
-        <button class="btn" @click="getSelectionEvent">获取选中</button>
+        <vxe-button @click="$refs.xTable.remove(tableData[1])">删除第2行</vxe-button>
+        <vxe-button @click="$refs.xTable.removeSelecteds()">删除选中</vxe-button>
+        <vxe-button @click="getRemoveEvent">获取删除</vxe-button>
+        <vxe-button @click="getSelectionEvent">获取选中</vxe-button>
         <vxe-table
           ref="xTable"
           border

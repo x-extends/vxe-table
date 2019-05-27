@@ -2,10 +2,10 @@
   <div>
     <p>调用 insert、insertAt 函数插入数据</p>
 
-    <button class="btn" @click="$refs.xTable.insert({name: Date.now()})">在第1行插入</button>
-    <button class="btn" @click="$refs.xTable.insertAt({name: Date.now()}, tableData[2])">在第3行插入</button>
-    <button class="btn" @click="$refs.xTable.insertAt({name: Date.now()}, -1)">在最后行插入</button>
-    <button class="btn" @click="getInsertEvent">获取新增</button>
+    <vxe-button @click="$refs.xTable.insert({name: Date.now()})">在第1行插入</vxe-button>
+    <vxe-button @click="$refs.xTable.insertAt({name: Date.now()}, tableData[2])">在第3行插入</vxe-button>
+    <vxe-button @click="$refs.xTable.insertAt({name: Date.now()}, -1)">在最后行插入</vxe-button>
+    <vxe-button @click="getInsertEvent">获取新增</vxe-button>
     <vxe-table
       ref="xTable"
       border
@@ -36,10 +36,10 @@ export default {
       tableData: [],
       demoCodes: [
         `
-        <button class="btn" @click="$refs.xTable.insert({name: Date.now()})">在第1行插入</button>
-        <button class="btn" @click="$refs.xTable.insertAt({name: Date.now()}, tableData[2])">在第3行插入</button>
-        <button class="btn" @click="$refs.xTable.insertAt({name: Date.now()}, -1)">在最后行插入</button>
-        <button class="btn" @click="getInsertEvent">获取新增</button>
+        <vxe-button @click="$refs.xTable.insert({name: Date.now()})">在第1行插入</vxe-button>
+        <vxe-button @click="$refs.xTable.insertAt({name: Date.now()}, tableData[2])">在第3行插入</vxe-button>
+        <vxe-button @click="$refs.xTable.insertAt({name: Date.now()}, -1)">在最后行插入</vxe-button>
+        <vxe-button @click="getInsertEvent">获取新增</vxe-button>
         <vxe-table
           ref="xTable"
           border

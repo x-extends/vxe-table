@@ -39,7 +39,10 @@ import TableTreeRadio from './views/table/tree/Radio.vue'
 
 import GridBasic from './views/table/grid/Basic.vue'
 import GridPage from './views/table/grid/Page.vue'
-import GridFull from './views/table/grid/Full.vue'
+import GridProxy from './views/table/grid/Proxy.vue'
+import GridEdit from './views/table/grid/Edit.vue'
+import GridToolbar from './views/table/grid/Toolbar.vue'
+import GridFullQuery from './views/table/grid/FullQuery.vue'
 
 import TableScroll from './views/table/scroll/Scroll.vue'
 import TableScrollRows from './views/table/scroll/ScrollRows.vue'
@@ -274,9 +277,24 @@ export default new Router({
       component: GridPage
     },
     {
-      path: '/table/grid/full',
-      name: 'GridFull',
-      component: GridFull
+      path: '/table/grid/proxy',
+      name: 'GridProxy',
+      component: GridProxy
+    },
+    {
+      path: '/table/grid/edit',
+      name: 'GridEdit',
+      component: GridEdit
+    },
+    {
+      path: '/table/grid/toolbar',
+      name: 'GridToolbar',
+      component: GridToolbar
+    },
+    {
+      path: '/table/grid/fullQuery',
+      name: 'GridFullQuery',
+      component: GridFullQuery
     },
     {
       path: '/table/scroll/scroll',

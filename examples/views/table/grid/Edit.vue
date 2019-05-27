@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>通过配置 pages 参数开启分页功能</p>
+    <p>可编辑的配置</p>
 
     <vxe-grid
       border
@@ -9,6 +9,7 @@
       :pages="tablePage"
       :columns="tableColumn"
       :data.sync="tableData"
+      :edit-config="{trigger: 'click', mode: 'row'}"
       @current-page-change="handleCurrentChange"
       @page-size-change="handleSizeChange"></vxe-grid>
 
@@ -29,9 +30,6 @@ export default {
   data () {
     return {
       loading: false,
-      formData: {
-
-      },
       tablePage: {
         total: 0,
         currentPage: 1,
@@ -41,10 +39,10 @@ export default {
       tableColumn: [
         { type: 'index', width: 60 },
         { type: 'selection', width: 50 },
-        { prop: 'name', label: 'Name' },
-        { prop: 'nickname', label: 'Nickname' },
-        { prop: 'role', label: 'Role' },
-        { prop: 'describe', label: 'Describe', showOverflow: true }
+        { prop: 'name', label: 'Name', editRender: { name: 'input' } },
+        { prop: 'nickname', label: 'Nickname', editRender: { name: 'input' } },
+        { prop: 'role', label: 'Role', editRender: { name: 'input' } },
+        { prop: 'describe', label: 'Describe', showOverflow: true, editRender: { name: 'input' } }
       ],
       tableData: [],
       demoCodes: [
@@ -56,6 +54,7 @@ export default {
           :pages="tablePage"
           :columns="tableColumn"
           :data.sync="tableData"
+          :edit-config="{trigger: 'click', mode: 'row'}"
           @current-page-change="handleCurrentChange"
           @page-size-change="handleSizeChange"></vxe-grid>
         `,
@@ -64,9 +63,6 @@ export default {
           data () {
             return {
               loading: false,
-              formData: {
-
-              },
               tablePage: {
                 total: 0,
                 currentPage: 1,
@@ -75,10 +71,10 @@ export default {
               tableColumn: [
                 { type: 'index', width: 60 },
                 { type: 'selection', width: 50 },
-                { prop: 'name', label: 'Name' },
-                { prop: 'nickname', label: 'Nickname' },
-                { prop: 'role', label: 'Role' },
-                { prop: 'describe', label: 'Describe', showOverflow: true }
+                { prop: 'name', label: 'Name', editRender: { name: 'input' } },
+                { prop: 'nickname', label: 'Nickname', editRender: { name: 'input' } },
+                { prop: 'role', label: 'Role', editRender: { name: 'input' } },
+                { prop: 'describe', label: 'Describe', showOverflow: true, editRender: { name: 'input' } }
               ],
               tableData: []
             }
@@ -90,7 +86,7 @@ export default {
             findList () {
               // 模拟后台接口
               this.loading = true
-              XEAjax.doGet(\`/api/user/page/list/\${this.tablePage.pageSize}/\${this.tablePage.currentPage}\`, this.formData).then(response => {
+              XEAjax.doGet(\`/api/user/page/list/\${this.tablePage.pageSize}/\${this.tablePage.currentPage}\`).then(response => {
                 let { page, result } = response.data
                 this.tableData = result
                 this.tablePage.total = page.total
@@ -129,7 +125,7 @@ export default {
     findList () {
       // 模拟后台接口
       this.loading = true
-      XEAjax.doGet(`/api/user/page/list/${this.tablePage.pageSize}/${this.tablePage.currentPage}`, this.formData).then(response => {
+      XEAjax.doGet(`/api/user/page/list/${this.tablePage.pageSize}/${this.tablePage.currentPage}`).then(response => {
         let { page, result } = response.data
         this.tableData = result
         this.tablePage.total = page.total

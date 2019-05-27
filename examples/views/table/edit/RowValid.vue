@@ -2,11 +2,11 @@
   <div>
     <p>通过调用 validate 函数校验数据，edit-rules 校验规则配置</p>
 
-    <button class="btn" @click="insertEvent">新增</button>
-    <button class="btn" @click="validEvent">校验</button>
-    <button class="btn" @click="getInsertEvent">获取新增</button>
-    <button class="btn" @click="getRemoveEvent">获取删除</button>
-    <button class="btn" @click="getUpdateEvent">获取修改</button>
+    <vxe-button @click="insertEvent">新增</vxe-button>
+    <vxe-button @click="validEvent">校验</vxe-button>
+    <vxe-button @click="getInsertEvent">获取新增</vxe-button>
+    <vxe-button @click="getRemoveEvent">获取删除</vxe-button>
+    <vxe-button @click="getUpdateEvent">获取修改</vxe-button>
     <vxe-table
       ref="xTable"
       border
@@ -49,18 +49,19 @@ export default {
       },
       demoCodes: [
         `
-        <button class="btn" @click="insertEvent">新增</button>
-        <button class="btn" @click="validEvent">校验</button>
-        <button class="btn" @click="getInsertEvent">获取新增</button>
-        <button class="btn" @click="getRemoveEvent">获取删除</button>
-        <button class="btn" @click="getUpdateEvent">获取修改</button>
+        <vxe-button @click="insertEvent">新增</vxe-button>
+        <vxe-button @click="validEvent">校验</vxe-button>
+        <vxe-button @click="getInsertEvent">获取新增</vxe-button>
+        <vxe-button @click="getRemoveEvent">获取删除</vxe-button>
+        <vxe-button @click="getUpdateEvent">获取修改</vxe-button>
         <vxe-table
           ref="xTable"
           border
           show-all-overflow
           :data.sync="tableData"
           :edit-rules="validRules"
-          :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">
+          :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
+          :keyboard-config="{isArray: true, isTab: true}">
           <vxe-table-column type="selection" width="60"></vxe-table-column>
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column prop="name" label="Name" :edit-render="{name: 'input'}"></vxe-table-column>

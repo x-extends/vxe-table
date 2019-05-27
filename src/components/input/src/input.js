@@ -7,8 +7,13 @@ export default {
     placeholder: String,
     size: String
   },
+  computed: {
+    vSize () {
+      return this.size || this.$parent.size || this.$parent.vSize
+    }
+  },
   render (h) {
-    let { $listeners, value, type, size, placeholder, disabled } = this
+    let { $listeners, value, type, vSize, placeholder, disabled } = this
     let on = {
       input: evnt => this.$emit('input', evnt.target.value)
     }
@@ -17,7 +22,7 @@ export default {
     }
     return h('div', {
       class: ['vxe-input--wrapper', {
-        [`size--${size}`]: size,
+        [`size--${vSize}`]: vSize,
         'is--disabled': this.disabled
       }]
     }, [

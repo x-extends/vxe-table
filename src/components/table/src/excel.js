@@ -1,5 +1,3 @@
-import VxeTable from './table'
-import VxeTableColumn from './column'
 import TableProps from './props'
 import funs from './func'
 
@@ -132,10 +130,6 @@ export default {
     columns: Array,
     ...TableProps
   },
-  components: {
-    VxeTable,
-    VxeTableColumn
-  },
   data () {
     return {
       excelStore: {
@@ -205,41 +199,41 @@ export default {
       }
     },
     contextMenuLinkEvent ({ menu, row, column }, evnt) {
-      let xTable = this.$refs.xTable
+      let $table = this.$refs.xTable
       let { property } = column
       switch (menu.code) {
         case 'clip':
-          xTable.handleCopyed(true, evnt)
+          $table.handleCopyed(true, evnt)
           break
         case 'copy':
-          xTable.handleCopyed(false, evnt)
+          $table.handleCopyed(false, evnt)
           break
         case 'paste':
-          xTable.handlePaste(evnt)
+          $table.handlePaste(evnt)
           break
         case 'insert':
-          xTable.insertAt({}, row)
+          $table.insertAt({}, row)
           break
         case 'remove':
-          xTable.remove(row)
+          $table.remove(row)
           break
         case 'clearData':
-          xTable.clearData(row, property)
+          $table.clearData(row, property)
           break
         case 'clearFilter':
-          xTable.clearFilter()
+          $table.clearFilter()
           break
         case 'clearSort':
-          xTable.clearSort()
+          $table.clearSort()
           break
         case 'sortAsc':
-          xTable.sort(property, 'asc')
+          $table.sort(property, 'asc')
           break
         case 'sortDesc':
-          xTable.sort(property, 'desc')
+          $table.sort(property, 'desc')
           break
         case 'exportAll':
-          xTable.exportCsv({ isHeader: false })
+          $table.exportCsv({ isHeader: false })
           break
       }
     }
