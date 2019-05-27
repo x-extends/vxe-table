@@ -652,7 +652,7 @@ export default {
             list: [
               {
                 name: 'key',
-                desc: '行数据中的唯一主键',
+                desc: '行数据中的唯一主键（需要设置 rowKey 或 key）',
                 type: 'String',
                 enum: '',
                 defVal: '',
@@ -1173,7 +1173,7 @@ export default {
           },
           {
             name: 'setActiveRow(row)',
-            desc: '只对 mode=cell 有效，激活行编辑',
+            desc: '激活行编辑，如果是 mode=cell 则默认激活第一个单元格',
             type: 'Promise',
             enum: '',
             defVal: 'row',
@@ -1181,7 +1181,7 @@ export default {
           },
           {
             name: 'setActiveCell(row,prop)',
-            desc: '只对 mode=row 有效，激活单元格编辑',
+            desc: '激活单元格编辑',
             type: 'Promise',
             enum: '',
             defVal: 'row,prop',

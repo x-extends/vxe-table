@@ -1,19 +1,21 @@
 import XEUtils from 'xe-utils'
 
-var columnId = 0
+var columnUniqueId = 0
 
 const UtilTools = {
   getSize ({ size, $parent }) {
     return size || ($parent && ['medium', 'small', 'mini'].indexOf($parent.size) > -1 ? $parent.size : null)
   },
-  getRowId ($table, row, rowIndex) {
-    let { rowKey, treeConfig, expandeds } = $table
+  getRowKey ($table) {
+    let { rowKey, treeConfig = {}, expandeds = {}, editConfig = {} } = $table
     if (!rowKey) {
-      if (treeConfig || expandeds) {
-        rowKey = (treeConfig || expandeds).key
-      }
+      rowKey = treeConfig.key || expandeds.key || editConfig.key
     }
-    return rowKey ? XEUtils.get(row, rowKey) : rowIndex
+    return rowKey
+  },
+  getRowId ($table, row, rowIndex) {
+    let rowKey = UtilTools.getRowKey($table)
+    return `${encodeURIComponent(rowKey ? XEUtils.get(row, rowKey) : rowIndex)}`
   },
   // 触发事件
   emitEvent (_vm, type, args) {
@@ -45,7 +47,7 @@ const UtilTools = {
   getColumnConfig (_vm, { renderHeader, renderCell, renderData } = {}) {
     return {
       // 基本属性
-      id: `col--${++columnId}`,
+      id: `col--${++columnUniqueId}`,
       type: _vm.type,
       property: _vm.prop,
       label: _vm.label,

@@ -25,7 +25,7 @@
       size="small"
       :loading="loading"
       :data.sync="tableData"
-      :edit-config="{trigger: 'click', mode: 'row'}">
+      :edit-config="{key: 'id', trigger: 'click', mode: 'row'}">
       <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
       <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
       <vxe-table-column prop="name" label="Input" min-width="140" :edit-render="{name: 'Input'}"></vxe-table-column>
@@ -103,7 +103,7 @@ export default {
           size="small"
           :loading="loading"
           :data.sync="tableData"
-          :edit-config="{trigger: 'click', mode: 'row'}">
+          :edit-config="{key: 'id', trigger: 'click', mode: 'row'}">
           <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
           <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
           <vxe-table-column prop="name" label="Input" min-width="140" :edit-render="{name: 'Input'}"></vxe-table-column>

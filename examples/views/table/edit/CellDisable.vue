@@ -7,7 +7,7 @@
       border
       show-all-overflow
       :data.sync="tableData"
-      :edit-config="{trigger: 'click', mode: 'cell', activeMethod: activeCellMethod}"
+      :edit-config="{key: 'id', trigger: 'click', mode: 'cell', activeMethod: activeCellMethod}"
       @edit-disabled="editDisabledEvent">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column prop="name" label="Name" :edit-render="{name: 'input'}"></vxe-table-column>
@@ -29,7 +29,7 @@
       border
       show-all-overflow
       :data.sync="tableData"
-      :edit-config="{trigger: 'click', mode: 'cell', activeMethod: activeRowMethod}"
+      :edit-config="{key: 'id', trigger: 'click', mode: 'cell', activeMethod: activeRowMethod}"
       @edit-disabled="editDisabledEvent">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column prop="name" label="Name" :edit-render="{name: 'input'}"></vxe-table-column>
@@ -60,7 +60,7 @@ export default {
           border
           show-all-overflow
           :data.sync="tableData"
-          :edit-config="{trigger: 'click', mode: 'cell', activeMethod: activeCellMethod}"
+          :edit-config="{key: 'id', trigger: 'click', mode: 'cell', activeMethod: activeCellMethod}"
           @edit-disabled="editDisabledEvent">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column prop="name" label="Name" :edit-render="{name: 'input'}"></vxe-table-column>
@@ -97,7 +97,7 @@ export default {
           border
           show-all-overflow
           :data.sync="tableData"
-          :edit-config="{trigger: 'click', mode: 'row', , activeMethod: activeRowMethod}"
+          :edit-config="{key: 'id', trigger: 'click', mode: 'row', , activeMethod: activeRowMethod}"
           @edit-disabled="editDisabledEvent">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column prop="name" label="Name" :edit-render="{name: 'input'}"></vxe-table-column>

@@ -16,7 +16,7 @@
       height="600"
       :loading="loading"
       :data.sync="tableData"
-      :edit-config="{trigger: 'click', mode: 'cell'}">
+      :edit-config="{key: 'id', trigger: 'click', mode: 'cell'}">
       <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
       <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
       <vxe-table-column prop="name" label="ElInput" min-width="140" :edit-render="{name: 'ElInput', events: {change: nameChangeEvent}}"></vxe-table-column>
@@ -93,7 +93,7 @@ export default {
           height="600"
           :loading="loading"
           :data.sync="tableData"
-          :edit-config="{trigger: 'click', mode: 'cell'}">
+          :edit-config="{key: 'id', trigger: 'click', mode: 'cell'}">
           <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
           <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
           <vxe-table-column prop="name" label="ElInput" min-width="140" :edit-render="{name: 'ElInput', events: {change: nameChangeEvent}}"></vxe-table-column>

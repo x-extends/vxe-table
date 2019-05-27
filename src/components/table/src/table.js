@@ -14,6 +14,8 @@ import GlobalConfig from '../../../conf'
 import EventInterceptor from '../../../interceptor'
 import CellMethods from './cell'
 
+var rowUniqueId = 0
+
 /**
  * 渲染浮固定列
  */
@@ -331,7 +333,7 @@ export default {
     }
   },
   created () {
-    let { scrollYStore, optimizeConfig, rowKey, treeConfig } = this
+    let { scrollYStore, optimizeConfig, rowKey, treeConfig, editConfig } = this
     let { scrollY } = optimizeConfig
     if (scrollY) {
       Object.assign(scrollYStore, {
@@ -347,6 +349,8 @@ export default {
     this.loadData(this.data, true).then(() => {
       if (treeConfig && !(rowKey || treeConfig.key)) {
         throw new Error('[vxe-table] Tree table must have a unique primary key.')
+      } else if (editConfig && !(rowKey || editConfig.key)) {
+        throw new Error('[vxe-table] Editable must have a unique primary key.')
       }
       this.tableFullColumn = UtilTools.getColumnList(this.collectColumn)
       if (this.customs) {
@@ -703,9 +707,13 @@ export default {
     },
     defineProperty (record) {
       let recordItem = Object.assign({}, record)
+      let rowKey = UtilTools.getRowKey(this)
       this.visibleColumn.forEach(column => {
         if (column.property && !XEUtils.has(recordItem, column.property)) {
           XEUtils.set(recordItem, column.property, null)
+        }
+        if (rowKey) {
+          XEUtils.set(recordItem, rowKey, ++rowUniqueId + Date.now())
         }
       })
       return recordItem
@@ -845,7 +853,7 @@ export default {
     /**
      * 获取选中数据
      */
-    getSelectionRecords () {
+    getSelectRecords () {
       let { tableFullData, selection } = this
       return tableFullData.filter(item => selection.indexOf(item) > -1)
     },
@@ -1315,7 +1323,7 @@ export default {
     },
     // 处理 Tab 键移动
     moveTabSelected (params, evnt) {
-      let { $refs, tableData, visibleColumn, editConfig } = this
+      let { tableData, visibleColumn, editConfig } = this
       let nextRow
       let nextRowIndex
       let nextColumn
@@ -1350,7 +1358,7 @@ export default {
         }
         params.columnIndex = nextColumnIndex
         params.column = nextColumn
-        params.cell = DomTools.getCell(params, $refs.tableBody.$el)
+        params.cell = DomTools.getCell(this, params)
         if (editConfig) {
           if (editConfig.trigger === 'click') {
             this.handleActived(params, evnt)
@@ -1362,7 +1370,7 @@ export default {
     },
     // 处理方向键移动
     moveSelected (params, isLeftArrow, isUpArrow, isRightArrow, isDwArrow, evnt) {
-      let { $refs, tableData, visibleColumn, handleSelected } = this
+      let { tableData, visibleColumn, handleSelected } = this
       if (isUpArrow && params.rowIndex) {
         params.rowIndex -= 1
         params.row = tableData[params.rowIndex]
@@ -1386,7 +1394,7 @@ export default {
           }
         }
       }
-      params.cell = DomTools.getCell(params, $refs.tableBody.$el)
+      params.cell = DomTools.getCell(this, params)
       handleSelected(params, evnt)
     },
     // 处理菜单的移动
@@ -1701,7 +1709,7 @@ export default {
           }
         }
         this.checkSelectionStatus()
-        UtilTools.emitEvent(this, 'select-change', [{ row, selection: this.getSelectionRecords(), checked: value }, evnt])
+        UtilTools.emitEvent(this, 'select-change', [{ row, selection: this.getSelectRecords(), checked: value }, evnt])
       }
     },
     checkSelectionStatus () {
@@ -1774,7 +1782,7 @@ export default {
      */
     triggerCheckAllEvent (evnt, value) {
       this.setAllSelection(value)
-      UtilTools.emitEvent(this, 'select-all', [{ selection: this.getSelectionRecords(), checked: value }, evnt])
+      UtilTools.emitEvent(this, 'select-all', [{ selection: this.getSelectRecords(), checked: value }, evnt])
     },
     /**
      * 多选，切换所有行的选中状态
@@ -2201,31 +2209,21 @@ export default {
       }
     },
     /**
-     * 只对 mode=cell 有效，激活行编辑
+     * 激活行编辑
      */
     setActiveRow (row) {
-      let { $refs, id, tableData, visibleColumn, handleActived, editConfig } = this
-      if (row && editConfig.mode === 'row') {
-        let rowIndex = tableData.indexOf(row)
-        if (rowIndex > -1) {
-          let column = visibleColumn.find(column => column.editRender)
-          let cell = $refs.tableBody.$el.querySelector(`.vxe-body--row.row--${id}_${rowIndex} .${column.id}`)
-          handleActived({ row, column, cell })
-          this.lastCallTime = Date.now()
-        }
-      }
-      return this.$nextTick()
+      return this.setActiveCell(row, this.visibleColumn.find(column => column.editRender).property)
     },
     /**
-     * 只对 mode=row 有效，激活单元格编辑
+     * 激活单元格编辑
      */
     setActiveCell (row, prop) {
-      let { $refs, id, tableData, visibleColumn, handleActived, editConfig } = this
-      if (row && prop && editConfig.mode === 'cell') {
+      let { tableData, visibleColumn, handleActived } = this
+      if (row && prop) {
         let rowIndex = tableData.indexOf(row)
         if (rowIndex > -1 && prop) {
           let column = visibleColumn.find(column => column.property === prop)
-          let cell = $refs.tableBody.$el.querySelector(`.vxe-body--row.row--${id}_${rowIndex} .${column.id}`)
+          let cell = DomTools.getCell(this, { row, rowIndex, column })
           handleActived({ row, column, cell })
           this.lastCallTime = Date.now()
         }
@@ -2236,12 +2234,12 @@ export default {
      * 只对 trigger=dblclick 有效，选中单元格
      */
     setSelectCell (row, prop) {
-      let { $refs, id, tableData, editConfig, visibleColumn } = this
+      let { tableData, editConfig, visibleColumn } = this
       if (row && prop && editConfig.trigger !== 'manual') {
         let column = visibleColumn.find(column => column.property === prop)
         let rowIndex = tableData.indexOf(row)
         if (rowIndex > -1 && column) {
-          let cell = $refs.tableBody.$el.querySelector(`.vxe-body--row.row--${id}_${rowIndex} .${column.id}`)
+          let cell = DomTools.getCell(this, { row, rowIndex, column })
           let params = { row, rowIndex, column, columnIndex: visibleColumn.indexOf(column), cell }
           this.handleSelected(params, {})
         }
@@ -2675,7 +2673,7 @@ export default {
         if (scope && $refs.tableBody && !XEUtils.isEmpty(editRules)) {
           let { row, column } = scope
           let rowIndex = tableData.indexOf(row)
-          let cell = DomTools.getCell({ rowIndex, column }, $refs.tableBody.$el)
+          let cell = DomTools.getCell(this, { row, rowIndex, column })
           if (cell) {
             return this.validCellRules('change', row, column)
               .then(() => this.clearValidate())
@@ -2740,7 +2738,7 @@ export default {
      * 返回 Promise 对象，或者使用回调方式
      */
     validate (cb) {
-      let { $refs, editRules, tableData } = this
+      let { editRules, tableData } = this
       let validPromise = Promise.resolve(true)
       this.lastCallTime = Date.now()
       this.clearValidate()
@@ -2753,7 +2751,7 @@ export default {
                 this.validCellRules('all', row, column)
                   .then(resolve)
                   .catch(rule => {
-                    let rest = { rule, rowIndex, row, columnIndex, column, cell: DomTools.getCell({ rowIndex, column }, $refs.tableBody.$el) }
+                    let rest = { rule, rowIndex, row, columnIndex, column, cell: DomTools.getCell(this, { row, rowIndex, column }) }
                     return reject(rest)
                   })
               }))
@@ -2784,7 +2782,7 @@ export default {
       return validPromise
     },
     validRowRules (type, row) {
-      let { $refs, tableData, editRules } = this
+      let { tableData, editRules } = this
       let rowIndex = tableData.indexOf(row)
       let validPromise = Promise.resolve()
       if (!XEUtils.isEmpty(editRules)) {
@@ -2794,7 +2792,7 @@ export default {
               this.validCellRules('all', row, column)
                 .then(resolve)
                 .catch(rule => {
-                  let rest = { rule, row, column, cell: DomTools.getCell({ rowIndex, column }, $refs.tableBody.$el) }
+                  let rest = { rule, row, column, cell: DomTools.getCell(this, { row, rowIndex, column }) }
                   return reject(rest)
                 })
             }))

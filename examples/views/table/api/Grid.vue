@@ -33,12 +33,62 @@ export default {
         defVal: '',
         list: [
           {
+            name: 'toolbar',
+            desc: '工具栏配置',
+            type: 'Object',
+            enum: '',
+            defVal: '',
+            list: [
+              {
+                name: 'size',
+                desc: '尺寸',
+                type: 'String',
+                enum: 'medium,small,mini',
+                defVal: '',
+                list: []
+              },
+              {
+                name: 'buttons',
+                desc: '按钮列表',
+                type: 'Array',
+                enum: '',
+                defVal: '',
+                list: [
+                  {
+                    name: 'code',
+                    desc: '按钮编码',
+                    type: 'String',
+                    enum: '',
+                    defVal: 'reload,query,insert,pending,delete,save,export',
+                    list: []
+                  },
+                  {
+                    name: 'name',
+                    desc: '显示名称',
+                    type: 'String',
+                    enum: '',
+                    defVal: '',
+                    list: []
+                  }
+                ]
+              }
+            ]
+          },
+          {
             name: 'page-config',
             desc: '分页配置项',
             type: 'Object',
             enum: '',
             defVal: '',
             list: [
+              {
+                name: 'size',
+                desc: '尺寸',
+                type: 'String',
+                enum: 'medium,small,mini',
+                defVal: '',
+                list: []
+              },
               {
                 name: 'current-page',
                 desc: '当前页',
@@ -96,6 +146,14 @@ export default {
             enum: '',
             defVal: '',
             list: [
+              {
+                name: 'autoLoad',
+                desc: '是否自动加载查询数据',
+                type: 'Boolean',
+                enum: '',
+                defVal: 'true',
+                list: []
+              },
               {
                 name: 'props',
                 desc: '获取的属性配置',

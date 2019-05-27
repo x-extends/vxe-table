@@ -179,6 +179,9 @@ function renderRows (h, _vm, $table, rowLevel, fixedType, tableData, tableColumn
           'row--selected': row === selectRow,
           'row--hover': row === hoverRow
         }, rowClassName ? XEUtils.isFunction(rowClassName) ? rowClassName({ $table, seq, row, rowIndex }) : rowClassName : ''],
+        attrs: {
+          'data-rowkey': UtilTools.getRowId($table, row, rowIndex)
+        },
         key: rowKey || treeConfig ? UtilTools.getCellValue(row, rowKey || treeConfig.key) : rowIndex,
         on
       }, tableColumn.map((column, columnIndex) => {

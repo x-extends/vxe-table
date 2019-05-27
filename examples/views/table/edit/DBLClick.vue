@@ -6,7 +6,7 @@
       border
       show-all-overflow
       :data.sync="tableData"
-      :edit-config="{trigger: 'dblclick', mode: 'cell'}">
+      :edit-config="{key: 'id', trigger: 'dblclick', mode: 'cell'}">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column prop="name" label="Name" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column prop="sex" label="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
@@ -26,7 +26,7 @@
       border
       show-all-overflow
       :data.sync="tableData"
-      :edit-config="{trigger: 'dblclick', mode: 'row'}">
+      :edit-config="{key: 'id', trigger: 'dblclick', mode: 'row'}">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column prop="name" label="Name" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column prop="sex" label="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
@@ -56,7 +56,7 @@ export default {
           border
           show-all-overflow
           :data.sync="tableData"
-          :edit-config="{trigger: 'dblclick', mode: 'cell'}">
+          :edit-config="{key: 'id', trigger: 'dblclick', mode: 'cell'}">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column prop="name" label="Name" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column prop="sex" label="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
@@ -80,7 +80,7 @@ export default {
           border
           show-all-overflow
           :data.sync="tableData"
-          :edit-config="{trigger: 'dblclick', mode: 'row'}">
+          :edit-config="{key: 'id', trigger: 'dblclick', mode: 'row'}">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column prop="name" label="Name" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column prop="sex" label="Sex" :edit-render="{name: 'input'}"></vxe-table-column>

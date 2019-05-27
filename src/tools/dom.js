@@ -1,4 +1,5 @@
 import XEUtils from 'xe-utils'
+import UtilTools from './utils'
 
 const browse = XEUtils.browse()
 const htmlElem = document.querySelector('html')
@@ -51,10 +52,9 @@ const DomTools = {
     let rowIndex = [].indexOf.call(trElem.parentNode.children, trElem)
     return { rowIndex, columnIndex }
   },
-  getCell ({ rowIndex, column }, tableElem) {
-    let tBodyElem = tableElem.querySelector('.vxe-table--body>tbody')
-    let trElem = tBodyElem.children[rowIndex]
-    return trElem.querySelector(`.${column.id}`)
+  getCell ($table, { row, rowIndex, column }) {
+    let rowId = UtilTools.getRowId($table, row, rowIndex)
+    return $table.$refs.tableBody.$el.querySelector(`.vxe-body--row[data-rowkey="${rowId}"] .${column.id}`)
   },
   getCursorPosition (textarea) {
     let rangeData = { text: '', start: 0, end: 0 }

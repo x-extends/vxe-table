@@ -14,7 +14,7 @@ export default {
     return {
       btnList: [
         {
-          code: 'add',
+          code: 'insert',
           name: '新增'
         },
         {
@@ -70,10 +70,15 @@ export default {
   methods: {
     btnEvent (item, evnt) {
       let { $grid } = this
-      let $table = $grid.$refs.xTable
       switch (item.code) {
-        case 'add':
-          $table.insert()
+        case 'insert':
+          $grid.insert().then(({ row }) => $grid.setActiveRow(row))
+          break
+        case 'pending':
+          $grid.triggerPendingEvent(evnt)
+          break
+        case 'delete':
+          $grid.commitProxy('delete')
           break
         case 'save':
           $grid.commitProxy('save')
@@ -85,7 +90,7 @@ export default {
           $grid.commitProxy('reload')
           break
         case 'export':
-          $table.exportCsv()
+          $grid.exportCsv()
           break
       }
     }

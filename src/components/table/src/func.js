@@ -17,7 +17,7 @@ export default [
   'getInsertRecords',
   'getRemoveRecords',
   'getUpdateRecords',
-  'getSelectionRecords',
+  'getSelectRecords',
   'hasRowChange',
   'setActiveRow',
   'setActiveCell',

@@ -10,7 +10,7 @@
       :proxy-config="tableProxy"
       :columns="tableColumn"
       :toolbar="toolbar"
-      :edit-config="{trigger: 'click', mode: 'row'}"></vxe-grid>
+      :edit-config="{key: 'id', trigger: 'click', mode: 'row'}"></vxe-grid>
 
     <p class="demo-code">显示代码</p>
 
@@ -30,7 +30,7 @@ export default {
     return {
       tableProxy: {
         props: {
-          list: 'data.result',
+          data: 'data.result',
           total: 'data.page.total'
         },
         ajax: {
@@ -40,7 +40,14 @@ export default {
         }
       },
       toolbar: {
-        buttons: ['add', 'pending', 'save', 'reload', 'export']
+        buttons: [
+          { code: 'reload', name: '刷新' },
+          { code: 'insert', name: '新增' },
+          { code: 'pending', name: '标记/取消' },
+          { code: 'delete', name: '直接删除' },
+          { code: 'save', name: '保存' },
+          { code: 'export', name: '导出.csv' }
+        ]
       },
       tableColumn: [
         { type: 'selection', width: 50 },
@@ -61,7 +68,7 @@ export default {
           :columns="tableColumn"
           :data.sync="tableData"
           :toolbar="toolbar"
-          :edit-config="{trigger: 'click', mode: 'row'}"></vxe-grid>
+          :edit-config="{key: 'id', trigger: 'click', mode: 'row'}"></vxe-grid>
         `,
         `
         export default {

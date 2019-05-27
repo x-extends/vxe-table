@@ -221,7 +221,9 @@ class Helper {
         let updateTime = Date.now()
         let updateRecords = request.body[page && page.update ? page.update : 'updateRecords'] || []
         let removeRecords = request.body[page && page.remove ? page.remove : 'removeRecords'] || []
+        let pendingRecords = request.body[page && page.remove ? page.remove : 'pendingRecords'] || []
         let insertRecords = request.body[page && page.insert ? page.insert : 'insertRecords'] || []
+        removeRecords = removeRecords.concat(pendingRecords)
         removeRest = XEUtils.remove(list, item => removeRecords.some(row => row[key] === item[key]))
         updateRecords.forEach(data => {
           let item = list.find(item => item[key] === data[key])

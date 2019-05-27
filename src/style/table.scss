@@ -128,9 +128,6 @@
       }
     }
   }
-  .vxe-body--row {
-    background-color: $vxe-table-background-color;
-  }
   .vxe-table--body-wrapper,
   .vxe-table--fixed-left-body-wrapper,
   .vxe-table--fixed-right-body-wrapper {
@@ -138,6 +135,11 @@
     overflow-x: auto;
   }
   .vxe-body--row {
+    background-color: $vxe-table-background-color;
+    &.row--pending {
+      color: #f56c6c;
+      text-decoration: line-through;
+    }
     &.row--hover {
       background-color: $vxe-table-row-hover-background-color;
     }

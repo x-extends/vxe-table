@@ -30,6 +30,7 @@ export default {
     return {
       tableLoading: false,
       tableData: [],
+      pendingRecords: [],
       tablePage: {
         total: 0,
         pageSize: 10,
@@ -52,10 +53,13 @@ export default {
     }
   },
   mounted () {
-    if (this.columns && this.columns.length) {
+    let { columns, proxyConfig } = this
+    if (columns && columns.length) {
       this.$refs.xTable.loadColumn(this.columns)
     }
-    this.commitProxy('query')
+    if (proxyConfig && proxyConfig.autoLoad !== false) {
+      this.commitProxy('query')
+    }
   },
   render (h) {
     let { $slots, $listeners, pageConfig, size, loading, toolbar, proxyConfig, tableProps, tableLoading, tablePage, tableData } = this
@@ -67,7 +71,7 @@ export default {
         props: toolbar
       }) : null,
       h('vxe-table', {
-        props: proxyConfig ? Object.assign({}, tableProps, { loading: tableLoading, data: tableData }) : tableProps,
+        props: Object.assign({ }, tableProps, proxyConfig ? { loading: tableLoading, data: tableData, rowClassName: this.handleRowClassName } : {}),
         on: $listeners,
         ref: 'xTable'
       }, $slots.default),
@@ -85,6 +89,12 @@ export default {
   },
   methods: {
     ...methods,
+    handleRowClassName ({ row }) {
+      if (this.pendingRecords.some(item => item === row)) {
+        return 'row--pending'
+      }
+      return ''
+    },
     commitProxy (code) {
       let { proxyConfig = {}, tablePage } = this
       let { ajax, props = {} } = proxyConfig
@@ -96,6 +106,7 @@ export default {
               this.tableLoading = true
               if (code === 'reload') {
                 tablePage.currentPage = 1
+                this.pendingRecords = []
               }
               return ajax.query({ page: tablePage }).then(result => {
                 tablePage.total = XEUtils.get(result, props.total || 'page.total')
@@ -107,10 +118,27 @@ export default {
             }
             break
           case 'delete':
+            if (ajax.delete) {
+              return this.validate().then(() => {
+                let body = { removeRecords: this.getSelectRecords() }
+                let { removeRecords } = body
+                if (removeRecords.length) {
+                  this.tableLoading = true
+                  return ajax.delete({ body }).then(result => {
+                    this.tableLoading = false
+                  }).catch(e => {
+                    this.tableLoading = false
+                  }).then(() => this.commitProxy('reload'))
+                } else {
+                  // 请至少选择一条数据！
+                }
+              })
+            }
+            break
           case 'save':
             if (ajax.save) {
               return this.validate().then(() => {
-                let body = code === 'delete' ? { removeRecords: this.getSelectRecords() } : Object.assign({ pendingRecords: [] }, this.getAllRecords())
+                let body = Object.assign({ pendingRecords: this.pendingRecords }, this.getAllRecords())
                 let { insertRecords, removeRecords, updateRecords, pendingRecords } = body
                 if (insertRecords.length || removeRecords.length || updateRecords.length || pendingRecords.length) {
                   this.tableLoading = true
@@ -118,7 +146,9 @@ export default {
                     this.tableLoading = false
                   }).catch(e => {
                     this.tableLoading = false
-                  }).then(() => this.reload(true))
+                  }).then(() => this.commitProxy('reload'))
+                } else {
+                  // 数据未更改！
                 }
               })
             }
@@ -126,6 +156,28 @@ export default {
         }
       }
       return this.$nextTick()
+    },
+    triggerPendingEvent (evnt) {
+      let selectRecords = this.getSelectRecords()
+      if (selectRecords.length) {
+        let plus = []
+        let minus = []
+        selectRecords.forEach(data => {
+          if (this.pendingRecords.some(item => data === item)) {
+            minus.push(data)
+          } else {
+            plus.push(data)
+          }
+        })
+        if (minus.length) {
+          this.pendingRecords = this.pendingRecords.filter(item => minus.some(data => data !== item)).concat(plus)
+        } else if (plus) {
+          this.pendingRecords = this.pendingRecords.concat(plus)
+        }
+        this.clearSelection()
+      } else {
+        // 请至少选择一条数据！
+      }
     },
     currentChangeEvent (currentPage) {
       this.tablePage.currentPage = currentPage

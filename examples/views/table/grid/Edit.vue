@@ -9,7 +9,7 @@
       :pages="tablePage"
       :columns="tableColumn"
       :data.sync="tableData"
-      :edit-config="{trigger: 'click', mode: 'row'}"
+      :edit-config="{key: 'id', trigger: 'click', mode: 'row'}"
       @current-page-change="handleCurrentChange"
       @page-size-change="handleSizeChange"></vxe-grid>
 
@@ -54,7 +54,7 @@ export default {
           :pages="tablePage"
           :columns="tableColumn"
           :data.sync="tableData"
-          :edit-config="{trigger: 'click', mode: 'row'}"
+          :edit-config="{key: 'id', trigger: 'click', mode: 'row'}"
           @current-page-change="handleCurrentChange"
           @page-size-change="handleSizeChange"></vxe-grid>
         `,

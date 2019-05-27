@@ -9,7 +9,7 @@
       :data.sync="tableData"
       :mouse-config="{selected: true}"
       :keyboard-config="{isArray: true, isTab: true, isEdit: true}"
-      :edit-config="{trigger: 'dblclick', mode: 'cell'}">
+      :edit-config="{key: 'id', trigger: 'dblclick', mode: 'cell'}">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column prop="name" label="Name" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column prop="sex" label="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
@@ -56,7 +56,7 @@ export default {
           :data.sync="tableData"
           :mouse-config="{selected: true}"
           :keyboard-config="{isArray: true, isTab: true, isEdit: true}"
-          :edit-config="{trigger: 'dblclick', mode: 'cell'}">
+          :edit-config="{key: 'id', trigger: 'dblclick', mode: 'cell'}">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column prop="name" label="Name" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column prop="sex" label="Sex" :edit-render="{name: 'input'}"></vxe-table-column>

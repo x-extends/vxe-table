@@ -7,7 +7,7 @@
       border
       show-all-overflow
       :data.sync="tableData"
-      :edit-config="{trigger: 'manual', mode: 'row'}">
+      :edit-config="{key: 'id', trigger: 'manual', mode: 'row'}">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column prop="name" label="Name" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column prop="sex" label="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
@@ -49,7 +49,7 @@ export default {
           border
           show-all-overflow
           :data.sync="tableData"
-          :edit-config="{trigger: 'manual', mode: 'row'}">
+          :edit-config="{key: 'id', trigger: 'manual', mode: 'row'}">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column prop="name" label="Name" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column prop="sex" label="Sex" :edit-render="{name: 'input'}"></vxe-table-column>

@@ -9,7 +9,7 @@
       border
       show-all-overflow
       :data.sync="tableData"
-      :edit-config="{trigger: 'click', mode: 'cell', showStatus: true}">
+      :edit-config="{key: 'id', trigger: 'click', mode: 'cell', showStatus: true}">
       <vxe-table-column type="selection" width="60"></vxe-table-column>
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column prop="name" label="Name" :edit-render="{name: 'input'}"></vxe-table-column>
@@ -47,7 +47,7 @@ export default {
           border
           show-all-overflow
           :data.sync="tableData"
-          :edit-config="{trigger: 'click', mode: 'cell', showStatus: true}">
+          :edit-config="{key: 'id', trigger: 'click', mode: 'cell', showStatus: true}">
           <vxe-table-column type="selection" width="60"></vxe-table-column>
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column prop="name" label="Name" :edit-render="{name: 'input'}"></vxe-table-column>
