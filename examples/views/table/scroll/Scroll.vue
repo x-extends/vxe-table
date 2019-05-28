@@ -29,7 +29,6 @@
       border
       show-all-overflow
       height="300"
-      :loading="loading"
       :data.sync="tableData2">
       <vxe-table-column type="index" width="100"></vxe-table-column>
       <vxe-table-column prop="name" label="Name" sortable></vxe-table-column>
@@ -53,7 +52,6 @@ import hljs from 'highlight.js'
 export default {
   data () {
     return {
-      loading: false,
       tableData: [],
       tableData2: [],
       demoCodes: [
@@ -74,13 +72,11 @@ export default {
         export default {
           data () {
             return {
-              tableData: [],
-              tableData2: []
+              tableData: []
             }
           },
           created () {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 200)
-            this.tableData2 = window.MOCK_DATA_LIST.slice(0, 1000)
           }
         }
         `,
@@ -101,12 +97,10 @@ export default {
         export default {
           data () {
             return {
-              tableData: [],
               tableData2: []
             }
           },
           created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 200)
             this.tableData2 = window.MOCK_DATA_LIST.slice(0, 1000)
           }
         }
@@ -116,11 +110,7 @@ export default {
   },
   created () {
     this.tableData = window.MOCK_DATA_LIST.slice(0, 200)
-    this.loading = true
-    setTimeout(() => {
-      this.tableData2 = window.MOCK_DATA_LIST.slice(0, 10000)
-      this.loading = false
-    }, 200)
+    this.tableData2 = window.MOCK_DATA_LIST.slice(0, 10000)
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {

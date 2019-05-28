@@ -1031,10 +1031,7 @@ export default {
      * 支持 width=? width=?px width=?% min-width=? min-width=?px min-width=?%
      */
     recalculate (refull) {
-      let { $refs, scrollXLoad, scrollYLoad } = this
-      let tableBody = $refs.tableBody
-      let tableHeader = $refs.tableHeader
-      let tableFooter = $refs.tableFooter
+      let { tableBody, tableHeader, tableFooter } = this.$refs
       let bodyElem = tableBody ? tableBody.$el : null
       let headerElem = tableHeader ? tableHeader.$el : null
       let footerElem = tableFooter ? tableFooter.$el : null
@@ -1048,13 +1045,11 @@ export default {
             if (bodyWidth !== tableWidth) {
               this.autoCellWidth(headerElem, bodyElem, footerElem, bodyWidth)
             }
+            this.computeScrollLoad()
           })
         }
       }
-      if (scrollXLoad || scrollYLoad) {
-        this.computeScrollLoad()
-      }
-      return this.$nextTick()
+      return this.$nextTick().then(this.computeScrollLoad)
     },
     // 列宽计算
     autoCellWidth (headerElem, bodyElem, footerElem, bodyWidth) {
