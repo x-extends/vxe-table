@@ -1,12 +1,12 @@
 <template>
   <div>
-    <p>通过配置 pages 参数开启分页功能</p>
+    <p>通过配置 page-config 参数开启分页功能</p>
 
     <vxe-grid
       border
       height="530"
       :loading="loading"
-      :pages="tablePage"
+      :page-config="tablePage"
       :columns="tableColumn"
       :data.sync="tableData"
       @current-page-change="handleCurrentChange"
@@ -29,9 +29,6 @@ export default {
   data () {
     return {
       loading: false,
-      formData: {
-
-      },
       tablePage: {
         total: 0,
         currentPage: 1,
@@ -53,7 +50,7 @@ export default {
           border
           height="530"
           :loading="loading"
-          :pages="tablePage"
+          :page-config="tablePage"
           :columns="tableColumn"
           :data.sync="tableData"
           @current-page-change="handleCurrentChange"
@@ -64,9 +61,6 @@ export default {
           data () {
             return {
               loading: false,
-              formData: {
-
-              },
               tablePage: {
                 total: 0,
                 currentPage: 1,
@@ -90,7 +84,7 @@ export default {
             findList () {
               // 模拟后台接口
               this.loading = true
-              XEAjax.doGet(\`/api/user/page/list/\${this.tablePage.pageSize}/\${this.tablePage.currentPage}\`, this.formData).then(response => {
+              XEAjax.doGet(\`/api/user/page/list/\${this.tablePage.pageSize}/\${this.tablePage.currentPage}\`).then(response => {
                 let { page, result } = response.data
                 this.tableData = result
                 this.tablePage.total = page.total
@@ -129,7 +123,7 @@ export default {
     findList () {
       // 模拟后台接口
       this.loading = true
-      XEAjax.doGet(`/api/user/page/list/${this.tablePage.pageSize}/${this.tablePage.currentPage}`, this.formData).then(response => {
+      XEAjax.doGet(`/api/user/page/list/${this.tablePage.pageSize}/${this.tablePage.currentPage}`).then(response => {
         let { page, result } = response.data
         this.tableData = result
         this.tablePage.total = page.total
