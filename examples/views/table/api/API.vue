@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="search-wrapper">
-      <vxe-input class="search-input" v-model="filterName" type="search" placeholder="API"></vxe-input>
+      <vxe-input class="search-input" v-model="filterName" type="search" placeholder="API 搜索"></vxe-input>
     </div>
     <vxe-table
       highlight-hover-row
@@ -39,7 +39,7 @@ export default {
     apiList () {
       if (this.filterName) {
         let filterName = this.filterName.toLowerCase()
-        return XEUtils.searchTree(this.tableData, item => item.name.toLowerCase().indexOf(filterName) > -1 || item.desc.toLowerCase().indexOf(filterName) > -1, { children: 'list' })
+        return XEUtils.searchTree(this.tableData, item => item.name.toLowerCase().indexOf(filterName) > -1 || item.desc.toLowerCase().indexOf(filterName) > -1 || item.type.toLowerCase().indexOf(filterName) > -1, { children: 'list' })
       }
       return this.tableData
     }
