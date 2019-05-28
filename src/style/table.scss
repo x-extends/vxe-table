@@ -137,8 +137,9 @@
   .vxe-body--row {
     background-color: $vxe-table-background-color;
     &.row--pending {
-      color: #f56c6c;
+      color: $vxe-table-validate-error-color;
       text-decoration: line-through;
+      cursor: no-drop;
     }
     &.row--hover {
       background-color: $vxe-table-row-hover-background-color;
@@ -192,7 +193,7 @@
     }
     .vxe-required-icon {
       display: inline-block;
-      color: #f56c6c;
+      color: $vxe-table-validate-error-color;
       line-height: 16px;
       font-size: 16px;
       vertical-align: middle;
@@ -619,7 +620,7 @@
     &.col--valid-error {
       .vxe-input--wrapper {
         > .vxe-input {
-          border-color: #f56c6c;
+          border-color: $vxe-table-validate-error-color;
         }
       }
     }
@@ -681,7 +682,7 @@
           left: -5px;
           position: absolute;
           border: 5px solid;
-          border-color: transparent #f56c6c transparent transparent;
+          border-color: transparent $vxe-table-validate-error-color transparent transparent;
           transform: rotate(45deg);
         }
       }
@@ -1249,7 +1250,7 @@
 
 /*valid error*/
 .vxe-table--valid-error-wrapper {
-  background-color: #f56c6c;
+  background-color: $vxe-table-validate-error-color;
   color: #fff;
 }
 

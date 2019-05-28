@@ -62,7 +62,20 @@ export default {
     }
   },
   render (h) {
-    let { $slots, $listeners, pageConfig, size, loading, toolbar, proxyConfig, tableProps, tableLoading, tablePage, tableData } = this
+    let { $slots, $listeners: on, pageConfig, size, loading, toolbar, editConfig, proxyConfig, tableProps, tableLoading, tablePage, tableData } = this
+    let props = Object.assign({}, tableProps)
+    if (proxyConfig) {
+      Object.assign(props, {
+        loading: tableLoading,
+        data: tableData,
+        rowClassName: this.handleRowClassName
+      })
+    }
+    if (editConfig) {
+      props.editConfig = Object.assign({}, editConfig, {
+        activeMethod: this.handleActiveMethod
+      })
+    }
     return h('div', {
       class: 'vxe-grid'
     }, [
@@ -71,8 +84,8 @@ export default {
         props: toolbar
       }) : null,
       h('vxe-table', {
-        props: Object.assign({ }, tableProps, proxyConfig ? { loading: tableLoading, data: tableData, rowClassName: this.handleRowClassName } : {}),
-        on: $listeners,
+        props,
+        on,
         ref: 'xTable'
       }, $slots.default),
       pageConfig ? h('vxe-pagination', {
@@ -94,6 +107,9 @@ export default {
         return 'row--pending'
       }
       return ''
+    },
+    handleActiveMethod ({ row }) {
+      return this.pendingRecords.indexOf(row) === -1
     },
     commitProxy (code) {
       let { proxyConfig = {}, tablePage } = this
@@ -119,9 +135,10 @@ export default {
             break
           case 'delete':
             if (ajax.delete) {
+              this.removeSelecteds()
               return this.validate().then(() => {
-                let body = { removeRecords: this.getSelectRecords() }
-                let { removeRecords } = body
+                let removeRecords = this.getRemoveRecords()
+                let body = { removeRecords }
                 if (removeRecords.length) {
                   this.tableLoading = true
                   return ajax.delete({ body }).then(result => {

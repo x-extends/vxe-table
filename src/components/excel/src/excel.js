@@ -1,5 +1,5 @@
-import TableProps from './props'
-import funs from './func'
+import TableProps from '../../table/src/props'
+import funs from '../../table/src/func'
 
 const excelContextMenu = {
   header: {

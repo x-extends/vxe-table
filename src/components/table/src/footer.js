@@ -12,7 +12,7 @@ export default {
   },
   render (h) {
     let { $parent: $table, fixedType, fixedColumn, tableColumn, footerData } = this
-    let { footerRowClassName, footerCellClassName, tableWidth, scrollYWidth, scrollXHeight, scrollXLoad, scrollXStore, fullColumnKeyMap, optimizeConfig } = $table
+    let { footerRowClassName, footerCellClassName, tableWidth, scrollYWidth, scrollXHeight, scrollXLoad, scrollXStore, optimizeConfig, getColumnMapIndex } = $table
     let { overflow } = optimizeConfig
     // 如果是使用优化模式
     if (fixedType && overflow) {
@@ -77,7 +77,7 @@ export default {
             let isGroup = column.children && column.children.length
             let fixedHiddenColumn = fixedType && column.fixed !== fixedType && !isGroup
             // 确保任何情况下 columnIndex 都精准指向真实列索引
-            columnIndex = fullColumnKeyMap.get(column)
+            columnIndex = getColumnMapIndex(column)
             return h('td', {
               class: ['vxe-footer--column', column.id, {
                 [`col--${column.headerAlign}`]: column.headerAlign,

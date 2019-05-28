@@ -334,9 +334,15 @@ export default {
             },
             {
               label: '带工具栏',
-              disabled: true,
               locat: {
                 name: 'GridToolbar'
+              }
+            },
+            {
+              label: '复杂功能',
+              disabled: true,
+              locat: {
+                name: 'GridFullEdit'
               }
             }
           ]
@@ -468,6 +474,13 @@ export default {
               locat: {
                 name: 'TableEditTemplate'
               }
+            },
+            {
+              label: '复杂渲染',
+              disabled: true,
+              locat: {
+                name: 'TableEditFull'
+              }
             }
           ]
         },
@@ -549,49 +562,73 @@ export default {
             {
               label: 'vxe-table',
               locat: {
-                name: 'TableAPI'
+                name: 'TableAPI',
+                params: {
+                  name: 'table'
+                }
               }
             },
             {
               label: 'vxe-table-column',
               locat: {
-                name: 'TableColumnAPI'
+                name: 'TableAPI',
+                params: {
+                  name: 'table-column'
+                }
               }
             },
             {
               label: 'vxe-grid',
               locat: {
-                name: 'GridAPI'
+                name: 'TableAPI',
+                params: {
+                  name: 'grid'
+                }
               }
             },
             {
               label: 'vxe-excel',
               locat: {
-                name: 'ExcelAPI'
+                name: 'TableAPI',
+                params: {
+                  name: 'excel'
+                }
               }
             },
             {
               label: 'vxe-pagination',
               locat: {
-                name: 'PaginationAPI'
+                name: 'TableAPI',
+                params: {
+                  name: 'pagination'
+                }
               }
             },
             {
               label: 'vxe-radio',
               locat: {
-                name: 'RadioAPI'
+                name: 'TableAPI',
+                params: {
+                  name: 'radio'
+                }
               }
             },
             {
               label: 'vxe-checkbox',
               locat: {
-                name: 'CheckboxAPI'
+                name: 'TableAPI',
+                params: {
+                  name: 'checkbox'
+                }
               }
             },
             {
               label: 'vxe-input',
               locat: {
-                name: 'InputAPI'
+                name: 'TableAPI',
+                params: {
+                  name: 'input'
+                }
               }
             }
           ]

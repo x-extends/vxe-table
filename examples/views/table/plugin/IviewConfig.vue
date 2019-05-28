@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>使用 vxe-table-plugin-iview 配置式的插件，并加上 class=vxe-table-iview 或者自行实现样式调整</p>
+    <p>使用 vxe-table-plugin-iview 配置式的插件，并加上 class=vxe-table-iview 或者自行实现样式都可以</p>
 
     <pre>
       <code class="javascript">{{ demoCodes[0] }}</code>

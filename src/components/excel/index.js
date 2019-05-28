@@ -1,4 +1,4 @@
-import VxeExcel from '../table/src/excel'
+import VxeExcel from './src/excel'
 
 VxeExcel.install = function (Vue) {
   Vue.component(VxeExcel.name, VxeExcel)

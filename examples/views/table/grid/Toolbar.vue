@@ -1,7 +1,8 @@
 <template>
   <div>
     <p>工具栏、数据代理配置</p>
-    <p>save 默认提交的数据结构：{ insertRecords, updateRecords, removeRecords, pendingRecords}</p>
+    <p>delete 提交的数据结构：{ removeRecords }</p>
+    <p>save 提交的数据结构：{ insertRecords, updateRecords, removeRecords, pendingRecords}</p>
 
     <vxe-grid
       border
@@ -43,8 +44,10 @@ export default {
         buttons: [
           { code: 'reload', name: '刷新' },
           { code: 'insert', name: '新增' },
-          { code: 'pending', name: '标记/取消' },
-          { code: 'delete', name: '直接删除' },
+          { code: 'insert_actived', name: '新增并激活' },
+          { code: 'delete_pending', name: '标记/取消' },
+          { code: 'delete_selection', name: '删除选中' },
+          { code: 'delete_rows', name: '移除' },
           { code: 'save', name: '保存' },
           { code: 'export', name: '导出.csv' }
         ]
@@ -86,7 +89,16 @@ export default {
                 }
               },
               toolbar: {
-                buttons: ['add', 'pending', 'save', 'reload', 'export']
+                buttons: [
+                  { code: 'reload', name: '刷新' },
+                  { code: 'insert', name: '新增' },
+                  { code: 'insert_actived', name: '新增并激活' },
+                  { code: 'delete_pending', name: '标记/取消' },
+                  { code: 'delete_selection', name: '删除选中' },
+                  { code: 'delete_rows', name: '移除' },
+                  { code: 'save', name: '保存' },
+                  { code: 'export', name: '导出.csv' }
+                ]
               },
               tableColumn: [
                 { type: 'selection', width: 50 },

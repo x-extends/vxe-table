@@ -1,5 +1,3 @@
-import XEUtils from 'xe-utils'
-
 export default {
   name: 'VxeTableToolbar',
   props: {
@@ -10,56 +8,18 @@ export default {
   inject: [
     '$grid'
   ],
-  data () {
-    return {
-      btnList: [
-        {
-          code: 'insert',
-          name: '新增'
-        },
-        {
-          code: 'pending',
-          name: '标记/取消'
-        },
-        {
-          code: 'delete',
-          name: '删除'
-        },
-        {
-          code: 'save',
-          name: '保存'
-        },
-        {
-          code: 'reload',
-          name: '刷新'
-        },
-        {
-          code: 'query',
-          name: '查询'
-        },
-        {
-          code: 'export',
-          name: '导出'
-        }
-      ]
-    }
-  },
   computed: {
     vSize () {
       return this.size || this.$parent.size || this.$parent.vSize
-    },
-    btnConfig () {
-      let { btnList, buttons } = this
-      return buttons.map(code => Object.assign({}, XEUtils.isString(code) ? btnList.find(item => item.code === code) : code))
     }
   },
   render (h) {
-    let { btnConfig, vSize, btnEvent } = this
+    let { buttons, vSize, btnEvent } = this
     return h('div', {
       class: ['vxe-table-toolbar', {
         [`size--${vSize}`]: vSize
       }]
-    }, btnConfig.map(item => {
+    }, buttons.map(item => {
       return h('vxe-button', {
         on: {
           click: evnt => btnEvent(item, evnt)
@@ -72,19 +32,22 @@ export default {
       let { $grid } = this
       switch (item.code) {
         case 'insert':
+          $grid.insert()
+          break
+        case 'insert_actived':
           $grid.insert().then(({ row }) => $grid.setActiveRow(row))
           break
-        case 'pending':
+        case 'delete_pending':
           $grid.triggerPendingEvent(evnt)
           break
-        case 'delete':
+        case 'delete_selection':
           $grid.commitProxy('delete')
+          break
+        case 'delete_rows':
+          $grid.removeSelecteds()
           break
         case 'save':
           $grid.commitProxy('save')
-          break
-        case 'query':
-          $grid.commitProxy('query')
           break
         case 'reload':
           $grid.commitProxy('reload')

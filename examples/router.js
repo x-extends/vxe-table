@@ -39,10 +39,11 @@ import TableTreeRadio from './views/table/tree/Radio.vue'
 
 import GridBasic from './views/table/grid/Basic.vue'
 import GridPage from './views/table/grid/Page.vue'
+import GridFullQuery from './views/table/grid/FullQuery.vue'
 import GridProxy from './views/table/grid/Proxy.vue'
 import GridEdit from './views/table/grid/Edit.vue'
 import GridToolbar from './views/table/grid/Toolbar.vue'
-import GridFullQuery from './views/table/grid/FullQuery.vue'
+import GridFullEdit from './views/table/grid/FullEdit.vue'
 
 import TableScroll from './views/table/scroll/Scroll.vue'
 import TableScrollRows from './views/table/scroll/ScrollRows.vue'
@@ -63,6 +64,7 @@ import TableEditKeyboard from './views/table/edit/Keyboard.vue'
 import TableEditCellValid from './views/table/edit/CellValid.vue'
 import TableEditRowValid from './views/table/edit/RowValid.vue'
 import TableEditTemplate from './views/table/edit/Template.vue'
+import TableEditFull from './views/table/edit/Full.vue'
 
 import TableExcelCell from './views/table/excel/Cell.vue'
 
@@ -74,14 +76,7 @@ import TablePluginElementPage from './views/table/plugin/ElementPage.vue'
 import TablePluginIviewConfig from './views/table/plugin/IviewConfig.vue'
 import TablePluginIviewPage from './views/table/plugin/IviewPage.vue'
 
-import TableAPI from './views/table/api/Table.vue'
-import TableColumnAPI from './views/table/api/TableColumn.vue'
-import GridAPI from './views/table/api/Grid.vue'
-import ExcelAPI from './views/table/api/Excel.vue'
-import PaginationAPI from './views/table/api//Pagination.vue'
-import RadioAPI from './views/table/api/Radio.vue'
-import CheckboxAPI from './views/table/api/Checkbox.vue'
-import InputAPI from './views/table/api/Input.vue'
+import TableAPI from './views/table/api/API.vue'
 
 Vue.use(Router)
 
@@ -292,6 +287,11 @@ export default new Router({
       component: GridToolbar
     },
     {
+      path: '/table/grid/gullEdit',
+      name: 'GridFullEdit',
+      component: GridFullEdit
+    },
+    {
       path: '/table/grid/fullQuery',
       name: 'GridFullQuery',
       component: GridFullQuery
@@ -372,11 +372,6 @@ export default new Router({
       component: TableEditKeyboard
     },
     {
-      path: '/table/edit/template',
-      name: 'TableEditTemplate',
-      component: TableEditTemplate
-    },
-    {
       path: '/table/edit/cellValid',
       name: 'TableEditCellValid',
       component: TableEditCellValid
@@ -385,6 +380,16 @@ export default new Router({
       path: '/table/edit/rowValid',
       name: 'TableEditRowValid',
       component: TableEditRowValid
+    },
+    {
+      path: '/table/edit/template',
+      name: 'TableEditTemplate',
+      component: TableEditTemplate
+    },
+    {
+      path: '/table/edit/full',
+      name: 'TableEditFull',
+      component: TableEditFull
     },
     {
       path: '/table/excel/cell',
@@ -422,44 +427,9 @@ export default new Router({
       component: TablePluginIviewPage
     },
     {
-      path: '/table/api',
+      path: '/:name/api',
       name: 'TableAPI',
       component: TableAPI
-    },
-    {
-      path: '/tableColumn/api',
-      name: 'TableColumnAPI',
-      component: TableColumnAPI
-    },
-    {
-      path: '/grid/api',
-      name: 'GridAPI',
-      component: GridAPI
-    },
-    {
-      path: '/excel/api',
-      name: 'ExcelAPI',
-      component: ExcelAPI
-    },
-    {
-      path: '/pagination/api',
-      name: 'PaginationAPI',
-      component: PaginationAPI
-    },
-    {
-      path: '/radio/api',
-      name: 'RadioAPI',
-      component: RadioAPI
-    },
-    {
-      path: '/checkbox/api',
-      name: 'CheckboxAPI',
-      component: CheckboxAPI
-    },
-    {
-      path: '/input/api',
-      name: 'InputAPI',
-      component: InputAPI
     }
   ]
 })

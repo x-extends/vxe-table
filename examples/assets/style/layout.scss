@@ -153,6 +153,7 @@ body {
   color: #409eff;
   font-weight: bold;
   text-align: center;
+  user-select: none;
   &:before {
     content: ">> ";
   }
@@ -161,5 +162,12 @@ body {
     &.is-show {
       display: block;
     }
+  }
+}
+
+.search-wrapper {
+  margin: 10px 0;
+  .search-input {
+    width: 200px;
   }
 }

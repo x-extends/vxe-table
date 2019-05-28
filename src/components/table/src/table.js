@@ -664,21 +664,20 @@ export default {
     updateKeyMap (datas, key) {
       let keyMap = this[key]
       keyMap.clear()
-      datas.forEach((item, index) => keyMap.set(item, index))
+      datas.forEach((item, index) => keyMap.set(item, { item, index }))
     },
-    getIndex (row) {
-      let { tableFullData, fullDataKeyMap, treeConfig } = this
-      if (fullDataKeyMap && fullDataKeyMap.has(row)) {
-        return fullDataKeyMap.get(row)
-      }
-      return treeConfig ? XEUtils.findTree(tableFullData, item => item === row, treeConfig) : -1
+    getRowMapIndex (row) {
+      return this.fullDataKeyMap.has(row) ? this.fullDataKeyMap.get(row).index : -1
+    },
+    getRowIndex (row) {
+      let { tableFullData, treeConfig } = this
+      return treeConfig ? XEUtils.findTree(tableFullData, item => item === row, treeConfig) : this.getRowMapIndex(row)
+    },
+    getColumnMapIndex (column) {
+      return this.fullColumnKeyMap.has(column) ? this.fullColumnKeyMap.get(column).index : -1
     },
     getColumnIndex (column) {
-      let { fullColumnKeyMap } = this
-      if (fullColumnKeyMap && fullColumnKeyMap.has(column)) {
-        return fullColumnKeyMap.get(column)
-      }
-      return -1
+      return this.getColumnMapIndex(column)
     },
     insert (records) {
       return this.insertAt(records)
@@ -703,7 +702,10 @@ export default {
         }
       }
       [].push.apply(editStore.insertList, newRecords)
-      return this.$nextTick().then(() => ({ row: newRecords.length ? newRecords[newRecords.length - 1] : null, rows: newRecords }))
+      return this.$nextTick().then(() => {
+        this.recalculate()
+        return { row: newRecords.length ? newRecords[newRecords.length - 1] : null, rows: newRecords }
+      })
     },
     defineProperty (record) {
       let recordItem = Object.assign({}, record)
@@ -724,7 +726,9 @@ export default {
      * 支持删除多行
      */
     remove (rows) {
-      let { tableData, tableFullData, editStore, selection } = this
+      let { tableData, tableFullData, editStore, selectConfig = {}, selection, hasRowInsert } = this
+      let { removeList, insertList } = editStore
+      let { checkProp: property } = selectConfig
       let rest = []
       this.isUpdateData = true
       if (rows) {
@@ -732,21 +736,31 @@ export default {
           rows = [rows]
         }
         if (rows.length) {
-          rest = XEUtils.remove(tableFullData, item => rows.indexOf(item) > -1)
+          rest = XEUtils.remove(tableFullData, row => rows.indexOf(row) > -1)
         }
+        if (!property) {
+          XEUtils.remove(selection, row => rows.indexOf(row) > -1)
+        }
+        rows.forEach(row => {
+          if (!hasRowInsert(row)) {
+            removeList.push(row)
+          }
+        })
+        XEUtils.remove(insertList, row => rows.indexOf(row) > -1)
+        XEUtils.remove(tableData, row => rows.indexOf(row) > -1)
       }
-      [].push.apply(editStore.removeList, rest)
-      XEUtils.remove(tableData, item => rest.indexOf(item) > -1)
-      XEUtils.remove(selection, item => rest.indexOf(item) > -1)
       this.checkSelectionStatus()
-      return this.$nextTick().then(() => ({ row: rows && rows.length ? rows[rows.length - 1] : null, rows: rest }))
+      return this.$nextTick().then(() => {
+        this.recalculate()
+        return { row: rows && rows.length ? rows[rows.length - 1] : null, rows: rest }
+      })
     },
     /**
      * 删除选中数据
      */
     removeSelecteds () {
-      return this.remove(this.selection).then(params => {
-        this.selection = []
+      return this.remove(this.getSelectRecords()).then(params => {
+        this.clearSelection()
         return params
       })
     },
@@ -805,10 +819,20 @@ export default {
       }
       return this.$nextTick()
     },
+    hasRowInsert (row) {
+      return this.getRowMapIndex(row) === -1
+    },
     hasRowChange (row, prop) {
-      let { tableFullData, tableSourceData } = this
-      let oRowIndex = tableFullData.indexOf(row)
-      let oRow = tableSourceData[oRowIndex]
+      let { tableSourceData } = this
+      let rowKey = UtilTools.getRowKey(this)
+      let oRow
+      if (rowKey) {
+        let rowId = UtilTools.getCellValue(row, rowKey)
+        oRow = tableSourceData.find(row => rowId === UtilTools.getCellValue(row, rowKey))
+      } else {
+        let oRowIndex = this.getRowMapIndex(row)
+        oRow = tableSourceData[oRowIndex]
+      }
       if (arguments.length > 1) {
         return oRow && !XEUtils.isEqual(UtilTools.getCellValue(oRow, prop), UtilTools.getCellValue(row, prop))
       }
@@ -854,22 +878,33 @@ export default {
      * 获取选中数据
      */
     getSelectRecords () {
-      let { tableFullData, selection } = this
-      return tableFullData.filter(item => selection.indexOf(item) > -1)
+      let { tableFullData, editStore, treeConfig, selectConfig = {}, selection } = this
+      let { checkProp: property } = selectConfig
+      let rowList = []
+      let insList = []
+      if (property) {
+        if (treeConfig) {
+          rowList = XEUtils.filterTree(tableFullData, row => UtilTools.getCellValue(row, property), treeConfig)
+        } else {
+          rowList = tableFullData.filter(row => UtilTools.getCellValue(row, property))
+        }
+        insList = editStore.insertList.filter(row => UtilTools.getCellValue(row, property))
+      } else {
+        insList = editStore.insertList.filter(row => selection.indexOf(row) > -1)
+      }
+      if (treeConfig) {
+        rowList = XEUtils.filterTree(tableFullData, row => selection.indexOf(row) > -1, treeConfig)
+      } else {
+        rowList = tableFullData.filter(row => selection.indexOf(row) > -1)
+      }
+      return rowList.concat(insList)
     },
     /**
      * 获取更新数据
      */
     getUpdateRecords () {
-      let { tableSourceData, tableFullData, visibleColumn } = this
-      let updateRecords = []
-      tableFullData.forEach((row, rowIndex) => {
-        let oRow = tableSourceData[rowIndex]
-        if (oRow && visibleColumn.some(column => !XEUtils.isEqual(UtilTools.getCellValue(oRow, column.property), UtilTools.getCellValue(row, column.property)))) {
-          updateRecords.push(row)
-        }
-      })
-      return updateRecords
+      let { tableFullData, hasRowChange } = this
+      return tableFullData.filter(row => hasRowChange(row))
     },
     /**
      * 获取处理后全量的表格数据
@@ -1195,9 +1230,10 @@ export default {
                 // 如果点击了当前表格之外
                 !DomTools.getEventTargetNode(evnt, this.$el).flag
               ) {
-                this.triggerValidate().then(() => {
-                  this.clearActived(evnt)
-                }).catch(e => e)
+                // this.triggerValidate().then(() => {
+                this.clearValidate()
+                this.clearActived(evnt)
+                // }).catch(e => e)
               }
             }
           }
@@ -2343,7 +2379,7 @@ export default {
      */
     triggerRowExpandEvent (evnt, { row }) {
       let rest = this.toggleRowExpansion(row)
-      UtilTools.emitEvent(this, 'toggle-expand-change', [{ row, rowIndex: this.fullDataKeyMap.get(row), $table: this }, evnt])
+      UtilTools.emitEvent(this, 'toggle-expand-change', [{ row, rowIndex: this.getRowMapIndex(row), $table: this }, evnt])
       return rest
     },
     /**
@@ -2411,7 +2447,7 @@ export default {
      */
     triggerTreeExpandEvent (evnt, { row }) {
       let rest = this.toggleTreeExpansion(row)
-      UtilTools.emitEvent(this, 'toggle-tree-change', [{ row, rowIndex: this.fullDataKeyMap.get(row), $table: this }, evnt])
+      UtilTools.emitEvent(this, 'toggle-tree-change', [{ row, rowIndex: this.getRowMapIndex(row), $table: this }, evnt])
       return rest
     },
     /**
@@ -2442,7 +2478,7 @@ export default {
           expandRowKeys.forEach(rowKey => {
             let matchObj = XEUtils.findTree(tableFullData, item => rowKey === item[property], treeConfig)
             let rowChildren = matchObj ? matchObj.item[children] : 0
-            if (rowChildren) {
+            if (rowChildren && rowChildren.length) {
               treeExpandeds.push(matchObj.item)
             }
           })

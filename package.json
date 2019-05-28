@@ -1,6 +1,6 @@
 {
   "name": "vxe-table",
-  "version": "0.9.8",
+  "version": "0.9.9",
   "description": "A very powerful Vue table component.",
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -59,12 +59,12 @@
     "webpack-cli": "^3.3.1",
     "xe-ajax": "^3.5.3",
     "xe-ajax-mock": "^1.7.10",
-    "xe-utils": "^1.9.0",
+    "xe-utils": "^1.9.1",
     "xlsx": "^0.14.3"
   },
   "peerDependencies": {
     "vue": "^2.6.10",
-    "xe-utils": "^1.8.26"
+    "xe-utils": "^1.9.0"
   },
   "postcss": {
     "plugins": {

@@ -70,7 +70,7 @@ export default {
               alert(removeRecords.length)
             },
             getSelectionEvent () {
-              let removeRecords = this.$refs.xTable.getSelectionRecords()
+              let removeRecords = this.$refs.xTable.getSelectRecords()
               alert(removeRecords.length)
             }
           }
@@ -94,7 +94,7 @@ export default {
       alert(removeRecords.length)
     },
     getSelectionEvent () {
-      let removeRecords = this.$refs.xTable.getSelectionRecords()
+      let removeRecords = this.$refs.xTable.getSelectRecords()
       alert(removeRecords.length)
     }
   }

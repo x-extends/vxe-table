@@ -151,7 +151,7 @@ function renderColumn (h, _vm, $table, seq, fixedType, rowLevel, row, rowIndex, 
 }
 
 function renderRows (h, _vm, $table, rowLevel, fixedType, tableData, tableColumn) {
-  let { highlightHoverRow, id, fullDataKeyMap, fullColumnKeyMap, rowKey, rowClassName, selectRow, hoverRow, treeConfig, treeExpandeds, scrollYLoad, overflowX, columnStore, scrollYStore, expandeds } = $table
+  let { highlightHoverRow, rowClassName, selectRow, hoverRow, treeConfig, treeExpandeds, scrollYLoad, overflowX, columnStore, scrollYStore, expandeds, getRowMapIndex, getColumnMapIndex } = $table
   let { leftList, rightList } = columnStore
   let rows = []
   tableData.forEach((row, rowIndex) => {
@@ -161,7 +161,7 @@ function renderRows (h, _vm, $table, rowLevel, fixedType, tableData, tableColumn
       seq += scrollYStore.startIndex
     }
     // 确保任何情况下 rowIndex 都精准指向真实 data 索引
-    rowIndex = fullDataKeyMap.get(row)
+    rowIndex = getRowMapIndex(row)
     // 事件绑定
     if (highlightHoverRow && (leftList.length || rightList.length) && overflowX) {
       on = {
@@ -172,33 +172,35 @@ function renderRows (h, _vm, $table, rowLevel, fixedType, tableData, tableColumn
         }
       }
     }
+    let rowId = UtilTools.getRowId($table, row, rowIndex)
     rows.push(
       h('tr', {
-        class: ['vxe-body--row', `row--${id}_${UtilTools.getRowId($table, row, rowIndex)}`, {
+        class: ['vxe-body--row', {
           [`row--level-${rowLevel}`]: treeConfig,
           'row--selected': row === selectRow,
           'row--hover': row === hoverRow
         }, rowClassName ? XEUtils.isFunction(rowClassName) ? rowClassName({ $table, seq, row, rowIndex }) : rowClassName : ''],
         attrs: {
-          'data-rowkey': UtilTools.getRowId($table, row, rowIndex)
+          'data-rowkey': rowId
         },
-        key: rowKey || treeConfig ? UtilTools.getCellValue(row, rowKey || treeConfig.key) : rowIndex,
+        key: rowId,
         on
       }, tableColumn.map((column, columnIndex) => {
-        columnIndex = fullColumnKeyMap.get(column)
+        columnIndex = getColumnMapIndex(column)
         return renderColumn(h, _vm, $table, seq, fixedType, rowLevel, row, rowIndex, column, columnIndex)
       }))
     )
     if (treeConfig && treeExpandeds.length) {
       // 如果是树形表格
-      if (treeExpandeds.indexOf(row) > -1) {
-        rows.push.apply(rows, renderRows(h, _vm, $table, rowLevel + 1, fixedType, row[treeConfig.children], tableColumn))
+      let rowChildren = row[treeConfig.children]
+      if (rowChildren && rowChildren.length && treeExpandeds.indexOf(row) > -1) {
+        rows.push.apply(rows, renderRows(h, _vm, $table, rowLevel + 1, fixedType, rowChildren, tableColumn))
       }
     } else if (expandeds.length) {
       // 如果行被展开了
       if (expandeds.indexOf(row) > -1) {
         let column = tableColumn.find(column => column.type === 'expand')
-        let columnIndex = fullColumnKeyMap.get(column)
+        let columnIndex = getColumnMapIndex(column)
         if (column) {
           rows.push(
             h('tr', {

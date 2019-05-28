@@ -78,7 +78,7 @@ export default {
   },
   render (h) {
     let { $parent: $table, fixedType, headerColumn, tableColumn, resizeMousedown, fixedColumn } = this
-    let { $listeners: tableListeners, resizable, border, headerRowClassName, headerCellClassName, showHeaderAllOverflow, tableWidth, fullColumnKeyMap, scrollXLoad, scrollXStore, scrollYWidth } = $table
+    let { $listeners: tableListeners, resizable, border, headerRowClassName, headerCellClassName, showHeaderAllOverflow, tableWidth, scrollXLoad, scrollXStore, scrollYWidth, getColumnMapIndex } = $table
     // 横向滚动渲染
     if (scrollXLoad) {
       if (fixedType) {
@@ -139,7 +139,7 @@ export default {
             let showTooltip = showHeaderOverflow === true || showHeaderOverflow === 'tooltip' || showHeaderAllOverflow === true || showHeaderAllOverflow === 'tooltip'
             let thOns = {}
             // 确保任何情况下 columnIndex 都精准指向真实列索引
-            columnIndex = fullColumnKeyMap.get(column)
+            columnIndex = getColumnMapIndex(column)
             if (showTooltip) {
               thOns.mouseover = evnt => {
                 $table.triggerHeaderTooltipEvent(evnt, { $table, column, columnIndex, fixed: fixedType })
