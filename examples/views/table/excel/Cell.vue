@@ -13,7 +13,8 @@
       ref="xExcel"
       max-height="600"
       :columns="columns"
-      :data.sync="tableData">
+      :data.sync="tableData"
+      :edit-config="{key: 'index'}">
     </vxe-excel>
 
     <pre>
@@ -71,8 +72,8 @@ export default {
           }
         }
       })),
-      tableData: Array.from(new Array(20)).map(() => {
-        let item = {}
+      tableData: Array.from(new Array(20)).map((num, index) => {
+        let item = { index }
         columns.forEach(name => {
           item[name] = ''
         })
