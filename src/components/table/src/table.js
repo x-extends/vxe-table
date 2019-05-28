@@ -330,6 +330,9 @@ export default {
     },
     tableColumn () {
       this.analyColumnWidth()
+    },
+    height () {
+      this.$nextTick(this.recalculate)
     }
   },
   created () {
@@ -1563,8 +1566,10 @@ export default {
      * 快捷菜单点击事件
      */
     ctxMenuLinkEvent (evnt, menu) {
-      UtilTools.emitEvent(this, 'context-menu-link', [Object.assign({ menu }, this.ctxMenuStore.args), evnt])
-      this.closeContextMenu()
+      if (!menu.disabled && (!menu.children || !menu.children.length)) {
+        UtilTools.emitEvent(this, 'context-menu-link', [Object.assign({ menu }, this.ctxMenuStore.args), evnt])
+        this.closeContextMenu()
+      }
     },
     /**
      * 触发表头 tooltip 事件

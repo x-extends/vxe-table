@@ -30,6 +30,7 @@ export default {
     return {
       tableLoading: false,
       tableData: [],
+      tableCustoms: [],
       pendingRecords: [],
       tablePage: {
         total: 0,
@@ -52,6 +53,12 @@ export default {
       this.$refs.xTable.loadColumn(value)
     }
   },
+  created () {
+    let { customs } = this
+    if (customs) {
+      this.tableCustoms = customs
+    }
+  },
   mounted () {
     let { columns, proxyConfig } = this
     if (columns && columns.length) {
@@ -62,8 +69,10 @@ export default {
     }
   },
   render (h) {
-    let { $slots, $listeners: on, pageConfig, size, loading, toolbar, editConfig, proxyConfig, tableProps, tableLoading, tablePage, tableData } = this
+    let { $slots, $listeners, pageConfig, size, loading, toolbar, editConfig, proxyConfig, tableProps, tableLoading, tablePage, tableData, tableCustoms } = this
     let props = Object.assign({}, tableProps)
+    let on = Object.assign({}, $listeners)
+    let toolbarProps = Object.assign({ tableCustoms }, toolbar)
     if (proxyConfig) {
       Object.assign(props, {
         loading: tableLoading,
@@ -71,17 +80,25 @@ export default {
         rowClassName: this.handleRowClassName
       })
     }
+    if (toolbar) {
+      props.customs = tableCustoms
+      on['update:customs'] = value => {
+        this.tableCustoms = value
+      }
+    }
     if (editConfig) {
       props.editConfig = Object.assign({}, editConfig, {
         activeMethod: this.handleActiveMethod
       })
     }
     return h('div', {
-      class: 'vxe-grid'
+      class: [ 'vxe-grid', {
+        't--animat': true
+      }]
     }, [
       toolbar ? h('vxe-table-toolbar', {
         ref: 'toolbar',
-        props: toolbar
+        props: toolbarProps
       }) : null,
       h('vxe-table', {
         props,

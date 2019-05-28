@@ -42,7 +42,13 @@ export default {
   data () {
     return {
       tableData: [],
-      customColumns: [],
+      // 如果为空则默认全部显示，也可以指定默认的隐藏列
+      customColumns: [
+        {
+          prop: 'age',
+          visible: false
+        }
+      ],
       demoCodes: [
         `
         <div class="table-oper">
@@ -71,7 +77,13 @@ export default {
           data () {
             return {
               tableData: [],
-              customColumns: []
+              // 如果为空则默认全部显示，也可以指定默认的隐藏列
+              customColumns: [
+                {
+                  prop: 'age',
+                  visible: false
+                }
+              ]
             }
           },
           created () {

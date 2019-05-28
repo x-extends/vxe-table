@@ -118,6 +118,31 @@ const apis = [
                 list: []
               }
             ]
+          },
+          {
+            name: 'setting',
+            desc: '显示列个性化设置按钮',
+            type: 'Boolean,Object',
+            enum: '',
+            defVal: '',
+            list: [
+              {
+                name: 'trigger',
+                desc: '触发方式',
+                type: 'String',
+                enum: 'manual,click,hover',
+                defVal: 'click',
+                list: []
+              },
+              {
+                name: 'immediate',
+                desc: '列勾选之后是否实时同步',
+                type: 'Boolean',
+                enum: '',
+                defVal: 'false',
+                list: []
+              }
+            ]
           }
         ]
       },

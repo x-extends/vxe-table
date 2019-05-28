@@ -1,8 +1,6 @@
 <template>
   <div>
-    <p>工具栏、数据代理配置</p>
-    <p>delete 提交的数据结构：{ removeRecords }</p>
-    <p>save 提交的数据结构：{ insertRecords, updateRecords, removeRecords, pendingRecords}</p>
+    <p>工具栏：通过 toolbar 属性配置</p>
 
     <vxe-grid
       border
@@ -35,8 +33,11 @@ export default {
           total: 'data.page.total'
         },
         ajax: {
-          query: ({ params, page }) => XEAjax.doGet(`/api/user/page/list/${page.pageSize}/${page.currentPage}`),
+          // page 对象： { pageSize, currentPage }
+          query: ({ page }) => XEAjax.doGet(`/api/user/page/list/${page.pageSize}/${page.currentPage}`),
+          // body 对象： { removeRecords }
           delete: ({ body }) => XEAjax.doPost('/api/user/save', body),
+          // body 对象： { insertRecords, updateRecords, removeRecords, pendingRecords }
           save: ({ body }) => XEAjax.doPost('/api/user/save', body)
         }
       },
@@ -50,7 +51,8 @@ export default {
           { code: 'delete_rows', name: '移除' },
           { code: 'save', name: '保存' },
           { code: 'export', name: '导出.csv' }
-        ]
+        ],
+        setting: true
       },
       tableColumn: [
         { type: 'selection', width: 50 },
@@ -67,9 +69,7 @@ export default {
           height="530"
           :page-config="{pageSize: 10}"
           :proxy-config="tableProxy"
-          :loading="loading"
           :columns="tableColumn"
-          :data.sync="tableData"
           :toolbar="toolbar"
           :edit-config="{key: 'id', trigger: 'click', mode: 'row'}"></vxe-grid>
         `,
@@ -83,8 +83,11 @@ export default {
                   total: 'data.page.total'
                 },
                 ajax: {
-                  query: ({ params, page }) => XEAjax.doGet(\`/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`),
+                  // page 对象： { pageSize, currentPage }
+                  query: ({ page }) => XEAjax.doGet(\`/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`),
+                  // body 对象： { removeRecords }
                   delete: ({ body }) => XEAjax.doPost('/api/user/save', body),
+                  // body 对象： { insertRecords, updateRecords, removeRecords, pendingRecords }
                   save: ({ body }) => XEAjax.doPost('/api/user/save', body)
                 }
               },
@@ -98,7 +101,8 @@ export default {
                   { code: 'delete_rows', name: '移除' },
                   { code: 'save', name: '保存' },
                   { code: 'export', name: '导出.csv' }
-                ]
+                ],
+                setting: true
               },
               tableColumn: [
                 { type: 'selection', width: 50 },

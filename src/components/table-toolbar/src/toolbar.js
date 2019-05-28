@@ -1,33 +1,159 @@
+import GlobalEvent from '../../../tools/event'
+import DomTools from '../../../tools/dom'
+
 export default {
   name: 'VxeTableToolbar',
   props: {
-    setting: Boolean,
+    setting: [Boolean, Object],
     buttons: Array,
-    size: String
+    size: String,
+    tableCustoms: Array
   },
   inject: [
     '$grid'
   ],
+  data () {
+    return {
+      settingStore: {
+        visible: false
+      }
+    }
+  },
   computed: {
     vSize () {
       return this.size || this.$parent.size || this.$parent.vSize
     }
   },
+  created () {
+    GlobalEvent.on(this, 'mousedown', this.handleGlobalMousedownEvent)
+    GlobalEvent.on(this, 'blur', this.handleGlobalBlurEvent)
+  },
+  destroyed () {
+    GlobalEvent.off(this, 'mousedown')
+    GlobalEvent.off(this, 'blur')
+  },
   render (h) {
-    let { buttons, vSize, btnEvent } = this
+    let { $grid, settingStore, setting, buttons, vSize, tableCustoms } = this
+    let customBtnOns = {}
+    let customWrapperOns = {}
+    if (setting) {
+      if (setting.trigger === 'manual') {
+        // 手动触发
+      } else if (setting.trigger === 'hover') {
+        // hover 触发
+        customBtnOns.mouseenter = this.handleMouseenterSettingEvent
+        customBtnOns.mouseleave = this.handleMouseleaveSettingEvent
+        customWrapperOns.mouseenter = this.handleWrapperMouseenterEvent
+        customWrapperOns.mouseleave = this.handleWrapperMouseleaveEvent
+      } else {
+        // 点击触发
+        customBtnOns.click = this.handleClickSettingEvent
+      }
+    }
     return h('div', {
       class: ['vxe-table-toolbar', {
         [`size--${vSize}`]: vSize
       }]
-    }, buttons.map(item => {
-      return h('vxe-button', {
-        on: {
-          click: evnt => btnEvent(item, evnt)
-        }
-      }, item.name)
-    }))
+    }, [
+      h('div', {
+        class: 'vxe-button--wrapper'
+      }, buttons.map(item => {
+        return h('vxe-button', {
+          on: {
+            click: evnt => this.btnEvent(item, evnt)
+          }
+        }, item.name)
+      })),
+      setting ? h('div', {
+        class: ['vxe-custom--wrapper', {
+          'is--active': settingStore.visible
+        }],
+        ref: 'customWrapper'
+      }, [
+        h('div', {
+          class: 'vxe-custom--setting-btn',
+          on: customBtnOns
+        }, [
+          h('i', {
+            class: 'vxe-custom--setting-icon'
+          })
+        ]),
+        h('div', {
+          class: 'vxe-custom--option-wrapper'
+        }, [
+          h('div', {
+            class: 'vxe-custom--option',
+            on: customWrapperOns
+          }, tableCustoms.map(column => {
+            return column.property ? h('vxe-checkbox', {
+              props: {
+                value: column.visible
+              },
+              on: {
+                change: value => {
+                  column.visible = value
+                  if (setting && setting.immediate) {
+                    $grid.refreshColumn()
+                  }
+                }
+              }
+            }, column.label) : null
+          }))
+        ])
+      ]) : null
+    ])
   },
   methods: {
+    openSetting () {
+      this.settingStore.visible = true
+    },
+    closeSetting () {
+      let { $grid, setting, settingStore } = this
+      if (settingStore.visible) {
+        settingStore.visible = false
+        if (setting && !setting.immediate) {
+          $grid.refreshColumn()
+        }
+      }
+    },
+    handleGlobalMousedownEvent (evnt) {
+      if (!DomTools.getEventTargetNode(evnt, this.$refs.customWrapper).flag) {
+        this.closeSetting()
+      }
+    },
+    handleGlobalBlurEvent (evnt) {
+      this.closeSetting()
+    },
+    handleClickSettingEvent (evnt) {
+      let { settingStore } = this
+      settingStore.visible = !settingStore.visible
+    },
+    handleMouseenterSettingEvent (evnt) {
+      this.settingStore.activeBtn = true
+      this.openSetting()
+    },
+    handleMouseleaveSettingEvent (evnt) {
+      let { settingStore } = this
+      settingStore.activeBtn = false
+      setTimeout(() => {
+        if (!settingStore.activeBtn && !settingStore.activeWrapper) {
+          this.closeSetting()
+        }
+      }, 300)
+    },
+    handleWrapperMouseenterEvent (evnt) {
+      this.settingStore.activeWrapper = true
+      this.openSetting()
+    },
+    handleWrapperMouseleaveEvent (evnt) {
+      let { settingStore } = this
+      settingStore.activeWrapper = false
+      setTimeout(() => {
+        if (!settingStore.activeBtn && !settingStore.activeWrapper) {
+          this.closeSetting()
+        }
+      }, 300)
+    },
     btnEvent (item, evnt) {
       let { $grid } = this
       switch (item.code) {
