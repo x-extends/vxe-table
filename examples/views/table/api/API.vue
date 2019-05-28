@@ -12,6 +12,9 @@
       <vxe-table-column prop="type" label="类型 / 返回类型" width="160"></vxe-table-column>
       <vxe-table-column prop="enum" label="可选值" width="180"></vxe-table-column>
       <vxe-table-column prop="defVal" label="默认值 / 参数" width="180"></vxe-table-column>
+      <template v-slot:empty>
+        <span>找不对应 API，请输入正确的关键字！</span>
+      </template>
     </vxe-table>
   </div>
 </template>
