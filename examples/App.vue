@@ -2,7 +2,9 @@
   <div id="app" @click="clickEvent">
     <header class="page-header">
       <img class="logo" src="./assets/logo.jpg">
-      <h1 class="title"><a href="https://github.com/xuliangzhan/vxe-table">vxe-table</a></h1>
+      <h1 class="title">
+        <a href="https://github.com/xuliangzhan/vxe-table">vxe-table</a>
+      </h1>
       <span class="desc">一个功能更加强大的 Vue 表格组件</span>
     </header>
     <div class="page-container">
