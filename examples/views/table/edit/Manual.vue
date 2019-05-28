@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>设置 edit-config={trigger: 'manual', mode: 'row'} 启用行编辑的功能</p>
+    <p>设置 edit-config={key: 'id', trigger: 'manual', mode: 'row'} 启用行编辑的功能（必须指定 rowKey 或 key）</p>
 
     <vxe-table
       ref="xTable"
