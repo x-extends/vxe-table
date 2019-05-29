@@ -1,0 +1,86 @@
+/*table-toolbar*/
+.vxe-table-toolbar {
+  padding: 10px 0;
+  &.size--small,
+  &.size--mini {
+    padding: 8px 0
+  }
+  &.size--medium {
+    .vxe-custom--setting-btn {
+      font-size: 17px;
+    }
+  }
+  &.size--small {
+    .vxe-custom--setting-btn {
+      font-size: 15px;
+    }
+  }
+  &.size--mini {
+    .vxe-custom--setting-btn {
+      font-size: 14px;
+    }
+  }
+  .vxe-custom--wrapper {
+    float: right;
+    text-align: right;
+    position: relative;
+    &.is--active {
+      .vxe-custom--setting-btn {
+        background-color: #D9DADB;
+        border-radius: 50%;
+      }
+      .vxe-custom--option-wrapper {
+        display: block;
+      }
+    }
+  }
+  .vxe-custom--setting-btn {
+    font-size: 18px;
+    padding: 4px;
+    vertical-align: middle;
+    cursor: pointer;
+    user-select: none;
+    &:hover {
+      background-color: #F0F0F0;
+      border-radius: 50%;
+    }
+    .vxe-custom--setting-icon {
+      display: inline-block;
+      position: relative;
+      vertical-align: middle;
+      direction: ltr;
+      width: 0.22em;
+      height: 0.22em;
+      -webkit-box-shadow: 0 -0.4em 0, -0.4em -0.4em 0, 0.4em -0.4em 0, 0 0 0 1em inset, -0.4em 0 0, 0.4em 0 0, 0 0.4em 0, -0.4em 0.4em 0, 0.4em 0.4em 0;
+      box-shadow: 0 -0.4em 0, -0.4em -0.4em 0, 0.4em -0.4em 0, 0 0 0 1em inset, -0.4em 0 0, 0.4em 0 0, 0 0.4em 0, -0.4em 0.4em 0, 0.4em 0.4em 0;
+      margin: 0.65em;
+      transition: all .2s ease-in-out;
+    }
+  }
+  .vxe-custom--option-wrapper {
+    display: none;
+    position: absolute;
+    right: 0;
+    text-align: left;
+    background-color: #fff;
+    z-index: 19;
+    max-height: 200px;
+    overflow: auto;
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,.2);
+    .vxe-custom--option {
+      padding: 5px 5px;
+      border: 1px solid $vxe-table-border-color;
+      border-radius: 2px;
+      font-weight: 700;
+      font-size: 14px;
+      > .vxe-checkbox {
+        display: block;
+        padding: 5px;
+        max-width: 160px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
+  }
+}

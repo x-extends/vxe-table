@@ -1,0 +1,34 @@
+/*checkbox*/
+.vxe-checkbox {
+  @extend %radioAndCheckbox;
+  &.is--indeterminate {
+    > input {
+      &+.checkbox--icon {
+        background-color: $vxe-primary-color;
+        border-color: $vxe-primary-color;
+        &:before {
+          top: 50%;
+          height: 0;
+          width: 100%;
+          transform: translateY(-50%) scale(.5);
+        }
+      }
+    }
+  }
+  > input {
+    &+.checkbox--icon {
+      border-radius: 2px;
+    }
+    &:checked+.checkbox--icon {
+      &:before {
+        height: 8px;
+        width: 4px;
+        left: 4px;
+        top: 1px;
+        border-left: 0;
+        border-top: 0;
+        transform: rotate(45deg);
+      }
+    }
+  }
+}

@@ -12,11 +12,12 @@
       <vxe-table-column prop="address" label="Address" show-overflow></vxe-table-column>
     </vxe-table>
 
-    <p>当纵向内容过多时，出现横向滚动条</p>
+    <p>当纵向或横向内容过多时，自动出现滚动条</p>
 
     <vxe-table
+      height="400"
       :show-header="false"
-      :data.sync="tableData">
+      :data.sync="tableData2">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column prop="name" label="Name"></vxe-table-column>
       <vxe-table-column prop="sex" label="Sex"></vxe-table-column>
@@ -34,8 +35,8 @@ export default {
     }
   },
   created () {
-    let list = window.MOCK_DATA_LIST.slice(0, 6)
-    this.tableData = list
+    this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
+    this.tableData2 = window.MOCK_DATA_LIST.slice(0, 50)
   }
 }
 </script>

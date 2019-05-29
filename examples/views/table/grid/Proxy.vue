@@ -54,7 +54,7 @@ export default {
             return {
               tableProxy: {
                 ajax: {
-                  query: ({ page }) => XEAjax.getJSON(\`/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`)
+                  query: ({ page }) => XEAjax.getJSON(\`/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`) // 模拟请求
                 }
               },
               tableColumn: [

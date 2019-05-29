@@ -1,0 +1,79 @@
+%boxSizing {
+  box-sizing: border-box;
+}
+
+/*radio checkbox*/
+%radioAndCheckbox {
+  display: inline-block;
+  user-select: none;
+  cursor: pointer;
+  > input {
+    display: none;
+    &+.radio--icon,
+    &+.checkbox--icon {
+      position: relative;
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border: 1px solid $vxe-input-border-color;
+      background-color: #fff;
+      vertical-align: middle;
+      &:before {
+        content: "";
+        position: absolute;
+      }
+    }
+    &:checked+.radio--icon,
+    &:checked+.checkbox--icon {
+      background-color: $vxe-primary-color;
+      border-color: $vxe-primary-color;
+      &:before {
+        border-width: 1px;
+        border-style: solid;
+        border-color: #fff;
+      }
+      &+.radio--label,
+      &+.checkbox--label {
+        color: $vxe-primary-color;
+      }
+    }
+  }
+  &.is--indeterminate {
+    > input {
+      &+.checkbox--icon {
+        &:before {
+          border-width: 1px;
+          border-style: solid;
+          border-color: #fff;
+        }
+      }
+    }
+  }
+  &.is--disabled {
+    cursor: not-allowed;
+    > input {
+      &+.radio--icon,
+      &+.checkbox--icon {
+        border-color: $vxe-input-border-color;
+        background-color: $vxe-input-disabled-color;
+        &:before {
+          border-color: #c0c4cc;
+        }
+      }
+      &:checked+.radio--icon,
+      &:checked+.checkbox--icon {
+        border-color: $vxe-input-border-color;
+        background-color: $vxe-input-disabled-color;
+        &+.radio--label,
+        &+.checkbox--label {
+          color: $vxe-input-border-color;
+        }
+      }
+    }
+  }
+  .checkbox--label {
+    padding-left: 5px;
+    vertical-align: middle;
+    display: inline-block;
+  }
+}

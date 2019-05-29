@@ -1,0 +1,43 @@
+[class*="vxe-"] {
+  @extend %boxSizing;
+  *, *:after, *:before {
+    @extend %boxSizing;
+  }
+}
+
+/*animat*/
+.t--animat {
+  .vxe-sort--asc-icon,
+  .vxe-sort--desc-icon {
+    &:before {
+      @include animatTransition(border);
+    }
+  }
+  .vxe-table--expand-icon{
+    @include animatTransition(all);
+  }
+  .vxe-header--column,
+  .vxe-body--column,
+  .vxe-body--row {
+    @include animatTransition(background-color);
+  }
+  .vxe-input--wrapper {
+    .vxe-input {
+      @include animatTransition(border);
+    }
+  }
+  .vxe-tree--node-icon {
+    @include animatTransition(transform);
+  }
+  .vxe-button {
+    @include animatTransition(all, .2s, linear);
+  }
+  .vxe-checkbox,
+  .vxe-radio {
+    > input {
+      &:checked+span {
+        @include animatTransition(background-color);
+      }
+    }
+  }
+}

@@ -84,7 +84,7 @@ export default {
                 },
                 ajax: {
                   // page 对象： { pageSize, currentPage }
-                  query: ({ page }) => XEAjax.doGet(\`/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`),
+                  query: ({ page }) => XEAjax.doGet(\`/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`), // 模拟请求
                   // body 对象： { removeRecords }
                   delete: ({ body }) => XEAjax.doPost('/api/user/save', body),
                   // body 对象： { insertRecords, updateRecords, removeRecords, pendingRecords }

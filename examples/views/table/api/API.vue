@@ -1,15 +1,27 @@
 <template>
   <div>
     <div class="search-wrapper">
-      <vxe-input class="search-input" v-model="filterName" type="search" placeholder="API 搜索"></vxe-input>
+      <vxe-input class="search-input" v-model="filterName" type="search" placeholder="参数不清楚？来试试 API 搜索吧！"></vxe-input>
     </div>
     <vxe-table
       highlight-hover-row
       :data.sync="apiList"
       :tree-config="{key: 'id', children: 'list', expandAll: !!filterName, expandRowKeys: defaultExpandRowKeys, trigger: 'cell'}">
-      <vxe-table-column prop="name" label="属性" width="280" tree-node></vxe-table-column>
-      <vxe-table-column prop="desc" label="说明"></vxe-table-column>
-      <vxe-table-column prop="type" label="类型 / 返回类型" width="160"></vxe-table-column>
+      <vxe-table-column prop="name" label="属性" width="280" tree-node>
+        <template v-slot="{ row }">
+          <span v-html="row.name"></span>
+        </template>
+      </vxe-table-column>
+      <vxe-table-column prop="desc" label="说明">
+        <template v-slot="{ row }">
+          <span v-html="row.desc"></span>
+        </template>
+      </vxe-table-column>
+      <vxe-table-column prop="type" label="类型 / 返回类型" width="160">
+        <template v-slot="{ row }">
+          <span v-html="row.type"></span>
+        </template>
+      </vxe-table-column>
       <vxe-table-column prop="enum" label="可选值" width="180"></vxe-table-column>
       <vxe-table-column prop="defVal" label="默认值 / 参数" width="180"></vxe-table-column>
       <template v-slot:empty>
@@ -42,7 +54,14 @@ export default {
     apiList () {
       if (this.filterName) {
         let filterName = this.filterName.toLowerCase()
-        return XEUtils.searchTree(this.tableData, item => item.name.toLowerCase().indexOf(filterName) > -1 || item.desc.toLowerCase().indexOf(filterName) > -1 || item.type.toLowerCase().indexOf(filterName) > -1, { children: 'list' })
+        let filterRE = new RegExp(filterName, 'gi')
+        let rest = XEUtils.searchTree(this.tableData, item => item.name.toLowerCase().indexOf(filterName) > -1 || item.desc.toLowerCase().indexOf(filterName) > -1 || item.type.toLowerCase().indexOf(filterName) > -1, { children: 'list' })
+        XEUtils.eachTree(rest, item => {
+          item.name = item.name.replace(filterRE, match => `<span class="keyword-lighten">${match}</span>`)
+          item.desc = item.desc.replace(filterRE, match => `<span class="keyword-lighten">${match}</span>`)
+          item.type = item.type.replace(filterRE, match => `<span class="keyword-lighten">${match}</span>`)
+        }, { children: 'list' })
+        return rest
       }
       return this.tableData
     }

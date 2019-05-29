@@ -1,0 +1,67 @@
+/*button*/
+button {
+  &.vxe-button {
+    padding: 0 16px;
+    line-height: 30px;
+    border: 1px solid $vxe-input-border-color;
+    border-radius: 4px;
+    &:hover {
+      color: lighten($vxe-primary-color, 6%);
+      border-color: lighten($vxe-primary-color, 10%);
+    }
+    &:active {
+      color: darken($vxe-primary-color, 2%);
+      border-color: darken($vxe-primary-color, 2%);
+    }
+    &.size--medium {
+      padding: 0 14px;
+      line-height: 28px;
+    }
+    &.size--small {
+      padding: 0 12px;
+      line-height: 26px;
+    }
+    &.size--mini {
+      padding: 0 10px;
+      line-height: 24px;
+    }
+  }
+}
+a {
+  &.vxe-button {
+    color: $vxe-primary-color;
+    text-decoration: none;
+    &:hover {
+      color: lighten($vxe-primary-color, 10%);
+    }
+  }
+}
+.vxe-button {
+  text-align: center;
+  background-color: #fff;
+  outline: 0;
+  font-size: $vxe-font-size;
+  color: $vxe-font-color;
+  user-select: none;
+  appearance: none;
+  cursor: pointer;
+  &+.vxe-button {
+    margin-left: 10px;
+    &.size--medium {
+      margin-left: 8px;
+    }
+    &.size--small {
+      margin-left: 6px;
+    }
+    &.size--mini {
+      margin-left: 4px;
+    }
+  }
+  &.size--small,
+  &.size--mini {
+    font-size: 12px;
+  }
+}
+.vxe-button--wrapper {
+  display: inline-block;
+}

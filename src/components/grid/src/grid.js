@@ -2,6 +2,7 @@ import TableProps from '../../table/src/props'
 import funs from '../../table/src/func'
 import UtilTools from '../../../tools/utils'
 import XEUtils from 'xe-utils'
+import GlobalConfig from '../../../conf'
 
 const methods = {}
 const propKeys = Object.keys(TableProps)
@@ -69,10 +70,13 @@ export default {
     }
   },
   render (h) {
-    let { $slots, $listeners, pageConfig, size, loading, toolbar, editConfig, proxyConfig, tableProps, tableLoading, tablePage, tableData, tableCustoms } = this
+    let { $slots, $listeners, pageConfig, size, loading, toolbar, editConfig, proxyConfig, tableProps, tableLoading, tablePage, tableData, tableCustoms, optimized } = this
     let props = Object.assign({}, tableProps)
     let on = Object.assign({}, $listeners)
-    let toolbarProps = Object.assign({ tableCustoms }, toolbar)
+    let toolbarProps = Object.assign({
+      tableCustoms,
+      optimized: Object.assign({}, GlobalConfig.optimized, optimized)
+    }, toolbar)
     if (proxyConfig) {
       Object.assign(props, {
         loading: tableLoading,
@@ -93,7 +97,7 @@ export default {
     }
     return h('div', {
       class: [ 'vxe-grid', {
-        't--animat': true
+        't--animat': toolbarProps.optimized.animat
       }]
     }, [
       toolbar ? h('vxe-table-toolbar', {
