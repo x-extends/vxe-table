@@ -97,12 +97,6 @@ export default {
                 }
               })
             },
-            validEvent () {
-              this.$refs.xTable.validate(valid => {
-                if (valid) {
-                }
-              })
-            },
             selectValidEvent () {
             let getSelectRecords =  this.$refs.xTable.getSelectRecords()
             if(getSelectRecords.length>0){
