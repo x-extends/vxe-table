@@ -89,11 +89,11 @@ body {
         display: block;
         height: 30px;
         line-height: 30px;
-        &.router-link-exact-active,
+        &.router-link-active,
         &:hover {
           color: #409eff;
         }
-        &.router-link-exact-active {
+        &.router-link-active {
           border-right: 3px solid #409eff;
         }
         &.disabled {
