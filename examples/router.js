@@ -89,13 +89,13 @@ export default new Router({
     {
       path: '*',
       redirect: {
-        name: 'TableInstall'
+        name: 'Install'
       }
     },
     {
       path: '/',
       redirect: {
-        name: 'TableInstall'
+        name: 'Install'
       }
     },
     {

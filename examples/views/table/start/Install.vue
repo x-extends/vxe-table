@@ -24,23 +24,27 @@
         import VXETable, {
           Table,
           TableColumn,
+          TableToolbar,
           Grid,
           Excel,
           Pagination,
           Checkbox,
           Radio,
-          Input
+          Input,
+          Button
         } from 'vxe-table'
         import 'vxe-table/lib/index.css'
 
         Vue.use(Table)
         Vue.use(TableColumn)
+        Vue.use(TableToolbar)
         Vue.use(Grid)
         Vue.use(Excel)
         Vue.use(Pagination)
         Vue.use(Checkbox)
         Vue.use(Radio)
         Vue.use(Input)
+        Vue.use(Button)
 
         // 设置全局默认参数
         VXETable.setup({
