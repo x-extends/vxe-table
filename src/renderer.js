@@ -1,8 +1,6 @@
 import XEUtils from 'xe-utils'
-import UtilTools from '../../../tools/utils'
-import DomTools from '../../../tools/dom'
-
-const rowHeight = 24
+import UtilTools from './tools/utils'
+import DomTools from './tools/dom'
 
 /**
  * 内置渲染器
@@ -32,7 +30,8 @@ function defaultRenderer (h, attrs, editRender, params) {
   ]
 }
 
-const renderMap = {
+const rowHeight = 24
+const _storeMap = {
   input: {
     autofocus: '.vxe-input',
     renderEdit (h, editRender, params) {
@@ -117,4 +116,27 @@ const renderMap = {
   }
 }
 
-export default renderMap
+/**
+ * 全局渲染器
+ */
+const Renderer = {
+  mixin (map) {
+    Object.assign(_storeMap, map)
+    return Renderer
+  },
+  get (name) {
+    return _storeMap[name] || null
+  },
+  add (name, options) {
+    if (name && options) {
+      _storeMap[name] = options
+    }
+    return Renderer
+  },
+  delete (name) {
+    delete _storeMap[name]
+    return Renderer
+  }
+}
+
+export default Renderer

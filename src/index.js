@@ -10,7 +10,8 @@ import Radio from './components/radio'
 import Input from './components/input'
 import Button from './components/button'
 import GlobalConfig from './conf'
-import EventInterceptor from './interceptor'
+import Interceptor from './interceptor'
+import Renderer from './renderer'
 
 import './style/index.scss'
 
@@ -26,20 +27,22 @@ const components = [
   Checkbox
 ]
 
+/**
+ * 全局参数设置
+ */
 function setup (options = {}) {
-  let { renderMap, iconMap } = GlobalConfig
-  if (options.renderMap) {
-    Object.assign(renderMap, options.renderMap)
-  }
+  let { iconMap } = GlobalConfig
   if (options.iconMap) {
     Object.assign(iconMap, options.iconMap)
   }
   Object.assign(GlobalConfig, options, {
-    renderMap,
     iconMap
   })
 }
 
+/**
+ * 默认安装
+ */
 function install (Vue, options) {
   if (XEUtils.isPlainObject(options)) {
     setup(options)
@@ -50,7 +53,7 @@ function install (Vue, options) {
 function use (Plugin, options) {
   if (Plugin && Plugin.install) {
     if (installedPlugins.indexOf(Plugin) === -1) {
-      Plugin.install(GlobalConfig, EventInterceptor, options)
+      Plugin.install(options, { setup, interceptor: Interceptor, renderer: Renderer })
       installedPlugins.push(Plugin)
     }
   }
@@ -64,6 +67,8 @@ export default {
   install,
   use,
   setup,
+  interceptor: Interceptor,
+  renderer: Renderer,
   Table,
   TableColumn,
   TableToolbar,

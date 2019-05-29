@@ -1,6 +1,5 @@
 import XEUtils from 'xe-utils'
 import zhCNLocat from '../lib/locale/lang/zh-CN'
-import renderMap from './components/table/src/renderer'
 
 const GlobalConfig = {
   size: null,
@@ -25,7 +24,6 @@ const GlobalConfig = {
   showAllOverflow: null,
   showHeaderAllOverflow: null,
   contextMenu: null,
-  renderMap, // 渲染器
   tooltipConfig: null,
   iconMap: {
     sortAsc: 'vxe-sort--asc-icon',

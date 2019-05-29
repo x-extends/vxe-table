@@ -1,6 +1,7 @@
 import XEUtils from 'xe-utils'
 import UtilTools from '../../../tools/utils'
 import GlobalConfig from '../../../conf'
+import Renderer from '../../../renderer'
 
 const CellMethods = {
   createColumn ($table, _vm) {
@@ -457,9 +458,8 @@ const CellMethods = {
   runRenderer (h, params, _vm, isEdit) {
     let { $table, column } = params
     let { slots } = column
-    let { renderMap = {} } = GlobalConfig
     let editRender = _vm ? _vm.editRender : column.editRender
-    let compConf = renderMap[editRender.name]
+    let compConf = Renderer.get(editRender.name)
     let context = { $excel: $table.$parent, $table, $column: column }
     if (editRender.type === 'visible' || isEdit) {
       if (slots && slots.edit) {

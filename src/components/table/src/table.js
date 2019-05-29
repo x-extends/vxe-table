@@ -11,8 +11,9 @@ import TableProps from './props'
 import TableFilter from './filter'
 import TableContextMenu from './menu'
 import GlobalConfig from '../../../conf'
-import EventInterceptor from '../../../interceptor'
+import Interceptor from '../../../interceptor'
 import CellMethods from './cell'
+import Renderer from '../../../renderer'
 
 var rowUniqueId = 0
 
@@ -1210,7 +1211,8 @@ export default {
         if (!(editConfig.autoClear === false)) {
           // 如果手动调用了激活单元格，避免触发源被移除后导致重复关闭
           if (!this.lastCallTime || this.lastCallTime + 50 < Date.now()) {
-            if (!EventInterceptor.clearActiveds.some(func => func(actived.args, evnt) === false)) {
+            let evntList = Interceptor.get('event.clear_actived')
+            if (!evntList.some(func => func(actived.args, evnt) === false)) {
               let isClear
               let isReadonlyCol = !DomTools.getEventTargetNode(evnt, this.$el, 'col--edit').flag
               // row 方式
@@ -2244,8 +2246,7 @@ export default {
     handleFocus (params, evnt) {
       let { column, cell } = params
       let { editRender } = column
-      let { renderMap = {} } = GlobalConfig
-      let compRender = renderMap[editRender.name]
+      let compRender = Renderer.get(editRender.name)
       let inputElem
       // 如果指定了聚焦 class
       if (editRender.autofocus) {

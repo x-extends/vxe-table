@@ -47,13 +47,19 @@ export default {
             {
               label: '安装',
               locat: {
-                name: 'TableInstall'
+                name: 'Install'
               }
             },
             {
               label: '快速上手',
               locat: {
-                name: 'TableUse'
+                name: 'Use'
+              }
+            },
+            {
+              label: '高级函数',
+              locat: {
+                name: 'Advanced'
               }
             }
           ]

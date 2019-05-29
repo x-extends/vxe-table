@@ -20,7 +20,6 @@
         import VXETable from 'vxe-table'
         import 'vxe-table/lib/index.css'
 
-        Vue.use(VXETable)
         VXETable.setup({
           // 默认尺寸
           size: 'small',
