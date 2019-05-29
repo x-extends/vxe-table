@@ -1,7 +1,6 @@
 <template>
   <div>
     <p>数据代理：通过配置 proxy 实现更加简化数据加载</p>
-    <p>默认读取属性：{page: {total: 0}, result: []}</p>
 
     <vxe-grid
       border
@@ -54,6 +53,7 @@ export default {
             return {
               tableProxy: {
                 ajax: {
+                  // 默认读取响应结果中 page.total 和 result 属性，可以通过 props 修改，具体查看 API；比如 {page: {total: 0}, result: []}
                   query: ({ page }) => XEAjax.getJSON(\`/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`) // 模拟请求
                 }
               },
