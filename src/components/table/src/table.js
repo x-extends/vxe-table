@@ -1569,7 +1569,7 @@ export default {
      */
     ctxMenuLinkEvent (evnt, menu) {
       if (!menu.disabled && (!menu.children || !menu.children.length)) {
-        UtilTools.emitEvent(this, 'context-menu-link', [Object.assign({ menu }, this.ctxMenuStore.args), evnt])
+        UtilTools.emitEvent(this, 'context-menu-click', [Object.assign({ menu }, this.ctxMenuStore.args), evnt])
         this.closeContextMenu()
       }
     },

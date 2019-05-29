@@ -10,7 +10,7 @@
       :footer-method="footerMethod"
       :data.sync="tableData"
       :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}, footer: {options: footerMenus}}"
-      @context-menu-link="contextMenuLinkEvent">
+      @context-menu-click="contextMenuClickEvent">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column prop="name" label="Name" sortable></vxe-table-column>
       <vxe-table-column prop="sex" label="Sex"></vxe-table-column>
@@ -125,7 +125,7 @@ export default {
           :footer-method="footerMethod"
           :data.sync="tableData"
           :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}, footer: {options: footerMenus}}"
-          @context-menu-link="contextMenuLinkEvent">
+          @context-menu-click="contextMenuClickEvent">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column prop="name" label="Name" sortable></vxe-table-column>
           <vxe-table-column prop="sex" label="Sex"></vxe-table-column>
@@ -215,7 +215,7 @@ export default {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
           },
           methods: {
-            contextMenuLinkEvent ({ menu }) {
+            contextMenuClickEvent ({ menu }) {
               alert(menu.name)
             },
             footerMethod ({ columns, data }) {
@@ -247,7 +247,7 @@ export default {
     })
   },
   methods: {
-    contextMenuLinkEvent ({ menu }) {
+    contextMenuClickEvent ({ menu }) {
       alert(menu.name)
     },
     footerMethod ({ columns, data }) {

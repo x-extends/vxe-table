@@ -1,5 +1,6 @@
 import GlobalEvent from '../../../tools/event'
 import DomTools from '../../../tools/dom'
+import UtilTools from '../../../tools/utils'
 
 export default {
   name: 'VxeTableToolbar',
@@ -182,6 +183,7 @@ export default {
           $grid.exportCsv()
           break
       }
+      UtilTools.emitEvent($grid, 'toolbar-button-click', [{ button: item, $grid }, evnt])
     }
   }
 }

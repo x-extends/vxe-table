@@ -145,7 +145,7 @@ export default {
         ...this.$listeners,
         'cell-click': this.cellClickEvent,
         'header-cell-click': this.headerCellClickEvent,
-        'context-menu-link': this.contextMenuLinkEvent
+        'context-menu-click': this.contextMenuClickEvent
       },
       ref: 'xTable'
     }, buildColumns(h, this.columns))
@@ -198,7 +198,7 @@ export default {
         })
       }
     },
-    contextMenuLinkEvent ({ menu, row, column }, evnt) {
+    contextMenuClickEvent ({ menu, row, column }, evnt) {
       let $table = this.$refs.xTable
       let { property } = column
       switch (menu.code) {

@@ -305,7 +305,7 @@ const apis = [
     list: [
       {
         name: 'current-page-change',
-        desc: '当前页发生改变时会触发该事件',
+        desc: '只对 page-config 配置时有效，当前页发生改变时会触发该事件',
         type: '',
         enum: '',
         defVal: '',
@@ -313,10 +313,18 @@ const apis = [
       },
       {
         name: 'page-size-change',
-        desc: '每页大小发生改变时会触发该事件',
+        desc: '只对 page-config 配置时有效，每页大小发生改变时会触发该事件',
         type: '',
         enum: '',
         defVal: '',
+        list: []
+      },
+      {
+        name: 'toolbar-button-click',
+        desc: '只对 toolbar 配置时有效，当工具栏的按钮被点击时会后触发该事件',
+        type: '',
+        enum: '',
+        defVal: '{menu,type,row,rowIndex,column,columnIndex,cell},event',
         list: []
       }
     ]

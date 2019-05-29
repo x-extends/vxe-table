@@ -947,8 +947,8 @@ const apis = [
         list: []
       },
       {
-        name: 'context-menu-link',
-        desc: '当点击快捷菜单后触发',
+        name: 'context-menu-click',
+        desc: '只对 context-menu 配置时有效，当点击快捷菜单时会触发该事件',
         type: '',
         enum: '',
         defVal: '{menu,type,row,rowIndex,column,columnIndex,cell},event',

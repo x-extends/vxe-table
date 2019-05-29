@@ -9,7 +9,8 @@
       :proxy-config="tableProxy"
       :columns="tableColumn"
       :toolbar="toolbar"
-      :edit-config="{key: 'id', trigger: 'click', mode: 'row'}"></vxe-grid>
+      :edit-config="{key: 'id', trigger: 'click', mode: 'row'}"
+      @toolbar-button-click="toolbarButtonClickEvent"></vxe-grid>
 
     <p class="demo-code">显示代码</p>
 
@@ -50,7 +51,8 @@ export default {
           { code: 'delete_selection', name: '删除选中' },
           { code: 'delete_rows', name: '移除' },
           { code: 'save', name: '保存' },
-          { code: 'export', name: '导出.csv' }
+          { code: 'export', name: '导出.csv' },
+          { code: 'myBtn', name: '自定义按钮' }
         ],
         setting: true
       },
@@ -71,7 +73,8 @@ export default {
           :proxy-config="tableProxy"
           :columns="tableColumn"
           :toolbar="toolbar"
-          :edit-config="{key: 'id', trigger: 'click', mode: 'row'}"></vxe-grid>
+          :edit-config="{key: 'id', trigger: 'click', mode: 'row'}"
+          @toolbar-button-click="toolbarButtonClickEvent"></vxe-grid>
         `,
         `
         export default {
@@ -100,7 +103,8 @@ export default {
                   { code: 'delete_selection', name: '删除选中' },
                   { code: 'delete_rows', name: '移除' },
                   { code: 'save', name: '保存' },
-                  { code: 'export', name: '导出.csv' }
+                  { code: 'export', name: '导出.csv' },
+                  { code: 'myBtn', name: '自定义按钮' }
                 ],
                 setting: true
               },
@@ -113,6 +117,15 @@ export default {
                 { prop: 'describe', label: 'Describe', showOverflow: true, editRender: { name: 'input' } }
               ]
             }
+          },
+          methods: {
+            toolbarButtonClickEvent ({ button }, event) {
+              switch (button.code) {
+                case 'myBtn':
+                  alert(button.name)
+                  break
+              }
+            }
           }
         }
         `
@@ -123,6 +136,15 @@ export default {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
       hljs.highlightBlock(block)
     })
+  },
+  methods: {
+    toolbarButtonClickEvent ({ button }, event) {
+      switch (button.code) {
+        case 'myBtn':
+          alert(button.name)
+          break
+      }
+    }
   }
 }
 </script>
