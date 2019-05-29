@@ -2806,11 +2806,17 @@ export default {
       return Promise.resolve()
     },
     /**
-     * 对整个表格数据进行校验
+     * 对表格数据进行校验
+     * 若传rows为多行记录，则只验证传入的行，否则默认验证整个表格数据
      * 返回 Promise 对象，或者使用回调方式
      */
-    validate (cb) {
+    validate (rows, cb) {
       let { editRules, tableData } = this
+      if (XEUtils.isFunction(rows)) {
+        cb = rows
+      } else if (XEUtils.isArray(rows)) {
+        tableData = rows
+      }
       let validPromise = Promise.resolve(true)
       this.lastCallTime = Date.now()
       this.clearValidate()
