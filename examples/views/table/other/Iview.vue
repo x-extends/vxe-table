@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>自定义渲染 iview 组件，使用插槽 edit slot</p>
+    <p>自定义渲染 iview 组件，使用插槽 edit slot（需要使用 vxe-table-plugin-iview 插件，也可以自行处理兼容性</p>
 
     <vxe-table
       border

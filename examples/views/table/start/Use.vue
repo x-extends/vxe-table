@@ -41,7 +41,7 @@
           // 默认 tooltip 主题样式
           tooltipTheme: 'dark',
           // 默认优化配置项
-          optimized: {
+          optimization : {
             // 显示表格效果
             animat: true,
             // 横向 X 滚动渲染

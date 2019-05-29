@@ -3,7 +3,7 @@
     <p>加载 10 万行 1 万列，左右固定列，表尾合计</p>
     <p>大数据不建议使用双向绑定的 data 属性（vue 监听会大数据会短暂的卡顿），建议使用 loadData/reloadData 函数</p>
     <p>对于多选 type="selection" 当数据量海量时应该绑定 checkProp 属性渲染速度可以提升n倍以上</p>
-    <p>数据超大情况下必须使用：show-all-overflow,show-header-all-overflow 参数以及调整好 optimized：{scrollX,scrollY} 适合的参数可以更加流畅</p>
+    <p>数据超大情况下必须使用：show-all-overflow,show-header-all-overflow 参数以及调整好 optimization ：{scrollX,scrollY} 适合的参数可以更加流畅</p>
 
     <vxe-grid
       ref="xTable"
@@ -18,7 +18,7 @@
       :loading="loading"
       :columns="tableColumn"
       :select-config="{checkProp: 'checked'}"
-      :optimized="{scrollX: {gt: 20, oSize: 4, rSize: 8}, scrollY: {gt: 500, oSize: 20, rSize: 60}}">
+      :optimization ="{scrollX: {gt: 20, oSize: 4, rSize: 8}, scrollY: {gt: 500, oSize: 20, rSize: 60}}">
     </vxe-grid>
   </div>
 </template>

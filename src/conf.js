@@ -4,7 +4,7 @@ import renderMap from './components/table/src/renderer'
 
 const GlobalConfig = {
   size: null,
-  optimized: {
+  optimization: {
     animat: true,
     // 默认列大于 80 条时自动使用横向 X 滚动渲染
     scrollX: {

@@ -686,7 +686,7 @@ const apis = [
       },
       {
         name: 'edit-rules',
-        desc: '校验规则配置项',
+        desc: '校验规则配置项（默认情况下是非强制性的，无论是否必填都允许编辑其他的单元格）',
         type: 'Object',
         enum: '',
         defVal: '',
@@ -741,16 +741,16 @@ const apis = [
           },
           {
             name: 'trigger',
-            desc: '触发校验方式',
+            desc: '触发校验方式（如果为空，则为常规校验方式； 如果指定触发方式，则只会在匹配情况下进行校验）',
             type: 'String',
             enum: 'blur,change',
-            defVal: 'change',
+            defVal: '',
             list: []
           }
         ]
       },
       {
-        name: 'optimized',
+        name: 'optimization ',
         desc: '优化配置项',
         type: 'Object',
         enum: '',

@@ -531,25 +531,25 @@ export default {
           expand: false,
           children: [
             {
-              label: 'element-ui 配置式插件',
+              label: 'element-ui 适配插件',
               locat: {
                 name: 'TablePluginElementConfig'
               }
             },
             {
-              label: 'element-ui 配置式插件 + 分页',
+              label: 'element-ui 更多配置',
               locat: {
                 name: 'TablePluginElementPage'
               }
             },
             {
-              label: 'iview 配置式插件',
+              label: 'iview 适配插件',
               locat: {
                 name: 'TablePluginIviewConfig'
               }
             },
             {
-              label: 'iview 配置式插件 + 分页',
+              label: 'iview 更多配置',
               locat: {
                 name: 'TablePluginIviewPage'
               }

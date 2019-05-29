@@ -40,11 +40,11 @@ export default {
       tableData: [],
       validRules: {
         name: [
-          { required: true, message: '名称必须填写', trigger: 'change' },
-          { min: 3, max: 50, message: '名称长度在 3 到 50 个字符', trigger: 'change' }
+          { required: true, message: '名称必须填写' },
+          { min: 3, max: 50, message: '名称长度在 3 到 50 个字符' }
         ],
         sex: [
-          { required: true, message: '性别必须填写', trigger: 'change' }
+          { required: true, message: '性别必须填写' }
         ]
       },
       demoCodes: [
@@ -76,11 +76,11 @@ export default {
               tableData: [],
               validRules: {
                 name: [
-                  { required: true, message: '名称必须填写', trigger: 'change' },
-                  { min: 3, max: 50, message: '名称长度在 3 到 50 个字符', trigger: 'change' }
+                  { required: true, message: '名称必须填写' },
+                  { min: 3, max: 50, message: '名称长度在 3 到 50 个字符' }
                 ],
                 sex: [
-                  { required: true, message: '性别必须填写', trigger: 'change' }
+                  { required: true, message: '性别必须填写' }
                 ]
               }
             }

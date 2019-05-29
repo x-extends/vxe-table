@@ -77,5 +77,5 @@ export default {
   // 校验规则配置项
   editRules: Object,
   // 优化配置项
-  optimized: Object
+  optimization: Object
 }

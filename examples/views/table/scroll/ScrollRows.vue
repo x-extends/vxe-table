@@ -9,7 +9,7 @@
       show-all-overflow
       height="600"
       :loading="loading"
-      :optimized="{scrollY: {gt: 500, oSize: 20, rSize: 60}}">>
+      :optimization ="{scrollY: {gt: 500, oSize: 20, rSize: 60}}">>
       <vxe-table-column type="index" width="100" fixed="left"></vxe-table-column>
       <vxe-table-column prop="name" label="Name" sortable width="200"></vxe-table-column>
       <vxe-table-column prop="age" label="Age" width="200"></vxe-table-column>

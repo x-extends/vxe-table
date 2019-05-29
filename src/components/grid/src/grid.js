@@ -70,12 +70,12 @@ export default {
     }
   },
   render (h) {
-    let { $slots, $listeners, pageConfig, size, loading, toolbar, editConfig, proxyConfig, tableProps, tableLoading, tablePage, tableData, tableCustoms, optimized } = this
+    let { $slots, $listeners, pageConfig, size, loading, toolbar, editConfig, proxyConfig, tableProps, tableLoading, tablePage, tableData, tableCustoms, optimization } = this
     let props = Object.assign({}, tableProps)
     let on = Object.assign({}, $listeners)
     let toolbarProps = Object.assign({
       tableCustoms,
-      optimized: Object.assign({}, GlobalConfig.optimized, optimized)
+      optimization: Object.assign({}, GlobalConfig.optimization, optimization)
     }, toolbar)
     if (proxyConfig) {
       Object.assign(props, {
@@ -97,7 +97,7 @@ export default {
     }
     return h('div', {
       class: [ 'vxe-grid', {
-        't--animat': toolbarProps.optimized.animat
+        't--animat': toolbarProps.optimization.animat
       }]
     }, [
       toolbar ? h('vxe-table-toolbar', {

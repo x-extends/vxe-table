@@ -276,7 +276,7 @@ export default {
     },
     // 优化的参数
     optimizeConfig () {
-      return Object.assign({}, GlobalConfig.optimized, this.optimized)
+      return Object.assign({}, GlobalConfig.optimization, this.optimization)
     },
     // 是否使用了分组表头
     isGroup () {
@@ -1233,7 +1233,7 @@ export default {
                 // 如果点击了当前表格之外
                 !DomTools.getEventTargetNode(evnt, this.$el).flag
               ) {
-                // this.triggerValidate().then(() => {
+                // this.triggerValidate('blur').then(a => {
                 this.clearValidate()
                 this.clearActived(evnt)
                 // }).catch(e => e)
@@ -1958,7 +1958,7 @@ export default {
      * 如果是双击模式，则单击后选中状态
      */
     triggerCellClickEvent (evnt, params) {
-      let { $el, highlightCurrentRow, editRules, editStore, treeConfig, editConfig } = this
+      let { $el, highlightCurrentRow, editStore, treeConfig, editConfig } = this
       let { actived } = editStore
       let { column, columnIndex } = params
       if (highlightCurrentRow) {
@@ -1966,18 +1966,36 @@ export default {
           this.selectRow = params.row
         }
       }
+      // 如果是树形表格
       if (treeConfig && (treeConfig.trigger === 'row' || (column.treeNode && treeConfig.trigger === 'cell'))) {
         this.triggerTreeExpandEvent(evnt, params)
       }
       if (editConfig) {
         if (editConfig.trigger === 'click') {
           if (!actived.args || evnt.currentTarget !== actived.args.cell) {
-            if (editRules) {
-              this.handleActived(params, evnt)
-            } else {
-              this.triggerValidate().then(() => {
+            // if (editRules) {
+            //   this.handleActived(params, evnt)
+            // } else {
+            // this.triggerValidate('change').then(() => {
+            //   this.handleActived(params, evnt)
+            // }).catch(e => e)
+            // }
+            if (editConfig.mode === 'row') {
+              // if (validStore.visible && validStore.row === params.row && validStore.column === params.column) {
+              //   this.handleActived(params, evnt)
+              // } else {
+              this.triggerValidate('blur').then(() => {
+
+              }).catch(e => e).then(() => {
                 this.handleActived(params, evnt)
-              }).catch(e => e)
+                  .then(() => this.triggerValidate('change'))
+                  .catch(e => e)
+              })
+              // }
+            } else if (editConfig.mode === 'cell') {
+              this.handleActived(params, evnt)
+                .then(() => this.triggerValidate('change'))
+                .catch(e => e)
             }
           }
         } else {
@@ -1999,9 +2017,9 @@ export default {
       if (editConfig) {
         if (editConfig.trigger === 'dblclick') {
           if (!actived.args || evnt.currentTarget !== actived.args.cell) {
-            this.triggerValidate().then(() => {
-              this.handleActived(params, evnt)
-            }).catch(e => e)
+            // this.triggerValidate().then(() => {
+            this.handleActived(params, evnt)
+            // }).catch(e => e)
           }
         }
       }
@@ -2076,7 +2094,7 @@ export default {
      * 处理选中源
      */
     handleSelected (params, evnt) {
-      let { mouseConfig = {}, editRules, editStore } = this
+      let { mouseConfig = {}, editStore } = this
       let { selected } = editStore
       let { row, column } = params
       let selectMethod = () => {
@@ -2094,7 +2112,8 @@ export default {
         }
         return this.$nextTick()
       }
-      return editRules ? this.triggerValidate().then(selectMethod).catch(e => e) : selectMethod()
+      // return editRules ? this.triggerValidate('blur').then(selectMethod).catch(e => e) : selectMethod()
+      return selectMethod()
     },
     /**
      * 清除所有选中状态
@@ -2708,12 +2727,15 @@ export default {
         let { $refs, tableData, editRules } = this
         if (scope && $refs.tableBody && !XEUtils.isEmpty(editRules)) {
           let { row, column } = scope
-          let rowIndex = tableData.indexOf(row)
-          let cell = DomTools.getCell(this, { row, rowIndex, column })
-          if (cell) {
-            return this.validCellRules('change', row, column)
-              .then(() => this.clearValidate())
-              .catch(rule => this.handleValidError({ rule, row, column, cell }))
+          let type = 'change'
+          if (this.hasCellRules(type, row, column)) {
+            let rowIndex = tableData.indexOf(row)
+            let cell = DomTools.getCell(this, { row, rowIndex, column })
+            if (cell) {
+              return this.validCellRules(type, row, column)
+                .then(() => this.clearValidate())
+                .catch(rule => this.handleValidError({ rule, row, column, cell }))
+            }
           }
         }
       })
@@ -2746,26 +2768,39 @@ export default {
           })
       })
     },
-    triggerValidate (cb) {
+    triggerValidate (type) {
       let { editConfig, editStore, editRules, validStore } = this
       let { actived } = editStore
-      let type = validStore.visible ? 'all' : 'blur'
-      this.clearValidate()
+      // let type = validStore.visible ? 'all' : 'blur'
+      // this.clearValidate()
       if (actived.row && editRules) {
         let { row, column, cell } = actived.args
-        if (editConfig.mode === 'row') {
-          return this.validRowRules(type, row)
-            .catch(params => {
-              this.handleValidError(params)
-              return Promise.reject(params)
-            })
-        } else {
-          return this.validCellRules(type, row, column).catch(rule => {
-            let rest = { rule, row, column, cell }
-            this.handleValidError(rest)
-            return Promise.reject(rest)
+        // if (editConfig.mode === 'row') {
+        //   return this.validRowRules(type, row)
+        //     .catch(params => {
+        //       this.handleValidError(params)
+        //       return Promise.reject(params)
+        //     })
+        // } else {
+        if (this.hasCellRules(type, row, column)) {
+          return this.validCellRules(type, row, column).then(() => {
+            if (editConfig.mode === 'row') {
+              if (validStore.visible && validStore.row === row && validStore.column === column) {
+                this.clearValidate()
+              }
+            }
+          }).catch(rule => {
+            // 如果校验不通过与触发方式一致，则聚焦提示错误，否则跳过并不作任何处理
+            if (!rule.trigger || type === rule.trigger) {
+              let rest = { rule, row, column, cell }
+              this.handleValidError(rest)
+              return Promise.reject(rest)
+            }
+            return Promise.resolve()
           })
         }
+
+        // }
       }
       return Promise.resolve()
     },
@@ -2837,6 +2872,15 @@ export default {
       }
       return validPromise
     },
+    hasCellRules (type, row, column) {
+      let { editRules } = this
+      let { property } = column
+      if (property && !XEUtils.isEmpty(editRules)) {
+        let rules = XEUtils.get(editRules, property)
+        return rules && rules.find(rule => type === 'all' || !rule.trigger || type === rule.trigger)
+      }
+      return false
+    },
     /**
      * 校验数据
      * 按表格行、列顺序依次校验（同步或异步）
@@ -2847,7 +2891,7 @@ export default {
      * 参数：required=Boolean 是否必填，min=Number 最小长度，max=Number 最大长度，validator=Function(rule, value, callback) 自定义校验，trigger=blur|change 触发方式
      */
     validCellRules (type, row, column) {
-      let { editRules, tableFullData, visibleColumn } = this
+      let { editRules } = this
       let { property } = column
       let validPromise = Promise.resolve()
       if (property && !XEUtils.isEmpty(editRules)) {
@@ -2858,15 +2902,15 @@ export default {
             validPromise = validPromise.then(() => new Promise((resolve, reject) => {
               let rule = rules[rIndex]
               let isRequired = rule.required === true
-              if ((type === 'all' || !rule.trigger || rule.trigger === 'change' || type === rule.trigger) && (isRequired || value || rule.validator)) {
+              if ((type === 'all' || !rule.trigger || type === rule.trigger) && (isRequired || value || rule.validator)) {
                 if (XEUtils.isFunction(rule.validator)) {
                   rule.validator(rule, value, e => {
                     if (XEUtils.isError(e)) {
-                      let cusRule = { type: 'custom', message: e.message, rule }
+                      let cusRule = { type: 'custom', trigger: rule.trigger, message: e.message, rule }
                       return reject(cusRule)
                     }
                     return resolve()
-                  }, { rules, row, column, rowIndex: tableFullData.indexOf(row), columnIndex: visibleColumn.indexOf(column), $table: this })
+                  }, { rules, row, column, rowIndex: this.getRowMapIndex(row), columnIndex: this.getColumnMapIndex(column) })
                 } else {
                   let restVal
                   let isNumber = rule.type === 'number'
