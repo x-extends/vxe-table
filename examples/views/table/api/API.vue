@@ -45,7 +45,7 @@ import inputAPI from '../../../api/input'
 export default {
   data () {
     return {
-      filterName: '',
+      filterName: this.$route.query.filterName,
       tableData: [],
       defaultExpandRowKeys: []
     }
@@ -106,13 +106,13 @@ export default {
       }, { children: 'list' })
 
       // 默认展开一级
-      this.filterName = ''
       this.defaultExpandRowKeys = apis.filter(item => item.list && item.list.length).map(item => item.id)
       this.tableData = apis
     }
   },
   beforeRouteUpdate (to, from, next) {
     next()
+    this.filterName = ''
     this.loadAPI()
   }
 }
