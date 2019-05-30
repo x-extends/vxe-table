@@ -113,7 +113,7 @@ export default {
         class: ['vxe-grid--pagination', {
           'is--loading': loading
         }],
-        props: Object.assign({ size }, proxyConfig ? tablePage : pageConfig),
+        props: Object.assign({ size }, proxyConfig ? tablePage : {}, pageConfig),
         on: {
           'current-change': this.currentChangeEvent,
           'size-change': this.sizeChangeEvent
@@ -194,6 +194,9 @@ export default {
         }
       }
       return this.$nextTick()
+    },
+    getPendingRecords () {
+      return this.pendingRecords
     },
     triggerPendingEvent (evnt) {
       let selectRecords = this.getSelectRecords()

@@ -5,7 +5,7 @@
     <vxe-grid
       border
       height="530"
-      :page-config="{pageSize: 10}"
+      :page-config="tablePage"
       :proxy-config="tableProxy"
       :columns="tableColumn"></vxe-grid>
 
@@ -25,6 +25,10 @@ import hljs from 'highlight.js'
 export default {
   data () {
     return {
+      tablePage: {
+        pageSize: 15,
+        background: true
+      },
       tableProxy: {
         ajax: {
           query: ({ page }) => XEAjax.getJSON(`/api/user/page/list/${page.pageSize}/${page.currentPage}`)
@@ -43,7 +47,7 @@ export default {
         <vxe-grid
           border
           height="530"
-          :page-config="{pageSize: 10}"
+          :page-config="tablePage"
           :proxy-config="tableProxy"
           :columns="tableColumn"></vxe-grid>
         `,
@@ -51,6 +55,10 @@ export default {
         export default {
           data () {
             return {
+              tablePage: {
+                pageSize: 10,
+                background: true
+              },
               tableProxy: {
                 ajax: {
                   // 默认读取响应结果中 page.total 和 result 属性，可以通过 props 修改，具体查看 API；比如 {page: {total: 0}, result: []}

@@ -6,7 +6,7 @@
       ref="xGrid"
       border
       height="548"
-      :page-config="{pageSize: 10}"
+      :page-config="tablePage"
       :columns="tableColumn"
       :proxy-config="tableProxy"
       @sort-change="sortChangeEvent"
@@ -31,6 +31,10 @@ export default {
       formData: {
         sort: '',
         order: ''
+      },
+      tablePage: {
+        pageSize: 15,
+        background: true
       },
       tableProxy: {
         ajax: {
@@ -62,16 +66,14 @@ export default {
       demoCodes: [
         `
         <vxe-grid
+          ref="xGrid"
           border
           height="548"
-          :loading="loading"
-          :pages="tablePage"
+          :page-config="tablePage"
           :columns="tableColumn"
-          :data.sync="tableData"
+          :proxy-config="tableProxy"
           @sort-change="sortChangeEvent"
-          @filter-change="filterChangeEvent"
-          @current-page-change="handleCurrentChange"
-          @page-size-change="handleSizeChange"></vxe-grid>
+          @filter-change="filterChangeEvent"></vxe-grid>
         `,
         `
         export default {
@@ -80,6 +82,10 @@ export default {
               formData: {
                 sort: '',
                 order: ''
+              },
+              tablePage: {
+                pageSize: 15,
+                background: true
               },
               tableProxy: {
                 ajax: {

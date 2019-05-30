@@ -5,11 +5,13 @@ import UtilTools from '../../../tools/utils'
 const getAllColumns = (columns) => {
   const result = []
   columns.forEach((column) => {
-    if (column.children && column.children.length) {
-      result.push(column)
-      result.push.apply(result, getAllColumns(column.children))
-    } else {
-      result.push(column)
+    if (column.visible) {
+      if (column.children && column.children.length && column.children.some(column => column.visible)) {
+        result.push(column)
+        result.push.apply(result, getAllColumns(column.children))
+      } else {
+        result.push(column)
+      }
     }
   })
   return result
@@ -24,11 +26,13 @@ const convertToRows = (originColumns) => {
         maxLevel = column.level
       }
     }
-    if (column.children && column.children.length) {
+    if (column.children && column.children.length && column.children.some(column => column.visible)) {
       let colSpan = 0
       column.children.forEach((subColumn) => {
-        traverse(subColumn, column)
-        colSpan += subColumn.colSpan
+        if (subColumn.visible) {
+          traverse(subColumn, column)
+          colSpan += subColumn.colSpan
+        }
       })
       column.colSpan = colSpan
     } else {
@@ -49,7 +53,7 @@ const convertToRows = (originColumns) => {
   const allColumns = getAllColumns(originColumns)
 
   allColumns.forEach((column) => {
-    if (column.children && column.children.length) {
+    if (column.children && column.children.length && column.children.some(column => column.visible)) {
       column.rowSpan = 1
     } else {
       column.rowSpan = maxLevel - column.level + 1
@@ -71,10 +75,18 @@ export default {
     fixedType: String,
     isGroup: Boolean
   },
-  computed: {
-    headerColumn () {
-      return this.isGroup ? convertToRows(this.collectColumn) : [this.$parent.scrollXLoad && this.fixedType ? this.fixedColumn : this.tableColumn]
+  data () {
+    return {
+      headerColumn: []
     }
+  },
+  watch: {
+    tableColumn () {
+      this.uploadColumn()
+    }
+  },
+  created () {
+    this.uploadColumn()
   },
   render (h) {
     let { $parent: $table, fixedType, headerColumn, tableColumn, resizeMousedown, fixedColumn } = this
@@ -162,7 +174,7 @@ export default {
                 rowspan: column.rowSpan
               },
               on: thOns,
-              key: columnKey || columnIndex
+              key: columnKey || (isGroup ? column.id : columnIndex)
             }, [
               h('div', {
                 class: ['vxe-cell', {
@@ -208,6 +220,9 @@ export default {
     ])
   },
   methods: {
+    uploadColumn () {
+      this.headerColumn = this.isGroup ? convertToRows(this.collectColumn) : [this.$parent.scrollXLoad && this.fixedType ? this.fixedColumn : this.tableColumn]
+    },
     resizeMousedown (evnt, column) {
       let { $parent: $table, $el } = this
       let targetElem = evnt.target

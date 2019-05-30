@@ -118,6 +118,10 @@ export default {
   data () {
     return {
       id: XEUtils.uniqueId(),
+      // 表头子列属性
+      headerProps: {
+        children: 'children'
+      },
       // 列分组配置
       collectColumn: [],
       // 完整所有列
@@ -653,7 +657,7 @@ export default {
       return this.loadData(datas).then(this.handleDefaultExpand)
     },
     loadColumn (columns) {
-      let collectColumn = XEUtils.mapTree(columns, column => CellMethods.createColumn(this, column), { children: 'children' })
+      let collectColumn = XEUtils.mapTree(columns, column => CellMethods.createColumn(this, column), this.headerProps)
       this.collectColumn = collectColumn
       this.tableFullColumn = UtilTools.getColumnList(collectColumn)
       this.updateKeyMap(columns, 'fullColumnKeyMap')
@@ -987,8 +991,17 @@ export default {
       let rightIndex = 0
       let centerList = []
       let rightList = []
-      let { tableFullColumn, isGroup, columnStore, scrollXStore, optimizeConfig } = this
+      let { headerProps, collectColumn, tableFullColumn, isGroup, columnStore, scrollXStore, optimizeConfig } = this
       let { scrollX } = optimizeConfig
+      // 如果是分组表头，如果子列全部被隐藏，则根列也隐藏
+      if (isGroup) {
+        XEUtils.eachTree(collectColumn, column => {
+          if (column.children && column.children.length) {
+            column.visible = !!XEUtils.findTree(column.children, subColumn => subColumn.children && subColumn.children.length ? 0 : subColumn.visible, headerProps)
+          }
+        }, headerProps)
+      }
+      // 重新分配列
       tableFullColumn.forEach((column, columnIndex) => {
         if (column.visible) {
           if (column.fixed === 'left') {

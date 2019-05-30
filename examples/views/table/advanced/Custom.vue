@@ -1,23 +1,25 @@
 <template>
   <div>
-    <p>通过 customs 来初始化绑定内部列变量，prop:属性,visible:默认是否显示；可使用的属性{property,label,visible}</p>
-    <p>该功能对于列比较多的表格非常有用，可以轻松实现强大的显示/隐藏列的配置功能</p>
+    <p>通过 customs 来初始化绑定动态列，prop:属性,visible:默认是否显示；可使用的属性 {property(只读),label(只读),visible（读写）}</p>
+    <p>该功能对于列比较多的表格非常有用，可以轻松实现强大的显示/隐藏列的配置功能，实时调用 refreshColumn 刷新列</p>
 
     <div class="table-oper">
       <span class="menu-btn">
         <i class="icon-menu"></i>
         <div class="menu-wrapper">
-          <vxe-checkbox class="checkbox-item" v-model="column.visible" v-for="(column,index) in allColumnList" :key="index" @change="$refs.xTable.refreshColumn()">{{ column.label }}</vxe-checkbox>
+          <template v-for="(column,index) in customColumns1">
+            <vxe-checkbox v-if="column.property" class="checkbox-item" v-model="column.visible" :key="index" @change="$refs.xTable1.refreshColumn()">{{ column.label }}</vxe-checkbox>
+          </template>
         </div>
       </span>
     </div>
 
     <vxe-table
-      ref="xTable"
+      ref="xTable1"
       border
       height="400"
       :data.sync="tableData"
-      :customs.sync="customColumns">
+      :customs.sync="customColumns1">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column prop="name" label="Name"></vxe-table-column>
       <vxe-table-column prop="role" label="Role"></vxe-table-column>
@@ -32,6 +34,40 @@
       <code class="javascript">{{ demoCodes[1] }}</code>
       <code class="scss">{{ demoCodes[2] }}</code>
     </pre>
+
+    <p>通过点击后才调用 refreshColumn 刷新列</p>
+
+    <template v-for="(column,index) in customColumns2">
+      <vxe-checkbox v-if="column.property" class="checkbox-item" v-model="column.visible" :key="index">{{ column.label }}</vxe-checkbox>
+    </template>
+
+    <vxe-button @click="$refs.xTable2.refreshColumn()">刷新</vxe-button>
+
+    <vxe-table
+      ref="xTable2"
+      border
+      height="400"
+      :data.sync="tableData"
+      :customs.sync="customColumns2">
+      <vxe-table-column type="index" width="60"></vxe-table-column>
+      <vxe-table-column prop="name" label="Name"></vxe-table-column>
+      <vxe-table-column prop="role" label="Role"></vxe-table-column>
+      <vxe-table-column label="基本信息">
+        <vxe-table-column prop="sex" label="Sex"></vxe-table-column>
+        <vxe-table-column prop="age" label="Age"></vxe-table-column>
+        <vxe-table-column label="其他信息">
+          <vxe-table-column prop="rate" label="Rate"></vxe-table-column>
+          <vxe-table-column prop="flag" label="Flag"></vxe-table-column>
+        </vxe-table-column>
+      </vxe-table-column>
+    </vxe-table>
+
+    <p class="demo-code">显示代码</p>
+
+    <pre>
+      <code class="xml">{{ demoCodes[3] }}</code>
+      <code class="javascript">{{ demoCodes[4] }}</code>
+    </pre>
   </div>
 </template>
 
@@ -43,28 +79,32 @@ export default {
     return {
       tableData: [],
       // 如果为空则默认全部显示，也可以指定默认的隐藏列
-      customColumns: [
+      customColumns1: [
         {
           prop: 'age',
           visible: false
         }
       ],
+      customColumns2: [],
       demoCodes: [
         `
         <div class="table-oper">
           <span class="menu-btn">
             <i class="icon-menu"></i>
             <div class="menu-wrapper">
-              <vxe-checkbox class="checkbox-item" v-model="column.visible" v-for="(column,index) in allColumnList" :key="index">{{ column.label }}</vxe-checkbox>
+              <template v-for="(column,index) in customColumns1">
+                <vxe-checkbox v-if="column.property" class="checkbox-item" v-model="column.visible" :key="index" @change="$refs.xTable1.refreshColumn()">{{ column.label }}</vxe-checkbox>
+              </template>
             </div>
           </span>
         </div>
 
         <vxe-table
+          ref="xTable1"
           border
           height="400"
           :data.sync="tableData"
-          :customs.sync="customColumns">
+          :customs.sync="customColumns1">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column prop="name" label="Name"></vxe-table-column>
           <vxe-table-column prop="role" label="Role"></vxe-table-column>
@@ -78,7 +118,7 @@ export default {
             return {
               tableData: [],
               // 如果为空则默认全部显示，也可以指定默认的隐藏列
-              customColumns: [
+              customColumns1: [
                 {
                   prop: 'age',
                   visible: false
@@ -131,13 +171,47 @@ export default {
           margin-bottom: 16px;
           box-shadow: 0 6px 0 2px #606266, 0 0 0 2px #606266, 0 12px 0 2px #606266;
         }
+        `,
+        `
+        <template v-for="(column,index) in customColumns2">
+          <vxe-checkbox v-if="column.property" class="checkbox-item" v-model="column.visible" :key="index">{{ column.label }}</vxe-checkbox>
+        </template>
+
+        <vxe-button @click="$refs.xTable2.refreshColumn()">刷新</vxe-button>
+
+        <vxe-table
+          ref="xTable2"
+          border
+          height="400"
+          :data.sync="tableData"
+          :customs.sync="customColumns2">
+          <vxe-table-column type="index" width="60"></vxe-table-column>
+          <vxe-table-column prop="name" label="Name"></vxe-table-column>
+          <vxe-table-column prop="role" label="Role"></vxe-table-column>
+          <vxe-table-column label="基本信息">
+            <vxe-table-column prop="sex" label="Sex"></vxe-table-column>
+            <vxe-table-column prop="age" label="Age"></vxe-table-column>
+            <vxe-table-column label="其他信息">
+              <vxe-table-column prop="rate" label="Rate"></vxe-table-column>
+              <vxe-table-column prop="flag" label="Flag"></vxe-table-column>
+            </vxe-table-column>
+          </vxe-table-column>
+        </vxe-table>
+        `,
+        `
+        export default {
+          data () {
+            return {
+              tableData: [],
+              customColumns2: []
+            }
+          },
+          created () {
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 20)
+          }
+        }
         `
       ]
-    }
-  },
-  computed: {
-    allColumnList () {
-      return this.customColumns.filter(item => item.property)
     }
   },
   created () {
