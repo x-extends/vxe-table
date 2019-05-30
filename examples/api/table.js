@@ -919,7 +919,7 @@ const apis = [
         desc: '表头单元格被点击时会触发该事件',
         type: '',
         enum: '',
-        defVal: '{column,columnIndex,cell},event',
+        defVal: '{headIndex,column,columnIndex,cell},event',
         list: []
       },
       {
@@ -927,7 +927,7 @@ const apis = [
         desc: '表头单元格被双击时会触发该事件',
         type: '',
         enum: '',
-        defVal: '{column,columnIndex,cell},event',
+        defVal: '{headIndex,column,columnIndex,cell},event',
         list: []
       },
       {
@@ -935,7 +935,7 @@ const apis = [
         desc: '表尾单元格被点击时会触发该事件',
         type: '',
         enum: '',
-        defVal: '{column,columnIndex,cell},event',
+        defVal: '{footIndex,column,columnIndex,cell},event',
         list: []
       },
       {
@@ -943,7 +943,7 @@ const apis = [
         desc: '表尾单元格被双击时会触发该事件',
         type: '',
         enum: '',
-        defVal: '{column,columnIndex,cell},event',
+        defVal: '{footIndex,column,columnIndex,cell},event',
         list: []
       },
       {
