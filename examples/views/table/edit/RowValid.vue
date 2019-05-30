@@ -98,13 +98,15 @@ export default {
               })
             },
             selectValidEvent () {
-            let getSelectRecords =  this.$refs.xTable.getSelectRecords()
-            if(getSelectRecords.length>0){
-              this.$refs.xTable.validate(getSelectRecords,valid => {
-                      if (valid) {
-                      }
-              })
-            }
+              let selectRecords = this.$refs.xTable.getSelectRecords()
+              if (selectRecords.length > 0) {
+                this.$refs.xTable.validate(selectRecords, valid => {
+                  if (valid) {
+                  }
+                })
+              } else {
+                // 未选中数据！
+              }
             },
             insertEvent () {
               this.$refs.xTable.insert().then(({ row }) => {
@@ -150,6 +152,17 @@ export default {
         }
       })
     },
+    selectValidEvent () {
+      let selectRecords = this.$refs.xTable.getSelectRecords()
+      if (selectRecords.length > 0) {
+        this.$refs.xTable.validate(selectRecords, valid => {
+          if (valid) {
+          }
+        })
+      } else {
+        // 未选中数据！
+      }
+    },
     insertEvent () {
       this.$refs.xTable.insert().then(({ row }) => {
         // 插入一条数据并触发校验
@@ -159,15 +172,6 @@ export default {
           }
         })
       })
-    },
-     selectValidEvent () {
-      let getSelectRecords =  this.$refs.xTable.getSelectRecords()
-        if(getSelectRecords.length>0){
-          this.$refs.xTable.validate(getSelectRecords,valid => {
-            if (valid) {
-            }
-          })
-        }
     },
     getInsertEvent () {
       let insertRecords = this.$refs.xTable.getInsertRecords()

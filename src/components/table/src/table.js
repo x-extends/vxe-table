@@ -2754,34 +2754,6 @@ export default {
         }
       })
     },
-    /**
-     * 对表格某一行进行校验的方法
-     * 返回 Promise 对象，或者使用回调方式
-     */
-    validateRow (row, cb) {
-      this.lastCallTime = Date.now()
-      this.clearValidate()
-      return new Promise((resolve, reject) => {
-        this.validRowRules('all', row)
-          .then(() => {
-            let valid = true
-            if (cb) {
-              cb(valid)
-            }
-            resolve(true)
-          }).catch((params) => {
-            let valid = false
-            let { rule, column } = params
-            this.handleValidError(params)
-            if (cb) {
-              cb(valid, { [column.property]: [new Error(rule.message)] })
-              resolve(valid)
-            } else {
-              reject(valid)
-            }
-          })
-      })
-    },
     triggerValidate (type) {
       let { editConfig, editStore, editRules, validStore } = this
       let { actived } = editStore
@@ -2819,23 +2791,39 @@ export default {
       return Promise.resolve()
     },
     /**
+     * 废弃
+     */
+    validateRow (row, cb) {
+      console.error('[vxe-table] This method is discard, use the validate(rows, callback) method.')
+      return this.validate([row], cb)
+    },
+    /**
      * 对表格数据进行校验
-     * 若传rows为多行记录，则只验证传入的行，否则默认验证整个表格数据
+     * 如果传 row 指定行记录，则只验证传入的行
+     * 如果传 rows 为多行记录，则只验证传入的行
+     * 如果只传 callback 否则默认验证整个表格数据
      * 返回 Promise 对象，或者使用回调方式
      */
     validate (rows, cb) {
       let { editRules, tableData } = this
-      if (XEUtils.isFunction(rows)) {
-        cb = rows
-      } else if (XEUtils.isArray(rows)) {
-        tableData = rows
+      let vaildDatas = tableData
+      if (arguments.length) {
+        if (XEUtils.isFunction(rows)) {
+          cb = rows
+        } else {
+          if (!XEUtils.isArray(rows)) {
+            vaildDatas = [rows]
+          }
+          vaildDatas = rows
+        }
       }
       let validPromise = Promise.resolve(true)
       this.lastCallTime = Date.now()
       this.clearValidate()
       if (!XEUtils.isEmpty(editRules)) {
         let columns = this.getColumns()
-        tableData.forEach((row, rowIndex) => {
+        vaildDatas.forEach(row => {
+          let rowIndex = tableData.indexOf(row)
           columns.forEach((column, columnIndex) => {
             if (XEUtils.has(editRules, column.property)) {
               validPromise = validPromise.then(() => new Promise((resolve, reject) => {

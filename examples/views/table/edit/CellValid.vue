@@ -4,6 +4,7 @@
 
     <vxe-button @click="insertEvent">新增</vxe-button>
     <vxe-button @click="validEvent">校验</vxe-button>
+    <vxe-button @click="selectValidEvent">选中校验</vxe-button>
     <vxe-button @click="getInsertEvent">获取新增</vxe-button>
     <vxe-button @click="getRemoveEvent">获取删除</vxe-button>
     <vxe-button @click="getUpdateEvent">获取修改</vxe-button>
@@ -51,6 +52,7 @@ export default {
         `
         <vxe-button @click="insertEvent">新增</vxe-button>
         <vxe-button @click="validEvent">校验</vxe-button>
+        <vxe-button @click="selectValidEvent">选中校验</vxe-button>
         <vxe-button @click="getInsertEvent">获取新增</vxe-button>
         <vxe-button @click="getRemoveEvent">获取删除</vxe-button>
         <vxe-button @click="getUpdateEvent">获取修改</vxe-button>
@@ -95,6 +97,17 @@ export default {
                 }
               })
             },
+            selectValidEvent () {
+              let selectRecords = this.$refs.xTable.getSelectRecords()
+              if (selectRecords.length > 0) {
+                this.$refs.xTable.validate(selectRecords, valid => {
+                  if (valid) {
+                  }
+                })
+              } else {
+                // 未选中数据！
+              }
+            },
             insertEvent () {
               this.$refs.xTable.insert().then(({ row }) => {
                 // 插入一条数据并触发校验
@@ -138,6 +151,17 @@ export default {
         if (valid) {
         }
       })
+    },
+    selectValidEvent () {
+      let selectRecords = this.$refs.xTable.getSelectRecords()
+      if (selectRecords.length > 0) {
+        this.$refs.xTable.validate(selectRecords, valid => {
+          if (valid) {
+          }
+        })
+      } else {
+        // 未选中数据！
+      }
     },
     insertEvent () {
       this.$refs.xTable.insert().then(({ row }) => {
