@@ -5,6 +5,7 @@
     <vxe-table
       border
       height="300"
+      highlight-hover-row
       show-all-overflow
       :data.sync="tableData">
       <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
@@ -20,6 +21,7 @@
     <vxe-table
       border
       height="300"
+      highlight-hover-row
       show-all-overflow
       :data.sync="tableData">
       <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>

@@ -222,6 +222,13 @@ export default {
           expand: false,
           children: [
             {
+
+              label: '事件绑定',
+              locat: {
+                name: 'TableEvent'
+              }
+            },
+            {
               label: '自定义模板',
               demoUrl: 'https://jsrun.net/DjXKp',
               locat: {

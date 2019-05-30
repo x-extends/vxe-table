@@ -27,6 +27,7 @@ import TableEmpty from './views/table/base/Empty.vue'
 import TableLoading from './views/table/base/Loading.vue'
 import TableFormat from './views/table/base/Format.vue'
 
+import TableEvent from './views/table/advanced/Event.vue'
 import TableTemplate from './views/table/advanced/Template.vue'
 import TableSpan from './views/table/advanced/Span.vue'
 import TableFooter from './views/table/advanced/Footer.vue'
@@ -218,6 +219,11 @@ export default new Router({
       path: '/table/base/format',
       name: 'TableFormat',
       component: TableFormat
+    },
+    {
+      path: '/table/base/event',
+      name: 'TableEvent',
+      component: TableEvent
     },
     {
       path: '/table/base/template',

@@ -947,6 +947,22 @@ const apis = [
         list: []
       },
       {
+        name: 'cell-mouseenter',
+        desc: '当单元格 hover 进入时会触发该事件',
+        type: '',
+        enum: '',
+        defVal: '{row,rowIndex,column,columnIndex,cell},event',
+        list: []
+      },
+      {
+        name: 'cell-mouseleave',
+        desc: '当单元格 hover 退出时会触发该事件',
+        type: '',
+        enum: '',
+        defVal: '{row,rowIndex,column,columnIndex,cell},event',
+        list: []
+      },
+      {
         name: 'sort-change',
         desc: '当排序条件发生变化时会触发该事件',
         type: '',

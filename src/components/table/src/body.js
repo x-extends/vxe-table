@@ -39,16 +39,29 @@ function renderColumn (h, _vm, $table, seq, fixedType, rowLevel, row, rowIndex, 
   if ((scrollXLoad || scrollYLoad) && !hasEllipsis) {
     showEllipsis = hasEllipsis = true
   }
-  // 事件绑定
-  if (showTooltip) {
-    tdOns.mouseover = evnt => {
-      $table.triggerTooltipEvent(evnt, { $table, seq, row, rowIndex, column, columnIndex, fixed: fixedType, level: rowLevel })
+  // hover 进入事件
+  if (showTooltip || tableListeners['cell-mouseenter']) {
+    tdOns.mouseenter = evnt => {
+      let params = { $table, seq, row, rowIndex, column, columnIndex, fixed: fixedType, level: rowLevel, cell: evnt.currentTarget }
+      // 如果配置了显示 tooltip
+      if (showTooltip) {
+        $table.triggerTooltipEvent(evnt, params)
+      }
+      UtilTools.emitEvent($table, 'cell-mouseenter', [params, evnt])
     }
-    tdOns.mouseout = $table.clostTooltip
   }
+  // hover 退出事件
+  if (showTooltip || tableListeners['cell-mouseleave']) {
+    tdOns.mouseleave = evnt => {
+      $table.clostTooltip()
+      UtilTools.emitEvent($table, 'cell-mouseleave', [{ $table, seq, row, rowIndex, column, columnIndex, fixed: fixedType, level: rowLevel, cell: evnt.currentTarget }, evnt])
+    }
+  }
+  // 按下事件处理
   tdOns.mousedown = evnt => {
     $table.triggerCellMousedownEvent(evnt, { $table, seq, row, rowIndex, column, columnIndex, fixed: fixedType, level: rowLevel, cell: evnt.currentTarget })
   }
+  // 点击事件处理
   if (highlightCurrentRow ||
     tableListeners['cell-click'] ||
     (editRender && editConfig) ||
@@ -57,6 +70,7 @@ function renderColumn (h, _vm, $table, seq, fixedType, rowLevel, row, rowIndex, 
       $table.triggerCellClickEvent(evnt, { $table, row, rowIndex, column, columnIndex, fixed: fixedType, level: rowLevel, cell: evnt.currentTarget })
     }
   }
+  // 双击事件处理
   if (triggerDblclick || tableListeners['cell-dblclick']) {
     tdOns.dblclick = evnt => {
       $table.triggerCellDBLClickEvent(evnt, { $table, seq, row, rowIndex, column, columnIndex, fixed: fixedType, level: rowLevel, cell: evnt.currentTarget })
@@ -155,7 +169,7 @@ function renderRows (h, _vm, $table, rowLevel, fixedType, tableData, tableColumn
   let { leftList, rightList } = columnStore
   let rows = []
   tableData.forEach((row, rowIndex) => {
-    let on = null
+    let trOn = {}
     let seq = rowIndex + 1
     if (scrollYLoad) {
       seq += scrollYStore.startIndex
@@ -164,11 +178,9 @@ function renderRows (h, _vm, $table, rowLevel, fixedType, tableData, tableColumn
     rowIndex = getRowMapIndex(row)
     // 事件绑定
     if (highlightHoverRow && (leftList.length || rightList.length) && overflowX) {
-      on = {
-        mouseover (evnt) {
-          if (row !== hoverRow) {
-            $table.triggerHoverEvent(evnt, { row, rowIndex })
-          }
+      trOn.mouseenter = evnt => {
+        if (row !== hoverRow) {
+          $table.triggerHoverEvent(evnt, { row, rowIndex })
         }
       }
     }
@@ -184,7 +196,7 @@ function renderRows (h, _vm, $table, rowLevel, fixedType, tableData, tableColumn
           'data-rowkey': rowId
         },
         key: rowId,
-        on
+        on: trOn
       }, tableColumn.map((column, columnIndex) => {
         columnIndex = getColumnMapIndex(column)
         return renderColumn(h, _vm, $table, seq, fixedType, rowLevel, row, rowIndex, column, columnIndex)
@@ -206,7 +218,7 @@ function renderRows (h, _vm, $table, rowLevel, fixedType, tableData, tableColumn
             h('tr', {
               class: ['vxe-body--expanded-row'],
               key: `expand_${rowIndex}`,
-              on
+              on: trOn
             }, [
               h('td', {
                 class: ['vxe-body--expanded-column'],
