@@ -133,28 +133,43 @@ export default {
       return this.pendingRecords.indexOf(row) === -1
     },
     commitProxy (code) {
-      let { proxyConfig = {}, tablePage } = this
+      let { proxyConfig = {}, tablePage, pageConfig } = this
       let { ajax, props = {} } = proxyConfig
       if (ajax) {
         switch (code) {
           case 'reload':
-          case 'query':
+          case 'query': {
             if (ajax.query) {
+              let params = {}
               this.tableLoading = true
+              if (pageConfig) {
+                params.page = tablePage
+              }
               if (code === 'reload') {
-                tablePage.currentPage = 1
+                if (pageConfig) {
+                  tablePage.currentPage = 1
+                }
                 this.pendingRecords = []
               }
-              return ajax.query({ page: tablePage }).then(result => {
-                tablePage.total = XEUtils.get(result, props.total || 'page.total')
-                this.tableData = XEUtils.get(result, props.data || 'result')
+              return ajax.query(params).then(result => {
+                if (result) {
+                  if (pageConfig) {
+                    tablePage.total = XEUtils.get(result, props.total || 'page.total')
+                    this.tableData = XEUtils.get(result, props.data || 'result')
+                  } else {
+                    this.tableData = props.data ? XEUtils.get(result, props.data) : result
+                  }
+                } else {
+                  this.tableData = []
+                }
                 this.tableLoading = false
               }).catch(e => {
                 this.tableLoading = false
               })
             }
             break
-          case 'delete':
+          }
+          case 'delete': {
             if (ajax.delete) {
               this.removeSelecteds()
               return this.validate().then(() => {
@@ -173,7 +188,8 @@ export default {
               })
             }
             break
-          case 'save':
+          }
+          case 'save': {
             if (ajax.save) {
               return this.validate().then(() => {
                 let body = Object.assign({ pendingRecords: this.pendingRecords }, this.getAllRecords())
@@ -191,6 +207,7 @@ export default {
               })
             }
             break
+          }
         }
       }
       return this.$nextTick()

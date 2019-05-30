@@ -1,11 +1,12 @@
 <template>
   <div>
-    <p>数据代理：通过配置 proxy-config 参数，默认直接读取结果，响应结果应该为数组；可以通过 props 修改默认值</p>
+    <p>数据代理：通过配置 proxy-config 参数，如果配置了 page-config 分页，则默认读取响应结果中 page.total 和 result 属性，可以通过 props 修改</p>
     <p>由 grid 代理数据转换，只需要配置好数据源即可；非常简单就可以渲染一个表格</p>
 
     <vxe-grid
       border
       height="530"
+      :page-config="tablePage"
       :proxy-config="tableProxy"
       :columns="tableColumn"></vxe-grid>
 
@@ -25,9 +26,13 @@ import hljs from 'highlight.js'
 export default {
   data () {
     return {
+      tablePage: {
+        pageSize: 15,
+        background: true
+      },
       tableProxy: {
         ajax: {
-          query: () => XEAjax.getJSON('/api/user/list')
+          query: ({ page }) => XEAjax.getJSON(`/api/user/page/list/${page.pageSize}/${page.currentPage}`)
         }
       },
       tableColumn: [
@@ -43,6 +48,7 @@ export default {
         <vxe-grid
           border
           height="530"
+          :page-config="tablePage"
           :proxy-config="tableProxy"
           :columns="tableColumn"></vxe-grid>
         `,
@@ -50,10 +56,14 @@ export default {
         export default {
           data () {
             return {
+              tablePage: {
+                pageSize: 10,
+                background: true
+              },
               tableProxy: {
                 ajax: {
                   // 任何支持 Promise API 的库都可以对接
-                  query: () => XEAjax.getJSON('/api/user/list')
+                  query: ({ page }) => XEAjax.getJSON(\`/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`)
                 }
               },
               tableColumn: [

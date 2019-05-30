@@ -163,6 +163,11 @@ export default {
                 UtilTools.emitEvent($table, 'header-cell-click', [{ $table, headIndex: rowIndex, column, columnIndex, fixed: fixedType, cell: evnt.currentTarget }, evnt])
               }
             }
+            if (tableListeners['header-cell-dblclick']) {
+              thOns.dblclick = evnt => {
+                UtilTools.emitEvent($table, 'header-cell-dblclick', [{ $table, headIndex: rowIndex, column, columnIndex, fixed: fixedType, cell: evnt.currentTarget }, evnt])
+              }
+            }
             return h('th', {
               class: ['vxe-header--column', column.id, {
                 [`col--${headerAlign}`]: headerAlign,

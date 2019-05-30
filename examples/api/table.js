@@ -915,6 +915,38 @@ const apis = [
         list: []
       },
       {
+        name: 'header-cell-click',
+        desc: '表头单元格被点击时会触发该事件',
+        type: '',
+        enum: '',
+        defVal: '{column,columnIndex,cell},event',
+        list: []
+      },
+      {
+        name: 'header-cell-dblclick',
+        desc: '表头单元格被双击时会触发该事件',
+        type: '',
+        enum: '',
+        defVal: '{column,columnIndex,cell},event',
+        list: []
+      },
+      {
+        name: 'footer-cell-click',
+        desc: '表尾单元格被点击时会触发该事件',
+        type: '',
+        enum: '',
+        defVal: '{column,columnIndex,cell},event',
+        list: []
+      },
+      {
+        name: 'footer-cell-dblclick',
+        desc: '表尾单元格被双击时会触发该事件',
+        type: '',
+        enum: '',
+        defVal: '{column,columnIndex,cell},event',
+        list: []
+      },
+      {
         name: 'sort-change',
         desc: '当排序条件发生变化时会触发该事件',
         type: '',

@@ -238,12 +238,12 @@ const apis = [
                 desc: '响应结果中获取数据列表的属性',
                 type: 'String',
                 enum: '',
-                defVal: 'result',
+                defVal: '如果 page-config 配置了，则默认 result，否则为空',
                 list: []
               },
               {
                 name: 'page',
-                desc: '响应结果中获取分页的属性',
+                desc: '只对 page-config 配置了有效，响应结果中获取分页的属性',
                 type: 'String',
                 enum: '',
                 defVal: 'page.total',

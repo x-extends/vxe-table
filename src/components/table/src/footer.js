@@ -12,7 +12,7 @@ export default {
   },
   render (h) {
     let { $parent: $table, fixedType, fixedColumn, tableColumn, footerData } = this
-    let { footerRowClassName, footerCellClassName, tableWidth, scrollYWidth, scrollXHeight, scrollXLoad, scrollXStore, optimizeConfig, getColumnMapIndex } = $table
+    let { $listeners: tableListeners, footerRowClassName, footerCellClassName, tableWidth, scrollYWidth, scrollXHeight, scrollXLoad, scrollXStore, optimizeConfig, getColumnMapIndex } = $table
     let { overflow } = optimizeConfig
     // 如果是使用优化模式
     if (fixedType && overflow) {
@@ -76,14 +76,26 @@ export default {
           }, tableColumn.map((column, columnIndex) => {
             let isGroup = column.children && column.children.length
             let fixedHiddenColumn = fixedType && column.fixed !== fixedType && !isGroup
+            let tfOns = {}
             // 确保任何情况下 columnIndex 都精准指向真实列索引
             columnIndex = getColumnMapIndex(column)
+            if (tableListeners['header-cell-click']) {
+              tfOns.click = evnt => {
+                UtilTools.emitEvent($table, 'header-cell-click', [{ $table, footIndex: rowIndex, column, columnIndex, fixed: fixedType, cell: evnt.currentTarget }, evnt])
+              }
+            }
+            if (tableListeners['header-cell-dblclick']) {
+              tfOns.dblclick = evnt => {
+                UtilTools.emitEvent($table, 'header-cell-dblclick', [{ $table, footIndex: rowIndex, column, columnIndex, fixed: fixedType, cell: evnt.currentTarget }, evnt])
+              }
+            }
             return h('td', {
               class: ['vxe-footer--column', column.id, {
                 [`col--${column.headerAlign}`]: column.headerAlign,
                 'fixed--hidden': fixedHiddenColumn,
                 'filter--active': column.filters.some(item => item.checked)
               }, footerCellClassName ? XEUtils.isFunction(footerCellClassName) ? footerCellClassName({ footIndex: rowIndex, column, columnIndex, fixed: fixedType }) : footerCellClassName : ''],
+              on: tfOns,
               key: columnIndex
             }, [
               h('div', {

@@ -329,6 +329,12 @@ export default {
               }
             },
             {
+              label: '数据代理 + 分页',
+              locat: {
+                name: 'GridPageProxy'
+              }
+            },
+            {
               label: '完整查询',
               locat: {
                 name: 'GridFullQuery'

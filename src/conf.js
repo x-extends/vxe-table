@@ -9,14 +9,14 @@ const GlobalConfig = {
     scrollX: {
       gt: 60,
       oSize: 6,
-      rSize: 20,
+      rSize: 18,
       vSize: 0
     },
     // 默认数据大于 500 条时自动使用纵向 Y 滚动渲染
     scrollY: {
       gt: 500,
       oSize: 30,
-      rSize: 100,
+      rSize: 80,
       vSize: 0,
       rHeight: 0
     }

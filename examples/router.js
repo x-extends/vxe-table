@@ -43,6 +43,7 @@ import GridBasic from './views/table/grid/Basic.vue'
 import GridPage from './views/table/grid/Page.vue'
 import GridFullQuery from './views/table/grid/FullQuery.vue'
 import GridProxy from './views/table/grid/Proxy.vue'
+import GridPageProxy from './views/table/grid/PageProxy.vue'
 import GridEdit from './views/table/grid/Edit.vue'
 import GridToolbar from './views/table/grid/Toolbar.vue'
 import GridFullEdit from './views/table/grid/FullEdit.vue'
@@ -282,6 +283,11 @@ export default new Router({
       path: '/table/grid/proxy',
       name: 'GridProxy',
       component: GridProxy
+    },
+    {
+      path: '/table/grid/pageProxy',
+      name: 'GridPageProxy',
+      component: GridPageProxy
     },
     {
       path: '/table/grid/edit',
