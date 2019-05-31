@@ -21,6 +21,11 @@ export default {
     // 带背景颜色
     background: Boolean
   },
+  inject: {
+    $grid: {
+      default: null
+    }
+  },
   data () {
     return {
       showSizes: false,

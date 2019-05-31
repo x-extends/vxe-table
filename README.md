@@ -162,7 +162,7 @@ new Vue({ i18n }).$mount('#app')
 <template>
   <div>
     <vxe-table ref="xTable" :data.sync="tableData">
-      <vxe-table-column type="index" label="Number" width="60"></vxe-table-column>
+      <vxe-table-column type="index" label="Number" width="80"></vxe-table-column>
       <vxe-table-column prop="name" label="Name"></vxe-table-column>
       <vxe-table-column prop="sex" label="Sex"></vxe-table-column>
       <vxe-table-column prop="address" label="Address"></vxe-table-column>

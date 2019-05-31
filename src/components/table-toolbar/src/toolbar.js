@@ -10,6 +10,11 @@ export default {
     size: String,
     customs: Array
   },
+  inject: {
+    $grid: {
+      default: null
+    }
+  },
   data () {
     return {
       settingStore: {
@@ -20,9 +25,6 @@ export default {
   computed: {
     vSize () {
       return this.size || this.$parent.size || this.$parent.vSize
-    },
-    isGrid () {
-      return this.$parent.$vnode.componentOptions.tag === 'vxe-grid'
     }
   },
   created () {
@@ -118,12 +120,13 @@ export default {
       }
     },
     updateSetting () {
-      let { $parent: $grid, customs, isGrid } = this
-      if (isGrid) {
+      let { $parent, $grid, customs } = this
+      if ($grid) {
         $grid.refreshColumn()
       } else {
-        let selfIndex = $grid.$children.indexOf(this)
-        let $table = $grid.$children.find((comp, index) => comp.refreshColumn && index > selfIndex && comp.customs === customs)
+        let { $children } = $parent
+        let selfIndex = $children.indexOf(this)
+        let $table = $children.find((comp, index) => comp.refreshColumn && index > selfIndex && comp.customs === customs)
         if ($table) {
           $table.refreshColumn()
         } else {
@@ -170,9 +173,9 @@ export default {
       }, 300)
     },
     btnEvent (item, evnt) {
-      let { $parent: $grid, isGrid } = this
+      let { $grid } = this
       // 只对 gird 环境中有效
-      if (isGrid) {
+      if ($grid) {
         switch (item.code) {
           case 'insert':
             $grid.insert()

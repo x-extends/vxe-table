@@ -11,7 +11,7 @@
       :data.sync="tableData"
       :edit-config="{key: 'id', trigger: 'click', mode: 'cell'}">
       <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
-      <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
+      <vxe-table-column type="index" label="Number" width="80" fixed="left"></vxe-table-column>
       <vxe-table-column prop="name" label="Input" min-width="140" :edit-render="{name: 'Input', events: {'on-change': nameChangeEvent}}"></vxe-table-column>
       <vxe-table-column prop="role" label="AutoComplete" min-width="160" :edit-render="{name: 'AutoComplete', props: {data: restaurants, filterMethod: roleFilterMethod}}"></vxe-table-column>
       <vxe-table-column prop="age" label="InputNumber" width="140" :edit-render="{name: 'InputNumber', props: {max: 35, min: 18}}"></vxe-table-column>
@@ -77,7 +77,7 @@ export default {
           :data.sync="tableData"
           :edit-config="{key: 'id', trigger: 'click', mode: 'cell'}">
           <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
-          <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
+          <vxe-table-column type="index" label="Number" width="80" fixed="left"></vxe-table-column>
           <vxe-table-column prop="name" label="Input" min-width="140" :edit-render="{name: 'Input', events: {'on-change': nameChangeEvent}}"></vxe-table-column>
           <vxe-table-column prop="role" label="AutoComplete" min-width="160" :edit-render="{name: 'AutoComplete', props: {data: restaurants, filterMethod: roleFilterMethod}}"></vxe-table-column>
           <vxe-table-column prop="age" label="InputNumber" width="140" :edit-render="{name: 'InputNumber', props: {max: 35, min: 18}}"></vxe-table-column>
