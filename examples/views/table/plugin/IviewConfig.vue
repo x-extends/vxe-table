@@ -20,6 +20,7 @@
       <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
       <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
       <vxe-table-column prop="name" label="Input" min-width="140" :edit-render="{name: 'Input', events: {'on-change': nameChangeEvent}}"></vxe-table-column>
+      <vxe-table-column prop="role" label="AutoComplete" min-width="160" :edit-render="{name: 'AutoComplete', props: {data: restaurants, filterMethod: roleFilterMethod}}"></vxe-table-column>
       <vxe-table-column prop="age" label="InputNumber" width="140" :edit-render="{name: 'InputNumber', props: {max: 35, min: 18}}"></vxe-table-column>
       <vxe-table-column prop="sex" label="Select" width="140" :edit-render="{name: 'Select', options: sexList}"></vxe-table-column>
       <vxe-table-column prop="sex1" label="Select" width="140" :edit-render="{name: 'Select', options: sexList, props: {multiple: true, clearable: true}}"></vxe-table-column>
@@ -51,6 +52,7 @@ export default {
       tableData: [],
       sexList: [],
       regionList: [],
+      restaurants: ['前端', '后端'],
       sexGroupList: [
         {
           label: '分组1',
@@ -96,6 +98,7 @@ export default {
           <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
           <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
           <vxe-table-column prop="name" label="Input" min-width="140" :edit-render="{name: 'Input', events: {'on-change': nameChangeEvent}}"></vxe-table-column>
+          <vxe-table-column prop="role" label="AutoComplete" min-width="160" :edit-render="{name: 'AutoComplete', props: {data: restaurants, filterMethod: roleFilterMethod}}"></vxe-table-column>
           <vxe-table-column prop="age" label="InputNumber" width="140" :edit-render="{name: 'InputNumber', props: {max: 35, min: 18}}"></vxe-table-column>
           <vxe-table-column prop="sex" label="Select" width="140" :edit-render="{name: 'Select', options: sexList}"></vxe-table-column>
           <vxe-table-column prop="sex1" label="Select" width="140" :edit-render="{name: 'Select', options: sexList, props: {multiple: true, clearable: true}}"></vxe-table-column>
@@ -146,6 +149,9 @@ export default {
             },
             regionChangeEvent ({ row }, value, selectedData) {
               console.log(value)
+            },
+            roleFilterMethod  (value, option) {
+              return option.toUpperCase().indexOf(value.toUpperCase()) !== -1
             }
           }
         }
@@ -180,6 +186,9 @@ export default {
         this.regionList = data
         return data
       })
+    },
+    roleFilterMethod  (value, option) {
+      return option.toUpperCase().indexOf(value.toUpperCase()) !== -1
     },
     nameChangeEvent ({ row }, event) {
       console.log(event)

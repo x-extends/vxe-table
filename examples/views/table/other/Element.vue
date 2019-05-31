@@ -24,6 +24,11 @@
           <el-input v-model="row.name"></el-input>
         </template>
       </vxe-table-column>
+      <vxe-table-column prop="role" label="ElAutocomplete" min-width="160" :edit-render="{type: 'default'}">
+        <template v-slot:edit="{ row }">
+          <el-autocomplete v-model="row.role" :fetch-suggestions="roleFetchSuggestions"></el-autocomplete>
+        </template>
+      </vxe-table-column>
       <vxe-table-column prop="age" label="ElInputNumber"  width="160" :edit-render="{type: 'default'}">
         <template v-slot:header="{ column }">
           <span>{{ column.label }}</span>
@@ -98,6 +103,10 @@ export default {
       tableData: [],
       sexList: [],
       regionList: [],
+      restaurants: [
+        { value: '前端', name: '前端' },
+        { value: '后端', name: '后端' }
+      ],
       demoCodes: [
         `
         <vxe-table
@@ -120,6 +129,11 @@ export default {
           <vxe-table-column prop="name" label="ElInput" min-width="140" :edit-render="{type: 'default'}">
             <template v-slot:edit="{ row }">
               <el-input v-model="row.name"></el-input>
+            </template>
+          </vxe-table-column>
+          <vxe-table-column prop="role" label="ElAutocomplete" min-width="160" :edit-render="{type: 'default'}">
+            <template v-slot:edit="{ row }">
+              <el-autocomplete v-model="row.role" :fetch-suggestions="roleFetchSuggestions"></el-autocomplete>
             </template>
           </vxe-table-column>
           <vxe-table-column prop="age" label="ElInputNumber"  width="160" :edit-render="{type: 'default'}">
@@ -182,11 +196,80 @@ export default {
               loading: false,
               tableData: [],
               sexList: [],
-              regionList: []
+              regionList: [],
+              restaurants: [
+                { value: '前端', name: '前端' },
+                { value: '后端', name: '后端' }
+              ]
             }
           },
           created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 100)
+            this.loading = true
+            setTimeout(() => {
+              this.tableData = window.MOCK_DATA_LIST.slice(0, 100)
+              this.loading = false
+            }, 500)
+          },
+          methods: {
+            formatDate (value, format) {
+              return XEUtils.toDateString(value, format)
+            },
+            getSelectLabel (value, list, valueProp = 'value', labelProp = 'label') {
+              let item = XEUtils.find(list, item => item[valueProp] === value)
+              return item ? item[labelProp] : null
+            },
+            getCascaderLabel (value, list) {
+              let values = value || []
+              let labels = []
+              let matchCascaderData = function (index, list) {
+                let val = values[index]
+                if (list && values.length > index) {
+                  list.forEach(item => {
+                    if (item.value === val) {
+                      labels.push(item.label)
+                      matchCascaderData(++index, item.children)
+                    }
+                  })
+                }
+              }
+              matchCascaderData(0, list)
+              return labels.join(' / ')
+            },
+            roleFetchSuggestions (queryString, cb) {
+              var restaurants = this.restaurants
+              var results = queryString ? restaurants.filter(this.createStateFilter(queryString)) : restaurants
+              clearTimeout(this.timeout)
+              this.timeout = setTimeout(() => {
+                cb(results)
+              }, 3000 * Math.random())
+            },
+            createStateFilter (queryString) {
+              return (state) => {
+                return (state.name.toLowerCase().indexOf(queryString.toLowerCase()) === 0)
+              }
+            },
+            footerMethod ({ columns, data }) {
+              return [
+                columns.map((column, columnIndex) => {
+                  if (columnIndex === 0) {
+                    return '平均'
+                  }
+                  if (['age', 'rate'].includes(column.property)) {
+                    return XEUtils.mean(data, column.property)
+                  }
+                  return '-'
+                }),
+                columns.map((column, columnIndex) => {
+                  if (columnIndex === 0) {
+                    return '和值'
+                  }
+                  if (['age', 'rate'].includes(column.property)) {
+                    return XEUtils.sum(data, column.property)
+                  }
+                  return '-'
+                })
+              ]
+            }
           }
         }
         `
@@ -244,6 +327,19 @@ export default {
       }
       matchCascaderData(0, list)
       return labels.join(' / ')
+    },
+    roleFetchSuggestions (queryString, cb) {
+      var restaurants = this.restaurants
+      var results = queryString ? restaurants.filter(this.createStateFilter(queryString)) : restaurants
+      clearTimeout(this.timeout)
+      this.timeout = setTimeout(() => {
+        cb(results)
+      }, 3000 * Math.random())
+    },
+    createStateFilter (queryString) {
+      return (state) => {
+        return (state.name.toLowerCase().indexOf(queryString.toLowerCase()) === 0)
+      }
     },
     footerMethod ({ columns, data }) {
       return [

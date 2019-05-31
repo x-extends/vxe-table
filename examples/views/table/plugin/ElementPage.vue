@@ -2,7 +2,7 @@
   <div>
     <p>element-ui 使用分页</p>
 
-    <el-form ref="tableform" :model="formData" inline>
+    <el-form ref="tableform" :model="formData" inline size="small">
       <el-form-item label="名字" prop="name">
         <el-input v-model="formData.name" placeholder="名字"></el-input>
       </el-form-item>
@@ -29,6 +29,7 @@
       <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
       <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
       <vxe-table-column prop="name" label="ElInput" min-width="140" :edit-render="{name: 'ElInput'}"></vxe-table-column>
+      <vxe-table-column prop="role" label="ElAutocomplete" width="160" :edit-render="{name: 'ElAutocomplete', props: {fetchSuggestions: roleFetchSuggestions}}"></vxe-table-column>
       <vxe-table-column prop="age" label="ElInputNumber" width="160" :edit-render="{name: 'ElInputNumber', props: {max: 35, min: 18}}"></vxe-table-column>
       <vxe-table-column prop="sex" label="ElSelect" width="140" :edit-render="{name: 'ElSelect', options: sexList}"></vxe-table-column>
       <vxe-table-column prop="region" label="ElCascader" width="200" :edit-render="{name: 'ElCascader', props: {options: regionList}}"></vxe-table-column>
@@ -69,6 +70,10 @@ export default {
       tableData: [],
       sexList: [],
       regionList: [],
+      restaurants: [
+        { value: '前端', name: '前端' },
+        { value: '后端', name: '后端' }
+      ],
       pageVO: {
         currentPage: 1,
         pageSize: 10,
@@ -133,6 +138,10 @@ export default {
               tableData: [],
               sexList: [],
               regionList: [],
+              restaurants: [
+                { value: '前端', name: '前端' },
+                { value: '后端', name: '后端' }
+              ],
               pageVO: {
                 currentPage: 1,
                 pageSize: 10,
@@ -185,6 +194,19 @@ export default {
             handleCurrentChange (currentPage) {
               this.pageVO.currentPage = currentPage
               this.findList()
+            },
+            roleFetchSuggestions (queryString, cb) {
+              var restaurants = this.restaurants
+              var results = queryString ? restaurants.filter(this.createStateFilter(queryString)) : restaurants
+              clearTimeout(this.timeout)
+              this.timeout = setTimeout(() => {
+                cb(results)
+              }, 3000 * Math.random())
+            },
+            createStateFilter (queryString) {
+              return (state) => {
+                return (state.name.toLowerCase().indexOf(queryString.toLowerCase()) === 0)
+              }
             }
           }
         }
@@ -238,6 +260,19 @@ export default {
     handleCurrentChange (currentPage) {
       this.pageVO.currentPage = currentPage
       this.findList()
+    },
+    roleFetchSuggestions (queryString, cb) {
+      var restaurants = this.restaurants
+      var results = queryString ? restaurants.filter(this.createStateFilter(queryString)) : restaurants
+      clearTimeout(this.timeout)
+      this.timeout = setTimeout(() => {
+        cb(results)
+      }, 3000 * Math.random())
+    },
+    createStateFilter (queryString) {
+      return (state) => {
+        return (state.name.toLowerCase().indexOf(queryString.toLowerCase()) === 0)
+      }
     }
   }
 }

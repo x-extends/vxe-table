@@ -24,6 +24,11 @@
           <Input v-model="row.name"/>
         </template>
       </vxe-table-column>
+      <vxe-table-column prop="role" label="Input"  min-width="140" :edit-render="{type: 'default'}">
+        <template v-slot:edit="{ row }">
+          <AutoComplete v-model="row.role" :data="restaurants" :filterMethod="roleFilterMethod"></AutoComplete>
+        </template>
+      </vxe-table-column>
       <vxe-table-column prop="age" label="InputNumber" width="140" :edit-render="{type: 'default'}">
         <template v-slot:header="{ column }">
           <span>{{ column.label }}</span>
@@ -91,6 +96,7 @@ export default {
       tableData: [],
       sexList: [],
       regionList: [],
+      restaurants: ['前端', '后端'],
       demoCodes: [
         `
         <vxe-table
@@ -104,13 +110,27 @@ export default {
           :footer-method="footerMethod"
           :edit-config="{key: 'id', trigger: 'click', mode: 'cell'}">
           <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
-          <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
+          <vxe-table-column type="index" width="80" fixed="left">
+            <template v-slot:header="{ column }">
+              <span>序号</span>
+              <Icon type="md-help-circle" />
+            </template>
+          </vxe-table-column>
           <vxe-table-column prop="name" label="Input"  min-width="140" :edit-render="{type: 'default'}">
             <template v-slot:edit="{ row }">
               <Input v-model="row.name"/>
             </template>
           </vxe-table-column>
+          <vxe-table-column prop="role" label="Input"  min-width="140" :edit-render="{type: 'default'}">
+            <template v-slot:edit="{ row }">
+              <AutoComplete v-model="row.role" :data="restaurants" :filterMethod="roleFilterMethod"></AutoComplete>
+            </template>
+          </vxe-table-column>
           <vxe-table-column prop="age" label="InputNumber" width="140" :edit-render="{type: 'default'}">
+            <template v-slot:header="{ column }">
+              <span>{{ column.label }}</span>
+              <Icon type="md-alert" />
+            </template>
             <template v-slot:edit="{ row }">
               <InputNumber v-model="row.age" :max="35" :min="18"></InputNumber>
             </template>
@@ -164,6 +184,57 @@ export default {
           },
           created () {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 100)
+          },
+          methods: {
+            formatDate (value, format) {
+              return XEUtils.toDateString(value, format)
+            },
+            getSelectLabel (value, list, valueProp = 'value', labelProp = 'label') {
+              let item = XEUtils.find(list, item => item[valueProp] === value)
+              return item ? item[labelProp] : null
+            },
+            getCascaderLabel (value, list) {
+              let values = value || []
+              let labels = []
+              let matchCascaderData = function (index, list) {
+                let val = values[index]
+                if (list && values.length > index) {
+                  list.forEach(item => {
+                    if (item.value === val) {
+                      labels.push(item.label)
+                      matchCascaderData(++index, item.children)
+                    }
+                  })
+                }
+              }
+              matchCascaderData(0, list)
+              return labels.join(' / ')
+            },
+            roleFilterMethod  (value, option) {
+              return option.toUpperCase().indexOf(value.toUpperCase()) !== -1
+            },
+            footerMethod ({ columns, data }) {
+              return [
+                columns.map((column, columnIndex) => {
+                  if (columnIndex === 0) {
+                    return '平均'
+                  }
+                  if (['age', 'rate'].includes(column.property)) {
+                    return XEUtils.mean(data, column.property)
+                  }
+                  return '-'
+                }),
+                columns.map((column, columnIndex) => {
+                  if (columnIndex === 0) {
+                    return '和值'
+                  }
+                  if (['age', 'rate'].includes(column.property)) {
+                    return XEUtils.sum(data, column.property)
+                  }
+                  return '-'
+                })
+              ]
+            }
           }
         }
         `
@@ -221,6 +292,9 @@ export default {
       }
       matchCascaderData(0, list)
       return labels.join(' / ')
+    },
+    roleFilterMethod  (value, option) {
+      return option.toUpperCase().indexOf(value.toUpperCase()) !== -1
     },
     footerMethod ({ columns, data }) {
       return [

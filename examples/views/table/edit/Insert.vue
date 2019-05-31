@@ -2,10 +2,15 @@
   <div>
     <p>调用 insert、insertAt 函数插入数据</p>
 
-    <vxe-button @click="$refs.xTable.insert({name: Date.now()})">在第1行插入</vxe-button>
-    <vxe-button @click="$refs.xTable.insertAt({name: Date.now()}, tableData[2])">在第3行插入</vxe-button>
-    <vxe-button @click="$refs.xTable.insertAt({name: Date.now()}, -1)">在最后行插入</vxe-button>
-    <vxe-button @click="getInsertEvent">获取新增</vxe-button>
+    <vxe-table-toolbar>
+      <template v-slot:buttons>
+        <vxe-button @click="$refs.xTable.insert({name: Date.now()})">在第1行插入</vxe-button>
+        <vxe-button @click="insertEvent">在第3行插入并激活 Sex 单元格</vxe-button>
+        <vxe-button @click="$refs.xTable.insertAt({name: Date.now()}, -1)">在最后行插入</vxe-button>
+        <vxe-button @click="getInsertEvent">获取新增</vxe-button>
+      </template>
+    </vxe-table-toolbar>
+
     <vxe-table
       ref="xTable"
       border
@@ -36,10 +41,15 @@ export default {
       tableData: [],
       demoCodes: [
         `
-        <vxe-button @click="$refs.xTable.insert({name: Date.now()})">在第1行插入</vxe-button>
-        <vxe-button @click="$refs.xTable.insertAt({name: Date.now()}, tableData[2])">在第3行插入</vxe-button>
-        <vxe-button @click="$refs.xTable.insertAt({name: Date.now()}, -1)">在最后行插入</vxe-button>
-        <vxe-button @click="getInsertEvent">获取新增</vxe-button>
+        <vxe-table-toolbar>
+          <template v-slot:buttons>
+            <vxe-button @click="$refs.xTable.insert({name: Date.now()})">在第1行插入</vxe-button>
+            <vxe-button @click="insertEvent">在第3行插入并激活 Sex 单元格</vxe-button>
+            <vxe-button @click="$refs.xTable.insertAt({name: Date.now()}, -1)">在最后行插入</vxe-button>
+            <vxe-button @click="getInsertEvent">获取新增</vxe-button>
+          </template>
+        </vxe-table-toolbar>
+        
         <vxe-table
           ref="xTable"
           border
@@ -63,6 +73,13 @@ export default {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
           },
           methods: {
+            insertEvent () {
+              let record = {
+                name: Date.now()
+              }
+              this.$refs.xTable.insertAt(record, this.tableData[2])
+                .then(({ row }) => this.$refs.xTable.setActiveCell(row, 'sex'))
+            },
             getInsertEvent () {
               let insertRecords = this.$refs.xTable.getInsertRecords()
               alert(insertRecords.length)
@@ -83,6 +100,13 @@ export default {
     })
   },
   methods: {
+    insertEvent () {
+      let record = {
+        name: Date.now()
+      }
+      this.$refs.xTable.insertAt(record, this.tableData[2])
+        .then(({ row }) => this.$refs.xTable.setActiveCell(row, 'sex'))
+    },
     getInsertEvent () {
       let insertRecords = this.$refs.xTable.getInsertRecords()
       alert(insertRecords.length)

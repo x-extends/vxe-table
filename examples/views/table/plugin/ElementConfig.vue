@@ -20,6 +20,7 @@
       <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
       <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
       <vxe-table-column prop="name" label="ElInput" min-width="140" :edit-render="{name: 'ElInput', events: {change: nameChangeEvent}}"></vxe-table-column>
+      <vxe-table-column prop="role" label="ElAutocomplete" width="160" :edit-render="{name: 'ElAutocomplete', props: {fetchSuggestions: roleFetchSuggestions}}"></vxe-table-column>
       <vxe-table-column prop="age" label="ElInputNumber" width="160" :edit-render="{name: 'ElInputNumber', props: {max: 35, min: 18}}"></vxe-table-column>
       <vxe-table-column prop="sex" label="ElSelect" width="140" :edit-render="{name: 'ElSelect', options: sexList}"></vxe-table-column>
       <vxe-table-column prop="sex1" label="ElSelect" width="140" :edit-render="{name: 'ElSelect', options: sexList, props: {multiple: true, clearable: true}}"></vxe-table-column>
@@ -52,6 +53,10 @@ export default {
       tableData: [],
       sexList: [],
       regionList: [],
+      restaurants: [
+        { value: '前端', name: '前端' },
+        { value: '后端', name: '后端' }
+      ],
       sexGroupList: [
         {
           label: '分组1',
@@ -97,6 +102,7 @@ export default {
           <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
           <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
           <vxe-table-column prop="name" label="ElInput" min-width="140" :edit-render="{name: 'ElInput', events: {change: nameChangeEvent}}"></vxe-table-column>
+          <vxe-table-column prop="role" label="ElAutocomplete" width="160" :edit-render="{name: 'ElAutocomplete', props: {fetchSuggestions: roleFetchSuggestions}}"></vxe-table-column>
           <vxe-table-column prop="age" label="ElInputNumber" width="160" :edit-render="{name: 'ElInputNumber', props: {max: 35, min: 18}}"></vxe-table-column>
           <vxe-table-column prop="sex" label="ElSelect" width="140" :edit-render="{name: 'ElSelect', options: sexList}"></vxe-table-column>
           <vxe-table-column prop="sex1" label="ElSelect" width="140" :edit-render="{name: 'ElSelect', options: sexList, props: {multiple: true, clearable: true}}"></vxe-table-column>
@@ -104,7 +110,7 @@ export default {
           <vxe-table-column prop="region" label="ElCascader" width="200" :edit-render="{name: 'ElCascader', props: {options: regionList}, events: {change: regionChangeEvent}}"></vxe-table-column>
           <vxe-table-column prop="date" label="ElDatePicker" width="200" :edit-render="{name: 'ElDatePicker', props: {type: 'date', format: 'yyyy/MM/dd'}}"></vxe-table-column>
           <vxe-table-column prop="date1" label="DateTimePicker" width="220" :edit-render="{name: 'ElDatePicker', props: {type: 'datetime', format: 'yyyy-MM-dd HH:mm:ss'}}"></vxe-table-column>
-          <vxe-table-column prop="date2" label="ElTimeSelect" width="200" :edit-render="{name: 'ElTimeSelect', props: {pickerOptions: {start: '08:30', step: '00:15', end: '18:30'}}}"></vxe-table-column>
+          <vxe-table-column prop="date5" label="ElTimeSelect" width="200" :edit-render="{name: 'ElTimeSelect', props: {pickerOptions: {start: '08:30', step: '00:15', end: '18:30'}}}"></vxe-table-column>
           <vxe-table-column prop="flag" label="ElSwitch" width="100" :edit-render="{name: 'ElSwitch', type: 'visible'}"></vxe-table-column>
           <vxe-table-column prop="rate" label="ElRate" width="200" fixed="right" :edit-render="{name: 'ElRate', type: 'visible'}"></vxe-table-column>
         </vxe-table>
@@ -117,6 +123,10 @@ export default {
               tableData: [],
               sexList: [],
               regionList: [],
+              restaurants: [
+                { value: '前端', name: '前端' },
+                { value: '后端', name: '后端' }
+              ],
               sexGroupList: [
                 {
                   label: '分组1',
@@ -143,6 +153,19 @@ export default {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 100)
           },
           methods: {
+            roleFetchSuggestions (queryString, cb) {
+              var restaurants = this.restaurants
+              var results = queryString ? restaurants.filter(this.createStateFilter(queryString)) : restaurants
+              clearTimeout(this.timeout)
+              this.timeout = setTimeout(() => {
+                cb(results)
+              }, 3000 * Math.random())
+            },
+            createStateFilter (queryString) {
+              return (state) => {
+                return (state.name.toLowerCase().indexOf(queryString.toLowerCase()) === 0)
+              }
+            },
             nameChangeEvent ({ row }, value) {
               console.log(value)
             },
@@ -182,6 +205,19 @@ export default {
         this.regionList = data
         return data
       })
+    },
+    roleFetchSuggestions (queryString, cb) {
+      var restaurants = this.restaurants
+      var results = queryString ? restaurants.filter(this.createStateFilter(queryString)) : restaurants
+      clearTimeout(this.timeout)
+      this.timeout = setTimeout(() => {
+        cb(results)
+      }, 3000 * Math.random())
+    },
+    createStateFilter (queryString) {
+      return (state) => {
+        return (state.name.toLowerCase().indexOf(queryString.toLowerCase()) === 0)
+      }
     },
     nameChangeEvent ({ row }, value) {
       console.log(value)

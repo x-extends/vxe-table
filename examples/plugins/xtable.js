@@ -9,8 +9,10 @@ import Radio from '../../src/components/radio'
 import Input from '../../src/components/input'
 import Button from '../../src/components/button'
 
-import VXETablePluginElement from 'vxe-table-plugin-element'
-import VXETablePluginIView from 'vxe-table-plugin-iview'
+import VXETablePluginElement from '../../../vxe-table-plugin-element/index.js'
+import VXETablePluginIView from '../../../vxe-table-plugin-iview/index.js'
+// import VXETablePluginElement from 'vxe-table-plugin-element'
+// import VXETablePluginIView from 'vxe-table-plugin-iview'
 import 'vxe-table-plugin-element/dist/style.css'
 import 'vxe-table-plugin-iview/dist/style.css'
 

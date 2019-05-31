@@ -9,6 +9,7 @@ import Checkbox from './components/checkbox'
 import Radio from './components/radio'
 import Input from './components/input'
 import Button from './components/button'
+import Alert from './components/alert'
 import GlobalConfig from './conf'
 import Interceptor from './interceptor'
 import Renderer from './renderer'
@@ -24,7 +25,11 @@ const components = [
   Grid,
   Excel,
   Pagination,
-  Checkbox
+  Checkbox,
+  Radio,
+  Input,
+  Button,
+  Alert
 ]
 
 /**
@@ -78,5 +83,6 @@ export default {
   Checkbox,
   Radio,
   Input,
-  Button
+  Button,
+  Alert
 }

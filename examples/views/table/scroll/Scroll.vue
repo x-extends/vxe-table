@@ -26,10 +26,10 @@
     <p>数据超大情况下必须使用：show-all-overflow,show-header-all-overflow 参数以及调整好 optimization ：{scrollX,scrollY} 适合的参数可以更加流畅</p>
 
     <vxe-table
+      ref="xTable"
       border
       show-all-overflow
-      height="300"
-      :data.sync="tableData2">
+      height="300">
       <vxe-table-column type="index" width="100"></vxe-table-column>
       <vxe-table-column prop="name" label="Name" sortable></vxe-table-column>
       <vxe-table-column prop="sex" label="Sex"></vxe-table-column>
@@ -82,6 +82,7 @@ export default {
         `,
         `
         <vxe-table
+          ref="xTable"
           border
           show-all-overflow
           height="300"
@@ -101,7 +102,9 @@ export default {
             }
           },
           created () {
-            this.tableData2 = window.MOCK_DATA_LIST.slice(0, 1000)
+            this.$nextTick(() => {
+              this.$refs.xTable.reloadData(window.MOCK_DATA_LIST.slice(0, 10000))
+            })
           }
         }
         `
@@ -110,7 +113,9 @@ export default {
   },
   created () {
     this.tableData = window.MOCK_DATA_LIST.slice(0, 200)
-    this.tableData2 = window.MOCK_DATA_LIST.slice(0, 10000)
+    this.$nextTick(() => {
+      this.$refs.xTable.reloadData(window.MOCK_DATA_LIST.slice(0, 10000))
+    })
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {

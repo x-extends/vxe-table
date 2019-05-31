@@ -35,6 +35,7 @@ import TableCustom from './views/table/advanced/Custom.vue'
 import TableExport from './views/table/advanced/Export.vue'
 import TableMenu from './views/table/advanced/Menu.vue'
 import TableExpand from './views/table/advanced/Expand.vue'
+import TableToolbar from './views/table/advanced/Toolbar.vue'
 
 import TableTreeBasic from './views/table/tree/Basic.vue'
 import TableTreeSelection from './views/table/tree/Selection.vue'
@@ -58,6 +59,7 @@ import TableScrollFullCols from './views/table/scroll/ScrollFullCols.vue'
 import TableEditManual from './views/table/edit/Manual.vue'
 import TableEditClick from './views/table/edit/Click.vue'
 import TableEditDBLClick from './views/table/edit/DBLClick.vue'
+import TableAutoClearManual from './views/table/edit/AutoClear.vue'
 import TableEditInsert from './views/table/edit/Insert.vue'
 import TableEditRemove from './views/table/edit/Remove.vue'
 import TableEditRevert from './views/table/edit/Revert.vue'
@@ -261,6 +263,11 @@ export default new Router({
       component: TableExpand
     },
     {
+      path: '/table/advanced/toolbar',
+      name: 'TableToolbar',
+      component: TableToolbar
+    },
+    {
       path: '/table/tree/basic',
       name: 'TableTreeBasic',
       component: TableTreeBasic
@@ -354,6 +361,11 @@ export default new Router({
       path: '/table/edit/dblclick',
       name: 'TableEditDBLClick',
       component: TableEditDBLClick
+    },
+    {
+      path: '/table/edit/autoClear',
+      name: 'TableAutoClearManual',
+      component: TableAutoClearManual
     },
     {
       path: '/table/edit/insert',

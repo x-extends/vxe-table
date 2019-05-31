@@ -722,7 +722,8 @@ export default {
         if (column.property && !XEUtils.has(recordItem, column.property)) {
           XEUtils.set(recordItem, column.property, null)
         }
-        if (rowKey) {
+        // 如果设置了 Key 就必须要唯一，可以自行设置；如果为空，则默认生成一个随机数
+        if (rowKey && !XEUtils.get(recordItem, rowKey)) {
           XEUtils.set(recordItem, rowKey, ++rowUniqueId + Date.now())
         }
       })
@@ -730,8 +731,8 @@ export default {
     },
     /**
      * 删除指定行数据
-     * 支持删除一行
-     * 支持删除多行
+     * 如果传 row 则删除一行
+     * 如果传 rows 则删除多行
      */
     remove (rows) {
       let { tableData, tableFullData, editStore, selectConfig = {}, selection, hasRowInsert } = this
@@ -774,10 +775,10 @@ export default {
     },
     /**
      * 还原数据
-     * 支持还原整个表格
-     * 支持还原一行
-     * 支持还原多行
-     * 支持还原指定单元格
+     * 如果不传任何参数，则还原整个表格
+     * 如果传 row 则还原一行
+     * 如果传 rows 则还原多行
+     * 如果还额外传了 prop 则还原指定单元格
      */
     revert (rows, prop) {
       let { tableSourceData, tableFullData } = this
@@ -802,10 +803,10 @@ export default {
     },
     /**
      * 清空单元格内容
-     * 支持清空整个表格内容
-     * 支持清空一行内容
-     * 支持清空多行内容
-     * 支持清空指定单元格内容
+     * 如果不创参数，则清空整个表格内容
+     * 如果传 row 则清空一行内容
+     * 如果传 rows 则清空多行内容
+     * 如果还额外传了 prop 则清空指定单元格内容
      */
     clearData (rows, prop) {
       let { tableSourceData, visibleColumn } = this
@@ -2811,10 +2812,7 @@ export default {
         if (XEUtils.isFunction(rows)) {
           cb = rows
         } else {
-          if (!XEUtils.isArray(rows)) {
-            vaildDatas = [rows]
-          }
-          vaildDatas = rows
+          vaildDatas = XEUtils.isArray(rows) ? rows : [rows]
         }
       }
       let validPromise = Promise.resolve(true)
@@ -2860,26 +2858,26 @@ export default {
       }
       return validPromise
     },
-    validRowRules (type, row) {
-      let { tableData, editRules } = this
-      let rowIndex = tableData.indexOf(row)
-      let validPromise = Promise.resolve()
-      if (!XEUtils.isEmpty(editRules)) {
-        this.getColumns().forEach((column, columnIndex) => {
-          if (XEUtils.has(editRules, column.property)) {
-            validPromise = validPromise.then(() => new Promise((resolve, reject) => {
-              this.validCellRules('all', row, column)
-                .then(resolve)
-                .catch(rule => {
-                  let rest = { rule, row, column, cell: DomTools.getCell(this, { row, rowIndex, column }) }
-                  return reject(rest)
-                })
-            }))
-          }
-        })
-      }
-      return validPromise
-    },
+    // validRowRules (type, row) {
+    //   let { tableData, editRules } = this
+    //   let rowIndex = tableData.indexOf(row)
+    //   let validPromise = Promise.resolve()
+    //   if (!XEUtils.isEmpty(editRules)) {
+    //     this.getColumns().forEach(column => {
+    //       if (XEUtils.has(editRules, column.property)) {
+    //         validPromise = validPromise.then(() => new Promise((resolve, reject) => {
+    //           this.validCellRules('all', row, column)
+    //             .then(resolve)
+    //             .catch(rule => {
+    //               let rest = { rule, row, column, cell: DomTools.getCell(this, { row, rowIndex, column }) }
+    //               return reject(rest)
+    //             })
+    //         }))
+    //       }
+    //     })
+    //   }
+    //   return validPromise
+    // },
     hasCellRules (type, row, column) {
       let { editRules } = this
       let { property } = column
@@ -2896,7 +2894,12 @@ export default {
      * 如果校验失败则，触发回调或者Promise，结果返回一个 Boolean 值
      * 如果是传回调方式这返回一个 Boolean 值和校验不通过列的错误消息
      *
-     * 参数：required=Boolean 是否必填，min=Number 最小长度，max=Number 最大长度，validator=Function(rule, value, callback) 自定义校验，trigger=blur|change 触发方式
+     * rule 配置：
+     *  required=Boolean 是否必填
+     *  min=Number 最小长度
+     *  max=Number 最大长度
+     *  validator=Function(rule, value, callback, {rules, row, column, rowIndex, columnIndex}) 自定义校验
+     *  trigger=blur|change 触发方式（除非特殊场景，否则默认为空就行）
      */
     validCellRules (type, row, column) {
       let { editRules } = this

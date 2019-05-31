@@ -2,8 +2,13 @@
   <div>
     <p>调用 revert 还原数据</p>
 
-    <vxe-button @click="$refs.xTable.revert()">还原全部</vxe-button>
-    <vxe-button @click="$refs.xTable.removeSelecteds()">删除选中</vxe-button>
+    <vxe-table-toolbar>
+      <template v-slot:buttons>
+        <vxe-button @click="$refs.xTable.revert()">还原全部</vxe-button>
+        <vxe-button @click="$refs.xTable.removeSelecteds()">删除选中</vxe-button>
+      </template>
+    </vxe-table-toolbar>
+
     <vxe-table
       ref="xTable"
       border
@@ -40,8 +45,13 @@ export default {
       tableData: [],
       demoCodes: [
         `
-        <vxe-button @click="$refs.xTable.revert()">还原全部</vxe-button>
-        <vxe-button @click="$refs.xTable.removeSelecteds()">删除选中</vxe-button>
+        <vxe-table-toolbar>
+          <template v-slot:buttons>
+            <vxe-button @click="$refs.xTable.revert()">还原全部</vxe-button>
+            <vxe-button @click="$refs.xTable.removeSelecteds()">删除选中</vxe-button>
+          </template>
+        </vxe-table-toolbar>
+
         <vxe-table
           ref="xTable"
           border

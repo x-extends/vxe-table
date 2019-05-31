@@ -300,7 +300,7 @@ export default {
       maxHeight = XEUtils.toNumber(maxHeight)
       style['max-height'] = `${fixedType ? maxHeight - headerHeight - (showFooter ? 0 : scrollXHeight) : maxHeight - headerHeight}px`
     }
-    // 如果是使用优化模式
+    // 如果是固定列与设置了超出隐藏
     if (fixedType && showAllOverflow) {
       tableColumn = fixedColumn
       tableWidth = tableColumn.reduce((previous, column) => previous + column.renderWidth, 0)

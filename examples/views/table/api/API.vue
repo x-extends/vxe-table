@@ -35,12 +35,14 @@
 import XEUtils from 'xe-utils'
 import tableAPI from '../../../api/table'
 import tableColumnAPI from '../../../api/table-column'
+import tableToolbarAPI from '../../../api/table-toolbar'
 import gridAPI from '../../../api/grid'
 import excelAPI from '../../../api/excel'
 import paginationAPI from '../../../api/pagination'
 import radioAPI from '../../../api/radio'
 import checkboxAPI from '../../../api/checkbox'
 import inputAPI from '../../../api/input'
+import buttonAPI from '../../../api/button'
 
 export default {
   data () {
@@ -79,6 +81,9 @@ export default {
         case 'table-column':
           apis = tableColumnAPI
           break
+        case 'table-toolbar':
+          apis = tableToolbarAPI
+          break
         case 'grid':
           apis = gridAPI
           break
@@ -96,6 +101,9 @@ export default {
           break
         case 'input':
           apis = inputAPI
+          break
+        case 'button':
+          apis = buttonAPI
           break
       }
 

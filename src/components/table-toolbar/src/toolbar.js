@@ -8,11 +8,8 @@ export default {
     setting: [Boolean, Object],
     buttons: Array,
     size: String,
-    tableCustoms: Array
+    customs: Array
   },
-  inject: [
-    '$grid'
-  ],
   data () {
     return {
       settingStore: {
@@ -23,6 +20,9 @@ export default {
   computed: {
     vSize () {
       return this.size || this.$parent.size || this.$parent.vSize
+    },
+    isGrid () {
+      return this.$parent.$vnode.componentOptions.tag === 'vxe-grid'
     }
   },
   created () {
@@ -34,7 +34,7 @@ export default {
     GlobalEvent.off(this, 'blur')
   },
   render (h) {
-    let { $grid, settingStore, setting, buttons, vSize, tableCustoms } = this
+    let { $slots, settingStore, setting, buttons = [], vSize, customs } = this
     let customBtnOns = {}
     let customWrapperOns = {}
     if (setting) {
@@ -58,7 +58,7 @@ export default {
     }, [
       h('div', {
         class: 'vxe-button--wrapper'
-      }, buttons.map(item => {
+      }, $slots.buttons ? $slots.buttons : buttons.map(item => {
         return h('vxe-button', {
           on: {
             click: evnt => this.btnEvent(item, evnt)
@@ -85,7 +85,7 @@ export default {
           h('div', {
             class: 'vxe-custom--option',
             on: customWrapperOns
-          }, tableCustoms.map(column => {
+          }, customs.map(column => {
             return column.property ? h('vxe-checkbox', {
               props: {
                 value: column.visible
@@ -94,7 +94,7 @@ export default {
                 change: value => {
                   column.visible = value
                   if (setting && setting.immediate) {
-                    $grid.refreshColumn()
+                    this.updateSetting()
                   }
                 }
               }
@@ -109,11 +109,25 @@ export default {
       this.settingStore.visible = true
     },
     closeSetting () {
-      let { $grid, setting, settingStore } = this
+      let { setting, settingStore } = this
       if (settingStore.visible) {
         settingStore.visible = false
         if (setting && !setting.immediate) {
-          $grid.refreshColumn()
+          this.updateSetting()
+        }
+      }
+    },
+    updateSetting () {
+      let { $parent: $grid, customs, isGrid } = this
+      if (isGrid) {
+        $grid.refreshColumn()
+      } else {
+        let selfIndex = $grid.$children.indexOf(this)
+        let $table = $grid.$children.find((comp, index) => comp.refreshColumn && index > selfIndex && comp.customs === customs)
+        if ($table) {
+          $table.refreshColumn()
+        } else {
+          console.error('[vxe-table-toolbar] Not found vxe-table.')
         }
       }
     },
@@ -156,34 +170,37 @@ export default {
       }, 300)
     },
     btnEvent (item, evnt) {
-      let { $grid } = this
-      switch (item.code) {
-        case 'insert':
-          $grid.insert()
-          break
-        case 'insert_actived':
-          $grid.insert().then(({ row }) => $grid.setActiveRow(row))
-          break
-        case 'delete_pending':
-          $grid.triggerPendingEvent(evnt)
-          break
-        case 'delete_selection':
-          $grid.commitProxy('delete')
-          break
-        case 'delete_rows':
-          $grid.removeSelecteds()
-          break
-        case 'save':
-          $grid.commitProxy('save')
-          break
-        case 'reload':
-          $grid.commitProxy('reload')
-          break
-        case 'export':
-          $grid.exportCsv()
-          break
+      let { $parent: $grid, isGrid } = this
+      // 只对 gird 环境中有效
+      if (isGrid) {
+        switch (item.code) {
+          case 'insert':
+            $grid.insert()
+            break
+          case 'insert_actived':
+            $grid.insert().then(({ row }) => $grid.setActiveRow(row))
+            break
+          case 'delete_pending':
+            $grid.triggerPendingEvent(evnt)
+            break
+          case 'delete_selection':
+            $grid.commitProxy('delete')
+            break
+          case 'delete_rows':
+            $grid.removeSelecteds()
+            break
+          case 'save':
+            $grid.commitProxy('save')
+            break
+          case 'reload':
+            $grid.commitProxy('reload')
+            break
+          case 'export':
+            $grid.exportCsv()
+            break
+        }
+        UtilTools.emitEvent($grid, 'toolbar-button-click', [{ button: item, $grid }, evnt])
       }
-      UtilTools.emitEvent($grid, 'toolbar-button-click', [{ button: item, $grid }, evnt])
     }
   }
 }

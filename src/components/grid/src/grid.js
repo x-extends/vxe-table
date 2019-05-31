@@ -74,7 +74,7 @@ export default {
     let props = Object.assign({}, tableProps)
     let on = Object.assign({}, $listeners)
     let toolbarProps = Object.assign({
-      tableCustoms,
+      customs: tableCustoms,
       optimization: Object.assign({}, GlobalConfig.optimization, optimization)
     }, toolbar)
     if (proxyConfig) {

@@ -276,6 +276,12 @@ export default {
               locat: {
                 name: 'TableExpand'
               }
+            },
+            {
+              label: '工具栏',
+              locat: {
+                name: 'TableToolbar'
+              }
             }
           ]
         },
@@ -434,6 +440,12 @@ export default {
               label: '双击触发',
               locat: {
                 name: 'TableEditDBLClick'
+              }
+            },
+            {
+              label: '关闭自动清除',
+              locat: {
+                name: 'TableAutoClearManual'
               }
             },
             {
@@ -599,6 +611,15 @@ export default {
               }
             },
             {
+              label: 'vxe-table-toolbar',
+              locat: {
+                name: 'TableAPI',
+                params: {
+                  name: 'table-toolbar'
+                }
+              }
+            },
+            {
               label: 'vxe-grid',
               locat: {
                 name: 'TableAPI',
@@ -649,6 +670,15 @@ export default {
                 name: 'TableAPI',
                 params: {
                   name: 'input'
+                }
+              }
+            },
+            {
+              label: 'vxe-button',
+              locat: {
+                name: 'TableAPI',
+                params: {
+                  name: 'button'
                 }
               }
             }

@@ -1,6 +1,7 @@
 <template>
   <div>
     <p>加载 10 万行 1 万列，左右固定列，表尾合计</p>
+    <p>vxe-grid 的性能比 vxe-table 快 n 倍，因为不需要为每个 vxe-table-column 创建实例，列越多越能体现出来</p>
     <p>大数据不建议使用双向绑定的 data 属性（vue 监听会大数据会短暂的卡顿），建议使用 loadData/reloadData 函数</p>
     <p>对于多选 type="selection" 当数据量海量时应该绑定 checkProp 属性渲染速度可以提升n倍以上</p>
     <p>数据超大情况下必须使用：show-all-overflow,show-header-all-overflow 参数以及调整好 optimization ：{scrollX,scrollY} 适合的参数可以更加流畅</p>

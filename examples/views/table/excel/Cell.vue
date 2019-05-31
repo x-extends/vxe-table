@@ -3,12 +3,17 @@
     <p>使用 vxe-excel 渲染 Excel 表格</p>
     <p>注意：暂时只能支持少量数据，不建议使用（重构中...）</p>
 
-    <button class="btn" @click="getValidEvent">获取有效数据</button>
-    <button class="btn" @click="getInsertEvent">获取新增</button>
-    <button class="btn" @click="getRemoveEvent">获取删除</button>
-    <button class="btn" @click="getUpdateEvent">获取修改</button>
-    <button class="btn" @click="exportCsvEvent">导出.csv</button>
-    <input type="file" @change="fileChangeEvent" accept=".csv,.xls,.xlsx">
+    <vxe-table-toolbar>
+      <template v-slot:buttons>
+        <vxe-button @click="getValidEvent">获取有效数据</vxe-button>
+        <vxe-button  @click="getInsertEvent">获取新增</vxe-button>
+        <vxe-button @click="getRemoveEvent">获取删除</vxe-button>
+        <vxe-button @click="getUpdateEvent">获取修改</vxe-button>
+        <vxe-button @click="exportCsvEvent">导出.csv</vxe-button>
+        <input type="file" @change="fileChangeEvent" accept=".csv,.xls,.xlsx">
+      </template>
+    </vxe-table-toolbar>
+
     <vxe-excel
       ref="xExcel"
       max-height="600"
@@ -81,17 +86,19 @@ export default {
       }),
       demoCodes: [
         `
-        <button class="btn" @click="getValidEvent">获取有效数据</button>
-        <button class="btn" @click="getInsertEvent">获取新增</button>
-        <button class="btn" @click="getRemoveEvent">获取删除</button>
-        <button class="btn" @click="getUpdateEvent">获取修改</button>
-        <button class="btn" @click="exportCsvEvent">导出.csv</button>
+        <vxe-button @click="getValidEvent">获取有效数据</vxe-button>
+        <vxe-button  @click="getInsertEvent">获取新增</vxe-button>
+        <vxe-button @click="getRemoveEvent">获取删除</vxe-button>
+        <vxe-button @click="getUpdateEvent">获取修改</vxe-button>
+        <vxe-button @click="exportCsvEvent">导出.csv</vxe-button>
         <input type="file" @change="fileChangeEvent" accept=".csv,.xls,.xlsx">
+
         <vxe-excel
           ref="xExcel"
           max-height="600"
           :columns="columns"
-          :data.sync="tableData">
+          :data.sync="tableData"
+          :edit-config="{key: 'id'}">
         </vxe-excel>
         `,
         `

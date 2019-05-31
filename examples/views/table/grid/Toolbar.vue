@@ -45,7 +45,6 @@ export default {
       toolbar: {
         buttons: [
           { code: 'reload', name: '刷新' },
-          { code: 'insert', name: '新增' },
           { code: 'insert_actived', name: '新增并激活' },
           { code: 'delete_pending', name: '标记/取消' },
           { code: 'delete_selection', name: '删除选中' },

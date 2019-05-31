@@ -2,7 +2,12 @@
   <div>
     <p>通过调用 exportCsv 函数可以直接将表格导出为 .cvs 格式的文件；</p>
 
-    <button class="btn" @click="exportCsvEvent">默认导出</button>
+    <vxe-table-toolbar>
+      <template v-slot:buttons>
+        <vxe-button @click="exportCsvEvent">默认导出</vxe-button>
+      </template>
+    </vxe-table-toolbar>
+
     <vxe-table
       ref="xTable1"
       highlight-hover-row
@@ -17,7 +22,12 @@
 
     <p>配置 columnFilterMethod 参数过滤指定列</p>
 
-    <button class="btn" @click="exportCsvEvent2">导出指定列 [name,sex]</button>
+    <vxe-table-toolbar>
+      <template v-slot:buttons>
+        <vxe-button @click="exportCsvEvent2">导出指定列 [name,sex]</vxe-button>
+      </template>
+    </vxe-table-toolbar>
+
     <vxe-table
       ref="xTable2"
       highlight-hover-row
@@ -32,7 +42,12 @@
 
     <p>配置 dataFilterMethod 参数过滤指定行</p>
 
-    <button class="btn" @click="exportCsvEvent3">导出指定第10-20行</button>
+    <vxe-table-toolbar>
+      <template v-slot:buttons>
+        <vxe-button @click="exportCsvEvent3">导出指定第10-20行</vxe-button>
+      </template>
+    </vxe-table-toolbar>
+
     <vxe-table
       ref="xTable3"
       highlight-hover-row
@@ -47,7 +62,12 @@
 
     <p>不导出表头，指定文件名，导出源数据,格式化数据</p>
 
-    <button class="btn" @click="exportCsvEvent4">完整配置</button>
+    <vxe-table-toolbar>
+      <template v-slot:buttons>
+        <vxe-button @click="exportCsvEvent4">完整配置</vxe-button>
+      </template>
+    </vxe-table-toolbar>
+
     <vxe-table
       ref="xTable4"
       highlight-hover-row
