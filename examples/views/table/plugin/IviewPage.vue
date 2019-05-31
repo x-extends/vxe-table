@@ -17,14 +17,23 @@
       </FormItem>
     </Form>
 
+    <vxe-table-toolbar size="small" :customs="customColumns" setting>
+      <template v-slot:buttons>
+        <vxe-button @click="insertEvent">新增</vxe-button>
+        <vxe-button @click="saveEvent">保存</vxe-button>
+      </template>
+    </vxe-table-toolbar>
+
     <vxe-table
       border
       show-all-overflow
+      ref="xTable"
       class="vxe-table-iview"
       height="460"
       size="small"
       :loading="loading"
       :data.sync="tableData"
+      :customs.sync="customColumns"
       :edit-config="{key: 'id', trigger: 'click', mode: 'row'}">
       <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
       <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
@@ -68,6 +77,7 @@ export default {
     return {
       loading: false,
       tableData: [],
+      customColumns: [],
       sexList: [],
       regionList: [],
       restaurants: ['前端', '后端'],
@@ -97,14 +107,23 @@ export default {
           </FormItem>
         </Form>
 
+        <vxe-table-toolbar size="small" :customs="customColumns" setting>
+          <template v-slot:buttons>
+            <vxe-button @click="insertEvent">新增</vxe-button>
+            <vxe-button @click="saveEvent">保存</vxe-button>
+          </template>
+        </vxe-table-toolbar>
+
         <vxe-table
           border
           show-all-overflow
+          ref="xTable"
           class="vxe-table-iview"
           height="460"
           size="small"
           :loading="loading"
           :data.sync="tableData"
+          :customs.sync="customColumns"
           :edit-config="{key: 'id', trigger: 'click', mode: 'row'}">
           <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
           <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
@@ -179,6 +198,20 @@ export default {
                 return data
               })
             },
+            insertEvent () {
+              let record = {
+                role: '',
+                age: 18,
+                region: [],
+                flag: false,
+                rate: 2
+              }
+              this.$refs.xTable.insert(record).then(({ row }) => this.$refs.xTable.setActiveRow(row))
+            },
+            saveEvent () {
+              let { insertRecords, removeRecords, updateRecords } = this.$refs.xTable.getAllRecords()
+              alert(\`insertRecords=\${insertRecords.length}, removeRecords=\${removeRecords.length}, updateRecords=\${updateRecords.length}\`)
+            },
             searchEvent () {
               this.pageVO.currentPage = 1
               this.findList()
@@ -234,6 +267,20 @@ export default {
         this.regionList = data
         return data
       })
+    },
+    insertEvent () {
+      let record = {
+        role: '',
+        age: 18,
+        region: [],
+        flag: false,
+        rate: 2
+      }
+      this.$refs.xTable.insert(record).then(({ row }) => this.$refs.xTable.setActiveRow(row))
+    },
+    saveEvent () {
+      let { insertRecords, removeRecords, updateRecords } = this.$refs.xTable.getAllRecords()
+      alert(`insertRecords=${insertRecords.length}, removeRecords=${removeRecords.length}, updateRecords=${updateRecords.length}`)
     },
     searchEvent () {
       this.pageVO.currentPage = 1

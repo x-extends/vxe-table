@@ -1,13 +1,6 @@
 <template>
   <div>
-    <p>使用 vxe-table-plugin-element 配置式的插件，并加上 class=vxe-table-element 或者自行实现样式都可以</p>
-
-    <pre>
-      <code class="javascript">{{ demoCodes[0] }}</code>
-      <code class="javascript">{{ demoCodes[1] }}</code>
-    </pre>
-
-    <p>配置如下</p>
+    <p>具体查看 <a class="link" href="https://www.npmjs.com/package/vxe-table-plugin-element" target="_blank">vxe-table-plugin-element</a> 适配插件</p>
 
     <vxe-table
       border
@@ -36,8 +29,8 @@
     <p class="demo-code">显示代码</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[2] }}</code>
-      <code class="javascript">{{ demoCodes[3] }}</code>
+      <code class="xml">{{ demoCodes[0] }}</code>
+      <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
   </div>
 </template>
@@ -78,18 +71,6 @@ export default {
         }
       ],
       demoCodes: [
-        `
-        npm install vxe-table-plugin-element
-        `,
-        `
-        import Vue from 'vue'
-        import VXETable from 'vxe-table'
-        import VXETablePluginElement from 'vxe-table-plugin-element'
-        import 'vxe-table-plugin-element/dist/style.css'
-
-        Vue.use(VXETable)
-        VXETable.use(VXETablePluginElement)
-        `,
         `
         <vxe-table
           border

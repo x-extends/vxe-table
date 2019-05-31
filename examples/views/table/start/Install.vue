@@ -13,7 +13,6 @@
         import VXETable from 'vxe-table'
         import 'vxe-table/lib/index.css'
 
-        // 默认安装 Table,TableColumn,Grid,Excel,Pagination,Checkbox
         Vue.use(VXETable)
       </code>
     </pre>

@@ -1003,32 +1003,30 @@ export default {
         }, headerProps)
       }
       // 重新分配列
-      tableFullColumn.forEach((column, columnIndex) => {
-        if (column.visible) {
-          if (column.fixed === 'left') {
-            if (!isColspan) {
-              if (columnIndex - letIndex !== 0) {
-                isColspan = true
-              } else {
-                letIndex++
-              }
+      tableFullColumn.filter(column => column.visible).forEach((column, columnIndex) => {
+        if (column.fixed === 'left') {
+          if (!isColspan) {
+            if (columnIndex - letIndex !== 0) {
+              isColspan = true
+            } else {
+              letIndex++
             }
-            leftList.push(column)
-          } else if (column.fixed === 'right') {
-            if (!isColspan) {
-              if (!rightIndex) {
-                rightIndex = columnIndex
-              }
-              if (columnIndex - rightIndex !== 0) {
-                isColspan = true
-              } else {
-                rightIndex++
-              }
-            }
-            rightList.push(column)
-          } else {
-            centerList.push(column)
           }
+          leftList.push(column)
+        } else if (column.fixed === 'right') {
+          if (!isColspan) {
+            if (!rightIndex) {
+              rightIndex = columnIndex
+            }
+            if (columnIndex - rightIndex !== 0) {
+              isColspan = true
+            } else {
+              rightIndex++
+            }
+          }
+          rightList.push(column)
+        } else {
+          centerList.push(column)
         }
       })
       let visibleColumn = leftList.concat(centerList).concat(rightList)
@@ -2749,7 +2747,7 @@ export default {
             if (cell) {
               return this.validCellRules(type, row, column)
                 .then(() => this.clearValidate())
-                .catch(rule => this.handleValidError({ rule, row, column, cell }))
+                .catch(rule => this.openValidTooltip({ rule, row, column, cell }))
             }
           }
         }
@@ -2780,7 +2778,7 @@ export default {
             // 如果校验不通过与触发方式一致，则聚焦提示错误，否则跳过并不作任何处理
             if (!rule.trigger || type === rule.trigger) {
               let rest = { rule, row, column, cell }
-              this.handleValidError(rest)
+              this.openValidTooltip(rest)
               return Promise.reject(rest)
             }
             return Promise.resolve()
@@ -2808,7 +2806,7 @@ export default {
     validate (rows, cb) {
       let { editRules, tableData } = this
       let vaildDatas = tableData
-      if (arguments.length) {
+      if (rows && arguments.length) {
         if (XEUtils.isFunction(rows)) {
           cb = rows
         } else {
@@ -2964,10 +2962,20 @@ export default {
       })
       return this.$nextTick()
     },
+    /**
+     * 聚焦到校验通过的单元格并弹出校验错误提示
+     */
     handleValidError (params) {
+      this.handleActived(params, { type: 'valid-error', trigger: 'call' })
+        .then(() => this.openValidTooltip(params))
+    },
+    /**
+     * 弹出校验错误提示
+     */
+    openValidTooltip (params) {
       let { $refs, validStore } = this
       let { rule, row, column, cell } = params
-      this.handleActived(params, { type: 'valid-error', trigger: 'call' }).then(() => {
+      this.$nextTick(() => {
         let { top, left } = DomTools.getOffsetPos(cell)
         let { scrollTop, scrollLeft, visibleWidth, visibleHeight } = DomTools.getDomNode()
         Object.assign(validStore, {

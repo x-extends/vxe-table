@@ -76,6 +76,7 @@ import TableExcelCell from './views/table/excel/Cell.vue'
 
 import TableOtherElement from './views/table/other/Element.vue'
 import TableOtherIview from './views/table/other/Iview.vue'
+import TableSortablejs from './views/table/other/Sortablejs.vue'
 
 import TablePluginElementConfig from './views/table/plugin/ElementConfig.vue'
 import TablePluginElementPage from './views/table/plugin/ElementPage.vue'
@@ -436,6 +437,11 @@ export default new Router({
       path: '/table/other/iview',
       name: 'TableOtherIview',
       component: TableOtherIview
+    },
+    {
+      path: '/table/other/Sortablejs',
+      name: 'TableSortablejs',
+      component: TableSortablejs
     },
     {
       path: '/table/plugin/elementConfig',

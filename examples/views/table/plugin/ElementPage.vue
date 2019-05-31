@@ -17,14 +17,23 @@
       </el-form-item>
     </el-form>
 
+    <vxe-table-toolbar size="small" :customs="customColumns" setting>
+      <template v-slot:buttons>
+        <vxe-button @click="insertEvent">新增</vxe-button>
+        <vxe-button @click="saveEvent">保存</vxe-button>
+      </template>
+    </vxe-table-toolbar>
+
     <vxe-table
       border
       show-all-overflow
+      ref="xTable"
       class="vxe-table-element"
       height="460"
       size="small"
       :loading="loading"
       :data.sync="tableData"
+      :customs.sync="customColumns"
       :edit-config="{key: 'id', trigger: 'click', mode: 'row'}">
       <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
       <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
@@ -68,6 +77,7 @@ export default {
     return {
       loading: false,
       tableData: [],
+      customColumns: [],
       sexList: [],
       regionList: [],
       restaurants: [
@@ -98,24 +108,34 @@ export default {
             </el-form-item>
           </el-form>
 
+          <vxe-table-toolbar size="small" :customs="customColumns" setting>
+            <template v-slot:buttons>
+              <vxe-button @click="insertEvent">新增</vxe-button>
+              <vxe-button @click="saveEvent">保存</vxe-button>
+            </template>
+          </vxe-table-toolbar>
+
           <vxe-table
             border
             show-all-overflow
+            ref="xTable"
             class="vxe-table-element"
             height="460"
             size="small"
             :loading="loading"
             :data.sync="tableData"
+            :customs.sync="customColumns"
             :edit-config="{key: 'id', trigger: 'click', mode: 'row'}">
             <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
             <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
             <vxe-table-column prop="name" label="ElInput" min-width="140" :edit-render="{name: 'ElInput'}"></vxe-table-column>
+            <vxe-table-column prop="role" label="ElAutocomplete" width="160" :edit-render="{name: 'ElAutocomplete', props: {fetchSuggestions: roleFetchSuggestions}}"></vxe-table-column>
             <vxe-table-column prop="age" label="ElInputNumber" width="160" :edit-render="{name: 'ElInputNumber', props: {max: 35, min: 18}}"></vxe-table-column>
             <vxe-table-column prop="sex" label="ElSelect" width="140" :edit-render="{name: 'ElSelect', options: sexList}"></vxe-table-column>
             <vxe-table-column prop="region" label="ElCascader" width="200" :edit-render="{name: 'ElCascader', props: {options: regionList}}"></vxe-table-column>
             <vxe-table-column prop="date" label="ElDatePicker" width="200" :edit-render="{name: 'ElDatePicker', props: {type: 'date', format: 'yyyy/MM/dd'}}"></vxe-table-column>
             <vxe-table-column prop="date1" label="DateTimePicker" width="220" :edit-render="{name: 'ElDatePicker', props: {type: 'datetime', format: 'yyyy-MM-dd HH:mm:ss'}}"></vxe-table-column>
-            <vxe-table-column prop="date2" label="ElTimeSelect" width="200" :edit-render="{name: 'ElTimeSelect', props: {pickerOptions: {start: '08:30', step: '00:15', end: '18:30'}}}"></vxe-table-column>
+            <vxe-table-column prop="date5" label="ElTimeSelect" width="200" :edit-render="{name: 'ElTimeSelect', props: {pickerOptions: {start: '08:30', step: '00:15', end: '18:30'}}}"></vxe-table-column>
             <vxe-table-column prop="flag" label="ElSwitch" width="100" :edit-render="{name: 'ElSwitch', type: 'visible'}"></vxe-table-column>
             <vxe-table-column prop="rate" label="ElRate" width="200" fixed="right" :edit-render="{name: 'ElRate', type: 'visible'}"></vxe-table-column>
           </vxe-table>
@@ -136,6 +156,7 @@ export default {
             return {
               loading: false,
               tableData: [],
+              customColumns: [],
               sexList: [],
               regionList: [],
               restaurants: [
@@ -182,6 +203,20 @@ export default {
                 this.regionList = data
                 return data
               })
+            },
+            insertEvent () {
+              let record = {
+                role: '',
+                age: 18,
+                region: [],
+                flag: false,
+                rate: 2
+              }
+              this.$refs.xTable.insert(record).then(({ row }) => this.$refs.xTable.setActiveRow(row))
+            },
+            saveEvent () {
+              let { insertRecords, removeRecords, updateRecords } = this.$refs.xTable.getAllRecords()
+              alert(\`insertRecords=\${insertRecords.length}, removeRecords=\${removeRecords.length}, updateRecords=\${updateRecords.length}\`)
             },
             searchEvent () {
               this.pageVO.currentPage = 1
@@ -248,6 +283,20 @@ export default {
         this.regionList = data
         return data
       })
+    },
+    insertEvent () {
+      let record = {
+        role: '',
+        age: 18,
+        region: [],
+        flag: false,
+        rate: 2
+      }
+      this.$refs.xTable.insert(record).then(({ row }) => this.$refs.xTable.setActiveRow(row))
+    },
+    saveEvent () {
+      let { insertRecords, removeRecords, updateRecords } = this.$refs.xTable.getAllRecords()
+      alert(`insertRecords=${insertRecords.length}, removeRecords=${removeRecords.length}, updateRecords=${updateRecords.length}`)
     },
     searchEvent () {
       this.pageVO.currentPage = 1

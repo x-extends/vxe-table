@@ -22,7 +22,7 @@
         </ul>
       </div>
       <div class="body">
-        <a class="link tosrc" href="https://github.com/xuliangzhan/vxe-table/tree/master/examples/views/table" target="_blank">查看代码</a>
+        <a class="link tosrc" :href="`https://github.com/xuliangzhan/vxe-table/tree/master/examples/views/table/${pageKey}`" target="_blank">查看代码</a>
         <a v-if="demoLink" class="link todemo" :href="demoLink" target="_blank">在线运行</a>
         <router-view/>
       </div>
@@ -551,7 +551,7 @@ export default {
               label: '使用 sortablejs 拖拽行排序',
               disabled: true,
               locat: {
-                name: 'TableInstall'
+                name: 'TableSortablejs'
               }
             }
           ]
@@ -697,10 +697,13 @@ export default {
         }
       }
       return null
+    },
+    pageKey () {
+      return this.$route.path.split('/')[2]
     }
   },
   created () {
-    let group = this.tableList.find(item => item.value === this.$route.path.split('/')[2])
+    let group = this.tableList.find(item => item.value === this.pageKey)
     if (group) {
       group.expand = true
     }

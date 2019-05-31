@@ -1,6 +1,10 @@
 /*radio*/
 .vxe-radio {
   @extend %radioAndCheckbox;
+  &.size--small,
+  &.size--mini {
+    font-size: 12px;
+  }
   > input {
     &+.radio--icon {
       border-radius: 50%;

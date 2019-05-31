@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>自定义渲染 element-ui 组件，使用插槽 edit slot（需要使用 vxe-table-plugin-element 插件，也可以自行处理兼容性）</p>
+    <p>自定义渲染 element-ui 组件（建议使用 <a class="link" href="https://www.npmjs.com/package/vxe-table-plugin-element" target="_blank">vxe-table-plugin-element</a> 适配插件，也可以自行处理兼容性）</p>
 
     <vxe-table
       border

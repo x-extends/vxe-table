@@ -77,7 +77,6 @@ import Vue from 'vue'
 import VXETable from 'vxe-table'
 import 'vxe-table/lib/index.css'
 
-// 默认安装 Table,TableColumn,Grid,Excel,Pagination,Checkbox
 Vue.use(VXETable)
 ```
 
@@ -113,10 +112,14 @@ $vxe-table-header-background-color: #f8f8f9;
 $vxe-table-border-color: #e8eaec;
 $vxe-table-background-color: #ffffff;
 // 引入样式
-@import 'vxe-table/src/style/table.scss';
+@import 'vxe-table/src/style/default.scss';
 ```
 
-Case 3. 重写主题样式（复制 src/style/variable.scss 和 src/style/table.scss 到项目中自行修改）
+Case 3. 重写主题样式，复制 vxe-table/src/style 目录到项目中自行修改就行（例如复制到 /assets）
+
+```scss
+@import 'assets/style/index.scss';
+```
 
 ## I18n
 
@@ -159,7 +162,7 @@ new Vue({ i18n }).$mount('#app')
 <template>
   <div>
     <vxe-table ref="xTable" :data.sync="tableData">
-      <vxe-table-column type="index" width="60"></vxe-table-column>
+      <vxe-table-column type="index" label="Number" width="60"></vxe-table-column>
       <vxe-table-column prop="name" label="Name"></vxe-table-column>
       <vxe-table-column prop="sex" label="Sex"></vxe-table-column>
       <vxe-table-column prop="address" label="Address"></vxe-table-column>

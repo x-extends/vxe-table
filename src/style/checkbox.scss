@@ -1,6 +1,10 @@
 /*checkbox*/
 .vxe-checkbox {
   @extend %radioAndCheckbox;
+  &.size--small,
+  &.size--mini {
+    font-size: 12px;
+  }
   &.is--indeterminate {
     > input {
       &+.checkbox--icon {
