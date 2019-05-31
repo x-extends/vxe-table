@@ -83,7 +83,7 @@ const excelContextMenu = {
       [
         {
           code: 'exportAll',
-          name: '导出数据.cvs'
+          name: '导出数据.csv'
         }
       ]
     ]

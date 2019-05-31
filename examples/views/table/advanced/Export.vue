@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>通过调用 exportCsv 函数可以直接将表格导出为 .cvs 格式的文件；</p>
+    <p>通过调用 exportCsv 函数可以直接将表格导出为 .csv 格式的文件；</p>
 
     <vxe-table-toolbar>
       <template v-slot:buttons>
@@ -111,7 +111,7 @@ export default {
     },
     exportCsvEvent4 () {
       this.$refs.xTable1.exportCsv({
-        filename: '自定义文件名.cvs',
+        filename: '自定义文件名.csv',
         original: true,
         isHeader: false,
         data: this.tableData.map(row => {

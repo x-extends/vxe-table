@@ -49,7 +49,7 @@ export default {
         [
           {
             code: 'exportAll',
-            name: '导出所有.cvs'
+            name: '导出所有.csv'
           }
         ]
       ],
@@ -142,7 +142,7 @@ export default {
                 [
                   {
                     code: 'exportAll',
-                    name: '导出所有.cvs'
+                    name: '导出所有.csv'
                   }
                 ]
               ],
