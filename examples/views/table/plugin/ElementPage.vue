@@ -2,7 +2,7 @@
   <div>
     <p>element-ui 使用分页</p>
 
-    <el-form ref="tableform" :model="formData" inline size="small">
+    <el-form ref="tableform" :model="formData" inline>
       <el-form-item label="名字" prop="name">
         <el-input v-model="formData.name" placeholder="名字"></el-input>
       </el-form-item>
@@ -17,10 +17,19 @@
       </el-form-item>
     </el-form>
 
-    <vxe-table-toolbar size="small" :customs="customColumns" setting>
+    <vxe-table-toolbar :customs="customColumns" setting>
       <template v-slot:buttons>
-        <vxe-button @click="insertEvent">新增</vxe-button>
-        <vxe-button @click="saveEvent">保存</vxe-button>
+        <el-button @click="insertEvent">新增</el-button>
+        <el-button @click="saveEvent">保存</el-button>
+        <el-dropdown @command="dropdownMenuEvent">
+          <el-button>
+            操作<i class="el-icon-arrow-down el-icon--right"></i>
+          </el-button>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item command="remove">删除选中</el-dropdown-item>
+            <el-dropdown-item command="export">导出数据</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
       </template>
     </vxe-table-toolbar>
 
@@ -30,7 +39,6 @@
       ref="xTable"
       class="vxe-table-element"
       height="460"
-      size="small"
       :loading="loading"
       :data.sync="tableData"
       :customs.sync="customColumns"
@@ -108,10 +116,19 @@ export default {
             </el-form-item>
           </el-form>
 
-          <vxe-table-toolbar size="small" :customs="customColumns" setting>
+          <vxe-table-toolbar :customs="customColumns" setting>
             <template v-slot:buttons>
-              <vxe-button @click="insertEvent">新增</vxe-button>
-              <vxe-button @click="saveEvent">保存</vxe-button>
+              <el-button @click="insertEvent">新增</el-button>
+              <el-button @click="saveEvent">保存</el-button>
+              <el-dropdown @command="dropdownMenuEvent">
+                <el-button>
+                  操作<i class="el-icon-arrow-down el-icon--right"></i>
+                </el-button>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item command="remove">删除选中</el-dropdown-item>
+                  <el-dropdown-item command="export">导出数据</el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
             </template>
           </vxe-table-toolbar>
 
@@ -216,7 +233,29 @@ export default {
             },
             saveEvent () {
               let { insertRecords, removeRecords, updateRecords } = this.$refs.xTable.getAllRecords()
-              alert(\`insertRecords=\${insertRecords.length}, removeRecords=\${removeRecords.length}, updateRecords=\${updateRecords.length}\`)
+              if (insertRecords.length || removeRecords.length || updateRecords.length) {
+                this.$message({ message: '保存成功！', type: 'success' })
+                this.searchEvent()
+              } else {
+                this.$message({ message: '数据未改动！' })
+              }
+            },
+            dropdownMenuEvent (name) {
+              switch (name) {
+                case 'remove': {
+                  let selectRecords = this.$refs.xTable.getSelectRecords()
+                  if (selectRecords.length) {
+                    this.$refs.xTable.removeSelecteds()
+                  } else {
+                    this.$message({ message: '请至少选择一条数据！' })
+                  }
+                  break
+                }
+                case 'export': {
+                  this.$refs.xTable.exportCsv()
+                  break
+                }
+              }
             },
             searchEvent () {
               this.pageVO.currentPage = 1
@@ -296,7 +335,29 @@ export default {
     },
     saveEvent () {
       let { insertRecords, removeRecords, updateRecords } = this.$refs.xTable.getAllRecords()
-      alert(`insertRecords=${insertRecords.length}, removeRecords=${removeRecords.length}, updateRecords=${updateRecords.length}`)
+      if (insertRecords.length || removeRecords.length || updateRecords.length) {
+        this.$message({ message: '保存成功！', type: 'success' })
+        this.searchEvent()
+      } else {
+        this.$message({ message: '数据未改动！' })
+      }
+    },
+    dropdownMenuEvent (name) {
+      switch (name) {
+        case 'remove': {
+          let selectRecords = this.$refs.xTable.getSelectRecords()
+          if (selectRecords.length) {
+            this.$refs.xTable.removeSelecteds()
+          } else {
+            this.$message({ message: '请至少选择一条数据！' })
+          }
+          break
+        }
+        case 'export': {
+          this.$refs.xTable.exportCsv()
+          break
+        }
+      }
     },
     searchEvent () {
       this.pageVO.currentPage = 1
