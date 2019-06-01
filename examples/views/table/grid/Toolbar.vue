@@ -81,6 +81,8 @@ export default {
           data () {
             return {
               tableProxy: {
+                alert: true, // 启用默认的提示框
+                // 配置响应的数据属性
                 props: {
                   data: 'data.result',
                   total: 'data.page.total'

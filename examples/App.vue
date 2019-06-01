@@ -354,13 +354,13 @@ export default {
               }
             },
             {
-              label: '增删改查',
+              label: '可编辑',
               locat: {
                 name: 'GridEdit'
               }
             },
             {
-              label: '带工具栏',
+              label: '增删改查 + 工具栏',
               locat: {
                 name: 'GridToolbar'
               }
@@ -678,6 +678,15 @@ export default {
                 name: 'TableAPI',
                 params: {
                   name: 'button'
+                }
+              }
+            },
+            {
+              label: 'vxe-alert',
+              locat: {
+                name: 'TableAPI',
+                params: {
+                  name: 'alert'
                 }
               }
             }

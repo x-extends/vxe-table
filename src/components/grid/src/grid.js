@@ -89,12 +89,19 @@ export default {
       customs: tableCustoms,
       optimization: Object.assign({}, GlobalConfig.optimization, optimization)
     }, toolbar)
+    let alertProps = null
     if (proxyConfig) {
       Object.assign(props, {
         loading: tableLoading,
         data: tableData,
         rowClassName: this.handleRowClassName
       })
+      if (proxyConfig.alert) {
+        alertProps = Object.assign({}, proxyConfig.alert, {
+          value: tableAlert.visible,
+          message: tableAlert.message
+        })
+      }
       if (proxyConfig.sort) {
         tableOns['sort-change'] = this.sortChangeEvent
       }
@@ -139,10 +146,7 @@ export default {
         }
       }) : null,
       proxyConfig && proxyConfig.alert ? h('vxe-alert', {
-        props: {
-          value: tableAlert.visible,
-          message: tableAlert.message
-        },
+        props: alertProps,
         on: {
           close: this.closeAlertEvent
         }

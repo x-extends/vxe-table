@@ -43,6 +43,7 @@ import radioAPI from '../../../api/radio'
 import checkboxAPI from '../../../api/checkbox'
 import inputAPI from '../../../api/input'
 import buttonAPI from '../../../api/button'
+import alertAPI from '../../../api/alert'
 
 export default {
   data () {
@@ -104,6 +105,9 @@ export default {
           break
         case 'button':
           apis = buttonAPI
+          break
+        case 'alert':
+          apis = alertAPI
           break
       }
 

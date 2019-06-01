@@ -227,6 +227,14 @@ const apis = [
             list: []
           },
           {
+            name: 'alert',
+            desc: '默认的提示框',
+            type: 'Boolean,Object',
+            enum: '',
+            defVal: 'false',
+            list: []
+          },
+          {
             name: 'sort',
             desc: '是否代理排序',
             type: 'Boolean',

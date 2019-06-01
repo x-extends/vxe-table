@@ -5,7 +5,11 @@ export default {
   props: {
     value: Boolean,
     title: { type: String, default: () => GlobalConfig.i18n('vxe.alert.title') },
-    message: String
+    message: String,
+    lockView: { type: Boolean, default: true },
+    lockScroll: { type: Boolean, default: true },
+    mask: { type: Boolean, default: true },
+    maskClosable: { type: Boolean, default: false }
   },
   data () {
     return {
@@ -28,10 +32,12 @@ export default {
     }
   },
   render (h) {
-    let { vSize, visible, title, message } = this
+    let { vSize, visible, title, message, lockView, mask } = this
     return h('div', {
       class: ['vxe-alert--wrapper', {
         [`size--${vSize}`]: vSize,
+        'lock--view': lockView,
+        'is--mask': mask,
         active: visible
       }],
       on: {
@@ -84,7 +90,7 @@ export default {
   },
   methods: {
     selfClickEvent (evnt) {
-      if (evnt.target === this.$el) {
+      if (this.maskClosable && evnt.target === this.$el) {
         this.close()
       }
     },

@@ -10,16 +10,7 @@
   font-size: $vxe-font-size;
   color: $vxe-font-color;
   font-family: $vxe-font-family;
-  &:before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: -1;
-  }
+  pointer-events: none;
   &:after {
     content: "";
     display: inline-block;
@@ -29,6 +20,24 @@
   }
   &.active {
     display: block;
+  }
+  &.lock--view,
+  &.is--mask {
+    &:before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: auto;
+    }
+  }
+  &.is--mask {
+    &:before {
+      background-color: rgba(0, 0, 0, 0.5);
+    }
   }
   &.size--small,
   &.size--mini {
@@ -59,6 +68,7 @@
     box-shadow: 0 2px 8px 0 rgba(0,0,0,.1);
     text-align: left;
     padding: 8px 0;
+    pointer-events: auto;
   }
   .vxe-alert--body,
   .vxe-alert--footer {
@@ -69,6 +79,7 @@
     font-size: 16px;
     font-weight: 700;
     padding: 8px 40px 8px 16px;
+    user-select: none;
   }
   .vxe-alert--close-icon {
     font-size: 16px;
