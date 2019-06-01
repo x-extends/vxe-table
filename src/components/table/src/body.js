@@ -17,7 +17,7 @@ function handleLocation (obj, rows, columns, row, column) {
 /**
  * 渲染列
  */
-function renderColumn (h, _vm, $table, seq, fixedType, rowLevel, row, rowIndex, column, columnIndex) {
+function renderColumn (h, _vm, $table, seq, fixedType, rowLevel, row, rowIndex, nowIndex, column, columnIndex) {
   let { $listeners: tableListeners, tableData, overflowX, scrollXLoad, scrollYLoad, border, highlightCurrentRow, showAllOverflow, cellClassName, spanMethod, keyboardConfig, treeConfig, mouseConfig, editConfig, editStore, validStore } = $table
   let { editRender, align, showOverflow, renderWidth, columnKey } = column
   let { checked, selected, actived, copyed } = editStore
@@ -42,7 +42,7 @@ function renderColumn (h, _vm, $table, seq, fixedType, rowLevel, row, rowIndex, 
   // hover 进入事件
   if (showTooltip || tableListeners['cell-mouseenter']) {
     tdOns.mouseenter = evnt => {
-      let params = { $table, seq, row, rowIndex, column, columnIndex, fixed: fixedType, level: rowLevel, cell: evnt.currentTarget }
+      let params = { $table, seq, row, rowIndex, nowIndex, column, columnIndex, fixed: fixedType, level: rowLevel, cell: evnt.currentTarget }
       // 如果配置了显示 tooltip
       if (showTooltip) {
         $table.triggerTooltipEvent(evnt, params)
@@ -54,12 +54,12 @@ function renderColumn (h, _vm, $table, seq, fixedType, rowLevel, row, rowIndex, 
   if (showTooltip || tableListeners['cell-mouseleave']) {
     tdOns.mouseleave = evnt => {
       $table.clostTooltip()
-      UtilTools.emitEvent($table, 'cell-mouseleave', [{ $table, seq, row, rowIndex, column, columnIndex, fixed: fixedType, level: rowLevel, cell: evnt.currentTarget }, evnt])
+      UtilTools.emitEvent($table, 'cell-mouseleave', [{ $table, seq, row, rowIndex, nowIndex, column, columnIndex, fixed: fixedType, level: rowLevel, cell: evnt.currentTarget }, evnt])
     }
   }
   // 按下事件处理
   tdOns.mousedown = evnt => {
-    $table.triggerCellMousedownEvent(evnt, { $table, seq, row, rowIndex, column, columnIndex, fixed: fixedType, level: rowLevel, cell: evnt.currentTarget })
+    $table.triggerCellMousedownEvent(evnt, { $table, seq, row, rowIndex, nowIndex, column, columnIndex, fixed: fixedType, level: rowLevel, cell: evnt.currentTarget })
   }
   // 点击事件处理
   if (highlightCurrentRow ||
@@ -67,18 +67,18 @@ function renderColumn (h, _vm, $table, seq, fixedType, rowLevel, row, rowIndex, 
     (editRender && editConfig) ||
     (treeConfig && (treeConfig.trigger === 'row' || (column.treeNode && treeConfig.trigger === 'cell')))) {
     tdOns.click = evnt => {
-      $table.triggerCellClickEvent(evnt, { $table, row, rowIndex, column, columnIndex, fixed: fixedType, level: rowLevel, cell: evnt.currentTarget })
+      $table.triggerCellClickEvent(evnt, { $table, row, rowIndex, nowIndex, column, columnIndex, fixed: fixedType, level: rowLevel, cell: evnt.currentTarget })
     }
   }
   // 双击事件处理
   if (triggerDblclick || tableListeners['cell-dblclick']) {
     tdOns.dblclick = evnt => {
-      $table.triggerCellDBLClickEvent(evnt, { $table, seq, row, rowIndex, column, columnIndex, fixed: fixedType, level: rowLevel, cell: evnt.currentTarget })
+      $table.triggerCellDBLClickEvent(evnt, { $table, seq, row, rowIndex, nowIndex, column, columnIndex, fixed: fixedType, level: rowLevel, cell: evnt.currentTarget })
     }
   }
   // 合并行或列
   if (spanMethod) {
-    let { rowspan = 1, colspan = 1 } = spanMethod({ $table, seq, row, rowIndex, column, columnIndex, fixed: fixedType, level: rowLevel, data: tableData }) || {}
+    let { rowspan = 1, colspan = 1 } = spanMethod({ $table, seq, row, rowIndex, nowIndex, column, columnIndex, fixed: fixedType, level: rowLevel, data: tableData }) || {}
     if (!rowspan || !colspan) {
       return null
     }
@@ -123,7 +123,7 @@ function renderColumn (h, _vm, $table, seq, fixedType, rowLevel, row, rowIndex, 
       'col--valid-error': validStore.row === row && validStore.column === column,
       'edit--visible': editRender && editRender.type === 'visible',
       'fixed--hidden': fixedHiddenColumn
-    }, cellClassName ? XEUtils.isFunction(cellClassName) ? cellClassName({ $table, seq, row, rowIndex, column, columnIndex, fixed: fixedType, level: rowLevel }) : cellClassName : ''],
+    }, cellClassName ? XEUtils.isFunction(cellClassName) ? cellClassName({ $table, seq, row, rowIndex, nowIndex, column, columnIndex, fixed: fixedType, level: rowLevel }) : cellClassName : ''],
     key: columnKey || columnIndex,
     attrs,
     on: tdOns
@@ -140,7 +140,7 @@ function renderColumn (h, _vm, $table, seq, fixedType, rowLevel, row, rowIndex, 
       style: {
         width: hasEllipsis ? `${border ? renderWidth - 1 : renderWidth}px` : null
       }
-    }, column.renderCell(h, { $table, seq, row, rowIndex, column, columnIndex, fixed: fixedType, level: rowLevel, isHidden: fixedHiddenColumn })),
+    }, column.renderCell(h, { $table, seq, row, rowIndex, nowIndex, column, columnIndex, fixed: fixedType, level: rowLevel, isHidden: fixedHiddenColumn })),
     isMouseChecked && !fixedType ? h('span', {
       class: 'vxe-body--column-checked-lt'
     }) : null,
@@ -157,7 +157,7 @@ function renderColumn (h, _vm, $table, seq, fixedType, rowLevel, row, rowIndex, 
       class: 'vxe-body--column-checked-corner',
       on: {
         mousedown (evnt) {
-          $table.triggerCornerMousedownEvent({ $table, seq, row, rowIndex, column, columnIndex, fixed: fixedType, level: rowLevel, cell: evnt.target.parentNode }, evnt)
+          $table.triggerCornerMousedownEvent({ $table, seq, row, rowIndex, nowIndex, column, columnIndex, fixed: fixedType, level: rowLevel, cell: evnt.target.parentNode }, evnt)
         }
       }
     }) : null
@@ -168,8 +168,9 @@ function renderRows (h, _vm, $table, rowLevel, fixedType, tableData, tableColumn
   let { highlightHoverRow, rowClassName, selectRow, hoverRow, treeConfig, treeExpandeds, scrollYLoad, overflowX, columnStore, scrollYStore, expandeds, getRowMapIndex, getColumnMapIndex } = $table
   let { leftList, rightList } = columnStore
   let rows = []
-  tableData.forEach((row, rowIndex) => {
+  tableData.forEach((row, nowIndex) => {
     let trOn = {}
+    let rowIndex = nowIndex
     let seq = rowIndex + 1
     if (scrollYLoad) {
       seq += scrollYStore.startIndex
@@ -199,7 +200,7 @@ function renderRows (h, _vm, $table, rowLevel, fixedType, tableData, tableColumn
         on: trOn
       }, tableColumn.map((column, columnIndex) => {
         columnIndex = getColumnMapIndex(column)
-        return renderColumn(h, _vm, $table, seq, fixedType, rowLevel, row, rowIndex, column, columnIndex)
+        return renderColumn(h, _vm, $table, seq, fixedType, rowLevel, row, rowIndex, nowIndex, column, columnIndex)
       }))
     )
     if (treeConfig && treeExpandeds.length) {
