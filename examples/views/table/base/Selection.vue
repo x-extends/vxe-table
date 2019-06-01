@@ -18,7 +18,7 @@
       <vxe-table-column prop="address" label="Address" show-overflow></vxe-table-column>
     </vxe-table>
 
-    <p>还可以通过 checkMethod 方法控制是否允许点击 CheckBox 勾选</p>
+    <p>还可以通过 checkMethod 方法控制是否允许点击 CheckBox 勾选，还可以配置 labelProp 列显示属性</p>
 
     <button class="btn" @click="$refs.xTable2.toggleRowSelection(tableData[1])">切换第二行选中</button>
     <button class="btn" @click="$refs.xTable2.setSelection([tableData[2], tableData[3]], true)">设置第三、四行选中</button>
@@ -29,9 +29,8 @@
       border
       height="300"
       :data.sync="tableData"
-      :select-config="{checkMethod}">
-      <vxe-table-column type="selection" width="60"></vxe-table-column>
-      <vxe-table-column prop="name" label="Name"></vxe-table-column>
+      :select-config="{labelProp: 'name', checkMethod}">
+      <vxe-table-column type="selection" label="All"></vxe-table-column>
       <vxe-table-column prop="sex" label="Sex"></vxe-table-column>
       <vxe-table-column prop="age" label="Age"></vxe-table-column>
       <vxe-table-column prop="address" label="Address" show-overflow></vxe-table-column>

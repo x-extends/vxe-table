@@ -43,7 +43,7 @@ export default {
         class: ['checkbox--icon']
       }),
       this.$slots.default ? h('span', {
-        class: ['checkbox--label']
+        class: 'checkbox--label'
       }, this.$slots.default) : null
     ])
   }

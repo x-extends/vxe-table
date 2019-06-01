@@ -5,7 +5,7 @@
     <vxe-grid
       border
       height="530"
-      :page-config="{pageSize: 10}"
+      :page-config="tablePage"
       :proxy-config="tableProxy"
       :columns="tableColumn"
       :toolbar="toolbar"
@@ -28,6 +28,9 @@ import hljs from 'highlight.js'
 export default {
   data () {
     return {
+      tablePage: {
+        pageSize: 15
+      },
       tableProxy: {
         alert: true,
         props: {
@@ -69,7 +72,7 @@ export default {
         <vxe-grid
           border
           height="530"
-          :page-config="{pageSize: 10}"
+          :page-config="tablePage"
           :proxy-config="tableProxy"
           :columns="tableColumn"
           :toolbar="toolbar"
@@ -80,6 +83,9 @@ export default {
         export default {
           data () {
             return {
+              tablePage: {
+                pageSize: 15
+              },
               tableProxy: {
                 alert: true, // 启用默认的提示框
                 // 配置响应的数据属性

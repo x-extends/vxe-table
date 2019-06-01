@@ -348,6 +348,14 @@ const apis = [
             list: []
           },
           {
+            name: 'labelProp',
+            desc: '列显示的属性，可以直接显示在列中',
+            type: 'String',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
             name: 'checkProp',
             desc: '绑定选中属性，如果设置了该属性渲染速度可以提升n倍（建议数据量大时使用）',
             type: 'String',

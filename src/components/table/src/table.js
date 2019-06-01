@@ -736,7 +736,7 @@ export default {
      * 如果传 rows 则删除多行
      */
     remove (rows) {
-      let { tableData, tableFullData, editStore, selectConfig = {}, selection, hasRowInsert } = this
+      let { tableData, tableFullData, editStore, treeConfig, selectConfig = {}, selection, hasRowInsert } = this
       let { removeList, insertList } = editStore
       let { checkProp: property } = selectConfig
       let rest = []
@@ -745,19 +745,43 @@ export default {
         if (!XEUtils.isArray(rows)) {
           rows = [rows]
         }
-        if (rows.length) {
+        if (treeConfig) {
+          rows.forEach(row => {
+            let matchObj = XEUtils.findTree(tableFullData, item => item === row, treeConfig)
+            if (matchObj) {
+              let { item, items, index } = matchObj
+              // 如果是新增，则保存记录
+              if (!hasRowInsert(item)) {
+                removeList.push(item)
+              }
+              // 从树节点中移除
+              let restRow = items.splice(index, 1)[0]
+              // 如果绑定了多选属性，则更新状态
+              if (!property) {
+                XEUtils.remove(selection, row => rows.indexOf(row) > -1)
+              }
+              rest.push(restRow)
+            }
+          })
+        } else {
+          // 如果是新增，则保存记录
+          rows.forEach(row => {
+            if (!hasRowInsert(row)) {
+              removeList.push(row)
+            }
+          })
+          // 从数据源中移除
           rest = XEUtils.remove(tableFullData, row => rows.indexOf(row) > -1)
-        }
-        if (!property) {
-          XEUtils.remove(selection, row => rows.indexOf(row) > -1)
-        }
-        rows.forEach(row => {
-          if (!hasRowInsert(row)) {
-            removeList.push(row)
+          // 如果绑定了多选属性，则更新状态
+          if (!property) {
+            XEUtils.remove(selection, row => rest.indexOf(row) > -1)
           }
-        })
-        XEUtils.remove(insertList, row => rows.indexOf(row) > -1)
-        XEUtils.remove(tableData, row => rows.indexOf(row) > -1)
+          // 从列表中移除
+          XEUtils.remove(tableData, row => rest.indexOf(row) > -1)
+        }
+        if (rest.length) {
+          XEUtils.remove(insertList, row => rest.indexOf(row) > -1)
+        }
       }
       this.checkSelectionStatus()
       return this.$nextTick().then(() => {
@@ -830,6 +854,10 @@ export default {
       return this.$nextTick()
     },
     hasRowInsert (row) {
+      let { treeConfig, tableSourceData } = this
+      if (treeConfig) {
+        return XEUtils.findTree(tableSourceData, item => item === row, treeConfig)
+      }
       return this.getRowMapIndex(row) === -1
     },
     hasRowChange (row, prop) {
@@ -3047,12 +3075,14 @@ export default {
     },
     /**
      * 导出 csv 文件
+     * 如果是树表格，则默认是导出所有节点
+     * 如果是启用了滚动加载，则只能导出数据源，可以配合 dataFilterMethod 函数自行转换数据
      */
     exportCsv (options) {
-      let { visibleColumn, scrollXLoad, scrollYLoad } = this
+      let { visibleColumn, scrollXLoad, scrollYLoad, treeConfig } = this
       let opts = Object.assign({
         filename: 'table.csv',
-        original: false,
+        original: !!treeConfig,
         isHeader: true,
         download: true,
         data: null,
@@ -3068,6 +3098,9 @@ export default {
       }
       let columns = visibleColumn
       let oData = this.getTableData().fullData
+      if (treeConfig) {
+        oData = XEUtils.toTreeArray(oData, treeConfig)
+      }
       return ExportTools.downloadCsc(opts, ExportTools.getCsvContent(opts, oData, columns, this.$el))
     }
   }

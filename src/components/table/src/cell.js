@@ -208,14 +208,17 @@ const CellMethods = {
         h('input', options),
         h('span', {
           class: ['checkbox--icon']
-        })
+        }),
+        column.label ? h('span', {
+          class: 'checkbox--label'
+        }, column.label) : null
       ])
     ]
   },
   renderSelectionCell (h, params) {
     let { $table } = params
     let { selectConfig = {}, treeConfig, treeIndeterminates } = $table
-    let { checkMethod } = selectConfig
+    let { labelProp, checkMethod } = selectConfig
     let { row, isHidden } = params
     let indeterminate = false
     let isDisabled = !!checkMethod
@@ -251,7 +254,10 @@ const CellMethods = {
         h('input', options),
         h('span', {
           class: ['checkbox--icon']
-        })
+        }),
+        labelProp ? h('span', {
+          class: 'checkbox--label'
+        }, UtilTools.getCellValue(row, labelProp)) : null
       ])
     ]
   },
@@ -261,7 +267,7 @@ const CellMethods = {
   renderSelectionCellByProp (h, params) {
     let { $table } = params
     let { selectConfig = {}, treeConfig, treeIndeterminates } = $table
-    let { checkProp: property, checkMethod } = selectConfig
+    let { labelProp, checkProp: property, checkMethod } = selectConfig
     let { row, isHidden } = params
     let indeterminate = false
     let isDisabled = !!checkMethod
@@ -297,7 +303,10 @@ const CellMethods = {
         h('input', options),
         h('span', {
           class: ['checkbox--icon']
-        })
+        }),
+        labelProp ? h('span', {
+          class: 'checkbox--label'
+        }, UtilTools.getCellValue(row, labelProp)) : null
       ])
     ]
   },

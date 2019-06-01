@@ -378,6 +378,18 @@ export default {
               }
             },
             {
+              label: '基础树',
+              locat: {
+                name: 'GridTree'
+              }
+            },
+            {
+              label: '树增删改查 + 工具栏',
+              locat: {
+                name: 'GridTreeEdit'
+              }
+            },
+            {
               label: '完整功能',
               locat: {
                 name: 'GridFullEdit'
