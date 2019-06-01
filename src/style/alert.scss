@@ -29,7 +29,7 @@
     }
     .vxe-alert--box {
       opacity: 1;
-      transform: scale(1);
+      transform: translate(0, 0);
       visibility: visible;
     }
   }
@@ -93,7 +93,7 @@
     padding: 8px 0;
     pointer-events: auto;
     opacity: 0;
-    transform: scale(.9);
+    transform: translate(0, -10%);
   }
   .vxe-alert--body,
   .vxe-alert--footer {

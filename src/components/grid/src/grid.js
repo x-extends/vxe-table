@@ -102,7 +102,8 @@ export default {
         alertProps = Object.assign({}, proxyConfig.alert, {
           value: tableAlert.visible,
           type: tableAlert.type,
-          message: tableAlert.message
+          message: tableAlert.message,
+          animat: toolbarProps.optimization.animat
         })
       }
       if (proxyConfig.sort) {

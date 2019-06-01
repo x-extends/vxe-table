@@ -10,7 +10,8 @@ export default {
     lockView: { type: Boolean, default: true },
     lockScroll: { type: Boolean, default: true },
     mask: { type: Boolean, default: true },
-    maskClosable: { type: Boolean, default: false }
+    maskClosable: { type: Boolean, default: false },
+    animat: { type: Boolean, default: true }
   },
   data () {
     return {
@@ -35,10 +36,11 @@ export default {
     }
   },
   render (h) {
-    let { vSize, type, contentVisible, visible, title, message, lockView, mask } = this
+    let { vSize, type, animat, contentVisible, visible, title, message, lockView, mask } = this
     return h('div', {
-      class: ['vxe-alert--wrapper is--animat', {
+      class: ['vxe-alert--wrapper', {
         [`size--${vSize}`]: vSize,
+        'is--animat': animat,
         'lock--view': lockView,
         'is--mask': mask,
         'is--visible': contentVisible,
