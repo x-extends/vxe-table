@@ -104,8 +104,8 @@ const apis = [
       },
       {
         name: 'sortable',
-        desc: '是否允许列排序，如果是服务端排序需要设置为custom',
-        type: 'Boolean,String',
+        desc: '是否允许列排序',
+        type: 'Boolean',
         enum: '',
         defVal: 'false',
         list: []
@@ -116,6 +116,14 @@ const apis = [
         type: 'String,Array',
         enum: '',
         defVal: '',
+        list: []
+      },
+      {
+        name: 'remoteSort',
+        desc: '是否使用服务端排序，如果设置为 true 则不会对数据进行处理',
+        type: 'Boolean',
+        enum: '',
+        defVal: 'false',
         list: []
       },
       {
@@ -153,10 +161,18 @@ const apis = [
       },
       {
         name: 'filter-method',
-        desc: '只对 filters 有效，自定义筛选方法 Function({value, row, column})，如果是服务端排序需要设置为custom',
-        type: 'String,Function',
+        desc: '只对 filters 有效，自定义筛选方法 Function({value, row, column})',
+        type: 'Function',
         enum: '',
         defVal: '',
+        list: []
+      },
+      {
+        name: 'remoteFilter',
+        desc: '是否使用服务端筛选，如果设置为 true 则不会对数据进行处理',
+        type: 'Boolean',
+        enum: '',
+        defVal: 'false',
         list: []
       },
       {
