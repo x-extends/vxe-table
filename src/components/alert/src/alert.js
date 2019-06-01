@@ -13,7 +13,8 @@ export default {
   },
   data () {
     return {
-      visible: false
+      visible: false,
+      contentVisible: false
     }
   },
   computed: {
@@ -32,12 +33,13 @@ export default {
     }
   },
   render (h) {
-    let { vSize, visible, title, message, lockView, mask } = this
+    let { vSize, contentVisible, visible, title, message, lockView, mask } = this
     return h('div', {
-      class: ['vxe-alert--wrapper', {
+      class: ['vxe-alert--wrapper is--animat', {
         [`size--${vSize}`]: vSize,
         'lock--view': lockView,
         'is--mask': mask,
+        'is--visible': contentVisible,
         active: visible
       }],
       on: {
@@ -100,13 +102,20 @@ export default {
     open () {
       if (!this.visible) {
         this.visible = true
+        this.contentVisible = false
+        setTimeout(() => {
+          this.contentVisible = true
+        }, 10)
         this.$emit('input', true)
         this.$emit('open')
       }
     },
     close () {
       if (this.visible) {
-        this.visible = false
+        this.contentVisible = false
+        setTimeout(() => {
+          this.visible = false
+        }, 200)
         this.$emit('input', false)
         this.$emit('close')
       }

@@ -21,6 +21,18 @@
   &.active {
     display: block;
   }
+  &.is--visible {
+    &.is--mask {
+      &:before {
+        background-color: rgba(0, 0, 0, 0.5);
+      }
+    }
+    .vxe-alert--box {
+      opacity: 1;
+      transform: scale(1);
+      visibility: visible;
+    }
+  }
   &.lock--view,
   &.is--mask {
     &:before {
@@ -36,7 +48,17 @@
   }
   &.is--mask {
     &:before {
-      background-color: rgba(0, 0, 0, 0.5);
+      background-color: rgba(0, 0, 0, 0);
+    }
+  }
+  &.is--animat {
+    &.is--mask {
+      &:before {
+        @include animatTransition(background-color, .2s);
+      }
+    }
+    .vxe-alert--box {
+      @include animatTransition(all, .2s, ease-out);
     }
   }
   &.size--small,
@@ -59,6 +81,7 @@
   }
   .vxe-alert--box {
     display: inline-block;
+    visibility: hidden;
     width: 420px;
     vertical-align: middle;
     background-color: #fff;
@@ -69,6 +92,8 @@
     text-align: left;
     padding: 8px 0;
     pointer-events: auto;
+    opacity: 0;
+    transform: scale(.9);
   }
   .vxe-alert--body,
   .vxe-alert--footer {

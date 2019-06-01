@@ -43,7 +43,7 @@ A very powerful Vue table component.
 * 滚动渲染
 * 展开行
 * 树形表格
-* 可编辑表格
+* 增删改查
 * 数据校验
 * 数据代理
 * 全键盘操作
