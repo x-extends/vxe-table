@@ -14,7 +14,8 @@ export default {
   data () {
     return {
       visible: false,
-      contentVisible: false
+      contentVisible: false,
+      beforeLockStyle: null
     }
   },
   computed: {
@@ -106,15 +107,28 @@ export default {
         setTimeout(() => {
           this.contentVisible = true
         }, 10)
+        if (this.lockScroll) {
+          let bodyElem = document.body
+          this.beforeLockStyle = {
+            paddingRight: bodyElem.style.paddingRight,
+            overflow: bodyElem.style.overflow
+          }
+          bodyElem.style.paddingRight = `${window.innerWidth - (document.documentElement.clientWidth || document.body.clientWidth)}px`
+          bodyElem.style.overflow = 'hidden'
+        }
         this.$emit('input', true)
         this.$emit('open')
       }
     },
     close () {
-      if (this.visible) {
+      let { visible, lockScroll, beforeLockStyle } = this
+      if (visible) {
         this.contentVisible = false
         setTimeout(() => {
           this.visible = false
+          if (lockScroll) {
+            Object.assign(document.body.style, beforeLockStyle)
+          }
         }, 200)
         this.$emit('input', false)
         this.$emit('close')
