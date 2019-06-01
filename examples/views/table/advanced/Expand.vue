@@ -4,7 +4,7 @@
 
     <button class="btn" @click="$refs.xTable.toggleRowExpansion(tableData[1])">切换第二行展开</button>
     <button class="btn" @click="$refs.xTable.setRowExpansion([tableData[2], tableData[3]], true)">设置第三、四行展开</button>
-    <button class="btn" @click="$refs.xTable.setRowExpansion(tableData, true)">设置所有行展开</button>
+    <button class="btn" @click="$refs.xTable.setAllRowExpansion(true)">设置所有行展开</button>
     <button class="btn" @click="$refs.xTable.clearRowExpand()">关闭所有行展开</button>
     <vxe-table
       ref="xTable"
@@ -60,7 +60,6 @@
     <p>默认展开所有行，通过 expandAll 参数设置默认展开行</p>
 
     <vxe-table
-      ref="xTable"
       border
       :data.sync="tableData"
       :expand-config="{key: 'id', expandAll: true}">
@@ -173,7 +172,6 @@ export default {
         `,
         `
         <vxe-table
-          ref="xTable"
           border
           :data.sync="tableData2"
           :expand-config="{key: 'id', expandAll: true}">

@@ -1244,11 +1244,27 @@ const apis = [
         list: []
       },
       {
+        name: 'setAllRowExpansion(checked)',
+        desc: '设置所有行的展开与否',
+        type: 'Promise',
+        enum: '',
+        defVal: 'checked',
+        list: []
+      },
+      {
         name: 'setTreeExpansion(rows,checked)',
         desc: '设置展开树形节点，二个参数设置这一行展开与否',
         type: 'Promise',
         enum: '',
         defVal: 'rows,checked',
+        list: []
+      },
+      {
+        name: 'setAllTreeExpansion(checked)',
+        desc: '设置所有树节点的展开与否',
+        type: 'Promise',
+        enum: '',
+        defVal: 'checked',
         list: []
       },
       {

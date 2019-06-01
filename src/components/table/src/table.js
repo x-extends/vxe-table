@@ -341,7 +341,7 @@ export default {
     }
   },
   created () {
-    let { scrollYStore, optimizeConfig, rowKey, treeConfig, editConfig } = this
+    let { scrollYStore, optimizeConfig, treeConfig, editConfig } = this
     let { scrollY } = optimizeConfig
     if (scrollY) {
       Object.assign(scrollYStore, {
@@ -355,9 +355,10 @@ export default {
     this.fullDataKeyMap = new Map()
     this.fullColumnKeyMap = new Map()
     this.loadData(this.data, true).then(() => {
-      if (treeConfig && !(rowKey || treeConfig.key)) {
+      let rowKey = UtilTools.getRowKey(this)
+      if (treeConfig && !rowKey) {
         throw new Error('[vxe-table] Tree table must have a unique primary key.')
-      } else if (editConfig && !(rowKey || editConfig.key)) {
+      } else if (editConfig && !rowKey) {
         throw new Error('[vxe-table] Editable must have a unique primary key.')
       }
       this.tableFullColumn = UtilTools.getColumnList(this.collectColumn)
@@ -832,12 +833,21 @@ export default {
       return this.getRowMapIndex(row) === -1
     },
     hasRowChange (row, prop) {
-      let { tableSourceData } = this
+      let { tableSourceData, treeConfig } = this
       let rowKey = UtilTools.getRowKey(this)
       let oRow
-      if (rowKey) {
+      if (rowKey || treeConfig) {
         let rowId = UtilTools.getCellValue(row, rowKey)
-        oRow = tableSourceData.find(row => rowId === UtilTools.getCellValue(row, rowKey))
+        if (treeConfig) {
+          let children = treeConfig.children
+          let matchObj = XEUtils.findTree(tableSourceData, row => rowId === UtilTools.getCellValue(row, rowKey), treeConfig)
+          row = Object.assign({}, row, { [children]: null })
+          if (matchObj) {
+            oRow = Object.assign({}, matchObj.item, { [children]: null })
+          }
+        } else {
+          oRow = tableSourceData.find(row => rowId === UtilTools.getCellValue(row, rowKey))
+        }
       } else {
         let oRowIndex = this.getRowMapIndex(row)
         oRow = tableSourceData[oRowIndex]
@@ -910,9 +920,14 @@ export default {
     },
     /**
      * 获取更新数据
+     * 只精准匹配 row 的更改
+     * 如果是树表格，子节点更改状态不会影响父节点的更新状态
      */
     getUpdateRecords () {
-      let { tableFullData, hasRowChange } = this
+      let { tableFullData, hasRowChange, treeConfig } = this
+      if (treeConfig) {
+        return XEUtils.filterTree(tableFullData, row => hasRowChange(row))
+      }
       return tableFullData.filter(row => hasRowChange(row))
     },
     /**
@@ -2441,6 +2456,10 @@ export default {
         this.expandeds = expandRowKeys.map(rowKey => tableFullData.find(item => rowKey === item[property]))
       }
     },
+    setAllRowExpansion (expanded) {
+      this.expandeds = expanded ? this.tableFullData.slice(0) : []
+      return this.$nextTick()
+    },
     /**
      * 设置展开行，二个参数设置这一行展开与否
      * 支持单行
@@ -2522,6 +2541,21 @@ export default {
           this.treeExpandeds = treeExpandeds
         }
       }
+    },
+    setAllTreeExpansion (expanded) {
+      let { tableFullData, treeConfig } = this
+      let { children } = treeConfig
+      let treeExpandeds = []
+      if (expanded) {
+        XEUtils.eachTree(tableFullData, row => {
+          let rowChildren = row[children]
+          if (rowChildren && rowChildren.length) {
+            treeExpandeds.push(row)
+          }
+        }, treeConfig)
+      }
+      this.treeExpandeds = treeExpandeds
+      return this.$nextTick()
     },
     /**
      * 设置展开树形节点，二个参数设置这一行展开与否

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>增删改查</p>
+    <p>可编辑表格</p>
 
     <vxe-grid
       border

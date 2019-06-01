@@ -89,7 +89,7 @@ export default {
             class: 'vxe-custom--option',
             on: customWrapperOns
           }, customs.map(column => {
-            return column.property ? h('vxe-checkbox', {
+            return column.property && column.label ? h('vxe-checkbox', {
               props: {
                 value: column.visible
               },

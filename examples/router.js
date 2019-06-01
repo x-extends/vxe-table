@@ -40,6 +40,8 @@ import TableToolbar from './views/table/advanced/Toolbar.vue'
 import TableTreeBasic from './views/table/tree/Basic.vue'
 import TableTreeSelection from './views/table/tree/Selection.vue'
 import TableTreeRadio from './views/table/tree/Radio.vue'
+import TableTreeToolbar from './views/table/tree/Toolbar.vue'
+import TableTreeEdit from './views/table/tree/Edit.vue'
 
 import GridBasic from './views/table/grid/Basic.vue'
 import GridPage from './views/table/grid/Page.vue'
@@ -282,6 +284,16 @@ export default new Router({
       path: '/table/tree/radio',
       name: 'TableTreeRadio',
       component: TableTreeRadio
+    },
+    {
+      path: '/table/tree/toolbar',
+      name: 'TableTreeToolbar',
+      component: TableTreeToolbar
+    },
+    {
+      path: '/table/tree/edit',
+      name: 'TableTreeEdit',
+      component: TableTreeEdit
     },
     {
       path: '/table/grid/basic',

@@ -291,25 +291,37 @@ export default {
           expand: false,
           children: [
             {
-              label: '基本树形',
+              label: '基础',
               locat: {
                 name: 'TableTreeBasic'
               }
             },
             {
-              label: '单选树形',
+              label: '单选',
               locat: {
                 name: 'TableTreeRadio'
               }
             },
             {
-              label: '多选树形',
+              label: '多选',
               locat: {
                 name: 'TableTreeSelection'
               }
             },
             {
-              label: '复杂树形',
+              label: '可编辑',
+              locat: {
+                name: 'TableTreeEdit'
+              }
+            },
+            {
+              label: '增删改查 + 工具栏',
+              locat: {
+                name: 'TableTreeToolbar'
+              }
+            },
+            {
+              label: '完整功能',
               disabled: true,
               locat: {
                 name: 'TableTreeBasic'
