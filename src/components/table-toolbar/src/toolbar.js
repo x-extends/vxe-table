@@ -1,6 +1,7 @@
 import GlobalEvent from '../../../tools/event'
 import DomTools from '../../../tools/dom'
 import UtilTools from '../../../tools/utils'
+import GlobalConfig from '../../../conf'
 
 export default {
   name: 'VxeTableToolbar',
@@ -190,7 +191,15 @@ export default {
             $grid.commitProxy('delete')
             break
           case 'delete_rows':
-            $grid.removeSelecteds()
+            let selectRecords = $grid.getSelectRecords()
+            if (selectRecords.length) {
+              $grid.openConfirm(GlobalConfig.i18n('vxe.grid.removeSelectRecord'))
+                .then(() => $grid.removeSelecteds())
+                .catch(e => e)
+            } else {
+              $grid.openAlert(GlobalConfig.i18n('vxe.grid.selectOneRecord'))
+                .catch(e => e)
+            }
             break
           case 'save':
             $grid.commitProxy('save')

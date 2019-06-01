@@ -45,7 +45,9 @@ export default {
       },
       tableAlert: {
         visible: false,
-        message: ''
+        type: null,
+        message: '',
+        events: null
       }
     }
   },
@@ -99,6 +101,7 @@ export default {
       if (proxyConfig.alert) {
         alertProps = Object.assign({}, proxyConfig.alert, {
           value: tableAlert.visible,
+          type: tableAlert.type,
           message: tableAlert.message
         })
       }
@@ -147,9 +150,7 @@ export default {
       }) : null,
       proxyConfig && proxyConfig.alert ? h('vxe-alert', {
         props: alertProps,
-        on: {
-          close: this.closeAlertEvent
-        }
+        on: tableAlert.events
       }) : null
     ])
   },
@@ -165,7 +166,7 @@ export default {
       return this.pendingRecords.indexOf(row) === -1
     },
     commitProxy (code) {
-      let { proxyConfig = {}, tablePage, pageConfig, sortData, filterData, tableAlert } = this
+      let { proxyConfig = {}, tablePage, pageConfig, sortData, filterData } = this
       let { ajax, props = {} } = proxyConfig
       if (ajax) {
         switch (code) {
@@ -218,8 +219,8 @@ export default {
                     this.tableLoading = false
                   }).then(() => this.commitProxy('reload'))
                 } else {
-                  tableAlert.message = GlobalConfig.i18n('vxe.grid.selectOneRecord')
-                  tableAlert.visible = true
+                  this.openAlert(GlobalConfig.i18n('vxe.grid.selectOneRecord'))
+                    .catch(e => e)
                 }
               })
             }
@@ -238,8 +239,8 @@ export default {
                     this.tableLoading = false
                   }).then(() => this.commitProxy('reload'))
                 } else {
-                  tableAlert.message = GlobalConfig.i18n('vxe.grid.dataUnchanged')
-                  tableAlert.visible = true
+                  this.openAlert(GlobalConfig.i18n('vxe.grid.dataUnchanged'))
+                    .catch(e => e)
                 }
               })
             }
@@ -253,7 +254,7 @@ export default {
       return this.pendingRecords
     },
     triggerPendingEvent (evnt) {
-      let { pendingRecords, tableAlert } = this
+      let { pendingRecords } = this
       let selectRecords = this.getSelectRecords()
       if (selectRecords.length) {
         let plus = []
@@ -272,8 +273,8 @@ export default {
         }
         this.clearSelection()
       } else {
-        tableAlert.message = GlobalConfig.i18n('vxe.grid.selectOneRecord')
-        tableAlert.visible = true
+        this.openAlert(GlobalConfig.i18n('vxe.grid.selectOneRecord'))
+          .catch(e => e)
       }
     },
     currentChangeEvent (currentPage) {
@@ -307,8 +308,35 @@ export default {
         UtilTools.emitEvent(this, 'filter-change', [column, prop, values])
       }
     },
-    closeAlertEvent () {
+    closeAlert () {
       this.tableAlert.visible = false
+    },
+    openAlert (message, type) {
+      let { proxyConfig, tableAlert } = this
+      return new Promise((resolve, reject) => {
+        if (proxyConfig && proxyConfig.alert) {
+          Object.assign(tableAlert, {
+            type: type || null,
+            message: message,
+            visible: true,
+            events: {
+              hide: type => {
+                if (type === 'confirm') {
+                  resolve(type)
+                } else {
+                  reject(type)
+                }
+                this.closeAlert()
+              }
+            }
+          })
+        } else {
+          resolve()
+        }
+      })
+    },
+    openConfirm (message) {
+      return this.openAlert(message, 'confirm')
     }
   }
 }

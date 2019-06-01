@@ -4,6 +4,7 @@ export default {
   name: 'VxeAlert',
   props: {
     value: Boolean,
+    type: String,
     title: { type: String, default: () => GlobalConfig.i18n('vxe.alert.title') },
     message: String,
     lockView: { type: Boolean, default: true },
@@ -34,7 +35,7 @@ export default {
     }
   },
   render (h) {
-    let { vSize, contentVisible, visible, title, message, lockView, mask } = this
+    let { vSize, type, contentVisible, visible, title, message, lockView, mask } = this
     return h('div', {
       class: ['vxe-alert--wrapper is--animat', {
         [`size--${vSize}`]: vSize,
@@ -73,12 +74,17 @@ export default {
         h('div', {
           class: 'vxe-alert--footer'
         }, [
+          type === 'confirm' ? h('vxe-button', {
+            on: {
+              click: this.cancelEvent
+            }
+          }, GlobalConfig.i18n('vxe.button.cancel')) : null,
           h('vxe-button', {
             props: {
               type: 'primary'
             },
             on: {
-              click: this.closeEvent
+              click: this.confirmEvent
             }
           }, GlobalConfig.i18n('vxe.button.confirm'))
         ])
@@ -94,11 +100,24 @@ export default {
   methods: {
     selfClickEvent (evnt) {
       if (this.maskClosable && evnt.target === this.$el) {
-        this.close()
+        let type = 'mask'
+        this.close(type)
       }
     },
     closeEvent (evnt) {
-      this.close()
+      let type = 'close'
+      this.$emit(type, evnt)
+      this.close(type)
+    },
+    confirmEvent (evnt) {
+      let type = 'confirm'
+      this.$emit(type, evnt)
+      this.close(type)
+    },
+    cancelEvent (evnt) {
+      let type = 'cancel'
+      this.$emit(type, evnt)
+      this.close(type)
     },
     open () {
       if (!this.visible) {
@@ -117,10 +136,10 @@ export default {
           bodyElem.style.overflow = 'hidden'
         }
         this.$emit('input', true)
-        this.$emit('open')
+        this.$emit('show')
       }
     },
-    close () {
+    close (type) {
       let { visible, lockScroll, beforeLockStyle } = this
       if (visible) {
         this.contentVisible = false
@@ -129,9 +148,9 @@ export default {
           if (lockScroll) {
             Object.assign(document.body.style, beforeLockStyle)
           }
+          this.$emit('input', false)
+          this.$emit('hide', type)
         }, 200)
-        this.$emit('input', false)
-        this.$emit('close')
       }
     }
   }

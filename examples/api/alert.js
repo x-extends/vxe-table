@@ -89,8 +89,24 @@ const apis = [
     defVal: '',
     list: [
       {
-        name: 'open',
-        desc: '在提示框打开是会触发该事件',
+        name: 'show',
+        desc: '在提示框打开时会触发该事件',
+        type: '',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'hide',
+        desc: '在提示框关闭时会触发该事件',
+        type: '',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'confirm',
+        desc: '点击确定按钮时会触发该事件',
         type: '',
         enum: '',
         defVal: '',
@@ -98,7 +114,7 @@ const apis = [
       },
       {
         name: 'close',
-        desc: '在提示框关闭是会触发该事件',
+        desc: '点击关闭按钮时会触发该事件',
         type: '',
         enum: '',
         defVal: '',
