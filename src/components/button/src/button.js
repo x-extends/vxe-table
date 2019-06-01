@@ -19,7 +19,8 @@ export default {
     }
     return h(type === 'text' ? 'a' : 'button', {
       class: ['vxe-button', {
-        [`size--${vSize}`]: vSize
+        [`size--${vSize}`]: vSize,
+        [`type--${type}`]: type
       }],
       on
     }, this.$slots.default)

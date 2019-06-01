@@ -354,7 +354,7 @@ export default {
               }
             },
             {
-              label: '可编辑',
+              label: '增删改查',
               locat: {
                 name: 'GridEdit'
               }
@@ -366,8 +366,7 @@ export default {
               }
             },
             {
-              label: '复杂功能',
-              disabled: true,
+              label: '完整功能',
               locat: {
                 name: 'GridFullEdit'
               }

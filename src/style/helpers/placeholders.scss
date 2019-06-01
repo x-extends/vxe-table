@@ -2,6 +2,12 @@
   box-sizing: border-box;
 }
 
+%textEllipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 /*radio checkbox*/
 %radioAndCheckbox {
   display: inline-block;

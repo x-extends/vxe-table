@@ -232,9 +232,7 @@
     &.c--ellipsis,
     &.c--title,
     &.c--tooltip {
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+      @extend %textEllipsis;
     }
   }
   .vxe-input--wrapper {

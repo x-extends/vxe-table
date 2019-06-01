@@ -29,6 +29,7 @@ export default {
   data () {
     return {
       tableProxy: {
+        alert: true,
         props: {
           data: 'data.result',
           total: 'data.page.total'

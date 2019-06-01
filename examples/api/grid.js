@@ -227,6 +227,22 @@ const apis = [
             list: []
           },
           {
+            name: 'sort',
+            desc: '是否代理排序',
+            type: 'Boolean',
+            enum: '',
+            defVal: 'false',
+            list: []
+          },
+          {
+            name: 'filter',
+            desc: '是否代理筛选',
+            type: 'Boolean',
+            enum: '',
+            defVal: 'false',
+            list: []
+          },
+          {
             name: 'props',
             desc: '获取的属性配置',
             type: 'Object',
@@ -260,7 +276,7 @@ const apis = [
             list: [
               {
                 name: 'query',
-                desc: '查询方法 Function({ page })，默认处理的数据结构 {page: {total: 0}, result: []}',
+                desc: '查询方法 Function({ page, sort })，默认处理的数据结构 {page: {total: 0}, result: []}；如果使用了服务端排序，sort 属性可以获取相关信息；如果使用了服务端过滤，filter 属性可以获取相关信息',
                 type: 'Promise',
                 enum: '',
                 defVal: '',
@@ -338,7 +354,7 @@ const apis = [
     list: [
       {
         name: 'commitProxy(code)',
-        desc: '提交给代理去处理数据',
+        desc: '给代理提交指令',
         type: '',
         enum: 'reload,query,delete,save',
         defVal: '',

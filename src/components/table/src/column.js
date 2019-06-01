@@ -29,15 +29,19 @@ export default {
     // 自定义索引方法
     indexMethod: Function,
     // 是否允许排序
-    sortable: [Boolean, String],
+    sortable: Boolean,
+    // 是否服务端排序
+    remoteSort: Boolean,
     // 自定义排序的属性
     sortBy: [String, Array],
     // 配置筛选条件数组
     filters: Array,
     // 筛选是否允许多选
     filterMultiple: { type: Boolean, default: true },
-    // 自定义筛选方法，如果是服务端排序需要设置为custom
-    filterMethod: [String, Function],
+    // 自定义筛选方法
+    filterMethod: Function,
+    // 是否服务端筛选
+    remoteFilter: Boolean,
     // 指定为树节点
     treeNode: Boolean,
     // 列的 key

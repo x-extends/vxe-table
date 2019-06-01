@@ -33,14 +33,26 @@ export default {
       tableData: [],
       tableCustoms: [],
       pendingRecords: [],
+      filterData: {},
+      sortData: {
+        prop: '',
+        order: ''
+      },
       tablePage: {
         total: 0,
         pageSize: 10,
         currentPage: 1
+      },
+      tableAlert: {
+        visible: false,
+        message: ''
       }
     }
   },
   computed: {
+    vSize () {
+      return this.size || this.$parent.size || this.$parent.vSize
+    },
     tableProps () {
       let rest = {}
       propKeys.forEach(key => {
@@ -70,9 +82,9 @@ export default {
     }
   },
   render (h) {
-    let { $slots, $listeners, pageConfig, size, loading, toolbar, editConfig, proxyConfig, tableProps, tableLoading, tablePage, tableData, tableCustoms, optimization } = this
+    let { $slots, $listeners, pageConfig, vSize, loading, toolbar, editConfig, proxyConfig, tableProps, tableLoading, tablePage, tableData, tableCustoms, optimization, tableAlert } = this
     let props = Object.assign({}, tableProps)
-    let on = Object.assign({}, $listeners)
+    let tableOns = Object.assign({}, $listeners)
     let toolbarProps = Object.assign({
       customs: tableCustoms,
       optimization: Object.assign({}, GlobalConfig.optimization, optimization)
@@ -83,10 +95,16 @@ export default {
         data: tableData,
         rowClassName: this.handleRowClassName
       })
+      if (proxyConfig.sort) {
+        tableOns['sort-change'] = this.sortChangeEvent
+      }
+      if (proxyConfig.filter) {
+        tableOns['filter-change'] = this.filterChangeEvent
+      }
     }
     if (toolbar) {
       props.customs = tableCustoms
-      on['update:customs'] = value => {
+      tableOns['update:customs'] = value => {
         this.tableCustoms = value
       }
     }
@@ -97,6 +115,7 @@ export default {
     }
     return h('div', {
       class: [ 'vxe-grid', {
+        [`size--${vSize}`]: vSize,
         't--animat': toolbarProps.optimization.animat
       }]
     }, [
@@ -106,17 +125,26 @@ export default {
       }) : null,
       h('vxe-table', {
         props,
-        on,
+        on: tableOns,
         ref: 'xTable'
       }, $slots.default),
       pageConfig ? h('vxe-pagination', {
         class: ['vxe-grid--pagination', {
           'is--loading': loading
         }],
-        props: Object.assign({ size }, proxyConfig ? tablePage : {}, pageConfig),
+        props: Object.assign({ size: vSize }, proxyConfig ? tablePage : {}, pageConfig),
         on: {
           'current-change': this.currentChangeEvent,
           'size-change': this.sizeChangeEvent
+        }
+      }) : null,
+      proxyConfig && proxyConfig.alert ? h('vxe-alert', {
+        props: {
+          value: tableAlert.visible,
+          message: tableAlert.message
+        },
+        on: {
+          close: this.closeAlertEvent
         }
       }) : null
     ])
@@ -133,14 +161,17 @@ export default {
       return this.pendingRecords.indexOf(row) === -1
     },
     commitProxy (code) {
-      let { proxyConfig = {}, tablePage, pageConfig } = this
+      let { proxyConfig = {}, tablePage, pageConfig, sortData, filterData, tableAlert } = this
       let { ajax, props = {} } = proxyConfig
       if (ajax) {
         switch (code) {
           case 'reload':
           case 'query': {
             if (ajax.query) {
-              let params = {}
+              let params = {
+                sort: sortData,
+                filter: filterData
+              }
               this.tableLoading = true
               if (pageConfig) {
                 params.page = tablePage
@@ -183,7 +214,8 @@ export default {
                     this.tableLoading = false
                   }).then(() => this.commitProxy('reload'))
                 } else {
-                  // 请至少选择一条数据！
+                  tableAlert.message = GlobalConfig.i18n('vxe.grid.selectOneRecord')
+                  tableAlert.visible = true
                 }
               })
             }
@@ -202,7 +234,8 @@ export default {
                     this.tableLoading = false
                   }).then(() => this.commitProxy('reload'))
                 } else {
-                  // 数据未更改！
+                  tableAlert.message = GlobalConfig.i18n('vxe.grid.dataUnchanged')
+                  tableAlert.visible = true
                 }
               })
             }
@@ -216,25 +249,27 @@ export default {
       return this.pendingRecords
     },
     triggerPendingEvent (evnt) {
+      let { pendingRecords, tableAlert } = this
       let selectRecords = this.getSelectRecords()
       if (selectRecords.length) {
         let plus = []
         let minus = []
         selectRecords.forEach(data => {
-          if (this.pendingRecords.some(item => data === item)) {
+          if (pendingRecords.some(item => data === item)) {
             minus.push(data)
           } else {
             plus.push(data)
           }
         })
         if (minus.length) {
-          this.pendingRecords = this.pendingRecords.filter(item => minus.some(data => data !== item)).concat(plus)
+          this.pendingRecords = pendingRecords.filter(item => minus.some(data => data !== item)).concat(plus)
         } else if (plus) {
-          this.pendingRecords = this.pendingRecords.concat(plus)
+          this.pendingRecords = pendingRecords.concat(plus)
         }
         this.clearSelection()
       } else {
-        // 请至少选择一条数据！
+        tableAlert.message = GlobalConfig.i18n('vxe.grid.selectOneRecord')
+        tableAlert.visible = true
       }
     },
     currentChangeEvent (currentPage) {
@@ -247,6 +282,29 @@ export default {
       this.tablePage.pageSize = pageSize
       this.commitProxy('reload')
       UtilTools.emitEvent(this, 'page-size-change', [pageSize])
+    },
+    sortChangeEvent ({ column, prop, order }) {
+      let { sortData } = this
+      // 如果是服务端排序
+      if (column.remoteSort) {
+        sortData.prop = prop
+        sortData.order = order
+        this.commitProxy('query')
+      } else {
+        UtilTools.emitEvent(this, 'sort-change', [column, prop, order])
+      }
+    },
+    filterChangeEvent ({ column, prop, values }) {
+      // 如果是服务端过滤
+      if (column.remoteFilter) {
+        this.filterData[prop] = values
+        this.commitProxy('reload')
+      } else {
+        UtilTools.emitEvent(this, 'filter-change', [column, prop, values])
+      }
+    },
+    closeAlertEvent () {
+      this.tableAlert.visible = false
     }
   }
 }

@@ -44,14 +44,14 @@ export default {
       tableColumn: [
         { type: 'selection', width: 50, fixed: 'left' },
         { type: 'index', width: 60, fixed: 'left' },
-        { prop: 'id', label: 'ID', width: 100, sortable: 'custom' },
-        { prop: 'name', label: 'Name', width: 300, sortable: 'custom' },
-        { prop: 'nickname', label: 'Nickname', sortable: 'custom', width: 300 },
-        { prop: 'age', label: 'Age', sortable: 'custom', width: 100 },
+        { prop: 'id', label: 'ID', width: 100, remoteSort: true },
+        { prop: 'name', label: 'Name', width: 300, remoteSort: true },
+        { prop: 'nickname', label: 'Nickname', remoteSort: true, width: 300 },
+        { prop: 'age', label: 'Age', remoteSort: true, width: 100 },
         {
           prop: 'role',
           label: 'Role',
-          sortable: 'custom',
+          remoteSort: true,
           width: 200,
           filters: [
             { label: '前端', value: '前端' },
@@ -59,7 +59,7 @@ export default {
             { label: '测试', value: '测试' }
           ],
           filterMultiple: false,
-          filterMethod: 'custom'
+          remoteFilter: true
         },
         { prop: 'describe', label: 'Describe', width: 300, showOverflow: true }
       ],
@@ -95,14 +95,14 @@ export default {
               tableColumn: [
                 { type: 'selection', width: 50, fixed: 'left' },
                 { type: 'index', width: 60, fixed: 'left' },
-                { prop: 'id', label: 'ID', width: 100, sortable: 'custom' },
-                { prop: 'name', label: 'Name', width: 300, sortable: 'custom' },
-                { prop: 'nickname', label: 'Nickname', sortable: 'custom', width: 300 },
-                { prop: 'age', label: 'Age', sortable: 'custom', width: 100 },
+                { prop: 'id', label: 'ID', width: 100, remoteSort: true },
+                { prop: 'name', label: 'Name', width: 300, remoteSort: true },
+                { prop: 'nickname', label: 'Nickname', remoteSort: true, width: 300 },
+                { prop: 'age', label: 'Age', remoteSort: true, width: 100 },
                 {
                   prop: 'role',
                   label: 'Role',
-                  sortable: 'custom',
+                  remoteSort: true,
                   width: 200,
                   filters: [
                     { label: '前端', value: '前端' },
@@ -110,7 +110,7 @@ export default {
                     { label: '测试', value: '测试' }
                   ],
                   filterMultiple: false,
-                  filterMethod: 'custom'
+                  remoteFilter: true
                 },
                 { prop: 'describe', label: 'Describe', width: 300, showOverflow: true }
               ]

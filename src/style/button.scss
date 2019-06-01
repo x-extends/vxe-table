@@ -5,6 +5,21 @@ button {
     line-height: 30px;
     border: 1px solid $vxe-input-border-color;
     border-radius: 4px;
+    &.type--primary {
+      color: #fff;
+      border-color: $vxe-primary-color;
+      background-color: $vxe-primary-color;
+      &:hover {
+        color: #fff;
+        background-color: lighten($vxe-primary-color, 4%);
+        border-color: lighten($vxe-primary-color, 4%);
+      }
+      &:active {
+        color: #fff;
+        background-color: darken($vxe-primary-color, 2%);
+        border-color: darken($vxe-primary-color, 2%);
+      }
+    }
     &:hover {
       color: lighten($vxe-primary-color, 6%);
       border-color: lighten($vxe-primary-color, 10%);

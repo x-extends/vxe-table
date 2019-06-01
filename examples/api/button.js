@@ -5,7 +5,16 @@ const apis = [
     type: '',
     enum: '',
     defVal: '',
-    list: []
+    list: [
+      {
+        name: 'type',
+        desc: '类型',
+        type: '',
+        enum: 'text,primary',
+        defVal: '',
+        list: []
+      }
+    ]
   },
   {
     name: 'Slots',
@@ -13,7 +22,16 @@ const apis = [
     type: '',
     enum: '',
     defVal: '',
-    list: []
+    list: [
+      {
+        name: '—',
+        desc: '按钮内容',
+        type: '',
+        enum: '',
+        defVal: '',
+        list: []
+      }
+    ]
   },
   {
     name: 'Events',

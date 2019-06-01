@@ -314,7 +314,7 @@ export default new Router({
       component: GridToolbar
     },
     {
-      path: '/table/grid/gullEdit',
+      path: '/table/grid/fullEdit',
       name: 'GridFullEdit',
       component: GridFullEdit
     },

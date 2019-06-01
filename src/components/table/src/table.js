@@ -926,7 +926,7 @@ export default {
       let filterColumn = visibleColumn.filter(({ filters }) => filters && filters.length)
       tableData = tableData.filter(row => {
         return filterColumn.every(column => {
-          let { property, filters, filterMethod } = column
+          let { property, filters, filterMethod, remoteFilter } = column
           if (filters && filters.length) {
             let valueList = []
             filters.forEach(item => {
@@ -934,7 +934,7 @@ export default {
                 valueList.push(item.value)
               }
             })
-            if (valueList.length && filterMethod !== 'custom') {
+            if (valueList.length && !remoteFilter) {
               return filterMethod ? valueList.some(value => filterMethod({ value, row, column })) : valueList.indexOf(UtilTools.getCellValue(row, property)) > -1
             }
           }
@@ -2329,7 +2329,7 @@ export default {
         })
         column.order = order
         // 如果是服务端排序，则跳过本地排序处理
-        if (column.sortable !== 'custom') {
+        if (!column.remoteSort) {
           this.tableData = this.getTableData(true).tableData
         }
         UtilTools.emitEvent(this, 'sort-change', [{ column, prop, order }])
@@ -2386,7 +2386,7 @@ export default {
         this.clearScroll()
       } else {
         // 如果是服务端筛选，则跳过本地筛选处理
-        if (column.filterMethod !== 'custom') {
+        if (!column.remoteFilter) {
           this.tableData = this.getTableData(true).tableData
         }
         UtilTools.emitEvent(this, 'filter-change', [{ column, prop: column.property, values: valueList }])

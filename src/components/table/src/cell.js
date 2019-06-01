@@ -5,7 +5,7 @@ import Renderer from '../../../renderer'
 
 const CellMethods = {
   createColumn ($table, _vm) {
-    let { type, sortable, filters, editRender, treeNode } = _vm
+    let { type, sortable, remoteSort, filters, editRender, treeNode } = _vm
     let { selectConfig, treeConfig } = $table
     let isTreeNode = treeConfig && treeNode
     let renMaps = {
@@ -33,9 +33,9 @@ const CellMethods = {
         if (editRender) {
           renMaps.renderHeader = this.renderEditHeader
           renMaps.renderCell = $table.editConfig && $table.editConfig.mode === 'cell' ? (isTreeNode ? this.renderTreeCellEdit : this.renderCellEdit) : (isTreeNode ? this.renderTreeRadioCell : this.renderRowEdit)
-        } else if (filters && filters.length && sortable) {
+        } else if (filters && filters.length && (sortable || remoteSort)) {
           renMaps.renderHeader = this.renderSortAndFilterHeader
-        } else if (sortable) {
+        } else if (sortable || remoteSort) {
           renMaps.renderHeader = this.renderSortHeader
         } else if (filters && filters.length) {
           renMaps.renderHeader = this.renderFilterHeader
@@ -418,7 +418,7 @@ const CellMethods = {
     let { iconMap } = GlobalConfig
     let { $table, column } = params
     let { editRules, editConfig } = $table
-    let { sortable, filters } = column
+    let { sortable, remoteSort, filters } = column
     let isRequired
     if (editRules) {
       let columnRules = XEUtils.get(editRules, params.column.property)
@@ -434,7 +434,7 @@ const CellMethods = {
         class: iconMap.edit
       })
     ].concat(CellMethods.renderHeader(h, params))
-      .concat(sortable ? CellMethods.renderSortIcon(h, params) : [])
+      .concat(sortable || remoteSort ? CellMethods.renderSortIcon(h, params) : [])
       .concat(filters && filters.length ? CellMethods.renderFilterIcon(h, params) : [])
   },
   // 行格编辑模式
