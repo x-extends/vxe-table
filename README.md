@@ -56,7 +56,7 @@ A very powerful Vue table component.
 
 ## Installing
 
-require: Vue 2.6.x
+require: Vue 2.6+
 
 ```shell
 npm install xe-utils vxe-table
