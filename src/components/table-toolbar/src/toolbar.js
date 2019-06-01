@@ -191,14 +191,18 @@ export default {
             $grid.commitProxy('delete')
             break
           case 'delete_rows':
+            let { proxyConfig } = $grid
             let selectRecords = $grid.getSelectRecords()
-            if (selectRecords.length) {
-              $grid.openConfirm(GlobalConfig.i18n('vxe.grid.removeSelectRecord'))
-                .then(() => $grid.removeSelecteds())
-                .catch(e => e)
+            if (proxyConfig && proxyConfig.alert) {
+              if (selectRecords.length) {
+                this.$XTool.confirm(GlobalConfig.i18n('vxe.grid.removeSelectRecord')).then(() => $grid.removeSelecteds()).catch(e => e)
+              } else {
+                this.$XTool.alert(GlobalConfig.i18n('vxe.grid.selectOneRecord')).catch(e => e)
+              }
             } else {
-              $grid.openAlert(GlobalConfig.i18n('vxe.grid.selectOneRecord'))
-                .catch(e => e)
+              if (selectRecords.length) {
+                $grid.removeSelecteds()
+              }
             }
             break
           case 'save':

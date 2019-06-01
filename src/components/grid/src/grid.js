@@ -42,12 +42,6 @@ export default {
         total: 0,
         pageSize: 10,
         currentPage: 1
-      },
-      tableAlert: {
-        visible: false,
-        type: null,
-        message: '',
-        events: null
       }
     }
   },
@@ -84,28 +78,19 @@ export default {
     }
   },
   render (h) {
-    let { $slots, $listeners, pageConfig, vSize, loading, toolbar, editConfig, proxyConfig, tableProps, tableLoading, tablePage, tableData, tableCustoms, optimization, tableAlert } = this
+    let { $slots, $listeners, pageConfig, vSize, loading, toolbar, editConfig, proxyConfig, tableProps, tableLoading, tablePage, tableData, tableCustoms, optimization } = this
     let props = Object.assign({}, tableProps)
     let tableOns = Object.assign({}, $listeners)
     let toolbarProps = Object.assign({
       customs: tableCustoms,
       optimization: Object.assign({}, GlobalConfig.optimization, optimization)
     }, toolbar)
-    let alertProps = null
     if (proxyConfig) {
       Object.assign(props, {
         loading: tableLoading,
         data: tableData,
         rowClassName: this.handleRowClassName
       })
-      if (proxyConfig.alert) {
-        alertProps = Object.assign({}, proxyConfig.alert, {
-          value: tableAlert.visible,
-          type: tableAlert.type,
-          message: tableAlert.message,
-          animat: toolbarProps.optimization.animat
-        })
-      }
       if (proxyConfig.sort) {
         tableOns['sort-change'] = this.sortChangeEvent
       }
@@ -148,10 +133,6 @@ export default {
           'current-change': this.currentChangeEvent,
           'size-change': this.sizeChangeEvent
         }
-      }) : null,
-      proxyConfig && proxyConfig.alert ? h('vxe-alert', {
-        props: alertProps,
-        on: tableAlert.events
       }) : null
     ])
   },
@@ -220,8 +201,9 @@ export default {
                     this.tableLoading = false
                   }).then(() => this.commitProxy('reload'))
                 } else {
-                  this.openAlert(GlobalConfig.i18n('vxe.grid.selectOneRecord'))
-                    .catch(e => e)
+                  if (proxyConfig && proxyConfig.alert) {
+                    this.$XTool.alert(GlobalConfig.i18n('vxe.grid.selectOneRecord')).catch(e => e)
+                  }
                 }
               })
             }
@@ -240,8 +222,9 @@ export default {
                     this.tableLoading = false
                   }).then(() => this.commitProxy('reload'))
                 } else {
-                  this.openAlert(GlobalConfig.i18n('vxe.grid.dataUnchanged'))
-                    .catch(e => e)
+                  if (proxyConfig && proxyConfig.alert) {
+                    this.$XTool.alert(GlobalConfig.i18n('vxe.grid.dataUnchanged')).catch(e => e)
+                  }
                 }
               })
             }
@@ -255,7 +238,7 @@ export default {
       return this.pendingRecords
     },
     triggerPendingEvent (evnt) {
-      let { pendingRecords } = this
+      let { pendingRecords, proxyConfig } = this
       let selectRecords = this.getSelectRecords()
       if (selectRecords.length) {
         let plus = []
@@ -274,8 +257,9 @@ export default {
         }
         this.clearSelection()
       } else {
-        this.openAlert(GlobalConfig.i18n('vxe.grid.selectOneRecord'))
-          .catch(e => e)
+        if (proxyConfig && proxyConfig.alert) {
+          this.$XTool.alert(GlobalConfig.i18n('vxe.grid.selectOneRecord')).catch(e => e)
+        }
       }
     },
     currentChangeEvent (currentPage) {
@@ -308,36 +292,6 @@ export default {
       } else {
         UtilTools.emitEvent(this, 'filter-change', [column, prop, values])
       }
-    },
-    closeAlert () {
-      this.tableAlert.visible = false
-    },
-    openAlert (message, type) {
-      let { proxyConfig, tableAlert } = this
-      return new Promise((resolve, reject) => {
-        if (proxyConfig && proxyConfig.alert) {
-          Object.assign(tableAlert, {
-            type: type || null,
-            message: message,
-            visible: true,
-            events: {
-              hide: type => {
-                if (type === 'confirm') {
-                  resolve(type)
-                } else {
-                  reject(type)
-                }
-                this.closeAlert()
-              }
-            }
-          })
-        } else {
-          resolve()
-        }
-      })
-    },
-    openConfirm (message) {
-      return this.openAlert(message, 'confirm')
     }
   }
 }

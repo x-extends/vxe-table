@@ -30,7 +30,8 @@
           Checkbox,
           Radio,
           Input,
-          Button
+          Button,
+          Alert
         } from 'vxe-table'
         import 'vxe-table/lib/index.css'
 
@@ -44,6 +45,7 @@
         Vue.use(Radio)
         Vue.use(Input)
         Vue.use(Button)
+        Vue.use(Alert)
 
         // 设置全局默认参数
         VXETable.setup({

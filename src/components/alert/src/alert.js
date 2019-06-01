@@ -22,7 +22,7 @@ export default {
   },
   computed: {
     vSize () {
-      return this.size || this.$parent.size || this.$parent.vSize
+      return this.size || (this.$parent && (this.$parent.size || this.$parent.vSize))
     }
   },
   watch: {
@@ -34,6 +34,12 @@ export default {
     if (this.value) {
       this.open()
     }
+  },
+  mounted () {
+    document.body.appendChild(this.$el)
+  },
+  beforeDestroy () {
+    this.$el.parentNode.removeChild(this.$el)
   },
   render (h) {
     let { vSize, type, animat, contentVisible, visible, title, message, lockView, mask } = this
@@ -93,12 +99,6 @@ export default {
       ])
     ])
   },
-  mounted () {
-    document.body.appendChild(this.$el)
-  },
-  beforeDestroy () {
-    this.$el.parentNode.removeChild(this.$el)
-  },
   methods: {
     selfClickEvent (evnt) {
       if (this.maskClosable && evnt.target === this.$el) {
@@ -137,8 +137,10 @@ export default {
           bodyElem.style.paddingRight = `${window.innerWidth - (document.documentElement.clientWidth || document.body.clientWidth)}px`
           bodyElem.style.overflow = 'hidden'
         }
-        this.$emit('input', true)
-        this.$emit('show')
+        if (!this._handleCustom) {
+          this.$emit('input', true)
+          this.$emit('show')
+        }
       }
     },
     close (type) {
@@ -150,8 +152,12 @@ export default {
           if (lockScroll) {
             Object.assign(document.body.style, beforeLockStyle)
           }
-          this.$emit('input', false)
-          this.$emit('hide', type)
+          if (this._handleCustom) {
+            this._handleCustom(type)
+          } else {
+            this.$emit('input', false)
+            this.$emit('hide', type)
+          }
         }, 200)
       }
     }

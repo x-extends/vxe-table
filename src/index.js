@@ -32,6 +32,44 @@ const components = [
   Alert
 ]
 
+var AlertController = null
+
+function MessageBox (options) {
+  return new Promise((resolve, reject) => {
+    let $alert = new AlertController({
+      el: document.createElement('div')
+    })
+    Object.keys($alert.$props).forEach(key => {
+      if (options.hasOwnProperty(key)) {
+        $alert[key] = options[key]
+      }
+    })
+    $alert._handleCustom = function (type) {
+      $alert.$destroy()
+      if (type === 'confirm') {
+        resolve(type)
+      } else {
+        reject(type)
+      }
+    }
+    setTimeout(() => $alert.open())
+  })
+}
+
+['alert', 'confirm'].forEach(type => {
+  MessageBox[type] = function (message, title, options) {
+    let opts = { message, type }
+    if (XEUtils.isString(message)) {
+      if (title) {
+        opts.title = title
+      }
+    } else {
+      opts = message
+    }
+    return MessageBox(Object.assign({}, opts, options))
+  }
+})
+
 /**
  * 全局参数设置
  */
@@ -52,6 +90,8 @@ function install (Vue, options) {
   if (XEUtils.isPlainObject(options)) {
     setup(options)
   }
+  AlertController = Vue.extend(Alert)
+  Vue.prototype.$XTool = MessageBox
   components.map(component => Vue.component(component.name, component))
 }
 
@@ -84,5 +124,6 @@ export default {
   Radio,
   Input,
   Button,
-  Alert
+  Alert,
+  MessageBox
 }
