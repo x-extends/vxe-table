@@ -1,8 +1,8 @@
 <template>
   <div>
-    <p>增删改查、工具栏</p>
+    <p>增删改查、工具栏，如果 key 值一样的情况下（row-key、tree-config、edit-config 的 key 任意配置一个即可）</p>
 
-    <vxe-table-toolbar :customs="customColumns" setting>>
+    <vxe-table-toolbar :customs="customColumns" setting>
       <template v-slot:buttons>
         <vxe-button @click="insertEvent">新增</vxe-button>
         <vxe-button @click="getInsertEvent">获取新增</vxe-button>
@@ -179,7 +179,7 @@ export default {
       ],
       demoCodes: [
         `
-        <vxe-table-toolbar :customs="customColumns" setting>>
+        <vxe-table-toolbar :customs="customColumns" setting>
           <template v-slot:buttons>
             <vxe-button @click="insertEvent">新增</vxe-button>
             <vxe-button @click="getInsertEvent">获取新增</vxe-button>

@@ -1,8 +1,18 @@
 <template>
   <div>
-    <p>可编辑树表格，如果 key 值一样的情况下（row-key、tree-config、edit-config 的 key 任意配置一个即可）</p>
+    <p>可编辑树表格，还可以通过手动调用展开收起</p>
+
+    <vxe-table-toolbar>
+      <template v-slot:buttons>
+        <vxe-button @click="$refs.xTree.toggleTreeExpansion(tableData[0], true)">切换第一个</vxe-button>
+        <vxe-button @click="$refs.xTree.setTreeExpansion(tableData[2], true)">展开第三个</vxe-button>
+        <vxe-button @click="$refs.xTree.setAllTreeExpansion(true)">展开所有</vxe-button>
+        <vxe-button @click="$refs.xTree.clearTreeExpand()">关闭所有</vxe-button>
+      </template>
+    </vxe-table-toolbar>
 
     <vxe-table
+      ref="xTree"
       :tree-config="{key: 'id', children: 'children'}"
       :edit-config="{trigger: 'click', mode: 'row'}"
       :data.sync="tableData">
@@ -166,7 +176,17 @@ export default {
       ],
       demoCodes: [
         `
+        <vxe-table-toolbar>
+          <template v-slot:buttons>
+            <vxe-button @click="$refs.xTree.toggleTreeExpansion(tableData[0], true)">切换第一个</vxe-button>
+            <vxe-button @click="$refs.xTree.setTreeExpansion(tableData[2], true)">展开第三个</vxe-button>
+            <vxe-button @click="$refs.xTree.setAllTreeExpansion(true)">展开所有</vxe-button>
+            <vxe-button @click="$refs.xTree.clearTreeExpand()">关闭所有</vxe-button>
+          </template>
+        </vxe-table-toolbar>
+
         <vxe-table
+          ref="xTree"
           :tree-config="{key: 'id', children: 'children'}"
           :edit-config="{trigger: 'click', mode: 'row'}"
           :data.sync="tableData">
