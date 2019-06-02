@@ -49,6 +49,9 @@ export default {
     vSize () {
       return this.size || this.$parent.size || this.$parent.vSize
     },
+    isAlert () {
+      return this.proxyConfig && this.proxyConfig.alert !== false
+    },
     tableProps () {
       let rest = {}
       propKeys.forEach(key => {
@@ -63,9 +66,12 @@ export default {
     }
   },
   created () {
-    let { customs } = this
+    let { customs, pageConfig } = this
     if (customs) {
       this.tableCustoms = customs
+    }
+    if (pageConfig && pageConfig.pageSize) {
+      this.tablePage.pageSize = pageConfig.pageSize
     }
   },
   mounted () {
@@ -87,7 +93,7 @@ export default {
     }, toolbar)
     if (proxyConfig) {
       Object.assign(props, {
-        loading: tableLoading,
+        loading: loading || tableLoading,
         data: tableData,
         rowClassName: this.handleRowClassName
       })
@@ -148,7 +154,7 @@ export default {
       return this.pendingRecords.indexOf(row) === -1
     },
     commitProxy (code) {
-      let { proxyConfig = {}, tablePage, pageConfig, sortData, filterData } = this
+      let { proxyConfig = {}, tablePage, pageConfig, sortData, filterData, isAlert } = this
       let { ajax, props = {} } = proxyConfig
       if (ajax) {
         switch (code) {
@@ -201,7 +207,7 @@ export default {
                     this.tableLoading = false
                   }).then(() => this.commitProxy('reload'))
                 } else {
-                  if (proxyConfig && proxyConfig.alert) {
+                  if (isAlert) {
                     this.$XTool.alert(GlobalConfig.i18n('vxe.grid.selectOneRecord')).catch(e => e)
                   }
                 }
@@ -222,7 +228,7 @@ export default {
                     this.tableLoading = false
                   }).then(() => this.commitProxy('reload'))
                 } else {
-                  if (proxyConfig && proxyConfig.alert) {
+                  if (isAlert) {
                     this.$XTool.alert(GlobalConfig.i18n('vxe.grid.dataUnchanged')).catch(e => e)
                   }
                 }
@@ -238,7 +244,7 @@ export default {
       return this.pendingRecords
     },
     triggerPendingEvent (evnt) {
-      let { pendingRecords, proxyConfig } = this
+      let { pendingRecords, isAlert } = this
       let selectRecords = this.getSelectRecords()
       if (selectRecords.length) {
         let plus = []
@@ -257,7 +263,7 @@ export default {
         }
         this.clearSelection()
       } else {
-        if (proxyConfig && proxyConfig.alert) {
+        if (isAlert) {
           this.$XTool.alert(GlobalConfig.i18n('vxe.grid.selectOneRecord')).catch(e => e)
         }
       }

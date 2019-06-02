@@ -378,6 +378,12 @@ export default {
               }
             },
             {
+              label: '实现可配置动态列',
+              locat: {
+                name: 'GridDynamic'
+              }
+            },
+            {
               label: '基础树',
               locat: {
                 name: 'GridTree'

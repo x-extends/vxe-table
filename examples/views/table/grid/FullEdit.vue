@@ -35,7 +35,6 @@ export default {
         background: true
       },
       tableProxy: {
-        alert: true, // 启用默认的提示框
         sort: true, // 启用排序代理
         filter: true, // 启用筛选代理
         ajax: {
@@ -106,7 +105,6 @@ export default {
                 background: true
               },
               tableProxy: {
-                alert: true, // 启用默认的提示框
                 sort: true, // 启用排序代理
                 filter: true, // 启用筛选代理
                 ajax: {

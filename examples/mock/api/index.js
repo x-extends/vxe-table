@@ -82,12 +82,13 @@ class ColumnVO {
     this.id = data.id
     this.key = data.key
     this.name = data.name
-    this.readonly = data.readonly
+    this.isEdit = data.isEdit
     this.required = data.required
     this.validator = data.validator
     this.validMsg = data.validMsg
     this.visible = data.visible
     this.width = data.width
+    this.type = data.type
     this.describe = data.describe
     this.createTime = data.createTime
     this.updateTime = data.updateTime

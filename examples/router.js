@@ -50,6 +50,7 @@ import GridProxy from './views/table/grid/Proxy.vue'
 import GridPageProxy from './views/table/grid/PageProxy.vue'
 import GridEdit from './views/table/grid/Edit.vue'
 import GridToolbar from './views/table/grid/Toolbar.vue'
+import GridDynamic from './views/table/grid/Dynamic.vue'
 import GridTree from './views/table/grid/Tree.vue'
 import GridTreeEdit from './views/table/grid/TreeEdit.vue'
 import GridFullEdit from './views/table/grid/FullEdit.vue'
@@ -326,6 +327,11 @@ export default new Router({
       path: '/table/grid/toolbar',
       name: 'GridToolbar',
       component: GridToolbar
+    },
+    {
+      path: '/table/grid/dynamic',
+      name: 'GridDynamic',
+      component: GridDynamic
     },
     {
       path: '/table/grid/tree',

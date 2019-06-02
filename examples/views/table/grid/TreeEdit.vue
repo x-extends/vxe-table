@@ -29,7 +29,6 @@ export default {
   data () {
     return {
       tableProxy: {
-        alert: true,
         ajax: {
           // 处理树结构转换
           query: () => XEAjax.getJSON('/api/file/list').then(data => XEUtils.toArrayTree(data, { key: 'id', parentKey: 'parentId', children: 'children' })),
@@ -41,7 +40,6 @@ export default {
           { code: 'reload', name: '刷新' },
           { code: 'insert_actived', name: '新增' },
           { code: 'delete_pending', name: '标记/取消' },
-          { code: 'delete_rows', name: '移除' },
           { code: 'save', name: '保存' },
           { code: 'export', name: '导出.csv' }
         ],
@@ -70,7 +68,6 @@ export default {
           data () {
             return {
               tableProxy: {
-                alert: true,
                 ajax: {
                   // 处理树结构转换
                   query: () => XEAjax.getJSON('/api/file/list').then(data => XEUtils.toArrayTree(data, { key: 'id', parentKey: 'parentId', children: 'children' })),
@@ -82,7 +79,6 @@ export default {
                   { code: 'reload', name: '刷新' },
                   { code: 'insert_actived', name: '新增' },
                   { code: 'delete_pending', name: '标记/取消' },
-                  { code: 'delete_rows', name: '移除' },
                   { code: 'save', name: '保存' },
                   { code: 'export', name: '导出.csv' }
                 ],

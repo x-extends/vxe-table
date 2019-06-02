@@ -231,7 +231,7 @@ const apis = [
             desc: '默认的提示框',
             type: 'Boolean,Object',
             enum: '',
-            defVal: 'false',
+            defVal: 'true',
             list: []
           },
           {

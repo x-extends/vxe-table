@@ -32,7 +32,6 @@ export default {
         pageSize: 15
       },
       tableProxy: {
-        alert: true,
         props: {
           data: 'data.result',
           total: 'data.page.total'
@@ -59,7 +58,14 @@ export default {
         ],
         setting: true
       },
-      tableColumn: [],
+      tableColumn: [
+        { type: 'selection', width: 50 },
+        { type: 'index', width: 60 },
+        { prop: 'name', label: 'Name', editRender: { name: 'input' } },
+        { prop: 'nickname', label: 'Nickname', editRender: { name: 'input' } },
+        { prop: 'role', label: 'Role', editRender: { name: 'input' } },
+        { prop: 'describe', label: 'Describe', showOverflow: true, editRender: { name: 'input' } }
+      ],
       demoCodes: [
         `
         <vxe-grid
@@ -80,7 +86,6 @@ export default {
                 pageSize: 15
               },
               tableProxy: {
-                alert: true, // 启用默认的提示框
                 // 配置响应的数据属性
                 props: {
                   data: 'data.result',
@@ -137,16 +142,6 @@ export default {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
       hljs.highlightBlock(block)
     })
-    setTimeout(() => {
-      this.tableColumn = [
-        { type: 'selection', width: 50 },
-        { type: 'index', width: 60 },
-        { prop: 'name', label: 'Name', editRender: { name: 'input' } },
-        { prop: 'nickname', label: 'Nickname', editRender: { name: 'input' } },
-        { prop: 'role', label: 'Role', editRender: { name: 'input' } },
-        { prop: 'describe', label: 'Describe', showOverflow: true, editRender: { name: 'input' } }
-      ]
-    }, 500)
   },
   methods: {
     toolbarButtonClickEvent ({ button }, event) {
