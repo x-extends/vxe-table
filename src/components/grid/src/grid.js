@@ -59,7 +59,7 @@ export default {
   },
   watch: {
     columns (value) {
-      this.$refs.xTable.loadColumn(value)
+      this.loadColumn(value)
     }
   },
   created () {
@@ -71,7 +71,7 @@ export default {
   mounted () {
     let { columns, proxyConfig } = this
     if (columns && columns.length) {
-      this.$refs.xTable.loadColumn(this.columns)
+      this.loadColumn(this.columns)
     }
     if (proxyConfig && proxyConfig.autoLoad !== false) {
       this.commitProxy('query')

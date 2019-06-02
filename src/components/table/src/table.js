@@ -617,16 +617,6 @@ export default {
       this.clearRowExpand()
       this.clearTreeExpand()
     },
-    /// ///////////////// 废弃
-    load (datas) {
-      console.error('[vxe-table] This method is discard, use the loadData(datas) method.')
-      return this.loadData(datas)
-    },
-    reload (datas) {
-      console.error('[vxe-table] This method is discard, use the reloadData(datas) method.')
-      return this.reloadData(datas)
-    },
-    /// ////////////////// 废弃
     loadData (datas, init) {
       let { height, maxHeight, autoWidth, editStore, optimizeConfig, recalculate } = this
       let { scrollY } = optimizeConfig
@@ -661,6 +651,9 @@ export default {
       let collectColumn = XEUtils.mapTree(columns, column => CellMethods.createColumn(this, column), this.headerProps)
       this.collectColumn = collectColumn
       this.tableFullColumn = UtilTools.getColumnList(collectColumn)
+      if (this.customs) {
+        this.mergeCustomColumn(this.customs)
+      }
       this.updateKeyMap(columns, 'fullColumnKeyMap')
       this.refreshColumn()
       return this.$nextTick()
@@ -2850,13 +2843,6 @@ export default {
         // }
       }
       return Promise.resolve()
-    },
-    /**
-     * 废弃
-     */
-    validateRow (row, cb) {
-      console.error('[vxe-table] This method is discard, use the validate(rows, callback) method.')
-      return this.validate([row], cb)
     },
     /**
      * 对表格数据进行校验

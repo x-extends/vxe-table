@@ -59,14 +59,7 @@ export default {
         ],
         setting: true
       },
-      tableColumn: [
-        { type: 'selection', width: 50 },
-        { type: 'index', width: 60 },
-        { prop: 'name', label: 'Name', editRender: { name: 'input' } },
-        { prop: 'nickname', label: 'Nickname', editRender: { name: 'input' } },
-        { prop: 'role', label: 'Role', editRender: { name: 'input' } },
-        { prop: 'describe', label: 'Describe', showOverflow: true, editRender: { name: 'input' } }
-      ],
+      tableColumn: [],
       demoCodes: [
         `
         <vxe-grid
@@ -144,6 +137,16 @@ export default {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
       hljs.highlightBlock(block)
     })
+    setTimeout(() => {
+      this.tableColumn = [
+        { type: 'selection', width: 50 },
+        { type: 'index', width: 60 },
+        { prop: 'name', label: 'Name', editRender: { name: 'input' } },
+        { prop: 'nickname', label: 'Nickname', editRender: { name: 'input' } },
+        { prop: 'role', label: 'Role', editRender: { name: 'input' } },
+        { prop: 'describe', label: 'Describe', showOverflow: true, editRender: { name: 'input' } }
+      ]
+    }, 500)
   },
   methods: {
     toolbarButtonClickEvent ({ button }, event) {

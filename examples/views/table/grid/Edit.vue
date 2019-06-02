@@ -6,7 +6,7 @@
       border
       height="530"
       :loading="loading"
-      :pages="tablePage"
+      :page-config="tablePage"
       :columns="tableColumn"
       :data.sync="tableData"
       :edit-config="{key: 'id', trigger: 'click', mode: 'row'}"
@@ -51,7 +51,7 @@ export default {
           border
           height="530"
           :loading="loading"
-          :pages="tablePage"
+          :page-config="tablePage"
           :columns="tableColumn"
           :data.sync="tableData"
           :edit-config="{key: 'id', trigger: 'click', mode: 'row'}"
