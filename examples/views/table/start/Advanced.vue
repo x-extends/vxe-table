@@ -1,17 +1,19 @@
 <template>
   <div>
     <h3>高级函数</h3>
-    <p>自定义渲染器 + 渲染函数</p>
+    <p>通过渲染器你可以轻松实现渲染的单元格组件，可以根据不同业务实现不一样的组件，这个功能将非常实用</p>
+    <p>例子：使用 render 实现单元格组件</p>
     <pre>
       <code class="javascript">{{ demoCodes[0] }}</code>
       <code class="html">{{ demoCodes[1] }}</code>
     </pre>
-    <p>自定义渲染器 + JSX</p>
+    <p>例子：使用 JSX 实现单元格组件</p>
     <pre>
       <code class="javascript">{{ demoCodes[2] }}</code>
       <code class="html">{{ demoCodes[3] }}</code>
     </pre>
-    <p>内置拦截器（对于自定义渲染的组件与内部事件存在冲突时可能会使用到）</p>
+    <p>通过内置拦截器可以解决当表格交互与其他组件存在冲突的，可以通过拦截器去阻止默认的行为，从而可以集成其他组件互相兼容</p>
+    <p>例子：比如集成某个日期组件后，由于面板不在对单元格之内，按键事件的交互行为存在冲突，对于这些场景就很有用了</p>
     <pre>
       <code class="javascript">{{ demoCodes[4] }}</code>
     </pre>
