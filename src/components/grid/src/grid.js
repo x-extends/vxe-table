@@ -134,7 +134,7 @@ export default {
         class: ['vxe-grid--pagination', {
           'is--loading': loading
         }],
-        props: Object.assign({ size: vSize }, proxyConfig ? tablePage : {}, pageConfig),
+        props: Object.assign({ size: vSize }, pageConfig, proxyConfig ? tablePage : {}),
         on: {
           'current-change': this.currentChangeEvent,
           'size-change': this.sizeChangeEvent

@@ -91,8 +91,7 @@ export default {
       ],
       loading2: false,
       tablePage2: {
-        pageSize: 5,
-        pageSizes: [5, 10, 15, 20, 50, 10, 200]
+        pageSize: 10
       },
       tableProxy2: {
         props: {
