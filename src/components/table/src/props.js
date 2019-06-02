@@ -61,7 +61,7 @@ export default {
   // 多选配置项
   selectConfig: Object,
   // tooltip 配置项
-  tooltipConfig: { type: Object, default: () => GlobalConfig.tooltipConfig },
+  tooltipConfig: Object,
   // 展开行配置项
   expandConfig: Object,
   // 树形结构配置项

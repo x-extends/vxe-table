@@ -23,7 +23,7 @@ const GlobalConfig = {
     }
   },
   tooltipConfig: {
-    // theme: 'dark'
+    theme: 'dark'
   },
   iconMap: {
     sortAsc: 'vxe-sort--asc-icon',

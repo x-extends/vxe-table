@@ -3,11 +3,11 @@ import GlobalConfig from '../../../conf'
 export default {
   props: {
     filterStore: Object,
-    optimizeConfig: Object
+    optimizeOpts: Object
   },
   render (h) {
     let $table = this.$parent
-    let { filterStore, optimizeConfig, filterCheckAllEvent, filterOptionRadioEvent, filterOptionCheckEvent } = this
+    let { filterStore, optimizeOpts, filterCheckAllEvent, filterOptionRadioEvent, filterOptionCheckEvent } = this
     let { multiple } = filterStore
     let filterRens = [
       h('li', {
@@ -94,7 +94,7 @@ export default {
     })
     return h('div', {
       class: ['vxe-table--filter-wrapper', {
-        't--animat': optimizeConfig.animat,
+        't--animat': optimizeOpts.animat,
         'filter--active': filterStore.visible
       }],
       style: filterStore.style

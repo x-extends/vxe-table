@@ -281,8 +281,11 @@ export default {
       return this.size || this.$parent.size || this.$parent.vSize
     },
     // 优化的参数
-    optimizeConfig () {
+    optimizeOpts () {
       return Object.assign({}, GlobalConfig.optimization, this.optimization)
+    },
+    tooltipOpts () {
+      return Object.assign({}, GlobalConfig.tooltipConfig, this.tooltipConfig)
     },
     // 是否使用了分组表头
     isGroup () {
@@ -346,8 +349,8 @@ export default {
     }
   },
   created () {
-    let { scrollYStore, optimizeConfig, treeConfig, editConfig } = this
-    let { scrollY } = optimizeConfig
+    let { scrollYStore, optimizeOpts, treeConfig, editConfig } = this
+    let { scrollY } = optimizeOpts
     if (scrollY) {
       Object.assign(scrollYStore, {
         startIndex: 0,
@@ -424,14 +427,14 @@ export default {
       stripe,
       highlightHoverRow,
       vSize,
-      tooltipConfig,
+      tooltipOpts,
       editConfig,
       showFooter,
       footerMethod,
       overflowX,
       overflowY,
       scrollXHeight,
-      optimizeConfig,
+      optimizeOpts,
       columnStore,
       filterStore,
       ctxMenuStore,
@@ -449,7 +452,7 @@ export default {
         'scroll--x': overflowX,
         'fixed--left': leftList.length,
         'fixed--right': rightList.length,
-        't--animat': optimizeConfig.animat,
+        't--animat': optimizeOpts.animat,
         't--stripe': stripe,
         't--border': border,
         't--highlight': highlightHoverRow
@@ -543,7 +546,7 @@ export default {
          */
         isFilter ? h('table-filter', {
           props: {
-            optimizeConfig,
+            optimizeOpts,
             filterStore
           },
           ref: 'filterWrapper'
@@ -561,7 +564,7 @@ export default {
          * tooltip
          */
         tooltipStore.visible ? h('div', {
-          class: ['vxe-table--tooltip-wrapper', `theme--${tooltipConfig ? tooltipConfig.theme : 'dark'}`, `placement--${tooltipStore.placement}`],
+          class: ['vxe-table--tooltip-wrapper', `theme--${tooltipOpts.theme}`, `placement--${tooltipStore.placement}`],
           style: tooltipStore.style,
           ref: 'tipWrapper'
         }, [
@@ -622,8 +625,8 @@ export default {
       this.clearTreeExpand()
     },
     loadData (datas, init) {
-      let { height, maxHeight, autoWidth, editStore, optimizeConfig, recalculate } = this
-      let { scrollY } = optimizeConfig
+      let { height, maxHeight, autoWidth, editStore, optimizeOpts, recalculate } = this
+      let { scrollY } = optimizeOpts
       let tableFullData = datas || []
       let scrollYLoad = scrollY && scrollY.gt && scrollY.gt < tableFullData.length
       editStore.insertList = []
@@ -1032,8 +1035,8 @@ export default {
       let rightIndex = 0
       let centerList = []
       let rightList = []
-      let { headerProps, collectColumn, tableFullColumn, isGroup, columnStore, scrollXStore, optimizeConfig } = this
-      let { scrollX } = optimizeConfig
+      let { headerProps, collectColumn, tableFullColumn, isGroup, columnStore, scrollXStore, optimizeOpts } = this
+      let { scrollX } = optimizeOpts
       // 如果是分组表头，如果子列全部被隐藏，则根列也隐藏
       if (isGroup) {
         XEUtils.eachTree(collectColumn, column => {
@@ -2716,8 +2719,8 @@ export default {
     }, DomTools.browse.msie ? 40 : 20, { leading: false, trailing: true }),
     // 计算滚动渲染相关数据
     computeScrollLoad () {
-      let { scrollXLoad, scrollYLoad, scrollYStore, scrollXStore, visibleColumn, optimizeConfig } = this
-      let { scrollX, scrollY } = optimizeConfig
+      let { scrollXLoad, scrollYLoad, scrollYStore, scrollXStore, visibleColumn, optimizeOpts } = this
+      let { scrollX, scrollY } = optimizeOpts
       let tableBody = this.$refs.tableBody
       let tableBodyElem = tableBody ? tableBody.$el : null
       let tableHeader = this.$refs.tableHeader

@@ -12,8 +12,8 @@ export default {
   },
   render (h) {
     let { $parent: $table, fixedType, fixedColumn, tableColumn, footerData } = this
-    let { $listeners: tableListeners, footerRowClassName, footerCellClassName, tableWidth, scrollYWidth, scrollXHeight, scrollXLoad, scrollXStore, optimizeConfig, getColumnMapIndex } = $table
-    let { overflow } = optimizeConfig
+    let { $listeners: tableListeners, footerRowClassName, footerCellClassName, tableWidth, scrollYWidth, scrollXHeight, scrollXLoad, scrollXStore, optimizeOpts, getColumnMapIndex } = $table
+    let { overflow } = optimizeOpts
     // 如果是使用优化模式
     if (fixedType && overflow) {
       tableColumn = fixedColumn
