@@ -15,6 +15,14 @@ const apis = [
         list: []
       },
       {
+        name: 'layouts',
+        desc: '自定义布局',
+        type: 'Array',
+        enum: 'PrevJump,PrevPage,Number,jumpNumber,NextPage,NextJump,Sizes,Jump,PageCount,Total',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'current-page',
         desc: '当前页',
         type: 'Number',

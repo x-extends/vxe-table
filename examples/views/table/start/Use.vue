@@ -23,6 +23,12 @@
         VXETable.setup({
           // 默认尺寸
           size: 'small',
+          // 所有内容超过隐藏
+          showAllOverflow: null,
+          // 所有表头内容超过隐藏
+          showHeaderAllOverflow: null,
+          // 默认快捷菜单
+          contextMenu: null,
           // 自定义图标配置
           iconMap: {
             sortAsc: 'vxe-sort--asc-icon',
@@ -31,25 +37,27 @@
             edit: 'vxe-edit--icon',
             tree: 'vxe-tree--node-icon'
           },
-          // 所有内容超过隐藏
-          showAllOverflow: null,
-          // 所有表头内容超过隐藏
-          showHeaderAllOverflow: null,
-          // 默认快捷菜单
-          contextMenu: null,
           // 默认 tooltip 主题样式
-          tooltipTheme: 'dark',
+          tooltipConfig: {
+            theme: 'dark'
+          },
+          // 默认分页参数
+          pagination: {
+            pageSize: 10,
+            pagerCount: 7,
+            pageSizes: [10, 15, 20, 50, 100],
+            layouts: ['PrevPage', 'NextPage', 'Jump', 'Sizes', 'Total']
+          },
           // 默认优化配置项
           optimization : {
-            // 显示表格效果
             animat: true,
-            // 横向 X 滚动渲染
+            // 当列大于 40 条时自动启用横向 X 滚动渲染
             scrollX: {
               gt: 40,
               oSize: 5,
               rSize: 16
             },
-            // 纵向 Y 滚动渲染
+            // 当数据大于 500 条时自动启用纵向 Y 滚动渲染
             scrollY: {
               gt: 500,
               oSize: 20,

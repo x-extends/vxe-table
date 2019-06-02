@@ -8,16 +8,18 @@ export default {
   name: 'VxePagination',
   props: {
     size: String,
+    // 自定义布局
+    layouts: { type: Array, default: () => GlobalConfig.pagination.layouts || ['PrevPage', 'NextPage', 'Jump', 'Sizes', 'Total'] },
     // 当前页
     currentPage: { type: Number, default: 1 },
     // 每页大小
-    pageSize: { type: Number, default: 10 },
+    pageSize: { type: Number, default: () => GlobalConfig.pagination.pageSize || 10 },
     // 总条数
     total: { type: Number, default: 0 },
     // 显示页码按钮的数量
-    pagerCount: { type: Number, default: 7 },
+    pagerCount: { type: Number, default: () => GlobalConfig.pagination.pagerCount || 7 },
     // 每页大小选项列表
-    pageSizes: { type: Array, default: () => [10, 15, 20, 50, 100] },
+    pageSizes: { type: Array, default: () => GlobalConfig.pagination.pageSizes || [10, 15, 20, 50, 100] },
     // 带背景颜色
     background: Boolean
   },
@@ -36,6 +38,9 @@ export default {
     vSize () {
       return this.size || this.$parent.size || this.$parent.vSize
     },
+    isSizes () {
+      return this.layouts.some(name => name === 'Sizes')
+    },
     pageCount () {
       return Math.max(Math.ceil(this.total / this.pageSize), 1)
     },
@@ -50,7 +55,10 @@ export default {
     GlobalEvent.on(this, 'mousedown', this.handleGlobalMousedownEvent)
   },
   mounted () {
-    document.body.appendChild(this.$refs.sizePanel)
+    let sizePanel = this.$refs.sizePanel
+    if (sizePanel) {
+      document.body.appendChild(this.$refs.sizePanel)
+    }
   },
   beforeDestroy () {
     let sizePanel = this.$refs.sizePanel
@@ -62,33 +70,81 @@ export default {
     GlobalEvent.off(this, 'mousedown')
   },
   render (h) {
-    let { panelStyle, vSize, background, currentPage, pageSize, pageSizes, total, pageCount, showSizes } = this
+    let { layouts, isSizes, vSize, background } = this
     return h('div', {
       class: ['vxe-pagination', {
         'p--background': background,
         [`size--${vSize}`]: vSize
       }]
-    }, [
-      h('span', {
+    }, layouts.map(name => this[`render${name}`](h)).concat(isSizes ? this.renderSizePanel(h) : []))
+  },
+  methods: {
+    // prevPage
+    renderPrevPage (h) {
+      let { currentPage } = this
+      return h('span', {
         class: ['page--prev-btn', {
           'is--disabled': currentPage <= 1
         }],
         on: {
           click: this.prevPageEvent
         }
-      }),
-      h('ul', {
+      })
+    },
+    // prevJump
+    renderPrevJump (h, tagName) {
+      let { numList, currentPage } = this
+      return h(tagName || 'span', {
+        class: ['page--jump-prev', {
+          'is--fixed': !tagName,
+          'is--disabled': currentPage <= 1
+        }],
+        on: {
+          click: () => this.jumpPageEvent(Math.max(currentPage - numList.length, 1))
+        }
+      })
+    },
+    // number
+    renderNumber (h) {
+      return h('ul', {
         class: 'page--btn-wrapper'
-      }, this.renderPageBtn(h)),
-      h('span', {
+      }, this.renderPageBtn(h))
+    },
+    // jumpNumber
+    renderJumpNumber (h) {
+      return h('ul', {
+        class: 'page--btn-wrapper'
+      }, this.renderPageBtn(h, true))
+    },
+    // nextJump
+    renderNextJump (h, tagName) {
+      let { numList, currentPage, pageCount } = this
+      return h(tagName || 'span', {
+        class: ['page--jump-next', {
+          'is--fixed': !tagName,
+          'is--disabled': currentPage >= pageCount
+        }],
+        on: {
+          click: () => this.jumpPageEvent(Math.min(currentPage + numList.length, pageCount))
+        }
+      })
+    },
+    // nextPage
+    renderNextPage (h) {
+      let { currentPage, pageCount } = this
+      return h('span', {
         class: ['page--next-btn', {
           'is--disabled': currentPage >= pageCount
         }],
         on: {
           click: this.nextPageEvent
         }
-      }),
-      h('span', {
+      })
+    },
+    // sizes
+    renderSizes (h) {
+      let { pageSize } = this
+      return h('span', {
         class: 'page--sizes',
         ref: 'sizeBtn'
       }, [
@@ -98,37 +154,12 @@ export default {
             click: this.toggleSizePanel
           }
         }, `${pageSize}${GlobalConfig.i18n('vxe.pagination.pagesize')}`)
-      ]),
-      h('span', {
-        class: 'page--jump'
-      }, [
-        h('span', GlobalConfig.i18n('vxe.pagination.goto')),
-        h('input', {
-          class: 'page--goto',
-          domProps: {
-            value: currentPage
-          },
-          attrs: {
-            type: 'text',
-            autocomplete: 'off'
-          },
-          on: {
-            keyup: evnt => {
-              if (evnt.keyCode === 13) {
-                let value = XEUtils.toNumber(evnt.target.value)
-                let current = value <= 0 ? 1 : value >= pageCount ? pageCount : value
-                evnt.target.value = current
-                this.jumpPageEvent(current)
-              }
-            }
-          }
-        }),
-        h('span', GlobalConfig.i18n('vxe.pagination.pageClassifier')),
-        h('span', {
-          class: 'page--total'
-        }, XEUtils.template(GlobalConfig.i18n('vxe.pagination.total'), { total }))
-      ]),
-      h('ul', {
+      ])
+    },
+    // 分页面板
+    renderSizePanel (h) {
+      let { panelStyle, pageSize, pageSizes, showSizes } = this
+      return h('ul', {
         class: ['vxe-pagination-size--select', {
           'is--show': showSizes
         }],
@@ -144,10 +175,68 @@ export default {
           }
         }, `${num}${GlobalConfig.i18n('vxe.pagination.pagesize')}`)
       }))
-    ])
-  },
-  methods: {
-    renderPageBtn (h) {
+    },
+    // jump
+    renderJump (h) {
+      let { currentPage, pageCount } = this
+      return h('span', {
+        class: 'page--jump'
+      }, [
+        h('span', {
+          class: 'page--goto-text'
+        }, GlobalConfig.i18n('vxe.pagination.goto')),
+        h('input', {
+          class: 'page--goto',
+          domProps: {
+            value: currentPage
+          },
+          attrs: {
+            type: 'text',
+            autocomplete: 'off'
+          },
+          on: {
+            keydown: evnt => {
+              if (evnt.keyCode === 13) {
+                let value = XEUtils.toNumber(evnt.target.value)
+                let current = value <= 0 ? 1 : value >= pageCount ? pageCount : value
+                evnt.target.value = current
+                this.jumpPageEvent(current)
+              } else if (evnt.keyCode === 38) {
+                evnt.preventDefault()
+                this.nextPageEvent(evnt)
+              } else if (evnt.keyCode === 40) {
+                evnt.preventDefault()
+                this.prevPageEvent(evnt)
+              }
+            }
+          }
+        }),
+        h('span', {
+          class: 'page--classifier-text'
+        }, GlobalConfig.i18n('vxe.pagination.pageClassifier'))
+      ])
+    },
+    // PageCount
+    renderPageCount (h) {
+      let { pageCount } = this
+      return h('span', {
+        class: 'page--count'
+      }, [
+        h('span', {
+          class: 'page--separator'
+        }, '/'),
+        h('span', pageCount)
+      ])
+    },
+    // total
+    renderTotal (h) {
+      let { total } = this
+      return h('span', {
+        class: 'page--total'
+      }, XEUtils.template(GlobalConfig.i18n('vxe.pagination.total'), { total }))
+    },
+    // number
+    renderPageBtn (h, showJump) {
       let { numList, currentPage, pageCount, pagerCount, offsetNumber } = this
       let nums = []
       let isOv = pageCount > pagerCount
@@ -161,7 +250,7 @@ export default {
           startNumber = Math.max(currentPage - offsetNumber, 1)
         }
       }
-      if (isLt) {
+      if (showJump && isLt) {
         nums.push(
           h('li', {
             class: 'page--num-btn',
@@ -169,12 +258,7 @@ export default {
               click: () => this.jumpPageEvent(1)
             }
           }, 1),
-          h('li', {
-            class: 'page--jump-prev',
-            on: {
-              click: () => this.jumpPageEvent(Math.max(currentPage - numList.length, 1))
-            }
-          })
+          this.renderPrevJump(h, 'li')
         )
       }
       numList.forEach((item, index) => {
@@ -187,19 +271,15 @@ export default {
               }],
               on: {
                 click: () => this.jumpPageEvent(number)
-              }
+              },
+              key: number
             }, number)
           )
         }
       })
-      if (isGt) {
+      if (showJump && isGt) {
         nums.push(
-          h('li', {
-            class: 'page--jump-next',
-            on: {
-              click: () => this.jumpPageEvent(Math.min(currentPage + numList.length, pageCount))
-            }
-          }),
+          this.renderNextJump(h, 'li'),
           h('li', {
             class: 'page--num-btn',
             on: {
