@@ -285,7 +285,6 @@ export default {
   methods: {
     findList () {
       this.loading = true
-      this.pendingRemoveList = []
       XEAjax.doGet(`/api/user/page/list/${this.pageVO.pageSize}/${this.pageVO.currentPage}`, this.formData).then(response => {
         let { page, result } = response.data
         this.tableData = result

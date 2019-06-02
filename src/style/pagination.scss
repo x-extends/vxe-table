@@ -5,6 +5,23 @@
   color: $vxe-font-color;
   font-family: $vxe-font-family;
   text-align: right;
+  user-select: none;
+  &.is--loading {
+    position: relative;
+    border-style: solid;
+    border-color: transparent;
+    border-width: 0 1px;
+    &:before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      background-color: $vxe-loading-background-color;
+    }
+  }
   &.p--background {
     .page--prev-btn,
     .page--next-btn {
@@ -187,7 +204,6 @@
   .page--jump-next,
   .page--next-btn,
   .page--sizes {
-    user-select: none;
     cursor: pointer;
   }
   .page--prev-btn,

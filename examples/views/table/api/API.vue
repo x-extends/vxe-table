@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="search-wrapper">
-      <vxe-input class="search-input" v-model="filterName" type="search" placeholder="参数不清楚？来试试 API 搜索吧！"></vxe-input>
+      <vxe-input class="search-input" v-model="filterName" type="search" placeholder="参数不清楚？看这里！"></vxe-input>
     </div>
     <vxe-table
       highlight-hover-row

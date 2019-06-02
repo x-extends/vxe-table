@@ -9,9 +9,11 @@ export default {
   props: {
     size: String,
     // 自定义布局
-    layouts: { type: Array, default: () => GlobalConfig.pagination.layouts || ['PrevPage', 'NextPage', 'Jump', 'Sizes', 'Total'] },
+    layouts: { type: Array, default: () => GlobalConfig.pagination.layouts || ['PrevPage', 'NextPage', 'FullJump', 'Sizes', 'Total'] },
     // 当前页
     currentPage: { type: Number, default: 1 },
+    // 加载中
+    loading: Boolean,
     // 每页大小
     pageSize: { type: Number, default: () => GlobalConfig.pagination.pageSize || 10 },
     // 总条数
@@ -70,11 +72,12 @@ export default {
     GlobalEvent.off(this, 'mousedown')
   },
   render (h) {
-    let { layouts, isSizes, vSize, background } = this
+    let { layouts, isSizes, loading, vSize, background } = this
     return h('div', {
       class: ['vxe-pagination', {
+        [`size--${vSize}`]: vSize,
         'p--background': background,
-        [`size--${vSize}`]: vSize
+        'is--loading': loading
       }]
     }, layouts.map(name => this[`render${name}`](h)).concat(isSizes ? this.renderSizePanel(h) : []))
   },
@@ -176,15 +179,19 @@ export default {
         }, `${num}${GlobalConfig.i18n('vxe.pagination.pagesize')}`)
       }))
     },
-    // jump
-    renderJump (h) {
+    // FullJump
+    renderFullJump (h) {
+      return this.renderJump(h, true)
+    },
+    // Jump
+    renderJump (h, isFull) {
       let { currentPage, pageCount } = this
       return h('span', {
         class: 'page--jump'
       }, [
-        h('span', {
+        isFull ? h('span', {
           class: 'page--goto-text'
-        }, GlobalConfig.i18n('vxe.pagination.goto')),
+        }, GlobalConfig.i18n('vxe.pagination.goto')) : null,
         h('input', {
           class: 'page--goto',
           domProps: {
@@ -211,9 +218,9 @@ export default {
             }
           }
         }),
-        h('span', {
+        isFull ? h('span', {
           class: 'page--classifier-text'
-        }, GlobalConfig.i18n('vxe.pagination.pageClassifier'))
+        }, GlobalConfig.i18n('vxe.pagination.pageClassifier')) : null
       ])
     },
     // PageCount

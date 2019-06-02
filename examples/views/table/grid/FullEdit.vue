@@ -31,8 +31,7 @@ export default {
   data () {
     return {
       tablePage: {
-        pageSize: 15,
-        background: true
+        pageSize: 15
       },
       tableProxy: {
         sort: true, // 启用排序代理
@@ -59,9 +58,7 @@ export default {
           { code: 'save', name: '保存' },
           { code: 'export', name: '导出.csv' }
         ],
-        setting: {
-          immediate: true
-        }
+        setting: true
       },
       tableColumn: [
         { type: 'selection', width: 50 },
@@ -101,8 +98,7 @@ export default {
           data () {
             return {
               tablePage: {
-                pageSize: 15,
-                background: true
+                pageSize: 15
               },
               tableProxy: {
                 sort: true, // 启用排序代理

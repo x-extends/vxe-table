@@ -36,6 +36,7 @@ import TableExport from './views/table/advanced/Export.vue'
 import TableMenu from './views/table/advanced/Menu.vue'
 import TableExpand from './views/table/advanced/Expand.vue'
 import TableToolbar from './views/table/advanced/Toolbar.vue'
+import TablePage from './views/table/advanced/Page.vue'
 
 import TableTreeBasic from './views/table/tree/Basic.vue'
 import TableTreeSelection from './views/table/tree/Selection.vue'
@@ -272,6 +273,11 @@ export default new Router({
       path: '/table/advanced/toolbar',
       name: 'TableToolbar',
       component: TableToolbar
+    },
+    {
+      path: '/table/advanced/page',
+      name: 'TablePage',
+      component: TablePage
     },
     {
       path: '/table/tree/basic',

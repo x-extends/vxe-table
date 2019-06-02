@@ -320,7 +320,7 @@ export default {
     },
     footerData () {
       let { showFooter, visibleColumn, tableFullData, data, footerMethod } = this
-      return showFooter && footerMethod && (visibleColumn.length || data) ? footerMethod({ columns: visibleColumn, data: tableFullData }) : []
+      return showFooter && footerMethod && (visibleColumn.length || data) ? footerMethod({ columns: visibleColumn, data: tableFullData }) : ['-']
     }
   },
   watch: {

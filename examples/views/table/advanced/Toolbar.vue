@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>使用表格自带的工具栏 vxe-table-toolbar，配合模板可以非常简单的实现强大的功能</p>
+    <p>使用自带的工具栏 vxe-table-toolbar，配合模板可以非常简单的实现强大的功能</p>
 
     <vxe-table-toolbar>
       <template v-slot:buttons>

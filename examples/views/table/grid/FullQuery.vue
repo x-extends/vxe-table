@@ -33,8 +33,7 @@ export default {
         order: ''
       },
       tablePage: {
-        pageSize: 15,
-        background: true
+        pageSize: 15
       },
       tableProxy: {
         ajax: {
@@ -84,8 +83,7 @@ export default {
                 order: ''
               },
               tablePage: {
-                pageSize: 15,
-                background: true
+                pageSize: 15
               },
               tableProxy: {
                 ajax: {

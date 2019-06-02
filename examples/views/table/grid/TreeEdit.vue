@@ -43,7 +43,9 @@ export default {
           { code: 'save', name: '保存' },
           { code: 'export', name: '导出.csv' }
         ],
-        setting: true
+        setting: {
+          immediate: true
+        }
       },
       tableColumn: [
         { type: 'selection', label: '全选', width: 180, treeNode: true },
@@ -82,7 +84,9 @@ export default {
                   { code: 'save', name: '保存' },
                   { code: 'export', name: '导出.csv' }
                 ],
-                setting: true
+                setting:  {
+                  immediate: true
+                }
               },
               tableColumn: [
                 { type: 'selection', label: '全选', width: 180, treeNode: true },

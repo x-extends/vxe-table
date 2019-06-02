@@ -18,8 +18,8 @@ const apis = [
         name: 'layouts',
         desc: '自定义布局',
         type: 'Array',
-        enum: 'PrevJump,PrevPage,Number,jumpNumber,NextPage,NextJump,Sizes,Jump,PageCount,Total',
-        defVal: '',
+        enum: 'PrevJump,PrevPage,Number,JumpNumber,NextPage,NextJump,Sizes,Jump,FullJump,PageCount,Total',
+        defVal: '[PrevPage,NextPage,FullJump,Sizes,Total]',
         list: []
       },
       {

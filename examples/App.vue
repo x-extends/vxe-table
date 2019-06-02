@@ -282,6 +282,12 @@ export default {
               locat: {
                 name: 'TableToolbar'
               }
+            },
+            {
+              label: '分页',
+              locat: {
+                name: 'TablePage'
+              }
             }
           ]
         },

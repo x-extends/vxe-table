@@ -131,10 +131,10 @@ export default {
         ref: 'xTable'
       }, $slots.default),
       pageConfig ? h('vxe-pagination', {
-        class: ['vxe-grid--pagination', {
-          'is--loading': loading
-        }],
-        props: Object.assign({ size: vSize }, pageConfig, proxyConfig ? tablePage : {}),
+        props: Object.assign({
+          size: vSize,
+          loading: loading || tableLoading
+        }, pageConfig, proxyConfig ? tablePage : {}),
         on: {
           'current-change': this.currentChangeEvent,
           'size-change': this.sizeChangeEvent

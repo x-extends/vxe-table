@@ -27,8 +27,7 @@ export default {
   data () {
     return {
       tablePage: {
-        pageSize: 15,
-        background: true
+        pageSize: 15
       },
       tableProxy: {
         ajax: {
@@ -57,8 +56,7 @@ export default {
           data () {
             return {
               tablePage: {
-                pageSize: 10,
-                background: true
+                pageSize: 10
               },
               tableProxy: {
                 ajax: {
