@@ -17,11 +17,11 @@ function defaultRenderer (h, attrs, editRender, params) {
         class: `vxe-${name}`,
         attrs,
         domProps: {
-          value: UtilTools.getCellValue(row, column.property)
+          value: UtilTools.getCellValue(row, column)
         },
         on: {
           input (evnt) {
-            UtilTools.setCellValue(row, column.property, evnt.target.value)
+            UtilTools.setCellValue(row, column, evnt.target.value)
             $table.updateStatus(params)
           }
         }
@@ -63,12 +63,12 @@ const _storeMap = {
               width: `${column.renderWidth}px`
             },
             domProps: {
-              value: UtilTools.getCellValue(row, column.property)
+              value: UtilTools.getCellValue(row, column)
             },
             on: {
               input (evnt) {
                 let inpElem = evnt.target
-                UtilTools.setCellValue(row, column.property, evnt.target.value)
+                UtilTools.setCellValue(row, column, evnt.target.value)
                 if (inpElem.scrollHeight > inpElem.offsetHeight) {
                   if (uploadRows.indexOf(row) === -1) {
                     inpElem.style.width = `${inpElem.offsetWidth + 20}px`
@@ -90,7 +90,7 @@ const _storeMap = {
                   let value = inpElem.value
                   let rangeData = DomTools.getCursorPosition(inpElem)
                   let pos = rangeData.end
-                  UtilTools.setCellValue(row, column.property, `${value.slice(0, pos)}\n${value.slice(pos, value.length)}`)
+                  UtilTools.setCellValue(row, column, `${value.slice(0, pos)}\n${value.slice(pos, value.length)}`)
                   inpElem.style.height = `${(Math.floor(inpElem.offsetHeight / rowHeight) + 1) * rowHeight}px`
                   setTimeout(() => {
                     rangeData.start = rangeData.end = ++pos
@@ -108,7 +108,7 @@ const _storeMap = {
       return [
         h('span', {
           domProps: {
-            innerHTML: XEUtils.escape(UtilTools.getCellValue(row, column.property)).replace(/\n/g, '<br>')
+            innerHTML: XEUtils.escape(UtilTools.getCellValue(row, column)).replace(/\n/g, '<br>')
           }
         })
       ]

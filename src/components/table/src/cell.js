@@ -61,7 +61,7 @@ const CellMethods = {
     if (slots && slots.default) {
       return slots.default(params)
     }
-    cellValue = UtilTools.getCellValue(row, column.property)
+    cellValue = UtilTools.getCellValue(row, column)
     if (formatter) {
       cellValue = formatter({ cellValue, row, rowIndex, column, columnIndex })
     }
@@ -257,7 +257,7 @@ const CellMethods = {
         }),
         labelProp ? h('span', {
           class: 'checkbox--label'
-        }, UtilTools.getCellValue(row, labelProp)) : null
+        }, XEUtils.get(row, labelProp)) : null
       ])
     ]
   },
@@ -285,7 +285,7 @@ const CellMethods = {
         indeterminate = treeIndeterminates.indexOf(row) > -1
       }
       options.domProps = {
-        checked: UtilTools.getCellValue(row, property)
+        checked: XEUtils.get(row, property)
       }
       options.on = {
         change (evnt) {
@@ -306,7 +306,7 @@ const CellMethods = {
         }),
         labelProp ? h('span', {
           class: 'checkbox--label'
-        }, UtilTools.getCellValue(row, labelProp)) : null
+        }, XEUtils.get(row, labelProp)) : null
       ])
     ]
   },

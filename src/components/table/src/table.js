@@ -816,7 +816,7 @@ export default {
           let oRow = tableSourceData[rowIndex]
           if (oRow && row) {
             if (prop) {
-              UtilTools.setCellValue(row, prop, UtilTools.getCellValue(oRow, prop))
+              XEUtils.set(row, prop, XEUtils.get(oRow, prop))
             } else {
               XEUtils.destructuring(row, oRow)
             }
@@ -841,12 +841,12 @@ export default {
         rows = [rows]
       }
       if (prop) {
-        rows.forEach(row => UtilTools.setCellValue(row, prop, null))
+        rows.forEach(row => XEUtils.set(row, prop, null))
       } else {
         rows.forEach(row => {
           visibleColumn.forEach(column => {
             if (column.property) {
-              UtilTools.setCellValue(row, column.property, null)
+              UtilTools.setCellValue(row, column, null)
             }
           })
         })
@@ -865,23 +865,23 @@ export default {
       let rowKey = UtilTools.getRowKey(this)
       let oRow
       if (rowKey || treeConfig) {
-        let rowId = UtilTools.getCellValue(row, rowKey)
+        let rowId = XEUtils.get(row, rowKey)
         if (treeConfig) {
           let children = treeConfig.children
-          let matchObj = XEUtils.findTree(tableSourceData, row => rowId === UtilTools.getCellValue(row, rowKey), treeConfig)
+          let matchObj = XEUtils.findTree(tableSourceData, row => rowId === XEUtils.get(row, rowKey), treeConfig)
           row = Object.assign({}, row, { [children]: null })
           if (matchObj) {
             oRow = Object.assign({}, matchObj.item, { [children]: null })
           }
         } else {
-          oRow = tableSourceData.find(row => rowId === UtilTools.getCellValue(row, rowKey))
+          oRow = tableSourceData.find(row => rowId === XEUtils.get(row, rowKey))
         }
       } else {
         let oRowIndex = this.getRowMapIndex(row)
         oRow = tableSourceData[oRowIndex]
       }
       if (arguments.length > 1) {
-        return oRow && !XEUtils.isEqual(UtilTools.getCellValue(oRow, prop), UtilTools.getCellValue(row, prop))
+        return oRow && !XEUtils.isEqual(XEUtils.get(oRow, prop), XEUtils.get(row, prop))
       }
       return oRow && !XEUtils.isEqual(oRow, row)
     },
@@ -931,11 +931,11 @@ export default {
       let insList = []
       if (property) {
         if (treeConfig) {
-          rowList = XEUtils.filterTree(tableFullData, row => UtilTools.getCellValue(row, property), treeConfig)
+          rowList = XEUtils.filterTree(tableFullData, row => XEUtils.get(row, property), treeConfig)
         } else {
-          rowList = tableFullData.filter(row => UtilTools.getCellValue(row, property))
+          rowList = tableFullData.filter(row => XEUtils.get(row, property))
         }
-        insList = editStore.insertList.filter(row => UtilTools.getCellValue(row, property))
+        insList = editStore.insertList.filter(row => XEUtils.get(row, property))
       } else {
         insList = editStore.insertList.filter(row => selection.indexOf(row) > -1)
       }
@@ -978,7 +978,7 @@ export default {
               }
             })
             if (valueList.length && !remoteFilter) {
-              return filterMethod ? valueList.some(value => filterMethod({ value, row, column })) : valueList.indexOf(UtilTools.getCellValue(row, property)) > -1
+              return filterMethod ? valueList.some(value => filterMethod({ value, row, column })) : valueList.indexOf(XEUtils.get(row, property)) > -1
             }
           }
           return true
@@ -1390,7 +1390,7 @@ export default {
       } else if (isDel || isBack) {
         // 如果是删除键
         if (selected.row || selected.column) {
-          UtilTools.setCellValue(selected.row, selected.column.property, null)
+          UtilTools.setCellValue(selected.row, selected.column, null)
           if (isBack) {
             this.handleActived(selected.args, evnt)
           }
@@ -1406,7 +1406,7 @@ export default {
         // 如果是按下非功能键之外允许直接编辑
         if (selected.row || selected.column) {
           if (!keyboardConfig.editMethod || !(keyboardConfig.editMethod(selected.args, evnt) === false)) {
-            UtilTools.setCellValue(selected.row, selected.column.property, null)
+            UtilTools.setCellValue(selected.row, selected.column, null)
             this.handleActived(selected.args, evnt)
           }
         }
@@ -1640,16 +1640,17 @@ export default {
     /**
      * 触发 tooltip 事件
      */
-    triggerTooltipEvent (evnt, { row, column }) {
+    triggerTooltipEvent (evnt, params) {
       let { editConfig, editStore, tooltipStore } = this
       let { actived } = editStore
+      let { row, column } = params
       if (editConfig) {
         if ((editConfig.mode === 'row' && actived.row === row) || (actived.row === row && actived.column === column)) {
           return
         }
       }
       if (tooltipStore.column !== column || tooltipStore.row !== row || !tooltipStore.visible) {
-        this.showTooltip(evnt, UtilTools.getCellValue(row, column.property), column, row)
+        this.showTooltip(evnt, UtilTools.getCellLabel(row, column, params), column, row)
       }
     },
     // 显示 tooltip
@@ -1752,20 +1753,20 @@ export default {
           if (treeConfig) {
             if (value === -1) {
               treeIndeterminates.push(row)
-              UtilTools.setCellValue(row, property, false)
+              XEUtils.set(row, property, false)
             } else {
               // 更新子节点状态
-              XEUtils.eachTree([row], item => UtilTools.setCellValue(item, property, value), treeConfig)
+              XEUtils.eachTree([row], item => XEUtils.set(item, property, value), treeConfig)
               XEUtils.remove(treeIndeterminates, item => item === row)
             }
             // 如果存在父节点，更新父节点状态
             let matchObj = XEUtils.findTree(tableFullData, item => item === row, treeConfig)
             if (matchObj.parent) {
-              let selectItems = matchObj.items.filter(item => UtilTools.getCellValue(item, property))
+              let selectItems = matchObj.items.filter(item => XEUtils.get(item, property))
               return this.triggerCheckRowEvent(evnt, { row: matchObj.parent }, selectItems.length === matchObj.items.length ? true : (selectItems.length || value === -1 ? -1 : false))
             }
           } else {
-            UtilTools.setCellValue(row, property, value)
+            XEUtils.set(row, property, value)
           }
         } else {
           if (treeConfig) {
@@ -1811,10 +1812,10 @@ export default {
       if (property) {
         this.isAllSelected = tableFullData.length && tableFullData.every(
           checkMethod
-            ? (row, rowIndex) => !checkMethod({ row, rowIndex }) || UtilTools.getCellValue(row, property)
-            : row => UtilTools.getCellValue(row, property)
+            ? (row, rowIndex) => !checkMethod({ row, rowIndex }) || XEUtils.get(row, property)
+            : row => XEUtils.get(row, property)
         )
-        this.isIndeterminate = !this.isAllSelected && tableFullData.some(row => UtilTools.getCellValue(row, property) || treeIndeterminates.indexOf(row) > -1)
+        this.isIndeterminate = !this.isAllSelected && tableFullData.some(row => XEUtils.get(row, property) || treeIndeterminates.indexOf(row) > -1)
       } else {
         this.isAllSelected = tableFullData.length && tableFullData.every(
           checkMethod
@@ -1830,7 +1831,7 @@ export default {
     toggleRowSelection (row) {
       let { selectConfig = {}, selection } = this
       let { checkProp: property } = selectConfig
-      this.triggerCheckRowEvent(null, { row }, property ? !UtilTools.getCellValue(row, property) : selection.indexOf(row) === -1)
+      this.triggerCheckRowEvent(null, { row }, property ? !XEUtils.get(row, property) : selection.indexOf(row) === -1)
       return this.$nextTick()
     },
     setAllSelection (value) {
@@ -1840,7 +1841,7 @@ export default {
       if (property) {
         let updateValue = (row, rowIndex) => {
           if (!checkMethod || checkMethod({ row, rowIndex })) {
-            UtilTools.setCellValue(row, property, value)
+            XEUtils.set(row, property, value)
           }
         }
         if (treeConfig) {
@@ -1889,9 +1890,9 @@ export default {
       let { checkProp: property } = selectConfig
       if (property) {
         if (treeConfig) {
-          XEUtils.eachTree(tableFullData, item => UtilTools.setCellValue(item, property, false), treeConfig)
+          XEUtils.eachTree(tableFullData, item => XEUtils.set(item, property, false), treeConfig)
         } else {
-          tableFullData.forEach(item => UtilTools.setCellValue(item, property, false))
+          tableFullData.forEach(item => XEUtils.set(item, property, false))
         }
       }
       this.isAllSelected = false
@@ -2093,6 +2094,7 @@ export default {
       if (editConfig.mode === 'row' ? actived.row !== row : (actived.row !== row || actived.column !== column)) {
         // 判断是否禁用编辑
         if (!activeMethod || activeMethod(params)) {
+          this.clostTooltip()
           this.clearValidate()
           this.clearCopyed(evnt)
           this.clearChecked(evnt)
@@ -2281,10 +2283,10 @@ export default {
             columns.forEach((column, cIndex) => {
               let offsetColumn = visibleColumn[columnIndex + cIndex]
               if (offsetColumn) {
-                UtilTools.setCellValue(offsetRow, offsetColumn.property, UtilTools.getCellValue(row, column.property))
+                UtilTools.setCellValue(offsetRow, offsetColumn, UtilTools.getCellValue(row, column))
               }
               if (cut) {
-                UtilTools.setCellValue(row, column.property, null)
+                UtilTools.setCellValue(row, column, null)
               }
             })
           }

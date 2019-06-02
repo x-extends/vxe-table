@@ -5,7 +5,7 @@
       <h1 class="title">
         <a href="https://github.com/xuliangzhan/vxe-table">vxe-table</a>
       </h1>
-      <span class="desc">一个功能更加强大的 Vue 表格组件</span>
+      <span class="desc">一个功能更加强大的、可扩展、可配置的 Vue 表格组件</span>
     </header>
     <div class="page-container">
       <div class="aside">

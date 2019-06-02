@@ -88,7 +88,7 @@ const apis = [
       },
       {
         name: 'formatter',
-        desc: '格式化显示内容 Function({cellValue, seq, row, rowIndex, column, columnIndex})',
+        desc: '格式化显示内容 Function({cellValue, row, rowIndex, column, columnIndex})',
         type: 'Function',
         enum: '',
         defVal: '',
@@ -96,7 +96,7 @@ const apis = [
       },
       {
         name: 'index-method',
-        desc: '只对 type=index 有效，自定义索引方法 Function({seq, row, rowIndex, column, columnIndex})',
+        desc: '只对 type=index 有效，自定义索引方法 Function({row, rowIndex, column, columnIndex})',
         type: 'Function',
         enum: '',
         defVal: '',

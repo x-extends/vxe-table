@@ -233,6 +233,10 @@
     &.c--title,
     &.c--tooltip {
       @extend %textEllipsis;
+      & > .vxe-checkbox {
+        display: block;
+        @extend %textEllipsis;
+      }
     }
   }
   .vxe-input--wrapper {

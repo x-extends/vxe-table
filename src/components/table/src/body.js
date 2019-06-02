@@ -35,6 +35,7 @@ function renderColumn (h, _vm, $table, seq, fixedType, rowLevel, row, rowIndex, 
   let checkedTLocat = {}
   let copyedLocat = {}
   let triggerDblclick = (editRender && editConfig && editConfig.trigger === 'dblclick')
+  let params = { $table, seq, row, rowIndex, nowIndex, column, columnIndex, fixed: fixedType, level: rowLevel, isHidden: fixedHiddenColumn, data: tableData }
   // 滚动的渲染不支持动态行高
   if ((scrollXLoad || scrollYLoad) && !hasEllipsis) {
     showEllipsis = hasEllipsis = true
@@ -42,12 +43,12 @@ function renderColumn (h, _vm, $table, seq, fixedType, rowLevel, row, rowIndex, 
   // hover 进入事件
   if (showTooltip || tableListeners['cell-mouseenter']) {
     tdOns.mouseenter = evnt => {
-      let params = { $table, seq, row, rowIndex, nowIndex, column, columnIndex, fixed: fixedType, level: rowLevel, cell: evnt.currentTarget }
+      let evntParams = { $table, seq, row, rowIndex, nowIndex, column, columnIndex, fixed: fixedType, level: rowLevel, cell: evnt.currentTarget }
       // 如果配置了显示 tooltip
       if (showTooltip) {
-        $table.triggerTooltipEvent(evnt, params)
+        $table.triggerTooltipEvent(evnt, evntParams)
       }
-      UtilTools.emitEvent($table, 'cell-mouseenter', [params, evnt])
+      UtilTools.emitEvent($table, 'cell-mouseenter', [evntParams, evnt])
     }
   }
   // hover 退出事件
@@ -78,7 +79,7 @@ function renderColumn (h, _vm, $table, seq, fixedType, rowLevel, row, rowIndex, 
   }
   // 合并行或列
   if (spanMethod) {
-    let { rowspan = 1, colspan = 1 } = spanMethod({ $table, seq, row, rowIndex, nowIndex, column, columnIndex, fixed: fixedType, level: rowLevel, data: tableData }) || {}
+    let { rowspan = 1, colspan = 1 } = spanMethod(params) || {}
     if (!rowspan || !colspan) {
       return null
     }
@@ -123,7 +124,7 @@ function renderColumn (h, _vm, $table, seq, fixedType, rowLevel, row, rowIndex, 
       'col--valid-error': validStore.row === row && validStore.column === column,
       'edit--visible': editRender && editRender.type === 'visible',
       'fixed--hidden': fixedHiddenColumn
-    }, cellClassName ? XEUtils.isFunction(cellClassName) ? cellClassName({ $table, seq, row, rowIndex, nowIndex, column, columnIndex, fixed: fixedType, level: rowLevel }) : cellClassName : ''],
+    }, cellClassName ? XEUtils.isFunction(cellClassName) ? cellClassName(params) : cellClassName : ''],
     key: columnKey || columnIndex,
     attrs,
     on: tdOns
@@ -135,12 +136,12 @@ function renderColumn (h, _vm, $table, seq, fixedType, rowLevel, row, rowIndex, 
         'c--ellipsis': showEllipsis
       }],
       attrs: {
-        title: showTitle ? UtilTools.getCellValue(row, column.property) : null
+        title: showTitle ? UtilTools.getCellLabel(row, column, params) : null
       },
       style: {
         width: hasEllipsis ? `${border ? renderWidth - 1 : renderWidth}px` : null
       }
-    }, column.renderCell(h, { $table, seq, row, rowIndex, nowIndex, column, columnIndex, fixed: fixedType, level: rowLevel, isHidden: fixedHiddenColumn })),
+    }, column.renderCell(h, params)),
     isMouseChecked && !fixedType ? h('span', {
       class: 'vxe-body--column-checked-lt'
     }) : null,

@@ -86,7 +86,7 @@ export default {
         { prop: 'validator', label: '校验规则', width: 140, editRender: { name: 'input' } },
         { prop: 'validMsg', label: '校验提示消息', width: 150, editRender: { name: 'input' } },
         { prop: 'describe', label: '描述', width: 200, showOverflow: true, editRender: { name: 'input' } },
-        { prop: 'createTime', label: '创建时间', width: 200, showOverflow: true, formatter: this.formatterDate, editRender: { name: 'input' } },
+        { prop: 'createTime', label: '创建时间', width: 100, showOverflow: true, formatter: this.formatterDate, editRender: { name: 'input' } },
         { prop: 'updateTime', label: '更新时间', width: 200, showOverflow: true, formatter: this.formatterDate, editRender: { name: 'input' } }
       ],
       loading2: false,

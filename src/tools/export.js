@@ -13,9 +13,9 @@ const ExportTools = {
       if (isOriginal) {
         content += columns.map(column => {
           if (column.type === 'index') {
-            return `"${column.index ? column.index(rowIndex) : rowIndex + 1}"`
+            return `"${column.indexMethod ? column.indexMethod(rowIndex) : rowIndex + 1}"`
           }
-          return `"${UtilTools.getCellValue(record, column.property) || ''}"`
+          return `"${UtilTools.getCellValue(record, column) || ''}"`
         }).join(',') + '\n'
       } else {
         content += columns.map(column => `"${record[column.id]}"`).join(',') + '\n'

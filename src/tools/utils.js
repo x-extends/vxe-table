@@ -38,11 +38,15 @@ const UtilTools = {
   formatText (value) {
     return '' + (value === null || value === void 0 ? '' : value)
   },
-  getCellValue (row, prop) {
-    return XEUtils.get(row, prop)
+  getCellValue (row, column) {
+    return XEUtils.get(row, column.property)
   },
-  setCellValue (row, prop, value) {
-    return XEUtils.set(row, prop, value)
+  getCellLabel (row, column, params) {
+    let cellValue = XEUtils.get(row, column.property)
+    return params && column.formatter ? column.formatter(Object.assign({ cellValue }, params)) : cellValue
+  },
+  setCellValue (row, column, value) {
+    return XEUtils.set(row, column.property, value)
   },
   getColumnConfig (_vm, { renderHeader, renderCell, renderData } = {}) {
     return {
