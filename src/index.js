@@ -10,6 +10,7 @@ import Radio from './components/radio'
 import Input from './components/input'
 import Button from './components/button'
 import Alert from './components/alert'
+import Tooltip from './components/tooltip'
 import GlobalConfig from './conf'
 import Interceptor from './interceptor'
 import Renderer from './renderer'
@@ -29,7 +30,8 @@ const components = [
   Radio,
   Input,
   Button,
-  Alert
+  Alert,
+  Tooltip
 ]
 
 var AlertController = null
@@ -37,12 +39,8 @@ var AlertController = null
 function MessageBox (options) {
   return new Promise((resolve, reject) => {
     let $alert = new AlertController({
-      el: document.createElement('div')
-    })
-    Object.keys($alert.$props).forEach(key => {
-      if (options.hasOwnProperty(key)) {
-        $alert[key] = options[key]
-      }
+      el: document.createElement('div'),
+      propsData: options
     })
     $alert._handleCustom = function (type) {
       $alert.$destroy()

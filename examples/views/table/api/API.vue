@@ -44,6 +44,7 @@ import checkboxAPI from '../../../api/checkbox'
 import inputAPI from '../../../api/input'
 import buttonAPI from '../../../api/button'
 import alertAPI from '../../../api/alert'
+import tooltipAPI from '../../../api/tooltip'
 
 export default {
   data () {
@@ -108,6 +109,9 @@ export default {
           break
         case 'alert':
           apis = alertAPI
+          break
+        case 'tooltip':
+          apis = tooltipAPI
           break
       }
 

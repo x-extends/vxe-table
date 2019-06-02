@@ -725,6 +725,15 @@ export default {
                   name: 'alert'
                 }
               }
+            },
+            {
+              label: 'vxe-tooltip',
+              locat: {
+                name: 'TableAPI',
+                params: {
+                  name: 'tooltip'
+                }
+              }
             }
           ]
         }
