@@ -25,7 +25,7 @@ function mockData () {
     fullIndex++
     if (columns.length < 10000) {
       let colItem = {
-        prop: 'name',
+        prop: fullIndex % 2 === 0 ? 'age' : (fullIndex % 3 === 0 ? 'rate' : 'name'),
         label: 'cloumn_' + fullIndex,
         width: 160
       }

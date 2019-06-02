@@ -9,6 +9,7 @@
       show-all-overflow
       height="600"
       :loading="loading"
+      :data.sync="tableData"
       :optimization ="{scrollY: {gt: 500, oSize: 20, rSize: 60}}">>
       <vxe-table-column type="index" width="100" fixed="left"></vxe-table-column>
       <vxe-table-column prop="name" label="Name" sortable width="200"></vxe-table-column>
@@ -38,21 +39,16 @@
 export default {
   data () {
     return {
-      loading: false
+      loading: false,
+      tableData: []
     }
   },
   created () {
     this.loading = true
-    this.$nextTick(() => {
-      this.$refs.xTable.reloadData([])
-      setTimeout(() => {
-        if (this.$refs.xTable) {
-          this.tableData = window.MOCK_DATA_LIST.slice(0, 10000)
-          this.$refs.xTable.reloadData(this.tableData)
-        }
-        this.loading = false
-      }, 500)
-    })
+    setTimeout(() => {
+      this.tableData = window.MOCK_DATA_LIST.slice(0, 10000)
+      this.loading = false
+    }, 300)
   }
 }
 </script>

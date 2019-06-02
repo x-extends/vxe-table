@@ -48,7 +48,8 @@ import XEUtils from 'xe-utils'
 export default {
   data () {
     return {
-      loading: false
+      loading: false,
+      updateFooter: 0
     }
   },
   created () {
@@ -58,7 +59,11 @@ export default {
       setTimeout(() => {
         if (this.$refs.xTable) {
           this.tableData = window.MOCK_DATA_LIST.slice(0, 100000)
-          this.$refs.xTable.reloadData(this.tableData)
+          this.$refs.xTable.reloadData(this.tableData).then(() => {
+            // 由于没有使用响应式的 data，所以 footerMethod 是无法自动执行的
+            // 建议提前计算好，或者手动改变响应的属性去触发
+            this.updateFooter++
+          })
         }
         this.loading = false
       }, 300)
@@ -75,36 +80,39 @@ export default {
       }
     },
     footerMethod ({ columns, data }) {
-      return [
-        columns.map((column, columnIndex) => {
-          if (columnIndex === 0) {
-            return '平均'
-          } else if (column.property === 'age') {
-            return `${parseInt(XEUtils.mean(data, column.property))} 岁`
-          } else if (column.property === 'rate') {
-            return `${parseInt(XEUtils.mean(data, column.property))} 分`
-          }
-          return '-'
-        }),
-        columns.map((column, columnIndex) => {
-          if (columnIndex === 0) {
-            return '和值'
-          } else if (column.property === 'rate') {
-            return `总分 ${XEUtils.sum(data, column.property)}`
-          }
-          return '-'
-        }),
-        columns.map((column, columnIndex) => {
-          if (columnIndex === 0) {
-            return '统计'
-          }
-          if (column.property === 'sex') {
-            let rest = XEUtils.groupBy(data, column.property)
-            return `男 ${rest[1] ? rest[1].length : 0} 人，女 ${rest[0] ? rest[0].length : 0} 人`
-          }
-          return '-'
-        })
-      ]
+      if (this.updateFooter) {
+        return [
+          columns.map((column, columnIndex) => {
+            if (columnIndex === 0) {
+              return '平均'
+            } else if (column.property === 'age') {
+              return `${parseInt(XEUtils.mean(data, column.property))} 岁`
+            } else if (column.property === 'rate') {
+              return `${parseInt(XEUtils.mean(data, column.property))} 分`
+            }
+            return '-'
+          }),
+          columns.map((column, columnIndex) => {
+            if (columnIndex === 0) {
+              return '和值'
+            } else if (column.property === 'rate') {
+              return `总分 ${XEUtils.sum(data, column.property)}`
+            }
+            return '-'
+          }),
+          columns.map((column, columnIndex) => {
+            if (columnIndex === 0) {
+              return '统计'
+            }
+            if (column.property === 'sex') {
+              let rest = XEUtils.groupBy(data, column.property)
+              return `男 ${rest[1] ? rest[1].length : 0} 人，女 ${rest[0] ? rest[0].length : 0} 人`
+            }
+            return '-'
+          })
+        ]
+      }
+      return [[], [], []]
     }
   }
 }

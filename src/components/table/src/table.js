@@ -20,7 +20,7 @@ var rowUniqueId = 0
 /**
  * 渲染浮固定列
  */
-function renderFixed (h, $table, fixedType, footerData) {
+function renderFixed (h, $table, fixedType) {
   let {
     tableData,
     tableColumn,
@@ -38,7 +38,8 @@ function renderFixed (h, $table, fixedType, footerData) {
     scrollXHeight,
     scrollRightToLeft,
     scrollLeftToRight,
-    columnStore
+    columnStore,
+    footerData
   } = $table
   let customHeight = isNaN(height) ? 0 : parseFloat(height)
   let isRightFixed = fixedType === 'right'
@@ -313,6 +314,10 @@ export default {
         })
       })
       return rest
+    },
+    footerData () {
+      let { showFooter, visibleColumn, tableFullData, data, footerMethod } = this
+      return showFooter && footerMethod && (visibleColumn.length || data) ? footerMethod({ columns: visibleColumn, data: tableFullData }) : []
     }
   },
   watch: {
@@ -432,10 +437,9 @@ export default {
       ctxMenuStore,
       tooltipStore,
       validStore,
-      getRecords
+      footerData
     } = this
     let { leftList, rightList } = columnStore
-    let footerData = showFooter && footerMethod && visibleColumn.length ? footerMethod({ columns: visibleColumn, data: getRecords() }) : ['-']
     return h('div', {
       class: ['vxe-table', vSize ? `size--${vSize}` : '', {
         'vxe-editable': editConfig,
@@ -502,11 +506,11 @@ export default {
       /**
        * 左侧固定列
        */
-      leftList && leftList.length && overflowX ? renderFixed(h, this, 'left', footerData) : _e(),
+      leftList && leftList.length && overflowX ? renderFixed(h, this, 'left') : _e(),
       /**
        * 右侧固定列
        */
-      rightList && rightList.length && overflowX ? renderFixed(h, this, 'right', footerData) : _e(),
+      rightList && rightList.length && overflowX ? renderFixed(h, this, 'right') : _e(),
       /**
        * 列宽线
        */
