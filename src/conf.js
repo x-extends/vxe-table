@@ -37,7 +37,7 @@ const GlobalConfig = {
     // pageSize: 10,
     // pagerCount: 7,
     // pageSizes: [10, 15, 20, 50, 100],
-    // layouts: ['PrevPage', 'NextPage', 'Jump', 'Sizes', 'Total']
+    // layouts: ['PrevJump', 'PrevPage', 'Jump', 'PageCount', 'NextPage', 'NextJump', 'Sizes', 'Total']
   },
   i18n: (key, value) => XEUtils.get(zhCNLocat, key)
 }

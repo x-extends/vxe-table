@@ -9,7 +9,7 @@ export default {
   props: {
     size: String,
     // 自定义布局
-    layouts: { type: Array, default: () => GlobalConfig.pagination.layouts || ['PrevPage', 'NextPage', 'FullJump', 'Sizes', 'Total'] },
+    layouts: { type: Array, default: () => GlobalConfig.pagination.layouts || ['PrevJump', 'PrevPage', 'Jump', 'PageCount', 'NextPage', 'NextJump', 'Sizes', 'Total'] },
     // 当前页
     currentPage: { type: Number, default: 1 },
     // 加载中
