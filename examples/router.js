@@ -15,6 +15,7 @@ import TableHeader from './views/table/base/Header.vue'
 import TableResizable from './views/table/base/Resizable.vue'
 import TableMaxHeight from './views/table/base/MaxHeight.vue'
 import TableHeight from './views/table/base/Height.vue'
+import TableAutoHeight from './views/table/base/AutoHeight.vue'
 import TableFixed from './views/table/base/Fixed.vue'
 import TableFixedFull from './views/table/base/FixedFull.vue'
 import TableGroup from './views/table/base/Group.vue'
@@ -35,6 +36,7 @@ import TableCustom from './views/table/advanced/Custom.vue'
 import TableExport from './views/table/advanced/Export.vue'
 import TableMenu from './views/table/advanced/Menu.vue'
 import TableExpand from './views/table/advanced/Expand.vue'
+import TableSearch from './views/table/advanced/Search.vue'
 import TableToolbar from './views/table/advanced/Toolbar.vue'
 import TablePage from './views/table/advanced/Page.vue'
 
@@ -45,6 +47,7 @@ import TableTreeToolbar from './views/table/tree/Toolbar.vue'
 import TableTreeEdit from './views/table/tree/Edit.vue'
 
 import GridBasic from './views/table/grid/Basic.vue'
+import GridTemplate from './views/table/grid/Template.vue'
 import GridPage from './views/table/grid/Page.vue'
 import GridFullQuery from './views/table/grid/FullQuery.vue'
 import GridProxy from './views/table/grid/Proxy.vue'
@@ -175,6 +178,11 @@ export default new Router({
       component: TableHeight
     },
     {
+      path: '/table/base/autoHeight',
+      name: 'TableAutoHeight',
+      component: TableAutoHeight
+    },
+    {
       path: '/table/base/fixed',
       name: 'TableFixed',
       component: TableFixed
@@ -270,6 +278,11 @@ export default new Router({
       component: TableExpand
     },
     {
+      path: '/table/advanced/search',
+      name: 'TableSearch',
+      component: TableSearch
+    },
+    {
       path: '/table/advanced/toolbar',
       name: 'TableToolbar',
       component: TableToolbar
@@ -308,6 +321,11 @@ export default new Router({
       path: '/table/grid/basic',
       name: 'GridBasic',
       component: GridBasic
+    },
+    {
+      path: '/table/grid/template',
+      name: 'GridTemplate',
+      component: GridTemplate
     },
     {
       path: '/table/grid/page',

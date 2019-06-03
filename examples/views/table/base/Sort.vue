@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>通过给需要排序功能的列加上 sortable 属性可以支持排序，还可以通过设置 sort-by 多字段进行排序</p>
+    <p>通过给需要排序功能的列加上 <table-api-link prop="sortable"/> 属性可以支持排序，还可以通过设置 <table-api-link prop="sort-by"/> 多字段进行排序</p>
 
     <vxe-table
       border
@@ -14,7 +14,7 @@
       <vxe-table-column prop="time" label="Time" sortable></vxe-table-column>
     </vxe-table>
 
-    <p>配置 sort-by 多个字段组合排序</p>
+    <p>配置 <table-api-link prop="sort-by"/> 多个字段组合排序</p>
 
     <vxe-table
       border

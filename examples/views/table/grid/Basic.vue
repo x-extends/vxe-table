@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>使用 vxe-grid 配置的方式渲染表格，这对一些动态渲染的场景非常有用，完全使用数据进行配置</p>
+    <p>使用 <grid-api-link name="vxe-grid"/> 配置的方式渲染表格，这对一些动态渲染的场景非常有用，完全使用数据进行配置</p>
 
     <vxe-grid
       border

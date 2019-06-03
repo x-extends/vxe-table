@@ -1,7 +1,7 @@
 <template>
   <div>
-    <p>数据代理：通过配置 proxy-config 参数，如果配置了 page-config 分页，则默认读取响应结果中 page.total 和 result 属性，可以通过 props 修改</p>
-    <p>由 grid 代理数据转换，只需要配置好数据源即可；非常简单就可以渲染一个表格</p>
+    <p>数据代理：通过配置 <grid-api-link prop="proxy-config"/> 参数，如果配置了 <grid-api-link prop="page-config"/> 分页，则默认读取响应结果中 page.total 和 result 属性，可以通过 <grid-api-link prop="props"/> 修改</p>
+    <p>由 <grid-api-link prop="page-config"/> 代理数据转换，只需要配置好数据源即可；非常简单就可以渲染一个表格</p>
 
     <vxe-grid
       border

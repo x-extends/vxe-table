@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>通过设置 loading 属性可以使用自带的加载效果</p>
+    <p>通过设置 <table-api-link prop="loading"/> 属性可以使用自带的加载效果</p>
 
     <vxe-table
       border

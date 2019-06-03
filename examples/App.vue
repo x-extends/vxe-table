@@ -132,6 +132,12 @@ export default {
               }
             },
             {
+              label: '响应式宽高',
+              locat: {
+                name: 'TableAutoHeight'
+              }
+            },
+            {
               label: '固定表头',
               demoUrl: 'https://jsrun.net/JrXKp',
               locat: {
@@ -284,6 +290,12 @@ export default {
               }
             },
             {
+              label: '全表搜索',
+              locat: {
+                name: 'TableSearch'
+              }
+            },
+            {
               label: '分页',
               locat: {
                 name: 'TablePage'
@@ -345,6 +357,12 @@ export default {
               demoUrl: 'https://jsrun.net/5RXKp',
               locat: {
                 name: 'GridBasic'
+              }
+            },
+            {
+              label: '自定义模板',
+              locat: {
+                name: 'GridTemplate'
               }
             },
             {
@@ -435,6 +453,7 @@ export default {
             },
             {
               label: '1 万行 1 万列',
+              demoUrl: 'https://jsrun.net/ULyKp',
               locat: {
                 name: 'TableScrollCols'
               }

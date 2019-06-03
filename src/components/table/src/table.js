@@ -28,6 +28,7 @@ function renderFixed (h, $table, fixedType) {
     collectColumn,
     isGroup,
     height,
+    containerHeight,
     vSize,
     headerHeight,
     footerHeight,
@@ -41,7 +42,7 @@ function renderFixed (h, $table, fixedType) {
     columnStore,
     footerData
   } = $table
-  let customHeight = isNaN(height) ? 0 : parseFloat(height)
+  let customHeight = height === 'auto' ? containerHeight : XEUtils.toNumber(height)
   let isRightFixed = fixedType === 'right'
   let fixedColumn = columnStore[`${fixedType}List`]
   let style = {
@@ -134,6 +135,8 @@ export default {
       // afterFullData: [],
       // 渲染中的数据
       tableData: [],
+      // 表格父容器的高度
+      containerHeight: 0,
       // 表格宽度
       tableWidth: 0,
       // 表格高度
@@ -142,9 +145,9 @@ export default {
       headerHeight: 0,
       // 表尾高度
       footerHeight: 0,
-      // 是否横向 X 滚动方式加载
+      // 是否启用了横向 X 可视渲染方式加载
       scrollXLoad: false,
-      // 是否纵向 Y 滚动方式加载
+      // 是否启用了纵向 Y 可视渲染方式加载
       scrollYLoad: false,
       // 是否存在纵向滚动条
       overflowY: true,
@@ -205,7 +208,7 @@ export default {
         list: [],
         style: null
       },
-      // 存放横向 X 滚动渲染相关的信息
+      // 存放横向 X 可视渲染相关的信息
       scrollXStore: {
         renderSize: 0,
         visibleSize: 0,
@@ -216,7 +219,7 @@ export default {
         leftSpaceWidth: 0,
         rightSpaceWidth: 0
       },
-      // 存放纵向 Y 滚动渲染相关的信息
+      // 存放纵向 Y 可视渲染相关的信息
       scrollYStore: {
         renderSize: 0,
         visibleSize: 0,
@@ -326,7 +329,7 @@ export default {
   watch: {
     data (value) {
       if (!this.isUpdateData) {
-        this.loadData(value).then(this.handleDefaultExpand)
+        this.loadData(value, true).then(this.handleDefaultExpand)
       }
       this.isUpdateData = false
     },
@@ -384,7 +387,7 @@ export default {
     GlobalEvent.on(this, 'resize', this.handleGlobalResizeEvent)
   },
   mounted () {
-    if (this.autoResize && this.autoWidth) {
+    if (this.autoResize) {
       ResizeEvent.on(this, this.$el.parentNode, this.recalculate)
     }
     document.body.appendChild(this.$refs.tableWrapper)
@@ -624,8 +627,8 @@ export default {
       this.clearRowExpand()
       this.clearTreeExpand()
     },
-    loadData (datas, init) {
-      let { height, maxHeight, autoWidth, editStore, optimizeOpts, recalculate } = this
+    loadData (datas, notRefresh) {
+      let { height, maxHeight, editStore, optimizeOpts, recalculate } = this
       let { scrollY } = optimizeOpts
       let tableFullData = datas || []
       let scrollYLoad = scrollY && scrollY.gt && scrollY.gt < tableFullData.length
@@ -643,10 +646,8 @@ export default {
       this.updateKeyMap(tableFullData, 'fullDataKeyMap')
       this.checkSelectionStatus()
       let rest = this.$nextTick()
-      if (!init) {
-        if (autoWidth) {
-          rest = rest.then(recalculate)
-        }
+      if (!notRefresh) {
+        rest = rest.then(recalculate)
       }
       return rest
     },
@@ -1011,6 +1012,7 @@ export default {
       if (this.treeConfig) {
         this.handleDefaultTreeExpand()
       }
+      this.$nextTick(this.recalculate)
     },
     /**
      * 动态列处理
@@ -1151,7 +1153,7 @@ export default {
       let tableWidth = 0
       let minCellWidth = 40 // 列宽最少限制 40px
       let remainWidth = bodyWidth
-      let { fit, columnStore } = this
+      let { $el, fit, columnStore } = this
       let { resizeList, pxMinList, pxList, scaleList, scaleMinList, autoList } = columnStore
       // 最小宽
       pxMinList.forEach(column => {
@@ -1210,10 +1212,12 @@ export default {
         }
       })
       let tableHeight = bodyElem.offsetHeight
-      this.scrollYWidth = bodyElem.offsetWidth - bodyWidth
-      this.overflowY = this.scrollYWidth > 0
+      let scrollYWidth = bodyElem.offsetWidth - bodyWidth
+      this.scrollYWidth = scrollYWidth
+      this.overflowY = scrollYWidth > 0
       this.tableWidth = tableWidth
       this.tableHeight = tableHeight
+      this.containerHeight = $el.parentNode.clientHeight
       if (headerElem) {
         this.headerHeight = headerElem.offsetHeight
       }
@@ -2631,19 +2635,19 @@ export default {
       return this.$nextTick()
     },
     /**
-     * 是否启用了横向 X 滚动渲染
+     * 是否启用了横向 X 可视渲染
      */
     isScrollXLoad () {
       return this.scrollXLoad
     },
     /**
-     * 是否启用了纵向 Y 滚动渲染
+     * 是否启用了纵向 Y 可视渲染
      */
     isScrollYLoad () {
       return this.scrollYLoad
     },
     /**
-     * 横向 Y 滚动渲染事件处理
+     * 横向 Y 可视渲染事件处理
      */
     triggerScrollXEvent (evnt) {
       let { $refs, visibleColumn, scrollXStore } = this
@@ -2686,7 +2690,7 @@ export default {
       this.clostTooltip()
     },
     /**
-     * 纵向 Y 滚动渲染事件处理
+     * 纵向 Y 可视渲染事件处理
      */
     triggerScrollYEvent: XEUtils.debounce(function (evnt) {
       let { tableFullData, scrollYStore } = this
@@ -2719,7 +2723,7 @@ export default {
         }
       }
     }, DomTools.browse.msie ? 40 : 20, { leading: false, trailing: true }),
-    // 计算滚动渲染相关数据
+    // 计算可视渲染相关数据
     computeScrollLoad () {
       let { scrollXLoad, scrollYLoad, scrollYStore, scrollXStore, visibleColumn, optimizeOpts } = this
       let { scrollX, scrollY } = optimizeOpts
@@ -2751,14 +2755,14 @@ export default {
         }
       }
     },
-    // 更新 X 滚动上下剩余空间大小
+    // 更新横向 X 可视渲染上下剩余空间大小
     updateScrollXSpace () {
       let { visibleColumn, scrollXStore } = this
       this.tableColumn = visibleColumn.slice(scrollXStore.startIndex, scrollXStore.startIndex + scrollXStore.renderSize)
       scrollXStore.leftSpaceWidth = visibleColumn.slice(0, scrollXStore.startIndex).reduce((previous, column) => previous + column.renderWidth, 0)
       scrollXStore.rightSpaceWidth = visibleColumn.slice(scrollXStore.startIndex + scrollXStore.renderSize, visibleColumn.length).reduce((previous, column) => previous + column.renderWidth, 0)
     },
-    // 更新 Y 滚动上下剩余空间大小
+    // 更新纵向 Y 可视渲染上下剩余空间大小
     updateScrollYSpace () {
       let { scrollYStore } = this
       let { fullData, tableData } = this.getTableData()
@@ -3071,7 +3075,7 @@ export default {
     /**
      * 导出 csv 文件
      * 如果是树表格，则默认是导出所有节点
-     * 如果是启用了滚动加载，则只能导出数据源，可以配合 dataFilterMethod 函数自行转换数据
+     * 如果是启用了可视渲染，则只能导出数据源，可以配合 dataFilterMethod 函数自行转换数据
      */
     exportCsv (options) {
       let { visibleColumn, scrollXLoad, scrollYLoad, treeConfig } = this

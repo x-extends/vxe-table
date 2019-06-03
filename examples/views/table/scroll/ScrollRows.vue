@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>加载 1 万行，左右固定列</p>
+    <p>可视渲染，加载 1 万行，左右固定列</p>
 
     <vxe-table
       ref="xTable"

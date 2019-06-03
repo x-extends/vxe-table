@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>通过设置 expand-config 属性和 type="expand" 与 slot 可以开启展开行功能</p>
+    <p>通过设置 <table-api-link prop="expand-config"/> 属性和 type="<table-api-link prop="expand"/>" 与 slot 可以开启展开行功能</p>
 
     <button class="btn" @click="$refs.xTable.toggleRowExpansion(tableData[1])">切换第二行展开</button>
     <button class="btn" @click="$refs.xTable.setRowExpansion([tableData[2], tableData[3]], true)">设置第三、四行展开</button>
@@ -57,7 +57,7 @@
       <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
 
-    <p>默认展开所有行，通过 expandAll 参数设置默认展开行</p>
+    <p>默认展开所有行，通过 <table-api-link prop="expandAll"/> 参数设置默认展开行</p>
 
     <vxe-table
       border

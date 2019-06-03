@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>通过配置 page-config 参数开启分页功能</p>
+    <p>通过配置 <grid-api-link prop="page-config"/> 参数开启分页功能</p>
 
     <vxe-grid
       border

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>使用 highlight-current-row 方式；选项改变触发事件select-change</p>
+    <p>使用 <table-api-link prop="highlight-current-row"/> 方式；选项改变触发事件 <table-api-link prop="select-change"/></p>
 
     <vxe-table
       border

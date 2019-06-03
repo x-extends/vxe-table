@@ -1,7 +1,7 @@
 <template>
   <div>
     <p>右键快捷菜单，支持表头菜单、内容菜单、表尾菜单</p>
-    <p>配置项 {header, body, footer}</p>
+    <p>配置项 <table-api-link prop="context-menu"/>={header,body,footer}</p>
 
     <vxe-table
       border

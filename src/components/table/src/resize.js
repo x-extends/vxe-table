@@ -1,22 +1,23 @@
 
 import XEUtils from 'xe-utils'
+import GlobalConfig from '../../../conf'
 
 const eventStore = []
+const defaultInterval = 250
 var resizeTimeout = null
 
 function addListener () {
   clearTimeout(resizeTimeout)
-  resizeTimeout = setTimeout(ResizeEvent.handle, ResizeEvent.delay)
+  resizeTimeout = setTimeout(ResizeEvent.handle, GlobalConfig.resizeInterval || defaultInterval)
 }
 
 const ResizeEvent = {
-  delay: 250,
   on (comp, target, cb) {
     if (!eventStore.length) {
       addListener()
     }
     if (!eventStore.some(item => item.comp === comp && item.target === target)) {
-      eventStore.push({ comp, target, cb, width: target.clientWidth })
+      eventStore.push({ comp, target, cb, width: target.clientWidth, heighe: target.clientWidth })
     }
   },
   off (comp, target) {
@@ -25,14 +26,18 @@ const ResizeEvent = {
   handle () {
     if (eventStore.length) {
       eventStore.forEach(item => {
-        let { comp, target, cb, width } = item
+        let { comp, target, cb, width, heighe } = item
         let clientWidth = target.clientWidth
-        if (clientWidth && width !== clientWidth) {
+        let clientHeight = target.clientHeight
+        let rWidth = clientWidth && width !== clientWidth
+        let rHeight = clientHeight && heighe !== clientHeight
+        if (rWidth || rHeight) {
           item.width = clientWidth
-          cb.call(comp, { type: 'resize', target, currentTarget: target })
+          item.heighe = clientHeight
+          cb.call(comp, { type: 'resize', target, rWidth, rHeight, currentTarget: target })
         }
       })
-      resizeTimeout = setTimeout(ResizeEvent.handle, ResizeEvent.delay)
+      resizeTimeout = setTimeout(ResizeEvent.handle, GlobalConfig.resizeInterval || defaultInterval)
     }
   }
 }

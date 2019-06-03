@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>隐藏头部</p>
+    <p>隐藏头部，通过设置 <table-column-api-link prop="show-header"/> 参数</p>
 
     <vxe-table
       :show-header="false"

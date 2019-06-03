@@ -8,9 +8,9 @@
   user-select: none;
   &.is--loading {
     position: relative;
-    border-style: solid;
-    border-color: transparent;
-    border-width: 0 1px;
+    // border-style: solid;
+    // border-color: transparent;
+    // border-width: 0 1px;
     &:before {
       content: "";
       position: absolute;

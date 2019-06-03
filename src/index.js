@@ -96,7 +96,7 @@ function install (Vue, options) {
 function use (Plugin, options) {
   if (Plugin && Plugin.install) {
     if (installedPlugins.indexOf(Plugin) === -1) {
-      Plugin.install(options, { setup, interceptor: Interceptor, renderer: Renderer })
+      Plugin.install({ setup, interceptor: Interceptor, renderer: Renderer, MessageBox }, options)
       installedPlugins.push(Plugin)
     }
   }

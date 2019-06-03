@@ -11,7 +11,7 @@
       :loading="loading"
       :data.sync="tableData"
       :footer-method="footerMethod"
-      :edit-config="{key: 'id', trigger: 'click', mode: 'cell'}">
+      :edit-config="{key: 'id', trigger: 'click', mode: 'row'}">
       <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
       <vxe-table-column type="index" width="80" fixed="left">
         <template v-slot:header="{ column }">

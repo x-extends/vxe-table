@@ -7,6 +7,14 @@ const apis = [
     defVal: '',
     list: [
       {
+        name: 'customs',
+        desc: '与表格的 customs 属性同步绑定',
+        type: 'Array',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'setting',
         desc: '显示列个性化设置按钮',
         type: 'Boolean,Object',

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>通过 customs 来初始化绑定动态列，prop:属性,visible:默认是否显示；可使用的属性 {property(只读),label(只读),visible（读写）}</p>
+    <p>通过 <table-api-link prop="customs"/> 来初始化绑定动态列，prop:属性,visible:默认是否显示；可使用的属性 {property(只读),label(只读),visible（读写）}</p>
     <p>该功能对于列比较多的表格非常有用，可以轻松实现强大的显示/隐藏列的配置功能，实时调用 refreshColumn 刷新列</p>
 
     <div class="table-oper">
@@ -35,7 +35,7 @@
       <code class="scss">{{ demoCodes[2] }}</code>
     </pre>
 
-    <p>通过点击后才调用 refreshColumn 刷新列</p>
+    <p>通过点击后才调用 <table-api-link prop="refreshColumn"/> 刷新列</p>
 
     <template v-for="(column,index) in customColumns2">
       <vxe-checkbox v-if="column.property" class="checkbox-item" v-model="column.visible" :key="index">{{ column.label }}</vxe-checkbox>

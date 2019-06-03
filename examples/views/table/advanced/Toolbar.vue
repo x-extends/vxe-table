@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>使用自带的工具栏 vxe-table-toolbar，配合模板可以非常简单的实现强大的功能</p>
+    <p>使用自带的工具栏 <toolbar-api-link name="vxe-table-toolbar"/>，配合模板可以非常简单的实现强大的功能</p>
 
     <vxe-table-toolbar>
       <template v-slot:buttons>
@@ -27,7 +27,7 @@
       <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
 
-    <p>显示/隐藏列功能，通过设置 setting 和 customs 参数开启</p>
+    <p>显示/隐藏列功能，通过设置 <toolbar-api-link prop="setting"/> 和 <toolbar-api-link prop="customs"/> 参数开启</p>
 
     <vxe-table-toolbar :customs="customColumns" setting>
       <template v-slot:buttons>

@@ -12,7 +12,7 @@
       <vxe-table-column prop="address" label="Address" show-overflow></vxe-table-column>
     </vxe-table>
 
-    <p>使用 highlight-hover-row 属性启用 hover 行高亮</p>
+    <p>使用 <table-api-link prop="highlight-hover-row"/> 属性启用 hover 行高亮</p>
 
     <vxe-table
       stripe

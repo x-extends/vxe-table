@@ -17,7 +17,7 @@
       <vxe-table-column prop="address" label="Address" show-overflow></vxe-table-column>
     </vxe-table>
 
-    <p>通过 cell-click 事件点击改变颜色</p>
+    <p>通过 <table-api-link prop="cell-click"/> 事件点击改变颜色</p>
 
     <vxe-table
       border

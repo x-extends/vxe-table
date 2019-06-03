@@ -23,6 +23,7 @@ A very powerful Vue table component.
 * 单元格样式
 * 列宽拖动
 * 流体高度
+* 响应式宽高
 * 固定表头
 * 固定列
 * 固定表头和列
@@ -40,8 +41,10 @@ A very powerful Vue table component.
 * 格式化内容
 * 自定义模板
 * 快捷菜单
-* 滚动渲染
+* 可视渲染
 * 展开行
+* 分页
+* 工具栏
 * 树形表格
 * 增删改查
 * 数据校验

@@ -14,7 +14,7 @@
       <vxe-table-column prop="address" label="Address" show-overflow></vxe-table-column>
     </vxe-table>
 
-    <p>如果设置 max-height，当内容为达到最大高度时会自适应</p>
+    <p>如果设置 <table-api-link prop="max-height"/>，当内容为达到最大高度时会自适应</p>
 
     <vxe-table
       border

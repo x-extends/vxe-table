@@ -7,6 +7,7 @@ import './plugins/highlight.js'
 import './plugins/element.js'
 import './plugins/iview.js'
 import './plugins/xtable.js'
+import './plugins/index.js'
 import './mock'
 import XEUtils from 'xe-utils'
 
@@ -87,6 +88,112 @@ function mockData () {
     setTimeout(mockData, 10)
   }
 }
+
+window.MOCK_TREE_DATA_LIST = [
+  {
+    id: '10000',
+    name: '文件夹 10000',
+    size: '53k',
+    type: '',
+    date: '2019-05-16',
+    children: [
+      {
+        id: '11000',
+        name: '文件 11000',
+        size: '11k',
+        type: 'js',
+        date: '2019-05-16'
+      },
+      {
+        id: '12000',
+        name: '文件夹 12000',
+        size: '22k',
+        type: '',
+        date: '2019-05-16',
+        children: [
+          {
+            id: '12100',
+            name: '文件夹 12100',
+            size: '60k',
+            type: '',
+            date: '2019-05-16',
+            children: [
+              {
+                id: '12110',
+                name: '文件 12110',
+                size: '100k',
+                type: 'html',
+                date: '2019-05-16'
+              }
+            ]
+          },
+          {
+            id: '122000',
+            name: '文件 122000',
+            size: '80k',
+            type: 'avi',
+            date: '2019-05-16'
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: '20000',
+    name: '文件 20000',
+    size: '66k',
+    type: 'png',
+    date: '2019-05-16'
+  },
+  {
+    id: '30000',
+    name: '文件夹 30000',
+    size: '3k',
+    type: '',
+    date: '2019-05-16',
+    children: [
+      {
+        id: '31000',
+        name: '文件夹 31000',
+        size: '9k',
+        type: '',
+        date: '2019-05-16',
+        children: [
+          {
+            id: '31100',
+            name: '文件 31100',
+            size: 'mp3',
+            type: 'js',
+            date: '2019-05-16'
+          },
+          {
+            id: '31200',
+            name: '文件 31200',
+            size: '224k',
+            type: 'java',
+            date: '2019-05-16'
+          }
+        ]
+      },
+      {
+        id: '32000',
+        name: '文件夹 32000',
+        size: '33k',
+        type: '',
+        date: '2019-05-16',
+        children: [
+          {
+            id: '32100',
+            name: '文件 32100',
+            size: '35k',
+            type: 'mp4',
+            date: '2019-05-16'
+          }
+        ]
+      }
+    ]
+  }
+]
 
 mockData()
 

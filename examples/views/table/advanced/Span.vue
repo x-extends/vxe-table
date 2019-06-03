@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>合并列</p>
+    <p>合并列，通过参数 <table-api-link prop="span-method"/></p>
     <p>使用 nowIndex 指向当前数据的索引，rowIndex 指向 data 的真实索引，可以根据不同场景使用</p>
 
     <vxe-table

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>使用自带的分页 vxe-pagination</p>
+    <p>使用自带的分页 <pagination-api-link name="vxe-pagination"/></p>
 
     <vxe-table
       border

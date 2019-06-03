@@ -17,7 +17,7 @@
       <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
 
-    <p>配合 loading 使用，可以通过 slot=empty 自定义提示语</p>
+    <p>配合 loading 使用，可以通过 slot=<table-api-link prop="empty"/> 自定义提示语</p>
 
     <vxe-table
       height="300"

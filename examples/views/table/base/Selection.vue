@@ -18,7 +18,7 @@
       <vxe-table-column prop="address" label="Address" show-overflow></vxe-table-column>
     </vxe-table>
 
-    <p>还可以通过 checkMethod 方法控制是否允许点击 CheckBox 勾选，还可以配置 labelProp 列显示属性</p>
+    <p>还可以通过 <table-api-link prop="checkMethod"/> 方法控制是否允许点击 CheckBox 勾选，还可以配置 <table-api-link prop="labelProp"/> 列显示属性</p>
 
     <button class="btn" @click="$refs.xTable2.toggleRowSelection(tableData[1])">切换第二行选中</button>
     <button class="btn" @click="$refs.xTable2.setSelection([tableData[2], tableData[3]], true)">设置第三、四行选中</button>
@@ -36,7 +36,7 @@
       <vxe-table-column prop="address" label="Address" show-overflow></vxe-table-column>
     </vxe-table>
 
-    <p>多选表格，通过配置 select-config 参数，使用渲染最快的 checkProp 属性绑定方式</p>
+    <p>多选表格，通过配置 <table-api-link prop="select-config"/> 参数，使用渲染最快的 <table-api-link prop="labelProp"/> 属性绑定方式</p>
 
     <button class="btn" @click="$refs.xTable3.toggleRowSelection(tableData[1])">切换第二行选中</button>
     <button class="btn" @click="$refs.xTable3.setSelection([tableData[2], tableData[3]], true)">设置第三、四行选中</button>

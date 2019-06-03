@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>设置 show-footer 和 footerMethod 自定义表尾合计</p>
+    <p>设置 <table-api-link prop="show-footer"/> show-footer 和 <table-api-link prop="footer-method"/> 自定义表尾合计</p>
 
     <vxe-table
       class="mytable-footer"
@@ -17,7 +17,7 @@
       <vxe-table-column prop="rate" label="Rate"></vxe-table-column>
     </vxe-table>
 
-    <p>还可以配合 footerCellClassName 自定义不同列颜色</p>
+    <p>还可以配合 <table-api-link prop="footer-cell-class-name"/> 自定义不同列颜色</p>
 
     <vxe-table
       class="mytable-footer"

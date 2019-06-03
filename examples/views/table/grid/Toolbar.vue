@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>工具栏：通过 toolbar 属性配置</p>
+    <p>工具栏：通过 <grid-api-link prop="toolbar"/> 属性配置</p>
 
     <vxe-grid
       border

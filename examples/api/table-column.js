@@ -10,7 +10,7 @@ const apis = [
         name: 'type',
         desc: '列的类型',
         type: 'String',
-        enum: 'index,selection,radio,expand',
+        enum: 'index（序号）,selection（多选）,radio（单选）,expand（展开行）',
         defVal: '',
         list: []
       },
@@ -34,23 +34,23 @@ const apis = [
         name: 'width',
         desc: '列宽度',
         type: 'Number,String',
-        enum: '',
-        defVal: '',
+        enum: '数值px，数值%',
+        defVal: '默认均匀分配',
         list: []
       },
       {
         name: 'min-width',
         desc: '最小列宽度，会把剩余空间按比例分配',
         type: 'Number,String',
-        enum: '',
+        enum: '数值px，数值%',
         defVal: '',
         list: []
       },
       {
         name: 'fixed',
-        desc: '将列固定在左侧或者右侧',
+        desc: '将列固定在左侧或者右侧（规范：固定列放在左右两侧）',
         type: 'String',
-        enum: '',
+        enum: 'left（固定左侧）,right（固定右侧）',
         defVal: '',
         list: []
       },
@@ -58,7 +58,7 @@ const apis = [
         name: 'align',
         desc: '列对其方式',
         type: 'String',
-        enum: '',
+        enum: 'left（居左）,center（居中）,right（居右）',
         defVal: 'left',
         list: []
       },
@@ -66,7 +66,7 @@ const apis = [
         name: 'header-align',
         desc: '表头对齐方式',
         type: 'String',
-        enum: '',
+        enum: 'left（居左）,center（居中）,right（居右）',
         defVal: '',
         list: []
       },
@@ -74,7 +74,7 @@ const apis = [
         name: 'show-overflow',
         desc: '当内容过长时显示为省略号',
         type: 'String,Boolean',
-        enum: 'ellipsis,title,tooltip',
+        enum: 'ellipsis（只显示省略号）,title（并且显示为原生 title）,tooltip（并且显示为 tooltip 提示）',
         defVal: '',
         list: []
       },
@@ -82,7 +82,7 @@ const apis = [
         name: 'show-header-overflow',
         desc: '当表头内容过长时显示为省略号',
         type: 'String,Boolean',
-        enum: 'ellipsis,title,tooltip',
+        enum: 'ellipsis（只显示省略号）,title（并且显示为原生 title）,tooltip（并且显示为 tooltip 提示）',
         defVal: '',
         list: []
       },

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>通过设置 resizable 属性可以支持列宽拖动</p>
+    <p>通过设置 <table-api-link prop="resizable"/> 属性可以支持列宽拖动</p>
 
     <vxe-table
       resizable

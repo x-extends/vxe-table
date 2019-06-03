@@ -136,7 +136,7 @@ const apis = [
         name: 'height',
         desc: '表格的高度',
         type: 'Number,String',
-        enum: '',
+        enum: 'auto（相对于父容器高度），数值px',
         defVal: '',
         list: []
       },
@@ -144,8 +144,16 @@ const apis = [
         name: 'max-height',
         desc: '表格的最大高度',
         type: 'Number,String',
-        enum: '',
+        enum: '数值px',
         defVal: '',
+        list: []
+      },
+      {
+        name: 'auto-resize',
+        desc: '是否自动根据父容器响应式调整表格宽高（如果表格需要铺满父容器时可能会用到）',
+        type: 'Boolean',
+        enum: '',
+        defVal: 'false',
         list: []
       },
       {
@@ -296,7 +304,7 @@ const apis = [
         name: 'show-all-overflow',
         desc: '设置所有内容过长时显示为省略号（如果是固定列建议设置该值，提升渲染速度）',
         type: 'Boolean,String',
-        enum: 'ellipsis,title,tooltip',
+        enum: 'ellipsis（只显示省略号）,title（并且显示为原生 title）,tooltip（并且显示为 tooltip 提示）',
         defVal: '',
         list: []
       },
@@ -304,7 +312,7 @@ const apis = [
         name: 'show-header-all-overflow',
         desc: '设置表头所有内容过长时显示为省略号',
         type: 'Boolean,String',
-        enum: 'ellipsis,title,tooltip',
+        enum: 'ellipsis（只显示省略号）,title（并且显示为原生 title）,tooltip（并且显示为 tooltip 提示）',
         defVal: '',
         list: []
       },
@@ -314,22 +322,6 @@ const apis = [
         type: 'Number,String',
         enum: '',
         defVal: '',
-        list: []
-      },
-      {
-        name: 'auto-resize',
-        desc: '是否自动根据父容器大小调整表格宽度',
-        type: 'Boolean',
-        enum: '',
-        defVal: 'false',
-        list: []
-      },
-      {
-        name: 'auto-width',
-        desc: '是否自动计算列宽（如果关闭了需要手动调用 recalculate 函数）',
-        type: 'Boolean',
-        enum: '',
-        defVal: 'true',
         list: []
       },
       {
@@ -774,14 +766,14 @@ const apis = [
           },
           {
             name: 'scrollX',
-            desc: '横向 X 滚动渲染配置',
+            desc: '横向 X 可视渲染配置',
             type: 'Object',
             enum: '',
             defVal: '',
             list: [
               {
                 name: 'gt',
-                desc: '指定大于多少范围时自动启动滚动渲染',
+                desc: '指定大于多少范围时自动启动可视渲染',
                 type: 'Number',
                 enum: '',
                 defVal: '60',
@@ -815,14 +807,14 @@ const apis = [
           },
           {
             name: 'scrollY',
-            desc: '纵向 Y 滚动渲染配置',
+            desc: '纵向 Y 可视渲染配置',
             type: 'Object',
             enum: '',
             defVal: '',
             list: [
               {
                 name: 'gt',
-                desc: '指定大于多少范围时自动启动滚动渲染',
+                desc: '指定大于多少范围时自动启动可视渲染',
                 type: 'Number',
                 enum: '',
                 defVal: '500',
@@ -1485,7 +1477,7 @@ const apis = [
       },
       {
         name: 'isScrollXLoad()',
-        desc: '判断是否启用了横向 X 滚动渲染',
+        desc: '判断是否启用了横向 X 可视渲染',
         type: 'Boolean',
         enum: '',
         defVal: '',
@@ -1493,7 +1485,7 @@ const apis = [
       },
       {
         name: 'isScrollYLoad()',
-        desc: '判断是否启用了纵向 Y 滚动渲染',
+        desc: '判断是否启用了纵向 Y 可视渲染',
         type: 'Boolean',
         enum: '',
         defVal: '',
@@ -1532,7 +1524,7 @@ const apis = [
           },
           {
             name: 'original',
-            desc: '是否导出源数据（滚动渲染启用后默认是 true）',
+            desc: '是否导出源数据（可视渲染启用后默认是 true）',
             type: 'Boolean',
             enum: '',
             defVal: 'false',

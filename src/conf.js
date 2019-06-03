@@ -6,6 +6,7 @@ const GlobalConfig = {
   // showAllOverflow: null,
   // showHeaderAllOverflow: null,
   // contextMenu: null,
+  // resizeInterval: 250,
   optimization: {
     animat: true,
     scrollX: {

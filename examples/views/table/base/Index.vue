@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>默认的序号从 1 开始，你也可以自定义 indexMethod 函数</p>
+    <p>默认的序号从 1 开始，你也可以自定义 <table-column-api-link prop="index-method"/> 函数</p>
 
     <vxe-table
       border
@@ -13,7 +13,7 @@
       <vxe-table-column prop="address" label="Address" show-overflow></vxe-table-column>
     </vxe-table>
 
-    <p>使用 indexMethod 自定义序号</p>
+    <p>使用 <table-column-api-link prop="index-method"/> 自定义序号</p>
 
     <vxe-table
       border

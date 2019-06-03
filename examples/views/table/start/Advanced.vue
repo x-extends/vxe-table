@@ -2,6 +2,7 @@
   <div>
     <h3>高级函数</h3>
     <p>通过渲染器你可以轻松实现渲染的单元格组件，可以根据不同业务实现不一样的组件，这个功能将非常实用</p>
+    <p>比如这些插件 <a href="https://www.npmjs.com/package/vxe-table-plugin-element">vxe-table-plugin-element</a> , <a href="https://www.npmjs.com/package/vxe-table-plugin-iview">vxe-table-plugin-iview</a> 都是使用渲染器实现的</p>
     <p>例子：使用 render 实现单元格组件</p>
     <pre>
       <code class="javascript">{{ demoCodes[0] }}</code>
