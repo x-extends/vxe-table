@@ -65,7 +65,7 @@ export default {
           ]
         },
         {
-          label: '基本功能',
+          label: '基础功能',
           value: 'base',
           expand: false,
           children: [
