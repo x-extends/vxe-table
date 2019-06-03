@@ -40,6 +40,7 @@
     <pre>
       <code class="xml">{{ demoCodes[0] }}</code>
       <code class="javascript">{{ demoCodes[1] }}</code>
+      <code class="scss">{{ demoCodes[2] }}</code>
     </pre>
 
     <p>树表格搜索功能，非常简单就可以实现树表格内容搜索</p>
@@ -79,8 +80,9 @@
     <p class="demo-code">显示代码</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[2] }}</code>
-      <code class="javascript">{{ demoCodes[3] }}</code>
+      <code class="xml">{{ demoCodes[3] }}</code>
+      <code class="javascript">{{ demoCodes[4] }}</code>
+      <code class="scss">{{ demoCodes[5] }}</code>
     </pre>
   </div>
 </template>
@@ -163,6 +165,12 @@ export default {
         }
         `,
         `
+        .keyword-lighten {
+          color: #000;
+          background-color: #FFFF00;
+        }
+        `,
+        `
         <vxe-table-toolbar>
           <template v-slot:buttons>
             <vxe-input v-model="filterName2" type="search" placeholder="试试全表搜索"></vxe-input>
@@ -223,7 +231,13 @@ export default {
           created () {
             this.tableData = window.MOCK_TREE_DATA_LIST.slice(0)
           }
-        }`
+        }`,
+        `
+        .keyword-lighten {
+          color: #000;
+          background-color: #FFFF00;
+        }
+        `
       ]
     }
   },
