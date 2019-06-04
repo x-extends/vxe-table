@@ -10,7 +10,7 @@ module.exports = {
         use: 'Quick start',
         advancedFunctions: 'Advanced Functions',
 
-        basics: 'Basics functions',
+        basics: 'Basics',
         base: 'Basics table',
         size: 'Size',
         ellipsis: 'Ellipsis',
@@ -34,7 +34,7 @@ module.exports = {
         loading: 'Loading',
         format: 'Format content',
 
-        advanced: 'Advanced functions',
+        advanced: 'Advanced',
         events: '事件绑定',
         template: '自定义模板',
         span: 'Rowspan and colspan',
