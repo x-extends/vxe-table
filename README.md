@@ -134,7 +134,7 @@ import Vue from 'vue'
 import VueI18n from 'vxe-i18n'
 import VXETable from 'vxe-table'
 import zhCNLocat from 'vxe-table/lib/locale/lang/zh_CN'
-import enLocat from 'vxe-table/lib/locale/lang/zh_CN'
+import enLocat from 'vxe-table/lib/locale/lang/en'
 
 const messages = {
   zh_CN: {

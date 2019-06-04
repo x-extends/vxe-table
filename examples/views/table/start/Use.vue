@@ -78,14 +78,15 @@
     <p>修改默认的主题颜色</p>
     <pre>
       <code class="scss">
-        // Case 1. 引入默认的样式
+        // Case 1. Use the default theme style.  使用默认的主题样式
         @import 'vxe-table/lib/index.css';
 
-        // Case 2. 自定义表格颜色（复制 vxe-table/src/style/variable.scss 到自己的项目中，修改颜色变量，然后引入）
+        // Case 2. Modify the table theme color.  修改表格主题颜色
         // @import 'assets/style/vxe-table/variable.scss';
         // @import 'vxe-table/src/style/default.scss';
 
-        // Case 3. 重写主题样式，复制 vxe-table/src/style 目录到项目中自行修改（例如复制到 /assets）
+        // Case 3. If you need to completely rewrite the theme style, Copy the vxe-table/src/style directory into the project and modify it yourself.
+        // 如果需要完全重写主题样式，只需复制 vxe-table/src/style 目录到项目中自行修改就行（例如复制到 /assets
         // @import 'assets/style/index.scss';
       </code>
     </pre>
@@ -97,7 +98,7 @@
         import VueI18n from 'vxe-i18n'
         import VXETable from 'vxe-table'
         import zhCNLocat from 'vxe-table/lib/locale/lang/zh_CN'
-        import enLocat from 'vxe-table/lib/locale/lang/zh_CN'
+        import enLocat from 'vxe-table/lib/locale/lang/en'
 
         const messages = {
           zh_CN: {
