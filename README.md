@@ -156,8 +156,8 @@ new Vue({ i18n }).$mount('#app')
 
 ## Plugins
 
-* [vxe-table-plugin-element](https://github.com/xuliangzhan/vxe-table-plugin-element) 用于适配 element-ui 组件
-* [vxe-table-plugin-iview](https://github.com/xuliangzhan/vxe-table-plugin-iview) 用于适配 iview 组件
+* [vxe-table-plugin-element](https://www.npmjs.com/package/vxe-table-plugin-element) For integration [element-ui](https://www.npmjs.com/package/element-ui) components.
+* [vxe-table-plugin-iview](https://www.npmjs.com/package/vxe-table-plugin-iview) For integration [iview](https://www.npmjs.com/package/iview) components.
 
 ## Example
 
