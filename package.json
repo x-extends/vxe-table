@@ -1,6 +1,6 @@
 {
   "name": "vxe-table",
-  "version": "1.0.0-beta.22",
+  "version": "1.0.0-beta.23",
   "description": "A very powerful Vue table component.",
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -51,6 +51,7 @@
     "vinyl-buffer": "^1.0.1",
     "vinyl-source-stream": "^2.0.0",
     "vue": "^2.6.10",
+    "vue-i18n": "^8.11.2",
     "vue-router": "^3.0.3",
     "vue-template-compiler": "^2.6.10",
     "vxe-table-plugin-element": "0.9.1",

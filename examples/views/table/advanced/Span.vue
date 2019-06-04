@@ -15,7 +15,7 @@
       <vxe-table-column prop="age" label="Age"></vxe-table-column>
     </vxe-table>
 
-    <p class="demo-code">显示代码</p>
+    <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
       <code class="xml">{{ demoCodes[0] }}</code>
@@ -35,7 +35,7 @@
       <vxe-table-column prop="language" label="Language" :filters="[{label: '中文', value: 'zh_CN'}, {label: 'English', value: 'en_US'}]"></vxe-table-column>
     </vxe-table>
 
-    <p class="demo-code">显示代码</p>
+    <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
       <code class="xml">{{ demoCodes[2] }}</code>

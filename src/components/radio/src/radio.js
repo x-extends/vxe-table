@@ -1,7 +1,8 @@
 export default {
   name: 'VxeRadio',
-  prpos: {
-    value: Boolean,
+  props: {
+    value: [String, Number],
+    label: [String, Number],
     disabled: Boolean,
     name: String,
     size: String
@@ -12,7 +13,7 @@ export default {
     }
   },
   render (h) {
-    let { $slots, disabled, vSize, value, name } = this
+    let { $slots, disabled, vSize, value, label, name } = this
     return h('label', {
       class: ['vxe-radio', {
         [`size--${vSize}`]: vSize,
@@ -26,14 +27,13 @@ export default {
           disabled
         },
         domProps: {
-          checked: value
+          checked: value === label
         },
         on: {
           change: evnt => {
             if (!disabled) {
-              let checked = evnt.target.checked
-              this.$emit('input', checked)
-              this.$emit('change', checked, evnt)
+              this.$emit('input', label)
+              this.$emit('change', label, evnt)
             }
           }
         }

@@ -22,13 +22,19 @@
       <h1 class="title">
         <a href="https://github.com/xuliangzhan/vxe-table">vxe-table</a>
       </h1>
-      <span class="desc">一个功能更加强大的、可扩展、可配置的 Vue 表格组件</span>
+      <div class="right">
+        <div class="langs">
+          <vxe-radio v-model="$i18n.locale" name="lang" label="zh-CN">中文</vxe-radio>
+          <vxe-radio v-model="$i18n.locale" name="lang" label="en">English</vxe-radio>
+        </div>
+        <div class="desc">{{ $t('app.header.desc') }}</div>
+      </div>
     </header>
     <div class="page-container">
       <div class="aside">
         <ul class="nav-menu">
           <li v-for="(item, index) in tableList" :key="index">
-            <a class="nav-link" @click="linkEvent(item)">{{ item.label }}</a>
+            <a class="nav-link" @click="linkEvent(item)">{{ $t(item.label) }}</a>
             <ul v-if="item.children" v-show="item.expand" class="nav-child-menu">
               <li v-for="(child, cIndex) in item.children" :key="cIndex">
                 <a class="nav-link disabled" v-if="child.disabled" title="后续版本会考虑支持该功能！">{{ child.label }}</a>
@@ -39,8 +45,8 @@
         </ul>
       </div>
       <div class="body">
-        <a class="link tosrc" :href="`https://github.com/xuliangzhan/vxe-table/tree/master/examples/views/table/${pageKey}`" target="_blank">查看代码</a>
-        <a v-if="demoLink" class="link todemo" :href="demoLink" target="_blank">在线运行</a>
+        <a class="link tosrc" :href="`https://github.com/xuliangzhan/vxe-table/tree/master/examples/views/table/${pageKey}`" target="_blank">{{ $t('app.body.button.viewCode') }}</a>
+        <a v-if="demoLink" class="link todemo" :href="demoLink" target="_blank">{{ $t('app.body.button.runDemo') }}</a>
         <router-view/>
       </div>
     </div>
@@ -57,7 +63,7 @@ export default {
       selected: null,
       tableList: [
         {
-          label: '开发指南',
+          label: 'app.aside.nav.start',
           value: 'start',
           expand: false,
           children: [
@@ -82,7 +88,7 @@ export default {
           ]
         },
         {
-          label: '基础功能',
+          label: 'app.aside.nav.basics',
           value: 'base',
           expand: false,
           children: [
@@ -240,7 +246,7 @@ export default {
           ]
         },
         {
-          label: '高级功能',
+          label: 'app.aside.nav.advanced',
           value: 'advanced',
           expand: false,
           children: [
@@ -321,7 +327,7 @@ export default {
           ]
         },
         {
-          label: 'Tree 表格',
+          label: 'app.aside.nav.tree',
           value: 'tree',
           expand: false,
           children: [
@@ -365,7 +371,7 @@ export default {
           ]
         },
         {
-          label: 'Grid 表格',
+          label: 'app.aside.nav.grid',
           value: 'grid',
           expand: false,
           children: [
@@ -445,7 +451,7 @@ export default {
           ]
         },
         {
-          label: 'Big 表格',
+          label: 'app.aside.nav.scroll',
           value: 'scroll',
           expand: false,
           children: [
@@ -491,7 +497,7 @@ export default {
           ]
         },
         {
-          label: 'Edit 表格',
+          label: 'app.aside.nav.edit',
           value: 'edit',
           expand: false,
           children: [
@@ -589,7 +595,7 @@ export default {
           ]
         },
         {
-          label: 'Excel 表格',
+          label: 'app.aside.nav.excel',
           value: 'excel',
           expand: false,
           children: [
@@ -602,7 +608,7 @@ export default {
           ]
         },
         {
-          label: 'UI 集成',
+          label: 'app.aside.nav.other',
           value: 'other',
           expand: false,
           children: [
@@ -628,7 +634,7 @@ export default {
           ]
         },
         {
-          label: 'Plugin 插件',
+          label: 'app.aside.nav.plugin',
           value: 'plugin',
           expand: false,
           children: [
@@ -659,7 +665,7 @@ export default {
           ]
         },
         {
-          label: 'API',
+          label: 'app.aside.nav.api',
           value: 'api',
           expand: false,
           children: [

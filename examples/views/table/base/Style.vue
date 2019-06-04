@@ -17,7 +17,7 @@
       <vxe-table-column prop="address" label="Address" show-overflow></vxe-table-column>
     </vxe-table>
 
-    <p class="demo-code">显示代码</p>
+    <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
       <code class="xml">{{ demoCodes[0] }}</code>
@@ -41,7 +41,7 @@
       <vxe-table-column prop="address" label="Address" show-overflow></vxe-table-column>
     </vxe-table>
 
-    <p class="demo-code">显示代码</p>
+    <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
       <code class="xml">{{ demoCodes[3] }}</code>

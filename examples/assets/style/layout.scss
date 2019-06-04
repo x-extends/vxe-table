@@ -49,11 +49,18 @@ body {
     }
     float: left;
   }
-  .desc {
+  .right {
     float: right;
+    width: 500px;
+    text-align: right;
+    margin: 5px 0;
+  }
+  .langs {
+    margin-bottom: 5px;
+  }
+  .desc {
     font-size: 14px;
     color: #333;
-    margin-top: 30px;
   }
 }
 .page-container {
