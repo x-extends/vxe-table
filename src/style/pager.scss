@@ -57,7 +57,7 @@
     }
     .vxe-pager--sizes {
       .vxe-pager--sizes-arrow {
-        top: 9px;
+        top: 8px;
       }
       .size--content {
         height: 28px;
@@ -93,7 +93,7 @@
     }
     .vxe-pager--sizes {
       .vxe-pager--sizes-arrow {
-        top: 8px;
+        top: 7px;
       }
       .size--content {
         height: 26px;
@@ -133,7 +133,7 @@
         line-height: 24px;
       }
       .vxe-pager--sizes-arrow {
-        top: 7px;
+        top: 6px;
       }
     }
     .vxe-pager--jump .vxe-pager--goto {
@@ -236,7 +236,7 @@
     .vxe-pager--sizes-arrow {
       position: absolute;
       right: 5px;
-      top: 10px;
+      top: 9px;
       font-size: 12px;
       @include animatTransition(transform, .2s);
     }
