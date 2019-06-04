@@ -57,7 +57,7 @@
       <vxe-table-column prop="rate" label="ElRate" width="200" fixed="right" :edit-render="{name: 'ElRate', type: 'visible'}"></vxe-table-column>
     </vxe-table>
 
-    <el-pager
+    <el-pagination
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page="pageVO.currentPage"
@@ -65,7 +65,7 @@
       :page-size="pageVO.pageSize"
       layout="total, sizes, prev, pager, next, jumper"
       :total="pageVO.totalResult">
-    </el-pager>
+    </el-pagination>
 
     <p class="demo-code">显示代码</p>
 
