@@ -6,7 +6,7 @@
 [![gzip size: CSS](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/index.css?compression=gzip&label=gzip%20size:%20CSS)](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/index.css?compression=gzip&label=gzip%20size:%20CSS)
 [![npm license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/xuliangzhan/vxe-table/blob/master/LICENSE)
 
-A very powerful Vue table component.
+A more powerful, extensible, configurable Vue Table component.
 
 ## Browser Support
 
@@ -97,14 +97,14 @@ Vue.use(VXETable, {
 
 ## Theme
 
-Case 1. 默认的样式
+Case 1. Use the default theme style. 使用默认的主题样式
 
 ```javascript
 import VXETable from 'vxe-table'
 import 'vxe-table/lib/index.css'
 ```
 
-Case 2. 自定义表格颜色（修改局部颜色变量）
+Case 2. Modify the table theme color. 修改表格主题颜色
 
 ```scss
 // 引入变量
@@ -118,7 +118,8 @@ $vxe-table-background-color: #ffffff;
 @import 'vxe-table/src/style/default.scss';
 ```
 
-Case 3. 重写主题样式，复制 vxe-table/src/style 目录到项目中自行修改就行（例如复制到 /assets）
+Case 3. If you need to completely rewrite the theme style, Copy the vxe-table/src/style directory into the project and modify it yourself.
+如果需要完全重写主题样式，只需复制 vxe-table/src/style 目录到项目中自行修改就行（例如复制到 /assets）
 
 ```scss
 @import 'assets/style/index.scss';
