@@ -8,7 +8,7 @@ import tableZhCN from '../../lib/locale/lang/zh-CN'
 Vue.use(VueI18n)
 
 const i18n = new VueI18n({
-  locale: 'zh-CN',
+  locale: ['zh-CN', 'zh-TW'].includes(navigator.language) ? 'zh-CN' : 'en',
   messages: {
     en: {
       ...tableEn,
