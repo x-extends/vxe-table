@@ -2,10 +2,15 @@
   <div>
     <p>通过设置 <table-api-link prop="expand-config"/> 属性和 type="<table-api-link prop="expand"/>" 与 slot 可以开启展开行功能</p>
 
-    <button class="btn" @click="$refs.xTable.toggleRowExpansion(tableData[1])">切换第二行展开</button>
-    <button class="btn" @click="$refs.xTable.setRowExpansion([tableData[2], tableData[3]], true)">设置第三、四行展开</button>
-    <button class="btn" @click="$refs.xTable.setAllRowExpansion(true)">设置所有行展开</button>
-    <button class="btn" @click="$refs.xTable.clearRowExpand()">关闭所有行展开</button>
+    <vxe-toolbar>
+      <template v-slot:buttons>
+        <vxe-button @click="$refs.xTable.toggleRowExpansion(tableData[1])">切换第二行展开</vxe-button>
+        <vxe-button @click="$refs.xTable.setRowExpansion([tableData[2], tableData[3]], true)">设置第三、四行展开</vxe-button>
+        <vxe-button @click="$refs.xTable.setAllRowExpansion(true)">设置所有行展开</vxe-button>
+        <vxe-button @click="$refs.xTable.clearRowExpand()">关闭所有行展开</vxe-button>
+      </template>
+    </vxe-toolbar>
+
     <vxe-table
       ref="xTable"
       border
@@ -110,10 +115,15 @@ export default {
       tableData2: [],
       demoCodes: [
         `
-        <button class="btn" @click="$refs.xTable.toggleRowExpansion(tableData[1])">切换第二行展开</button>
-        <button class="btn" @click="$refs.xTable.setRowExpansion([tableData[2], tableData[3]], true)">设置第三、四行展开</button>
-        <button class="btn" @click="$refs.xTable.setRowExpansion(tableData, true)">设置所有行展开</button>
-        <button class="btn" @click="$refs.xTable.clearRowExpand()">关闭所有行展开</button>
+        <vxe-toolbar>
+          <template v-slot:buttons>
+            <vxe-button @click="$refs.xTable.toggleRowExpansion(tableData[1])">切换第二行展开</vxe-button>
+            <vxe-button @click="$refs.xTable.setRowExpansion([tableData[2], tableData[3]], true)">设置第三、四行展开</vxe-button>
+            <vxe-button @click="$refs.xTable.setAllRowExpansion(true)">设置所有行展开</vxe-button>
+            <vxe-button @click="$refs.xTable.clearRowExpand()">关闭所有行展开</vxe-button>
+          </template>
+        </vxe-toolbar>
+
         <vxe-table
           ref="xTable"
           border

@@ -15,9 +15,10 @@
       ref="xTree"
       :tree-config="{key: 'id', children: 'children'}"
       :edit-config="{trigger: 'click', mode: 'row'}"
-      :select-config="{labelProp: 'name'}"
+      :select-config="{labelProp: 'id'}"
       :data.sync="tableData">
-      <vxe-table-column type="selection" label="Name" tree-node></vxe-table-column>
+      <vxe-table-column type="selection" label="ID" tree-node></vxe-table-column>
+      <vxe-table-column prop="name" label="Name" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column prop="size" label="Size" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column prop="type" label="Type" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column prop="date" label="Date" :edit-render="{name: 'input'}"></vxe-table-column>
@@ -54,8 +55,9 @@ export default {
           ref="xTree"
           :tree-config="{key: 'id', children: 'children'}"
           :edit-config="{trigger: 'click', mode: 'row'}"
+          :select-config="{labelProp: 'id'}"
           :data.sync="tableData">
-          <vxe-table-column type="selection" width="120" tree-node></vxe-table-column>
+          <vxe-table-column type="selection" label="ID" tree-node></vxe-table-column>
           <vxe-table-column prop="name" label="Name" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column prop="size" label="Size" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column prop="type" label="Type" :edit-render="{name: 'input'}"></vxe-table-column>

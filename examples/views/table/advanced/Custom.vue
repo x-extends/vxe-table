@@ -8,7 +8,12 @@
         <i class="icon-menu"></i>
         <div class="menu-wrapper">
           <template v-for="(column,index) in customColumns1">
-            <vxe-checkbox v-if="column.property" class="checkbox-item" v-model="column.visible" :key="index" @change="$refs.xTable1.refreshColumn()">{{ column.label }}</vxe-checkbox>
+            <vxe-checkbox
+              v-if="column.property"
+              class="checkbox-item"
+              v-model="column.visible"
+              :key="index"
+              @change="$refs.xTable1.refreshColumn()">{{ column.label }}</vxe-checkbox>
           </template>
         </div>
       </span>
@@ -38,10 +43,18 @@
     <p>通过点击后才调用 <table-api-link prop="refreshColumn"/> 刷新列</p>
 
     <template v-for="(column,index) in customColumns2">
-      <vxe-checkbox v-if="column.property" class="checkbox-item" v-model="column.visible" :key="index">{{ column.label }}</vxe-checkbox>
+      <vxe-checkbox
+        v-if="column.property"
+        class="checkbox-item"
+        v-model="column.visible"
+        :key="index">{{ column.label }}</vxe-checkbox>
     </template>
 
-    <vxe-button @click="$refs.xTable2.refreshColumn()">刷新</vxe-button>
+    <vxe-toolbar :customs="customColumns2" setting>
+      <template v-slot:buttons>
+        <vxe-button @click="$refs.xTable2.refreshColumn()">刷新</vxe-button>
+      </template>
+    </vxe-toolbar>
 
     <vxe-table
       ref="xTable2"
@@ -93,7 +106,12 @@ export default {
             <i class="icon-menu"></i>
             <div class="menu-wrapper">
               <template v-for="(column,index) in customColumns1">
-                <vxe-checkbox v-if="column.property" class="checkbox-item" v-model="column.visible" :key="index" @change="$refs.xTable1.refreshColumn()">{{ column.label }}</vxe-checkbox>
+                <vxe-checkbox
+                  v-if="column.property"
+                  class="checkbox-item"
+                  v-model="column.visible"
+                  :key="index"
+                  @change="$refs.xTable1.refreshColumn()">{{ column.label }}</vxe-checkbox>
               </template>
             </div>
           </span>
@@ -174,10 +192,18 @@ export default {
         `,
         `
         <template v-for="(column,index) in customColumns2">
-          <vxe-checkbox v-if="column.property" class="checkbox-item" v-model="column.visible" :key="index">{{ column.label }}</vxe-checkbox>
+          <vxe-checkbox
+            v-if="column.property"
+            class="checkbox-item"
+            v-model="column.visible"
+            :key="index">{{ column.label }}</vxe-checkbox>
         </template>
 
-        <vxe-button @click="$refs.xTable2.refreshColumn()">刷新</vxe-button>
+        <vxe-toolbar :customs="customColumns2" setting>
+          <template v-slot:buttons>
+            <vxe-button @click="$refs.xTable2.refreshColumn()">刷新</vxe-button>
+          </template>
+        </vxe-toolbar>
 
         <vxe-table
           ref="xTable2"

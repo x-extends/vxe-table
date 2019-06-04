@@ -111,7 +111,7 @@ const apis = [
         list: []
       },
       {
-        name: 'sortBy',
+        name: 'sort-by',
         desc: '只对 sortable 有效，自定义排序的属性',
         type: 'String,Array',
         enum: '',
@@ -119,7 +119,7 @@ const apis = [
         list: []
       },
       {
-        name: 'remoteSort',
+        name: 'remote-sort',
         desc: '是否使用服务端排序，如果设置为 true 则不会对数据进行处理',
         type: 'Boolean',
         enum: '',
@@ -168,7 +168,7 @@ const apis = [
         list: []
       },
       {
-        name: 'remoteFilter',
+        name: 'remote-filter',
         desc: '是否使用服务端筛选，如果设置为 true 则不会对数据进行处理',
         type: 'Boolean',
         enum: '',
