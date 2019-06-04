@@ -118,7 +118,7 @@ $vxe-table-background-color: #ffffff;
 @import 'vxe-table/src/style/default.scss';
 ```
 
-Case 3. If you need to completely rewrite the theme style, Copy the vxe-table/src/style directory into the project and modify it yourself.
+Case 3. If you need to completely rewrite the theme style, Copy the vxe-table/src/style directory into the project and modify it yourself.  
 如果需要完全重写主题样式，只需复制 vxe-table/src/style 目录到项目中自行修改就行（例如复制到 /assets）
 
 ```scss
