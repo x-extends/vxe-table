@@ -3,6 +3,7 @@
     <p>通过设置 <table-api-link prop="resizable"/> 属性可以支持列宽拖动</p>
 
     <vxe-table
+      border
       resizable
       :data.sync="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>

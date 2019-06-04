@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>使用 <table-column-api-link prop="formatter"/> 格式化内容</p>
+    <p>使用 <table-column-api-link prop="formatter"/> 格式化内容，建议是提前转换好数据，<table-column-api-link prop="formatter"/> 一般用于动态的数据，跟随数据的变化而重新执行</p>
 
     <vxe-table
       border

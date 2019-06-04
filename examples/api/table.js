@@ -325,6 +325,23 @@ const apis = [
         list: []
       },
       {
+        name: 'radio-config',
+        desc: '单选配置项',
+        type: 'Object',
+        enum: '',
+        defVal: '',
+        list: [
+          {
+            name: 'labelProp',
+            desc: '列显示的属性，可以直接显示在列中',
+            type: 'String',
+            enum: '',
+            defVal: '',
+            list: []
+          }
+        ]
+      },
+      {
         name: 'select-config',
         desc: '多选配置项',
         type: 'Object',

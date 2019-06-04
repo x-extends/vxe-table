@@ -42,7 +42,7 @@ export default {
         class: ['radio--icon']
       }),
       $slots.default ? h('span', {
-        class: ['checkbox--label']
+        class: ['radio--label']
       }, $slots.default) : null
     ])
   }

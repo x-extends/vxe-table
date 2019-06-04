@@ -133,11 +133,13 @@ const CellMethods = {
    * 单选
    */
   renderRadioHeader (h, params) {
-    return UtilTools.formatText(params.column.label)
+    return [UtilTools.formatText(params.column.label)]
   },
   renderRadioCell (h, params) {
     let { $table, column } = params
+    let { radioConfig = {} } = $table
     let { slots } = column
+    let { labelProp } = radioConfig
     if (slots && slots.header) {
       return slots.header(params)
     }
@@ -166,7 +168,10 @@ const CellMethods = {
         h('input', options),
         h('span', {
           class: ['radio--icon']
-        })
+        }),
+        labelProp ? h('span', {
+          class: 'radio--label'
+        }, XEUtils.get(row, labelProp)) : null
       ])
     ]
   },

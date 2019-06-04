@@ -56,6 +56,8 @@ export default {
   rowKey: [String, Number],
   // 是否自动根据父容器响应式调整表格宽高
   autoResize: Boolean,
+  // 单选配置
+  radioConfig: Object,
   // 多选配置项
   selectConfig: Object,
   // tooltip 配置项
