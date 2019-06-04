@@ -53,11 +53,11 @@ module.exports = {
         full: '完整功能',
 
         grid: 'Grid table',
-        proxy: '数据代理',
-        proxyPage: '数据代理 + 分页',
+        proxy: 'DataProxy',
+        proxyPage: 'DataProxy + Pager',
         fullQuery: '完整查询',
         dynamicColumn: '实现可配置动态列',
-        baseTree: '基础树',
+        baseTree: 'Basics tree',
         crudTreeToolbar: 'Tree + CRUD + Toolbar',
 
         scroll: 'Big table',
