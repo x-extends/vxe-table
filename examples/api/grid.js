@@ -147,7 +147,7 @@ const apis = [
         ]
       },
       {
-        name: 'page-config',
+        name: 'pager-config',
         desc: '分页配置项',
         type: 'Object',
         enum: '',
@@ -262,12 +262,12 @@ const apis = [
                 desc: '响应结果中获取数据列表的属性',
                 type: 'String',
                 enum: '',
-                defVal: '如果 page-config 配置了，则默认 result，否则为空',
+                defVal: '如果 pager-config 配置了，则默认 result，否则为空',
                 list: []
               },
               {
                 name: 'page',
-                desc: '只对 page-config 配置了有效，响应结果中获取分页的属性',
+                desc: '只对 pager-config 配置了有效，响应结果中获取分页的属性',
                 type: 'String',
                 enum: '',
                 defVal: 'page.total',
@@ -329,7 +329,7 @@ const apis = [
     list: [
       {
         name: 'current-page-change',
-        desc: '只对 page-config 配置时有效，当前页发生改变时会触发该事件',
+        desc: '只对 pager-config 配置时有效，当前页发生改变时会触发该事件',
         type: '',
         enum: '',
         defVal: '',
@@ -337,7 +337,7 @@ const apis = [
       },
       {
         name: 'page-size-change',
-        desc: '只对 page-config 配置时有效，每页大小发生改变时会触发该事件',
+        desc: '只对 pager-config 配置时有效，每页大小发生改变时会触发该事件',
         type: '',
         enum: '',
         defVal: '',

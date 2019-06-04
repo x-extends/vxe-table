@@ -1,12 +1,12 @@
 <template>
   <div>
-    <p>通过配置 <grid-api-link prop="page-config"/> 参数开启分页功能</p>
+    <p>通过配置 <grid-api-link prop="pager-config"/> 参数开启分页功能</p>
 
     <vxe-grid
       border
       height="530"
       :loading="loading"
-      :page-config="tablePage"
+      :pager-config="tablePage"
       :columns="tableColumn"
       :data.sync="tableData"
       @current-page-change="handleCurrentChange"
@@ -50,7 +50,7 @@ export default {
           border
           height="530"
           :loading="loading"
-          :page-config="tablePage"
+          :pager-config="tablePage"
           :columns="tableColumn"
           :data.sync="tableData"
           @current-page-change="handleCurrentChange"

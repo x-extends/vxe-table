@@ -27,13 +27,17 @@ const GlobalConfig = {
     theme: 'dark'
   },
   iconMap: {
-    sortAsc: 'vxe-sort--asc-icon',
-    sortDesc: 'vxe-sort--desc-icon',
-    filter: 'vxe-filter--icon',
-    edit: 'vxe-edit--icon',
-    tree: 'vxe-tree--node-icon'
+    sortAsc: 'vxe-icon--caret-top',
+    sortDesc: 'vxe-icon--caret-bottom',
+    filter: 'vxe-icon--funnel',
+    edit: 'vxe-icon--edit-outline',
+    tree: 'vxe-icon--caret-right',
+    jumpPrev: 'vxe-icon--d-arrow-left',
+    jumpNext: 'vxe-icon--d-arrow-right',
+    prevPage: 'vxe-icon--arrow-left',
+    nextPage: 'vxe-icon--arrow-right'
   },
-  pagination: {
+  pager: {
     // pageSize: 10,
     // pagerCount: 7,
     // pageSizes: [10, 15, 20, 50, 100],

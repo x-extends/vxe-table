@@ -4,7 +4,7 @@ import TableColumn from './components/table-column'
 import TableToolbar from './components/table-toolbar'
 import Grid from './components/grid'
 import Excel from './components/excel'
-import Pagination from './components/pagination'
+import Pager from './components/pager'
 import Checkbox from './components/checkbox'
 import Radio from './components/radio'
 import Input from './components/input'
@@ -25,7 +25,7 @@ const components = [
   TableToolbar,
   Grid,
   Excel,
-  Pagination,
+  Pager,
   Checkbox,
   Radio,
   Input,
@@ -117,7 +117,7 @@ export default {
   TableToolbar,
   Grid,
   Excel,
-  Pagination,
+  Pager,
   Checkbox,
   Radio,
   Input,

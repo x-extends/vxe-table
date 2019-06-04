@@ -7,9 +7,11 @@
 
 /*animat*/
 .t--animat {
-  .vxe-sort--asc-icon,
-  .vxe-sort--desc-icon {
-    &:before {
+  .vxe-sort--asc-btn,
+  .vxe-sort--desc-btn,
+  .vxe-filter--btn {
+    &:before,
+    &:after {
       @include animatTransition(border);
     }
   }
@@ -26,7 +28,7 @@
       @include animatTransition(border);
     }
   }
-  .vxe-tree--node-icon {
+  .vxe-tree--node-btn {
     @include animatTransition(transform);
   }
   .vxe-button {

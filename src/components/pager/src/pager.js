@@ -5,23 +5,23 @@ import DomTools from '../../../tools/dom'
 import GlobalConfig from '../../../conf'
 
 export default {
-  name: 'VxePagination',
+  name: 'VxePager',
   props: {
     size: String,
     // 自定义布局
-    layouts: { type: Array, default: () => GlobalConfig.pagination.layouts || ['PrevJump', 'PrevPage', 'Jump', 'PageCount', 'NextPage', 'NextJump', 'Sizes', 'Total'] },
+    layouts: { type: Array, default: () => GlobalConfig.pager.layouts || ['PrevJump', 'PrevPage', 'Jump', 'PageCount', 'NextPage', 'NextJump', 'Sizes', 'Total'] },
     // 当前页
     currentPage: { type: Number, default: 1 },
     // 加载中
     loading: Boolean,
     // 每页大小
-    pageSize: { type: Number, default: () => GlobalConfig.pagination.pageSize || 10 },
+    pageSize: { type: Number, default: () => GlobalConfig.pager.pageSize || 10 },
     // 总条数
     total: { type: Number, default: 0 },
     // 显示页码按钮的数量
-    pagerCount: { type: Number, default: () => GlobalConfig.pagination.pagerCount || 7 },
+    pagerCount: { type: Number, default: () => GlobalConfig.pager.pagerCount || 7 },
     // 每页大小选项列表
-    pageSizes: { type: Array, default: () => GlobalConfig.pagination.pageSizes || [10, 15, 20, 50, 100] },
+    pageSizes: { type: Array, default: () => GlobalConfig.pager.pageSizes || [10, 15, 20, 50, 100] },
     // 带背景颜色
     background: Boolean
   },
@@ -74,7 +74,7 @@ export default {
   render (h) {
     let { layouts, isSizes, loading, vSize, background } = this
     return h('div', {
-      class: ['vxe-pagination', {
+      class: ['vxe-pager', {
         [`size--${vSize}`]: vSize,
         'p--background': background,
         'is--loading': loading
@@ -86,84 +86,111 @@ export default {
     renderPrevPage (h) {
       let { currentPage } = this
       return h('span', {
-        class: ['page--prev-btn', {
+        class: ['vxe-pager--prev-btn', {
           'is--disabled': currentPage <= 1
         }],
         on: {
           click: this.prevPageEvent
         }
-      })
+      }, [
+        h('i', {
+          class: ['vxe-icon--page-icon', GlobalConfig.iconMap.prevPage]
+        })
+      ])
     },
     // prevJump
     renderPrevJump (h, tagName) {
       let { numList, currentPage } = this
       return h(tagName || 'span', {
-        class: ['page--jump-prev', {
+        class: ['vxe-pager--jump-prev', {
           'is--fixed': !tagName,
           'is--disabled': currentPage <= 1
         }],
         on: {
           click: () => this.jumpPageEvent(Math.max(currentPage - numList.length, 1))
         }
-      })
+      }, [
+        tagName ? h('i', {
+          class: 'vxe-pager--jump-more vxe-icon--more'
+        }) : null,
+        h('i', {
+          class: ['vxe-pager--jump-icon', GlobalConfig.iconMap.jumpPrev]
+        })
+      ])
     },
     // number
     renderNumber (h) {
       return h('ul', {
-        class: 'page--btn-wrapper'
+        class: 'vxe-pager--btn-wrapper'
       }, this.renderPageBtn(h))
     },
     // jumpNumber
     renderJumpNumber (h) {
       return h('ul', {
-        class: 'page--btn-wrapper'
+        class: 'vxe-pager--btn-wrapper'
       }, this.renderPageBtn(h, true))
     },
     // nextJump
     renderNextJump (h, tagName) {
       let { numList, currentPage, pageCount } = this
       return h(tagName || 'span', {
-        class: ['page--jump-next', {
+        class: ['vxe-pager--jump-next', {
           'is--fixed': !tagName,
           'is--disabled': currentPage >= pageCount
         }],
         on: {
           click: () => this.jumpPageEvent(Math.min(currentPage + numList.length, pageCount))
         }
-      })
+      }, [
+        tagName ? h('i', {
+          class: 'vxe-pager--jump-more vxe-icon--more'
+        }) : null,
+        h('i', {
+          class: ['vxe-pager--jump-icon', GlobalConfig.iconMap.jumpNext]
+        })
+      ])
     },
     // nextPage
     renderNextPage (h) {
       let { currentPage, pageCount } = this
       return h('span', {
-        class: ['page--next-btn', {
+        class: ['vxe-pager--next-btn', {
           'is--disabled': currentPage >= pageCount
         }],
         on: {
           click: this.nextPageEvent
         }
-      })
+      }, [
+        h('i', {
+          class: ['vxe-icon--page-icon', GlobalConfig.iconMap.nextPage]
+        })
+      ])
     },
     // sizes
     renderSizes (h) {
       let { pageSize } = this
       return h('span', {
-        class: 'page--sizes',
+        class: ['vxe-pager--sizes', {
+          'is--active': this.showSizes
+        }],
+        on: {
+          click: this.toggleSizePanel
+        },
         ref: 'sizeBtn'
       }, [
+        h('i', {
+          class: 'vxe-pager--sizes-arrow vxe-icon--caret-bottom'
+        }),
         h('span', {
-          class: 'size--content',
-          on: {
-            click: this.toggleSizePanel
-          }
-        }, `${pageSize}${GlobalConfig.i18n('vxe.pagination.pagesize')}`)
+          class: 'size--content'
+        }, `${pageSize}${GlobalConfig.i18n('vxe.pager.pagesize')}`)
       ])
     },
     // 分页面板
     renderSizePanel (h) {
       let { panelStyle, pageSize, pageSizes, showSizes } = this
       return h('ul', {
-        class: ['vxe-pagination-size--select', {
+        class: ['vxe-pager-size--select', {
           'is--show': showSizes
         }],
         style: panelStyle,
@@ -176,7 +203,7 @@ export default {
           on: {
             click: () => this.sizeChangeEvent(num)
           }
-        }, `${num}${GlobalConfig.i18n('vxe.pagination.pagesize')}`)
+        }, `${num}${GlobalConfig.i18n('vxe.pager.pagesize')}`)
       }))
     },
     // FullJump
@@ -187,13 +214,13 @@ export default {
     renderJump (h, isFull) {
       let { currentPage, pageCount } = this
       return h('span', {
-        class: 'page--jump'
+        class: 'vxe-pager--jump'
       }, [
         isFull ? h('span', {
-          class: 'page--goto-text'
-        }, GlobalConfig.i18n('vxe.pagination.goto')) : null,
+          class: 'vxe-pager--goto-text'
+        }, GlobalConfig.i18n('vxe.pager.goto')) : null,
         h('input', {
-          class: 'page--goto',
+          class: 'vxe-pager--goto',
           domProps: {
             value: currentPage
           },
@@ -219,18 +246,18 @@ export default {
           }
         }),
         isFull ? h('span', {
-          class: 'page--classifier-text'
-        }, GlobalConfig.i18n('vxe.pagination.pageClassifier')) : null
+          class: 'vxe-pager--classifier-text'
+        }, GlobalConfig.i18n('vxe.pager.pageClassifier')) : null
       ])
     },
     // PageCount
     renderPageCount (h) {
       let { pageCount } = this
       return h('span', {
-        class: 'page--count'
+        class: 'vxe-pager--count'
       }, [
         h('span', {
-          class: 'page--separator'
+          class: 'vxe-pager--separator'
         }, '/'),
         h('span', pageCount)
       ])
@@ -239,8 +266,8 @@ export default {
     renderTotal (h) {
       let { total } = this
       return h('span', {
-        class: 'page--total'
-      }, XEUtils.template(GlobalConfig.i18n('vxe.pagination.total'), { total }))
+        class: 'vxe-pager--total'
+      }, XEUtils.template(GlobalConfig.i18n('vxe.pager.total'), { total }))
     },
     // number
     renderPageBtn (h, showJump) {
@@ -260,7 +287,7 @@ export default {
       if (showJump && isLt) {
         nums.push(
           h('li', {
-            class: 'page--num-btn',
+            class: 'vxe-pager--num-btn',
             on: {
               click: () => this.jumpPageEvent(1)
             }
@@ -273,7 +300,7 @@ export default {
         if (number <= pageCount) {
           nums.push(
             h('li', {
-              class: ['page--num-btn', {
+              class: ['vxe-pager--num-btn', {
                 'is--active': currentPage === number
               }],
               on: {
@@ -288,7 +315,7 @@ export default {
         nums.push(
           this.renderNextJump(h, 'li'),
           h('li', {
-            class: 'page--num-btn',
+            class: 'vxe-pager--num-btn',
             on: {
               click: () => this.jumpPageEvent(pageCount)
             }
@@ -298,7 +325,7 @@ export default {
       return nums
     },
     handleGlobalMousedownEvent (evnt) {
-      if (this.showSizes && !DomTools.getEventTargetNode(evnt, this.$refs.sizePanel).flag) {
+      if (this.showSizes && !(DomTools.getEventTargetNode(evnt, this.$refs.sizeBtn).flag || DomTools.getEventTargetNode(evnt, this.$refs.sizePanel).flag)) {
         this.hideSizePanel()
       }
     },

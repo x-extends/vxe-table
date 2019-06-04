@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>使用自带的分页 <pagination-api-link name="vxe-pagination"/></p>
+    <p>使用自带的分页 <pager-api-link name="vxe-pager"/></p>
 
     <vxe-table
       border
@@ -16,7 +16,7 @@
       <vxe-table-column prop="rate" label="Rate"></vxe-table-column>
     </vxe-table>
 
-    <vxe-pagination
+    <vxe-pager
       :loading="loading"
       :current-page="pageVO.currentPage"
       :page-size="pageVO.pageSize"
@@ -24,7 +24,7 @@
       :layouts="['PrevPage', 'JumpNumber', 'NextPage', 'FullJump', 'Sizes', 'Total']"
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange">
-    </vxe-pagination>
+    </vxe-pager>
 
     <p class="demo-code">显示代码</p>
 
@@ -65,7 +65,7 @@ export default {
             <vxe-table-column prop="rate" label="Rate"></vxe-table-column>
           </vxe-table>
 
-          <vxe-pagination
+          <vxe-pager
             :loading="loading"
             :current-page="pageVO.currentPage"
             :page-size="pageVO.pageSize"
@@ -73,7 +73,7 @@ export default {
             :layouts="['PrevPage', 'JumpNumber', 'NextPage', 'FullJump', 'Sizes', 'Total']"
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange">
-          </vxe-pagination>
+          </vxe-pager>
         `,
         `
         export default {

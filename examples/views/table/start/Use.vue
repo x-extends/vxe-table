@@ -34,18 +34,22 @@
           contextMenu: null,
           // 自定义图标配置
           iconMap: {
-            sortAsc: 'vxe-sort--asc-icon',
-            sortDesc: 'vxe-sort--desc-icon',
-            filter: 'vxe-filter--icon',
-            edit: 'vxe-edit--icon',
-            tree: 'vxe-tree--node-icon'
+            sortAsc: 'vxe-icon--caret-top',
+            sortDesc: 'vxe-icon--caret-bottom',
+            filter: 'vxe-icon--funnel',
+            edit: 'vxe-icon--edit-outline',
+            tree: 'vxe-icon--caret-right',
+            jumpPrev: 'vxe-icon--d-arrow-left',
+            jumpNext: 'vxe-icon--d-arrow-right',
+            prevPage: 'vxe-icon--arrow-left',
+            nextPage: 'vxe-icon--arrow-right'
           },
           // 默认 tooltip 主题样式
           tooltipConfig: {
             theme: 'dark'
           },
           // 默认分页参数
-          pagination: {
+          pager: {
             pageSize: 10,
             pagerCount: 7,
             pageSizes: [10, 15, 20, 50, 100],

@@ -1,0 +1,211 @@
+[class*="vxe-icon--"] {
+  display: inline-block;
+  vertical-align: middle;
+  position: relative;
+  direction: ltr;
+}
+
+%DefaultWidthHeight {
+  width: 1em;
+  height: 1em;
+}
+
+.vxe-icon--menu {
+  width: 0.22em;
+  height: 0.22em;
+  box-shadow: 0 -0.4em 0, -0.4em -0.4em 0, 0.4em -0.4em 0, 0 0 0 1em inset, -0.4em 0 0, 0.4em 0 0, 0 0.4em 0, -0.4em 0.4em 0, 0.4em 0.4em 0;
+  margin: 0.58em;
+  @include animatTransition(all, .2s);
+}
+
+.vxe-icon--caret-top {
+  @extend %DefaultWidthHeight;
+  &:before {
+    content: "";
+    left: 0;
+    bottom: 0.25em;
+    position: absolute;
+    border-width: 0.5em;
+    border-style: solid;
+    border-top-color: transparent;
+    border-right-color: transparent;
+    border-bottom-color: inherit;
+    border-left-color: transparent;
+    @include animatTransition(border);
+  }
+}
+
+.vxe-icon--caret-bottom {
+  @extend .vxe-icon--caret-top;
+  transform: rotate(180deg);
+}
+
+.vxe-icon--caret-left {
+  @extend .vxe-icon--caret-top;
+  transform: rotate(-90deg);
+}
+
+.vxe-icon--caret-right {
+  @extend .vxe-icon--caret-top;
+  transform: rotate(90deg);
+}
+
+%BeforeArrowTop {
+  &:before {
+    content: "";
+    position: absolute;
+    top: 0.38em;
+    left: 0.12em;
+    width: 0.5em;
+    height: 0.5em;
+    border-width: 0.1em;
+    border-style: solid;
+    border-top-color: inherit;
+    border-right-color: inherit;
+    border-bottom-color: transparent;
+    border-left-color: transparent;
+  }
+}
+
+.vxe-icon--arrow-top {
+  @extend %DefaultWidthHeight, %BeforeArrowTop;
+  transform: rotate(-45deg);
+}
+
+.vxe-icon--arrow-bottom {
+  @extend %DefaultWidthHeight, %BeforeArrowTop;
+  transform: rotate(135deg);
+}
+
+.vxe-icon--arrow-left {
+  @extend %DefaultWidthHeight, %BeforeArrowTop;
+  transform: rotate(-135deg);
+}
+
+.vxe-icon--arrow-right {
+  @extend %DefaultWidthHeight, %BeforeArrowTop;
+  transform: rotate(45deg);
+}
+
+%BeforeDArrowTop {
+  &:before {
+    content: "";
+    position: absolute;
+    top: 0.24em;
+    left: 0.26em;
+    width: 0.5em;
+    height: 0.5em;
+    border-width: 0.08em;
+    border-style: solid;
+    border-top-color: inherit;
+    border-right-color: inherit;
+    border-bottom-color: transparent;
+    border-left-color: transparent;
+  }
+}
+
+%AfterDArrowTop {
+  &:after {
+    content: "";
+    position: absolute;
+    top: 0.42em;
+    left: 0.1em;
+    width: 0.5em;
+    height: 0.5em;
+    border-width: 0.08em;
+    border-style: solid;
+    border-top-color: inherit;
+    border-right-color: inherit;
+    border-bottom-color: transparent;
+    border-left-color: transparent;
+  }
+}
+
+.vxe-icon--d-arrow-top {
+  @extend %DefaultWidthHeight, %BeforeDArrowTop, %AfterDArrowTop;
+  transform: rotate(-45deg);
+}
+
+.vxe-icon--d-arrow-bottom {
+  @extend %DefaultWidthHeight, %BeforeDArrowTop, %AfterDArrowTop;
+  transform: rotate(135deg);
+}
+
+.vxe-icon--d-arrow-left {
+  @extend %DefaultWidthHeight, %BeforeDArrowTop, %AfterDArrowTop;
+  transform: rotate(-135deg);
+}
+
+.vxe-icon--d-arrow-right {
+  @extend %DefaultWidthHeight, %BeforeDArrowTop, %AfterDArrowTop;
+  transform: rotate(45deg);
+}
+
+.vxe-icon--funnel {
+  @extend %DefaultWidthHeight;
+  &:before {
+    content: "";
+    position: absolute;
+    top: 0.1em;
+    left: 0;
+    border-width: 0.5em;
+    border-style: solid;
+    border-top-color: inherit;
+    border-right-color: transparent;
+    border-bottom-color: transparent;
+    border-left-color: transparent;
+  }
+  &:after {
+    content: "";
+    position: absolute;
+    left: 0.4em;
+    top: 0.5em;
+    width: 0;
+    height: 0.4em;
+    border-width: 0 0.2em 0 0;
+    border-style: solid;
+    border-right-color: inherit;
+  }
+}
+
+.vxe-icon--edit-outline {
+  @extend %DefaultWidthHeight;
+  border-radius: 0.2em;
+  border-width: 0.1em;
+  border-style: solid;
+  border-color: inherit;
+  &:before {
+    content: "";
+    position: absolute;
+    top: -0.1em;
+    right: -0.1em;
+    width: 0.4em;
+    height: 0.4em;
+    background-color: #fff;
+  }
+  &:after {
+    content: "";
+    position: absolute;
+    left: 0.1em;
+    top: 0.1em;
+    width: 0.9em;
+    height: 0.26em;
+    border-radius: 0.2em;
+    border-width: 0.1em;
+    border-style: solid;
+    border-color: inherit;
+    transform: rotate(-45deg);
+  }
+}
+
+.vxe-icon--more {
+  @extend %DefaultWidthHeight;
+  &:before {
+    content: "...";
+    position: absolute;
+    top: 0;
+    left: 0.1em;
+    line-height: 0.5em;
+    font-weight: 700;
+  }
+}

@@ -79,7 +79,7 @@ export default {
           on: customBtnOns
         }, [
           h('i', {
-            class: 'vxe-custom--setting-icon'
+            class: 'vxe-icon--menu'
           })
         ]),
         h('div', {

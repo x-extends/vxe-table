@@ -44,8 +44,8 @@ const CellMethods = {
     return UtilTools.getColumnConfig(_vm, renMaps)
   },
   /**
-     * 单元格
-     */
+   * 单元格
+   */
   renderHeader (h, params) {
     let { column } = params
     let { slots } = column
@@ -72,8 +72,8 @@ const CellMethods = {
   },
 
   /**
-     * 树节点
-     */
+   * 树节点
+   */
   renderTreeIcon (h, params) {
     let { iconMap } = GlobalConfig
     let { $table } = params
@@ -94,20 +94,20 @@ const CellMethods = {
       }),
       h('span', {
         class: ['vxe-tree-wrapper', {
-          active: treeExpandeds.indexOf(row) > -1
+          'is--active': treeExpandeds.indexOf(row) > -1
         }],
         on
       }, rowChildren && rowChildren.length ? [
         h('i', {
-          class: iconMap.tree
+          class: ['vxe-tree--node-btn', iconMap.tree]
         })
       ] : [])
     ]
   },
 
   /**
-     * 索引
-     */
+   * 索引
+   */
   renderIndexHeader (h, params) {
     let { column } = params
     let { slots } = column
@@ -130,8 +130,8 @@ const CellMethods = {
   },
 
   /**
-     * 单选
-     */
+   * 单选
+   */
   renderRadioHeader (h, params) {
     return UtilTools.formatText(params.column.label)
   },
@@ -175,8 +175,8 @@ const CellMethods = {
   },
 
   /**
-     * 多选
-     */
+   * 多选
+   */
   renderSelectionHeader (h, params) {
     let { $table, column } = params
     let { slots } = column
@@ -315,8 +315,8 @@ const CellMethods = {
   },
 
   /**
-     * 展开行
-     */
+   * 展开行
+   */
   renderExpandCell (h, params) {
     let { $table, isHidden } = params
     let expandActive = false
@@ -350,8 +350,8 @@ const CellMethods = {
   },
 
   /**
-     * 排序和筛选
-     */
+   * 排序和筛选
+   */
   renderSortAndFilterHeader (h, params) {
     return CellMethods.renderHeader(h, params)
       .concat(CellMethods.renderSortIcon(h, params))
@@ -359,8 +359,8 @@ const CellMethods = {
   },
 
   /**
-     * 排序
-     */
+   * 排序
+   */
   renderSortHeader (h, params) {
     return CellMethods.renderHeader(h, params).concat(CellMethods.renderSortIcon(h, params))
   },
@@ -372,7 +372,7 @@ const CellMethods = {
         class: ['vxe-sort-wrapper']
       }, [
         h('i', {
-          class: [iconMap.sortAsc, {
+          class: ['vxe-sort--asc-btn', iconMap.sortAsc, {
             'sort--active': column.order === 'asc'
           }],
           on: {
@@ -382,7 +382,7 @@ const CellMethods = {
           }
         }),
         h('i', {
-          class: [iconMap.sortDesc, {
+          class: ['vxe-sort--desc-btn', iconMap.sortDesc, {
             'sort--active': column.order === 'desc'
           }],
           on: {
@@ -396,8 +396,8 @@ const CellMethods = {
   },
 
   /**
-     * 筛选
-     */
+   * 筛选
+   */
   renderFilterHeader (h, params) {
     return CellMethods.renderHeader(h, params).concat(CellMethods.renderFilterIcon(h, params))
   },
@@ -406,10 +406,12 @@ const CellMethods = {
     let { $table } = params
     return [
       h('span', {
-        class: ['vxe-filter-wrapper']
+        class: ['vxe-filter-wrapper', {
+          'is--active': $table.filterStore.visible
+        }]
       }, [
         h('i', {
-          class: [iconMap.filter],
+          class: ['vxe-filter--btn', iconMap.filter],
           on: {
             click (evnt) {
               $table.triggerFilterEvent(evnt, params.column, params)
@@ -421,8 +423,8 @@ const CellMethods = {
   },
 
   /**
-     * 可编辑
-     */
+   * 可编辑
+   */
   renderEditHeader (h, params) {
     let { iconMap } = GlobalConfig
     let { $table, column } = params
@@ -440,7 +442,7 @@ const CellMethods = {
         class: 'vxe-required-icon'
       }) : null,
       editConfig && editConfig.showIcon === false ? null : h('i', {
-        class: iconMap.edit
+        class: ['vxe-edit-icon', iconMap.edit]
       })
     ].concat(CellMethods.renderHeader(h, params))
       .concat(sortable || remoteSort ? CellMethods.renderSortIcon(h, params) : [])

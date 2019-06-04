@@ -5,7 +5,7 @@
     <vxe-grid
       border
       height="530"
-      :page-config="tablePage"
+      :pager-config="tablePage"
       :proxy-config="tableProxy"
       :columns="tableColumn"
       :toolbar="toolbar"
@@ -71,7 +71,7 @@ export default {
         <vxe-grid
           border
           height="530"
-          :page-config="tablePage"
+          :pager-config="tablePage"
           :proxy-config="tableProxy"
           :columns="tableColumn"
           :toolbar="toolbar"

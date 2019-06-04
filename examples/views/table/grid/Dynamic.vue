@@ -5,7 +5,7 @@
     <vxe-grid
       border
       height="306"
-      :page-config="tablePage"
+      :pager-config="tablePage"
       :proxy-config="tableProxy"
       :columns="tableColumn"
       :toolbar="toolbar"
@@ -24,7 +24,7 @@
       border
       height="290"
       :loading="loading2"
-      :page-config="tablePage2"
+      :pager-config="tablePage2"
       :proxy-config="tableProxy2"
       :columns="tableColumn2"
       :toolbar="toolbar2"
@@ -122,7 +122,7 @@ export default {
         <vxe-grid
           border
           height="306"
-          :page-config="tablePage"
+          :pager-config="tablePage"
           :proxy-config="tableProxy"
           :columns="tableColumn"
           :toolbar="toolbar"
@@ -186,7 +186,7 @@ export default {
           border
           height="530"
           :loading="loading"
-          :page-config="tablePage"
+          :pager-config="tablePage"
           :proxy-config="tableProxy"
           :columns="tableColumn"
           :toolbar="toolbar"

@@ -7,7 +7,7 @@
       border
       highlight-hover-row
       height="530"
-      :page-config="tablePage"
+      :pager-config="tablePage"
       :toolbar="toolbar"
       :proxy-config="tableProxy"
       :columns="tableColumn"
@@ -87,7 +87,7 @@ export default {
           border
           highlight-hover-row
           height="530"
-          :page-config="tablePage"
+          :pager-config="tablePage"
           :toolbar="toolbar"
           :proxy-config="tableProxy"
           :columns="tableColumn"

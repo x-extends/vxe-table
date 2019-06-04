@@ -50,7 +50,7 @@ import tableColumnAPI from '../../../api/table-column'
 import tableToolbarAPI from '../../../api/table-toolbar'
 import gridAPI from '../../../api/grid'
 import excelAPI from '../../../api/excel'
-import paginationAPI from '../../../api/pagination'
+import pagerAPI from '../../../api/pager'
 import radioAPI from '../../../api/radio'
 import checkboxAPI from '../../../api/checkbox'
 import inputAPI from '../../../api/input'
@@ -106,8 +106,8 @@ export default {
         case 'excel':
           apis = excelAPI
           break
-        case 'pagination':
-          apis = paginationAPI
+        case 'pager':
+          apis = pagerAPI
           break
         case 'radio':
           apis = radioAPI

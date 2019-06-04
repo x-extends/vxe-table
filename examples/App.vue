@@ -1,5 +1,22 @@
 <template>
   <div id="app" @click="clickEvent">
+    <!--icon-->
+    <!-- <i class="vxe-icon--caret-top"></i>
+    <i class="vxe-icon--caret-bottom"></i>
+    <i class="vxe-icon--caret-left"></i>
+    <i class="vxe-icon--caret-right"></i>
+    <i class="vxe-icon--arrow-top"></i>
+    <i class="vxe-icon--arrow-bottom"></i>
+    <i class="vxe-icon--arrow-left"></i>
+    <i class="vxe-icon--arrow-right"></i>
+    <i class="vxe-icon--d-arrow-top"></i>
+    <i class="vxe-icon--d-arrow-bottom"></i>
+    <i class="vxe-icon--d-arrow-left"></i>
+    <i class="vxe-icon--d-arrow-right"></i>
+    <i class="vxe-icon--menu"></i>
+    <i class="vxe-icon--funnel"></i>
+    <i class="vxe-icon--edit-outline"></i>
+    <i class="vxe-icon--more"></i> -->
     <header class="page-header">
       <img class="logo" src="./assets/logo.jpg">
       <h1 class="title">
@@ -692,11 +709,11 @@ export default {
               }
             },
             {
-              label: 'vxe-pagination',
+              label: 'vxe-pager',
               locat: {
                 name: 'TableAPI',
                 params: {
-                  name: 'pagination'
+                  name: 'pager'
                 }
               }
             },

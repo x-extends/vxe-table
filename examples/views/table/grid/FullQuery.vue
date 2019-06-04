@@ -6,7 +6,7 @@
       ref="xGrid"
       border
       height="548"
-      :page-config="tablePage"
+      :pager-config="tablePage"
       :columns="tableColumn"
       :proxy-config="tableProxy"
       @sort-change="sortChangeEvent"
@@ -68,7 +68,7 @@ export default {
           ref="xGrid"
           border
           height="548"
-          :page-config="tablePage"
+          :pager-config="tablePage"
           :columns="tableColumn"
           :proxy-config="tableProxy"
           @sort-change="sortChangeEvent"

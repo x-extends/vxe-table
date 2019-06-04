@@ -17,7 +17,7 @@ export default {
   name: 'VxeGrid',
   props: {
     columns: Array,
-    pageConfig: Object,
+    pagerConfig: Object,
     proxyConfig: Object,
     toolbar: Object,
     ...TableProps
@@ -66,12 +66,12 @@ export default {
     }
   },
   created () {
-    let { customs, pageConfig } = this
+    let { customs, pagerConfig } = this
     if (customs) {
       this.tableCustoms = customs
     }
-    if (pageConfig && pageConfig.pageSize) {
-      this.tablePage.pageSize = pageConfig.pageSize
+    if (pagerConfig && pagerConfig.pageSize) {
+      this.tablePage.pageSize = pagerConfig.pageSize
     }
   },
   mounted () {
@@ -84,7 +84,7 @@ export default {
     }
   },
   render (h) {
-    let { $slots, $listeners, pageConfig, vSize, loading, toolbar, editConfig, proxyConfig, tableProps, tableLoading, tablePage, tableData, tableCustoms, optimization } = this
+    let { $slots, $listeners, pagerConfig, vSize, loading, toolbar, editConfig, proxyConfig, tableProps, tableLoading, tablePage, tableData, tableCustoms, optimization } = this
     let props = Object.assign({}, tableProps)
     let tableOns = Object.assign({}, $listeners)
     let toolbarProps = Object.assign({
@@ -130,11 +130,11 @@ export default {
         on: tableOns,
         ref: 'xTable'
       }, $slots.default),
-      pageConfig ? h('vxe-pagination', {
+      pagerConfig ? h('vxe-pager', {
         props: Object.assign({
           size: vSize,
           loading: loading || tableLoading
-        }, pageConfig, proxyConfig ? tablePage : {}),
+        }, pagerConfig, proxyConfig ? tablePage : {}),
         on: {
           'current-change': this.currentChangeEvent,
           'size-change': this.sizeChangeEvent
@@ -154,7 +154,7 @@ export default {
       return this.pendingRecords.indexOf(row) === -1
     },
     commitProxy (code) {
-      let { proxyConfig = {}, tablePage, pageConfig, sortData, filterData, isAlert } = this
+      let { proxyConfig = {}, tablePage, pagerConfig, sortData, filterData, isAlert } = this
       let { ajax, props = {} } = proxyConfig
       if (ajax) {
         switch (code) {
@@ -166,18 +166,18 @@ export default {
                 filter: filterData
               }
               this.tableLoading = true
-              if (pageConfig) {
+              if (pagerConfig) {
                 params.page = tablePage
               }
               if (code === 'reload') {
-                if (pageConfig) {
+                if (pagerConfig) {
                   tablePage.currentPage = 1
                 }
                 this.pendingRecords = []
               }
               return ajax.query(params).then(result => {
                 if (result) {
-                  if (pageConfig) {
+                  if (pagerConfig) {
                     tablePage.total = XEUtils.get(result, props.total || 'page.total')
                     this.tableData = XEUtils.get(result, props.data || 'result')
                   } else {
