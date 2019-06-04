@@ -22,35 +22,35 @@ A very powerful Vue table component.
 * Table with border （带边框）
 * Cell style （单元格样式）
 * Column resizable （列宽拖动）
-* Fluid-height Table with fixed header （流体高度）
+* Fluid-height table with fixed header （流体高度）
 * Resize height table （响应式宽高）
 * Table with fixed header （固定表头）
 * Table with fixed column （固定列）
 * Table with fixed columns and header （固定表头和列）
-* 表头分组
-* 序号
-* 单选
-* 多选
-* 排序
-* 筛选
-* 合并行或列
-* 表尾合计
-* 导出 CSV
-* 显示/隐藏列
-* 加载中
-* 格式化内容
-* 自定义模板
-* 快捷菜单
-* 可视渲染
-* 展开行
-* 分页
-* 工具栏
-* 树形表格
-* 增删改查
-* 数据校验
-* 数据代理
-* 全键盘操作
-* Excel 表格
+* Grouping table head 表头分组
+* Table sequence （序号)
+* Radio table （单选)
+* Checkbox table （多选）
+* Sorting （排序）
+* Filter （筛选）
+* Rowspan and colspan （合并行或列）
+* Footer summary （表尾合计）
+* Export CSV （导出 CSV）
+* Show/hide columns （显示/隐藏列）
+* Loading （加载中）
+* Format content （格式化内容）
+* Custom column template （自定义模板）
+* Context menu（快捷菜单）
+* Virtual Scroller（可视渲染）
+* Expandable row （展开行）
+* Pager（分页）
+* Toolbar（工具栏）
+* Tree table （树形表格)
+* Editable CRUD（增删改查)
+* Editable validate（数据校验）
+* DataProxy（数据代理）
+* Keyboard navigation（全键盘操作）
+* Excel（Excel 表格）
 
 ## Docs
 
