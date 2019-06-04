@@ -16,17 +16,17 @@ A very powerful Vue table component.
 
 ## Features
 
-* Basics table 基础
-* Table size 尺寸
-* Striped table 斑马线条纹
-* Table with border 带边框
-* Cell style 单元格样式
-* Column resizable 列宽拖动
-* Fluid-height Table with fixed header 流体高度
-* Resize height table 响应式宽高
-* Table with fixed header 固定表头
-* Table with fixed column 固定列
-* Table with fixed columns and header 固定表头和列
+* Basics table （基础）
+* Table size （尺寸）
+* Striped table （斑马线条纹）
+* Table with border （带边框）
+* Cell style （单元格样式）
+* Column resizable （列宽拖动）
+* Fluid-height Table with fixed header （流体高度）
+* Resize height table （响应式宽高）
+* Table with fixed header （固定表头）
+* Table with fixed column （固定列）
+* Table with fixed columns and header （固定表头和列）
 * 表头分组
 * 序号
 * 单选
