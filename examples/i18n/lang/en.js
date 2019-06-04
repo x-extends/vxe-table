@@ -6,9 +6,9 @@ module.exports = {
     aside: {
       nav: {
         start: 'Development',
-        install: '安装',
-        use: '快速上手',
-        advancedFunctions: '高级函数',
+        install: 'Install',
+        use: 'Quick start',
+        advancedFunctions: 'Advanced Functions',
 
         basics: 'Basics functions',
         base: '基础',
