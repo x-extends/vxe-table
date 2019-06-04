@@ -1,6 +1,7 @@
 <template>
   <div>
     <p>可视渲染，只会渲染可视区域的数据，对于海量数据的性能提升非常大</p>
+    <p>相关参数说明 {seq: 序号, $rowIndex: 获取渲染中的行索引, rowIndex: 获取真实的行索引, row: 获取行数据, column: 获取列配置, columnIndex: 获取真实列索引，$columnIndex:获取渲染中的列索引}</p>
 
     <vxe-table
       border

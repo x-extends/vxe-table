@@ -1,7 +1,7 @@
 <template>
   <div>
     <p>合并列，通过参数 <table-api-link prop="span-method"/></p>
-    <p>使用 nowIndex 指向当前数据的索引，rowIndex 指向 data 的真实索引，可以根据不同场景使用</p>
+    <p>使用 $rowIndex 获取渲染中的行索引，rowIndex 指向真实数据的行索引，可以根据不同场景使用</p>
 
     <vxe-table
       border
@@ -117,9 +117,9 @@ export default {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 20)
           },
           methods: {
-            rowspanMethod ({ row, rowIndex, nowIndex, column, columnIndex, data }) {
-              let prevRow = data[nowIndex - 1]
-              let nextRow = data[nowIndex + 1]
+            rowspanMethod ({ row, $rowIndex, column, data }) {
+              let prevRow = data[$rowIndex - 1]
+              let nextRow = data[$rowIndex + 1]
               if (column.property === 'key') {
                 if (prevRow && prevRow.key === row.key) {
                   return {
@@ -166,9 +166,9 @@ export default {
         }
       }
     },
-    rowspanMethod ({ row, rowIndex, nowIndex, column, columnIndex, data }) {
-      let prevRow = data[nowIndex - 1]
-      let nextRow = data[nowIndex + 1]
+    rowspanMethod ({ row, $rowIndex, column, data }) {
+      let prevRow = data[$rowIndex - 1]
+      let nextRow = data[$rowIndex + 1]
       if (column.property === 'key') {
         if (prevRow && prevRow.key === row.key) {
           return {

@@ -1,7 +1,7 @@
 ---
 name: Bug report
 about: 有 Bug
-title: '请将问题描述清楚、并提供相关报错信息，否则可能不会及时帮你解决！！！'
+title: '请将问题描述清楚、并提供问题重现链接或报错信息，否则可能会被关闭！'
 labels: bug
 assignees: ''
 
@@ -13,7 +13,7 @@ assignees: ''
 **重现问题的步骤 To Reproduce**
 
 
-**请提供能重现问题的链接（jsfiddle、jsrun） Expected behavior**
+**请提供能重现问题的链接（[jsfiddle](https://jsfiddle.net/y7n0bw4e/)、[codepen](https://codepen.io/anon/pen/gJEmRW)、[jsrun](https://jsrun.net/vIyKp/edit)） Expected behavior**
 
 
 **报错信息或截图 Error message or screenshots**

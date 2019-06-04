@@ -277,14 +277,14 @@ const apis = [
           },
           {
             name: 'ajax',
-            desc: '数据响应配置',
+            desc: '代理配置（任何使用 Promise API 的任何库都可以对接数据代理）',
             type: 'Object',
             enum: '',
             defVal: '',
             list: [
               {
                 name: 'query',
-                desc: '查询方法 Function({ page, sort })，默认处理的数据结构 {page: {total: 0}, result: []}；如果使用了服务端排序，sort 属性可以获取相关信息；如果使用了服务端过滤，filter 属性可以获取相关信息',
+                desc: '查询方法 Function({ page, sort, filter })，默认处理的数据结构 {page: {total: 0}, result: []}；如果使用了服务端排序，sort 属性可以获取相关信息；如果使用了服务端过滤，filter 属性可以获取相关信息',
                 type: 'Promise',
                 enum: '',
                 defVal: '',

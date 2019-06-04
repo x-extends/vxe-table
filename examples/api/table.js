@@ -136,7 +136,7 @@ const apis = [
         name: 'height',
         desc: '表格的高度',
         type: 'Number,String',
-        enum: 'auto（相对于父容器高度），数值px',
+        enum: 'auto（铺满父容器高度），数值px',
         defVal: '',
         list: []
       },
@@ -150,7 +150,7 @@ const apis = [
       },
       {
         name: 'auto-resize',
-        desc: '是否自动根据父容器响应式调整表格宽高（如果表格需要铺满父容器时可能会用到）',
+        desc: '是否自动监听父容器响应式调整表格宽高（如果需要自动跟随父容器的高度变化时可能会用到）',
         type: 'Boolean',
         enum: '',
         defVal: 'false',
@@ -158,7 +158,7 @@ const apis = [
       },
       {
         name: 'resizable',
-        desc: '是否允许拖动列宽调整大小',
+        desc: '所有的列是否允许拖动列宽调整大小',
         type: 'Boolean',
         enum: '',
         defVal: 'false',

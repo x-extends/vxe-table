@@ -1,7 +1,7 @@
 <template>
   <div>
     <p>使用 <table-column-api-link prop="slot"/> 自定义模板；可以实现自定义任意内容及 html 元素</p>
-    <p>相关参数 {seq: 序号, rowIndex: 获取 data 中的行索引, row: 获取 data 中行数据, column: 列, columnIndex: 列索引}</p>
+    <p>相关参数说明 {seq: 序号, $rowIndex: 获取渲染中的行索引, rowIndex: 获取真实的行索引, row: 获取行数据, column: 获取列配置, columnIndex: 获取真实列索引，$columnIndex:获取渲染中的列索引}</p>
 
     <vxe-table
       border
