@@ -37,8 +37,8 @@
             <a class="nav-link" @click="linkEvent(item)">{{ $t(item.label) }}</a>
             <ul v-if="item.children" v-show="item.expand" class="nav-child-menu">
               <li v-for="(child, cIndex) in item.children" :key="cIndex">
-                <a class="nav-link disabled" v-if="child.disabled" title="后续版本会考虑支持该功能！">{{ child.label }}</a>
-                <router-link v-else class="nav-link" :to="child.locat">{{ child.label }}</router-link>
+                <a class="nav-link disabled" v-if="child.disabled" title="后续版本会考虑支持该功能！">{{ $t(child.label) }}</a>
+                <router-link v-else class="nav-link" :to="child.locat">{{ $t(child.label) }}</router-link>
               </li>
             </ul>
           </li>
@@ -68,19 +68,19 @@ export default {
           expand: false,
           children: [
             {
-              label: '安装',
+              label: 'app.aside.nav.install',
               locat: {
                 name: 'Install'
               }
             },
             {
-              label: '快速上手',
+              label: 'app.aside.nav.use',
               locat: {
                 name: 'Use'
               }
             },
             {
-              label: '高级函数',
+              label: 'app.aside.nav.advancedFunctions',
               locat: {
                 name: 'Advanced'
               }
@@ -93,151 +93,151 @@ export default {
           expand: false,
           children: [
             {
-              label: '基础',
+              label: 'app.aside.nav.base',
               demoUrl: 'https://jsrun.net/VrXKp',
               locat: {
                 name: 'TableBasic'
               }
             },
             {
-              label: '尺寸',
+              label: 'app.aside.nav.size',
               demoUrl: 'https://jsrun.net/PmXKp',
               locat: {
                 name: 'TableSize'
               }
             },
             {
-              label: '内容显示省略号',
+              label: 'app.aside.nav.ellipsis',
               locat: {
                 name: 'TableOverflow'
               }
             },
             {
-              label: '斑马线条纹',
+              label: 'app.aside.nav.stripe',
               demoUrl: 'https://jsrun.net/zrXKp',
               locat: {
                 name: 'TableStripe'
               }
             },
             {
-              label: '带边框',
+              label: 'app.aside.nav.border',
               demoUrl: 'https://jsrun.net/QrXKp',
               locat: {
                 name: 'TableBorder'
               }
             },
             {
-              label: '单元格样式',
+              label: 'app.aside.nav.style',
               demoUrl: 'https://jsrun.net/EmXKp',
               locat: {
                 name: 'TableStyle'
               }
             },
             {
-              label: '隐藏头部',
+              label: 'app.aside.nav.hideHead',
               demoUrl: 'https://jsrun.net/7mXKp',
               locat: {
                 name: 'TableHeader'
               }
             },
             {
-              label: '列宽拖动',
+              label: 'app.aside.nav.resizable',
               demoUrl: 'https://jsrun.net/5AXKp',
               locat: {
                 name: 'TableResizable'
               }
             },
             {
-              label: '流体高度',
+              label: 'app.aside.nav.fluidHeight',
               demoUrl: 'https://jsrun.net/smXKp',
               locat: {
                 name: 'TableMaxHeight'
               }
             },
             {
-              label: '响应式宽高',
+              label: 'app.aside.nav.resize',
               locat: {
                 name: 'TableAutoHeight'
               }
             },
             {
-              label: '固定表头',
+              label: 'app.aside.nav.height',
               demoUrl: 'https://jsrun.net/JrXKp',
               locat: {
                 name: 'TableHeight'
               }
             },
             {
-              label: '固定列',
+              label: 'app.aside.nav.fixed',
               demoUrl: 'https://jsrun.net/TrXKp',
               locat: {
                 name: 'TableFixed'
               }
             },
             {
-              label: '固定表头和列',
+              label: 'app.aside.nav.fullFixed',
               demoUrl: 'https://jsrun.net/8rXKp',
               locat: {
                 name: 'TableFixedFull'
               }
             },
             {
-              label: '表头分组',
+              label: 'app.aside.nav.group',
               demoUrl: 'https://jsrun.net/7rXKp',
               locat: {
                 name: 'TableGroup'
               }
             },
             {
-              label: '序号',
+              label: 'app.aside.nav.seq',
               demoUrl: 'https://jsrun.net/xrXKp',
               locat: {
                 name: 'TableIndex'
               }
             },
             {
-              label: '单选',
+              label: 'app.aside.nav.radio',
               demoUrl: 'https://jsrun.net/9rXKp',
               locat: {
                 name: 'TableRadio'
               }
             },
             {
-              label: '多选',
+              label: 'app.aside.nav.checkbox',
               demoUrl: 'https://jsrun.net/erXKp',
               locat: {
                 name: 'TableSelection'
               }
             },
             {
-              label: '排序',
+              label: 'app.aside.nav.sort',
               demoUrl: 'https://jsrun.net/crXKp',
               locat: {
                 name: 'TableSort'
               }
             },
             {
-              label: '筛选',
+              label: 'app.aside.nav.filter',
               demoUrl: 'https://jsrun.net/drXKp',
               locat: {
                 name: 'TableFilter'
               }
             },
             {
-              label: '空数据',
+              label: 'app.aside.nav.empty',
               locat: {
                 name: 'TableEmpty'
               }
             },
             {
-              label: '加载中',
+              label: 'app.aside.nav.loading',
               demoUrl: 'https://jsrun.net/GjXKp',
               locat: {
                 name: 'TableLoading'
               }
             },
             {
-              label: '格式化内容',
+              label: 'app.aside.nav.format',
               demoUrl: 'https://jsrun.net/FrXKp',
               locat: {
                 name: 'TableFormat'
@@ -252,74 +252,74 @@ export default {
           children: [
             {
 
-              label: '事件绑定',
+              label: 'app.aside.nav.events',
               locat: {
                 name: 'TableEvent'
               }
             },
             {
-              label: '自定义模板',
+              label: 'app.aside.nav.template',
               demoUrl: 'https://jsrun.net/DjXKp',
               locat: {
                 name: 'TableTemplate'
               }
             },
             {
-              label: '合并行或列',
+              label: 'app.aside.nav.span',
               demoUrl: 'https://jsrun.net/5jXKp',
               locat: {
                 name: 'TableSpan'
               }
             },
             {
-              label: '表尾合计',
+              label: 'app.aside.nav.footer',
               demoUrl: 'https://jsrun.net/dmXKp',
               locat: {
                 name: 'TableFooter'
               }
             },
             {
-              label: '显示/隐藏列',
+              label: 'app.aside.nav.customs',
               demoUrl: 'https://jsrun.net/PrXKp',
               locat: {
                 name: 'TableCustom'
               }
             },
             {
-              label: '导出.csv',
+              label: 'app.aside.nav.export',
               demoUrl: 'https://jsrun.net/cmXKp',
               locat: {
                 name: 'TableExport'
               }
             },
             {
-              label: '快捷菜单',
+              label: 'app.aside.nav.contextMenu',
               demoUrl: 'https://jsrun.net/VjXKp',
               locat: {
                 name: 'TableMenu'
               }
             },
             {
-              label: '展开行',
+              label: 'app.aside.nav.expandRow',
               demoUrl: 'https://jsrun.net/eRXKp',
               locat: {
                 name: 'TableExpand'
               }
             },
             {
-              label: '工具栏',
+              label: 'app.aside.nav.toolbar',
               locat: {
                 name: 'Toolbar'
               }
             },
             {
-              label: '全表搜索',
+              label: 'app.aside.nav.search',
               locat: {
                 name: 'TableSearch'
               }
             },
             {
-              label: '分页',
+              label: 'app.aside.nav.pager',
               locat: {
                 name: 'TablePage'
               }
@@ -332,37 +332,37 @@ export default {
           expand: false,
           children: [
             {
-              label: '基础',
+              label: 'app.aside.nav.base',
               locat: {
                 name: 'TableTreeBasic'
               }
             },
             {
-              label: '单选',
+              label: 'app.aside.nav.radio',
               locat: {
                 name: 'TableTreeRadio'
               }
             },
             {
-              label: '多选',
+              label: 'app.aside.nav.checkbox',
               locat: {
                 name: 'TableTreeSelection'
               }
             },
             {
-              label: '可编辑',
+              label: 'app.aside.nav.edit',
               locat: {
                 name: 'TableTreeEdit'
               }
             },
             {
-              label: '增删改查 + 工具栏',
+              label: 'app.aside.nav.crudToolbar',
               locat: {
                 name: 'TableTreeToolbar'
               }
             },
             {
-              label: '完整功能',
+              label: 'app.aside.nav.full',
               disabled: true,
               locat: {
                 name: 'TableTreeBasic'
@@ -376,74 +376,74 @@ export default {
           expand: false,
           children: [
             {
-              label: '基础',
+              label: 'app.aside.nav.base',
               demoUrl: 'https://jsrun.net/5RXKp',
               locat: {
                 name: 'GridBasic'
               }
             },
             {
-              label: '自定义模板',
+              label: 'app.aside.nav.template',
               locat: {
                 name: 'GridTemplate'
               }
             },
             {
-              label: '带分页',
+              label: 'app.aside.nav.pager',
               locat: {
                 name: 'GridPage'
               }
             },
             {
-              label: '数据代理',
+              label: 'app.aside.nav.proxy',
               locat: {
                 name: 'GridProxy'
               }
             },
             {
-              label: '数据代理 + 分页',
+              label: 'app.aside.nav.proxyPage',
               locat: {
                 name: 'GridPageProxy'
               }
             },
             {
-              label: '完整查询',
+              label: 'app.aside.nav.fullQuery',
               locat: {
                 name: 'GridFullQuery'
               }
             },
             {
-              label: '可编辑',
+              label: 'app.aside.nav.edit',
               locat: {
                 name: 'GridEdit'
               }
             },
             {
-              label: '增删改查 + 工具栏',
+              label: 'app.aside.nav.crudToolbar',
               locat: {
                 name: 'GridToolbar'
               }
             },
             {
-              label: '实现可配置动态列',
+              label: 'app.aside.nav.dynamicColumn',
               locat: {
                 name: 'GridDynamic'
               }
             },
             {
-              label: '基础树',
+              label: 'app.aside.nav.baseTree',
               locat: {
                 name: 'GridTree'
               }
             },
             {
-              label: '树增删改查 + 工具栏',
+              label: 'app.aside.nav.crudTreeToolbar',
               locat: {
                 name: 'GridTreeEdit'
               }
             },
             {
-              label: '完整功能',
+              label: 'app.aside.nav.full',
               locat: {
                 name: 'GridFullEdit'
               }
@@ -456,39 +456,39 @@ export default {
           expand: false,
           children: [
             {
-              label: '海量数据',
+              label: 'app.aside.nav.bigData',
               demoUrl: 'https://jsrun.net/XRXKp',
               locat: {
                 name: 'TableScroll'
               }
             },
             {
-              label: '1 万行',
+              label: 'app.aside.nav.big1wRow',
               locat: {
                 name: 'TableScrollRows'
               }
             },
             {
-              label: '10 万行 + 更复杂渲染',
+              label: 'app.aside.nav.big10wRow',
               locat: {
                 name: 'TableScrollFullRows'
               }
             },
             {
-              label: '1 万行 1 万列',
+              label: 'app.aside.nav.big1wRow1wCol',
               demoUrl: 'https://jsrun.net/ULyKp',
               locat: {
                 name: 'TableScrollCols'
               }
             },
             {
-              label: '10 万行 1 万列 + 更复杂渲染',
+              label: 'app.aside.nav.big10wRow1wCol',
               locat: {
                 name: 'TableScrollFullCols'
               }
             },
             {
-              label: '无限滚动',
+              label: 'app.aside.nav.infiniteScroll',
               disabled: true,
               locat: {
                 name: 'TableScroll'
@@ -497,96 +497,96 @@ export default {
           ]
         },
         {
-          label: 'app.aside.nav.edit',
+          label: 'app.aside.nav.editable',
           value: 'edit',
           expand: false,
           children: [
             {
-              label: '手动触发',
+              label: 'app.aside.nav.manual',
               locat: {
                 name: 'TableEditManual'
               }
             },
             {
-              label: '点击触发',
+              label: 'app.aside.nav.click',
               locat: {
                 name: 'TableEditClick'
               }
             },
             {
-              label: '双击触发',
+              label: 'app.aside.nav.dblclick',
               locat: {
                 name: 'TableEditDBLClick'
               }
             },
             {
-              label: '关闭自动清除',
+              label: 'app.aside.nav.autoClear',
               locat: {
                 name: 'TableAutoClearManual'
               }
             },
             {
-              label: '插入数据',
+              label: 'app.aside.nav.install',
               locat: {
                 name: 'TableEditInsert'
               }
             },
             {
-              label: '删除数据',
+              label: 'app.aside.nav.delete',
               locat: {
                 name: 'TableEditRemove'
               }
             },
             {
-              label: '还原数据',
+              label: 'app.aside.nav.revert',
               locat: {
                 name: 'TableEditRevert'
               }
             },
             {
-              label: '编辑状态',
+              label: 'app.aside.nav.status',
               locat: {
                 name: 'TableEditStatus'
               }
             },
             {
-              label: '禁用编辑 cell',
+              label: 'app.aside.nav.cellDisable',
               locat: {
                 name: 'TableEditCellDisable'
               }
             },
             {
-              label: '禁用编辑 row',
+              label: 'app.aside.nav.rowDisable',
               locat: {
                 name: 'TableEditRowDisable'
               }
             },
             {
-              label: '数据校验 cell',
+              label: 'app.aside.nav.cellVaild',
               locat: {
                 name: 'TableEditCellValid'
               }
             },
             {
-              label: '数据校验 row',
+              label: 'app.aside.nav.rowVaild',
               locat: {
                 name: 'TableEditRowValid'
               }
             },
             {
-              label: '全键盘操作',
+              label: 'app.aside.nav.keyboard',
               locat: {
                 name: 'TableEditKeyboard'
               }
             },
             {
-              label: '自定义渲染',
+              label: 'app.aside.nav.template',
               locat: {
                 name: 'TableEditTemplate'
               }
             },
             {
-              label: '复杂渲染',
+              label: 'app.aside.nav.full',
               disabled: true,
               locat: {
                 name: 'TableEditFull'
@@ -600,7 +600,7 @@ export default {
           expand: false,
           children: [
             {
-              label: '单元格',
+              label: 'app.aside.nav.cell',
               locat: {
                 name: 'TableExcelCell'
               }
@@ -613,19 +613,19 @@ export default {
           expand: false,
           children: [
             {
-              label: 'element-ui 自定义渲染',
+              label: 'app.aside.nav.elementRender',
               locat: {
                 name: 'TableOtherElement'
               }
             },
             {
-              label: 'iview 自定义渲染',
+              label: 'app.aside.nav.iviewRender',
               locat: {
                 name: 'TableOtherIview'
               }
             },
             {
-              label: '使用 sortablejs 拖拽行排序',
+              label: 'app.aside.nav.sortablejsRender',
               disabled: true,
               locat: {
                 name: 'TableSortablejs'
@@ -639,25 +639,25 @@ export default {
           expand: false,
           children: [
             {
-              label: 'element-ui 适配插件',
+              label: 'app.aside.nav.elementPlugin',
               locat: {
                 name: 'TablePluginElementConfig'
               }
             },
             {
-              label: 'element-ui 更多配置',
+              label: 'app.aside.nav.elementPluginMore',
               locat: {
                 name: 'TablePluginElementPage'
               }
             },
             {
-              label: 'iview 适配插件',
+              label: 'app.aside.nav.iviewPlugin',
               locat: {
                 name: 'TablePluginIviewConfig'
               }
             },
             {
-              label: 'iview 更多配置',
+              label: 'app.aside.nav.iviewPluginMore',
               locat: {
                 name: 'TablePluginIviewPage'
               }
@@ -670,7 +670,7 @@ export default {
           expand: false,
           children: [
             {
-              label: 'vxe-table',
+              label: 'app.aside.nav.vxeTable',
               locat: {
                 name: 'TableAPI',
                 params: {
@@ -679,7 +679,7 @@ export default {
               }
             },
             {
-              label: 'vxe-table-column',
+              label: 'app.aside.nav.vxeTableColumn',
               locat: {
                 name: 'TableAPI',
                 params: {
@@ -688,7 +688,7 @@ export default {
               }
             },
             {
-              label: 'vxe-grid',
+              label: 'app.aside.nav.vxeGrid',
               locat: {
                 name: 'TableAPI',
                 params: {
@@ -697,7 +697,7 @@ export default {
               }
             },
             {
-              label: 'vxe-excel',
+              label: 'app.aside.nav.vxeExcel',
               locat: {
                 name: 'TableAPI',
                 params: {
@@ -706,7 +706,7 @@ export default {
               }
             },
             {
-              label: 'vxe-toolbar',
+              label: 'app.aside.nav.vxeToolbar',
               locat: {
                 name: 'TableAPI',
                 params: {
@@ -715,7 +715,7 @@ export default {
               }
             },
             {
-              label: 'vxe-pager',
+              label: 'app.aside.nav.vxePager',
               locat: {
                 name: 'TableAPI',
                 params: {
@@ -724,7 +724,7 @@ export default {
               }
             },
             {
-              label: 'vxe-radio',
+              label: 'app.aside.nav.vxeRadio',
               locat: {
                 name: 'TableAPI',
                 params: {
@@ -733,7 +733,7 @@ export default {
               }
             },
             {
-              label: 'vxe-checkbox',
+              label: 'app.aside.nav.vxeCheckbox',
               locat: {
                 name: 'TableAPI',
                 params: {
@@ -742,7 +742,7 @@ export default {
               }
             },
             {
-              label: 'vxe-input',
+              label: 'app.aside.nav.vxeInput',
               locat: {
                 name: 'TableAPI',
                 params: {
@@ -751,7 +751,7 @@ export default {
               }
             },
             {
-              label: 'vxe-button',
+              label: 'app.aside.nav.vxeButton',
               locat: {
                 name: 'TableAPI',
                 params: {
@@ -760,7 +760,7 @@ export default {
               }
             },
             {
-              label: 'vxe-alert',
+              label: 'app.aside.nav.vxeAlert',
               locat: {
                 name: 'TableAPI',
                 params: {
@@ -769,7 +769,7 @@ export default {
               }
             // },
             // {
-            //   label: 'vxe-tooltip',
+            //   label: 'app.aside.nav.vxeTooltip',
             //   locat: {
             //     name: 'TableAPI',
             //     params: {
