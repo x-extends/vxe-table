@@ -2,14 +2,14 @@
   <div>
     <p>可编辑树表格，还可以通过手动调用展开收起</p>
 
-    <vxe-table-toolbar>
+    <vxe-toolbar>
       <template v-slot:buttons>
         <vxe-button @click="$refs.xTree.toggleTreeExpansion(tableData[0], true)">切换第一个</vxe-button>
         <vxe-button @click="$refs.xTree.setTreeExpansion(tableData[2], true)">展开第三个</vxe-button>
         <vxe-button @click="$refs.xTree.setAllTreeExpansion(true)">展开所有</vxe-button>
         <vxe-button @click="$refs.xTree.clearTreeExpand()">关闭所有</vxe-button>
       </template>
-    </vxe-table-toolbar>
+    </vxe-toolbar>
 
     <vxe-table
       ref="xTree"
@@ -41,14 +41,14 @@ export default {
       tableData: [],
       demoCodes: [
         `
-        <vxe-table-toolbar>
+        <vxe-toolbar>
           <template v-slot:buttons>
             <vxe-button @click="$refs.xTree.toggleTreeExpansion(tableData[0], true)">切换第一个</vxe-button>
             <vxe-button @click="$refs.xTree.setTreeExpansion(tableData[2], true)">展开第三个</vxe-button>
             <vxe-button @click="$refs.xTree.setAllTreeExpansion(true)">展开所有</vxe-button>
             <vxe-button @click="$refs.xTree.clearTreeExpand()">关闭所有</vxe-button>
           </template>
-        </vxe-table-toolbar>
+        </vxe-toolbar>
 
         <vxe-table
           ref="xTree"

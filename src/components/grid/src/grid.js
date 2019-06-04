@@ -121,7 +121,7 @@ export default {
         't--animat': toolbarProps.optimization.animat
       }]
     }, [
-      toolbar ? h('vxe-table-toolbar', {
+      toolbar ? h('vxe-toolbar', {
         ref: 'toolbar',
         props: toolbarProps
       }) : null,

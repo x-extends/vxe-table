@@ -1,5 +1,5 @@
 <template>
-  <router-link class="link" :to="{name: 'TableAPI', params: {name: 'table-toolbar'}, query: {filterName: prop}}">{{ prop || name }}</router-link>
+  <router-link class="link" :to="{name: 'TableAPI', params: {name: 'toolbar'}, query: {filterName: prop}}">{{ prop || name }}</router-link>
 </template>
 
 <script>

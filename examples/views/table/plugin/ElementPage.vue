@@ -17,7 +17,7 @@
       </el-form-item>
     </el-form>
 
-    <vxe-table-toolbar :customs="customColumns" setting>
+    <vxe-toolbar :customs="customColumns" setting>
       <template v-slot:buttons>
         <el-button @click="insertEvent">新增</el-button>
         <el-button @click="saveEvent">保存</el-button>
@@ -31,7 +31,7 @@
           </el-dropdown-menu>
         </el-dropdown>
       </template>
-    </vxe-table-toolbar>
+    </vxe-toolbar>
 
     <vxe-table
       border
@@ -116,7 +116,7 @@ export default {
             </el-form-item>
           </el-form>
 
-          <vxe-table-toolbar :customs="customColumns" setting>
+          <vxe-toolbar :customs="customColumns" setting>
             <template v-slot:buttons>
               <el-button @click="insertEvent">新增</el-button>
               <el-button @click="saveEvent">保存</el-button>
@@ -130,7 +130,7 @@ export default {
                 </el-dropdown-menu>
               </el-dropdown>
             </template>
-          </vxe-table-toolbar>
+          </vxe-toolbar>
 
           <vxe-table
             border

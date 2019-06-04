@@ -2,7 +2,7 @@
   <div>
     <p>通过调用 validate 函数校验数据，edit-rules 校验规则配置</p>
 
-    <vxe-table-toolbar>
+    <vxe-toolbar>
       <template v-slot:buttons>
         <vxe-button @click="insertEvent">新增</vxe-button>
         <vxe-button @click="validEvent">校验</vxe-button>
@@ -11,7 +11,7 @@
         <vxe-button @click="getRemoveEvent">获取删除</vxe-button>
         <vxe-button @click="getUpdateEvent">获取修改</vxe-button>
       </template>
-    </vxe-table-toolbar>
+    </vxe-toolbar>
 
     <vxe-table
       ref="xTable"
@@ -55,7 +55,7 @@ export default {
       },
       demoCodes: [
         `
-        <vxe-table-toolbar>
+        <vxe-toolbar>
           <template v-slot:buttons>
             <vxe-button @click="insertEvent">新增</vxe-button>
             <vxe-button @click="validEvent">校验</vxe-button>
@@ -64,7 +64,7 @@ export default {
             <vxe-button @click="getRemoveEvent">获取删除</vxe-button>
             <vxe-button @click="getUpdateEvent">获取修改</vxe-button>
           </template>
-        </vxe-table-toolbar>
+        </vxe-toolbar>
 
         <vxe-table
           ref="xTable"

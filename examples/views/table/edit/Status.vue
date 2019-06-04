@@ -2,13 +2,13 @@
   <div>
     <p>设置 edit-config={trigger: 'click', mode: 'cell', showStatus: true} 开启编辑状态显示功能</p>
 
-    <vxe-table-toolbar>
+    <vxe-toolbar>
       <template v-slot:buttons>
         <vxe-button @click="getInsertEvent">获取新增</vxe-button>
         <vxe-button @click="getRemoveEvent">获取删除</vxe-button>
         <vxe-button @click="getUpdateEvent">获取修改</vxe-button>
       </template>
-    </vxe-table-toolbar>
+    </vxe-toolbar>
 
     <vxe-table
       ref="xTable"
@@ -40,13 +40,13 @@ export default {
       tableData: [],
       demoCodes: [
         `
-        <vxe-table-toolbar>
+        <vxe-toolbar>
           <template v-slot:buttons>
             <vxe-button @click="getInsertEvent">获取新增</vxe-button>
             <vxe-button @click="getRemoveEvent">获取删除</vxe-button>
             <vxe-button @click="getUpdateEvent">获取修改</vxe-button>
           </template>
-        </vxe-table-toolbar>
+        </vxe-toolbar>
 
         <vxe-table
           ref="xTable"

@@ -4,7 +4,7 @@ import UtilTools from '../../../tools/utils'
 import GlobalConfig from '../../../conf'
 
 export default {
-  name: 'VxeTableToolbar',
+  name: 'VxeToolbar',
   props: {
     setting: [Boolean, Object],
     buttons: Array,
@@ -55,7 +55,7 @@ export default {
       }
     }
     return h('div', {
-      class: ['vxe-table-toolbar', {
+      class: ['vxe-toolbar', {
         [`size--${vSize}`]: vSize
       }]
     }, [
@@ -131,7 +131,7 @@ export default {
         if ($table) {
           $table.refreshColumn()
         } else {
-          console.error('[vxe-table-toolbar] Not found vxe-table.')
+          console.error('[vxe-toolbar] Not found vxe-table.')
         }
       }
     },

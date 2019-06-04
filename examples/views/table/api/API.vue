@@ -1,10 +1,10 @@
 <template>
   <div>
-    <vxe-table-toolbar>
+    <vxe-toolbar>
       <template v-slot:buttons>
         <vxe-input class="search-input" v-model="filterName" type="search" :placeholder="`vxe-${$route.params.name} API 搜索`"></vxe-input>
       </template>
-    </vxe-table-toolbar>
+    </vxe-toolbar>
 
     <vxe-table
       highlight-current-row
@@ -47,7 +47,7 @@
 import XEUtils from 'xe-utils'
 import tableAPI from '../../../api/table'
 import tableColumnAPI from '../../../api/table-column'
-import tableToolbarAPI from '../../../api/table-toolbar'
+import toolbarAPI from '../../../api/toolbar'
 import gridAPI from '../../../api/grid'
 import excelAPI from '../../../api/excel'
 import pagerAPI from '../../../api/pager'
@@ -97,8 +97,8 @@ export default {
         case 'table-column':
           apis = tableColumnAPI
           break
-        case 'table-toolbar':
-          apis = tableToolbarAPI
+        case 'toolbar':
+          apis = toolbarAPI
           break
         case 'grid':
           apis = gridAPI

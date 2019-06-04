@@ -2,11 +2,11 @@
   <div>
     <p>通过调用 <table-api-link prop="exportCsv"/> 函数可以直接将表格导出为 .csv 格式的文件；</p>
 
-    <vxe-table-toolbar>
+    <vxe-toolbar>
       <template v-slot:buttons>
         <vxe-button @click="exportCsvEvent">默认导出</vxe-button>
       </template>
-    </vxe-table-toolbar>
+    </vxe-toolbar>
 
     <vxe-table
       ref="xTable1"
@@ -22,11 +22,11 @@
 
     <p>配置 <table-api-link prop="columnFilterMethod"/> 参数过滤指定列</p>
 
-    <vxe-table-toolbar>
+    <vxe-toolbar>
       <template v-slot:buttons>
         <vxe-button @click="exportCsvEvent2">导出指定列 [name,sex]</vxe-button>
       </template>
-    </vxe-table-toolbar>
+    </vxe-toolbar>
 
     <vxe-table
       ref="xTable2"
@@ -42,11 +42,11 @@
 
     <p>配置 <table-api-link prop="dataFilterMethod"/> 参数过滤指定行</p>
 
-    <vxe-table-toolbar>
+    <vxe-toolbar>
       <template v-slot:buttons>
         <vxe-button @click="exportCsvEvent3">导出指定第10-20行</vxe-button>
       </template>
-    </vxe-table-toolbar>
+    </vxe-toolbar>
 
     <vxe-table
       ref="xTable3"
@@ -62,11 +62,11 @@
 
     <p>不导出表头，指定文件名，导出源数据,格式化数据</p>
 
-    <vxe-table-toolbar>
+    <vxe-toolbar>
       <template v-slot:buttons>
         <vxe-button @click="exportCsvEvent4">完整配置</vxe-button>
       </template>
-    </vxe-table-toolbar>
+    </vxe-toolbar>
 
     <vxe-table
       ref="xTable4"

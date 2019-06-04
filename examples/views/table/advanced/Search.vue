@@ -2,11 +2,11 @@
   <div>
     <p>表格搜索功能，非常简单就可以实现表格内容搜索</p>
 
-    <vxe-table-toolbar>
+    <vxe-toolbar>
       <template v-slot:buttons>
         <vxe-input v-model="filterName1" type="search" placeholder="试试全表搜索"></vxe-input>
       </template>
-    </vxe-table-toolbar>
+    </vxe-toolbar>
 
     <vxe-table
       border
@@ -45,11 +45,11 @@
 
     <p>树表格搜索功能，非常简单就可以实现树表格内容搜索</p>
 
-    <vxe-table-toolbar>
+    <vxe-toolbar>
       <template v-slot:buttons>
         <vxe-input v-model="filterName2" type="search" placeholder="试试全表搜索"></vxe-input>
       </template>
-    </vxe-table-toolbar>
+    </vxe-toolbar>
 
     <vxe-table
       :data.sync="list2"
@@ -100,11 +100,11 @@ export default {
       tableData2: [],
       demoCodes: [
         `
-        <vxe-table-toolbar>
+        <vxe-toolbar>
           <template v-slot:buttons>
             <vxe-input v-model="filterName" type="search" placeholder="试试全表搜索"></vxe-input>
           </template>
-        </vxe-table-toolbar>
+        </vxe-toolbar>
 
         <vxe-table
           border
@@ -171,11 +171,11 @@ export default {
         }
         `,
         `
-        <vxe-table-toolbar>
+        <vxe-toolbar>
           <template v-slot:buttons>
             <vxe-input v-model="filterName2" type="search" placeholder="试试全表搜索"></vxe-input>
           </template>
-        </vxe-table-toolbar>
+        </vxe-toolbar>
 
         <vxe-table
           :data.sync="list2"

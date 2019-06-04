@@ -303,7 +303,7 @@ export default {
             {
               label: '工具栏',
               locat: {
-                name: 'TableToolbar'
+                name: 'Toolbar'
               }
             },
             {
@@ -682,15 +682,6 @@ export default {
               }
             },
             {
-              label: 'vxe-table-toolbar',
-              locat: {
-                name: 'TableAPI',
-                params: {
-                  name: 'table-toolbar'
-                }
-              }
-            },
-            {
               label: 'vxe-grid',
               locat: {
                 name: 'TableAPI',
@@ -705,6 +696,15 @@ export default {
                 name: 'TableAPI',
                 params: {
                   name: 'excel'
+                }
+              }
+            },
+            {
+              label: 'vxe-toolbar',
+              locat: {
+                name: 'TableAPI',
+                params: {
+                  name: 'toolbar'
                 }
               }
             },
@@ -761,15 +761,15 @@ export default {
                   name: 'alert'
                 }
               }
-            },
-            {
-              label: 'vxe-tooltip',
-              locat: {
-                name: 'TableAPI',
-                params: {
-                  name: 'tooltip'
-                }
-              }
+            // },
+            // {
+            //   label: 'vxe-tooltip',
+            //   locat: {
+            //     name: 'TableAPI',
+            //     params: {
+            //       name: 'tooltip'
+            //     }
+            //   }
             }
           ]
         }

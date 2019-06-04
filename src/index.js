@@ -1,7 +1,7 @@
 import XEUtils from 'xe-utils'
 import Table from './components/table'
 import TableColumn from './components/table-column'
-import TableToolbar from './components/table-toolbar'
+import Toolbar from './components/toolbar'
 import Grid from './components/grid'
 import Excel from './components/excel'
 import Pager from './components/pager'
@@ -22,7 +22,7 @@ const installedPlugins = []
 const components = [
   Table,
   TableColumn,
-  TableToolbar,
+  Toolbar,
   Grid,
   Excel,
   Pager,
@@ -114,7 +114,7 @@ export default {
   renderer: Renderer,
   Table,
   TableColumn,
-  TableToolbar,
+  Toolbar,
   Grid,
   Excel,
   Pager,

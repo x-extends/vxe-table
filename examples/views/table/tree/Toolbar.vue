@@ -2,14 +2,14 @@
   <div>
     <p>增删改查、工具栏，如果 key 值一样的情况下（<table-api-link prop="row-key"/>、<table-api-link prop="tree-config"/>、<table-api-link prop="edit-config"/> 的 key 任意配置一个即可）</p>
 
-    <vxe-table-toolbar :customs="customColumns" setting>
+    <vxe-toolbar :customs="customColumns" setting>
       <template v-slot:buttons>
         <vxe-button @click="insertEvent">新增</vxe-button>
         <vxe-button @click="getInsertEvent">获取新增</vxe-button>
         <vxe-button @click="getRemoveEvent">获取删除</vxe-button>
         <vxe-button @click="getUpdateEvent">获取修改</vxe-button>
       </template>
-    </vxe-table-toolbar>
+    </vxe-toolbar>
 
     <vxe-table
       ref="xTree"
@@ -44,14 +44,14 @@ export default {
       tableData: [],
       demoCodes: [
         `
-        <vxe-table-toolbar :customs="customColumns" setting>
+        <vxe-toolbar :customs="customColumns" setting>
           <template v-slot:buttons>
             <vxe-button @click="insertEvent">新增</vxe-button>
             <vxe-button @click="getInsertEvent">获取新增</vxe-button>
             <vxe-button @click="getRemoveEvent">获取删除</vxe-button>
             <vxe-button @click="getUpdateEvent">获取修改</vxe-button>
           </template>
-        </vxe-table-toolbar>
+        </vxe-toolbar>
 
         <vxe-table
           ref="xTree"

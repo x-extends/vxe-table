@@ -1,13 +1,13 @@
 <template>
   <div>
-    <p>使用自带的工具栏 <toolbar-api-link name="vxe-table-toolbar"/>，配合模板可以非常简单的实现强大的功能</p>
+    <p>使用自带的工具栏 <toolbar-api-link name="vxe-toolbar"/>，配合模板可以非常简单的实现强大的功能</p>
 
-    <vxe-table-toolbar>
+    <vxe-toolbar>
       <template v-slot:buttons>
         <vxe-button>按钮1</vxe-button>
         <vxe-button>按钮2</vxe-button>
       </template>
-    </vxe-table-toolbar>
+    </vxe-toolbar>
 
     <vxe-table
       border
@@ -29,12 +29,12 @@
 
     <p>显示/隐藏列功能，通过设置 <toolbar-api-link prop="setting"/> 和 <toolbar-api-link prop="customs"/> 参数开启</p>
 
-    <vxe-table-toolbar :customs="customColumns" setting>
+    <vxe-toolbar :customs="customColumns" setting>
       <template v-slot:buttons>
         <vxe-button>按钮1</vxe-button>
         <vxe-button>按钮2</vxe-button>
       </template>
-    </vxe-table-toolbar>
+    </vxe-toolbar>
 
     <vxe-table
       border
@@ -67,12 +67,12 @@ export default {
       customColumns: [],
       demoCodes: [
         `
-        <vxe-table-toolbar>
+        <vxe-toolbar>
           <template v-slot:buttons>
             <vxe-button>按钮1</vxe-button>
             <vxe-button>按钮2</vxe-button>
           </template>
-        </vxe-table-toolbar>
+        </vxe-toolbar>
 
         <vxe-table
           border
@@ -98,12 +98,12 @@ export default {
         }
         `,
         `
-        <vxe-table-toolbar :customs="customColumns" setting>
+        <vxe-toolbar :customs="customColumns" setting>
           <template v-slot:buttons>
             <vxe-button>按钮1</vxe-button>
             <vxe-button>按钮2</vxe-button>
           </template>
-        </vxe-table-toolbar>
+        </vxe-toolbar>
 
         <vxe-table
           border

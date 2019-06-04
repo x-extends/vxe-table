@@ -3,7 +3,7 @@
     <p>使用 vxe-excel 渲染 Excel 表格</p>
     <p>注意：暂时只能支持少量数据，不建议使用（重构中...）</p>
 
-    <vxe-table-toolbar>
+    <vxe-toolbar>
       <template v-slot:buttons>
         <vxe-button @click="getValidEvent">获取有效数据</vxe-button>
         <vxe-button  @click="getInsertEvent">获取新增</vxe-button>
@@ -12,7 +12,7 @@
         <vxe-button @click="exportCsvEvent">导出.csv</vxe-button>
         <input type="file" @change="fileChangeEvent" accept=".csv,.xls,.xlsx">
       </template>
-    </vxe-table-toolbar>
+    </vxe-toolbar>
 
     <vxe-excel
       ref="xExcel"
