@@ -54,8 +54,8 @@ A very powerful Vue table component.
 
 ## Docs
 
-[查看演示 Example](https://xuliangzhan.github.io/vxe-table/)  
-[查看文档 API](https://xuliangzhan.github.io/vxe-table/#/table/api)
+[To view the example](https://xuliangzhan.github.io/vxe-table/)  
+[To view the document](https://xuliangzhan.github.io/vxe-table/#/table/api)
 
 ## Installing
 
