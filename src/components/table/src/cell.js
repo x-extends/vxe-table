@@ -403,11 +403,12 @@ const CellMethods = {
   },
   renderFilterIcon (h, params) {
     let { iconMap } = GlobalConfig
-    let { $table } = params
+    let { $table, column } = params
+    let { filterStore } = $table
     return [
       h('span', {
         class: ['vxe-filter-wrapper', {
-          'is--active': $table.filterStore.visible
+          'is--active': filterStore.visible && filterStore.column === column
         }]
       }, [
         h('i', {
