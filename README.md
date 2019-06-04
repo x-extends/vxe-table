@@ -97,14 +97,16 @@ Vue.use(VXETable, {
 
 ## Theme
 
-Case 1. Use the default theme style. 使用默认的主题样式
+Case 1. Use the default theme style.  
+使用默认的主题样式
 
 ```javascript
 import VXETable from 'vxe-table'
 import 'vxe-table/lib/index.css'
 ```
 
-Case 2. Modify the table theme color. 修改表格主题颜色
+Case 2. Modify the table theme color.  
+修改表格主题颜色
 
 ```scss
 // 引入变量
