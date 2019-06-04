@@ -17,20 +17,20 @@ A more powerful, extensible, configurable Vue Table component.
 ## Features
 
 * Basics table （基础）
-* Table size （尺寸）
-* Striped table （斑马线条纹）
+* Size （尺寸）
+* Striped （斑马线条纹）
 * Table with border （带边框）
 * Cell style （单元格样式）
 * Column resizable （列宽拖动）
 * Fluid-height table with fixed header （流体高度）
-* Resize height table （响应式宽高）
+* Resize height and width （响应式宽高）
 * Table with fixed header （固定表头）
 * Table with fixed column （固定列）
 * Table with fixed columns and header （固定表头和列）
 * Grouping table head 表头分组
 * Table sequence （序号)
-* Radio table （单选)
-* Checkbox table （多选）
+* Radio （单选)
+* Checkbox （多选）
 * Sorting （排序）
 * Filter （筛选）
 * Rowspan and colspan （合并行或列）
