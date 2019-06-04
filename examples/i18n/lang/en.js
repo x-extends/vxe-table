@@ -69,8 +69,8 @@ module.exports = {
         infiniteScroll: 'The infinite scroll',
 
         editable: 'Editable',
-        manual: 'manual trigger',
-        click: 'click trigger',
+        manual: 'Manual trigger',
+        click: 'Click trigger',
         dblclick: 'dblclick trigger',
         autoClear: 'Auto clear',
         insert: 'Insert',
