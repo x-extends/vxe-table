@@ -195,6 +195,12 @@ export default {
 </script>
 ```
 
+## Donation
+
+If the project is very helpful to you, you can buy the author a cup of coffee. ☕
+
+![pay](https://raw.githubusercontent.com/xuliangzhan/vxe-table/public/donation/pay.jpg)
+
 ## License
 
 Copyright (c) 2019-present, Xu Liangzhan
