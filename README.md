@@ -199,7 +199,7 @@ export default {
 
 If the project is very helpful to you, you can buy the author a cup of coffee. ☕
 
-![pay](https://raw.githubusercontent.com/xuliangzhan/vxe-table/public/donation/pay.jpg)
+![pay](https://github.com/xuliangzhan/vxe-table/blob/master/public/donation/pay.jpg?raw=true)
 
 ## License
 
