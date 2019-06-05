@@ -938,12 +938,12 @@ export default {
         }
         insList = editStore.insertList.filter(row => XEUtils.get(row, property))
       } else {
+        if (treeConfig) {
+          rowList = XEUtils.filterTree(tableFullData, row => selection.indexOf(row) > -1, treeConfig)
+        } else {
+          rowList = tableFullData.filter(row => selection.indexOf(row) > -1)
+        }
         insList = editStore.insertList.filter(row => selection.indexOf(row) > -1)
-      }
-      if (treeConfig) {
-        rowList = XEUtils.filterTree(tableFullData, row => selection.indexOf(row) > -1, treeConfig)
-      } else {
-        rowList = tableFullData.filter(row => selection.indexOf(row) > -1)
       }
       return rowList.concat(insList)
     },
