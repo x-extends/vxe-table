@@ -44,7 +44,7 @@ module.exports = {
         contextMenu: '快捷菜单',
         expandRow: '展开行',
         toolbar: '工具栏',
-        search: '全部搜索',
+        search: '全表搜索',
         pager: '分页',
 
         tree: '树形表格',
