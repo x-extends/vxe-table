@@ -34,7 +34,7 @@ module.exports = {
         loading: 'Loading',
         format: 'Format content',
 
-        advanced: 'Advanced',
+        more: 'More',
         events: '事件绑定',
         template: '自定义模板',
         span: 'Rowspan and colspan',

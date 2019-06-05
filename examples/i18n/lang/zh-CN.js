@@ -34,7 +34,7 @@ module.exports = {
         loading: '加载中',
         format: '格式化内容',
 
-        advanced: '高级功能',
+        more: '更多功能',
         events: '事件绑定',
         template: '自定义模板',
         span: '合并行货列',

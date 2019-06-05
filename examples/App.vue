@@ -246,7 +246,7 @@ export default {
           ]
         },
         {
-          label: 'app.aside.nav.advanced',
+          label: 'app.aside.nav.more',
           value: 'advanced',
           expand: false,
           children: [
