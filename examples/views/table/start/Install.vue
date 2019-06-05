@@ -2,9 +2,10 @@
   <div>
     <h3>npm 安装</h3>
     <p>推荐使用 npm 的方式安装，它能更好地和 <a class="link" href="https://webpack.js.org/">webpack</a> 打包工具配合使用。</p>
+    <p>依赖 xe-utils vue2.6+</p>
     <pre>
       <code class="javascript">
-        npm install vxe-table
+        npm install xe-utils vxe-table
       </code>
     </pre>
     <pre>
