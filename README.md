@@ -54,8 +54,8 @@ A more powerful, extensible, configurable Vue Table component.
 
 ## Docs
 
-[To view the example](https://xuliangzhan.github.io/vxe-table/)  
-[To view the document](https://xuliangzhan.github.io/vxe-table/#/table/api)
+[To view the example 查看演示](https://xuliangzhan.github.io/vxe-table/)  
+[To view the document 查看文档](https://xuliangzhan.github.io/vxe-table/#/table/api)
 
 ## Installing
 
