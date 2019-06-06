@@ -84,6 +84,9 @@ body {
       .nav-link {
         height: 40px;
         line-height: 40px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
     }
     .nav-child-menu {
