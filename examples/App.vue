@@ -526,7 +526,7 @@ export default {
               }
             },
             {
-              label: 'app.aside.nav.install',
+              label: 'app.aside.nav.insert',
               locat: {
                 name: 'TableEditInsert'
               }
