@@ -1,0 +1,288 @@
+/*excel*/
+.vxe-table {
+  &.vxe-excel {
+    color: $vxe-excel-font-color;
+    border-color: $vxe-excel-column-border-color;
+    &.t--border {
+      .vxe-header--column,
+      .vxe-body--column {
+        border-right-color: $vxe-excel-column-border-color;
+        border-bottom-color: $vxe-excel-column-border-color;
+      }
+    }
+    .vxe-table--resizable-bar {
+      &:before {
+        background-color: $vxe-excel-column-border-color;
+      }
+    }
+    .body--wrapper {
+      .vxe-header--column {
+        &:last-child {
+          border-right-color: $vxe-excel-header-background-color;
+        }
+      }
+      .vxe-body--column {
+        &:last-child {
+          border-right-color: $vxe-table-background-color;
+        }
+      }
+    }
+    .vxe-header--column {
+      padding: 4px 0;
+      font-size: 12px;
+      cursor: default;
+    }
+    .vxe-excel--column-selected {
+      background-color: $vxe-excel-header-selected-background-color;
+      color: $vxe-excel-primary-color;
+    }
+    .vxe-table--header-wrapper {
+      background-color: $vxe-excel-header-background-color;
+      .vxe-table--repair {
+        background-color: $vxe-excel-column-border-color;
+      }
+    }
+    // 修复边缘
+    .vxe-body--row {
+      &:first-child {
+        .vxe-body--column {
+          &.col--checked-top {
+            .vxe-body--column-checked-lt {
+              &:before {
+                top: 0;
+              }
+            }
+          }
+        }
+      }
+      &:last-child {
+        .col--checked {
+          .vxe-body--column-checked-corner {
+            bottom: -1px;
+          }
+        }
+      }
+    }
+    .vxe-body--column {
+      &:nth-child(2) {
+        &.col--checked-left {
+          .vxe-body--column-checked-lt {
+            &:after {
+              left: 0;
+            }
+          }
+        }
+      }
+      &:last-child {
+        &.col--checked {
+          .vxe-body--column-checked-corner {
+            right: -1px;
+          }
+        }
+      }
+    }
+    .vxe-body--column {
+      padding: 0;
+      transition: none;
+      height: inherit;
+      line-height: 24px;
+      cursor: cell;
+      .vxe-cell {
+        padding: 0 #{$vxe-excel-column-border-width + 2px};
+        .vxe-input--wrapper {
+          height: inherit;
+          position: relative;
+          .vxe-textarea {
+            position: absolute;
+            color: $vxe-excel-font-color;
+            overflow: hidden;
+          }
+          .vxe-textarea,
+          .vxe-textarea:focus {
+            border-radius: 0;
+            border: $vxe-excel-column-border-width solid $vxe-excel-primary-color;
+          }
+        }
+      }
+      &:first-child {
+        background-color: $vxe-excel-header-background-color;
+        cursor: default;
+        &.vxe-excel--index-selected {
+          color: $vxe-excel-primary-color;
+          background-color: $vxe-excel-header-selected-background-color;
+        }
+      }
+      &.col--selected {
+        box-shadow: none;
+        &.col--checked {
+          background-color: #fff;
+        }
+      }
+      &.col--actived {
+        .vxe-cell {
+          padding: 0;
+        }
+      }
+      &.col--checked,
+      &.col--checked-temp,
+      &.col--copyed {
+        position: relative;
+      }
+      &.col--checked {
+        background-color: rgba(0, 0, 0, 0.2);
+        border-color: #A5A5A5;
+      }
+      &.col--checked,
+      &.col--checked-temp {
+        .vxe-body--column-checked-lt,
+        .vxe-body--column-checked-rb {
+          &:before,
+          &:after {
+            background: $vxe-excel-primary-color;
+          }
+        }
+        .vxe-body--column-checked-corner {
+          position: absolute;
+          right: -$vxe-excel-column-border-width;
+          bottom: -$vxe-excel-column-border-width;
+          width: $vxe-excel-column-border-width * 4;
+          height: $vxe-excel-column-border-width * 4;
+          border: 1px solid #fff;
+          background-color: $vxe-excel-primary-color;
+          cursor: crosshair;
+        }
+      }
+      &.col--copyed {
+        .vxe-body--column-copyed-lt,
+        .vxe-body--column-copyed-rb {
+          &:before,
+          &:after {
+            background: repeating-linear-gradient(135deg, transparent, transparent 3px, $vxe-excel-primary-color 3px, $vxe-excel-primary-color 9px);
+            animation: shine 1s infinite linear;
+          }
+        }
+      }
+      %checked-left-after {
+        content: "";
+        top: 1px - $vxe-excel-column-border-width;
+        left: 1px - $vxe-excel-column-border-width;
+        position: absolute;
+        height: calc(100% + #{$vxe-excel-column-border-width});
+        width: $vxe-excel-column-border-width;
+      }
+      &.col--checked-left,
+      &.col--checked-temp-left {
+        .vxe-body--column-checked-lt {
+          &:after {
+            @extend %checked-left-after;
+          }
+        }
+      }
+      &.col--copyed-left {
+        .vxe-body--column-checked-lt {
+          &:after {
+            left: -$vxe-excel-column-border-width;
+          }
+        }
+        .vxe-body--column-copyed-lt {
+          &:after {
+            @extend %checked-left-after;
+          }
+        }
+      }
+      %checked-top-before {
+        content: "";
+        top: 1px - $vxe-excel-column-border-width;
+        left: 1px - $vxe-excel-column-border-width;
+        position: absolute;
+        width: calc(100% + #{$vxe-excel-column-border-width});
+        height: $vxe-excel-column-border-width;
+      }
+      &.col--checked-top,
+      &.col--checked-temp-top {
+        .vxe-body--column-checked-lt {
+          &:before {
+            @extend %checked-top-before;
+          }
+        }
+      }
+      &.col--copyed-top {
+        .vxe-body--column-checked-lt {
+          &:before {
+            top: -$vxe-excel-column-border-width;
+          }
+        }
+        .vxe-body--column-copyed-lt {
+          &:before {
+            @extend %checked-top-before;
+          }
+        }
+      }
+      %checked-right-after {
+        content: "";
+        top: 1px - $vxe-excel-column-border-width;
+        right: 1px - $vxe-excel-column-border-width;
+        position: absolute;
+        height: calc(100% + #{$vxe-excel-column-border-width});
+        width: $vxe-excel-column-border-width;
+      }
+      &.col--checked-right,
+      &.col--checked-temp-right {
+        .vxe-body--column-checked-rb {
+          &:after {
+            @extend %checked-right-after;
+          }
+        }
+      }
+      &.col--copyed-right {
+        .vxe-body--column-checked-rb {
+          &:after {
+            right: -$vxe-excel-column-border-width;
+          }
+        }
+        .vxe-body--column-copyed-rb {
+          &:after {
+            @extend %checked-right-after;
+          }
+        }
+      }
+      %checked-bottom-before {
+        content: "";
+        bottom: 1px - $vxe-excel-column-border-width;
+        left: 1px - $vxe-excel-column-border-width;
+        position: absolute;
+        width: calc(100% + #{$vxe-excel-column-border-width});
+        height: $vxe-excel-column-border-width;
+      }
+      &.col--checked-bottom,
+      &.col--checked-temp-bottom {
+        .vxe-body--column-checked-rb {
+          &:before {
+            @extend %checked-bottom-before;
+          }
+        }
+      }
+      &.col--copyed-bottom {
+        .vxe-body--column-checked-rb {
+          &:before {
+            bottom: -$vxe-excel-column-border-width;
+          }
+        }
+        .vxe-body--column-copyed-rb {
+          &:before {
+            @extend %checked-bottom-before;
+          }
+        }
+      }
+    }
+  }
+}
+
+@keyframes shine {
+  0% {
+    background-position: -1px -1px;
+  }
+  100% {
+    background-position: -12px -12px;
+  }
+}

@@ -1,0 +1,25 @@
+/*radio*/
+.vxe-radio {
+  @extend %radioAndCheckbox;
+  &.size--small,
+  &.size--mini {
+    font-size: 12px;
+  }
+  > input {
+    &+.radio--icon {
+      border-radius: 50%;
+      &:before {
+        background-color: #fff;
+        border-radius: 50%;
+        height: 4px;
+        width: 4px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+      }
+    }
+  }
+  &+.vxe-radio {
+    margin-left: 10px;
+  }
+}

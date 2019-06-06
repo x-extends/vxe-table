@@ -1,0 +1,10 @@
+{
+  "!return|array(15-120)": {
+    "id|number": "{{ $index+1 }}",
+    "name": "{{ random.repeat(['前端', '后端', '测试', '项目经理', '设计'],1) }}_{{ $index }}",
+    "describe": "{{ random.repeat('角色描述',4,50) }}",
+    "seq|number": "{{ $index }}",
+    "createTime|number": "{{ random.time('2019-01-01 00:00:00','2019-02-20 23:59:59', 'yyyy-MM-dd HH:mm:ss') }}",
+    "updateTime|number": "{{ random.time('2019-01-01 00:00:00','2019-02-20 23:59:59', 'yyyy-MM-dd HH:mm:ss') }}"
+  }
+}

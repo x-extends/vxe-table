@@ -1,0 +1,307 @@
+/*pager*/
+.vxe-pager {
+  padding: 10px 0;
+  font-size: $vxe-font-size;
+  color: $vxe-font-color;
+  font-family: $vxe-font-family;
+  text-align: right;
+  user-select: none;
+  &.is--loading {
+    position: relative;
+    &:before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      background-color: $vxe-loading-background-color;
+    }
+  }
+  &.p--background {
+    .vxe-pager--prev-btn,
+    .vxe-pager--next-btn {
+      background-color: #f4f4f5;
+      border-radius: 4px;
+    }
+    .vxe-pager--jump-prev,
+    .vxe-pager--num-btn,
+    .vxe-pager--jump-next {
+      background-color: #f4f4f5;
+      border-radius: 4px;
+      &:hover {
+        color: $vxe-primary-color;
+      }
+      &.is--active {
+        color: #fff;
+        background-color: $vxe-primary-color;
+      }
+    }
+  }
+  &.size--medium {
+    padding: 8px 0;
+    .vxe-pager--total,
+    .vxe-pager--prev-btn,
+    .vxe-pager--btn-wrapper,
+    .vxe-pager--next-btn,
+    .vxe-pager--sizes,
+    .vxe-pager--jump {
+      margin: 0 4px;
+    }
+    .vxe-pager--jump-prev,
+    .vxe-pager--num-btn,
+    .vxe-pager--jump-next {
+      height: 28px;
+      line-height: 28px;
+    }
+    .vxe-pager--sizes {
+      .vxe-pager--sizes-arrow {
+        top: 8px;
+      }
+      .size--content {
+        height: 28px;
+        line-height: 28px;
+      }
+    }
+    .vxe-pager--jump .vxe-pager--goto {
+      height: 28px;
+    }
+    .vxe-pager--jump-prev,
+    .vxe-pager--prev-btn,
+    .vxe-pager--next-btn,
+    .vxe-pager--jump-next {
+      font-size: 19px;
+    }
+  }
+  &.size--small {
+    font-size: 12px;
+    padding: 8px 0;
+    .vxe-pager--total,
+    .vxe-pager--prev-btn,
+    .vxe-pager--btn-wrapper,
+    .vxe-pager--next-btn,
+    .vxe-pager--sizes,
+    .vxe-pager--jump {
+      margin: 0 4px;
+    }
+    .vxe-pager--jump-prev,
+    .vxe-pager--num-btn,
+    .vxe-pager--jump-next {
+      height: 26px;
+      line-height: 26px;
+    }
+    .vxe-pager--sizes {
+      .vxe-pager--sizes-arrow {
+        top: 7px;
+      }
+      .size--content {
+        height: 26px;
+        line-height: 26px;
+      }
+    }
+    .vxe-pager--jump .vxe-pager--goto {
+      height: 26px;
+    }
+    .vxe-pager--jump-prev,
+    .vxe-pager--prev-btn,
+    .vxe-pager--next-btn,
+    .vxe-pager--jump-next {
+      font-size: 17px;
+    }
+  }
+  &.size--mini {
+    font-size: 12px;
+    padding: 8px 0;
+    .vxe-pager--total,
+    .vxe-pager--prev-btn,
+    .vxe-pager--btn-wrapper,
+    .vxe-pager--next-btn,
+    .vxe-pager--sizes,
+    .vxe-pager--jump {
+      margin: 0 4px;
+    }
+    .vxe-pager--jump-prev,
+    .vxe-pager--num-btn,
+    .vxe-pager--jump-next {
+      height: 24px;
+      line-height: 24px;
+    }
+    .vxe-pager--sizes {
+      .size--content {
+        height: 24px;
+        line-height: 24px;
+      }
+      .vxe-pager--sizes-arrow {
+        top: 6px;
+      }
+    }
+    .vxe-pager--jump .vxe-pager--goto {
+      height: 24px;
+    }
+    .vxe-pager--jump-prev,
+    .vxe-pager--prev-btn,
+    .vxe-pager--next-btn,
+    .vxe-pager--jump-next {
+      font-size: 14px;
+    }
+  }
+  .vxe-pager--total,
+  .vxe-pager--prev-btn,
+  .vxe-pager--btn-wrapper,
+  .vxe-pager--next-btn,
+  .vxe-pager--sizes,
+  .vxe-pager--jump,
+  .vxe-pager--count {
+    margin: 0 6px;
+    vertical-align: middle;
+    display: inline-block;
+  }
+  .vxe-pager--prev-btn,
+  .vxe-pager--jump-prev,
+  .vxe-pager--num-btn,
+  .vxe-pager--jump-next,
+  .vxe-pager--next-btn,
+  .vxe-pager--sizes {
+    cursor: pointer;
+  }
+  .vxe-pager--btn-wrapper {
+    list-style-type: none;
+    padding: 0;
+    display: inline-block;
+    text-align: center;
+    height: 30px;
+    line-height: 30px;
+    .vxe-pager--jump-prev,
+    .vxe-pager--jump-next {
+      &:hover {
+        .vxe-pager--jump-more {
+          display: none;
+        }
+        .vxe-pager--jump-icon {
+          display: block;
+        }
+      }
+    }
+    .vxe-pager--jump-icon {
+      display: none;
+    }
+  }
+  .vxe-pager--jump-prev,
+  .vxe-pager--prev-btn,
+  .vxe-pager--num-btn,
+  .vxe-pager--next-btn,
+  .vxe-pager--jump-next {
+    display: inline-block;
+    margin: 0 2px;
+    vertical-align: middle;
+    &:hover,
+    &.is--active {
+      color: $vxe-primary-color;
+    }
+    &.is--disabled {
+      cursor: no-drop;
+      color: $vxe-disabled-color;
+      &:hover {
+        color: $vxe-disabled-color;
+      }
+    }
+  }
+  .vxe-pager--jump-prev,
+  .vxe-pager--prev-btn,
+  .vxe-pager--next-btn,
+  .vxe-pager--jump-next {
+    font-size: 20px;
+  }
+  .vxe-pager--num-btn {
+    min-width: 30px;
+    font-weight: 700;
+    vertical-align: middle;
+  }
+  .vxe-pager--sizes {
+    position: relative;
+    border-radius: 4px;
+    padding: 0;
+    border: 1px solid $vxe-input-border-color;
+    color: $vxe-font-color;
+    text-align: center;
+    display: inline-block;
+    @include animatTransition(border);
+    &.is--active {
+      border: 1px solid $vxe-primary-color;
+      .vxe-pager--sizes-arrow {
+        transform: rotate(360deg);
+      }
+    }
+    .vxe-pager--sizes-arrow {
+      position: absolute;
+      right: 5px;
+      top: 9px;
+      font-size: 12px;
+      @include animatTransition(transform, .2s);
+    }
+    .size--content {
+      padding: 0 22px 0 10px;
+      height: 30px;
+      line-height: 30px;
+      display: block;
+    }
+  }
+  .vxe-pager--count {
+    .vxe-pager--separator {
+      margin-right: 6px;
+    }
+  }
+  .vxe-pager--jump .vxe-pager--goto {
+    border-radius: 4px;
+    border: 1px solid $vxe-input-border-color;
+    color: $vxe-font-color;
+    height: 30px;
+    transition: border .2s ease-in-out;
+    &:focus {
+      border: 1px solid $vxe-primary-color;
+      outline: 0;
+    }
+  }
+  .vxe-pager--jump {
+    .vxe-pager--goto-text {
+      margin-right: 4px;
+    }
+    .vxe-pager--classifier-text {
+      margin-left: 4px;
+    }
+    .vxe-pager--goto {
+      width: 42px;
+      text-align: center;
+    }
+  }
+}
+.vxe-pager-size--select {
+  display: none;
+  position: absolute;
+  margin: 0;
+  padding: 4px 0;
+  min-width: 50px;
+  background-color: #fff;
+  list-style-type: none;
+  border-radius: 4px;
+  font-size: $vxe-font-size;
+  color: $vxe-font-color;
+  font-family: $vxe-font-family;
+  border: 1px solid $vxe-primary-color;
+  &.is--show {
+    display: block;
+  }
+  .size--option {
+    padding: 0 15px;
+    white-space: nowrap;
+    cursor: pointer;
+    &:hover {
+      color: $vxe-primary-color;
+    }
+    &.is--active {
+      font-weight: 700;
+      color: $vxe-primary-color;
+    }
+  }
+}
