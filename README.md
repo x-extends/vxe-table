@@ -27,7 +27,7 @@ A more powerful, extensible, configurable Vue Table component.
 * Table with fixed header （固定表头）
 * Table with fixed column （固定列）
 * Table with fixed columns and header （固定表头和列）
-* Grouping table head 表头分组
+* Grouping table head （表头分组）
 * Table sequence （序号)
 * Radio （单选)
 * Checkbox （多选）

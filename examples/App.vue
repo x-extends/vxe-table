@@ -625,6 +625,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.antd',
+              locat: {
+                name: 'TableOtherAntd'
+              }
+            },
+            {
               label: 'app.aside.nav.sortablejsRender',
               disabled: true,
               locat: {
@@ -660,6 +666,18 @@ export default {
               label: 'app.aside.nav.iviewPluginMore',
               locat: {
                 name: 'TablePluginIviewPage'
+              }
+            },
+            {
+              label: 'app.aside.nav.antdPlugin',
+              locat: {
+                name: 'TablePluginAntdConfig'
+              }
+            },
+            {
+              label: 'app.aside.nav.antdPluginMore',
+              locat: {
+                name: 'TablePluginAntdPage'
               }
             }
           ]

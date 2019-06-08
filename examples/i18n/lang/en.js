@@ -89,6 +89,7 @@ module.exports = {
         other: 'Other rendering',
         elementRender: '使用 element-ui 自定义渲染',
         iviewRender: '使用 iview 自定义渲染',
+        antd: '使用 ant-design-vue 自定义渲染',
         sortablejsRender: '使用 sortablejs 拖拽行排序',
 
         plugin: 'Plugins',
@@ -96,6 +97,8 @@ module.exports = {
         elementPluginMore: 'element-ui 跟多配置',
         iviewPlugin: 'iview 适配插件',
         iviewPluginMore: 'iview 跟多配置',
+        antdPlugin: 'ant-design-vue 适配插件',
+        antdPluginMore: 'ant-design-vue 跟多配置',
 
         api: 'API Document',
         vxeTable: 'vxe-table',

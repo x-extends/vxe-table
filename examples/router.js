@@ -85,12 +85,15 @@ import TableExcelCell from './views/table/excel/Cell.vue'
 
 import TableOtherElement from './views/table/other/Element.vue'
 import TableOtherIview from './views/table/other/Iview.vue'
+import TableOtherAntd from './views/table/other/Antd.vue'
 import TableSortablejs from './views/table/other/Sortablejs.vue'
 
 import TablePluginElementConfig from './views/table/plugin/ElementConfig.vue'
 import TablePluginElementPage from './views/table/plugin/ElementPage.vue'
 import TablePluginIviewConfig from './views/table/plugin/IviewConfig.vue'
 import TablePluginIviewPage from './views/table/plugin/IviewPage.vue'
+import TablePluginAntdConfig from './views/table/plugin/AntdConfig.vue'
+import TablePluginAntdPage from './views/table/plugin/AntdPage.vue'
 
 import TableAPI from './views/table/api/API.vue'
 
@@ -493,6 +496,11 @@ export default new Router({
       component: TableOtherIview
     },
     {
+      path: '/table/other/antd',
+      name: 'TableOtherAntd',
+      component: TableOtherAntd
+    },
+    {
       path: '/table/other/Sortablejs',
       name: 'TableSortablejs',
       component: TableSortablejs
@@ -516,6 +524,16 @@ export default new Router({
       path: '/table/plugin/iviewPage',
       name: 'TablePluginIviewPage',
       component: TablePluginIviewPage
+    },
+    {
+      path: '/table/plugin/antdConfig',
+      name: 'TablePluginAntdConfig',
+      component: TablePluginAntdConfig
+    },
+    {
+      path: '/table/plugin/antdPage',
+      name: 'TablePluginAntdPage',
+      component: TablePluginAntdPage
     },
     {
       path: '/:name/api',

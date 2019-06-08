@@ -7,10 +7,12 @@ import './assets/style/layout.scss'
 import './plugins/highlight.js'
 import './plugins/element.js'
 import './plugins/iview.js'
+import './plugins/antd.js'
 import './plugins/xtable.js'
 import './plugins/index.js'
 import './mock'
 import XEUtils from 'xe-utils'
+import moment from 'moment'
 
 Vue.config.productionTip = false
 
@@ -66,6 +68,8 @@ function mockData () {
       date3: XEUtils.toDateString(currTime, 'yyyy-MM-dd'),
       date4: new Date(currTime),
       date5: '09:00',
+      date6: null,
+      date7: moment(currTime),
       time: currTime + XEUtils.random(100, 10000),
       sex: index % 3 ? '0' : '1',
       sex1: [index % 3 ? '0' : '1'],

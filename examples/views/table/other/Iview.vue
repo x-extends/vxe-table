@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>自定义渲染 iview 组件（建议使用 <a class="link" href="https://www.npmjs.com/package/vxe-table-plugin-iview" target="_blank">vxe-table-plugin-iview</a> 适配插件，也可以自行处理兼容性</p>
+    <p>自定义渲染 iview 组件（建议使用 <a class="link" href="https://www.npmjs.com/package/vxe-table-plugin-iview" target="_blank">vxe-table-plugin-iview</a> 适配插件，当然你也可以自行处理兼容性</p>
 
     <vxe-table
       border
