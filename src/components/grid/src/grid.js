@@ -258,7 +258,7 @@ export default {
         })
         if (minus.length) {
           this.pendingRecords = pendingRecords.filter(item => minus.some(data => data !== item)).concat(plus)
-        } else if (plus) {
+        } else if (plus.length) {
           this.pendingRecords = pendingRecords.concat(plus)
         }
         this.clearSelection()

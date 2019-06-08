@@ -2507,14 +2507,12 @@ export default {
           rows = [rows]
         }
         if (expandConfig.accordion) {
-          rows.slice(rows.length - 1, rows.length)
+          // 只能同时展开一个
+          expandeds.length = 0
+          rows = rows.slice(rows.length - 1, rows.length)
         }
         rows.forEach(row => {
           let index = expandeds.indexOf(row)
-          if (expandConfig.accordion) {
-            // 只能同时展开一个
-            expandeds.length = 0
-          }
           if (index > -1) {
             if (isToggle || !expanded) {
               expandeds.splice(index, 1)
@@ -2605,7 +2603,7 @@ export default {
           rows = [rows]
         }
         if (treeConfig.accordion) {
-          rows.slice(rows.length - 1, rows.length)
+          rows = rows.slice(rows.length - 1, rows.length)
         }
         rows.forEach(row => {
           let rowChildren = row[children]
