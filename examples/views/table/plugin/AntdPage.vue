@@ -41,7 +41,7 @@
       border
       show-all-overflow
       class="vxe-table-antd"
-      height="600"
+      height="460"
       :loading="loading"
       :customs.sync="customColumns"
       :data.sync="tableData"
@@ -162,7 +162,7 @@ export default {
             border
             show-all-overflow
             class="vxe-table-antd"
-            height="600"
+            height="460"
             :loading="loading"
             :customs.sync="customColumns"
             :data.sync="tableData"
@@ -342,7 +342,7 @@ export default {
   methods: {
     findList () {
       this.loading = true
-      XEAjax.doGet(`/api/user/page/list/${this.pageVO.pageSize}/${this.pageVO.currentPage}`).then(response => {
+      XEAjax.doGet(`/api/user/page/list/${this.pageVO.pageSize}/${this.pageVO.currentPage}`, this.form.getFieldsValue()).then(response => {
         let { page, result } = response.data
         this.tableData = result
         this.pageVO.totalResult = page.totalResult
