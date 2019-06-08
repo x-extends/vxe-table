@@ -8,6 +8,11 @@
 
 A more powerful, extensible, configurable Vue Table component.
 
+* vxe-table 的设计理念
+  * 精简的 API（简洁、高效、通用、扩展）
+  * 超高扩展性（兼容任意组件库，不污染全局样式及变量）
+  * 专注表格，提供非常强大的功能（兼具性能）
+
 ## Browser Support
 
 ![IE](https://raw.github.com/alrra/browser-logos/master/src/archive/internet-explorer_9-11/internet-explorer_9-11_48x48.png) | ![Edge](https://raw.github.com/alrra/browser-logos/master/src/edge/edge_48x48.png) | ![Chrome](https://raw.github.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png) | ![Firefox](https://raw.github.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png) | ![Opera](https://raw.github.com/alrra/browser-logos/master/src/opera/opera_48x48.png) | ![Safari](https://raw.github.com/alrra/browser-logos/master/src/safari/safari_48x48.png)
