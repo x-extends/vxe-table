@@ -19,7 +19,11 @@
       <vxe-table-column prop="sex1" label="ASelect" width="160" :edit-render="{name: 'ASelect', options: sexList, props: {mode: 'multiple'}}"></vxe-table-column>
       <vxe-table-column prop="sex2" label="ASelect" width="140" :edit-render="{name: 'ASelect', optionGroups: sexGroupList}"></vxe-table-column>
       <vxe-table-column prop="region" label="ACascader" width="200" :edit-render="{name: 'ACascader', props: {options: regionList}, events: {change: regionChangeEvent}}"></vxe-table-column>
-      <vxe-table-column prop="date7" label="ADatePicker" width="200" :edit-render="{name: 'ADatePicker', props: {type: 'date', format: 'YYYY/MM/DD'}}"></vxe-table-column>
+      <vxe-table-column prop="date7" label="ADatePicker" width="140" :edit-render="{name: 'ADatePicker', props: {type: 'date', format: 'YYYY/MM/DD'}}"></vxe-table-column>
+      <vxe-table-column prop="date8" label="AMonthPicker" width="140" :edit-render="{name: 'AMonthPicker'}"></vxe-table-column>
+      <vxe-table-column prop="date9" label="AWeekPicker" width="140" :edit-render="{name: 'AWeekPicker'}"></vxe-table-column>
+      <vxe-table-column prop="date11" label="ARangePicker" width="240" :edit-render="{name: 'ARangePicker'}"></vxe-table-column>
+      <vxe-table-column prop="date10" label="ATimePicker" width="140" :edit-render="{name: 'ATimePicker'}"></vxe-table-column>
       <vxe-table-column prop="flag" label="ASwitch" width="100" :edit-render="{name: 'ASwitch', type: 'visible'}"></vxe-table-column>
       <vxe-table-column prop="rate" label="ARate" width="200" fixed="right" :edit-render="{name: 'ARate', type: 'visible'}"></vxe-table-column>
     </vxe-table>
