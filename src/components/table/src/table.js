@@ -342,7 +342,7 @@ export default {
     collectColumn (value) {
       let tableFullColumn = UtilTools.getColumnList(value)
       this.tableFullColumn = tableFullColumn
-      this.updateKeyMap(tableFullColumn, 'fullColumnKeyMap')
+      this.updateCacheMap(tableFullColumn, 'fullColumn')
     },
     tableColumn () {
       this.analyColumnWidth()
@@ -352,7 +352,7 @@ export default {
     }
   },
   created () {
-    let { scrollYStore, optimizeOpts, treeConfig, editConfig } = this
+    let { scrollYStore, optimizeOpts, selectConfig, treeConfig, editConfig } = this
     let { scrollY } = optimizeOpts
     if (scrollY) {
       Object.assign(scrollYStore, {
@@ -363,11 +363,14 @@ export default {
       })
     }
     this.afterFullData = []
+    this.fullDataIndexMap = new Map()
     this.fullDataKeyMap = new Map()
-    this.fullColumnKeyMap = new Map()
+    this.fullColumnIndexMap = new Map()
     this.loadData(this.data, true).then(() => {
       let rowKey = UtilTools.getRowKey(this)
-      if (treeConfig && !rowKey) {
+      if (selectConfig && selectConfig.reserve && !rowKey) {
+        throw new Error('[vxe-table] Checkbox status reserve must have a unique primary key.')
+      } else if (treeConfig && !rowKey) {
         throw new Error('[vxe-table] Tree table must have a unique primary key.')
       } else if (editConfig && !rowKey) {
         throw new Error('[vxe-table] Editable must have a unique primary key.')
@@ -398,8 +401,8 @@ export default {
       tableWrapper.parentNode.removeChild(tableWrapper)
     }
     this.afterFullData.length = 0
-    this.fullDataKeyMap.clear()
-    this.fullColumnKeyMap.clear()
+    this.fullDataIndexMap.clear()
+    this.fullColumnIndexMap.clear()
     this.closeFilter()
     this.closeContextMenu()
     ResizeEvent.off(this, this.$el.parentNode)
@@ -643,7 +646,8 @@ export default {
         throw new Error('[vxe-table] The height/max-height must be set for the scroll load.')
       }
       this.tableData = this.getTableData(true).tableData
-      this.updateKeyMap(tableFullData, 'fullDataKeyMap')
+      this.updateCacheMap(tableFullData, 'fullData')
+      this.reserveCheckSelection()
       this.checkSelectionStatus()
       let rest = this.$nextTick()
       if (!notRefresh) {
@@ -662,7 +666,7 @@ export default {
       if (this.customs) {
         this.mergeCustomColumn(this.customs)
       }
-      this.updateKeyMap(columns, 'fullColumnKeyMap')
+      this.updateCacheMap(columns, 'fullColumn')
       this.refreshColumn()
       return this.$nextTick()
     },
@@ -670,21 +674,31 @@ export default {
       this.clearAll()
       return this.loadColumn(columns)
     },
-    // 更新数据真实的 key Map
-    updateKeyMap (datas, key) {
-      let keyMap = this[key]
-      keyMap.clear()
-      datas.forEach((item, index) => keyMap.set(item, { item, index }))
+    // 更新数据真实的索引 Map
+    updateCacheMap (datas, key) {
+      let indexMap = this[`${key}IndexMap`]
+      let keyMap = this[`${key}KeyMap`]
+      let rowKey = UtilTools.getRowKey(this)
+      indexMap.clear()
+      if (keyMap && rowKey) {
+        keyMap.clear()
+        datas.forEach((row, index) => {
+          keyMap.set(XEUtils.get(row, rowKey), { rowKey, row, index })
+          indexMap.set(row, { row, index })
+        })
+      } else {
+        datas.forEach((row, index) => indexMap.set(row, { row, index }))
+      }
     },
     getRowMapIndex (row) {
-      return this.fullDataKeyMap.has(row) ? this.fullDataKeyMap.get(row).index : -1
+      return this.fullDataIndexMap.has(row) ? this.fullDataIndexMap.get(row).index : -1
     },
     getRowIndex (row) {
       let { tableFullData, treeConfig } = this
       return treeConfig ? XEUtils.findTree(tableFullData, item => item === row, treeConfig) : this.getRowMapIndex(row)
     },
     getColumnMapIndex (column) {
-      return this.fullColumnKeyMap.has(column) ? this.fullColumnKeyMap.get(column).index : -1
+      return this.fullColumnIndexMap.has(column) ? this.fullColumnIndexMap.get(column).index : -1
     },
     getColumnIndex (column) {
       return this.getColumnMapIndex(column)
@@ -1726,16 +1740,17 @@ export default {
      * 处理默认勾选
      */
     handleDefaultRowChecked () {
-      let { rowKey, selectConfig = {}, tableFullData } = this
-      let { key, checkAll, checkRowKeys } = selectConfig
+      let { selectConfig = {}, tableFullData } = this
+      let { checkAll, checkRowKeys } = selectConfig
+      let rowKey = UtilTools.getRowKey(this)
       if (checkAll) {
         this.setAllSelection(true)
       } else if (checkRowKeys) {
-        let property = rowKey || key
+        let property = rowKey
         if (!property) {
           throw new Error('[vxe-table] Checked rows must have a unique primary key.')
         }
-        this.setSelection(checkRowKeys.map(rowKey => tableFullData.find(item => rowKey === item[property])), true)
+        this.setSelection(checkRowKeys.map(checkKey => tableFullData.find(item => checkKey === item[property])), true)
       }
     },
     setSelection (rows, value) {
@@ -1827,6 +1842,18 @@ export default {
             : row => selection.indexOf(row) > -1
         )
         this.isIndeterminate = !this.isAllSelected && tableFullData.some(row => treeIndeterminates.indexOf(row) > -1 || selection.indexOf(row) > -1)
+      }
+    },
+    // 保留选中状态
+    reserveCheckSelection () {
+      let { selectConfig = {}, selection, fullDataKeyMap } = this
+      let { reserve } = selectConfig
+      let rowKey = UtilTools.getRowKey(this)
+      if (reserve && selection.length) {
+        this.selection = selection.map(row => {
+          let rowId = XEUtils.get(row, rowKey)
+          return fullDataKeyMap.has(rowId) ? fullDataKeyMap.get(rowId).row : row
+        })
       }
     },
     /**
@@ -2474,16 +2501,17 @@ export default {
      * 处理默认展开行
      */
     handleDefaultRowExpand () {
-      let { rowKey, expandConfig = {}, tableFullData } = this
-      let { key, expandAll, expandRowKeys } = expandConfig
+      let { expandConfig = {}, tableFullData } = this
+      let { expandAll, expandRowKeys } = expandConfig
+      let rowKey = UtilTools.getRowKey(this)
       if (expandAll) {
         this.expandeds = tableFullData.slice(0)
       } else if (expandRowKeys) {
-        let property = rowKey || key
+        let property = rowKey
         if (!property) {
           throw new Error('[vxe-table] Expand rows must have a unique primary key.')
         }
-        this.expandeds = expandRowKeys.map(rowKey => tableFullData.find(item => rowKey === item[property]))
+        this.expandeds = expandRowKeys.map(expandKey => tableFullData.find(item => expandKey === item[property]))
       }
     },
     setAllRowExpansion (expanded) {

@@ -357,6 +357,14 @@ const apis = [
             list: []
           },
           {
+            name: 'reserve',
+            desc: '是否保留多选状态，对于某些场景下非常有用，比如分页之后状态还保留选中状态（需要设置 rowKey || key）',
+            type: 'String',
+            enum: '',
+            defVal: 'false',
+            list: []
+          },
+          {
             name: 'labelProp',
             desc: '列显示的属性，可以直接显示在列中',
             type: 'String',
@@ -382,7 +390,7 @@ const apis = [
           },
           {
             name: 'checkRowKeys',
-            desc: '默认勾选开指定行（需要设置 rowKey | key）',
+            desc: '默认勾选开指定行（需要设置 rowKey || key）',
             type: 'Array',
             enum: '',
             defVal: '',
@@ -440,7 +448,7 @@ const apis = [
           },
           {
             name: 'expandRowKeys',
-            desc: '默认展开指定行（需要设置 rowKey | key）',
+            desc: '默认展开指定行（需要设置 rowKey || key）',
             type: 'Array',
             enum: '',
             defVal: '',

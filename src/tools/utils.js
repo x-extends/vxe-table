@@ -7,9 +7,9 @@ const UtilTools = {
     return size || ($parent && ['medium', 'small', 'mini'].indexOf($parent.size) > -1 ? $parent.size : null)
   },
   getRowKey ($table) {
-    let { rowKey, treeConfig = {}, expandeds = {}, editConfig = {} } = $table
+    let { rowKey, selectConfig = {}, treeConfig = {}, expandConfig = {}, editConfig = {} } = $table
     if (!rowKey) {
-      rowKey = treeConfig.key || expandeds.key || editConfig.key
+      rowKey = selectConfig.key || treeConfig.key || expandConfig.key || editConfig.key
     }
     return rowKey
   },
