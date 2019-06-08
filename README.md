@@ -9,7 +9,7 @@
 A more powerful, extensible, configurable Vue Table component.
 
 * vxe-table 的设计理念
-  * 精简的 API（简洁、高效、通用、扩展）
+  * 精简的 API（简洁、高效、通用）
   * 超高扩展性（兼容任意组件库，不污染任意一个全局样式及变量）
   * 提供强大的功能的同时兼具性能（不多说了，自行体验喽）
 
