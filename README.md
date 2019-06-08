@@ -13,7 +13,7 @@ A more powerful, extensible, configurable Vue Table component.
   * 超高扩展性（兼容任意组件库，不污染任意一个全局样式及变量）
   * 提供强大的功能的同时兼具性能（不多说了，自行体验喽）
 
-😉 如果有更好的 API 调用方式、优化点或 Bug 都欢迎提 Issues
+😉 如果有更好的建议、优化点或 Bug 都欢迎提 Issues
 
 ## Browser Support
 
