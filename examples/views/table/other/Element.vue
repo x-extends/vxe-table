@@ -1,6 +1,8 @@
 <template>
   <div>
     <p>自定义渲染 element-ui 组件（建议使用 <a class="link" href="https://www.npmjs.com/package/vxe-table-plugin-element" target="_blank">vxe-table-plugin-element</a> 适配插件，当然你也可以自行处理兼容性）</p>
+    <p>使用自定义模板可以实现对更多细节的控制，但会失去默认的一些功能，比如自动聚焦等。（可以通过设置 autofocus 属性强制聚焦）</p>
+    <p>如果很多页面都使用相同自定义模板的场景下建议使用<router-link class="link" :to="{name: 'Advanced'}">渲染器</router-link>，因为可以更好的复用</p>
 
     <vxe-table
       border

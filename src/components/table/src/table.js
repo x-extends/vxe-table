@@ -2313,13 +2313,9 @@ export default {
       if (editRender.autofocus) {
         inputElem = cell.querySelector(editRender.autofocus)
       }
-      if (!inputElem) {
-        // 渲染器的聚焦处理
-        if (compRender) {
-          if (compRender.autofocus) {
-            inputElem = cell.querySelector(compRender.autofocus)
-          }
-        }
+      // 渲染器的聚焦处理
+      if (!inputElem && compRender && compRender.autofocus) {
+        inputElem = cell.querySelector(compRender.autofocus)
       }
       if (inputElem) {
         inputElem.focus()
