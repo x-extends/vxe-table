@@ -45,7 +45,7 @@
       :loading="loading"
       :customs.sync="customColumns"
       :data.sync="tableData"
-      :edit-config="{key: 'id', trigger: 'click', mode: 'cell'}">
+      :edit-config="{key: 'id', trigger: 'click', mode: 'row'}">
       <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
       <vxe-table-column type="index" label="Number" width="80" fixed="left"></vxe-table-column>
       <vxe-table-column prop="name" label="AInput" min-width="140" :edit-render="{name: 'AInput'}"></vxe-table-column>
