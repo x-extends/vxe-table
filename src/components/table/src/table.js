@@ -46,7 +46,7 @@ function renderFixed (h, $table, fixedType) {
   let isRightFixed = fixedType === 'right'
   let fixedColumn = columnStore[`${fixedType}List`]
   let style = {
-    height: `${(customHeight ? customHeight - headerHeight - footerHeight : tableHeight) + headerHeight + footerHeight - scrollXHeight * (showFooter ? 2 : 1)}px`,
+    height: `${(customHeight > 0 ? customHeight - headerHeight - footerHeight : tableHeight) + headerHeight + footerHeight - scrollXHeight * (showFooter ? 2 : 1)}px`,
     width: `${fixedColumn.reduce((previous, column) => previous + column.renderWidth, isRightFixed ? scrollYWidth : 0)}px`
   }
   return h('div', {
@@ -1403,7 +1403,7 @@ export default {
         // 如果开启复制功能
         if (isX || isC) {
           this.handleCopyed(isX, evnt)
-        } else if (isV) {
+        } else {
           this.handlePaste(evnt)
         }
       } else if (keyboardConfig.isEdit && !isCtrlKey && ((keyCode >= 48 && keyCode <= 57) || (keyCode >= 65 && keyCode <= 90) || (keyCode >= 96 && keyCode <= 111) || (keyCode >= 186 && keyCode <= 192) || (keyCode >= 219 && keyCode <= 222) || keyCode === 32)) {
@@ -1967,7 +1967,7 @@ export default {
               }
               this.closeFilter()
               this.closeContextMenu()
-            } else if (isRightBtn) {
+            } else {
               // 如果不在所有选中的范围之内则重新选中
               let select = DomTools.getCellIndexs(cell)
               if (checked.rows.indexOf(tableData[select.rowIndex]) === -1 || checked.columns.indexOf(visibleColumn[select.columnIndex]) === -1) {
@@ -2338,7 +2338,7 @@ export default {
       let { tableData, visibleColumn, handleActived } = this
       if (row && prop) {
         let rowIndex = tableData.indexOf(row)
-        if (rowIndex > -1 && prop) {
+        if (rowIndex > -1) {
           let column = visibleColumn.find(column => column.property === prop)
           let cell = DomTools.getCell(this, { row, rowIndex, column })
           handleActived({ row, column, cell })

@@ -326,8 +326,8 @@ export default {
     let { maxHeight, height, containerHeight, loading, tableData, tableColumn, headerHeight, showFooter, showAllOverflow, footerHeight, tableHeight, tableWidth, scrollXStore, scrollXLoad, scrollYStore, scrollYLoad, scrollXHeight } = $table
     let customHeight = height === 'auto' ? containerHeight : XEUtils.toNumber(height)
     let style = {}
-    if (customHeight) {
-      style.height = `${fixedType ? (customHeight ? customHeight - headerHeight - footerHeight : tableHeight) - (showFooter ? 0 : scrollXHeight) : customHeight - headerHeight - footerHeight}px`
+    if (customHeight > 0) {
+      style.height = `${fixedType ? (customHeight > 0 ? customHeight - headerHeight - footerHeight : tableHeight) - (showFooter ? 0 : scrollXHeight) : customHeight - headerHeight - footerHeight}px`
     } else if (maxHeight) {
       maxHeight = XEUtils.toNumber(maxHeight)
       style['max-height'] = `${fixedType ? maxHeight - headerHeight - (showFooter ? 0 : scrollXHeight) : maxHeight - headerHeight}px`
