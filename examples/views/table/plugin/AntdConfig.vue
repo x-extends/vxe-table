@@ -6,7 +6,7 @@
       border
       show-all-overflow
       class="vxe-table-antd"
-      height="600"
+      height="460"
       :loading="loading"
       :data.sync="tableData"
       :edit-config="{key: 'id', trigger: 'click', mode: 'cell'}">
@@ -45,10 +45,6 @@ export default {
       dataSource: [],
       sexList: [],
       regionList: [],
-      restaurants: [
-        { value: '前端', name: '前端' },
-        { value: '后端', name: '后端' }
-      ],
       sexGroupList: [
         {
           label: '分组1',
@@ -102,10 +98,6 @@ export default {
               dataSource: [],
               sexList: [],
               regionList: [],
-              restaurants: [
-                { value: '前端', name: '前端' },
-                { value: '后端', name: '后端' }
-              ],
               sexGroupList: [
                 {
                   label: '分组1',
@@ -157,11 +149,6 @@ export default {
                 value + value + value
               ]
             },
-            createStateFilter (queryString) {
-              return (state) => {
-                return (state.name.toLowerCase().indexOf(queryString.toLowerCase()) === 0)
-              }
-            },
             nameChangeEvent ({ row }, value) {
               console.log(value)
             },
@@ -207,11 +194,6 @@ export default {
         value + value,
         value + value + value
       ]
-    },
-    createStateFilter (queryString) {
-      return (state) => {
-        return (state.name.toLowerCase().indexOf(queryString.toLowerCase()) === 0)
-      }
     },
     nameChangeEvent ({ row }, value) {
       console.log(value)

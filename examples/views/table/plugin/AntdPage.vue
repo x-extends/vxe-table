@@ -91,10 +91,6 @@ export default {
       customColumns: [],
       sexList: [],
       regionList: [],
-      restaurants: [
-        { value: '前端', name: '前端' },
-        { value: '后端', name: '后端' }
-      ],
       sexGroupList: [
         {
           label: '分组1',
@@ -202,10 +198,6 @@ export default {
               customColumns: [],
               sexList: [],
               regionList: [],
-              restaurants: [
-                { value: '前端', name: '前端' },
-                { value: '后端', name: '后端' }
-              ],
               sexGroupList: [
                 {
                   label: '分组1',
@@ -242,7 +234,7 @@ export default {
           methods: {
             findList () {
               this.loading = true
-              XEAjax.doGet(\`/api/user/page/list/\${this.pageVO.pageSize}/\${this.pageVO.currentPage}\`).then(response => {
+              XEAjax.doGet(\`/api/user/page/list/\${this.pageVO.pageSize}/\${this.pageVO.currentPage}\`, this.form.getFieldsValue()).then(response => {
                 let { page, result } = response.data
                 this.tableData = result
                 this.pageVO.totalResult = page.totalResult
@@ -317,11 +309,6 @@ export default {
                 value + value,
                 value + value + value
               ]
-            },
-            createStateFilter (queryString) {
-              return (state) => {
-                return (state.name.toLowerCase().indexOf(queryString.toLowerCase()) === 0)
-              }
             }
           }
         }
@@ -417,11 +404,6 @@ export default {
         value + value,
         value + value + value
       ]
-    },
-    createStateFilter (queryString) {
-      return (state) => {
-        return (state.name.toLowerCase().indexOf(queryString.toLowerCase()) === 0)
-      }
     }
   }
 }
