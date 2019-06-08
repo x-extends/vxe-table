@@ -37,7 +37,7 @@
             <a class="nav-link" @click="linkEvent(item)" :title="$t(item.label)">{{ $t(item.label) }}</a>
             <ul v-if="item.children" v-show="item.expand" class="nav-child-menu">
               <li v-for="(child, cIndex) in item.children" :key="cIndex">
-                <a class="nav-link disabled" v-if="child.disabled" title="后续版本会考虑支持该功能！">{{ $t(child.label) }}</a>
+                <a class="nav-link disabled" v-if="child.disabled" title="作者比较忙，后续有时间会完善该功能！">{{ $t(child.label) }}</a>
                 <router-link v-else class="nav-link" :to="child.locat" :title="$t(child.label)">{{ $t(child.label) }}</router-link>
               </li>
             </ul>
@@ -635,6 +635,13 @@ export default {
               disabled: true,
               locat: {
                 name: 'TableSortablejs'
+              }
+            },
+            {
+              label: 'app.aside.nav.xlsxRender',
+              disabled: true,
+              locat: {
+                name: 'TableXlsx'
               }
             }
           ]

@@ -87,10 +87,11 @@ module.exports = {
         cell: '单元格',
 
         other: '其他渲染',
-        elementRender: '使用 element-ui 自定义渲染',
-        iviewRender: '使用 iview 自定义渲染',
-        antd: '使用 ant-design-vue 自定义渲染',
+        elementRender: '使用 element-ui 渲染列',
+        iviewRender: '使用 iview 渲染列',
+        antd: '使用 ant-design-vue 渲染列',
         sortablejsRender: '使用 sortablejs 拖拽行排序',
+        xlsxRender: '使用 xlsx 导出数据',
 
         plugin: '插件',
         elementPlugin: 'element-ui 适配插件',
