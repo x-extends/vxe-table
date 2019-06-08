@@ -1,8 +1,9 @@
 <template>
   <div>
     <h3>局部大小</h3>
-    <p>&nbsp;&nbsp;&nbsp;&nbsp;每个组件都有 <table-api-link prop="size"/> 属性，默认是继承父组件，所以只要给局部的父组件设置 <table-api-link prop="size"/>，所有子孙组件一律继承，该功能对于某些场景非常有用</p>
-    <p>&nbsp;&nbsp;&nbsp;&nbsp;如果需要设置全局大小尺寸，请参考下面即可</p>
+    <p>size 继承关系</p>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;每个组件都有 <table-api-link prop="size"/> 属性，默认是继承父组件，所以只要给局部的父组件设置 <table-api-link prop="size"/>，所有后代组件一律继承，该功能对于很多场景中都非常有用</p>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;如果需要设置全局大小尺寸也是可以，请参考下面即可</p>
     <h3>全局参数</h3>
     <p>修改默认的全局配置</p>
     <pre>

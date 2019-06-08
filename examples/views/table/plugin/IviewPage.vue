@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>iview 使用首页</p>
+    <p>与 <a class="link" href="https://www.npmjs.com/package/iview">iview</a> 组合渲染 + 使用分页</p>
 
     <Form ref="tableform" :model="formData" inline>
       <FormItem prop="name">

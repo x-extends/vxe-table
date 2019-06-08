@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>具体查看 <a class="link" href="https://www.npmjs.com/package/vxe-table-plugin-antd" target="_blank">vxe-table-plugin-antd</a> 适配插件</p>
+    <p>具体兼容请查看 <a class="link" href="https://www.npmjs.com/package/vxe-table-plugin-antd" target="_blank">vxe-table-plugin-antd</a> 适配插件的 API</p>
 
     <vxe-table
       border

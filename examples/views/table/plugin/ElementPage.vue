@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>element-ui 使用分页</p>
+    <p>与 <a class="link" href="https://www.npmjs.com/package/element-ui">element-ui</a> 组合渲染 + 使用分页</p>
 
     <el-form ref="tableform" :model="formData" inline>
       <el-form-item label="名字" prop="name">
