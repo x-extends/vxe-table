@@ -84,6 +84,8 @@ function mockData () {
       address: `地址 地址地址 地址地址 址地址址地址 址地址 址地址  址地址 址地址  址地址 址地址址地址址地址 地址${index}`,
       updateTime: currTime,
       createTime: currTime,
+      attr1: '',
+      attr2: [],
       info: {
         name2: 'name2_' + fullIndex,
         more: {

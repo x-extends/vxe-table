@@ -24,6 +24,8 @@
       <vxe-table-column prop="date9" label="AWeekPicker" width="140" :edit-render="{name: 'AWeekPicker'}"></vxe-table-column>
       <vxe-table-column prop="date11" label="ARangePicker" width="240" :edit-render="{name: 'ARangePicker'}"></vxe-table-column>
       <vxe-table-column prop="date10" label="ATimePicker" width="140" :edit-render="{name: 'ATimePicker'}"></vxe-table-column>
+      <vxe-table-column prop="attr1" label="ATreeSelect" width="140" :edit-render="{name: 'ATreeSelect', props: {treeData}}"></vxe-table-column>
+      <vxe-table-column prop="attr2" label="ATreeSelect" width="140" :edit-render="{name: 'ATreeSelect', props: {treeData, treeCheckable: true}}"></vxe-table-column>
       <vxe-table-column prop="flag" label="ASwitch" width="100" :edit-render="{name: 'ASwitch', type: 'visible'}"></vxe-table-column>
       <vxe-table-column prop="rate" label="ARate" width="200" fixed="right" :edit-render="{name: 'ARate', type: 'visible'}"></vxe-table-column>
     </vxe-table>
@@ -49,6 +51,34 @@ export default {
       dataSource: [],
       sexList: [],
       regionList: [],
+      treeData: [{
+        title: 'Node1',
+        value: '0-0',
+        key: '0-0',
+        children: [{
+          title: 'Child Node1',
+          value: '0-0-0',
+          key: '0-0-0'
+        }]
+      }, {
+        title: 'Node2',
+        value: '0-1',
+        key: '0-1',
+        children: [{
+          title: 'Child Node3',
+          value: '0-1-0',
+          key: '0-1-0',
+          disabled: true
+        }, {
+          title: 'Child Node4',
+          value: '0-1-1',
+          key: '0-1-1'
+        }, {
+          title: 'Child Node5',
+          value: '0-1-2',
+          key: '0-1-2'
+        }]
+      }],
       sexGroupList: [
         {
           label: '分组1',
