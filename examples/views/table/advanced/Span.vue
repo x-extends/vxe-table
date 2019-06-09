@@ -32,6 +32,7 @@
       :data.sync="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column prop="key" label="Key"></vxe-table-column>
+      <vxe-table-column prop="content" label="Content"></vxe-table-column>
       <vxe-table-column prop="language" label="Language" :filters="[{label: '中文', value: 'zh_CN'}, {label: 'English', value: 'en_US'}]"></vxe-table-column>
     </vxe-table>
 
