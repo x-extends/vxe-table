@@ -38,7 +38,6 @@ export default {
         <div style="height: 800px">
           <vxe-table
             border
-            auto-resize
             height="auto"
             :data.sync="tableData">
             <vxe-table-column type="index" width="60"></vxe-table-column>
