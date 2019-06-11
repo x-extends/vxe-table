@@ -8,15 +8,15 @@ const apis = [
     list: [
       {
         name: 'id',
-        desc: '工具栏的唯一 ID，根据表格的业务',
+        desc: '唯一 ID 标识',
         type: 'String',
         enum: '',
         defVal: '',
         list: []
       },
       {
-        name: 'customs',
-        desc: '与表格的 customs 属性同步绑定',
+        name: 'data',
+        desc: '与表格的 data 属性同步绑定',
         type: 'Array',
         enum: '',
         defVal: '',
@@ -47,10 +47,10 @@ const apis = [
           },
           {
             name: 'storage',
-            desc: '是否使用 localStorage 记忆功能，会自动记住最后操作行为（需要设置 id）',
-            type: 'String',
+            desc: '是否启用 localStorage 本地保存，会将保存列个性化的设置状态保存到本地（需要设置 id）',
+            type: 'Boolean',
             enum: '',
-            defVal: 'local',
+            defVal: 'false',
             list: []
           }
         ]

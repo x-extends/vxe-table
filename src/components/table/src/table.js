@@ -1043,6 +1043,15 @@ export default {
       this.$emit('update:customs', this.tableFullColumn)
     },
     /**
+     * 初始化加载动态列
+     */
+    reloadCustoms (customColumns) {
+      return this.$nextTick().then(() => {
+        this.mergeCustomColumn(customColumns)
+        return this.refreshColumn().then(() => this.tableFullColumn)
+      })
+    },
+    /**
      * 刷新列信息
      * 将固定的列左边、右边分别靠边
      * 如果使用了分组表头，固定列必须在左侧或者右侧
@@ -1108,7 +1117,7 @@ export default {
       }
       this.scrollXLoad = scrollXLoad
       this.tableColumn = visibleColumn
-      return this.$nextTick(() => this.recalculate(true))
+      return this.$nextTick().then(() => this.recalculate(true))
     },
     /**
      * 指定列宽的列进行拆分

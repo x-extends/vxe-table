@@ -1,6 +1,7 @@
 <template>
   <div>
     <p>树表格、增删改查、工具栏</p>
+    <p>可以通过 <toolbar-api-link prop="storage"/> 开启将列个性化的设置状态保存到本地</p>
 
     <vxe-grid
       highlight-hover-row
@@ -36,6 +37,7 @@ export default {
         }
       },
       toolbar: {
+        id: 'treeEdit_demo1',
         buttons: [
           { code: 'reload', name: '刷新' },
           { code: 'insert_actived', name: '新增' },
@@ -44,6 +46,7 @@ export default {
           { code: 'export', name: '导出.csv' }
         ],
         setting: {
+          storage: true,
           immediate: true
         }
       },
@@ -77,6 +80,7 @@ export default {
                 }
               },
               toolbar: {
+                id: 'treeEdit_demo1',
                 buttons: [
                   { code: 'reload', name: '刷新' },
                   { code: 'insert_actived', name: '新增' },
@@ -84,7 +88,8 @@ export default {
                   { code: 'save', name: '保存' },
                   { code: 'export', name: '导出.csv' }
                 ],
-                setting:  {
+                setting: {
+                  storage: true,
                   immediate: true
                 }
               },

@@ -85,12 +85,10 @@ export default {
   },
   render (h) {
     let { $slots, $listeners, pagerConfig, vSize, loading, toolbar, editConfig, proxyConfig, tableProps, tableLoading, tablePage, tableData, tableCustoms, optimization } = this
-    let props = Object.assign({}, tableProps)
-    let tableOns = Object.assign({}, $listeners)
-    let toolbarProps = Object.assign({
-      customs: tableCustoms,
+    let props = Object.assign({}, tableProps, {
       optimization: Object.assign({}, GlobalConfig.optimization, optimization)
-    }, toolbar)
+    })
+    let tableOns = Object.assign({}, $listeners)
     if (proxyConfig) {
       Object.assign(props, {
         loading: loading || tableLoading,
@@ -105,7 +103,9 @@ export default {
       }
     }
     if (toolbar) {
-      props.customs = tableCustoms
+      if (!(toolbar.setting && toolbar.setting.storage)) {
+        props.customs = tableCustoms
+      }
       tableOns['update:customs'] = value => {
         this.tableCustoms = value
       }
@@ -118,12 +118,12 @@ export default {
     return h('div', {
       class: [ 'vxe-grid', {
         [`size--${vSize}`]: vSize,
-        't--animat': toolbarProps.optimization.animat
+        't--animat': props.optimization.animat
       }]
     }, [
       toolbar ? h('vxe-toolbar', {
         ref: 'toolbar',
-        props: toolbarProps
+        props: toolbar
       }) : null,
       h('vxe-table', {
         props,

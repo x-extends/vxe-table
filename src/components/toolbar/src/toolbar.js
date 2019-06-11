@@ -2,6 +2,7 @@ import GlobalEvent from '../../../tools/event'
 import DomTools from '../../../tools/dom'
 import UtilTools from '../../../tools/utils'
 import GlobalConfig from '../../../conf'
+import XEUtils from 'xe-utils'
 
 export default {
   name: 'VxeToolbar',
@@ -10,6 +11,7 @@ export default {
     setting: [Boolean, Object],
     buttons: Array,
     size: String,
+    data: Array,
     customs: Array
   },
   inject: {
@@ -19,17 +21,37 @@ export default {
   },
   data () {
     return {
+      tableCustoms: [],
       settingStore: {
         visible: false
       }
     }
   },
   computed: {
+    $table () {
+      let { $parent, data, customs } = this
+      let { $children } = $parent
+      let selfIndex = $children.indexOf(this)
+      return $children.find((comp, index) => comp && comp.refreshColumn && index > selfIndex && (data ? comp.data === data : (customs ? comp.customs === customs : comp.$vnode.componentOptions.tag === 'vxe-table')))
+    },
     vSize () {
       return this.size || this.$parent.size || this.$parent.vSize
+    },
+    isCustomStorage () {
+      return this.setting && this.setting.storage
     }
   },
   created () {
+    let { isCustomStorage, id, customs, setting } = this
+    if (customs) {
+      this.tableCustoms = customs
+    }
+    if (isCustomStorage && !id) {
+      throw new Error('[vxe-table] Toolbar must have a unique primary id.')
+    }
+    if (setting) {
+      this.$nextTick(() => this.loadStorage())
+    }
     GlobalEvent.on(this, 'mousedown', this.handleGlobalMousedownEvent)
     GlobalEvent.on(this, 'blur', this.handleGlobalBlurEvent)
   },
@@ -38,7 +60,7 @@ export default {
     GlobalEvent.off(this, 'blur')
   },
   render (h) {
-    let { $slots, settingStore, setting, buttons = [], vSize, customs } = this
+    let { $slots, settingStore, setting, buttons = [], vSize, tableCustoms } = this
     let customBtnOns = {}
     let customWrapperOns = {}
     if (setting) {
@@ -89,7 +111,7 @@ export default {
           h('div', {
             class: 'vxe-custom--option',
             on: customWrapperOns
-          }, customs.map(column => {
+          }, tableCustoms.map(column => {
             return column.property && column.label ? h('vxe-checkbox', {
               props: {
                 value: column.visible
@@ -121,16 +143,53 @@ export default {
         }
       }
     },
+    loadStorage () {
+      if (this.isCustomStorage) {
+        let customStorageMap = this.getStorageMap()
+        let customStorage = customStorageMap[this.id]
+        if (customStorage) {
+          this.updateCustoms(customStorage)
+        } else {
+          this.updateCustoms(this.tableCustoms)
+        }
+      } else {
+        this.updateCustoms(this.tableCustoms)
+      }
+    },
+    updateCustoms (customs) {
+      let { $grid, $table } = this
+      let comp = $grid || $table
+      if (comp) {
+        comp.reloadCustoms(customs).then(customs => {
+          this.tableCustoms = customs
+        })
+      }
+    },
+    getStorageMap () {
+      return XEUtils.toStringJSON(localStorage.getItem('VXE_TOOLBAR_CUSTOMS')) || {}
+    },
+    saveStorageMap () {
+      let { id, tableCustoms, isCustomStorage } = this
+      if (isCustomStorage) {
+        let customStorageMap = this.getStorageMap()
+        customStorageMap[id] = tableCustoms.filter(column => !column.visible).map(column => {
+          return {
+            prop: column.property,
+            visible: column.visible
+          }
+        })
+        localStorage.setItem('VXE_TOOLBAR_CUSTOMS', XEUtils.toJSONString(customStorageMap))
+      }
+    },
     updateSetting () {
-      let { $parent, $grid, customs } = this
+      let { $grid, $table } = this
       if ($grid) {
         $grid.refreshColumn()
+        this.saveStorageMap()
       } else {
-        let { $children } = $parent
-        let selfIndex = $children.indexOf(this)
-        let $table = $children.find((comp, index) => comp.refreshColumn && index > selfIndex && comp.customs === customs)
         if ($table) {
           $table.refreshColumn()
+          this.saveStorageMap()
         } else {
           console.error('[vxe-toolbar] Not found vxe-table.')
         }

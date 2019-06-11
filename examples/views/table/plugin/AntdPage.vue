@@ -17,7 +17,7 @@
       </a-form-item>
     </a-form>
 
-    <vxe-toolbar :customs="customColumns" setting>
+    <vxe-toolbar setting>
       <template v-slot:buttons>
         <a-button @click="insertEvent">新增</a-button>
         <a-button @click="saveEvent">保存</a-button>
@@ -43,7 +43,6 @@
       class="vxe-table-antd"
       height="460"
       :loading="loading"
-      :customs.sync="customColumns"
       :data.sync="tableData"
       :edit-config="{key: 'id', trigger: 'click', mode: 'row'}">
       <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
@@ -88,7 +87,6 @@ export default {
       loading: false,
       tableData: [],
       dataSource: [],
-      customColumns: [],
       sexList: [],
       regionList: [],
       sexGroupList: [
@@ -134,7 +132,7 @@ export default {
             </a-form-item>
           </a-form>
 
-          <vxe-toolbar :customs="customColumns" setting>
+          <vxe-toolbar setting>
             <template v-slot:buttons>
               <a-button @click="insertEvent">新增</a-button>
               <a-button @click="saveEvent">保存</a-button>
@@ -160,7 +158,6 @@ export default {
             class="vxe-table-antd"
             height="460"
             :loading="loading"
-            :customs.sync="customColumns"
             :data.sync="tableData"
             :edit-config="{key: 'id', trigger: 'click', mode: 'cell'}">
             <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
@@ -195,7 +192,6 @@ export default {
               loading: false,
               tableData: [],
               dataSource: [],
-              customColumns: [],
               sexList: [],
               regionList: [],
               sexGroupList: [

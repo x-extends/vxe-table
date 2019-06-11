@@ -17,7 +17,7 @@
       </el-form-item>
     </el-form>
 
-    <vxe-toolbar :customs="customColumns" setting>
+    <vxe-toolbar setting>
       <template v-slot:buttons>
         <el-button @click="insertEvent">新增</el-button>
         <el-button @click="saveEvent">保存</el-button>
@@ -41,7 +41,6 @@
       height="460"
       :loading="loading"
       :data.sync="tableData"
-      :customs.sync="customColumns"
       :edit-config="{key: 'id', trigger: 'click', mode: 'row'}">
       <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
       <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
@@ -85,7 +84,6 @@ export default {
     return {
       loading: false,
       tableData: [],
-      customColumns: [],
       sexList: [],
       regionList: [],
       restaurants: [
@@ -116,7 +114,7 @@ export default {
             </el-form-item>
           </el-form>
 
-          <vxe-toolbar :customs="customColumns" setting>
+          <vxe-toolbar setting>
             <template v-slot:buttons>
               <el-button @click="insertEvent">新增</el-button>
               <el-button @click="saveEvent">保存</el-button>
@@ -141,7 +139,6 @@ export default {
             size="small"
             :loading="loading"
             :data.sync="tableData"
-            :customs.sync="customColumns"
             :edit-config="{key: 'id', trigger: 'click', mode: 'row'}">
             <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
             <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
@@ -173,7 +170,6 @@ export default {
             return {
               loading: false,
               tableData: [],
-              customColumns: [],
               sexList: [],
               regionList: [],
               restaurants: [

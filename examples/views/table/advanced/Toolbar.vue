@@ -18,6 +18,7 @@
       <vxe-table-column prop="role" label="Role"></vxe-table-column>
       <vxe-table-column prop="sex" label="Sex"></vxe-table-column>
       <vxe-table-column prop="age" label="Age"></vxe-table-column>
+      <vxe-table-column prop="rate" label="Rate"></vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -27,9 +28,10 @@
       <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
 
-    <p>显示/隐藏列功能，通过设置 <toolbar-api-link prop="setting"/> 和 <toolbar-api-link prop="customs"/> 参数开启</p>
+    <p>显示/隐藏列功能，通过设置 <toolbar-api-link prop="setting"/> 和 <toolbar-api-link prop="data"/> 参数开启</p>
+    <p>可以通过 <toolbar-api-link prop="storage"/> 开启将列个性化的设置状态保存到本地</p>
 
-    <vxe-toolbar :customs="customColumns" setting>
+    <vxe-toolbar id="toolbar_demo3" :setting="{storage: true}">
       <template v-slot:buttons>
         <vxe-button>按钮1</vxe-button>
         <vxe-button>按钮2</vxe-button>
@@ -39,8 +41,7 @@
     <vxe-table
       border
       height="400"
-      :data.sync="tableData"
-      :customs.sync="customColumns">
+      :data.sync="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column prop="name" label="Name"></vxe-table-column>
       <vxe-table-column prop="role" label="Role"></vxe-table-column>
@@ -64,7 +65,6 @@ export default {
   data () {
     return {
       tableData: [],
-      customColumns: [],
       demoCodes: [
         `
         <vxe-toolbar>
@@ -98,7 +98,7 @@ export default {
         }
         `,
         `
-        <vxe-toolbar :customs="customColumns" setting>
+        <vxe-toolbar id="toolbar_demo3" :setting="{storage: true}">
           <template v-slot:buttons>
             <vxe-button>按钮1</vxe-button>
             <vxe-button>按钮2</vxe-button>
@@ -108,8 +108,7 @@ export default {
         <vxe-table
           border
           height="500"
-          :data.sync="tableData"
-          :customs.sync="customColumns">
+          :data.sync="tableData">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column prop="name" label="Name"></vxe-table-column>
           <vxe-table-column prop="role" label="Role"></vxe-table-column>
@@ -121,8 +120,7 @@ export default {
         export default {
           data () {
             return {
-              tableData: [],
-              customColumns: []
+              tableData: []
             }
           },
           created () {

@@ -3,6 +3,7 @@ export default [
   'reloadData',
   'loadColumn',
   'reloadColumn',
+  'reloadCustoms',
   'reload',
   'insert',
   'insertAt',

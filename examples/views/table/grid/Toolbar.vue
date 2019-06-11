@@ -1,6 +1,7 @@
 <template>
   <div>
     <p>工具栏：通过 <grid-api-link prop="toolbar"/> 属性配置</p>
+    <p>可以通过 <toolbar-api-link prop="storage"/> 开启将列个性化的设置状态保存到本地</p>
 
     <vxe-grid
       border
@@ -46,6 +47,7 @@ export default {
         }
       },
       toolbar: {
+        id: 'toolbar_demo_1',
         buttons: [
           { code: 'reload', name: '刷新' },
           { code: 'insert_actived', name: '新增并激活' },
@@ -56,7 +58,9 @@ export default {
           { code: 'export', name: '导出.csv' },
           { code: 'myBtn', name: '自定义按钮' }
         ],
-        setting: true
+        setting: {
+          storage: true
+        }
       },
       tableColumn: [
         { type: 'selection', width: 50 },

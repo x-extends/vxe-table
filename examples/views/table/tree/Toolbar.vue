@@ -2,7 +2,7 @@
   <div>
     <p>增删改查、工具栏，如果 key 值一样的情况下（<table-api-link prop="row-key"/>、<table-api-link prop="select-config"/>、<table-api-link prop="tree-config"/>、<table-api-link prop="edit-config"/> 的 key 任意配置一个即可）</p>
 
-    <vxe-toolbar :customs="customColumns" setting>
+    <vxe-toolbar :data="tableData" setting>
       <template v-slot:buttons>
         <vxe-button @click="insertEvent">新增</vxe-button>
         <vxe-button @click="getInsertEvent">获取新增</vxe-button>
@@ -15,7 +15,6 @@
       ref="xTree"
       :tree-config="{key: 'id', children: 'children'}"
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
-      :customs.sync="customColumns"
       :data.sync="tableData">
       <vxe-table-column type="selection" width="120" tree-node></vxe-table-column>
       <vxe-table-column prop="name" label="Name" :edit-render="{name: 'input'}"></vxe-table-column>
@@ -40,11 +39,10 @@ import XEUtils from 'xe-utils'
 export default {
   data () {
     return {
-      customColumns: [],
       tableData: [],
       demoCodes: [
         `
-        <vxe-toolbar :customs="customColumns" setting>
+        <vxe-toolbar :data="tableData" setting>
           <template v-slot:buttons>
             <vxe-button @click="insertEvent">新增</vxe-button>
             <vxe-button @click="getInsertEvent">获取新增</vxe-button>
@@ -57,7 +55,6 @@ export default {
           ref="xTree"
           :tree-config="{key: 'id', children: 'children'}"
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
-          :customs.sync="customColumns"
           :data.sync="tableData">
           <vxe-table-column type="selection" width="120" tree-node></vxe-table-column>
           <vxe-table-column prop="name" label="Name" :edit-render="{name: 'input'}"></vxe-table-column>
