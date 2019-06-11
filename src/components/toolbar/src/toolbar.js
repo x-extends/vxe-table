@@ -6,6 +6,7 @@ import GlobalConfig from '../../../conf'
 export default {
   name: 'VxeToolbar',
   props: {
+    id: String,
     setting: [Boolean, Object],
     buttons: Array,
     size: String,

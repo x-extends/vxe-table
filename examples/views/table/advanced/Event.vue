@@ -7,6 +7,7 @@
       height="500"
       highlight-hover-row
       show-all-overflow
+      resizable
       :data.sync="tableData"
       @header-cell-click="headerCellClickEvent"
       @header-cell-dblclick="headerCellDBLClickEvent"
@@ -46,6 +47,7 @@ export default {
           height="500"
           highlight-hover-row
           show-all-overflow
+          resizable
           :data.sync="tableData"
           @header-cell-click="headerCellClickEvent"
           @header-cell-dblclick="headerCellDBLClickEvent"

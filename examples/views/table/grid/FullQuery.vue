@@ -10,7 +10,7 @@
       :pager-config="tablePage"
       :columns="tableColumn"
       :proxy-config="tableProxy"
-      :select-config="{reserve: true}"
+      :select-config="{key: 'id', reserve: true}"
       @sort-change="sortChangeEvent"
       @filter-change="filterChangeEvent"></vxe-grid>
 

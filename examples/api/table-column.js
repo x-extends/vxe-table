@@ -47,6 +47,14 @@ const apis = [
         list: []
       },
       {
+        name: 'resizable',
+        desc: '列是否允许拖动列宽调整大小',
+        type: 'Boolean',
+        enum: '',
+        defVal: 'false',
+        list: []
+      },
+      {
         name: 'fixed',
         desc: '将列固定在左侧或者右侧（规范：固定列放在左右两侧）',
         type: 'String',

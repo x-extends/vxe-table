@@ -836,13 +836,24 @@ export default {
       return this.$route.path.split('/')[2]
     }
   },
-  created () {
-    let group = this.tableList.find(item => item.value === this.pageKey)
-    if (group) {
-      group.expand = true
+  watch: {
+    pageKey () {
+      this.init()
     }
   },
+  created () {
+    this.init()
+  },
   methods: {
+    init () {
+      this.tableList.forEach(item => {
+        item.expand = false
+      })
+      let group = this.tableList.find(item => item.value === this.pageKey)
+      if (group) {
+        group.expand = true
+      }
+    },
     clickEvent (evnt) {
       let pElem = evnt.target
       if (pElem && pElem.className === 'demo-code') {

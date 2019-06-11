@@ -117,13 +117,14 @@ const CellMethods = {
     return [UtilTools.formatText(params.column.label || '#')]
   },
   renderIndexCell (h, params) {
-    let { column } = params
+    let { $table, column } = params
+    let { startIndex } = $table
     let { slots, indexMethod } = column
     if (slots && slots.default) {
       return slots.default(params)
     }
     let { seq, level } = params
-    return [UtilTools.formatText(indexMethod ? indexMethod(params) : level ? `${level}.${seq}` : seq)]
+    return [UtilTools.formatText(indexMethod ? indexMethod(params) : level ? `${level}.${seq}` : startIndex + seq)]
   },
   renderTreeIndexCell (h, params) {
     return CellMethods.renderTreeIcon(h, params).concat(CellMethods.renderIndexCell(h, params))

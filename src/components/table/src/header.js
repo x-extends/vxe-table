@@ -194,7 +194,7 @@ export default {
                   width: showTitle || showTooltip || showEllipsis ? `${border ? renderWidth - 1 : renderWidth}px` : null
                 }
               }, column.renderHeader(h, { $table, column, columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn })),
-              border && resizable && !fixedType && !isGroup ? h('div', {
+              border && (XEUtils.isBoolean(column.resizable) ? column.resizable : resizable) && !fixedType && !isGroup ? h('div', {
                 class: ['vxe-resizable'],
                 on: {
                   mousedown: evnt => {

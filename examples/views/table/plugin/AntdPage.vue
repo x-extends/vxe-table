@@ -61,10 +61,10 @@
     <a-pagination
       @showSizeChange="handleSizeChange"
       @change="handleCurrentChange"
-      v-model="pageVO.currentPage"
+      v-model="tablePage.currentPage"
       :page-size-options="['5', '10', '15', '20', '50', '100', '150', '200']"
-      :page-size="pageVO.pageSize"
-      :total="pageVO.totalResult"
+      :page-size="tablePage.pageSize"
+      :total="tablePage.totalResult"
       showSizeChanger
       showQuickJumper>
     </a-pagination>
@@ -111,7 +111,7 @@ export default {
           ]
         }
       ],
-      pageVO: {
+      tablePage: {
         currentPage: 1,
         pageSize: 10,
         totalResult: 0
@@ -180,10 +180,10 @@ export default {
           <a-pagination
             @showSizeChange="handleSizeChange"
             @change="handleCurrentChange"
-            v-model="pageVO.currentPage"
+            v-model="tablePage.currentPage"
             :page-size-options="['5', '10', '15', '20', '50', '100', '150', '200']"
-            :page-size="pageVO.pageSize"
-            :total="pageVO.totalResult"
+            :page-size="tablePage.pageSize"
+            :total="tablePage.totalResult"
             showSizeChanger
             showQuickJumper>
           </a-pagination>
@@ -218,7 +218,7 @@ export default {
                   ]
                 }
               ],
-              pageVO: {
+              tablePage: {
                 currentPage: 1,
                 pageSize: 10,
                 totalResult: 0
@@ -234,10 +234,10 @@ export default {
           methods: {
             findList () {
               this.loading = true
-              XEAjax.doGet(\`/api/user/page/list/\${this.pageVO.pageSize}/\${this.pageVO.currentPage}\`, this.form.getFieldsValue()).then(response => {
+              XEAjax.doGet(\`/api/user/page/list/\${this.tablePage.pageSize}/\${this.tablePage.currentPage}\`, this.form.getFieldsValue()).then(response => {
                 let { page, result } = response.data
                 this.tableData = result
-                this.pageVO.totalResult = page.totalResult
+                this.tablePage.totalResult = page.totalResult
                 this.loading = false
               }).catch(e => {
                 this.loading = false
@@ -292,15 +292,15 @@ export default {
               }
             },
             searchEvent () {
-              this.pageVO.currentPage = 1
+              this.tablePage.currentPage = 1
               this.findList()
             },
             handleSizeChange (current, size) {
-              this.pageVO.pageSize = size
+              this.tablePage.pageSize = size
               this.searchEvent()
             },
             handleCurrentChange (page, pageSize) {
-              this.pageVO.currentPage = page
+              this.tablePage.currentPage = page
               this.findList()
             },
             roleSearchEvent ({ row }, value) {
@@ -329,10 +329,10 @@ export default {
   methods: {
     findList () {
       this.loading = true
-      XEAjax.doGet(`/api/user/page/list/${this.pageVO.pageSize}/${this.pageVO.currentPage}`, this.form.getFieldsValue()).then(response => {
+      XEAjax.doGet(`/api/user/page/list/${this.tablePage.pageSize}/${this.tablePage.currentPage}`, this.form.getFieldsValue()).then(response => {
         let { page, result } = response.data
         this.tableData = result
-        this.pageVO.totalResult = page.totalResult
+        this.tablePage.totalResult = page.totalResult
         this.loading = false
       }).catch(e => {
         this.loading = false
@@ -387,15 +387,15 @@ export default {
       }
     },
     searchEvent () {
-      this.pageVO.currentPage = 1
+      this.tablePage.currentPage = 1
       this.findList()
     },
     handleSizeChange (current, size) {
-      this.pageVO.pageSize = size
+      this.tablePage.pageSize = size
       this.searchEvent()
     },
     handleCurrentChange (page, pageSize) {
-      this.pageVO.currentPage = page
+      this.tablePage.currentPage = page
       this.findList()
     },
     roleSearchEvent ({ row }, value) {

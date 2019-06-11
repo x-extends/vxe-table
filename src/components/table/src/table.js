@@ -297,6 +297,9 @@ export default {
     visibleColumn () {
       return this.tableFullColumn ? this.tableFullColumn.filter(column => column.visible) : []
     },
+    isResizable () {
+      return this.resizable || this.tableFullColumn.some(column => column.resizable)
+    },
     isFilter () {
       return this.tableColumn.some(column => column.filters && column.filters.length)
     },
@@ -425,10 +428,10 @@ export default {
       collectColumn,
       isGroup,
       isFilter,
+      isResizable,
       isCtxMenu,
       loading,
       showHeader,
-      resizable,
       border,
       stripe,
       highlightHoverRow,
@@ -523,7 +526,7 @@ export default {
       /**
        * 列宽线
        */
-      resizable ? h('div', {
+      isResizable ? h('div', {
         class: ['vxe-table--resizable-bar'],
         style: overflowX ? {
           'padding-bottom': `${scrollXHeight}px`

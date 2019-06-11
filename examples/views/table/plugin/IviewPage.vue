@@ -62,8 +62,8 @@
       show-elevator
       prev-text="Previous"
       next-text="Next"
-      :total="pageVO.totalResult"
-      :current.sync="pageVO.currentPage"
+      :total="tablePage.totalResult"
+      :current.sync="tablePage.currentPage"
       @on-page-size-change="handleSizeChange"
       @on-change="handleCurrentChange"/>
 
@@ -89,7 +89,7 @@ export default {
       sexList: [],
       regionList: [],
       restaurants: ['前端', '后端'],
-      pageVO: {
+      tablePage: {
         currentPage: 1,
         pageSize: 10,
         totalResult: 0
@@ -161,8 +161,8 @@ export default {
           show-elevator
           prev-text="Previous"
           next-text="Next"
-          :total="pageVO.totalResult"
-          :current.sync="pageVO.currentPage"
+          :total="tablePage.totalResult"
+          :current.sync="tablePage.currentPage"
           @on-page-size-change="handleSizeChange"
           @on-change="handleCurrentChange"/>
         `,
@@ -174,7 +174,7 @@ export default {
               tableData: [],
               sexList: [],
               regionList: [],
-              pageVO: {
+              tablePage: {
                 currentPage: 1,
                 pageSize: 10,
                 totalResult: 0
@@ -194,10 +194,10 @@ export default {
             findList () {
               // 模拟后台数据
               this.loading = true
-              XEAjax.doGet(\`/api/user/page/list/\${this.pageVO.pageSize}/\${this.pageVO.currentPage}\`, this.formData).then(response => {
+              XEAjax.doGet(\`/api/user/page/list/\${this.tablePage.pageSize}/\${this.tablePage.currentPage}\`, this.formData).then(response => {
                 let { page, result } = response.data
                 this.tableData = result
-                this.pageVO.totalResult = page.totalResult
+                this.tablePage.totalResult = page.totalResult
                 this.loading = false
               }).catch(e => {
                 this.loading = false
@@ -252,15 +252,15 @@ export default {
               }
             },
             searchEvent () {
-              this.pageVO.currentPage = 1
+              this.tablePage.currentPage = 1
               this.findList()
             },
             handleSizeChange (pageSize) {
-              this.pageVO.pageSize = pageSize
+              this.tablePage.pageSize = pageSize
               this.searchEvent()
             },
             handleCurrentChange (currentPage) {
-              this.pageVO.currentPage = currentPage
+              this.tablePage.currentPage = currentPage
               this.findList()
             },
             roleFilterMethod  (value, option) {
@@ -285,10 +285,10 @@ export default {
   methods: {
     findList () {
       this.loading = true
-      XEAjax.doGet(`/api/user/page/list/${this.pageVO.pageSize}/${this.pageVO.currentPage}`, this.formData).then(response => {
+      XEAjax.doGet(`/api/user/page/list/${this.tablePage.pageSize}/${this.tablePage.currentPage}`, this.formData).then(response => {
         let { page, result } = response.data
         this.tableData = result
-        this.pageVO.totalResult = page.totalResult
+        this.tablePage.totalResult = page.totalResult
         this.loading = false
       }).catch(e => {
         this.loading = false
@@ -343,15 +343,15 @@ export default {
       }
     },
     searchEvent () {
-      this.pageVO.currentPage = 1
+      this.tablePage.currentPage = 1
       this.findList()
     },
     handleSizeChange (pageSize) {
-      this.pageVO.pageSize = pageSize
+      this.tablePage.pageSize = pageSize
       this.searchEvent()
     },
     handleCurrentChange (currentPage) {
-      this.pageVO.currentPage = currentPage
+      this.tablePage.currentPage = currentPage
       this.findList()
     },
     roleFilterMethod  (value, option) {

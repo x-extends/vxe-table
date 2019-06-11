@@ -1,7 +1,7 @@
 module.exports = {
   app: {
     header: {
-      desc: 'A more powerful, extensible, configurable Vue Table component.'
+      desc: 'A powerful, flexible, configurable, extensible Vue table component.'
     },
     aside: {
       nav: {

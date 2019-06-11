@@ -1,11 +1,13 @@
 <template>
   <div>
     <p>通过配置 <grid-api-link prop="pager-config"/> 参数开启分页功能</p>
+    <p>对于分页场景下，如果现有序号递增，可以通过 <table-api-link prop="start-index"/> 属性设置起始值</p>
 
     <vxe-grid
       border
       height="530"
       :loading="loading"
+      :start-index="(tablePage.currentPage - 1) * tablePage.pageSize"
       :pager-config="tablePage"
       :columns="tableColumn"
       :data.sync="tableData"

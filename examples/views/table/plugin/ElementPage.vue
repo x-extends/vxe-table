@@ -60,11 +60,11 @@
     <el-pagination
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
-      :current-page="pageVO.currentPage"
+      :current-page="tablePage.currentPage"
       :page-sizes="[5, 10, 15, 20, 50, 100, 150, 200]"
-      :page-size="pageVO.pageSize"
+      :page-size="tablePage.pageSize"
       layout="total, sizes, prev, pager, next, jumper"
-      :total="pageVO.totalResult">
+      :total="tablePage.totalResult">
     </el-pagination>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -92,7 +92,7 @@ export default {
         { value: '前端', name: '前端' },
         { value: '后端', name: '后端' }
       ],
-      pageVO: {
+      tablePage: {
         currentPage: 1,
         pageSize: 10,
         totalResult: 0
@@ -160,11 +160,11 @@ export default {
           <el-pager
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
-            :current-page="pageVO.currentPage"
+            :current-page="tablePage.currentPage"
             :page-sizes="[5, 10, 15, 20, 50, 100, 150, 200]"
-            :page-size="pageVO.pageSize"
+            :page-size="tablePage.pageSize"
             layout="total, sizes, prev, pager, next, jumper"
-            :total="pageVO.totalResult">
+            :total="tablePage.totalResult">
           </el-pager>
         `,
         `
@@ -180,7 +180,7 @@ export default {
                 { value: '前端', name: '前端' },
                 { value: '后端', name: '后端' }
               ],
-              pageVO: {
+              tablePage: {
                 currentPage: 1,
                 pageSize: 10,
                 totalResult: 0
@@ -200,10 +200,10 @@ export default {
             findList () {
               // 模拟后台数据
               this.loading = true
-              XEAjax.doGet(\`/api/user/page/list/\${this.pageVO.pageSize}/\${this.pageVO.currentPage}\`, this.formData).then(response => {
+              XEAjax.doGet(\`/api/user/page/list/\${this.tablePage.pageSize}/\${this.tablePage.currentPage}\`, this.formData).then(response => {
                 let { page, result } = response.data
                 this.tableData = result
-                this.pageVO.totalResult = page.totalResult
+                this.tablePage.totalResult = page.totalResult
                 this.loading = false
               }).catch(e => {
                 this.loading = false
@@ -258,15 +258,15 @@ export default {
               }
             },
             searchEvent () {
-              this.pageVO.currentPage = 1
+              this.tablePage.currentPage = 1
               this.findList()
             },
             handleSizeChange (pageSize) {
-              this.pageVO.pageSize = pageSize
+              this.tablePage.pageSize = pageSize
               this.searchEvent()
             },
             handleCurrentChange (currentPage) {
-              this.pageVO.currentPage = currentPage
+              this.tablePage.currentPage = currentPage
               this.findList()
             },
             roleFetchSuggestions (queryString, cb) {
@@ -301,10 +301,10 @@ export default {
   methods: {
     findList () {
       this.loading = true
-      XEAjax.doGet(`/api/user/page/list/${this.pageVO.pageSize}/${this.pageVO.currentPage}`, this.formData).then(response => {
+      XEAjax.doGet(`/api/user/page/list/${this.tablePage.pageSize}/${this.tablePage.currentPage}`, this.formData).then(response => {
         let { page, result } = response.data
         this.tableData = result
-        this.pageVO.totalResult = page.totalResult
+        this.tablePage.totalResult = page.totalResult
         this.loading = false
       }).catch(e => {
         this.loading = false
@@ -359,15 +359,15 @@ export default {
       }
     },
     searchEvent () {
-      this.pageVO.currentPage = 1
+      this.tablePage.currentPage = 1
       this.findList()
     },
     handleSizeChange (pageSize) {
-      this.pageVO.pageSize = pageSize
+      this.tablePage.pageSize = pageSize
       this.searchEvent()
     },
     handleCurrentChange (currentPage) {
-      this.pageVO.currentPage = currentPage
+      this.tablePage.currentPage = currentPage
       this.findList()
     },
     roleFetchSuggestions (queryString, cb) {

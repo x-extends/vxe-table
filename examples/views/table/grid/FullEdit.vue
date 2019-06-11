@@ -6,6 +6,7 @@
 
     <vxe-grid
       border
+      resizable
       highlight-hover-row
       height="530"
       :pager-config="tablePage"
@@ -87,6 +88,7 @@ export default {
         `
         <vxe-grid
           border
+          resizable
           highlight-hover-row
           height="530"
           :pager-config="tablePage"

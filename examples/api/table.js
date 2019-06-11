@@ -213,6 +213,14 @@ const apis = [
         list: []
       },
       {
+        name: 'startIndex',
+        desc: '只对 type=index 时有效，自定义序号的起始值',
+        type: 'Number',
+        enum: '',
+        defVal: '0',
+        list: []
+      },
+      {
         name: 'highlight-current-row',
         desc: '是否要高亮当前选中行',
         type: 'Boolean',

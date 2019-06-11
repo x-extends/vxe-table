@@ -10,7 +10,7 @@ export default {
   height: [Number, String],
   // 表格的最大高度
   maxHeight: [Number, String],
-  // 是否允许拖动列宽调整大小
+  // 所有列是否允许拖动列宽调整大小
   resizable: Boolean,
   // 是否带有斑马纹
   stripe: Boolean,
@@ -24,6 +24,8 @@ export default {
   loading: Boolean,
   // 是否显示表头
   showHeader: { type: Boolean, default: true },
+  // 只对 type=index 时有效，自定义序号的起始值
+  startIndex: { type: Number, default: 0 },
   // 是否要高亮当前选中行
   highlightCurrentRow: Boolean,
   // 鼠标移到行是否要高亮显示

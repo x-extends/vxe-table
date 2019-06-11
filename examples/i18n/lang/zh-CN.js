@@ -1,7 +1,7 @@
 module.exports = {
   app: {
     header: {
-      desc: '一个功能更加强大的、可扩展、可配置的 Vue 表格组件'
+      desc: '一个功能强大的、灵活、可配置、可扩展的 Vue 表格组件'
     },
     aside: {
       nav: {

@@ -7,6 +7,14 @@ const apis = [
     defVal: '',
     list: [
       {
+        name: 'id',
+        desc: '工具栏的唯一 ID，根据表格的业务',
+        type: 'String',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'customs',
         desc: '与表格的 customs 属性同步绑定',
         type: 'Array',
@@ -35,6 +43,14 @@ const apis = [
             type: 'Boolean',
             enum: '',
             defVal: 'false',
+            list: []
+          },
+          {
+            name: 'storage',
+            desc: '是否使用 localStorage 记忆功能，会自动记住最后操作行为（需要设置 id）',
+            type: 'String',
+            enum: '',
+            defVal: 'local',
             list: []
           }
         ]

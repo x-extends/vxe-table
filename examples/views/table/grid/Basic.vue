@@ -4,6 +4,7 @@
 
     <vxe-grid
       border
+      resizable
       height="300"
       :columns="tableColumn"
       :data.sync="tableData"></vxe-grid>
@@ -20,6 +21,7 @@
     <vxe-grid
       border
       stripe
+      resizable
       show-footer
       height="500"
       :footer-method="footerMethod"
@@ -71,6 +73,7 @@ export default {
         `
         <vxe-grid
           border
+          resizable
           height="300"
           :columns="tableColumn"
           :data.sync="tableData"></vxe-grid>
@@ -96,6 +99,7 @@ export default {
         <vxe-grid
           border
           stripe
+          resizable
           show-footer
           height="500"
           :footer-method="footerMethod"

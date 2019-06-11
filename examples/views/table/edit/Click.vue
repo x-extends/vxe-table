@@ -4,6 +4,7 @@
 
     <vxe-table
       border
+      resizable
       show-all-overflow
       :data.sync="tableData"
       :edit-config="{key: 'id', trigger: 'click', mode: 'cell'}"
@@ -26,6 +27,7 @@
 
     <vxe-table
       border
+      resizable
       show-all-overflow
       :data.sync="tableData"
       :edit-config="{key: 'id', trigger: 'click', mode: 'row'}">
@@ -56,6 +58,7 @@ export default {
         `
         <vxe-table
           border
+          resizable
           show-all-overflow
           :data.sync="tableData"
           :edit-config="{key: 'id', trigger: 'click', mode: 'cell'}"
@@ -82,6 +85,7 @@ export default {
         `
         <vxe-table
           border
+          resizable
           show-all-overflow
           :data.sync="tableData"
           :edit-config="{key: 'id', trigger: 'click', mode: 'row'}">

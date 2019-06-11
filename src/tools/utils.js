@@ -57,6 +57,7 @@ const UtilTools = {
       label: _vm.label,
       width: _vm.width,
       minWidth: _vm.minWidth,
+      resizable: _vm.resizable,
       fixed: _vm.fixed,
       align: _vm.align,
       headerAlign: _vm.headerAlign,
