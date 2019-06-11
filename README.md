@@ -61,8 +61,8 @@ A more powerful, extensible, configurable Vue Table component.
 
 ## Docs
 
-[To view the example](https://xuliangzhan.github.io/vxe-table/) [查看演示](https://xuliangzhan.gitee.io/vxe-table/)  
-[To view the document](https://xuliangzhan.github.io/vxe-table/#/table/api) [查看文档](https://xuliangzhan.gitee.io/vxe-table/#/table/api)  
+[To view the example](https://xuliangzhan.github.io/vxe-table/) [查看演示](https://xuliangzhan_admin.gitee.io/vxe-table/)  
+[To view the document](https://xuliangzhan.github.io/vxe-table/#/table/api) [查看文档](https://xuliangzhan_admin.gitee.io/vxe-table/#/table/api)  
 
 ## Installing
 
