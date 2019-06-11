@@ -358,7 +358,7 @@ const apis = [
           },
           {
             name: 'reserve',
-            desc: '是否保留多选状态，对于某些场景下非常有用，比如分页之后状态还保留选中状态（需要设置 rowKey || key）',
+            desc: '是否保留勾选状态，对于某些场景下非常有用，比如分页之后还保留之前选中的状态（需要设置 rowKey || key）',
             type: 'String',
             enum: '',
             defVal: 'false',
