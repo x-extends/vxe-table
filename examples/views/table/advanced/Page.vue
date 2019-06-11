@@ -1,6 +1,7 @@
 <template>
   <div>
     <p>使用自带的分页 <pager-api-link name="vxe-pager"/></p>
+    <p>对于分页场景下，如果想要保留选中状态，可以通过设置 <table-api-link prop="select-config"/> 的 <table-api-link prop="reserve"/> 属性</p>
 
     <vxe-table
       border
@@ -8,7 +9,9 @@
       ref="xTable"
       height="460"
       :loading="loading"
+      :select-config="{key: 'id', reserve: true}"
       :data.sync="tableData">
+      <vxe-table-column type="selection" width="60"></vxe-table-column>
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column prop="name" label="Name" sortable></vxe-table-column>
       <vxe-table-column prop="sex" label="Sex"></vxe-table-column>

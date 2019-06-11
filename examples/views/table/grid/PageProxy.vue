@@ -8,6 +8,7 @@
       height="530"
       :pager-config="tablePage"
       :proxy-config="tableProxy"
+      :select-config="{reserve: true}"
       :columns="tableColumn"></vxe-grid>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
