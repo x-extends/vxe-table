@@ -574,6 +574,20 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.forceCellValid',
+              disabled: true,
+              locat: {
+                name: 'TableEditForceCellValid'
+              }
+            },
+            {
+              label: 'app.aside.nav.forceRowVaild',
+              disabled: true,
+              locat: {
+                name: 'TableEditForceRowValid'
+              }
+            },
+            {
               label: 'app.aside.nav.keyboard',
               locat: {
                 name: 'TableEditKeyboard'

@@ -65,7 +65,7 @@ module.exports = {
         big1wRow: '1 万行',
         big10wRow: '10 万行 + 更复杂渲染',
         big1wRow1wCol: '1 万行 1 万列',
-        big10wRow1wCol: '1 万行 1 万列+ 更复杂渲染',
+        big10wRow1wCol: '1 万行 1 万列 + 更复杂渲染',
         infiniteScroll: '无限滚动',
 
         editable: '可编辑表格',
@@ -81,6 +81,8 @@ module.exports = {
         rowDisable: '禁用编辑 row',
         cellVaild: '数据校验 call',
         rowVaild: '数据校验 row',
+        forceCellValid: '数据校验 cell + 强制锁定',
+        forceRowVaild: '数据校验 row + 强制锁定',
         keyboard: '全键盘操作',
 
         excel: 'Excel 表格',

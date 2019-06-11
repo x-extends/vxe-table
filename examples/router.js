@@ -78,6 +78,8 @@ import TableEditRowDisable from './views/table/edit/RowDisable.vue'
 import TableEditKeyboard from './views/table/edit/Keyboard.vue'
 import TableEditCellValid from './views/table/edit/CellValid.vue'
 import TableEditRowValid from './views/table/edit/RowValid.vue'
+import TableEditForceCellValid from './views/table/edit/ForceCellValid.vue'
+import TableEditForceRowValid from './views/table/edit/ForceRowValid.vue'
 import TableEditTemplate from './views/table/edit/Template.vue'
 import TableEditFull from './views/table/edit/Full.vue'
 
@@ -470,6 +472,16 @@ export default new Router({
       path: '/table/edit/rowValid',
       name: 'TableEditRowValid',
       component: TableEditRowValid
+    },
+    {
+      path: '/table/edit/forceCellValid',
+      name: 'TableEditForceCellValid',
+      component: TableEditForceCellValid
+    },
+    {
+      path: '/table/edit/forceRowValid',
+      name: 'TableEditForceRowValid',
+      component: TableEditForceRowValid
     },
     {
       path: '/table/edit/template',

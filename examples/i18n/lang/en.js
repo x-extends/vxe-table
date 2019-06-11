@@ -81,6 +81,8 @@ module.exports = {
         rowDisable: 'Disable edit row',
         cellVaild: 'Validate call',
         rowVaild: 'Validate row',
+        forceCellValid: 'Validate cell + lock',
+        forceRowVaild: 'Validate row + lock',
         keyboard: 'Keyboard navigation',
 
         excel: 'Excel table',
