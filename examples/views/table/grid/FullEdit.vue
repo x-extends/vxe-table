@@ -14,6 +14,7 @@
       :proxy-config="tableProxy"
       :columns="tableColumn"
       :select-config="{reserve: true}"
+      :edit-rules="validRules"
       :edit-config="{key: 'id', trigger: 'click', mode: 'row', showStatus: true}"></vxe-grid>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -33,6 +34,15 @@ import XEUtils from 'xe-utils'
 export default {
   data () {
     return {
+      validRules: {
+        name: [
+          { required: true, message: '名称必须填写' },
+          { min: 3, max: 50, message: '名称长度在 3 到 50 个字符' }
+        ],
+        role: [
+          { required: true, message: '角色必须填写' }
+        ]
+      },
       tableProxy: {
         index: true, // 启用动态序号代理
         sort: true, // 启用排序代理

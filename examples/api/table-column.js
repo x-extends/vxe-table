@@ -1,14 +1,14 @@
 const apis = [
   {
     name: 'Props',
-    desc: '参数',
+    descKey: 'app.api.title.props',
     type: '',
     enum: '',
     defVal: '',
     list: [
       {
         name: 'type',
-        desc: '列的类型',
+        descKey: 'app.api.tableColumn.desc.type',
         type: 'String',
         enum: 'index（序号）,selection（多选）,radio（单选）,expand（展开行）',
         defVal: '',

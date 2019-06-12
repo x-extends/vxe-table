@@ -4,6 +4,7 @@
     "name": "{{ random.repeat(['name', 'test'],1) }}_{{ $index }}",
     "nickname": "{{ random.repeat(['昵称', '名字'],1) }}_{{ $index }}",
     "password": "{{ random.repeat('abcdefgABCDEFG',6,12) }}",
+    "checked": false,
     "sex|random(1)": [null, "0", "1"],
     "role|random(1)": ["前端", "后端", "测试", "设计", "项目经理"],
     "region|random(1)": [[1, 1, 5], [19, 199, 1773], [9, 73, 719]],

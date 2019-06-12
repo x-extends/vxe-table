@@ -728,7 +728,7 @@ export default {
           tableData.splice.apply(tableData, [rowIndex, 0].concat(newRecords))
         }
       }
-      [].push.apply(editStore.insertList, newRecords)
+      [].unshift.apply(editStore.insertList, newRecords)
       return this.$nextTick().then(() => {
         this.recalculate()
         return { row: newRecords.length ? newRecords[newRecords.length - 1] : null, rows: newRecords }
@@ -1115,7 +1115,7 @@ export default {
       }
       this.scrollXLoad = scrollXLoad
       this.tableColumn = visibleColumn
-      return this.$nextTick()
+      return this.$nextTick().then(() => this.recalculate())
     },
     /**
      * 指定列宽的列进行拆分
@@ -1880,9 +1880,9 @@ export default {
       return this.$nextTick()
     },
     setAllSelection (value) {
-      let { tableFullData, selectConfig = {}, treeConfig } = this
-      let { checkProp: property, checkMethod } = selectConfig
-      let selection = []
+      let { tableFullData, selectConfig = {}, treeConfig, selection } = this
+      let { checkProp: property, reserve, checkMethod } = selectConfig
+      let selectRows = []
       if (property) {
         let updateValue = (row, rowIndex) => {
           if (!checkMethod || checkMethod({ row, rowIndex })) {
@@ -1899,19 +1899,19 @@ export default {
           if (treeConfig) {
             XEUtils.eachTree(tableFullData, (row, rowIndex) => {
               if (!checkMethod || checkMethod({ row, rowIndex })) {
-                selection.push(row)
+                selectRows.push(row)
               }
             }, treeConfig)
           } else {
             if (checkMethod) {
-              selection = tableFullData.filter((row, rowIndex) => checkMethod({ row, rowIndex }))
+              selectRows = tableFullData.filter((row, rowIndex) => checkMethod({ row, rowIndex }))
             } else {
-              selection = tableFullData.slice(0)
+              selectRows = tableFullData.slice(0)
             }
           }
         }
       }
-      this.selection = selection
+      this.selection = reserve ? selection.concat(selectRows.filter(row => selection.indexOf(row) === -1)) : selectRows
       this.isAllSelected = value
       this.isIndeterminate = false
       this.treeIndeterminates = []

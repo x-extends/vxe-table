@@ -220,34 +220,44 @@ export default {
           }
           case 'save': {
             if (ajax.save) {
-              return this.validate().then(() => {
-                let body = Object.assign({ pendingRecords: this.pendingRecords }, this.getAllRecords())
-                let { insertRecords, removeRecords, updateRecords, pendingRecords } = body
-                // 排除掉新增且标记为删除的数据
-                if (insertRecords.length) {
-                  body.pendingRecords = pendingRecords.filter(row => insertRecords.indexOf(row) === -1)
-                }
-                // 排除已标记为删除的数据
-                if (pendingRecords.length) {
-                  body.insertRecords = insertRecords.filter(row => pendingRecords.indexOf(row) === -1)
-                }
-                if (body.insertRecords.length || removeRecords.length || updateRecords.length || body.pendingRecords.length) {
-                  this.tableLoading = true
-                  return ajax.save({ body }).then(result => {
-                    this.tableLoading = false
-                  }).catch(e => {
-                    this.tableLoading = false
-                  }).then(() => this.commitProxy('reload'))
-                } else {
-                  if (isAlert) {
-                    // 直接移除未保存且标记为删除的数据
-                    if (pendingRecords.length) {
-                      this.remove(pendingRecords)
+              let body = Object.assign({ pendingRecords: this.pendingRecords }, this.getAllRecords())
+              let { insertRecords, removeRecords, updateRecords, pendingRecords } = body
+              // 排除掉新增且标记为删除的数据
+              if (insertRecords.length) {
+                body.pendingRecords = pendingRecords.filter(row => insertRecords.indexOf(row) === -1)
+              }
+              // 排除已标记为删除的数据
+              if (pendingRecords.length) {
+                body.insertRecords = insertRecords.filter(row => pendingRecords.indexOf(row) === -1)
+              }
+              // 只校验新增和修改的数据
+              return new Promise(resolve => {
+                this.validate(body.insertRecords.concat(updateRecords), vaild => {
+                  if (vaild) {
+                    if (body.insertRecords.length || removeRecords.length || updateRecords.length || body.pendingRecords.length) {
+                      this.tableLoading = true
+                      resolve(
+                        ajax.save({ body }).then(() => {
+                          this.tableLoading = false
+                        }).catch(e => {
+                          this.tableLoading = false
+                        }).then(() => this.commitProxy('reload'))
+                      )
                     } else {
-                      this.$XTool.alert(GlobalConfig.i18n('vxe.grid.dataUnchanged')).catch(e => e)
+                      if (isAlert) {
+                        // 直接移除未保存且标记为删除的数据
+                        if (pendingRecords.length) {
+                          this.remove(pendingRecords)
+                        } else {
+                          this.$XTool.alert(GlobalConfig.i18n('vxe.grid.dataUnchanged')).catch(e => e)
+                        }
+                      }
+                      resolve()
                     }
+                  } else {
+                    resolve(vaild)
                   }
-                }
+                })
               })
             }
             break

@@ -1,7 +1,7 @@
 const apis = [
   {
     name: 'Props',
-    desc: '参数',
+    descKey: 'app.api.title.props',
     type: '',
     enum: '',
     defVal: '',

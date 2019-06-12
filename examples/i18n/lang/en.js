@@ -135,7 +135,26 @@ module.exports = {
         desc: 'Description',
         type: 'Type / Return type',
         enum: 'Accepted Values',
-        defVal: 'Default / Arguments'
+        defVal: 'Default / Arguments',
+        props: 'Table Attributes'
+      },
+      table: {
+        desc: {
+          data: 'Table data',
+          customs: 'Initialize the binding to show/hide columns;You can modify the display or hide columns by using the visible property',
+          height: 'Table height, supports adaptive or fixed width and height',
+          maxHeight: 'Max height of the table',
+          autoResize: 'Whether to automatically listen to the parent container to adjust the table width and height in a responsive manner (this may be used if you need to automatically follow the parent container\'s height)',
+          resizable: 'Whether drag column width resizing is allowed for all columns',
+          stripe: 'Whether with zebra stripes',
+          border: 'Whether there is a vertical border',
+          size: 'Table size'
+        }
+      },
+      tableColumn: {
+        desc: {
+          type: 'The type of the column'
+        }
       }
     }
   }

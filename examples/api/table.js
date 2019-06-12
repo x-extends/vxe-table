@@ -111,14 +111,14 @@ const contextMenuApi = [
 const apis = [
   {
     name: 'Props',
-    desc: '参数',
+    descKey: 'app.api.title.props',
     type: '',
     enum: '',
     defVal: '',
     list: [
       {
         name: 'data',
-        desc: '显示的数据',
+        descKey: 'app.api.table.desc.data',
         type: 'Array',
         enum: '',
         defVal: '',
@@ -126,7 +126,7 @@ const apis = [
       },
       {
         name: 'customs',
-        desc: '初始化绑定显示/隐藏列',
+        descKey: 'app.api.table.desc.customs',
         type: 'Array',
         enum: '',
         defVal: '',
@@ -134,7 +134,7 @@ const apis = [
       },
       {
         name: 'height',
-        desc: '表格的高度',
+        descKey: 'app.api.table.desc.height',
         type: 'Number,String',
         enum: 'auto（铺满父容器高度），数值px',
         defVal: '',
@@ -142,7 +142,7 @@ const apis = [
       },
       {
         name: 'max-height',
-        desc: '表格的最大高度',
+        descKey: 'app.api.table.desc.maxHeight',
         type: 'Number,String',
         enum: '数值px',
         defVal: '',
@@ -150,7 +150,7 @@ const apis = [
       },
       {
         name: 'auto-resize',
-        desc: '是否自动监听父容器响应式调整表格宽高（如果需要自动跟随父容器的高度变化时可能会用到）',
+        descKey: 'app.api.table.desc.autoResize',
         type: 'Boolean',
         enum: '',
         defVal: 'false',
@@ -158,7 +158,7 @@ const apis = [
       },
       {
         name: 'resizable',
-        desc: '所有的列是否允许拖动列宽调整大小',
+        descKey: 'app.api.table.desc.resizable',
         type: 'Boolean',
         enum: '',
         defVal: 'false',
@@ -166,7 +166,7 @@ const apis = [
       },
       {
         name: 'stripe',
-        desc: '是否带有斑马纹',
+        descKey: 'app.api.table.desc.stripe',
         type: 'Boolean',
         enum: '',
         defVal: 'false',
@@ -174,7 +174,7 @@ const apis = [
       },
       {
         name: 'border',
-        desc: '是否带有纵向边框',
+        descKey: 'app.api.table.desc.border',
         type: 'Boolean',
         enum: '',
         defVal: 'false',
@@ -182,7 +182,7 @@ const apis = [
       },
       {
         name: 'size',
-        desc: '表格的尺寸',
+        descKey: 'app.api.table.desc.size',
         type: 'String',
         enum: 'medium,small,mini',
         defVal: '',

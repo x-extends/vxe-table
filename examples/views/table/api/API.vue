@@ -62,33 +62,11 @@ export default {
   data () {
     return {
       filterName: this.$route.query.filterName,
-      tableData: [],
       defaultExpandRowKeys: []
     }
   },
   computed: {
-    apiList () {
-      let filterName = XEUtils.toString(this.filterName).trim().toLowerCase()
-      if (filterName) {
-        let filterRE = new RegExp(filterName, 'gi')
-        let options = { children: 'list' }
-        let searchProps = ['name', 'desc', 'type', 'enum', 'defVal']
-        let rest = XEUtils.searchTree(this.tableData, item => searchProps.some(key => item[key].toLowerCase().indexOf(filterName) > -1), options)
-        XEUtils.eachTree(rest, item => {
-          searchProps.forEach(key => {
-            item[key] = item[key].replace(filterRE, match => `<span class="keyword-lighten">${match}</span>`)
-          })
-        }, options)
-        return rest
-      }
-      return this.tableData
-    }
-  },
-  created () {
-    this.loadAPI()
-  },
-  methods: {
-    loadAPI () {
+    tableData () {
       let apis = []
       switch (this.$route.params.name) {
         case 'table':
@@ -128,22 +106,38 @@ export default {
           apis = tooltipAPI
           break
       }
-
       // 生成唯一 id
       let index = 1
       XEUtils.eachTree(apis, item => {
         item.id = index++
+        item.desc = item.descKey ? this.$t(item.descKey) : item.desc
       }, { children: 'list' })
-
-      // 默认展开一级
-      this.defaultExpandRowKeys = apis.filter(item => item.list && item.list.length).map(item => item.id)
-      this.tableData = apis
+      return apis
+    },
+    apiList () {
+      let filterName = XEUtils.toString(this.filterName).trim().toLowerCase()
+      if (filterName) {
+        let filterRE = new RegExp(filterName, 'gi')
+        let options = { children: 'list' }
+        let searchProps = ['name', 'desc', 'type', 'enum', 'defVal']
+        let rest = XEUtils.searchTree(this.tableData, item => searchProps.some(key => item[key].toLowerCase().indexOf(filterName) > -1), options)
+        XEUtils.eachTree(rest, item => {
+          searchProps.forEach(key => {
+            item[key] = item[key].replace(filterRE, match => `<span class="keyword-lighten">${match}</span>`)
+          })
+        }, options)
+        return rest
+      }
+      return this.tableData
     }
+  },
+  created () {
+    // 默认展开一级
+    this.defaultExpandRowKeys = this.tableData.filter(item => item.list && item.list.length).map(item => item.id)
   },
   beforeRouteUpdate (to, from, next) {
     next()
     this.filterName = ''
-    this.loadAPI()
   }
 }
 </script>
