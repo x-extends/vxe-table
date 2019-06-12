@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>通过调用 validate 函数校验数据，edit-rules 校验规则配置</p>
+    <p>通过调用 <table-api-link prop="validate"/> 函数校验数据，<table-api-link prop="edit-rules"/> 校验规则配置</p>
 
     <vxe-toolbar>
       <template v-slot:buttons>
@@ -20,7 +20,7 @@
       :data.sync="tableData"
       :edit-rules="validRules"
       :edit-config="{key: 'id', trigger: 'click', mode: 'row', showStatus: true}"
-      :keyboard-config="{isArray: true, isTab: true}">
+      :keyboard-config="{isArrow: true, isTab: true}">
       <vxe-table-column type="selection" width="60"></vxe-table-column>
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column prop="name" label="Name" :edit-render="{name: 'input'}"></vxe-table-column>
@@ -73,7 +73,7 @@ export default {
           :data.sync="tableData"
           :edit-rules="validRules"
           :edit-config="{key: 'id', trigger: 'click', mode: 'row', showStatus: true}"
-          :keyboard-config="{isArray: true, isTab: true}">
+          :keyboard-config="{isArrow: true, isTab: true}">
           <vxe-table-column type="selection" width="60"></vxe-table-column>
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column prop="name" label="Name" :edit-render="{name: 'input'}"></vxe-table-column>

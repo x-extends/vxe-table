@@ -113,7 +113,7 @@ function buildProps (h, _vm, props = {}) {
     cellClassName: _vm.handleCellClassName,
     contextMenu: Object.assign({}, contextMenu, excelContextMenu),
     mouseConfig: { selected: true, checked: true },
-    keyboardConfig: { isArray: true, isTab: true, isCut: true, isEdit: true },
+    keyboardConfig: { isArrow: true, isDel: true, isTab: true, isCut: true, isEdit: true },
     editConfig: editConfig ? Object.assign({}, excelEditConfig, editConfig) : excelEditConfig
   })
 }

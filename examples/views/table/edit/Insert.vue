@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>调用 insert、insertAt 函数插入数据</p>
+    <p>调用 <table-api-link prop="insert"/>、<table-api-link prop="insertAt"/> 函数插入数据</p>
 
     <vxe-toolbar>
       <template v-slot:buttons>

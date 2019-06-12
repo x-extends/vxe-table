@@ -604,7 +604,7 @@ const apis = [
         ]
       },
       {
-        name: 'Keyboard-config',
+        name: 'keyboard-config',
         desc: '按键配置项',
         type: 'Object',
         enum: '',
@@ -616,6 +616,14 @@ const apis = [
             type: 'Boolean',
             enum: '',
             defVal: 'false',
+            list: []
+          },
+          {
+            name: 'isDel',
+            desc: '开启删除键功能',
+            type: 'Boolean',
+            enum: '',
+            defVal: 'true',
             list: []
           },
           {

@@ -1402,7 +1402,7 @@ export default {
         if (selected.row && selected.column) {
           this.handleActived(selected.args, evnt)
         }
-      } else if (operArrow && keyboardConfig.isArray) {
+      } else if (operArrow && keyboardConfig.isArrow) {
         // 如果按下了方向键
         if (selected.row && selected.column) {
           evnt.preventDefault()
@@ -1419,7 +1419,7 @@ export default {
         }
       } else if (isDel || isBack) {
         // 如果是删除键
-        if (selected.row || selected.column) {
+        if (keyboardConfig.isDel && (selected.row || selected.column)) {
           UtilTools.setCellValue(selected.row, selected.column, null)
           if (isBack) {
             this.handleActived(selected.args, evnt)
@@ -2134,32 +2134,35 @@ export default {
       let { activeMethod } = editConfig
       let { actived } = editStore
       let { row, column, cell } = params
-      if (editConfig.mode === 'row' ? actived.row !== row : (actived.row !== row || actived.column !== column)) {
-        // 判断是否禁用编辑
-        if (!activeMethod || activeMethod(params)) {
-          this.clostTooltip()
-          this.clearValidate()
-          this.clearCopyed(evnt)
-          this.clearChecked(evnt)
-          this.clearSelected(evnt)
-          this.clearActived(evnt)
+      let { editRender } = column
+      if (editRender) {
+        if (editConfig.mode === 'row' ? actived.row !== row : (actived.row !== row || actived.column !== column)) {
+          // 判断是否禁用编辑
+          if (!activeMethod || activeMethod(params)) {
+            this.clostTooltip()
+            this.clearValidate()
+            this.clearCopyed(evnt)
+            this.clearChecked(evnt)
+            this.clearSelected(evnt)
+            this.clearActived(evnt)
+            column.renderHeight = cell.offsetHeight
+            actived.args = params
+            actived.row = row
+            actived.column = column
+            this.$nextTick(() => {
+              this.handleFocus(params, evnt)
+            })
+            UtilTools.emitEvent(this, 'edit-actived', [params, evnt])
+          } else {
+            UtilTools.emitEvent(this, 'edit-disabled', [params, evnt])
+          }
+        } else {
           column.renderHeight = cell.offsetHeight
           actived.args = params
-          actived.row = row
-          actived.column = column
-          this.$nextTick(() => {
+          setTimeout(() => {
             this.handleFocus(params, evnt)
           })
-          UtilTools.emitEvent(this, 'edit-actived', [params, evnt])
-        } else {
-          UtilTools.emitEvent(this, 'edit-disabled', [params, evnt])
         }
-      } else {
-        column.renderHeight = cell.offsetHeight
-        actived.args = params
-        setTimeout(() => {
-          this.handleFocus(params, evnt)
-        })
       }
       return this.$nextTick()
     },
@@ -2346,18 +2349,20 @@ export default {
     handleFocus (params, evnt) {
       let { column, cell } = params
       let { editRender } = column
-      let compRender = Renderer.get(editRender.name)
-      let inputElem
-      // 如果指定了聚焦 class
-      if (editRender.autofocus) {
-        inputElem = cell.querySelector(editRender.autofocus)
-      }
-      // 渲染器的聚焦处理
-      if (!inputElem && compRender && compRender.autofocus) {
-        inputElem = cell.querySelector(compRender.autofocus)
-      }
-      if (inputElem) {
-        inputElem.focus()
+      if (editRender) {
+        let compRender = Renderer.get(editRender.name)
+        let inputElem
+        // 如果指定了聚焦 class
+        if (editRender.autofocus) {
+          inputElem = cell.querySelector(editRender.autofocus)
+        }
+        // 渲染器的聚焦处理
+        if (!inputElem && compRender && compRender.autofocus) {
+          inputElem = cell.querySelector(compRender.autofocus)
+        }
+        if (inputElem) {
+          inputElem.focus()
+        }
       }
     },
     /**

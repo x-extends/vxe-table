@@ -1,14 +1,14 @@
 <template>
   <div>
-    <p>设置 mouse-config={selected: true} 启用单元格选中功能</p>
-    <p>设置 :keyboard-config={isArray: true, isTab: true} 启用按键功能，方向键、Tab 键、Esc 键、F2 键、Del、Back 键</p>
+    <p>设置 <table-api-link prop="mouse-config"/>={selected: true} 启用单元格选中功能</p>
+    <p>设置 <table-api-link prop="keyboard-config"/>={isArrow: true, isDel: true, isTab: true, isEdit: true} 启用按键功能及任意键编辑功能，方向键、Tab 键、Esc 键、F2 键、Del、Back 键</p>
 
     <vxe-table
       border
       show-all-overflow
       :data.sync="tableData"
       :mouse-config="{selected: true}"
-      :keyboard-config="{isArray: true, isTab: true, isEdit: true}"
+      :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true}"
       :edit-config="{key: 'id', trigger: 'dblclick', mode: 'cell'}">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column prop="name" label="Name" :edit-render="{name: 'input'}"></vxe-table-column>
@@ -55,7 +55,7 @@ export default {
           show-all-overflow
           :data.sync="tableData"
           :mouse-config="{selected: true}"
-          :keyboard-config="{isArray: true, isTab: true, isEdit: true}"
+          :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true}"
           :edit-config="{key: 'id', trigger: 'dblclick', mode: 'cell'}">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column prop="name" label="Name" :edit-render="{name: 'input'}"></vxe-table-column>

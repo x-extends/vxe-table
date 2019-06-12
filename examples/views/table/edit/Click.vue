@@ -1,10 +1,11 @@
 <template>
   <div>
-    <p>设置 edit-config={key: 'id', trigger: 'click', mode: 'cell'} 启用单元格点击编辑的功能（必须指定 rowKey 或 key）</p>
+    <p>设置 <table-api-link prop="edit-config"/>={key: 'id', trigger: 'click', mode: 'cell'} 启用单元格点击编辑的功能（必须指定 <table-api-link prop="row-key"/> 或 key）</p>
 
     <vxe-table
       border
       resizable
+      highlight-current-row
       show-all-overflow
       :data.sync="tableData"
       :edit-config="{key: 'id', trigger: 'click', mode: 'cell'}"
@@ -23,7 +24,8 @@
       <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
 
-    <p>设置 edit-config={key: 'id', trigger: 'click', mode: 'row'} 启用行点击编辑的功能</p>
+    <p>设置 <table-api-link prop="edit-config"/>={key: 'id', trigger: 'click', mode: 'row'} 启用行点击编辑的功能</p>
+    <p>需要注意的 mode=row 时，事件中的 column 相关参数是不确定性的（会保留 column 相关参数，但不一定是准确的）</p>
 
     <vxe-table
       border
@@ -59,6 +61,7 @@ export default {
         <vxe-table
           border
           resizable
+          highlight-current-row
           show-all-overflow
           :data.sync="tableData"
           :edit-config="{key: 'id', trigger: 'click', mode: 'cell'}"

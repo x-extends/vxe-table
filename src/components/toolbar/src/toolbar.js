@@ -29,10 +29,10 @@ export default {
   },
   computed: {
     $table () {
-      let { $parent, data, customs } = this
+      let { $parent, data } = this
       let { $children } = $parent
       let selfIndex = $children.indexOf(this)
-      return $children.find((comp, index) => comp && comp.refreshColumn && index > selfIndex && (data ? comp.data === data : (customs ? comp.customs === customs : comp.$vnode.componentOptions.tag === 'vxe-table')))
+      return $children.find((comp, index) => comp && comp.refreshColumn && index > selfIndex && (data ? comp.data === data : comp.$vnode.componentOptions.tag === 'vxe-table'))
     },
     vSize () {
       return this.size || this.$parent.size || this.$parent.vSize

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>设置 edit-config={trigger: 'click', mode: 'cell', showStatus: true} 开启编辑状态显示功能</p>
+    <p>设置 <table-api-link prop="edit-config"/>={trigger: 'click', mode: 'cell', showStatus: true} 开启编辑状态显示功能</p>
 
     <vxe-toolbar>
       <template v-slot:buttons>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>调用 remove 删除指定行数据</p>
+    <p>调用 <table-api-link prop="remove"/> 删除指定行数据</p>
 
     <vxe-toolbar>
       <template v-slot:buttons>

@@ -1,13 +1,16 @@
 <template>
   <div>
-    <p>设置 edit-config={key: 'id', trigger: 'dblclick', mode: 'cell'} 启用单元格双击编辑的功能（必须指定 rowKey 或 key）</p>
+    <p>设置 <table-api-link prop="edit-config"/>={key: 'id', trigger: 'dblclick', mode: 'cell'} 启用单元格双击编辑的功能（必须指定 rowKey 或 key）</p>
 
     <vxe-table
       border
       resizable
+      highlight-current-row
       show-all-overflow
       :data.sync="tableData"
-      :edit-config="{key: 'id', trigger: 'dblclick', mode: 'cell'}">
+      :edit-config="{key: 'id', trigger: 'dblclick', mode: 'cell'}"
+      @edit-actived="editActivedEvent"
+      @edit-closed="editClosedEvent">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column prop="name" label="Name" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column prop="sex" label="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
@@ -21,7 +24,8 @@
       <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
 
-    <p>设置 edit-config={key: 'id', trigger: 'dblclick', mode: 'row'} 启用行双击编辑的功能</p>
+    <p>设置 <table-api-link prop="edit-config"/>={key: 'id', trigger: 'dblclick', mode: 'row'} 启用行双击编辑的功能</p>
+    <p>需要注意的 mode=row 时，事件中的 column 相关参数是不确定性的（会保留 column 相关参数，但不一定是准确的）</p>
 
     <vxe-table
       border
@@ -57,6 +61,7 @@ export default {
         <vxe-table
           border
           resizable
+          highlight-current-row
           show-all-overflow
           :data.sync="tableData"
           :edit-config="{key: 'id', trigger: 'dblclick', mode: 'cell'}">
@@ -75,6 +80,14 @@ export default {
           },
           created () {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
+          },
+          methods: {
+            editActivedEvent ({ row, column }, event) {
+              console.log(\`打开 \${column.label} 列编辑\`)
+            },
+            editClosedEvent ({ row, column }, event) {
+              console.log(\`关闭 \${column.label} 列编辑\`)
+            }
           }
         }
         `,
@@ -115,6 +128,14 @@ export default {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
       hljs.highlightBlock(block)
     })
+  },
+  methods: {
+    editActivedEvent ({ row, column }, event) {
+      console.log(`打开 ${column.label} 列编辑`)
+    },
+    editClosedEvent ({ row, column }, event) {
+      console.log(`关闭 ${column.label} 列编辑`)
+    }
   }
 }
 </script>

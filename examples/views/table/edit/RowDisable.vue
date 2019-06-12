@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>设置 edit-config 的 activeMethod 方法判断单元格是否禁用</p>
+    <p>设置 <table-api-link prop="edit-config"/> 的 <table-api-link prop="activeMethod"/> 方法判断单元格是否禁用</p>
 
     <vxe-table
       ref="xTable"

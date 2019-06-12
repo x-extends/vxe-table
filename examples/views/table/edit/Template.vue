@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>使用 edit slot 自定义渲染任意 Vue 组件</p>
+    <p>使用 edit <table-column-api-link prop="slot"/> 自定义渲染任意 Vue 组件</p>
 
     <vxe-table
       border
