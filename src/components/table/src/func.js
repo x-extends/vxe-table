@@ -56,7 +56,6 @@ export default [
   'isScrollXLoad',
   'isScrollYLoad',
   'sort',
-  'validateRow',
   'validate',
   'exportCsv'
 ]

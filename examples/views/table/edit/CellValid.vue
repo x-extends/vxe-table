@@ -122,7 +122,7 @@ export default {
             insertEvent () {
               this.$refs.xTable.insert().then(({ row }) => {
                 // 插入一条数据并触发校验
-                this.$refs.xTable.validateRow(row, valid => {
+                this.$refs.xTable.validate(row, valid => {
                   if (valid) {
 
                   }
@@ -177,7 +177,7 @@ export default {
     insertEvent () {
       this.$refs.xTable.insert().then(({ row }) => {
         // 插入一条数据并触发校验
-        this.$refs.xTable.validateRow(row, valid => {
+        this.$refs.xTable.validate(row, valid => {
           if (valid) {
 
           }
