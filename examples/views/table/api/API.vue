@@ -37,7 +37,7 @@
         </template>
       </vxe-table-column>
       <template v-slot:empty>
-        <span>找不对应 API，请输入正确的关键字！</span>
+        <span class="red">找不对应 API，请输入正确的关键字！</span>
       </template>
     </vxe-table>
   </div>
@@ -71,14 +71,14 @@ export default {
       if (this.filterName) {
         let filterName = this.filterName.toLowerCase()
         let filterRE = new RegExp(filterName, 'gi')
-        let rest = XEUtils.searchTree(this.tableData, item => item.name.toLowerCase().indexOf(filterName) > -1 || item.desc.toLowerCase().indexOf(filterName) > -1 || item.type.toLowerCase().indexOf(filterName) > -1 || item.enum.toLowerCase().indexOf(filterName) > -1 || item.defVal.toLowerCase().indexOf(filterName) > -1, { children: 'list' })
+        let options = { children: 'list' }
+        let searchProps = ['name', 'desc', 'type', 'enum', 'defVal']
+        let rest = XEUtils.searchTree(this.tableData, item => searchProps.some(key => item[key].toLowerCase().indexOf(filterName) > -1), options)
         XEUtils.eachTree(rest, item => {
-          item.name = item.name.replace(filterRE, match => `<span class="keyword-lighten">${match}</span>`)
-          item.desc = item.desc.replace(filterRE, match => `<span class="keyword-lighten">${match}</span>`)
-          item.type = item.type.replace(filterRE, match => `<span class="keyword-lighten">${match}</span>`)
-          item.enum = item.enum.replace(filterRE, match => `<span class="keyword-lighten">${match}</span>`)
-          item.defVal = item.defVal.replace(filterRE, match => `<span class="keyword-lighten">${match}</span>`)
-        }, { children: 'list' })
+          searchProps.forEach(key => {
+            item[key] = item[key].replace(filterRE, match => `<span class="keyword-lighten">${match}</span>`)
+          })
+        }, options)
         return rest
       }
       return this.tableData

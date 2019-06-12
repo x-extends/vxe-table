@@ -144,15 +144,15 @@ export default {
           computed: {
             list () {
               if (this.filterName) {
-                let filterName = this.filterName.toLowerCase()
+                let filterName = this.filterName1.toLowerCase()
                 let filterRE = new RegExp(filterName, 'gi')
-                let rest = this.tableData.filter(item => XEUtils.toString(item.name).toLowerCase().indexOf(filterName) > -1 || XEUtils.toString(item.role).toLowerCase().indexOf(filterName) > -1 || XEUtils.toString(item.age).toLowerCase().indexOf(filterName) > -1 || XEUtils.toString(item.address).toLowerCase().indexOf(filterName) > -1)
+                let searchProps = ['name', 'role', 'age', 'address']
+                let rest = this.tableData.filter(item => searchProps.some(key => XEUtils.toString(item[key]).toLowerCase().indexOf(filterName) > -1))
                 return rest.map(row => {
                   let item = Object.assign({}, row)
-                  item.name = XEUtils.toString(item.name).replace(filterRE, match => \`<span class="keyword-lighten">\${match}</span>\`)
-                  item.role = XEUtils.toString(item.role).replace(filterRE, match => \`<span class="keyword-lighten">\${match}</span>\`)
-                  item.age = XEUtils.toString(item.age).replace(filterRE, match => \`<span class="keyword-lighten">\${match}</span>\`)
-                  item.address = XEUtils.toString(item.address).replace(filterRE, match => \`<span class="keyword-lighten">\${match}</span>\`)
+                  searchProps.forEach(key => {
+                    item[key] = XEUtils.toString(item[key]).replace(filterRE, match => \`<span class="keyword-lighten">\${match}</span>\`)
+                  })
                   return item
                 })
               }
@@ -178,7 +178,7 @@ export default {
         </vxe-toolbar>
 
         <vxe-table
-          :data.sync="list2"
+          :data.sync="list"
           :tree-config="{key: 'id', children: 'children', expandAll: !!filterName2}">
           <vxe-table-column type="index" width="120" label="序号" tree-node></vxe-table-column>
           <vxe-table-column prop="name" label="Name">
@@ -214,15 +214,16 @@ export default {
           computed: {
             list () {
               if (this.filterName) {
-                let filterName = this.filterName.toLowerCase()
+                let filterName = this.filterName2.toLowerCase()
                 let filterRE = new RegExp(filterName, 'gi')
-                let rest = XEUtils.searchTree(this.tableData, item => XEUtils.toString(item.name).toLowerCase().indexOf(filterName) > -1 || XEUtils.toString(item.size).toLowerCase().indexOf(filterName) > -1 || XEUtils.toString(item.type).toLowerCase().indexOf(filterName) > -1 || XEUtils.toString(item.date).toLowerCase().indexOf(filterName) > -1, { children: 'children' })
+                let options = { children: 'children' }
+                let searchProps = ['name', 'size', 'type', 'date']
+                let rest = XEUtils.searchTree(this.tableData, item => searchProps.some(key => XEUtils.toString(item[key]).toLowerCase().indexOf(filterName) > -1), options)
                 XEUtils.eachTree(rest, item => {
-                  item.name = XEUtils.toString(item.name).replace(filterRE, match => \`<span class="keyword-lighten">\${match}</span>\`)
-                  item.size = XEUtils.toString(item.size).replace(filterRE, match => \`<span class="keyword-lighten">\${match}</span>\`)
-                  item.type = XEUtils.toString(item.type).replace(filterRE, match => \`<span class="keyword-lighten">\${match}</span>\`)
-                  item.date = XEUtils.toString(item.date).replace(filterRE, match => \`<span class="keyword-lighten">\${match}</span>\`)
-                }, { children: 'children' })
+                  searchProps.forEach(key => {
+                    item[key] = XEUtils.toString(item[key]).replace(filterRE, match => \`<span class="keyword-lighten">\${match}</span>\`)
+                  })
+                }, options)
                 return rest
               }
               return this.tableData
@@ -246,13 +247,13 @@ export default {
       if (this.filterName1) {
         let filterName = this.filterName1.toLowerCase()
         let filterRE = new RegExp(filterName, 'gi')
-        let rest = this.tableData1.filter(item => XEUtils.toString(item.name).toLowerCase().indexOf(filterName) > -1 || XEUtils.toString(item.role).toLowerCase().indexOf(filterName) > -1 || XEUtils.toString(item.age).toLowerCase().indexOf(filterName) > -1 || XEUtils.toString(item.address).toLowerCase().indexOf(filterName) > -1)
+        let searchProps = ['name', 'role', 'age', 'address']
+        let rest = this.tableData1.filter(item => searchProps.some(key => XEUtils.toString(item[key]).toLowerCase().indexOf(filterName) > -1))
         return rest.map(row => {
           let item = Object.assign({}, row)
-          item.name = XEUtils.toString(item.name).replace(filterRE, match => `<span class="keyword-lighten">${match}</span>`)
-          item.role = XEUtils.toString(item.role).replace(filterRE, match => `<span class="keyword-lighten">${match}</span>`)
-          item.age = XEUtils.toString(item.age).replace(filterRE, match => `<span class="keyword-lighten">${match}</span>`)
-          item.address = XEUtils.toString(item.address).replace(filterRE, match => `<span class="keyword-lighten">${match}</span>`)
+          searchProps.forEach(key => {
+            item[key] = XEUtils.toString(item[key]).replace(filterRE, match => `<span class="keyword-lighten">${match}</span>`)
+          })
           return item
         })
       }
@@ -262,13 +263,14 @@ export default {
       if (this.filterName2) {
         let filterName = this.filterName2.toLowerCase()
         let filterRE = new RegExp(filterName, 'gi')
-        let rest = XEUtils.searchTree(this.tableData2, item => XEUtils.toString(item.name).toLowerCase().indexOf(filterName) > -1 || XEUtils.toString(item.size).toLowerCase().indexOf(filterName) > -1 || XEUtils.toString(item.type).toLowerCase().indexOf(filterName) > -1 || XEUtils.toString(item.date).toLowerCase().indexOf(filterName) > -1, { children: 'children' })
+        let options = { children: 'children' }
+        let searchProps = ['name', 'size', 'type', 'date']
+        let rest = XEUtils.searchTree(this.tableData2, item => searchProps.some(key => XEUtils.toString(item[key]).toLowerCase().indexOf(filterName) > -1), options)
         XEUtils.eachTree(rest, item => {
-          item.name = XEUtils.toString(item.name).replace(filterRE, match => `<span class="keyword-lighten">${match}</span>`)
-          item.size = XEUtils.toString(item.size).replace(filterRE, match => `<span class="keyword-lighten">${match}</span>`)
-          item.type = XEUtils.toString(item.type).replace(filterRE, match => `<span class="keyword-lighten">${match}</span>`)
-          item.date = XEUtils.toString(item.date).replace(filterRE, match => `<span class="keyword-lighten">${match}</span>`)
-        }, { children: 'children' })
+          searchProps.forEach(key => {
+            item[key] = XEUtils.toString(item[key]).replace(filterRE, match => `<span class="keyword-lighten">${match}</span>`)
+          })
+        }, options)
         return rest
       }
       return this.tableData2
