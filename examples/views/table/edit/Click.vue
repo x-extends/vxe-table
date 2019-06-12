@@ -82,6 +82,14 @@ export default {
           },
           created () {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
+          },
+          methods: {
+            editActivedEvent ({ row, column }, event) {
+              console.log(\`打开 \${column.label} 列编辑\`)
+            },
+            editClosedEvent ({ row, column }, event) {
+              console.log(\`关闭 \${column.label} 列编辑\`)
+            }
           }
         }
         `,
@@ -108,14 +116,6 @@ export default {
           },
           created () {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
-          },
-          methods: {
-            editActivedEvent ({ row, column }, event) {
-              console.log(\`打开 \${column.label} 列编辑\`)
-            },
-            editClosedEvent ({ row, column }, event) {
-              console.log(\`关闭 \${column.label} 列编辑\`)
-            }
           }
         }
         `

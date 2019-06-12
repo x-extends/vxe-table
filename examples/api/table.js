@@ -623,7 +623,7 @@ const apis = [
             desc: '开启删除键功能',
             type: 'Boolean',
             enum: '',
-            defVal: 'true',
+            defVal: 'false',
             list: []
           },
           {
