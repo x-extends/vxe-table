@@ -1115,7 +1115,7 @@ export default {
       }
       this.scrollXLoad = scrollXLoad
       this.tableColumn = visibleColumn
-      return this.$nextTick().then(() => this.recalculate(true))
+      return this.$nextTick()
     },
     /**
      * 指定列宽的列进行拆分
@@ -1145,6 +1145,7 @@ export default {
         }
       })
       Object.assign(this.columnStore, { resizeList, pxList, pxMinList, scaleList, scaleMinList, autoList })
+      this.recalculate()
     },
     /**
      * 计算单元格列宽，动态分配可用剩余空间
