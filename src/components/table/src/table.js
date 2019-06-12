@@ -1489,8 +1489,9 @@ export default {
       }
     },
     // 处理方向键移动
-    moveSelected (params, isLeftArrow, isUpArrow, isRightArrow, isDwArrow, evnt) {
+    moveSelected (args, isLeftArrow, isUpArrow, isRightArrow, isDwArrow, evnt) {
       let { tableData, visibleColumn, handleSelected } = this
+      let params = Object.assign({}, args)
       if (isUpArrow && params.rowIndex) {
         params.rowIndex -= 1
         params.row = tableData[params.rowIndex]
