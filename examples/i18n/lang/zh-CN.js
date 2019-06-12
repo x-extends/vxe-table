@@ -50,6 +50,7 @@ module.exports = {
         tree: '树形表格',
         edit: '可编辑',
         crudToolbar: '增删改查 + 工具栏',
+        lazy: '懒加载',
         full: '完整功能',
 
         grid: '高级表格',

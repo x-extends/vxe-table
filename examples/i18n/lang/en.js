@@ -50,6 +50,7 @@ module.exports = {
         tree: 'Tree table',
         edit: '可编辑',
         crudToolbar: 'CRUD + Toolbar',
+        lazy: 'Lazy loading',
         full: '完整功能',
 
         grid: 'Grid table',

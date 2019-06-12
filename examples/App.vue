@@ -362,6 +362,13 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.lazy',
+              disabled: true,
+              locat: {
+                name: 'TableTreeBasic'
+              }
+            },
+            {
               label: 'app.aside.nav.full',
               disabled: true,
               locat: {
