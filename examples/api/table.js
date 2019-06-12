@@ -600,14 +600,6 @@ const apis = [
             enum: '',
             defVal: 'false',
             list: []
-          },
-          {
-            name: 'checked',
-            desc: '开启鼠标移动单元格批量选中功能',
-            type: 'Boolean',
-            enum: '',
-            defVal: 'false',
-            list: []
           }
         ]
       },
