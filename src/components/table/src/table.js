@@ -792,14 +792,12 @@ export default {
           rest = XEUtils.remove(tableFullData, row => rows.indexOf(row) > -1)
           // 如果绑定了多选属性，则更新状态
           if (!property) {
-            XEUtils.remove(selection, row => rest.indexOf(row) > -1)
+            XEUtils.remove(selection, row => rows.indexOf(row) > -1)
           }
           // 从列表中移除
-          XEUtils.remove(tableData, row => rest.indexOf(row) > -1)
+          XEUtils.remove(tableData, row => rows.indexOf(row) > -1)
         }
-        if (rest.length) {
-          XEUtils.remove(insertList, row => rest.indexOf(row) > -1)
-        }
+        XEUtils.remove(insertList, row => rows.indexOf(row) > -1)
       }
       this.checkSelectionStatus()
       return this.$nextTick().then(() => {
@@ -1443,12 +1441,13 @@ export default {
       }
     },
     // 处理 Tab 键移动
-    moveTabSelected (params, evnt) {
+    moveTabSelected (args, evnt) {
       let { tableData, visibleColumn, editConfig } = this
       let nextRow
       let nextRowIndex
       let nextColumn
       let nextColumnIndex
+      let params = Object.assign({}, args)
       let rowIndex = tableData.indexOf(params.row)
       let columnIndex = visibleColumn.indexOf(params.column)
       for (let index = columnIndex + 1; index < visibleColumn.length; index++) {
@@ -1688,7 +1687,7 @@ export default {
       let cell = evnt.currentTarget
       let wrapperElem = cell.children[0]
       if (content && wrapperElem.scrollWidth > wrapperElem.clientWidth) {
-        let { tooltipStore, $refs } = this
+        let { tooltipStore, tooltipOpts, $refs } = this
         let { top, left } = DomTools.getOffsetPos(cell)
         let { scrollTop, scrollLeft, visibleWidth } = DomTools.getDomNode()
         let tipLeft = left
@@ -1705,6 +1704,7 @@ export default {
           if (tipWrapperElem) {
             tipLeft = left + Math.floor((cell.offsetWidth - tipWrapperElem.offsetWidth) / 2)
             tooltipStore.style = {
+              zIndex: tooltipOpts.zIndex,
               width: `${tipWrapperElem.offsetWidth + 2}px`,
               top: `${top - tipWrapperElem.offsetHeight - 6}px`,
               left: `${tipLeft}px`
@@ -3073,7 +3073,7 @@ export default {
      * 弹出校验错误提示
      */
     openValidTooltip (params) {
-      let { $refs, validStore } = this
+      let { $refs, tooltipOpts, validStore } = this
       let { rule, row, column, cell } = params
       this.$nextTick(() => {
         let { top, left } = DomTools.getOffsetPos(cell)
@@ -3089,6 +3089,7 @@ export default {
           let validWrapperElem = $refs.validWrapper
           if (validWrapperElem) {
             validStore.style = {
+              zIndex: tooltipOpts.zIndex,
               top: `${top + cell.offsetHeight}px`,
               left: `${left + Math.floor((cell.offsetWidth - validWrapperElem.offsetWidth) / 2)}px`
             }

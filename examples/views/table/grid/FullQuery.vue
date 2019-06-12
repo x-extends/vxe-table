@@ -7,7 +7,7 @@
       ref="xGrid"
       border
       height="548"
-      :pager-config="tablePage"
+      :pager-config="{pageSize: 15}"
       :columns="tableColumn"
       :proxy-config="tableProxy"
       :select-config="{key: 'id', reserve: true}"
@@ -34,10 +34,8 @@ export default {
         sort: '',
         order: ''
       },
-      tablePage: {
-        pageSize: 15
-      },
       tableProxy: {
+        index: true, // 启用动态序号代理
         ajax: {
           query: ({ page }) => XEAjax.getJSON(`/api/user/page/list/${page.pageSize}/${page.currentPage}`, this.formData)
         }
@@ -70,7 +68,7 @@ export default {
           ref="xGrid"
           border
           height="548"
-          :pager-config="tablePage"
+          :pager-config="{pageSize: 15}"
           :columns="tableColumn"
           :proxy-config="tableProxy"
           @sort-change="sortChangeEvent"
@@ -84,10 +82,8 @@ export default {
                 sort: '',
                 order: ''
               },
-              tablePage: {
-                pageSize: 15
-              },
               tableProxy: {
+                index: true, // 启用动态序号代理
                 ajax: {
                   query: ({ page }) => XEAjax.getJSON(\`/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`, this.formData)
                 }

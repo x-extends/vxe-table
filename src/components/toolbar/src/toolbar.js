@@ -166,7 +166,9 @@ export default {
       }
     },
     getStorageMap () {
-      return XEUtils.toStringJSON(localStorage.getItem('VXE_TOOLBAR_CUSTOMS')) || {}
+      let version = GlobalConfig.version
+      let rest = XEUtils.toStringJSON(localStorage.getItem('VXE_TOOLBAR_CUSTOMS'))
+      return rest && rest.version === version ? rest : { version }
     },
     saveStorageMap () {
       let { id, tableCustoms, isCustomStorage } = this

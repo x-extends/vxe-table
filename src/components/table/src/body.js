@@ -194,6 +194,7 @@ function renderRows (h, _vm, $table, rowLevel, fixedType, tableData, tableColumn
     overflowX,
     columnStore,
     scrollYStore,
+    editStore,
     expandeds,
     getRowMapIndex,
     getColumnMapIndex } = $table
@@ -222,7 +223,8 @@ function renderRows (h, _vm, $table, rowLevel, fixedType, tableData, tableColumn
         class: ['vxe-body--row', {
           [`row--level-${rowLevel}`]: treeConfig,
           'row--selected': row === selectRow,
-          'row--hover': row === hoverRow
+          'row--hover': row === hoverRow,
+          'row--new': editStore.insertList.indexOf(row) > -1
         }, rowClassName ? XEUtils.isFunction(rowClassName) ? rowClassName({ $table, seq, row, rowIndex }) : rowClassName : ''],
         attrs: {
           'data-rowkey': rowId

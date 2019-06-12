@@ -1,6 +1,7 @@
 <template>
   <div>
     <p>使用自带的工具栏 <toolbar-api-link name="vxe-toolbar"/>，配合模板可以非常简单的实现强大的功能</p>
+    <p>组成一套完整的表格，工具栏和表格必须是上下相邻关系，不允许更换位置（如果是复杂的布局不建议使用工具栏，自行写模板即可）</p>
 
     <vxe-toolbar>
       <template v-slot:buttons>

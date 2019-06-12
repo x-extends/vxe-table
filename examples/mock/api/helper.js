@@ -223,8 +223,6 @@ class Helper {
         let removeRecords = request.body[page && page.remove ? page.remove : 'removeRecords'] || []
         let pendingRecords = request.body[page && page.remove ? page.remove : 'pendingRecords'] || []
         let insertRecords = request.body[page && page.insert ? page.insert : 'insertRecords'] || []
-        removeRecords = removeRecords.concat(pendingRecords)
-        removeRest = XEUtils.remove(list, item => removeRecords.some(row => row[key] === item[key]))
         updateRecords.forEach(data => {
           let item = list.find(item => item[key] === data[key])
           if (item) {
@@ -237,6 +235,8 @@ class Helper {
           insertRest.push(rest)
           list.push(rest)
         })
+        removeRecords = removeRecords.concat(pendingRecords)
+        removeRest = XEUtils.remove(list, item => removeRecords.some(row => row[key] === item[key]))
       }
       response.body = { insertRest, updateRest, removeRest }
       return response
@@ -254,14 +254,8 @@ class Helper {
         let updateTime = Date.now()
         let updateRecords = request.body[page && page.update ? page.update : 'updateRecords'] || []
         let removeRecords = request.body[page && page.remove ? page.remove : 'removeRecords'] || []
+        let pendingRecords = request.body[page && page.remove ? page.remove : 'pendingRecords'] || []
         let insertRecords = request.body[page && page.insert ? page.insert : 'insertRecords'] || []
-        // 删除树
-        let removes = XEUtils.remove(list, item => removeRecords.some(row => row[key] === item[key]))
-        removeRest = removeRest.concat(removes)
-        while (removes.length) {
-          removes = XEUtils.remove(list, item => removes.some(row => row[key] === item[parentKey]))
-          removeRest = removeRest.concat(removes)
-        }
         // 更新树
         updateRecords.forEach(data => {
           let item = list.find(item => item[key] === data[key])
@@ -283,6 +277,14 @@ class Helper {
           })
         }
         insertTree(XEUtils.toArrayTree(insertRecords, { key, parentKey }))
+        // 删除树
+        removeRecords = removeRecords.concat(pendingRecords)
+        let removes = XEUtils.remove(list, item => removeRecords.some(row => row[key] === item[key]))
+        removeRest = removeRest.concat(removes)
+        while (removes.length) {
+          removes = XEUtils.remove(list, item => removes.some(row => row[key] === item[parentKey]))
+          removeRest = removeRest.concat(removes)
+        }
       }
       response.body = { insertRest, updateRest, removeRest }
       return response

@@ -95,6 +95,9 @@ export default {
         data: tableData,
         rowClassName: this.handleRowClassName
       })
+      if (proxyConfig.index && pagerConfig) {
+        props.startIndex = (tablePage.currentPage - 1) * tablePage.pageSize
+      }
       if (proxyConfig.sort) {
         tableOns['sort-change'] = this.sortChangeEvent
       }
@@ -220,7 +223,15 @@ export default {
               return this.validate().then(() => {
                 let body = Object.assign({ pendingRecords: this.pendingRecords }, this.getAllRecords())
                 let { insertRecords, removeRecords, updateRecords, pendingRecords } = body
-                if (insertRecords.length || removeRecords.length || updateRecords.length || pendingRecords.length) {
+                // 排除掉新增且标记为删除的数据
+                if (insertRecords.length) {
+                  body.pendingRecords = pendingRecords.filter(row => insertRecords.indexOf(row) === -1)
+                }
+                // 排除已标记为删除的数据
+                if (pendingRecords.length) {
+                  body.insertRecords = insertRecords.filter(row => pendingRecords.indexOf(row) === -1)
+                }
+                if (body.insertRecords.length || removeRecords.length || updateRecords.length || body.pendingRecords.length) {
                   this.tableLoading = true
                   return ajax.save({ body }).then(result => {
                     this.tableLoading = false
@@ -229,7 +240,12 @@ export default {
                   }).then(() => this.commitProxy('reload'))
                 } else {
                   if (isAlert) {
-                    this.$XTool.alert(GlobalConfig.i18n('vxe.grid.dataUnchanged')).catch(e => e)
+                    // 直接移除未保存且标记为删除的数据
+                    if (pendingRecords.length) {
+                      this.remove(pendingRecords)
+                    } else {
+                      this.$XTool.alert(GlobalConfig.i18n('vxe.grid.dataUnchanged')).catch(e => e)
+                    }
                   }
                 }
               })

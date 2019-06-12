@@ -214,7 +214,7 @@ const apis = [
       },
       {
         name: 'startIndex',
-        desc: '只对 type=index 时有效，自定义序号的起始值',
+        desc: '只对 type=index 时有效，动态索引序号的起始值',
         type: 'Number',
         enum: '',
         defVal: '0',
@@ -421,6 +421,14 @@ const apis = [
         enum: '',
         defVal: '',
         list: [
+          {
+            name: 'zIndex',
+            desc: '自定义 tooltip 的堆叠顺序（对于在弹框中使用是由于堆叠被覆盖时可能会用到）',
+            type: 'Number',
+            enum: '',
+            defVal: '99',
+            list: []
+          },
           {
             name: 'theme',
             desc: '列 tooltip 的主题',
@@ -1470,7 +1478,7 @@ const apis = [
       },
       {
         name: 'clearAll()',
-        desc: '清除表格所有条件，还原到初始状态',
+        desc: '清除表格所有条件，还原到初始状态（对于增删改查的场景中可能会用到，比如在数据保存之后清除表格缓存）',
         type: 'Promise',
         enum: '',
         defVal: '',

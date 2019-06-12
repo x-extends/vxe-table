@@ -13,7 +13,11 @@
         import 'vxe-table/lib/index.css'
 
         Vue.use(VXETable, {
-          size: 'small'
+          size: 'small',
+          version: 0,
+          tooltipConfig: {
+            zIndex: 3000
+          }
         })
       </code>
     </pre>
@@ -27,6 +31,8 @@
         VXETable.setup({
           // 默认尺寸
           size: 'small',
+          // 版本号，对于某些带数据缓存的功能有用到，上升版本号可以用于重置数据
+          version: 0,
           // 所有内容超过隐藏
           showAllOverflow: null,
           // 所有表头内容超过隐藏
@@ -47,6 +53,7 @@
           },
           // 默认 tooltip 主题样式
           tooltipConfig: {
+            zIndex: 3000,
             theme: 'dark'
           },
           // 默认分页参数

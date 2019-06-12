@@ -9,7 +9,9 @@
       :data.sync="tableData"
       :mouse-config="{selected: true}"
       :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true}"
-      :edit-config="{key: 'id', trigger: 'dblclick', mode: 'cell'}">
+      :edit-config="{key: 'id', trigger: 'dblclick', mode: 'cell'}"
+      @edit-actived="editActivedEvent"
+      @edit-closed="editClosedEvent">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column prop="name" label="Name" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column prop="sex" label="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
@@ -87,6 +89,14 @@ export default {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
       hljs.highlightBlock(block)
     })
+  },
+  methods: {
+    editActivedEvent ({ row, column }, event) {
+      console.log(`打开 ${column.label} 列编辑`)
+    },
+    editClosedEvent ({ row, column }, event) {
+      console.log(`关闭 ${column.label} 列编辑`)
+    }
   }
 }
 </script>

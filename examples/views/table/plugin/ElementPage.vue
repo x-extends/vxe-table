@@ -230,10 +230,10 @@ export default {
             saveEvent () {
               let { insertRecords, removeRecords, updateRecords } = this.$refs.xTable.getAllRecords()
               if (insertRecords.length || removeRecords.length || updateRecords.length) {
-                this.$message({ message: '保存成功！', type: 'success' })
+                this.$alert('保存成功！')
                 this.searchEvent()
               } else {
-                this.$message({ message: '数据未改动！' })
+                this.$alert('数据未改动！')
               }
             },
             dropdownMenuEvent (name) {
@@ -243,7 +243,7 @@ export default {
                   if (selectRecords.length) {
                     this.$refs.xTable.removeSelecteds()
                   } else {
-                    this.$message({ message: '请至少选择一条数据！' })
+                    this.$alert('请至少选择一条数据！')
                   }
                   break
                 }
@@ -331,10 +331,10 @@ export default {
     saveEvent () {
       let { insertRecords, removeRecords, updateRecords } = this.$refs.xTable.getAllRecords()
       if (insertRecords.length || removeRecords.length || updateRecords.length) {
-        this.$message({ message: '保存成功！', type: 'success' })
+        this.$alert('保存成功！')
         this.searchEvent()
       } else {
-        this.$message({ message: '数据未改动！' })
+        this.$alert('数据未改动！')
       }
     },
     dropdownMenuEvent (name) {
@@ -344,7 +344,7 @@ export default {
           if (selectRecords.length) {
             this.$refs.xTable.removeSelecteds()
           } else {
-            this.$message({ message: '请至少选择一条数据！' })
+            this.$alert('请至少选择一条数据！')
           }
           break
         }

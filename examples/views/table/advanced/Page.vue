@@ -1,8 +1,8 @@
 <template>
   <div>
     <p>使用自带的分页 <pager-api-link name="vxe-pager"/></p>
-    <p>对于分页场景下，如果现有序号递增，可以通过 <table-api-link prop="start-index"/> 属性设置起始值</p>
-    <p>对于分页场景下，如果想要保留选中状态，可以通过设置 <table-api-link prop="select-config"/> 的 <table-api-link prop="reserve"/> 属性</p>
+    <p>如果要支持动态序号，可以通过 <table-api-link prop="start-index"/> 属性设置起始值</p>
+    <p>如果要支持保留选中状态，可以通过设置 <table-api-link prop="select-config"/> 的 <table-api-link prop="reserve"/> 属性</p>
     <p class="red">设置 reserve 需要指定 <table-api-link prop="row-key"/> 或者 ( <table-api-link prop="select-config"/>、<table-api-link prop="tree-config"/>、<table-api-link prop="expand-config"/>、<table-api-link prop="edit-config"/> ) 中的 key 任意配置一个即可</p>
 
     <vxe-table

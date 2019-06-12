@@ -9,7 +9,7 @@
       resizable
       highlight-hover-row
       height="530"
-      :pager-config="tablePage"
+      :pager-config="{pageSize: 15}"
       :toolbar="toolbar"
       :proxy-config="tableProxy"
       :columns="tableColumn"
@@ -33,10 +33,8 @@ import XEUtils from 'xe-utils'
 export default {
   data () {
     return {
-      tablePage: {
-        pageSize: 15
-      },
       tableProxy: {
+        index: true, // 启用动态序号代理
         sort: true, // 启用排序代理
         filter: true, // 启用筛选代理
         ajax: {
@@ -91,7 +89,7 @@ export default {
           resizable
           highlight-hover-row
           height="530"
-          :pager-config="tablePage"
+          :pager-config="{pageSize: 15}"
           :toolbar="toolbar"
           :proxy-config="tableProxy"
           :columns="tableColumn"
@@ -101,10 +99,8 @@ export default {
         export default {
           data () {
             return {
-              tablePage: {
-                pageSize: 15
-              },
               tableProxy: {
+                index: true, // 启用动态序号代理
                 sort: true, // 启用排序代理
                 filter: true, // 启用筛选代理
                 ajax: {
@@ -129,9 +125,7 @@ export default {
                   { code: 'save', name: '保存' },
                   { code: 'export', name: '导出.csv' }
                 ],
-                setting: {
-                  immediate: true
-                }
+                setting: true
               },
               tableColumn: [
                 { type: 'selection', width: 50 },

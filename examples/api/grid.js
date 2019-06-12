@@ -154,14 +154,6 @@ const apis = [
         defVal: '',
         list: [
           {
-            name: 'size',
-            desc: '尺寸',
-            type: 'String',
-            enum: 'medium,small,mini',
-            defVal: '',
-            list: []
-          },
-          {
             name: 'current-page',
             desc: '当前页',
             type: 'Number',
@@ -228,10 +220,18 @@ const apis = [
           },
           {
             name: 'alert',
-            desc: '默认的提示框',
+            desc: '使用自带的提示框',
             type: 'Boolean,Object',
             enum: '',
             defVal: 'true',
+            list: []
+          },
+          {
+            name: 'index',
+            desc: '存在 type=index 列时有效，是否代理动态序号（根据分页动态变化）',
+            type: 'Boolean',
+            enum: '',
+            defVal: 'false',
             list: []
           },
           {

@@ -31,6 +31,7 @@ export default {
         pageSize: 15
       },
       tableProxy: {
+        index: true, // 启用动态序号代理
         ajax: {
           query: ({ page }) => XEAjax.getJSON(`/api/user/page/list/${page.pageSize}/${page.currentPage}`)
         }
@@ -60,6 +61,7 @@ export default {
                 pageSize: 10
               },
               tableProxy: {
+                index: true, // 启用动态序号代理
                 ajax: {
                   // 任何支持 Promise API 的库都可以对接
                   query: ({ page }) => XEAjax.getJSON(\`/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`)

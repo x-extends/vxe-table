@@ -9,7 +9,7 @@
       :columns="tableColumn"
       :toolbar="toolbar"
       :select-config="{labelProp: 'id'}"
-      :tree-config="{key: 'id', children: 'children', expandAll: true}"
+      :tree-config="{key: 'id', children: 'children'}"
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"></vxe-grid>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -65,7 +65,7 @@ export default {
           :columns="tableColumn"
           :toolbar="toolbar"
           :select-config="{labelProp: 'id'}"
-          :tree-config="{key: 'id', children: 'children', expandAll: true}"
+          :tree-config="{key: 'id', children: 'children'}"
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"></vxe-grid>
         `,
         `

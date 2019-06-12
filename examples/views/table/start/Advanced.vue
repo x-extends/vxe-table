@@ -3,6 +3,9 @@
     <h3>高级函数</h3>
     <p>通过渲染器你可以轻松实现渲染的单元格组件，可以根据不同业务实现不一样的组件，这个功能将非常实用</p>
     <p>比如这些插件 <a href="https://www.npmjs.com/package/vxe-table-plugin-element">vxe-table-plugin-element</a> 等插件都是使用渲染器实现的</p>
+    <p>添加单个 renderer.add(name, options)</p>
+    <p>混合多个 renderer.mixin(opts)</p>
+    <p>删除 renderer.delete(name)</p>
     <p>例子：使用 render 实现单元格组件</p>
     <pre>
       <code class="javascript">{{ demoCodes[0] }}</code>
@@ -14,7 +17,9 @@
       <code class="html">{{ demoCodes[3] }}</code>
     </pre>
     <p>通过内置拦截器可以解决当表格交互与其他组件存在冲突的，可以通过拦截器去阻止默认的行为，从而可以集成其他组件互相兼容</p>
-    <p>例子：比如集成某个日期组件后，由于面板不在对单元格之内，按键事件的交互行为存在冲突，对于这些场景就很有用了</p>
+    <p>添加单个 interceptor.add(name, handle)</p>
+    <p>name: event.clear_actived（清除激活单元格时触发，返回 false 阻止默认的清除行为）</p>
+    <p>例子：比如自定义渲染某个组件后，由于弹出层面板不在单元格之内，按键事件的交互行为存在冲突，对于这些场景就很有用了</p>
     <pre>
       <code class="javascript">{{ demoCodes[4] }}</code>
     </pre>
@@ -106,7 +111,7 @@ export default {
 
         VXETable.interceptor.add('event.clear_actived', (params, event) => {
           // 比如点击了某日期组件的面板，此时被激活单元格不应该被自动关闭，通过返回 false 可以阻止默认的行为。
-          if (event.target.className.indexOf('cascader-popper') > -1) {
+          if (event.target.className.indexOf('other-popper') > -1) {
             return false
           }
         })
