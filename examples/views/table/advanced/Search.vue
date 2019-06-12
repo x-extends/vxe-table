@@ -143,8 +143,8 @@ export default {
           },
           computed: {
             list () {
-              if (this.filterName) {
-                let filterName = this.filterName1.toLowerCase()
+              let filterName = XEUtils.toString(this.filterName).trim().toLowerCase()
+              if (filterName) {
                 let filterRE = new RegExp(filterName, 'gi')
                 let searchProps = ['name', 'role', 'age', 'address']
                 let rest = this.tableData.filter(item => searchProps.some(key => XEUtils.toString(item[key]).toLowerCase().indexOf(filterName) > -1))
@@ -213,8 +213,8 @@ export default {
           },
           computed: {
             list () {
-              if (this.filterName) {
-                let filterName = this.filterName2.toLowerCase()
+              let filterName = XEUtils.toString(this.filterName).trim().toLowerCase()
+              if (filterName) {
                 let filterRE = new RegExp(filterName, 'gi')
                 let options = { children: 'children' }
                 let searchProps = ['name', 'size', 'type', 'date']
@@ -244,8 +244,8 @@ export default {
   },
   computed: {
     list1 () {
-      if (this.filterName1) {
-        let filterName = this.filterName1.toLowerCase()
+      let filterName = XEUtils.toString(this.filterName1).trim().toLowerCase()
+      if (filterName) {
         let filterRE = new RegExp(filterName, 'gi')
         let searchProps = ['name', 'role', 'age', 'address']
         let rest = this.tableData1.filter(item => searchProps.some(key => XEUtils.toString(item[key]).toLowerCase().indexOf(filterName) > -1))
@@ -260,8 +260,8 @@ export default {
       return this.tableData1
     },
     list2 () {
-      if (this.filterName2) {
-        let filterName = this.filterName2.toLowerCase()
+      let filterName = XEUtils.toString(this.filterName2).trim().toLowerCase()
+      if (filterName) {
         let filterRE = new RegExp(filterName, 'gi')
         let options = { children: 'children' }
         let searchProps = ['name', 'size', 'type', 'date']

@@ -68,8 +68,8 @@ export default {
   },
   computed: {
     apiList () {
-      if (this.filterName) {
-        let filterName = this.filterName.toLowerCase()
+      let filterName = XEUtils.toString(this.filterName).trim().toLowerCase()
+      if (filterName) {
         let filterRE = new RegExp(filterName, 'gi')
         let options = { children: 'list' }
         let searchProps = ['name', 'desc', 'type', 'enum', 'defVal']
