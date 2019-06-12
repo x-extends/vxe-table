@@ -214,7 +214,7 @@ const apis = [
       },
       {
         name: 'startIndex',
-        desc: '只对 type=index 时有效，动态索引序号的起始值',
+        desc: '只对 type=index 的列有效，动态索引序号的起始值',
         type: 'Number',
         enum: '',
         defVal: '0',

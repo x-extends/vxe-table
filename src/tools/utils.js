@@ -89,7 +89,8 @@ const UtilTools = {
       renderCell: renderCell || _vm.renderCell,
       renderData: renderData,
       // 单元格插槽，只对 grid 有效
-      slots: _vm.slots
+      slots: _vm.slots,
+      origin: _vm
     }
   },
   // 组装列配置

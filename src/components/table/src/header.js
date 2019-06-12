@@ -188,7 +188,7 @@ export default {
                   'c--ellipsis': showEllipsis
                 }],
                 attrs: {
-                  title: showTitle ? column.label : null
+                  title: showTitle ? column.origin.label : null
                 },
                 style: {
                   width: showTitle || showTooltip || showEllipsis ? `${border ? renderWidth - 1 : renderWidth}px` : null

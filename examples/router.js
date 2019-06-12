@@ -244,12 +244,12 @@ export default new Router({
       component: TableFormat
     },
     {
-      path: '/table/base/event',
+      path: '/table/advanced/event',
       name: 'TableEvent',
       component: TableEvent
     },
     {
-      path: '/table/base/template',
+      path: '/table/advanced/template',
       name: 'TableTemplate',
       component: TableTemplate
     },

@@ -1665,7 +1665,7 @@ export default {
     triggerHeaderTooltipEvent (evnt, { column }) {
       let { tooltipStore } = this
       if (tooltipStore.column !== column || !tooltipStore.visible) {
-        this.showTooltip(evnt, column.label, column)
+        this.showTooltip(evnt, column.origin.label, column)
       }
     },
     /**

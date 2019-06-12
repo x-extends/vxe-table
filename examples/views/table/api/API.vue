@@ -2,7 +2,7 @@
   <div>
     <vxe-toolbar>
       <template v-slot:buttons>
-        <vxe-input class="search-input" v-model="filterName" type="search" :placeholder="`vxe-${$route.params.name} API 搜索`"></vxe-input>
+        <vxe-input class="search-input" v-model="filterName" type="search" :placeholder="`vxe-${$route.params.name} ${$t('app.api.form.apiSearch')}`"></vxe-input>
       </template>
     </vxe-toolbar>
 
@@ -11,27 +11,27 @@
       highlight-hover-row
       :data.sync="apiList"
       :tree-config="{key: 'id', children: 'list', expandAll: !!filterName, expandRowKeys: defaultExpandRowKeys, trigger: 'cell'}">
-      <vxe-table-column prop="name" label="属性" width="280" tree-node>
+      <vxe-table-column prop="name" :label="$t('app.api.title.prop')" width="280" tree-node>
         <template v-slot="{ row }">
           <span v-html="row.name"></span>
         </template>
       </vxe-table-column>
-      <vxe-table-column prop="desc" label="说明">
+      <vxe-table-column prop="desc" :label="$t('app.api.title.desc')">
         <template v-slot="{ row }">
           <span v-html="row.desc"></span>
         </template>
       </vxe-table-column>
-      <vxe-table-column prop="type" label="类型 / 返回类型" width="160">
+      <vxe-table-column prop="type" :label="$t('app.api.title.type')" width="160">
         <template v-slot="{ row }">
           <span v-html="row.type"></span>
         </template>
       </vxe-table-column>
-      <vxe-table-column prop="enum" label="可选值" width="180">
+      <vxe-table-column prop="enum" :label="$t('app.api.title.enum')" width="180">
         <template v-slot="{ row }">
           <span v-html="row.enum"></span>
         </template>
       </vxe-table-column>
-      <vxe-table-column prop="defVal" label="默认值 / 参数" width="180">
+      <vxe-table-column prop="defVal" :label="$t('app.api.title.defVal')" width="180">
         <template v-slot="{ row }">
           <span v-html="row.defVal"></span>
         </template>

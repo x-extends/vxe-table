@@ -52,7 +52,7 @@ const CellMethods = {
     if (slots && slots.header) {
       return slots.header(params)
     }
-    return [UtilTools.formatText(params.column.label)]
+    return [UtilTools.formatText(params.column.origin.label)]
   },
   renderCell (h, params) {
     let cellValue
@@ -114,7 +114,7 @@ const CellMethods = {
     if (slots && slots.header) {
       return slots.header(params)
     }
-    return [UtilTools.formatText(params.column.label || '#')]
+    return [UtilTools.formatText(params.column.origin.label || '#')]
   },
   renderIndexCell (h, params) {
     let { $table, column } = params
@@ -134,7 +134,7 @@ const CellMethods = {
    * 单选
    */
   renderRadioHeader (h, params) {
-    return [UtilTools.formatText(params.column.label)]
+    return [UtilTools.formatText(params.column.origin.label)]
   },
   renderRadioCell (h, params) {
     let { $table, column } = params
@@ -215,9 +215,9 @@ const CellMethods = {
         h('span', {
           class: ['checkbox--icon']
         }),
-        column.label ? h('span', {
+        column.origin.label ? h('span', {
           class: 'checkbox--label'
-        }, column.label) : null
+        }, column.origin.label) : null
       ])
     ]
   },

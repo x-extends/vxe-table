@@ -125,6 +125,18 @@ module.exports = {
         runDemo: 'Run demo',
         showCode: 'Show code'
       }
+    },
+    api: {
+      form: {
+        apiSearch: 'API Search'
+      },
+      title: {
+        prop: 'Attribute',
+        desc: 'Description',
+        type: 'Type / Return type',
+        enum: 'Accepted Values',
+        defVal: 'Default / Arguments'
+      }
     }
   }
 }

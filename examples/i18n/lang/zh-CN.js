@@ -125,6 +125,18 @@ module.exports = {
         runDemo: '在线运行',
         showCode: '显示代码'
       }
+    },
+    api: {
+      form: {
+        apiSearch: 'API 搜索'
+      },
+      title: {
+        prop: '属性',
+        desc: '说明',
+        type: '类型 / 返回类型',
+        enum: '可选值',
+        defVal: '默认值 / 参数'
+      }
     }
   }
 }
