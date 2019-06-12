@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>设置 <table-api-link prop="edit-config"/>={key: 'id', trigger: 'manual', mode: 'row', <table-api-link prop="autoClear"/>: false}，还可以通过设置 <table-api-link prop="autoClear"/> 关闭默认的单元格清除激活行为</p>
+    <p>设置 <table-api-link prop="edit-config"/>={key: 'id', trigger: 'manual', mode: 'row', autoClear: false}，还可以通过设置 <table-api-link prop="autoClear"/> 关闭默认的单元格清除激活行为</p>
 
     <vxe-table
       ref="xTable"

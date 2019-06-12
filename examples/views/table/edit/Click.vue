@@ -1,6 +1,7 @@
 <template>
   <div>
-    <p>设置 <table-api-link prop="edit-config"/>={key: 'id', trigger: 'click', mode: 'cell'} 启用单元格点击编辑的功能（必须指定 <table-api-link prop="row-key"/> 或 key）</p>
+    <p>设置 <table-api-link prop="edit-config"/>={key: 'id', trigger: 'click', mode: 'cell'} 启用单元格点击编辑的功能</p>
+    <p class="red">必须指定 <table-api-link prop="row-key"/> 或者 ( <table-api-link prop="select-config"/>、<table-api-link prop="tree-config"/>、<table-api-link prop="expand-config"/>、<table-api-link prop="edit-config"/> ) 中的 key 任意配置一个即可</p>
 
     <vxe-table
       border
