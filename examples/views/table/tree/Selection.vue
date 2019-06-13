@@ -4,7 +4,8 @@
 
     <vxe-table
       :tree-config="{key: 'id', children: 'children'}"
-      :data.sync="tableData">
+      :data.sync="tableData"
+      @select-change="selectChangeEvent">
       <vxe-table-column type="selection" prop="checked" width="120" tree-node></vxe-table-column>
       <vxe-table-column prop="name" label="Name"></vxe-table-column>
       <vxe-table-column prop="size" label="Size"></vxe-table-column>
@@ -32,7 +33,8 @@ export default {
         `
         <vxe-table
           :tree-config="{key: 'id', children: 'children'}"
-          :data.sync="tableData">
+          :data.sync="tableData"
+          @select-change="selectChangeEvent">
           <vxe-table-column type="selection" tree-node></vxe-table-column>
           <vxe-table-column prop="name" label="Name"></vxe-table-column>
           <vxe-table-column prop="size" label="Size"></vxe-table-column>
@@ -49,6 +51,11 @@ export default {
           },
           created () {
             this.tableData = window.MOCK_TREE_DATA_LIST.slice(0)
+          },
+          methods: {
+            selectChangeEvent ({ selection }) {
+              console.info(\`勾选\${selection.length}个树形节点\`, selection)
+            }
           }
         }
         `
@@ -62,6 +69,11 @@ export default {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
       hljs.highlightBlock(block)
     })
+  },
+  methods: {
+    selectChangeEvent ({ selection }) {
+      console.info(`勾选${selection.length}个树形节点`, selection)
+    }
   }
 }
 </script>
