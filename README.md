@@ -48,7 +48,7 @@ A powerful, flexible, configurable, extensible Vue Table component.
 * Format content （格式化内容）
 * Custom column template （自定义模板）
 * Context menu（快捷菜单）
-* Virtual Scroller（虚拟滚动渲染）
+* Virtual Scroller（虚拟滚动）
 * Expandable row （展开行）
 * Pager（分页）
 * Toolbar（工具栏）

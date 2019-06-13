@@ -62,7 +62,7 @@ module.exports = {
         crudTreeToolbar: 'Tree + CRUD + Toolbar',
 
         scroll: 'Big table',
-        bigData: 'Big data',
+        bigData: 'Virtual Scroller',
         big1wRow: '10,000 row',
         big10wRow: '100,000 row, More complex rendering',
         big1wRow1wCol: '10,000 row 10,000 column',

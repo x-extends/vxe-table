@@ -62,7 +62,7 @@ module.exports = {
         crudTreeToolbar: '树 + 增删改查 + 工具栏',
 
         scroll: '大数据表格',
-        bigData: '海量数据',
+        bigData: '虚拟滚动',
         big1wRow: '1 万行',
         big10wRow: '10 万行 + 更复杂渲染',
         big1wRow1wCol: '1 万行 1 万列',
