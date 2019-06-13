@@ -1,7 +1,7 @@
 <template>
   <div>
-    <p>可视渲染，加载 1 万行 1 万列</p>
-    <p><grid-api-link name="vxe-grid"/> 的性能比 <table-api-link name="vxe-table"/> 快 n 倍，因为不需要为每个 <table-column-api-link name="vxe-table-column"/>  创建实例，列越多越能体现出来</p>
+    <p>虚拟滚动渲染，加载 1 万行 1 万列</p>
+    <p><grid-api-link name="vxe-grid"/> 的性能比 <table-api-link name="vxe-table"/> 更快，因为不需要为每个 <table-column-api-link name="vxe-table-column"/>  创建实例，列越多越能体现出来</p>
 
     <vxe-grid
       border
@@ -32,7 +32,7 @@ export default {
     this.tableData = []
     setTimeout(() => {
       this.tableData = window.MOCK_DATA_LIST.slice(0, 10000)
-      this.tableColumn = window.MOCK_COLUMN_LIST.slice(0, 10000)
+      this.tableColumn = window.MOCK_COLUMN_LIST.slice(0, 10000).map(item => Object.assign({}, item, { fixed: undefined }))
       this.loading = false
     }, 500)
   }

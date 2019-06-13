@@ -822,7 +822,7 @@ const apis = [
             list: [
               {
                 name: 'gt',
-                desc: '指定大于多少范围时自动启动可视渲染',
+                desc: '指定大于多少范围时自动启动虚拟滚动渲染',
                 type: 'Number',
                 enum: '',
                 defVal: '60',
@@ -863,7 +863,7 @@ const apis = [
             list: [
               {
                 name: 'gt',
-                desc: '指定大于多少范围时自动启动可视渲染',
+                desc: '指定大于多少范围时自动启动虚拟滚动渲染',
                 type: 'Number',
                 enum: '',
                 defVal: '500',

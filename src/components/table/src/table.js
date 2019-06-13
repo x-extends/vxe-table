@@ -1116,7 +1116,8 @@ export default {
       }
       this.scrollXLoad = scrollXLoad
       this.tableColumn = visibleColumn
-      return this.$nextTick().then(() => this.recalculate())
+      // 需要计算两次，解决隐藏列首次被显示无宽度造成闪动问题
+      return this.$nextTick().then(this.recalculate).then(this.recalculate)
     },
     /**
      * 指定列宽的列进行拆分
@@ -1146,7 +1147,6 @@ export default {
         }
       })
       Object.assign(this.columnStore, { resizeList, pxList, pxMinList, scaleList, scaleMinList, autoList })
-      this.recalculate()
     },
     /**
      * 计算单元格列宽，动态分配可用剩余空间
