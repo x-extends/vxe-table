@@ -601,6 +601,14 @@ const apis = [
             defVal: 'false',
             list: []
           }
+          // {
+          //   name: 'checked',
+          //   desc: '开启鼠标移动单元格批量选中功能',
+          //   type: 'Boolean',
+          //   enum: '',
+          //   defVal: 'false',
+          //   list: []
+          // }
         ]
       },
       {
@@ -634,14 +642,14 @@ const apis = [
             defVal: 'false',
             list: []
           },
-          {
-            name: 'isCut',
-            desc: '开启复制粘贴功能',
-            type: 'Boolean',
-            enum: '',
-            defVal: 'false',
-            list: []
-          },
+          // {
+          //   name: 'isCut',
+          //   desc: '开启复制粘贴功能',
+          //   type: 'Boolean',
+          //   enum: '',
+          //   defVal: 'false',
+          //   list: []
+          // },
           {
             name: 'isEdit',
             desc: '开启任意键进入编辑（功能键除外）',
