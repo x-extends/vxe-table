@@ -6,7 +6,7 @@
 [![gzip size: CSS](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/index.css?compression=gzip&label=gzip%20size:%20CSS)](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/index.css?compression=gzip&label=gzip%20size:%20CSS)
 [![npm license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/xuliangzhan/vxe-table/blob/master/LICENSE)
 
-A more powerful, extensible, configurable Vue Table component.
+A powerful, flexible, configurable, extensible Vue Table component.
 
 * vxe-table 的设计理念
   * 精简的 API（简洁、高效、通用）

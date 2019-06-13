@@ -16,7 +16,7 @@ const apis = [
       },
       {
         name: 'prop',
-        desc: '列属性',
+        descKey: 'app.api.tableColumn.desc.prop',
         type: 'String',
         enum: '',
         defVal: '',
@@ -24,7 +24,7 @@ const apis = [
       },
       {
         name: 'label',
-        desc: '列标题',
+        descKey: 'app.api.tableColumn.desc.label',
         type: 'String',
         enum: '',
         defVal: '',
@@ -32,7 +32,7 @@ const apis = [
       },
       {
         name: 'width',
-        desc: '列宽度',
+        descKey: 'app.api.tableColumn.desc.width',
         type: 'Number,String',
         enum: '数值px，数值%',
         defVal: '默认均匀分配',
@@ -40,7 +40,7 @@ const apis = [
       },
       {
         name: 'min-width',
-        desc: '最小列宽度，会把剩余空间按比例分配',
+        descKey: 'app.api.tableColumn.desc.minWidth',
         type: 'Number,String',
         enum: '数值px，数值%',
         defVal: '',
@@ -48,7 +48,7 @@ const apis = [
       },
       {
         name: 'resizable',
-        desc: '列是否允许拖动列宽调整大小',
+        descKey: 'app.api.tableColumn.desc.resizable',
         type: 'Boolean',
         enum: '',
         defVal: 'false',
@@ -56,7 +56,7 @@ const apis = [
       },
       {
         name: 'fixed',
-        desc: '将列固定在左侧或者右侧（规范：固定列放在左右两侧）',
+        descKey: 'app.api.tableColumn.desc.fixed',
         type: 'String',
         enum: 'left（固定左侧）,right（固定右侧）',
         defVal: '',
@@ -64,7 +64,7 @@ const apis = [
       },
       {
         name: 'align',
-        desc: '列对其方式',
+        descKey: 'app.api.tableColumn.desc.align',
         type: 'String',
         enum: 'left（居左）,center（居中）,right（居右）',
         defVal: 'left',
@@ -72,7 +72,7 @@ const apis = [
       },
       {
         name: 'header-align',
-        desc: '表头对齐方式',
+        descKey: 'app.api.tableColumn.desc.headerAlign',
         type: 'String',
         enum: 'left（居左）,center（居中）,right（居右）',
         defVal: '',
@@ -80,7 +80,7 @@ const apis = [
       },
       {
         name: 'show-overflow',
-        desc: '当内容过长时显示为省略号',
+        descKey: 'app.api.tableColumn.desc.showOverflow',
         type: 'String,Boolean',
         enum: 'ellipsis（只显示省略号）,title（并且显示为原生 title）,tooltip（并且显示为 tooltip 提示）',
         defVal: '',
@@ -88,7 +88,7 @@ const apis = [
       },
       {
         name: 'show-header-overflow',
-        desc: '当表头内容过长时显示为省略号',
+        descKey: 'app.api.tableColumn.desc.showHeaderOverflow',
         type: 'String,Boolean',
         enum: 'ellipsis（只显示省略号）,title（并且显示为原生 title）,tooltip（并且显示为 tooltip 提示）',
         defVal: '',
@@ -96,7 +96,7 @@ const apis = [
       },
       {
         name: 'formatter',
-        desc: '格式化显示内容 Function({cellValue, row, rowIndex, column, columnIndex})',
+        descKey: 'app.api.tableColumn.desc.formatter',
         type: 'Function',
         enum: '',
         defVal: '',
@@ -104,7 +104,7 @@ const apis = [
       },
       {
         name: 'index-method',
-        desc: '只对 type=index 有效，自定义索引方法 Function({row, rowIndex, column, columnIndex})',
+        descKey: 'app.api.tableColumn.desc.indexMethod',
         type: 'Function',
         enum: '',
         defVal: '',
@@ -112,7 +112,7 @@ const apis = [
       },
       {
         name: 'sortable',
-        desc: '是否允许列排序',
+        descKey: 'app.api.tableColumn.desc.sortable',
         type: 'Boolean',
         enum: '',
         defVal: 'false',
@@ -120,7 +120,7 @@ const apis = [
       },
       {
         name: 'sort-by',
-        desc: '只对 sortable 有效，自定义排序的属性',
+        descKey: 'app.api.tableColumn.desc.sortBy',
         type: 'String,Array',
         enum: '',
         defVal: '',
@@ -128,7 +128,7 @@ const apis = [
       },
       {
         name: 'remote-sort',
-        desc: '是否使用服务端排序，如果设置为 true 则不会对数据进行处理',
+        descKey: 'app.api.tableColumn.desc.remoteSort',
         type: 'Boolean',
         enum: '',
         defVal: 'false',
@@ -136,7 +136,7 @@ const apis = [
       },
       {
         name: 'filters',
-        desc: '配置筛选条件数组',
+        descKey: 'app.api.tableColumn.desc.filters',
         type: 'Array',
         enum: '',
         defVal: '',
@@ -161,7 +161,7 @@ const apis = [
       },
       {
         name: 'filter-multiple',
-        desc: '只对 filters 有效，筛选是否允许多选',
+        descKey: 'app.api.tableColumn.desc.filterMultiple',
         type: 'Boolean',
         enum: '',
         defVal: 'true',
@@ -169,7 +169,7 @@ const apis = [
       },
       {
         name: 'filter-method',
-        desc: '只对 filters 有效，自定义筛选方法 Function({value, row, column})',
+        descKey: 'app.api.tableColumn.desc.filterMethod',
         type: 'Function',
         enum: '',
         defVal: '',
@@ -177,7 +177,7 @@ const apis = [
       },
       {
         name: 'remote-filter',
-        desc: '是否使用服务端筛选，如果设置为 true 则不会对数据进行处理',
+        descKey: 'app.api.tableColumn.desc.remoteFilter',
         type: 'Boolean',
         enum: '',
         defVal: 'false',
@@ -185,7 +185,7 @@ const apis = [
       },
       {
         name: 'tree-node',
-        desc: '只对 tree-config 配置时有效，指定为树节点',
+        descKey: 'app.api.tableColumn.desc.treeNode',
         type: 'Boolean',
         enum: '',
         defVal: 'false',
@@ -193,7 +193,7 @@ const apis = [
       },
       {
         name: 'column-key',
-        desc: '列渲染的 key，对应列渲染中虚拟 DOM 的 key 属性（非特殊情况下不需要使用）',
+        descKey: 'app.api.tableColumn.desc.columnKey',
         type: 'String,Number',
         enum: '',
         defVal: '',
@@ -201,7 +201,7 @@ const apis = [
       },
       {
         name: 'edit-render',
-        desc: '列编辑配置项',
+        descKey: 'app.api.tableColumn.desc.editRender',
         type: 'Object',
         enum: '',
         defVal: '',
@@ -236,7 +236,7 @@ const apis = [
   },
   {
     name: 'Slots',
-    desc: '插槽',
+    descKey: 'app.api.title.slots',
     type: '',
     enum: '',
     defVal: '',
@@ -269,7 +269,7 @@ const apis = [
   },
   {
     name: 'Events',
-    desc: '事件',
+    descKey: 'app.api.title.events',
     type: '',
     enum: '',
     defVal: '',
@@ -277,7 +277,7 @@ const apis = [
   },
   {
     name: 'Methods',
-    desc: '方法',
+    descKey: 'app.api.title.methods',
     type: '',
     enum: '',
     defVal: '',

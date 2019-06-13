@@ -8,8 +8,8 @@ export default {
   name: 'VxeToolbar',
   props: {
     id: String,
-    setting: [Boolean, Object],
-    buttons: Array,
+    setting: { type: [Boolean, Object], default: () => GlobalConfig.toolbar.setting },
+    buttons: { type: Array, default: () => GlobalConfig.toolbar.buttons },
     size: String,
     data: Array,
     customs: Array
@@ -37,16 +37,19 @@ export default {
     vSize () {
       return this.size || this.$parent.size || this.$parent.vSize
     },
-    isCustomStorage () {
+    isStorage () {
       return this.setting && this.setting.storage
+    },
+    storageKey () {
+      return GlobalConfig.toolbar.storageKey || 'VXE_TABLE_CUSTOM_HIDDEN'
     }
   },
   created () {
-    let { isCustomStorage, id, customs, setting } = this
+    let { isStorage, id, customs, setting } = this
     if (customs) {
       this.tableCustoms = customs
     }
-    if (isCustomStorage && !id) {
+    if (isStorage && !id) {
       throw new Error('[vxe-table] Toolbar must have a unique primary id.')
     }
     if (setting) {
@@ -89,7 +92,7 @@ export default {
           on: {
             click: evnt => this.btnEvent(item, evnt)
           }
-        }, item.name)
+        }, XEUtils.isFunction(item.name) ? item.name() : item.name)
       })),
       setting ? h('div', {
         class: ['vxe-custom--wrapper', {
@@ -144,11 +147,11 @@ export default {
       }
     },
     loadStorage () {
-      if (this.isCustomStorage) {
+      if (this.isStorage) {
         let customStorageMap = this.getStorageMap()
         let customStorage = customStorageMap[this.id]
         if (customStorage) {
-          this.updateCustoms(customStorage)
+          this.updateCustoms(customStorage.split(',').map(prop => ({ prop, visible: false })))
         } else {
           this.updateCustoms(this.tableCustoms)
         }
@@ -167,20 +170,15 @@ export default {
     },
     getStorageMap () {
       let version = GlobalConfig.version
-      let rest = XEUtils.toStringJSON(localStorage.getItem('VXE_TOOLBAR_CUSTOMS'))
-      return rest && rest.version === version ? rest : { version }
+      let rest = XEUtils.toStringJSON(localStorage.getItem(this.storageKey))
+      return rest && rest._v === version ? rest : { _v: version }
     },
     saveStorageMap () {
-      let { id, tableCustoms, isCustomStorage } = this
-      if (isCustomStorage) {
+      let { id, tableCustoms, isStorage, storageKey } = this
+      if (isStorage) {
         let customStorageMap = this.getStorageMap()
-        customStorageMap[id] = tableCustoms.filter(column => !column.visible).map(column => {
-          return {
-            prop: column.property,
-            visible: column.visible
-          }
-        })
-        localStorage.setItem('VXE_TOOLBAR_CUSTOMS', XEUtils.toJSONString(customStorageMap))
+        customStorageMap[id] = tableCustoms.filter(column => !column.visible).map(column => column.property).join(',') || undefined
+        localStorage.setItem(storageKey, XEUtils.toJSONString(customStorageMap))
       }
     },
     updateSetting () {
@@ -249,23 +247,14 @@ export default {
           case 'delete_pending':
             $grid.triggerPendingEvent(evnt)
             break
-          case 'delete_selection':
-            $grid.commitProxy('delete')
+          case 'delete_selection': {
+            this.handleDeleteRow($grid, 'vxe.grid.deleteSelectRecord', () => $grid.commitProxy('delete'))
             break
-          case 'delete_rows':
-            let selectRecords = $grid.getSelectRecords()
-            if ($grid.isAlert) {
-              if (selectRecords.length) {
-                this.$XTool.confirm(GlobalConfig.i18n('vxe.grid.removeSelectRecord')).then(() => $grid.removeSelecteds()).catch(e => e)
-              } else {
-                this.$XTool.alert(GlobalConfig.i18n('vxe.grid.selectOneRecord')).catch(e => e)
-              }
-            } else {
-              if (selectRecords.length) {
-                $grid.removeSelecteds()
-              }
-            }
+          }
+          case 'remove_selection': {
+            this.handleDeleteRow($grid, 'vxe.grid.removeSelectRecord', () => $grid.removeSelecteds())
             break
+          }
           case 'save':
             $grid.commitProxy('save')
             break
@@ -277,6 +266,20 @@ export default {
             break
         }
         UtilTools.emitEvent($grid, 'toolbar-button-click', [{ button: item, $grid }, evnt])
+      }
+    },
+    handleDeleteRow ($grid, alertKey, callback) {
+      let selectRecords = $grid.getSelectRecords()
+      if ($grid.isAlert) {
+        if (selectRecords.length) {
+          this.$XTool.confirm(GlobalConfig.i18n(alertKey)).then(callback).catch(e => e)
+        } else {
+          this.$XTool.alert(GlobalConfig.i18n('vxe.grid.selectOneRecord')).catch(e => e)
+        }
+      } else {
+        if (selectRecords.length) {
+          callback()
+        }
       }
     }
   }

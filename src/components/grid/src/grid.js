@@ -198,8 +198,8 @@ export default {
           }
           case 'delete': {
             if (ajax.delete) {
-              this.removeSelecteds()
-              return this.validate().then(() => {
+              let selectRecords = this.getSelectRecords()
+              this.remove(selectRecords).then(() => {
                 let removeRecords = this.getRemoveRecords()
                 let body = { removeRecords }
                 if (removeRecords.length) {
@@ -210,7 +210,7 @@ export default {
                     this.tableLoading = false
                   }).then(() => this.commitProxy('reload'))
                 } else {
-                  if (isAlert) {
+                  if (isAlert && !selectRecords.length) {
                     this.$XTool.alert(GlobalConfig.i18n('vxe.grid.selectOneRecord')).catch(e => e)
                   }
                 }

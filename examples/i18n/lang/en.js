@@ -1,7 +1,7 @@
 module.exports = {
   app: {
     header: {
-      desc: 'A powerful, flexible, configurable, extensible Vue table component.'
+      desc: 'A powerful, flexible, configurable, extensible Vue Table component.'
     },
     aside: {
       nav: {
@@ -136,24 +136,78 @@ module.exports = {
         type: 'Type / Return type',
         enum: 'Accepted Values',
         defVal: 'Default / Arguments',
-        props: 'Table Attributes'
+        props: 'Table Attributes',
+        events: 'Table events',
+        slots: 'Table slots',
+        methods: 'Table methods'
       },
       table: {
         desc: {
           data: 'Table data',
           customs: 'Initialize the binding to show/hide columns;You can modify the display or hide columns by using the visible property',
           height: 'Table height, supports adaptive or fixed width and height',
-          maxHeight: 'Max height of the table',
+          maxHeight: 'Maximum height of the table',
           autoResize: 'Whether to automatically listen to the parent container to adjust the table width and height in a responsive manner (this may be used if you need to automatically follow the parent container\'s height)',
           resizable: 'Whether drag column width resizing is allowed for all columns',
           stripe: 'Whether with zebra stripes',
           border: 'Whether there is a vertical border',
-          size: 'Table size'
+          size: 'Table size',
+          fit: 'Whether the width of all columns is self-supporting',
+          loading: 'Whether the table is loaded',
+          showHeader: 'Whether to display the header',
+          startIndex: '只对 type=index 的列有效，动态索引的起始值',
+          highlightCurrentRow: 'Whether to highlight the currently selected row',
+          highlightHoverRow: 'Mouse over a row to highlight',
+          rowClassName: '给行附加 className，也可以是函数 Function({seq, row, rowIndex})',
+          cellClassName: '给单元格附加 className，也可以是函数 Function({seq, row, rowIndex, column, columnIndex})',
+          headerRowClassName: '给表头的行附加 className，也可以是函数 Function({headIndex})',
+          headerCellClassName: '给表头的单元格附加 className，也可以是函数 Function({headIndex, column, columnIndex})',
+          footerRowClassName: '给表尾的行附加 className，也可以是函数 Function({footIndex})',
+          footerCellClassName: '给表尾的单元格附加 className，也可以是函数 Function({footIndex, column, columnIndex})',
+          showFooter: 'Whether to display table end totals',
+          footerMethod: '表尾合计的计算方法 Function({columns, data})',
+          spanMethod: '合并行或列，该函数 Function({seq, row, rowIndex, column, columnIndex, data}) 返回计算后的值',
+          showAllOverflow: 'Sets all content to appear as ellipses if it is too long',
+          showHeaderAllOverflow: 'Sets the header to show ellipsis when all content is too long',
+          rowKey: 'Key of row data, corresponding to the Key attribute of virtual DOM in row rendering (not required for non-exceptional cases)',
+          radioConfig: 'Radio configuration',
+          selectConfig: 'Select multiple configuration',
+          tooltipConfig: 'tooltip configuration',
+          expandConfig: 'Expand the row configuration',
+          treeConfig: 'Tree configuration',
+          contextMenu: 'context menu configuration',
+          mouseConfig: 'Mouse configuration',
+          keyboardConfig: 'Keyboard configuration',
+          editConfig: 'Editable configuration',
+          editRules: 'Checksum rule configuration entries',
+          optimization: 'Optimize configuration'
         }
       },
       tableColumn: {
         desc: {
-          type: 'The type of the column'
+          type: 'The type of the column',
+          prop: 'Column field name',
+          label: 'Column label',
+          width: 'Column width',
+          minWidth: 'Minimum height of the column,The remaining space is automatically allocated proportionally',
+          resizable: 'Whether column resizing allows dragging column widths',
+          fixed: 'Fix the column to the left or right (note: fixed columns should be left and right)',
+          align: 'Column on its way',
+          headerAlign: 'Alignment of header columns',
+          showOverflow: 'Appears as an ellipsis when the content is too long',
+          showHeaderOverflow: 'Appears as an ellipsis when the header content is too long',
+          formatter: 'Format display content, Function({cellValue, row, rowIndex, column, columnIndex})',
+          indexMethod: '只对 type=index 有效，自定义索引方法 Function({row, rowIndex, column, columnIndex})',
+          sortable: '是否允许列排序',
+          sortBy: '只对 sortable 有效，自定义排序的属性',
+          remoteSort: '是否使用服务端排序，如果设置为 true 则不会对数据进行处理',
+          filters: 'Configure filter conditions',
+          filterMultiple: '只对 filters 有效，筛选是否允许多选',
+          filterMethod: '只对 filters 有效，自定义筛选方法 Function({value, row, column})',
+          remoteFilter: '是否使用服务端筛选，如果设置为 true 则不会对数据进行处理',
+          treeNode: '只对 tree-config 配置时有效，指定为树节点',
+          columnKey: 'Key for column rendering, corresponding to the key attribute of the virtual DOM in column rendering (not required for non-exceptional cases)',
+          editRender: 'Column edit configuration items'
         }
       }
     }

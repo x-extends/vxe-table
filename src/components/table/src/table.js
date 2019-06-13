@@ -1794,7 +1794,7 @@ export default {
             }
             // 如果存在父节点，更新父节点状态
             let matchObj = XEUtils.findTree(tableFullData, item => item === row, treeConfig)
-            if (matchObj.parent) {
+            if (matchObj && matchObj.parent) {
               let selectItems = matchObj.items.filter(item => XEUtils.get(item, property))
               return this.triggerCheckRowEvent(evnt, { row: matchObj.parent }, selectItems.length === matchObj.items.length ? true : (selectItems.length || value === -1 ? -1 : false))
             }
@@ -1821,7 +1821,7 @@ export default {
             }
             // 如果存在父节点，更新父节点状态
             let matchObj = XEUtils.findTree(tableFullData, item => item === row, treeConfig)
-            if (matchObj.parent) {
+            if (matchObj && matchObj.parent) {
               let selectItems = matchObj.items.filter(item => selection.indexOf(item) > -1)
               return this.triggerCheckRowEvent(evnt, { row: matchObj.parent }, selectItems.length === matchObj.items.length ? true : (selectItems.length || value === -1 ? -1 : false))
             }

@@ -63,6 +63,11 @@
             pageSizes: [10, 15, 20, 50, 100],
             layouts: ['PrevJump', 'PrevPage', 'Jump', 'PageCount', 'NextPage', 'NextJump', 'Sizes', 'Total']
           },
+          // 默认工具栏参数
+          toolbar: {
+            setting: false,
+            buttons: []
+          },
           // 默认优化配置项
           optimization : {
             animat: true,

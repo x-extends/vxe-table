@@ -136,7 +136,10 @@ module.exports = {
         type: '类型 / 返回类型',
         enum: '可选值',
         defVal: '默认值 / 参数',
-        props: '参数'
+        props: '参数',
+        events: '事件',
+        slots: '插槽',
+        methods: '方法'
       },
       table: {
         desc: {
@@ -148,12 +151,63 @@ module.exports = {
           resizable: '所有的列是否允许拖动列宽调整大小',
           stripe: '是否带有斑马纹',
           border: '是否带有纵向边框',
-          size: '表格的尺寸'
+          size: '表格的尺寸',
+          fit: '所有列的宽度是否自撑开',
+          loading: '表格是否显示加载中',
+          showHeader: '是否显示表头',
+          startIndex: '只对 type=index 的列有效，动态索引的起始值',
+          highlightCurrentRow: '是否要高亮当前选中行',
+          highlightHoverRow: '鼠标移到行是否要高亮显示',
+          rowClassName: '给行附加 className，也可以是函数 Function({seq, row, rowIndex})',
+          cellClassName: '给单元格附加 className，也可以是函数 Function({seq, row, rowIndex, column, columnIndex})',
+          headerRowClassName: '给表头的行附加 className，也可以是函数 Function({headIndex})',
+          headerCellClassName: '给表头的单元格附加 className，也可以是函数 Function({headIndex, column, columnIndex})',
+          footerRowClassName: '给表尾的行附加 className，也可以是函数 Function({footIndex})',
+          footerCellClassName: '给表尾的单元格附加 className，也可以是函数 Function({footIndex, column, columnIndex})',
+          showFooter: '是否显示表尾合计',
+          footerMethod: '表尾合计的计算方法 Function({columns, data})',
+          spanMethod: '合并行或列，该函数 Function({seq, row, rowIndex, column, columnIndex, data}) 返回计算后的值',
+          showAllOverflow: '设置所有内容过长时显示为省略号（如果是固定列建议设置该值，提升渲染速度）',
+          showHeaderAllOverflow: '设置表头所有内容过长时显示为省略号',
+          rowKey: '行数据的 Key，对应行渲染中虚拟 DOM 的 key 属性（非特殊情况下不需要使用）',
+          radioConfig: '单选配置项',
+          selectConfig: '多选配置项',
+          tooltipConfig: 'tooltip 配置项',
+          expandConfig: '展开行配置项',
+          treeConfig: '树形结构配置项',
+          contextMenu: '快捷菜单配置项',
+          mouseConfig: '鼠标配置项',
+          keyboardConfig: '按键配置项',
+          editConfig: '可编辑配置项',
+          editRules: '校验规则配置项（默认情况下是非强制性的，无论是否必填都允许编辑其他的单元格）',
+          optimization: '优化配置项'
         }
       },
       tableColumn: {
         desc: {
-          type: '列的类型'
+          type: '列的类型',
+          prop: '列属性',
+          label: '列标题',
+          width: '列宽度',
+          minWidth: '最小列宽度；会自动将剩余空间按比例分配',
+          resizable: '列是否允许拖动列宽调整大小',
+          fixed: '将列固定在左侧或者右侧（注意：固定列应该放在左右两侧的位置）',
+          align: '列对其方式',
+          headerAlign: '表头列的对齐方式',
+          showOverflow: '当内容过长时显示为省略号',
+          showHeaderOverflow: '当表头内容过长时显示为省略号',
+          formatter: '格式化显示内容 Function({cellValue, row, rowIndex, column, columnIndex})',
+          indexMethod: '只对 type=index 有效，自定义索引方法 Function({row, rowIndex, column, columnIndex})',
+          sortable: '是否允许列排序',
+          sortBy: '只对 sortable 有效，自定义排序的属性',
+          remoteSort: '是否使用服务端排序，如果设置为 true 则不会对数据进行处理',
+          filters: '配置筛选条件',
+          filterMultiple: '只对 filters 有效，筛选是否允许多选',
+          filterMethod: '只对 filters 有效，自定义筛选方法 Function({value, row, column})',
+          remoteFilter: '是否使用服务端筛选，如果设置为 true 则不会对数据进行处理',
+          treeNode: '只对 tree-config 配置时有效，指定为树节点',
+          columnKey: '列渲染的 key，对应列渲染中虚拟 DOM 的 key 属性（非特殊情况下不需要使用）',
+          editRender: '列编辑配置项'
         }
       }
     }

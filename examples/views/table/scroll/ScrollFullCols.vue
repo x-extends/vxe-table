@@ -4,7 +4,7 @@
     <p><grid-api-link name="vxe-grid"/> 的性能比 <table-api-link name="vxe-table"/> 快 n 倍，因为不需要为每个 <table-column-api-link name="vxe-table-column"/>  创建实例，列越多越能体现出来</p>
     <p>大数据不建议使用双向绑定的 <table-api-link name="data"/> 属性（vue 监听会大数据会短暂的卡顿），建议使用 <table-api-link prop="loadData"/>/<table-api-link prop="reloadData"/> 函数</p>
     <p>对于多选 type=<table-column-api-link prop="selection"/> 当数据量海量时应该绑定 <table-api-link prop="checkProp"/> 属性渲染速度可以提升n倍以上</p>
-    <p>数据超大情况下必须使用：<table-api-link prop="show-all-overflow"/>，<table-api-link prop="show-header-all-overflow"/> 参数以及调整好 <table-api-link prop="optimization"/> ：{<table-api-link prop="scrollX"/>,<table-api-link prop="scrollY"/>} 适合的参数可以更加流畅</p>
+    <p>数据超大情况下必须使用：<table-api-link prop="show-all-overflow"/>，<table-api-link prop="show-header-all-overflow"/> 参数以及调整好 <table-api-link prop="optimization"/> ：{scrollX,scrollY} 适合的参数可以更加流畅</p>
 
     <vxe-grid
       ref="xTable"

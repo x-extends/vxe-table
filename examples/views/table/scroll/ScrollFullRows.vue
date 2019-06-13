@@ -3,7 +3,7 @@
     <p>可视渲染，加载 10 万行，左右固定列，表尾合计</p>
     <p>大数据不建议使用双向绑定的 data 属性（vue 监听会大数据会短暂的卡顿），建议使用 loadData/reloadData 函数</p>
     <p>对于多选 type=<table-column-api-link prop="selection"/> 当数据量海量时应该绑定 <table-api-link prop="checkProp"/> 属性渲染速度可以提升n倍以上</p>
-    <p>数据超大情况下必须使用：<table-api-link prop="show-all-overflow"/>，<table-api-link prop="show-header-all-overflow"/> 参数以及调整好 <table-api-link prop="optimization"/> ：{<table-api-link prop="scrollX"/>,<table-api-link prop="scrollY"/>} 适合的参数可以更加流畅</p>
+    <p>数据超大情况下必须使用：<table-api-link prop="show-all-overflow"/>，<table-api-link prop="show-header-all-overflow"/> 参数以及调整好 <table-api-link prop="optimization"/> ：{scrollX,scrollY} 适合的参数可以更加流畅</p>
 
     <vxe-table
       ref="xTable"

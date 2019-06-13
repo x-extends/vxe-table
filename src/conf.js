@@ -45,6 +45,11 @@ const GlobalConfig = {
     // pageSizes: [10, 15, 20, 50, 100],
     // layouts: ['PrevJump', 'PrevPage', 'Jump', 'PageCount', 'NextPage', 'NextJump', 'Sizes', 'Total']
   },
+  toolbar: {
+    // storageKey: 'VXE_TABLE_CUSTOM_HIDDEN',
+    // setting: false,
+    // buttons: []
+  },
   i18n: (key, value) => XEUtils.get(zhCNLocat, key)
 }
 

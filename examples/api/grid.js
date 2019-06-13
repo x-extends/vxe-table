@@ -84,7 +84,7 @@ const apis = [
                     list: []
                   },
                   {
-                    name: 'delete_rows',
+                    name: 'remove_selection',
                     desc: '移除选中行',
                     type: '',
                     enum: '',
@@ -314,7 +314,7 @@ const apis = [
   },
   {
     name: 'Slots',
-    desc: '插槽',
+    descKey: 'app.api.title.slots',
     type: '',
     enum: '',
     defVal: '',
@@ -322,7 +322,7 @@ const apis = [
   },
   {
     name: 'Events',
-    desc: '事件',
+    descKey: 'app.api.title.events',
     type: '',
     enum: '',
     defVal: '',
@@ -355,7 +355,7 @@ const apis = [
   },
   {
     name: 'Methods',
-    desc: '方法',
+    descKey: 'app.api.title.methods',
     type: '',
     enum: '',
     defVal: '',

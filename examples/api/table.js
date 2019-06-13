@@ -190,7 +190,7 @@ const apis = [
       },
       {
         name: 'fit',
-        desc: '列的宽度是否自撑开',
+        descKey: 'app.api.table.desc.fit',
         type: 'Boolean',
         enum: '',
         defVal: 'true',
@@ -198,7 +198,7 @@ const apis = [
       },
       {
         name: 'loading',
-        desc: '表格是否显示加载中',
+        descKey: 'app.api.table.desc.loading',
         type: 'Boolean',
         enum: '',
         defVal: 'true',
@@ -206,15 +206,15 @@ const apis = [
       },
       {
         name: 'show-header',
-        desc: '是否显示表头',
+        descKey: 'app.api.table.desc.showHeader',
         type: 'Boolean',
         enum: '',
         defVal: 'false',
         list: []
       },
       {
-        name: 'startIndex',
-        desc: '只对 type=index 的列有效，动态索引序号的起始值',
+        name: 'start-index',
+        descKey: 'app.api.table.desc.startIndex',
         type: 'Number',
         enum: '',
         defVal: '0',
@@ -222,7 +222,7 @@ const apis = [
       },
       {
         name: 'highlight-current-row',
-        desc: '是否要高亮当前选中行',
+        descKey: 'app.api.table.desc.highlightCurrentRow',
         type: 'Boolean',
         enum: '',
         defVal: 'false',
@@ -230,7 +230,7 @@ const apis = [
       },
       {
         name: 'highlight-hover-row',
-        desc: '鼠标移到行是否要高亮显示',
+        descKey: 'app.api.table.desc.highlightHoverRow',
         type: 'Boolean',
         enum: '',
         defVal: 'false',
@@ -238,7 +238,7 @@ const apis = [
       },
       {
         name: 'row-class-name',
-        desc: '给行附加 className，也可以是函数 Function({seq, row, rowIndex})',
+        descKey: 'app.api.table.desc.rowClassName',
         type: 'String,Function',
         enum: '',
         defVal: '',
@@ -246,7 +246,7 @@ const apis = [
       },
       {
         name: 'cell-class-name',
-        desc: '给单元格附加 className，也可以是函数 Function({seq, row, rowIndex, column, columnIndex})',
+        descKey: 'app.api.table.desc.cellClassName',
         type: 'String,Function',
         enum: '',
         defVal: '',
@@ -254,7 +254,7 @@ const apis = [
       },
       {
         name: 'header-row-class-name',
-        desc: '给表头的行附加 className，也可以是函数 Function({headIndex})',
+        descKey: 'app.api.table.desc.headerRowClassName',
         type: 'String,Function',
         enum: '',
         defVal: '',
@@ -262,7 +262,7 @@ const apis = [
       },
       {
         name: 'header-cell-class-name',
-        desc: '给表头的单元格附加 className，也可以是函数 Function({headIndex, column, columnIndex})',
+        descKey: 'app.api.table.desc.headerCellClassName',
         type: 'String,Function',
         enum: '',
         defVal: '',
@@ -270,7 +270,7 @@ const apis = [
       },
       {
         name: 'footer-row-class-name',
-        desc: '给表尾的行附加 className，也可以是函数 Function({footIndex})',
+        descKey: 'app.api.table.desc.footerRowClassName',
         type: 'String,Function',
         enum: '',
         defVal: '',
@@ -278,7 +278,7 @@ const apis = [
       },
       {
         name: 'footer-cell-class-name',
-        desc: '给表尾的单元格附加 className，也可以是函数 Function({footIndex, column, columnIndex})',
+        descKey: 'app.api.table.desc.footerCellClassName',
         type: 'String,Function',
         enum: '',
         defVal: '',
@@ -286,7 +286,7 @@ const apis = [
       },
       {
         name: 'show-footer',
-        desc: '是否显示表尾合计',
+        descKey: 'app.api.table.desc.showFooter',
         type: 'Boolean',
         enum: '',
         defVal: 'false',
@@ -294,7 +294,7 @@ const apis = [
       },
       {
         name: 'footer-method',
-        desc: '表尾合计的计算方法 Function({columns, data})',
+        descKey: 'app.api.table.desc.footerMethod',
         type: 'Function',
         enum: '',
         defVal: '',
@@ -302,7 +302,7 @@ const apis = [
       },
       {
         name: 'span-method',
-        desc: '合并行或列，该函数 Function({seq, row, rowIndex, column, columnIndex, data}) 返回计算后的值',
+        descKey: 'app.api.table.desc.spanMethod',
         type: 'Object',
         enum: '',
         defVal: '{ rowspan: 1, colspan: 1}',
@@ -310,7 +310,7 @@ const apis = [
       },
       {
         name: 'show-all-overflow',
-        desc: '设置所有内容过长时显示为省略号（如果是固定列建议设置该值，提升渲染速度）',
+        descKey: 'app.api.table.desc.showAllOverflow',
         type: 'Boolean,String',
         enum: 'ellipsis（只显示省略号）,title（并且显示为原生 title）,tooltip（并且显示为 tooltip 提示）',
         defVal: '',
@@ -318,7 +318,7 @@ const apis = [
       },
       {
         name: 'show-header-all-overflow',
-        desc: '设置表头所有内容过长时显示为省略号',
+        descKey: 'app.api.table.desc.showHeaderAllOverflow',
         type: 'Boolean,String',
         enum: 'ellipsis（只显示省略号）,title（并且显示为原生 title）,tooltip（并且显示为 tooltip 提示）',
         defVal: '',
@@ -326,7 +326,7 @@ const apis = [
       },
       {
         name: 'row-key',
-        desc: '行数据的 Key，对应行渲染中虚拟 DOM 的 key 属性（非特殊情况下不需要使用）',
+        descKey: 'app.api.table.desc.rowKey',
         type: 'Number,String',
         enum: '',
         defVal: '',
@@ -334,7 +334,7 @@ const apis = [
       },
       {
         name: 'radio-config',
-        desc: '单选配置项',
+        descKey: 'app.api.table.desc.radioConfig',
         type: 'Object',
         enum: '',
         defVal: '',
@@ -351,7 +351,7 @@ const apis = [
       },
       {
         name: 'select-config',
-        desc: '多选配置项',
+        descKey: 'app.api.table.desc.selectConfig',
         type: 'Object',
         enum: '',
         defVal: '',
@@ -416,7 +416,7 @@ const apis = [
       },
       {
         name: 'tooltip-config',
-        desc: 'tooltip 配置项',
+        descKey: 'app.api.table.desc.tooltipConfig',
         type: 'Object',
         enum: '',
         defVal: '',
@@ -441,7 +441,7 @@ const apis = [
       },
       {
         name: 'expand-config',
-        desc: '展开行配置项',
+        descKey: 'app.api.table.desc.expandConfig',
         type: 'Object',
         enum: '',
         defVal: '',
@@ -490,7 +490,7 @@ const apis = [
       },
       {
         name: 'tree-config',
-        desc: '树形结构配置项',
+        descKey: 'app.api.table.desc.treeConfig',
         type: 'Object',
         enum: '',
         defVal: '',
@@ -555,7 +555,7 @@ const apis = [
       },
       {
         name: 'context-menu',
-        desc: '快捷菜单配置项',
+        descKey: 'app.api.table.desc.contextMenu',
         type: 'Object',
         enum: '',
         defVal: '',
@@ -588,7 +588,7 @@ const apis = [
       },
       {
         name: 'mouse-config',
-        desc: '鼠标配置项',
+        descKey: 'app.api.table.desc.mouseConfig',
         type: 'Object',
         enum: '',
         defVal: '',
@@ -605,7 +605,7 @@ const apis = [
       },
       {
         name: 'keyboard-config',
-        desc: '按键配置项',
+        descKey: 'app.api.table.desc.keyboardConfig',
         type: 'Object',
         enum: '',
         defVal: '',
@@ -662,7 +662,7 @@ const apis = [
       },
       {
         name: 'edit-config',
-        desc: '可编辑配置项',
+        descKey: 'app.api.table.desc.editConfig',
         type: 'Object',
         enum: '',
         defVal: '',
@@ -727,7 +727,7 @@ const apis = [
       },
       {
         name: 'edit-rules',
-        desc: '校验规则配置项（默认情况下是非强制性的，无论是否必填都允许编辑其他的单元格）',
+        descKey: 'app.api.table.desc.editRules',
         type: 'Object',
         enum: '',
         defVal: '',
@@ -791,8 +791,8 @@ const apis = [
         ]
       },
       {
-        name: 'optimization ',
-        desc: '优化配置项',
+        name: 'optimization',
+        descKey: 'app.api.table.desc.optimization',
         type: 'Object',
         enum: '',
         defVal: '',
@@ -901,7 +901,7 @@ const apis = [
   },
   {
     name: 'Slots',
-    desc: '插槽',
+    descKey: 'app.api.title.slots',
     type: '',
     enum: '',
     defVal: '',
@@ -918,7 +918,7 @@ const apis = [
   },
   {
     name: 'Events',
-    desc: '事件',
+    descKey: 'app.api.title.events',
     type: '',
     enum: '',
     defVal: '',
@@ -1095,7 +1095,7 @@ const apis = [
   },
   {
     name: 'Methods',
-    desc: '方法',
+    descKey: 'app.api.title.methods',
     type: '',
     enum: '',
     defVal: '',
