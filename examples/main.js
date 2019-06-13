@@ -82,7 +82,7 @@ function mockData () {
       age: XEUtils.random(18, 35),
       region: index % 4 === 0 ? [19, 199, 1773] : index % 3 === 0 ? [9, 73, 719] : [1, 1, 5],
       rate: XEUtils.random(0, 5),
-      address: `地址 地址地址 地址地址 址地址址地址 址地址 址地址  址地址 址地址  址地址 址地址址地址址地址 地址${index}`,
+      address: `地址 地址地址 地址地址 址地址 址地址  址地址 址地址址地址址地址 地址${index}`,
       updateTime: currTime,
       createTime: currTime,
       attr1: '',

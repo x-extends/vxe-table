@@ -28,7 +28,7 @@
           <span v-html="row.age"></span>
         </template>
       </vxe-table-column>
-      <vxe-table-column prop="address" label="Address" show-overflow>
+      <vxe-table-column prop="address" label="Address">
         <template v-slot="{ row }">
           <span v-html="row.address"></span>
         </template>
@@ -126,7 +126,7 @@ export default {
               <span v-html="row.age"></span>
             </template>
           </vxe-table-column>
-          <vxe-table-column prop="address" label="Address" show-overflow>
+          <vxe-table-column prop="address" label="Address">
             <template v-slot="{ row }">
               <span v-html="row.address"></span>
             </template>
