@@ -3,7 +3,7 @@
     <p>使用自定义模板渲染，通过 slots 属性编写 JSX 模板或 VNode</p>
     <p>default：显示内容（建议优先使用 formatter）</p>
     <p>header：显示表头</p>
-    <p>edit：编辑内容（建议优先使用渲染器）</p>
+    <p>edit：编辑内容（建议使用渲染器）</p>
 
     <vxe-grid
       border
