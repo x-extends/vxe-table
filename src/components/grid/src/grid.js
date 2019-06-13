@@ -283,7 +283,7 @@ export default {
           }
         })
         if (minus.length) {
-          this.pendingRecords = pendingRecords.filter(item => minus.some(data => data !== item)).concat(plus)
+          this.pendingRecords = pendingRecords.filter(item => minus.indexOf(item) === -1).concat(plus)
         } else if (plus.length) {
           this.pendingRecords = pendingRecords.concat(plus)
         }

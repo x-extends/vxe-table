@@ -729,6 +729,7 @@ export default {
         }
       }
       [].unshift.apply(editStore.insertList, newRecords)
+      this.checkSelectionStatus()
       return this.$nextTick().then(() => {
         this.recalculate()
         return { row: newRecords.length ? newRecords[newRecords.length - 1] : null, rows: newRecords }
@@ -1840,8 +1841,13 @@ export default {
       }
     },
     checkSelectionStatus () {
-      let { tableFullData, selectConfig = {}, selection, treeIndeterminates } = this
+      let { tableFullData, editStore, selectConfig = {}, selection, treeIndeterminates } = this
       let { checkProp: property, checkMethod } = selectConfig
+      let { insertList } = editStore
+      // 包含新增的数据
+      if (insertList.length) {
+        tableFullData = tableFullData.concat(insertList)
+      }
       if (property) {
         this.isAllSelected = tableFullData.length && tableFullData.every(
           checkMethod
@@ -1880,9 +1886,14 @@ export default {
       return this.$nextTick()
     },
     setAllSelection (value) {
-      let { tableFullData, selectConfig = {}, treeConfig, selection } = this
+      let { tableFullData, editStore, selectConfig = {}, treeConfig, selection } = this
       let { checkProp: property, reserve, checkMethod } = selectConfig
+      let { insertList } = editStore
       let selectRows = []
+      // 包含新增的数据
+      if (insertList.length) {
+        tableFullData = tableFullData.concat(insertList)
+      }
       if (property) {
         let updateValue = (row, rowIndex) => {
           if (!checkMethod || checkMethod({ row, rowIndex })) {

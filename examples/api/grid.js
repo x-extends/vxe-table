@@ -68,7 +68,7 @@ const apis = [
                     list: []
                   },
                   {
-                    name: 'delete_pending',
+                    name: 'mark_cancel',
                     desc: '将选中的数据标记或取消删除',
                     type: '',
                     enum: '',

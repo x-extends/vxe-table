@@ -244,7 +244,7 @@ export default {
           case 'insert_actived':
             $grid.insert().then(({ row }) => $grid.setActiveRow(row))
             break
-          case 'delete_pending':
+          case 'mark_cancel':
             $grid.triggerPendingEvent(evnt)
             break
           case 'delete_selection': {

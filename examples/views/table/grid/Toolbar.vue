@@ -51,7 +51,7 @@ export default {
         buttons: [
           { code: 'reload', name: '刷新' },
           { code: 'insert_actived', name: '新增并激活' },
-          { code: 'delete_pending', name: '标记/取消' },
+          { code: 'mark_cancel', name: '标记/取消' },
           { code: 'delete_selection', name: '删除选中' },
           { code: 'remove_selection', name: '移除' },
           { code: 'save', name: '保存' },
@@ -109,7 +109,7 @@ export default {
                   { code: 'reload', name: '刷新' },
                   { code: 'insert', name: '新增' },
                   { code: 'insert_actived', name: '新增并激活' },
-                  { code: 'delete_pending', name: '标记/取消' },
+                  { code: 'mark_cancel', name: '标记/取消' },
                   { code: 'delete_selection', name: '删除选中' },
                   { code: 'remove_selection', name: '移除' },
                   { code: 'save', name: '保存' },
