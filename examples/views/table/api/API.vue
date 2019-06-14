@@ -55,7 +55,7 @@ import radioAPI from '../../../api/radio'
 import checkboxAPI from '../../../api/checkbox'
 import inputAPI from '../../../api/input'
 import buttonAPI from '../../../api/button'
-import alertAPI from '../../../api/alert'
+import messageBoxAPI from '../../../api/message-box'
 import tooltipAPI from '../../../api/tooltip'
 
 export default {
@@ -99,8 +99,8 @@ export default {
         case 'button':
           apis = buttonAPI
           break
-        case 'alert':
-          apis = alertAPI
+        case 'message-box':
+          apis = messageBoxAPI
           break
         case 'tooltip':
           apis = tooltipAPI

@@ -1,11 +1,94 @@
 <template>
   <div>
-    <h3>局部大小</h3>
-    <p>size 继承关系</p>
-    <p>&nbsp;&nbsp;&nbsp;&nbsp;每个组件都有 <table-api-link prop="size"/> 属性，默认是继承父组件，所以只要给局部的父组件设置 <table-api-link prop="size"/>，所有后代组件一律继承，该功能对于很多场景中都非常有用</p>
-    <p>&nbsp;&nbsp;&nbsp;&nbsp;如果需要设置全局大小尺寸也是可以，请参考下面即可</p>
-    <h3>全局参数</h3>
-    <p>修改默认的全局配置</p>
+    <h3>完整引入</h3>
+    <pre>
+      <code class="javascript">
+        npm install xe-utils vxe-table
+      </code>
+      <code class="javascript">
+        import Vue from 'vue'
+        import VXETable from 'vxe-table'
+        import 'vxe-table/lib/index.css'
+
+        Vue.use(VXETable)
+      </code>
+    </pre>
+    <h3>按需引入</h3>
+    <p>借助插件 <a class="link" href="https://www.npmjs.com/package/babel-plugin-import">babel-plugin-import</a> 可以实现按需加载组件，减少文件体积。然后在文件 .babelrc 中配置</p>
+    <pre>
+      <code class="javascript">
+        npm install babel-plugin-import -D
+      </code>
+      <code class="javascript">
+        {
+          "plugins": [
+            [
+              "import",
+              {
+                "libraryName": "vxe-table",
+                "style": true
+              }
+            ]
+          ]
+        }
+      </code>
+    </pre>
+    <p>最后这样按需引入组件，就可以减小体积了</p>
+    <pre>
+      <code class="javascript">
+        import {
+          VXETable,
+          Table,
+          TableColumn,
+          TableHeader,
+          TableBody,
+          TableFooter,
+          TableFilter,
+          Grid,
+          Excel,
+          ContextMenu,
+          Toolbar,
+          Pager,
+          Checkbox,
+          Radio,
+          Input,
+          Button,
+          MessageBox,
+          Tooltip
+        } from 'vxe-table'
+        import zhCNLocat from 'vxe-table/lib/locale/lang/zh-CN'
+
+        Vue.use(Table)
+        Vue.use(TableColumn)
+        Vue.use(TableHeader)
+        Vue.use(TableBody)
+        Vue.use(TableFooter)
+        Vue.use(TableFilter)
+        Vue.use(Grid)
+        Vue.use(Excel)
+        Vue.use(ContextMenu)
+        Vue.use(Toolbar)
+        Vue.use(Pager)
+        Vue.use(Checkbox)
+        Vue.use(Radio)
+        Vue.use(Input)
+        Vue.use(Button)
+        Vue.use(MessageBox)
+        Vue.use(Tooltip)
+
+        // 按需加载的方式默认是不带国际化的，需要自行导入
+        VXETable.setup({
+          i18n: (key, value) => VXETable.t(zhCNLocat, key)
+        })
+      </code>
+    </pre>
+    <h3>局部 size 设置</h3>
+    <pre>
+      <code class="xml">
+        每个组件都有 size 属性，默认是继承父组件，所以只要给局部的父组件设置 size，所有后代组件一律继承，该功能对于很多场景中都非常有用
+      </code>
+    </pre>
+    <h3>全局默认参数</h3>
     <pre>
       <code class="javascript">
         import Vue from 'vue'
@@ -85,53 +168,6 @@
             }
           }
         })
-      </code>
-    </pre>
-    <h3>主题</h3>
-    <p>修改默认的主题颜色</p>
-    <pre>
-      <code class="scss">
-        // Case 1. Use the default theme style.  使用默认的主题样式
-        @import 'vxe-table/lib/index.css';
-
-        // Case 2. Modify the table theme color.  修改表格主题颜色
-        // @import 'assets/style/vxe-table/variable.scss';
-        // @import 'vxe-table/src/style/default.scss';
-
-        // Case 3. If you need to completely rewrite the theme style, Copy the vxe-table/src/style directory into the project and modify it yourself.
-        // 如果需要完全重写主题样式，只需复制 vxe-table/src/style 目录到项目中自行修改就行（例如复制到 /assets
-        // @import 'assets/style/index.scss';
-      </code>
-    </pre>
-    <h3>国际化</h3>
-    <p>修改默认的国际化信息</p>
-    <pre>
-      <code class="javascript">
-        import Vue from 'vue'
-        import VueI18n from 'vxe-i18n'
-        import VXETable from 'vxe-table'
-        import zhCNLocat from 'vxe-table/lib/locale/lang/zh_CN'
-        import enLocat from 'vxe-table/lib/locale/lang/en'
-
-        const messages = {
-          zh_CN: {
-            ...zhCNLocat
-          },
-          en: {
-            ...enLocat
-          }
-        }
-
-        const i18n = new VueI18n({
-          locale: 'zh_CN',
-          messages,
-        })
-
-        Vue.use(VXETable, {
-          i18n: (key, value) => i18n.t(key, value)
-        })
-
-        new Vue({ i18n }).$mount('#app')
       </code>
     </pre>
   </div>

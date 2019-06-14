@@ -219,8 +219,8 @@ const apis = [
             list: []
           },
           {
-            name: 'alert',
-            desc: '使用自带的提示框',
+            name: 'message',
+            desc: '是否显示消息提示',
             type: 'Boolean,Object',
             enum: '',
             defVal: 'true',

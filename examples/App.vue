@@ -80,6 +80,18 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.theme',
+              locat: {
+                name: 'Theme'
+              }
+            },
+            {
+              label: 'app.aside.nav.i18n',
+              locat: {
+                name: 'I18n'
+              }
+            },
+            {
               label: 'app.aside.nav.advancedFunctions',
               locat: {
                 name: 'Advanced'
@@ -806,11 +818,11 @@ export default {
               }
             },
             {
-              label: 'app.aside.nav.vxeAlert',
+              label: 'app.aside.nav.vxeMessageBox',
               locat: {
                 name: 'TableAPI',
                 params: {
-                  name: 'alert'
+                  name: 'message-box'
                 }
               }
             // },

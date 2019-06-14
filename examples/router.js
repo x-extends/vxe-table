@@ -3,6 +3,8 @@ import Router from 'vue-router'
 
 import Install from './views/table/start/Install.vue'
 import Use from './views/table/start/Use.vue'
+import Theme from './views/table/start/Theme.vue'
+import I18n from './views/table/start/I18n.vue'
 import Advanced from './views/table/start/Advanced.vue'
 
 import TableBasic from './views/table/base/Basic.vue'
@@ -127,6 +129,16 @@ export default new Router({
       path: '/table/start/use',
       name: 'Use',
       component: Use
+    },
+    {
+      path: '/table/start/theme',
+      name: 'Theme',
+      component: Theme
+    },
+    {
+      path: '/table/start/i18n',
+      name: 'I18n',
+      component: I18n
     },
     {
       path: '/table/start/advanced',

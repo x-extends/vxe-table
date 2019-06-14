@@ -10,6 +10,7 @@ A powerful, flexible, configurable, extensible Vue Table component.
 
 * vxe-table 的设计理念
   * 精简的 API（简洁、高效、通用）
+  * 模块化表格（功能模块拆分，全部都可以按需加载）
   * 更加灵活的自定义配置项，更高的可扩展性（兼容任意组件库，不污染全局样式及变量）
   * 强大的功能的同时兼具性能（支持虚拟滚动渲染）
 
@@ -59,6 +60,34 @@ A powerful, flexible, configurable, extensible Vue Table component.
 * Keyboard navigation（全键盘操作）
 * Excel（Excel 表格）
 
+## Modules
+
+All modules are allowed to load on demand. （所有模块都允许按需加载）
+
+* table (主要核心)
+  * components （高级组件）
+    * gird （扩展）
+    * excel （Excel）
+  * modules （功能模块）
+    * table-column （列与单元格）
+    * table-header （表头）
+    * table-body （表内容）
+    * table-footer （表尾）
+    * table-filter （筛选）
+    * context-menu （快捷菜单）
+    * pager （分页 ）
+    * toolbar （工具栏）
+  * more （更多功能）
+    * checkbox （复选框）
+    * radio （单选框）
+    * input （输入框）
+    * message-box （消息提示框）
+    * button （按钮）
+  * plugins（插件）
+    * [vxe-table-plugin-element](https://www.npmjs.com/package/vxe-table-plugin-element) For integration [element-ui](https://www.npmjs.com/package/element-ui) components.
+    * [vxe-table-plugin-iview](https://www.npmjs.com/package/vxe-table-plugin-iview) For integration [iview](https://www.npmjs.com/package/iview) components.
+    * [vxe-table-plugin-antd](https://www.npmjs.com/package/vxe-table-plugin-antd) For integration [ant-design-vue](https://www.npmjs.com/package/ant-design-vue) components.
+
 ## Docs
 
 [To view the example](https://xuliangzhan.github.io/vxe-table/) [查看演示](https://xuliangzhan_admin.gitee.io/vxe-table/)  
@@ -92,6 +121,51 @@ Vue.use(VXETable, {
   tooltipConfig: {
     zIndex: 3000
   }
+})
+```
+
+## On demand （按需引入）
+
+借助插件 [babel-plugin-import](https://www.npmjs.com/package/babel-plugin-import) 可以实现按需加载组件，减少文件体积。然后在文件 .babelrc 中配置
+
+```javascript
+npm install babel-plugin-import -D
+```
+
+```javascript
+{
+  "plugins": [
+    [
+      "import",
+      {
+        "libraryName": "vxe-table",
+        "style": true
+      }
+    ]
+  ]
+}
+```
+
+最后这样按需引入组件，就可以减小体积了
+
+```javascript
+import {
+  VXETable,
+  Table,
+  TableColumn,
+  TableHeader,
+  TableBody
+} from 'vxe-table'
+import zhCNLocat from 'vxe-table/lib/locale/lang/zh-CN'
+
+Vue.use(Table)
+Vue.use(TableColumn)
+Vue.use(TableHeader)
+Vue.use(TableBody)
+
+// 按需加载的方式默认是不带国际化的，需要自行导入
+VXETable.setup({
+  i18n: (key, value) => VXETable.t(zhCNLocat, key)
 })
 ```
 
@@ -156,12 +230,6 @@ Vue.use(VXETable, {
 
 new Vue({ i18n }).$mount('#app')
 ```
-
-## Plugins
-
-* [vxe-table-plugin-element](https://www.npmjs.com/package/vxe-table-plugin-element) For integration [element-ui](https://www.npmjs.com/package/element-ui) components.
-* [vxe-table-plugin-iview](https://www.npmjs.com/package/vxe-table-plugin-iview) For integration [iview](https://www.npmjs.com/package/iview) components.
-* [vxe-table-plugin-antd](https://www.npmjs.com/package/vxe-table-plugin-antd) For integration [ant-design-vue](https://www.npmjs.com/package/ant-design-vue) components.
 
 ## Example
 

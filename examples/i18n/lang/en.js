@@ -8,6 +8,8 @@ module.exports = {
         start: 'Development',
         install: 'Install',
         use: 'Quick start',
+        theme: 'Custom theme',
+        i18n: 'Internationalization',
         advancedFunctions: 'Advanced Functions',
 
         basics: 'Basics',
@@ -115,7 +117,7 @@ module.exports = {
         vxeCheckbox: 'vxe-checkbox',
         vxeInput: 'vxe-input',
         vxeButton: 'vxe-button',
-        vxeAlert: 'vxe-alert',
+        vxeMessageBox: 'vxe-message-box',
         vxeTooltip: 'vxe-tooltip'
       }
     },

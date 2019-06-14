@@ -8,6 +8,8 @@ module.exports = {
         start: '开发指南',
         install: '安装',
         use: '快速上手',
+        theme: '自定义主题',
+        i18n: '国际化',
         advancedFunctions: '高级函数',
 
         basics: '基础功能',
@@ -115,7 +117,7 @@ module.exports = {
         vxeCheckbox: 'vxe-checkbox',
         vxeInput: 'vxe-input',
         vxeButton: 'vxe-button',
-        vxeAlert: 'vxe-alert',
+        vxeMessageBox: 'vxe-message-box',
         vxeTooltip: 'vxe-tooltip'
       }
     },

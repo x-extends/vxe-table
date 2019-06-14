@@ -7,8 +7,6 @@
       <code class="javascript">
         npm install xe-utils vxe-table
       </code>
-    </pre>
-    <pre>
       <code class="javascript">
         import Vue from 'vue'
         import VXETable from 'vxe-table'

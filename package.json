@@ -1,24 +1,29 @@
 {
   "name": "vxe-table",
-  "version": "1.0.10",
+  "version": "1.1.0-beta.1",
   "description": "A very powerful Vue table component.",
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "lib": "vue-cli-service build --no-clean --target lib --name index --dest lib src/index.js"
+    "build": "vue-cli-service build",
+    "lib:modules": "gulp build",
+    "lib:pack": "vue-cli-service build --target lib --name index --dest lib index.js",
+    "lib": "npm run lib:pack && npm run lib:modules"
   },
   "files": [
     "lib",
     "types",
-    "src"
+    "packages",
+    "components.js"
   ],
   "main": "lib/index.common.js",
   "style": "lib/index.css",
-  "unpkg": "lib/index.umd.js",
-  "jsdelivr": "lib/index.umd.js",
+  "unpkg": "lib/index.js",
+  "jsdelivr": "lib/index.js",
   "typings": "types/index.d.ts",
-  "dependencies": {},
+  "dependencies": {
+    "gulp-clean": "^0.4.0"
+  },
   "devDependencies": {
     "@babel/core": "^7.4.4",
     "@babel/preset-env": "^7.4.4",
