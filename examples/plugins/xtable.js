@@ -8,10 +8,10 @@ import TableHeader from '../../packages/table-header'
 import TableBody from '../../packages/table-body'
 import TableFooter from '../../packages/table-footer'
 import TableFilter from '../../packages/table-filter'
-import ContextMenu from '../../packages/context-menu'
-import Toolbar from '../../packages/toolbar'
 import Grid from '../../packages/grid'
 import Excel from '../../packages/excel'
+import ContextMenu from '../../packages/context-menu'
+import Toolbar from '../../packages/toolbar'
 import Pager from '../../packages/pager'
 import Checkbox from '../../packages/checkbox'
 import Radio from '../../packages/radio'
@@ -41,10 +41,10 @@ Vue.use(TableHeader)
 Vue.use(TableBody)
 Vue.use(TableFooter)
 Vue.use(TableFilter)
-Vue.use(ContextMenu)
-Vue.use(Toolbar)
 Vue.use(Grid)
 Vue.use(Excel)
+Vue.use(ContextMenu)
+Vue.use(Toolbar)
 Vue.use(Pager)
 Vue.use(Checkbox)
 Vue.use(Radio)
