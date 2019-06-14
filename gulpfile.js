@@ -100,9 +100,7 @@ gulp.task('build_style', gulp.series('build_modules', 'build_locale', () => {
 
 gulp.task('build_clean', gulp.series('build_style', 'build_rename', () => {
   return gulp.src([
-    'lib/demo.html',
-    'lib/index.umd.js',
-    'lib/index.umd.min.js'
+    'lib/demo.html'
   ])
     .pipe(clean())
 }))
