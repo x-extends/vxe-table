@@ -11,7 +11,7 @@ function addListener () {
   resizeTimeout = setTimeout(ResizeEvent.handle, GlobalConfig.resizeInterval || defaultInterval)
 }
 
-const ResizeEvent = {
+export const ResizeEvent = {
   on (comp, target, cb) {
     if (!eventStore.length) {
       addListener()

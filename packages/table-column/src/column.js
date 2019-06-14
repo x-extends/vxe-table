@@ -1,4 +1,4 @@
-import CellMethods from './cell'
+import Cell from './cell'
 import { UtilTools } from '../../tools'
 
 export default {
@@ -66,5 +66,5 @@ export default {
   render (h) {
     return h('div', this.$slots.default)
   },
-  methods: CellMethods
+  methods: Cell
 }

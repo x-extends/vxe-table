@@ -3,7 +3,7 @@ import GlobalConfig from '../../conf'
 import { Renderer } from '../../v-x-e-table'
 import { UtilTools } from '../../tools'
 
-const CellMethods = {
+const Cell = {
   createColumn ($table, _vm) {
     let { type, sortable, remoteSort, filters, editRender, treeNode } = _vm
     let { selectConfig, treeConfig } = $table
@@ -68,7 +68,7 @@ const CellMethods = {
     return [UtilTools.formatText(cellValue)]
   },
   renderTreeCell (h, params) {
-    return CellMethods.renderTreeIcon(h, params).concat(CellMethods.renderCell(h, params))
+    return Cell.renderTreeIcon(h, params).concat(Cell.renderCell(h, params))
   },
 
   /**
@@ -127,7 +127,7 @@ const CellMethods = {
     return [UtilTools.formatText(indexMethod ? indexMethod(params) : level ? `${level}.${seq}` : startIndex + seq)]
   },
   renderTreeIndexCell (h, params) {
-    return CellMethods.renderTreeIcon(h, params).concat(CellMethods.renderIndexCell(h, params))
+    return Cell.renderTreeIcon(h, params).concat(Cell.renderIndexCell(h, params))
   },
 
   /**
@@ -177,7 +177,7 @@ const CellMethods = {
     ]
   },
   renderTreeRadioCell (h, params) {
-    return CellMethods.renderTreeIcon(h, params).concat(CellMethods.renderRadioCell(h, params))
+    return Cell.renderTreeIcon(h, params).concat(Cell.renderRadioCell(h, params))
   },
 
   /**
@@ -268,7 +268,7 @@ const CellMethods = {
     ]
   },
   renderTreeSelectionCell (h, params) {
-    return CellMethods.renderTreeIcon(h, params).concat(CellMethods.renderSelectionCell(h, params))
+    return Cell.renderTreeIcon(h, params).concat(Cell.renderSelectionCell(h, params))
   },
   renderSelectionCellByProp (h, params) {
     let { $table } = params
@@ -317,7 +317,7 @@ const CellMethods = {
     ]
   },
   renderTreeSelectionCellByProp (h, params) {
-    return CellMethods.renderTreeIcon(h, params).concat(CellMethods.renderSelectionCellByProp(h, params))
+    return Cell.renderTreeIcon(h, params).concat(Cell.renderSelectionCellByProp(h, params))
   },
 
   /**
@@ -359,16 +359,16 @@ const CellMethods = {
    * 排序和筛选
    */
   renderSortAndFilterHeader (h, params) {
-    return CellMethods.renderHeader(h, params)
-      .concat(CellMethods.renderSortIcon(h, params))
-      .concat(CellMethods.renderFilterIcon(h, params))
+    return Cell.renderHeader(h, params)
+      .concat(Cell.renderSortIcon(h, params))
+      .concat(Cell.renderFilterIcon(h, params))
   },
 
   /**
    * 排序
    */
   renderSortHeader (h, params) {
-    return CellMethods.renderHeader(h, params).concat(CellMethods.renderSortIcon(h, params))
+    return Cell.renderHeader(h, params).concat(Cell.renderSortIcon(h, params))
   },
   renderSortIcon (h, params) {
     let { iconMap } = GlobalConfig
@@ -405,7 +405,7 @@ const CellMethods = {
    * 筛选
    */
   renderFilterHeader (h, params) {
-    return CellMethods.renderHeader(h, params).concat(CellMethods.renderFilterIcon(h, params))
+    return Cell.renderHeader(h, params).concat(Cell.renderFilterIcon(h, params))
   },
   renderFilterIcon (h, params) {
     let { iconMap } = GlobalConfig
@@ -451,27 +451,27 @@ const CellMethods = {
       editConfig && editConfig.showIcon === false ? null : h('i', {
         class: ['vxe-edit-icon', iconMap.edit]
       })
-    ].concat(CellMethods.renderHeader(h, params))
-      .concat(sortable || remoteSort ? CellMethods.renderSortIcon(h, params) : [])
-      .concat(filters && filters.length ? CellMethods.renderFilterIcon(h, params) : [])
+    ].concat(Cell.renderHeader(h, params))
+      .concat(sortable || remoteSort ? Cell.renderSortIcon(h, params) : [])
+      .concat(filters && filters.length ? Cell.renderFilterIcon(h, params) : [])
   },
   // 行格编辑模式
   renderRowEdit (h, params) {
     let { $table } = params
     let { actived } = $table.editStore
-    return CellMethods.runRenderer(h, params, this, actived && actived.row === params.row)
+    return Cell.runRenderer(h, params, this, actived && actived.row === params.row)
   },
   renderTreeRowEdit (h, params) {
-    return CellMethods.renderTreeIcon(h, params).concat(CellMethods.renderRowEdit(h, params))
+    return Cell.renderTreeIcon(h, params).concat(Cell.renderRowEdit(h, params))
   },
   // 单元格编辑模式
   renderCellEdit (h, params) {
     let { $table } = params
     let { actived } = $table.editStore
-    return CellMethods.runRenderer(h, params, this, actived && actived.row === params.row && actived.column === params.column)
+    return Cell.runRenderer(h, params, this, actived && actived.row === params.row && actived.column === params.column)
   },
   renderTreeCellEdit (h, params) {
-    return CellMethods.renderTreeIcon(h, params).concat(CellMethods.renderCellEdit(h, params))
+    return Cell.renderTreeIcon(h, params).concat(Cell.renderCellEdit(h, params))
   },
   runRenderer (h, params, _vm, isEdit) {
     let { $table, column } = params
@@ -485,8 +485,8 @@ const CellMethods = {
       }
       return compConf && compConf.renderEdit ? compConf.renderEdit(h, editRender, params, context) : []
     }
-    return compConf && compConf.renderCell ? compConf.renderCell(h, editRender, params, context) : CellMethods.renderCell(h, params)
+    return compConf && compConf.renderCell ? compConf.renderCell(h, editRender, params, context) : Cell.renderCell(h, params)
   }
 }
 
-export default CellMethods
+export default Cell

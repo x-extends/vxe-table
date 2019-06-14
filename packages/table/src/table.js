@@ -1,10 +1,9 @@
 import XEUtils from 'xe-utils'
-import ResizeEvent from './resize'
 import TableProps from './props'
 import GlobalConfig from '../../conf'
-import CellMethods from '../../table-column/src/cell'
+import Cell from '../../table-column/src/cell'
 import { Interceptor, Renderer } from '../../v-x-e-table'
-import { UtilTools, DomTools, ExportTools, GlobalEvent } from '../../tools'
+import { UtilTools, DomTools, ExportTools, GlobalEvent, ResizeEvent } from '../../tools'
 
 var rowUniqueId = 0
 
@@ -647,7 +646,7 @@ export default {
       return this.loadData(datas).then(this.handleDefaultExpand)
     },
     loadColumn (columns) {
-      let collectColumn = XEUtils.mapTree(columns, column => CellMethods.createColumn(this, column), this.headerProps)
+      let collectColumn = XEUtils.mapTree(columns, column => Cell.createColumn(this, column), this.headerProps)
       this.collectColumn = collectColumn
       this.tableFullColumn = UtilTools.getColumnList(collectColumn)
       if (this.customs) {
