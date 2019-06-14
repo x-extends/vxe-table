@@ -83,7 +83,7 @@ All modules are allowed to load on demand. （所有模块都允许按需加载�
     * input （输入框）
     * message-box （消息提示框）
     * button （按钮）
-  * plugins（插件）
+  * plugins（适配插件）
     * [vxe-table-plugin-element](https://www.npmjs.com/package/vxe-table-plugin-element) For integration [element-ui](https://www.npmjs.com/package/element-ui) components.
     * [vxe-table-plugin-iview](https://www.npmjs.com/package/vxe-table-plugin-iview) For integration [iview](https://www.npmjs.com/package/iview) components.
     * [vxe-table-plugin-antd](https://www.npmjs.com/package/vxe-table-plugin-antd) For integration [ant-design-vue](https://www.npmjs.com/package/ant-design-vue) components.
