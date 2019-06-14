@@ -53,8 +53,7 @@
           Radio,
           Input,
           Button,
-          MessageBox,
-          Tooltip
+          MessageBox
         } from 'vxe-table'
         import zhCNLocat from 'vxe-table/lib/locale/lang/zh-CN'
 
@@ -74,7 +73,6 @@
         Vue.use(Input)
         Vue.use(Button)
         Vue.use(MessageBox)
-        Vue.use(Tooltip)
 
         // 按需加载的方式默认是不带国际化的，需要自行导入
         VXETable.setup({

@@ -124,8 +124,9 @@ Vue.use(VXETable, {
 })
 ```
 
-## On demand （按需引入）
+## Import on demand
 
+By using the [babel-plugin-import](https://www.npmjs.com/package/babel-plugin-import) , you can load components on demand and reduce the size of files. First installation, then update .babelrc file  
 借助插件 [babel-plugin-import](https://www.npmjs.com/package/babel-plugin-import) 可以实现按需加载组件，减少文件体积。然后在文件 .babelrc 中配置
 
 ```javascript
@@ -146,6 +147,7 @@ npm install babel-plugin-import -D
 }
 ```
 
+Now you can import components like  
 最后这样按需引入组件，就可以减小体积了
 
 ```javascript
@@ -163,42 +165,11 @@ Vue.use(TableColumn)
 Vue.use(TableHeader)
 Vue.use(TableBody)
 
+// The on-demand mode is not internationalized by default and needs to be imported by itself
 // 按需加载的方式默认是不带国际化的，需要自行导入
 VXETable.setup({
   i18n: (key, value) => VXETable.t(zhCNLocat, key)
 })
-```
-
-## Theme
-
-Case 1. Use the default theme style.  
-使用默认的主题样式
-
-```javascript
-import VXETable from 'vxe-table'
-import 'vxe-table/lib/index.css'
-```
-
-Case 2. Modify the table theme color.  
-修改表格主题颜色
-
-```scss
-// 引入变量
-@import 'vxe-table/src/style/variable.scss';
-// 局部覆盖
-$vxe-font-color: #606266;
-$vxe-table-header-background-color: #f8f8f9;
-$vxe-table-border-color: #e8eaec;
-$vxe-table-background-color: #ffffff;
-// 引入样式
-@import 'vxe-table/src/style/default.scss';
-```
-
-Case 3. If you need to completely rewrite the theme style, Copy the vxe-table/src/style directory into the project and modify it yourself.  
-如果需要完全重写主题样式，只需复制 vxe-table/src/style 目录到项目中自行修改就行（例如复制到 /assets）
-
-```scss
-@import 'assets/style/index.scss';
 ```
 
 ## I18n
