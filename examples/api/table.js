@@ -916,7 +916,7 @@ const apis = [
     list: [
       {
         name: 'empty',
-        desc: '空数据时显示的文本内容',
+        descKey: 'app.api.table.desc.empty',
         type: '',
         enum: '',
         defVal: '暂无数据',
@@ -933,7 +933,7 @@ const apis = [
     list: [
       {
         name: 'select-all',
-        desc: '只对 type=selection 有效，当手动勾选全选时触发的事件',
+        descKey: 'app.api.table.desc.selectAll',
         type: '',
         enum: '',
         defVal: '{selection,checked},event',
@@ -941,7 +941,7 @@ const apis = [
       },
       {
         name: 'select-change',
-        desc: '只对 type=selection,radio 有效，当手动勾选时触发的事件',
+        descKey: 'app.api.table.desc.selectChange',
         type: '',
         enum: '',
         defVal: '{selection,checked,row,column},event',
@@ -949,7 +949,7 @@ const apis = [
       },
       {
         name: 'cell-click',
-        desc: '单元格被点击时会触发该事件',
+        descKey: 'app.api.table.desc.cellClick',
         type: '',
         enum: '',
         defVal: '{row,rowIndex,column,columnIndex,cell},event',
@@ -957,7 +957,7 @@ const apis = [
       },
       {
         name: 'cell-dblclick',
-        desc: '单元格被双击时会触发该事件',
+        descKey: 'app.api.table.desc.cellDblclick',
         type: '',
         enum: '',
         defVal: '{row,rowIndex,column,columnIndex,cell},event',
@@ -965,7 +965,7 @@ const apis = [
       },
       {
         name: 'header-cell-click',
-        desc: '表头单元格被点击时会触发该事件',
+        descKey: 'app.api.table.desc.headerCellClick',
         type: '',
         enum: '',
         defVal: '{headIndex,column,columnIndex,cell},event',
@@ -973,7 +973,7 @@ const apis = [
       },
       {
         name: 'header-cell-dblclick',
-        desc: '表头单元格被双击时会触发该事件',
+        descKey: 'app.api.table.desc.headerCellDblclick',
         type: '',
         enum: '',
         defVal: '{headIndex,column,columnIndex,cell},event',
@@ -981,7 +981,7 @@ const apis = [
       },
       {
         name: 'footer-cell-click',
-        desc: '表尾单元格被点击时会触发该事件',
+        descKey: 'app.api.table.desc.footerCellClick',
         type: '',
         enum: '',
         defVal: '{footIndex,column,columnIndex,cell},event',
@@ -989,7 +989,7 @@ const apis = [
       },
       {
         name: 'footer-cell-dblclick',
-        desc: '表尾单元格被双击时会触发该事件',
+        descKey: 'app.api.table.desc.footerCellDblclick',
         type: '',
         enum: '',
         defVal: '{footIndex,column,columnIndex,cell},event',
@@ -997,7 +997,7 @@ const apis = [
       },
       {
         name: 'cell-mouseenter',
-        desc: '当单元格 hover 进入时会触发该事件',
+        descKey: 'app.api.table.desc.cellMouseenter',
         type: '',
         enum: '',
         defVal: '{row,rowIndex,column,columnIndex,cell},event',
@@ -1005,7 +1005,7 @@ const apis = [
       },
       {
         name: 'cell-mouseleave',
-        desc: '当单元格 hover 退出时会触发该事件',
+        descKey: 'app.api.table.desc.cellMouseleave',
         type: '',
         enum: '',
         defVal: '{row,rowIndex,column,columnIndex,cell},event',
@@ -1013,7 +1013,7 @@ const apis = [
       },
       {
         name: 'sort-change',
-        desc: '当排序条件发生变化时会触发该事件',
+        descKey: 'app.api.table.desc.sortChange',
         type: '',
         enum: '',
         defVal: '{column,prop,order}',
@@ -1021,7 +1021,7 @@ const apis = [
       },
       {
         name: 'filter-change',
-        desc: '当筛选条件发生变化时会触发该事件',
+        descKey: 'app.api.table.desc.filterChange',
         type: '',
         enum: '',
         defVal: '{column,prop,values}',
@@ -1029,7 +1029,7 @@ const apis = [
       },
       {
         name: 'toggle-expand-change',
-        desc: '当行展开或收起时会触发该事件',
+        descKey: 'app.api.table.desc.toggleExpandChange',
         type: '',
         enum: '',
         defVal: '{row,rowIndex},event',
@@ -1037,7 +1037,7 @@ const apis = [
       },
       {
         name: 'toggle-tree-change',
-        desc: '当树节点展开或收起时会触发该事件',
+        descKey: 'app.api.table.desc.toggleTreeChange',
         type: '',
         enum: '',
         defVal: '{row,rowIndex},event',
@@ -1045,7 +1045,7 @@ const apis = [
       },
       {
         name: 'context-menu-click',
-        desc: '只对 context-menu 配置时有效，当点击快捷菜单时会触发该事件',
+        descKey: 'app.api.table.desc.contextMenuClick',
         type: '',
         enum: '',
         defVal: '{menu,type,row,rowIndex,column,columnIndex,cell},event',
@@ -1053,7 +1053,7 @@ const apis = [
       },
       {
         name: 'edit-closed',
-        desc: '单元格编辑状态下被关闭时会触发该事件',
+        descKey: 'app.api.table.desc.editClosed',
         type: '',
         enum: '',
         defVal: '{row,rowIndex,column,columnIndex,cell},event',
@@ -1061,7 +1061,7 @@ const apis = [
       },
       {
         name: 'edit-actived',
-        desc: '单元格被激活编辑时会触发该事件',
+        descKey: 'app.api.table.desc.editActived',
         type: '',
         enum: '',
         defVal: '{row,rowIndex,column,columnIndex,cell},event',
@@ -1069,7 +1069,7 @@ const apis = [
       },
       {
         name: 'edit-disabled',
-        desc: '当点击后单元格如果是禁用状态时会触发该事件',
+        descKey: 'app.api.table.desc.editDisabled',
         type: '',
         enum: '',
         defVal: '{row,rowIndex,column,columnIndex,cell},event',
@@ -1077,28 +1077,28 @@ const apis = [
       },
       {
         name: 'valid-error',
-        desc: '当数据校验不通过时会触发该事件',
+        descKey: 'app.api.table.desc.validError',
         type: '',
         enum: '',
         defVal: '{rule,row,rowIndex,column,columnIndex,cell}',
         list: []
-      },
-      {
-        name: 'body-scroll',
-        desc: '内容滚动时会触发该事件',
-        type: '',
-        enum: '',
-        defVal: '{fixed,scrollTop,scrollLeft},event',
-        list: []
-      },
-      {
-        name: 'footer-scroll',
-        desc: '表尾滚动时会触发该事件',
-        type: '',
-        enum: '',
-        defVal: '{fixed,scrollLeft},event',
-        list: []
       }
+      // {
+      //   name: 'body-scroll',
+      //   descKey: 'app.api.table.desc.bodyScroll',
+      //   type: '',
+      //   enum: '',
+      //   defVal: '{fixed,scrollTop,scrollLeft},event',
+      //   list: []
+      // },
+      // {
+      //   name: 'footer-scroll',
+      //   descKey: 'app.api.table.desc.footerScroll',
+      //   type: '',
+      //   enum: '',
+      //   defVal: '{fixed,scrollLeft},event',
+      //   list: []
+      // }
     ]
   },
   {

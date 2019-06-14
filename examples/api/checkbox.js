@@ -8,15 +8,23 @@ const apis = [
     list: [
       {
         name: 'value,v-model',
-        desc: '绑定值',
+        descKey: 'app.api.checkbox.desc.value',
         type: '',
         enum: '',
         defVal: '',
         list: []
       },
       {
+        name: 'size',
+        descKey: 'app.api.checkbox.desc.size',
+        type: 'String',
+        enum: 'medium,small,mini',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'disabled',
-        desc: '是否禁用',
+        descKey: 'app.api.checkbox.desc.disabled',
         type: 'Boolean',
         enum: '',
         defVal: 'false',

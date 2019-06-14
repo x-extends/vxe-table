@@ -8,15 +8,23 @@ const apis = [
     list: [
       {
         name: 'value,v-model',
-        desc: '绑定值',
+        descKey: 'app.api.input.desc.value',
         type: '',
         enum: '',
         defVal: '',
         list: []
       },
       {
+        name: 'size',
+        descKey: 'app.api.input.desc.size',
+        type: 'String',
+        enum: 'medium,small,mini',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'disabled',
-        desc: '是否禁用',
+        descKey: 'app.api.input.desc.disabled',
         type: 'Boolean',
         enum: '',
         defVal: 'false',

@@ -1922,7 +1922,7 @@ export default {
           }
         }
       }
-      this.selection = reserve ? selection.concat(selectRows.filter(row => selection.indexOf(row) === -1)) : selectRows
+      this.selection = value && reserve ? selection.concat(selectRows.filter(row => selection.indexOf(row) === -1)) : selectRows
       this.isAllSelected = value
       this.isIndeterminate = false
       this.treeIndeterminates = []

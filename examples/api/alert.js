@@ -8,7 +8,7 @@ const apis = [
     list: [
       {
         name: 'value,v-model',
-        desc: '绑定值',
+        descKey: 'app.api.alert.desc.value',
         type: '',
         enum: '',
         defVal: '',
@@ -16,7 +16,7 @@ const apis = [
       },
       {
         name: 'title',
-        desc: '提示框的标题',
+        descKey: 'app.api.alert.desc.title',
         type: 'String',
         enum: '',
         defVal: '消息提示',
@@ -24,23 +24,23 @@ const apis = [
       },
       {
         name: 'message',
-        desc: '提示框的内容',
+        descKey: 'app.api.alert.desc.message',
         type: 'String',
         enum: '',
         defVal: '',
         list: []
       },
       {
-        name: 'lockView',
-        desc: '是否锁住页面，不允许提示框之外的任何操作',
+        name: 'lock-view',
+        descKey: 'app.api.alert.desc.lockView',
         type: 'Boolean',
         enum: '',
         defVal: 'true',
         list: []
       },
       {
-        name: 'lockScroll',
-        desc: '是否锁住滚动条，不允许页面滚动',
+        name: 'lock-scroll',
+        descKey: 'app.api.alert.desc.lockScroll',
         type: 'Boolean',
         enum: '',
         defVal: 'true',
@@ -48,15 +48,15 @@ const apis = [
       },
       {
         name: 'mask',
-        desc: '是否显示遮罩层',
+        descKey: 'app.api.alert.desc.mask',
         type: 'Boolean',
         enum: '',
         defVal: 'true',
         list: []
       },
       {
-        name: 'maskClosable',
-        desc: '是否允许点击遮罩层关闭提示框',
+        name: 'mask-closable',
+        descKey: 'app.api.alert.desc.maskClosable',
         type: 'Boolean',
         enum: '',
         defVal: 'false',

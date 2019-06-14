@@ -8,7 +8,7 @@ const apis = [
     list: [
       {
         name: 'size',
-        desc: '尺寸',
+        descKey: 'app.api.pager.desc.size',
         type: 'String',
         enum: 'medium,small,mini',
         defVal: '',
@@ -16,7 +16,7 @@ const apis = [
       },
       {
         name: 'layouts',
-        desc: '自定义布局',
+        descKey: 'app.api.pager.desc.layouts',
         type: 'Array',
         enum: 'PrevJump,PrevPage,Number,JumpNumber,NextPage,NextJump,Sizes,Jump,FullJump,PageCount,Total',
         defVal: '[PrevPage,NextPage,FullJump,Sizes,Total]',
@@ -24,7 +24,7 @@ const apis = [
       },
       {
         name: 'current-page',
-        desc: '当前页',
+        descKey: 'app.api.pager.desc.currentPage',
         type: 'Number',
         enum: '',
         defVal: '1',
@@ -32,7 +32,7 @@ const apis = [
       },
       {
         name: 'page-size',
-        desc: '每页大小',
+        descKey: 'app.api.pager.desc.pageSize',
         type: 'Number',
         enum: '',
         defVal: '10',
@@ -40,7 +40,7 @@ const apis = [
       },
       {
         name: 'total',
-        desc: '总条数',
+        descKey: 'app.api.pager.desc.total',
         type: 'Number',
         enum: '',
         defVal: '0',
@@ -48,7 +48,7 @@ const apis = [
       },
       {
         name: 'pager-count',
-        desc: '显示页码按钮的数量',
+        descKey: 'app.api.pager.desc.pagerCount',
         type: 'Number',
         enum: '',
         defVal: '7',
@@ -56,7 +56,7 @@ const apis = [
       },
       {
         name: 'page-sizes',
-        desc: '每页大小选项列表',
+        descKey: 'app.api.pager.desc.pageSizes',
         type: 'Array',
         enum: '',
         defVal: '[10,15,20,50,100]',
@@ -64,7 +64,7 @@ const apis = [
       },
       {
         name: 'background',
-        desc: '带背景颜色',
+        descKey: 'app.api.pager.desc.background',
         type: 'Boolean',
         enum: '',
         defVal: 'false',

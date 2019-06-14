@@ -8,7 +8,7 @@ const apis = [
     list: [
       {
         name: 'toolbar',
-        desc: '工具栏配置',
+        descKey: 'app.api.grid.desc.toolbar',
         type: 'Object',
         enum: '',
         defVal: '',
@@ -148,7 +148,7 @@ const apis = [
       },
       {
         name: 'pager-config',
-        desc: '分页配置项',
+        descKey: 'app.api.grid.desc.pagerConfig',
         type: 'Object',
         enum: '',
         defVal: '',
@@ -205,7 +205,7 @@ const apis = [
       },
       {
         name: 'proxy-config',
-        desc: '数据代理配置项',
+        descKey: 'app.api.grid.desc.proxyConfig',
         type: 'Object',
         enum: '',
         defVal: '',

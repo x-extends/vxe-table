@@ -180,7 +180,31 @@ module.exports = {
           keyboardConfig: '按键配置项',
           editConfig: '可编辑配置项',
           editRules: '校验规则配置项（默认情况下是非强制性的，无论是否必填都允许编辑其他的单元格）',
-          optimization: '优化配置项'
+          optimization: '优化配置项',
+
+          empty: '空数据时显示的文本内容',
+
+          selectAll: '只对 type=selection 有效，当手动勾选全选时触发的事件',
+          selectChange: '只对 type=selection,radio 有效，当手动勾选时触发的事件',
+          cellClick: '单元格被点击时会触发该事件',
+          cellDblclick: '单元格被双击时会触发该事件',
+          headerCellClick: '表头单元格被点击时会触发该事件',
+          headerCellDblclick: '表头单元格被双击时会触发该事件',
+          footerCellClick: '表尾单元格被点击时会触发该事件',
+          footerCellDblclick: '表尾单元格被双击时会触发该事件',
+          cellMouseenter: '当单元格 hover 进入时会触发该事件',
+          cellMouseleave: '当单元格 hover 退出时会触发该事件',
+          sortChange: '当排序条件发生变化时会触发该事件',
+          filterChange: '当筛选条件发生变化时会触发该事件',
+          toggleExpandChange: '当行展开或收起时会触发该事件',
+          toggleTreeChange: '当树节点展开或收起时会触发该事件',
+          contextMenuClick: '只对 context-menu 配置时有效，当点击快捷菜单时会触发该事件',
+          editClosed: '单元格编辑状态下被关闭时会触发该事件',
+          editActived: '单元格被激活编辑时会触发该事件',
+          editDisabled: '当点击后单元格如果是禁用状态时会触发该事件',
+          validError: '当数据校验不通过时会触发该事件',
+          bodyScroll: '内容滚动时会触发该事件',
+          footerScroll: '表尾滚动时会触发该事件'
         }
       },
       tableColumn: {
@@ -208,6 +232,72 @@ module.exports = {
           treeNode: '只对 tree-config 配置时有效，指定为树节点',
           columnKey: '列渲染的 key，对应列渲染中虚拟 DOM 的 key 属性（非特殊情况下不需要使用）',
           editRender: '列编辑配置项'
+        }
+      },
+      grid: {
+        desc: {
+          toolbar: '工具栏配置',
+          pagerConfig: '分页配置项',
+          proxyConfig: '数据代理配置项'
+        }
+      },
+      toolbar: {
+        desc: {
+          id: '唯一 ID 标识',
+          size: '尺寸',
+          data: '与表格的 data 属性同步绑定',
+          setting: '显示列个性化设置按钮'
+        }
+      },
+      pager: {
+        desc: {
+          size: '尺寸',
+          layouts: '自定义布局',
+          currentPage: '当前页',
+          pageSize: '每页大小',
+          total: '总条数',
+          pagerCount: '显示页码按钮的数量',
+          pageSizes: '每页大小选项列表',
+          background: '带背景颜色'
+        }
+      },
+      radio: {
+        desc: {
+          value: '绑定值',
+          size: '尺寸',
+          disabled: '是否禁用',
+          name: '原生 name 属性'
+        }
+      },
+      checkbox: {
+        desc: {
+          value: '绑定值',
+          size: '尺寸',
+          disabled: '是否禁用'
+        }
+      },
+      input: {
+        desc: {
+          value: '绑定值',
+          size: '尺寸',
+          disabled: '是否禁用'
+        }
+      },
+      button: {
+        desc: {
+          type: '类型',
+          size: '尺寸'
+        }
+      },
+      alert: {
+        desc: {
+          value: '绑定值',
+          title: '提示框的标题',
+          message: '提示框的内容',
+          lockView: '是否锁住页面，不允许提示框之外的任何操作',
+          lockScroll: '是否锁住滚动条，不允许页面滚动',
+          mask: '是否显示遮罩层',
+          maskClosable: '是否允许点击遮罩层关闭提示框'
         }
       }
     }

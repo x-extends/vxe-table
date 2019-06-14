@@ -8,9 +8,17 @@ const apis = [
     list: [
       {
         name: 'type',
-        desc: '类型',
+        descKey: 'app.api.button.desc.type',
         type: '',
         enum: 'text,primary',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'size',
+        descKey: 'app.api.button.desc.size',
+        type: 'String',
+        enum: 'medium,small,mini',
         defVal: '',
         list: []
       }

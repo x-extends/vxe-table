@@ -87,18 +87,11 @@ import Vue from 'vue'
 import VXETable from 'vxe-table'
 import 'vxe-table/lib/index.css'
 
-Vue.use(VXETable)
-```
-
-## Global config
-
-```javascript
-import Vue from 'vue'
-import VXETable from 'vxe-table'
-import 'vxe-table/lib/index.css'
-
 Vue.use(VXETable, {
-  size: 'small'
+  size: 'small',
+  tooltipConfig: {
+    zIndex: 3000
+  }
 })
 ```
 

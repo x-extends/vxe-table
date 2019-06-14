@@ -8,15 +8,23 @@ const apis = [
     list: [
       {
         name: 'id',
-        desc: '唯一 ID 标识',
+        descKey: 'app.api.toolbar.desc.id',
         type: 'String',
         enum: '',
         defVal: '',
         list: []
       },
       {
+        name: 'size',
+        descKey: 'app.api.toolbar.desc.size',
+        type: 'String',
+        enum: 'medium,small,mini',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'data',
-        desc: '与表格的 data 属性同步绑定',
+        descKey: 'app.api.toolbar.desc.data',
         type: 'Array',
         enum: '',
         defVal: '',
@@ -24,7 +32,7 @@ const apis = [
       },
       {
         name: 'setting',
-        desc: '显示列个性化设置按钮',
+        descKey: 'app.api.toolbar.desc.setting',
         type: 'Boolean,Object',
         enum: '',
         defVal: '',
