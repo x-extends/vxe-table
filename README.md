@@ -84,9 +84,9 @@ All modules are allowed to load on demand. （所有模块都允许按需加载�
     * message-box （消息提示框）
     * button （按钮）
   * plugins（插件）
-    * [vxe-table-plugin-element](https://www.npmjs.com/package/vxe-table-plugin-element)[![gzip size: JS](http://img.badgesize.io/https://unpkg.com/vxe-table-plugin-antd/dist/index.min.js?compression=gzip&label=gzip%20size:%20JS)](http://img.badgesize.io/https://unpkg.com/vxe-table-plugin-antd/dist/index.min.js?compression=gzip&label=gzip%20size:%20JS) For integration [element-ui](https://www.npmjs.com/package/element-ui) components.
-    * [vxe-table-plugin-iview](https://www.npmjs.com/package/vxe-table-plugin-iview) For integration [iview](https://www.npmjs.com/package/iview) components.
-    * [vxe-table-plugin-antd](https://www.npmjs.com/package/vxe-table-plugin-antd) For integration [ant-design-vue](https://www.npmjs.com/package/ant-design-vue) components.
+    * [vxe-table-plugin-element](https://www.npmjs.com/package/vxe-table-plugin-element)[![size](http://img.badgesize.io/https://unpkg.com/vxe-table-plugin-antd/dist/index.min.js?compression=gzip&label=gzip%20size:%20JS)](http://img.badgesize.io/https://unpkg.com/vxe-table-plugin-antd/dist/index.min.js?compression=gzip&label=gzip%20size:%20JS) For integration [element-ui](https://www.npmjs.com/package/element-ui) components.
+    * [vxe-table-plugin-iview](https://www.npmjs.com/package/vxe-table-plugin-iview)[![size](http://img.badgesize.io/https://unpkg.com/vxe-table-plugin-element/dist/index.min.js?compression=gzip&label=gzip%20size:%20JS)](http://img.badgesize.io/https://unpkg.com/vxe-table-plugin-element/dist/index.min.js?compression=gzip&label=gzip%20size:%20JS) For integration [iview](https://www.npmjs.com/package/iview) components.
+    * [vxe-table-plugin-antd](https://www.npmjs.com/package/vxe-table-plugin-antd)[![size](http://img.badgesize.io/https://unpkg.com/vxe-table-plugin-iview/dist/index.min.js?compression=gzip&label=gzip%20size:%20JS)](http://img.badgesize.io/https://unpkg.com/vxe-table-plugin-iview/dist/index.min.js?compression=gzip&label=gzip%20size:%20JS) For integration [ant-design-vue](https://www.npmjs.com/package/ant-design-vue) components.
 
 ## Docs
 
