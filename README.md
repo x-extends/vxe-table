@@ -10,6 +10,7 @@
 [![npm license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/xuliangzhan/vxe-table/blob/master/LICENSE)
 
 A powerful, flexible, configurable, extensible Vue Table component.
+全功能表格，只为解决绝大部分对 Table 的一切需求，与任意组件库完美兼容
 
 * vxe-table 的设计理念
   * 精简的 API（简洁、高效、通用）
