@@ -83,9 +83,9 @@ All modules are allowed to load on demand. （所有模块都允许按需加载�
     * ![message-box](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/message-box/src/message.min.js?compression=gzip&label=message-box) （消息提示框）
     * ![button](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/button/src/button.min.js?compression=gzip&label=button) （按钮）
   * plugins（插件）
-    * [vxe-table-plugin-element](https://www.npmjs.com/package/vxe-table-plugin-element) For integration [element-ui](https://www.npmjs.com/package/element-ui) components.
-    * [vxe-table-plugin-iview](https://www.npmjs.com/package/vxe-table-plugin-iview) For integration [iview](https://www.npmjs.com/package/iview) components.
-    * [vxe-table-plugin-antd](https://www.npmjs.com/package/vxe-table-plugin-antd) For integration [ant-design-vue](https://www.npmjs.com/package/ant-design-vue) components.
+    * ![vxe-table-plugin-element](http://img.badgesize.io/https://unpkg.com/vxe-table-plugin-element/dist/index.min.js?compression=gzip&label=vxe-table-plugin-element) （[element-ui](https://www.npmjs.com/package/element-ui) 适配插件）
+    * ![vxe-table-plugin-iview](http://img.badgesize.io/https://unpkg.com/vxe-table-plugin-iview/dist/index.min.js?compression=gzip&label=vxe-table-plugin-iview) （[iview](https://www.npmjs.com/package/iview) 适配插件）
+    * ![vxe-table-plugin-antd](http://img.badgesize.io/https://unpkg.com/vxe-table-plugin-antd/dist/index.min.js?compression=gzip&label=vxe-table-plugin-antd) （[ant-design-vue](https://www.npmjs.com/package/ant-design-vue) 适配插件）
 
 ## Docs
 
