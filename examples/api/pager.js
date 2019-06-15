@@ -15,6 +15,14 @@ const apis = [
         list: []
       },
       {
+        name: 'loading',
+        descKey: 'app.api.pager.desc.loading',
+        type: 'Boolean',
+        enum: '',
+        defVal: 'false',
+        list: []
+      },
+      {
         name: 'layouts',
         descKey: 'app.api.pager.desc.layouts',
         type: 'Array',

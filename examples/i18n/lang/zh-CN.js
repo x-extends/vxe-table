@@ -39,9 +39,9 @@ module.exports = {
         more: '更多功能',
         events: '事件绑定',
         template: '自定义模板',
-        span: '合并行货列',
+        span: '合并行或列',
         footer: '表尾合计',
-        customs: '显示/隐藏列',
+        customs: '显示/隐藏 列',
         export: '导出 CSV',
         contextMenu: '快捷菜单',
         expandRow: '展开行',
@@ -254,6 +254,7 @@ module.exports = {
       pager: {
         desc: {
           size: '尺寸',
+          loading: '是否加载中',
           layouts: '自定义布局',
           currentPage: '当前页',
           pageSize: '每页大小',

@@ -254,20 +254,21 @@ module.exports = {
       pager: {
         desc: {
           size: 'Size',
-          layouts: '自定义布局',
-          currentPage: '当前页',
-          pageSize: '每页大小',
-          total: '总条数',
+          loading: '是否加载中',
+          layouts: 'Custom layouts',
+          currentPage: 'Current page',
+          pageSize: 'Page size',
+          total: 'Total number',
           pagerCount: '显示页码按钮的数量',
           pageSizes: '每页大小选项列表',
-          background: '带背景颜色'
+          background: 'Show background color'
         }
       },
       radio: {
         desc: {
-          value: '绑定值',
+          value: 'Binding values',
           size: 'Size',
-          disabled: '是否禁用',
+          disabled: 'Whether to disable',
           name: '原生 name 属性'
         }
       },
@@ -275,14 +276,14 @@ module.exports = {
         desc: {
           value: 'Size',
           size: '尺寸',
-          disabled: '是否禁用'
+          disabled: 'Whether to disable'
         }
       },
       input: {
         desc: {
-          value: '绑定值',
+          value: 'Binding values',
           size: 'Size',
-          disabled: '是否禁用'
+          disabled: 'Whether to disable'
         }
       },
       button: {
@@ -293,7 +294,7 @@ module.exports = {
       },
       alert: {
         desc: {
-          value: '绑定值',
+          value: 'Binding values',
           title: '提示框的标题',
           message: '提示框的内容',
           lockView: '是否锁住页面，不允许提示框之外的任何操作',
