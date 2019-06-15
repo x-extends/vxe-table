@@ -9,8 +9,8 @@
 [![gzip size: CSS](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/index.css?compression=gzip&label=gzip%20size:%20CSS&color=green)](https://unpkg.com/vxe-table/lib/index.css)
 [![npm license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/xuliangzhan/vxe-table/blob/master/LICENSE)
 
-A complete Vue Table, easily solve most of the Table all requirements, and perfect compatibility with any component library.  
-一个完整 Vue 表格，轻松解决绝大部分对 Table 的一切需求，与任意组件库完美兼容
+A complete Vue Table, support most of the Table of all requirements, and perfect compatibility with any component library.  
+一个完整 Vue 表格，支持绝大部分对 Table 的一切需求，与任意组件库完美兼容
 
 * vxe-table 的设计理念
   * 精简的 API（简洁、高效、通用）
