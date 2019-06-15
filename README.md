@@ -69,23 +69,23 @@ All modules are allowed to load on demand. （所有模块都允许按需加载�
     * ![grid](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/grid/src/grid.min.js?compression=gzip&label=grid) （扩展）
     * ![excel](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/excel/src/excel.min.js?compression=gzip&label=excel) （Excel）
   * modules （功能模块）
-    * ![table-column](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/table-column/src/cell.min.js?compression=gzip&label=table-column) （列与单元格）
-    * ![table-header](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/table-header/src/header.min.js?compression=gzip&label=table-header) （表头）
-    * ![table-body](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/table-body/src/body.min.js?compression=gzip&label=table-body) （表内容）
-    * ![table-footer](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/table-footer/src/footer.min.js?compression=gzip&label=table-footer) （表尾）
-    * ![table-filter](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/table-filter/src/filter.min.js?compression=gzip&label=table-filter) （筛选）
-    * ![context-menu](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/context-menu/src/menu.min.js?compression=gzip&label=context-menu) （快捷菜单）
+    * ![table-column](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/table-column/src/cell.min.js?compression=gzip&label=table%20column) （列与单元格）
+    * ![table-header](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/table-header/src/header.min.js?compression=gzip&label=table%20header) （表头）
+    * ![table-body](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/table-body/src/body.min.js?compression=gzip&label=table%20body) （表内容）
+    * ![table-footer](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/table-footer/src/footer.min.js?compression=gzip&label=table%20footer) （表尾）
+    * ![table-filter](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/table-filter/src/filter.min.js?compression=gzip&label=table%20filter) （筛选）
+    * ![context-menu](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/context-menu/src/menu.min.js?compression=gzip&label=context%20menu) （快捷菜单）
     * ![pager](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/pager/src/pager.min.js?compression=gzip&label=pager) （分页 ）
     * ![toolbar](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/toolbar/src/toolbar.min.js?compression=gzip&label=toolbar) （工具栏）
     * ![checkbox](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/checkbox/src/checkbox.min.js?compression=gzip&label=checkbox) （复选框）
     * ![radio](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/radio/src/radio.min.js?compression=gzip&label=radio) （单选框）
     * ![input](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/input/src/input.min.js?compression=gzip&label=input) （输入框）
-    * ![message-box](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/message-box/src/message.min.js?compression=gzip&label=message-box) （消息提示框）
+    * ![message-box](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/message-box/src/message.min.js?compression=gzip&label=message%20box) （消息提示框）
     * ![button](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/button/src/button.min.js?compression=gzip&label=button) （按钮）
   * plugins（插件）
-    * ![vxe-table-plugin-element](http://img.badgesize.io/https://unpkg.com/vxe-table-plugin-element/dist/index.min.js?compression=gzip&label=vxe-table-plugin-element) （[element-ui](https://www.npmjs.com/package/element-ui) 适配插件）
-    * ![vxe-table-plugin-iview](http://img.badgesize.io/https://unpkg.com/vxe-table-plugin-iview/dist/index.min.js?compression=gzip&label=vxe-table-plugin-iview) （[iview](https://www.npmjs.com/package/iview) 适配插件）
-    * ![vxe-table-plugin-antd](http://img.badgesize.io/https://unpkg.com/vxe-table-plugin-antd/dist/index.min.js?compression=gzip&label=vxe-table-plugin-antd) （[ant-design-vue](https://www.npmjs.com/package/ant-design-vue) 适配插件）
+    * ![vxe-table-plugin-element](http://img.badgesize.io/https://unpkg.com/vxe-table-plugin-element/dist/index.min.js?compression=gzip&label=vxe%20table%20plugin%20element) （[element-ui](https://www.npmjs.com/package/element-ui) 适配插件）
+    * ![vxe-table-plugin-iview](http://img.badgesize.io/https://unpkg.com/vxe-table-plugin-iview/dist/index.min.js?compression=gzip&label=vxe%20table%20plugin%20iview) （[iview](https://www.npmjs.com/package/iview) 适配插件）
+    * ![vxe-table-plugin-antd](http://img.badgesize.io/https://unpkg.com/vxe-table-plugin-antd/dist/index.min.js?compression=gzip&label=vxe%20table%20plugin%20antd) （[ant-design-vue](https://www.npmjs.com/package/ant-design-vue) 适配插件）
 
 ## Docs
 
