@@ -8,6 +8,7 @@ import TableHeader from '../../packages/table-header'
 import TableBody from '../../packages/table-body'
 import TableFooter from '../../packages/table-footer'
 import TableFilter from '../../packages/table-filter'
+import TableLoading from '../../packages/table-loading'
 import Grid from '../../packages/grid'
 import Excel from '../../packages/excel'
 import ContextMenu from '../../packages/context-menu'
@@ -41,6 +42,7 @@ Vue.use(TableHeader)
 Vue.use(TableBody)
 Vue.use(TableFooter)
 Vue.use(TableFilter)
+Vue.use(TableLoading)
 Vue.use(Grid)
 Vue.use(Excel)
 Vue.use(ContextMenu)

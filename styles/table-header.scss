@@ -1,0 +1,12 @@
+/**Variable**/
+
+.vxe-table--header-wrapper {
+  background-color: $vxe-table-header-background-color;
+  .vxe-table--repair {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 1px;
+    background-color: $vxe-table-border-color;
+  }
+}

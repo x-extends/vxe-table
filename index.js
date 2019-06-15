@@ -5,6 +5,7 @@ import TableHeader from './packages/table-header'
 import TableBody from './packages/table-body'
 import TableFooter from './packages/table-footer'
 import TableFilter from './packages/table-filter'
+import TableLoading from './packages/table-loading'
 import Grid from './packages/grid'
 import Excel from './packages/excel'
 import ContextMenu from './packages/context-menu'
@@ -30,6 +31,7 @@ export const components = [
   TableBody,
   TableFooter,
   TableFilter,
+  TableLoading,
   Grid,
   Excel,
   ContextMenu,
@@ -68,6 +70,7 @@ export * from './packages/table-header'
 export * from './packages/table-body'
 export * from './packages/table-footer'
 export * from './packages/table-filter'
+export * from './packages/table-loading'
 export * from './packages/grid'
 export * from './packages/excel'
 export * from './packages/context-menu'

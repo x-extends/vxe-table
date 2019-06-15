@@ -1,0 +1,9 @@
+/**Variable**/
+
+.vxe-table--footer-wrapper {
+  margin-top: -1px;
+  background-color: $vxe-table-background-color;
+  &.footer--wrapper{
+    overflow-x: auto;
+  }
+}

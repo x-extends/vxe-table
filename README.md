@@ -62,7 +62,7 @@ A powerful, flexible, configurable, extensible Vue Table component.
 
 ## Modules
 
-All modules are allowed to load on demand. （所有模块都允许按需加载）
+All modules can be loaded on demand.（所有模块都可以按需加载）
 
 * ![table](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/table/src/table.min.js?compression=gzip&label=table)![style](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/table/style/style.css?compression=gzip&label=style&color=green) (核心)
   * Components （高级组件）
@@ -74,6 +74,7 @@ All modules are allowed to load on demand. （所有模块都允许按需加载�
     * ![table-body](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/table-body/src/body.min.js?compression=gzip&label=table%20body)![style](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/table-body/style/style.css?compression=gzip&label=style&color=green) （表内容）
     * ![table-footer](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/table-footer/src/footer.min.js?compression=gzip&label=table%20footer)![style](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/table-footer/style/style.css?compression=gzip&label=style&color=green) （表尾）
     * ![table-filter](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/table-filter/src/filter.min.js?compression=gzip&label=table%20filter)![style](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/table-filter/style/style.css?compression=gzip&label=style&color=green) （筛选）
+    * ![table-loading](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/table-loading/src/loading.min.js?compression=gzip&label=table%20loading)![style](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/table-loading/style/style.css?compression=gzip&label=style&color=green) （加载中）
     * ![context-menu](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/context-menu/src/menu.min.js?compression=gzip&label=context%20menu)![style](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/context-menu/style/style.css?compression=gzip&label=style&color=green) （快捷菜单）
     * ![pager](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/pager/src/pager.min.js?compression=gzip&label=pager)![style](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/pager/style/style.css?compression=gzip&label=style&color=green) （分页 ）
     * ![toolbar](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/toolbar/src/toolbar.min.js?compression=gzip&label=toolbar)![style](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/toolbar/style/style.css?compression=gzip&label=style&color=green) （工具栏）

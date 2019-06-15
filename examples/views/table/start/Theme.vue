@@ -7,7 +7,7 @@
         @import 'vxe-table/lib/index.css';
       </code>
     </pre>
-    <p>Case 2.修改主题颜色，只需修改局部变量即可</p>
+    <p>Case 2.修改主题颜色，只需在项目的 scss 文件中修改局部变量即可</p>
     <pre>
       <code class="scss">
         @import 'vxe-table/styles/variable.scss';

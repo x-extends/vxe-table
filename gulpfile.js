@@ -16,6 +16,7 @@ const components = [
   'table-body',
   'table-footer',
   'table-filter',
+  'table-loading',
   'context-menu',
   'toolbar',
   'grid',

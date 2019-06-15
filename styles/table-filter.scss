@@ -1,0 +1,107 @@
+/**Variable**/
+
+/*筛选*/
+.vxe-filter-wrapper {
+  padding: 0 2px;
+  vertical-align: middle;
+  display: inline-block;
+  &.is--active {
+    .vxe-filter--btn {
+      color: $vxe-font-color;
+    }
+  }
+  .vxe-filter--btn {
+    font-size: 13px;
+    color: $vxe-table-column-icon-border-color;
+    cursor: pointer;
+    &:hover {
+      color: $vxe-font-color;
+    }
+  }
+}
+.filter--active {
+  .vxe-filter-wrapper {
+    .vxe-filter--btn {
+      color: $vxe-primary-color;
+    }
+  }
+}
+
+/*筛选容器*/
+.vxe-table--filter-wrapper {
+  display: none;
+  position: absolute;
+  min-width: 80px;
+  border-radius: 2px;
+  color: $vxe-font-color;
+  background-color: #fff;
+  border: 1px solid $vxe-table-popup-border-color;
+  box-shadow: 0 2px 12px 0 rgba(0,0,0,.2);
+  font-size: 13px;
+  font-family: $vxe-font-family;
+  &.filter--active {
+    display: block;
+  }
+  .vxe-table--filter-body {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    max-height: 240px;
+    padding: 10px 10px 0 10px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    .vxe-table--filter-option {
+      margin-bottom: 8px;
+      &:hover {
+        .vxe-table--filter-label {
+          color: $vxe-primary-color;
+        }
+      }
+      &.is--active {
+        .vxe-table--filter-label {
+          font-weight: 700;
+          color: $vxe-primary-color;
+        }
+      }
+      .vxe-checkbox {
+        display: block;
+        .checkbox--label {
+          max-width: 360px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+      }
+      .vxe-table--filter-label {
+        display: block;
+        max-width: 360px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        cursor: pointer;
+      }
+    }
+  }
+  .vxe-table--filter-footer {
+    border-top: 1px solid $vxe-table-popup-border-color;
+    padding: 8px;
+    button {
+      background-color: transparent;
+      padding: 0 3px;
+      border: 0;
+      font-size: 13px;
+      color: $vxe-font-color;
+      cursor: pointer;
+      &:focus {
+        outline: none;
+      }
+      &:hover {
+        color: $vxe-primary-color;
+      }
+      &.is--disabled {
+        color: #c0c4cc;
+        cursor: not-allowed;
+      }
+    }
+  }
+}

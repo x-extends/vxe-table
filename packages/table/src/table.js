@@ -160,6 +160,7 @@ export default {
       treeIndeterminates: [],
       // 当前 hover 行
       hoverRow: null,
+      isLoading: false,
       // 当前选中的筛选列
       filterStore: {
         isAllSelected: false,
@@ -335,11 +336,19 @@ export default {
     },
     height () {
       this.$nextTick(this.recalculate)
+    },
+    loading () {
+      if (!this.isLoading) {
+        this.isLoading = true
+      }
     }
   },
   created () {
-    let { scrollYStore, optimizeOpts, selectConfig, treeConfig, editConfig } = this
+    let { scrollYStore, optimizeOpts, selectConfig, treeConfig, editConfig, loading } = this
     let { scrollY } = optimizeOpts
+    if (loading) {
+      this.isLoading = true
+    }
     if (scrollY) {
       Object.assign(scrollYStore, {
         startIndex: 0,
@@ -414,6 +423,7 @@ export default {
       isResizable,
       isCtxMenu,
       loading,
+      isLoading,
       showHeader,
       border,
       stripe,
@@ -519,16 +529,11 @@ export default {
       /**
        * 加载中
        */
-      h('div', {
-        class: ['vxe-table--loading'],
-        style: {
-          display: loading ? 'block' : 'none'
+      isLoading ? h('vxe-table-loading', {
+        props: {
+          visible: loading
         }
-      }, [
-        h('div', {
-          class: 'vxe-table--spinner'
-        })
-      ]),
+      }) : _e(),
       h('div', {
         class: [`vxe-table${id}-wrapper`],
         ref: 'tableWrapper'
