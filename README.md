@@ -62,7 +62,7 @@ A powerful, flexible, configurable, extensible Vue Table component.
 
 ## Modules
 
-All modules can be loaded on demand.（所有模块都可以按需加载）
+All functional modules support loading on demand.（所有的功能模块都支持按需加载）
 
 * ![table](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/table/src/table.min.js?compression=gzip&label=table)![style](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/table/style/style.css?compression=gzip&label=style&color=green) (核心)
   * Components （高级组件）
