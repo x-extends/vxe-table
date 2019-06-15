@@ -1,0 +1,4 @@
+language: node_js
+script: npm run lib
+notifications:
+  email: false
