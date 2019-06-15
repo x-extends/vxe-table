@@ -174,6 +174,10 @@ VXETable.setup({
 
 ## I18n
 
+```shell
+npm install vxe-i18n
+```
+
 ```javascript
 import Vue from 'vue'
 import VueI18n from 'vxe-i18n'
