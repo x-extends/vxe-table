@@ -65,10 +65,10 @@ A powerful, flexible, configurable, extensible Vue Table component.
 All modules are allowed to load on demand. （所有模块都允许按需加载）
 
 * ![table](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/table/src/table.min.js?compression=gzip&label=table) (主要核心)
-  * components （高级组件）
+  * Components （高级组件）
     * ![grid](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/grid/src/grid.min.js?compression=gzip&label=grid) （扩展）
     * ![excel](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/excel/src/excel.min.js?compression=gzip&label=excel) （Excel）
-  * modules （功能模块）
+  * Modules （功能模块）
     * ![table-column](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/table-column/src/cell.min.js?compression=gzip&label=table%20column) （列与单元格）
     * ![table-header](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/table-header/src/header.min.js?compression=gzip&label=table%20header) （表头）
     * ![table-body](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/table-body/src/body.min.js?compression=gzip&label=table%20body) （表内容）
@@ -82,7 +82,7 @@ All modules are allowed to load on demand. （所有模块都允许按需加载�
     * ![input](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/input/src/input.min.js?compression=gzip&label=input) （输入框）
     * ![message-box](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/message-box/src/message.min.js?compression=gzip&label=message%20box) （消息提示框）
     * ![button](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/button/src/button.min.js?compression=gzip&label=button) （按钮）
-  * plugins（插件）
+  * Plugins（插件）
     * ![vxe-table-plugin-element](http://img.badgesize.io/https://unpkg.com/vxe-table-plugin-element/dist/index.min.js?compression=gzip&label=vxe%20table%20plugin%20element) （[element-ui](https://www.npmjs.com/package/element-ui) 适配插件）
     * ![vxe-table-plugin-iview](http://img.badgesize.io/https://unpkg.com/vxe-table-plugin-iview/dist/index.min.js?compression=gzip&label=vxe%20table%20plugin%20iview) （[iview](https://www.npmjs.com/package/iview) 适配插件）
     * ![vxe-table-plugin-antd](http://img.badgesize.io/https://unpkg.com/vxe-table-plugin-antd/dist/index.min.js?compression=gzip&label=vxe%20table%20plugin%20antd) （[ant-design-vue](https://www.npmjs.com/package/ant-design-vue) 适配插件）
