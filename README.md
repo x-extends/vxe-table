@@ -64,26 +64,25 @@ A powerful, flexible, configurable, extensible Vue Table component.
 
 All modules are allowed to load on demand. （所有模块都允许按需加载）
 
-* table (主要核心)
+* ![table](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/table/src/table.min.js?compression=gzip&label=table) (主要核心)
   * components （高级组件）
-    * gird （扩展）
-    * excel （Excel）
+    * ![grid](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/grid/src/grid.min.js?compression=gzip&label=grid) （扩展）
+    * ![excel](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/excel/src/excel.min.js?compression=gzip&label=excel) （Excel）
   * modules （功能模块）
-    * table-column （列与单元格）
-    * table-header （表头）
-    * table-body （表内容）
-    * table-footer （表尾）
-    * table-filter （筛选）
-    * context-menu （快捷菜单）
-    * pager （分页 ）
-    * toolbar （工具栏）
-  * more （更多功能）
-    * checkbox （复选框）
-    * radio （单选框）
-    * input （输入框）
-    * message-box （消息提示框）
-    * button （按钮）
-  * plugins（适配插件）
+    * ![table-column](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/table-column/src/cell.min.js?compression=gzip&label=table-column) （列与单元格）
+    * ![table-header](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/table-header/src/header.min.js?compression=gzip&label=table-header) （表头）
+    * ![table-body](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/table-body/src/body.min.js?compression=gzip&label=table-body) （表内容）
+    * ![table-footer](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/table-footer/src/footer.min.js?compression=gzip&label=table-footer) （表尾）
+    * ![table-filter](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/table-filter/src/filter.min.js?compression=gzip&label=table-filter) （筛选）
+    * ![context-menu](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/context-menu/src/menu.min.js?compression=gzip&label=context-menu) （快捷菜单）
+    * ![pager](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/pager/src/pager.min.js?compression=gzip&label=pager) （分页 ）
+    * ![toolbar](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/toolbar/src/toolbar.min.js?compression=gzip&label=toolbar) （工具栏）
+    * ![checkbox](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/checkbox/src/checkbox.min.js?compression=gzip&label=checkbox) （复选框）
+    * ![radio](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/radio/src/radio.min.js?compression=gzip&label=radio) （单选框）
+    * ![input](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/input/src/input.min.js?compression=gzip&label=input) （输入框）
+    * ![message-box](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/message-box/src/message.min.js?compression=gzip&label=message-box) （消息提示框）
+    * ![button](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/button/src/button.min.js?compression=gzip&label=button) （按钮）
+  * plugins（插件）
     * [vxe-table-plugin-element](https://www.npmjs.com/package/vxe-table-plugin-element) For integration [element-ui](https://www.npmjs.com/package/element-ui) components.
     * [vxe-table-plugin-iview](https://www.npmjs.com/package/vxe-table-plugin-iview) For integration [iview](https://www.npmjs.com/package/iview) components.
     * [vxe-table-plugin-antd](https://www.npmjs.com/package/vxe-table-plugin-antd) For integration [ant-design-vue](https://www.npmjs.com/package/ant-design-vue) components.
@@ -129,7 +128,7 @@ Vue.use(VXETable, {
 By using the [babel-plugin-import](https://www.npmjs.com/package/babel-plugin-import) , you can load components on demand and reduce the size of files. First installation, then update .babelrc file  
 借助插件 [babel-plugin-import](https://www.npmjs.com/package/babel-plugin-import) 可以实现按需加载组件，减少文件体积。然后在文件 .babelrc 中配置
 
-```javascript
+```shell
 npm install babel-plugin-import -D
 ```
 

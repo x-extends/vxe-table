@@ -2,7 +2,7 @@
   <div>
     <h3>完整引入</h3>
     <pre>
-      <code class="javascript">
+      <code class="shell">
         npm install xe-utils vxe-table
       </code>
       <code class="javascript">
@@ -16,7 +16,7 @@
     <h3>按需引入</h3>
     <p>借助插件 <a class="link" href="https://www.npmjs.com/package/babel-plugin-import">babel-plugin-import</a> 可以实现按需加载组件，减少文件体积。然后在文件 .babelrc 中配置</p>
     <pre>
-      <code class="javascript">
+      <code class="shell">
         npm install babel-plugin-import -D
       </code>
       <code class="javascript">

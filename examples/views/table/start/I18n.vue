@@ -1,8 +1,11 @@
 <template>
   <div>
     <h3>国际化</h3>
-    <p>修改默认的国际化信息</p>
-    <pre>
+    <p>若希望使用指定语言，则需要进行多语言设置。以中/英文为例</p>
+     <pre>
+      <code class="shell">
+        npm install vue-i18n
+      </code>
       <code class="javascript">
         import Vue from 'vue'
         import VueI18n from 'vxe-i18n'
