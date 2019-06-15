@@ -83,9 +83,9 @@ All modules are allowed to load on demand. （所有模块都允许按需加载�
     * ![message-box](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/message-box/src/message.min.js?compression=gzip&label=message%20box)![style](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/message-box/style/style.css?compression=gzip&label=style&color=green) （消息提示框）
     * ![button](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/button/src/button.min.js?compression=gzip&label=button)![style](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/button/style/style.css?compression=gzip&label=style&color=green) （按钮）
   * Plugins（插件）
-    * ![vxe-table-plugin-element](http://img.badgesize.io/https://unpkg.com/vxe-table-plugin-element/dist/index.min.js?compression=gzip&label=vxe%20table%20plugin%20element) （[element-ui](https://www.npmjs.com/package/element-ui) 适配插件）
-    * ![vxe-table-plugin-iview](http://img.badgesize.io/https://unpkg.com/vxe-table-plugin-iview/dist/index.min.js?compression=gzip&label=vxe%20table%20plugin%20iview) （[iview](https://www.npmjs.com/package/iview) 适配插件）
-    * ![vxe-table-plugin-antd](http://img.badgesize.io/https://unpkg.com/vxe-table-plugin-antd/dist/index.min.js?compression=gzip&label=vxe%20table%20plugin%20antd) （[ant-design-vue](https://www.npmjs.com/package/ant-design-vue) 适配插件）
+    * ![vxe-table-plugin-element](http://img.badgesize.io/https://unpkg.com/vxe-table-plugin-element/dist/index.min.js?compression=gzip&label=vxe%20table%20plugin%20element)![style](http://img.badgesize.io/https://unpkg.com/vxe-table-plugin-element/lib/dist/index.css?compression=gzip&label=style&color=green) （[element-ui](https://www.npmjs.com/package/element-ui) 适配插件）
+    * ![vxe-table-plugin-iview](http://img.badgesize.io/https://unpkg.com/vxe-table-plugin-iview/dist/index.min.js?compression=gzip&label=vxe%20table%20plugin%20iview)![style](http://img.badgesize.io/https://unpkg.com/vxe-table-plugin-iview/lib/dist/index.css?compression=gzip&label=style&color=green) （[iview](https://www.npmjs.com/package/iview) 适配插件）
+    * ![vxe-table-plugin-antd](http://img.badgesize.io/https://unpkg.com/vxe-table-plugin-antd/dist/index.min.js?compression=gzip&label=vxe%20table%20plugin%20antd) （[ant-design-vue](https://www.npmjs.com/package/ant-design-vue)![style](http://img.badgesize.io/https://unpkg.com/vxe-table-plugin-iview/lib/dist/index.css?compression=gzip&label=style&color=green) 适配插件）
 
 ## Docs
 
