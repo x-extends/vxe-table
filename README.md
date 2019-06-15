@@ -66,8 +66,8 @@ All modules are allowed to load on demand. （所有模块都允许按需加载�
 
 * ![table](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/table/src/table.min.js?compression=gzip&label=table)![css](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/table/style/style.css?compression=gzip&label=css&color=green) (主要核心)
   * Components （高级组件）
-    * ![grid](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/grid/src/grid.min.js?compression=gzip&label=grid) （扩展）
-    * ![excel](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/excel/src/excel.min.js?compression=gzip&label=excel) （Excel）
+    * ![grid](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/grid/src/grid.min.js?compression=gzip&label=grid)![css](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/grid/style/style.css?compression=gzip&label=css&color=green) （扩展）
+    * ![excel](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/excel/src/excel.min.js?compression=gzip&label=excel)![css](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/excel/style/style.css?compression=gzip&label=css&color=green) （Excel）
   * Modules （功能模块）
     * ![table-column](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/table-column/src/cell.min.js?compression=gzip&label=table%20column) （列与单元格）
     * ![table-header](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/table-header/src/header.min.js?compression=gzip&label=table%20header) （表头）
