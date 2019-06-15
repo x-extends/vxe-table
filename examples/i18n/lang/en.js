@@ -1,7 +1,7 @@
 module.exports = {
   app: {
     header: {
-      desc: 'A complete function Vue Table, easily solve most of the Table all requirements, and perfect compatibility with any component library.'
+      desc: 'A complete Vue Table, easily solve most of the Table all requirements, and perfect compatibility with any component library.'
     },
     aside: {
       nav: {
