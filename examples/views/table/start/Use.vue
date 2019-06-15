@@ -26,7 +26,7 @@
               "import",
               {
                 "libraryName": "vxe-table",
-                "style": true
+                "style": true // 样式是否也按需加载
               }
             ]
           ]
@@ -44,6 +44,7 @@
           TableBody,
           TableFooter,
           TableFilter,
+          TableLoading,
           Grid,
           Excel,
           ContextMenu,
@@ -63,6 +64,7 @@
         Vue.use(TableBody)
         Vue.use(TableFooter)
         Vue.use(TableFilter)
+        Vue.use(TableLoading)
         Vue.use(Grid)
         Vue.use(Excel)
         Vue.use(ContextMenu)

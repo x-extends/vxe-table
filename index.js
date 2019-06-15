@@ -53,7 +53,7 @@ function install (Vue, options) {
   components.map(component => Vue.use(component))
 }
 
-// UMD 默认中文
+// 默认中文
 VXETable.setup({
   i18n: (key, value) => XEUtils.get(zhCNLocat, key)
 })
@@ -82,4 +82,5 @@ export * from './packages/input'
 export * from './packages/button'
 export * from './packages/message-box'
 export * from './packages/tooltip'
+export * from './packages/v-x-e-table'
 export default VXETable
