@@ -9,7 +9,7 @@
 [![gzip size: CSS](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/index.css?compression=gzip&label=gzip%20size:%20CSS&color=green)](https://unpkg.com/vxe-table/lib/index.css)
 [![npm license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/xuliangzhan/vxe-table/blob/master/LICENSE)
 
-A powerful, flexible, configurable, extensible Vue Table component.  
+Fully functional Table, easily solve most of the Table all requirements, and perfect compatibility with any component library.  
 全功能表格，轻松解决绝大部分对 Table 的一切需求，与任意组件库完美兼容
 
 * vxe-table 的设计理念
