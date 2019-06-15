@@ -69,7 +69,7 @@ All modules are allowed to load on demand. （所有模块都允许按需加载�
     * ![grid](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/grid/src/grid.min.js?compression=gzip&label=grid) （扩展）
     * ![excel](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/excel/src/excel.min.js?compression=gzip&label=excel) （Excel）
   * modules （功能模块）
-    * ![table-column](http://img.badgesize.io/https%3A%2F%2Funpkg.com%2Fvxe-table%2Flib%2Ftable-column%2Fsrc%2Fcell.min.js?compression=gzip&label=table-column) （列与单元格）
+    * ![table-column](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/tableColumn/src/cell.min.js?compression=gzip&label=table-column) （列与单元格）
     * ![table-header](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/table-header/src/header.min.js?compression=gzip&label=table-header) （表头）
     * ![table-body](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/table-body/src/body.min.js?compression=gzip&label=table-body) （表内容）
     * ![table-footer](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/table-footer/src/footer.min.js?compression=gzip&label=table-footer) （表尾）
