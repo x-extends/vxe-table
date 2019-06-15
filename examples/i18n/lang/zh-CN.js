@@ -106,7 +106,7 @@ module.exports = {
         antdPlugin: 'ant-design-vue 适配插件',
         antdPluginMore: 'ant-design-vue 跟多配置',
 
-        api: 'API 文档',
+        api: 'API',
         vxeTable: 'vxe-table',
         vxeTableColumn: 'vxe-table-column',
         vxeGrid: 'vxe-grid',
