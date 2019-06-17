@@ -68,7 +68,7 @@ A complete Vue Table, support most of the Table of all requirements, and perfect
 
 All functional modules support loading on demand.（所有的功能模块都支持按需加载）
 
-* ![Table](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/table/src/table.min.js?compression=gzip&label=Table)![style](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/1/style/style.css?compression=gzip&label=style&color=green) (核心)
+* ![Table](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/table/src/table.min.js?compression=gzip&label=Table)![style](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/table/style/style.css?compression=gzip&label=style&color=green) (核心)
   * Components （高级组件）
     * ![Grid](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/grid/src/grid.min.js?compression=gzip&label=Grid)![style](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/grid/style/style.css?compression=gzip&label=style&color=green) （扩展）
     * ![Excel](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/excel/src/excel.min.js?compression=gzip&label=Excel)![style](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/excel/style/style.css?compression=gzip&label=style&color=green) （Excel）
