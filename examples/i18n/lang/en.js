@@ -41,11 +41,12 @@ module.exports = {
         template: '自定义模板',
         span: 'Rowspan and colspan',
         footer: 'Footer summary',
-        customs: 'Show/hide columns',
         export: 'Export CSV',
         contextMenu: 'Context menu',
         expandRow: 'Expandable row',
         toolbar: 'Toolbar',
+        customs: 'Show/hide columns',
+        customStorage: 'Show/hide columns + localStorage',
         search: 'Table search',
         pager: 'Pager',
 
@@ -75,6 +76,7 @@ module.exports = {
         manual: 'Manual trigger',
         click: 'Click trigger',
         dblclick: 'dblclick trigger',
+        select: '选中内容',
         autoClear: 'Auto clear',
         insert: 'Insert',
         delete: 'Delete',
@@ -95,7 +97,8 @@ module.exports = {
         elementRender: '使用 element-ui 渲染列',
         iviewRender: '使用 iview 渲染列',
         antd: '使用 ant-design-vue 渲染列',
-        sortablejsRender: '使用 sortablejs 拖拽行排序',
+        sortablejsRow: '使用 sortablejs 实现行拖拽',
+        sortablejsColumn: '使用 sortablejs 实现列拖拽',
         xlsxRender: '使用 xlsx 导出数据',
 
         plugin: 'Plugins',
@@ -109,6 +112,7 @@ module.exports = {
         api: 'API',
         vxeTable: 'vxe-table',
         vxeTableColumn: 'vxe-table-column',
+        vxeTableMessage: 'vxe-table-message',
         vxeGrid: 'vxe-grid',
         vxeExcel: 'vxe-excel',
         vxeToolbar: 'vxe-toolbar',
@@ -117,7 +121,6 @@ module.exports = {
         vxeCheckbox: 'vxe-checkbox',
         vxeInput: 'vxe-input',
         vxeButton: 'vxe-button',
-        vxeMessageBox: 'vxe-message-box',
         vxeTooltip: 'vxe-tooltip'
       }
     },

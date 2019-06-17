@@ -41,11 +41,12 @@ module.exports = {
         template: '自定义模板',
         span: '合并行或列',
         footer: '表尾合计',
-        customs: '显示/隐藏 列',
         export: '导出 CSV',
         contextMenu: '快捷菜单',
         expandRow: '展开行',
         toolbar: '工具栏',
+        customs: '显示/隐藏 列',
+        customStorage: '显示/隐藏 列 + localStorage',
         search: '全表搜索',
         pager: '分页',
 
@@ -75,6 +76,7 @@ module.exports = {
         manual: '手动触发',
         click: '点击触发',
         dblclick: '双击触发',
+        select: '选中内容',
         autoClear: '关闭自动清除',
         insert: '插入数据',
         delete: '删除数据',
@@ -95,7 +97,8 @@ module.exports = {
         elementRender: '使用 element-ui 渲染列',
         iviewRender: '使用 iview 渲染列',
         antd: '使用 ant-design-vue 渲染列',
-        sortablejsRender: '使用 sortablejs 拖拽行排序',
+        sortablejsRow: '使用 sortablejs 实现行拖拽',
+        sortablejsColumn: '使用 sortablejs 实现列拖拽',
         xlsxRender: '使用 xlsx 导出数据',
 
         plugin: '插件',
@@ -117,7 +120,7 @@ module.exports = {
         vxeCheckbox: 'vxe-checkbox',
         vxeInput: 'vxe-input',
         vxeButton: 'vxe-button',
-        vxeMessageBox: 'vxe-message-box',
+        vxeTableMessage: 'vxe-table-message',
         vxeTooltip: 'vxe-tooltip'
       }
     },

@@ -1,22 +1,25 @@
 import XEUtils from 'xe-utils'
 import Table from './packages/table'
-import TableColumn from './packages/table-column'
-import TableHeader from './packages/table-header'
-import TableBody from './packages/table-body'
-import TableFooter from './packages/table-footer'
-import TableFilter from './packages/table-filter'
-import TableLoading from './packages/table-loading'
+import Column from './packages/column'
+import Header from './packages/header'
+import Body from './packages/body'
+import Footer from './packages/footer'
+import Filter from './packages/filter'
+import Loading from './packages/loading'
 import Grid from './packages/grid'
 import Excel from './packages/excel'
-import ContextMenu from './packages/context-menu'
+import Menu from './packages/menu'
 import Toolbar from './packages/toolbar'
 import Pager from './packages/pager'
 import Checkbox from './packages/checkbox'
 import Radio from './packages/radio'
 import Input from './packages/input'
 import Button from './packages/button'
-import MessageBox from './packages/message-box'
+import Message from './packages/message'
 import Tooltip from './packages/tooltip'
+
+import Export from './packages/export'
+import Resize from './packages/resize'
 import VXETable from './packages/v-x-e-table'
 import zhCNLocat from './locale/lang/zh-CN'
 
@@ -26,23 +29,26 @@ import './styles/index.scss'
 // 按需加载的组件
 export const components = [
   Table,
-  TableColumn,
-  TableHeader,
-  TableBody,
-  TableFooter,
-  TableFilter,
-  TableLoading,
+  Column,
+  Header,
+  Body,
+  Footer,
+  Filter,
+  Loading,
   Grid,
   Excel,
-  ContextMenu,
+  Menu,
   Toolbar,
   Pager,
   Checkbox,
   Radio,
   Input,
   Button,
-  MessageBox,
-  Tooltip
+  Message,
+  Tooltip,
+
+  Export,
+  Resize
 ]
 
 // 默认安装
@@ -65,22 +71,24 @@ if (typeof window !== 'undefined' && window.Vue) {
 VXETable.install = install
 
 export * from './packages/table'
-export * from './packages/table-column'
-export * from './packages/table-header'
-export * from './packages/table-body'
-export * from './packages/table-footer'
-export * from './packages/table-filter'
-export * from './packages/table-loading'
+export * from './packages/column'
+export * from './packages/header'
+export * from './packages/body'
+export * from './packages/footer'
+export * from './packages/filter'
+export * from './packages/loading'
 export * from './packages/grid'
 export * from './packages/excel'
-export * from './packages/context-menu'
+export * from './packages/menu'
 export * from './packages/toolbar'
 export * from './packages/pager'
 export * from './packages/checkbox'
 export * from './packages/radio'
 export * from './packages/input'
 export * from './packages/button'
-export * from './packages/message-box'
+export * from './packages/message'
 export * from './packages/tooltip'
+export * from './packages/export'
+export * from './packages/resize'
 export * from './packages/v-x-e-table'
 export default VXETable

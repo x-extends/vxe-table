@@ -9,15 +9,14 @@ const cleanCSS = require('gulp-clean-css')
 const prefixer = require('gulp-autoprefixer')
 
 const components = [
-  'v-x-e-table',
   'table',
-  'table-column',
-  'table-header',
-  'table-body',
-  'table-footer',
-  'table-filter',
-  'table-loading',
-  'context-menu',
+  'column',
+  'header',
+  'body',
+  'footer',
+  'filter',
+  'loading',
+  'menu',
   'toolbar',
   'grid',
   'excel',
@@ -26,8 +25,12 @@ const components = [
   'radio',
   'input',
   'button',
-  'message-box',
-  'tooltip'
+  'message',
+  'tooltip',
+
+  'export',
+  'resize',
+  'v-x-e-table'
 ]
 
 gulp.task('build_modules', () => {

@@ -3,23 +3,25 @@ import i18n from '../i18n'
 
 import VXETable from '../../packages/v-x-e-table'
 import Table from '../../packages/table'
-import TableColumn from '../../packages/table-column'
-import TableHeader from '../../packages/table-header'
-import TableBody from '../../packages/table-body'
-import TableFooter from '../../packages/table-footer'
-import TableFilter from '../../packages/table-filter'
-import TableLoading from '../../packages/table-loading'
+import Column from '../../packages/column'
+import Header from '../../packages/header'
+import Body from '../../packages/body'
+import Footer from '../../packages/footer'
+import Filter from '../../packages/filter'
+import Loading from '../../packages/loading'
 import Grid from '../../packages/grid'
 import Excel from '../../packages/excel'
-import ContextMenu from '../../packages/context-menu'
+import Menu from '../../packages/menu'
 import Toolbar from '../../packages/toolbar'
 import Pager from '../../packages/pager'
 import Checkbox from '../../packages/checkbox'
 import Radio from '../../packages/radio'
 import Input from '../../packages/input'
 import Button from '../../packages/button'
-import MessageBox from '../../packages/message-box'
+import Message from '../../packages/message'
 import Tooltip from '../../packages/tooltip'
+import Export from '../../packages/export'
+import Resize from '../../packages/resize'
 import '../../styles/index.scss'
 
 // import VXETablePluginElement from '../../../vxe-table-plugin-element/index.js'
@@ -37,23 +39,25 @@ VXETable.setup({
 })
 
 Vue.use(Table)
-Vue.use(TableColumn)
-Vue.use(TableHeader)
-Vue.use(TableBody)
-Vue.use(TableFooter)
-Vue.use(TableFilter)
-Vue.use(TableLoading)
+Vue.use(Column)
+Vue.use(Header)
+Vue.use(Body)
+Vue.use(Footer)
+Vue.use(Filter)
+Vue.use(Loading)
 Vue.use(Grid)
 Vue.use(Excel)
-Vue.use(ContextMenu)
+Vue.use(Menu)
 Vue.use(Toolbar)
 Vue.use(Pager)
 Vue.use(Checkbox)
 Vue.use(Radio)
 Vue.use(Input)
 Vue.use(Button)
-Vue.use(MessageBox)
+Vue.use(Message)
 Vue.use(Tooltip)
+Vue.use(Export)
+Vue.use(Resize)
 
 VXETable.use(VXETablePluginElement)
 VXETable.use(VXETablePluginIView)

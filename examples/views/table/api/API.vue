@@ -46,7 +46,8 @@
 <script>
 import XEUtils from 'xe-utils'
 import tableAPI from '../../../api/table'
-import tableColumnAPI from '../../../api/table-column'
+import tableColumnAPI from '../../../api/column'
+import tableMessageAPI from '../../../api/message'
 import toolbarAPI from '../../../api/toolbar'
 import gridAPI from '../../../api/grid'
 import excelAPI from '../../../api/excel'
@@ -55,7 +56,6 @@ import radioAPI from '../../../api/radio'
 import checkboxAPI from '../../../api/checkbox'
 import inputAPI from '../../../api/input'
 import buttonAPI from '../../../api/button'
-import messageBoxAPI from '../../../api/message-box'
 import tooltipAPI from '../../../api/tooltip'
 
 export default {
@@ -74,6 +74,9 @@ export default {
           break
         case 'table-column':
           apis = tableColumnAPI
+          break
+        case 'table-message':
+          apis = tableMessageAPI
           break
         case 'toolbar':
           apis = toolbarAPI
@@ -98,9 +101,6 @@ export default {
           break
         case 'button':
           apis = buttonAPI
-          break
-        case 'message-box':
-          apis = messageBoxAPI
           break
         case 'tooltip':
           apis = tooltipAPI

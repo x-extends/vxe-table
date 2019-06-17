@@ -39,42 +39,46 @@
         import {
           VXETable,
           Table,
-          TableColumn,
-          TableHeader,
-          TableBody,
-          TableFooter,
-          TableFilter,
-          TableLoading,
+          Column,
+          Header,
+          Body,
+          Footer,
+          Filter,
+          Loading,
           Grid,
           Excel,
-          ContextMenu,
+          Menu,
           Toolbar,
           Pager,
           Checkbox,
           Radio,
           Input,
           Button,
-          MessageBox
+          Message,
+          Export,
+          Resize
         } from 'vxe-table'
         import zhCNLocat from 'vxe-table/lib/locale/lang/zh-CN'
 
         Vue.use(Table)
-        Vue.use(TableColumn)
-        Vue.use(TableHeader)
-        Vue.use(TableBody)
-        Vue.use(TableFooter)
-        Vue.use(TableFilter)
-        Vue.use(TableLoading)
+        Vue.use(Column)
+        Vue.use(Header)
+        Vue.use(Body)
+        Vue.use(Footer)
+        Vue.use(Filter)
+        Vue.use(Loading)
         Vue.use(Grid)
         Vue.use(Excel)
-        Vue.use(ContextMenu)
+        Vue.use(Menu)
         Vue.use(Toolbar)
         Vue.use(Pager)
         Vue.use(Checkbox)
         Vue.use(Radio)
         Vue.use(Input)
         Vue.use(Button)
-        Vue.use(MessageBox)
+        Vue.use(Message)
+        Vue.use(Export)
+        Vue.use(Resize)
 
         // 按需加载的方式默认是不带国际化的，需要自行导入
         VXETable.setup({

@@ -1,7 +1,7 @@
 import XEUtils from 'xe-utils'
 import TableProps from './props'
 import GlobalConfig from '../../conf'
-import Cell from '../../table-column/src/cell'
+import Cell from '../../column/src/cell'
 import { Interceptor, Renderer } from '../../v-x-e-table'
 import { UtilTools, DomTools, ExportTools, GlobalEvent, ResizeEvent } from '../../tools'
 

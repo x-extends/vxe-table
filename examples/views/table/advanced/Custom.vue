@@ -381,12 +381,14 @@ export default {
     this.tableData = window.MOCK_DATA_LIST.slice(0, 20)
     setTimeout(() => {
       this.loading = false
-      this.$refs.xTable2.reloadCustoms([
-        {
-          prop: 'name',
-          visible: false
-        }
-      ])
+      if (this.$refs.xTable2) {
+        this.$refs.xTable2.reloadCustoms([
+          {
+            prop: 'name',
+            visible: false
+          }
+        ])
+      }
     }, 300)
   },
   mounted () {

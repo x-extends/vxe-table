@@ -34,12 +34,13 @@ import TableEvent from './views/table/advanced/Event.vue'
 import TableTemplate from './views/table/advanced/Template.vue'
 import TableSpan from './views/table/advanced/Span.vue'
 import TableFooter from './views/table/advanced/Footer.vue'
-import TableCustom from './views/table/advanced/Custom.vue'
 import TableExport from './views/table/advanced/Export.vue'
 import TableMenu from './views/table/advanced/Menu.vue'
 import TableExpand from './views/table/advanced/Expand.vue'
 import TableSearch from './views/table/advanced/Search.vue'
 import Toolbar from './views/table/advanced/Toolbar.vue'
+import TableCustom from './views/table/advanced/Custom.vue'
+import TableCustomStorage from './views/table/advanced/CustomStorage.vue'
 import TablePage from './views/table/advanced/Page.vue'
 
 import TableTreeBasic from './views/table/tree/Basic.vue'
@@ -70,6 +71,7 @@ import TableScrollFullCols from './views/table/scroll/ScrollFullCols.vue'
 import TableEditManual from './views/table/edit/Manual.vue'
 import TableEditClick from './views/table/edit/Click.vue'
 import TableEditDBLClick from './views/table/edit/DBLClick.vue'
+import TableEditSelect from './views/table/edit/Select.vue'
 import TableAutoClearManual from './views/table/edit/AutoClear.vue'
 import TableEditInsert from './views/table/edit/Insert.vue'
 import TableEditRemove from './views/table/edit/Remove.vue'
@@ -276,11 +278,6 @@ export default new Router({
       component: TableFooter
     },
     {
-      path: '/table/advanced/custom',
-      name: 'TableCustom',
-      component: TableCustom
-    },
-    {
       path: '/table/advanced/export',
       name: 'TableExport',
       component: TableExport
@@ -304,6 +301,16 @@ export default new Router({
       path: '/table/advanced/toolbar',
       name: 'Toolbar',
       component: Toolbar
+    },
+    {
+      path: '/table/advanced/custom',
+      name: 'TableCustom',
+      component: TableCustom
+    },
+    {
+      path: '/table/advanced/customStorage',
+      name: 'TableCustomStorage',
+      component: TableCustomStorage
     },
     {
       path: '/table/advanced/page',
@@ -434,6 +441,11 @@ export default new Router({
       path: '/table/edit/dblclick',
       name: 'TableEditDBLClick',
       component: TableEditDBLClick
+    },
+    {
+      path: '/table/edit/select',
+      name: 'TableEditSelect',
+      component: TableEditSelect
     },
     {
       path: '/table/edit/autoClear',

@@ -291,13 +291,6 @@ export default {
               }
             },
             {
-              label: 'app.aside.nav.customs',
-              demoUrl: 'https://jsrun.net/PrXKp',
-              locat: {
-                name: 'TableCustom'
-              }
-            },
-            {
               label: 'app.aside.nav.export',
               demoUrl: 'https://jsrun.net/cmXKp',
               locat: {
@@ -322,6 +315,19 @@ export default {
               label: 'app.aside.nav.toolbar',
               locat: {
                 name: 'Toolbar'
+              }
+            },
+            {
+              label: 'app.aside.nav.customs',
+              demoUrl: 'https://jsrun.net/PrXKp',
+              locat: {
+                name: 'TableCustom'
+              }
+            },
+            {
+              label: 'app.aside.nav.customStorage',
+              locat: {
+                name: 'TableCustomStorage'
               }
             },
             {
@@ -539,6 +545,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.select',
+              locat: {
+                name: 'TableEditSelect'
+              }
+            },
+            {
               label: 'app.aside.nav.autoClear',
               locat: {
                 name: 'TableAutoClearManual'
@@ -664,7 +676,14 @@ export default {
               }
             },
             {
-              label: 'app.aside.nav.sortablejsRender',
+              label: 'app.aside.nav.sortablejsRow',
+              disabled: true,
+              locat: {
+                name: 'TableSortablejs'
+              }
+            },
+            {
+              label: 'app.aside.nav.sortablejsColumn',
               disabled: true,
               locat: {
                 name: 'TableSortablejs'
@@ -746,6 +765,15 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.vxeTableMessage',
+              locat: {
+                name: 'TableAPI',
+                params: {
+                  name: 'table-message'
+                }
+              }
+            },
+            {
               label: 'app.aside.nav.vxeGrid',
               locat: {
                 name: 'TableAPI',
@@ -814,15 +842,6 @@ export default {
                 name: 'TableAPI',
                 params: {
                   name: 'button'
-                }
-              }
-            },
-            {
-              label: 'app.aside.nav.vxeMessageBox',
-              locat: {
-                name: 'TableAPI',
-                params: {
-                  name: 'message-box'
                 }
               }
             // },
