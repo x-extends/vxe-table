@@ -47,7 +47,6 @@
 import XEUtils from 'xe-utils'
 import tableAPI from '../../../api/table'
 import tableColumnAPI from '../../../api/column'
-import tableMessageAPI from '../../../api/message'
 import toolbarAPI from '../../../api/toolbar'
 import gridAPI from '../../../api/grid'
 import excelAPI from '../../../api/excel'
@@ -57,6 +56,7 @@ import checkboxAPI from '../../../api/checkbox'
 import inputAPI from '../../../api/input'
 import buttonAPI from '../../../api/button'
 import tooltipAPI from '../../../api/tooltip'
+import messageBoxAPI from '../../../api/message'
 
 export default {
   data () {
@@ -74,9 +74,6 @@ export default {
           break
         case 'table-column':
           apis = tableColumnAPI
-          break
-        case 'table-message':
-          apis = tableMessageAPI
           break
         case 'toolbar':
           apis = toolbarAPI
@@ -104,6 +101,9 @@ export default {
           break
         case 'tooltip':
           apis = tooltipAPI
+          break
+        case 'message-box':
+          apis = messageBoxAPI
           break
       }
       // 生成唯一 id

@@ -112,7 +112,6 @@ module.exports = {
         api: 'API',
         vxeTable: 'vxe-table',
         vxeTableColumn: 'vxe-table-column',
-        vxeTableMessage: 'vxe-table-message',
         vxeGrid: 'vxe-grid',
         vxeExcel: 'vxe-excel',
         vxeToolbar: 'vxe-toolbar',
@@ -121,7 +120,8 @@ module.exports = {
         vxeCheckbox: 'vxe-checkbox',
         vxeInput: 'vxe-input',
         vxeButton: 'vxe-button',
-        vxeTooltip: 'vxe-tooltip'
+        vxeTooltip: 'vxe-tooltip',
+        vxeMessageBox: 'vxe-message-box'
       }
     },
     body: {

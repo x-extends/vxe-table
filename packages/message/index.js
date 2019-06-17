@@ -1,4 +1,4 @@
-import VxeTableMessage from './src/message'
+import VxeMessageBox from './src/message'
 
 var AlertController = null
 
@@ -35,7 +35,7 @@ export function Message (options) {
 })
 
 Message.install = function (Vue) {
-  AlertController = Vue.extend(VxeTableMessage)
+  AlertController = Vue.extend(VxeMessageBox)
   Vue.prototype.$XMsg = Message
 }
 

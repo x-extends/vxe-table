@@ -1,7 +1,7 @@
 import GlobalConfig from '../../conf'
 
 export default {
-  name: 'VxeTableMessage',
+  name: 'VxeMessageBox',
   props: {
     value: Boolean,
     type: String,

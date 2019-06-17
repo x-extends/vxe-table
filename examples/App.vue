@@ -765,15 +765,6 @@ export default {
               }
             },
             {
-              label: 'app.aside.nav.vxeTableMessage',
-              locat: {
-                name: 'TableAPI',
-                params: {
-                  name: 'table-message'
-                }
-              }
-            },
-            {
               label: 'app.aside.nav.vxeGrid',
               locat: {
                 name: 'TableAPI',
@@ -842,6 +833,15 @@ export default {
                 name: 'TableAPI',
                 params: {
                   name: 'button'
+                }
+              }
+            },
+            {
+              label: 'app.aside.nav.vxeMessageBox',
+              locat: {
+                name: 'TableAPI',
+                params: {
+                  name: 'message-box'
                 }
               }
             // },

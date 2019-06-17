@@ -120,8 +120,8 @@ module.exports = {
         vxeCheckbox: 'vxe-checkbox',
         vxeInput: 'vxe-input',
         vxeButton: 'vxe-button',
-        vxeTableMessage: 'vxe-table-message',
-        vxeTooltip: 'vxe-tooltip'
+        vxeTooltip: 'vxe-tooltip',
+        vxeMessageBox: 'vxe-message-box'
       }
     },
     body: {
