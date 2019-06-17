@@ -11,6 +11,7 @@ function addListener () {
 }
 
 function eventHandle () {
+  console.log(111)
   if (eventStore.length) {
     eventStore.forEach(item => {
       let { comp, target, cb, width, heighe } = item

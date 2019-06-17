@@ -395,7 +395,7 @@ export default {
     if (tableWrapper && tableWrapper.parentNode) {
       tableWrapper.parentNode.removeChild(tableWrapper)
     }
-    if (this.autoResize) {
+    if (ResizeEvent.off) {
       ResizeEvent.off(this, this.$el.parentNode)
     }
     this.afterFullData.length = 0
