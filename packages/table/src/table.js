@@ -395,12 +395,14 @@ export default {
     if (tableWrapper && tableWrapper.parentNode) {
       tableWrapper.parentNode.removeChild(tableWrapper)
     }
+    if (this.autoResize) {
+      ResizeEvent.off(this, this.$el.parentNode)
+    }
     this.afterFullData.length = 0
     this.fullDataIndexMap.clear()
     this.fullColumnIndexMap.clear()
     this.closeFilter()
     this.closeContextMenu()
-    ResizeEvent.off(this, this.$el.parentNode)
   },
   destroyed () {
     GlobalEvent.off(this, 'mousedown')

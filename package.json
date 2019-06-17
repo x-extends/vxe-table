@@ -1,6 +1,6 @@
 {
   "name": "vxe-table",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "A complete Vue Table, support most of the Table of all requirements, and perfect compatibility with any component library.",
   "scripts": {
     "serve": "vue-cli-service serve",
