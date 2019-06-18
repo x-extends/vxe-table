@@ -1,6 +1,6 @@
 <template>
   <div id="app" @click="clickEvent">
-    <!--icon-->
+    <!-- icon -->
     <!-- <i class="vxe-icon--caret-top"></i>
     <i class="vxe-icon--caret-bottom"></i>
     <i class="vxe-icon--caret-left"></i>
