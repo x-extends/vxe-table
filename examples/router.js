@@ -1,109 +1,109 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-import Install from './views/table/start/Install.vue'
-import Use from './views/table/start/Use.vue'
-import Theme from './views/table/start/Theme.vue'
-import I18n from './views/table/start/I18n.vue'
-import Advanced from './views/table/start/Advanced.vue'
+const Install = () => import(/* webpackChunkName: "start" */ './views/table/start/Install.vue')
+const Use = () => import(/* webpackChunkName: "start" */ './views/table/start/Use.vue')
+const Theme = () => import(/* webpackChunkName: "start" */ './views/table/start/Theme.vue')
+const I18n = () => import(/* webpackChunkName: "start" */ './views/table/start/I18n.vue')
+const Advanced = () => import(/* webpackChunkName: "start" */ './views/table/start/Advanced.vue')
 
-import TableBasic from './views/table/base/Basic.vue'
-import TableSize from './views/table/base/Size.vue'
-import TableOverflow from './views/table/base/Overflow.vue'
-import TableStripe from './views/table/base/Stripe.vue'
-import TableBorder from './views/table/base/Border.vue'
-import TableStyle from './views/table/base/Style.vue'
-import TableHeader from './views/table/base/Header.vue'
-import TableResizable from './views/table/base/Resizable.vue'
-import TableMaxHeight from './views/table/base/MaxHeight.vue'
-import TableHeight from './views/table/base/Height.vue'
-import TableAutoHeight from './views/table/base/AutoHeight.vue'
-import TableFixed from './views/table/base/Fixed.vue'
-import TableFixedFull from './views/table/base/FixedFull.vue'
-import TableGroup from './views/table/base/Group.vue'
-import TableIndex from './views/table/base/Index.vue'
-import TableRadio from './views/table/base/Radio.vue'
-import TableSelection from './views/table/base/Selection.vue'
-import TableSort from './views/table/base/Sort.vue'
-import TableFilter from './views/table/base/Filter.vue'
-import TableEmpty from './views/table/base/Empty.vue'
-import TableLoading from './views/table/base/Loading.vue'
-import TableFormat from './views/table/base/Format.vue'
+const TableBasic = () => import(/* webpackChunkName: "base" */ './views/table/base/Basic.vue')
+const TableSize = () => import(/* webpackChunkName: "base" */ './views/table/base/Size.vue')
+const TableOverflow = () => import(/* webpackChunkName: "base" */ './views/table/base/Overflow.vue')
+const TableStripe = () => import(/* webpackChunkName: "base" */ './views/table/base/Stripe.vue')
+const TableBorder = () => import(/* webpackChunkName: "base" */ './views/table/base/Border.vue')
+const TableStyle = () => import(/* webpackChunkName: "base" */ './views/table/base/Style.vue')
+const TableHeader = () => import(/* webpackChunkName: "base" */ './views/table/base/Header.vue')
+const TableResizable = () => import(/* webpackChunkName: "base" */ './views/table/base/Resizable.vue')
+const TableMaxHeight = () => import(/* webpackChunkName: "base" */ './views/table/base/MaxHeight.vue')
+const TableHeight = () => import(/* webpackChunkName: "base" */ './views/table/base/Height.vue')
+const TableAutoHeight = () => import(/* webpackChunkName: "base" */ './views/table/base/AutoHeight.vue')
+const TableFixed = () => import(/* webpackChunkName: "base" */ './views/table/base/Fixed.vue')
+const TableFixedFull = () => import(/* webpackChunkName: "base" */ './views/table/base/FixedFull.vue')
+const TableGroup = () => import(/* webpackChunkName: "base" */ './views/table/base/Group.vue')
+const TableIndex = () => import(/* webpackChunkName: "base" */ './views/table/base/Index.vue')
+const TableRadio = () => import(/* webpackChunkName: "base" */ './views/table/base/Radio.vue')
+const TableSelection = () => import(/* webpackChunkName: "base" */ './views/table/base/Selection.vue')
+const TableSort = () => import(/* webpackChunkName: "base" */ './views/table/base/Sort.vue')
+const TableFilter = () => import(/* webpackChunkName: "base" */ './views/table/base/Filter.vue')
+const TableEmpty = () => import(/* webpackChunkName: "base" */ './views/table/base/Empty.vue')
+const TableLoading = () => import(/* webpackChunkName: "base" */ './views/table/base/Loading.vue')
+const TableFormat = () => import(/* webpackChunkName: "base" */ './views/table/base/Format.vue')
 
-import TableEvent from './views/table/advanced/Event.vue'
-import TableTemplate from './views/table/advanced/Template.vue'
-import TableSpan from './views/table/advanced/Span.vue'
-import TableFooter from './views/table/advanced/Footer.vue'
-import TableExport from './views/table/advanced/Export.vue'
-import TableMenu from './views/table/advanced/Menu.vue'
-import TableExpand from './views/table/advanced/Expand.vue'
-import TableSearch from './views/table/advanced/Search.vue'
-import Toolbar from './views/table/advanced/Toolbar.vue'
-import TableCustom from './views/table/advanced/Custom.vue'
-import TableCustomStorage from './views/table/advanced/CustomStorage.vue'
-import TablePage from './views/table/advanced/Page.vue'
+const TableEvent = () => import(/* webpackChunkName: "table" */ './views/table/advanced/Event.vue')
+const TableTemplate = () => import(/* webpackChunkName: "table" */ './views/table/advanced/Template.vue')
+const TableSpan = () => import(/* webpackChunkName: "table" */ './views/table/advanced/Span.vue')
+const TableFooter = () => import(/* webpackChunkName: "table" */ './views/table/advanced/Footer.vue')
+const TableExport = () => import(/* webpackChunkName: "table" */ './views/table/advanced/Export.vue')
+const TableMenu = () => import(/* webpackChunkName: "table" */ './views/table/advanced/Menu.vue')
+const TableExpand = () => import(/* webpackChunkName: "table" */ './views/table/advanced/Expand.vue')
+const TableSearch = () => import(/* webpackChunkName: "table" */ './views/table/advanced/Search.vue')
+const Toolbar = () => import(/* webpackChunkName: "table" */ './views/table/advanced/Toolbar.vue')
+const TableCustom = () => import(/* webpackChunkName: "table" */ './views/table/advanced/Custom.vue')
+const TableCustomStorage = () => import(/* webpackChunkName: "table" */ './views/table/advanced/CustomStorage.vue')
+const TablePage = () => import(/* webpackChunkName: "table" */ './views/table/advanced/Page.vue')
 
-import TableTreeBasic from './views/table/tree/Basic.vue'
-import TableTreeSelection from './views/table/tree/Selection.vue'
-import TableTreeRadio from './views/table/tree/Radio.vue'
-import TableTreeToolbar from './views/table/tree/Toolbar.vue'
-import TableTreeEdit from './views/table/tree/Edit.vue'
+const TableTreeBasic = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Basic.vue')
+const TableTreeSelection = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Selection.vue')
+const TableTreeRadio = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Radio.vue')
+const TableTreeToolbar = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Toolbar.vue')
+const TableTreeEdit = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Edit.vue')
 
-import GridBasic from './views/table/grid/Basic.vue'
-import GridTemplate from './views/table/grid/Template.vue'
-import GridPage from './views/table/grid/Page.vue'
-import GridFullQuery from './views/table/grid/FullQuery.vue'
-import GridProxy from './views/table/grid/Proxy.vue'
-import GridPageProxy from './views/table/grid/PageProxy.vue'
-import GridEdit from './views/table/grid/Edit.vue'
-import GridToolbar from './views/table/grid/Toolbar.vue'
-import GridDynamic from './views/table/grid/Dynamic.vue'
-import GridTree from './views/table/grid/Tree.vue'
-import GridTreeEdit from './views/table/grid/TreeEdit.vue'
-import GridFullEdit from './views/table/grid/FullEdit.vue'
+const GridBasic = () => import(/* webpackChunkName: "grid" */ './views/table/grid/Basic.vue')
+const GridTemplate = () => import(/* webpackChunkName: "grid" */ './views/table/grid/Template.vue')
+const GridPage = () => import(/* webpackChunkName: "grid" */ './views/table/grid/Page.vue')
+const GridFullQuery = () => import(/* webpackChunkName: "grid" */ './views/table/grid/FullQuery.vue')
+const GridProxy = () => import(/* webpackChunkName: "grid" */ './views/table/grid/Proxy.vue')
+const GridPageProxy = () => import(/* webpackChunkName: "grid" */ './views/table/grid/PageProxy.vue')
+const GridEdit = () => import(/* webpackChunkName: "grid" */ './views/table/grid/Edit.vue')
+const GridToolbar = () => import(/* webpackChunkName: "grid" */ './views/table/grid/Toolbar.vue')
+const GridDynamic = () => import(/* webpackChunkName: "grid" */ './views/table/grid/Dynamic.vue')
+const GridTree = () => import(/* webpackChunkName: "grid" */ './views/table/grid/Tree.vue')
+const GridTreeEdit = () => import(/* webpackChunkName: "grid" */ './views/table/grid/TreeEdit.vue')
+const GridFullEdit = () => import(/* webpackChunkName: "grid" */ './views/table/grid/FullEdit.vue')
 
-import TableScroll from './views/table/scroll/Scroll.vue'
-import TableScrollRows from './views/table/scroll/ScrollRows.vue'
-import TableScrollFullRows from './views/table/scroll/ScrollFullRows.vue'
-import TableScrollCols from './views/table/scroll/ScrollCols.vue'
-import TableScrollFullCols from './views/table/scroll/ScrollFullCols.vue'
+const TableScroll = () => import(/* webpackChunkName: "scroll" */ './views/table/scroll/Scroll.vue')
+const TableScrollRows = () => import(/* webpackChunkName: "scroll" */ './views/table/scroll/ScrollRows.vue')
+const TableScrollFullRows = () => import(/* webpackChunkName: "scroll" */ './views/table/scroll/ScrollFullRows.vue')
+const TableScrollCols = () => import(/* webpackChunkName: "scroll" */ './views/table/scroll/ScrollCols.vue')
+const TableScrollFullCols = () => import(/* webpackChunkName: "scroll" */ './views/table/scroll/ScrollFullCols.vue')
 
-import TableEditManual from './views/table/edit/Manual.vue'
-import TableEditClick from './views/table/edit/Click.vue'
-import TableEditDBLClick from './views/table/edit/DBLClick.vue'
-import TableEditSelect from './views/table/edit/Select.vue'
-import TableAutoClearManual from './views/table/edit/AutoClear.vue'
-import TableEditInsert from './views/table/edit/Insert.vue'
-import TableEditRemove from './views/table/edit/Remove.vue'
-import TableEditRevert from './views/table/edit/Revert.vue'
-import TableEditStatus from './views/table/edit/Status.vue'
-import TableEditCellDisable from './views/table/edit/CellDisable.vue'
-import TableEditRowDisable from './views/table/edit/RowDisable.vue'
-import TableEditKeyboard from './views/table/edit/Keyboard.vue'
-import TableEditCellValid from './views/table/edit/CellValid.vue'
-import TableEditRowValid from './views/table/edit/RowValid.vue'
-import TableEditForceCellValid from './views/table/edit/ForceCellValid.vue'
-import TableEditForceRowValid from './views/table/edit/ForceRowValid.vue'
-import TableEditTemplate from './views/table/edit/Template.vue'
-import TableEditFull from './views/table/edit/Full.vue'
+const TableEditManual = () => import(/* webpackChunkName: "edit" */ './views/table/edit/Manual.vue')
+const TableEditClick = () => import(/* webpackChunkName: "edit" */ './views/table/edit/Click.vue')
+const TableEditDBLClick = () => import(/* webpackChunkName: "edit" */ './views/table/edit/DBLClick.vue')
+const TableEditSelect = () => import(/* webpackChunkName: "edit" */ './views/table/edit/Select.vue')
+const TableAutoClearManual = () => import(/* webpackChunkName: "edit" */ './views/table/edit/AutoClear.vue')
+const TableEditInsert = () => import(/* webpackChunkName: "edit" */ './views/table/edit/Insert.vue')
+const TableEditRemove = () => import(/* webpackChunkName: "edit" */ './views/table/edit/Remove.vue')
+const TableEditRevert = () => import(/* webpackChunkName: "edit" */ './views/table/edit/Revert.vue')
+const TableEditStatus = () => import(/* webpackChunkName: "edit" */ './views/table/edit/Status.vue')
+const TableEditCellDisable = () => import(/* webpackChunkName: "edit" */ './views/table/edit/CellDisable.vue')
+const TableEditRowDisable = () => import(/* webpackChunkName: "edit" */ './views/table/edit/RowDisable.vue')
+const TableEditKeyboard = () => import(/* webpackChunkName: "edit" */ './views/table/edit/Keyboard.vue')
+const TableEditCellValid = () => import(/* webpackChunkName: "edit" */ './views/table/edit/CellValid.vue')
+const TableEditRowValid = () => import(/* webpackChunkName: "edit" */ './views/table/edit/RowValid.vue')
+const TableEditForceCellValid = () => import(/* webpackChunkName: "edit" */ './views/table/edit/ForceCellValid.vue')
+const TableEditForceRowValid = () => import(/* webpackChunkName: "edit" */ './views/table/edit/ForceRowValid.vue')
+const TableEditTemplate = () => import(/* webpackChunkName: "edit" */ './views/table/edit/Template.vue')
+const TableEditFull = () => import(/* webpackChunkName: "edit" */ './views/table/edit/Full.vue')
 
-import TableExcelCell from './views/table/excel/Cell.vue'
+const TableExcelCell = () => import(/* webpackChunkName: "excel" */ './views/table/excel/Cell.vue')
 
-import TableOtherElement from './views/table/other/Element.vue'
-import TableOtherIview from './views/table/other/Iview.vue'
-import TableOtherAntd from './views/table/other/Antd.vue'
-import TableSortableColumn from './views/table/other/SortableColumn.vue'
-import TableSortableRow from './views/table/other/SortableRow.vue'
-import TableXlsx from './views/table/other/Xlsx.vue'
+const TableOtherElement = () => import(/* webpackChunkName: "other" */ './views/table/other/Element.vue')
+const TableOtherIview = () => import(/* webpackChunkName: "other" */ './views/table/other/Iview.vue')
+const TableOtherAntd = () => import(/* webpackChunkName: "other" */ './views/table/other/Antd.vue')
+const TableSortableColumn = () => import(/* webpackChunkName: "other" */ './views/table/other/SortableColumn.vue')
+const TableSortableRow = () => import(/* webpackChunkName: "other" */ './views/table/other/SortableRow.vue')
+const TableXlsx = () => import(/* webpackChunkName: "other" */ './views/table/other/Xlsx.vue')
 
-import TablePluginElementConfig from './views/table/plugin/ElementConfig.vue'
-import TablePluginElementPage from './views/table/plugin/ElementPage.vue'
-import TablePluginIviewConfig from './views/table/plugin/IviewConfig.vue'
-import TablePluginIviewPage from './views/table/plugin/IviewPage.vue'
-import TablePluginAntdConfig from './views/table/plugin/AntdConfig.vue'
-import TablePluginAntdPage from './views/table/plugin/AntdPage.vue'
+const TablePluginElementConfig = () => import(/* webpackChunkName: "plugin" */ './views/table/plugin/ElementConfig.vue')
+const TablePluginElementPage = () => import(/* webpackChunkName: "plugin" */ './views/table/plugin/ElementPage.vue')
+const TablePluginIviewConfig = () => import(/* webpackChunkName: "plugin" */ './views/table/plugin/IviewConfig.vue')
+const TablePluginIviewPage = () => import(/* webpackChunkName: "plugin" */ './views/table/plugin/IviewPage.vue')
+const TablePluginAntdConfig = () => import(/* webpackChunkName: "plugin" */ './views/table/plugin/AntdConfig.vue')
+const TablePluginAntdPage = () => import(/* webpackChunkName: "plugin" */ './views/table/plugin/AntdPage.vue')
 
-import TableAPI from './views/table/api/API.vue'
+const TableAPI = () => import(/* webpackChunkName: "api" */ './views/table/api/API.vue')
 
 Vue.use(Router)
 
