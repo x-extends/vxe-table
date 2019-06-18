@@ -78,8 +78,8 @@ export default {
         }
         `,
         `
-        .sortable-column-demo .vxe-header--column.sortable-ghost,
-        .sortable-column-demo .vxe-header--column.sortable-chosen {
+        .sortable-column-demo .vxe-header--row .vxe-header--column.sortable-ghost,
+        .sortable-column-demo .vxe-header--row .vxe-header--column.sortable-chosen {
           background-color: #dfecfb;
         }
         `

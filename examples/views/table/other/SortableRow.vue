@@ -100,6 +100,10 @@ export default {
         }
         `,
         `
+        .sortable-row-demo .drag-btn {
+          cursor: move;
+          font-size: 12px;
+        }
         .sortable-row-demo .vxe-body--row.sortable-ghost,
         .sortable-row-demo .vxe-body--row.sortable-chosen {
           background-color: #dfecfb;
