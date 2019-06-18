@@ -1,6 +1,7 @@
 <template>
   <div>
     <h3>国际化</h3>
+    <p>目前支持的<a class="link" href="https://github.com/xuliangzhan/vxe-table/tree/master/locale/lang" target="_blank">国际化列表</a></p>
     <p>若希望使用指定语言，则需要进行多语言设置。以中/英文为例</p>
      <pre>
       <code class="shell">
