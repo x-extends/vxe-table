@@ -2379,17 +2379,21 @@ export default {
      * 激活单元格编辑
      */
     setActiveCell (row, prop) {
-      let { tableData, visibleColumn, handleActived } = this
-      if (row && prop) {
-        let rowIndex = tableData.indexOf(row)
-        if (rowIndex > -1) {
-          let column = visibleColumn.find(column => column.property === prop)
-          let cell = DomTools.getCell(this, { row, rowIndex, column })
-          handleActived({ row, column, cell })
-          this.lastCallTime = Date.now()
-        }
-      }
-      return this.$nextTick()
+      return new Promise(resolve => {
+        setTimeout(() => {
+          let { tableData, visibleColumn, handleActived } = this
+          if (row && prop) {
+            let rowIndex = tableData.indexOf(row)
+            if (rowIndex > -1) {
+              let column = visibleColumn.find(column => column.property === prop)
+              let cell = DomTools.getCell(this, { row, rowIndex, column })
+              handleActived({ row, column, cell })
+              this.lastCallTime = Date.now()
+            }
+          }
+          resolve(this.$nextTick())
+        })
+      })
     },
     /**
      * 只对 trigger=dblclick 有效，选中单元格

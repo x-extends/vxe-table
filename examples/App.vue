@@ -18,9 +18,13 @@
     <i class="vxe-icon--edit-outline"></i>
     <i class="vxe-icon--more"></i> -->
     <header class="page-header">
-      <img class="logo" src="./assets/logo.jpg">
       <h1 class="title">
-        <a href="https://github.com/xuliangzhan/vxe-table">vxe-table</a>
+        <a href="https://github.com/xuliangzhan/vxe-table">
+          <span>vxe-table</span>
+          <img src="https://img.shields.io/github/watchers/xuliangzhan/vxe-table.svg?style=social">
+          <img src="https://img.shields.io/github/stars/xuliangzhan/vxe-table.svg?style=social">
+          <img src="https://img.shields.io/github/forks/xuliangzhan/vxe-table.svg?style=social">
+        </a>
       </h1>
       <div class="right">
         <div class="langs">
