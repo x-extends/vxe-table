@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>使用 <a class="link" href="https://www.npmjs.com/package/sortablejs" target="_blank">sortablejs</a> 实现列拖拽，由于操作了 Dom 节点所以需要指定 <table-column-api-link prop="column-key"/></p>
+    <p>使用 <a class="link" href="https://www.npmjs.com/package/sortablejs" target="_blank">sortablejs</a> 实现列移动，由于操作了 Dom 节点所以需要指定 <table-column-api-link prop="column-key"/></p>
 
     <vxe-grid
       border

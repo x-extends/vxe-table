@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>使用 <a class="link" href="https://www.npmjs.com/package/sortablejs" target="_blank">sortablejs</a> 实现行拖拽，由于操作了 Dom 节点所以需要指定 <table-api-link prop="row-key"/></p>
+    <p>使用 <a class="link" href="https://www.npmjs.com/package/sortablejs" target="_blank">sortablejs</a> 实现行拖动，由于操作了 Dom 节点所以需要指定 <table-api-link prop="row-key"/></p>
 
     <vxe-table
       border
@@ -10,12 +10,14 @@
       <vxe-table-column width="60">
         <template v-slot:header>
           <el-tooltip class="item" placement="top">
-            <div slot="content">按住后可以上下拖动排序，<br>完成后点击保存即可！</div>
+            <div slot="content">按住后可以上下拖动</div>
             <i class="el-icon-question"></i>
           </el-tooltip>
         </template>
         <template>
-          <i class="el-icon-rank drag-btn"></i>
+          <span class="drag-btn">
+            <i class="vxe-icon--menu"></i>
+          </span>
         </template>
       </vxe-table-column>
       <vxe-table-column prop="name" label="Name"></vxe-table-column>
@@ -137,6 +139,10 @@ export default {
 </script>
 
 <style lang="scss">
+.sortable-row-demo .drag-btn {
+  cursor: move;
+  font-size: 12px;
+}
 .sortable-row-demo .vxe-body--row.sortable-ghost,
 .sortable-row-demo .vxe-body--row.sortable-chosen {
   background-color: #dfecfb;
