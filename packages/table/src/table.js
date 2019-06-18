@@ -103,7 +103,7 @@ export default {
   data () {
     return {
       id: XEUtils.uniqueId(),
-      // 表头子列属性
+      // 分组表头的属性
       headerProps: {
         children: 'children'
       },
@@ -160,6 +160,7 @@ export default {
       treeIndeterminates: [],
       // 当前 hover 行
       hoverRow: null,
+      // 是否加载了 Loading 模块
       isLoading: false,
       // 当前选中的筛选列
       filterStore: {

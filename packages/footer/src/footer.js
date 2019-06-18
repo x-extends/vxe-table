@@ -41,6 +41,7 @@ export default {
         }
       }) : null,
       h('table', {
+        class: 'vxe-table--footer',
         attrs: {
           cellspacing: 0,
           cellpadding: 0,

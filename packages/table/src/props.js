@@ -14,19 +14,19 @@ export default {
   // 表格的最大高度
   maxHeight: [Number, String],
   // 所有列是否允许拖动列宽调整大小
-  resizable: Boolean,
+  resizable: { type: Boolean, default: () => GlobalConfig.resizable },
   // 是否带有斑马纹
-  stripe: Boolean,
+  stripe: { type: Boolean, default: () => GlobalConfig.stripe },
   // 是否带有纵向边框
-  border: Boolean,
+  border: { type: Boolean, default: () => GlobalConfig.border },
   // 表格的尺寸
   size: { type: String, default: () => GlobalConfig.size },
   // 列的宽度是否自撑开
-  fit: { type: Boolean, default: true },
+  fit: { type: Boolean, default: () => GlobalConfig.fit },
   // 表格是否加载中
   loading: Boolean,
   // 是否显示表头
-  showHeader: { type: Boolean, default: true },
+  showHeader: { type: Boolean, default: () => GlobalConfig.showHeader },
   // 只对 type=index 时有效，自定义序号的起始值
   startIndex: { type: Number, default: 0 },
   // 是否要高亮当前选中行

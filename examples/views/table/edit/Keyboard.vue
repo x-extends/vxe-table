@@ -91,7 +91,7 @@ export default {
     })
   },
   methods: {
-    editActivedEvent ({ row, column }, event) {
+    editActivedEvent ({ row, column, cell }, event) {
       console.log(`打开 ${column.label} 列编辑`)
     },
     editClosedEvent ({ row, column }, event) {

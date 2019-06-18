@@ -86,7 +86,7 @@ export default {
               this.$refs.xTable.setActiveRow(row)
             },
             saveRowEvent (row) {
-              console.log('success')
+              this.$XMsg.alert('success')
               this.cancelRowEvent()
             },
             cancelRowEvent (row) {
@@ -111,7 +111,7 @@ export default {
       this.$refs.xTable.setActiveRow(row)
     },
     saveRowEvent (row) {
-      console.log('success')
+      this.$XMsg.alert('success')
       this.$refs.xTable.clearActived()
     },
     cancelRowEvent (row) {

@@ -2,11 +2,16 @@
 // import zhCNLocat from '../lib/locale/lang/zh-CN'
 
 const GlobalConfig = {
-  // size: null,
   // showAllOverflow: null,
   // showHeaderAllOverflow: null,
   // contextMenu: null,
   // resizeInterval: 250,
+  // size: null,
+  resizable: false,
+  stripe: false,
+  border: false,
+  fit: true,
+  showHeader: true,
   version: 0, // 版本号，对于某些带数据缓存的功能有用到，上升版本号可以用于重置数据
   optimization: {
     animat: true,
@@ -49,6 +54,12 @@ const GlobalConfig = {
     // storageKey: 'VXE_TABLE_CUSTOM_HIDDEN',
     // setting: false,
     // buttons: []
+  },
+  message: {
+    lockView: true,
+    lockScroll: true,
+    mask: true,
+    animat: true
   },
   i18n: key => key
 }

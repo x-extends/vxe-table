@@ -7,11 +7,11 @@ export default {
     type: String,
     title: { type: String, default: () => GlobalConfig.i18n('vxe.alert.title') },
     message: String,
-    lockView: { type: Boolean, default: true },
-    lockScroll: { type: Boolean, default: true },
-    mask: { type: Boolean, default: true },
-    maskClosable: { type: Boolean, default: false },
-    animat: { type: Boolean, default: true }
+    lockView: { type: Boolean, default: () => GlobalConfig.message.lockView },
+    lockScroll: { type: Boolean, default: () => GlobalConfig.message.lockScroll },
+    mask: { type: Boolean, default: () => GlobalConfig.message.mask },
+    maskClosable: Boolean,
+    animat: { type: Boolean, default: () => GlobalConfig.message.animat }
   },
   data () {
     return {

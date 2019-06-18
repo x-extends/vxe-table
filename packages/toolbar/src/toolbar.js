@@ -189,7 +189,7 @@ export default {
           $table.refreshColumn()
           this.saveStorageMap()
         } else {
-          console.error('[vxe-toolbar] Not found vxe-table.')
+          throw new Error('[vxe-toolbar] Not found vxe-table.')
         }
       }
     },

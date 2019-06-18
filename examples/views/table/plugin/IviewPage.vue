@@ -35,6 +35,7 @@
 
     <vxe-table
       border
+      resizable
       show-all-overflow
       ref="xTable"
       class="vxe-table-iview"
@@ -131,6 +132,7 @@ export default {
 
         <vxe-table
           border
+          resizable
           show-all-overflow
           ref="xTable"
           class="vxe-table-iview"

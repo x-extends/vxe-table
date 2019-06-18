@@ -677,21 +677,18 @@ export default {
             },
             {
               label: 'app.aside.nav.sortablejsRow',
-              disabled: true,
               locat: {
-                name: 'TableSortablejs'
+                name: 'TableSortableRow'
               }
             },
             {
               label: 'app.aside.nav.sortablejsColumn',
-              disabled: true,
               locat: {
-                name: 'TableSortablejs'
+                name: 'TableSortableColumn'
               }
             },
             {
               label: 'app.aside.nav.xlsxRender',
-              disabled: true,
               locat: {
                 name: 'TableXlsx'
               }

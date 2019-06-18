@@ -1,9 +1,9 @@
 <template>
   <div>
-    <p>使用自定义模板渲染，通过 slots 属性编写 JSX 模板或 VNode</p>
-    <p>default：显示内容（建议优先使用 formatter）</p>
-    <p>header：显示表头</p>
-    <p>edit：编辑内容（建议使用渲染器）</p>
+    <p>使用自定义模板渲染，通过 <table-column-api-link prop="slots"/> 属性编写 <a class="link" href="https://cn.vuejs.org/v2/guide/render-function.html#JSX" target="_blank">JSX</a> 模板或 <a class="link" href="https://cn.vuejs.org/v2/guide/render-function.html#%E8%99%9A%E6%8B%9F-DOM" target="_blank">VNode</a></p>
+    <p><table-column-api-link prop="default"/>：自定义内容模板（提前格式化好数据 > <table-column-api-link prop="formatter"/> > <table-column-api-link prop="slots"/></p>
+    <p><table-column-api-link prop="header"/>：自定义表头模板</p>
+    <p><table-column-api-link prop="edit"/>：自定义可编辑模板（如果需要复用，建议使用<router-link :to="{name: 'Advanced'}">渲染器</router-link>）</p>
 
     <vxe-grid
       border
@@ -33,9 +33,12 @@ export default {
           prop: 'name',
           label: 'Name',
           slots: {
-            default: ({ row }) => {
+            default: ({ row, column }) => {
               return [
-                <span style="color: red;">{ row.name }</span>
+                <span>
+                  <span style="color: red;">{ row.name }</span>
+                  <button onClick={ () => this.clickEvent(row, column) }>按钮</button>
+                </span>
               ]
             }
           }
@@ -49,7 +52,7 @@ export default {
               return [
                 <span>
                   <i>@</i>
-                  <span style="color: red;">{ column.label }</span>
+                  <span style="color: red;" onClick={ this.headerClickEvent }>{ column.label }</span>
                 </span>
               ]
             }
@@ -66,6 +69,11 @@ export default {
                 h('span', {
                   style: {
                     color: 'blue'
+                  },
+                  on: {
+                    click: evnt => {
+                      this.addressClickEvent(row)
+                    }
                   }
                 }, row.address)
               ]
@@ -95,7 +103,10 @@ export default {
                   slots: {
                     default: ({ row }) => {
                       return [
-                        <span style="color: red;">{ row.name }</span>
+                        <span>
+                          <span style="color: red;">{ row.name }</span>
+                          <button onClick={ () => this.clickEvent(row, column) }>按钮</button>
+                        </span>
                       ]
                     }
                   }
@@ -109,7 +120,7 @@ export default {
                       return [
                         <span>
                           <i>@</i>
-                          <span style="color: red;">{ column.label }</span>
+                          <span style="color: red;" onClick={ this.headerClickEvent }>{ column.label }</span>
                         </span>
                       ]
                     }
@@ -126,6 +137,11 @@ export default {
                         h('span', {
                           style: {
                             color: 'blue'
+                          },
+                          on: {
+                            click (evnt) {
+                              this.addressClickEvent(row)
+                            }
                           }
                         }, row.address)
                       ]
@@ -138,6 +154,17 @@ export default {
           },
           created () {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 100)
+          },
+          methods: {
+            clickEvent (row, column) {
+              this.$XMsg.alert(\`\${column.label}点击事件\`)
+            },
+            headerClickEvent (evnt) {
+              this.$XMsg.alert('头部点击事件')
+            },
+            addressClickEvent (row) {
+              this.$XMsg.alert(\`address点击事件：\${row.row}\`)
+            }
           }
         }
         `
@@ -152,6 +179,17 @@ export default {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
       hljs.highlightBlock(block)
     })
+  },
+  methods: {
+    clickEvent (row, column) {
+      this.$XMsg.alert(`${column.label}点击事件`)
+    },
+    headerClickEvent (evnt) {
+      this.$XMsg.alert('头部点击事件')
+    },
+    addressClickEvent (row) {
+      this.$XMsg.alert(`address点击事件：${row.row}`)
+    }
   }
 }
 </script>

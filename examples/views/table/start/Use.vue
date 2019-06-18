@@ -14,7 +14,7 @@
       </code>
     </pre>
     <h3>按需引入</h3>
-    <p>借助插件 <a class="link" href="https://www.npmjs.com/package/babel-plugin-import">babel-plugin-import</a> 可以实现按需加载组件，减少文件体积。然后在文件 .babelrc 中配置</p>
+    <p>借助插件 <a class="link" href="https://www.npmjs.com/package/babel-plugin-import">babel-plugin-import</a> 可以实现按需加载模块，减少文件体积。然后在文件 .babelrc 中配置</p>
     <pre>
       <code class="shell">
         npm install babel-plugin-import -D
@@ -33,7 +33,7 @@
         }
       </code>
     </pre>
-    <p>最后这样按需引入组件，就可以减小体积了</p>
+    <p>最后这样按需引入模块，就可以减小体积了</p>
     <pre>
       <code class="javascript">
         import {
@@ -116,14 +116,17 @@
         import 'vxe-table/lib/index.css'
 
         VXETable.setup({
-          // 默认尺寸
+          // 默认表格参数
           size: 'small',
-          // 版本号，对于某些带数据缓存的功能有用到，上升版本号可以用于重置数据
-          version: 0,
-          // 所有内容超过隐藏
           showAllOverflow: null,
-          // 所有表头内容超过隐藏
           showHeaderAllOverflow: null,
+          stripe: false,
+          border: false,
+          resizable: false,
+          fit: true,
+          showHeader: true,
+          // 版本号（对于某些带 Storage 数据储存的功能有用到，上升版本号可以用于重置 Storage 数据）
+          version: 0,
           // 默认快捷菜单
           contextMenu: null,
           // 自定义图标配置
@@ -154,6 +157,13 @@
           toolbar: {
             setting: false,
             buttons: []
+          },
+          // 默认消息提示框参数
+          message: {
+            lockView: true,
+            lockScroll: true,
+            mask: true,
+            animat: true
           },
           // 默认优化配置项
           optimization : {

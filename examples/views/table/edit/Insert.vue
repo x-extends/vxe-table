@@ -82,7 +82,7 @@ export default {
             },
             getInsertEvent () {
               let insertRecords = this.$refs.xTable.getInsertRecords()
-              alert(insertRecords.length)
+              this.$XMsg.alert(insertRecords.length)
             }
           }
         }
@@ -109,7 +109,7 @@ export default {
     },
     getInsertEvent () {
       let insertRecords = this.$refs.xTable.getInsertRecords()
-      alert(insertRecords.length)
+      this.$XMsg.alert(insertRecords.length)
     }
   }
 }

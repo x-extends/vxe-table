@@ -123,7 +123,7 @@ export default {
               return rowIndex !== 1
             },
             editDisabledEvent ({ row, column }) {
-              alert('禁止编辑')
+              this.$XMsg.alert('禁止编辑')
             }
           }
         }
@@ -148,7 +148,7 @@ export default {
       return rowIndex !== 1
     },
     editDisabledEvent ({ row, column }) {
-      alert('禁止编辑')
+      this.$XMsg.alert('禁止编辑')
     }
   }
 }

@@ -77,11 +77,11 @@ export default {
           methods: {
             getRemoveEvent () {
               let removeRecords = this.$refs.xTable.getRemoveRecords()
-              alert(removeRecords.length)
+              this.$XMsg.alert(removeRecords.length)
             },
             getSelectionEvent () {
               let removeRecords = this.$refs.xTable.getSelectRecords()
-              alert(removeRecords.length)
+              this.$XMsg.alert(removeRecords.length)
             }
           }
         }
@@ -101,11 +101,11 @@ export default {
   methods: {
     getRemoveEvent () {
       let removeRecords = this.$refs.xTable.getRemoveRecords()
-      alert(removeRecords.length)
+      this.$XMsg.alert(removeRecords.length)
     },
     getSelectionEvent () {
       let removeRecords = this.$refs.xTable.getSelectRecords()
-      alert(removeRecords.length)
+      this.$XMsg.alert(removeRecords.length)
     }
   }
 }

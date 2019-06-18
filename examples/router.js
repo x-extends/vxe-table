@@ -92,7 +92,8 @@ import TableExcelCell from './views/table/excel/Cell.vue'
 import TableOtherElement from './views/table/other/Element.vue'
 import TableOtherIview from './views/table/other/Iview.vue'
 import TableOtherAntd from './views/table/other/Antd.vue'
-import TableSortablejs from './views/table/other/Sortablejs.vue'
+import TableSortableColumn from './views/table/other/SortableColumn.vue'
+import TableSortableRow from './views/table/other/SortableRow.vue'
 import TableXlsx from './views/table/other/Xlsx.vue'
 
 import TablePluginElementConfig from './views/table/plugin/ElementConfig.vue'
@@ -538,9 +539,14 @@ export default new Router({
       component: TableOtherAntd
     },
     {
-      path: '/table/other/Sortablejs',
-      name: 'TableSortablejs',
-      component: TableSortablejs
+      path: '/table/other/sortableColumn',
+      name: 'TableSortableColumn',
+      component: TableSortableColumn
+    },
+    {
+      path: '/table/other/sortableRow',
+      name: 'TableSortableRow',
+      component: TableSortableRow
     },
     {
       path: '/table/other/xlsx',

@@ -66,12 +66,12 @@ A complete Vue Table, support most of the Table of all requirements, and perfect
 
 ## Modules
 
-All functional modules support loading on demand.（所有的功能模块都支持按需加载）
+All modules support loading on demand.（所有的模块都支持按需加载）
 
 * ![Table](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/table/src/table.min.js?compression=gzip&label=Table)![style](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/table/style/style.css?compression=gzip&label=style&color=green) (核心)
-  * Components （高级组件）
-    * ![Grid](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/grid/src/grid.min.js?compression=gzip&label=Grid)![style](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/grid/style/style.css?compression=gzip&label=style&color=green) （扩展）
-    * ![Excel](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/excel/src/excel.min.js?compression=gzip&label=Excel)![style](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/excel/style/style.css?compression=gzip&label=style&color=green) （Excel）
+  * Extends （扩展模块）
+    * ![Grid](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/grid/src/grid.min.js?compression=gzip&label=Grid)![style](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/grid/style/style.css?compression=gzip&label=style&color=green) （高级表格）
+    * ![Excel](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/excel/src/excel.min.js?compression=gzip&label=Excel)![style](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/excel/style/style.css?compression=gzip&label=style&color=green) （Excel 表格）
   * Modules （功能模块）
     * ![Column](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/column/src/cell.min.js?compression=gzip&label=Column)![style](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/column/style/style.css?compression=gzip&label=style&color=green) （列与单元格）
     * ![Header](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/header/src/header.min.js?compression=gzip&label=Header)![style](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/header/style/style.css?compression=gzip&label=style&color=green) （表头）
@@ -80,8 +80,8 @@ All functional modules support loading on demand.（所有的功能模块都支�
     * ![Filter](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/filter/src/filter.min.js?compression=gzip&label=Filter)![style](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/filter/style/style.css?compression=gzip&label=style&color=green) （筛选）
     * ![Loading](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/loading/src/loading.min.js?compression=gzip&label=Loading)![style](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/loading/style/style.css?compression=gzip&label=style&color=green) （加载中）
     * ![Menu](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/menu/src/menu.min.js?compression=gzip&label=Menu)![style](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/menu/style/style.css?compression=gzip&label=style&color=green) （快捷菜单）
-    * ![Export](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/export/src/export.min.js?compression=gzip&label=Export)![style](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/export/style/style.css?compression=gzip&label=style&color=green) （导出）
-    * ![Resize](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/resize/src/resize.min.js?compression=gzip&label=Resize)![style](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/resize/style/style.css?compression=gzip&label=style&color=green) （响应式）
+    * ![Export](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/export/src/export.min.js?compression=gzip&label=Export)![style](https://img.shields.io/badge/style-none-blue.svg) （导出）
+    * ![Resize](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/resize/src/resize.min.js?compression=gzip&label=Resize)![style](https://img.shields.io/badge/style-none-blue.svg) （响应式）
     * ![Pager](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/pager/src/pager.min.js?compression=gzip&label=Pager)![style](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/pager/style/style.css?compression=gzip&label=style&color=green) （分页 ）
     * ![Toolbar](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/toolbar/src/toolbar.min.js?compression=gzip&label=Toolbar)![style](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/toolbar/style/style.css?compression=gzip&label=style&color=green) （工具栏）
     * ![Checkbox](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/checkbox/src/checkbox.min.js?compression=gzip&label=Checkbox)![style](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/checkbox/style/style.css?compression=gzip&label=style&color=green) （复选框）
@@ -132,8 +132,8 @@ Vue.use(VXETable, {
 
 ## Import on demand
 
-By using the [babel-plugin-import](https://www.npmjs.com/package/babel-plugin-import) , you can load components on demand and reduce the size of files. First installation, then update .babelrc file  
-借助插件 [babel-plugin-import](https://www.npmjs.com/package/babel-plugin-import) 可以实现按需加载组件，减少文件体积。然后在文件 .babelrc 中配置
+By using the [babel-plugin-import](https://www.npmjs.com/package/babel-plugin-import) , you can load modules on demand and reduce the size of files. First installation, then update .babelrc file  
+借助插件 [babel-plugin-import](https://www.npmjs.com/package/babel-plugin-import) 可以实现按需加载模块，减少文件体积。然后在文件 .babelrc 中配置
 
 ```shell
 npm install babel-plugin-import -D
@@ -153,8 +153,8 @@ npm install babel-plugin-import -D
 }
 ```
 
-Now you can import components like  
-最后这样按需引入组件，就可以减小体积了
+Now you can import modules like  
+最后这样按需引入模块，就可以减小体积了
 
 ```javascript
 import {

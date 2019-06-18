@@ -243,7 +243,7 @@ const apis = [
     list: [
       {
         name: 'default',
-        desc: '自定义显示内容',
+        desc: '自定义显示内容模板',
         type: '',
         enum: '',
         defVal: '{row,rowIndex,column,columnIndex,fixed,isHidden}',
@@ -251,7 +251,7 @@ const apis = [
       },
       {
         name: 'header',
-        desc: '自定义表头的内容',
+        desc: '自定义表头内容的模板',
         type: '',
         enum: '',
         defVal: '{column,columnIndex,fixed,isHidden}',

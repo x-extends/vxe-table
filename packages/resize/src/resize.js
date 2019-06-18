@@ -1,17 +1,20 @@
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../conf'
 
+/**
+ * 支持任意元素模拟 resize 事件行为，定时检测
+ * 用于支持表格响应式布局，当宽度或高度发生变化时更新表格布局
+ */
 const eventStore = []
 const defaultInterval = 250
 var resizeTimeout = null
 
-function addListener () {
+function eventListener () {
   clearTimeout(resizeTimeout)
   resizeTimeout = setTimeout(eventHandle, GlobalConfig.resizeInterval || defaultInterval)
 }
 
 function eventHandle () {
-  console.log(111)
   if (eventStore.length) {
     eventStore.forEach(item => {
       let { comp, target, cb, width, heighe } = item
@@ -32,7 +35,7 @@ function eventHandle () {
 export default {
   on (comp, target, cb) {
     if (!eventStore.length) {
-      addListener()
+      eventListener()
     }
     if (!eventStore.some(item => item.comp === comp && item.target === target)) {
       eventStore.push({ comp, target, cb, width: target.clientWidth, heighe: target.clientWidth })

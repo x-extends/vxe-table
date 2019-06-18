@@ -108,6 +108,7 @@ export default {
         }
       }) : null,
       h('table', {
+        class: 'vxe-table--header',
         attrs: {
           cellspacing: 0,
           cellpadding: 0,
@@ -194,8 +195,10 @@ export default {
                   width: showTitle || showTooltip || showEllipsis ? `${border ? renderWidth - 1 : renderWidth}px` : null
                 }
               }, column.renderHeader(h, { $table, column, columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn })),
-              border && (XEUtils.isBoolean(column.resizable) ? column.resizable : resizable) && !fixedType && !isGroup ? h('div', {
-                class: ['vxe-resizable'],
+              (XEUtils.isBoolean(column.resizable) ? column.resizable : resizable) && !fixedType && !isGroup ? h('div', {
+                class: ['vxe-resizable', {
+                  'is--line': !border
+                }],
                 on: {
                   mousedown: evnt => {
                     resizeMousedown(evnt, column)

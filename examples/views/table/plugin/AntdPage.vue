@@ -39,6 +39,7 @@
     <vxe-table
       ref="xTable"
       border
+      resizable
       show-all-overflow
       class="vxe-table-antd"
       height="460"
@@ -154,6 +155,7 @@ export default {
           <vxe-table
             ref="xTable"
             border
+            resizable
             show-all-overflow
             class="vxe-table-antd"
             height="460"

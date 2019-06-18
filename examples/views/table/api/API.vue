@@ -7,6 +7,7 @@
     </vxe-toolbar>
 
     <vxe-table
+      resizable
       highlight-current-row
       highlight-hover-row
       :data.sync="apiList"
