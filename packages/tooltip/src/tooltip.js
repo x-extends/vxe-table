@@ -62,7 +62,7 @@ export default {
     }, [
       h('div', {
         class: ['vxe-table--tooltip-content']
-      }, content),
+      }, this.$slots.content || content),
       h('div', {
         class: ['vxe-table--tooltip-arrow'],
         style: tipStore.arrowStyle
