@@ -45,6 +45,7 @@
           Footer,
           Filter,
           Loading,
+          Tooltip,
           Grid,
           Excel,
           Menu,
@@ -67,6 +68,7 @@
         Vue.use(Footer)
         Vue.use(Filter)
         Vue.use(Loading)
+        Vue.use(Tooltip)
         Vue.use(Grid)
         Vue.use(Excel)
         Vue.use(Menu)

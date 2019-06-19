@@ -846,15 +846,15 @@ export default {
                   name: 'message-box'
                 }
               }
-            // },
-            // {
-            //   label: 'app.aside.nav.vxeTooltip',
-            //   locat: {
-            //     name: 'TableAPI',
-            //     params: {
-            //       name: 'tooltip'
-            //     }
-            //   }
+            },
+            {
+              label: 'app.aside.nav.vxeTooltip',
+              locat: {
+                name: 'TableAPI',
+                params: {
+                  name: 'tooltip'
+                }
+              }
             }
           ]
         }

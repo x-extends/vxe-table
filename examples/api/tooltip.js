@@ -5,7 +5,48 @@ const apis = [
     type: '',
     enum: '',
     defVal: '',
-    list: []
+    list: [
+      {
+        name: 'value,v-model',
+        descKey: 'app.api.tooltip.desc.value',
+        type: '',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'content',
+        descKey: 'app.api.tooltip.desc.content',
+        type: '',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'theme',
+        descKey: 'app.api.tooltip.desc.theme',
+        type: '',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'zIndex',
+        descKey: 'app.api.tooltip.desc.zIndex',
+        type: '',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'isArrow',
+        descKey: 'app.api.tooltip.desc.isArrow',
+        type: '',
+        enum: '',
+        defVal: '',
+        list: []
+      }
+    ]
   },
   {
     name: 'Slots',

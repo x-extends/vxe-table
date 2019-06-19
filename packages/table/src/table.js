@@ -352,6 +352,9 @@ export default {
     isGroup () {
       return this.collectColumn.some(column => UtilTools.hasChildrenList(column))
     },
+    hasTip () {
+      return GlobalConfig._tip
+    },
     visibleColumn () {
       return this.tableFullColumn ? this.tableFullColumn.filter(column => column.visible) : []
     },
@@ -506,6 +509,7 @@ export default {
       highlightHoverRow,
       vSize,
       editConfig,
+      editRules,
       showFooter,
       footerMethod,
       overflowX,
@@ -516,8 +520,10 @@ export default {
       filterStore,
       ctxMenuStore,
       tooltipStore,
+      tooltipConfig,
       validStore,
-      footerData
+      footerData,
+      hasTip
     } = this
     let { leftList, rightList } = columnStore
     return h('div', {
@@ -635,18 +641,18 @@ export default {
         /**
          * Ellipsis tooltip
          */
-        h('vxe-tooltip', {
-          props: tooltipStore,
+        hasTip ? h('vxe-tooltip', {
+          props: Object.assign({}, tooltipStore, tooltipConfig),
           ref: 'tooltip'
-        }),
+        }) : null,
         /**
          * valid error tooltip
          */
-        h('vxe-tooltip', {
+        editRules && hasTip ? h('vxe-tooltip', {
           class: 'vxe-table--valid-error',
-          props: validStore,
+          props: Object.assign({}, validStore, tooltipConfig),
           ref: 'validTip'
-        })
+        }) : null
       ])
     ])
   },

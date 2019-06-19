@@ -239,6 +239,15 @@ module.exports = {
           editRender: 'Column edit configuration items'
         }
       },
+      tooltip: {
+        desc: {
+          value: '是否显示',
+          content: '显示内容',
+          theme: '主题样式',
+          zIndex: '自定义堆叠顺序（对于在弹框中使用是由于堆叠被覆盖时可能会用到）',
+          isArrow: '是否显示箭头'
+        }
+      },
       grid: {
         desc: {
           toolbar: '工具栏配置',

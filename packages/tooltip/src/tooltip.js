@@ -108,7 +108,7 @@ export default {
             tipLeft = left + Math.floor((target.offsetWidth - wrapperElem.offsetWidth) / 2)
             tipStore.style = {
               zIndex,
-              width: `${wrapperElem.offsetWidth + 2}px`,
+              width: `${wrapperElem.offsetWidth}px`,
               top: `${top - wrapperElem.offsetHeight - 6}px`,
               left: `${tipLeft}px`
             }

@@ -61,7 +61,8 @@ const GlobalConfig = {
     mask: true,
     animat: true
   },
-  i18n: key => key
+  i18n: key => key,
+  _tip: 0 // 是否按需加载了 tooltip
 }
 
 export default GlobalConfig
