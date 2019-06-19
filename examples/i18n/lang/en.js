@@ -97,8 +97,8 @@ module.exports = {
         elementRender: 'Customize the rendering element-ui',
         iviewRender: 'Customize the rendering iview',
         antd: 'Customize the rendering ant-design-vue',
-        sortablejsRow: 'Implement row drag',
-        sortablejsColumn: 'Implement column moving',
+        sortablejsRow: 'Row data drag',
+        sortablejsColumn: 'The header column moving',
         xlsxRender: 'Export.xlsx',
 
         plugin: 'More plug-in',

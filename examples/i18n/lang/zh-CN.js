@@ -97,8 +97,8 @@ module.exports = {
         elementRender: 'element-ui 自定义渲染',
         iviewRender: 'iview 自定义渲染',
         antd: 'ant-design-vue 自定义渲染',
-        sortablejsRow: '实现行拖动',
-        sortablejsColumn: '使实现列移动',
+        sortablejsRow: '行数据拖动',
+        sortablejsColumn: '表头列移动',
         xlsxRender: '导出数据.xlsx',
 
         plugin: '更多插件',
