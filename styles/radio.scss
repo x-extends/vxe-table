@@ -13,6 +13,9 @@
     &+.radio--icon {
       border-radius: 50%;
       &:before {
+        border-width: 1px;
+        border-style: solid;
+        border-color: #fff;
         background-color: #fff;
         border-radius: 50%;
         height: 4px;

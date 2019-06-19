@@ -33,11 +33,6 @@
     &:checked+.checkbox--icon {
       background-color: $vxe-primary-color;
       border-color: $vxe-primary-color;
-      &:before {
-        border-width: 1px;
-        border-style: solid;
-        border-color: #fff;
-      }
       &+.radio--label,
       &+.checkbox--label {
         color: $vxe-primary-color;
