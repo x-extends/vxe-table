@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3>高级函数</h3>
+    <h3>单元格渲染器</h3>
     <p>通过渲染器你可以轻松实现渲染的单元格组件，可以根据不同业务实现不一样的组件，这个功能将非常实用</p>
     <p>比如这些插件 <a href="https://www.npmjs.com/package/vxe-table-plugin-element">vxe-table-plugin-element</a> 等插件都是使用渲染器实现的</p>
     <p>添加单个 renderer.add(name, options)</p>
@@ -16,6 +16,7 @@
       <code class="javascript">{{ demoCodes[2] }}</code>
       <code class="html">{{ demoCodes[3] }}</code>
     </pre>
+    <h3>事件拦截器</h3>
     <p>通过内置拦截器可以解决当表格交互与其他组件存在冲突的，可以通过拦截器去阻止默认的行为，从而可以集成其他组件互相兼容</p>
     <p>添加单个 interceptor.add(name, handle)</p>
     <p>name: event.clear_actived（清除激活单元格时触发，返回 false 阻止默认的清除行为）</p>

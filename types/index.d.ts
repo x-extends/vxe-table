@@ -1,10 +1,4 @@
-export interface VXETableMethods {
+export * from './vxe-table';
 
-}
-
-/**
- * A powerful table component.
- */
-declare var VXETable: VXETableMethods;
-
+import * as VXETable from './vxe-table';
 export default VXETable;

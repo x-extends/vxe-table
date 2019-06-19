@@ -102,7 +102,7 @@
         Vue.use(VXETable, {
           size: 'small',
           version: 0,
-          tooltipConfig: {
+          tooltip: {
             zIndex: 3000
           }
         })
@@ -142,7 +142,7 @@
             nextPage: 'vxe-icon--arrow-right'
           },
           // 默认 tooltip 主题样式
-          tooltipConfig: {
+          tooltip: {
             zIndex: 3000,
             theme: 'dark'
           },

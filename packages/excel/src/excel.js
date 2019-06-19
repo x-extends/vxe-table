@@ -1,5 +1,4 @@
-import TableProps from '../../table/src/props'
-import funs from '../../table/src/func'
+import Table from '../../table'
 
 const excelContextMenu = {
   header: {
@@ -118,7 +117,7 @@ function buildProps (h, _vm, props = {}) {
   })
 }
 
-funs.forEach(name => {
+Object.keys(Table.methods).forEach(name => {
   methods[name] = function () {
     return this.$refs.xTable[name].apply(this.$refs.xTable[name], arguments)
   }
@@ -128,7 +127,7 @@ export default {
   name: 'VxeExcel',
   props: {
     columns: Array,
-    ...TableProps
+    ...Table.props
   },
   data () {
     return {

@@ -1,5 +1,4 @@
 import XEUtils from 'xe-utils'
-import TableProps from './props'
 import GlobalConfig from '../../conf'
 import Cell from '../../column/src/cell'
 import { Interceptor, Renderer } from '../../v-x-e-table'
@@ -94,7 +93,87 @@ function renderFixed (h, $table, fixedType) {
 
 export default {
   name: 'VxeTable',
-  props: TableProps,
+  props: {
+    /** 基本属性 */
+    // 数据
+    data: Array,
+    // 初始化绑定动态列
+    customs: Array,
+    // 表格的高度
+    height: [Number, String],
+    // 表格的最大高度
+    maxHeight: [Number, String],
+    // 所有列是否允许拖动列宽调整大小
+    resizable: { type: Boolean, default: () => GlobalConfig.resizable },
+    // 是否带有斑马纹
+    stripe: { type: Boolean, default: () => GlobalConfig.stripe },
+    // 是否带有纵向边框
+    border: { type: Boolean, default: () => GlobalConfig.border },
+    // 表格的尺寸
+    size: { type: String, default: () => GlobalConfig.size },
+    // 列的宽度是否自撑开
+    fit: { type: Boolean, default: () => GlobalConfig.fit },
+    // 表格是否加载中
+    loading: Boolean,
+    // 是否显示表头
+    showHeader: { type: Boolean, default: () => GlobalConfig.showHeader },
+    // 只对 type=index 时有效，自定义序号的起始值
+    startIndex: { type: Number, default: 0 },
+    // 是否要高亮当前选中行
+    highlightCurrentRow: Boolean,
+    // 鼠标移到行是否要高亮显示
+    highlightHoverRow: Boolean,
+    // 是否显示表尾合计
+    showFooter: Boolean,
+    // 表尾合计的计算方法
+    footerMethod: Function,
+    // 给行附加 className
+    rowClassName: [String, Function],
+    // 给单元格附加 className
+    cellClassName: [String, Function],
+    // 给表头的行附加 className
+    headerRowClassName: [String, Function],
+    // 给表头的单元格附加 className
+    headerCellClassName: [String, Function],
+    // 给表尾的行附加 className
+    footerRowClassName: [String, Function],
+    // 给表尾的单元格附加 className
+    footerCellClassName: [String, Function],
+    // 合并行或列
+    spanMethod: Function,
+    // 设置所有内容过长时显示为省略号
+    showAllOverflow: { type: [Boolean, String], default: () => GlobalConfig.showAllOverflow },
+    // 设置表头所有内容过长时显示为省略号
+    showHeaderAllOverflow: { type: [Boolean, String], default: () => GlobalConfig.showHeaderAllOverflow },
+
+    /** 高级属性 */
+    // 行数据的 Key
+    rowKey: [String, Number],
+    // 是否自动根据父容器响应式调整表格宽高
+    autoResize: Boolean,
+    // 单选配置
+    radioConfig: Object,
+    // 多选配置项
+    selectConfig: Object,
+    // tooltip 配置项
+    tooltipConfig: Object,
+    // 展开行配置项
+    expandConfig: Object,
+    // 树形结构配置项
+    treeConfig: Object,
+    // 快捷菜单配置项
+    contextMenu: { type: Object, default: () => GlobalConfig.contextMenu },
+    // 鼠标配置项
+    mouseConfig: Object,
+    // 按键配置项
+    keyboardConfig: Object,
+    // 编辑配置项
+    editConfig: Object,
+    // 校验规则配置项
+    editRules: Object,
+    // 优化配置项
+    optimization: Object
+  },
   provide () {
     return {
       $table: this
@@ -220,10 +299,7 @@ export default {
         visible: false,
         row: null,
         column: null,
-        content: null,
-        style: null,
-        arrowStyle: null,
-        placement: null
+        content: ''
       },
       // 存放可编辑相关信息
       editStore: {
@@ -258,9 +334,9 @@ export default {
         visible: false,
         row: null,
         column: null,
+        content: '',
         rule: null,
-        style: null,
-        placement: null
+        isArrow: false
       }
     }
   },
@@ -271,9 +347,6 @@ export default {
     // 优化的参数
     optimizeOpts () {
       return Object.assign({}, GlobalConfig.optimization, this.optimization)
-    },
-    tooltipOpts () {
-      return Object.assign({}, GlobalConfig.tooltipConfig, this.tooltipConfig)
     },
     // 是否使用了分组表头
     isGroup () {
@@ -403,7 +476,7 @@ export default {
     this.fullDataIndexMap.clear()
     this.fullColumnIndexMap.clear()
     this.closeFilter()
-    this.closeContextMenu()
+    this.closeMenu()
   },
   destroyed () {
     GlobalEvent.off(this, 'mousedown')
@@ -432,7 +505,6 @@ export default {
       stripe,
       highlightHoverRow,
       vSize,
-      tooltipOpts,
       editConfig,
       showFooter,
       footerMethod,
@@ -561,36 +633,20 @@ export default {
           ref: 'ctxWrapper'
         }) : null,
         /**
-         * tooltip
+         * Ellipsis tooltip
          */
-        tooltipStore.visible ? h('div', {
-          class: ['vxe-table--tooltip-wrapper', `theme--${tooltipOpts.theme}`, `placement--${tooltipStore.placement}`],
-          style: tooltipStore.style,
-          ref: 'tipWrapper'
-        }, [
-          h('div', {
-            class: ['vxe-table--tooltip-content']
-          }, UtilTools.formatText(tooltipStore.content)),
-          h('div', {
-            class: ['vxe-table--tooltip-arrow'],
-            style: tooltipStore.arrowStyle
-          })
-        ]) : null,
+        h('vxe-tooltip', {
+          props: tooltipStore,
+          ref: 'tooltip'
+        }),
         /**
-         * valid error
+         * valid error tooltip
          */
-        validStore.visible ? h('div', {
-          class: ['vxe-table--valid-error-wrapper', `placement--${validStore.placement}`],
-          style: validStore.style,
-          ref: 'validWrapper'
-        }, [
-          h('div', {
-            class: ['vxe-table--valid-error-content']
-          }, UtilTools.formatText(validStore.rule.message)),
-          h('div', {
-            class: ['vxe-table--valid-error-arrow']
-          })
-        ]) : null
+        h('vxe-tooltip', {
+          class: 'vxe-table--valid-error',
+          props: validStore,
+          ref: 'validTip'
+        })
       ])
     ])
   },
@@ -1322,7 +1378,7 @@ export default {
       }
       // 如果配置了快捷菜单且，点击了其他地方则关闭
       if (ctxMenuStore.visible && this.$refs.ctxWrapper && !DomTools.getEventTargetNode(evnt, this.$refs.ctxWrapper.$el).flag) {
-        this.closeContextMenu()
+        this.closeMenu()
       }
     },
     /**
@@ -1330,14 +1386,14 @@ export default {
      */
     handleGlobalBlurEvent (evnt) {
       this.closeFilter()
-      this.closeContextMenu()
+      this.closeMenu()
     },
     /**
      * 全局滚动事件
      */
     handleGlobalMousewheelEvent (evnt) {
       this.clostTooltip()
-      this.closeContextMenu()
+      this.closeMenu()
     },
     /**
      * 全局键盘事件
@@ -1366,7 +1422,7 @@ export default {
       let operCtxMenu = isCtxMenu && ctxMenuStore.visible && (isEnter || isSpacebar || operArrow)
       if (isEsc) {
         // 如果按下了 Esc 键，关闭快捷菜单、筛选
-        this.closeContextMenu()
+        this.closeMenu()
         this.closeFilter()
         // 如果是激活编辑状态，则取消编辑
         if (actived.row) {
@@ -1557,7 +1613,7 @@ export default {
           return
         }
       }
-      this.closeContextMenu()
+      this.closeMenu()
       this.closeFilter()
     },
     /**
@@ -1606,7 +1662,7 @@ export default {
               }
             })
           } else {
-            this.closeContextMenu()
+            this.closeMenu()
           }
         }
       }
@@ -1615,7 +1671,7 @@ export default {
     /**
      * 关闭快捷菜单
      */
-    closeContextMenu () {
+    closeMenu () {
       Object.assign(this.ctxMenuStore, {
         list: [],
         visible: false,
@@ -1648,7 +1704,7 @@ export default {
     ctxMenuLinkEvent (evnt, menu) {
       if (!menu.disabled && (!menu.children || !menu.children.length)) {
         UtilTools.emitEvent(this, 'context-menu-click', [Object.assign({ menu }, this.ctxMenuStore.args), evnt])
-        this.closeContextMenu()
+        this.closeMenu()
       }
     },
     /**
@@ -1679,67 +1735,33 @@ export default {
     // 显示 tooltip
     showTooltip (evnt, content, column, row) {
       let cell = evnt.currentTarget
+      let tooltip = this.$refs.tooltip
       let wrapperElem = cell.children[0]
       if (content && wrapperElem.scrollWidth > wrapperElem.clientWidth) {
-        let { tooltipStore, tooltipOpts, $refs } = this
-        let { top, left } = DomTools.getOffsetPos(cell)
-        let { scrollTop, scrollLeft, visibleWidth } = DomTools.getDomNode()
-        let tipLeft = left
-        Object.assign(tooltipStore, {
+        Object.assign(this.tooltipStore, {
           row,
           column,
-          content,
-          visible: true,
-          placement: 'top',
-          arrowStyle: { left: '50%' }
+          content: UtilTools.formatText(content),
+          visible: true
         })
-        return this.$nextTick().then(() => {
-          let tipWrapperElem = $refs.tipWrapper
-          if (tipWrapperElem) {
-            tipLeft = left + Math.floor((cell.offsetWidth - tipWrapperElem.offsetWidth) / 2)
-            tooltipStore.style = {
-              zIndex: tooltipOpts.zIndex,
-              width: `${tipWrapperElem.offsetWidth + 2}px`,
-              top: `${top - tipWrapperElem.offsetHeight - 6}px`,
-              left: `${tipLeft}px`
-            }
-            return this.$nextTick()
-          }
-        }).then(() => {
-          let tipWrapperElem = $refs.tipWrapper
-          if (tipWrapperElem) {
-            let offsetHeight = tipWrapperElem.offsetHeight
-            let offsetWidth = tipWrapperElem.offsetWidth
-            if (top - offsetHeight < scrollTop) {
-              tooltipStore.placement = 'bottom'
-              tooltipStore.style.top = `${top + cell.offsetHeight + 6}px`
-            }
-            if (tipLeft < scrollLeft + 6) {
-              // 超出左边界
-              tipLeft = scrollLeft + 6
-              tooltipStore.arrowStyle.left = `${left > tipLeft + 16 ? left - tipLeft + 16 : 16}px`
-              tooltipStore.style.left = `${tipLeft}px`
-            } else if (left + offsetWidth > scrollLeft + visibleWidth) {
-              // 超出右边界
-              tipLeft = scrollLeft + visibleWidth - offsetWidth - 6
-              tooltipStore.arrowStyle.left = `${offsetWidth - Math.max(Math.floor((tipLeft + offsetWidth - left) / 2), 22)}px`
-              tooltipStore.style.left = `${tipLeft}px`
-            }
-          }
-        })
+        if (tooltip) {
+          tooltip.toVisible(cell)
+        }
       }
       return this.$nextTick()
     },
     // 关闭 tooltip
     clostTooltip () {
+      let tooltip = this.$refs.tooltip
       Object.assign(this.tooltipStore, {
         row: null,
         column: null,
         content: null,
-        style: null,
-        visible: false,
-        placement: null
+        visible: false
       })
+      if (tooltip) {
+        tooltip.close()
+      }
       return this.$nextTick()
     },
     /**
@@ -2009,7 +2031,7 @@ export default {
                 document.onmouseup = domMouseup
               }
               this.closeFilter()
-              this.closeContextMenu()
+              this.closeMenu()
             } else {
               // 如果不在所有选中的范围之内则重新选中
               let select = DomTools.getCellIndexs(cell)
@@ -2163,6 +2185,9 @@ export default {
         } else {
           column.renderHeight = cell.offsetHeight
           actived.args = params
+          if (actived.column !== column) {
+            this.clearValidate()
+          }
           setTimeout(() => {
             this.handleFocus(params, evnt)
           })
@@ -2862,7 +2887,7 @@ export default {
             if (cell) {
               return this.validCellRules(type, row, column)
                 .then(() => this.clearValidate())
-                .catch(rule => this.openValidTooltip({ rule, row, column, cell }))
+                .catch(rule => this.showValidTooltip({ rule, row, column, cell }))
             }
           }
         }
@@ -2893,7 +2918,7 @@ export default {
             // 如果校验不通过与触发方式一致，则聚焦提示错误，否则跳过并不作任何处理
             if (!rule.trigger || type === rule.trigger) {
               let rest = { rule, row, column, cell }
-              this.openValidTooltip(rest)
+              this.showValidTooltip(rest)
               return Promise.reject(rest)
             }
             return Promise.resolve()
@@ -3060,14 +3085,17 @@ export default {
       return validPromise
     },
     clearValidate () {
+      let validTip = this.$refs.validTip
       Object.assign(this.validStore, {
         visible: false,
         row: null,
         column: null,
-        rule: null,
-        style: null,
-        placement: null
+        content: '',
+        rule: null
       })
+      if (validTip) {
+        validTip.close()
+      }
       return this.$nextTick()
     },
     /**
@@ -3075,48 +3103,25 @@ export default {
      */
     handleValidError (params) {
       this.handleActived(params, { type: 'valid-error', trigger: 'call' })
-        .then(() => this.openValidTooltip(params))
+        .then(() => this.showValidTooltip(params))
     },
     /**
      * 弹出校验错误提示
      */
-    openValidTooltip (params) {
-      let { $refs, tooltipOpts, validStore } = this
+    showValidTooltip (params) {
+      let validTip = this.$refs.validTip
       let { rule, row, column, cell } = params
       this.$nextTick(() => {
-        let { top, left } = DomTools.getOffsetPos(cell)
-        let { scrollTop, scrollLeft, visibleWidth, visibleHeight } = DomTools.getDomNode()
-        Object.assign(validStore, {
+        Object.assign(this.validStore, {
           row,
           column,
           rule,
-          visible: true,
-          placement: 'bottom'
+          content: UtilTools.formatText(rule.message),
+          visible: true
         })
-        this.$nextTick().then(() => {
-          let validWrapperElem = $refs.validWrapper
-          if (validWrapperElem) {
-            validStore.style = {
-              zIndex: tooltipOpts.zIndex,
-              top: `${top + cell.offsetHeight}px`,
-              left: `${left + Math.floor((cell.offsetWidth - validWrapperElem.offsetWidth) / 2)}px`
-            }
-            return this.$nextTick()
-          }
-        }).then(() => {
-          let validWrapperElem = $refs.validWrapper
-          if (validWrapperElem) {
-            let offsetHeight = validWrapperElem.offsetHeight
-            let offsetWidth = validWrapperElem.offsetWidth
-            if (top + cell.offsetHeight + offsetHeight > scrollTop + visibleHeight) {
-              validStore.placement = 'top'
-              validStore.style.top = `${top - offsetHeight}px`
-            }
-            if (left + offsetWidth > scrollLeft + visibleWidth) {
-              validStore.style.left = `${scrollLeft + visibleWidth - offsetWidth - 6}px`
-            }
-          }
-        })
+        if (validTip) {
+          validTip.toVisible(cell)
+        }
         UtilTools.emitEvent(this, 'valid-error', [params])
       })
     },

@@ -29,10 +29,6 @@ const GlobalConfig = {
       rHeight: 0
     }
   },
-  tooltipConfig: {
-    // zIndex: 99,
-    theme: 'dark'
-  },
   iconMap: {
     sortAsc: 'vxe-icon--caret-top',
     sortDesc: 'vxe-icon--caret-bottom',
@@ -43,6 +39,10 @@ const GlobalConfig = {
     jumpNext: 'vxe-icon--d-arrow-right',
     prevPage: 'vxe-icon--arrow-left',
     nextPage: 'vxe-icon--arrow-right'
+  },
+  tooltip: {
+    // zIndex: 99,
+    theme: 'dark'
   },
   pager: {
     // pageSize: 10,

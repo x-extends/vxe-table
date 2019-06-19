@@ -6,6 +6,7 @@
     <vxe-toolbar :data="tableData" setting>
       <template v-slot:buttons>
         <vxe-button @click="insertEvent">新增</vxe-button>
+        <vxe-button @click="$refs.xTree.removeSelecteds()">移除选中</vxe-button>
         <vxe-button @click="getInsertEvent">获取新增</vxe-button>
         <vxe-button @click="getRemoveEvent">获取删除</vxe-button>
         <vxe-button @click="getUpdateEvent">获取修改</vxe-button>
@@ -46,6 +47,7 @@ export default {
         <vxe-toolbar :data="tableData" setting>
           <template v-slot:buttons>
             <vxe-button @click="insertEvent">新增</vxe-button>
+            <vxe-button @click="$refs.xTree.removeSelecteds()">移除选中</vxe-button>
             <vxe-button @click="getInsertEvent">获取新增</vxe-button>
             <vxe-button @click="getRemoveEvent">获取删除</vxe-button>
             <vxe-button @click="getUpdateEvent">获取修改</vxe-button>

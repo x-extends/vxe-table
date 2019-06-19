@@ -1501,7 +1501,7 @@ const apis = [
         list: []
       },
       {
-        name: 'closeContextMenu()',
+        name: 'closeMenu()',
         desc: '手动关闭快捷菜单',
         type: 'Promise',
         enum: '',

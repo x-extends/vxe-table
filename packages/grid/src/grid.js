@@ -1,13 +1,12 @@
-import TableProps from '../../table/src/props'
-import funs from '../../table/src/func'
+import Table from '../../table'
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../conf'
 import { UtilTools } from '../../tools'
 
 const methods = {}
-const propKeys = Object.keys(TableProps)
+const propKeys = Object.keys(Table.props)
 
-funs.forEach(name => {
+Object.keys(Table.methods).forEach(name => {
   methods[name] = function () {
     return this.$refs.xTable[name].apply(this.$refs.xTable[name], arguments)
   }
@@ -20,7 +19,7 @@ export default {
     pagerConfig: Object,
     proxyConfig: Object,
     toolbar: Object,
-    ...TableProps
+    ...Table.props
   },
   provide () {
     return {

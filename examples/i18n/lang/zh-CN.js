@@ -94,12 +94,12 @@ module.exports = {
         cell: '单元格',
 
         other: '其他组件',
-        elementRender: '使用 element-ui 自定义渲染',
-        iviewRender: '使用 iview 自定义渲染',
-        antd: '使用 ant-design-vue 自定义渲染',
-        sortablejsRow: '使用 sortablejs 实现行拖动',
-        sortablejsColumn: '使用 sortablejs 实现列移动',
-        xlsxRender: '使用 xlsx 导出数据',
+        elementRender: 'element-ui 自定义渲染',
+        iviewRender: 'iview 自定义渲染',
+        antd: 'ant-design-vue 自定义渲染',
+        sortablejsRow: '实现行拖动',
+        sortablejsColumn: '使实现列移动',
+        xlsxRender: '导出数据.xlsx',
 
         plugin: '更多插件',
         elementPlugin: 'element-ui 基本配置',

@@ -1,8 +1,10 @@
 /**Variable**/
+@import './helpers/placeholders.scss';
+@import './helpers/mixin.scss';
 
 /*tppltip*/
-.vxe-table--tooltip-wrapper,
-.vxe-table--valid-error-wrapper {
+.vxe-table--tooltip-wrapper {
+  display: none;
   position: absolute;
   top: 0;
   left: 0;
@@ -16,7 +18,16 @@
   box-shadow: 2px 2px 4px -2px rgba(0,0,0,.2);
   color: $vxe-font-color;
   font-family: $vxe-font-family;
+  &.is--visible {
+    display: block;
+  }
+  &.is--arrow {
+    .vxe-table--tooltip-arrow {
+      display: block;
+    }
+  }
   .vxe-table--tooltip-arrow {
+    display: none;
     position: absolute;
     border-color: transparent;
     border-width: 6px;
@@ -92,7 +103,9 @@
 }
 
 /*valid error*/
-.vxe-table--valid-error-wrapper {
-  background-color: $vxe-table-validate-error-color;
-  color: #fff;
+.vxe-table--tooltip-wrapper {
+  &.vxe-table--valid-error {
+    background-color: $vxe-table-validate-error-color;
+    color: #fff;
+  }
 }
