@@ -9,15 +9,15 @@ const apis = [
       {
         name: 'value,v-model',
         descKey: 'app.api.tooltip.desc.value',
-        type: '',
+        type: 'Boolean',
         enum: '',
-        defVal: '',
+        defVal: 'false',
         list: []
       },
       {
         name: 'content',
         descKey: 'app.api.tooltip.desc.content',
-        type: '',
+        type: 'String',
         enum: '',
         defVal: '',
         list: []
@@ -25,25 +25,25 @@ const apis = [
       {
         name: 'theme',
         descKey: 'app.api.tooltip.desc.theme',
-        type: '',
-        enum: '',
-        defVal: '',
+        type: 'String',
+        enum: 'dark,light',
+        defVal: 'dark',
         list: []
       },
       {
         name: 'zIndex',
         descKey: 'app.api.tooltip.desc.zIndex',
-        type: '',
+        type: 'Number',
         enum: '',
-        defVal: '',
+        defVal: '99',
         list: []
       },
       {
         name: 'isArrow',
         descKey: 'app.api.tooltip.desc.isArrow',
-        type: '',
+        type: 'Boolean',
         enum: '',
-        defVal: '',
+        defVal: 'true',
         list: []
       }
     ]
