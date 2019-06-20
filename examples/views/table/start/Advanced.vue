@@ -1,29 +1,34 @@
 <template>
   <div>
-    <h3>渲染器</h3>
+    <h2>渲染器</h2>
     <p>通过渲染器你可以轻松实现筛选模板、单元格模板，可以根据不同业务实现不一样的组件，这个功能将非常实用</p>
-    <p>比如这些插件 <a href="https://www.npmjs.com/package/vxe-table-plugin-element">vxe-table-plugin-element</a> 等插件都是使用渲染器实现的</p>
+    <p>比如这些插件 <a class="link" href="https://www.npmjs.com/package/vxe-table-plugin-element" target="_blank">vxe-table-plugin-element</a> 等插件都是使用渲染器实现的</p>
     <p>添加单个 renderer.add(name, options)</p>
     <p>混合多个 renderer.mixin(opts)</p>
     <p>删除 renderer.delete(name)</p>
-    <p>例子：使用 render 实现单元格组件</p>
+    <h3>例子：动手实现一个简单的筛选渲染</h3>
     <pre>
       <code class="javascript">{{ demoCodes[0] }}</code>
       <code class="html">{{ demoCodes[1] }}</code>
     </pre>
-    <p>例子：使用 JSX 实现单元格组件</p>
+    <h3>例子：动手实现一个简单的单元格渲染</h3>
     <pre>
       <code class="javascript">{{ demoCodes[2] }}</code>
       <code class="html">{{ demoCodes[3] }}</code>
     </pre>
-    <h3>事件拦截器</h3>
+    <h3>例子：通过 JSX 实现更加简单，方便维护</h3>
+    <pre>
+      <code class="javascript">{{ demoCodes[4] }}</code>
+      <code class="html">{{ demoCodes[5] }}</code>
+    </pre>
+    <h2>事件拦截器</h2>
     <p>通过内置拦截器可以解决当表格交互与其他组件存在冲突的，可以通过返回 false 阻止默认的行为，从而可以集成其他组件互相兼容</p>
     <p>添加单个 interceptor.add(name, handle)</p>
     <p>event.clear_filter（清除筛选面板时触发）</p>
     <p>event.clear_actived（清除激活单元格时触发）</p>
     <p>例子：比如自定义渲染某个组件后，由于弹出层面板不在单元格之内，按键事件的交互行为存在冲突，对于这些场景就很有用了</p>
     <pre>
-      <code class="javascript">{{ demoCodes[4] }}</code>
+      <code class="javascript">{{ demoCodes[6] }}</code>
     </pre>
   </div>
 </template>
@@ -36,10 +41,6 @@ export default {
     return {
       demoCodes: [
         `
-        import Vue from 'vue'
-        import VXETable from 'vxe-table'
-        import 'vxe-table/lib/index.css'
-
         VXETable.renderer.mixin({
           MyFilter: {
             // 筛选模板
@@ -62,20 +63,27 @@ export default {
               })
             },
             // 筛选方法
-            filterMethod () {
-
-            },
-            // 单元格显示模板
-            renderCell (h, editRender, params, context) {
-              return h('div')
-            },
-            // 单元格可编辑模板
-            renderEdit (h, editRender, params, context) {
-              return h('div')
+            filterMethod ({ option, row, column }) {
+              let { data } = option
+              let cellValue = XEUtils.get(row, column.property)
+              return cellValue === data
             }
           }
         })
-
+        `,
+        `
+        <vxe-table
+          border
+          height="600"
+          :data.sync="tableData"
+          :edit-config="{key: 'id', trigger: 'click', mode: 'row'}">
+          <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
+          <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
+          <vxe-table-column prop="age" label="Age" :filters="[{data: null}]" :filter-render="{name: 'MyFilter'}"></vxe-table-column>
+          <vxe-table-column prop="name" label="Name"></vxe-table-column>
+        </vxe-table>
+        `,
+        `
         VXETable.renderer.add('MyCell', {
           autofocus: '.my-cell',
           renderEdit (h, editRender, params) {
@@ -113,15 +121,11 @@ export default {
           :edit-config="{key: 'id', trigger: 'click', mode: 'row'}">
           <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
           <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
-          <vxe-table-column prop="age" label="Age" :filters="[{data: null}]" :filter-render="{name: 'MyFilter'}"></vxe-table-column>
+          <vxe-table-column prop="age" label="Age"></vxe-table-column>
           <vxe-table-column prop="name" label="Name" :edit-render="{name: 'MyCell'}"></vxe-table-column>
         </vxe-table>
         `,
         `
-        import Vue from 'vue'
-        import VXETable from 'vxe-table'
-        import 'vxe-table/lib/index.css'
-
         VXETable.renderer.add('MyCell', {
           autofocus: '.my-cell',
           renderEdit (h, editRender, { row, column }) {
@@ -148,12 +152,8 @@ export default {
         </vxe-table>
         `,
         `
-        import Vue from 'vue'
-        import VXETable from 'vxe-table'
-        import 'vxe-table/lib/index.css'
-
         VXETable.interceptor.add('event.clear_actived', (params, event) => {
-          // 比如点击了某日期组件的面板，此时被激活单元格不应该被自动关闭，通过返回 false 可以阻止默认的行为。
+          // 比如点击了某个组件的弹出层面板之后，此时被激活单元格不应该被自动关闭，通过返回 false 可以阻止默认的行为。
           if (event.target.className.indexOf('other-popper') > -1) {
             return false
           }
