@@ -87,7 +87,7 @@ export default {
       tableData: [],
       sexList: [],
       regionList: [],
-      restaurants: ['前端', '后端'],
+      restaurants: ['前端', '后端', '开发', '测试'],
       tablePage: {
         currentPage: 1,
         pageSize: 10,

@@ -712,6 +712,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.elementFilterPlugin',
+              locat: {
+                name: 'TablePluginElementFilter'
+              }
+            },
+            {
               label: 'app.aside.nav.elementPluginMore',
               locat: {
                 name: 'TablePluginElementPage'
@@ -724,6 +730,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.iviewFilter',
+              locat: {
+                name: 'TablePluginIviewFilter'
+              }
+            },
+            {
               label: 'app.aside.nav.iviewPluginMore',
               locat: {
                 name: 'TablePluginIviewPage'
@@ -733,6 +745,12 @@ export default {
               label: 'app.aside.nav.antdPlugin',
               locat: {
                 name: 'TablePluginAntdConfig'
+              }
+            },
+            {
+              label: 'app.aside.nav.antdFilter',
+              locat: {
+                name: 'TablePluginAntdFilter'
               }
             },
             {

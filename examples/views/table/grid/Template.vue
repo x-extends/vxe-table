@@ -3,13 +3,15 @@
     <p>使用自定义模板渲染，通过 <table-column-api-link prop="slots"/> 属性编写 <a class="link" href="https://cn.vuejs.org/v2/guide/render-function.html#JSX" target="_blank">JSX</a> 模板或 <a class="link" href="https://cn.vuejs.org/v2/guide/render-function.html#%E8%99%9A%E6%8B%9F-DOM" target="_blank">VNode</a></p>
     <p><table-column-api-link prop="default"/>：自定义内容模板（提前格式化好数据 > <table-column-api-link prop="formatter"/> > <table-column-api-link prop="slots"/></p>
     <p><table-column-api-link prop="header"/>：自定义表头模板</p>
-    <p><table-column-api-link prop="edit"/>：自定义可编辑模板（如果需要复用，建议使用<router-link :to="{name: 'Advanced'}">渲染器</router-link>）</p>
+    <p><table-column-api-link prop="filter"/>：自定义筛选模板（建议使用<router-link :to="{name: 'Advanced'}">渲染器</router-link>，可以更好的复用）</p>
+    <p><table-column-api-link prop="edit"/>：自定义可编辑模板（建议使用<router-link :to="{name: 'Advanced'}">渲染器</router-link>，可以更好的复用）</p>
 
     <vxe-grid
       border
       height="400"
       :columns="tableColumn"
-      :data.sync="tableData">
+      :data.sync="tableData"
+      :edit-config="{key: 'id', trigger: 'click', mode: 'cell'}">
     </vxe-grid>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -47,6 +49,9 @@ export default {
           prop: 'sex',
           label: 'Sex',
           showHeaderOverflow: true,
+          filters: [{ data: '' }],
+          filterMethod: this.filterSexMethod,
+          editRender: { type: 'default' },
           slots: {
             header: ({ column }) => {
               return [
@@ -54,6 +59,16 @@ export default {
                   <i>@</i>
                   <span style="color: red;" onClick={ this.headerClickEvent }>{ column.label }</span>
                 </span>
+              ]
+            },
+            filter: ({ column, context }) => {
+              return column.filters.map(option => {
+                return <input type="type" value={ option.data } onInput={ evnt => this.changeFilterEvent(evnt, option, context) }/>
+              })
+            },
+            edit: ({ row }) => {
+              return [
+                <input type="text" value={ row.sex } onInput={ evnt => { row.sex = evnt.target.value } }/>
               ]
             }
           }
@@ -88,7 +103,8 @@ export default {
           border
           height="400"
           :columns="tableColumn"
-          :data.sync="tableData">
+          :data.sync="tableData"
+          :edit-config="{key: 'id', trigger: 'click', mode: 'cell'}">
         </vxe-grid>
         `,
         `
@@ -115,6 +131,9 @@ export default {
                   prop: 'sex',
                   label: 'Sex',
                   showHeaderOverflow: true,
+                  filters: [{ data: '' }],
+                  filterMethod: this.filterSexMethod,
+                  editRender: { type: 'default' },
                   slots: {
                     header: ({ column }) => {
                       return [
@@ -122,6 +141,16 @@ export default {
                           <i>@</i>
                           <span style="color: red;" onClick={ this.headerClickEvent }>{ column.label }</span>
                         </span>
+                      ]
+                    },
+                    filter: ({ column, context }) => {
+                      return column.filters.map(option => {
+                        return <input type="type" value={ option.data } onInput={ evnt => this.changeFilterEvent(evnt, option, context) }/>
+                      })
+                    },
+                    edit: ({ row }) => {
+                      return [
+                        <input type="text" value={ row.sex } onInput={ evnt => { row.sex = evnt.target.value } }/>
                       ]
                     }
                   }
@@ -164,6 +193,13 @@ export default {
             },
             addressClickEvent (row) {
               this.$XMsg.alert(\`address点击事件：\${row.row}\`)
+            },
+            filterSexMethod ({ option, row }) {
+              return row.sex === option.data
+            },
+            changeFilterEvent (evnt, option, context) {
+              option.data = evnt.target.value
+              context.changeMultipleOption(evnt, !!option.data, option)
             }
           }
         }
@@ -189,6 +225,13 @@ export default {
     },
     addressClickEvent (row) {
       this.$XMsg.alert(`address点击事件：${row.row}`)
+    },
+    filterSexMethod ({ option, row }) {
+      return row.sex === option.data
+    },
+    changeFilterEvent (evnt, option, context) {
+      option.data = evnt.target.value
+      context.changeMultipleOption(evnt, !!option.data, option)
     }
   }
 }

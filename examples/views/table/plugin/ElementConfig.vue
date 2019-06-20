@@ -48,7 +48,9 @@ export default {
       regionList: [],
       restaurants: [
         { value: '前端', name: '前端' },
-        { value: '后端', name: '后端' }
+        { value: '后端', name: '后端' },
+        { value: '开发', name: '开发' },
+        { value: '测试', name: '测试' }
       ],
       sexGroupList: [
         {
@@ -140,7 +142,7 @@ export default {
               clearTimeout(this.timeout)
               this.timeout = setTimeout(() => {
                 cb(results)
-              }, 3000 * Math.random())
+              }, 1000 * Math.random())
             },
             createStateFilter (queryString) {
               return (state) => {
@@ -193,7 +195,7 @@ export default {
       clearTimeout(this.timeout)
       this.timeout = setTimeout(() => {
         cb(results)
-      }, 3000 * Math.random())
+      }, 1000 * Math.random())
     },
     createStateFilter (queryString) {
       return (state) => {

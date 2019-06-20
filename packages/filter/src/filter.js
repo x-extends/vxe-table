@@ -1,4 +1,5 @@
 import GlobalConfig from '../../conf'
+import { Renderer } from '../../v-x-e-table'
 
 export default {
   name: 'VxeTableFilter',
@@ -7,71 +8,54 @@ export default {
     optimizeOpts: Object
   },
   render (h) {
-    let $table = this.$parent
-    let { filterStore, optimizeOpts, filterCheckAllEvent, filterOptionRadioEvent, filterOptionCheckEvent } = this
-    let { multiple } = filterStore
-    let filterRens = [
-      h('li', {
-        class: ['vxe-table--filter-option', {
-          'is--active': !filterStore.options.some(item => item.checked)
-        }]
-      }, [
-        multiple
-          ? h('label', {
-            class: ['vxe-checkbox', {
-              'is--indeterminate': filterStore.isIndeterminate
-            }]
-          }, [
-            h('input', {
-              attrs: {
-                type: 'checkbox'
-              },
-              domProps: {
-                checked: filterStore.isAllSelected
-              },
-              on: {
-                change (evnt) {
-                  filterCheckAllEvent(evnt, evnt.target.checked)
-                }
-              }
-            }),
-            h('span', {
-              class: ['checkbox--icon']
-            }),
-            h('span', {
-              class: ['checkbox--label']
-            }, GlobalConfig.i18n('vxe.table.allFilter'))
-          ])
-          : h('span', {
-            class: 'vxe-table--filter-label',
-            on: {
-              click: $table.resetFilterEvent
-            }
-          }, GlobalConfig.i18n('vxe.table.allFilter'))
-      ])
-    ]
-    filterStore.options.forEach((item, index) => {
-      filterRens.push(
+    let { filterStore, optimizeOpts } = this
+    return h('div', {
+      class: ['vxe-table--filter-wrapper filter--prevent-default', {
+        't--animat': optimizeOpts.animat,
+        'filter--active': filterStore.visible
+      }],
+      style: filterStore.style
+    }, filterStore.visible ? [
+      h('ul', {
+        class: ['vxe-table--filter-body']
+      }, this.renderOptions(h)),
+      this.renderFooter(h)
+    ] : [])
+  },
+  methods: {
+    renderOptions (h) {
+      let $table = this.$parent
+      let { filterStore, filterCheckAllEvent, changeRadioOption, changeMultipleOption } = this
+      let { args, column, multiple } = filterStore
+      let { slots, filterRender } = column
+      let compConf = filterRender ? Renderer.get(filterRender.name) : null
+      if (slots.filter) {
+        return slots.filter.call($table, Object.assign({ context: this }, args))
+      } else if (compConf && compConf.renderFilter) {
+        return compConf.renderFilter(h, filterRender, args, this)
+      }
+      let filterRens = [
         h('li', {
           class: ['vxe-table--filter-option', {
-            'is--active': item.checked
-          }],
-          key: index
+            'is--active': !filterStore.options.some(item => item.checked)
+          }]
         }, [
           multiple
             ? h('label', {
-              class: 'vxe-checkbox'
+              class: ['vxe-checkbox', {
+                'is--indeterminate': filterStore.isIndeterminate
+              }]
             }, [
               h('input', {
                 attrs: {
                   type: 'checkbox'
                 },
                 domProps: {
-                  checked: item.checked
+                  checked: filterStore.isAllSelected
                 },
                 on: {
                   change (evnt) {
-                    filterOptionCheckEvent(evnt, evnt.target.checked, item)
+                    filterCheckAllEvent(evnt, evnt.target.checked)
                   }
                 }
               }),
@@ -80,30 +64,65 @@ export default {
               }),
               h('span', {
                 class: ['checkbox--label']
-              }, item.label)
+              }, GlobalConfig.i18n('vxe.table.allFilter'))
             ])
             : h('span', {
               class: 'vxe-table--filter-label',
               on: {
-                click (evnt) {
-                  filterOptionRadioEvent(evnt, !item.checked, item)
-                }
+                click: $table.resetFilterEvent
               }
-            }, item.label)
+            }, GlobalConfig.i18n('vxe.table.allFilter'))
         ])
-      )
-    })
-    return h('div', {
-      class: ['vxe-table--filter-wrapper', {
-        't--animat': optimizeOpts.animat,
-        'filter--active': filterStore.visible
-      }],
-      style: filterStore.style
-    }, filterStore.visible ? [
-      h('ul', {
-        class: ['vxe-table--filter-body']
-      }, filterRens),
-      multiple ? h('div', {
+      ]
+      filterStore.options.forEach((item, index) => {
+        filterRens.push(
+          h('li', {
+            class: ['vxe-table--filter-option', {
+              'is--active': item.checked
+            }],
+            key: index
+          }, [
+            multiple
+              ? h('label', {
+                class: 'vxe-checkbox'
+              }, [
+                h('input', {
+                  attrs: {
+                    type: 'checkbox'
+                  },
+                  domProps: {
+                    checked: item.checked
+                  },
+                  on: {
+                    change (evnt) {
+                      changeMultipleOption(evnt, evnt.target.checked, item)
+                    }
+                  }
+                }),
+                h('span', {
+                  class: ['checkbox--icon']
+                }),
+                h('span', {
+                  class: ['checkbox--label']
+                }, item.label)
+              ])
+              : h('span', {
+                class: 'vxe-table--filter-label',
+                on: {
+                  click (evnt) {
+                    changeRadioOption(evnt, !item.checked, item)
+                  }
+                }
+              }, item.label)
+          ])
+        )
+      })
+      return filterRens
+    },
+    renderFooter (h) {
+      let { filterStore } = this
+      let { multiple } = filterStore
+      return multiple ? h('div', {
         class: ['vxe-table--filter-footer']
       }, [
         h('button', {
@@ -114,18 +133,16 @@ export default {
             disabled: !filterStore.isAllSelected && !filterStore.isIndeterminate
           },
           on: {
-            click: $table.confirmFilterEvent
+            click: this.confirmFilter
           }
         }, GlobalConfig.i18n('vxe.table.confirmFilter')),
         h('button', {
           on: {
-            click: $table.resetFilterEvent
+            click: this.resetFilter
           }
         }, GlobalConfig.i18n('vxe.table.resetFilter'))
       ]) : null
-    ] : [])
-  },
-  methods: {
+    },
     // 全部筛选事件
     filterCheckAllEvent (evnt, value) {
       let filterStore = this.filterStore
@@ -135,24 +152,39 @@ export default {
       filterStore.isAllSelected = value
       filterStore.isIndeterminate = false
     },
-    // 筛选选项勾选事件
-    filterOptionCheckEvent (evnt, value, item) {
-      item.checked = value
-      this.checkOptions()
-    },
-    // 筛选选项单选事件
-    filterOptionRadioEvent (evnt, value, item) {
-      this.filterStore.options.forEach(item => {
-        item.checked = false
-      })
-      item.checked = value
-      this.checkOptions()
-      this.$parent.confirmFilterEvent()
-    },
     checkOptions () {
       let { filterStore } = this
       filterStore.isAllSelected = filterStore.options.every(item => item.checked)
       filterStore.isIndeterminate = !filterStore.isAllSelected && filterStore.options.some(item => item.checked)
+    },
+
+    /*************************
+     * Publish methods
+     *************************/
+    // （单选）筛选发生改变
+    changeRadioOption (evnt, checked, item) {
+      this.filterStore.options.forEach(item => {
+        item.checked = false
+      })
+      item.checked = checked
+      this.checkOptions()
+      this.$parent.confirmFilterEvent()
+    },
+    // （多选）筛选发生改变
+    changeMultipleOption (evnt, checked, item) {
+      item.checked = checked
+      this.checkOptions()
+    },
+    // 确认筛选
+    confirmFilter () {
+      this.$parent.confirmFilterEvent()
+    },
+    // 重置筛选
+    resetFilter () {
+      this.$parent.resetFilterEvent()
     }
+    /*************************
+     * Publish methods
+     *************************/
   }
 }

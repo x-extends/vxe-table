@@ -45,7 +45,7 @@ export default {
       tableData: [],
       sexList: [],
       regionList: [],
-      restaurants: ['前端', '后端'],
+      restaurants: ['前端', '后端', '开发', '测试'],
       sexGroupList: [
         {
           label: '分组1',
@@ -132,7 +132,7 @@ export default {
               console.log(value)
             },
             roleFilterMethod  (value, option) {
-              return option.toUpperCase().indexOf(value.toUpperCase()) !== -1
+              return option.toUpperCase().indexOf((value || '').toUpperCase()) !== -1
             }
           }
         }
@@ -169,7 +169,7 @@ export default {
       })
     },
     roleFilterMethod  (value, option) {
-      return option.toUpperCase().indexOf(value.toUpperCase()) !== -1
+      return option.toUpperCase().indexOf((value || '').toUpperCase()) !== -1
     },
     nameChangeEvent ({ row }, event) {
       console.log(event)

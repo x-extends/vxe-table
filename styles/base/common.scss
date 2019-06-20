@@ -1,3 +1,7 @@
+%boxSizing {
+  box-sizing: border-box;
+}
+
 [class*="vxe-"] {
   @extend %boxSizing;
   *:after, *:before {

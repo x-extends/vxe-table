@@ -483,9 +483,9 @@ const Cell = {
       if (slots && slots.edit) {
         return slots.edit(params)
       }
-      return compConf && compConf.renderEdit ? compConf.renderEdit(h, editRender, params, context) : []
+      return compConf && compConf.renderEdit ? compConf.renderEdit.call($table, h, editRender, params, context) : []
     }
-    return compConf && compConf.renderCell ? compConf.renderCell(h, editRender, params, context) : Cell.renderCell(h, params)
+    return compConf && compConf.renderCell ? compConf.renderCell.call($table, h, editRender, params, context) : Cell.renderCell(h, params)
   }
 }
 

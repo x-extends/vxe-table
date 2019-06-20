@@ -1,8 +1,13 @@
 /**Variable**/
-@import './helpers/placeholders.scss';
 @import './helpers/mixin.scss';
 @import './base/common.scss';
 @import './icon/icon.scss';
+
+%textEllipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 
 /*table*/
 .vxe-table {

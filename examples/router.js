@@ -97,10 +97,13 @@ const TableSortableRow = () => import(/* webpackChunkName: "other" */ './views/t
 const TableXlsx = () => import(/* webpackChunkName: "other" */ './views/table/other/Xlsx.vue')
 
 const TablePluginElementConfig = () => import(/* webpackChunkName: "plugin" */ './views/table/plugin/ElementConfig.vue')
+const TablePluginElementFilter = () => import(/* webpackChunkName: "plugin" */ './views/table/plugin/ElementFilter.vue')
 const TablePluginElementPage = () => import(/* webpackChunkName: "plugin" */ './views/table/plugin/ElementPage.vue')
 const TablePluginIviewConfig = () => import(/* webpackChunkName: "plugin" */ './views/table/plugin/IviewConfig.vue')
+const TablePluginIviewFilter = () => import(/* webpackChunkName: "plugin" */ './views/table/plugin/IviewFilter.vue')
 const TablePluginIviewPage = () => import(/* webpackChunkName: "plugin" */ './views/table/plugin/IviewPage.vue')
 const TablePluginAntdConfig = () => import(/* webpackChunkName: "plugin" */ './views/table/plugin/AntdConfig.vue')
+const TablePluginAntdFilter = () => import(/* webpackChunkName: "plugin" */ './views/table/plugin/AntdFilter.vue')
 const TablePluginAntdPage = () => import(/* webpackChunkName: "plugin" */ './views/table/plugin/AntdPage.vue')
 
 const TableAPI = () => import(/* webpackChunkName: "api" */ './views/table/api/API.vue')
@@ -559,6 +562,11 @@ export default new Router({
       component: TablePluginElementConfig
     },
     {
+      path: '/table/plugin/elementFilter',
+      name: 'TablePluginElementFilter',
+      component: TablePluginElementFilter
+    },
+    {
       path: '/table/plugin/elementPage',
       name: 'TablePluginElementPage',
       component: TablePluginElementPage
@@ -569,6 +577,11 @@ export default new Router({
       component: TablePluginIviewConfig
     },
     {
+      path: '/table/plugin/iviewFilter',
+      name: 'TablePluginIviewFilter',
+      component: TablePluginIviewFilter
+    },
+    {
       path: '/table/plugin/iviewPage',
       name: 'TablePluginIviewPage',
       component: TablePluginIviewPage
@@ -577,6 +590,11 @@ export default new Router({
       path: '/table/plugin/antdConfig',
       name: 'TablePluginAntdConfig',
       component: TablePluginAntdConfig
+    },
+    {
+      path: '/table/plugin/antdFilter',
+      name: 'TablePluginAntdFilter',
+      component: TablePluginAntdFilter
     },
     {
       path: '/table/plugin/antdPage',

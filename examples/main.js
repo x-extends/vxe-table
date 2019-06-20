@@ -25,7 +25,7 @@ var size = 200000
 function mockData () {
   let len = fullIndex === 0 ? 10000 : 1500
   for (var index = 0; index < len; index++) {
-    currTime += 5000
+    currTime += 7200000
     fullIndex++
     if (columns.length < 10000) {
       let colItem = {
@@ -57,7 +57,7 @@ function mockData () {
     list.push({
       id: fullIndex,
       name: 'name_' + fullIndex,
-      role: 'role_' + fullIndex,
+      role: XEUtils.sample(['前端', '后端', 'UI', 'PM', '开发', '测试', '美工']),
       key: 'home.label.key' + Math.max(0, index % 2 === 0 ? index - 1 : index),
       language: index % 2 === 0 ? 'zh_CN' : 'en_US',
       content: index % 2 === 0 ? '内容' + index : 'Content' + index,

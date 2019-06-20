@@ -103,10 +103,13 @@ module.exports = {
 
         plugin: 'More plug-in',
         elementPlugin: 'Configuration element-ui',
+        elementFilterPlugin: 'element-ui 筛选配置',
         elementPluginMore: 'More configuration for element-ui',
         iviewPlugin: 'Configuration iview',
+        iviewFilter: 'iview 筛选配置',
         iviewPluginMore: 'More configuration for iview',
         antdPlugin: 'Configuration ant-design-vue',
+        antdFilter: 'ant-design-vue 筛选配置',
         antdPluginMore: 'More configuration for ant-design-vue',
 
         api: 'API',

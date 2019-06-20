@@ -361,7 +361,7 @@ export default {
     isResizable () {
       return this.resizable || this.tableFullColumn.some(column => column.resizable)
     },
-    isFilter () {
+    hasFilter () {
       return this.tableColumn.some(column => column.filters && column.filters.length)
     },
     headerCtxMenu () {
@@ -498,7 +498,7 @@ export default {
       visibleColumn,
       collectColumn,
       isGroup,
-      isFilter,
+      hasFilter,
       isResizable,
       isCtxMenu,
       loading,
@@ -622,13 +622,13 @@ export default {
         /**
          * 筛选
          */
-        isFilter ? h('vxe-table-filter', {
+        hasFilter ? h('vxe-table-filter', {
           props: {
             optimizeOpts,
             filterStore
           },
           ref: 'filterWrapper'
-        }) : null,
+        }) : _e(),
         /**
          * 快捷菜单
          */
@@ -637,14 +637,14 @@ export default {
             ctxMenuStore
           },
           ref: 'ctxWrapper'
-        }) : null,
+        }) : _e(),
         /**
          * Ellipsis tooltip
          */
         hasTip ? h('vxe-tooltip', {
           props: Object.assign({}, tooltipStore, tooltipConfig),
           ref: 'tooltip'
-        }) : null,
+        }) : _e(),
         /**
          * valid error tooltip
          */
@@ -652,7 +652,7 @@ export default {
           class: 'vxe-table--valid-error',
           props: Object.assign({}, validStore, tooltipConfig),
           ref: 'validTip'
-        }) : null
+        }) : _e()
       ])
     ])
   },
@@ -1039,16 +1039,22 @@ export default {
       let filterColumn = visibleColumn.filter(({ filters }) => filters && filters.length)
       tableData = tableData.filter(row => {
         return filterColumn.every(column => {
-          let { property, filters, filterMethod, remoteFilter } = column
+          let { property, filters, filterMethod, filterRender, remoteFilter } = column
+          let compConf = filterRender ? Renderer.get(filterRender.name) : null
           if (filters && filters.length) {
             let valueList = []
+            let itemList = []
             filters.forEach(item => {
               if (item.checked) {
+                itemList.push(item)
                 valueList.push(item.value)
               }
             })
             if (valueList.length && !remoteFilter) {
-              return filterMethod ? valueList.some(value => filterMethod({ value, row, column })) : valueList.indexOf(XEUtils.get(row, property)) > -1
+              if (!filterMethod && compConf && compConf.renderFilter) {
+                filterMethod = compConf.filterMethod
+              }
+              return filterMethod ? itemList.some(item => filterMethod({ value: item.value, option: item, row, column })) : valueList.indexOf(XEUtils.get(row, property)) > -1
             }
           }
           return true
@@ -1329,19 +1335,25 @@ export default {
         }
       }
     },
+    preventEvent (evnt, type, args, callback) {
+      let evntList = Interceptor.get(type)
+      if (!evntList.some(func => func(args, evnt, this) === false)) {
+        callback()
+      }
+    },
     /**
      * 全局按下事件处理
      */
     handleGlobalMousedownEvent (evnt) {
-      let { editStore, ctxMenuStore, editConfig = {} } = this
+      let { editStore, ctxMenuStore, editConfig = {}, filterStore } = this
       let { actived } = editStore
       if (this.$refs.filterWrapper) {
-        if (DomTools.getEventTargetNode(evnt, this.$el, 'vxe-filter-wrapper').flag) {
+        if (this.getEventTargetNode(evnt, this.$el, 'vxe-filter-wrapper').flag) {
           // 如果点击了筛选按钮
-        } else if (DomTools.getEventTargetNode(evnt, this.$refs.filterWrapper.$el).flag) {
+        } else if (this.getEventTargetNode(evnt, this.$refs.filterWrapper.$el).flag) {
           // 如果点击筛选容器
         } else {
-          this.closeFilter()
+          this.preventEvent(evnt, 'event.clear_filter', filterStore.args, this.closeFilter)
         }
       }
       // 如果已激活了编辑状态
@@ -1349,13 +1361,12 @@ export default {
         if (!(editConfig.autoClear === false)) {
           // 如果手动调用了激活单元格，避免触发源被移除后导致重复关闭
           if (!this.lastCallTime || this.lastCallTime + 50 < Date.now()) {
-            let evntList = Interceptor.get('event.clear_actived')
-            if (!evntList.some(func => func(actived.args, evnt) === false)) {
+            this.preventEvent(evnt, 'event.clear_actived', actived.args, () => {
               let isClear
-              let isReadonlyCol = !DomTools.getEventTargetNode(evnt, this.$el, 'col--edit').flag
+              let isReadonlyCol = !this.getEventTargetNode(evnt, this.$el, 'col--edit').flag
               // row 方式
               if (editConfig.mode === 'row') {
-                let rowNode = DomTools.getEventTargetNode(evnt, this.$el, 'vxe-body--row')
+                let rowNode = this.getEventTargetNode(evnt, this.$el, 'vxe-body--row')
                 let isOtherRow = rowNode.flag ? rowNode.targetElem !== actived.args.cell.parentNode : 0
                 if (editConfig.trigger === 'manual') {
                   // manual 触发，如果点击了不同行
@@ -1371,19 +1382,19 @@ export default {
               if (
                 isClear ||
                 // 如果点击了当前表格之外
-                !DomTools.getEventTargetNode(evnt, this.$el).flag
+                !this.getEventTargetNode(evnt, this.$el).flag
               ) {
                 // this.triggerValidate('blur').then(a => {
                 this.clearValidate()
                 this.clearActived(evnt)
                 // }).catch(e => e)
               }
-            }
+            })
           }
         }
       }
       // 如果配置了快捷菜单且，点击了其他地方则关闭
-      if (ctxMenuStore.visible && this.$refs.ctxWrapper && !DomTools.getEventTargetNode(evnt, this.$refs.ctxWrapper.$el).flag) {
+      if (ctxMenuStore.visible && this.$refs.ctxWrapper && !this.getEventTargetNode(evnt, this.$refs.ctxWrapper.$el).flag) {
         this.closeMenu()
       }
     },
@@ -1601,19 +1612,19 @@ export default {
       let { isCtxMenu } = this
       if (isCtxMenu) {
         // 右键头部
-        let headeWrapperNode = DomTools.getEventTargetNode(evnt, this.$el, 'vxe-table--header-wrapper')
+        let headeWrapperNode = this.getEventTargetNode(evnt, this.$el, 'vxe-table--header-wrapper')
         if (headeWrapperNode.flag) {
           this.openContextMenu(evnt, 'header', { })
           return
         }
         // 右键内容
-        let bodyWrapperNode = DomTools.getEventTargetNode(evnt, this.$el, 'vxe-table--body-wrapper')
+        let bodyWrapperNode = this.getEventTargetNode(evnt, this.$el, 'vxe-table--body-wrapper')
         if (bodyWrapperNode.flag) {
           this.openContextMenu(evnt, 'body', { })
           return
         }
         // 右键表尾
-        let footerWrapperNode = DomTools.getEventTargetNode(evnt, this.$el, 'vxe-table--footer-wrapper')
+        let footerWrapperNode = this.getEventTargetNode(evnt, this.$el, 'vxe-table--footer-wrapper')
         if (footerWrapperNode.flag) {
           this.openContextMenu(evnt, 'footer', { })
           return
@@ -1636,7 +1647,7 @@ export default {
           if (!visibleMethod || visibleMethod(params, evnt)) {
             evnt.preventDefault()
             let { scrollTop, scrollLeft, visibleHeight, visibleWidth } = DomTools.getDomNode()
-            let { targetElem } = DomTools.getEventTargetNode(evnt, this.$el, `vxe-${type}--column`)
+            let { targetElem } = this.getEventTargetNode(evnt, this.$el, `vxe-${type}--column`)
             let { rowIndex, columnIndex } = DomTools.getCellIndexs(targetElem)
             let row = tableData[rowIndex]
             let column = visibleColumn[columnIndex]
@@ -2026,7 +2037,7 @@ export default {
               let start = DomTools.getCellIndexs(cell)
               let updateEvent = XEUtils.throttle(function (evnt) {
                 evnt.preventDefault()
-                let { flag, targetElem } = DomTools.getEventTargetNode(evnt, $el, 'vxe-body--column')
+                let { flag, targetElem } = this.getEventTargetNode(evnt, $el, 'vxe-body--column')
                 if (flag) {
                   handleChecked(start, DomTools.getCellIndexs(targetElem), evnt)
                 }
@@ -2070,7 +2081,7 @@ export default {
           }
           let updateEvent = XEUtils.throttle(function (evnt) {
             evnt.preventDefault()
-            let { flag, targetElem } = DomTools.getEventTargetNode(evnt, $el, 'vxe-body--column')
+            let { flag, targetElem } = this.getEventTargetNode(evnt, $el, 'vxe-body--column')
             if (flag) {
               handleTempChecked(start, DomTools.getCellIndexs(targetElem), evnt)
             }
@@ -2095,7 +2106,7 @@ export default {
       let { actived } = editStore
       let { column, columnIndex } = params
       if (highlightCurrentRow) {
-        if (!DomTools.getEventTargetNode(evnt, $el, 'vxe-tree-wrapper').flag) {
+        if (!this.getEventTargetNode(evnt, $el, 'vxe-tree-wrapper').flag) {
           this.selectRow = params.row
         }
       }
@@ -2474,12 +2485,13 @@ export default {
       } else {
         let targetElem = evnt.target
         let bodyElem = $refs.tableBody.$el
-        let filterWrapperElem = $refs.filterWrapper
+        let filterWrapper = $refs.filterWrapper
         let { top, left } = DomTools.getOffsetPos(targetElem)
         if (overflowX) {
           left -= bodyElem.scrollLeft
         }
         Object.assign(filterStore, {
+          args: params,
           multiple: column.filterMultiple,
           options: column.filters,
           column: column,
@@ -2492,9 +2504,10 @@ export default {
         filterStore.isAllSelected = filterStore.options.every(item => item.checked)
         filterStore.isIndeterminate = !this.isAllSelected && filterStore.options.some(item => item.checked)
         this.$nextTick(() => {
+          let filterWrapperElem = filterWrapper.$el
           filterStore.style = {
             top: `${top + targetElem.clientHeight + 6}px`,
-            left: `${left - filterWrapperElem.$el.clientWidth / 2 + 10}px`
+            left: `${left - filterWrapperElem.clientWidth / 2 + 10}px`
           }
         })
       }
@@ -2536,6 +2549,7 @@ export default {
     resetFilterEvent (evnt) {
       this.filterStore.options.forEach(item => {
         item.checked = false
+        item.data = item._data
       })
       this.confirmFilterEvent(evnt)
     },
@@ -3160,6 +3174,15 @@ export default {
         oData = XEUtils.toTreeArray(oData, treeConfig)
       }
       return ExportTools.downloadCsc(opts, ExportTools.getCsvContent(opts, oData, columns, this.$el))
-    }
+    },
+
+    /*************************
+     * Publish methods
+     *************************/
+    // 检查触发源是否属于目标节点
+    getEventTargetNode: DomTools.getEventTargetNode
+    /*************************
+     * Publish methods
+     *************************/
   }
 }

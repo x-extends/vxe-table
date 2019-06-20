@@ -156,6 +156,14 @@ const apis = [
             enum: '',
             defVal: '',
             list: []
+          },
+          {
+            name: 'data',
+            desc: '额外的数据属性（当使用自定义模板时可能会用到）',
+            type: 'Any',
+            enum: '',
+            defVal: '',
+            list: []
           }
         ]
       },
@@ -174,6 +182,31 @@ const apis = [
         enum: '',
         defVal: '',
         list: []
+      },
+      {
+        name: 'filter-render',
+        descKey: '筛选模板配置项',
+        type: 'Object',
+        enum: '',
+        defVal: '',
+        list: [
+          {
+            name: 'name',
+            desc: '渲染组件的名称',
+            type: 'String',
+            enum: 'input,textarea',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'props',
+            desc: '渲染组件的参数',
+            type: 'Object',
+            enum: '',
+            defVal: '',
+            list: []
+          }
+        ]
       },
       {
         name: 'remote-filter',
@@ -216,9 +249,25 @@ const apis = [
           },
           {
             name: 'name',
-            desc: '支持渲染的组件，自带精简的输入组件，建议配合其他 UI 库混合渲染',
+            desc: '渲染组件的名称（自带精简的输入组件，建议配合其他 UI 库混合渲染）',
             type: 'String',
             enum: 'input,textarea',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'props',
+            desc: '渲染组件的参数',
+            type: 'Object',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'events',
+            desc: '渲染组件的事件',
+            type: 'Object',
+            enum: '',
             defVal: '',
             list: []
           },
@@ -258,11 +307,19 @@ const apis = [
         list: []
       },
       {
+        name: 'filter',
+        desc: '自定义筛选模板',
+        type: '',
+        enum: '',
+        defVal: '{column,columnIndex,fixed,isHidden}',
+        list: []
+      },
+      {
         name: 'edit',
         desc: '自定义可编辑组件模板',
         type: '',
         enum: '',
-        defVal: '{column,columnIndex,fixed,isHidden}',
+        defVal: '{row,rowIndex,column,columnIndex,fixed,isHidden}',
         list: []
       }
     ]

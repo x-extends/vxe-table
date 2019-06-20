@@ -85,7 +85,7 @@ gulp.task('build_style', gulp.series('build_modules', 'build_locale', () => {
       gulp.src('styles/index.js')
         .pipe(gulp.dest(`lib/${name}/style`)),
       gulp.src(`styles/${name}.scss`)
-        .pipe(replace(/(\/\*\*Variable\*\*\/)/, `@import './variable.scss';@import './helpers/placeholders.scss';\n@import './helpers/mixin.scss';\n`))
+        .pipe(replace(/(\/\*\*Variable\*\*\/)/, `@import './variable.scss';\n`))
         .pipe(sass())
         .pipe(prefixer({
           borwsers: ['last 1 version', '> 1%', 'not ie <= 8'],

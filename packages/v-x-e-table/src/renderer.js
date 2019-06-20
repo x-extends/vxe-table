@@ -120,7 +120,7 @@ const _storeMap = {
  */
 export const Renderer = {
   mixin (map) {
-    Object.assign(_storeMap, map)
+    XEUtils.each(map, (options, name) => Renderer.add(name, options))
     return Renderer
   },
   get (name) {
@@ -128,7 +128,12 @@ export const Renderer = {
   },
   add (name, options) {
     if (name && options) {
-      _storeMap[name] = options
+      let renders = _storeMap[name]
+      if (renders) {
+        Object.assign(renders, options)
+      } else {
+        _storeMap[name] = options
+      }
     }
     return Renderer
   },

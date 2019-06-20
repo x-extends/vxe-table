@@ -1,7 +1,7 @@
 <template>
   <div>
-    <h3>单元格渲染器</h3>
-    <p>通过渲染器你可以轻松实现渲染的单元格组件，可以根据不同业务实现不一样的组件，这个功能将非常实用</p>
+    <h3>渲染器</h3>
+    <p>通过渲染器你可以轻松实现筛选模板、单元格模板，可以根据不同业务实现不一样的组件，这个功能将非常实用</p>
     <p>比如这些插件 <a href="https://www.npmjs.com/package/vxe-table-plugin-element">vxe-table-plugin-element</a> 等插件都是使用渲染器实现的</p>
     <p>添加单个 renderer.add(name, options)</p>
     <p>混合多个 renderer.mixin(opts)</p>
@@ -17,9 +17,10 @@
       <code class="html">{{ demoCodes[3] }}</code>
     </pre>
     <h3>事件拦截器</h3>
-    <p>通过内置拦截器可以解决当表格交互与其他组件存在冲突的，可以通过拦截器去阻止默认的行为，从而可以集成其他组件互相兼容</p>
+    <p>通过内置拦截器可以解决当表格交互与其他组件存在冲突的，可以通过返回 false 阻止默认的行为，从而可以集成其他组件互相兼容</p>
     <p>添加单个 interceptor.add(name, handle)</p>
-    <p>name: event.clear_actived（清除激活单元格时触发，返回 false 阻止默认的清除行为）</p>
+    <p>event.clear_filter（清除筛选面板时触发）</p>
+    <p>event.clear_actived（清除激活单元格时触发）</p>
     <p>例子：比如自定义渲染某个组件后，由于弹出层面板不在单元格之内，按键事件的交互行为存在冲突，对于这些场景就很有用了</p>
     <pre>
       <code class="javascript">{{ demoCodes[4] }}</code>
@@ -38,6 +39,42 @@ export default {
         import Vue from 'vue'
         import VXETable from 'vxe-table'
         import 'vxe-table/lib/index.css'
+
+        VXETable.renderer.mixin({
+          MyFilter: {
+            // 筛选模板
+            renderFilter (h, filterRender, params, context) {
+              let { column } = params
+              return column.filters.map(item => {
+                return h('input', {
+                  attrs: {
+                    type: 'text'
+                  },
+                  domProps: {
+                    value: item.data
+                  },
+                  on: {
+                    input (evnt) {
+                      item.data = evnt.target.value
+                    }
+                  }
+                })
+              })
+            },
+            // 筛选方法
+            filterMethod () {
+
+            },
+            // 单元格显示模板
+            renderCell (h, editRender, params, context) {
+              return h('div')
+            },
+            // 单元格可编辑模板
+            renderEdit (h, editRender, params, context) {
+              return h('div')
+            }
+          }
+        })
 
         VXETable.renderer.add('MyCell', {
           autofocus: '.my-cell',
@@ -76,6 +113,7 @@ export default {
           :edit-config="{key: 'id', trigger: 'click', mode: 'row'}">
           <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
           <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
+          <vxe-table-column prop="age" label="Age" :filters="[{data: null}]" :filter-render="{name: 'MyFilter'}"></vxe-table-column>
           <vxe-table-column prop="name" label="Name" :edit-render="{name: 'MyCell'}"></vxe-table-column>
         </vxe-table>
         `,
@@ -87,10 +125,14 @@ export default {
         VXETable.renderer.add('MyCell', {
           autofocus: '.my-cell',
           renderEdit (h, editRender, { row, column }) {
-            return <input class="my-cell" text="text" value={row[column.property]} on-input={val => row[column.property] = val}/>
+            return [
+              <input class="my-cell" text="text" value={ row[column.property] } onInput={ val => { row[column.property] = val }}/>
+            ]
           },
           renderCell (h, editRender, { row, column }) {
-            return <span>{row[column.property]}</span>
+            return [
+              <span>{row[column.property]}</span>
+            ]
           }
         })
         `,
