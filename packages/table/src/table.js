@@ -2037,7 +2037,7 @@ export default {
               let start = DomTools.getCellIndexs(cell)
               let updateEvent = XEUtils.throttle(function (evnt) {
                 evnt.preventDefault()
-                let { flag, targetElem } = this.getEventTargetNode(evnt, $el, 'vxe-body--column')
+                let { flag, targetElem } = DomTools.getEventTargetNode(evnt, $el, 'vxe-body--column')
                 if (flag) {
                   handleChecked(start, DomTools.getCellIndexs(targetElem), evnt)
                 }
@@ -2081,7 +2081,7 @@ export default {
           }
           let updateEvent = XEUtils.throttle(function (evnt) {
             evnt.preventDefault()
-            let { flag, targetElem } = this.getEventTargetNode(evnt, $el, 'vxe-body--column')
+            let { flag, targetElem } = DomTools.getEventTargetNode(evnt, $el, 'vxe-body--column')
             if (flag) {
               handleTempChecked(start, DomTools.getCellIndexs(targetElem), evnt)
             }
