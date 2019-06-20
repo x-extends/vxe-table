@@ -65,7 +65,7 @@
     "vue-template-compiler": "^2.6.10",
     "vxe-table-plugin-antd": "1.1.0",
     "vxe-table-plugin-element": "1.1.0",
-    "vxe-table-plugin-iview": "1.1.0",
+    "vxe-table-plugin-iview": "1.1.1",
     "webpack-cli": "^3.3.1",
     "xe-ajax": "^3.6.0",
     "xe-ajax-mock": "^1.8.0",

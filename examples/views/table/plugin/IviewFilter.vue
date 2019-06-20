@@ -8,10 +8,10 @@
       height="400"
       :data.sync="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
-      <vxe-table-column prop="name" label="Name" :filters="[{data: null}]" :filter-render="{name: 'Input', props: {placeholder: '请输入名称'}}"></vxe-table-column>
-      <vxe-table-column prop="age" label="Age" sortable :filters="[{data: 0}]" :filter-render="{name: 'InputNumber', props: {min: 0, max: 100}}"></vxe-table-column>
-      <vxe-table-column prop="role" label="Role" :filters="[{data: ''}]" :filter-render="{name: 'AutoComplete', props: {data: restaurants, filterMethod: roleFilterMethod, placeholder: '请输入角色名称'}}"></vxe-table-column>
-      <vxe-table-column prop="time" label="Time" sortable></vxe-table-column>
+      <vxe-table-column prop="name" label="Input" :filters="[{data: ''}]" :filter-render="{name: 'Input', props: {placeholder: '请输入名称'}}"></vxe-table-column>
+      <vxe-table-column prop="age" label="InputNumber" sortable :filters="[{data: 0}]" :filter-render="{name: 'InputNumber', props: {min: 0, max: 100}}"></vxe-table-column>
+      <vxe-table-column prop="role" label="AutoComplete" :filters="[{data: ''}]" :filter-render="{name: 'AutoComplete', props: {data: restaurants, filterMethod: roleFilterMethod, placeholder: '请输入角色名称'}}"></vxe-table-column>
+      <vxe-table-column prop="date3" label="DatePicker" :filters="[{data: []}]" :filter-render="{name: 'DatePicker', props: {type: 'daterange', rangeSeparator: '至', startPlaceholder: '开始日期', endPlaceholder: '结束日期'}}"></vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -39,10 +39,10 @@ export default {
           height="400"
           :data.sync="tableData">
           <vxe-table-column type="index" width="60"></vxe-table-column>
-          <vxe-table-column prop="name" label="Name" :filters="[{data: null}]" :filter-render="{name: 'Input', props: {placeholder: '请输入名称'}}"></vxe-table-column>
-          <vxe-table-column prop="age" label="Age" sortable :filters="[{data: 0}]" :filter-render="{name: 'InputNumber', props: {min: 0, max: 100}}"></vxe-table-column>
-          <vxe-table-column prop="role" label="Role" :filters="[{data: ''}]" :filter-render="{name: 'AutoComplete', props: {data: restaurants, filterMethod: roleFilterMethod, placeholder: '请输入角色名称'}}"></vxe-table-column>
-          <vxe-table-column prop="time" label="Time" sortable></vxe-table-column>
+          <vxe-table-column prop="name" label="Input" :filters="[{data: null}]" :filter-render="{name: 'Input', props: {placeholder: '请输入名称'}}"></vxe-table-column>
+          <vxe-table-column prop="age" label="InputNumber" sortable :filters="[{data: 0}]" :filter-render="{name: 'InputNumber', props: {min: 0, max: 100}}"></vxe-table-column>
+          <vxe-table-column prop="role" label="AutoComplete" :filters="[{data: ''}]" :filter-render="{name: 'AutoComplete', props: {data: restaurants, filterMethod: roleFilterMethod, placeholder: '请输入角色名称'}}"></vxe-table-column>
+          <vxe-table-column prop="date3" label="DatePicker" :filters="[{data: []}]" :filter-render="{name: 'DatePicker', props: {type: 'daterange', rangeSeparator: '至', startPlaceholder: '开始日期', endPlaceholder: '结束日期'}}"></vxe-table-column>
         </vxe-table>
         `,
         `
