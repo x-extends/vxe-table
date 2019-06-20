@@ -29,7 +29,7 @@ export default {
       let { args, column, multiple } = filterStore
       let { slots, filterRender } = column
       let compConf = filterRender ? Renderer.get(filterRender.name) : null
-      if (slots.filter) {
+      if (slots && slots.filter) {
         return slots.filter.call($table, Object.assign({ context: this }, args))
       } else if (compConf && compConf.renderFilter) {
         return compConf.renderFilter(h, filterRender, args, this)
