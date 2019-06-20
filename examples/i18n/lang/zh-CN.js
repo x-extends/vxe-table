@@ -236,10 +236,11 @@ module.exports = {
           filters: '配置筛选条件',
           filterMultiple: '只对 filters 有效，筛选是否允许多选',
           filterMethod: '只对 filters 有效，自定义筛选方法 Function({value, row, column})',
+          filterRender: '筛选渲染配置项',
           remoteFilter: '是否使用服务端筛选，如果设置为 true 则不会对数据进行处理',
           treeNode: '只对 tree-config 配置时有效，指定为树节点',
           columnKey: '列渲染的 key，对应列渲染中虚拟 DOM 的 key 属性（非特殊情况下不需要使用）',
-          editRender: '列编辑配置项'
+          editRender: '列渲染配置项'
         }
       },
       tooltip: {

@@ -185,7 +185,7 @@ const apis = [
       },
       {
         name: 'filter-render',
-        descKey: '筛选模板配置项',
+        descKey: 'app.api.tableColumn.desc.filterRender',
         type: 'Object',
         enum: '',
         defVal: '',

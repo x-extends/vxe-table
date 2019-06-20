@@ -230,16 +230,17 @@ module.exports = {
           showHeaderOverflow: 'Appears as an ellipsis when the header content is too long',
           formatter: 'Format display content, Function({cellValue, row, rowIndex, column, columnIndex})',
           indexMethod: '只对 type=index 有效，自定义索引方法 Function({row, rowIndex, column, columnIndex})',
-          sortable: '是否允许列排序',
+          sortable: 'Whether column sorting is allowed',
           sortBy: '只对 sortable 有效，自定义排序的属性',
           remoteSort: '是否使用服务端排序，如果设置为 true 则不会对数据进行处理',
           filters: 'Configure filter conditions',
           filterMultiple: '只对 filters 有效，筛选是否允许多选',
           filterMethod: '只对 filters 有效，自定义筛选方法 Function({value, row, column})',
+          filterRender: 'Filter render configuration',
           remoteFilter: '是否使用服务端筛选，如果设置为 true 则不会对数据进行处理',
           treeNode: '只对 tree-config 配置时有效，指定为树节点',
           columnKey: 'Key for column rendering, corresponding to the key attribute of the virtual DOM in column rendering (not required for non-exceptional cases)',
-          editRender: 'Column edit configuration items'
+          editRender: 'Column render configuration'
         }
       },
       tooltip: {
