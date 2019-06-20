@@ -32,7 +32,8 @@ export default {
       tableData: [],
       restaurants: ['前端', '后端', '开发', '测试'],
       ACProps: {
-        dataSource: []
+        dataSource: [],
+        placeholder: '请输入角色名称'
       },
       demoCodes: [
         `
@@ -55,7 +56,8 @@ export default {
               tableData: [],
               restaurants: ['前端', '后端', '开发', '测试'],
               ACProps: {
-                dataSource: []
+                dataSource: [],
+                placeholder: '请输入角色名称'
               }
             }
           },
