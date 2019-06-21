@@ -139,7 +139,7 @@ export default {
       if (scrollXLoad) {
         triggerScrollXEvent(evnt)
       }
-      UtilTools.emitEvent($table, 'footer-scroll', [{ fixed: fixedType, scrollLeft }, evnt])
+      UtilTools.emitEvent($table, 'scroll', [{ type: 'footer', fixed: fixedType, scrollTop: bodyElem.scrollTop, scrollLeft, $table }, evnt])
     }
   }
 }

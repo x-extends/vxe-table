@@ -16,14 +16,14 @@ import moment from 'moment'
 
 Vue.config.productionTip = false
 
-// 后台异步生成20万数据，为了避免大量运算卡主页面
+// 后台异步生成10万数据，为了避免大量运算卡主页面
 var columns = window.MOCK_COLUMN_LIST = []
 var list = window.MOCK_DATA_LIST = []
 var currTime = Date.now()
 var fullIndex = 0
-var size = 200000
+var size = 100000
 function mockData () {
-  let len = fullIndex === 0 ? 10000 : 1500
+  let len = XEUtils.browse().msie ? 500 : 10000
   for (var index = 0; index < len; index++) {
     currTime += 7200000
     fullIndex++
@@ -35,9 +35,9 @@ function mockData () {
       }
       if (fullIndex === 1) {
         colItem.type = 'selection'
+        colItem.label = null
         colItem.width = 60
-      }
-      if (fullIndex === 2) {
+      } else if (fullIndex === 2) {
         colItem.type = 'index'
         colItem.label = '序号'
         colItem.width = 100
@@ -54,34 +54,36 @@ function mockData () {
       }
       columns.push(colItem)
     }
+    let date = new Date(currTime)
+    let mDate = moment(currTime)
     list.push({
       id: fullIndex,
       name: 'name_' + fullIndex,
-      role: XEUtils.sample(['前端', '后端', 'UI', 'PM', '开发', '测试', '美工']),
+      role: [index % 2 === 0 ? '前端' : '后端'],
       key: 'home.label.key' + Math.max(0, index % 2 === 0 ? index - 1 : index),
       language: index % 2 === 0 ? 'zh_CN' : 'en_US',
       content: index % 2 === 0 ? '内容' + index : 'Content' + index,
       checked: false,
       flag: index % 2 === 0,
-      date: new Date(currTime),
-      date1: new Date(currTime),
+      date: date,
+      date1: date,
       date2: '09:00:00',
       date3: XEUtils.toDateString(currTime, 'yyyy-MM-dd'),
-      date4: new Date(currTime),
+      date4: date,
       date5: '09:00',
       date6: null,
-      date7: moment(currTime),
-      date8: moment(currTime),
-      date9: moment(currTime),
-      date10: moment(currTime),
+      date7: mDate,
+      date8: mDate,
+      date9: mDate,
+      date10: mDate,
       date11: [],
-      time: currTime + XEUtils.random(100, 10000),
+      time: currTime + 360000,
       sex: index % 3 ? '0' : '1',
       sex1: [index % 3 ? '0' : '1'],
       sex2: index % 3 ? '0' : '1',
-      age: XEUtils.random(18, 35),
+      age: index % 2 === 0 ? 26 : 28,
       region: index % 4 === 0 ? [19, 199, 1773] : index % 3 === 0 ? [9, 73, 719] : [1, 1, 5],
-      rate: XEUtils.random(0, 5),
+      rate: index % 2 === 0 ? 2 : 0,
       address: `地址 地址地址 地址地址 址地址 址地址  址地址 址地址址地址址地址 地址${index}`,
       updateTime: currTime,
       createTime: currTime,
@@ -91,13 +93,13 @@ function mockData () {
         name2: 'name2_' + fullIndex,
         more: {
           sex2: index % 3 ? '0' : '1',
-          age2: XEUtils.random(18, 35)
+          age2: index % 2 === 0 ? 26 : 30
         }
       }
     })
   }
   if (fullIndex < size) {
-    setTimeout(mockData, 10)
+    setTimeout(mockData, 200)
   }
 }
 

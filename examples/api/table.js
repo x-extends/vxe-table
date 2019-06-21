@@ -1116,23 +1116,15 @@ const apis = [
         enum: '',
         defVal: '{rule,row,rowIndex,column,columnIndex,cell}',
         list: []
+      },
+      {
+        name: 'scroll',
+        descKey: 'app.api.table.desc.scroll',
+        type: '',
+        enum: '',
+        defVal: '{type,fixed,scrollTop,scrollLeft},event',
+        list: []
       }
-      // {
-      //   name: 'body-scroll',
-      //   descKey: 'app.api.table.desc.bodyScroll',
-      //   type: '',
-      //   enum: '',
-      //   defVal: '{fixed,scrollTop,scrollLeft},event',
-      //   list: []
-      // },
-      // {
-      //   name: 'footer-scroll',
-      //   descKey: 'app.api.table.desc.footerScroll',
-      //   type: '',
-      //   enum: '',
-      //   defVal: '{fixed,scrollLeft},event',
-      //   list: []
-      // }
     ]
   },
   {
@@ -1593,6 +1585,14 @@ const apis = [
       {
         name: 'validate(rows, callback)',
         desc: '表格校验函数，如果指定 row 或 rows 则校验指定一行或多行，否则校验整个表格。该回调函数会在校验结束后被调用，并传入两个参数：（是否校验成功，最近一列未通过校验的字段）。若不传入回调函数，则会返回一个 promise',
+        type: 'Promise',
+        enum: '',
+        defVal: 'rows?callback?',
+        list: []
+      },
+      {
+        name: 'fullValidate(rows, callback)',
+        desc: '表格完整校验函数，和 validate 的区别就是会对数据的所有规则进行完整校验',
         type: 'Promise',
         enum: '',
         defVal: 'rows?callback?',

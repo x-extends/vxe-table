@@ -342,11 +342,13 @@ export default {
       footerHeight,
       tableHeight,
       tableWidth,
+      overflowY,
+      scrollXHeight,
+      scrollYWidth,
       scrollXStore,
       scrollXLoad,
       scrollYStore,
-      scrollYLoad,
-      scrollXHeight
+      scrollYLoad
     } = $table
     // v2.0 废弃属性，保留兼容
     let allColumnOverflow = XEUtils.isBoolean(oldShowAllOverflow) ? oldShowAllOverflow : allShowOverflow
@@ -367,6 +369,14 @@ export default {
         tableColumn = fixedColumn
       }
       tableWidth = tableColumn.reduce((previous, column) => previous + column.renderWidth, 0)
+    }
+    let tableStyle = {
+      width: tableWidth ? `${tableWidth}px` : tableWidth,
+      marginLeft: fixedType ? null : `${scrollXStore.leftSpaceWidth}px`
+    }
+    // 兼容火狐滚动条
+    if (overflowY && fixedType && DomTools.browse['-moz']) {
+      tableStyle.paddingRight = `${scrollYWidth}px`
     }
     return h('div', {
       class: ['vxe-table--body-wrapper', fixedType ? `fixed--${fixedType}-wrapper` : 'body--wrapper'],
@@ -394,10 +404,7 @@ export default {
           cellpadding: 0,
           border: 0
         },
-        style: {
-          width: tableWidth === null ? tableWidth : `${tableWidth}px`,
-          'margin-left': fixedType ? null : `${scrollXStore.leftSpaceWidth}px`
-        }
+        style: tableStyle
       }, [
         /**
          * 列宽
@@ -470,7 +477,7 @@ export default {
       if (scrollYLoad) {
         triggerScrollYEvent(evnt)
       }
-      UtilTools.emitEvent($table, 'body-scroll', [{ fixed: fixedType, scrollTop, scrollLeft }, evnt])
+      UtilTools.emitEvent($table, 'scroll', [{ type: 'body', fixed: fixedType, scrollTop, scrollLeft, $table }, evnt])
     }
   }
 }

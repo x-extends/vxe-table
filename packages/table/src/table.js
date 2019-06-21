@@ -2932,7 +2932,7 @@ export default {
             if (cell) {
               return this.validCellRules(type, row, column)
                 .then(() => this.clearValidate())
-                .catch(rule => this.showValidTooltip({ rule, row, column, cell }))
+                .catch(({ rule }) => this.showValidTooltip({ rule, row, column, cell }))
             }
           }
         }
@@ -2959,7 +2959,7 @@ export default {
                 this.clearValidate()
               }
             }
-          }).catch(rule => {
+          }).catch(({ rule }) => {
             // 如果校验不通过与触发方式一致，则聚焦提示错误，否则跳过并不作任何处理
             if (!rule.trigger || type === rule.trigger) {
               let rest = { rule, row, column, cell }
@@ -2974,6 +2974,19 @@ export default {
       }
       return Promise.resolve()
     },
+
+    /**
+     * 与 validate 一致行为，区别就是会校验所有并返回所有不通过的所有列
+     */
+    fullValidate (rows, cb) {
+      return this.beginValidate(rows, cb, true)
+    },
+    /**
+     * 对表格数据进行校验
+     */
+    validate (rows, cb) {
+      return this.beginValidate(rows, cb)
+    },
     /**
      * 对表格数据进行校验
      * 如果传 row 指定行记录，则只验证传入的行
@@ -2981,10 +2994,12 @@ export default {
      * 如果只传 callback 否则默认验证整个表格数据
      * 返回 Promise 对象，或者使用回调方式
      */
-    validate (rows, cb) {
+    beginValidate (rows, cb, isAll) {
+      let validRest = {}
+      let status = true
       let { editRules, tableData } = this
       let vaildDatas = tableData
-      if (rows && arguments.length) {
+      if (rows) {
         if (XEUtils.isFunction(rows)) {
           cb = rows
         } else {
@@ -3003,8 +3018,15 @@ export default {
               validPromise = validPromise.then(() => new Promise((resolve, reject) => {
                 this.validCellRules('all', row, column)
                   .then(resolve)
-                  .catch(rule => {
-                    let rest = { rule, rowIndex, row, columnIndex, column, cell: DomTools.getCell(this, { row, rowIndex, column }) }
+                  .catch(({ rule, rules }) => {
+                    let rest = { rule, rules, rowIndex, row, columnIndex, column }
+                    if (isAll) {
+                      if (!validRest[column.property]) {
+                        validRest[column.property] = []
+                      }
+                      validRest[column.property].push(rest)
+                      return resolve()
+                    }
                     return reject(rest)
                   })
               }))
@@ -3012,24 +3034,27 @@ export default {
           })
         })
         return validPromise.then(() => {
-          let valid = true
-          if (cb) {
-            cb(valid)
+          let ruleProps = Object.keys(validRest)
+          if (ruleProps.length) {
+            return Promise.reject(validRest[ruleProps[0]][0])
           }
-          return true
+          if (cb) {
+            cb(status)
+          }
         }).catch(params => {
-          let valid = false
-          let { rule, column } = params
+          let args = isAll ? validRest : { [params.column.property]: params }
+          params.cell = DomTools.getCell(this, params)
           this.handleValidError(params)
           if (cb) {
-            cb(valid, { [column.property]: [new Error(rule.message)] })
+            status = false
+            cb(status, args)
+          } else {
+            return Promise.reject(args)
           }
-          return cb ? Promise.resolve(valid) : Promise.reject(valid)
         })
       } else {
-        let valid = true
         if (cb) {
-          cb(valid)
+          cb(status)
         }
       }
       return validPromise
@@ -3080,45 +3105,46 @@ export default {
     validCellRules (type, row, column) {
       let { editRules } = this
       let { property } = column
+      let errorRules = []
       let validPromise = Promise.resolve()
       if (property && !XEUtils.isEmpty(editRules)) {
         let rules = XEUtils.get(editRules, property)
         let value = XEUtils.get(row, property)
         if (rules) {
           for (let rIndex = 0; rIndex < rules.length; rIndex++) {
-            validPromise = validPromise.then(() => new Promise((resolve, reject) => {
+            validPromise = validPromise.then(() => new Promise(resolve => {
               let rule = rules[rIndex]
               let isRequired = rule.required === true
-              if ((type === 'all' || !rule.trigger || type === rule.trigger) && (isRequired || value || rule.validator)) {
+              if (type === 'all' || !rule.trigger || type === rule.trigger) {
                 if (XEUtils.isFunction(rule.validator)) {
                   rule.validator(rule, value, e => {
                     if (XEUtils.isError(e)) {
                       let cusRule = { type: 'custom', trigger: rule.trigger, message: e.message, rule }
-                      return reject(cusRule)
+                      errorRules.push(cusRule)
                     }
                     return resolve()
                   }, { rules, row, column, rowIndex: this.getRowMapIndex(row), columnIndex: this.getColumnMapIndex(column) })
                 } else {
-                  let restVal
+                  let len
+                  let restVal = value
                   let isNumber = rule.type === 'number'
                   let isEmpty = value === null || value === undefined || value === ''
                   if (isNumber) {
                     restVal = XEUtils.toNumber(value)
                   } else {
-                    restVal = isEmpty ? '' : '' + value
+                    len = XEUtils.getSize(restVal)
                   }
                   if (isRequired && isEmpty) {
-                    reject(rule)
-                  } else if (value &&
+                    errorRules.push(rule)
+                  } else if (
                     ((isNumber && isNaN(value)) ||
                     (XEUtils.isRegExp(rule.pattern) && !rule.pattern.test(value)) ||
-                    (XEUtils.isNumber(rule.min) && (isNumber ? restVal < rule.min : restVal.length < rule.min)) ||
-                    (XEUtils.isNumber(rule.max) && (isNumber ? restVal > rule.max : restVal.length > rule.max)))
+                    (XEUtils.isNumber(rule.min) && (isNumber ? restVal < rule.min : len < rule.min)) ||
+                    (XEUtils.isNumber(rule.max) && (isNumber ? restVal > rule.max : len > rule.max)))
                   ) {
-                    reject(rule)
-                  } else {
-                    resolve()
+                    errorRules.push(rule)
                   }
+                  resolve()
                 }
               } else {
                 resolve()
@@ -3127,7 +3153,12 @@ export default {
           }
         }
       }
-      return validPromise
+      return validPromise.then(() => {
+        if (errorRules.length) {
+          let rest = { rules: errorRules, rule: errorRules[0] }
+          return Promise.reject(rest)
+        }
+      })
     },
     clearValidate () {
       let validTip = this.$refs.validTip

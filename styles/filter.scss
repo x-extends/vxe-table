@@ -5,6 +5,8 @@
   padding: 0 2px;
   vertical-align: middle;
   display: inline-block;
+  line-height: 15px;
+  margin-top: -2px;
   &.is--active {
     .vxe-filter--btn {
       color: $vxe-font-color;

@@ -248,6 +248,10 @@
     top: 0;
     z-index: 1;
     overflow: hidden;
+    background-color: $vxe-table-background-color;
+    .vxe-table--body-wrapper {
+      overflow-x: hidden;
+    }
   }
   .vxe-table--fixed-left-wrapper {
     left: 0;
@@ -289,6 +293,8 @@
     padding: 0 2px;
     vertical-align: middle;
     display: inline-block;
+    height: 22px;
+    margin-top: -2px;
     .vxe-icon--caret-top {
       &:before {
         bottom: 0.1em;

@@ -7,6 +7,7 @@
       <template v-slot:buttons>
         <vxe-button @click="insertEvent">新增</vxe-button>
         <vxe-button @click="validEvent">校验</vxe-button>
+        <vxe-button @click="fullValidEvent">完整校验</vxe-button>
         <vxe-button @click="selectValidEvent">选中校验</vxe-button>
         <vxe-button @click="getInsertEvent">获取新增</vxe-button>
         <vxe-button @click="getRemoveEvent">获取删除</vxe-button>
@@ -60,6 +61,7 @@ export default {
           <template v-slot:buttons>
             <vxe-button @click="insertEvent">新增</vxe-button>
             <vxe-button @click="validEvent">校验</vxe-button>
+            <vxe-button @click="fullValidEvent">完整校验</vxe-button>
             <vxe-button @click="selectValidEvent">选中校验</vxe-button>
             <vxe-button @click="getInsertEvent">获取新增</vxe-button>
             <vxe-button @click="getRemoveEvent">获取删除</vxe-button>
@@ -105,6 +107,36 @@ export default {
             validEvent () {
               this.$refs.xTable.validate(valid => {
                 if (valid) {
+                }
+              })
+            },
+            fullValidEvent () {
+              this.$refs.xTable.fullValidate((valid, errMap) => {
+                if (valid) {
+                  this.$XMsg.alert('校验成功！')
+                } else {
+                  let msgList = []
+                  Object.values(errMap).forEach(errList => {
+                    errList.forEach(params => {
+                      let { rowIndex, column, rules } = params
+                      rules.forEach(rule => {
+                        msgList.push(\`第 \${rowIndex} 行 \${column.label} 校验错误：\${rule.message}\`)
+                      })
+                    })
+                  })
+                  this.$XMsg.alert({
+                    message: () => {
+                      return [
+                        <div class="red" style="max-height: 400px;overflow: auto;">
+                          {
+                            msgList.map(msg => {
+                              return <p>{ msg }</p>
+                            })
+                          }
+                        </div>
+                      ]
+                    }
+                  })
                 }
               })
             },
@@ -160,6 +192,37 @@ export default {
     validEvent () {
       this.$refs.xTable.validate(valid => {
         if (valid) {
+          this.$XMsg.alert('校验成功！')
+        }
+      })
+    },
+    fullValidEvent () {
+      this.$refs.xTable.fullValidate((valid, errMap) => {
+        if (valid) {
+          this.$XMsg.alert('校验成功！')
+        } else {
+          let msgList = []
+          Object.values(errMap).forEach(errList => {
+            errList.forEach(params => {
+              let { rowIndex, column, rules } = params
+              rules.forEach(rule => {
+                msgList.push(`第 ${rowIndex} 行 ${column.label} 校验错误：${rule.message}`)
+              })
+            })
+          })
+          this.$XMsg.alert({
+            message: () => {
+              return [
+                <div class="red" style="max-height: 400px;overflow: auto;">
+                  {
+                    msgList.map(msg => {
+                      return <p>{ msg }</p>
+                    })
+                  }
+                </div>
+              ]
+            }
+          })
         }
       })
     },
@@ -168,10 +231,11 @@ export default {
       if (selectRecords.length > 0) {
         this.$refs.xTable.validate(selectRecords, valid => {
           if (valid) {
+            this.$XMsg.alert('校验成功！')
           }
         })
       } else {
-        // 未选中数据！
+        this.$XMsg.alert('未选中数据！')
       }
     },
     insertEvent () {

@@ -1,4 +1,5 @@
 import GlobalConfig from '../../conf'
+import XEUtils from 'xe-utils'
 
 export default {
   name: 'VxeMessageBox',
@@ -6,7 +7,7 @@ export default {
     value: Boolean,
     type: String,
     title: { type: String, default: () => GlobalConfig.i18n('vxe.alert.title') },
-    message: String,
+    message: [String, Function],
     lockView: { type: Boolean, default: () => GlobalConfig.message.lockView },
     lockScroll: { type: Boolean, default: () => GlobalConfig.message.lockScroll },
     mask: { type: Boolean, default: () => GlobalConfig.message.mask },
@@ -75,9 +76,9 @@ export default {
         h('div', {
           class: 'vxe-alert--body'
         }, [
-          h('span', {
+          h('div', {
             class: 'vxe-alert--content'
-          }, this.$slots.default || message)
+          }, this.$slots.default || (XEUtils.isFunction(message) ? message.call(this, h) : message))
         ]),
         h('div', {
           class: 'vxe-alert--footer'

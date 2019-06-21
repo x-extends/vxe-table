@@ -1,7 +1,6 @@
 <template>
   <div>
     <p>虚拟滚动渲染，只会渲染可视区域的数据，对于海量数据的性能提升非常大</p>
-    <p>推荐使用性能更优的 <grid-api-link name="vxe-grid"/> ，因为不需要为每个 <table-column-api-link name="vxe-table-column"/>  创建实例，列越多越能体现出来</p>
     <p>相关参数说明 {seq: 序号, $rowIndex: 获取渲染中的行索引, rowIndex: 获取真实的行索引, row: 获取行数据, column: 获取列配置, columnIndex: 获取真实列索引，$columnIndex:获取渲染中的列索引}</p>
 
     <vxe-table

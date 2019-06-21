@@ -215,8 +215,7 @@ module.exports = {
           editActived: '单元格被激活编辑时会触发该事件',
           editDisabled: '当点击后单元格如果是禁用状态时会触发该事件',
           validError: '当数据校验不通过时会触发该事件',
-          bodyScroll: '内容滚动时会触发该事件',
-          footerScroll: '表尾滚动时会触发该事件'
+          scroll: '表格滚动时会触发该事件'
         }
       },
       tableColumn: {
