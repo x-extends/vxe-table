@@ -97,6 +97,8 @@ export default {
       headerCellClassName,
       showHeaderOverflow: allHeaderOverflow,
       showHeaderAllOverflow: oldHeaderOverflow,
+      highlightCurrentColumn,
+      selectColumn,
       tableWidth,
       scrollXLoad,
       scrollXStore,
@@ -173,9 +175,9 @@ export default {
               }
               thOns.mouseout = $table.clostTooltip
             }
-            if (tableListeners['header-cell-click']) {
+            if (highlightCurrentColumn || tableListeners['header-cell-click']) {
               thOns.click = evnt => {
-                UtilTools.emitEvent($table, 'header-cell-click', [{ $table, $rowIndex: rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, cell: evnt.currentTarget }, evnt])
+                $table.triggerHeaderCellClickEvent(evnt, { $table, $rowIndex: rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, cell: evnt.currentTarget })
               }
             }
             if (tableListeners['header-cell-dblclick']) {
@@ -186,10 +188,12 @@ export default {
             return h('th', {
               class: ['vxe-header--column', column.id, {
                 [`col--${headerAlign}`]: headerAlign,
+                'col--current': selectColumn === column,
                 'fixed--hidden': fixedHiddenColumn,
                 'filter--active': column.filters.some(item => item.checked)
               }, headerCellClassName ? XEUtils.isFunction(headerCellClassName) ? headerCellClassName({ $table, $rowIndex: rowIndex, column, columnIndex, $columnIndex, fixed: fixedType }) : headerCellClassName : ''],
               attrs: {
+                'data-index': columnIndex,
                 colspan: column.colSpan,
                 rowspan: column.rowSpan
               },

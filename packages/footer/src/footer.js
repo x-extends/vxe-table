@@ -97,6 +97,9 @@ export default {
                 'fixed--hidden': fixedHiddenColumn,
                 'filter--active': column.filters.some(item => item.checked)
               }, footerCellClassName ? XEUtils.isFunction(footerCellClassName) ? footerCellClassName({ $rowIndex: rowIndex, column, columnIndex, $columnIndex, fixed: fixedType }) : footerCellClassName : ''],
+              attrs: {
+                'data-index': columnIndex
+              },
               on: tfOns,
               key: columnIndex
             }, [

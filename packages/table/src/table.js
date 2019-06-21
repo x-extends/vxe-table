@@ -123,6 +123,10 @@ export default {
     highlightCurrentRow: Boolean,
     // 鼠标移到行是否要高亮显示
     highlightHoverRow: Boolean,
+    // 是否要高亮当前选中列
+    highlightCurrentColumn: Boolean,
+    // 鼠标移到列是否要高亮显示
+    highlightHoverColumn: Boolean,
     // 是否显示表尾合计
     showFooter: Boolean,
     // 表尾合计的计算方法
@@ -235,8 +239,10 @@ export default {
       isIndeterminate: false,
       // 多选属性，已选中的列
       selection: [],
-      // 单选属性
+      // 单选属性，选中行
       selectRow: null,
+      // 单选属性，选中列
+      selectColumn: null,
       // 已展开的行
       expandeds: [],
       // 已展开树节点
@@ -412,7 +418,7 @@ export default {
     collectColumn (value) {
       let tableFullColumn = UtilTools.getColumnList(value)
       this.tableFullColumn = tableFullColumn
-      this.updateCacheMap(tableFullColumn, 'fullColumn')
+      this.cacheColumnMap()
     },
     tableColumn () {
       this.analyColumnWidth()
@@ -448,7 +454,7 @@ export default {
     }
     this.afterFullData = []
     this.fullDataIndexMap = new Map()
-    this.fullDataKeyMap = new Map()
+    this.fullDataRowIdMap = new Map()
     this.fullColumnIndexMap = new Map()
     this.loadData(this.data, true).then(() => {
       let rowKey = UtilTools.getRowKey(this)
@@ -519,6 +525,7 @@ export default {
       border,
       stripe,
       highlightHoverRow,
+      highlightHoverColumn,
       vSize,
       editConfig,
       editRules,
@@ -550,7 +557,8 @@ export default {
         't--animat': optimizeOpts.animat,
         't--stripe': stripe,
         't--border': border,
-        't--highlight': highlightHoverRow
+        'row--highlight': highlightHoverRow,
+        'column--highlight': highlightHoverColumn
       }]
     }, [
       /**
@@ -714,7 +722,7 @@ export default {
         throw new Error('[vxe-table] The height/max-height must be set for the scroll load.')
       }
       this.tableData = this.getTableData(true).tableData
-      this.updateCacheMap(tableFullData, 'fullData')
+      this.cacheDataMap()
       this.reserveCheckSelection()
       this.checkSelectionStatus()
       let rest = this.$nextTick()
@@ -734,7 +742,7 @@ export default {
       if (this.customs) {
         this.mergeCustomColumn(this.customs)
       }
-      this.updateCacheMap(columns, 'fullColumn')
+      this.cacheColumnMap()
       this.refreshColumn()
       return this.$nextTick()
     },
@@ -742,21 +750,30 @@ export default {
       this.clearAll()
       return this.loadColumn(columns)
     },
-    // 更新数据真实的索引 Map
-    updateCacheMap (datas, key) {
-      let indexMap = this[`${key}IndexMap`]
-      let keyMap = this[`${key}KeyMap`]
+    // 更新数据的 Map
+    cacheDataMap () {
+      let { treeConfig, tableFullData, fullDataIndexMap, fullDataRowIdMap } = this
       let rowKey = UtilTools.getRowKey(this)
-      indexMap.clear()
-      if (keyMap && rowKey) {
-        keyMap.clear()
-        datas.forEach((row, index) => {
-          keyMap.set(XEUtils.get(row, rowKey), { rowKey, row, index })
-          indexMap.set(row, { row, index })
-        })
+      fullDataIndexMap.clear()
+      fullDataRowIdMap.clear()
+      if (treeConfig) {
+        XEUtils.eachTree(tableFullData, (row, index) => {
+          fullDataRowIdMap.set('' + XEUtils.get(row, rowKey), { rowKey, row, index })
+        }, treeConfig)
       } else {
-        datas.forEach((row, index) => indexMap.set(row, { row, index }))
+        tableFullData.forEach((row, index) => {
+          fullDataRowIdMap.set('' + XEUtils.get(row, rowKey), { rowKey, row, index })
+          fullDataIndexMap.set(row, { row, index })
+        })
       }
+    },
+    // 更新列的 Map
+    cacheColumnMap () {
+      let { tableFullColumn, fullColumnIndexMap } = this
+      fullColumnIndexMap.clear()
+      tableFullColumn.forEach((row, index) => {
+        fullColumnIndexMap.set(row, { row, index })
+      })
     },
     getRowMapIndex (row) {
       return this.fullDataIndexMap.has(row) ? this.fullDataIndexMap.get(row).index : -1
@@ -1649,7 +1666,7 @@ export default {
      * 显示快捷菜单
      */
     openContextMenu (evnt, type, params) {
-      let { tableData, visibleColumn, ctxMenuStore, ctxMenuConfig } = this
+      let { tableData, visibleColumn, ctxMenuStore, ctxMenuConfig, fullDataRowIdMap, tableFullColumn } = this
       let config = ctxMenuConfig[type]
       if (config) {
         let { options, visibleMethod, disabled } = config
@@ -1659,14 +1676,22 @@ export default {
           if (!visibleMethod || visibleMethod(params, evnt)) {
             evnt.preventDefault()
             let { scrollTop, scrollLeft, visibleHeight, visibleWidth } = DomTools.getDomNode()
-            let { targetElem } = this.getEventTargetNode(evnt, this.$el, `vxe-${type}--column`)
-            let { rowIndex, columnIndex } = DomTools.getCellIndexs(targetElem)
-            let row = tableData[rowIndex]
-            let column = visibleColumn[columnIndex]
+            let { targetElem, flag } = this.getEventTargetNode(evnt, this.$el, `vxe-${type}--column`)
+            let args = { type, $table: this }
+            if (flag) {
+              let { rowId, rowIndex, colIndex, columnIndex } = DomTools.getCellIndexs(targetElem)
+              let column = colIndex ? tableFullColumn[colIndex] : visibleColumn[columnIndex]
+              if (type === 'body') {
+                let { row } = rowId ? fullDataRowIdMap.get('' + rowId) : tableData[rowIndex]
+                args.row = row
+                args.rowIndex = rowIndex
+              }
+              Object.assign(args, { column, columnIndex, cell: targetElem })
+            }
             let top = evnt.clientY + scrollTop
             let left = evnt.clientX + scrollLeft
             Object.assign(ctxMenuStore, {
-              args: { type, row, rowIndex, column, columnIndex, cell: targetElem, $table: this },
+              args,
               visible: true,
               list: options,
               selected: null,
@@ -1908,13 +1933,13 @@ export default {
     },
     // 保留选中状态
     reserveCheckSelection () {
-      let { selectConfig = {}, selection, fullDataKeyMap } = this
+      let { selectConfig = {}, selection, fullDataRowIdMap } = this
       let { reserve } = selectConfig
       let rowKey = UtilTools.getRowKey(this)
       if (reserve && selection.length) {
         this.selection = selection.map(row => {
           let rowId = XEUtils.get(row, rowKey)
-          return fullDataKeyMap.has(rowId) ? fullDataKeyMap.get(rowId).row : row
+          return fullDataRowIdMap.has(rowId) ? fullDataRowIdMap.get('' + rowId).row : row
         })
       }
     },
@@ -2003,15 +2028,17 @@ export default {
      * 单选，行选中事件
      */
     triggerRowEvent (evnt, { row }) {
-      this.selectRow = row
       UtilTools.emitEvent(this, 'select-change', [{ row }, evnt])
-      return this.$nextTick()
+      return this.setCurrentRow(row)
     },
     /**
      * 单选，设置某一行为选中状态，如果调不加参数，则会取消目前高亮行的选中状态
      */
     setCurrentRow (row) {
-      this.selectRow = row
+      if (this.highlightCurrentRow) {
+        this.clearCurrentColumn()
+        this.selectRow = row
+      }
       return this.$nextTick()
     },
     clearCurrentRow () {
@@ -2108,6 +2135,20 @@ export default {
         }
       }
     },
+    triggerHeaderCellClickEvent (evnt, params) {
+      UtilTools.emitEvent(this, 'header-cell-click', [params, evnt])
+      return this.setCurrentColumn(params.column, true)
+    },
+    setCurrentColumn (column) {
+      if (this.highlightCurrentColumn) {
+        this.clearCurrentRow()
+        this.selectColumn = column
+      }
+      return this.$nextTick()
+    },
+    clearCurrentColumn () {
+      this.selectColumn = null
+    },
     /**
      * 列点击事件
      * 如果是单击模式，则激活为编辑状态
@@ -2119,7 +2160,7 @@ export default {
       let { column, columnIndex } = params
       if (highlightCurrentRow) {
         if (!this.getEventTargetNode(evnt, $el, 'vxe-tree-wrapper').flag) {
-          this.selectRow = params.row
+          this.setCurrentRow(params.row)
         }
       }
       // 如果是树形表格

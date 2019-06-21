@@ -10,10 +10,15 @@
       resizable
       highlight-current-row
       highlight-hover-row
+      highlight-current-column
+      highlight-hover-column
+      ref="xTable"
       class="api-table"
       :row-class-name="rowClassNameFunc"
       :data.sync="apiList"
-      :tree-config="{key: 'id', children: 'list', expandAll: !!filterName, expandRowKeys: defaultExpandRowKeys, trigger: 'cell'}">
+      :tree-config="{key: 'id', children: 'list', expandAll: !!filterName, expandRowKeys: defaultExpandRowKeys, trigger: 'cell'}"
+      :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus},}"
+      @context-menu-click="contextMenuClickEvent">
       <vxe-table-column prop="name" :label="$t('app.api.title.prop')" width="280" tree-node>
         <template v-slot="{ row }">
           <span v-html="row.name"></span>
@@ -47,7 +52,9 @@
 </template>
 
 <script>
+import pack from '../../../../package.json'
 import XEUtils from 'xe-utils'
+import XEClipboard from 'xe-clipboard'
 import tableAPI from '../../../api/table'
 import tableColumnAPI from '../../../api/column'
 import toolbarAPI from '../../../api/toolbar'
@@ -65,7 +72,27 @@ export default {
   data () {
     return {
       filterName: this.$route.query.filterName,
-      defaultExpandRowKeys: []
+      defaultExpandRowKeys: [],
+      headerMenus: [
+        [
+          {
+            code: 'exportAll',
+            name: '导出完整文档'
+          }
+        ]
+      ],
+      bodyMenus: [
+        [
+          {
+            code: 'copy',
+            name: '复制内容'
+          },
+          {
+            code: 'export',
+            name: '导出文档'
+          }
+        ]
+      ]
     }
   },
   computed: {
@@ -141,6 +168,31 @@ export default {
   methods: {
     rowClassNameFunc ({ row }) {
       return row.disabled ? 'api--disabled' : null
+    },
+    contextMenuClickEvent ({ menu, row, column }) {
+      switch (menu.code) {
+        case 'copy':
+          if (row && column) {
+            if (XEClipboard.copy(row[column.property])) {
+              this.$XMsg.alert({
+                message: '已复制到剪贴板',
+                maskClosable: true
+              })
+            }
+          }
+          break
+        case 'export':
+          this.$refs.xTable.exportCsv({
+            filename: `vxe-${this.$route.params.name}_v${pack.version}.csv`
+          })
+          break
+        case 'exportAll':
+          this.$refs.xTable.exportCsv({
+            data: XEUtils.toTreeArray(this.tableData, { children: 'list' }),
+            filename: `vxe-${this.$route.params.name}_v${pack.version}.csv`
+          })
+          break
+      }
     }
   },
   beforeRouteUpdate (to, from, next) {

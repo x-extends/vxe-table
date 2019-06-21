@@ -56,17 +56,24 @@
     &.row--hover {
       background-color: $vxe-table-row-hover-background-color;
     }
-    &.row--selected {
-      background-color: $vxe-table-row-selected-background-color;
+    &.row--current {
+      background-color: $vxe-table-row-current-background-color;
     }
     .vxe-body--column {
       border-bottom: 1px solid $vxe-table-border-color;
     }
   }
-  &.t--highlight {
+  &.row--highlight {
     .vxe-body--row {
       &:hover {
         background-color: $vxe-table-row-hover-background-color;
+      }
+    }
+  }
+  &.column--highlight {
+    .vxe-header--column {
+      &:hover {
+        background-color: $vxe-table-column-hover-background-color;
       }
     }
   }
@@ -83,6 +90,9 @@
     padding: 12px 0;
     line-height: 23px;
     text-align: left;
+    &.col--current {
+      background-color: $vxe-table-column-current-background-color;
+    }
     &.col--center {
       text-align: center;
     }

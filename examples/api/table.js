@@ -237,6 +237,22 @@ const apis = [
         list: []
       },
       {
+        name: 'highlight-current-column',
+        descKey: 'app.api.table.desc.highlightCurrentColumn',
+        type: 'Boolean',
+        enum: '',
+        defVal: 'false',
+        list: []
+      },
+      {
+        name: 'highlight-hover-column',
+        descKey: 'app.api.table.desc.highlightHoverColumn',
+        type: 'Boolean',
+        enum: '',
+        defVal: 'false',
+        list: []
+      },
+      {
         name: 'row-class-name',
         descKey: 'app.api.table.desc.rowClassName',
         type: 'String,Function',
@@ -1351,11 +1367,19 @@ const apis = [
         list: []
       },
       {
-        name: 'setCurrentRow(rows,checked)',
-        desc: '用于单选表格，设置某一行为选中状态，第二个参数为选中与否',
+        name: 'setCurrentRow(row)',
+        desc: '设置某一行为选中状态',
         type: 'Promise',
         enum: '',
-        defVal: 'rows,checked',
+        defVal: 'row',
+        list: []
+      },
+      {
+        name: 'setCurrentColumn(column)',
+        desc: '设置某一列为选中状态',
+        type: 'Promise',
+        enum: '',
+        defVal: 'column',
         list: []
       },
       {
@@ -1408,7 +1432,15 @@ const apis = [
       },
       {
         name: 'clearCurrentRow()',
-        desc: '用于单选表格，清空用户的选择',
+        desc: '清空用户的选择',
+        type: 'Promise',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'clearCurrentColumn()',
+        desc: '清空用户的选择列',
         type: 'Promise',
         enum: '',
         defVal: '',

@@ -166,6 +166,8 @@ module.exports = {
           startIndex: '只对 type=index 的列有效，动态索引的起始值',
           highlightCurrentRow: 'Whether to highlight the currently selected row',
           highlightHoverRow: 'Mouse over a row to highlight',
+          highlightCurrentColumn: '是否要高亮当前选中列',
+          highlightHoverColumn: '鼠标移到列是否要高亮显示',
           rowClassName: '给行附加 className，也可以是函数 Function({seq, row, rowIndex})',
           cellClassName: '给单元格附加 className，也可以是函数 Function({seq, row, rowIndex, column, columnIndex})',
           headerRowClassName: '给表头的行附加 className，也可以是函数 Function({headIndex})',

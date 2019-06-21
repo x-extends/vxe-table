@@ -27,6 +27,7 @@ function renderColumn (h, _vm, $table, seq, fixedType, rowLevel, row, rowIndex, 
     highlightCurrentRow,
     showOverflow: allShowOverflow,
     showAllOverflow: oldShowAllOverflow,
+    selectColumn,
     cellClassName,
     spanMethod,
     keyboardConfig,
@@ -48,11 +49,12 @@ function renderColumn (h, _vm, $table, seq, fixedType, rowLevel, row, rowIndex, 
   let showTitle = (showOverflow || allColumnOverflow) === 'title'
   let showTooltip = showOverflow === true || showOverflow === 'tooltip' || allColumnOverflow === true || allColumnOverflow === 'tooltip'
   let hasEllipsis = showTitle || showTooltip || showEllipsis
-  let attrs, isDirty
+  let isDirty
   let tdOns = {}
   let checkedLocat = {}
   let checkedTLocat = {}
   let copyedLocat = {}
+  let attrs = { 'data-index': columnIndex }
   let triggerDblclick = (editRender && editConfig && editConfig.trigger === 'dblclick')
   let params = { $table, seq, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, level: rowLevel, isHidden: fixedHiddenColumn, data: tableData }
   // 滚动的渲染不支持动态行高
@@ -102,7 +104,8 @@ function renderColumn (h, _vm, $table, seq, fixedType, rowLevel, row, rowIndex, 
     if (!rowspan || !colspan) {
       return null
     }
-    attrs = { rowspan, colspan }
+    attrs.rowspan = rowspan
+    attrs.colspan = colspan
   }
   // 如果显示状态
   if (!fixedHiddenColumn && editConfig && editConfig.showStatus) {
@@ -141,6 +144,7 @@ function renderColumn (h, _vm, $table, seq, fixedType, rowLevel, row, rowIndex, 
       'col--actived': editRender && actived.row === row && actived.column === column,
       'col--dirty': isDirty,
       'col--valid-error': validStore.row === row && validStore.column === column,
+      'col--current': selectColumn === column,
       'edit--visible': editRender && editRender.type === 'visible',
       'fixed--hidden': fixedHiddenColumn
     }, cellClassName ? XEUtils.isFunction(cellClassName) ? cellClassName(params) : cellClassName : ''],
@@ -224,12 +228,12 @@ function renderRows (h, _vm, $table, rowLevel, fixedType, tableData, tableColumn
       h('tr', {
         class: ['vxe-body--row', {
           [`row--level-${rowLevel}`]: treeConfig,
-          'row--selected': row === selectRow,
+          'row--current': row === selectRow,
           'row--hover': row === hoverRow,
           'row--new': editStore.insertList.indexOf(row) > -1
         }, rowClassName ? XEUtils.isFunction(rowClassName) ? rowClassName({ $table, seq, row, rowIndex }) : rowClassName : ''],
         attrs: {
-          'data-rowkey': rowId
+          'data-rowid': rowId
         },
         key: rowId,
         on: trOn
