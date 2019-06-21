@@ -6,7 +6,7 @@
       ref="xTable"
       border
       resizable
-      show-all-overflow
+      show-overflow
       height="600"
       :loading="loading"
       :data.sync="tableData"

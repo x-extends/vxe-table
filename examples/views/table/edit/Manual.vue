@@ -7,7 +7,7 @@
       ref="xTable"
       border
       resizable
-      show-all-overflow
+      show-overflow
       :data.sync="tableData"
       :edit-config="{key: 'id', trigger: 'manual', mode: 'row'}">
       <vxe-table-column type="index" width="60"></vxe-table-column>
@@ -50,7 +50,7 @@ export default {
           ref="xTable"
           border
           resizable
-          show-all-overflow
+          show-overflow
           :data.sync="tableData"
           :edit-config="{key: 'id', trigger: 'manual', mode: 'row'}">
           <vxe-table-column type="index" width="60"></vxe-table-column>

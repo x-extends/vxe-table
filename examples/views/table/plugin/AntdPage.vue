@@ -40,7 +40,7 @@
       ref="xTable"
       border
       resizable
-      show-all-overflow
+      show-overflow
       class="vxe-table-antd"
       height="460"
       :loading="loading"
@@ -159,7 +159,7 @@ export default {
             ref="xTable"
             border
             resizable
-            show-all-overflow
+            show-overflow
             class="vxe-table-antd"
             height="460"
             :loading="loading"

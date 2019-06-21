@@ -8,6 +8,7 @@
       border
       resizable
       highlight-hover-row
+      remote-filter
       height="530"
       :pager-config="{pageSize: 15}"
       :toolbar="toolbar"
@@ -29,7 +30,6 @@
 <script>
 import XEAjax from 'xe-ajax'
 import hljs from 'highlight.js'
-import XEUtils from 'xe-utils'
 
 export default {
   data () {
@@ -48,13 +48,16 @@ export default {
         sort: true, // 启用排序代理
         filter: true, // 启用筛选代理
         ajax: {
-          query: ({ page, sort, filter }) => {
-            // 根据不同逻辑处理参数
+          query: ({ page, sort, filters }) => {
+            // 处理排序条件
             let formData = {
               sort: sort.prop,
-              order: sort.order,
-              ...XEUtils.objectMap(filter, values => values.join(','))
+              order: sort.order
             }
+            // 处理筛选条件
+            filters.forEach(({ column, prop, values }) => {
+              formData[prop] = values.join(',')
+            })
             return XEAjax.getJSON(`/api/user/page/list/${page.pageSize}/${page.currentPage}`, formData)
           },
           save: ({ body }) => XEAjax.doPost('/api/user/save', body)
@@ -87,7 +90,6 @@ export default {
             { label: '测试', value: '测试' }
           ],
           filterMultiple: false,
-          remoteFilter: true,
           editRender: { name: 'input' }
         },
         { prop: 'describe', label: 'Describe', showOverflow: true, editRender: { name: 'input' } }
@@ -98,6 +100,7 @@ export default {
           border
           resizable
           highlight-hover-row
+          remote-filter
           height="530"
           :pager-config="{pageSize: 15}"
           :toolbar="toolbar"
@@ -115,12 +118,15 @@ export default {
                 filter: true, // 启用筛选代理
                 ajax: {
                   query: ({ page, sort, filter }) => {
-                    // 根据不同逻辑处理参数
+                    // 处理排序条件
                     let formData = {
                       sort: sort.prop,
-                      order: sort.order,
-                      ...XEUtils.objectMap(filter, values => values.join(','))
+                      order: sort.order
                     }
+                    // 处理筛选条件
+                    filters.forEach(({ column, prop, values }) => {
+                      formData[prop] = values.join(',')
+                    })
                     return XEAjax.getJSON(\`/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`, formData)
                   },
                   save: ({ body }) => XEAjax.doPost('/api/user/save', body)
@@ -153,7 +159,6 @@ export default {
                     { label: '测试', value: '测试' }
                   ],
                   filterMultiple: false,
-                  remoteFilter: true,
                   editRender: { name: 'input' }
                 },
                 { prop: 'describe', label: 'Describe', showOverflow: true, editRender: { name: 'input' } }

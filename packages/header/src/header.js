@@ -90,7 +90,21 @@ export default {
   },
   render (h) {
     let { $parent: $table, fixedType, headerColumn, tableColumn, resizeMousedown, fixedColumn } = this
-    let { $listeners: tableListeners, resizable, border, headerRowClassName, headerCellClassName, showHeaderAllOverflow, tableWidth, scrollXLoad, scrollXStore, scrollYWidth, getColumnMapIndex } = $table
+    let {
+      $listeners: tableListeners,
+      resizable, border,
+      headerRowClassName,
+      headerCellClassName,
+      showHeaderOverflow: allHeaderOverflow,
+      showHeaderAllOverflow: oldHeaderOverflow,
+      tableWidth,
+      scrollXLoad,
+      scrollXStore,
+      scrollYWidth,
+      getColumnMapIndex
+    } = $table
+    // v2.0 废弃属性，保留兼容
+    let allColumnHeaderOverflow = XEUtils.isBoolean(oldHeaderOverflow) ? oldHeaderOverflow : allHeaderOverflow
     // 横向滚动渲染
     if (scrollXLoad) {
       if (fixedType) {
@@ -147,9 +161,9 @@ export default {
             let { columnKey, showHeaderOverflow, headerAlign, renderWidth } = column
             let isGroup = column.children && column.children.length
             let fixedHiddenColumn = fixedType && column.fixed !== fixedType && !isGroup
-            let showEllipsis = (showHeaderOverflow || showHeaderAllOverflow) === 'ellipsis'
-            let showTitle = (showHeaderOverflow || showHeaderAllOverflow) === 'title'
-            let showTooltip = showHeaderOverflow === true || showHeaderOverflow === 'tooltip' || showHeaderAllOverflow === true || showHeaderAllOverflow === 'tooltip'
+            let showEllipsis = (showHeaderOverflow || allColumnHeaderOverflow) === 'ellipsis'
+            let showTitle = (showHeaderOverflow || allColumnHeaderOverflow) === 'title'
+            let showTooltip = showHeaderOverflow === true || showHeaderOverflow === 'tooltip' || allColumnHeaderOverflow === true || allColumnHeaderOverflow === 'tooltip'
             let thOns = {}
             // 确保任何情况下 columnIndex 都精准指向真实列索引
             let columnIndex = getColumnMapIndex(column)

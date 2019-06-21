@@ -1,7 +1,7 @@
 <template>
   <div>
     <p>通过设置 <table-column-api-link prop="filters"/> 属性和 <table-column-api-link prop="filter-method"/> 方法可以支持列筛选功能</p>
-    <p>如果是服务端筛选，只需加上 <table-column-api-link prop="remote-filter"/> 和 <table-api-link prop="filter-change"/> 事件就可以实现</p>
+    <p>如果是服务端筛选，只需加上 <table-api-link prop="remote-filter"/> 和 <table-api-link prop="filter-change"/> 事件就可以实现</p>
 
     <vxe-table
       border

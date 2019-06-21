@@ -36,7 +36,7 @@
     <vxe-table
       border
       resizable
-      show-all-overflow
+      show-overflow
       ref="xTable"
       class="vxe-table-element"
       height="460"
@@ -134,7 +134,7 @@ export default {
           <vxe-table
             border
             resizable
-            show-all-overflow
+            show-overflow
             ref="xTable"
             class="vxe-table-element"
             height="460"

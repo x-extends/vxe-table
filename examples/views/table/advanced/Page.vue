@@ -7,7 +7,7 @@
 
     <vxe-table
       border
-      show-all-overflow
+      show-overflow
       ref="xTable"
       height="460"
       :loading="loading"
@@ -59,7 +59,7 @@ export default {
         `
         <vxe-table
           border
-          show-all-overflow
+          show-overflow
           ref="xTable"
           height="460"
           :loading="loading"

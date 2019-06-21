@@ -6,7 +6,7 @@
 
     <vxe-table
       border
-      show-all-overflow
+      show-overflow
       show-footer
       class="vxe-table-element"
       height="600"
@@ -113,7 +113,7 @@ export default {
         `
         <vxe-table
           border
-          show-all-overflow
+          show-overflow
           show-footer
           class="vxe-table-element"
           height="600"

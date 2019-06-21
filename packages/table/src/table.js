@@ -141,10 +141,16 @@ export default {
     footerCellClassName: [String, Function],
     // 合并行或列
     spanMethod: Function,
+    // （v2.0 废弃）
+    showAllOverflow: { type: [Boolean, String], default: () => GlobalConfig.showOverflow },
+    // （v2.0 废弃）
+    showHeaderAllOverflow: { type: [Boolean, String], default: () => GlobalConfig.showHeaderOverflow },
     // 设置所有内容过长时显示为省略号
-    showAllOverflow: { type: [Boolean, String], default: () => GlobalConfig.showAllOverflow },
+    showOverflow: { type: [Boolean, String], default: () => GlobalConfig.showOverflow },
     // 设置表头所有内容过长时显示为省略号
-    showHeaderAllOverflow: { type: [Boolean, String], default: () => GlobalConfig.showHeaderAllOverflow },
+    showHeaderOverflow: { type: [Boolean, String], default: () => GlobalConfig.showHeaderOverflow },
+    // 是否服务端筛选
+    remoteFilter: Boolean,
 
     /** 高级属性 */
     // 行数据的 Key
@@ -421,7 +427,7 @@ export default {
     }
   },
   created () {
-    let { scrollYStore, optimizeOpts, selectConfig, treeConfig, editConfig, loading } = this
+    let { scrollYStore, optimizeOpts, selectConfig, treeConfig, editConfig, loading, showAllOverflow, showHeaderAllOverflow } = this
     let { scrollY } = optimizeOpts
     if (loading) {
       this.isLoading = true
@@ -433,6 +439,12 @@ export default {
         renderSize: scrollY.rSize,
         offsetSize: scrollY.oSize
       })
+    }
+    if (XEUtils.isBoolean(showAllOverflow)) {
+      console.warn('[vxe-table] The property show-all-overflow is deprecated, please use show-overflow')
+    }
+    if (XEUtils.isBoolean(showHeaderAllOverflow)) {
+      console.warn('[vxe-table] The property show-header-all-overflow is deprecated, please use show-header-overflow')
     }
     this.afterFullData = []
     this.fullDataIndexMap = new Map()
@@ -1033,17 +1045,17 @@ export default {
      * 如果存在筛选条件，继续处理
      */
     updateAfterFullData () {
-      let { visibleColumn, tableFullData } = this
+      let { visibleColumn, tableFullData, remoteFilter } = this
       let column = this.visibleColumn.find(column => column.order)
       let tableData = tableFullData
       let filterColumn = visibleColumn.filter(({ filters }) => filters && filters.length)
       tableData = tableData.filter(row => {
         return filterColumn.every(column => {
-          let { property, filters, filterMethod, filterRender, remoteFilter } = column
+          let { property, filters, filterMethod, filterRender } = column
           let compConf = filterRender ? Renderer.get(filterRender.name) : null
+          let valueList = []
+          let itemList = []
           if (filters && filters.length) {
-            let valueList = []
-            let itemList = []
             filters.forEach(item => {
               if (item.checked) {
                 itemList.push(item)
@@ -2460,15 +2472,16 @@ export default {
       this.sort(column.property, order)
     },
     sort (prop, order) {
-      let { visibleColumn, tableFullColumn } = this
+      let { visibleColumn, tableFullColumn, remoteSort } = this
       let column = visibleColumn.find(item => item.property === prop)
+      let isRemote = XEUtils.isBoolean(column.remoteSort) ? column.remoteSort : remoteSort
       if (order && column.order !== order) {
         tableFullColumn.forEach(column => {
           column.order = null
         })
         column.order = order
         // 如果是服务端排序，则跳过本地排序处理
-        if (!column.remoteSort) {
+        if (!isRemote) {
           this.tableData = this.getTableData(true).tableData
         }
         UtilTools.emitEvent(this, 'sort-change', [{ column, prop, order }])
@@ -2514,23 +2527,35 @@ export default {
     },
     // 确认筛选
     confirmFilterEvent (evnt) {
-      let { filterStore, scrollXLoad, scrollYLoad } = this
+      let { visibleColumn, filterStore, remoteFilter, scrollXLoad, scrollYLoad } = this
       let { column } = filterStore
-      let valueList = []
+      let values = []
       column.filters.forEach(item => {
         if (item.checked) {
-          valueList.push(item.value)
+          values.push(item.value)
         }
       })
       filterStore.visible = false
+      // 如果是服务端筛选，则跳过本地筛选处理
+      if (!remoteFilter) {
+        this.tableData = this.getTableData(true).tableData
+      }
+      let filterList = []
+      visibleColumn.filter(column => {
+        let { property, filters } = column
+        let valueList = []
+        if (filters && filters.length) {
+          filters.forEach(item => {
+            if (item.checked) {
+              valueList.push(item.value)
+            }
+          })
+          filterList.push({ column, prop: property, values: valueList })
+        }
+      })
+      UtilTools.emitEvent(this, 'filter-change', [{ column, prop: column.property, values, filters: filterList }])
       if (scrollXLoad || scrollYLoad) {
         this.clearScroll()
-      } else {
-        // 如果是服务端筛选，则跳过本地筛选处理
-        if (!column.remoteFilter) {
-          this.tableData = this.getTableData(true).tableData
-        }
-        UtilTools.emitEvent(this, 'filter-change', [{ column, prop: column.property, values: valueList }])
       }
       this.closeFilter()
       this.$nextTick(this.recalculate)

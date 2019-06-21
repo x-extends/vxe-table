@@ -6,8 +6,8 @@
     <vxe-grid
       border
       resizable
-      show-all-overflow
-      show-header-all-overflow
+      show-overflow
+      show-header-overflow
       height="600"
       :columns="tableColumn"
       :loading="loading"

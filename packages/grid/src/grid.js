@@ -32,7 +32,7 @@ export default {
       tableData: [],
       tableCustoms: [],
       pendingRecords: [],
-      filterData: {},
+      filterData: [],
       sortData: {
         prop: '',
         order: ''
@@ -165,7 +165,7 @@ export default {
             if (ajax.query) {
               let params = {
                 sort: sortData,
-                filter: filterData
+                filters: filterData
               }
               this.tableLoading = true
               if (pagerConfig) {
@@ -305,9 +305,10 @@ export default {
       UtilTools.emitEvent(this, 'page-size-change', [pageSize])
     },
     sortChangeEvent ({ column, prop, order }) {
-      let { sortData } = this
+      let { remoteSort, sortData } = this
+      let isRemote = XEUtils.isBoolean(column.remoteSort) ? column.remoteSort : remoteSort
       // 如果是服务端排序
-      if (column.remoteSort) {
+      if (isRemote) {
         sortData.prop = prop
         sortData.order = order
         this.commitProxy('query')
@@ -315,13 +316,14 @@ export default {
         UtilTools.emitEvent(this, 'sort-change', [column, prop, order])
       }
     },
-    filterChangeEvent ({ column, prop, values }) {
+    filterChangeEvent ({ column, prop, values, filters }) {
+      let { remoteFilter } = this
       // 如果是服务端过滤
-      if (column.remoteFilter) {
-        this.filterData[prop] = values
+      if (remoteFilter) {
+        this.filterData = filters
         this.commitProxy('reload')
       } else {
-        UtilTools.emitEvent(this, 'filter-change', [column, prop, values])
+        UtilTools.emitEvent(this, 'filter-change', [column, prop, values, filters])
       }
     }
   }

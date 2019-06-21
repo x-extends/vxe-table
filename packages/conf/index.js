@@ -2,8 +2,8 @@
 // import zhCNLocat from '../lib/locale/lang/zh-CN'
 
 const GlobalConfig = {
-  // showAllOverflow: null,
-  // showHeaderAllOverflow: null,
+  // showOverflow: null,
+  // showHeaderOverflow: null,
   // contextMenu: null,
   // resizeInterval: 250,
   // size: null,

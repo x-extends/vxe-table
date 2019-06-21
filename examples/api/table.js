@@ -309,8 +309,25 @@ const apis = [
         list: []
       },
       {
+        name: 'show-overflow',
+        descKey: 'app.api.table.desc.showOverflow',
+        type: 'Boolean,String',
+        enum: 'ellipsis（只显示省略号）,title（并且显示为原生 title）,tooltip（并且显示为 tooltip 提示）',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'show-all-overflow',
         descKey: 'app.api.table.desc.showAllOverflow',
+        disabled: true,
+        type: '',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'show-header-overflow',
+        descKey: 'app.api.table.desc.showHeaderOverflow',
         type: 'Boolean,String',
         enum: 'ellipsis（只显示省略号）,title（并且显示为原生 title）,tooltip（并且显示为 tooltip 提示）',
         defVal: '',
@@ -319,9 +336,26 @@ const apis = [
       {
         name: 'show-header-all-overflow',
         descKey: 'app.api.table.desc.showHeaderAllOverflow',
-        type: 'Boolean,String',
-        enum: 'ellipsis（只显示省略号）,title（并且显示为原生 title）,tooltip（并且显示为 tooltip 提示）',
+        disabled: true,
+        type: '',
+        enum: '',
         defVal: '',
+        list: []
+      },
+      {
+        name: 'remote-sort',
+        descKey: 'app.api.table.desc.remoteSort',
+        type: 'Boolean',
+        enum: '',
+        defVal: 'false',
+        list: []
+      },
+      {
+        name: 'remote-filter',
+        descKey: 'app.api.table.desc.remoteFilter',
+        type: 'Boolean',
+        enum: '',
+        defVal: 'false',
         list: []
       },
       {
@@ -1024,7 +1058,7 @@ const apis = [
         descKey: 'app.api.table.desc.filterChange',
         type: '',
         enum: '',
-        defVal: '{column,prop,values}',
+        defVal: '{column,prop,values,filters}',
         list: []
       },
       {

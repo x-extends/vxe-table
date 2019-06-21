@@ -22,8 +22,8 @@ import { Resize } from './resize';
 export function install(vue: typeof Vue): void;
 
 export interface GlobalOptions<T> {
-  showAllOverflow: boolean;
-  showHeaderAllOverflow: boolean;
+  showOverflow: boolean;
+  showHeaderOverflow: boolean;
   contextMenu: Array<object>;
   resizeInterval: number;
   size: string;

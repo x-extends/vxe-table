@@ -25,7 +25,8 @@ function renderColumn (h, _vm, $table, seq, fixedType, rowLevel, row, rowIndex, 
     scrollYLoad,
     border,
     highlightCurrentRow,
-    showAllOverflow,
+    showOverflow: allShowOverflow,
+    showAllOverflow: oldShowAllOverflow,
     cellClassName,
     spanMethod,
     keyboardConfig,
@@ -35,15 +36,17 @@ function renderColumn (h, _vm, $table, seq, fixedType, rowLevel, row, rowIndex, 
     editStore,
     validStore
   } = $table
+  // v2.0 废弃属性，保留兼容
+  let allColumnOverflow = XEUtils.isBoolean(oldShowAllOverflow) ? oldShowAllOverflow : allShowOverflow
   let { editRender, align, showOverflow, renderWidth, columnKey } = column
   let { checked, selected, actived, copyed } = editStore
   let isMouseSelected = mouseConfig && mouseConfig.selected
   let isMouseChecked = mouseConfig && mouseConfig.checked
   let isKeyboardCut = keyboardConfig && keyboardConfig.isCut
   let fixedHiddenColumn = fixedType ? column.fixed !== fixedType : column.fixed && overflowX
-  let showEllipsis = (showOverflow || showAllOverflow) === 'ellipsis'
-  let showTitle = (showOverflow || showAllOverflow) === 'title'
-  let showTooltip = showOverflow === true || showOverflow === 'tooltip' || showAllOverflow === true || showAllOverflow === 'tooltip'
+  let showEllipsis = (showOverflow || allColumnOverflow) === 'ellipsis'
+  let showTitle = (showOverflow || allColumnOverflow) === 'title'
+  let showTooltip = showOverflow === true || showOverflow === 'tooltip' || allColumnOverflow === true || allColumnOverflow === 'tooltip'
   let hasEllipsis = showTitle || showTooltip || showEllipsis
   let attrs, isDirty
   let tdOns = {}
@@ -144,7 +147,7 @@ function renderColumn (h, _vm, $table, seq, fixedType, rowLevel, row, rowIndex, 
     key: columnKey || columnIndex,
     attrs,
     on: tdOns
-  }, showAllOverflow && fixedHiddenColumn ? [] : [
+  }, allColumnOverflow && fixedHiddenColumn ? [] : [
     h('div', {
       class: ['vxe-cell', {
         'c--title': showTitle,
@@ -325,7 +328,28 @@ export default {
   },
   render (h) {
     let { $parent: $table, fixedColumn, fixedType } = this
-    let { maxHeight, height, containerHeight, loading, tableData, tableColumn, headerHeight, showFooter, showAllOverflow, footerHeight, tableHeight, tableWidth, scrollXStore, scrollXLoad, scrollYStore, scrollYLoad, scrollXHeight } = $table
+    let {
+      maxHeight,
+      height,
+      containerHeight,
+      loading,
+      tableData,
+      tableColumn,
+      headerHeight,
+      showFooter,
+      showOverflow: allShowOverflow,
+      showAllOverflow: oldShowAllOverflow,
+      footerHeight,
+      tableHeight,
+      tableWidth,
+      scrollXStore,
+      scrollXLoad,
+      scrollYStore,
+      scrollYLoad,
+      scrollXHeight
+    } = $table
+    // v2.0 废弃属性，保留兼容
+    let allColumnOverflow = XEUtils.isBoolean(oldShowAllOverflow) ? oldShowAllOverflow : allShowOverflow
     let customHeight = height === 'auto' ? containerHeight : XEUtils.toNumber(height)
     let style = {}
     if (customHeight > 0) {
@@ -335,7 +359,7 @@ export default {
       style['max-height'] = `${fixedType ? maxHeight - headerHeight - (showFooter ? 0 : scrollXHeight) : maxHeight - headerHeight}px`
     }
     // 如果是固定列与设置了超出隐藏
-    if (fixedType && showAllOverflow) {
+    if (fixedType && allColumnOverflow) {
       tableColumn = fixedColumn
       tableWidth = tableColumn.reduce((previous, column) => previous + column.renderWidth, 0)
     } else if (scrollXLoad) {

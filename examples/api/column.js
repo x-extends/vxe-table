@@ -209,14 +209,6 @@ const apis = [
         ]
       },
       {
-        name: 'remote-filter',
-        descKey: 'app.api.tableColumn.desc.remoteFilter',
-        type: 'Boolean',
-        enum: '',
-        defVal: 'false',
-        list: []
-      },
-      {
         name: 'tree-node',
         descKey: 'app.api.tableColumn.desc.treeNode',
         type: 'Boolean',

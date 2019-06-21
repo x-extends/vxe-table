@@ -7,7 +7,7 @@
       border
       resizable
       highlight-current-row
-      show-all-overflow
+      show-overflow
       :data.sync="tableData"
       :edit-config="{key: 'id', trigger: 'click', mode: 'cell'}"
       @edit-actived="editActivedEvent"
@@ -31,7 +31,7 @@
     <vxe-table
       border
       resizable
-      show-all-overflow
+      show-overflow
       :data.sync="tableData"
       :edit-config="{key: 'id', trigger: 'click', mode: 'row'}">
       <vxe-table-column type="index" width="60"></vxe-table-column>
@@ -63,7 +63,7 @@ export default {
           border
           resizable
           highlight-current-row
-          show-all-overflow
+          show-overflow
           :data.sync="tableData"
           :edit-config="{key: 'id', trigger: 'click', mode: 'cell'}"
           @edit-actived="editActivedEvent"
@@ -98,7 +98,7 @@ export default {
         <vxe-table
           border
           resizable
-          show-all-overflow
+          show-overflow
           :data.sync="tableData"
           :edit-config="{key: 'id', trigger: 'click', mode: 'row'}">
           <vxe-table-column type="index" width="60"></vxe-table-column>

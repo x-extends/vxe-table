@@ -6,7 +6,7 @@
       border
       resizable
       highlight-current-row
-      show-all-overflow
+      show-overflow
       :data.sync="tableData"
       :edit-config="{key: 'id', trigger: 'click', mode: 'cell'}"
       @edit-actived="editActivedEvent">
@@ -38,7 +38,7 @@ export default {
           border
           resizable
           highlight-current-row
-          show-all-overflow
+          show-overflow
           :data.sync="tableData"
           :edit-config="{key: 'id', trigger: 'click', mode: 'cell'}"
           @edit-actived="editActivedEvent">

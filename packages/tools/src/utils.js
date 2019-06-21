@@ -72,7 +72,6 @@ export const UtilTools = {
       filterMultiple: XEUtils.isBoolean(_vm.filterMultiple) ? _vm.filterMultiple : true,
       filterMethod: _vm.filterMethod,
       filterRender: _vm.filterRender,
-      remoteFilter: _vm.remoteFilter,
       treeNode: _vm.treeNode,
       columnKey: _vm.columnKey,
       editRender: _vm.editRender,

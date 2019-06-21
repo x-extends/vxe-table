@@ -17,7 +17,7 @@
     <vxe-table
       ref="xTable"
       border
-      show-all-overflow
+      show-overflow
       :data.sync="tableData"
       :edit-rules="validRules"
       :edit-config="{key: 'id', trigger: 'click', mode: 'cell', showStatus: true}"
@@ -70,7 +70,7 @@ export default {
         <vxe-table
           ref="xTable"
           border
-          show-all-overflow
+          show-overflow
           :data.sync="tableData"
           :edit-rules="validRules"
           :edit-config="{key: 'id', trigger: 'click', mode: 'cell', showStatus: true}"

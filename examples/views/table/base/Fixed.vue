@@ -5,7 +5,7 @@
 
     <vxe-table
       border
-      show-all-overflow
+      show-overflow
       :data.sync="tableData">
       <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
       <vxe-table-column prop="name" label="Name" width="300"></vxe-table-column>
@@ -26,7 +26,7 @@
 
     <vxe-table
       border
-      show-all-overflow
+      show-overflow
       :data.sync="tableData">
       <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
       <vxe-table-column prop="name" label="Name"></vxe-table-column>
@@ -56,7 +56,7 @@ export default {
         `
         <vxe-table
           border
-          show-all-overflow
+          show-overflow
           :data.sync="tableData">
           <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
           <vxe-table-column prop="name" label="Name" width="300"></vxe-table-column>
@@ -81,7 +81,7 @@ export default {
         `
         <vxe-table
           border
-          show-all-overflow
+          show-overflow
           :data.sync="tableData">
           <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
           <vxe-table-column prop="name" label="Name"></vxe-table-column>

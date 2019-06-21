@@ -44,8 +44,6 @@ export default {
     filterMethod: Function,
     // 筛选模板配置项
     filterRender: Object,
-    // 是否服务端筛选
-    remoteFilter: Boolean,
     // 指定为树节点
     treeNode: Boolean,
     // 列的 key

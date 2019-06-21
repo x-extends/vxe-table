@@ -6,6 +6,7 @@
     <vxe-grid
       ref="xGrid"
       border
+      remote-filter
       height="548"
       :pager-config="{pageSize: 15}"
       :columns="tableColumn"
@@ -57,8 +58,7 @@ export default {
             { label: '后端', value: '后端' },
             { label: '测试', value: '测试' }
           ],
-          filterMultiple: false,
-          remoteFilter: true
+          filterMultiple: false
         },
         { prop: 'describe', label: 'Describe', width: 300, showOverflow: true }
       ],
@@ -67,6 +67,7 @@ export default {
         <vxe-grid
           ref="xGrid"
           border
+          remote-filter
           height="548"
           :pager-config="{pageSize: 15}"
           :columns="tableColumn"
@@ -105,8 +106,7 @@ export default {
                     { label: '后端', value: '后端' },
                     { label: '测试', value: '测试' }
                   ],
-                  filterMultiple: false,
-                  remoteFilter: true
+                  filterMultiple: false
                 },
                 { prop: 'describe', label: 'Describe', width: 300, showOverflow: true }
               ]
@@ -119,10 +119,10 @@ export default {
               // 重新查询
               this.$refs.xGrid.commitProxy('query')
             },
-            filterChangeEvent ({ column, prop, values }) {
-              this.formData = {
-                [prop]: values[0]
-              }
+            filterChangeEvent ({ filters }) {
+              filters.forEach(({ column, prop, values }) => {
+                this.formData[prop] = values.join(',')
+              })
               // 重新加载，恢复初始状态
               this.$refs.xGrid.commitProxy('reload')
             }
@@ -144,10 +144,10 @@ export default {
       // 重新查询
       this.$refs.xGrid.commitProxy('query')
     },
-    filterChangeEvent ({ column, prop, values }) {
-      this.formData = {
-        [prop]: values[0]
-      }
+    filterChangeEvent ({ filters }) {
+      filters.forEach(({ column, prop, values }) => {
+        this.formData[prop] = values.join(',')
+      })
       // 重新加载，恢复初始状态
       this.$refs.xGrid.commitProxy('reload')
     }

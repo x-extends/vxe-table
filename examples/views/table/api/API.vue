@@ -10,6 +10,8 @@
       resizable
       highlight-current-row
       highlight-hover-row
+      class="api-table"
+      :row-class-name="rowClassNameFunc"
       :data.sync="apiList"
       :tree-config="{key: 'id', children: 'list', expandAll: !!filterName, expandRowKeys: defaultExpandRowKeys, trigger: 'cell'}">
       <vxe-table-column prop="name" :label="$t('app.api.title.prop')" width="280" tree-node>
@@ -136,9 +138,23 @@ export default {
     // 默认展开一级
     this.defaultExpandRowKeys = this.tableData.filter(item => item.list && item.list.length).map(item => item.id)
   },
+  methods: {
+    rowClassNameFunc ({ row }) {
+      return row.disabled ? 'api--disabled' : null
+    }
+  },
   beforeRouteUpdate (to, from, next) {
     next()
     this.filterName = ''
   }
 }
 </script>
+
+<style lang="scss">
+.api-table {
+  .api--disabled {
+    color: #cb2431;
+    text-decoration: line-through;
+  }
+}
+</style>

@@ -120,8 +120,8 @@
         VXETable.setup({
           // 默认表格参数
           size: 'small',
-          showAllOverflow: null,
-          showHeaderAllOverflow: null,
+          showOverflow: null,
+          showHeaderOverflow: null,
           stripe: false,
           border: false,
           resizable: false,
