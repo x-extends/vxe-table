@@ -136,19 +136,19 @@ export default {
           methods: {
             getValidEvent () {
               let validRecords = this.$refs.xExcel.getRecords().filter(item => Object.keys(item).some(key => item[key]))
-              alert(validRecords.length)
+              this.$XMsg.alert(validRecords.length)
             },
             getInsertEvent () {
               let insertRecords = this.$refs.xExcel.getInsertRecords()
-              alert(insertRecords.length)
+              this.$XMsg.alert(insertRecords.length)
             },
             getRemoveEvent () {
               let removeRecords = this.$refs.xExcel.getRemoveRecords()
-              alert(removeRecords.length)
+              this.$XMsg.alert(removeRecords.length)
             },
             getUpdateEvent () {
               let updateRecords = this.$refs.xExcel.getUpdateRecords()
-              alert(updateRecords.length)
+              this.$XMsg.alert(updateRecords.length)
             },
             exportCsvEvent () {
               this.$refs.xExcel.exportCsv()
@@ -195,19 +195,19 @@ export default {
   methods: {
     getValidEvent () {
       let validRecords = this.$refs.xExcel.getRecords().filter(item => Object.keys(item).some(key => item[key]))
-      alert(validRecords.length)
+      this.$XMsg.alert(validRecords.length)
     },
     getInsertEvent () {
       let insertRecords = this.$refs.xExcel.getInsertRecords()
-      alert(insertRecords.length)
+      this.$XMsg.alert(insertRecords.length)
     },
     getRemoveEvent () {
       let removeRecords = this.$refs.xExcel.getRemoveRecords()
-      alert(removeRecords.length)
+      this.$XMsg.alert(removeRecords.length)
     },
     getUpdateEvent () {
       let updateRecords = this.$refs.xExcel.getUpdateRecords()
-      alert(updateRecords.length)
+      this.$XMsg.alert(updateRecords.length)
     },
     exportCsvEvent () {
       this.$refs.xExcel.exportCsv()

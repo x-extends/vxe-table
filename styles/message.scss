@@ -1,7 +1,7 @@
 /**Variable**/
 @import './helpers/mixin.scss';
 
-.vxe-alert--wrapper {
+.vxe-msg--wrapper {
   display: none;
   position: fixed;
   top: 0;
@@ -14,6 +14,7 @@
   color: $vxe-font-color;
   font-family: $vxe-font-family;
   pointer-events: none;
+  transition: top .4s;
   &.active {
     display: block;
   }
@@ -23,7 +24,7 @@
         background-color: rgba(0, 0, 0, 0.5);
       }
     }
-    .vxe-alert--box {
+    .vxe-msg--box {
       opacity: 1;
       transform: translate(0, 0);
       visibility: visible;
@@ -53,29 +54,39 @@
         @include animatTransition(background-color, .2s);
       }
     }
-    .vxe-alert--box {
+    .vxe-msg--box {
       @include animatTransition(all, .2s, ease-out);
     }
   }
   &.size--small,
   &.size--mini {
     font-size: 12px;
-    .vxe-alert--box {
+    .vxe-msg--box {
       padding: 6px 0;
     }
-    .vxe-alert--body,
-    .vxe-alert--footer {
+    .vxe-msg--body,
+    .vxe-msg--footer {
       padding: 6px 14px;
     }
-    .vxe-alert--header {
+    .vxe-msg--header {
       font-size: 14px;
       padding: 6px 30px 6px 14px;
     }
-    .vxe-alert--close-icon {
+    .vxe-msg--close-icon {
       font-size: 15px;
     }
   }
-  .vxe-alert--box {
+  &.type--message {
+    .vxe-msg--box {
+      padding: 2px 4px;
+      margin-top: 0;
+      width: auto;
+      .vxe-msg--content {
+        display: inline-block;
+      }
+    }
+  }
+  .vxe-msg--box {
     display: inline-block;
     visibility: hidden;
     width: 420px;
@@ -91,18 +102,18 @@
     opacity: 0;
     transform: translate(0, -10%);
   }
-  .vxe-alert--body,
-  .vxe-alert--footer {
+  .vxe-msg--body,
+  .vxe-msg--footer {
     padding: 8px 16px;
   }
-  .vxe-alert--header {
+  .vxe-msg--header {
     position: relative;
     font-size: 16px;
     font-weight: 700;
     padding: 8px 40px 8px 16px;
     user-select: none;
   }
-  .vxe-alert--close-icon {
+  .vxe-msg--close-icon {
     font-size: 17px;
     width: 20px;
     height: 20px;
@@ -139,7 +150,7 @@
       }
     }
   }
-  .vxe-alert--footer {
+  .vxe-msg--footer {
     text-align: right;
   }
 }

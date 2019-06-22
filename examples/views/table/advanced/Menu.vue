@@ -216,7 +216,7 @@ export default {
           },
           methods: {
             contextMenuClickEvent ({ menu }) {
-              alert(menu.name)
+              this.$XMsg.alert(menu.name)
             },
             footerMethod ({ columns, data }) {
               return [
@@ -248,7 +248,7 @@ export default {
   },
   methods: {
     contextMenuClickEvent ({ menu }) {
-      alert(menu.name)
+      this.$XMsg.alert(menu.name)
     },
     footerMethod ({ columns, data }) {
       return [

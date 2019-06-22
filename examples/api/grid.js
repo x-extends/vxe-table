@@ -221,7 +221,7 @@ const apis = [
           {
             name: 'message',
             desc: '是否显示消息提示',
-            type: 'Boolean,Object',
+            type: 'Boolean',
             enum: '',
             defVal: 'true',
             list: []

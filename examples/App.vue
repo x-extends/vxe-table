@@ -867,7 +867,7 @@ export default {
               locat: {
                 name: 'TableAPI',
                 params: {
-                  name: 'message-box'
+                  name: 'message'
                 }
               }
             },

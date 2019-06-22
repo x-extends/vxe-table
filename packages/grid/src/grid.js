@@ -48,7 +48,7 @@ export default {
     vSize () {
       return this.size || this.$parent.size || this.$parent.vSize
     },
-    isAlert () {
+    isMsg () {
       return this.proxyConfig && this.proxyConfig.message !== false
     },
     tableProps () {
@@ -156,7 +156,7 @@ export default {
       return this.pendingRecords.indexOf(row) === -1
     },
     commitProxy (code) {
-      let { proxyConfig = {}, tablePage, pagerConfig, sortData, filterData, isAlert } = this
+      let { proxyConfig = {}, tablePage, pagerConfig, sortData, filterData, isMsg } = this
       let { ajax, props = {} } = proxyConfig
       if (ajax) {
         switch (code) {
@@ -209,8 +209,8 @@ export default {
                     this.tableLoading = false
                   }).then(() => this.commitProxy('reload'))
                 } else {
-                  if (isAlert && !selectRecords.length) {
-                    this.$XMsg.alert(GlobalConfig.i18n('vxe.grid.selectOneRecord')).catch(e => e)
+                  if (isMsg && !selectRecords.length) {
+                    this.$XMsg.message(GlobalConfig.i18n('vxe.grid.selectOneRecord'))
                   }
                 }
               })
@@ -237,18 +237,19 @@ export default {
                       this.tableLoading = true
                       resolve(
                         ajax.save({ body }).then(() => {
+                          this.$XMsg.message(GlobalConfig.i18n('vxe.grid.saveSuccess'))
                           this.tableLoading = false
                         }).catch(e => {
                           this.tableLoading = false
                         }).then(() => this.commitProxy('reload'))
                       )
                     } else {
-                      if (isAlert) {
+                      if (isMsg) {
                         // 直接移除未保存且标记为删除的数据
                         if (pendingRecords.length) {
                           this.remove(pendingRecords)
                         } else {
-                          this.$XMsg.alert(GlobalConfig.i18n('vxe.grid.dataUnchanged')).catch(e => e)
+                          this.$XMsg.message(GlobalConfig.i18n('vxe.grid.dataUnchanged'))
                         }
                       }
                       resolve()
@@ -269,7 +270,7 @@ export default {
       return this.pendingRecords
     },
     triggerPendingEvent (evnt) {
-      let { pendingRecords, isAlert } = this
+      let { pendingRecords, isMsg } = this
       let selectRecords = this.getSelectRecords()
       if (selectRecords.length) {
         let plus = []
@@ -288,8 +289,8 @@ export default {
         }
         this.clearSelection()
       } else {
-        if (isAlert) {
-          this.$XMsg.alert(GlobalConfig.i18n('vxe.grid.selectOneRecord')).catch(e => e)
+        if (isMsg) {
+          this.$XMsg.message(GlobalConfig.i18n('vxe.grid.selectOneRecord'))
         }
       }
     },

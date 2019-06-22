@@ -8,7 +8,7 @@ const apis = [
     list: [
       {
         name: 'value,v-model',
-        descKey: 'app.api.alert.desc.value',
+        descKey: 'app.api.msg.desc.value',
         type: '',
         enum: '',
         defVal: '',
@@ -16,15 +16,23 @@ const apis = [
       },
       {
         name: 'title',
-        descKey: 'app.api.alert.desc.title',
+        descKey: 'app.api.msg.desc.title',
         type: 'String',
         enum: '',
         defVal: '消息提示',
         list: []
       },
       {
+        name: 'type',
+        descKey: 'app.api.msg.desc.type',
+        type: 'String',
+        enum: 'alert, confirm, message',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'message',
-        descKey: 'app.api.alert.desc.message',
+        descKey: 'app.api.msg.desc.message',
         type: 'String',
         enum: '',
         defVal: '',
@@ -32,7 +40,7 @@ const apis = [
       },
       {
         name: 'lock-view',
-        descKey: 'app.api.alert.desc.lockView',
+        descKey: 'app.api.msg.desc.lockView',
         type: 'Boolean',
         enum: '',
         defVal: 'true',
@@ -40,7 +48,7 @@ const apis = [
       },
       {
         name: 'lock-scroll',
-        descKey: 'app.api.alert.desc.lockScroll',
+        descKey: 'app.api.msg.desc.lockScroll',
         type: 'Boolean',
         enum: '',
         defVal: 'true',
@@ -48,7 +56,7 @@ const apis = [
       },
       {
         name: 'mask',
-        descKey: 'app.api.alert.desc.mask',
+        descKey: 'app.api.msg.desc.mask',
         type: 'Boolean',
         enum: '',
         defVal: 'true',
@@ -56,10 +64,34 @@ const apis = [
       },
       {
         name: 'mask-closable',
-        descKey: 'app.api.alert.desc.maskClosable',
+        descKey: 'app.api.msg.desc.maskClosable',
         type: 'Boolean',
         enum: '',
         defVal: 'false',
+        list: []
+      },
+      {
+        name: 'duration',
+        descKey: 'app.api.msg.desc.duration',
+        type: 'Number',
+        enum: '',
+        defVal: '1500',
+        list: []
+      },
+      {
+        name: 'top',
+        descKey: 'app.api.msg.desc.top',
+        type: 'Number',
+        enum: '',
+        defVal: '15',
+        list: []
+      },
+      {
+        name: 'zIndex',
+        descKey: 'app.api.msg.desc.zIndex',
+        type: 'Number',
+        enum: '',
+        defVal: '999',
         list: []
       }
     ]

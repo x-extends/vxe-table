@@ -2,7 +2,7 @@
   <div>
     <vxe-toolbar ref="xToolbar" id="document_api" :setting="{storage: true}">
       <template v-slot:buttons>
-        <vxe-input class="search-input" v-model="filterName" type="search" :placeholder="`vxe-${$route.params.name} ${$t('app.api.form.apiSearch')}`"></vxe-input>
+        <vxe-input class="search-input" v-model="filterName" type="search" :placeholder="`vxe-${apiName} ${$t('app.api.form.apiSearch')}`"></vxe-input>
       </template>
     </vxe-toolbar>
 
@@ -19,7 +19,7 @@
       :tree-config="{key: 'id', children: 'list', expandAll: !!filterName, expandRowKeys: defaultExpandRowKeys, trigger: 'cell'}"
       :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus},}"
       @context-menu-click="contextMenuClickEvent">
-      <vxe-table-column prop="name" :label="$t('app.api.title.prop')" min-width="280" tree-node>
+      <vxe-table-column prop="name" :label="$t('app.api.title.prop')" min-width="280" tree-node :filters="nameFilters">
         <template v-slot="{ row }">
           <span v-html="row.name"></span>
         </template>
@@ -66,13 +66,20 @@ import checkboxAPI from '../../../api/checkbox'
 import inputAPI from '../../../api/input'
 import buttonAPI from '../../../api/button'
 import tooltipAPI from '../../../api/tooltip'
-import messageBoxAPI from '../../../api/message'
+import messageAPI from '../../../api/message'
 
 export default {
   data () {
     return {
       filterName: this.$route.query.filterName,
       defaultExpandRowKeys: [],
+      tableData: [],
+      nameFilters: [
+        { label: 'Props', value: 'Props' },
+        { label: 'Slots', value: 'Slots' },
+        { label: 'Events', value: 'Events' },
+        { label: 'Methods', value: 'Methods' }
+      ],
       headerMenus: [
         [
           {
@@ -94,8 +101,8 @@ export default {
       bodyMenus: [
         [
           {
-            code: 'reload',
-            name: '重新加载'
+            code: 'resize',
+            name: '重置操作'
           }
         ],
         [
@@ -112,7 +119,36 @@ export default {
     }
   },
   computed: {
-    tableData () {
+    apiName () {
+      return this.$route.params.name
+    },
+    apiList () {
+      let filterName = XEUtils.toString(this.filterName).trim().toLowerCase()
+      if (filterName) {
+        let filterRE = new RegExp(filterName, 'gi')
+        let options = { children: 'list' }
+        let searchProps = ['name', 'desc', 'type', 'enum', 'defVal']
+        let rest = XEUtils.searchTree(this.tableData, item => searchProps.some(key => item[key].toLowerCase().indexOf(filterName) > -1), options)
+        XEUtils.eachTree(rest, item => {
+          searchProps.forEach(key => {
+            item[key] = item[key].replace(filterRE, match => `<span class="keyword-lighten">${match}</span>`)
+          })
+        }, options)
+        return rest
+      }
+      return this.tableData
+    }
+  },
+  watch: {
+    apiName () {
+      this.loadList()
+    }
+  },
+  created () {
+    this.loadList()
+  },
+  methods: {
+    loadList () {
       let apis = []
       switch (this.$route.params.name) {
         case 'table':
@@ -148,8 +184,8 @@ export default {
         case 'tooltip':
           apis = tooltipAPI
           break
-        case 'message-box':
-          apis = messageBoxAPI
+        case 'message':
+          apis = messageAPI
           break
       }
       // 生成唯一 id
@@ -162,30 +198,10 @@ export default {
           item[key] = item[key] || '&#12288;'// 使用空白占位符、避免由于空值导致高度缩小破坏布局
         })
       }, { children: 'list' })
-      return apis
+      this.tableData = apis
+      // 默认展开一级
+      this.defaultExpandRowKeys = apis.filter(item => item.list && item.list.length).map(item => item.id)
     },
-    apiList () {
-      let filterName = XEUtils.toString(this.filterName).trim().toLowerCase()
-      if (filterName) {
-        let filterRE = new RegExp(filterName, 'gi')
-        let options = { children: 'list' }
-        let searchProps = ['name', 'desc', 'type', 'enum', 'defVal']
-        let rest = XEUtils.searchTree(this.tableData, item => searchProps.some(key => item[key].toLowerCase().indexOf(filterName) > -1), options)
-        XEUtils.eachTree(rest, item => {
-          searchProps.forEach(key => {
-            item[key] = item[key].replace(filterRE, match => `<span class="keyword-lighten">${match}</span>`)
-          })
-        }, options)
-        return rest
-      }
-      return this.tableData
-    }
-  },
-  created () {
-    // 默认展开一级
-    this.defaultExpandRowKeys = this.tableData.filter(item => item.list && item.list.length).map(item => item.id)
-  },
-  methods: {
     cellClassNameFunc ({ row, column }) {
       return {
         'api-disabled': row.disabled,
@@ -203,25 +219,27 @@ export default {
         case 'exportAll':
           this.$refs.xTable.exportCsv({
             data: XEUtils.toTreeArray(this.tableData, { children: 'list' }),
-            filename: `vxe-${this.$route.params.name}_v${pack.version}.csv`
+            filename: `vxe-${this.apiName}_v${pack.version}.csv`
           })
           break
         case 'copy':
           if (row && column) {
             if (XEClipboard.copy(row[column.property])) {
-              this.$XMsg.alert({
-                message: '已复制到剪贴板',
-                maskClosable: true
-              })
+              this.$XMsg.message('已复制到剪贴板！')
             }
           }
           break
-        case 'reload':
-          location.reload(true)
+        case 'resize':
+          this.filterName = ''
+          this.tableData = []
+          if (this.$refs.xTable) {
+            this.$refs.xTable.clearAll()
+          }
+          this.$nextTick(() => this.loadList())
           break
         case 'export':
           this.$refs.xTable.exportCsv({
-            filename: `vxe-${this.$route.params.name}_v${pack.version}.csv`
+            filename: `vxe-${this.apiName}_v${pack.version}.csv`
           })
           break
       }
@@ -230,6 +248,9 @@ export default {
   beforeRouteUpdate (to, from, next) {
     next()
     this.filterName = ''
+    if (this.$refs.xTable) {
+      this.$refs.xTable.clearAll()
+    }
   }
 }
 </script>

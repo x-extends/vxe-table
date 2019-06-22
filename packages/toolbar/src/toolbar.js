@@ -278,11 +278,11 @@ export default {
     },
     handleDeleteRow ($grid, alertKey, callback) {
       let selectRecords = $grid.getSelectRecords()
-      if ($grid.isAlert) {
+      if ($grid.isMsg) {
         if (selectRecords.length) {
           this.$XMsg.confirm(GlobalConfig.i18n(alertKey)).then(callback).catch(e => e)
         } else {
-          this.$XMsg.alert(GlobalConfig.i18n('vxe.grid.selectOneRecord')).catch(e => e)
+          this.$XMsg.message(GlobalConfig.i18n('vxe.grid.selectOneRecord'))
         }
       } else {
         if (selectRecords.length) {

@@ -145,7 +145,7 @@
           },
           // 默认 tooltip 主题样式
           tooltip: {
-            zIndex: 3000,
+            zIndex: 99,
             theme: 'dark'
           },
           // 默认分页参数
@@ -162,6 +162,7 @@
           },
           // 默认消息提示框参数
           message: {
+            zIndex: 999,
             lockView: true,
             lockScroll: true,
             mask: true,

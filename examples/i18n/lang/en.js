@@ -125,7 +125,7 @@ module.exports = {
         vxeInput: 'vxe-input',
         vxeButton: 'vxe-button',
         vxeTooltip: 'vxe-tooltip',
-        vxeMessageBox: 'vxe-message-box'
+        vxeMessageBox: 'vxe-message'
       }
     },
     body: {
@@ -313,15 +313,19 @@ module.exports = {
           size: 'Size'
         }
       },
-      alert: {
+      msg: {
         desc: {
           value: 'Binding values',
-          title: '提示框的标题',
+          title: 'Message title',
+          type: 'Message type',
           message: '提示框的内容',
           lockView: '是否锁住页面，不允许提示框之外的任何操作',
           lockScroll: '是否锁住滚动条，不允许页面滚动',
           mask: '是否显示遮罩层',
-          maskClosable: '是否允许点击遮罩层关闭提示框'
+          maskClosable: '是否允许点击遮罩层关闭提示框',
+          duration: '只对 type=message 有效，自动关闭的延时',
+          top: '只对 type=message 有效，消息距离顶部的位置',
+          zIndex: '自定义堆叠顺序（对于在弹框中使用是由于堆叠被覆盖时可能会用到）'
         }
       }
     }

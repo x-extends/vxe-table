@@ -10,7 +10,8 @@ export default {
       selectOneRecord: '請至少選擇壹條記錄！',
       deleteSelectRecord: '您確定要刪除所選記錄嗎？',
       removeSelectRecord: '您確定要移除所選記錄嗎？',
-      dataUnchanged: '數據未改動！ '
+      dataUnchanged: '數據未改動！ ',
+      saveSuccess: '保存成功'
     },
     pager: {
       goto: '前往',

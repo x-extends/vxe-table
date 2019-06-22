@@ -56,6 +56,7 @@ const GlobalConfig = {
     // buttons: []
   },
   message: {
+    // zIndex: 999,
     lockView: true,
     lockScroll: true,
     mask: true,

@@ -1,4 +1,5 @@
 import VxeMessageBox from './src/message'
+import XEUtils from 'xe-utils'
 
 var AlertController = null
 
@@ -10,7 +11,7 @@ export function Message (options) {
     })
     $alert._handleCustom = function (type) {
       $alert.$destroy()
-      if (type === 'confirm') {
+      if (type === 'confirm' || options.type === 'message') {
         resolve(type)
       } else {
         reject(type)
@@ -20,17 +21,24 @@ export function Message (options) {
   })
 }
 
-['alert', 'confirm'].forEach(type => {
+['alert', 'confirm', 'message'].forEach((type, index) => {
+  let defOpts = index === 2 ? {
+    mask: false,
+    duration: 1500,
+    lockView: false,
+    lockScroll: false
+  } : {}
   Message[type] = function (message, title, options) {
-    let opts = { message, type }
-    if (typeof message === 'string') {
+    let opts
+    if (XEUtils.isObject(message)) {
+      opts = message
+    } else {
+      opts = { message: XEUtils.toString(message), type }
       if (title) {
         opts.title = title
       }
-    } else {
-      opts = message
     }
-    return Message(Object.assign({}, opts, options))
+    return Message(Object.assign({}, defOpts, opts, options))
   }
 })
 

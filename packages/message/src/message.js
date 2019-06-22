@@ -1,29 +1,38 @@
 import GlobalConfig from '../../conf'
 import XEUtils from 'xe-utils'
 
+const msgQueueList = []
+
 export default {
-  name: 'VxeMessageBox',
+  name: 'VxeMessage',
   props: {
     value: Boolean,
     type: String,
+    top: { type: Number, default: 15 },
     title: { type: String, default: () => GlobalConfig.i18n('vxe.alert.title') },
+    duration: Number,
     message: [String, Function],
     lockView: { type: Boolean, default: () => GlobalConfig.message.lockView },
     lockScroll: { type: Boolean, default: () => GlobalConfig.message.lockScroll },
     mask: { type: Boolean, default: () => GlobalConfig.message.mask },
     maskClosable: Boolean,
+    zIndex: { type: Number, default: () => GlobalConfig.message.zIndex },
     animat: { type: Boolean, default: () => GlobalConfig.message.animat }
   },
   data () {
     return {
       visible: false,
       contentVisible: false,
-      beforeLockStyle: null
+      beforeLockStyle: null,
+      msgTop: 0
     }
   },
   computed: {
     vSize () {
       return this.size || (this.$parent && (this.$parent.size || this.$parent.vSize))
+    },
+    isMsg () {
+      return this.type === 'message'
     }
   },
   watch: {
@@ -40,12 +49,13 @@ export default {
     document.body.appendChild(this.$el)
   },
   beforeDestroy () {
+    this.removeMsgQueue()
     this.$el.parentNode.removeChild(this.$el)
   },
   render (h) {
-    let { vSize, type, animat, contentVisible, visible, title, message, lockView, mask } = this
+    let { vSize, type, animat, zIndex, msgTop, contentVisible, visible, title, message, lockView, mask, isMsg } = this
     return h('div', {
-      class: ['vxe-alert--wrapper', {
+      class: ['vxe-msg--wrapper', `type--${type}`, {
         [`size--${vSize}`]: vSize,
         'is--animat': animat,
         'lock--view': lockView,
@@ -53,35 +63,40 @@ export default {
         'is--visible': contentVisible,
         active: visible
       }],
+      style: {
+        zIndex,
+        top: msgTop ? `${msgTop}px` : msgTop
+      },
       on: {
         click: this.selfClickEvent
       }
     }, [
       h('div', {
-        class: 'vxe-alert--box'
+        class: 'vxe-msg--box',
+        ref: 'msgBox'
       }, [
-        h('div', {
-          class: 'vxe-alert--header'
+        !isMsg ? h('div', {
+          class: 'vxe-msg--header'
         }, [
           h('span', {
-            class: 'vxe-alert--title'
+            class: 'vxe-msg--title'
           }, title),
           h('i', {
-            class: 'vxe-alert--close-icon',
+            class: 'vxe-msg--close-icon',
             on: {
               click: this.closeEvent
             }
           })
-        ]),
+        ]) : null,
         h('div', {
-          class: 'vxe-alert--body'
+          class: 'vxe-msg--body'
         }, [
           h('div', {
-            class: 'vxe-alert--content'
+            class: 'vxe-msg--content'
           }, this.$slots.default || (XEUtils.isFunction(message) ? message.call(this, h) : message))
         ]),
-        h('div', {
-          class: 'vxe-alert--footer'
+        !isMsg ? h('div', {
+          class: 'vxe-msg--footer'
         }, [
           type === 'confirm' ? h('vxe-button', {
             on: {
@@ -96,7 +111,7 @@ export default {
               click: this.confirmEvent
             }
           }, GlobalConfig.i18n('vxe.button.confirm'))
-        ])
+        ]) : null
       ])
     ])
   },
@@ -123,13 +138,14 @@ export default {
       this.close(type)
     },
     open () {
-      if (!this.visible) {
+      let { duration, visible, lockScroll, _handleCustom, isMsg } = this
+      if (!visible) {
         this.visible = true
         this.contentVisible = false
         setTimeout(() => {
           this.contentVisible = true
         }, 10)
-        if (this.lockScroll) {
+        if (lockScroll) {
           let bodyElem = document.body
           this.beforeLockStyle = {
             paddingRight: bodyElem.style.paddingRight,
@@ -138,15 +154,44 @@ export default {
           bodyElem.style.paddingRight = `${window.innerWidth - (document.documentElement.clientWidth || document.body.clientWidth)}px`
           bodyElem.style.overflow = 'hidden'
         }
-        if (!this._handleCustom) {
+        if (!_handleCustom) {
           this.$emit('input', true)
           this.$emit('show')
         }
+        if (isMsg) {
+          this.addMsgQueue()
+          setTimeout(this.close, duration)
+        }
       }
     },
+    addMsgQueue () {
+      if (msgQueueList.indexOf(this) === -1) {
+        msgQueueList.push(this)
+      }
+      this.updateStyle()
+    },
+    removeMsgQueue () {
+      if (msgQueueList.indexOf(this) > -1) {
+        XEUtils.remove(msgQueueList, comp => comp === this)
+      }
+      this.updateStyle()
+    },
+    updateStyle () {
+      this.$nextTick(() => {
+        let offsetTop = 0
+        msgQueueList.forEach((comp, index) => {
+          offsetTop += comp.top
+          comp.msgTop = offsetTop
+          offsetTop += comp.$refs.msgBox.clientHeight
+        })
+      })
+    },
     close (type) {
-      let { visible, lockScroll, beforeLockStyle } = this
+      let { visible, lockScroll, beforeLockStyle, isMsg } = this
       if (visible) {
+        if (isMsg) {
+          this.removeMsgQueue()
+        }
         this.contentVisible = false
         setTimeout(() => {
           this.visible = false

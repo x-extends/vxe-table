@@ -685,23 +685,12 @@ export default {
       this.tableData = this.getTableData(true).tableData
       return this.$nextTick()
     },
-    clearFilter (force) {
-      Object.assign(this.filterStore, {
-        isAllSelected: false,
-        isIndeterminate: false,
-        style: null,
-        options: [],
-        column: null,
-        multiple: false,
-        visible: false
-      })
-      return this.$nextTick()
-    },
     clearAll () {
       this.clearScroll()
       this.clearSort()
       this.clearFilter()
       this.clearCurrentRow()
+      this.clearCurrentColumn()
       this.clearSelection()
       this.clearRowExpand()
       this.clearTreeExpand()
@@ -2623,6 +2612,28 @@ export default {
         item.data = item._data
       })
       this.confirmFilterEvent(evnt)
+    },
+    clearFilter (force) {
+      let { visibleColumn } = this
+      visibleColumn.forEach(column => {
+        let { filters } = column
+        if (filters && filters.length) {
+          filters.forEach(item => {
+            item.checked = false
+          })
+        }
+      })
+      Object.assign(this.filterStore, {
+        isAllSelected: false,
+        isIndeterminate: false,
+        style: null,
+        options: [],
+        column: null,
+        multiple: false,
+        visible: false
+      })
+      this.tableData = this.getTableData(true).tableData
+      return this.$nextTick()
     },
     /**
      * 展开行事件

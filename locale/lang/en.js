@@ -10,7 +10,8 @@ export default {
       selectOneRecord: 'Please choose at least one piece of record!',
       deleteSelectRecord: 'Are you sure you want to delete the selected record?',
       removeSelectRecord: 'Are you sure you want to remove the selected record?',
-      dataUnchanged: 'Data unchanged! '
+      dataUnchanged: 'Data unchanged! ',
+      saveSuccess: 'save successfully.'
     },
     pager: {
       goto: 'Go to',
