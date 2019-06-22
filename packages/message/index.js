@@ -24,7 +24,6 @@ export function Message (options) {
 ['alert', 'confirm', 'message'].forEach((type, index) => {
   let defOpts = index === 2 ? {
     mask: false,
-    duration: 1500,
     lockView: false,
     lockScroll: false
   } : {}

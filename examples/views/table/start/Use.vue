@@ -166,6 +166,7 @@
             lockView: true,
             lockScroll: true,
             mask: true,
+            duration: 3000,
             animat: true
           },
           // 默认优化配置项

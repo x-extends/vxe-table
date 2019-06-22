@@ -117,7 +117,7 @@ export default {
                 sort: true, // 启用排序代理
                 filter: true, // 启用筛选代理
                 ajax: {
-                  query: ({ page, sort, filter }) => {
+                  query: ({ page, sort, filters }) => {
                     // 处理排序条件
                     let formData = {
                       sort: sort.prop,

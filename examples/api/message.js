@@ -75,7 +75,7 @@ const apis = [
         descKey: 'app.api.msg.desc.duration',
         type: 'Number',
         enum: '',
-        defVal: '1500',
+        defVal: '3000',
         list: []
       },
       {

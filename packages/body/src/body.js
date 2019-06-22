@@ -222,6 +222,9 @@ function renderRows (h, _vm, $table, rowLevel, fixedType, tableData, tableColumn
           $table.triggerHoverEvent(evnt, { row, rowIndex })
         }
       }
+      trOn.mouseleave = evnt => {
+        $table.hoverRow = null
+      }
     }
     let rowId = UtilTools.getRowId($table, row, rowIndex)
     rows.push(

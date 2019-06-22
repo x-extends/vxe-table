@@ -9,8 +9,8 @@ export default {
     value: Boolean,
     type: String,
     top: { type: Number, default: 15 },
-    title: { type: String, default: () => GlobalConfig.i18n('vxe.alert.title') },
-    duration: Number,
+    title: String,
+    duration: { type: Number, default: () => GlobalConfig.message.duration },
     message: [String, Function],
     lockView: { type: Boolean, default: () => GlobalConfig.message.lockView },
     lockScroll: { type: Boolean, default: () => GlobalConfig.message.lockScroll },
@@ -80,7 +80,7 @@ export default {
         }, [
           h('span', {
             class: 'vxe-msg--title'
-          }, title),
+          }, title || GlobalConfig.i18n('vxe.alert.title')),
           h('i', {
             class: 'vxe-msg--close-icon',
             on: {

@@ -16,7 +16,7 @@ const GlobalConfig = {
   optimization: {
     animat: true,
     scrollX: {
-      gt: 200,
+      gt: 500,
       oSize: 6,
       rSize: 18,
       vSize: 0
@@ -60,6 +60,7 @@ const GlobalConfig = {
     lockView: true,
     lockScroll: true,
     mask: true,
+    duration: 3000,
     animat: true
   },
   i18n: key => key,
