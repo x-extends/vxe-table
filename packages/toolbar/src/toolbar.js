@@ -178,20 +178,30 @@ export default {
         customStorageMap[id] = tableCustoms.filter(column => !column.visible).map(column => column.property).join(',') || undefined
         localStorage.setItem(storageKey, XEUtils.toJSONString(customStorageMap))
       }
+      return this.$nextTick()
+    },
+    hideColumn (column) {
+      column.visible = false
+      return this.updateSetting()
+    },
+    showColumn (column) {
+      let { tableCustoms } = this
+      if (column) {
+        column.visible = true
+      } else {
+        tableCustoms.forEach(column => {
+          column.visible = true
+        })
+      }
+      return this.updateSetting()
     },
     updateSetting () {
       let { $grid, $table } = this
-      if ($grid) {
-        $grid.refreshColumn()
-        this.saveStorageMap()
-      } else {
-        if ($table) {
-          $table.refreshColumn()
-          this.saveStorageMap()
-        } else {
-          throw new Error('[vxe-toolbar] Not found vxe-table.')
-        }
+      if ($grid || $table) {
+        ($grid || $table).refreshColumn()
+        return this.saveStorageMap()
       }
+      throw new Error('[vxe-toolbar] Not found vxe-table.')
     },
     handleGlobalMousedownEvent (evnt) {
       if (!DomTools.getEventTargetNode(evnt, this.$refs.customWrapper).flag) {

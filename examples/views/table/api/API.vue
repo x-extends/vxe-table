@@ -1,6 +1,6 @@
 <template>
   <div>
-    <vxe-toolbar>
+    <vxe-toolbar ref="xToolbar" id="document_api" :setting="{storage: true}">
       <template v-slot:buttons>
         <vxe-input class="search-input" v-model="filterName" type="search" :placeholder="`vxe-${$route.params.name} ${$t('app.api.form.apiSearch')}`"></vxe-input>
       </template>
@@ -14,32 +14,32 @@
       highlight-hover-column
       ref="xTable"
       class="api-table"
-      :row-class-name="rowClassNameFunc"
+      :cell-class-name="cellClassNameFunc"
       :data.sync="apiList"
       :tree-config="{key: 'id', children: 'list', expandAll: !!filterName, expandRowKeys: defaultExpandRowKeys, trigger: 'cell'}"
       :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus},}"
       @context-menu-click="contextMenuClickEvent">
-      <vxe-table-column prop="name" :label="$t('app.api.title.prop')" width="280" tree-node>
+      <vxe-table-column prop="name" :label="$t('app.api.title.prop')" min-width="280" tree-node>
         <template v-slot="{ row }">
           <span v-html="row.name"></span>
         </template>
       </vxe-table-column>
-      <vxe-table-column prop="desc" :label="$t('app.api.title.desc')">
+      <vxe-table-column prop="desc" :label="$t('app.api.title.desc')" min-width="200">
         <template v-slot="{ row }">
           <span v-html="row.desc"></span>
         </template>
       </vxe-table-column>
-      <vxe-table-column prop="type" :label="$t('app.api.title.type')" width="160">
+      <vxe-table-column prop="type" :label="$t('app.api.title.type')" min-width="140">
         <template v-slot="{ row }">
           <span v-html="row.type"></span>
         </template>
       </vxe-table-column>
-      <vxe-table-column prop="enum" :label="$t('app.api.title.enum')" width="180">
+      <vxe-table-column prop="enum" :label="$t('app.api.title.enum')" min-width="160">
         <template v-slot="{ row }">
           <span v-html="row.enum"></span>
         </template>
       </vxe-table-column>
-      <vxe-table-column prop="defVal" :label="$t('app.api.title.defVal')" width="180">
+      <vxe-table-column prop="defVal" :label="$t('app.api.title.defVal')" min-width="160">
         <template v-slot="{ row }">
           <span v-html="row.defVal"></span>
         </template>
@@ -76,12 +76,28 @@ export default {
       headerMenus: [
         [
           {
+            code: 'hideColumn',
+            name: '隐藏列'
+          },
+          {
+            code: 'showAllColumn',
+            name: '取消所有隐藏列'
+          }
+        ],
+        [
+          {
             code: 'exportAll',
             name: '导出完整文档'
           }
         ]
       ],
       bodyMenus: [
+        [
+          {
+            code: 'reload',
+            name: '重新加载'
+          }
+        ],
         [
           {
             code: 'copy',
@@ -138,9 +154,13 @@ export default {
       }
       // 生成唯一 id
       let index = 1
+      let searchProps = ['name', 'desc', 'type', 'enum', 'defVal']
       XEUtils.eachTree(apis, item => {
         item.id = index++
         item.desc = item.descKey ? this.$t(item.descKey) : item.desc
+        searchProps.forEach(key => {
+          item[key] = item[key] || '&#12288;'// 使用空白占位符、避免由于空值导致高度缩小破坏布局
+        })
       }, { children: 'list' })
       return apis
     },
@@ -166,11 +186,26 @@ export default {
     this.defaultExpandRowKeys = this.tableData.filter(item => item.list && item.list.length).map(item => item.id)
   },
   methods: {
-    rowClassNameFunc ({ row }) {
-      return row.disabled ? 'api--disabled' : null
+    cellClassNameFunc ({ row, column }) {
+      return {
+        'api-disabled': row.disabled,
+        'disabled-line-through': row.disabled && column.property === 'name'
+      }
     },
     contextMenuClickEvent ({ menu, row, column }) {
       switch (menu.code) {
+        case 'hideColumn':
+          this.$refs.xToolbar.hideColumn(column)
+          break
+        case 'showAllColumn':
+          this.$refs.xToolbar.showColumn()
+          break
+        case 'exportAll':
+          this.$refs.xTable.exportCsv({
+            data: XEUtils.toTreeArray(this.tableData, { children: 'list' }),
+            filename: `vxe-${this.$route.params.name}_v${pack.version}.csv`
+          })
+          break
         case 'copy':
           if (row && column) {
             if (XEClipboard.copy(row[column.property])) {
@@ -181,14 +216,11 @@ export default {
             }
           }
           break
+        case 'reload':
+          location.reload(true)
+          break
         case 'export':
           this.$refs.xTable.exportCsv({
-            filename: `vxe-${this.$route.params.name}_v${pack.version}.csv`
-          })
-          break
-        case 'exportAll':
-          this.$refs.xTable.exportCsv({
-            data: XEUtils.toTreeArray(this.tableData, { children: 'list' }),
             filename: `vxe-${this.$route.params.name}_v${pack.version}.csv`
           })
           break
@@ -204,8 +236,10 @@ export default {
 
 <style lang="scss">
 .api-table {
-  .api--disabled {
+  .api-disabled {
     color: #cb2431;
+  }
+  .disabled-line-through {
     text-decoration: line-through;
   }
 }

@@ -2,8 +2,8 @@ import XEUtils from 'xe-utils'
 import UtilTools from './utils'
 
 const browse = XEUtils.browse()
-// const htmlElem = document.querySelector('html')
-// const bodyElem = document.body
+const htmlElem = document.querySelector('html')
+const bodyElem = document.body
 
 export const DomTools = {
   browse,
@@ -44,10 +44,12 @@ export const DomTools = {
    * 获取元素相对于 document 的位置
    */
   getOffsetPos (elem, container) {
+    return getNodeOffset(elem, container, { left: 0, top: 0 })
+  },
+  getAbsolutePos (elem) {
     let bounding = elem.getBoundingClientRect()
     let { scrollTop, scrollLeft } = DomTools.getDomNode()
     return { top: scrollTop + bounding.top, left: scrollLeft + bounding.left }
-    // return getNodeOffset(elem, container, { left: 0, top: 0 })
   },
   getCellIndexs (cell) {
     let trElem = cell.parentNode
@@ -101,20 +103,20 @@ export const DomTools = {
   }
 }
 
-// function getNodeOffset (elem, container, rest) {
-//   if (elem) {
-//     let parentElem = elem.parentNode
-//     rest.top += elem.offsetTop
-//     rest.left += elem.offsetLeft
-//     if (parentElem && parentElem !== htmlElem && parentElem !== bodyElem) {
-//       rest.top -= parentElem.scrollTop
-//       rest.left -= parentElem.scrollLeft
-//     }
-//     if (container && (elem === container || elem.offsetParent === container) ? 0 : elem.offsetParent) {
-//       return getNodeOffset(elem.offsetParent, container, rest)
-//     }
-//   }
-//   return rest
-// }
+function getNodeOffset (elem, container, rest) {
+  if (elem) {
+    let parentElem = elem.parentNode
+    rest.top += elem.offsetTop
+    rest.left += elem.offsetLeft
+    if (parentElem && parentElem !== htmlElem && parentElem !== bodyElem) {
+      rest.top -= parentElem.scrollTop
+      rest.left -= parentElem.scrollLeft
+    }
+    if (container && (elem === container || elem.offsetParent === container) ? 0 : elem.offsetParent) {
+      return getNodeOffset(elem.offsetParent, container, rest)
+    }
+  }
+  return rest
+}
 
 export default DomTools

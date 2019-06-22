@@ -365,7 +365,7 @@ export default {
     showSizePanel () {
       let { $refs } = this
       let sizeBtnElem = $refs.sizeBtn
-      let { left, top } = DomTools.getOffsetPos(sizeBtnElem)
+      let { left, top } = DomTools.getAbsolutePos(sizeBtnElem)
       let { scrollTop, scrollLeft, visibleWidth, visibleHeight } = DomTools.getDomNode()
       this.panelStyle = {
         left: `${left}px`,

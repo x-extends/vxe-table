@@ -1638,8 +1638,14 @@ export default {
      * 快捷菜单事件处理
      */
     handleGlobalContextmenuEvent (evnt) {
-      let { isCtxMenu } = this
+      let { isCtxMenu, ctxMenuStore } = this
       if (isCtxMenu) {
+        if (ctxMenuStore.visible) {
+          if (ctxMenuStore.visible && this.$refs.ctxWrapper && this.getEventTargetNode(evnt, this.$refs.ctxWrapper.$el).flag) {
+            evnt.preventDefault()
+            return
+          }
+        }
         // 右键头部
         let headeWrapperNode = this.getEventTargetNode(evnt, this.$el, 'vxe-table--header-wrapper')
         if (headeWrapperNode.flag) {
@@ -1727,7 +1733,6 @@ export default {
      */
     closeMenu () {
       Object.assign(this.ctxMenuStore, {
-        list: [],
         visible: false,
         selected: null,
         selectChild: null,

@@ -14,6 +14,7 @@ const TableStripe = () => import(/* webpackChunkName: "base" */ './views/table/b
 const TableBorder = () => import(/* webpackChunkName: "base" */ './views/table/base/Border.vue')
 const TableStyle = () => import(/* webpackChunkName: "base" */ './views/table/base/Style.vue')
 const TableHeader = () => import(/* webpackChunkName: "base" */ './views/table/base/Header.vue')
+const TableHeaderHighlight = () => import(/* webpackChunkName: "base" */ './views/table/base/HeaderHighlight.vue')
 const TableResizable = () => import(/* webpackChunkName: "base" */ './views/table/base/Resizable.vue')
 const TableMaxHeight = () => import(/* webpackChunkName: "base" */ './views/table/base/MaxHeight.vue')
 const TableHeight = () => import(/* webpackChunkName: "base" */ './views/table/base/Height.vue')
@@ -185,6 +186,11 @@ export default new Router({
       path: '/table/base/header',
       name: 'TableHeader',
       component: TableHeader
+    },
+    {
+      path: '/table/base/highlight',
+      name: 'TableHeaderHighlight',
+      component: TableHeaderHighlight
     },
     {
       path: '/table/base/resizable',

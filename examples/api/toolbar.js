@@ -105,7 +105,32 @@ const apis = [
     type: '',
     enum: '',
     defVal: '',
-    list: []
+    list: [
+      {
+        name: 'hideColumn(column)',
+        desc: '隐藏指定列',
+        type: '',
+        enum: '',
+        defVal: 'column',
+        list: []
+      },
+      {
+        name: 'showColumn(column)',
+        desc: '显示指定列，如果不传参数则显示所有列',
+        type: '',
+        enum: '',
+        defVal: 'column?',
+        list: []
+      },
+      {
+        name: 'updateSetting()',
+        desc: '更新列设置',
+        type: '',
+        enum: '',
+        defVal: '',
+        list: []
+      }
+    ]
   }
 ]
 

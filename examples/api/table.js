@@ -135,7 +135,7 @@ const apis = [
       {
         name: 'height',
         descKey: 'app.api.table.desc.height',
-        type: 'Number,String',
+        type: 'Number, String',
         enum: 'auto（铺满父容器高度），数值px',
         defVal: '',
         list: []
@@ -143,7 +143,7 @@ const apis = [
       {
         name: 'max-height',
         descKey: 'app.api.table.desc.maxHeight',
-        type: 'Number,String',
+        type: 'Number, String',
         enum: '数值px',
         defVal: '',
         list: []
@@ -255,7 +255,7 @@ const apis = [
       {
         name: 'row-class-name',
         descKey: 'app.api.table.desc.rowClassName',
-        type: 'String,Function',
+        type: 'String, Function',
         enum: '',
         defVal: '',
         list: []
@@ -263,7 +263,7 @@ const apis = [
       {
         name: 'cell-class-name',
         descKey: 'app.api.table.desc.cellClassName',
-        type: 'String,Function',
+        type: 'String, Function',
         enum: '',
         defVal: '',
         list: []
@@ -271,7 +271,7 @@ const apis = [
       {
         name: 'header-row-class-name',
         descKey: 'app.api.table.desc.headerRowClassName',
-        type: 'String,Function',
+        type: 'String, Function',
         enum: '',
         defVal: '',
         list: []
@@ -279,7 +279,7 @@ const apis = [
       {
         name: 'header-cell-class-name',
         descKey: 'app.api.table.desc.headerCellClassName',
-        type: 'String,Function',
+        type: 'String, Function',
         enum: '',
         defVal: '',
         list: []
@@ -287,7 +287,7 @@ const apis = [
       {
         name: 'footer-row-class-name',
         descKey: 'app.api.table.desc.footerRowClassName',
-        type: 'String,Function',
+        type: 'String, Function',
         enum: '',
         defVal: '',
         list: []
@@ -295,7 +295,7 @@ const apis = [
       {
         name: 'footer-cell-class-name',
         descKey: 'app.api.table.desc.footerCellClassName',
-        type: 'String,Function',
+        type: 'String, Function',
         enum: '',
         defVal: '',
         list: []
@@ -327,7 +327,7 @@ const apis = [
       {
         name: 'show-overflow',
         descKey: 'app.api.table.desc.showOverflow',
-        type: 'Boolean,String',
+        type: 'Boolean, String',
         enum: 'ellipsis（只显示省略号）,title（并且显示为原生 title）,tooltip（并且显示为 tooltip 提示）',
         defVal: '',
         list: []
@@ -344,7 +344,7 @@ const apis = [
       {
         name: 'show-header-overflow',
         descKey: 'app.api.table.desc.showHeaderOverflow',
-        type: 'Boolean,String',
+        type: 'Boolean, String',
         enum: 'ellipsis（只显示省略号）,title（并且显示为原生 title）,tooltip（并且显示为 tooltip 提示）',
         defVal: '',
         list: []
@@ -377,7 +377,7 @@ const apis = [
       {
         name: 'row-key',
         descKey: 'app.api.table.desc.rowKey',
-        type: 'Number,String',
+        type: 'Number, String',
         enum: '',
         defVal: '',
         list: []
@@ -818,7 +818,7 @@ const apis = [
             name: 'type',
             desc: '数据校验的类型',
             type: 'String',
-            enum: 'number,string',
+            enum: 'Number, String',
             defVal: 'string',
             list: []
           },
@@ -1199,19 +1199,19 @@ const apis = [
         list: []
       },
       {
-        name: 'insertAt(records,row)',
+        name: 'insertAt(records, row)',
         desc: '往表格插入数据，从指定位置插入一行或多行；第二个参数：row 指定位置、null 从第一行插入、-1 从最后插入',
         type: 'Promise<{row, rows}>',
         enum: '',
-        defVal: 'records,row',
+        defVal: 'records, row',
         list: []
       },
       {
-        name: 'revert(rows,prop)',
+        name: 'revert(rows, prop)',
         desc: '还原更改，还原指定行 row 或者整个表格的数据',
         type: 'Promise',
         enum: '',
-        defVal: 'rows?,prop?',
+        defVal: 'rows?, prop?',
         list: []
       },
       {
@@ -1303,11 +1303,11 @@ const apis = [
         list: []
       },
       {
-        name: 'hasRowChange(row,prop)',
+        name: 'hasRowChange(row, prop)',
         desc: '检查行或列数据是否发生改变',
         type: 'Boolean',
         enum: '',
-        defVal: 'row,prop?',
+        defVal: 'row, prop?',
         list: []
       },
       {
@@ -1319,27 +1319,27 @@ const apis = [
         list: []
       },
       {
-        name: 'setActiveCell(row,prop)',
+        name: 'setActiveCell(row, prop)',
         desc: '激活单元格编辑',
         type: 'Promise',
         enum: '',
-        defVal: 'row,prop',
+        defVal: 'row, prop',
         list: []
       },
       {
-        name: 'setSelectCell(row,prop)',
+        name: 'setSelectCell(row, prop)',
         desc: '只对 trigger!=manual 有效，选中单元格',
         type: 'Promise',
         enum: '',
-        defVal: 'row,prop',
+        defVal: 'row, prop',
         list: []
       },
       {
-        name: 'setRowExpansion(rows,checked)',
+        name: 'setRowExpansion(rows, checked)',
         desc: '设置展开行，二个参数设置这一行展开与否',
         type: 'Promise',
         enum: '',
-        defVal: 'rows,checked',
+        defVal: 'rows, checked',
         list: []
       },
       {
@@ -1351,11 +1351,11 @@ const apis = [
         list: []
       },
       {
-        name: 'setTreeExpansion(rows,checked)',
+        name: 'setTreeExpansion(rows, checked)',
         desc: '设置展开树形节点，二个参数设置这一行展开与否',
         type: 'Promise',
         enum: '',
-        defVal: 'rows,checked',
+        defVal: 'rows, checked',
         list: []
       },
       {
@@ -1383,11 +1383,11 @@ const apis = [
         list: []
       },
       {
-        name: 'setSelection(rows,checked)',
+        name: 'setSelection(rows, checked)',
         desc: '用于多选表格，设置行为选中状态，第二个参数为选中与否',
         type: 'Promise',
         enum: '',
-        defVal: 'rows,checked',
+        defVal: 'rows, checked',
         list: []
       },
       {

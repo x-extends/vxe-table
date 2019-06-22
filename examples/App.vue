@@ -158,6 +158,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.headerHighlight',
+              locat: {
+                name: 'TableHeaderHighlight'
+              }
+            },
+            {
               label: 'app.aside.nav.resizable',
               demoUrl: 'https://jsrun.net/5AXKp',
               locat: {

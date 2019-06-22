@@ -92,7 +92,7 @@ export default {
     toVisible (target) {
       if (target) {
         let { $el, tipStore, zIndex } = this
-        let { top, left } = DomTools.getOffsetPos(target)
+        let { top, left } = DomTools.getAbsolutePos(target)
         let { scrollTop, scrollLeft, visibleWidth } = DomTools.getDomNode()
         let parentNode = $el.parentNode
         let tipLeft = left

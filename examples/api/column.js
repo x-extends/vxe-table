@@ -33,7 +33,7 @@ const apis = [
       {
         name: 'width',
         descKey: 'app.api.tableColumn.desc.width',
-        type: 'Number,String',
+        type: 'Number, String',
         enum: '数值px，数值%',
         defVal: '默认均匀分配',
         list: []
@@ -41,7 +41,7 @@ const apis = [
       {
         name: 'min-width',
         descKey: 'app.api.tableColumn.desc.minWidth',
-        type: 'Number,String',
+        type: 'Number, String',
         enum: '数值px，数值%',
         defVal: '',
         list: []
