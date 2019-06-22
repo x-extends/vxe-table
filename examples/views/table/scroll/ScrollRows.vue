@@ -1,16 +1,16 @@
 <template>
   <div>
     <p>虚拟滚动渲染，加载 1 万行，左右固定列</p>
+    <p>大数据不建议使用双向绑定的 <table-api-link name="data"/> 属性（vue 监听会大数据会短暂的卡顿），建议使用 <table-api-link prop="loadData"/>/<table-api-link prop="reloadData"/> 函数</p>
 
     <vxe-table
       ref="xTable"
       border
       resizable
       show-overflow
-      height="600"
+      height="300"
       :loading="loading"
-      :data.sync="tableData"
-      :optimization ="{scrollY: {gt: 500, oSize: 20, rSize: 60}}">>
+      :optimization ="{scrollY: {gt: 500, oSize: 10, rSize: 30}}">>
       <vxe-table-column type="index" width="100"></vxe-table-column>
       <vxe-table-column prop="name" label="Name" sortable width="200"></vxe-table-column>
       <vxe-table-column prop="age" label="Age" width="200"></vxe-table-column>
@@ -39,14 +39,17 @@
 export default {
   data () {
     return {
-      loading: false,
-      tableData: []
+      loading: false
     }
   },
   created () {
     this.loading = true
     setTimeout(() => {
-      this.tableData = window.MOCK_DATA_LIST.slice(0, 10000)
+      let tableData = window.MOCK_DATA_LIST.slice(0, 10000)
+      // 阻断 vue 对大数组的双向绑定，大数据性能翻倍提升
+      if (this.$refs.xTable) {
+        this.$refs.xTable.loadData(tableData)
+      }
       this.loading = false
     }, 300)
   }
