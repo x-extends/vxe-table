@@ -4,7 +4,6 @@
 
     <vxe-grid
       border
-      highlight-hover-row
       class="reverse-table"
       :show-header="false"
       :columns="tableColumn"
@@ -23,7 +22,6 @@
     <vxe-grid
       border
       show-overflow
-      highlight-hover-row
       class="reverse-table"
       height="400"
       :show-header="false"
