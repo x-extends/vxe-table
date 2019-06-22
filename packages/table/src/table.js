@@ -1677,7 +1677,7 @@ export default {
               let { rowId, rowIndex, colIndex, columnIndex } = DomTools.getCellIndexs(targetElem)
               let column = colIndex ? tableFullColumn[colIndex] : visibleColumn[columnIndex]
               if (type === 'body') {
-                let { row } = rowId ? fullDataRowIdMap.get('' + rowId) : tableData[rowIndex]
+                let { row } = rowId ? fullDataRowIdMap.get(rowId) : tableData[rowIndex]
                 args.row = row
                 args.rowIndex = rowIndex
               }
@@ -1932,8 +1932,8 @@ export default {
       let rowKey = UtilTools.getRowKey(this)
       if (reserve && selection.length) {
         this.selection = selection.map(row => {
-          let rowId = XEUtils.get(row, rowKey)
-          return fullDataRowIdMap.has(rowId) ? fullDataRowIdMap.get('' + rowId).row : row
+          let rowId = '' + XEUtils.get(row, rowKey)
+          return fullDataRowIdMap.has(rowId) ? fullDataRowIdMap.get(rowId).row : row
         })
       }
     },
