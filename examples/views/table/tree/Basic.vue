@@ -8,10 +8,10 @@
       resizable
       :tree-config="{key: 'id', children: 'children'}"
       :data.sync="tableData">
-      <vxe-table-column prop="name" label="Name" tree-node></vxe-table-column>
+      <vxe-table-column prop="name" label="Name"></vxe-table-column>
       <vxe-table-column prop="size" label="Size"></vxe-table-column>
       <vxe-table-column prop="type" label="Type"></vxe-table-column>
-      <vxe-table-column prop="date" label="Date"></vxe-table-column>
+      <vxe-table-column prop="date" label="Date" tree-node></vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -56,10 +56,10 @@ export default {
           resizable
           :tree-config="{key: 'id', children: 'children'}"
           :data.sync="tableData">
-          <vxe-table-column prop="name" label="Name" tree-node></vxe-table-column>
+          <vxe-table-column prop="name" label="Name"></vxe-table-column>
           <vxe-table-column prop="size" label="Size"></vxe-table-column>
           <vxe-table-column prop="type" label="Type"></vxe-table-column>
-          <vxe-table-column prop="date" label="Date"></vxe-table-column>
+          <vxe-table-column prop="date" label="Date" tree-node></vxe-table-column>
         </vxe-table>
         `,
         `
