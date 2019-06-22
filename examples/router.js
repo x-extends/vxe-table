@@ -51,6 +51,7 @@ const TableTreeToolbar = () => import(/* webpackChunkName: "tree" */ './views/ta
 const TableTreeEdit = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Edit.vue')
 
 const GridBasic = () => import(/* webpackChunkName: "grid" */ './views/table/grid/Basic.vue')
+const GridReverse = () => import(/* webpackChunkName: "grid" */ './views/table/grid/Reverse.vue')
 const GridTemplate = () => import(/* webpackChunkName: "grid" */ './views/table/grid/Template.vue')
 const GridPage = () => import(/* webpackChunkName: "grid" */ './views/table/grid/Page.vue')
 const GridFullQuery = () => import(/* webpackChunkName: "grid" */ './views/table/grid/FullQuery.vue')
@@ -356,6 +357,11 @@ export default new Router({
       path: '/table/grid/basic',
       name: 'GridBasic',
       component: GridBasic
+    },
+    {
+      path: '/table/grid/reverse',
+      name: 'GridReverse',
+      component: GridReverse
     },
     {
       path: '/table/grid/template',

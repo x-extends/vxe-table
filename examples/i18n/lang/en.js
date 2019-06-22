@@ -58,6 +58,7 @@ module.exports = {
         full: '完整功能',
 
         grid: 'Grid table',
+        reverse: '反转表格',
         proxy: 'DataProxy',
         proxyPage: 'DataProxy + Pager',
         fullQuery: '完整查询',

@@ -16,7 +16,7 @@ const GlobalConfig = {
   optimization: {
     animat: true,
     scrollX: {
-      gt: 60,
+      gt: 200,
       oSize: 6,
       rSize: 18,
       vSize: 0

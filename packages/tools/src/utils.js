@@ -35,8 +35,8 @@ export const UtilTools = {
     })
     return result
   },
-  formatText (value) {
-    return '' + (value === null || value === void 0 ? '' : value)
+  formatText (value, placeholder) {
+    return '' + (value === null || value === void 0 ? (placeholder ? '　' : '') : value)
   },
   getCellValue (row, column) {
     return XEUtils.get(row, column.property)

@@ -52,7 +52,7 @@ const Cell = {
     if (slots && slots.header) {
       return slots.header(params)
     }
-    return [UtilTools.formatText(params.column.origin.label)]
+    return [UtilTools.formatText(params.column.origin.label, 1)]
   },
   renderCell (h, params) {
     let cellValue
@@ -65,7 +65,7 @@ const Cell = {
     if (formatter) {
       cellValue = formatter({ cellValue, row, rowIndex, column, columnIndex })
     }
-    return [UtilTools.formatText(cellValue)]
+    return [UtilTools.formatText(cellValue, 1)]
   },
   renderTreeCell (h, params) {
     return Cell.renderTreeIcon(h, params).concat(Cell.renderCell(h, params))
@@ -114,7 +114,7 @@ const Cell = {
     if (slots && slots.header) {
       return slots.header(params)
     }
-    return [UtilTools.formatText(params.column.origin.label || '#')]
+    return [UtilTools.formatText(params.column.origin.label || '#', 1)]
   },
   renderIndexCell (h, params) {
     let { $table, column } = params
@@ -124,7 +124,7 @@ const Cell = {
       return slots.default(params)
     }
     let { seq, level } = params
-    return [UtilTools.formatText(indexMethod ? indexMethod(params) : level ? `${level}.${seq}` : startIndex + seq)]
+    return [UtilTools.formatText(indexMethod ? indexMethod(params) : level ? `${level}.${seq}` : startIndex + seq, 1)]
   },
   renderTreeIndexCell (h, params) {
     return Cell.renderTreeIcon(h, params).concat(Cell.renderIndexCell(h, params))
@@ -134,7 +134,7 @@ const Cell = {
    * 单选
    */
   renderRadioHeader (h, params) {
-    return [UtilTools.formatText(params.column.origin.label)]
+    return [UtilTools.formatText(params.column.origin.label, 1)]
   },
   renderRadioCell (h, params) {
     let { $table, column } = params

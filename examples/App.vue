@@ -419,6 +419,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.reverse',
+              locat: {
+                name: 'GridReverse'
+              }
+            },
+            {
               label: 'app.aside.nav.template',
               locat: {
                 name: 'GridTemplate'

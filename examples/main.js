@@ -58,7 +58,7 @@ function mockData () {
     let mDate = moment(currTime)
     list.push({
       id: fullIndex,
-      name: 'name_' + fullIndex,
+      name: 'test' + fullIndex,
       role: [index % 2 === 0 ? '前端' : '后端'],
       key: 'home.label.key' + Math.max(0, index % 2 === 0 ? index - 1 : index),
       language: index % 2 === 0 ? 'zh_CN' : 'en_US',
@@ -85,6 +85,7 @@ function mockData () {
       region: index % 4 === 0 ? [19, 199, 1773] : index % 3 === 0 ? [9, 73, 719] : [1, 1, 5],
       rate: index % 2 === 0 ? 2 : 0,
       address: `地址 地址地址 地址地址 址地址 址地址  址地址 址地址址地址址地址 地址${index}`,
+      address2: `地址 地址地址 地址${index}`,
       updateTime: currTime,
       createTime: currTime,
       attr1: '',
