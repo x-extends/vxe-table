@@ -23,7 +23,7 @@ var currTime = Date.now()
 var fullIndex = 0
 var size = 100000
 function mockData () {
-  let len = XEUtils.browse().msie ? 500 : 10000
+  let len = XEUtils.browse().msie ? 500 : 2000
   for (var index = 0; index < len; index++) {
     currTime += 7200000
     fullIndex++
