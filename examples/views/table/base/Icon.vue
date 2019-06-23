@@ -138,8 +138,8 @@ export default {
       border-color: #606266;
     }
     &:hover {
-      color: #5CB6FF;
       & > i {
+        color: #5CB6FF;
         border-color: #5CB6FF;
       }
     }
