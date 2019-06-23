@@ -72,13 +72,13 @@
       font-size: 14px;
       padding: 6px 30px 6px 14px;
     }
-    .vxe-msg--close-icon {
-      font-size: 15px;
+    .vxe-msg--close-btn {
+      font-size: 16px;
     }
   }
   &.type--message {
     .vxe-msg--box {
-      padding: 2px 4px;
+      padding: 2px;
       margin-top: 0;
       width: auto;
       .vxe-msg--content {
@@ -102,6 +102,30 @@
     opacity: 0;
     transform: translate(0, -10%);
   }
+  &.msg--info {
+    .vxe-msg--status {
+      color: #2998FF;
+    }
+  }
+  &.msg--warning {
+    .vxe-msg--status {
+      color: #FAAD14;
+    }
+  }
+  &.msg--success {
+    .vxe-msg--status {
+      color: #52C41A;
+    }
+  }
+  &.msg--error {
+    .vxe-msg--status {
+      color: #F5222D;
+    }
+  }
+  .vxe-msg--status {
+    font-size: 16px;
+    margin-right: 4px;
+  }
   .vxe-msg--body,
   .vxe-msg--footer {
     padding: 8px 16px;
@@ -113,41 +137,16 @@
     padding: 8px 40px 8px 16px;
     user-select: none;
   }
-  .vxe-msg--close-icon {
-    font-size: 17px;
-    width: 20px;
-    height: 20px;
+  .vxe-msg--close-btn {
+    font-size: 18px;
     position: absolute;
     right: 14px;
     top: 10px;
     z-index: 1;
+    color: $vxe-table-column-icon-border-color;
     cursor: pointer;
-    &:before,
-    &:after {
-      content: "";
-      position: absolute;
-      left: 0;
-      top: 0;
-      transform: rotate(45deg);
-      border-color: $vxe-table-column-icon-border-color;
-      border-style: solid;
-      border-width: 0;
-    }
-    &:before {
-      width: 1em;
-      border-bottom-width: .12em;
-      top: .48em;
-    }
-    &:after {
-      height: 1em;
-      border-right-width: .12em;
-      left: .48em;
-    }
     &:hover {
-      &:before,
-      &:after {
-        border-color: $vxe-table-column-icon-border-hover-color;
-      }
+      color: $vxe-font-color;
     }
   }
   .vxe-msg--footer {

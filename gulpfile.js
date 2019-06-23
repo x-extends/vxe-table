@@ -28,6 +28,7 @@ const components = [
   'message',
   'tooltip',
 
+  'icon',
   'export',
   'resize',
   'v-x-e-table'

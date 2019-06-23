@@ -15,6 +15,14 @@ const apis = [
         list: []
       },
       {
+        name: 'id',
+        descKey: 'app.api.msg.desc.id',
+        type: 'String',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'title',
         descKey: 'app.api.msg.desc.title',
         type: 'String',
@@ -27,6 +35,14 @@ const apis = [
         descKey: 'app.api.msg.desc.type',
         type: 'String',
         enum: 'alert, confirm, message',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'status',
+        descKey: 'app.api.msg.desc.status',
+        type: 'String',
+        enum: 'info, success, warning, error',
         defVal: '',
         list: []
       },

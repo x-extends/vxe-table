@@ -7,6 +7,7 @@ const Theme = () => import(/* webpackChunkName: "start" */ './views/table/start/
 const I18n = () => import(/* webpackChunkName: "start" */ './views/table/start/I18n.vue')
 const Advanced = () => import(/* webpackChunkName: "start" */ './views/table/start/Advanced.vue')
 
+const TableIcon = () => import(/* webpackChunkName: "base" */ './views/table/base/Icon.vue')
 const TableBasic = () => import(/* webpackChunkName: "base" */ './views/table/base/Basic.vue')
 const TableSize = () => import(/* webpackChunkName: "base" */ './views/table/base/Size.vue')
 const TableOverflow = () => import(/* webpackChunkName: "base" */ './views/table/base/Overflow.vue')
@@ -152,6 +153,11 @@ export default new Router({
       path: '/table/start/advanced',
       name: 'Advanced',
       component: Advanced
+    },
+    {
+      path: '/table/base/icon',
+      name: 'TableIcon',
+      component: TableIcon
     },
     {
       path: '/table/base/basic',

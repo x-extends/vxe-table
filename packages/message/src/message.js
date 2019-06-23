@@ -1,13 +1,14 @@
 import GlobalConfig from '../../conf'
 import XEUtils from 'xe-utils'
-
-const msgQueueList = []
+import MsgQueue from './msgQueue'
 
 export default {
   name: 'VxeMessage',
   props: {
     value: Boolean,
+    id: String,
     type: String,
+    status: String,
     top: { type: Number, default: 15 },
     title: String,
     duration: { type: Number, default: () => GlobalConfig.message.duration },
@@ -53,10 +54,11 @@ export default {
     this.$el.parentNode.removeChild(this.$el)
   },
   render (h) {
-    let { vSize, type, animat, zIndex, msgTop, contentVisible, visible, title, message, lockView, mask, isMsg } = this
+    let { vSize, type, animat, zIndex, status, msgTop, contentVisible, visible, title, message, lockView, mask, isMsg } = this
     return h('div', {
       class: ['vxe-msg--wrapper', `type--${type}`, {
         [`size--${vSize}`]: vSize,
+        [`msg--${status}`]: status,
         'is--animat': animat,
         'lock--view': lockView,
         'is--mask': mask,
@@ -82,7 +84,7 @@ export default {
             class: 'vxe-msg--title'
           }, title || GlobalConfig.i18n('vxe.alert.title')),
           h('i', {
-            class: 'vxe-msg--close-icon',
+            class: ['vxe-msg--close-btn', GlobalConfig.iconMap.msgClose],
             on: {
               click: this.closeEvent
             }
@@ -91,6 +93,9 @@ export default {
         h('div', {
           class: 'vxe-msg--body'
         }, [
+          status ? h('i', {
+            class: ['vxe-msg--status', GlobalConfig.iconMap[`msg${status.replace(/\b(\w)/, word => word.toUpperCase())}`]]
+          }) : null,
           h('div', {
             class: 'vxe-msg--content'
           }, this.$slots.default || (XEUtils.isFunction(message) ? message.call(this, h) : message))
@@ -165,21 +170,21 @@ export default {
       }
     },
     addMsgQueue () {
-      if (msgQueueList.indexOf(this) === -1) {
-        msgQueueList.push(this)
+      if (MsgQueue.indexOf(this) === -1) {
+        MsgQueue.push(this)
       }
       this.updateStyle()
     },
     removeMsgQueue () {
-      if (msgQueueList.indexOf(this) > -1) {
-        XEUtils.remove(msgQueueList, comp => comp === this)
+      if (MsgQueue.indexOf(this) > -1) {
+        XEUtils.remove(MsgQueue, comp => comp === this)
       }
       this.updateStyle()
     },
     updateStyle () {
       this.$nextTick(() => {
         let offsetTop = 0
-        msgQueueList.forEach((comp, index) => {
+        MsgQueue.forEach((comp, index) => {
           offsetTop += comp.top
           comp.msgTop = offsetTop
           offsetTop += comp.$refs.msgBox.clientHeight

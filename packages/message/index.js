@@ -1,23 +1,28 @@
-import VxeMessageBox from './src/message'
 import XEUtils from 'xe-utils'
+import VxeMessageBox from './src/message'
+import MsgQueue from './src/msgQueue'
 
 var AlertController = null
 
 export function Message (options) {
   return new Promise((resolve, reject) => {
-    let $alert = new AlertController({
-      el: document.createElement('div'),
-      propsData: options
-    })
-    $alert._handleCustom = function (type) {
-      $alert.$destroy()
-      if (type === 'confirm' || options.type === 'message') {
-        resolve(type)
-      } else {
-        reject(type)
+    if (options && options.id && MsgQueue.some(comp => comp.id === options.id)) {
+      resolve('exist')
+    } else {
+      let $alert = new AlertController({
+        el: document.createElement('div'),
+        propsData: options
+      })
+      $alert._handleCustom = function (type) {
+        $alert.$destroy()
+        if (type === 'confirm' || options.type === 'message') {
+          resolve(type)
+        } else {
+          reject(type)
+        }
       }
+      setTimeout(() => $alert.open())
     }
-    setTimeout(() => $alert.open())
   })
 }
 
@@ -32,12 +37,11 @@ export function Message (options) {
     if (XEUtils.isObject(message)) {
       opts = message
     } else {
-      opts = { message: XEUtils.toString(message), type }
       if (title) {
-        opts.title = title
+        opts = { title }
       }
     }
-    return Message(Object.assign({}, defOpts, opts, options))
+    return Message(Object.assign({ message: XEUtils.toString(message), type }, defOpts, opts, options))
   }
 })
 

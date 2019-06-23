@@ -1,22 +1,5 @@
 <template>
   <div id="app" @click="clickEvent">
-    <!-- icon -->
-    <!-- <i class="vxe-icon--caret-top"></i>
-    <i class="vxe-icon--caret-bottom"></i>
-    <i class="vxe-icon--caret-left"></i>
-    <i class="vxe-icon--caret-right"></i>
-    <i class="vxe-icon--arrow-top"></i>
-    <i class="vxe-icon--arrow-bottom"></i>
-    <i class="vxe-icon--arrow-left"></i>
-    <i class="vxe-icon--arrow-right"></i>
-    <i class="vxe-icon--d-arrow-top"></i>
-    <i class="vxe-icon--d-arrow-bottom"></i>
-    <i class="vxe-icon--d-arrow-left"></i>
-    <i class="vxe-icon--d-arrow-right"></i>
-    <i class="vxe-icon--menu"></i>
-    <i class="vxe-icon--funnel"></i>
-    <i class="vxe-icon--edit-outline"></i>
-    <i class="vxe-icon--more"></i> -->
     <header class="page-header">
       <h1 class="title">
         <a href="https://github.com/xuliangzhan/vxe-table">
@@ -109,6 +92,12 @@ export default {
           value: 'base',
           expand: false,
           children: [
+            {
+              label: 'app.aside.nav.icon',
+              locat: {
+                name: 'TableIcon'
+              }
+            },
             {
               label: 'app.aside.nav.base',
               demoUrl: 'https://jsrun.net/VrXKp',

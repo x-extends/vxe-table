@@ -162,6 +162,7 @@ Now you can import modules like
 ```javascript
 import {
   VXETable,
+  Icon,
   Table,
   Column,
   Header,
@@ -169,6 +170,7 @@ import {
 } from 'vxe-table'
 import zhCNLocat from 'vxe-table/lib/locale/lang/zh-CN'
 
+Vue.use(Icon)
 Vue.use(Table)
 Vue.use(Column)
 Vue.use(Header)

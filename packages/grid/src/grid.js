@@ -210,7 +210,7 @@ export default {
                   }).then(() => this.commitProxy('reload'))
                 } else {
                   if (isMsg && !selectRecords.length) {
-                    this.$XMsg.message(GlobalConfig.i18n('vxe.grid.selectOneRecord'))
+                    this.$XMsg.message({ id: code, message: GlobalConfig.i18n('vxe.grid.selectOneRecord'), status: 'warning' })
                   }
                 }
               })
@@ -237,7 +237,7 @@ export default {
                       this.tableLoading = true
                       resolve(
                         ajax.save({ body }).then(() => {
-                          this.$XMsg.message(GlobalConfig.i18n('vxe.grid.saveSuccess'))
+                          this.$XMsg.message({ id: code, message: GlobalConfig.i18n('vxe.grid.saveSuccess'), status: 'success' })
                           this.tableLoading = false
                         }).catch(e => {
                           this.tableLoading = false
@@ -249,7 +249,7 @@ export default {
                         if (pendingRecords.length) {
                           this.remove(pendingRecords)
                         } else {
-                          this.$XMsg.message(GlobalConfig.i18n('vxe.grid.dataUnchanged'))
+                          this.$XMsg.message({ id: code, message: GlobalConfig.i18n('vxe.grid.dataUnchanged'), status: 'info' })
                         }
                       }
                       resolve()
@@ -269,7 +269,7 @@ export default {
     getPendingRecords () {
       return this.pendingRecords
     },
-    triggerPendingEvent (evnt) {
+    triggerPendingEvent (code, evnt) {
       let { pendingRecords, isMsg } = this
       let selectRecords = this.getSelectRecords()
       if (selectRecords.length) {
@@ -290,7 +290,7 @@ export default {
         this.clearSelection()
       } else {
         if (isMsg) {
-          this.$XMsg.message(GlobalConfig.i18n('vxe.grid.selectOneRecord'))
+          this.$XMsg.message({ id: code, message: GlobalConfig.i18n('vxe.grid.selectOneRecord'), status: 'warning' })
         }
       }
     },

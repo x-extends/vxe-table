@@ -12,6 +12,7 @@ module.exports = {
         i18n: '国际化',
         advancedFunctions: '高级函数',
 
+        icon: '图标',
         basics: '基础功能',
         base: '基础',
         size: '尺寸',
@@ -317,8 +318,10 @@ module.exports = {
       msg: {
         desc: {
           value: '绑定值',
+          id: '只对 type=message 有效，如果不想提示框重复点击，可以设置唯一的 id 防止重复提示',
           title: '提示框的标题',
           type: '提示框类型',
+          status: '只对 type=message 有效，消息状态',
           message: '提示框的内容',
           lockView: '是否锁住页面，不允许提示框之外的任何操作',
           lockScroll: '是否锁住滚动条，不允许页面滚动',

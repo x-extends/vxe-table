@@ -38,6 +38,7 @@
       <code class="javascript">
         import {
           VXETable,
+          Icon,
           Table,
           Column,
           Header,
@@ -61,6 +62,7 @@
         } from 'vxe-table'
         import zhCNLocat from 'vxe-table/lib/locale/lang/zh-CN'
 
+        Vue.use(Icon)
         Vue.use(Table)
         Vue.use(Column)
         Vue.use(Header)
@@ -141,7 +143,12 @@
             jumpPrev: 'vxe-icon--d-arrow-left',
             jumpNext: 'vxe-icon--d-arrow-right',
             prevPage: 'vxe-icon--arrow-left',
-            nextPage: 'vxe-icon--arrow-right'
+            nextPage: 'vxe-icon--arrow-right',
+            msgClose: 'vxe-icon--close',
+            msgInfo: 'vxe-icon--info',
+            msgSuccess: 'vxe-icon--success',
+            msgWarning: 'vxe-icon--warning',
+            msgError: 'vxe-icon--error'
           },
           // 默认 tooltip 主题样式
           tooltip: {
