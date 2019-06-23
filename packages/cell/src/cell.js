@@ -3,7 +3,7 @@ import GlobalConfig from '../../conf'
 import { Renderer } from '../../v-x-e-table'
 import { UtilTools } from '../../tools'
 
-const Cell = {
+export const Cell = {
   createColumn ($table, _vm) {
     let { type, sortable, remoteSort, filters, editRender, treeNode } = _vm
     let { selectConfig, treeConfig } = $table

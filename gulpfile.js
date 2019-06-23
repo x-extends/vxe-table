@@ -11,6 +11,7 @@ const prefixer = require('gulp-autoprefixer')
 const components = [
   'table',
   'column',
+  'cell',
   'header',
   'body',
   'footer',

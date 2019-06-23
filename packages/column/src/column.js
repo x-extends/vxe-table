@@ -1,4 +1,4 @@
-import Cell from './cell'
+import Cell from '../../cell'
 import { UtilTools } from '../../tools'
 
 export default {

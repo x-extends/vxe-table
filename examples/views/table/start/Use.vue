@@ -40,6 +40,7 @@
           VXETable,
           Table,
           Column,
+          Cell,
           Header,
           Body,
           Footer,
@@ -64,6 +65,7 @@
 
         Vue.use(Table)
         Vue.use(Column)
+        Vue.use(Cell)
         Vue.use(Header)
         Vue.use(Body)
         Vue.use(Footer)
