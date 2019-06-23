@@ -1,10 +1,11 @@
 <template>
   <div>
-    <p>鼠标上移高亮，通过设置 <table-api-link prop="highlight-hover-column"/> 参数</p>
+    <p>列选中高亮，通过设置 <table-api-link prop="highlight-current-column"/> 参数</p>
 
     <vxe-table
       border
       highlight-hover-column
+      highlight-current-column
       :data.sync="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column prop="name" label="Name"></vxe-table-column>
@@ -20,7 +21,7 @@
       <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
 
-    <p>列、行选中高亮，通过设置 <table-api-link prop="highlight-hover-row"/>、<table-api-link prop="highlight-hover-column"/> 参数</p>
+    <p>列和行选中高亮，通过设置 <table-api-link prop="highlight-hover-row"/>、<table-api-link prop="highlight-hover-column"/> 参数</p>
 
     <vxe-table
       border
@@ -57,6 +58,7 @@ export default {
         <vxe-table
           border
           highlight-hover-column
+          highlight-current-column
           :data.sync="tableData">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column prop="name" label="Name"></vxe-table-column>
@@ -80,6 +82,8 @@ export default {
         `
         <vxe-table
           border
+          highlight-hover-row
+          highlight-current-row
           highlight-hover-column
           highlight-current-column
           :data.sync="tableData">

@@ -1,16 +1,23 @@
 <template>
   <div>
-    <p>内置的小图标，可以通过全局参数 <router-link class="link" :to="{name: 'Use'}">iconMap</router-link> 更改</p>
+    <p>内置的小图标，可以通过全局参数 <router-link class="link" :to="{name: 'Use'}">iconMap</router-link> 任意更换</p>
     <ul class="icon-list">
-      <li v-for="item in list" :key="item.icon" @click="copyEvent(item)" title="点击复制">
+      <li v-for="item in list" :key="item.icon" @click="copyEvent(item)" title="点击复制内容">
         <i :class="item.icon"></i>
         <div class="title">{{ item.icon }}</div>
       </li>
     </ul>
+
+    <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
+
+    <pre>
+      <code class="xml">{{ demoCodes[0] }}</code>
+    </pre>
   </div>
 </template>
 
 <script>
+import hljs from 'highlight.js'
 import XEClipboard from 'xe-clipboard'
 
 export default {
@@ -83,8 +90,18 @@ export default {
         {
           icon: 'vxe-icon--error'
         }
+      ],
+      demoCodes: [
+        `
+        <i class="vxe-icon--caret-top"></i>
+        `
       ]
     }
+  },
+  mounted () {
+    Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
+      hljs.highlightBlock(block)
+    })
   },
   methods: {
     copyEvent ({ icon }) {
@@ -98,7 +115,7 @@ export default {
 
 <style lang="scss" scoped>
 .icon-list {
-  font-size: 30px;
+  font-size: 26px;
   text-align: center;
   border-top: 1px solid #eee;
   border-left: 1px solid #eee;
@@ -115,9 +132,16 @@ export default {
     border-right: 1px solid #eee;
     border-bottom: 1px solid #eee;
     cursor: pointer;
+    padding-top: 10px;
     & > i {
-      border-color: #000;
-      color: #000;
+      color: #606266;
+      border-color: #606266;
+    }
+    &:hover {
+      color: #5CB6FF;
+      & > i {
+        border-color: #5CB6FF;
+      }
     }
     .title {
       font-size: 14px;
