@@ -670,7 +670,7 @@ export default {
          */
         hasTip && editRules && editConfig && editConfig.validTip !== 'none' ? h('vxe-tooltip', {
           class: 'vxe-table--valid-error',
-          props: tableData.length === 1 ? Object.assign({}, validStore, tooltipConfig) : null,
+          props: editConfig.validTip === 'tooltip' || tableData.length === 1 ? Object.assign({}, validStore, tooltipConfig) : null,
           ref: 'validTip'
         }) : _e()
       ])
@@ -3257,7 +3257,7 @@ export default {
      * 弹出校验错误提示
      */
     showValidTooltip (params) {
-      let { $refs, tableData } = this
+      let { $refs, tableData, editConfig } = this
       let validTip = $refs.validTip
       let { rule, row, column, cell } = params
       this.$nextTick(() => {
@@ -3268,7 +3268,7 @@ export default {
           content: UtilTools.formatText(rule.message),
           visible: true
         })
-        if (validTip && tableData.length === 1) {
+        if (validTip && (editConfig.validTip === 'tooltip' || tableData.length === 1)) {
           validTip.toVisible(cell)
         }
         UtilTools.emitEvent(this, 'valid-error', [params])
