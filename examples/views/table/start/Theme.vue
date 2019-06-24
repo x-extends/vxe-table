@@ -31,6 +31,7 @@
         @import 'vxe-table/styles/header.scss';
         @import 'vxe-table/styles/body.scss';
         @import 'vxe-table/styles/footer.scss';
+        @import 'vxe-table/styles/icon.scss';
         @import 'vxe-table/styles/filter.scss';
         @import 'vxe-table/styles/loading.scss';
         @import 'vxe-table/styles/grid.scss';
@@ -46,10 +47,10 @@
         @import 'vxe-table/styles/tooltip.scss';
       </code>
     </pre>
-    <p>Case 4.如果需要完全重写主题样式，把 vxe-table/styles/** 目录全部复制到项目中自行修改（例如 /assets 目录下）</p>
+    <p>Case 4.如果需要完全重写主题样式，把 vxe-table/styles/** 目录全部复制到项目中自行修改（例如 /assets/styles/xtable 目录下）</p>
     <pre>
       <code class="scss">
-        @import './assets/styles/index.scss';
+        @import './assets/styles/xtable/index.scss';
       </code>
     </pre>
   </div>

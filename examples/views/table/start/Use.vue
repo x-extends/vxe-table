@@ -133,7 +133,7 @@
           showHeader: true,
           // 版本号（对于某些带 Storage 数据储存的功能有用到，上升版本号可以用于重置 Storage 数据）
           version: 0,
-          // 自定义图标配置
+          // 自定义图标配置（如果全部图标都使用自定义，就不需要引入 Icon 模块了，减少体积）
           icon: {
             sortAsc: 'vxe-icon--caret-top',
             sortDesc: 'vxe-icon--caret-bottom',
@@ -162,7 +162,7 @@
             pageSize: 10,
             pagerCount: 7,
             pageSizes: [10, 15, 20, 50, 100],
-            layouts: ['PrevJump', 'PrevPage', 'Jump', 'PageCount', 'NextPage', 'NextJump', 'Sizes', 'Total']
+            layouts: ['PrevJump', 'PrevPage', 'Jump', 'PageCount', 'NextPage', 'NextJump', 'Sizes', 'Total'] // 非常灵活的分页布局，支持任意位置随意换
           },
           // 默认工具栏参数
           toolbar: {
@@ -181,13 +181,13 @@
           // 默认优化配置项
           optimization : {
             animat: true,
-            // 当列大于 40 条时自动启用横向 X 滚动渲染
+            // 当表头大于 40 列时自动启用横向 X 滚动渲染
             scrollX: {
               gt: 40,
               oSize: 5,
               rSize: 16
             },
-            // 当数据大于 500 条时自动启用纵向 Y 滚动渲染
+            // 当行数据大于 500 条时自动启用纵向 Y 滚动渲染
             scrollY: {
               gt: 500,
               oSize: 20,
