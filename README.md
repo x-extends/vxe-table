@@ -187,7 +187,7 @@ VXETable.setup({
 })
 ```
 
-## I18n
+## Internationalization
 
 ```shell
 npm install vxe-i18n
