@@ -4,7 +4,6 @@
 const GlobalConfig = {
   // showOverflow: null,
   // showHeaderOverflow: null,
-  // contextMenu: null,
   // resizeInterval: 250,
   // size: null,
   resizable: false,
@@ -22,14 +21,14 @@ const GlobalConfig = {
       vSize: 0
     },
     scrollY: {
-      gt: 1000,
+      gt: 500,
       oSize: 30,
       rSize: 100,
       vSize: 0,
       rHeight: 0
     }
   },
-  iconMap: {
+  icon: {
     sortAsc: 'vxe-icon--caret-top',
     sortDesc: 'vxe-icon--caret-bottom',
     filter: 'vxe-icon--funnel',
@@ -45,6 +44,7 @@ const GlobalConfig = {
     msgWarning: 'vxe-icon--warning',
     msgError: 'vxe-icon--error'
   },
+  menu: {},
   tooltip: {
     // zIndex: 99,
     theme: 'dark'

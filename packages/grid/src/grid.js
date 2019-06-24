@@ -138,8 +138,7 @@ export default {
           loading: loading || tableLoading
         }, pagerConfig, proxyConfig ? tablePage : {}),
         on: {
-          'current-change': this.currentChangeEvent,
-          'size-change': this.sizeChangeEvent
+          'page-change': this.pageChangeEvent
         }
       }) : null
     ])
@@ -294,16 +293,18 @@ export default {
         }
       }
     },
-    currentChangeEvent (currentPage) {
-      this.tablePage.currentPage = currentPage
+    pageChangeEvent (params) {
+      let { tablePage } = this
+      let { currentPage, pageSize } = params
+      tablePage.currentPage = currentPage
+      tablePage.pageSize = pageSize
+      if (params.type === 'current-change') {
+        UtilTools.emitEvent(this, 'current-page-change', [currentPage])
+      } else {
+        UtilTools.emitEvent(this, 'page-size-change', [pageSize])
+      }
+      UtilTools.emitEvent(this, 'page-change', [params])
       this.commitProxy('query')
-      UtilTools.emitEvent(this, 'current-page-change', [currentPage])
-    },
-    sizeChangeEvent (pageSize) {
-      this.tablePage.currentPage = 1
-      this.tablePage.pageSize = pageSize
-      this.commitProxy('reload')
-      UtilTools.emitEvent(this, 'page-size-change', [pageSize])
     },
     sortChangeEvent ({ column, prop, order }) {
       let { remoteSort, sortData } = this

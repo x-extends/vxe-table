@@ -42,7 +42,7 @@ export default {
       return this.layouts.some(name => name === 'Sizes')
     },
     pageCount () {
-      return Math.max(Math.ceil(this.total / this.pageSize), 1)
+      return this.getPageCount(this.total, this.pageSize)
     },
     numList () {
       return Array.from(new Array(this.pageCount > this.pagerCount ? this.pagerCount - 2 : this.pagerCount))
@@ -92,7 +92,7 @@ export default {
         }
       }, [
         h('i', {
-          class: ['vxe-icon--page-icon', GlobalConfig.iconMap.prevPage]
+          class: ['vxe-icon--page-icon', GlobalConfig.icon.prevPage]
         })
       ])
     },
@@ -112,7 +112,7 @@ export default {
           class: 'vxe-pager--jump-more vxe-icon--more'
         }) : null,
         h('i', {
-          class: ['vxe-pager--jump-icon', GlobalConfig.iconMap.jumpPrev]
+          class: ['vxe-pager--jump-icon', GlobalConfig.icon.jumpPrev]
         })
       ])
     },
@@ -144,7 +144,7 @@ export default {
           class: 'vxe-pager--jump-more vxe-icon--more'
         }) : null,
         h('i', {
-          class: ['vxe-pager--jump-icon', GlobalConfig.iconMap.jumpNext]
+          class: ['vxe-pager--jump-icon', GlobalConfig.icon.jumpNext]
         })
       ])
     },
@@ -160,7 +160,7 @@ export default {
         }
       }, [
         h('i', {
-          class: ['vxe-icon--page-icon', GlobalConfig.iconMap.nextPage]
+          class: ['vxe-icon--page-icon', GlobalConfig.icon.nextPage]
         })
       ])
     },
@@ -322,6 +322,9 @@ export default {
       }
       return nums
     },
+    getPageCount (total, size) {
+      return Math.max(Math.ceil(total / size), 1)
+    },
     handleGlobalMousedownEvent (evnt) {
       if (this.showSizes && !(DomTools.getEventTargetNode(evnt, this.$refs.sizeBtn).flag || DomTools.getEventTargetNode(evnt, this.$refs.sizePanel).flag)) {
         this.hideSizePanel()
@@ -340,17 +343,24 @@ export default {
       }
     },
     jumpPageEvent (currentPage) {
+      let type = 'current-change'
       if (currentPage !== this.currentPage) {
         this.$emit('update:currentPage', currentPage)
-        UtilTools.emitEvent(this, 'current-change', [currentPage])
+        UtilTools.emitEvent(this, type, [currentPage])
+        this.emitPageChange(type, this.pageSize, currentPage)
       }
     },
     sizeChangeEvent (pageSize) {
+      let type = 'size-change'
       if (pageSize !== this.pageSize) {
         this.$emit('update:pageSize', pageSize)
-        UtilTools.emitEvent(this, 'size-change', [pageSize])
+        UtilTools.emitEvent(this, type, [pageSize])
+        this.emitPageChange(type, pageSize, Math.min(this.currentPage, this.getPageCount(this.total, pageSize)))
       }
       this.hideSizePanel()
+    },
+    emitPageChange (type, pageSize, currentPage) {
+      UtilTools.emitEvent(this, 'page-change', [{ type, pageSize, currentPage }])
     },
     toggleSizePanel () {
       if (this.showSizes) {

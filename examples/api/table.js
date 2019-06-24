@@ -780,6 +780,14 @@ const apis = [
             enum: '',
             defVal: '',
             list: []
+          },
+          {
+            name: 'validTip',
+            desc: '校验提示框的类型',
+            type: 'String',
+            enum: 'none, default, tooltip',
+            defVal: 'default',
+            list: []
           }
         ]
       },

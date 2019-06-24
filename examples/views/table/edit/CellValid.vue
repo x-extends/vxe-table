@@ -1,7 +1,6 @@
 <template>
   <div>
     <p>通过调用 <table-api-link prop="validate"/> 函数校验数据，<table-api-link prop="edit-rules"/> 校验规则配置</p>
-    <p>如果是在弹出框中使用，可能校验提示信息的 z-index 堆叠顺序会被覆盖，可以通过设置 <table-api-link prop="tooltip-config"/> 属性的 zIndex 解决</p>
 
     <vxe-toolbar>
       <template v-slot:buttons>
@@ -19,6 +18,7 @@
       ref="xTable"
       border
       show-overflow
+      height="500"
       :data.sync="tableData"
       :edit-rules="validRules"
       :edit-config="{key: 'id', trigger: 'click', mode: 'cell', showStatus: true}"
@@ -73,6 +73,7 @@ export default {
           ref="xTable"
           border
           show-overflow
+          height="500"
           :data.sync="tableData"
           :edit-rules="validRules"
           :edit-config="{key: 'id', trigger: 'click', mode: 'cell', showStatus: true}"
@@ -101,7 +102,7 @@ export default {
             }
           },
           created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 100)
           },
           methods: {
             validEvent () {
@@ -180,7 +181,7 @@ export default {
     }
   },
   created () {
-    let list = window.MOCK_DATA_LIST.slice(0, 6)
+    let list = window.MOCK_DATA_LIST.slice(0, 100)
     this.tableData = list
   },
   mounted () {

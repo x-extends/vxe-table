@@ -19,9 +19,12 @@ function defaultRenderer (h, attrs, editRender, params) {
           value: UtilTools.getCellValue(row, column)
         },
         on: {
-          input (evnt) {
+          change (evnt) {
             UtilTools.setCellValue(row, column, evnt.target.value)
-            $table.updateStatus(params)
+          },
+          input (evnt) {
+            // UtilTools.setCellValue(row, column, evnt.target.value)
+            $table.updateStatus(params, evnt.target.value)
           }
         }
       })

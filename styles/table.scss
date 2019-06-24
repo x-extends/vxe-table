@@ -457,10 +457,39 @@
   /*校验不通过*/
   .vxe-body--column {
     &.col--valid-error {
+      position: relative;
+      .vxe-cell--valid {
+        max-width: 320px;
+        min-width: 180px;
+        width: 100%;
+        position: absolute;
+        bottom: calc(100% + 4px);
+        left: 50%;
+        transform: translateX(-50%);
+        text-align: center;
+        pointer-events: none;
+        z-index: 9;
+        .vxe-cell--valid-msg {
+          display: inline-block;
+          border-radius: 4px;
+          padding: 8px 12px;
+          color: #fff;
+          background-color: $vxe-table-validate-error-color;
+          pointer-events: auto;
+        }
+      }
       .vxe-input--wrapper {
         > .vxe-input {
           border-color: $vxe-table-validate-error-color;
         }
+      }
+    }
+  }
+  .vxe-body--row {
+    &:first-child {
+      .vxe-cell--valid {
+        bottom: auto;
+        top: calc(100% + 4px);
       }
     }
   }
@@ -491,5 +520,4 @@
       }
     }
   }
-
 }

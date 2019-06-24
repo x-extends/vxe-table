@@ -8,6 +8,7 @@
       resizable
       highlight-current-row
       show-overflow
+      height="500"
       :data.sync="tableData"
       :edit-config="{key: 'id', trigger: 'dblclick', mode: 'cell'}"
       @edit-actived="editActivedEvent"
@@ -32,6 +33,7 @@
       border
       resizable
       show-overflow
+      height="500"
       :data.sync="tableData"
       :edit-config="{key: 'id', trigger: 'dblclick', mode: 'row'}">
       <vxe-table-column type="index" width="60"></vxe-table-column>
@@ -64,6 +66,7 @@ export default {
           resizable
           highlight-current-row
           show-overflow
+          height="500"
           :data.sync="tableData"
           :edit-config="{key: 'id', trigger: 'dblclick', mode: 'cell'}">
           <vxe-table-column type="index" width="60"></vxe-table-column>
@@ -80,7 +83,7 @@ export default {
             }
           },
           created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 100)
           },
           methods: {
             editActivedEvent ({ row, column }, event) {
@@ -97,6 +100,7 @@ export default {
           border
           resizable
           show-overflow
+          height="500"
           :data.sync="tableData"
           :edit-config="{key: 'id', trigger: 'dblclick', mode: 'row'}">
           <vxe-table-column type="index" width="60"></vxe-table-column>
@@ -114,7 +118,7 @@ export default {
             }
           },
           created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 100)
           }
         }
         `
@@ -122,7 +126,7 @@ export default {
     }
   },
   created () {
-    let list = window.MOCK_DATA_LIST.slice(0, 6)
+    let list = window.MOCK_DATA_LIST.slice(0, 100)
     this.tableData = list
   },
   mounted () {

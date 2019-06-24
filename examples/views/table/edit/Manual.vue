@@ -8,6 +8,7 @@
       border
       resizable
       show-overflow
+      height="500"
       :data.sync="tableData"
       :edit-config="{key: 'id', trigger: 'manual', mode: 'row'}">
       <vxe-table-column type="index" width="60"></vxe-table-column>
@@ -51,6 +52,7 @@ export default {
           border
           resizable
           show-overflow
+          height="500"
           :data.sync="tableData"
           :edit-config="{key: 'id', trigger: 'manual', mode: 'row'}">
           <vxe-table-column type="index" width="60"></vxe-table-column>
@@ -79,7 +81,7 @@ export default {
             }
           },
           created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 100)
           },
           methods: {
             editRowEvent (row) {
@@ -99,7 +101,7 @@ export default {
     }
   },
   created () {
-    this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
+    this.tableData = window.MOCK_DATA_LIST.slice(0, 100)
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {

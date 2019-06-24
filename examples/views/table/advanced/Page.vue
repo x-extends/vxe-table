@@ -28,8 +28,7 @@
       :page-size="tablePage.pageSize"
       :total="tablePage.totalResult"
       :layouts="['PrevPage', 'JumpNumber', 'NextPage', 'FullJump', 'Sizes', 'Total']"
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange">
+      @page-change="handlePageChange">
     </vxe-pager>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -80,8 +79,7 @@ export default {
           :page-size="tablePage.pageSize"
           :total="tablePage.totalResult"
           :layouts="['PrevPage', 'JumpNumber', 'NextPage', 'FullJump', 'Sizes', 'Total']"
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange">
+          @page-change="handlePageChange">
         </vxe-pager>
         `,
         `
@@ -112,16 +110,9 @@ export default {
                 this.loading = false
               })
             },
-            searchEvent () {
-              this.tablePage.currentPage = 1
-              this.findList()
-            },
-            handleSizeChange (pageSize) {
-              this.tablePage.pageSize = pageSize
-              this.searchEvent()
-            },
-            handleCurrentChange (currentPage) {
+            handlePageChange ({ currentPage, pageSize }) {
               this.tablePage.currentPage = currentPage
+              this.tablePage.pageSize = pageSize
               this.findList()
             }
           }
@@ -150,16 +141,9 @@ export default {
         this.loading = false
       })
     },
-    searchEvent () {
-      this.tablePage.currentPage = 1
-      this.findList()
-    },
-    handleSizeChange (pageSize) {
-      this.tablePage.pageSize = pageSize
-      this.searchEvent()
-    },
-    handleCurrentChange (currentPage) {
+    handlePageChange ({ currentPage, pageSize }) {
       this.tablePage.currentPage = currentPage
+      this.tablePage.pageSize = pageSize
       this.findList()
     }
   }

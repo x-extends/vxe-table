@@ -110,6 +110,14 @@ const apis = [
         enum: '',
         defVal: 'pageSize',
         list: []
+      },
+      {
+        name: 'page-change',
+        desc: '分页发生改变时会触发该事件',
+        type: '',
+        enum: '',
+        defVal: '{type, currentPage, pageSize}',
+        list: []
       }
     ]
   },

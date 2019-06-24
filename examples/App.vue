@@ -763,6 +763,19 @@ export default {
           ]
         },
         {
+          label: 'app.aside.nav.optimize',
+          value: 'optimize',
+          expand: false,
+          children: [
+            {
+              label: 'app.aside.nav.optimizeEdit',
+              locat: {
+                name: 'TableOptimizeEdit'
+              }
+            }
+          ]
+        },
+        {
           label: 'app.aside.nav.api',
           value: 'api',
           expand: false,

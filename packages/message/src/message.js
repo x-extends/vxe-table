@@ -84,7 +84,7 @@ export default {
             class: 'vxe-msg--title'
           }, title || GlobalConfig.i18n('vxe.alert.title')),
           h('i', {
-            class: ['vxe-msg--close-btn', GlobalConfig.iconMap.msgClose],
+            class: ['vxe-msg--close-btn', GlobalConfig.icon.msgClose],
             on: {
               click: this.closeEvent
             }
@@ -94,7 +94,7 @@ export default {
           class: 'vxe-msg--body'
         }, [
           status ? h('i', {
-            class: ['vxe-msg--status', GlobalConfig.iconMap[`msg${status.replace(/\b(\w)/, word => word.toUpperCase())}`]]
+            class: ['vxe-msg--status', GlobalConfig.icon[`msg${status.replace(/\b(\w)/, word => word.toUpperCase())}`]]
           }) : null,
           h('div', {
             class: 'vxe-msg--content'

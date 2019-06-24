@@ -75,7 +75,7 @@ export const Cell = {
    * 树节点
    */
   renderTreeIcon (h, params) {
-    let { iconMap } = GlobalConfig
+    let { icon } = GlobalConfig
     let { $table } = params
     let { treeConfig, treeExpandeds } = $table
     let { row, level } = params
@@ -99,7 +99,7 @@ export const Cell = {
         on
       }, rowChildren && rowChildren.length ? [
         h('i', {
-          class: ['vxe-tree--node-btn', iconMap.tree]
+          class: ['vxe-tree--node-btn', icon.tree]
         })
       ] : [])
     ]
@@ -371,14 +371,14 @@ export const Cell = {
     return Cell.renderHeader(h, params).concat(Cell.renderSortIcon(h, params))
   },
   renderSortIcon (h, params) {
-    let { iconMap } = GlobalConfig
+    let { icon } = GlobalConfig
     let { $table, column } = params
     return [
       h('span', {
         class: ['vxe-sort-wrapper']
       }, [
         h('i', {
-          class: ['vxe-sort--asc-btn', iconMap.sortAsc, {
+          class: ['vxe-sort--asc-btn', icon.sortAsc, {
             'sort--active': column.order === 'asc'
           }],
           on: {
@@ -388,7 +388,7 @@ export const Cell = {
           }
         }),
         h('i', {
-          class: ['vxe-sort--desc-btn', iconMap.sortDesc, {
+          class: ['vxe-sort--desc-btn', icon.sortDesc, {
             'sort--active': column.order === 'desc'
           }],
           on: {
@@ -408,7 +408,7 @@ export const Cell = {
     return Cell.renderHeader(h, params).concat(Cell.renderFilterIcon(h, params))
   },
   renderFilterIcon (h, params) {
-    let { iconMap } = GlobalConfig
+    let { icon } = GlobalConfig
     let { $table, column } = params
     let { filterStore } = $table
     return [
@@ -418,7 +418,7 @@ export const Cell = {
         }]
       }, [
         h('i', {
-          class: ['vxe-filter--btn', iconMap.filter],
+          class: ['vxe-filter--btn', icon.filter],
           on: {
             click (evnt) {
               $table.triggerFilterEvent(evnt, params.column, params)
@@ -433,7 +433,7 @@ export const Cell = {
    * 可编辑
    */
   renderEditHeader (h, params) {
-    let { iconMap } = GlobalConfig
+    let { icon } = GlobalConfig
     let { $table, column } = params
     let { editRules, editConfig } = $table
     let { sortable, remoteSort, filters } = column
@@ -449,7 +449,7 @@ export const Cell = {
         class: 'vxe-required-icon'
       }) : null,
       editConfig && editConfig.showIcon === false ? null : h('i', {
-        class: ['vxe-edit-icon', iconMap.edit]
+        class: ['vxe-edit-icon', icon.edit]
       })
     ].concat(Cell.renderHeader(h, params))
       .concat(sortable || remoteSort ? Cell.renderSortIcon(h, params) : [])

@@ -109,6 +109,8 @@ const TablePluginAntdConfig = () => import(/* webpackChunkName: "plugin" */ './v
 const TablePluginAntdFilter = () => import(/* webpackChunkName: "plugin" */ './views/table/plugin/AntdFilter.vue')
 const TablePluginAntdPage = () => import(/* webpackChunkName: "plugin" */ './views/table/plugin/AntdPage.vue')
 
+const TableOptimizeEdit = () => import(/* webpackChunkName: "plugin" */ './views/table/optimize/Edit.vue')
+
 const TableAPI = () => import(/* webpackChunkName: "api" */ './views/table/api/API.vue')
 
 Vue.use(Router)
@@ -618,6 +620,11 @@ export default new Router({
       path: '/table/plugin/antdPage',
       name: 'TablePluginAntdPage',
       component: TablePluginAntdPage
+    },
+    {
+      path: '/table/optimize/edit',
+      name: 'TableOptimizeEdit',
+      component: TableOptimizeEdit
     },
     {
       path: '/:name/api',

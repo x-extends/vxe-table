@@ -59,7 +59,7 @@ function mockData () {
     list.push({
       id: fullIndex,
       name: 'test' + fullIndex,
-      role: [index % 2 === 0 ? '前端' : '后端'],
+      role: index % 2 === 0 ? '前端' : '后端',
       key: 'home.label.key' + Math.max(0, index % 2 === 0 ? index - 1 : index),
       language: index % 2 === 0 ? 'zh_CN' : 'en_US',
       content: index % 2 === 0 ? '内容' + index : 'Content' + index,

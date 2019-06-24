@@ -332,7 +332,7 @@ const apis = [
         desc: '只对 pager-config 配置时有效，当前页发生改变时会触发该事件',
         type: '',
         enum: '',
-        defVal: '',
+        defVal: 'currentPage',
         list: []
       },
       {
@@ -340,7 +340,15 @@ const apis = [
         desc: '只对 pager-config 配置时有效，每页大小发生改变时会触发该事件',
         type: '',
         enum: '',
-        defVal: '',
+        defVal: 'pageSize',
+        list: []
+      },
+      {
+        name: 'page-change',
+        desc: '只对 pager-config 配置时有效，分页发生改变时会触发该事件',
+        type: '',
+        enum: '',
+        defVal: '{type, currentPage, pageSize}',
         list: []
       },
       {
@@ -348,7 +356,7 @@ const apis = [
         desc: '只对 toolbar 配置时有效，当工具栏的按钮被点击时会后触发该事件',
         type: '',
         enum: '',
-        defVal: '{menu,type,row,rowIndex,column,columnIndex,cell},event',
+        defVal: '{menu ,type, row, rowIndex, column, columnIndex, cell}, event',
         list: []
       }
     ]
@@ -362,9 +370,9 @@ const apis = [
     list: [
       {
         name: 'commitProxy(code)',
-        desc: '给代理提交指令',
+        desc: '给数据代理提交指令',
         type: '',
-        enum: 'reload,query,delete,save',
+        enum: 'reload, query, delete, save',
         defVal: '',
         list: []
       }

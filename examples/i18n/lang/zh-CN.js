@@ -115,6 +115,9 @@ module.exports = {
         antdFilter: 'ant-design-vue 筛选配置',
         antdPluginMore: 'ant-design-vue 跟多配置',
 
+        optimize: '性能优化',
+        optimizeEdit: '编辑渲染优化',
+
         api: 'API',
         vxeTable: 'vxe-table',
         vxeTableColumn: 'vxe-table-column',

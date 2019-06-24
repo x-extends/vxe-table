@@ -172,7 +172,7 @@ export default {
     // 树形结构配置项
     treeConfig: Object,
     // 快捷菜单配置项
-    contextMenu: { type: Object, default: () => GlobalConfig.contextMenu },
+    contextMenu: Object,
     // 鼠标配置项
     mouseConfig: Object,
     // 按键配置项
@@ -386,7 +386,7 @@ export default {
       return this.headerCtxMenu.length || this.bodyCtxMenu.length
     },
     ctxMenuConfig () {
-      return Object.assign({}, this.contextMenu)
+      return Object.assign({}, GlobalConfig.menu)
     },
     ctxMenuList () {
       let rest = []
@@ -668,9 +668,9 @@ export default {
         /**
          * valid error tooltip
          */
-        editRules && hasTip ? h('vxe-tooltip', {
+        hasTip && editRules && editConfig && editConfig.validTip !== 'none' ? h('vxe-tooltip', {
           class: 'vxe-table--valid-error',
-          props: Object.assign({}, validStore, tooltipConfig),
+          props: tableData.length === 1 ? Object.assign({}, validStore, tooltipConfig) : null,
           ref: 'validTip'
         }) : _e()
       ])
@@ -1363,12 +1363,13 @@ export default {
      * 全局按下事件处理
      */
     handleGlobalMousedownEvent (evnt) {
-      let { editStore, ctxMenuStore, editConfig = {}, filterStore } = this
+      let { $refs, editStore, ctxMenuStore, editConfig = {}, filterStore } = this
       let { actived } = editStore
-      if (this.$refs.filterWrapper) {
+      let { filterWrapper, validTip } = $refs
+      if (filterWrapper) {
         if (this.getEventTargetNode(evnt, this.$el, 'vxe-filter-wrapper').flag) {
           // 如果点击了筛选按钮
-        } else if (this.getEventTargetNode(evnt, this.$refs.filterWrapper.$el).flag) {
+        } else if (this.getEventTargetNode(evnt, filterWrapper.$el).flag) {
           // 如果点击筛选容器
         } else {
           this.preventEvent(evnt, 'event.clear_filter', filterStore.args, this.closeFilter)
@@ -1377,8 +1378,10 @@ export default {
       // 如果已激活了编辑状态
       if (actived.row) {
         if (!(editConfig.autoClear === false)) {
-          // 如果手动调用了激活单元格，避免触发源被移除后导致重复关闭
-          if (!this.lastCallTime || this.lastCallTime + 50 < Date.now()) {
+          if (validTip && this.getEventTargetNode(evnt, validTip.$el).flag) {
+            // 如果是激活状态，且点击了校验提示框
+          } else if (!this.lastCallTime || this.lastCallTime + 50 < Date.now()) {
+            // 如果手动调用了激活单元格，避免触发源被移除后导致重复关闭
             this.preventEvent(evnt, 'event.clear_actived', actived.args, () => {
               let isClear
               let isReadonlyCol = !this.getEventTargetNode(evnt, this.$el, 'col--edit').flag
@@ -2265,8 +2268,9 @@ export default {
     clearActived (evnt) {
       let { editStore } = this
       let { actived } = editStore
-      if (actived.row || actived.column) {
-        UtilTools.emitEvent(this, 'edit-closed', [actived.args, evnt])
+      let { args, row, column } = actived
+      if (row || column) {
+        UtilTools.emitEvent(this, 'edit-closed', [args, evnt])
       }
       actived.args = null
       actived.row = null
@@ -2977,9 +2981,10 @@ export default {
      * 如果组件值 v-model 发生 change 时，调用改函数用于更新某一列编辑状态
      * 如果单元格配置了校验规则，则会进行校验
      */
-    updateStatus (scope) {
+    updateStatus (scope, cellValue) {
+      let customVal = arguments.length >= 2
       return this.$nextTick().then(() => {
-        let { $refs, tableData, editRules } = this
+        let { $refs, tableData, editRules, validStore } = this
         if (scope && $refs.tableBody && !XEUtils.isEmpty(editRules)) {
           let { row, column } = scope
           let type = 'change'
@@ -2987,9 +2992,19 @@ export default {
             let rowIndex = tableData.indexOf(row)
             let cell = DomTools.getCell(this, { row, rowIndex, column })
             if (cell) {
-              return this.validCellRules(type, row, column)
-                .then(() => this.clearValidate())
-                .catch(({ rule }) => this.showValidTooltip({ rule, row, column, cell }))
+              return this.validCellRules(type, row, column, cellValue)
+                .then(() => {
+                  if (customVal && validStore.visible) {
+                    UtilTools.setCellValue(row, column, cellValue)
+                  }
+                  this.clearValidate()
+                })
+                .catch(({ rule }) => {
+                  if (customVal) {
+                    UtilTools.setCellValue(row, column, cellValue)
+                  }
+                  this.showValidTooltip({ rule, row, column, cell })
+                })
             }
           }
         }
@@ -3159,14 +3174,14 @@ export default {
      *  validator=Function(rule, value, callback, {rules, row, column, rowIndex, columnIndex}) 自定义校验
      *  trigger=blur|change 触发方式（除非特殊场景，否则默认为空就行）
      */
-    validCellRules (type, row, column) {
+    validCellRules (type, row, column, cellValue) {
       let { editRules } = this
       let { property } = column
       let errorRules = []
       let validPromise = Promise.resolve()
       if (property && !XEUtils.isEmpty(editRules)) {
         let rules = XEUtils.get(editRules, property)
-        let value = XEUtils.get(row, property)
+        let value = arguments.length >= 4 ? cellValue : XEUtils.get(row, property)
         if (rules) {
           for (let rIndex = 0; rIndex < rules.length; rIndex++) {
             validPromise = validPromise.then(() => new Promise(resolve => {
@@ -3226,7 +3241,7 @@ export default {
         content: '',
         rule: null
       })
-      if (validTip) {
+      if (validTip && validTip.visible) {
         validTip.close()
       }
       return this.$nextTick()
@@ -3242,7 +3257,8 @@ export default {
      * 弹出校验错误提示
      */
     showValidTooltip (params) {
-      let validTip = this.$refs.validTip
+      let { $refs, tableData } = this
+      let validTip = $refs.validTip
       let { rule, row, column, cell } = params
       this.$nextTick(() => {
         Object.assign(this.validStore, {
@@ -3252,7 +3268,7 @@ export default {
           content: UtilTools.formatText(rule.message),
           visible: true
         })
-        if (validTip) {
+        if (validTip && tableData.length === 1) {
           validTip.toVisible(cell)
         }
         UtilTools.emitEvent(this, 'valid-error', [params])

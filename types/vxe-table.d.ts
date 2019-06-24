@@ -35,7 +35,7 @@ export interface GlobalOptions<T> {
   version: string | number;
   optimization: object;
   tooltipConfig: object;
-  iconMap: object;
+  icon: object;
   pager: object;
   toolbar: object;
   message: object;

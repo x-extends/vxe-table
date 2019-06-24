@@ -18,6 +18,7 @@ function handleLocation (obj, rows, columns, row, column) {
  */
 function renderColumn (h, _vm, $table, seq, fixedType, rowLevel, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex) {
   let {
+    _e,
     $listeners: tableListeners,
     tableData,
     overflowX,
@@ -34,6 +35,7 @@ function renderColumn (h, _vm, $table, seq, fixedType, rowLevel, row, rowIndex, 
     treeConfig,
     mouseConfig,
     editConfig,
+    editRules,
     editStore,
     validStore
   } = $table
@@ -54,6 +56,8 @@ function renderColumn (h, _vm, $table, seq, fixedType, rowLevel, row, rowIndex, 
   let checkedLocat = {}
   let checkedTLocat = {}
   let copyedLocat = {}
+  let validError = validStore.row === row && validStore.column === column
+  let hasDefaultTip = editConfig && editRules && (!editConfig.validTip || editConfig.validTip === 'default')
   let attrs = { 'data-index': columnIndex }
   let triggerDblclick = (editRender && editConfig && editConfig.trigger === 'dblclick')
   let params = { $table, seq, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, level: rowLevel, isHidden: fixedHiddenColumn, data: tableData }
@@ -143,7 +147,7 @@ function renderColumn (h, _vm, $table, seq, fixedType, rowLevel, row, rowIndex, 
       'col--copyed-right': copyedLocat.right,
       'col--actived': editRender && actived.row === row && actived.column === column,
       'col--dirty': isDirty,
-      'col--valid-error': validStore.row === row && validStore.column === column,
+      'col--valid-error': validError,
       'col--current': selectColumn === column,
       'edit--visible': editRender && editRender.type === 'visible',
       'fixed--hidden': fixedHiddenColumn
@@ -165,6 +169,13 @@ function renderColumn (h, _vm, $table, seq, fixedType, rowLevel, row, rowIndex, 
         width: hasEllipsis ? `${border ? renderWidth - 1 : renderWidth}px` : null
       }
     }, column.renderCell(h, params)),
+    hasDefaultTip ? validError && tableData.length >= 2 ? h('div', {
+      class: 'vxe-cell--valid'
+    }, [
+      h('span', {
+        class: 'vxe-cell--valid-msg'
+      }, validStore.content)
+    ]) : _e() : null,
     isMouseChecked && !fixedType ? h('span', {
       class: 'vxe-body--column-checked-lt'
     }) : null,

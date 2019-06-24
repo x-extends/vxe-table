@@ -133,10 +133,8 @@
           showHeader: true,
           // 版本号（对于某些带 Storage 数据储存的功能有用到，上升版本号可以用于重置 Storage 数据）
           version: 0,
-          // 默认快捷菜单
-          contextMenu: null,
           // 自定义图标配置
-          iconMap: {
+          icon: {
             sortAsc: 'vxe-icon--caret-top',
             sortDesc: 'vxe-icon--caret-bottom',
             filter: 'vxe-icon--funnel',
@@ -152,6 +150,8 @@
             msgWarning: 'vxe-icon--warning',
             msgError: 'vxe-icon--error'
           },
+          // 默认快捷菜单
+          menu: {},
           // 默认 tooltip 主题样式
           tooltip: {
             zIndex: 99,
