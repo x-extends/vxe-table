@@ -2,7 +2,7 @@
 name: Feature request
 about: 功能需求
 title: ''
-labels: enhancement
+labels: enhancement 功能需求
 assignees: ''
 
 ---

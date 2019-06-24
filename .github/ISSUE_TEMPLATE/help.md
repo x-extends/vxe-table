@@ -1,8 +1,8 @@
 ---
 name: Help
 about: 遇到问题
-title: '请将问题描述清楚、并提供问题重现链接或报错信息，否则可能会被关闭！'
-labels: 'help wanted'
+title: 请将问题描述清楚、并提供问题重现链接或报错信息，否则可能会被关闭！
+labels: help wanted 遇到问题
 assignees: ''
 
 ---
