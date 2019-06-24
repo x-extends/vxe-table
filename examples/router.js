@@ -109,7 +109,7 @@ const TablePluginAntdConfig = () => import(/* webpackChunkName: "plugin" */ './v
 const TablePluginAntdFilter = () => import(/* webpackChunkName: "plugin" */ './views/table/plugin/AntdFilter.vue')
 const TablePluginAntdPage = () => import(/* webpackChunkName: "plugin" */ './views/table/plugin/AntdPage.vue')
 
-const TableOptimizeEdit = () => import(/* webpackChunkName: "plugin" */ './views/table/optimize/Edit.vue')
+const TableOptimizeEdit = () => import(/* webpackChunkName: "optimize" */ './views/table/optimize/Edit.vue')
 
 const TableAPI = () => import(/* webpackChunkName: "api" */ './views/table/api/API.vue')
 
