@@ -108,13 +108,16 @@ export default {
             validEvent () {
               this.$refs.xTable.validate(valid => {
                 if (valid) {
+                  this.$XMsg.message({ status: 'success', message: '校验成功！' })
+                } else {
+                  this.$XMsg.message({ status: 'error', message: '校验不通过！' })
                 }
               })
             },
             fullValidEvent () {
               this.$refs.xTable.fullValidate((valid, errMap) => {
                 if (valid) {
-                  this.$XMsg.alert('校验成功！')
+                  this.$XMsg.message({ status: 'success', message: '校验成功！' })
                 } else {
                   let msgList = []
                   Object.values(errMap).forEach(errList => {
@@ -125,13 +128,14 @@ export default {
                       })
                     })
                   })
-                  this.$XMsg.alert({
+                  this.$XMsg.message({
+                    status: 'error',
                     message: () => {
                       return [
                         <div class="red" style="max-height: 400px;overflow: auto;">
                           {
                             msgList.map(msg => {
-                              return <p>{ msg }</p>
+                              return <div>{ msg }</div>
                             })
                           }
                         </div>
@@ -146,10 +150,13 @@ export default {
               if (selectRecords.length > 0) {
                 this.$refs.xTable.validate(selectRecords, valid => {
                   if (valid) {
+                    this.$XMsg.message({ status: 'success', message: '校验成功！' })
+                  } else {
+                    this.$XMsg.message({ status: 'error', message: '校验不通过！' })
                   }
                 })
               } else {
-                // 未选中数据！
+                this.$XMsg.message({ status: 'warning', message: '未选中数据！' })
               }
             },
             insertEvent () {
@@ -193,14 +200,16 @@ export default {
     validEvent () {
       this.$refs.xTable.validate(valid => {
         if (valid) {
-          this.$XMsg.alert('校验成功！')
+          this.$XMsg.message({ status: 'success', message: '校验成功！' })
+        } else {
+          this.$XMsg.message({ status: 'error', message: '校验不通过！' })
         }
       })
     },
     fullValidEvent () {
       this.$refs.xTable.fullValidate((valid, errMap) => {
         if (valid) {
-          this.$XMsg.alert('校验成功！')
+          this.$XMsg.message({ status: 'success', message: '校验成功！' })
         } else {
           let msgList = []
           Object.values(errMap).forEach(errList => {
@@ -211,13 +220,14 @@ export default {
               })
             })
           })
-          this.$XMsg.alert({
+          this.$XMsg.message({
+            status: 'error',
             message: () => {
               return [
                 <div class="red" style="max-height: 400px;overflow: auto;">
                   {
                     msgList.map(msg => {
-                      return <p>{ msg }</p>
+                      return <div>{ msg }</div>
                     })
                   }
                 </div>
@@ -232,11 +242,13 @@ export default {
       if (selectRecords.length > 0) {
         this.$refs.xTable.validate(selectRecords, valid => {
           if (valid) {
-            this.$XMsg.alert('校验成功！')
+            this.$XMsg.message({ status: 'success', message: '校验成功！' })
+          } else {
+            this.$XMsg.message({ status: 'error', message: '校验不通过！' })
           }
         })
       } else {
-        this.$XMsg.alert('未选中数据！')
+        this.$XMsg.message({ status: 'warning', message: '未选中数据！' })
       }
     },
     insertEvent () {

@@ -78,11 +78,22 @@
   }
   &.type--message {
     .vxe-msg--box {
-      padding: 2px;
+      padding: 2px 0;
       margin-top: 0;
       width: auto;
+      .vxe-msg--body {
+        &:after {
+          content: '';
+          display: block;
+          clear: both;
+          height: 0;
+          overflow: hidden;
+          visibility: hidden;
+        }
+      }
       .vxe-msg--content {
-        display: inline-block;
+        max-width: 800px;
+        float: left;
       }
     }
   }
@@ -103,28 +114,29 @@
     transform: translate(0, -10%);
   }
   &.msg--info {
-    .vxe-msg--status {
+    .vxe-msg--status-wrapper {
       color: #2998FF;
     }
   }
   &.msg--warning {
-    .vxe-msg--status {
+    .vxe-msg--status-wrapper {
       color: #FAAD14;
     }
   }
   &.msg--success {
-    .vxe-msg--status {
+    .vxe-msg--status-wrapper {
       color: #52C41A;
     }
   }
   &.msg--error {
-    .vxe-msg--status {
+    .vxe-msg--status-wrapper {
       color: #F5222D;
     }
   }
-  .vxe-msg--status {
+  .vxe-msg--status-wrapper {
     font-size: 16px;
-    margin-right: 4px;
+    margin-right: 10px;
+    float: left;
   }
   .vxe-msg--body,
   .vxe-msg--footer {

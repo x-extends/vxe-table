@@ -93,9 +93,13 @@ export default {
         h('div', {
           class: 'vxe-msg--body'
         }, [
-          status ? h('i', {
-            class: ['vxe-msg--status', GlobalConfig.icon[`msg${status.replace(/\b(\w)/, word => word.toUpperCase())}`]]
-          }) : null,
+          status ? h('div', {
+            class: 'vxe-msg--status-wrapper'
+          }, [
+            h('i', {
+              class: ['vxe-msg--status-icon', GlobalConfig.icon[`msg${status.replace(/\b(\w)/, word => word.toUpperCase())}`]]
+            })
+          ]) : null,
           h('div', {
             class: 'vxe-msg--content'
           }, this.$slots.default || (XEUtils.isFunction(message) ? message.call(this, h) : message))
