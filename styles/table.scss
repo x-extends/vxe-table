@@ -459,9 +459,7 @@
     &.col--valid-error {
       position: relative;
       .vxe-cell--valid {
-        max-width: 320px;
-        min-width: 180px;
-        width: 100%;
+        width: 320px;
         position: absolute;
         bottom: calc(100% + 4px);
         left: 50%;

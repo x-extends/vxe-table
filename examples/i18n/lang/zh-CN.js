@@ -199,6 +199,7 @@ module.exports = {
           mouseConfig: '鼠标配置项',
           keyboardConfig: '按键配置项',
           editConfig: '可编辑配置项',
+          validConfig: '校验配置项',
           editRules: '校验规则配置项（默认情况下是非强制性的，无论是否必填都允许编辑其他的单元格）',
           optimization: '优化配置项',
 

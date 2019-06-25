@@ -179,6 +179,8 @@ export default {
     keyboardConfig: Object,
     // 编辑配置项
     editConfig: Object,
+    // 校验配置项
+    validConfig: Object,
     // 校验规则配置项
     editRules: Object,
     // 优化配置项
@@ -528,6 +530,7 @@ export default {
       highlightHoverColumn,
       vSize,
       editConfig,
+      validConfig = {},
       editRules,
       showFooter,
       footerMethod,
@@ -668,9 +671,9 @@ export default {
         /**
          * valid error tooltip
          */
-        hasTip && editRules && editConfig && editConfig.validTip !== 'none' ? h('vxe-tooltip', {
+        hasTip && editRules && validConfig.message !== 'none' ? h('vxe-tooltip', {
           class: 'vxe-table--valid-error',
-          props: editConfig.validTip === 'tooltip' || tableData.length === 1 ? Object.assign({}, validStore, tooltipConfig) : null,
+          props: validConfig.message === 'tooltip' || tableData.length === 1 ? Object.assign({}, validStore, tooltipConfig) : null,
           ref: 'validTip'
         }) : _e()
       ])
@@ -2982,7 +2985,7 @@ export default {
      * 如果单元格配置了校验规则，则会进行校验
      */
     updateStatus (scope, cellValue) {
-      let customVal = arguments.length >= 2
+      let customVal = !XEUtils.isUndefined(cellValue)
       return this.$nextTick().then(() => {
         let { $refs, tableData, editRules, validStore } = this
         if (scope && $refs.tableBody && !XEUtils.isEmpty(editRules)) {
@@ -3181,7 +3184,7 @@ export default {
       let validPromise = Promise.resolve()
       if (property && !XEUtils.isEmpty(editRules)) {
         let rules = XEUtils.get(editRules, property)
-        let value = arguments.length >= 4 ? cellValue : XEUtils.get(row, property)
+        let value = XEUtils.isUndefined(cellValue) ? XEUtils.get(row, property) : cellValue
         if (rules) {
           for (let rIndex = 0; rIndex < rules.length; rIndex++) {
             validPromise = validPromise.then(() => new Promise(resolve => {
@@ -3257,7 +3260,7 @@ export default {
      * 弹出校验错误提示
      */
     showValidTooltip (params) {
-      let { $refs, tableData, editConfig } = this
+      let { $refs, tableData, validConfig = {} } = this
       let validTip = $refs.validTip
       let { rule, row, column, cell } = params
       this.$nextTick(() => {
@@ -3268,7 +3271,7 @@ export default {
           content: UtilTools.formatText(rule.message),
           visible: true
         })
-        if (validTip && (editConfig.validTip === 'tooltip' || tableData.length === 1)) {
+        if (validTip && (validConfig.message === 'tooltip' || tableData.length === 1)) {
           validTip.toVisible(cell)
         }
         UtilTools.emitEvent(this, 'valid-error', [params])

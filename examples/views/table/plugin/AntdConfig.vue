@@ -12,13 +12,13 @@
       :edit-config="{key: 'id', trigger: 'click', mode: 'cell'}">
       <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
       <vxe-table-column type="index" label="Number" width="80" fixed="left"></vxe-table-column>
-      <vxe-table-column prop="name" label="AInput" min-width="140" :edit-render="{name: 'AInput', events: {change: nameChangeEvent}}"></vxe-table-column>
+      <vxe-table-column prop="name" label="AInput" min-width="140" :edit-render="{name: 'AInput'}"></vxe-table-column>
       <vxe-table-column prop="role" label="AAutoComplete" width="160" :edit-render="{name: 'AAutoComplete', props: ACProps, events: {search: roleSearchEvent}}"></vxe-table-column>
       <vxe-table-column prop="age" label="AInputNumber" width="160" :edit-render="{name: 'AInputNumber', props: {max: 35, min: 18}}"></vxe-table-column>
       <vxe-table-column prop="sex" label="ASelect" width="140" :edit-render="{name: 'ASelect', options: sexList}"></vxe-table-column>
       <vxe-table-column prop="sex1" label="ASelect" width="160" :edit-render="{name: 'ASelect', options: sexList, props: {mode: 'multiple'}}"></vxe-table-column>
       <vxe-table-column prop="sex2" label="ASelect" width="140" :edit-render="{name: 'ASelect', optionGroups: sexGroupList}"></vxe-table-column>
-      <vxe-table-column prop="region" label="ACascader" width="200" :edit-render="{name: 'ACascader', props: {options: regionList}, events: {change: regionChangeEvent}}"></vxe-table-column>
+      <vxe-table-column prop="region" label="ACascader" width="200" :edit-render="{name: 'ACascader', props: {options: regionList}}"></vxe-table-column>
       <vxe-table-column prop="date7" label="ADatePicker" width="140" :edit-render="{name: 'ADatePicker', props: {type: 'date', format: 'YYYY/MM/DD'}}"></vxe-table-column>
       <vxe-table-column prop="date8" label="AMonthPicker" width="140" :edit-render="{name: 'AMonthPicker'}"></vxe-table-column>
       <vxe-table-column prop="date9" label="AWeekPicker" width="140" :edit-render="{name: 'AWeekPicker'}"></vxe-table-column>
@@ -114,13 +114,13 @@ export default {
           :edit-config="{key: 'id', trigger: 'click', mode: 'cell'}">
           <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
           <vxe-table-column type="index" label="Number" width="80" fixed="left"></vxe-table-column>
-          <vxe-table-column prop="name" label="AInput" min-width="140" :edit-render="{name: 'AInput', events: {change: nameChangeEvent}}"></vxe-table-column>
+          <vxe-table-column prop="name" label="AInput" min-width="140" :edit-render="{name: 'AInput'}"></vxe-table-column>
           <vxe-table-column prop="role" label="AAutoComplete" width="160" :edit-render="{name: 'AAutoComplete', props: ACProps, events: {search: roleSearchEvent}}"></vxe-table-column>
           <vxe-table-column prop="age" label="AInputNumber" width="160" :edit-render="{name: 'AInputNumber', props: {max: 35, min: 18}}"></vxe-table-column>
           <vxe-table-column prop="sex" label="ASelect" width="140" :edit-render="{name: 'ASelect', options: sexList}"></vxe-table-column>
           <vxe-table-column prop="sex1" label="ASelect" width="160" :edit-render="{name: 'ASelect', options: sexList, props: {mode: 'multiple'}}"></vxe-table-column>
           <vxe-table-column prop="sex2" label="ASelect" width="140" :edit-render="{name: 'ASelect', optionGroups: sexGroupList}"></vxe-table-column>
-          <vxe-table-column prop="region" label="ACascader" width="200" :edit-render="{name: 'ACascader', props: {options: regionList}, events: {change: regionChangeEvent}}"></vxe-table-column>
+          <vxe-table-column prop="region" label="ACascader" width="200" :edit-render="{name: 'ACascader', props: {options: regionList}}"></vxe-table-column>
           <vxe-table-column prop="date7" label="ADatePicker" width="140" :edit-render="{name: 'ADatePicker', props: {type: 'date', format: 'YYYY/MM/DD'}}"></vxe-table-column>
           <vxe-table-column prop="date8" label="AMonthPicker" width="140" :edit-render="{name: 'AMonthPicker'}"></vxe-table-column>
           <vxe-table-column prop="date9" label="AWeekPicker" width="140" :edit-render="{name: 'AWeekPicker'}"></vxe-table-column>
@@ -190,12 +190,6 @@ export default {
             },
             roleSearchEvent ({ row }, value) {
               this.ACProps.dataSource = this.restaurants.filter(option => option.toUpperCase().indexOf((value || '').toUpperCase()) !== -1)
-            },
-            nameChangeEvent ({ row }, value) {
-              console.log(value)
-            },
-            regionChangeEvent ({ row }, value) {
-              console.log(value)
             }
           }
         }
@@ -232,12 +226,6 @@ export default {
     },
     roleSearchEvent ({ row }, value) {
       this.ACProps.dataSource = this.restaurants.filter(option => option.toUpperCase().indexOf((value || '').toUpperCase()) !== -1)
-    },
-    nameChangeEvent ({ row }, value) {
-      console.log(value)
-    },
-    regionChangeEvent ({ row }, value) {
-      console.log(value)
     }
   }
 }

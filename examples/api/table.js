@@ -780,13 +780,30 @@ const apis = [
             enum: '',
             defVal: '',
             list: []
-          },
+          }
+        ]
+      },
+      {
+        name: 'valid-config',
+        descKey: 'app.api.table.desc.validConfig',
+        type: 'Object',
+        enum: '',
+        defVal: '',
+        list: [
           {
-            name: 'validTip',
+            name: 'message',
             desc: '校验提示框的类型',
             type: 'String',
             enum: 'none, default, tooltip',
             defVal: 'default',
+            list: []
+          },
+          {
+            name: 'maxWidth',
+            desc: '所有提示框的最大宽度',
+            type: 'Number',
+            enum: '',
+            defVal: '320',
             list: []
           }
         ]
@@ -852,6 +869,14 @@ const apis = [
             type: 'String',
             enum: 'blur,change',
             defVal: '',
+            list: []
+          },
+          {
+            name: 'maxWidth',
+            desc: '提示框的最大宽度',
+            type: 'Number',
+            enum: '',
+            defVal: '320',
             list: []
           }
         ]

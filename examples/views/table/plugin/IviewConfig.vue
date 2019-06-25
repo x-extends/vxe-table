@@ -12,13 +12,13 @@
       :edit-config="{key: 'id', trigger: 'click', mode: 'cell'}">
       <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
       <vxe-table-column type="index" label="Number" width="80" fixed="left"></vxe-table-column>
-      <vxe-table-column prop="name" label="Input" min-width="140" :edit-render="{name: 'Input', events: {'on-change': nameChangeEvent}}"></vxe-table-column>
+      <vxe-table-column prop="name" label="Input" min-width="140" :edit-render="{name: 'Input'}"></vxe-table-column>
       <vxe-table-column prop="role" label="AutoComplete" min-width="160" :edit-render="{name: 'AutoComplete', props: {data: restaurants, filterMethod: roleFilterMethod}}"></vxe-table-column>
       <vxe-table-column prop="age" label="InputNumber" width="140" :edit-render="{name: 'InputNumber', props: {max: 35, min: 18}}"></vxe-table-column>
       <vxe-table-column prop="sex" label="Select" width="140" :edit-render="{name: 'Select', options: sexList}"></vxe-table-column>
       <vxe-table-column prop="sex1" label="Select" width="140" :edit-render="{name: 'Select', options: sexList, props: {multiple: true, clearable: true}}"></vxe-table-column>
       <vxe-table-column prop="sex2" label="Select" width="140" :edit-render="{name: 'Select', options: sexList, optionGroups: sexGroupList, props: {clearable: true}}"></vxe-table-column>
-      <vxe-table-column prop="region" label="Cascader" width="200" :edit-render="{name: 'Cascader', props: {data: regionList}, events: {'on-change': regionChangeEvent}}"> </vxe-table-column>
+      <vxe-table-column prop="region" label="Cascader" width="200" :edit-render="{name: 'Cascader', props: {data: regionList}}"> </vxe-table-column>
       <vxe-table-column prop="date" label="DatePicker" width="200" :edit-render="{name: 'DatePicker', props: {type: 'date', format: 'yyyy/MM/dd'}}"></vxe-table-column>
       <vxe-table-column prop="date2" label="TimePicker" width="200" :edit-render="{name: 'TimePicker', props: {type: 'time'}}"></vxe-table-column>
       <vxe-table-column prop="flag" label="iSwitch" width="100" :edit-render="{name: 'iSwitch', type: 'visible'}"></vxe-table-column>
@@ -78,13 +78,13 @@ export default {
           :edit-config="{key: 'id', trigger: 'click', mode: 'cell'}">
           <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
           <vxe-table-column type="index" label="Number" width="80" fixed="left"></vxe-table-column>
-          <vxe-table-column prop="name" label="Input" min-width="140" :edit-render="{name: 'Input', events: {'on-change': nameChangeEvent}}"></vxe-table-column>
+          <vxe-table-column prop="name" label="Input" min-width="140" :edit-render="{name: 'Input'}"></vxe-table-column>
           <vxe-table-column prop="role" label="AutoComplete" min-width="160" :edit-render="{name: 'AutoComplete', props: {data: restaurants, filterMethod: roleFilterMethod}}"></vxe-table-column>
           <vxe-table-column prop="age" label="InputNumber" width="140" :edit-render="{name: 'InputNumber', props: {max: 35, min: 18}}"></vxe-table-column>
           <vxe-table-column prop="sex" label="Select" width="140" :edit-render="{name: 'Select', options: sexList}"></vxe-table-column>
           <vxe-table-column prop="sex1" label="Select" width="140" :edit-render="{name: 'Select', options: sexList, props: {multiple: true, clearable: true}}"></vxe-table-column>
           <vxe-table-column prop="sex2" label="Select" width="140" :edit-render="{name: 'Select', options: sexList, optionGroups: sexGroupList, props: {clearable: true}}"></vxe-table-column>
-          <vxe-table-column prop="region" label="Cascader" width="200" :edit-render="{name: 'Cascader', props: {data: regionList}, events: {'on-change': regionChangeEvent}}"> </vxe-table-column>
+          <vxe-table-column prop="region" label="Cascader" width="200" :edit-render="{name: 'Cascader', props: {data: regionList}}"> </vxe-table-column>
           <vxe-table-column prop="date" label="DatePicker" width="200" :edit-render="{name: 'DatePicker', props: {type: 'date', format: 'yyyy/MM/dd'}}"></vxe-table-column>
           <vxe-table-column prop="date2" label="TimePicker" width="200" :edit-render="{name: 'TimePicker', props: {type: 'time'}}"></vxe-table-column>
           <vxe-table-column prop="flag" label="iSwitch" width="100" :edit-render="{name: 'iSwitch', type: 'visible'}"></vxe-table-column>
@@ -127,12 +127,6 @@ export default {
           methods: {
             nameChangeEvent ({ row }, event) {
               console.log(event)
-            },
-            regionChangeEvent ({ row }, value, selectedData) {
-              console.log(value)
-            },
-            roleFilterMethod  (value, option) {
-              return option.toUpperCase().indexOf((value || '').toUpperCase()) !== -1
             }
           }
         }
@@ -170,12 +164,6 @@ export default {
     },
     roleFilterMethod  (value, option) {
       return option.toUpperCase().indexOf((value || '').toUpperCase()) !== -1
-    },
-    nameChangeEvent ({ row }, event) {
-      console.log(event)
-    },
-    regionChangeEvent ({ row }, value, selectedData) {
-      console.log(value)
     }
   }
 }

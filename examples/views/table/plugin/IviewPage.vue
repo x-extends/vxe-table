@@ -42,6 +42,7 @@
       height="460"
       :loading="loading"
       :data.sync="tableData"
+      :edit-rules="validRules"
       :edit-config="{key: 'id', trigger: 'click', mode: 'row'}">
       <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
       <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
@@ -85,6 +86,15 @@ export default {
     return {
       loading: false,
       tableData: [],
+      validRules: {
+        name: [
+          { required: true, message: '名称必须填写' },
+          { min: 3, max: 50, message: '名称长度在 3 到 50 个字符' }
+        ],
+        sex: [
+          { required: true, message: '性别必须填写' }
+        ]
+      },
       sexList: [],
       regionList: [],
       restaurants: ['前端', '后端', '开发', '测试'],
@@ -140,6 +150,7 @@ export default {
           size="small"
           :loading="loading"
           :data.sync="tableData"
+          :edit-rules="validRules"
           :edit-config="{key: 'id', trigger: 'click', mode: 'row'}">
           <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
           <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
@@ -171,6 +182,15 @@ export default {
             return {
               loading: false,
               tableData: [],
+              validRules: {
+                name: [
+                  { required: true, message: '名称必须填写' },
+                  { min: 3, max: 50, message: '名称长度在 3 到 50 个字符' }
+                ],
+                sex: [
+                  { required: true, message: '性别必须填写' }
+                ]
+              },
               sexList: [],
               regionList: [],
               tablePage: {

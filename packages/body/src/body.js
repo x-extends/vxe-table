@@ -36,6 +36,7 @@ function renderColumn (h, _vm, $table, seq, fixedType, rowLevel, row, rowIndex, 
     mouseConfig,
     editConfig,
     editRules,
+    validConfig = {},
     editStore,
     validStore
   } = $table
@@ -57,7 +58,7 @@ function renderColumn (h, _vm, $table, seq, fixedType, rowLevel, row, rowIndex, 
   let checkedTLocat = {}
   let copyedLocat = {}
   let validError = validStore.row === row && validStore.column === column
-  let hasDefaultTip = editConfig && editRules && (!editConfig.validTip || editConfig.validTip === 'default')
+  let hasDefaultTip = editRules && (!validConfig.message || validConfig.message === 'default')
   let attrs = { 'data-index': columnIndex }
   let triggerDblclick = (editRender && editConfig && editConfig.trigger === 'dblclick')
   let params = { $table, seq, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, level: rowLevel, isHidden: fixedHiddenColumn, data: tableData }
@@ -170,7 +171,10 @@ function renderColumn (h, _vm, $table, seq, fixedType, rowLevel, row, rowIndex, 
       }
     }, column.renderCell(h, params)),
     hasDefaultTip ? validError && tableData.length >= 2 ? h('div', {
-      class: 'vxe-cell--valid'
+      class: 'vxe-cell--valid',
+      style: validStore.rule && validStore.rule.width ? {
+        width: `${validStore.rule.width}px`
+      } : null
     }, [
       h('span', {
         class: 'vxe-cell--valid-msg'

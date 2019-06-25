@@ -199,6 +199,7 @@ module.exports = {
           mouseConfig: 'Mouse configuration',
           keyboardConfig: 'Keyboard configuration',
           editConfig: 'Editable configuration',
+          validConfig: 'Validate configuration',
           editRules: 'Checksum rule configuration entries',
           optimization: 'Optimize configuration',
 
