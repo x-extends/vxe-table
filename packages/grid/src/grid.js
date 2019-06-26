@@ -62,6 +62,12 @@ export default {
   watch: {
     columns (value) {
       this.loadColumn(value)
+    },
+    tableCustoms () {
+      let { $refs, toolbar } = this
+      if (toolbar && $refs.toolbar) {
+        $refs.toolbar.loadStorage()
+      }
     }
   },
   created () {

@@ -1409,8 +1409,11 @@ export default {
                 !this.getEventTargetNode(evnt, this.$el).flag
               ) {
                 // this.triggerValidate('blur').then(a => {
-                this.clearValidate()
-                this.clearActived(evnt)
+                // 保证 input 的 change 事件能先触发之后再清除
+                setTimeout(() => {
+                  this.clearValidate()
+                  this.clearActived(evnt)
+                })
                 // }).catch(e => e)
               }
             })
