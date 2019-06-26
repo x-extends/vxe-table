@@ -91,6 +91,7 @@ export default {
           },
           created () {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 20)
+            this.reverseTable()
           },
           methods: {
             // 反转函数
@@ -159,6 +160,7 @@ export default {
           },
           created () {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 200)
+            this.reverseTable()
           },
           methods: {
             // 反转函数

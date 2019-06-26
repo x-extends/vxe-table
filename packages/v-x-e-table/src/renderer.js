@@ -22,6 +22,11 @@ function defaultRenderer (h, attrs, editRender, params) {
           change (evnt) {
             UtilTools.setCellValue(row, column, evnt.target.value)
           },
+          keydown (evnt) {
+            if (evnt.keyCode === 13) {
+              UtilTools.setCellValue(row, column, evnt.target.value)
+            }
+          },
           input (evnt) {
             // UtilTools.setCellValue(row, column, evnt.target.value)
             $table.updateStatus(params, evnt.target.value)

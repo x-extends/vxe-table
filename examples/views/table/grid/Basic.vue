@@ -1,5 +1,6 @@
 <template>
   <div>
+    <p><grid-api-link name="vxe-grid"/> 解决动态一切需求（动态列、动态数据、动态个性化...）</p>
     <p>使用 <grid-api-link name="vxe-grid"/> 配置的方式渲染表格，这对一些动态渲染的场景非常有用，完全使用数据进行配置</p>
 
     <vxe-grid
