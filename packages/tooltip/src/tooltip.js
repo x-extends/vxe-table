@@ -14,6 +14,7 @@ export default {
     return {
       isUpdate: false,
       visible: false,
+      message: '',
       tipStore: {
         style: null,
         placement: '',
@@ -22,6 +23,9 @@ export default {
     }
   },
   watch: {
+    content (value) {
+      this.message = value
+    },
     value (value) {
       if (!this.isUpdate) {
         this[value ? 'show' : 'close']()
@@ -30,8 +34,9 @@ export default {
     }
   },
   mounted () {
-    let { $el, value } = this
+    let { $el, content, value } = this
     let parentNode = $el.parentNode
+    this.message = content
     Array.from($el.children).forEach((elem, index) => {
       if (index > 1) {
         parentNode.insertBefore(elem, $el)
@@ -51,7 +56,7 @@ export default {
     }
   },
   render (h) {
-    let { theme, content, isArrow, visible, tipStore } = this
+    let { theme, message, isArrow, visible, tipStore } = this
     return h('div', {
       class: ['vxe-table--tooltip-wrapper', `theme--${theme}`, `placement--${tipStore.placement}`, {
         'is--visible': visible,
@@ -62,7 +67,7 @@ export default {
     }, [
       h('div', {
         class: ['vxe-table--tooltip-content']
-      }, this.$slots.content || content),
+      }, this.$slots.content || message),
       h('div', {
         class: ['vxe-table--tooltip-arrow'],
         style: tipStore.arrowStyle
@@ -89,7 +94,7 @@ export default {
         this.$emit('input', this.visible)
       }
     },
-    toVisible (target) {
+    toVisible (target, message) {
       if (target) {
         let { $el, tipStore, zIndex } = this
         let { top, left } = DomTools.getAbsolutePos(target)
@@ -100,6 +105,9 @@ export default {
         tipStore.arrowStyle = { left: '50%' }
         if (!parentNode) {
           document.body.appendChild($el)
+        }
+        if (message) {
+          this.message = message
         }
         this.update(true)
         return this.$nextTick().then(() => {

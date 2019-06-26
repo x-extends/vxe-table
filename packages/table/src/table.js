@@ -17,33 +17,33 @@ function renderFixed (h, $table, fixedType) {
     collectColumn,
     isGroup,
     height,
-    containerHeight,
+    _parentHeight,
     vSize,
     headerHeight,
     footerHeight,
     showHeader,
     showFooter,
     tableHeight,
-    scrollYWidth,
-    scrollXHeight,
-    scrollRightToLeft,
-    scrollLeftToRight,
+    // scrollYWidth,
+    // scrollXHeight,
+    // scrollRightToLeft,
+    // scrollLeftToRight,
     columnStore,
     footerData
   } = $table
-  let customHeight = height === 'auto' ? containerHeight : XEUtils.toNumber(height)
-  let isRightFixed = fixedType === 'right'
+  let customHeight = height === 'auto' ? _parentHeight : XEUtils.toNumber(height)
+  // let isRightFixed = fixedType === 'right'
   let fixedColumn = columnStore[`${fixedType}List`]
-  let style = {
-    height: `${(customHeight > 0 ? customHeight - headerHeight - footerHeight : tableHeight) + headerHeight + footerHeight - scrollXHeight * (showFooter ? 2 : 1)}px`,
-    width: `${fixedColumn.reduce((previous, column) => previous + column.renderWidth, isRightFixed ? scrollYWidth : 0)}px`
-  }
+  // let style = {
+  //   height: `${(customHeight > 0 ? customHeight - headerHeight - footerHeight : tableHeight) + headerHeight + footerHeight - scrollXHeight * (showFooter ? 2 : 1)}px`,
+  //   width: `${fixedColumn.reduce((previous, column) => previous + column.renderWidth, isRightFixed ? scrollYWidth : 0)}px`
+  // }
   return h('div', {
     class: [`vxe-table--fixed-${fixedType}-wrapper`, {
-      'scrolling--middle': isRightFixed ? scrollRightToLeft : scrollLeftToRight
+      // 'scrolling--middle': isRightFixed ? scrollRightToLeft : scrollLeftToRight
     }],
-    style,
-    ref: `fixedTable`
+    // style,
+    ref: `${fixedType}Container`
   }, [
     showHeader ? h('vxe-table-header', {
       props: {
@@ -210,15 +210,15 @@ export default {
       // 渲染中的数据
       tableData: [],
       // 表格父容器的高度
-      containerHeight: 0,
+      // _parentHeight: 0,
       // 表格宽度
-      tableWidth: 0,
-      // 表格高度
-      tableHeight: 0,
-      // 表头高度
-      headerHeight: 0,
-      // 表尾高度
-      footerHeight: 0,
+      // tableWidth: 0,
+      // // 表格高度
+      // tableHeight: 0,
+      // // 表头高度
+      // headerHeight: 0,
+      // // 表尾高度
+      // footerHeight: 0,
       // 是否启用了横向 X 可视渲染方式加载
       scrollXLoad: false,
       // 是否启用了纵向 Y 可视渲染方式加载
@@ -232,9 +232,9 @@ export default {
       // 横向滚动条的高度
       scrollXHeight: 0,
       // 左侧固定列是否向右滚动了
-      scrollLeftToRight: false,
+      // scrollLeftToRight: false,
       // 右侧固定列是否向左滚动了
-      scrollRightToLeft: false,
+      // scrollRightToLeft: false,
       // 是否全选
       isAllSelected: false,
       // 多选属性，有选中且非全选状态
@@ -244,7 +244,7 @@ export default {
       // 单选属性，选中行
       selectRow: null,
       // 单选属性，选中列
-      selectColumn: null,
+      // selectColumn: null,
       // 已展开的行
       expandeds: [],
       // 已展开树节点
@@ -252,9 +252,9 @@ export default {
       // 树节点不确定状态的列表
       treeIndeterminates: [],
       // 当前 hover 行
-      hoverRow: null,
+      // _hoverRow: null,
       // 是否加载了 Loading 模块
-      isLoading: false,
+      // isLoading: false,
       // 当前选中的筛选列
       filterStore: {
         isAllSelected: false,
@@ -287,34 +287,35 @@ export default {
         style: null
       },
       // 存放横向 X 可视渲染相关的信息
-      scrollXStore: {
-        renderSize: 0,
-        visibleSize: 0,
-        offsetSize: 0,
-        rowHeight: 0,
-        startIndex: 0,
-        visibleIndex: 0,
-        leftSpaceWidth: 0,
-        rightSpaceWidth: 0
-      },
+      // _scrollXStore: {
+      //   renderSize: 0,
+      //   visibleSize: 0,
+      //   offsetSize: 0,
+      //   rowHeight: 0,
+      //   startIndex: 0,
+      //   visibleIndex: 0
+      //   // leftSpaceWidth: 0,
+      //   // rightSpaceWidth: 0
+      // },
       // 存放纵向 Y 可视渲染相关的信息
-      scrollYStore: {
-        renderSize: 0,
-        visibleSize: 0,
-        offsetSize: 0,
-        rowHeight: 0,
-        startIndex: 0,
-        visibleIndex: 0,
-        topSpaceHeight: 0,
-        bottomSpaceHeight: 0
-      },
+      // _scrollYStore: {
+      //   renderSize: 0,
+      //   visibleSize: 0,
+      //   offsetSize: 0,
+      //   rowHeight: 0,
+      //   startIndex: 0,
+      //   visibleIndex: 0,
+      //   // topSpaceHeight: 0,
+      //   // bottomSpaceHeight: 0,
+      //   bodyHeight: 0
+      // },
       // 存放 tooltip 相关信息
-      tooltipStore: {
-        visible: false,
-        row: null,
-        column: null,
-        content: ''
-      },
+      // _tooltipStore: {
+      //   visible: false,
+      //   row: null,
+      //   column: null,
+      //   content: ''
+      // },
       // 存放可编辑相关信息
       editStore: {
         // 所有选中
@@ -435,13 +436,25 @@ export default {
     }
   },
   created () {
-    let { scrollYStore, optimizeOpts, selectConfig, treeConfig, editConfig, loading, showAllOverflow, showHeaderAllOverflow } = this
+    this._elemStore = {}
+    this._scrollXStore = {}
+    this._scrollYStore = {}
+    this._tooltipStore = {}
+    this._parentHeight = 0
+    this.tableWidth = 0
+    this.tableHeight = 0
+    this.headerHeight = 0
+    this.footerHeight = 0
+    this.afterFullData = []
+    this.fullDataIndexMap = new Map()
+    this.fullDataRowIdMap = new Map()
+    this.fullColumnIdMap = new Map()
+    this.fullColumnIndexMap = new Map()
+    let { _scrollYStore, optimizeOpts, selectConfig, treeConfig, editConfig, loading, showAllOverflow, showHeaderAllOverflow } = this
     let { scrollY } = optimizeOpts
-    if (loading) {
-      this.isLoading = true
-    }
+    this.isLoading = loading
     if (scrollY) {
-      Object.assign(scrollYStore, {
+      Object.assign(_scrollYStore, {
         startIndex: 0,
         visibleIndex: 0,
         renderSize: scrollY.rSize,
@@ -454,25 +467,23 @@ export default {
     if (XEUtils.isBoolean(showHeaderAllOverflow)) {
       console.warn('[vxe-table] The property show-header-all-overflow is deprecated, please use show-header-overflow')
     }
-    this.afterFullData = []
-    this.fullDataIndexMap = new Map()
-    this.fullDataRowIdMap = new Map()
-    this.fullColumnIndexMap = new Map()
+    let rowKey = UtilTools.getRowKey(this)
+    if (selectConfig && selectConfig.reserve && !rowKey) {
+      throw new Error('[vxe-table] Checkbox status reserve must have a unique primary key.')
+    } else if (treeConfig && !rowKey) {
+      throw new Error('[vxe-table] Tree table must have a unique primary key.')
+    } else if (editConfig && !rowKey) {
+      throw new Error('[vxe-table] Editable must have a unique primary key.')
+    }
     this.loadData(this.data, true).then(() => {
-      let rowKey = UtilTools.getRowKey(this)
-      if (selectConfig && selectConfig.reserve && !rowKey) {
-        throw new Error('[vxe-table] Checkbox status reserve must have a unique primary key.')
-      } else if (treeConfig && !rowKey) {
-        throw new Error('[vxe-table] Tree table must have a unique primary key.')
-      } else if (editConfig && !rowKey) {
-        throw new Error('[vxe-table] Editable must have a unique primary key.')
-      }
       this.tableFullColumn = UtilTools.getColumnList(this.collectColumn)
       if (this.customs) {
         this.mergeCustomColumn(this.customs)
       }
       this.refreshColumn()
       this.handleDefaultExpand()
+      this.updateStyle()
+      console.log(2222)
     })
     GlobalEvent.on(this, 'mousedown', this.handleGlobalMousedownEvent)
     GlobalEvent.on(this, 'blur', this.handleGlobalBlurEvent)
@@ -541,13 +552,14 @@ export default {
       columnStore,
       filterStore,
       ctxMenuStore,
-      tooltipStore,
+      // _tooltipStore,
       tooltipConfig,
       validStore,
       footerData,
       hasTip
     } = this
     let { leftList, rightList } = columnStore
+    console.info('table', tableColumn.length, tableData.length)
     return h('div', {
       class: ['vxe-table', vSize ? `size--${vSize}` : '', {
         'vxe-editable': editConfig,
@@ -560,6 +572,7 @@ export default {
         't--animat': optimizeOpts.animat,
         't--stripe': stripe,
         't--border': border,
+        'is--loading': loading,
         'row--highlight': highlightHoverRow,
         'column--highlight': highlightHoverColumn
       }]
@@ -665,7 +678,6 @@ export default {
          * Ellipsis tooltip
          */
         hasTip ? h('vxe-tooltip', {
-          props: Object.assign({}, tooltipStore, tooltipConfig),
           ref: 'tooltip'
         }) : _e(),
         /**
@@ -761,10 +773,12 @@ export default {
     },
     // 更新列的 Map
     cacheColumnMap () {
-      let { tableFullColumn, fullColumnIndexMap } = this
+      let { tableFullColumn, fullColumnIdMap, fullColumnIndexMap } = this
+      fullColumnIdMap.clear()
       fullColumnIndexMap.clear()
-      tableFullColumn.forEach((row, index) => {
-        fullColumnIndexMap.set(row, { row, index })
+      tableFullColumn.forEach((column, index) => {
+        fullColumnIdMap.set(column.id, column)
+        fullColumnIndexMap.set(column, { column, index })
       })
     },
     getRowMapIndex (row) {
@@ -1094,9 +1108,9 @@ export default {
      * 如果存在排序，继续处理
      */
     getTableData (force) {
-      let { scrollYLoad, scrollYStore } = this
+      let { scrollYLoad, _scrollYStore } = this
       let fullData = force ? this.updateAfterFullData() : this.afterFullData
-      return { fullData, tableData: scrollYLoad ? fullData.slice(scrollYStore.startIndex, scrollYStore.startIndex + scrollYStore.renderSize) : fullData.slice(0) }
+      return { fullData, tableData: scrollYLoad ? fullData.slice(_scrollYStore.startIndex, _scrollYStore.startIndex + _scrollYStore.renderSize) : fullData.slice(0) }
     },
     handleDefaultExpand () {
       if (this.selectConfig) {
@@ -1142,7 +1156,7 @@ export default {
       let rightIndex = 0
       let centerList = []
       let rightList = []
-      let { headerProps, collectColumn, tableFullColumn, isGroup, columnStore, scrollXStore, optimizeOpts } = this
+      let { headerProps, collectColumn, tableFullColumn, isGroup, columnStore, _scrollXStore, optimizeOpts } = this
       let { scrollX } = optimizeOpts
       // 如果是分组表头，如果子列全部被隐藏，则根列也隐藏
       if (isGroup) {
@@ -1186,13 +1200,13 @@ export default {
         throw new Error('[vxe-table] Fixed column must to the left and right sides.')
       }
       if (scrollXLoad) {
-        Object.assign(scrollXStore, {
+        Object.assign(_scrollXStore, {
           startIndex: 0,
           visibleIndex: 0,
           renderSize: scrollX.rSize,
           offsetSize: scrollX.oSize
         })
-        visibleColumn = visibleColumn.slice(scrollXStore.startIndex, scrollXStore.startIndex + scrollXStore.renderSize)
+        visibleColumn = visibleColumn.slice(_scrollXStore.startIndex, _scrollXStore.startIndex + _scrollXStore.renderSize)
       }
       this.scrollXLoad = scrollXLoad
       this.tableColumn = visibleColumn
@@ -1323,7 +1337,7 @@ export default {
       this.overflowY = scrollYWidth > 0
       this.tableWidth = tableWidth
       this.tableHeight = tableHeight
-      this.containerHeight = $el.parentNode.clientHeight
+      this._parentHeight = $el.parentNode.clientHeight
       if (headerElem) {
         this.headerHeight = headerElem.offsetHeight
       }
@@ -1341,18 +1355,227 @@ export default {
       }
       return tableWidth
     },
+    updateStyle () {
+      let {
+        $refs,
+        fullColumnIdMap,
+        maxHeight,
+        height,
+        _parentHeight,
+        border,
+        // loading,
+        // tableData,
+        tableColumn,
+        headerHeight,
+        showHeaderOverflow: allHeaderOverflow,
+        showHeaderAllOverflow: oldHeaderOverflow,
+        showFooter,
+        showOverflow: allShowOverflow,
+        showAllOverflow: oldShowAllOverflow,
+        footerHeight,
+        tableHeight,
+        tableWidth,
+        overflowY,
+        // overflowX,
+        scrollXHeight,
+        scrollYWidth,
+        _scrollXStore,
+        scrollXLoad,
+        // _scrollYStore,
+        // scrollYLoad,
+        columnStore,
+        _elemStore
+      } = this
+      // v2.0 废弃属性，保留兼容
+      let allColumnOverflow = XEUtils.isBoolean(oldShowAllOverflow) ? oldShowAllOverflow : allShowOverflow
+      // v2.0 废弃属性，保留兼容
+      let allColumnHeaderOverflow = XEUtils.isBoolean(oldHeaderOverflow) ? oldHeaderOverflow : allHeaderOverflow
+
+      let containerList = ['main', 'left', 'right']
+      containerList.forEach((name, index) => {
+        let fixedType = index > 0 ? name : ''
+        let layoutList = ['header', 'body', 'footer']
+        let fixedColumn = columnStore[`${fixedType}List`]
+        let fixedWrapperElem = $refs[`${fixedType}Container`]
+        layoutList.forEach(layout => {
+          let wrapperElem = _elemStore[`${name}-${layout}-wrapper`]
+          let tableElem = _elemStore[`${name}-${layout}-table`]
+          if (layout === 'header') {
+            // 表头体样式处理
+            // 横向滚动渲染
+            let tWidth = tableWidth
+            if (scrollXLoad) {
+              if (fixedType) {
+                tableColumn = fixedColumn
+              }
+              tWidth = tableColumn.reduce((previous, column) => previous + column.renderWidth, 0)
+            }
+            if (tableElem) {
+              tableElem.style.width = tWidth === null ? tWidth : `${tWidth + scrollYWidth}px`
+              tableElem.style.marginLeft = fixedType ? null : `${_scrollXStore.leftSpaceWidth}px`
+            }
+
+            let repairElem = _elemStore[`${name}-${layout}-repair`]
+            if (repairElem) {
+              repairElem.style.width = `${tableWidth}px`
+            }
+
+            let listElem = _elemStore[`${name}-${layout}-list`]
+            if (listElem) {
+              XEUtils.arrayEach(listElem.querySelectorAll(`.col--gutter`), thElem => {
+                thElem.style.width = `${scrollYWidth}px`
+              })
+            }
+          } else if (layout === 'body') {
+            let customHeight = height === 'auto' ? _parentHeight : XEUtils.toNumber(height)
+            if (wrapperElem) {
+              if (customHeight > 0) {
+                wrapperElem.style.height = `${fixedType ? (customHeight > 0 ? customHeight - headerHeight - footerHeight : tableHeight) - (showFooter ? 0 : scrollXHeight) : customHeight - headerHeight - footerHeight}px`
+              } else if (maxHeight) {
+                maxHeight = XEUtils.toNumber(maxHeight)
+                wrapperElem.style.maxHeight = `${fixedType ? maxHeight - headerHeight - (showFooter ? 0 : scrollXHeight) : maxHeight - headerHeight}px`
+              }
+            }
+
+            // 如果是固定列
+            if (fixedWrapperElem) {
+              let isRightFixed = fixedType === 'right'
+              let fixedColumn = columnStore[`${fixedType}List`]
+              fixedWrapperElem.style.height = `${(customHeight > 0 ? customHeight - headerHeight - footerHeight : tableHeight) + headerHeight + footerHeight - scrollXHeight * (showFooter ? 2 : 1)}px`
+              fixedWrapperElem.style.width = `${fixedColumn.reduce((previous, column) => previous + column.renderWidth, isRightFixed ? scrollYWidth : 0)}px`
+            }
+
+            let tWidth = tableWidth
+            // 如果是固定列与设置了超出隐藏
+            if (fixedType && allColumnOverflow) {
+              tableColumn = fixedColumn
+              tWidth = tableColumn.reduce((previous, column) => previous + column.renderWidth, 0)
+            } else if (scrollXLoad) {
+              if (fixedType) {
+                tableColumn = fixedColumn
+              }
+              tWidth = tableColumn.reduce((previous, column) => previous + column.renderWidth, 0)
+            }
+
+            if (tableElem) {
+              tableElem.style.width = tWidth ? `${tWidth}px` : tWidth
+              tableElem.style.marginLeft = fixedType ? null : `${_scrollXStore.leftSpaceWidth}px`
+              // 兼容火狐滚动条
+              if (overflowY && fixedType && DomTools.browse['-moz']) {
+                tableElem.style.paddingRight = `${scrollYWidth}px`
+              }
+            }
+          } else if (layout === 'footer') {
+            // 如果是使用优化模式
+            let tWidth = tableWidth
+            if (fixedType && allShowOverflow) {
+              tableColumn = fixedColumn
+              tWidth = tableColumn.reduce((previous, column) => previous + column.renderWidth, 0)
+            } else if (scrollXLoad) {
+              if (fixedType) {
+                tableColumn = fixedColumn
+              }
+              tWidth = tableColumn.reduce((previous, column) => previous + column.renderWidth, 0)
+            }
+            if (wrapperElem) {
+              wrapperElem.style.marginTop = `${-scrollXHeight - 1}px`
+            }
+            if (tableElem) {
+              tableElem.style.width = tWidth === null ? tWidth : `${tWidth + scrollYWidth}px`
+              tableElem.style.marginLeft = fixedType ? null : `${_scrollXStore.leftSpaceWidth}px`
+            }
+          }
+          let colgroupElem = _elemStore[`${name}-${layout}-colgroup`]
+          if (colgroupElem) {
+            XEUtils.arrayEach(colgroupElem.children, colElem => {
+              let colId = colElem.getAttribute('name')
+              let column = fullColumnIdMap.get(colId)
+              if (colId === 'col-gutter') {
+                colElem.width = `${scrollYWidth || ''}`
+              }
+              if (column) {
+                colElem.width = `${column.renderWidth || ''}`
+                if (layout === 'header') {
+                  let {
+                    // columnKey,
+                    showHeaderOverflow,
+                    // headerAlign,
+                    renderWidth
+                  } = column
+                  // let isGroup = column.children && column.children.length
+                  // let fixedHiddenColumn = fixedType && column.fixed !== fixedType && !isGroup
+                  let showEllipsis = (showHeaderOverflow || allColumnHeaderOverflow) === 'ellipsis'
+                  let showTitle = (showHeaderOverflow || allColumnHeaderOverflow) === 'title'
+                  let showTooltip = showHeaderOverflow === true || showHeaderOverflow === 'tooltip' || allColumnHeaderOverflow === true || allColumnHeaderOverflow === 'tooltip'
+
+                  let listElem = _elemStore[`${name}-${layout}-list`]
+                  if (listElem) {
+                    XEUtils.arrayEach(listElem.querySelectorAll(`.${column.id}`), thElem => {
+                      let cellElem = thElem.querySelector('.vxe-cell')
+                      if (cellElem) {
+                        cellElem.style.width = showTitle || showTooltip || showEllipsis ? `${border ? renderWidth - 1 : renderWidth}px` : null
+                      }
+                    })
+                  }
+                } else if (layout === 'body') {
+                  // 表主体样式处理
+
+                  // v2.0 废弃属性，保留兼容
+                  let {
+                    // editRender,
+                    // align,
+                    showOverflow,
+                    renderWidth
+                    // columnKey
+                  } = column
+                  // let fixedHiddenColumn = fixedType ? column.fixed !== fixedType : column.fixed && overflowX
+                  let showEllipsis = (showOverflow || allColumnOverflow) === 'ellipsis'
+                  let showTitle = (showOverflow || allColumnOverflow) === 'title'
+                  let showTooltip = showOverflow === true || showOverflow === 'tooltip' || allColumnOverflow === true || allColumnOverflow === 'tooltip'
+                  let hasEllipsis = showTitle || showTooltip || showEllipsis
+
+                  let listElem = _elemStore[`${name}-${layout}-list`]
+                  if (listElem) {
+                    XEUtils.arrayEach(listElem.querySelectorAll(`.${column.id}`), tdElem => {
+                      let cellElem = tdElem.querySelector('.vxe-cell')
+                      if (cellElem) {
+                        cellElem.style.width = hasEllipsis ? `${border ? renderWidth - 1 : renderWidth}px` : null
+                      }
+                    })
+                  }
+                } else if (layout === 'footer') {
+
+                }
+              }
+            })
+          }
+        })
+      })
+    },
     /**
      * 处理固定列的显示状态
      */
     checkScrolling () {
-      let { tableBody, leftBody, rightBody } = this.$refs
+      let { tableBody, leftContainer, rightContainer } = this.$refs
       let bodyElem = tableBody ? tableBody.$el : null
       if (bodyElem) {
-        if (leftBody) {
-          this.scrollLeftToRight = bodyElem.scrollLeft > 0
+        if (leftContainer) {
+          if (bodyElem.scrollLeft > 0) {
+            DomTools.addClass(leftContainer, 'scrolling--middle')
+          } else {
+            DomTools.removeClass(leftContainer, 'scrolling--middle')
+          }
+          // leftContainer.dataset.scrolling = bodyElem.scrollLeft > 0 ? 'middle' : ''
+          // this.scrollLeftToRight = bodyElem.scrollLeft > 0
         }
-        if (rightBody) {
-          this.scrollRightToLeft = bodyElem.clientWidth < bodyElem.scrollWidth - bodyElem.scrollLeft
+        if (rightContainer) {
+          if (bodyElem.clientWidth < bodyElem.scrollWidth - bodyElem.scrollLeft) {
+            DomTools.addClass(rightContainer, 'scrolling--middle')
+          } else {
+            DomTools.removeClass(rightContainer, 'scrolling--middle')
+          }
+          // rightContainer.dataset.scrolling = bodyElem.clientWidth < bodyElem.scrollWidth - bodyElem.scrollLeft ? 'middle' : ''
+          // this.scrollRightToLeft = bodyElem.clientWidth < bodyElem.scrollWidth - bodyElem.scrollLeft
         }
       }
     },
@@ -1409,7 +1632,6 @@ export default {
                 !this.getEventTargetNode(evnt, this.$el).flag
               ) {
                 // this.triggerValidate('blur').then(a => {
-                // 保证 input 的 change 事件能先触发之后再清除
                 setTimeout(() => {
                   this.clearValidate()
                   this.clearActived(evnt)
@@ -1768,8 +1990,8 @@ export default {
      * 触发表头 tooltip 事件
      */
     triggerHeaderTooltipEvent (evnt, { column }) {
-      let { tooltipStore } = this
-      if (tooltipStore.column !== column || !tooltipStore.visible) {
+      let { _tooltipStore } = this
+      if (_tooltipStore.column !== column || !_tooltipStore.visible) {
         this.showTooltip(evnt, column.origin.label, column)
       }
     },
@@ -1777,7 +1999,7 @@ export default {
      * 触发 tooltip 事件
      */
     triggerTooltipEvent (evnt, params) {
-      let { editConfig, editStore, tooltipStore } = this
+      let { editConfig, editStore, _tooltipStore } = this
       let { actived } = editStore
       let { row, column } = params
       if (editConfig) {
@@ -1785,7 +2007,7 @@ export default {
           return
         }
       }
-      if (tooltipStore.column !== column || tooltipStore.row !== row || !tooltipStore.visible) {
+      if (_tooltipStore.column !== column || _tooltipStore.row !== row || !_tooltipStore.visible) {
         this.showTooltip(evnt, UtilTools.getCellLabel(row, column, params), column, row)
       }
     },
@@ -1795,14 +2017,14 @@ export default {
       let tooltip = this.$refs.tooltip
       let wrapperElem = cell.children[0]
       if (content && wrapperElem.scrollWidth > wrapperElem.clientWidth) {
-        Object.assign(this.tooltipStore, {
+        Object.assign(this._tooltipStore, {
           row,
           column,
-          content: UtilTools.formatText(content),
+          // content: UtilTools.formatText(content),
           visible: true
         })
         if (tooltip) {
-          tooltip.toVisible(cell)
+          tooltip.toVisible(cell, UtilTools.formatText(content))
         }
       }
       return this.$nextTick()
@@ -1810,7 +2032,7 @@ export default {
     // 关闭 tooltip
     clostTooltip () {
       let tooltip = this.$refs.tooltip
-      Object.assign(this.tooltipStore, {
+      Object.assign(this._tooltipStore, {
         row: null,
         column: null,
         content: null,
@@ -2038,22 +2260,33 @@ export default {
      * 单选，设置某一行为选中状态，如果调不加参数，则会取消目前高亮行的选中状态
      */
     setCurrentRow (row) {
-      if (this.highlightCurrentRow) {
-        this.clearCurrentColumn()
-        this.selectRow = row
-      }
+      // if (this.highlightCurrentRow) {
+      let rowId = UtilTools.getRowId(this, row, this.getRowMapIndex(row))
+      this.clearCurrentRow()
+      this.clearCurrentColumn()
+      this.selectRow = row
+      XEUtils.arrayEach(this.$el.querySelectorAll(`[data-rowid="${rowId}"]`), elem => DomTools.addClass(elem, 'row--current'))
+      // }
       return this.$nextTick()
     },
     clearCurrentRow () {
       this.selectRow = null
-      this.hoverRow = null
+      this._hoverRow = null
+      XEUtils.arrayEach(this.$el.querySelectorAll('.row--current'), elem => DomTools.removeClass(elem, 'row--current'))
       return this.$nextTick()
     },
     /**
      * 行 hover 事件
      */
-    triggerHoverEvent (evnt, { row }) {
-      this.hoverRow = row
+    triggerHoverEvent (evnt, { row, rowIndex }) {
+      let { $el } = this
+      let rowId = UtilTools.getRowId(this, row, rowIndex)
+      this.clearHoverRow()
+      XEUtils.arrayEach($el.querySelectorAll(`[data-rowid="${rowId}"]`), elem => DomTools.addClass(elem, 'row--hover'))
+      this._hoverRow = row
+    },
+    clearHoverRow () {
+      XEUtils.arrayEach(this.$el.querySelectorAll('.row--hover'), elem => DomTools.removeClass(elem, 'row--hover'))
     },
     /**
      * 选中事件
@@ -2140,17 +2373,24 @@ export default {
     },
     triggerHeaderCellClickEvent (evnt, params) {
       UtilTools.emitEvent(this, 'header-cell-click', [params, evnt])
-      return this.setCurrentColumn(params.column, true)
+      if (this.highlightCurrentColumn) {
+        return this.setCurrentColumn(params.column, true)
+      }
+      return this.$nextTick()
     },
     setCurrentColumn (column) {
-      if (this.highlightCurrentColumn) {
-        this.clearCurrentRow()
-        this.selectColumn = column
-      }
+      // if (this.highlightCurrentColumn) {
+      this.clearCurrentRow()
+      this.clearCurrentColumn()
+      this.selectColumn = column
+      XEUtils.arrayEach(this.$el.querySelectorAll(`.${column.id}`), elem => DomTools.addClass(elem, 'col--current'))
+      // }
       return this.$nextTick()
     },
     clearCurrentColumn () {
       this.selectColumn = null
+      XEUtils.arrayEach(this.$el.querySelectorAll('.col--current'), elem => DomTools.removeClass(elem, 'col--current'))
+      return this.$nextTick()
     },
     /**
      * 列点击事件
@@ -2302,16 +2542,25 @@ export default {
      * 处理选中源
      */
     handleSelected (params, evnt) {
-      let { mouseConfig = {}, editStore } = this
+      let { mouseConfig = {}, editStore, _elemStore } = this
       let { selected } = editStore
       let { row, column } = params
       let selectMethod = () => {
         if (selected.row !== row || selected.column !== column) {
           this.clearChecked(evnt)
           this.clearActived(evnt)
+          this.clearValidate()
           selected.args = params
           selected.row = row
           selected.column = column
+          let listElem = _elemStore['main-body-list']
+          XEUtils.arrayEach([listElem.querySelector('.col--selected')], tdElem => {
+            DomTools.removeClass(tdElem, 'col--selected')
+          })
+          let rowId = UtilTools.getRowId(this, row, this.getRowMapIndex(row))
+          let trElem = listElem.querySelector(`[data-rowid="${rowId}"]`)
+          let tdElem = trElem.querySelector(`.${column.id}`)
+          DomTools.addClass(tdElem, 'col--selected')
         }
         // 如果配置了批量选中功能，则为批量选中状态
         if (mouseConfig.checked) {
@@ -2339,7 +2588,7 @@ export default {
      * 处理所有选中
      */
     handleChecked (start, end, evnt) {
-      let { tableData, visibleColumn, editStore } = this
+      let { tableData, visibleColumn, editStore, _elemStore } = this
       let { checked } = editStore
       let { rowIndex: sRowIndex, columnIndex: sColumnIndex } = start
       let { rowIndex: eRowIndex, columnIndex: eColumnIndex } = end
@@ -2359,6 +2608,18 @@ export default {
         // 向左
         checked.columns = visibleColumn.slice(Math.max(eColumnIndex, 1), sColumnIndex + 1)
       }
+      let listElem = _elemStore['main-body-list']
+      XEUtils.arrayEach(listElem.querySelectorAll('.col--checked'), tdElem => {
+        DomTools.removeClass(tdElem, 'col--checked')
+      })
+      checked.rows.forEach(row => {
+        let rowId = UtilTools.getRowId(this, row, this.getRowMapIndex(row))
+        let trElem = listElem.querySelector(`[data-rowid="${rowId}"]`)
+        checked.columns.forEach(column => {
+          let tdElem = trElem.querySelector(`.${column.id}`)
+          DomTools.addClass(tdElem, 'col--checked')
+        })
+      })
     },
     /**
      * 处理所有选中的临时选中
@@ -2834,8 +3095,8 @@ export default {
      * 横向 Y 可视渲染事件处理
      */
     triggerScrollXEvent (evnt) {
-      let { $refs, visibleColumn, scrollXStore } = this
-      let { startIndex, renderSize, offsetSize, visibleSize } = scrollXStore
+      let { $refs, visibleColumn, _scrollXStore } = this
+      let { startIndex, renderSize, offsetSize, visibleSize } = _scrollXStore
       let scrollBodyElem = $refs.tableBody.$el
       let scrollLeft = scrollBodyElem.scrollLeft
       let toVisibleIndex = 0
@@ -2847,10 +3108,10 @@ export default {
           break
         }
       }
-      if (scrollXStore.visibleIndex !== toVisibleIndex) {
+      if (_scrollXStore.visibleIndex !== toVisibleIndex) {
         let isReload
         let preloadSize = 0
-        let isLeft = scrollXStore.visibleIndex > toVisibleIndex
+        let isLeft = _scrollXStore.visibleIndex > toVisibleIndex
         // 如果渲染数量不充足
         let isTooLow = renderSize < visibleSize * 3
         // 除去可视条数剩余数量
@@ -2863,11 +3124,12 @@ export default {
           isReload = toVisibleIndex + visibleSize + offsetSize >= startIndex + renderSize
         }
         if (isReload) {
-          scrollXStore.visibleIndex = toVisibleIndex
-          scrollXStore.startIndex = Math.min(Math.max(toVisibleIndex - preloadSize, 0), visibleColumn.length - renderSize)
+          _scrollXStore.visibleIndex = toVisibleIndex
+          _scrollXStore.startIndex = Math.min(Math.max(toVisibleIndex - preloadSize, 0), visibleColumn.length - renderSize)
           this.updateScrollXSpace()
           this.$nextTick(() => {
             scrollBodyElem.scrollLeft = scrollLeft
+            this.updateStyle()
           })
         }
       }
@@ -2877,15 +3139,15 @@ export default {
      * 纵向 Y 可视渲染事件处理
      */
     triggerScrollYEvent: XEUtils.debounce(function (evnt) {
-      let { tableFullData, scrollYStore } = this
-      let { startIndex, renderSize, offsetSize, visibleSize, rowHeight } = scrollYStore
+      let { tableFullData, _scrollYStore } = this
+      let { startIndex, renderSize, offsetSize, visibleSize, rowHeight } = _scrollYStore
       let scrollBodyElem = evnt.target
       let scrollTop = scrollBodyElem.scrollTop
       let toVisibleIndex = Math.ceil(scrollTop / rowHeight)
-      if (scrollYStore.visibleIndex !== toVisibleIndex) {
+      if (_scrollYStore.visibleIndex !== toVisibleIndex) {
         let isReload
         let preloadSize = 0
-        let isTop = scrollYStore.visibleIndex > toVisibleIndex
+        let isTop = _scrollYStore.visibleIndex > toVisibleIndex
         // 如果渲染数量不充足
         let isTooLow = renderSize < visibleSize * 3
         // 除去可视条数剩余数量
@@ -2898,18 +3160,19 @@ export default {
           isReload = toVisibleIndex + visibleSize + offsetSize >= startIndex + renderSize
         }
         if (isReload) {
-          scrollYStore.visibleIndex = toVisibleIndex
-          scrollYStore.startIndex = Math.min(Math.max(toVisibleIndex - preloadSize, 0), tableFullData.length - renderSize)
+          _scrollYStore.visibleIndex = toVisibleIndex
+          _scrollYStore.startIndex = Math.min(Math.max(toVisibleIndex - preloadSize, 0), tableFullData.length - renderSize)
           this.updateScrollYSpace()
           this.$nextTick(() => {
             scrollBodyElem.scrollTop = scrollTop
+            this.updateStyle()
           })
         }
       }
     }, DomTools.browse.msie ? 40 : 20, { leading: false, trailing: true }),
     // 计算可视渲染相关数据
     computeScrollLoad () {
-      let { scrollXLoad, scrollYLoad, scrollYStore, scrollXStore, visibleColumn, optimizeOpts } = this
+      let { scrollXLoad, scrollYLoad, _scrollYStore, _scrollXStore, visibleColumn, optimizeOpts } = this
       let { scrollX, scrollY } = optimizeOpts
       let tableBody = this.$refs.tableBody
       let tableBodyElem = tableBody ? tableBody.$el : null
@@ -2918,54 +3181,96 @@ export default {
         // 计算 X 逻辑
         if (scrollXLoad) {
         // 无法预知，默认取前 10 条平均宽度进行运算
-          scrollXStore.visibleSize = scrollX.vSize || Math.ceil(tableBodyElem.clientWidth / (visibleColumn.slice(0, 10).reduce((previous, column) => previous + column.renderWidth, 0) / 10))
+          _scrollXStore.visibleSize = scrollX.vSize || Math.ceil(tableBodyElem.clientWidth / (visibleColumn.slice(0, 10).reduce((previous, column) => previous + column.renderWidth, 0) / 10))
           this.updateScrollXSpace()
         }
         // 计算 Y 逻辑
         if (scrollYLoad) {
           if (scrollY.rHeight) {
-            scrollYStore.rowHeight = scrollY.rHeight
+            _scrollYStore.rowHeight = scrollY.rHeight
           } else {
             let firstTrElem = tableBodyElem.querySelector('tbody>tr')
             if (!firstTrElem && tableHeader) {
               firstTrElem = tableHeader.$el.querySelector('thead>tr')
             }
             if (firstTrElem) {
-              scrollYStore.rowHeight = firstTrElem.clientHeight
+              _scrollYStore.rowHeight = firstTrElem.clientHeight
             }
           }
-          scrollYStore.visibleSize = scrollY.vSize || Math.ceil(tableBodyElem.clientHeight / scrollYStore.rowHeight)
+          _scrollYStore.visibleSize = scrollY.vSize || Math.ceil(tableBodyElem.clientHeight / _scrollYStore.rowHeight)
           this.updateScrollYSpace()
         }
       }
+      this.$nextTick(this.updateStyle)
     },
     // 更新横向 X 可视渲染上下剩余空间大小
     updateScrollXSpace () {
-      let { visibleColumn, scrollXStore } = this
-      this.tableColumn = visibleColumn.slice(scrollXStore.startIndex, scrollXStore.startIndex + scrollXStore.renderSize)
-      scrollXStore.leftSpaceWidth = visibleColumn.slice(0, scrollXStore.startIndex).reduce((previous, column) => previous + column.renderWidth, 0)
-      scrollXStore.rightSpaceWidth = visibleColumn.slice(scrollXStore.startIndex + scrollXStore.renderSize, visibleColumn.length).reduce((previous, column) => previous + column.renderWidth, 0)
+      let { $refs, _elemStore, visibleColumn, _scrollXStore, tableWidth, scrollYWidth } = this
+      let { tableHeader, tableBody, tableFooter } = $refs
+      let headerElem = tableHeader ? tableHeader.$el.querySelector('.vxe-table--header') : null
+      let bodyElem = tableBody.$el.querySelector('.vxe-table--body')
+      let footerElem = tableFooter ? tableFooter.$el.querySelector('.vxe-table--footer') : null
+      this.tableColumn = visibleColumn.slice(_scrollXStore.startIndex, _scrollXStore.startIndex + _scrollXStore.renderSize)
+      // _scrollXStore.leftSpaceWidth = visibleColumn.slice(0, _scrollXStore.startIndex).reduce((previous, column) => previous + column.renderWidth, 0)
+      // _scrollXStore.rightSpaceWidth = visibleColumn.slice(_scrollXStore.startIndex + _scrollXStore.renderSize, visibleColumn.length).reduce((previous, column) => previous + column.renderWidth, 0)
+      // _scrollXStore.leftSpaceWidth = visibleColumn.slice(0, _scrollXStore.startIndex).reduce((previous, column) => previous + column.renderWidth, 0)
+      let leftSpaceWidth = visibleColumn.slice(0, _scrollXStore.startIndex).reduce((previous, column) => previous + column.renderWidth, 0)
+      if (headerElem) {
+        headerElem.style.marginLeft = `${leftSpaceWidth}px`
+      }
+      bodyElem.style.marginLeft = `${leftSpaceWidth}px`
+      if (footerElem) {
+        footerElem.style.marginLeft = `${leftSpaceWidth}px`
+      }
+      let containerList = ['main']
+      containerList.forEach(name => {
+        let layoutList = ['header', 'body', 'footer']
+        layoutList.forEach(layout => {
+          let xSpaceElem = _elemStore[`${name}-${layout}-x-space`]
+          if (xSpaceElem) {
+            xSpaceElem.style.width = `${tableWidth + (layout === 'header' ? scrollYWidth : 0)}px`
+          }
+        })
+      })
+      // _scrollXStore.rightSpaceWidth = visibleColumn.slice(_scrollXStore.startIndex + _scrollXStore.renderSize, visibleColumn.length).reduce((previous, column) => previous + column.renderWidth, 0)
     },
     // 更新纵向 Y 可视渲染上下剩余空间大小
     updateScrollYSpace () {
-      let { scrollYStore } = this
+      let { _elemStore, _scrollYStore } = this
       let { fullData, tableData } = this.getTableData()
       this.tableData = tableData
-      scrollYStore.topSpaceHeight = Math.max(scrollYStore.startIndex * scrollYStore.rowHeight, 0)
-      scrollYStore.bottomSpaceHeight = Math.max((fullData.length - (scrollYStore.startIndex + scrollYStore.renderSize)) * scrollYStore.rowHeight, 0)
+      // _scrollYStore.bodyHeight = fullData.length * _scrollYStore.rowHeight
+      let bodyHeight = fullData.length * _scrollYStore.rowHeight
+      // _scrollYStore.topSpaceHeight = Math.max(_scrollYStore.startIndex * _scrollYStore.rowHeight, 0)
+      let topSpaceHeight = Math.max(_scrollYStore.startIndex * _scrollYStore.rowHeight, 0)
+      let containerList = ['main', 'left', 'right']
+      containerList.forEach(name => {
+        let layoutList = ['header', 'body', 'footer']
+        layoutList.forEach(layout => {
+          let ySpaceElem = _elemStore[`${name}-${layout}-y-space`]
+          let topSpaceElem = _elemStore[`${name}-${layout}-top-space`]
+          if (ySpaceElem) {
+            ySpaceElem.style.height = `${bodyHeight}px`
+          }
+          if (topSpaceElem) {
+            topSpaceElem.style.height = `${topSpaceHeight}px`
+          }
+        })
+      })
+      // _scrollYStore.bottomSpaceHeight = Math.max((fullData.length - (_scrollYStore.startIndex + _scrollYStore.renderSize)) * _scrollYStore.rowHeight, 0)
     },
     clearScroll () {
-      Object.assign(this.scrollXStore, {
+      Object.assign(this._scrollXStore, {
         visibleSize: 0,
         startIndex: 0,
-        leftSpaceWidth: 0,
-        rightSpaceWidth: 0
+        leftSpaceWidth: 0
+        // rightSpaceWidth: 0
       })
-      Object.assign(this.scrollYStore, {
+      Object.assign(this._scrollYStore, {
         visibleSize: 0,
-        startIndex: 0,
-        topSpaceHeight: 0,
-        bottomSpaceHeight: 0
+        startIndex: 0
+        // topSpaceHeight: 0
+        // bottomSpaceHeight: 0
       })
       this.$nextTick(() => {
         let tableBody = this.$refs.tableBody
@@ -3271,11 +3576,11 @@ export default {
           row,
           column,
           rule,
-          content: UtilTools.formatText(rule.message),
+          // content: UtilTools.formatText(rule.message),
           visible: true
         })
         if (validTip && (validConfig.message === 'tooltip' || tableData.length === 1)) {
-          validTip.toVisible(cell)
+          validTip.toVisible(cell, UtilTools.formatText(rule.message))
         }
         UtilTools.emitEvent(this, 'valid-error', [params])
       })

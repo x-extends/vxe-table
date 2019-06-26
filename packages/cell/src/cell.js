@@ -56,14 +56,15 @@ export const Cell = {
   },
   renderCell (h, params) {
     let cellValue
-    let { row, rowIndex, column, columnIndex } = params
+    let { row, column } = params
     let { slots, formatter } = column
     if (slots && slots.default) {
       return slots.default(params)
     }
     cellValue = UtilTools.getCellValue(row, column)
     if (formatter) {
-      cellValue = formatter({ cellValue, row, rowIndex, column, columnIndex })
+      params.cellValue = cellValue
+      cellValue = formatter(params)
     }
     return [UtilTools.formatText(cellValue, 1)]
   },
@@ -474,8 +475,8 @@ export const Cell = {
     return Cell.renderTreeIcon(h, params).concat(Cell.renderCellEdit(h, params))
   },
   runRenderer (h, params, _vm, isEdit) {
-    let { $table, column } = params
-    let { slots } = column
+    let { $table, row, column } = params
+    let { slots, formatter } = column
     let editRender = _vm ? _vm.editRender : column.editRender
     let compConf = Renderer.get(editRender.name)
     let context = { $excel: $table.$parent, $table, $column: column }
@@ -484,6 +485,13 @@ export const Cell = {
         return slots.edit(params)
       }
       return compConf && compConf.renderEdit ? compConf.renderEdit.call($table, h, editRender, params, context) : []
+    }
+    if (slots && slots.default) {
+      return slots.default(params)
+    }
+    if (formatter) {
+      params.cellValue = UtilTools.getCellValue(row, column)
+      return [UtilTools.formatText(formatter(params), 1)]
     }
     return compConf && compConf.renderCell ? compConf.renderCell.call($table, h, editRender, params, context) : Cell.renderCell(h, params)
   }

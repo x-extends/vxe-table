@@ -44,6 +44,9 @@
         background-color: $vxe-excel-column-border-color;
       }
     }
+    .vxe-table--fixed-left-wrapper {
+      border-right: 1px solid $vxe-excel-column-border-color;
+    }
     // 修复边缘
     .vxe-body--row {
       &:first-child {

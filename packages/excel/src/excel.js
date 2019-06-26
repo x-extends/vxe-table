@@ -1,4 +1,6 @@
+// import XEUtils from 'xe-utils'
 import Table from '../../table'
+// import { DomTools } from '../../tools'
 
 const excelContextMenu = {
   header: {
@@ -108,8 +110,8 @@ function buildProps (h, _vm, props = {}) {
     border: true,
     resizable: true,
     showOverflow: null,
-    headerCellClassName: _vm.handleHeaderCellClassName,
-    cellClassName: _vm.handleCellClassName,
+    // headerCellClassName: _vm.handleHeaderCellClassName,
+    // cellClassName: _vm.handleCellClassName,
     contextMenu: Object.assign({}, contextMenu, excelContextMenu),
     mouseConfig: { selected: true, checked: true },
     keyboardConfig: { isArrow: true, isDel: true, isTab: true, isCut: true, isEdit: true },
@@ -151,50 +153,66 @@ export default {
   },
   methods: {
     ...methods,
-    handleHeaderCellClassName ({ column, columnIndex, $table }) {
-      let { editStore } = $table
-      let { selected, actived } = editStore
-      if (columnIndex > 0) {
-        if (selected.column === column || actived.column === column) {
-          return 'vxe-excel--column-selected'
-        }
-      }
-    },
-    handleCellClassName ({ row, column, columnIndex, $table }) {
-      let { editStore } = $table
-      let { selected, actived } = editStore
-      if (columnIndex === 0) {
-        if (selected.row === row || actived.row === row) {
-          return 'vxe-excel--index-selected'
-        }
-      }
-    },
+    // handleHeaderCellClassName ({ column, columnIndex, $table }) {
+    //   let { editStore } = $table
+    //   let { selected, actived } = editStore
+    //   if (columnIndex > 0) {
+    //     if (selected.column === column || actived.column === column) {
+    //       return 'vxe-excel--column-selected'
+    //     }
+    //   }
+    // },
+    // handleCellClassName ({ row, column, columnIndex, $table }) {
+    //   let { editStore } = $table
+    //   let { selected, actived } = editStore
+    //   if (columnIndex === 0) {
+    //     if (selected.row === row || actived.row === row) {
+    //       return 'vxe-excel--index-selected'
+    //     }
+    //   }
+    // },
     cellClickEvent ({ row, rowIndex, columnIndex, $table }, evnt) {
-      let { $refs, visibleColumn, handleSelected, handleChecked } = $table
-      if (columnIndex === 0) {
-        columnIndex += 1
-        let tableBodyElem = $refs.tableBody.$el
-        let column = visibleColumn[columnIndex]
-        let trElemList = tableBodyElem.querySelectorAll('.vxe-body--row')
-        let trElem = trElemList[rowIndex]
-        let cell = trElem.querySelector(`.${column.id}`)
-        handleSelected({ row, rowIndex, column, columnIndex, cell, $table }, evnt).then(() => {
-          handleChecked({ rowIndex, columnIndex }, { rowIndex, columnIndex: visibleColumn.length - 1 }, evnt)
-        })
+      // let { $refs, visibleColumn, handleSelected, handleChecked } = $table
+      if (columnIndex > 0) {
+        // columnIndex += 1
+        // let tableBodyElem = $refs.tableBody.$el
+        // let column = visibleColumn[columnIndex]
+        // let trElemList = tableBodyElem.querySelectorAll('.vxe-body--row')
+        // let trElem = trElemList[rowIndex]
+        // let cell = trElem.querySelector(`.${column.id}`)
+        // handleSelected({ row, rowIndex, column, columnIndex, cell, $table }, evnt).then(() => {
+        //   handleChecked({ rowIndex, columnIndex }, { rowIndex, columnIndex: visibleColumn.length - 1 }, evnt)
+        // })
+        $table.clearCurrentColumn()
+        $table.clearCurrentRow()
+      } else {
+        $table.setCurrentRow(row)
       }
     },
     headerCellClickEvent ({ column, columnIndex, $table }, evnt) {
-      let { $refs, tableData, handleSelected, handleChecked } = $table
-      if (tableData.length) {
-        let tableBodyElem = $refs.tableBody.$el
-        let rowIndex = 0
-        let row = tableData[rowIndex]
-        let trElemList = tableBodyElem.querySelectorAll('.vxe-body--row')
-        let trElem = trElemList[rowIndex]
-        let cell = trElem.querySelector(`.${column.id}`)
-        handleSelected({ row, rowIndex, column, columnIndex, cell, $table }, evnt).then(() => {
-          handleChecked({ rowIndex, columnIndex }, { rowIndex: tableData.length - 1, columnIndex }, evnt)
-        })
+      // let { $refs, tableData, handleSelected, handleChecked, _elemStore } = $table
+      // let listElem = _elemStore['main-header-list']
+      // XEUtils.arrayEach([listElem.querySelector('.vxe-excel--column-selected')], elem => {
+      //   DomTools.removeClass(elem, 'vxe-excel--column-selected')
+      // })
+      // let thElem = listElem.querySelector(`.${column.id}`)
+      // DomTools.addClass(thElem, 'vxe-excel--column-selected')
+      // if (tableData.length) {
+      //   let tableBodyElem = $refs.tableBody.$el
+      //   let rowIndex = 0
+      //   let row = tableData[rowIndex]
+      //   let trElemList = tableBodyElem.querySelectorAll('.vxe-body--row')
+      //   let trElem = trElemList[rowIndex]
+      //   let cell = trElem.querySelector(`.${column.id}`)
+      //   handleSelected({ row, rowIndex, column, columnIndex, cell, $table }, evnt).then(() => {
+      //     handleChecked({ rowIndex, columnIndex }, { rowIndex: tableData.length - 1, columnIndex }, evnt)
+      //   })
+      // }
+      if (columnIndex > 0) {
+        $table.setCurrentColumn(column)
+      } else {
+        $table.clearCurrentColumn()
+        $table.clearCurrentRow()
       }
     },
     contextMenuClickEvent ({ menu, row, column }, evnt) {

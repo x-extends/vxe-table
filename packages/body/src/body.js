@@ -1,17 +1,17 @@
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../conf'
-import { UtilTools, DomTools } from '../../tools'
+import { UtilTools } from '../../tools'
 
 // 处理选中位置
-function handleLocation (obj, rows, columns, row, column) {
-  let rowIndex = rows.indexOf(row)
-  let columnIndex = columns.indexOf(column)
-  obj.active = rowIndex > -1 && columnIndex > -1
-  obj.top = rowIndex === 0 && columnIndex > -1
-  obj.bottom = rowIndex === rows.length - 1 && columnIndex > -1
-  obj.left = rowIndex > -1 && columnIndex === 0
-  obj.right = rowIndex > -1 && columnIndex === columns.length - 1
-}
+// function handleLocation (obj, rows, columns, row, column) {
+//   let rowIndex = rows.indexOf(row)
+//   let columnIndex = columns.indexOf(column)
+//   obj.active = rowIndex > -1 && columnIndex > -1
+//   obj.top = rowIndex === 0 && columnIndex > -1
+//   obj.bottom = rowIndex === rows.length - 1 && columnIndex > -1
+//   obj.left = rowIndex > -1 && columnIndex === 0
+//   obj.right = rowIndex > -1 && columnIndex === columns.length - 1
+// }
 
 /**
  * 渲染列
@@ -24,16 +24,16 @@ function renderColumn (h, _vm, $table, seq, fixedType, rowLevel, row, rowIndex, 
     overflowX,
     scrollXLoad,
     scrollYLoad,
-    border,
+    // border,
     highlightCurrentRow,
     showOverflow: allShowOverflow,
     showAllOverflow: oldShowAllOverflow,
-    selectColumn,
+    // selectColumn,
     cellClassName,
     spanMethod,
-    keyboardConfig,
+    // keyboardConfig,
     treeConfig,
-    mouseConfig,
+    // mouseConfig,
     editConfig,
     editRules,
     validConfig = {},
@@ -42,11 +42,22 @@ function renderColumn (h, _vm, $table, seq, fixedType, rowLevel, row, rowIndex, 
   } = $table
   // v2.0 废弃属性，保留兼容
   let allColumnOverflow = XEUtils.isBoolean(oldShowAllOverflow) ? oldShowAllOverflow : allShowOverflow
-  let { editRender, align, showOverflow, renderWidth, columnKey } = column
-  let { checked, selected, actived, copyed } = editStore
-  let isMouseSelected = mouseConfig && mouseConfig.selected
-  let isMouseChecked = mouseConfig && mouseConfig.checked
-  let isKeyboardCut = keyboardConfig && keyboardConfig.isCut
+  let {
+    editRender,
+    align,
+    showOverflow,
+    // renderWidth,
+    columnKey
+  } = column
+  let {
+    // checked,
+    // selected,
+    actived
+    // copyed
+  } = editStore
+  // let isMouseSelected = mouseConfig && mouseConfig.selected
+  // let isMouseChecked = mouseConfig && mouseConfig.checked
+  // let isKeyboardCut = keyboardConfig && keyboardConfig.isCut
   let fixedHiddenColumn = fixedType ? column.fixed !== fixedType : column.fixed && overflowX
   let showEllipsis = (showOverflow || allColumnOverflow) === 'ellipsis'
   let showTitle = (showOverflow || allColumnOverflow) === 'title'
@@ -54,9 +65,9 @@ function renderColumn (h, _vm, $table, seq, fixedType, rowLevel, row, rowIndex, 
   let hasEllipsis = showTitle || showTooltip || showEllipsis
   let isDirty
   let tdOns = {}
-  let checkedLocat = {}
-  let checkedTLocat = {}
-  let copyedLocat = {}
+  // let checkedLocat = {}
+  // let checkedTLocat = {}
+  // let copyedLocat = {}
   let validError = validStore.row === row && validStore.column === column
   let hasDefaultTip = editRules && (!validConfig.message || validConfig.message === 'default')
   let attrs = { 'data-index': columnIndex }
@@ -118,38 +129,38 @@ function renderColumn (h, _vm, $table, seq, fixedType, rowLevel, row, rowIndex, 
   }
   // 批量选中处理
   if (!fixedHiddenColumn && !fixedType) {
-    if (isMouseChecked) {
-      handleLocation(checkedLocat, checked.rows, checked.columns, row, column)
-      handleLocation(checkedTLocat, checked.tRows, checked.tColumns, row, column)
-    }
-    if (isKeyboardCut) {
-      handleLocation(copyedLocat, copyed.rows, copyed.columns, row, column)
-    }
+    // if (isMouseChecked) {
+    //   handleLocation(checkedLocat, checked.rows, checked.columns, row, column)
+    //   handleLocation(checkedTLocat, checked.tRows, checked.tColumns, row, column)
+    // }
+    // if (isKeyboardCut) {
+    //   handleLocation(copyedLocat, copyed.rows, copyed.columns, row, column)
+    // }
   }
   return h('td', {
     class: ['vxe-body--column', column.id, {
       [`col--${align}`]: align,
       'col--edit': editRender,
-      'col--checked': checkedLocat.active,
-      'col--checked-top': checkedLocat.top,
-      'col--checked-bottom': checkedLocat.bottom,
-      'col--checked-left': checkedLocat.left,
-      'col--checked-right': checkedLocat.right,
-      'col--checked-temp': checkedTLocat.active,
-      'col--checked-temp-top': checkedTLocat.top,
-      'col--checked-temp-bottom': checkedTLocat.bottom,
-      'col--checked-temp-left': checkedTLocat.left,
-      'col--checked-temp-right': checkedTLocat.right,
-      'col--selected': isMouseSelected && editRender && selected.row === row && selected.column === column,
-      'col--copyed': copyedLocat.active,
-      'col--copyed-top': copyedLocat.top,
-      'col--copyed-bottom': copyedLocat.bottom,
-      'col--copyed-left': copyedLocat.left,
-      'col--copyed-right': copyedLocat.right,
+      // 'col--checked': checkedLocat.active,
+      // 'col--checked-top': checkedLocat.top,
+      // 'col--checked-bottom': checkedLocat.bottom,
+      // 'col--checked-left': checkedLocat.left,
+      // 'col--checked-right': checkedLocat.right,
+      // 'col--checked-temp': checkedTLocat.active,
+      // 'col--checked-temp-top': checkedTLocat.top,
+      // 'col--checked-temp-bottom': checkedTLocat.bottom,
+      // 'col--checked-temp-left': checkedTLocat.left,
+      // 'col--checked-temp-right': checkedTLocat.right,
+      // 'col--selected': isMouseSelected && editRender && selected.row === row && selected.column === column,
+      // 'col--copyed': copyedLocat.active,
+      // 'col--copyed-top': copyedLocat.top,
+      // 'col--copyed-bottom': copyedLocat.bottom,
+      // 'col--copyed-left': copyedLocat.left,
+      // 'col--copyed-right': copyedLocat.right,
       'col--actived': editRender && actived.row === row && actived.column === column,
       'col--dirty': isDirty,
       'col--valid-error': validError,
-      'col--current': selectColumn === column,
+      // 'col--current': selectColumn === column,
       'edit--visible': editRender && editRender.type === 'visible',
       'fixed--hidden': fixedHiddenColumn
     }, cellClassName ? XEUtils.isFunction(cellClassName) ? cellClassName(params) : cellClassName : ''],
@@ -167,7 +178,7 @@ function renderColumn (h, _vm, $table, seq, fixedType, rowLevel, row, rowIndex, 
         title: showTitle ? UtilTools.getCellLabel(row, column, params) : null
       },
       style: {
-        width: hasEllipsis ? `${border ? renderWidth - 1 : renderWidth}px` : null
+        // width: hasEllipsis ? `${border ? renderWidth - 1 : renderWidth}px` : null
       }
     }, column.renderCell(h, params)),
     hasDefaultTip ? validError && tableData.length >= 2 ? h('div', {
@@ -179,27 +190,27 @@ function renderColumn (h, _vm, $table, seq, fixedType, rowLevel, row, rowIndex, 
       h('span', {
         class: 'vxe-cell--valid-msg'
       }, validStore.content)
-    ]) : _e() : null,
-    isMouseChecked && !fixedType ? h('span', {
-      class: 'vxe-body--column-checked-lt'
-    }) : null,
-    isMouseChecked && !fixedType ? h('span', {
-      class: 'vxe-body--column-checked-rb'
-    }) : null,
-    isKeyboardCut && !fixedType ? h('span', {
-      class: 'vxe-body--column-copyed-lt'
-    }) : null,
-    isKeyboardCut && !fixedType ? h('span', {
-      class: 'vxe-body--column-copyed-rb'
-    }) : null,
-    checkedLocat.bottom && checkedLocat.right ? h('span', {
-      class: 'vxe-body--column-checked-corner',
-      on: {
-        mousedown (evnt) {
-          $table.triggerCornerMousedownEvent({ $table, seq, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, level: rowLevel, cell: evnt.target.parentNode }, evnt)
-        }
-      }
-    }) : null
+    ]) : _e() : null
+    // isMouseChecked && !fixedType ? h('span', {
+    //   class: 'vxe-body--column-checked-lt'
+    // }) : null,
+    // isMouseChecked && !fixedType ? h('span', {
+    //   class: 'vxe-body--column-checked-rb'
+    // }) : null,
+    // isKeyboardCut && !fixedType ? h('span', {
+    //   class: 'vxe-body--column-copyed-lt'
+    // }) : null,
+    // isKeyboardCut && !fixedType ? h('span', {
+    //   class: 'vxe-body--column-copyed-rb'
+    // }) : null,
+    // checkedLocat.bottom && checkedLocat.right ? h('span', {
+    //   class: 'vxe-body--column-checked-corner',
+    //   on: {
+    //     mousedown (evnt) {
+    //       $table.triggerCornerMousedownEvent({ $table, seq, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, level: rowLevel, cell: evnt.target.parentNode }, evnt)
+    //     }
+    //   }
+    // }) : null
   ])
 }
 
@@ -207,47 +218,47 @@ function renderRows (h, _vm, $table, rowLevel, fixedType, tableData, tableColumn
   let {
     highlightHoverRow,
     rowClassName,
-    selectRow,
-    hoverRow,
+    // selectRow,
+    // _hoverRow,
     treeConfig,
     treeExpandeds,
     scrollYLoad,
-    overflowX,
-    columnStore,
-    scrollYStore,
+    // overflowX,
+    // columnStore,
+    _scrollYStore,
     editStore,
     expandeds,
     getRowMapIndex,
     getColumnMapIndex } = $table
-  let { leftList, rightList } = columnStore
+  // let { leftList, rightList } = columnStore
   let rows = []
   tableData.forEach((row, $rowIndex) => {
     let trOn = {}
     let rowIndex = $rowIndex
     let seq = rowIndex + 1
     if (scrollYLoad) {
-      seq += scrollYStore.startIndex
+      seq += _scrollYStore.startIndex
     }
     // 确保任何情况下 rowIndex 都精准指向真实 data 索引
     rowIndex = getRowMapIndex(row)
     // 事件绑定
-    if (highlightHoverRow && (leftList.length || rightList.length) && overflowX) {
+    if (highlightHoverRow) {
       trOn.mouseenter = evnt => {
-        if (row !== hoverRow) {
-          $table.triggerHoverEvent(evnt, { row, rowIndex })
-        }
+        // if (row !== _hoverRow) {
+        $table.triggerHoverEvent(evnt, { row, rowIndex })
+        // }
       }
-      trOn.mouseleave = evnt => {
-        $table.hoverRow = null
-      }
+      // trOn.mouseleave = evnt => {
+      //   $table._hoverRow = null
+      // }
     }
     let rowId = UtilTools.getRowId($table, row, rowIndex)
     rows.push(
       h('tr', {
         class: ['vxe-body--row', {
           [`row--level-${rowLevel}`]: treeConfig,
-          'row--current': row === selectRow,
-          'row--hover': row === hoverRow,
+          // 'row--current': row === selectRow,
+          // 'row--hover': row === _hoverRow,
           'row--new': editStore.insertList.indexOf(row) > -1
         }, rowClassName ? XEUtils.isFunction(rowClassName) ? rowClassName({ $table, seq, row, rowIndex }) : rowClassName : ''],
         attrs: {
@@ -305,7 +316,7 @@ function renderRows (h, _vm, $table, rowLevel, fixedType, tableData, tableColumn
  * mousewheel 方式：对于同步滚动效果就略差了，左右滚动，内容跟随即可
  */
 var scrollProcessTimeout
-var updateLeftScrollingTimeput
+// var updateLeftScrollingTimeput
 function syncBodyScroll (scrollTop, elem1, elem2) {
   if (elem1 || elem2) {
     if (elem1) {
@@ -341,6 +352,16 @@ export default {
     isGroup: Boolean
   },
   mounted () {
+    let { $parent: $table, $el, $refs, fixedType } = this
+    let { _elemStore } = $table
+    let prefix = `${fixedType || 'main'}-body-`
+    _elemStore[`${prefix}wrapper`] = $el
+    _elemStore[`${prefix}table`] = $refs.table
+    _elemStore[`${prefix}colgroup`] = $refs.colgroup
+    _elemStore[`${prefix}list`] = $refs.tbody
+    _elemStore[`${prefix}x-space`] = $refs.xSpace
+    _elemStore[`${prefix}y-space`] = $refs.ySpace
+    _elemStore[`${prefix}top-space`] = $refs.topSpace
     this.$el.onscroll = this.scrollEvent
     this.$el._onscroll = this.scrollEvent
   },
@@ -349,76 +370,94 @@ export default {
     this.$el.onscroll = null
   },
   render (h) {
-    let { $parent: $table, fixedColumn, fixedType } = this
     let {
-      maxHeight,
-      height,
-      containerHeight,
-      loading,
+      _e,
+      $parent: $table,
+      fixedColumn,
+      fixedType
+    } = this
+    let {
+      // maxHeight,
+      // height,
+      // _parentHeight,
+      // loading,
       tableData,
       tableColumn,
-      headerHeight,
-      showFooter,
+      // headerHeight,
+      // showFooter,
       showOverflow: allShowOverflow,
       showAllOverflow: oldShowAllOverflow,
-      footerHeight,
-      tableHeight,
-      tableWidth,
-      overflowY,
-      scrollXHeight,
-      scrollYWidth,
-      scrollXStore,
-      scrollXLoad,
-      scrollYStore,
-      scrollYLoad
+      // footerHeight,
+      // tableHeight,
+      // tableWidth,
+      // overflowY,
+      // scrollXHeight,
+      // scrollYWidth,
+      // _scrollXStore,
+      scrollXLoad
+      // _scrollYStore
+      // scrollYLoad
     } = $table
+    console.log('body', tableColumn.length, tableData.length)
     // v2.0 废弃属性，保留兼容
     let allColumnOverflow = XEUtils.isBoolean(oldShowAllOverflow) ? oldShowAllOverflow : allShowOverflow
-    let customHeight = height === 'auto' ? containerHeight : XEUtils.toNumber(height)
-    let style = {}
-    if (customHeight > 0) {
-      style.height = `${fixedType ? (customHeight > 0 ? customHeight - headerHeight - footerHeight : tableHeight) - (showFooter ? 0 : scrollXHeight) : customHeight - headerHeight - footerHeight}px`
-    } else if (maxHeight) {
-      maxHeight = XEUtils.toNumber(maxHeight)
-      style['max-height'] = `${fixedType ? maxHeight - headerHeight - (showFooter ? 0 : scrollXHeight) : maxHeight - headerHeight}px`
-    }
+    // let customHeight = height === 'auto' ? _parentHeight : XEUtils.toNumber(height)
+    // let style = {}
+    // if (customHeight > 0) {
+    //   style.height = `${fixedType ? (customHeight > 0 ? customHeight - headerHeight - footerHeight : tableHeight) - (showFooter ? 0 : scrollXHeight) : customHeight - headerHeight - footerHeight}px`
+    // } else if (maxHeight) {
+    //   maxHeight = XEUtils.toNumber(maxHeight)
+    //   style['max-height'] = `${fixedType ? maxHeight - headerHeight - (showFooter ? 0 : scrollXHeight) : maxHeight - headerHeight}px`
+    // }
     // 如果是固定列与设置了超出隐藏
     if (fixedType && allColumnOverflow) {
       tableColumn = fixedColumn
-      tableWidth = tableColumn.reduce((previous, column) => previous + column.renderWidth, 0)
+      // tableWidth = tableColumn.reduce((previous, column) => previous + column.renderWidth, 0)
     } else if (scrollXLoad) {
       if (fixedType) {
         tableColumn = fixedColumn
       }
-      tableWidth = tableColumn.reduce((previous, column) => previous + column.renderWidth, 0)
+      // tableWidth = tableColumn.reduce((previous, column) => previous + column.renderWidth, 0)
     }
-    let tableStyle = {
-      width: tableWidth ? `${tableWidth}px` : tableWidth,
-      marginLeft: fixedType ? null : `${scrollXStore.leftSpaceWidth}px`
-    }
-    // 兼容火狐滚动条
-    if (overflowY && fixedType && DomTools.browse['-moz']) {
-      tableStyle.paddingRight = `${scrollYWidth}px`
-    }
+    // let tableStyle = {
+    //   width: tableWidth ? `${tableWidth}px` : tableWidth,
+    //   marginLeft: fixedType ? null : `${_scrollXStore.leftSpaceWidth}px`
+    // }
+    // // 兼容火狐滚动条
+    // if (overflowY && fixedType && DomTools.browse['-moz']) {
+    //   tableStyle.paddingRight = `${scrollYWidth}px`
+    // }
     return h('div', {
-      class: ['vxe-table--body-wrapper', fixedType ? `fixed--${fixedType}-wrapper` : 'body--wrapper'],
+      class: ['vxe-table--body-wrapper', fixedType ? `fixed-${fixedType}--wrapper` : 'body--wrapper'],
       attrs: {
         fixed: fixedType
       },
-      style
+      // style,
+      on: {
+        mouseleave: $table.clearHoverRow
+      }
     }, [
-      scrollYLoad ? h('div', {
-        class: ['vxe-body--top-space'],
-        style: {
-          height: `${scrollYStore.topSpaceHeight}px`
-        }
-      }) : null,
-      !fixedType && scrollXLoad ? h('div', {
+      fixedType ? _e() : h('div', {
         class: ['vxe-body--x-space'],
-        style: {
-          width: `${$table.tableWidth}px`
-        }
-      }) : null,
+        // style: {
+        // width: `${$table.tableWidth}px`
+        // },
+        ref: 'xSpace'
+      }),
+      h('div', {
+        class: ['vxe-body--y-space'],
+        // style: {
+        // height: `${_scrollYStore.bodyHeight}px`
+        // },
+        ref: 'ySpace'
+      }),
+      h('div', {
+        class: ['vxe-body--top-space'],
+        // style: {
+        // height: `${_scrollYStore.topSpaceHeight}px`
+        // },
+        ref: 'topSpace'
+      }),
       h('table', {
         class: ['vxe-table--body'],
         attrs: {
@@ -426,16 +465,19 @@ export default {
           cellpadding: 0,
           border: 0
         },
-        style: tableStyle
+        // style: tableStyle,
+        ref: 'table'
       }, [
         /**
          * 列宽
          */
-        h('colgroup', tableColumn.map((column, columnIndex) => {
+        h('colgroup', {
+          ref: 'colgroup'
+        }, tableColumn.map((column, columnIndex) => {
           return h('col', {
             attrs: {
-              name: column.id,
-              width: column.renderWidth
+              name: column.id
+              // width: column.renderWidth
             },
             key: columnIndex
           })
@@ -443,21 +485,23 @@ export default {
         /**
          * 内容
          */
-        h('tbody', renderRows(h, this, $table, 0, fixedType, tableData, tableColumn))
+        h('tbody', {
+          ref: 'tbody'
+        }, renderRows(h, this, $table, 0, fixedType, tableData, tableColumn))
       ]),
-      !fixedType && !loading && !tableData.length ? h('div', {
+      !fixedType && !tableData.length ? h('div', {
         class: 'vxe-table--empty-block'
       }, [
         h('span', {
           class: 'vxe-table--empty-text'
         }, $table.$slots.empty || GlobalConfig.i18n('vxe.table.emptyText'))
-      ]) : null,
-      scrollYLoad ? h('div', {
-        class: ['vxe-body--bottom-space'],
-        style: {
-          height: `${scrollYStore.bottomSpaceHeight}px`
-        }
-      }) : null
+      ]) : null
+      // scrollYLoad ? h('div', {
+      //   class: ['vxe-body--bottom-space'],
+      //   style: {
+      //     height: `${_scrollYStore.bottomSpaceHeight}px`
+      //   }
+      // }) : null
     ])
   },
   methods: {
@@ -488,8 +532,9 @@ export default {
         }
         // 缓解 IE 卡顿
         if (leftElem || rightElem) {
-          clearTimeout(updateLeftScrollingTimeput)
-          updateLeftScrollingTimeput = setTimeout($table.checkScrolling, DomTools.browse.msie ? 200 : 20)
+          // clearTimeout(updateLeftScrollingTimeput)
+          // updateLeftScrollingTimeput = setTimeout($table.checkScrolling, DomTools.browse.msie ? 100 : 20)
+          $table.checkScrolling()
           syncBodyScroll(scrollTop, leftElem, rightElem)
         }
       }

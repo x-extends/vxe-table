@@ -11,35 +11,61 @@ export default {
     size: String,
     fixedType: String
   },
+  mounted () {
+    let { $parent: $table, $el, $refs, fixedType } = this
+    let { _elemStore } = $table
+    let prefix = `${fixedType || 'main'}-footer-`
+    _elemStore[`${prefix}wrapper`] = $el
+    _elemStore[`${prefix}table`] = $refs.table
+    _elemStore[`${prefix}colgroup`] = $refs.colgroup
+    _elemStore[`${prefix}list`] = $refs.tfoot
+    _elemStore[`${prefix}x-space`] = $refs.xSpace
+  },
   render (h) {
-    let { $parent: $table, fixedType, fixedColumn, tableColumn, footerData } = this
-    let { $listeners: tableListeners, footerRowClassName, footerCellClassName, tableWidth, scrollYWidth, scrollXHeight, scrollXLoad, scrollXStore, optimizeOpts, getColumnMapIndex } = $table
-    let { overflow } = optimizeOpts
+    let {
+      _e,
+      $parent: $table,
+      fixedType,
+      fixedColumn,
+      tableColumn,
+      footerData
+    } = this
+    let { $listeners: tableListeners, footerRowClassName, footerCellClassName,
+      // tableWidth,
+      // scrollYWidth,
+      // scrollXHeight,
+      scrollXLoad,
+      showOverflow,
+      // _scrollXStore,
+      getColumnMapIndex
+    } = $table
+    console.log('footer', tableColumn.length)
     // 如果是使用优化模式
-    if (fixedType && overflow) {
+    if (fixedType && showOverflow) {
       tableColumn = fixedColumn
-      tableWidth = tableColumn.reduce((previous, column) => previous + column.renderWidth, 0)
+      // tableWidth = tableColumn.reduce((previous, column) => previous + column.renderWidth, 0)
     } else if (scrollXLoad) {
       if (fixedType) {
         tableColumn = fixedColumn
       }
-      tableWidth = tableColumn.reduce((previous, column) => previous + column.renderWidth, 0)
+      // tableWidth = tableColumn.reduce((previous, column) => previous + column.renderWidth, 0)
     }
     return h('div', {
-      class: ['vxe-table--footer-wrapper', fixedType ? `fixed--${fixedType}-wrapper` : 'footer--wrapper'],
+      class: ['vxe-table--footer-wrapper', fixedType ? `fixed-${fixedType}--wrapper` : 'body--wrapper'],
       style: {
-        'margin-top': `${-scrollXHeight - 1}px`
+        // 'margin-top': `${-scrollXHeight - 1}px`
       },
       on: {
         scroll: this.scrollEvent
       }
     }, [
-      !fixedType && scrollXLoad ? h('div', {
+      fixedType ? _e() : h('div', {
         class: ['vxe-body--x-space'],
         style: {
-          width: `${$table.tableWidth}px`
-        }
-      }) : null,
+          // width: `${$table.tableWidth}px`
+        },
+        ref: 'xSpace'
+      }),
       h('table', {
         class: 'vxe-table--footer',
         attrs: {
@@ -48,31 +74,37 @@ export default {
           border: 0
         },
         style: {
-          width: tableWidth === null ? tableWidth : `${tableWidth + scrollYWidth}px`,
-          'margin-left': fixedType ? null : `${scrollXStore.leftSpaceWidth}px`
-        }
+          // width: tableWidth === null ? tableWidth : `${tableWidth + scrollYWidth}px`,
+          // 'margin-left': fixedType ? null : `${_scrollXStore.leftSpaceWidth}px`
+        },
+        ref: 'table'
       }, [
         /**
          * 列宽
          */
-        h('colgroup', tableColumn.map((column, columnIndex) => {
+        h('colgroup', {
+          ref: 'colgroup'
+        }, tableColumn.map((column, columnIndex) => {
           return h('col', {
             attrs: {
-              name: column.id,
-              width: column.renderWidth
+              name: column.id
+              // width: column.renderWidth
             }
           })
         }).concat([
           h('col', {
+            name: 'col--gutter',
             attrs: {
-              width: scrollYWidth
+              // width: scrollYWidth
             }
           })
         ])),
         /**
          * 底部
          */
-        h('tfoot', footerData.map((list, rowIndex) => {
+        h('tfoot', {
+          ref: 'tfoot'
+        }, footerData.map((list, rowIndex) => {
           return h('tr', {
             class: ['vxe-footer--row', footerRowClassName ? XEUtils.isFunction(footerRowClassName) ? footerRowClassName({ $rowIndex: rowIndex, fixed: fixedType }) : footerRowClassName : '']
           }, tableColumn.map((column, $columnIndex) => {
@@ -105,13 +137,13 @@ export default {
             }, [
               h('div', {
                 class: ['vxe-cell']
-              }, list[fixedType === 'right' ? list.length - tableColumn.length + columnIndex : columnIndex])
+              }, list[columnIndex] || '　')
             ])
           }).concat([
             h('td', {
               class: ['col--gutter'],
               style: {
-                width: `${scrollYWidth}px`
+                // width: `${scrollYWidth}px`
               }
             })
           ]))

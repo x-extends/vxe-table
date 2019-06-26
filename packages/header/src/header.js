@@ -88,23 +88,44 @@ export default {
   created () {
     this.uploadColumn()
   },
+  mounted () {
+    let { $parent: $table, $el, $refs, fixedType } = this
+    let { _elemStore } = $table
+    let prefix = `${fixedType || 'main'}-header-`
+    _elemStore[`${prefix}wrapper`] = $el
+    _elemStore[`${prefix}table`] = $refs.table
+    _elemStore[`${prefix}colgroup`] = $refs.colgroup
+    _elemStore[`${prefix}list`] = $refs.thead
+    _elemStore[`${prefix}x-space`] = $refs.xSpace
+    _elemStore[`${prefix}repair`] = $refs.repair
+  },
   render (h) {
-    let { $parent: $table, fixedType, headerColumn, tableColumn, resizeMousedown, fixedColumn } = this
+    let {
+      _e,
+      $parent: $table,
+      fixedType,
+      headerColumn,
+      tableColumn,
+      resizeMousedown,
+      fixedColumn
+    } = this
     let {
       $listeners: tableListeners,
-      resizable, border,
+      resizable,
+      border,
       headerRowClassName,
       headerCellClassName,
       showHeaderOverflow: allHeaderOverflow,
       showHeaderAllOverflow: oldHeaderOverflow,
       highlightCurrentColumn,
-      selectColumn,
-      tableWidth,
+      // selectColumn,
+      // tableWidth,
       scrollXLoad,
-      scrollXStore,
-      scrollYWidth,
+      // _scrollXStore,
+      // scrollYWidth,
       getColumnMapIndex
     } = $table
+    console.log('header', tableColumn.length)
     // v2.0 废弃属性，保留兼容
     let allColumnHeaderOverflow = XEUtils.isBoolean(oldHeaderOverflow) ? oldHeaderOverflow : allHeaderOverflow
     // 横向滚动渲染
@@ -112,17 +133,18 @@ export default {
       if (fixedType) {
         tableColumn = fixedColumn
       }
-      tableWidth = tableColumn.reduce((previous, column) => previous + column.renderWidth, 0)
+      // tableWidth = tableColumn.reduce((previous, column) => previous + column.renderWidth, 0)
     }
     return h('div', {
-      class: ['vxe-table--header-wrapper', fixedType ? `fixed--${fixedType}-wrapper` : 'body--wrapper']
+      class: ['vxe-table--header-wrapper', fixedType ? `fixed-${fixedType}--wrapper` : 'body--wrapper']
     }, [
-      !fixedType && scrollXLoad ? h('div', {
+      fixedType ? _e() : h('div', {
         class: ['vxe-body--x-space'],
-        style: {
-          width: `${$table.tableWidth + scrollYWidth}px`
-        }
-      }) : null,
+        // style: {
+        // width: `${$table.tableWidth + scrollYWidth}px`
+        // },
+        ref: 'xSpace'
+      }),
       h('table', {
         class: 'vxe-table--header',
         attrs: {
@@ -130,37 +152,48 @@ export default {
           cellpadding: 0,
           border: 0
         },
-        style: {
-          width: tableWidth === null ? tableWidth : `${tableWidth + scrollYWidth}px`,
-          'margin-left': fixedType ? null : `${scrollXStore.leftSpaceWidth}px`
-        }
+        // style: {
+        // width: tableWidth === null ? tableWidth : `${tableWidth + scrollYWidth}px`,
+        // 'margin-left': fixedType ? null : `${_scrollXStore.leftSpaceWidth}px`
+        // },
+        ref: 'table'
       }, [
         /**
          * 列宽
          */
-        h('colgroup', tableColumn.map((column, columnIndex) => {
+        h('colgroup', {
+          ref: 'colgroup'
+        }, tableColumn.map((column, columnIndex) => {
           return h('col', {
             attrs: {
-              name: column.id,
-              width: column.renderWidth
+              name: column.id
+              // width: column.renderWidth
             },
             key: columnIndex
           })
         }).concat([
           h('col', {
             attrs: {
-              width: scrollYWidth
+              name: 'col-gutter'
+              // width: scrollYWidth
             }
           })
         ])),
         /**
          * 头部
          */
-        h('thead', headerColumn.map((cols, rowIndex) => {
+        h('thead', {
+          ref: 'thead'
+        }, headerColumn.map((cols, rowIndex) => {
           return h('tr', {
             class: ['vxe-header--row', headerRowClassName ? XEUtils.isFunction(headerRowClassName) ? headerRowClassName({ $table, $rowIndex: rowIndex, fixed: fixedType }) : headerRowClassName : '']
           }, cols.map((column, $columnIndex) => {
-            let { columnKey, showHeaderOverflow, headerAlign, renderWidth } = column
+            let {
+              columnKey,
+              showHeaderOverflow,
+              headerAlign
+              // renderWidth
+            } = column
             let isGroup = column.children && column.children.length
             let fixedHiddenColumn = fixedType && column.fixed !== fixedType && !isGroup
             let showEllipsis = (showHeaderOverflow || allColumnHeaderOverflow) === 'ellipsis'
@@ -188,7 +221,7 @@ export default {
             return h('th', {
               class: ['vxe-header--column', column.id, {
                 [`col--${headerAlign}`]: headerAlign,
-                'col--current': selectColumn === column,
+                // 'col--current': selectColumn === column,
                 'fixed--hidden': fixedHiddenColumn,
                 'filter--active': column.filters.some(item => item.checked)
               }, headerCellClassName ? XEUtils.isFunction(headerCellClassName) ? headerCellClassName({ $table, $rowIndex: rowIndex, column, columnIndex, $columnIndex, fixed: fixedType }) : headerCellClassName : ''],
@@ -210,7 +243,7 @@ export default {
                   title: showTitle ? column.origin.label : null
                 },
                 style: {
-                  width: showTitle || showTooltip || showEllipsis ? `${border ? renderWidth - 1 : renderWidth}px` : null
+                  // width: showTitle || showTooltip || showEllipsis ? `${border ? renderWidth - 1 : renderWidth}px` : null
                 }
               }, column.renderHeader(h, { $table, column, columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn })),
               (XEUtils.isBoolean(column.resizable) ? column.resizable : resizable) && !fixedType && !isGroup ? h('div', {
@@ -224,14 +257,14 @@ export default {
                 }
               }) : null
             ])
-          }).concat(scrollYWidth ? [
+          }).concat([
             h('th', {
-              class: ['col--gutter'],
-              style: {
-                width: `${scrollYWidth}px`
-              }
+              class: ['col--gutter']
+              // style: {
+              // width: `${scrollYWidth}px`
+              // }
             })
-          ] : []))
+          ]))
         }))
       ]),
       /**
@@ -239,9 +272,10 @@ export default {
        */
       h('div', {
         class: ['vxe-table--repair'],
-        style: {
-          width: tableWidth === null ? tableWidth : `${tableWidth}px`
-        }
+        // style: {
+        // width: tableWidth === null ? tableWidth : `${tableWidth}px`
+        // },
+        ref: 'repair'
       })
     ])
   },

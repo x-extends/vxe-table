@@ -5,6 +5,17 @@ const browse = XEUtils.browse()
 const htmlElem = document.querySelector('html')
 const bodyElem = document.body
 
+function rClass (cls) {
+  return new RegExp(`(?:^|\\s)${cls}(?!\\S)`)
+}
+
+const rClsMap = {}
+const preClss = ['row--hover', 'row--current', 'col--current', 'col--checked', 'col--selected', 'scrolling--middle']
+
+preClss.forEach(cls => {
+  rClsMap[cls] = rClass(cls)
+})
+
 export const DomTools = {
   browse,
   isPx (val) {
@@ -15,6 +26,20 @@ export const DomTools = {
   },
   hasClass (elem, cls) {
     return elem && elem.className && elem.className.split && elem.className.split(' ').indexOf(cls) > -1
+  },
+  removeClass (elem, cls) {
+    if (elem) {
+      elem.className = elem.className.replace(rClsMap[cls] || rClass(cls), '')
+    }
+  },
+  addClass (elem, cls) {
+    if (elem) {
+      let className = elem.className
+      if (!(preClss[cls] || rClass(cls)).test(className)) {
+        DomTools.removeClass(elem, cls)
+        elem.className = `${className} ${cls}`
+      }
+    }
   },
   getDomNode () {
     return {
