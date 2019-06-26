@@ -2309,6 +2309,7 @@ export default {
         if (selected.row !== row || selected.column !== column) {
           this.clearChecked(evnt)
           this.clearActived(evnt)
+          this.clearValidate()
           selected.args = params
           selected.row = row
           selected.column = column
