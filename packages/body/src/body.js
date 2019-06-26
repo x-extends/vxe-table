@@ -398,7 +398,6 @@ export default {
       // _scrollYStore
       // scrollYLoad
     } = $table
-    console.log('body', tableColumn.length, tableData.length)
     // v2.0 废弃属性，保留兼容
     let allColumnOverflow = XEUtils.isBoolean(oldShowAllOverflow) ? oldShowAllOverflow : allShowOverflow
     // let customHeight = height === 'auto' ? _parentHeight : XEUtils.toNumber(height)

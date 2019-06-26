@@ -483,7 +483,6 @@ export default {
       this.refreshColumn()
       this.handleDefaultExpand()
       this.updateStyle()
-      console.log(2222)
     })
     GlobalEvent.on(this, 'mousedown', this.handleGlobalMousedownEvent)
     GlobalEvent.on(this, 'blur', this.handleGlobalBlurEvent)
@@ -559,7 +558,6 @@ export default {
       hasTip
     } = this
     let { leftList, rightList } = columnStore
-    console.info('table', tableColumn.length, tableData.length)
     return h('div', {
       class: ['vxe-table', vSize ? `size--${vSize}` : '', {
         'vxe-editable': editConfig,

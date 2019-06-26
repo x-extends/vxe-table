@@ -125,7 +125,6 @@ export default {
       // scrollYWidth,
       getColumnMapIndex
     } = $table
-    console.log('header', tableColumn.length)
     // v2.0 废弃属性，保留兼容
     let allColumnHeaderOverflow = XEUtils.isBoolean(oldHeaderOverflow) ? oldHeaderOverflow : allHeaderOverflow
     // 横向滚动渲染

@@ -71,7 +71,6 @@ export default {
   },
   methods: {
     formatTime ({ cellValue, row, column }) {
-      console.log(666)
       return XEUtils.toDateString(cellValue, 'yyyy-MM-dd HH:ss:mm')
     }
   }

@@ -39,7 +39,6 @@ export default {
       // _scrollXStore,
       getColumnMapIndex
     } = $table
-    console.log('footer', tableColumn.length)
     // 如果是使用优化模式
     if (fixedType && showOverflow) {
       tableColumn = fixedColumn
