@@ -73,6 +73,7 @@ module.exports = {
         big10wRow: '10 万行 + 更复杂渲染',
         big1wRow1wCol: '1 万行 1 万列',
         big10wRow1wCol: '10 万行 1 万列 + 更复杂渲染',
+        big1wRowEdit: '1 万行 + 可编辑',
         infiniteScroll: '无限滚动',
 
         editable: '可编辑表格',

@@ -124,8 +124,8 @@ export const Cell = {
     if (slots && slots.default) {
       return slots.default(params)
     }
-    let { seq, level } = params
-    return [UtilTools.formatText(indexMethod ? indexMethod(params) : level ? `${level}.${seq}` : startIndex + seq, 1)]
+    let { $seq, seq, level } = params
+    return [UtilTools.formatText(indexMethod ? indexMethod(params) : level ? `${$seq}.${seq}` : startIndex + seq, 1)]
   },
   renderTreeIndexCell (h, params) {
     return Cell.renderTreeIcon(h, params).concat(Cell.renderIndexCell(h, params))
@@ -138,7 +138,7 @@ export const Cell = {
     return [UtilTools.formatText(params.column.origin.label, 1)]
   },
   renderRadioCell (h, params) {
-    let { $table, column } = params
+    let { $table, column, isHidden } = params
     let { radioConfig = {} } = $table
     let { slots } = column
     let { labelProp } = radioConfig
@@ -153,7 +153,7 @@ export const Cell = {
         name: `vxe-radio--${$table.id}`
       }
     }
-    if (!params.isHidden) {
+    if (!isHidden) {
       options.domProps = {
         checked: row === selectRow
       }
@@ -186,15 +186,15 @@ export const Cell = {
    */
   renderSelectionHeader (h, params) {
     let { $table, column } = params
-    let { slots } = column
-    if (slots && slots.header) {
-      return slots.header(params)
-    }
     let { isHidden } = params
+    let { slots } = column
     let options = {
       attrs: {
         type: 'checkbox'
       }
+    }
+    if (slots && slots.header) {
+      return slots.header(params)
     }
     if (!isHidden) {
       options.domProps = {

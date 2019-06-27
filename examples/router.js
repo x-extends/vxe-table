@@ -70,6 +70,7 @@ const TableScrollRows = () => import(/* webpackChunkName: "scroll" */ './views/t
 const TableScrollFullRows = () => import(/* webpackChunkName: "scroll" */ './views/table/scroll/ScrollFullRows.vue')
 const TableScrollCols = () => import(/* webpackChunkName: "scroll" */ './views/table/scroll/ScrollCols.vue')
 const TableScrollFullCols = () => import(/* webpackChunkName: "scroll" */ './views/table/scroll/ScrollFullCols.vue')
+const TableScrollEdit = () => import(/* webpackChunkName: "scroll" */ './views/table/scroll/ScrollEdit.vue')
 
 const TableEditManual = () => import(/* webpackChunkName: "edit" */ './views/table/edit/Manual.vue')
 const TableEditClick = () => import(/* webpackChunkName: "edit" */ './views/table/edit/Click.vue')
@@ -450,6 +451,11 @@ export default new Router({
       path: '/table/scroll/fullCols',
       name: 'TableScrollFullCols',
       component: TableScrollFullCols
+    },
+    {
+      path: '/table/scroll/edit',
+      name: 'TableScrollEdit',
+      component: TableScrollEdit
     },
     {
       path: '/table/edit/manual',

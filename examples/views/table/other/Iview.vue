@@ -14,8 +14,8 @@
       :data.sync="tableData"
       :footer-method="footerMethod"
       :edit-config="{key: 'id', trigger: 'click', mode: 'row'}">
-      <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
-      <vxe-table-column type="index" width="80" fixed="left">
+      <vxe-table-column type="selection" width="60"></vxe-table-column>
+      <vxe-table-column type="index" width="80" >
         <template v-slot:header="{ column }">
           <span>序号</span>
           <Icon type="md-help-circle" />
@@ -70,7 +70,7 @@
           <Rate v-model="row.rate" />
         </template>
       </vxe-table-column>
-      <vxe-table-column prop="flag" label="iSwitch" width="100" fixed="right" :edit-render="{type: 'visible'}">
+      <vxe-table-column prop="flag" label="iSwitch" width="100" :edit-render="{type: 'visible'}">
         <template v-slot:edit="{ row }">
           <iSwitch v-model="row.flag"/>
         </template>
@@ -111,8 +111,8 @@ export default {
           :data.sync="tableData"
           :footer-method="footerMethod"
           :edit-config="{key: 'id', trigger: 'click', mode: 'cell'}">
-          <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
-          <vxe-table-column type="index" width="80" fixed="left">
+          <vxe-table-column type="selection" width="60"></vxe-table-column>
+          <vxe-table-column type="index" width="80">
             <template v-slot:header="{ column }">
               <span>序号</span>
               <Icon type="md-help-circle" />
@@ -167,7 +167,7 @@ export default {
               <Rate v-model="row.rate" />
             </template>
           </vxe-table-column>
-          <vxe-table-column prop="flag" label="iSwitch" width="100" fixed="right" :edit-render="{type: 'visible'}">
+          <vxe-table-column prop="flag" label="iSwitch" width="100" :edit-render="{type: 'visible'}">
             <template v-slot:edit="{ row }">
               <iSwitch v-model="row.flag"/>
             </template>

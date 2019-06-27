@@ -115,8 +115,7 @@ export default {
       border,
       headerRowClassName,
       headerCellClassName,
-      showHeaderOverflow: allHeaderOverflow,
-      showHeaderAllOverflow: oldHeaderOverflow,
+      showHeaderOverflow: allColumnHeaderOverflow,
       highlightCurrentColumn,
       // selectColumn,
       // tableWidth,
@@ -125,8 +124,6 @@ export default {
       // scrollYWidth,
       getColumnMapIndex
     } = $table
-    // v2.0 废弃属性，保留兼容
-    let allColumnHeaderOverflow = XEUtils.isBoolean(oldHeaderOverflow) ? oldHeaderOverflow : allHeaderOverflow
     // 横向滚动渲染
     if (scrollXLoad) {
       if (fixedType) {

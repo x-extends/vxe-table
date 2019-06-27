@@ -16,7 +16,7 @@ import { UtilTools } from '../../tools'
 /**
  * 渲染列
  */
-function renderColumn (h, _vm, $table, seq, fixedType, rowLevel, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex) {
+function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex) {
   let {
     _e,
     $listeners: tableListeners,
@@ -26,8 +26,7 @@ function renderColumn (h, _vm, $table, seq, fixedType, rowLevel, row, rowIndex, 
     scrollYLoad,
     // border,
     highlightCurrentRow,
-    showOverflow: allShowOverflow,
-    showAllOverflow: oldShowAllOverflow,
+    showOverflow: allColumnOverflow,
     // selectColumn,
     cellClassName,
     spanMethod,
@@ -37,11 +36,9 @@ function renderColumn (h, _vm, $table, seq, fixedType, rowLevel, row, rowIndex, 
     editConfig,
     editRules,
     validConfig = {},
-    editStore,
+    // editStore,
     validStore
   } = $table
-  // v2.0 废弃属性，保留兼容
-  let allColumnOverflow = XEUtils.isBoolean(oldShowAllOverflow) ? oldShowAllOverflow : allShowOverflow
   let {
     editRender,
     align,
@@ -49,12 +46,12 @@ function renderColumn (h, _vm, $table, seq, fixedType, rowLevel, row, rowIndex, 
     // renderWidth,
     columnKey
   } = column
-  let {
-    // checked,
-    // selected,
-    actived
-    // copyed
-  } = editStore
+  // let {
+  //   // checked,
+  //   // selected,
+  //   // actived
+  //   // copyed
+  // } = editStore
   // let isMouseSelected = mouseConfig && mouseConfig.selected
   // let isMouseChecked = mouseConfig && mouseConfig.checked
   // let isKeyboardCut = keyboardConfig && keyboardConfig.isCut
@@ -72,7 +69,7 @@ function renderColumn (h, _vm, $table, seq, fixedType, rowLevel, row, rowIndex, 
   let hasDefaultTip = editRules && (!validConfig.message || validConfig.message === 'default')
   let attrs = { 'data-index': columnIndex }
   let triggerDblclick = (editRender && editConfig && editConfig.trigger === 'dblclick')
-  let params = { $table, seq, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, level: rowLevel, isHidden: fixedHiddenColumn, data: tableData }
+  let params = { $table, $seq, seq, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn, level: rowLevel, data: tableData }
   // 滚动的渲染不支持动态行高
   if ((scrollXLoad || scrollYLoad) && !hasEllipsis) {
     showEllipsis = hasEllipsis = true
@@ -80,7 +77,7 @@ function renderColumn (h, _vm, $table, seq, fixedType, rowLevel, row, rowIndex, 
   // hover 进入事件
   if (showTooltip || tableListeners['cell-mouseenter']) {
     tdOns.mouseenter = evnt => {
-      let evntParams = { $table, seq, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, level: rowLevel, cell: evnt.currentTarget }
+      let evntParams = { $table, seq, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn, level: rowLevel, cell: evnt.currentTarget }
       // 如果配置了显示 tooltip
       if (showTooltip) {
         $table.triggerTooltipEvent(evnt, evntParams)
@@ -92,12 +89,12 @@ function renderColumn (h, _vm, $table, seq, fixedType, rowLevel, row, rowIndex, 
   if (showTooltip || tableListeners['cell-mouseleave']) {
     tdOns.mouseleave = evnt => {
       $table.clostTooltip()
-      UtilTools.emitEvent($table, 'cell-mouseleave', [{ $table, seq, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, level: rowLevel, cell: evnt.currentTarget }, evnt])
+      UtilTools.emitEvent($table, 'cell-mouseleave', [{ $table, seq, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn, level: rowLevel, cell: evnt.currentTarget }, evnt])
     }
   }
   // 按下事件处理
   tdOns.mousedown = evnt => {
-    $table.triggerCellMousedownEvent(evnt, { $table, seq, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, level: rowLevel, cell: evnt.currentTarget })
+    $table.triggerCellMousedownEvent(evnt, { $table, seq, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn, level: rowLevel, cell: evnt.currentTarget })
   }
   // 点击事件处理
   if (highlightCurrentRow ||
@@ -105,13 +102,13 @@ function renderColumn (h, _vm, $table, seq, fixedType, rowLevel, row, rowIndex, 
     (editRender && editConfig) ||
     (treeConfig && (treeConfig.trigger === 'row' || (column.treeNode && treeConfig.trigger === 'cell')))) {
     tdOns.click = evnt => {
-      $table.triggerCellClickEvent(evnt, { $table, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, level: rowLevel, cell: evnt.currentTarget })
+      $table.triggerCellClickEvent(evnt, { $table, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn, level: rowLevel, cell: evnt.currentTarget })
     }
   }
   // 双击事件处理
   if (triggerDblclick || tableListeners['cell-dblclick']) {
     tdOns.dblclick = evnt => {
-      $table.triggerCellDBLClickEvent(evnt, { $table, seq, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, level: rowLevel, cell: evnt.currentTarget })
+      $table.triggerCellDBLClickEvent(evnt, { $table, seq, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn, level: rowLevel, cell: evnt.currentTarget })
     }
   }
   // 合并行或列
@@ -157,7 +154,7 @@ function renderColumn (h, _vm, $table, seq, fixedType, rowLevel, row, rowIndex, 
       // 'col--copyed-bottom': copyedLocat.bottom,
       // 'col--copyed-left': copyedLocat.left,
       // 'col--copyed-right': copyedLocat.right,
-      'col--actived': editRender && actived.row === row && actived.column === column,
+      // 'col--actived': editRender && actived.row === row && actived.column === column,
       'col--dirty': isDirty,
       'col--valid-error': validError,
       // 'col--current': selectColumn === column,
@@ -176,10 +173,10 @@ function renderColumn (h, _vm, $table, seq, fixedType, rowLevel, row, rowIndex, 
       }],
       attrs: {
         title: showTitle ? UtilTools.getCellLabel(row, column, params) : null
-      },
-      style: {
-        // width: hasEllipsis ? `${border ? renderWidth - 1 : renderWidth}px` : null
       }
+      // style: {
+      //   // width: hasEllipsis ? `${border ? renderWidth - 1 : renderWidth}px` : null
+      // }
     }, column.renderCell(h, params)),
     hasDefaultTip ? validError && tableData.length >= 2 ? h('div', {
       class: 'vxe-cell--valid',
@@ -202,7 +199,7 @@ function renderColumn (h, _vm, $table, seq, fixedType, rowLevel, row, rowIndex, 
     // }) : null,
     // isKeyboardCut && !fixedType ? h('span', {
     //   class: 'vxe-body--column-copyed-rb'
-    // }) : null,
+    // }) : null
     // checkedLocat.bottom && checkedLocat.right ? h('span', {
     //   class: 'vxe-body--column-checked-corner',
     //   on: {
@@ -214,7 +211,7 @@ function renderColumn (h, _vm, $table, seq, fixedType, rowLevel, row, rowIndex, 
   ])
 }
 
-function renderRows (h, _vm, $table, rowLevel, fixedType, tableData, tableColumn) {
+function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, tableColumn) {
   let {
     highlightHoverRow,
     rowClassName,
@@ -268,14 +265,14 @@ function renderRows (h, _vm, $table, rowLevel, fixedType, tableData, tableColumn
         on: trOn
       }, tableColumn.map((column, $columnIndex) => {
         let columnIndex = getColumnMapIndex(column)
-        return renderColumn(h, _vm, $table, seq, fixedType, rowLevel, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex)
+        return renderColumn(h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex)
       }))
     )
     if (treeConfig && treeExpandeds.length) {
       // 如果是树形表格
       let rowChildren = row[treeConfig.children]
       if (rowChildren && rowChildren.length && treeExpandeds.indexOf(row) > -1) {
-        rows.push.apply(rows, renderRows(h, _vm, $table, rowLevel + 1, fixedType, rowChildren, tableColumn))
+        rows.push.apply(rows, renderRows(h, _vm, $table, $seq ? `${$seq}.${seq}` : `${seq}`, rowLevel + 1, fixedType, rowChildren, tableColumn))
       }
     } else if (expandeds.length) {
       // 如果行被展开了
@@ -385,8 +382,7 @@ export default {
       tableColumn,
       // headerHeight,
       // showFooter,
-      showOverflow: allShowOverflow,
-      showAllOverflow: oldShowAllOverflow,
+      showOverflow: allColumnOverflow,
       // footerHeight,
       // tableHeight,
       // tableWidth,
@@ -398,8 +394,6 @@ export default {
       // _scrollYStore
       // scrollYLoad
     } = $table
-    // v2.0 废弃属性，保留兼容
-    let allColumnOverflow = XEUtils.isBoolean(oldShowAllOverflow) ? oldShowAllOverflow : allShowOverflow
     // let customHeight = height === 'auto' ? _parentHeight : XEUtils.toNumber(height)
     // let style = {}
     // if (customHeight > 0) {
@@ -486,7 +480,7 @@ export default {
          */
         h('tbody', {
           ref: 'tbody'
-        }, renderRows(h, this, $table, 0, fixedType, tableData, tableColumn))
+        }, renderRows(h, this, $table, '', 0, fixedType, tableData, tableColumn))
       ]),
       !fixedType && !tableData.length ? h('div', {
         class: 'vxe-table--empty-block'

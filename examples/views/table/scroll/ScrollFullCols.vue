@@ -10,6 +10,8 @@
       resizable
       show-overflow
       show-header-overflow
+      highlight-hover-row
+      highlight-current-row
       ref="xTable"
       height="600"
       :loading="loading"

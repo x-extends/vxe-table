@@ -10,6 +10,8 @@
       border
       resizable
       show-overflow
+      highlight-hover-row
+      highlight-current-row
       height="600"
       :loading="loading"
       :select-config="{checkProp: 'checked'}"

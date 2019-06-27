@@ -64,7 +64,6 @@ A complete Vue Table, to meet most of the Table all requirements, and perfect co
 * Editable validate（数据校验）
 * DataProxy（数据代理）
 * Keyboard navigation（全键盘操作）
-* Excel（Excel 表格）
 
 ## Modules
 
@@ -73,7 +72,6 @@ All modules support loading on demand.（所有的模块都支持按需加载）
 * ![Table](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/table/src/table.min.js?compression=gzip&label=Table)![style](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/table/style/style.css?compression=gzip&label=style&color=green) (核心)
   * Extends （扩展模块）
     * ![Grid](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/grid/src/grid.min.js?compression=gzip&label=Grid)![style](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/grid/style/style.css?compression=gzip&label=style&color=green) （高级表格）
-    * ![Excel](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/excel/src/excel.min.js?compression=gzip&label=Excel)![style](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/excel/style/style.css?compression=gzip&label=style&color=green) （Excel 表格）
   * Modules （功能模块）
     * ![Column](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/column/src/column.min.js?compression=gzip&label=Column)![style](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/column/style/style.css?compression=gzip&label=style&color=green) （列）
     * ![Cell](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/cell/src/cell.min.js?compression=gzip&label=Cell)![style](https://img.shields.io/badge/style-none-blue.svg) （单元格）

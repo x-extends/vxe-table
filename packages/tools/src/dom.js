@@ -6,15 +6,38 @@ const htmlElem = document.querySelector('html')
 const bodyElem = document.body
 
 function rClass (cls) {
-  return new RegExp(`(?:^|\\s)${cls}(?!\\S)`)
+  return new RegExp(`(?:^|\\s)${cls}(?!\\S)`, 'g')
 }
 
+// function rClassList (clss) {
+//   return new RegExp(clss.map(cls => `(?:^|\\s)${cls}(?!\\S)`).join('|'), 'g')
+// }
+
 const rClsMap = {}
-const preClss = ['row--hover', 'row--current', 'col--current', 'col--checked', 'col--selected', 'scrolling--middle']
+const preClss = [
+  'row--hover',
+  'row--current',
+  'col--current',
+  'col--selected',
+  'col--actived',
+  'scrolling--middle'
+]
+// const preClsMap = {
+//   'col--checked': [
+//     'col--checked-top',
+//     'col--checked-bottom',
+//     'col--checked-left',
+//     'col--checked-right'
+//   ]
+// }
 
 preClss.forEach(cls => {
   rClsMap[cls] = rClass(cls)
 })
+
+// XEUtils.each(preClsMap, (clss, cls) => {
+//   rClsMap[cls] = rClassList([cls].concat(clss))
+// })
 
 export const DomTools = {
   browse,
@@ -75,6 +98,35 @@ export const DomTools = {
     let bounding = elem.getBoundingClientRect()
     let { scrollTop, scrollLeft } = DomTools.getDomNode()
     return { top: scrollTop + bounding.top, left: scrollLeft + bounding.left }
+  },
+  /**
+   * 获取单元格节点索引
+   */
+  getCellNodeIndex (cell) {
+    let trElem = cell.parentNode
+    let columnIndex = XEUtils.arrayIndexOf(trElem.children, cell)
+    let rowIndex = XEUtils.arrayIndexOf(trElem.parentNode.children, trElem)
+    return { columnIndex, rowIndex }
+  },
+  /**
+   * 获取选中单元格矩阵范围
+   */
+  getRowNodes (trList, cellNode, targetCellNode) {
+    let startColIndex = cellNode.columnIndex
+    let startRowIndex = cellNode.rowIndex
+    let targetColIndex = targetCellNode.columnIndex
+    let targetRowIndex = targetCellNode.rowIndex
+    let rows = []
+    for (let rowIndex = Math.min(startRowIndex, targetRowIndex), rowLen = Math.max(startRowIndex, targetRowIndex); rowIndex <= rowLen; rowIndex++) {
+      let cells = []
+      let trElem = trList[rowIndex]
+      for (let colIndex = Math.min(startColIndex, targetColIndex), colLen = Math.max(startColIndex, targetColIndex); colIndex <= colLen; colIndex++) {
+        let tdElem = trElem.children[colIndex]
+        cells.push(tdElem)
+      }
+      rows.push(cells)
+    }
+    return rows
   },
   getCellIndexs (cell) {
     let trElem = cell.parentNode

@@ -1519,14 +1519,14 @@ const apis = [
         defVal: '',
         list: []
       },
-      {
-        name: 'clearChecked()',
-        desc: '清除单元格批量选中状态',
-        type: 'Promise',
-        enum: '',
-        defVal: '',
-        list: []
-      },
+      // {
+      //   name: 'clearChecked()',
+      //   desc: '清除单元格批量选中状态',
+      //   type: 'Promise',
+      //   enum: '',
+      //   defVal: '',
+      //   list: []
+      // },
       {
         name: 'clearSelected()',
         desc: '清除单元格选中状态',
@@ -1543,14 +1543,14 @@ const apis = [
         defVal: '',
         list: []
       },
-      {
-        name: 'clearCopyed()',
-        desc: '清空已复制的内容',
-        type: 'Promise',
-        enum: '',
-        defVal: '',
-        list: []
-      },
+      // {
+      //   name: 'clearCopyed()',
+      //   desc: '清空已复制的内容',
+      //   type: 'Promise',
+      //   enum: '',
+      //   defVal: '',
+      //   list: []
+      // },
       {
         name: 'clearData()',
         desc: '清空单元格内容',

@@ -14,6 +14,10 @@
         <div class="langs">
           <vxe-radio v-model="$i18n.locale" name="lang" label="zh-CN">中文</vxe-radio>
           <vxe-radio v-model="$i18n.locale" name="lang" label="en">English</vxe-radio>
+          <select class="version-switch" v-model="version" @change="vChangeEvent">
+            <option value="1">V1</option>
+            <option value="2">V2</option>
+          </select>
         </div>
         <div class="desc">{{ $t('app.header.desc') }}</div>
       </div>
@@ -49,6 +53,7 @@ export default {
   data () {
     return {
       selected: null,
+      version: '2',
       tableList: [
         {
           label: 'app.aside.nav.start',
@@ -519,6 +524,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.big1wRowEdit',
+              locat: {
+                name: 'TableScrollEdit'
+              }
+            },
+            {
               label: 'app.aside.nav.infiniteScroll',
               disabled: true,
               locat: {
@@ -645,19 +656,19 @@ export default {
             }
           ]
         },
-        {
-          label: 'app.aside.nav.excel',
-          value: 'excel',
-          expand: false,
-          children: [
-            {
-              label: 'app.aside.nav.cell',
-              locat: {
-                name: 'TableExcelCell'
-              }
-            }
-          ]
-        },
+        // {
+        //   label: 'app.aside.nav.excel',
+        //   value: 'excel',
+        //   expand: false,
+        //   children: [
+        //     {
+        //       label: 'app.aside.nav.cell',
+        //       locat: {
+        //         name: 'TableExcelCell'
+        //       }
+        //     }
+        //   ]
+        // },
         {
           label: 'app.aside.nav.other',
           value: 'other',
@@ -946,6 +957,16 @@ export default {
         }
       })
       item.expand = !item.expand
+    },
+    vChangeEvent () {
+      switch (this.version) {
+        case '1':
+          location.href = '/vxe-table/v1/index.html'
+          break
+        case '2':
+          location.href = '/vxe-table'
+          break
+      }
     }
   }
 }
