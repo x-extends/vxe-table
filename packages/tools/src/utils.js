@@ -85,6 +85,7 @@ export const UtilTools = {
       renderHeight: 0,
       resizeWidth: 0,
       renderLeft: 0,
+      inputValue: null,
       renderHeader: renderHeader || _vm.renderHeader,
       renderCell: renderCell || _vm.renderCell,
       renderData: renderData,

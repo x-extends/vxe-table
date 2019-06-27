@@ -8,10 +8,9 @@
       highlight-current-row
       show-overflow
       :data.sync="tableData"
-      :edit-config="{key: 'id', trigger: 'click', mode: 'cell'}"
-      @edit-actived="editActivedEvent">
+      :edit-config="{key: 'id', trigger: 'click', mode: 'cell'}">
       <vxe-table-column type="index" width="60"></vxe-table-column>
-      <vxe-table-column prop="name" label="Name" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column prop="name" label="Name" :edit-render="{name: 'input', autoselect: true}"></vxe-table-column>
       <vxe-table-column prop="sex" label="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column prop="date" label="Date" :edit-render="{name: 'input'}"></vxe-table-column>
     </vxe-table>
@@ -40,10 +39,9 @@ export default {
           highlight-current-row
           show-overflow
           :data.sync="tableData"
-          :edit-config="{key: 'id', trigger: 'click', mode: 'cell'}"
-          @edit-actived="editActivedEvent">
+          :edit-config="{key: 'id', trigger: 'click', mode: 'cell'}">
           <vxe-table-column type="index" width="60"></vxe-table-column>
-          <vxe-table-column prop="name" label="Name" :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column prop="name" label="Name" :edit-render="{name: 'input', autoselect: true}"></vxe-table-column>
           <vxe-table-column prop="sex" label="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column prop="date" label="Date" :edit-render="{name: 'input'}"></vxe-table-column>
         </vxe-table>
@@ -57,13 +55,6 @@ export default {
           },
           created () {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
-          },
-          methods: {
-            editActivedEvent ({ row, column, cell}, event) {
-              this.$nextTick(() => {
-                cell.querySelector('input').select()
-              })
-            }
           }
         }
         `
@@ -77,13 +68,6 @@ export default {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
       hljs.highlightBlock(block)
     })
-  },
-  methods: {
-    editActivedEvent ({ row, column, cell }, event) {
-      this.$nextTick(() => {
-        cell.querySelector('input').select()
-      })
-    }
   }
 }
 </script>

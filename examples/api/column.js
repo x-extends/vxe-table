@@ -270,6 +270,14 @@ const apis = [
             enum: '',
             defVal: '',
             list: []
+          },
+          {
+            name: 'autoselect',
+            desc: '是否在激活编辑之后自动选中输入框内容',
+            type: 'Boolean',
+            enum: '',
+            defVal: 'false',
+            list: []
           }
         ]
       }

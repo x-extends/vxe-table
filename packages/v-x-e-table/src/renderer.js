@@ -19,17 +19,14 @@ function defaultRenderer (h, attrs, editRender, params) {
           value: UtilTools.getCellValue(row, column)
         },
         on: {
+          input (evnt) {
+            let cellValue = evnt.target.value
+            column.inputValue = cellValue
+            // UtilTools.setCellValue(row, column, evnt.target.value)
+            $table.updateStatus(params, cellValue)
+          },
           change (evnt) {
             UtilTools.setCellValue(row, column, evnt.target.value)
-          },
-          keydown (evnt) {
-            if (evnt.keyCode === 13) {
-              UtilTools.setCellValue(row, column, evnt.target.value)
-            }
-          },
-          input (evnt) {
-            // UtilTools.setCellValue(row, column, evnt.target.value)
-            $table.updateStatus(params, evnt.target.value)
           }
         }
       })
@@ -75,7 +72,7 @@ const _storeMap = {
             on: {
               input (evnt) {
                 let inpElem = evnt.target
-                UtilTools.setCellValue(row, column, evnt.target.value)
+                column.inputValue = inpElem.value
                 if (inpElem.scrollHeight > inpElem.offsetHeight) {
                   if (uploadRows.indexOf(row) === -1) {
                     inpElem.style.width = `${inpElem.offsetWidth + 20}px`
@@ -84,7 +81,8 @@ const _storeMap = {
                   }
                 }
               },
-              change () {
+              change (evnt) {
+                UtilTools.setCellValue(row, column, evnt.target.value)
                 if (uploadRows.indexOf(row) === -1) {
                   uploadRows.push(row)
                 }
@@ -94,10 +92,12 @@ const _storeMap = {
                 if (evnt.altKey && evnt.keyCode === 13) {
                   evnt.preventDefault()
                   evnt.stopPropagation()
-                  let value = inpElem.value
                   let rangeData = DomTools.getCursorPosition(inpElem)
                   let pos = rangeData.end
-                  UtilTools.setCellValue(row, column, `${value.slice(0, pos)}\n${value.slice(pos, value.length)}`)
+                  let cellValue = inpElem.value
+                  cellValue = `${cellValue.slice(0, pos)}\n${cellValue.slice(pos, cellValue.length)}`
+                  inpElem.value = cellValue
+                  column.inputValue = cellValue
                   inpElem.style.height = `${(Math.floor(inpElem.offsetHeight / rowHeight) + 1) * rowHeight}px`
                   setTimeout(() => {
                     rangeData.start = rangeData.end = ++pos

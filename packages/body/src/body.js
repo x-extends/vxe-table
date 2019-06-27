@@ -16,7 +16,7 @@ function handleLocation (obj, rows, columns, row, column) {
 /**
  * 渲染列
  */
-function renderColumn (h, _vm, $table, seq, fixedType, rowLevel, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex) {
+function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex) {
   let {
     _e,
     $listeners: tableListeners,
@@ -61,7 +61,7 @@ function renderColumn (h, _vm, $table, seq, fixedType, rowLevel, row, rowIndex, 
   let hasDefaultTip = editRules && (!validConfig.message || validConfig.message === 'default')
   let attrs = { 'data-index': columnIndex }
   let triggerDblclick = (editRender && editConfig && editConfig.trigger === 'dblclick')
-  let params = { $table, seq, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, level: rowLevel, isHidden: fixedHiddenColumn, data: tableData }
+  let params = { $table, $seq, seq, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, level: rowLevel, isHidden: fixedHiddenColumn, data: tableData }
   // 滚动的渲染不支持动态行高
   if ((scrollXLoad || scrollYLoad) && !hasEllipsis) {
     showEllipsis = hasEllipsis = true
@@ -203,7 +203,7 @@ function renderColumn (h, _vm, $table, seq, fixedType, rowLevel, row, rowIndex, 
   ])
 }
 
-function renderRows (h, _vm, $table, rowLevel, fixedType, tableData, tableColumn) {
+function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, tableColumn) {
   let {
     highlightHoverRow,
     rowClassName,
@@ -257,14 +257,14 @@ function renderRows (h, _vm, $table, rowLevel, fixedType, tableData, tableColumn
         on: trOn
       }, tableColumn.map((column, $columnIndex) => {
         let columnIndex = getColumnMapIndex(column)
-        return renderColumn(h, _vm, $table, seq, fixedType, rowLevel, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex)
+        return renderColumn(h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex)
       }))
     )
     if (treeConfig && treeExpandeds.length) {
       // 如果是树形表格
       let rowChildren = row[treeConfig.children]
       if (rowChildren && rowChildren.length && treeExpandeds.indexOf(row) > -1) {
-        rows.push.apply(rows, renderRows(h, _vm, $table, rowLevel + 1, fixedType, rowChildren, tableColumn))
+        rows.push.apply(rows, renderRows(h, _vm, $table, $seq ? `${$seq}.${seq}` : `${seq}`, rowLevel + 1, fixedType, rowChildren, tableColumn))
       }
     } else if (expandeds.length) {
       // 如果行被展开了
@@ -443,7 +443,7 @@ export default {
         /**
          * 内容
          */
-        h('tbody', renderRows(h, this, $table, 0, fixedType, tableData, tableColumn))
+        h('tbody', renderRows(h, this, $table, '', 0, fixedType, tableData, tableColumn))
       ]),
       !fixedType && !loading && !tableData.length ? h('div', {
         class: 'vxe-table--empty-block'

@@ -124,8 +124,8 @@ export const Cell = {
     if (slots && slots.default) {
       return slots.default(params)
     }
-    let { seq, level } = params
-    return [UtilTools.formatText(indexMethod ? indexMethod(params) : level ? `${level}.${seq}` : startIndex + seq, 1)]
+    let { $seq, seq, level } = params
+    return [UtilTools.formatText(indexMethod ? indexMethod(params) : level ? `${$seq}.${seq}` : startIndex + seq, 1)]
   },
   renderTreeIndexCell (h, params) {
     return Cell.renderTreeIcon(h, params).concat(Cell.renderIndexCell(h, params))

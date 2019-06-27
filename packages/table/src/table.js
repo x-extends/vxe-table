@@ -388,7 +388,7 @@ export default {
       return this.headerCtxMenu.length || this.bodyCtxMenu.length
     },
     ctxMenuConfig () {
-      return Object.assign({}, GlobalConfig.menu)
+      return Object.assign({}, GlobalConfig.menu, this.contextMenu)
     },
     ctxMenuList () {
       let rest = []
@@ -745,17 +745,17 @@ export default {
     // 更新数据的 Map
     cacheDataMap () {
       let { treeConfig, tableFullData, fullDataIndexMap, fullDataRowIdMap } = this
-      let rowKey = UtilTools.getRowKey(this)
       fullDataIndexMap.clear()
       fullDataRowIdMap.clear()
       if (treeConfig) {
+        let rowKey = UtilTools.getRowKey(this)
         XEUtils.eachTree(tableFullData, (row, index) => {
           fullDataRowIdMap.set('' + XEUtils.get(row, rowKey), { rowKey, row, index })
         }, treeConfig)
       } else {
-        tableFullData.forEach((row, index) => {
-          fullDataRowIdMap.set('' + XEUtils.get(row, rowKey), { rowKey, row, index })
-          fullDataIndexMap.set(row, { row, index })
+        tableFullData.forEach((row, rowIndex) => {
+          fullDataRowIdMap.set(UtilTools.getRowId(this, row, rowIndex), { row, index: rowIndex })
+          fullDataIndexMap.set(row, { row, index: rowIndex })
         })
       }
     },
@@ -1477,7 +1477,7 @@ export default {
             this.handleSelected(params, evnt)
           }
         }
-      } else if (isEnter && (selected.row || actived.row)) {
+      } else if (isEnter && (keyboardConfig.isArrow || keyboardConfig.isTab) && (selected.row || actived.row)) {
         // 如果是激活状态，退则出到下一行
         this.moveSelected(selected.row ? selected.args : actived.args, isLeftArrow, isUpArrow, isRightArrow, true, evnt)
       } else if (operCtxMenu) {
@@ -2200,8 +2200,11 @@ export default {
           }
         } else {
           if (actived.row) {
-            actived.args.column = column
-            actived.args.columnIndex = columnIndex
+            if (actived.row) {
+              column.inputValue = null
+              actived.column = actived.args.column = column
+              actived.columnIndex = actived.args.columnIndex = columnIndex
+            }
           }
         }
       }
@@ -2276,6 +2279,11 @@ export default {
       let { actived } = editStore
       let { args, row, column } = actived
       if (row || column) {
+        let { inputValue } = column
+        if (inputValue !== null) {
+          UtilTools.setCellValue(row, column, inputValue)
+          column.inputValue = null
+        }
         UtilTools.emitEvent(this, 'edit-closed', [args, evnt])
       }
       actived.args = null
@@ -2455,17 +2463,18 @@ export default {
       let { editRender } = column
       if (editRender) {
         let compRender = Renderer.get(editRender.name)
+        let { autofocus, autoselect } = editRender
         let inputElem
         // 如果指定了聚焦 class
-        if (editRender.autofocus) {
-          inputElem = cell.querySelector(editRender.autofocus)
+        if (autofocus) {
+          inputElem = cell.querySelector(autofocus)
         }
         // 渲染器的聚焦处理
         if (!inputElem && compRender && compRender.autofocus) {
           inputElem = cell.querySelector(compRender.autofocus)
         }
         if (inputElem) {
-          inputElem.focus()
+          inputElem[autoselect ? 'select' : 'focus']()
         }
       }
     },

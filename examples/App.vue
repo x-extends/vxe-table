@@ -3,7 +3,7 @@
     <header class="page-header">
       <h1 class="title">
         <a href="https://github.com/xuliangzhan/vxe-table">
-          <span>vxe-table</span>
+          <span>vxe-table V1</span>
           <img src="https://img.shields.io/npm/dm/vxe-table.svg?style=social&logo=github">
           <img src="https://img.shields.io/github/watchers/xuliangzhan/vxe-table.svg?style=social">
           <img src="https://img.shields.io/github/stars/xuliangzhan/vxe-table.svg?style=social">
@@ -14,6 +14,10 @@
         <div class="langs">
           <vxe-radio v-model="$i18n.locale" name="lang" label="zh-CN">中文</vxe-radio>
           <vxe-radio v-model="$i18n.locale" name="lang" label="en">English</vxe-radio>
+          <select class="version-switch" v-model="version" @change="vChangeEvent">
+            <option value="1">V1</option>
+            <option value="2">V2</option>
+          </select>
         </div>
         <div class="desc">{{ $t('app.header.desc') }}</div>
       </div>
@@ -49,6 +53,7 @@ export default {
   data () {
     return {
       selected: null,
+      version: '1',
       tableList: [
         {
           label: 'app.aside.nav.start',
@@ -946,6 +951,16 @@ export default {
         }
       })
       item.expand = !item.expand
+    },
+    vChangeEvent () {
+      switch (this.version) {
+        case '1':
+          location.href = '/vxe-table/v1/index.html'
+          break
+        case '2':
+          location.href = '/vxe-table'
+          break
+      }
     }
   }
 }

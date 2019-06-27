@@ -64,7 +64,6 @@ A complete Vue Table, to meet most of the Table all requirements, and perfect co
 * Editable validate（数据校验）
 * DataProxy（数据代理）
 * Keyboard navigation（全键盘操作）
-* Excel（Excel 表格）
 
 ## Modules
 
@@ -101,8 +100,8 @@ All modules support loading on demand.（所有的模块都支持按需加载）
 
 ## Docs
 
-[To view the example](https://xuliangzhan.github.io/vxe-table/) [查看演示](https://xuliangzhan_admin.gitee.io/vxe-table/)  
-[To view the document](https://xuliangzhan.github.io/vxe-table/#/table/api) [查看文档](https://xuliangzhan_admin.gitee.io/vxe-table/#/table/api)  
+[To view the example](https://xuliangzhan.github.io/vxe-table/v1/index.html) [查看演示](https://xuliangzhan_admin.gitee.io/vxe-table/v1/index.html)  
+[To view the document](https://xuliangzhan.github.io/vxe-table/v1/index.html#/table/api) [查看文档](https://xuliangzhan_admin.gitee.io/vxe-table/v1/index.html#/table/api)  
 
 ## Installing
 
