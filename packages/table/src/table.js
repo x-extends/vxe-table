@@ -787,26 +787,35 @@ export default {
      * 从指定行插入数据
      */
     insertAt (records, row) {
-      let { tableData, editStore, defineProperty } = this
+      let { tableData, editStore, defineProperty, scrollYLoad, tableFullData } = this
       if (!XEUtils.isArray(records)) {
         records = [records]
       }
       let newRecords = records.map(record => defineProperty(record))
-      if (arguments.length === 1) {
-        tableData.unshift.apply(tableData, newRecords)
-      } else {
-        if (row === -1) {
-          tableData.push.apply(tableData, newRecords)
+      return new Promise(resolve => {
+        if (arguments.length === 1) {
+          tableData.unshift.apply(tableData, newRecords)
+          if (scrollYLoad) {
+            tableFullData.unshift.apply(tableFullData, newRecords)
+            this.updateAfterFullData()
+          }
         } else {
-          let rowIndex = tableData.indexOf(row)
-          tableData.splice.apply(tableData, [rowIndex, 0].concat(newRecords))
+          if (scrollYLoad) {
+            throw new Error('[vxe-table] Virtual scroller does not support this operation.')
+          }
+          if (row === -1) {
+            tableData.push.apply(tableData, newRecords)
+          } else {
+            let rowIndex = tableData.indexOf(row)
+            tableData.splice.apply(tableData, [rowIndex, 0].concat(newRecords))
+          }
         }
-      }
-      [].unshift.apply(editStore.insertList, newRecords)
-      this.checkSelectionStatus()
-      return this.$nextTick().then(() => {
-        this.recalculate()
-        return { row: newRecords.length ? newRecords[newRecords.length - 1] : null, rows: newRecords }
+        [].unshift.apply(editStore.insertList, newRecords)
+        this.checkSelectionStatus()
+        this.$nextTick(() => {
+          this.recalculate()
+          resolve({ row: newRecords.length ? newRecords[newRecords.length - 1] : null, rows: newRecords })
+        })
       })
     },
     defineProperty (record) {
@@ -3001,7 +3010,7 @@ export default {
       let customVal = !XEUtils.isUndefined(cellValue)
       return this.$nextTick().then(() => {
         let { $refs, tableData, editRules, validStore } = this
-        if (scope && $refs.tableBody && !XEUtils.isEmpty(editRules)) {
+        if (scope && $refs.tableBody && editRules) {
           let { row, column } = scope
           let type = 'change'
           if (this.hasCellRules(type, row, column)) {
@@ -3085,8 +3094,8 @@ export default {
     beginValidate (rows, cb, isAll) {
       let validRest = {}
       let status = true
-      let { editRules, tableData } = this
-      let vaildDatas = tableData
+      let { editRules, tableData, tableFullData, scrollYLoad, _scrollYStore } = this
+      let vaildDatas = scrollYLoad ? tableFullData : tableData
       if (rows) {
         if (XEUtils.isFunction(rows)) {
           cb = rows
@@ -3094,34 +3103,38 @@ export default {
           vaildDatas = XEUtils.isArray(rows) ? rows : [rows]
         }
       }
-      let validPromise = Promise.resolve(true)
+      let rowValids = []
       this.lastCallTime = Date.now()
       this.clearValidate()
-      if (!XEUtils.isEmpty(editRules)) {
+      if (editRules) {
         let columns = this.getColumns()
         vaildDatas.forEach(row => {
           let rowIndex = tableData.indexOf(row)
+          let colVailds = []
           columns.forEach((column, columnIndex) => {
             if (XEUtils.has(editRules, column.property)) {
-              validPromise = validPromise.then(() => new Promise((resolve, reject) => {
-                this.validCellRules('all', row, column)
-                  .then(resolve)
-                  .catch(({ rule, rules }) => {
-                    let rest = { rule, rules, rowIndex, row, columnIndex, column }
-                    if (isAll) {
-                      if (!validRest[column.property]) {
-                        validRest[column.property] = []
+              colVailds.push(
+                new Promise((resolve, reject) => {
+                  this.validCellRules('all', row, column)
+                    .then(resolve)
+                    .catch(({ rule, rules }) => {
+                      let rest = { rule, rules, rowIndex, row, columnIndex, column }
+                      if (isAll) {
+                        if (!validRest[column.property]) {
+                          validRest[column.property] = []
+                        }
+                        validRest[column.property].push(rest)
+                        return resolve()
                       }
-                      validRest[column.property].push(rest)
-                      return resolve()
-                    }
-                    return reject(rest)
-                  })
-              }))
+                      return reject(rest)
+                    })
+                })
+              )
             }
           })
+          rowValids.push(Promise.all(colVailds))
         })
-        return validPromise.then(() => {
+        return Promise.all(rowValids).then(() => {
           let ruleProps = Object.keys(validRest)
           if (ruleProps.length) {
             return Promise.reject(validRest[ruleProps[0]][0])
@@ -3131,27 +3144,41 @@ export default {
           }
         }).catch(params => {
           let args = isAll ? validRest : { [params.column.property]: params }
-          params.cell = DomTools.getCell(this, params)
-          this.handleValidError(params)
-          if (cb) {
-            status = false
-            cb(status, args)
-          } else {
-            return Promise.reject(args)
-          }
+          return new Promise((resolve, reject) => {
+            let finish = () => {
+              params.cell = DomTools.getCell(this, params)
+              this.handleValidError(params)
+              if (cb) {
+                status = false
+                resolve(cb(status, args))
+              } else {
+                reject(args)
+              }
+            }
+            if (scrollYLoad) {
+              let { startIndex, renderSize, rowHeight } = _scrollYStore
+              let rowIndex = this.getRowMapIndex(params.row)
+              if (rowIndex < startIndex || rowIndex > startIndex + renderSize) {
+                let bodyElem = this.$refs.tableBody.$el
+                bodyElem.scrollTop = (rowIndex - 1) * rowHeight
+                return setTimeout(finish, 40)
+              }
+            }
+            finish()
+          })
         })
       } else {
         if (cb) {
           cb(status)
         }
       }
-      return validPromise
+      return Promise.resolve(true)
     },
     // validRowRules (type, row) {
     //   let { tableData, editRules } = this
     //   let rowIndex = tableData.indexOf(row)
     //   let validPromise = Promise.resolve()
-    //   if (!XEUtils.isEmpty(editRules)) {
+    //   if (editRules) {
     //     this.getColumns().forEach(column => {
     //       if (XEUtils.has(editRules, column.property)) {
     //         validPromise = validPromise.then(() => new Promise((resolve, reject) => {
@@ -3170,7 +3197,7 @@ export default {
     hasCellRules (type, row, column) {
       let { editRules } = this
       let { property } = column
-      if (property && !XEUtils.isEmpty(editRules)) {
+      if (property && editRules) {
         let rules = XEUtils.get(editRules, property)
         return rules && rules.find(rule => type === 'all' || !rule.trigger || type === rule.trigger)
       }
@@ -3194,54 +3221,55 @@ export default {
       let { editRules } = this
       let { property } = column
       let errorRules = []
-      let validPromise = Promise.resolve()
-      if (property && !XEUtils.isEmpty(editRules)) {
+      let cellVailds = []
+      if (property && editRules) {
         let rules = XEUtils.get(editRules, property)
         let value = XEUtils.isUndefined(cellValue) ? XEUtils.get(row, property) : cellValue
         if (rules) {
-          for (let rIndex = 0; rIndex < rules.length; rIndex++) {
-            validPromise = validPromise.then(() => new Promise(resolve => {
-              let rule = rules[rIndex]
-              let isRequired = rule.required === true
-              if (type === 'all' || !rule.trigger || type === rule.trigger) {
-                if (XEUtils.isFunction(rule.validator)) {
-                  rule.validator(rule, value, e => {
-                    if (XEUtils.isError(e)) {
-                      let cusRule = { type: 'custom', trigger: rule.trigger, message: e.message, rule }
-                      errorRules.push(cusRule)
-                    }
-                    return resolve()
-                  }, { rules, row, column, rowIndex: this.getRowMapIndex(row), columnIndex: this.getColumnMapIndex(column) })
-                } else {
-                  let len
-                  let restVal = value
-                  let isNumber = rule.type === 'number'
-                  let isEmpty = value === null || value === undefined || value === ''
-                  if (isNumber) {
-                    restVal = XEUtils.toNumber(value)
+          rules.forEach(rule => {
+            cellVailds.push(
+              new Promise(resolve => {
+                let isRequired = rule.required === true
+                if (type === 'all' || !rule.trigger || type === rule.trigger) {
+                  if (XEUtils.isFunction(rule.validator)) {
+                    rule.validator(rule, value, e => {
+                      if (XEUtils.isError(e)) {
+                        let cusRule = { type: 'custom', trigger: rule.trigger, message: e.message, rule }
+                        errorRules.push(cusRule)
+                      }
+                      return resolve()
+                    }, { rules, row, column, rowIndex: this.getRowMapIndex(row), columnIndex: this.getColumnMapIndex(column) })
                   } else {
-                    len = XEUtils.getSize(restVal)
+                    let len
+                    let restVal = value
+                    let isNumber = rule.type === 'number'
+                    let isEmpty = value === null || value === undefined || value === ''
+                    if (isNumber) {
+                      restVal = XEUtils.toNumber(value)
+                    } else {
+                      len = XEUtils.getSize(restVal)
+                    }
+                    if (isRequired && isEmpty) {
+                      errorRules.push(rule)
+                    } else if (
+                      ((isNumber && isNaN(value)) ||
+                      (XEUtils.isRegExp(rule.pattern) && !rule.pattern.test(value)) ||
+                      (XEUtils.isNumber(rule.min) && (isNumber ? restVal < rule.min : len < rule.min)) ||
+                      (XEUtils.isNumber(rule.max) && (isNumber ? restVal > rule.max : len > rule.max)))
+                    ) {
+                      errorRules.push(rule)
+                    }
+                    resolve()
                   }
-                  if (isRequired && isEmpty) {
-                    errorRules.push(rule)
-                  } else if (
-                    ((isNumber && isNaN(value)) ||
-                    (XEUtils.isRegExp(rule.pattern) && !rule.pattern.test(value)) ||
-                    (XEUtils.isNumber(rule.min) && (isNumber ? restVal < rule.min : len < rule.min)) ||
-                    (XEUtils.isNumber(rule.max) && (isNumber ? restVal > rule.max : len > rule.max)))
-                  ) {
-                    errorRules.push(rule)
-                  }
+                } else {
                   resolve()
                 }
-              } else {
-                resolve()
-              }
-            }))
-          }
+              })
+            )
+          })
         }
       }
-      return validPromise.then(() => {
+      return Promise.all(cellVailds).then(() => {
         if (errorRules.length) {
           let rest = { rules: errorRules, rule: errorRules[0] }
           return Promise.reject(rest)
