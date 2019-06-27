@@ -225,7 +225,7 @@ export default {
         case 'copy':
           if (row && column) {
             if (XEClipboard.copy(row[column.property])) {
-              this.$XMsg.message('已复制到剪贴板！')
+              this.$XMsg.message({ message: '已复制到剪贴板！', status: 'success' })
             }
           }
           break
