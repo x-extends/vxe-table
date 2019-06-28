@@ -49,7 +49,10 @@ export default {
       return this.size || this.$parent.size || this.$parent.vSize
     },
     isMsg () {
-      return this.proxyConfig && this.proxyConfig.message !== false
+      return this.proxyOpts.message !== false
+    },
+    proxyOpts () {
+      return Object.assign({}, GlobalConfig.grid.proxyConfig, this.proxyConfig)
     },
     tableProps () {
       let rest = {}
@@ -80,16 +83,16 @@ export default {
     }
   },
   mounted () {
-    let { columns, proxyConfig } = this
+    let { columns, proxyConfig, proxyOpts } = this
     if (columns && columns.length) {
       this.loadColumn(this.columns)
     }
-    if (proxyConfig && proxyConfig.autoLoad !== false) {
+    if (proxyConfig && proxyOpts.autoLoad !== false) {
       this.commitProxy('query')
     }
   },
   render (h) {
-    let { $slots, $listeners, pagerConfig, vSize, loading, toolbar, editConfig, proxyConfig, tableProps, tableLoading, tablePage, tableData, tableCustoms, optimization } = this
+    let { $slots, $listeners, pagerConfig, vSize, loading, toolbar, editConfig, proxyConfig, proxyOpts, tableProps, tableLoading, tablePage, tableData, tableCustoms, optimization } = this
     let props = Object.assign({}, tableProps, {
       optimization: Object.assign({}, GlobalConfig.optimization, optimization)
     })
@@ -100,13 +103,13 @@ export default {
         data: tableData,
         rowClassName: this.handleRowClassName
       })
-      if (proxyConfig.index && pagerConfig) {
+      if (proxyOpts.index && pagerConfig) {
         props.startIndex = (tablePage.currentPage - 1) * tablePage.pageSize
       }
-      if (proxyConfig.sort) {
+      if (proxyOpts.sort) {
         tableOns['sort-change'] = this.sortChangeEvent
       }
-      if (proxyConfig.filter) {
+      if (proxyOpts.filter) {
         tableOns['filter-change'] = this.filterChangeEvent
       }
     }
@@ -161,8 +164,8 @@ export default {
       return this.pendingRecords.indexOf(row) === -1
     },
     commitProxy (code) {
-      let { proxyConfig = {}, tablePage, pagerConfig, sortData, filterData, isMsg } = this
-      let { ajax, props = {} } = proxyConfig
+      let { proxyOpts, tablePage, pagerConfig, sortData, filterData, isMsg } = this
+      let { ajax, props = {} } = proxyOpts
       if (ajax) {
         switch (code) {
           case 'reload':
@@ -185,10 +188,10 @@ export default {
               return ajax.query(params).then(result => {
                 if (result) {
                   if (pagerConfig) {
-                    tablePage.total = XEUtils.get(result, props.total || 'page.total')
-                    this.tableData = XEUtils.get(result, props.data || 'result')
+                    tablePage.total = XEUtils.get(result, props.total || 'page.total') || 0
+                    this.tableData = XEUtils.get(result, props.data || 'result') || []
                   } else {
-                    this.tableData = props.data ? XEUtils.get(result, props.data) : result
+                    this.tableData = (props.list ? XEUtils.get(result, props.list) : result) || []
                   }
                 } else {
                   this.tableData = []

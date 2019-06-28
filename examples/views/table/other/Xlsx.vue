@@ -91,12 +91,12 @@ export default {
             },
             getExportData (isHead) {
               let datas = this.$refs.xGrid.getSelectRecords()
-              let columns = this.tableColumn.filter(item => item.prop)
-              let headers = isHead ? [columns.map(item => item.label)] : []
+              let columns = this.tableColumn.filter(item => item.field)
+              let headers = isHead ? [columns.map(item => item.title)] : []
               return headers.concat(
                 datas.map(row => {
                   return columns.map(column => {
-                    return row[column.prop]
+                    return row[column.field]
                   })
                 })
               )
@@ -135,12 +135,12 @@ export default {
     },
     getExportData (isHead) {
       let datas = this.$refs.xGrid.getSelectRecords()
-      let columns = this.tableColumn.filter(item => item.prop)
-      let headers = isHead ? [columns.map(item => item.label)] : []
+      let columns = this.tableColumn.filter(item => item.field)
+      let headers = isHead ? [columns.map(item => item.title)] : []
       return headers.concat(
         datas.map(row => {
           return columns.map(column => {
-            return row[column.prop]
+            return row[column.field]
           })
         })
       )

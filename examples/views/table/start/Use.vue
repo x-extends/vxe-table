@@ -151,6 +151,18 @@
             msgError: 'vxe-icon--error',
             msgLoading: 'vxe-icon--refresh roll'
           },
+          // 高级表格默认配置
+          grid: {
+            proxyConfig: {
+              autoLoad: true,
+              message: true,
+              props: {
+                list: null,
+                data: 'result',
+                page: 'page.total'
+              }
+            }
+          },
           // 默认快捷菜单
           menu: {},
           // 默认 tooltip 主题样式
