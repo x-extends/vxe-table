@@ -2392,9 +2392,8 @@ export default {
     //   }
     // },
     triggerHeaderCellClickEvent (evnt, params) {
-      let { column } = params
       UtilTools.emitEvent(this, 'header-cell-click', [params, evnt])
-      if (column.type !== 'index' && this.highlightCurrentColumn) {
+      if (this.highlightCurrentColumn) {
         return this.setCurrentColumn(params.column, true)
       }
       return this.$nextTick()
