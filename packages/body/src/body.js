@@ -33,7 +33,7 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
     spanMethod,
     // keyboardConfig,
     treeConfig,
-    // mouseConfig,
+    mouseConfig = {},
     editConfig,
     editRules,
     validConfig = {},
@@ -54,7 +54,7 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
   //   // copyed
   // } = editStore
   // let isMouseSelected = mouseConfig && mouseConfig.selected
-  // let isMouseChecked = mouseConfig && mouseConfig.checked
+  let isMouseChecked = mouseConfig.checked
   // let isKeyboardCut = keyboardConfig && keyboardConfig.isCut
   let fixedHiddenColumn = fixedType ? column.fixed !== fixedType : column.fixed && overflowX
   let showEllipsis = (showOverflow || allColumnOverflow) === 'ellipsis'
@@ -179,9 +179,9 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
       //   // width: hasEllipsis ? `${border ? renderWidth - 1 : renderWidth}px` : null
       // }
     }, column.renderCell(h, params)),
-    // highlightCurrentColumn ? h('span', {
-    //   class: 'vxe-cell--highlight-line'
-    // }) : null,
+    isMouseChecked ? h('span', {
+      class: 'vxe-cell--checked-line'
+    }) : null,
     hasDefaultTip ? validError && tableData.length >= 2 ? h('div', {
       class: 'vxe-cell--valid',
       style: validStore.rule && validStore.rule.width ? {

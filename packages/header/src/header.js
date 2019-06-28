@@ -117,6 +117,7 @@ export default {
       headerCellClassName,
       showHeaderOverflow: allColumnHeaderOverflow,
       highlightCurrentColumn,
+      mouseConfig = {},
       // selectColumn,
       // tableWidth,
       scrollXLoad,
@@ -205,7 +206,7 @@ export default {
               }
               thOns.mouseout = $table.clostTooltip
             }
-            if (highlightCurrentColumn || tableListeners['header-cell-click']) {
+            if (highlightCurrentColumn || tableListeners['header-cell-click'] || mouseConfig.checked) {
               thOns.click = evnt => {
                 $table.triggerHeaderCellClickEvent(evnt, { $table, $rowIndex: rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, cell: evnt.currentTarget })
               }

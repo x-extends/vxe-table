@@ -45,6 +45,7 @@ const GlobalConfig = {
     msgError: 'vxe-icon--error',
     msgLoading: 'vxe-icon--refresh roll'
   },
+  grid: {},
   menu: {},
   tooltip: {
     // zIndex: 99,

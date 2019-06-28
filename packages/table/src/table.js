@@ -2392,9 +2392,19 @@ export default {
     //   }
     // },
     triggerHeaderCellClickEvent (evnt, params) {
+      let { _elemStore, mouseConfig = {} } = this
+      let { column } = params
       UtilTools.emitEvent(this, 'header-cell-click', [params, evnt])
+      if (mouseConfig.checked) {
+        let trList = _elemStore['main-body-list'].children
+        if (trList.length) {
+          let startCell = trList[0].querySelector(`.${column.id}`)
+          let endCell = trList[trList.length - 1].querySelector(`.${column.id}`)
+          return this.handleChecked(DomTools.getRowNodes(trList, DomTools.getCellNodeIndex(startCell), DomTools.getCellNodeIndex(endCell)))
+        }
+      }
       if (this.highlightCurrentColumn) {
-        return this.setCurrentColumn(params.column, true)
+        return this.setCurrentColumn(column, true)
       }
       return this.$nextTick()
     },
@@ -2633,22 +2643,22 @@ export default {
     /**
      * 清除所有选中状态
      */
-    // clearChecked (evnt) {
-    //   let { editStore } = this
-    //   let { checked } = editStore
-    //   checked.rows = []
-    //   checked.columns = []
-    //   checked.tRows = []
-    //   checked.tColumns = []
-    //   if (checked.rowNodes) {
-    //     checked.rowNodes.forEach(nodes => {
-    //       nodes.forEach(elem => {
-    //         DomTools.removeClass(elem, 'col--checked')
-    //       })
-    //     })
-    //   }
-    //   return this.$nextTick()
-    // },
+    clearChecked (evnt) {
+      let { editStore } = this
+      let { checked } = editStore
+      checked.rows = []
+      checked.columns = []
+      checked.tRows = []
+      checked.tColumns = []
+      if (checked.rowNodes) {
+        checked.rowNodes.forEach(nodes => {
+          nodes.forEach(elem => {
+            DomTools.removeClass(elem, 'col--checked')
+          })
+        })
+      }
+      return this.$nextTick()
+    },
     /**
      * 处理所有选中
      */
@@ -2686,32 +2696,32 @@ export default {
     //     })
     //   })
     // },
-    // handleChecked (rowNodes) {
-    //   let { checked } = this.editStore
-    //   this.clearChecked()
-    //   rowNodes.forEach((rows, rowIndex) => {
-    //     let isTop = rowIndex === 0
-    //     let isBottom = rowIndex === rowNodes.length - 1
-    //     rows.forEach((elem, colIndex) => {
-    //       let isLeft = colIndex === 0
-    //       let isRight = colIndex === rows.length - 1
-    //       DomTools.addClass(elem, 'col--checked')
-    //       if (isTop) {
-    //         DomTools.addClass(elem, 'col--checked-top')
-    //       }
-    //       if (isBottom) {
-    //         DomTools.addClass(elem, 'col--checked-bottom')
-    //       }
-    //       if (isLeft) {
-    //         DomTools.addClass(elem, 'col--checked-left')
-    //       }
-    //       if (isRight) {
-    //         DomTools.addClass(elem, 'col--checked-right')
-    //       }
-    //     })
-    //   })
-    //   checked.rowNodes = rowNodes
-    // },
+    handleChecked (rowNodes) {
+      let { checked } = this.editStore
+      this.clearChecked()
+      rowNodes.forEach((rows, rowIndex) => {
+        let isTop = rowIndex === 0
+        let isBottom = rowIndex === rowNodes.length - 1
+        rows.forEach((elem, colIndex) => {
+          let isLeft = colIndex === 0
+          let isRight = colIndex === rows.length - 1
+          DomTools.addClass(elem, 'col--checked')
+          if (isTop) {
+            DomTools.addClass(elem, 'col--checked-top')
+          }
+          if (isBottom) {
+            DomTools.addClass(elem, 'col--checked-bottom')
+          }
+          if (isLeft) {
+            DomTools.addClass(elem, 'col--checked-left')
+          }
+          if (isRight) {
+            DomTools.addClass(elem, 'col--checked-right')
+          }
+        })
+      })
+      checked.rowNodes = rowNodes
+    },
     /**
      * 处理所有选中的临时选中
      */

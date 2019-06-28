@@ -96,7 +96,7 @@ export default {
             errList.forEach(params => {
               let { rowIndex, column, rules } = params
               rules.forEach(rule => {
-                msgList.push(`第 ${rowIndex} 行 ${column.label} 校验错误：${rule.message}`)
+                msgList.push(`第 ${rowIndex} 行 ${column.title} 校验错误：${rule.message}`)
               })
             })
           })

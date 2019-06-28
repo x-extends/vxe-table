@@ -76,22 +76,22 @@ export default {
           },
           methods: {
             headerCellClickEvent ({ row, rowIndex, column, columnIndex }, event) {
-              console.log(\`表头单元格点击\${column.label}\`)
+              console.log(\`表头单元格点击\${column.title}\`)
             },
             headerCellDBLClickEvent ({ row, rowIndex, column, columnIndex }, event) {
-              console.log(\`表头单元格双击\${column.label}\`)
+              console.log(\`表头单元格双击\${column.title}\`)
             },
             cellClickEvent ({ row, rowIndex, column, columnIndex }, event) {
-              console.log(\`单元格点击\${column.label}\`)
+              console.log(\`单元格点击\${column.title}\`)
             },
             cellDBLClickEvent ({ row, rowIndex, column, columnIndex }, event) {
-              console.log(\`单元格双击\${column.label}\`)
+              console.log(\`单元格双击\${column.title}\`)
             },
             cellMouseenterEvent ({ row, rowIndex, column, columnIndex }, event) {
-              console.log(\`鼠标进入单元格\${column.label}\`)
+              console.log(\`鼠标进入单元格\${column.title}\`)
             },
             cellMouseleaveEvent ({ row, rowIndex, column, columnIndex }, event) {
-              console.log(\`鼠标离开单元格\${column.label}\`)
+              console.log(\`鼠标离开单元格\${column.title}\`)
             }
           }
         }
@@ -110,22 +110,22 @@ export default {
   },
   methods: {
     headerCellClickEvent ({ row, rowIndex, column, columnIndex }, event) {
-      console.log(`表头单元格点击${column.label}`)
+      console.log(`表头单元格点击${column.title}`)
     },
     headerCellDBLClickEvent ({ row, rowIndex, column, columnIndex }, event) {
-      console.log(`表头单元格双击${column.label}`)
+      console.log(`表头单元格双击${column.title}`)
     },
     cellClickEvent ({ row, rowIndex, column, columnIndex }, event) {
-      console.log(`单元格点击${column.label}`)
+      console.log(`单元格点击${column.title}`)
     },
     cellDBLClickEvent ({ row, rowIndex, column, columnIndex }, event) {
-      console.log(`单元格双击${column.label}`)
+      console.log(`单元格双击${column.title}`)
     },
     cellMouseenterEvent ({ row, rowIndex, column, columnIndex }, event) {
-      console.log(`鼠标进入单元格${column.label}`)
+      console.log(`鼠标进入单元格${column.title}`)
     },
     cellMouseleaveEvent ({ row, rowIndex, column, columnIndex }, event) {
-      console.log(`鼠标离开单元格${column.label}`)
+      console.log(`鼠标离开单元格${column.title}`)
     },
     bodyScrollEvent ({ scrollTop, scrollLeft }, event) {
       console.log(`滚动事件scrollTop=${scrollTop} scrollLeft=${scrollLeft}`)

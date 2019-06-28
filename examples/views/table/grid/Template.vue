@@ -57,7 +57,7 @@ export default {
               return [
                 <span>
                   <i>@</i>
-                  <span style="color: red;" onClick={ this.headerClickEvent }>{ column.label }</span>
+                  <span style="color: red;" onClick={ this.headerClickEvent }>{ column.title }</span>
                 </span>
               ]
             },
@@ -139,7 +139,7 @@ export default {
                       return [
                         <span>
                           <i>@</i>
-                          <span style="color: red;" onClick={ this.headerClickEvent }>{ column.label }</span>
+                          <span style="color: red;" onClick={ this.headerClickEvent }>{ column.title }</span>
                         </span>
                       ]
                     },
@@ -186,7 +186,7 @@ export default {
           },
           methods: {
             clickEvent (row, column) {
-              this.$XMsg.alert(\`\${column.label}点击事件\`)
+              this.$XMsg.alert(\`\${column.title}点击事件\`)
             },
             headerClickEvent (evnt) {
               this.$XMsg.alert('头部点击事件')
@@ -218,7 +218,7 @@ export default {
   },
   methods: {
     clickEvent (row, column) {
-      this.$XMsg.alert(`${column.label}点击事件`)
+      this.$XMsg.alert(`${column.title}点击事件`)
     },
     headerClickEvent (evnt) {
       this.$XMsg.alert('头部点击事件')

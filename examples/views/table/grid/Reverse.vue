@@ -98,9 +98,9 @@ export default {
             reverseTable () {
               let tableData = this.tableData
               this.tableData = this.tableColumn.map(column => {
-                let item = { 0: column.label }
+                let item = { 0: column.title }
                 tableData.forEach((row, rowIndex) => {
-                  item[rowIndex + 1] = row[column.prop]
+                  item[rowIndex + 1] = row[column.field]
                 })
                 return item
               })

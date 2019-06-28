@@ -32,6 +32,10 @@ export default {
       },
       tableProxy: {
         index: true, // 启用动态序号代理
+        props: {
+          data: 'result',
+          total: 'page.total'
+        },
         ajax: {
           query: ({ page }) => XEAjax.getJSON(`/api/user/page/list/${page.pageSize}/${page.currentPage}`)
         }

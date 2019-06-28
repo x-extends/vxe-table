@@ -13,7 +13,7 @@
               class="checkbox-item"
               v-model="column.visible"
               :key="index"
-              @change="$refs.xTable1.refreshColumn()">{{ column.label }}</vxe-checkbox>
+              @change="$refs.xTable1.refreshColumn()">{{ column.title }}</vxe-checkbox>
           </template>
         </div>
       </span>
@@ -52,7 +52,7 @@
               class="checkbox-item"
               v-model="column.visible"
               :key="index"
-              @change="$refs.xTable2.refreshColumn()">{{ column.label }}</vxe-checkbox>
+              @change="$refs.xTable2.refreshColumn()">{{ column.title }}</vxe-checkbox>
           </template>
         </div>
       </span>
@@ -87,7 +87,7 @@
         v-if="column.property"
         class="checkbox-item"
         v-model="column.visible"
-        :key="index">{{ column.label }}</vxe-checkbox>
+        :key="index">{{ column.title }}</vxe-checkbox>
     </template>
 
     <vxe-toolbar :data="tableData" setting>
@@ -153,7 +153,7 @@ export default {
                   class="checkbox-item"
                   v-model="column.visible"
                   :key="index"
-                  @change="$refs.xTable.refreshColumn()">{{ column.label }}</vxe-checkbox>
+                  @change="$refs.xTable.refreshColumn()">{{ column.title }}</vxe-checkbox>
               </template>
             </div>
           </span>
@@ -243,7 +243,7 @@ export default {
                   class="checkbox-item"
                   v-model="column.visible"
                   :key="index"
-                  @change="$refs.xTable.refreshColumn()">{{ column.label }}</vxe-checkbox>
+                  @change="$refs.xTable.refreshColumn()">{{ column.title }}</vxe-checkbox>
               </template>
             </div>
           </span>
@@ -332,7 +332,7 @@ export default {
             v-if="column.property"
             class="checkbox-item"
             v-model="column.visible"
-            :key="index">{{ column.label }}</vxe-checkbox>
+            :key="index">{{ column.title }}</vxe-checkbox>
         </template>
 
         <vxe-toolbar :data="tableData" setting>
