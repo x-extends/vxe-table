@@ -3,7 +3,7 @@
     <header class="page-header">
       <h1 class="title">
         <a href="https://github.com/xuliangzhan/vxe-table/tree/v1.5">
-          <span>vxe-table V1</span>
+          <span>vxe-table</span>
           <img src="https://img.shields.io/npm/dm/vxe-table.svg?style=social&logo=github">
           <img src="https://img.shields.io/github/watchers/xuliangzhan/vxe-table.svg?style=social">
           <img src="https://img.shields.io/github/stars/xuliangzhan/vxe-table.svg?style=social">
