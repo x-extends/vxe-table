@@ -5,6 +5,8 @@ import { Interceptor, Renderer } from '../../v-x-e-table'
 import { UtilTools, DomTools, ExportTools, GlobalEvent, ResizeEvent } from '../../tools'
 
 var rowUniqueId = 0
+var browse = DomTools.browse
+var debounceScrollYDuration = browse.msie ? 40 : 20
 
 /**
  * 渲染浮固定列
@@ -421,6 +423,15 @@ export default {
       let tableFullColumn = UtilTools.getColumnList(value)
       this.tableFullColumn = tableFullColumn
       this.cacheColumnMap()
+      if (tableFullColumn.length) {
+        let cIndex = Math.floor((tableFullColumn.length - 1) / 2)
+        if (tableFullColumn[cIndex].prop) {
+          console.warn('[vxe-table] The property prop is deprecated, please use field')
+        }
+        if (tableFullColumn[cIndex].label) {
+          console.warn('[vxe-table] The property label is deprecated, please use title')
+        }
+      }
     },
     tableColumn () {
       this.analyColumnWidth()
@@ -1778,8 +1789,9 @@ export default {
      */
     triggerHeaderTooltipEvent (evnt, { column }) {
       let { tooltipStore } = this
+      let { own } = column
       if (tooltipStore.column !== column || !tooltipStore.visible) {
-        this.showTooltip(evnt, column.origin.label, column)
+        this.showTooltip(evnt, own.title || own.label, column)
       }
     },
     /**
@@ -2092,7 +2104,7 @@ export default {
                 if (flag) {
                   handleChecked(start, DomTools.getCellIndexs(targetElem), evnt)
                 }
-              }, DomTools.browse.msie ? 80 : 40, { leading: true, trailing: true })
+              }, browse.msie ? 80 : 40, { leading: true, trailing: true })
               document.onmousemove = updateEvent
               document.onmouseup = function (evnt) {
                 document.onmousemove = domMousemove
@@ -2136,7 +2148,7 @@ export default {
             if (flag) {
               handleTempChecked(start, DomTools.getCellIndexs(targetElem), evnt)
             }
-          }, DomTools.browse.msie ? 80 : 40, { leading: true, trailing: true })
+          }, browse.msie ? 80 : 40, { leading: true, trailing: true })
           document.onmousemove = updateEvent
           document.onmouseup = function (evnt) {
             document.onmousemove = domMousemove
@@ -2614,10 +2626,10 @@ export default {
               valueList.push(item.value)
             }
           })
-          filterList.push({ column, prop: property, values: valueList })
+          filterList.push({ column, field: property, prop: property, values: valueList })
         }
       })
-      UtilTools.emitEvent(this, 'filter-change', [{ column, prop: column.property, values, filters: filterList }])
+      UtilTools.emitEvent(this, 'filter-change', [{ column, field: column.property, prop: column.property, values, filters: filterList }])
       if (scrollXLoad || scrollYLoad) {
         this.clearScroll()
       }
@@ -2925,7 +2937,7 @@ export default {
           })
         }
       }
-    }, DomTools.browse.msie ? 40 : 20, { leading: false, trailing: true }),
+    }, debounceScrollYDuration, { leading: false, trailing: true }),
     // 计算可视渲染相关数据
     computeScrollLoad () {
       let { scrollXLoad, scrollYLoad, scrollYStore, scrollXStore, visibleColumn, optimizeOpts } = this

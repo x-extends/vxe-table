@@ -2,6 +2,7 @@
   <div>
     <p>虚拟滚动渲染，加载 1 万行 1 万列</p>
     <p>大数据不建议使用双向绑定的 <table-api-link name="data"/> 属性（vue 监听会大数据会短暂的卡顿），建议使用 <table-api-link prop="loadData"/>/<table-api-link prop="loadColumn"/> 函数</p>
+    <p class="red">注意：如果要启用横向虚拟滚动，所有的列宽度必须一致，否则无法兼容</p>
 
     <vxe-grid
       border

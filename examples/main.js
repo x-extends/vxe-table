@@ -29,17 +29,17 @@ function mockData () {
     fullIndex++
     if (columns.length < 10000) {
       let colItem = {
-        prop: fullIndex % 2 === 0 ? 'age' : (fullIndex % 3 === 0 ? 'rate' : 'name'),
-        label: 'cloumn_' + fullIndex,
+        field: fullIndex % 2 === 0 ? 'age' : (fullIndex % 3 === 0 ? 'rate' : 'name'),
+        title: 'cloumn_' + fullIndex,
         width: 160
       }
       if (fullIndex === 1) {
         colItem.type = 'selection'
-        colItem.label = null
+        colItem.title = null
         colItem.width = 60
       } else if (fullIndex === 2) {
         colItem.type = 'index'
-        colItem.label = '序号'
+        colItem.title = '序号'
         colItem.width = 100
       }
       if (fullIndex < 4) {

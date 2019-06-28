@@ -44,13 +44,13 @@ export default {
       tableColumn: [
         { type: 'selection', width: 50, fixed: 'left' },
         { type: 'index', width: 60, fixed: 'left' },
-        { prop: 'id', label: 'ID', width: 100, remoteSort: true },
-        { prop: 'name', label: 'Name', width: 300, remoteSort: true },
-        { prop: 'nickname', label: 'Nickname', remoteSort: true, width: 300 },
-        { prop: 'age', label: 'Age', remoteSort: true, width: 100 },
+        { field: 'id', title: 'ID', width: 100, remoteSort: true },
+        { field: 'name', title: 'Name', width: 300, remoteSort: true },
+        { field: 'nickname', title: 'Nickname', remoteSort: true, width: 300 },
+        { field: 'age', title: 'Age', remoteSort: true, width: 100 },
         {
-          prop: 'role',
-          label: 'Role',
+          field: 'role',
+          title: 'Role',
           remoteSort: true,
           width: 200,
           filters: [
@@ -60,7 +60,7 @@ export default {
           ],
           filterMultiple: false
         },
-        { prop: 'describe', label: 'Describe', width: 300, showOverflow: true }
+        { field: 'describe', title: 'Describe', width: 300, showOverflow: true }
       ],
       demoCodes: [
         `
@@ -92,13 +92,13 @@ export default {
               tableColumn: [
                 { type: 'selection', width: 50, fixed: 'left' },
                 { type: 'index', width: 60, fixed: 'left' },
-                { prop: 'id', label: 'ID', width: 100, remoteSort: true },
-                { prop: 'name', label: 'Name', width: 300, remoteSort: true },
-                { prop: 'nickname', label: 'Nickname', remoteSort: true, width: 300 },
-                { prop: 'age', label: 'Age', remoteSort: true, width: 100 },
+                { field: 'id', title: 'ID', width: 100, remoteSort: true },
+                { field: 'name', title: 'Name', width: 300, remoteSort: true },
+                { field: 'nickname', title: 'Nickname', remoteSort: true, width: 300 },
+                { field: 'age', title: 'Age', remoteSort: true, width: 100 },
                 {
-                  prop: 'role',
-                  label: 'Role',
+                  field: 'role',
+                  title: 'Role',
                   remoteSort: true,
                   width: 200,
                   filters: [
@@ -108,7 +108,7 @@ export default {
                   ],
                   filterMultiple: false
                 },
-                { prop: 'describe', label: 'Describe', width: 300, showOverflow: true }
+                { field: 'describe', title: 'Describe', width: 300, showOverflow: true }
               ]
             }
           },

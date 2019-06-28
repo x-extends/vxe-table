@@ -12,11 +12,11 @@
       :data.sync="tableData"
       :edit-config="{key: 'id', trigger: 'manual', mode: 'row'}">
       <vxe-table-column type="index" width="60"></vxe-table-column>
-      <vxe-table-column prop="name" label="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column prop="sex" label="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column prop="date" label="Date" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column prop="address" label="Address" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column label="操作">
+      <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="date" title="Date" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="address" title="Address" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column title="操作">
         <template v-slot="{ row }">
           <template v-if="$refs.xTable.hasActiveRow(row)">
             <vxe-button @click="saveRowEvent(row)">保存</vxe-button>
@@ -56,11 +56,11 @@ export default {
           :data.sync="tableData"
           :edit-config="{key: 'id', trigger: 'manual', mode: 'row'}">
           <vxe-table-column type="index" width="60"></vxe-table-column>
-          <vxe-table-column prop="name" label="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column prop="sex" label="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column prop="date" label="Date" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column prop="address" label="Address" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column label="操作">
+          <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column field="date" title="Date" :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column field="address" title="Address" :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column title="操作">
             <template v-slot="{ row }">
               <template v-if="$refs.xTable.hasActiveRow(row)">
                 <vxe-button @click="saveRowEvent(row)">保存</vxe-button>

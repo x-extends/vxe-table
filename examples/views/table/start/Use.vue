@@ -148,7 +148,8 @@
             msgInfo: 'vxe-icon--info',
             msgSuccess: 'vxe-icon--success',
             msgWarning: 'vxe-icon--warning',
-            msgError: 'vxe-icon--error'
+            msgError: 'vxe-icon--error',
+            msgLoading: 'vxe-icon--refresh roll'
           },
           // 默认快捷菜单
           menu: {},

@@ -1,7 +1,7 @@
 <template>
   <div>
-    <p><grid-api-link name="vxe-grid"/> 解决动态一切需求（动态列、动态数据、动态个性化...）</p>
-    <p>使用 <grid-api-link name="vxe-grid"/> 配置的方式渲染表格，这对一些动态渲染的场景非常有用，完全使用数据进行配置</p>
+    <p><grid-api-link name="vxe-grid"/> 只为解决动态表格一切需求（动态列、动态数据、动态个性化...）</p>
+    <p>继承 <table-api-link name="vxe-table"/> 的所有参数、事件、方法...，使用配置的方式渲染表格，这非常适用于动态渲染的场景，完全使用数据进行配置</p>
 
     <vxe-grid
       border
@@ -47,27 +47,27 @@ export default {
     return {
       tableColumn: [
         { type: 'index', width: 50 },
-        { prop: 'name', label: 'Name' },
-        { prop: 'sex', label: 'Sex', showHeaderOverflow: true },
-        { prop: 'address', label: 'Address', showOverflow: true }
+        { field: 'name', title: 'Name' },
+        { field: 'sex', title: 'Sex', showHeaderOverflow: true },
+        { field: 'address', title: 'Address', showOverflow: true }
       ],
       tableColumn2: [
         { type: 'index', width: 50 },
         {
-          label: '基本信息',
+          title: '基本信息',
           children: [
-            { prop: 'name', label: 'Name' },
+            { field: 'name', title: 'Name' },
             {
-              label: '其他信息',
+              title: '其他信息',
               children: [
-                { prop: 'rate', label: 'Rate' },
-                { prop: 'age', label: 'Age' }
+                { field: 'rate', title: 'Rate' },
+                { field: 'age', title: 'Age' }
               ]
             },
-            { prop: 'sex', label: 'Sex' }
+            { field: 'sex', title: 'Sex' }
           ]
         },
-        { prop: 'address', label: 'Address', showOverflow: true }
+        { field: 'address', title: 'Address', showOverflow: true }
       ],
       tableData: [],
       demoCodes: [
@@ -85,9 +85,9 @@ export default {
             return {
               tableColumn: [
                 { type: 'index', width: 50 },
-                { prop: 'name', label: 'Name' },
-                { prop: 'sex', label: 'Sex', showHeaderOverflow: true },
-                { prop: 'address', label: 'Address', showOverflow: true }
+                { field: 'name', title: 'Name' },
+                { field: 'sex', title: 'Sex', showHeaderOverflow: true },
+                { field: 'address', title: 'Address', showOverflow: true }
               ]
             }
           },
@@ -114,20 +114,20 @@ export default {
               tableColumn2: [
                 { type: 'index', width: 50 },
                 {
-                  label: '基本信息',
+                  title: '基本信息',
                   children: [
-                    { prop: 'name', label: 'Name' },
+                    { field: 'name', title: 'Name' },
                     {
-                      label: '其他信息',
+                      title: '其他信息',
                       children: [
-                        { prop: 'rate', label: 'Rate' },
-                        { prop: 'age', label: 'Age' }
+                        { field: 'rate', title: 'Rate' },
+                        { field: 'age', title: 'Age' }
                       ]
                     },
-                    { prop: 'sex', label: 'Sex' }
+                    { field: 'sex', title: 'Sex' }
                   ]
                 },
-                { prop: 'address', label: 'Address', showOverflow: true }
+                { field: 'address', title: 'Address', showOverflow: true }
               ]
             }
           },

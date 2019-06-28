@@ -39,10 +39,10 @@ export default {
       tableColumn: [
         { type: 'selection', width: 50 },
         { type: 'index', width: 60 },
-        { prop: 'name', label: 'Name' },
-        { prop: 'nickname', label: 'Nickname' },
-        { prop: 'role', label: 'Role' },
-        { prop: 'describe', label: 'Describe', showOverflow: true }
+        { field: 'name', title: 'Name' },
+        { field: 'nickname', title: 'Nickname' },
+        { field: 'role', title: 'Role' },
+        { field: 'describe', title: 'Describe', showOverflow: true }
       ],
       demoCodes: [
         `
@@ -70,10 +70,10 @@ export default {
               tableColumn: [
                 { type: 'selection', width: 50 },
                 { type: 'index', width: 60 },
-                { prop: 'name', label: 'Name' },
-                { prop: 'nickname', label: 'Nickname' },
-                { prop: 'role', label: 'Role' },
-                { prop: 'describe', label: 'Describe', showOverflow: true }
+                { field: 'name', title: 'Name' },
+                { field: 'nickname', title: 'Nickname' },
+                { field: 'role', title: 'Role' },
+                { field: 'describe', title: 'Describe', showOverflow: true }
               ]
             }
           }

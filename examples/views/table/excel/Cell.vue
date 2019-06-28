@@ -68,8 +68,8 @@ export default {
         }
       ].concat(columns.map(name => {
         return {
-          prop: name,
-          label: name,
+          field: name,
+          title: name,
           width: 76,
           headerAlign: 'center',
           editRender: {
@@ -115,8 +115,8 @@ export default {
                 }
               ].concat(columns.map(name => {
                 return {
-                  prop: name,
-                  label: name,
+                  field: name,
+                  title: name,
                   width: 76,
                   headerAlign: 'center',
                   editRender: {

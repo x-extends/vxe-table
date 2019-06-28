@@ -21,26 +21,26 @@
           <a-icon type="question" />
         </template>
       </vxe-table-column>
-      <vxe-table-column prop="name" label="AInput" min-width="140" :edit-render="{type: 'default'}">
+      <vxe-table-column field="name" title="AInput" min-width="140" :edit-render="{type: 'default'}">
         <template v-slot:edit="{ row }">
           <a-input v-model="row.name"></a-input>
         </template>
       </vxe-table-column>
-      <vxe-table-column prop="role" label="AAutoComplete" min-width="160" :edit-render="{type: 'default'}">
+      <vxe-table-column field="role" title="AAutoComplete" min-width="160" :edit-render="{type: 'default'}">
         <template v-slot:edit="{ row }">
           <a-auto-complete v-model="row.role" :dataSource="dataSource" @select="onSelect" @search="handleSearch"/>
         </template>
       </vxe-table-column>
-      <vxe-table-column prop="age" label="AInputNumber"  width="160" :edit-render="{type: 'default'}">
+      <vxe-table-column field="age" title="AInputNumber"  width="160" :edit-render="{type: 'default'}">
         <template v-slot:header="{ column }">
-          <span>{{ column.label }}</span>
+          <span>{{ column.title }}</span>
           <a-icon type="warning" />
         </template>
         <template v-slot:edit="{ row }">
           <a-input-number v-model="row.age" :max="35" :min="18"></a-input-number>
         </template>
       </vxe-table-column>
-      <vxe-table-column prop="sex" label="ASelect" width="140" :edit-render="{type: 'default'}">
+      <vxe-table-column field="sex" title="ASelect" width="140" :edit-render="{type: 'default'}">
         <template v-slot:edit="{ row }">
           <a-select v-model="row.sex">
             <a-select-option v-for="item in sexList" :key="item.value" :value="item.value">{{ item.label }}</a-select-option>
@@ -48,24 +48,24 @@
         </template>
         <template v-slot="{ row }">{{ getSelectLabel(row.sex, sexList) }}</template>
       </vxe-table-column>
-      <vxe-table-column prop="region" label="ACascader" width="200" :edit-render="{type: 'default'}">
+      <vxe-table-column field="region" title="ACascader" width="200" :edit-render="{type: 'default'}">
         <template v-slot:edit="{ row }">
           <a-cascader v-model="row.region" :options="regionList"></a-cascader>
         </template>
         <template v-slot="{ row }">{{ getCascaderLabel(row.region, regionList) }}</template>
       </vxe-table-column>
-      <vxe-table-column prop="date7" label="ADatePicker" width="200" :edit-render="{type: 'default'}">
+      <vxe-table-column field="date7" title="ADatePicker" width="200" :edit-render="{type: 'default'}">
         <template v-slot:edit="{ row }">
           <a-date-picker v-model="row.date7" format="YYYY/MM/DD hh:mm:ss"></a-date-picker>
         </template>
         <template v-slot="{ row }">{{ formatDate(row.date7, 'YYYY/MM/DD hh:mm:ss') }}</template>
       </vxe-table-column>
-      <vxe-table-column prop="rate" label="ARate" width="200" :edit-render="{type: 'visible'}">
+      <vxe-table-column field="rate" title="ARate" width="200" :edit-render="{type: 'visible'}">
         <template v-slot:edit="{ row }">
           <a-rate v-model="row.rate"></a-rate>
         </template>
       </vxe-table-column>
-      <vxe-table-column prop="flag" label="ElSwitch" width="100" :edit-render="{type: 'visible'}">
+      <vxe-table-column field="flag" title="ElSwitch" width="100" :edit-render="{type: 'visible'}">
         <template v-slot:edit="{ row }">
           <a-switch v-model="row.flag"></a-switch>
         </template>
@@ -117,26 +117,26 @@ export default {
               <a-icon type="question" />
             </template>
           </vxe-table-column>
-          <vxe-table-column prop="name" label="AInput" min-width="140" :edit-render="{type: 'default'}">
+          <vxe-table-column field="name" title="AInput" min-width="140" :edit-render="{type: 'default'}">
             <template v-slot:edit="{ row }">
               <a-input v-model="row.name"></a-input>
             </template>
           </vxe-table-column>
-          <vxe-table-column prop="role" label="AAutoComplete" min-width="160" :edit-render="{type: 'default'}">
+          <vxe-table-column field="role" title="AAutoComplete" min-width="160" :edit-render="{type: 'default'}">
             <template v-slot:edit="{ row }">
               <a-auto-complete v-model="row.role" :dataSource="dataSource" @select="onSelect" @search="handleSearch"/>
             </template>
           </vxe-table-column>
-          <vxe-table-column prop="age" label="AInputNumber"  width="160" :edit-render="{type: 'default'}">
+          <vxe-table-column field="age" title="AInputNumber"  width="160" :edit-render="{type: 'default'}">
             <template v-slot:header="{ column }">
-              <span>{{ column.label }}</span>
+              <span>{{ column.title }}</span>
               <a-icon type="warning" />
             </template>
             <template v-slot:edit="{ row }">
               <a-input-number v-model="row.age" :max="35" :min="18"></a-input-number>
             </template>
           </vxe-table-column>
-          <vxe-table-column prop="sex" label="ASelect" width="140" :edit-render="{type: 'default'}">
+          <vxe-table-column field="sex" title="ASelect" width="140" :edit-render="{type: 'default'}">
             <template v-slot:edit="{ row }">
               <a-select v-model="row.sex">
                 <a-select-option v-for="item in sexList" :key="item.value" :value="item.value">{{ item.label }}</a-select-option>
@@ -144,24 +144,24 @@ export default {
             </template>
             <template v-slot="{ row }">{{ getSelectLabel(row.sex, sexList) }}</template>
           </vxe-table-column>
-          <vxe-table-column prop="region" label="ACascader" width="200" :edit-render="{type: 'default'}">
+          <vxe-table-column field="region" title="ACascader" width="200" :edit-render="{type: 'default'}">
             <template v-slot:edit="{ row }">
               <a-cascader v-model="row.region" :options="regionList"></a-cascader>
             </template>
             <template v-slot="{ row }">{{ getCascaderLabel(row.region, regionList) }}</template>
           </vxe-table-column>
-          <vxe-table-column prop="date7" label="ADatePicker" width="200" :edit-render="{type: 'default'}">
+          <vxe-table-column field="date7" title="ADatePicker" width="200" :edit-render="{type: 'default'}">
             <template v-slot:edit="{ row }">
               <a-date-picker v-model="row.date7" format="YYYY/MM/DD hh:mm:ss"></a-date-picker>
             </template>
             <template v-slot="{ row }">{{ formatDate(row.date7, 'YYYY/MM/DD hh:mm:ss') }}</template>
           </vxe-table-column>
-          <vxe-table-column prop="rate" label="ARate" width="200" :edit-render="{type: 'visible'}">
+          <vxe-table-column field="rate" title="ARate" width="200" :edit-render="{type: 'visible'}">
             <template v-slot:edit="{ row }">
               <a-rate v-model="row.rate"></a-rate>
             </template>
           </vxe-table-column>
-          <vxe-table-column prop="flag" label="ElSwitch" width="100" :edit-render="{type: 'visible'}">
+          <vxe-table-column field="flag" title="ElSwitch" width="100" :edit-render="{type: 'visible'}">
             <template v-slot:edit="{ row }">
               <a-switch v-model="row.flag"></a-switch>
             </template>

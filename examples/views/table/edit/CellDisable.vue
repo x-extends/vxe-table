@@ -10,9 +10,9 @@
       :edit-config="{key: 'id', trigger: 'click', mode: 'cell', activeMethod: activeCellMethod}"
       @edit-disabled="editDisabledEvent">
       <vxe-table-column type="index" width="60"></vxe-table-column>
-      <vxe-table-column prop="name" label="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column prop="sex" label="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column prop="date" label="Date" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="date" title="Date" :edit-render="{name: 'input'}"></vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -32,9 +32,9 @@
       :edit-config="{key: 'id', trigger: 'click', mode: 'cell', activeMethod: activeRowMethod}"
       @edit-disabled="editDisabledEvent">
       <vxe-table-column type="index" width="60"></vxe-table-column>
-      <vxe-table-column prop="name" label="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column prop="sex" label="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column prop="date" label="Date" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="date" title="Date" :edit-render="{name: 'input'}"></vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -63,9 +63,9 @@ export default {
           :edit-config="{key: 'id', trigger: 'click', mode: 'cell', activeMethod: activeCellMethod}"
           @edit-disabled="editDisabledEvent">
           <vxe-table-column type="index" width="60"></vxe-table-column>
-          <vxe-table-column prop="name" label="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column prop="sex" label="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column prop="date" label="Date" :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column field="date" title="Date" :edit-render="{name: 'input'}"></vxe-table-column>
         </vxe-table>
         `,
         `
@@ -100,9 +100,9 @@ export default {
           :edit-config="{key: 'id', trigger: 'click', mode: 'row', , activeMethod: activeRowMethod}"
           @edit-disabled="editDisabledEvent">
           <vxe-table-column type="index" width="60"></vxe-table-column>
-          <vxe-table-column prop="name" label="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column prop="sex" label="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column prop="date" label="Date" :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column field="date" title="Date" :edit-render="{name: 'input'}"></vxe-table-column>
         </vxe-table>
         `,
         `

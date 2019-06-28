@@ -10,9 +10,9 @@
       :edit-config="{key: 'id', trigger: 'click', mode: 'row', activeMethod: activeRowMethod}"
       @edit-disabled="editDisabledEvent">
       <vxe-table-column type="index" width="60"></vxe-table-column>
-      <vxe-table-column prop="name" label="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column prop="sex" label="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column prop="date" label="Date" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="date" title="Date" :edit-render="{name: 'input'}"></vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -31,17 +31,17 @@
       :data.sync="tableData"
       :edit-config="{key: 'id', trigger: 'click', mode: 'row'}">
       <vxe-table-column type="index" width="60"></vxe-table-column>
-      <vxe-table-column prop="name" label="Name" :edit-render="{type: 'default'}">
+      <vxe-table-column field="name" title="Name" :edit-render="{type: 'default'}">
         <template v-slot:edit="{ row }">
           <input type="text" v-model="row.name">
         </template>
       </vxe-table-column>
-      <vxe-table-column prop="age" label="Age" :edit-render="{type: 'default'}">
+      <vxe-table-column field="age" title="Age" :edit-render="{type: 'default'}">
         <template v-slot:edit="scope">
           <input type="text" v-model="scope.row.name" :disabled="disableMethod(scope)">
         </template>
       </vxe-table-column>
-      <vxe-table-column prop="date" label="Date" :edit-render="{type: 'default'}">
+      <vxe-table-column field="date" title="Date" :edit-render="{type: 'default'}">
         <template v-slot:edit="{ row }">
           <input type="date" v-model="row.name">
         </template>
@@ -74,9 +74,9 @@ export default {
           :edit-config="{key: 'id', trigger: 'click', mode: 'row', activeMethod: activeRowMethod}"
           @edit-disabled="editDisabledEvent">
           <vxe-table-column type="index" width="60"></vxe-table-column>
-          <vxe-table-column prop="name" label="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column prop="sex" label="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column prop="date" label="Date" :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column field="date" title="Date" :edit-render="{name: 'input'}"></vxe-table-column>
         </vxe-table>
         `,
         `
@@ -107,17 +107,17 @@ export default {
           :data.sync="tableData"
           :edit-config="{key: 'id', trigger: 'click', mode: 'row'}">
           <vxe-table-column type="index" width="60"></vxe-table-column>
-          <vxe-table-column prop="name" label="Name" :edit-render="{type: 'default'}">
+          <vxe-table-column field="name" title="Name" :edit-render="{type: 'default'}">
             <template v-slot:edit="{ row }">
               <input type="text" v-model="row.name">
             </template>
           </vxe-table-column>
-          <vxe-table-column prop="sex" label="Sex" :edit-render="{type: 'default'}">
+          <vxe-table-column field="sex" title="Sex" :edit-render="{type: 'default'}">
             <template v-slot:edit="{ row }">
               <input type="sex" v-model="row.name" :disabled="row.disabled">
             </template>
           </vxe-table-column>
-          <vxe-table-column prop="date" label="Date" :edit-render="{type: 'default'}">
+          <vxe-table-column field="date" title="Date" :edit-render="{type: 'default'}">
             <template v-slot:edit="{ row }">
               <input type="date" v-model="row.name">
             </template>

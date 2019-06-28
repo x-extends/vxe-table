@@ -12,15 +12,16 @@
     </vxe-toolbar>
 
     <vxe-table
-      ref="xTable"
       border
       show-overflow
+      ref="xTable"
+      height="400"
       :data.sync="tableData"
       :edit-config="{key: 'id', trigger: 'click', mode: 'cell'}">
       <vxe-table-column type="index" width="60"></vxe-table-column>
-      <vxe-table-column prop="name" label="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column prop="sex" label="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column prop="age" label="Age" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="age" title="Age" :edit-render="{name: 'input'}"></vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -51,15 +52,16 @@ export default {
         </vxe-toolbar>
         
         <vxe-table
-          ref="xTable"
           border
           show-overflow
+          ref="xTable"
+          height="400"
           :data.sync="tableData"
           :edit-config="{key: 'id', trigger: 'click', mode: 'cell'}">
           <vxe-table-column type="index" width="60"></vxe-table-column>
-          <vxe-table-column prop="name" label="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column prop="sex" label="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column prop="age" label="Age" :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column field="age" title="Age" :edit-render="{name: 'input'}"></vxe-table-column>
         </vxe-table>
         `,
         `
@@ -70,7 +72,7 @@ export default {
             }
           },
           created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 50)
           },
           methods: {
             insertEvent () {
@@ -91,7 +93,7 @@ export default {
     }
   },
   created () {
-    let list = window.MOCK_DATA_LIST.slice(0, 6)
+    let list = window.MOCK_DATA_LIST.slice(0, 50)
     this.tableData = list
   },
   mounted () {

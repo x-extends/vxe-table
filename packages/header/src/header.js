@@ -160,7 +160,7 @@ export default {
           return h('tr', {
             class: ['vxe-header--row', headerRowClassName ? XEUtils.isFunction(headerRowClassName) ? headerRowClassName({ $table, $rowIndex: rowIndex, fixed: fixedType }) : headerRowClassName : '']
           }, cols.map((column, $columnIndex) => {
-            let { columnKey, showHeaderOverflow, headerAlign, renderWidth } = column
+            let { columnKey, showHeaderOverflow, headerAlign, renderWidth, own } = column
             let isGroup = column.children && column.children.length
             let fixedHiddenColumn = fixedType && column.fixed !== fixedType && !isGroup
             let showEllipsis = (showHeaderOverflow || allColumnHeaderOverflow) === 'ellipsis'
@@ -207,7 +207,7 @@ export default {
                   'c--ellipsis': showEllipsis
                 }],
                 attrs: {
-                  title: showTitle ? column.origin.label : null
+                  title: showTitle ? (own.title || own.label) : null
                 },
                 style: {
                   width: showTitle || showTooltip || showEllipsis ? `${border ? renderWidth - 1 : renderWidth}px` : null

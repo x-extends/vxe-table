@@ -13,22 +13,22 @@
       height="300"
       :data="list1">
       <vxe-table-column type="index" width="80"></vxe-table-column>
-      <vxe-table-column prop="name" label="Name">
+      <vxe-table-column field="name" title="Name">
         <template v-slot="{ row }">
           <span v-html="row.name"></span>
         </template>
       </vxe-table-column>
-      <vxe-table-column prop="role" label="Role">
+      <vxe-table-column field="role" title="Role">
         <template v-slot="{ row }">
           <span v-html="row.role"></span>
         </template>
       </vxe-table-column>
-      <vxe-table-column prop="age" label="Age">
+      <vxe-table-column field="age" title="Age">
         <template v-slot="{ row }">
           <span v-html="row.age"></span>
         </template>
       </vxe-table-column>
-      <vxe-table-column prop="address" label="Address">
+      <vxe-table-column field="address" title="Address">
         <template v-slot="{ row }">
           <span v-html="row.address"></span>
         </template>
@@ -54,23 +54,23 @@
     <vxe-table
       :data.sync="list2"
       :tree-config="{key: 'id', children: 'children', expandAll: !!filterName2}">
-      <vxe-table-column type="index" width="120" label="序号" tree-node></vxe-table-column>
-      <vxe-table-column prop="name" label="Name">
+      <vxe-table-column type="index" width="120" title="序号" tree-node></vxe-table-column>
+      <vxe-table-column field="name" title="Name">
         <template v-slot="{ row }">
           <span v-html="row.name"></span>
         </template>
       </vxe-table-column>
-      <vxe-table-column prop="size" label="Size">
+      <vxe-table-column field="size" title="Size">
         <template v-slot="{ row }">
           <span v-html="row.size"></span>
         </template>
       </vxe-table-column>
-      <vxe-table-column prop="type" label="Type">
+      <vxe-table-column field="type" title="Type">
         <template v-slot="{ row }">
           <span v-html="row.type"></span>
         </template>
       </vxe-table-column>
-      <vxe-table-column prop="date" label="Date">
+      <vxe-table-column field="date" title="Date">
         <template v-slot="{ row }">
           <span v-html="row.date"></span>
         </template>
@@ -111,22 +111,22 @@ export default {
           height="300"
           :data="list">
           <vxe-table-column type="index" width="80"></vxe-table-column>
-          <vxe-table-column prop="name" label="Name">
+          <vxe-table-column field="name" title="Name">
             <template v-slot="{ row }">
               <span v-html="row.name"></span>
             </template>
           </vxe-table-column>
-          <vxe-table-column prop="role" label="Role">
+          <vxe-table-column field="role" title="Role">
             <template v-slot="{ row }">
               <span v-html="row.role"></span>
             </template>
           </vxe-table-column>
-          <vxe-table-column prop="age" label="Age">
+          <vxe-table-column field="age" title="Age">
             <template v-slot="{ row }">
               <span v-html="row.age"></span>
             </template>
           </vxe-table-column>
-          <vxe-table-column prop="address" label="Address">
+          <vxe-table-column field="address" title="Address">
             <template v-slot="{ row }">
               <span v-html="row.address"></span>
             </template>
@@ -180,23 +180,23 @@ export default {
         <vxe-table
           :data.sync="list"
           :tree-config="{key: 'id', children: 'children', expandAll: !!filterName2}">
-          <vxe-table-column type="index" width="120" label="序号" tree-node></vxe-table-column>
-          <vxe-table-column prop="name" label="Name">
+          <vxe-table-column type="index" width="120" title="序号" tree-node></vxe-table-column>
+          <vxe-table-column field="name" title="Name">
             <template v-slot="{ row }">
               <span v-html="row.name"></span>
             </template>
           </vxe-table-column>
-          <vxe-table-column prop="size" label="Size">
+          <vxe-table-column field="size" title="Size">
             <template v-slot="{ row }">
               <span v-html="row.size"></span>
             </template>
           </vxe-table-column>
-          <vxe-table-column prop="type" label="Type">
+          <vxe-table-column field="type" title="Type">
             <template v-slot="{ row }">
               <span v-html="row.type"></span>
             </template>
           </vxe-table-column>
-          <vxe-table-column prop="date" label="Date">
+          <vxe-table-column field="date" title="Date">
             <template v-slot="{ row }">
               <span v-html="row.date"></span>
             </template>

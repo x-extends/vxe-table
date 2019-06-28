@@ -15,13 +15,13 @@
           <span>seq= {{ seq }}</span>
         </template>
       </vxe-table-column>
-      <vxe-table-column prop="name" label="Name" sortable>
+      <vxe-table-column field="name" title="Name" sortable>
         <template v-slot="{ rowIndex, columnIndex }">
           <span>rowIndex= {{ rowIndex }}</span>
           <span>columnIndex= {{ columnIndex }}</span>
         </template>
       </vxe-table-column>
-      <vxe-table-column prop="sex" label="Sex" :filters="[{data: ''}]" :filter-method="filterSexMethod">
+      <vxe-table-column field="sex" title="Sex" :filters="[{data: ''}]" :filter-method="filterSexMethod">
         <template v-slot:header="{ column }">
           <span style="color: red;">这样玩也行</span>
         </template>
@@ -36,7 +36,7 @@
           <vxe-button type="text">删除</vxe-button>
         </template>
       </vxe-table-column>
-      <vxe-table-column prop="time" label="Time">
+      <vxe-table-column field="time" title="Time">
         <template v-slot:header="{ column }">
           <vxe-input placeholder="这样也行" size="mini"></vxe-input>
         </template>
@@ -44,7 +44,7 @@
           <span>{{ formatDate(row.time) }}</span>
         </template>
       </vxe-table-column>
-      <vxe-table-column prop="address" label="Address" show-overflow>
+      <vxe-table-column field="address" title="Address" show-overflow>
         <template v-slot="{ row, rowIndex }">
           <select v-if="rowIndex === 1">
             <option value="1">还可以这样</option>
@@ -81,13 +81,13 @@ export default {
               <span>seq= {{ seq }}</span>
             </template>
           </vxe-table-column>
-          <vxe-table-column prop="name" label="Name" sortable>
+          <vxe-table-column field="name" title="Name" sortable>
             <template v-slot="{ rowIndex, columnIndex }">
               <span>rowIndex= {{ rowIndex }}</span>
               <span>columnIndex= {{ columnIndex }}</span>
             </template>
           </vxe-table-column>
-          <vxe-table-column prop="sex" label="Sex" :filters="[{data: ''}]" :filter-method="filterSexMethod">
+          <vxe-table-column field="sex" title="Sex" :filters="[{data: ''}]" :filter-method="filterSexMethod">
             <template v-slot:header="{ column }">
               <span style="color: red;">这样玩也行</span>
             </template>
@@ -102,7 +102,7 @@ export default {
               <vxe-button type="text">删除</vxe-button>
             </template>
           </vxe-table-column>
-          <vxe-table-column prop="time" label="Time">
+          <vxe-table-column field="time" title="Time">
             <template v-slot:header="{ column }">
               <vxe-input placeholder="这样也行" size="mini"></vxe-input>
             </template>
@@ -110,7 +110,7 @@ export default {
               <span>{{ formatDate(row.time) }}</span>
             </template>
           </vxe-table-column>
-          <vxe-table-column prop="address" label="Address" show-overflow>
+          <vxe-table-column field="address" title="Address" show-overflow>
             <template v-slot="{ row, rowIndex }">
               <select v-if="rowIndex === 1">
                 <option value="1">还可以这样</option>

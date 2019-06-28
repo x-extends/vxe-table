@@ -11,10 +11,10 @@
       :footer-method="footerMethod"
       :data.sync="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
-      <vxe-table-column prop="name" label="Name" sortable></vxe-table-column>
-      <vxe-table-column prop="sex" label="Sex"></vxe-table-column>
-      <vxe-table-column prop="age" label="Age"></vxe-table-column>
-      <vxe-table-column prop="rate" label="Rate"></vxe-table-column>
+      <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
+      <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+      <vxe-table-column field="age" title="Age"></vxe-table-column>
+      <vxe-table-column field="rate" title="Rate"></vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -35,10 +35,10 @@
       :footer-cell-class-name="footerCellClassName"
       :data.sync="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
-      <vxe-table-column prop="name" label="Name" sortable></vxe-table-column>
-      <vxe-table-column prop="sex" label="Sex"></vxe-table-column>
-      <vxe-table-column prop="age" label="Age"></vxe-table-column>
-      <vxe-table-column prop="rate" label="Rate"></vxe-table-column>
+      <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
+      <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+      <vxe-table-column field="age" title="Age"></vxe-table-column>
+      <vxe-table-column field="rate" title="Rate"></vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -60,12 +60,12 @@
       :footer-cell-class-name="footerCellClassName"
       :data.sync="tableData">
       <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
-      <vxe-table-column label="基本信息">
-        <vxe-table-column prop="name" label="Name" min-width="600" sortable></vxe-table-column>
-        <vxe-table-column prop="age" label="Age" min-width="600"></vxe-table-column>
+      <vxe-table-column title="基本信息">
+        <vxe-table-column field="name" title="Name" min-width="600" sortable></vxe-table-column>
+        <vxe-table-column field="age" title="Age" min-width="600"></vxe-table-column>
       </vxe-table-column>
-      <vxe-table-column prop="date" label="Date" min-width="600"></vxe-table-column>
-      <vxe-table-column prop="rate" label="Rate" width="200" fixed="right"></vxe-table-column>
+      <vxe-table-column field="date" title="Date" min-width="600"></vxe-table-column>
+      <vxe-table-column field="rate" title="Rate" width="200" fixed="right"></vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -96,10 +96,10 @@ export default {
           :footer-method="footerMethod"
           :data.sync="tableData">
           <vxe-table-column type="index" width="60"></vxe-table-column>
-          <vxe-table-column prop="name" label="Name" sortable></vxe-table-column>
-          <vxe-table-column prop="sex" label="Sex"></vxe-table-column>
-          <vxe-table-column prop="age" label="Age"></vxe-table-column>
-          <vxe-table-column prop="rate" label="Rate"></vxe-table-column>
+          <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
+          <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+          <vxe-table-column field="age" title="Age"></vxe-table-column>
+          <vxe-table-column field="rate" title="Rate"></vxe-table-column>
         </vxe-table>
         `,
         `
@@ -148,10 +148,10 @@ export default {
           :footer-cell-class-name="footerCellClassName"
           :data.sync="tableData">
           <vxe-table-column type="index" width="60"></vxe-table-column>
-          <vxe-table-column prop="name" label="Name" sortable></vxe-table-column>
-          <vxe-table-column prop="sex" label="Sex"></vxe-table-column>
-          <vxe-table-column prop="age" label="Age"></vxe-table-column>
-          <vxe-table-column prop="rate" label="Rate"></vxe-table-column>
+          <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
+          <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+          <vxe-table-column field="age" title="Age"></vxe-table-column>
+          <vxe-table-column field="rate" title="Rate"></vxe-table-column>
         </vxe-table>
         `,
         `
@@ -210,12 +210,12 @@ export default {
           :footer-cell-class-name="footerCellClassName"
           :data.sync="tableData">
           <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
-          <vxe-table-column label="基本信息">
-            <vxe-table-column prop="name" label="Name" min-width="600" sortable></vxe-table-column>
-            <vxe-table-column prop="age" label="Age" min-width="600"></vxe-table-column>
+          <vxe-table-column title="基本信息">
+            <vxe-table-column field="name" title="Name" min-width="600" sortable></vxe-table-column>
+            <vxe-table-column field="age" title="Age" min-width="600"></vxe-table-column>
           </vxe-table-column>
-          <vxe-table-column prop="date" label="Date" min-width="600"></vxe-table-column>
-          <vxe-table-column prop="rate" label="Rate" width="200" fixed="right"></vxe-table-column>
+          <vxe-table-column field="date" title="Date" min-width="600"></vxe-table-column>
+          <vxe-table-column field="rate" title="Rate" width="200" fixed="right"></vxe-table-column>
         </vxe-table>
         `,
         `

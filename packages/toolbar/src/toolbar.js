@@ -113,9 +113,11 @@ export default {
             class: 'vxe-custom--option',
             on: customWrapperOns
           }, tableCustoms.map(column => {
-            return column.property && column.label ? h('vxe-checkbox', {
+            let { property, visible, own } = column
+            let headerTitle = own.title || own.label
+            return property && headerTitle ? h('vxe-checkbox', {
               props: {
-                value: column.visible
+                value: visible
               },
               on: {
                 change: value => {
@@ -125,7 +127,7 @@ export default {
                   }
                 }
               }
-            }, column.label) : null
+            }, headerTitle) : null
           }))
         ])
       ]) : null

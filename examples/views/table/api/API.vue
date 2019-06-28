@@ -19,27 +19,27 @@
       :tree-config="{key: 'id', children: 'list', expandAll: !!filterName, expandRowKeys: defaultExpandRowKeys, trigger: 'cell'}"
       :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus},}"
       @context-menu-click="contextMenuClickEvent">
-      <vxe-table-column prop="name" :label="$t('app.api.title.prop')" min-width="280" tree-node :filters="nameFilters">
+      <vxe-table-column field="name" :title="$t('app.api.title.prop')" min-width="280" tree-node :filters="nameFilters">
         <template v-slot="{ row }">
           <span v-html="row.name"></span>
         </template>
       </vxe-table-column>
-      <vxe-table-column prop="desc" :label="$t('app.api.title.desc')" min-width="200">
+      <vxe-table-column field="desc" :title="$t('app.api.title.desc')" min-width="200">
         <template v-slot="{ row }">
           <span v-html="row.desc"></span>
         </template>
       </vxe-table-column>
-      <vxe-table-column prop="type" :label="$t('app.api.title.type')" min-width="140">
+      <vxe-table-column field="type" :title="$t('app.api.title.type')" min-width="140">
         <template v-slot="{ row }">
           <span v-html="row.type"></span>
         </template>
       </vxe-table-column>
-      <vxe-table-column prop="enum" :label="$t('app.api.title.enum')" min-width="160">
+      <vxe-table-column field="enum" :title="$t('app.api.title.enum')" min-width="160">
         <template v-slot="{ row }">
           <span v-html="row.enum"></span>
         </template>
       </vxe-table-column>
-      <vxe-table-column prop="defVal" :label="$t('app.api.title.defVal')" min-width="160">
+      <vxe-table-column field="defVal" :title="$t('app.api.title.defVal')" min-width="160">
         <template v-slot="{ row }">
           <span v-html="row.defVal"></span>
         </template>
@@ -141,6 +141,10 @@ export default {
   },
   watch: {
     apiName () {
+      this.loadList()
+    },
+    '$i18n.locale' () {
+      // 由于使用 v-html 无法自动翻译，需要重新加载
       this.loadList()
     }
   },

@@ -6,23 +6,23 @@
     <h3>渲染器和插槽对比</h3>
     <p>渲染器：可以完全复用，统一处理逻辑，可配置化；</p>
     <p>插槽：自定义程度高，但需要重复写冗余代码，局限性较大；</p>
-    <h3>尝试一下</h3>
+    <h3>简单示例</h3>
     <p>通过渲染器你可以轻松实现筛选模板、单元格模板，可以根据不同业务实现不一样的组件，这个功能将非常实用</p>
     <p>比如这些插件 <a class="link" href="https://www.npmjs.com/package/vxe-table-plugin-element" target="_blank">vxe-table-plugin-element</a> 等插件都是使用渲染器实现的</p>
     <p>添加单个 renderer.add(name, options)</p>
     <p>混合多个 renderer.mixin(opts)</p>
     <p>删除 renderer.delete(name)</p>
-    <h3>例子：实现一个简单的筛选渲染</h3>
+    <h4>例子：实现一个简单的筛选渲染</h4>
     <pre>
       <code class="javascript">{{ demoCodes[0] }}</code>
       <code class="html">{{ demoCodes[1] }}</code>
     </pre>
-    <h3>例子：实现一个简单的单元格渲染</h3>
+    <h4>例子：实现一个简单的单元格渲染</h4>
     <pre>
       <code class="javascript">{{ demoCodes[2] }}</code>
       <code class="html">{{ demoCodes[3] }}</code>
     </pre>
-    <h3>例子：通过 JSX 实现更加简单，可维护高</h3>
+    <h4>例子：通过 JSX 实现更加简单，可维护高</h4>
     <pre>
       <code class="javascript">{{ demoCodes[4] }}</code>
       <code class="html">{{ demoCodes[5] }}</code>
@@ -85,8 +85,8 @@ export default {
           :edit-config="{key: 'id', trigger: 'click', mode: 'row'}">
           <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
           <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
-          <vxe-table-column prop="age" label="Age" :filters="[{data: null}]" :filter-render="{name: 'MyFilter'}"></vxe-table-column>
-          <vxe-table-column prop="name" label="Name"></vxe-table-column>
+          <vxe-table-column field="age" title="Age" :filters="[{data: null}]" :filter-render="{name: 'MyFilter'}"></vxe-table-column>
+          <vxe-table-column field="name" title="Name"></vxe-table-column>
         </vxe-table>
         `,
         `
@@ -127,8 +127,8 @@ export default {
           :edit-config="{key: 'id', trigger: 'click', mode: 'row'}">
           <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
           <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
-          <vxe-table-column prop="age" label="Age"></vxe-table-column>
-          <vxe-table-column prop="name" label="Name" :edit-render="{name: 'MyCell'}"></vxe-table-column>
+          <vxe-table-column field="age" title="Age"></vxe-table-column>
+          <vxe-table-column field="name" title="Name" :edit-render="{name: 'MyCell'}"></vxe-table-column>
         </vxe-table>
         `,
         `
@@ -154,7 +154,7 @@ export default {
           :edit-config="{key: 'id', trigger: 'click', mode: 'row'}">
           <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
           <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
-          <vxe-table-column prop="name" label="Name" :edit-render="{name: 'MyCell'}"></vxe-table-column>
+          <vxe-table-column field="name" title="Name" :edit-render="{name: 'MyCell'}"></vxe-table-column>
         </vxe-table>
         `,
         `

@@ -65,9 +65,6 @@ export default {
           icon: 'vxe-icon--menu'
         },
         {
-          icon: 'vxe-icon--funnel'
-        },
-        {
           icon: 'vxe-icon--edit-outline'
         },
         {
@@ -75,6 +72,15 @@ export default {
         },
         {
           icon: 'vxe-icon--close'
+        },
+        {
+          icon: 'vxe-icon--refresh'
+        },
+        {
+          icon: 'vxe-icon--refresh roll'
+        },
+        {
+          icon: 'vxe-icon--funnel'
         },
         {
           icon: 'vxe-icon--question'

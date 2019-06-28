@@ -34,11 +34,11 @@ export default {
     return {
       tableColumn: [
         { type: 'selection', width: 60 },
-        { prop: 'name', label: 'Name' },
-        { prop: 'role', label: 'Role' },
-        { prop: 'sex', label: 'Sex' },
-        { prop: 'date3', label: 'Date' },
-        { prop: 'address', label: 'Address', showOverflow: true }
+        { field: 'name', title: 'Name' },
+        { field: 'role', title: 'Role' },
+        { field: 'sex', title: 'Sex' },
+        { field: 'date3', title: 'Date' },
+        { field: 'address', title: 'Address', showOverflow: true }
       ],
       tableData: [],
       demoCodes: [
@@ -62,11 +62,11 @@ export default {
             return {
               tableColumn: [
                 { type: 'selection', width: 60 },
-                { prop: 'name', label: 'Name' },
-                { prop: 'role', label: 'Role' },
-                { prop: 'sex', label: 'Sex' },
-                { prop: 'date3', label: 'Date' },
-                { prop: 'address', label: 'Address', showOverflow: true }
+                { field: 'name', title: 'Name' },
+                { field: 'role', title: 'Role' },
+                { field: 'sex', title: 'Sex' },
+                { field: 'date3', title: 'Date' },
+                { field: 'address', title: 'Address', showOverflow: true }
               ],
               tableData: []
             }

@@ -11,23 +11,23 @@
       :data.sync="tableData"
       :edit-config="{key: 'id', trigger: 'click', mode: 'cell'}">
       <vxe-table-column type="selection" width="60"></vxe-table-column>
-      <vxe-table-column type="index" label="Number" width="80"></vxe-table-column>
-      <vxe-table-column prop="name" label="AInput" min-width="140" :edit-render="{name: 'AInput'}"></vxe-table-column>
-      <vxe-table-column prop="role" label="AAutoComplete" width="160" :edit-render="{name: 'AAutoComplete', props: ACProps, events: {search: roleSearchEvent}}"></vxe-table-column>
-      <vxe-table-column prop="age" label="AInputNumber" width="160" :edit-render="{name: 'AInputNumber', props: {max: 35, min: 18}}"></vxe-table-column>
-      <vxe-table-column prop="sex" label="ASelect" width="140" :edit-render="{name: 'ASelect', options: sexList}"></vxe-table-column>
-      <vxe-table-column prop="sex1" label="ASelect" width="160" :edit-render="{name: 'ASelect', options: sexList, props: {mode: 'multiple'}}"></vxe-table-column>
-      <vxe-table-column prop="sex2" label="ASelect" width="140" :edit-render="{name: 'ASelect', optionGroups: sexGroupList}"></vxe-table-column>
-      <vxe-table-column prop="region" label="ACascader" width="200" :edit-render="{name: 'ACascader', props: {options: regionList}}"></vxe-table-column>
-      <vxe-table-column prop="date7" label="ADatePicker" width="140" :edit-render="{name: 'ADatePicker', props: {type: 'date', format: 'YYYY/MM/DD'}}"></vxe-table-column>
-      <vxe-table-column prop="date8" label="AMonthPicker" width="140" :edit-render="{name: 'AMonthPicker'}"></vxe-table-column>
-      <vxe-table-column prop="date9" label="AWeekPicker" width="140" :edit-render="{name: 'AWeekPicker'}"></vxe-table-column>
-      <vxe-table-column prop="date11" label="ARangePicker" width="240" :edit-render="{name: 'ARangePicker'}"></vxe-table-column>
-      <vxe-table-column prop="date10" label="ATimePicker" width="140" :edit-render="{name: 'ATimePicker'}"></vxe-table-column>
-      <vxe-table-column prop="attr1" label="ATreeSelect" width="140" :edit-render="{name: 'ATreeSelect', props: {treeData}}"></vxe-table-column>
-      <vxe-table-column prop="attr2" label="ATreeSelect" width="140" :edit-render="{name: 'ATreeSelect', props: {treeData, treeCheckable: true}}"></vxe-table-column>
-      <vxe-table-column prop="flag" label="ASwitch" width="100" :edit-render="{name: 'ASwitch', type: 'visible'}"></vxe-table-column>
-      <vxe-table-column prop="rate" label="ARate" width="200" :edit-render="{name: 'ARate', type: 'visible'}"></vxe-table-column>
+      <vxe-table-column type="index" title="Number" width="80"></vxe-table-column>
+      <vxe-table-column field="name" title="AInput" min-width="140" :edit-render="{name: 'AInput'}"></vxe-table-column>
+      <vxe-table-column field="role" title="AAutoComplete" width="160" :edit-render="{name: 'AAutoComplete', props: ACProps, events: {search: roleSearchEvent}}"></vxe-table-column>
+      <vxe-table-column field="age" title="AInputNumber" width="160" :edit-render="{name: 'AInputNumber', props: {max: 35, min: 18}}"></vxe-table-column>
+      <vxe-table-column field="sex" title="ASelect" width="140" :edit-render="{name: 'ASelect', options: sexList}"></vxe-table-column>
+      <vxe-table-column field="sex1" title="ASelect" width="160" :edit-render="{name: 'ASelect', options: sexList, props: {mode: 'multiple'}}"></vxe-table-column>
+      <vxe-table-column field="sex2" title="ASelect" width="140" :edit-render="{name: 'ASelect', optionGroups: sexGroupList}"></vxe-table-column>
+      <vxe-table-column field="region" title="ACascader" width="200" :edit-render="{name: 'ACascader', props: {options: regionList}}"></vxe-table-column>
+      <vxe-table-column field="date7" title="ADatePicker" width="140" :edit-render="{name: 'ADatePicker', props: {type: 'date', format: 'YYYY/MM/DD'}}"></vxe-table-column>
+      <vxe-table-column field="date8" title="AMonthPicker" width="140" :edit-render="{name: 'AMonthPicker'}"></vxe-table-column>
+      <vxe-table-column field="date9" title="AWeekPicker" width="140" :edit-render="{name: 'AWeekPicker'}"></vxe-table-column>
+      <vxe-table-column field="date11" title="ARangePicker" width="240" :edit-render="{name: 'ARangePicker'}"></vxe-table-column>
+      <vxe-table-column field="date10" title="ATimePicker" width="140" :edit-render="{name: 'ATimePicker'}"></vxe-table-column>
+      <vxe-table-column field="attr1" title="ATreeSelect" width="140" :edit-render="{name: 'ATreeSelect', props: {treeData}}"></vxe-table-column>
+      <vxe-table-column field="attr2" title="ATreeSelect" width="140" :edit-render="{name: 'ATreeSelect', props: {treeData, treeCheckable: true}}"></vxe-table-column>
+      <vxe-table-column field="flag" title="ASwitch" width="100" :edit-render="{name: 'ASwitch', type: 'visible'}"></vxe-table-column>
+      <vxe-table-column field="rate" title="ARate" width="200" :edit-render="{name: 'ARate', type: 'visible'}"></vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -113,23 +113,23 @@ export default {
           :data.sync="tableData"
           :edit-config="{key: 'id', trigger: 'click', mode: 'cell'}">
           <vxe-table-column type="selection" width="60"></vxe-table-column>
-          <vxe-table-column type="index" label="Number" width="80"></vxe-table-column>
-          <vxe-table-column prop="name" label="AInput" min-width="140" :edit-render="{name: 'AInput'}"></vxe-table-column>
-          <vxe-table-column prop="role" label="AAutoComplete" width="160" :edit-render="{name: 'AAutoComplete', props: ACProps, events: {search: roleSearchEvent}}"></vxe-table-column>
-          <vxe-table-column prop="age" label="AInputNumber" width="160" :edit-render="{name: 'AInputNumber', props: {max: 35, min: 18}}"></vxe-table-column>
-          <vxe-table-column prop="sex" label="ASelect" width="140" :edit-render="{name: 'ASelect', options: sexList}"></vxe-table-column>
-          <vxe-table-column prop="sex1" label="ASelect" width="160" :edit-render="{name: 'ASelect', options: sexList, props: {mode: 'multiple'}}"></vxe-table-column>
-          <vxe-table-column prop="sex2" label="ASelect" width="140" :edit-render="{name: 'ASelect', optionGroups: sexGroupList}"></vxe-table-column>
-          <vxe-table-column prop="region" label="ACascader" width="200" :edit-render="{name: 'ACascader', props: {options: regionList}}"></vxe-table-column>
-          <vxe-table-column prop="date7" label="ADatePicker" width="140" :edit-render="{name: 'ADatePicker', props: {type: 'date', format: 'YYYY/MM/DD'}}"></vxe-table-column>
-          <vxe-table-column prop="date8" label="AMonthPicker" width="140" :edit-render="{name: 'AMonthPicker'}"></vxe-table-column>
-          <vxe-table-column prop="date9" label="AWeekPicker" width="140" :edit-render="{name: 'AWeekPicker'}"></vxe-table-column>
-          <vxe-table-column prop="date11" label="ARangePicker" width="240" :edit-render="{name: 'ARangePicker'}"></vxe-table-column>
-          <vxe-table-column prop="date10" label="ATimePicker" width="140" :edit-render="{name: 'ATimePicker'}"></vxe-table-column>
-          <vxe-table-column prop="attr1" label="ATreeSelect" width="140" :edit-render="{name: 'ATreeSelect', props: {treeData}}"></vxe-table-column>
-          <vxe-table-column prop="attr2" label="ATreeSelect" width="140" :edit-render="{name: 'ATreeSelect', props: {treeData, treeCheckable: true}}"></vxe-table-column>
-          <vxe-table-column prop="flag" label="ASwitch" width="100" :edit-render="{name: 'ASwitch', type: 'visible'}"></vxe-table-column>
-          <vxe-table-column prop="rate" label="ARate" width="200" :edit-render="{name: 'ARate', type: 'visible'}"></vxe-table-column>
+          <vxe-table-column type="index" title="Number" width="80"></vxe-table-column>
+          <vxe-table-column field="name" title="AInput" min-width="140" :edit-render="{name: 'AInput'}"></vxe-table-column>
+          <vxe-table-column field="role" title="AAutoComplete" width="160" :edit-render="{name: 'AAutoComplete', props: ACProps, events: {search: roleSearchEvent}}"></vxe-table-column>
+          <vxe-table-column field="age" title="AInputNumber" width="160" :edit-render="{name: 'AInputNumber', props: {max: 35, min: 18}}"></vxe-table-column>
+          <vxe-table-column field="sex" title="ASelect" width="140" :edit-render="{name: 'ASelect', options: sexList}"></vxe-table-column>
+          <vxe-table-column field="sex1" title="ASelect" width="160" :edit-render="{name: 'ASelect', options: sexList, props: {mode: 'multiple'}}"></vxe-table-column>
+          <vxe-table-column field="sex2" title="ASelect" width="140" :edit-render="{name: 'ASelect', optionGroups: sexGroupList}"></vxe-table-column>
+          <vxe-table-column field="region" title="ACascader" width="200" :edit-render="{name: 'ACascader', props: {options: regionList}}"></vxe-table-column>
+          <vxe-table-column field="date7" title="ADatePicker" width="140" :edit-render="{name: 'ADatePicker', props: {type: 'date', format: 'YYYY/MM/DD'}}"></vxe-table-column>
+          <vxe-table-column field="date8" title="AMonthPicker" width="140" :edit-render="{name: 'AMonthPicker'}"></vxe-table-column>
+          <vxe-table-column field="date9" title="AWeekPicker" width="140" :edit-render="{name: 'AWeekPicker'}"></vxe-table-column>
+          <vxe-table-column field="date11" title="ARangePicker" width="240" :edit-render="{name: 'ARangePicker'}"></vxe-table-column>
+          <vxe-table-column field="date10" title="ATimePicker" width="140" :edit-render="{name: 'ATimePicker'}"></vxe-table-column>
+          <vxe-table-column field="attr1" title="ATreeSelect" width="140" :edit-render="{name: 'ATreeSelect', props: {treeData}}"></vxe-table-column>
+          <vxe-table-column field="attr2" title="ATreeSelect" width="140" :edit-render="{name: 'ATreeSelect', props: {treeData, treeCheckable: true}}"></vxe-table-column>
+          <vxe-table-column field="flag" title="ASwitch" width="100" :edit-render="{name: 'ASwitch', type: 'visible'}"></vxe-table-column>
+          <vxe-table-column field="rate" title="ARate" width="200" :edit-render="{name: 'ARate', type: 'visible'}"></vxe-table-column>
         </vxe-table>
         `,
         `

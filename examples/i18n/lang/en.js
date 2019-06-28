@@ -230,8 +230,10 @@ module.exports = {
       tableColumn: {
         desc: {
           type: 'The type of the column',
-          prop: 'Column field name',
-          label: 'Column label',
+          prop: '在 v3.0 中废弃，请使用 field',
+          field: 'Column field name',
+          label: '在 v3.0 中废弃，请使用 title',
+          title: 'Column title',
           width: 'Column width',
           minWidth: 'Minimum height of the column,The remaining space is automatically allocated proportionally',
           resizable: 'Whether column resizing allows dragging column widths',

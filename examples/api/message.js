@@ -42,7 +42,7 @@ const apis = [
         name: 'status',
         descKey: 'app.api.msg.desc.status',
         type: 'String',
-        enum: 'info, success, warning, error',
+        enum: 'info, success, warning, error, loading',
         defVal: '',
         list: []
       },

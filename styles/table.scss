@@ -62,6 +62,13 @@
       border-bottom: 1px solid $vxe-table-border-color;
     }
   }
+  &.t--stripe {
+    .vxe-body--row {
+      &:nth-child(2n) {
+        background-color: $vxe-table-row-striped-background-color;
+      }
+    }
+  }
   &.row--highlight {
     .vxe-body--row {
       &:hover {
@@ -73,13 +80,6 @@
     .vxe-header--column {
       &:hover {
         background-color: $vxe-table-column-hover-background-color;
-      }
-    }
-  }
-  &.t--stripe {
-    .vxe-body--row {
-      &:nth-child(2n) {
-        background-color: $vxe-table-row-striped-background-color;
       }
     }
   }
