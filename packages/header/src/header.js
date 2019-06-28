@@ -220,7 +220,7 @@ export default {
               class: ['vxe-header--column', column.id, {
                 [`col--${headerAlign}`]: headerAlign,
                 // 'col--current': selectColumn === column,
-                'type--index': column.type === 'index',
+                'col--index': column.type === 'index',
                 'fixed--hidden': fixedHiddenColumn,
                 'filter--active': column.filters.some(item => item.checked)
               }, headerCellClassName ? XEUtils.isFunction(headerCellClassName) ? headerCellClassName({ $table, $rowIndex: rowIndex, column, columnIndex, $columnIndex, fixed: fixedType }) : headerCellClassName : ''],

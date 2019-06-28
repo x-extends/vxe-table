@@ -317,6 +317,9 @@ export default {
       // },
       // 存放可编辑相关信息
       editStore: {
+        titles: {
+          columns: []
+        },
         // 所有选中
         checked: {
           rows: [],
@@ -544,6 +547,7 @@ export default {
       vSize,
       editConfig,
       validConfig = {},
+      mouseConfig = {},
       editRules,
       showFooter,
       footerMethod,
@@ -573,6 +577,7 @@ export default {
         't--animat': optimizeOpts.animat,
         't--stripe': stripe,
         't--border': border,
+        't--checked': mouseConfig.checked,
         'is--loading': loading,
         'row--highlight': highlightHoverRow,
         'column--highlight': highlightHoverColumn
@@ -2395,8 +2400,9 @@ export default {
       let { _elemStore, mouseConfig = {} } = this
       let { column } = params
       UtilTools.emitEvent(this, 'header-cell-click', [params, evnt])
-      if (mouseConfig.checked) {
+      if (mouseConfig.checked && column.type !== 'index') {
         let trList = _elemStore['main-body-list'].children
+        this.handleHeaderChecked([evnt.currentTarget])
         if (trList.length) {
           let startCell = trList[0].querySelector(`.${column.id}`)
           let endCell = trList[trList.length - 1].querySelector(`.${column.id}`)
@@ -2430,9 +2436,15 @@ export default {
      * 如果是双击模式，则单击后选中状态
      */
     triggerCellClickEvent (evnt, params) {
-      let { $el, highlightCurrentRow, editStore, treeConfig, editConfig } = this
+      let { $el, mouseConfig = {}, highlightCurrentRow, editStore, treeConfig, editConfig, _elemStore } = this
       let { actived } = editStore
-      let { column, columnIndex } = params
+      let { column, columnIndex, cell } = params
+      if (mouseConfig.checked && column.type === 'index') {
+        let trList = _elemStore['main-body-list'].children
+        this.clearHeaderChecked()
+        this.handleChecked(DomTools.getRowNodes(trList, DomTools.getCellNodeIndex(cell.nextElementSibling), DomTools.getCellNodeIndex(cell.parentNode.lastElementChild)))
+        DomTools.addClass(cell, 'col--checked')
+      }
       if (highlightCurrentRow) {
         if (!this.getEventTargetNode(evnt, $el, 'vxe-tree-wrapper').flag) {
           this.setCurrentRow(params.row)
@@ -2644,19 +2656,16 @@ export default {
      * 清除所有选中状态
      */
     clearChecked (evnt) {
-      let { editStore } = this
+      let { editStore, _elemStore } = this
       let { checked } = editStore
+      let bodyElem = _elemStore['main-body-list']
       checked.rows = []
       checked.columns = []
       checked.tRows = []
       checked.tColumns = []
-      if (checked.rowNodes) {
-        checked.rowNodes.forEach(nodes => {
-          nodes.forEach(elem => {
-            DomTools.removeClass(elem, 'col--checked')
-          })
-        })
-      }
+      XEUtils.arrayEach(bodyElem.querySelectorAll('.col--checked'), elem => {
+        DomTools.removeClass(elem, 'col--checked')
+      })
       return this.$nextTick()
     },
     /**
@@ -2721,6 +2730,23 @@ export default {
         })
       })
       checked.rowNodes = rowNodes
+    },
+    handleHeaderChecked (cellNodes) {
+      let { titles } = this.editStore
+      this.clearHeaderChecked()
+      cellNodes.forEach(elem => {
+        DomTools.addClass(elem, 'col--title-checked')
+      })
+      titles.cellNodes = cellNodes
+    },
+    clearHeaderChecked () {
+      let { titles } = this.editStore
+      if (titles.cellNodes) {
+        titles.cellNodes.forEach(elem => {
+          DomTools.removeClass(elem, 'col--title-checked')
+        })
+      }
+      return this.$nextTick()
     },
     /**
      * 处理所有选中的临时选中

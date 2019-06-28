@@ -100,6 +100,7 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
   // 点击事件处理
   if (highlightCurrentRow ||
     tableListeners['cell-click'] ||
+    mouseConfig.checked ||
     (editRender && editConfig) ||
     (treeConfig && (treeConfig.trigger === 'row' || (column.treeNode && treeConfig.trigger === 'cell')))) {
     tdOns.click = evnt => {
@@ -157,6 +158,7 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
       // 'col--copyed-right': copyedLocat.right,
       // 'col--actived': editRender && actived.row === row && actived.column === column,
       'col--dirty': isDirty,
+      'col--index': column.type === 'index',
       'col--valid-error': validError,
       // 'col--current': selectColumn === column,
       'edit--visible': editRender && editRender.type === 'visible',

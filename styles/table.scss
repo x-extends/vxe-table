@@ -84,7 +84,7 @@
   &.column--highlight {
     .vxe-header--column {
       &:hover {
-        &:not(.type--index) {
+        &:not(.col--index) {
           background-color: $vxe-table-column-hover-background-color;
         }
       }
@@ -131,6 +131,26 @@
     .vxe-table--fixed-left-wrapper {
       .vxe-body--column{
         border-right-color: $vxe-table-border-color;
+      }
+    }
+  }
+  &.t--checked {
+    .vxe-header--column,
+    .vxe-body--column {
+      &.col--index {
+        text-align: center;
+      }
+    }
+    .vxe-header--column {
+      &.col--index {
+        .vxe-cell {
+          visibility: hidden;
+        }
+      }
+    }
+    .vxe-body--column {
+      &.col--index {
+        background-color: $vxe-table-header-background-color;
       }
     }
   }
