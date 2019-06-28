@@ -6,3 +6,41 @@
   overflow-y: auto;
   overflow-x: auto;
 }
+
+// .vxe-body--row {
+//   &:first-child {
+//     .vxe-body--column {
+//       &.col--current {
+//         .vxe-cell--highlight-line {
+//           border-top-width: 1px;
+//         }
+//       }
+//     }
+//   }
+//   &:last-child {
+//     .vxe-body--column {
+//       &.col--current {
+//         .vxe-cell--highlight-line {
+//           border-bottom-width: 1px;
+//         }
+//       }
+//     }
+//   }
+// }
+// .vxe-body--column {
+//   &.col--current {
+//     position: relative;
+//     .vxe-cell--highlight-line {
+//       display: block;
+//       position: absolute;
+//       top: 0;
+//       left: 0;
+//       width: 100%;
+//       height: 100%;
+//       border-width: 0 1px;
+//       border-style: solid;
+//       border-color: $vxe-primary-color;
+//       pointer-events: none;
+//     }
+//   }
+// }

@@ -39,10 +39,10 @@ export default {
       tableColumn: [
         { type: 'index', width: 60 },
         { type: 'selection', width: 50 },
-        { prop: 'name', label: 'Name', editRender: { name: 'input' } },
-        { prop: 'nickname', label: 'Nickname', editRender: { name: 'input' } },
-        { prop: 'role', label: 'Role', editRender: { name: 'input' } },
-        { prop: 'describe', label: 'Describe', showOverflow: true, editRender: { name: 'input' } }
+        { field: 'name', title: 'Name', editRender: { name: 'input' } },
+        { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
+        { field: 'role', title: 'Role', editRender: { name: 'input' } },
+        { field: 'describe', title: 'Describe', showOverflow: true, editRender: { name: 'input' } }
       ],
       tableData: [],
       demoCodes: [
@@ -71,10 +71,10 @@ export default {
               tableColumn: [
                 { type: 'index', width: 60 },
                 { type: 'selection', width: 50 },
-                { prop: 'name', label: 'Name', editRender: { name: 'input' } },
-                { prop: 'nickname', label: 'Nickname', editRender: { name: 'input' } },
-                { prop: 'role', label: 'Role', editRender: { name: 'input' } },
-                { prop: 'describe', label: 'Describe', showOverflow: true, editRender: { name: 'input' } }
+                { field: 'name', title: 'Name', editRender: { name: 'input' } },
+                { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
+                { field: 'role', title: 'Role', editRender: { name: 'input' } },
+                { field: 'describe', title: 'Describe', showOverflow: true, editRender: { name: 'input' } }
               ],
               tableData: []
             }

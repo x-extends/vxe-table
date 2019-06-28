@@ -17,6 +17,15 @@ const apis = [
       {
         name: 'prop',
         descKey: 'app.api.tableColumn.desc.prop',
+        disabled: true,
+        type: 'String',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'field',
+        descKey: 'app.api.tableColumn.desc.field',
         type: 'String',
         enum: '',
         defVal: '',
@@ -25,6 +34,15 @@ const apis = [
       {
         name: 'label',
         descKey: 'app.api.tableColumn.desc.label',
+        disabled: true,
+        type: 'String',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'title',
+        descKey: 'app.api.tableColumn.desc.title',
         type: 'String',
         enum: '',
         defVal: '',

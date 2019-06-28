@@ -15,11 +15,11 @@
       :select-config="{key: 'id', reserve: true}"
       :data.sync="tableData">
       <vxe-table-column type="selection" width="60"></vxe-table-column>
-      <vxe-table-column type="index" label="序号" width="60"></vxe-table-column>
-      <vxe-table-column prop="name" label="Name" sortable></vxe-table-column>
-      <vxe-table-column prop="sex" label="Sex"></vxe-table-column>
-      <vxe-table-column prop="age" label="Age"></vxe-table-column>
-      <vxe-table-column prop="rate" label="Rate"></vxe-table-column>
+      <vxe-table-column type="index" title="序号" width="60"></vxe-table-column>
+      <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
+      <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+      <vxe-table-column field="age" title="Age"></vxe-table-column>
+      <vxe-table-column field="rate" title="Rate"></vxe-table-column>
     </vxe-table>
 
     <vxe-pager
@@ -66,11 +66,11 @@ export default {
           :select-config="{key: 'id', reserve: true}"
           :data.sync="tableData">
           <vxe-table-column type="selection" width="60"></vxe-table-column>
-          <vxe-table-column type="index" label="序号" width="60"></vxe-table-column>
-          <vxe-table-column prop="name" label="Name" sortable></vxe-table-column>
-          <vxe-table-column prop="sex" label="Sex"></vxe-table-column>
-          <vxe-table-column prop="age" label="Age"></vxe-table-column>
-          <vxe-table-column prop="rate" label="Rate"></vxe-table-column>
+          <vxe-table-column type="index" title="序号" width="60"></vxe-table-column>
+          <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
+          <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+          <vxe-table-column field="age" title="Age"></vxe-table-column>
+          <vxe-table-column field="rate" title="Rate"></vxe-table-column>
         </vxe-table>
 
         <vxe-pager

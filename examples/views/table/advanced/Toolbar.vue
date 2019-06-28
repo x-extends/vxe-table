@@ -15,11 +15,11 @@
       height="400"
       :data.sync="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
-      <vxe-table-column prop="name" label="Name"></vxe-table-column>
-      <vxe-table-column prop="role" label="Role"></vxe-table-column>
-      <vxe-table-column prop="sex" label="Sex"></vxe-table-column>
-      <vxe-table-column prop="age" label="Age"></vxe-table-column>
-      <vxe-table-column prop="rate" label="Rate"></vxe-table-column>
+      <vxe-table-column field="name" title="Name"></vxe-table-column>
+      <vxe-table-column field="role" title="Role"></vxe-table-column>
+      <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+      <vxe-table-column field="age" title="Age"></vxe-table-column>
+      <vxe-table-column field="rate" title="Rate"></vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -52,10 +52,10 @@ export default {
           height="400"
           :data.sync="tableData">
           <vxe-table-column type="index" width="60"></vxe-table-column>
-          <vxe-table-column prop="name" label="Name"></vxe-table-column>
-          <vxe-table-column prop="role" label="Role"></vxe-table-column>
-          <vxe-table-column prop="sex" label="Sex"></vxe-table-column>
-          <vxe-table-column prop="age" label="Age"></vxe-table-column>
+          <vxe-table-column field="name" title="Name"></vxe-table-column>
+          <vxe-table-column field="role" title="Role"></vxe-table-column>
+          <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+          <vxe-table-column field="age" title="Age"></vxe-table-column>
         </vxe-table>
         `,
         `

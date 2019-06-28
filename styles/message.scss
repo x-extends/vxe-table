@@ -133,10 +133,19 @@
       color: #F5222D;
     }
   }
+  &.msg--loading {
+    .vxe-msg--status-wrapper {
+      color: #78B1EB;
+    }
+  }
   .vxe-msg--status-wrapper {
     font-size: 16px;
+    padding-top: 2px;
     margin-right: 10px;
     float: left;
+    .vxe-msg--status-icon {
+      display: block;
+    }
   }
   .vxe-msg--body,
   .vxe-msg--footer {

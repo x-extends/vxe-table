@@ -225,10 +225,10 @@ new Vue({ i18n }).$mount('#app')
 <template>
   <div>
     <vxe-table ref="xTable" :data.sync="tableData">
-      <vxe-table-column type="index" label="Number" width="80"></vxe-table-column>
-      <vxe-table-column prop="name" label="Name"></vxe-table-column>
-      <vxe-table-column prop="sex" label="Sex"></vxe-table-column>
-      <vxe-table-column prop="address" label="Address"></vxe-table-column>
+      <vxe-table-column type="index" title="Number" width="80"></vxe-table-column>
+      <vxe-table-column field="name" title="Name"></vxe-table-column>
+      <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+      <vxe-table-column field="address" title="Address"></vxe-table-column>
     </vxe-table>
   </div>
 </template>

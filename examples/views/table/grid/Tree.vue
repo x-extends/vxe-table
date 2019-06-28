@@ -32,11 +32,11 @@ export default {
         }
       },
       tableColumn: [
-        { prop: 'id', label: 'ID', width: 120, treeNode: true },
-        { prop: 'name', label: '名称' },
-        { prop: 'size', label: '大小' },
-        { prop: 'createTime', label: '创建时间', formatter: this.formatterDate },
-        { prop: 'updateTime', label: '修改时间', formatter: this.formatterDate }
+        { field: 'id', title: 'ID', width: 120, treeNode: true },
+        { field: 'name', title: '名称' },
+        { field: 'size', title: '大小' },
+        { field: 'createTime', title: '创建时间', formatter: this.formatterDate },
+        { field: 'updateTime', title: '修改时间', formatter: this.formatterDate }
       ],
       demoCodes: [
         `
@@ -58,11 +58,11 @@ export default {
               },
               tableColumn: [
                 { type: 'selection', width: 100, treeNode: true },
-                { prop: 'id', label: 'ID', width: 0 },
-                { prop: 'name', label: '名称' },
-                { prop: 'size', label: '大小' },
-                { prop: 'createTime', label: '创建时间' },
-                { prop: 'updateTime', label: '修改时间' }
+                { field: 'id', title: 'ID', width: 0 },
+                { field: 'name', title: '名称' },
+                { field: 'size', title: '大小' },
+                { field: 'createTime', title: '创建时间' },
+                { field: 'updateTime', title: '修改时间' }
               ]
             }
           },

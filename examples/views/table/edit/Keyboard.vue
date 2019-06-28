@@ -13,10 +13,10 @@
       @edit-actived="editActivedEvent"
       @edit-closed="editClosedEvent">
       <vxe-table-column type="index" width="60"></vxe-table-column>
-      <vxe-table-column prop="name" label="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column prop="sex" label="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column prop="date" label="Date"></vxe-table-column>
-      <vxe-table-column prop="address" label="Address" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="date" title="Date"></vxe-table-column>
+      <vxe-table-column field="address" title="Address" :edit-render="{name: 'input'}"></vxe-table-column>
     </vxe-table>
 
     <pre>
@@ -60,10 +60,10 @@ export default {
           :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true}"
           :edit-config="{key: 'id', trigger: 'dblclick', mode: 'cell'}">
           <vxe-table-column type="index" width="60"></vxe-table-column>
-          <vxe-table-column prop="name" label="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column prop="sex" label="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column prop="date" label="Date"></vxe-table-column>
-          <vxe-table-column prop="address" label="Address" show-overflow :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column field="date" title="Date"></vxe-table-column>
+          <vxe-table-column field="address" title="Address" show-overflow :edit-render="{name: 'input'}"></vxe-table-column>
         </vxe-table>
         `,
         `
@@ -92,10 +92,10 @@ export default {
   },
   methods: {
     editActivedEvent ({ row, column, cell }, event) {
-      console.log(`打开 ${column.label} 列编辑`)
+      console.log(`打开 ${column.title} 列编辑`)
     },
     editClosedEvent ({ row, column }, event) {
-      console.log(`关闭 ${column.label} 列编辑`)
+      console.log(`关闭 ${column.title} 列编辑`)
     }
   }
 }

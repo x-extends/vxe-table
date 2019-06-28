@@ -221,6 +221,14 @@ const apis = [
         list: []
       },
       {
+        name: 'checked-current-row',
+        descKey: 'app.api.table.desc.checkedCurrentRow',
+        type: 'Boolean',
+        enum: '',
+        defVal: 'false',
+        list: []
+      },
+      {
         name: 'highlight-current-row',
         descKey: 'app.api.table.desc.highlightCurrentRow',
         type: 'Boolean',
@@ -231,6 +239,14 @@ const apis = [
       {
         name: 'highlight-hover-row',
         descKey: 'app.api.table.desc.highlightHoverRow',
+        type: 'Boolean',
+        enum: '',
+        defVal: 'false',
+        list: []
+      },
+      {
+        name: 'checked-current-column',
+        descKey: 'app.api.table.desc.checkedCurrentColumn',
         type: 'Boolean',
         enum: '',
         defVal: 'false',
@@ -333,28 +349,10 @@ const apis = [
         list: []
       },
       {
-        name: 'show-all-overflow',
-        descKey: 'app.api.table.desc.showAllOverflow',
-        disabled: true,
-        type: '',
-        enum: '',
-        defVal: '',
-        list: []
-      },
-      {
         name: 'show-header-overflow',
         descKey: 'app.api.table.desc.showHeaderOverflow',
         type: 'Boolean, String',
         enum: 'ellipsis（只显示省略号）,title（并且显示为原生 title）,tooltip（并且显示为 tooltip 提示）',
-        defVal: '',
-        list: []
-      },
-      {
-        name: 'show-header-all-overflow',
-        descKey: 'app.api.table.desc.showHeaderAllOverflow',
-        disabled: true,
-        type: '',
-        enum: '',
         defVal: '',
         list: []
       },
@@ -934,6 +932,14 @@ const apis = [
                 enum: '',
                 defVal: '',
                 list: []
+              },
+              {
+                name: 'adaptive',
+                desc: '自动适配最优的渲染方式',
+                type: 'Boolean',
+                enum: '',
+                defVal: 'true',
+                list: []
               }
             ]
           },
@@ -982,6 +988,14 @@ const apis = [
                 type: 'Number',
                 enum: '',
                 defVal: '',
+                list: []
+              },
+              {
+                name: 'adaptive',
+                desc: '自动适配最优的渲染方式',
+                type: 'Boolean',
+                enum: '',
+                defVal: 'true',
                 list: []
               }
             ]

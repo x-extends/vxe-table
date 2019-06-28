@@ -32,8 +32,8 @@ export default {
       tableColumn: [
         { type: 'index', width: 50 },
         {
-          prop: 'name',
-          label: 'Name',
+          field: 'name',
+          title: 'Name',
           slots: {
             default: ({ row, column }) => {
               return [
@@ -46,8 +46,8 @@ export default {
           }
         },
         {
-          prop: 'sex',
-          label: 'Sex',
+          field: 'sex',
+          title: 'Sex',
           showHeaderOverflow: true,
           filters: [{ data: '' }],
           filterMethod: this.filterSexMethod,
@@ -74,8 +74,8 @@ export default {
           }
         },
         {
-          prop: 'address',
-          label: 'Address',
+          field: 'address',
+          title: 'Address',
           showOverflow: true,
           slots: {
             default: ({ row }) => {
@@ -114,8 +114,8 @@ export default {
               tableColumn: [
                 { type: 'index', width: 50 },
                 {
-                  prop: 'name',
-                  label: 'Name',
+                  field: 'name',
+                  title: 'Name',
                   slots: {
                     default: ({ row }) => {
                       return [
@@ -128,8 +128,8 @@ export default {
                   }
                 },
                 {
-                  prop: 'sex',
-                  label: 'Sex',
+                  field: 'sex',
+                  title: 'Sex',
                   showHeaderOverflow: true,
                   filters: [{ data: '' }],
                   filterMethod: this.filterSexMethod,
@@ -156,8 +156,8 @@ export default {
                   }
                 },
                 {
-                  prop: 'address',
-                  label: 'Address',
+                  field: 'address',
+                  title: 'Address',
                   showOverflow: true,
                   slots: {
                     default: ({ row }) => {

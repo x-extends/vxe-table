@@ -238,6 +238,50 @@
   }
 }
 
+.vxe-icon--refresh {
+  @extend %DefaultWidthHeight;
+  border-width: 0.1em;
+  border-style: solid;
+  border-radius: 50%;
+  border-right-color: transparent !important;
+  border-left-color: transparent !important;
+  &:before {
+    left: 50%;
+    top: 0;
+    transform: translateX(50%) rotate(-45deg);
+  }
+  &:after {
+    right: 50%;
+    bottom: 0;
+    transform: translateX(-50%) rotate(135deg);
+  }
+  &:before,
+  &:after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-width: 0.25em;
+    border-style: solid;
+    border-right-color: transparent;
+    border-bottom-color: transparent;
+    border-left-color: transparent;
+  }
+  &.roll {
+    animation: rollCircle 1s infinite linear;
+  }
+}
+
+@keyframes rollCircle {
+  0% { 
+    transform: rotate(0deg);
+  }
+  100% { 
+    transform: rotate(360deg);
+  }
+}
+ 
+
 %BeforeSolidRadius {
   content: "";
   border-radius: 50%;

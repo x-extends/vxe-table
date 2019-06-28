@@ -7,10 +7,10 @@
       highlight-current-row
       height="300"
       :data.sync="tableData">
-      <vxe-table-column prop="name" label="Name"></vxe-table-column>
-      <vxe-table-column prop="sex" label="Sex"></vxe-table-column>
-      <vxe-table-column prop="age" label="Age"></vxe-table-column>
-      <vxe-table-column prop="address" label="Address" show-overflow></vxe-table-column>
+      <vxe-table-column field="name" title="Name"></vxe-table-column>
+      <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+      <vxe-table-column field="age" title="Age"></vxe-table-column>
+      <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -27,10 +27,10 @@
       height="300"
       :radio-config="{labelProp: 'name'}"
       :data.sync="tableData">
-      <vxe-table-column type="radio" label="这样也行"></vxe-table-column>
-      <vxe-table-column prop="sex" label="Sex"></vxe-table-column>
-      <vxe-table-column prop="age" label="Age"></vxe-table-column>
-      <vxe-table-column prop="address" label="Address" show-overflow></vxe-table-column>
+      <vxe-table-column type="radio" title="这样也行"></vxe-table-column>
+      <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+      <vxe-table-column field="age" title="Age"></vxe-table-column>
+      <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -53,12 +53,13 @@
       border
       highlight-current-row
       height="300"
+      :radio-config="{labelProp: 'name'}"
       :data.sync="tableData">
-      <vxe-table-column type="radio" label="还可以这样" width="120"></vxe-table-column>
-      <vxe-table-column prop="name" label="Name"></vxe-table-column>
-      <vxe-table-column prop="sex" label="Sex"></vxe-table-column>
-      <vxe-table-column prop="age" label="Age"></vxe-table-column>
-      <vxe-table-column prop="address" label="Address" show-overflow></vxe-table-column>
+      <vxe-table-column type="radio" title="还可以这样" width="120"></vxe-table-column>
+      <vxe-table-column field="name" title="Name"></vxe-table-column>
+      <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+      <vxe-table-column field="age" title="Age"></vxe-table-column>
+      <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -84,10 +85,10 @@ export default {
           highlight-current-row
           height="300"
           :data.sync="tableData">
-          <vxe-table-column prop="name" label="Name"></vxe-table-column>
-          <vxe-table-column prop="sex" label="Sex"></vxe-table-column>
-          <vxe-table-column prop="age" label="Age"></vxe-table-column>
-          <vxe-table-column prop="address" label="Address" show-overflow></vxe-table-column>
+          <vxe-table-column field="name" title="Name"></vxe-table-column>
+          <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+          <vxe-table-column field="age" title="Age"></vxe-table-column>
+          <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
         </vxe-table>
         `,
         `
@@ -108,10 +109,10 @@ export default {
           height="300"
           :radio-config="{labelProp: 'name'}"
           :data.sync="tableData">
-          <vxe-table-column type="radio" label="这样也行"></vxe-table-column>
-          <vxe-table-column prop="sex" label="Sex"></vxe-table-column>
-          <vxe-table-column prop="age" label="Age"></vxe-table-column>
-          <vxe-table-column prop="address" label="Address" show-overflow></vxe-table-column>
+          <vxe-table-column type="radio" title="这样也行"></vxe-table-column>
+          <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+          <vxe-table-column field="age" title="Age"></vxe-table-column>
+          <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
         </vxe-table>
         `,
         `
@@ -138,12 +139,13 @@ export default {
           border
           highlight-current-row
           height="300"
+          :radio-config="{labelProp: 'name'}"
           :data.sync="tableData">
-          <vxe-table-column type="radio" label="还可以这样" width="120"></vxe-table-column>
-          <vxe-table-column prop="name" label="Name"></vxe-table-column>
-          <vxe-table-column prop="sex" label="Sex"></vxe-table-column>
-          <vxe-table-column prop="age" label="Age"></vxe-table-column>
-          <vxe-table-column prop="address" label="Address" show-overflow></vxe-table-column>
+          <vxe-table-column type="radio" title="还可以这样" width="120"></vxe-table-column>
+          <vxe-table-column field="name" title="Name"></vxe-table-column>
+          <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+          <vxe-table-column field="age" title="Age"></vxe-table-column>
+          <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
         </vxe-table>
         `,
         `

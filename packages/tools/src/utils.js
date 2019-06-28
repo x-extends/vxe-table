@@ -53,7 +53,9 @@ export const UtilTools = {
       // 基本属性
       id: `col--${++columnUniqueId}`,
       type: _vm.type,
-      property: _vm.prop,
+      prop: _vm.prop,
+      property: _vm.field || _vm.prop,
+      title: _vm.title,
       label: _vm.label,
       width: _vm.width,
       minWidth: _vm.minWidth,
@@ -91,7 +93,7 @@ export const UtilTools = {
       renderData: renderData,
       // 单元格插槽，只对 grid 有效
       slots: _vm.slots,
-      origin: _vm
+      own: _vm
     }
   },
   // 组装列配置

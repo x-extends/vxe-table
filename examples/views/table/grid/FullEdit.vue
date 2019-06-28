@@ -77,11 +77,11 @@ export default {
       tableColumn: [
         { type: 'selection', width: 50 },
         { type: 'index', width: 60 },
-        { prop: 'name', label: 'Name', remoteSort: true, editRender: { name: 'input' } },
-        { prop: 'nickname', label: 'Nickname', editRender: { name: 'input' } },
+        { field: 'name', title: 'Name', remoteSort: true, editRender: { name: 'input' } },
+        { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
         {
-          prop: 'role',
-          label: 'Role',
+          field: 'role',
+          title: 'Role',
           remoteSort: true,
           width: 200,
           filters: [
@@ -92,7 +92,7 @@ export default {
           filterMultiple: false,
           editRender: { name: 'input' }
         },
-        { prop: 'describe', label: 'Describe', showOverflow: true, editRender: { name: 'input' } }
+        { field: 'describe', title: 'Describe', showOverflow: true, editRender: { name: 'input' } }
       ],
       demoCodes: [
         `
@@ -146,11 +146,11 @@ export default {
               tableColumn: [
                 { type: 'selection', width: 50 },
                 { type: 'index', width: 60 },
-                { prop: 'name', label: 'Name', remoteSort: true, editRender: { name: 'input' } },
-                { prop: 'nickname', label: 'Nickname', editRender: { name: 'input' } },
+                { field: 'name', title: 'Name', remoteSort: true, editRender: { name: 'input' } },
+                { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
                 {
-                  prop: 'role',
-                  label: 'Role',
+                  field: 'role',
+                  title: 'Role',
                   remoteSort: true,
                   width: 200,
                   filters: [
@@ -161,7 +161,7 @@ export default {
                   filterMultiple: false,
                   editRender: { name: 'input' }
                 },
-                { prop: 'describe', label: 'Describe', showOverflow: true, editRender: { name: 'input' } }
+                { field: 'describe', title: 'Describe', showOverflow: true, editRender: { name: 'input' } }
               ]
             }
           }

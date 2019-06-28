@@ -42,7 +42,8 @@ const GlobalConfig = {
     msgInfo: 'vxe-icon--info',
     msgSuccess: 'vxe-icon--success',
     msgWarning: 'vxe-icon--warning',
-    msgError: 'vxe-icon--error'
+    msgError: 'vxe-icon--error',
+    msgLoading: 'vxe-icon--refresh roll'
   },
   menu: {},
   tooltip: {

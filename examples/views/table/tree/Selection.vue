@@ -7,10 +7,10 @@
       :data.sync="tableData"
       @select-change="selectChangeEvent">
       <vxe-table-column type="selection" prop="checked" width="120" tree-node></vxe-table-column>
-      <vxe-table-column prop="name" label="Name"></vxe-table-column>
-      <vxe-table-column prop="size" label="Size"></vxe-table-column>
-      <vxe-table-column prop="type" label="Type"></vxe-table-column>
-      <vxe-table-column prop="date" label="Date"></vxe-table-column>
+      <vxe-table-column field="name" title="Name"></vxe-table-column>
+      <vxe-table-column field="size" title="Size"></vxe-table-column>
+      <vxe-table-column field="type" title="Type"></vxe-table-column>
+      <vxe-table-column field="date" title="Date"></vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -36,10 +36,10 @@ export default {
           :data.sync="tableData"
           @select-change="selectChangeEvent">
           <vxe-table-column type="selection" tree-node></vxe-table-column>
-          <vxe-table-column prop="name" label="Name"></vxe-table-column>
-          <vxe-table-column prop="size" label="Size"></vxe-table-column>
-          <vxe-table-column prop="type" label="Type"></vxe-table-column>
-          <vxe-table-column prop="date" label="Date"></vxe-table-column>
+          <vxe-table-column field="name" title="Name"></vxe-table-column>
+          <vxe-table-column field="size" title="Size"></vxe-table-column>
+          <vxe-table-column field="type" title="Type"></vxe-table-column>
+          <vxe-table-column field="date" title="Date"></vxe-table-column>
         </vxe-table>
         `,
         `

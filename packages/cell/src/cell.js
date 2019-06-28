@@ -48,11 +48,11 @@ export const Cell = {
    */
   renderHeader (h, params) {
     let { column } = params
-    let { slots } = column
+    let { slots, own } = column
     if (slots && slots.header) {
       return slots.header(params)
     }
-    return [UtilTools.formatText(params.column.origin.label, 1)]
+    return [UtilTools.formatText(own.title || own.label, 1)]
   },
   renderCell (h, params) {
     let cellValue
@@ -111,11 +111,11 @@ export const Cell = {
    */
   renderIndexHeader (h, params) {
     let { column } = params
-    let { slots } = column
+    let { slots, own } = column
     if (slots && slots.header) {
       return slots.header(params)
     }
-    return [UtilTools.formatText(params.column.origin.label || '#', 1)]
+    return [UtilTools.formatText(own.title || own.label || '#', 1)]
   },
   renderIndexCell (h, params) {
     let { $table, column } = params
@@ -135,7 +135,8 @@ export const Cell = {
    * 单选
    */
   renderRadioHeader (h, params) {
-    return [UtilTools.formatText(params.column.origin.label, 1)]
+    let { own } = params.column
+    return [UtilTools.formatText(own.title || own.label, 1)]
   },
   renderRadioCell (h, params) {
     let { $table, column, isHidden } = params
@@ -185,9 +186,9 @@ export const Cell = {
    * 多选
    */
   renderSelectionHeader (h, params) {
-    let { $table, column } = params
-    let { isHidden } = params
-    let { slots } = column
+    let { $table, column, isHidden } = params
+    let { slots, own } = column
+    let headerTitle = own.title || own.label
     let options = {
       attrs: {
         type: 'checkbox'
@@ -216,9 +217,9 @@ export const Cell = {
         h('span', {
           class: ['checkbox--icon']
         }),
-        column.origin.label ? h('span', {
+        headerTitle ? h('span', {
           class: 'checkbox--label'
-        }, column.origin.label) : null
+        }, headerTitle) : null
       ])
     ]
   },

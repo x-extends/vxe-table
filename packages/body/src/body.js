@@ -26,6 +26,7 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
     scrollYLoad,
     // border,
     highlightCurrentRow,
+    // highlightCurrentColumn,
     showOverflow: allColumnOverflow,
     // selectColumn,
     cellClassName,
@@ -178,6 +179,9 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
       //   // width: hasEllipsis ? `${border ? renderWidth - 1 : renderWidth}px` : null
       // }
     }, column.renderCell(h, params)),
+    // highlightCurrentColumn ? h('span', {
+    //   class: 'vxe-cell--highlight-line'
+    // }) : null,
     hasDefaultTip ? validError && tableData.length >= 2 ? h('div', {
       class: 'vxe-cell--valid',
       style: validStore.rule && validStore.rule.width ? {
@@ -505,7 +509,7 @@ export default {
      */
     scrollEvent (evnt) {
       let { $parent: $table, fixedType } = this
-      let { $refs, scrollXLoad, scrollYLoad, triggerScrollXEvent, triggerScrollYEvent } = $table
+      let { $refs, scrollXLoad, scrollYLoad } = $table
       let { tableHeader, tableBody, leftBody, rightBody } = $refs
       let headerElem = tableHeader ? tableHeader.$el : null
       let bodyElem = tableBody.$el
@@ -532,10 +536,10 @@ export default {
         }
       }
       if (scrollXLoad) {
-        triggerScrollXEvent(evnt)
+        $table.triggerScrollXEvent(evnt)
       }
       if (scrollYLoad) {
-        triggerScrollYEvent(evnt)
+        $table.triggerScrollYEvent(evnt)
       }
       UtilTools.emitEvent($table, 'scroll', [{ type: 'body', fixed: fixedType, scrollTop, scrollLeft, $table }, evnt])
     }

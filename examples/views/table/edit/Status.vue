@@ -17,9 +17,9 @@
       :data.sync="tableData"
       :edit-config="{key: 'id', trigger: 'click', mode: 'cell', showStatus: true}">
       <vxe-table-column type="index" width="60"></vxe-table-column>
-      <vxe-table-column prop="name" label="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column prop="sex" label="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column prop="date" label="Date" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="date" title="Date" :edit-render="{name: 'input'}"></vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -55,9 +55,9 @@ export default {
           :data.sync="tableData"
           :edit-config="{key: 'id', trigger: 'click', mode: 'cell', showStatus: true}">
           <vxe-table-column type="index" width="60"></vxe-table-column>
-          <vxe-table-column prop="name" label="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column prop="sex" label="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column prop="date" label="Date" :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column field="date" title="Date" :edit-render="{name: 'input'}"></vxe-table-column>
         </vxe-table>
         `,
         `

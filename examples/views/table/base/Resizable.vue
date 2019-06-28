@@ -7,11 +7,11 @@
       resizable
       :data.sync="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
-      <vxe-table-column prop="name" label="Name"></vxe-table-column>
-      <vxe-table-column prop="sex" label="Sex"></vxe-table-column>
-      <vxe-table-column prop="age" label="Age"></vxe-table-column>
-      <vxe-table-column prop="time" label="Time"></vxe-table-column>
-      <vxe-table-column prop="address" label="Address" show-overflow></vxe-table-column>
+      <vxe-table-column field="name" title="Name"></vxe-table-column>
+      <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+      <vxe-table-column field="age" title="Age"></vxe-table-column>
+      <vxe-table-column field="time" title="Time"></vxe-table-column>
+      <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -29,11 +29,11 @@
       highlight-hover-row
       :data.sync="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
-      <vxe-table-column prop="name" label="Name" width="300"></vxe-table-column>
-      <vxe-table-column prop="sex" label="Sex" width="300"></vxe-table-column>
-      <vxe-table-column prop="age" label="Age" width="300"></vxe-table-column>
-      <vxe-table-column prop="time" label="Time" width="300"></vxe-table-column>
-      <vxe-table-column prop="address" label="Address" width="300" show-overflow></vxe-table-column>
+      <vxe-table-column field="name" title="Name" width="300"></vxe-table-column>
+      <vxe-table-column field="sex" title="Sex" width="300"></vxe-table-column>
+      <vxe-table-column field="age" title="Age" width="300"></vxe-table-column>
+      <vxe-table-column field="time" title="Time" width="300"></vxe-table-column>
+      <vxe-table-column field="address" title="Address" width="300" show-overflow></vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -58,11 +58,11 @@ export default {
           resizable
           :data.sync="tableData">
           <vxe-table-column type="index" width="60"></vxe-table-column>
-          <vxe-table-column prop="name" label="Name"></vxe-table-column>
-          <vxe-table-column prop="sex" label="Sex"></vxe-table-column>
-          <vxe-table-column prop="age" label="Age"></vxe-table-column>
-          <vxe-table-column prop="time" label="Time"></vxe-table-column>
-          <vxe-table-column prop="address" label="Address" show-overflow></vxe-table-column>
+          <vxe-table-column field="name" title="Name"></vxe-table-column>
+          <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+          <vxe-table-column field="age" title="Age"></vxe-table-column>
+          <vxe-table-column field="time" title="Time"></vxe-table-column>
+          <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
         </vxe-table>
         `,
         `
@@ -84,11 +84,11 @@ export default {
           highlight-hover-row
           :data.sync="tableData">
           <vxe-table-column type="index" width="60"></vxe-table-column>
-          <vxe-table-column prop="name" label="Name" width="300"></vxe-table-column>
-          <vxe-table-column prop="sex" label="Sex" width="300"></vxe-table-column>
-          <vxe-table-column prop="age" label="Age" width="300"></vxe-table-column>
-          <vxe-table-column prop="time" label="Time" width="300"></vxe-table-column>
-          <vxe-table-column prop="address" label="Address" width="300" show-overflow></vxe-table-column>
+          <vxe-table-column field="name" title="Name" width="300"></vxe-table-column>
+          <vxe-table-column field="sex" title="Sex" width="300"></vxe-table-column>
+          <vxe-table-column field="age" title="Age" width="300"></vxe-table-column>
+          <vxe-table-column field="time" title="Time" width="300"></vxe-table-column>
+          <vxe-table-column field="address" title="Address" width="300" show-overflow></vxe-table-column>
         </vxe-table>
         `,
         `

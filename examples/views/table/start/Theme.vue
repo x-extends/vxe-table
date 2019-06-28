@@ -7,7 +7,7 @@
         @import 'vxe-table/lib/index.css';
       </code>
     </pre>
-    <p>Case 2.修改主题颜色，并引入所有样式</p>
+    <p>Case 2.修改主题颜色，并引入所有样式（<a class="link" href="https://github.com/xuliangzhan/vxe-table/blob/master/styles/variable.scss" target="_blank">查看所有变量</a>）</p>
     <pre>
       <code class="scss">
         @import 'vxe-table/styles/variable.scss';
@@ -18,7 +18,7 @@
         @import 'vxe-table/styles/default.scss';
       </code>
     </pre>
-    <p>Case 3.修改主题颜色，并按需引入样式</p>
+    <p>Case 3.修改主题颜色，并按需引入样式（<a class="link" href="https://github.com/xuliangzhan/vxe-table/blob/master/styles/variable.scss" target="_blank">查看所有变量</a>）</p>
     <pre>
       <code class="scss">
         @import 'vxe-table/styles/variable.scss';

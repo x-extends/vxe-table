@@ -10,3 +10,52 @@
     background-color: $vxe-table-border-color;
   }
 }
+
+.vxe-header--column {
+  position: relative;
+  .vxe-required-icon {
+    display: inline-block;
+    color: $vxe-table-validate-error-color;
+    line-height: 16px;
+    font-size: 16px;
+    vertical-align: middle;
+    &:before {
+      content: "*";
+      width: 10px;
+      height: 8px;
+      display: block;
+    }
+  }
+  .vxe-edit-icon {
+    font-size: 12px;
+    margin: 1px 2px 2px 2px;
+  }
+  .vxe-resizable {
+    position: absolute;
+    right: -7px;
+    top: 0;
+    width: 14px;
+    height: 100%;
+    text-align: center;
+    z-index: 1;
+    user-select: none;
+    cursor: col-resize;
+    &.is--line {
+      &:before,
+      &:after {
+        content: "";
+        display: inline-block;
+        vertical-align: middle;
+      }
+      &:before {
+        width: 1px;
+        height: 50%;
+        background-color: $vxe-table-resizable-color;
+      }
+      &:after {
+        width: 0;
+        height: 100%;
+      }
+    }
+  }
+}

@@ -8,6 +8,11 @@
   white-space: nowrap;
 }
 
+.vxe-cell--highlight-line,
+.vxe-table-hidden-column {
+  display: none;
+}
+
 /*table*/
 .vxe-table {
   position: relative;
@@ -62,6 +67,13 @@
       border-bottom: 1px solid $vxe-table-border-color;
     }
   }
+  &.t--stripe {
+    .vxe-body--row {
+      &:nth-child(2n) {
+        background-color: $vxe-table-row-striped-background-color;
+      }
+    }
+  }
   &.row--highlight {
     .vxe-body--row {
       &:hover {
@@ -72,14 +84,9 @@
   &.column--highlight {
     .vxe-header--column {
       &:hover {
-        background-color: $vxe-table-column-hover-background-color;
-      }
-    }
-  }
-  &.t--stripe {
-    .vxe-body--row {
-      &:nth-child(2n) {
-        background-color: $vxe-table-row-striped-background-color;
+        &:not(.type--index) {
+          background-color: $vxe-table-column-hover-background-color;
+        }
       }
     }
   }
@@ -97,54 +104,6 @@
     }
     &.col--right {
       text-align: right;
-    }
-  }
-  .vxe-header--column {
-    position: relative;
-    .vxe-required-icon {
-      display: inline-block;
-      color: $vxe-table-validate-error-color;
-      line-height: 16px;
-      font-size: 16px;
-      vertical-align: middle;
-      &:before {
-        content: "*";
-        width: 10px;
-        height: 8px;
-        display: block;
-      }
-    }
-    .vxe-edit-icon {
-      font-size: 12px;
-      margin: 1px 2px 2px 2px;
-    }
-    .vxe-resizable {
-      position: absolute;
-      right: -7px;
-      top: 0;
-      width: 14px;
-      height: 100%;
-      text-align: center;
-      z-index: 1;
-      user-select: none;
-      cursor: col-resize;
-      &.is--line {
-        &:before,
-        &:after {
-          content: "";
-          display: inline-block;
-          vertical-align: middle;
-        }
-        &:before {
-          width: 1px;
-          height: 50%;
-          background-color: $vxe-table-resizable-color;
-        }
-        &:after {
-          width: 0;
-          height: 100%;
-        }
-      }
     }
   }
   &.t--border {

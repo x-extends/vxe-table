@@ -26,11 +26,11 @@ export default {
   data () {
     return {
       tableColumn: [
-        { prop: 'name', label: 'Name', columnKey: 'name' },
-        { prop: 'role', label: 'Role', columnKey: 'role' },
-        { prop: 'sex', label: 'Sex', columnKey: 'sex' },
-        { prop: 'date3', label: 'Date', columnKey: 'date3', width: 120 },
-        { prop: 'address', label: 'Address', columnKey: 'address', showOverflow: true }
+        { field: 'name', title: 'Name', columnKey: 'name' },
+        { field: 'role', title: 'Role', columnKey: 'role' },
+        { field: 'sex', title: 'Sex', columnKey: 'sex' },
+        { field: 'date3', title: 'Date', columnKey: 'date3', width: 120 },
+        { field: 'address', title: 'Address', columnKey: 'address', showOverflow: true }
       ],
       tableData: [],
       demoCodes: [
@@ -45,11 +45,11 @@ export default {
           data () {
             return {
               tableColumn: [
-                { prop: 'name', label: 'Name', columnKey: 'name' },
-                { prop: 'role', label: 'Role', columnKey: 'role' },
-                { prop: 'sex', label: 'Sex', columnKey: 'sex' },
-                { prop: 'date3', label: 'Date', columnKey: 'date3', width: 120 },
-                { prop: 'address', label: 'Address', columnKey: 'address', showOverflow: true }
+                { field: 'name', title: 'Name', columnKey: 'name' },
+                { field: 'role', title: 'Role', columnKey: 'role' },
+                { field: 'sex', title: 'Sex', columnKey: 'sex' },
+                { field: 'date3', title: 'Date', columnKey: 'date3', width: 120 },
+                { field: 'address', title: 'Address', columnKey: 'address', showOverflow: true }
               ],
               tableData: []
             }

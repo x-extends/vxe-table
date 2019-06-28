@@ -35,6 +35,7 @@ export default {
       filterData: [],
       sortData: {
         prop: '',
+        field: '',
         order: ''
       },
       tablePage: {

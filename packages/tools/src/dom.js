@@ -48,20 +48,21 @@ export const DomTools = {
     return val && /^\d+%$/.test(val)
   },
   hasClass (elem, cls) {
-    return elem && elem.className && elem.className.split && elem.className.split(' ').indexOf(cls) > -1
+    if (elem) {
+      let className = elem.className
+      return (preClss[cls] || rClass(cls)).test(className)
+    }
+    return false
   },
   removeClass (elem, cls) {
-    if (elem) {
+    if (DomTools.hasClass(elem, cls)) {
       elem.className = elem.className.replace(rClsMap[cls] || rClass(cls), '')
     }
   },
   addClass (elem, cls) {
-    if (elem) {
-      let className = elem.className
-      if (!(preClss[cls] || rClass(cls)).test(className)) {
-        DomTools.removeClass(elem, cls)
-        elem.className = `${className} ${cls}`
-      }
+    if (!DomTools.hasClass(elem, cls)) {
+      DomTools.removeClass(elem, cls)
+      elem.className = `${elem.className} ${cls}`
     }
   },
   getDomNode () {

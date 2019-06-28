@@ -187,8 +187,9 @@ export default {
             let {
               columnKey,
               showHeaderOverflow,
-              headerAlign
-              // renderWidth
+              headerAlign,
+              // renderWidth,
+              own
             } = column
             let isGroup = column.children && column.children.length
             let fixedHiddenColumn = fixedType && column.fixed !== fixedType && !isGroup
@@ -218,6 +219,7 @@ export default {
               class: ['vxe-header--column', column.id, {
                 [`col--${headerAlign}`]: headerAlign,
                 // 'col--current': selectColumn === column,
+                'type--index': column.type === 'index',
                 'fixed--hidden': fixedHiddenColumn,
                 'filter--active': column.filters.some(item => item.checked)
               }, headerCellClassName ? XEUtils.isFunction(headerCellClassName) ? headerCellClassName({ $table, $rowIndex: rowIndex, column, columnIndex, $columnIndex, fixed: fixedType }) : headerCellClassName : ''],
@@ -236,7 +238,7 @@ export default {
                   'c--ellipsis': showEllipsis
                 }],
                 attrs: {
-                  title: showTitle ? column.origin.label : null
+                  title: showTitle ? (own.title || own.label) : null
                 },
                 style: {
                   // width: showTitle || showTooltip || showEllipsis ? `${border ? renderWidth - 1 : renderWidth}px` : null

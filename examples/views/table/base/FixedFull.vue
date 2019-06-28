@@ -9,11 +9,11 @@
       show-overflow
       :data.sync="tableData">
       <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
-      <vxe-table-column prop="name" label="Name" width="300"></vxe-table-column>
-      <vxe-table-column prop="role" label="Role" width="300"></vxe-table-column>
-      <vxe-table-column prop="sex" label="Sex" width="300"></vxe-table-column>
-      <vxe-table-column prop="date" label="Date" width="300"></vxe-table-column>
-      <vxe-table-column prop="address" label="Address" fixed="right" width="300"></vxe-table-column>
+      <vxe-table-column field="name" title="Name" width="300"></vxe-table-column>
+      <vxe-table-column field="role" title="Role" width="300"></vxe-table-column>
+      <vxe-table-column field="sex" title="Sex" width="300"></vxe-table-column>
+      <vxe-table-column field="date" title="Date" width="300"></vxe-table-column>
+      <vxe-table-column field="address" title="Address" fixed="right" width="300"></vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -32,11 +32,11 @@
       show-overflow
       :data.sync="tableData">
       <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
-      <vxe-table-column prop="name" label="Name" width="300"></vxe-table-column>
-      <vxe-table-column prop="role" label="Role" width="300"></vxe-table-column>
-      <vxe-table-column prop="sex" label="Sex" width="300"></vxe-table-column>
-      <vxe-table-column prop="date" label="Date" width="300"></vxe-table-column>
-      <vxe-table-column prop="address" label="Address" fixed="right" width="300"></vxe-table-column>
+      <vxe-table-column field="name" title="Name" width="300"></vxe-table-column>
+      <vxe-table-column field="role" title="Role" width="300"></vxe-table-column>
+      <vxe-table-column field="sex" title="Sex" width="300"></vxe-table-column>
+      <vxe-table-column field="date" title="Date" width="300"></vxe-table-column>
+      <vxe-table-column field="address" title="Address" fixed="right" width="300"></vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -64,11 +64,11 @@ export default {
           show-overflow
           :data.sync="tableData">
           <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
-          <vxe-table-column prop="name" label="Name" width="300"></vxe-table-column>
-          <vxe-table-column prop="role" label="Role" width="300"></vxe-table-column>
-          <vxe-table-column prop="sex" label="Sex" width="300"></vxe-table-column>
-          <vxe-table-column prop="date" label="Date" width="300"></vxe-table-column>
-          <vxe-table-column prop="address" label="Address" fixed="right" width="300"></vxe-table-column>
+          <vxe-table-column field="name" title="Name" width="300"></vxe-table-column>
+          <vxe-table-column field="role" title="Role" width="300"></vxe-table-column>
+          <vxe-table-column field="sex" title="Sex" width="300"></vxe-table-column>
+          <vxe-table-column field="date" title="Date" width="300"></vxe-table-column>
+          <vxe-table-column field="address" title="Address" fixed="right" width="300"></vxe-table-column>
         </vxe-table>
         `,
         `
@@ -91,11 +91,11 @@ export default {
           show-overflow
           :data.sync="tableData">
           <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
-          <vxe-table-column prop="name" label="Name" width="300"></vxe-table-column>
-          <vxe-table-column prop="role" label="Role" width="300"></vxe-table-column>
-          <vxe-table-column prop="sex" label="Sex" width="300"></vxe-table-column>
-          <vxe-table-column prop="date" label="Date" width="300"></vxe-table-column>
-          <vxe-table-column prop="address" label="Address" fixed="right" width="300"></vxe-table-column>
+          <vxe-table-column field="name" title="Name" width="300"></vxe-table-column>
+          <vxe-table-column field="role" title="Role" width="300"></vxe-table-column>
+          <vxe-table-column field="sex" title="Sex" width="300"></vxe-table-column>
+          <vxe-table-column field="date" title="Date" width="300"></vxe-table-column>
+          <vxe-table-column field="address" title="Address" fixed="right" width="300"></vxe-table-column>
         </vxe-table>
         `,
         `

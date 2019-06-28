@@ -5,6 +5,9 @@ import { Interceptor, Renderer } from '../../v-x-e-table'
 import { UtilTools, DomTools, ExportTools, GlobalEvent, ResizeEvent } from '../../tools'
 
 var rowUniqueId = 0
+var browse = DomTools.browse
+var isWebkit = browse['-webkit'] && !browse['-ms'] && !browse['-moz']
+var debounceScrollYDuration = browse.msie ? 40 : 20
 
 /**
  * 渲染浮固定列
@@ -418,6 +421,15 @@ export default {
       let tableFullColumn = UtilTools.getColumnList(value)
       this.tableFullColumn = tableFullColumn
       this.cacheColumnMap()
+      if (tableFullColumn.length) {
+        let cIndex = Math.floor((tableFullColumn.length - 1) / 2)
+        if (tableFullColumn[cIndex].prop) {
+          console.warn('[vxe-table] The property prop is deprecated, please use field')
+        }
+        if (tableFullColumn[cIndex].label) {
+          console.warn('[vxe-table] The property label is deprecated, please use title')
+        }
+      }
     },
     tableColumn () {
       this.analyColumnWidth()
@@ -453,6 +465,7 @@ export default {
       Object.assign(_scrollYStore, {
         startIndex: 0,
         visibleIndex: 0,
+        adaptive: XEUtils.isBoolean(scrollY.adaptive) ? scrollY.adaptive : true,
         renderSize: scrollY.rSize,
         offsetSize: scrollY.oSize
       })
@@ -1201,6 +1214,7 @@ export default {
         Object.assign(_scrollXStore, {
           startIndex: 0,
           visibleIndex: 0,
+          adaptive: XEUtils.isBoolean(scrollX.adaptive) ? scrollX.adaptive : true,
           renderSize: scrollX.rSize,
           offsetSize: scrollX.oSize
         })
@@ -1375,7 +1389,7 @@ export default {
         // overflowX,
         scrollXHeight,
         scrollYWidth,
-        _scrollXStore,
+        // _scrollXStore,
         scrollXLoad,
         // _scrollYStore,
         // scrollYLoad,
@@ -1403,7 +1417,7 @@ export default {
             }
             if (tableElem) {
               tableElem.style.width = tWidth === null ? tWidth : `${tWidth + scrollYWidth}px`
-              tableElem.style.marginLeft = fixedType ? null : `${_scrollXStore.leftSpaceWidth}px`
+              // tableElem.style.marginLeft = fixedType ? null : `${_scrollXStore.leftSpaceWidth}px`
             }
 
             let repairElem = _elemStore[`${name}-${layout}-repair`]
@@ -1450,9 +1464,9 @@ export default {
 
             if (tableElem) {
               tableElem.style.width = tWidth ? `${tWidth}px` : tWidth
-              tableElem.style.marginLeft = fixedType ? null : `${_scrollXStore.leftSpaceWidth}px`
+              // tableElem.style.marginLeft = fixedType ? null : `${_scrollXStore.leftSpaceWidth}px`
               // 兼容火狐滚动条
-              if (overflowY && fixedType && DomTools.browse['-moz']) {
+              if (overflowY && fixedType && browse['-moz']) {
                 tableElem.style.paddingRight = `${scrollYWidth}px`
               }
             }
@@ -1473,7 +1487,7 @@ export default {
             }
             if (tableElem) {
               tableElem.style.width = tWidth === null ? tWidth : `${tWidth + scrollYWidth}px`
-              tableElem.style.marginLeft = fixedType ? null : `${_scrollXStore.leftSpaceWidth}px`
+              // tableElem.style.marginLeft = fixedType ? null : `${_scrollXStore.leftSpaceWidth}px`
             }
           }
           let colgroupElem = _elemStore[`${name}-${layout}-colgroup`]
@@ -1981,8 +1995,9 @@ export default {
      */
     triggerHeaderTooltipEvent (evnt, { column }) {
       let { _tooltipStore } = this
+      let { own } = column
       if (_tooltipStore.column !== column || !_tooltipStore.visible) {
-        this.showTooltip(evnt, column.origin.label, column)
+        this.showTooltip(evnt, own.title || own.label, column)
       }
     },
     /**
@@ -2252,7 +2267,9 @@ export default {
     setCurrentRow (row) {
       // if (this.highlightCurrentRow) {
       let rowId = UtilTools.getRowId(this, row, this.getRowMapIndex(row))
-      this.clearCurrentRow()
+      if (this.selectRow !== row) {
+        this.clearCurrentRow()
+      }
       this.clearCurrentColumn()
       this.selectRow = row
       XEUtils.arrayEach(this.$el.querySelectorAll(`[data-rowid="${rowId}"]`), elem => DomTools.addClass(elem, 'row--current'))
@@ -2363,7 +2380,7 @@ export default {
     //         if (flag) {
     //           handleTempChecked(start, DomTools.getCellIndexs(targetElem), evnt)
     //         }
-    //       }, DomTools.browse.msie ? 80 : 40, { leading: true, trailing: true })
+    //       }, browse.msie ? 80 : 40, { leading: true, trailing: true })
     //       document.onmousemove = updateEvent
     //       document.onmouseup = function (evnt) {
     //         document.onmousemove = domMousemove
@@ -2375,8 +2392,9 @@ export default {
     //   }
     // },
     triggerHeaderCellClickEvent (evnt, params) {
+      let { column } = params
       UtilTools.emitEvent(this, 'header-cell-click', [params, evnt])
-      if (this.highlightCurrentColumn) {
+      if (column.type !== 'index' && this.highlightCurrentColumn) {
         return this.setCurrentColumn(params.column, true)
       }
       return this.$nextTick()
@@ -2384,7 +2402,9 @@ export default {
     setCurrentColumn (column) {
       // if (this.highlightCurrentColumn) {
       this.clearCurrentRow()
-      this.clearCurrentColumn()
+      if (this.selectColumn !== column) {
+        this.clearCurrentColumn()
+      }
       this.selectColumn = column
       XEUtils.arrayEach(this.$el.querySelectorAll(`.${column.id}`), elem => DomTools.addClass(elem, 'col--current'))
       // }
@@ -2929,10 +2949,10 @@ export default {
               valueList.push(item.value)
             }
           })
-          filterList.push({ column, prop: property, values: valueList })
+          filterList.push({ column, field: property, prop: property, values: valueList })
         }
       })
-      UtilTools.emitEvent(this, 'filter-change', [{ column, prop: column.property, values, filters: filterList }])
+      UtilTools.emitEvent(this, 'filter-change', [{ column, field: column.property, prop: column.property, values, filters: filterList }])
       if (scrollXLoad || scrollYLoad) {
         this.clearScroll()
       }
@@ -3054,8 +3074,12 @@ export default {
      * 展开树节点事件
      */
     triggerTreeExpandEvent (evnt, { row }) {
+      let { selectColumn } = this
       let rest = this.toggleTreeExpansion(row)
       UtilTools.emitEvent(this, 'toggle-tree-change', [{ row, rowIndex: this.getRowMapIndex(row), $table: this }, evnt])
+      if (selectColumn) {
+        this.$nextTick(() => this.setCurrentColumn(selectColumn))
+      }
       return rest
     },
     /**
@@ -3211,7 +3235,22 @@ export default {
     /**
      * 纵向 Y 可视渲染事件处理
      */
-    triggerScrollYEvent: XEUtils.debounce(function (evnt) {
+    triggerScrollYEvent (evnt) {
+      let { _scrollYStore } = this
+      // webkit 浏览器使用最佳的渲染方式
+      if (isWebkit && _scrollYStore.adaptive) {
+        this.loadScrollYData(evnt)
+      } else {
+        this.debounceScrollY(evnt)
+      }
+    },
+    debounceScrollY: XEUtils.debounce(function (evnt) {
+      this.loadScrollYData(evnt)
+    }, debounceScrollYDuration, { leading: false, trailing: true }),
+    /**
+     * 纵向 Y 可视渲染处理
+     */
+    loadScrollYData (evnt) {
       let { tableFullData, _scrollYStore } = this
       let { startIndex, renderSize, offsetSize, visibleSize, rowHeight } = _scrollYStore
       let scrollBodyElem = evnt.target
@@ -3242,7 +3281,7 @@ export default {
           })
         }
       }
-    }, DomTools.browse.msie ? 40 : 20, { leading: false, trailing: true }),
+    },
     // 计算可视渲染相关数据
     computeScrollLoad () {
       let { scrollXLoad, scrollYLoad, _scrollYStore, _scrollXStore, visibleColumn, optimizeOpts } = this
@@ -3254,7 +3293,12 @@ export default {
         // 计算 X 逻辑
         if (scrollXLoad) {
         // 无法预知，默认取前 10 条平均宽度进行运算
-          _scrollXStore.visibleSize = scrollX.vSize || Math.ceil(tableBodyElem.clientWidth / (visibleColumn.slice(0, 10).reduce((previous, column) => previous + column.renderWidth, 0) / 10))
+          let visibleSize = scrollX.vSize || Math.ceil(tableBodyElem.clientWidth / (visibleColumn.slice(0, 10).reduce((previous, column) => previous + column.renderWidth, 0) / 10))
+          _scrollXStore.visibleSize = visibleSize
+          if (_scrollXStore.adaptive) {
+            _scrollXStore.offsetSize = visibleSize
+            _scrollXStore.renderSize = visibleSize + 2
+          }
           this.updateScrollXSpace()
         }
         // 计算 Y 逻辑
@@ -3270,7 +3314,12 @@ export default {
               _scrollYStore.rowHeight = firstTrElem.clientHeight
             }
           }
-          _scrollYStore.visibleSize = scrollY.vSize || Math.ceil(tableBodyElem.clientHeight / _scrollYStore.rowHeight)
+          let visibleSize = scrollY.vSize || Math.ceil(tableBodyElem.clientHeight / _scrollYStore.rowHeight)
+          _scrollYStore.visibleSize = visibleSize
+          if (isWebkit && _scrollYStore.adaptive) {
+            _scrollYStore.offsetSize = visibleSize
+            _scrollYStore.renderSize = visibleSize + 2
+          }
           this.updateScrollYSpace()
         }
       }
@@ -3334,13 +3383,11 @@ export default {
     },
     clearScroll () {
       Object.assign(this._scrollXStore, {
-        visibleSize: 0,
-        startIndex: 0,
-        leftSpaceWidth: 0
+        startIndex: 0
+        // leftSpaceWidth: 0
         // rightSpaceWidth: 0
       })
       Object.assign(this._scrollYStore, {
-        visibleSize: 0,
         startIndex: 0
         // topSpaceHeight: 0
         // bottomSpaceHeight: 0
@@ -3524,7 +3571,7 @@ export default {
               if (rowIndex < startIndex || rowIndex > startIndex + renderSize) {
                 let bodyElem = this.$refs.tableBody.$el
                 bodyElem.scrollTop = (rowIndex - 1) * rowHeight
-                return setTimeout(finish, 40)
+                return setTimeout(finish, debounceScrollYDuration * 2)
               }
             }
             finish()
