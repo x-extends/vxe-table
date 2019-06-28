@@ -423,15 +423,6 @@ export default {
       let tableFullColumn = UtilTools.getColumnList(value)
       this.tableFullColumn = tableFullColumn
       this.cacheColumnMap()
-      if (tableFullColumn.length) {
-        let cIndex = Math.floor((tableFullColumn.length - 1) / 2)
-        if (tableFullColumn[cIndex].prop) {
-          console.warn('[vxe-table] The property prop is deprecated, please use field')
-        }
-        if (tableFullColumn[cIndex].label) {
-          console.warn('[vxe-table] The property label is deprecated, please use title')
-        }
-      }
     },
     tableColumn () {
       this.analyColumnWidth()
