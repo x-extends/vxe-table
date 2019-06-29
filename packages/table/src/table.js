@@ -3261,10 +3261,10 @@ export default {
                     if (isRequired && isEmpty) {
                       errorRules.push(rule)
                     } else if (
-                      ((isNumber && isNaN(value)) ||
+                      (isNumber && isNaN(value)) ||
                       (XEUtils.isRegExp(rule.pattern) && !rule.pattern.test(value)) ||
                       (XEUtils.isNumber(rule.min) && (isNumber ? restVal < rule.min : len < rule.min)) ||
-                      (XEUtils.isNumber(rule.max) && (isNumber ? restVal > rule.max : len > rule.max)))
+                      (XEUtils.isNumber(rule.max) && (isNumber ? restVal > rule.max : len > rule.max))
                     ) {
                       errorRules.push(rule)
                     }
