@@ -1358,6 +1358,22 @@ const apis = [
         list: []
       },
       {
+        name: 'hasRowExpand(row)',
+        desc: '检查行是否已展开',
+        type: 'Boolean',
+        enum: '',
+        defVal: 'row',
+        list: []
+      },
+      {
+        name: 'hasTreeExpand(row)',
+        desc: '检查树节点是否已展开',
+        type: 'Boolean',
+        enum: '',
+        defVal: 'row',
+        list: []
+      },
+      {
         name: 'setActiveRow(row)',
         desc: '激活行编辑，如果是 mode=cell 则默认激活第一个单元格',
         type: 'Promise',

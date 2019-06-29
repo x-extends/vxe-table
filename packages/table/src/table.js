@@ -3102,6 +3102,9 @@ export default {
       }
       return this.$nextTick()
     },
+    hasRowExpand (row) {
+      return this.expandeds.indexOf(row) > -1
+    },
     clearRowExpand () {
       this.expandeds = []
       return this.$nextTick()
@@ -3207,6 +3210,9 @@ export default {
         })
       }
       return this.$nextTick()
+    },
+    hasTreeExpand (row) {
+      return this.treeExpandeds.indexOf(row) > -1
     },
     clearTreeExpand () {
       this.treeExpandeds = []
