@@ -4,6 +4,7 @@
 
     <vxe-table
       border
+      resizable
       highlight-hover-row
       height="400"
       :data.sync="tableData">
@@ -38,6 +39,7 @@ export default {
         `
         <vxe-table
           border
+          resizable
           highlight-hover-row
           height="400"
           :data.sync="tableData">
@@ -60,7 +62,7 @@ export default {
             }
           },
           created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 50)
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 300)
           },
           methods: {
             roleSearchEvent ({ row }, value) {
@@ -73,7 +75,7 @@ export default {
     }
   },
   created () {
-    this.tableData = window.MOCK_DATA_LIST.slice(0, 50)
+    this.tableData = window.MOCK_DATA_LIST.slice(0, 300)
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
