@@ -221,14 +221,6 @@ const apis = [
         list: []
       },
       {
-        name: 'checked-current-row',
-        descKey: 'app.api.table.desc.checkedCurrentRow',
-        type: 'Boolean',
-        enum: '',
-        defVal: 'false',
-        list: []
-      },
-      {
         name: 'highlight-current-row',
         descKey: 'app.api.table.desc.highlightCurrentRow',
         type: 'Boolean',
@@ -239,14 +231,6 @@ const apis = [
       {
         name: 'highlight-hover-row',
         descKey: 'app.api.table.desc.highlightHoverRow',
-        type: 'Boolean',
-        enum: '',
-        defVal: 'false',
-        list: []
-      },
-      {
-        name: 'checked-current-column',
-        descKey: 'app.api.table.desc.checkedCurrentColumn',
         type: 'Boolean',
         enum: '',
         defVal: 'false',
@@ -1667,6 +1651,22 @@ const apis = [
         type: 'Boolean',
         enum: '',
         defVal: '',
+        list: []
+      },
+      {
+        name: 'scrollToRow(row)',
+        desc: '如果有滚动条，则滚动到对应的行',
+        type: 'Promise',
+        enum: '',
+        defVal: 'row',
+        list: []
+      },
+      {
+        name: 'scrollToColumn(column)',
+        desc: '如果有滚动条，则滚动到对应的列',
+        type: 'Promise',
+        enum: '',
+        defVal: 'column',
         list: []
       },
       {

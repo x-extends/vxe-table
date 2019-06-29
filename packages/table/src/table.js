@@ -3423,6 +3423,56 @@ export default {
       })
       // _scrollYStore.bottomSpaceHeight = Math.max((fullData.length - (_scrollYStore.startIndex + _scrollYStore.renderSize)) * _scrollYStore.rowHeight, 0)
     },
+    scrollToRow (row) {
+      let { scrollYLoad, _scrollYStore, afterFullData, fullDataIndexMap } = this
+      let rowId = UtilTools.getRowId(this, row, this.getRowMapIndex(row))
+      if (scrollYLoad) {
+        if (row === -1 && afterFullData.length) {
+          row = afterFullData[afterFullData.length - 1]
+        }
+        if (fullDataIndexMap.has(row)) {
+          let { rowHeight } = _scrollYStore
+          let rowIndex = afterFullData.indexOf(row)
+          let bodyElem = this.$refs.tableBody.$el
+          bodyElem.scrollTop = (rowIndex - 1) * rowHeight
+        }
+      } else {
+        let trElem = this.$el.querySelector(`[data-rowid="${rowId}"]`)
+        if (trElem) {
+          if (trElem.scrollIntoViewIfNeeded) {
+            trElem.scrollIntoViewIfNeeded()
+          } else if (trElem.scrollIntoView) {
+            trElem.scrollIntoView()
+          }
+        }
+      }
+    },
+    scrollToColumn (column) {
+      let { scrollXLoad, _elemStore, visibleColumn, fullColumnIndexMap } = this
+      let bodyElem = _elemStore['main-body-list']
+      if (scrollXLoad) {
+        if (column === -1 || fullColumnIndexMap.has(column)) {
+          let bodyElem = this.$refs.tableBody.$el
+          let scrollLeft = 0
+          for (let index = 0; index < visibleColumn.length; index++) {
+            if (visibleColumn[index] === column) {
+              break
+            }
+            scrollLeft += visibleColumn[index].renderWidth
+          }
+          bodyElem.scrollLeft = scrollLeft
+        }
+      } else {
+        let cellElem = bodyElem.querySelector(`.${column.id}`)
+        if (cellElem) {
+          if (cellElem.scrollIntoViewIfNeeded) {
+            cellElem.scrollIntoViewIfNeeded()
+          } else if (cellElem.scrollIntoView) {
+            cellElem.scrollIntoView()
+          }
+        }
+      }
+    },
     clearScroll () {
       Object.assign(this._scrollXStore, {
         startIndex: 0

@@ -56,12 +56,12 @@ export const DomTools = {
     return false
   },
   removeClass (elem, cls) {
-    if (DomTools.hasClass(elem, cls)) {
+    if (elem && DomTools.hasClass(elem, cls)) {
       elem.className = elem.className.replace(rClsMap[cls] || rClass(cls), '')
     }
   },
   addClass (elem, cls) {
-    if (!DomTools.hasClass(elem, cls)) {
+    if (elem && !DomTools.hasClass(elem, cls)) {
       DomTools.removeClass(elem, cls)
       elem.className = `${elem.className} ${cls}`
     }
