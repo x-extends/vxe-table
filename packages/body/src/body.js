@@ -73,7 +73,8 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
   let params = { $table, $seq, seq, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn, level: rowLevel, data: tableData }
   // 滚动的渲染不支持动态行高
   if ((scrollXLoad || scrollYLoad) && !hasEllipsis) {
-    showEllipsis = hasEllipsis = true
+    // showEllipsis = hasEllipsis = true
+    showEllipsis = true
   }
   // hover 进入事件
   if (showTooltip || tableListeners['cell-mouseenter']) {

@@ -1552,9 +1552,10 @@ export default {
                       }
                     })
                   }
-                } else if (layout === 'footer') {
-
                 }
+                // else if (layout === 'footer') {
+
+                // }
               }
             })
           }
