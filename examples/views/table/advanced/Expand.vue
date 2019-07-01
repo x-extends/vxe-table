@@ -15,7 +15,8 @@
       ref="xTable"
       border
       :data.sync="tableData"
-      :expand-config="{key: 'id'}">
+      :expand-config="{key: 'id'}"
+      @toggle-expand-change="toggleExpandChangeEvent">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column type="expand" width="60">
         <template v-slot="{ row, rowIndex }">
@@ -67,7 +68,8 @@
     <vxe-table
       border
       :data.sync="tableData"
-      :expand-config="{key: 'id', expandAll: true}">
+      :expand-config="{key: 'id', expandAll: true}"
+      @toggle-expand-change="toggleExpandChangeEvent">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column type="expand" width="60">
         <template v-slot="{ row }">
@@ -128,7 +130,8 @@ export default {
           ref="xTable"
           border
           :data.sync="tableData"
-          :expand-config="{key: 'id'}">
+          :expand-config="{key: 'id'}"
+          @toggle-expand-change="toggleExpandChangeEvent">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column type="expand" width="60">
             <template v-slot="{ row, rowIndex }">
@@ -177,6 +180,11 @@ export default {
           },
           created () {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
+          },
+          methods: {
+            toggleExpandChangeEvent ({ row }) {
+              this.$XMsg.alert('行展开、收起事件')
+            }
           }
         }
         `,
@@ -184,7 +192,8 @@ export default {
         <vxe-table
           border
           :data.sync="tableData2"
-          :expand-config="{key: 'id', expandAll: true}">
+          :expand-config="{key: 'id', expandAll: true}"
+          @toggle-expand-change="toggleExpandChangeEvent">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column type="expand" width="60">
             <template v-slot="{ row }">
@@ -222,6 +231,11 @@ export default {
           },
           created () {
             this.tableData2 = window.MOCK_DATA_LIST.slice(0, 3)
+          },
+          methods: {
+            toggleExpandChangeEvent ({ row }) {
+              this.$XMsg.alert('行展开、收起事件')
+            }
           }
         }
         `
@@ -236,6 +250,11 @@ export default {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
       hljs.highlightBlock(block)
     })
+  },
+  methods: {
+    toggleExpandChangeEvent ({ row }) {
+      this.$XMsg.alert('行展开、收起事件')
+    }
   }
 }
 </script>

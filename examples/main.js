@@ -77,6 +77,7 @@ function mockData () {
       date9: mDate,
       date10: mDate,
       date11: [],
+      list: [],
       time: currTime + 360000,
       sex: index % 3 ? '0' : '1',
       sex1: [index % 3 ? '0' : '1'],

@@ -8,16 +8,16 @@ export default {
     if (opts.isHeader) {
       content += columns.map(({ own }) => own.title || own.label).join(',') + '\n'
     }
-    datas.forEach((record, rowIndex) => {
+    datas.forEach((row, rowIndex) => {
       if (isOriginal) {
         content += columns.map(column => {
           if (column.type === 'index') {
             return `"${column.indexMethod ? column.indexMethod(rowIndex) : rowIndex + 1}"`
           }
-          return `"${UtilTools.getCellValue(record, column) || ''}"`
+          return `"${UtilTools.getCellValue(row, column) || ''}"`
         }).join(',') + '\n'
       } else {
-        content += columns.map(column => `"${record[column.id]}"`).join(',') + '\n'
+        content += columns.map(column => `"${row[column.id]}"`).join(',') + '\n'
       }
     })
     return content

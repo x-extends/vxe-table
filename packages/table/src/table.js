@@ -456,6 +456,8 @@ export default {
     if (XEUtils.isBoolean(showHeaderAllOverflow)) {
       console.warn('[vxe-table] The property show-header-all-overflow is deprecated, please use show-header-overflow')
     }
+    this.lastScrollLeft = 0
+    this.lastScrollTop = 0
     this.afterFullData = []
     this.fullDataIndexMap = new Map()
     this.fullDataRowIdMap = new Map()
@@ -488,6 +490,18 @@ export default {
       ResizeEvent.on(this, this.$el.parentNode, this.recalculate)
     }
     document.body.appendChild(this.$refs.tableWrapper)
+  },
+  activated () {
+    let { $refs, lastScrollTop, lastScrollLeft } = this
+    let bodyElem = $refs.tableBody.$el
+    if (bodyElem) {
+      if (lastScrollTop) {
+        bodyElem.scrollTop = lastScrollTop
+      }
+      if (lastScrollLeft) {
+        bodyElem.scrollLeft = lastScrollLeft
+      }
+    }
   },
   beforeDestroy () {
     let tableWrapper = this.$refs.tableWrapper
@@ -905,9 +919,9 @@ export default {
      * 如果不传任何参数，则还原整个表格
      * 如果传 row 则还原一行
      * 如果传 rows 则还原多行
-     * 如果还额外传了 prop 则还原指定单元格
+     * 如果还额外传了 field 则还原指定单元格
      */
-    revert (rows, prop) {
+    revert (rows, field) {
       let { tableSourceData, tableFullData } = this
       if (arguments.length) {
         if (rows && !XEUtils.isArray(rows)) {
@@ -917,8 +931,8 @@ export default {
           let rowIndex = tableFullData.indexOf(row)
           let oRow = tableSourceData[rowIndex]
           if (oRow && row) {
-            if (prop) {
-              XEUtils.set(row, prop, XEUtils.get(oRow, prop))
+            if (field) {
+              XEUtils.set(row, field, XEUtils.get(oRow, field))
             } else {
               XEUtils.destructuring(row, oRow)
             }
@@ -933,17 +947,17 @@ export default {
      * 如果不创参数，则清空整个表格内容
      * 如果传 row 则清空一行内容
      * 如果传 rows 则清空多行内容
-     * 如果还额外传了 prop 则清空指定单元格内容
+     * 如果还额外传了 field 则清空指定单元格内容
      */
-    clearData (rows, prop) {
+    clearData (rows, field) {
       let { tableSourceData, visibleColumn } = this
       if (!arguments.length) {
         rows = tableSourceData
       } else if (rows && !XEUtils.isArray(rows)) {
         rows = [rows]
       }
-      if (prop) {
-        rows.forEach(row => XEUtils.set(row, prop, null))
+      if (field) {
+        rows.forEach(row => XEUtils.set(row, field, null))
       } else {
         rows.forEach(row => {
           visibleColumn.forEach(column => {
@@ -962,7 +976,7 @@ export default {
       }
       return this.getRowMapIndex(row) === -1
     },
-    hasRowChange (row, prop) {
+    hasRowChange (row, field) {
       let { tableSourceData, treeConfig } = this
       let rowKey = UtilTools.getRowKey(this)
       let oRow
@@ -983,7 +997,7 @@ export default {
         oRow = tableSourceData[oRowIndex]
       }
       if (arguments.length > 1) {
-        return oRow && !XEUtils.isEqual(XEUtils.get(oRow, prop), XEUtils.get(row, prop))
+        return oRow && !XEUtils.isEqual(XEUtils.get(oRow, field), XEUtils.get(row, field))
       }
       return oRow && !XEUtils.isEqual(oRow, row)
     },
@@ -1127,7 +1141,7 @@ export default {
     mergeCustomColumn (customColumns) {
       this.isUpdateCustoms = true
       this.tableFullColumn.forEach(column => {
-        let item = customColumns.find(item => column.property && item.prop === column.property)
+        let item = customColumns.find(item => column.property && (item.field || item.prop) === column.property)
         column.visible = item ? !!item.visible : true
       })
       this.$emit('update:customs', this.tableFullColumn)
@@ -2174,7 +2188,7 @@ export default {
       let { actived } = editStore
       let { column, columnIndex } = params
       if (highlightCurrentRow) {
-        if (!this.getEventTargetNode(evnt, $el, 'vxe-tree-wrapper').flag) {
+        if (!this.getEventTargetNode(evnt, $el, 'vxe-tree-wrapper').flag && !this.getEventTargetNode(evnt, $el, 'vxe-checkbox').flag) {
           this.setCurrentRow(params.row)
         }
       }
@@ -2499,14 +2513,14 @@ export default {
     /**
      * 激活单元格编辑
      */
-    setActiveCell (row, prop) {
+    setActiveCell (row, field) {
       return new Promise(resolve => {
         setTimeout(() => {
           let { tableData, visibleColumn, handleActived } = this
-          if (row && prop) {
+          if (row && field) {
             let rowIndex = tableData.indexOf(row)
             if (rowIndex > -1) {
-              let column = visibleColumn.find(column => column.property === prop)
+              let column = visibleColumn.find(column => column.property === field)
               let cell = DomTools.getCell(this, { row, rowIndex, column })
               handleActived({ row, column, cell })
               this.lastCallTime = Date.now()
@@ -2519,10 +2533,10 @@ export default {
     /**
      * 只对 trigger=dblclick 有效，选中单元格
      */
-    setSelectCell (row, prop) {
+    setSelectCell (row, field) {
       let { tableData, editConfig, visibleColumn } = this
-      if (row && prop && editConfig.trigger !== 'manual') {
-        let column = visibleColumn.find(column => column.property === prop)
+      if (row && field && editConfig.trigger !== 'manual') {
+        let column = visibleColumn.find(column => column.property === field)
         let rowIndex = tableData.indexOf(row)
         if (rowIndex > -1 && column) {
           let cell = DomTools.getCell(this, { row, rowIndex, column })
@@ -2538,9 +2552,9 @@ export default {
     triggerSortEvent (evnt, column, params, order) {
       this.sort(column.property, order)
     },
-    sort (prop, order) {
+    sort (field, order) {
       let { visibleColumn, tableFullColumn, remoteSort } = this
-      let column = visibleColumn.find(item => item.property === prop)
+      let column = visibleColumn.find(item => item.property === field)
       let isRemote = XEUtils.isBoolean(column.remoteSort) ? column.remoteSort : remoteSort
       if (order && column.order !== order) {
         tableFullColumn.forEach(column => {
@@ -2551,7 +2565,7 @@ export default {
         if (!isRemote) {
           this.tableData = this.getTableData(true).tableData
         }
-        UtilTools.emitEvent(this, 'sort-change', [{ column, prop, order }])
+        UtilTools.emitEvent(this, 'sort-change', [{ column, prop: field, field, order }])
       }
       return this.$nextTick()
     },
@@ -2859,7 +2873,7 @@ export default {
       return this.scrollYLoad
     },
     /**
-     * 横向 Y 可视渲染事件处理
+     * 横向 X 可视渲染事件处理
      */
     triggerScrollXEvent (evnt) {
       let { $refs, visibleColumn, scrollXStore } = this

@@ -35,9 +35,6 @@
   .vxe-tree--node-btn {
     @include animatTransition(transform);
   }
-  .vxe-button {
-    @include animatTransition(all, .2s, linear);
-  }
   .vxe-checkbox,
   .vxe-radio {
     > input {

@@ -51,12 +51,12 @@ export default {
           query: ({ page, sort, filters }) => {
             // 处理排序条件
             let formData = {
-              sort: sort.prop,
+              sort: sort.field,
               order: sort.order
             }
             // 处理筛选条件
-            filters.forEach(({ column, prop, values }) => {
-              formData[prop] = values.join(',')
+            filters.forEach(({ column, field, values }) => {
+              formData[field] = values.join(',')
             })
             return XEAjax.getJSON(`/api/user/page/list/${page.pageSize}/${page.currentPage}`, formData)
           },
@@ -120,12 +120,12 @@ export default {
                   query: ({ page, sort, filters }) => {
                     // 处理排序条件
                     let formData = {
-                      sort: sort.prop,
+                      sort: sort.field,
                       order: sort.order
                     }
                     // 处理筛选条件
-                    filters.forEach(({ column, prop, values }) => {
-                      formData[prop] = values.join(',')
+                    filters.forEach(({ column, field, values }) => {
+                      formData[field] = values.join(',')
                     })
                     return XEAjax.getJSON(\`/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`, formData)
                   },

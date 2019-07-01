@@ -21,27 +21,27 @@
       @context-menu-click="contextMenuClickEvent">
       <vxe-table-column field="name" :title="$t('app.api.title.prop')" min-width="280" tree-node :filters="nameFilters">
         <template v-slot="{ row }">
-          <span v-html="row.name"></span>
+          <span v-html="row.name || '&#12288;'"></span>
         </template>
       </vxe-table-column>
       <vxe-table-column field="desc" :title="$t('app.api.title.desc')" min-width="200">
         <template v-slot="{ row }">
-          <span v-html="row.desc"></span>
+          <span v-html="row.desc || '&#12288;'"></span>
         </template>
       </vxe-table-column>
       <vxe-table-column field="type" :title="$t('app.api.title.type')" min-width="140">
         <template v-slot="{ row }">
-          <span v-html="row.type"></span>
+          <span v-html="row.type || '&#12288;'"></span>
         </template>
       </vxe-table-column>
       <vxe-table-column field="enum" :title="$t('app.api.title.enum')" min-width="160">
         <template v-slot="{ row }">
-          <span v-html="row.enum"></span>
+          <span v-html="row.enum || '&#12288;'"></span>
         </template>
       </vxe-table-column>
       <vxe-table-column field="defVal" :title="$t('app.api.title.defVal')" min-width="160">
         <template v-slot="{ row }">
-          <span v-html="row.defVal"></span>
+          <span v-html="row.defVal || '&#12288;'"></span>
         </template>
       </vxe-table-column>
       <template v-slot:empty>
@@ -194,13 +194,9 @@ export default {
       }
       // 生成唯一 id
       let index = 1
-      let searchProps = ['name', 'desc', 'type', 'enum', 'defVal']
       XEUtils.eachTree(apis, item => {
         item.id = index++
         item.desc = item.descKey ? this.$t(item.descKey) : item.desc
-        searchProps.forEach(key => {
-          item[key] = item[key] || '&#12288;'// 使用空白占位符、避免由于空值导致高度缩小破坏布局
-        })
       }, { children: 'list' })
       this.tableData = apis
       // 默认展开一级

@@ -6,7 +6,7 @@
       :tree-config="{key: 'id', children: 'children'}"
       :data.sync="tableData"
       @select-change="selectChangeEvent">
-      <vxe-table-column type="selection" prop="checked" width="120" tree-node></vxe-table-column>
+      <vxe-table-column type="selection" field="checked" width="120" tree-node></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
       <vxe-table-column field="size" title="Size"></vxe-table-column>
       <vxe-table-column field="type" title="Type"></vxe-table-column>

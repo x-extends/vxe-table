@@ -35,7 +35,7 @@ export default {
           :tree-config="{key: 'id', children: 'children'}"
           :edit-config="{key: 'id', trigger: 'click', mode: 'row'}"
           :data.sync="tableData">
-          <vxe-table-column type="selection" prop="checked" width="120" tree-node></vxe-table-column>
+          <vxe-table-column type="selection" field="checked" width="120" tree-node></vxe-table-column>
           <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column field="size" title="Size" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column field="type" title="Type" :edit-render="{name: 'input'}"></vxe-table-column>

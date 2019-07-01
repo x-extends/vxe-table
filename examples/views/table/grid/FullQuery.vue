@@ -113,15 +113,15 @@ export default {
             }
           },
           methods: {
-            sortChangeEvent ({ column, prop, order }) {
-              this.formData.sort = prop
+            sortChangeEvent ({ column, field, order }) {
+              this.formData.sort = field
               this.formData.order = order
               // 重新查询
               this.$refs.xGrid.commitProxy('query')
             },
             filterChangeEvent ({ filters }) {
-              filters.forEach(({ column, prop, values }) => {
-                this.formData[prop] = values.join(',')
+              filters.forEach(({ column, field, values }) => {
+                this.formData[field] = values.join(',')
               })
               // 重新加载，恢复初始状态
               this.$refs.xGrid.commitProxy('reload')
@@ -138,15 +138,15 @@ export default {
     })
   },
   methods: {
-    sortChangeEvent ({ column, prop, order }) {
-      this.formData.sort = prop
+    sortChangeEvent ({ column, field, order }) {
+      this.formData.sort = field
       this.formData.order = order
       // 重新查询
       this.$refs.xGrid.commitProxy('query')
     },
     filterChangeEvent ({ filters }) {
-      filters.forEach(({ column, prop, values }) => {
-        this.formData[prop] = values.join(',')
+      filters.forEach(({ column, field, values }) => {
+        this.formData[field] = values.join(',')
       })
       // 重新加载，恢复初始状态
       this.$refs.xGrid.commitProxy('reload')

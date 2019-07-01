@@ -467,7 +467,7 @@ export default {
      * 如果存在列固定右侧，同步更新滚动状态
      */
     scrollEvent (evnt) {
-      let { $parent: $table, fixedType } = this
+      let { $parent: $table, fixedType, lastScrollTop, lastScrollLeft } = this
       let { $refs, scrollXLoad, scrollYLoad, triggerScrollXEvent, triggerScrollYEvent } = $table
       let { tableHeader, tableBody, leftBody, rightBody } = $refs
       let headerElem = tableHeader ? tableHeader.$el : null
@@ -476,6 +476,8 @@ export default {
       let rightElem = rightBody ? rightBody.$el : null
       let scrollTop = bodyElem.scrollTop
       let scrollLeft = bodyElem.scrollLeft
+      let isX = lastScrollLeft !== scrollLeft
+      let isY = lastScrollTop !== scrollTop
       if (leftElem && fixedType === 'left') {
         scrollTop = leftElem.scrollTop
         syncBodyScroll(scrollTop, bodyElem, rightElem)
@@ -499,7 +501,9 @@ export default {
       if (scrollYLoad) {
         triggerScrollYEvent(evnt)
       }
-      UtilTools.emitEvent($table, 'scroll', [{ type: 'body', fixed: fixedType, scrollTop, scrollLeft, $table }, evnt])
+      $table.lastScrollTop = scrollTop
+      $table.lastScrollLeft = scrollLeft
+      UtilTools.emitEvent($table, 'scroll', [{ type: 'body', fixed: fixedType, scrollTop, scrollLeft, isX, isY, $table }, evnt])
     }
   }
 }
