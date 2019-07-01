@@ -3,7 +3,6 @@ import { UtilTools, DomTools } from '../../tools'
 export default {
   getCsvContent (opts, oData, oColumns, tableElem) {
     let isOriginal = opts.original
-    debugger
     let { columns, datas } = getCsvData(opts, oData, oColumns, tableElem)
     let content = '\ufeff'
     if (opts.isHeader) {
