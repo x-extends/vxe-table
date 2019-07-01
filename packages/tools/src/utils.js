@@ -62,7 +62,7 @@ export const UtilTools = {
       resizable: _vm.resizable,
       fixed: _vm.fixed,
       align: _vm.align,
-      headerAlign: _vm.headerAlign,
+      headerAlign: _vm.headerAlign || _vm.align,
       showOverflow: _vm.showOverflow,
       showHeaderOverflow: _vm.showHeaderOverflow,
       indexMethod: _vm.indexMethod,

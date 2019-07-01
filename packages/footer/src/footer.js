@@ -158,22 +158,24 @@ export default {
      */
     scrollEvent (evnt) {
       let { $parent: $table, fixedType } = this
-      let { $refs, scrollXLoad, triggerScrollXEvent } = $table
+      let { $refs, scrollXLoad, triggerScrollXEvent, lastScrollLeft } = $table
       let tableHeader = $refs.tableHeader
       let headerElem = tableHeader ? tableHeader.$el : null
       let bodyElem = $refs.tableBody.$el
       let footerElem = $refs.tableFooter.$el
       let scrollLeft = footerElem.scrollLeft
+      let isX = scrollLeft !== lastScrollLeft
+      $table.lastScrollLeft = scrollLeft
       if (headerElem) {
         headerElem.scrollLeft = scrollLeft
       }
       if (bodyElem) {
         bodyElem.scrollLeft = scrollLeft
       }
-      if (scrollXLoad) {
+      if (scrollXLoad && isX) {
         triggerScrollXEvent(evnt)
       }
-      UtilTools.emitEvent($table, 'scroll', [{ type: 'footer', fixed: fixedType, scrollTop: bodyElem.scrollTop, scrollLeft, $table }, evnt])
+      UtilTools.emitEvent($table, 'scroll', [{ type: 'footer', fixed: fixedType, scrollTop: bodyElem.scrollTop, scrollLeft, isX, isY: false, $table }, evnt])
     }
   }
 }

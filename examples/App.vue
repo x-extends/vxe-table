@@ -818,15 +818,15 @@ export default {
                 }
               }
             },
-            {
-              label: 'app.aside.nav.vxeExcel',
-              locat: {
-                name: 'TableAPI',
-                params: {
-                  name: 'excel'
-                }
-              }
-            },
+            // {
+            //   label: 'app.aside.nav.vxeExcel',
+            //   locat: {
+            //     name: 'TableAPI',
+            //     params: {
+            //       name: 'excel'
+            //     }
+            //   }
+            // },
             {
               label: 'app.aside.nav.vxeToolbar',
               locat: {

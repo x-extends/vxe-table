@@ -135,7 +135,7 @@ export default {
       // 如果为空则默认全部显示，也可以指定默认的隐藏列
       customColumns1: [
         {
-          prop: 'age',
+          field: 'age',
           visible: false
         }
       ],
@@ -180,7 +180,7 @@ export default {
               // 如果为空则默认全部显示，也可以指定默认的隐藏列
               customColumns: [
                 {
-                  prop: 'age',
+                  field: 'age',
                   visible: false
                 }
               ]
@@ -277,7 +277,7 @@ export default {
               this.loading = false
               this.$refs.xTable.reloadCustoms([
                 {
-                  prop: 'name',
+                  field: 'name',
                   visible: false
                 }
               ])
@@ -384,7 +384,7 @@ export default {
       if (this.$refs.xTable2) {
         this.$refs.xTable2.reloadCustoms([
           {
-            prop: 'name',
+            field: 'name',
             visible: false
           }
         ])

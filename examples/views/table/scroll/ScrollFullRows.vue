@@ -57,7 +57,7 @@ export default {
         this.$refs.xTable.reloadData(tableData)
       }
       this.loading = false
-    }, 300)
+    }, 500)
   }
 }
 </script>

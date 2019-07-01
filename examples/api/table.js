@@ -1097,7 +1097,7 @@ const apis = [
         descKey: 'app.api.table.desc.sortChange',
         type: '',
         enum: '',
-        defVal: '{column,prop,order}',
+        defVal: '{column,field,order}',
         list: []
       },
       {
@@ -1105,7 +1105,7 @@ const apis = [
         descKey: 'app.api.table.desc.filterChange',
         type: '',
         enum: '',
-        defVal: '{column,prop,values,filters}',
+        defVal: '{column,field,values,filters}',
         list: []
       },
       {
@@ -1238,11 +1238,11 @@ const apis = [
         list: []
       },
       {
-        name: 'revert(rows, prop)',
+        name: 'revert(rows, field)',
         desc: '还原更改，还原指定行 row 或者整个表格的数据',
         type: 'Promise',
         enum: '',
-        defVal: 'rows?, prop?',
+        defVal: 'rows?, field?',
         list: []
       },
       {
@@ -1334,11 +1334,11 @@ const apis = [
         list: []
       },
       {
-        name: 'hasRowChange(row, prop)',
+        name: 'hasRowChange(row, field)',
         desc: '检查行或列数据是否发生改变',
         type: 'Boolean',
         enum: '',
-        defVal: 'row, prop?',
+        defVal: 'row, field?',
         list: []
       },
       {
@@ -1366,19 +1366,19 @@ const apis = [
         list: []
       },
       {
-        name: 'setActiveCell(row, prop)',
+        name: 'setActiveCell(row, field)',
         desc: '激活单元格编辑',
         type: 'Promise',
         enum: '',
-        defVal: 'row, prop',
+        defVal: 'row, field',
         list: []
       },
       {
-        name: 'setSelectCell(row, prop)',
+        name: 'setSelectCell(row, field)',
         desc: '只对 trigger!=manual 有效，选中单元格',
         type: 'Promise',
         enum: '',
-        defVal: 'row, prop',
+        defVal: 'row, field',
         list: []
       },
       {
@@ -1570,7 +1570,7 @@ const apis = [
         desc: '清空单元格内容',
         type: 'Promise',
         enum: '',
-        defVal: 'rows?,prop?',
+        defVal: '?',
         list: []
       },
       {
@@ -1654,6 +1654,14 @@ const apis = [
         list: []
       },
       {
+        name: 'scrollTo(x, y)',
+        desc: '如果有滚动条，则滚动到对应的位置',
+        type: 'Promise',
+        enum: '',
+        defVal: 'x, y',
+        list: []
+      },
+      {
         name: 'scrollToRow(row)',
         desc: '如果有滚动条，则滚动到对应的行',
         type: 'Promise',
@@ -1670,11 +1678,11 @@ const apis = [
         list: []
       },
       {
-        name: 'sort(prop,order)',
+        name: 'sort(field,order)',
         desc: '手动对表格进行排序',
         type: 'Promise',
         enum: '',
-        defVal: 'prop,order',
+        defVal: 'field,order',
         list: []
       },
       {
@@ -1753,7 +1761,7 @@ const apis = [
             desc: '列过滤方法，该函数 Function(column,columnIndex) 的返回值用来决定该列是否导出',
             type: 'Function',
             enum: '',
-            defVal: '默认过滤掉 type=index,selection,radio 和 prop 为空的列',
+            defVal: '默认过滤掉 type=index,selection,radio 和 field 为空的列',
             list: []
           },
           {

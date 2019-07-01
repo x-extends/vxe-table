@@ -9,6 +9,7 @@
     <vxe-grid
       border
       height="400"
+      :toolbar="toolbar"
       :columns="tableColumn"
       :data.sync="tableData"
       :edit-config="{key: 'id', trigger: 'click', mode: 'cell'}">
@@ -96,6 +97,19 @@ export default {
           }
         }
       ],
+      toolbar: {
+        setting: true,
+        slots: {
+          buttons: () => {
+            return [
+              <button>按钮</button>,
+              <input type="text"/>,
+              <vxe-button>按钮1</vxe-button>,
+              <vxe-button>按钮2</vxe-button>
+            ]
+          }
+        }
+      },
       tableData: [],
       demoCodes: [
         `
@@ -178,6 +192,19 @@ export default {
                   }
                 }
               ],
+              toolbar: {
+                setting: true,
+                slots: {
+                  buttons: () => {
+                    return [
+                      <button>按钮</button>,
+                      <input type="text"/>,
+                      <vxe-button>按钮1</vxe-button>,
+                      <vxe-button>按钮2</vxe-button>
+                    ]
+                  }
+                }
+              },
               tableData: []
             }
           },

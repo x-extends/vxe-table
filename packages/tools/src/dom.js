@@ -66,6 +66,15 @@ export const DomTools = {
       elem.className = `${elem.className} ${cls}`
     }
   },
+  scrollIntoElem (elem) {
+    if (elem) {
+      if (elem.scrollIntoViewIfNeeded) {
+        elem.scrollIntoViewIfNeeded()
+      } else if (elem.scrollIntoView) {
+        elem.scrollIntoView()
+      }
+    }
+  },
   getDomNode () {
     return {
       scrollTop: document.documentElement.scrollTop || document.body.scrollTop,

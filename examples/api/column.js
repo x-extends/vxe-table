@@ -52,7 +52,7 @@ const apis = [
         name: 'width',
         descKey: 'app.api.tableColumn.desc.width',
         type: 'Number, String',
-        enum: '数值px，数值%',
+        enum: 'px，%',
         defVal: '默认均匀分配',
         list: []
       },
@@ -60,7 +60,7 @@ const apis = [
         name: 'min-width',
         descKey: 'app.api.tableColumn.desc.minWidth',
         type: 'Number, String',
-        enum: '数值px，数值%',
+        enum: 'px，%',
         defVal: '',
         list: []
       },
@@ -69,7 +69,7 @@ const apis = [
         descKey: 'app.api.tableColumn.desc.resizable',
         type: 'Boolean',
         enum: '',
-        defVal: 'false',
+        defVal: '继承 table 的 resizable',
         list: []
       },
       {
@@ -93,7 +93,7 @@ const apis = [
         descKey: 'app.api.tableColumn.desc.headerAlign',
         type: 'String',
         enum: 'left（居左）,center（居中）,right（居右）',
-        defVal: '',
+        defVal: '继承 align',
         list: []
       },
       {
@@ -101,7 +101,7 @@ const apis = [
         descKey: 'app.api.tableColumn.desc.showOverflow',
         type: 'String,Boolean',
         enum: 'ellipsis（只显示省略号）,title（并且显示为原生 title）,tooltip（并且显示为 tooltip 提示）',
-        defVal: '',
+        defVal: '继承 table 的 show-overflow',
         list: []
       },
       {
@@ -109,7 +109,7 @@ const apis = [
         descKey: 'app.api.tableColumn.desc.showHeaderOverflow',
         type: 'String,Boolean',
         enum: 'ellipsis（只显示省略号）,title（并且显示为原生 title）,tooltip（并且显示为 tooltip 提示）',
-        defVal: '',
+        defVal: '继承 table 的 show-header-overflow',
         list: []
       },
       {
@@ -139,7 +139,7 @@ const apis = [
       {
         name: 'sort-by',
         descKey: 'app.api.tableColumn.desc.sortBy',
-        type: 'String,Array',
+        type: 'String, Array',
         enum: '',
         defVal: '',
         list: []
@@ -149,7 +149,7 @@ const apis = [
         descKey: 'app.api.tableColumn.desc.remoteSort',
         type: 'Boolean',
         enum: '',
-        defVal: 'false',
+        defVal: '继承 table 的 remote-sort',
         list: []
       },
       {
@@ -212,7 +212,7 @@ const apis = [
             name: 'name',
             desc: '渲染组件的名称',
             type: 'String',
-            enum: 'input,textarea',
+            enum: 'input, textarea',
             defVal: '',
             list: []
           },
@@ -237,7 +237,7 @@ const apis = [
       {
         name: 'column-key',
         descKey: 'app.api.tableColumn.desc.columnKey',
-        type: 'String,Number',
+        type: 'String, Number',
         enum: '',
         defVal: '',
         list: []
@@ -261,7 +261,7 @@ const apis = [
             name: 'name',
             desc: '渲染组件的名称（自带精简的输入组件，建议配合其他 UI 库混合渲染）',
             type: 'String',
-            enum: 'input,textarea',
+            enum: 'input, textarea',
             defVal: '',
             list: []
           },

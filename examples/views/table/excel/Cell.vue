@@ -68,7 +68,7 @@ export default {
         }
       ].concat(columns.map(name => {
         return {
-          prop: name,
+          field: name,
           label: name,
           width: 76,
           headerAlign: 'center',
@@ -115,7 +115,7 @@ export default {
                 }
               ].concat(columns.map(name => {
                 return {
-                  prop: name,
+                  field: name,
                   label: name,
                   width: 76,
                   headerAlign: 'center',

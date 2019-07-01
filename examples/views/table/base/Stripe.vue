@@ -23,6 +23,7 @@
 
     <vxe-table
       stripe
+      highlight-current-row
       highlight-hover-row
       :data.sync="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
@@ -75,6 +76,7 @@ export default {
         `
         <vxe-table
           stripe
+          highlight-current-row
           highlight-hover-row
           :data.sync="tableData">
           <vxe-table-column type="index" width="60"></vxe-table-column>

@@ -16,7 +16,8 @@
       :columns="tableColumn"
       :select-config="{reserve: true}"
       :edit-rules="validRules"
-      :edit-config="{key: 'id', trigger: 'click', mode: 'row', showStatus: true}"></vxe-grid>
+      :edit-config="{key: 'id', trigger: 'click', mode: 'row', showStatus: true}">
+    </vxe-grid>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
@@ -51,12 +52,12 @@ export default {
           query: ({ page, sort, filters }) => {
             // 处理排序条件
             let formData = {
-              sort: sort.prop,
+              sort: sort.field,
               order: sort.order
             }
             // 处理筛选条件
-            filters.forEach(({ column, prop, values }) => {
-              formData[prop] = values.join(',')
+            filters.forEach(({ column, field, values }) => {
+              formData[field] = values.join(',')
             })
             return XEAjax.getJSON(`/api/user/page/list/${page.pageSize}/${page.currentPage}`, formData)
           },
@@ -120,12 +121,12 @@ export default {
                   query: ({ page, sort, filters }) => {
                     // 处理排序条件
                     let formData = {
-                      sort: sort.prop,
+                      sort: sort.field,
                       order: sort.order
                     }
                     // 处理筛选条件
-                    filters.forEach(({ column, prop, values }) => {
-                      formData[prop] = values.join(',')
+                    filters.forEach(({ column, field, values }) => {
+                      formData[field] = values.join(',')
                     })
                     return XEAjax.getJSON(\`/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`, formData)
                   },

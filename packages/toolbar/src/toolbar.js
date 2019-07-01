@@ -61,9 +61,10 @@ export default {
     GlobalEvent.off(this, 'blur')
   },
   render (h) {
-    let { $slots, settingStore, setting, buttons = [], vSize, tableCustoms } = this
+    let { $scopedSlots, settingStore, setting, buttons = [], vSize, tableCustoms } = this
     let customBtnOns = {}
     let customWrapperOns = {}
+    let $buttons = $scopedSlots.buttons
     if (setting) {
       if (setting.trigger === 'manual') {
         // 手动触发
@@ -85,7 +86,7 @@ export default {
     }, [
       h('div', {
         class: 'vxe-button--wrapper'
-      }, $slots.buttons ? $slots.buttons : buttons.map(item => {
+      }, $buttons ? $buttons() : buttons.map(item => {
         return h('vxe-button', {
           on: {
             click: evnt => this.btnEvent(item, evnt)

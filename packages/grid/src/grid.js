@@ -34,7 +34,6 @@ export default {
       pendingRecords: [],
       filterData: [],
       sortData: {
-        prop: '',
         field: '',
         order: ''
       },
@@ -93,11 +92,12 @@ export default {
     }
   },
   render (h) {
-    let { $slots, $listeners, pagerConfig, vSize, loading, toolbar, editConfig, proxyConfig, proxyOpts, tableProps, tableLoading, tablePage, tableData, tableCustoms, optimization } = this
+    let { $slots, $scopedSlots, $listeners, pagerConfig, vSize, loading, toolbar, editConfig, proxyConfig, proxyOpts, tableProps, tableLoading, tablePage, tableData, tableCustoms, optimization } = this
     let props = Object.assign({}, tableProps, {
       optimization: Object.assign({}, GlobalConfig.optimization, optimization)
     })
     let tableOns = Object.assign({}, $listeners)
+    let $buttons = $scopedSlots.buttons
     if (proxyConfig) {
       Object.assign(props, {
         loading: loading || tableLoading,
@@ -115,6 +115,9 @@ export default {
       }
     }
     if (toolbar) {
+      if (toolbar.slots) {
+        $buttons = toolbar.slots.buttons || $buttons
+      }
       if (!(toolbar.setting && toolbar.setting.storage)) {
         props.customs = tableCustoms
       }
@@ -135,7 +138,10 @@ export default {
     }, [
       toolbar ? h('vxe-toolbar', {
         ref: 'toolbar',
-        props: toolbar
+        props: toolbar,
+        scopedSlots: $buttons ? {
+          buttons: $buttons
+        } : null
       }) : null,
       h('vxe-table', {
         props,
@@ -316,26 +322,28 @@ export default {
       UtilTools.emitEvent(this, 'page-change', [params])
       this.commitProxy('query')
     },
-    sortChangeEvent ({ column, prop, order }) {
+    sortChangeEvent (params) {
       let { remoteSort, sortData } = this
+      let { column, field, order } = params
       let isRemote = XEUtils.isBoolean(column.remoteSort) ? column.remoteSort : remoteSort
       // 如果是服务端排序
       if (isRemote) {
-        sortData.prop = prop
+        sortData.field = field
         sortData.order = order
         this.commitProxy('query')
       } else {
-        UtilTools.emitEvent(this, 'sort-change', [column, prop, order])
+        UtilTools.emitEvent(this, 'sort-change', [params])
       }
     },
-    filterChangeEvent ({ column, prop, values, filters }) {
+    filterChangeEvent (params) {
       let { remoteFilter } = this
+      let { filters } = params
       // 如果是服务端过滤
       if (remoteFilter) {
         this.filterData = filters
         this.commitProxy('reload')
       } else {
-        UtilTools.emitEvent(this, 'filter-change', [column, prop, values, filters])
+        UtilTools.emitEvent(this, 'filter-change', [params])
       }
     }
   }

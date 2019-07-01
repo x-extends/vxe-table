@@ -512,7 +512,7 @@ export default {
      */
     scrollEvent (evnt) {
       let { $parent: $table, fixedType } = this
-      let { $refs, scrollXLoad, scrollYLoad } = $table
+      let { $refs, scrollXLoad, scrollYLoad, lastScrollTop, lastScrollLeft } = $table
       let { tableHeader, tableBody, leftBody, rightBody } = $refs
       let headerElem = tableHeader ? tableHeader.$el : null
       let bodyElem = tableBody.$el
@@ -520,6 +520,10 @@ export default {
       let rightElem = rightBody ? rightBody.$el : null
       let scrollTop = bodyElem.scrollTop
       let scrollLeft = bodyElem.scrollLeft
+      let isX = scrollLeft !== lastScrollLeft
+      let isY = scrollTop !== lastScrollTop
+      $table.lastScrollTop = scrollTop
+      $table.lastScrollLeft = scrollLeft
       if (leftElem && fixedType === 'left') {
         scrollTop = leftElem.scrollTop
         syncBodyScroll(scrollTop, bodyElem, rightElem)
@@ -527,24 +531,23 @@ export default {
         scrollTop = rightElem.scrollTop
         syncBodyScroll(scrollTop, bodyElem, leftElem)
       } else {
-        if (headerElem) {
+        if (isX && headerElem) {
           headerElem.scrollLeft = bodyElem.scrollLeft
         }
         // 缓解 IE 卡顿
-        if (leftElem || rightElem) {
+        if (isY && (leftElem || rightElem)) {
           // clearTimeout(updateLeftScrollingTimeput)
           // updateLeftScrollingTimeput = setTimeout($table.checkScrolling, DomTools.browse.msie ? 100 : 20)
           $table.checkScrolling()
           syncBodyScroll(scrollTop, leftElem, rightElem)
         }
       }
-      if (scrollXLoad) {
+      if (scrollXLoad && isX) {
         $table.triggerScrollXEvent(evnt)
-      }
-      if (scrollYLoad) {
+      } else if (scrollYLoad && isY) {
         $table.triggerScrollYEvent(evnt)
       }
-      UtilTools.emitEvent($table, 'scroll', [{ type: 'body', fixed: fixedType, scrollTop, scrollLeft, $table }, evnt])
+      UtilTools.emitEvent($table, 'scroll', [{ type: 'body', fixed: fixedType, scrollTop, scrollLeft, isX, isY, $table }, evnt])
     }
   }
 }
