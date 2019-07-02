@@ -298,6 +298,14 @@ const apis = [
             list: []
           }
         ]
+      },
+      {
+        name: 'params',
+        descKey: 'app.api.tableColumn.desc.params',
+        type: 'Object',
+        enum: '',
+        defVal: '',
+        list: []
       }
     ]
   },

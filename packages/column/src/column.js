@@ -53,7 +53,9 @@ export default {
     // 列的 key
     columnKey: [String, Number],
     // 列编辑配置项
-    editRender: Object
+    editRender: Object,
+    // 额外的参数
+    params: Object
   },
   inject: [
     '$table'

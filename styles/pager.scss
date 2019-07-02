@@ -292,6 +292,7 @@
   color: $vxe-font-color;
   font-family: $vxe-font-family;
   border: 1px solid $vxe-primary-color;
+  z-index: $vxe-zindex;
   &.is--show {
     display: block;
   }

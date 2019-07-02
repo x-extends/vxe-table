@@ -162,8 +162,6 @@ export default {
       props: tableProps,
       on: {
         ...$listeners,
-        'cell-click': this.cellClickEvent,
-        'header-cell-click': this.headerCellClickEvent,
         'context-menu-click': this.contextMenuClickEvent
       },
       ref: 'xTable'
@@ -171,24 +169,6 @@ export default {
   },
   methods: {
     ...methods,
-    cellClickEvent ({ row, columnIndex }, evnt) {
-      let $table = this.$refs.xTable
-      if (columnIndex > 0) {
-        $table.clearCurrentColumn()
-        $table.clearCurrentRow()
-      } else {
-        $table.setCurrentRow(row)
-      }
-    },
-    headerCellClickEvent ({ column, columnIndex }, evnt) {
-      let $table = this.$refs.xTable
-      if (columnIndex > 0) {
-        $table.setCurrentColumn(column)
-      } else {
-        $table.clearCurrentColumn()
-        $table.clearCurrentRow()
-      }
-    },
     contextMenuClickEvent ({ menu, row, column }, evnt) {
       let $table = this.$refs.xTable
       let { property } = column

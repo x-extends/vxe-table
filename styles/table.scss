@@ -141,6 +141,7 @@
     }
   }
   &.t--checked {
+    user-select: none;
     .vxe-header--column,
     .vxe-body--column {
       &.col--index {
@@ -157,6 +158,9 @@
     .vxe-body--column {
       &.col--index {
         background-color: $vxe-table-header-background-color;
+        &.col--index-checked {
+          background-color: $vxe-table-column-checked-background-color;
+        }
       }
     }
   }
@@ -497,7 +501,20 @@
         }
       }
       &.col--selected {
-        box-shadow: inset 0 0 4px $vxe-primary-color;
+        position: relative;
+        &:after {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          border-width: $vxe-table-column-checked-border-width;
+          border-style: solid;
+          border-color: $vxe-primary-color;
+          z-index: 1;
+          pointer-events: none;
+        }
       }
       &.col--dirty {
         position: relative;

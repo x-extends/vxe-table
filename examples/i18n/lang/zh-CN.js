@@ -254,7 +254,8 @@ module.exports = {
           filterRender: '筛选渲染配置项',
           treeNode: '只对 tree-config 配置时有效，指定为树节点',
           columnKey: '列渲染的 key，对应列渲染中虚拟 DOM 的 key 属性（非特殊情况下不需要使用）',
-          editRender: '列渲染配置项'
+          editRender: '列渲染配置项',
+          params: '额外的参数（自定义一些数据参数，对于某些特殊的场景可能会用到）'
         }
       },
       tooltip: {

@@ -11,10 +11,8 @@
     <pre>
       <code class="scss">
         @import 'vxe-table/styles/variable.scss';
-        $vxe-font-color: #606266;
-        $vxe-table-header-background-color: #f8f8f9;
-        $vxe-table-border-color: #e8eaec;
-        $vxe-table-background-color: #ffffff;
+        $vxe-font-color: #666;
+        $vxe-zindex: 3000;
         @import 'vxe-table/styles/default.scss';
       </code>
     </pre>
@@ -22,10 +20,8 @@
     <pre>
       <code class="scss">
         @import 'vxe-table/styles/variable.scss';
-        $vxe-font-color: #606266;
-        $vxe-table-header-background-color: #f8f8f9;
-        $vxe-table-border-color: #e8eaec;
-        $vxe-table-background-color: #ffffff;
+        $vxe-font-color: #666;
+        $vxe-zindex: 3000;
         @import 'vxe-table/styles/table.scss';
         @import 'vxe-table/styles/column.scss';
         @import 'vxe-table/styles/header.scss';

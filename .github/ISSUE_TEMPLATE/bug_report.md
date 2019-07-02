@@ -23,6 +23,6 @@ assignees: ''
 
 
 **请填写以下版本信息 please complete the following information**
- - 浏览器版本: ?
+ - browser: ?
  - vue: ?
  - vxe-table: ?

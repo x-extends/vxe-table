@@ -216,6 +216,10 @@ export default {
                 UtilTools.emitEvent($table, 'header-cell-dblclick', [{ $table, $rowIndex: rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, cell: evnt.currentTarget }, evnt])
               }
             }
+            // 按下事件处理
+            thOns.mousedown = evnt => {
+              $table.triggerHeaderCellMousedownEvent(evnt, { $table, $rowIndex: rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, cell: evnt.currentTarget })
+            }
             return h('th', {
               class: ['vxe-header--column', column.id, {
                 [`col--${headerAlign}`]: headerAlign,

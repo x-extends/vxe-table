@@ -2,6 +2,7 @@
 $vxe-font-family: Helvetica Neue,Helvetica,PingFang SC,Hiragino Sans GB,Microsoft YaHei,\\5FAE\8F6F\96C5\9ED1,Arial,sans-serif;
 $vxe-font-color: #606266;
 $vxe-font-size: 14px;
+$vxe-zindex: 99;
 
 /*primary color*/
 $vxe-primary-color: #409eff;
@@ -32,8 +33,9 @@ $vxe-table-column-icon-border-color: #c0c4cc;
 $vxe-table-column-icon-border-hover-color: #515A6E;
 
 /*table checked*/
-$vxe-table-column-checked-background-color: #E6EFFF;
-$vxe-excel-column-checked-border-color: #D4D4D4;
+$vxe-table-column-checked-border-width: 2px;
+$vxe-table-column-checked-border-color: #D4D4D4;
+$vxe-table-column-checked-background-color: #e6f7ff;
 
 /*loading*/
 $vxe-loading-background-color: rgba(0, 0, 0, 0.2);

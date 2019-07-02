@@ -535,11 +535,13 @@ export default {
           headerElem.scrollLeft = bodyElem.scrollLeft
         }
         // 缓解 IE 卡顿
-        if (isY && (leftElem || rightElem)) {
+        if (leftElem || rightElem) {
           // clearTimeout(updateLeftScrollingTimeput)
           // updateLeftScrollingTimeput = setTimeout($table.checkScrolling, DomTools.browse.msie ? 100 : 20)
           $table.checkScrolling()
-          syncBodyScroll(scrollTop, leftElem, rightElem)
+          if (isY) {
+            syncBodyScroll(scrollTop, leftElem, rightElem)
+          }
         }
       }
       if (scrollXLoad && isX) {

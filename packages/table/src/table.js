@@ -317,6 +317,9 @@ export default {
       // },
       // 存放可编辑相关信息
       editStore: {
+        indexs: {
+          columns: []
+        },
         titles: {
           columns: []
         },
@@ -377,6 +380,9 @@ export default {
     },
     isResizable () {
       return this.resizable || this.tableFullColumn.some(column => column.resizable)
+    },
+    hasFixed () {
+      return this.columnStore.leftList.length || this.columnStore.rightList.length
     },
     hasFilter () {
       return this.tableColumn.some(column => column.filters && column.filters.length)
@@ -1575,6 +1581,7 @@ export default {
           }
         })
       })
+      return this.$nextTick()
     },
     /**
      * 处理固定列的显示状态
@@ -2316,64 +2323,150 @@ export default {
       XEUtils.arrayEach(this.$el.querySelectorAll('.row--hover'), elem => DomTools.removeClass(elem, 'row--hover'))
     },
     /**
-     * 选中事件
+     * 表头按下事件
+     */
+    triggerHeaderCellMousedownEvent (evnt, params) {
+      let { $el, mouseConfig = {}, _elemStore, handleChecked, handleHeaderChecked, handleIndexChecked } = this
+      let { button } = evnt
+      let { column, cell } = params
+      let isLeftBtn = button === 0
+      let isIndex = column.type === 'index'
+      if (isLeftBtn && mouseConfig.checked) {
+        let headerList = _elemStore['main-header-list'].children
+        let bodyList = _elemStore['main-body-list'].children
+        if (isIndex) {
+          let firstTrElem = bodyList[0]
+          let lastTrElem = bodyList[bodyList.length - 1]
+          let firstCell = firstTrElem.querySelector(`.${column.id}`)
+          this.clearSelected()
+          handleHeaderChecked(DomTools.getRowNodes(headerList, DomTools.getCellNodeIndex(cell.nextElementSibling), DomTools.getCellNodeIndex(cell.parentNode.lastElementChild)))
+          handleIndexChecked(DomTools.getRowNodes(bodyList, DomTools.getCellNodeIndex(firstCell), DomTools.getCellNodeIndex(lastTrElem.querySelector(`.${column.id}`))))
+          handleChecked(DomTools.getRowNodes(bodyList, DomTools.getCellNodeIndex(firstCell.nextElementSibling), DomTools.getCellNodeIndex(lastTrElem.lastElementChild)))
+        } else {
+          evnt.preventDefault()
+          evnt.stopPropagation()
+          this.clearSelected()
+          this.clearHeaderChecked()
+          this.clearIndexChecked()
+          // this.handleSelected(params, evnt)
+          let domMousemove = document.onmousemove
+          let domMouseup = document.onmouseup
+          // let start = DomTools.getCellIndexs(cell)
+          // let startCellNode = DomTools.getCellNodeIndex(cell)
+          let startCell = bodyList[0].querySelector(`.${column.id}`)
+          // let cellLastElementChild = cell.parentNode.lastElementChild
+          let updateEvent = XEUtils.throttle(function (evnt) {
+            evnt.preventDefault()
+            let { flag, targetElem } = DomTools.getEventTargetNode(evnt, $el, 'vxe-header--column')
+            if (!flag) {
+              let a = DomTools.getEventTargetNode(evnt, $el, 'vxe-body--column')
+              flag = a.flag
+              targetElem = a.targetElem
+            }
+            if (flag && !DomTools.hasClass(targetElem, 'col--index')) {
+              let colIndex = [].indexOf.call(targetElem.parentNode.children, targetElem)
+              let endCell = bodyList[bodyList.length - 1].children[colIndex]
+              let head = headerList[0].children[colIndex]
+              handleHeaderChecked(DomTools.getRowNodes(headerList, DomTools.getCellNodeIndex(head), DomTools.getCellNodeIndex(cell)))
+              handleChecked(DomTools.getRowNodes(bodyList, DomTools.getCellNodeIndex(startCell), DomTools.getCellNodeIndex(endCell)))
+            }
+          }, 80, { leading: true, trailing: true })
+          document.onmousemove = updateEvent
+          document.onmouseup = function (evnt) {
+            document.onmousemove = domMousemove
+            document.onmouseup = domMouseup
+          }
+          handleHeaderChecked([[cell]])
+          if (bodyList.length) {
+            let endCell = bodyList[bodyList.length - 1].querySelector(`.${column.id}`)
+            this.handleChecked(DomTools.getRowNodes(bodyList, DomTools.getCellNodeIndex(startCell), DomTools.getCellNodeIndex(endCell)))
+          }
+        }
+        this.closeMenu()
+      }
+    },
+    /**
+     * 单元格按下事件
      */
     triggerCellMousedownEvent (evnt, params) {
       let {
-        // $el,
+        $el,
         tableData,
         visibleColumn,
         editStore,
         editConfig,
-        handleSelected
+        handleSelected,
         // handleOldChecked,
-        // handleChecked,
-        // _elemStore
+        handleChecked,
+        handleIndexChecked,
+        _elemStore
       } = this
       let { checked, actived } = editStore
-      let { row, column, cell } = params
+      let {
+        row,
+        column,
+        cell
+      } = params
       let { button } = evnt
       let isLeftBtn = button === 0
-      let isRightBtn = button === 2
-      if (isLeftBtn || isRightBtn) {
-        if (editConfig && editConfig.trigger === 'dblclick') {
-          if ((editConfig.mode === 'row' && actived.row === row) || (actived.row === row && actived.column === column)) {
-            // 如果已经是激活状态
-          } else {
-            if (isLeftBtn) {
-              evnt.preventDefault()
-              evnt.stopPropagation()
-              this.handleSelected(params, evnt)
-              // let domMousemove = document.onmousemove
-              // let domMouseup = document.onmouseup
-              // // let start = DomTools.getCellIndexs(cell)
-              // let startCellNode = DomTools.getCellNodeIndex(cell)
-              // let trList = _elemStore['main-body-list'].children
-              // let updateEvent = XEUtils.throttle(function (evnt) {
-              //   evnt.preventDefault()
-              //   let { flag, targetElem } = DomTools.getEventTargetNode(evnt, $el, 'vxe-body--column')
-              //   if (flag) {
-              //     // handleOldChecked(start, DomTools.getCellIndexs(targetElem), evnt)
-              //     handleChecked(DomTools.getRowNodes(trList, startCellNode, DomTools.getCellNodeIndex(targetElem)))
-              //   }
-              // }, 80, { leading: true, trailing: true })
-              // document.onmousemove = updateEvent
-              // document.onmouseup = function (evnt) {
-              //   document.onmousemove = domMousemove
-              //   document.onmouseup = domMouseup
-              // }
-              this.closeFilter()
-              this.closeMenu()
-            } else {
-              // 如果不在所有选中的范围之内则重新选中
-              let select = DomTools.getCellIndexs(cell)
-              if (checked.rows.indexOf(tableData[select.rowIndex]) === -1 || checked.columns.indexOf(visibleColumn[select.columnIndex]) === -1) {
-                handleSelected(params, evnt)
+      // let isRightBtn = button === 2
+      // if (isLeftBtn || isRightBtn) {
+      // if (editConfig && editConfig.trigger === 'dblclick') {
+      // 如果已经是激活状态
+      if (!editConfig || (editConfig.mode === 'row' && actived.row === row) || (actived.row === row && actived.column === column)) {
+
+      } else {
+        if (isLeftBtn) {
+          evnt.preventDefault()
+          evnt.stopPropagation()
+          this.clearHeaderChecked()
+          this.clearIndexChecked()
+          let domMousemove = document.onmousemove
+          let domMouseup = document.onmouseup
+          // let start = DomTools.getCellIndexs(cell)
+          let startCellNode = DomTools.getCellNodeIndex(cell)
+          let isIndex = column.type === 'index'
+          let trList = _elemStore['main-body-list'].children
+          let cellLastElementChild = cell.parentNode.lastElementChild
+          let updateEvent = XEUtils.throttle(function (evnt) {
+            evnt.preventDefault()
+            let { flag, targetElem } = DomTools.getEventTargetNode(evnt, $el, 'vxe-body--column')
+            if (flag) {
+              if (isIndex) {
+                let firstCell = targetElem.parentNode.firstElementChild
+                handleChecked(DomTools.getRowNodes(trList, DomTools.getCellNodeIndex(firstCell.nextElementSibling), DomTools.getCellNodeIndex(cellLastElementChild)))
+                handleIndexChecked(DomTools.getRowNodes(trList, DomTools.getCellNodeIndex(firstCell), DomTools.getCellNodeIndex(cell)))
+              } else {
+                handleChecked(DomTools.getRowNodes(trList, startCellNode, DomTools.getCellNodeIndex(targetElem)))
               }
             }
+          }, 80, { leading: true, trailing: true })
+          document.onmousemove = updateEvent
+          document.onmouseup = function (evnt) {
+            document.onmousemove = domMousemove
+            document.onmouseup = domMouseup
+          }
+          if (isIndex) {
+            let firstCell = cell.parentNode.firstElementChild
+            this.clearSelected()
+            handleChecked(DomTools.getRowNodes(trList, DomTools.getCellNodeIndex(firstCell.nextElementSibling), DomTools.getCellNodeIndex(cellLastElementChild)))
+            handleIndexChecked(DomTools.getRowNodes(trList, DomTools.getCellNodeIndex(firstCell), DomTools.getCellNodeIndex(cell)))
+          } else {
+            this.handleSelected(params, evnt)
+            handleChecked(DomTools.getRowNodes(trList, startCellNode, DomTools.getCellNodeIndex(cell)))
+          }
+          this.closeFilter()
+          this.closeMenu()
+        } else {
+          // 如果不在所有选中的范围之内则重新选中
+          let select = DomTools.getCellIndexs(cell)
+          if (checked.rows.indexOf(tableData[select.rowIndex]) === -1 || checked.columns.indexOf(visibleColumn[select.columnIndex]) === -1) {
+            handleSelected(params, evnt)
           }
         }
       }
+      // }
+      // }
     },
     /**
      * 边角事件
@@ -2412,18 +2505,18 @@ export default {
     //   }
     // },
     triggerHeaderCellClickEvent (evnt, params) {
-      let { _elemStore, mouseConfig = {} } = this
+      // let { _elemStore, mouseConfig = {} } = this
       let { column } = params
       UtilTools.emitEvent(this, 'header-cell-click', [params, evnt])
-      if (mouseConfig.checked && column.type !== 'index') {
-        let trList = _elemStore['main-body-list'].children
-        this.handleHeaderChecked([evnt.currentTarget])
-        if (trList.length) {
-          let startCell = trList[0].querySelector(`.${column.id}`)
-          let endCell = trList[trList.length - 1].querySelector(`.${column.id}`)
-          return this.handleChecked(DomTools.getRowNodes(trList, DomTools.getCellNodeIndex(startCell), DomTools.getCellNodeIndex(endCell)))
-        }
-      }
+      // if (mouseConfig.checked && column.type !== 'index') {
+      //   let trList = _elemStore['main-body-list'].children
+      //   this.handleHeaderChecked([evnt.currentTarget])
+      //   if (trList.length) {
+      //     let startCell = trList[0].querySelector(`.${column.id}`)
+      //     let endCell = trList[trList.length - 1].querySelector(`.${column.id}`)
+      //     return this.handleChecked(DomTools.getRowNodes(trList, DomTools.getCellNodeIndex(startCell), DomTools.getCellNodeIndex(endCell)))
+      //   }
+      // }
       if (this.highlightCurrentColumn) {
         return this.setCurrentColumn(column, true)
       }
@@ -2451,15 +2544,19 @@ export default {
      * 如果是双击模式，则单击后选中状态
      */
     triggerCellClickEvent (evnt, params) {
-      let { $el, mouseConfig = {}, highlightCurrentRow, editStore, treeConfig, editConfig, _elemStore } = this
+      let { $el, highlightCurrentRow, editStore, treeConfig, editConfig } = this
       let { actived } = editStore
-      let { column, columnIndex, cell } = params
-      if (mouseConfig.checked && column.type === 'index') {
-        let trList = _elemStore['main-body-list'].children
-        this.clearHeaderChecked()
-        this.handleChecked(DomTools.getRowNodes(trList, DomTools.getCellNodeIndex(cell.nextElementSibling), DomTools.getCellNodeIndex(cell.parentNode.lastElementChild)))
-        DomTools.addClass(cell, 'col--checked')
-      }
+      let { column, columnIndex } = params
+      // if (mouseConfig.checked) {
+      //   let trList = _elemStore['main-body-list'].children
+      //   this.clearHeaderChecked()
+      //   if (column.type === 'index') {
+      //     this.handleChecked(DomTools.getRowNodes(trList, DomTools.getCellNodeIndex(cell.nextElementSibling), DomTools.getCellNodeIndex(cell.parentNode.lastElementChild)))
+      //     DomTools.addClass(cell, 'col--checked')
+      //   } else {
+      //     this.handleChecked([[cell]])
+      //   }
+      // }
       if (highlightCurrentRow) {
         if (!this.getEventTargetNode(evnt, $el, 'vxe-tree-wrapper').flag && !this.getEventTargetNode(evnt, $el, 'vxe-checkbox').flag) {
           this.setCurrentRow(params.row)
@@ -2542,6 +2639,9 @@ export default {
             this.clearValidate()
             // this.clearCopyed(evnt)
             // this.clearChecked(evnt)
+            this.clearChecked()
+            this.clearIndexChecked()
+            this.clearHeaderChecked()
             this.clearSelected(evnt)
             this.clearActived(evnt)
             column.renderHeight = cell.offsetHeight
@@ -2627,8 +2727,10 @@ export default {
       let { selected } = editStore
       selected.row = null
       selected.column = null
-      let listElem = _elemStore['main-body-list']
-      XEUtils.arrayEach([listElem.querySelector('.col--selected')], elem => DomTools.removeClass(elem, 'col--selected'))
+      let headerElem = _elemStore['main-header-list']
+      let bodyElem = _elemStore['main-body-list']
+      XEUtils.arrayEach(headerElem.querySelectorAll('.col--title-selected'), elem => DomTools.removeClass(elem, 'col--title-selected'))
+      XEUtils.arrayEach([bodyElem.querySelector('.col--selected')], elem => DomTools.removeClass(elem, 'col--selected'))
       return this.$nextTick()
     },
     /**
@@ -2636,15 +2738,17 @@ export default {
      */
     handleSelected (params, evnt) {
       let {
-        // mouseConfig = {},
+        mouseConfig = {},
         editStore,
         _elemStore
       } = this
       let { selected } = editStore
-      let { row, column } = params
+      let { row, column, cell } = params
       let selectMethod = () => {
         if (selected.row !== row || selected.column !== column) {
-          // this.clearChecked(evnt)
+          this.clearChecked(evnt)
+          this.clearIndexChecked()
+          this.clearHeaderChecked()
           this.clearSelected()
           this.clearActived(evnt)
           this.clearValidate()
@@ -2657,11 +2761,15 @@ export default {
           let tdElem = trElem.querySelector(`.${column.id}`)
           DomTools.addClass(tdElem, 'col--selected')
         }
-        // // 如果配置了批量选中功能，则为批量选中状态
-        // if (mouseConfig.checked) {
+        // 如果配置了批量选中功能，则为批量选中状态
+        if (mouseConfig.checked) {
+          let headerElem = _elemStore['main-header-list']
+          this.clearSelected()
+          this.handleHeaderChecked([[headerElem.querySelector(`.${column.id}`)]])
+          this.handleIndexChecked([[cell.parentNode.querySelector('.col--index')]])
         //   let select = DomTools.getCellIndexs(params.cell)
         //   this.handleOldChecked(select, select, evnt)
-        // }
+        }
         return this.$nextTick()
       }
       // return editRules ? this.triggerValidate('blur').then(selectMethod).catch(e => e) : selectMethod()
@@ -2678,9 +2786,7 @@ export default {
       checked.columns = []
       checked.tRows = []
       checked.tColumns = []
-      XEUtils.arrayEach(bodyElem.querySelectorAll('.col--checked'), elem => {
-        DomTools.removeClass(elem, 'col--checked')
-      })
+      XEUtils.arrayEach(bodyElem.querySelectorAll('.col--checked'), elem => DomTools.removeClass(elem, 'col--checked'))
       return this.$nextTick()
     },
     /**
@@ -2746,21 +2852,36 @@ export default {
       })
       checked.rowNodes = rowNodes
     },
-    handleHeaderChecked (cellNodes) {
+    handleIndexChecked (rowNodes) {
+      let { indexs } = this.editStore
+      this.clearIndexChecked()
+      rowNodes.forEach(rows => {
+        rows.forEach(elem => {
+          DomTools.addClass(elem, 'col--index-checked')
+        })
+      })
+      indexs.rowNodes = rowNodes
+    },
+    clearIndexChecked () {
+      let { _elemStore } = this
+      let bodyElem = _elemStore['main-body-list']
+      XEUtils.arrayEach(bodyElem.querySelectorAll('.col--index-checked'), elem => DomTools.removeClass(elem, 'col--index-checked'))
+      return this.$nextTick()
+    },
+    handleHeaderChecked (rowNodes) {
       let { titles } = this.editStore
       this.clearHeaderChecked()
-      cellNodes.forEach(elem => {
-        DomTools.addClass(elem, 'col--title-checked')
+      rowNodes.forEach(rows => {
+        rows.forEach(elem => {
+          DomTools.addClass(elem, 'col--title-checked')
+        })
       })
-      titles.cellNodes = cellNodes
+      titles.rowNodes = rowNodes
     },
     clearHeaderChecked () {
-      let { titles } = this.editStore
-      if (titles.cellNodes) {
-        titles.cellNodes.forEach(elem => {
-          DomTools.removeClass(elem, 'col--title-checked')
-        })
-      }
+      let { _elemStore } = this
+      let headerElem = _elemStore['main-header-list']
+      XEUtils.arrayEach(headerElem.querySelectorAll('.col--title-checked'), elem => DomTools.removeClass(elem, 'col--title-checked'))
       return this.$nextTick()
     },
     /**
@@ -2935,7 +3056,7 @@ export default {
         }
         UtilTools.emitEvent(this, 'sort-change', [{ column, prop: field, field, order }])
       }
-      return this.$nextTick()
+      return this.$nextTick().then(this.updateStyle)
     },
     /**
      * 点击筛选事件
@@ -2958,6 +3079,7 @@ export default {
           options: column.filters,
           column: column,
           style: {
+            zIndex: GlobalConfig.tooltip.zIndex,
             top: `${top + targetElem.clientHeight + 6}px`,
             left: `${left}px`
           },
@@ -2967,10 +3089,8 @@ export default {
         filterStore.isIndeterminate = !this.isAllSelected && filterStore.options.some(item => item.checked)
         this.$nextTick(() => {
           let filterWrapperElem = filterWrapper.$el
-          filterStore.style = {
-            top: `${top + targetElem.clientHeight + 6}px`,
-            left: `${left - filterWrapperElem.clientWidth / 2 + 10}px`
-          }
+          filterStore.style.top = `${top + targetElem.clientHeight + 6}px`
+          filterStore.style.left = `${left - filterWrapperElem.clientWidth / 2 + 10}px`
         })
       }
     },
@@ -3292,9 +3412,9 @@ export default {
      * 纵向 Y 可视渲染事件处理
      */
     triggerScrollYEvent (evnt) {
-      let { _scrollYStore, scrollXLoad } = this
+      let { _scrollYStore, scrollXLoad, hasFixed } = this
       // webkit 浏览器使用最佳的渲染方式
-      if (isWebkit && _scrollYStore.adaptive && !scrollXLoad) {
+      if (isWebkit && _scrollYStore.adaptive && !scrollXLoad && !hasFixed) {
         this.loadScrollYData(evnt)
       } else {
         this.debounceScrollY(evnt)
@@ -3340,7 +3460,7 @@ export default {
     },
     // 计算可视渲染相关数据
     computeScrollLoad () {
-      let { scrollXLoad, scrollYLoad, _scrollYStore, _scrollXStore, visibleColumn, optimizeOpts } = this
+      let { scrollXLoad, scrollYLoad, _scrollYStore, _scrollXStore, visibleColumn, optimizeOpts, hasFixed } = this
       let { scrollX, scrollY } = optimizeOpts
       let tableBody = this.$refs.tableBody
       let tableBodyElem = tableBody ? tableBody.$el : null
@@ -3372,7 +3492,7 @@ export default {
           }
           let visibleSize = scrollY.vSize || Math.ceil(tableBodyElem.clientHeight / _scrollYStore.rowHeight)
           _scrollYStore.visibleSize = visibleSize
-          if (isWebkit && _scrollYStore.adaptive && !scrollXLoad) {
+          if (isWebkit && _scrollYStore.adaptive && !scrollXLoad && !hasFixed) {
             _scrollYStore.offsetSize = visibleSize
             _scrollYStore.renderSize = visibleSize + 2
           }

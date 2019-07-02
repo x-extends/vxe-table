@@ -12,35 +12,47 @@
     &.col--checked {
       position: relative;
       background-color: $vxe-table-column-checked-background-color;
-      border-right-color: $vxe-excel-column-checked-border-color;
-      &:not(.col--index) {
-        border-bottom-color: $vxe-excel-column-checked-border-color;
-      }
-      &.col--index {
-        background-color: $vxe-table-column-checked-background-color;
-      }
+      border-right-color: $vxe-table-column-checked-border-color;
+      border-bottom-color: $vxe-table-column-checked-border-color;
       &.col--checked-top {
         .vxe-cell--checked-line {
-          border-top-width: 1px;
+          border-top-width: $vxe-table-column-checked-border-width;
         }
       }
       &.col--checked-bottom {
         .vxe-cell--checked-line {
-          border-bottom-width: 1px;
+          border-bottom-width: $vxe-table-column-checked-border-width;
         }
       }
       &.col--checked-left {
         .vxe-cell--checked-line {
-          border-left-width: 1px;
+          border-left-width: $vxe-table-column-checked-border-width;
         }
       }
       &.col--checked-right {
         .vxe-cell--checked-line {
-          border-right-width: 1px;
+          border-right-width: $vxe-table-column-checked-border-width;
+        }
+      }
+      &.col--checked-top,
+      &.col--checked-bottom,
+      &.col--checked-left,
+      &.col--checked-right {
+        .vxe-cell--checked-line {
+          display: block;
+        }
+      }
+      &.col--selected {
+        &:after {
+          display: none;
+        }
+      }
+      &.col--actived {
+        .vxe-cell--checked-line {
+          display: none;
         }
       }
       .vxe-cell--checked-line {
-        display: block;
         position: absolute;
         top: 0;
         left: 0;
@@ -49,9 +61,12 @@
         border-width: 0;
         border-style: solid;
         border-color: $vxe-primary-color;
+        z-index: 1;
         pointer-events: none;
-        z-index: 3;
       }
+    }
+    &.col--selected {
+      background-color: #fff;
     }
   }
 }
