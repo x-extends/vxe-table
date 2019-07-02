@@ -217,8 +217,10 @@ export default {
               }
             }
             // 按下事件处理
-            thOns.mousedown = evnt => {
-              $table.triggerHeaderCellMousedownEvent(evnt, { $table, $rowIndex: rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, cell: evnt.currentTarget })
+            if (mouseConfig.checked) {
+              thOns.mousedown = evnt => {
+                $table.triggerHeaderCellMousedownEvent(evnt, { $table, $rowIndex: rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, cell: evnt.currentTarget })
+              }
             }
             return h('th', {
               class: ['vxe-header--column', column.id, {

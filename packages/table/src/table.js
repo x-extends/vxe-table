@@ -2396,6 +2396,7 @@ export default {
         editStore,
         editConfig,
         handleSelected,
+        mouseConfig = {},
         // handleOldChecked,
         handleChecked,
         handleIndexChecked,
@@ -2416,7 +2417,7 @@ export default {
       if (!editConfig || (editConfig.mode === 'row' && actived.row === row) || (actived.row === row && actived.column === column)) {
 
       } else {
-        if (isLeftBtn) {
+        if (isLeftBtn && mouseConfig.checked) {
           evnt.preventDefault()
           evnt.stopPropagation()
           this.clearHeaderChecked()

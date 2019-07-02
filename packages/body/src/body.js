@@ -95,8 +95,10 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
     }
   }
   // 按下事件处理
-  tdOns.mousedown = evnt => {
-    $table.triggerCellMousedownEvent(evnt, { $table, seq, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn, level: rowLevel, cell: evnt.currentTarget })
+  if (mouseConfig.checked || mouseConfig.selected) {
+    tdOns.mousedown = evnt => {
+      $table.triggerCellMousedownEvent(evnt, { $table, seq, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn, level: rowLevel, cell: evnt.currentTarget })
+    }
   }
   // 点击事件处理
   if (highlightCurrentRow ||

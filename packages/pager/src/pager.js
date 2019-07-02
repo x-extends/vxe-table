@@ -54,30 +54,18 @@ export default {
   created () {
     GlobalEvent.on(this, 'mousedown', this.handleGlobalMousedownEvent)
   },
-  mounted () {
-    let sizePanel = this.$refs.sizePanel
-    if (sizePanel) {
-      document.body.appendChild(this.$refs.sizePanel)
-    }
-  },
-  beforeDestroy () {
-    let sizePanel = this.$refs.sizePanel
-    if (sizePanel && sizePanel.parentNode) {
-      sizePanel.parentNode.removeChild(sizePanel)
-    }
-  },
   destroyed () {
     GlobalEvent.off(this, 'mousedown')
   },
   render (h) {
-    let { layouts, isSizes, loading, vSize, background } = this
+    let { layouts, loading, vSize, background } = this
     return h('div', {
       class: ['vxe-pager', {
         [`size--${vSize}`]: vSize,
         'p--background': background,
         'is--loading': loading
       }]
-    }, layouts.map(name => this[`render${name}`](h)).concat(isSizes ? this.renderSizePanel(h) : []))
+    }, layouts.map(name => this[`render${name}`](h)))
   },
   methods: {
     // prevPage
@@ -166,43 +154,43 @@ export default {
     },
     // sizes
     renderSizes (h) {
-      let { pageSize } = this
+      let { pageSizes, showSizes, pageSize, panelStyle } = this
       return h('span', {
         class: ['vxe-pager--sizes', {
-          'is--active': this.showSizes
+          'is--active': showSizes
         }],
-        on: {
-          click: this.toggleSizePanel
-        },
         ref: 'sizeBtn'
       }, [
-        h('i', {
-          class: 'vxe-pager--sizes-arrow vxe-icon--caret-bottom'
-        }),
         h('span', {
-          class: 'size--content'
-        }, `${pageSize}${GlobalConfig.i18n('vxe.pager.pagesize')}`)
-      ])
-    },
-    // 分页面板
-    renderSizePanel (h) {
-      let { panelStyle, pageSize, pageSizes, showSizes } = this
-      return h('ul', {
-        class: ['vxe-pager-size--select', {
-          'is--show': showSizes
-        }],
-        style: panelStyle,
-        ref: 'sizePanel'
-      }, pageSizes.map(num => {
-        return h('li', {
-          class: ['size--option', {
-            'is--active': num === pageSize
-          }],
+          class: 'size--content',
           on: {
-            click: () => this.sizeChangeEvent(num)
+            click: this.toggleSizePanel
           }
-        }, `${num}${GlobalConfig.i18n('vxe.pager.pagesize')}`)
-      }))
+        }, [
+          h('span', `${pageSize}${GlobalConfig.i18n('vxe.pager.pagesize')}`),
+          h('i', {
+            class: 'vxe-pager--sizes-arrow vxe-icon--caret-bottom'
+          })
+        ]),
+        h('div', {
+          class: 'vxe-pager-size--select-wrapper',
+          style: panelStyle,
+          ref: 'sizePanel'
+        }, [
+          h('ul', {
+            class: 'vxe-pager-size--select'
+          }, pageSizes.map(num => {
+            return h('li', {
+              class: ['size--option', {
+                'is--active': num === pageSize
+              }],
+              on: {
+                click: () => this.sizeChangeEvent(num)
+              }
+            }, `${num}${GlobalConfig.i18n('vxe.pager.pagesize')}`)
+          }))
+        ])
+      ])
     },
     // FullJump
     renderFullJump (h) {
@@ -363,46 +351,21 @@ export default {
       UtilTools.emitEvent(this, 'page-change', [{ type, pageSize, currentPage }])
     },
     toggleSizePanel () {
-      if (this.showSizes) {
-        this.hideSizePanel()
-      } else {
-        this.showSizePanel()
-      }
+      this[this.showSizes ? 'hideSizePanel' : 'showSizePanel']()
+    },
+    showSizePanel () {
+      this.showSizes = true
+      this.$nextTick(() => {
+        let { $refs } = this
+        let { sizeBtn, sizePanel } = $refs
+        this.panelStyle = {
+          bottom: `${sizeBtn.clientHeight + 6}px`,
+          left: `-${sizePanel.clientWidth / 2 - sizeBtn.clientWidth / 2}px`
+        }
+      })
     },
     hideSizePanel () {
       this.showSizes = false
-    },
-    showSizePanel () {
-      let { $refs, zIndex = GlobalConfig.tooltip.zIndex } = this
-      let sizeBtnElem = $refs.sizeBtn
-      let { left, top } = DomTools.getAbsolutePos(sizeBtnElem)
-      let { scrollTop, scrollLeft, visibleWidth, visibleHeight } = DomTools.getDomNode()
-      this.panelStyle = {
-        zIndex,
-        left: `${left}px`,
-        top: `${top + sizeBtnElem.offsetHeight + 6}px`
-      }
-      this.showSizes = true
-      this.$nextTick().then(() => {
-        let sizePanelElem = $refs.sizePanel
-        if (sizePanelElem) {
-          this.panelStyle.top = `${top + sizeBtnElem.offsetHeight + 6}px`
-          this.panelStyle.left = `${left + Math.floor((sizeBtnElem.offsetWidth - sizePanelElem.offsetWidth) / 2)}px`
-          return this.$nextTick()
-        }
-      }).then(() => {
-        let sizePanelElem = $refs.sizePanel
-        if (sizePanelElem) {
-          let offsetHeight = sizePanelElem.offsetHeight
-          let offsetWidth = sizePanelElem.offsetWidth
-          if (top + sizeBtnElem.offsetHeight + offsetHeight > scrollTop + visibleHeight) {
-            this.panelStyle.top = `${top - offsetHeight - 6}px`
-          }
-          if (left + offsetWidth > scrollLeft + visibleWidth) {
-            this.panelStyle.left = `${scrollLeft + visibleWidth - offsetWidth - 6}px`
-          }
-        }
-      })
     }
   }
 }
