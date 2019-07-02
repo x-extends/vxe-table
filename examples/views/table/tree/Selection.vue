@@ -3,6 +3,7 @@
     <p>多选树表格</p>
 
     <vxe-table
+      resizable
       :tree-config="{key: 'id', children: 'children'}"
       :data.sync="tableData"
       @select-change="selectChangeEvent">
@@ -32,6 +33,7 @@ export default {
       demoCodes: [
         `
         <vxe-table
+          resizable
           :tree-config="{key: 'id', children: 'children'}"
           :data.sync="tableData"
           @select-change="selectChangeEvent">

@@ -3,6 +3,7 @@
     <p>可编辑树表格</p>
 
     <vxe-table
+      resizable
       :tree-config="{key: 'id', children: 'children'}"
       :edit-config="{key: 'id', trigger: 'click', mode: 'row'}"
       :data.sync="tableData">
@@ -32,6 +33,7 @@ export default {
       demoCodes: [
         `
         <vxe-table
+          resizable
           :tree-config="{key: 'id', children: 'children'}"
           :edit-config="{key: 'id', trigger: 'click', mode: 'row'}"
           :data.sync="tableData">

@@ -41,6 +41,7 @@
     <p>当然也可以两种方式同时使用</p>
 
     <vxe-table
+      resizable
       highlight-current-row
       :tree-config="{key: 'id', children: 'children'}"
       :data.sync="tableData">
@@ -116,6 +117,7 @@ export default {
         `,
         `
         <vxe-table
+          resizable
           highlight-current-row
           :tree-config="{key: 'id', children: 'children'}"
           :data.sync="tableData">
