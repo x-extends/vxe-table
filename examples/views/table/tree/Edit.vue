@@ -12,6 +12,7 @@
     </vxe-toolbar>
 
     <vxe-table
+      resizable
       ref="xTree"
       :tree-config="{key: 'id', children: 'children'}"
       :edit-config="{trigger: 'click', mode: 'row'}"
@@ -52,6 +53,7 @@ export default {
         </vxe-toolbar>
 
         <vxe-table
+          resizable
           ref="xTree"
           :tree-config="{key: 'id', children: 'children'}"
           :edit-config="{trigger: 'click', mode: 'row'}"
