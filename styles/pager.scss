@@ -52,6 +52,10 @@
     .vxe-pager--jump {
       margin: 0 4px;
     }
+    .vxe-pager--count,
+    .size--content,
+    .vxe-pager--prev-btn,
+    .vxe-pager--next-btn,
     .vxe-pager--jump-prev,
     .vxe-pager--num-btn,
     .vxe-pager--jump-next {
@@ -61,10 +65,6 @@
     .vxe-pager--sizes {
       .vxe-pager--sizes-arrow {
         top: 8px;
-      }
-      .size--content {
-        height: 28px;
-        line-height: 28px;
       }
     }
     .vxe-pager--jump .vxe-pager--goto {
@@ -88,6 +88,10 @@
     .vxe-pager--jump {
       margin: 0 4px;
     }
+    .vxe-pager--count,
+    .size--content,
+    .vxe-pager--prev-btn,
+    .vxe-pager--next-btn,
     .vxe-pager--jump-prev,
     .vxe-pager--num-btn,
     .vxe-pager--jump-next {
@@ -97,10 +101,6 @@
     .vxe-pager--sizes {
       .vxe-pager--sizes-arrow {
         top: 7px;
-      }
-      .size--content {
-        height: 26px;
-        line-height: 26px;
       }
     }
     .vxe-pager--jump .vxe-pager--goto {
@@ -124,6 +124,10 @@
     .vxe-pager--jump {
       margin: 0 4px;
     }
+    .vxe-pager--count,
+    .size--content,
+    .vxe-pager--prev-btn,
+    .vxe-pager--next-btn,
     .vxe-pager--jump-prev,
     .vxe-pager--num-btn,
     .vxe-pager--jump-next {
@@ -131,10 +135,6 @@
       line-height: 24px;
     }
     .vxe-pager--sizes {
-      .size--content {
-        height: 24px;
-        line-height: 24px;
-      }
       .vxe-pager--sizes-arrow {
         top: 6px;
       }
@@ -155,6 +155,8 @@
   .vxe-pager--next-btn,
   .vxe-pager--sizes,
   .vxe-pager--jump,
+  .vxe-pager--jump-prev,
+  .vxe-pager--jump-next,
   .vxe-pager--count {
     margin: 0 6px;
     vertical-align: middle;
@@ -168,13 +170,22 @@
   .vxe-pager--sizes {
     cursor: pointer;
   }
+  .vxe-pager--count,
+  .size--content,
+  .vxe-pager--prev-btn,
+  .vxe-pager--next-btn,
+  .vxe-pager--jump-prev,
+  .vxe-pager--num-btn,
+  .vxe-pager--jump-next {
+    height: 30px;
+    line-height: 30px;
+    display: inline-block;
+  }
   .vxe-pager--btn-wrapper {
     list-style-type: none;
     padding: 0;
     display: inline-block;
     text-align: center;
-    height: 30px;
-    line-height: 30px;
     .vxe-pager--jump-prev,
     .vxe-pager--jump-next {
       &:hover {
@@ -182,7 +193,7 @@
           display: none;
         }
         .vxe-pager--jump-icon {
-          display: block;
+          display: inline-block;
         }
       }
     }
@@ -195,9 +206,7 @@
   .vxe-pager--num-btn,
   .vxe-pager--next-btn,
   .vxe-pager--jump-next {
-    display: inline-block;
     margin: 0 2px;
-    vertical-align: middle;
     &:hover,
     &.is--active {
       color: $vxe-primary-color;
@@ -220,6 +229,10 @@
     min-width: 30px;
     font-weight: 700;
     vertical-align: middle;
+  }
+  .vxe-icon--page-icon,
+  .vxe-pager--jump-icon {
+    margin-top: -2px;
   }
   .vxe-pager--sizes {
     position: relative;
@@ -248,8 +261,6 @@
     }
     .size--content {
       padding: 0 22px 0 10px;
-      height: 30px;
-      line-height: 30px;
       display: block;
     }
   }
@@ -288,9 +299,6 @@
   bottom: 100%;
   width: 200px;
   text-align: center;
-  font-size: $vxe-font-size;
-  color: $vxe-font-color;
-  font-family: $vxe-font-family;
   z-index: $vxe-zindex;
   pointer-events: none;
   .vxe-pager-size--select {
