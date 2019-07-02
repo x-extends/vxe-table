@@ -373,11 +373,12 @@ export default {
       this.showSizes = false
     },
     showSizePanel () {
-      let { $refs } = this
+      let { $refs, zIndex = GlobalConfig.tooltip.zIndex } = this
       let sizeBtnElem = $refs.sizeBtn
       let { left, top } = DomTools.getAbsolutePos(sizeBtnElem)
       let { scrollTop, scrollLeft, visibleWidth, visibleHeight } = DomTools.getDomNode()
       this.panelStyle = {
+        zIndex,
         left: `${left}px`,
         top: `${top + sizeBtnElem.offsetHeight + 6}px`
       }
@@ -385,10 +386,8 @@ export default {
       this.$nextTick().then(() => {
         let sizePanelElem = $refs.sizePanel
         if (sizePanelElem) {
-          this.panelStyle = {
-            top: `${top + sizeBtnElem.offsetHeight + 6}px`,
-            left: `${left + Math.floor((sizeBtnElem.offsetWidth - sizePanelElem.offsetWidth) / 2)}px`
-          }
+          this.panelStyle.top = `${top + sizeBtnElem.offsetHeight + 6}px`
+          this.panelStyle.left = `${left + Math.floor((sizeBtnElem.offsetWidth - sizePanelElem.offsetWidth) / 2)}px`
           return this.$nextTick()
         }
       }).then(() => {

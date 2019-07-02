@@ -2590,6 +2590,7 @@ export default {
           options: column.filters,
           column: column,
           style: {
+            zIndex: GlobalConfig.tooltip.zIndex,
             top: `${top + targetElem.clientHeight + 6}px`,
             left: `${left}px`
           },
@@ -2599,10 +2600,8 @@ export default {
         filterStore.isIndeterminate = !this.isAllSelected && filterStore.options.some(item => item.checked)
         this.$nextTick(() => {
           let filterWrapperElem = filterWrapper.$el
-          filterStore.style = {
-            top: `${top + targetElem.clientHeight + 6}px`,
-            left: `${left - filterWrapperElem.clientWidth / 2 + 10}px`
-          }
+          filterStore.style.top = `${top + targetElem.clientHeight + 6}px`
+          filterStore.style.left = `${left - filterWrapperElem.clientWidth / 2 + 10}px`
         })
       }
     },

@@ -6,7 +6,6 @@
   position: absolute;
   top: 0;
   left: 0;
-  z-index: 99;
   font-size: 12px;
   max-width: 400px;
   border-radius: 4px;
@@ -17,6 +16,7 @@
   color: $vxe-font-color;
   font-family: $vxe-font-family;
   pointer-events: none;
+  z-index: $vxe-zindex;
   &.is--visible {
     display: block;
   }

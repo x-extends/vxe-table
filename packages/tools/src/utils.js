@@ -77,6 +77,8 @@ export const UtilTools = {
       treeNode: _vm.treeNode,
       columnKey: _vm.columnKey,
       editRender: _vm.editRender,
+      // 自定义参数
+      params: _vm.params,
       // 渲染属性
       visible: true,
       level: 1,
