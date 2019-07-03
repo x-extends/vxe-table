@@ -13,13 +13,13 @@ export default {
   },
   mounted () {
     let { $parent: $table, $el, $refs, fixedType } = this
-    let { _elemStore } = $table
+    let { elemStore } = $table
     let prefix = `${fixedType || 'main'}-footer-`
-    _elemStore[`${prefix}wrapper`] = $el
-    _elemStore[`${prefix}table`] = $refs.table
-    _elemStore[`${prefix}colgroup`] = $refs.colgroup
-    _elemStore[`${prefix}list`] = $refs.tfoot
-    _elemStore[`${prefix}x-space`] = $refs.xSpace
+    elemStore[`${prefix}wrapper`] = $el
+    elemStore[`${prefix}table`] = $refs.table
+    elemStore[`${prefix}colgroup`] = $refs.colgroup
+    elemStore[`${prefix}list`] = $refs.tfoot
+    elemStore[`${prefix}x-space`] = $refs.xSpace
   },
   render (h) {
     let {
@@ -36,7 +36,7 @@ export default {
       // scrollXHeight,
       scrollXLoad,
       showOverflow,
-      // _scrollXStore,
+      // scrollXStore,
       getColumnMapIndex
     } = $table
     // 如果是使用优化模式
@@ -74,7 +74,7 @@ export default {
         },
         style: {
           // width: tableWidth === null ? tableWidth : `${tableWidth + scrollYWidth}px`,
-          // 'margin-left': fixedType ? null : `${_scrollXStore.leftSpaceWidth}px`
+          // 'margin-left': fixedType ? null : `${scrollXStore.leftSpaceWidth}px`
         },
         ref: 'table'
       }, [

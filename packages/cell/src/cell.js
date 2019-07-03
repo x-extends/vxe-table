@@ -23,7 +23,7 @@ export const Cell = {
         break
       case 'selection':
         renMaps.renderHeader = this.renderSelectionHeader
-        renMaps.renderCell = selectConfig && selectConfig.checkProp ? (isTreeNode ? this.renderTreeSelectionCellByProp : this.renderSelectionCellByProp) : (isTreeNode ? this.renderTreeSelectionCell : this.renderSelectionCell)
+        renMaps.renderCell = selectConfig && selectConfig.checkField ? (isTreeNode ? this.renderTreeSelectionCellByProp : this.renderSelectionCellByProp) : (isTreeNode ? this.renderTreeSelectionCell : this.renderSelectionCell)
         break
       case 'expand':
         renMaps.renderCell = this.renderExpandCell
@@ -142,7 +142,7 @@ export const Cell = {
     let { $table, column, isHidden } = params
     let { radioConfig = {} } = $table
     let { slots } = column
-    let { labelProp } = radioConfig
+    let { labelField } = radioConfig
     if (slots && slots.header) {
       return slots.header(params)
     }
@@ -172,9 +172,9 @@ export const Cell = {
         h('span', {
           class: ['radio--icon']
         }),
-        labelProp ? h('span', {
+        labelField ? h('span', {
           class: 'radio--label'
-        }, XEUtils.get(row, labelProp)) : null
+        }, XEUtils.get(row, labelField)) : null
       ])
     ]
   },
@@ -226,7 +226,7 @@ export const Cell = {
   renderSelectionCell (h, params) {
     let { $table } = params
     let { selectConfig = {}, treeConfig, treeIndeterminates } = $table
-    let { labelProp, checkMethod } = selectConfig
+    let { labelField, checkMethod } = selectConfig
     let { row, isHidden } = params
     let indeterminate = false
     let isDisabled = !!checkMethod
@@ -263,9 +263,9 @@ export const Cell = {
         h('span', {
           class: ['checkbox--icon']
         }),
-        labelProp ? h('span', {
+        labelField ? h('span', {
           class: 'checkbox--label'
-        }, XEUtils.get(row, labelProp)) : null
+        }, XEUtils.get(row, labelField)) : null
       ])
     ]
   },
@@ -275,7 +275,7 @@ export const Cell = {
   renderSelectionCellByProp (h, params) {
     let { $table } = params
     let { selectConfig = {}, treeConfig, treeIndeterminates } = $table
-    let { labelProp, checkProp: property, checkMethod } = selectConfig
+    let { labelField, checkField: property, checkMethod } = selectConfig
     let { row, isHidden } = params
     let indeterminate = false
     let isDisabled = !!checkMethod
@@ -312,9 +312,9 @@ export const Cell = {
         h('span', {
           class: ['checkbox--icon']
         }),
-        labelProp ? h('span', {
+        labelField ? h('span', {
           class: 'checkbox--label'
-        }, XEUtils.get(row, labelProp)) : null
+        }, XEUtils.get(row, labelField)) : null
       ])
     ]
   },

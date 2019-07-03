@@ -90,14 +90,14 @@ export default {
   },
   mounted () {
     let { $parent: $table, $el, $refs, fixedType } = this
-    let { _elemStore } = $table
+    let { elemStore } = $table
     let prefix = `${fixedType || 'main'}-header-`
-    _elemStore[`${prefix}wrapper`] = $el
-    _elemStore[`${prefix}table`] = $refs.table
-    _elemStore[`${prefix}colgroup`] = $refs.colgroup
-    _elemStore[`${prefix}list`] = $refs.thead
-    _elemStore[`${prefix}x-space`] = $refs.xSpace
-    _elemStore[`${prefix}repair`] = $refs.repair
+    elemStore[`${prefix}wrapper`] = $el
+    elemStore[`${prefix}table`] = $refs.table
+    elemStore[`${prefix}colgroup`] = $refs.colgroup
+    elemStore[`${prefix}list`] = $refs.thead
+    elemStore[`${prefix}x-space`] = $refs.xSpace
+    elemStore[`${prefix}repair`] = $refs.repair
   },
   render (h) {
     let {
@@ -121,7 +121,7 @@ export default {
       // selectColumn,
       // tableWidth,
       scrollXLoad,
-      // _scrollXStore,
+      // scrollXStore,
       // scrollYWidth,
       getColumnMapIndex
     } = $table
@@ -151,7 +151,7 @@ export default {
         },
         // style: {
         // width: tableWidth === null ? tableWidth : `${tableWidth + scrollYWidth}px`,
-        // 'margin-left': fixedType ? null : `${_scrollXStore.leftSpaceWidth}px`
+        // 'margin-left': fixedType ? null : `${scrollXStore.leftSpaceWidth}px`
         // },
         ref: 'table'
       }, [
@@ -197,6 +197,7 @@ export default {
             let showEllipsis = (showHeaderOverflow || allColumnHeaderOverflow) === 'ellipsis'
             let showTitle = (showHeaderOverflow || allColumnHeaderOverflow) === 'title'
             let showTooltip = showHeaderOverflow === true || showHeaderOverflow === 'tooltip' || allColumnHeaderOverflow === true || allColumnHeaderOverflow === 'tooltip'
+            let hasEllipsis = showTitle || showTooltip || showEllipsis
             let thOns = {}
             // 确保任何情况下 columnIndex 都精准指向真实列索引
             let columnIndex = getColumnMapIndex(column)
@@ -227,6 +228,7 @@ export default {
                 [`col--${headerAlign}`]: headerAlign,
                 // 'col--current': selectColumn === column,
                 'col--index': column.type === 'index',
+                'col--ellipsis': hasEllipsis,
                 'fixed--hidden': fixedHiddenColumn,
                 'filter--active': column.filters.some(item => item.checked)
               }, headerCellClassName ? XEUtils.isFunction(headerCellClassName) ? headerCellClassName({ $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType }) : headerCellClassName : ''],

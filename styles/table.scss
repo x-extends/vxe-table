@@ -218,13 +218,18 @@
     white-space: normal;
     word-break: break-all;
     padding: 0 10px;
-    &.c--ellipsis,
-    &.c--title,
-    &.c--tooltip {
-      @extend %textEllipsis;
-      & > .vxe-checkbox {
-        display: block;
+    & > .vxe-checkbox {
+      display: block;
+    }
+  }
+  .vxe-header--column,
+  .vxe-body--column {
+    &:not(.col--actived) {
+      .vxe-cell {
         @extend %textEllipsis;
+        & > .vxe-checkbox {
+          @extend %textEllipsis;
+        }
       }
     }
   }

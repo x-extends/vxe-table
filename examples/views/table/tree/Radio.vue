@@ -23,7 +23,7 @@
 
     <vxe-table
       :tree-config="{key: 'id', children: 'children'}"
-      :radio-config="{labelProp: 'name'}"
+      :radio-config="{labelField: 'name'}"
       :data.sync="tableData">
       <vxe-table-column type="radio" title="Name" tree-node></vxe-table-column>
       <vxe-table-column field="size" title="Size"></vxe-table-column>

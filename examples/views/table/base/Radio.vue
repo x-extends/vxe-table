@@ -25,7 +25,7 @@
     <vxe-table
       border
       height="300"
-      :radio-config="{labelProp: 'name'}"
+      :radio-config="{labelField: 'name'}"
       :data.sync="tableData">
       <vxe-table-column type="radio" title="这样也行"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -53,7 +53,7 @@
       border
       highlight-current-row
       height="300"
-      :radio-config="{labelProp: 'name'}"
+      :radio-config="{labelField: 'name'}"
       :data.sync="tableData">
       <vxe-table-column type="radio" title="还可以这样" width="120"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -107,7 +107,7 @@ export default {
         <vxe-table
           border
           height="300"
-          :radio-config="{labelProp: 'name'}"
+          :radio-config="{labelField: 'name'}"
           :data.sync="tableData">
           <vxe-table-column type="radio" title="这样也行"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -139,7 +139,7 @@ export default {
           border
           highlight-current-row
           height="300"
-          :radio-config="{labelProp: 'name'}"
+          :radio-config="{labelField: 'name'}"
           :data.sync="tableData">
           <vxe-table-column type="radio" title="还可以这样" width="120"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>

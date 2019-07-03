@@ -6,7 +6,7 @@
     <vxe-grid
       border
       height="530"
-      :pager-config="tablePage"
+      :pager-config="{pageSize: 10}"
       :proxy-config="tableProxy"
       :select-config="{key: 'id', reserve: true}"
       :columns="tableColumn"></vxe-grid>
@@ -27,9 +27,6 @@ import hljs from 'highlight.js'
 export default {
   data () {
     return {
-      tablePage: {
-        pageSize: 15
-      },
       tableProxy: {
         index: true, // 启用动态序号代理
         props: {
@@ -53,7 +50,7 @@ export default {
         <vxe-grid
           border
           height="530"
-          :pager-config="tablePage"
+          :pager-config="{pageSize: 10}"
           :proxy-config="tableProxy"
           :columns="tableColumn"></vxe-grid>
         `,
@@ -61,13 +58,10 @@ export default {
         export default {
           data () {
             return {
-              tablePage: {
-                pageSize: 10
-              },
               tableProxy: {
                 index: true, // 启用动态序号代理
                 ajax: {
-                  // 任何支持 Promise API 的库都可以对接
+                  // 任何支持 Promise API 的库都可以对接（fetch、jquery、axios、xe-ajax）
                   query: ({ page }) => XEAjax.getJSON(\`/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`)
                 }
               },

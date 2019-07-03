@@ -32,12 +32,13 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
     cellClassName,
     spanMethod,
     // keyboardConfig,
-    treeConfig,
+    selectConfig = {},
+    treeConfig = {},
     mouseConfig = {},
     editConfig,
     editRules,
     validConfig = {},
-    // editStore,
+    editStore,
     validStore
   } = $table
   let {
@@ -47,12 +48,12 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
     // renderWidth,
     columnKey
   } = column
-  // let {
-  //   // checked,
-  //   // selected,
-  //   // actived
-  //   // copyed
-  // } = editStore
+  let {
+    // checked,
+    // selected,
+    actived
+    // copyed
+  } = editStore
   // let isMouseSelected = mouseConfig && mouseConfig.selected
   let isMouseChecked = mouseConfig.checked
   // let isKeyboardCut = keyboardConfig && keyboardConfig.isCut
@@ -105,7 +106,8 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
     tableListeners['cell-click'] ||
     mouseConfig.checked ||
     (editRender && editConfig) ||
-    (treeConfig && (treeConfig.trigger === 'row' || (column.treeNode && treeConfig.trigger === 'cell')))) {
+    (selectConfig.trigger === 'row' || (column.type === 'selection' && selectConfig.trigger === 'cell')) ||
+    (treeConfig.trigger === 'row' || (column.treeNode && treeConfig.trigger === 'cell'))) {
     tdOns.click = evnt => {
       $table.triggerCellClickEvent(evnt, { $table, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn, level: rowLevel, cell: evnt.currentTarget })
     }
@@ -159,10 +161,11 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
       // 'col--copyed-bottom': copyedLocat.bottom,
       // 'col--copyed-left': copyedLocat.left,
       // 'col--copyed-right': copyedLocat.right,
-      // 'col--actived': editRender && actived.row === row && actived.column === column,
+      'col--actived': editConfig && editRender && (actived.column === column || (editConfig.mode === 'row' && actived.row === row)),
       'col--dirty': isDirty,
       'col--index': column.type === 'index',
       'col--valid-error': validError,
+      'col--ellipsis': hasEllipsis,
       // 'col--current': selectColumn === column,
       'edit--visible': editRender && editRender.type === 'visible',
       'fixed--hidden': fixedHiddenColumn
@@ -225,13 +228,13 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
     highlightHoverRow,
     rowClassName,
     // selectRow,
-    // _hoverRow,
+    // hoverRow,
     treeConfig,
     treeExpandeds,
     scrollYLoad,
     // overflowX,
     // columnStore,
-    _scrollYStore,
+    scrollYStore,
     editStore,
     expandeds,
     getRowMapIndex,
@@ -243,19 +246,19 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
     let rowIndex = $rowIndex
     let seq = rowIndex + 1
     if (scrollYLoad) {
-      seq += _scrollYStore.startIndex
+      seq += scrollYStore.startIndex
     }
     // 确保任何情况下 rowIndex 都精准指向真实 data 索引
     rowIndex = getRowMapIndex(row)
     // 事件绑定
     if (highlightHoverRow) {
       trOn.mouseenter = evnt => {
-        // if (row !== _hoverRow) {
+        // if (row !== hoverRow) {
         $table.triggerHoverEvent(evnt, { row, rowIndex })
         // }
       }
       // trOn.mouseleave = evnt => {
-      //   $table._hoverRow = null
+      //   $table.hoverRow = null
       // }
     }
     let rowId = UtilTools.getRowId($table, row, rowIndex)
@@ -264,7 +267,7 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
         class: ['vxe-body--row', {
           [`row--level-${rowLevel}`]: treeConfig,
           // 'row--current': row === selectRow,
-          // 'row--hover': row === _hoverRow,
+          // 'row--hover': row === hoverRow,
           'row--new': editStore.insertList.indexOf(row) > -1
         }, rowClassName ? XEUtils.isFunction(rowClassName) ? rowClassName({ $table, seq, row, rowIndex }) : rowClassName : ''],
         attrs: {
@@ -359,15 +362,14 @@ export default {
   },
   mounted () {
     let { $parent: $table, $el, $refs, fixedType } = this
-    let { _elemStore } = $table
+    let { elemStore } = $table
     let prefix = `${fixedType || 'main'}-body-`
-    _elemStore[`${prefix}wrapper`] = $el
-    _elemStore[`${prefix}table`] = $refs.table
-    _elemStore[`${prefix}colgroup`] = $refs.colgroup
-    _elemStore[`${prefix}list`] = $refs.tbody
-    _elemStore[`${prefix}x-space`] = $refs.xSpace
-    _elemStore[`${prefix}y-space`] = $refs.ySpace
-    _elemStore[`${prefix}top-space`] = $refs.topSpace
+    elemStore[`${prefix}wrapper`] = $el
+    elemStore[`${prefix}table`] = $refs.table
+    elemStore[`${prefix}colgroup`] = $refs.colgroup
+    elemStore[`${prefix}list`] = $refs.tbody
+    elemStore[`${prefix}xSpace`] = $refs.xSpace
+    elemStore[`${prefix}ySpace`] = $refs.ySpace
     this.$el.onscroll = this.scrollEvent
     this.$el._onscroll = this.scrollEvent
   },
@@ -385,7 +387,7 @@ export default {
     let {
       // maxHeight,
       // height,
-      // _parentHeight,
+      // parentHeight,
       // loading,
       tableData,
       tableColumn,
@@ -398,12 +400,12 @@ export default {
       // overflowY,
       // scrollXHeight,
       // scrollYWidth,
-      // _scrollXStore,
+      // scrollXStore,
       scrollXLoad
-      // _scrollYStore
+      // scrollYStore
       // scrollYLoad
     } = $table
-    // let customHeight = height === 'auto' ? _parentHeight : XEUtils.toNumber(height)
+    // let customHeight = height === 'auto' ? parentHeight : XEUtils.toNumber(height)
     // let style = {}
     // if (customHeight > 0) {
     //   style.height = `${fixedType ? (customHeight > 0 ? customHeight - headerHeight - footerHeight : tableHeight) - (showFooter ? 0 : scrollXHeight) : customHeight - headerHeight - footerHeight}px`
@@ -423,7 +425,7 @@ export default {
     }
     // let tableStyle = {
     //   width: tableWidth ? `${tableWidth}px` : tableWidth,
-    //   marginLeft: fixedType ? null : `${_scrollXStore.leftSpaceWidth}px`
+    //   marginLeft: fixedType ? null : `${scrollXStore.leftSpaceWidth}px`
     // }
     // // 兼容火狐滚动条
     // if (overflowY && fixedType && DomTools.browse['-moz']) {
@@ -449,17 +451,17 @@ export default {
       h('div', {
         class: ['vxe-body--y-space'],
         // style: {
-        // height: `${_scrollYStore.bodyHeight}px`
+        // height: `${scrollYStore.bodyHeight}px`
         // },
         ref: 'ySpace'
       }),
-      h('div', {
-        class: ['vxe-body--top-space'],
-        // style: {
-        // height: `${_scrollYStore.topSpaceHeight}px`
-        // },
-        ref: 'topSpace'
-      }),
+      // h('div', {
+      //   class: ['vxe-body--top-space'],
+      //   // style: {
+      //   // height: `${scrollYStore.topSpaceHeight}px`
+      //   // },
+      //   ref: 'topSpace'
+      // }),
       h('table', {
         class: ['vxe-table--body'],
         attrs: {
@@ -501,7 +503,7 @@ export default {
       // scrollYLoad ? h('div', {
       //   class: ['vxe-body--bottom-space'],
       //   style: {
-      //     height: `${_scrollYStore.bottomSpaceHeight}px`
+      //     height: `${scrollYStore.bottomSpaceHeight}px`
       //   }
       // }) : null
     ])

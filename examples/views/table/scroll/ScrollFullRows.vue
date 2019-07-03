@@ -2,7 +2,7 @@
   <div>
     <p>虚拟滚动渲染，加载 10 万行，左右固定列</p>
     <p>大数据不建议使用双向绑定的 data 属性（vue 监听会大数据会短暂的卡顿），建议使用 <table-api-link prop="loadData"/>/<table-api-link prop="reloadData"/> 函数</p>
-    <p>对于多选 type=<table-column-api-link prop="selection"/> 当数据量海量时应该绑定 <table-api-link prop="checkProp"/> 属性渲染速度更快</p>
+    <p>对于多选 type=<table-column-api-link prop="selection"/> 当数据量海量时应该绑定 <table-api-link prop="checkField"/> 属性渲染速度更快</p>
     <p>数据超大情况下必须使用：<table-api-link prop="show-overflow"/>，<table-api-link prop="show-header-overflow"/> 参数以及调整好 <table-api-link prop="optimization"/> ：{scrollX,scrollY} 适合的参数可以更加流畅</p>
 
     <vxe-table
@@ -14,7 +14,7 @@
       highlight-current-row
       height="600"
       :loading="loading"
-      :select-config="{checkProp: 'checked'}"
+      :select-config="{checkField: 'checked'}"
       :optimization ="{scrollY: {gt: 500, oSize: 20, rSize: 60}}">
       <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
       <vxe-table-column type="index" width="100" fixed="left"></vxe-table-column>
