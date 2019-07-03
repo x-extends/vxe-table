@@ -1049,7 +1049,7 @@ const apis = [
         descKey: 'app.api.table.desc.headerCellClick',
         type: '',
         enum: '',
-        defVal: '{headIndex,column,columnIndex,cell},event',
+        defVal: '{rowIndex,column,columnIndex,cell},event',
         list: []
       },
       {
@@ -1057,7 +1057,7 @@ const apis = [
         descKey: 'app.api.table.desc.headerCellDblclick',
         type: '',
         enum: '',
-        defVal: '{headIndex,column,columnIndex,cell},event',
+        defVal: '{rowIndex,column,columnIndex,cell},event',
         list: []
       },
       {
@@ -1065,7 +1065,7 @@ const apis = [
         descKey: 'app.api.table.desc.footerCellClick',
         type: '',
         enum: '',
-        defVal: '{footIndex,column,columnIndex,cell},event',
+        defVal: '{rowIndex,column,columnIndex,cell},event',
         list: []
       },
       {
@@ -1073,7 +1073,7 @@ const apis = [
         descKey: 'app.api.table.desc.footerCellDblclick',
         type: '',
         enum: '',
-        defVal: '{footIndex,column,columnIndex,cell},event',
+        defVal: '{rowIndex,column,columnIndex,cell},event',
         list: []
       },
       {
