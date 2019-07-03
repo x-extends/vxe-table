@@ -224,11 +224,13 @@
   }
   .vxe-header--column,
   .vxe-body--column {
-    &:not(.col--actived) {
-      .vxe-cell {
-        @extend %textEllipsis;
-        & > .vxe-checkbox {
+    &.col--ellipsis {
+      &:not(.col--actived) {
+        .vxe-cell {
           @extend %textEllipsis;
+          & > .vxe-checkbox {
+            @extend %textEllipsis;
+          }
         }
       }
     }
