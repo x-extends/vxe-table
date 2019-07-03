@@ -12,7 +12,7 @@
       ref="xTable"
       height="300"
       :loading="loading"
-      :select-config="{checkProp: 'checked'}"
+      :select-config="{checkField: 'checked'}"
       :optimization ="{scrollX: {gt: 20, oSize: 4, rSize: 10}, scrollY: {gt: 500, oSize: 10, rSize: 30}}">
     </vxe-grid>
   </div>

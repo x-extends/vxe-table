@@ -21,12 +21,8 @@ function defaultRenderer (h, attrs, editRender, params) {
         on: {
           input (evnt) {
             let cellValue = evnt.target.value
-            column.inputValue = cellValue
-            // UtilTools.setCellValue(row, column, evnt.target.value)
-            $table.updateStatus(params, cellValue)
-          },
-          change (evnt) {
             UtilTools.setCellValue(row, column, evnt.target.value)
+            $table.updateStatus(params, cellValue)
           }
         }
       })
@@ -72,7 +68,7 @@ const _storeMap = {
             on: {
               input (evnt) {
                 let inpElem = evnt.target
-                column.inputValue = inpElem.value
+                UtilTools.setCellValue(row, column, inpElem.value)
                 if (inpElem.scrollHeight > inpElem.offsetHeight) {
                   if (uploadRows.indexOf(row) === -1) {
                     inpElem.style.width = `${inpElem.offsetWidth + 20}px`
@@ -97,7 +93,7 @@ const _storeMap = {
                   let cellValue = inpElem.value
                   cellValue = `${cellValue.slice(0, pos)}\n${cellValue.slice(pos, cellValue.length)}`
                   inpElem.value = cellValue
-                  column.inputValue = cellValue
+                  UtilTools.setCellValue(row, column, cellValue)
                   inpElem.style.height = `${(Math.floor(inpElem.offsetHeight / rowHeight) + 1) * rowHeight}px`
                   setTimeout(() => {
                     rangeData.start = rangeData.end = ++pos

@@ -32,7 +32,8 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
     cellClassName,
     spanMethod,
     keyboardConfig,
-    treeConfig,
+    selectConfig = {},
+    treeConfig = {},
     mouseConfig,
     editConfig,
     editRules,
@@ -92,7 +93,8 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
   if (highlightCurrentRow ||
     tableListeners['cell-click'] ||
     (editRender && editConfig) ||
-    (treeConfig && (treeConfig.trigger === 'row' || (column.treeNode && treeConfig.trigger === 'cell')))) {
+    (selectConfig.trigger === 'row' || (column.type === 'selection' && selectConfig.trigger === 'cell')) ||
+    (treeConfig.trigger === 'row' || (column.treeNode && treeConfig.trigger === 'cell'))) {
     tdOns.click = evnt => {
       $table.triggerCellClickEvent(evnt, { $table, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, level: rowLevel, cell: evnt.currentTarget })
     }
@@ -146,7 +148,8 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
       'col--copyed-bottom': copyedLocat.bottom,
       'col--copyed-left': copyedLocat.left,
       'col--copyed-right': copyedLocat.right,
-      'col--actived': editRender && actived.row === row && actived.column === column,
+      'col--ellipsis': hasEllipsis,
+      'col--actived': editConfig && editRender && (actived.column === column || (editConfig.mode === 'row' && actived.row === row)),
       'col--dirty': isDirty,
       'col--valid-error': validError,
       'col--current': selectColumn === column,

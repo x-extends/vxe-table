@@ -16,7 +16,7 @@
       ref="xTree"
       :tree-config="{key: 'id', children: 'children'}"
       :edit-config="{trigger: 'click', mode: 'row'}"
-      :select-config="{labelProp: 'id'}"
+      :select-config="{labelField: 'id'}"
       :data.sync="tableData">
       <vxe-table-column type="selection" title="ID" tree-node></vxe-table-column>
       <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
@@ -57,7 +57,7 @@ export default {
           ref="xTree"
           :tree-config="{key: 'id', children: 'children'}"
           :edit-config="{trigger: 'click', mode: 'row'}"
-          :select-config="{labelProp: 'id'}"
+          :select-config="{labelField: 'id'}"
           :data.sync="tableData">
           <vxe-table-column type="selection" title="ID" tree-node></vxe-table-column>
           <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>

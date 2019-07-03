@@ -437,7 +437,7 @@ export default {
     }
   },
   created () {
-    let { scrollYStore, optimizeOpts, selectConfig, treeConfig, editConfig, loading, showAllOverflow, showHeaderAllOverflow } = this
+    let { scrollYStore, optimizeOpts, radioConfig = {}, selectConfig = {}, treeConfig, editConfig, loading, showAllOverflow, showHeaderAllOverflow } = this
     let { scrollY } = optimizeOpts
     if (loading) {
       this.isLoading = true
@@ -455,6 +455,15 @@ export default {
     }
     if (XEUtils.isBoolean(showHeaderAllOverflow)) {
       console.warn('[vxe-table] The property show-header-all-overflow is deprecated, please use show-header-overflow')
+    }
+    if (radioConfig.labelProp) {
+      console.warn('[vxe-table] The property labelProp is deprecated, please use labelField')
+    }
+    if (selectConfig.checkProp) {
+      console.warn('[vxe-table] The property checkProp is deprecated, please use checkField')
+    }
+    if (selectConfig.labelProp) {
+      console.warn('[vxe-table] The property labelProp is deprecated, please use labelField')
     }
     this.lastScrollLeft = 0
     this.lastScrollTop = 0
@@ -856,7 +865,7 @@ export default {
     remove (rows) {
       let { tableData, tableFullData, editStore, treeConfig, selectConfig = {}, selection, hasRowInsert } = this
       let { removeList, insertList } = editStore
-      let { checkProp: property } = selectConfig
+      let property = selectConfig.checkField || selectConfig.checkProp
       let rest = []
       this.isUpdateData = true
       if (rows) {
@@ -1042,7 +1051,7 @@ export default {
      */
     getSelectRecords () {
       let { tableFullData, editStore, treeConfig, selectConfig = {}, selection } = this
-      let { checkProp: property } = selectConfig
+      let property = selectConfig.checkField || selectConfig.checkProp
       let rowList = []
       let insList = []
       if (property) {
@@ -1868,7 +1877,7 @@ export default {
       if (rows && !XEUtils.isArray(rows)) {
         rows = [rows]
       }
-      rows.forEach(row => this.triggerCheckRowEvent({}, { row }, !!value))
+      rows.forEach(row => this.triggerCheckRowEvent(null, { row }, !!value))
       return this.$nextTick()
     },
     /**
@@ -1877,7 +1886,8 @@ export default {
      */
     triggerCheckRowEvent (evnt, { row }, value) {
       let { selection, tableFullData, selectConfig = {}, treeConfig, treeIndeterminates } = this
-      let { checkProp: property, checkMethod } = selectConfig
+      let { checkMethod } = selectConfig
+      let property = selectConfig.checkField || selectConfig.checkProp
       if (!checkMethod || checkMethod({ row, rowIndex: tableFullData.indexOf(row) })) {
         if (property) {
           if (treeConfig) {
@@ -1938,7 +1948,8 @@ export default {
     },
     checkSelectionStatus () {
       let { tableFullData, editStore, selectConfig = {}, selection, treeIndeterminates } = this
-      let { checkProp: property, checkMethod } = selectConfig
+      let { checkMethod } = selectConfig
+      let property = selectConfig.checkField || selectConfig.checkProp
       let { insertList } = editStore
       // 包含新增的数据
       if (insertList.length) {
@@ -1977,13 +1988,14 @@ export default {
      */
     toggleRowSelection (row) {
       let { selectConfig = {}, selection } = this
-      let { checkProp: property } = selectConfig
+      let property = selectConfig.checkField || selectConfig.checkProp
       this.triggerCheckRowEvent(null, { row }, property ? !XEUtils.get(row, property) : selection.indexOf(row) === -1)
       return this.$nextTick()
     },
     setAllSelection (value) {
       let { tableFullData, editStore, selectConfig = {}, treeConfig, selection } = this
-      let { checkProp: property, reserve, checkMethod } = selectConfig
+      let { reserve, checkMethod } = selectConfig
+      let property = selectConfig.checkField || selectConfig.checkProp
       let { insertList } = editStore
       let selectRows = []
       // 包含新增的数据
@@ -2039,7 +2051,7 @@ export default {
     },
     clearSelection () {
       let { tableFullData, selectConfig = {}, treeConfig } = this
-      let { checkProp: property } = selectConfig
+      let property = selectConfig.checkField || selectConfig.checkProp
       if (property) {
         if (treeConfig) {
           XEUtils.eachTree(tableFullData, item => XEUtils.set(item, property, false), treeConfig)
@@ -2074,6 +2086,9 @@ export default {
       this.selectRow = null
       this.hoverRow = null
       return this.$nextTick()
+    },
+    getCurrentRow () {
+      return this.selectRow
     },
     /**
      * 行 hover 事件
@@ -2184,13 +2199,17 @@ export default {
      * 如果是双击模式，则单击后选中状态
      */
     triggerCellClickEvent (evnt, params) {
-      let { $el, highlightCurrentRow, editStore, treeConfig, editConfig } = this
+      let { $el, highlightCurrentRow, editStore, selectConfig, treeConfig, editConfig } = this
       let { actived } = editStore
       let { column, columnIndex } = params
       if (highlightCurrentRow) {
         if (!this.getEventTargetNode(evnt, $el, 'vxe-tree-wrapper').flag && !this.getEventTargetNode(evnt, $el, 'vxe-checkbox').flag) {
           this.setCurrentRow(params.row)
         }
+      }
+      // 如果是多选
+      if (selectConfig && (selectConfig.trigger === 'row' || (column.type === 'selection' && selectConfig.trigger === 'cell')) && !this.getEventTargetNode(evnt, params.cell, 'vxe-checkbox').flag) {
+        this.toggleRowSelection(params.row, evnt)
       }
       // 如果是树形表格
       if (treeConfig && (treeConfig.trigger === 'row' || (column.treeNode && treeConfig.trigger === 'cell'))) {
@@ -2227,7 +2246,6 @@ export default {
         } else {
           if (actived.row) {
             if (actived.row) {
-              column.inputValue = null
               actived.column = actived.args.column = column
               actived.columnIndex = actived.args.columnIndex = columnIndex
             }
@@ -2305,11 +2323,6 @@ export default {
       let { actived } = editStore
       let { args, row, column } = actived
       if (row || column) {
-        let { inputValue } = column
-        if (inputValue !== null) {
-          UtilTools.setCellValue(row, column, inputValue)
-          column.inputValue = null
-        }
         UtilTools.emitEvent(this, 'edit-closed', [args, evnt])
       }
       actived.args = null
@@ -2317,10 +2330,11 @@ export default {
       actived.column = null
       return this.$nextTick()
     },
+    getActiveRow () {
+      return Object.assign({}, this.editStore.actived.args)
+    },
     hasActiveRow (row) {
-      let { editStore } = this
-      let { actived } = editStore
-      return actived.row === row
+      return this.editStore.actived.row === row
     },
     /**
      * 清除所选中源状态

@@ -8,7 +8,7 @@
       :proxy-config="tableProxy"
       :columns="tableColumn"
       :toolbar="toolbar"
-      :select-config="{labelProp: 'id'}"
+      :select-config="{labelField: 'id'}"
       :tree-config="{key: 'id', children: 'children'}"
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"></vxe-grid>
 
@@ -64,7 +64,7 @@ export default {
           :proxy-config="tableProxy"
           :columns="tableColumn"
           :toolbar="toolbar"
-          :select-config="{labelProp: 'id'}"
+          :select-config="{labelField: 'id'}"
           :tree-config="{key: 'id', children: 'children'}"
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"></vxe-grid>
         `,

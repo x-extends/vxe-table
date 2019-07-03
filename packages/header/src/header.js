@@ -166,6 +166,7 @@ export default {
             let showEllipsis = (showHeaderOverflow || allColumnHeaderOverflow) === 'ellipsis'
             let showTitle = (showHeaderOverflow || allColumnHeaderOverflow) === 'title'
             let showTooltip = showHeaderOverflow === true || showHeaderOverflow === 'tooltip' || allColumnHeaderOverflow === true || allColumnHeaderOverflow === 'tooltip'
+            let hasEllipsis = showTitle || showTooltip || showEllipsis
             let thOns = {}
             // 确保任何情况下 columnIndex 都精准指向真实列索引
             let columnIndex = getColumnMapIndex(column)
@@ -189,6 +190,7 @@ export default {
               class: ['vxe-header--column', column.id, {
                 [`col--${headerAlign}`]: headerAlign,
                 'col--current': selectColumn === column,
+                'col--ellipsis': hasEllipsis,
                 'fixed--hidden': fixedHiddenColumn,
                 'filter--active': column.filters.some(item => item.checked)
               }, headerCellClassName ? XEUtils.isFunction(headerCellClassName) ? headerCellClassName({ $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType }) : headerCellClassName : ''],

@@ -23,7 +23,7 @@ export const Cell = {
         break
       case 'selection':
         renMaps.renderHeader = this.renderSelectionHeader
-        renMaps.renderCell = selectConfig && selectConfig.checkProp ? (isTreeNode ? this.renderTreeSelectionCellByProp : this.renderSelectionCellByProp) : (isTreeNode ? this.renderTreeSelectionCell : this.renderSelectionCell)
+        renMaps.renderCell = selectConfig && (selectConfig.checkField || selectConfig.checkProp) ? (isTreeNode ? this.renderTreeSelectionCellByProp : this.renderSelectionCellByProp) : (isTreeNode ? this.renderTreeSelectionCell : this.renderSelectionCell)
         break
       case 'expand':
         renMaps.renderCell = this.renderExpandCell
@@ -142,7 +142,7 @@ export const Cell = {
     let { $table, column } = params
     let { radioConfig = {} } = $table
     let { slots } = column
-    let { labelProp } = radioConfig
+    let labelProp = radioConfig.labelField || radioConfig.labelProp
     if (slots && slots.header) {
       return slots.header(params)
     }
@@ -226,8 +226,9 @@ export const Cell = {
   renderSelectionCell (h, params) {
     let { $table } = params
     let { selectConfig = {}, treeConfig, treeIndeterminates } = $table
-    let { labelProp, checkMethod } = selectConfig
+    let { checkMethod } = selectConfig
     let { row, isHidden } = params
+    let labelProp = selectConfig.labelField || selectConfig.labelProp
     let indeterminate = false
     let isDisabled = !!checkMethod
     let options = {
@@ -275,10 +276,12 @@ export const Cell = {
   renderSelectionCellByProp (h, params) {
     let { $table } = params
     let { selectConfig = {}, treeConfig, treeIndeterminates } = $table
-    let { labelProp, checkProp: property, checkMethod } = selectConfig
+    let { checkMethod } = selectConfig
     let { row, isHidden } = params
+    let labelProp = selectConfig.labelField || selectConfig.labelProp
     let indeterminate = false
     let isDisabled = !!checkMethod
+    let property = selectConfig.checkField || selectConfig.checkProp
     let options = {
       attrs: {
         type: 'checkbox'

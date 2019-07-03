@@ -114,6 +114,16 @@ export default {
             code: 'export',
             name: '导出文档'
           }
+        ],
+        [
+          {
+            code: 'allExpand',
+            name: '全部展开'
+          },
+          {
+            code: 'allShrink',
+            name: '全部收起'
+          }
         ]
       ]
     }
@@ -241,6 +251,12 @@ export default {
           this.$refs.xTable.exportCsv({
             filename: `vxe-${this.apiName}_v${pack.version}.csv`
           })
+          break
+        case 'allExpand':
+          this.$refs.xTable.setAllTreeExpansion(true)
+          break
+        case 'allShrink':
+          this.$refs.xTable.clearTreeExpand()
           break
       }
     }

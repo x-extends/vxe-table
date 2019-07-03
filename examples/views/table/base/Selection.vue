@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>多选表格，基础方式</p>
+    <p>多选表格，基础方式；更多参数具体看文档 <table-api-link prop="select-config"/></p>
 
     <vxe-toolbar>
       <template v-slot:buttons>
@@ -30,7 +30,7 @@
       <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
 
-    <p>还可以通过 <table-api-link prop="checkMethod"/> 方法控制是否允许点击 CheckBox 勾选，还可以配置 <table-api-link prop="labelProp"/> 列显示属性</p>
+    <p>还可以通过 <table-api-link prop="checkMethod"/> 方法控制是否允许点击 CheckBox 勾选，还可以配置 <table-api-link prop="labelField"/> 列显示属性</p>
 
     <vxe-toolbar>
       <template v-slot:buttons>
@@ -46,7 +46,7 @@
       border
       height="300"
       :data.sync="tableData"
-      :select-config="{labelProp: 'name', checkMethod}">
+      :select-config="{labelField: 'name', checkMethod}">
       <vxe-table-column type="selection" title="All"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
       <vxe-table-column field="age" title="Age"></vxe-table-column>
@@ -60,7 +60,7 @@
       <code class="javascript">{{ demoCodes[3] }}</code>
     </pre>
 
-    <p>多选表格，通过配置 <table-api-link prop="select-config"/> 参数，使用渲染最快的 <table-api-link prop="labelProp"/> 属性绑定方式</p>
+    <p>多选表格，通过配置 <table-api-link prop="trigger"/> 设置触发源，使用渲染最快的 <table-api-link prop="checkField"/> 属性绑定方式</p>
 
     <vxe-toolbar>
       <template v-slot:buttons>
@@ -72,11 +72,12 @@
     </vxe-toolbar>
 
     <vxe-table
-      ref="xTable3"
       border
+      highlight-hover-row
+      ref="xTable3"
       height="300"
       :data.sync="tableData"
-      :select-config="{checkProp: 'checked'}">
+      :select-config="{checkField: 'checked', trigger: 'row'}">
       <vxe-table-column type="selection" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -150,7 +151,7 @@ export default {
           border
           height="300"
           :data.sync="tableData"
-          :select-config="{labelProp: 'name', checkMethod}">
+          :select-config="{labelField: 'name', checkMethod}">
           <vxe-table-column type="selection" title="All"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
           <vxe-table-column field="age" title="Age"></vxe-table-column>
@@ -185,11 +186,12 @@ export default {
         </vxe-toolbar>
 
         <vxe-table
-          ref="xTable3"
           border
+          highlight-hover-row
+          ref="xTable3"
           height="300"
           :data.sync="tableData"
-          :select-config="{checkProp: 'checked'}">
+          :select-config="{checkField: 'checked', trigger: 'row'}">
           <vxe-table-column type="selection" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>

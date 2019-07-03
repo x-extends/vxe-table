@@ -391,6 +391,15 @@ const apis = [
         list: [
           {
             name: 'labelProp',
+            disabled: true,
+            desc: '在 v2.0 中废弃，请使用 labelField',
+            type: 'String',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'labelField',
             desc: '列显示的属性，可以直接显示在列中',
             type: 'String',
             enum: '',
@@ -424,6 +433,15 @@ const apis = [
           },
           {
             name: 'labelProp',
+            disabled: true,
+            desc: '在 v2.0 中废弃，请使用 labelField',
+            type: 'String',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'labelField',
             desc: '列显示的属性，可以直接显示在列中',
             type: 'String',
             enum: '',
@@ -432,6 +450,15 @@ const apis = [
           },
           {
             name: 'checkProp',
+            disabled: true,
+            desc: '在 v2.0 中废弃，请使用 checkField',
+            type: 'String',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'checkField',
             desc: '绑定选中属性，如果设置了该属性渲染速度可以提升n倍（建议数据量大时使用）',
             type: 'String',
             enum: '',
@@ -460,6 +487,14 @@ const apis = [
             type: 'Function',
             enum: '',
             defVal: '',
+            list: []
+          },
+          {
+            name: 'trigger',
+            desc: '触发方式',
+            type: 'String',
+            enum: 'default（默认）,cell（点击单元格触发）,row（点击行触发）',
+            defVal: 'default',
             list: []
           }
         ]
@@ -532,7 +567,7 @@ const apis = [
             name: 'trigger',
             desc: '触发方式',
             type: 'String',
-            enum: 'default（点击按钮触发）,cell（点击单元格触发）,row（点击行触发）',
+            enum: 'default（默认）,cell（点击单元格触发）,row（点击行触发）',
             defVal: 'default',
             list: []
           }
@@ -1328,11 +1363,35 @@ const apis = [
         list: []
       },
       {
-        name: 'getSelectRecords()',
-        desc: '获取已选中数据',
-        type: 'Array',
+        name: 'getCurrentRow()',
+        desc: '用于单选行，获取当前选中的数据',
+        type: 'Row',
         enum: '',
         defVal: '',
+        list: []
+      },
+      {
+        name: 'getSelectRecords()',
+        desc: '用于多选行，获取已选中的数据',
+        type: 'Array<Row>',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'getActiveRow()',
+        desc: '获取已激活的行数据',
+        type: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,cell}',
+        enum: '',
+        defVal: 'row',
+        list: []
+      },
+      {
+        name: 'hasActiveRow(row)',
+        desc: '检查行是否已激活为编辑状态',
+        type: 'Boolean',
+        enum: '',
+        defVal: 'row',
         list: []
       },
       {
@@ -1417,7 +1476,7 @@ const apis = [
       },
       {
         name: 'setCurrentRow(row)',
-        desc: '设置某一行为选中状态',
+        desc: '用于单选行，设置某一行为选中状态',
         type: 'Promise',
         enum: '',
         defVal: 'row',
@@ -1425,7 +1484,7 @@ const apis = [
       },
       {
         name: 'setCurrentColumn(column)',
-        desc: '设置某一列为选中状态',
+        desc: '用于单选列，设置某一列为选中状态',
         type: 'Promise',
         enum: '',
         defVal: 'column',
@@ -1433,7 +1492,7 @@ const apis = [
       },
       {
         name: 'setSelection(rows, checked)',
-        desc: '用于多选表格，设置行为选中状态，第二个参数为选中与否',
+        desc: '用于多选行，设置行为选中状态，第二个参数为选中与否',
         type: 'Promise',
         enum: '',
         defVal: 'rows, checked',
@@ -1441,7 +1500,7 @@ const apis = [
       },
       {
         name: 'setAllSelection(checked)',
-        desc: '用于多选表格，设置所有行的选中状态',
+        desc: '用于多选行，设置所有行的选中状态',
         type: 'Promise',
         enum: '',
         defVal: 'checked',
@@ -1449,7 +1508,7 @@ const apis = [
       },
       {
         name: 'toggleRowSelection(row)',
-        desc: '用于多选表格，切换某一行的选中状态',
+        desc: '用于多选行，切换某一行的选中状态',
         type: 'Promise',
         enum: '',
         defVal: 'row',
@@ -1457,7 +1516,7 @@ const apis = [
       },
       {
         name: 'toggleAllSelection()',
-        desc: '用于多选表格，切换所有行的选中状态',
+        desc: '用于多选行，切换所有行的选中状态',
         type: 'Promise',
         enum: '',
         defVal: '',
@@ -1481,7 +1540,7 @@ const apis = [
       },
       {
         name: 'clearCurrentRow()',
-        desc: '清空用户的选择',
+        desc: '用于单选行，清空用户的选择',
         type: 'Promise',
         enum: '',
         defVal: '',
@@ -1489,7 +1548,7 @@ const apis = [
       },
       {
         name: 'clearCurrentColumn()',
-        desc: '清空用户的选择列',
+        desc: '用于单选列，清空用户的选择列',
         type: 'Promise',
         enum: '',
         defVal: '',
@@ -1497,7 +1556,7 @@ const apis = [
       },
       {
         name: 'clearSelection()',
-        desc: '用于多选表格，清空用户的选择',
+        desc: '用于多选行，清空用户的选择',
         type: 'Promise',
         enum: '',
         defVal: '',
@@ -1668,7 +1727,7 @@ const apis = [
         desc: '表格校验函数，如果指定 row 或 rows 则校验指定一行或多行，否则校验整个表格。该回调函数会在校验结束后被调用，并传入两个参数：（是否校验成功，最近一列未通过校验的字段）。若不传入回调函数，则会返回一个 promise',
         type: 'Promise',
         enum: '',
-        defVal: 'rows?callback?',
+        defVal: 'rows?,callback?',
         list: []
       },
       {
@@ -1676,7 +1735,7 @@ const apis = [
         desc: '表格完整校验函数，和 validate 的区别就是会对数据的所有规则进行完整校验',
         type: 'Promise',
         enum: '',
-        defVal: 'rows?callback?',
+        defVal: 'rows?,callback?',
         list: []
       },
       {

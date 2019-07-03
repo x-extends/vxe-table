@@ -208,9 +208,9 @@ export default {
             formatDate (value, format) {
               return value ? value.format(format) : null
             },
-            getSelectLabel (value, list, valueProp = 'value', labelProp = 'label') {
+            getSelectLabel (value, list, valueProp = 'value', labelField = 'label') {
               let item = XEUtils.find(list, item => item[valueProp] === value)
-              return item ? item[labelProp] : null
+              return item ? item[labelField] : null
             },
             getCascaderLabel (value, list) {
               let values = value || []
@@ -302,9 +302,9 @@ export default {
     formatDate (value, format) {
       return value ? value.format(format) : null
     },
-    getSelectLabel (value, list, valueProp = 'value', labelProp = 'label') {
+    getSelectLabel (value, list, valueProp = 'value', labelField = 'label') {
       let item = XEUtils.find(list, item => item[valueProp] === value)
-      return item ? item[labelProp] : null
+      return item ? item[labelField] : null
     },
     getCascaderLabel (value, list) {
       let values = value || []
