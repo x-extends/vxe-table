@@ -1035,7 +1035,7 @@ const apis = [
         descKey: 'app.api.table.desc.cellClick',
         type: '',
         enum: '',
-        defVal: '{row,rowIndex,column,columnIndex,cell},event',
+        defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,cell},event',
         list: []
       },
       {
@@ -1043,7 +1043,7 @@ const apis = [
         descKey: 'app.api.table.desc.cellDblclick',
         type: '',
         enum: '',
-        defVal: '{row,rowIndex,column,columnIndex,cell},event',
+        defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,cell},event',
         list: []
       },
       {
@@ -1051,7 +1051,7 @@ const apis = [
         descKey: 'app.api.table.desc.headerCellClick',
         type: '',
         enum: '',
-        defVal: '{rowIndex,column,columnIndex,cell},event',
+        defVal: '{$rowIndex,column,columnIndex,cell},event',
         list: []
       },
       {
@@ -1059,7 +1059,7 @@ const apis = [
         descKey: 'app.api.table.desc.headerCellDblclick',
         type: '',
         enum: '',
-        defVal: '{rowIndex,column,columnIndex,cell},event',
+        defVal: '{$rowIndex,column,columnIndex,cell},event',
         list: []
       },
       {
@@ -1067,7 +1067,7 @@ const apis = [
         descKey: 'app.api.table.desc.footerCellClick',
         type: '',
         enum: '',
-        defVal: '{rowIndex,column,columnIndex,cell},event',
+        defVal: '{$rowIndex,column,columnIndex,cell},event',
         list: []
       },
       {
@@ -1075,7 +1075,7 @@ const apis = [
         descKey: 'app.api.table.desc.footerCellDblclick',
         type: '',
         enum: '',
-        defVal: '{rowIndex,column,columnIndex,cell},event',
+        defVal: '{$rowIndex,column,columnIndex,cell},event',
         list: []
       },
       {
@@ -1083,7 +1083,7 @@ const apis = [
         descKey: 'app.api.table.desc.cellMouseenter',
         type: '',
         enum: '',
-        defVal: '{row,rowIndex,column,columnIndex,cell},event',
+        defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,cell},event',
         list: []
       },
       {
@@ -1091,7 +1091,7 @@ const apis = [
         descKey: 'app.api.table.desc.cellMouseleave',
         type: '',
         enum: '',
-        defVal: '{row,rowIndex,column,columnIndex,cell},event',
+        defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,cell},event',
         list: []
       },
       {
@@ -1131,7 +1131,7 @@ const apis = [
         descKey: 'app.api.table.desc.contextMenuClick',
         type: '',
         enum: '',
-        defVal: '{menu,type,row,rowIndex,column,columnIndex,cell},event',
+        defVal: '{menu,type,row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,cell},event',
         list: []
       },
       {
@@ -1139,7 +1139,7 @@ const apis = [
         descKey: 'app.api.table.desc.editClosed',
         type: '',
         enum: '',
-        defVal: '{row,rowIndex,column,columnIndex,cell},event',
+        defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,cell},event',
         list: []
       },
       {
@@ -1147,7 +1147,7 @@ const apis = [
         descKey: 'app.api.table.desc.editActived',
         type: '',
         enum: '',
-        defVal: '{row,rowIndex,column,columnIndex,cell},event',
+        defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,cell},event',
         list: []
       },
       {
@@ -1155,7 +1155,7 @@ const apis = [
         descKey: 'app.api.table.desc.editDisabled',
         type: '',
         enum: '',
-        defVal: '{row,rowIndex,column,columnIndex,cell},event',
+        defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,cell},event',
         list: []
       },
       {
@@ -1163,7 +1163,7 @@ const apis = [
         descKey: 'app.api.table.desc.validError',
         type: '',
         enum: '',
-        defVal: '{rule,row,rowIndex,column,columnIndex,cell}',
+        defVal: '{rule,row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,cell}',
         list: []
       },
       {

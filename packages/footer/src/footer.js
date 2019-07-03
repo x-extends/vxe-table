@@ -72,9 +72,9 @@ export default {
         /**
          * 底部
          */
-        h('tfoot', footerData.map((list, rowIndex) => {
+        h('tfoot', footerData.map((list, $rowIndex) => {
           return h('tr', {
-            class: ['vxe-footer--row', footerRowClassName ? XEUtils.isFunction(footerRowClassName) ? footerRowClassName({ $rowIndex: rowIndex, fixed: fixedType }) : footerRowClassName : '']
+            class: ['vxe-footer--row', footerRowClassName ? XEUtils.isFunction(footerRowClassName) ? footerRowClassName({ $rowIndex, fixed: fixedType }) : footerRowClassName : '']
           }, tableColumn.map((column, $columnIndex) => {
             let isGroup = column.children && column.children.length
             let fixedHiddenColumn = fixedType && column.fixed !== fixedType && !isGroup
@@ -83,12 +83,12 @@ export default {
             let columnIndex = getColumnMapIndex(column)
             if (tableListeners['header-cell-click']) {
               tfOns.click = evnt => {
-                UtilTools.emitEvent($table, 'header-cell-click', [{ $table, $rowIndex: rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, cell: evnt.currentTarget }, evnt])
+                UtilTools.emitEvent($table, 'header-cell-click', [{ $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, cell: evnt.currentTarget }, evnt])
               }
             }
             if (tableListeners['header-cell-dblclick']) {
               tfOns.dblclick = evnt => {
-                UtilTools.emitEvent($table, 'header-cell-dblclick', [{ $table, $rowIndex: rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, cell: evnt.currentTarget }, evnt])
+                UtilTools.emitEvent($table, 'header-cell-dblclick', [{ $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, cell: evnt.currentTarget }, evnt])
               }
             }
             return h('td', {
@@ -96,7 +96,7 @@ export default {
                 [`col--${column.headerAlign}`]: column.headerAlign,
                 'fixed--hidden': fixedHiddenColumn,
                 'filter--active': column.filters.some(item => item.checked)
-              }, footerCellClassName ? XEUtils.isFunction(footerCellClassName) ? footerCellClassName({ $rowIndex: rowIndex, column, columnIndex, $columnIndex, fixed: fixedType }) : footerCellClassName : ''],
+              }, footerCellClassName ? XEUtils.isFunction(footerCellClassName) ? footerCellClassName({ $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType }) : footerCellClassName : ''],
               attrs: {
                 'data-index': columnIndex
               },

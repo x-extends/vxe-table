@@ -156,9 +156,9 @@ export default {
         /**
          * 头部
          */
-        h('thead', headerColumn.map((cols, rowIndex) => {
+        h('thead', headerColumn.map((cols, $rowIndex) => {
           return h('tr', {
-            class: ['vxe-header--row', headerRowClassName ? XEUtils.isFunction(headerRowClassName) ? headerRowClassName({ $table, $rowIndex: rowIndex, fixed: fixedType }) : headerRowClassName : '']
+            class: ['vxe-header--row', headerRowClassName ? XEUtils.isFunction(headerRowClassName) ? headerRowClassName({ $table, $rowIndex, fixed: fixedType }) : headerRowClassName : '']
           }, cols.map((column, $columnIndex) => {
             let { columnKey, showHeaderOverflow, headerAlign, renderWidth, own } = column
             let isGroup = column.children && column.children.length
@@ -171,18 +171,18 @@ export default {
             let columnIndex = getColumnMapIndex(column)
             if (showTooltip) {
               thOns.mouseover = evnt => {
-                $table.triggerHeaderTooltipEvent(evnt, { $table, column, columnIndex, fixed: fixedType })
+                $table.triggerHeaderTooltipEvent(evnt, { $table, column, columnIndex, $columnIndex, fixed: fixedType })
               }
               thOns.mouseout = $table.clostTooltip
             }
             if (highlightCurrentColumn || tableListeners['header-cell-click']) {
               thOns.click = evnt => {
-                $table.triggerHeaderCellClickEvent(evnt, { $table, $rowIndex: rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, cell: evnt.currentTarget })
+                $table.triggerHeaderCellClickEvent(evnt, { $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, cell: evnt.currentTarget })
               }
             }
             if (tableListeners['header-cell-dblclick']) {
               thOns.dblclick = evnt => {
-                UtilTools.emitEvent($table, 'header-cell-dblclick', [{ $table, $rowIndex: rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, cell: evnt.currentTarget }, evnt])
+                UtilTools.emitEvent($table, 'header-cell-dblclick', [{ $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, cell: evnt.currentTarget }, evnt])
               }
             }
             return h('th', {
@@ -191,7 +191,7 @@ export default {
                 'col--current': selectColumn === column,
                 'fixed--hidden': fixedHiddenColumn,
                 'filter--active': column.filters.some(item => item.checked)
-              }, headerCellClassName ? XEUtils.isFunction(headerCellClassName) ? headerCellClassName({ $table, $rowIndex: rowIndex, column, columnIndex, $columnIndex, fixed: fixedType }) : headerCellClassName : ''],
+              }, headerCellClassName ? XEUtils.isFunction(headerCellClassName) ? headerCellClassName({ $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType }) : headerCellClassName : ''],
               attrs: {
                 'data-index': columnIndex,
                 colspan: column.colSpan,
@@ -212,7 +212,7 @@ export default {
                 style: {
                   width: showTitle || showTooltip || showEllipsis ? `${border ? renderWidth - 1 : renderWidth}px` : null
                 }
-              }, column.renderHeader(h, { $table, column, columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn })),
+              }, column.renderHeader(h, { $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn })),
               (XEUtils.isBoolean(column.resizable) ? column.resizable : resizable) && !fixedType && !isGroup ? h('div', {
                 class: ['vxe-resizable', {
                   'is--line': !border
