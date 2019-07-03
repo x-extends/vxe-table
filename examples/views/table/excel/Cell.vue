@@ -62,7 +62,7 @@ export default {
         {
           type: 'index',
           width: 50,
-          fixed: 'left',
+          // fixed: 'left',
           align: 'center',
           headerAlign: 'center'
         }
@@ -77,7 +77,7 @@ export default {
           }
         }
       })),
-      tableData: Array.from(new Array(20)).map((num, index) => {
+      tableData: Array.from(new Array(100)).map((num, index) => {
         let item = { id: index }
         columns.forEach(name => {
           item[name] = ''

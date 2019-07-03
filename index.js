@@ -7,7 +7,7 @@ import Footer from './packages/footer'
 import Filter from './packages/filter'
 import Loading from './packages/loading'
 import Grid from './packages/grid'
-// import Excel from './packages/excel'
+import Excel from './packages/excel'
 import Menu from './packages/menu'
 import Toolbar from './packages/toolbar'
 import Pager from './packages/pager'
@@ -36,7 +36,7 @@ export const components = [
   Filter,
   Loading,
   Grid,
-  // Excel,
+  Excel,
   Menu,
   Toolbar,
   Pager,
@@ -78,7 +78,7 @@ export * from './packages/footer'
 export * from './packages/filter'
 export * from './packages/loading'
 export * from './packages/grid'
-// export * from './packages/excel'
+export * from './packages/excel'
 export * from './packages/menu'
 export * from './packages/toolbar'
 export * from './packages/pager'

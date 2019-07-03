@@ -2341,6 +2341,7 @@ export default {
         // handleOldChecked,
         handleChecked,
         handleIndexChecked,
+        handleHeaderChecked,
         elemStore
       } = this
       let { checked, actived } = editStore
@@ -2368,18 +2369,27 @@ export default {
           // let start = DomTools.getCellIndexs(cell)
           let startCellNode = DomTools.getCellNodeIndex(cell)
           let isIndex = column.type === 'index'
-          let trList = elemStore['main-body-list'].children
+          let bodyList = elemStore['main-body-list'].children
+          let headerList = elemStore['main-header-list'].children
           let cellLastElementChild = cell.parentNode.lastElementChild
+          let cellFirstElementChild = cell.parentNode.firstElementChild
+          let colIndex = [].indexOf.call(cell.parentNode.children, cell)
+          let headStart = headerList[0].children[colIndex]
           let updateEvent = XEUtils.throttle(function (evnt) {
             evnt.preventDefault()
             let { flag, targetElem } = DomTools.getEventTargetNode(evnt, $el, 'vxe-body--column')
             if (flag) {
               if (isIndex) {
                 let firstCell = targetElem.parentNode.firstElementChild
-                handleChecked(DomTools.getRowNodes(trList, DomTools.getCellNodeIndex(firstCell.nextElementSibling), DomTools.getCellNodeIndex(cellLastElementChild)))
-                handleIndexChecked(DomTools.getRowNodes(trList, DomTools.getCellNodeIndex(firstCell), DomTools.getCellNodeIndex(cell)))
+                handleChecked(DomTools.getRowNodes(bodyList, DomTools.getCellNodeIndex(firstCell.nextElementSibling), DomTools.getCellNodeIndex(cellLastElementChild)))
+                handleIndexChecked(DomTools.getRowNodes(bodyList, DomTools.getCellNodeIndex(firstCell), DomTools.getCellNodeIndex(cell)))
               } else {
-                handleChecked(DomTools.getRowNodes(trList, startCellNode, DomTools.getCellNodeIndex(targetElem)))
+                let firstCell = targetElem.parentNode.firstElementChild
+                let colIndex = [].indexOf.call(targetElem.parentNode.children, targetElem)
+                let head = headerList[0].children[colIndex]
+                handleHeaderChecked(DomTools.getRowNodes(headerList, DomTools.getCellNodeIndex(head), DomTools.getCellNodeIndex(headStart)))
+                handleIndexChecked(DomTools.getRowNodes(bodyList, DomTools.getCellNodeIndex(firstCell), DomTools.getCellNodeIndex(cellFirstElementChild)))
+                handleChecked(DomTools.getRowNodes(bodyList, startCellNode, DomTools.getCellNodeIndex(targetElem)))
               }
             }
           }, 80, { leading: true, trailing: true })
@@ -2391,11 +2401,10 @@ export default {
           if (isIndex) {
             let firstCell = cell.parentNode.firstElementChild
             this.clearSelected()
-            handleChecked(DomTools.getRowNodes(trList, DomTools.getCellNodeIndex(firstCell.nextElementSibling), DomTools.getCellNodeIndex(cellLastElementChild)))
-            handleIndexChecked(DomTools.getRowNodes(trList, DomTools.getCellNodeIndex(firstCell), DomTools.getCellNodeIndex(cell)))
+            handleChecked(DomTools.getRowNodes(bodyList, DomTools.getCellNodeIndex(firstCell.nextElementSibling), DomTools.getCellNodeIndex(cellLastElementChild)))
+            handleIndexChecked(DomTools.getRowNodes(bodyList, DomTools.getCellNodeIndex(firstCell), DomTools.getCellNodeIndex(cell)))
           } else {
             this.handleSelected(params, evnt)
-            handleChecked(DomTools.getRowNodes(trList, startCellNode, DomTools.getCellNodeIndex(cell)))
           }
           this.closeFilter()
           this.closeMenu()
@@ -2588,8 +2597,8 @@ export default {
             // this.clearCopyed(evnt)
             // this.clearChecked(evnt)
             this.clearChecked()
-            this.clearIndexChecked()
-            this.clearHeaderChecked()
+            // this.clearIndexChecked()
+            // this.clearHeaderChecked()
             this.clearSelected(evnt)
             this.clearActived(evnt)
             column.renderHeight = cell.offsetHeight
@@ -2722,7 +2731,6 @@ export default {
         // 如果配置了批量选中功能，则为批量选中状态
         if (mouseConfig.checked) {
           let headerElem = elemStore['main-header-list']
-          this.clearSelected()
           this.handleHeaderChecked([[headerElem.querySelector(`.${column.id}`)]])
           this.handleIndexChecked([[cell.parentNode.querySelector('.col--index')]])
         //   let select = DomTools.getCellIndexs(params.cell)

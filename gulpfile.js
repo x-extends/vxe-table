@@ -20,7 +20,7 @@ const components = [
   'menu',
   'toolbar',
   'grid',
-  // 'excel',
+  'excel',
   'pager',
   'checkbox',
   'radio',

@@ -14,7 +14,7 @@
 .vxe-header--column {
   position: relative;
   &.col--title-checked {
-    background-color: $vxe-table-column-checked-background-color;
+    background-color: $vxe-table-column-header-checked-background-color;
   }
   .vxe-required-icon {
     display: inline-block;

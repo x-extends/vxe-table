@@ -303,6 +303,7 @@ export default {
       let domMousemove = document.onmousemove
       let domMouseup = document.onmouseup
       let updateEvent = function (evnt) {
+        evnt.stopPropagation()
         evnt.preventDefault()
         let offsetX = evnt.clientX - dragClientX
         let left = dragPosLeft + offsetX
