@@ -2331,7 +2331,12 @@ export default {
       return this.$nextTick()
     },
     getActiveRow () {
-      return Object.assign({}, this.editStore.actived.args)
+      let { editStore, tableData, fullDataIndexMap, fullColumnIndexMap } = this
+      let { args, row, column } = editStore.actived
+      if (args && fullDataIndexMap.has(row) && fullColumnIndexMap.has(column) && tableData.indexOf(row) > -1) {
+        return Object.assign({}, args)
+      }
+      return null
     },
     hasActiveRow (row) {
       return this.editStore.actived.row === row
