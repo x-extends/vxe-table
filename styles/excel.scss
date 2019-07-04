@@ -90,6 +90,7 @@
       line-height: 24px;
       cursor: cell;
       .vxe-cell {
+        word-break: break-all;
         padding: 0 #{$vxe-excel-column-border-width + 2px};
         .vxe-input--wrapper {
           height: inherit;
