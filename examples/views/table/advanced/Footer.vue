@@ -165,9 +165,9 @@ export default {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 50)
           },
           methods: {
-            footerCellClassName ({ rowIndex, column, columnIndex }) {
+            footerCellClassName ({ $rowIndex, column, columnIndex }) {
               if (columnIndex === 0) {
-                if (rowIndex === 0) {
+                if ($rowIndex === 0) {
                   return 'col-blue'
                 } else {
                   return 'col-red'
@@ -229,9 +229,9 @@ export default {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 50)
           },
           methods: {
-            footerCellClassName ({ rowIndex, column, columnIndex }) {
+            footerCellClassName ({ $rowIndex, column, columnIndex }) {
               if (columnIndex === 0) {
-                if (rowIndex === 0) {
+                if ($rowIndex === 0) {
                   return 'col-blue'
                 } else {
                   return 'col-red'
@@ -276,9 +276,9 @@ export default {
     })
   },
   methods: {
-    footerCellClassName ({ rowIndex, column, columnIndex }) {
+    footerCellClassName ({ $rowIndex, column, columnIndex }) {
       if (columnIndex === 0) {
-        if (rowIndex === 0) {
+        if ($rowIndex === 0) {
           return 'col-blue'
         } else {
           return 'col-red'

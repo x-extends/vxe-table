@@ -31,7 +31,7 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
     // selectColumn,
     cellClassName,
     spanMethod,
-    // keyboardConfig,
+    keyboardConfig = {},
     selectConfig = {},
     treeConfig = {},
     mouseConfig = {},
@@ -56,11 +56,12 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
   } = editStore
   // let isMouseSelected = mouseConfig && mouseConfig.selected
   let isMouseChecked = mouseConfig.checked
-  // let isKeyboardCut = keyboardConfig && keyboardConfig.isCut
+  let isKeyboardCut = keyboardConfig.isCut
   let fixedHiddenColumn = fixedType ? column.fixed !== fixedType : column.fixed && overflowX
-  let showEllipsis = (showOverflow || allColumnOverflow) === 'ellipsis'
-  let showTitle = (showOverflow || allColumnOverflow) === 'title'
-  let showTooltip = showOverflow === true || showOverflow === 'tooltip' || allColumnOverflow === true || allColumnOverflow === 'tooltip'
+  let cellOverflow = XEUtils.isUndefined(showOverflow) || XEUtils.isNull(showOverflow) ? allColumnOverflow : showOverflow
+  let showEllipsis = cellOverflow === 'ellipsis'
+  let showTitle = cellOverflow === 'title'
+  let showTooltip = cellOverflow === true || cellOverflow === 'tooltip'
   let hasEllipsis = showTitle || showTooltip || showEllipsis
   let isDirty
   let tdOns = {}
@@ -187,8 +188,11 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
       //   // width: hasEllipsis ? `${border ? renderWidth - 1 : renderWidth}px` : null
       // }
     }, column.renderCell(h, params)),
-    isMouseChecked ? h('span', {
+    isMouseChecked ? h('div', {
       class: 'vxe-cell--checked-line'
+    }) : null,
+    isKeyboardCut ? h('div', {
+      class: 'vxe-cell--copyed-line'
     }) : null,
     hasDefaultTip ? validError && tableData.length >= 2 ? h('div', {
       class: 'vxe-cell--valid',

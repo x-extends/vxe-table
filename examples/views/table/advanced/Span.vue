@@ -5,6 +5,7 @@
 
     <vxe-table
       border
+      show-overflow
       max-height="400"
       :span-method="colspanMethod"
       :data.sync="tableData">

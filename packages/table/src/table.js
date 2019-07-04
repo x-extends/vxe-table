@@ -951,9 +951,12 @@ export default {
       return this.getRowMapIndex(row) === -1
     },
     hasRowChange (row, field) {
-      let { tableSourceData, treeConfig, fullDataRowIdMap } = this
-      let rowKey = UtilTools.getRowKey(this)
+      let { tableSourceData, treeConfig, fullDataIndexMap } = this
       let oRow
+      if (!fullDataIndexMap.has(row)) {
+        return true
+      }
+      let rowKey = UtilTools.getRowKey(this)
       if (rowKey) {
         let rowId = XEUtils.get(row, rowKey)
         if (treeConfig) {
@@ -964,7 +967,7 @@ export default {
             oRow = Object.assign({}, matchObj.item, { [children]: null })
           }
         } else {
-          let oRowIndex = fullDataRowIdMap.get(`${rowId}`).index
+          let oRowIndex = this.fullDataRowIdMap.get(`${rowId}`).index
           oRow = tableSourceData[oRowIndex]
         }
       } else {
@@ -1484,16 +1487,18 @@ export default {
                   } = column
                   // let isGroup = column.children && column.children.length
                   // let fixedHiddenColumn = fixedType && column.fixed !== fixedType && !isGroup
-                  let showEllipsis = (showHeaderOverflow || allColumnHeaderOverflow) === 'ellipsis'
-                  let showTitle = (showHeaderOverflow || allColumnHeaderOverflow) === 'title'
-                  let showTooltip = showHeaderOverflow === true || showHeaderOverflow === 'tooltip' || allColumnHeaderOverflow === true || allColumnHeaderOverflow === 'tooltip'
+                  let headOverflow = XEUtils.isUndefined(showHeaderOverflow) || XEUtils.isNull(showHeaderOverflow) ? allColumnHeaderOverflow : showHeaderOverflow
+                  let showEllipsis = headOverflow === 'ellipsis'
+                  let showTitle = headOverflow === 'title'
+                  let showTooltip = headOverflow === true || headOverflow === 'tooltip'
+                  let hasEllipsis = showTitle || showTooltip || showEllipsis
 
                   let listElem = elemStore[`${name}-${layout}-list`]
-                  if (listElem) {
+                  if (listElem && hasEllipsis) {
                     XEUtils.arrayEach(listElem.querySelectorAll(`.${column.id}`), thElem => {
                       let cellElem = thElem.querySelector('.vxe-cell')
                       if (cellElem) {
-                        cellElem.style.width = showTitle || showTooltip || showEllipsis ? `${border ? renderWidth - 1 : renderWidth}px` : null
+                        cellElem.style.width = `${border ? renderWidth - 1 : renderWidth}px`
                       }
                     })
                   }
@@ -1508,17 +1513,18 @@ export default {
                     // columnKey
                   } = column
                   // let fixedHiddenColumn = fixedType ? column.fixed !== fixedType : column.fixed && overflowX
-                  let showEllipsis = (showOverflow || allColumnOverflow) === 'ellipsis'
-                  let showTitle = (showOverflow || allColumnOverflow) === 'title'
-                  let showTooltip = showOverflow === true || showOverflow === 'tooltip' || allColumnOverflow === true || allColumnOverflow === 'tooltip'
+                  let cellOverflow = XEUtils.isUndefined(showOverflow) || XEUtils.isNull(showOverflow) ? allColumnOverflow : showOverflow
+                  let showEllipsis = cellOverflow === 'ellipsis'
+                  let showTitle = cellOverflow === 'title'
+                  let showTooltip = cellOverflow === true || cellOverflow === 'tooltip'
                   let hasEllipsis = showTitle || showTooltip || showEllipsis
 
                   let listElem = elemStore[`${name}-${layout}-list`]
-                  if (listElem) {
+                  if (listElem && hasEllipsis) {
                     XEUtils.arrayEach(listElem.querySelectorAll(`.${column.id}`), tdElem => {
                       let cellElem = tdElem.querySelector('.vxe-cell')
                       if (cellElem) {
-                        cellElem.style.width = hasEllipsis ? `${border ? renderWidth - 1 : renderWidth}px` : null
+                        cellElem.style.width = `${border ? renderWidth - 1 : renderWidth}px`
                       }
                     })
                   }
@@ -1648,9 +1654,9 @@ export default {
       let isRightArrow = keyCode === 39
       let isDwArrow = keyCode === 40
       let isDel = keyCode === 46
-      // let isC = keyCode === 67
-      // let isV = keyCode === 86
-      // let isX = keyCode === 88
+      let isC = keyCode === 67
+      let isV = keyCode === 86
+      let isX = keyCode === 88
       let isF2 = keyCode === 113
       let isCtrlKey = evnt.ctrlKey
       let operArrow = isLeftArrow || isUpArrow || isRightArrow || isDwArrow
@@ -1707,13 +1713,13 @@ export default {
             this.handleActived(selected.args, evnt)
           }
         }
-      // } else if (keyboardConfig.isCut && isCtrlKey && (isX || isC || isV)) {
-      //   // 如果开启复制功能
-      //   if (isX || isC) {
-      //     this.handleCopyed(isX, evnt)
-      //   } else {
-      //     this.handlePaste(evnt)
-      //   }
+      } else if (keyboardConfig.isCut && isCtrlKey && (isX || isC || isV)) {
+        // 如果开启复制功能
+        if (isX || isC) {
+          this.handleCopyed(isX, evnt)
+        } else {
+          // this.handlePaste(evnt)
+        }
       } else if (keyboardConfig.isEdit && !isCtrlKey && ((keyCode >= 48 && keyCode <= 57) || (keyCode >= 65 && keyCode <= 90) || (keyCode >= 96 && keyCode <= 111) || (keyCode >= 186 && keyCode <= 192) || (keyCode >= 219 && keyCode <= 222) || keyCode === 32)) {
         // 如果是按下非功能键之外允许直接编辑
         if (selected.row || selected.column) {
@@ -2594,8 +2600,7 @@ export default {
           if (!activeMethod || activeMethod(params)) {
             this.clostTooltip()
             this.clearValidate()
-            // this.clearCopyed(evnt)
-            // this.clearChecked(evnt)
+            this.clearCopyed(evnt)
             this.clearChecked()
             // this.clearIndexChecked()
             // this.clearHeaderChecked()
@@ -2680,8 +2685,12 @@ export default {
       return this.$nextTick().then(this.recalculate)
     },
     getActiveRow () {
-      let args = this.editStore.actived.args
-      return args ? Object.assign({}, args) : null
+      let { editStore, tableData, fullDataIndexMap, fullColumnIndexMap } = this
+      let { args, row, column } = editStore.actived
+      if (args && fullDataIndexMap.has(row) && fullColumnIndexMap.has(column) && tableData.indexOf(row) > -1) {
+        return Object.assign({}, args)
+      }
+      return null
     },
     hasActiveRow (row) {
       return this.editStore.actived.row === row
@@ -2884,24 +2893,50 @@ export default {
     /**
      * 清空已复制的内容
      */
-    // clearCopyed () {
-    //   let { editStore } = this
-    //   let { copyed } = editStore
-    //   copyed.cut = false
-    //   copyed.rows = []
-    //   copyed.columns = []
-    //   return this.$nextTick()
-    // },
+    clearCopyed () {
+      let { editStore, elemStore } = this
+      let { copyed } = editStore
+      let bodyElem = elemStore['main-body-list']
+      copyed.cut = false
+      copyed.rows = []
+      copyed.columns = []
+      XEUtils.arrayEach(bodyElem.querySelectorAll('.col--copyed'), elem => DomTools.removeClass(elem, 'col--copyed'))
+      return this.$nextTick()
+    },
     /**
      * 处理复制
      */
-    // handleCopyed (cut, evnt) {
-    //   let { editStore } = this
-    //   let { copyed, checked } = editStore
-    //   copyed.cut = cut
-    //   copyed.rows = checked.rows
-    //   copyed.columns = checked.columns
-    // },
+    handleCopyed (cut, evnt) {
+      let { editStore } = this
+      let { copyed, checked } = editStore
+      let rowNodes = checked.rowNodes
+      this.clearCopyed()
+      rowNodes.forEach((rows, rowIndex) => {
+        let isTop = rowIndex === 0
+        let isBottom = rowIndex === rowNodes.length - 1
+        rows.forEach((elem, colIndex) => {
+          let isLeft = colIndex === 0
+          let isRight = colIndex === rows.length - 1
+          DomTools.addClass(elem, 'col--copyed')
+          if (isTop) {
+            DomTools.addClass(elem, 'col--copyed-top')
+          }
+          if (isBottom) {
+            DomTools.addClass(elem, 'col--copyed-bottom')
+          }
+          if (isLeft) {
+            DomTools.addClass(elem, 'col--copyed-left')
+          }
+          if (isRight) {
+            DomTools.addClass(elem, 'col--copyed-right')
+          }
+        })
+      })
+      copyed.cut = cut
+      copyed.rows = checked.rows
+      copyed.columns = checked.columns
+      copyed.rowNodes = rowNodes
+    },
     /**
      * 处理粘贴
      */

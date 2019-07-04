@@ -9,7 +9,8 @@
 }
 
 .vxe-table-hidden-column,
-.vxe-cell--checked-line {
+.vxe-cell--checked-line,
+.vxe-cell--copyed-line {
   display: none;
 }
 
@@ -146,6 +147,7 @@
     .vxe-body--column {
       &.col--index {
         text-align: center;
+        cursor: default;
       }
     }
     .vxe-header--column {
@@ -462,8 +464,12 @@
 
   /*校验不通过*/
   .vxe-body--column {
-    &.col--valid-error {
+    &.col--actived,
+    &.col--selected,
+    &.col--dirty {
       position: relative;
+    }
+    &.col--valid-error {
       .vxe-cell--valid {
         width: 320px;
         position: absolute;
@@ -502,13 +508,10 @@
   &.vxe-editable {
     .vxe-body--column {
       padding: 0;
-      &.col--edit {
-        &.col--actived {
-          padding: 0;
-        }
+      &.col--actived {
+        padding: 0;
       }
       &.col--selected {
-        position: relative;
         &:after {
           content: "";
           position: absolute;
@@ -524,7 +527,6 @@
         }
       }
       &.col--dirty {
-        position: relative;
         &:before {
           content: "";
           top: -5px;

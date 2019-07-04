@@ -194,9 +194,10 @@ export default {
             } = column
             let isGroup = column.children && column.children.length
             let fixedHiddenColumn = fixedType && column.fixed !== fixedType && !isGroup
-            let showEllipsis = (showHeaderOverflow || allColumnHeaderOverflow) === 'ellipsis'
-            let showTitle = (showHeaderOverflow || allColumnHeaderOverflow) === 'title'
-            let showTooltip = showHeaderOverflow === true || showHeaderOverflow === 'tooltip' || allColumnHeaderOverflow === true || allColumnHeaderOverflow === 'tooltip'
+            let headOverflow = XEUtils.isUndefined(showHeaderOverflow) || XEUtils.isUndefined(showHeaderOverflow) ? allColumnHeaderOverflow : showHeaderOverflow
+            let showEllipsis = headOverflow === 'ellipsis'
+            let showTitle = headOverflow === 'title'
+            let showTooltip = headOverflow === true || headOverflow === 'tooltip'
             let hasEllipsis = showTitle || showTooltip || showEllipsis
             let thOns = {}
             // 确保任何情况下 columnIndex 都精准指向真实列索引

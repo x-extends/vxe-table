@@ -29,6 +29,12 @@ const preClsMap = {
     'col--checked-bottom',
     'col--checked-left',
     'col--checked-right'
+  ],
+  'col--copyed': [
+    'col--copyed-top',
+    'col--copyed-bottom',
+    'col--copyed-left',
+    'col--copyed-right'
   ]
 }
 
