@@ -469,8 +469,12 @@
 
   /*校验不通过*/
   .vxe-body--column {
-    &.col--valid-error {
+    &.col--actived,
+    &.col--selected,
+    &.col--dirty {
       position: relative;
+    }
+    &.col--valid-error {
       .vxe-cell--valid {
         width: 320px;
         position: absolute;

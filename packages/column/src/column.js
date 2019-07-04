@@ -27,9 +27,9 @@ export default {
     // 表头对齐方式
     headerAlign: String,
     // 当内容过长时显示为省略号
-    showOverflow: [Boolean, String],
+    showOverflow: { type: [Boolean, String], default: null },
     // 当表头内容过长时显示为省略号
-    showHeaderOverflow: [Boolean, String],
+    showHeaderOverflow: { type: [Boolean, String], default: null },
     // 格式化显示内容
     formatter: Function,
     // 自定义索引方法
