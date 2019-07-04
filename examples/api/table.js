@@ -827,15 +827,15 @@ const apis = [
         list: [
           {
             name: 'message',
-            desc: '校验提示框的类型',
+            desc: '校验提示框的方式',
             type: 'String',
-            enum: 'none, default, tooltip',
+            enum: 'none（关闭提示）, default（默认）, tooltip（强制使用 tooltip）',
             defVal: 'default',
             list: []
           },
           {
             name: 'maxWidth',
-            desc: '所有提示框的最大宽度',
+            desc: '所有提示框的最大宽度（对于列比较小的场景下可能会用到）',
             type: 'Number',
             enum: '',
             defVal: '320',
@@ -908,7 +908,7 @@ const apis = [
           },
           {
             name: 'maxWidth',
-            desc: '提示框的最大宽度',
+            desc: '提示框的最大宽度（对于列比较小的场景下可能会用到）',
             type: 'Number',
             enum: '',
             defVal: '320',
