@@ -34,7 +34,7 @@
           <span v-html="row.type || '&#12288;'"></span>
         </template>
       </vxe-table-column>
-      <vxe-table-column field="enum" :title="$t('app.api.title.enum')" min-width="160">
+      <vxe-table-column field="enum" :title="$t('app.api.title.enum')" min-width="150">
         <template v-slot="{ row }">
           <span v-html="row.enum || '&#12288;'"></span>
         </template>
