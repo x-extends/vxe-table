@@ -954,7 +954,7 @@ export default {
       let { tableSourceData, treeConfig, fullDataIndexMap } = this
       let oRow
       if (!fullDataIndexMap.has(row)) {
-        return true
+        return false
       }
       let rowKey = UtilTools.getRowKey(this)
       if (rowKey) {
