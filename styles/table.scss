@@ -68,6 +68,9 @@
       border-bottom: 1px solid $vxe-table-border-color;
     }
   }
+  &.c--resize {
+    cursor: col-resize;
+  }
   &.t--stripe {
     .vxe-body--row {
       &:nth-child(2n) {

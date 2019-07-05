@@ -15,6 +15,8 @@ function rClassList (clss) {
 
 const rClsMap = {}
 const preClss = [
+  'c--resize',
+  'c--checked',
   'row--hover',
   'row--current',
   'col--current',

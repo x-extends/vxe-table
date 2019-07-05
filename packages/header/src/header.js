@@ -189,9 +189,19 @@ export default {
             let columnIndex = getColumnMapIndex(column)
             if (showTooltip) {
               thOns.mouseover = evnt => {
+                // 拖动过程中不需要触发
+                if ($table._isResize) {
+                  return
+                }
                 $table.triggerHeaderTooltipEvent(evnt, { $table, column, columnIndex, $columnIndex, fixed: fixedType })
               }
-              thOns.mouseout = $table.clostTooltip
+              thOns.mouseout = evnt => {
+                // 拖动过程中不需要触发
+                if ($table._isResize) {
+                  return
+                }
+                $table.clostTooltip()
+              }
             }
             if (highlightCurrentColumn || tableListeners['header-cell-click'] || mouseConfig.checked) {
               thOns.click = evnt => {
@@ -286,6 +296,8 @@ export default {
         dragLeft = left < dragMinLeft ? dragMinLeft : left
         resizeBarElem.style.left = `${dragLeft - tableBodyElem.scrollLeft}px`
       }
+      $table._isResize = true
+      DomTools.addClass($table.$el, 'c--resize')
       resizeBarElem.style.display = 'block'
       document.onmousemove = updateEvent
       document.onmouseup = function (evnt) {
@@ -293,8 +305,10 @@ export default {
         document.onmouseup = domMouseup
         column.resizeWidth = column.renderWidth - (dragPosLeft - dragLeft)
         resizeBarElem.style.display = 'none'
+        $table._isResize = false
         $table.analyColumnWidth()
         $table.recalculate()
+        DomTools.removeClass($table.$el, 'c--resize')
       }
       updateEvent(evnt)
     }

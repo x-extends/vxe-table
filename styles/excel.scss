@@ -3,6 +3,14 @@
 /*excel*/
 .vxe-table {
   &.vxe-excel {
+    &.c--checked {
+      cursor: default;
+      .vxe-header--column {
+        .vxe-resizable {
+          cursor: default;
+        }
+      }
+    }
     .vxe-header--column {
       padding: 4px 0;
       font-size: 12px;

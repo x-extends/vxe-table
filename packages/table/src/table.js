@@ -2288,8 +2288,10 @@ export default {
               handleChecked(DomTools.getRowNodes(bodyList, DomTools.getCellNodeIndex(startCell), DomTools.getCellNodeIndex(endCell)))
             }
           }, 80, { leading: true, trailing: true })
+          DomTools.addClass($el, 'c--checked')
           document.onmousemove = updateEvent
           document.onmouseup = function () {
+            DomTools.removeClass($el, 'c--checked')
             document.onmousemove = domMousemove
             document.onmouseup = domMouseup
           }
