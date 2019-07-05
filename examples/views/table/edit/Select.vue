@@ -5,7 +5,6 @@
     <vxe-table
       border
       resizable
-      highlight-current-row
       show-overflow
       :data.sync="tableData"
       :edit-config="{key: 'id', trigger: 'click', mode: 'cell'}">
@@ -36,7 +35,6 @@ export default {
         <vxe-table
           border
           resizable
-          highlight-current-row
           show-overflow
           :data.sync="tableData"
           :edit-config="{key: 'id', trigger: 'click', mode: 'cell'}">

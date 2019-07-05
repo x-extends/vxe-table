@@ -235,9 +235,6 @@
     white-space: normal;
     word-break: break-word;
     padding: 0 10px;
-    & > .vxe-checkbox {
-      display: block;
-    }
   }
   .vxe-header--column,
   .vxe-body--column {
@@ -525,11 +522,12 @@
         position: relative;
         &:before {
           content: "";
-          top: -5px;
-          left: -5px;
+          top: -$vxe-table-cell-dirty-width;
+          left: -$vxe-table-cell-dirty-width;
           position: absolute;
-          border: 5px solid;
-          border-color: transparent $vxe-table-validate-error-color transparent transparent;
+          border-width: $vxe-table-cell-dirty-width;
+          border-style: solid;
+          border-color: transparent $vxe-table-cell-dirty-color transparent transparent;
           transform: rotate(45deg);
         }
       }

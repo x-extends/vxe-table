@@ -140,6 +140,10 @@ module.exports = {
         showCode: '显示代码'
       }
     },
+    footer: {
+      donation: '捐赠',
+      donationDesc: '如果这个项目对您有帮助，请作者喝杯咖啡吧'
+    },
     api: {
       form: {
         apiSearch: 'API 搜索'

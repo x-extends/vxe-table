@@ -45,7 +45,7 @@ const apis = [
                   },
                   {
                     name: 'query',
-                    desc: '刷新数据；触发 ajax.query 方法',
+                    desc: '刷新数据；会自动触发 ajax.query 方法',
                     type: '',
                     enum: '',
                     defVal: '',
@@ -77,7 +77,7 @@ const apis = [
                   },
                   {
                     name: 'delete_selection',
-                    desc: '删除选中行；触发 ajax.delete 方法',
+                    desc: '删除选中行；会自动触发 ajax.delete 方法',
                     type: '',
                     enum: '',
                     defVal: '',
@@ -93,7 +93,7 @@ const apis = [
                   },
                   {
                     name: 'save',
-                    desc: '保存数据；；触发 ajax.save 方法',
+                    desc: '保存数据；会自动触发 ajax.save 方法，并且在 Promise 完成之后重新触发 ajax.query 方法',
                     type: '',
                     enum: '',
                     defVal: '',

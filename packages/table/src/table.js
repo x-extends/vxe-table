@@ -722,6 +722,11 @@ export default {
       this.clearSelection()
       this.clearRowExpand()
       this.clearTreeExpand()
+      this.clearChecked()
+      this.clearSelected()
+      this.clearActived()
+      this.clearValidate()
+      return this.$nextTick()
     },
     loadData (datas, notRefresh) {
       let { height, maxHeight, editStore, optimizeOpts, recalculate } = this
@@ -2331,9 +2336,9 @@ export default {
       return this.$nextTick()
     },
     getActiveRow () {
-      let { editStore, tableData, fullDataIndexMap, fullColumnIndexMap } = this
-      let { args, row, column } = editStore.actived
-      if (args && fullDataIndexMap.has(row) && fullColumnIndexMap.has(column) && tableData.indexOf(row) > -1) {
+      let { $el, editStore, tableData } = this
+      let { args, row } = editStore.actived
+      if (args && tableData.indexOf(row) > -1 && $el.querySelectorAll('.vxe-body--column.col--actived').length) {
         return Object.assign({}, args)
       }
       return null

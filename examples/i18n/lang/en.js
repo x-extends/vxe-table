@@ -140,6 +140,10 @@ module.exports = {
         showCode: 'Show code'
       }
     },
+    footer: {
+      donation: 'Donation',
+      donationDesc: 'If the project is very helpful to you, you can buy the author a cup of coffee.'
+    },
     api: {
       form: {
         apiSearch: 'API Search'

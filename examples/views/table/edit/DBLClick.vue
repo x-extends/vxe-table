@@ -6,7 +6,6 @@
     <vxe-table
       border
       resizable
-      highlight-current-row
       show-overflow
       height="500"
       :data.sync="tableData"
@@ -64,7 +63,6 @@ export default {
         <vxe-table
           border
           resizable
-          highlight-current-row
           show-overflow
           height="500"
           :data.sync="tableData"

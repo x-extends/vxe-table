@@ -1299,6 +1299,14 @@ const apis = [
         list: []
       },
       {
+        name: 'getRowIndex(row)',
+        desc: '根据 row 获取数据中的索引',
+        type: 'Number',
+        enum: '',
+        defVal: 'row',
+        list: []
+      },
+      {
         name: 'getRecords(rowIndex)',
         desc: '获取表格所有数据，和 data 属性一致行为，也可以指定索引获取数据',
         type: 'Array',
@@ -1307,11 +1315,11 @@ const apis = [
         list: []
       },
       {
-        name: 'getRowIndex(row)',
-        desc: '根据 row 获取数据中的索引',
-        type: 'Number',
+        name: 'getTableData()',
+        desc: '获取当前表格渲染中的数据（如果存在条件，则返回处理完条件之后的数据）',
+        type: 'Array',
         enum: '',
-        defVal: 'row',
+        defVal: '',
         list: []
       },
       {
@@ -1740,7 +1748,7 @@ const apis = [
       },
       {
         name: 'exportCsv(options)',
-        desc: '将表格数据导出为 .csv 文件，说明：支持IE9+、Edge、Chrome、Firefox 等常用浏览器。IE11以下可能存在中文乱码问题，部分浏览器需要手动修改后缀名为 .csv',
+        desc: '将表格数据导出为 .csv 文件，说明：支持IE、Edge、Chrome、Firefox 等常用浏览器（部分浏览器需要手动修改后缀名为 .csv）',
         type: 'Promise',
         enum: '',
         defVal: 'options',

@@ -2,7 +2,7 @@
   <div id="app" @click="clickEvent">
     <header class="page-header">
       <h1 class="title">
-        <a href="https://github.com/xuliangzhan/vxe-table/tree/v1.5">
+        <a href="https://github.com/xuliangzhan/vxe-table/tree/v1.6">
           <span>vxe-table</span>
           <img src="https://img.shields.io/npm/dm/vxe-table.svg?style=social&logo=github">
           <img src="https://img.shields.io/github/watchers/xuliangzhan/vxe-table.svg?style=social">
@@ -43,7 +43,7 @@
       </div>
     </div>
     <footer class="page-footer">
-      <p class="copyright">github <a class="link" href="https://github.com/xuliangzhan/vxe-table">vxe-table</a> Copyright (c) 2019-present, Xu Liangzhan</p>
+      <p class="copyright">github <a class="link" href="https://github.com/xuliangzhan/vxe-table">vxe-table</a> Copyright (c) 2019-present, Xu Liangzhan<a class="donation" href="https://github.com/xuliangzhan/vxe-table#donation" :title="$t('app.footer.donationDesc')" target="_blank">☕{{ $t('app.footer.donation') }}</a></p>
     </footer>
   </div>
 </template>

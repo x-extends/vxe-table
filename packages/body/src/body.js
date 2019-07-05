@@ -210,6 +210,7 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
 function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, tableColumn) {
   let {
     highlightHoverRow,
+    highlightCurrentRow,
     rowClassName,
     selectRow,
     hoverRow,
@@ -250,7 +251,7 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
       h('tr', {
         class: ['vxe-body--row', {
           [`row--level-${rowLevel}`]: treeConfig,
-          'row--current': row === selectRow,
+          'row--current': highlightCurrentRow && row === selectRow,
           'row--hover': row === hoverRow,
           'row--new': editStore.insertList.indexOf(row) > -1
         }, rowClassName ? XEUtils.isFunction(rowClassName) ? rowClassName({ $table, seq, row, rowIndex }) : rowClassName : ''],
