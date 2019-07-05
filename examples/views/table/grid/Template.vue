@@ -19,7 +19,7 @@
 
     <pre>
       <code class="xml">{{ demoCodes[0] }}</code>
-      <code class="javascript">{{ demoCodes[1] }}</code>
+      <code class="vue">{{ demoCodes[1] }}</code>
     </pre>
   </div>
 </template>
@@ -38,10 +38,8 @@ export default {
           slots: {
             default: ({ row, column }) => {
               return [
-                <span>
-                  <span style="color: red;">{ row.name }</span>
-                  <button onClick={ () => this.clickEvent(row, column) }>按钮</button>
-                </span>
+                <span style="color: red;">{ row.name }</span>,
+                <button onClick={ () => this.clickEvent(row, column) }>按钮</button>
               ]
             }
           }
@@ -79,17 +77,14 @@ export default {
           title: 'Address',
           showOverflow: true,
           slots: {
-            default: ({ row }) => {
-              let h = this.$createElement
+            default: ({ row }, h) => {
               return [
                 h('span', {
                   style: {
                     color: 'blue'
                   },
                   on: {
-                    click: evnt => {
-                      this.addressClickEvent(row)
-                    }
+                    click: () => this.addressClickEvent(row)
                   }
                 }, row.address)
               ]
@@ -133,10 +128,8 @@ export default {
                   slots: {
                     default: ({ row }) => {
                       return [
-                        <span>
-                          <span style="color: red;">{ row.name }</span>
-                          <button onClick={ () => this.clickEvent(row, column) }>按钮</button>
-                        </span>
+                        <span style="color: red;">{ row.name }</span>,
+                        <button onClick={ () => this.clickEvent(row, column) }>按钮</button>
                       ]
                     }
                   }
@@ -174,17 +167,14 @@ export default {
                   title: 'Address',
                   showOverflow: true,
                   slots: {
-                    default: ({ row }) => {
-                      let h = this.$createElement
+                    default: ({ row }, h) => {
                       return [
                         h('span', {
                           style: {
                             color: 'blue'
                           },
                           on: {
-                            click (evnt) {
-                              this.addressClickEvent(row)
-                            }
+                            click: () => this.addressClickEvent(row)
                           }
                         }, row.address)
                       ]

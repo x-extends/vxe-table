@@ -162,14 +162,14 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
       // 'col--copyed-bottom': copyedLocat.bottom,
       // 'col--copyed-left': copyedLocat.left,
       // 'col--copyed-right': copyedLocat.right,
-      'col--actived': editConfig && editRender && (actived.row === row && (actived.column === column || editConfig.mode === 'row')),
-      'col--dirty': isDirty,
       'col--index': column.type === 'index',
-      'col--valid-error': validError,
       'col--ellipsis': hasEllipsis,
       // 'col--current': selectColumn === column,
       'edit--visible': editRender && editRender.type === 'visible',
-      'fixed--hidden': fixedHiddenColumn
+      'fixed--hidden': fixedHiddenColumn,
+      'col--dirty': isDirty,
+      'col--actived': editConfig && editRender && (actived.row === row && (actived.column === column || editConfig.mode === 'row')),
+      'col--valid-error': validError
     }, cellClassName ? XEUtils.isFunction(cellClassName) ? cellClassName(params) : cellClassName : ''],
     key: columnKey || columnIndex,
     attrs,

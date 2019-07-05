@@ -141,6 +141,10 @@ module.exports = {
         showCode: 'Show code'
       }
     },
+    footer: {
+      donation: 'Donation',
+      donationDesc: 'If the project is very helpful to you, you can buy the author a cup of coffee.'
+    },
     api: {
       form: {
         apiSearch: 'API Search'
@@ -175,6 +179,7 @@ module.exports = {
           highlightHoverRow: 'Mouse over a row to highlight',
           highlightCurrentColumn: '是否要高亮当前选中列',
           highlightHoverColumn: '鼠标移到列是否要高亮显示',
+          highlightCell: '只对 editConfig 配置时有效，是否在编辑时高亮单元格边框',
           rowClassName: '给行附加 className，也可以是函数 Function({seq, row, rowIndex, $rowIndex})',
           cellClassName: '给单元格附加 className，也可以是函数 Function({seq, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex})',
           headerRowClassName: '给表头的行附加 className，也可以是函数 Function({$rowIndex})',

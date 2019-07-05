@@ -50,7 +50,7 @@ export const Cell = {
     let { column } = params
     let { slots, own } = column
     if (slots && slots.header) {
-      return slots.header(params)
+      return slots.header(params, h)
     }
     return [UtilTools.formatText(own.title || own.label, 1)]
   },
@@ -59,7 +59,7 @@ export const Cell = {
     let { row, column } = params
     let { slots, formatter } = column
     if (slots && slots.default) {
-      return slots.default(params)
+      return slots.default(params, h)
     }
     cellValue = UtilTools.getCellValue(row, column)
     if (formatter) {
@@ -113,7 +113,7 @@ export const Cell = {
     let { column } = params
     let { slots, own } = column
     if (slots && slots.header) {
-      return slots.header(params)
+      return slots.header(params, h)
     }
     return [UtilTools.formatText(own.title || own.label || '#', 1)]
   },
@@ -122,7 +122,7 @@ export const Cell = {
     let { startIndex } = $table
     let { slots, indexMethod } = column
     if (slots && slots.default) {
-      return slots.default(params)
+      return slots.default(params, h)
     }
     let { $seq, seq, level } = params
     return [UtilTools.formatText(indexMethod ? indexMethod(params) : level ? `${$seq}.${seq}` : startIndex + seq, 1)]
@@ -144,7 +144,7 @@ export const Cell = {
     let { slots } = column
     let { labelField } = radioConfig
     if (slots && slots.header) {
-      return slots.header(params)
+      return slots.header(params, h)
     }
     let { selectRow } = $table
     let { row } = params
@@ -195,7 +195,7 @@ export const Cell = {
       }
     }
     if (slots && slots.header) {
-      return slots.header(params)
+      return slots.header(params, h)
     }
     if (!isHidden) {
       options.domProps = {
@@ -352,7 +352,7 @@ export const Cell = {
     let { column } = params
     let { slots } = column
     if (slots && slots.default) {
-      return slots.default(params)
+      return slots.default(params, h)
     }
     return []
   },
@@ -483,12 +483,12 @@ export const Cell = {
     let context = { $excel: $table.$parent, $table, $column: column }
     if (editRender.type === 'visible' || isEdit) {
       if (slots && slots.edit) {
-        return slots.edit(params)
+        return slots.edit(params, h)
       }
       return compConf && compConf.renderEdit ? compConf.renderEdit.call($table, h, editRender, params, context) : []
     }
     if (slots && slots.default) {
-      return slots.default(params)
+      return slots.default(params, h)
     }
     if (formatter) {
       params.cellValue = UtilTools.getCellValue(row, column)

@@ -5,6 +5,7 @@
     <vxe-toolbar>
       <template v-slot:buttons>
         <vxe-button @click="insertEvent">新增</vxe-button>
+        <vxe-button @click="$refs.xTable.removeSelecteds()">删除选中</vxe-button>
         <vxe-button @click="validEvent">校验</vxe-button>
         <vxe-button @click="fullValidEvent">完整校验</vxe-button>
         <vxe-button @click="selectValidEvent">选中校验</vxe-button>
@@ -18,6 +19,7 @@
       ref="xTable"
       border
       show-overflow
+      highlight-cell
       height="500"
       :data.sync="tableData"
       :edit-rules="validRules"
@@ -73,6 +75,7 @@ export default {
           ref="xTable"
           border
           show-overflow
+          highlight-cell
           height="500"
           :data.sync="tableData"
           :edit-rules="validRules"

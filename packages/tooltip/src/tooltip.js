@@ -1,3 +1,4 @@
+import XEUtils from 'xe-utils'
 import GlobalConfig from '../../conf'
 import { DomTools } from '../../tools'
 
@@ -66,10 +67,10 @@ export default {
       ref: 'tipWrapper'
     }, [
       h('div', {
-        class: ['vxe-table--tooltip-content']
+        class: 'vxe-table--tooltip-content'
       }, this.$slots.content || message),
       h('div', {
-        class: ['vxe-table--tooltip-arrow'],
+        class: 'vxe-table--tooltip-arrow',
         style: tipStore.arrowStyle
       })
     ].concat(this.$slots.default))
@@ -113,11 +114,13 @@ export default {
         return this.$nextTick().then(() => {
           let wrapperElem = $el
           if (wrapperElem) {
-            tipLeft = left + Math.floor((target.offsetWidth - wrapperElem.offsetWidth) / 2)
+            let clientHeight = wrapperElem.clientHeight
+            let clientWidth = XEUtils.toNumber(getComputedStyle(wrapperElem).width)
+            tipLeft = left + Math.floor((target.clientWidth - clientWidth) / 2)
             tipStore.style = {
               zIndex,
-              width: `${wrapperElem.offsetWidth}px`,
-              top: `${top - wrapperElem.offsetHeight - 6}px`,
+              width: `${clientWidth}px`,
+              top: `${top - clientHeight - 6}px`,
               left: `${tipLeft}px`
             }
             return this.$nextTick()
@@ -125,21 +128,25 @@ export default {
         }).then(() => {
           let wrapperElem = $el
           if (wrapperElem) {
-            let offsetHeight = wrapperElem.offsetHeight
-            let offsetWidth = wrapperElem.offsetWidth
-            if (top - offsetHeight < scrollTop + 6) {
+            let clientHeight = wrapperElem.clientHeight
+            let clientWidth = wrapperElem.clientWidth
+            Object.assign(tipStore.style, {
+              top: `${top - clientHeight - 6}px`,
+              left: `${tipLeft}px`
+            })
+            if (top - clientHeight < scrollTop + 6) {
               tipStore.placement = 'bottom'
-              tipStore.style.top = `${top + target.offsetHeight + 6}px`
+              tipStore.style.top = `${top + target.clientHeight + 6}px`
             }
             if (tipLeft < scrollLeft + 6) {
-            // 超出左边界
+              // 超出左边界
               tipLeft = scrollLeft + 6
               tipStore.arrowStyle.left = `${left > tipLeft + 16 ? left - tipLeft + 16 : 16}px`
               tipStore.style.left = `${tipLeft}px`
-            } else if (left + offsetWidth > scrollLeft + visibleWidth) {
-            // 超出右边界
-              tipLeft = scrollLeft + visibleWidth - offsetWidth - 6
-              tipStore.arrowStyle.left = `${offsetWidth - Math.max(Math.floor((tipLeft + offsetWidth - left) / 2), 22)}px`
+            } else if (left + clientWidth > scrollLeft + visibleWidth) {
+              // 超出右边界
+              tipLeft = scrollLeft + visibleWidth - clientWidth - 6
+              tipStore.arrowStyle.left = `${clientWidth - Math.max(Math.floor((tipLeft + clientWidth - left) / 2), 22)}px`
               tipStore.style.left = `${tipLeft}px`
             }
           }

@@ -5,6 +5,7 @@
     <vxe-table
       border
       show-overflow
+      highlight-cell
       class="vxe-table-antd"
       height="460"
       :loading="loading"
@@ -107,6 +108,7 @@ export default {
         <vxe-table
           border
           show-overflow
+          highlight-cell
           class="vxe-table-antd"
           height="460"
           :loading="loading"

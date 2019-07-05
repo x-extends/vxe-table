@@ -10,39 +10,35 @@ function defaultRenderer (h, attrs, editRender, params) {
   let { name } = editRender
   let { model } = column
   return [
-    h('div', {
-      class: 'vxe-input--wrapper'
-    }, [
-      h(name, {
-        class: `vxe-${name}`,
-        attrs,
-        domProps: {
-          value: model.value
-        },
-        on: {
-          input (evnt) {
-            let cellValue = evnt.target.value
-            model.update = true
-            model.value = cellValue
-            // UtilTools.setCellValue(row, column, evnt.target.value)
-            $table.updateStatus(params, cellValue)
-          }
+    h(name, {
+      class: `vxe-default-${name}`,
+      attrs,
+      domProps: {
+        value: model.value
+      },
+      on: {
+        input (evnt) {
+          let cellValue = evnt.target.value
+          model.update = true
+          model.value = cellValue
+          // UtilTools.setCellValue(row, column, evnt.target.value)
+          $table.updateStatus(params, cellValue)
         }
-      })
-    ])
+      }
+    })
   ]
 }
 
 const rowHeight = 24
 const _storeMap = {
   input: {
-    autofocus: '.vxe-input',
+    autofocus: 'input',
     renderEdit (h, editRender, params) {
       return defaultRenderer(h, { type: 'text' }, editRender, params)
     }
   },
   textarea: {
-    autofocus: '.vxe-textarea',
+    autofocus: 'textarea',
     renderEdit (h, editRender, params) {
       return defaultRenderer(h, null, editRender, params)
     }

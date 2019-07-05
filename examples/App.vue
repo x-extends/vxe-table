@@ -43,7 +43,7 @@
       </div>
     </div>
     <footer class="page-footer">
-      <p class="copyright">github <a class="link" href="https://github.com/xuliangzhan/vxe-table">vxe-table</a> Copyright (c) 2019-present, Xu Liangzhan</p>
+      <p class="copyright">github <a class="link" href="https://github.com/xuliangzhan/vxe-table">vxe-table</a> Copyright (c) 2019-present, Xu Liangzhan<a class="donation" href="https://github.com/xuliangzhan/vxe-table#donation" :title="$t('app.footer.donationDesc')" target="_blank">☕{{ $t('app.footer.donation') }}</a></p>
     </footer>
   </div>
 </template>

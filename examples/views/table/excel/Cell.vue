@@ -69,7 +69,7 @@ export default {
       ].concat(columns.map(name => {
         return {
           field: name,
-          label: name,
+          title: name,
           width: 76,
           headerAlign: 'center',
           editRender: {

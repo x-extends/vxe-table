@@ -118,6 +118,8 @@ export default {
     highlightCurrentColumn: Boolean,
     // 鼠标移到列是否要高亮显示
     highlightHoverColumn: Boolean,
+    // 激活单元格编辑时是否高亮显示
+    highlightCell: Boolean,
     // 是否显示表尾合计
     showFooter: Boolean,
     // 表尾合计的计算方法
@@ -514,6 +516,7 @@ export default {
       stripe,
       highlightHoverRow,
       highlightHoverColumn,
+      highlightCell,
       vSize,
       editConfig,
       validConfig = {},
@@ -538,6 +541,7 @@ export default {
     return h('div', {
       class: ['vxe-table', vSize ? `size--${vSize}` : '', {
         'vxe-editable': editConfig,
+        'c--highlight': highlightCell,
         'show--head': showHeader,
         'show--foot': showFooter,
         'scroll--y': overflowY,
@@ -685,6 +689,13 @@ export default {
       this.clearSelection()
       this.clearRowExpand()
       this.clearTreeExpand()
+      this.clearIndexChecked()
+      this.clearHeaderChecked()
+      this.clearChecked()
+      this.clearSelected()
+      this.clearActived()
+      this.clearValidate()
+      return this.$nextTick()
     },
     loadData (datas, notRefresh) {
       let { height, maxHeight, editStore, optimizeOpts, recalculate } = this
@@ -1722,7 +1733,7 @@ export default {
         }
       } else if (keyboardConfig.isEdit && !isCtrlKey && ((keyCode >= 48 && keyCode <= 57) || (keyCode >= 65 && keyCode <= 90) || (keyCode >= 96 && keyCode <= 111) || (keyCode >= 186 && keyCode <= 192) || (keyCode >= 219 && keyCode <= 222) || keyCode === 32)) {
         // 如果是按下非功能键之外允许直接编辑
-        if (selected.row || selected.column) {
+        if (selected.column && selected.row && selected.column.editRender) {
           if (!keyboardConfig.editMethod || !(keyboardConfig.editMethod(selected.args, evnt) === false)) {
             UtilTools.setCellValue(selected.row, selected.column, null)
             this.handleActived(selected.args, evnt)
@@ -2236,15 +2247,15 @@ export default {
      * 单选，设置某一行为选中状态，如果调不加参数，则会取消目前高亮行的选中状态
      */
     setCurrentRow (row) {
-      // if (this.highlightCurrentRow) {
       let rowId = UtilTools.getRowId(this, row, this.getRowMapIndex(row))
       if (this.selectRow !== row) {
         this.clearCurrentRow()
       }
       this.clearCurrentColumn()
       this.selectRow = row
-      XEUtils.arrayEach(this.$el.querySelectorAll(`[data-rowid="${rowId}"]`), elem => DomTools.addClass(elem, 'row--current'))
-      // }
+      if (this.highlightCurrentRow) {
+        XEUtils.arrayEach(this.$el.querySelectorAll(`[data-rowid="${rowId}"]`), elem => DomTools.addClass(elem, 'row--current'))
+      }
       return this.$nextTick()
     },
     clearCurrentRow () {
@@ -2685,9 +2696,9 @@ export default {
       return this.$nextTick().then(this.recalculate)
     },
     getActiveRow () {
-      let { editStore, tableData, fullDataIndexMap, fullColumnIndexMap } = this
-      let { args, row, column } = editStore.actived
-      if (args && fullDataIndexMap.has(row) && fullColumnIndexMap.has(column) && tableData.indexOf(row) > -1) {
+      let { $el, editStore, tableData } = this
+      let { args, row } = editStore.actived
+      if (args && tableData.indexOf(row) > -1 && $el.querySelectorAll('.vxe-body--column.col--actived').length) {
         return Object.assign({}, args)
       }
       return null
