@@ -854,11 +854,11 @@ export default {
         if (column.property && !XEUtils.has(recordItem, column.property)) {
           XEUtils.set(recordItem, column.property, null)
         }
-        // 如果设置了 Key 就必须要唯一，可以自行设置；如果为空，则默认生成一个随机数
-        if (rowKey && !XEUtils.get(recordItem, rowKey)) {
-          XEUtils.set(recordItem, rowKey, ++rowUniqueId + Date.now())
-        }
       })
+      // 如果设置了 Key 就必须要唯一，可以自行设置；如果为空，则默认生成一个随机数
+      if (rowKey && !XEUtils.get(recordItem, rowKey)) {
+        XEUtils.set(recordItem, rowKey, ++rowUniqueId + Date.now())
+      }
       return recordItem
     },
     /**
