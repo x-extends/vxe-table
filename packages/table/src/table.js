@@ -2285,12 +2285,14 @@ export default {
       if (editRender) {
         if (editConfig.mode === 'row' ? actived.row !== row : (actived.row !== row || actived.column !== column)) {
           // 判断是否禁用编辑
+          let type = 'edit-disabled'
           if (!activeMethod || activeMethod(params)) {
             this.clostTooltip()
             this.clearCopyed(evnt)
             this.clearChecked(evnt)
             this.clearSelected(evnt)
             this.clearActived(evnt)
+            type = 'edit-actived'
             column.renderHeight = cell.offsetHeight
             actived.args = params
             actived.row = row
@@ -2298,10 +2300,8 @@ export default {
             this.$nextTick(() => {
               this.handleFocus(params, evnt)
             })
-            UtilTools.emitEvent(this, 'edit-actived', [params, evnt])
-          } else {
-            UtilTools.emitEvent(this, 'edit-disabled', [params, evnt])
           }
+          UtilTools.emitEvent(this, type, [params, evnt])
         } else {
           column.renderHeight = cell.offsetHeight
           actived.args = params
