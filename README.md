@@ -11,8 +11,8 @@
 [![pull requests closed](https://img.shields.io/github/issues-pr-closed/xuliangzhan/vxe-table.svg)](https://github.com/xuliangzhan/vxe-table/pulls?q=is%3Apr+is%3Aclosed)
 [![npm license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/xuliangzhan/vxe-table/blob/master/LICENSE)
 
-A complete Vue Table, to meet most of the Table all requirements, and perfect compatibility with any component library.  
-一个完整 Vue 表格，满足绝大部分对 Table 的一切需求，与任意组件库完美兼容
+A fully functional Vue Table, to meet most of the Table all requirements, and perfect compatibility with any component library.  
+一个全功能的 Vue 表格，满足绝大部分对 Table 的一切需求，与任意组件库完美兼容
 
 * vxe-table 的设计理念
   * 精简的 API（简洁、高效、通用）
