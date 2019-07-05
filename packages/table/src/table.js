@@ -694,7 +694,6 @@ export default {
       this.clearChecked()
       this.clearSelected()
       this.clearActived()
-      this.clearValidate()
       return this.$nextTick()
     },
     loadData (datas, notRefresh) {
@@ -1618,10 +1617,7 @@ export default {
                 !this.getEventTargetNode(evnt, this.$el).flag
               ) {
                 // this.triggerValidate('blur').then(a => {
-                setTimeout(() => {
-                  this.clearValidate()
-                  this.clearActived(evnt)
-                })
+                setTimeout(this.clearActived)
                 // }).catch(e => e)
               }
             })
@@ -2610,7 +2606,6 @@ export default {
           // 判断是否禁用编辑
           if (!activeMethod || activeMethod(params)) {
             this.clostTooltip()
-            this.clearValidate()
             this.clearCopyed(evnt)
             this.clearChecked()
             // this.clearIndexChecked()
@@ -2693,7 +2688,7 @@ export default {
       // XEUtils.arrayEach(listElem.querySelectorAll('.col--actived'), elem => {
       //   DomTools.removeClass(elem, 'col--actived')
       // })
-      return this.$nextTick().then(this.recalculate)
+      return this.clearValidate().then(this.recalculate)
     },
     getActiveRow () {
       let { $el, editStore, tableData } = this
@@ -2738,7 +2733,6 @@ export default {
           this.clearHeaderChecked()
           this.clearSelected()
           this.clearActived(evnt)
-          this.clearValidate()
           selected.args = params
           selected.row = row
           selected.column = column
