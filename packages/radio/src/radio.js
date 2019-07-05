@@ -39,10 +39,10 @@ export default {
         }
       }),
       h('span', {
-        class: ['radio--icon']
+        class: 'radio--icon'
       }),
       $slots.default ? h('span', {
-        class: ['radio--label']
+        class: 'radio--label'
       }, $slots.default) : null
     ])
   }

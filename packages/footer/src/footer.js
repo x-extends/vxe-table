@@ -30,39 +30,23 @@ export default {
       tableColumn,
       footerData
     } = this
-    let { $listeners: tableListeners, footerRowClassName, footerCellClassName,
-      // tableWidth,
-      // scrollYWidth,
-      // scrollXHeight,
-      scrollXLoad,
-      showOverflow,
-      // scrollXStore,
-      getColumnMapIndex
-    } = $table
+    let { $listeners: tableListeners, footerRowClassName, footerCellClassName, scrollXLoad, showOverflow, getColumnMapIndex } = $table
     // 如果是使用优化模式
     if (fixedType && showOverflow) {
       tableColumn = fixedColumn
-      // tableWidth = tableColumn.reduce((previous, column) => previous + column.renderWidth, 0)
     } else if (scrollXLoad) {
       if (fixedType) {
         tableColumn = fixedColumn
       }
-      // tableWidth = tableColumn.reduce((previous, column) => previous + column.renderWidth, 0)
     }
     return h('div', {
       class: ['vxe-table--footer-wrapper', fixedType ? `fixed-${fixedType}--wrapper` : 'body--wrapper'],
-      style: {
-        // 'margin-top': `${-scrollXHeight - 1}px`
-      },
       on: {
         scroll: this.scrollEvent
       }
     }, [
       fixedType ? _e() : h('div', {
-        class: ['vxe-body--x-space'],
-        style: {
-          // width: `${$table.tableWidth}px`
-        },
+        class: 'vxe-body--x-space',
         ref: 'xSpace'
       }),
       h('table', {
@@ -71,10 +55,6 @@ export default {
           cellspacing: 0,
           cellpadding: 0,
           border: 0
-        },
-        style: {
-          // width: tableWidth === null ? tableWidth : `${tableWidth + scrollYWidth}px`,
-          // 'margin-left': fixedType ? null : `${scrollXStore.leftSpaceWidth}px`
         },
         ref: 'table'
       }, [
@@ -87,15 +67,11 @@ export default {
           return h('col', {
             attrs: {
               name: column.id
-              // width: column.renderWidth
             }
           })
         }).concat([
           h('col', {
-            name: 'col--gutter',
-            attrs: {
-              // width: scrollYWidth
-            }
+            name: 'col--gutter'
           })
         ])),
         /**
@@ -135,15 +111,12 @@ export default {
               key: columnIndex
             }, [
               h('div', {
-                class: ['vxe-cell']
+                class: 'vxe-cell'
               }, list[columnIndex] || '　')
             ])
           }).concat([
             h('td', {
-              class: ['col--gutter'],
-              style: {
-                // width: `${scrollYWidth}px`
-              }
+              class: 'col--gutter'
             })
           ]))
         }))

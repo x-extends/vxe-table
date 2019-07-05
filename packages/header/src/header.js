@@ -118,11 +118,7 @@ export default {
       showHeaderOverflow: allColumnHeaderOverflow,
       highlightCurrentColumn,
       mouseConfig = {},
-      // selectColumn,
-      // tableWidth,
       scrollXLoad,
-      // scrollXStore,
-      // scrollYWidth,
       getColumnMapIndex
     } = $table
     // 横向滚动渲染
@@ -130,16 +126,12 @@ export default {
       if (fixedType) {
         tableColumn = fixedColumn
       }
-      // tableWidth = tableColumn.reduce((previous, column) => previous + column.renderWidth, 0)
     }
     return h('div', {
       class: ['vxe-table--header-wrapper', fixedType ? `fixed-${fixedType}--wrapper` : 'body--wrapper']
     }, [
       fixedType ? _e() : h('div', {
-        class: ['vxe-body--x-space'],
-        // style: {
-        // width: `${$table.tableWidth + scrollYWidth}px`
-        // },
+        class: 'vxe-body--x-space',
         ref: 'xSpace'
       }),
       h('table', {
@@ -149,10 +141,6 @@ export default {
           cellpadding: 0,
           border: 0
         },
-        // style: {
-        // width: tableWidth === null ? tableWidth : `${tableWidth + scrollYWidth}px`,
-        // 'margin-left': fixedType ? null : `${scrollXStore.leftSpaceWidth}px`
-        // },
         ref: 'table'
       }, [
         /**
@@ -164,7 +152,6 @@ export default {
           return h('col', {
             attrs: {
               name: column.id
-              // width: column.renderWidth
             },
             key: columnIndex
           })
@@ -172,7 +159,6 @@ export default {
           h('col', {
             attrs: {
               name: 'col-gutter'
-              // width: scrollYWidth
             }
           })
         ])),
@@ -189,7 +175,6 @@ export default {
               columnKey,
               showHeaderOverflow,
               headerAlign,
-              // renderWidth,
               own
             } = column
             let isGroup = column.children && column.children.length
@@ -227,7 +212,6 @@ export default {
             return h('th', {
               class: ['vxe-header--column', column.id, {
                 [`col--${headerAlign}`]: headerAlign,
-                // 'col--current': selectColumn === column,
                 'col--index': column.type === 'index',
                 'col--ellipsis': hasEllipsis,
                 'fixed--hidden': fixedHiddenColumn,
@@ -249,9 +233,6 @@ export default {
                 }],
                 attrs: {
                   title: showTitle ? (own.title || own.label) : null
-                },
-                style: {
-                  // width: showTitle || showTooltip || showEllipsis ? `${border ? renderWidth - 1 : renderWidth}px` : null
                 }
               }, column.renderHeader(h, { $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn })),
               (XEUtils.isBoolean(column.resizable) ? column.resizable : resizable) && !fixedType && !isGroup ? h('div', {
@@ -267,10 +248,7 @@ export default {
             ])
           }).concat([
             h('th', {
-              class: ['col--gutter']
-              // style: {
-              // width: `${scrollYWidth}px`
-              // }
+              class: 'col--gutter'
             })
           ]))
         }))
@@ -279,10 +257,7 @@ export default {
        * 其他
        */
       h('div', {
-        class: ['vxe-table--repair'],
-        // style: {
-        // width: tableWidth === null ? tableWidth : `${tableWidth}px`
-        // },
+        class: 'vxe-table--repair',
         ref: 'repair'
       })
     ])

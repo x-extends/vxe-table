@@ -13,19 +13,19 @@ export default {
       style: ctxMenuStore.style
     }, ctxMenuStore.list.map((options, gIndex) => {
       return h('ul', {
-        class: ['vxe-ctxmenu--option-wrapper'],
+        class: 'vxe-ctxmenu--option-wrapper',
         key: gIndex
       }, options.map((item, index) => {
         let hasChild = item.children && item.children.length
         return h('li', {
-          class: [{
+          class: {
             'link--disabled': item.disabled,
             'link--active': item === ctxMenuStore.selected
-          }],
+          },
           key: `${gIndex}_${index}`
         }, [
           h('a', {
-            class: ['vxe-ctxmenu--link'],
+            class: 'vxe-ctxmenu--link',
             on: {
               click (evnt) {
                 $table.ctxMenuLinkEvent(evnt, item)
@@ -42,7 +42,7 @@ export default {
               class: ['vxe-ctxmenu--link-prefix', item.prefixIcon]
             }),
             h('span', {
-              class: ['vxe-ctxmenu--link-content']
+              class: 'vxe-ctxmenu--link-content'
             }, item.name),
             h('i', {
               class: ['vxe-ctxmenu--link-suffix', hasChild ? item.suffixIcon || 'suffix--haschild' : item.suffixIcon]
@@ -54,14 +54,14 @@ export default {
             }]
           }, item.children.map((child, cIndex) => {
             return h('li', {
-              class: [{
+              class: {
                 'link--disabled': child.disabled,
                 'link--active': child === ctxMenuStore.selectChild
-              }],
+              },
               key: `${gIndex}_${index}_${cIndex}`
             }, [
               h('a', {
-                class: ['vxe-ctxmenu--link'],
+                class: 'vxe-ctxmenu--link',
                 on: {
                   click (evnt) {
                     $table.ctxMenuLinkEvent(evnt, child)
@@ -78,7 +78,7 @@ export default {
                   class: ['vxe-ctxmenu--link-prefix', child.prefixIcon]
                 }),
                 h('span', {
-                  class: ['vxe-ctxmenu--link-content']
+                  class: 'vxe-ctxmenu--link-content'
                 }, child.name)
               ])
             ])

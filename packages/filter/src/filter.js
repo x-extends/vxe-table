@@ -10,14 +10,14 @@ export default {
   render (h) {
     let { filterStore, optimizeOpts } = this
     return h('div', {
-      class: ['vxe-table--filter-wrapper filter--prevent-default', {
+      class: ['vxe-table--filter-wrapper', 'filter--prevent-default', {
         't--animat': optimizeOpts.animat,
         'filter--active': filterStore.visible
       }],
       style: filterStore.style
     }, filterStore.visible ? [
       h('ul', {
-        class: ['vxe-table--filter-body']
+        class: 'vxe-table--filter-body'
       }, this.renderOptions(h)),
       this.renderFooter(h)
     ] : [])
@@ -100,10 +100,10 @@ export default {
                   }
                 }),
                 h('span', {
-                  class: ['checkbox--icon']
+                  class: 'checkbox--icon'
                 }),
                 h('span', {
-                  class: ['checkbox--label']
+                  class: 'checkbox--label'
                 }, item.label)
               ])
               : h('span', {
@@ -123,7 +123,7 @@ export default {
       let { filterStore } = this
       let { multiple } = filterStore
       return multiple ? h('div', {
-        class: ['vxe-table--filter-footer']
+        class: 'vxe-table--filter-footer'
       }, [
         h('button', {
           class: {
