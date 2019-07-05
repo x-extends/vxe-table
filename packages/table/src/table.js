@@ -725,7 +725,6 @@ export default {
       this.clearChecked()
       this.clearSelected()
       this.clearActived()
-      this.clearValidate()
       return this.$nextTick()
     },
     loadData (datas, notRefresh) {
@@ -1449,10 +1448,7 @@ export default {
               ) {
                 // this.triggerValidate('blur').then(a => {
                 // 保证 input 的 change 事件能先触发之后再清除
-                setTimeout(() => {
-                  this.clearValidate()
-                  this.clearActived(evnt)
-                })
+                setTimeout(this.clearActived)
                 // }).catch(e => e)
               }
             })
@@ -2291,7 +2287,6 @@ export default {
           // 判断是否禁用编辑
           if (!activeMethod || activeMethod(params)) {
             this.clostTooltip()
-            this.clearValidate()
             this.clearCopyed(evnt)
             this.clearChecked(evnt)
             this.clearSelected(evnt)
@@ -2333,7 +2328,7 @@ export default {
       actived.args = null
       actived.row = null
       actived.column = null
-      return this.$nextTick()
+      return this.clearValidate()
     },
     getActiveRow () {
       let { $el, editStore, tableData } = this
@@ -2367,7 +2362,6 @@ export default {
         if (selected.row !== row || selected.column !== column) {
           this.clearChecked(evnt)
           this.clearActived(evnt)
-          this.clearValidate()
           selected.args = params
           selected.row = row
           selected.column = column
