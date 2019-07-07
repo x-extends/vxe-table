@@ -20,7 +20,7 @@ A fully functional Vue Table, to meet most of the Table all requirements, and pe
   * 更加灵活的自定义配置项，更高的可扩展性（兼容任意组件库，不污染全局样式及变量）
   * 强大的功能的同时兼具性能（支持横向、纵向虚拟滚动）
 
-😉 如果有更好的建议、优化点或 Bug 都欢迎提 [Issues](https://github.com/xuliangzhan/vxe-table/issues)
+🐬 如果有更好的建议、优化点或 Bug 都欢迎提 [Issues](https://github.com/xuliangzhan/vxe-table/issues)
 
 ## Browser Support
 
