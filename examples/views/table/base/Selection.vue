@@ -91,6 +91,29 @@
       <code class="xml">{{ demoCodes[4] }}</code>
       <code class="javascript">{{ demoCodes[5] }}</code>
     </pre>
+
+    <p>多选可单选同时使用</p>
+
+    <vxe-table
+      border
+      ref="xTable4"
+      height="300"
+      :data.sync="tableData"
+      :select-config="{checkField: 'checked'}"
+      :radio-config="{labelField: 'name'}">
+      <vxe-table-column type="selection" width="60"></vxe-table-column>
+      <vxe-table-column type="radio" width="200" title="Name"></vxe-table-column>
+      <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+      <vxe-table-column field="age" title="Age"></vxe-table-column>
+      <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+    </vxe-table>
+
+    <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
+
+    <pre>
+      <code class="xml">{{ demoCodes[6] }}</code>
+      <code class="javascript">{{ demoCodes[7] }}</code>
+    </pre>
   </div>
 </template>
 
@@ -194,6 +217,33 @@ export default {
           :select-config="{checkField: 'checked', trigger: 'row'}">
           <vxe-table-column type="selection" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
+          <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+          <vxe-table-column field="age" title="Age"></vxe-table-column>
+          <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+        </vxe-table>
+        `,
+        `
+        export default {
+          data () {
+            return {
+              tableData: []
+            }
+          },
+          created () {
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 10)
+          }
+        }
+        `,
+        `
+        <vxe-table
+          border
+          ref="xTable4"
+          height="300"
+          :data.sync="tableData"
+          :select-config="{checkField: 'checked'}"
+          :radio-config="{labelField: 'name'}">
+          <vxe-table-column type="selection" width="60"></vxe-table-column>
+          <vxe-table-column type="radio" width="200" title="Name"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
           <vxe-table-column field="age" title="Age"></vxe-table-column>
           <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>

@@ -9,10 +9,6 @@ function rClass (cls) {
   return new RegExp(`(?:^|\\s)${cls}(?!\\S)`, 'g')
 }
 
-function rClassList (clss) {
-  return new RegExp(clss.map(cls => `(?:^|\\s)${cls}(?!\\S)`).join('|'), 'g')
-}
-
 const rClsMap = {}
 const preClss = [
   'c--resize',
@@ -20,32 +16,16 @@ const preClss = [
   'row--hover',
   'row--current',
   'col--current',
+  'col--checked',
+  'col--copyed',
   'col--selected',
   'col--index-checked',
   'col--title-checked',
   'scrolling--middle'
 ]
-const preClsMap = {
-  'col--checked': [
-    'col--checked-top',
-    'col--checked-bottom',
-    'col--checked-left',
-    'col--checked-right'
-  ],
-  'col--copyed': [
-    'col--copyed-top',
-    'col--copyed-bottom',
-    'col--copyed-left',
-    'col--copyed-right'
-  ]
-}
 
 preClss.forEach(cls => {
   rClsMap[cls] = rClass(cls)
-})
-
-XEUtils.each(preClsMap, (clss, cls) => {
-  rClsMap[cls] = rClassList([cls].concat(clss))
 })
 
 export const DomTools = {

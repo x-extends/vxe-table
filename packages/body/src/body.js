@@ -17,7 +17,6 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
     showOverflow: allColumnOverflow,
     cellClassName,
     spanMethod,
-    keyboardConfig = {},
     selectConfig = {},
     treeConfig = {},
     mouseConfig = {},
@@ -34,8 +33,6 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
     columnKey
   } = column
   let { actived } = editStore
-  let isMouseChecked = mouseConfig.checked
-  let isKeyboardCut = keyboardConfig.isCut
   let fixedHiddenColumn = fixedType ? column.fixed !== fixedType : column.fixed && overflowX
   let cellOverflow = XEUtils.isUndefined(showOverflow) || XEUtils.isNull(showOverflow) ? allColumnOverflow : showOverflow
   let showEllipsis = cellOverflow === 'ellipsis'
@@ -141,12 +138,6 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
         title: showTitle ? UtilTools.getCellLabel(row, column, params) : null
       }
     }, column.renderCell(h, params)),
-    isMouseChecked ? h('div', {
-      class: 'vxe-cell--checked-line'
-    }) : null,
-    isKeyboardCut ? h('div', {
-      class: 'vxe-cell--copyed-line'
-    }) : null,
     hasDefaultTip ? validError && tableData.length >= 2 ? h('div', {
       class: 'vxe-cell--valid',
       style: validStore.rule && validStore.rule.width ? {
@@ -312,7 +303,9 @@ export default {
       tableData,
       tableColumn,
       showOverflow: allColumnOverflow,
-      scrollXLoad
+      scrollXLoad,
+      mouseConfig = {},
+      keyboardConfig = {}
     } = $table
     // 如果是固定列与设置了超出隐藏
     if (fixedType && allColumnOverflow) {
@@ -368,6 +361,55 @@ export default {
           ref: 'tbody'
         }, renderRows(h, this, $table, '', 0, fixedType, tableData, tableColumn))
       ]),
+      /**
+       * 选中边框线
+       */
+      !fixedType ? h('div', {
+        class: 'vxe-table--borders'
+      }, [
+        mouseConfig.checked ? h('div', {
+          class: 'vxe-table-checked-borders',
+          ref: 'checkBorders'
+        }, [
+          h('span', {
+            class: 'vxe-table-border-top',
+            ref: 'checkTop'
+          }),
+          h('span', {
+            class: 'vxe-table-border-right',
+            ref: 'checkRight'
+          }),
+          h('span', {
+            class: 'vxe-table-border-bottom',
+            ref: 'checkBottom'
+          }),
+          h('span', {
+            class: 'vxe-table-border-left',
+            ref: 'checkLeft'
+          })
+        ]) : null,
+        keyboardConfig.isCut ? h('div', {
+          class: 'vxe-table-copyed-borders',
+          ref: 'copyBorders'
+        }, [
+          h('span', {
+            class: 'vxe-table-border-top',
+            ref: 'copyTop'
+          }),
+          h('span', {
+            class: 'vxe-table-border-right',
+            ref: 'copyRight'
+          }),
+          h('span', {
+            class: 'vxe-table-border-bottom',
+            ref: 'copyBottom'
+          }),
+          h('span', {
+            class: 'vxe-table-border-left',
+            ref: 'copyLeft'
+          })
+        ]) : null
+      ]) : null,
       !fixedType && !tableData.length ? h('div', {
         class: 'vxe-table--empty-block'
       }, [

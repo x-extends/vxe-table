@@ -1693,7 +1693,7 @@ export default {
         if (isX || isC) {
           this.handleCopyed(isX, evnt)
         } else {
-          // this.handlePaste(evnt)
+          this.handlePaste(evnt)
         }
       } else if (keyboardConfig.isEdit && !isCtrlKey && ((keyCode >= 48 && keyCode <= 57) || (keyCode >= 65 && keyCode <= 90) || (keyCode >= 96 && keyCode <= 111) || (keyCode >= 186 && keyCode <= 192) || (keyCode >= 219 && keyCode <= 222) || keyCode === 32)) {
         // 如果是按下非功能键之外允许直接编辑
@@ -2652,6 +2652,7 @@ export default {
         // 如果配置了批量选中功能，则为批量选中状态
         if (mouseConfig.checked) {
           let headerElem = elemStore['main-header-list']
+          this.handleChecked([[cell]])
           this.handleHeaderChecked([[headerElem.querySelector(`.${column.id}`)]])
           this.handleIndexChecked([[cell.parentNode.querySelector('.col--index')]])
         }
@@ -2663,14 +2664,16 @@ export default {
      * 清除所有选中状态
      */
     clearChecked (evnt) {
-      let { editStore, elemStore } = this
+      let { $refs, editStore } = this
       let { checked } = editStore
-      let bodyElem = elemStore['main-body-list']
+      let tableBody = $refs.tableBody
       checked.rows = []
       checked.columns = []
       checked.tRows = []
       checked.tColumns = []
-      XEUtils.arrayEach(bodyElem.querySelectorAll('.col--checked'), elem => DomTools.removeClass(elem, 'col--checked'))
+      let { checkBorders } = tableBody.$refs
+      checkBorders.style.display = 'none'
+      XEUtils.arrayEach(tableBody.$el.querySelectorAll('.col--checked'), elem => DomTools.removeClass(elem, 'col--checked'))
       return this.$nextTick()
     },
     /**
@@ -2679,26 +2682,48 @@ export default {
     handleChecked (rowNodes) {
       let { checked } = this.editStore
       this.clearChecked()
+      let cWidth = 0
+      let cHeight = 0
+      let offsetTop = 0
+      let offsetLeft = 0
       rowNodes.forEach((rows, rowIndex) => {
         let isTop = rowIndex === 0
-        let isBottom = rowIndex === rowNodes.length - 1
         rows.forEach((elem, colIndex) => {
           let isLeft = colIndex === 0
-          let isRight = colIndex === rows.length - 1
-          DomTools.addClass(elem, 'col--checked')
-          if (isTop) {
-            DomTools.addClass(elem, 'col--checked-top')
+          if (isLeft && isTop) {
+            offsetTop = elem.offsetTop
+            offsetLeft = elem.offsetLeft
           }
-          if (isBottom) {
-            DomTools.addClass(elem, 'col--checked-bottom')
+          if (isTop) {
+            cWidth += elem.offsetWidth
           }
           if (isLeft) {
-            DomTools.addClass(elem, 'col--checked-left')
+            cHeight += elem.offsetHeight
           }
-          if (isRight) {
-            DomTools.addClass(elem, 'col--checked-right')
-          }
+          DomTools.addClass(elem, 'col--checked')
         })
+      })
+      let { checkBorders, checkTop, checkRight, checkBottom, checkLeft } = this.$refs.tableBody.$refs
+      checkBorders.style.display = 'block'
+      Object.assign(checkTop.style, {
+        top: `${offsetTop}px`,
+        left: `${offsetLeft}px`,
+        width: `${cWidth}px`
+      })
+      Object.assign(checkRight.style, {
+        top: `${offsetTop}px`,
+        left: `${offsetLeft + cWidth}px`,
+        height: `${cHeight}px`
+      })
+      Object.assign(checkBottom.style, {
+        top: `${offsetTop + cHeight}px`,
+        left: `${offsetLeft}px`,
+        width: `${cWidth}px`
+      })
+      Object.assign(checkLeft.style, {
+        top: `${offsetTop}px`,
+        left: `${offsetLeft}px`,
+        height: `${cHeight}px`
       })
       checked.rowNodes = rowNodes
     },
@@ -2769,83 +2794,117 @@ export default {
      * 清空已复制的内容
      */
     clearCopyed () {
-      let { editStore, elemStore } = this
+      let { $refs, editStore } = this
       let { copyed } = editStore
-      let bodyElem = elemStore['main-body-list']
+      let tableBody = $refs.tableBody
       copyed.cut = false
       copyed.rows = []
       copyed.columns = []
-      XEUtils.arrayEach(bodyElem.querySelectorAll('.col--copyed'), elem => DomTools.removeClass(elem, 'col--copyed'))
+      let { copyBorders } = this.$refs.tableBody.$refs
+      copyBorders.style.display = 'none'
+      XEUtils.arrayEach(tableBody.$el.querySelectorAll('.col--copyed'), elem => DomTools.removeClass(elem, 'col--copyed'))
       return this.$nextTick()
     },
     /**
      * 处理复制
      */
     handleCopyed (cut, evnt) {
-      let { editStore } = this
+      let { tableData, tableColumn, editStore } = this
       let { copyed, checked } = editStore
       let rowNodes = checked.rowNodes
       this.clearCopyed()
+      let cWidth = 0
+      let cHeight = 0
+      let offsetTop = 0
+      let offsetLeft = 0
+      let columns = []
+      let rows = []
+      if (rowNodes.length) {
+        let firstRows = rowNodes[0]
+        let { rowIndex, columnIndex } = DomTools.getCellNodeIndex(firstRows[0])
+        columns = tableColumn.slice(columnIndex, columnIndex + firstRows.length)
+        rows = tableData.slice(rowIndex, rowIndex + rowNodes.length)
+      }
       rowNodes.forEach((rows, rowIndex) => {
         let isTop = rowIndex === 0
-        let isBottom = rowIndex === rowNodes.length - 1
         rows.forEach((elem, colIndex) => {
           let isLeft = colIndex === 0
-          let isRight = colIndex === rows.length - 1
-          DomTools.addClass(elem, 'col--copyed')
-          if (isTop) {
-            DomTools.addClass(elem, 'col--copyed-top')
+          if (isLeft && isTop) {
+            offsetTop = elem.offsetTop
+            offsetLeft = elem.offsetLeft
           }
-          if (isBottom) {
-            DomTools.addClass(elem, 'col--copyed-bottom')
+          if (isTop) {
+            cWidth += elem.offsetWidth
           }
           if (isLeft) {
-            DomTools.addClass(elem, 'col--copyed-left')
+            cHeight += elem.offsetHeight
           }
-          if (isRight) {
-            DomTools.addClass(elem, 'col--copyed-right')
-          }
+          DomTools.addClass(elem, 'col--copyed')
         })
       })
+      let { copyBorders, copyTop, copyRight, copyBottom, copyLeft } = this.$refs.tableBody.$refs
+      copyBorders.style.display = 'block'
+      Object.assign(copyTop.style, {
+        top: `${offsetTop}px`,
+        left: `${offsetLeft}px`,
+        width: `${cWidth}px`
+      })
+      Object.assign(copyRight.style, {
+        top: `${offsetTop}px`,
+        left: `${offsetLeft + cWidth}px`,
+        height: `${cHeight}px`
+      })
+      Object.assign(copyBottom.style, {
+        top: `${offsetTop + cHeight}px`,
+        left: `${offsetLeft}px`,
+        width: `${cWidth}px`
+      })
+      Object.assign(copyLeft.style, {
+        top: `${offsetTop}px`,
+        left: `${offsetLeft}px`,
+        height: `${cHeight}px`
+      })
       copyed.cut = cut
-      copyed.rows = checked.rows
-      copyed.columns = checked.columns
+      copyed.rows = rows
+      copyed.columns = columns
       copyed.rowNodes = rowNodes
     },
     /**
      * 处理粘贴
      */
-    // handlePaste (evnt) {
-    //   let { tableData, visibleColumn, editStore } = this
-    //   let { copyed, selected } = editStore
-    //   let { cut, rows, columns } = copyed
-    //   if (rows.length && columns.length && selected.row && selected.column) {
-    //     let { rowIndex, columnIndex } = selected.args
-    //     // let start = { rowIndex, columnIndex }
-    //     // let end = {
-    //     //   rowIndex: rowIndex + rows.length - 1,
-    //     //   columnIndex: columnIndex + columns.length - 1
-    //     // }
-    //     rows.forEach((row, rIndex) => {
-    //       let offsetRow = tableData[rowIndex + rIndex]
-    //       if (offsetRow) {
-    //         columns.forEach((column, cIndex) => {
-    //           let offsetColumn = visibleColumn[columnIndex + cIndex]
-    //           if (offsetColumn) {
-    //             UtilTools.setCellValue(offsetRow, offsetColumn, UtilTools.getCellValue(row, column))
-    //           }
-    //           if (cut) {
-    //             UtilTools.setCellValue(row, column, null)
-    //           }
-    //         })
-    //       }
-    //     })
-    //     if (cut) {
-    //       this.clearCopyed()
-    //     }
-    //     // this.handleOldChecked(start, end, evnt)
-    //   }
-    // },
+    handlePaste (evnt) {
+      let { tableData, visibleColumn, editStore, elemStore } = this
+      let { copyed, selected } = editStore
+      let { cut, rows, columns } = copyed
+      if (rows.length && columns.length && selected.row && selected.column) {
+        let { rowIndex, columnIndex } = selected.args
+        rows.forEach((row, rIndex) => {
+          let offsetRow = tableData[rowIndex + rIndex]
+          if (offsetRow) {
+            columns.forEach((column, cIndex) => {
+              let offsetColumn = visibleColumn[columnIndex + cIndex]
+              if (offsetColumn) {
+                UtilTools.setCellValue(offsetRow, offsetColumn, UtilTools.getCellValue(row, column))
+              }
+              if (cut) {
+                UtilTools.setCellValue(row, column, null)
+              }
+            })
+          }
+        })
+        if (cut) {
+          this.clearCopyed()
+        }
+        let bodyList = elemStore['main-body-list'].children
+        let cell = selected.args.cell
+        let trElem = cell.parentNode
+        let colIndex = XEUtils.arrayIndexOf(trElem.children, cell)
+        let rIndex = XEUtils.arrayIndexOf(bodyList, trElem)
+        let targetTrElem = bodyList[rIndex + rows.length - 1]
+        let targetCell = targetTrElem.children[colIndex + columns.length - 1]
+        this.handleChecked(DomTools.getRowNodes(bodyList, DomTools.getCellNodeIndex(cell), DomTools.getCellNodeIndex(targetCell)))
+      }
+    },
     /**
      * 处理聚焦
      */

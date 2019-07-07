@@ -7,6 +7,40 @@
   overflow-x: auto;
 }
 
+.vxe-table--borders {
+  .vxe-table-border-top,
+  .vxe-table-border-right,
+  .vxe-table-border-bottom,
+  .vxe-table-border-left {
+    position: absolute;
+    background-color: $vxe-primary-color;
+  }
+  .vxe-table-checked-borders {
+    .vxe-table-border-top,
+    .vxe-table-border-bottom {
+      height: $vxe-table-column-checked-border-width;
+    }
+    .vxe-table-border-right,
+    .vxe-table-border-left {
+      width: $vxe-table-column-checked-border-width;
+    }
+  }
+  .vxe-table-copyed-borders {
+    .vxe-table-border-top,
+    .vxe-table-border-bottom {
+      height: #{$vxe-table-column-checked-border-width + 1};
+    }
+    .vxe-table-border-right,
+    .vxe-table-border-left {
+      width: #{$vxe-table-column-checked-border-width + 1};
+    }
+    & > span {
+      background: repeating-linear-gradient(135deg, transparent, transparent 3px, $vxe-primary-color 3px, $vxe-primary-color 9px);
+      animation: shine 1s infinite linear;
+    }
+  }
+}
+
 .vxe-body--row {
   .vxe-body--column {
     &.col--checked {
@@ -14,142 +48,6 @@
       background-color: $vxe-table-column-checked-background-color;
       border-right-color: $vxe-table-column-checked-border-color;
       border-bottom-color: $vxe-table-column-checked-border-color;
-      &.col--checked-top {
-        .vxe-cell--checked-line {
-          border-top-width: $vxe-table-column-checked-border-width;
-        }
-      }
-      &.col--checked-bottom {
-        .vxe-cell--checked-line {
-          border-bottom-width: $vxe-table-column-checked-border-width;
-        }
-      }
-      &.col--checked-left {
-        .vxe-cell--checked-line {
-          border-left-width: $vxe-table-column-checked-border-width;
-        }
-      }
-      &.col--checked-right {
-        .vxe-cell--checked-line {
-          border-right-width: $vxe-table-column-checked-border-width;
-        }
-      }
-      &.col--checked-top,
-      &.col--checked-bottom,
-      &.col--checked-left,
-      &.col--checked-right {
-        .vxe-cell--checked-line {
-          display: block;
-        }
-      }
-      &.col--selected {
-        &:after {
-          display: none;
-        }
-      }
-      &.col--actived {
-        .vxe-cell--checked-line {
-          display: none;
-        }
-      }
-      .vxe-cell--checked-line {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        border-width: 0;
-        border-style: solid;
-        border-color: $vxe-primary-color;
-        z-index: 1;
-        pointer-events: none;
-      }
-    }
-    &.col--copyed {
-      position: relative;
-      &.col--copyed-top {
-        &.col--checked-top {
-          .vxe-cell--copyed-line {
-            &:after {
-              top: #{$vxe-table-column-checked-border-width + 1};
-              height: calc(100% - #{$vxe-table-column-checked-border-width + 1});
-            }
-          }
-        }
-        .vxe-cell--copyed-line {
-          &:after {
-            top: $vxe-table-column-checked-border-width;
-            height: calc(100% - #{$vxe-table-column-checked-border-width});
-          }
-        }
-      }
-      &.col--copyed-bottom {
-        &.col--checked-bottom {
-          .vxe-cell--copyed-line {
-            &:after {
-              height: calc(100% - #{$vxe-table-column-checked-border-width + 1});
-            }
-          }
-        }
-        .vxe-cell--copyed-line {
-          &:after {
-            height: calc(100% - #{$vxe-table-column-checked-border-width});
-          }
-        }
-      }
-      &.col--copyed-left {
-        &.col--checked-left {
-          .vxe-cell--copyed-line {
-            &:after {
-              left: #{$vxe-table-column-checked-border-width + 1};
-              width: calc(100% - #{$vxe-table-column-checked-border-width + 1});
-            }
-          }
-        }
-        .vxe-cell--copyed-line {
-          &:after {
-            left: $vxe-table-column-checked-border-width;
-            width: calc(100% - #{$vxe-table-column-checked-border-width});
-          }
-        }
-      }
-      &.col--copyed-right {
-        &.col--checked-right {
-          .vxe-cell--copyed-line {
-            &:after {
-              width: calc(100% - #{$vxe-table-column-checked-border-width + 1});
-            }
-          }
-        }
-        .vxe-cell--copyed-line {
-          &:after {
-            width: calc(100% - #{$vxe-table-column-checked-border-width});
-          }
-        }
-      }
-      .vxe-cell--copyed-line {
-        display: block;
-        pointer-events: none;
-        &:before {
-          content: "";
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          background: repeating-linear-gradient(135deg,transparent,transparent 3px,$vxe-primary-color 0,$vxe-primary-color 9px);
-          animation: shine 1s linear infinite;
-        }
-        &:after {
-          content: "";
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          background-color: #fff;
-        }
-      }
     }
     &.col--selected {
       background-color: #fff;

@@ -8,9 +8,7 @@
   white-space: nowrap;
 }
 
-.vxe-table-hidden-column,
-.vxe-cell--checked-line,
-.vxe-cell--copyed-line {
+.vxe-table-hidden-column {
   display: none;
 }
 
@@ -323,6 +321,7 @@
   .vxe-table--header-wrapper,
   .vxe-table--body-wrapper,
   .vxe-table--footer-wrapper {
+    position: relative;
     &.fixed-left--wrapper,
     &.fixed-right--wrapper {
       position: absolute;
@@ -561,9 +560,6 @@
       padding: 0;
       &.col--actived {
         padding: 0;
-      }
-      &.col--selected {
-        box-shadow: inset 0px 0px 0px 2px $vxe-primary-color;
       }
       &.col--dirty {
         &:before {

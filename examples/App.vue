@@ -656,19 +656,19 @@ export default {
             }
           ]
         },
-        // {
-        //   label: 'app.aside.nav.excel',
-        //   value: 'excel',
-        //   expand: false,
-        //   children: [
-        //     {
-        //       label: 'app.aside.nav.cell',
-        //       locat: {
-        //         name: 'TableExcelCell'
-        //       }
-        //     }
-        //   ]
-        // },
+        {
+          label: 'app.aside.nav.excel',
+          value: 'excel',
+          expand: false,
+          children: [
+            {
+              label: 'app.aside.nav.cell',
+              locat: {
+                name: 'TableExcelCell'
+              }
+            }
+          ]
+        },
         {
           label: 'app.aside.nav.other',
           value: 'other',

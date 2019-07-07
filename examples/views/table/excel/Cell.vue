@@ -1,7 +1,6 @@
 <template>
   <div>
     <p>使用 vxe-excel 渲染 Excel 表格</p>
-    <p class="red">注意：暂时只能支持少量数据，不建议使用（重构中...）</p>
 
     <vxe-toolbar>
       <template v-slot:buttons>
@@ -77,7 +76,7 @@ export default {
           }
         }
       })),
-      tableData: Array.from(new Array(100)).map((num, index) => {
+      tableData: Array.from(new Array(20)).map((num, index) => {
         let item = { id: index }
         columns.forEach(name => {
           item[name] = ''
