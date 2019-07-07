@@ -229,6 +229,9 @@
     white-space: normal;
     word-break: break-word;
     padding: 0 10px;
+    .vxe-checkbox {
+      vertical-align: middle;
+    }
   }
   .vxe-header--column,
   .vxe-body--column {
