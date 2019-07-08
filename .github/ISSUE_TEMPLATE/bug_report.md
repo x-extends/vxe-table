@@ -1,7 +1,7 @@
 ---
 name: Bug report
 about: 有 Bug
-title: 请将问题描述清楚、并提供问题重现链接或报错信息，否则可能会被关闭！
+title: 请将问题描述清楚、并提供问题重现链接、报错信息，否则可能会被关闭！
 labels: bug
 assignees: ''
 
