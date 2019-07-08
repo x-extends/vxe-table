@@ -4,6 +4,7 @@
 
     <vxe-grid
       border
+      show-overflow
       height="306"
       :pager-config="tablePage"
       :proxy-config="tableProxy"
@@ -22,6 +23,7 @@
 
     <vxe-grid
       border
+      show-overflow
       height="290"
       :loading="loading2"
       :pager-config="tablePage2"
@@ -81,6 +83,7 @@ export default {
         { field: 'name', title: '列名称', width: 100, editRender: { name: 'input' } },
         { field: 'type', title: '列类型', width: 100, editRender: { name: 'input' } },
         { field: 'width', title: '列宽度', width: 100, editRender: { name: 'input' } },
+        { field: 'link', title: '是否链接', width: 150, editRender: { name: 'input' } },
         { field: 'isEdit', title: '是否编辑', width: 100, editRender: { name: 'input' } },
         { field: 'required', title: '是否必填', width: 140, editRender: { name: 'input' } },
         { field: 'validator', title: '校验规则', width: 140, editRender: { name: 'input' } },
@@ -121,6 +124,7 @@ export default {
         `
         <vxe-grid
           border
+          show-overflow
           height="306"
           :pager-config="tablePage"
           :proxy-config="tableProxy"
@@ -164,6 +168,7 @@ export default {
                 { field: 'name', title: '列名称', width: 100, editRender: { name: 'input' } },
                 { field: 'type', title: '列类型', width: 100, editRender: { name: 'input' } },
                 { field: 'width', title: '列宽度', width: 100, editRender: { name: 'input' } },
+                { field: 'link', title: '是否链接', width: 150, editRender: { name: 'input' } },
                 { field: 'isEdit', title: '是否编辑', width: 100, editRender: { name: 'input' } },
                 { field: 'required', title: '是否必填', width: 140, editRender: { name: 'input' } },
                 { field: 'validator', title: '校验规则', width: 140, editRender: { name: 'input' } },
@@ -184,6 +189,7 @@ export default {
         `
         <vxe-grid
           border
+          show-overflow
           height="530"
           :loading="loading"
           :pager-config="tablePage"
@@ -235,7 +241,25 @@ export default {
               this.loading = true
               XEAjax.getJSON('/api/column/list', { sort: 'seq', order: 'asc' }).then(data => {
                 let validRules = {}
-                this.tableColumn = data.map(item => {
+                this.tableColumn2 = data.map(item => {
+                  let config = {
+                    title: item.name,
+                    width: item.width,
+                    slots: {
+                      default: ({ row, column }) => {
+                        // 渲染链接
+                        if (item.link) {
+                          return [
+                            <a class="link" href={ item.link }>{ row[column.property] }</a>
+                          ]
+                        }
+                        // 渲染文本
+                        return [
+                          <span>{ row[column.property] }</span>
+                        ]
+                      }
+                    }
+                  }
                   // 动态生成校验
                   if (item.required) {
                     validRules[item.key] = [
@@ -251,24 +275,17 @@ export default {
                       ]
                     }
                   }
-                  // 动态生成列
+                  if (item.key) {
+                    config.field = item.key
+                  }
                   if (item.type) {
-                    return {
-                      title: item.name,
-                      width: item.width,
-                      type: item.type
-                    }
+                    config.type = item.type
                   }
-                  return {
-                    field: item.key,
-                    title: item.name,
-                    width: item.width,
-                    editRender: { name: 'input' }
+                  if (item.isEdit) {
+                    config.editRender = { name: 'input' }
                   }
+                  return config
                 })
-                this.validRules = validRules
-                this.loading = false
-              })
             },
             formatterDate ({ cellValue }) {
               return XEUtils.toDateString(cellValue, 'yyyy-MM-dd HH:mm:ss')
@@ -300,6 +317,24 @@ export default {
       XEAjax.getJSON('/api/column/list', { sort: 'seq', order: 'asc' }).then(data => {
         let validRules = {}
         this.tableColumn2 = data.map(item => {
+          let config = {
+            title: item.name,
+            width: item.width,
+            slots: {
+              default: ({ row, column }) => {
+                // 渲染链接
+                if (item.link) {
+                  return [
+                    <a class="link" href={ item.link }>{ row[column.property] }</a>
+                  ]
+                }
+                // 渲染文本
+                return [
+                  <span>{ row[column.property] }</span>
+                ]
+              }
+            }
+          }
           // 动态生成校验
           if (item.required) {
             validRules[item.key] = [
@@ -315,20 +350,16 @@ export default {
               ]
             }
           }
-          // 动态生成列
+          if (item.key) {
+            config.field = item.key
+          }
           if (item.type) {
-            return {
-              title: item.name,
-              width: item.width,
-              type: item.type
-            }
+            config.type = item.type
           }
-          return {
-            field: item.key,
-            title: item.name,
-            width: item.width,
-            editRender: { name: 'input' }
+          if (item.isEdit) {
+            config.editRender = { name: 'input' }
           }
+          return config
         })
         this.validRules2 = validRules
         this.loading2 = false
