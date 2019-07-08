@@ -1699,6 +1699,14 @@ const apis = [
         list: []
       },
       {
+        name: 'updateFooter()',
+        desc: '更新表尾合计（对于某些需要频繁更新的场景下可能会用到）',
+        type: 'Promise',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'updateStatus(scope)',
         desc: '更新单元格状态（只对 showStatus=true 并且使用自定义渲染时，当值发生改变时才需要调用）',
         type: 'Promise',

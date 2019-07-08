@@ -636,6 +636,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.footer',
+              locat: {
+                name: 'TableEditFooter'
+              }
+            },
+            {
               label: 'app.aside.nav.template',
               locat: {
                 name: 'TableEditTemplate'
