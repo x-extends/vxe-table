@@ -2247,7 +2247,7 @@ export default {
      * 表头按下事件
      */
     triggerHeaderCellMousedownEvent (evnt, params) {
-      let { $el, mouseConfig = {}, elemStore, handleChecked, handleHeaderChecked, handleIndexChecked } = this
+      let { $el, tableData, mouseConfig = {}, elemStore, handleChecked, handleHeaderChecked, handleIndexChecked } = this
       let { button } = evnt
       let { column, cell } = params
       let isLeftBtn = button === 0
@@ -2298,6 +2298,14 @@ export default {
           handleHeaderChecked([[cell]])
           if (bodyList.length) {
             let endCell = bodyList[bodyList.length - 1].querySelector(`.${column.id}`)
+            let firstTrElem = bodyList[0]
+            let lastTrElem = bodyList[bodyList.length - 1]
+            let firstCell = firstTrElem.querySelector(`.col--index`)
+            params.rowIndex = 0
+            params.row = tableData[0]
+            params.cell = DomTools.getCell(this, params)
+            this.handleSelected(params, evnt)
+            this.handleIndexChecked(DomTools.getRowNodes(bodyList, DomTools.getCellNodeIndex(firstCell), DomTools.getCellNodeIndex(lastTrElem.querySelector(`.col--index`))))
             this.handleChecked(DomTools.getRowNodes(bodyList, DomTools.getCellNodeIndex(startCell), DomTools.getCellNodeIndex(endCell)))
           }
         }
@@ -2343,7 +2351,6 @@ export default {
           this.clearIndexChecked()
           let domMousemove = document.onmousemove
           let domMouseup = document.onmouseup
-          // let start = DomTools.getCellIndexs(cell)
           let startCellNode = DomTools.getCellNodeIndex(cell)
           let isIndex = column.type === 'index'
           let bodyList = elemStore['main-body-list'].children
@@ -2360,7 +2367,7 @@ export default {
                 let firstCell = targetElem.parentNode.firstElementChild
                 handleChecked(DomTools.getRowNodes(bodyList, DomTools.getCellNodeIndex(firstCell.nextElementSibling), DomTools.getCellNodeIndex(cellLastElementChild)))
                 handleIndexChecked(DomTools.getRowNodes(bodyList, DomTools.getCellNodeIndex(firstCell), DomTools.getCellNodeIndex(cell)))
-              } else {
+              } else if (!DomTools.hasClass(targetElem, 'col--index')) {
                 let firstCell = targetElem.parentNode.firstElementChild
                 let colIndex = [].indexOf.call(targetElem.parentNode.children, targetElem)
                 let head = headerList[0].children[colIndex]
@@ -2377,8 +2384,12 @@ export default {
           }
           if (isIndex) {
             let firstCell = cell.parentNode.firstElementChild
-            this.clearSelected()
+            params.columnIndex++
+            params.column = visibleColumn[params.columnIndex]
+            params.cell = cell.nextElementSibling
+            this.handleSelected(params, evnt)
             handleChecked(DomTools.getRowNodes(bodyList, DomTools.getCellNodeIndex(firstCell.nextElementSibling), DomTools.getCellNodeIndex(cellLastElementChild)))
+            handleHeaderChecked([headerList[0].querySelectorAll('.vxe-header--column:not(.col--index)')])
             handleIndexChecked(DomTools.getRowNodes(bodyList, DomTools.getCellNodeIndex(firstCell), DomTools.getCellNodeIndex(cell)))
           } else {
             this.handleSelected(params, evnt)
@@ -2664,16 +2675,18 @@ export default {
      * 清除所有选中状态
      */
     clearChecked (evnt) {
-      let { $refs, editStore } = this
+      let { $refs, editStore, mouseConfig } = this
       let { checked } = editStore
-      let tableBody = $refs.tableBody
-      checked.rows = []
-      checked.columns = []
-      checked.tRows = []
-      checked.tColumns = []
-      let { checkBorders } = tableBody.$refs
-      checkBorders.style.display = 'none'
-      XEUtils.arrayEach(tableBody.$el.querySelectorAll('.col--checked'), elem => DomTools.removeClass(elem, 'col--checked'))
+      if (mouseConfig && mouseConfig.checked) {
+        let tableBody = $refs.tableBody
+        checked.rows = []
+        checked.columns = []
+        checked.tRows = []
+        checked.tColumns = []
+        let { checkBorders } = tableBody.$refs
+        checkBorders.style.display = 'none'
+        XEUtils.arrayEach(tableBody.$el.querySelectorAll('.col--checked'), elem => DomTools.removeClass(elem, 'col--checked'))
+      }
       return this.$nextTick()
     },
     /**
@@ -2682,13 +2695,13 @@ export default {
     handleChecked (rowNodes) {
       let { checked } = this.editStore
       this.clearChecked()
-      let cWidth = 0
-      let cHeight = 0
+      let cWidth = -2
+      let cHeight = -2
       let offsetTop = 0
       let offsetLeft = 0
-      rowNodes.forEach((rows, rowIndex) => {
+      XEUtils.arrayEach(rowNodes, (rows, rowIndex) => {
         let isTop = rowIndex === 0
-        rows.forEach((elem, colIndex) => {
+        XEUtils.arrayEach(rows, (elem, colIndex) => {
           let isLeft = colIndex === 0
           if (isLeft && isTop) {
             offsetTop = elem.offsetTop
@@ -2730,8 +2743,8 @@ export default {
     handleIndexChecked (rowNodes) {
       let { indexs } = this.editStore
       this.clearIndexChecked()
-      rowNodes.forEach(rows => {
-        rows.forEach(elem => {
+      XEUtils.arrayEach(rowNodes, rows => {
+        XEUtils.arrayEach(rows, elem => {
           DomTools.addClass(elem, 'col--index-checked')
         })
       })
@@ -2746,8 +2759,8 @@ export default {
     handleHeaderChecked (rowNodes) {
       let { titles } = this.editStore
       this.clearHeaderChecked()
-      rowNodes.forEach(rows => {
-        rows.forEach(elem => {
+      XEUtils.arrayEach(rowNodes, rows => {
+        XEUtils.arrayEach(rows, elem => {
           DomTools.addClass(elem, 'col--title-checked')
         })
       })
@@ -2794,15 +2807,17 @@ export default {
      * 清空已复制的内容
      */
     clearCopyed () {
-      let { $refs, editStore } = this
+      let { $refs, editStore, keyboardConfig } = this
       let { copyed } = editStore
-      let tableBody = $refs.tableBody
-      copyed.cut = false
-      copyed.rows = []
-      copyed.columns = []
-      let { copyBorders } = this.$refs.tableBody.$refs
-      copyBorders.style.display = 'none'
-      XEUtils.arrayEach(tableBody.$el.querySelectorAll('.col--copyed'), elem => DomTools.removeClass(elem, 'col--copyed'))
+      if (keyboardConfig && keyboardConfig.isCut) {
+        let tableBody = $refs.tableBody
+        copyed.cut = false
+        copyed.rows = []
+        copyed.columns = []
+        let { copyBorders } = this.$refs.tableBody.$refs
+        copyBorders.style.display = 'none'
+        XEUtils.arrayEach(tableBody.$el.querySelectorAll('.col--copyed'), elem => DomTools.removeClass(elem, 'col--copyed'))
+      }
       return this.$nextTick()
     },
     /**
@@ -2813,8 +2828,8 @@ export default {
       let { copyed, checked } = editStore
       let rowNodes = checked.rowNodes
       this.clearCopyed()
-      let cWidth = 0
-      let cHeight = 0
+      let cWidth = -3
+      let cHeight = -3
       let offsetTop = 0
       let offsetLeft = 0
       let columns = []
@@ -2825,9 +2840,9 @@ export default {
         columns = tableColumn.slice(columnIndex, columnIndex + firstRows.length)
         rows = tableData.slice(rowIndex, rowIndex + rowNodes.length)
       }
-      rowNodes.forEach((rows, rowIndex) => {
+      XEUtils.arrayEach(rowNodes, (rows, rowIndex) => {
         let isTop = rowIndex === 0
-        rows.forEach((elem, colIndex) => {
+        XEUtils.arrayEach(rows, (elem, colIndex) => {
           let isLeft = colIndex === 0
           if (isLeft && isTop) {
             offsetTop = elem.offsetTop
@@ -2878,10 +2893,10 @@ export default {
       let { cut, rows, columns } = copyed
       if (rows.length && columns.length && selected.row && selected.column) {
         let { rowIndex, columnIndex } = selected.args
-        rows.forEach((row, rIndex) => {
+        XEUtils.arrayEach(rows, (row, rIndex) => {
           let offsetRow = tableData[rowIndex + rIndex]
           if (offsetRow) {
-            columns.forEach((column, cIndex) => {
+            XEUtils.arrayEach(columns, (column, cIndex) => {
               let offsetColumn = visibleColumn[columnIndex + cIndex]
               if (offsetColumn) {
                 UtilTools.setCellValue(offsetRow, offsetColumn, UtilTools.getCellValue(row, column))

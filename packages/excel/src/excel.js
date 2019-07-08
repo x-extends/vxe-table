@@ -131,14 +131,14 @@ export default {
         editConfig: Object.assign({}, excelEditConfig, editConfig),
         optimization: {
           scrollX: {
-            gt: 1000,
+            gt: 100,
             oSize: 6,
-            rSize: 18
+            rSize: 20
           },
           scrollY: {
-            gt: 5000,
+            gt: 100,
             oSize: 30,
-            rSize: 100
+            rSize: 80
           }
         }
       }
