@@ -563,6 +563,11 @@
       &.col--actived {
         padding: 0;
       }
+      &.col--selected {
+        &:not(.col--checked) {
+          box-shadow: inset 0px 0px 0px 2px $vxe-primary-color;
+        }
+      }
       &.col--dirty {
         &:before {
           content: "";

@@ -215,6 +215,8 @@ export default {
       selection: [],
       // 单选属性，选中行
       selectRow: null,
+      // 表尾合计数据
+      footerData: [],
       // 已展开的行
       expandeds: [],
       // 已展开树节点
@@ -340,16 +342,12 @@ export default {
         })
       })
       return rest
-    },
-    footerData () {
-      let { showFooter, visibleColumn, tableFullData, data, footerMethod } = this
-      return showFooter && footerMethod && (visibleColumn.length || data) ? footerMethod({ columns: visibleColumn, data: tableFullData }) : ['-']
     }
   },
   watch: {
     data (value) {
       if (!this._isUpdateData) {
-        this.loadData(value, true).then(this.handleDefaultExpand)
+        this.loadData(value, true).then(this.handleDefault)
       }
       this._isUpdateData = false
     },
@@ -448,7 +446,7 @@ export default {
         this.mergeCustomColumn(customs)
       }
       this.refreshColumn()
-      this.handleDefaultExpand()
+      this.handleDefault()
       this.updateStyle()
     })
     GlobalEvent.on(this, 'mousedown', this.handleGlobalMousedownEvent)
@@ -716,7 +714,7 @@ export default {
     },
     reloadData (datas) {
       this.clearAll()
-      return this.loadData(datas).then(this.handleDefaultExpand)
+      return this.loadData(datas).then(this.handleDefault)
     },
     loadColumn (columns) {
       let collectColumn = XEUtils.mapTree(columns, column => Cell.createColumn(this, column), this.headerProps)
@@ -1107,7 +1105,7 @@ export default {
       let fullData = force ? this.updateAfterFullData() : this.afterFullData
       return { fullData, tableData: scrollYLoad ? fullData.slice(scrollYStore.startIndex, scrollYStore.startIndex + scrollYStore.renderSize) : fullData.slice(0) }
     },
-    handleDefaultExpand () {
+    handleDefault () {
       if (this.selectConfig) {
         this.handleDefaultRowChecked()
       }
@@ -1117,6 +1115,7 @@ export default {
       if (this.treeConfig) {
         this.handleDefaultTreeExpand()
       }
+      this.updateFooter()
       this.$nextTick(this.recalculate)
     },
     /**
@@ -2604,6 +2603,7 @@ export default {
           UtilTools.setCellValue(row, column, model.value)
           model.update = false
           model.value = null
+          this.updateFooter()
         }
         UtilTools.emitEvent(this, 'edit-closed', [args, evnt])
       }
@@ -3572,6 +3572,16 @@ export default {
           tableFooterElem.scrollLeft = 0
         }
       })
+      return this.$nextTick()
+    },
+    /**
+     * 更新表尾合计
+     */
+    updateFooter () {
+      let { showFooter, visibleColumn, afterFullData, footerMethod } = this
+      if (showFooter && footerMethod) {
+        this.footerData = visibleColumn.length ? footerMethod({ columns: visibleColumn, data: this.editStore.insertList.concat(afterFullData) }) : []
+      }
       return this.$nextTick()
     },
     /**
