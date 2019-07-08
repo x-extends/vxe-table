@@ -89,6 +89,7 @@ class ColumnVO {
     this.visible = data.visible
     this.width = data.width
     this.type = data.type
+    this.link = data.link
     this.describe = data.describe
     this.createTime = data.createTime
     this.updateTime = data.updateTime
