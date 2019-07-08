@@ -52,6 +52,11 @@ export default {
           filterMethod: this.filterSexMethod,
           editRender: { type: 'default' },
           slots: {
+            default: ({ row, column }) => {
+              return [
+                <a class="link" href="https://xuliangzhan.github.io/vxe-table/">链接：{ row.sex }</a>
+              ]
+            },
             header: ({ column }) => {
               return [
                 <span>
@@ -142,6 +147,11 @@ export default {
                   filterMethod: this.filterSexMethod,
                   editRender: { type: 'default' },
                   slots: {
+                    default: ({ row, column }) => {
+                      return [
+                        <a class="link" href="https://xuliangzhan.github.io/vxe-table/">链接：{ row.sex }</a>
+                      ]
+                    },
                     header: ({ column }) => {
                       return [
                         <span>
