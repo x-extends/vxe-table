@@ -2474,7 +2474,7 @@ export default {
      * 如果是双击模式，则单击后选中状态
      */
     triggerCellClickEvent (evnt, params) {
-      let { $el, highlightCurrentRow, editStore, selectConfig, treeConfig, editConfig } = this
+      let { $el, highlightCurrentRow, editStore, selectConfig, treeConfig, editConfig, mouseConfig = {} } = this
       let { actived } = editStore
       let { row, column, columnIndex, cell } = params
       if (highlightCurrentRow) {
@@ -2490,43 +2490,46 @@ export default {
       if (treeConfig && (treeConfig.trigger === 'row' || (column.treeNode && treeConfig.trigger === 'cell'))) {
         this.triggerTreeExpandEvent(evnt, params)
       }
-      if (editConfig) {
-        if (editConfig.trigger === 'click') {
-          if (!actived.args || cell !== actived.args.cell) {
-            if (editConfig.mode === 'row') {
-              if (row === actived.row) {
-                // column.model.update = false
-                // column.model.value = UtilTools.getCellValue(actived.row, column)
-                actived.args.columnIndex = columnIndex
-                actived.column = actived.args.column = column
-              } else {
-                this.triggerValidate('blur')
+      // 如果设置了单元格选中功能，则不会使用点击事件去处理（只能支持双击模式）
+      if (!mouseConfig.checked) {
+        if (editConfig) {
+          if (editConfig.trigger === 'click') {
+            if (!actived.args || cell !== actived.args.cell) {
+              if (editConfig.mode === 'row') {
+                if (row === actived.row) {
+                  // column.model.update = false
+                  // column.model.value = UtilTools.getCellValue(actived.row, column)
+                  actived.args.columnIndex = columnIndex
+                  actived.column = actived.args.column = column
+                } else {
+                  this.triggerValidate('blur')
+                    .catch(e => e)
+                    .then(() => {
+                      this.handleActived(params, evnt)
+                        .then(() => this.triggerValidate('change'))
+                        .catch(e => e)
+                    })
+                }
+              } else if (editConfig.mode === 'cell') {
+                this.handleActived(params, evnt)
+                  .then(() => this.triggerValidate('change'))
                   .catch(e => e)
-                  .then(() => {
-                    this.handleActived(params, evnt)
-                      .then(() => this.triggerValidate('change'))
-                      .catch(e => e)
-                  })
               }
-            } else if (editConfig.mode === 'cell') {
-              this.handleActived(params, evnt)
-                .then(() => this.triggerValidate('change'))
-                .catch(e => e)
             }
-          }
-        } else if (editConfig.trigger === 'dblclick') {
-          if (!actived.args || cell !== actived.args.cell) {
-            if (editConfig.mode === 'row') {
-              if (row === actived.row) {
-                // column.model.update = false
-                // column.model.value = UtilTools.getCellValue(actived.row, column)
-                actived.args.columnIndex = columnIndex
-                actived.column = actived.args.column = column
-              } else {
+          } else if (editConfig.trigger === 'dblclick') {
+            if (!actived.args || cell !== actived.args.cell) {
+              if (editConfig.mode === 'row') {
+                if (row === actived.row) {
+                  // column.model.update = false
+                  // column.model.value = UtilTools.getCellValue(actived.row, column)
+                  actived.args.columnIndex = columnIndex
+                  actived.column = actived.args.column = column
+                } else {
+                  this.handleSelected(params, evnt)
+                }
+              } else if (editConfig.mode === 'cell') {
                 this.handleSelected(params, evnt)
               }
-            } else if (editConfig.mode === 'cell') {
-              this.handleSelected(params, evnt)
             }
           }
         }
