@@ -2522,6 +2522,11 @@ export default {
         }
         if (inputElem) {
           inputElem[autoselect ? 'select' : 'focus']()
+          if (browse.msie) {
+            let textRange = inputElem.createTextRange()
+            textRange.collapse(false)
+            textRange.select()
+          }
         }
       }
     },

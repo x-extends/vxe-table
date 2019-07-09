@@ -6,23 +6,67 @@
 
     <vxe-grid
       border
-      resizable
       show-overflow
       show-header-overflow
       ref="xTable"
       height="300"
       :loading="loading"
       :select-config="{checkField: 'checked'}"
-      :optimization ="{scrollX: {gt: 20, oSize: 4, rSize: 10}, scrollY: {gt: 500, oSize: 10, rSize: 30}}">
+      :optimization ="{scrollY: {gt: 500, oSize: 10, rSize: 30}}">
     </vxe-grid>
+
+    <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
+
+    <pre>
+      <code class="xml">{{ demoCodes[0] }}</code>
+      <code class="javascript">{{ demoCodes[1] }}</code>
+    </pre>
   </div>
 </template>
 
 <script>
+import hljs from 'highlight.js'
+
 export default {
   data () {
     return {
-      loading: false
+      loading: false,
+      demoCodes: [
+        `
+        <vxe-grid
+          border
+          show-overflow
+          show-header-overflow
+          ref="xTable"
+          height="300"
+          :loading="loading"
+          :select-config="{checkField: 'checked'}"
+          :optimization ="{scrollY: {gt: 500, oSize: 10, rSize: 30}}">
+        </vxe-grid>
+        `,
+        `
+        export default {
+          data () {
+            return {
+              tableData: []
+            }
+          },
+          created () {
+            this.loading = true
+            setTimeout(() => {
+              let tableData = window.MOCK_DATA_LIST.slice(0, 10000)
+              let tableColumn = window.MOCK_COLUMN_LIST.slice(0, 10000).map(item => Object.assign({}, item, { fixed: undefined }))
+              // 阻断 vue 对大数组的双向绑定，大数据性能翻倍提升
+              if (this.$refs.xTable) {
+                this.$refs.xTable.loadColumn(tableColumn)
+                this.$refs.xTable.loadData(tableData)
+              }
+              this.loading = false
+            }, 500)
+          }
+        }
+        `
+      ]
     }
   },
   created () {
@@ -37,6 +81,11 @@ export default {
       }
       this.loading = false
     }, 500)
+  },
+  mounted () {
+    Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
+      hljs.highlightBlock(block)
+    })
   }
 }
 </script>

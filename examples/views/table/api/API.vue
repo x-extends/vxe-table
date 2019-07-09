@@ -175,10 +175,18 @@ export default {
           apis = toolbarAPI
           break
         case 'grid':
-          apis = gridAPI
+          apis = XEUtils.clone(tableAPI, true).map(item => {
+            let rest = gridAPI.find(obj => obj.name === item.name)
+            rest.list = item.list.concat(rest.list)
+            return rest
+          })
           break
         case 'excel':
-          apis = excelAPI
+          apis = XEUtils.clone(tableAPI, true).map(item => {
+            let rest = excelAPI.find(obj => obj.name === item.name)
+            rest.list = item.list.concat(rest.list)
+            return rest
+          })
           break
         case 'pager':
           apis = pagerAPI
