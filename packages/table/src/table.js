@@ -1607,10 +1607,12 @@ export default {
         params.column = nextColumn
         params.cell = DomTools.getCell(this, params)
         if (editConfig) {
-          if (editConfig.trigger === 'click') {
-            this.handleActived(params, evnt)
-          } else if (editConfig.trigger === 'dblclick') {
-            this.handleSelected(params, evnt)
+          if (editConfig.trigger === 'click' || editConfig.trigger === 'dblclick') {
+            if (editConfig.mode === 'row') {
+              this.handleActived(params, evnt)
+            } else {
+              this.handleSelected(params, evnt)
+            }
           }
         }
       }
@@ -2201,7 +2203,7 @@ export default {
     triggerCellClickEvent (evnt, params) {
       let { $el, highlightCurrentRow, editStore, selectConfig, treeConfig, editConfig } = this
       let { actived } = editStore
-      let { column, columnIndex } = params
+      let { column, columnIndex, row, cell } = params
       if (highlightCurrentRow) {
         if (!this.getEventTargetNode(evnt, $el, 'vxe-tree-wrapper').flag && !this.getEventTargetNode(evnt, $el, 'vxe-checkbox').flag) {
           this.setCurrentRow(params.row)
@@ -2218,36 +2220,29 @@ export default {
       if (editConfig) {
         if (editConfig.trigger === 'click') {
           if (!actived.args || evnt.currentTarget !== actived.args.cell) {
-            // if (editRules) {
-            //   this.handleActived(params, evnt)
-            // } else {
-            // this.triggerValidate('change').then(() => {
-            //   this.handleActived(params, evnt)
-            // }).catch(e => e)
-            // }
             if (editConfig.mode === 'row') {
-              // if (validStore.visible && validStore.row === params.row && validStore.column === params.column) {
-              //   this.handleActived(params, evnt)
-              // } else {
-              this.triggerValidate('blur').then(() => {
-
-              }).catch(e => e).then(() => {
+              this.triggerValidate('blur').catch(e => e).then(() => {
                 this.handleActived(params, evnt)
                   .then(() => this.triggerValidate('change'))
                   .catch(e => e)
               })
-              // }
             } else if (editConfig.mode === 'cell') {
               this.handleActived(params, evnt)
                 .then(() => this.triggerValidate('change'))
                 .catch(e => e)
             }
           }
-        } else {
-          if (actived.row) {
-            if (actived.row) {
-              actived.column = actived.args.column = column
-              actived.columnIndex = actived.args.columnIndex = columnIndex
+        } else if (editConfig.trigger === 'dblclick') {
+          if (!actived.args || cell !== actived.args.cell) {
+            if (editConfig.mode === 'row') {
+              if (row === actived.row) {
+                actived.args.columnIndex = columnIndex
+                actived.column = actived.args.column = column
+              } else {
+                this.handleSelected(params, evnt)
+              }
+            } else if (editConfig.mode === 'cell') {
+              this.handleSelected(params, evnt)
             }
           }
         }
@@ -2264,9 +2259,17 @@ export default {
       if (editConfig) {
         if (editConfig.trigger === 'dblclick') {
           if (!actived.args || evnt.currentTarget !== actived.args.cell) {
-            // this.triggerValidate().then(() => {
-            this.handleActived(params, evnt)
-            // }).catch(e => e)
+            if (editConfig.mode === 'row') {
+              this.triggerValidate('blur').catch(e => e).then(() => {
+                this.handleActived(params, evnt)
+                  .then(() => this.triggerValidate('change'))
+                  .catch(e => e)
+              })
+            } else if (editConfig.mode === 'cell') {
+              this.handleActived(params, evnt)
+                .then(() => this.triggerValidate('change'))
+                .catch(e => e)
+            }
           }
         }
       }
