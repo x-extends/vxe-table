@@ -32,20 +32,20 @@ const excelContextMenu = {
   },
   body: {
     options: [
-      // [
-      //   {
-      //     code: 'clip',
-      //     name: '剪贴'
-      //   },
-      //   {
-      //     code: 'copy',
-      //     name: '复制'
-      //   },
-      //   {
-      //     code: 'paste',
-      //     name: '粘贴'
-      //   }
-      // ],
+      [
+        {
+          code: 'clip',
+          name: '剪贴'
+        },
+        {
+          code: 'copy',
+          name: '复制'
+        },
+        {
+          code: 'paste',
+          name: '粘贴'
+        }
+      ],
       [
         {
           code: 'insert',
@@ -173,15 +173,15 @@ export default {
       let $table = this.$refs.xTable
       let { property } = column
       switch (menu.code) {
-        // case 'clip':
-        //   $table.handleCopyed(true, evnt)
-        //   break
-        // case 'copy':
-        //   $table.handleCopyed(false, evnt)
-        //   break
-        // case 'paste':
-        //   $table.handlePaste(evnt)
-        //   break
+        case 'clip':
+          $table.handleCopyed(true, evnt)
+          break
+        case 'copy':
+          $table.handleCopyed(false, evnt)
+          break
+        case 'paste':
+          $table.handlePaste(evnt)
+          break
         case 'insert':
           $table.insertAt({}, row)
           break
