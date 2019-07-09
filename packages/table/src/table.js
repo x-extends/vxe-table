@@ -1715,7 +1715,7 @@ export default {
       let rowIndex = tableData.indexOf(params.row)
       let columnIndex = visibleColumn.indexOf(params.column)
       for (let index = columnIndex + 1; index < visibleColumn.length; index++) {
-        if (visibleColumn[index].editRender) {
+        if (visibleColumn[index]) {
           nextColumnIndex = index
           nextColumn = visibleColumn[index]
           break
@@ -1726,7 +1726,7 @@ export default {
         nextRowIndex = rowIndex + 1
         nextRow = tableData[nextRowIndex]
         for (let index = 0; index < visibleColumn.length; index++) {
-          if (visibleColumn[index].editRender) {
+          if (visibleColumn[index]) {
             nextColumnIndex = index
             nextColumn = visibleColumn[index]
             break
@@ -1744,17 +1744,20 @@ export default {
         params.column = nextColumn
         params.cell = DomTools.getCell(this, params)
         if (editConfig) {
-          if (editConfig.trigger === 'click') {
-            this.handleActived(params, evnt)
-          } else if (editConfig.trigger === 'dblclick') {
-            this.handleSelected(params, evnt)
+          if (editConfig.trigger === 'click' || editConfig.trigger === 'dblclick') {
+            if (editConfig.mode === 'row') {
+              this.handleActived(params, evnt)
+            } else {
+              this.handleSelected(params, evnt)
+              this.scrollToColumn(params.column)
+            }
           }
         }
       }
     },
     // 处理方向键移动
     moveSelected (args, isLeftArrow, isUpArrow, isRightArrow, isDwArrow, evnt) {
-      let { tableData, visibleColumn, handleSelected } = this
+      let { tableData, visibleColumn } = this
       let params = Object.assign({}, args)
       if (isUpArrow && params.rowIndex) {
         params.rowIndex -= 1
@@ -1764,15 +1767,15 @@ export default {
         params.row = tableData[params.rowIndex]
       } else if (isLeftArrow && params.columnIndex) {
         for (let len = params.columnIndex - 1; len >= 0; len--) {
-          if (visibleColumn[len].editRender) {
+          if (visibleColumn[len]) {
             params.columnIndex = len
             params.column = visibleColumn[len]
             break
           }
         }
-      } else if (isRightArrow && params.columnIndex) {
+      } else if (isRightArrow) {
         for (let index = params.columnIndex + 1; index < visibleColumn.length; index++) {
-          if (visibleColumn[index].editRender) {
+          if (visibleColumn[index]) {
             params.columnIndex = index
             params.column = visibleColumn[index]
             break
@@ -1780,7 +1783,8 @@ export default {
         }
       }
       params.cell = DomTools.getCell(this, params)
-      handleSelected(params, evnt)
+      this.handleSelected(params, evnt)
+      this.scrollToColumn(params.column)
     },
     // 处理菜单的移动
     moveCtxMenu (evnt, keyCode, ctxMenuStore, key, operKey, operRest, menuList) {
@@ -2472,7 +2476,7 @@ export default {
     triggerCellClickEvent (evnt, params) {
       let { $el, highlightCurrentRow, editStore, selectConfig, treeConfig, editConfig } = this
       let { actived } = editStore
-      let { column, columnIndex } = params
+      let { row, column, columnIndex, cell } = params
       if (highlightCurrentRow) {
         if (!this.getEventTargetNode(evnt, $el, 'vxe-tree-wrapper').flag && !this.getEventTargetNode(evnt, $el, 'vxe-checkbox').flag) {
           this.setCurrentRow(params.row)
@@ -2488,27 +2492,42 @@ export default {
       }
       if (editConfig) {
         if (editConfig.trigger === 'click') {
-          if (!actived.args || evnt.currentTarget !== actived.args.cell) {
+          if (!actived.args || cell !== actived.args.cell) {
             if (editConfig.mode === 'row') {
-              this.triggerValidate('blur')
-                .catch(e => e)
-                .then(() => {
-                  this.handleActived(params, evnt)
-                    .then(() => this.triggerValidate('change'))
-                    .catch(e => e)
-                })
+              if (row === actived.row) {
+                // column.model.update = false
+                // column.model.value = UtilTools.getCellValue(actived.row, column)
+                actived.args.columnIndex = columnIndex
+                actived.column = actived.args.column = column
+              } else {
+                this.triggerValidate('blur')
+                  .catch(e => e)
+                  .then(() => {
+                    this.handleActived(params, evnt)
+                      .then(() => this.triggerValidate('change'))
+                      .catch(e => e)
+                  })
+              }
             } else if (editConfig.mode === 'cell') {
               this.handleActived(params, evnt)
                 .then(() => this.triggerValidate('change'))
                 .catch(e => e)
             }
           }
-        } else {
-          if (actived.row) {
-            column.model.update = false
-            column.model.value = UtilTools.getCellValue(actived.row, column)
-            actived.column = actived.args.column = column
-            actived.columnIndex = actived.args.columnIndex = columnIndex
+        } else if (editConfig.trigger === 'dblclick') {
+          if (!actived.args || cell !== actived.args.cell) {
+            if (editConfig.mode === 'row') {
+              if (row === actived.row) {
+                // column.model.update = false
+                // column.model.value = UtilTools.getCellValue(actived.row, column)
+                actived.args.columnIndex = columnIndex
+                actived.column = actived.args.column = column
+              } else {
+                this.handleSelected(params, evnt)
+              }
+            } else if (editConfig.mode === 'cell') {
+              this.handleSelected(params, evnt)
+            }
           }
         }
       }
@@ -2524,7 +2543,19 @@ export default {
       if (editConfig) {
         if (editConfig.trigger === 'dblclick') {
           if (!actived.args || evnt.currentTarget !== actived.args.cell) {
-            this.handleActived(params, evnt)
+            if (editConfig.mode === 'row') {
+              this.triggerValidate('blur')
+                .catch(e => e)
+                .then(() => {
+                  this.handleActived(params, evnt)
+                    .then(() => this.triggerValidate('change'))
+                    .catch(e => e)
+                })
+            } else if (editConfig.mode === 'cell') {
+              this.handleActived(params, evnt)
+                .then(() => this.triggerValidate('change'))
+                .catch(e => e)
+            }
           }
         }
       }
@@ -2654,11 +2685,13 @@ export default {
           selected.args = params
           selected.row = row
           selected.column = column
-          let listElem = elemStore['main-body-list']
-          let rowId = UtilTools.getRowId(this, row, this.getRowMapIndex(row))
-          let trElem = listElem.querySelector(`[data-rowid="${rowId}"]`)
-          let tdElem = trElem.querySelector(`.${column.id}`)
-          DomTools.addClass(tdElem, 'col--selected')
+          if (mouseConfig.selected) {
+            let listElem = elemStore['main-body-list']
+            let rowId = UtilTools.getRowId(this, row, this.getRowMapIndex(row))
+            let trElem = listElem.querySelector(`[data-rowid="${rowId}"]`)
+            let tdElem = trElem.querySelector(`.${column.id}`)
+            DomTools.addClass(tdElem, 'col--selected')
+          }
         }
         // 如果配置了批量选中功能，则为批量选中状态
         if (mouseConfig.checked) {

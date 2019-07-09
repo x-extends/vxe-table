@@ -10,7 +10,9 @@
       height="460"
       :loading="loading"
       :data.sync="tableData"
-      :edit-config="{key: 'id', trigger: 'click', mode: 'cell'}">
+      :mouse-config="{selected: true}"
+      :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true}"
+      :edit-config="{key: 'id', trigger: 'dblclick', mode: 'cell'}">
       <vxe-table-column type="selection" width="60"></vxe-table-column>
       <vxe-table-column type="index" title="Number" width="80"></vxe-table-column>
       <vxe-table-column field="name" title="AInput" min-width="140" :edit-render="{name: 'AInput'}"></vxe-table-column>
@@ -113,7 +115,9 @@ export default {
           height="460"
           :loading="loading"
           :data.sync="tableData"
-          :edit-config="{key: 'id', trigger: 'click', mode: 'cell'}">
+          :mouse-config="{selected: true}"
+          :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true}"
+          :edit-config="{key: 'id', trigger: 'dblclick', mode: 'cell'}">
           <vxe-table-column type="selection" width="60"></vxe-table-column>
           <vxe-table-column type="index" title="Number" width="80"></vxe-table-column>
           <vxe-table-column field="name" title="AInput" min-width="140" :edit-render="{name: 'AInput'}"></vxe-table-column>
