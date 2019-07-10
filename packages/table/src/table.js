@@ -364,6 +364,11 @@ export default {
     vSize () {
       return this.size || this.$parent.size || this.$parent.vSize
     },
+    validOpts () {
+      return Object.assign({
+        message: 'default'
+      }, GlobalConfig.validConfig, this.validConfig)
+    },
     // 优化的参数
     optimizeOpts () {
       return Object.assign({}, GlobalConfig.optimization, this.optimization)
@@ -551,11 +556,12 @@ export default {
       showHeader,
       border,
       stripe,
+      height,
       highlightHoverRow,
       highlightHoverColumn,
       vSize,
       editConfig,
-      validConfig = {},
+      validOpts,
       editRules,
       showFooter,
       footerMethod,
@@ -696,9 +702,9 @@ export default {
         /**
          * valid error tooltip
          */
-        hasTip && editRules && validConfig.message !== 'none' ? h('vxe-tooltip', {
+        hasTip && editRules && (validOpts.message === 'default' ? !height : validOpts.message === 'tooltip') ? h('vxe-tooltip', {
           class: 'vxe-table--valid-error',
-          props: validConfig.message === 'tooltip' || tableData.length === 1 ? Object.assign({}, validStore, tooltipConfig) : null,
+          props: validOpts.message === 'tooltip' || tableData.length === 1 ? Object.assign({}, validStore, tooltipConfig) : null,
           ref: 'validTip'
         }) : _e()
       ])
@@ -2917,13 +2923,28 @@ export default {
      * 是否启用了横向 X 可视渲染
      */
     isScrollXLoad () {
+      console.warn('[vxe-table] The function isScrollXLoad is deprecated, please use getVirtualScroller')
       return this.scrollXLoad
     },
     /**
      * 是否启用了纵向 Y 可视渲染
      */
     isScrollYLoad () {
+      console.warn('[vxe-table] The function isScrollXLoad is deprecated, please use getVirtualScroller')
       return this.scrollYLoad
+    },
+    /**
+     * 获取虚拟滚动状态
+     */
+    getVirtualScroller () {
+      let { $refs, scrollXLoad, scrollYLoad } = this
+      let bodyElem = $refs.tableBody.$el
+      return {
+        scrollX: scrollXLoad,
+        scrollY: scrollYLoad,
+        scrollTop: bodyElem.scrollTop,
+        scrollLeft: bodyElem.scrollLeft
+      }
     },
     /**
      * 横向 X 可视渲染事件处理
@@ -3387,7 +3408,7 @@ export default {
      * 弹出校验错误提示
      */
     showValidTooltip (params) {
-      let { $refs, tableData, validConfig = {} } = this
+      let { $refs, height, tableData, validOpts } = this
       let validTip = $refs.validTip
       let { rule, row, column, cell } = params
       this.$nextTick(() => {
@@ -3398,7 +3419,7 @@ export default {
           content: UtilTools.formatText(rule.message),
           visible: true
         })
-        if (validTip && (validConfig.message === 'tooltip' || tableData.length === 1)) {
+        if (validTip && (validOpts.message === 'tooltip' || (validOpts.message === 'default' && !height && tableData.length < 2))) {
           validTip.toVisible(cell)
         }
         UtilTools.emitEvent(this, 'valid-error', [params])

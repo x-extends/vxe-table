@@ -16,7 +16,7 @@ export default {
       isUpdate: false,
       visible: false,
       tipStore: {
-        style: null,
+        style: {},
         placement: '',
         arrowStyle: null
       }
@@ -76,7 +76,7 @@ export default {
     },
     close () {
       Object.assign(this.tipStore, {
-        style: null,
+        style: {},
         placement: '',
         arrowStyle: null
       })

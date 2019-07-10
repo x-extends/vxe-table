@@ -837,7 +837,7 @@ const apis = [
             name: 'message',
             desc: '校验提示框的方式',
             type: 'String',
-            enum: 'none（关闭提示）, default（默认）, tooltip（强制使用 tooltip）',
+            enum: 'default（如果不设置高度，则默认第一行使用 tooltip，之后使用 inline）, none（关闭提示）, inline（强制使用内联的提示）, tooltip（强制使用 tooltip 提示）',
             defVal: 'default',
             list: []
           },
@@ -1740,6 +1740,7 @@ const apis = [
       },
       {
         name: 'isScrollXLoad()',
+        disabled: true,
         desc: '判断是否启用了横向 X 可视渲染',
         type: 'Boolean',
         enum: '',
@@ -1748,8 +1749,17 @@ const apis = [
       },
       {
         name: 'isScrollYLoad()',
+        disabled: true,
         desc: '判断是否启用了纵向 Y 可视渲染',
         type: 'Boolean',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'getVirtualScroller()',
+        desc: '获取虚拟滚动相关状态',
+        type: 'Object',
         enum: '',
         defVal: '',
         list: []

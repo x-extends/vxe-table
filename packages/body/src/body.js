@@ -21,6 +21,7 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
     _e,
     $listeners: tableListeners,
     tableData,
+    height,
     overflowX,
     scrollXLoad,
     scrollYLoad,
@@ -38,7 +39,7 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
     mouseConfig,
     editConfig,
     editRules,
-    validConfig = {},
+    validOpts,
     editStore,
     validStore
   } = $table
@@ -61,7 +62,7 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
   let checkedTLocat = {}
   let copyedLocat = {}
   let validError = validStore.row === row && validStore.column === column
-  let hasDefaultTip = editRules && (!validConfig.message || validConfig.message === 'default')
+  let hasDefaultTip = editRules && (validOpts.message === 'default' ? (height || tableData.length > 1) : validOpts.message === 'inline')
   let attrs = { 'data-index': columnIndex }
   let triggerDblclick = (editRender && editConfig && editConfig.trigger === 'dblclick')
   let params = { $table, $seq, seq, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, level: rowLevel, isHidden: fixedHiddenColumn, data: tableData }
@@ -176,7 +177,7 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
         width: hasEllipsis ? `${border ? renderWidth - 1 : renderWidth}px` : null
       }
     }, column.renderCell(h, params)),
-    hasDefaultTip ? validError && tableData.length >= 2 ? h('div', {
+    hasDefaultTip ? validError ? h('div', {
       class: 'vxe-cell--valid',
       style: validStore.rule && validStore.rule.width ? {
         width: `${validStore.rule.width}px`
