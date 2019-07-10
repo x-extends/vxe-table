@@ -32,6 +32,7 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
     cellClassName,
     spanMethod,
     keyboardConfig,
+    radioConfig = {},
     selectConfig = {},
     treeConfig = {},
     mouseConfig,
@@ -94,6 +95,7 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
   if (highlightCurrentRow ||
     tableListeners['cell-click'] ||
     (editRender && editConfig) ||
+    (radioConfig.trigger === 'row' || (column.type === 'radio' && radioConfig.trigger === 'cell')) ||
     (selectConfig.trigger === 'row' || (column.type === 'selection' && selectConfig.trigger === 'cell')) ||
     (treeConfig.trigger === 'row' || (column.treeNode && treeConfig.trigger === 'cell'))) {
     tdOns.click = evnt => {
@@ -370,8 +372,8 @@ export default {
       tableHeight,
       tableWidth,
       overflowY,
-      scrollXHeight,
-      scrollYWidth,
+      scrollbarHeight,
+      scrollbarWidth,
       scrollXStore,
       scrollXLoad,
       scrollYStore,
@@ -382,10 +384,10 @@ export default {
     let customHeight = height === 'auto' ? containerHeight : XEUtils.toNumber(height)
     let style = {}
     if (customHeight > 0) {
-      style.height = `${fixedType ? (customHeight > 0 ? customHeight - headerHeight - footerHeight : tableHeight) - (showFooter ? 0 : scrollXHeight) : customHeight - headerHeight - footerHeight}px`
+      style.height = `${fixedType ? (customHeight > 0 ? customHeight - headerHeight - footerHeight : tableHeight) - (showFooter ? 0 : scrollbarHeight) : customHeight - headerHeight - footerHeight}px`
     } else if (maxHeight) {
       maxHeight = XEUtils.toNumber(maxHeight)
-      style['max-height'] = `${fixedType ? maxHeight - headerHeight - (showFooter ? 0 : scrollXHeight) : maxHeight - headerHeight}px`
+      style['max-height'] = `${fixedType ? maxHeight - headerHeight - (showFooter ? 0 : scrollbarHeight) : maxHeight - headerHeight}px`
     }
     // 如果是固定列与设置了超出隐藏
     if (fixedType && allColumnOverflow) {
@@ -403,7 +405,7 @@ export default {
     }
     // 兼容火狐滚动条
     if (overflowY && fixedType && DomTools.browse['-moz']) {
-      tableStyle.paddingRight = `${scrollYWidth}px`
+      tableStyle.paddingRight = `${scrollbarWidth}px`
     }
     return h('div', {
       class: ['vxe-table--body-wrapper', fixedType ? `fixed--${fixedType}-wrapper` : 'body--wrapper'],

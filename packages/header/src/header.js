@@ -102,7 +102,7 @@ export default {
       tableWidth,
       scrollXLoad,
       scrollXStore,
-      scrollYWidth,
+      scrollbarWidth,
       getColumnMapIndex
     } = $table
     // v2.0 废弃属性，保留兼容
@@ -120,7 +120,7 @@ export default {
       !fixedType && scrollXLoad ? h('div', {
         class: ['vxe-body--x-space'],
         style: {
-          width: `${$table.tableWidth + scrollYWidth}px`
+          width: `${$table.tableWidth + scrollbarWidth}px`
         }
       }) : null,
       h('table', {
@@ -131,7 +131,7 @@ export default {
           border: 0
         },
         style: {
-          width: tableWidth === null ? tableWidth : `${tableWidth + scrollYWidth}px`,
+          width: tableWidth === null ? tableWidth : `${tableWidth + scrollbarWidth}px`,
           'margin-left': fixedType ? null : `${scrollXStore.leftSpaceWidth}px`
         }
       }, [
@@ -149,7 +149,7 @@ export default {
         }).concat([
           h('col', {
             attrs: {
-              width: scrollYWidth
+              width: scrollbarWidth
             }
           })
         ])),
@@ -227,11 +227,11 @@ export default {
                 }
               }) : null
             ])
-          }).concat(scrollYWidth ? [
+          }).concat(scrollbarWidth ? [
             h('th', {
               class: ['col--gutter'],
               style: {
-                width: `${scrollYWidth}px`
+                width: `${scrollbarWidth}px`
               }
             })
           ] : []))

@@ -160,7 +160,7 @@ export const Cell = {
       }
       options.on = {
         change (evnt) {
-          $table.triggerRowEvent(evnt, params)
+          $table.triggerRadioRowEvent(evnt, params)
         }
       }
     }

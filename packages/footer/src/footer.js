@@ -13,7 +13,7 @@ export default {
   },
   render (h) {
     let { $parent: $table, fixedType, fixedColumn, tableColumn, footerData } = this
-    let { $listeners: tableListeners, footerRowClassName, footerCellClassName, tableWidth, scrollYWidth, scrollXHeight, scrollXLoad, scrollXStore, optimizeOpts, getColumnMapIndex } = $table
+    let { $listeners: tableListeners, footerRowClassName, footerCellClassName, tableWidth, scrollbarWidth, scrollbarHeight, scrollXLoad, scrollXStore, optimizeOpts, getColumnMapIndex } = $table
     let { overflow } = optimizeOpts
     // 如果是使用优化模式
     if (fixedType && overflow) {
@@ -28,7 +28,7 @@ export default {
     return h('div', {
       class: ['vxe-table--footer-wrapper', fixedType ? `fixed--${fixedType}-wrapper` : 'footer--wrapper'],
       style: {
-        'margin-top': `${-scrollXHeight - 1}px`
+        'margin-top': `${-scrollbarHeight - 1}px`
       },
       on: {
         scroll: this.scrollEvent
@@ -48,7 +48,7 @@ export default {
           border: 0
         },
         style: {
-          width: tableWidth === null ? tableWidth : `${tableWidth + scrollYWidth}px`,
+          width: tableWidth === null ? tableWidth : `${tableWidth + scrollbarWidth}px`,
           'margin-left': fixedType ? null : `${scrollXStore.leftSpaceWidth}px`
         }
       }, [
@@ -65,7 +65,7 @@ export default {
         }).concat([
           h('col', {
             attrs: {
-              width: scrollYWidth
+              width: scrollbarWidth
             }
           })
         ])),
@@ -111,7 +111,7 @@ export default {
             h('td', {
               class: ['col--gutter'],
               style: {
-                width: `${scrollYWidth}px`
+                width: `${scrollbarWidth}px`
               }
             })
           ]))

@@ -26,8 +26,8 @@ function renderFixed (h, $table, fixedType) {
     showHeader,
     showFooter,
     tableHeight,
-    scrollYWidth,
-    scrollXHeight,
+    scrollbarWidth,
+    scrollbarHeight,
     scrollRightToLeft,
     scrollLeftToRight,
     columnStore,
@@ -37,8 +37,8 @@ function renderFixed (h, $table, fixedType) {
   let isRightFixed = fixedType === 'right'
   let fixedColumn = columnStore[`${fixedType}List`]
   let style = {
-    height: `${(customHeight > 0 ? customHeight - headerHeight - footerHeight : tableHeight) + headerHeight + footerHeight - scrollXHeight * (showFooter ? 2 : 1)}px`,
-    width: `${fixedColumn.reduce((previous, column) => previous + column.renderWidth, isRightFixed ? scrollYWidth : 0)}px`
+    height: `${(customHeight > 0 ? customHeight - headerHeight - footerHeight : tableHeight) + headerHeight + footerHeight - scrollbarHeight * (showFooter ? 2 : 1)}px`,
+    width: `${fixedColumn.reduce((previous, column) => previous + column.renderWidth, isRightFixed ? scrollbarWidth : 0)}px`
   }
   return h('div', {
     class: [`vxe-table--fixed-${fixedType}-wrapper`, {
@@ -230,9 +230,9 @@ export default {
       // 是否存在横向滚动条
       overflowX: false,
       // 纵向滚动条的宽度
-      scrollYWidth: 0,
+      scrollbarWidth: 0,
       // 横向滚动条的高度
-      scrollXHeight: 0,
+      scrollbarHeight: 0,
       // 左侧固定列是否向右滚动了
       scrollLeftToRight: false,
       // 右侧固定列是否向左滚动了
@@ -243,6 +243,8 @@ export default {
       isIndeterminate: false,
       // 多选属性，已选中的列
       selection: [],
+      // 当前行
+      currentRow: null,
       // 单选属性，选中行
       selectRow: null,
       // 单选属性，选中列
@@ -559,7 +561,7 @@ export default {
       footerMethod,
       overflowX,
       overflowY,
-      scrollXHeight,
+      scrollbarHeight,
       optimizeOpts,
       columnStore,
       filterStore,
@@ -649,7 +651,7 @@ export default {
       isResizable ? h('div', {
         class: ['vxe-table--resizable-bar'],
         style: overflowX ? {
-          'padding-bottom': `${scrollXHeight}px`
+          'padding-bottom': `${scrollbarHeight}px`
         } : null,
         ref: 'resizeBar'
       }) : _e(),
@@ -1355,9 +1357,9 @@ export default {
         }
       })
       let tableHeight = bodyElem.offsetHeight
-      let scrollYWidth = bodyElem.offsetWidth - bodyWidth
-      this.scrollYWidth = scrollYWidth
-      this.overflowY = scrollYWidth > 0
+      let overflowY = bodyElem.scrollHeight > bodyElem.clientHeight
+      this.scrollbarWidth = overflowY ? bodyElem.offsetWidth - bodyWidth : 0
+      this.overflowY = overflowY
       this.tableWidth = tableWidth
       this.tableHeight = tableHeight
       this.containerHeight = $el.parentNode.clientHeight
@@ -1366,11 +1368,11 @@ export default {
       }
       if (footerElem) {
         let footerHeight = footerElem.offsetHeight
-        this.scrollXHeight = Math.max(footerHeight - footerElem.clientHeight, 0)
+        this.scrollbarHeight = Math.max(footerHeight - footerElem.clientHeight, 0)
         this.overflowX = tableWidth > footerElem.clientWidth
         this.footerHeight = footerHeight
       } else {
-        this.scrollXHeight = Math.max(tableHeight - bodyElem.clientHeight, 0)
+        this.scrollbarHeight = Math.max(tableHeight - bodyElem.clientHeight, 0)
         this.overflowX = tableWidth > bodyWidth
       }
       if (this.overflowX) {
@@ -1879,14 +1881,14 @@ export default {
       if (rows && !XEUtils.isArray(rows)) {
         rows = [rows]
       }
-      rows.forEach(row => this.triggerCheckRowEvent(null, { row }, !!value))
+      rows.forEach(row => this.handleSelectRow(null, { row }, !!value))
       return this.$nextTick()
     },
     /**
-     * 多选，行选中事件
+     * 多选，行选中处理
      * value 选中true 不选false 不确定-1
      */
-    triggerCheckRowEvent (evnt, { row }, value) {
+    handleSelectRow (evnt, { row }, value) {
       let { selection, tableFullData, selectConfig = {}, treeConfig, treeIndeterminates } = this
       let { checkMethod } = selectConfig
       let property = selectConfig.checkField || selectConfig.checkProp
@@ -1905,7 +1907,7 @@ export default {
             let matchObj = XEUtils.findTree(tableFullData, item => item === row, treeConfig)
             if (matchObj && matchObj.parent) {
               let selectItems = matchObj.items.filter(item => XEUtils.get(item, property))
-              return this.triggerCheckRowEvent(evnt, { row: matchObj.parent }, selectItems.length === matchObj.items.length ? true : (selectItems.length || value === -1 ? -1 : false))
+              return this.handleSelectRow(evnt, { row: matchObj.parent }, selectItems.length === matchObj.items.length ? true : (selectItems.length || value === -1 ? -1 : false))
             }
           } else {
             XEUtils.set(row, property, value)
@@ -1932,7 +1934,7 @@ export default {
             let matchObj = XEUtils.findTree(tableFullData, item => item === row, treeConfig)
             if (matchObj && matchObj.parent) {
               let selectItems = matchObj.items.filter(item => selection.indexOf(item) > -1)
-              return this.triggerCheckRowEvent(evnt, { row: matchObj.parent }, selectItems.length === matchObj.items.length ? true : (selectItems.length || value === -1 ? -1 : false))
+              return this.handleSelectRow(evnt, { row: matchObj.parent }, selectItems.length === matchObj.items.length ? true : (selectItems.length || value === -1 ? -1 : false))
             }
           } else {
             if (value) {
@@ -1945,8 +1947,11 @@ export default {
           }
         }
         this.checkSelectionStatus()
-        UtilTools.emitEvent(this, 'select-change', [{ row, selection: this.getSelectRecords(), checked: value }, evnt])
       }
+    },
+    triggerCheckRowEvent (evnt, params, value) {
+      this.handleSelectRow(evnt, params, value)
+      UtilTools.emitEvent(this, 'select-change', [Object.assign({ selection: this.getSelectRecords(), checked: value }, params), evnt])
     },
     checkSelectionStatus () {
       let { tableFullData, editStore, selectConfig = {}, selection, treeIndeterminates } = this
@@ -1991,7 +1996,7 @@ export default {
     toggleRowSelection (row) {
       let { selectConfig = {}, selection } = this
       let property = selectConfig.checkField || selectConfig.checkProp
-      this.triggerCheckRowEvent(null, { row }, property ? !XEUtils.get(row, property) : selection.indexOf(row) === -1)
+      this.handleSelectRow(null, { row }, property ? !XEUtils.get(row, property) : selection.indexOf(row) === -1)
       return this.$nextTick()
     },
     setAllSelection (value) {
@@ -2070,9 +2075,16 @@ export default {
     /**
      * 单选，行选中事件
      */
-    triggerRowEvent (evnt, { row }) {
-      UtilTools.emitEvent(this, 'select-change', [{ row }, evnt])
-      return this.setCurrentRow(row)
+    triggerRadioRowEvent (evnt, params) {
+      if (!this.$listeners['radio-change'] && this.$listeners['select-change']) {
+        console.warn('[vxe-table] Radio should use radio-change events')
+      }
+      UtilTools.emitEvent(this, 'radio-change', [params, evnt])
+      return this.setRadioRow(params.row)
+    },
+    triggerCurrentRowEvent (evnt, params) {
+      this.setCurrentRow(params.row)
+      UtilTools.emitEvent(this, 'current-change', [params, evnt])
     },
     /**
      * 单选，设置某一行为选中状态，如果调不加参数，则会取消目前高亮行的选中状态
@@ -2080,16 +2092,27 @@ export default {
     setCurrentRow (row) {
       if (this.highlightCurrentRow) {
         this.clearCurrentColumn()
-        this.selectRow = row
+        this.currentRow = row
       }
       return this.$nextTick()
     },
+    setRadioRow (row) {
+      this.selectRow = row
+      return this.$nextTick()
+    },
     clearCurrentRow () {
-      this.selectRow = null
+      this.currentRow = null
       this.hoverRow = null
       return this.$nextTick()
     },
+    clearRadioRow () {
+      this.selectRow = null
+      return this.$nextTick()
+    },
     getCurrentRow () {
+      return this.currentRow
+    },
+    getRadioRow () {
       return this.selectRow
     },
     /**
@@ -2201,13 +2224,18 @@ export default {
      * 如果是双击模式，则单击后选中状态
      */
     triggerCellClickEvent (evnt, params) {
-      let { $el, highlightCurrentRow, editStore, selectConfig, treeConfig, editConfig } = this
+      let { $el, highlightCurrentRow, editStore, radioConfig = {}, selectConfig, treeConfig, editConfig } = this
       let { actived } = editStore
       let { column, columnIndex, row, cell } = params
       if (highlightCurrentRow) {
-        if (!this.getEventTargetNode(evnt, $el, 'vxe-tree-wrapper').flag && !this.getEventTargetNode(evnt, $el, 'vxe-checkbox').flag) {
-          this.setCurrentRow(params.row)
+        if (radioConfig.trigger === 'row' || (!this.getEventTargetNode(evnt, $el, 'vxe-tree-wrapper').flag && !this.getEventTargetNode(evnt, $el, 'vxe-checkbox').flag && !this.getEventTargetNode(evnt, $el, 'vxe-radio').flag)) {
+          this.triggerCurrentRowEvent(evnt, params)
+          UtilTools.emitEvent(this, 'current-change', [params, evnt])
         }
+      }
+      // 如果是单选
+      if ((radioConfig.trigger === 'row' || (column.type === 'radio' && selectConfig.trigger === 'cell')) && !this.getEventTargetNode(evnt, $el, 'vxe-radio').flag) {
+        this.triggerRadioRowEvent(evnt, params)
       }
       // 如果是多选
       if (selectConfig && (selectConfig.trigger === 'row' || (column.type === 'selection' && selectConfig.trigger === 'cell')) && !this.getEventTargetNode(evnt, params.cell, 'vxe-checkbox').flag) {
