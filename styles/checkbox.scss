@@ -8,18 +8,24 @@
   &.size--small,
   &.size--mini {
     font-size: 12px;
+    > input {
+      &+.checkbox--icon {
+        font-size: 14px;
+      }
+    }
   }
   > input {
     display: none;
     &+.checkbox--icon {
       position: relative;
       display: inline-block;
-      width: 14px;
-      height: 14px;
+      width: 1em;
+      height: 1em;
       border: 1px solid $vxe-input-border-color;
       background-color: #fff;
       vertical-align: middle;
-      border-radius: 2px;
+      border-radius: 0.2em;
+      font-size: 16px;
       &:before {
         content: "";
         position: absolute;
@@ -29,11 +35,11 @@
       background-color: $vxe-primary-color;
       border-color: $vxe-primary-color;
       &:before {
-        height: 8px;
-        width: 4px;
-        left: 4px;
-        top: 1px;
-        border-width: 1px;
+        height: 0.6em;
+        width: 0.3em;
+        left: 0.32em;
+        top: 0.06em;
+        border-width: 0.15em;
         border-style: solid;
         border-color: #fff;
         border-left: 0;
@@ -52,12 +58,11 @@
         border-color: $vxe-primary-color;
         &:before {
           top: 50%;
-          height: 0;
+          height: 0.15em;
           width: 100%;
           transform: translateY(-50%) scale(.5);
-          border-width: 1px;
-          border-style: solid;
-          border-color: #fff;
+          border: 0;
+          background-color: #fff;
         }
       }
     }

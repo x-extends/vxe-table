@@ -24,8 +24,8 @@ export default {
   },
   methods: {
     renderOptions (h) {
-      let $table = this.$parent
-      let { filterStore, filterCheckAllEvent, changeRadioOption, changeMultipleOption } = this
+      let { $parent: $table, filterStore, filterCheckAllEvent, changeRadioOption, changeMultipleOption } = this
+      let { vSize } = $table
       let { args, column, multiple } = filterStore
       let { slots, filterRender } = column
       let compConf = filterRender ? Renderer.get(filterRender.name) : null
@@ -43,6 +43,7 @@ export default {
           multiple
             ? h('label', {
               class: ['vxe-checkbox', {
+                [`size--${vSize}`]: vSize,
                 'is--indeterminate': filterStore.isIndeterminate
               }]
             }, [
@@ -84,7 +85,9 @@ export default {
           }, [
             multiple
               ? h('label', {
-                class: 'vxe-checkbox'
+                class: ['vxe-checkbox', {
+                  [`size--${vSize}`]: vSize
+                }]
               }, [
                 h('input', {
                   attrs: {
