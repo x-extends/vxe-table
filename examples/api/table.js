@@ -386,6 +386,14 @@ const apis = [
             enum: '',
             defVal: '',
             list: []
+          },
+          {
+            name: 'trigger',
+            desc: '触发方式',
+            type: 'String',
+            enum: 'default（默认）,cell（点击单元格触发）,row（点击行触发）',
+            defVal: 'default',
+            list: []
           }
         ]
       },
@@ -1029,11 +1037,19 @@ const apis = [
     defVal: '',
     list: [
       {
-        name: 'select-all',
-        descKey: 'app.api.table.desc.selectAll',
+        name: 'current-change',
+        descKey: 'app.api.table.desc.currentChange',
         type: '',
         enum: '',
-        defVal: '{selection,checked},event',
+        defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,cell},event',
+        list: []
+      },
+      {
+        name: 'radio-change',
+        descKey: 'app.api.table.desc.radioChange',
+        type: '',
+        enum: '',
+        defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,cell},event',
         list: []
       },
       {
@@ -1041,7 +1057,15 @@ const apis = [
         descKey: 'app.api.table.desc.selectChange',
         type: '',
         enum: '',
-        defVal: '{selection,checked,row,column},event',
+        defVal: '{selection,checked,row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,cell},event',
+        list: []
+      },
+      {
+        name: 'select-all',
+        descKey: 'app.api.table.desc.selectAll',
+        type: '',
+        enum: '',
+        defVal: '{selection,checked},event',
         list: []
       },
       {

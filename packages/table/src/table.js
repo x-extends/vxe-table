@@ -204,15 +204,17 @@ export default {
       // 是否存在横向滚动条
       overflowX: false,
       // 纵向滚动条的宽度
-      scrollYWidth: 0,
+      scrollbarWidth: 0,
       // 横向滚动条的高度
-      scrollXHeight: 0,
+      scrollbarHeight: 0,
       // 是否全选
       isAllSelected: false,
       // 多选属性，有选中且非全选状态
       isIndeterminate: false,
       // 多选属性，已选中的列
       selection: [],
+      // 当前行
+      currentRow: null,
       // 单选属性，选中行
       selectRow: null,
       // 表尾合计数据
@@ -525,7 +527,7 @@ export default {
       footerMethod,
       overflowX,
       overflowY,
-      scrollXHeight,
+      scrollbarHeight,
       optimizeOpts,
       columnStore,
       filterStore,
@@ -619,7 +621,7 @@ export default {
       isResizable ? h('div', {
         class: 'vxe-table--resizable-bar',
         style: overflowX ? {
-          'padding-bottom': `${scrollXHeight}px`
+          'padding-bottom': `${scrollbarHeight}px`
         } : null,
         ref: 'resizeBar'
       }) : _e(),
@@ -1328,9 +1330,9 @@ export default {
         }
       })
       let tableHeight = bodyElem.offsetHeight
-      let scrollYWidth = bodyElem.offsetWidth - bodyWidth
-      this.scrollYWidth = scrollYWidth
-      this.overflowY = scrollYWidth > 0
+      let overflowY = bodyElem.scrollHeight > bodyElem.clientHeight
+      this.scrollbarWidth = overflowY ? bodyElem.offsetWidth - bodyWidth : 0
+      this.overflowY = overflowY
       this.tableWidth = tableWidth
       this.tableHeight = tableHeight
       this.parentHeight = $el.parentNode.clientHeight
@@ -1339,11 +1341,11 @@ export default {
       }
       if (footerElem) {
         let footerHeight = footerElem.offsetHeight
-        this.scrollXHeight = Math.max(footerHeight - footerElem.clientHeight, 0)
+        this.scrollbarHeight = Math.max(footerHeight - footerElem.clientHeight, 0)
         this.overflowX = tableWidth > footerElem.clientWidth
         this.footerHeight = footerHeight
       } else {
-        this.scrollXHeight = Math.max(tableHeight - bodyElem.clientHeight, 0)
+        this.scrollbarHeight = Math.max(tableHeight - bodyElem.clientHeight, 0)
         this.overflowX = tableWidth > bodyWidth
       }
       if (this.overflowX) {
@@ -1368,8 +1370,8 @@ export default {
         tableHeight,
         tableWidth,
         overflowY,
-        scrollXHeight,
-        scrollYWidth,
+        scrollbarHeight,
+        scrollbarWidth,
         scrollXLoad,
         columnStore,
         elemStore
@@ -1394,7 +1396,7 @@ export default {
               tWidth = tableColumn.reduce((previous, column) => previous + column.renderWidth, 0)
             }
             if (tableElem) {
-              tableElem.style.width = tWidth === null ? tWidth : `${tWidth + scrollYWidth}px`
+              tableElem.style.width = tWidth === null ? tWidth : `${tWidth + scrollbarWidth}px`
             }
 
             let repairElem = elemStore[`${name}-${layout}-repair`]
@@ -1405,17 +1407,17 @@ export default {
             let listElem = elemStore[`${name}-${layout}-list`]
             if (listElem) {
               XEUtils.arrayEach(listElem.querySelectorAll(`.col--gutter`), thElem => {
-                thElem.style.width = `${scrollYWidth}px`
+                thElem.style.width = `${scrollbarWidth}px`
               })
             }
           } else if (layout === 'body') {
             let customHeight = height === 'auto' ? parentHeight : XEUtils.toNumber(height)
             if (wrapperElem) {
               if (customHeight > 0) {
-                wrapperElem.style.height = `${fixedType ? (customHeight > 0 ? customHeight - headerHeight - footerHeight : tableHeight) - (showFooter ? 0 : scrollXHeight) : customHeight - headerHeight - footerHeight}px`
+                wrapperElem.style.height = `${fixedType ? (customHeight > 0 ? customHeight - headerHeight - footerHeight : tableHeight) - (showFooter ? 0 : scrollbarHeight) : customHeight - headerHeight - footerHeight}px`
               } else if (maxHeight) {
                 maxHeight = XEUtils.toNumber(maxHeight)
-                wrapperElem.style.maxHeight = `${fixedType ? maxHeight - headerHeight - (showFooter ? 0 : scrollXHeight) : maxHeight - headerHeight}px`
+                wrapperElem.style.maxHeight = `${fixedType ? maxHeight - headerHeight - (showFooter ? 0 : scrollbarHeight) : maxHeight - headerHeight}px`
               }
             }
 
@@ -1423,8 +1425,8 @@ export default {
             if (fixedWrapperElem) {
               let isRightFixed = fixedType === 'right'
               let fixedColumn = columnStore[`${fixedType}List`]
-              fixedWrapperElem.style.height = `${(customHeight > 0 ? customHeight - headerHeight - footerHeight : tableHeight) + headerHeight + footerHeight - scrollXHeight * (showFooter ? 2 : 1)}px`
-              fixedWrapperElem.style.width = `${fixedColumn.reduce((previous, column) => previous + column.renderWidth, isRightFixed ? scrollYWidth : 0)}px`
+              fixedWrapperElem.style.height = `${(customHeight > 0 ? customHeight - headerHeight - footerHeight : tableHeight) + headerHeight + footerHeight - scrollbarHeight * (showFooter ? 2 : 1)}px`
+              fixedWrapperElem.style.width = `${fixedColumn.reduce((previous, column) => previous + column.renderWidth, isRightFixed ? scrollbarWidth : 0)}px`
             }
 
             let tWidth = tableWidth
@@ -1442,8 +1444,8 @@ export default {
             if (tableElem) {
               tableElem.style.width = tWidth ? `${tWidth}px` : tWidth
               // 兼容火狐滚动条
-              if (overflowY && fixedType && browse['-moz']) {
-                tableElem.style.paddingRight = `${scrollYWidth}px`
+              if (overflowY && fixedType && (browse['-moz'] || browse['safari'])) {
+                tableElem.style.paddingRight = `${scrollbarWidth}px`
               }
             }
           } else if (layout === 'footer') {
@@ -1459,10 +1461,10 @@ export default {
               tWidth = tableColumn.reduce((previous, column) => previous + column.renderWidth, 0)
             }
             if (wrapperElem) {
-              wrapperElem.style.marginTop = `${-scrollXHeight - 1}px`
+              wrapperElem.style.marginTop = `${-scrollbarHeight - 1}px`
             }
             if (tableElem) {
-              tableElem.style.width = tWidth === null ? tWidth : `${tWidth + scrollYWidth}px`
+              tableElem.style.width = tWidth === null ? tWidth : `${tWidth + scrollbarWidth}px`
             }
           }
           let colgroupElem = elemStore[`${name}-${layout}-colgroup`]
@@ -1471,7 +1473,7 @@ export default {
               let colId = colElem.getAttribute('name')
               let column = fullColumnIdMap.get(colId)
               if (colId === 'col-gutter') {
-                colElem.width = `${scrollYWidth || ''}`
+                colElem.width = `${scrollbarWidth || ''}`
               }
               if (column) {
                 colElem.width = `${column.renderWidth || ''}`
@@ -2017,14 +2019,14 @@ export default {
       if (rows && !XEUtils.isArray(rows)) {
         rows = [rows]
       }
-      rows.forEach(row => this.triggerCheckRowEvent(null, { row }, !!value))
+      rows.forEach(row => this.handleSelectRow(null, { row }, !!value))
       return this.$nextTick()
     },
     /**
      * 多选，行选中事件
      * value 选中true 不选false 不确定-1
      */
-    triggerCheckRowEvent (evnt, { row }, value) {
+    handleSelectRow (evnt, { row }, value) {
       let { selection, tableFullData, selectConfig = {}, treeConfig, treeIndeterminates } = this
       let { checkField: property, checkMethod } = selectConfig
       if (!checkMethod || checkMethod({ row, rowIndex: tableFullData.indexOf(row) })) {
@@ -2042,7 +2044,7 @@ export default {
             let matchObj = XEUtils.findTree(tableFullData, item => item === row, treeConfig)
             if (matchObj && matchObj.parent) {
               let selectItems = matchObj.items.filter(item => XEUtils.get(item, property))
-              return this.triggerCheckRowEvent(evnt, { row: matchObj.parent }, selectItems.length === matchObj.items.length ? true : (selectItems.length || value === -1 ? -1 : false))
+              return this.handleSelectRow(evnt, { row: matchObj.parent }, selectItems.length === matchObj.items.length ? true : (selectItems.length || value === -1 ? -1 : false))
             }
           } else {
             XEUtils.set(row, property, value)
@@ -2069,7 +2071,7 @@ export default {
             let matchObj = XEUtils.findTree(tableFullData, item => item === row, treeConfig)
             if (matchObj && matchObj.parent) {
               let selectItems = matchObj.items.filter(item => selection.indexOf(item) > -1)
-              return this.triggerCheckRowEvent(evnt, { row: matchObj.parent }, selectItems.length === matchObj.items.length ? true : (selectItems.length || value === -1 ? -1 : false))
+              return this.handleSelectRow(evnt, { row: matchObj.parent }, selectItems.length === matchObj.items.length ? true : (selectItems.length || value === -1 ? -1 : false))
             }
           } else {
             if (value) {
@@ -2082,8 +2084,11 @@ export default {
           }
         }
         this.checkSelectionStatus()
-        UtilTools.emitEvent(this, 'select-change', [{ row, selection: this.getSelectRecords(), checked: value }, evnt])
       }
+    },
+    triggerCheckRowEvent (evnt, params, value) {
+      this.handleSelectRow(evnt, params, value)
+      UtilTools.emitEvent(this, 'select-change', [Object.assign({ selection: this.getSelectRecords(), checked: value }, params), evnt])
     },
     checkSelectionStatus () {
       let { tableFullData, editStore, selectConfig = {}, selection, treeIndeterminates } = this
@@ -2127,7 +2132,7 @@ export default {
     toggleRowSelection (row) {
       let { selectConfig = {}, selection } = this
       let { checkField: property } = selectConfig
-      this.triggerCheckRowEvent(arguments[1], { row }, property ? !XEUtils.get(row, property) : selection.indexOf(row) === -1)
+      this.handleSelectRow(arguments[1], { row }, property ? !XEUtils.get(row, property) : selection.indexOf(row) === -1)
       return this.$nextTick()
     },
     setAllSelection (value) {
@@ -2205,32 +2210,50 @@ export default {
     /**
      * 单选，行选中事件
      */
-    triggerRowEvent (evnt, { row }) {
-      UtilTools.emitEvent(this, 'select-change', [{ row }, evnt])
-      return this.setCurrentRow(row)
+    triggerRadioRowEvent (evnt, params) {
+      this.setRadioRow(params.row)
+      UtilTools.emitEvent(this, 'radio-change', [params, evnt])
+    },
+    triggerCurrentRowEvent (evnt, params) {
+      this.setCurrentRow(params.row)
+      UtilTools.emitEvent(this, 'current-change', [params, evnt])
     },
     /**
      * 单选，设置某一行为选中状态，如果调不加参数，则会取消目前高亮行的选中状态
      */
     setCurrentRow (row) {
       let rowId = UtilTools.getRowId(this, row, this.getRowMapIndex(row))
-      if (this.selectRow !== row) {
+      if (this.currentRow !== row) {
         this.clearCurrentRow()
       }
       this.clearCurrentColumn()
-      this.selectRow = row
+      this.currentRow = row
       if (this.highlightCurrentRow) {
         XEUtils.arrayEach(this.$el.querySelectorAll(`[data-rowid="${rowId}"]`), elem => DomTools.addClass(elem, 'row--current'))
       }
       return this.$nextTick()
     },
+    setRadioRow (row) {
+      if (this.selectRow !== row) {
+        this.clearRadioRow()
+      }
+      this.selectRow = row
+      return this.$nextTick()
+    },
     clearCurrentRow () {
-      this.selectRow = null
+      this.currentRow = null
       this.hoverRow = null
       XEUtils.arrayEach(this.$el.querySelectorAll('.row--current'), elem => DomTools.removeClass(elem, 'row--current'))
       return this.$nextTick()
     },
+    clearRadioRow () {
+      this.selectRow = null
+      return this.$nextTick()
+    },
     getCurrentRow () {
+      return this.currentRow
+    },
+    getRadioRow () {
       return this.selectRow
     },
     /**
@@ -2474,13 +2497,17 @@ export default {
      * 如果是双击模式，则单击后选中状态
      */
     triggerCellClickEvent (evnt, params) {
-      let { $el, highlightCurrentRow, editStore, selectConfig, treeConfig, editConfig, mouseConfig = {} } = this
+      let { $el, highlightCurrentRow, editStore, radioConfig = {}, selectConfig, treeConfig, editConfig, mouseConfig = {} } = this
       let { actived } = editStore
       let { row, column, columnIndex, cell } = params
       if (highlightCurrentRow) {
-        if (!this.getEventTargetNode(evnt, $el, 'vxe-tree-wrapper').flag && !this.getEventTargetNode(evnt, $el, 'vxe-checkbox').flag) {
-          this.setCurrentRow(params.row)
+        if (radioConfig.trigger === 'row' || (!this.getEventTargetNode(evnt, $el, 'vxe-tree-wrapper').flag && !this.getEventTargetNode(evnt, $el, 'vxe-checkbox').flag && !this.getEventTargetNode(evnt, $el, 'vxe-radio').flag)) {
+          this.triggerCurrentRowEvent(evnt, params)
         }
+      }
+      // 如果是单选
+      if ((radioConfig.trigger === 'row' || (column.type === 'radio' && selectConfig.trigger === 'cell')) && !this.getEventTargetNode(evnt, $el, 'vxe-radio').flag) {
+        this.triggerRadioRowEvent(evnt, params)
       }
       // 如果是多选
       if (selectConfig && (selectConfig.trigger === 'row' || (column.type === 'selection' && selectConfig.trigger === 'cell')) && !this.getEventTargetNode(evnt, params.cell, 'vxe-checkbox').flag) {
@@ -3502,7 +3529,7 @@ export default {
     },
     // 更新横向 X 可视渲染上下剩余空间大小
     updateScrollXSpace () {
-      let { $refs, elemStore, visibleColumn, scrollXStore, tableWidth, scrollYWidth } = this
+      let { $refs, elemStore, visibleColumn, scrollXStore, tableWidth, scrollbarWidth } = this
       let { tableHeader, tableBody, tableFooter } = $refs
       let headerElem = tableHeader ? tableHeader.$el.querySelector('.vxe-table--header') : null
       let bodyElem = tableBody.$el.querySelector('.vxe-table--body')
@@ -3522,7 +3549,7 @@ export default {
         layoutList.forEach(layout => {
           let xSpaceElem = elemStore[`${name}-${layout}-xSpace`]
           if (xSpaceElem) {
-            xSpaceElem.style.width = `${tableWidth + (layout === 'header' ? scrollYWidth : 0)}px`
+            xSpaceElem.style.width = `${tableWidth + (layout === 'header' ? scrollbarWidth : 0)}px`
           }
         })
       })

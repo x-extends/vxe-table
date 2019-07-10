@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>多选表格，基础方式；更多参数具体看文档 <table-api-link prop="select-config"/></p>
+    <p>多选表格，用户操作点击选项时会触发事件 <table-api-link prop="select-change"/></p>
 
     <vxe-toolbar>
       <template v-slot:buttons>
@@ -15,7 +15,9 @@
       ref="xTable1"
       border
       height="300"
-      :data.sync="tableData">
+      :data.sync="tableData"
+      @select-all="selectAllEvent"
+      @select-change="selectChangeEvent">
       <vxe-table-column type="selection" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -96,10 +98,10 @@
 
     <vxe-table
       border
+      highlight-hover-row
       ref="xTable4"
       height="300"
       :data.sync="tableData"
-      :select-config="{checkField: 'checked'}"
       :radio-config="{labelField: 'name'}">
       <vxe-table-column type="selection" width="60"></vxe-table-column>
       <vxe-table-column type="radio" width="200" title="Name"></vxe-table-column>
@@ -113,6 +115,31 @@
     <pre>
       <code class="xml">{{ demoCodes[6] }}</code>
       <code class="javascript">{{ demoCodes[7] }}</code>
+    </pre>
+
+    <p>不仅如此，还可以多种方式混合使用</p>
+
+    <vxe-table
+      border
+      resizable
+      highlight-hover-row
+      highlight-current-row
+      ref="xTable5"
+      height="300"
+      :data.sync="tableData"
+      :radio-config="{labelField: 'name'}">
+      <vxe-table-column type="selection" width="60"></vxe-table-column>
+      <vxe-table-column type="radio" width="200" title="Name"></vxe-table-column>
+      <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+      <vxe-table-column field="age" title="Age"></vxe-table-column>
+      <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+    </vxe-table>
+
+    <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
+
+    <pre>
+      <code class="xml">{{ demoCodes[8] }}</code>
+      <code class="javascript">{{ demoCodes[9] }}</code>
     </pre>
   </div>
 </template>
@@ -139,7 +166,9 @@ export default {
           ref="xTable1"
           border
           height="300"
-          :data.sync="tableData">
+          :data.sync="tableData"
+          @select-all="selectAllEvent"
+          @select-change="selectChangeEvent">
           <vxe-table-column type="selection" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -156,6 +185,14 @@ export default {
           },
           created () {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 10)
+          },
+          methods: {
+            selectAllEvent ({ checked }) {
+              console.log(checked ? '所有勾选事件' : '所有取消事件')
+            },
+            selectChangeEvent ({ checked, row }) {
+              console.log(checked ? '勾选事件' : '取消事件')
+            }
           }
         }
         `,
@@ -237,10 +274,39 @@ export default {
         `
         <vxe-table
           border
+          highlight-hover-row
           ref="xTable4"
           height="300"
           :data.sync="tableData"
-          :select-config="{checkField: 'checked'}"
+          :radio-config="{labelField: 'name'}">
+          <vxe-table-column type="selection" width="60"></vxe-table-column>
+          <vxe-table-column type="radio" width="200" title="Name"></vxe-table-column>
+          <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+          <vxe-table-column field="age" title="Age"></vxe-table-column>
+          <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+        </vxe-table>
+        `,
+        `
+        export default {
+          data () {
+            return {
+              tableData: []
+            }
+          },
+          created () {
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 10)
+          }
+        }
+        `,
+        `
+        <vxe-table
+          border
+          resizable
+          highlight-hover-row
+          highlight-current-row
+          ref="xTable5"
+          height="300"
+          :data.sync="tableData"
           :radio-config="{labelField: 'name'}">
           <vxe-table-column type="selection" width="60"></vxe-table-column>
           <vxe-table-column type="radio" width="200" title="Name"></vxe-table-column>
@@ -276,6 +342,12 @@ export default {
   methods: {
     checkMethod ({ row }) {
       return row.age > 26
+    },
+    selectAllEvent ({ checked }) {
+      console.log(checked ? '所有勾选事件' : '所有取消事件')
+    },
+    selectChangeEvent ({ checked, row }) {
+      console.log(checked ? '勾选事件' : '取消事件')
     }
   }
 }

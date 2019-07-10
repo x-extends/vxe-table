@@ -24,6 +24,7 @@ const TableFixed = () => import(/* webpackChunkName: "base" */ './views/table/ba
 const TableFixedFull = () => import(/* webpackChunkName: "base" */ './views/table/base/FixedFull.vue')
 const TableGroup = () => import(/* webpackChunkName: "base" */ './views/table/base/Group.vue')
 const TableIndex = () => import(/* webpackChunkName: "base" */ './views/table/base/Index.vue')
+const TableCurrent = () => import(/* webpackChunkName: "base" */ './views/table/base/Current.vue')
 const TableRadio = () => import(/* webpackChunkName: "base" */ './views/table/base/Radio.vue')
 const TableSelection = () => import(/* webpackChunkName: "base" */ './views/table/base/Selection.vue')
 const TableSort = () => import(/* webpackChunkName: "base" */ './views/table/base/Sort.vue')
@@ -242,6 +243,11 @@ export default new Router({
       path: '/table/base/index',
       name: 'TableIndex',
       component: TableIndex
+    },
+    {
+      path: '/table/base/current',
+      name: 'TableCurrent',
+      component: TableCurrent
     },
     {
       path: '/table/base/radio',

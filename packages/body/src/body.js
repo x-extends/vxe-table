@@ -17,6 +17,7 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
     showOverflow: allColumnOverflow,
     cellClassName,
     spanMethod,
+    radioConfig = {},
     selectConfig = {},
     treeConfig = {},
     mouseConfig = {},
@@ -87,6 +88,7 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
     tableListeners['cell-click'] ||
     mouseConfig.checked ||
     (editRender && editConfig) ||
+    (radioConfig.trigger === 'row' || (column.type === 'radio' && radioConfig.trigger === 'cell')) ||
     (selectConfig.trigger === 'row' || (column.type === 'selection' && selectConfig.trigger === 'cell')) ||
     (treeConfig.trigger === 'row' || (column.treeNode && treeConfig.trigger === 'cell'))) {
     tdOns.click = evnt => {

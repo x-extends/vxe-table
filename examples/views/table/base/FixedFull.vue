@@ -25,7 +25,6 @@
 
     <p>固定列建议设置 show-overflow 或 show-overflow 该值，禁用自动换行，大幅提升渲染速度</p>
 
-<button></button>
     <keep-alive>
       <vxe-table
         border

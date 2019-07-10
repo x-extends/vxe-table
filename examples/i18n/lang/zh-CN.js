@@ -21,7 +21,6 @@ module.exports = {
         border: '边框',
         style: '单元格样式',
         hideHead: '隐藏头部',
-        headerHighlight: '高亮显示选中列',
         resizable: '列宽拖动',
         fluidHeight: '流体高度',
         resize: '响应式宽高',
@@ -30,6 +29,8 @@ module.exports = {
         fullFixed: '固定表头和列',
         group: '表头分组',
         seq: '序号',
+        headerHighlight: '高亮列',
+        current: '高亮行',
         radio: '单选',
         checkbox: '多选',
         sort: '排序',
@@ -211,8 +212,10 @@ module.exports = {
 
           empty: '空数据时显示的文本内容',
 
+          currentChange: '只对 highlightCurrentRow 有效，当手动选中行时触发的事件',
+          radioChange: '只对 type=radio 有效，当手动勾选时触发的事件',
+          selectChange: '只对 type=selection 有效，当手动勾选时触发的事件',
           selectAll: '只对 type=selection 有效，当手动勾选全选时触发的事件',
-          selectChange: '只对 type=selection,radio 有效，当手动勾选时触发的事件',
           cellClick: '单元格被点击时会触发该事件',
           cellDblclick: '单元格被双击时会触发该事件',
           headerCellClick: '表头单元格被点击时会触发该事件',
