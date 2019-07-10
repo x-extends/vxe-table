@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p><grid-api-link name="vxe-grid"/> 只为解决动态表格一切需求（动态列、动态数据、动态个性化...）</p>
+    <p><grid-api-link name="vxe-grid"/> 高级表格，解决动态数据一切需求（动态列、动态数据、动态个性化...）</p>
     <p>继承 <table-api-link name="vxe-table"/> 的所有参数、事件、方法...，使用配置的方式渲染表格，这非常适用于动态渲染的场景，完全使用数据进行配置</p>
 
     <vxe-grid

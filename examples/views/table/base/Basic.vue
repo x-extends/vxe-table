@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>基础使用</p>
+    <p><table-api-link name="vxe-table"/> 静态化基础表格</p>
 
     <vxe-table
       :data.sync="tableData">

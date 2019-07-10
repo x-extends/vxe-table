@@ -18,7 +18,7 @@
         <vxe-button @click="$refs.xGrid.commitProxy('insert_actived')">新增</vxe-button>
         <vxe-button @click="$refs.xGrid.commitProxy('mark_cancel')">标记/取消</vxe-button>
         <vxe-button @click="$refs.xGrid.commitProxy('save')">保存</vxe-button>
-        <vxe-button @click="$refs.xGrid.commitProxy('export')">导出.csv</vxe-button>
+        <vxe-button @click="$refs.xGrid.exportCsv()">导出.csv</vxe-button>
       </template>
     </vxe-grid>
 
@@ -87,7 +87,7 @@ export default {
             <vxe-button @click="$refs.xGrid.commitProxy('insert_actived')">新增</vxe-button>
             <vxe-button @click="$refs.xGrid.commitProxy('mark_cancel')">标记/取消</vxe-button>
             <vxe-button @click="$refs.xGrid.commitProxy('save')">保存</vxe-button>
-            <vxe-button @click="$refs.xGrid.commitProxy('export')">导出.csv</vxe-button>
+            <vxe-button @click="$refs.xGrid.exportCsv()">导出.csv</vxe-button>
           </template>
         </vxe-grid>
         `,
