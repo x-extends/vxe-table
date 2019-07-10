@@ -100,7 +100,7 @@ export const Cell = {
         on
       }, rowChildren && rowChildren.length ? [
         h('i', {
-          class: ['vxe-tree--node-btn', icon.tree]
+          class: `vxe-tree--node-btn ${icon.tree}`
         })
       ] : [])
     ]
@@ -140,7 +140,7 @@ export const Cell = {
   },
   renderRadioCell (h, params) {
     let { $table, column, isHidden } = params
-    let { radioConfig = {} } = $table
+    let { vSize, radioConfig = {} } = $table
     let { slots } = column
     let { labelField } = radioConfig
     if (slots && slots.header) {
@@ -166,11 +166,13 @@ export const Cell = {
     }
     return [
       h('label', {
-        class: ['vxe-radio']
+        class: ['vxe-radio', {
+          [`size--${vSize}`]: vSize
+        }]
       }, [
         h('input', options),
         h('span', {
-          class: ['radio--icon']
+          class: 'radio--icon'
         }),
         labelField ? h('span', {
           class: 'radio--label'
@@ -187,6 +189,7 @@ export const Cell = {
    */
   renderSelectionHeader (h, params) {
     let { $table, column, isHidden } = params
+    let { vSize } = $table
     let { slots, own } = column
     let headerTitle = own.title || own.label
     let options = {
@@ -210,12 +213,13 @@ export const Cell = {
     return [
       h('label', {
         class: ['vxe-checkbox', {
+          [`size--${vSize}`]: vSize,
           'is--indeterminate': $table.isIndeterminate
         }]
       }, [
         h('input', options),
         h('span', {
-          class: ['checkbox--icon']
+          class: 'checkbox--icon'
         }),
         headerTitle ? h('span', {
           class: 'checkbox--label'
@@ -225,7 +229,7 @@ export const Cell = {
   },
   renderSelectionCell (h, params) {
     let { $table } = params
-    let { selectConfig = {}, treeConfig, treeIndeterminates } = $table
+    let { vSize, selectConfig = {}, treeConfig, treeIndeterminates } = $table
     let { labelField, checkMethod } = selectConfig
     let { row, isHidden } = params
     let indeterminate = false
@@ -255,13 +259,14 @@ export const Cell = {
     return [
       h('label', {
         class: ['vxe-checkbox', {
+          [`size--${vSize}`]: vSize,
           'is--indeterminate': indeterminate,
           'is--disabled': isDisabled
         }]
       }, [
         h('input', options),
         h('span', {
-          class: ['checkbox--icon']
+          class: 'checkbox--icon'
         }),
         labelField ? h('span', {
           class: 'checkbox--label'
@@ -274,7 +279,7 @@ export const Cell = {
   },
   renderSelectionCellByProp (h, params) {
     let { $table } = params
-    let { selectConfig = {}, treeConfig, treeIndeterminates } = $table
+    let { vSize, selectConfig = {}, treeConfig, treeIndeterminates } = $table
     let { labelField, checkField: property, checkMethod } = selectConfig
     let { row, isHidden } = params
     let indeterminate = false
@@ -304,13 +309,14 @@ export const Cell = {
     return [
       h('label', {
         class: ['vxe-checkbox', {
+          [`size--${vSize}`]: vSize,
           'is--indeterminate': indeterminate,
           'is--disabled': isDisabled
         }]
       }, [
         h('input', options),
         h('span', {
-          class: ['checkbox--icon']
+          class: 'checkbox--icon'
         }),
         labelField ? h('span', {
           class: 'checkbox--label'
@@ -343,7 +349,7 @@ export const Cell = {
         }
       }, [
         h('i', {
-          class: ['vxe-table--expand-icon']
+          class: 'vxe-table--expand-icon'
         })
       ])
     ]
@@ -377,7 +383,7 @@ export const Cell = {
     let { $table, column } = params
     return [
       h('span', {
-        class: ['vxe-sort-wrapper']
+        class: 'vxe-sort-wrapper'
       }, [
         h('i', {
           class: ['vxe-sort--asc-btn', icon.sortAsc, {
@@ -420,7 +426,7 @@ export const Cell = {
         }]
       }, [
         h('i', {
-          class: ['vxe-filter--btn', icon.filter],
+          class: `vxe-filter--btn ${icon.filter}`,
           on: {
             click (evnt) {
               $table.triggerFilterEvent(evnt, params.column, params)
@@ -451,7 +457,7 @@ export const Cell = {
         class: 'vxe-required-icon'
       }) : null,
       editConfig && editConfig.showIcon === false ? null : h('i', {
-        class: ['vxe-edit-icon', icon.edit]
+        class: `vxe-edit-icon ${icon.edit}`
       })
     ].concat(Cell.renderHeader(h, params))
       .concat(sortable || remoteSort ? Cell.renderSortIcon(h, params) : [])

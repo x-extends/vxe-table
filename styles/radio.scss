@@ -8,28 +8,34 @@
   &.size--small,
   &.size--mini {
     font-size: 12px;
+    > input {
+      &+.radio--icon {
+        font-size: 14px;
+      }
+    }
   }
   > input {
     display: none;
     &+.radio--icon {
       position: relative;
       display: inline-block;
-      width: 14px;
-      height: 14px;
+      width: 1em;
+      height: 1em;
       border: 1px solid $vxe-input-border-color;
       background-color: #fff;
       vertical-align: middle;
       border-radius: 50%;
+      font-size: 16px;
       &:before {
         content: "";
         position: absolute;
-        border-width: 1px;
+        border-width: 0.15em;
         border-style: solid;
         border-color: #fff;
         background-color: #fff;
         border-radius: 50%;
-        height: 4px;
-        width: 4px;
+        height: 0.4em;
+        width: 0.4em;
         top: 50%;
         left: 50%;
         transform: translate(-50%,-50%);
