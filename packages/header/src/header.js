@@ -179,7 +179,7 @@ export default {
             } = column
             let isGroup = column.children && column.children.length
             let fixedHiddenColumn = fixedType && column.fixed !== fixedType && !isGroup
-            let headOverflow = (XEUtils.isUndefined(showHeaderOverflow) || XEUtils.isUndefined(showHeaderOverflow)) ? allColumnHeaderOverflow : showHeaderOverflow
+            let headOverflow = XEUtils.isUndefined(showHeaderOverflow) || XEUtils.isNull(showHeaderOverflow) ? allColumnHeaderOverflow : showHeaderOverflow
             let showEllipsis = headOverflow === 'ellipsis'
             let showTitle = headOverflow === 'title'
             let showTooltip = headOverflow === true || headOverflow === 'tooltip'
