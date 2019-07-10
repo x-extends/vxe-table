@@ -246,52 +246,9 @@ export default {
     },
     btnEvent (item, evnt) {
       let { $grid } = this
-      let { code } = item
-      // 只对 gird 环境中有效
       if ($grid) {
-        switch (code) {
-          case 'insert':
-            $grid.insert()
-            break
-          case 'insert_actived':
-            $grid.insert().then(({ row }) => $grid.setActiveRow(row))
-            break
-          case 'mark_cancel':
-            $grid.triggerPendingEvent(code, evnt)
-            break
-          case 'delete_selection': {
-            this.handleDeleteRow($grid, code, 'vxe.grid.deleteSelectRecord', () => $grid.commitProxy('delete'))
-            break
-          }
-          case 'remove_selection': {
-            this.handleDeleteRow($grid, code, 'vxe.grid.removeSelectRecord', () => $grid.removeSelecteds())
-            break
-          }
-          case 'save':
-            $grid.commitProxy('save')
-            break
-          case 'reload':
-            $grid.commitProxy('reload')
-            break
-          case 'export':
-            $grid.exportCsv()
-            break
-        }
+        $grid.commitProxy(item.code)
         UtilTools.emitEvent($grid, 'toolbar-button-click', [{ button: item, $grid }, evnt])
-      }
-    },
-    handleDeleteRow ($grid, code, alertKey, callback) {
-      let selectRecords = $grid.getSelectRecords()
-      if ($grid.isMsg) {
-        if (selectRecords.length) {
-          this.$XMsg.confirm(GlobalConfig.i18n(alertKey)).then(callback).catch(e => e)
-        } else {
-          this.$XMsg.message({ id: code, message: GlobalConfig.i18n('vxe.grid.selectOneRecord'), status: 'warning' })
-        }
-      } else {
-        if (selectRecords.length) {
-          callback()
-        }
       }
     }
   }

@@ -64,6 +64,7 @@ module.exports = {
         proxy: 'DataProxy',
         proxyPage: 'DataProxy + Pager',
         fullQuery: '完整查询',
+        customToolbar: '自定义工具栏',
         dynamicColumn: '实现可配置动态列',
         baseTree: 'Basics tree',
         crudTreeToolbar: 'Tree + CRUD + Toolbar',

@@ -64,6 +64,7 @@ module.exports = {
         proxy: '数据代理',
         proxyPage: '数据代理 + 分页',
         fullQuery: '完整查询',
+        customToolbar: '自定义工具栏',
         dynamicColumn: '实现可配置动态列',
         baseTree: '基础树',
         crudTreeToolbar: '树 + 增删改查 + 工具栏',
