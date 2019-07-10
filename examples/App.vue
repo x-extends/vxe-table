@@ -467,6 +467,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.customToolbar',
+              locat: {
+                name: 'GridCustomToolbar'
+              }
+            },
+            {
               label: 'app.aside.nav.dynamicColumn',
               locat: {
                 name: 'GridDynamic'

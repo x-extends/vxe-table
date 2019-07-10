@@ -61,6 +61,7 @@ const GridProxy = () => import(/* webpackChunkName: "grid" */ './views/table/gri
 const GridPageProxy = () => import(/* webpackChunkName: "grid" */ './views/table/grid/PageProxy.vue')
 const GridEdit = () => import(/* webpackChunkName: "grid" */ './views/table/grid/Edit.vue')
 const GridToolbar = () => import(/* webpackChunkName: "grid" */ './views/table/grid/Toolbar.vue')
+const GridCustomToolbar = () => import(/* webpackChunkName: "grid" */ './views/table/grid/CustomToolbar.vue')
 const GridDynamic = () => import(/* webpackChunkName: "grid" */ './views/table/grid/Dynamic.vue')
 const GridTree = () => import(/* webpackChunkName: "grid" */ './views/table/grid/Tree.vue')
 const GridTreeEdit = () => import(/* webpackChunkName: "grid" */ './views/table/grid/TreeEdit.vue')
@@ -408,6 +409,11 @@ export default new Router({
       path: '/table/grid/toolbar',
       name: 'GridToolbar',
       component: GridToolbar
+    },
+    {
+      path: '/table/grid/customToolbar',
+      name: 'GridCustomToolbar',
+      component: GridCustomToolbar
     },
     {
       path: '/table/grid/dynamic',

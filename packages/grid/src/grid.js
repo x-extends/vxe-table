@@ -175,6 +175,24 @@ export default {
       let { ajax, props = {} } = proxyOpts
       if (ajax) {
         switch (code) {
+          case 'insert':
+            this.insert()
+            break
+          case 'insert_actived':
+            this.insert().then(({ row }) => this.setActiveRow(row))
+            break
+          case 'mark_cancel':
+            this.triggerPendingEvent(code)
+            break
+          case 'delete_selection':
+            this.handleDeleteRow(code, 'vxe.grid.deleteSelectRecord', () => this.commitProxy('delete'))
+            break
+          case 'remove_selection':
+            this.handleDeleteRow(code, 'vxe.grid.removeSelectRecord', () => this.removeSelecteds())
+            break
+          case 'export':
+            this.exportCsv()
+            break
           case 'reload':
           case 'query': {
             if (ajax.query) {
@@ -281,10 +299,24 @@ export default {
       }
       return this.$nextTick()
     },
+    handleDeleteRow (code, alertKey, callback) {
+      let selectRecords = this.getSelectRecords()
+      if (this.isMsg) {
+        if (selectRecords.length) {
+          this.$XMsg.confirm(GlobalConfig.i18n(alertKey)).then(callback).catch(e => e)
+        } else {
+          this.$XMsg.message({ id: code, message: GlobalConfig.i18n('vxe.grid.selectOneRecord'), status: 'warning' })
+        }
+      } else {
+        if (selectRecords.length) {
+          callback()
+        }
+      }
+    },
     getPendingRecords () {
       return this.pendingRecords
     },
-    triggerPendingEvent (code, evnt) {
+    triggerPendingEvent (code) {
       let { pendingRecords, isMsg } = this
       let selectRecords = this.getSelectRecords()
       if (selectRecords.length) {
