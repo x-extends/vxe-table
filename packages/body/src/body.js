@@ -405,7 +405,7 @@ export default {
       marginLeft: fixedType ? null : `${scrollXStore.leftSpaceWidth}px`
     }
     // 兼容火狐滚动条
-    if (overflowY && fixedType && DomTools.browse['-moz']) {
+    if (overflowY && fixedType && (DomTools.browse['-moz'] || DomTools.browse['safari'])) {
       tableStyle.paddingRight = `${scrollbarWidth}px`
     }
     return h('div', {
