@@ -1955,54 +1955,26 @@ export default {
         this.checkSelectionStatus()
       }
     },
+    handleToggleCheckRowEvent (params, evnt) {
+      let { selectConfig = {}, selection } = this
+      let { checkField: property } = selectConfig
+      let { row } = params
+      let value = property ? !XEUtils.get(row, property) : selection.indexOf(row) === -1
+      if (evnt) {
+        this.triggerCheckRowEvent(evnt, params, value)
+      } else {
+        this.handleSelectRow(params, value)
+      }
+    },
     triggerCheckRowEvent (evnt, params, value) {
       this.handleSelectRow(evnt, params, value)
       UtilTools.emitEvent(this, 'select-change', [Object.assign({ selection: this.getSelectRecords(), checked: value }, params), evnt])
-    },
-    checkSelectionStatus () {
-      let { tableFullData, editStore, selectConfig = {}, selection, treeIndeterminates } = this
-      let { checkMethod } = selectConfig
-      let property = selectConfig.checkField || selectConfig.checkProp
-      let { insertList } = editStore
-      // 包含新增的数据
-      if (insertList.length) {
-        tableFullData = tableFullData.concat(insertList)
-      }
-      if (property) {
-        this.isAllSelected = tableFullData.length && tableFullData.every(
-          checkMethod
-            ? (row, rowIndex) => !checkMethod({ row, rowIndex }) || XEUtils.get(row, property)
-            : row => XEUtils.get(row, property)
-        )
-        this.isIndeterminate = !this.isAllSelected && tableFullData.some(row => XEUtils.get(row, property) || treeIndeterminates.indexOf(row) > -1)
-      } else {
-        this.isAllSelected = tableFullData.length && tableFullData.every(
-          checkMethod
-            ? (row, rowIndex) => !checkMethod({ row, rowIndex }) || selection.indexOf(row) > -1
-            : row => selection.indexOf(row) > -1
-        )
-        this.isIndeterminate = !this.isAllSelected && tableFullData.some(row => treeIndeterminates.indexOf(row) > -1 || selection.indexOf(row) > -1)
-      }
-    },
-    // 保留选中状态
-    reserveCheckSelection () {
-      let { selectConfig = {}, selection, fullDataRowIdMap } = this
-      let { reserve } = selectConfig
-      let rowKey = UtilTools.getRowKey(this)
-      if (reserve && selection.length) {
-        this.selection = selection.map(row => {
-          let rowId = '' + XEUtils.get(row, rowKey)
-          return fullDataRowIdMap.has(rowId) ? fullDataRowIdMap.get(rowId).row : row
-        })
-      }
     },
     /**
      * 多选，切换某一行的选中状态
      */
     toggleRowSelection (row) {
-      let { selectConfig = {}, selection } = this
-      let property = selectConfig.checkField || selectConfig.checkProp
-      this.handleSelectRow(null, { row }, property ? !XEUtils.get(row, property) : selection.indexOf(row) === -1)
+      this.handleToggleCheckRowEvent({ row })
       return this.$nextTick()
     },
     setAllSelection (value) {
@@ -2047,6 +2019,43 @@ export default {
       this.isAllSelected = value
       this.isIndeterminate = false
       this.treeIndeterminates = []
+    },
+    checkSelectionStatus () {
+      let { tableFullData, editStore, selectConfig = {}, selection, treeIndeterminates } = this
+      let { checkMethod } = selectConfig
+      let property = selectConfig.checkField || selectConfig.checkProp
+      let { insertList } = editStore
+      // 包含新增的数据
+      if (insertList.length) {
+        tableFullData = tableFullData.concat(insertList)
+      }
+      if (property) {
+        this.isAllSelected = tableFullData.length && tableFullData.every(
+          checkMethod
+            ? (row, rowIndex) => !checkMethod({ row, rowIndex }) || XEUtils.get(row, property)
+            : row => XEUtils.get(row, property)
+        )
+        this.isIndeterminate = !this.isAllSelected && tableFullData.some(row => XEUtils.get(row, property) || treeIndeterminates.indexOf(row) > -1)
+      } else {
+        this.isAllSelected = tableFullData.length && tableFullData.every(
+          checkMethod
+            ? (row, rowIndex) => !checkMethod({ row, rowIndex }) || selection.indexOf(row) > -1
+            : row => selection.indexOf(row) > -1
+        )
+        this.isIndeterminate = !this.isAllSelected && tableFullData.some(row => treeIndeterminates.indexOf(row) > -1 || selection.indexOf(row) > -1)
+      }
+    },
+    // 保留选中状态
+    reserveCheckSelection () {
+      let { selectConfig = {}, selection, fullDataRowIdMap } = this
+      let { reserve } = selectConfig
+      let rowKey = UtilTools.getRowKey(this)
+      if (reserve && selection.length) {
+        this.selection = selection.map(row => {
+          let rowId = '' + XEUtils.get(row, rowKey)
+          return fullDataRowIdMap.has(rowId) ? fullDataRowIdMap.get(rowId).row : row
+        })
+      }
     },
     /**
      * 多选，选中所有事件
@@ -2230,7 +2239,7 @@ export default {
      * 如果是双击模式，则单击后选中状态
      */
     triggerCellClickEvent (evnt, params) {
-      let { $el, highlightCurrentRow, editStore, radioConfig = {}, selectConfig, treeConfig, editConfig } = this
+      let { $el, highlightCurrentRow, editStore, radioConfig = {}, selectConfig = {}, treeConfig = {}, editConfig } = this
       let { actived } = editStore
       let { column, columnIndex, row, cell } = params
       if (highlightCurrentRow) {
@@ -2240,15 +2249,15 @@ export default {
         }
       }
       // 如果是单选
-      if ((radioConfig.trigger === 'row' || (column.type === 'radio' && selectConfig.trigger === 'cell')) && !this.getEventTargetNode(evnt, $el, 'vxe-radio').flag) {
+      if ((radioConfig.trigger === 'row' || (column.type === 'radio' && radioConfig.trigger === 'cell')) && !this.getEventTargetNode(evnt, $el, 'vxe-radio').flag) {
         this.triggerRadioRowEvent(evnt, params)
       }
       // 如果是多选
-      if (selectConfig && (selectConfig.trigger === 'row' || (column.type === 'selection' && selectConfig.trigger === 'cell')) && !this.getEventTargetNode(evnt, params.cell, 'vxe-checkbox').flag) {
-        this.toggleRowSelection(params.row, evnt)
+      if ((selectConfig.trigger === 'row' || (column.type === 'selection' && selectConfig.trigger === 'cell')) && !this.getEventTargetNode(evnt, params.cell, 'vxe-checkbox').flag) {
+        this.handleToggleCheckRowEvent(params.row, evnt)
       }
       // 如果是树形表格
-      if (treeConfig && (treeConfig.trigger === 'row' || (column.treeNode && treeConfig.trigger === 'cell'))) {
+      if ((treeConfig.trigger === 'row' || (column.treeNode && treeConfig.trigger === 'cell'))) {
         this.triggerTreeExpandEvent(evnt, params)
       }
       if (editConfig) {
