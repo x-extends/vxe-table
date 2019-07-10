@@ -1,3 +1,6 @@
+import XEUtils from 'xe-utils'
+import tableAPI from './table'
+
 const apis = [
   {
     name: 'Props',
@@ -33,4 +36,8 @@ const apis = [
   }
 ]
 
-export default apis
+export default XEUtils.clone(tableAPI, true).map(item => {
+  let rest = apis.find(obj => obj.name === item.name)
+  rest.list = item.list.concat(rest.list)
+  return rest
+})
