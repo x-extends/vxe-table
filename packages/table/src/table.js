@@ -2372,10 +2372,8 @@ export default {
       // let isRightBtn = button === 2
       // if (isLeftBtn || isRightBtn) {
       // if (editConfig && editConfig.trigger === 'dblclick') {
-      // 如果已经是激活状态
-      if (!editConfig || (editConfig.mode === 'row' && actived.row === row) || (actived.row === row && actived.column === column)) {
-
-      } else {
+      // 可编辑表格才能支持选中模式
+      if (editConfig && (editConfig.mode === 'row' ? actived.row !== row : actived.column !== column)) {
         if (isLeftBtn && mouseConfig.checked) {
           evnt.preventDefault()
           evnt.stopPropagation()
