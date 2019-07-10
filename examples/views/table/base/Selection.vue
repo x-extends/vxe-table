@@ -127,9 +127,10 @@
       ref="xTable5"
       height="300"
       :data.sync="tableData"
-      :radio-config="{labelField: 'name'}">
-      <vxe-table-column type="selection" width="60"></vxe-table-column>
-      <vxe-table-column type="radio" width="200" title="Name"></vxe-table-column>
+      :radio-config="{labelField: 'role'}"
+      :select-config="{labelField: 'name'}">
+      <vxe-table-column type="selection" title="Name"></vxe-table-column>
+      <vxe-table-column type="radio" title="Role"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
       <vxe-table-column field="age" title="Age"></vxe-table-column>
       <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
@@ -307,9 +308,10 @@ export default {
           ref="xTable5"
           height="300"
           :data.sync="tableData"
-          :radio-config="{labelField: 'name'}">
-          <vxe-table-column type="selection" width="60"></vxe-table-column>
-          <vxe-table-column type="radio" width="200" title="Name"></vxe-table-column>
+          :radio-config="{labelField: 'role'}"
+          :select-config="{labelField: 'name'}">
+          <vxe-table-column type="selection" title="Name"></vxe-table-column>
+          <vxe-table-column type="radio" title="Role"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
           <vxe-table-column field="age" title="Age"></vxe-table-column>
           <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
