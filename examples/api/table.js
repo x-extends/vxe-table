@@ -1243,6 +1243,14 @@ const apis = [
     defVal: '',
     list: [
       {
+        name: 'refresh()',
+        desc: '刷新表格（对于某些特殊的场景可能会用到，比如树层节点元素发生变动）',
+        type: 'Promise',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'loadData(datas)',
         desc: '加载数据（对于表格数据需要重载、局部递增场景下可能会用到）',
         type: 'Promise',

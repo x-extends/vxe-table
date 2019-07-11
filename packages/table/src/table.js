@@ -93,6 +93,11 @@ function renderFixed (h, $table, fixedType) {
   ])
 }
 
+// 分组表头的属性
+const headerProps = {
+  children: 'children'
+}
+
 export default {
   name: 'VxeTable',
   props: {
@@ -196,10 +201,6 @@ export default {
   data () {
     return {
       id: XEUtils.uniqueId(),
-      // 分组表头的属性
-      headerProps: {
-        children: 'children'
-      },
       // 列分组配置
       collectColumn: [],
       // 完整所有列
@@ -733,6 +734,12 @@ export default {
       this.clearActived()
       return this.$nextTick()
     },
+    refresh () {
+      return this.$nextTick(() => {
+        this.tableData = []
+        return this.$nextTick(() => this.loadData(this.tableFullData))
+      })
+    },
     loadData (datas, notRefresh) {
       let { height, maxHeight, editStore, optimizeOpts, recalculate } = this
       let { scrollY } = optimizeOpts
@@ -763,7 +770,7 @@ export default {
       return this.loadData(datas).then(this.handleDefault)
     },
     loadColumn (columns) {
-      let collectColumn = XEUtils.mapTree(columns, column => Cell.createColumn(this, column), this.headerProps)
+      let collectColumn = XEUtils.mapTree(columns, column => Cell.createColumn(this, column), headerProps)
       this.collectColumn = collectColumn
       this.tableFullColumn = UtilTools.getColumnList(collectColumn)
       if (this.customs) {
@@ -1187,7 +1194,7 @@ export default {
       let rightIndex = 0
       let centerList = []
       let rightList = []
-      let { headerProps, collectColumn, tableFullColumn, isGroup, columnStore, scrollXStore, optimizeOpts } = this
+      let { collectColumn, tableFullColumn, isGroup, columnStore, scrollXStore, optimizeOpts } = this
       let { scrollX } = optimizeOpts
       // 如果是分组表头，如果子列全部被隐藏，则根列也隐藏
       if (isGroup) {
@@ -2727,7 +2734,7 @@ export default {
       })
       this.confirmFilterEvent(evnt)
     },
-    clearFilter (force) {
+    clearFilter () {
       let { visibleColumn } = this
       visibleColumn.forEach(column => {
         let { filters } = column
