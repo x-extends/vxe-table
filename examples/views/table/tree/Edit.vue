@@ -36,6 +36,7 @@
 
 <script>
 import hljs from 'highlight.js'
+import XEUtils from 'xe-utils'
 
 export default {
   data () {
@@ -82,7 +83,7 @@ export default {
     }
   },
   created () {
-    this.tableData = window.MOCK_TREE_DATA_LIST.slice(0)
+    this.tableData = XEUtils.clone(window.MOCK_TREE_DATA_LIST, true)
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {

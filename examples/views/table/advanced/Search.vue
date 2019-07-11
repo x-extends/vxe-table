@@ -278,7 +278,7 @@ export default {
   },
   created () {
     this.tableData1 = window.MOCK_DATA_LIST.slice(0, 50)
-    this.tableData2 = window.MOCK_TREE_DATA_LIST.slice(0)
+    this.tableData2 = XEUtils.clone(window.MOCK_TREE_DATA_LIST, true)
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {

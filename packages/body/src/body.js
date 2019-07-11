@@ -367,7 +367,7 @@ export default {
       /**
        * 选中边框线
        */
-      !fixedType ? h('div', {
+      !fixedType && (mouseConfig.checked || keyboardConfig.isCut) ? h('div', {
         class: 'vxe-table--borders'
       }, [
         mouseConfig.checked ? h('div', {

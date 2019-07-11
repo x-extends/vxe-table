@@ -82,6 +82,11 @@ function renderFixed (h, $table, fixedType) {
   ])
 }
 
+// 分组表头的属性
+const headerProps = {
+  children: 'children'
+}
+
 export default {
   name: 'VxeTable',
   props: {
@@ -183,10 +188,6 @@ export default {
   data () {
     return {
       id: XEUtils.uniqueId(),
-      // 分组表头的属性
-      headerProps: {
-        children: 'children'
-      },
       // 列分组配置
       collectColumn: [],
       // 完整所有列
@@ -693,7 +694,14 @@ export default {
       this.clearHeaderChecked()
       this.clearChecked()
       this.clearSelected()
+      this.clearCopyed()
       return this.clearActived()
+    },
+    refresh () {
+      return this.$nextTick(() => {
+        this.tableData = []
+        return this.$nextTick(() => this.loadData(this.tableFullData))
+      })
     },
     loadData (datas, notRefresh) {
       let { height, maxHeight, editStore, optimizeOpts, recalculate } = this
@@ -725,7 +733,7 @@ export default {
       return this.loadData(datas).then(this.handleDefault)
     },
     loadColumn (columns) {
-      let collectColumn = XEUtils.mapTree(columns, column => Cell.createColumn(this, column), this.headerProps)
+      let collectColumn = XEUtils.mapTree(columns, column => Cell.createColumn(this, column), headerProps)
       this.collectColumn = collectColumn
       this.tableFullColumn = UtilTools.getColumnList(collectColumn)
       if (this.customs) {
@@ -1159,7 +1167,7 @@ export default {
       let rightIndex = 0
       let centerList = []
       let rightList = []
-      let { headerProps, tableFullColumn, isGroup, columnStore, scrollXStore, optimizeOpts } = this
+      let { tableFullColumn, isGroup, columnStore, scrollXStore, optimizeOpts } = this
       let { scrollX } = optimizeOpts
       // 如果是分组表头，如果子列全部被隐藏，则根列也隐藏
       if (isGroup) {
@@ -2887,10 +2895,10 @@ export default {
       let { copyed } = editStore
       if (keyboardConfig && keyboardConfig.isCut) {
         let tableBody = $refs.tableBody
+        let { copyBorders } = $refs.tableBody.$refs
         copyed.cut = false
         copyed.rows = []
         copyed.columns = []
-        let { copyBorders } = this.$refs.tableBody.$refs
         copyBorders.style.display = 'none'
         XEUtils.arrayEach(tableBody.$el.querySelectorAll('.col--copyed'), elem => DomTools.removeClass(elem, 'col--copyed'))
       }
@@ -3186,7 +3194,7 @@ export default {
       })
       this.confirmFilterEvent(evnt)
     },
-    clearFilter (force) {
+    clearFilter () {
       let { visibleColumn } = this
       visibleColumn.forEach(column => {
         let { filters } = column
