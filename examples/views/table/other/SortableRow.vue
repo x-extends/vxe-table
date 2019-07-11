@@ -56,9 +56,9 @@
         </template>
       </vxe-table-column>
       <vxe-table-column field="name" title="Name" tree-node></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-      <vxe-table-column field="age" title="Age"></vxe-table-column>
-      <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+      <vxe-table-column field="size" title="Size"></vxe-table-column>
+      <vxe-table-column field="type" title="Type"></vxe-table-column>
+      <vxe-table-column field="date" title="Date"></vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -168,9 +168,9 @@ export default {
             </template>
           </vxe-table-column>
           <vxe-table-column field="name" title="Name" tree-node></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-          <vxe-table-column field="age" title="Age"></vxe-table-column>
-          <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+          <vxe-table-column field="size" title="Size"></vxe-table-column>
+          <vxe-table-column field="type" title="Type"></vxe-table-column>
+          <vxe-table-column field="date" title="Date"></vxe-table-column>
         </vxe-table>
         `,
         `
