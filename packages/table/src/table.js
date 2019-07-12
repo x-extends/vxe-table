@@ -734,7 +734,7 @@ export default {
       this.clearActived()
       return this.$nextTick()
     },
-    refresh () {
+    refreshData () {
       return this.$nextTick(() => {
         this.tableData = []
         return this.$nextTick(() => this.loadData(this.tableFullData))
@@ -808,6 +808,24 @@ export default {
       tableFullColumn.forEach((row, index) => {
         fullColumnIndexMap.set(row, { row, index })
       })
+    },
+    getRowNode (tr) {
+      if (tr) {
+        let { treeConfig, tableFullData, fullDataRowIdMap } = this
+        let rowId = tr.getAttribute('data-rowid')
+        if (treeConfig) {
+          let matchObj = XEUtils.findTree(tableFullData, row => `${row.id}` === rowId, treeConfig)
+          if (matchObj) {
+            return matchObj
+          }
+        } else {
+          if (fullDataRowIdMap.has(rowId)) {
+            let rest = fullDataRowIdMap.get(rowId)
+            return { item: rest.row, index: rest.index, items: tableFullData }
+          }
+        }
+      }
+      return null
     },
     getRowMapIndex (row) {
       return this.fullDataIndexMap.has(row) ? this.fullDataIndexMap.get(row).index : -1
@@ -2227,8 +2245,12 @@ export default {
       }
     },
     triggerHeaderCellClickEvent (evnt, params) {
-      UtilTools.emitEvent(this, 'header-cell-click', [params, evnt])
-      return this.setCurrentColumn(params.column, true)
+      let { column, cell } = params
+      UtilTools.emitEvent(this, 'header-cell-click', [Object.assign({
+        triggerSort: this.getEventTargetNode(evnt, cell, 'vxe-sort-wrapper').flag,
+        triggerFilter: this.getEventTargetNode(evnt, cell, 'vxe-filter-wrapper').flag
+      }, params), evnt])
+      return this.setCurrentColumn(column, true)
     },
     setCurrentColumn (column) {
       if (this.highlightCurrentColumn) {
@@ -2632,16 +2654,21 @@ export default {
       let { visibleColumn, tableFullColumn, remoteSort } = this
       let column = visibleColumn.find(item => item.property === field)
       let isRemote = XEUtils.isBoolean(column.remoteSort) ? column.remoteSort : remoteSort
-      if (order && column.order !== order) {
-        tableFullColumn.forEach(column => {
-          column.order = null
-        })
-        column.order = order
-        // 如果是服务端排序，则跳过本地排序处理
-        if (!isRemote) {
-          this.tableData = this.getTableData(true).tableData
+      if (column.sortable) {
+        if (!order) {
+          order = column.order === 'desc' ? 'asc' : 'desc'
         }
-        UtilTools.emitEvent(this, 'sort-change', [{ column, prop: field, field, order }])
+        if (column.order !== order) {
+          tableFullColumn.forEach(column => {
+            column.order = null
+          })
+          column.order = order
+          // 如果是服务端排序，则跳过本地排序处理
+          if (!isRemote) {
+            this.tableData = this.getTableData(true).tableData
+          }
+          UtilTools.emitEvent(this, 'sort-change', [{ column, prop: field, field, order }])
+        }
       }
       return this.$nextTick()
     },

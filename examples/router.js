@@ -35,6 +35,7 @@ const TableFormat = () => import(/* webpackChunkName: "base" */ './views/table/b
 
 const TableEvent = () => import(/* webpackChunkName: "table" */ './views/table/advanced/Event.vue')
 const TableTemplate = () => import(/* webpackChunkName: "table" */ './views/table/advanced/Template.vue')
+const TableCustomSort = () => import(/* webpackChunkName: "table" */ './views/table/advanced/CustomSort.vue')
 const TableSpan = () => import(/* webpackChunkName: "table" */ './views/table/advanced/Span.vue')
 const TableFooter = () => import(/* webpackChunkName: "table" */ './views/table/advanced/Footer.vue')
 const TableExport = () => import(/* webpackChunkName: "table" */ './views/table/advanced/Export.vue')
@@ -112,6 +113,7 @@ const TablePluginAntdConfig = () => import(/* webpackChunkName: "plugin" */ './v
 const TablePluginAntdFilter = () => import(/* webpackChunkName: "plugin" */ './views/table/plugin/AntdFilter.vue')
 const TablePluginAntdPage = () => import(/* webpackChunkName: "plugin" */ './views/table/plugin/AntdPage.vue')
 
+const TableOptimizeScroller = () => import(/* webpackChunkName: "optimize" */ './views/table/optimize/Scroller.vue')
 const TableOptimizeEdit = () => import(/* webpackChunkName: "optimize" */ './views/table/optimize/Edit.vue')
 
 const TableAPI = () => import(/* webpackChunkName: "api" */ './views/table/api/API.vue')
@@ -293,6 +295,11 @@ export default new Router({
       path: '/table/advanced/template',
       name: 'TableTemplate',
       component: TableTemplate
+    },
+    {
+      path: '/table/advanced/customSort',
+      name: 'TableCustomSort',
+      component: TableCustomSort
     },
     {
       path: '/table/advanced/span',
@@ -638,6 +645,11 @@ export default new Router({
       path: '/table/plugin/antdPage',
       name: 'TablePluginAntdPage',
       component: TablePluginAntdPage
+    },
+    {
+      path: '/table/optimize/scroller',
+      name: 'TableOptimizeScroller',
+      component: TableOptimizeScroller
     },
     {
       path: '/table/optimize/edit',

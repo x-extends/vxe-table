@@ -42,6 +42,7 @@ module.exports = {
         more: '更多功能',
         events: '事件绑定',
         template: '自定义模板',
+        customSort: '实现列头排序',
         span: '合并行或列',
         footer: '表尾合计',
         export: '导出 CSV',
@@ -117,8 +118,9 @@ module.exports = {
         antdFilter: 'ant-design-vue 筛选配置',
         antdPluginMore: 'ant-design-vue 跟多配置',
 
-        optimize: '性能优化',
-        optimizeEdit: '编辑渲染优化',
+        optimize: '优化建议',
+        optimizeScroller: '虚拟滚动优化',
+        optimizeEdit: '可编辑优化',
 
         api: 'API',
         vxeTable: 'vxe-table',

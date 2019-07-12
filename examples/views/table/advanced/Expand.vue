@@ -183,7 +183,7 @@ export default {
           },
           methods: {
             toggleExpandChangeEvent ({ row }) {
-              this.$XMsg.alert('行展开、收起事件')
+              console.log('行展开、收起事件')
             }
           }
         }
@@ -234,7 +234,7 @@ export default {
           },
           methods: {
             toggleExpandChangeEvent ({ row }) {
-              this.$XMsg.alert('行展开、收起事件')
+              console.log('行展开、收起事件')
             }
           }
         }
@@ -253,7 +253,7 @@ export default {
   },
   methods: {
     toggleExpandChangeEvent ({ row }) {
-      this.$XMsg.alert('行展开、收起事件')
+      console.log('行展开、收起事件')
     }
   }
 }

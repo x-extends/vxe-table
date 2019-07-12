@@ -1,7 +1,7 @@
 <template>
   <div>
     <p>使用 vxe-excel 渲染 Excel 表格</p>
-    <p class="red">注意：暂时只能支持少量数据，不建议使用（重构中...）</p>
+    <p class="red">注意：暂时不支持大量的数据</p>
 
     <vxe-toolbar>
       <template v-slot:buttons>
