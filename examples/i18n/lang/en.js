@@ -42,6 +42,7 @@ module.exports = {
         more: 'More',
         events: 'Event',
         template: 'Template',
+        customSort: '实现列头排序',
         span: 'Rowspan and colspan',
         footer: 'Footer summary',
         export: 'Export CSV',
@@ -118,8 +119,9 @@ module.exports = {
         antdFilter: 'ant-design-vue 筛选配置',
         antdPluginMore: 'More configuration for ant-design-vue',
 
-        optimize: '性能优化',
-        optimizeEdit: '编辑渲染优化',
+        optimize: 'Optimization and suggestion',
+        optimizeScroller: '虚拟滚动优化',
+        optimizeEdit: '可编辑优化',
 
         api: 'API',
         vxeTable: 'vxe-table',

@@ -29,6 +29,8 @@
       <code class="css">{{ demoCodes[2] }}</code>
     </pre>
 
+    <p>树表格的移动也是一样的，由于树节点的深层结构，所以需要在树节点在变动之后调用 <table-api-link prop="refreshData"/> 方法刷新数据</p>
+
     <vxe-table
       border
       ref="xTable2"
@@ -73,6 +75,7 @@ export default {
         `
         <vxe-table
           border
+          ref="xTable"
           class="sortable-row-demo"
           row-key="id"
           :data.sync="tableData">
@@ -106,7 +109,8 @@ export default {
           methods: {
             rowDrop () {
               this.$nextTick(() => {
-                this.sortable = Sortable.create(this.$el.querySelector('.body--wrapper>.vxe-table--body tbody'), {
+                let xTable = this.$refs.xTable
+                this.sortable1 = Sortable.create(xTable.$el.querySelector('.body--wrapper>.vxe-table--body tbody'), {
                   handle: '.drag-btn',
                   onEnd: ({ newIndex, oldIndex }) => {
                     let currRow = this.tableData.splice(oldIndex, 1)[0]
@@ -131,7 +135,7 @@ export default {
         `
         <vxe-table
           border
-          ref="xTable2"
+          ref="xTable"
           class="sortable-tree-demo"
           row-key="id"
           :data.sync="tableTreeData"
@@ -168,22 +172,18 @@ export default {
           methods: {
             treeDrop () {
               this.$nextTick(() => {
-                this.sortable2 = Sortable.create(this.$refs.xTable2.$el.querySelector('.body--wrapper>.vxe-table--body tbody'), {
+                let xTable = this.$refs.xTable
+                this.sortable2 = Sortable.create(xTable.$el.querySelector('.body--wrapper>.vxe-table--body tbody'), {
                   handle: '.drag-btn',
                   onEnd: ({ item, oldIndex }) => {
                     let options = { children: 'children' }
                     let targetTrElem = item
                     let wrapperElem = targetTrElem.parentNode
-                    let tableTreeData = this.tableTreeData
                     let prevTrElem = targetTrElem.previousElementSibling
-                    let selfRowId = targetTrElem.getAttribute('data-rowid')
-                    let selfNode = XEUtils.findTree(tableTreeData, row => \`\${row.id}\` === selfRowId, options)
-                    let selfNodeList = selfNode.parent ? selfNode.parent[options.children] : tableTreeData
+                    let selfNode = xTable.getRowNode(targetTrElem)
                     if (prevTrElem) {
                       // 移动到节点
-                      let prevRowId = prevTrElem.getAttribute('data-rowid')
-                      let prevNode = XEUtils.findTree(tableTreeData, row => \`\${row.id}\` === prevRowId, options)
-                      let prevNodeList = prevNode.parent ? prevNode.parent[options.children] : tableTreeData
+                      let prevNode = xTable.getRowNode(prevTrElem)
                       let prevRow = prevNode.item
                       let selfRow = selfNode.item
                       if (XEUtils.findTree(selfRow[options.children], row => prevRow === row, options)) {
@@ -192,22 +192,21 @@ export default {
                         wrapperElem.insertBefore(targetTrElem, oldTrElem)
                         return this.$XMsg.message({ message: '不允许自己给自己拖动！', status: 'error' })
                       }
-                      let currRow = selfNodeList.splice(selfNode.index, 1)[0]
-                      if (this.$refs.xTable2.hasTreeExpand(prevRow)) {
+                      let currRow = selfNode.items.splice(selfNode.index, 1)[0]
+                      if (xTable.hasTreeExpand(prevRow)) {
                         // 移动到当前的子节点
                         prevRow[options.children].splice(0, 0, currRow)
                       } else {
                         // 移动到相邻节点
-                        prevNodeList.splice(prevNode.index + (selfNode.index < prevNode.index ? 0 : 1), 0, currRow)
+                        prevNode.items.splice(prevNode.index + (selfNode.index < prevNode.index ? 0 : 1), 0, currRow)
                       }
                     } else {
                       // 移动到第一行
-                      let currRow = selfNodeList.splice(selfNode.index, 1)[0]
-                      tableTreeData.splice(0, 0, currRow)
+                      let currRow = selfNode.items.splice(selfNode.index, 1)[0]
+                      this.tableTreeData.splice(0, 0, currRow)
                     }
-                    this.tableTreeData = tableTreeData
-                    // 如果变动了树层级，需要刷新表格
-                    this.$refs.xTable2.refresh()
+                    // 如果变动了树层级，需要刷新数据
+                    xTable.refreshData()
                   }
                 })
               })
@@ -251,7 +250,8 @@ export default {
   methods: {
     rowDrop () {
       this.$nextTick(() => {
-        this.sortable1 = Sortable.create(this.$refs.xTable1.$el.querySelector('.body--wrapper>.vxe-table--body tbody'), {
+        let xTable = this.$refs.xTable1
+        this.sortable1 = Sortable.create(xTable.$el.querySelector('.body--wrapper>.vxe-table--body tbody'), {
           handle: '.drag-btn',
           onEnd: ({ newIndex, oldIndex }) => {
             let currRow = this.tableData.splice(oldIndex, 1)[0]
@@ -262,22 +262,18 @@ export default {
     },
     treeDrop () {
       this.$nextTick(() => {
-        this.sortable2 = Sortable.create(this.$refs.xTable2.$el.querySelector('.body--wrapper>.vxe-table--body tbody'), {
+        let xTable = this.$refs.xTable2
+        this.sortable2 = Sortable.create(xTable.$el.querySelector('.body--wrapper>.vxe-table--body tbody'), {
           handle: '.drag-btn',
           onEnd: ({ item, oldIndex }) => {
             let options = { children: 'children' }
             let targetTrElem = item
             let wrapperElem = targetTrElem.parentNode
-            let tableTreeData = this.tableTreeData
             let prevTrElem = targetTrElem.previousElementSibling
-            let selfRowId = targetTrElem.getAttribute('data-rowid')
-            let selfNode = XEUtils.findTree(tableTreeData, row => `${row.id}` === selfRowId, options)
-            let selfNodeList = selfNode.parent ? selfNode.parent[options.children] : tableTreeData
+            let selfNode = xTable.getRowNode(targetTrElem)
             if (prevTrElem) {
               // 移动到节点
-              let prevRowId = prevTrElem.getAttribute('data-rowid')
-              let prevNode = XEUtils.findTree(tableTreeData, row => `${row.id}` === prevRowId, options)
-              let prevNodeList = prevNode.parent ? prevNode.parent[options.children] : tableTreeData
+              let prevNode = xTable.getRowNode(prevTrElem)
               let prevRow = prevNode.item
               let selfRow = selfNode.item
               if (XEUtils.findTree(selfRow[options.children], row => prevRow === row, options)) {
@@ -286,22 +282,21 @@ export default {
                 wrapperElem.insertBefore(targetTrElem, oldTrElem)
                 return this.$XMsg.message({ message: '不允许自己给自己拖动！', status: 'error' })
               }
-              let currRow = selfNodeList.splice(selfNode.index, 1)[0]
-              if (this.$refs.xTable2.hasTreeExpand(prevRow)) {
+              let currRow = selfNode.items.splice(selfNode.index, 1)[0]
+              if (xTable.hasTreeExpand(prevRow)) {
                 // 移动到当前的子节点
                 prevRow[options.children].splice(0, 0, currRow)
               } else {
                 // 移动到相邻节点
-                prevNodeList.splice(prevNode.index + (selfNode.index < prevNode.index ? 0 : 1), 0, currRow)
+                prevNode.items.splice(prevNode.index + (selfNode.index < prevNode.index ? 0 : 1), 0, currRow)
               }
             } else {
               // 移动到第一行
-              let currRow = selfNodeList.splice(selfNode.index, 1)[0]
-              tableTreeData.splice(0, 0, currRow)
+              let currRow = selfNode.items.splice(selfNode.index, 1)[0]
+              this.tableTreeData.splice(0, 0, currRow)
             }
-            this.tableTreeData = tableTreeData
-            // 如果变动了树层级，需要刷新表格
-            this.$refs.xTable2.refresh()
+            // 如果变动了树层级，需要刷新数据
+            xTable.refreshData()
           }
         })
       })

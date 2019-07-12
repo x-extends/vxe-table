@@ -697,7 +697,7 @@ export default {
       this.clearCopyed()
       return this.clearActived()
     },
-    refresh () {
+    refreshData () {
       return this.$nextTick(() => {
         this.tableData = []
         return this.$nextTick(() => this.loadData(this.tableFullData))
@@ -773,6 +773,24 @@ export default {
         fullColumnIdMap.set(column.id, column)
         fullColumnIndexMap.set(column, { column, index })
       })
+    },
+    getRowNode (tr) {
+      if (tr) {
+        let { treeConfig, tableFullData, fullDataRowIdMap } = this
+        let rowId = tr.getAttribute('data-rowid')
+        if (treeConfig) {
+          let matchObj = XEUtils.findTree(tableFullData, row => `${row.id}` === rowId, treeConfig)
+          if (matchObj) {
+            return matchObj
+          }
+        } else {
+          if (fullDataRowIdMap.has(rowId)) {
+            let rest = fullDataRowIdMap.get(rowId)
+            return { item: rest.row, index: rest.index, items: tableFullData }
+          }
+        }
+      }
+      return null
     },
     getRowMapIndex (row) {
       return this.fullDataIndexMap.has(row) ? this.fullDataIndexMap.get(row).index : -1
@@ -1141,6 +1159,7 @@ export default {
       let { tableFullColumn } = this
       this.isUpdateCustoms = true
       tableFullColumn.forEach(column => {
+        // 在 v3.0 中废弃 prop
         let item = customColumns.find(item => column.property && (item.field || item.prop) === column.property)
         column.visible = item ? !!item.visible : true
       })
@@ -1962,6 +1981,7 @@ export default {
       let { tooltipStore } = this
       let { own } = column
       if (tooltipStore.column !== column || !tooltipStore.visible) {
+        // 在 v3.0 中废弃 label
         this.showTooltip(evnt, own.title || own.label, column)
       }
     },
@@ -2491,8 +2511,11 @@ export default {
     //   }
     // },
     triggerHeaderCellClickEvent (evnt, params) {
-      let { column } = params
-      UtilTools.emitEvent(this, 'header-cell-click', [params, evnt])
+      let { column, cell } = params
+      UtilTools.emitEvent(this, 'header-cell-click', [Object.assign({
+        triggerSort: this.getEventTargetNode(evnt, cell, 'vxe-sort-wrapper').flag,
+        triggerFilter: this.getEventTargetNode(evnt, cell, 'vxe-filter-wrapper').flag
+      }, params), evnt])
       if (this.highlightCurrentColumn) {
         return this.setCurrentColumn(column, true)
       }
@@ -3084,18 +3107,25 @@ export default {
       let { visibleColumn, tableFullColumn, remoteSort } = this
       let column = visibleColumn.find(item => item.property === field)
       let isRemote = XEUtils.isBoolean(column.remoteSort) ? column.remoteSort : remoteSort
-      if (order && column.order !== order) {
-        tableFullColumn.forEach(column => {
-          column.order = null
-        })
-        column.order = order
-        // 如果是服务端排序，则跳过本地排序处理
-        if (!isRemote) {
-          this.tableData = this.getTableData(true).tableData
+      if (column.sortable) {
+        if (!order) {
+          order = column.order === 'desc' ? 'asc' : 'desc'
         }
-        UtilTools.emitEvent(this, 'sort-change', [{ column, prop: field, field, order }])
+        if (column.order !== order) {
+          tableFullColumn.forEach(column => {
+            column.order = null
+          })
+          column.order = order
+          // 如果是服务端排序，则跳过本地排序处理
+          if (!isRemote) {
+            this.tableData = this.getTableData(true).tableData
+          }
+          // 在 v3.0 中废弃 prop
+          UtilTools.emitEvent(this, 'sort-change', [{ column, prop: field, field, order }])
+        }
+        return this.$nextTick().then(this.updateStyle)
       }
-      return this.$nextTick().then(this.updateStyle)
+      return this.$nextTick()
     },
     clearSort () {
       this.tableFullColumn.forEach(column => {
@@ -3166,9 +3196,11 @@ export default {
               valueList.push(item.value)
             }
           })
+          // 在 v3.0 中废弃 prop
           filterList.push({ column, field: property, prop: property, values: valueList })
         }
       })
+      // 在 v3.0 中废弃 prop
       UtilTools.emitEvent(this, 'filter-change', [{ column, field: column.property, prop: column.property, values, filters: filterList }])
       if (scrollXLoad || scrollYLoad) {
         this.clearScroll()

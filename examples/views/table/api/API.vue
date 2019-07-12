@@ -20,7 +20,7 @@
       :tree-config="{key: 'id', children: 'list', expandAll: !!filterName, expandRowKeys: defaultExpandRowKeys, trigger: 'cell'}"
       :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus},}"
       @context-menu-click="contextMenuClickEvent">
-      <vxe-table-column field="name" :title="$t('app.api.title.prop')" min-width="280" tree-node :filters="nameFilters">
+      <vxe-table-column field="name" :title="$t('app.api.title.prop')" min-width="280" :filters="nameFilters" tree-node>
         <template v-slot="{ row }">
           <span v-html="row.name || '&#12288;'"></span>
         </template>

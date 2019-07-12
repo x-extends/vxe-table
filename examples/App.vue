@@ -288,6 +288,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.customSort',
+              locat: {
+                name: 'TableCustomSort'
+              }
+            },
+            {
               label: 'app.aside.nav.span',
               demoUrl: 'https://jsrun.net/5jXKp',
               locat: {
@@ -796,6 +802,12 @@ export default {
           value: 'optimize',
           expand: false,
           children: [
+            {
+              label: 'app.aside.nav.optimizeScroller',
+              locat: {
+                name: 'TableOptimizeScroller'
+              }
+            },
             {
               label: 'app.aside.nav.optimizeEdit',
               locat: {

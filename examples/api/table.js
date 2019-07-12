@@ -1089,7 +1089,7 @@ const apis = [
         descKey: 'app.api.table.desc.headerCellClick',
         type: '',
         enum: '',
-        defVal: '{$rowIndex,column,columnIndex,$columnIndex,cell},event',
+        defVal: '{triggerSort,triggerFilter,$rowIndex,column,columnIndex,$columnIndex,cell},event',
         list: []
       },
       {
@@ -1222,14 +1222,6 @@ const apis = [
     defVal: '',
     list: [
       {
-        name: 'refresh()',
-        desc: '刷新表格（对于某些特殊的场景可能会用到，比如树层节点元素发生变动）',
-        type: 'Promise',
-        enum: '',
-        defVal: '',
-        list: []
-      },
-      {
         name: 'loadData(datas)',
         desc: '加载数据（对于表格数据需要重载、局部递增场景下可能会用到）',
         type: 'Promise',
@@ -1243,6 +1235,14 @@ const apis = [
         type: 'Promise',
         enum: '',
         defVal: 'datas',
+        list: []
+      },
+      {
+        name: 'refreshData()',
+        desc: '刷新数据（对于某些特殊的场景可能会用到，比如树层节点元素发生变动）',
+        type: 'Promise',
+        enum: '',
+        defVal: '',
         list: []
       },
       {
@@ -1331,6 +1331,14 @@ const apis = [
         type: 'Array',
         enum: '',
         defVal: '',
+        list: []
+      },
+      {
+        name: 'getRowNode(trElem)',
+        desc: '根据 tr 元素获取对应的 row 信息',
+        type: 'Object',
+        enum: '',
+        defVal: 'trElem',
         list: []
       },
       {
@@ -1758,11 +1766,11 @@ const apis = [
         list: []
       },
       {
-        name: 'sort(field,order)',
-        desc: '手动对表格进行排序',
+        name: 'sort(field, order)',
+        desc: '手动对表格进行排序；如果 order 为空则自动切换排序',
         type: 'Promise',
         enum: '',
-        defVal: 'field,order',
+        defVal: 'field, order?',
         list: []
       },
       {
@@ -1770,7 +1778,7 @@ const apis = [
         desc: '表格校验函数，如果指定 row 或 rows 则校验指定一行或多行，否则校验整个表格。该回调函数会在校验结束后被调用，并传入两个参数：（是否校验成功，最近一列未通过校验的字段）。若不传入回调函数，则会返回一个 promise',
         type: 'Promise',
         enum: '',
-        defVal: 'rows?,callback?',
+        defVal: 'rows?, callback?',
         list: []
       },
       {
@@ -1778,7 +1786,7 @@ const apis = [
         desc: '表格完整校验函数，和 validate 的区别就是会对数据的所有规则进行完整校验',
         type: 'Promise',
         enum: '',
-        defVal: 'rows?,callback?',
+        defVal: 'rows?, callback?',
         list: []
       },
       {
