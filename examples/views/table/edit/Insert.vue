@@ -16,8 +16,9 @@
       show-overflow
       ref="xTable"
       height="400"
+      row-id="id"
       :data.sync="tableData"
-      :edit-config="{key: 'id', trigger: 'click', mode: 'cell'}">
+      :edit-config="{trigger: 'click', mode: 'cell'}">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
@@ -56,8 +57,9 @@ export default {
           show-overflow
           ref="xTable"
           height="400"
+          row-id="id"
           :data.sync="tableData"
-          :edit-config="{key: 'id', trigger: 'click', mode: 'cell'}">
+          :edit-config="{trigger: 'click', mode: 'cell'}">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>

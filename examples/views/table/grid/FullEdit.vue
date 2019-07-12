@@ -10,13 +10,14 @@
       highlight-hover-row
       remote-filter
       height="530"
+      row-id="id"
       :pager-config="{pageSize: 15}"
       :toolbar="toolbar"
       :proxy-config="tableProxy"
       :columns="tableColumn"
       :select-config="{reserve: true}"
       :edit-rules="validRules"
-      :edit-config="{key: 'id', trigger: 'click', mode: 'row', showStatus: true}">
+      :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">
     </vxe-grid>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -103,11 +104,12 @@ export default {
           highlight-hover-row
           remote-filter
           height="530"
+          row-id="id"
           :pager-config="{pageSize: 15}"
           :toolbar="toolbar"
           :proxy-config="tableProxy"
           :columns="tableColumn"
-          :edit-config="{key: 'id', trigger: 'click', mode: 'row', showStatus: true}"></vxe-grid>
+          :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"></vxe-grid>
         `,
         `
         export default {

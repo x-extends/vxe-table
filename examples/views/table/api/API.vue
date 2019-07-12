@@ -14,10 +14,11 @@
       highlight-hover-column
       ref="xTable"
       class="api-table"
+      row-id="id"
       :loading="loading"
       :cell-class-name="cellClassNameFunc"
       :data.sync="apiList"
-      :tree-config="{key: 'id', children: 'list', expandAll: !!filterName, expandRowKeys: defaultExpandRowKeys, trigger: 'cell'}"
+      :tree-config="{children: 'list', expandAll: !!filterName, expandRowKeys: defaultExpandRowKeys, trigger: 'cell'}"
       :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus},}"
       @context-menu-click="contextMenuClickEvent">
       <vxe-table-column field="name" :title="$t('app.api.title.prop')" min-width="280" :filters="nameFilters" tree-node>

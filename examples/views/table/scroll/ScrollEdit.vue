@@ -24,9 +24,10 @@
       show-overflow
       ref="xTable"
       height="300"
+      row-id="id"
       :loading="loading"
       :edit-rules="validRules"
-      :edit-config="{key: 'id', trigger: 'click', mode: 'row'}"
+      :edit-config="{trigger: 'click', mode: 'row'}"
       :optimization ="{scrollY: {gt: 500, oSize: 10, rSize: 30}}">>
       <vxe-table-column type="index" width="100"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable width="200" :edit-render="{name: 'input'}"></vxe-table-column>
@@ -97,9 +98,10 @@ export default {
           resizable
           show-overflow
           height="300"
+          row-id="id"
           :loading="loading"
           :edit-rules="validRules"
-          :edit-config="{key: 'id', trigger: 'click', mode: 'row'}"
+          :edit-config="{trigger: 'click', mode: 'row'}"
           :optimization ="{scrollY: {gt: 500, oSize: 10, rSize: 30}}">>
           <vxe-table-column type="index" width="100"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable width="200" :edit-render="{name: 'input'}"></vxe-table-column>

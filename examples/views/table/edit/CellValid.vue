@@ -21,9 +21,10 @@
       show-overflow
       highlight-cell
       height="500"
+      row-id="id"
       :data.sync="tableData"
       :edit-rules="validRules"
-      :edit-config="{key: 'id', trigger: 'click', mode: 'cell', showStatus: true}"
+      :edit-config="{trigger: 'click', mode: 'cell', showStatus: true}"
       :keyboard-config="{isArrow: true, isTab: true}">
       <vxe-table-column type="selection" width="60"></vxe-table-column>
       <vxe-table-column type="index" width="60"></vxe-table-column>
@@ -77,9 +78,10 @@ export default {
           show-overflow
           highlight-cell
           height="500"
+          row-id="id"
           :data.sync="tableData"
           :edit-rules="validRules"
-          :edit-config="{key: 'id', trigger: 'click', mode: 'cell', showStatus: true}"
+          :edit-config="{trigger: 'click', mode: 'cell', showStatus: true}"
           :keyboard-config="{isArrow: true, isTab: true}">
           <vxe-table-column type="selection" width="60"></vxe-table-column>
           <vxe-table-column type="index" width="60"></vxe-table-column>

@@ -6,8 +6,9 @@
       ref="xTable"
       border
       show-overflow
+      row-id="id"
       :data.sync="tableData"
-      :edit-config="{key: 'id', trigger: 'click', mode: 'row', activeMethod: activeRowMethod}"
+      :edit-config="{trigger: 'click', mode: 'row', activeMethod: activeRowMethod}"
       @edit-disabled="editDisabledEvent">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
@@ -28,8 +29,9 @@
       ref="xTable"
       border
       show-overflow
+      row-id="id"
       :data.sync="tableData"
-      :edit-config="{key: 'id', trigger: 'click', mode: 'row'}">
+      :edit-config="{trigger: 'click', mode: 'row'}">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" :edit-render="{type: 'default'}">
         <template v-slot:edit="{ row }">
@@ -70,8 +72,9 @@ export default {
           ref="xTable"
           border
           show-overflow
+          row-id="id"
           :data.sync="tableData"
-          :edit-config="{key: 'id', trigger: 'click', mode: 'row', activeMethod: activeRowMethod}"
+          :edit-config="{trigger: 'click', mode: 'row', activeMethod: activeRowMethod}"
           @edit-disabled="editDisabledEvent">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
@@ -104,8 +107,9 @@ export default {
           ref="xTable"
           border
           show-overflow
+          row-id="id"
           :data.sync="tableData"
-          :edit-config="{key: 'id', trigger: 'click', mode: 'row'}">
+          :edit-config="{trigger: 'click', mode: 'row'}">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" :edit-render="{type: 'default'}">
             <template v-slot:edit="{ row }">

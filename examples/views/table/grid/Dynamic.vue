@@ -6,11 +6,12 @@
       border
       show-overflow
       height="306"
+      row-id="id"
       :pager-config="tablePage"
       :proxy-config="tableProxy"
       :columns="tableColumn"
       :toolbar="toolbar"
-      :edit-config="{key: 'id', trigger: 'click', mode: 'row', showStatus: true}"></vxe-grid>
+      :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"></vxe-grid>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
@@ -25,13 +26,14 @@
       border
       show-overflow
       height="290"
+      row-id="id"
       :loading="loading2"
       :pager-config="tablePage2"
       :proxy-config="tableProxy2"
       :columns="tableColumn2"
       :toolbar="toolbar2"
       :edit-rules="validRules2"
-      :edit-config="{key: 'id', trigger: 'click', mode: 'row', showStatus: true}"
+      :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
       @toolbar-button-click="toolbarButtonClickEvent"></vxe-grid>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -126,11 +128,12 @@ export default {
           border
           show-overflow
           height="306"
+          row-id="id"
           :pager-config="tablePage"
           :proxy-config="tableProxy"
           :columns="tableColumn"
           :toolbar="toolbar"
-          :edit-config="{key: 'id', trigger: 'click', mode: 'row', showStatus: true}"></vxe-grid>
+          :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"></vxe-grid>
         `,
         `
         export default {
@@ -191,12 +194,13 @@ export default {
           border
           show-overflow
           height="530"
+          row-id="id"
           :loading="loading"
           :pager-config="tablePage"
           :proxy-config="tableProxy"
           :columns="tableColumn"
           :toolbar="toolbar"
-          :edit-config="{key: 'id', trigger: 'click', mode: 'row', showStatus: true}"
+          :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
           @toolbar-button-click="toolbarButtonClickEvent"></vxe-grid>
         `,
         `

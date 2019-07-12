@@ -44,10 +44,11 @@
       highlight-hover-row
       class="vxe-table-antd"
       height="460"
+      row-id="id"
       :loading="loading"
       :data.sync="tableData"
       :edit-rules="validRules"
-      :edit-config="{key: 'id', trigger: 'click', mode: 'row'}">
+      :edit-config="{trigger: 'click', mode: 'row'}">
       <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
       <vxe-table-column type="index" title="Number" width="80" fixed="left"></vxe-table-column>
       <vxe-table-column field="name" title="AInput" min-width="140" :edit-render="{name: 'AInput'}"></vxe-table-column>
@@ -174,10 +175,11 @@ export default {
             highlight-hover-row
             class="vxe-table-antd"
             height="460"
+            row-id="id"
             :loading="loading"
             :data.sync="tableData"
             :edit-rules="validRules"
-            :edit-config="{key: 'id', trigger: 'click', mode: 'row'}">
+            :edit-config="{trigger: 'click', mode: 'row'}">
             <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
             <vxe-table-column type="index" title="Number" width="80" fixed="left"></vxe-table-column>
             <vxe-table-column field="name" title="AInput" min-width="140" :edit-render="{name: 'AInput'}"></vxe-table-column>

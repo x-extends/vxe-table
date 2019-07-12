@@ -10,10 +10,11 @@
       show-footer
       class="vxe-table-element"
       height="600"
+      row-id="id"
       :loading="loading"
       :data.sync="tableData"
       :footer-method="footerMethod"
-      :edit-config="{key: 'id', trigger: 'click', mode: 'row'}">
+      :edit-config="{trigger: 'click', mode: 'row'}">
       <vxe-table-column type="selection" width="60"></vxe-table-column>
       <vxe-table-column type="index" width="80">
         <template v-slot:header="{ column }">
@@ -117,10 +118,11 @@ export default {
           show-footer
           class="vxe-table-element"
           height="600"
+          row-id="id"
           :loading="loading"
           :data.sync="tableData"
           :footer-method="footerMethod"
-          :edit-config="{key: 'id', trigger: 'click', mode: 'cell'}">
+          :edit-config="{trigger: 'click', mode: 'cell'}">
           <vxe-table-column type="selection" width="60"></vxe-table-column>
           <vxe-table-column type="index" width="80">
             <template v-slot:header="{ column }">

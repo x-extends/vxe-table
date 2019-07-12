@@ -6,11 +6,12 @@
       border
       ref="xGrid"
       height="530"
+      row-id="id"
       :pager-config="tablePage"
       :proxy-config="tableProxy"
       :columns="tableColumn"
       :toolbar="toolbar"
-      :edit-config="{key: 'id', trigger: 'click', mode: 'row'}">
+      :edit-config="{trigger: 'click', mode: 'row'}">
       <template v-slot:buttons>
         <input type="text"/>
         <button>搜索</button>
@@ -75,11 +76,12 @@ export default {
           border
           ref="xGrid"
           height="530"
+          row-id="id"
           :pager-config="tablePage"
           :proxy-config="tableProxy"
           :columns="tableColumn"
           :toolbar="toolbar"
-          :edit-config="{key: 'id', trigger: 'click', mode: 'row'}">
+          :edit-config="{trigger: 'click', mode: 'row'}">
           <template v-slot:buttons>
             <input type="text"/>
             <vxe-button>搜索</vxe-button>

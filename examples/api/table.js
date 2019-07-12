@@ -373,6 +373,14 @@ const apis = [
         list: []
       },
       {
+        name: 'row-id',
+        descKey: 'app.api.table.desc.rowId',
+        type: 'Number, String',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'radio-config',
         descKey: 'app.api.table.desc.radioConfig',
         type: 'Object',
@@ -405,16 +413,8 @@ const apis = [
         defVal: '',
         list: [
           {
-            name: 'key',
-            desc: '行数据中的唯一主键',
-            type: 'String',
-            enum: '',
-            defVal: '',
-            list: []
-          },
-          {
             name: 'reserve',
-            desc: '是否保留勾选状态，对于某些场景下非常有用，比如分页之后还保留之前选中的状态（需要设置 rowKey || key）',
+            desc: '是否保留勾选状态，对于某些场景下非常有用，比如分页之后还保留之前选中的状态（需要设置 row-id || row-key）',
             type: 'String',
             enum: '',
             defVal: 'false',
@@ -446,7 +446,7 @@ const apis = [
           },
           {
             name: 'checkRowKeys',
-            desc: '默认勾选开指定行（需要设置 rowKey || key）',
+            desc: '默认勾选开指定行（需要设置 row-id || row-key）',
             type: 'Array',
             enum: '',
             defVal: '',
@@ -503,14 +503,6 @@ const apis = [
         defVal: '',
         list: [
           {
-            name: 'key',
-            desc: '行数据中的唯一主键',
-            type: 'String',
-            enum: '',
-            defVal: '',
-            list: []
-          },
-          {
             name: 'expandAll',
             desc: '默认展开所有行',
             type: 'Boolean',
@@ -520,7 +512,7 @@ const apis = [
           },
           {
             name: 'expandRowKeys',
-            desc: '默认展开指定行（需要设置 rowKey || key）',
+            desc: '默认展开指定行（需要设置 row-id || row-key）',
             type: 'Array',
             enum: '',
             defVal: '',
@@ -551,14 +543,6 @@ const apis = [
         enum: '',
         defVal: '',
         list: [
-          {
-            name: 'key',
-            desc: '行数据中的唯一主键（需要设置 rowKey 或 key）',
-            type: 'String',
-            enum: '',
-            defVal: '',
-            list: []
-          },
           {
             name: 'children',
             desc: '树子节点的属性',
@@ -731,14 +715,6 @@ const apis = [
         enum: '',
         defVal: '',
         list: [
-          {
-            name: 'key',
-            desc: '行数据中的唯一主键（需要设置 rowKey 或 key）',
-            type: 'String',
-            enum: '',
-            defVal: '',
-            list: []
-          },
           {
             name: 'trigger',
             desc: '触发方式',

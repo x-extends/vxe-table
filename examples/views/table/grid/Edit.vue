@@ -5,11 +5,12 @@
     <vxe-grid
       border
       height="530"
+      row-id="id"
       :loading="loading"
       :pager-config="tablePage"
       :columns="tableColumn"
       :data.sync="tableData"
-      :edit-config="{key: 'id', trigger: 'click', mode: 'row'}"
+      :edit-config="{trigger: 'click', mode: 'row'}"
       @current-page-change="handleCurrentChange"
       @page-size-change="handleSizeChange"></vxe-grid>
 
@@ -50,11 +51,12 @@ export default {
         <vxe-grid
           border
           height="530"
+          row-id="id"
           :loading="loading"
           :pager-config="tablePage"
           :columns="tableColumn"
           :data.sync="tableData"
-          :edit-config="{key: 'id', trigger: 'click', mode: 'row'}"
+          :edit-config="{trigger: 'click', mode: 'row'}"
           @current-page-change="handleCurrentChange"
           @page-size-change="handleSizeChange"></vxe-grid>
         `,

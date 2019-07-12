@@ -8,11 +8,12 @@
       highlight-cell
       class="vxe-table-element"
       height="600"
+      row-id="id"
       :loading="loading"
       :data.sync="tableData"
       :mouse-config="{selected: true}"
       :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true}"
-      :edit-config="{key: 'id', trigger: 'dblclick', mode: 'cell'}">
+      :edit-config="{trigger: 'dblclick', mode: 'cell'}">
       <vxe-table-column type="selection" width="60"></vxe-table-column>
       <vxe-table-column type="index" title="Number" width="80"></vxe-table-column>
       <vxe-table-column field="name" title="ElInput" min-width="140" :edit-render="{name: 'ElInput'}"></vxe-table-column>
@@ -83,11 +84,12 @@ export default {
           highlight-cell
           class="vxe-table-element"
           height="600"
+          row-id="id"
           :loading="loading"
           :data.sync="tableData"
           :mouse-config="{selected: true}"
           :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true}"
-          :edit-config="{key: 'id', trigger: 'dblclick', mode: 'cell'}">
+          :edit-config="{trigger: 'dblclick', mode: 'cell'}">
           <vxe-table-column type="selection" width="60"></vxe-table-column>
           <vxe-table-column type="index" title="Number" width="80"></vxe-table-column>
           <vxe-table-column field="name" title="ElInput" min-width="140" :edit-render="{name: 'ElInput'}"></vxe-table-column>

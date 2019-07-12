@@ -5,11 +5,12 @@
 
     <vxe-grid
       highlight-hover-row
+      row-id="id"
       :proxy-config="tableProxy"
       :columns="tableColumn"
       :toolbar="toolbar"
       :select-config="{labelField: 'id'}"
-      :tree-config="{key: 'id', children: 'children'}"
+      :tree-config="{children: 'children'}"
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"></vxe-grid>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -61,11 +62,12 @@ export default {
         `
         <vxe-grid
           highlight-hover-row
+          row-id="id"
           :proxy-config="tableProxy"
           :columns="tableColumn"
           :toolbar="toolbar"
           :select-config="{labelField: 'id'}"
-          :tree-config="{key: 'id', children: 'children'}"
+          :tree-config="{children: 'children'}"
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"></vxe-grid>
         `,
         `

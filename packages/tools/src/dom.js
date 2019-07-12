@@ -130,14 +130,14 @@ export const DomTools = {
   getCellIndexs (cell) {
     let trElem = cell.parentNode
     let colIndex = cell.getAttribute('data-index')
-    let rowId = trElem.getAttribute('data-rowid')
+    let rowPrimaryKey = trElem.getAttribute('data-rowid')
     let columnIndex = [].indexOf.call(trElem.children, cell)
     let rowIndex = [].indexOf.call(trElem.parentNode.children, trElem)
-    return { rowId, rowIndex, colIndex: colIndex ? parseInt(colIndex) : colIndex, columnIndex }
+    return { rowPrimaryKey, rowIndex, colIndex: colIndex ? parseInt(colIndex) : colIndex, columnIndex }
   },
   getCell ($table, { row, rowIndex, column }) {
-    let rowId = UtilTools.getRowId($table, row, rowIndex)
-    return $table.$refs.tableBody.$el.querySelector(`.vxe-body--row[data-rowid="${rowId}"] .${column.id}`)
+    let rowPrimaryKey = UtilTools.getRowPrimaryKey($table, row, rowIndex)
+    return $table.$refs.tableBody.$el.querySelector(`.vxe-body--row[data-rowid="${rowPrimaryKey}"] .${column.id}`)
   },
   getCursorPosition (textarea) {
     let rangeData = { text: '', start: 0, end: 0 }

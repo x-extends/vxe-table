@@ -14,7 +14,8 @@
     <vxe-table
       resizable
       ref="xTree"
-      :tree-config="{key: 'id', children: 'children'}"
+      row-id="id"
+      :tree-config="{children: 'children'}"
       :edit-config="{trigger: 'click', mode: 'row'}"
       :select-config="{labelField: 'id'}"
       :data.sync="tableData">
@@ -56,7 +57,8 @@ export default {
         <vxe-table
           resizable
           ref="xTree"
-          :tree-config="{key: 'id', children: 'children'}"
+          row-id="id"
+          :tree-config="{children: 'children'}"
           :edit-config="{trigger: 'click', mode: 'row'}"
           :select-config="{labelField: 'id'}"
           :data.sync="tableData">

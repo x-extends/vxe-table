@@ -41,10 +41,11 @@
       ref="xTable"
       class="vxe-table-element"
       height="460"
+      row-id="id"
       :loading="loading"
       :data.sync="tableData"
       :edit-rules="validRules"
-      :edit-config="{key: 'id', trigger: 'click', mode: 'row'}">
+      :edit-config="{trigger: 'click', mode: 'row'}">
       <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
       <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
       <vxe-table-column field="name" title="ElInput" min-width="140" :edit-render="{name: 'ElInput'}"></vxe-table-column>
@@ -151,10 +152,11 @@ export default {
             class="vxe-table-element"
             height="460"
             size="small"
+            row-id="id"
             :loading="loading"
             :data.sync="tableData"
             :edit-rules="validRules"
-            :edit-config="{key: 'id', trigger: 'click', mode: 'row'}">
+            :edit-config="{trigger: 'click', mode: 'row'}">
             <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
             <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
             <vxe-table-column field="name" title="ElInput" min-width="140" :edit-render="{name: 'ElInput'}"></vxe-table-column>

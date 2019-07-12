@@ -4,7 +4,8 @@
 
     <vxe-table
       highlight-current-row
-      :tree-config="{key: 'id', children: 'children'}"
+      row-id="id"
+      :tree-config="{children: 'children'}"
       :data.sync="tableData">
       <vxe-table-column field="name" title="Name" tree-node></vxe-table-column>
       <vxe-table-column field="size" title="Size"></vxe-table-column>
@@ -22,7 +23,8 @@
     <p>使用 radio 方式</p>
 
     <vxe-table
-      :tree-config="{key: 'id', children: 'children'}"
+      row-id="id"
+      :tree-config="{children: 'children'}"
       :radio-config="{labelField: 'name'}"
       :data.sync="tableData">
       <vxe-table-column type="radio" title="Name" tree-node></vxe-table-column>
@@ -43,7 +45,8 @@
     <vxe-table
       resizable
       highlight-current-row
-      :tree-config="{key: 'id', children: 'children'}"
+      row-id="id"
+      :tree-config="{children: 'children'}"
       :data.sync="tableData">
       <vxe-table-column type="radio" width="120" tree-node></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -73,7 +76,8 @@ export default {
         `
         <vxe-table
           highlight-current-row
-          :tree-config="{key: 'id', children: 'children'}"
+          row-id="id"
+          :tree-config="{children: 'children'}"
           :data.sync="tableData">
           <vxe-table-column field="name" title="Name" tree-node></vxe-table-column>
           <vxe-table-column field="size" title="Size"></vxe-table-column>
@@ -95,7 +99,8 @@ export default {
         `,
         `
         <vxe-table
-          :tree-config="{key: 'id', children: 'children'}"
+          row-id="id"
+          :tree-config="{children: 'children'}"
           :data.sync="tableData">
           <vxe-table-column type="radio" width="120" tree-node></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -120,7 +125,8 @@ export default {
         <vxe-table
           resizable
           highlight-current-row
-          :tree-config="{key: 'id', children: 'children'}"
+          row-id="id"
+          :tree-config="{children: 'children'}"
           :data.sync="tableData">
           <vxe-table-column type="radio" width="120" tree-node></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>

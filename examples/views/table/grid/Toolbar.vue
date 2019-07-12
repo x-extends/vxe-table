@@ -6,11 +6,12 @@
     <vxe-grid
       border
       height="530"
+      row-id="id"
       :pager-config="tablePage"
       :proxy-config="tableProxy"
       :columns="tableColumn"
       :toolbar="toolbar"
-      :edit-config="{key: 'id', trigger: 'click', mode: 'row'}"
+      :edit-config="{trigger: 'click', mode: 'row'}"
       @toolbar-button-click="toolbarButtonClickEvent"></vxe-grid>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -75,11 +76,12 @@ export default {
         <vxe-grid
           border
           height="530"
+          row-id="id"
           :pager-config="tablePage"
           :proxy-config="tableProxy"
           :columns="tableColumn"
           :toolbar="toolbar"
-          :edit-config="{key: 'id', trigger: 'click', mode: 'row'}"
+          :edit-config="{trigger: 'click', mode: 'row'}"
           @toolbar-button-click="toolbarButtonClickEvent"></vxe-grid>
         `,
         `
