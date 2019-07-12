@@ -9,6 +9,7 @@ export const UtilTools = {
   getRowKey ($table) {
     let { rowKey, rowId, selectConfig = {}, treeConfig = {}, expandConfig = {}, editConfig = {} } = $table
     if (!rowKey) {
+      // 在 v2.0 中废弃 key
       rowKey = rowId || selectConfig.key || treeConfig.key || expandConfig.key || editConfig.key
     }
     return rowKey

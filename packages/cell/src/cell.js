@@ -23,6 +23,7 @@ export const Cell = {
         break
       case 'selection':
         renMaps.renderHeader = this.renderSelectionHeader
+        // 在 v2.0 中废弃 checkProp
         renMaps.renderCell = selectConfig && (selectConfig.checkField || selectConfig.checkProp) ? (isTreeNode ? this.renderTreeSelectionCellByProp : this.renderSelectionCellByProp) : (isTreeNode ? this.renderTreeSelectionCell : this.renderSelectionCell)
         break
       case 'expand':
@@ -142,6 +143,7 @@ export const Cell = {
     let { $table, column } = params
     let { vSize, radioConfig = {} } = $table
     let { slots } = column
+    // 在 v2.0 中废弃 labelProp
     let labelProp = radioConfig.labelField || radioConfig.labelProp
     if (slots && slots.header) {
       return slots.header(params, h)
@@ -232,6 +234,7 @@ export const Cell = {
     let { vSize, selectConfig = {}, treeConfig, treeIndeterminates } = $table
     let { checkMethod } = selectConfig
     let { row, isHidden } = params
+    // 在 v2.0 中废弃 labelProp
     let labelProp = selectConfig.labelField || selectConfig.labelProp
     let indeterminate = false
     let isDisabled = !!checkMethod
@@ -283,9 +286,11 @@ export const Cell = {
     let { vSize, selectConfig = {}, treeConfig, treeIndeterminates } = $table
     let { checkMethod } = selectConfig
     let { row, isHidden } = params
+    // 在 v2.0 中废弃 labelProp
     let labelProp = selectConfig.labelField || selectConfig.labelProp
     let indeterminate = false
     let isDisabled = !!checkMethod
+    // 在 v2.0 中废弃 checkProp
     let property = selectConfig.checkField || selectConfig.checkProp
     let options = {
       attrs: {

@@ -1194,6 +1194,7 @@ export default {
     mergeCustomColumn (customColumns) {
       this.isUpdateCustoms = true
       this.tableFullColumn.forEach(column => {
+        // 在 v3.0 中废弃 prop
         let item = customColumns.find(item => column.property && (item.field || item.prop) === column.property)
         column.visible = item ? !!item.visible : true
       })
@@ -2675,6 +2676,7 @@ export default {
           if (!isRemote) {
             this.tableData = this.getTableData(true).tableData
           }
+          // 在 v3.0 中废弃 prop
           UtilTools.emitEvent(this, 'sort-change', [{ column, prop: field, field, order }])
         }
       }
@@ -2741,9 +2743,11 @@ export default {
               valueList.push(item.value)
             }
           })
+          // 在 v3.0 中废弃 prop
           filterList.push({ column, field: property, prop: property, values: valueList })
         }
       })
+      // 在 v3.0 中废弃 prop
       UtilTools.emitEvent(this, 'filter-change', [{ column, field: column.property, prop: column.property, values, filters: filterList }])
       if (scrollXLoad || scrollYLoad) {
         this.clearScroll()
