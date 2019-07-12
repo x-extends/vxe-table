@@ -161,8 +161,8 @@ export default {
             class: ['vxe-header--row', headerRowClassName ? XEUtils.isFunction(headerRowClassName) ? headerRowClassName({ $table, $rowIndex, fixed: fixedType }) : headerRowClassName : '']
           }, cols.map((column, $columnIndex) => {
             let { columnKey, showHeaderOverflow, headerAlign, renderWidth, own } = column
-            let isGroup = column.children && column.children.length
-            let fixedHiddenColumn = fixedType && column.fixed !== fixedType && !isGroup
+            let isColGroup = column.children && column.children.length
+            let fixedHiddenColumn = fixedType && column.fixed !== fixedType && !isColGroup
             let headOverflow = XEUtils.isUndefined(showHeaderOverflow) || XEUtils.isNull(showHeaderOverflow) ? allColumnHeaderOverflow : showHeaderOverflow
             let showEllipsis = headOverflow === 'ellipsis'
             let showTitle = headOverflow === 'title'
@@ -201,7 +201,7 @@ export default {
                 rowspan: column.rowSpan
               },
               on: thOns,
-              key: columnKey || (isGroup ? column.id : columnIndex)
+              key: columnKey || (isColGroup ? column.id : columnIndex)
             }, [
               h('div', {
                 class: ['vxe-cell', {
@@ -216,7 +216,11 @@ export default {
                   width: showTitle || showTooltip || showEllipsis ? `${border ? renderWidth - 1 : renderWidth}px` : null
                 }
               }, column.renderHeader(h, { $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn })),
-              (XEUtils.isBoolean(column.resizable) ? column.resizable : resizable) && !fixedType && !isGroup ? h('div', {
+              /**
+               * 列宽拖动
+               * 固定列不允许拖动 -> 待解决 需要处理的逻辑复杂、涉及场景较大
+               */
+              !fixedType && !isColGroup && (XEUtils.isBoolean(column.resizable) ? column.resizable : resizable) ? h('div', {
                 class: ['vxe-resizable', {
                   'is--line': !border
                 }],
