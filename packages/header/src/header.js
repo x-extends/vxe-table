@@ -172,20 +172,14 @@ export default {
             // 确保任何情况下 columnIndex 都精准指向真实列索引
             let columnIndex = getColumnMapIndex(column)
             if (showTooltip) {
-              thOns.mouseover = evnt => {
-                $table.triggerHeaderTooltipEvent(evnt, { $table, column, columnIndex, $columnIndex, fixed: fixedType })
-              }
+              thOns.mouseover = evnt => $table.triggerHeaderTooltipEvent(evnt, { $table, column, columnIndex, $columnIndex, fixed: fixedType })
               thOns.mouseout = $table.clostTooltip
             }
             if (highlightCurrentColumn || tableListeners['header-cell-click']) {
-              thOns.click = evnt => {
-                $table.triggerHeaderCellClickEvent(evnt, { $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, cell: evnt.currentTarget })
-              }
+              thOns.click = evnt => $table.triggerHeaderCellClickEvent(evnt, { $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, cell: evnt.currentTarget })
             }
             if (tableListeners['header-cell-dblclick']) {
-              thOns.dblclick = evnt => {
-                UtilTools.emitEvent($table, 'header-cell-dblclick', [{ $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, cell: evnt.currentTarget }, evnt])
-              }
+              thOns.dblclick = evnt => UtilTools.emitEvent($table, 'header-cell-dblclick', [{ $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, cell: evnt.currentTarget }, evnt])
             }
             return h('th', {
               class: ['vxe-header--column', column.id, {
@@ -225,9 +219,7 @@ export default {
                   'is--line': !border
                 }],
                 on: {
-                  mousedown: evnt => {
-                    resizeMousedown(evnt, column)
-                  }
+                  mousedown: evnt => resizeMousedown(evnt, column)
                 }
               }) : null
             ])
