@@ -9,12 +9,6 @@
       row-key="id"
       :data.sync="tableData">
       <vxe-table-column width="60">
-        <template v-slot:header>
-          <el-tooltip class="item" placement="top">
-            <div slot="content">按住后可以上下拖动</div>
-            <i class="el-icon-question"></i>
-          </el-tooltip>
-        </template>
         <template>
           <span class="drag-btn">
             <i class="vxe-icon--menu"></i>
@@ -43,12 +37,6 @@
       :data.sync="tableTreeData"
       :tree-config="{children: 'children'}">
       <vxe-table-column width="60">
-        <template v-slot:header>
-          <el-tooltip class="item" placement="top">
-            <div slot="content">按住后可以上下拖动</div>
-            <i class="el-icon-question"></i>
-          </el-tooltip>
-        </template>
         <template>
           <span class="drag-btn">
             <i class="vxe-icon--menu"></i>
@@ -88,12 +76,6 @@ export default {
           row-key="id"
           :data.sync="tableData">
           <vxe-table-column width="60">
-            <template v-slot:header>
-              <el-tooltip class="item" placement="top">
-                <div slot="content">按住后可以上下拖动排序，<br>完成后点击保存即可！</div>
-                <i class="el-icon-question"></i>
-              </el-tooltip>
-            </template>
             <template>
               <i class="el-icon-rank drag-btn"></i>
             </template>
@@ -154,12 +136,6 @@ export default {
           :data.sync="tableTreeData"
           :tree-config="{children: 'children'}">
           <vxe-table-column width="60">
-            <template v-slot:header>
-              <el-tooltip class="item" placement="top">
-                <div slot="content">按住后可以上下拖动</div>
-                <i class="el-icon-question"></i>
-              </el-tooltip>
-            </template>
             <template>
               <span class="drag-btn">
                 <i class="vxe-icon--menu"></i>
