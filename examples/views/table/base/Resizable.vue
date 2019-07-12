@@ -59,7 +59,7 @@
         <vxe-table-column field="sex" title="Sex"></vxe-table-column>
         <vxe-table-column title="详细信息">
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-          <vxe-table-column field="date" title="Date"></vxe-table-column>
+          <vxe-table-column field="date" title="Date" width="140" show-overflow></vxe-table-column>
         </vxe-table-column>
       </vxe-table-column>
       <vxe-table-column field="address" title="Address" width="200" show-overflow></vxe-table-column>
@@ -147,7 +147,7 @@ export default {
             <vxe-table-column field="sex" title="Sex"></vxe-table-column>
             <vxe-table-column title="详细信息">
               <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-              <vxe-table-column field="date" title="Date"></vxe-table-column>
+              <vxe-table-column field="date" title="Date" width="140" show-overflow></vxe-table-column>
             </vxe-table-column>
           </vxe-table-column>
           <vxe-table-column field="address" title="Address" width="200" show-overflow></vxe-table-column>
