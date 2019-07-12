@@ -27,7 +27,7 @@
       <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
 
-    <p>如果使用了分组表头情，则需要按组来设置固定列</p>
+    <p>如果使用了分组表头情，则需要按组来设置固定列，且固定列必须是在左右两侧位置，不允许跨列</p>
 
     <vxe-table
       border

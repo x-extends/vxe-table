@@ -42,6 +42,35 @@
       <code class="xml">{{ demoCodes[2] }}</code>
       <code class="javascript">{{ demoCodes[3] }}</code>
     </pre>
+
+    <p>分组表头拖动</p>
+
+    <vxe-table
+      border
+      resizable
+      height="400"
+      :data.sync="tableData">
+      <vxe-table-column title="基本信息">
+        <vxe-table-column type="index" width="60"></vxe-table-column>
+        <vxe-table-column field="name" title="Name"></vxe-table-column>
+      </vxe-table-column>
+      <vxe-table-column title="更多信息">
+        <vxe-table-column field="role" title="Role"></vxe-table-column>
+        <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+        <vxe-table-column title="详细信息">
+          <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+          <vxe-table-column field="date" title="Date"></vxe-table-column>
+        </vxe-table-column>
+      </vxe-table-column>
+      <vxe-table-column field="address" title="Address" width="200" show-overflow></vxe-table-column>
+    </vxe-table>
+
+    <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
+
+    <pre>
+      <code class="xml">{{ demoCodes[4] }}</code>
+      <code class="javascript">{{ demoCodes[5] }}</code>
+    </pre>
   </div>
 </template>
 
@@ -89,6 +118,39 @@ export default {
           <vxe-table-column field="age" title="Age" width="300"></vxe-table-column>
           <vxe-table-column field="time" title="Time" width="300"></vxe-table-column>
           <vxe-table-column field="address" title="Address" width="300" show-overflow></vxe-table-column>
+        </vxe-table>
+        `,
+        `
+        export default {
+          data () {
+            return {
+              tableData: []
+            }
+          },
+          created () {
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
+          }
+        }
+        `,
+        `
+        <vxe-table
+          border
+          resizable
+          height="400"
+          :data.sync="tableData">
+          <vxe-table-column title="基本信息">
+            <vxe-table-column type="index" width="60"></vxe-table-column>
+            <vxe-table-column field="name" title="Name"></vxe-table-column>
+          </vxe-table-column>
+          <vxe-table-column title="更多信息">
+            <vxe-table-column field="role" title="Role"></vxe-table-column>
+            <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+            <vxe-table-column title="详细信息">
+              <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+              <vxe-table-column field="date" title="Date"></vxe-table-column>
+            </vxe-table-column>
+          </vxe-table-column>
+          <vxe-table-column field="address" title="Address" width="200" show-overflow></vxe-table-column>
         </vxe-table>
         `,
         `

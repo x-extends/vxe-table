@@ -177,8 +177,8 @@ export default {
               headerAlign,
               own
             } = column
-            let isGroup = column.children && column.children.length
-            let fixedHiddenColumn = fixedType && column.fixed !== fixedType && !isGroup
+            let isColGroup = column.children && column.children.length
+            let fixedHiddenColumn = fixedType && column.fixed !== fixedType && !isColGroup
             let headOverflow = XEUtils.isUndefined(showHeaderOverflow) || XEUtils.isNull(showHeaderOverflow) ? allColumnHeaderOverflow : showHeaderOverflow
             let showEllipsis = headOverflow === 'ellipsis'
             let showTitle = headOverflow === 'title'
@@ -204,20 +204,14 @@ export default {
               }
             }
             if (highlightCurrentColumn || tableListeners['header-cell-click'] || mouseConfig.checked) {
-              thOns.click = evnt => {
-                $table.triggerHeaderCellClickEvent(evnt, { $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, cell: evnt.currentTarget })
-              }
+              thOns.click = evnt => $table.triggerHeaderCellClickEvent(evnt, { $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, cell: evnt.currentTarget })
             }
             if (tableListeners['header-cell-dblclick']) {
-              thOns.dblclick = evnt => {
-                UtilTools.emitEvent($table, 'header-cell-dblclick', [{ $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, cell: evnt.currentTarget }, evnt])
-              }
+              thOns.dblclick = evnt => UtilTools.emitEvent($table, 'header-cell-dblclick', [{ $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, cell: evnt.currentTarget }, evnt])
             }
             // 按下事件处理
             if (mouseConfig.checked) {
-              thOns.mousedown = evnt => {
-                $table.triggerHeaderCellMousedownEvent(evnt, { $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, cell: evnt.currentTarget })
-              }
+              thOns.mousedown = evnt => $table.triggerHeaderCellMousedownEvent(evnt, { $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, cell: evnt.currentTarget })
             }
             return h('th', {
               class: ['vxe-header--column', column.id, {
@@ -233,7 +227,7 @@ export default {
                 rowspan: column.rowSpan
               },
               on: thOns,
-              key: columnKey || (isGroup ? column.id : columnIndex)
+              key: columnKey || (isColGroup ? column.id : columnIndex)
             }, [
               h('div', {
                 class: ['vxe-cell', {
@@ -245,14 +239,16 @@ export default {
                   title: showTitle ? (own.title || own.label) : null
                 }
               }, column.renderHeader(h, { $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn })),
-              (XEUtils.isBoolean(column.resizable) ? column.resizable : resizable) && !fixedType && !isGroup ? h('div', {
+              /**
+               * 列宽拖动
+               * 固定列不允许拖动 -> 待解决 需要处理的逻辑复杂、涉及场景较大
+               */
+              !fixedType && !isColGroup && (XEUtils.isBoolean(column.resizable) ? column.resizable : resizable) ? h('div', {
                 class: ['vxe-resizable', {
                   'is--line': !border
                 }],
                 on: {
-                  mousedown: evnt => {
-                    resizeMousedown(evnt, column)
-                  }
+                  mousedown: evnt => resizeMousedown(evnt, column)
                 }
               }) : null
             ])
