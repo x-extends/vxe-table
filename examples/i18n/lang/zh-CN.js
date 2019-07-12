@@ -42,7 +42,7 @@ module.exports = {
         more: '更多功能',
         events: '事件绑定',
         template: '自定义模板',
-        customSort: '实现列头排序',
+        customSort: '点击列头排序',
         span: '合并行或列',
         footer: '表尾合计',
         export: '导出 CSV',

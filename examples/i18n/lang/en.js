@@ -42,7 +42,7 @@ module.exports = {
         more: 'More',
         events: 'Event',
         template: 'Template',
-        customSort: '实现列头排序',
+        customSort: '点击列头排序',
         span: 'Rowspan and colspan',
         footer: 'Footer summary',
         export: 'Export CSV',
