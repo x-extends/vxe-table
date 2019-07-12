@@ -17,9 +17,9 @@
     <vxe-excel
       ref="xExcel"
       max-height="600"
+      row-id="id"
       :columns="columns"
-      :data.sync="tableData"
-      :edit-config="{key: 'id'}">
+      :data.sync="tableData">
     </vxe-excel>
 
     <pre>
@@ -96,9 +96,9 @@ export default {
         <vxe-excel
           ref="xExcel"
           max-height="600"
+          row-id="id"
           :columns="columns"
-          :data.sync="tableData"
-          :edit-config="{key: 'id'}">
+          :data.sync="tableData">
         </vxe-excel>
         `,
         `

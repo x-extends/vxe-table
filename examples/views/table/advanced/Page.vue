@@ -3,16 +3,17 @@
     <p>使用自带的分页 <pager-api-link name="vxe-pager"/></p>
     <p>如果要支持动态序号，可以通过 <table-api-link prop="start-index"/> 属性设置起始值</p>
     <p>如果要支持保留选中状态，可以通过设置 <table-api-link prop="select-config"/> 的 <table-api-link prop="reserve"/> 属性</p>
-    <p class="red">设置 reserve 需要指定 <table-api-link prop="row-key"/> 或者 ( <table-api-link prop="select-config"/>、<table-api-link prop="tree-config"/>、<table-api-link prop="expand-config"/>、<table-api-link prop="edit-config"/> ) 中的 key 任意配置一个即可</p>
+    <p class="red">配置 reserve 属性时，必须设置 <table-api-link prop="row-id"/> 或者 <table-api-link prop="row-key"/></p>
 
     <vxe-table
       border
       show-overflow
       ref="xTable"
       height="460"
+      row-id="id"
       :loading="loading"
       :start-index="(tablePage.currentPage - 1) * tablePage.pageSize"
-      :select-config="{key: 'id', reserve: true}"
+      :select-config="{reserve: true}"
       :data.sync="tableData">
       <vxe-table-column type="selection" width="60"></vxe-table-column>
       <vxe-table-column type="index" title="序号" width="60"></vxe-table-column>
@@ -61,9 +62,10 @@ export default {
           show-overflow
           ref="xTable"
           height="460"
+          row-id="id"
           :loading="loading"
           :start-index="(tablePage.currentPage - 1) * tablePage.pageSize"
-          :select-config="{key: 'id', reserve: true}"
+          :select-config="{reserve: true}"
           :data.sync="tableData">
           <vxe-table-column type="selection" width="60"></vxe-table-column>
           <vxe-table-column type="index" title="序号" width="60"></vxe-table-column>

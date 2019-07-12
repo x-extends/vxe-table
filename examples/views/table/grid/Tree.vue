@@ -4,9 +4,10 @@
 
     <vxe-grid
       border
+      row-id="id"
       :proxy-config="tableProxy"
       :columns="tableColumn"
-      :tree-config="{key: 'id', children: 'children'}"></vxe-grid>
+      :tree-config="{children: 'children'}"></vxe-grid>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
@@ -42,9 +43,10 @@ export default {
         `
         <vxe-grid
           border
+          row-id="id"
           :proxy-config="tableProxy"
           :columns="tableColumn"
-          :tree-config="{key: 'id', children: 'children'}"></vxe-grid>
+          :tree-config="{children: 'children'}"></vxe-grid>
         `,
         `
         export default {

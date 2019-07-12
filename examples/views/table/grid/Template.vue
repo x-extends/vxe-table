@@ -9,10 +9,11 @@
     <vxe-grid
       border
       height="400"
+      row-id="id"
       :toolbar="toolbar"
       :columns="tableColumn"
       :data.sync="tableData"
-      :edit-config="{key: 'id', trigger: 'click', mode: 'cell'}">
+      :edit-config="{trigger: 'click', mode: 'cell'}">
     </vxe-grid>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -116,9 +117,10 @@ export default {
         <vxe-grid
           border
           height="400"
+          row-id="id"
           :columns="tableColumn"
           :data.sync="tableData"
-          :edit-config="{key: 'id', trigger: 'click', mode: 'cell'}">
+          :edit-config="{trigger: 'click', mode: 'cell'}">
         </vxe-grid>
         `,
         `

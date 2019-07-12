@@ -6,8 +6,9 @@
       ref="xTable"
       border
       show-overflow
+      row-id="id"
       :data.sync="tableData"
-      :edit-config="{key: 'id', trigger: 'click', mode: 'cell', activeMethod: activeCellMethod}"
+      :edit-config="{trigger: 'click', mode: 'cell', activeMethod: activeCellMethod}"
       @edit-disabled="editDisabledEvent">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
@@ -28,8 +29,9 @@
       ref="xTable"
       border
       show-overflow
+      row-id="id"
       :data.sync="tableData"
-      :edit-config="{key: 'id', trigger: 'click', mode: 'cell', activeMethod: activeRowMethod}"
+      :edit-config="{trigger: 'click', mode: 'cell', activeMethod: activeRowMethod}"
       @edit-disabled="editDisabledEvent">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
@@ -59,8 +61,9 @@ export default {
           ref="xTable"
           border
           show-overflow
+          row-id="id"
           :data.sync="tableData"
-          :edit-config="{key: 'id', trigger: 'click', mode: 'cell', activeMethod: activeCellMethod}"
+          :edit-config="{trigger: 'click', mode: 'cell', activeMethod: activeCellMethod}"
           @edit-disabled="editDisabledEvent">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
@@ -96,8 +99,9 @@ export default {
           ref="xTable"
           border
           show-overflow
+          row-id="id"
           :data.sync="tableData"
-          :edit-config="{key: 'id', trigger: 'click', mode: 'row', , activeMethod: activeRowMethod}"
+          :edit-config="{trigger: 'click', mode: 'row', , activeMethod: activeRowMethod}"
           @edit-disabled="editDisabledEvent">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>

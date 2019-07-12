@@ -4,8 +4,9 @@
 
     <vxe-table
       resizable
-      :tree-config="{key: 'id', children: 'children'}"
-      :edit-config="{key: 'id', trigger: 'click', mode: 'row'}"
+      row-id="id"
+      :tree-config="{children: 'children'}"
+      :edit-config="{trigger: 'click', mode: 'row'}"
       :data.sync="tableData">
       <vxe-table-column type="selection" width="120" tree-node></vxe-table-column>
       <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
@@ -34,8 +35,9 @@ export default {
         `
         <vxe-table
           resizable
-          :tree-config="{key: 'id', children: 'children'}"
-          :edit-config="{key: 'id', trigger: 'click', mode: 'row'}"
+          row-id="id"
+          :tree-config="{children: 'children'}"
+          :edit-config="{trigger: 'click', mode: 'row'}"
           :data.sync="tableData">
           <vxe-table-column type="selection" field="checked" width="120" tree-node></vxe-table-column>
           <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>

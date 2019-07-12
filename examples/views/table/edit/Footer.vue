@@ -18,10 +18,11 @@
       ref="xTable"
       height="400"
       class="editable-footer"
+      row-id="id"
       :footer-method="footerMethod"
       :footer-cell-class-name="footerCellClassName"
       :data.sync="tableData"
-      :edit-config="{key: 'id', trigger: 'click', mode: 'row'}">
+      :edit-config="{trigger: 'click', mode: 'row'}">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="age" title="Age" :edit-render="{name: 'input'}"></vxe-table-column>
@@ -63,10 +64,11 @@ export default {
           ref="xTable"
           height="400"
           class="editable-footer"
+          row-id="id"
           :footer-method="footerMethod"
           :footer-cell-class-name="footerCellClassName"
           :data.sync="tableData"
-          :edit-config="{key: 'id', trigger: 'click', mode: 'row'}">
+          :edit-config="{trigger: 'click', mode: 'row'}">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column field="age" title="Age" :edit-render="{name: 'input'}"></vxe-table-column>

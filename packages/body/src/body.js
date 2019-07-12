@@ -212,6 +212,7 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
 
 function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, tableColumn) {
   let {
+    rowKey,
     highlightHoverRow,
     highlightCurrentRow,
     rowClassName,
@@ -249,7 +250,7 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
         $table.hoverRow = null
       }
     }
-    let rowId = UtilTools.getRowId($table, row, rowIndex)
+    let rowPrimaryKey = UtilTools.getRowPrimaryKey($table, row, rowIndex)
     rows.push(
       h('tr', {
         class: ['vxe-body--row', {
@@ -259,9 +260,9 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
           'row--new': editStore.insertList.indexOf(row) > -1
         }, rowClassName ? XEUtils.isFunction(rowClassName) ? rowClassName({ $table, seq, row, rowIndex }) : rowClassName : ''],
         attrs: {
-          'data-rowid': rowId
+          'data-rowid': rowPrimaryKey
         },
-        key: rowId,
+        key: treeConfig ? rowPrimaryKey : (rowKey ? XEUtils.get(row, rowKey) : $rowIndex),
         on: trOn
       }, tableColumn.map((column, $columnIndex) => {
         let columnIndex = getColumnMapIndex(column)

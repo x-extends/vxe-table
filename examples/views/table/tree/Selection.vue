@@ -4,7 +4,8 @@
 
     <vxe-table
       resizable
-      :tree-config="{key: 'id', children: 'children'}"
+      row-id="id"
+      :tree-config="{children: 'children'}"
       :data.sync="tableData"
       @select-change="selectChangeEvent">
       <vxe-table-column type="selection" field="checked" width="120" tree-node></vxe-table-column>
@@ -34,7 +35,8 @@ export default {
         `
         <vxe-table
           resizable
-          :tree-config="{key: 'id', children: 'children'}"
+          row-id="id"
+          :tree-config="{ children: 'children'}"
           :data.sync="tableData"
           @select-change="selectChangeEvent">
           <vxe-table-column type="selection" tree-node></vxe-table-column>

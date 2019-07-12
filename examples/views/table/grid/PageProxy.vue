@@ -6,9 +6,10 @@
     <vxe-grid
       border
       height="530"
+      row-id="id"
       :pager-config="{pageSize: 10}"
       :proxy-config="tableProxy"
-      :select-config="{key: 'id', reserve: true}"
+      :select-config="{reserve: true}"
       :columns="tableColumn"></vxe-grid>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>

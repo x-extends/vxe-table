@@ -7,15 +7,15 @@ export const UtilTools = {
     return size || ($parent && ['medium', 'small', 'mini'].indexOf($parent.size) > -1 ? $parent.size : null)
   },
   getRowKey ($table) {
-    let { rowKey, selectConfig = {}, treeConfig = {}, expandConfig = {}, editConfig = {} } = $table
+    let { rowKey, rowId, selectConfig = {}, treeConfig = {}, expandConfig = {}, editConfig = {} } = $table
     if (!rowKey) {
-      rowKey = selectConfig.key || treeConfig.key || expandConfig.key || editConfig.key
+      rowKey = rowId || selectConfig.key || treeConfig.key || expandConfig.key || editConfig.key
     }
     return rowKey
   },
-  getRowId ($table, row, rowIndex) {
+  getRowPrimaryKey ($table, row, rowIndex) {
     let rowKey = UtilTools.getRowKey($table)
-    return `${encodeURIComponent(rowKey ? XEUtils.get(row, rowKey) : rowIndex)}`
+    return `${rowKey ? encodeURIComponent(XEUtils.get(row, rowKey)) : rowIndex}`
   },
   // 触发事件
   emitEvent (_vm, type, args) {

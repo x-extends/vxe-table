@@ -8,10 +8,11 @@
       border
       remote-filter
       height="548"
+      row-id="id"
       :pager-config="{pageSize: 15}"
       :columns="tableColumn"
       :proxy-config="tableProxy"
-      :select-config="{key: 'id', reserve: true}"
+      :select-config="{reserve: true}"
       @sort-change="sortChangeEvent"
       @filter-change="filterChangeEvent"></vxe-grid>
 

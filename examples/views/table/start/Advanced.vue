@@ -81,8 +81,9 @@ export default {
         <vxe-table
           border
           height="600"
+          row-id="id"
           :data.sync="tableData"
-          :edit-config="{key: 'id', trigger: 'click', mode: 'row'}">
+          :edit-config="{trigger: 'click', mode: 'row'}">
           <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
           <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
           <vxe-table-column field="age" title="Age" :filters="[{data: null}]" :filter-render="{name: 'MyFilter'}"></vxe-table-column>
@@ -123,8 +124,9 @@ export default {
         <vxe-table
           border
           height="600"
+          row-id="id"
           :data.sync="tableData"
-          :edit-config="{key: 'id', trigger: 'click', mode: 'row'}">
+          :edit-config="{trigger: 'click', mode: 'row'}">
           <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
           <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
           <vxe-table-column field="age" title="Age"></vxe-table-column>
@@ -150,8 +152,9 @@ export default {
         <vxe-table
           border
           height="600"
+          row-id="id"
           :data.sync="tableData"
-          :edit-config="{key: 'id', trigger: 'click', mode: 'row'}">
+          :edit-config="{trigger: 'click', mode: 'row'}">
           <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
           <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
           <vxe-table-column field="name" title="Name" :edit-render="{name: 'MyCell'}"></vxe-table-column>

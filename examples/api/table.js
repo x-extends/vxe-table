@@ -383,6 +383,14 @@ const apis = [
         list: []
       },
       {
+        name: 'row-id',
+        descKey: 'app.api.table.desc.rowId',
+        type: 'Number, String',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'radio-config',
         descKey: 'app.api.table.desc.radioConfig',
         type: 'Object',
@@ -425,7 +433,8 @@ const apis = [
         list: [
           {
             name: 'key',
-            desc: '行数据中的唯一主键',
+            disabled: true,
+            desc: '在 v2.0 中废弃，请使用 row-id || row-key',
             type: 'String',
             enum: '',
             defVal: '',
@@ -433,7 +442,7 @@ const apis = [
           },
           {
             name: 'reserve',
-            desc: '是否保留勾选状态，对于某些场景下非常有用，比如分页之后还保留之前选中的状态（需要设置 rowKey || key）',
+            desc: '是否保留勾选状态，对于某些场景下非常有用，比如分页之后还保留之前选中的状态（需要设置 row-id || row-key）',
             type: 'String',
             enum: '',
             defVal: 'false',
@@ -483,7 +492,7 @@ const apis = [
           },
           {
             name: 'checkRowKeys',
-            desc: '默认勾选开指定行（需要设置 rowKey || key）',
+            desc: '默认勾选开指定行（需要设置 row-id || row-key）',
             type: 'Array',
             enum: '',
             defVal: '',
@@ -541,7 +550,8 @@ const apis = [
         list: [
           {
             name: 'key',
-            desc: '行数据中的唯一主键',
+            disabled: true,
+            desc: '在 v2.0 中废弃，请使用 row-id || row-key',
             type: 'String',
             enum: '',
             defVal: '',
@@ -557,7 +567,7 @@ const apis = [
           },
           {
             name: 'expandRowKeys',
-            desc: '默认展开指定行（需要设置 rowKey || key）',
+            desc: '默认展开指定行（需要设置 row-id || row-key）',
             type: 'Array',
             enum: '',
             defVal: '',
@@ -590,7 +600,8 @@ const apis = [
         list: [
           {
             name: 'key',
-            desc: '行数据中的唯一主键（需要设置 rowKey 或 key）',
+            disabled: true,
+            desc: '在 v2.0 中废弃，请使用 row-id || row-key',
             type: 'String',
             enum: '',
             defVal: '',
@@ -770,7 +781,8 @@ const apis = [
         list: [
           {
             name: 'key',
-            desc: '行数据中的唯一主键（需要设置 rowKey 或 key）',
+            disabled: true,
+            desc: '在 v2.0 中废弃，请使用 row-id || row-key',
             type: 'String',
             enum: '',
             defVal: '',

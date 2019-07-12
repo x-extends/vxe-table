@@ -7,11 +7,12 @@
       show-overflow
       class="vxe-table-iview"
       height="600"
+      row-id="id"
       :loading="loading"
       :data.sync="tableData"
       :mouse-config="{selected: true}"
       :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true}"
-      :edit-config="{key: 'id', trigger: 'dblclick', mode: 'cell'}">
+      :edit-config="{trigger: 'dblclick', mode: 'cell'}">
       <vxe-table-column type="selection" width="60"></vxe-table-column>
       <vxe-table-column type="index" title="Number" width="80"></vxe-table-column>
       <vxe-table-column field="name" title="Input" min-width="140" :edit-render="{name: 'Input'}"></vxe-table-column>
@@ -75,11 +76,12 @@ export default {
           show-overflow
           class="vxe-table-iview"
           height="600"
+          row-id="id"
           :loading="loading"
           :data.sync="tableData"
           :mouse-config="{selected: true}"
           :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true}"
-          :edit-config="{key: 'id', trigger: 'dblclick', mode: 'cell'}">
+          :edit-config="{trigger: 'dblclick', mode: 'cell'}">
           <vxe-table-column type="selection" width="60"></vxe-table-column>
           <vxe-table-column type="index" title="Number" width="80"></vxe-table-column>
           <vxe-table-column field="name" title="Input" min-width="140" :edit-render="{name: 'Input'}"></vxe-table-column>

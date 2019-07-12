@@ -1,13 +1,14 @@
 <template>
   <div>
-    <p>设置 <table-api-link prop="edit-config"/>={key: 'id', trigger: 'manual', mode: 'row', autoClear: false}，还可以通过设置 <table-api-link prop="autoClear"/> 关闭默认的单元格清除激活行为</p>
+    <p>设置 <table-api-link prop="edit-config"/>={trigger: 'manual', mode: 'row', autoClear: false}，还可以通过设置 <table-api-link prop="autoClear"/> 关闭默认的单元格清除激活行为</p>
 
     <vxe-table
       ref="xTable"
       border
       show-overflow
+      row-id="id"
       :data.sync="tableData"
-      :edit-config="{key: 'id', trigger: 'manual', mode: 'row', autoClear: false}">
+      :edit-config="{trigger: 'manual', mode: 'row', autoClear: false}">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
@@ -49,7 +50,7 @@ export default {
           border
           show-overflow
           :data.sync="tableData"
-          :edit-config="{key: 'id', trigger: 'manual', mode: 'row', autoClear: false}">
+          :edit-config="{trigger: 'manual', mode: 'row', autoClear: false}">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
