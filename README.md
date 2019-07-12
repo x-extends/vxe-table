@@ -15,7 +15,7 @@ A fully functional Vue Table, to meet most of the Table all requirements, and pe
 一个全功能的 Vue 表格，满足绝大部分对 Table 的一切需求，与任意组件库完美兼容
 
 * vxe-table 的设计理念
-  * 精简的 API（简洁、高效、通用）
+  * 精简的 API（简洁、高效）
   * 模块化表格（功能模块解耦，支持按需加载）
   * 更加灵活的自定义配置项，更高的可扩展性（兼容任意组件库，不污染全局样式及变量）
   * 强大的功能的同时兼具性能（支持横向、纵向虚拟滚动）
