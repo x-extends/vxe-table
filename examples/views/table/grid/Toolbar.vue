@@ -11,7 +11,7 @@
       :proxy-config="tableProxy"
       :columns="tableColumn"
       :toolbar="toolbar"
-      :edit-config="{trigger: 'click', mode: 'row'}"
+      :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
       @toolbar-button-click="toolbarButtonClickEvent"></vxe-grid>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -81,7 +81,7 @@ export default {
           :proxy-config="tableProxy"
           :columns="tableColumn"
           :toolbar="toolbar"
-          :edit-config="{trigger: 'click', mode: 'row'}"
+          :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
           @toolbar-button-click="toolbarButtonClickEvent"></vxe-grid>
         `,
         `

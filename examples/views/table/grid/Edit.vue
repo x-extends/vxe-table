@@ -10,7 +10,7 @@
       :pager-config="tablePage"
       :columns="tableColumn"
       :data.sync="tableData"
-      :edit-config="{trigger: 'click', mode: 'row'}"
+      :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
       @current-page-change="handleCurrentChange"
       @page-size-change="handleSizeChange"></vxe-grid>
 
@@ -56,7 +56,7 @@ export default {
           :pager-config="tablePage"
           :columns="tableColumn"
           :data.sync="tableData"
-          :edit-config="{trigger: 'click', mode: 'row'}"
+          :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
           @current-page-change="handleCurrentChange"
           @page-size-change="handleSizeChange"></vxe-grid>
         `,

@@ -807,6 +807,7 @@ export default {
             XEUtils.set(row, rowKey, rowPrimaryKey)
           }
           fullDataRowIdMap.set(`${rowPrimaryKey}`, { rowKey, row, index })
+          fullDataIndexMap.set(row, { row, index: rowPrimaryKey })
         }, treeConfig)
       } else {
         tableFullData.forEach((row, rowIndex) => {
@@ -819,7 +820,7 @@ export default {
             }
           }
           fullDataRowIdMap.set(`${rowPrimaryKey}`, { row, index: rowIndex })
-          fullDataIndexMap.set(row, { row, index: rowIndex })
+          fullDataIndexMap.set(row, { row, rowPrimaryKey, index: rowIndex })
         })
       }
     },
@@ -1136,7 +1137,7 @@ export default {
     getUpdateRecords () {
       let { tableFullData, hasRowChange, treeConfig } = this
       if (treeConfig) {
-        return XEUtils.filterTree(tableFullData, row => hasRowChange(row))
+        return XEUtils.filterTree(tableFullData, row => hasRowChange(row), treeConfig)
       }
       return tableFullData.filter(row => hasRowChange(row))
     },
