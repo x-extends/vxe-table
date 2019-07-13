@@ -13,7 +13,7 @@ assignees: ''
 * **描述下，你希望得到的什么解决方案 Describe the solution you'd like**
  ?
 
-* **是否已有其他不错的替代组件 Describe alternatives you've considered**
+* **是否已有其他不错的替代方案 Describe alternatives you've considered**
  ?
 
 * **版本信息 Version information**
