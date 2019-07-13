@@ -19,7 +19,7 @@ assignees: ''
 * **期望的结果 Expected behavior**
  ?
 
-* **请填写以下版本信息 please complete the following information**
+* **版本信息 Version information**
   * system: ?
   * browser: ?
   * vue: ?
