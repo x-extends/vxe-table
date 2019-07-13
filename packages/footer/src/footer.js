@@ -12,8 +12,26 @@ export default {
     fixedType: String
   },
   render (h) {
-    let { $parent: $table, fixedType, fixedColumn, tableColumn, footerData } = this
-    let { $listeners: tableListeners, footerRowClassName, footerCellClassName, tableWidth, scrollbarWidth, scrollbarHeight, scrollXLoad, scrollXStore, optimizeOpts, getColumnMapIndex } = $table
+    let {
+      $parent: $table,
+      fixedType,
+      fixedColumn,
+      tableColumn,
+      footerData
+    } = this
+    let {
+      $listeners: tableListeners,
+      footerRowClassName,
+      footerCellClassName,
+      tableWidth,
+      scrollbarWidth,
+      scrollbarHeight,
+      scrollXLoad,
+      scrollXStore,
+      optimizeOpts,
+      overflowX,
+      getColumnMapIndex
+    } = $table
     let { overflow } = optimizeOpts
     // 如果是使用优化模式
     if (fixedType && overflow) {
@@ -76,8 +94,8 @@ export default {
           return h('tr', {
             class: ['vxe-footer--row', footerRowClassName ? XEUtils.isFunction(footerRowClassName) ? footerRowClassName({ $rowIndex, fixed: fixedType }) : footerRowClassName : '']
           }, tableColumn.map((column, $columnIndex) => {
-            let isGroup = column.children && column.children.length
-            let fixedHiddenColumn = fixedType && column.fixed !== fixedType && !isGroup
+            let isColGroup = column.children && column.children.length
+            let fixedHiddenColumn = fixedType ? column.fixed !== fixedType && !isColGroup : column.fixed && overflowX
             let tfOns = {}
             // 确保任何情况下 columnIndex 都精准指向真实列索引
             let columnIndex = getColumnMapIndex(column)
