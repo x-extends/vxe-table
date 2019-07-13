@@ -699,16 +699,17 @@ export default {
       let scrollYLoad = scrollY && scrollY.gt && scrollY.gt < tableFullData.length
       editStore.insertList = []
       editStore.removeList = []
-      // 原始数据
-      this.tableSourceData = XEUtils.clone(tableFullData, true)
       // 全量数据
       this.tableFullData = tableFullData
+      // 缓存数据
+      this.cacheDataMap()
+      // 原始数据
+      this.tableSourceData = XEUtils.clone(tableFullData, true)
       this.scrollYLoad = scrollYLoad
       if (scrollYLoad && !(height || maxHeight)) {
         throw new Error('[vxe-table] The height/max-height must be set for the scroll load.')
       }
       this.tableData = this.getTableData(true).tableData
-      this.cacheDataMap()
       this.reserveCheckSelection()
       this.checkSelectionStatus()
       let rest = this.$nextTick()
