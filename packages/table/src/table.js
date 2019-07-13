@@ -19,18 +19,12 @@ function renderFixed (h, $table, fixedType) {
     visibleColumn,
     collectColumn,
     isGroup,
-    height,
-    parentHeight,
     vSize,
-    // headerHeight,
-    footerHeight,
     showHeader,
     showFooter,
-    tableHeight,
     columnStore,
     footerData
   } = $table
-  let customHeight = height === 'auto' ? parentHeight : XEUtils.toNumber(height)
   let fixedColumn = columnStore[`${fixedType}List`]
   return h('div', {
     class: `vxe-table--fixed-${fixedType}-wrapper`,
@@ -50,9 +44,6 @@ function renderFixed (h, $table, fixedType) {
       ref: `${fixedType}Header`
     }) : null,
     h('vxe-table-body', {
-      // style: {
-      //   top: `${headerHeight}px`
-      // },
       props: {
         fixedType,
         tableData,
@@ -66,9 +57,6 @@ function renderFixed (h, $table, fixedType) {
       ref: `${fixedType}Body`
     }),
     showFooter ? h('vxe-table-footer', {
-      style: {
-        top: `${customHeight ? customHeight - footerHeight : tableHeight}px`
-      },
       props: {
         fixedType,
         footerData,
@@ -1411,6 +1399,7 @@ export default {
         elemStore
       } = this
       let containerList = ['main', 'left', 'right']
+      let customHeight = height === 'auto' ? parentHeight : XEUtils.toNumber(height)
       containerList.forEach((name, index) => {
         let fixedType = index > 0 ? name : ''
         let layoutList = ['header', 'body', 'footer']
@@ -1445,7 +1434,6 @@ export default {
               })
             }
           } else if (layout === 'body') {
-            let customHeight = height === 'auto' ? parentHeight : XEUtils.toNumber(height)
             if (wrapperElem) {
               if (customHeight > 0) {
                 wrapperElem.style.height = `${fixedType ? (customHeight > 0 ? customHeight - headerHeight - footerHeight : tableHeight) - (showFooter ? 0 : scrollbarHeight) : customHeight - headerHeight - footerHeight}px`
@@ -1496,6 +1484,10 @@ export default {
               tWidth = tableColumn.reduce((previous, column) => previous + column.renderWidth, 0)
             }
             if (wrapperElem) {
+              // 如果是固定列
+              if (fixedWrapperElem) {
+                wrapperElem.style.top = `${customHeight ? customHeight - footerHeight : tableHeight}px`
+              }
               wrapperElem.style.marginTop = `${-scrollbarHeight - 1}px`
             }
             if (tableElem) {
