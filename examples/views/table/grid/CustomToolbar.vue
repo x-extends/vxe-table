@@ -11,7 +11,7 @@
       :proxy-config="tableProxy"
       :columns="tableColumn"
       :toolbar="toolbar"
-      :edit-config="{trigger: 'click', mode: 'row'}">
+      :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">
       <template v-slot:buttons>
         <input type="text"/>
         <button>搜索</button>
@@ -81,7 +81,7 @@ export default {
           :proxy-config="tableProxy"
           :columns="tableColumn"
           :toolbar="toolbar"
-          :edit-config="{trigger: 'click', mode: 'row'}">
+          :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">
           <template v-slot:buttons>
             <input type="text"/>
             <vxe-button>搜索</vxe-button>

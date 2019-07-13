@@ -741,30 +741,25 @@ export default {
     cacheDataMap () {
       let { treeConfig, tableFullData, fullDataIndexMap, fullDataRowIdMap } = this
       let rowKey = UtilTools.getRowKey(this)
-      fullDataIndexMap.clear()
-      fullDataRowIdMap.clear()
-      if (treeConfig) {
-        XEUtils.eachTree(tableFullData, (row, index) => {
-          let rowPrimaryKey = XEUtils.get(row, rowKey)
+      let handleData = (row, index) => {
+        let rowPrimaryKey = index
+        if (rowKey) {
+          rowPrimaryKey = XEUtils.get(row, rowKey)
           if (!rowPrimaryKey) {
             rowPrimaryKey = ++rowUniqueId
             XEUtils.set(row, rowKey, rowPrimaryKey)
           }
-          fullDataRowIdMap.set(`${rowPrimaryKey}`, { rowKey, row, index })
-        }, treeConfig)
+        }
+        let rest = { rowKey, row, rowPrimaryKey, index }
+        fullDataRowIdMap.set(`${rowPrimaryKey}`, rest)
+        fullDataIndexMap.set(row, rest)
+      }
+      fullDataIndexMap.clear()
+      fullDataRowIdMap.clear()
+      if (treeConfig) {
+        XEUtils.eachTree(tableFullData, handleData, treeConfig)
       } else {
-        tableFullData.forEach((row, rowIndex) => {
-          let rowPrimaryKey = rowIndex
-          if (rowKey) {
-            rowPrimaryKey = XEUtils.get(row, rowKey)
-            if (!rowPrimaryKey) {
-              rowPrimaryKey = ++rowUniqueId
-              XEUtils.set(row, rowKey, rowPrimaryKey)
-            }
-          }
-          fullDataRowIdMap.set(`${rowPrimaryKey}`, { row, index: rowIndex })
-          fullDataIndexMap.set(row, { row, index: rowIndex })
-        })
+        tableFullData.forEach(handleData)
       }
     },
     // 更新列的 Map
@@ -1088,9 +1083,9 @@ export default {
     getUpdateRecords () {
       let { tableFullData, hasRowChange, treeConfig } = this
       if (treeConfig) {
-        return XEUtils.filterTree(tableFullData, hasRowChange)
+        return XEUtils.filterTree(tableFullData, row => hasRowChange(row), treeConfig)
       }
-      return tableFullData.filter(hasRowChange)
+      return tableFullData.filter(row => hasRowChange(row))
     },
     /**
      * 获取处理后全量的表格数据
