@@ -119,6 +119,7 @@ export default {
       highlightCurrentColumn,
       mouseConfig = {},
       scrollXLoad,
+      overflowX,
       getColumnMapIndex
     } = $table
     // 横向滚动渲染
@@ -178,7 +179,7 @@ export default {
               own
             } = column
             let isColGroup = column.children && column.children.length
-            let fixedHiddenColumn = fixedType && column.fixed !== fixedType && !isColGroup
+            let fixedHiddenColumn = fixedType ? column.fixed !== fixedType && !isColGroup : column.fixed && overflowX
             let headOverflow = XEUtils.isUndefined(showHeaderOverflow) || XEUtils.isNull(showHeaderOverflow) ? allColumnHeaderOverflow : showHeaderOverflow
             let showEllipsis = headOverflow === 'ellipsis'
             let showTitle = headOverflow === 'title'
@@ -241,9 +242,8 @@ export default {
               }, column.renderHeader(h, { $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn })),
               /**
                * 列宽拖动
-               * 固定列不允许拖动 -> 待解决 需要处理的逻辑复杂、涉及场景较大
                */
-              !fixedType && !isColGroup && (XEUtils.isBoolean(column.resizable) ? column.resizable : resizable) ? h('div', {
+              !fixedHiddenColumn && !isColGroup && (XEUtils.isBoolean(column.resizable) ? column.resizable : resizable) ? h('div', {
                 class: ['vxe-resizable', {
                   'is--line': !border
                 }],
@@ -273,24 +273,53 @@ export default {
       this.headerColumn = this.isGroup ? convertToRows(this.collectColumn) : [this.$parent.scrollXLoad && this.fixedType ? this.fixedColumn : this.tableColumn]
     },
     resizeMousedown (evnt, column) {
-      let { $parent: $table, $el } = this
-      let targetElem = evnt.target
+      let { $parent: $table, $el, fixedType } = this
+      let { tableBody, rightContainer, resizeBar: resizeBarElem } = $table.$refs
+      let { target: dragBtnElem, clientX: dragClientX } = evnt
+      let cell = dragBtnElem.parentNode
       let dragLeft = 0
-      let tableBodyElem = $table.$refs.tableBody.$el
-      let resizeBarElem = $table.$refs.resizeBar
-      let pos = DomTools.getOffsetPos(targetElem, $el)
-      let dragMinLeft = pos.left - targetElem.parentNode.clientWidth + targetElem.clientWidth + 36
-      let dragPosLeft = pos.left + 6
-      let dragClientX = evnt.clientX
+      let minInterval = 36 // 列之间的最小间距
+      let tableBodyElem = tableBody.$el
+      let pos = DomTools.getOffsetPos(dragBtnElem, $el)
+      let dragBtnWidth = dragBtnElem.clientWidth
+      let dragMinLeft = pos.left - cell.clientWidth + dragBtnWidth + minInterval
+      let dragPosLeft = pos.left + Math.floor(dragBtnWidth / 2)
       let domMousemove = document.onmousemove
       let domMouseup = document.onmouseup
+
+      // 计算右侧固定列位置
+      let prevOffsetWidth = 0
+      let prevCellElem = cell
+      if (rightContainer && fixedType === 'right') {
+        while (prevCellElem) {
+          if (DomTools.hasClass(prevCellElem, 'fixed--hidden')) {
+            break
+          } else {
+            prevOffsetWidth += prevCellElem.offsetWidth
+          }
+          prevCellElem = prevCellElem.previousElementSibling
+        }
+        dragPosLeft = rightContainer.offsetLeft + prevOffsetWidth
+      }
+
+      // 处理拖动事件
       let updateEvent = function (evnt) {
         evnt.stopPropagation()
         evnt.preventDefault()
         let offsetX = evnt.clientX - dragClientX
         let left = dragPosLeft + offsetX
+        let scrollLeft = fixedType ? 0 : tableBodyElem.scrollLeft
+
+        if (fixedType === 'left' && rightContainer) {
+          // 左固定列不允许超过右侧固定列
+          left = Math.min(left, rightContainer.offsetLeft - minInterval)
+        } else if (fixedType === 'right') {
+          // 右侧固定列
+          dragMinLeft = dragPosLeft - cell.offsetWidth + minInterval
+        }
+
         dragLeft = left < dragMinLeft ? dragMinLeft : left
-        resizeBarElem.style.left = `${dragLeft - tableBodyElem.scrollLeft}px`
+        resizeBarElem.style.left = `${dragLeft - scrollLeft}px`
       }
       $table._isResize = true
       DomTools.addClass($table.$el, 'c--resize')
@@ -299,11 +328,11 @@ export default {
       document.onmouseup = function (evnt) {
         document.onmousemove = domMousemove
         document.onmouseup = domMouseup
-        column.resizeWidth = column.renderWidth - (dragPosLeft - dragLeft)
+        column.resizeWidth = column.renderWidth + (dragLeft - dragPosLeft)
         resizeBarElem.style.display = 'none'
         $table._isResize = false
         $table.analyColumnWidth()
-        $table.recalculate()
+        $table.recalculate(true)
         DomTools.removeClass($table.$el, 'c--resize')
       }
       updateEvent(evnt)

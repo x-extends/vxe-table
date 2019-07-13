@@ -22,7 +22,7 @@ function renderFixed (h, $table, fixedType) {
     height,
     parentHeight,
     vSize,
-    headerHeight,
+    // headerHeight,
     footerHeight,
     showHeader,
     showFooter,
@@ -50,9 +50,9 @@ function renderFixed (h, $table, fixedType) {
       ref: `${fixedType}Header`
     }) : null,
     h('vxe-table-body', {
-      style: {
-        top: `${headerHeight}px`
-      },
+      // style: {
+      //   top: `${headerHeight}px`
+      // },
       props: {
         fixedType,
         tableData,
@@ -1242,8 +1242,7 @@ export default {
       }
       this.scrollXLoad = scrollXLoad
       this.tableColumn = visibleColumn
-      // 需要计算两次，解决隐藏列首次被显示无宽度造成闪动问题
-      return this.$nextTick().then(this.recalculate).then(this.recalculate)
+      return this.$nextTick().then(() => this.recalculate(true))
     },
     /**
      * 指定列宽的列进行拆分
@@ -1285,19 +1284,20 @@ export default {
       let footerElem = tableFooter ? tableFooter.$el : null
       if (bodyElem) {
         let bodyWidth = bodyElem.clientWidth
-        let tableWidth = this.autoCellWidth(headerElem, bodyElem, footerElem, bodyWidth)
+        // let tableWidth = this.autoCellWidth(headerElem, bodyElem, footerElem, bodyWidth)
+        this.autoCellWidth(headerElem, bodyElem, footerElem, bodyWidth)
         if (refull === true) {
           // 初始化时需要在列计算之后再执行优化运算，达到最优显示效果
-          return this.$nextTick().then(() => {
+          return this.computeScrollLoad().then(() => {
             bodyWidth = bodyElem.clientWidth
-            if (bodyWidth !== tableWidth) {
-              this.autoCellWidth(headerElem, bodyElem, footerElem, bodyWidth)
-            }
+            // if (bodyWidth !== tableWidth) {
+            this.autoCellWidth(headerElem, bodyElem, footerElem, bodyWidth)
+            // }
             this.computeScrollLoad()
           })
         }
       }
-      return this.$nextTick().then(this.computeScrollLoad)
+      return this.computeScrollLoad()
     },
     // 列宽计算
     autoCellWidth (headerElem, bodyElem, footerElem, bodyWidth) {
@@ -1385,7 +1385,7 @@ export default {
       if (this.overflowX) {
         this.checkScrolling()
       }
-      return tableWidth
+      // return tableWidth
     },
     updateStyle () {
       let {
@@ -1459,6 +1459,7 @@ export default {
             if (fixedWrapperElem) {
               let isRightFixed = fixedType === 'right'
               let fixedColumn = columnStore[`${fixedType}List`]
+              wrapperElem.style.top = `${headerHeight}px`
               fixedWrapperElem.style.height = `${(customHeight > 0 ? customHeight - headerHeight - footerHeight : tableHeight) + headerHeight + footerHeight - scrollbarHeight * (showFooter ? 2 : 1)}px`
               fixedWrapperElem.style.width = `${fixedColumn.reduce((previous, column) => previous + column.renderWidth, isRightFixed ? scrollbarWidth : 0)}px`
             }
@@ -3541,46 +3542,48 @@ export default {
     },
     // 计算可视渲染相关数据
     computeScrollLoad () {
-      let { scrollXLoad, scrollYLoad, scrollYStore, scrollXStore, visibleColumn, optimizeOpts } = this
-      let { scrollX, scrollY } = optimizeOpts
-      let tableBody = this.$refs.tableBody
-      let tableBodyElem = tableBody ? tableBody.$el : null
-      let tableHeader = this.$refs.tableHeader
-      if (tableBodyElem) {
+      return this.$nextTick().then(() => {
+        let { scrollXLoad, scrollYLoad, scrollYStore, scrollXStore, visibleColumn, optimizeOpts } = this
+        let { scrollX, scrollY } = optimizeOpts
+        let tableBody = this.$refs.tableBody
+        let tableBodyElem = tableBody ? tableBody.$el : null
+        let tableHeader = this.$refs.tableHeader
+        if (tableBodyElem) {
         // 计算 X 逻辑
-        if (scrollXLoad) {
-        // 无法预知，默认取前 10 条平均宽度进行运算
-          let visibleSize = scrollX.vSize || Math.ceil(tableBodyElem.clientWidth / (visibleColumn.slice(0, 10).reduce((previous, column) => previous + column.renderWidth, 0) / 10))
-          scrollXStore.visibleSize = visibleSize
-          if (scrollXStore.adaptive) {
-            scrollXStore.offsetSize = visibleSize
-            scrollXStore.renderSize = visibleSize + 2
-          }
-          this.updateScrollXSpace()
-        }
-        // 计算 Y 逻辑
-        if (scrollYLoad) {
-          if (scrollY.rHeight) {
-            scrollYStore.rowHeight = scrollY.rHeight
-          } else {
-            let firstTrElem = tableBodyElem.querySelector('tbody>tr')
-            if (!firstTrElem && tableHeader) {
-              firstTrElem = tableHeader.$el.querySelector('thead>tr')
+          if (scrollXLoad) {
+            // 无法预知，默认取前 10 条平均宽度进行运算
+            let visibleSize = scrollX.vSize || Math.ceil(tableBodyElem.clientWidth / (visibleColumn.slice(0, 10).reduce((previous, column) => previous + column.renderWidth, 0) / 10))
+            scrollXStore.visibleSize = visibleSize
+            if (scrollXStore.adaptive) {
+              scrollXStore.offsetSize = visibleSize
+              scrollXStore.renderSize = visibleSize + 2
             }
-            if (firstTrElem) {
-              scrollYStore.rowHeight = firstTrElem.clientHeight
+            this.updateScrollXSpace()
+          }
+          // 计算 Y 逻辑
+          if (scrollYLoad) {
+            if (scrollY.rHeight) {
+              scrollYStore.rowHeight = scrollY.rHeight
+            } else {
+              let firstTrElem = tableBodyElem.querySelector('tbody>tr')
+              if (!firstTrElem && tableHeader) {
+                firstTrElem = tableHeader.$el.querySelector('thead>tr')
+              }
+              if (firstTrElem) {
+                scrollYStore.rowHeight = firstTrElem.clientHeight
+              }
             }
+            let visibleSize = scrollY.vSize || Math.ceil(tableBodyElem.clientHeight / scrollYStore.rowHeight)
+            scrollYStore.visibleSize = visibleSize
+            if (isWebkit && scrollYStore.adaptive) {
+              scrollYStore.offsetSize = visibleSize
+              scrollYStore.renderSize = visibleSize + 2
+            }
+            this.updateScrollYSpace()
           }
-          let visibleSize = scrollY.vSize || Math.ceil(tableBodyElem.clientHeight / scrollYStore.rowHeight)
-          scrollYStore.visibleSize = visibleSize
-          if (isWebkit && scrollYStore.adaptive) {
-            scrollYStore.offsetSize = visibleSize
-            scrollYStore.renderSize = visibleSize + 2
-          }
-          this.updateScrollYSpace()
         }
-      }
-      this.$nextTick(this.updateStyle)
+        this.$nextTick(this.updateStyle)
+      })
     },
     // 更新横向 X 可视渲染上下剩余空间大小
     updateScrollXSpace () {

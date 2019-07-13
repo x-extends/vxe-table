@@ -21,6 +21,7 @@ const preClss = [
   'col--selected',
   'col--index-checked',
   'col--title-checked',
+  'fixed--hidden',
   'scrolling--middle'
 ]
 

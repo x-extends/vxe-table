@@ -1367,7 +1367,15 @@ const apis = [
       },
       {
         name: 'getCurrentRow()',
-        desc: '用于单选行，获取当前选中的数据',
+        desc: '用于当前行，获取当前行的数据',
+        type: 'Row',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'getRadioRow()',
+        desc: '用于单选行，获取当已选中的数据',
         type: 'Row',
         enum: '',
         defVal: '',
@@ -1479,7 +1487,7 @@ const apis = [
       },
       {
         name: 'setCurrentRow(row)',
-        desc: '用于单选行，设置某一行为选中状态',
+        desc: '用于当前行，设置某一行为高亮状态',
         type: 'Promise',
         enum: '',
         defVal: 'row',
@@ -1487,10 +1495,18 @@ const apis = [
       },
       {
         name: 'setCurrentColumn(column)',
-        desc: '用于单选列，设置某一列为选中状态',
+        desc: '用于当前列，设置某列行为高亮状态',
         type: 'Promise',
         enum: '',
         defVal: 'column',
+        list: []
+      },
+      {
+        name: 'setRadioRow(row)',
+        desc: '用于单选行，设置某一行为选中状态',
+        type: 'Promise',
+        enum: '',
+        defVal: 'row',
         list: []
       },
       {
@@ -1543,7 +1559,7 @@ const apis = [
       },
       {
         name: 'clearCurrentRow()',
-        desc: '用于单选行，清空用户的选择',
+        desc: '用于当前行，清空当前高亮的状态',
         type: 'Promise',
         enum: '',
         defVal: '',
@@ -1551,7 +1567,15 @@ const apis = [
       },
       {
         name: 'clearCurrentColumn()',
-        desc: '用于单选列，清空用户的选择列',
+        desc: '用于当前列，清空当前高亮的状态',
+        type: 'Promise',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'clearRadioRow()',
+        desc: '用于单选行，清空用户的选择',
         type: 'Promise',
         enum: '',
         defVal: '',
