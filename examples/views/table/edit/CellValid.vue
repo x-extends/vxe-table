@@ -16,15 +16,17 @@
     </vxe-toolbar>
 
     <vxe-table
-      ref="xTable"
       border
       show-overflow
+      highlight-cell
       height="500"
+      ref="xTable"
       row-id="id"
       :data.sync="tableData"
       :edit-rules="validRules"
-      :edit-config="{trigger: 'click', mode: 'cell', showStatus: true}"
-      :keyboard-config="{isArrow: true, isTab: true}">
+      :mouse-config="{selected: true}"
+      :keyboard-config="{isArrow: true, isTab: true}"
+      :edit-config="{trigger: 'click', mode: 'cell', showStatus: true}">
       <vxe-table-column type="selection" width="60"></vxe-table-column>
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
@@ -72,15 +74,17 @@ export default {
         </vxe-toolbar>
 
         <vxe-table
-          ref="xTable"
           border
           show-overflow
+          highlight-cell
           height="500"
+          ref="xTable"
           row-id="id"
           :data.sync="tableData"
           :edit-rules="validRules"
-          :edit-config="{trigger: 'click', mode: 'cell', showStatus: true}"
-          :keyboard-config="{isArrow: true, isTab: true}">
+          :mouse-config="{selected: true}"
+          :keyboard-config="{isArrow: true, isTab: true}"
+          :edit-config="{trigger: 'click', mode: 'cell', showStatus: true}">
           <vxe-table-column type="selection" width="60"></vxe-table-column>
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
