@@ -10,7 +10,7 @@ assignees: ''
 * **请简要描述一下问题 Describe**
  ?
 
-* **请提供能重现问题的链接（[jsfiddle](https://jsfiddle.net/w8q6unes/)、[codepen](https://codepen.io/anon/pen/gJEmRW)、[jsrun](https://jsrun.net/vIyKp/edit)） Expected behavior**
+* **请提供能重现问题的链接（[jsfiddle](https://jsfiddle.net/w8q6unes/)、[codepen](https://codepen.io/anon/pen/gJEmRW)、[jsrun](https://jsrun.net/vIyKp/edit)） Please provide a url to reproduce the problem**
  ?
 
 * **请填写以下版本信息 please complete the following information**
