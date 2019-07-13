@@ -4,7 +4,7 @@ import Cell from '../../cell'
 import { Interceptor, Renderer } from '../../v-x-e-table'
 import { UtilTools, DomTools, ExportTools, ResizeEvent, GlobalEvent } from '../../tools'
 
-var rowUniqueId = 0
+var rowUniqueId = 1000000
 var browse = DomTools.browse
 var isWebkit = browse['-webkit'] && !browse['-ms']
 var debounceScrollYDuration = browse.msie ? 40 : 20
@@ -739,16 +739,29 @@ export default {
     // 更新数据的 Map
     cacheDataMap () {
       let { treeConfig, tableFullData, fullDataIndexMap, fullDataRowIdMap } = this
+      let rowKey = UtilTools.getRowKey(this)
       fullDataIndexMap.clear()
       fullDataRowIdMap.clear()
       if (treeConfig) {
-        let rowKey = UtilTools.getRowKey(this)
         XEUtils.eachTree(tableFullData, (row, index) => {
-          fullDataRowIdMap.set('' + XEUtils.get(row, rowKey), { rowKey, row, index })
+          let rowPrimaryKey = XEUtils.get(row, rowKey)
+          if (!rowPrimaryKey) {
+            rowPrimaryKey = ++rowUniqueId
+            XEUtils.set(row, rowKey, rowPrimaryKey)
+          }
+          fullDataRowIdMap.set(`${rowPrimaryKey}`, { rowKey, row, index })
         }, treeConfig)
       } else {
         tableFullData.forEach((row, rowIndex) => {
-          fullDataRowIdMap.set(UtilTools.getRowPrimaryKey(this, row, rowIndex), { row, index: rowIndex })
+          let rowPrimaryKey = rowIndex
+          if (rowKey) {
+            rowPrimaryKey = XEUtils.get(row, rowKey)
+            if (!rowPrimaryKey) {
+              rowPrimaryKey = ++rowUniqueId
+              XEUtils.set(row, rowKey, rowPrimaryKey)
+            }
+          }
+          fullDataRowIdMap.set(`${rowPrimaryKey}`, { row, index: rowIndex })
           fullDataIndexMap.set(row, { row, index: rowIndex })
         })
       }
@@ -842,7 +855,7 @@ export default {
       })
       // 如果设置了 Key 就必须要唯一，可以自行设置；如果为空，则默认生成一个随机数
       if (rowKey && !XEUtils.get(recordItem, rowKey)) {
-        XEUtils.set(recordItem, rowKey, ++rowUniqueId + Date.now())
+        XEUtils.set(recordItem, rowKey, ++rowUniqueId)
       }
       return recordItem
     },
