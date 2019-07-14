@@ -149,6 +149,8 @@
       <code class="javascript">{{ demoCodes[11] }}</code>
     </pre>
 
+    <p>左右固定列的分组表头拖动（只允许列拖动，不允许分组标题拖动）</p>
+
     <vxe-table
       border
       resizable
@@ -347,6 +349,41 @@ export default {
             </vxe-table-column>
           </vxe-table-column>
           <vxe-table-column field="address" title="Address" width="200" show-overflow></vxe-table-column>
+        </vxe-table>
+        `,
+        `
+        export default {
+          data () {
+            return {
+              tableData: []
+            }
+          },
+          created () {
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 3)
+          }
+        }
+        `,
+        `
+        <vxe-table
+          border
+          resizable
+          :data.sync="tableData">
+          <vxe-table-column title="基本信息">
+            <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
+            <vxe-table-column field="name" title="Name" fixed="left" width="100"></vxe-table-column>
+          </vxe-table-column>
+          <vxe-table-column title="更多信息">
+            <vxe-table-column field="role" title="Role" width="300"></vxe-table-column>
+            <vxe-table-column field="sex" title="Sex" width="300"></vxe-table-column>
+            <vxe-table-column title="详细信息">
+              <vxe-table-column field="sex" title="Sex" width="300"></vxe-table-column>
+              <vxe-table-column field="date" title="Date" width="300"></vxe-table-column>
+            </vxe-table-column>
+          </vxe-table-column>
+          <vxe-table-column title="其他信息">
+            <vxe-table-column field="age" title="Age" width="100" fixed="right" show-overflow></vxe-table-column>
+            <vxe-table-column field="address" title="Address" width="100" fixed="right" show-overflow></vxe-table-column>
+          </vxe-table-column>
         </vxe-table>
         `,
         `
