@@ -56,7 +56,7 @@ export default {
             }
           },
           created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 300)
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 100)
           },
           methods: {
             roleFilterMethod  (value, option) {
@@ -69,7 +69,7 @@ export default {
     }
   },
   created () {
-    this.tableData = window.MOCK_DATA_LIST.slice(0, 300)
+    this.tableData = window.MOCK_DATA_LIST.slice(0, 100)
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {

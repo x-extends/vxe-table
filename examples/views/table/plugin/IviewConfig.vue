@@ -2,31 +2,16 @@
   <div>
     <p>具体兼容请查看 <a class="link" href="https://www.npmjs.com/package/vxe-table-plugin-iview" target="_blank">vxe-table-plugin-iview</a> 适配插件的 API</p>
 
-    <vxe-table
+    <vxe-grid
       border
       show-overflow
       class="vxe-table-iview"
-      height="600"
+      height="460"
       row-id="id"
       :loading="loading"
       :data.sync="tableData"
-      :mouse-config="{selected: true}"
-      :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true}"
-      :edit-config="{trigger: 'dblclick', mode: 'cell'}">
-      <vxe-table-column type="selection" width="60"></vxe-table-column>
-      <vxe-table-column type="index" title="Number" width="80"></vxe-table-column>
-      <vxe-table-column field="name" title="Input" min-width="140" :edit-render="{name: 'Input'}"></vxe-table-column>
-      <vxe-table-column field="role" title="AutoComplete" min-width="160" :edit-render="{name: 'AutoComplete', props: {data: restaurants, filterMethod: roleFilterMethod}}"></vxe-table-column>
-      <vxe-table-column field="age" title="InputNumber" width="140" :edit-render="{name: 'InputNumber', props: {max: 35, min: 18}}"></vxe-table-column>
-      <vxe-table-column field="sex" title="Select" width="140" :edit-render="{name: 'Select', options: sexList}"></vxe-table-column>
-      <vxe-table-column field="sex1" title="Select" width="140" :edit-render="{name: 'Select', options: sexList, props: {multiple: true, clearable: true}}"></vxe-table-column>
-      <vxe-table-column field="sex2" title="Select" width="140" :edit-render="{name: 'Select', options: sexList, optionGroups: sexGroupList, props: {clearable: true}}"></vxe-table-column>
-      <vxe-table-column field="region" title="Cascader" width="200" :edit-render="{name: 'Cascader', props: {data: regionList}}"> </vxe-table-column>
-      <vxe-table-column field="date" title="DatePicker" width="200" :edit-render="{name: 'DatePicker', props: {type: 'date', format: 'yyyy/MM/dd'}}"></vxe-table-column>
-      <vxe-table-column field="date2" title="TimePicker" width="200" :edit-render="{name: 'TimePicker', props: {type: 'time'}}"></vxe-table-column>
-      <vxe-table-column field="flag" title="iSwitch" width="100" :edit-render="{name: 'iSwitch', type: 'visible'}"></vxe-table-column>
-      <vxe-table-column field="rate" title="Rate" width="200" :edit-render="{name: 'Rate', type: 'visible'}"></vxe-table-column>
-    </vxe-table>
+      :columns="tableColumn"
+      :edit-config="{trigger: 'click', mode: 'row'}"></vxe-grid>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
@@ -43,69 +28,98 @@ import hljs from 'highlight.js'
 
 export default {
   data () {
+    let restaurants = ['前端', '后端', '开发', '测试']
     return {
       loading: false,
       tableData: [],
-      sexList: [],
-      regionList: [],
-      restaurants: ['前端', '后端', '开发', '测试'],
-      sexGroupList: [
-        {
-          label: '分组1',
-          options: [
-            {
-              label: '男',
-              value: '1'
-            }
-          ]
-        },
-        {
-          label: '分组2',
-          options: [
-            {
-              label: '女',
-              value: '0'
-            }
-          ]
-        }
+      tableColumn: [
+        { type: 'selection', width: 60 },
+        { type: 'index', title: 'Number', width: 80 },
+        { field: 'name', title: 'Number', minWidth: 140, editRender: { name: 'Input' } },
+        { field: 'role', title: 'AutoComplete', width: 160, editRender: { name: 'AutoComplete', props: { data: restaurants, filterMethod: this.roleFilterMethod } } },
+        { field: 'age', title: 'InputNumber', width: 160, editRender: { name: 'InputNumber', props: { max: 35, min: 18 } } },
+        { field: 'sex', title: 'Select', width: 140, editRender: { name: 'Select', options: [] } },
+        { field: 'sex1', title: 'Select', width: 160, editRender: { name: 'Select', options: [], props: { multiple: true, clearable: true } } },
+        { field: 'sex2', title: 'Select', width: 140, editRender: { name: 'Select', optionGroups: [], props: { clearable: true } } },
+        { field: 'region', title: 'Cascader', width: 200, editRender: { name: 'Cascader', props: { data: [] } } },
+        { field: 'date', title: 'DatePicker', width: 200, editRender: { name: 'DatePicker', props: { type: 'date', format: 'yyyy/MM/dd' } } },
+        { field: 'date1', title: 'TimePicker', width: 200, editRender: { name: 'TimePicker', props: { type: 'time' } } },
+        { field: 'flag', title: 'iSwitch', width: 100, editRender: { name: 'iSwitch', type: 'visible' } },
+        { field: 'rate', title: 'Rate', width: 200, editRender: { name: 'Rate', type: 'visible' } }
       ],
       demoCodes: [
         `
-        <vxe-table
+        <vxe-grid
           border
           show-overflow
           class="vxe-table-iview"
-          height="600"
+          height="460"
           row-id="id"
           :loading="loading"
           :data.sync="tableData"
-          :mouse-config="{selected: true}"
-          :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true}"
-          :edit-config="{trigger: 'dblclick', mode: 'cell'}">
-          <vxe-table-column type="selection" width="60"></vxe-table-column>
-          <vxe-table-column type="index" title="Number" width="80"></vxe-table-column>
-          <vxe-table-column field="name" title="Input" min-width="140" :edit-render="{name: 'Input'}"></vxe-table-column>
-          <vxe-table-column field="role" title="AutoComplete" min-width="160" :edit-render="{name: 'AutoComplete', props: {data: restaurants, filterMethod: roleFilterMethod}}"></vxe-table-column>
-          <vxe-table-column field="age" title="InputNumber" width="140" :edit-render="{name: 'InputNumber', props: {max: 35, min: 18}}"></vxe-table-column>
-          <vxe-table-column field="sex" title="Select" width="140" :edit-render="{name: 'Select', options: sexList}"></vxe-table-column>
-          <vxe-table-column field="sex1" title="Select" width="140" :edit-render="{name: 'Select', options: sexList, props: {multiple: true, clearable: true}}"></vxe-table-column>
-          <vxe-table-column field="sex2" title="Select" width="140" :edit-render="{name: 'Select', options: sexList, optionGroups: sexGroupList, props: {clearable: true}}"></vxe-table-column>
-          <vxe-table-column field="region" title="Cascader" width="200" :edit-render="{name: 'Cascader', props: {data: regionList}}"> </vxe-table-column>
-          <vxe-table-column field="date" title="DatePicker" width="200" :edit-render="{name: 'DatePicker', props: {type: 'date', format: 'yyyy/MM/dd'}}"></vxe-table-column>
-          <vxe-table-column field="date2" title="TimePicker" width="200" :edit-render="{name: 'TimePicker', props: {type: 'time'}}"></vxe-table-column>
-          <vxe-table-column field="flag" title="iSwitch" width="100" :edit-render="{name: 'iSwitch', type: 'visible'}"></vxe-table-column>
-          <vxe-table-column field="rate" title="Rate" width="200" :edit-render="{name: 'Rate', type: 'visible'}"></vxe-table-column>
-        </vxe-table>
+          :columns="tableColumn"
+          :edit-config="{trigger: 'click', mode: 'row'}"></vxe-grid>
         `,
         `
         export default {
           data () {
+            let restaurants = ['前端', '后端', '开发', '测试']
             return {
               loading: false,
               tableData: [],
-              sexList: [],
-              regionList: [],
-              sexGroupList: [
+              tableColumn: [
+                { type: 'selection', width: 60 },
+                { type: 'index', title: 'Number', width: 80 },
+                { field: 'name', title: 'Number', minWidth: 140, editRender: { name: 'Input' } },
+                { field: 'role', title: 'AutoComplete', width: 160, editRender: { name: 'AutoComplete', props: { data: restaurants, filterMethod: this.roleFilterMethod } } },
+                { field: 'age', title: 'InputNumber', width: 160, editRender: { name: 'InputNumber', props: { max: 35, min: 18 } } },
+                { field: 'sex', title: 'Select', width: 140, editRender: { name: 'Select', options: [] } },
+                { field: 'sex1', title: 'Select', width: 140, editRender: { name: 'Select', options: [], props: { multiple: true, clearable: true } } },
+                { field: 'sex2', title: 'Select', width: 140, editRender: { name: 'Select', optionGroups: [], props: { clearable: true } } },
+                { field: 'region', title: 'Cascader', width: 200, editRender: { name: 'Cascader', props: { data: [] } } },
+                { field: 'date', title: 'DatePicker', width: 200, editRender: { name: 'DatePicker', props: { type: 'date', format: 'yyyy/MM/dd' } } },
+                { field: 'date1', title: 'TimePicker', width: 200, editRender: { name: 'TimePicker', props: { type: 'time' } } },
+                { field: 'flag', title: 'iSwitch', width: 100, editRender: { name: 'iSwitch', type: 'visible' } },
+                { field: 'rate', title: 'Rate', width: 200, editRender: { name: 'Rate', type: 'visible' } }
+              ]
+            }
+          },
+          created () {
+            this.loading = true
+            setTimeout(() => {
+              this.tableData = window.MOCK_DATA_LIST.slice(0, 10)
+              this.loading = false
+            }, 500)
+            this.findSexList()
+            this.findRegionList()
+            this.findSexGroupList()
+            this.findSexGroupList()
+          },
+          methods: {
+            findSexList () {
+              return XEAjax.doGet('/api/conf/sex/list').then(({ data }) => {
+                // 更新指定列的数据源
+                this.tableColumn.forEach(cloumn => {
+                  if (['sex', 'sex1'].includes(cloumn.field)) {
+                    cloumn.editRender.options = data
+                  }
+                })
+                return data
+              })
+            },
+            findRegionList () {
+              return XEAjax.doGet('/api/conf/region/list').then(({ data }) => {
+                // 更新指定列的数据源
+                this.tableColumn.forEach(cloumn => {
+                  if (['region'].includes(cloumn.field)) {
+                    cloumn.editRender.props.data = data
+                  }
+                })
+                return data
+              })
+            },
+            findSexGroupList () {
+              let sexGroupList = [
                 {
                   label: '分组1',
                   options: [
@@ -125,14 +139,15 @@ export default {
                   ]
                 }
               ]
-            }
-          },
-          created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 100)
-          },
-          methods: {
-            nameChangeEvent ({ row }, event) {
-              console.log(event)
+              // 更新指定列的数据源
+              this.tableColumn.forEach(cloumn => {
+                if (['sex2'].includes(cloumn.field)) {
+                  cloumn.editRender.optionGroups = sexGroupList
+                }
+              })
+            },
+            roleFilterMethod  (value, option) {
+              return option.toUpperCase().indexOf((value || '').toUpperCase()) !== -1
             }
           }
         }
@@ -143,12 +158,13 @@ export default {
   created () {
     this.loading = true
     setTimeout(() => {
-      let list = window.MOCK_DATA_LIST.slice(0, 100)
-      this.tableData = list
+      this.tableData = window.MOCK_DATA_LIST.slice(0, 10)
       this.loading = false
     }, 500)
     this.findSexList()
     this.findRegionList()
+    this.findSexGroupList()
+    this.findSexGroupList()
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
@@ -158,14 +174,52 @@ export default {
   methods: {
     findSexList () {
       return XEAjax.doGet('/api/conf/sex/list').then(({ data }) => {
-        this.sexList = data
+        // 更新指定列的数据源
+        this.tableColumn.forEach(cloumn => {
+          if (['sex', 'sex1'].includes(cloumn.field)) {
+            cloumn.editRender.options = data
+          }
+        })
         return data
       })
     },
     findRegionList () {
       return XEAjax.doGet('/api/conf/region/list').then(({ data }) => {
-        this.regionList = data
+        // 更新指定列的数据源
+        this.tableColumn.forEach(cloumn => {
+          if (['region'].includes(cloumn.field)) {
+            cloumn.editRender.props.data = data
+          }
+        })
         return data
+      })
+    },
+    findSexGroupList () {
+      let sexGroupList = [
+        {
+          label: '分组1',
+          options: [
+            {
+              label: '男',
+              value: '1'
+            }
+          ]
+        },
+        {
+          label: '分组2',
+          options: [
+            {
+              label: '女',
+              value: '0'
+            }
+          ]
+        }
+      ]
+      // 更新指定列的数据源
+      this.tableColumn.forEach(cloumn => {
+        if (['sex2'].includes(cloumn.field)) {
+          cloumn.editRender.optionGroups = sexGroupList
+        }
       })
     },
     roleFilterMethod  (value, option) {
