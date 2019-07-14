@@ -148,6 +148,35 @@
       <code class="xml">{{ demoCodes[10] }}</code>
       <code class="javascript">{{ demoCodes[11] }}</code>
     </pre>
+
+    <vxe-table
+      border
+      resizable
+      :data.sync="tableData">
+      <vxe-table-column title="基本信息">
+        <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
+        <vxe-table-column field="name" title="Name" fixed="left" width="100"></vxe-table-column>
+      </vxe-table-column>
+      <vxe-table-column title="更多信息">
+        <vxe-table-column field="role" title="Role" width="300"></vxe-table-column>
+        <vxe-table-column field="sex" title="Sex" width="300"></vxe-table-column>
+        <vxe-table-column title="详细信息">
+          <vxe-table-column field="sex" title="Sex" width="300"></vxe-table-column>
+          <vxe-table-column field="date" title="Date" width="300"></vxe-table-column>
+        </vxe-table-column>
+      </vxe-table-column>
+      <vxe-table-column title="其他信息">
+        <vxe-table-column field="age" title="Age" width="100" fixed="right" show-overflow></vxe-table-column>
+        <vxe-table-column field="address" title="Address" width="100" fixed="right" show-overflow></vxe-table-column>
+      </vxe-table-column>
+    </vxe-table>
+
+    <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
+
+    <pre>
+      <code class="xml">{{ demoCodes[12] }}</code>
+      <code class="javascript">{{ demoCodes[13] }}</code>
+    </pre>
   </div>
 </template>
 

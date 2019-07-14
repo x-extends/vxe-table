@@ -10,11 +10,13 @@ function rClass (cls) {
 }
 
 const rClsMap = {}
+// 预编译正则，提升速度
 const preClss = [
   'c--resize',
   'c--checked',
   'row--hover',
   'row--current',
+  'col--group',
   'col--current',
   'col--checked',
   'col--copyed',

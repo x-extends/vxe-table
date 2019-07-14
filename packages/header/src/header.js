@@ -222,6 +222,7 @@ export default {
               class: ['vxe-header--column', column.id, {
                 [`col--${headAlign}`]: headAlign,
                 'col--index': column.type === 'index',
+                'col--group': isColGroup,
                 'col--ellipsis': hasEllipsis,
                 'fixed--hidden': fixedHiddenColumn,
                 'filter--active': column.filters.some(item => item.checked)
@@ -301,7 +302,7 @@ export default {
         while (tempCellElem) {
           if (DomTools.hasClass(tempCellElem, 'fixed--hidden')) {
             break
-          } else {
+          } else if (!DomTools.hasClass(tempCellElem, 'col--group')) {
             fixedOffsetWidth += tempCellElem.offsetWidth
           }
           tempCellElem = tempCellElem[siblingProp]
