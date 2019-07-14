@@ -143,7 +143,7 @@ export default {
               tipLeft = scrollLeft + 6
               tipStore.arrowStyle.left = `${left > tipLeft + 16 ? left - tipLeft + 16 : 16}px`
               tipStore.style.left = `${tipLeft}px`
-            } else if (left + clientWidth > scrollLeft + visibleWidth) {
+            } else if (tipLeft + clientWidth > scrollLeft + visibleWidth) {
               // 超出右边界
               tipLeft = scrollLeft + visibleWidth - clientWidth - 6
               tipStore.arrowStyle.left = `${clientWidth - Math.max(Math.floor((tipLeft + clientWidth - left) / 2), 22)}px`

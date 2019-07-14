@@ -290,21 +290,25 @@ export default {
       let dragPosLeft = pos.left + Math.floor(dragBtnWidth / 2)
       let domMousemove = document.onmousemove
       let domMouseup = document.onmouseup
+      let isLeftFixed = fixedType === 'left'
       let isRightFixed = fixedType === 'right'
 
-      // 计算右侧固定列位置
-      let prevOffsetWidth = 0
-      let prevCellElem = cell.previousElementSibling
-      if (rightContainer && isRightFixed) {
-        while (prevCellElem) {
-          if (DomTools.hasClass(prevCellElem, 'fixed--hidden')) {
+      // 计算左右侧固定列偏移量
+      let fixedOffsetWidth = 0
+      if (isLeftFixed || isRightFixed) {
+        let siblingProp = isLeftFixed ? 'nextElementSibling' : 'previousElementSibling'
+        let tempCellElem = cell[siblingProp]
+        while (tempCellElem) {
+          if (DomTools.hasClass(tempCellElem, 'fixed--hidden')) {
             break
           } else {
-            prevOffsetWidth += prevCellElem.offsetWidth
+            fixedOffsetWidth += tempCellElem.offsetWidth
           }
-          prevCellElem = prevCellElem.previousElementSibling
+          tempCellElem = tempCellElem[siblingProp]
         }
-        dragPosLeft = rightContainer.offsetLeft + prevOffsetWidth
+        if (isRightFixed && rightContainer) {
+          dragPosLeft = rightContainer.offsetLeft + fixedOffsetWidth
+        }
       }
 
       // 处理拖动事件
@@ -314,15 +318,15 @@ export default {
         let offsetX = evnt.clientX - dragClientX
         let left = dragPosLeft + offsetX
         let scrollLeft = fixedType ? 0 : tableBodyElem.scrollLeft
-        if (fixedType === 'left') {
+        if (isLeftFixed) {
           // 左固定列（不允许超过右侧固定列、不允许超过右边距）
-          left = Math.min(left, (rightContainer ? rightContainer.offsetLeft : tableBodyElem.clientWidth) - minInterval)
+          left = Math.min(left, (rightContainer ? rightContainer.offsetLeft : tableBodyElem.clientWidth) - fixedOffsetWidth - minInterval)
         } else if (isRightFixed) {
           // 右侧固定列（不允许超过左侧固定列、不允许超过左边距）
-          dragMinLeft = (leftContainer ? leftContainer.clientWidth : 0) + minInterval
+          dragMinLeft = (leftContainer ? leftContainer.clientWidth : 0) + fixedOffsetWidth + minInterval
           left = Math.min(left, dragPosLeft + cell.clientWidth - minInterval)
         }
-        dragLeft = Math.max(left, dragMinLeft + prevOffsetWidth)
+        dragLeft = Math.max(left, dragMinLeft)
         resizeBarElem.style.left = `${dragLeft - scrollLeft}px`
       }
       $table._isResize = true
