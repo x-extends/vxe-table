@@ -188,9 +188,10 @@ export default {
             return h('th', {
               class: ['vxe-header--column', column.id, {
                 [`col--${headAlign}`]: headAlign,
-                'col--current': selectColumn === column,
+                'col--group': isColGroup,
                 'col--ellipsis': hasEllipsis,
                 'fixed--hidden': fixedHiddenColumn,
+                'col--current': selectColumn === column,
                 'filter--active': column.filters.some(item => item.checked)
               }, headerCellClassName ? XEUtils.isFunction(headerCellClassName) ? headerCellClassName({ $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType }) : headerCellClassName : ''],
               attrs: {
@@ -277,7 +278,7 @@ export default {
         while (tempCellElem) {
           if (DomTools.hasClass(tempCellElem, 'fixed--hidden')) {
             break
-          } else {
+          } else if (!DomTools.hasClass(tempCellElem, 'col--group')) {
             fixedOffsetWidth += tempCellElem.offsetWidth
           }
           tempCellElem = tempCellElem[siblingProp]
