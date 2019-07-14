@@ -22,7 +22,7 @@
       <code class="javascript">{{ demoCodes[2] }}</code>
       <code class="html">{{ demoCodes[3] }}</code>
     </pre>
-    <h4>例子：通过 JSX 实现更加简单，可维护高</h4>
+    <h4>例子：（推荐）通过 JSX 实现更加简单，可维护性好</h4>
     <pre>
       <code class="javascript">{{ demoCodes[4] }}</code>
       <code class="html">{{ demoCodes[5] }}</code>
