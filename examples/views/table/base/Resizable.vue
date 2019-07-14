@@ -1,7 +1,6 @@
 <template>
   <div>
-    <p>通过设置 <table-api-link prop="resizable"/> 属性可以启用所有列宽拖动</p>
-    <p>也可以通过给列设置 <table-column-api-link prop="resizable"/> 属性控制列是否允许拖动</p>
+    <p>通过设置 <table-api-link prop="resizable"/> 属性启用列宽拖动功能</p>
 
     <vxe-table
       resizable
@@ -43,7 +42,7 @@
       <code class="javascript">{{ demoCodes[3] }}</code>
     </pre>
 
-    <p>固定左列宽拖动</p>
+    <p>固定左列宽拖动（固定左不允许超过表格右边距）</p>
 
     <vxe-table
       border
@@ -68,7 +67,7 @@
       <code class="javascript">{{ demoCodes[5] }}</code>
     </pre>
 
-    <p>固定右列宽拖动</p>
+    <p>固定右列宽拖动（固定右不允许超过表格左边距）</p>
 
     <vxe-table
       border
@@ -94,7 +93,7 @@
       <code class="javascript">{{ demoCodes[7] }}</code>
     </pre>
 
-    <p>左右固定列宽拖动</p>
+    <p>左右固定列宽拖动（固定左不允许超过固定右，固定右不允许超过固定左）</p>
 
     <vxe-table
       border
@@ -122,7 +121,7 @@
       <code class="javascript">{{ demoCodes[9] }}</code>
     </pre>
 
-    <p>分组表头拖动</p>
+    <p>分组表头拖动（只允许列拖动，不允许分组标题拖动）</p>
 
     <vxe-table
       border
