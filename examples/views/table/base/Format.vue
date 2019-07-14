@@ -19,7 +19,7 @@
       <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
 
-    <p>全局格式化内容，会在需要的时候自动调用对应 <a class="link" href="https://xuliangzhan.github.io/xe-utils/#/" target="_blank">xe-utils</a> 的方法进行数据处理</p>
+    <p>全局格式化内容，会在需要的时候自动调用对应 <a class="link" href="https://xuliangzhan.github.io/xe-utils/#/" target="_blank">xe-utils</a> 函数库的方法进行数据处理</p>
     <p>可以通过自定义函数实现统一的格式化处理，这对于很多场景非常有用，减少很多不必要的重复代码</p>
 
     <vxe-table
