@@ -58,15 +58,11 @@ export const Cell = {
   renderCell (h, params) {
     let cellValue
     let { row, column } = params
-    let { slots, formatter } = column
+    let { slots } = column
     if (slots && slots.default) {
       return slots.default(params, h)
     }
-    cellValue = UtilTools.getCellValue(row, column)
-    if (formatter) {
-      params.cellValue = cellValue
-      cellValue = formatter(params)
-    }
+    cellValue = UtilTools.getCellLabel(row, column, params)
     return [UtilTools.formatText(cellValue, 1)]
   },
   renderTreeCell (h, params) {
@@ -501,8 +497,7 @@ export const Cell = {
       return slots.default(params, h)
     }
     if (formatter) {
-      params.cellValue = UtilTools.getCellValue(row, column)
-      return [UtilTools.formatText(formatter(params), 1)]
+      return [UtilTools.formatText(UtilTools.getCellLabel(row, column, params), 1)]
     }
     return compConf && compConf.renderCell ? compConf.renderCell.call($table, h, editRender, params, context) : Cell.renderCell(h, params)
   }

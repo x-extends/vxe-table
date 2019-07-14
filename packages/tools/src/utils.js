@@ -43,8 +43,17 @@ export const UtilTools = {
     return XEUtils.get(row, column.property)
   },
   getCellLabel (row, column, params) {
-    let cellValue = XEUtils.get(row, column.property)
-    return params && column.formatter ? column.formatter(Object.assign({ cellValue }, params)) : cellValue
+    let { formatter } = column
+    let cellValue = UtilTools.getCellValue(row, column)
+    if (params && formatter) {
+      if (XEUtils.isString(formatter)) {
+        return XEUtils[formatter](cellValue)
+      } else if (XEUtils.isArray(formatter)) {
+        return XEUtils[formatter[0]].apply(XEUtils, [cellValue].concat(formatter.slice(1)))
+      }
+      return formatter(Object.assign({ cellValue }, params))
+    }
+    return cellValue
   },
   setCellValue (row, column, value) {
     return XEUtils.set(row, column.property, value)

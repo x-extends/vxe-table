@@ -115,7 +115,7 @@ const apis = [
       {
         name: 'formatter',
         descKey: 'app.api.tableColumn.desc.formatter',
-        type: 'Function',
+        type: 'Function, Array, String',
         enum: '',
         defVal: '',
         list: []

@@ -31,7 +31,7 @@ export default {
     // 当表头内容过长时显示为省略号
     showHeaderOverflow: { type: [Boolean, String], default: null },
     // 格式化显示内容
-    formatter: Function,
+    formatter: [Function, Array, String],
     // 自定义索引方法
     indexMethod: Function,
     // 是否允许排序
