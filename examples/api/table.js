@@ -205,6 +205,22 @@ const apis = [
         list: []
       },
       {
+        name: 'align',
+        descKey: 'app.api.table.desc.align',
+        type: 'String',
+        enum: 'left（居左）,center（居中）,right（居右）',
+        defVal: 'left',
+        list: []
+      },
+      {
+        name: 'header-align',
+        descKey: 'app.api.table.desc.headerAlign',
+        type: 'String',
+        enum: 'left（居左）,center（居中）,right（居右）',
+        defVal: '继承 align',
+        list: []
+      },
+      {
         name: 'show-header',
         descKey: 'app.api.table.desc.showHeader',
         type: 'Boolean',

@@ -43,7 +43,7 @@
       <code class="javascript">{{ demoCodes[3] }}</code>
     </pre>
 
-    <p>固定列宽拖动</p>
+    <p>固定左列宽拖动</p>
 
     <vxe-table
       border
@@ -64,8 +64,34 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[3] }}</code>
-      <code class="javascript">{{ demoCodes[4] }}</code>
+      <code class="xml">{{ demoCodes[4] }}</code>
+      <code class="javascript">{{ demoCodes[5] }}</code>
+    </pre>
+
+    <p>固定右列宽拖动</p>
+
+    <vxe-table
+      border
+      resizable
+      :data.sync="tableData">
+      <vxe-table-column type="index" width="60"></vxe-table-column>
+      <vxe-table-column field="name" title="Name" width="200"></vxe-table-column>
+      <vxe-table-column field="sex" title="Sex" width="200"></vxe-table-column>
+      <vxe-table-column field="age" title="Age" width="200"></vxe-table-column>
+      <vxe-table-column field="atrr1" title="atrr1" width="200"></vxe-table-column>
+      <vxe-table-column field="atrr2" title="atrr2" width="200"></vxe-table-column>
+      <vxe-table-column field="atrr3" title="atrr3" width="200"></vxe-table-column>
+      <vxe-table-column field="atrr4" title="atrr4" width="200"></vxe-table-column>
+      <vxe-table-column field="role" title="Role" width="100" fixed="right"></vxe-table-column>
+      <vxe-table-column field="name" title="Name" width="100" fixed="right"></vxe-table-column>
+      <vxe-table-column field="sex" title="Sex" width="100" fixed="right"></vxe-table-column>
+    </vxe-table>
+
+    <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
+
+    <pre>
+      <code class="xml">{{ demoCodes[6] }}</code>
+      <code class="javascript">{{ demoCodes[7] }}</code>
     </pre>
 
     <p>左右固定列宽拖动</p>
@@ -92,8 +118,8 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[6] }}</code>
-      <code class="javascript">{{ demoCodes[7] }}</code>
+      <code class="xml">{{ demoCodes[8] }}</code>
+      <code class="javascript">{{ demoCodes[9] }}</code>
     </pre>
 
     <p>分组表头拖动</p>
@@ -120,8 +146,8 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[8] }}</code>
-      <code class="javascript">{{ demoCodes[9] }}</code>
+      <code class="xml">{{ demoCodes[10] }}</code>
+      <code class="javascript">{{ demoCodes[11] }}</code>
     </pre>
   </div>
 </template>
@@ -188,13 +214,40 @@ export default {
         <vxe-table
           border
           resizable
-          show-overflow
-          show-header-overflow
           :data.sync="tableData">
           <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
           <vxe-table-column field="name" title="Name" width="100" fixed="left"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" width="100" fixed="left"></vxe-table-column>
           <vxe-table-column field="age" title="Age" width="100" fixed="left"></vxe-table-column>
+          <vxe-table-column field="atrr1" title="atrr1" width="200"></vxe-table-column>
+          <vxe-table-column field="atrr2" title="atrr2" width="200"></vxe-table-column>
+          <vxe-table-column field="atrr3" title="atrr3" width="200"></vxe-table-column>
+          <vxe-table-column field="atrr4" title="atrr4" width="200"></vxe-table-column>
+          <vxe-table-column field="time" title="Time" width="200"></vxe-table-column>
+          <vxe-table-column field="address" title="Address" width="200" show-overflow></vxe-table-column>
+        </vxe-table>
+        `,
+        `
+        export default {
+          data () {
+            return {
+              tableData: []
+            }
+          },
+          created () {
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 3)
+          }
+        }
+        `,
+        `
+        <vxe-table
+          border
+          resizable
+          :data.sync="tableData">
+          <vxe-table-column type="index" width="60"></vxe-table-column>
+          <vxe-table-column field="name" title="Name" width="200"></vxe-table-column>
+          <vxe-table-column field="sex" title="Sex" width="200"></vxe-table-column>
+          <vxe-table-column field="age" title="Age" width="200"></vxe-table-column>
           <vxe-table-column field="atrr1" title="atrr1" width="200"></vxe-table-column>
           <vxe-table-column field="atrr2" title="atrr2" width="200"></vxe-table-column>
           <vxe-table-column field="atrr3" title="atrr3" width="200"></vxe-table-column>

@@ -177,6 +177,8 @@ module.exports = {
           size: '表格的尺寸',
           fit: '所有列的宽度是否自撑开',
           loading: '表格是否显示加载中',
+          align: '所有的列对其方式',
+          headerAlign: '所有的表头列的对齐方式',
           showHeader: '是否显示表头',
           startIndex: '只对 type=index 的列有效，动态索引的起始值',
           highlightCurrentRow: '是否要高亮当前行',
