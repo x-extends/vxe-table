@@ -29,6 +29,7 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
     highlightCurrentRow,
     showOverflow: allShowOverflow,
     showAllOverflow: oldShowAllOverflow,
+    align: allAlign,
     selectColumn,
     cellClassName,
     spanMethod,
@@ -52,6 +53,7 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
   let isKeyboardCut = keyboardConfig && keyboardConfig.isCut
   let fixedHiddenColumn = fixedType ? column.fixed !== fixedType : column.fixed && overflowX
   let cellOverflow = (XEUtils.isUndefined(showOverflow) || XEUtils.isNull(showOverflow)) ? allColumnOverflow : showOverflow
+  let cellAlign = align || allAlign
   let showEllipsis = cellOverflow === 'ellipsis'
   let showTitle = cellOverflow === 'title'
   let showTooltip = cellOverflow === true || cellOverflow === 'tooltip'
@@ -134,7 +136,7 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
   }
   return h('td', {
     class: ['vxe-body--column', column.id, {
-      [`col--${align}`]: align,
+      [`col--${cellAlign}`]: cellAlign,
       'col--edit': editRender,
       'col--checked': checkedLocat.active,
       'col--checked-top': checkedLocat.top,

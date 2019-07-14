@@ -10,3 +10,12 @@
     background-color: $vxe-table-border-color;
   }
 }
+
+.vxe-table--fixed-right-wrapper {
+  .vxe-header--column {
+    .vxe-resizable {
+      right: auto;
+      left: -7px;
+    }
+  }
+}

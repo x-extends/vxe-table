@@ -176,6 +176,8 @@ module.exports = {
           size: 'Table size',
           fit: 'Whether the width of all columns is self-supporting',
           loading: 'Whether the table is loaded',
+          align: '所有的列对其方式',
+          headerAlign: '所有的表头列的对齐方式',
           showHeader: 'Whether to display the header',
           startIndex: '只对 type=index 的列有效，动态索引的起始值',
           highlightCurrentRow: 'Whether to highlight the current row',
