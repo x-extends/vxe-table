@@ -13,7 +13,7 @@ module.exports = {
         advancedFunctions: '高级函数',
 
         icon: '图标',
-        basics: '静态化表格',
+        basics: '基础功能',
         base: '基础',
         size: '尺寸',
         ellipsis: '内容显示省略号',

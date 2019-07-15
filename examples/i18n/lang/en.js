@@ -13,7 +13,7 @@ module.exports = {
         advancedFunctions: 'Advanced Functions',
 
         icon: '图标',
-        basics: '静态化表格',
+        basics: '基础功能',
         base: 'Basics table',
         size: 'Size',
         ellipsis: 'Ellipsis',
