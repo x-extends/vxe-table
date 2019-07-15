@@ -457,7 +457,10 @@ export default {
         h('tbody', renderRows(h, this, $table, '', 0, fixedType, tableData, tableColumn))
       ]),
       !fixedType && !loading && !tableData.length ? h('div', {
-        class: 'vxe-table--empty-block'
+        class: 'vxe-table--empty-block',
+        style: {
+          width: tableWidth ? `${tableWidth}px` : tableWidth
+        }
       }, [
         h('span', {
           class: 'vxe-table--empty-text'
