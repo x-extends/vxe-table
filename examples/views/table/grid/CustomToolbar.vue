@@ -4,6 +4,7 @@
 
     <vxe-grid
       border
+      resizable
       ref="xGrid"
       height="530"
       row-id="id"
@@ -74,6 +75,7 @@ export default {
         `
         <vxe-grid
           border
+          resizable
           ref="xGrid"
           height="530"
           row-id="id"

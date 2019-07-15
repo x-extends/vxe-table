@@ -6,6 +6,7 @@
     <vxe-grid
       ref="xGrid"
       border
+      resizable
       remote-filter
       height="548"
       row-id="id"
@@ -68,6 +69,7 @@ export default {
         <vxe-grid
           ref="xGrid"
           border
+          resizable
           remote-filter
           height="548"
           :pager-config="{pageSize: 15}"

@@ -4,6 +4,7 @@
     <p>可以通过 <toolbar-api-link prop="storage"/> 开启将列个性化的设置状态保存到本地</p>
 
     <vxe-grid
+      resizable
       highlight-hover-row
       row-id="id"
       :proxy-config="tableProxy"
@@ -61,6 +62,7 @@ export default {
       demoCodes: [
         `
         <vxe-grid
+          resizable
           highlight-hover-row
           row-id="id"
           :proxy-config="tableProxy"

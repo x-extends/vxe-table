@@ -4,6 +4,7 @@
 
     <vxe-grid
       border
+      resizable
       show-overflow
       height="306"
       row-id="id"
@@ -126,6 +127,7 @@ export default {
         `
         <vxe-grid
           border
+          resizable
           show-overflow
           height="306"
           row-id="id"

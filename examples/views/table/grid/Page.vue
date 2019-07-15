@@ -5,6 +5,7 @@
 
     <vxe-grid
       border
+      resizable
       height="530"
       :loading="loading"
       :start-index="(tablePage.currentPage - 1) * tablePage.pageSize"
@@ -50,6 +51,7 @@ export default {
         `
         <vxe-grid
           border
+          resizable
           height="530"
           :loading="loading"
           :pager-config="tablePage"

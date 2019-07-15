@@ -8,6 +8,7 @@
 
     <vxe-grid
       border
+      resizable
       height="400"
       row-id="id"
       :toolbar="toolbar"
@@ -116,6 +117,7 @@ export default {
         `
         <vxe-grid
           border
+          resizable
           height="400"
           row-id="id"
           :columns="tableColumn"
