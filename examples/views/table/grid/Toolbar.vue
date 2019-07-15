@@ -5,6 +5,7 @@
 
     <vxe-grid
       border
+      resizable
       height="530"
       row-id="id"
       :pager-config="tablePage"
@@ -75,6 +76,7 @@ export default {
         `
         <vxe-grid
           border
+          resizable
           height="530"
           row-id="id"
           :pager-config="tablePage"

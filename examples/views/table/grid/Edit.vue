@@ -4,6 +4,7 @@
 
     <vxe-grid
       border
+      resizable
       height="530"
       row-id="id"
       :loading="loading"
@@ -50,6 +51,7 @@ export default {
         `
         <vxe-grid
           border
+          resizable
           height="530"
           row-id="id"
           :loading="loading"

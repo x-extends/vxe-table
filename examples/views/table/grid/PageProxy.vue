@@ -5,6 +5,7 @@
 
     <vxe-grid
       border
+      resizable
       height="530"
       row-id="id"
       :pager-config="{pageSize: 10}"
@@ -46,6 +47,7 @@ export default {
         `
         <vxe-grid
           border
+          resizable
           height="530"
           :pager-config="{pageSize: 10}"
           :proxy-config="tableProxy"

@@ -5,6 +5,7 @@
 
     <vxe-grid
       border
+      resizable
       height="530"
       :proxy-config="tableProxy"
       :columns="tableColumn"></vxe-grid>
@@ -42,6 +43,7 @@ export default {
         `
         <vxe-grid
           border
+          resizable
           height="530"
           :proxy-config="tableProxy"
           :columns="tableColumn"></vxe-grid>

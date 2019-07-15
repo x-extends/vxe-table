@@ -25,6 +25,7 @@
     <vxe-table
       border
       resizable
+      show-header-overflow
       highlight-hover-row
       :data.sync="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
@@ -218,6 +219,7 @@ export default {
         <vxe-table
           border
           resizable
+          show-header-overflow
           highlight-hover-row
           :data.sync="tableData">
           <vxe-table-column type="index" width="60"></vxe-table-column>
