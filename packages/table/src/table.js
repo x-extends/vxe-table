@@ -1447,6 +1447,7 @@ export default {
               })
             }
           } else if (layout === 'body') {
+            let emptyBlockElem = elemStore[`${name}-${layout}-emptyBlock`]
             if (wrapperElem) {
               if (customHeight > 0) {
                 wrapperElem.style.height = `${fixedType ? (customHeight > 0 ? customHeight - headerHeight - footerHeight : tableHeight) - (showFooter ? 0 : scrollbarHeight) : customHeight - headerHeight - footerHeight}px`
@@ -1483,6 +1484,9 @@ export default {
               if (overflowY && fixedType && (browse['-moz'] || browse['safari'])) {
                 tableElem.style.paddingRight = `${scrollbarWidth}px`
               }
+            }
+            if (emptyBlockElem) {
+              emptyBlockElem.style.width = tWidth ? `${tWidth}px` : tWidth
             }
           } else if (layout === 'footer') {
             // 如果是使用优化模式

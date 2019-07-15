@@ -17,9 +17,30 @@
       <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
 
+    <p>出现滚动条</p>
+
+    <vxe-table
+      border
+      :data.sync="tableData">
+      <vxe-table-column type="index" width="100"></vxe-table-column>
+      <vxe-table-column field="name" title="Name" width="300"></vxe-table-column>
+      <vxe-table-column field="sex" title="Sex" width="300"></vxe-table-column>
+      <vxe-table-column field="date" title="Date" width="300"></vxe-table-column>
+      <vxe-table-column field="age" title="Age" width="300"></vxe-table-column>
+      <vxe-table-column field="address" title="Address" width="300" show-overflow></vxe-table-column>
+    </vxe-table>
+
+    <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
+
+    <pre>
+      <code class="xml">{{ demoCodes[0] }}</code>
+      <code class="javascript">{{ demoCodes[1] }}</code>
+    </pre>
+
     <p>配合 loading 使用，可以通过 slot=<table-api-link prop="empty"/> 自定义提示语</p>
 
     <vxe-table
+      border
       height="300"
       :loading="loading"
       :data.sync="tableData">

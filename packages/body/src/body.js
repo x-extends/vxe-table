@@ -291,6 +291,7 @@ export default {
     elemStore[`${prefix}list`] = $refs.tbody
     elemStore[`${prefix}xSpace`] = $refs.xSpace
     elemStore[`${prefix}ySpace`] = $refs.ySpace
+    elemStore[`${prefix}emptyBlock`] = $refs.emptyBlock
     this.$el.onscroll = this.scrollEvent
     this.$el._onscroll = this.scrollEvent
   },
@@ -417,7 +418,8 @@ export default {
         ]) : null
       ]) : null,
       !fixedType && !tableData.length ? h('div', {
-        class: 'vxe-table--empty-block'
+        class: 'vxe-table--empty-block',
+        ref: 'emptyBlock'
       }, [
         h('span', {
           class: 'vxe-table--empty-text'
