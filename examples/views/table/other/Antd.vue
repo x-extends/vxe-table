@@ -188,7 +188,7 @@ export default {
           created () {
             this.loading = true
             setTimeout(() => {
-              this.tableData = window.MOCK_DATA_LIST.slice(0, 100)
+              this.tableData = window.MOCK_DATA_LIST.slice(0, 10)
               this.loading = false
             }, 500)
             this.findSexList()
@@ -277,7 +277,7 @@ export default {
   created () {
     this.loading = true
     setTimeout(() => {
-      this.tableData = window.MOCK_DATA_LIST.slice(0, 100)
+      this.tableData = window.MOCK_DATA_LIST.slice(0, 10)
       this.loading = false
     }, 500)
     this.findSexList()
