@@ -210,7 +210,7 @@ export default {
           created () {
             this.loading = true
             setTimeout(() => {
-              this.tableData = window.MOCK_DATA_LIST.slice(0, 100)
+              this.tableData = window.MOCK_DATA_LIST.slice(0, 10)
               this.loading = false
             }, 500)
           },
@@ -283,7 +283,7 @@ export default {
   created () {
     this.loading = true
     setTimeout(() => {
-      let list = window.MOCK_DATA_LIST.slice(0, 100)
+      let list = window.MOCK_DATA_LIST.slice(0, 10)
       this.tableData = list
       this.loading = false
     }, 500)
