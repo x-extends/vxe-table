@@ -30,7 +30,8 @@ A fully functional Vue Table, to meet most of the Table all requirements, and pe
 
 ## Features
 
-* Basics table （基础）
+* Static table （静态化表格）
+* Dynamic grid （动态化表格）
 * Size （尺寸）
 * Striped （斑马线条纹）
 * Table with border （带边框）
@@ -43,6 +44,7 @@ A fully functional Vue Table, to meet most of the Table all requirements, and pe
 * Table with fixed columns and header （固定表头和列）
 * Grouping table head （表头分组）
 * Table sequence （序号)
+* Highlight row and column （高亮行、列)
 * Radio （单选)
 * Checkbox （多选）
 * Sorting （排序）
