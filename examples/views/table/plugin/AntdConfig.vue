@@ -108,24 +108,13 @@ export default {
           methods: {
             findSexList () {
               return XEAjax.doGet('/api/conf/sex/list').then(({ data }) => {
-                // 更新指定列的数据源
-                this.tableColumn.forEach(cloumn => {
-                  if (['sex', 'sex1'].includes(cloumn.field)) {
-                    cloumn.editRender.options = data
-                  }
-                })
-                return data
+                this.tableColumn[5].editRender.options = data
+                this.tableColumn[6].editRender.options = data
               })
             },
             findRegionList () {
               return XEAjax.doGet('/api/conf/region/list').then(({ data }) => {
-                // 更新指定列的数据源
-                this.tableColumn.forEach(cloumn => {
-                  if (['region'].includes(cloumn.field)) {
-                    cloumn.editRender.props.options = data
-                  }
-                })
-                return data
+                this.tableColumn[8].editRender.props.options = data
               })
             },
             findSexGroupList () {
@@ -149,12 +138,7 @@ export default {
                   ]
                 }
               ]
-              // 更新指定列的数据源
-              this.tableColumn.forEach(cloumn => {
-                if (['sex2'].includes(cloumn.field)) {
-                  cloumn.editRender.optionGroups = sexGroupList
-                }
-              })
+              this.tableColumn[7].editRender.optionGroups = sexGroupList
             },
             findTreeSelectList () {
               let treeData = [{
@@ -185,21 +169,12 @@ export default {
                   key: '0-1-2'
                 }]
               }]
-              // 更新指定列的数据源
-              this.tableColumn.forEach(cloumn => {
-                if (['attr1', 'attr2'].includes(cloumn.field)) {
-                  cloumn.editRender.props.treeData = treeData
-                }
-              })
+              this.tableColumn[14].editRender.props.treeData = treeData
+              this.tableColumn[15].editRender.props.treeData = treeData
             },
             roleSearchEvent ({ row }, value) {
               let dataSource = this.restaurants.filter(option => option.toUpperCase().indexOf((value || '').toUpperCase()) !== -1)
-              // 更新指定列的数据源
-              this.tableColumn.forEach(cloumn => {
-                if (['role'].includes(cloumn.field)) {
-                  cloumn.editRender.props.dataSource = dataSource
-                }
-              })
+              this.tableColumn[3].editRender.props.dataSource = dataSource
             }
           }
         }
@@ -226,24 +201,13 @@ export default {
   methods: {
     findSexList () {
       return XEAjax.doGet('/api/conf/sex/list').then(({ data }) => {
-        // 更新指定列的数据源
-        this.tableColumn.forEach(cloumn => {
-          if (['sex', 'sex1'].includes(cloumn.field)) {
-            cloumn.editRender.options = data
-          }
-        })
-        return data
+        this.tableColumn[5].editRender.options = data
+        this.tableColumn[6].editRender.options = data
       })
     },
     findRegionList () {
       return XEAjax.doGet('/api/conf/region/list').then(({ data }) => {
-        // 更新指定列的数据源
-        this.tableColumn.forEach(cloumn => {
-          if (['region'].includes(cloumn.field)) {
-            cloumn.editRender.props.options = data
-          }
-        })
-        return data
+        this.tableColumn[8].editRender.props.options = data
       })
     },
     findSexGroupList () {
@@ -267,12 +231,7 @@ export default {
           ]
         }
       ]
-      // 更新指定列的数据源
-      this.tableColumn.forEach(cloumn => {
-        if (['sex2'].includes(cloumn.field)) {
-          cloumn.editRender.optionGroups = sexGroupList
-        }
-      })
+      this.tableColumn[7].editRender.optionGroups = sexGroupList
     },
     findTreeSelectList () {
       let treeData = [{
@@ -303,21 +262,12 @@ export default {
           key: '0-1-2'
         }]
       }]
-      // 更新指定列的数据源
-      this.tableColumn.forEach(cloumn => {
-        if (['attr1', 'attr2'].includes(cloumn.field)) {
-          cloumn.editRender.props.treeData = treeData
-        }
-      })
+      this.tableColumn[14].editRender.props.treeData = treeData
+      this.tableColumn[15].editRender.props.treeData = treeData
     },
     roleSearchEvent ({ row }, value) {
       let dataSource = this.restaurants.filter(option => option.toUpperCase().indexOf((value || '').toUpperCase()) !== -1)
-      // 更新指定列的数据源
-      this.tableColumn.forEach(cloumn => {
-        if (['role'].includes(cloumn.field)) {
-          cloumn.editRender.props.dataSource = dataSource
-        }
-      })
+      this.tableColumn[3].editRender.props.dataSource = dataSource
     }
   }
 }
