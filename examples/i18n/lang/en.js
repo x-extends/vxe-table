@@ -60,7 +60,7 @@ module.exports = {
         lazy: 'Lazy loading',
         full: '完整功能',
 
-        grid: '动态化表格',
+        grid: '动态化高级表格',
         reverse: '反转表格',
         proxy: 'DataProxy',
         proxyPage: 'DataProxy + Pager',
