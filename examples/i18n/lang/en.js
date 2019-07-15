@@ -13,7 +13,7 @@ module.exports = {
         advancedFunctions: 'Advanced Functions',
 
         icon: '图标',
-        basics: 'Basics',
+        basics: '静态化表格',
         base: 'Basics table',
         size: 'Size',
         ellipsis: 'Ellipsis',
@@ -39,7 +39,7 @@ module.exports = {
         loading: 'Loading',
         format: 'Format content',
 
-        more: 'More',
+        more: '更多功能',
         events: 'Event',
         template: 'Template',
         customSort: '点击列头排序',
@@ -60,7 +60,7 @@ module.exports = {
         lazy: 'Lazy loading',
         full: '完整功能',
 
-        grid: 'Grid table',
+        grid: '动态化表格',
         reverse: '反转表格',
         proxy: 'DataProxy',
         proxyPage: 'DataProxy + Pager',

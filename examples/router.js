@@ -47,12 +47,6 @@ const TableCustom = () => import(/* webpackChunkName: "table" */ './views/table/
 const TableCustomStorage = () => import(/* webpackChunkName: "table" */ './views/table/advanced/CustomStorage.vue')
 const TablePage = () => import(/* webpackChunkName: "table" */ './views/table/advanced/Page.vue')
 
-const TableTreeBasic = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Basic.vue')
-const TableTreeSelection = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Selection.vue')
-const TableTreeRadio = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Radio.vue')
-const TableTreeToolbar = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Toolbar.vue')
-const TableTreeEdit = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Edit.vue')
-
 const GridBasic = () => import(/* webpackChunkName: "grid" */ './views/table/grid/Basic.vue')
 const GridReverse = () => import(/* webpackChunkName: "grid" */ './views/table/grid/Reverse.vue')
 const GridTemplate = () => import(/* webpackChunkName: "grid" */ './views/table/grid/Template.vue')
@@ -67,6 +61,12 @@ const GridDynamic = () => import(/* webpackChunkName: "grid" */ './views/table/g
 const GridTree = () => import(/* webpackChunkName: "grid" */ './views/table/grid/Tree.vue')
 const GridTreeEdit = () => import(/* webpackChunkName: "grid" */ './views/table/grid/TreeEdit.vue')
 const GridFullEdit = () => import(/* webpackChunkName: "grid" */ './views/table/grid/FullEdit.vue')
+
+const TableTreeBasic = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Basic.vue')
+const TableTreeSelection = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Selection.vue')
+const TableTreeRadio = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Radio.vue')
+const TableTreeToolbar = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Toolbar.vue')
+const TableTreeEdit = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Edit.vue')
 
 const TableScroll = () => import(/* webpackChunkName: "scroll" */ './views/table/scroll/Scroll.vue')
 const TableScrollRows = () => import(/* webpackChunkName: "scroll" */ './views/table/scroll/ScrollRows.vue')

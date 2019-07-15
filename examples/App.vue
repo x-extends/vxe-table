@@ -362,57 +362,6 @@ export default {
           ]
         },
         {
-          label: 'app.aside.nav.tree',
-          value: 'tree',
-          expand: false,
-          children: [
-            {
-              label: 'app.aside.nav.base',
-              locat: {
-                name: 'TableTreeBasic'
-              }
-            },
-            {
-              label: 'app.aside.nav.radio',
-              locat: {
-                name: 'TableTreeRadio'
-              }
-            },
-            {
-              label: 'app.aside.nav.checkbox',
-              locat: {
-                name: 'TableTreeSelection'
-              }
-            },
-            {
-              label: 'app.aside.nav.edit',
-              locat: {
-                name: 'TableTreeEdit'
-              }
-            },
-            {
-              label: 'app.aside.nav.crudToolbar',
-              locat: {
-                name: 'TableTreeToolbar'
-              }
-            },
-            {
-              label: 'app.aside.nav.lazy',
-              disabled: true,
-              locat: {
-                name: 'TableTreeBasic'
-              }
-            },
-            {
-              label: 'app.aside.nav.full',
-              disabled: true,
-              locat: {
-                name: 'TableTreeBasic'
-              }
-            }
-          ]
-        },
-        {
           label: 'app.aside.nav.grid',
           value: 'grid',
           expand: false,
@@ -500,6 +449,57 @@ export default {
               label: 'app.aside.nav.full',
               locat: {
                 name: 'GridFullEdit'
+              }
+            }
+          ]
+        },
+        {
+          label: 'app.aside.nav.tree',
+          value: 'tree',
+          expand: false,
+          children: [
+            {
+              label: 'app.aside.nav.base',
+              locat: {
+                name: 'TableTreeBasic'
+              }
+            },
+            {
+              label: 'app.aside.nav.radio',
+              locat: {
+                name: 'TableTreeRadio'
+              }
+            },
+            {
+              label: 'app.aside.nav.checkbox',
+              locat: {
+                name: 'TableTreeSelection'
+              }
+            },
+            {
+              label: 'app.aside.nav.edit',
+              locat: {
+                name: 'TableTreeEdit'
+              }
+            },
+            {
+              label: 'app.aside.nav.crudToolbar',
+              locat: {
+                name: 'TableTreeToolbar'
+              }
+            },
+            {
+              label: 'app.aside.nav.lazy',
+              disabled: true,
+              locat: {
+                name: 'TableTreeBasic'
+              }
+            },
+            {
+              label: 'app.aside.nav.full',
+              disabled: true,
+              locat: {
+                name: 'TableTreeBasic'
               }
             }
           ]
