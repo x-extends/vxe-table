@@ -13,7 +13,7 @@ module.exports = {
         advancedFunctions: '高级函数',
 
         icon: '图标',
-        basics: '基础功能',
+        basics: '静态化表格',
         base: '基础',
         size: '尺寸',
         ellipsis: '内容显示省略号',
@@ -60,7 +60,7 @@ module.exports = {
         lazy: '懒加载',
         full: '完整功能',
 
-        grid: '高级表格',
+        grid: '动态化表格',
         reverse: '反转表格',
         proxy: '数据代理',
         proxyPage: '数据代理 + 分页',
