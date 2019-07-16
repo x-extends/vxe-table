@@ -6,6 +6,7 @@
       <template v-slot:buttons>
         <vxe-button @click="$refs.xTable1.setRadioRow(tableData[1])">设置第二行选中</vxe-button>
         <vxe-button @click="$refs.xTable1.clearRadioRow()">取消选中</vxe-button>
+        <vxe-button @click="getRadioEvent1">获取选中</vxe-button>
       </template>
     </vxe-toolbar>
 
@@ -110,6 +111,7 @@ export default {
           <template v-slot:buttons>
             <vxe-button @click="$refs.xTable1.setRadioRow(tableData[1])">设置第二行选中</vxe-button>
             <vxe-button @click="$refs.xTable1.clearRadioRow()">取消选中</vxe-button>
+            <vxe-button @click="getRadioEvent">获取选中</vxe-button>
           </template>
         </vxe-toolbar>
 
@@ -138,6 +140,9 @@ export default {
           methods: {
             radioChangeEvent ({ row }) {
               console.log('单选事件')
+            },
+            getRadioEvent () {
+              this.$XMsg.alert(JSON.stringify(this.$refs.xTable1.getRadioRow()))
             }
           }
         }
@@ -244,6 +249,9 @@ export default {
     },
     radioChangeEvent ({ row }) {
       console.log('单选事件')
+    },
+    getRadioEvent1 () {
+      this.$XMsg.alert(JSON.stringify(this.$refs.xTable1.getRadioRow()))
     }
   }
 }

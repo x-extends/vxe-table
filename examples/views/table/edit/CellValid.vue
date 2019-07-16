@@ -9,6 +9,7 @@
         <vxe-button @click="validEvent">校验</vxe-button>
         <vxe-button @click="fullValidEvent">完整校验</vxe-button>
         <vxe-button @click="selectValidEvent">选中校验</vxe-button>
+        <vxe-button @click="getSelectEvent">获取选中</vxe-button>
         <vxe-button @click="getInsertEvent">获取新增</vxe-button>
         <vxe-button @click="getRemoveEvent">获取删除</vxe-button>
         <vxe-button @click="getUpdateEvent">获取修改</vxe-button>
@@ -18,14 +19,11 @@
     <vxe-table
       border
       show-overflow
-      highlight-cell
       height="500"
       ref="xTable"
       row-id="id"
       :data.sync="tableData"
       :edit-rules="validRules"
-      :mouse-config="{selected: true}"
-      :keyboard-config="{isArrow: true, isTab: true}"
       :edit-config="{trigger: 'click', mode: 'cell', showStatus: true}">
       <vxe-table-column type="selection" width="60"></vxe-table-column>
       <vxe-table-column type="index" width="60"></vxe-table-column>
@@ -67,6 +65,7 @@ export default {
             <vxe-button @click="validEvent">校验</vxe-button>
             <vxe-button @click="fullValidEvent">完整校验</vxe-button>
             <vxe-button @click="selectValidEvent">选中校验</vxe-button>
+            <vxe-button @click="getSelectEvent">获取选中</vxe-button>
             <vxe-button @click="getInsertEvent">获取新增</vxe-button>
             <vxe-button @click="getRemoveEvent">获取删除</vxe-button>
             <vxe-button @click="getUpdateEvent">获取修改</vxe-button>
@@ -76,14 +75,11 @@ export default {
         <vxe-table
           border
           show-overflow
-          highlight-cell
           height="500"
           ref="xTable"
           row-id="id"
           :data.sync="tableData"
           :edit-rules="validRules"
-          :mouse-config="{selected: true}"
-          :keyboard-config="{isArrow: true, isTab: true}"
           :edit-config="{trigger: 'click', mode: 'cell', showStatus: true}">
           <vxe-table-column type="selection" width="60"></vxe-table-column>
           <vxe-table-column type="index" width="60"></vxe-table-column>
@@ -176,6 +172,10 @@ export default {
                 })
               })
             },
+            getSelectEvent () {
+              let selectRecords = this.$refs.xTable.getSelectRecords()
+              this.$XMsg.alert(selectRecords.length)
+            },
             getInsertEvent () {
               let insertRecords = this.$refs.xTable.getInsertRecords()
               this.$XMsg.alert(insertRecords.length)
@@ -267,6 +267,10 @@ export default {
           }
         })
       })
+    },
+    getSelectEvent () {
+      let selectRecords = this.$refs.xTable.getSelectRecords()
+      this.$XMsg.alert(selectRecords.length)
     },
     getInsertEvent () {
       let insertRecords = this.$refs.xTable.getInsertRecords()

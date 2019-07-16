@@ -8,6 +8,7 @@
         <vxe-button @click="$refs.xTable1.setSelection([tableData[2], tableData[3]], true)">设置第三、四行选中</vxe-button>
         <vxe-button @click="$refs.xTable1.setAllSelection(true)">设置所有行选中</vxe-button>
         <vxe-button @click="$refs.xTable1.clearSelection()">清除所有行选中</vxe-button>
+        <vxe-button @click="getSelectEvent1">获取选中</vxe-button>
       </template>
     </vxe-toolbar>
 
@@ -160,6 +161,7 @@ export default {
             <vxe-button @click="$refs.xTable1.setSelection([tableData[2], tableData[3]], true)">设置第三、四行选中</vxe-button>
             <vxe-button @click="$refs.xTable1.setAllSelection(true)">设置所有行选中</vxe-button>
             <vxe-button @click="$refs.xTable1.clearSelection()">清除所有行选中</vxe-button>
+            <vxe-button @click="getSelectEvent">获取选中</vxe-button>
           </template>
         </vxe-toolbar>
 
@@ -193,6 +195,10 @@ export default {
             },
             selectChangeEvent ({ checked, row }) {
               console.log(checked ? '勾选事件' : '取消事件')
+            },
+            getSelectEvent () {
+              let updateRecords = this.$refs.xTable1.getSelectRecords()
+              this.$XMsg.alert(updateRecords.length)
             }
           }
         }
@@ -350,6 +356,10 @@ export default {
     },
     selectChangeEvent ({ checked, row }) {
       console.log(checked ? '勾选事件' : '取消事件')
+    },
+    getSelectEvent1 () {
+      let updateRecords = this.$refs.xTable1.getSelectRecords()
+      this.$XMsg.alert(updateRecords.length)
     }
   }
 }
