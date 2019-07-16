@@ -1319,16 +1319,16 @@ const apis = [
       },
       {
         name: 'getTableData()',
-        desc: '获取当前表格渲染中的数据（如果存在条件，则返回处理完条件之后的数据）',
+        desc: '获取当前表格渲染中的数据（如果存在条件，则返回处理完之后的数据）',
         type: 'Array',
         enum: '',
         defVal: '',
         list: []
       },
       {
-        name: 'getRowNode(trElem)',
+        name: 'getRowNode(tr)',
         desc: '根据 tr 元素获取对应的 row 信息',
-        type: 'Object',
+        type: 'Row',
         enum: '',
         defVal: 'trElem',
         list: []
@@ -1342,11 +1342,27 @@ const apis = [
         list: []
       },
       {
+        name: 'getTableColumn()',
+        desc: '获取当前表格渲染中的列（如果有隐藏列，则返回处理完之后的数据）',
+        type: 'Array',
+        enum: '',
+        defVal: 'columnIndex?',
+        list: []
+      },
+      {
         name: 'getColumnIndex(column)',
         desc: '根据 column 获取列中的索引',
         type: 'Number',
         enum: '',
         defVal: 'column',
+        list: []
+      },
+      {
+        name: 'getColumnNode(th)',
+        desc: '根据 th 元素获取对应的 column 信息',
+        type: 'ColumnConfig',
+        enum: '',
+        defVal: 'tr',
         list: []
       },
       {
