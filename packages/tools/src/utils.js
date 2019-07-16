@@ -9,7 +9,7 @@ class ColumnConfig {
       id: `col--${++columnUniqueId}`,
       type: _vm.type,
       prop: _vm.prop,
-      property: _vm.property || _vm.field || _vm.prop,
+      property: _vm.field || _vm.prop,
       title: _vm.title,
       label: _vm.label,
       width: _vm.width,
@@ -111,7 +111,7 @@ export const UtilTools = {
     return XEUtils.set(row, column.property, value)
   },
   getColumnConfig (_vm, options) {
-    return _vm instanceof ColumnConfig ? _vm : new ColumnConfig(options)
+    return _vm instanceof ColumnConfig ? _vm : new ColumnConfig(_vm, options)
   },
   // 组装列配置
   assemColumn (_vm) {

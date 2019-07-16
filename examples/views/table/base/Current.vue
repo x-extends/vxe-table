@@ -6,6 +6,7 @@
       <template v-slot:buttons>
         <vxe-button @click="$refs.xTable.setCurrentRow(tableData[1])">设置第二行选中</vxe-button>
         <vxe-button @click="$refs.xTable.clearCurrentRow()">取消选中</vxe-button>
+        <vxe-button @click="getCurrentEvent">获取高亮行</vxe-button>
       </template>
     </vxe-toolbar>
 
@@ -45,6 +46,7 @@ export default {
           <template v-slot:buttons>
             <vxe-button @click="$refs.xTable.setCurrentRow(tableData[1])">设置第二行选中</vxe-button>
             <vxe-button @click="$refs.xTable.clearCurrentRow()">取消选中</vxe-button>
+            <vxe-button @click="getCurrentEvent">获取高亮行</vxe-button>
           </template>
         </vxe-toolbar>
 
@@ -75,6 +77,9 @@ export default {
           methods: {
             currentChangeEvent ({ row }) {
               console.log('行选中事件')
+            },
+            getCurrentEvent () {
+              this.$XMsg.alert(JSON.stringify(this.$refs.xTable1.getCurrentRow()))
             }
           }
         }
@@ -95,8 +100,8 @@ export default {
     currentChangeEvent ({ row }) {
       console.log('行选中事件')
     },
-    radioChangeEvent ({ row }) {
-      console.log('单选事件')
+    getCurrentEvent () {
+      this.$XMsg.alert(JSON.stringify(this.$refs.xTable1.getCurrentRow()))
     }
   }
 }
