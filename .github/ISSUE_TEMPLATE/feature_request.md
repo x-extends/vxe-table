@@ -21,7 +21,7 @@ assignees: ''
 
 ### 版本 Version
 
-- system: ?
+- os: ?
 - browser: ?
 - vue: ?
 - vxe-table: ?
