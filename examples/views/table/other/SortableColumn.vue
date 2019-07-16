@@ -60,7 +60,7 @@ export default {
         `
         <vxe-table
           border
-          ref="xTable1"
+          ref="xTable"
           class="sortable-column-demo"
           :data.sync="tableData">
           <vxe-table-column field="name" title="Name" column-key="name"></vxe-table-column>
