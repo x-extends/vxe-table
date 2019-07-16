@@ -7,17 +7,21 @@ assignees: ''
 
 ---
 
-* **这个新特性和一个问题相关吗？简单描述下，比如我什么场景下，需要解决什么问题，发现表格不支持这个功能 Is your feature request related to a problem? Please describe.**
+### 这个新特性和一个问题相关吗？简单描述下，比如我什么场景下，需要解决什么问题，发现表格不支持这个功能 Is your feature request related to a problem? Please describe.
+
  ?
 
-* **描述下，你希望得到的什么解决方案 Describe the solution you'd like**
+### 描述下，你希望得到的什么解决方案 Describe the solution you'd like
+
  ?
 
-* **是否已有其他不错的替代方案 Describe alternatives you've considered**
+### 是否已有其他不错的替代方案 Describe alternatives you've considered
+
  ?
 
-* **版本信息 Version information**
-  * system: ?
-  * browser: ?
-  * vue: ?
-  * vxe-table: ?
+### 版本 Version
+
+- system: ?
+- browser: ?
+- vue: ?
+- vxe-table: ?
