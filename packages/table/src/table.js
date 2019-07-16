@@ -1022,14 +1022,14 @@ export default {
      */
     getColumns (columnIndex) {
       let columns = this.visibleColumn
-      return arguments.length ? columns[columnIndex] : columns
+      return arguments.length ? columns[columnIndex] : columns.slice(0)
     },
     /**
      * 获取表格所有数据
      */
     getRecords (rowIndex) {
       let { tableFullData } = this
-      return arguments.length ? tableFullData[rowIndex] : tableFullData
+      return arguments.length ? tableFullData[rowIndex] : tableFullData.slice(0)
     },
     /**
      * 获取表格数据集合
