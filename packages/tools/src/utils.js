@@ -2,6 +2,58 @@ import XEUtils from 'xe-utils'
 
 var columnUniqueId = 0
 
+class ColumnConfig {
+  constructor (_vm, { renderHeader, renderCell, renderData } = {}) {
+    Object.assign(this, {
+      // 基本属性
+      id: `col--${++columnUniqueId}`,
+      type: _vm.type,
+      prop: _vm.prop,
+      property: _vm.property || _vm.field || _vm.prop,
+      title: _vm.title,
+      label: _vm.label,
+      width: _vm.width,
+      minWidth: _vm.minWidth,
+      resizable: _vm.resizable,
+      fixed: _vm.fixed,
+      align: _vm.align,
+      headerAlign: _vm.headerAlign,
+      showOverflow: _vm.showOverflow,
+      showHeaderOverflow: _vm.showHeaderOverflow,
+      indexMethod: _vm.indexMethod,
+      formatter: _vm.formatter,
+      sortable: _vm.sortable,
+      sortBy: _vm.sortBy,
+      remoteSort: _vm.remoteSort,
+      filters: (_vm.filters || []).map(({ label, value, data }) => ({ label, value, data, _data: data, checked: false })),
+      filterMultiple: XEUtils.isBoolean(_vm.filterMultiple) ? _vm.filterMultiple : true,
+      filterMethod: _vm.filterMethod,
+      filterRender: _vm.filterRender,
+      treeNode: _vm.treeNode,
+      columnKey: _vm.columnKey,
+      editRender: _vm.editRender,
+      // 自定义参数
+      params: _vm.params,
+      // 渲染属性
+      visible: true,
+      level: 1,
+      rowSpan: 1,
+      colSpan: 1,
+      order: null,
+      renderWidth: 0,
+      renderHeight: 0,
+      resizeWidth: 0,
+      renderLeft: 0,
+      renderHeader: renderHeader || _vm.renderHeader,
+      renderCell: renderCell || _vm.renderCell,
+      renderData: renderData,
+      // 单元格插槽，只对 grid 有效
+      slots: _vm.slots,
+      own: _vm
+    })
+  }
+}
+
 export const UtilTools = {
   getSize ({ size, $parent }) {
     return size || ($parent && ['medium', 'small', 'mini'].indexOf($parent.size) > -1 ? $parent.size : null)
@@ -58,54 +110,8 @@ export const UtilTools = {
   setCellValue (row, column, value) {
     return XEUtils.set(row, column.property, value)
   },
-  getColumnConfig (_vm, { renderHeader, renderCell, renderData } = {}) {
-    return {
-      // 基本属性
-      id: `col--${++columnUniqueId}`,
-      type: _vm.type,
-      prop: _vm.prop,
-      property: _vm.property || _vm.field || _vm.prop,
-      title: _vm.title,
-      label: _vm.label,
-      width: _vm.width,
-      minWidth: _vm.minWidth,
-      resizable: _vm.resizable,
-      fixed: _vm.fixed,
-      align: _vm.align,
-      headerAlign: _vm.headerAlign,
-      showOverflow: _vm.showOverflow,
-      showHeaderOverflow: _vm.showHeaderOverflow,
-      indexMethod: _vm.indexMethod,
-      formatter: _vm.formatter,
-      sortable: _vm.sortable,
-      sortBy: _vm.sortBy,
-      remoteSort: _vm.remoteSort,
-      filters: (_vm.filters || []).map(({ label, value, data }) => ({ label, value, data, _data: data, checked: false })),
-      filterMultiple: XEUtils.isBoolean(_vm.filterMultiple) ? _vm.filterMultiple : true,
-      filterMethod: _vm.filterMethod,
-      filterRender: _vm.filterRender,
-      treeNode: _vm.treeNode,
-      columnKey: _vm.columnKey,
-      editRender: _vm.editRender,
-      // 自定义参数
-      params: _vm.params,
-      // 渲染属性
-      visible: true,
-      level: 1,
-      rowSpan: 1,
-      colSpan: 1,
-      order: null,
-      renderWidth: 0,
-      renderHeight: 0,
-      resizeWidth: 0,
-      renderLeft: 0,
-      renderHeader: renderHeader || _vm.renderHeader,
-      renderCell: renderCell || _vm.renderCell,
-      renderData: renderData,
-      // 单元格插槽，只对 grid 有效
-      slots: _vm.slots,
-      own: _vm
-    }
+  getColumnConfig (_vm, options) {
+    return _vm instanceof ColumnConfig ? _vm : new ColumnConfig(options)
   },
   // 组装列配置
   assemColumn (_vm) {
