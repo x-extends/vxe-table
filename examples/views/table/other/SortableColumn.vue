@@ -1,17 +1,17 @@
 <template>
   <div>
     <p><table-api-link name="vxe-table"/> 方式：使用 <a class="link" href="https://www.npmjs.com/package/sortablejs" target="_blank">sortablejs</a> 实现列移动</p>
-    <p class="red">由于操作了 Dom 节点，请根据需要指定 <table-column-api-link prop="column-key"/></p>
+    <p class="red">由于操作了 Dom 节点，请根据需要指定唯一的 <table-column-api-link prop="column-key"/></p>
 
     <vxe-table
       border
       ref="xTable1"
       class="sortable-column-demo"
       :data.sync="tableData">
-      <vxe-table-column field="name" title="Name"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-      <vxe-table-column field="age" title="Age"></vxe-table-column>
-      <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+      <vxe-table-column field="name" title="Name" column-key="name"></vxe-table-column>
+      <vxe-table-column field="sex" title="Sex" column-key="sex"></vxe-table-column>
+      <vxe-table-column field="age" title="Age" column-key="age"></vxe-table-column>
+      <vxe-table-column field="address" title="Address" column-key="address" show-overflow></vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -47,28 +47,26 @@ import Sortable from 'sortablejs'
 
 export default {
   data () {
-    window.aa = this
     return {
       tableColumn: [
-        { field: 'name', title: 'Name' },
-        { field: 'role', title: 'Role' },
-        { field: 'sex', title: 'Sex' },
-        { field: 'date3', title: 'Date', width: 120 },
-        { field: 'address', title: 'Address', showOverflow: true }
+        { field: 'name', title: 'Name', columnKey: 'name' },
+        { field: 'role', title: 'Role', columnKey: 'role' },
+        { field: 'sex', title: 'Sex', columnKey: 'sex' },
+        { field: 'date3', title: 'Date', columnKey: 'date3', width: 120 },
+        { field: 'address', title: 'Address', columnKey: 'address', showOverflow: true }
       ],
       tableData: [],
       demoCodes: [
         `
         <vxe-table
           border
-          ref="xTable"
+          ref="xTable1"
           class="sortable-column-demo"
           :data.sync="tableData">
-          <vxe-table-column type="index" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-          <vxe-table-column field="age" title="Age"></vxe-table-column>
-          <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+          <vxe-table-column field="name" title="Name" column-key="name"></vxe-table-column>
+          <vxe-table-column field="sex" title="Sex" column-key="sex"></vxe-table-column>
+          <vxe-table-column field="age" title="Age" column-key="age"></vxe-table-column>
+          <vxe-table-column field="address" title="Address" column-key="address" show-overflow></vxe-table-column>
         </vxe-table>
         `,
         `
@@ -78,13 +76,13 @@ export default {
               tableData: []
             }
           },
-          destroyed () {
+          created () {
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
+          },
+          beforeDestroy () {
             if (this.sortable) {
               this.sortable.destroy()
             }
-          },
-          created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
           },
           methods: {
             columnDrop () {
@@ -132,13 +130,13 @@ export default {
               tableData: []
             }
           },
-          destroyed () {
+          created () {
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
+          },
+          beforeDestroy () {
             if (this.sortable) {
               this.sortable.destroy()
             }
-          },
-          created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
           },
           methods: {
             columnDrop () {
@@ -175,11 +173,19 @@ export default {
       hljs.highlightBlock(block)
     })
   },
+  beforeDestroy () {
+    if (this.sortable1) {
+      this.sortable1.destroy()
+    }
+    if (this.sortable2) {
+      this.sortable2.destroy()
+    }
+  },
   methods: {
     columnDrop1 () {
       this.$nextTick(() => {
         let xTable = this.$refs.xTable1
-        this.sortable = Sortable.create(xTable.$el.querySelector('.body--wrapper>.vxe-table--header .vxe-header--row'), {
+        this.sortable1 = Sortable.create(xTable.$el.querySelector('.body--wrapper>.vxe-table--header .vxe-header--row'), {
           handle: '.vxe-header--column',
           onEnd: ({ newIndex, oldIndex }) => {
             let tableColumn = xTable.getColumns()
@@ -193,7 +199,7 @@ export default {
     columnDrop2 () {
       this.$nextTick(() => {
         let xTable = this.$refs.xTable2
-        this.sortable = Sortable.create(xTable.$el.querySelector('.body--wrapper>.vxe-table--header .vxe-header--row'), {
+        this.sortable2 = Sortable.create(xTable.$el.querySelector('.body--wrapper>.vxe-table--header .vxe-header--row'), {
           handle: '.vxe-header--column',
           onEnd: ({ newIndex, oldIndex }) => {
             let currRow = this.tableColumn.splice(oldIndex, 1)[0]
