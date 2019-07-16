@@ -1417,7 +1417,7 @@ const apis = [
       {
         name: 'getColumnNode(th)',
         desc: '根据 th 元素获取对应的 column 信息',
-        type: 'ColumnConfig',
+        type: 'Column',
         enum: '',
         defVal: 'tr',
         list: []
