@@ -64,7 +64,7 @@ export const UtilTools = {
       id: `col--${++columnUniqueId}`,
       type: _vm.type,
       prop: _vm.prop,
-      property: _vm.field || _vm.prop,
+      property: _vm.property || _vm.field || _vm.prop,
       title: _vm.title,
       label: _vm.label,
       width: _vm.width,

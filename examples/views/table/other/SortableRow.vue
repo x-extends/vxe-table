@@ -1,12 +1,12 @@
 <template>
   <div>
-    <p>使用 <a class="link" href="https://www.npmjs.com/package/sortablejs" target="_blank">sortablejs</a> 实现行拖动，由于操作了 Dom 节点所以需要指定 <table-api-link prop="row-key"/></p>
+    <p><table-api-link name="vxe-table"/> 方式：使用 <a class="link" href="https://www.npmjs.com/package/sortablejs" target="_blank">sortablejs</a> 实现行拖动</p>
+    <p class="red">由于操作了 Dom 节点，-请根据需要指定 <table-api-link prop="row-key"/></p>
 
     <vxe-table
       border
       ref="xTable1"
       class="sortable-row-demo"
-      row-key="id"
       :data.sync="tableData">
       <vxe-table-column width="60">
         <template>
@@ -29,27 +29,16 @@
       <code class="css">{{ demoCodes[2] }}</code>
     </pre>
 
-    <p>树表格的移动也是一样的，由于树节点的深层结构，所以需要在树节点在变动之后调用 <table-api-link prop="refreshData"/> 方法刷新数据</p>
+    <p><grid-api-link name="vxe-grid"/> 方式：树表格的移动也是一样的，由于树节点的深层结构，所以需要在树节点在变动之后调用 <table-api-link prop="refreshData"/> 方法刷新数据</p>
 
-    <vxe-table
+    <vxe-grid
       border
       ref="xTable2"
       class="sortable-tree-demo"
       row-key="id"
+      :columns="tableColumn"
       :data.sync="tableTreeData"
-      :tree-config="{children: 'children'}">
-      <vxe-table-column width="60">
-        <template>
-          <span class="drag-btn">
-            <i class="vxe-icon--menu"></i>
-          </span>
-        </template>
-      </vxe-table-column>
-      <vxe-table-column field="name" title="Name" tree-node></vxe-table-column>
-      <vxe-table-column field="size" title="Size"></vxe-table-column>
-      <vxe-table-column field="type" title="Type"></vxe-table-column>
-      <vxe-table-column field="date" title="Date"></vxe-table-column>
-    </vxe-table>
+      :tree-config="{children: 'children'}"></vxe-grid>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
@@ -70,6 +59,24 @@ export default {
   data () {
     return {
       tableData: [],
+      tableColumn: [
+        {
+          width: 60,
+          slots: {
+            default: () => {
+              return [
+                <span class="drag-btn">
+                  <i class="vxe-icon--menu"></i>
+                </span>
+              ]
+            }
+          }
+        },
+        { field: 'name', title: 'Name', treeNode: true },
+        { field: 'size', title: 'Size' },
+        { field: 'type', title: 'Type' },
+        { field: 'date', title: 'Date' }
+      ],
       tableTreeData: [],
       demoCodes: [
         `
@@ -133,31 +140,38 @@ export default {
         }
         `,
         `
-        <vxe-table
+        <vxe-grid
           border
-          ref="xTable"
+          ref="xTable2"
           class="sortable-tree-demo"
           row-key="id"
+          :columns="tableColumn"
           :data.sync="tableTreeData"
-          :tree-config="{children: 'children'}">
-          <vxe-table-column width="60">
-            <template>
-              <span class="drag-btn">
-                <i class="vxe-icon--menu"></i>
-              </span>
-            </template>
-          </vxe-table-column>
-          <vxe-table-column field="name" title="Name" tree-node></vxe-table-column>
-          <vxe-table-column field="size" title="Size"></vxe-table-column>
-          <vxe-table-column field="type" title="Type"></vxe-table-column>
-          <vxe-table-column field="date" title="Date"></vxe-table-column>
-        </vxe-table>
+          :tree-config="{children: 'children'}"></vxe-grid>
         `,
         `
         export default {
           data () {
             return {
-              tableTreeData: []
+              tableTreeData: [],
+              tableColumn: [
+                {
+                  width: 60,
+                  slots: {
+                    default: () => {
+                      return [
+                        <span class="drag-btn">
+                          <i class="vxe-icon--menu"></i>
+                        </span>
+                      ]
+                    }
+                  }
+                },
+                { field: 'name', title: 'Name', treeNode: true },
+                { field: 'size', title: 'Size' },
+                { field: 'type', title: 'Type' },
+                { field: 'date', title: 'Date' }
+              ]
             }
           },
           created () {
@@ -228,7 +242,6 @@ export default {
     }
   },
   created () {
-    window.aa = this
     this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
     this.tableTreeData = XEUtils.clone(window.MOCK_TREE_DATA_LIST, true)
     this.rowDrop()
