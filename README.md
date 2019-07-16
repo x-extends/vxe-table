@@ -14,11 +14,16 @@
 A fully functional Vue Table, to meet most of the Table all requirements, and perfect compatibility with any component library.  
 一个全功能的 Vue 表格，满足绝大部分对 Table 的一切需求，与任意组件库完美兼容
 
-* vxe-table 的设计理念
+* Design concept 设计理念
   * 精简的 API（简洁、高效）
   * 模块化表格（功能模块解耦，支持按需加载）
   * 更加灵活的自定义配置项，更高的可扩展性（兼容任意组件库，不污染全局样式及变量）
   * 强大的功能的同时兼具性能（支持横向、纵向虚拟滚动）
+
+* Plan 计划
+  * [x] v1 95% 实现表格的一切实用的功能
+  * [x] v2 80% 同时兼具功能与性能权衡
+  * [ ] v3 0%  极致性能，实现方式重写、使用 typescript 开发、基于 Vue3
 
 🐬 如果有更好的建议、优化点或 Bug 都欢迎提 [Issues](https://github.com/xuliangzhan/vxe-table/issues)
 
