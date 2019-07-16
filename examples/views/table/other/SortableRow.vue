@@ -120,7 +120,7 @@ export default {
             rowDrop () {
               this.$nextTick(() => {
                 let xTable = this.$refs.xTable
-                this.sortable1 = Sortable.create(xTable.$el.querySelector('.body--wrapper>.vxe-table--body tbody'), {
+                this.sortable = Sortable.create(xTable.$el.querySelector('.body--wrapper>.vxe-table--body tbody'), {
                   handle: '.drag-btn',
                   onEnd: ({ newIndex, oldIndex }) => {
                     let currRow = this.tableData.splice(oldIndex, 1)[0]
