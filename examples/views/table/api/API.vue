@@ -11,7 +11,6 @@
       highlight-current-row
       highlight-hover-row
       highlight-current-column
-      highlight-hover-column
       ref="xTable"
       class="api-table"
       row-id="id"
