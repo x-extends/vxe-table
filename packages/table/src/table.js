@@ -2588,7 +2588,7 @@ export default {
       }
       // 如果是多选
       if ((selectConfig.trigger === 'row' || (column.type === 'selection' && selectConfig.trigger === 'cell')) && !this.getEventTargetNode(evnt, params.cell, 'vxe-checkbox').flag) {
-        this.handleToggleCheckRowEvent(params.row, evnt)
+        this.handleToggleCheckRowEvent(params, evnt)
       }
       // 如果是树形表格
       if ((treeConfig.trigger === 'row' || (column.treeNode && treeConfig.trigger === 'cell'))) {
