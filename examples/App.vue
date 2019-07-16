@@ -718,6 +718,7 @@ export default {
             },
             {
               label: 'app.aside.nav.sortablejsColumn',
+              demoUrl: 'https://jsrun.net/MibKp/edit',
               locat: {
                 name: 'TableSortableColumn'
               }

@@ -1,12 +1,13 @@
 <template>
   <div>
     <p><table-api-link name="vxe-table"/> 方式：使用 <a class="link" href="https://www.npmjs.com/package/sortablejs" target="_blank">sortablejs</a> 实现行拖动</p>
-    <p class="red">由于操作了 Dom 节点，-请根据需要指定 <table-api-link prop="row-key"/></p>
+    <p class="red">由于操作了 Dom 节点，-请根据需要指定唯一的 <table-api-link prop="row-key"/></p>
 
     <vxe-table
       border
       ref="xTable1"
       class="sortable-row-demo"
+      row-key="id"
       :data.sync="tableData">
       <vxe-table-column width="60">
         <template>
@@ -82,13 +83,15 @@ export default {
         `
         <vxe-table
           border
-          ref="xTable"
+          ref="xTable1"
           class="sortable-row-demo"
           row-key="id"
           :data.sync="tableData">
           <vxe-table-column width="60">
             <template>
-              <i class="el-icon-rank drag-btn"></i>
+              <span class="drag-btn">
+                <i class="vxe-icon--menu"></i>
+              </span>
             </template>
           </vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -108,7 +111,7 @@ export default {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
             this.rowDrop()
           },
-          destroyed () {
+          beforeDestroy () {
             if (this.sortable) {
               this.sortable.destroy()
             }
@@ -178,7 +181,7 @@ export default {
             this.tableTreeData = window.MOCK_DATA_LIST.slice(0)
             this.treeDrop()
           },
-          destroyed () {
+          beforeDestroy () {
             if (this.sortable) {
               this.sortable.destroy()
             }
@@ -252,7 +255,7 @@ export default {
       hljs.highlightBlock(block)
     })
   },
-  destroyed () {
+  beforeDestroy () {
     if (this.sortable1) {
       this.sortable1.destroy()
     }
