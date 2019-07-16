@@ -1077,14 +1077,14 @@ export default {
      */
     getColumns (columnIndex) {
       let columns = this.visibleColumn
-      return arguments.length ? columns[columnIndex] : columns
+      return arguments.length ? columns[columnIndex] : columns.slice(0)
     },
     /**
      * 获取表格所有数据
      */
     getRecords (rowIndex) {
       let list = this.tableFullData
-      return arguments.length ? list[rowIndex] : list
+      return arguments.length ? list[rowIndex] : list.slice(0)
     },
     /**
      * 获取表格数据集合
