@@ -136,7 +136,7 @@ const apis = [
         name: 'height',
         descKey: 'app.api.table.desc.height',
         type: 'Number, String',
-        enum: 'auto（铺满父容器高度），数值px',
+        enum: 'auto, px',
         defVal: '',
         list: []
       },
@@ -144,7 +144,7 @@ const apis = [
         name: 'max-height',
         descKey: 'app.api.table.desc.maxHeight',
         type: 'Number, String',
-        enum: '数值px',
+        enum: 'px',
         defVal: '',
         list: []
       },
@@ -184,7 +184,7 @@ const apis = [
         name: 'size',
         descKey: 'app.api.table.desc.size',
         type: 'String',
-        enum: 'medium,small,mini',
+        enum: 'medium, small, mini',
         defVal: '',
         list: []
       },
@@ -208,7 +208,7 @@ const apis = [
         name: 'align',
         descKey: 'app.api.table.desc.align',
         type: 'String',
-        enum: 'left（居左）,center（居中）,right（居右）',
+        enum: 'left, center, right',
         defVal: 'left',
         list: []
       },
@@ -216,7 +216,7 @@ const apis = [
         name: 'header-align',
         descKey: 'app.api.table.desc.headerAlign',
         type: 'String',
-        enum: 'left（居左）,center（居中）,right（居右）',
+        enum: 'left, center, right',
         defVal: '继承 align',
         list: []
       },
@@ -1328,9 +1328,9 @@ const apis = [
       {
         name: 'getRowNode(tr)',
         desc: '根据 tr 元素获取对应的 row 信息',
-        type: 'Row',
+        type: '{item, items, index, parent}',
         enum: '',
-        defVal: 'trElem',
+        defVal: 'tr',
         list: []
       },
       {
@@ -1346,7 +1346,7 @@ const apis = [
         desc: '获取当前表格渲染中的列（如果有隐藏列，则返回处理完之后的数据）',
         type: 'Array',
         enum: '',
-        defVal: 'columnIndex?',
+        defVal: '',
         list: []
       },
       {
@@ -1360,9 +1360,9 @@ const apis = [
       {
         name: 'getColumnNode(th)',
         desc: '根据 th 元素获取对应的 column 信息',
-        type: 'Column',
+        type: '{item, items, index, parent}',
         enum: '',
-        defVal: 'tr',
+        defVal: 'th',
         list: []
       },
       {

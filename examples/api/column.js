@@ -84,7 +84,7 @@ const apis = [
         name: 'align',
         descKey: 'app.api.tableColumn.desc.align',
         type: 'String',
-        enum: 'left（居左）,center（居中）,right（居右）',
+        enum: 'left, center, right',
         defVal: '继承 table 的 align',
         list: []
       },
@@ -92,7 +92,7 @@ const apis = [
         name: 'header-align',
         descKey: 'app.api.tableColumn.desc.headerAlign',
         type: 'String',
-        enum: 'left（居左）,center（居中）,right（居右）',
+        enum: 'left, center, right',
         defVal: '继承 align > 继承 table 的 header-align',
         list: []
       },
