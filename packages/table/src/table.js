@@ -3512,7 +3512,7 @@ export default {
         if (isReload) {
           scrollXStore.visibleIndex = toVisibleIndex
           scrollXStore.startIndex = Math.min(Math.max(toVisibleIndex - preloadSize, 0), visibleColumn.length - renderSize)
-          this.updateScrollXSpace()
+          this.updateScrollXData()
           this.$nextTick(() => {
             // scrollBodyElem.scrollLeft = scrollLeft
             this.updateStyle()
@@ -3563,7 +3563,7 @@ export default {
         if (isReload) {
           scrollYStore.visibleIndex = toVisibleIndex
           scrollYStore.startIndex = Math.min(Math.max(toVisibleIndex - preloadSize, 0), tableFullData.length - renderSize)
-          this.updateScrollYSpace()
+          this.updateScrollYData()
           this.$nextTick(() => {
             // scrollBodyElem.scrollTop = scrollTop
             this.updateStyle()
@@ -3580,7 +3580,7 @@ export default {
         let tableBodyElem = tableBody ? tableBody.$el : null
         let tableHeader = this.$refs.tableHeader
         if (tableBodyElem) {
-        // 计算 X 逻辑
+          // 计算 X 逻辑
           if (scrollXLoad) {
             // 无法预知，默认取前 10 条平均宽度进行运算
             let visibleSize = scrollX.vSize || Math.ceil(tableBodyElem.clientWidth / (visibleColumn.slice(0, 10).reduce((previous, column) => previous + column.renderWidth, 0) / 10))
@@ -3589,6 +3589,8 @@ export default {
               scrollXStore.offsetSize = visibleSize
               scrollXStore.renderSize = visibleSize + 2
             }
+            this.updateScrollXData()
+          } else {
             this.updateScrollXSpace()
           }
           // 计算 Y 逻辑
@@ -3610,27 +3612,37 @@ export default {
               scrollYStore.offsetSize = visibleSize
               scrollYStore.renderSize = visibleSize + 2
             }
+            this.updateScrollYData()
+          } else {
             this.updateScrollYSpace()
           }
         }
         this.$nextTick(this.updateStyle)
       })
     },
+    updateScrollXData () {
+      let { visibleColumn, scrollXStore } = this
+      this.tableColumn = visibleColumn.slice(scrollXStore.startIndex, scrollXStore.startIndex + scrollXStore.renderSize)
+      this.updateScrollXSpace()
+    },
     // 更新横向 X 可视渲染上下剩余空间大小
     updateScrollXSpace () {
-      let { $refs, elemStore, visibleColumn, scrollXStore, tableWidth, scrollbarWidth } = this
+      let { $refs, elemStore, visibleColumn, scrollXStore, scrollXLoad, tableWidth, scrollbarWidth } = this
       let { tableHeader, tableBody, tableFooter } = $refs
       let headerElem = tableHeader ? tableHeader.$el.querySelector('.vxe-table--header') : null
       let bodyElem = tableBody.$el.querySelector('.vxe-table--body')
       let footerElem = tableFooter ? tableFooter.$el.querySelector('.vxe-table--footer') : null
-      this.tableColumn = visibleColumn.slice(scrollXStore.startIndex, scrollXStore.startIndex + scrollXStore.renderSize)
       let leftSpaceWidth = visibleColumn.slice(0, scrollXStore.startIndex).reduce((previous, column) => previous + column.renderWidth, 0)
-      if (headerElem) {
-        headerElem.style.marginLeft = `${leftSpaceWidth}px`
+      let marginLeft = ''
+      if (scrollXLoad) {
+        marginLeft = `${leftSpaceWidth}px`
       }
-      bodyElem.style.marginLeft = `${leftSpaceWidth}px`
+      if (headerElem) {
+        headerElem.style.marginLeft = marginLeft
+      }
+      bodyElem.style.marginLeft = marginLeft
       if (footerElem) {
-        footerElem.style.marginLeft = `${leftSpaceWidth}px`
+        footerElem.style.marginLeft = marginLeft
       }
       let containerList = ['main']
       containerList.forEach(name => {
@@ -3638,29 +3650,39 @@ export default {
         layoutList.forEach(layout => {
           let xSpaceElem = elemStore[`${name}-${layout}-xSpace`]
           if (xSpaceElem) {
-            xSpaceElem.style.width = `${tableWidth + (layout === 'header' ? scrollbarWidth : 0)}px`
+            xSpaceElem.style.width = scrollXLoad ? `${tableWidth + (layout === 'header' ? scrollbarWidth : 0)}px` : ''
           }
         })
       })
     },
+    updateScrollYData () {
+      let { tableData } = this.getTableData()
+      this.tableData = tableData
+      this.updateScrollYSpace()
+    },
     // 更新纵向 Y 可视渲染上下剩余空间大小
     updateScrollYSpace () {
-      let { elemStore, scrollYStore } = this
-      let { fullData, tableData } = this.getTableData()
-      this.tableData = tableData
+      let { elemStore, scrollYStore, scrollYLoad } = this
+      let { fullData } = this.getTableData()
       let bodyHeight = fullData.length * scrollYStore.rowHeight
       let topSpaceHeight = Math.max(scrollYStore.startIndex * scrollYStore.rowHeight, 0)
       let containerList = ['main', 'left', 'right']
+      let marginTop = ''
+      let ySpaceHeight = ''
+      if (scrollYLoad) {
+        marginTop = `${topSpaceHeight}px`
+        ySpaceHeight = `${bodyHeight}px`
+      }
       containerList.forEach(name => {
         let layoutList = ['header', 'body', 'footer']
         let tableElem = elemStore[`${name}-body-table`]
         if (tableElem) {
-          tableElem.style.marginTop = `${topSpaceHeight}px`
+          tableElem.style.marginTop = marginTop
         }
         layoutList.forEach(layout => {
           let ySpaceElem = elemStore[`${name}-${layout}-ySpace`]
           if (ySpaceElem) {
-            ySpaceElem.style.height = `${bodyHeight}px`
+            ySpaceElem.style.height = ySpaceHeight
           }
         })
       })
