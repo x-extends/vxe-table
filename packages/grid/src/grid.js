@@ -210,13 +210,14 @@ export default {
                 }
                 this.pendingRecords = []
               }
-              return ajax.query(params).then(result => {
-                if (result) {
+              return ajax.query(params).then(rest => {
+                if (rest) {
                   if (pagerConfig) {
-                    tablePage.total = XEUtils.get(result, props.total || 'page.total') || 0
-                    this.tableData = XEUtils.get(result, props.data || 'result') || []
+                    // （v3.0 废弃 data）
+                    tablePage.total = XEUtils.get(rest, props.total || 'page.total') || 0
+                    this.tableData = XEUtils.get(rest, props.result || props.data || 'result') || []
                   } else {
-                    this.tableData = (props.list ? XEUtils.get(result, props.list) : result) || []
+                    this.tableData = (props.list ? XEUtils.get(rest, props.list) : rest) || []
                   }
                 } else {
                   this.tableData = []

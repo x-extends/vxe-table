@@ -161,8 +161,8 @@
               message: true,
               props: {
                 list: null,
-                data: 'result',
-                page: 'page.total'
+                result: 'result',
+                total: 'page.total'
               }
             }
           },

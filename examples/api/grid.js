@@ -261,15 +261,32 @@ const apis = [
             defVal: '',
             list: [
               {
-                name: 'data',
+                name: 'list',
                 desc: '响应结果中获取数据列表的属性',
                 type: 'String',
                 enum: '',
-                defVal: '如果 pager-config 配置了，则默认 result，否则为空',
+                defVal: '',
                 list: []
               },
               {
-                name: 'page',
+                name: 'data',
+                disabled: true,
+                desc: '在 v3.0 中废弃，请使用 result',
+                type: 'String',
+                enum: '',
+                defVal: 'result',
+                list: []
+              },
+              {
+                name: 'result',
+                desc: '只对 pager-config 配置了有效，响应结果中获取数据列表的属性',
+                type: 'String',
+                enum: '',
+                defVal: 'result',
+                list: []
+              },
+              {
+                name: 'total',
                 desc: '只对 pager-config 配置了有效，响应结果中获取分页的属性',
                 type: 'String',
                 enum: '',

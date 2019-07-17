@@ -10,7 +10,7 @@ const apis = [
         name: 'type',
         descKey: 'app.api.tableColumn.desc.type',
         type: 'String',
-        enum: 'index（序号）,selection（多选）,radio（单选）,expand（展开行）',
+        enum: 'index（序号）, selection（复选框）, radio（单选框）, expand（展开行）',
         defVal: '',
         list: []
       },
@@ -76,7 +76,7 @@ const apis = [
         name: 'fixed',
         descKey: 'app.api.tableColumn.desc.fixed',
         type: 'String',
-        enum: 'left（固定左侧）,right（固定右侧）',
+        enum: 'left（固定左侧）, right（固定右侧）',
         defVal: '',
         list: []
       },
@@ -84,7 +84,7 @@ const apis = [
         name: 'align',
         descKey: 'app.api.tableColumn.desc.align',
         type: 'String',
-        enum: 'left, center, right',
+        enum: 'left（左对其）, center（居中对其）, right（右对齐）',
         defVal: '继承 table 的 align',
         list: []
       },
@@ -92,7 +92,7 @@ const apis = [
         name: 'header-align',
         descKey: 'app.api.tableColumn.desc.headerAlign',
         type: 'String',
-        enum: 'left, center, right',
+        enum: 'left（左对其）, center（居中对其）, right（右对齐）',
         defVal: '继承 align > 继承 table 的 header-align',
         list: []
       },
@@ -100,7 +100,7 @@ const apis = [
         name: 'show-overflow',
         descKey: 'app.api.tableColumn.desc.showOverflow',
         type: 'String,Boolean',
-        enum: 'ellipsis（只显示省略号）,title（并且显示为原生 title）,tooltip（并且显示为 tooltip 提示）',
+        enum: 'ellipsis（只显示省略号）, title（并且显示为原生 title）, tooltip（并且显示为 tooltip 提示）',
         defVal: '继承 table 的 show-overflow',
         list: []
       },
@@ -108,7 +108,7 @@ const apis = [
         name: 'show-header-overflow',
         descKey: 'app.api.tableColumn.desc.showHeaderOverflow',
         type: 'String,Boolean',
-        enum: 'ellipsis（只显示省略号）,title（并且显示为原生 title）,tooltip（并且显示为 tooltip 提示）',
+        enum: 'ellipsis（只显示省略号）, title（并且显示为原生 title）, tooltip（并且显示为 tooltip 提示）',
         defVal: '继承 table 的 show-header-overflow',
         list: []
       },
@@ -237,7 +237,7 @@ const apis = [
       {
         name: 'column-key',
         descKey: 'app.api.tableColumn.desc.columnKey',
-        type: 'String,Number',
+        type: 'String, Number',
         enum: '',
         defVal: '',
         list: []
@@ -261,7 +261,7 @@ const apis = [
             name: 'name',
             desc: '渲染组件的名称（自带精简的输入组件，建议配合其他 UI 库混合渲染）',
             type: 'String',
-            enum: 'input,textarea',
+            enum: 'input, textarea',
             defVal: '',
             list: []
           },
