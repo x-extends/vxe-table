@@ -22,7 +22,7 @@ A fully functional Vue Table, to meet most of the Table all requirements, and pe
 
 * Plan 计划
   * [x] v1 95% 实现表格的一切实用的功能
-  * [x] v2 80% 性能优化，同时兼具功能与性能权衡
+  * [x] v2 80% 性能优化，同时兼具功能与性能
   * [ ] v3 &nbsp;&nbsp;0% 实现重构，渲染性能大幅提升，基于 Vue3 并使用 typescript 开发
 
 🐬 如果有更好的建议、优化点或 Bug 都欢迎提 [Issues](https://github.com/xuliangzhan/vxe-table/issues)
