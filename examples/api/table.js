@@ -969,14 +969,14 @@ const apis = [
           },
           {
             name: 'scrollX',
-            desc: '横向 X 可视渲染配置',
+            desc: '横向 X 虚拟滚动配置',
             type: 'Object',
             enum: '',
             defVal: '',
             list: [
               {
                 name: 'gt',
-                desc: '指定大于多少范围时自动启动虚拟滚动渲染',
+                desc: '指定大于多少范围时自动启动虚拟滚动（启用 X 虚拟滚动，必须固定所有列宽，否则无法兼容）',
                 type: 'Number',
                 enum: '',
                 defVal: '60',
@@ -984,7 +984,7 @@ const apis = [
               },
               {
                 name: 'oSize',
-                desc: '超过指定阈值重新渲染',
+                desc: '当剩余数据少于指定范围时触发重新渲染',
                 type: 'Number',
                 enum: '',
                 defVal: '6',
@@ -1000,24 +1000,24 @@ const apis = [
               },
               {
                 name: 'vSize',
-                desc: '指定可视区域条数，默认自动计算',
+                desc: '指定可视区域条数',
                 type: 'Number',
                 enum: '',
-                defVal: '',
+                defVal: '默认自动计算',
                 list: []
               }
             ]
           },
           {
             name: 'scrollY',
-            desc: '纵向 Y 可视渲染配置',
+            desc: '纵向 Y 虚拟滚动配置',
             type: 'Object',
             enum: '',
             defVal: '',
             list: [
               {
                 name: 'gt',
-                desc: '指定大于多少范围时自动启动虚拟滚动渲染',
+                desc: '指定大于多少范围时自动启动虚拟滚动（启用 Y 虚拟滚动，必须固定所有行高，否则无法兼容）',
                 type: 'Number',
                 enum: '',
                 defVal: '500',
@@ -1025,7 +1025,7 @@ const apis = [
               },
               {
                 name: 'oSize',
-                desc: '超过指定阈值重新渲染',
+                desc: '当剩余数据少于指定范围时触发重新渲染',
                 type: 'Number',
                 enum: '',
                 defVal: '25',
@@ -1041,18 +1041,18 @@ const apis = [
               },
               {
                 name: 'vSize',
-                desc: '指定可视区域条数，默认自动计算',
+                desc: '指定可视区域条数',
                 type: 'Number',
                 enum: '',
-                defVal: '',
+                defVal: '默认自动计算',
                 list: []
               },
               {
                 name: 'rHeight',
-                desc: '指定行高，默认自动计算',
+                desc: '指定行高',
                 type: 'Number',
                 enum: '',
-                defVal: '',
+                defVal: '默认自动计算',
                 list: []
               }
             ]
