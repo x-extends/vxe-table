@@ -208,7 +208,7 @@ const apis = [
         name: 'align',
         descKey: 'app.api.table.desc.align',
         type: 'String',
-        enum: 'left, center, right',
+        enum: 'left（左对其）, center（居中对其）, right（右对齐）',
         defVal: 'left',
         list: []
       },
@@ -216,7 +216,7 @@ const apis = [
         name: 'header-align',
         descKey: 'app.api.table.desc.headerAlign',
         type: 'String',
-        enum: 'left, center, right',
+        enum: 'left（左对其）, center（居中对其）, right（右对齐）',
         defVal: '继承 align',
         list: []
       },
@@ -405,7 +405,7 @@ const apis = [
         list: [
           {
             name: 'labelField',
-            desc: '列显示的属性，可以直接显示在列中',
+            desc: '单选框显示的字段名，可以直接显示在单选框中',
             type: 'String',
             enum: '',
             defVal: '',
@@ -430,7 +430,7 @@ const apis = [
         list: [
           {
             name: 'reserve',
-            desc: '是否保留勾选状态，对于某些场景下非常有用，比如分页之后还保留之前选中的状态（需要设置 row-id || row-key）',
+            desc: '是否保留勾选状态，对于某些场景下非常有用，比如分页之后还保留之前选中的状态（需要 row-id | row-key）',
             type: 'String',
             enum: '',
             defVal: 'false',
@@ -438,7 +438,7 @@ const apis = [
           },
           {
             name: 'labelField',
-            desc: '列显示的属性，可以直接显示在列中',
+            desc: '复选框显示的字段名，可以直接显示在复选框中',
             type: 'String',
             enum: '',
             defVal: '',
@@ -446,7 +446,7 @@ const apis = [
           },
           {
             name: 'checkField',
-            desc: '绑定选中属性，如果设置了该属性渲染速度可以提升n倍（建议数据量大时使用）',
+            desc: '绑定选中属性，如果设置了该属性渲染速度更快（建议数据量大时使用）',
             type: 'String',
             enum: '',
             defVal: '',
@@ -462,7 +462,7 @@ const apis = [
           },
           {
             name: 'checkRowKeys',
-            desc: '默认勾选开指定行（需要设置 row-id || row-key）',
+            desc: '默认勾选开指定行（需要 row-id | row-key）',
             type: 'Array',
             enum: '',
             defVal: '',
@@ -528,7 +528,7 @@ const apis = [
           },
           {
             name: 'expandRowKeys',
-            desc: '默认展开指定行（需要设置 row-id || row-key）',
+            desc: '默认展开指定行（需要 row-id | row-key）',
             type: 'Array',
             enum: '',
             defVal: '',

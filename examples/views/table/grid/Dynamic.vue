@@ -60,7 +60,7 @@ export default {
       },
       tableProxy: {
         props: {
-          data: 'data.result',
+          result: 'data.result',
           total: 'data.page.total'
         },
         ajax: {
@@ -147,7 +147,7 @@ export default {
               },
               tableProxy: {
                 props: {
-                  data: 'data.result',
+                  result: 'data.result',
                   total: 'data.page.total'
                 },
                 ajax: {
@@ -215,7 +215,7 @@ export default {
               },
               tableProxy: {
                 props: {
-                  data: 'data.result',
+                  result: 'data.result',
                   total: 'data.page.total'
                 },
                 ajax: {

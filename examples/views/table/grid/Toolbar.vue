@@ -36,7 +36,7 @@ export default {
       },
       tableProxy: {
         props: {
-          data: 'data.result',
+          result: 'data.result',
           total: 'data.page.total'
         },
         ajax: {
@@ -96,7 +96,7 @@ export default {
               tableProxy: {
                 // 配置响应的数据属性
                 props: {
-                  data: 'data.result',
+                  result: 'data.result',
                   total: 'data.page.total'
                 },
                 ajax: {

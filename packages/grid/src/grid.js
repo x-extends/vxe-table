@@ -74,12 +74,17 @@ export default {
     }
   },
   created () {
-    let { customs, pagerConfig } = this
+    let { customs, proxyOpts, pagerConfig } = this
+    let { props } = proxyOpts
     if (customs) {
       this.tableCustoms = customs
     }
     if (pagerConfig && pagerConfig.pageSize) {
       this.tablePage.pageSize = pagerConfig.pageSize
+    }
+    // （v3.0 废弃 data）
+    if (props && props.data) {
+      console.warn('[vxe-table] The property proxyConfig.props.data is deprecated, please use proxyConfig.props.result')
     }
   },
   mounted () {
@@ -210,13 +215,13 @@ export default {
                 }
                 this.pendingRecords = []
               }
-              return ajax.query(params).then(result => {
-                if (result) {
+              return ajax.query(params).then(rest => {
+                if (rest) {
                   if (pagerConfig) {
-                    tablePage.total = XEUtils.get(result, props.total || 'page.total') || 0
-                    this.tableData = XEUtils.get(result, props.data || 'result') || []
+                    tablePage.total = XEUtils.get(rest, props.total || 'page.total') || 0
+                    this.tableData = XEUtils.get(rest, props.result || props.data || 'result') || []
                   } else {
-                    this.tableData = (props.list ? XEUtils.get(result, props.list) : result) || []
+                    this.tableData = (props.list ? XEUtils.get(rest, props.list) : rest) || []
                   }
                 } else {
                   this.tableData = []

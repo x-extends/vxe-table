@@ -204,7 +204,7 @@ module.exports = {
           rowKey: 'Key of row VNode, corresponding to the Key attribute of virtual DOM in row rendering (not necessary to set in non-special cases)',
           rowId: 'Key for row data (must be set when some advanced functions are enabled, such as tree tables, editable tables...)',
           radioConfig: 'Radio configuration',
-          selectConfig: 'Select multiple configuration',
+          selectConfig: 'Checkbox configuration',
           tooltipConfig: 'tooltip configuration',
           expandConfig: 'Expand the row configuration',
           treeConfig: 'Tree configuration',

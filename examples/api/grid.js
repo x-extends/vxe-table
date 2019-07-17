@@ -269,7 +269,7 @@ const apis = [
                 list: []
               },
               {
-                name: 'data',
+                name: 'result',
                 desc: '只对 pager-config 配置了有效，响应结果中获取数据列表的属性',
                 type: 'String',
                 enum: '',
@@ -277,7 +277,7 @@ const apis = [
                 list: []
               },
               {
-                name: 'page',
+                name: 'total',
                 desc: '只对 pager-config 配置了有效，响应结果中获取分页的属性',
                 type: 'String',
                 enum: '',

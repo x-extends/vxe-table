@@ -1431,7 +1431,8 @@ export default {
         scrollbarWidth,
         scrollXLoad,
         columnStore,
-        elemStore
+        elemStore,
+        currentRow
       } = this
       let containerList = ['main', 'left', 'right']
       let customHeight = height === 'auto' ? parentHeight : XEUtils.toNumber(height)
@@ -1584,6 +1585,9 @@ export default {
           }
         })
       })
+      if (currentRow) {
+        this.setCurrentRow(currentRow)
+      }
       return this.$nextTick()
     },
     /**
@@ -2295,13 +2299,11 @@ export default {
       UtilTools.emitEvent(this, 'current-change', [params, evnt])
     },
     /**
-     * 单选，设置某一行为选中状态，如果调不加参数，则会取消目前高亮行的选中状态
+     * 高亮行，设置某一行为高亮状态，如果调不加参数，则会取消目前高亮行的选中状态
      */
     setCurrentRow (row) {
       let rowPrimaryKey = UtilTools.getRowPrimaryKey(this, row, this.getRowMapIndex(row))
-      if (this.currentRow !== row) {
-        this.clearCurrentRow()
-      }
+      this.clearCurrentRow()
       this.clearCurrentColumn()
       this.currentRow = row
       if (this.highlightCurrentRow) {
@@ -2556,9 +2558,7 @@ export default {
     },
     setCurrentColumn (column) {
       this.clearCurrentRow()
-      if (this.selectColumn !== column) {
-        this.clearCurrentColumn()
-      }
+      this.clearCurrentColumn()
       this.selectColumn = column
       XEUtils.arrayEach(this.$el.querySelectorAll(`.${column.id}`), elem => DomTools.addClass(elem, 'col--current'))
       return this.$nextTick()
