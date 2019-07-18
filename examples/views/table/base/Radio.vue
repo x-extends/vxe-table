@@ -29,6 +29,27 @@
       <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
 
+    <p>默认选中，通过指定 <table-api-link prop="checkRowKey"/> 设置默认选中的行</p>
+
+    <vxe-table
+      border
+      height="300"
+      row-id="id"
+      :data.sync="tableData"
+      :radio-config="{checkRowKey: '2'}">
+      <vxe-table-column type="radio" width="60"></vxe-table-column>
+      <vxe-table-column field="name" title="Name"></vxe-table-column>
+      <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+      <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+    </vxe-table>
+
+    <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
+
+    <pre>
+      <code class="xml">{{ demoCodes[2] }}</code>
+      <code class="javascript">{{ demoCodes[3] }}</code>
+    </pre>
+
     <p>使用 <table-api-link prop="highlight-current-row"/> 高亮方式</p>
 
     <vxe-table
@@ -46,8 +67,8 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[2] }}</code>
-      <code class="javascript">{{ demoCodes[3] }}</code>
+      <code class="xml">{{ demoCodes[4] }}</code>
+      <code class="javascript">{{ demoCodes[5] }}</code>
     </pre>
 
     <p>两种方式混合使用</p>
@@ -69,8 +90,8 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[4] }}</code>
-      <code class="javascript">{{ demoCodes[5] }}</code>
+      <code class="xml">{{ demoCodes[6] }}</code>
+      <code class="javascript">{{ demoCodes[7] }}</code>
     </pre>
 
     <p>当然也可以两种方式同时使用</p>
@@ -92,8 +113,8 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[6] }}</code>
-      <code class="javascript">{{ demoCodes[7] }}</code>
+      <code class="xml">{{ demoCodes[8] }}</code>
+      <code class="javascript">{{ demoCodes[9] }}</code>
     </pre>
   </div>
 </template>
@@ -144,6 +165,31 @@ export default {
             getRadioEvent () {
               this.$XMsg.alert(JSON.stringify(this.$refs.xTable1.getRadioRow()))
             }
+          }
+        }
+        `,
+        `
+        <vxe-table
+          border
+          height="300"
+          row-id="id"
+          :data.sync="tableData"
+          :radio-config="{checkRowKey: '2'}">
+          <vxe-table-column type="radio" width="60"></vxe-table-column>
+          <vxe-table-column field="name" title="Name"></vxe-table-column>
+          <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+          <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+        </vxe-table>
+        `,
+        `
+        export default {
+          data () {
+            return {
+              tableData: []
+            }
+          },
+          created () {
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
           }
         }
         `,
