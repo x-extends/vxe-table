@@ -44,6 +44,7 @@ module.exports = {
         template: 'Template',
         customSort: '点击列头排序',
         span: 'Rowspan and colspan',
+        spanRow: '更加复杂的合并行',
         footer: 'Footer summary',
         export: 'Export CSV',
         contextMenu: 'Context menu',

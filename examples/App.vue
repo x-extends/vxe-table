@@ -301,6 +301,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.spanRow',
+              locat: {
+                name: 'TableSpanRow'
+              }
+            },
+            {
               label: 'app.aside.nav.footer',
               demoUrl: 'https://jsrun.net/dmXKp',
               locat: {

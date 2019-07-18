@@ -44,6 +44,7 @@ module.exports = {
         template: '自定义模板',
         customSort: '点击列头排序',
         span: '合并行或列',
+        spanRow: '更加复杂的合并行',
         footer: '表尾合计',
         export: '导出 CSV',
         contextMenu: '快捷菜单',

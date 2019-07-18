@@ -37,6 +37,7 @@ const TableEvent = () => import(/* webpackChunkName: "table" */ './views/table/a
 const TableTemplate = () => import(/* webpackChunkName: "table" */ './views/table/advanced/Template.vue')
 const TableCustomSort = () => import(/* webpackChunkName: "table" */ './views/table/advanced/CustomSort.vue')
 const TableSpan = () => import(/* webpackChunkName: "table" */ './views/table/advanced/Span.vue')
+const TableSpanRow = () => import(/* webpackChunkName: "table" */ './views/table/advanced/SpanRow.vue')
 const TableFooter = () => import(/* webpackChunkName: "table" */ './views/table/advanced/Footer.vue')
 const TableExport = () => import(/* webpackChunkName: "table" */ './views/table/advanced/Export.vue')
 const TableMenu = () => import(/* webpackChunkName: "table" */ './views/table/advanced/Menu.vue')
@@ -306,6 +307,11 @@ export default new Router({
       path: '/table/advanced/span',
       name: 'TableSpan',
       component: TableSpan
+    },
+    {
+      path: '/table/advanced/spanRow',
+      name: 'TableSpanRow',
+      component: TableSpanRow
     },
     {
       path: '/table/advanced/footer',
