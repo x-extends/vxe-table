@@ -47,6 +47,7 @@
       highlight-current-row
       row-id="id"
       :tree-config="{children: 'children'}"
+      :radio-config="{trigger: 'row'}"
       :data.sync="tableData">
       <vxe-table-column type="radio" width="120" tree-node></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -126,6 +127,7 @@ export default {
           highlight-current-row
           row-id="id"
           :tree-config="{children: 'children'}"
+          :radio-config="{trigger: 'row'}"
           :data.sync="tableData">
           <vxe-table-column type="radio" width="120" tree-node></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>

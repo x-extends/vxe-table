@@ -1218,7 +1218,10 @@ export default {
     },
     handleDefault () {
       if (this.selectConfig) {
-        this.handleDefaultRowChecked()
+        this.handleSelectionDefChecked()
+      }
+      if (this.radioConfig) {
+        this.handleRadioDefChecked()
       }
       if (this.expandConfig) {
         this.handleDefaultRowExpand()
@@ -1943,16 +1946,15 @@ export default {
       return this.$nextTick()
     },
     /**
-     * 处理默认勾选
+     * 处理复选框默认勾选
      */
-    handleDefaultRowChecked () {
+    handleSelectionDefChecked () {
       let { selectConfig = {}, fullDataRowIdMap } = this
       let { checkAll, checkRowKeys } = selectConfig
-      let rowKey = UtilTools.getRowKey(this)
       if (checkAll) {
         this.setAllSelection(true)
       } else if (checkRowKeys) {
-        let property = rowKey
+        let property = UtilTools.getRowKey(this)
         if (!property) {
           throw new Error('[vxe-table] Checked rows must have a unique primary key (row-id | row-key).')
         }
@@ -2162,6 +2164,20 @@ export default {
       this.selection = []
       this.treeIndeterminates = []
       return this.$nextTick()
+    },
+    /**
+     * 处理单选框默认勾选
+     */
+    handleRadioDefChecked () {
+      let { radioConfig = {}, fullDataRowIdMap } = this
+      let { checkRowKey } = radioConfig
+      if (checkRowKey) {
+        let property = UtilTools.getRowKey(this)
+        if (!property) {
+          throw new Error('[vxe-table] Checked row must have a unique primary key (row-id | row-key).')
+        }
+        this.setRadioRow(fullDataRowIdMap.get(checkRowKey).row)
+      }
     },
     /**
      * 单选，行选中事件
