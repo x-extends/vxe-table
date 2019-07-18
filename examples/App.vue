@@ -489,6 +489,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.expandRow',
+              locat: {
+                name: 'TableTreeExpand'
+              }
+            },
+            {
               label: 'app.aside.nav.crudToolbar',
               locat: {
                 name: 'TableTreeToolbar'

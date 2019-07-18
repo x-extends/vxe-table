@@ -26,9 +26,6 @@ export const Cell = {
         renMaps.renderCell = selectConfig && selectConfig.checkField ? (isTreeNode ? this.renderTreeSelectionCellByProp : this.renderSelectionCellByProp) : (isTreeNode ? this.renderTreeSelectionCell : this.renderSelectionCell)
         break
       case 'expand':
-        if (treeConfig) {
-          throw new Error('[vxe-table] Tree tables and expanded rows are not allowed to exist together.')
-        }
         renMaps.renderCell = this.renderExpandCell
         renMaps.renderData = this.renderExpandData
         break
