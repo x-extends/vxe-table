@@ -197,6 +197,7 @@
         height: 50px;
       }
     }
+    .vxe-default-select,
     .vxe-input--wrapper {
       height: 36px;
     }
@@ -214,6 +215,7 @@
         height: 44px;
       }
     }
+    .vxe-default-select,
     .vxe-input--wrapper {
       height: 32px;
     }
@@ -231,6 +233,7 @@
         height: 38px;
       }
     }
+    .vxe-default-select,
     .vxe-input--wrapper {
       height: 28px;
     }
@@ -254,6 +257,18 @@
           }
         }
       }
+    }
+  }
+  .vxe-default-select {
+    outline: 0;
+    padding: 0 2px;
+    height: 40px;
+    width: 100%;
+    color: $vxe-font-color;
+    border-radius: 4px;
+    border: 1px solid $vxe-input-border-color;
+    &:focus {
+      border: 1px solid $vxe-primary-color;
     }
   }
   .vxe-input--wrapper {
@@ -497,6 +512,7 @@
           pointer-events: auto;
         }
       }
+      .vxe-default-select,
       .vxe-input--wrapper {
         > .vxe-input {
           border-color: $vxe-table-validate-error-color;

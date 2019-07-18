@@ -26,14 +26,13 @@
     <p>合并行</p>
 
     <vxe-table
-      ref="xTable"
       border
       height="400"
       :span-method="rowspanMethod"
       :data.sync="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column field="key" title="Key"></vxe-table-column>
-      <vxe-table-column field="content" title="Content"></vxe-table-column>
+      <vxe-table-column field="content" title="Translate"></vxe-table-column>
       <vxe-table-column field="language" title="Language" :filters="[{label: '中文', value: 'zh_CN'}, {label: 'English', value: 'en_US'}]"></vxe-table-column>
     </vxe-table>
 
@@ -98,13 +97,13 @@ export default {
         `,
         `
         <vxe-table
-          ref="xTable"
           border
           height="400"
           :span-method="rowspanMethod"
           :data.sync="tableData">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="key" title="Key"></vxe-table-column>
+          <vxe-table-column field="content" title="Translate"></vxe-table-column>
           <vxe-table-column field="language" title="Language" :filters="[{label: '中文', value: 'zh_CN'}, {label: 'English', value: 'en_US'}]"></vxe-table-column>
         </vxe-table>
         `,
@@ -122,14 +121,15 @@ export default {
             // 通用行合并函数（将相同多列数据合并为一行）
             rowspanMethod ({ row, $rowIndex, column, data }) {
               let fields = ['key']
-              if (fields.includes(column.property)) {
+              let cellValue = row[column.property]
+              if (cellValue && fields.includes(column.property)) {
                 let prevRow = data[$rowIndex - 1]
                 let nextRow = data[$rowIndex + 1]
-                if (prevRow && prevRow[column.property] === row[column.property]) {
+                if (prevRow && prevRow[column.property] === cellValue) {
                   return { rowspan: 0, colspan: 0 }
                 } else {
                   let countRowspan = 1
-                  while (nextRow && nextRow[column.property] === row[column.property]) {
+                  while (nextRow && nextRow[column.property] === cellValue) {
                     nextRow = data[++countRowspan + $rowIndex]
                   }
                   if (countRowspan > 1) {
@@ -172,14 +172,15 @@ export default {
     // 通用行合并函数（将相同多列数据合并为一行）
     rowspanMethod ({ row, $rowIndex, column, data }) {
       let fields = ['key']
-      if (fields.includes(column.property)) {
+      let cellValue = row[column.property]
+      if (cellValue && fields.includes(column.property)) {
         let prevRow = data[$rowIndex - 1]
         let nextRow = data[$rowIndex + 1]
-        if (prevRow && prevRow[column.property] === row[column.property]) {
+        if (prevRow && prevRow[column.property] === cellValue) {
           return { rowspan: 0, colspan: 0 }
         } else {
           let countRowspan = 1
-          while (nextRow && nextRow[column.property] === row[column.property]) {
+          while (nextRow && nextRow[column.property] === cellValue) {
             nextRow = data[++countRowspan + $rowIndex]
           }
           if (countRowspan > 1) {
