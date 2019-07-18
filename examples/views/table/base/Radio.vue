@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>单选表格，用户操作点击选项时会触发事件 <table-api-link prop="radio-change"/></p>
+    <p>单选表格，用户手动勾选时会触发事件 <table-api-link prop="radio-change"/></p>
 
     <vxe-toolbar>
       <template v-slot:buttons>

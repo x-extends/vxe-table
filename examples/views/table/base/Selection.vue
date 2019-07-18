@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>多选表格，用户操作点击选项时会触发事件 <table-api-link prop="select-change"/></p>
+    <p>多选表格，用户手动勾选时会触发事件 <table-api-link prop="select-change"/></p>
 
     <vxe-toolbar>
       <template v-slot:buttons>
@@ -95,6 +95,31 @@
       <code class="javascript">{{ demoCodes[5] }}</code>
     </pre>
 
+    <p>默认选中，通过指定 <table-api-link prop="checkRowKeys"/> 设置默认选中的行</p>
+
+    <vxe-table
+      border
+      highlight-hover-row
+      ref="xTable4"
+      height="300"
+      row-id="id"
+      :data.sync="tableData"
+      :select-config="{checkRowKeys: ['2', '3']}"
+      :radio-config="{labelField: 'name'}">
+      <vxe-table-column type="selection" width="60"></vxe-table-column>
+      <vxe-table-column type="radio" width="200" title="Name"></vxe-table-column>
+      <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+      <vxe-table-column field="age" title="Age"></vxe-table-column>
+      <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+    </vxe-table>
+
+    <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
+
+    <pre>
+      <code class="xml">{{ demoCodes[6] }}</code>
+      <code class="javascript">{{ demoCodes[7] }}</code>
+    </pre>
+
     <p>多选可单选同时使用</p>
 
     <vxe-table
@@ -114,8 +139,8 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[6] }}</code>
-      <code class="javascript">{{ demoCodes[7] }}</code>
+      <code class="xml">{{ demoCodes[8] }}</code>
+      <code class="javascript">{{ demoCodes[9] }}</code>
     </pre>
 
     <p>不仅如此，还可以多种方式混合使用</p>
@@ -140,8 +165,8 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[8] }}</code>
-      <code class="javascript">{{ demoCodes[9] }}</code>
+      <code class="xml">{{ demoCodes[10] }}</code>
+      <code class="javascript">{{ demoCodes[11] }}</code>
     </pre>
   </div>
 </template>
@@ -261,6 +286,35 @@ export default {
           :select-config="{checkField: 'checked', trigger: 'row'}">
           <vxe-table-column type="selection" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
+          <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+          <vxe-table-column field="age" title="Age"></vxe-table-column>
+          <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+        </vxe-table>
+        `,
+        `
+        export default {
+          data () {
+            return {
+              tableData: []
+            }
+          },
+          created () {
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 10)
+          }
+        }
+        `,
+        `
+        <vxe-table
+          border
+          highlight-hover-row
+          ref="xTable4"
+          height="300"
+          row-id="id"
+          :data.sync="tableData"
+          :select-config="{checkRowKeys: ['2', '3']}"
+          :radio-config="{labelField: 'name'}">
+          <vxe-table-column type="selection" width="60"></vxe-table-column>
+          <vxe-table-column type="radio" width="200" title="Name"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
           <vxe-table-column field="age" title="Age"></vxe-table-column>
           <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
