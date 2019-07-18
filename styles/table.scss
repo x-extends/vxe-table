@@ -187,6 +187,7 @@
     }
     .vxe-default-input,
     .vxe-default-textarea,
+    .vxe-default-select,
     .vxe-input--wrapper {
       height: 36px;
     }
@@ -206,6 +207,7 @@
     }
     .vxe-default-input,
     .vxe-default-textarea,
+    .vxe-default-select,
     .vxe-input--wrapper {
       height: 32px;
     }
@@ -225,6 +227,7 @@
     }
     .vxe-default-input,
     .vxe-default-textarea,
+    .vxe-default-select,
     .vxe-input--wrapper {
       height: 28px;
     }
@@ -252,7 +255,8 @@
   }
   /*默认的渲染*/
   .vxe-default-input,
-  .vxe-default-textarea {
+  .vxe-default-textarea,
+  .vxe-default-select {
     outline: 0;
     padding: 0 2px;
     height: 40px;
@@ -517,7 +521,8 @@
         }
       }
       .vxe-default-input,
-      .vxe-default-textarea {
+      .vxe-default-textarea,
+      .vxe-default-select {
         border-color: $vxe-table-validate-error-color;
       }
       .vxe-input--wrapper {
@@ -525,6 +530,7 @@
           border-color: $vxe-table-validate-error-color;
         }
       }
+
     }
   }
   .vxe-body--row {

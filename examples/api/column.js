@@ -259,9 +259,9 @@ const apis = [
           },
           {
             name: 'name',
-            desc: '渲染组件的名称（自带精简的输入组件，建议配合其他 UI 库混合渲染）',
+            desc: '渲染组件的名称（可以使用自带原生的渲染，也可以配合其他 UI 库混合渲染）',
             type: 'String',
-            enum: 'input, textarea',
+            enum: 'input, textarea, select',
             defVal: '',
             list: []
           },

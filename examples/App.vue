@@ -672,6 +672,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.i18n',
+              locat: {
+                name: 'TableEditI18n'
+              }
+            },
+            {
               label: 'app.aside.nav.template',
               locat: {
                 name: 'TableEditTemplate'
