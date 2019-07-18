@@ -2073,7 +2073,7 @@ export default {
      * 处理默认勾选
      */
     handleDefaultRowChecked () {
-      let { selectConfig = {}, tableFullData } = this
+      let { selectConfig = {}, fullDataRowIdMap } = this
       let { checkAll, checkRowKeys } = selectConfig
       let rowKey = UtilTools.getRowKey(this)
       if (checkAll) {
@@ -2083,7 +2083,7 @@ export default {
         if (!property) {
           throw new Error('[vxe-table] Checked rows must have a unique primary key (row-id | row-key).')
         }
-        this.setSelection(checkRowKeys.map(checkKey => tableFullData.find(item => checkKey === item[property])), true)
+        this.setSelection(checkRowKeys.map(checkKey => fullDataRowIdMap.get(checkKey).row), true)
       }
     },
     setSelection (rows, value) {

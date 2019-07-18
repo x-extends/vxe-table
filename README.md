@@ -36,7 +36,7 @@ A fully functional Vue Table, to meet most of the Table all requirements, and pe
 ## Features
 
 * Basic table （基础功能）
-* Dynamic Grid （动态化高级表格）
+* Dynamic Grid （配置式表格）
 * Size （尺寸）
 * Striped （斑马线条纹）
 * Table with border （带边框）
