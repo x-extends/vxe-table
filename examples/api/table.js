@@ -1262,6 +1262,14 @@ const apis = [
         list: []
       },
       {
+        name: 'refreshColumn()',
+        desc: '刷新列配置（对于显示/隐藏列场景下可能会用到）',
+        type: 'Promise>',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'insert(records)',
         desc: '往表格插入数据，从第一行新增一行或多行新数据',
         type: 'Promise<{row, rows}>',
@@ -1310,22 +1318,6 @@ const apis = [
         list: []
       },
       {
-        name: 'getRecords(rowIndex)',
-        desc: '获取表格所有数据，和 data 属性一致行为，也可以指定索引获取数据',
-        type: 'Array',
-        enum: '',
-        defVal: 'rowIndex?',
-        list: []
-      },
-      {
-        name: 'getTableData()',
-        desc: '获取当前表格渲染中的数据（如果存在条件，则返回处理完之后的数据）',
-        type: 'Array',
-        enum: '',
-        defVal: '',
-        list: []
-      },
-      {
         name: 'getRowNode(tr)',
         desc: '根据 tr 元素获取对应的 row 信息',
         type: '{item, items, index, parent}',
@@ -1366,16 +1358,32 @@ const apis = [
         list: []
       },
       {
+        name: 'getTableData()',
+        desc: '获取当前表格渲染中的数据（如果存在条件，则返回处理完之后的数据）',
+        type: 'Array',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'getRecords(rowIndex)',
+        desc: '获取表格全量数据，和 data 的行为一致，也可以指定索引获取数据',
+        type: 'Array',
+        enum: '',
+        defVal: 'rowIndex?',
+        list: []
+      },
+      {
         name: 'getAllRecords()',
         desc: '获取表格数据集合',
-        type: 'Array<{insertRecords, removeRecords, updateRecords}>',
+        type: '{insertRecords, removeRecords, updateRecords}',
         enum: '',
         defVal: '',
         list: []
       },
       {
         name: 'getInsertRecords()',
-        desc: '获取新增数据',
+        desc: '获取新增的数据',
         type: 'Array',
         enum: '',
         defVal: '',
@@ -1383,7 +1391,7 @@ const apis = [
       },
       {
         name: 'getRemoveRecords()',
-        desc: '获取已删除数据',
+        desc: '获取已删除的数据',
         type: 'Array',
         enum: '',
         defVal: '',
@@ -1391,7 +1399,7 @@ const apis = [
       },
       {
         name: 'getUpdateRecords()',
-        desc: '获取已修改数据',
+        desc: '获取已修改的数据',
         type: 'Array',
         enum: '',
         defVal: '',
@@ -1427,6 +1435,14 @@ const apis = [
         type: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,cell}',
         enum: '',
         defVal: 'row',
+        list: []
+      },
+      {
+        name: 'getVirtualScroller()',
+        desc: '获取虚拟滚动相关状态',
+        type: 'Object',
+        enum: '',
+        defVal: '',
         list: []
       },
       {
@@ -1591,7 +1607,7 @@ const apis = [
       },
       {
         name: 'clearCurrentRow()',
-        desc: '用于当前行，清空当前高亮的状态',
+        desc: '用于当前行，手动清空当前高亮的状态',
         type: 'Promise',
         enum: '',
         defVal: '',
@@ -1599,7 +1615,7 @@ const apis = [
       },
       {
         name: 'clearCurrentColumn()',
-        desc: '用于当前列，清空当前高亮的状态',
+        desc: '用于当前列，手动清空当前高亮的状态',
         type: 'Promise',
         enum: '',
         defVal: '',
@@ -1607,7 +1623,7 @@ const apis = [
       },
       {
         name: 'clearRadioRow()',
-        desc: '用于单选行，清空用户的选择',
+        desc: '用于单选行，手动清空用户的选择',
         type: 'Promise',
         enum: '',
         defVal: '',
@@ -1615,7 +1631,7 @@ const apis = [
       },
       {
         name: 'clearSelection()',
-        desc: '用于多选行，清空用户的选择',
+        desc: '用于多选行，手动清空用户的选择',
         type: 'Promise',
         enum: '',
         defVal: '',
@@ -1623,7 +1639,7 @@ const apis = [
       },
       {
         name: 'clearRowExpand()',
-        desc: '清空展开行状态，数据会恢复成未展开的状态',
+        desc: '手动清空展开行状态，数据会恢复成未展开的状态',
         type: 'Promise',
         enum: '',
         defVal: '',
@@ -1631,7 +1647,7 @@ const apis = [
       },
       {
         name: 'clearTreeExpand()',
-        desc: '清空树形节点的展开状态，数据会恢复成未展开的状态',
+        desc: '手动清空树形节点的展开状态，数据会恢复成未展开的状态',
         type: 'Promise',
         enum: '',
         defVal: '',
@@ -1639,7 +1655,7 @@ const apis = [
       },
       {
         name: 'clearSort()',
-        desc: '清空排序条件，数据会恢复成未排序的状态',
+        desc: '手动清空排序条件，数据会恢复成未排序的状态',
         type: 'Promise',
         enum: '',
         defVal: '',
@@ -1647,7 +1663,7 @@ const apis = [
       },
       {
         name: 'clearFilter()',
-        desc: '清空筛选条件，数据会恢复成未筛选的状态',
+        desc: '手动清空筛选条件，数据会恢复成未筛选的状态',
         type: 'Promise',
         enum: '',
         defVal: '',
@@ -1655,7 +1671,7 @@ const apis = [
       },
       // {
       //   name: 'clearChecked()',
-      //   desc: '清除单元格批量选中状态',
+      //   desc: '手动清除单元格批量选中状态',
       //   type: 'Promise',
       //   enum: '',
       //   defVal: '',
@@ -1663,7 +1679,7 @@ const apis = [
       // },
       {
         name: 'clearSelected()',
-        desc: '清除单元格选中状态',
+        desc: '手动清除单元格选中状态',
         type: 'Promise',
         enum: '',
         defVal: '',
@@ -1671,7 +1687,7 @@ const apis = [
       },
       {
         name: 'clearActived()',
-        desc: '清除单元格激活状态',
+        desc: '手动清除单元格激活状态',
         type: 'Promise',
         enum: '',
         defVal: '',
@@ -1679,23 +1695,23 @@ const apis = [
       },
       // {
       //   name: 'clearCopyed()',
-      //   desc: '清空已复制的内容',
+      //   desc: '手动清空已复制的内容',
       //   type: 'Promise',
       //   enum: '',
       //   defVal: '',
       //   list: []
       // },
       {
-        name: 'clearData()',
-        desc: '清空单元格内容',
+        name: 'clearData(rows, field)',
+        desc: '手动清空单元格内容，如果不创参数，则清空整个表格内容，如果传了行则清空指定行内容，如果传了指定字段，则清空该字段内容',
         type: 'Promise',
         enum: '',
-        defVal: '?',
+        defVal: 'rows?, field?',
         list: []
       },
       {
         name: 'clearScroll()',
-        desc: '清除滚动相关信息，还原到初始状态',
+        desc: '手动清除滚动相关信息，还原到初始状态',
         type: 'Promise',
         enum: '',
         defVal: '',
@@ -1703,7 +1719,7 @@ const apis = [
       },
       {
         name: 'clearAll()',
-        desc: '清除表格所有条件，还原到初始状态（对于增删改查的场景中可能会用到，比如在数据保存之后清除表格缓存）',
+        desc: '手动清除表格所有条件，还原到初始状态（对于增删改查的场景中可能会用到，比如在数据保存之后清除表格缓存）',
         type: 'Promise',
         enum: '',
         defVal: '',
@@ -1734,22 +1750,6 @@ const apis = [
         list: []
       },
       {
-        name: 'recalculate()',
-        desc: '重新计算并更新列宽',
-        type: 'Promise',
-        enum: '',
-        defVal: '',
-        list: []
-      },
-      {
-        name: 'refreshColumn()',
-        desc: '刷新列配置（对于显示/隐藏列场景下可能会用到）',
-        type: 'Promise>',
-        enum: '',
-        defVal: '',
-        list: []
-      },
-      {
         name: 'updateFooter()',
         desc: '更新表尾合计（对于某些需要频繁更新的场景下可能会用到）',
         type: 'Promise',
@@ -1759,18 +1759,10 @@ const apis = [
       },
       {
         name: 'updateStatus(scope)',
-        desc: '更新单元格状态（只对 showStatus=true 并且使用自定义渲染时，当值发生改变时才需要调用）',
+        desc: '更新单元格状态（当使用自定义渲染时可能会用到，当配置 showStatus=true 且单元格内值发生改变时需要调用）',
         type: 'Promise',
         enum: '',
-        defVal: '',
-        list: []
-      },
-      {
-        name: 'getVirtualScroller()',
-        desc: '获取虚拟滚动相关状态',
-        type: 'Object',
-        enum: '',
-        defVal: '',
+        defVal: 'scope',
         list: []
       },
       {
@@ -1803,6 +1795,14 @@ const apis = [
         type: 'Promise',
         enum: '',
         defVal: 'field, order?',
+        list: []
+      },
+      {
+        name: 'recalculate()',
+        desc: '表格重新计算（对于需要更新列宽时可能会用到）',
+        type: 'Promise',
+        enum: '',
+        defVal: '',
         list: []
       },
       {
