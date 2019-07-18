@@ -35,42 +35,42 @@ A fully functional Vue Table, to meet most of the Table all requirements, and pe
 
 ## Features
 
-* Basic table （基础功能）
-* Dynamic Grid （配置式表格）
-* Size （尺寸）
-* Striped （斑马线条纹）
-* Table with border （带边框）
-* Cell style （单元格样式）
-* Column resizable （列宽拖动）
-* Fluid-height table with fixed header （流体高度）
-* Resize height and width （响应式宽高）
-* Table with fixed header （固定表头）
-* Table with fixed column （固定列）
-* Table with fixed columns and header （固定表头和列）
-* Grouping table head （表头分组）
-* Table sequence （序号)
-* Highlight row and column （高亮行、列)
-* Radio （单选)
-* Checkbox （多选）
-* Sorting （排序）
-* Filter （筛选）
-* Rowspan and colspan （合并行或列）
-* Footer summary （表尾合计）
-* Export CSV （导出 CSV）
-* Show/hide columns （显示/隐藏列）
-* Loading （加载中）
-* Format content （格式化内容）
-* Custom column template （自定义模板）
-* Context menu（快捷菜单）
-* Virtual Scroller（虚拟滚动）
-* Expandable row （展开行）
-* Pager（分页）
-* Toolbar（工具栏）
-* Tree table （树形表格)
-* Editable CRUD（增删改查)
-* Editable validate（数据校验）
-* DataProxy（数据代理）
-* Keyboard navigation（全键盘操作）
+* [x] Basic table （基础功能）
+* [x] Dynamic Grid （配置式表格）
+* [x] Size （尺寸）
+* [x] Striped （斑马线条纹）
+* [x] Table with border （带边框）
+* [x] Cell style （单元格样式）
+* [x] Column resizable （列宽拖动）
+* [x] Fluid-height table with fixed header （流体高度）
+* [x] Resize height and width （响应式宽高）
+* [x] Table with fixed header （固定表头）
+* [x] Table with fixed column （固定列）
+* [x] Table with fixed columns and header （固定表头和列）
+* [x] Grouping table head （表头分组）
+* [x] Table sequence （序号)
+* [x] Highlight row and column （高亮行、列)
+* [x] Radio （单选)
+* [x] Checkbox （多选）
+* [x] Sorting （排序）
+* [x] Filter （筛选）
+* [x] Rowspan and colspan （合并行或列）
+* [x] Footer summary （表尾合计）
+* [x] Export CSV （导出 CSV）
+* [x] Show/hide columns （显示/隐藏列）
+* [x] Loading （加载中）
+* [x] Format content （格式化内容）
+* [x] Custom column template （自定义模板）
+* [x] Context menu（快捷菜单）
+* [x] Virtual Scroller（虚拟滚动）
+* [x] Expandable row （展开行）
+* [x] Pager（分页）
+* [x] Toolbar（工具栏）
+* [x] Tree table （树形表格)
+* [x] Editable CRUD（增删改查)
+* [x] Editable validate（数据校验）
+* [x] DataProxy（数据代理）
+* [x] Keyboard navigation（全键盘操作）
 
 ## Modules
 
