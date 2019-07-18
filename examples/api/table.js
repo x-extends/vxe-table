@@ -509,7 +509,7 @@ const apis = [
           {
             name: 'checkRowKeys',
             desc: '默认勾选开指定行（需要 row-id | row-key）',
-            type: 'Array',
+            type: 'Array<String>',
             enum: '',
             defVal: '',
             list: []
