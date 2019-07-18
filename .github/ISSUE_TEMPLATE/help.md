@@ -1,7 +1,7 @@
 ---
 name: Help
 about: 遇到问题
-title: 请将 ? 地方填写完整，否则可能会被关闭！
+title: ''
 labels: need help 需要帮助
 assignees: ''
 

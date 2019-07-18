@@ -1,7 +1,7 @@
 ---
 name: Bug report
 about: 有 Bug
-title: 请将 ? 地方填写完整，否则可能会被关闭！
+title: ''
 labels: bug
 assignees: ''
 
