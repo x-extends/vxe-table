@@ -65,6 +65,7 @@ const GridFullEdit = () => import(/* webpackChunkName: "grid" */ './views/table/
 const TableTreeBasic = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Basic.vue')
 const TableTreeSelection = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Selection.vue')
 const TableTreeRadio = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Radio.vue')
+const TableTreeExpand = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Expand.vue')
 const TableTreeToolbar = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Toolbar.vue')
 const TableTreeEdit = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Edit.vue')
 
@@ -366,6 +367,11 @@ export default new Router({
       path: '/table/tree/radio',
       name: 'TableTreeRadio',
       component: TableTreeRadio
+    },
+    {
+      path: '/table/tree/expand',
+      name: 'TableTreeExpand',
+      component: TableTreeExpand
     },
     {
       path: '/table/tree/toolbar',

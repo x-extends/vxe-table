@@ -271,39 +271,38 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
         return renderColumn(h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex)
       }))
     )
+    // 如果行被展开了
+    if (expandeds.length && expandeds.indexOf(row) > -1) {
+      let column = tableColumn.find(column => column.type === 'expand')
+      let columnIndex = getColumnMapIndex(column)
+      if (column) {
+        rows.push(
+          h('tr', {
+            class: 'vxe-body--expanded-row',
+            key: `expand_${rowPrimaryKey}`,
+            on: trOn
+          }, [
+            h('td', {
+              class: 'vxe-body--expanded-column',
+              attrs: {
+                colspan: tableColumn.length
+              }
+            }, [
+              h('div', {
+                class: 'vxe-body--expanded-cell'
+              }, [
+                column.renderData(h, { $table, seq, row, rowIndex, column, columnIndex, fixed: fixedType, level: rowLevel })
+              ])
+            ])
+          ])
+        )
+      }
+    }
+    // 如果是树形表格
     if (treeConfig && treeExpandeds.length) {
-      // 如果是树形表格
       let rowChildren = row[treeConfig.children]
       if (rowChildren && rowChildren.length && treeExpandeds.indexOf(row) > -1) {
         rows.push.apply(rows, renderRows(h, _vm, $table, $seq ? `${$seq}.${seq}` : `${seq}`, rowLevel + 1, fixedType, rowChildren, tableColumn))
-      }
-    } else if (expandeds.length) {
-      // 如果行被展开了
-      if (expandeds.indexOf(row) > -1) {
-        let column = tableColumn.find(column => column.type === 'expand')
-        let columnIndex = getColumnMapIndex(column)
-        if (column) {
-          rows.push(
-            h('tr', {
-              class: ['vxe-body--expanded-row'],
-              key: `expand_${rowIndex}`,
-              on: trOn
-            }, [
-              h('td', {
-                class: ['vxe-body--expanded-column'],
-                attrs: {
-                  colspan: tableColumn.length
-                }
-              }, [
-                h('div', {
-                  class: ['vxe-body--expanded-cell']
-                }, [
-                  column.renderData(h, { $table, seq, row, rowIndex, column, columnIndex, fixed: fixedType, level: rowLevel })
-                ])
-              ])
-            ])
-          )
-        }
       }
     }
   })
