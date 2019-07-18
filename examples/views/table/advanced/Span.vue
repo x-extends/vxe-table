@@ -5,7 +5,8 @@
 
     <vxe-table
       border
-      max-height="400"
+      show-overflow
+      height="400"
       :span-method="colspanMethod"
       :data.sync="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
@@ -27,7 +28,7 @@
     <vxe-table
       ref="xTable"
       border
-      max-height="400"
+      height="400"
       :span-method="rowspanMethod"
       :data.sync="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
@@ -56,7 +57,7 @@ export default {
         `
         <vxe-table
           border
-          max-height="400"
+          height="400"
           :span-method="colspanMethod"
           :data.sync="tableData">
           <vxe-table-column type="index" width="60"></vxe-table-column>
@@ -99,7 +100,7 @@ export default {
         <vxe-table
           ref="xTable"
           border
-          max-height="400"
+          height="400"
           :span-method="rowspanMethod"
           :data.sync="tableData">
           <vxe-table-column type="index" width="60"></vxe-table-column>
@@ -118,20 +119,21 @@ export default {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 20)
           },
           methods: {
+            // 通用行合并函数（将相同多列数据合并为一行）
             rowspanMethod ({ row, $rowIndex, column, data }) {
-              let prevRow = data[$rowIndex - 1]
-              let nextRow = data[$rowIndex + 1]
-              if (column.property === 'key') {
-                if (prevRow && prevRow.key === row.key) {
-                  return {
-                    rowspan: 0,
-                    colspan: 0
+              let fields = ['key']
+              if (fields.includes(column.property)) {
+                let prevRow = data[$rowIndex - 1]
+                let nextRow = data[$rowIndex + 1]
+                if (prevRow && prevRow[column.property] === row[column.property]) {
+                  return { rowspan: 0, colspan: 0 }
+                } else {
+                  let countRowspan = 1
+                  while (nextRow && nextRow[column.property] === row[column.property]) {
+                    nextRow = data[++countRowspan + $rowIndex]
                   }
-                }
-                if (nextRow && nextRow.key === row.key) {
-                  return {
-                    rowspan: 2,
-                    colspan: 1
+                  if (countRowspan > 1) {
+                    return { rowspan: countRowspan, colspan: 1 }
                   }
                 }
               }
@@ -167,20 +169,21 @@ export default {
         }
       }
     },
+    // 通用行合并函数（将相同多列数据合并为一行）
     rowspanMethod ({ row, $rowIndex, column, data }) {
-      let prevRow = data[$rowIndex - 1]
-      let nextRow = data[$rowIndex + 1]
-      if (column.property === 'key') {
-        if (prevRow && prevRow.key === row.key) {
-          return {
-            rowspan: 0,
-            colspan: 0
+      let fields = ['key']
+      if (fields.includes(column.property)) {
+        let prevRow = data[$rowIndex - 1]
+        let nextRow = data[$rowIndex + 1]
+        if (prevRow && prevRow[column.property] === row[column.property]) {
+          return { rowspan: 0, colspan: 0 }
+        } else {
+          let countRowspan = 1
+          while (nextRow && nextRow[column.property] === row[column.property]) {
+            nextRow = data[++countRowspan + $rowIndex]
           }
-        }
-        if (nextRow && nextRow.key === row.key) {
-          return {
-            rowspan: 2,
-            colspan: 1
+          if (countRowspan > 1) {
+            return { rowspan: countRowspan, colspan: 1 }
           }
         }
       }
