@@ -384,12 +384,12 @@ export default {
     } = $table
     // v2.0 废弃属性，保留兼容
     let allColumnOverflow = XEUtils.isBoolean(oldShowAllOverflow) ? oldShowAllOverflow : allShowOverflow
-    let customHeight = height === 'auto' ? containerHeight : XEUtils.toNumber(height)
+    let customHeight = height === 'auto' ? containerHeight : (DomTools.isScale(height) ? Math.floor(parseInt(height) / 100 * containerHeight) : XEUtils.toNumber(height))
     let style = {}
     if (customHeight > 0) {
       style.height = `${fixedType ? (customHeight > 0 ? customHeight - headerHeight - footerHeight : tableHeight) - (showFooter ? 0 : scrollbarHeight) : customHeight - headerHeight - footerHeight}px`
     } else if (maxHeight) {
-      maxHeight = XEUtils.toNumber(maxHeight)
+      maxHeight = DomTools.isScale(maxHeight) ? Math.floor(parseInt(maxHeight) / 100 * containerHeight) : XEUtils.toNumber(maxHeight)
       style['max-height'] = `${fixedType ? maxHeight - headerHeight - (showFooter ? 0 : scrollbarHeight) : maxHeight - headerHeight}px`
     }
     // 如果是固定列与设置了超出隐藏

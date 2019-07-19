@@ -33,9 +33,9 @@ function renderFixed (h, $table, fixedType) {
     columnStore,
     footerData
   } = $table
-  let customHeight = height === 'auto' ? containerHeight : XEUtils.toNumber(height)
   let isRightFixed = fixedType === 'right'
   let fixedColumn = columnStore[`${fixedType}List`]
+  let customHeight = height === 'auto' ? containerHeight : (DomTools.isScale(height) ? Math.floor(parseInt(height) / 100 * containerHeight) : XEUtils.toNumber(height))
   let style = {
     height: `${(customHeight > 0 ? customHeight - headerHeight - footerHeight : tableHeight) + headerHeight + footerHeight - scrollbarHeight * (showFooter ? 2 : 1)}px`,
     width: `${fixedColumn.reduce((previous, column) => previous + column.renderWidth, isRightFixed ? scrollbarWidth : 0)}px`
