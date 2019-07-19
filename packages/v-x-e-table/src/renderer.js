@@ -5,7 +5,7 @@ import XEUtils from 'xe-utils'
  * 只支持 input 和 textarea
  */
 function defaultRenderer (h, attrs, editRender, params) {
-  let { $table, column } = params
+  let { column } = params
   let { name } = editRender
   let { model } = column
   return [
@@ -15,16 +15,30 @@ function defaultRenderer (h, attrs, editRender, params) {
       domProps: {
         value: model.value
       },
-      on: {
-        input (evnt) {
-          let cellValue = evnt.target.value
-          model.update = true
-          model.value = cellValue
-          $table.updateStatus(params, cellValue)
-        }
-      }
+      on: getEvents(editRender, params)
     })
   ]
+}
+
+function getEvents (editRender, params) {
+  let { name, events } = editRender
+  let { $table, column } = params
+  let { model } = column
+  let type = name === 'select' ? 'change' : 'input'
+  let on = {
+    [type] (evnt) {
+      let cellValue = evnt.target.value
+      model.update = true
+      model.value = cellValue
+      $table.updateStatus(params, cellValue)
+    }
+  }
+  if (events) {
+    XEUtils.assign(on, XEUtils.objectMap(events, cb => function () {
+      cb.apply(null, [params].concat.apply(params, arguments))
+    }))
+  }
+  return on
 }
 
 function renderOptgroups (h, editRender, params) {
@@ -72,22 +86,12 @@ const _storeMap = {
   },
   select: {
     renderEdit (h, editRender, params) {
-      let { options, optionGroups } = editRender
-      let { $table, column } = params
-      let { model } = column
       return [
         h('select', {
           class: 'vxe-default-select',
-          on: {
-            change (evnt) {
-              let cellValue = evnt.target.value
-              model.update = true
-              model.value = cellValue
-              $table.updateStatus(params, cellValue)
-            }
-          }
+          on: getEvents(editRender, params)
         },
-        optionGroups ? renderOptgroups(h, editRender, params) : renderOptions(h, options, editRender, params))
+        editRender.optionGroups ? renderOptgroups(h, editRender, params) : renderOptions(h, editRender.options, editRender, params))
       ]
     },
     renderCell (h, editRender, params) {
