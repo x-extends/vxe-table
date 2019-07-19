@@ -2101,10 +2101,10 @@ export default {
      */
     handleSelectRow ({ row }, value) {
       let { selection, tableFullData, selectConfig = {}, treeConfig, treeIndeterminates } = this
-      let { checkField: property, checkMethod } = selectConfig
+      let { checkField: property, checkStrictly, checkMethod } = selectConfig
       if (!checkMethod || checkMethod({ row, rowIndex: tableFullData.indexOf(row) })) {
         if (property) {
-          if (treeConfig) {
+          if (treeConfig && !checkStrictly) {
             if (value === -1) {
               treeIndeterminates.push(row)
               XEUtils.set(row, property, false)
@@ -2116,14 +2116,21 @@ export default {
             // 如果存在父节点，更新父节点状态
             let matchObj = XEUtils.findTree(tableFullData, item => item === row, treeConfig)
             if (matchObj && matchObj.parent) {
-              let selectItems = matchObj.items.filter(item => XEUtils.get(item, property))
-              return this.handleSelectRow({ row: matchObj.parent }, selectItems.length === matchObj.items.length ? true : (selectItems.length || value === -1 ? -1 : false))
+              let indeterminatesItem = matchObj.items.find(item => treeIndeterminates.indexOf(item) > -1)
+              let parentStatus = value
+              if (indeterminatesItem) {
+                parentStatus = -1
+              } else {
+                let selectItems = matchObj.items.filter(item => XEUtils.get(item, property))
+                parentStatus = selectItems.length === matchObj.items.length ? true : (selectItems.length || value === -1 ? -1 : false)
+              }
+              return this.handleSelectRow({ row: matchObj.parent }, parentStatus)
             }
           } else {
             XEUtils.set(row, property, value)
           }
         } else {
-          if (treeConfig) {
+          if (treeConfig && !checkStrictly) {
             if (value === -1) {
               treeIndeterminates.push(row)
               XEUtils.remove(selection, item => item === row)
@@ -2143,8 +2150,15 @@ export default {
             // 如果存在父节点，更新父节点状态
             let matchObj = XEUtils.findTree(tableFullData, item => item === row, treeConfig)
             if (matchObj && matchObj.parent) {
-              let selectItems = matchObj.items.filter(item => selection.indexOf(item) > -1)
-              return this.handleSelectRow({ row: matchObj.parent }, selectItems.length === matchObj.items.length ? true : (selectItems.length || value === -1 ? -1 : false))
+              let indeterminatesItem = matchObj.items.find(item => treeIndeterminates.indexOf(item) > -1)
+              let parentStatus = value
+              if (indeterminatesItem) {
+                parentStatus = -1
+              } else {
+                let selectItems = matchObj.items.filter(item => selection.indexOf(item) > -1)
+                parentStatus = selectItems.length === matchObj.items.length ? true : (selectItems.length || value === -1 ? -1 : false)
+              }
+              return this.handleSelectRow({ row: matchObj.parent }, parentStatus)
             }
           } else {
             if (value) {
@@ -2183,68 +2197,72 @@ export default {
     },
     setAllSelection (value) {
       let { tableFullData, editStore, selectConfig = {}, treeConfig, selection } = this
-      let { checkField: property, reserve, checkMethod } = selectConfig
+      let { checkField: property, reserve, checkStrictly, checkMethod } = selectConfig
       let { insertList } = editStore
       let selectRows = []
       // 包含新增的数据
       if (insertList.length) {
         tableFullData = tableFullData.concat(insertList)
       }
-      if (property) {
-        let updateValue = (row, rowIndex) => {
-          if (!checkMethod || checkMethod({ row, rowIndex })) {
-            XEUtils.set(row, property, value)
+      if (!checkStrictly) {
+        if (property) {
+          let updateValue = (row, rowIndex) => {
+            if (!checkMethod || checkMethod({ row, rowIndex })) {
+              XEUtils.set(row, property, value)
+            }
           }
-        }
-        if (treeConfig) {
-          XEUtils.eachTree(tableFullData, updateValue, treeConfig)
-        } else {
-          tableFullData.forEach(updateValue)
-        }
-      } else {
-        if (value) {
           if (treeConfig) {
-            XEUtils.eachTree(tableFullData, (row, rowIndex) => {
-              if (!checkMethod || checkMethod({ row, rowIndex })) {
-                selectRows.push(row)
-              }
-            }, treeConfig)
+            XEUtils.eachTree(tableFullData, updateValue, treeConfig)
           } else {
-            if (checkMethod) {
-              selectRows = tableFullData.filter((row, rowIndex) => checkMethod({ row, rowIndex }))
+            tableFullData.forEach(updateValue)
+          }
+        } else {
+          if (value) {
+            if (treeConfig) {
+              XEUtils.eachTree(tableFullData, (row, rowIndex) => {
+                if (!checkMethod || checkMethod({ row, rowIndex })) {
+                  selectRows.push(row)
+                }
+              }, treeConfig)
             } else {
-              selectRows = tableFullData.slice(0)
+              if (checkMethod) {
+                selectRows = tableFullData.filter((row, rowIndex) => checkMethod({ row, rowIndex }))
+              } else {
+                selectRows = tableFullData.slice(0)
+              }
             }
           }
         }
+        this.selection = value && reserve ? selection.concat(selectRows.filter(row => selection.indexOf(row) === -1)) : selectRows
       }
-      this.selection = value && reserve ? selection.concat(selectRows.filter(row => selection.indexOf(row) === -1)) : selectRows
       this.isAllSelected = value
       this.isIndeterminate = false
       this.treeIndeterminates = []
     },
     checkSelectionStatus () {
       let { tableFullData, editStore, selectConfig = {}, selection, treeIndeterminates } = this
-      let { checkField: property, checkMethod } = selectConfig
+      let { checkField: property, checkStrictly, checkMethod } = selectConfig
       let { insertList } = editStore
       // 包含新增的数据
       if (insertList.length) {
         tableFullData = tableFullData.concat(insertList)
       }
-      if (property) {
-        this.isAllSelected = tableFullData.length && tableFullData.every(
-          checkMethod
-            ? (row, rowIndex) => !checkMethod({ row, rowIndex }) || XEUtils.get(row, property)
-            : row => XEUtils.get(row, property)
-        )
-        this.isIndeterminate = !this.isAllSelected && tableFullData.some(row => XEUtils.get(row, property) || treeIndeterminates.indexOf(row) > -1)
-      } else {
-        this.isAllSelected = tableFullData.length && tableFullData.every(
-          checkMethod
-            ? (row, rowIndex) => !checkMethod({ row, rowIndex }) || selection.indexOf(row) > -1
-            : row => selection.indexOf(row) > -1
-        )
-        this.isIndeterminate = !this.isAllSelected && tableFullData.some(row => treeIndeterminates.indexOf(row) > -1 || selection.indexOf(row) > -1)
+      if (!checkStrictly) {
+        if (property) {
+          this.isAllSelected = tableFullData.length && tableFullData.every(
+            checkMethod
+              ? (row, rowIndex) => !checkMethod({ row, rowIndex }) || XEUtils.get(row, property)
+              : row => XEUtils.get(row, property)
+          )
+          this.isIndeterminate = !this.isAllSelected && tableFullData.some(row => XEUtils.get(row, property) || treeIndeterminates.indexOf(row) > -1)
+        } else {
+          this.isAllSelected = tableFullData.length && tableFullData.every(
+            checkMethod
+              ? (row, rowIndex) => !checkMethod({ row, rowIndex }) || selection.indexOf(row) > -1
+              : row => selection.indexOf(row) > -1
+          )
+          this.isIndeterminate = !this.isAllSelected && tableFullData.some(row => treeIndeterminates.indexOf(row) > -1 || selection.indexOf(row) > -1)
+        }
       }
     },
     // 保留选中状态

@@ -13,9 +13,8 @@
     </vxe-toolbar>
 
     <vxe-table
-      ref="xTable1"
       border
-      height="300"
+      ref="xTable1"
       :data.sync="tableData"
       @select-all="selectAllEvent"
       @select-change="selectChangeEvent">
@@ -45,9 +44,8 @@
     </vxe-toolbar>
 
     <vxe-table
-      ref="xTable2"
       border
-      height="300"
+      ref="xTable2"
       :data.sync="tableData"
       :select-config="{labelField: 'name', checkMethod}">
       <vxe-table-column type="selection" title="All"></vxe-table-column>
@@ -78,7 +76,6 @@
       border
       highlight-hover-row
       ref="xTable3"
-      height="300"
       :data.sync="tableData"
       :select-config="{checkField: 'checked', trigger: 'row'}">
       <vxe-table-column type="selection" width="60"></vxe-table-column>
@@ -100,14 +97,12 @@
     <vxe-table
       border
       highlight-hover-row
-      ref="xTable4"
-      height="300"
       row-id="id"
       :data.sync="tableData"
       :select-config="{checkRowKeys: ['2', '3']}"
       :radio-config="{labelField: 'name'}">
       <vxe-table-column type="selection" width="60"></vxe-table-column>
-      <vxe-table-column type="radio" width="200" title="Name"></vxe-table-column>
+      <vxe-table-column type="radio" width="300" title="Name"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
       <vxe-table-column field="age" title="Age"></vxe-table-column>
       <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
@@ -120,17 +115,15 @@
       <code class="javascript">{{ demoCodes[7] }}</code>
     </pre>
 
-    <p>多选可单选同时使用</p>
+    <p>通过 <table-api-link prop="checkStrictly"/> 设置父子节点不互相关联</p>
 
     <vxe-table
       border
       highlight-hover-row
-      ref="xTable4"
-      height="300"
       :data.sync="tableData"
-      :radio-config="{labelField: 'name'}">
-      <vxe-table-column type="selection" width="60"></vxe-table-column>
-      <vxe-table-column type="radio" width="200" title="Name"></vxe-table-column>
+      :select-config="{checkStrictly: true}">
+      <vxe-table-column type="selection" width="60" tree-node></vxe-table-column>
+      <vxe-table-column field="name" title="Name"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
       <vxe-table-column field="age" title="Age"></vxe-table-column>
       <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
@@ -143,6 +136,27 @@
       <code class="javascript">{{ demoCodes[9] }}</code>
     </pre>
 
+    <p>多选可单选同时使用</p>
+
+    <vxe-table
+      border
+      highlight-hover-row
+      :data.sync="tableData"
+      :radio-config="{labelField: 'name'}">
+      <vxe-table-column type="selection" width="60"></vxe-table-column>
+      <vxe-table-column type="radio" width="300" title="Name"></vxe-table-column>
+      <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+      <vxe-table-column field="age" title="Age"></vxe-table-column>
+      <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+    </vxe-table>
+
+    <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
+
+    <pre>
+      <code class="xml">{{ demoCodes[10] }}</code>
+      <code class="javascript">{{ demoCodes[11] }}</code>
+    </pre>
+
     <p>不仅如此，还可以多种方式混合使用</p>
 
     <vxe-table
@@ -150,8 +164,6 @@
       resizable
       highlight-hover-row
       highlight-current-row
-      ref="xTable5"
-      height="300"
       :data.sync="tableData"
       :radio-config="{labelField: 'role'}"
       :select-config="{labelField: 'name'}">
@@ -165,8 +177,8 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[10] }}</code>
-      <code class="javascript">{{ demoCodes[11] }}</code>
+      <code class="xml">{{ demoCodes[12] }}</code>
+      <code class="javascript">{{ demoCodes[13] }}</code>
     </pre>
   </div>
 </template>
@@ -186,14 +198,13 @@ export default {
             <vxe-button @click="$refs.xTable1.setSelection([tableData[2], tableData[3]], true)">设置第三、四行选中</vxe-button>
             <vxe-button @click="$refs.xTable1.setAllSelection(true)">设置所有行选中</vxe-button>
             <vxe-button @click="$refs.xTable1.clearSelection()">清除所有行选中</vxe-button>
-            <vxe-button @click="getSelectEvent">获取选中</vxe-button>
+            <vxe-button @click="getSelectEvent1">获取选中</vxe-button>
           </template>
         </vxe-toolbar>
 
         <vxe-table
-          ref="xTable1"
           border
-          height="300"
+          ref="xTable1"
           :data.sync="tableData"
           @select-all="selectAllEvent"
           @select-change="selectChangeEvent">
@@ -212,7 +223,7 @@ export default {
             }
           },
           created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 10)
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 5)
           },
           methods: {
             selectAllEvent ({ checked }) {
@@ -239,9 +250,8 @@ export default {
         </vxe-toolbar>
 
         <vxe-table
-          ref="xTable2"
           border
-          height="300"
+          ref="xTable2"
           :data.sync="tableData"
           :select-config="{labelField: 'name', checkMethod}">
           <vxe-table-column type="selection" title="All"></vxe-table-column>
@@ -258,7 +268,7 @@ export default {
             }
           },
           created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 10)
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 5)
           },
           methods: {
             checkMethod ({ row }) {
@@ -281,7 +291,6 @@ export default {
           border
           highlight-hover-row
           ref="xTable3"
-          height="300"
           :data.sync="tableData"
           :select-config="{checkField: 'checked', trigger: 'row'}">
           <vxe-table-column type="selection" width="60"></vxe-table-column>
@@ -299,7 +308,7 @@ export default {
             }
           },
           created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 10)
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 5)
           }
         }
         `,
@@ -307,14 +316,12 @@ export default {
         <vxe-table
           border
           highlight-hover-row
-          ref="xTable4"
-          height="300"
           row-id="id"
           :data.sync="tableData"
           :select-config="{checkRowKeys: ['2', '3']}"
           :radio-config="{labelField: 'name'}">
           <vxe-table-column type="selection" width="60"></vxe-table-column>
-          <vxe-table-column type="radio" width="200" title="Name"></vxe-table-column>
+          <vxe-table-column type="radio" width="300" title="Name"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
           <vxe-table-column field="age" title="Age"></vxe-table-column>
           <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
@@ -328,7 +335,7 @@ export default {
             }
           },
           created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 10)
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 5)
           }
         }
         `,
@@ -336,12 +343,10 @@ export default {
         <vxe-table
           border
           highlight-hover-row
-          ref="xTable4"
-          height="300"
           :data.sync="tableData"
-          :radio-config="{labelField: 'name'}">
-          <vxe-table-column type="selection" width="60"></vxe-table-column>
-          <vxe-table-column type="radio" width="200" title="Name"></vxe-table-column>
+          :select-config="{checkStrictly: true}">
+          <vxe-table-column type="selection" width="60" tree-node></vxe-table-column>
+          <vxe-table-column field="name" title="Name"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
           <vxe-table-column field="age" title="Age"></vxe-table-column>
           <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
@@ -355,7 +360,32 @@ export default {
             }
           },
           created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 10)
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 5)
+          }
+        }
+        `,
+        `
+        <vxe-table
+          border
+          highlight-hover-row
+          :data.sync="tableData"
+          :radio-config="{labelField: 'name'}">
+          <vxe-table-column type="selection" width="60"></vxe-table-column>
+          <vxe-table-column type="radio" width="300" title="Name"></vxe-table-column>
+          <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+          <vxe-table-column field="age" title="Age"></vxe-table-column>
+          <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+        </vxe-table>
+        `,
+        `
+        export default {
+          data () {
+            return {
+              tableData: []
+            }
+          },
+          created () {
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 5)
           }
         }
         `,
@@ -365,8 +395,6 @@ export default {
           resizable
           highlight-hover-row
           highlight-current-row
-          ref="xTable5"
-          height="300"
           :data.sync="tableData"
           :radio-config="{labelField: 'role'}"
           :select-config="{labelField: 'name'}">
@@ -385,7 +413,7 @@ export default {
             }
           },
           created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 10)
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 5)
           }
         }
         `
@@ -393,7 +421,7 @@ export default {
     }
   },
   created () {
-    let list = window.MOCK_DATA_LIST.slice(0, 10)
+    let list = window.MOCK_DATA_LIST.slice(0, 5)
     this.tableData = list
   },
   mounted () {
