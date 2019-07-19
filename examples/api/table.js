@@ -1097,7 +1097,7 @@ const apis = [
         descKey: 'app.api.table.desc.headerCellClick',
         type: '',
         enum: '',
-        defVal: '{triggerSort,triggerFilter,$rowIndex,column,columnIndex,$columnIndex,cell},event',
+        defVal: '{triggerResizable,triggerSort,triggerFilter,$rowIndex,column,columnIndex,$columnIndex,cell},event',
         list: []
       },
       {

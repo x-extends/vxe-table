@@ -341,6 +341,7 @@ export default {
         column.resizeWidth = column.renderWidth + (isRightFixed ? dragPosLeft - dragLeft : dragLeft - dragPosLeft)
         resizeBarElem.style.display = 'none'
         $table._isResize = false
+        $table._lastResizeTime = Date.now()
         $table.analyColumnWidth()
         $table.recalculate(true)
         DomTools.removeClass($table.$el, 'c--resize')

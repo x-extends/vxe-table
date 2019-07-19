@@ -2615,8 +2615,10 @@ export default {
     //   }
     // },
     triggerHeaderCellClickEvent (evnt, params) {
+      let { _lastResizeTime } = this
       let { column, cell } = params
       UtilTools.emitEvent(this, 'header-cell-click', [Object.assign({
+        triggerResizable: _lastResizeTime && _lastResizeTime > Date.now() - 300,
         triggerSort: this.getEventTargetNode(evnt, cell, 'vxe-sort-wrapper').flag,
         triggerFilter: this.getEventTargetNode(evnt, cell, 'vxe-filter-wrapper').flag
       }, params), evnt])

@@ -4,6 +4,7 @@
 
     <vxe-table
       border
+      resizable
       highlight-hover-row
       highlight-current-row
       ref="xTable"
@@ -37,6 +38,7 @@ export default {
         `
         <vxe-table
           border
+          resizable
           highlight-hover-row
           highlight-current-row
           ref="xTable"
@@ -61,9 +63,9 @@ export default {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 50)
           },
           methods: {
-            headerCellClickEvent ({ column, triggerSort, triggerFilter }) {
-              // 如果点击了列并且没触发对应的按钮，则手动排序
-              if (!triggerSort && !triggerFilter) {
+            headerCellClickEvent ({ column, triggerResizable, triggerSort, triggerFilter }) {
+              // 如果点击了列并且没触发对应的按钮、则手动排序、列宽拖动
+              if (!(triggerResizable || triggerSort || triggerFilter)) {
                 this.$refs.xTable.sort(column.property)
               }
             },
@@ -85,9 +87,9 @@ export default {
     })
   },
   methods: {
-    headerCellClickEvent ({ column, triggerSort, triggerFilter }) {
-      // 如果点击了列并且没触发对应的按钮，则手动排序
-      if (!triggerSort && !triggerFilter) {
+    headerCellClickEvent ({ column, triggerResizable, triggerSort, triggerFilter }) {
+      // 如果点击了列并且没触发对应的按钮、则手动排序、列宽拖动
+      if (!(triggerResizable || triggerSort || triggerFilter)) {
         this.$refs.xTable.sort(column.property)
       }
     },
