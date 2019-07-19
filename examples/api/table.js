@@ -523,6 +523,14 @@ const apis = [
             list: []
           },
           {
+            name: 'checkStrictly',
+            desc: '是否严格的遵循父子不互相关联的做法',
+            type: 'Boolean',
+            enum: '',
+            defVal: 'false',
+            list: []
+          },
+          {
             name: 'checkMethod',
             desc: '是否允许勾选的方法，该方法 Function({row, rowIndex}) 的返回值用来决定这一行的 CheckBox 是否可以勾选',
             type: 'Function',
