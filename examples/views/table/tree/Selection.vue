@@ -29,10 +29,9 @@
       row-id="id"
       :data.sync="tableData"
       :tree-config="{children: 'children'}"
-      :select-config="{checkRowKeys: ['122000', '20000']}"
+      :select-config="{labelField: 'name', checkRowKeys: ['122000', '20000']}"
       @select-change="selectChangeEvent">
-      <vxe-table-column type="selection" width="120" tree-node></vxe-table-column>
-      <vxe-table-column field="name" title="Name"></vxe-table-column>
+      <vxe-table-column type="selection" title="Name" width="180" tree-node></vxe-table-column>
       <vxe-table-column field="size" title="Size"></vxe-table-column>
       <vxe-table-column field="type" title="Type"></vxe-table-column>
       <vxe-table-column field="date" title="Date"></vxe-table-column>
@@ -66,6 +65,22 @@
       <code class="xml">{{ demoCodes[4] }}</code>
       <code class="javascript">{{ demoCodes[5] }}</code>
     </pre>
+
+    <!-- <p>还可以通过 <table-api-link prop="checkMethod"/> 方法控制 CheckBox 是否允许用户手动勾选，还可以配置 <table-api-link prop="labelField"/> 列显示属性</p>
+    <p class="red">禁止用户手动勾选，但是可以通过函数式调用强制勾选，该功能对于某些场景需要强制勾选指定行时非常有用</p>
+
+    <vxe-table
+      resizable
+      row-id="id"
+      :data.sync="tableData"
+      :tree-config="{children: 'children'}"
+      :select-config="{labelField: 'name', checkMethod}"
+      @select-change="selectChangeEvent">
+      <vxe-table-column type="selection" width="180" title="Name" tree-node></vxe-table-column>
+      <vxe-table-column field="size" title="Size"></vxe-table-column>
+      <vxe-table-column field="type" title="Type"></vxe-table-column>
+      <vxe-table-column field="date" title="Date"></vxe-table-column>
+    </vxe-table> -->
   </div>
 </template>
 
@@ -115,10 +130,9 @@ export default {
           row-id="id"
           :data.sync="tableData"
           :tree-config="{children: 'children'}"
-          :select-config="{checkRowKeys: ['122000', '20000']}"
+          :select-config="{labelField: 'name', checkRowKeys: ['122000', '20000']}"
           @select-change="selectChangeEvent">
-          <vxe-table-column type="selection" width="120" tree-node></vxe-table-column>
-          <vxe-table-column field="name" title="Name"></vxe-table-column>
+          <vxe-table-column type="selection" title="Name" width="180" tree-node></vxe-table-column>
           <vxe-table-column field="size" title="Size"></vxe-table-column>
           <vxe-table-column field="type" title="Type"></vxe-table-column>
           <vxe-table-column field="date" title="Date"></vxe-table-column>
@@ -179,6 +193,9 @@ export default {
     })
   },
   methods: {
+    checkMethod ({ row }) {
+      return !['js', 'mp4'].includes(row.type)
+    },
     selectChangeEvent ({ selection }) {
       console.info(`勾选${selection.length}个树形节点`, selection)
     }
