@@ -1438,7 +1438,7 @@ export default {
         currentRow
       } = this
       let containerList = ['main', 'left', 'right']
-      let customHeight = height === 'auto' ? parentHeight : XEUtils.toNumber(height)
+      let customHeight = height === 'auto' ? parentHeight : (DomTools.isScale(height) ? Math.floor(parseInt(height) / 100 * parentHeight) : XEUtils.toNumber(height))
       containerList.forEach((name, index) => {
         let fixedType = index > 0 ? name : ''
         let layoutList = ['header', 'body', 'footer']
@@ -1478,7 +1478,7 @@ export default {
               if (customHeight > 0) {
                 wrapperElem.style.height = `${fixedType ? (customHeight > 0 ? customHeight - headerHeight - footerHeight : tableHeight) - (showFooter ? 0 : scrollbarHeight) : customHeight - headerHeight - footerHeight}px`
               } else if (maxHeight) {
-                maxHeight = XEUtils.toNumber(maxHeight)
+                maxHeight = DomTools.isScale(maxHeight) ? Math.floor(parseInt(maxHeight) / 100 * parentHeight) : XEUtils.toNumber(maxHeight)
                 wrapperElem.style.maxHeight = `${fixedType ? maxHeight - headerHeight - (showFooter ? 0 : scrollbarHeight) : maxHeight - headerHeight}px`
               }
             }

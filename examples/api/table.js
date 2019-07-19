@@ -136,7 +136,7 @@ const apis = [
         name: 'height',
         descKey: 'app.api.table.desc.height',
         type: 'Number, String',
-        enum: 'auto, px',
+        enum: 'auto, %, px',
         defVal: '',
         list: []
       },
@@ -144,7 +144,7 @@ const apis = [
         name: 'max-height',
         descKey: 'app.api.table.desc.maxHeight',
         type: 'Number, String',
-        enum: 'px',
+        enum: '%, px',
         defVal: '',
         list: []
       },

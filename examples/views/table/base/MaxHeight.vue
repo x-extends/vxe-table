@@ -41,6 +41,29 @@
       <code class="xml">{{ demoCodes[2] }}</code>
       <code class="javascript">{{ demoCodes[3] }}</code>
     </pre>
+
+    <p>也可以设置相对于父容器的百分比</p>
+
+    <div style="height: 500px;">
+      <vxe-table
+        border
+        highlight-hover-row
+        max-height="100%"
+        :data.sync="tableData">
+        <vxe-table-column type="index" width="60"></vxe-table-column>
+        <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
+        <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+        <vxe-table-column field="age" title="Age"></vxe-table-column>
+        <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+      </vxe-table>
+    </div>
+
+    <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
+
+    <pre>
+      <code class="xml">{{ demoCodes[4] }}</code>
+      <code class="javascript">{{ demoCodes[5] }}</code>
+    </pre>
   </div>
 </template>
 
@@ -100,6 +123,33 @@ export default {
           },
           created () {
             this.tableData2 = window.MOCK_DATA_LIST.slice(0, 2)
+          }
+        }
+        `,
+        `
+        <div style="height: 500px;">
+          <vxe-table
+            border
+            highlight-hover-row
+            max-height="100%"
+            :data.sync="tableData">
+            <vxe-table-column type="index" width="60"></vxe-table-column>
+            <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
+            <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+            <vxe-table-column field="age" title="Age"></vxe-table-column>
+            <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+          </vxe-table>
+        </div>
+        `,
+        `
+        export default {
+          data () {
+            return {
+              tableData: []
+            }
+          },
+          created () {
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 50)
           }
         }
         `
