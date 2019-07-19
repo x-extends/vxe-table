@@ -314,6 +314,7 @@ export default {
         document.onmouseup = domMouseup
         column.resizeWidth = column.renderWidth + (isRightFixed ? dragPosLeft - dragLeft : dragLeft - dragPosLeft)
         resizeBarElem.style.display = 'none'
+        $table._lastResizeTime = Date.now()
         $table.analyColumnWidth()
         $table.recalculate(true)
       }
