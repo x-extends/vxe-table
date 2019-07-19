@@ -76,13 +76,13 @@
         &:before {
           border-color: #c0c4cc;
         }
+        &+.checkbox--label {
+          color: $vxe-input-border-color;
+        }
       }
       &:checked+.checkbox--icon {
         border-color: $vxe-input-border-color;
         background-color: $vxe-input-disabled-color;
-        &+.checkbox--label {
-          color: $vxe-input-border-color;
-        }
       }
     }
   }

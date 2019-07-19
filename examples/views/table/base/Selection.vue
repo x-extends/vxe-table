@@ -32,7 +32,8 @@
       <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
 
-    <p>还可以通过 <table-api-link prop="checkMethod"/> 方法控制是否允许点击 CheckBox 勾选，还可以配置 <table-api-link prop="labelField"/> 列显示属性</p>
+    <p>还可以通过 <table-api-link prop="checkMethod"/> 方法控制 CheckBox 是否允许用户手动勾选，还可以配置 <table-api-link prop="labelField"/> 列显示属性</p>
+    <p class="red">禁止用户手动勾选，但是可以通过函数式调用强制勾选，该功能对于某些场景需要强制勾选指定行时非常有用</p>
 
     <vxe-toolbar>
       <template v-slot:buttons>
@@ -421,8 +422,7 @@ export default {
     }
   },
   created () {
-    let list = window.MOCK_DATA_LIST.slice(0, 5)
-    this.tableData = list
+    this.tableData = window.MOCK_DATA_LIST.slice(0, 5)
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
