@@ -2116,8 +2116,8 @@ export default {
             // 如果存在父节点，更新父节点状态
             let matchObj = XEUtils.findTree(tableFullData, item => item === row, treeConfig)
             if (matchObj && matchObj.parent) {
+              let parentStatus
               let indeterminatesItem = matchObj.items.find(item => treeIndeterminates.indexOf(item) > -1)
-              let parentStatus = value
               if (indeterminatesItem) {
                 parentStatus = -1
               } else {
@@ -2150,8 +2150,8 @@ export default {
             // 如果存在父节点，更新父节点状态
             let matchObj = XEUtils.findTree(tableFullData, item => item === row, treeConfig)
             if (matchObj && matchObj.parent) {
+              let parentStatus
               let indeterminatesItem = matchObj.items.find(item => treeIndeterminates.indexOf(item) > -1)
-              let parentStatus = value
               if (indeterminatesItem) {
                 parentStatus = -1
               } else {
