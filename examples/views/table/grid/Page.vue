@@ -12,8 +12,7 @@
       :pager-config="tablePage"
       :columns="tableColumn"
       :data.sync="tableData"
-      @current-page-change="handleCurrentChange"
-      @page-size-change="handleSizeChange"></vxe-grid>
+      @page-change="handlePageChange"></vxe-grid>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
@@ -54,11 +53,11 @@ export default {
           resizable
           height="530"
           :loading="loading"
+          :start-index="(tablePage.currentPage - 1) * tablePage.pageSize"
           :pager-config="tablePage"
           :columns="tableColumn"
           :data.sync="tableData"
-          @current-page-change="handleCurrentChange"
-          @page-size-change="handleSizeChange"></vxe-grid>
+          @page-change="handlePageChange"></vxe-grid>
         `,
         `
         export default {
@@ -101,12 +100,9 @@ export default {
               this.tablePage.currentPage = 1
               this.findList()
             },
-            handleSizeChange (pageSize) {
-              this.tablePage.pageSize = pageSize
-              this.searchEvent()
-            },
-            handleCurrentChange (currentPage) {
+            handlePageChange ({ currentPage, pageSize }) {
               this.tablePage.currentPage = currentPage
+              this.tablePage.pageSize = pageSize
               this.findList()
             }
           }
@@ -140,12 +136,9 @@ export default {
       this.tablePage.currentPage = 1
       this.findList()
     },
-    handleSizeChange (pageSize) {
-      this.tablePage.pageSize = pageSize
-      this.searchEvent()
-    },
-    handleCurrentChange (currentPage) {
+    handlePageChange ({ currentPage, pageSize }) {
       this.tablePage.currentPage = currentPage
+      this.tablePage.pageSize = pageSize
       this.findList()
     }
   }
