@@ -154,7 +154,7 @@ export default {
                   children: [
                     {
                       id: '21110',
-                      name: '个性化列表'
+                      name: '信息列表'
                     }
                   ]
                 },
@@ -172,7 +172,7 @@ export default {
             },
             {
               id: '22000',
-              name: '账户余额',
+              name: '账户管理',
               children: [
                 {
                   id: '22100',
@@ -336,7 +336,7 @@ export default {
                           children: [
                             {
                               id: '21110',
-                              name: '个性化列表'
+                              name: '信息列表'
                             }
                           ]
                         },
@@ -354,7 +354,7 @@ export default {
                     },
                     {
                       id: '22000',
-                      name: '账户余额',
+                      name: '账户管理',
                       children: [
                         {
                           id: '22100',
@@ -421,7 +421,7 @@ export default {
           },
           // 通用行合并函数（将相同多列数据合并为一行）
           rowspanMethod ({ row, $rowIndex, column, data }) {
-            let fields = ['key']
+            let fields = ['name_1', 'name_2', 'name_3']
             let cellValue = row[column.property]
             if (cellValue && fields.includes(column.property)) {
               let prevRow = data[$rowIndex - 1]
@@ -492,7 +492,7 @@ export default {
     },
     // 通用行合并函数（将相同多列数据合并为一行）
     rowspanMethod ({ row, $rowIndex, column, data }) {
-      let fields = ['key']
+      let fields = ['name_1', 'name_2', 'name_3']
       let cellValue = row[column.property]
       if (cellValue && fields.includes(column.property)) {
         let prevRow = data[$rowIndex - 1]
