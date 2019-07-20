@@ -4108,9 +4108,9 @@ export default {
      */
     showValidTooltip (params) {
       let { $refs, height, tableData, validOpts } = this
-      let validTip = $refs.validTip
       let { rule, row, column, cell } = params
-      let content = UtilTools.formatText(rule.message)
+      let validTip = $refs.validTip
+      let content = rule.message
       this.$nextTick(() => {
         Object.assign(this.validStore, {
           row,
