@@ -101,7 +101,7 @@ export default {
       },
       tableProxy2: {
         props: {
-          data: 'data.result',
+          result: 'data.result',
           total: 'data.page.total'
         },
         ajax: {
