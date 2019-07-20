@@ -1,5 +1,6 @@
 import XEUtils from 'xe-utils'
 import tableAPI from './table'
+import columnAPI from './column'
 
 const apis = [
   {
@@ -9,6 +10,14 @@ const apis = [
     enum: '',
     defVal: '',
     list: [
+      {
+        name: 'columns',
+        descKey: 'app.api.table.desc.columns',
+        type: 'Array',
+        enum: '',
+        defVal: '',
+        list: XEUtils.mapTree(columnAPI.find(item => item.name === 'Props').list, item => Object.assign({}, item, { name: XEUtils.camelCase(item.name) }))
+      },
       {
         name: 'toolbar',
         descKey: 'app.api.grid.desc.toolbar',
