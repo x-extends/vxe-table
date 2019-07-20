@@ -17,6 +17,7 @@
           <select class="version-switch" v-model="version" @change="vChangeEvent">
             <option value="1">V1</option>
             <option value="2">V2</option>
+            <option value="3">V3</option>
           </select>
         </div>
         <div class="desc">{{ $t('app.header.desc') }}</div>
@@ -1014,6 +1015,9 @@ export default {
           break
         case '2':
           location.href = '/vxe-table'
+          break
+        case '3':
+          this.$XMsg.message({ message: '由于作者比较忙，该版本正在重构开发中，敬请期待吧。。。', status: 'info' })
           break
       }
     }
