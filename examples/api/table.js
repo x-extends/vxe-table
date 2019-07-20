@@ -857,7 +857,7 @@ const apis = [
             name: 'type',
             desc: '数据校验的类型',
             type: 'String',
-            enum: 'Number, String',
+            enum: 'number, string',
             defVal: 'string',
             list: []
           },
@@ -871,8 +871,16 @@ const apis = [
           },
           {
             name: 'validator',
-            desc: '自定义校验方法，Function(rule, value, callback, {rules,row,column,rowIndex,columnIndex})',
+            desc: '自定义校验方法，Function(rule, value, callback, {rules,row,column,rowIndex,columnIndex})，如果 return new Error("该字段必填") 则校验失败',
             type: 'Function',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'message',
+            desc: '校验提示内容',
+            type: 'String, Function',
             enum: '',
             defVal: '',
             list: []
