@@ -871,7 +871,7 @@ const apis = [
           },
           {
             name: 'validator',
-            desc: '自定义校验方法，Function(rule, value, callback, {rules,row,column,rowIndex,columnIndex})，如果 return new Error("该字段必填") 则校验失败',
+            desc: '自定义校验方法，Function(rule, value, callback, {rules,row,column,rowIndex,columnIndex})，通过调用 callback() 则校验成功，调用 callback(new Error("该字段必填")) 则校验失败',
             type: 'Function',
             enum: '',
             defVal: '',
