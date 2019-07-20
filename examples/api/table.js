@@ -1319,16 +1319,16 @@ const apis = [
         list: []
       },
       {
-        name: 'loadColumn(columns)',
-        desc: '加载列配置（对于表格列需要重载、局部递增场景下可能会用到）',
+        name: 'reloadCustoms(customs)',
+        desc: '初始化加载显示/隐藏列（对于异步更新的场景下可能会用到）',
         type: 'Promise',
         enum: '',
-        defVal: 'columns',
+        defVal: 'customs',
         list: []
       },
       {
-        name: 'reloadCustoms(customs)',
-        desc: '初始化加载显示/隐藏列（对于异步更新的场景下可能会用到）',
+        name: 'loadColumn(columns)',
+        desc: '加载列配置（对于表格列需要重载、局部递增场景下可能会用到）',
         type: 'Promise',
         enum: '',
         defVal: 'columns',

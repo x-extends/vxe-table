@@ -169,6 +169,7 @@ module.exports = {
       table: {
         desc: {
           data: '显示的数据',
+          columns: '列配置',
           customs: '初始化绑定显示/隐藏列；可以通过 visible 动态修改显示或隐藏',
           height: '表格的高度；支持铺满父容器或者固定宽高',
           maxHeight: '表格的最大高度',

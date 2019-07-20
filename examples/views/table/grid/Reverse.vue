@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>反转表格，只需要将 columns 和 data 数据进行反转</p>
+    <p>反转表格，只需要将 <grid-api-link prop="columns"/> 和 <grid-api-link prop="data"/> 数据进行反转</p>
 
     <vxe-grid
       border

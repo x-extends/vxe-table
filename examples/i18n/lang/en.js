@@ -169,6 +169,7 @@ module.exports = {
       table: {
         desc: {
           data: 'Table data',
+          columns: 'Column configuration',
           customs: 'Initialize the binding to show/hide columns;You can modify the display or hide columns by using the visible property',
           height: 'Table height, supports adaptive or fixed width and height',
           maxHeight: 'Maximum height of the table',
