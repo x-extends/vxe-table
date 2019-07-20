@@ -275,6 +275,12 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
     if (expandeds.length && expandeds.indexOf(row) > -1) {
       let column = tableColumn.find(column => column.type === 'expand')
       let columnIndex = getColumnMapIndex(column)
+      let cellStyle
+      if (treeConfig) {
+        cellStyle = {
+          paddingLeft: `${rowLevel * (treeConfig.indent || 16) + 30}px`
+        }
+      }
       if (column) {
         rows.push(
           h('tr', {
@@ -289,7 +295,8 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
               }
             }, [
               h('div', {
-                class: 'vxe-body--expanded-cell'
+                class: 'vxe-body--expanded-cell',
+                style: cellStyle
               }, [
                 column.renderData(h, { $table, seq, row, rowIndex, column, columnIndex, fixed: fixedType, level: rowLevel })
               ])
