@@ -7,7 +7,7 @@ export default {
   props: {
     value: Boolean,
     theme: { type: String, default: () => GlobalConfig.tooltip.theme },
-    content: String,
+    content: [String, Function],
     zIndex: { type: Number, default: () => GlobalConfig.tooltip.zIndex },
     isArrow: { type: Boolean, default: true }
   },
@@ -63,7 +63,7 @@ export default {
     }, [
       h('div', {
         class: ['vxe-table--tooltip-content']
-      }, this.$slots.content || content),
+      }, this.$slots.content || (XEUtils.isFunction(content) ? content.call(this, h) : content)),
       h('div', {
         class: ['vxe-table--tooltip-arrow'],
         style: tipStore.arrowStyle

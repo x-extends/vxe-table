@@ -3580,14 +3580,14 @@ export default {
      */
     showValidTooltip (params) {
       let { $refs, height, tableData, validOpts } = this
-      let validTip = $refs.validTip
       let { rule, row, column, cell } = params
+      let validTip = $refs.validTip
       this.$nextTick(() => {
         Object.assign(this.validStore, {
           row,
           column,
           rule,
-          content: UtilTools.formatText(rule.message),
+          content: rule.message,
           visible: true
         })
         if (validTip && (validOpts.message === 'tooltip' || (validOpts.message === 'default' && !height && tableData.length < 2))) {

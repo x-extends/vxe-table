@@ -142,6 +142,9 @@ module.exports = {
         viewCode: '查看代码',
         runDemo: '在线运行',
         showCode: '显示代码'
+      },
+      valid: {
+        rName: '名称必须填写'
       }
     },
     footer: {

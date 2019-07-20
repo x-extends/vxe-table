@@ -142,6 +142,9 @@ module.exports = {
         viewCode: 'View source',
         runDemo: 'Run demo',
         showCode: 'Show code'
+      },
+      valid: {
+        rName: 'The name of the required.'
       }
     },
     footer: {
