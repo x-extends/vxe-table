@@ -4,14 +4,14 @@
 
     <vxe-toolbar>
       <template v-slot:buttons>
-        <vxe-button @click="exportEvent">导出选中.xlsx</vxe-button>
+        <vxe-button @click="exportEvent1">导出选中.xlsx</vxe-button>
       </template>
     </vxe-toolbar>
 
     <vxe-grid
       border
-      ref="xGrid"
-      height="500"
+      ref="xGrid1"
+      height="300"
       :columns="tableColumn"
       :data.sync="tableData"></vxe-grid>
 
@@ -20,6 +20,29 @@
     <pre>
       <code class="xml">{{ demoCodes[0] }}</code>
       <code class="javascript">{{ demoCodes[1] }}</code>
+    </pre>
+
+    <p>简单的导出表格</p>
+
+    <vxe-toolbar>
+      <template v-slot:buttons>
+        <vxe-button @click="exportEvent2">导出表格.xlsx</vxe-button>
+      </template>
+    </vxe-toolbar>
+
+    <vxe-grid
+      border
+      ref="xGrid2"
+      height="300"
+      :span-method="rowspanMethod"
+      :columns="tableColumn"
+      :data.sync="tableData"></vxe-grid>
+
+    <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
+
+    <pre>
+      <code class="xml">{{ demoCodes[2] }}</code>
+      <code class="javascript">{{ demoCodes[3] }}</code>
     </pre>
   </div>
 </template>
@@ -33,7 +56,6 @@ export default {
   data () {
     return {
       tableColumn: [
-        { type: 'selection', width: 60 },
         { field: 'name', title: 'Name' },
         { field: 'role', title: 'Role' },
         { field: 'sex', title: 'Sex' },
@@ -72,25 +94,23 @@ export default {
             }
           },
           created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 50)
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 20)
           },
           methods: {
             exportEvent () {
-              // 获取数据
+              // 对数据预处理
               let data = this.getExportData(true)
-
-              // 处理工作簿
-              let wb = XLSX.utils.book_new()
-              let ws = XLSX.utils.json_to_sheet(data, { skipHeader: true })
-              XLSX.utils.book_append_sheet(wb, ws)
-              let wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: false, type: 'binary' })
+              // 转换数据
+              let book = XLSX.utils.book_new()
+              let sheet = XLSX.utils.json_to_sheet(data, { skipHeader: true })
+              XLSX.utils.book_append_sheet(book, sheet)
+              let wbout = XLSX.write(book, { bookType: 'xlsx', bookSST: false, type: 'binary' })
               let blob = new Blob([this.toBuffer(wbout)], { type: 'application/octet-stream' })
-              
               // 保存导出
               FileSaver.saveAs(blob, '数据导出.xlsx')
             },
             getExportData (isHead) {
-              let datas = this.$refs.xGrid.getSelectRecords()
+              let datas = this.$refs.xGrid1.getSelectRecords()
               let columns = this.tableColumn.filter(item => item.field)
               let headers = isHead ? [columns.map(item => item.title)] : []
               return headers.concat(
@@ -109,12 +129,79 @@ export default {
             }
           }
         }
+        `,
+        `
+        <vxe-toolbar>
+          <template v-slot:buttons>
+            <vxe-button @click="exportEvent2">合并行导出.xlsx</vxe-button>
+          </template>
+        </vxe-toolbar>
+
+        <vxe-grid
+          border
+          ref="xGrid2"
+          height="300"
+          :span-method="rowspanMethod"
+          :columns="tableColumn"
+          :data.sync="tableData"></vxe-grid>
+        `,
+        `
+        export default {
+          data () {
+            return {
+              tableColumn: [
+                { field: 'name', title: 'Name' },
+                { field: 'role', title: 'Role' },
+                { field: 'sex', title: 'Sex' },
+                { field: 'date3', title: 'Date' },
+                { field: 'address', title: 'Address', showOverflow: true }
+              ],
+              tableData: []
+            }
+          },
+          created () {
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 20)
+          },
+          methods: {
+            // 通用行合并函数（将相同多列数据合并为一行）
+            rowspanMethod ({ row, $rowIndex, column, data }) {
+              let fields = ['sex']
+              let cellValue = row[column.property]
+              if (cellValue && fields.includes(column.property)) {
+                let prevRow = data[$rowIndex - 1]
+                let nextRow = data[$rowIndex + 1]
+                if (prevRow && prevRow[column.property] === cellValue) {
+                  return { rowspan: 0, colspan: 0 }
+                } else {
+                  let countRowspan = 1
+                  while (nextRow && nextRow[column.property] === cellValue) {
+                    nextRow = data[++countRowspan + $rowIndex]
+                  }
+                  if (countRowspan > 1) {
+                    return { rowspan: countRowspan, colspan: 1 }
+                  }
+                }
+              }
+            },
+            exportEvent () {
+              // 转换数据
+              let table = this.$refs.xGrid2.$el.querySelector('.body--wrapper>.vxe-table--body')
+              let book = XLSX.utils.book_new()
+              let sheet = XLSX.utils.table_to_sheet(table)
+              XLSX.utils.book_append_sheet(book, sheet)
+              let wbout = XLSX.write(book, { bookType: 'xlsx', bookSST: false, type: 'binary' })
+              let blob = new Blob([this.toBuffer(wbout)], { type: 'application/octet-stream' })
+              // 保存导出
+              FileSaver.saveAs(blob, '数据导出.xlsx')
+            }
+          }
+        }
         `
       ]
     }
   },
   created () {
-    this.tableData = window.MOCK_DATA_LIST.slice(0, 50)
+    this.tableData = window.MOCK_DATA_LIST.slice(0, 20)
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
@@ -122,19 +209,20 @@ export default {
     })
   },
   methods: {
-    exportEvent () {
+    exportEvent1 () {
+      // 对数据预处理
       let data = this.getExportData(true)
-      let wb = XLSX.utils.book_new()
-      let ws = XLSX.utils.json_to_sheet(data, { skipHeader: true })
-
-      XLSX.utils.book_append_sheet(wb, ws)
-
-      let wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: false, type: 'binary' })
+      // 转换数据
+      let book = XLSX.utils.book_new()
+      let sheet = XLSX.utils.json_to_sheet(data, { skipHeader: true })
+      XLSX.utils.book_append_sheet(book, sheet)
+      let wbout = XLSX.write(book, { bookType: 'xlsx', bookSST: false, type: 'binary' })
       let blob = new Blob([this.toBuffer(wbout)], { type: 'application/octet-stream' })
+      // 保存导出
       FileSaver.saveAs(blob, '数据导出.xlsx')
     },
     getExportData (isHead) {
-      let datas = this.$refs.xGrid.getSelectRecords()
+      let datas = this.$refs.xGrid1.getSelectRecords()
       let columns = this.tableColumn.filter(item => item.field)
       let headers = isHead ? [columns.map(item => item.title)] : []
       return headers.concat(
@@ -150,6 +238,37 @@ export default {
       let view = new Uint8Array(buf)
       for (let index = 0; index !== wbout.length; ++index) view[index] = wbout.charCodeAt(index) & 0xFF
       return buf
+    },
+    // 通用行合并函数（将相同多列数据合并为一行）
+    rowspanMethod ({ row, $rowIndex, column, data }) {
+      let fields = ['sex']
+      let cellValue = row[column.property]
+      if (cellValue && fields.includes(column.property)) {
+        let prevRow = data[$rowIndex - 1]
+        let nextRow = data[$rowIndex + 1]
+        if (prevRow && prevRow[column.property] === cellValue) {
+          return { rowspan: 0, colspan: 0 }
+        } else {
+          let countRowspan = 1
+          while (nextRow && nextRow[column.property] === cellValue) {
+            nextRow = data[++countRowspan + $rowIndex]
+          }
+          if (countRowspan > 1) {
+            return { rowspan: countRowspan, colspan: 1 }
+          }
+        }
+      }
+    },
+    exportEvent2 () {
+      // 转换数据
+      let table = this.$refs.xGrid2.$el.querySelector('.body--wrapper>.vxe-table--body')
+      let book = XLSX.utils.book_new()
+      let sheet = XLSX.utils.table_to_sheet(table)
+      XLSX.utils.book_append_sheet(book, sheet)
+      let wbout = XLSX.write(book, { bookType: 'xlsx', bookSST: false, type: 'binary' })
+      let blob = new Blob([this.toBuffer(wbout)], { type: 'application/octet-stream' })
+      // 保存导出
+      FileSaver.saveAs(blob, '数据导出.xlsx')
     }
   }
 }
