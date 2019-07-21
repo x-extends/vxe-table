@@ -254,7 +254,7 @@ export default {
               this.$refs.xTable.insert(record).then(({ row }) => this.$refs.xTable.setActiveRow(row))
             },
             saveEvent () {
-              let { insertRecords, removeRecords, updateRecords } = this.$refs.xTable.getAllRecords()
+              let { insertRecords, removeRecords, updateRecords } = this.$refs.xTable.getRecordset()
               if (insertRecords.length || removeRecords.length || updateRecords.length) {
                 this.$alert('保存成功！')
                 this.searchEvent()
@@ -355,7 +355,7 @@ export default {
       this.$refs.xTable.insert(record).then(({ row }) => this.$refs.xTable.setActiveRow(row))
     },
     saveEvent () {
-      let { insertRecords, removeRecords, updateRecords } = this.$refs.xTable.getAllRecords()
+      let { insertRecords, removeRecords, updateRecords } = this.$refs.xTable.getRecordset()
       if (insertRecords.length || removeRecords.length || updateRecords.length) {
         this.$alert('保存成功！')
         this.searchEvent()

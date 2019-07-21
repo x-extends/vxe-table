@@ -65,11 +65,10 @@ export const UtilTools = {
     //   rowKey = selectConfig.key || treeConfig.key || expandConfig.key || editConfig.key
     // }
     // return rowKey
-    return $table.rowKey || $table.rowId
+    return $table.rowKey || $table.rowId || 'xid'
   },
-  getRowPrimaryKey ($table, row, rowIndex) {
-    let rowKey = UtilTools.getRowKey($table)
-    return `${rowKey ? encodeURIComponent(XEUtils.get(row, rowKey)) : rowIndex}`
+  getRowPrimaryKey ($table, row) {
+    return `${encodeURIComponent(XEUtils.get(row, UtilTools.getRowKey($table)))}`
   },
   // 触发事件
   emitEvent (_vm, type, args) {

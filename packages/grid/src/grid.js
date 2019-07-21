@@ -257,7 +257,7 @@ export default {
           }
           case 'save': {
             if (ajax.save) {
-              let body = Object.assign({ pendingRecords: this.pendingRecords }, this.getAllRecords())
+              let body = Object.assign({ pendingRecords: this.pendingRecords }, this.getRecordset())
               let { insertRecords, removeRecords, updateRecords, pendingRecords } = body
               // 排除掉新增且标记为删除的数据
               if (insertRecords.length) {

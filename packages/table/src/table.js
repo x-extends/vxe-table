@@ -415,10 +415,10 @@ export default {
       tableFullData: [],
       afterFullData: [],
       // 缓存数据集
-      fullDataIndexMap: new Map(),
+      fullDataRowMap: new Map(),
       fullDataRowIdMap: new Map(),
       fullColumnIdMap: new Map(),
-      fullColumnIndexMap: new Map()
+      fullColumnMap: new Map()
     })
     let { scrollY } = optimizeOpts
     // 是否加载过 Loading 模块
@@ -484,8 +484,8 @@ export default {
       ResizeEvent.off(this, this.$el.parentNode)
     }
     this.afterFullData.length = 0
-    this.fullDataIndexMap.clear()
-    this.fullColumnIndexMap.clear()
+    this.fullDataRowMap.clear()
+    this.fullColumnMap.clear()
     this.closeFilter()
     this.closeMenu()
   },
@@ -743,22 +743,19 @@ export default {
     },
     // 更新数据的 Map
     cacheDataMap () {
-      let { treeConfig, tableFullData, fullDataIndexMap, fullDataRowIdMap } = this
+      let { treeConfig, tableFullData, fullDataRowMap, fullDataRowIdMap } = this
       let rowKey = UtilTools.getRowKey(this)
       let handleData = (row, index) => {
-        let rowPrimaryKey = index
-        if (rowKey) {
-          rowPrimaryKey = XEUtils.get(row, rowKey)
-          if (!rowPrimaryKey) {
-            rowPrimaryKey = ++rowUniqueId
-            XEUtils.set(row, rowKey, rowPrimaryKey)
-          }
+        let rowPrimaryKey = UtilTools.getRowPrimaryKey(this, row)
+        if (!rowPrimaryKey) {
+          rowPrimaryKey = ++rowUniqueId
+          XEUtils.set(row, rowKey, rowPrimaryKey)
         }
         let rest = { rowKey, row, rowPrimaryKey, index }
-        fullDataRowIdMap.set(`${rowPrimaryKey}`, rest)
-        fullDataIndexMap.set(row, rest)
+        fullDataRowIdMap.set('' + rowPrimaryKey, rest)
+        fullDataRowMap.set(row, rest)
       }
-      fullDataIndexMap.clear()
+      fullDataRowMap.clear()
       fullDataRowIdMap.clear()
       if (treeConfig) {
         XEUtils.eachTree(tableFullData, handleData, treeConfig)
@@ -768,12 +765,13 @@ export default {
     },
     // 更新列的 Map
     cacheColumnMap () {
-      let { tableFullColumn, fullColumnIdMap, fullColumnIndexMap } = this
+      let { tableFullColumn, fullColumnIdMap, fullColumnMap } = this
       fullColumnIdMap.clear()
-      fullColumnIndexMap.clear()
+      fullColumnMap.clear()
       tableFullColumn.forEach((column, index) => {
-        fullColumnIdMap.set(column.id, column)
-        fullColumnIndexMap.set(column, { column, index })
+        let rest = { column, index }
+        fullColumnIdMap.set(column.id, rest)
+        fullColumnMap.set(column, rest)
       })
     },
     getRowNode (tr) {
@@ -804,21 +802,21 @@ export default {
             return matchObj
           }
         } else {
-          let column = fullColumnIdMap.get(colId)
+          let column = fullColumnIdMap.get(colId).column
           return { item: column, index: this.getColumnMapIndex(column), items: tableFullColumn }
         }
       }
       return null
     },
     getRowMapIndex (row) {
-      return this.fullDataIndexMap.has(row) ? this.fullDataIndexMap.get(row).index : -1
+      return this.fullDataRowMap.has(row) ? this.fullDataRowMap.get(row).index : -1
     },
     getRowIndex (row) {
       let { tableFullData, treeConfig } = this
       return treeConfig ? XEUtils.findTree(tableFullData, item => item === row, treeConfig) : this.getRowMapIndex(row)
     },
     getColumnMapIndex (column) {
-      return this.fullColumnIndexMap.has(column) ? this.fullColumnIndexMap.get(column).index : -1
+      return this.fullColumnMap.has(column) ? this.fullColumnMap.get(column).index : -1
     },
     getColumnIndex (column) {
       return this.getColumnMapIndex(column)
@@ -1005,8 +1003,8 @@ export default {
     },
     hasRowChange (row, field) {
       let oRow
-      let { tableSourceData, fullDataIndexMap } = this
-      if (!fullDataIndexMap.has(row)) {
+      let { tableSourceData, fullDataRowMap } = this
+      if (!fullDataRowMap.has(row)) {
         return false
       }
       let rowKey = UtilTools.getRowKey(this)
@@ -1040,23 +1038,37 @@ export default {
       let columns = this.visibleColumn
       return arguments.length ? columns[columnIndex] : columns.slice(0)
     },
+    getColumnById (colId) {
+      let fullColumnIdMap = this.fullColumnIdMap
+      return fullColumnIdMap.has(colId) ? fullColumnIdMap.get(colId).column : null
+    },
     /**
      * 获取表格可视列
      */
     getTableColumn () {
-      return this.tableColumn
+      return { fullColumn: this.visibleColumn, tableColumn: this.tableColumn }
+    },
+    // 在 v3.0 中废弃 prop
+    getRecords () {
+      console.warn('[vxe-table] The function getRecords is deprecated, please use getRows')
+      return this.getRows.apply(this, arguments)
     },
     /**
      * 获取表格所有数据
      */
-    getRecords (rowIndex) {
+    getRows (rowIndex) {
       let { tableFullData } = this
       return arguments.length ? tableFullData[rowIndex] : tableFullData.slice(0)
     },
-    /**
-     * 获取表格数据集合
-     */
+    // 在 v3.0 中废弃 prop
     getAllRecords () {
+      console.warn('[vxe-table] The function getAllRecords is deprecated, please use getRecordset')
+      return this.getRecordset()
+    },
+    /**
+     * 获取表格数据集
+     */
+    getRecordset () {
       return {
         insertRecords: this.getInsertRecords(),
         removeRecords: this.getRemoveRecords(),
@@ -1152,6 +1164,10 @@ export default {
       }
       this.afterFullData = tableData
       return tableData
+    },
+    getRowById (rowId) {
+      let fullDataRowIdMap = this.fullDataRowIdMap
+      return fullDataRowIdMap.has(rowId) ? fullDataRowIdMap.get(rowId).row : null
     },
     /**
      * 获取处理后的表格数据
@@ -1541,11 +1557,11 @@ export default {
           if (colgroupElem) {
             XEUtils.arrayEach(colgroupElem.children, colElem => {
               let colId = colElem.getAttribute('name')
-              let column = fullColumnIdMap.get(colId)
               if (colId === 'col-gutter') {
                 colElem.width = `${scrollbarWidth || ''}`
               }
-              if (column) {
+              if (fullColumnIdMap.has(colId)) {
+                let column = fullColumnIdMap.get(colId).column
                 colElem.width = `${column.renderWidth || ''}`
                 if (layout === 'header') {
                   let { showHeaderOverflow, renderWidth } = column
@@ -3768,13 +3784,13 @@ export default {
       }
     },
     scrollToRow (row) {
-      let { scrollYLoad, scrollYStore, afterFullData, fullDataIndexMap, elemStore } = this
+      let { scrollYLoad, scrollYStore, afterFullData, fullDataRowMap, elemStore } = this
       let rowPrimaryKey = UtilTools.getRowPrimaryKey(this, row, this.getRowMapIndex(row))
       if (scrollYLoad) {
         if (row === -1 && afterFullData.length) {
           row = afterFullData[afterFullData.length - 1]
         }
-        if (fullDataIndexMap.has(row)) {
+        if (fullDataRowMap.has(row)) {
           let { rowHeight } = scrollYStore
           let rowIndex = afterFullData.indexOf(row)
           this.scrollTo(null, (rowIndex - 1) * rowHeight)
@@ -3785,9 +3801,9 @@ export default {
       }
     },
     scrollToColumn (column) {
-      let { scrollXLoad, elemStore, visibleColumn, fullColumnIndexMap } = this
+      let { scrollXLoad, elemStore, visibleColumn, fullColumnMap } = this
       if (scrollXLoad) {
-        if (column === -1 || fullColumnIndexMap.has(column)) {
+        if (column === -1 || fullColumnMap.has(column)) {
           let scrollLeft = 0
           for (let index = 0; index < visibleColumn.length; index++) {
             if (visibleColumn[index] === column) {

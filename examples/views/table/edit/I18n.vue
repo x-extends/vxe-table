@@ -131,7 +131,7 @@ export default {
                 .then(({ row }) => this.$refs.xTable.setActiveCell(row, 'key'))
             },
             saveEvent () {
-              let body = this.$refs.xTable.getAllRecords()
+              let body = this.$refs.xTable.getRecordset()
               let { insertRecords, removeRecords, updateRecords } = body
               if (insertRecords.length || removeRecords.length || updateRecords.length) {
                 this.$refs.xTable.validate(valid => {
@@ -196,7 +196,7 @@ export default {
         .then(({ row }) => this.$refs.xTable.setActiveCell(row, 'key'))
     },
     saveEvent () {
-      let body = this.$refs.xTable.getAllRecords()
+      let body = this.$refs.xTable.getRecordset()
       let { insertRecords, removeRecords, updateRecords } = body
       if (insertRecords.length || removeRecords.length || updateRecords.length) {
         this.$refs.xTable.validate(valid => {
