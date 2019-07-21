@@ -479,9 +479,10 @@ export default {
     this.lastScrollLeft = 0
     this.lastScrollTop = 0
     this.afterFullData = []
-    this.fullDataIndexMap = new Map()
+    this.fullDataRowMap = new Map()
     this.fullDataRowIdMap = new Map()
-    this.fullColumnIndexMap = new Map()
+    this.fullColumnMap = new Map()
+    this.fullColumnIdMap = new Map()
     this.loadData(this.data, true).then(() => {
       let rowKey = UtilTools.getRowKey(this)
       if (selectConfig.key) {
@@ -539,8 +540,8 @@ export default {
       ResizeEvent.off(this, this.$el.parentNode)
     }
     this.afterFullData.length = 0
-    this.fullDataIndexMap.clear()
-    this.fullColumnIndexMap.clear()
+    this.fullDataRowMap.clear()
+    this.fullColumnMap.clear()
     this.closeFilter()
     this.closeMenu()
   },
@@ -799,9 +800,9 @@ export default {
     },
     // 更新数据的 Map
     cacheDataMap () {
-      let { treeConfig, tableFullData, fullDataIndexMap, fullDataRowIdMap } = this
+      let { treeConfig, tableFullData, fullDataRowMap, fullDataRowIdMap } = this
       let rowKey = UtilTools.getRowKey(this)
-      fullDataIndexMap.clear()
+      fullDataRowMap.clear()
       fullDataRowIdMap.clear()
       if (treeConfig) {
         XEUtils.eachTree(tableFullData, (row, index) => {
@@ -811,7 +812,7 @@ export default {
             XEUtils.set(row, rowKey, rowPrimaryKey)
           }
           fullDataRowIdMap.set(`${rowPrimaryKey}`, { rowKey, row, index })
-          fullDataIndexMap.set(row, { row, index: rowPrimaryKey })
+          fullDataRowMap.set(row, { row, index: rowPrimaryKey })
         }, treeConfig)
       } else {
         tableFullData.forEach((row, rowIndex) => {
@@ -824,16 +825,19 @@ export default {
             }
           }
           fullDataRowIdMap.set(`${rowPrimaryKey}`, { row, index: rowIndex })
-          fullDataIndexMap.set(row, { row, rowPrimaryKey, index: rowIndex })
+          fullDataRowMap.set(row, { row, rowPrimaryKey, index: rowIndex })
         })
       }
     },
     // 更新列的 Map
     cacheColumnMap () {
-      let { tableFullColumn, fullColumnIndexMap } = this
-      fullColumnIndexMap.clear()
-      tableFullColumn.forEach((row, index) => {
-        fullColumnIndexMap.set(row, { row, index })
+      let { tableFullColumn, fullColumnIdMap, fullColumnMap } = this
+      fullColumnIdMap.clear()
+      fullColumnMap.clear()
+      tableFullColumn.forEach((column, index) => {
+        let rest = { column, index }
+        fullColumnIdMap.set(column.id, rest)
+        fullColumnMap.set(column, rest)
       })
     },
     getRowNode (tr) {
@@ -864,21 +868,21 @@ export default {
             return matchObj
           }
         } else {
-          let column = fullColumnIdMap.get(colId)
+          let column = fullColumnIdMap.get(colId).column
           return { item: column, index: this.getColumnMapIndex(column), items: tableFullColumn }
         }
       }
       return null
     },
     getRowMapIndex (row) {
-      return this.fullDataIndexMap.has(row) ? this.fullDataIndexMap.get(row).index : -1
+      return this.fullDataRowMap.has(row) ? this.fullDataRowMap.get(row).index : -1
     },
     getRowIndex (row) {
       let { tableFullData, treeConfig } = this
       return treeConfig ? XEUtils.findTree(tableFullData, item => item === row, treeConfig) : this.getRowMapIndex(row)
     },
     getColumnMapIndex (column) {
-      return this.fullColumnIndexMap.has(column) ? this.fullColumnIndexMap.get(column).index : -1
+      return this.fullColumnMap.has(column) ? this.fullColumnMap.get(column).index : -1
     },
     getColumnIndex (column) {
       return this.getColumnMapIndex(column)
@@ -1095,23 +1099,37 @@ export default {
       let columns = this.visibleColumn
       return arguments.length ? columns[columnIndex] : columns.slice(0)
     },
+    getColumnById (colId) {
+      let fullColumnIdMap = this.fullColumnIdMap
+      return fullColumnIdMap.has(colId) ? fullColumnIdMap.get(colId).column : null
+    },
     /**
      * 获取表格可视列
      */
     getTableColumn () {
-      return this.tableColumn
+      return { fullColumn: this.visibleColumn, tableColumn: this.tableColumn }
+    },
+    // 在 v3.0 中废弃 getRecords
+    getRecords () {
+      console.warn('[vxe-table] The function getRecords is deprecated, please use getRows')
+      return this.getRows.apply(this, arguments)
     },
     /**
      * 获取表格所有数据
      */
-    getRecords (rowIndex) {
+    getRows (rowIndex) {
       let list = this.tableFullData
       return arguments.length ? list[rowIndex] : list.slice(0)
     },
-    /**
-     * 获取表格数据集合
-     */
+    // 在 v3.0 中废弃 getAllRecords
     getAllRecords () {
+      console.warn('[vxe-table] The function getAllRecords is deprecated, please use getRecordset')
+      return this.getRecordset()
+    },
+    /**
+     * 获取表格数据集
+     */
+    getRecordset () {
       return {
         insertRecords: this.getInsertRecords(),
         removeRecords: this.getRemoveRecords(),
@@ -1205,6 +1223,10 @@ export default {
       }
       this.afterFullData = tableData
       return tableData
+    },
+    getRowById (rowId) {
+      let fullDataRowIdMap = this.fullDataRowIdMap
+      return fullDataRowIdMap.has(rowId) ? fullDataRowIdMap.get(rowId).row : null
     },
     /**
      * 获取处理后的表格数据

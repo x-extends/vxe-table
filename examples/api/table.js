@@ -1415,9 +1415,17 @@ const apis = [
         list: []
       },
       {
+        name: 'getColumnById(colId)',
+        desc: '根据列的唯一主键获取列',
+        type: 'Column',
+        enum: '',
+        defVal: 'colId',
+        list: []
+      },
+      {
         name: 'getTableColumn()',
         desc: '获取当前表格渲染中的列（如果有隐藏列，则返回处理完之后的数据）',
-        type: 'Array',
+        type: '{fullColumn, tableColumn}',
         enum: '',
         defVal: '',
         list: []
@@ -1441,13 +1449,30 @@ const apis = [
       {
         name: 'getTableData()',
         desc: '获取当前表格渲染中的数据（如果存在条件，则返回处理完之后的数据）',
-        type: 'Array',
+        type: '{fullData, tableData}',
         enum: '',
         defVal: '',
         list: []
       },
       {
+        name: 'getRowById(rowId)',
+        desc: '根据行的唯一主键获取行',
+        type: 'Row',
+        enum: '',
+        defVal: 'rowId',
+        list: []
+      },
+      {
         name: 'getRecords(rowIndex)',
+        disabled: true,
+        desc: '在 v3.0 中废弃，请使用 getRows',
+        type: 'Array',
+        enum: '',
+        defVal: 'rowIndex?',
+        list: []
+      },
+      {
+        name: 'getRows(rowIndex)',
         desc: '获取表格全量数据，和 data 的行为一致，也可以指定索引获取数据',
         type: 'Array',
         enum: '',
@@ -1456,7 +1481,16 @@ const apis = [
       },
       {
         name: 'getAllRecords()',
-        desc: '获取表格数据集合',
+        disabled: true,
+        desc: '在 v3.0 中废弃，请使用 getRecordset',
+        type: '{insertRecords, removeRecords, updateRecords}',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'getRecordset()',
+        desc: '获取表格数据集（获取新增、删除、更改的数据，对于增删改查表格非常方便）',
         type: '{insertRecords, removeRecords, updateRecords}',
         enum: '',
         defVal: '',
@@ -1521,7 +1555,7 @@ const apis = [
       {
         name: 'getVirtualScroller()',
         desc: '获取虚拟滚动相关状态',
-        type: 'Object',
+        type: '{scrollX, scrollY, scrollTop, scrollLeft}',
         enum: '',
         defVal: '',
         list: []
@@ -1890,7 +1924,7 @@ const apis = [
       },
       {
         name: 'fullValidate(rows, callback)',
-        desc: '表格完整校验函数，和 validate 的区别就是会对数据的所有规则进行完整校验',
+        desc: '表格完整校验函数，和 validate 的区别就是会对全量数据的所有规则进行完整校验',
         type: 'Promise',
         enum: '',
         defVal: 'rows?, callback?',
