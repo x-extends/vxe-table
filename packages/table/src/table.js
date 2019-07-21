@@ -874,12 +874,8 @@ export default {
       }
       return null
     },
-    getRowMapIndex (row) {
-      return this.fullDataRowMap.has(row) ? this.fullDataRowMap.get(row).index : -1
-    },
     getRowIndex (row) {
-      let { tableFullData, treeConfig } = this
-      return treeConfig ? XEUtils.findTree(tableFullData, item => item === row, treeConfig) : this.getRowMapIndex(row)
+      return this.fullDataRowMap.has(row) ? this.fullDataRowMap.get(row).index : -1
     },
     getColumnMapIndex (column) {
       return this.fullColumnMap.has(column) ? this.fullColumnMap.get(column).index : -1
@@ -1065,7 +1061,7 @@ export default {
       if (treeConfig) {
         return XEUtils.findTree(tableSourceData, item => item === row, treeConfig)
       }
-      return this.getRowMapIndex(row) === -1
+      return this.getRowIndex(row) === -1
     },
     hasRowChange (row, field) {
       let { tableSourceData, treeConfig } = this
@@ -1084,7 +1080,7 @@ export default {
           oRow = tableSourceData.find(row => rowPrimaryKey === XEUtils.get(row, rowKey))
         }
       } else {
-        let oRowIndex = this.getRowMapIndex(row)
+        let oRowIndex = this.getRowIndex(row)
         oRow = tableSourceData[oRowIndex]
       }
       if (arguments.length > 1) {
@@ -2935,7 +2931,7 @@ export default {
      */
     triggerRowExpandEvent (evnt, { row }) {
       let rest = this.toggleRowExpansion(row)
-      UtilTools.emitEvent(this, 'toggle-expand-change', [{ row, rowIndex: this.getRowMapIndex(row), $table: this }, evnt])
+      UtilTools.emitEvent(this, 'toggle-expand-change', [{ row, rowIndex: this.getRowIndex(row), $table: this }, evnt])
       return rest
     },
     /**
@@ -3009,7 +3005,7 @@ export default {
      */
     triggerTreeExpandEvent (evnt, { row }) {
       let rest = this.toggleTreeExpansion(row)
-      UtilTools.emitEvent(this, 'toggle-tree-change', [{ row, rowIndex: this.getRowMapIndex(row), $table: this }, evnt])
+      UtilTools.emitEvent(this, 'toggle-tree-change', [{ row, rowIndex: this.getRowIndex(row), $table: this }, evnt])
       return rest
     },
     /**
@@ -3457,7 +3453,7 @@ export default {
             }
             if (scrollYLoad) {
               let { startIndex, renderSize, rowHeight } = _scrollYStore
-              let rowIndex = this.getRowMapIndex(params.row)
+              let rowIndex = this.getRowIndex(params.row)
               if (rowIndex < startIndex || rowIndex > startIndex + renderSize) {
                 let bodyElem = this.$refs.tableBody.$el
                 bodyElem.scrollTop = (rowIndex - 1) * rowHeight
@@ -3538,7 +3534,7 @@ export default {
                         errorRules.push(cusRule)
                       }
                       return resolve()
-                    }, { rules, row, column, rowIndex: this.getRowMapIndex(row), columnIndex: this.getColumnMapIndex(column) })
+                    }, { rules, row, column, rowIndex: this.getRowIndex(row), columnIndex: this.getColumnMapIndex(column) })
                   } else {
                     let len
                     let restVal = value

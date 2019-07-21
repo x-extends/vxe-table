@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>通过设置 <table-api-link prop="expand-config"/> 属性和 type="<table-api-link prop="expand"/>" 与 slot 可以开启展开行功能</p>
+    <p>通过设置 <table-api-link prop="expand-config"/> 属性和 type=<table-api-link prop="expand"/> 与 <table-column-api-link prop="slot"/> 可以开启展开行功能</p>
 
     <vxe-toolbar>
       <template v-slot:buttons>
@@ -16,7 +16,6 @@
       border
       row-id="id"
       :data.sync="tableData"
-      :expand-config="{}"
       @toggle-expand-change="toggleExpandChangeEvent">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column type="expand" width="60">
@@ -65,14 +64,67 @@
       <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
 
-    <p>默认展开所有行，通过 <table-api-link prop="expandAll"/> 参数设置默认展开行</p>
+    <p>默认展开指定行，通过 <table-api-link prop="expandRowKeys"/> 参数设置默认展开行</p>
+
+    <vxe-table
+      border
+      row-id="id"
+      :expand-config="{expandRowKeys: ['1']}"
+      :data.sync="tableData">
+      <vxe-table-column type="index" width="60"></vxe-table-column>
+      <vxe-table-column type="expand" width="60">
+        <template v-slot="{ row, rowIndex }">
+          <template v-if="rowIndex === 1">
+            <vxe-table
+              border
+              row-id="id"
+              :data.sync="tableData"
+              :expand-config="{}">
+              <vxe-table-column field="role" title="Role"></vxe-table-column>
+              <vxe-table-column field="age" title="Age"></vxe-table-column>
+            </vxe-table>
+          </template>
+          <template v-else>
+            <ul>
+              <li>
+                <span>ID：</span>
+                <span>{{ row.id }}</span>
+              </li>
+              <li>
+                <span>Name：</span>
+                <span>{{ row.name }}</span>
+              </li>
+              <li>
+                <span>UpdateTime：</span>
+                <span>{{ row.updateTime }}</span>
+              </li>
+              <li>
+                <span>CreateTime：</span>
+                <span>{{ row.createTime }}</span>
+              </li>
+            </ul>
+          </template>
+        </template>
+      </vxe-table-column>
+      <vxe-table-column field="name" title="Name"></vxe-table-column>
+      <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+      <vxe-table-column field="age" title="Age"></vxe-table-column>
+    </vxe-table>
+
+    <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
+
+    <pre>
+      <code class="xml">{{ demoCodes[2] }}</code>
+      <code class="javascript">{{ demoCodes[3] }}</code>
+    </pre>
+
+    <p>默认展开所有行，通过 <table-api-link prop="expandAll"/> 参数设置默认展开所有行</p>
 
     <vxe-table
       border
       row-id="id"
       :data.sync="tableData"
-      :expand-config="{expandAll: true}"
-      @toggle-expand-change="toggleExpandChangeEvent">
+      :expand-config="{expandAll: true}">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column type="expand" width="60">
         <template v-slot="{ row }">
@@ -104,8 +156,8 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[2] }}</code>
-      <code class="javascript">{{ demoCodes[3] }}</code>
+      <code class="xml">{{ demoCodes[4] }}</code>
+      <code class="javascript">{{ demoCodes[5] }}</code>
     </pre>
   </div>
 </template>
@@ -117,7 +169,6 @@ export default {
   data () {
     return {
       tableData: [],
-      tableData2: [],
       demoCodes: [
         `
         <vxe-toolbar>
@@ -134,7 +185,6 @@ export default {
           border
           row-id="id"
           :data.sync="tableData"
-          :expand-config="{}"
           @toggle-expand-change="toggleExpandChangeEvent">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column type="expand" width="60">
@@ -184,7 +234,7 @@ export default {
             }
           },
           created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 3)
           },
           methods: {
             toggleExpandChangeEvent ({ row }) {
@@ -197,9 +247,66 @@ export default {
         <vxe-table
           border
           row-id="id"
-          :data.sync="tableData2"
-          :expand-config="{expandAll: true}"
-          @toggle-expand-change="toggleExpandChangeEvent">
+          :expand-config="{expandRowKeys: ['1']}"
+          :data.sync="tableData">
+          <vxe-table-column type="index" width="60"></vxe-table-column>
+          <vxe-table-column type="expand" width="60">
+            <template v-slot="{ row, rowIndex }">
+              <template v-if="rowIndex === 1">
+                <vxe-table
+                  border
+                  row-id="id"
+                  :data.sync="tableData"
+                  :expand-config="{}">
+                  <vxe-table-column field="role" title="Role"></vxe-table-column>
+                  <vxe-table-column field="age" title="Age"></vxe-table-column>
+                </vxe-table>
+              </template>
+              <template v-else>
+                <ul>
+                  <li>
+                    <span>ID：</span>
+                    <span>{{ row.id }}</span>
+                  </li>
+                  <li>
+                    <span>Name：</span>
+                    <span>{{ row.name }}</span>
+                  </li>
+                  <li>
+                    <span>UpdateTime：</span>
+                    <span>{{ row.updateTime }}</span>
+                  </li>
+                  <li>
+                    <span>CreateTime：</span>
+                    <span>{{ row.createTime }}</span>
+                  </li>
+                </ul>
+              </template>
+            </template>
+          </vxe-table-column>
+          <vxe-table-column field="name" title="Name"></vxe-table-column>
+          <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+          <vxe-table-column field="age" title="Age"></vxe-table-column>
+        </vxe-table>
+        `,
+        `
+        export default {
+          data () {
+            return {
+              tableData: []
+            }
+          },
+          created () {
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 3)
+          }
+        }
+        `,
+        `
+        <vxe-table
+          border
+          row-id="id"
+          :data.sync="tableData"
+          :expand-config="{expandAll: true}">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column type="expand" width="60">
             <template v-slot="{ row }">
@@ -232,16 +339,11 @@ export default {
         export default {
           data () {
             return {
-              tableData2: []
+              tableData: []
             }
           },
           created () {
-            this.tableData2 = window.MOCK_DATA_LIST.slice(0, 3)
-          },
-          methods: {
-            toggleExpandChangeEvent ({ row }) {
-              console.log('行展开、收起事件')
-            }
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 3)
           }
         }
         `
@@ -249,7 +351,6 @@ export default {
     }
   },
   created () {
-    this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
     this.tableData = window.MOCK_DATA_LIST.slice(0, 3)
   },
   mounted () {

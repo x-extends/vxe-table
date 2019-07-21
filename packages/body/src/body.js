@@ -228,7 +228,6 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
     scrollYStore,
     editStore,
     expandeds,
-    getRowMapIndex,
     getColumnMapIndex } = $table
   let { leftList, rightList } = columnStore
   let rows = []
@@ -240,7 +239,7 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
       seq += scrollYStore.startIndex
     }
     // 确保任何情况下 rowIndex 都精准指向真实 data 索引
-    rowIndex = getRowMapIndex(row)
+    rowIndex = $table.getRowIndex(row)
     // 事件绑定
     if (highlightHoverRow && (leftList.length || rightList.length) && overflowX) {
       trOn.mouseenter = evnt => {
