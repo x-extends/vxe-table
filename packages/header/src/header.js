@@ -122,7 +122,7 @@ export default {
       mouseConfig = {},
       scrollXLoad,
       overflowX,
-      getColumnMapIndex
+      getColumnIndex
     } = $table
     // 横向滚动渲染
     if (scrollXLoad) {
@@ -191,7 +191,7 @@ export default {
             let hasEllipsis = showTitle || showTooltip || showEllipsis
             let thOns = {}
             // 确保任何情况下 columnIndex 都精准指向真实列索引
-            let columnIndex = getColumnMapIndex(column)
+            let columnIndex = getColumnIndex(column)
             if (showTooltip) {
               thOns.mouseover = evnt => {
                 // 拖动过程中不需要触发

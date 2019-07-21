@@ -37,7 +37,7 @@ export default {
       scrollXLoad,
       showOverflow,
       overflowX,
-      getColumnMapIndex
+      getColumnIndex
     } = $table
     // 如果是使用优化模式
     if (fixedType && showOverflow) {
@@ -95,7 +95,7 @@ export default {
             let fixedHiddenColumn = fixedType ? column.fixed !== fixedType && !isColGroup : column.fixed && overflowX
             let tfOns = {}
             // 确保任何情况下 columnIndex 都精准指向真实列索引
-            let columnIndex = getColumnMapIndex(column)
+            let columnIndex = getColumnIndex(column)
             if (tableListeners['header-cell-click']) {
               tfOns.click = evnt => {
                 UtilTools.emitEvent($table, 'header-cell-click', [{ $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, cell: evnt.currentTarget }, evnt])

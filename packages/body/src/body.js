@@ -167,8 +167,7 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
     scrollYStore,
     editStore,
     expandeds,
-    getRowMapIndex,
-    getColumnMapIndex } = $table
+    getColumnIndex } = $table
   let rows = []
   tableData.forEach((row, $rowIndex) => {
     let trOn = {}
@@ -178,14 +177,14 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
       seq += scrollYStore.startIndex
     }
     // 确保任何情况下 rowIndex 都精准指向真实 data 索引
-    rowIndex = getRowMapIndex(row)
+    rowIndex = $table.getRowIndex(row)
     // 事件绑定
     if (highlightHoverRow) {
       trOn.mouseenter = evnt => {
         $table.triggerHoverEvent(evnt, { row, rowIndex })
       }
     }
-    let rowPrimaryKey = UtilTools.getRowPrimaryKey($table, row, rowIndex)
+    let rowPrimaryKey = UtilTools.getRowPrimaryKey($table, row)
     rows.push(
       h('tr', {
         class: ['vxe-body--row', {
@@ -198,14 +197,14 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
         key: treeConfig ? rowPrimaryKey : (rowKey ? XEUtils.get(row, rowKey) : $rowIndex),
         on: trOn
       }, tableColumn.map((column, $columnIndex) => {
-        let columnIndex = getColumnMapIndex(column)
+        let columnIndex = getColumnIndex(column)
         return renderColumn(h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex)
       }))
     )
     // 如果行被展开了
     if (expandeds.length && expandeds.indexOf(row) > -1) {
       let column = tableColumn.find(column => column.type === 'expand')
-      let columnIndex = getColumnMapIndex(column)
+      let columnIndex = getColumnIndex(column)
       let cellStyle
       if (treeConfig) {
         cellStyle = {

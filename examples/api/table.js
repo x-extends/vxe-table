@@ -393,7 +393,7 @@ const apis = [
         descKey: 'app.api.table.desc.rowId',
         type: 'Number, String',
         enum: '',
-        defVal: '',
+        defVal: 'xid',
         list: []
       },
       {

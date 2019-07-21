@@ -138,47 +138,9 @@ export const DomTools = {
     let rowIndex = [].indexOf.call(trElem.parentNode.children, trElem)
     return { rowPrimaryKey, rowIndex, colIndex: colIndex ? parseInt(colIndex) : colIndex, columnIndex }
   },
-  getCell ($table, { row, rowIndex, column }) {
-    let rowPrimaryKey = UtilTools.getRowPrimaryKey($table, row, rowIndex)
+  getCell ($table, { row, column }) {
+    let rowPrimaryKey = UtilTools.getRowPrimaryKey($table, row)
     return $table.$refs.tableBody.$el.querySelector(`.vxe-body--row[data-rowid="${rowPrimaryKey}"] .${column.id}`)
-  },
-  getCursorPosition (textarea) {
-    let rangeData = { text: '', start: 0, end: 0 }
-    if (textarea.setSelectionRange) {
-      rangeData.start = textarea.selectionStart
-      rangeData.end = textarea.selectionEnd
-      rangeData.text = (rangeData.start !== rangeData.end) ? textarea.value.substring(rangeData.start, rangeData.end) : ''
-    } else if (document.selection) {
-      let index = 0
-      let range = document.selection.createRange()
-      let textRange = document.body.createTextRange()
-      textRange.moveToElementText(textarea)
-      rangeData.text = range.text
-      rangeData.bookmark = range.getBookmark()
-      for (; textRange.compareEndPoints('StartToStart', range) < 0 && range.moveStart('character', -1) !== 0; index++) {
-        if (textarea.value.charAt(index) === '\n') {
-          index++
-        }
-      }
-      rangeData.start = index
-      rangeData.end = rangeData.text.length + rangeData.start
-    }
-    return rangeData
-  },
-  setCursorPosition (textarea, rangeData) {
-    if (textarea.setSelectionRange) {
-      textarea.focus()
-      textarea.setSelectionRange(rangeData.start, rangeData.end)
-    } else if (textarea.createTextRange) {
-      let textRange = textarea.createTextRange()
-      if (textarea.value.length === rangeData.start) {
-        textRange.collapse(false)
-        textRange.select()
-      } else {
-        textRange.moveToBookmark(rangeData.bookmark)
-        textRange.select()
-      }
-    }
   }
 }
 
