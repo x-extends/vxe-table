@@ -1,8 +1,6 @@
 <template>
   <div>
     <p>调用 <table-api-link prop="insert"/>、<table-api-link prop="insertAt"/> 函数插入数据</p>
-    <p class="red">开启编辑功能，必须要有唯一行数据的 key，通过设置 <table-api-link prop="row-id"/> 或者 <table-api-link prop="row-key"/> 自定义字段名</p>
-    <p class="red">注意：如果行 key 不存在则会在在插入后自动生成随机数</p>
 
     <vxe-toolbar>
       <template v-slot:buttons>

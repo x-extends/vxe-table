@@ -145,7 +145,7 @@ export default {
     /** 高级属性 */
     // 行数据的 Key
     rowKey: String,
-    rowId: { type: String, default: 'xid' },
+    rowId: { type: String, default: () => GlobalConfig.rowId },
     // 是否自动根据父容器响应式调整表格宽高
     autoResize: Boolean,
     // 单选配置

@@ -1,7 +1,6 @@
 <template>
   <div>
     <p>设置 <table-api-link prop="edit-config"/>={trigger: 'manual', mode: 'row'} 启用行编辑的功能</p>
-    <p class="red">开启编辑功能，必须要有唯一行数据的 key，通过设置 <table-api-link prop="row-id"/> 或者 <table-api-link prop="row-key"/> 自定义字段名</p>
 
     <vxe-table
       ref="xTable"

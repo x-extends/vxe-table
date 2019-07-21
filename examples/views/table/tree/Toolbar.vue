@@ -1,7 +1,6 @@
 <template>
   <div>
     <p>增删改查、工具栏</p>
-    <p class="red">必须设置 <table-api-link prop="row-id"/> 或者 <table-api-link prop="row-key"/></p>
 
     <vxe-toolbar :data="tableData" setting>
       <template v-slot:buttons>

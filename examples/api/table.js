@@ -393,7 +393,7 @@ const apis = [
         descKey: 'app.api.table.desc.rowId',
         type: 'Number, String',
         enum: '',
-        defVal: 'xid',
+        defVal: '_XID',
         list: []
       },
       {
@@ -438,7 +438,7 @@ const apis = [
         list: [
           {
             name: 'reserve',
-            desc: '是否保留勾选状态，对于某些场景下非常有用，比如分页之后还保留之前选中的状态（需要 row-id | row-key）',
+            desc: '是否保留勾选状态，对于某些场景下非常有用，比如分页之后还保留之前选中的状态',
             type: 'String',
             enum: '',
             defVal: 'false',

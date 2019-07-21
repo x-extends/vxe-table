@@ -17,7 +17,6 @@
     <vxe-excel
       ref="xExcel"
       max-height="600"
-      row-id="id"
       :columns="columns"
       :data.sync="tableData">
     </vxe-excel>
@@ -62,7 +61,6 @@ export default {
         {
           type: 'index',
           width: 50,
-          // fixed: 'left',
           align: 'center',
           headerAlign: 'center'
         }
@@ -78,7 +76,7 @@ export default {
         }
       })),
       tableData: Array.from(new Array(20)).map((num, index) => {
-        let item = { id: index }
+        let item = {}
         columns.forEach(name => {
           item[name] = ''
         })
@@ -96,7 +94,6 @@ export default {
         <vxe-excel
           ref="xExcel"
           max-height="600"
-          row-id="id"
           :columns="columns"
           :data.sync="tableData">
         </vxe-excel>
@@ -116,7 +113,7 @@ export default {
               ].concat(columns.map(name => {
                 return {
                   field: name,
-                  label: name,
+                  title: name,
                   width: 76,
                   headerAlign: 'center',
                   editRender: {
@@ -124,7 +121,7 @@ export default {
                   }
                 }
               })),
-              tableData: Array.from(new Array(20)).map(() => {
+              tableData: Array.from(new Array(20)).map((num, index) => {
                 let item = {}
                 columns.forEach(name => {
                   item[name] = ''
@@ -162,7 +159,7 @@ export default {
                 let workbook = XLSX.read(data, { type: 'binary' })
                 let keys = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
                 let csvData = XLSX.utils.sheet_to_csv(workbook.Sheets.Sheet1)
-                let tableData = csvData.split('\\n').map(vRow => {
+                let tableData = csvData.split('\n').map((vRow, rIndex) => {
                   let vCols = vRow.split(',')
                   let item = {}
                   vCols.forEach((val, cIndex) => {
@@ -224,9 +221,7 @@ export default {
         let csvData = XLSX.utils.sheet_to_csv(workbook.Sheets.Sheet1)
         let tableData = csvData.split('\n').map((vRow, rIndex) => {
           let vCols = vRow.split(',')
-          let item = {
-            id: rIndex
-          }
+          let item = {}
           vCols.forEach((val, cIndex) => {
             let kIndex = Math.floor(cIndex / 26)
             let lIndex = cIndex % 26
