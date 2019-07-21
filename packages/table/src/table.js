@@ -2115,21 +2115,9 @@ export default {
             }
           }
           if (treeConfig) {
-            if (value) {
-              XEUtils.eachTree(tableFullData, setValFn, treeConfig)
-            } else {
-              if (checkMethod) {
-                XEUtils.eachTree(tableFullData, clearValFn, treeConfig)
-              }
-            }
+            XEUtils.eachTree(tableFullData, value ? setValFn : clearValFn, treeConfig)
           } else {
-            if (value) {
-              tableFullData.forEach(setValFn)
-            } else {
-              if (checkMethod) {
-                tableFullData.forEach(clearValFn)
-              }
-            }
+            tableFullData.forEach(value ? setValFn : clearValFn)
           }
         } else {
           if (treeConfig) {
