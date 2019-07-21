@@ -1017,7 +1017,8 @@ export default {
           location.href = '/vxe-table'
           break
         case '3':
-          this.$XMsg.message({ message: '由于作者比较忙，该版本正在重构开发中，敬请期待吧。。。', status: 'info' })
+          this.version = '2'
+          this.$XMsg.message({ message: '由于作者比较忙，该版本正在重构开发中，敬请期待！', status: 'info' })
           break
       }
     }
