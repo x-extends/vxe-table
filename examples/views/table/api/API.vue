@@ -104,7 +104,7 @@ export default {
         [
           {
             code: 'resize',
-            name: '重置操作'
+            name: '重新加载'
           }
         ],
         [

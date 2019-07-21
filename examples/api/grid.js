@@ -11,14 +11,6 @@ const apis = [
     defVal: '',
     list: [
       {
-        name: 'columns',
-        descKey: 'app.api.table.desc.columns',
-        type: 'Array',
-        enum: '',
-        defVal: '',
-        list: XEUtils.mapTree(columnAPI.find(item => item.name === 'Props').list, item => Object.assign({}, item, { name: XEUtils.camelCase(item.name) }))
-      },
-      {
         name: 'toolbar',
         descKey: 'app.api.grid.desc.toolbar',
         type: 'Object',
@@ -409,8 +401,19 @@ const apis = [
   }
 ]
 
-export default XEUtils.clone(tableAPI, true).map(item => {
+const gridAPI = XEUtils.clone(tableAPI, true).map(item => {
   let rest = apis.find(obj => obj.name === item.name)
   rest.list = item.list.concat(rest.list)
   return rest
 })
+
+gridAPI.find(item => item.name === 'Props').list.splice(1, 0, {
+  name: 'columns',
+  descKey: 'app.api.table.desc.columns',
+  type: 'Array',
+  enum: '',
+  defVal: '',
+  list: XEUtils.mapTree(columnAPI.find(item => item.name === 'Props').list, item => Object.assign({}, item, { name: XEUtils.camelCase(item.name) }))
+})
+
+export default gridAPI

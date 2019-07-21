@@ -172,7 +172,7 @@ module.exports = {
         desc: {
           data: 'Table data',
           columns: 'Column configuration',
-          customs: 'Initialize the binding to show/hide columns;You can modify the display or hide columns by using the visible property',
+          customs: 'Initialize the show/hide column (you can dynamically modify show or hide by visible)',
           height: 'Table height, supports adaptive or fixed width and height',
           maxHeight: 'Maximum height of the table',
           autoResize: 'Whether to automatically listen to the parent container to adjust the table width and height in a responsive manner (this may be used if you need to automatically follow the parent container\'s height)',
