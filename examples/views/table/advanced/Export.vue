@@ -1,6 +1,7 @@
 <template>
   <div>
     <p>通过调用 <table-api-link prop="exportCsv"/> 函数可以直接将表格导出为 .csv 格式的文件；</p>
+    <p class="red">建议的方式应该是放到后台做导出！</p>
 
     <vxe-toolbar>
       <template v-slot:buttons>

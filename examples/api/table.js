@@ -1847,7 +1847,7 @@ const apis = [
       },
       {
         name: 'exportCsv(options)',
-        desc: '将表格数据导出为 .csv 文件，说明：支持IE、Edge、Chrome、Firefox 等常用浏览器（部分浏览器需要手动修改后缀名为 .csv）',
+        desc: '将表格数据导出为 .csv 文件（支持所有主流的浏览器，不支持合并行或列）',
         type: 'Promise',
         enum: '',
         defVal: 'options',
