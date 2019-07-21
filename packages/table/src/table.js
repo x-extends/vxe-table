@@ -2110,7 +2110,7 @@ export default {
             }
           }
           let clearValFn = (row, rowIndex) => {
-            if (checkMethod({ row, [indexKey]: rowIndex }) ? 0 : selection.indexOf(row) > -1) {
+            if (!checkMethod || (checkMethod({ row, [indexKey]: rowIndex }) ? 0 : selection.indexOf(row) > -1)) {
               XEUtils.set(row, property, value)
             }
           }
