@@ -144,8 +144,8 @@ export default {
 
     /** 高级属性 */
     // 行数据的 Key
-    rowKey: [String, Number],
-    rowId: [String, Number],
+    rowKey: String,
+    rowId: { type: String, default: 'xid' },
     // 是否自动根据父容器响应式调整表格宽高
     autoResize: Boolean,
     // 单选配置
@@ -769,7 +769,7 @@ export default {
       fullColumnIdMap.clear()
       fullColumnMap.clear()
       tableFullColumn.forEach((column, index) => {
-        let rest = { column, index }
+        let rest = { column, colid: column.id, index }
         fullColumnIdMap.set(column.id, rest)
         fullColumnMap.set(column, rest)
       })
@@ -795,14 +795,14 @@ export default {
     getColumnNode (th) {
       if (th) {
         let { isGroup, fullColumnIdMap, tableFullColumn } = this
-        let colId = th.getAttribute('data-colid')
+        let colid = th.getAttribute('data-colid')
         if (isGroup) {
-          let matchObj = XEUtils.findTree(tableFullColumn, column => column.id === colId, headerProps)
+          let matchObj = XEUtils.findTree(tableFullColumn, column => column.id === colid, headerProps)
           if (matchObj) {
             return matchObj
           }
         } else {
-          let column = fullColumnIdMap.get(colId).column
+          let column = fullColumnIdMap.get(colid).column
           return { item: column, index: this.getColumnMapIndex(column), items: tableFullColumn }
         }
       }
@@ -1038,9 +1038,9 @@ export default {
       let columns = this.visibleColumn
       return arguments.length ? columns[columnIndex] : columns.slice(0)
     },
-    getColumnById (colId) {
+    getColumnById (colid) {
       let fullColumnIdMap = this.fullColumnIdMap
-      return fullColumnIdMap.has(colId) ? fullColumnIdMap.get(colId).column : null
+      return fullColumnIdMap.has(colid) ? fullColumnIdMap.get(colid).column : null
     },
     /**
      * 获取表格可视列
@@ -1165,9 +1165,9 @@ export default {
       this.afterFullData = tableData
       return tableData
     },
-    getRowById (rowId) {
+    getRowById (rowid) {
       let fullDataRowIdMap = this.fullDataRowIdMap
-      return fullDataRowIdMap.has(rowId) ? fullDataRowIdMap.get(rowId).row : null
+      return fullDataRowIdMap.has(rowid) ? fullDataRowIdMap.get(rowid).row : null
     },
     /**
      * 获取处理后的表格数据
@@ -1556,12 +1556,12 @@ export default {
           let colgroupElem = elemStore[`${name}-${layout}-colgroup`]
           if (colgroupElem) {
             XEUtils.arrayEach(colgroupElem.children, colElem => {
-              let colId = colElem.getAttribute('name')
-              if (colId === 'col-gutter') {
+              let colid = colElem.getAttribute('name')
+              if (colid === 'col-gutter') {
                 colElem.width = `${scrollbarWidth || ''}`
               }
-              if (fullColumnIdMap.has(colId)) {
-                let column = fullColumnIdMap.get(colId).column
+              if (fullColumnIdMap.has(colid)) {
+                let column = fullColumnIdMap.get(colid).column
                 colElem.width = `${column.renderWidth || ''}`
                 if (layout === 'header') {
                   let { showHeaderOverflow, renderWidth } = column

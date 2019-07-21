@@ -1358,11 +1358,11 @@ const apis = [
         list: []
       },
       {
-        name: 'getColumnById(colId)',
+        name: 'getColumnById(colid)',
         desc: '根据列的唯一主键获取列',
         type: 'Column',
         enum: '',
-        defVal: 'colId',
+        defVal: 'colid',
         list: []
       },
       {
@@ -1398,11 +1398,11 @@ const apis = [
         list: []
       },
       {
-        name: 'getRowById(rowId)',
+        name: 'getRowById(rowid)',
         desc: '根据行的唯一主键获取行',
         type: 'Row',
         enum: '',
-        defVal: 'rowId',
+        defVal: 'rowid',
         list: []
       },
       {
