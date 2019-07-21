@@ -68,7 +68,7 @@ export const UtilTools = {
   },
   getRowPrimaryKey ($table, row, rowIndex) {
     let rowKey = UtilTools.getRowKey($table)
-    return `${rowKey ? encodeURIComponent(XEUtils.get(row, rowKey)) : rowIndex}`
+    return `${rowKey ? encodeURIComponent(XEUtils.get(row, rowKey) || '') : rowIndex}`
   },
   // 触发事件
   emitEvent (_vm, type, args) {
