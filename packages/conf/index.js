@@ -61,8 +61,12 @@ const GlobalConfig = {
     // layouts: ['PrevJump', 'PrevPage', 'Jump', 'PageCount', 'NextPage', 'NextJump', 'Sizes', 'Total']
   },
   toolbar: {
-    // storageKey: 'VXE_TABLE_CUSTOM_HIDDEN',
-    // setting: false,
+    // resizable: {
+    //   storage: false
+    // },
+    // setting: {
+    //   storage: false
+    // },
     // buttons: []
   },
   message: {

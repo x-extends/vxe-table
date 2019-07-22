@@ -60,6 +60,9 @@ export default {
           { code: 'export', name: '导出.csv' },
           { code: 'myBtn', name: '自定义按钮' }
         ],
+        resizable: {
+          storage: true
+        },
         setting: {
           storage: true
         }
@@ -120,7 +123,12 @@ export default {
                   { code: 'export', name: '导出.csv' },
                   { code: 'myBtn', name: '自定义按钮' }
                 ],
-                setting: true
+                resizable: {
+                  storage: true
+                },
+                setting: {
+                  storage: true
+                }
               },
               tableColumn: [
                 { type: 'selection', width: 50 },

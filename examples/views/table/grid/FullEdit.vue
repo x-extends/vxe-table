@@ -17,7 +17,8 @@
       :columns="tableColumn"
       :select-config="{reserve: true}"
       :edit-rules="validRules"
-      :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"></vxe-grid>
+      :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">
+    </vxe-grid>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
@@ -65,6 +66,7 @@ export default {
         }
       },
       toolbar: {
+        id: 'full_edit_1',
         buttons: [
           { code: 'reload', name: '刷新' },
           { code: 'insert_actived', name: '新增' },
@@ -73,7 +75,12 @@ export default {
           { code: 'save', name: '保存' },
           { code: 'export', name: '导出.csv' }
         ],
-        setting: true
+        resizable: {
+          storage: true
+        },
+        setting: {
+          storage: true
+        }
       },
       tableColumn: [
         { type: 'selection', width: 50 },
@@ -135,6 +142,7 @@ export default {
                 }
               },
               toolbar: {
+                id: 'full_edit_1',
                 buttons: [
                   { code: 'reload', name: '刷新' },
                   { code: 'insert_actived', name: '新增' },
@@ -143,7 +151,12 @@ export default {
                   { code: 'save', name: '保存' },
                   { code: 'export', name: '导出.csv' }
                 ],
-                setting: true
+                resizable: {
+                  storage: true
+                },
+                setting: {
+                  storage: true
+                }
               },
               tableColumn: [
                 { type: 'selection', width: 50 },

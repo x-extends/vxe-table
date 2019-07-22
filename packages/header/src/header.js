@@ -89,7 +89,7 @@ export default {
     this.uploadColumn()
   },
   render (h) {
-    let { $parent: $table, fixedType, headerColumn, tableColumn, resizeMousedown, fixedColumn } = this
+    let { $parent: $table, fixedType, headerColumn, tableColumn, fixedColumn } = this
     let {
       $listeners: tableListeners,
       resizable, border,
@@ -225,7 +225,7 @@ export default {
                   'is--line': !border
                 }],
                 on: {
-                  mousedown: evnt => resizeMousedown(evnt, column)
+                  mousedown: evnt => this.resizeMousedown(evnt, { $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn })
                 }
               }) : null
             ])
@@ -254,7 +254,8 @@ export default {
     uploadColumn () {
       this.headerColumn = this.isGroup ? convertToRows(this.collectColumn) : [this.$parent.scrollXLoad && this.fixedType ? this.fixedColumn : this.tableColumn]
     },
-    resizeMousedown (evnt, column) {
+    resizeMousedown (evnt, params) {
+      let { column } = params
       let { $parent: $table, $el, fixedType } = this
       let { tableBody, leftContainer, rightContainer, resizeBar: resizeBarElem } = $table.$refs
       let { target: dragBtnElem, clientX: dragClientX } = evnt
@@ -306,6 +307,7 @@ export default {
         }
         dragLeft = Math.max(left, dragMinLeft)
         resizeBarElem.style.left = `${dragLeft - scrollLeft}px`
+        column.isResizable = true
       }
       resizeBarElem.style.display = 'block'
       document.onmousemove = updateEvent
@@ -317,6 +319,10 @@ export default {
         $table._lastResizeTime = Date.now()
         $table.analyColumnWidth()
         $table.recalculate(true)
+        if ($table._toolbar) {
+          $table._toolbar.saveColumnWidth()
+        }
+        UtilTools.emitEvent($table, 'resizable-change', [params])
       }
       updateEvent(evnt)
     }

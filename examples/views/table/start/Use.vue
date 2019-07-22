@@ -182,7 +182,12 @@
           },
           // 默认工具栏参数
           toolbar: {
-            setting: false,
+            resizable: {
+              storage: false
+            },
+            setting: {
+              storage: false
+            },
             buttons: []
           },
           // 默认消息提示框参数

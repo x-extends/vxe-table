@@ -47,9 +47,11 @@ export default {
           { code: 'save', name: '保存' },
           { code: 'export', name: '导出.csv' }
         ],
+        resizable: {
+          storage: true
+        },
         setting: {
-          storage: true,
-          immediate: true
+          storage: true
         }
       },
       tableColumn: [
@@ -92,9 +94,11 @@ export default {
                   { code: 'save', name: '保存' },
                   { code: 'export', name: '导出.csv' }
                 ],
+                resizable: {
+                  storage: true
+                },
                 setting: {
-                  storage: true,
-                  immediate: true
+                  storage: true
                 }
               },
               tableColumn: [

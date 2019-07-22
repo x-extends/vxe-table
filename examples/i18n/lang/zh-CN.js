@@ -49,8 +49,9 @@ module.exports = {
         contextMenu: '快捷菜单',
         expandRow: '展开行',
         toolbar: '工具栏',
-        customs: '显示/隐藏 列',
-        customStorage: '显示/隐藏 列 + localStorage',
+        customs: '自定义列',
+        customStorage: '自定义列 + localStorage',
+        customlWidthStorage: '自定义列&列宽 + localStorage',
         search: '全表搜索',
         pager: '分页',
 
@@ -234,6 +235,7 @@ module.exports = {
           cellMouseleave: '当单元格 hover 退出时会触发该事件',
           sortChange: '当排序条件发生变化时会触发该事件',
           filterChange: '当筛选条件发生变化时会触发该事件',
+          resizableChange: '当列宽拖动发生变化时会触发该事件',
           toggleExpandChange: '当行展开或收起时会触发该事件',
           toggleTreeChange: '当树节点展开或收起时会触发该事件',
           contextMenuClick: '只对 context-menu 配置时有效，当点击快捷菜单时会触发该事件',
@@ -295,7 +297,8 @@ module.exports = {
           id: '唯一 ID 标识',
           size: '尺寸',
           data: '与表格的 data 属性同步绑定',
-          setting: '显示列个性化设置按钮'
+          resizable: '列宽拖动配置',
+          setting: '列个性化配置'
         }
       },
       pager: {

@@ -45,6 +45,7 @@ const TableSearch = () => import(/* webpackChunkName: "table" */ './views/table/
 const Toolbar = () => import(/* webpackChunkName: "table" */ './views/table/advanced/Toolbar.vue')
 const TableCustom = () => import(/* webpackChunkName: "table" */ './views/table/advanced/Custom.vue')
 const TableCustomStorage = () => import(/* webpackChunkName: "table" */ './views/table/advanced/CustomStorage.vue')
+const TableCustomlWidthStorage = () => import(/* webpackChunkName: "table" */ './views/table/advanced/CustomlWidthStorage.vue')
 const TablePage = () => import(/* webpackChunkName: "table" */ './views/table/advanced/Page.vue')
 
 const GridBasic = () => import(/* webpackChunkName: "grid" */ './views/table/grid/Basic.vue')
@@ -347,6 +348,11 @@ export default new Router({
       path: '/table/advanced/customStorage',
       name: 'TableCustomStorage',
       component: TableCustomStorage
+    },
+    {
+      path: '/table/advanced/customlWidthStorage',
+      name: 'TableCustomlWidthStorage',
+      component: TableCustomlWidthStorage
     },
     {
       path: '/table/advanced/page',
