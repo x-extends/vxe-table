@@ -347,7 +347,7 @@ export default {
         $table.recalculate(true)
         DomTools.removeClass($table.$el, 'c--resize')
         if ($table._toolbar) {
-          $table._toolbar.saveColumnWidth()
+          $table._toolbar.updateResizable()
         }
         UtilTools.emitEvent($table, 'resizable-change', [params])
       }
