@@ -38,13 +38,13 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
   let { actived } = editStore
   let fixedHiddenColumn = fixedType ? column.fixed !== fixedType : column.fixed && overflowX
   let cellOverflow = (XEUtils.isUndefined(showOverflow) || XEUtils.isNull(showOverflow)) ? allColumnOverflow : showOverflow
-  let cellAlign = align || allAlign
   let showEllipsis = cellOverflow === 'ellipsis'
   let showTitle = cellOverflow === 'title'
   let showTooltip = cellOverflow === true || cellOverflow === 'tooltip'
   let hasEllipsis = showTitle || showTooltip || showEllipsis
   let isDirty
   let tdOns = {}
+  let cellAlign = align || allAlign
   let validError = validStore.row === row && validStore.column === column
   let hasDefaultTip = editRules && (validOpts.message === 'default' ? (height || tableData.length > 1) : validOpts.message === 'inline')
   let attrs = { 'data-index': columnIndex }

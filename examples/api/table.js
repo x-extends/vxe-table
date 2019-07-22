@@ -1408,14 +1408,14 @@ const apis = [
       {
         name: 'getRecords(rowIndex)',
         disabled: true,
-        desc: '在 v3.0 中废弃，请使用 getRows',
+        desc: '在 v3.0 中废弃，请使用 getData',
         type: 'Array',
         enum: '',
         defVal: 'rowIndex?',
         list: []
       },
       {
-        name: 'getRows(rowIndex)',
+        name: 'getData(rowIndex)',
         desc: '获取表格全量数据，和 data 的行为一致，也可以指定索引获取数据',
         type: 'Array',
         enum: '',

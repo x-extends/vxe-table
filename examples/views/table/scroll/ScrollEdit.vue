@@ -12,8 +12,8 @@
         <vxe-button @click="getInsertEvent">获取新增</vxe-button>
         <vxe-button @click="getRemoveEvent">获取删除</vxe-button>
         <vxe-button @click="getUpdateEvent">获取修改</vxe-button>
-        <vxe-button @click="$refs.xTable.scrollToRow($refs.xTable.getRows(10))">滚动到第 10 行</vxe-button>
-        <vxe-button @click="$refs.xTable.scrollToRow($refs.xTable.getRows(4000))">滚动到第 4000 行</vxe-button>
+        <vxe-button @click="$refs.xTable.scrollToRow($refs.xTable.getData(10))">滚动到第 10 行</vxe-button>
+        <vxe-button @click="$refs.xTable.scrollToRow($refs.xTable.getData(4000))">滚动到第 4000 行</vxe-button>
         <vxe-button @click="$refs.xTable.scrollToColumn($refs.xTable.getColumns(10))">滚动到第 10 列</vxe-button>
       </template>
     </vxe-toolbar>
@@ -87,8 +87,8 @@ export default {
             <vxe-button @click="getInsertEvent">获取新增</vxe-button>
             <vxe-button @click="getRemoveEvent">获取删除</vxe-button>
             <vxe-button @click="getUpdateEvent">获取修改</vxe-button>
-            <vxe-button @click="$refs.xTable.scrollToRow($refs.xTable.getRows(10))">滚动到第 10 行</vxe-button>
-            <vxe-button @click="$refs.xTable.scrollToRow($refs.xTable.getRows(2000))">滚动到第 2000 行</vxe-button>
+            <vxe-button @click="$refs.xTable.scrollToRow($refs.xTable.getData(10))">滚动到第 10 行</vxe-button>
+            <vxe-button @click="$refs.xTable.scrollToRow($refs.xTable.getData(2000))">滚动到第 2000 行</vxe-button>
           </template>
         </vxe-toolbar>
 

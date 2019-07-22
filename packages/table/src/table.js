@@ -1032,13 +1032,13 @@ export default {
     },
     // 在 v3.0 中废弃 prop
     getRecords () {
-      console.warn('[vxe-table] The function getRecords is deprecated, please use getRows')
-      return this.getRows.apply(this, arguments)
+      console.warn('[vxe-table] The function getRecords is deprecated, please use getData')
+      return this.getData.apply(this, arguments)
     },
     /**
      * 获取表格所有数据
      */
-    getRows (rowIndex) {
+    getData (rowIndex) {
       let tableFullData = this.tableFullData
       return arguments.length ? tableFullData[rowIndex] : tableFullData.slice(0)
     },
@@ -1539,42 +1539,26 @@ export default {
               }
               if (fullColumnIdMap.has(colid)) {
                 let column = fullColumnIdMap.get(colid).column
+                let { showHeaderOverflow, showOverflow, renderWidth } = column
+                let cellOverflow
                 colElem.width = `${column.renderWidth || ''}`
                 if (layout === 'header') {
-                  let { showHeaderOverflow, renderWidth } = column
-                  let headOverflow = XEUtils.isUndefined(showHeaderOverflow) || XEUtils.isNull(showHeaderOverflow) ? allColumnHeaderOverflow : showHeaderOverflow
-                  let showEllipsis = headOverflow === 'ellipsis'
-                  let showTitle = headOverflow === 'title'
-                  let showTooltip = headOverflow === true || headOverflow === 'tooltip'
-                  let hasEllipsis = showTitle || showTooltip || showEllipsis
-
-                  let listElem = elemStore[`${name}-${layout}-list`]
-                  if (listElem && hasEllipsis) {
-                    XEUtils.arrayEach(listElem.querySelectorAll(`.${column.id}`), thElem => {
-                      let cellElem = thElem.querySelector('.vxe-cell')
-                      if (cellElem) {
-                        cellElem.style.width = `${border ? renderWidth - 1 : renderWidth}px`
-                      }
-                    })
-                  }
-                } else if (layout === 'body') {
-                  // 表主体样式处理
-                  let { showOverflow, renderWidth } = column
-                  let cellOverflow = XEUtils.isUndefined(showOverflow) || XEUtils.isNull(showOverflow) ? allColumnOverflow : showOverflow
-                  let showEllipsis = cellOverflow === 'ellipsis'
-                  let showTitle = cellOverflow === 'title'
-                  let showTooltip = cellOverflow === true || cellOverflow === 'tooltip'
-                  let hasEllipsis = showTitle || showTooltip || showEllipsis
-
-                  let listElem = elemStore[`${name}-${layout}-list`]
-                  if (listElem && hasEllipsis) {
-                    XEUtils.arrayEach(listElem.querySelectorAll(`.${column.id}`), tdElem => {
-                      let cellElem = tdElem.querySelector('.vxe-cell')
-                      if (cellElem) {
-                        cellElem.style.width = `${border ? renderWidth - 1 : renderWidth}px`
-                      }
-                    })
-                  }
+                  cellOverflow = XEUtils.isUndefined(showHeaderOverflow) || XEUtils.isNull(showHeaderOverflow) ? allColumnHeaderOverflow : showHeaderOverflow
+                } else {
+                  cellOverflow = XEUtils.isUndefined(showOverflow) || XEUtils.isNull(showOverflow) ? allColumnOverflow : showOverflow
+                }
+                let showEllipsis = cellOverflow === 'ellipsis'
+                let showTitle = cellOverflow === 'title'
+                let showTooltip = cellOverflow === true || cellOverflow === 'tooltip'
+                let hasEllipsis = showTitle || showTooltip || showEllipsis
+                let listElem = elemStore[`${name}-${layout}-list`]
+                if (listElem && hasEllipsis) {
+                  XEUtils.arrayEach(listElem.querySelectorAll(`.${column.id}`), thElem => {
+                    let cellElem = thElem.querySelector('.vxe-cell')
+                    if (cellElem) {
+                      cellElem.style.width = `${border ? renderWidth - 1 : renderWidth}px`
+                    }
+                  })
                 }
               }
             })
@@ -2016,6 +2000,15 @@ export default {
       if (tooltipStore.column !== column || !tooltipStore.visible) {
         // 在 v3.0 中废弃 label
         this.showTooltip(evnt, own.title || own.label, column)
+      }
+    },
+    /**
+     * 触发表尾 tooltip 事件
+     */
+    triggerFooterTooltipEvent (evnt, { $rowIndex, column, columnIndex }) {
+      let { tooltipStore, footerData } = this
+      if (tooltipStore.column !== column || !tooltipStore.visible) {
+        this.showTooltip(evnt, footerData[$rowIndex][columnIndex], column)
       }
     },
     /**

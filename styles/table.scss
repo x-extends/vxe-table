@@ -241,7 +241,8 @@
     }
   }
   .vxe-header--column,
-  .vxe-body--column {
+  .vxe-body--column,
+  .vxe-footer--column {
     &.col--ellipsis {
       &:not(.col--actived) {
         .vxe-cell {

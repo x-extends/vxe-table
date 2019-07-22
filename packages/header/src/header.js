@@ -198,7 +198,7 @@ export default {
                 if ($table._isResize) {
                   return
                 }
-                $table.triggerHeaderTooltipEvent(evnt, { $table, column, columnIndex, $columnIndex, fixed: fixedType })
+                $table.triggerHeaderTooltipEvent(evnt, { $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType })
               }
               thOns.mouseout = evnt => {
                 // 拖动过程中不需要触发
