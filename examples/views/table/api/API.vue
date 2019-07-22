@@ -94,7 +94,7 @@ export default {
           },
           {
             code: 'resetColumn',
-            name: '全部重置'
+            name: '重置个性化数据'
           }
         ],
         [
