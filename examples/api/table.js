@@ -1883,7 +1883,7 @@ const apis = [
       {
         name: 'isScrollXLoad()',
         disabled: true,
-        desc: '判断是否启用了横向 X 可视渲染',
+        desc: '在 v2.0 中废弃，请使用 getVirtualScroller',
         type: 'Boolean',
         enum: '',
         defVal: '',
@@ -1892,7 +1892,7 @@ const apis = [
       {
         name: 'isScrollYLoad()',
         disabled: true,
-        desc: '判断是否启用了纵向 Y 可视渲染',
+        desc: '在 v2.0 中废弃，请使用 getVirtualScroller',
         type: 'Boolean',
         enum: '',
         defVal: '',
