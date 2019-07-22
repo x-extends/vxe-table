@@ -72,7 +72,7 @@ const apis = [
           },
           {
             name: 'storage',
-            desc: '是否启用 localStorage 本地保存，会将保存列个性化的设置状态保存到本地（需要设置 id）',
+            desc: '是否启用 localStorage 本地保存，会将列的隐藏状态保存到本地（需要设置 id）',
             type: 'Boolean',
             enum: '',
             defVal: 'false',
