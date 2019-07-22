@@ -320,7 +320,7 @@ export default {
         $table.analyColumnWidth()
         $table.recalculate(true)
         if ($table._toolbar) {
-          $table._toolbar.saveColumnWidth()
+          $table._toolbar.updateResizable()
         }
         UtilTools.emitEvent($table, 'resizable-change', [params])
       }

@@ -91,6 +91,10 @@ export default {
           {
             code: 'showAllColumn',
             name: '取消所有隐藏列'
+          },
+          {
+            code: 'resetColumn',
+            name: '全部重置'
           }
         ],
         [
@@ -233,6 +237,9 @@ export default {
           break
         case 'showAllColumn':
           this.$refs.xToolbar.showColumn()
+          break
+        case 'resetColumn':
+          this.$refs.xToolbar.resetStorage()
           break
         case 'exportAll':
           this.$refs.xTable.exportCsv({

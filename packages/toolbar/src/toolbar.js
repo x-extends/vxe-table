@@ -203,26 +203,35 @@ export default {
       }
       return this.$nextTick()
     },
-    saveColumnWidth () {
+    saveColumnWidth (isReset) {
       let { id, tableCustoms, resizableOpts } = this
       if (resizableOpts.storage) {
         let columnWidthStorageMap = this.getStorageMap(resizableOpts.storageKey)
-        let columnWidthStorage = XEUtils.isPlainObject(columnWidthStorageMap[id]) ? columnWidthStorageMap[id] : {}
-        tableCustoms.forEach(({ property, isResizable, renderWidth }) => {
-          if (property && isResizable) {
-            columnWidthStorage[property] = renderWidth
-          }
-        })
+        let columnWidthStorage
+        if (!isReset) {
+          columnWidthStorage = XEUtils.isPlainObject(columnWidthStorageMap[id]) ? columnWidthStorageMap[id] : {}
+          tableCustoms.forEach(({ property, isResizable, renderWidth }) => {
+            if (property && isResizable) {
+              columnWidthStorage[property] = renderWidth
+            }
+          })
+        }
         columnWidthStorageMap[id] = XEUtils.isEmpty(columnWidthStorage) ? undefined : columnWidthStorage
         localStorage.setItem(resizableOpts.storageKey, XEUtils.toJSONString(columnWidthStorageMap))
       }
       return this.$nextTick()
     },
     resetStorage () {
+      let { $grid, $table } = this
+      let comp = $grid || $table
       this.tableCustoms.forEach(column => {
-        column.renderWidth = 0
+        column.resizeWidth = 0
         column.visible = true
       })
+      comp.analyColumnWidth()
+      this.saveColumnWidth(true)
+      this.updateSetting()
+      return comp.recalculate(true)
     },
     hideColumn (column) {
       column.visible = false
@@ -238,6 +247,9 @@ export default {
         })
       }
       return this.updateSetting()
+    },
+    updateResizable () {
+      return this.saveColumnWidth()
     },
     updateSetting () {
       (this.$grid || this.$table).refreshColumn()
