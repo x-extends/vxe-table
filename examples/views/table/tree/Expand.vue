@@ -9,7 +9,7 @@
       :tree-config="{children: 'children'}"
       :data.sync="tableData">
       <vxe-table-column field="name" title="Name" tree-node></vxe-table-column>
-      <vxe-table-column type="expand" width="60">
+      <vxe-table-column type="expand" title="Details" width="80">
         <template v-slot="{ row, rowIndex }">
           <ul>
             <li>

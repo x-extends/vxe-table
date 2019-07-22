@@ -1107,13 +1107,13 @@ export default {
     },
     // 在 v3.0 中废弃 getRecords
     getRecords () {
-      console.warn('[vxe-table] The function getRecords is deprecated, please use getRows')
-      return this.getRows.apply(this, arguments)
+      console.warn('[vxe-table] The function getRecords is deprecated, please use getData')
+      return this.getData.apply(this, arguments)
     },
     /**
      * 获取表格所有数据
      */
-    getRows (rowIndex) {
+    getData (rowIndex) {
       let list = this.tableFullData
       return arguments.length ? list[rowIndex] : list.slice(0)
     },
@@ -1913,6 +1913,15 @@ export default {
       let { own } = column
       if (tooltipStore.column !== column || !tooltipStore.visible) {
         this.showTooltip(evnt, own.title || own.label, column)
+      }
+    },
+    /**
+     * 触发表尾 tooltip 事件
+     */
+    triggerFooterTooltipEvent (evnt, { $rowIndex, column, columnIndex }) {
+      let { tooltipStore, footerData } = this
+      if (tooltipStore.column !== column || !tooltipStore.visible) {
+        this.showTooltip(evnt, footerData[$rowIndex][columnIndex], column)
       }
     },
     /**

@@ -136,7 +136,7 @@ export default {
           methods: {
             getValidEvent () {
               let fields = this.$refs.xExcel.getColumns().map(item => item.property).filter(key => key)
-              let validRecords = this.$refs.xExcel.getRows().filter(item => fields.some(key => item[key]))
+              let validRecords = this.tableData.filter(item => fields.some(key => item[key]))
               this.$XMsg.alert(validRecords.length)
             },
             getInsertEvent () {
@@ -196,7 +196,7 @@ export default {
   methods: {
     getValidEvent () {
       let fields = this.$refs.xExcel.getColumns().map(item => item.property).filter(key => key)
-      let validRecords = this.$refs.xExcel.getRows().filter(item => fields.some(key => item[key]))
+      let validRecords = this.tableData.filter(item => fields.some(key => item[key]))
       this.$XMsg.alert(validRecords.length)
     },
     getInsertEvent () {

@@ -21,6 +21,7 @@ export default {
     } = this
     let {
       $listeners: tableListeners,
+      border,
       footerRowClassName,
       footerCellClassName,
       tableWidth,
@@ -28,13 +29,12 @@ export default {
       scrollbarHeight,
       scrollXLoad,
       scrollXStore,
-      optimizeOpts,
+      showOverflow: allColumnOverflow,
       overflowX,
       getColumnMapIndex
     } = $table
-    let { overflow } = optimizeOpts
     // 如果是使用优化模式
-    if (fixedType && overflow) {
+    if (fixedType && allColumnOverflow) {
       tableColumn = fixedColumn
       tableWidth = tableColumn.reduce((previous, column) => previous + column.renderWidth, 0)
     } else if (scrollXLoad) {
@@ -94,11 +94,25 @@ export default {
           return h('tr', {
             class: ['vxe-footer--row', footerRowClassName ? XEUtils.isFunction(footerRowClassName) ? footerRowClassName({ $rowIndex, fixed: fixedType }) : footerRowClassName : '']
           }, tableColumn.map((column, $columnIndex) => {
+            let { showOverflow, renderWidth } = column
             let isColGroup = column.children && column.children.length
             let fixedHiddenColumn = fixedType ? column.fixed !== fixedType && !isColGroup : column.fixed && overflowX
+            let cellOverflow = (XEUtils.isUndefined(showOverflow) || XEUtils.isNull(showOverflow)) ? allColumnOverflow : showOverflow
+            let showEllipsis = cellOverflow === 'ellipsis'
+            let showTitle = cellOverflow === 'title'
+            let showTooltip = cellOverflow === true || cellOverflow === 'tooltip'
+            let hasEllipsis = showTitle || showTooltip || showEllipsis
             let tfOns = {}
             // 确保任何情况下 columnIndex 都精准指向真实列索引
             let columnIndex = getColumnMapIndex(column)
+            if (showTooltip) {
+              tfOns.mouseover = evnt => {
+                $table.triggerFooterTooltipEvent(evnt, { $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType })
+              }
+              tfOns.mouseout = evnt => {
+                $table.clostTooltip()
+              }
+            }
             if (tableListeners['header-cell-click']) {
               tfOns.click = evnt => {
                 UtilTools.emitEvent($table, 'header-cell-click', [{ $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, cell: evnt.currentTarget }, evnt])
@@ -113,6 +127,7 @@ export default {
               class: ['vxe-footer--column', column.id, {
                 [`col--${column.headerAlign}`]: column.headerAlign,
                 'fixed--hidden': fixedHiddenColumn,
+                'col--ellipsis': hasEllipsis,
                 'filter--active': column.filters.some(item => item.checked)
               }, footerCellClassName ? XEUtils.isFunction(footerCellClassName) ? footerCellClassName({ $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType }) : footerCellClassName : ''],
               attrs: {
@@ -122,8 +137,11 @@ export default {
               key: columnIndex
             }, [
               h('div', {
-                class: ['vxe-cell']
-              }, list[fixedType === 'right' ? list.length - tableColumn.length + columnIndex : columnIndex])
+                class: 'vxe-cell',
+                style: {
+                  width: hasEllipsis ? `${border ? renderWidth - 1 : renderWidth}px` : null
+                }
+              }, list[columnIndex])
             ])
           }).concat([
             h('td', {
