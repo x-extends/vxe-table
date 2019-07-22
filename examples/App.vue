@@ -355,6 +355,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.customlWidthStorage',
+              locat: {
+                name: 'TableCustomlWidthStorage'
+              }
+            },
+            {
               label: 'app.aside.nav.search',
               locat: {
                 name: 'TableSearch'

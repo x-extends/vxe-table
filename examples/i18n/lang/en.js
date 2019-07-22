@@ -50,8 +50,9 @@ module.exports = {
         contextMenu: 'Context menu',
         expandRow: 'Expandable row',
         toolbar: 'Toolbar',
-        customs: 'Show/hide columns',
-        customStorage: 'Show/hide columns + localStorage',
+        customs: 'Custom column',
+        customStorage: 'Custom column + localStorage',
+        customlWidthStorage: '自定义列&列宽 + localStorage',
         search: 'Table search',
         pager: 'Pager',
 
@@ -237,6 +238,7 @@ module.exports = {
           cellMouseleave: '当单元格 hover 退出时会触发该事件',
           sortChange: '当排序条件发生变化时会触发该事件',
           filterChange: '当筛选条件发生变化时会触发该事件',
+          resizableChange: '当列宽拖动发生变化时会触发该事件',
           toggleExpandChange: '当行展开或收起时会触发该事件',
           toggleTreeChange: '当树节点展开或收起时会触发该事件',
           contextMenuClick: '只对 context-menu 配置时有效，当点击快捷菜单时会触发该事件',
@@ -298,7 +300,8 @@ module.exports = {
           id: '唯一 ID 标识',
           size: 'Size',
           data: '与表格的 data 属性同步绑定',
-          setting: '显示列个性化设置按钮'
+          resizable: '列宽拖动配置',
+          setting: '列个性化配置'
         }
       },
       pager: {

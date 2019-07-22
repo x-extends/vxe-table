@@ -106,7 +106,6 @@ export default {
       fixedType,
       headerColumn,
       tableColumn,
-      resizeMousedown,
       fixedColumn
     } = this
     let {
@@ -254,7 +253,7 @@ export default {
                   'is--line': !border
                 }],
                 on: {
-                  mousedown: evnt => resizeMousedown(evnt, column)
+                  mousedown: evnt => this.resizeMousedown(evnt, { $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn })
                 }
               }) : null
             ])
@@ -278,7 +277,8 @@ export default {
     uploadColumn () {
       this.headerColumn = this.isGroup ? convertToRows(this.collectColumn) : [this.$parent.scrollXLoad && this.fixedType ? this.fixedColumn : this.tableColumn]
     },
-    resizeMousedown (evnt, column) {
+    resizeMousedown (evnt, params) {
+      let { column } = params
       let { $parent: $table, $el, fixedType } = this
       let { tableBody, leftContainer, rightContainer, resizeBar: resizeBarElem } = $table.$refs
       let { target: dragBtnElem, clientX: dragClientX } = evnt
@@ -330,6 +330,7 @@ export default {
         }
         dragLeft = Math.max(left, dragMinLeft)
         resizeBarElem.style.left = `${dragLeft - scrollLeft}px`
+        column.isResizable = true
       }
       $table._isResize = true
       DomTools.addClass($table.$el, 'c--resize')
@@ -345,6 +346,10 @@ export default {
         $table.analyColumnWidth()
         $table.recalculate(true)
         DomTools.removeClass($table.$el, 'c--resize')
+        if ($table._toolbar) {
+          $table._toolbar.saveColumnWidth()
+        }
+        UtilTools.emitEvent($table, 'resizable-change', [params])
       }
       updateEvent(evnt)
     }

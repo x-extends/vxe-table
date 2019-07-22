@@ -31,9 +31,26 @@ const apis = [
         list: []
       },
       {
+        name: 'resizable',
+        descKey: 'app.api.toolbar.desc.resizable',
+        type: 'Object',
+        enum: '',
+        defVal: '',
+        list: [
+          {
+            name: 'storage',
+            desc: '是否启用 localStorage 本地保存，会将保存列宽拖动的状态保存到本地（需要设置 id）',
+            type: 'Boolean',
+            enum: '',
+            defVal: 'false',
+            list: []
+          }
+        ]
+      },
+      {
         name: 'setting',
         descKey: 'app.api.toolbar.desc.setting',
-        type: 'Boolean,Object',
+        type: 'Object',
         enum: '',
         defVal: '',
         list: [
@@ -122,9 +139,17 @@ const apis = [
         defVal: 'column?',
         list: []
       },
+      // {
+      //   name: 'updateSetting()',
+      //   desc: '更新列设置',
+      //   type: '',
+      //   enum: '',
+      //   defVal: '',
+      //   list: []
+      // },
       {
-        name: 'updateSetting()',
-        desc: '更新列设置',
+        name: 'resetStorage()',
+        desc: '重置所有本地储存数据',
         type: '',
         enum: '',
         defVal: '',

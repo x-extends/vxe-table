@@ -120,7 +120,9 @@ export default {
                   { code: 'export', name: '导出.csv' },
                   { code: 'myBtn', name: '自定义按钮' }
                 ],
-                setting: true
+                setting: {
+                  storage: false
+                }
               },
               tableColumn: [
                 { type: 'selection', width: 50 },

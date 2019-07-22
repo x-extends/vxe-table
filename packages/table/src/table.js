@@ -1183,11 +1183,20 @@ export default {
     mergeCustomColumn (customColumns) {
       let { tableFullColumn } = this
       this.isUpdateCustoms = true
-      tableFullColumn.forEach(column => {
-        // 在 v3.0 中废弃 prop
-        let item = customColumns.find(item => column.property && (item.field || item.prop) === column.property)
-        column.visible = item ? !!item.visible : true
-      })
+      if (customColumns.length) {
+        tableFullColumn.forEach(column => {
+          // 在 v3.0 中废弃 prop
+          let item = customColumns.find(item => column.property && (item.field || item.prop) === column.property)
+          if (item) {
+            if (XEUtils.isNumber(item.resizeWidth)) {
+              column.resizeWidth = item.resizeWidth
+            }
+            if (XEUtils.isBoolean(item.visible)) {
+              column.visible = item.visible
+            }
+          }
+        })
+      }
       this.$emit('update:customs', tableFullColumn)
     },
     /**
@@ -4110,6 +4119,10 @@ export default {
     /*************************
      * Publish methods
      *************************/
+    // 与工具栏对接
+    connect ({ toolbar }) {
+      this._toolbar = toolbar
+    },
     // 检查触发源是否属于目标节点
     getEventTargetNode: DomTools.getEventTargetNode
     /*************************

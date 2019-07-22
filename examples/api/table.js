@@ -1165,6 +1165,14 @@ const apis = [
         list: []
       },
       {
+        name: 'resizable-change',
+        descKey: 'app.api.table.desc.resizableChange',
+        type: '',
+        enum: '',
+        defVal: '{$rowIndex, column, columnIndex, $columnIndex, fixed, isHidden}',
+        list: []
+      },
+      {
         name: 'toggle-expand-change',
         descKey: 'app.api.table.desc.toggleExpandChange',
         type: '',
