@@ -91,7 +91,7 @@ export default {
                 this.sortable = Sortable.create(xTable.$el.querySelector('.body--wrapper>.vxe-table--header .vxe-header--row'), {
                   handle: '.vxe-header--column',
                   onEnd: ({ newIndex, oldIndex }) => {
-                    let tableColumn = xTable.getTableColumn()
+                    let { tableColumn } = xTable.getTableColumn()
                     let currRow = tableColumn.splice(oldIndex, 1)[0]
                     tableColumn.splice(newIndex, 0, currRow)
                     xTable.loadColumn(tableColumn)
@@ -145,7 +145,7 @@ export default {
                 this.sortable = Sortable.create(xTable.$el.querySelector('.body--wrapper>.vxe-table--header .vxe-header--row'), {
                   handle: '.vxe-header--column',
                   onEnd: ({ newIndex, oldIndex }) => {
-                    let tableColumn = xTable.getTableColumn()
+                    let { tableColumn } = xTable.getTableColumn()
                     let currRow = tableColumn.splice(oldIndex, 1)[0]
                     tableColumn.splice(newIndex, 0, currRow)
                     xTable.loadColumn(tableColumn)
@@ -190,7 +190,7 @@ export default {
         this.sortable1 = Sortable.create(xTable.$el.querySelector('.body--wrapper>.vxe-table--header .vxe-header--row'), {
           handle: '.vxe-header--column',
           onEnd: ({ newIndex, oldIndex }) => {
-            let tableColumn = xTable.getTableColumn()
+            let { tableColumn } = xTable.getTableColumn()
             let currRow = tableColumn.splice(oldIndex, 1)[0]
             tableColumn.splice(newIndex, 0, currRow)
             xTable.loadColumn(tableColumn)
@@ -204,7 +204,7 @@ export default {
         this.sortable2 = Sortable.create(xTable.$el.querySelector('.body--wrapper>.vxe-table--header .vxe-header--row'), {
           handle: '.vxe-header--column',
           onEnd: ({ newIndex, oldIndex }) => {
-            let tableColumn = xTable.getTableColumn()
+            let { tableColumn } = xTable.getTableColumn()
             let currRow = tableColumn.splice(oldIndex, 1)[0]
             tableColumn.splice(newIndex, 0, currRow)
             xTable.loadColumn(tableColumn)
