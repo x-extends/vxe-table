@@ -1,6 +1,6 @@
 <template>
   <div>
-    <vxe-toolbar ref="xToolbar" id="document_api" :setting="{storage: true}">
+    <vxe-toolbar ref="xToolbar" id="document_api" :resizable="{storage: true}" :setting="{storage: true}">
       <template v-slot:buttons>
         <vxe-input class="search-input" v-model="filterName" type="search" :placeholder="`vxe-${apiName} ${$t('app.api.form.apiSearch')}`"></vxe-input>
       </template>
