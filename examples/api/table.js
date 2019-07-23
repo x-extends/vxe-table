@@ -1201,7 +1201,7 @@ const apis = [
         descKey: 'app.api.table.desc.editClosed',
         type: '',
         enum: '',
-        defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,cell},event',
+        defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,cell},event?',
         list: []
       },
       {
@@ -1209,7 +1209,7 @@ const apis = [
         descKey: 'app.api.table.desc.editActived',
         type: '',
         enum: '',
-        defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,cell},event',
+        defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,cell},event?',
         list: []
       },
       {
@@ -1217,7 +1217,7 @@ const apis = [
         descKey: 'app.api.table.desc.editDisabled',
         type: '',
         enum: '',
-        defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,cell},event',
+        defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,cell},event?',
         list: []
       },
       {
