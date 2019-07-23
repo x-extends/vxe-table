@@ -156,7 +156,7 @@
             msgError: 'vxe-icon--error',
             msgLoading: 'vxe-icon--refresh roll'
           },
-          // 高级表格默认配置
+          // 配置式表格的默认参数
           grid: {
             proxyConfig: {
               autoLoad: true,
