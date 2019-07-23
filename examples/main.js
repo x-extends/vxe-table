@@ -59,6 +59,7 @@ function mockData () {
     list.push({
       id: fullIndex,
       name: 'test' + fullIndex,
+      nickname: (index % 4 === 0 ? '陈' : index % 3 === 0 ? '李' : '徐') + fullIndex,
       role: index % 2 === 0 ? '前端' : '后端',
       key: 'home.label.key' + Math.max(0, index % 2 === 0 ? index - 1 : index),
       language: index % 2 === 0 ? 'zh_CN' : 'en_US',

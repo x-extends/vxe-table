@@ -37,7 +37,7 @@ export default {
     // 是否允许排序
     sortable: Boolean,
     // 是否服务端排序
-    remoteSort: Boolean,
+    remoteSort: { type: Boolean, default: null },
     // 自定义排序的属性
     sortBy: [String, Array],
     // 配置筛选条件数组

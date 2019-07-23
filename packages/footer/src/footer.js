@@ -94,7 +94,7 @@ export default {
           return h('tr', {
             class: ['vxe-footer--row', footerRowClassName ? XEUtils.isFunction(footerRowClassName) ? footerRowClassName({ $rowIndex, fixed: fixedType }) : footerRowClassName : '']
           }, tableColumn.map((column, $columnIndex) => {
-            let { showOverflow, renderWidth } = column
+            let { showOverflow, renderWidth, columnKey } = column
             let isColGroup = column.children && column.children.length
             let fixedHiddenColumn = fixedType ? column.fixed !== fixedType && !isColGroup : column.fixed && overflowX
             let cellOverflow = (XEUtils.isUndefined(showOverflow) || XEUtils.isNull(showOverflow)) ? allColumnOverflow : showOverflow
@@ -134,7 +134,7 @@ export default {
                 'data-index': columnIndex
               },
               on: tfOns,
-              key: columnIndex
+              key: columnKey || ($table.columnKey ? column.id : $columnIndex)
             }, [
               h('div', {
                 class: 'vxe-cell',

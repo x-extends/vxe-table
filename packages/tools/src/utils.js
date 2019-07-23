@@ -58,17 +58,19 @@ export const UtilTools = {
   getSize ({ size, $parent }) {
     return size || ($parent && ['medium', 'small', 'mini'].indexOf($parent.size) > -1 ? $parent.size : null)
   },
-  getRowKey ($table) {
+  // 行主键 key
+  getRowkey ($table) {
     let { rowKey, rowId, selectConfig = {}, treeConfig = {}, expandConfig = {}, editConfig = {} } = $table
-    if (!rowKey) {
+    if (!rowKey || !XEUtils.isString(rowKey)) {
       // 在 v2.0 中废弃 key
       rowKey = rowId || selectConfig.key || treeConfig.key || expandConfig.key || editConfig.key
     }
     return rowKey
   },
-  getRowPrimaryKey ($table, row, rowIndex) {
-    let rowKey = UtilTools.getRowKey($table)
-    return `${rowKey ? encodeURIComponent(XEUtils.get(row, rowKey) || '') : rowIndex}`
+  // 行主键 value
+  getRowid ($table, row, rowIndex) {
+    let rowkey = UtilTools.getRowkey($table)
+    return `${rowkey ? encodeURIComponent(XEUtils.get(row, rowkey) || '') : rowIndex}`
   },
   // 触发事件
   emitEvent (_vm, type, args) {

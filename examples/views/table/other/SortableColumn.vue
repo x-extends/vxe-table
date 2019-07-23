@@ -1,17 +1,16 @@
 <template>
   <div>
     <p><table-api-link name="vxe-table"/> 方式：使用 <a class="link" href="https://www.npmjs.com/package/sortablejs" target="_blank">sortablejs</a> 实现列移动</p>
-    <p class="red">由于操作了 Dom 节点，请根据需要指定唯一的 <table-column-api-link prop="column-key"/></p>
 
     <vxe-table
       border
       ref="xTable1"
       class="sortable-column-demo"
       :data.sync="tableData">
-      <vxe-table-column field="name" title="Name" column-key="name"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex" column-key="sex"></vxe-table-column>
-      <vxe-table-column field="age" title="Age" column-key="age"></vxe-table-column>
-      <vxe-table-column field="address" title="Address" column-key="address" show-overflow></vxe-table-column>
+      <vxe-table-column field="name" title="Name"></vxe-table-column>
+      <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+      <vxe-table-column field="age" title="Age"></vxe-table-column>
+      <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -49,25 +48,25 @@ export default {
   data () {
     return {
       tableColumn: [
-        { field: 'name', title: 'Name', fixed: 'left', columnKey: 'name', width: 200 },
-        { field: 'role', title: 'Role', columnKey: 'role', width: 220 },
-        { field: 'sex', title: 'Sex', columnKey: 'sex', width: 220 },
-        { field: 'age', title: 'Age', columnKey: 'age', width: 220 },
-        { field: 'date3', title: 'Date', columnKey: 'date3', width: 220 },
-        { field: 'address', title: 'Address', columnKey: 'address', width: 300, showOverflow: true }
+        { field: 'name', title: 'Name', fixed: 'left', width: 200 },
+        { field: 'role', title: 'Role', width: 220 },
+        { field: 'sex', title: 'Sex', width: 220 },
+        { field: 'age', title: 'Age', width: 220 },
+        { field: 'date3', title: 'Date', width: 220 },
+        { field: 'address', title: 'Address', width: 300, showOverflow: true }
       ],
       tableData: [],
       demoCodes: [
         `
         <vxe-table
           border
-          ref="xTable"
+          ref="xTable1"
           class="sortable-column-demo"
           :data.sync="tableData">
-          <vxe-table-column field="name" title="Name" column-key="name"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex" column-key="sex"></vxe-table-column>
-          <vxe-table-column field="age" title="Age" column-key="age"></vxe-table-column>
-          <vxe-table-column field="address" title="Address" column-key="address" show-overflow></vxe-table-column>
+          <vxe-table-column field="name" title="Name"></vxe-table-column>
+          <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+          <vxe-table-column field="age" title="Age"></vxe-table-column>
+          <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
         </vxe-table>
         `,
         `
@@ -125,7 +124,7 @@ export default {
         `
         <vxe-grid
           border
-          ref="xTable"
+          ref="xTable2"
           class="sortable-column-demo"
           :columns="tableColumn"
           :data.sync="tableData"></vxe-grid>
@@ -135,12 +134,12 @@ export default {
           data () {
             return {
               tableColumn: [
-                { field: 'name', title: 'Name', fixed: 'left', columnKey: 'name', width: 200 },
-                { field: 'role', title: 'Role', columnKey: 'role', width: 220 },
-                { field: 'sex', title: 'Sex', columnKey: 'sex', width: 220 },
-                { field: 'age', title: 'Age', columnKey: 'age', width: 220 },
-                { field: 'date3', title: 'Date', columnKey: 'date3', width: 220 },
-                { field: 'address', title: 'Address', columnKey: 'address', width: 300, showOverflow: true }
+                { field: 'name', title: 'Name', fixed: 'left', width: 200 },
+                { field: 'role', title: 'Role', width: 220 },
+                { field: 'sex', title: 'Sex', width: 220 },
+                { field: 'age', title: 'Age', width: 220 },
+                { field: 'date3', title: 'Date', width: 220 },
+                { field: 'address', title: 'Address', width: 300, showOverflow: true }
               ],
               tableData: []
             }

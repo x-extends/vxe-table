@@ -162,7 +162,7 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
       'edit--visible': editRender && editRender.type === 'visible',
       'fixed--hidden': fixedHiddenColumn
     }, cellClassName ? XEUtils.isFunction(cellClassName) ? cellClassName(params) : cellClassName : ''],
-    key: columnKey || columnIndex,
+    key: columnKey || ($table.columnKey ? column.id : $columnIndex),
     attrs,
     on: tdOns
   }, allColumnOverflow && fixedHiddenColumn ? [] : [
@@ -251,7 +251,7 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
         $table.hoverRow = null
       }
     }
-    let rowPrimaryKey = UtilTools.getRowPrimaryKey($table, row, rowIndex)
+    let rowid = UtilTools.getRowid($table, row, rowIndex)
     rows.push(
       h('tr', {
         class: ['vxe-body--row', {
@@ -261,9 +261,9 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
           'row--new': editStore.insertList.indexOf(row) > -1
         }, rowClassName ? XEUtils.isFunction(rowClassName) ? rowClassName({ $table, seq, row, rowIndex }) : rowClassName : ''],
         attrs: {
-          'data-rowid': rowPrimaryKey
+          'data-rowid': rowid
         },
-        key: treeConfig ? rowPrimaryKey : (rowKey ? XEUtils.get(row, rowKey) : $rowIndex),
+        key: rowKey || treeConfig ? rowid : $rowIndex,
         on: trOn
       }, tableColumn.map((column, $columnIndex) => {
         let columnIndex = getColumnMapIndex(column)
@@ -284,7 +284,7 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
         rows.push(
           h('tr', {
             class: 'vxe-body--expanded-row',
-            key: `expand_${rowPrimaryKey}`,
+            key: `expand_${rowid}`,
             on: trOn
           }, [
             h('td', {

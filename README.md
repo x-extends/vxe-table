@@ -21,8 +21,8 @@ A fully functional Vue Table, to meet most of the Table all requirements, and pe
   * 强大的功能的同时兼具性能（支持横向、纵向虚拟滚动）
 
 * Plan 计划
-  * [x] v1 95% 实现表格的一切实用的功能
-  * [x] v2 85% 性能优化，同时兼具功能与性能
+  * [x] v1 100% 实现表格的一切实用的功能
+  * [x] v2 &nbsp;90% 性能优化，同时兼具功能与性能
   * [ ] v3 &nbsp;&nbsp;0% 实现重构，渲染性能大幅提升，基于 Vue3 并使用 typescript 开发
 
 🐬 如果有更好的建议、优化点或 Bug 都欢迎提 [Issues](https://github.com/xuliangzhan/vxe-table/issues)
@@ -66,6 +66,7 @@ A fully functional Vue Table, to meet most of the Table all requirements, and pe
 * [x] Expandable row （展开行）
 * [x] Pager（分页）
 * [x] Toolbar（工具栏）
+* [x] Save the operational state of the column（保存列的操作状态）
 * [x] Tree table （树形表格)
 * [x] Editable CRUD（增删改查)
 * [x] Editable validate（数据校验）

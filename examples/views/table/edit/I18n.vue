@@ -14,7 +14,7 @@
       border
       ref="xTable"
       height="500"
-      row-key="id"
+      row-id="id"
       :loading="loading"
       :span-method="rowspanMethod"
       :data.sync="tableData"
@@ -76,7 +76,7 @@ export default {
           border
           ref="xTable"
           height="500"
-          row-key="id"
+          row-id="id"
           :loading="loading"
           :span-method="rowspanMethod"
           :data.sync="tableData"

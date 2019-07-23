@@ -8,6 +8,8 @@ var rowUniqueId = 100000
 var browse = DomTools.browse
 var debounceScrollYDuration = browse.msie ? 40 : 20
 
+var isFieldWarn = false
+
 /**
  * 渲染浮固定列
  */
@@ -166,11 +168,14 @@ export default {
     showHeaderOverflow: { type: [Boolean, String], default: () => GlobalConfig.showHeaderOverflow },
     // 是否服务端筛选
     remoteFilter: Boolean,
+    // 是否服务端排序
+    remoteSort: Boolean,
 
     /** 高级属性 */
-    // 行数据的 Key
-    rowKey: [String, Number],
-    rowId: [String, Number],
+    // 主键配置
+    columnKey: Boolean,
+    rowKey: [Boolean, String],
+    rowId: String,
     // 是否自动根据父容器响应式调整表格宽高
     autoResize: Boolean,
     // 单选配置
@@ -434,6 +439,22 @@ export default {
       let tableFullColumn = UtilTools.getColumnList(value)
       this.tableFullColumn = tableFullColumn
       this.cacheColumnMap()
+      // 在 v2.0 中废弃
+      if (tableFullColumn.length) {
+        if (tableFullColumn.some(column => column.columnKey)) {
+          console.warn('[vxe-table] The property column.column-key is deprecated, please use table.column-key')
+        }
+      }
+      // 在 v3.0 中废弃
+      if (!isFieldWarn) {
+        if (tableFullColumn.length) {
+          let cIndex = Math.floor((tableFullColumn.length - 1) / 2)
+          if (tableFullColumn[cIndex].prop || tableFullColumn[cIndex].label) {
+            isFieldWarn = true
+            console.warn('[vxe-table] The property prop/label is deprecated, please use field/title')
+          }
+        }
+      }
     },
     tableColumn () {
       this.analyColumnWidth()
@@ -484,20 +505,20 @@ export default {
     this.fullColumnMap = new Map()
     this.fullColumnIdMap = new Map()
     this.loadData(this.data, true).then(() => {
-      let rowKey = UtilTools.getRowKey(this)
+      let rowkey = UtilTools.getRowkey(this)
       if (selectConfig.key) {
-        console.warn('[vxe-table] The property select-config.key is deprecated, please use (row-id | row-key)')
+        console.warn('[vxe-table] The property select-config.key is deprecated, please use row-id')
       } else if (treeConfig && treeConfig.key) {
-        console.warn('[vxe-table] The property tree-config.key is deprecated, please use (row-id | row-key)')
+        console.warn('[vxe-table] The property tree-config.key is deprecated, please use row-id')
       } else if (editConfig && editConfig.key) {
-        console.warn('[vxe-table] The property edit-config.key is deprecated, please use (row-id | row-key)')
+        console.warn('[vxe-table] The property edit-config.key is deprecated, please use row-id')
       }
-      if (selectConfig.reserve && !rowKey) {
-        throw new Error('[vxe-table] Checkbox status reserve must have a unique primary key (row-id | row-key).')
-      } else if (treeConfig && !rowKey) {
-        throw new Error('[vxe-table] Tree table must have a unique primary key (row-id | row-key).')
-      } else if (editConfig && !rowKey) {
-        throw new Error('[vxe-table] Editable must have a unique primary key (row-id | row-key).')
+      if (selectConfig.reserve && !rowkey) {
+        throw new Error('[vxe-table] Checkbox status reserve must have a unique primary key row-id')
+      } else if (treeConfig && !rowkey) {
+        throw new Error('[vxe-table] Tree table must have a unique primary key row-id')
+      } else if (editConfig && !rowkey) {
+        throw new Error('[vxe-table] Editable must have a unique primary key row-id')
       }
       this.tableFullColumn = UtilTools.getColumnList(this.collectColumn)
       if (this.customs) {
@@ -801,31 +822,31 @@ export default {
     // 更新数据的 Map
     cacheDataMap () {
       let { treeConfig, tableFullData, fullDataRowMap, fullDataRowIdMap } = this
-      let rowKey = UtilTools.getRowKey(this)
+      let rowkey = UtilTools.getRowkey(this)
       fullDataRowMap.clear()
       fullDataRowIdMap.clear()
       if (treeConfig) {
         XEUtils.eachTree(tableFullData, (row, index) => {
-          let rowPrimaryKey = XEUtils.get(row, rowKey)
-          if (!rowPrimaryKey) {
-            rowPrimaryKey = ++rowUniqueId
-            XEUtils.set(row, rowKey, rowPrimaryKey)
+          let rowid = XEUtils.get(row, rowkey)
+          if (!rowid) {
+            rowid = ++rowUniqueId
+            XEUtils.set(row, rowkey, rowid)
           }
-          fullDataRowIdMap.set(`${rowPrimaryKey}`, { rowKey, row, index })
-          fullDataRowMap.set(row, { row, index: rowPrimaryKey })
+          fullDataRowIdMap.set(`${rowid}`, { rowkey, row, index })
+          fullDataRowMap.set(row, { row, index: rowid })
         }, treeConfig)
       } else {
         tableFullData.forEach((row, rowIndex) => {
-          let rowPrimaryKey = rowIndex
-          if (rowKey) {
-            rowPrimaryKey = XEUtils.get(row, rowKey)
-            if (!rowPrimaryKey) {
-              rowPrimaryKey = ++rowUniqueId
-              XEUtils.set(row, rowKey, rowPrimaryKey)
+          let rowid = rowIndex
+          if (rowkey) {
+            rowid = XEUtils.get(row, rowkey)
+            if (!rowid) {
+              rowid = ++rowUniqueId
+              XEUtils.set(row, rowkey, rowid)
             }
           }
-          fullDataRowIdMap.set(`${rowPrimaryKey}`, { row, index: rowIndex })
-          fullDataRowMap.set(row, { row, rowPrimaryKey, index: rowIndex })
+          fullDataRowIdMap.set(`${rowid}`, { row, index: rowIndex })
+          fullDataRowMap.set(row, { row, rowid, index: rowIndex })
         })
       }
     },
@@ -843,15 +864,15 @@ export default {
     getRowNode (tr) {
       if (tr) {
         let { treeConfig, tableFullData, fullDataRowIdMap } = this
-        let rowPrimaryKey = tr.getAttribute('data-rowid')
+        let rowid = tr.getAttribute('data-rowid')
         if (treeConfig) {
-          let matchObj = XEUtils.findTree(tableFullData, (row, rowIndex) => UtilTools.getRowPrimaryKey(this, row, rowIndex) === rowPrimaryKey, treeConfig)
+          let matchObj = XEUtils.findTree(tableFullData, (row, rowIndex) => UtilTools.getRowid(this, row, rowIndex) === rowid, treeConfig)
           if (matchObj) {
             return matchObj
           }
         } else {
-          if (fullDataRowIdMap.has(rowPrimaryKey)) {
-            let rest = fullDataRowIdMap.get(rowPrimaryKey)
+          if (fullDataRowIdMap.has(rowid)) {
+            let rest = fullDataRowIdMap.get(rowid)
             return { item: rest.row, index: rest.index, items: tableFullData }
           }
         }
@@ -923,15 +944,15 @@ export default {
     },
     defineProperty (record) {
       let recordItem = Object.assign({}, record)
-      let rowKey = UtilTools.getRowKey(this)
+      let rowkey = UtilTools.getRowkey(this)
       this.visibleColumn.forEach(column => {
         if (column.property && !XEUtils.has(recordItem, column.property)) {
           XEUtils.set(recordItem, column.property, null)
         }
       })
       // 如果设置了 Key 就必须要唯一，可以自行设置；如果为空，则默认生成一个随机数
-      if (rowKey && !XEUtils.get(recordItem, rowKey)) {
-        XEUtils.set(recordItem, rowKey, ++rowUniqueId)
+      if (rowkey && !XEUtils.get(recordItem, rowkey)) {
+        XEUtils.set(recordItem, rowkey, ++rowUniqueId)
       }
       return recordItem
     },
@@ -1065,19 +1086,19 @@ export default {
     },
     hasRowChange (row, field) {
       let { tableSourceData, treeConfig } = this
-      let rowKey = UtilTools.getRowKey(this)
+      let rowkey = UtilTools.getRowkey(this)
       let oRow
-      if (rowKey || treeConfig) {
-        let rowPrimaryKey = XEUtils.get(row, rowKey)
+      if (rowkey || treeConfig) {
+        let rowid = XEUtils.get(row, rowkey)
         if (treeConfig) {
           let children = treeConfig.children
-          let matchObj = XEUtils.findTree(tableSourceData, row => rowPrimaryKey === XEUtils.get(row, rowKey), treeConfig)
+          let matchObj = XEUtils.findTree(tableSourceData, row => rowid === XEUtils.get(row, rowkey), treeConfig)
           row = Object.assign({}, row, { [children]: null })
           if (matchObj) {
             oRow = Object.assign({}, matchObj.item, { [children]: null })
           }
         } else {
-          oRow = tableSourceData.find(row => rowPrimaryKey === XEUtils.get(row, rowKey))
+          oRow = tableSourceData.find(row => rowid === XEUtils.get(row, rowkey))
         }
       } else {
         let oRowIndex = this.getRowIndex(row)
@@ -1186,7 +1207,7 @@ export default {
      * 如果存在筛选条件，继续处理
      */
     updateAfterFullData () {
-      let { visibleColumn, tableFullData, remoteFilter } = this
+      let { visibleColumn, tableFullData, remoteSort, remoteFilter } = this
       let column = this.visibleColumn.find(column => column.order)
       let tableData = tableFullData
       let filterColumn = visibleColumn.filter(({ filters }) => filters && filters.length)
@@ -1214,8 +1235,11 @@ export default {
         })
       })
       if (column && column.order) {
-        let rest = XEUtils.sortBy(tableData, column.property)
-        tableData = column.order === 'desc' ? rest.reverse() : rest
+        let isRemote = XEUtils.isBoolean(column.remoteSort) ? column.remoteSort : remoteSort
+        if (!isRemote) {
+          let rest = XEUtils.sortBy(tableData, column.property)
+          tableData = column.order === 'desc' ? rest.reverse() : rest
+        }
       }
       this.afterFullData = tableData
       return tableData
@@ -1286,7 +1310,7 @@ export default {
       if (arguments.length) {
         column.visible = visible
       } else {
-        this.visibleColumn.forEach(column => {
+        this.tableFullColumn.forEach(column => {
           column.visible = true
         })
       }
@@ -1867,10 +1891,10 @@ export default {
             let { targetElem, flag } = this.getEventTargetNode(evnt, this.$el, `vxe-${type}--column`)
             let args = { type, $table: this }
             if (flag) {
-              let { rowPrimaryKey, rowIndex, colIndex, columnIndex } = DomTools.getCellIndexs(targetElem)
+              let { rowid, rowIndex, colIndex, columnIndex } = DomTools.getCellIndexs(targetElem)
               let column = colIndex ? tableFullColumn[colIndex] : visibleColumn[columnIndex]
               if (type === 'body') {
-                let { row } = rowPrimaryKey ? fullDataRowIdMap.get(rowPrimaryKey) : tableData[rowIndex]
+                let row = rowid ? fullDataRowIdMap.get(rowid).row : tableData[rowIndex]
                 args.row = row
                 args.rowIndex = rowIndex
               }
@@ -2024,9 +2048,9 @@ export default {
       if (checkAll) {
         this.setAllSelection(true)
       } else if (checkRowKeys) {
-        let property = UtilTools.getRowKey(this)
-        if (!property) {
-          throw new Error('[vxe-table] Checked rows must have a unique primary key (row-id | row-key).')
+        let rowkey = UtilTools.getRowkey(this)
+        if (!rowkey) {
+          throw new Error('[vxe-table] Checked rows must have a unique primary key row-id')
         }
         this.setSelection(checkRowKeys.map(checkKey => fullDataRowIdMap.get(checkKey).row), true)
       }
@@ -2238,11 +2262,11 @@ export default {
     reserveCheckSelection () {
       let { selectConfig = {}, selection, fullDataRowIdMap } = this
       let { reserve } = selectConfig
-      let rowKey = UtilTools.getRowKey(this)
+      let rowkey = UtilTools.getRowkey(this)
       if (reserve && selection.length) {
         this.selection = selection.map(row => {
-          let rowPrimaryKey = '' + XEUtils.get(row, rowKey)
-          return fullDataRowIdMap.has(rowPrimaryKey) ? fullDataRowIdMap.get(rowPrimaryKey).row : row
+          let rowid = '' + XEUtils.get(row, rowkey)
+          return fullDataRowIdMap.has(rowid) ? fullDataRowIdMap.get(rowid).row : row
         })
       }
     },
@@ -2283,9 +2307,9 @@ export default {
       let { radioConfig = {}, fullDataRowIdMap } = this
       let { checkRowKey } = radioConfig
       if (checkRowKey) {
-        let property = UtilTools.getRowKey(this)
-        if (!property) {
-          throw new Error('[vxe-table] Checked row must have a unique primary key (row-id | row-key).')
+        let rowkey = UtilTools.getRowkey(this)
+        if (!rowkey) {
+          throw new Error('[vxe-table] Checked row must have a unique primary key row-id')
         }
         this.setRadioRow(fullDataRowIdMap.get(checkRowKey).row)
       }
@@ -2834,7 +2858,7 @@ export default {
       let { visibleColumn, tableFullColumn, remoteSort } = this
       let column = visibleColumn.find(item => item.property === field)
       let isRemote = XEUtils.isBoolean(column.remoteSort) ? column.remoteSort : remoteSort
-      if (column.sortable) {
+      if (column.sortable || column.remoteSort) {
         if (!order) {
           order = column.order === 'desc' ? 'asc' : 'desc'
         }
@@ -2986,15 +3010,14 @@ export default {
     handleDefaultRowExpand () {
       let { expandConfig = {}, tableFullData } = this
       let { expandAll, expandRowKeys } = expandConfig
-      let rowKey = UtilTools.getRowKey(this)
       if (expandAll) {
         this.expandeds = tableFullData.slice(0)
       } else if (expandRowKeys) {
-        let property = rowKey
-        if (!property) {
-          throw new Error('[vxe-table] Expand rows must have a unique primary key (row-id | row-key).')
+        let rowkey = UtilTools.getRowkey(this)
+        if (!rowkey) {
+          throw new Error('[vxe-table] Expand rows must have a unique primary key (row-id).')
         }
-        this.expandeds = expandRowKeys.map(expandKey => tableFullData.find(item => expandKey === item[property]))
+        this.expandeds = expandRowKeys.map(rowid => tableFullData.find(item => rowid === XEUtils.get(item, rowkey)))
       }
     },
     setAllRowExpansion (expanded) {
@@ -3062,7 +3085,6 @@ export default {
       if (treeConfig) {
         let { expandAll, expandRowKeys } = treeConfig
         let { children } = treeConfig
-        let property = UtilTools.getRowKey(this)
         let treeExpandeds = []
         if (expandAll) {
           XEUtils.filterTree(tableFullData, row => {
@@ -3073,8 +3095,9 @@ export default {
           }, treeConfig)
           this.treeExpandeds = treeExpandeds
         } else if (expandRowKeys) {
-          expandRowKeys.forEach(rowPrimaryKey => {
-            let matchObj = XEUtils.findTree(tableFullData, item => rowPrimaryKey === XEUtils.get(item, property), treeConfig)
+          let rowkey = UtilTools.getRowkey(this)
+          expandRowKeys.forEach(rowid => {
+            let matchObj = XEUtils.findTree(tableFullData, item => rowid === XEUtils.get(item, rowkey), treeConfig)
             let rowChildren = matchObj ? matchObj.item[children] : 0
             if (rowChildren && rowChildren.length) {
               treeExpandeds.push(matchObj.item)

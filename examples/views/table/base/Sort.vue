@@ -10,6 +10,7 @@
       :data.sync="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
+      <vxe-table-column field="nickname" title="Nickname" sortable></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
       <vxe-table-column field="age" title="Age"></vxe-table-column>
       <vxe-table-column field="time" title="Time" sortable></vxe-table-column>
@@ -31,6 +32,7 @@
       :data.sync="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
+      <vxe-table-column field="nickname" title="Nickname" sortable></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
       <vxe-table-column field="age" title="Age"></vxe-table-column>
       <vxe-table-column field="time" title="Time" sortable :sort-by="['time', 'name']"></vxe-table-column>
@@ -54,6 +56,7 @@
       @header-cell-click="headerCellClickEvent">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
+      <vxe-table-column field="nickname" title="Nickname" sortable></vxe-table-column>
       <vxe-table-column field="sex" title="Sex" sortable></vxe-table-column>
       <vxe-table-column field="age" title="Age" sortable></vxe-table-column>
       <vxe-table-column field="time" title="Time" sortable></vxe-table-column>
@@ -84,6 +87,7 @@ export default {
           :data.sync="tableData">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
+          <vxe-table-column field="nickname" title="Nickname" sortable></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
           <vxe-table-column field="age" title="Age"></vxe-table-column>
           <vxe-table-column field="time" title="Time" sortable></vxe-table-column>
@@ -109,6 +113,7 @@ export default {
           :data.sync="tableData">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
+          <vxe-table-column field="nickname" title="Nickname" sortable></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
           <vxe-table-column field="age" title="Age"></vxe-table-column>
           <vxe-table-column field="time" title="Time" sortable :sort-by="['time', 'name']"></vxe-table-column>
@@ -136,6 +141,7 @@ export default {
           @header-cell-click="headerCellClickEvent">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
+          <vxe-table-column field="nickname" title="Nickname" sortable></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" sortable></vxe-table-column>
           <vxe-table-column field="age" title="Age" sortable></vxe-table-column>
           <vxe-table-column field="time" title="Time" sortable></vxe-table-column>

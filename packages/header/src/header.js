@@ -202,7 +202,7 @@ export default {
                 rowspan: column.rowSpan
               },
               on: thOns,
-              key: columnKey || (isColGroup ? column.id : columnIndex)
+              key: columnKey || (isColGroup || $table.columnKey ? column.id : $columnIndex)
             }, [
               h('div', {
                 class: ['vxe-cell', {

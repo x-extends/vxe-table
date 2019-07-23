@@ -391,17 +391,25 @@ const apis = [
         list: []
       },
       {
+        name: 'column-key',
+        descKey: 'app.api.table.desc.columnKey',
+        type: 'Boolean',
+        enum: '',
+        defVal: 'false',
+        list: []
+      },
+      {
         name: 'row-key',
         descKey: 'app.api.table.desc.rowKey',
-        type: 'Number, String',
+        type: 'Boolean',
         enum: '',
-        defVal: '',
+        defVal: 'false',
         list: []
       },
       {
         name: 'row-id',
         descKey: 'app.api.table.desc.rowId',
-        type: 'Number, String',
+        type: 'String',
         enum: '',
         defVal: '',
         list: []
@@ -432,7 +440,7 @@ const apis = [
           },
           {
             name: 'checkRowKey',
-            desc: '默认勾选开指定行（需要 row-id | row-key）',
+            desc: '默认勾选开指定行（需要 row-id）',
             type: 'String',
             enum: '',
             defVal: '',
@@ -458,7 +466,7 @@ const apis = [
           {
             name: 'key',
             disabled: true,
-            desc: '在 v2.0 中废弃，请使用 row-id | row-key',
+            desc: '在 v2.0 中废弃，请使用 row-id',
             type: 'String',
             enum: '',
             defVal: '',
@@ -466,7 +474,7 @@ const apis = [
           },
           {
             name: 'reserve',
-            desc: '是否保留勾选状态，对于某些场景下非常有用，比如分页之后还保留之前选中的状态（需要 row-id | row-key）',
+            desc: '是否保留勾选状态，对于某些场景下非常有用，比如分页之后还保留之前选中的状态（需要 row-id）',
             type: 'String',
             enum: '',
             defVal: 'false',
@@ -516,7 +524,7 @@ const apis = [
           },
           {
             name: 'checkRowKeys',
-            desc: '默认勾选开指定行（需要 row-id | row-key）',
+            desc: '默认勾选开指定行（需要 row-id）',
             type: 'Array<String>',
             enum: '',
             defVal: '',
@@ -583,7 +591,7 @@ const apis = [
           {
             name: 'key',
             disabled: true,
-            desc: '在 v2.0 中废弃，请使用 row-id | row-key',
+            desc: '在 v2.0 中废弃，请使用 row-id',
             type: 'String',
             enum: '',
             defVal: '',
@@ -599,7 +607,7 @@ const apis = [
           },
           {
             name: 'expandRowKeys',
-            desc: '默认展开指定行（需要 row-id | row-key）',
+            desc: '默认展开指定行（需要 row-id）',
             type: 'Array',
             enum: '',
             defVal: '',
@@ -633,7 +641,7 @@ const apis = [
           {
             name: 'key',
             disabled: true,
-            desc: '在 v2.0 中废弃，请使用 row-id | row-key',
+            desc: '在 v2.0 中废弃，请使用 row-id',
             type: 'String',
             enum: '',
             defVal: '',
@@ -814,7 +822,7 @@ const apis = [
           {
             name: 'key',
             disabled: true,
-            desc: '在 v2.0 中废弃，请使用 row-id | row-key',
+            desc: '在 v2.0 中废弃，请使用 row-id',
             type: 'String',
             enum: '',
             defVal: '',

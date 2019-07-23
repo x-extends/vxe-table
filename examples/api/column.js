@@ -236,8 +236,9 @@ const apis = [
       },
       {
         name: 'column-key',
-        descKey: 'app.api.tableColumn.desc.columnKey',
-        type: 'String, Number',
+        disabled: true,
+        desc: '在 v2.0 中废弃，请使用 table.column-key',
+        type: 'String',
         enum: '',
         defVal: '',
         list: []
