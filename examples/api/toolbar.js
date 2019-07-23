@@ -123,33 +123,33 @@ const apis = [
     enum: '',
     defVal: '',
     list: [
-      {
-        name: 'hideColumn(column)',
-        desc: '隐藏指定列',
-        type: '',
-        enum: '',
-        defVal: 'column',
-        list: []
-      },
-      {
-        name: 'showColumn(column)',
-        desc: '显示指定列，如果不传参数则显示所有列',
-        type: '',
-        enum: '',
-        defVal: 'column?',
-        list: []
-      },
       // {
-      //   name: 'updateSetting()',
-      //   desc: '更新列设置',
+      //   name: 'hideColumn(column)',
+      //   desc: '隐藏指定列',
       //   type: '',
       //   enum: '',
-      //   defVal: '',
+      //   defVal: 'column',
+      //   list: []
+      // },
+      // {
+      //   name: 'showColumn(column)',
+      //   desc: '显示指定列',
+      //   type: '',
+      //   enum: '',
+      //   defVal: 'column',
       //   list: []
       // },
       {
-        name: 'resetStorage()',
-        desc: '重置所有本地储存数据',
+        name: 'updateSetting()',
+        desc: '手动更新列自定义的操作状态',
+        type: '',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'updateResizable()',
+        desc: '手动更新列宽拖动的操作状态',
         type: '',
         enum: '',
         defVal: '',

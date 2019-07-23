@@ -1792,6 +1792,30 @@ const apis = [
         list: []
       },
       {
+        name: 'resetCustoms()',
+        desc: '手动重置列的显示/隐藏操作，还原到初始状态（如果已关联工具栏，则会同步更新）',
+        type: 'Promise',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'resetResizable()',
+        desc: '手动重置列宽拖动的操作，还原到初始状态（如果已关联工具栏，则会同步更新）',
+        type: 'Promise',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'resetAll()',
+        desc: '手动重置列的所有操作，还原到初始状态（如果已关联工具栏，则会同步更新）',
+        type: 'Promise',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'closeFilter()',
         desc: '手动关闭筛选面板',
         type: 'Promise',
@@ -1829,6 +1853,22 @@ const apis = [
         type: 'Promise',
         enum: '',
         defVal: 'scope',
+        list: []
+      },
+      {
+        name: 'hideColumn(column)',
+        desc: '隐藏指定列',
+        type: 'Promise',
+        enum: '',
+        defVal: 'column',
+        list: []
+      },
+      {
+        name: 'showColumn(column)',
+        desc: '显示指定列',
+        type: 'Promise',
+        enum: '',
+        defVal: 'column',
         list: []
       },
       {

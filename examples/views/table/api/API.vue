@@ -1,6 +1,6 @@
 <template>
   <div>
-    <vxe-toolbar ref="xToolbar" id="document_api" :resizable="{storage: true}" :setting="{storage: true}">
+    <vxe-toolbar id="document_api" :resizable="{storage: true}" :setting="{storage: true}">
       <template v-slot:buttons>
         <vxe-input class="search-input" v-model="filterName" type="search" :placeholder="`vxe-${apiName} ${$t('app.api.form.apiSearch')}`"></vxe-input>
       </template>
@@ -233,13 +233,13 @@ export default {
     contextMenuClickEvent ({ menu, row, column }) {
       switch (menu.code) {
         case 'hideColumn':
-          this.$refs.xToolbar.hideColumn(column)
+          this.$refs.xTable.hideColumn(column)
           break
         case 'showAllColumn':
-          this.$refs.xToolbar.showColumn()
+          this.$refs.xTable.showColumn()
           break
         case 'resetColumn':
-          this.$refs.xToolbar.resetStorage()
+          this.$refs.xTable.resetAll()
           break
         case 'exportAll':
           this.$refs.xTable.exportCsv({

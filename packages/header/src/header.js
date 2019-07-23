@@ -220,6 +220,7 @@ export default {
             return h('th', {
               class: ['vxe-header--column', column.id, {
                 [`col--${headAlign}`]: headAlign,
+                'col--fixed': column.fixed,
                 'col--index': column.type === 'index',
                 'col--group': isColGroup,
                 'col--ellipsis': hasEllipsis,
@@ -330,7 +331,6 @@ export default {
         }
         dragLeft = Math.max(left, dragMinLeft)
         resizeBarElem.style.left = `${dragLeft - scrollLeft}px`
-        column.isResizable = true
       }
       $table._isResize = true
       DomTools.addClass($table.$el, 'c--resize')

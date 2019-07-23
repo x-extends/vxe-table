@@ -1199,6 +1199,32 @@ export default {
       }
       this.$emit('update:customs', tableFullColumn)
     },
+    resetAll () {
+      this.resetCustoms()
+      this.resetResizable()
+    },
+    hideColumn (column) {
+      return this.handleVisibleColumn(column, false)
+    },
+    showColumn (column) {
+      return this.handleVisibleColumn(column, true)
+    },
+    resetCustoms () {
+      return this.handleVisibleColumn()
+    },
+    handleVisibleColumn (column, visible) {
+      if (arguments.length) {
+        column.visible = visible
+      } else {
+        this.visibleColumn.forEach(column => {
+          column.visible = true
+        })
+      }
+      if (this._toolbar) {
+        this._toolbar.updateSetting()
+      }
+      return this.$nextTick()
+    },
     /**
      * 初始化加载动态列
      */
@@ -1414,6 +1440,16 @@ export default {
       if (this.overflowX) {
         this.checkScrolling()
       }
+    },
+    resetResizable () {
+      this.visibleColumn.forEach(column => {
+        column.resizeWidth = 0
+      })
+      if (this._toolbar) {
+        this._toolbar.resetResizable()
+      }
+      this.analyColumnWidth()
+      return this.recalculate(true)
     },
     updateStyle () {
       let {
@@ -1646,7 +1682,7 @@ export default {
                 // 如果点击了当前表格之外
                 !this.getEventTargetNode(evnt, $el).flag
               ) {
-                setTimeout(this.clearActived)
+                setTimeout(() => this.clearActived(evnt))
               }
             })
           }
@@ -2425,7 +2461,7 @@ export default {
         } else {
           evnt.preventDefault()
           evnt.stopPropagation()
-          this.clearSelected()
+          this.clearSelected(evnt)
           this.clearHeaderChecked()
           this.clearIndexChecked()
           let domMousemove = document.onmousemove
@@ -2822,7 +2858,7 @@ export default {
           this.clearChecked(evnt)
           this.clearIndexChecked()
           this.clearHeaderChecked()
-          this.clearSelected()
+          this.clearSelected(evnt)
           this.clearActived(evnt)
           selected.args = params
           selected.row = row
