@@ -112,6 +112,7 @@ export default {
       $listeners: tableListeners,
       resizable,
       border,
+      columnKey,
       headerRowClassName,
       headerCellClassName,
       showHeaderOverflow: allColumnHeaderOverflow,
@@ -174,7 +175,6 @@ export default {
             class: ['vxe-header--row', headerRowClassName ? XEUtils.isFunction(headerRowClassName) ? headerRowClassName({ $table, $rowIndex, fixed: fixedType }) : headerRowClassName : '']
           }, cols.map((column, $columnIndex) => {
             let {
-              columnKey,
               showHeaderOverflow,
               headerAlign,
               align,
@@ -234,7 +234,7 @@ export default {
                 rowspan: column.rowSpan
               },
               on: thOns,
-              key: columnKey || (isColGroup ? column.id : columnIndex)
+              key: columnKey || isColGroup ? column.id : $columnIndex
             }, [
               h('div', {
                 class: ['vxe-cell', {

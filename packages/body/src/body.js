@@ -11,6 +11,7 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
     $listeners: tableListeners,
     tableData,
     height,
+    columnKey,
     overflowX,
     scrollXLoad,
     scrollYLoad,
@@ -32,8 +33,7 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
   let {
     editRender,
     align,
-    showOverflow,
-    columnKey
+    showOverflow
   } = column
   let { actived } = editStore
   let fixedHiddenColumn = fixedType ? column.fixed !== fixedType : column.fixed && overflowX
@@ -129,7 +129,7 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
       'col--actived': editConfig && editRender && (actived.row === row && (actived.column === column || editConfig.mode === 'row')),
       'col--valid-error': validError
     }, cellClassName ? XEUtils.isFunction(cellClassName) ? cellClassName(params) : cellClassName : ''],
-    key: columnKey || columnIndex,
+    key: columnKey ? column.id : $columnIndex,
     attrs,
     on: tdOns
   }, allColumnOverflow && fixedHiddenColumn ? [] : [
@@ -184,7 +184,7 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
         $table.triggerHoverEvent(evnt, { row, rowIndex })
       }
     }
-    let rowPrimaryKey = UtilTools.getRowPrimaryKey($table, row)
+    let rowid = UtilTools.getRowid($table, row)
     rows.push(
       h('tr', {
         class: ['vxe-body--row', {
@@ -192,9 +192,9 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
           'row--new': editStore.insertList.indexOf(row) > -1
         }, rowClassName ? XEUtils.isFunction(rowClassName) ? rowClassName({ $table, seq, row, rowIndex }) : rowClassName : ''],
         attrs: {
-          'data-rowid': rowPrimaryKey
+          'data-rowid': rowid
         },
-        key: treeConfig ? rowPrimaryKey : (rowKey ? XEUtils.get(row, rowKey) : $rowIndex),
+        key: rowKey || treeConfig ? rowid : $rowIndex,
         on: trOn
       }, tableColumn.map((column, $columnIndex) => {
         let columnIndex = getColumnIndex(column)
@@ -215,7 +215,7 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
         rows.push(
           h('tr', {
             class: 'vxe-body--expanded-row',
-            key: `expand_${rowPrimaryKey}`,
+            key: `expand_${rowid}`,
             on: trOn
           }, [
             h('td', {

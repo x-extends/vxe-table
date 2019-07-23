@@ -30,7 +30,6 @@ class ColumnConfig {
       filterMethod: _vm.filterMethod,
       filterRender: _vm.filterRender,
       treeNode: _vm.treeNode,
-      columnKey: _vm.columnKey,
       editRender: _vm.editRender,
       // 自定义参数
       params: _vm.params,
@@ -59,16 +58,13 @@ export const UtilTools = {
   getSize ({ size, $parent }) {
     return size || ($parent && ['medium', 'small', 'mini'].indexOf($parent.size) > -1 ? $parent.size : null)
   },
-  getRowKey ($table) {
-    // let { rowKey, selectConfig = {}, treeConfig = {}, expandConfig = {}, editConfig = {} } = $table
-    // if (!rowKey) {
-    //   rowKey = selectConfig.key || treeConfig.key || expandConfig.key || editConfig.key
-    // }
-    // return rowKey
-    return $table.rowKey || $table.rowId
+  // 行主键 key
+  getRowkey ($table) {
+    return $table.rowId
   },
-  getRowPrimaryKey ($table, row) {
-    let rowId = XEUtils.get(row, UtilTools.getRowKey($table))
+  // 行主键 value
+  getRowid ($table, row) {
+    let rowId = XEUtils.get(row, UtilTools.getRowkey($table))
     return rowId ? encodeURIComponent(rowId) : ''
   },
   // 触发事件

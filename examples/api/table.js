@@ -381,17 +381,25 @@ const apis = [
         list: []
       },
       {
+        name: 'column-key',
+        descKey: 'app.api.table.desc.columnKey',
+        type: 'Boolean',
+        enum: '',
+        defVal: 'false',
+        list: []
+      },
+      {
         name: 'row-key',
         descKey: 'app.api.table.desc.rowKey',
-        type: 'Number, String',
+        type: 'Boolean',
         enum: '',
-        defVal: '',
+        defVal: 'false',
         list: []
       },
       {
         name: 'row-id',
         descKey: 'app.api.table.desc.rowId',
-        type: 'Number, String',
+        type: 'String',
         enum: '',
         defVal: '_XID',
         list: []
@@ -413,7 +421,7 @@ const apis = [
           },
           {
             name: 'checkRowKey',
-            desc: '默认勾选开指定行（需要 row-id | row-key）',
+            desc: '默认勾选开指定行（需要 row-id）',
             type: 'String',
             enum: '',
             defVal: '',
@@ -470,7 +478,7 @@ const apis = [
           },
           {
             name: 'checkRowKeys',
-            desc: '默认勾选开指定行（需要 row-id | row-key）',
+            desc: '默认勾选开指定行（需要 row-id）',
             type: 'Array<String>',
             enum: '',
             defVal: '',
@@ -544,7 +552,7 @@ const apis = [
           },
           {
             name: 'expandRowKeys',
-            desc: '默认展开指定行（需要 row-id | row-key）',
+            desc: '默认展开指定行（需要 row-id）',
             type: 'Array',
             enum: '',
             defVal: '',

@@ -13,9 +13,7 @@
       :pager-config="{pageSize: 15}"
       :columns="tableColumn"
       :proxy-config="tableProxy"
-      :select-config="{reserve: true}"
-      @sort-change="sortChangeEvent"
-      @filter-change="filterChangeEvent"></vxe-grid>
+      :select-config="{reserve: true}"></vxe-grid>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
@@ -33,14 +31,23 @@ import hljs from 'highlight.js'
 export default {
   data () {
     return {
-      formData: {
-        sort: '',
-        order: ''
-      },
       tableProxy: {
         index: true, // 启用动态序号代理
+        sort: true, // 启用排序代理
+        filter: true, // 启用筛选代理
         ajax: {
-          query: ({ page }) => XEAjax.getJSON(`/api/user/page/list/${page.pageSize}/${page.currentPage}`, this.formData)
+          query: ({ page, sort, filters }) => {
+            // 处理排序条件
+            let formData = {
+              sort: sort.field,
+              order: sort.order
+            }
+            // 处理筛选条件
+            filters.forEach(({ column, field, values }) => {
+              formData[field] = values.join(',')
+            })
+            return XEAjax.getJSON(`/api/user/page/list/${page.pageSize}/${page.currentPage}`, formData)
+          }
         }
       },
       tableColumn: [
@@ -82,14 +89,23 @@ export default {
         export default {
           data () {
             return {
-              formData: {
-                sort: '',
-                order: ''
-              },
               tableProxy: {
                 index: true, // 启用动态序号代理
+                sort: true, // 启用排序代理
+                filter: true, // 启用筛选代理
                 ajax: {
-                  query: ({ page }) => XEAjax.getJSON(\`/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`, this.formData)
+                  query: ({ page, sort, filters }) => {
+                    // 处理排序条件
+                    let formData = {
+                      sort: sort.field,
+                      order: sort.order
+                    }
+                    // 处理筛选条件
+                    filters.forEach(({ column, field, values }) => {
+                      formData[field] = values.join(',')
+                    })
+                    return XEAjax.getJSON(\`/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`, formData)
+                  }
                 }
               },
               tableColumn: [
@@ -114,21 +130,6 @@ export default {
                 { field: 'describe', title: 'Describe', width: 300, showOverflow: true }
               ]
             }
-          },
-          methods: {
-            sortChangeEvent ({ column, field, order }) {
-              this.formData.sort = field
-              this.formData.order = order
-              // 重新查询
-              this.$refs.xGrid.commitProxy('query')
-            },
-            filterChangeEvent ({ filters }) {
-              filters.forEach(({ column, field, values }) => {
-                this.formData[field] = values.join(',')
-              })
-              // 重新加载，恢复初始状态
-              this.$refs.xGrid.commitProxy('reload')
-            }
           }
         }
         `
@@ -139,21 +140,6 @@ export default {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
       hljs.highlightBlock(block)
     })
-  },
-  methods: {
-    sortChangeEvent ({ column, field, order }) {
-      this.formData.sort = field
-      this.formData.order = order
-      // 重新查询
-      this.$refs.xGrid.commitProxy('query')
-    },
-    filterChangeEvent ({ filters }) {
-      filters.forEach(({ column, field, values }) => {
-        this.formData[field] = values.join(',')
-      })
-      // 重新加载，恢复初始状态
-      this.$refs.xGrid.commitProxy('reload')
-    }
   }
 }
 </script>

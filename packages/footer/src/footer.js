@@ -35,6 +35,7 @@ export default {
       footerRowClassName,
       footerCellClassName,
       scrollXLoad,
+      columnKey,
       showOverflow: allColumnOverflow,
       overflowX,
       getColumnIndex
@@ -131,7 +132,7 @@ export default {
                 'data-index': columnIndex
               },
               on: tfOns,
-              key: columnIndex
+              key: columnKey ? column.id : $columnIndex
             }, [
               h('div', {
                 class: 'vxe-cell'

@@ -368,9 +368,8 @@ export default {
         sortData.field = field
         sortData.order = order
         this.commitProxy('query')
-      } else {
-        UtilTools.emitEvent(this, 'sort-change', [params])
       }
+      UtilTools.emitEvent(this, 'sort-change', [params])
     },
     filterChangeEvent (params) {
       let { remoteFilter } = this
@@ -379,9 +378,8 @@ export default {
       if (remoteFilter) {
         this.filterData = filters
         this.commitProxy('reload')
-      } else {
-        UtilTools.emitEvent(this, 'filter-change', [params])
       }
+      UtilTools.emitEvent(this, 'filter-change', [params])
     }
   }
 }

@@ -141,10 +141,13 @@ export default {
     showHeaderOverflow: { type: [Boolean, String], default: () => GlobalConfig.showHeaderOverflow },
     // 是否服务端筛选
     remoteFilter: Boolean,
+    // 是否服务端排序
+    remoteSort: Boolean,
 
     /** 高级属性 */
-    // 行数据的 Key
-    rowKey: String,
+    // 主键配置
+    columnKey: Boolean,
+    rowKey: Boolean,
     rowId: { type: String, default: () => GlobalConfig.rowId },
     // 是否自动根据父容器响应式调整表格宽高
     autoResize: Boolean,
@@ -736,15 +739,15 @@ export default {
     // 更新数据的 Map
     cacheDataMap () {
       let { treeConfig, tableFullData, fullDataRowMap, fullDataRowIdMap } = this
-      let rowKey = UtilTools.getRowKey(this)
+      let rowkey = UtilTools.getRowkey(this)
       let handleData = (row, index) => {
-        let rowPrimaryKey = UtilTools.getRowPrimaryKey(this, row)
-        if (!rowPrimaryKey) {
-          rowPrimaryKey = ++rowUniqueId
-          XEUtils.set(row, rowKey, rowPrimaryKey)
+        let rowid = UtilTools.getRowid(this, row)
+        if (!rowid) {
+          rowid = ++rowUniqueId
+          XEUtils.set(row, rowkey, rowid)
         }
-        let rest = { row, rowid: rowPrimaryKey, index }
-        fullDataRowIdMap.set('' + rowPrimaryKey, rest)
+        let rest = { row, rowid, index }
+        fullDataRowIdMap.set('' + rowid, rest)
         fullDataRowMap.set(row, rest)
       }
       fullDataRowMap.clear()
@@ -769,15 +772,15 @@ export default {
     getRowNode (tr) {
       if (tr) {
         let { treeConfig, tableFullData, fullDataRowIdMap } = this
-        let rowPrimaryKey = tr.getAttribute('data-rowid')
+        let rowid = tr.getAttribute('data-rowid')
         if (treeConfig) {
-          let matchObj = XEUtils.findTree(tableFullData, row => UtilTools.getRowPrimaryKey(this, row) === rowPrimaryKey, treeConfig)
+          let matchObj = XEUtils.findTree(tableFullData, row => UtilTools.getRowid(this, row) === rowid, treeConfig)
           if (matchObj) {
             return matchObj
           }
         } else {
-          if (fullDataRowIdMap.has(rowPrimaryKey)) {
-            let rest = fullDataRowIdMap.get(rowPrimaryKey)
+          if (fullDataRowIdMap.has(rowid)) {
+            let rest = fullDataRowIdMap.get(rowid)
             return { item: rest.row, index: rest.index, items: tableFullData }
           }
         }
@@ -847,15 +850,15 @@ export default {
     },
     defineProperty (record) {
       let recordItem = Object.assign({}, record)
-      let rowKey = UtilTools.getRowKey(this)
+      let rowkey = UtilTools.getRowkey(this)
       this.visibleColumn.forEach(column => {
         if (column.property && !XEUtils.has(recordItem, column.property)) {
           XEUtils.set(recordItem, column.property, null)
         }
       })
       // 如果设置了 Key 就必须要唯一，可以自行设置；如果为空，则默认生成一个随机数
-      if (rowKey && !XEUtils.get(recordItem, rowKey)) {
-        XEUtils.set(recordItem, rowKey, ++rowUniqueId)
+      if (rowkey && !XEUtils.get(recordItem, rowkey)) {
+        XEUtils.set(recordItem, rowkey, ++rowUniqueId)
       }
       return recordItem
     },
@@ -989,19 +992,19 @@ export default {
       if (!fullDataRowMap.has(row)) {
         return false
       }
-      let rowKey = UtilTools.getRowKey(this)
-      if (rowKey) {
-        let rowPrimaryKey = UtilTools.getRowPrimaryKey(this, row)
+      let rowkey = UtilTools.getRowkey(this)
+      if (rowkey) {
+        let rowid = UtilTools.getRowid(this, row)
         let treeConfig = this.treeConfig
         if (treeConfig) {
           let children = treeConfig.children
-          let matchObj = XEUtils.findTree(tableSourceData, item => rowPrimaryKey === UtilTools.getRowPrimaryKey(this, item), treeConfig)
+          let matchObj = XEUtils.findTree(tableSourceData, item => rowid === UtilTools.getRowid(this, item), treeConfig)
           row = Object.assign({}, row, { [children]: null })
           if (matchObj) {
             oRow = Object.assign({}, matchObj.item, { [children]: null })
           }
         } else {
-          let oRowIndex = this.fullDataRowIdMap.get(rowPrimaryKey).index
+          let oRowIndex = this.fullDataRowIdMap.get(rowid).index
           oRow = tableSourceData[oRowIndex]
         }
       } else {
@@ -1112,7 +1115,7 @@ export default {
      * 如果存在筛选条件，继续处理
      */
     updateAfterFullData () {
-      let { visibleColumn, tableFullData, remoteFilter } = this
+      let { visibleColumn, tableFullData, remoteSort, remoteFilter } = this
       let column = visibleColumn.find(column => column.order)
       let tableData = tableFullData
       let filterColumn = visibleColumn.filter(({ filters }) => filters && filters.length)
@@ -1141,8 +1144,11 @@ export default {
         })
       })
       if (column && column.order) {
-        let rest = XEUtils.sortBy(tableData, column.property)
-        tableData = column.order === 'desc' ? rest.reverse() : rest
+        let isRemote = XEUtils.isBoolean(column.remoteSort) ? column.remoteSort : remoteSort
+        if (!isRemote) {
+          let rest = XEUtils.sortBy(tableData, column.property)
+          tableData = column.order === 'desc' ? rest.reverse() : rest
+        }
       }
       this.afterFullData = tableData
       return tableData
@@ -1216,7 +1222,7 @@ export default {
       if (arguments.length) {
         column.visible = visible
       } else {
-        this.visibleColumn.forEach(column => {
+        this.tableFullColumn.forEach(column => {
           column.visible = true
         })
       }
@@ -1955,10 +1961,10 @@ export default {
             let { targetElem, flag } = this.getEventTargetNode(evnt, this.$el, `vxe-${type}--column`)
             let args = { type, $table: this }
             if (flag) {
-              let { rowPrimaryKey, rowIndex, colIndex, columnIndex } = DomTools.getCellIndexs(targetElem)
+              let { rowid, rowIndex, colIndex, columnIndex } = DomTools.getCellIndexs(targetElem)
               let column = colIndex ? tableFullColumn[colIndex] : visibleColumn[columnIndex]
               if (type === 'body') {
-                let { row } = rowPrimaryKey ? fullDataRowIdMap.get(rowPrimaryKey) : tableData[rowIndex]
+                let row = rowid ? fullDataRowIdMap.get(rowid).row : tableData[rowIndex]
                 args.row = row
                 args.rowIndex = rowIndex
               }
@@ -2325,11 +2331,11 @@ export default {
     reserveCheckSelection () {
       let { selectConfig = {}, selection, fullDataRowIdMap } = this
       let { reserve } = selectConfig
-      let rowKey = UtilTools.getRowKey(this)
+      let rowkey = UtilTools.getRowkey(this)
       if (reserve && selection.length) {
         this.selection = selection.map(row => {
-          let rowPrimaryKey = '' + XEUtils.get(row, rowKey)
-          return fullDataRowIdMap.has(rowPrimaryKey) ? fullDataRowIdMap.get(rowPrimaryKey).row : row
+          let rowid = '' + XEUtils.get(row, rowkey)
+          return fullDataRowIdMap.has(rowid) ? fullDataRowIdMap.get(rowid).row : row
         })
       }
     },
@@ -2388,12 +2394,12 @@ export default {
      * 高亮行，设置某一行为高亮状态，如果调不加参数，则会取消目前高亮行的选中状态
      */
     setCurrentRow (row) {
-      let rowPrimaryKey = UtilTools.getRowPrimaryKey(this, row)
+      let rowid = UtilTools.getRowid(this, row)
       this.clearCurrentRow()
       this.clearCurrentColumn()
       this.currentRow = row
       if (this.highlightCurrentRow) {
-        XEUtils.arrayEach(this.$el.querySelectorAll(`[data-rowid="${rowPrimaryKey}"]`), elem => DomTools.addClass(elem, 'row--current'))
+        XEUtils.arrayEach(this.$el.querySelectorAll(`[data-rowid="${rowid}"]`), elem => DomTools.addClass(elem, 'row--current'))
       }
       return this.$nextTick()
     },
@@ -2425,9 +2431,9 @@ export default {
      */
     triggerHoverEvent (evnt, { row, rowIndex }) {
       let { $el } = this
-      let rowPrimaryKey = UtilTools.getRowPrimaryKey(this, row)
+      let rowid = UtilTools.getRowid(this, row)
       this.clearHoverRow()
-      XEUtils.arrayEach($el.querySelectorAll(`[data-rowid="${rowPrimaryKey}"]`), elem => DomTools.addClass(elem, 'row--hover'))
+      XEUtils.arrayEach($el.querySelectorAll(`[data-rowid="${rowid}"]`), elem => DomTools.addClass(elem, 'row--hover'))
       this.hoverRow = row
     },
     clearHoverRow () {
@@ -2865,8 +2871,8 @@ export default {
           selected.column = column
           if (mouseConfig.selected) {
             let listElem = elemStore['main-body-list']
-            let rowPrimaryKey = UtilTools.getRowPrimaryKey(this, row)
-            let trElem = listElem.querySelector(`[data-rowid="${rowPrimaryKey}"]`)
+            let rowid = UtilTools.getRowid(this, row)
+            let trElem = listElem.querySelector(`[data-rowid="${rowid}"]`)
             let tdElem = trElem.querySelector(`.${column.id}`)
             DomTools.addClass(tdElem, 'col--selected')
           }
@@ -3211,7 +3217,7 @@ export default {
       let { visibleColumn, tableFullColumn, remoteSort } = this
       let column = visibleColumn.find(item => item.property === field)
       let isRemote = XEUtils.isBoolean(column.remoteSort) ? column.remoteSort : remoteSort
-      if (column.sortable) {
+      if (column.sortable || column.remoteSort) {
         if (!order) {
           order = column.order === 'desc' ? 'asc' : 'desc'
         }
@@ -3453,7 +3459,6 @@ export default {
       if (treeConfig) {
         let { expandAll, expandRowKeys } = treeConfig
         let { children } = treeConfig
-        let property = UtilTools.getRowKey(this)
         let treeExpandeds = []
         if (expandAll) {
           XEUtils.filterTree(tableFullData, row => {
@@ -3464,8 +3469,9 @@ export default {
           }, treeConfig)
           this.treeExpandeds = treeExpandeds
         } else if (expandRowKeys) {
-          expandRowKeys.forEach(rowPrimaryKey => {
-            let matchObj = XEUtils.findTree(tableFullData, item => rowPrimaryKey === XEUtils.get(item, property), treeConfig)
+          let rowkey = UtilTools.getRowkey(this)
+          expandRowKeys.forEach(rowid => {
+            let matchObj = XEUtils.findTree(tableFullData, item => rowid === XEUtils.get(item, rowkey), treeConfig)
             let rowChildren = matchObj ? matchObj.item[children] : 0
             if (rowChildren && rowChildren.length) {
               treeExpandeds.push(matchObj.item)
@@ -3770,7 +3776,7 @@ export default {
     },
     scrollToRow (row) {
       let { scrollYLoad, scrollYStore, afterFullData, fullDataRowMap, elemStore } = this
-      let rowPrimaryKey = UtilTools.getRowPrimaryKey(this, row)
+      let rowid = UtilTools.getRowid(this, row)
       if (scrollYLoad) {
         if (row === -1 && afterFullData.length) {
           row = afterFullData[afterFullData.length - 1]
@@ -3782,7 +3788,7 @@ export default {
         }
       } else {
         let bodyElem = elemStore['main-body-list']
-        DomTools.scrollIntoElem(bodyElem.querySelector(`[data-rowid="${rowPrimaryKey}"]`))
+        DomTools.scrollIntoElem(bodyElem.querySelector(`[data-rowid="${rowid}"]`))
       }
     },
     scrollToColumn (column) {

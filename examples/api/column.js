@@ -235,14 +235,6 @@ const apis = [
         list: []
       },
       {
-        name: 'column-key',
-        descKey: 'app.api.tableColumn.desc.columnKey',
-        type: 'String, Number',
-        enum: '',
-        defVal: '',
-        list: []
-      },
-      {
         name: 'edit-render',
         descKey: 'app.api.tableColumn.desc.editRender',
         type: 'Object',

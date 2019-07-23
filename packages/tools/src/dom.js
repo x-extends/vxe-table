@@ -133,14 +133,14 @@ export const DomTools = {
   getCellIndexs (cell) {
     let trElem = cell.parentNode
     let colIndex = cell.getAttribute('data-index')
-    let rowPrimaryKey = trElem.getAttribute('data-rowid')
+    let rowid = trElem.getAttribute('data-rowid')
     let columnIndex = [].indexOf.call(trElem.children, cell)
     let rowIndex = [].indexOf.call(trElem.parentNode.children, trElem)
-    return { rowPrimaryKey, rowIndex, colIndex: colIndex ? parseInt(colIndex) : colIndex, columnIndex }
+    return { rowid, rowIndex, colIndex: colIndex ? parseInt(colIndex) : colIndex, columnIndex }
   },
   getCell ($table, { row, column }) {
-    let rowPrimaryKey = UtilTools.getRowPrimaryKey($table, row)
-    return $table.$refs.tableBody.$el.querySelector(`.vxe-body--row[data-rowid="${rowPrimaryKey}"] .${column.id}`)
+    let rowid = UtilTools.getRowid($table, row)
+    return $table.$refs.tableBody.$el.querySelector(`.vxe-body--row[data-rowid="${rowid}"] .${column.id}`)
   }
 }
 

@@ -236,7 +236,7 @@ export default {
           this.$refs.xTable.hideColumn(column)
           break
         case 'showAllColumn':
-          this.$refs.xTable.showColumn()
+          this.$refs.xTable.resetCustoms()
           break
         case 'resetColumn':
           this.$refs.xTable.resetAll()

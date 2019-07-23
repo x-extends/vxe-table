@@ -55,7 +55,7 @@
       row-id="id"
       :data.sync="list2"
       :tree-config="{children: 'children', expandAll: !!filterName2}">
-      <vxe-table-column type="index" width="120" title="序号" tree-node></vxe-table-column>
+      <vxe-table-column type="index" width="160" title="序号" tree-node></vxe-table-column>
       <vxe-table-column field="name" title="Name">
         <template v-slot="{ row }">
           <span v-html="row.name"></span>
@@ -174,15 +174,15 @@ export default {
         `
         <vxe-toolbar>
           <template v-slot:buttons>
-            <vxe-input v-model="filterName2" type="search" placeholder="试试全表搜索"></vxe-input>
+            <vxe-input v-model="filterName" type="search" placeholder="试试全表搜索"></vxe-input>
           </template>
         </vxe-toolbar>
 
         <vxe-table
           row-id="id"
           :data.sync="list"
-          :tree-config="{children: 'children', expandAll: !!filterName2}">
-          <vxe-table-column type="index" width="120" title="序号" tree-node></vxe-table-column>
+          :tree-config="{children: 'children', expandAll: !!filterName}">
+          <vxe-table-column type="index" width="160" title="序号" tree-node></vxe-table-column>
           <vxe-table-column field="name" title="Name">
             <template v-slot="{ row }">
               <span v-html="row.name"></span>
