@@ -47,16 +47,7 @@ const apis = [
     type: '',
     enum: '',
     defVal: '',
-    list: [
-      {
-        name: 'click',
-        desc: '点击时会触发该事件',
-        type: '',
-        enum: '',
-        defVal: '',
-        list: []
-      }
-    ]
+    list: []
   },
   {
     name: 'Methods',
