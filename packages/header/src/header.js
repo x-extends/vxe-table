@@ -188,6 +188,7 @@ export default {
             return h('th', {
               class: ['vxe-header--column', column.id, {
                 [`col--${headAlign}`]: headAlign,
+                'col--fixed': column.fixed,
                 'col--group': isColGroup,
                 'col--ellipsis': hasEllipsis,
                 'fixed--hidden': fixedHiddenColumn,
@@ -307,7 +308,6 @@ export default {
         }
         dragLeft = Math.max(left, dragMinLeft)
         resizeBarElem.style.left = `${dragLeft - scrollLeft}px`
-        column.isResizable = true
       }
       resizeBarElem.style.display = 'block'
       document.onmousemove = updateEvent

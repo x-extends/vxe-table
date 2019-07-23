@@ -1269,6 +1269,32 @@ export default {
       })
       this.$emit('update:customs', this.tableFullColumn)
     },
+    resetAll () {
+      this.resetCustoms()
+      this.resetResizable()
+    },
+    hideColumn (column) {
+      return this.handleVisibleColumn(column, false)
+    },
+    showColumn (column) {
+      return this.handleVisibleColumn(column, true)
+    },
+    resetCustoms () {
+      return this.handleVisibleColumn()
+    },
+    handleVisibleColumn (column, visible) {
+      if (arguments.length) {
+        column.visible = visible
+      } else {
+        this.visibleColumn.forEach(column => {
+          column.visible = true
+        })
+      }
+      if (this._toolbar) {
+        this._toolbar.updateSetting()
+      }
+      return this.$nextTick()
+    },
     /**
      * 初始化加载动态列
      */
@@ -1490,6 +1516,16 @@ export default {
       }
       return tableWidth
     },
+    resetResizable () {
+      this.visibleColumn.forEach(column => {
+        column.resizeWidth = 0
+      })
+      if (this._toolbar) {
+        this._toolbar.resetResizable()
+      }
+      this.analyColumnWidth()
+      return this.recalculate(true)
+    },
     /**
      * 处理固定列的显示状态
      */
@@ -1559,7 +1595,7 @@ export default {
               ) {
                 // this.triggerValidate('blur').then(a => {
                 // 保证 input 的 change 事件能先触发之后再清除
-                setTimeout(this.clearActived)
+                setTimeout(() => this.clearActived(evnt))
                 // }).catch(e => e)
               }
             })

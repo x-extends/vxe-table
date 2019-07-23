@@ -1,6 +1,7 @@
 <template>
   <div>
-    <p>通过 <table-api-link prop="customs"/> 来初始化绑定动态列，prop:属性,visible:默认是否显示；可使用的属性 {property(只读),label(只读),visible（读写）}</p>
+    <p>通过 <table-api-link prop="customs"/> 来初始化绑定动态列：{field: 字段名, visible: 默认是否显示}</p>
+    <p>通过函数式调用 <table-api-link prop="showColumn"/>、<table-api-link prop="hideColumn"/> 操作列的显示/隐藏</p>
     <p>该功能对于列比较多的表格非常有用，可以轻松实现强大的显示/隐藏列的配置功能，实时调用 refreshColumn 刷新列</p>
 
     <div class="table-oper">

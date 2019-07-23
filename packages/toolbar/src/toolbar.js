@@ -210,8 +210,8 @@ export default {
         let columnWidthStorage
         if (!isReset) {
           columnWidthStorage = XEUtils.isPlainObject(columnWidthStorageMap[id]) ? columnWidthStorageMap[id] : {}
-          tableCustoms.forEach(({ property, isResizable, renderWidth }) => {
-            if (property && isResizable) {
+          tableCustoms.forEach(({ property, resizeWidth, renderWidth }) => {
+            if (property && resizeWidth) {
               columnWidthStorage[property] = renderWidth
             }
           })
@@ -221,35 +221,28 @@ export default {
       }
       return this.$nextTick()
     },
-    resetStorage () {
-      let { $grid, $table } = this
-      let comp = $grid || $table
-      this.tableCustoms.forEach(column => {
-        column.resizeWidth = 0
-        column.visible = true
-      })
-      comp.analyColumnWidth()
-      this.saveColumnWidth(true)
-      this.updateSetting()
-      return comp.recalculate(true)
-    },
     hideColumn (column) {
+      console.warn('[vxe-table] The function hideColumn is deprecated')
       column.visible = false
       return this.updateSetting()
     },
     showColumn (column) {
-      let { tableCustoms } = this
-      if (column) {
-        column.visible = true
-      } else {
-        tableCustoms.forEach(column => {
-          column.visible = true
-        })
-      }
+      console.warn('[vxe-table] The function showColumn is deprecated')
+      column.visible = true
       return this.updateSetting()
     },
-    updateResizable () {
-      return this.saveColumnWidth()
+    resetCustoms () {
+      return this.updateSetting()
+    },
+    resetResizable () {
+      this.updateResizable(this)
+    },
+    updateResizable (isReset) {
+      let { $grid, $table } = this
+      let comp = $grid || $table
+      this.saveColumnWidth(isReset)
+      comp.analyColumnWidth()
+      return comp.recalculate(true)
     },
     updateSetting () {
       (this.$grid || this.$table).refreshColumn()

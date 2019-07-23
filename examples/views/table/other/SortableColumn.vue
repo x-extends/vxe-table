@@ -49,11 +49,12 @@ export default {
   data () {
     return {
       tableColumn: [
-        { field: 'name', title: 'Name', columnKey: 'name' },
-        { field: 'role', title: 'Role', columnKey: 'role' },
-        { field: 'sex', title: 'Sex', columnKey: 'sex' },
-        { field: 'date3', title: 'Date', columnKey: 'date3', width: 120 },
-        { field: 'address', title: 'Address', columnKey: 'address', showOverflow: true }
+        { field: 'name', title: 'Name', fixed: 'left', columnKey: 'name', width: 200 },
+        { field: 'role', title: 'Role', columnKey: 'role', width: 220 },
+        { field: 'sex', title: 'Sex', columnKey: 'sex', width: 220 },
+        { field: 'age', title: 'Age', columnKey: 'age', width: 220 },
+        { field: 'date3', title: 'Date', columnKey: 'date3', width: 220 },
+        { field: 'address', title: 'Address', columnKey: 'address', width: 300, showOverflow: true }
       ],
       tableData: [],
       demoCodes: [
@@ -89,9 +90,22 @@ export default {
               this.$nextTick(() => {
                 let xTable = this.$refs.xTable
                 this.sortable = Sortable.create(xTable.$el.querySelector('.body--wrapper>.vxe-table--header .vxe-header--row'), {
-                  handle: '.vxe-header--column',
+                  handle: '.vxe-header--column:not(.col--fixed)',
                   onEnd: ({ newIndex, oldIndex }) => {
                     let { tableColumn } = xTable.getTableColumn()
+                    let targetThElem = item
+                    let wrapperElem = targetThElem.parentNode
+                    let newColumn = tableColumn[newIndex]
+                    if (newColumn.fixed) {
+                      // 错误的移动
+                      if (newIndex > oldIndex) {
+                        wrapperElem.insertBefore(targetThElem, wrapperElem.children[oldIndex])
+                      } else {
+                        wrapperElem.insertBefore(wrapperElem.children[oldIndex], targetThElem)
+                      }
+                      return this.$XMsg.message({ message: '固定列不允许拖动！', status: 'error' })
+                    }
+                    // 移动到目标列
                     let currRow = tableColumn.splice(oldIndex, 1)[0]
                     tableColumn.splice(newIndex, 0, currRow)
                     xTable.loadColumn(tableColumn)
@@ -121,11 +135,12 @@ export default {
           data () {
             return {
               tableColumn: [
-                { field: 'name', title: 'Name', columnKey: 'name' },
-                { field: 'role', title: 'Role', columnKey: 'role' },
-                { field: 'sex', title: 'Sex', columnKey: 'sex' },
-                { field: 'date3', title: 'Date', columnKey: 'date3', width: 120 },
-                { field: 'address', title: 'Address', columnKey: 'address', showOverflow: true }
+                { field: 'name', title: 'Name', fixed: 'left', columnKey: 'name', width: 200 },
+                { field: 'role', title: 'Role', columnKey: 'role', width: 220 },
+                { field: 'sex', title: 'Sex', columnKey: 'sex', width: 220 },
+                { field: 'age', title: 'Age', columnKey: 'age', width: 220 },
+                { field: 'date3', title: 'Date', columnKey: 'date3', width: 220 },
+                { field: 'address', title: 'Address', columnKey: 'address', width: 300, showOverflow: true }
               ],
               tableData: []
             }
@@ -143,12 +158,24 @@ export default {
               this.$nextTick(() => {
                 let xTable = this.$refs.xTable
                 this.sortable = Sortable.create(xTable.$el.querySelector('.body--wrapper>.vxe-table--header .vxe-header--row'), {
-                  handle: '.vxe-header--column',
+                  handle: '.vxe-header--column:not(.col--fixed)',
                   onEnd: ({ newIndex, oldIndex }) => {
                     let { tableColumn } = xTable.getTableColumn()
-                    let currRow = tableColumn.splice(oldIndex, 1)[0]
-                    tableColumn.splice(newIndex, 0, currRow)
-                    xTable.loadColumn(tableColumn)
+                    let targetThElem = item
+                    let wrapperElem = targetThElem.parentNode
+                    let newColumn = tableColumn[newIndex]
+                    if (newColumn.fixed) {
+                      // 错误的移动
+                      if (newIndex > oldIndex) {
+                        wrapperElem.insertBefore(targetThElem, wrapperElem.children[oldIndex])
+                      } else {
+                        wrapperElem.insertBefore(wrapperElem.children[oldIndex], targetThElem)
+                      }
+                      return this.$XMsg.message({ message: '固定列不允许拖动！', status: 'error' })
+                    }
+                    // 移动到目标列
+                    let currRow = this.tableColumn.splice(oldIndex, 1)[0]
+                    this.tableColumn.splice(newIndex, 0, currRow)
                   }
                 })
               })
@@ -188,9 +215,22 @@ export default {
       this.$nextTick(() => {
         let xTable = this.$refs.xTable1
         this.sortable1 = Sortable.create(xTable.$el.querySelector('.body--wrapper>.vxe-table--header .vxe-header--row'), {
-          handle: '.vxe-header--column',
-          onEnd: ({ newIndex, oldIndex }) => {
+          handle: '.vxe-header--column:not(.col--fixed)',
+          onEnd: ({ item, newIndex, oldIndex }) => {
             let { tableColumn } = xTable.getTableColumn()
+            let targetThElem = item
+            let wrapperElem = targetThElem.parentNode
+            let newColumn = tableColumn[newIndex]
+            if (newColumn.fixed) {
+              // 错误的移动
+              if (newIndex > oldIndex) {
+                wrapperElem.insertBefore(targetThElem, wrapperElem.children[oldIndex])
+              } else {
+                wrapperElem.insertBefore(wrapperElem.children[oldIndex], targetThElem)
+              }
+              return this.$XMsg.message({ message: '固定列不允许拖动！', status: 'error' })
+            }
+            // 移动到目标列
             let currRow = tableColumn.splice(oldIndex, 1)[0]
             tableColumn.splice(newIndex, 0, currRow)
             xTable.loadColumn(tableColumn)
@@ -202,12 +242,24 @@ export default {
       this.$nextTick(() => {
         let xTable = this.$refs.xTable2
         this.sortable2 = Sortable.create(xTable.$el.querySelector('.body--wrapper>.vxe-table--header .vxe-header--row'), {
-          handle: '.vxe-header--column',
-          onEnd: ({ newIndex, oldIndex }) => {
+          handle: '.vxe-header--column:not(.col--fixed)',
+          onEnd: ({ item, newIndex, oldIndex }) => {
             let { tableColumn } = xTable.getTableColumn()
-            let currRow = tableColumn.splice(oldIndex, 1)[0]
-            tableColumn.splice(newIndex, 0, currRow)
-            xTable.loadColumn(tableColumn)
+            let targetThElem = item
+            let wrapperElem = targetThElem.parentNode
+            let newColumn = tableColumn[newIndex]
+            if (newColumn.fixed) {
+              // 错误的移动
+              if (newIndex > oldIndex) {
+                wrapperElem.insertBefore(targetThElem, wrapperElem.children[oldIndex])
+              } else {
+                wrapperElem.insertBefore(wrapperElem.children[oldIndex], targetThElem)
+              }
+              return this.$XMsg.message({ message: '固定列不允许拖动！', status: 'error' })
+            }
+            // 移动到目标列
+            let currRow = this.tableColumn.splice(oldIndex, 1)[0]
+            this.tableColumn.splice(newIndex, 0, currRow)
           }
         })
       })

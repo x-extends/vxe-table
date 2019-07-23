@@ -40,7 +40,6 @@ class ColumnConfig {
       rowSpan: 1,
       colSpan: 1,
       order: null,
-      isResizable: false,
       renderWidth: 0,
       renderHeight: 0,
       resizeWidth: 0,
