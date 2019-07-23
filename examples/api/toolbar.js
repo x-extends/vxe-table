@@ -22,14 +22,14 @@ const apis = [
         defVal: '',
         list: []
       },
-      {
-        name: 'data',
-        descKey: 'app.api.toolbar.desc.data',
-        type: 'Array',
-        enum: '',
-        defVal: '',
-        list: []
-      },
+      // {
+      //   name: 'data',
+      //   descKey: 'app.api.toolbar.desc.data',
+      //   type: 'Array',
+      //   enum: '',
+      //   defVal: '',
+      //   list: []
+      // },
       {
         name: 'resizable',
         descKey: 'app.api.toolbar.desc.resizable',
@@ -105,16 +105,7 @@ const apis = [
     type: '',
     enum: '',
     defVal: '',
-    list: [
-      {
-        name: 'toolbar-button-click',
-        desc: '只对 toolbar 配置时有效，当工具栏的按钮被点击时会后触发该事件',
-        type: '',
-        enum: '',
-        defVal: '{menu,type,row,rowIndex,column,columnIndex,cell},event',
-        list: []
-      }
-    ]
+    list: []
   },
   {
     name: 'Methods',
