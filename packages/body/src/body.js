@@ -418,25 +418,22 @@ export default {
     }
     return h('div', {
       class: ['vxe-table--body-wrapper', fixedType ? `fixed--${fixedType}-wrapper` : 'body--wrapper'],
-      attrs: {
-        fixed: fixedType
-      },
       style
     }, [
       scrollYLoad ? h('div', {
-        class: ['vxe-body--top-space'],
+        class: 'vxe-body--top-space',
         style: {
           height: `${scrollYStore.topSpaceHeight}px`
         }
       }) : null,
       !fixedType && scrollXLoad ? h('div', {
-        class: ['vxe-body--x-space'],
+        class: 'vxe-body--x-space',
         style: {
           width: `${$table.tableWidth}px`
         }
       }) : null,
       h('table', {
-        class: ['vxe-table--body'],
+        class: 'vxe-table--body',
         attrs: {
           cellspacing: 0,
           cellpadding: 0,
@@ -472,7 +469,7 @@ export default {
         }, $table.$slots.empty || GlobalConfig.i18n('vxe.table.emptyText'))
       ]) : null,
       scrollYLoad ? h('div', {
-        class: ['vxe-body--bottom-space'],
+        class: 'vxe-body--bottom-space',
         style: {
           height: `${scrollYStore.bottomSpaceHeight}px`
         }
