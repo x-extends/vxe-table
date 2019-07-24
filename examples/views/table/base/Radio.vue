@@ -16,7 +16,11 @@
       height="300"
       :data.sync="tableData"
       @radio-change="radioChangeEvent">
-      <vxe-table-column type="radio" width="60"></vxe-table-column>
+      <vxe-table-column type="radio" width="60">
+        <template v-slot:header>
+          <vxe-button type="text" @click="$refs.xTable1.clearRadioRow()">取消</vxe-button>
+        </template>
+      </vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
       <vxe-table-column field="age" title="Age"></vxe-table-column>
       <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
@@ -142,7 +146,11 @@ export default {
           height="300"
           :data.sync="tableData"
           @radio-change="radioChangeEvent">
-          <vxe-table-column type="radio" title="这样也行"></vxe-table-column>
+          <vxe-table-column type="radio" title="这样也行">
+            <template v-slot:header>
+              <vxe-button type="text" @click="$refs.xTable1.clearRadioRow()">取消</vxe-button>
+            </template>
+          </vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
           <vxe-table-column field="age" title="Age"></vxe-table-column>
           <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>

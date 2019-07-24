@@ -46,10 +46,15 @@
       resizable
       highlight-current-row
       row-id="id"
+      ref="xTable3"
       :tree-config="{children: 'children'}"
       :radio-config="{trigger: 'row'}"
       :data.sync="tableData">
-      <vxe-table-column type="radio" width="120" tree-node></vxe-table-column>
+      <vxe-table-column type="radio" width="120" tree-node>
+        <template v-slot:header>
+          <vxe-button type="text" @click="$refs.xTable3.clearRadioRow()">取消</vxe-button>
+        </template>
+      </vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
       <vxe-table-column field="size" title="Size"></vxe-table-column>
       <vxe-table-column field="type" title="Type"></vxe-table-column>
@@ -127,10 +132,15 @@ export default {
           resizable
           highlight-current-row
           row-id="id"
+          ref="xTable3"
           :tree-config="{children: 'children'}"
           :radio-config="{trigger: 'row'}"
           :data.sync="tableData">
-          <vxe-table-column type="radio" width="120" tree-node></vxe-table-column>
+          <vxe-table-column type="radio" width="120" tree-node>
+            <template v-slot:header>
+              <vxe-button type="text" @click="$refs.xTable3.clearRadioRow()">取消</vxe-button>
+            </template>
+          </vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
           <vxe-table-column field="size" title="Size"></vxe-table-column>
           <vxe-table-column field="type" title="Type"></vxe-table-column>

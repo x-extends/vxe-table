@@ -133,7 +133,11 @@ export const Cell = {
    * 单选
    */
   renderRadioHeader (h, params) {
-    let { own } = params.column
+    let { column } = params
+    let { slots, own } = column
+    if (slots && slots.header) {
+      return slots.header(params, h)
+    }
     // 在 v3.0 中废弃 label
     return [UtilTools.formatText(own.title || own.label, 1)]
   },
@@ -142,8 +146,8 @@ export const Cell = {
     let { vSize, radioConfig = {} } = $table
     let { slots } = column
     let { labelField } = radioConfig
-    if (slots && slots.header) {
-      return slots.header(params, h)
+    if (slots && slots.default) {
+      return slots.default(params, h)
     }
     let { selectRow } = $table
     let { row } = params
@@ -228,16 +232,19 @@ export const Cell = {
     ]
   },
   renderSelectionCell (h, params) {
-    let { $table } = params
+    let { $table, row, column, isHidden } = params
     let { vSize, selectConfig = {}, treeConfig, treeIndeterminates } = $table
     let { labelField, checkMethod } = selectConfig
-    let { row, isHidden } = params
+    let { slots } = column
     let indeterminate = false
     let isDisabled = !!checkMethod
     let options = {
       attrs: {
         type: 'checkbox'
       }
+    }
+    if (slots && slots.default) {
+      return slots.default(params, h)
     }
     if (!isHidden) {
       if (checkMethod) {
@@ -278,16 +285,19 @@ export const Cell = {
     return Cell.renderTreeIcon(h, params).concat(Cell.renderSelectionCell(h, params))
   },
   renderSelectionCellByProp (h, params) {
-    let { $table } = params
+    let { $table, row, column, isHidden } = params
     let { vSize, selectConfig = {}, treeConfig, treeIndeterminates } = $table
     let { labelField, checkField: property, checkMethod } = selectConfig
-    let { row, isHidden } = params
+    let { slots } = column
     let indeterminate = false
     let isDisabled = !!checkMethod
     let options = {
       attrs: {
         type: 'checkbox'
       }
+    }
+    if (slots && slots.default) {
+      return slots.default(params, h)
     }
     if (!isHidden) {
       if (checkMethod) {
