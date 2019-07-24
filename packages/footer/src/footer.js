@@ -134,7 +134,7 @@ export default {
                 'data-index': columnIndex
               },
               on: tfOns,
-              key: columnKey || ($table.columnKey ? column.id : $columnIndex)
+              key: columnKey || ($table.columnKey ? column.id : columnIndex)
             }, [
               h('div', {
                 class: 'vxe-cell',

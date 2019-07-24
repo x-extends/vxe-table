@@ -40,7 +40,7 @@ export default {
         }
       }),
       h('span', {
-        class: ['checkbox--icon']
+        class: 'checkbox--icon'
       }),
       this.$slots.default ? h('span', {
         class: 'checkbox--label'

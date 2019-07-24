@@ -13,16 +13,12 @@ export default {
   },
   render (h) {
     let { $listeners, type, vSize } = this
-    let on = null
-    if ($listeners) {
-      on = XEUtils.objectMap($listeners, (cb, type) => evnt => this.$emit(type, evnt))
-    }
     return h(type === 'text' ? 'a' : 'button', {
       class: ['vxe-button', {
         [`size--${vSize}`]: vSize,
         [`type--${type}`]: type
       }],
-      on
+      on: XEUtils.objectMap($listeners, (cb, type) => evnt => this.$emit(type, evnt))
     }, this.$slots.default)
   }
 }

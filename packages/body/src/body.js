@@ -162,7 +162,7 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
       'edit--visible': editRender && editRender.type === 'visible',
       'fixed--hidden': fixedHiddenColumn
     }, cellClassName ? XEUtils.isFunction(cellClassName) ? cellClassName(params) : cellClassName : ''],
-    key: columnKey || ($table.columnKey ? column.id : $columnIndex),
+    key: columnKey || ($table.columnKey ? column.id : columnIndex),
     attrs,
     on: tdOns
   }, allColumnOverflow && fixedHiddenColumn ? [] : [
