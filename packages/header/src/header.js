@@ -234,7 +234,7 @@ export default {
                 rowspan: column.rowSpan
               },
               on: thOns,
-              key: columnKey || isColGroup ? column.id : $columnIndex
+              key: columnKey || isColGroup ? column.id : columnIndex
             }, [
               h('div', {
                 class: ['vxe-cell', {

@@ -132,7 +132,7 @@ export default {
                 'data-index': columnIndex
               },
               on: tfOns,
-              key: columnKey ? column.id : $columnIndex
+              key: columnKey ? column.id : columnIndex
             }, [
               h('div', {
                 class: 'vxe-cell'

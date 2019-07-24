@@ -1,3 +1,5 @@
+import XEUtils from 'xe-utils'
+
 export default {
   name: 'VxeInput',
   props: {
@@ -14,12 +16,6 @@ export default {
   },
   render (h) {
     let { $listeners, value, type, vSize, placeholder, disabled } = this
-    let on = {
-      input: evnt => this.$emit('input', evnt.target.value)
-    }
-    if ($listeners.change) {
-      on.change = evnt => this.$emit('change', evnt.target.value, evnt)
-    }
     return h('div', {
       class: ['vxe-input--wrapper', {
         [`size--${vSize}`]: vSize,
@@ -36,7 +32,10 @@ export default {
           placeholder,
           disabled
         },
-        on
+        on: XEUtils.objectMap($listeners, (cb, type) => evnt => {
+          let params = type === 'input' ? evnt.target.value : { value: evnt.target.value }
+          this.$emit(type, params, evnt)
+        })
       })
     ])
   }

@@ -129,7 +129,7 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
       'col--actived': editConfig && editRender && (actived.row === row && (actived.column === column || editConfig.mode === 'row')),
       'col--valid-error': validError
     }, cellClassName ? XEUtils.isFunction(cellClassName) ? cellClassName(params) : cellClassName : ''],
-    key: columnKey ? column.id : $columnIndex,
+    key: columnKey ? column.id : columnIndex,
     attrs,
     on: tdOns
   }, allColumnOverflow && fixedHiddenColumn ? [] : [
