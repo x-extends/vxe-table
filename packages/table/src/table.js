@@ -3330,6 +3330,15 @@ export default {
       scrollYStore.topSpaceHeight = Math.max(scrollYStore.startIndex * scrollYStore.rowHeight, 0)
       scrollYStore.bottomSpaceHeight = Math.max((fullData.length - (scrollYStore.startIndex + scrollYStore.renderSize)) * scrollYStore.rowHeight, 0)
     },
+    scrollTo (scrollLeft, scrollTop) {
+      let bodyElem = this.$refs.tableBody.$el
+      if (XEUtils.isNumber(scrollLeft)) {
+        bodyElem.scrollLeft = scrollLeft
+      }
+      if (XEUtils.isNumber(scrollTop)) {
+        bodyElem.scrollTop = scrollTop
+      }
+    },
     clearScroll () {
       Object.assign(this.scrollXStore, {
         visibleSize: 0,

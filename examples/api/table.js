@@ -1937,6 +1937,14 @@ const apis = [
         list: []
       },
       {
+        name: 'scrollTo(scrollLeft, scrollTop)',
+        desc: '如果有滚动条，则滚动到对应的位置',
+        type: 'Promise',
+        enum: '',
+        defVal: 'scrollLeft?, scrollTop?',
+        list: []
+      },
+      {
         name: 'isScrollXLoad()',
         disabled: true,
         desc: '在 v2.0 中废弃，请使用 getVirtualScroller',
