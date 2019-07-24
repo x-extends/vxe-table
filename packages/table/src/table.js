@@ -364,7 +364,12 @@ export default {
     collectColumn (value) {
       let tableFullColumn = UtilTools.getColumnList(value)
       this.tableFullColumn = tableFullColumn
+      if (this.customs) {
+        this.mergeCustomColumn(this.customs)
+      }
       this.cacheColumnMap()
+      this.refreshColumn()
+      this.$nextTick(this.updateFooter)
       // 在 v3.0 中废弃
       if (tableFullColumn.length) {
         let cIndex = Math.floor((tableFullColumn.length - 1) / 2)
@@ -436,12 +441,6 @@ export default {
       })
     }
     this.loadData(data, true).then(() => {
-      let { customs, collectColumn } = this
-      this.tableFullColumn = UtilTools.getColumnList(collectColumn)
-      if (customs) {
-        this.mergeCustomColumn(customs)
-      }
-      this.refreshColumn()
       this.handleDefault()
       this.updateStyle()
     })
@@ -727,14 +726,7 @@ export default {
       return this.loadData(datas).then(this.handleDefault)
     },
     loadColumn (columns) {
-      let collectColumn = XEUtils.mapTree(columns, column => Cell.createColumn(this, column), headerProps)
-      this.collectColumn = collectColumn
-      this.tableFullColumn = UtilTools.getColumnList(collectColumn)
-      if (this.customs) {
-        this.mergeCustomColumn(this.customs)
-      }
-      this.cacheColumnMap()
-      this.refreshColumn()
+      this.collectColumn = XEUtils.mapTree(columns, column => Cell.createColumn(this, column), headerProps)
       return this.$nextTick()
     },
     reloadColumn (columns) {
