@@ -2,6 +2,30 @@ import XEUtils from 'xe-utils'
 import GlobalConfig from '../../conf'
 import { UtilTools } from '../../tools'
 
+function renderBorder (h, type) {
+  return h('div', {
+    class: `vxe-table-${type}ed-borders`,
+    ref: `${type}Borders`
+  }, [
+    h('span', {
+      class: 'vxe-table-border-top',
+      ref: `${type}Top`
+    }),
+    h('span', {
+      class: 'vxe-table-border-right',
+      ref: `${type}Right`
+    }),
+    h('span', {
+      class: 'vxe-table-border-bottom',
+      ref: `${type}Bottom`
+    }),
+    h('span', {
+      class: 'vxe-table-border-left',
+      ref: `${type}Left`
+    })
+  ])
+}
+
 /**
  * 渲染列
  */
@@ -329,9 +353,6 @@ export default {
     }
     return h('div', {
       class: ['vxe-table--body-wrapper', fixedType ? `fixed-${fixedType}--wrapper` : 'body--wrapper'],
-      attrs: {
-        fixed: fixedType
-      },
       on: {
         mouseleave: $table.clearHoverRow
       }
@@ -379,48 +400,8 @@ export default {
       !fixedType && (mouseConfig.checked || keyboardConfig.isCut) ? h('div', {
         class: 'vxe-table--borders'
       }, [
-        mouseConfig.checked ? h('div', {
-          class: 'vxe-table-checked-borders',
-          ref: 'checkBorders'
-        }, [
-          h('span', {
-            class: 'vxe-table-border-top',
-            ref: 'checkTop'
-          }),
-          h('span', {
-            class: 'vxe-table-border-right',
-            ref: 'checkRight'
-          }),
-          h('span', {
-            class: 'vxe-table-border-bottom',
-            ref: 'checkBottom'
-          }),
-          h('span', {
-            class: 'vxe-table-border-left',
-            ref: 'checkLeft'
-          })
-        ]) : null,
-        keyboardConfig.isCut ? h('div', {
-          class: 'vxe-table-copyed-borders',
-          ref: 'copyBorders'
-        }, [
-          h('span', {
-            class: 'vxe-table-border-top',
-            ref: 'copyTop'
-          }),
-          h('span', {
-            class: 'vxe-table-border-right',
-            ref: 'copyRight'
-          }),
-          h('span', {
-            class: 'vxe-table-border-bottom',
-            ref: 'copyBottom'
-          }),
-          h('span', {
-            class: 'vxe-table-border-left',
-            ref: 'copyLeft'
-          })
-        ]) : null
+        mouseConfig.checked ? renderBorder(h, 'check') : null,
+        keyboardConfig.isCut ? renderBorder(h, 'copy') : null
       ]) : null,
       !fixedType && !tableData.length ? h('div', {
         class: 'vxe-table--empty-block',
