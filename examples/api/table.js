@@ -1319,7 +1319,7 @@ const apis = [
       },
       {
         name: 'insertAt(records, row)',
-        desc: '往表格插入数据，从指定位置插入一行或多行；第二个参数：row 指定位置、null 从第一行插入、-1 从最后插入',
+        desc: '往表格插入数据，从指定位置插入一行或多行；第二个参数：row 指定位置（不支持树表格）、null从第一行插入、-1 从最后插入',
         type: 'Promise<{row, rows}>',
         enum: '',
         defVal: 'records, row',

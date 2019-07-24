@@ -94,15 +94,27 @@ export const UtilTools = {
   getCellLabel (row, column, params) {
     let { formatter } = column
     let cellValue = UtilTools.getCellValue(row, column)
+    let cellLabel = cellValue
     if (params && formatter) {
-      if (XEUtils.isString(formatter)) {
-        return XEUtils[formatter](cellValue)
-      } else if (XEUtils.isArray(formatter)) {
-        return XEUtils[formatter[0]].apply(XEUtils, [cellValue].concat(formatter.slice(1)))
+      let { $table } = params
+      if ($table) {
+        let formatData = $table.fullDataRowMap.get(row).formatData
+        if (formatData && formatData.value === cellValue) {
+          return formatData.label
+        }
       }
-      return formatter(Object.assign({ cellValue }, params))
+      if (XEUtils.isString(formatter)) {
+        cellLabel = XEUtils[formatter](cellValue)
+      } else if (XEUtils.isArray(formatter)) {
+        cellLabel = XEUtils[formatter[0]].apply(XEUtils, [cellValue].concat(formatter.slice(1)))
+      } else {
+        cellLabel = formatter(Object.assign({ cellValue }, params))
+      }
+      if ($table) {
+        $table.fullDataRowMap.get(row).formatData = { value: cellValue, label: cellLabel }
+      }
     }
-    return cellValue
+    return cellLabel
   },
   setCellValue (row, column, value) {
     return XEUtils.set(row, column.property, value)
