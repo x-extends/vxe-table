@@ -798,7 +798,12 @@ export default {
       if (!notRefresh) {
         rest = rest.then(recalculate)
       }
-      return rest
+      return rest.then(() => {
+        // 如果启用虚拟滚动，重新加载数据需要重置滚动条
+        if (this.scrollXLoad || this.scrollYLoad) {
+          this.clearScroll()
+        }
+      })
     },
     reloadData (datas) {
       this.clearAll()
