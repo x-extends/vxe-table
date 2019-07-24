@@ -3773,13 +3773,13 @@ export default {
         })
       })
     },
-    scrollTo (x, y) {
+    scrollTo (scrollLeft, scrollTop) {
       let bodyElem = this.$refs.tableBody.$el
-      if (XEUtils.isNumber(x)) {
-        bodyElem.scrollLeft = x
+      if (XEUtils.isNumber(scrollLeft)) {
+        bodyElem.scrollLeft = scrollLeft
       }
-      if (XEUtils.isNumber(y)) {
-        bodyElem.scrollTop = y
+      if (XEUtils.isNumber(scrollTop)) {
+        bodyElem.scrollTop = scrollTop
       }
     },
     scrollToRow (row) {

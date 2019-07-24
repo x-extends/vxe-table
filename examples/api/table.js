@@ -1880,11 +1880,11 @@ const apis = [
         list: []
       },
       {
-        name: 'scrollTo(x, y)',
+        name: 'scrollTo(scrollLeft, scrollTop)',
         desc: '如果有滚动条，则滚动到对应的位置',
         type: 'Promise',
         enum: '',
-        defVal: 'x, y',
+        defVal: 'scrollLeft?, scrollTop?',
         list: []
       },
       {
