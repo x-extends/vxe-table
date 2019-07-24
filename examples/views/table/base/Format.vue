@@ -1,6 +1,7 @@
 <template>
   <div>
-    <p>局部自定义 <table-column-api-link prop="formatter"/> 格式化内容（建议是提前转换好数据，<table-column-api-link prop="formatter"/> 一般用于动态的数据，跟随数据的变化而执行）</p>
+    <p>局部自定义 <table-column-api-link prop="formatter"/> 格式化内容</p>
+    <p><table-column-api-link prop="formatter"/> 会确保在指定的 <table-column-api-link prop="field"/> 值发生改变时调用，如果想要多字段关联变化请使用<router-link class="nav-link" :to="{name: 'TableTemplate'}">自定义模板</router-link></p>
 
     <vxe-table
       border
