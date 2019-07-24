@@ -1,10 +1,13 @@
 <template>
   <div>
     <p><table-api-link name="vxe-table"/> 方式：使用 <a class="link" href="https://www.npmjs.com/package/sortablejs" target="_blank">sortablejs</a> 实现行拖动</p>
+    <p>由于 sortablejs 操作了 Dom 节点，需要与 Vue 的数据同步，必须设置 <table-api-link prop="row-key"/></p>
 
     <vxe-table
       border
+      row-key
       ref="xTable1"
+      row-id="id"
       class="sortable-row-demo"
       :data.sync="tableData">
       <vxe-table-column width="60">
@@ -32,6 +35,7 @@
 
     <vxe-grid
       border
+      row-key
       ref="xTable2"
       row-id="id"
       class="sortable-tree-demo"
@@ -81,7 +85,9 @@ export default {
         `
         <vxe-table
           border
+          row-key
           ref="xTable1"
+          row-id="id"
           class="sortable-row-demo"
           :data.sync="tableData">
           <vxe-table-column width="60">
@@ -142,6 +148,7 @@ export default {
         `
         <vxe-grid
           border
+          row-key
           ref="xTable2"
           row-id="id"
           class="sortable-tree-demo"

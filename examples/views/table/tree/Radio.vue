@@ -46,10 +46,15 @@
       resizable
       highlight-current-row
       row-id="id"
+      ref="xTable3"
       :tree-config="{children: 'children'}"
       :radio-config="{trigger: 'row'}"
       :data.sync="tableData">
-      <vxe-table-column type="radio" width="120" tree-node></vxe-table-column>
+      <vxe-table-column type="radio" width="120" tree-node>
+        <template v-slot:header>
+          <vxe-button type="text" @click="$refs.xTable3.clearRadioRow()">取消</vxe-button>
+        </template>
+      </vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
       <vxe-table-column field="size" title="Size"></vxe-table-column>
       <vxe-table-column field="type" title="Type"></vxe-table-column>
@@ -67,6 +72,7 @@
 
 <script>
 import hljs from 'highlight.js'
+import XEUtils from 'xe-utils'
 
 export default {
   data () {
@@ -126,10 +132,15 @@ export default {
           resizable
           highlight-current-row
           row-id="id"
+          ref="xTable3"
           :tree-config="{children: 'children'}"
           :radio-config="{trigger: 'row'}"
           :data.sync="tableData">
-          <vxe-table-column type="radio" width="120" tree-node></vxe-table-column>
+          <vxe-table-column type="radio" width="120" tree-node>
+            <template v-slot:header>
+              <vxe-button type="text" @click="$refs.xTable3.clearRadioRow()">取消</vxe-button>
+            </template>
+          </vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
           <vxe-table-column field="size" title="Size"></vxe-table-column>
           <vxe-table-column field="type" title="Type"></vxe-table-column>
@@ -152,7 +163,7 @@ export default {
     }
   },
   created () {
-    this.tableData = window.MOCK_TREE_DATA_LIST.slice(0)
+    this.tableData = XEUtils.clone(window.MOCK_TREE_DATA_LIST, true)
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
