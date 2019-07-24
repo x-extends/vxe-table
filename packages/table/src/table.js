@@ -501,9 +501,9 @@ export default {
     this.lastScrollTop = 0
     this.afterFullData = []
     this.fullDataRowMap = new Map()
-    this.fullDataRowIdMap = new Map()
+    this.fullDataRowIdData = {}
     this.fullColumnMap = new Map()
-    this.fullColumnIdMap = new Map()
+    this.fullColumnIdData = {}
     this.loadData(this.data, true).then(() => {
       let rowkey = UtilTools.getRowkey(this)
       if (selectConfig.key) {
@@ -826,10 +826,10 @@ export default {
     },
     // 更新数据的 Map
     cacheDataMap () {
-      let { treeConfig, tableFullData, fullDataRowMap, fullDataRowIdMap } = this
+      let { treeConfig, tableFullData, fullDataRowMap } = this
       let rowkey = UtilTools.getRowkey(this)
+      let fullDataRowIdData = this.fullDataRowIdData = {}
       fullDataRowMap.clear()
-      fullDataRowIdMap.clear()
       if (treeConfig) {
         XEUtils.eachTree(tableFullData, (row, index) => {
           let rowid = XEUtils.get(row, rowkey)
@@ -837,7 +837,7 @@ export default {
             rowid = ++rowUniqueId
             XEUtils.set(row, rowkey, rowid)
           }
-          fullDataRowIdMap.set(`${rowid}`, { rowkey, row, index })
+          fullDataRowIdData[rowid] = { rowkey, row, index }
           fullDataRowMap.set(row, { row, index: rowid })
         }, treeConfig)
       } else {
@@ -850,25 +850,25 @@ export default {
               XEUtils.set(row, rowkey, rowid)
             }
           }
-          fullDataRowIdMap.set(`${rowid}`, { row, index: rowIndex })
+          fullDataRowIdData[rowid] = { row, index: rowIndex }
           fullDataRowMap.set(row, { row, rowid, index: rowIndex })
         })
       }
     },
     // 更新列的 Map
     cacheColumnMap () {
-      let { tableFullColumn, fullColumnIdMap, fullColumnMap } = this
-      fullColumnIdMap.clear()
+      let { tableFullColumn, fullColumnMap } = this
+      let fullColumnIdData = this.fullColumnIdData = {}
       fullColumnMap.clear()
       tableFullColumn.forEach((column, index) => {
         let rest = { column, index }
-        fullColumnIdMap.set(column.id, rest)
+        fullColumnIdData[column.id] = rest
         fullColumnMap.set(column, rest)
       })
     },
     getRowNode (tr) {
       if (tr) {
-        let { treeConfig, tableFullData, fullDataRowIdMap } = this
+        let { treeConfig, tableFullData, fullDataRowIdData } = this
         let rowid = tr.getAttribute('data-rowid')
         if (treeConfig) {
           let matchObj = XEUtils.findTree(tableFullData, (row, rowIndex) => UtilTools.getRowid(this, row, rowIndex) === rowid, treeConfig)
@@ -876,8 +876,8 @@ export default {
             return matchObj
           }
         } else {
-          if (fullDataRowIdMap.has(rowid)) {
-            let rest = fullDataRowIdMap.get(rowid)
+          if (fullDataRowIdData[rowid]) {
+            let rest = fullDataRowIdData[rowid]
             return { item: rest.row, index: rest.index, items: tableFullData }
           }
         }
@@ -886,7 +886,7 @@ export default {
     },
     getColumnNode (th) {
       if (th) {
-        let { isGroup, fullColumnIdMap, tableFullColumn } = this
+        let { isGroup, fullColumnIdData, tableFullColumn } = this
         let colid = th.getAttribute('data-colid')
         if (isGroup) {
           let matchObj = XEUtils.findTree(tableFullColumn, column => column.id === colid, headerProps)
@@ -894,7 +894,7 @@ export default {
             return matchObj
           }
         } else {
-          let column = fullColumnIdMap.get(colid).column
+          let column = fullColumnIdData[colid].column
           return { item: column, index: this.getColumnMapIndex(column), items: tableFullColumn }
         }
       }
@@ -1125,8 +1125,8 @@ export default {
       return arguments.length ? columns[columnIndex] : columns.slice(0)
     },
     getColumnById (colid) {
-      let fullColumnIdMap = this.fullColumnIdMap
-      return fullColumnIdMap.has(colid) ? fullColumnIdMap.get(colid).column : null
+      let fullColumnIdData = this.fullColumnIdData
+      return fullColumnIdData[colid] ? fullColumnIdData[colid].column : null
     },
     /**
      * 获取表格可视列
@@ -1253,8 +1253,8 @@ export default {
       return tableData
     },
     getRowById (rowid) {
-      let fullDataRowIdMap = this.fullDataRowIdMap
-      return fullDataRowIdMap.has(rowid) ? fullDataRowIdMap.get(rowid).row : null
+      let fullDataRowIdData = this.fullDataRowIdData
+      return fullDataRowIdData[rowid] ? fullDataRowIdData[rowid].row : null
     },
     /**
      * 获取处理后的表格数据
@@ -1886,7 +1886,7 @@ export default {
      * 显示快捷菜单
      */
     openContextMenu (evnt, type, params) {
-      let { tableData, visibleColumn, ctxMenuStore, ctxMenuConfig, fullDataRowIdMap, tableFullColumn } = this
+      let { tableData, visibleColumn, ctxMenuStore, ctxMenuConfig, fullDataRowIdData, tableFullColumn } = this
       let config = ctxMenuConfig[type]
       if (config) {
         let { options, visibleMethod, disabled } = config
@@ -1902,7 +1902,7 @@ export default {
               let { rowid, rowIndex, colIndex, columnIndex } = DomTools.getCellIndexs(targetElem)
               let column = colIndex ? tableFullColumn[colIndex] : visibleColumn[columnIndex]
               if (type === 'body') {
-                let row = rowid ? fullDataRowIdMap.get(rowid).row : tableData[rowIndex]
+                let row = rowid ? fullDataRowIdData[rowid].row : tableData[rowIndex]
                 args.row = row
                 args.rowIndex = rowIndex
               }
@@ -2051,7 +2051,7 @@ export default {
      * 处理复选框默认勾选
      */
     handleSelectionDefChecked () {
-      let { selectConfig = {}, fullDataRowIdMap } = this
+      let { selectConfig = {}, fullDataRowIdData } = this
       let { checkAll, checkRowKeys } = selectConfig
       if (checkAll) {
         this.setAllSelection(true)
@@ -2060,7 +2060,7 @@ export default {
         if (!rowkey) {
           throw new Error('[vxe-table] Checked rows must have a unique primary key row-id')
         }
-        this.setSelection(checkRowKeys.map(checkKey => fullDataRowIdMap.get(checkKey).row), true)
+        this.setSelection(checkRowKeys.map(rowid => fullDataRowIdData[rowid].row), true)
       }
     },
     setSelection (rows, value) {
@@ -2268,13 +2268,13 @@ export default {
     },
     // 保留选中状态
     reserveCheckSelection () {
-      let { selectConfig = {}, selection, fullDataRowIdMap } = this
+      let { selectConfig = {}, selection, fullDataRowIdData } = this
       let { reserve } = selectConfig
       let rowkey = UtilTools.getRowkey(this)
       if (reserve && selection.length) {
         this.selection = selection.map(row => {
           let rowid = '' + XEUtils.get(row, rowkey)
-          return fullDataRowIdMap.has(rowid) ? fullDataRowIdMap.get(rowid).row : row
+          return fullDataRowIdData[rowid] ? fullDataRowIdData[rowid].row : row
         })
       }
     },
@@ -2312,14 +2312,14 @@ export default {
      * 处理单选框默认勾选
      */
     handleRadioDefChecked () {
-      let { radioConfig = {}, fullDataRowIdMap } = this
-      let { checkRowKey } = radioConfig
-      if (checkRowKey) {
+      let { radioConfig = {}, fullDataRowIdData } = this
+      let { checkRowKey: rowid } = radioConfig
+      if (rowid) {
         let rowkey = UtilTools.getRowkey(this)
         if (!rowkey) {
           throw new Error('[vxe-table] Checked row must have a unique primary key row-id')
         }
-        this.setRadioRow(fullDataRowIdMap.get(checkRowKey).row)
+        this.setRadioRow(fullDataRowIdData[rowid].row)
       }
     },
     /**
