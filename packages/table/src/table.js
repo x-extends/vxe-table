@@ -439,6 +439,7 @@ export default {
       let tableFullColumn = UtilTools.getColumnList(value)
       this.tableFullColumn = tableFullColumn
       this.cacheColumnMap()
+      this.$nextTick(this.updateFooter)
       // 在 v2.0 中废弃
       if (tableFullColumn.length) {
         if (tableFullColumn.some(column => column.columnKey)) {
