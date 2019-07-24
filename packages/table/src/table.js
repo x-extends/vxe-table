@@ -916,7 +916,7 @@ export default {
      * 从指定行插入数据
      */
     insertAt (records, row) {
-      let { tableData, editStore, defineProperty, scrollYLoad, tableFullData } = this
+      let { tableData, editStore, defineProperty, scrollYLoad, tableFullData, treeConfig } = this
       if (!XEUtils.isArray(records)) {
         records = [records]
       }
@@ -935,6 +935,9 @@ export default {
           if (row === -1) {
             tableData.push.apply(tableData, newRecords)
           } else {
+            if (treeConfig) {
+              throw new Error('[vxe-table] The tree table does not support this operation.')
+            }
             let rowIndex = tableData.indexOf(row)
             tableData.splice.apply(tableData, [rowIndex, 0].concat(newRecords))
           }
