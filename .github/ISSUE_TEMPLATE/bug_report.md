@@ -11,7 +11,7 @@ assignees: ''
 
  ?
 
-### 能重现问题的链接（[jsfiddle](https://jsfiddle.net/w8q6unes/)、[codepen](https://codepen.io/anon/pen/gJEmRW)、[jsrun](https://jsrun.net/vIyKp/edit)） Reproduction link
+### 能重现问题的链接（[jsfiddle](https://jsfiddle.net/w8q6unes/)、[codesandbox](https://codesandbox.io/s/vue-template-916h0)、[jsrun](https://jsrun.net/vIyKp/edit)） Reproduction link
 
  ?
 

@@ -134,9 +134,9 @@ export default {
         <vxe-table
           border
           class="mytable-style"
-          :cell-class-name="cellClassName2"
+          :cell-class-name="cellClassName"
           :data.sync="tableData"
-          @cell-click="cellClickEvent2">
+          @cell-click="cellClickEvent">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -158,12 +158,12 @@ export default {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
           },
           methods: {
-            cellClassName2 ({ row, column }) {
+            cellClassName ({ row, column }) {
               if (row === this.selectRow & column === this.selectColumn) {
                 return 'col-orange'
               }
             },
-            cellClickEvent2 ({ row, column }) {
+            cellClickEvent ({ row, column }) {
               this.selectRow = row
               this.selectColumn = column
             }
@@ -171,19 +171,19 @@ export default {
         }
         `,
         `
-        .mytable-style .vxe-body--row.row-green {
+        .mytable-style.vxe-table .vxe-body--row.row-green {
           background-color: #187;
           color: #fff;
         }
-        .mytable-style .vxe-header--column.col-blue {
+        .mytable-style.vxe-table .vxe-header--column.col-blue {
           background-color: #2db7f5;
           color: #fff;
         }
-        .mytable-style .vxe-body--column.col-red {
+        .mytable-style.vxe-table .vxe-body--column.col-red {
           background-color: red;
           color: #fff;
         }
-        .mytable-style .vxe-body--column.col-orange {
+        .mytable-style.vxe-table .vxe-body--column.col-orange {
           background-color: #f60;
           color: #fff;
         }
@@ -233,19 +233,19 @@ export default {
 </script>
 
 <style>
-.mytable-style .vxe-body--row.row-green {
+.mytable-style.vxe-table .vxe-body--row.row-green {
   background-color: #187;
   color: #fff;
 }
-.mytable-style .vxe-header--column.col-blue {
+.mytable-style.vxe-table .vxe-header--column.col-blue {
   background-color: #2db7f5;
   color: #fff;
 }
-.mytable-style .vxe-body--column.col-red {
+.mytable-style.vxe-table .vxe-body--column.col-red {
   background-color: red;
   color: #fff;
 }
-.mytable-style .vxe-body--column.col-orange {
+.mytable-style.vxe-table .vxe-body--column.col-orange {
   background-color: #f60;
   color: #fff;
 }
