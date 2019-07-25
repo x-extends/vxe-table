@@ -55,12 +55,12 @@ export default {
   data () {
     return {
       tableColumn: [
-        { field: 'name', title: 'Name', fixed: 'left', width: 200 },
-        { field: 'role', title: 'Role', width: 220 },
-        { field: 'sex', title: 'Sex', width: 220 },
-        { field: 'age', title: 'Age', width: 220 },
-        { field: 'date3', title: 'Date', width: 220 },
-        { field: 'address', title: 'Address', width: 300, showOverflow: true }
+        { field: 'name', title: 'Name', fixed: 'left', minWidth: 200 },
+        { field: 'role', title: 'Role', minWidth: 220 },
+        { field: 'sex', title: 'Sex', minWidth: 220 },
+        { field: 'age', title: 'Age', minWidth: 220 },
+        { field: 'date3', title: 'Date', minWidth: 220 },
+        { field: 'address', title: 'Address', minWidth: 300, showOverflow: true }
       ],
       toolbar: {
         setting: {
@@ -154,12 +154,12 @@ export default {
           data () {
             return {
               tableColumn: [
-                { field: 'name', title: 'Name', fixed: 'left', width: 200 },
-                { field: 'role', title: 'Role', width: 220 },
-                { field: 'sex', title: 'Sex', width: 220 },
-                { field: 'age', title: 'Age', width: 220 },
-                { field: 'date3', title: 'Date', width: 220 },
-                { field: 'address', title: 'Address', width: 300, showOverflow: true }
+                { field: 'name', title: 'Name', fixed: 'left', minWidth: 200 },
+                { field: 'role', title: 'Role', minWidth: 220 },
+                { field: 'sex', title: 'Sex', minWidth: 220 },
+                { field: 'age', title: 'Age', minWidth: 220 },
+                { field: 'date3', title: 'Date', minWidth: 220 },
+                { field: 'address', title: 'Address', minWidth: 300, showOverflow: true }
               ],
               toolbar: {
                 setting: {
