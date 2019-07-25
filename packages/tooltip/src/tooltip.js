@@ -103,6 +103,7 @@ export default {
         let parentNode = $el.parentNode
         let tipLeft = left
         tipStore.placement = 'top'
+        tipStore.style = { width: 'auto' }
         tipStore.arrowStyle = { left: '50%' }
         if (!parentNode) {
           document.body.appendChild($el)

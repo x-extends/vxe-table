@@ -310,6 +310,9 @@ export default {
     optimizeOpts () {
       return Object.assign({}, GlobalConfig.optimization, this.optimization)
     },
+    vaildTipOpts () {
+      return Object.assign({ isArrow: false }, this.tooltipConfig)
+    },
     // 是否使用了分组表头
     isGroup () {
       return this.collectColumn.some(column => UtilTools.hasChildrenList(column))
@@ -516,11 +519,11 @@ export default {
       overflowY,
       scrollbarHeight,
       optimizeOpts,
+      vaildTipOpts,
+      tooltipConfig,
       columnStore,
       filterStore,
       ctxMenuStore,
-      tooltipConfig,
-      validStore,
       footerData,
       hasTip
     } = this
@@ -647,14 +650,15 @@ export default {
          * Ellipsis tooltip
          */
         hasTip ? h('vxe-tooltip', {
-          ref: 'tooltip'
+          ref: 'tooltip',
+          props: tooltipConfig
         }) : _e(),
         /**
          * valid error tooltip
          */
         hasTip && editRules && (validOpts.message === 'default' ? !height : validOpts.message === 'tooltip') ? h('vxe-tooltip', {
           class: 'vxe-table--valid-error',
-          props: validOpts.message === 'tooltip' || tableData.length === 1 ? Object.assign({}, validStore, tooltipConfig) : null,
+          props: validOpts.message === 'tooltip' || tableData.length === 1 ? vaildTipOpts : null,
           ref: 'validTip'
         }) : _e()
       ])
