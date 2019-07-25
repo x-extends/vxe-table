@@ -1914,7 +1914,7 @@ const apis = [
       },
       {
         name: 'updateStatus(scope)',
-        desc: '更新单元格状态（当使用自定义渲染时可能会用到，当配置 showStatus=true 且单元格内值发生改变时需要调用）',
+        desc: '更新单元格状态（当使用自定义渲染时可能会用到）',
         type: 'Promise',
         enum: '',
         defVal: 'scope',

@@ -3,18 +3,20 @@
     <p>自定义渲染 <a class="link" href="https://www.npmjs.com/package/ant-design-vue" target="_blank">ant-design-vue</a> 组件（建议使用 <a class="link" href="https://www.npmjs.com/package/vxe-table-plugin-antd" target="_blank">vxe-table-plugin-antd</a> 适配插件，当然你也可以自行处理兼容性）</p>
     <p>使用自定义模板可以实现对更多细节的控制，但会失去默认的一些功能，比如自动聚焦等。（可以通过设置 <table-column-api-link prop="autofocus"/> 属性强制聚焦）</p>
     <p>如果很多页面都使用相同自定义模板的场景下建议使用<router-link class="link" :to="{name: 'Advanced'}">渲染器</router-link>，因为可以更好的复用</p>
+    <p class="red">自定义渲染需要配合 <table-api-link prop="updateStatus"/> 方法使用，在对应单元格的值发生改变时调用更新状态</p>
 
     <vxe-table
       border
       show-overflow
       show-footer
+      ref="xTable"
       class="vxe-table-antd"
       height="600"
       row-id="id"
       :loading="loading"
       :data.sync="tableData"
       :footer-method="footerMethod"
-      :edit-config="{trigger: 'click', mode: 'row'}">
+      :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">
       <vxe-table-column type="selection" width="60"></vxe-table-column>
       <vxe-table-column type="index" width="80">
         <template v-slot:header="{ column }">
@@ -23,8 +25,8 @@
         </template>
       </vxe-table-column>
       <vxe-table-column field="name" title="AInput" min-width="140" :edit-render="{type: 'default'}">
-        <template v-slot:edit="{ row }">
-          <a-input v-model="row.name"></a-input>
+        <template v-slot:edit="scope">
+          <a-input v-model="scope.row.name" @change="$refs.xTable.updateStatus(scope)"></a-input>
         </template>
       </vxe-table-column>
       <vxe-table-column field="role" title="AAutoComplete" min-width="160" :edit-render="{type: 'default'}">
@@ -105,13 +107,14 @@ export default {
           border
           show-overflow
           show-footer
+          ref="xTable"
           class="vxe-table-antd"
           height="600"
           row-id="id"
           :loading="loading"
           :data.sync="tableData"
           :footer-method="footerMethod"
-          :edit-config="{trigger: 'click', mode: 'row'}">
+          :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">
           <vxe-table-column type="selection" width="60"></vxe-table-column>
           <vxe-table-column type="index" width="80">
             <template v-slot:header="{ column }">
@@ -120,8 +123,8 @@ export default {
             </template>
           </vxe-table-column>
           <vxe-table-column field="name" title="AInput" min-width="140" :edit-render="{type: 'default'}">
-            <template v-slot:edit="{ row }">
-              <a-input v-model="row.name"></a-input>
+            <template v-slot:edit="scope">
+              <a-input v-model="scope.row.name" @change="$refs.xTable.updateStatus(scope)"></a-input>
             </template>
           </vxe-table-column>
           <vxe-table-column field="role" title="AAutoComplete" min-width="160" :edit-render="{type: 'default'}">
