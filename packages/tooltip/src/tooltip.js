@@ -15,6 +15,7 @@ export default {
     return {
       isUpdate: false,
       visible: false,
+      message: '',
       tipStore: {
         style: {},
         placement: '',
@@ -23,6 +24,9 @@ export default {
     }
   },
   watch: {
+    content (value) {
+      this.message = value
+    },
     value (value) {
       if (!this.isUpdate) {
         this[value ? 'show' : 'close']()
@@ -31,8 +35,9 @@ export default {
     }
   },
   mounted () {
-    let { $el, value } = this
+    let { $el, content, value } = this
     let parentNode = $el.parentNode
+    this.message = content
     Array.from($el.children).forEach((elem, index) => {
       if (index > 1) {
         parentNode.insertBefore(elem, $el)
@@ -52,7 +57,7 @@ export default {
     }
   },
   render (h) {
-    let { theme, content, isArrow, visible, tipStore } = this
+    let { theme, message, isArrow, visible, tipStore } = this
     return h('div', {
       class: ['vxe-table--tooltip-wrapper', `theme--${theme}`, `placement--${tipStore.placement}`, {
         'is--visible': visible,
@@ -62,10 +67,10 @@ export default {
       ref: 'tipWrapper'
     }, [
       h('div', {
-        class: ['vxe-table--tooltip-content']
-      }, this.$slots.content || (XEUtils.isFunction(content) ? content.call(this, h) : content)),
+        class: 'vxe-table--tooltip-content'
+      }, this.$slots.content || (XEUtils.isFunction(message) ? message.call(this, h) : message)),
       h('div', {
-        class: ['vxe-table--tooltip-arrow'],
+        class: 'vxe-table--tooltip-arrow',
         style: tipStore.arrowStyle
       })
     ].concat(this.$slots.default))
@@ -90,7 +95,7 @@ export default {
         this.$emit('input', this.visible)
       }
     },
-    toVisible (target) {
+    toVisible (target, message) {
       if (target) {
         let { $el, tipStore, zIndex } = this
         let { top, left } = DomTools.getAbsolutePos(target)
@@ -98,9 +103,13 @@ export default {
         let parentNode = $el.parentNode
         let tipLeft = left
         tipStore.placement = 'top'
+        tipStore.style = { width: 'auto' }
         tipStore.arrowStyle = { left: '50%' }
         if (!parentNode) {
           document.body.appendChild($el)
+        }
+        if (message) {
+          this.message = message
         }
         this.update(true)
         return this.$nextTick().then(() => {

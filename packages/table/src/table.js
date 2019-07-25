@@ -384,6 +384,9 @@ export default {
     optimizeOpts () {
       return Object.assign({}, GlobalConfig.optimization, this.optimization)
     },
+    vaildTipOpts () {
+      return Object.assign({ isArrow: false }, this.tooltipConfig)
+    },
     // 是否使用了分组表头
     isGroup () {
       return this.collectColumn.some(column => UtilTools.hasChildrenList(column))
@@ -602,12 +605,11 @@ export default {
       overflowY,
       scrollbarHeight,
       optimizeOpts,
+      vaildTipOpts,
+      tooltipConfig,
       columnStore,
       filterStore,
       ctxMenuStore,
-      tooltipStore,
-      tooltipConfig,
-      validStore,
       footerData,
       hasTip
     } = this
@@ -632,7 +634,7 @@ export default {
        * 隐藏列
        */
       h('div', {
-        class: ['vxe-table-hidden-column'],
+        class: 'vxe-table-hidden-column',
         ref: 'hideColumn'
       }, this.$slots.default),
       /**
@@ -688,7 +690,7 @@ export default {
        * 列宽线
        */
       isResizable ? h('div', {
-        class: ['vxe-table--resizable-bar'],
+        class: 'vxe-table--resizable-bar',
         style: overflowX ? {
           'padding-bottom': `${scrollbarHeight}px`
         } : null,
@@ -703,7 +705,7 @@ export default {
         }
       }) : _e(),
       h('div', {
-        class: [`vxe-table${id}-wrapper`],
+        class: `vxe-table${id}-wrapper`,
         ref: 'tableWrapper'
       }, [
         /**
@@ -729,15 +731,15 @@ export default {
          * Ellipsis tooltip
          */
         hasTip ? h('vxe-tooltip', {
-          props: Object.assign({}, tooltipStore, tooltipConfig),
-          ref: 'tooltip'
+          ref: 'tooltip',
+          props: tooltipConfig
         }) : _e(),
         /**
          * valid error tooltip
          */
         hasTip && editRules && (validOpts.message === 'default' ? !height : validOpts.message === 'tooltip') ? h('vxe-tooltip', {
           class: 'vxe-table--valid-error',
-          props: validOpts.message === 'tooltip' || tableData.length === 1 ? Object.assign({}, validStore, tooltipConfig) : null,
+          props: validOpts.message === 'tooltip' || tableData.length === 1 ? vaildTipOpts : null,
           ref: 'validTip'
         }) : _e()
       ])
@@ -2017,11 +2019,10 @@ export default {
         Object.assign(this.tooltipStore, {
           row,
           column,
-          content: UtilTools.formatText(content),
           visible: true
         })
         if (tooltip) {
-          tooltip.toVisible(cell)
+          tooltip.toVisible(cell, UtilTools.formatText(content))
         }
       }
       return this.$nextTick()
@@ -3682,16 +3683,17 @@ export default {
       let { $refs, height, tableData, validOpts } = this
       let { rule, row, column, cell } = params
       let validTip = $refs.validTip
+      let content = rule.message
       this.$nextTick(() => {
         Object.assign(this.validStore, {
           row,
           column,
           rule,
-          content: rule.message,
+          content,
           visible: true
         })
         if (validTip && (validOpts.message === 'tooltip' || (validOpts.message === 'default' && !height && tableData.length < 2))) {
-          validTip.toVisible(cell)
+          validTip.toVisible(cell, content)
         }
         UtilTools.emitEvent(this, 'valid-error', [params])
       })
