@@ -439,7 +439,6 @@ export default {
       let tableFullColumn = UtilTools.getColumnList(value)
       this.tableFullColumn = tableFullColumn
       this.cacheColumnMap()
-      this.$nextTick(this.updateFooter)
       // 在 v2.0 中废弃
       if (tableFullColumn.length) {
         if (tableFullColumn.some(column => column.columnKey)) {
@@ -1133,7 +1132,7 @@ export default {
      * 获取表格可视列
      */
     getTableColumn () {
-      return { fullColumn: this.visibleColumn, tableColumn: this.tableColumn }
+      return { fullColumn: this.tableFullColumn.slice(0), visibleColumn: this.visibleColumn.slice(0), tableColumn: this.tableColumn.slice(0) }
     },
     // 在 v3.0 中废弃 getRecords
     getRecords () {
@@ -1263,9 +1262,9 @@ export default {
      * 如果存在排序，继续处理
      */
     getTableData (force) {
-      let { scrollYLoad, scrollYStore } = this
+      let { tableFullData, scrollYLoad, scrollYStore } = this
       let fullData = force ? this.updateAfterFullData() : this.afterFullData
-      return { fullData, tableData: scrollYLoad ? fullData.slice(scrollYStore.startIndex, scrollYStore.startIndex + scrollYStore.renderSize) : fullData.slice(0) }
+      return { fullData: tableFullData.slice(0), visibleData: fullData, tableData: scrollYLoad ? fullData.slice(scrollYStore.startIndex, scrollYStore.startIndex + scrollYStore.renderSize) : fullData.slice(0) }
     },
     handleDefault () {
       if (this.selectConfig) {
@@ -1403,8 +1402,10 @@ export default {
       }
       this.scrollXLoad = scrollXLoad
       this.tableColumn = visibleColumn
-      // 需要计算两次，解决隐藏列首次被显示无宽度造成闪动问题
-      return this.$nextTick().then(this.recalculate).then(this.recalculate)
+      return this.$nextTick().then(() => {
+        this.updateFooter()
+        this.recalculate(true)
+      })
     },
     /**
      * 指定列宽的列进行拆分

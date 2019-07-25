@@ -15,6 +15,7 @@ export default {
     let {
       $parent: $table,
       fixedType,
+      visibleColumn,
       fixedColumn,
       tableColumn,
       footerData
@@ -142,7 +143,7 @@ export default {
                 style: {
                   width: hasEllipsis ? `${border ? renderWidth - 1 : renderWidth}px` : null
                 }
-              }, list[columnIndex])
+              }, list[visibleColumn.indexOf(column)])
             ])
           }).concat([
             h('td', {
