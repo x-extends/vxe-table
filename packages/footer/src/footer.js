@@ -72,11 +72,12 @@ export default {
          */
         h('colgroup', {
           ref: 'colgroup'
-        }, tableColumn.map(column => {
+        }, tableColumn.map((column, columnIndex) => {
           return h('col', {
             attrs: {
               name: column.id
-            }
+            },
+            key: columnIndex
           })
         }).concat([
           h('col', {
