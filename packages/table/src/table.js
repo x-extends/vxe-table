@@ -548,16 +548,7 @@ export default {
     document.body.appendChild(this.$refs.tableWrapper)
   },
   activated () {
-    let { $refs, lastScrollTop, lastScrollLeft } = this
-    let bodyElem = $refs.tableBody.$el
-    if (bodyElem) {
-      if (lastScrollTop) {
-        bodyElem.scrollTop = lastScrollTop
-      }
-      if (lastScrollLeft) {
-        bodyElem.scrollLeft = lastScrollLeft
-      }
-    }
+    this.scrollTo(this.lastScrollLeft, this.lastScrollTop)
   },
   beforeDestroy () {
     let tableWrapper = this.$refs.tableWrapper
@@ -3335,9 +3326,18 @@ export default {
     scrollTo (scrollLeft, scrollTop) {
       let bodyElem = this.$refs.tableBody.$el
       if (XEUtils.isNumber(scrollLeft)) {
-        bodyElem.scrollLeft = scrollLeft
+        let tableFooter = this.$refs.tableFooter
+        if (tableFooter) {
+          tableFooter.$el.scrollLeft = scrollLeft
+        } else {
+          bodyElem.scrollLeft = scrollLeft
+        }
       }
       if (XEUtils.isNumber(scrollTop)) {
+        let rightBody = this.$refs.rightBody
+        if (rightBody) {
+          rightBody.$el.scrollTop = scrollTop
+        }
         bodyElem.scrollTop = scrollTop
       }
     },
