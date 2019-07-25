@@ -2702,7 +2702,7 @@ export default {
       if (!mouseConfig.checked) {
         if (editConfig) {
           if (!actived.args || cell !== actived.args.cell) {
-            if (actived.args) {
+            if (editConfig.mode === 'row' && actived.args) {
               Object.assign(actived.args, { cell, columnIndex, column })
               actived.column = column
             }
