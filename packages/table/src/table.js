@@ -364,11 +364,14 @@ export default {
     collectColumn (value) {
       let tableFullColumn = UtilTools.getColumnList(value)
       this.tableFullColumn = tableFullColumn
+      this.cacheColumnMap()
       if (this.customs) {
         this.mergeCustomColumn(this.customs)
       }
-      this.cacheColumnMap()
       this.refreshColumn()
+      if (this._toolbar) {
+        this._toolbar.updateColumn(tableFullColumn)
+      }
       // 在 v3.0 中废弃
       if (tableFullColumn.length) {
         let cIndex = Math.floor((tableFullColumn.length - 1) / 2)
@@ -1575,7 +1578,7 @@ export default {
             if (wrapperElem) {
               // 如果是固定列
               if (fixedWrapperElem) {
-                wrapperElem.style.top = `${customHeight ? customHeight - footerHeight : tableHeight}px`
+                wrapperElem.style.top = `${customHeight ? customHeight - footerHeight : tableHeight + headerHeight}px`
               }
               wrapperElem.style.marginTop = `${-scrollbarHeight - 1}px`
             }

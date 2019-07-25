@@ -26,7 +26,6 @@ export default {
       _e,
       $parent: $table,
       fixedType,
-      visibleColumn,
       fixedColumn,
       tableColumn,
       footerData
@@ -138,7 +137,7 @@ export default {
             }, [
               h('div', {
                 class: 'vxe-cell'
-              }, list[visibleColumn.indexOf(column)] || '　')
+              }, list[$columnIndex] || '　')
             ])
           }).concat([
             h('td', {

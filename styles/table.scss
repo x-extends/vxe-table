@@ -124,11 +124,6 @@
     .vxe-footer--column {
       border-right: 1px solid $vxe-table-border-color;
     }
-    .vxe-body--column {
-      &:last-child {
-        border-right-color: $vxe-table-background-color;
-      }
-    }
     &.scroll--y {
       .vxe-header--column,
       .vxe-body--column,
