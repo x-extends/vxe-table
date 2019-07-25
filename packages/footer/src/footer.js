@@ -78,7 +78,8 @@ export default {
             attrs: {
               name: column.id,
               width: column.renderWidth
-            }
+            },
+            key: columnIndex
           })
         }).concat([
           h('col', {
