@@ -1440,7 +1440,7 @@ const apis = [
       },
       {
         name: 'getTableColumn()',
-        desc: '获取当前表格的列（完整的列、可视的列、渲染中的列）',
+        desc: '获取当前表格的列（完整的列、处理条件之后的的列、当前渲染中的列）',
         type: '{fullColumn, visibleColumn, tableColumn}',
         enum: '',
         defVal: '',
@@ -1464,7 +1464,7 @@ const apis = [
       },
       {
         name: 'getTableData()',
-        desc: '获取当前表格的数据（完整的数据、可视的数据、渲染中的数据）',
+        desc: '获取当前表格的数据（完整的数据、处理条件之后的数据、当前渲染中的数据）',
         type: '{fullData, visibleData, tableData}',
         enum: '',
         defVal: '',
