@@ -55,12 +55,12 @@ export default {
   data () {
     return {
       tableColumn: [
-        { field: 'name', title: 'Name', fixed: 'left', width: 200 },
-        { field: 'role', title: 'Role', width: 220 },
-        { field: 'sex', title: 'Sex', width: 220 },
-        { field: 'age', title: 'Age', width: 220 },
-        { field: 'date3', title: 'Date', width: 220 },
-        { field: 'address', title: 'Address', width: 300, showOverflow: true }
+        { field: 'name', title: 'Name', fixed: 'left', minWidth: 200 },
+        { field: 'role', title: 'Role', minWidth: 220 },
+        { field: 'sex', title: 'Sex', minWidth: 220 },
+        { field: 'age', title: 'Age', minWidth: 220 },
+        { field: 'date3', title: 'Date', minWidth: 220 },
+        { field: 'address', title: 'Address', minWidth: 300, showOverflow: true }
       ],
       toolbar: {
         setting: {
@@ -73,7 +73,7 @@ export default {
         <vxe-table
           border
           column-key
-          ref="xTable1"
+          ref="xTable"
           class="sortable-column-demo"
           :data.sync="tableData">
           <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -141,8 +141,11 @@ export default {
         <vxe-grid
           border
           column-key
-          ref="xTable2"
+          show-footer
+          ref="xTable"
           class="sortable-column-demo"
+          :footer-method="footerMethod"
+          :toolbar="toolbar"
           :columns="tableColumn"
           :data.sync="tableData"></vxe-grid>
         `,
@@ -151,13 +154,18 @@ export default {
           data () {
             return {
               tableColumn: [
-                { field: 'name', title: 'Name', fixed: 'left', width: 200 },
-                { field: 'role', title: 'Role', width: 220 },
-                { field: 'sex', title: 'Sex', width: 220 },
-                { field: 'age', title: 'Age', width: 220 },
-                { field: 'date3', title: 'Date', width: 220 },
-                { field: 'address', title: 'Address', width: 300, showOverflow: true }
+                { field: 'name', title: 'Name', fixed: 'left', minWidth: 200 },
+                { field: 'role', title: 'Role', minWidth: 220 },
+                { field: 'sex', title: 'Sex', minWidth: 220 },
+                { field: 'age', title: 'Age', minWidth: 220 },
+                { field: 'date3', title: 'Date', minWidth: 220 },
+                { field: 'address', title: 'Address', minWidth: 300, showOverflow: true }
               ],
+              toolbar: {
+                setting: {
+                  storage: false
+                }
+              },
               tableData: []
             }
           },
@@ -170,6 +178,28 @@ export default {
             }
           },
           methods: {
+            footerMethod ({ columns, data }) {
+              return [
+                columns.map((column, columnIndex) => {
+                  if (columnIndex === 0) {
+                    return '平均'
+                  }
+                  if (['age', 'sex'].includes(column.property)) {
+                    return XEUtils.mean(data, column.property)
+                  }
+                  return '-'
+                }),
+                columns.map((column, columnIndex) => {
+                  if (columnIndex === 0) {
+                    return '和值'
+                  }
+                  if (['age', 'sex'].includes(column.property)) {
+                    return XEUtils.sum(data, column.property)
+                  }
+                  return '-'
+                })
+              ]
+            },
             columnDrop () {
               this.$nextTick(() => {
                 let xTable = this.$refs.xTable
