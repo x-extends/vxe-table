@@ -20,7 +20,7 @@ export default {
   },
   data () {
     return {
-      tableCustoms: [],
+      tableFullColumn: [],
       settingStore: {
         visible: false
       }
@@ -46,7 +46,7 @@ export default {
   created () {
     let { settingOpts, id, customs } = this
     if (customs) {
-      this.tableCustoms = customs
+      this.tableFullColumn = customs
     }
     if (settingOpts.storage && !id) {
       throw new Error('[vxe-table] Toolbar must have a unique primary id.')
@@ -60,7 +60,7 @@ export default {
     GlobalEvent.off(this, 'blur')
   },
   render (h) {
-    let { $scopedSlots, settingStore, setting, buttons = [], vSize, tableCustoms } = this
+    let { $scopedSlots, settingStore, setting, buttons = [], vSize, tableFullColumn } = this
     let customBtnOns = {}
     let customWrapperOns = {}
     let $buttons = $scopedSlots.buttons
@@ -112,7 +112,7 @@ export default {
           h('div', {
             class: 'vxe-custom--option',
             on: customWrapperOns
-          }, tableCustoms.map(column => {
+          }, tableFullColumn.map(column => {
             let { property, visible, own } = column
             let headerTitle = own.title || own.label
             return property && headerTitle ? h('vxe-checkbox', {
@@ -176,15 +176,18 @@ export default {
           }
         }
         let customList = Object.values(customMap)
-        this.updateCustoms(customList.length ? customList : this.tableCustoms)
+        this.updateCustoms(customList.length ? customList : this.tableFullColumn)
       }
+    },
+    updateColumn (fullColumn) {
+      this.tableFullColumn = fullColumn
     },
     updateCustoms (customs) {
       let { $grid, $table } = this
       let comp = $grid || $table
       if (comp) {
-        comp.reloadCustoms(customs).then(customs => {
-          this.tableCustoms = customs
+        comp.reloadCustoms(customs).then(fullColumn => {
+          this.tableFullColumn = fullColumn
         })
       }
     },
@@ -194,23 +197,23 @@ export default {
       return rest && rest._v === version ? rest : { _v: version }
     },
     saveColumnHide () {
-      let { id, tableCustoms, settingOpts } = this
+      let { id, tableFullColumn, settingOpts } = this
       if (settingOpts.storage) {
         let columnHideStorageMap = this.getStorageMap(settingOpts.storageKey)
-        let colHides = tableCustoms.filter(column => column.property && !column.visible)
+        let colHides = tableFullColumn.filter(column => column.property && !column.visible)
         columnHideStorageMap[id] = colHides.length ? colHides.map(column => column.property).join(',') : undefined
         localStorage.setItem(settingOpts.storageKey, XEUtils.toJSONString(columnHideStorageMap))
       }
       return this.$nextTick()
     },
     saveColumnWidth (isReset) {
-      let { id, tableCustoms, resizableOpts } = this
+      let { id, tableFullColumn, resizableOpts } = this
       if (resizableOpts.storage) {
         let columnWidthStorageMap = this.getStorageMap(resizableOpts.storageKey)
         let columnWidthStorage
         if (!isReset) {
           columnWidthStorage = XEUtils.isPlainObject(columnWidthStorageMap[id]) ? columnWidthStorageMap[id] : {}
-          tableCustoms.forEach(({ property, resizeWidth, renderWidth }) => {
+          tableFullColumn.forEach(({ property, resizeWidth, renderWidth }) => {
             if (property && resizeWidth) {
               columnWidthStorage[property] = renderWidth
             }

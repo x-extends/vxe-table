@@ -28,8 +28,11 @@
     <vxe-grid
       border
       column-key
+      show-footer
       ref="xTable2"
       class="sortable-column-demo"
+      :footer-method="footerMethod"
+      :toolbar="toolbar"
       :columns="tableColumn"
       :data.sync="tableData"></vxe-grid>
 
@@ -46,6 +49,7 @@
 <script>
 import hljs from 'highlight.js'
 import Sortable from 'sortablejs'
+import XEUtils from 'xe-utils'
 
 export default {
   data () {
@@ -58,6 +62,11 @@ export default {
         { field: 'date3', title: 'Date', width: 220 },
         { field: 'address', title: 'Address', width: 300, showOverflow: true }
       ],
+      toolbar: {
+        setting: {
+          storage: false
+        }
+      },
       tableData: [],
       demoCodes: [
         `
@@ -222,6 +231,28 @@ export default {
     }
   },
   methods: {
+    footerMethod ({ columns, data }) {
+      return [
+        columns.map((column, columnIndex) => {
+          if (columnIndex === 0) {
+            return '平均'
+          }
+          if (['age', 'sex'].includes(column.property)) {
+            return XEUtils.mean(data, column.property)
+          }
+          return '-'
+        }),
+        columns.map((column, columnIndex) => {
+          if (columnIndex === 0) {
+            return '和值'
+          }
+          if (['age', 'sex'].includes(column.property)) {
+            return XEUtils.sum(data, column.property)
+          }
+          return '-'
+        })
+      ]
+    },
     columnDrop1 () {
       this.$nextTick(() => {
         let xTable = this.$refs.xTable1

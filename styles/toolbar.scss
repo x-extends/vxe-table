@@ -3,6 +3,14 @@
 /*toolbar*/
 .vxe-toolbar {
   padding: 10px 0;
+  &:after {
+    content: "";
+    display: block;
+    clear: both;
+    height: 0;
+    overflow: hidden;
+    visibility: hidden;
+  }
   &.size--small,
   &.size--mini {
     padding: 8px 0

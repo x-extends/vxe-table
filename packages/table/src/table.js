@@ -80,7 +80,7 @@ function renderFixed (h, $table, fixedType) {
     }),
     showFooter ? h('vxe-table-footer', {
       style: {
-        top: `${customHeight ? customHeight - footerHeight : tableHeight}px`
+        top: `${customHeight ? customHeight - footerHeight : tableHeight + headerHeight}px`
       },
       props: {
         fixedType,
@@ -439,6 +439,13 @@ export default {
       let tableFullColumn = UtilTools.getColumnList(value)
       this.tableFullColumn = tableFullColumn
       this.cacheColumnMap()
+      if (this.customs) {
+        this.mergeCustomColumn(this.customs)
+      }
+      this.refreshColumn()
+      if (this._toolbar) {
+        this._toolbar.updateColumn(tableFullColumn)
+      }
       // 在 v2.0 中废弃
       if (tableFullColumn.length) {
         if (tableFullColumn.some(column => column.columnKey)) {
@@ -810,14 +817,7 @@ export default {
       return this.loadData(datas).then(this.handleDefault)
     },
     loadColumn (columns) {
-      let collectColumn = XEUtils.mapTree(columns, column => Cell.createColumn(this, column), headerProps)
-      this.collectColumn = collectColumn
-      this.tableFullColumn = UtilTools.getColumnList(collectColumn)
-      if (this.customs) {
-        this.mergeCustomColumn(this.customs)
-      }
-      this.cacheColumnMap()
-      this.refreshColumn()
+      this.collectColumn = XEUtils.mapTree(columns, column => Cell.createColumn(this, column), headerProps)
       return this.$nextTick()
     },
     reloadColumn (columns) {
