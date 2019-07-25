@@ -218,7 +218,7 @@ const apis = [
           },
           {
             name: 'props',
-            desc: '渲染组件的参数',
+            desc: '渲染组件的参数（请查看目标组件的 Component Attributes）',
             type: 'Object',
             enum: '',
             defVal: '',
@@ -259,7 +259,7 @@ const apis = [
           },
           {
             name: 'props',
-            desc: '渲染组件的参数',
+            desc: '渲染组件的参数（请查看目标组件的 Component Attributes）',
             type: 'Object',
             enum: '',
             defVal: '',
@@ -267,10 +267,10 @@ const apis = [
           },
           {
             name: 'events',
-            desc: '渲染组件的事件',
+            desc: '渲染组件的事件（请查看目标组件的 Component Events）',
             type: 'Object',
             enum: '',
-            defVal: '',
+            defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex}, ...[Component arguments]',
             list: []
           },
           {
@@ -313,7 +313,7 @@ const apis = [
         desc: '自定义显示内容模板',
         type: '',
         enum: '',
-        defVal: '{row,rowIndex,column,columnIndex,fixed,isHidden}',
+        defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,fixed,isHidden}',
         list: []
       },
       {
@@ -321,7 +321,7 @@ const apis = [
         desc: '自定义表头内容的模板',
         type: '',
         enum: '',
-        defVal: '{column,columnIndex,fixed,isHidden}',
+        defVal: '{column,columnIndex,$columnIndex,fixed,isHidden}',
         list: []
       },
       {
@@ -329,7 +329,7 @@ const apis = [
         desc: '自定义筛选模板',
         type: '',
         enum: '',
-        defVal: '{column,columnIndex,fixed,isHidden}',
+        defVal: '{column,columnIndex,$columnIndex,fixed,isHidden}',
         list: []
       },
       {
@@ -337,7 +337,7 @@ const apis = [
         desc: '自定义可编辑组件模板',
         type: '',
         enum: '',
-        defVal: '{row,rowIndex,column,columnIndex,fixed,isHidden}',
+        defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,fixed,isHidden}',
         list: []
       }
     ]

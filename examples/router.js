@@ -69,6 +69,7 @@ const TableTreeSelection = () => import(/* webpackChunkName: "tree" */ './views/
 const TableTreeRadio = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Radio.vue')
 const TableTreeExpand = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Expand.vue')
 const TableTreeToolbar = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Toolbar.vue')
+const TableTreeLazy = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Lazy.vue')
 const TableTreeEdit = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Edit.vue')
 
 const TableScroll = () => import(/* webpackChunkName: "scroll" */ './views/table/scroll/Scroll.vue')
@@ -390,6 +391,11 @@ export default new Router({
       path: '/table/tree/toolbar',
       name: 'TableTreeToolbar',
       component: TableTreeToolbar
+    },
+    {
+      path: '/table/tree/lazy',
+      name: 'TableTreeLazy',
+      component: TableTreeLazy
     },
     {
       path: '/table/tree/edit',
