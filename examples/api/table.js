@@ -1917,7 +1917,7 @@ const apis = [
         desc: '更新单元格状态（当使用自定义渲染时可能会用到）',
         type: 'Promise',
         enum: '',
-        defVal: 'scope',
+        defVal: '{ row, column }',
         list: []
       },
       {
