@@ -7,7 +7,6 @@
       border
       resizable
       height="530"
-      row-id="id"
       :pager-config="{pageSize: 10}"
       :proxy-config="tableProxy"
       :select-config="{reserve: true}"

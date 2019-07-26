@@ -6,7 +6,6 @@
       ref="xTable"
       border
       show-overflow
-      row-id="id"
       :data.sync="tableData"
       :edit-config="{trigger: 'click', mode: 'row', activeMethod: activeRowMethod}"
       @edit-disabled="editDisabledEvent">
@@ -29,7 +28,6 @@
       ref="xTable"
       border
       show-overflow
-      row-id="id"
       :data.sync="tableData"
       :edit-config="{trigger: 'click', mode: 'row'}">
       <vxe-table-column type="index" width="60"></vxe-table-column>
@@ -72,7 +70,6 @@ export default {
           ref="xTable"
           border
           show-overflow
-          row-id="id"
           :data.sync="tableData"
           :edit-config="{trigger: 'click', mode: 'row', activeMethod: activeRowMethod}"
           @edit-disabled="editDisabledEvent">
@@ -107,7 +104,6 @@ export default {
           ref="xTable"
           border
           show-overflow
-          row-id="id"
           :data.sync="tableData"
           :edit-config="{trigger: 'click', mode: 'row'}">
           <vxe-table-column type="index" width="60"></vxe-table-column>

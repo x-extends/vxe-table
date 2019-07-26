@@ -44,7 +44,6 @@
       highlight-hover-row
       class="vxe-table-antd"
       height="460"
-      row-id="id"
       :loading="loading"
       :data.sync="tableData"
       :edit-rules="validRules"
@@ -175,7 +174,6 @@ export default {
             highlight-hover-row
             class="vxe-table-antd"
             height="460"
-            row-id="id"
             :loading="loading"
             :data.sync="tableData"
             :edit-rules="validRules"

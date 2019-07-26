@@ -7,7 +7,6 @@
       border
       show-overflow
       highlight-cell
-      row-id="id"
       :data.sync="tableData"
       :mouse-config="{selected: true}"
       :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true}"
@@ -56,7 +55,6 @@ export default {
           border
           show-overflow
           highlight-cell
-          row-id="id"
           :data.sync="tableData"
           :mouse-config="{selected: true}"
           :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true}"

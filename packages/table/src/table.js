@@ -4,10 +4,14 @@ import Cell from '../../cell'
 import { Interceptor, Renderer } from '../../v-x-e-table'
 import { UtilTools, DomTools, ExportTools, ResizeEvent, GlobalEvent } from '../../tools'
 
-var rowUniqueId = 1000000
+var rowUniqueId = 0
 var browse = DomTools.browse
 var isWebkit = browse['-webkit'] && !browse['-ms']
 var debounceScrollYDuration = browse.msie ? 40 : 20
+
+function getRowUniqueId () {
+  return `rid_${++rowUniqueId}`
+}
 
 /**
  * 渲染浮固定列
@@ -428,6 +432,8 @@ export default {
       tableFullData: [],
       afterFullData: [],
       // 缓存数据集
+      fullAllDataRowMap: new Map(),
+      fullAllDataRowIdData: {},
       fullDataRowMap: new Map(),
       fullDataRowIdData: {},
       fullColumnMap: new Map(),
@@ -474,6 +480,7 @@ export default {
       ResizeEvent.off(this, this.$el.parentNode)
     }
     this.afterFullData.length = 0
+    this.fullAllDataRowMap.clear()
     this.fullDataRowMap.clear()
     this.fullColumnMap.clear()
     this.closeFilter()
@@ -690,14 +697,14 @@ export default {
     loadData (datas, notRefresh) {
       let { height, maxHeight, editStore, optimizeOpts, recalculate } = this
       let { scrollY } = optimizeOpts
-      let tableFullData = datas || []
+      let tableFullData = datas ? datas.slice(0) : []
       let scrollYLoad = scrollY && scrollY.gt && scrollY.gt < tableFullData.length
       editStore.insertList = []
       editStore.removeList = []
       // 全量数据
       this.tableFullData = tableFullData
       // 缓存数据
-      this.cacheDataMap()
+      this.updateCache(true)
       // 原始数据
       this.tableSourceData = XEUtils.clone(tableFullData, true)
       this.scrollYLoad = scrollYLoad
@@ -731,21 +738,29 @@ export default {
       return this.loadColumn(columns)
     },
     // 更新数据的 Map
-    cacheDataMap () {
-      let { treeConfig, tableFullData, fullDataRowMap } = this
+    updateCache (source) {
+      let { treeConfig, tableFullData, fullDataRowIdData, fullDataRowMap, fullAllDataRowMap, fullAllDataRowIdData } = this
       let rowkey = UtilTools.getRowkey(this)
       let handleData = (row, index) => {
         let rowid = UtilTools.getRowid(this, row)
         if (!rowid) {
-          rowid = ++rowUniqueId
+          rowid = getRowUniqueId()
           XEUtils.set(row, rowkey, rowid)
         }
         let rest = { row, rowid, index }
-        fullDataRowIdData[rowid] = rest
-        fullDataRowMap.set(row, rest)
+        if (source) {
+          fullDataRowIdData[rowid] = rest
+          fullDataRowMap.set(row, rest)
+        }
+        fullAllDataRowIdData[rowid] = rest
+        fullAllDataRowMap.set(row, rest)
       }
-      let fullDataRowIdData = this.fullDataRowIdData = {}
-      fullDataRowMap.clear()
+      if (source) {
+        fullDataRowIdData = this.fullDataRowIdData = {}
+        fullDataRowMap.clear()
+      }
+      fullAllDataRowIdData = this.fullAllDataRowIdData = {}
+      fullAllDataRowMap.clear()
       if (treeConfig) {
         XEUtils.eachTree(tableFullData, handleData, treeConfig)
       } else {
@@ -765,7 +780,7 @@ export default {
     },
     getRowNode (tr) {
       if (tr) {
-        let { treeConfig, tableFullData, fullDataRowIdData } = this
+        let { treeConfig, tableFullData, fullAllDataRowIdData } = this
         let rowid = tr.getAttribute('data-rowid')
         if (treeConfig) {
           let matchObj = XEUtils.findTree(tableFullData, row => UtilTools.getRowid(this, row) === rowid, treeConfig)
@@ -773,18 +788,18 @@ export default {
             return matchObj
           }
         } else {
-          if (fullDataRowIdData[rowid]) {
-            let rest = fullDataRowIdData[rowid]
+          if (fullAllDataRowIdData[rowid]) {
+            let rest = fullAllDataRowIdData[rowid]
             return { item: rest.row, index: rest.index, items: tableFullData }
           }
         }
       }
       return null
     },
-    getColumnNode (th) {
-      if (th) {
+    getColumnNode (cell) {
+      if (cell) {
         let { isGroup, fullColumnIdData, tableFullColumn } = this
-        let colid = th.getAttribute('data-colid')
+        let colid = cell.getAttribute('data-colid')
         if (isGroup) {
           let matchObj = XEUtils.findTree(tableFullColumn, column => column.id === colid, headerProps)
           if (matchObj) {
@@ -819,8 +834,8 @@ export default {
       return new Promise(resolve => {
         if (args.length === 1) {
           tableData.unshift.apply(tableData, newRecords)
+          tableFullData.unshift.apply(tableFullData, newRecords)
           if (scrollYLoad) {
-            tableFullData.unshift.apply(tableFullData, newRecords)
             this.updateAfterFullData()
           }
         } else {
@@ -829,15 +844,17 @@ export default {
           }
           if (row === -1) {
             tableData.push.apply(tableData, newRecords)
+            tableFullData.push.apply(tableFullData, newRecords)
           } else {
             if (treeConfig) {
               throw new Error('[vxe-table] The tree table does not support this operation.')
             }
-            let rowIndex = tableData.indexOf(row)
-            tableData.splice.apply(tableData, [rowIndex, 0].concat(newRecords))
+            tableData.splice.apply(tableData, [tableData.indexOf(row), 0].concat(newRecords))
+            tableFullData.splice.apply(tableFullData, [tableFullData.indexOf(row), 0].concat(newRecords))
           }
         }
         [].unshift.apply(editStore.insertList, newRecords)
+        this.updateCache()
         this.checkSelectionStatus()
         this.$nextTick(() => {
           this.recalculate()
@@ -855,7 +872,7 @@ export default {
       })
       // 如果设置了 Key 就必须要唯一，可以自行设置；如果为空，则默认生成一个随机数
       if (rowkey && !XEUtils.get(recordItem, rowkey)) {
-        XEUtils.set(recordItem, rowkey, ++rowUniqueId)
+        XEUtils.set(recordItem, rowkey, getRowUniqueId())
       }
       return recordItem
     },
@@ -910,6 +927,7 @@ export default {
         }
         XEUtils.remove(insertList, row => rows.indexOf(row) > -1)
       }
+      this.updateCache()
       this.checkSelectionStatus()
       return this.$nextTick().then(() => {
         this.recalculate()
@@ -985,27 +1003,21 @@ export default {
     },
     hasRowChange (row, field) {
       let oRow
-      let { tableSourceData, fullDataRowMap } = this
-      if (!fullDataRowMap.has(row)) {
+      let { treeConfig, tableSourceData, fullDataRowIdData } = this
+      let rowid = UtilTools.getRowid(this, row)
+      // 新增的数据不需要检测
+      if (!fullDataRowIdData[rowid]) {
         return false
       }
-      let rowkey = UtilTools.getRowkey(this)
-      if (rowkey) {
-        let rowid = UtilTools.getRowid(this, row)
-        let treeConfig = this.treeConfig
-        if (treeConfig) {
-          let children = treeConfig.children
-          let matchObj = XEUtils.findTree(tableSourceData, item => rowid === UtilTools.getRowid(this, item), treeConfig)
-          row = Object.assign({}, row, { [children]: null })
-          if (matchObj) {
-            oRow = Object.assign({}, matchObj.item, { [children]: null })
-          }
-        } else {
-          let oRowIndex = this.fullDataRowIdData[rowid].index
-          oRow = tableSourceData[oRowIndex]
+      if (treeConfig) {
+        let children = treeConfig.children
+        let matchObj = XEUtils.findTree(tableSourceData, item => rowid === UtilTools.getRowid(this, item), treeConfig)
+        row = Object.assign({}, row, { [ children ]: null })
+        if (matchObj) {
+          oRow = Object.assign({}, matchObj.item, { [ children ]: null })
         }
       } else {
-        let oRowIndex = this.getRowIndex(row)
+        let oRowIndex = fullDataRowIdData[rowid].index
         oRow = tableSourceData[oRowIndex]
       }
       if (arguments.length > 1) {
@@ -1030,7 +1042,7 @@ export default {
     getTableColumn () {
       return { fullColumn: this.tableFullColumn.slice(0), visibleColumn: this.visibleColumn.slice(0), tableColumn: this.tableColumn.slice(0) }
     },
-    // 在 v3.0 中废弃 prop
+    // 在 v3.0 中废弃 getRecords
     getRecords () {
       console.warn('[vxe-table] The function getRecords is deprecated, please use getData')
       return this.getData.apply(this, arguments)
@@ -1042,7 +1054,7 @@ export default {
       let tableFullData = this.tableFullData
       return arguments.length ? tableFullData[rowIndex] : tableFullData.slice(0)
     },
-    // 在 v3.0 中废弃 prop
+    // 在 v3.0 中废弃 getAllRecords
     getAllRecords () {
       console.warn('[vxe-table] The function getAllRecords is deprecated, please use getRecordset')
       return this.getRecordset()
@@ -1915,6 +1927,7 @@ export default {
      */
     handleGlobalContextmenuEvent (evnt) {
       let { isCtxMenu, ctxMenuStore } = this
+      let layoutList = ['header', 'body', 'footer']
       if (isCtxMenu) {
         if (ctxMenuStore.visible) {
           if (ctxMenuStore.visible && this.$refs.ctxWrapper && this.getEventTargetNode(evnt, this.$refs.ctxWrapper.$el).flag) {
@@ -1922,23 +1935,27 @@ export default {
             return
           }
         }
-        // 右键头部
-        let headeWrapperNode = this.getEventTargetNode(evnt, this.$el, 'vxe-table--header-wrapper')
-        if (headeWrapperNode.flag) {
-          this.openContextMenu(evnt, 'header', {})
-          return
-        }
-        // 右键内容
-        let bodyWrapperNode = this.getEventTargetNode(evnt, this.$el, 'vxe-table--body-wrapper')
-        if (bodyWrapperNode.flag) {
-          this.openContextMenu(evnt, 'body', {})
-          return
-        }
-        // 右键表尾
-        let footerWrapperNode = this.getEventTargetNode(evnt, this.$el, 'vxe-table--footer-wrapper')
-        if (footerWrapperNode.flag) {
-          this.openContextMenu(evnt, 'footer', {})
-          return
+        for (let index = 0; index < layoutList.length; index++) {
+          let layout = layoutList[index]
+          let columnTargetNode = this.getEventTargetNode(evnt, this.$el, `vxe-${layout}--column`)
+          if (columnTargetNode.flag) {
+            let cell = columnTargetNode.targetElem
+            let column = this.getColumnNode(cell).item
+            let params = { type: layout, column, columnIndex: this.getColumnIndex(column), cell, $table: this }
+            let typePrefix = `${layout}-`
+            if (layout === 'body') {
+              let row = this.getRowNode(cell.parentNode).item
+              typePrefix = ''
+              params.row = row
+              params.rowIndex = this.getRowIndex(row)
+            }
+            this.openContextMenu(evnt, layout, params)
+            UtilTools.emitEvent(this, `${typePrefix}cell-context-menu`, [params, evnt])
+            return
+          } else if (this.getEventTargetNode(evnt, this.$el, `vxe-table--${layout}-wrapper`).flag) {
+            evnt.preventDefault()
+            return
+          }
         }
       }
       this.closeMenu()
@@ -1948,7 +1965,7 @@ export default {
      * 显示快捷菜单
      */
     openContextMenu (evnt, type, params) {
-      let { tableData, visibleColumn, ctxMenuStore, ctxMenuConfig, fullDataRowIdData, tableFullColumn } = this
+      let { ctxMenuStore, ctxMenuConfig } = this
       let config = ctxMenuConfig[type]
       if (config) {
         let { options, visibleMethod, disabled } = config
@@ -1958,22 +1975,10 @@ export default {
           if (!visibleMethod || visibleMethod(params, evnt)) {
             evnt.preventDefault()
             let { scrollTop, scrollLeft, visibleHeight, visibleWidth } = DomTools.getDomNode()
-            let { targetElem, flag } = this.getEventTargetNode(evnt, this.$el, `vxe-${type}--column`)
-            let args = { type, $table: this }
-            if (flag) {
-              let { rowid, rowIndex, colIndex, columnIndex } = DomTools.getCellIndexs(targetElem)
-              let column = colIndex ? tableFullColumn[colIndex] : visibleColumn[columnIndex]
-              if (type === 'body') {
-                let row = rowid ? fullDataRowIdData[rowid].row : tableData[rowIndex]
-                args.row = row
-                args.rowIndex = rowIndex
-              }
-              Object.assign(args, { column, columnIndex, cell: targetElem })
-            }
             let top = evnt.clientY + scrollTop
             let left = evnt.clientX + scrollLeft
             Object.assign(ctxMenuStore, {
-              args,
+              args: params,
               visible: true,
               list: options,
               selected: null,

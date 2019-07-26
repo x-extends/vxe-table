@@ -6,7 +6,6 @@
     <vxe-grid
       resizable
       highlight-hover-row
-      row-id="id"
       :proxy-config="tableProxy"
       :columns="tableColumn"
       :toolbar="toolbar"
@@ -66,7 +65,6 @@ export default {
         <vxe-grid
           resizable
           highlight-hover-row
-          row-id="id"
           :proxy-config="tableProxy"
           :columns="tableColumn"
           :toolbar="toolbar"

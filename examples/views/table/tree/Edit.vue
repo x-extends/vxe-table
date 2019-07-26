@@ -14,7 +14,6 @@
     <vxe-table
       resizable
       ref="xTree"
-      row-id="id"
       :tree-config="{children: 'children'}"
       :edit-config="{trigger: 'click', mode: 'row'}"
       :select-config="{labelField: 'id'}"
@@ -57,7 +56,6 @@ export default {
         <vxe-table
           resizable
           ref="xTree"
-          row-id="id"
           :tree-config="{children: 'children'}"
           :edit-config="{trigger: 'click', mode: 'row'}"
           :select-config="{labelField: 'id'}"

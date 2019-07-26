@@ -5,7 +5,6 @@
     <vxe-table
       border
       resizable
-      row-id="id"
       :tree-config="{children: 'children'}"
       :data.sync="tableData">
       <vxe-table-column field="name" title="Name" tree-node></vxe-table-column>
@@ -54,7 +53,6 @@ export default {
         <vxe-table
           border
           resizable
-          row-id="id"
           :tree-config="{children: 'children'}"
           :data.sync="tableData">
           <vxe-table-column field="name" title="Name" tree-node></vxe-table-column>

@@ -6,7 +6,7 @@ class ColumnConfig {
   constructor (_vm, { renderHeader, renderCell, renderData } = {}) {
     Object.assign(this, {
       // 基本属性
-      id: `col--${++columnUniqueId}`,
+      id: `cid_${++columnUniqueId}`,
       type: _vm.type,
       prop: _vm.prop,
       property: _vm.field || _vm.prop,

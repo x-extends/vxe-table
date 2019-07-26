@@ -81,7 +81,6 @@ export default {
         <vxe-table
           border
           height="600"
-          row-id="id"
           :data.sync="tableData"
           :edit-config="{trigger: 'click', mode: 'row'}">
           <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
@@ -124,7 +123,6 @@ export default {
         <vxe-table
           border
           height="600"
-          row-id="id"
           :data.sync="tableData"
           :edit-config="{trigger: 'click', mode: 'row'}">
           <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
@@ -152,7 +150,6 @@ export default {
         <vxe-table
           border
           height="600"
-          row-id="id"
           :data.sync="tableData"
           :edit-config="{trigger: 'click', mode: 'row'}">
           <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>

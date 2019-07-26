@@ -6,7 +6,6 @@
       border
       resizable
       height="530"
-      row-id="id"
       :loading="loading"
       :pager-config="tablePage"
       :columns="tableColumn"
@@ -52,7 +51,6 @@ export default {
           border
           resizable
           height="530"
-          row-id="id"
           :loading="loading"
           :pager-config="tablePage"
           :columns="tableColumn"

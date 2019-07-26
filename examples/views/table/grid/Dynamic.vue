@@ -7,7 +7,6 @@
       resizable
       show-overflow
       height="306"
-      row-id="id"
       :pager-config="tablePage"
       :proxy-config="tableProxy"
       :columns="tableColumn"
@@ -27,7 +26,6 @@
       border
       show-overflow
       height="290"
-      row-id="id"
       :loading="loading2"
       :pager-config="tablePage2"
       :proxy-config="tableProxy2"
@@ -134,7 +132,6 @@ export default {
           resizable
           show-overflow
           height="306"
-          row-id="id"
           :pager-config="tablePage"
           :proxy-config="tableProxy"
           :columns="tableColumn"
@@ -202,7 +199,6 @@ export default {
           border
           show-overflow
           height="530"
-          row-id="id"
           :loading="loading"
           :pager-config="tablePage"
           :proxy-config="tableProxy"

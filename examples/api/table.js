@@ -1109,6 +1109,30 @@ const apis = [
         list: []
       },
       {
+        name: 'cell-context-menu',
+        descKey: 'app.api.table.desc.cellContextmenu',
+        type: '',
+        enum: '',
+        defVal: '{type,row,rowIndex,column,columnIndex,cell},event',
+        list: []
+      },
+      {
+        name: 'cell-mouseenter',
+        descKey: 'app.api.table.desc.cellMouseenter',
+        type: '',
+        enum: '',
+        defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,cell},event',
+        list: []
+      },
+      {
+        name: 'cell-mouseleave',
+        descKey: 'app.api.table.desc.cellMouseleave',
+        type: '',
+        enum: '',
+        defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,cell},event',
+        list: []
+      },
+      {
         name: 'header-cell-click',
         descKey: 'app.api.table.desc.headerCellClick',
         type: '',
@@ -1122,6 +1146,14 @@ const apis = [
         type: '',
         enum: '',
         defVal: '{$rowIndex,column,columnIndex,$columnIndex,cell},event',
+        list: []
+      },
+      {
+        name: 'header-cell-context-menu',
+        descKey: 'app.api.table.desc.headerCellContextmenu',
+        type: '',
+        enum: '',
+        defVal: '{type,column,columnIndex,cell},event',
         list: []
       },
       {
@@ -1141,19 +1173,11 @@ const apis = [
         list: []
       },
       {
-        name: 'cell-mouseenter',
-        descKey: 'app.api.table.desc.cellMouseenter',
+        name: 'footer-cell-context-menu',
+        descKey: 'app.api.table.desc.footerCellContextmenu',
         type: '',
         enum: '',
-        defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,cell},event',
-        list: []
-      },
-      {
-        name: 'cell-mouseleave',
-        descKey: 'app.api.table.desc.cellMouseleave',
-        type: '',
-        enum: '',
-        defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,cell},event',
+        defVal: '{type,column,columnIndex,cell},event',
         list: []
       },
       {
@@ -1201,7 +1225,7 @@ const apis = [
         descKey: 'app.api.table.desc.contextMenuClick',
         type: '',
         enum: '',
-        defVal: '{menu,type,row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,cell},event',
+        defVal: '{menu,type,row,rowIndex,column,columnIndex,cell},event',
         list: []
       },
       {
@@ -1351,7 +1375,7 @@ const apis = [
       },
       {
         name: 'getRowIndex(row)',
-        desc: '根据 row 获取数据中的索引',
+        desc: '根据 row 获取相对于 data 属性中的索引',
         type: 'Number',
         enum: '',
         defVal: 'row',
@@ -1367,7 +1391,7 @@ const apis = [
       },
       {
         name: 'getColumns(columnIndex)',
-        desc: '获取表格所有列，也可以指定索引获取列',
+        desc: '获取表格的可视列，也可以指定索引获取列',
         type: 'Array',
         enum: '',
         defVal: 'columnIndex?',
@@ -1391,18 +1415,18 @@ const apis = [
       },
       {
         name: 'getColumnIndex(column)',
-        desc: '根据 column 获取列中的索引',
+        desc: '根据 column 获取相对于 columns 属性中的索引',
         type: 'Number',
         enum: '',
         defVal: 'column',
         list: []
       },
       {
-        name: 'getColumnNode(th)',
-        desc: '根据 th 元素获取对应的 column 信息',
+        name: 'getColumnNode(cell)',
+        desc: '根据 th/td 元素获取对应的 column 信息',
         type: '{item, items, index, parent}',
         enum: '',
-        defVal: 'th',
+        defVal: 'cell',
         list: []
       },
       {
@@ -1432,7 +1456,7 @@ const apis = [
       },
       {
         name: 'getData(rowIndex)',
-        desc: '获取表格全量数据，和 data 的行为一致，也可以指定索引获取数据',
+        desc: '获取数据，和 data 的行为一致，也可以指定索引获取数据',
         type: 'Array',
         enum: '',
         defVal: 'rowIndex?',

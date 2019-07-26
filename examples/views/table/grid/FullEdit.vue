@@ -10,7 +10,6 @@
       highlight-hover-row
       remote-filter
       height="530"
-      row-id="id"
       :pager-config="{pageSize: 15}"
       :toolbar="toolbar"
       :proxy-config="tableProxy"
@@ -110,7 +109,6 @@ export default {
           highlight-hover-row
           remote-filter
           height="530"
-          row-id="id"
           :pager-config="{pageSize: 15}"
           :toolbar="toolbar"
           :proxy-config="tableProxy"

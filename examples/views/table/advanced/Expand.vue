@@ -14,7 +14,6 @@
     <vxe-table
       ref="xTable"
       border
-      row-id="id"
       :data.sync="tableData"
       @toggle-expand-change="toggleExpandChangeEvent">
       <vxe-table-column type="index" width="60"></vxe-table-column>
@@ -23,9 +22,7 @@
           <template v-if="rowIndex === 1">
             <vxe-table
               border
-              row-id="id"
-              :data.sync="tableData"
-              :expand-config="{}">
+              :data.sync="tableData">
               <vxe-table-column field="role" title="Role"></vxe-table-column>
               <vxe-table-column field="age" title="Age"></vxe-table-column>
             </vxe-table>
@@ -64,7 +61,7 @@
       <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
 
-    <p>默认展开指定行，通过 <table-api-link prop="expandRowKeys"/> 参数设置默认展开行</p>
+    <p>默认展开指定行，通过 <table-api-link prop="expandRowKeys"/> 参数设置默认展开行，指定默认值需要有 <table-api-link prop="row-id"/></p>
 
     <vxe-table
       border
@@ -77,9 +74,7 @@
           <template v-if="rowIndex === 1">
             <vxe-table
               border
-              row-id="id"
-              :data.sync="tableData"
-              :expand-config="{}">
+              :data.sync="tableData">
               <vxe-table-column field="role" title="Role"></vxe-table-column>
               <vxe-table-column field="age" title="Age"></vxe-table-column>
             </vxe-table>
@@ -122,7 +117,6 @@
 
     <vxe-table
       border
-      row-id="id"
       :data.sync="tableData"
       :expand-config="{expandAll: true}">
       <vxe-table-column type="index" width="60"></vxe-table-column>
@@ -183,7 +177,6 @@ export default {
         <vxe-table
           ref="xTable"
           border
-          row-id="id"
           :data.sync="tableData"
           @toggle-expand-change="toggleExpandChangeEvent">
           <vxe-table-column type="index" width="60"></vxe-table-column>
@@ -192,9 +185,7 @@ export default {
               <template v-if="rowIndex === 1">
                 <vxe-table
                   border
-                  row-id="id"
-                  :data.sync="tableData"
-                  :expand-config="{}">
+                  :data.sync="tableData">
                   <vxe-table-column field="role" title="Role"></vxe-table-column>
                   <vxe-table-column field="age" title="Age"></vxe-table-column>
                 </vxe-table>
@@ -255,9 +246,7 @@ export default {
               <template v-if="rowIndex === 1">
                 <vxe-table
                   border
-                  row-id="id"
-                  :data.sync="tableData"
-                  :expand-config="{}">
+                  :data.sync="tableData">
                   <vxe-table-column field="role" title="Role"></vxe-table-column>
                   <vxe-table-column field="age" title="Age"></vxe-table-column>
                 </vxe-table>
@@ -304,8 +293,8 @@ export default {
         `
         <vxe-table
           border
-          row-id="id"
-          :data.sync="tableData"
+          :data.sync=
+          "tableData"
           :expand-config="{expandAll: true}">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column type="expand" width="60">

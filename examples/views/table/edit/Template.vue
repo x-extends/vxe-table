@@ -5,7 +5,6 @@
     <vxe-table
       border
       show-overflow
-      row-id="id"
       :data.sync="tableData"
       :edit-config="{trigger: 'click', mode: 'cell'}">
       <vxe-table-column type="index" width="60"></vxe-table-column>

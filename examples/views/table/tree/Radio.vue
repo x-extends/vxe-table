@@ -4,7 +4,6 @@
 
     <vxe-table
       highlight-current-row
-      row-id="id"
       :tree-config="{children: 'children'}"
       :data.sync="tableData">
       <vxe-table-column field="name" title="Name" tree-node></vxe-table-column>
@@ -23,7 +22,6 @@
     <p>使用 radio 方式</p>
 
     <vxe-table
-      row-id="id"
       :tree-config="{children: 'children'}"
       :radio-config="{labelField: 'name'}"
       :data.sync="tableData">
@@ -45,7 +43,6 @@
     <vxe-table
       resizable
       highlight-current-row
-      row-id="id"
       ref="xTable3"
       :tree-config="{children: 'children'}"
       :radio-config="{trigger: 'row'}"
@@ -82,7 +79,6 @@ export default {
         `
         <vxe-table
           highlight-current-row
-          row-id="id"
           :tree-config="{children: 'children'}"
           :data.sync="tableData">
           <vxe-table-column field="name" title="Name" tree-node></vxe-table-column>
@@ -105,7 +101,6 @@ export default {
         `,
         `
         <vxe-table
-          row-id="id"
           :tree-config="{children: 'children'}"
           :data.sync="tableData">
           <vxe-table-column type="radio" width="120" tree-node></vxe-table-column>
@@ -131,7 +126,6 @@ export default {
         <vxe-table
           resizable
           highlight-current-row
-          row-id="id"
           ref="xTable3"
           :tree-config="{children: 'children'}"
           :radio-config="{trigger: 'row'}"

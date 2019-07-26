@@ -24,7 +24,6 @@
       show-overflow
       ref="xTable"
       height="300"
-      row-id="id"
       :loading="loading"
       :edit-rules="validRules"
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
@@ -98,7 +97,6 @@ export default {
           resizable
           show-overflow
           height="300"
-          row-id="id"
           :loading="loading"
           :edit-rules="validRules"
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"

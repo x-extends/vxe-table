@@ -7,7 +7,6 @@
       show-overflow
       class="vxe-table-antd"
       height="460"
-      row-id="id"
       :loading="loading"
       :data.sync="tableData"
       :columns="tableColumn"
@@ -59,7 +58,6 @@ export default {
           show-overflow
           class="vxe-table-antd"
           height="460"
-          row-id="id"
           :loading="loading"
           :data.sync="tableData"
           :columns="tableColumn"

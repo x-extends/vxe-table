@@ -9,7 +9,6 @@
       show-overflow
       ref="xTable"
       height="460"
-      row-id="id"
       :loading="loading"
       :start-index="(tablePage.currentPage - 1) * tablePage.pageSize"
       :select-config="{reserve: true}"
@@ -61,7 +60,6 @@ export default {
           show-overflow
           ref="xTable"
           height="460"
-          row-id="id"
           :loading="loading"
           :start-index="(tablePage.currentPage - 1) * tablePage.pageSize"
           :select-config="{reserve: true}"

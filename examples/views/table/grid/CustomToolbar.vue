@@ -7,7 +7,6 @@
       resizable
       ref="xGrid"
       height="530"
-      row-id="id"
       :pager-config="tablePage"
       :proxy-config="tableProxy"
       :columns="tableColumn"
@@ -78,7 +77,6 @@ export default {
           resizable
           ref="xGrid"
           height="530"
-          row-id="id"
           :pager-config="tablePage"
           :proxy-config="tableProxy"
           :columns="tableColumn"

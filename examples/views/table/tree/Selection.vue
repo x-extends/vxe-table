@@ -4,7 +4,6 @@
 
     <vxe-table
       resizable
-      row-id="id"
       :tree-config="{children: 'children'}"
       :data.sync="tableData"
       @select-change="selectChangeEvent">
@@ -48,7 +47,6 @@
 
     <vxe-table
       resizable
-      row-id="id"
       :data.sync="tableData"
       :tree-config="{children: 'children'}"
       :select-config="{checkStrictly: true}">
@@ -71,7 +69,6 @@
 
     <vxe-table
       resizable
-      row-id="id"
       :data.sync="tableData"
       :tree-config="{children: 'children'}"
       :select-config="{labelField: 'name', checkMethod}"
@@ -96,7 +93,6 @@ export default {
         `
         <vxe-table
           resizable
-          row-id="id"
           :tree-config="{children: 'children'}"
           :data.sync="tableData"
           @select-change="selectChangeEvent">
@@ -158,7 +154,6 @@ export default {
         `
         <vxe-table
           resizable
-          row-id="id"
           :data.sync="tableData"
           :tree-config="{children: 'children'}"
           :select-config="{checkStrictly: true}">
