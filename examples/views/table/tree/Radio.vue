@@ -47,10 +47,10 @@
       :tree-config="{children: 'children'}"
       :radio-config="{trigger: 'row'}"
       :data.sync="tableData"
-      @radio-change="radioChangeEvent">
+      @current-change="currentChangeEvent">
       <vxe-table-column type="radio" width="120" tree-node>
         <template v-slot:header>
-          <vxe-button type="text" @click="clearRadioRowEevnt" :disabled="!selectRow">取消</vxe-button>
+          <vxe-button type="text" @click="clearCurrentRowEvent" :disabled="!selectRow">取消</vxe-button>
         </template>
       </vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -132,10 +132,10 @@ export default {
           :tree-config="{children: 'children'}"
           :radio-config="{trigger: 'row'}"
           :data.sync="tableData"
-          @radio-change="radioChangeEvent">
+          @current-change="currentChangeEvent">
           <vxe-table-column type="radio" width="120" tree-node>
             <template v-slot:header>
-              <vxe-button type="text" @click="clearRadioRowEevnt" :disabled="!selectRow">取消</vxe-button>
+              <vxe-button type="text" @click="clearCurrentRowEvent" :disabled="!selectRow">取消</vxe-button>
             </template>
           </vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -156,10 +156,10 @@ export default {
             this.tableData = window.MOCK_TREE_DATA_LIST.slice(0)
           },
           methods: {
-            radioChangeEvent ({ row }) {
+            currentChangeEvent ({ row }) {
               this.selectRow = row
             },
-            clearRadioRowEevnt () {
+            clearCurrentRowEvent () {
               this.selectRow = null
               this.$refs.xTable3.clearRadioRow()
             }
@@ -178,12 +178,13 @@ export default {
     })
   },
   methods: {
-    radioChangeEvent ({ row }) {
+    currentChangeEvent ({ row }) {
       this.selectRow = row
     },
-    clearRadioRowEevnt () {
+    clearCurrentRowEvent () {
       this.selectRow = null
       this.$refs.xTable3.clearRadioRow()
+      this.$refs.xTable3.clearCurrentRow()
     }
   }
 }
