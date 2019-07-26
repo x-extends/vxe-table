@@ -4,7 +4,8 @@ export default {
   name: 'VxeButton',
   props: {
     type: String,
-    size: String
+    size: String,
+    disabled: Boolean
   },
   computed: {
     vSize () {
@@ -12,12 +13,16 @@ export default {
     }
   },
   render (h) {
-    let { $listeners, type, vSize } = this
-    return h(type === 'text' ? 'a' : 'button', {
-      class: ['vxe-button', {
+    let { $listeners, type, vSize, disabled } = this
+    let isText = type === 'text'
+    return h('button', {
+      class: ['vxe-button', `type--${isText ? type : 'button'}`, {
         [`size--${vSize}`]: vSize,
-        [`type--${type}`]: type
+        [`theme--${type}`]: type && !isText
       }],
+      attrs: {
+        disabled: disabled
+      },
       on: XEUtils.objectMap($listeners, (cb, type) => evnt => this.$emit(type, evnt))
     }, this.$slots.default)
   }

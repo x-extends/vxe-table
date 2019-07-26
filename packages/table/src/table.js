@@ -2465,50 +2465,53 @@ export default {
       let { $el, highlightCurrentRow, editStore, radioConfig = {}, selectConfig = {}, treeConfig = {}, editConfig } = this
       let { actived } = editStore
       let { column, columnIndex, row, cell } = params
+      let triggerTreeNode = this.getEventTargetNode(evnt, $el, 'vxe-tree-wrapper').flag
       if (highlightCurrentRow) {
-        if (radioConfig.trigger === 'row' || (!this.getEventTargetNode(evnt, $el, 'vxe-tree-wrapper').flag && !this.getEventTargetNode(evnt, $el, 'vxe-checkbox').flag && !this.getEventTargetNode(evnt, $el, 'vxe-radio').flag)) {
+        if (radioConfig.trigger === 'row' || (!triggerTreeNode && !this.getEventTargetNode(evnt, $el, 'vxe-checkbox').flag && !this.getEventTargetNode(evnt, $el, 'vxe-radio').flag)) {
           this.triggerCurrentRowEvent(evnt, params)
           UtilTools.emitEvent(this, 'current-change', [params, evnt])
         }
-      }
-      // 如果是单选
-      if ((radioConfig.trigger === 'row' || (column.type === 'radio' && radioConfig.trigger === 'cell')) && !this.getEventTargetNode(evnt, $el, 'vxe-radio').flag) {
-        this.triggerRadioRowEvent(evnt, params)
-      }
-      // 如果是多选
-      if ((selectConfig.trigger === 'row' || (column.type === 'selection' && selectConfig.trigger === 'cell')) && !this.getEventTargetNode(evnt, params.cell, 'vxe-checkbox').flag) {
-        this.handleToggleCheckRowEvent(params, evnt)
       }
       // 如果是树形表格
       if ((treeConfig.trigger === 'row' || (column.treeNode && treeConfig.trigger === 'cell'))) {
         this.triggerTreeExpandEvent(evnt, params)
       }
-      if (editConfig) {
-        if (editConfig.trigger === 'click') {
-          if (!actived.args || evnt.currentTarget !== actived.args.cell) {
-            if (editConfig.mode === 'row') {
-              this.triggerValidate('blur').catch(e => e).then(() => {
+      if (!column.treeNode || !triggerTreeNode) {
+        // 如果是单选
+        if ((radioConfig.trigger === 'row' || (column.type === 'radio' && radioConfig.trigger === 'cell')) && !this.getEventTargetNode(evnt, $el, 'vxe-radio').flag) {
+          this.triggerRadioRowEvent(evnt, params)
+        }
+        // 如果是多选
+        if ((selectConfig.trigger === 'row' || (column.type === 'selection' && selectConfig.trigger === 'cell')) && !this.getEventTargetNode(evnt, params.cell, 'vxe-checkbox').flag) {
+          this.handleToggleCheckRowEvent(params, evnt)
+        }
+        if (editConfig) {
+          if (editConfig.trigger === 'click') {
+            if (!actived.args || evnt.currentTarget !== actived.args.cell) {
+              if (editConfig.mode === 'row') {
+                this.triggerValidate('blur').catch(e => e).then(() => {
+                  this.handleActived(params, evnt)
+                    .then(() => this.triggerValidate('change'))
+                    .catch(e => e)
+                })
+              } else if (editConfig.mode === 'cell') {
                 this.handleActived(params, evnt)
                   .then(() => this.triggerValidate('change'))
                   .catch(e => e)
-              })
-            } else if (editConfig.mode === 'cell') {
-              this.handleActived(params, evnt)
-                .then(() => this.triggerValidate('change'))
-                .catch(e => e)
+              }
             }
-          }
-        } else if (editConfig.trigger === 'dblclick') {
-          if (!actived.args || cell !== actived.args.cell) {
-            if (editConfig.mode === 'row') {
-              if (row === actived.row) {
-                actived.args.columnIndex = columnIndex
-                actived.column = actived.args.column = column
-              } else {
+          } else if (editConfig.trigger === 'dblclick') {
+            if (!actived.args || cell !== actived.args.cell) {
+              if (editConfig.mode === 'row') {
+                if (row === actived.row) {
+                  actived.args.columnIndex = columnIndex
+                  actived.column = actived.args.column = column
+                } else {
+                  this.handleSelected(params, evnt)
+                }
+              } else if (editConfig.mode === 'cell') {
                 this.handleSelected(params, evnt)
               }
-            } else if (editConfig.mode === 'cell') {
-              this.handleSelected(params, evnt)
             }
           }
         }

@@ -1,13 +1,35 @@
 /**Variable**/
 
-/*button*/
-button {
-  &.vxe-button {
+.vxe-button {
+  text-align: center;
+  background-color: #fff;
+  outline: 0;
+  font-size: $vxe-font-size;
+  color: $vxe-font-color;
+  user-select: none;
+  appearance: none;
+  cursor: pointer;
+  &.type--text {
+    color: $vxe-primary-color;
+    text-decoration: none;
+    border: 0;
+    background-color: transparent;
+    &[disabled] {
+      color: $vxe-disabled-color;
+      cursor: no-drop;
+    }
+    &:not([disabled]) {
+      &:hover {
+        color: lighten($vxe-primary-color, 10%);
+      }
+    }
+  }
+  &.type--button {
     padding: 0 16px;
     line-height: 30px;
     border: 1px solid $vxe-input-border-color;
     border-radius: 4px;
-    &.type--primary {
+    &.theme--primary {
       color: #fff;
       border-color: $vxe-primary-color;
       background-color: $vxe-primary-color;
@@ -43,25 +65,6 @@ button {
       line-height: 24px;
     }
   }
-}
-a {
-  &.vxe-button {
-    color: $vxe-primary-color;
-    text-decoration: none;
-    &:hover {
-      color: lighten($vxe-primary-color, 10%);
-    }
-  }
-}
-.vxe-button {
-  text-align: center;
-  background-color: #fff;
-  outline: 0;
-  font-size: $vxe-font-size;
-  color: $vxe-font-color;
-  user-select: none;
-  appearance: none;
-  cursor: pointer;
   &+.vxe-button {
     margin-left: 10px;
     &.size--medium {

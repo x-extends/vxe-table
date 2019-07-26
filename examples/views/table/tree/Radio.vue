@@ -46,10 +46,11 @@
       ref="xTable3"
       :tree-config="{children: 'children'}"
       :radio-config="{trigger: 'row'}"
-      :data.sync="tableData">
+      :data.sync="tableData"
+      @radio-change="radioChangeEvent">
       <vxe-table-column type="radio" width="120" tree-node>
         <template v-slot:header>
-          <vxe-button type="text" @click="$refs.xTable3.clearRadioRow()">取消</vxe-button>
+          <vxe-button type="text" @click="clearRadioRowEevnt" :disabled="!selectRow">取消</vxe-button>
         </template>
       </vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -75,6 +76,7 @@ export default {
   data () {
     return {
       tableData: [],
+      selectRow: null,
       demoCodes: [
         `
         <vxe-table
@@ -129,10 +131,11 @@ export default {
           ref="xTable3"
           :tree-config="{children: 'children'}"
           :radio-config="{trigger: 'row'}"
-          :data.sync="tableData">
+          :data.sync="tableData"
+          @radio-change="radioChangeEvent">
           <vxe-table-column type="radio" width="120" tree-node>
             <template v-slot:header>
-              <vxe-button type="text" @click="$refs.xTable3.clearRadioRow()">取消</vxe-button>
+              <vxe-button type="text" @click="clearRadioRowEevnt" :disabled="!selectRow">取消</vxe-button>
             </template>
           </vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -145,11 +148,21 @@ export default {
         export default {
           data () {
             return {
-              tableData: []
+              tableData: [],
+              selectRow: null
             }
           },
           created () {
             this.tableData = window.MOCK_TREE_DATA_LIST.slice(0)
+          },
+          methods: {
+            radioChangeEvent ({ row }) {
+              this.selectRow = row
+            },
+            clearRadioRowEevnt () {
+              this.selectRow = null
+              this.$refs.xTable3.clearRadioRow()
+            }
           }
         }
         `
@@ -163,6 +176,15 @@ export default {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
       hljs.highlightBlock(block)
     })
+  },
+  methods: {
+    radioChangeEvent ({ row }) {
+      this.selectRow = row
+    },
+    clearRadioRowEevnt () {
+      this.selectRow = null
+      this.$refs.xTable3.clearRadioRow()
+    }
   }
 }
 </script>
