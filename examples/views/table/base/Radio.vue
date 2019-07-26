@@ -5,7 +5,7 @@
     <vxe-toolbar>
       <template v-slot:buttons>
         <vxe-button @click="$refs.xTable1.setRadioRow(tableData[1])">设置第二行选中</vxe-button>
-        <vxe-button @click="$refs.xTable1.clearRadioRow()">取消选中</vxe-button>
+        <vxe-button @click="clearRadioRowEevnt">取消选中</vxe-button>
         <vxe-button @click="getRadioEvent1">获取选中</vxe-button>
       </template>
     </vxe-toolbar>
@@ -18,7 +18,7 @@
       @radio-change="radioChangeEvent">
       <vxe-table-column type="radio" width="60">
         <template v-slot:header>
-          <vxe-button type="text" @click="$refs.xTable1.clearRadioRow()">取消</vxe-button>
+          <vxe-button type="text" @click="clearRadioRowEevnt" :disabled="!selectRow">取消</vxe-button>
         </template>
       </vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -130,13 +130,14 @@ export default {
   data () {
     return {
       tableData: [],
+      selectRow: null,
       demoCodes: [
         `
         <vxe-toolbar>
           <template v-slot:buttons>
             <vxe-button @click="$refs.xTable1.setRadioRow(tableData[1])">设置第二行选中</vxe-button>
-            <vxe-button @click="$refs.xTable1.clearRadioRow()">取消选中</vxe-button>
-            <vxe-button @click="getRadioEvent">获取选中</vxe-button>
+            <vxe-button @click="clearRadioRowEevnt">取消选中</vxe-button>
+            <vxe-button @click="getRadioEvent1">获取选中</vxe-button>
           </template>
         </vxe-toolbar>
 
@@ -146,9 +147,9 @@ export default {
           height="300"
           :data.sync="tableData"
           @radio-change="radioChangeEvent">
-          <vxe-table-column type="radio" title="这样也行">
+          <vxe-table-column type="radio" width="60">
             <template v-slot:header>
-              <vxe-button type="text" @click="$refs.xTable1.clearRadioRow()">取消</vxe-button>
+              <vxe-button type="text" @click="clearRadioRowEevnt" :disabled="!selectRow">取消</vxe-button>
             </template>
           </vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -160,7 +161,8 @@ export default {
         export default {
           data () {
             return {
-              tableData: []
+              tableData: [],
+              selectRow: null
             }
           },
           created () {
@@ -168,9 +170,14 @@ export default {
           },
           methods: {
             radioChangeEvent ({ row }) {
+              this.selectRow = row
               console.log('单选事件')
             },
-            getRadioEvent () {
+            clearRadioRowEevnt () {
+              this.selectRow = null
+              this.$refs.xTable1.clearRadioRow()
+            },
+            getRadioEvent1 () {
               this.$XMsg.alert(JSON.stringify(this.$refs.xTable1.getRadioRow()))
             }
           }
@@ -302,7 +309,12 @@ export default {
       console.log('行选中事件')
     },
     radioChangeEvent ({ row }) {
+      this.selectRow = row
       console.log('单选事件')
+    },
+    clearRadioRowEevnt () {
+      this.selectRow = null
+      this.$refs.xTable1.clearRadioRow()
     },
     getRadioEvent1 () {
       this.$XMsg.alert(JSON.stringify(this.$refs.xTable1.getRadioRow()))
