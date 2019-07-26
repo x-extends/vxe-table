@@ -1391,6 +1391,14 @@ const apis = [
         list: []
       },
       {
+        name: 'createRow(record)',
+        desc: '创建 Row 对象（对于某些特殊场景需要对数据进行手动插入时可能会用到）',
+        type: 'Row',
+        enum: '',
+        defVal: 'record',
+        list: []
+      },
+      {
         name: 'insert(records)',
         desc: '往表格插入数据，从第一行新增一行或多行新数据',
         type: 'Promise<{row, rows}>',
@@ -1432,7 +1440,7 @@ const apis = [
       },
       {
         name: 'getRowIndex(row)',
-        desc: '根据 row 获取相对于 data 属性中的索引',
+        desc: '根据 row 获取相对于 data 中的索引',
         type: 'Number',
         enum: '',
         defVal: 'row',
@@ -1472,7 +1480,7 @@ const apis = [
       },
       {
         name: 'getColumnIndex(column)',
-        desc: '根据 column 获取相对于 columns 属性中的索引',
+        desc: '根据 column 获取相对于 columns 中的索引',
         type: 'Number',
         enum: '',
         defVal: 'column',

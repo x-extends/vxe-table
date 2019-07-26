@@ -502,6 +502,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.insert',
+              locat: {
+                name: 'TableTreeInsert'
+              }
+            },
+            {
               label: 'app.aside.nav.lazy',
               disabled: true,
               locat: {

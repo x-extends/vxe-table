@@ -765,9 +765,9 @@ export default {
       return this.$nextTick()
     },
     refreshData () {
-      return this.$nextTick(() => {
+      return this.$nextTick().then(() => {
         this.tableData = []
-        return this.$nextTick(() => this.loadData(this.tableFullData))
+        return this.$nextTick().then(() => this.loadData(this.tableFullData))
       })
     },
     loadData (datas, notRefresh) {
@@ -904,11 +904,11 @@ export default {
      * 从指定行插入数据
      */
     insertAt (records, row) {
-      let { tableData, editStore, defineProperty, scrollYLoad, tableFullData, treeConfig } = this
+      let { tableData, editStore, scrollYLoad, tableFullData, treeConfig } = this
       if (!XEUtils.isArray(records)) {
         records = [records]
       }
-      let newRecords = records.map(record => defineProperty(record))
+      let newRecords = records.map(this.createRow)
       return new Promise(resolve => {
         if (arguments.length === 1) {
           tableData.unshift.apply(tableData, newRecords)
@@ -940,7 +940,7 @@ export default {
         })
       })
     },
-    defineProperty (record) {
+    createRow (record) {
       let recordItem = Object.assign({}, record)
       let rowkey = UtilTools.getRowkey(this)
       this.visibleColumn.forEach(column => {
@@ -2808,13 +2808,11 @@ export default {
     setActiveCell (row, field) {
       return new Promise(resolve => {
         setTimeout(() => {
-          let { tableData, visibleColumn, handleActived } = this
           if (row && field) {
-            let rowIndex = tableData.indexOf(row)
-            if (rowIndex > -1) {
-              let column = visibleColumn.find(column => column.property === field)
-              let cell = DomTools.getCell(this, { row, rowIndex, column })
-              handleActived({ row, column, cell })
+            let column = this.visibleColumn.find(column => column.property === field)
+            let cell = DomTools.getCell(this, { row, column })
+            if (cell) {
+              this.handleActived({ row, column, cell })
               this.lastCallTime = Date.now()
             }
           }
