@@ -6,9 +6,8 @@
       ref="xTable"
       border
       show-overflow
-      row-id="id"
       :data.sync="tableData"
-      :edit-config="{trigger: 'manual', mode: 'row', autoClear: false}">
+      :edit-config="{ trigger: 'manual', mode: 'row', autoClear: false}">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
@@ -50,7 +49,7 @@ export default {
           border
           show-overflow
           :data.sync="tableData"
-          :edit-config="{trigger: 'manual', mode: 'row', autoClear: false}">
+          :edit-config="{ trigger: 'manual', mode: 'row', autoClear: false}">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>

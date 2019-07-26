@@ -6,7 +6,6 @@
       ref="xTable"
       border
       show-overflow
-      row-id="id"
       :data.sync="tableData"
       :edit-config="{trigger: 'click', mode: 'cell', activeMethod: activeCellMethod}"
       @edit-disabled="editDisabledEvent">
@@ -29,7 +28,6 @@
       ref="xTable"
       border
       show-overflow
-      row-id="id"
       :data.sync="tableData"
       :edit-config="{trigger: 'click', mode: 'cell', activeMethod: activeRowMethod}"
       @edit-disabled="editDisabledEvent">
@@ -61,7 +59,6 @@ export default {
           ref="xTable"
           border
           show-overflow
-          row-id="id"
           :data.sync="tableData"
           :edit-config="{trigger: 'click', mode: 'cell', activeMethod: activeCellMethod}"
           @edit-disabled="editDisabledEvent">
@@ -99,7 +96,6 @@ export default {
           ref="xTable"
           border
           show-overflow
-          row-id="id"
           :data.sync="tableData"
           :edit-config="{trigger: 'click', mode: 'row', , activeMethod: activeRowMethod}"
           @edit-disabled="editDisabledEvent">

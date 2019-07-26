@@ -196,7 +196,6 @@ export default {
                 'filter--active': column.filters.some(item => item.checked)
               }, headerCellClassName ? XEUtils.isFunction(headerCellClassName) ? headerCellClassName({ $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType }) : headerCellClassName : ''],
               attrs: {
-                'data-index': columnIndex,
                 'data-colid': column.id,
                 colspan: column.colSpan,
                 rowspan: column.rowSpan

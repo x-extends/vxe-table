@@ -53,11 +53,10 @@ export const DomTools = {
   },
   getCellIndexs (cell) {
     let trElem = cell.parentNode
-    let colIndex = cell.getAttribute('data-index')
     let rowid = trElem.getAttribute('data-rowid')
     let columnIndex = [].indexOf.call(trElem.children, cell)
     let rowIndex = [].indexOf.call(trElem.parentNode.children, trElem)
-    return { rowid, rowIndex, colIndex: colIndex ? parseInt(colIndex) : colIndex, columnIndex }
+    return { rowid, rowIndex, columnIndex }
   },
   getCell ($table, { row, rowIndex, column }) {
     let rowid = UtilTools.getRowid($table, row, rowIndex)

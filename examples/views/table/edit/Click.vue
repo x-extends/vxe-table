@@ -1,14 +1,12 @@
 <template>
   <div>
     <p>设置 <table-api-link prop="edit-config"/>={trigger: 'click', mode: 'cell'} 启用单元格点击编辑的功能</p>
-    <p class="red">开启编辑功能，需要设置 <table-api-link prop="row-id"/></p>
 
     <vxe-table
       border
       resizable
       show-overflow
       height="500"
-      row-id="id"
       :data.sync="tableData"
       :edit-config="{trigger: 'click', mode: 'cell'}"
       @edit-actived="editActivedEvent"
@@ -34,7 +32,6 @@
       resizable
       show-overflow
       height="500"
-      row-id="id"
       :data.sync="tableData"
       :edit-config="{trigger: 'click', mode: 'row'}">
       <vxe-table-column type="index" width="60"></vxe-table-column>
@@ -67,7 +64,6 @@ export default {
           resizable
           show-overflow
           height="500"
-          row-id="id"
           :data.sync="tableData"
           :edit-config="{trigger: 'click', mode: 'cell'}"
           @edit-actived="editActivedEvent"
@@ -104,7 +100,6 @@ export default {
           resizable
           show-overflow
           height="500"
-          row-id="id"
           :data.sync="tableData"
           :edit-config="{trigger: 'click', mode: 'row'}">
           <vxe-table-column type="index" width="60"></vxe-table-column>

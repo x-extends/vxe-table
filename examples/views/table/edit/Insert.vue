@@ -1,8 +1,6 @@
 <template>
   <div>
     <p>调用 <table-api-link prop="insert"/>、<table-api-link prop="insertAt"/> 函数插入数据</p>
-    <p class="red">开启编辑功能，需要设置 <table-api-link prop="row-id"/></p>
-    <p class="red">注意：如果行 key 不存在则会在在插入后自动生成随机数</p>
 
     <vxe-toolbar>
       <template v-slot:buttons>
@@ -18,7 +16,6 @@
       show-overflow
       ref="xTable"
       height="400"
-      row-id="id"
       :data.sync="tableData"
       :edit-config="{trigger: 'click', mode: 'cell'}">
       <vxe-table-column type="index" width="60"></vxe-table-column>
@@ -59,7 +56,6 @@ export default {
           show-overflow
           ref="xTable"
           height="400"
-          row-id="id"
           :data.sync="tableData"
           :edit-config="{trigger: 'click', mode: 'cell'}">
           <vxe-table-column type="index" width="60"></vxe-table-column>

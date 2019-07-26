@@ -12,7 +12,6 @@
       ref="xTable"
       class="vxe-table-antd"
       height="600"
-      row-id="id"
       :loading="loading"
       :data.sync="tableData"
       :footer-method="footerMethod"
@@ -26,7 +25,7 @@
       </vxe-table-column>
       <vxe-table-column field="name" title="AInput" min-width="140" :edit-render="{type: 'default'}">
         <template v-slot:edit="scope">
-          <a-input v-model="scope.row.name" @change="$refs.xTable.updateStatus(scope)"></a-input>
+          <a-input v-model="scope.row.name" @input="$refs.xTable.updateStatus(scope)"></a-input>
         </template>
       </vxe-table-column>
       <vxe-table-column field="role" title="AAutoComplete" min-width="160" :edit-render="{type: 'default'}">
@@ -44,8 +43,8 @@
         </template>
       </vxe-table-column>
       <vxe-table-column field="sex" title="ASelect" width="140" :edit-render="{type: 'default'}">
-        <template v-slot:edit="{ row }">
-          <a-select v-model="row.sex">
+        <template v-slot:edit="scope">
+          <a-select v-model="scope.row.sex" @change="$refs.xTable.updateStatus(scope)">
             <a-select-option v-for="item in sexList" :key="item.value" :value="item.value">{{ item.label }}</a-select-option>
           </a-select>
         </template>
@@ -110,7 +109,6 @@ export default {
           ref="xTable"
           class="vxe-table-antd"
           height="600"
-          row-id="id"
           :loading="loading"
           :data.sync="tableData"
           :footer-method="footerMethod"
@@ -124,7 +122,7 @@ export default {
           </vxe-table-column>
           <vxe-table-column field="name" title="AInput" min-width="140" :edit-render="{type: 'default'}">
             <template v-slot:edit="scope">
-              <a-input v-model="scope.row.name" @change="$refs.xTable.updateStatus(scope)"></a-input>
+              <a-input v-model="scope.row.name" @input="$refs.xTable.updateStatus(scope)"></a-input>
             </template>
           </vxe-table-column>
           <vxe-table-column field="role" title="AAutoComplete" min-width="160" :edit-render="{type: 'default'}">
@@ -142,8 +140,8 @@ export default {
             </template>
           </vxe-table-column>
           <vxe-table-column field="sex" title="ASelect" width="140" :edit-render="{type: 'default'}">
-            <template v-slot:edit="{ row }">
-              <a-select v-model="row.sex">
+            <template v-slot:edit="scope">
+              <a-select v-model="scope.row.sex" @change="$refs.xTable.updateStatus(scope)">
                 <a-select-option v-for="item in sexList" :key="item.value" :value="item.value">{{ item.label }}</a-select-option>
               </a-select>
             </template>

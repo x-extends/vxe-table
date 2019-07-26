@@ -20,7 +20,6 @@
       ref="xTable"
       border
       show-overflow
-      row-id="id"
       :data.sync="tableData"
       :edit-rules="validRules"
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">
@@ -75,7 +74,6 @@ export default {
           ref="xTable"
           border
           show-overflow
-          row-id="id"
           :data.sync="tableData"
           :edit-rules="validRules"
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">

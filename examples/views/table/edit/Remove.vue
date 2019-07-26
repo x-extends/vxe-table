@@ -15,7 +15,6 @@
       ref="xTable"
       border
       show-overflow
-      row-id="id"
       :data.sync="tableData"
       :edit-config="{trigger: 'click', mode: 'cell'}">
       <vxe-table-column type="selection" width="60"></vxe-table-column>
@@ -56,7 +55,6 @@ export default {
           ref="xTable"
           border
           show-overflow
-          row-id="id"
           :data.sync="tableData"
           :edit-config="{trigger: 'click', mode: 'cell'}">
           <vxe-table-column type="selection" width="60"></vxe-table-column>

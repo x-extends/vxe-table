@@ -17,7 +17,6 @@
     <vxe-excel
       ref="xExcel"
       max-height="600"
-      row-id="id"
       :columns="columns"
       :data.sync="tableData">
     </vxe-excel>
@@ -96,7 +95,6 @@ export default {
         <vxe-excel
           ref="xExcel"
           max-height="600"
-          row-id="id"
           :columns="columns"
           :data.sync="tableData">
         </vxe-excel>

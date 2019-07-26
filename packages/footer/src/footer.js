@@ -132,7 +132,7 @@ export default {
                 'filter--active': column.filters.some(item => item.checked)
               }, footerCellClassName ? XEUtils.isFunction(footerCellClassName) ? footerCellClassName({ $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType }) : footerCellClassName : ''],
               attrs: {
-                'data-index': columnIndex
+                'data-colid': column.id
               },
               on: tfOns,
               key: columnKey || ($table.columnKey ? column.id : columnIndex)

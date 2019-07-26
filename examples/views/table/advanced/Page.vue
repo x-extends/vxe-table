@@ -3,14 +3,12 @@
     <p>使用自带的分页 <pager-api-link name="vxe-pager"/></p>
     <p>如果要支持动态序号，可以通过 <table-api-link prop="start-index"/> 属性设置起始值</p>
     <p>如果要支持保留选中状态，可以通过设置 <table-api-link prop="select-config"/> 的 <table-api-link prop="reserve"/> 属性</p>
-    <p class="red">配置 reserve 属性时，需要设置 <table-api-link prop="row-id"/></p>
 
     <vxe-table
       border
       show-overflow
       ref="xTable"
       height="460"
-      row-id="id"
       :loading="loading"
       :start-index="(tablePage.currentPage - 1) * tablePage.pageSize"
       :select-config="{reserve: true}"
@@ -62,7 +60,6 @@ export default {
           show-overflow
           ref="xTable"
           height="460"
-          row-id="id"
           :loading="loading"
           :start-index="(tablePage.currentPage - 1) * tablePage.pageSize"
           :select-config="{reserve: true}"

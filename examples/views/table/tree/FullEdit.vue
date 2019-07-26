@@ -4,7 +4,6 @@
 
     <vxe-table
       resizable
-      row-id="id"
       :tree-config="{children: 'children'}"
       :edit-config="{trigger: 'click', mode: 'row'}"
       :data.sync="tableData">
@@ -35,7 +34,6 @@ export default {
         `
         <vxe-table
           resizable
-          row-id="id"
           :tree-config="{children: 'children'}"
           :edit-config="{trigger: 'click', mode: 'row'}"
           :data.sync="tableData">

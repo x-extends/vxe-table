@@ -1,4 +1,5 @@
 import XEUtils from 'xe-utils'
+import GlobalConfig from '../../conf'
 
 var columnUniqueId = 0
 
@@ -6,7 +7,7 @@ class ColumnConfig {
   constructor (_vm, { renderHeader, renderCell, renderData } = {}) {
     Object.assign(this, {
       // 基本属性
-      id: `col--${++columnUniqueId}`,
+      id: `cid_${++columnUniqueId}`,
       type: _vm.type,
       prop: _vm.prop,
       property: _vm.field || _vm.prop,
@@ -63,7 +64,7 @@ export const UtilTools = {
     let { rowKey, rowId, selectConfig = {}, treeConfig = {}, expandConfig = {}, editConfig = {} } = $table
     if (!rowKey || !XEUtils.isString(rowKey)) {
       // 在 v2.0 中废弃 key
-      rowKey = rowId || selectConfig.key || treeConfig.key || expandConfig.key || editConfig.key
+      rowKey = rowId || selectConfig.key || treeConfig.key || expandConfig.key || editConfig.key || GlobalConfig.rowId
     }
     return rowKey
   },

@@ -21,7 +21,6 @@
       show-overflow
       height="500"
       ref="xTable"
-      row-id="id"
       :data.sync="tableData"
       :edit-rules="validRules"
       :edit-config="{trigger: 'click', mode: 'cell', showStatus: true}">
@@ -77,7 +76,6 @@ export default {
           show-overflow
           height="500"
           ref="xTable"
-          row-id="id"
           :data.sync="tableData"
           :edit-rules="validRules"
           :edit-config="{trigger: 'click', mode: 'cell', showStatus: true}">

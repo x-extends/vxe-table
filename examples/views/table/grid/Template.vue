@@ -10,7 +10,6 @@
       border
       resizable
       height="400"
-      row-id="id"
       :toolbar="toolbar"
       :columns="tableColumn"
       :data.sync="tableData"
@@ -121,7 +120,6 @@ export default {
           border
           resizable
           height="400"
-          row-id="id"
           :columns="tableColumn"
           :data.sync="tableData"
           :edit-config="{trigger: 'click', mode: 'cell'}">

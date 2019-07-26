@@ -6,7 +6,6 @@
     <vxe-table
       border
       show-overflow
-      row-id="id"
       :data.sync="tableData"
       :mouse-config="{selected: true}"
       :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true}"
@@ -54,7 +53,6 @@ export default {
         <vxe-table
           border
           show-overflow
-          row-id="id"
           :data.sync="tableData"
           :mouse-config="{selected: true}"
           :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true}"

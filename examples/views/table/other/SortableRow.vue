@@ -7,7 +7,6 @@
       border
       row-key
       ref="xTable1"
-      row-id="id"
       class="sortable-row-demo"
       :data.sync="tableData">
       <vxe-table-column width="60">
@@ -37,7 +36,6 @@
       border
       row-key
       ref="xTable2"
-      row-id="id"
       class="sortable-tree-demo"
       :columns="tableColumn"
       :data.sync="tableTreeData"
@@ -87,7 +85,6 @@ export default {
           border
           row-key
           ref="xTable1"
-          row-id="id"
           class="sortable-row-demo"
           :data.sync="tableData">
           <vxe-table-column width="60">
@@ -150,7 +147,6 @@ export default {
           border
           row-key
           ref="xTable2"
-          row-id="id"
           class="sortable-tree-demo"
           :columns="tableColumn"
           :data.sync="tableTreeData"

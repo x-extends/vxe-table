@@ -52,7 +52,6 @@
     </vxe-toolbar>
 
     <vxe-table
-      row-id="id"
       :data.sync="list2"
       :tree-config="{children: 'children', expandAll: !!filterName2}">
       <vxe-table-column type="index" width="160" title="序号" tree-node></vxe-table-column>
@@ -179,7 +178,6 @@ export default {
         </vxe-toolbar>
 
         <vxe-table
-          row-id="id"
           :data.sync="list"
           :tree-config="{children: 'children', expandAll: !!filterName}">
           <vxe-table-column type="index" width="160" title="序号" tree-node></vxe-table-column>

@@ -93,7 +93,7 @@
       <code class="javascript">{{ demoCodes[5] }}</code>
     </pre>
 
-    <p>默认选中，通过指定 <table-api-link prop="checkRowKeys"/> 设置默认选中的行</p>
+    <p>默认选中，通过指定 <table-api-link prop="checkRowKeys"/> 设置默认选中的行，指定默认值需要有 <table-api-link prop="row-id"/></p>
 
     <vxe-table
       border

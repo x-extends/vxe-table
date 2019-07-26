@@ -92,7 +92,9 @@ export default {
       if (value !== this.visible) {
         this.visible = value
         this.isUpdate = true
-        this.$emit('input', this.visible)
+        if (this.$listeners.input) {
+          this.$emit('input', this.visible)
+        }
       }
     },
     toVisible (target, message) {

@@ -12,7 +12,6 @@
       ref="xTable"
       class="vxe-table-element"
       height="600"
-      row-id="id"
       :loading="loading"
       :data.sync="tableData"
       :footer-method="footerMethod"
@@ -26,7 +25,7 @@
       </vxe-table-column>
       <vxe-table-column field="name" title="ElInput" min-width="140" :edit-render="{type: 'default'}">
         <template v-slot:edit="scope">
-          <el-input v-model="scope.row.name" @change="$refs.xTable.updateStatus(scope)"></el-input>
+          <el-input v-model="scope.row.name" @input="$refs.xTable.updateStatus(scope)"></el-input>
         </template>
       </vxe-table-column>
       <vxe-table-column field="role" title="ElAutocomplete" min-width="160" :edit-render="{type: 'default'}">
@@ -44,8 +43,8 @@
         </template>
       </vxe-table-column>
       <vxe-table-column field="sex" title="ElSelect" width="140" :edit-render="{type: 'default'}">
-        <template v-slot:edit="{ row }">
-          <el-select v-model="row.sex">
+        <template v-slot:edit="scope">
+          <el-select v-model="scope.row.sex" @change="$refs.xTable.updateStatus(scope)">
             <el-option v-for="item in sexList" :key="item.value" :label="item.label" :value="item.value"></el-option>
           </el-select>
         </template>
@@ -121,7 +120,6 @@ export default {
           ref="xTable"
           class="vxe-table-element"
           height="600"
-          row-id="id"
           :loading="loading"
           :data.sync="tableData"
           :footer-method="footerMethod"
@@ -135,7 +133,7 @@ export default {
           </vxe-table-column>
           <vxe-table-column field="name" title="ElInput" min-width="140" :edit-render="{type: 'default'}">
             <template v-slot:edit="scope">
-              <el-input v-model="scope.row.name" @change="$refs.xTable.updateStatus(scope)"></el-input>
+              <el-input v-model="scope.row.name" @input="$refs.xTable.updateStatus(scope)"></el-input>
             </template>
           </vxe-table-column>
           <vxe-table-column field="role" title="ElAutocomplete" min-width="160" :edit-render="{type: 'default'}">
@@ -153,8 +151,8 @@ export default {
             </template>
           </vxe-table-column>
           <vxe-table-column field="sex" title="ElSelect" width="140" :edit-render="{type: 'default'}">
-            <template v-slot:edit="{ row }">
-              <el-select v-model="row.sex">
+            <template v-slot:edit="scope">
+              <el-select v-model="scope.row.sex" @change="$refs.xTable.updateStatus(scope)">
                 <el-option v-for="item in sexList" :key="item.value" :label="item.label" :value="item.value"></el-option>
               </el-select>
             </template>

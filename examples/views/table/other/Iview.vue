@@ -12,7 +12,6 @@
       ref="xTable"
       class="vxe-table-iview"
       height="600"
-      row-id="id"
       :loading="loading"
       :data.sync="tableData"
       :footer-method="footerMethod"
@@ -26,7 +25,7 @@
       </vxe-table-column>
       <vxe-table-column field="name" title="Input"  min-width="140" :edit-render="{type: 'default'}">
         <template v-slot:edit="scope">
-          <Input v-model="scope.row.name" @change="$refs.xTable.updateStatus(scope)"/>
+          <Input v-model="scope.row.name" @input="$refs.xTable.updateStatus(scope)"/>
         </template>
       </vxe-table-column>
       <vxe-table-column field="role" title="Input"  min-width="140" :edit-render="{type: 'default'}">
@@ -44,8 +43,8 @@
         </template>
       </vxe-table-column>
       <vxe-table-column field="sex" title="Select" width="140" :edit-render="{type: 'default'}">
-        <template v-slot:edit="{ row }">
-          <Select v-model="row.sex">
+        <template v-slot:edit="scope">
+          <Select v-model="scope.row.sex" @change="$refs.xTable.updateStatus(scope)">
             <Option v-for="item in sexList" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
         </template>
@@ -111,7 +110,6 @@ export default {
           ref="xTable"
           class="vxe-table-iview"
           height="600"
-          row-id="id"
           :loading="loading"
           :data.sync="tableData"
           :footer-method="footerMethod"
@@ -125,7 +123,7 @@ export default {
           </vxe-table-column>
           <vxe-table-column field="name" title="Input"  min-width="140" :edit-render="{type: 'default'}">
             <template v-slot:edit="scope">
-              <Input v-model="scope.row.name" @change="$refs.xTable.updateStatus(scope)"/>
+              <Input v-model="scope.row.name" @input="$refs.xTable.updateStatus(scope)"/>
             </template>
           </vxe-table-column>
           <vxe-table-column field="role" title="Input"  min-width="140" :edit-render="{type: 'default'}">
@@ -143,8 +141,8 @@ export default {
             </template>
           </vxe-table-column>
           <vxe-table-column field="sex" title="Select" width="140" :edit-render="{type: 'default'}">
-            <template v-slot:edit="{ row }">
-              <Select v-model="row.sex">
+            <template v-slot:edit="scope">
+              <Select v-model="scope.row.sex" @change="$refs.xTable.updateStatus(scope)">
                 <Option v-for="item in sexList" :value="item.value" :key="item.value">{{ item.label }}</Option>
               </Select>
             </template>
