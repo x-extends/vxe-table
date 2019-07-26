@@ -10,6 +10,7 @@
       highlight-hover-row
       remote-filter
       height="530"
+      row-id="id"
       :pager-config="{pageSize: 15}"
       :toolbar="toolbar"
       :proxy-config="tableProxy"
@@ -109,11 +110,15 @@ export default {
           highlight-hover-row
           remote-filter
           height="530"
+          row-id="id"
           :pager-config="{pageSize: 15}"
           :toolbar="toolbar"
           :proxy-config="tableProxy"
           :columns="tableColumn"
-          :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"></vxe-grid>
+          :select-config="{reserve: true}"
+          :edit-rules="validRules"
+          :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">
+        </vxe-grid>
         `,
         `
         export default {

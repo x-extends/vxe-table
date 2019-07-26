@@ -329,45 +329,50 @@ export default {
         this.tableColumn2 = data.map(item => {
           let config = {
             title: item.name,
-            width: item.width,
-            slots: {
-              default: ({ row, column }) => {
-                // 渲染链接
-                if (item.link) {
+            width: item.width
+          }
+          if (item.type) {
+            Object.assign(config, {
+              type: item.type
+            })
+          } else {
+            Object.assign(config, {
+              slots: {
+                default: ({ row, column }) => {
+                  // 渲染链接
+                  if (item.link) {
+                    return [
+                      <a class="link" href={ item.link }>{ row[column.property] }</a>
+                    ]
+                  }
+                  // 渲染文本
                   return [
-                    <a class="link" href={ item.link }>{ row[column.property] }</a>
+                    <span>{ row[column.property] }</span>
                   ]
                 }
-                // 渲染文本
-                return [
-                  <span>{ row[column.property] }</span>
+              }
+            })
+            // 动态生成校验
+            if (item.required) {
+              validRules[item.key] = [
+                { required: true, message: `请填写${item.name}` }
+              ]
+            }
+            if (item.validator) {
+              if (validRules[item.key]) {
+                validRules[item.key].push({ pattern: new RegExp(item.validator), message: item.validMsg || `${item.name}校验不通过，请重新填写` })
+              } else {
+                validRules[item.key] = [
+                  { pattern: new RegExp(item.validator), message: item.validMsg || `${item.name}校验不通过，请重新填写` }
                 ]
               }
             }
-          }
-          // 动态生成校验
-          if (item.required) {
-            validRules[item.key] = [
-              { required: true, message: `请填写${item.name}` }
-            ]
-          }
-          if (item.validator) {
-            if (validRules[item.key]) {
-              validRules[item.key].push({ pattern: new RegExp(item.validator), message: item.validMsg || `${item.name}校验不通过，请重新填写` })
-            } else {
-              validRules[item.key] = [
-                { pattern: new RegExp(item.validator), message: item.validMsg || `${item.name}校验不通过，请重新填写` }
-              ]
+            if (item.key) {
+              config.field = item.key
             }
-          }
-          if (item.key) {
-            config.field = item.key
-          }
-          if (item.type) {
-            config.type = item.type
-          }
-          if (item.isEdit) {
-            config.editRender = { name: 'input' }
+            if (item.isEdit) {
+              config.editRender = { name: 'input' }
+            }
           }
           return config
         })

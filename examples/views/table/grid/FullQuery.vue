@@ -9,6 +9,7 @@
       resizable
       remote-filter
       height="548"
+      row-id="id"
       :pager-config="{pageSize: 15}"
       :columns="tableColumn"
       :proxy-config="tableProxy"
@@ -78,6 +79,7 @@ export default {
           resizable
           remote-filter
           height="548"
+          row-id="id"
           :pager-config="{pageSize: 15}"
           :columns="tableColumn"
           :proxy-config="tableProxy"

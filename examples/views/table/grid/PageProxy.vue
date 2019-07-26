@@ -7,6 +7,7 @@
       border
       resizable
       height="530"
+      row-id="id"
       :pager-config="{pageSize: 10}"
       :proxy-config="tableProxy"
       :select-config="{reserve: true}"
@@ -52,8 +53,10 @@ export default {
           border
           resizable
           height="530"
+          row-id="id"
           :pager-config="{pageSize: 10}"
           :proxy-config="tableProxy"
+          :select-config="{reserve: true}"
           :columns="tableColumn"></vxe-grid>
         `,
         `
