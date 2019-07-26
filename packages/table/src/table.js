@@ -3184,10 +3184,12 @@ export default {
         setTimeout(() => {
           if (row && field) {
             let column = this.visibleColumn.find(column => column.property === field)
-            let cell = DomTools.getCell(this, { row, column })
-            if (cell) {
-              this.handleActived({ row, column, cell })
-              this.lastCallTime = Date.now()
+            if (column && column.editRender) {
+              let cell = DomTools.getCell(this, { row, column })
+              if (cell) {
+                this.handleActived({ row, column, cell })
+                this.lastCallTime = Date.now()
+              }
             }
           }
           resolve(this.$nextTick())

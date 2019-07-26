@@ -5,8 +5,6 @@
 
     <vxe-toolbar :data="tableData" :setting="{storage: false}">
       <template v-slot:buttons>
-        <vxe-button @click="insertEvent()">插入第一行</vxe-button>
-        <vxe-button @click="insertAtEvent()">插入指定行</vxe-button>
         <vxe-button @click="getInsertEvent">获取新增</vxe-button>
       </template>
     </vxe-toolbar>
@@ -15,8 +13,10 @@
       resizable
       ref="xTree"
       :tree-config="treeConfig"
+      :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}}"
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
-      :data.sync="tableData">
+      :data.sync="tableData"
+      @context-menu-click="contextMenuClickEvent">
       <vxe-table-column type="selection" width="120" tree-node></vxe-table-column>
       <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="size" title="Size" :edit-render="{name: 'input'}"></vxe-table-column>
@@ -44,12 +44,26 @@ export default {
       treeConfig: {
         children: 'children'
       },
+      headerMenus: [
+        [
+          {
+            code: 'hideColumn',
+            name: '隐藏列'
+          }
+        ]
+      ],
+      bodyMenus: [
+        [
+          {
+            code: 'insertAt',
+            name: '插入一行'
+          }
+        ]
+      ],
       demoCodes: [
         `
         <vxe-toolbar :data="tableData" :setting="{storage: false}">
           <template v-slot:buttons>
-            <vxe-button @click="insertEvent()">插入第一行</vxe-button>
-            <vxe-button @click="insertAtEvent()">插入指定行</vxe-button>
             <vxe-button @click="getInsertEvent">获取新增</vxe-button>
           </template>
         </vxe-toolbar>
@@ -58,8 +72,10 @@ export default {
           resizable
           ref="xTree"
           :tree-config="treeConfig"
+          :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}}"
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
-          :data.sync="tableData">
+          :data.sync="tableData"
+          @context-menu-click="contextMenuClickEvent">
           <vxe-table-column type="selection" width="120" tree-node></vxe-table-column>
           <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column field="size" title="Size" :edit-render="{name: 'input'}"></vxe-table-column>
@@ -74,41 +90,57 @@ export default {
               tableData: [],
               treeConfig: {
                 children: 'children'
-              }
+              },
+              headerMenus: [
+                [
+                  {
+                    code: 'hideColumn',
+                    name: '隐藏列'
+                  }
+                ]
+              ],
+              bodyMenus: [
+                [
+                  {
+                    code: 'insertAt',
+                    name: '插入一行'
+                  }
+                ]
+              ]
             }
           },
           created () {
             this.tableData = window.MOCK_TREE_DATA_LIST.slice(0)
           },
           methods: {
-            insertEvent () {
+            insertAtEvent (row, column) {
               let xTree = this.$refs.xTree
               let newRow = xTree.createRow({
                 name: '新数据',
                 date: XEUtils.toDateString(new Date(), 'yyyy-MM-dd'),
                 isNew: true
               })
-              // 插入到第一行
-              this.tableData.unshift(newRow)
-              xTree.refreshData().then(() => xTree.setActiveRow(newRow))
-            },
-            insertAtEvent () {
-              let xTree = this.$refs.xTree
-              let newRow = xTree.createRow({
-                name: '新数据',
-                date: XEUtils.toDateString(new Date(), 'yyyy-MM-dd'),
-                isNew: true
-              })
-              // 插入到 id 为 11000 的节点位置中
-              let rowNode = XEUtils.findTree(this.tableData, item => item.id === '11000', this.treeConfig)
+              // 插入到指定节点位置中
+              let rowNode = XEUtils.findTree(this.tableData, item => item === row, this.treeConfig)
               if (rowNode) {
                 rowNode.items.splice(rowNode.index, 0, newRow)
-                xTree.refreshData().then(() => xTree.setActiveRow(newRow))
+                xTree.refreshData().then(() => xTree.setActiveCell(newRow, column.property))
               }
             },
             getInsertEvent () {
               let insertRecords = XEUtils.filterTree(this.tableData, item => item.isNew, this.treeConfig)
               this.$XMsg.alert(insertRecords.length)
+            },
+            contextMenuClickEvent ({ menu, row, column }) {
+              let xTree = this.$refs.xTree
+              switch (menu.code) {
+                case 'hideColumn':
+                  xTree.hideColumn(column)
+                  break
+                case 'insertAt':
+                  this.insertAtEvent(row, column)
+                  break
+              }
             }
           }
         }
@@ -125,34 +157,34 @@ export default {
     })
   },
   methods: {
-    insertEvent () {
+    insertAtEvent (row, column) {
       let xTree = this.$refs.xTree
       let newRow = xTree.createRow({
         name: '新数据',
         date: XEUtils.toDateString(new Date(), 'yyyy-MM-dd'),
         isNew: true
       })
-      // 插入到第一行
-      this.tableData.unshift(newRow)
-      xTree.refreshData().then(() => xTree.setActiveRow(newRow))
-    },
-    insertAtEvent () {
-      let xTree = this.$refs.xTree
-      let newRow = xTree.createRow({
-        name: '新数据',
-        date: XEUtils.toDateString(new Date(), 'yyyy-MM-dd'),
-        isNew: true
-      })
-      // 插入到 id 为 11000 的节点位置中
-      let rowNode = XEUtils.findTree(this.tableData, item => item.id === '11000', this.treeConfig)
+      // 插入到指定节点位置中
+      let rowNode = XEUtils.findTree(this.tableData, item => item === row, this.treeConfig)
       if (rowNode) {
         rowNode.items.splice(rowNode.index, 0, newRow)
-        xTree.refreshData().then(() => xTree.setActiveRow(newRow))
+        xTree.refreshData().then(() => xTree.setActiveCell(newRow, column.property))
       }
     },
     getInsertEvent () {
       let insertRecords = XEUtils.filterTree(this.tableData, item => item.isNew, this.treeConfig)
       this.$XMsg.alert(insertRecords.length)
+    },
+    contextMenuClickEvent ({ menu, row, column }) {
+      let xTree = this.$refs.xTree
+      switch (menu.code) {
+        case 'hideColumn':
+          xTree.hideColumn(column)
+          break
+        case 'insertAt':
+          this.insertAtEvent(row, column)
+          break
+      }
     }
   }
 }

@@ -514,6 +514,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.contextMenu',
+              locat: {
+                name: 'TableTreeMenu'
+              }
+            },
+            {
               label: 'app.aside.nav.lazy',
               disabled: true,
               locat: {
