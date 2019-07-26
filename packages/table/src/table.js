@@ -2465,18 +2465,18 @@ export default {
       let { $el, highlightCurrentRow, editStore, radioConfig = {}, selectConfig = {}, treeConfig = {}, editConfig } = this
       let { actived } = editStore
       let { column, columnIndex, row, cell } = params
-      let triggerTreeNode = this.getEventTargetNode(evnt, $el, 'vxe-tree-wrapper').flag
-      if (highlightCurrentRow) {
-        if (radioConfig.trigger === 'row' || (!triggerTreeNode && !this.getEventTargetNode(evnt, $el, 'vxe-checkbox').flag && !this.getEventTargetNode(evnt, $el, 'vxe-radio').flag)) {
-          this.triggerCurrentRowEvent(evnt, params)
-          UtilTools.emitEvent(this, 'current-change', [params, evnt])
-        }
-      }
       // 如果是树形表格
       if ((treeConfig.trigger === 'row' || (column.treeNode && treeConfig.trigger === 'cell'))) {
         this.triggerTreeExpandEvent(evnt, params)
       }
-      if (!column.treeNode || !triggerTreeNode) {
+      if (!column.treeNode || !this.getEventTargetNode(evnt, $el, 'vxe-tree-wrapper').flag) {
+        // 如果是高亮行
+        if (highlightCurrentRow) {
+          if (radioConfig.trigger === 'row' || (!this.getEventTargetNode(evnt, $el, 'vxe-checkbox').flag && !this.getEventTargetNode(evnt, $el, 'vxe-radio').flag)) {
+            this.triggerCurrentRowEvent(evnt, params)
+            UtilTools.emitEvent(this, 'current-change', [params, evnt])
+          }
+        }
         // 如果是单选
         if ((radioConfig.trigger === 'row' || (column.type === 'radio' && radioConfig.trigger === 'cell')) && !this.getEventTargetNode(evnt, $el, 'vxe-radio').flag) {
           this.triggerRadioRowEvent(evnt, params)
