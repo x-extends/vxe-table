@@ -886,7 +886,6 @@ export default {
       let { removeList, insertList } = editStore
       let { checkField: property } = selectConfig
       let rest = []
-      this._isUpdateData = true
       if (rows) {
         if (!XEUtils.isArray(rows)) {
           rows = [rows]
@@ -3251,7 +3250,7 @@ export default {
       this.tableFullColumn.forEach(column => {
         column.order = null
       })
-      this.tableFullData = this.data || []
+      this.tableFullData = this.data ? this.data.slice(0) : []
       this.tableData = this.getTableData(true).tableData
       return this.$nextTick()
     },
