@@ -98,14 +98,6 @@ const contextMenuApi = [
         ]
       }
     ]
-  },
-  {
-    name: 'visibleMethod',
-    desc: '该函数 Function({row, rowIndex, column, columnIndex}) 的返回值用来决定是否允许显示右键菜单',
-    type: 'Function',
-    enum: '',
-    defVal: '',
-    list: []
   }
 ]
 const apis = [
@@ -663,6 +655,14 @@ const apis = [
             enum: '',
             defVal: '',
             list: XEUtils.clone(contextMenuApi, true)
+          },
+          {
+            name: 'visibleMethod',
+            desc: '该函数 Function({type, row?, rowIndex?, column?, columnIndex?}) 的返回值用来决定是否允许显示右键菜单',
+            type: 'Function',
+            enum: '',
+            defVal: '',
+            list: []
           }
         ]
       },

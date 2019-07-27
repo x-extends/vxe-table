@@ -1938,11 +1938,12 @@ export default {
         for (let index = 0; index < layoutList.length; index++) {
           let layout = layoutList[index]
           let columnTargetNode = this.getEventTargetNode(evnt, this.$el, `vxe-${layout}--column`)
+          let params = { type: layout, $table: this }
           if (columnTargetNode.flag) {
             let cell = columnTargetNode.targetElem
             let column = this.getColumnNode(cell).item
-            let params = { type: layout, column, columnIndex: this.getColumnIndex(column), cell, $table: this }
             let typePrefix = `${layout}-`
+            Object.assign(params, { column, columnIndex: this.getColumnIndex(column), cell })
             if (layout === 'body') {
               let row = this.getRowNode(cell.parentNode).item
               typePrefix = ''
@@ -1953,7 +1954,7 @@ export default {
             UtilTools.emitEvent(this, `${typePrefix}cell-context-menu`, [params, evnt])
             return
           } else if (this.getEventTargetNode(evnt, this.$el, `vxe-table--${layout}-wrapper`).flag) {
-            evnt.preventDefault()
+            this.openContextMenu(evnt, layout, params)
             return
           }
         }
@@ -1967,8 +1968,9 @@ export default {
     openContextMenu (evnt, type, params) {
       let { ctxMenuStore, ctxMenuConfig } = this
       let config = ctxMenuConfig[type]
+      let visibleMethod = ctxMenuConfig.visibleMethod
       if (config) {
-        let { options, visibleMethod, disabled } = config
+        let { options, disabled } = config
         if (disabled) {
           evnt.preventDefault()
         } else if (options && options.length) {
