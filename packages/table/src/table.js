@@ -482,7 +482,7 @@ export default {
     }
   },
   created () {
-    let { scrollYStore, optimizeOpts, radioConfig = {}, selectConfig = {}, treeConfig, editConfig, loading, showAllOverflow, showHeaderAllOverflow } = this
+    let { scrollYStore, optimizeOpts, ctxMenuConfig, radioConfig = {}, selectConfig = {}, treeConfig, editConfig, loading, showAllOverflow, showHeaderAllOverflow } = this
     let { scrollY } = optimizeOpts
     if (loading) {
       this.isLoading = true
@@ -510,6 +510,11 @@ export default {
     if (selectConfig.labelProp) {
       console.warn('[vxe-table] The property labelProp is deprecated, please use labelField')
     }
+    ['header', 'body', 'footer'].forEach(name => {
+      if (ctxMenuConfig[name] && ctxMenuConfig[name].visibleMethod) {
+        console.warn(`[vxe-table] The property context-menu.${name}.visibleMethod is deprecated, please use context-menu.visibleMethod`)
+      }
+    })
     this.lastScrollLeft = 0
     this.lastScrollTop = 0
     this.afterFullData = []
@@ -1856,11 +1861,12 @@ export default {
         for (let index = 0; index < layoutList.length; index++) {
           let layout = layoutList[index]
           let columnTargetNode = this.getEventTargetNode(evnt, this.$el, `vxe-${layout}--column`)
+          let params = { type: layout, $table: this }
           if (columnTargetNode.flag) {
             let cell = columnTargetNode.targetElem
             let column = this.getColumnNode(cell).item
-            let params = { type: layout, column, columnIndex: this.getColumnIndex(column), cell, $table: this }
             let typePrefix = `${layout}-`
+            Object.assign(params, { column, columnIndex: this.getColumnIndex(column), cell })
             if (layout === 'body') {
               let row = this.getRowNode(cell.parentNode).item
               typePrefix = ''
@@ -1871,7 +1877,7 @@ export default {
             UtilTools.emitEvent(this, `${typePrefix}cell-context-menu`, [params, evnt])
             return
           } else if (this.getEventTargetNode(evnt, this.$el, `vxe-table--${layout}-wrapper`).flag) {
-            evnt.preventDefault()
+            this.openContextMenu(evnt, layout, params)
             return
           }
         }
@@ -1886,7 +1892,8 @@ export default {
       let { ctxMenuStore, ctxMenuConfig } = this
       let config = ctxMenuConfig[type]
       if (config) {
-        let { options, visibleMethod, disabled } = config
+        let { options, disabled } = config
+        let visibleMethod = config.visibleMethod || ctxMenuConfig.visibleMethod
         if (disabled) {
           evnt.preventDefault()
         } else if (options && options.length) {
