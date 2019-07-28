@@ -2317,12 +2317,18 @@ export default {
       if (!this.$listeners['radio-change'] && this.$listeners['select-change']) {
         console.warn('[vxe-table] Radio should use radio-change events')
       }
-      UtilTools.emitEvent(this, 'radio-change', [params, evnt])
-      return this.setRadioRow(params.row)
+      let isChange = this.selectRow !== params.row
+      this.setRadioRow(params.row)
+      if (isChange) {
+        UtilTools.emitEvent(this, 'radio-change', [params, evnt])
+      }
     },
     triggerCurrentRowEvent (evnt, params) {
+      let isChange = this.currentRow !== params.row
       this.setCurrentRow(params.row)
-      UtilTools.emitEvent(this, 'current-change', [params, evnt])
+      if (isChange) {
+        UtilTools.emitEvent(this, 'current-change', [params, evnt])
+      }
     },
     /**
      * 单选，设置某一行为选中状态，如果调不加参数，则会取消目前高亮行的选中状态
@@ -2480,7 +2486,6 @@ export default {
         if (highlightCurrentRow) {
           if (radioConfig.trigger === 'row' || (!this.getEventTargetNode(evnt, $el, 'vxe-checkbox').flag && !this.getEventTargetNode(evnt, $el, 'vxe-radio').flag)) {
             this.triggerCurrentRowEvent(evnt, params)
-            UtilTools.emitEvent(this, 'current-change', [params, evnt])
           }
         }
         // 如果是单选
