@@ -49,6 +49,10 @@ export default {
           {
             code: 'hideColumn',
             name: '隐藏列'
+          },
+          {
+            code: 'showAllColumn',
+            name: '取消所有隐藏列'
           }
         ]
       ],
@@ -96,6 +100,10 @@ export default {
                   {
                     code: 'hideColumn',
                     name: '隐藏列'
+                  },
+                  {
+                    code: 'showAllColumn',
+                    name: '取消所有隐藏列'
                   }
                 ]
               ],
@@ -136,6 +144,9 @@ export default {
               switch (menu.code) {
                 case 'hideColumn':
                   xTree.hideColumn(column)
+                  break
+                case 'showAllColumn':
+                  xTree.resetCustoms()
                   break
                 case 'insertAt':
                   this.insertAtEvent(row, column)
@@ -180,6 +191,9 @@ export default {
       switch (menu.code) {
         case 'hideColumn':
           xTree.hideColumn(column)
+          break
+        case 'showAllColumn':
+          xTree.resetCustoms()
           break
         case 'insertAt':
           this.insertAtEvent(row, column)

@@ -685,6 +685,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.contextMenu',
+              locat: {
+                name: 'TableEditMenu'
+              }
+            },
+            {
               label: 'app.aside.nav.i18n',
               locat: {
                 name: 'TableEditI18n'
