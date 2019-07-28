@@ -79,6 +79,7 @@ module.exports = {
         big1wRow1wCol: '10,000 row 10,000 column',
         big10wRow1wCol: '100,000 row 10,000 column, More complex rendering',
         big1wRowEdit: '10,000 row editable',
+        treeScroll: '树结构',
         infiniteScroll: 'The infinite scroll',
 
         editable: 'Editable',

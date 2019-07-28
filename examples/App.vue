@@ -579,6 +579,13 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.treeScroll',
+              disabled: true,
+              locat: {
+                name: 'TableScroll'
+              }
+            },
+            {
               label: 'app.aside.nav.infiniteScroll',
               disabled: true,
               locat: {
