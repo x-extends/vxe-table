@@ -2389,12 +2389,18 @@ export default {
      * 单选，行选中事件
      */
     triggerRadioRowEvent (evnt, params) {
+      let isChange = this.selectRow !== params.row
       this.setRadioRow(params.row)
-      UtilTools.emitEvent(this, 'radio-change', [params, evnt])
+      if (isChange) {
+        UtilTools.emitEvent(this, 'radio-change', [params, evnt])
+      }
     },
     triggerCurrentRowEvent (evnt, params) {
+      let isChange = this.currentRow !== params.row
       this.setCurrentRow(params.row)
-      UtilTools.emitEvent(this, 'current-change', [params, evnt])
+      if (isChange) {
+        UtilTools.emitEvent(this, 'current-change', [params, evnt])
+      }
     },
     /**
      * 高亮行，设置某一行为高亮状态，如果调不加参数，则会取消目前高亮行的选中状态

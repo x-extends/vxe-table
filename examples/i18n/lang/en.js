@@ -225,9 +225,9 @@ module.exports = {
 
           empty: '空数据时显示的文本内容',
 
-          currentChange: '只对 highlightCurrentRow 有效，当手动选中行时触发的事件',
-          radioChange: '只对 type=radio 有效，当手动勾选时触发的事件',
-          selectChange: '只对 type=selection 有效，当手动勾选时触发的事件',
+          currentChange: '只对 highlightCurrentRow 有效，当手动选中行并且值发生改变时触发的事件',
+          radioChange: '只对 type=radio 有效，当手动勾选并且值发生改变时触发的事件',
+          selectChange: '只对 type=selection 有效，当手动勾选并且值发生改变时触发的事件',
           selectAll: '只对 type=selection 有效，当手动勾选全选时触发的事件',
           cellClick: '单元格被点击时会触发该事件',
           cellDblclick: '单元格被双击时会触发该事件',
