@@ -54,7 +54,16 @@ const apis = [
     type: '',
     enum: '',
     defVal: '',
-    list: []
+    list: [
+      {
+        name: 'default',
+        desc: '自定义显示内容模板',
+        type: '',
+        enum: '',
+        defVal: '',
+        list: []
+      }
+    ]
   },
   {
     name: 'Events',
@@ -70,7 +79,32 @@ const apis = [
     type: '',
     enum: '',
     defVal: '',
-    list: []
+    list: [
+      {
+        name: 'show()',
+        desc: '手动显示提示框',
+        type: 'Promise',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'close()',
+        desc: '手动关闭提示框',
+        type: 'Promise',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'toVisible(target, message)',
+        desc: '手动显示提示框（对于可复用高性能场景非常适合，只需要创建一个实例，后续通过该方法调用即可显示）',
+        type: 'Promise',
+        enum: '',
+        defVal: 'Event.target, message',
+        list: []
+      }
+    ]
   }
 ]
 

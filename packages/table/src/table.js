@@ -925,7 +925,7 @@ export default {
           if (scrollYLoad) {
             throw new Error('[vxe-table] Virtual scroller does not support this operation.')
           }
-          if (row === -1) {
+          if (!row || row === -1) {
             tableData.push.apply(tableData, newRecords)
             tableFullData.push.apply(tableFullData, newRecords)
           } else {

@@ -1331,7 +1331,7 @@ const apis = [
         descKey: 'app.api.table.desc.scroll',
         type: '',
         enum: '',
-        defVal: '{type,fixed,scrollTop,scrollLeft},event',
+        defVal: '{type,fixed,scrollTop,scrollLeft,isX,isY},event',
         list: []
       }
     ]

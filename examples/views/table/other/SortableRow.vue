@@ -15,6 +15,11 @@
             <i class="vxe-icon--menu"></i>
           </span>
         </template>
+        <template v-slot:header>
+          <vxe-tooltip v-model="showHelpTip1" content="按住后可以上下拖动排序！">
+            <i class="vxe-icon--question" @click="showHelpTip1 = !showHelpTip1"></i>
+          </vxe-tooltip>
+        </template>
       </vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -59,6 +64,8 @@ import XEUtils from 'xe-utils'
 export default {
   data () {
     return {
+      showHelpTip1: false,
+      showHelpTip2: false,
       tableData: [],
       tableColumn: [
         {
@@ -69,6 +76,13 @@ export default {
                 <span class="drag-btn">
                   <i class="vxe-icon--menu"></i>
                 </span>
+              ]
+            },
+            header: () => {
+              return [
+                <vxe-tooltip v-model={ this.showHelpTip2 } content="按住后可以上下拖动排序！">
+                  <i class="vxe-icon--question" onClick={ () => { this.showHelpTip2 = !this.showHelpTip2 } }></i>
+                </vxe-tooltip>
               ]
             }
           }
@@ -93,6 +107,11 @@ export default {
                 <i class="vxe-icon--menu"></i>
               </span>
             </template>
+            <template v-slot:header>
+              <vxe-tooltip v-model="showHelpTip1" content="按住后可以上下拖动排序！">
+                <i class="vxe-icon--question" @click="showHelpTip1 = !showHelpTip1"></i>
+              </vxe-tooltip>
+            </template>
           </vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -104,6 +123,7 @@ export default {
         export default {
           data () {
             return {
+              showHelpTip1: false,
               tableData: []
             }
           },
@@ -156,6 +176,7 @@ export default {
         export default {
           data () {
             return {
+              showHelpTip2: false,
               tableTreeData: [],
               tableColumn: [
                 {
@@ -166,6 +187,13 @@ export default {
                         <span class="drag-btn">
                           <i class="vxe-icon--menu"></i>
                         </span>
+                      ]
+                    },
+                    header: () => {
+                      return [
+                        <vxe-tooltip v-model={ this.showHelpTip2 } content="按住后可以上下拖动排序！">
+                          <i class="vxe-icon--question" onClick={ () => { this.showHelpTip2 = !this.showHelpTip2 } }></i>
+                        </vxe-tooltip>
                       ]
                     }
                   }
@@ -197,12 +225,13 @@ export default {
                     let targetTrElem = item
                     let wrapperElem = targetTrElem.parentNode
                     let prevTrElem = targetTrElem.previousElementSibling
-                    let selfNode = xTable.getRowNode(targetTrElem)
+                    let tableTreeData = this.tableTreeData
+                    let selfRow = xTable.getRowNode(targetTrElem).item
+                    let selfNode = XEUtils.findTree(tableTreeData, row => row === selfRow, options)
                     if (prevTrElem) {
                       // 移动到节点
-                      let prevNode = xTable.getRowNode(prevTrElem)
-                      let prevRow = prevNode.item
-                      let selfRow = selfNode.item
+                      let prevRow = xTable.getRowNode(prevTrElem).item
+                      let prevNode = XEUtils.findTree(tableTreeData, row => row === prevRow, options)
                       if (XEUtils.findTree(selfRow[options.children], row => prevRow === row, options)) {
                         // 错误的移动
                         let oldTrElem = wrapperElem.children[oldIndex]
@@ -219,8 +248,8 @@ export default {
                       }
                     } else {
                       // 移动到第一行
-                      let currRow = selfNode.items.splice(selfNode.index, 1)[0]
-                      this.tableTreeData.splice(0, 0, currRow)
+                      var currRow = selfNode.items.splice(selfNode.index, 1)[0]
+                      tableTreeData.unshift(currRow)
                     }
                     // 如果变动了树层级，需要刷新数据
                     xTable.refreshData()
@@ -286,12 +315,13 @@ export default {
             let targetTrElem = item
             let wrapperElem = targetTrElem.parentNode
             let prevTrElem = targetTrElem.previousElementSibling
-            let selfNode = xTable.getRowNode(targetTrElem)
+            let tableTreeData = this.tableTreeData
+            let selfRow = xTable.getRowNode(targetTrElem).item
+            let selfNode = XEUtils.findTree(tableTreeData, row => row === selfRow, options)
             if (prevTrElem) {
               // 移动到节点
-              let prevNode = xTable.getRowNode(prevTrElem)
-              let prevRow = prevNode.item
-              let selfRow = selfNode.item
+              let prevRow = xTable.getRowNode(prevTrElem).item
+              let prevNode = XEUtils.findTree(tableTreeData, row => row === prevRow, options)
               if (XEUtils.findTree(selfRow[options.children], row => prevRow === row, options)) {
                 // 错误的移动
                 let oldTrElem = wrapperElem.children[oldIndex]
@@ -308,8 +338,8 @@ export default {
               }
             } else {
               // 移动到第一行
-              let currRow = selfNode.items.splice(selfNode.index, 1)[0]
-              this.tableTreeData.splice(0, 0, currRow)
+              var currRow = selfNode.items.splice(selfNode.index, 1)[0]
+              tableTreeData.unshift(currRow)
             }
             // 如果变动了树层级，需要刷新数据
             xTable.refreshData()

@@ -23,7 +23,9 @@
       </vxe-table-column>
       <vxe-table-column field="sex" title="Sex" :filters="[{data: ''}]" :filter-method="filterSexMethod">
         <template v-slot:header="{ column }">
-          <span style="color: red;">这样玩也行</span>
+          <vxe-tooltip v-model="showSexTip" content="这样玩也行？">
+            <span style="color: red;" @click="showSexTip = !showSexTip">这样玩也行</span>
+          </vxe-tooltip>
         </template>
         <template v-slot:filter="{ column, context }">
           <template v-for="(option, index) in column.filters">
@@ -70,6 +72,7 @@ import XEUtils from 'xe-utils'
 export default {
   data () {
     return {
+      showSexTip: false,
       tableData: [],
       demoCodes: [
         `
@@ -89,7 +92,9 @@ export default {
           </vxe-table-column>
           <vxe-table-column field="sex" title="Sex" :filters="[{data: ''}]" :filter-method="filterSexMethod">
             <template v-slot:header="{ column }">
-              <span style="color: red;">这样玩也行</span>
+              <vxe-tooltip v-model="showSexTip" content="这样玩也行？">
+                <span style="color: red;" @click="showSexTip = !showSexTip">这样玩也行</span>
+              </vxe-tooltip>
             </template>
             <template v-slot:filter="{ column, context }">
               <template v-for="(option, index) in column.filters">
@@ -124,6 +129,7 @@ export default {
         export default {
           data () {
             return {
+              showSexTip: false,
               tableData: []
             }
           },

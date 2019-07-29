@@ -15,7 +15,7 @@
       border
       show-overflow
       ref="xTable"
-      height="400"
+      max-height="400"
       :data.sync="tableData"
       :edit-config="{trigger: 'click', mode: 'cell'}">
       <vxe-table-column type="index" width="60"></vxe-table-column>
@@ -55,7 +55,7 @@ export default {
           border
           show-overflow
           ref="xTable"
-          height="400"
+          max-height="400"
           :data.sync="tableData"
           :edit-config="{trigger: 'click', mode: 'cell'}">
           <vxe-table-column type="index" width="60"></vxe-table-column>
@@ -72,7 +72,7 @@ export default {
             }
           },
           created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 50)
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 2)
           },
           methods: {
             insertEvent () {
@@ -93,7 +93,7 @@ export default {
     }
   },
   created () {
-    let list = window.MOCK_DATA_LIST.slice(0, 50)
+    let list = window.MOCK_DATA_LIST.slice(0, 2)
     this.tableData = list
   },
   mounted () {
