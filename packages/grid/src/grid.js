@@ -361,12 +361,11 @@ export default {
     },
     sortChangeEvent (params) {
       let { remoteSort, sortData } = this
-      let { column, field, order } = params
+      let { column } = params
       let isRemote = XEUtils.isBoolean(column.remoteSort) ? column.remoteSort : remoteSort
       // 如果是服务端排序
       if (isRemote) {
-        sortData.field = field
-        sortData.order = order
+        Object.assign(sortData, params)
         this.commitProxy('query')
       }
       UtilTools.emitEvent(this, 'sort-change', [params])

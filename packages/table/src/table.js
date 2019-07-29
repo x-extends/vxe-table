@@ -2406,12 +2406,11 @@ export default {
      * 高亮行，设置某一行为高亮状态，如果调不加参数，则会取消目前高亮行的选中状态
      */
     setCurrentRow (row) {
-      let rowid = UtilTools.getRowid(this, row)
       this.clearCurrentRow()
       this.clearCurrentColumn()
       this.currentRow = row
       if (this.highlightCurrentRow) {
-        XEUtils.arrayEach(this.$el.querySelectorAll(`[data-rowid="${rowid}"]`), elem => DomTools.addClass(elem, 'row--current'))
+        DomTools.addClass(this.$el.querySelectorAll(`[data-rowid="${UtilTools.getRowid(this, row)}"]`), 'row--current')
       }
       return this.$nextTick()
     },
@@ -3246,7 +3245,7 @@ export default {
             this.tableData = this.getTableData(true).tableData
           }
           // 在 v3.0 中废弃 prop
-          UtilTools.emitEvent(this, 'sort-change', [{ column, prop: field, field, order }])
+          UtilTools.emitEvent(this, 'sort-change', [{ column, property: field, prop: field, field, order }])
         }
         return this.$nextTick().then(this.updateStyle)
       }
@@ -3300,6 +3299,7 @@ export default {
     confirmFilterEvent (evnt) {
       let { visibleColumn, filterStore, remoteFilter, scrollXLoad, scrollYLoad } = this
       let { column } = filterStore
+      let { property } = column
       let values = []
       column.filters.forEach(item => {
         if (item.checked) {
@@ -3322,11 +3322,11 @@ export default {
             }
           })
           // 在 v3.0 中废弃 prop
-          filterList.push({ column, field: property, prop: property, values: valueList })
+          filterList.push({ column, property, field: property, prop: property, values: valueList })
         }
       })
       // 在 v3.0 中废弃 prop
-      UtilTools.emitEvent(this, 'filter-change', [{ column, field: column.property, prop: column.property, values, filters: filterList }])
+      UtilTools.emitEvent(this, 'filter-change', [{ column, property, field: property, prop: property, values, filters: filterList }])
       if (scrollXLoad || scrollYLoad) {
         this.clearScroll()
       }
@@ -3452,10 +3452,12 @@ export default {
      * 展开树节点事件
      */
     triggerTreeExpandEvent (evnt, { row }) {
-      let { selectColumn } = this
+      let { selectRow, selectColumn } = this
       let rest = this.toggleTreeExpansion(row)
       UtilTools.emitEvent(this, 'toggle-tree-change', [{ row, rowIndex: this.getRowIndex(row), $table: this }, evnt])
-      if (selectColumn) {
+      if (selectRow) {
+        this.$nextTick(() => this.setCurrentRow(selectRow))
+      } else if (selectColumn) {
         this.$nextTick(() => this.setCurrentColumn(selectColumn))
       }
       return rest

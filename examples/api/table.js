@@ -1185,7 +1185,7 @@ const apis = [
         descKey: 'app.api.table.desc.sortChange',
         type: '',
         enum: '',
-        defVal: '{column,field,order}',
+        defVal: '{column,property,order}',
         list: []
       },
       {
@@ -1193,7 +1193,7 @@ const apis = [
         descKey: 'app.api.table.desc.filterChange',
         type: '',
         enum: '',
-        defVal: '{column,field,values,filters}',
+        defVal: '{column,property,values,filters}',
         list: []
       },
       {
