@@ -221,8 +221,8 @@ export default {
     },
     insertEvent (row, column) {
       let xTable = this.$refs.xTable
-      xTable.insertAt(null, row)
-        .then(({ row }) => xTable.setActiveCell(row, column.property))
+      xTable.insertAt(null, row || -1)
+        .then(({ row }) => xTable.setActiveCell(row, column ? column.property : 'name'))
     },
     contextMenuClickEvent ({ menu, row, column }) {
       let xTable = this.$refs.xTable
