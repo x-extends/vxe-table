@@ -59,6 +59,10 @@ export default {
       bodyMenus: [
         [
           {
+            code: 'expandOrFold',
+            name: '展开或折叠'
+          },
+          {
             code: 'insertAt',
             name: '插入一行'
           }
@@ -110,6 +114,10 @@ export default {
               bodyMenus: [
                 [
                   {
+                    code: 'expandOrFold',
+                    name: '展开或折叠'
+                  },
+                  {
                     code: 'insertAt',
                     name: '插入一行'
                   }
@@ -150,6 +158,9 @@ export default {
                   break
                 case 'insertAt':
                   this.insertAtEvent(row, column)
+                  break
+                case 'expandOrFold':
+                  xTree.toggleTreeExpansion(row)
                   break
               }
             }
@@ -197,6 +208,9 @@ export default {
           break
         case 'insertAt':
           this.insertAtEvent(row, column)
+          break
+        case 'expandOrFold':
+          xTree.toggleTreeExpansion(row)
           break
       }
     }
