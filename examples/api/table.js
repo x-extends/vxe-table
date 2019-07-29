@@ -1881,7 +1881,7 @@ const apis = [
       },
       {
         name: 'updateFooter()',
-        desc: '更新表尾合计（对于某些需要频繁更新的场景下可能会用到）',
+        desc: '手动更新表尾合计（对于某些需要频繁更新的场景下可能会用到）',
         type: 'Promise',
         enum: '',
         defVal: '',
@@ -1945,7 +1945,7 @@ const apis = [
       },
       {
         name: 'recalculate()',
-        desc: '表格重新计算（对于需要更新列宽时可能会用到）',
+        desc: '重新计算表格（对于某些场景可能会用到，比如需要更新列宽时）',
         type: 'Promise',
         enum: '',
         defVal: '',
@@ -1984,7 +1984,7 @@ const apis = [
           },
           {
             name: 'original',
-            desc: '是否导出源数据（可视渲染启用后默认是 true）',
+            desc: '是否导出源数据（虚拟渲染启用后必须是 true）',
             type: 'Boolean',
             enum: '',
             defVal: 'false',
