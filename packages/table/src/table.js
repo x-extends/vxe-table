@@ -2876,7 +2876,7 @@ export default {
             this.tableData = this.getTableData(true).tableData
           }
           // 在 v3.0 中废弃 prop
-          UtilTools.emitEvent(this, 'sort-change', [{ column, prop: field, field, order }])
+          UtilTools.emitEvent(this, 'sort-change', [{ column, property: field, prop: field, field, order }])
         }
       }
       return this.$nextTick()
@@ -2921,6 +2921,7 @@ export default {
     confirmFilterEvent (evnt) {
       let { visibleColumn, filterStore, remoteFilter, scrollXLoad, scrollYLoad } = this
       let { column } = filterStore
+      let { property } = column
       let values = []
       column.filters.forEach(item => {
         if (item.checked) {
@@ -2943,11 +2944,11 @@ export default {
             }
           })
           // 在 v3.0 中废弃 prop
-          filterList.push({ column, field: property, prop: property, values: valueList })
+          filterList.push({ column, property, field: property, prop: property, values: valueList })
         }
       })
       // 在 v3.0 中废弃 prop
-      UtilTools.emitEvent(this, 'filter-change', [{ column, field: column.property, prop: column.property, values, filters: filterList }])
+      UtilTools.emitEvent(this, 'filter-change', [{ column, property, field: property, prop: property, values, filters: filterList }])
       if (scrollXLoad || scrollYLoad) {
         this.clearScroll()
       }

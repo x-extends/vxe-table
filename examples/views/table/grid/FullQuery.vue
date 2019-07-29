@@ -39,12 +39,12 @@ export default {
           query: ({ page, sort, filters }) => {
             // 处理排序条件
             let formData = {
-              sort: sort.field,
+              sort: sort.property,
               order: sort.order
             }
             // 处理筛选条件
-            filters.forEach(({ column, field, values }) => {
-              formData[field] = values.join(',')
+            filters.forEach(({ column, property, values }) => {
+              formData[property] = values.join(',')
             })
             return XEAjax.getJSON(`/api/user/page/list/${page.pageSize}/${page.currentPage}`, formData)
           }
@@ -83,8 +83,7 @@ export default {
           :pager-config="{pageSize: 15}"
           :columns="tableColumn"
           :proxy-config="tableProxy"
-          @sort-change="sortChangeEvent"
-          @filter-change="filterChangeEvent"></vxe-grid>
+          :select-config="{reserve: true}"></vxe-grid>
         `,
         `
         export default {
@@ -98,12 +97,12 @@ export default {
                   query: ({ page, sort, filters }) => {
                     // 处理排序条件
                     let formData = {
-                      sort: sort.field,
+                      sort: sort.property,
                       order: sort.order
                     }
                     // 处理筛选条件
-                    filters.forEach(({ column, field, values }) => {
-                      formData[field] = values.join(',')
+                    filters.forEach(({ column, property, values }) => {
+                      formData[property] = values.join(',')
                     })
                     return XEAjax.getJSON(\`/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`, formData)
                   }
