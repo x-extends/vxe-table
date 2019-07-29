@@ -447,6 +447,20 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.contextMenu',
+              disabled: true,
+              locat: {
+                name: 'GridMenu'
+              }
+            },
+            {
+              label: 'app.aside.nav.span',
+              disabled: true,
+              locat: {
+                name: 'GridSpan'
+              }
+            },
+            {
               label: 'app.aside.nav.baseTree',
               locat: {
                 name: 'GridTree'
@@ -517,6 +531,13 @@ export default {
               label: 'app.aside.nav.contextMenu',
               locat: {
                 name: 'TableTreeMenu'
+              }
+            },
+            {
+              label: 'app.aside.nav.span',
+              disabled: true,
+              locat: {
+                name: 'TableTreeSpan'
               }
             },
             {

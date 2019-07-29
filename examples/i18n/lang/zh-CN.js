@@ -107,8 +107,8 @@ module.exports = {
         elementRender: 'element-ui -> 单元格',
         iviewRender: 'iview -> 单元格',
         antd: 'ant-design-vue -> 单元格',
-        sortablejsRow: 'sortablejs -> 行拖动',
-        sortablejsColumn: 'sortablejs -> 列拖动',
+        sortablejsRow: 'sortablejs -> 行拖拽',
+        sortablejsColumn: 'sortablejs -> 列拖拽',
         xlsxRender: 'xlsx -> 导出 xlsx',
 
         plugin: '使用插件',

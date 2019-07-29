@@ -60,6 +60,8 @@ const GridEdit = () => import(/* webpackChunkName: "grid" */ './views/table/grid
 const GridToolbar = () => import(/* webpackChunkName: "grid" */ './views/table/grid/Toolbar.vue')
 const GridCustomToolbar = () => import(/* webpackChunkName: "grid" */ './views/table/grid/CustomToolbar.vue')
 const GridDynamic = () => import(/* webpackChunkName: "grid" */ './views/table/grid/Dynamic.vue')
+const GridMenu = () => import(/* webpackChunkName: "grid" */ './views/table/grid/Menu.vue')
+const GridSpan = () => import(/* webpackChunkName: "grid" */ './views/table/grid/Span.vue')
 const GridTree = () => import(/* webpackChunkName: "grid" */ './views/table/grid/Tree.vue')
 const GridTreeEdit = () => import(/* webpackChunkName: "grid" */ './views/table/grid/TreeEdit.vue')
 const GridFullEdit = () => import(/* webpackChunkName: "grid" */ './views/table/grid/FullEdit.vue')
@@ -71,6 +73,7 @@ const TableTreeExpand = () => import(/* webpackChunkName: "tree" */ './views/tab
 const TableTreeToolbar = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Toolbar.vue')
 const TableTreeInsert = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Insert.vue')
 const TableTreeMenu = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Menu.vue')
+const TableTreeSpan = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Span.vue')
 const TableTreeLazy = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Lazy.vue')
 const TableTreeEdit = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Edit.vue')
 
@@ -406,6 +409,11 @@ export default new Router({
       component: TableTreeMenu
     },
     {
+      path: '/table/tree/span',
+      name: 'TableTreeSpan',
+      component: TableTreeSpan
+    },
+    {
       path: '/table/tree/lazy',
       name: 'TableTreeLazy',
       component: TableTreeLazy
@@ -464,6 +472,16 @@ export default new Router({
       path: '/table/grid/dynamic',
       name: 'GridDynamic',
       component: GridDynamic
+    },
+    {
+      path: '/table/grid/menu',
+      name: 'GridMenu',
+      component: GridMenu
+    },
+    {
+      path: '/table/grid/span',
+      name: 'GridSpan',
+      component: GridSpan
     },
     {
       path: '/table/grid/tree',
