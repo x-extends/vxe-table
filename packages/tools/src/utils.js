@@ -7,7 +7,7 @@ class ColumnConfig {
   constructor (_vm, { renderHeader, renderCell, renderData } = {}) {
     Object.assign(this, {
       // 基本属性
-      id: `cid_${++columnUniqueId}`,
+      id: `col_${++columnUniqueId}`,
       type: _vm.type,
       prop: _vm.prop,
       property: _vm.field || _vm.prop,
@@ -83,11 +83,7 @@ export const UtilTools = {
   getColumnList (columns) {
     let result = []
     columns.forEach(column => {
-      if (column.children && column.children.length) {
-        result.push.apply(result, UtilTools.getColumnList(column.children))
-      } else {
-        result.push(column)
-      }
+      result.push.apply(result, column.children && column.children.length ? UtilTools.getColumnList(column.children) : [column])
     })
     return result
   },

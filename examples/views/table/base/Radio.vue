@@ -13,8 +13,10 @@
     <vxe-table
       border
       ref="xTable1"
+      class="radio-table"
       height="300"
       :data.sync="tableData"
+      :row-class-name="rowClassName"
       @radio-change="radioChangeEvent">
       <vxe-table-column type="radio" width="60">
         <template v-slot:header>
@@ -31,6 +33,7 @@
     <pre>
       <code class="xml">{{ demoCodes[0] }}</code>
       <code class="javascript">{{ demoCodes[1] }}</code>
+      <code class="scss">{{ demoCodes[2] }}</code>
     </pre>
 
     <p>默认选中，通过指定 <table-api-link prop="checkRowKey"/> 设置默认选中的行，指定默认值需要有 <table-api-link prop="row-id"/></p>
@@ -50,8 +53,8 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[2] }}</code>
-      <code class="javascript">{{ demoCodes[3] }}</code>
+      <code class="xml">{{ demoCodes[3] }}</code>
+      <code class="javascript">{{ demoCodes[4] }}</code>
     </pre>
 
     <p>使用 <table-api-link prop="highlight-current-row"/> 高亮方式</p>
@@ -71,8 +74,8 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[4] }}</code>
-      <code class="javascript">{{ demoCodes[5] }}</code>
+      <code class="xml">{{ demoCodes[5] }}</code>
+      <code class="javascript">{{ demoCodes[6] }}</code>
     </pre>
 
     <p>两种方式混合使用</p>
@@ -94,8 +97,8 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[6] }}</code>
-      <code class="javascript">{{ demoCodes[7] }}</code>
+      <code class="xml">{{ demoCodes[7] }}</code>
+      <code class="javascript">{{ demoCodes[8] }}</code>
     </pre>
 
     <p>当然也可以两种方式同时使用</p>
@@ -117,8 +120,8 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[8] }}</code>
-      <code class="javascript">{{ demoCodes[9] }}</code>
+      <code class="xml">{{ demoCodes[9] }}</code>
+      <code class="javascript">{{ demoCodes[10] }}</code>
     </pre>
   </div>
 </template>
@@ -144,8 +147,10 @@ export default {
         <vxe-table
           border
           ref="xTable1"
+          class="radio-table"
           height="300"
           :data.sync="tableData"
+          :row-class-name="rowClassName"
           @radio-change="radioChangeEvent">
           <vxe-table-column type="radio" width="60">
             <template v-slot:header>
@@ -177,10 +182,20 @@ export default {
               this.selectRow = null
               this.$refs.xTable1.clearRadioRow()
             },
+            rowClassName ({ row }) {
+              return {
+                'row-checked': this.selectRow === row
+              }
+            },
             getRadioEvent1 () {
               this.$XMsg.alert(JSON.stringify(this.$refs.xTable1.getRadioRow()))
             }
           }
+        }
+        `,
+        `
+        .radio-table.vxe-table .vxe-body--row.row-checked {
+          background-color: #fbf8ec;
         }
         `,
         `
@@ -316,9 +331,20 @@ export default {
       this.selectRow = null
       this.$refs.xTable1.clearRadioRow()
     },
+    rowClassName ({ row }) {
+      return {
+        'row-checked': this.selectRow === row
+      }
+    },
     getRadioEvent1 () {
       this.$XMsg.alert(JSON.stringify(this.$refs.xTable1.getRadioRow()))
     }
   }
 }
 </script>
+
+<style lang="scss">
+.radio-table.vxe-table .vxe-body--row.row-checked {
+  background-color: #fbf8ec;
+}
+</style>

@@ -10,7 +10,7 @@ var debounceScrollYDuration = browse.msie ? 40 : 20
 var isFieldWarn = false
 
 function getRowUniqueId () {
-  return `rid_${++rowUniqueId}`
+  return `row_${++rowUniqueId}`
 }
 
 /**
@@ -262,7 +262,7 @@ export default {
       // 单选属性，选中行
       selectRow: null,
       // 单选属性，选中列
-      selectColumn: null,
+      currentColumn: null,
       // 表尾合计数据
       footerData: [],
       // 已展开的行
@@ -2461,12 +2461,12 @@ export default {
     setCurrentColumn (column) {
       if (this.highlightCurrentColumn) {
         this.clearCurrentRow()
-        this.selectColumn = column
+        this.currentColumn = column
       }
       return this.$nextTick()
     },
     clearCurrentColumn () {
-      this.selectColumn = null
+      this.currentColumn = null
     },
     /**
      * 列点击事件

@@ -17,11 +17,13 @@ export const DomTools = {
     return elem && elem.className && elem.className.split && elem.className.split(' ').indexOf(cls) > -1
   },
   getDomNode () {
+    let documentElement = document.documentElement
+    let bodyElem = document.body
     return {
-      scrollTop: document.documentElement.scrollTop || document.body.scrollTop,
-      scrollLeft: document.documentElement.scrollLeft || document.body.scrollLeft,
-      visibleHeight: document.documentElement.clientHeight || document.body.clientHeight,
-      visibleWidth: document.documentElement.clientWidth || document.body.clientWidth
+      scrollTop: documentElement.scrollTop || bodyElem.scrollTop,
+      scrollLeft: documentElement.scrollLeft || bodyElem.scrollLeft,
+      visibleHeight: documentElement.clientHeight || bodyElem.clientHeight,
+      visibleWidth: documentElement.clientWidth || bodyElem.clientWidth
     }
   },
   /**
