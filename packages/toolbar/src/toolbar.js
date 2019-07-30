@@ -114,7 +114,7 @@ export default {
             on: customWrapperOns
           }, tableFullColumn.map(column => {
             let { property, visible, own } = column
-            let headerTitle = own.title || own.label
+            let headerTitle = UtilTools.getFuncText(own.title || own.label)
             return property && headerTitle ? h('vxe-checkbox', {
               props: {
                 value: visible

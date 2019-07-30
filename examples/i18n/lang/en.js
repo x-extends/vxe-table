@@ -145,6 +145,11 @@ module.exports = {
         runDemo: 'Run demo',
         showCode: 'Show code'
       },
+      label: {
+        name: 'Name',
+        age: 'Age',
+        sex: 'Sex'
+      },
       valid: {
         rName: 'The name of the required.'
       }

@@ -187,7 +187,7 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
     }, [
       h('span', {
         class: 'vxe-cell--valid-msg'
-      }, XEUtils.isFunction(validStore.content) ? validStore.content.call($table, h) : validStore.content)
+      }, XEUtils.isFunction(validStore.content) ? validStore.content.call($table, h) : UtilTools.getFuncText(validStore.content))
     ]) : _e() : null,
     isMouseChecked && !fixedType ? h('span', {
       class: 'vxe-body--column-checked-lt'

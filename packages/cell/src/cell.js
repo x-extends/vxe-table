@@ -53,7 +53,7 @@ export const Cell = {
     if (slots && slots.header) {
       return slots.header(params, h)
     }
-    return [UtilTools.formatText(own.title || own.label, 1)]
+    return [UtilTools.formatText(UtilTools.getFuncText(own.title || own.label), 1)]
   },
   renderCell (h, params) {
     let cellValue
@@ -112,7 +112,7 @@ export const Cell = {
     if (slots && slots.header) {
       return slots.header(params, h)
     }
-    return [UtilTools.formatText(own.title || own.label || '#', 1)]
+    return [UtilTools.formatText(UtilTools.getFuncText(own.title || own.label || '#'), 1)]
   },
   renderIndexCell (h, params) {
     let { $table, column } = params
@@ -138,7 +138,7 @@ export const Cell = {
       return slots.header(params, h)
     }
     // 在 v3.0 中废弃 label
-    return [UtilTools.formatText(own.title || own.label, 1)]
+    return [UtilTools.formatText(UtilTools.getFuncText(own.title || own.label), 1)]
   },
   renderRadioCell (h, params) {
     let { $table, column } = params
@@ -226,7 +226,7 @@ export const Cell = {
         }),
         headerTitle ? h('span', {
           class: 'checkbox--label'
-        }, headerTitle) : null
+        }, UtilTools.getFuncText(headerTitle)) : null
       ])
     ]
   },

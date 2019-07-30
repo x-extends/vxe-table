@@ -145,6 +145,11 @@ module.exports = {
         runDemo: '在线运行',
         showCode: '显示代码'
       },
+      label: {
+        name: '名字',
+        age: '年龄',
+        sex: '性别'
+      },
       valid: {
         rName: '名称必须填写'
       }

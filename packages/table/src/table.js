@@ -1978,7 +1978,7 @@ export default {
       let { tooltipStore } = this
       let { own } = column
       if (tooltipStore.column !== column || !tooltipStore.visible) {
-        this.showTooltip(evnt, own.title || own.label, column)
+        this.showTooltip(evnt, UtilTools.getFuncText(own.title || own.label), column)
       }
     },
     /**

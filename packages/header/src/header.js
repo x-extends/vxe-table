@@ -210,7 +210,7 @@ export default {
                   'c--ellipsis': showEllipsis
                 }],
                 attrs: {
-                  title: showTitle ? (own.title || own.label) : null
+                  title: showTitle ? UtilTools.getFuncText(own.title || own.label) : null
                 },
                 style: {
                   width: hasEllipsis ? `${border ? renderWidth - 1 : renderWidth}px` : null
