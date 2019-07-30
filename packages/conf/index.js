@@ -13,6 +13,7 @@ const GlobalConfig = {
   // stripe: false,
   // border: false,
   fit: true,
+  emptyCell: '　',
   showHeader: true,
   rowId: '_XID', // 行数据的唯一主键字段名
   version: 0, // 版本号，对于某些带数据缓存的功能有用到，上升版本号可以用于重置数据

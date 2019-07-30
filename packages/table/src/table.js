@@ -2410,7 +2410,7 @@ export default {
       this.clearCurrentColumn()
       this.currentRow = row
       if (this.highlightCurrentRow) {
-        DomTools.addClass(this.$el.querySelectorAll(`[data-rowid="${UtilTools.getRowid(this, row)}"]`), 'row--current')
+        XEUtils.arrayEach(this.$el.querySelectorAll(`[data-rowid="${UtilTools.getRowid(this, row)}"]`), elem => DomTools.addClass(elem, 'row--current'))
       }
       return this.$nextTick()
     },

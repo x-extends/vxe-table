@@ -1,4 +1,5 @@
 import XEUtils from 'xe-utils'
+import GlobalConfig from '../../conf'
 
 var columnUniqueId = 0
 
@@ -86,7 +87,7 @@ export const UtilTools = {
     return result
   },
   formatText (value, placeholder) {
-    return '' + (value === null || value === void 0 ? (placeholder ? '　' : '') : value)
+    return '' + (value === null || value === void 0 ? (placeholder ? GlobalConfig.emptyCell : '') : value)
   },
   getCellValue (row, column) {
     return XEUtils.get(row, column.property)
