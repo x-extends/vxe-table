@@ -142,7 +142,7 @@ export default {
                 style: {
                   width: hasEllipsis ? `${border ? renderWidth - 1 : renderWidth}px` : null
                 }
-              }, list[$columnIndex])
+              }, UtilTools.formatText(list[$columnIndex], 1))
             ])
           }).concat([
             h('td', {
