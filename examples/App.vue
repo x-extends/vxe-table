@@ -499,6 +499,7 @@ export default {
             },
             {
               label: 'app.aside.nav.checkbox',
+              demoUrl: 'https://jsrun.pro/B6bKp/edit',
               locat: {
                 name: 'TableTreeSelection'
               }
