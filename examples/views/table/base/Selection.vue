@@ -76,7 +76,9 @@
     <vxe-table
       border
       highlight-hover-row
+      class="checkbox-table"
       ref="xTable3"
+      :row-class-name="rowClassName"
       :data.sync="tableData"
       :select-config="{checkField: 'checked', trigger: 'row'}">
       <vxe-table-column type="selection" width="60"></vxe-table-column>
@@ -91,6 +93,7 @@
     <pre>
       <code class="xml">{{ demoCodes[4] }}</code>
       <code class="javascript">{{ demoCodes[5] }}</code>
+      <code class="scss">{{ demoCodes[6] }}</code>
     </pre>
 
     <p>默认选中，通过指定 <table-api-link prop="checkRowKeys"/> 设置默认选中的行，指定默认值需要有 <table-api-link prop="row-id"/></p>
@@ -112,8 +115,8 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[6] }}</code>
-      <code class="javascript">{{ demoCodes[7] }}</code>
+      <code class="xml">{{ demoCodes[7] }}</code>
+      <code class="javascript">{{ demoCodes[8] }}</code>
     </pre>
 
     <p>通过 <table-api-link prop="checkStrictly"/> 设置父子节点不互相关联</p>
@@ -133,8 +136,8 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[8] }}</code>
-      <code class="javascript">{{ demoCodes[9] }}</code>
+      <code class="xml">{{ demoCodes[9] }}</code>
+      <code class="javascript">{{ demoCodes[10] }}</code>
     </pre>
 
     <p>多选可单选同时使用</p>
@@ -154,8 +157,8 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[10] }}</code>
-      <code class="javascript">{{ demoCodes[11] }}</code>
+      <code class="xml">{{ demoCodes[11] }}</code>
+      <code class="javascript">{{ demoCodes[12] }}</code>
     </pre>
 
     <p>不仅如此，还可以多种方式混合使用</p>
@@ -178,8 +181,8 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[12] }}</code>
-      <code class="javascript">{{ demoCodes[13] }}</code>
+      <code class="xml">{{ demoCodes[13] }}</code>
+      <code class="javascript">{{ demoCodes[14] }}</code>
     </pre>
   </div>
 </template>
@@ -291,7 +294,9 @@ export default {
         <vxe-table
           border
           highlight-hover-row
+          class="checkbox-table"
           ref="xTable3"
+          :row-class-name="rowClassName"
           :data.sync="tableData"
           :select-config="{checkField: 'checked', trigger: 'row'}">
           <vxe-table-column type="selection" width="60"></vxe-table-column>
@@ -310,7 +315,19 @@ export default {
           },
           created () {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 5)
+          },
+          methods: {
+            rowClassName ({ row }) {
+              return {
+                'row-checked': row.checked
+              }
+            }
           }
+        }
+        `,
+        `
+        .checkbox-table.vxe-table .vxe-body--row.row-checked {
+          background-color: #fbf8ec;
         }
         `,
         `
@@ -439,6 +456,11 @@ export default {
     selectChangeEvent ({ checked, row }) {
       console.log(checked ? '勾选事件' : '取消事件')
     },
+    rowClassName ({ row }) {
+      return {
+        'row-checked': row.checked
+      }
+    },
     getSelectEvent1 () {
       let updateRecords = this.$refs.xTable1.getSelectRecords()
       this.$XMsg.alert(updateRecords.length)
@@ -446,3 +468,9 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+.checkbox-table.vxe-table .vxe-body--row.row-checked {
+  background-color: #fbf8ec;
+}
+</style>

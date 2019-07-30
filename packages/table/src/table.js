@@ -10,7 +10,7 @@ var isWebkit = browse['-webkit'] && !browse['-ms']
 var debounceScrollYDuration = browse.msie ? 40 : 20
 
 function getRowUniqueId () {
-  return `rid_${++rowUniqueId}`
+  return `row_${++rowUniqueId}`
 }
 
 /**
@@ -422,7 +422,7 @@ export default {
       // 表尾高度
       footerHeight: 0,
       // 单选属性，选中列
-      // selectColumn: null,
+      // currentColumn: null,
       // 当前 hover 行
       // hoverRow: null,
       // 最后滚动位置
@@ -2669,12 +2669,12 @@ export default {
     setCurrentColumn (column) {
       this.clearCurrentRow()
       this.clearCurrentColumn()
-      this.selectColumn = column
+      this.currentColumn = column
       XEUtils.arrayEach(this.$el.querySelectorAll(`.${column.id}`), elem => DomTools.addClass(elem, 'col--current'))
       return this.$nextTick()
     },
     clearCurrentColumn () {
-      this.selectColumn = null
+      this.currentColumn = null
       XEUtils.arrayEach(this.$el.querySelectorAll('.col--current'), elem => DomTools.removeClass(elem, 'col--current'))
       return this.$nextTick()
     },
@@ -2738,22 +2738,20 @@ export default {
     triggerCellDBLClickEvent (evnt, params) {
       let { editStore, editConfig } = this
       let { actived } = editStore
-      if (editConfig) {
-        if (editConfig.trigger === 'dblclick') {
-          if (!actived.args || evnt.currentTarget !== actived.args.cell) {
-            if (editConfig.mode === 'row') {
-              this.triggerValidate('blur')
-                .catch(e => e)
-                .then(() => {
-                  this.handleActived(params, evnt)
-                    .then(() => this.triggerValidate('change'))
-                    .catch(e => e)
-                })
-            } else if (editConfig.mode === 'cell') {
-              this.handleActived(params, evnt)
-                .then(() => this.triggerValidate('change'))
-                .catch(e => e)
-            }
+      if (editConfig && editConfig.trigger === 'dblclick') {
+        if (!actived.args || evnt.currentTarget !== actived.args.cell) {
+          if (editConfig.mode === 'row') {
+            this.triggerValidate('blur')
+              .catch(e => e)
+              .then(() => {
+                this.handleActived(params, evnt)
+                  .then(() => this.triggerValidate('change'))
+                  .catch(e => e)
+              })
+          } else if (editConfig.mode === 'cell') {
+            this.handleActived(params, evnt)
+              .then(() => this.triggerValidate('change'))
+              .catch(e => e)
           }
         }
       }
@@ -3452,13 +3450,13 @@ export default {
      * 展开树节点事件
      */
     triggerTreeExpandEvent (evnt, { row }) {
-      let { selectRow, selectColumn } = this
+      let { currentRow, currentColumn } = this
       let rest = this.toggleTreeExpansion(row)
       UtilTools.emitEvent(this, 'toggle-tree-change', [{ row, rowIndex: this.getRowIndex(row), $table: this }, evnt])
-      if (selectRow) {
-        this.$nextTick(() => this.setCurrentRow(selectRow))
-      } else if (selectColumn) {
-        this.$nextTick(() => this.setCurrentColumn(selectColumn))
+      if (currentRow) {
+        this.$nextTick(() => this.setCurrentRow(currentRow))
+      } else if (currentColumn) {
+        this.$nextTick(() => this.setCurrentColumn(currentColumn))
       }
       return rest
     },

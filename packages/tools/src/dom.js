@@ -6,31 +6,13 @@ const htmlElem = document.querySelector('html')
 const bodyElem = document.body
 
 function rClass (cls) {
-  return new RegExp(`(?:^|\\s)${cls}(?!\\S)`, 'g')
+  if (!rClsMap[cls]) {
+    rClsMap[cls] = new RegExp(`(?:^|\\s)${cls}(?!\\S)`, 'g')
+  }
+  return rClsMap[cls]
 }
 
 const rClsMap = {}
-// 预编译正则，提升速度
-const preClss = [
-  'c--resize',
-  'c--checked',
-  'row--new',
-  'row--hover',
-  'row--current',
-  'col--group',
-  'col--current',
-  'col--checked',
-  'col--copyed',
-  'col--selected',
-  'col--index-checked',
-  'col--title-checked',
-  'fixed--hidden',
-  'scrolling--middle'
-]
-
-preClss.forEach(cls => {
-  rClsMap[cls] = rClass(cls)
-})
 
 export const DomTools = {
   browse,
@@ -41,15 +23,11 @@ export const DomTools = {
     return val && /^\d+%$/.test(val)
   },
   hasClass (elem, cls) {
-    if (elem) {
-      let className = elem.className
-      return (preClss[cls] || rClass(cls)).test(className)
-    }
-    return false
+    return elem && rClass(cls).test(elem.className)
   },
   removeClass (elem, cls) {
     if (elem && DomTools.hasClass(elem, cls)) {
-      elem.className = elem.className.replace(rClsMap[cls] || rClass(cls), '')
+      elem.className = elem.className.replace(rClass(cls), '')
     }
   },
   addClass (elem, cls) {
@@ -68,11 +46,13 @@ export const DomTools = {
     }
   },
   getDomNode () {
+    let documentElement = document.documentElement
+    let bodyElem = document.body
     return {
-      scrollTop: document.documentElement.scrollTop || document.body.scrollTop,
-      scrollLeft: document.documentElement.scrollLeft || document.body.scrollLeft,
-      visibleHeight: document.documentElement.clientHeight || document.body.clientHeight,
-      visibleWidth: document.documentElement.clientWidth || document.body.clientWidth
+      scrollTop: documentElement.scrollTop || bodyElem.scrollTop,
+      scrollLeft: documentElement.scrollLeft || bodyElem.scrollLeft,
+      visibleHeight: documentElement.clientHeight || bodyElem.clientHeight,
+      visibleWidth: documentElement.clientWidth || bodyElem.clientWidth
     }
   },
   /**
