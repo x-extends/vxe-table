@@ -30,7 +30,7 @@
       :tree-config="{children: 'children'}"
       :select-config="{labelField: 'name', checkRowKeys: ['122000', '20000']}"
       @select-change="selectChangeEvent">
-      <vxe-table-column type="selection" title="Name" width="180" tree-node></vxe-table-column>
+      <vxe-table-column type="selection" title="Sex" width="180" tree-node></vxe-table-column>
       <vxe-table-column field="size" title="Size"></vxe-table-column>
       <vxe-table-column field="type" title="Type"></vxe-table-column>
       <vxe-table-column field="date" title="Date"></vxe-table-column>
@@ -73,7 +73,7 @@
       :tree-config="{children: 'children'}"
       :select-config="{labelField: 'name', checkMethod}"
       @select-change="selectChangeEvent">
-      <vxe-table-column type="selection" width="180" title="Name" tree-node></vxe-table-column>
+      <vxe-table-column type="selection" width="180" title="Sex" tree-node></vxe-table-column>
       <vxe-table-column field="size" title="Size"></vxe-table-column>
       <vxe-table-column field="type" title="Type"></vxe-table-column>
       <vxe-table-column field="date" title="Date"></vxe-table-column>
@@ -128,7 +128,7 @@ export default {
           :tree-config="{children: 'children'}"
           :select-config="{labelField: 'name', checkRowKeys: ['122000', '20000']}"
           @select-change="selectChangeEvent">
-          <vxe-table-column type="selection" title="Name" width="180" tree-node></vxe-table-column>
+          <vxe-table-column type="selection" title="Sex" width="180" tree-node></vxe-table-column>
           <vxe-table-column field="size" title="Size"></vxe-table-column>
           <vxe-table-column field="type" title="Type"></vxe-table-column>
           <vxe-table-column field="date" title="Date"></vxe-table-column>

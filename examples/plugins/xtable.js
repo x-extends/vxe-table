@@ -35,6 +35,7 @@ import 'vxe-table-plugin-iview/dist/style.css'
 import 'vxe-table-plugin-antd/dist/style.css'
 
 VXETable.setup({
+  // translate: key => i18n.t(key),
   i18n: (key, value) => i18n.t(key, value)
 })
 

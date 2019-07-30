@@ -242,7 +242,7 @@ export default {
                   'c--ellipsis': showEllipsis
                 }],
                 attrs: {
-                  title: showTitle ? (own.title || own.label) : null
+                  title: showTitle ? UtilTools.getFuncText(own.title || own.label) : null
                 }
               }, column.renderHeader(h, { $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn })),
               /**

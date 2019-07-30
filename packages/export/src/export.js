@@ -6,7 +6,7 @@ export default {
     let { columns, datas } = getCsvData(opts, oData, oColumns, tableElem)
     let content = '\ufeff'
     if (opts.isHeader) {
-      content += columns.map(({ own }) => own.title || own.label).join(',') + '\n'
+      content += columns.map(({ own }) => UtilTools.getFuncText(own.title || own.label)).join(',') + '\n'
     }
     datas.forEach((row, rowIndex) => {
       if (isOriginal) {

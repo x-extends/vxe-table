@@ -216,7 +216,9 @@
               oSize: 20,
               rSize: 80
             }
-          }
+          },
+          // 全局转换翻译
+          translate: : key => i18n.t(key)
         })
       </code>
     </pre>

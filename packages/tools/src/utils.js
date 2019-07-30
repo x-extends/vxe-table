@@ -59,6 +59,9 @@ export const UtilTools = {
   getSize ({ size, $parent }) {
     return size || ($parent && ['medium', 'small', 'mini'].indexOf($parent.size) > -1 ? $parent.size : null)
   },
+  getFuncText (content) {
+    return XEUtils.isFunction(content) ? content() : (GlobalConfig.translate ? GlobalConfig.translate(content) : content)
+  },
   // 行主键 key
   getRowkey ($table) {
     return $table.rowId

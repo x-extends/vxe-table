@@ -25,7 +25,7 @@
       :tree-config="{children: 'children'}"
       :radio-config="{labelField: 'name'}"
       :data.sync="tableData">
-      <vxe-table-column type="radio" title="Name" tree-node></vxe-table-column>
+      <vxe-table-column type="radio" title="Sex" tree-node></vxe-table-column>
       <vxe-table-column field="size" title="Size"></vxe-table-column>
       <vxe-table-column field="type" title="Type"></vxe-table-column>
       <vxe-table-column field="date" title="Date"></vxe-table-column>

@@ -1,6 +1,6 @@
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../conf'
-import { DomTools } from '../../tools'
+import { DomTools, UtilTools } from '../../tools'
 
 export default {
   name: 'VxeTooltip',
@@ -68,7 +68,7 @@ export default {
     }, [
       h('div', {
         class: 'vxe-table--tooltip-content'
-      }, this.$slots.content || (XEUtils.isFunction(message) ? message.call(this, h) : message)),
+      }, this.$slots.content || (XEUtils.isFunction(message) ? message.call(this, h) : UtilTools.getFuncText(message))),
       h('div', {
         class: 'vxe-table--tooltip-arrow',
         style: tipStore.arrowStyle

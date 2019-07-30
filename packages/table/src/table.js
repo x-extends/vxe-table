@@ -2056,7 +2056,7 @@ export default {
       let { own } = column
       if (tooltipStore.column !== column || !tooltipStore.visible) {
         // 在 v3.0 中废弃 label
-        this.showTooltip(evnt, own.title || own.label, column)
+        this.showTooltip(evnt, UtilTools.getFuncText(own.title || own.label), column)
       }
     },
     /**
