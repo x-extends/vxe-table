@@ -61,6 +61,9 @@
     &.row--hover {
       background-color: $vxe-table-row-hover-background-color;
     }
+    &.row--current {
+      background-color: $vxe-table-row-current-background-color;
+    }
     .vxe-body--column {
       border-bottom: 1px solid $vxe-table-border-color;
     }
@@ -72,25 +75,26 @@
   }
   &.t--stripe {
     .vxe-body--row {
-      &:nth-child(2n) {
-        background-color: $vxe-table-row-striped-background-color;
+      &:not(.row--current) {
+        &:nth-child(2n) {
+          background-color: $vxe-table-row-striped-background-color;
+        }
       }
     }
   }
   &.row--highlight {
     .vxe-body--row {
-      &:hover {
-        background-color: $vxe-table-row-hover-background-color;
-      }
-      &.row--current {
-        background-color: $vxe-table-row-current-background-color;
+      &:not(.row--current) {
+        &:hover {
+          background-color: $vxe-table-row-hover-background-color;
+        }
       }
     }
   }
   &.column--highlight {
     .vxe-header--column {
-      &:hover {
-        &:not(.col--index) {
+      &:not(.col--index) {
+        &:hover {
           background-color: $vxe-table-column-hover-background-color;
         }
       }
