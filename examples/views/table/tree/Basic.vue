@@ -8,7 +8,7 @@
       resizable
       :tree-config="{children: 'children'}"
       :data.sync="tableData">
-      <vxe-table-column field="name" title="Name"></vxe-table-column>
+      <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
       <vxe-table-column field="size" title="Size"></vxe-table-column>
       <vxe-table-column field="type" title="Type"></vxe-table-column>
       <vxe-table-column field="date" title="Date" tree-node></vxe-table-column>
@@ -27,7 +27,7 @@
       :data.sync="tableData"
       :tree-config="{children: 'children', expandAll: true}">
       <vxe-table-column type="index" width="160" title="序号" tree-node></vxe-table-column>
-      <vxe-table-column field="name" title="Name"></vxe-table-column>
+      <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
       <vxe-table-column field="size" title="Size"></vxe-table-column>
       <vxe-table-column field="type" title="Type"></vxe-table-column>
       <vxe-table-column field="date" title="Date"></vxe-table-column>
@@ -57,7 +57,7 @@ export default {
           resizable
           :tree-config="{children: 'children'}"
           :data.sync="tableData">
-          <vxe-table-column field="name" title="Name"></vxe-table-column>
+          <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
           <vxe-table-column field="size" title="Size"></vxe-table-column>
           <vxe-table-column field="type" title="Type"></vxe-table-column>
           <vxe-table-column field="date" title="Date" tree-node></vxe-table-column>
@@ -80,7 +80,7 @@ export default {
           :data.sync="tableData"
           :tree-config="{children: 'children', expandAll: true}">
           <vxe-table-column type="index" width="120" title="序号" tree-node></vxe-table-column>
-          <vxe-table-column field="name" title="Name"></vxe-table-column>
+          <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
           <vxe-table-column field="size" title="Size"></vxe-table-column>
           <vxe-table-column field="type" title="Type"></vxe-table-column>
           <vxe-table-column field="date" title="Date"></vxe-table-column>

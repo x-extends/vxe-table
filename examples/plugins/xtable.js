@@ -35,7 +35,7 @@ import 'vxe-table-plugin-iview/dist/style.css'
 import 'vxe-table-plugin-antd/dist/style.css'
 
 VXETable.setup({
-  // translate: key => i18n.t(key),
+  translate: key => key && key.indexOf('app.') > -1 ? i18n.t(key) : key, // 自动翻译以 app. 开头的键值
   i18n: (key, value) => i18n.t(key, value)
 })
 

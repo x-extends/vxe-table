@@ -5,7 +5,7 @@
 
     <vxe-toolbar :setting="{storage: false}">
       <template v-slot:buttons>
-        <vxe-button>按钮1</vxe-button>
+        <vxe-button>{{ $t('app.body.button.insert') }}</vxe-button>
         <vxe-button>按钮2</vxe-button>
       </template>
     </vxe-toolbar>
@@ -15,10 +15,10 @@
       height="400"
       :data.sync="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name"></vxe-table-column>
+      <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
       <vxe-table-column field="role" title="Role"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-      <vxe-table-column field="age" title="Age"></vxe-table-column>
+      <vxe-table-column field="sex" title="app.body.label.sex"></vxe-table-column>
+      <vxe-table-column field="age" title="app.body.label.age"></vxe-table-column>
       <vxe-table-column field="rate" title="Rate"></vxe-table-column>
     </vxe-table>
 
@@ -42,7 +42,7 @@ export default {
         `
         <vxe-toolbar :setting="{storage: false}">
           <template v-slot:buttons>
-            <vxe-button>按钮1</vxe-button>
+            <vxe-button>{{ $t('app.body.button.insert') }}</vxe-button>
             <vxe-button>按钮2</vxe-button>
           </template>
         </vxe-toolbar>
@@ -52,10 +52,11 @@ export default {
           height="400"
           :data.sync="tableData">
           <vxe-table-column type="index" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name"></vxe-table-column>
+          <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
           <vxe-table-column field="role" title="Role"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-          <vxe-table-column field="age" title="Age"></vxe-table-column>
+          <vxe-table-column field="sex" title="app.body.label.sex"></vxe-table-column>
+          <vxe-table-column field="age" title="app.body.label.age"></vxe-table-column>
+          <vxe-table-column field="rate" title="Rate"></vxe-table-column>
         </vxe-table>
         `,
         `

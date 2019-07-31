@@ -47,8 +47,8 @@ export default {
     return {
       tableColumn: [
         { type: 'index', width: 50 },
-        { field: 'name', title: () => this.$t('app.body.label.name') },
-        { field: 'sex', title: () => this.$t('app.body.label.sex'), showHeaderOverflow: true },
+        { field: 'name', title: 'app.body.label.name' },
+        { field: 'sex', title: 'app.body.label.sex', showHeaderOverflow: true },
         { field: 'address', title: 'Address', showOverflow: true }
       ],
       tableColumn2: [
@@ -85,8 +85,8 @@ export default {
             return {
               tableColumn: [
                 { type: 'index', width: 50 },
-                { field: 'name', title: () => this.$t('app.body.label.name') },
-                { field: 'sex', title: () => this.$t('app.body.label.sex'), showHeaderOverflow: true },
+                { field: 'name', title: 'app.body.label.name' },
+                { field: 'sex', title: 'app.body.label.sex', showHeaderOverflow: true },
                 { field: 'address', title: 'Address', showOverflow: true }
               ]
             }

@@ -145,12 +145,19 @@ module.exports = {
       button: {
         viewCode: 'View source',
         runDemo: 'Run demo',
-        showCode: 'Show code'
+        showCode: 'Show code',
+        refresh: 'Refresh',
+        insert: 'Insert',
+        save: 'Save',
+        markCancel: 'Mark/Cancel',
+        deleteSelectedRecords: 'Delete selected records'
       },
       label: {
         name: 'Name',
         age: 'Age',
-        sex: 'Sex'
+        sex: 'Sex',
+        createTime: 'Create Date',
+        updateTime: 'Update Date'
       },
       valid: {
         rName: 'The name of the required.'

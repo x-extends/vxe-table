@@ -9,8 +9,8 @@
       </code>
       <code class="javascript">{{ demoCodes[0] }}</code>
     </pre>
-    <h3>全局国际化</h3>
-    <p>若希望在项目中支持全局自动翻译，可以通过全局参数开启</p>
+    <h3>集成国际化</h3>
+    <p>若希望在项目中支持全局自动翻译，可以通过全局参数开启（将对列头、校验提示..进行自动翻译）</p>
     <pre>
       <code class="javascript">{{ demoCodes[1] }}</code>
       <code class="html">{{ demoCodes[2] }}</code>
