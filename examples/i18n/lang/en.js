@@ -7,6 +7,7 @@ module.exports = {
       nav: {
         start: 'Development',
         install: 'Install',
+        global: 'Global props',
         use: 'Quick start',
         theme: 'Custom theme',
         i18n: 'Internationalization',

@@ -64,31 +64,37 @@ export default {
             {
               label: 'app.aside.nav.install',
               locat: {
-                name: 'Install'
+                name: 'StartInstall'
               }
             },
             {
               label: 'app.aside.nav.use',
               locat: {
-                name: 'Use'
+                name: 'StartUse'
+              }
+            },
+            {
+              label: 'app.aside.nav.global',
+              locat: {
+                name: 'StartGlobal'
               }
             },
             {
               label: 'app.aside.nav.theme',
               locat: {
-                name: 'Theme'
+                name: 'StartTheme'
               }
             },
             {
               label: 'app.aside.nav.i18n',
               locat: {
-                name: 'I18n'
+                name: 'StartI18n'
               }
             },
             {
               label: 'app.aside.nav.advancedFunctions',
               locat: {
-                name: 'Advanced'
+                name: 'StartAdvanced'
               }
             }
           ]

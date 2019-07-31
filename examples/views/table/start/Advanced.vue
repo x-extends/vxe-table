@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2>渲染器</h2>
+    <h2>Renderer 渲染器</h2>
     <h3>内置的渲染</h3>
     <p>默认只带三个原生的渲染函数 input、textarea、select，你也可以根据不同业务实现对应的渲染器</p>
     <h3>渲染器和插槽对比</h3>

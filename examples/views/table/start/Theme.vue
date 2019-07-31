@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3>主题</h3>
+    <h3>Theme 主题</h3>
     <p>Case 1.使用默认的主题样式</p>
     <pre>
       <code class="scss">
