@@ -1193,7 +1193,7 @@ const apis = [
         descKey: 'app.api.table.desc.filterChange',
         type: '',
         enum: '',
-        defVal: '{column,property,values,filters}',
+        defVal: '{column,property,values,datas,filters}',
         list: []
       },
       {
