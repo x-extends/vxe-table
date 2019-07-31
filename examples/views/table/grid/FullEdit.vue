@@ -68,11 +68,11 @@ export default {
       toolbar: {
         id: 'full_edit_1',
         buttons: [
-          { code: 'reload', name: '刷新' },
-          { code: 'insert_actived', name: '新增' },
-          { code: 'mark_cancel', name: '标记/取消' },
+          { code: 'reload', name: 'app.body.button.refresh' },
+          { code: 'insert_actived', name: 'app.body.button.insert' },
+          { code: 'mark_cancel', name: 'app.body.button.markCancel' },
           { code: 'remove_selection', name: '移除' },
-          { code: 'save', name: '保存' },
+          { code: 'save', name: 'app.body.button.save' },
           { code: 'export', name: '导出.csv' }
         ],
         resizable: {
@@ -147,11 +147,11 @@ export default {
               toolbar: {
                 id: 'full_edit_1',
                 buttons: [
-                  { code: 'reload', name: '刷新' },
-                  { code: 'insert_actived', name: '新增' },
-                  { code: 'mark_cancel', name: '标记/取消' },
+                  { code: 'reload', name: 'app.body.button.refresh' },
+                  { code: 'insert_actived', name: 'app.body.button.insert' },
+                  { code: 'mark_cancel', name: 'app.body.button.markCancel' },
                   { code: 'remove_selection', name: '移除' },
-                  { code: 'save', name: '保存' },
+                  { code: 'save', name: 'app.body.button.save' },
                   { code: 'export', name: '导出.csv' }
                 ],
                 resizable: {

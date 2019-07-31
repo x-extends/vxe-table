@@ -15,13 +15,13 @@
           <span>seq= {{ seq }}</span>
         </template>
       </vxe-table-column>
-      <vxe-table-column field="name" title="Name" sortable>
+      <vxe-table-column field="name" title="app.body.label.name" sortable>
         <template v-slot="{ rowIndex, columnIndex }">
           <span>rowIndex= {{ rowIndex }}</span>
           <span>columnIndex= {{ columnIndex }}</span>
         </template>
       </vxe-table-column>
-      <vxe-table-column field="sex" title="Sex" :filters="[{data: ''}]" :filter-method="filterSexMethod">
+      <vxe-table-column field="sex" title="app.body.label.sex" :filters="[{data: ''}]" :filter-method="filterSexMethod">
         <template v-slot:header="{ column }">
           <vxe-tooltip v-model="showSexTip" content="这样玩也行？">
             <span style="color: red;" @click="showSexTip = !showSexTip">这样玩也行</span>
@@ -84,13 +84,13 @@ export default {
               <span>seq= {{ seq }}</span>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="name" title="Name" sortable>
+          <vxe-table-column field="name" title="app.body.label.name" sortable>
             <template v-slot="{ rowIndex, columnIndex }">
               <span>rowIndex= {{ rowIndex }}</span>
               <span>columnIndex= {{ columnIndex }}</span>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="sex" title="Sex" :filters="[{data: ''}]" :filter-method="filterSexMethod">
+          <vxe-table-column field="sex" title="app.body.label.sex" :filters="[{data: ''}]" :filter-method="filterSexMethod">
             <template v-slot:header="{ column }">
               <vxe-tooltip v-model="showSexTip" content="这样玩也行？">
                 <span style="color: red;" @click="showSexTip = !showSexTip">这样玩也行</span>

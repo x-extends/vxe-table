@@ -40,10 +40,10 @@ export default {
       toolbar: {
         id: 'treeEdit_demo1',
         buttons: [
-          { code: 'reload', name: '刷新' },
-          { code: 'insert_actived', name: '新增' },
-          { code: 'mark_cancel', name: '标记/取消' },
-          { code: 'save', name: '保存' },
+          { code: 'reload', name: 'app.body.button.refresh' },
+          { code: 'insert_actived', name: 'app.body.button.insert' },
+          { code: 'mark_cancel', name: 'app.body.button.markCancel' },
+          { code: 'save', name: 'app.body.button.save' },
           { code: 'export', name: '导出.csv' }
         ],
         resizable: {
@@ -57,8 +57,8 @@ export default {
         { type: 'selection', title: '全选', width: 180, treeNode: true },
         { field: 'name', title: '名称', editRender: { name: 'input' } },
         { field: 'size', title: '大小', editRender: { name: 'input' } },
-        { field: 'createTime', title: '创建时间', formatter: this.formatterDate },
-        { field: 'updateTime', title: '修改时间', formatter: this.formatterDate }
+        { field: 'createTime', title: 'app.body.label.createTime', formatter: this.formatterDate },
+        { field: 'updateTime', title: 'app.body.label.updateTime', formatter: this.formatterDate }
       ],
       demoCodes: [
         `
@@ -86,10 +86,10 @@ export default {
               toolbar: {
                 id: 'treeEdit_demo1',
                 buttons: [
-                  { code: 'reload', name: '刷新' },
-                  { code: 'insert_actived', name: '新增' },
-                  { code: 'mark_cancel', name: '标记/取消' },
-                  { code: 'save', name: '保存' },
+                  { code: 'reload', name: 'app.body.button.refresh' },
+                  { code: 'insert_actived', name: 'app.body.button.insert' },
+                  { code: 'mark_cancel', name: 'app.body.button.markCancel' },
+                  { code: 'save', name: 'app.body.button.save' },
                   { code: 'export', name: '导出.csv' }
                 ],
                 resizable: {
@@ -103,8 +103,8 @@ export default {
                 { type: 'selection', title: '全选', width: 180, treeNode: true },
                 { field: 'name', title: '名称', editRender: { name: 'input' } },
                 { field: 'size', title: '大小', editRender: { name: 'input' } },
-                { field: 'createTime', title: '创建时间', formatter: this.formatterDate },
-                { field: 'updateTime', title: '修改时间', formatter: this.formatterDate }
+                { field: 'createTime', title: 'app.body.label.createTime', formatter: this.formatterDate },
+                { field: 'updateTime', title: 'app.body.label.updateTime', formatter: this.formatterDate }
               ]
             }
           },

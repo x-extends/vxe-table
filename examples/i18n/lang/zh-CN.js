@@ -143,12 +143,19 @@ module.exports = {
       button: {
         viewCode: '查看代码',
         runDemo: '在线运行',
-        showCode: '显示代码'
+        showCode: '显示代码',
+        refresh: '刷新',
+        insert: '新增',
+        save: '保存',
+        markCancel: '标记/取消',
+        deleteSelectedRecords: '删除选中'
       },
       label: {
         name: '名字',
         age: '年龄',
-        sex: '性别'
+        sex: '性别',
+        createTime: '创建时间',
+        updateTime: '更新时间'
       },
       valid: {
         rName: '名称必须填写'

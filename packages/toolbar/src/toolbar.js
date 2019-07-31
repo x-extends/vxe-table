@@ -90,7 +90,7 @@ export default {
           on: {
             click: evnt => this.btnEvent(item, evnt)
           }
-        }, XEUtils.isFunction(item.name) ? item.name() : item.name)
+        }, UtilTools.getFuncText(item.name))
       })),
       setting ? h('div', {
         class: ['vxe-custom--wrapper', {

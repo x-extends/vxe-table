@@ -1,4 +1,5 @@
 import XEUtils from 'xe-utils'
+import { UtilTools } from '../../tools'
 
 export default {
   name: 'VxeButton',
@@ -24,6 +25,6 @@ export default {
         disabled: disabled
       },
       on: XEUtils.objectMap($listeners, (cb, type) => evnt => this.$emit(type, evnt))
-    }, this.$slots.default)
+    }, UtilTools.getFuncText(this.$slots.default))
   }
 }
