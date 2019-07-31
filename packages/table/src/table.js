@@ -2062,10 +2062,10 @@ export default {
     /**
      * 触发表尾 tooltip 事件
      */
-    triggerFooterTooltipEvent (evnt, { $rowIndex, column, columnIndex }) {
-      let { tooltipStore, footerData } = this
+    triggerFooterTooltipEvent (evnt, { $rowIndex, column }) {
+      let tooltipStore = this.tooltipStore
       if (tooltipStore.column !== column || !tooltipStore.visible) {
-        this.showTooltip(evnt, footerData[$rowIndex][columnIndex], column)
+        this.showTooltip(evnt, this.footerData[$rowIndex][this.tableColumn.indexOf(column)], column)
       }
     },
     /**
@@ -3863,9 +3863,9 @@ export default {
      * 更新表尾合计
      */
     updateFooter () {
-      let { showFooter, visibleColumn, afterFullData, footerMethod } = this
+      let { showFooter, tableColumn, footerMethod } = this
       if (showFooter && footerMethod) {
-        this.footerData = visibleColumn.length ? footerMethod({ columns: visibleColumn, data: this.editStore.insertList.concat(afterFullData) }) : []
+        this.footerData = tableColumn.length ? footerMethod({ columns: tableColumn, data: this.tableFullData }) : []
       }
       return this.$nextTick()
     },
@@ -4166,6 +4166,7 @@ export default {
         filename: 'table.csv',
         original: !!treeConfig,
         isHeader: true,
+        isFooter: true,
         download: true,
         data: null,
         columns: null,
@@ -4175,15 +4176,18 @@ export default {
       if (opts.filename.indexOf('.csv') === -1) {
         opts.filename += '.csv'
       }
-      if (scrollXLoad || scrollYLoad) {
-        opts.original = true
+      if (!opts.original) {
+        if (scrollXLoad || scrollYLoad) {
+          opts.original = true
+          console.warn('[vxe-table] Virtual scrolling can only export source data, please set original=true.')
+        }
       }
       let columns = visibleColumn
       let oData = this.getTableData().fullData
       if (treeConfig) {
         oData = XEUtils.toTreeArray(oData, treeConfig)
       }
-      return ExportTools.downloadCsc(opts, ExportTools.getCsvContent(opts, oData, columns, this.$el))
+      return ExportTools.downloadCsc(opts, ExportTools.getCsvContent(this, opts, columns, oData))
     },
 
     /*************************

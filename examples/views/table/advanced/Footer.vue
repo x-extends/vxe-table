@@ -122,7 +122,7 @@ export default {
                   if (['age', 'rate'].includes(column.property)) {
                     return XEUtils.mean(data, column.property)
                   }
-                  return '-'
+                  return null
                 }),
                 columns.map((column, columnIndex) => {
                   if (columnIndex === 0) {
@@ -131,7 +131,7 @@ export default {
                   if (['age', 'rate'].includes(column.property)) {
                     return XEUtils.sum(data, column.property)
                   }
-                  return '-'
+                  return null
                 })
               ]
             }
@@ -183,7 +183,7 @@ export default {
                   if (['age', 'rate'].includes(column.property)) {
                     return XEUtils.mean(data, column.property)
                   }
-                  return '-'
+                  return null
                 }),
                 columns.map((column, columnIndex) => {
                   if (columnIndex === 0) {
@@ -192,7 +192,7 @@ export default {
                   if (['age', 'rate'].includes(column.property)) {
                     return XEUtils.sum(data, column.property)
                   }
-                  return '-'
+                  return null
                 })
               ]
             }
@@ -247,7 +247,7 @@ export default {
                   if (['age', 'rate'].includes(column.property)) {
                     return XEUtils.mean(data, column.property)
                   }
-                  return '-'
+                  return null
                 }),
                 columns.map((column, columnIndex) => {
                   if (columnIndex === 0) {
@@ -256,7 +256,7 @@ export default {
                   if (['age', 'rate'].includes(column.property)) {
                     return XEUtils.sum(data, column.property)
                   }
-                  return '-'
+                  return null
                 })
               ]
             }
@@ -294,7 +294,7 @@ export default {
           if (['age', 'rate'].includes(column.property)) {
             return XEUtils.mean(data, column.property)
           }
-          return '-'
+          return null
         }),
         columns.map((column, columnIndex) => {
           if (columnIndex === 0) {
@@ -303,7 +303,7 @@ export default {
           if (['age', 'rate'].includes(column.property)) {
             return XEUtils.sum(data, column.property)
           }
-          return '-'
+          return null
         })
       ]
     }

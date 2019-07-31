@@ -1984,7 +1984,7 @@ const apis = [
           },
           {
             name: 'original',
-            desc: '是否导出源数据（虚拟渲染启用后必须是 true）',
+            desc: '是否导出源数据（特殊场景只能是 true， 比如虚拟滚动、优化的固定列..）',
             type: 'Boolean',
             enum: '',
             defVal: 'false',
@@ -1992,7 +1992,15 @@ const apis = [
           },
           {
             name: 'isHeader',
-            desc: '是否显示表头',
+            desc: '是否导出表头',
+            type: 'Boolean',
+            enum: '',
+            defVal: 'true',
+            list: []
+          },
+          {
+            name: 'isFooter',
+            desc: '是否导出表尾',
             type: 'Boolean',
             enum: '',
             defVal: 'true',

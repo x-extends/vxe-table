@@ -137,7 +137,7 @@ export default {
             }, [
               h('div', {
                 class: 'vxe-cell'
-              }, UtilTools.formatText(list[$columnIndex], 1))
+              }, UtilTools.formatText(list[$table.tableColumn.indexOf(column)], 1))
             ])
           }).concat([
             h('td', {
