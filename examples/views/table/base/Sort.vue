@@ -45,7 +45,7 @@
       <code class="javascript">{{ demoCodes[3] }}</code>
     </pre>
 
-    <p>点击列头排序的实现，通过 <table-api-link prop="sort-config"/>={trigger: 'cell'} 就可以实现</p>
+    <p>点击表头排序，可以通过配置 trigger 设置触发源</p>
 
     <vxe-table
       border
