@@ -1,11 +1,12 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-const Install = () => import(/* webpackChunkName: "start" */ './views/table/start/Install.vue')
-const Use = () => import(/* webpackChunkName: "start" */ './views/table/start/Use.vue')
-const Theme = () => import(/* webpackChunkName: "start" */ './views/table/start/Theme.vue')
-const I18n = () => import(/* webpackChunkName: "start" */ './views/table/start/I18n.vue')
-const Advanced = () => import(/* webpackChunkName: "start" */ './views/table/start/Advanced.vue')
+const StartInstall = () => import(/* webpackChunkName: "start" */ './views/table/start/Install.vue')
+const StartUse = () => import(/* webpackChunkName: "start" */ './views/table/start/Use.vue')
+const StartGlobal = () => import(/* webpackChunkName: "start" */ './views/table/start/Global.vue')
+const StartTheme = () => import(/* webpackChunkName: "start" */ './views/table/start/Theme.vue')
+const StartI18n = () => import(/* webpackChunkName: "start" */ './views/table/start/I18n.vue')
+const StartAdvanced = () => import(/* webpackChunkName: "start" */ './views/table/start/Advanced.vue')
 
 const TableIcon = () => import(/* webpackChunkName: "base" */ './views/table/base/Icon.vue')
 const TableBasic = () => import(/* webpackChunkName: "base" */ './views/table/base/Basic.vue')
@@ -148,28 +149,33 @@ export default new Router({
     },
     {
       path: '/table/start/install',
-      name: 'Install',
-      component: Install
+      name: 'StartInstall',
+      component: StartInstall
     },
     {
       path: '/table/start/use',
-      name: 'Use',
-      component: Use
+      name: 'StartUse',
+      component: StartUse
+    },
+    {
+      path: '/table/start/global',
+      name: 'StartGlobal',
+      component: StartGlobal
     },
     {
       path: '/table/start/theme',
-      name: 'Theme',
-      component: Theme
+      name: 'StartTheme',
+      component: StartTheme
     },
     {
       path: '/table/start/i18n',
-      name: 'I18n',
-      component: I18n
+      name: 'StartI18n',
+      component: StartI18n
     },
     {
       path: '/table/start/advanced',
-      name: 'Advanced',
-      component: Advanced
+      name: 'StartAdvanced',
+      component: StartAdvanced
     },
     {
       path: '/table/base/icon',
