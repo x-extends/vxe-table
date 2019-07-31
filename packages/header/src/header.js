@@ -106,7 +106,8 @@ export default {
       scrollXLoad,
       scrollXStore,
       scrollbarWidth,
-      getColumnMapIndex
+      getColumnMapIndex,
+      sortOpts
     } = $table
     // v2.0 废弃属性，保留兼容
     let allColumnHeaderOverflow = XEUtils.isBoolean(oldHeaderOverflow) ? oldHeaderOverflow : allHeaderOverflow
@@ -179,7 +180,7 @@ export default {
               thOns.mouseover = evnt => $table.triggerHeaderTooltipEvent(evnt, { $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType })
               thOns.mouseout = $table.clostTooltip
             }
-            if (highlightCurrentColumn || tableListeners['header-cell-click']) {
+            if (highlightCurrentColumn || tableListeners['header-cell-click'] || sortOpts.trigger === 'cell') {
               thOns.click = evnt => $table.triggerHeaderCellClickEvent(evnt, { $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, cell: evnt.currentTarget })
             }
             if (tableListeners['header-cell-dblclick']) {

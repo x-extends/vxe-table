@@ -220,6 +220,7 @@ module.exports = {
           columnKey: '是否需要为每一列的 VNode 设置 key 属性（非特殊情况下不需要使用）',
           rowKey: '是否需要为每一行的 VNode 设置 key 属性（非特殊情况下没必要设置）',
           rowId: '自定义行数据唯一主键的字段名（对于启用某些高级功能时可能会用到）',
+          sortConfig: '排序配置项',
           radioConfig: '单选框配置项',
           selectConfig: '复选框配置项',
           tooltipConfig: 'tooltip 配置项',
