@@ -45,15 +45,16 @@
       <code class="javascript">{{ demoCodes[3] }}</code>
     </pre>
 
-    <p>点击列头排序的实现，通过 <table-api-link prop="header-cell-click"/> 事件和 <table-api-link prop="sort"/> 方法就可以实现</p>
+    <p>点击列头排序的实现，通过 <table-api-link prop="sort-config"/>={trigger: 'cell'} 就可以实现</p>
 
     <vxe-table
       border
       highlight-hover-row
+      highlight-hover-column
       ref="xTable"
       height="300"
       :data.sync="tableData"
-      @header-cell-click="headerCellClickEvent">
+      :sort-config="{trigger: 'cell'}">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
       <vxe-table-column field="nickname" title="Nickname" sortable></vxe-table-column>
@@ -135,10 +136,11 @@ export default {
         <vxe-table
           border
           highlight-hover-row
+          highlight-hover-column
           ref="xTable"
           height="300"
           :data.sync="tableData"
-          @header-cell-click="headerCellClickEvent">
+          :sort-config="{trigger: 'cell'}">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
           <vxe-table-column field="nickname" title="Nickname" sortable></vxe-table-column>
@@ -156,13 +158,6 @@ export default {
           },
           created () {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 50)
-          },
-          methods: {
-            headerCellClickEvent ({ column, triggerResizable, triggerSort, triggerFilter }) {
-              if (!(triggerResizable || triggerSort || triggerFilter)) {
-                this.$refs.xTable.sort(column.property)
-              }
-            }
           }
         }
         `
@@ -176,14 +171,6 @@ export default {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
       hljs.highlightBlock(block)
     })
-  },
-  methods: {
-    headerCellClickEvent ({ column, triggerResizable, triggerSort, triggerFilter }) {
-      // 如果点击了列并且没触发对应的按钮、则手动排序、列宽拖动
-      if (!(triggerResizable || triggerSort || triggerFilter)) {
-        this.$refs.xTable.sort(column.property)
-      }
-    }
   }
 }
 </script>

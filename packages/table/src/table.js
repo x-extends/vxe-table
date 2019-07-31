@@ -112,13 +112,13 @@ export default {
     // 只对 type=index 时有效，自定义序号的起始值
     startIndex: { type: Number, default: 0 },
     // 是否要高亮当前选中行
-    highlightCurrentRow: Boolean,
+    highlightCurrentRow: { type: Boolean, default: () => GlobalConfig.highlightCurrentRow },
     // 鼠标移到行是否要高亮显示
-    highlightHoverRow: Boolean,
+    highlightHoverRow: { type: Boolean, default: () => GlobalConfig.highlightHoverRow },
     // 是否要高亮当前选中列
-    highlightCurrentColumn: Boolean,
+    highlightCurrentColumn: { type: Boolean, default: () => GlobalConfig.highlightCurrentColumn },
     // 鼠标移到列是否要高亮显示
-    highlightHoverColumn: Boolean,
+    highlightHoverColumn: { type: Boolean, default: () => GlobalConfig.highlightHoverColumn },
     // 激活单元格编辑时是否高亮显示
     highlightCell: Boolean,
     // 是否显示表尾合计
@@ -155,6 +155,8 @@ export default {
     rowId: { type: String, default: () => GlobalConfig.rowId },
     // 是否自动根据父容器响应式调整表格宽高
     autoResize: Boolean,
+    // 排序配置项
+    sortConfig: Object,
     // 单选配置
     radioConfig: Object,
     // 多选配置项
@@ -317,6 +319,9 @@ export default {
     vaildTipOpts () {
       return Object.assign({ isArrow: false }, this.tooltipConfig)
     },
+    sortOpts () {
+      return Object.assign({}, GlobalConfig.sortConfig, this.sortConfig)
+    },
     // 是否使用了分组表头
     isGroup () {
       return this.collectColumn.some(column => UtilTools.hasChildrenList(column))
@@ -334,15 +339,15 @@ export default {
       return this.tableColumn.some(column => column.filters && column.filters.length)
     },
     headerCtxMenu () {
-      return this.ctxMenuConfig.header && this.ctxMenuConfig.header.options ? this.ctxMenuConfig.header.options : []
+      return this.ctxMenuOpts.header && this.ctxMenuOpts.header.options ? this.ctxMenuOpts.header.options : []
     },
     bodyCtxMenu () {
-      return this.ctxMenuConfig.body && this.ctxMenuConfig.body.options ? this.ctxMenuConfig.body.options : []
+      return this.ctxMenuOpts.body && this.ctxMenuOpts.body.options ? this.ctxMenuOpts.body.options : []
     },
     isCtxMenu () {
       return this.headerCtxMenu.length || this.bodyCtxMenu.length
     },
-    ctxMenuConfig () {
+    ctxMenuOpts () {
       return Object.assign({}, GlobalConfig.menu, this.contextMenu)
     },
     ctxMenuList () {
@@ -1965,9 +1970,9 @@ export default {
      * 显示快捷菜单
      */
     openContextMenu (evnt, type, params) {
-      let { ctxMenuStore, ctxMenuConfig } = this
-      let config = ctxMenuConfig[type]
-      let visibleMethod = ctxMenuConfig.visibleMethod
+      let { ctxMenuStore, ctxMenuOpts } = this
+      let config = ctxMenuOpts[type]
+      let visibleMethod = ctxMenuOpts.visibleMethod
       if (config) {
         let { options, disabled } = config
         if (disabled) {
@@ -2654,13 +2659,15 @@ export default {
     //   }
     // },
     triggerHeaderCellClickEvent (evnt, params) {
-      let { _lastResizeTime } = this
+      let { _lastResizeTime, sortOpts } = this
       let { column, cell } = params
-      UtilTools.emitEvent(this, 'header-cell-click', [Object.assign({
-        triggerResizable: _lastResizeTime && _lastResizeTime > Date.now() - 300,
-        triggerSort: this.getEventTargetNode(evnt, cell, 'vxe-sort-wrapper').flag,
-        triggerFilter: this.getEventTargetNode(evnt, cell, 'vxe-filter-wrapper').flag
-      }, params), evnt])
+      let triggerResizable = _lastResizeTime && _lastResizeTime > Date.now() - 300
+      let triggerSort = this.getEventTargetNode(evnt, cell, 'vxe-sort-wrapper').flag
+      let triggerFilter = this.getEventTargetNode(evnt, cell, 'vxe-filter-wrapper').flag
+      if (sortOpts.trigger === 'cell' && !(triggerResizable || triggerSort || triggerFilter)) {
+        this.sort(column.property)
+      }
+      UtilTools.emitEvent(this, 'header-cell-click', [Object.assign({ triggerResizable, triggerSort, triggerFilter }, params), evnt])
       if (this.highlightCurrentColumn) {
         return this.setCurrentColumn(column, true)
       }

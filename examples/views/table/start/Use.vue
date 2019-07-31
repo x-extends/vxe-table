@@ -131,11 +131,17 @@
           resizable: false,
           fit: true,
           showHeader: true,
+          highlightCurrentRow: false,
+          highlightHoverRow: false,
+          highlightCurrentColumn: false,
+          highlightHoverColumn: false,
+          rowId: '_XID',
+          sortConfig: {
+            trigger: 'default'
+          },
           validConfig: {
             message: 'default'
           },
-          // 行数据的唯一主键字段名
-          rowId: '_XID',
           // 版本号（对于某些带 Storage 数据储存的功能有用到，上升版本号可以用于重置 Storage 数据）
           version: 0,
           // 自定义图标配置（如果全部图标都使用自定义，就不需要引入 Icon 模块了，减少体积）

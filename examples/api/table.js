@@ -397,6 +397,23 @@ const apis = [
         list: []
       },
       {
+        name: 'sort-config',
+        descKey: 'app.api.table.desc.sortConfig',
+        type: 'Object',
+        enum: '',
+        defVal: '',
+        list: [
+          {
+            name: 'trigger',
+            desc: '触发方式',
+            type: 'String',
+            enum: 'default（点击按钮触发）,cell（点击表头触发）',
+            defVal: 'default',
+            list: []
+          }
+        ]
+      },
+      {
         name: 'radio-config',
         descKey: 'app.api.table.desc.radioConfig',
         type: 'Object',

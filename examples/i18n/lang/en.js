@@ -223,6 +223,7 @@ module.exports = {
           columnKey: 'Whether the key attribute needs to be set for each column VNode (not required for non-exceptional cases)',
           rowKey: 'Do you need to set the key attribute for VNode on each row (not necessary for non-exceptional cases)',
           rowId: 'Field names for custom row data unique primary keys (may be used when some advanced functionality is enabled)',
+          sortConfig: 'Sort configuration',
           radioConfig: 'Radio configuration',
           selectConfig: 'Checkbox configuration',
           tooltipConfig: 'tooltip configuration',

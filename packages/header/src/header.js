@@ -122,7 +122,8 @@ export default {
       mouseConfig = {},
       scrollXLoad,
       overflowX,
-      getColumnIndex
+      getColumnIndex,
+      sortOpts
     } = $table
     // 横向滚动渲染
     if (scrollXLoad) {
@@ -207,7 +208,7 @@ export default {
                 $table.clostTooltip()
               }
             }
-            if (highlightCurrentColumn || tableListeners['header-cell-click'] || mouseConfig.checked) {
+            if (highlightCurrentColumn || tableListeners['header-cell-click'] || mouseConfig.checked || sortOpts.trigger === 'cell') {
               thOns.click = evnt => $table.triggerHeaderCellClickEvent(evnt, { $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, cell: evnt.currentTarget })
             }
             if (tableListeners['header-cell-dblclick']) {
