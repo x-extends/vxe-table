@@ -227,7 +227,7 @@ export default {
                   if (['age', 'rate'].includes(column.property)) {
                     return XEUtils.mean(data, column.property)
                   }
-                  return '-'
+                  return null
                 })
               ]
             }
@@ -259,7 +259,7 @@ export default {
           if (['age', 'rate'].includes(column.property)) {
             return XEUtils.mean(data, column.property)
           }
-          return '-'
+          return null
         })
       ]
     }

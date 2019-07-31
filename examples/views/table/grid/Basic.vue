@@ -144,7 +144,7 @@ export default {
                   if (['age', 'rate'].includes(column.property)) {
                     return XEUtils.sum(data, column.property)
                   }
-                  return '-'
+                  return null
                 })
               ]
             }
@@ -173,7 +173,7 @@ export default {
           if (['age', 'rate'].includes(column.property)) {
             return XEUtils.sum(data, column.property)
           }
-          return '-'
+          return null
         })
       ]
     }
