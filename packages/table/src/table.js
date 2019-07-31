@@ -3299,9 +3299,11 @@ export default {
       let { column } = filterStore
       let { property } = column
       let values = []
+      let datas = []
       column.filters.forEach(item => {
         if (item.checked) {
           values.push(item.value)
+          datas.push(item.data)
         }
       })
       filterStore.visible = false
@@ -3313,18 +3315,20 @@ export default {
       visibleColumn.filter(column => {
         let { property, filters } = column
         let valueList = []
+        let dataList = []
         if (filters && filters.length) {
           filters.forEach(item => {
             if (item.checked) {
               valueList.push(item.value)
+              dataList.push(item.data)
             }
           })
           // 在 v3.0 中废弃 prop
-          filterList.push({ column, property, field: property, prop: property, values: valueList })
+          filterList.push({ column, property, field: property, prop: property, values: valueList, datas: dataList })
         }
       })
       // 在 v3.0 中废弃 prop
-      UtilTools.emitEvent(this, 'filter-change', [{ column, property, field: property, prop: property, values, filters: filterList }])
+      UtilTools.emitEvent(this, 'filter-change', [{ column, property, field: property, prop: property, values, datas, filters: filterList }])
       if (scrollXLoad || scrollYLoad) {
         this.clearScroll()
       }
