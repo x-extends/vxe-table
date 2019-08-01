@@ -69,7 +69,7 @@
     "webpack-cli": "^3.3.1",
     "xe-ajax": "^3.6.0",
     "xe-ajax-mock": "^1.8.0",
-    "xe-clipboard": "^1.1.2",
+    "xe-clipboard": "^1.2.0",
     "xe-utils": "^1.9.6",
     "xlsx": "^0.14.3"
   },
