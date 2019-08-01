@@ -9,14 +9,14 @@
   &.size--mini {
     font-size: 12px;
     > input {
-      &+.radio--icon {
+      &+.vxe-radio--icon {
         font-size: 14px;
       }
     }
   }
   > input {
     display: none;
-    &+.radio--icon {
+    &+.vxe-radio--icon {
       position: relative;
       display: inline-block;
       width: 1em;
@@ -41,10 +41,10 @@
         transform: translate(-50%,-50%);
       }
     }
-    &:checked+.radio--icon {
+    &:checked+.vxe-radio--icon {
       background-color: $vxe-primary-color;
       border-color: $vxe-primary-color;
-      &+.radio--label {
+      &+.vxe-radio--label {
         color: $vxe-primary-color;
       }
     }
@@ -52,24 +52,23 @@
   &.is--disabled {
     cursor: not-allowed;
     > input {
-      &+.radio--icon {
+      &+.vxe-radio--icon {
         border-color: $vxe-input-border-color;
         background-color: $vxe-input-disabled-color;
         &:before {
           border-color: #c0c4cc;
         }
       }
-      &:checked+.radio--icon {
+      &:checked+.vxe-radio--icon {
         border-color: $vxe-input-border-color;
         background-color: $vxe-input-disabled-color;
-        &+.radio--label,
-        &+.checkbox--label {
+        &+.vxe-radio--label {
           color: $vxe-input-border-color;
         }
       }
     }
   }
-  .radio--label {
+  .vxe-radio--label {
     padding-left: 5px;
     vertical-align: middle;
     display: inline-block;

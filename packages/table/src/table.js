@@ -104,9 +104,9 @@ export default {
     // 表格是否加载中
     loading: Boolean,
     // 所有的列对其方式
-    align: String,
+    align: { type: String, default: () => GlobalConfig.align },
     // 所有的表头列的对齐方式
-    headerAlign: String,
+    headerAlign: { type: String, default: () => GlobalConfig.headerAlign },
     // 是否显示表头
     showHeader: { type: Boolean, default: () => GlobalConfig.showHeader },
     // 只对 type=index 时有效，自定义序号的起始值

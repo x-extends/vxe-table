@@ -18,6 +18,8 @@
           size: 'small',
           showOverflow: null,
           showHeaderOverflow: null,
+          align: null,
+          headerAlign: null,
           stripe: false,
           border: false,
           resizable: false,

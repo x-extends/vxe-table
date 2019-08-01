@@ -47,6 +47,7 @@ export default {
         })
 
         Vue.use(VXETable, {
+          // 对组件内置的提示语进行国际化翻译
           i18n: (key, value) => i18n.t(key, value)
         })
 
@@ -54,6 +55,7 @@ export default {
         `,
         `
         Vue.use(VXETable, {
+          // 对外部参数的内容进行国际化翻译
           translate: : key => i18n.t(key)
         })
         `,

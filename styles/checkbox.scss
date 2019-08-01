@@ -9,14 +9,14 @@
   &.size--mini {
     font-size: 12px;
     > input {
-      &+.checkbox--icon {
+      &+.vxe-checkbox--icon {
         font-size: 14px;
       }
     }
   }
   > input {
     display: none;
-    &+.checkbox--icon {
+    &+.vxe-checkbox--icon {
       position: relative;
       display: inline-block;
       width: 1em;
@@ -31,7 +31,7 @@
         position: absolute;
       }
     }
-    &:checked+.checkbox--icon {
+    &:checked+.vxe-checkbox--icon {
       background-color: $vxe-primary-color;
       border-color: $vxe-primary-color;
       &:before {
@@ -46,14 +46,14 @@
         border-top: 0;
         transform: rotate(45deg);
       }
-      &+.checkbox--label {
+      &+.vxe-checkbox--label {
         color: $vxe-primary-color;
       }
     }
   }
   &.is--indeterminate {
     > input {
-      &+.checkbox--icon {
+      &+.vxe-checkbox--icon {
         background-color: $vxe-primary-color;
         border-color: $vxe-primary-color;
         &:before {
@@ -70,23 +70,23 @@
   &.is--disabled {
     cursor: not-allowed;
     > input {
-      &+.checkbox--icon {
+      &+.vxe-checkbox--icon {
         border-color: $vxe-input-border-color;
         background-color: $vxe-input-disabled-color;
         &:before {
           border-color: #c0c4cc;
         }
-        &+.checkbox--label {
+        &+.vxe-checkbox--label {
           color: $vxe-input-border-color;
         }
       }
-      &:checked+.checkbox--icon {
+      &:checked+.vxe-checkbox--icon {
         border-color: $vxe-input-border-color;
         background-color: $vxe-input-disabled-color;
       }
     }
   }
-  .checkbox--label {
+  .vxe-checkbox--label {
     padding-left: 5px;
     vertical-align: middle;
     display: inline-block;
