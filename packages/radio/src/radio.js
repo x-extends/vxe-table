@@ -39,10 +39,10 @@ export default {
         }
       }),
       h('span', {
-        class: ['radio--icon']
+        class: 'vxe-radio--icon'
       }),
       $slots.default ? h('span', {
-        class: ['radio--label']
+        class: 'vxe-radio--label'
       }, $slots.default) : null
     ])
   }

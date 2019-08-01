@@ -138,13 +138,13 @@ export default new Router({
     {
       path: '*',
       redirect: {
-        name: 'Install'
+        name: 'StartInstall'
       }
     },
     {
       path: '/',
       redirect: {
-        name: 'Install'
+        name: 'StartInstall'
       }
     },
     {

@@ -61,10 +61,10 @@ export default {
                 }
               }),
               h('span', {
-                class: ['checkbox--icon']
+                class: ['vxe-checkbox--icon']
               }),
               h('span', {
-                class: ['checkbox--label']
+                class: ['vxe-checkbox--label']
               }, GlobalConfig.i18n('vxe.table.allFilter'))
             ])
             : h('span', {
@@ -103,10 +103,10 @@ export default {
                   }
                 }),
                 h('span', {
-                  class: ['checkbox--icon']
+                  class: 'vxe-checkbox--icon'
                 }),
                 h('span', {
-                  class: ['checkbox--label']
+                  class: 'vxe-checkbox--label'
                 }, item.label)
               ])
               : h('span', {

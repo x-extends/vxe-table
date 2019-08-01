@@ -18,6 +18,8 @@
           size: 'small',
           showOverflow: null,
           showHeaderOverflow: null,
+          align: null,
+          headerAlign: null,
           stripe: false,
           border: false,
           resizable: false,
@@ -115,7 +117,7 @@
               rSize: 80
             }
           },
-          // 集成国际化（将对列头、校验提示..进行自动翻译）
+          // 集成国际化（可选）（将对列头、校验提示..进行自动翻译）
           translate: : key => i18n.t(key)
         })
       </code>
