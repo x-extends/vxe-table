@@ -296,7 +296,7 @@ const apis = [
             list: [
               {
                 name: 'query',
-                desc: '查询方法 Function({ page, sort, filter })，默认处理的数据结构 {page: {total: 0}, result: []}；如果使用了服务端排序，sort 属性可以获取相关信息；如果使用了服务端过滤，filter 属性可以获取相关信息',
+                desc: '查询方法 Function({ page, sort, filters }, ...arguments)，默认处理的数据结构 {page: {total: 0}, result: []}；如果使用了服务端排序，sort 属性可以获取相关信息；如果使用了服务端过滤，filter 属性可以获取相关信息',
                 type: 'Promise',
                 enum: '',
                 defVal: '',
@@ -304,7 +304,7 @@ const apis = [
               },
               {
                 name: 'delete',
-                desc: '删除方法 Function({ body })，提交的参数 { removeRecords }',
+                desc: '删除方法 Function({ body }, ...arguments)，提交的参数 { removeRecords }',
                 type: 'Promise',
                 enum: '',
                 defVal: '',
@@ -312,7 +312,7 @@ const apis = [
               },
               {
                 name: 'save',
-                desc: '保存方法 Function({ body })，提交的参数 { insertRecords, updateRecords, removeRecords, pendingRecords}',
+                desc: '保存方法 Function({ body }, ...arguments)，提交的参数 { insertRecords, updateRecords, removeRecords, pendingRecords}',
                 type: 'Promise',
                 enum: '',
                 defVal: '',
@@ -390,8 +390,8 @@ const apis = [
     defVal: '',
     list: [
       {
-        name: 'commitProxy(code)',
-        desc: '给数据代理提交指令',
+        name: 'commitProxy(code, ...arguments)',
+        desc: '给数据代理提交指令（支持额外的参数，对于很多特殊场景很有用）',
         type: '',
         enum: 'reload, query, delete, save',
         defVal: '',

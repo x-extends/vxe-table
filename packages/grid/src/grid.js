@@ -178,6 +178,7 @@ export default {
     commitProxy (code) {
       let { proxyOpts, tablePage, pagerConfig, sortData, filterData, isMsg } = this
       let { ajax, props = {} } = proxyOpts
+      let args = XEUtils.slice(arguments, 1)
       if (ajax) {
         switch (code) {
           case 'insert':
@@ -190,7 +191,7 @@ export default {
             this.triggerPendingEvent(code)
             break
           case 'delete_selection':
-            this.handleDeleteRow(code, 'vxe.grid.deleteSelectRecord', () => this.commitProxy('delete'))
+            this.handleDeleteRow(code, 'vxe.grid.deleteSelectRecord', () => this.commitProxy.apply(this, ['delete'].concat(args)))
             break
           case 'remove_selection':
             this.handleDeleteRow(code, 'vxe.grid.removeSelectRecord', () => this.removeSelecteds())
@@ -215,7 +216,7 @@ export default {
                 }
                 this.pendingRecords = []
               }
-              return ajax.query(params).then(rest => {
+              return ajax.query.apply(this, [params].concat(args)).then(rest => {
                 if (rest) {
                   if (pagerConfig) {
                     tablePage.total = XEUtils.get(rest, props.total || 'page.total') || 0
@@ -241,7 +242,7 @@ export default {
                 let body = { removeRecords }
                 if (removeRecords.length) {
                   this.tableLoading = true
-                  return ajax.delete({ body }).then(result => {
+                  return ajax.delete.apply(this, [{ body }].concat(args)).then(result => {
                     this.tableLoading = false
                   }).catch(e => {
                     this.tableLoading = false
@@ -274,7 +275,7 @@ export default {
                     if (body.insertRecords.length || removeRecords.length || updateRecords.length || body.pendingRecords.length) {
                       this.tableLoading = true
                       resolve(
-                        ajax.save({ body }).then(() => {
+                        ajax.save.apply(this, [{ body }].concat(args)).then(() => {
                           this.$XMsg.message({ id: code, message: GlobalConfig.i18n('vxe.grid.saveSuccess'), status: 'success' })
                           this.tableLoading = false
                         }).catch(e => {
