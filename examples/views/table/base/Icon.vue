@@ -1,7 +1,7 @@
 <template>
   <div>
     <p>内置的小图标</p>
-    <p>如果本身项目有合适的 icon 图标，可以通过全局参数 <router-link class="link" :to="{name: 'Use'}">icon</router-link> 替换自带的，可以减少一些体积</p>
+    <p>如果本身项目有合适的 icon 图标，可以通过全局参数 <router-link class="link" :to="{name: 'StartUse'}">icon</router-link> 替换自带的，可以减少一些体积</p>
     <ul class="icon-list">
       <li v-for="item in list" :key="item.icon" @click="copyEvent(item)" title="点击复制内容">
         <i :class="item.icon"></i>
