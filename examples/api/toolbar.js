@@ -33,7 +33,7 @@ const apis = [
       {
         name: 'resizable',
         descKey: 'app.api.toolbar.desc.resizable',
-        type: 'Object',
+        type: 'Boolean,Object',
         enum: '',
         defVal: '',
         list: [
@@ -50,7 +50,7 @@ const apis = [
       {
         name: 'setting',
         descKey: 'app.api.toolbar.desc.setting',
-        type: 'Object',
+        type: 'Boolean,Object',
         enum: '',
         defVal: '',
         list: [
