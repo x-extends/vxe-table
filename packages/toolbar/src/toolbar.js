@@ -6,7 +6,7 @@ export default {
   name: 'VxeToolbar',
   props: {
     id: String,
-    resizable: Object,
+    resizable: { type: [Boolean, Object], default: () => GlobalConfig.toolbar.resizable },
     setting: { type: [Boolean, Object], default: () => GlobalConfig.toolbar.setting },
     buttons: { type: Array, default: () => GlobalConfig.toolbar.buttons },
     size: String,
@@ -60,14 +60,14 @@ export default {
     GlobalEvent.off(this, 'blur')
   },
   render (h) {
-    let { $scopedSlots, settingStore, setting, buttons = [], vSize, tableFullColumn } = this
+    let { $scopedSlots, settingStore, setting, settingOpts, buttons = [], vSize, tableFullColumn } = this
     let customBtnOns = {}
     let customWrapperOns = {}
     let $buttons = $scopedSlots.buttons
     if (setting) {
-      if (setting.trigger === 'manual') {
+      if (settingOpts.trigger === 'manual') {
         // 手动触发
-      } else if (setting.trigger === 'hover') {
+      } else if (settingOpts.trigger === 'hover') {
         // hover 触发
         customBtnOns.mouseenter = this.handleMouseenterSettingEvent
         customBtnOns.mouseleave = this.handleMouseleaveSettingEvent
@@ -122,7 +122,7 @@ export default {
               on: {
                 change: value => {
                   column.visible = value
-                  if (setting && setting.immediate) {
+                  if (setting && settingOpts.immediate) {
                     this.updateSetting()
                   }
                 }
@@ -141,7 +141,7 @@ export default {
       let { setting, settingStore } = this
       if (settingStore.visible) {
         settingStore.visible = false
-        if (setting && !setting.immediate) {
+        if (setting && !settingStore.immediate) {
           this.updateSetting()
         }
       }
