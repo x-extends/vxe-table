@@ -15,6 +15,10 @@ assignees: ''
 
  ?
 
+### 报错信息或截图 Error message or screenshots
+
+ ?
+
 ### 版本 Version
 
 - os: ?
