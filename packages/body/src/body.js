@@ -459,7 +459,8 @@ export default {
       }
       if (scrollXLoad && isX) {
         $table.triggerScrollXEvent(evnt)
-      } else if (scrollYLoad && isY) {
+      }
+      if (scrollYLoad && isY) {
         $table.triggerScrollYEvent(evnt)
       }
       UtilTools.emitEvent($table, 'scroll', [{ type: 'body', fixed: fixedType, scrollTop, scrollLeft, isX, isY, $table }, evnt])
