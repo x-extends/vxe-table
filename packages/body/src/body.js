@@ -2,6 +2,11 @@ import XEUtils from 'xe-utils'
 import GlobalConfig from '../../conf'
 import { UtilTools } from '../../tools'
 
+// 滚动、拖动过程中不需要触发
+function isOperateMouse ($table) {
+  return $table._isResize || ($table.lastScrollTime && Date.now() < $table.lastScrollTime + 100)
+}
+
 function renderBorder (h, type) {
   return h('div', {
     class: `vxe-table-${type}ed-borders`,
@@ -81,8 +86,7 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
   // hover 进入事件
   if (showTooltip || tableListeners['cell-mouseenter']) {
     tdOns.mouseenter = evnt => {
-      // 拖动过程中不需要触发
-      if ($table._isResize) {
+      if (isOperateMouse($table)) {
         return
       }
       let evntParams = { $table, seq, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn, level: rowLevel, cell: evnt.currentTarget }
@@ -96,8 +100,7 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
   // hover 退出事件
   if (showTooltip || tableListeners['cell-mouseleave']) {
     tdOns.mouseleave = evnt => {
-      // 拖动过程中不需要触发
-      if ($table._isResize) {
+      if (isOperateMouse($table)) {
         return
       }
       $table.clostTooltip()
@@ -433,6 +436,7 @@ export default {
       let isY = scrollTop !== lastScrollTop
       $table.lastScrollTop = scrollTop
       $table.lastScrollLeft = scrollLeft
+      $table.lastScrollTime = Date.now()
       if (leftElem && fixedType === 'left') {
         scrollTop = leftElem.scrollTop
         syncBodyScroll(scrollTop, bodyElem, rightElem)
@@ -443,7 +447,6 @@ export default {
         if (isX && headerElem) {
           headerElem.scrollLeft = bodyElem.scrollLeft
         }
-        // 缓解 IE 卡顿
         if (leftElem || rightElem) {
           $table.checkScrolling()
           if (isY) {

@@ -187,7 +187,7 @@ module.exports = {
         desc: {
           data: '显示的数据',
           columns: '列配置',
-          customs: '初始化显示/隐藏列（可以通过 visible 动态修改显示或隐藏）',
+          customs: '初始化显示/隐藏列（通过 visible 设置为 false 则默认隐藏列）',
           height: '表格的高度；支持铺满父容器或者固定宽高',
           maxHeight: '表格的最大高度',
           autoResize: '是否自动监听父容器响应式调整表格宽高（如果需要自动跟随父容器的高度变化时可能会用到）',
