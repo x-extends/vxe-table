@@ -170,6 +170,7 @@ export default {
       let bodyElem = $refs.tableBody.$el
       let footerElem = $refs.tableFooter.$el
       let scrollLeft = footerElem.scrollLeft
+      $table.lastScrollTime = Date.now()
       if (headerElem) {
         headerElem.scrollLeft = scrollLeft
       }

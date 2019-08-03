@@ -13,6 +13,11 @@ function handleLocation (obj, rows, columns, row, column) {
   obj.right = rowIndex > -1 && columnIndex === columns.length - 1
 }
 
+// 滚动、拖动过程中不需要触发
+function isOperateMouse ($table) {
+  return $table._isResize || ($table.lastScrollTime && Date.now() < $table.lastScrollTime + 100)
+}
+
 /**
  * 渲染列
  */
@@ -75,6 +80,9 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
   // hover 进入事件
   if (showTooltip || tableListeners['cell-mouseenter']) {
     tdOns.mouseenter = evnt => {
+      if (isOperateMouse($table)) {
+        return
+      }
       let evntParams = { $table, seq, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, level: rowLevel, cell: evnt.currentTarget }
       // 如果配置了显示 tooltip
       if (showTooltip) {
@@ -86,6 +94,9 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
   // hover 退出事件
   if (showTooltip || tableListeners['cell-mouseleave']) {
     tdOns.mouseleave = evnt => {
+      if (isOperateMouse($table)) {
+        return
+      }
       $table.clostTooltip()
       UtilTools.emitEvent($table, 'cell-mouseleave', [{ $table, seq, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, level: rowLevel, cell: evnt.currentTarget }, evnt])
     }
@@ -243,11 +254,17 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
     // 事件绑定
     if (highlightHoverRow && (leftList.length || rightList.length) && overflowX) {
       trOn.mouseenter = evnt => {
+        if (isOperateMouse($table)) {
+          return
+        }
         if (row !== hoverRow) {
           $table.triggerHoverEvent(evnt, { row, rowIndex })
         }
       }
       trOn.mouseleave = evnt => {
+        if (isOperateMouse($table)) {
+          return
+        }
         $table.hoverRow = null
       }
     }
@@ -519,6 +536,7 @@ export default {
       }
       $table.lastScrollTop = scrollTop
       $table.lastScrollLeft = scrollLeft
+      $table.lastScrollTime = Date.now()
       UtilTools.emitEvent($table, 'scroll', [{ type: 'body', fixed: fixedType, scrollTop, scrollLeft, isX, isY, $table }, evnt])
     }
   }

@@ -3335,10 +3335,10 @@ export default {
     // 更新纵向 Y 可视渲染上下剩余空间大小
     updateScrollYSpace () {
       let { scrollYStore } = this
-      let { fullData, tableData } = this.getTableData()
+      let { visibleData, tableData } = this.getTableData()
       this.tableData = tableData
       scrollYStore.topSpaceHeight = Math.max(scrollYStore.startIndex * scrollYStore.rowHeight, 0)
-      scrollYStore.bottomSpaceHeight = Math.max((fullData.length - (scrollYStore.startIndex + scrollYStore.renderSize)) * scrollYStore.rowHeight, 0)
+      scrollYStore.bottomSpaceHeight = Math.max((visibleData.length - (scrollYStore.startIndex + scrollYStore.renderSize)) * scrollYStore.rowHeight, 0)
     },
     scrollTo (scrollLeft, scrollTop) {
       let bodyElem = this.$refs.tableBody.$el
