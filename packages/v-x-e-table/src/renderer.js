@@ -71,7 +71,7 @@ function renderOptions (h, options, editRender, params) {
   })
 }
 
-const _storeMap = {
+const renderMap = {
   input: {
     autofocus: 'input',
     renderEdit (h, editRender, params) {
@@ -130,21 +130,21 @@ export const Renderer = {
     return Renderer
   },
   get (name) {
-    return _storeMap[name] || null
+    return renderMap[name] || null
   },
   add (name, options) {
     if (name && options) {
-      let renders = _storeMap[name]
+      let renders = renderMap[name]
       if (renders) {
         Object.assign(renders, options)
       } else {
-        _storeMap[name] = options
+        renderMap[name] = options
       }
     }
     return Renderer
   },
   delete (name) {
-    delete _storeMap[name]
+    delete renderMap[name]
     return Renderer
   }
 }
