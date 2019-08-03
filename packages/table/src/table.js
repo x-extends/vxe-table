@@ -2445,15 +2445,20 @@ export default {
     /**
      * 行 hover 事件
      */
-    triggerHoverEvent (evnt, { row, rowIndex }) {
-      let { $el } = this
+    triggerHoverEvent (evnt, { row }) {
+      this.setHoverRow(row)
+    },
+    setHoverRow (row) {
       let rowid = UtilTools.getRowid(this, row)
       this.clearHoverRow()
-      XEUtils.arrayEach($el.querySelectorAll(`[data-rowid="${rowid}"]`), elem => DomTools.addClass(elem, 'row--hover'))
+      XEUtils.arrayEach(this.$el.querySelectorAll(`[data-rowid="${rowid}"]`), elem => DomTools.addClass(elem, 'row--hover'))
       this.hoverRow = row
     },
     clearHoverRow () {
-      XEUtils.arrayEach(this.$el.querySelectorAll('.row--hover'), elem => DomTools.removeClass(elem, 'row--hover'))
+      if (this.hoverRow) {
+        XEUtils.arrayEach(this.$el.querySelectorAll('.vxe-body--row.row--hover'), elem => DomTools.removeClass(elem, 'row--hover'))
+        this.hoverRow = null
+      }
     },
     /**
      * 表头按下事件
@@ -3338,6 +3343,9 @@ export default {
       UtilTools.emitEvent(this, 'filter-change', [{ column, property, field: property, prop: property, values, datas, filters: filterList }])
       if (scrollXLoad || scrollYLoad) {
         this.clearScroll()
+        if (scrollYLoad) {
+          this.updateScrollYSpace()
+        }
       }
       this.closeFilter()
       this.$nextTick(this.recalculate)
@@ -3670,6 +3678,7 @@ export default {
           this.updateScrollYData()
           this.$nextTick(() => {
             // scrollBodyElem.scrollTop = scrollTop
+            this.clearHoverRow()
             this.updateStyle()
           })
         }
@@ -3767,8 +3776,8 @@ export default {
     // 更新纵向 Y 可视渲染上下剩余空间大小
     updateScrollYSpace () {
       let { elemStore, scrollYStore, scrollYLoad } = this
-      let { fullData } = this.getTableData()
-      let bodyHeight = fullData.length * scrollYStore.rowHeight
+      let { visibleData } = this.getTableData()
+      let bodyHeight = visibleData.length * scrollYStore.rowHeight
       let topSpaceHeight = Math.max(scrollYStore.startIndex * scrollYStore.rowHeight, 0)
       let containerList = ['main', 'left', 'right']
       let marginTop = ''

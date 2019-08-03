@@ -164,6 +164,7 @@ export default {
       let scrollLeft = footerElem.scrollLeft
       let isX = scrollLeft !== lastScrollLeft
       $table.lastScrollLeft = scrollLeft
+      $table.lastScrollTime = Date.now()
       if (headerElem) {
         headerElem.scrollLeft = scrollLeft
       }

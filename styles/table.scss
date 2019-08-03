@@ -82,15 +82,6 @@
       }
     }
   }
-  &.row--highlight {
-    .vxe-body--row {
-      &:not(.row--current) {
-        &:hover {
-          background-color: $vxe-table-row-hover-background-color;
-        }
-      }
-    }
-  }
   &.column--highlight {
     .vxe-header--column {
       &:not(.col--index) {

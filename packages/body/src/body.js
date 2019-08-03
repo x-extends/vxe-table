@@ -208,6 +208,9 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
     // 事件绑定
     if (highlightHoverRow) {
       trOn.mouseenter = evnt => {
+        if (isOperateMouse($table)) {
+          return
+        }
         $table.triggerHoverEvent(evnt, { row, rowIndex })
       }
     }
