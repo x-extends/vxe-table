@@ -20,6 +20,7 @@ export default {
   },
   data () {
     return {
+      $table: null,
       tableFullColumn: [],
       settingStore: {
         visible: false
@@ -27,12 +28,6 @@ export default {
     }
   },
   computed: {
-    $table () {
-      let { $parent, data } = this
-      let { $children } = $parent
-      let selfIndex = $children.indexOf(this)
-      return $children.find((comp, index) => comp && comp.refreshColumn && index > selfIndex && (data ? comp.data === data : comp.$vnode.componentOptions.tag === 'vxe-table'))
-    },
     vSize () {
       return this.size || this.$parent.size || this.$parent.vSize
     },
@@ -51,7 +46,10 @@ export default {
     if (settingOpts.storage && !id) {
       throw new Error('[vxe-table] Toolbar must have a unique primary id.')
     }
-    this.$nextTick(() => this.loadStorage())
+    this.$nextTick(() => {
+      this.updateConf()
+      this.loadStorage()
+    })
     GlobalEvent.on(this, 'mousedown', this.handleGlobalMousedownEvent)
     GlobalEvent.on(this, 'blur', this.handleGlobalBlurEvent)
   },
@@ -60,7 +58,7 @@ export default {
     GlobalEvent.off(this, 'blur')
   },
   render (h) {
-    let { $scopedSlots, settingStore, setting, settingOpts, buttons = [], vSize, tableFullColumn } = this
+    let { $scopedSlots, $grid, $table, settingStore, setting, settingOpts, buttons = [], vSize, tableFullColumn } = this
     let customBtnOns = {}
     let customWrapperOns = {}
     let $buttons = $scopedSlots.buttons
@@ -85,7 +83,7 @@ export default {
     }, [
       h('div', {
         class: 'vxe-button--wrapper'
-      }, $buttons ? $buttons() : buttons.map(item => {
+      }, $buttons ? $buttons.call($grid || $table || this, { $grid, $table }, h) : buttons.map(item => {
         return h('vxe-button', {
           on: {
             click: evnt => this.btnEvent(item, evnt)
@@ -134,6 +132,12 @@ export default {
     ])
   },
   methods: {
+    updateConf () {
+      let { $parent, data } = this
+      let { $children } = $parent
+      let selfIndex = $children.indexOf(this)
+      this.$table = $children.find((comp, index) => comp && comp.refreshColumn && index > selfIndex && (data ? comp.data === data : comp.$vnode.componentOptions.tag === 'vxe-table'))
+    },
     openSetting () {
       this.settingStore.visible = true
     },
