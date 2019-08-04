@@ -986,7 +986,7 @@ const apis = [
           },
           {
             name: 'message',
-            desc: '校验提示内容',
+            desc: '校验提示内容（支持开启国际化）',
             type: 'String, Function',
             enum: '',
             defVal: '',

@@ -1,6 +1,7 @@
 import XEUtils from 'xe-utils'
 import tableAPI from './table'
 import columnAPI from './column'
+import toolbarAPI from './toolbar'
 
 const apis = [
   {
@@ -16,15 +17,7 @@ const apis = [
         type: 'Object',
         enum: '',
         defVal: '',
-        list: [
-          {
-            name: 'size',
-            desc: '尺寸',
-            type: 'String',
-            enum: 'medium,small,mini',
-            defVal: '',
-            list: []
-          },
+        list: XEUtils.clone(toolbarAPI.find(item => item.name === 'Props').list, true).concat([
           {
             name: 'buttons',
             desc: '按钮列表',
@@ -32,6 +25,14 @@ const apis = [
             enum: '',
             defVal: '',
             list: [
+              {
+                name: 'name',
+                desc: '按钮名称（支持开启国际化）',
+                type: 'String',
+                enum: '',
+                defVal: '',
+                list: []
+              },
               {
                 name: 'code',
                 desc: '按钮编码',
@@ -112,43 +113,17 @@ const apis = [
                     list: []
                   }
                 ]
-              },
-              {
-                name: 'name',
-                desc: '显示名称',
-                type: 'String',
-                enum: '',
-                defVal: '',
-                list: []
-              }
-            ]
-          },
-          {
-            name: 'setting',
-            desc: '显示列个性化设置按钮',
-            type: 'Boolean,Object',
-            enum: '',
-            defVal: '',
-            list: [
-              {
-                name: 'trigger',
-                desc: '触发方式',
-                type: 'String',
-                enum: 'manual,click,hover',
-                defVal: 'click',
-                list: []
-              },
-              {
-                name: 'immediate',
-                desc: '列勾选之后是否实时同步',
-                type: 'Boolean',
-                enum: '',
-                defVal: 'false',
-                list: []
               }
             ]
           }
-        ]
+        ]).concat([{
+          name: 'slots',
+          descKey: 'app.api.title.slots',
+          type: 'Object',
+          enum: '',
+          defVal: '',
+          list: XEUtils.clone(toolbarAPI.find(item => item.name === 'Slots').list, true)
+        }])
       },
       {
         name: 'pager-config',

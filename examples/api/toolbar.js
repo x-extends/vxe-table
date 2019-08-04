@@ -94,7 +94,7 @@ const apis = [
         desc: '按钮列表',
         type: '',
         enum: '',
-        defVal: '',
+        defVal: '{}, h',
         list: []
       }
     ]
