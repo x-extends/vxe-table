@@ -40,6 +40,15 @@
       <vxe-table-column field="age" title="Age" width="200" fixed="right"></vxe-table-column>
     </vxe-table>
 
+    <pre>
+      <code>
+        | Arrow Up ↑ | 匀速向上滚动数据 |
+        | Arrow Down ↓ | 匀速向下滚动数据 |
+        | Arrow Left ← | 匀速向左滚动数据 |
+        | Arrow Right → | 匀速向右滚动数据 |
+      </code>
+    </pre>
+
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
