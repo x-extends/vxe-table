@@ -313,7 +313,7 @@ const apis = [
         desc: '自定义显示内容模板',
         type: '',
         enum: '',
-        defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,fixed,isHidden}',
+        defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,fixed,isHidden}, h',
         list: []
       },
       {
@@ -321,7 +321,7 @@ const apis = [
         desc: '自定义表头内容的模板',
         type: '',
         enum: '',
-        defVal: '{column,columnIndex,$columnIndex,fixed,isHidden}',
+        defVal: '{column,columnIndex,$columnIndex,fixed,isHidden}, h',
         list: []
       },
       {
@@ -329,7 +329,7 @@ const apis = [
         desc: '自定义筛选模板',
         type: '',
         enum: '',
-        defVal: '{column,columnIndex,$columnIndex,fixed,isHidden}',
+        defVal: '{column,columnIndex,$columnIndex,fixed,isHidden}, h',
         list: []
       },
       {
@@ -337,7 +337,7 @@ const apis = [
         desc: '自定义可编辑组件模板',
         type: '',
         enum: '',
-        defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,fixed,isHidden}',
+        defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,fixed,isHidden}, h',
         list: []
       }
     ]

@@ -274,7 +274,7 @@ module.exports = {
           prop: '在 v3.0 中废弃，请使用 field',
           field: '列属性',
           label: '在 v3.0 中废弃，请使用 title',
-          title: '列标题',
+          title: '列标题（支持开启国际化）',
           width: '列宽度',
           minWidth: '最小列宽度；会自动将剩余空间按比例分配',
           resizable: '列是否允许拖动列宽调整大小',
