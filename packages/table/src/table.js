@@ -1736,7 +1736,7 @@ export default {
           evnt.preventDefault()
           this.moveTabSelected(actived.args, evnt)
         }
-      } else if (isDel || isBack || (isBack && keyboardConfig.isArrow && treeConfig && highlightCurrentRow && currentRow)) {
+      } else if (isDel || (treeConfig && highlightCurrentRow && currentRow ? isBack && keyboardConfig.isArrow : isBack)) {
         // 如果是删除键
         if (keyboardConfig.isDel && (selected.row || selected.column)) {
           UtilTools.setCellValue(selected.row, selected.column, null)
