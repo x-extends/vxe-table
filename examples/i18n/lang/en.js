@@ -292,7 +292,8 @@ module.exports = {
           filterRender: 'Filter render configuration',
           treeNode: '只对 tree-config 配置时有效，指定为树节点',
           columnKey: 'Key for column rendering, corresponding to the key attribute of the virtual DOM in column rendering (not required for non-exceptional cases)',
-          editRender: 'Column render configuration',
+          cellRender: '单元格渲染配置项',
+          editRender: '单元格编辑渲染配置项',
           params: '额外的参数（自定义一些数据参数，对于某些特殊的场景可能会用到）'
         }
       },

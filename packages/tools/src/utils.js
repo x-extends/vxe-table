@@ -32,6 +32,7 @@ class ColumnConfig {
       filterRender: _vm.filterRender,
       treeNode: _vm.treeNode,
       columnKey: _vm.columnKey,
+      cellRender: _vm.cellRender,
       editRender: _vm.editRender,
       // 自定义参数
       params: _vm.params,
