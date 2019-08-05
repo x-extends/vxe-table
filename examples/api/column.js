@@ -235,6 +235,63 @@ const apis = [
         list: []
       },
       {
+        name: 'cell-render',
+        descKey: 'app.api.tableColumn.desc.cellRender',
+        type: 'Object',
+        enum: '',
+        defVal: '',
+        list: [
+          {
+            name: 'name',
+            desc: '渲染器名称',
+            type: 'String',
+            enum: 'input, textarea, select',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'props',
+            desc: '渲染的参数（请查看目标渲染的 Props）',
+            type: 'Object',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'options',
+            desc: '只对 name=select 有效，下拉选项列表',
+            type: 'Array',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'optionProps',
+            desc: '只对 name=select 有效，下拉选项属性参数配置',
+            type: 'Object',
+            enum: '',
+            defVal: '{ value, label }',
+            list: []
+          },
+          {
+            name: 'optionGroups',
+            desc: '只对 name=select 有效，下拉分组选项列表',
+            type: 'Array',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'optionGroupProps',
+            desc: '只对 name=select 有效，下拉分组选项属性参数配置',
+            type: 'Object',
+            enum: '',
+            defVal: '{ options, label }',
+            list: []
+          }
+        ]
+      },
+      {
         name: 'edit-render',
         descKey: 'app.api.tableColumn.desc.editRender',
         type: 'Object',
@@ -251,7 +308,7 @@ const apis = [
           },
           {
             name: 'name',
-            desc: '渲染组件的名称（可以使用自带原生的渲染，也可以配合其他 UI 库混合渲染）',
+            desc: '渲染器名称',
             type: 'String',
             enum: 'input, textarea, select',
             defVal: '',
@@ -259,18 +316,50 @@ const apis = [
           },
           {
             name: 'props',
-            desc: '渲染组件的参数（请查看目标组件的 Component Attributes）',
+            desc: '渲染的参数（请查看目标渲染的 Props）',
             type: 'Object',
             enum: '',
             defVal: '',
             list: []
           },
           {
-            name: 'events',
-            desc: '渲染组件的事件（请查看目标组件的 Component Events）',
+            name: 'options',
+            desc: '只对 name=select 有效，下拉选项列表',
+            type: 'Array',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'optionProps',
+            desc: '只对 name=select 有效，下拉选项属性参数配置',
             type: 'Object',
             enum: '',
-            defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex}, ...[Component arguments]',
+            defVal: '{ value, label }',
+            list: []
+          },
+          {
+            name: 'optionGroups',
+            desc: '只对 name=select 有效，下拉分组选项列表',
+            type: 'Array',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'optionGroupProps',
+            desc: '只对 name=select 有效，下拉分组选项属性参数配置',
+            type: 'Object',
+            enum: '',
+            defVal: '{ options, label }',
+            list: []
+          },
+          {
+            name: 'events',
+            desc: '渲染组件的事件（请查看目标渲染的 Events）',
+            type: 'Object',
+            enum: '',
+            defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex}, ...[目标渲染的 arguments]',
             list: []
           },
           {

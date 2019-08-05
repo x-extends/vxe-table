@@ -92,6 +92,7 @@ export default {
         `
         VXETable.renderer.add('MyCell', {
           autofocus: '.my-cell',
+          // 编辑模板
           renderEdit (h, editRender, params) {
             let { row, column } = params
             return [
@@ -111,6 +112,7 @@ export default {
               })
             ]
           },
+          // 显示模板
           renderCell (h, editRender, params) {
             let { row, column } = params
             return [
@@ -134,11 +136,13 @@ export default {
         `
         VXETable.renderer.add('MyCell', {
           autofocus: '.my-cell',
+          // 编辑模板
           renderEdit (h, editRender, { row, column }) {
             return [
               <input class="my-cell" text="text" value={ row[column.property] } onInput={ val => { row[column.property] = val }}/>
             ]
           },
+          // 显示模板
           renderCell (h, editRender, { row, column }) {
             return [
               <span>{row[column.property]}</span>

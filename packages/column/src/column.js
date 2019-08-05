@@ -50,7 +50,9 @@ export default {
     filterRender: Object,
     // 指定为树节点
     treeNode: Boolean,
-    // 列编辑配置项
+    // 单元格渲染配置项
+    cellRender: Object,
+    // 单元格编辑渲染配置项
     editRender: Object,
     // 额外的参数
     params: Object

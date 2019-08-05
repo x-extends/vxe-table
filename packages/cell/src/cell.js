@@ -59,10 +59,11 @@ export const Cell = {
     let cellValue
     let { $table, row, column } = params
     let { slots } = column
+    let _vm = this || {}
+    let editRender = _vm.editRender || column.editRender || _vm.cellRender || column.cellRender
     if (slots && slots.default) {
       return slots.default(params, h)
     }
-    let editRender = this && this.editRender ? this.editRender : column.editRender
     if (editRender) {
       let compConf = Renderer.get(editRender.name)
       if (compConf && compConf.renderCell) {
