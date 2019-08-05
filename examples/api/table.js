@@ -2003,6 +2003,22 @@ const apis = [
         list: []
       },
       {
+        name: 'scrollToRow(row)',
+        desc: '如果有滚动条，则滚动到对应的行',
+        type: 'Promise',
+        enum: '',
+        defVal: 'row',
+        list: []
+      },
+      {
+        name: 'scrollToColumn(column)',
+        desc: '如果有滚动条，则滚动到对应的列',
+        type: 'Promise',
+        enum: '',
+        defVal: 'column',
+        list: []
+      },
+      {
         name: 'isScrollXLoad()',
         disabled: true,
         desc: '在 v2.0 中废弃，请使用 getVirtualScroller',

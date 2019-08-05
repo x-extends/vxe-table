@@ -533,7 +533,7 @@
         }
       }
       &.col--selected {
-        box-shadow: inset 0 0 4px $vxe-primary-color;
+        box-shadow: inset 0px 0px 0px 2px $vxe-primary-color;
       }
       &.col--dirty {
         position: relative;

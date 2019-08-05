@@ -78,6 +78,7 @@ module.exports = {
         big10wRow: '10 万行 + 更复杂渲染',
         big1wRow1wCol: '1 万行 1 万列',
         big10wRow1wCol: '10 万行 1 万列 + 更复杂渲染',
+        big1wRowEdit: '1 万行 + 可编辑',
         treeScroll: '树结构',
         infiniteScroll: '无限滚动',
 
@@ -97,7 +98,7 @@ module.exports = {
         rowVaild: '数据校验 row',
         forceCellValid: '数据校验 cell + 强制锁定',
         forceRowVaild: '数据校验 row + 强制锁定',
-        keyboard: '全键盘操作',
+        keyboard: '键盘导航',
 
         excel: '更多实现',
         cell: '单元格',

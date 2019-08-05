@@ -371,6 +371,12 @@ export default {
               locat: {
                 name: 'TablePage'
               }
+            },
+            {
+              label: 'app.aside.nav.keyboard',
+              locat: {
+                name: 'TableKeyboard'
+              }
             }
           ]
         },
@@ -542,6 +548,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.keyboard',
+              locat: {
+                name: 'TableTreeKeyboard'
+              }
+            },
+            {
               label: 'app.aside.nav.lazy',
               disabled: true,
               locat: {
@@ -592,6 +604,12 @@ export default {
               label: 'app.aside.nav.big10wRow1wCol',
               locat: {
                 name: 'TableScrollFullCols'
+              }
+            },
+            {
+              label: 'app.aside.nav.big1wRowEdit',
+              locat: {
+                name: 'TableScrollEdit'
               }
             },
             {

@@ -1659,7 +1659,7 @@ export default {
      */
     handleGlobalKeydownEvent (evnt) {
       let params
-      let { isCtxMenu, ctxMenuStore, editStore, mouseConfig = {}, keyboardConfig = {} } = this
+      let { isCtxMenu, ctxMenuStore, editStore, mouseConfig = {}, keyboardConfig = {}, treeConfig, highlightCurrentRow, currentRow } = this
       let { selected, actived } = editStore
       let keyCode = evnt.keyCode
       let isBack = keyCode === 8
@@ -1692,9 +1692,19 @@ export default {
             this.handleSelected(params, evnt)
           }
         }
-      } else if (isEnter && (keyboardConfig.isArrow || keyboardConfig.isTab) && (selected.row || actived.row)) {
+      } else if (isEnter && (keyboardConfig.isArrow || keyboardConfig.isTab) && (selected.row || actived.row || (treeConfig && highlightCurrentRow && currentRow))) {
         // 如果是激活状态，退则出到下一行
-        this.moveSelected(selected.row ? selected.args : actived.args, isLeftArrow, isUpArrow, isRightArrow, true, evnt)
+        if (selected.row || actived.row) {
+          this.moveSelected(selected.row ? selected.args : actived.args, isLeftArrow, isUpArrow, isRightArrow, true, evnt)
+        } else if (treeConfig && highlightCurrentRow && currentRow) {
+          // 如果是树形表格当前行回车移动到子节点
+          let childrens = currentRow[treeConfig.children]
+          if (childrens && childrens.length) {
+            this.setTreeExpansion(currentRow, true)
+              .then(() => this.setCurrentRow(childrens[0]))
+              .then(() => this.scrollToRow(childrens[0]))
+          }
+        }
       } else if (operCtxMenu) {
         // 如果配置了右键菜单; 支持方向键操作、回车
         evnt.preventDefault()
@@ -1713,6 +1723,9 @@ export default {
         if (selected.row && selected.column) {
           evnt.preventDefault()
           this.moveSelected(selected.args, isLeftArrow, isUpArrow, isRightArrow, isDwArrow, evnt)
+        } else if ((isUpArrow || isDwArrow) && highlightCurrentRow && currentRow) {
+          // 当前行按键上下移动
+          this.moveCurrentRow(isUpArrow, isDwArrow, evnt)
         }
       } else if (isTab && keyboardConfig.isTab) {
         // 如果按下了 Tab 键切换
@@ -1723,12 +1736,20 @@ export default {
           evnt.preventDefault()
           this.moveTabSelected(actived.args, evnt)
         }
-      } else if (isDel || isBack) {
+      } else if (isDel || isBack || (isBack && keyboardConfig.isArrow && treeConfig && highlightCurrentRow && currentRow)) {
         // 如果是删除键
         if (keyboardConfig.isDel && (selected.row || selected.column)) {
           UtilTools.setCellValue(selected.row, selected.column, null)
           if (isBack) {
             this.handleActived(selected.args, evnt)
+          }
+        } else if (isBack && keyboardConfig.isArrow && treeConfig && highlightCurrentRow && currentRow) {
+          // 如果树形表格回退键关闭当前行返回父节点
+          let { parent: parentRow } = XEUtils.findTree(this.getTableData().visibleData, item => item === currentRow, treeConfig)
+          if (parentRow) {
+            this.setTreeExpansion(parentRow, false)
+              .then(() => this.setCurrentRow(parentRow))
+              .then(() => this.scrollToRow(parentRow))
           }
         }
       } else if (keyboardConfig.isCut && isCtrlKey && (isX || isC || isV)) {
@@ -1793,14 +1814,40 @@ export default {
               this.handleActived(params, evnt)
             } else {
               this.handleSelected(params, evnt)
+              this.scrollToRow(params.row, params.column)
             }
           }
         }
       }
     },
+    // 处理当前行方向键移动
+    moveCurrentRow (isUpArrow, isDwArrow, evnt) {
+      let { currentRow, treeConfig } = this
+      let visibleData = this.getTableData().visibleData
+      let targetRow
+      evnt.preventDefault()
+      if (treeConfig) {
+        let { index, items } = XEUtils.findTree(visibleData, item => item === currentRow, treeConfig)
+        if (isUpArrow && index > 0) {
+          targetRow = items[index - 1]
+        } else if (isDwArrow && index < items.length - 1) {
+          targetRow = items[index + 1]
+        }
+      } else {
+        let rowIndex = visibleData.indexOf(currentRow)
+        if (isUpArrow && rowIndex > 0) {
+          targetRow = visibleData[rowIndex - 1]
+        } else if (isDwArrow && rowIndex < visibleData.length - 1) {
+          targetRow = visibleData[rowIndex + 1]
+        }
+      }
+      if (targetRow) {
+        this.setCurrentRow(targetRow).then(() => this.scrollToRow(targetRow))
+      }
+    },
     // 处理方向键移动
     moveSelected (args, isLeftArrow, isUpArrow, isRightArrow, isDwArrow, evnt) {
-      let { tableData, visibleColumn, handleSelected } = this
+      let { tableData, visibleColumn } = this
       let params = Object.assign({}, args)
       if (isUpArrow && params.rowIndex) {
         params.rowIndex -= 1
@@ -1826,7 +1873,8 @@ export default {
         }
       }
       params.cell = DomTools.getCell(this, params)
-      handleSelected(params, evnt)
+      this.handleSelected(params, evnt)
+      this.scrollToRow(params.row, params.column)
     },
     // 处理菜单的移动
     moveCtxMenu (evnt, keyCode, ctxMenuStore, property, operKey, operRest, menuList) {
@@ -2571,7 +2619,7 @@ export default {
       let { actived } = editStore
       let { row, column, cell } = params
       let { editRender } = column
-      if (editRender) {
+      if (editRender && cell) {
         if (editConfig.mode === 'row' ? actived.row !== row : (actived.row !== row || actived.column !== column)) {
           // 判断是否禁用编辑
           let type = 'edit-disabled'
@@ -3356,6 +3404,40 @@ export default {
           rightBody.$el.scrollTop = scrollTop
         }
         bodyElem.scrollTop = scrollTop
+      }
+    },
+    scrollToRow (row, column) {
+      let { scrollYLoad, scrollYStore, afterFullData, fullDataRowMap } = this
+      if (scrollYLoad) {
+        if (row === -1 && afterFullData.length) {
+          row = afterFullData[afterFullData.length - 1]
+        }
+        if (fullDataRowMap.has(row)) {
+          let rowIndex = afterFullData.indexOf(row)
+          this.scrollTo(null, (rowIndex - 1) * scrollYStore.rowHeight)
+        }
+      } else {
+        DomTools.rowToVisible(this, row)
+      }
+      if (column) {
+        this.scrollToColumn(column)
+      }
+    },
+    scrollToColumn (column) {
+      let { scrollXLoad, visibleColumn, fullColumnMap } = this
+      if (scrollXLoad) {
+        if (column === -1 || fullColumnMap.has(column)) {
+          let scrollLeft = 0
+          for (let index = 0; index < visibleColumn.length; index++) {
+            if (visibleColumn[index] === column) {
+              break
+            }
+            scrollLeft += visibleColumn[index].renderWidth
+          }
+          this.scrollTo(scrollLeft)
+        }
+      } else {
+        DomTools.colToVisible(this, column)
       }
     },
     clearScroll () {

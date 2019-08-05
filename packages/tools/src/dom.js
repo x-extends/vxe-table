@@ -16,6 +16,36 @@ export const DomTools = {
   hasClass (elem, cls) {
     return elem && elem.className && elem.className.split && elem.className.split(' ').indexOf(cls) > -1
   },
+  rowToVisible ($table, row) {
+    let bodyElem = $table.$refs.tableBody.$el
+    let trElem = bodyElem.querySelector(`[data-rowid="${UtilTools.getRowid($table, row)}"]`)
+    if (trElem) {
+      let bodyHeight = bodyElem.clientHeight
+      let bodySrcollTop = bodyElem.scrollTop
+      let trOffsetTop = trElem.offsetTop
+      let trHeight = trElem.clientHeight
+      if (trOffsetTop < bodySrcollTop) {
+        bodyElem.scrollTop = trOffsetTop
+      } else if (trOffsetTop + trHeight >= bodyHeight + bodySrcollTop) {
+        bodyElem.scrollTop = bodySrcollTop + trHeight
+      }
+    }
+  },
+  colToVisible ($table, column) {
+    let bodyElem = $table.$refs.tableBody.$el
+    let tdElem = bodyElem.querySelector(`.${column.id}`)
+    if (tdElem) {
+      let bodyWidth = bodyElem.clientWidth
+      let bodySrcollLeft = bodyElem.scrollLeft
+      let trOffsetLeft = tdElem.offsetLeft
+      let trWidth = tdElem.clientWidth
+      if (trOffsetLeft < bodySrcollLeft) {
+        bodyElem.scrollLeft = trOffsetLeft
+      } else if (trOffsetLeft + trWidth >= bodyWidth + bodySrcollLeft) {
+        bodyElem.scrollLeft = bodySrcollLeft + trWidth
+      }
+    }
+  },
   getDomNode () {
     let documentElement = document.documentElement
     let bodyElem = document.body

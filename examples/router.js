@@ -48,6 +48,7 @@ const TableCustom = () => import(/* webpackChunkName: "table" */ './views/table/
 const TableCustomStorage = () => import(/* webpackChunkName: "table" */ './views/table/advanced/CustomStorage.vue')
 const TableCustomlWidthStorage = () => import(/* webpackChunkName: "table" */ './views/table/advanced/CustomlWidthStorage.vue')
 const TablePage = () => import(/* webpackChunkName: "table" */ './views/table/advanced/Page.vue')
+const TableKeyboard = () => import(/* webpackChunkName: "table" */ './views/table/advanced/Keyboard.vue')
 
 const GridBasic = () => import(/* webpackChunkName: "grid" */ './views/table/grid/Basic.vue')
 const GridReverse = () => import(/* webpackChunkName: "grid" */ './views/table/grid/Reverse.vue')
@@ -74,6 +75,7 @@ const TableTreeToolbar = () => import(/* webpackChunkName: "tree" */ './views/ta
 const TableTreeInsert = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Insert.vue')
 const TableTreeMenu = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Menu.vue')
 const TableTreeSpan = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Span.vue')
+const TableTreeKeyboard = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Keyboard.vue')
 const TableTreeLazy = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Lazy.vue')
 const TableTreeEdit = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Edit.vue')
 
@@ -82,6 +84,7 @@ const TableScrollRows = () => import(/* webpackChunkName: "scroll" */ './views/t
 const TableScrollFullRows = () => import(/* webpackChunkName: "scroll" */ './views/table/scroll/ScrollFullRows.vue')
 const TableScrollCols = () => import(/* webpackChunkName: "scroll" */ './views/table/scroll/ScrollCols.vue')
 const TableScrollFullCols = () => import(/* webpackChunkName: "scroll" */ './views/table/scroll/ScrollFullCols.vue')
+const TableScrollEdit = () => import(/* webpackChunkName: "scroll" */ './views/table/scroll/ScrollEdit.vue')
 
 const TableEditManual = () => import(/* webpackChunkName: "edit" */ './views/table/edit/Manual.vue')
 const TableEditClick = () => import(/* webpackChunkName: "edit" */ './views/table/edit/Click.vue')
@@ -373,6 +376,11 @@ export default new Router({
       component: TablePage
     },
     {
+      path: '/table/advanced/keyboard',
+      name: 'TableKeyboard',
+      component: TableKeyboard
+    },
+    {
       path: '/table/tree/basic',
       name: 'TableTreeBasic',
       component: TableTreeBasic
@@ -411,6 +419,11 @@ export default new Router({
       path: '/table/tree/span',
       name: 'TableTreeSpan',
       component: TableTreeSpan
+    },
+    {
+      path: '/table/tree/keyboard',
+      name: 'TableTreeKeyboard',
+      component: TableTreeKeyboard
     },
     {
       path: '/table/tree/lazy',
@@ -526,6 +539,11 @@ export default new Router({
       path: '/table/scroll/fullCols',
       name: 'TableScrollFullCols',
       component: TableScrollFullCols
+    },
+    {
+      path: '/table/scroll/edit',
+      name: 'TableScrollEdit',
+      component: TableScrollEdit
     },
     {
       path: '/table/edit/manual',
