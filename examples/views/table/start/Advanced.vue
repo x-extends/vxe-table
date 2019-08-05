@@ -2,9 +2,9 @@
   <div>
     <h2>Renderer 渲染器</h2>
     <h3>内置的渲染</h3>
-    <p>默认只带三个原生的渲染函数 input、textarea、select，你也可以根据不同业务实现对应的渲染器</p>
+    <p>默认只带三个原生的渲染函数 input、textarea、select，你也可以根据不同业务去实现对应的渲染器</p>
     <h3>渲染器和插槽对比</h3>
-    <p>渲染器：可以完全复用，统一处理逻辑，可配置化；</p>
+    <p>渲染器：抽象一切可复用的功能，实现简单的可配置化；</p>
     <p>插槽：自定义程度高，但需要重复写冗余代码，局限性较大；</p>
     <h3>简单示例</h3>
     <p>通过渲染器你可以轻松实现筛选模板、单元格模板，可以根据不同业务实现不一样的组件，这个功能将非常实用</p>
@@ -130,7 +130,8 @@ export default {
           <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
           <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
           <vxe-table-column field="age" title="Age"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" :edit-render="{name: 'MyCell'}"></vxe-table-column>
+          <vxe-table-column field="name" title="Name" :cell-render="{name: 'MyCell'}"></vxe-table-column>
+          <vxe-table-column field="role" title="Role" :edit-render="{name: 'MyCell'}"></vxe-table-column>
         </vxe-table>
         `,
         `
@@ -158,7 +159,8 @@ export default {
           :edit-config="{trigger: 'click', mode: 'row'}">
           <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
           <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" :edit-render="{name: 'MyCell'}"></vxe-table-column>
+          <vxe-table-column field="name" title="Name" :cell-render="{name: 'MyCell'}"></vxe-table-column>
+          <vxe-table-column field="role" title="Role" :edit-render="{name: 'MyCell'}"></vxe-table-column>
         </vxe-table>
         `,
         `
