@@ -27,7 +27,7 @@
       <code class="javascript">{{ demoCodes[4] }}</code>
       <code class="html">{{ demoCodes[5] }}</code>
     </pre>
-    <h2>交互事件拦截器</h2>
+    <h2>事件交互拦截器</h2>
     <p>通过内置拦截器可以解决当表格交互与其他组件存在冲突的，可以通过返回 false 阻止默认的行为，从而可以集成其他组件互相兼容</p>
     <h3>API</h3>
     <p class="green">添加一个拦截器 interceptor.add(type, callback)</p>
