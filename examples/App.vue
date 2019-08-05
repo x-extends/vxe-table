@@ -744,9 +744,9 @@ export default {
               }
             },
             {
-              label: 'app.aside.nav.i18n',
+              label: 'app.aside.nav.span',
               locat: {
-                name: 'TableEditI18n'
+                name: 'TableEditSpan'
               }
             },
             {
