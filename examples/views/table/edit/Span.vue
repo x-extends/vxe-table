@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>实现国际化配置</p>
+    <p>可编辑的合并行</p>
 
     <vxe-toolbar>
       <template v-slot:buttons>
