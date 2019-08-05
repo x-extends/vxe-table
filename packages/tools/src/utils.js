@@ -5,6 +5,9 @@ var columnUniqueId = 0
 
 class ColumnConfig {
   constructor (_vm, { renderHeader, renderCell, renderData } = {}) {
+    if (_vm.cellRender && _vm.editRender) {
+      console.warn('[vxe-table] Properties cell-render and edit-render cannot be used together.')
+    }
     Object.assign(this, {
       // 基本属性
       id: `col_${++columnUniqueId}`,
