@@ -99,7 +99,7 @@ module.exports = {
         rowVaild: '数据校验 row',
         forceCellValid: '数据校验 cell + 强制锁定',
         forceRowVaild: '数据校验 row + 强制锁定',
-        keyboard: '全键盘操作',
+        keyboard: '键盘导航',
 
         excel: '更多实现',
         cell: '单元格',

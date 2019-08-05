@@ -6,7 +6,7 @@
     <vxe-table
       border
       show-overflow
-      highlight-cell
+      height="500"
       :data.sync="tableData"
       :mouse-config="{selected: true}"
       :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true}"
@@ -54,7 +54,7 @@ export default {
         <vxe-table
           border
           show-overflow
-          highlight-cell
+          height="500"
           :data.sync="tableData"
           :mouse-config="{selected: true}"
           :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true}"
@@ -74,7 +74,7 @@ export default {
             }
           },
           created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 50)
           }
         }
         `
@@ -82,7 +82,7 @@ export default {
     }
   },
   created () {
-    let list = window.MOCK_DATA_LIST.slice(0, 6)
+    let list = window.MOCK_DATA_LIST.slice(0, 50)
     this.tableData = list
   },
   mounted () {

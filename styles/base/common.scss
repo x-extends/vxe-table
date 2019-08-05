@@ -22,11 +22,6 @@
   .vxe-table--expand-icon{
     @include animatTransition(all);
   }
-  .vxe-header--column,
-  .vxe-body--column,
-  .vxe-body--row {
-    @include animatTransition(background-color);
-  }
   .vxe-input--wrapper {
     .vxe-input {
       @include animatTransition(border);

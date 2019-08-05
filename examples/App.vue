@@ -377,6 +377,12 @@ export default {
               locat: {
                 name: 'TablePage'
               }
+            },
+            {
+              label: 'app.aside.nav.keyboard',
+              locat: {
+                name: 'TableKeyboard'
+              }
             }
           ]
         },
@@ -545,6 +551,12 @@ export default {
               disabled: true,
               locat: {
                 name: 'TableTreeSpan'
+              }
+            },
+            {
+              label: 'app.aside.nav.keyboard',
+              locat: {
+                name: 'TableTreeKeyboard'
               }
             },
             {

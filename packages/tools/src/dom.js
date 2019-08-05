@@ -36,12 +36,33 @@ export const DomTools = {
       elem.className = `${elem.className} ${cls}`
     }
   },
-  scrollIntoElem (elem) {
-    if (elem) {
-      if (elem.scrollIntoViewIfNeeded) {
-        elem.scrollIntoViewIfNeeded()
-      } else if (elem.scrollIntoView) {
-        elem.scrollIntoView()
+  rowToVisible ($table, row) {
+    let bodyElem = $table.$refs.tableBody.$el
+    let trElem = bodyElem.querySelector(`[data-rowid="${UtilTools.getRowid($table, row)}"]`)
+    if (trElem) {
+      let bodyHeight = bodyElem.clientHeight
+      let bodySrcollTop = bodyElem.scrollTop
+      let trOffsetTop = trElem.offsetTop
+      let trHeight = trElem.clientHeight
+      if (trOffsetTop < bodySrcollTop) {
+        bodyElem.scrollTop = trOffsetTop
+      } else if (trOffsetTop + trHeight >= bodyHeight + bodySrcollTop) {
+        bodyElem.scrollTop = bodySrcollTop + trHeight
+      }
+    }
+  },
+  colToVisible ($table, column) {
+    let bodyElem = $table.$refs.tableBody.$el
+    let tdElem = bodyElem.querySelector(`.${column.id}`)
+    if (tdElem) {
+      let bodyWidth = bodyElem.clientWidth
+      let bodySrcollLeft = bodyElem.scrollLeft
+      let trOffsetLeft = tdElem.offsetLeft
+      let trWidth = tdElem.clientWidth
+      if (trOffsetLeft < bodySrcollLeft) {
+        bodyElem.scrollLeft = trOffsetLeft
+      } else if (trOffsetLeft + trWidth >= bodyWidth + bodySrcollLeft) {
+        bodyElem.scrollLeft = bodySrcollLeft + trWidth
       }
     }
   },

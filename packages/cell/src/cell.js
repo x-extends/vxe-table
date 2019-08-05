@@ -57,16 +57,23 @@ export const Cell = {
   },
   renderCell (h, params) {
     let cellValue
-    let { row, column } = params
+    let { $table, row, column } = params
     let { slots } = column
     if (slots && slots.default) {
       return slots.default(params, h)
+    }
+    let editRender = this && this.editRender ? this.editRender : column.editRender
+    if (editRender) {
+      let compConf = Renderer.get(editRender.name)
+      if (compConf && compConf.renderCell) {
+        return compConf.renderCell.call($table, h, editRender, params, { $excel: $table.$parent, $table, $column: column })
+      }
     }
     cellValue = UtilTools.getCellLabel(row, column, params)
     return [UtilTools.formatText(cellValue, 1)]
   },
   renderTreeCell (h, params) {
-    return Cell.renderTreeIcon(h, params).concat(Cell.renderCell(h, params))
+    return Cell.renderTreeIcon(h, params).concat(Cell.renderCell.call(this, h, params))
   },
 
   /**
@@ -496,12 +503,11 @@ export const Cell = {
     let { slots, formatter } = column
     let editRender = _vm ? _vm.editRender : column.editRender
     let compConf = Renderer.get(editRender.name)
-    let context = { $excel: $table.$parent, $table, $column: column }
     if (editRender.type === 'visible' || isEdit) {
       if (slots && slots.edit) {
         return slots.edit(params, h)
       }
-      return compConf && compConf.renderEdit ? compConf.renderEdit.call($table, h, editRender, params, context) : []
+      return compConf && compConf.renderEdit ? compConf.renderEdit.call($table, h, editRender, params, { $excel: $table.$parent, $table, $column: column }) : []
     }
     if (slots && slots.default) {
       return slots.default(params, h)
@@ -509,7 +515,7 @@ export const Cell = {
     if (formatter) {
       return [UtilTools.formatText(UtilTools.getCellLabel(row, column, params), 1)]
     }
-    return compConf && compConf.renderCell ? compConf.renderCell.call($table, h, editRender, params, context) : Cell.renderCell(h, params)
+    return Cell.renderCell.call(_vm, h, params)
   }
 }
 

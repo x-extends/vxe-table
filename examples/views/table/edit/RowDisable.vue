@@ -38,12 +38,12 @@
       </vxe-table-column>
       <vxe-table-column field="age" title="Age" :edit-render="{type: 'default'}">
         <template v-slot:edit="scope">
-          <input type="text" v-model="scope.row.name" :disabled="disableMethod(scope)">
+          <input type="text" v-model="scope.row.age" :disabled="disableMethod(scope)">
         </template>
       </vxe-table-column>
       <vxe-table-column field="date" title="Date" :edit-render="{type: 'default'}">
         <template v-slot:edit="{ row }">
-          <input type="date" v-model="row.name">
+          <input type="date" v-model="row.date">
         </template>
       </vxe-table-column>
     </vxe-table>
@@ -114,12 +114,12 @@ export default {
           </vxe-table-column>
           <vxe-table-column field="sex" title="Sex" :edit-render="{type: 'default'}">
             <template v-slot:edit="{ row }">
-              <input type="sex" v-model="row.name" :disabled="row.disabled">
+              <input type="sex" v-model="row.sex" :disabled="row.disabled">
             </template>
           </vxe-table-column>
           <vxe-table-column field="date" title="Date" :edit-render="{type: 'default'}">
             <template v-slot:edit="{ row }">
-              <input type="date" v-model="row.name">
+              <input type="date" v-model="row.date">
             </template>
           </vxe-table-column>
         </vxe-table>
