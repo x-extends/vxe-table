@@ -288,6 +288,14 @@ const apis = [
             enum: '',
             defVal: '{ options, label }',
             list: []
+          },
+          {
+            name: 'events',
+            desc: '渲染组件的事件（请查看目标渲染的 Events）',
+            type: 'Object',
+            enum: '',
+            defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex}, ...[目标渲染的 arguments]',
+            list: []
           }
         ]
       },
