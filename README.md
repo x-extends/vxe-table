@@ -163,6 +163,7 @@ npm install babel-plugin-import -D
 
 Now you can import modules like  
 最后这样按需引入模块，就可以减小体积了
+最小包大约120KB,zip
 
 ```javascript
 import {
