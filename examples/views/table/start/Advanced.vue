@@ -49,7 +49,7 @@ export default {
     return {
       demoCodes: [
         `
-        // 抽象一个筛选渲染器
+        // 定义一个筛选渲染器
         VXETable.renderer.add('MyFilter', {
           // 筛选模板
           renderFilter (h, filterRender, params, context) {
@@ -91,7 +91,7 @@ export default {
         </vxe-table>
         `,
         `
-        // 抽象一个输入框渲染器
+        // 定义一个输入框渲染器
         VXETable.renderer.add('MyCell', {
           autofocus: '.my-cell',
           // 编辑模板
@@ -123,7 +123,7 @@ export default {
           }
         })
 
-        // 抽象一个链接渲染器
+        // 定义一个链接渲染器
         VXETable.renderer.add('MyLink', {
           // 显示模板
           renderCell (h, editRender, params) {
@@ -149,7 +149,7 @@ export default {
         </vxe-table>
         `,
         `
-        // 抽象一个输入框渲染器
+        // 定义一个输入框渲染器
         VXETable.renderer.add('MyCell', {
           autofocus: '.my-cell',
           // 编辑模板
