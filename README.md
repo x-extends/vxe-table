@@ -107,8 +107,8 @@ All modules support loading on demand.（所有的模块都支持按需加载）
 
 ## Docs
 
-[To view the example](https://xuliangzhan.github.io/vxe-table/v1/index.html) [查看演示](https://xuliangzhan_admin.gitee.io/vxe-table/v1/index.html)  
-[To view the document](https://xuliangzhan.github.io/vxe-table/v1/index.html#/table/api) [查看文档](https://xuliangzhan_admin.gitee.io/vxe-table/v1/index.html#/table/api)  
+[To view the example](https://xuliangzhan.github.io/vxe-table/) [查看演示](https://xuliangzhan_admin.gitee.io/vxe-table/)  
+[To view the document](https://xuliangzhan.github.io/vxe-table/#/table/api) [查看文档](https://xuliangzhan_admin.gitee.io/vxe-table/#/table/api)  
 
 ## Installing
 
@@ -161,8 +161,8 @@ npm install babel-plugin-import -D
 }
 ```
 
-Now you can import modules like  
-最后这样按需引入模块，就可以减小体积了
+Now you can import modules like (The minimal packet is ≈ 120KB, gzip ≈ 40KB)  
+最后这样按需引入模块，就可以减小体积了（最小的包大约是 ≈ 120KB, gzip ≈ 40KB）
 
 ```javascript
 import {
