@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>虚拟滚动渲染，加载 1 万行，左右固定列</p>
+    <p>虚拟滚动渲染，加载 1 万行</p>
     <p>大数据不建议使用双向绑定的 <table-api-link name="data"/> 属性（vue 监听会大数据会短暂的卡顿），建议使用 <table-api-link prop="loadData"/>/<table-api-link prop="reloadData"/> 函数</p>
     <p class="red"><table-api-link prop="data"/> 和 <table-api-link prop="loadData"/>/<table-api-link prop="reloadData"/> 不应该同时使用，请根据数据量决定使用哪种方式，保证一致性</p>
 
@@ -104,7 +104,7 @@ export default {
             this.loading = true
             setTimeout(() => {
               let tableData = window.MOCK_DATA_LIST.slice(0, 10000)
-              // 阻断 vue 对大数组的双向绑定，大数据性能翻倍提升
+              // 使用函数式加载，阻断 vue 对大数组的双向绑定，大数据性能翻倍提升
               if (this.$refs.xTable) {
                 this.$refs.xTable.loadData(tableData)
               }
@@ -120,7 +120,7 @@ export default {
     this.loading = true
     setTimeout(() => {
       let tableData = window.MOCK_DATA_LIST.slice(0, 10000)
-      // 阻断 vue 对大数组的双向绑定，大数据性能翻倍提升
+      // 使用函数式加载，阻断 vue 对大数组的双向绑定，大数据性能翻倍提升
       if (this.$refs.xTable) {
         this.$refs.xTable.loadData(tableData)
       }

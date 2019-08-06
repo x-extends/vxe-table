@@ -1745,7 +1745,7 @@ export default {
           }
         } else if (isBack && keyboardConfig.isArrow && treeConfig && highlightCurrentRow && currentRow) {
           // 如果树形表格回退键关闭当前行返回父节点
-          let { parent: parentRow } = XEUtils.findTree(this.getTableData().visibleData, item => item === currentRow, treeConfig)
+          let { parent: parentRow } = XEUtils.findTree(this.afterFullData, item => item === currentRow, treeConfig)
           if (parentRow) {
             this.setTreeExpansion(parentRow, false)
               .then(() => this.setCurrentRow(parentRow))
@@ -1822,23 +1822,22 @@ export default {
     },
     // 处理当前行方向键移动
     moveCurrentRow (isUpArrow, isDwArrow, evnt) {
-      let { currentRow, treeConfig } = this
-      let visibleData = this.getTableData().visibleData
+      let { currentRow, treeConfig, afterFullData } = this
       let targetRow
       evnt.preventDefault()
       if (treeConfig) {
-        let { index, items } = XEUtils.findTree(visibleData, item => item === currentRow, treeConfig)
+        let { index, items } = XEUtils.findTree(afterFullData, item => item === currentRow, treeConfig)
         if (isUpArrow && index > 0) {
           targetRow = items[index - 1]
         } else if (isDwArrow && index < items.length - 1) {
           targetRow = items[index + 1]
         }
       } else {
-        let rowIndex = visibleData.indexOf(currentRow)
+        let rowIndex = afterFullData.indexOf(currentRow)
         if (isUpArrow && rowIndex > 0) {
-          targetRow = visibleData[rowIndex - 1]
-        } else if (isDwArrow && rowIndex < visibleData.length - 1) {
-          targetRow = visibleData[rowIndex + 1]
+          targetRow = afterFullData[rowIndex - 1]
+        } else if (isDwArrow && rowIndex < afterFullData.length - 1) {
+          targetRow = afterFullData[rowIndex + 1]
         }
       }
       if (targetRow) {
@@ -3405,40 +3404,19 @@ export default {
         }
         bodyElem.scrollTop = scrollTop
       }
+      return this.$nextTick()
     },
     scrollToRow (row, column) {
-      let { scrollYLoad, scrollYStore, afterFullData, fullDataRowMap } = this
-      if (scrollYLoad) {
-        if (row === -1 && afterFullData.length) {
-          row = afterFullData[afterFullData.length - 1]
-        }
-        if (fullDataRowMap.has(row)) {
-          let rowIndex = afterFullData.indexOf(row)
-          this.scrollTo(null, (rowIndex - 1) * scrollYStore.rowHeight)
-        }
-      } else {
+      if (row && this.fullDataRowMap.has(row)) {
         DomTools.rowToVisible(this, row)
       }
-      if (column) {
-        this.scrollToColumn(column)
-      }
+      return this.scrollToColumn(column)
     },
     scrollToColumn (column) {
-      let { scrollXLoad, visibleColumn, fullColumnMap } = this
-      if (scrollXLoad) {
-        if (column === -1 || fullColumnMap.has(column)) {
-          let scrollLeft = 0
-          for (let index = 0; index < visibleColumn.length; index++) {
-            if (visibleColumn[index] === column) {
-              break
-            }
-            scrollLeft += visibleColumn[index].renderWidth
-          }
-          this.scrollTo(scrollLeft)
-        }
-      } else {
+      if (column && this.fullColumnMap.has(column)) {
         DomTools.colToVisible(this, column)
       }
+      return this.$nextTick()
     },
     clearScroll () {
       Object.assign(this.scrollXStore, {
