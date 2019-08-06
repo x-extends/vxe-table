@@ -522,6 +522,11 @@
       }
     }
   }
+  .vxe-body--column {
+    &.col--selected {
+      box-shadow: inset 0px 0px 0px 2px $vxe-primary-color;
+    }
+  }
 
   /*可编辑*/
   &.vxe-editable {
@@ -531,9 +536,6 @@
         &.col--actived {
           padding: 0;
         }
-      }
-      &.col--selected {
-        box-shadow: inset 0px 0px 0px 2px $vxe-primary-color;
       }
       &.col--dirty {
         position: relative;
