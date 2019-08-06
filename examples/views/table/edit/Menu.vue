@@ -38,6 +38,7 @@
 
 <script>
 import hljs from 'highlight.js'
+import XEClipboard from 'xe-clipboard'
 
 export default {
   data () {
@@ -58,6 +59,10 @@ export default {
       ],
       bodyMenus: [
         [
+          {
+            code: 'copy',
+            name: '复制'
+          },
           {
             code: 'reload',
             name: '刷新'
@@ -124,6 +129,10 @@ export default {
               bodyMenus: [
                 [
                   {
+                    code: 'copy',
+                    name: '复制'
+                  },
+                  {
                     code: 'reload',
                     name: '刷新'
                   },
@@ -168,6 +177,15 @@ export default {
                   break
                 case 'showAllColumn':
                   xTable.resetCustoms()
+                  break
+                case 'copy':
+                  if (row && column) {
+                    if (XEClipboard.copy(row[column.property])) {
+                      this.$XMsg.message({ message: '已复制到剪贴板！', status: 'success' })
+                    }
+                  } else {
+                    this.$XMsg.message({ message: '请在任意单元格上右键点击复制！', status: 'info' })
+                  }
                   break
                 case 'reload':
                   this.findList()
@@ -232,6 +250,15 @@ export default {
           break
         case 'showAllColumn':
           xTable.resetCustoms()
+          break
+        case 'copy':
+          if (row && column) {
+            if (XEClipboard.copy(row[column.property])) {
+              this.$XMsg.message({ message: '已复制到剪贴板！', status: 'success' })
+            }
+          } else {
+            this.$XMsg.message({ message: '请在任意单元格上右键点击复制！', status: 'info' })
+          }
           break
         case 'reload':
           this.findList()
