@@ -6,10 +6,14 @@
     <vxe-table
       border
       show-footer
-      highlight-hover-row
+      highlight-current-row
+      highlight-current-column
+      ref="xTable"
       :footer-method="footerMethod"
       :data.sync="tableData"
       :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}, footer: {options: footerMenus}}"
+      @header-cell-context-menu="headerCellContextMenuEvent"
+      @cell-context-menu="cellContextMenuEvent"
       @context-menu-click="contextMenuClickEvent">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
@@ -120,10 +124,14 @@ export default {
         <vxe-table
           border
           show-footer
-          highlight-hover-row
+          highlight-current-row
+          highlight-current-column
+          ref="xTable"
           :footer-method="footerMethod"
           :data.sync="tableData"
           :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}, footer: {options: footerMenus}}"
+          @header-cell-context-menu="headerCellContextMenuEvent"
+          @cell-context-menu="cellContextMenuEvent"
           @context-menu-click="contextMenuClickEvent">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
@@ -210,6 +218,12 @@ export default {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
           },
           methods: {
+            headerCellContextMenuEvent ({ column }) {
+              this.$refs.xTable.setCurrentColumn(column)
+            },
+            cellContextMenuEvent ({ row }) {
+              this.$refs.xTable.setCurrentRow(row)
+            },
             contextMenuClickEvent ({ menu, row, column }) {
               switch (menu.code) {
                 case 'copy':
@@ -253,6 +267,12 @@ export default {
     })
   },
   methods: {
+    headerCellContextMenuEvent ({ column }) {
+      this.$refs.xTable.setCurrentColumn(column)
+    },
+    cellContextMenuEvent ({ row }) {
+      this.$refs.xTable.setCurrentRow(row)
+    },
     contextMenuClickEvent ({ menu, row, column }) {
       switch (menu.code) {
         case 'copy':
