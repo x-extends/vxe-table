@@ -12,7 +12,7 @@
       height="300"
       :loading="loading"
       :select-config="{checkField: 'checked'}"
-      :optimization ="{scrollY: {gt: 500, oSize: 10, rSize: 30}}">
+      :optimization ="{scrollY: {gt: 200, oSize: 10, rSize: 30}}">
     </vxe-grid>
 
     <pre>
@@ -50,7 +50,7 @@ export default {
           height="300"
           :loading="loading"
           :select-config="{checkField: 'checked'}"
-          :optimization ="{scrollY: {gt: 500, oSize: 10, rSize: 30}}">
+          :optimization ="{scrollY: {gt: 200, oSize: 10, rSize: 30}}">
         </vxe-grid>
         `,
         `
