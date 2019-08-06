@@ -61,10 +61,6 @@ export default {
           {
             code: 'copy',
             name: '复制'
-          },
-          {
-            code: 'paste',
-            name: '粘贴'
           }
         ],
         [
@@ -154,10 +150,6 @@ export default {
                   {
                     code: 'copy',
                     name: '复制'
-                  },
-                  {
-                    code: 'paste',
-                    name: '粘贴'
                   }
                 ],
                 [
