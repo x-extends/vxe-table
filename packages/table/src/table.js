@@ -1746,6 +1746,7 @@ export default {
       let isRightArrow = keyCode === 39
       let isDwArrow = keyCode === 40
       let isDel = keyCode === 46
+      let isA = keyCode === 65
       let isC = keyCode === 67
       let isV = keyCode === 86
       let isX = keyCode === 88
@@ -1827,9 +1828,11 @@ export default {
               .then(() => this.setCurrentRow(parentRow))
           }
         }
-      } else if (keyboardConfig.isCut && isCtrlKey && (isX || isC || isV)) {
+      } else if (keyboardConfig.isCut && isCtrlKey && (isA || isX || isC || isV)) {
         // 如果开启复制功能
-        if (isX || isC) {
+        if (isA) {
+          this.handleAllChecked(evnt)
+        } else if (isX || isC) {
           this.handleCopyed(isX, evnt)
         } else {
           this.handlePaste(evnt)
@@ -2512,7 +2515,7 @@ export default {
      * 表头按下事件
      */
     triggerHeaderCellMousedownEvent (evnt, params) {
-      let { $el, tableData, visibleColumn, mouseConfig = {}, elemStore, handleChecked, handleHeaderChecked, handleIndexChecked } = this
+      let { $el, tableData, mouseConfig = {}, elemStore, handleChecked, handleHeaderChecked } = this
       let { button } = evnt
       let { column, cell } = params
       let isLeftBtn = button === 0
@@ -2521,18 +2524,7 @@ export default {
         let headerList = elemStore['main-header-list'].children
         let bodyList = elemStore['main-body-list'].children
         if (isIndex) {
-          let firstTrElem = bodyList[0]
-          let lastTrElem = bodyList[bodyList.length - 1]
-          let firstCell = firstTrElem.querySelector(`.${column.id}`)
-          params.rowIndex = 0
-          params.row = tableData[0]
-          params.column = visibleColumn.find(column => column.property)
-          params.columnIndex = this.getColumnIndex(params.column)
-          params.cell = DomTools.getCell(this, params)
-          this.handleSelected(params, evnt)
-          handleHeaderChecked(DomTools.getRowNodes(headerList, DomTools.getCellNodeIndex(cell.nextElementSibling), DomTools.getCellNodeIndex(cell.parentNode.lastElementChild)))
-          handleIndexChecked(DomTools.getRowNodes(bodyList, DomTools.getCellNodeIndex(firstCell), DomTools.getCellNodeIndex(lastTrElem.querySelector(`.${column.id}`))))
-          handleChecked(DomTools.getRowNodes(bodyList, DomTools.getCellNodeIndex(firstCell.nextElementSibling), DomTools.getCellNodeIndex(lastTrElem.lastElementChild)))
+          this.handleAllChecked(evnt)
         } else {
           evnt.preventDefault()
           evnt.stopPropagation()
@@ -2607,9 +2599,8 @@ export default {
       } = params
       let { button } = evnt
       let isLeftBtn = button === 0
-      // 可编辑表格才能支持选中模式
       if (editConfig) {
-        if (editConfig.mode === 'row' ? actived.row !== row : actived.column !== column) {
+        if (actived.row !== row || !(editConfig.mode === 'cell' && actived.column === column)) {
           if (isLeftBtn && mouseConfig.checked) {
             evnt.preventDefault()
             evnt.stopPropagation()
@@ -2830,7 +2821,7 @@ export default {
       let { model, editRender } = column
       if (editRender && cell) {
         let isRowMode = editConfig.mode === 'row'
-        if (isRowMode ? actived.row !== row : (actived.row !== row || actived.column !== column)) {
+        if (actived.row !== row || !(editConfig.mode === 'cell' && actived.column === column)) {
           // 判断是否禁用编辑
           let type = 'edit-disabled'
           if (!activeMethod || activeMethod(params)) {
@@ -3030,6 +3021,32 @@ export default {
         height: `${cHeight}px`
       })
       checked.rowNodes = rowNodes
+    },
+    handleAllChecked (evnt) {
+      let { tableData, visibleColumn, mouseConfig = {}, elemStore } = this
+      if (mouseConfig.checked) {
+        evnt.preventDefault()
+        let headerListElem = elemStore['main-header-list']
+        let headerList = headerListElem.children
+        let bodyList = elemStore['main-body-list'].children
+        let column = visibleColumn.find(column => column.type === 'index') || visibleColumn[0]
+        let cell = headerListElem.querySelector(`.${column.id}`)
+        let firstTrElem = bodyList[0]
+        let lastTrElem = bodyList[bodyList.length - 1]
+        let firstCell = firstTrElem.querySelector(`.${column.id}`)
+        let params = {
+          $table: this,
+          rowIndex: 0,
+          row: tableData[0],
+          column: visibleColumn.find(column => column.property)
+        }
+        params.columnIndex = this.getColumnIndex(params.column)
+        params.cell = DomTools.getCell(this, params)
+        this.handleSelected(params, evnt)
+        this.handleHeaderChecked(DomTools.getRowNodes(headerList, DomTools.getCellNodeIndex(cell.nextElementSibling), DomTools.getCellNodeIndex(cell.parentNode.lastElementChild)))
+        this.handleIndexChecked(DomTools.getRowNodes(bodyList, DomTools.getCellNodeIndex(firstCell), DomTools.getCellNodeIndex(lastTrElem.querySelector(`.${column.id}`))))
+        this.handleChecked(DomTools.getRowNodes(bodyList, DomTools.getCellNodeIndex(firstCell.nextElementSibling), DomTools.getCellNodeIndex(lastTrElem.lastElementChild)))
+      }
     },
     handleIndexChecked (rowNodes) {
       let { indexs } = this.editStore
