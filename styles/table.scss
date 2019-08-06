@@ -478,6 +478,14 @@
     }
   }
 
+  .vxe-body--column {
+    &.col--selected {
+      &:not(.col--checked) {
+        box-shadow: inset 0px 0px 0px 2px $vxe-primary-color;
+      }
+    }
+  }
+
   /*校验不通过*/
   .vxe-body--column {
     &.col--actived,
@@ -556,11 +564,6 @@
       padding: 0;
       &.col--actived {
         padding: 0;
-      }
-      &.col--selected {
-        &:not(.col--checked) {
-          box-shadow: inset 0px 0px 0px 2px $vxe-primary-color;
-        }
       }
       &.col--dirty {
         &:before {

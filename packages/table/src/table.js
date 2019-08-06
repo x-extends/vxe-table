@@ -2607,76 +2607,75 @@ export default {
       } = params
       let { button } = evnt
       let isLeftBtn = button === 0
-      // let isRightBtn = button === 2
-      // if (isLeftBtn || isRightBtn) {
-      // if (editConfig && editConfig.trigger === 'dblclick') {
       // 可编辑表格才能支持选中模式
-      if (editConfig && (editConfig.mode === 'row' ? actived.row !== row : actived.column !== column)) {
-        if (isLeftBtn && mouseConfig.checked) {
-          evnt.preventDefault()
-          evnt.stopPropagation()
-          this.clearHeaderChecked()
-          this.clearIndexChecked()
-          let domMousemove = document.onmousemove
-          let domMouseup = document.onmouseup
-          let startCellNode = DomTools.getCellNodeIndex(cell)
-          let isIndex = column.type === 'index'
-          let bodyList = elemStore['main-body-list'].children
-          let headerList = elemStore['main-header-list'].children
-          let cellLastElementChild = cell.parentNode.lastElementChild
-          let cellFirstElementChild = cell.parentNode.firstElementChild
-          let colIndex = [].indexOf.call(cell.parentNode.children, cell)
-          let headStart = headerList[0].children[colIndex]
-          let updateEvent = XEUtils.throttle(function (evnt) {
+      if (editConfig) {
+        if (editConfig.mode === 'row' ? actived.row !== row : actived.column !== column) {
+          if (isLeftBtn && mouseConfig.checked) {
             evnt.preventDefault()
-            let { flag, targetElem } = DomTools.getEventTargetNode(evnt, $el, 'vxe-body--column')
-            if (flag) {
-              if (isIndex) {
-                let firstCell = targetElem.parentNode.firstElementChild
-                handleChecked(DomTools.getRowNodes(bodyList, DomTools.getCellNodeIndex(firstCell.nextElementSibling), DomTools.getCellNodeIndex(cellLastElementChild)))
-                handleIndexChecked(DomTools.getRowNodes(bodyList, DomTools.getCellNodeIndex(firstCell), DomTools.getCellNodeIndex(cell)))
-              } else if (!DomTools.hasClass(targetElem, 'col--index')) {
-                let firstCell = targetElem.parentNode.firstElementChild
-                let colIndex = [].indexOf.call(targetElem.parentNode.children, targetElem)
-                let head = headerList[0].children[colIndex]
-                handleHeaderChecked(DomTools.getRowNodes(headerList, DomTools.getCellNodeIndex(head), DomTools.getCellNodeIndex(headStart)))
-                handleIndexChecked(DomTools.getRowNodes(bodyList, DomTools.getCellNodeIndex(firstCell), DomTools.getCellNodeIndex(cellFirstElementChild)))
-                handleChecked(DomTools.getRowNodes(bodyList, startCellNode, DomTools.getCellNodeIndex(targetElem)))
+            evnt.stopPropagation()
+            this.clearHeaderChecked()
+            this.clearIndexChecked()
+            let domMousemove = document.onmousemove
+            let domMouseup = document.onmouseup
+            let startCellNode = DomTools.getCellNodeIndex(cell)
+            let isIndex = column.type === 'index'
+            let bodyList = elemStore['main-body-list'].children
+            let headerList = elemStore['main-header-list'].children
+            let cellLastElementChild = cell.parentNode.lastElementChild
+            let cellFirstElementChild = cell.parentNode.firstElementChild
+            let colIndex = [].indexOf.call(cell.parentNode.children, cell)
+            let headStart = headerList[0].children[colIndex]
+            let updateEvent = XEUtils.throttle(function (evnt) {
+              evnt.preventDefault()
+              let { flag, targetElem } = DomTools.getEventTargetNode(evnt, $el, 'vxe-body--column')
+              if (flag) {
+                if (isIndex) {
+                  let firstCell = targetElem.parentNode.firstElementChild
+                  handleChecked(DomTools.getRowNodes(bodyList, DomTools.getCellNodeIndex(firstCell.nextElementSibling), DomTools.getCellNodeIndex(cellLastElementChild)))
+                  handleIndexChecked(DomTools.getRowNodes(bodyList, DomTools.getCellNodeIndex(firstCell), DomTools.getCellNodeIndex(cell)))
+                } else if (!DomTools.hasClass(targetElem, 'col--index')) {
+                  let firstCell = targetElem.parentNode.firstElementChild
+                  let colIndex = [].indexOf.call(targetElem.parentNode.children, targetElem)
+                  let head = headerList[0].children[colIndex]
+                  handleHeaderChecked(DomTools.getRowNodes(headerList, DomTools.getCellNodeIndex(head), DomTools.getCellNodeIndex(headStart)))
+                  handleIndexChecked(DomTools.getRowNodes(bodyList, DomTools.getCellNodeIndex(firstCell), DomTools.getCellNodeIndex(cellFirstElementChild)))
+                  handleChecked(DomTools.getRowNodes(bodyList, startCellNode, DomTools.getCellNodeIndex(targetElem)))
+                }
               }
+            }, 80, { leading: true, trailing: true })
+            document.onmousemove = updateEvent
+            document.onmouseup = function (evnt) {
+              document.onmousemove = domMousemove
+              document.onmouseup = domMouseup
             }
-          }, 80, { leading: true, trailing: true })
-          document.onmousemove = updateEvent
-          document.onmouseup = function (evnt) {
-            document.onmousemove = domMousemove
-            document.onmouseup = domMouseup
-          }
-          if (isIndex) {
-            let firstCell = cell.parentNode.firstElementChild
-            params.columnIndex++
-            params.column = visibleColumn[params.columnIndex]
-            params.cell = cell.nextElementSibling
-            this.handleSelected(params, evnt)
-            handleChecked(DomTools.getRowNodes(bodyList, DomTools.getCellNodeIndex(firstCell.nextElementSibling), DomTools.getCellNodeIndex(cellLastElementChild)))
-            handleHeaderChecked([headerList[0].querySelectorAll('.vxe-header--column:not(.col--index)')])
-            handleIndexChecked(DomTools.getRowNodes(bodyList, DomTools.getCellNodeIndex(firstCell), DomTools.getCellNodeIndex(cell)))
-          } else {
-            this.handleSelected(params, evnt)
-          }
-          this.closeFilter()
-          this.closeMenu()
-        } else {
-          // 除了双击其他都没有选中状态
-          if (editConfig.trigger === 'dblclick') {
-            // 如果不在所有选中的范围之内则重新选中
-            let select = DomTools.getCellIndexs(cell)
-            if (checked.rows.indexOf(tableData[select.rowIndex]) === -1 || checked.columns.indexOf(visibleColumn[select.columnIndex]) === -1) {
+            if (isIndex) {
+              let firstCell = cell.parentNode.firstElementChild
+              params.columnIndex++
+              params.column = visibleColumn[params.columnIndex]
+              params.cell = cell.nextElementSibling
               handleSelected(params, evnt)
+              handleChecked(DomTools.getRowNodes(bodyList, DomTools.getCellNodeIndex(firstCell.nextElementSibling), DomTools.getCellNodeIndex(cellLastElementChild)))
+              handleHeaderChecked([headerList[0].querySelectorAll('.vxe-header--column:not(.col--index)')])
+              handleIndexChecked(DomTools.getRowNodes(bodyList, DomTools.getCellNodeIndex(firstCell), DomTools.getCellNodeIndex(cell)))
+            } else {
+              handleSelected(params, evnt)
+            }
+            this.closeFilter()
+            this.closeMenu()
+          } else if (mouseConfig.selected) {
+            // 除了双击其他都没有选中状态
+            if (editConfig.trigger === 'dblclick') {
+              // 如果不在所有选中的范围之内则重新选中
+              let select = DomTools.getCellIndexs(cell)
+              if (checked.rows.indexOf(tableData[select.rowIndex]) === -1 || checked.columns.indexOf(visibleColumn[select.columnIndex]) === -1) {
+                handleSelected(params, evnt)
+              }
             }
           }
         }
+      } else if (mouseConfig.selected) {
+        handleSelected(params, evnt)
       }
-      // }
-      // }
     },
     /**
      * 边角事件
