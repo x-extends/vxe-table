@@ -44,10 +44,16 @@ export const DomTools = {
       let bodySrcollTop = bodyElem.scrollTop
       let trOffsetTop = trElem.offsetTop + (trElem.offsetParent ? trElem.offsetParent.offsetTop : 0)
       let trHeight = trElem.clientHeight
-      if (trOffsetTop < bodySrcollTop) {
+      if (trOffsetTop < bodySrcollTop || trOffsetTop > bodySrcollTop + bodyHeight) {
+        // 如果跨行滚动
         bodyElem.scrollTop = trOffsetTop
       } else if (trOffsetTop + trHeight >= bodyHeight + bodySrcollTop) {
         bodyElem.scrollTop = bodySrcollTop + trHeight
+      }
+    } else {
+      // 如果是虚拟渲染跨行滚动
+      if ($table.scrollYLoad) {
+        bodyElem.scrollTop = ($table.afterFullData.indexOf(row) - 1) * $table.scrollYStore.rowHeight
       }
     }
   },
@@ -57,12 +63,26 @@ export const DomTools = {
     if (tdElem) {
       let bodyWidth = bodyElem.clientWidth
       let bodySrcollLeft = bodyElem.scrollLeft
-      let trOffsetLeft = tdElem.offsetLeft + (tdElem.offsetParent ? tdElem.offsetParent.offsetLeft : 0)
-      let trWidth = tdElem.clientWidth
-      if (trOffsetLeft < bodySrcollLeft) {
-        bodyElem.scrollLeft = trOffsetLeft
-      } else if (trOffsetLeft + trWidth >= bodyWidth + bodySrcollLeft) {
-        bodyElem.scrollLeft = bodySrcollLeft + trWidth
+      let tdOffsetLeft = tdElem.offsetLeft + (tdElem.offsetParent ? tdElem.offsetParent.offsetLeft : 0)
+      let tdWidth = tdElem.clientWidth
+      if (tdOffsetLeft < bodySrcollLeft || tdOffsetLeft > bodySrcollLeft + bodyWidth) {
+        // 如果跨列滚动
+        bodyElem.scrollLeft = tdOffsetLeft
+      } else if (tdOffsetLeft + tdWidth >= bodyWidth + bodySrcollLeft) {
+        bodyElem.scrollLeft = bodySrcollLeft + tdWidth
+      }
+    } else {
+      // 如果是虚拟渲染跨行滚动
+      if ($table.scrollXLoad) {
+        let visibleColumn = $table.visibleColumn
+        let scrollLeft = 0
+        for (let index = 0; index < visibleColumn.length; index++) {
+          if (visibleColumn[index] === column) {
+            break
+          }
+          scrollLeft += visibleColumn[index].renderWidth
+        }
+        bodyElem.scrollLeft = scrollLeft
       }
     }
   },

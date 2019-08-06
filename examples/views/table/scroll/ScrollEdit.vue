@@ -1,6 +1,7 @@
 <template>
   <div>
     <p>虚拟滚动渲染，可编辑表格</p>
+    <p class="red">数据量非常大时，由于需要进行大量数据运算，所以数据校验或者获取数据...等函数执行会比较慢的</p>
 
     <vxe-toolbar>
       <template v-slot:buttons>
@@ -11,9 +12,10 @@
         <vxe-button @click="getInsertEvent">获取新增</vxe-button>
         <vxe-button @click="getRemoveEvent">获取删除</vxe-button>
         <vxe-button @click="getUpdateEvent">获取修改</vxe-button>
-        <vxe-button @click="$refs.xTable.scrollToRow($refs.xTable.getData(10))">滚动到第 10 行</vxe-button>
-        <vxe-button @click="$refs.xTable.scrollToRow($refs.xTable.getData(4000))">滚动到第 4000 行</vxe-button>
-        <vxe-button @click="$refs.xTable.scrollToColumn($refs.xTable.getColumns(10))">滚动到第 10 列</vxe-button>
+        <vxe-button @click="$refs.xTable.scrollToRow($refs.xTable.getData(10))">滚动 row=10</vxe-button>
+        <vxe-button @click="$refs.xTable.scrollToRow($refs.xTable.getData(4000))">滚动 row=4000</vxe-button>
+        <vxe-button @click="$refs.xTable.scrollToColumn($refs.xTable.getColumns(1))">滚动 col=1</vxe-button>
+        <vxe-button @click="$refs.xTable.scrollToColumn($refs.xTable.getColumns(10))">滚动 col=10</vxe-button>
       </template>
     </vxe-toolbar>
 
@@ -135,13 +137,22 @@ export default {
         export default {
           data () {
             return {
-              tableData: []
+              loading: false,
+              validRules: {
+                name: [
+                  { required: true, message: '名称必须填写' },
+                  { min: 3, max: 50, message: '名称长度在 3 到 50 个字符' }
+                ],
+                sex: [
+                  { required: true, message: '性别必须填写' }
+                ]
+              }
             }
           },
           created () {
             this.loading = true
             setTimeout(() => {
-              let tableData = window.MOCK_DATA_LIST.slice(0, 10000)
+              let tableData = window.MOCK_DATA_LIST.slice(0, 5000)
               // 阻断 vue 对大数组的双向绑定，避免 vue 绑定大数据造成短暂的卡顿
               if (this.$refs.xTable) {
                 this.$refs.xTable.loadData(tableData)
@@ -235,7 +246,7 @@ export default {
   created () {
     this.loading = true
     setTimeout(() => {
-      let tableData = window.MOCK_DATA_LIST.slice(0, 10000)
+      let tableData = window.MOCK_DATA_LIST.slice(0, 5000)
       // 阻断 vue 对大数组的双向绑定，避免 vue 绑定大数据造成短暂的卡顿
       if (this.$refs.xTable) {
         this.$refs.xTable.loadData(tableData)

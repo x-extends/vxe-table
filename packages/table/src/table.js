@@ -1976,7 +1976,7 @@ export default {
      * 快捷菜单事件处理
      */
     handleGlobalContextmenuEvent (evnt) {
-      let { isCtxMenu, ctxMenuStore } = this
+      let { isCtxMenu, ctxMenuStore, ctxMenuOpts } = this
       let layoutList = ['header', 'body', 'footer']
       if (isCtxMenu) {
         if (ctxMenuStore.visible) {
@@ -2004,7 +2004,11 @@ export default {
             UtilTools.emitEvent(this, `${typePrefix}cell-context-menu`, [params, evnt])
             return
           } else if (this.getEventTargetNode(evnt, this.$el, `vxe-table--${layout}-wrapper`).flag) {
-            this.openContextMenu(evnt, layout, params)
+            if (ctxMenuOpts.trigger === 'cell') {
+              evnt.preventDefault()
+            } else {
+              this.openContextMenu(evnt, layout, params)
+            }
             return
           }
         }
