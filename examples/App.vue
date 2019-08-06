@@ -613,7 +613,13 @@ export default {
               }
             },
             {
-              label: 'app.aside.nav.big1wRowEdit',
+              label: 'app.aside.nav.keyboard',
+              locat: {
+                name: 'TableScrollKeyboard'
+              }
+            },
+            {
+              label: 'app.aside.nav.edit',
               locat: {
                 name: 'TableScrollEdit'
               }

@@ -1,7 +1,6 @@
 <template>
   <div>
-    <p>虚拟滚动渲染，加载 1 万行，左右固定列</p>
-    <p>大数据不建议使用双向绑定的 <table-api-link name="data"/> 属性（vue 监听会大数据会短暂的卡顿），建议使用 <table-api-link prop="loadData"/>/<table-api-link prop="reloadData"/> 函数</p>
+    <p>虚拟滚动渲染，可编辑表格</p>
 
     <vxe-toolbar>
       <template v-slot:buttons>

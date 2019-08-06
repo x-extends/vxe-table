@@ -42,7 +42,7 @@ export const DomTools = {
     if (trElem) {
       let bodyHeight = bodyElem.clientHeight
       let bodySrcollTop = bodyElem.scrollTop
-      let trOffsetTop = trElem.offsetTop
+      let trOffsetTop = trElem.offsetTop + (trElem.offsetParent ? trElem.offsetParent.offsetTop : 0)
       let trHeight = trElem.clientHeight
       if (trOffsetTop < bodySrcollTop) {
         bodyElem.scrollTop = trOffsetTop
@@ -57,7 +57,7 @@ export const DomTools = {
     if (tdElem) {
       let bodyWidth = bodyElem.clientWidth
       let bodySrcollLeft = bodyElem.scrollLeft
-      let trOffsetLeft = tdElem.offsetLeft
+      let trOffsetLeft = tdElem.offsetLeft + (tdElem.offsetParent ? tdElem.offsetParent.offsetLeft : 0)
       let trWidth = tdElem.clientWidth
       if (trOffsetLeft < bodySrcollLeft) {
         bodyElem.scrollLeft = trOffsetLeft
