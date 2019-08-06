@@ -20,26 +20,33 @@ import { Export } from './export';
 import { Resize } from './resize';
 
 export function install(vue: typeof Vue): void;
+export function t(obj: object, key: string): string | number;
+export function setup(options: VXETableOptions): any;
+export function use(Plugin: object, options?: object): any;
 
-export interface GlobalOptions<T> {
-  showOverflow: boolean;
-  showHeaderOverflow: boolean;
-  contextMenu: Array<object>;
-  resizeInterval: number;
-  size: string;
-  resizable: boolean;
-  stripe: boolean;
-  border: boolean;
-  fit: boolean;
-  showHeader: boolean;
-  version: string | number;
-  optimization: object;
-  tooltipConfig: object;
-  icon: object;
-  pager: object;
-  toolbar: object;
-  message: object;
-  i18n(key: string, value: any): any;
+export interface VXETableOptions {
+  showOverflow?: boolean;
+  showHeaderOverflow?: boolean;
+  resizeInterval?: number;
+  size?: string;
+  validConfig?: object;
+  resizable?: boolean;
+  stripe?: boolean;
+  border?: boolean;
+  fit?: boolean;
+  emptyCell?: string;
+  showHeader?: boolean;
+  rowId?: string;
+  version?: string | number;
+  optimization?: object;
+  icon?: object;
+  grid?: object;
+  menu?: object;
+  tooltip?: object;
+  pager?: object;
+  toolbar?: object;
+  message?: object;
+  i18n?(key: string, value: any): any;
 }
 
 export interface Interceptor {
@@ -55,7 +62,11 @@ export interface Renderer {
   delete(name: object): Renderer;
 }
 
+export const interceptor: Interceptor;
+export const renderer: Renderer;
+
 export interface VXETableStatic {
+  install(vue: typeof Vue): void;
   /**
    * 国际化
    */
@@ -64,13 +75,13 @@ export interface VXETableStatic {
    * 设置全局参数
    * @param options 参数
    */
-  setup(options: GlobalOptions<any>): any;
+  setup(options: VXETableOptions): any;
   /**
    * 安装插件
    * @param Plugin 插件 
    * @param options 参数
    */
-  use(Plugin: object, options: object): any;
+  use(Plugin: object, options?: object): any;
   /**
    * 事件拦截器
    */
