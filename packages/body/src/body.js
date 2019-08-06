@@ -35,7 +35,7 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
     showOverflow: allShowOverflow,
     showAllOverflow: oldShowAllOverflow,
     align: allAlign,
-    selectColumn,
+    currentColumn,
     cellClassName,
     spanMethod,
     keyboardConfig,
@@ -169,7 +169,7 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
       'col--actived': editConfig && editRender && (actived.row === row && (actived.column === column || editConfig.mode === 'row')),
       'col--dirty': isDirty,
       'col--valid-error': validError,
-      'col--current': selectColumn === column,
+      'col--current': currentColumn === column,
       'edit--visible': editRender && editRender.type === 'visible',
       'fixed--hidden': fixedHiddenColumn
     }, cellClassName ? XEUtils.isFunction(cellClassName) ? cellClassName(params) : cellClassName : ''],
