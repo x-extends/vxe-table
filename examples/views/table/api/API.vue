@@ -17,9 +17,10 @@
       :loading="loading"
       :cell-class-name="cellClassNameFunc"
       :data.sync="apiList"
-      :mouse-config="{selected: true}"
       :tree-config="{children: 'list', expandAll: !!filterName, expandRowKeys: defaultExpandRowKeys, trigger: 'cell'}"
       :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus},}"
+      @header-cell-context-menu="headerCellContextMenuEvent"
+      @cell-context-menu="cellContextMenuEvent"
       @context-menu-click="contextMenuClickEvent">
       <vxe-table-column field="name" :title="$t('app.api.title.prop')" min-width="280" :filters="nameFilters" tree-node>
         <template v-slot="{ row }">
@@ -231,19 +232,26 @@ export default {
         'disabled-line-through': row.disabled && column.property === 'name'
       }
     },
+    headerCellContextMenuEvent ({ column }) {
+      this.$refs.xTable.setCurrentColumn(column)
+    },
+    cellContextMenuEvent ({ row }) {
+      this.$refs.xTable.setCurrentRow(row)
+    },
     contextMenuClickEvent ({ menu, row, column }) {
+      let xTable = this.$refs.xTable
       switch (menu.code) {
         case 'hideColumn':
-          this.$refs.xTable.hideColumn(column)
+          xTable.hideColumn(column)
           break
         case 'showAllColumn':
-          this.$refs.xTable.resetCustoms()
+          xTable.resetCustoms()
           break
         case 'resetColumn':
-          this.$refs.xTable.resetAll()
+          xTable.resetAll()
           break
         case 'exportAll':
-          this.$refs.xTable.exportCsv({
+          xTable.exportCsv({
             data: XEUtils.toTreeArray(this.tableData, { children: 'list' }),
             filename: `vxe-${this.apiName}_v${pack.version}.csv`
           })
@@ -258,21 +266,21 @@ export default {
         case 'resize':
           this.filterName = ''
           this.tableData = []
-          if (this.$refs.xTable) {
-            this.$refs.xTable.clearAll()
-          }
-          this.$nextTick(() => this.loadList())
+          this.$nextTick(() => {
+            xTable.clearAll()
+            this.loadList()
+          })
           break
         case 'export':
-          this.$refs.xTable.exportCsv({
+          xTable.exportCsv({
             filename: `vxe-${this.apiName}_v${pack.version}.csv`
           })
           break
         case 'allExpand':
-          this.$refs.xTable.setAllTreeExpansion(true)
+          xTable.setAllTreeExpansion(true)
           break
         case 'allShrink':
-          this.$refs.xTable.clearTreeExpand()
+          xTable.clearTreeExpand()
           break
       }
     }
