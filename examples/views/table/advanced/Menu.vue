@@ -42,6 +42,7 @@
 <script>
 import hljs from 'highlight.js'
 import XEUtils from 'xe-utils'
+import XEClipboard from 'xe-clipboard'
 
 export default {
   data () {
@@ -217,8 +218,18 @@ export default {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
           },
           methods: {
-            contextMenuClickEvent ({ menu }) {
-              this.$XMsg.alert(menu.name)
+            contextMenuClickEvent ({ menu, row, column }) {
+              switch (menu.code) {
+                case 'copy':
+                  if (row && column) {
+                    if (XEClipboard.copy(row[column.property])) {
+                      this.$XMsg.message({ message: '已复制到剪贴板！', status: 'success' })
+                    }
+                  }
+                  break
+                default:
+                  this.$XMsg.message(\`点击了 \${menu.name} 选项\`)
+              }
             },
             footerMethod ({ columns, data }) {
               return [
@@ -249,8 +260,18 @@ export default {
     })
   },
   methods: {
-    contextMenuClickEvent ({ menu }) {
-      this.$XMsg.alert(menu.name)
+    contextMenuClickEvent ({ menu, row, column }) {
+      switch (menu.code) {
+        case 'copy':
+          if (row && column) {
+            if (XEClipboard.copy(row[column.property])) {
+              this.$XMsg.message({ message: '已复制到剪贴板！', status: 'success' })
+            }
+          }
+          break
+        default:
+          this.$XMsg.message(`点击了 ${menu.name} 选项`)
+      }
     },
     footerMethod ({ columns, data }) {
       return [
