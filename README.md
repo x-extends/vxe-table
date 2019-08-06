@@ -134,10 +134,7 @@ import VXETable from 'vxe-table'
 import 'vxe-table/lib/index.css'
 
 Vue.use(VXETable, {
-  size: 'small',
-  tooltipConfig: {
-    zIndex: 3000
-  }
+  size: 'small'
 })
 ```
 
