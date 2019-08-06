@@ -213,6 +213,7 @@ export default {
             contextMenuClickEvent ({ menu, row, column }) {
               switch (menu.code) {
                 case 'copy':
+                  // 示例
                   if (row && column) {
                     if (XEClipboard.copy(row[column.property])) {
                       this.$XMsg.message({ message: '已复制到剪贴板！', status: 'success' })
@@ -255,6 +256,7 @@ export default {
     contextMenuClickEvent ({ menu, row, column }) {
       switch (menu.code) {
         case 'copy':
+          // 示例
           if (row && column) {
             if (XEClipboard.copy(row[column.property])) {
               this.$XMsg.message({ message: '已复制到剪贴板！', status: 'success' })
