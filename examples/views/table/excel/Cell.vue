@@ -149,7 +149,7 @@ export default {
               this.$XMsg.alert(updateRecords.length)
             },
             exportCsvEvent () {
-              this.$refs.xExcel.exportCsv()
+              this.$refs.xExcel.exportCsv({ isHeader: false })
             },
             fileChangeEvent (evnt) {
               let files = evnt.target.files
@@ -209,7 +209,7 @@ export default {
       this.$XMsg.alert(updateRecords.length)
     },
     exportCsvEvent () {
-      this.$refs.xExcel.exportCsv()
+      this.$refs.xExcel.exportCsv({ isHeader: false })
     },
     fileChangeEvent (evnt) {
       let files = evnt.target.files

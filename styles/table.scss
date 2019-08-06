@@ -220,7 +220,7 @@
     word-break: break-word;
     padding: 0 10px;
     .vxe-checkbox {
-      vertical-align: middle;
+      vertical-align: bottom;
     }
   }
   .vxe-header--column,
@@ -389,7 +389,7 @@
   }
   .vxe-tree-wrapper {
     display: inline-block;
-    vertical-align: middle;
+    vertical-align: bottom;
     width: 18px;
     cursor: pointer;
     &.is--active {

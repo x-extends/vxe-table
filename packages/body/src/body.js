@@ -459,6 +459,14 @@ export default {
       }
       if (scrollXLoad && isX) {
         $table.triggerScrollXEvent(evnt)
+        if (headerElem && scrollLeft + bodyElem.clientWidth >= bodyElem.scrollWidth) {
+          // 修复拖动滚动条时可能存在不同步问题
+          this.$nextTick(() => {
+            if (bodyElem.scrollLeft !== headerElem.scrollLeft) {
+              headerElem.scrollLeft = bodyElem.scrollLeft
+            }
+          })
+        }
       }
       if (scrollYLoad && isY) {
         $table.triggerScrollYEvent(evnt)
