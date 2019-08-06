@@ -105,7 +105,7 @@ export default {
         export default {
           data () {
             return {
-              tableData: []
+              loading: false
             }
           },
           created () {

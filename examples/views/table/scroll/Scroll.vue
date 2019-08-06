@@ -28,9 +28,9 @@
     <p>数据超大情况下必须使用：<table-api-link prop="show-overflow"/>，<table-api-link prop="show-header-overflow"/> 参数以及调整好 <table-api-link prop="optimization"/> ：{scrollX,scrollY} 适合的参数可以更加流畅</p>
 
     <vxe-table
-      ref="xTable"
       border
       show-overflow
+      ref="xTable"
       height="300">
       <vxe-table-column type="index" width="100"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
@@ -64,7 +64,6 @@ export default {
   data () {
     return {
       tableData: [],
-      tableData2: [],
       demoCodes: [
         `
         <vxe-table
@@ -93,11 +92,10 @@ export default {
         `,
         `
         <vxe-table
-          ref="xTable"
           border
           show-overflow
-          height="300"
-          :data.sync="tableData2">
+          ref="xTable"
+          height="300">
           <vxe-table-column type="index" width="100"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -107,11 +105,6 @@ export default {
         `,
         `
         export default {
-          data () {
-            return {
-              tableData2: []
-            }
-          },
           created () {
             this.$nextTick(() => {
               this.$refs.xTable.reloadData(window.MOCK_DATA_LIST.slice(0, 10000))
