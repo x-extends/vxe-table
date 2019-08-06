@@ -16,7 +16,7 @@
       height="600"
       :loading="loading"
       :select-config="{checkField: 'checked'}"
-      :optimization ="{scrollY: {gt: 500, oSize: 20, rSize: 60}}">
+      :optimization ="{scrollY: {gt: 200, oSize: 20, rSize: 60}}">
       <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
       <vxe-table-column type="index" width="100" fixed="left"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable width="200"></vxe-table-column>
@@ -77,7 +77,7 @@ export default {
           height="600"
           :loading="loading"
           :select-config="{checkField: 'checked'}"
-          :optimization ="{scrollY: {gt: 500, oSize: 20, rSize: 60}}">
+          :optimization ="{scrollY: {gt: 200, oSize: 20, rSize: 60}}">
           <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
           <vxe-table-column type="index" width="100" fixed="left"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable width="200"></vxe-table-column>

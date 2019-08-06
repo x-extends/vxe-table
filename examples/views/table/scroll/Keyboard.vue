@@ -11,7 +11,7 @@
       height="300"
       :loading="loading"
       :keyboard-config="{isArrow: true}"
-      :optimization ="{scrollY: {gt: 500, oSize: 10, rSize: 30}}">>
+      :optimization ="{scrollY: {gt: 200, oSize: 10, rSize: 30}}">>
       <vxe-table-column type="index" width="100"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable width="200"></vxe-table-column>
       <vxe-table-column field="age" title="Age" width="200"></vxe-table-column>
@@ -69,7 +69,7 @@ export default {
           height="300"
           :loading="loading"
           :keyboard-config="{isArrow: true}"
-          :optimization ="{scrollY: {gt: 500, oSize: 10, rSize: 30}}">>
+          :optimization ="{scrollY: {gt: 200, oSize: 10, rSize: 30}}">>
           <vxe-table-column type="index" width="100"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable width="200"></vxe-table-column>
           <vxe-table-column field="age" title="Age" width="200"></vxe-table-column>
