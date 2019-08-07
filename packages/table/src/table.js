@@ -384,7 +384,7 @@ export default {
       if (this._toolbar) {
         this._toolbar.updateColumn(tableFullColumn)
       }
-      // 在 v3.0 中废弃
+      // 在 v3.0 中废弃 prop、label
       if (tableFullColumn.length) {
         let cIndex = Math.floor((tableFullColumn.length - 1) / 2)
         if (tableFullColumn[cIndex].prop) {

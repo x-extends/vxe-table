@@ -82,7 +82,7 @@ export default {
     if (pagerConfig && pagerConfig.pageSize) {
       this.tablePage.pageSize = pagerConfig.pageSize
     }
-    // （v3.0 废弃 data）
+    // （v3.0 中废弃 proxyConfig.props.data）
     if (props && props.data) {
       console.warn('[vxe-table] The property proxyConfig.props.data is deprecated, please use proxyConfig.props.result')
     }
