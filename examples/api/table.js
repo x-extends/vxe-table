@@ -677,7 +677,7 @@ const apis = [
             name: 'trigger',
             desc: '触发方式',
             type: 'String',
-            enum: 'default（默认触发）,cell（点击单元格触发）',
+            enum: 'default（默认触发）,cell（右键单元格触发）',
             defVal: 'default',
             list: []
           },
