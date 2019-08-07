@@ -6,9 +6,9 @@ export default {
   props: {
     // 渲染类型 index,radio,selection,expand
     type: String,
-    // 在 v3.0 中废弃
+    // 在 v3.0 中废弃 prop
     prop: String,
-    // 在 v3.0 中废弃
+    // 在 v3.0 中废弃 label
     label: String,
     // 列属性
     field: String,

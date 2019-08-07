@@ -463,7 +463,7 @@ export default {
           console.warn('[vxe-table] The property column.column-key is deprecated, please use table.column-key')
         }
       }
-      // 在 v3.0 中废弃
+      // 在 v3.0 中废弃 prop/label
       if (!isFieldWarn) {
         if (tableFullColumn.length) {
           let cIndex = Math.floor((tableFullColumn.length - 1) / 2)

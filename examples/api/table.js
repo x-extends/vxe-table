@@ -747,14 +747,6 @@ const apis = [
             list: XEUtils.clone(contextMenuApi, true)
           },
           {
-            name: 'trigger',
-            desc: '触发方式',
-            type: 'String',
-            enum: 'default（默认触发）,cell（点击单元格触发）',
-            defVal: 'default',
-            list: []
-          },
-          {
             name: 'visibleMethod',
             desc: '该函数 Function({type, row?, rowIndex?, column?, columnIndex?}) 的返回值用来决定是否允许显示右键菜单',
             type: 'Function',

@@ -214,7 +214,7 @@ export default {
               return ajax.query.apply(this, [params].concat(args)).then(rest => {
                 if (rest) {
                   if (pagerConfig) {
-                    // （v3.0 废弃 data）
+                    // （v3.0 中废弃 data）
                     tablePage.total = XEUtils.get(rest, props.total || 'page.total') || 0
                     this.tableData = XEUtils.get(rest, props.result || props.data || 'result') || []
                   } else {
