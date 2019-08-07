@@ -23,7 +23,7 @@ export const DomTools = {
     return val && /^\d+%$/.test(val)
   },
   hasClass (elem, cls) {
-    return elem && elem.className.match(rClass(cls))
+    return elem && elem.className && elem.className.match && elem.className.match(rClass(cls))
   },
   removeClass (elem, cls) {
     if (elem && DomTools.hasClass(elem, cls)) {

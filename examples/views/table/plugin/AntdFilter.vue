@@ -6,11 +6,14 @@
       border
       resizable
       highlight-hover-row
+      class="vxe-table-antd"
       height="400"
       :data.sync="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="AInput" :filters="[{data: ''}]" :filter-render="{name: 'AInput', props: {placeholder: '请输入名称'}}"></vxe-table-column>
       <vxe-table-column field="age" title="AInputNumber" sortable :filters="[{data: 0}]" :filter-render="{name: 'AInputNumber', props: {min: 0, max: 100}}"></vxe-table-column>
+      <vxe-table-column field="sex" title="ASelect" sortable :filters="[{data: null}]" :filter-render="{name: 'ASelect', options: sexList}"></vxe-table-column>
+      <vxe-table-column field="sex1" title="ASelect" :filters="[{data: []}]" :filter-render="{name: 'ASelect', options: sexList, props: {mode: 'multiple'}}"></vxe-table-column>
       <vxe-table-column field="role" title="AAutoComplete" :filters="[{data: ''}]" :filter-render="{name: 'AAutoComplete', props: ACProps, events: {search: roleSearchEvent}}"></vxe-table-column>
     </vxe-table>
 
@@ -24,12 +27,14 @@
 </template>
 
 <script>
+import XEAjax from 'xe-ajax'
 import hljs from 'highlight.js'
 
 export default {
   data () {
     return {
       tableData: [],
+      sexList: [],
       restaurants: ['前端', '后端', '开发', '测试'],
       ACProps: {
         dataSource: [],
@@ -41,11 +46,14 @@ export default {
           border
           resizable
           highlight-hover-row
+          class="vxe-table-antd"
           height="400"
           :data.sync="tableData">
           <vxe-table-column type="index" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="AInput" :filters="[{data: null}]" :filter-render="{name: 'AInput', props: {placeholder: '请输入名称'}}"></vxe-table-column>
+          <vxe-table-column field="name" title="AInput" :filters="[{data: ''}]" :filter-render="{name: 'AInput', props: {placeholder: '请输入名称'}}"></vxe-table-column>
           <vxe-table-column field="age" title="AInputNumber" sortable :filters="[{data: 0}]" :filter-render="{name: 'AInputNumber', props: {min: 0, max: 100}}"></vxe-table-column>
+          <vxe-table-column field="sex" title="ASelect" sortable :filters="[{data: null}]" :filter-render="{name: 'ASelect', options: sexList}"></vxe-table-column>
+          <vxe-table-column field="sex1" title="ASelect" :filters="[{data: []}]" :filter-render="{name: 'ASelect', options: sexList, props: {mode: 'multiple'}}"></vxe-table-column>
           <vxe-table-column field="role" title="AAutoComplete" :filters="[{data: ''}]" :filter-render="{name: 'AAutoComplete', props: ACProps, events: {search: roleSearchEvent}}"></vxe-table-column>
         </vxe-table>
         `,
@@ -62,9 +70,16 @@ export default {
             }
           },
           created () {
+            this.findSexList()
             this.tableData = window.MOCK_DATA_LIST.slice(0, 100)
           },
           methods: {
+            findSexList () {
+              return XEAjax.doGet('/api/conf/sex/list').then(({ data }) => {
+                this.sexList = data
+                return data
+              })
+            },
             roleSearchEvent ({ row }, value) {
               this.ACProps.dataSource = this.restaurants.filter(option => option.toUpperCase().indexOf((value || '').toUpperCase()) !== -1)
             }
@@ -75,6 +90,7 @@ export default {
     }
   },
   created () {
+    this.findSexList()
     this.tableData = window.MOCK_DATA_LIST.slice(0, 100)
   },
   mounted () {
@@ -83,6 +99,12 @@ export default {
     })
   },
   methods: {
+    findSexList () {
+      return XEAjax.doGet('/api/conf/sex/list').then(({ data }) => {
+        this.sexList = data
+        return data
+      })
+    },
     roleSearchEvent ({ row }, value) {
       this.ACProps.dataSource = this.restaurants.filter(option => option.toUpperCase().indexOf((value || '').toUpperCase()) !== -1)
     }

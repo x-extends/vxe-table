@@ -460,7 +460,6 @@ export default {
             },
             {
               label: 'app.aside.nav.contextMenu',
-              disabled: true,
               locat: {
                 name: 'GridMenu'
               }

@@ -58,9 +58,8 @@ export const Cell = {
   renderCell (h, params) {
     let cellValue
     let { $table, row, column } = params
-    let { slots } = column
-    let _vm = this || {}
-    let editRender = _vm.editRender || column.editRender || _vm.cellRender || column.cellRender
+    let { slots, own } = column
+    let editRender = own.editRender || own.cellRender
     if (slots && slots.default) {
       return slots.default(params, h)
     }
@@ -501,8 +500,8 @@ export const Cell = {
   },
   runRenderer (h, params, _vm, isEdit) {
     let { $table, row, column } = params
-    let { slots, formatter } = column
-    let editRender = _vm ? _vm.editRender : column.editRender
+    let { slots, own, formatter } = column
+    let editRender = own.editRender
     let compConf = Renderer.get(editRender.name)
     if (editRender.type === 'visible' || isEdit) {
       if (slots && slots.edit) {

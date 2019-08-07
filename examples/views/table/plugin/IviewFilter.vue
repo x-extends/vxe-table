@@ -6,12 +6,15 @@
       border
       resizable
       highlight-hover-row
+      class="vxe-table-iview"
       height="400"
       :data.sync="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Input" :filters="[{data: ''}]" :filter-render="{name: 'Input', props: {placeholder: '请输入名称'}}"></vxe-table-column>
       <vxe-table-column field="age" title="InputNumber" sortable :filters="[{data: 0}]" :filter-render="{name: 'InputNumber', props: {min: 0, max: 100}}"></vxe-table-column>
       <vxe-table-column field="role" title="AutoComplete" :filters="[{data: ''}]" :filter-render="{name: 'AutoComplete', props: {data: restaurants, filterMethod: roleFilterMethod, placeholder: '请输入角色名称'}}"></vxe-table-column>
+      <vxe-table-column field="sex" title="Select" :filters="[{data: null}]" :filter-render="{name: 'Select', options: sexList}"></vxe-table-column>
+      <vxe-table-column field="sex1" title="Select" :filters="[{data: []}]" :filter-render="{name: 'Select', options: sexList, props: {multiple: true}}"></vxe-table-column>
       <vxe-table-column field="date3" title="DatePicker" :filters="[{data: []}]" :filter-render="{name: 'DatePicker', props: {type: 'daterange', rangeSeparator: '至', startPlaceholder: '开始日期', endPlaceholder: '结束日期'}}"></vxe-table-column>
     </vxe-table>
 
@@ -25,12 +28,14 @@
 </template>
 
 <script>
+import XEAjax from 'xe-ajax'
 import hljs from 'highlight.js'
 
 export default {
   data () {
     return {
       tableData: [],
+      sexList: [],
       restaurants: ['前端', '后端', '开发', '测试'],
       demoCodes: [
         `
@@ -38,12 +43,15 @@ export default {
           border
           resizable
           highlight-hover-row
+          class="vxe-table-iview"
           height="400"
           :data.sync="tableData">
           <vxe-table-column type="index" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Input" :filters="[{data: null}]" :filter-render="{name: 'Input', props: {placeholder: '请输入名称'}}"></vxe-table-column>
+          <vxe-table-column field="name" title="Input" :filters="[{data: ''}]" :filter-render="{name: 'Input', props: {placeholder: '请输入名称'}}"></vxe-table-column>
           <vxe-table-column field="age" title="InputNumber" sortable :filters="[{data: 0}]" :filter-render="{name: 'InputNumber', props: {min: 0, max: 100}}"></vxe-table-column>
           <vxe-table-column field="role" title="AutoComplete" :filters="[{data: ''}]" :filter-render="{name: 'AutoComplete', props: {data: restaurants, filterMethod: roleFilterMethod, placeholder: '请输入角色名称'}}"></vxe-table-column>
+          <vxe-table-column field="sex" title="Select" :filters="[{data: null}]" :filter-render="{name: 'Select', options: sexList}"></vxe-table-column>
+          <vxe-table-column field="sex1" title="Select" :filters="[{data: []}]" :filter-render="{name: 'Select', options: sexList, props: {multiple: true}}"></vxe-table-column>
           <vxe-table-column field="date3" title="DatePicker" :filters="[{data: []}]" :filter-render="{name: 'DatePicker', props: {type: 'daterange', rangeSeparator: '至', startPlaceholder: '开始日期', endPlaceholder: '结束日期'}}"></vxe-table-column>
         </vxe-table>
         `,
@@ -52,13 +60,21 @@ export default {
           data () {
             return {
               tableData: [],
+              sexList: [],
               restaurants: ['前端', '后端', '开发', '测试']
             }
           },
           created () {
+            this.findSexList()
             this.tableData = window.MOCK_DATA_LIST.slice(0, 100)
           },
           methods: {
+            findSexList () {
+              return XEAjax.doGet('/api/conf/sex/list').then(({ data }) => {
+                this.sexList = data
+                return data
+              })
+            },
             roleFilterMethod  (value, option) {
               return option.toUpperCase().indexOf((value || '').toUpperCase()) !== -1
             }
@@ -69,6 +85,7 @@ export default {
     }
   },
   created () {
+    this.findSexList()
     this.tableData = window.MOCK_DATA_LIST.slice(0, 100)
   },
   mounted () {
@@ -77,6 +94,12 @@ export default {
     })
   },
   methods: {
+    findSexList () {
+      return XEAjax.doGet('/api/conf/sex/list').then(({ data }) => {
+        this.sexList = data
+        return data
+      })
+    },
     roleFilterMethod  (value, option) {
       return option.toUpperCase().indexOf((value || '').toUpperCase()) !== -1
     }
