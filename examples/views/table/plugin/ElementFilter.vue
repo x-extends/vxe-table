@@ -13,8 +13,8 @@
       <vxe-table-column field="name" title="ElInput" :filters="[{data: ''}]" :filter-render="{name: 'ElInput', props: {placeholder: '请输入名称'}}"></vxe-table-column>
       <vxe-table-column field="age" title="ElInputNumber" sortable :filters="[{data: 0}]" :filter-render="{name: 'ElInputNumber', props: {min: 0, max: 100}}"></vxe-table-column>
       <vxe-table-column field="role" title="ElAutocomplete" :filters="[{data: ''}]" :filter-render="{name: 'ElAutocomplete', props: {fetchSuggestions: roleFetchSuggestions, placeholder: '请输入角色名称'}}"></vxe-table-column>
-      <vxe-table-column field="sex" title="ElSelect" :filters="[{data: null}]" :filter-render="{name: 'ElSelect', options: sexList}"></vxe-table-column>
-      <vxe-table-column field="sex1" title="ElSelect" :filters="[{data: []}]" :filter-render="{name: 'ElSelect', options: sexList, props: {multiple: true}}"></vxe-table-column>
+      <vxe-table-column field="sex" title="ElSelect" :filters="[{data: null}]" :filter-render="{name: 'ElSelect', options: sexList, props: {placeholder: '请选择'}}"></vxe-table-column>
+      <vxe-table-column field="sex1" title="ElSelect" :filters="[{data: []}]" :filter-render="{name: 'ElSelect', options: sexList, props: {multiple: true, placeholder: '请选择'}}"></vxe-table-column>
       <vxe-table-column field="date3" title="ElDatePicker" :filters="[{data: []}]" :filter-render="{name: 'ElDatePicker', props: {type: 'daterange', rangeSeparator: '至', startPlaceholder: '开始日期', endPlaceholder: '结束日期'}}"></vxe-table-column>
     </vxe-table>
 
@@ -55,8 +55,8 @@ export default {
           <vxe-table-column field="name" title="ElInput" :filters="[{data: ''}]" :filter-render="{name: 'ElInput', props: {placeholder: '请输入名称'}}"></vxe-table-column>
           <vxe-table-column field="age" title="ElInputNumber" sortable :filters="[{data: 0}]" :filter-render="{name: 'ElInputNumber', props: {min: 0, max: 100}}"></vxe-table-column>
           <vxe-table-column field="role" title="ElAutocomplete" :filters="[{data: ''}]" :filter-render="{name: 'ElAutocomplete', props: {fetchSuggestions: roleFetchSuggestions, placeholder: '请输入角色名称'}}"></vxe-table-column>
-          <vxe-table-column field="sex" title="ElSelect" :filters="[{data: null}]" :filter-render="{name: 'ElSelect', options: sexList}"></vxe-table-column>
-          <vxe-table-column field="sex1" title="ElSelect" :filters="[{data: []}]" :filter-render="{name: 'ElSelect', options: sexList, props: {multiple: true}}"></vxe-table-column>
+          <vxe-table-column field="sex" title="ElSelect" :filters="[{data: null}]" :filter-render="{name: 'ElSelect', options: sexList, props: {placeholder: '请选择'}}"></vxe-table-column>
+          <vxe-table-column field="sex1" title="ElSelect" :filters="[{data: []}]" :filter-render="{name: 'ElSelect', options: sexList, props: {multiple: true, placeholder: '请选择'}}"></vxe-table-column>
           <vxe-table-column field="date3" title="ElDatePicker" :filters="[{data: []}]" :filter-render="{name: 'ElDatePicker', props: {type: 'daterange', rangeSeparator: '至', startPlaceholder: '开始日期', endPlaceholder: '结束日期'}}"></vxe-table-column>
         </vxe-table>
         `,
