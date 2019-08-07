@@ -35,15 +35,15 @@ const excelContextMenu = {
       [
         {
           code: 'clip',
-          name: '剪贴'
+          name: '剪贴(Ctrl+X)'
         },
         {
           code: 'copy',
-          name: '复制'
+          name: '复制(Ctrl+C)'
         },
         {
           code: 'paste',
-          name: '粘贴'
+          name: '粘贴(Ctrl+V)'
         }
       ],
       [
@@ -57,7 +57,7 @@ const excelContextMenu = {
         },
         {
           code: 'clearData',
-          name: '清除内容'
+          name: '清除内容(Del)'
         }
       ],
       [
