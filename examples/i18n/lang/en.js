@@ -11,7 +11,8 @@ module.exports = {
         use: 'Quick start',
         theme: 'Custom theme',
         i18n: 'Internationalization',
-        advancedFunctions: 'Advanced Functions',
+        renderer: 'Renderer',
+        interceptor: 'Event interaction interceptor',
 
         icon: '图标',
         basics: '基础功能',

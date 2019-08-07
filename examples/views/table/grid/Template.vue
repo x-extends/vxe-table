@@ -4,8 +4,8 @@
     <p>列：</p>
     <p><table-column-api-link prop="default"/>：自定义内容模板（提前格式化好数据 > <table-column-api-link prop="formatter"/> > <table-column-api-link prop="slots"/>）</p>
     <p><table-column-api-link prop="header"/>：自定义表头模板</p>
-    <p><table-column-api-link prop="filter"/>：自定义筛选模板（建议使用<router-link :to="{name: 'StartAdvanced'}">渲染器</router-link>，可以更好的复用）</p>
-    <p><table-column-api-link prop="edit"/>：自定义可编辑模板（建议使用<router-link :to="{name: 'StartAdvanced'}">渲染器</router-link>，可以更好的复用）</p>
+    <p><table-column-api-link prop="filter"/>：自定义筛选模板（建议使用<router-link :to="{name: 'StartRenderer'}">渲染器</router-link>，可以更好的复用）</p>
+    <p><table-column-api-link prop="edit"/>：自定义可编辑模板（建议使用<router-link :to="{name: 'StartRenderer'}">渲染器</router-link>，可以更好的复用）</p>
     <p>工具栏：</p>
     <p><table-column-api-link prop="buttons"/>：自定义按钮模板</p>
 

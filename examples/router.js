@@ -6,7 +6,8 @@ const StartUse = () => import(/* webpackChunkName: "start" */ './views/table/sta
 const StartGlobal = () => import(/* webpackChunkName: "start" */ './views/table/start/Global.vue')
 const StartTheme = () => import(/* webpackChunkName: "start" */ './views/table/start/Theme.vue')
 const StartI18n = () => import(/* webpackChunkName: "start" */ './views/table/start/I18n.vue')
-const StartAdvanced = () => import(/* webpackChunkName: "start" */ './views/table/start/Advanced.vue')
+const StartRenderer = () => import(/* webpackChunkName: "start" */ './views/table/start/Renderer.vue')
+const StartInterceptor = () => import(/* webpackChunkName: "start" */ './views/table/start/Interceptor.vue')
 
 const TableIcon = () => import(/* webpackChunkName: "base" */ './views/table/base/Icon.vue')
 const TableBasic = () => import(/* webpackChunkName: "base" */ './views/table/base/Basic.vue')
@@ -178,9 +179,14 @@ export default new Router({
       component: StartI18n
     },
     {
-      path: '/table/start/advanced',
-      name: 'StartAdvanced',
-      component: StartAdvanced
+      path: '/table/start/renderer',
+      name: 'StartRenderer',
+      component: StartRenderer
+    },
+    {
+      path: '/table/start/interceptor',
+      name: 'StartInterceptor',
+      component: StartInterceptor
     },
     {
       path: '/table/base/icon',
