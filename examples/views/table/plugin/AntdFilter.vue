@@ -12,8 +12,8 @@
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="AInput" :filters="[{data: ''}]" :filter-render="{name: 'AInput', props: {placeholder: '请输入名称'}}"></vxe-table-column>
       <vxe-table-column field="age" title="AInputNumber" sortable :filters="[{data: 0}]" :filter-render="{name: 'AInputNumber', props: {min: 0, max: 100}}"></vxe-table-column>
-      <vxe-table-column field="sex" title="ASelect" sortable :filters="[{data: null}]" :filter-render="{name: 'ASelect', options: sexList}"></vxe-table-column>
-      <vxe-table-column field="sex1" title="ASelect" :filters="[{data: []}]" :filter-render="{name: 'ASelect', options: sexList, props: {mode: 'multiple'}}"></vxe-table-column>
+      <vxe-table-column field="sex" title="ASelect" sortable :filters="[{data: null}]" :filter-render="{name: 'ASelect', options: sexList, props: {placeholder: '请选择'}}"></vxe-table-column>
+      <vxe-table-column field="sex1" title="ASelect" :filters="[{data: []}]" :filter-render="{name: 'ASelect', options: sexList, props: {mode: 'multiple', placeholder: '请选择'}}"></vxe-table-column>
       <vxe-table-column field="role" title="AAutoComplete" :filters="[{data: ''}]" :filter-render="{name: 'AAutoComplete', props: ACProps, events: {search: roleSearchEvent}}"></vxe-table-column>
     </vxe-table>
 
@@ -52,8 +52,8 @@ export default {
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="AInput" :filters="[{data: ''}]" :filter-render="{name: 'AInput', props: {placeholder: '请输入名称'}}"></vxe-table-column>
           <vxe-table-column field="age" title="AInputNumber" sortable :filters="[{data: 0}]" :filter-render="{name: 'AInputNumber', props: {min: 0, max: 100}}"></vxe-table-column>
-          <vxe-table-column field="sex" title="ASelect" sortable :filters="[{data: null}]" :filter-render="{name: 'ASelect', options: sexList}"></vxe-table-column>
-          <vxe-table-column field="sex1" title="ASelect" :filters="[{data: []}]" :filter-render="{name: 'ASelect', options: sexList, props: {mode: 'multiple'}}"></vxe-table-column>
+          <vxe-table-column field="sex" title="ASelect" sortable :filters="[{data: null}]" :filter-render="{name: 'ASelect', options: sexList, props: {placeholder: '请选择'}}"></vxe-table-column>
+          <vxe-table-column field="sex1" title="ASelect" :filters="[{data: []}]" :filter-render="{name: 'ASelect', options: sexList, props: {mode: 'multiple', placeholder: '请选择'}}"></vxe-table-column>
           <vxe-table-column field="role" title="AAutoComplete" :filters="[{data: ''}]" :filter-render="{name: 'AAutoComplete', props: ACProps, events: {search: roleSearchEvent}}"></vxe-table-column>
         </vxe-table>
         `,
