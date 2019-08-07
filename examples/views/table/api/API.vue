@@ -109,14 +109,14 @@ export default {
       bodyMenus: [
         [
           {
-            code: 'resize',
-            name: '重新加载'
+            code: 'copy',
+            name: '复制内容'
           }
         ],
         [
           {
-            code: 'copy',
-            name: '复制内容'
+            code: 'resize',
+            name: '重新加载'
           },
           {
             code: 'export',
