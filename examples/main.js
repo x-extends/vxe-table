@@ -3,12 +3,8 @@ import App from './App.vue'
 import router from './router'
 import i18n from './i18n'
 
+import 'font-awesome/scss/font-awesome.scss'
 import './assets/style/layout.scss'
-import './plugins/highlight.js'
-import './plugins/element.js'
-import './plugins/iview.js'
-import './plugins/antd.js'
-import './plugins/xtable.js'
 import './plugins/index.js'
 import './mock'
 import XEUtils from 'xe-utils'
@@ -82,7 +78,7 @@ function mockData () {
       list: [],
       time: currTime + 360000,
       sex: index % 3 ? '0' : '1',
-      sex1: [index % 3 ? '0' : '1'],
+      sex1: index % 3 ? ['0'] : index % 4 ? ['0', '1'] : index % 5 ? [] : ['1'],
       sex2: index % 3 ? '0' : '1',
       age: index % 2 === 0 ? 26 : 28,
       region: index % 4 === 0 ? [19, 199, 1773] : index % 3 === 0 ? [9, 73, 719] : [1, 1, 5],

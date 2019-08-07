@@ -64,7 +64,8 @@ export default {
         [
           {
             code: 'copy',
-            name: '复制'
+            name: '复制',
+            prefixIcon: 'fa fa-copy'
           }
         ],
         [
@@ -157,7 +158,8 @@ export default {
                 [
                   {
                     code: 'copy',
-                    name: '复制'
+                    name: '复制',
+                    prefixIcon: 'fa fa-copy'
                   }
                 ],
                 [

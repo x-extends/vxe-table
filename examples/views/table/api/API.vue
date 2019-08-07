@@ -102,7 +102,8 @@ export default {
         [
           {
             code: 'exportAll',
-            name: '导出完整文档'
+            name: '导出完整文档',
+            prefixIcon: 'fa fa-download'
           }
         ]
       ],
@@ -110,7 +111,8 @@ export default {
         [
           {
             code: 'copy',
-            name: '复制内容'
+            name: '复制内容',
+            prefixIcon: 'fa fa-copy'
           }
         ],
         [
@@ -120,7 +122,8 @@ export default {
           },
           {
             code: 'export',
-            name: '导出文档'
+            name: '导出文档',
+            prefixIcon: 'fa fa-download'
           }
         ],
         [

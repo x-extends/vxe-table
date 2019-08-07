@@ -711,7 +711,7 @@ export default {
         }
       }) : _e(),
       h('div', {
-        class: `vxe-table${id}-wrapper`,
+        class: `vxe-table${id}-wrapper ${this.$vnode.data.staticClass || ''}`,
         ref: 'tableWrapper'
       }, [
         /**
@@ -1700,9 +1700,11 @@ export default {
           // 如果是树形表格当前行回车移动到子节点
           let childrens = currentRow[treeConfig.children]
           if (childrens && childrens.length) {
+            let targetRow = childrens[0]
+            params = { $table: this, row: targetRow }
             this.setTreeExpansion(currentRow, true)
-              .then(() => this.setCurrentRow(childrens[0]))
-              .then(() => this.scrollToRow(childrens[0]))
+              .then(() => this.scrollToRow(targetRow))
+              .then(() => this.triggerCurrentRowEvent(evnt, params))
           }
         }
       } else if (operCtxMenu) {
@@ -1747,9 +1749,10 @@ export default {
           // 如果树形表格回退键关闭当前行返回父节点
           let { parent: parentRow } = XEUtils.findTree(this.afterFullData, item => item === currentRow, treeConfig)
           if (parentRow) {
+            params = { $table: this, row: parentRow }
             this.setTreeExpansion(parentRow, false)
-              .then(() => this.setCurrentRow(parentRow))
               .then(() => this.scrollToRow(parentRow))
+              .then(() => this.triggerCurrentRowEvent(evnt, params))
           }
         }
       } else if (keyboardConfig.isCut && isCtrlKey && (isX || isC || isV)) {
@@ -1841,7 +1844,9 @@ export default {
         }
       }
       if (targetRow) {
-        this.setCurrentRow(targetRow).then(() => this.scrollToRow(targetRow))
+        let params = { $table: this, row: targetRow }
+        this.scrollToRow(targetRow)
+          .then(() => this.triggerCurrentRowEvent(evnt, params))
       }
     },
     // 处理方向键移动

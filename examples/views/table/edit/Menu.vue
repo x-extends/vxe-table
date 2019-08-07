@@ -61,7 +61,8 @@ export default {
         [
           {
             code: 'copy',
-            name: '复制'
+            name: '复制',
+            prefixIcon: 'fa fa-copy'
           },
           {
             code: 'reload',
@@ -77,7 +78,8 @@ export default {
           },
           {
             code: 'save',
-            name: '保存'
+            name: '保存',
+            prefixIcon: 'fa fa-save'
           }
         ]
       ],
@@ -130,7 +132,8 @@ export default {
                 [
                   {
                     code: 'copy',
-                    name: '复制'
+                    name: '复制',
+                    prefixIcon: 'fa fa-copy'
                   },
                   {
                     code: 'reload',
@@ -146,7 +149,8 @@ export default {
                   },
                   {
                     code: 'save',
-                    name: '保存'
+                    name: '保存',
+                    prefixIcon: 'fa fa-save'
                   }
                 ]
               ]

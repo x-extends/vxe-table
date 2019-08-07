@@ -27,7 +27,8 @@ export default {
       let { $parent: $table, filterStore, filterCheckAllEvent, changeRadioOption, changeMultipleOption } = this
       let { vSize } = $table
       let { args, column, multiple } = filterStore
-      let { slots, filterRender } = column
+      let { slots, own } = column
+      let filterRender = own.filterRender
       let compConf = filterRender ? Renderer.get(filterRender.name) : null
       if (slots && slots.filter) {
         return slots.filter.call($table, Object.assign({ context: this }, args), h)
