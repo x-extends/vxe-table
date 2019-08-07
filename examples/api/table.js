@@ -683,7 +683,7 @@ const apis = [
           },
           {
             name: 'visibleMethod',
-            desc: '该函数 Function({type, row?, rowIndex?, column?, columnIndex?}) 的返回值用来决定是否允许显示右键菜单',
+            desc: '该函数会在菜单显示之前执行，支持通过 Function({type, row?, rowIndex?, column?, columnIndex?}) 的返回值用来决定是否允许显示右键菜单（对于需要权限控制的选项可能会用到）',
             type: 'Function',
             enum: '',
             defVal: '',

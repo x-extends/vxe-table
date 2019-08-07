@@ -1,13 +1,13 @@
 <template>
   <div>
     <p>快捷菜单，实现对按钮的控制</p>
+    <p>通过 <table-api-link prop="visibleMethod"/> 和 <table-api-link prop="disabled"/> 属性来控制是否允许操作</p>
 
     <vxe-grid
       border
       resizable
       show-footer
       ref="xGrid"
-      height="400"
       :footer-method="footerMethod"
       :columns="tableColumn"
       :data.sync="tableData"
@@ -46,14 +46,15 @@ export default {
       tableColumn: [
         { type: 'index', width: 50 },
         { field: 'name', title: 'app.body.label.name' },
-        { field: 'sex', title: 'app.body.label.sex', showHeaderOverflow: true },
+        { field: 'age', title: 'app.body.label.age' },
         { field: 'address', title: 'Address', showOverflow: true }
       ],
       headerMenus: [
         [
           {
             code: 'exportAll',
-            name: '导出所有.csv'
+            name: '导出所有.csv',
+            disabled: false
           }
         ]
       ],
@@ -62,19 +63,23 @@ export default {
           {
             code: 'copy',
             name: '复制内容',
+            disabled: false,
             prefixIcon: 'fa fa-copy'
           },
           {
             code: 'clear',
-            name: '清除内容'
+            name: '清除内容',
+            disabled: false
           },
           {
             code: 'reload',
-            name: '刷新表格'
+            name: '刷新表格',
+            disabled: false
           },
           {
             code: 'export',
             name: '导出.csv',
+            disabled: false,
             prefixIcon: 'fa fa-download'
           }
         ]
@@ -83,7 +88,8 @@ export default {
         [
           {
             code: 'clearAll',
-            name: '清空数据'
+            name: '清空数据',
+            disabled: false
           }
         ]
       ],
@@ -93,9 +99,13 @@ export default {
         <vxe-grid
           border
           resizable
-          height="300"
+          show-footer
+          ref="xGrid"
+          :footer-method="footerMethod"
           :columns="tableColumn"
-          :data.sync="tableData"></vxe-grid>
+          :data.sync="tableData"
+          :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}, footer: {options: footerMenus}, visibleMethod}"
+          @context-menu-click="contextMenuClickEvent"></vxe-grid>
         `,
         `
         export default {
@@ -104,14 +114,15 @@ export default {
               tableColumn: [
                 { type: 'index', width: 50 },
                 { field: 'name', title: 'app.body.label.name' },
-                { field: 'sex', title: 'app.body.label.sex', showHeaderOverflow: true },
+                { field: 'age', title: 'app.body.label.age' },
                 { field: 'address', title: 'Address', showOverflow: true }
               ],
               headerMenus: [
                 [
                   {
                     code: 'exportAll',
-                    name: '导出所有.csv'
+                    name: '导出所有.csv',
+                    disabled: false
                   }
                 ]
               ],
@@ -120,19 +131,23 @@ export default {
                   {
                     code: 'copy',
                     name: '复制内容',
+                    disabled: false,
                     prefixIcon: 'fa fa-copy'
                   },
                   {
                     code: 'clear',
-                    name: '清除内容'
+                    name: '清除内容',
+                    disabled: false
                   },
                   {
                     code: 'reload',
-                    name: '刷新表格'
+                    name: '刷新表格',
+                    disabled: false
                   },
                   {
                     code: 'export',
                     name: '导出.csv',
+                    disabled: false,
                     prefixIcon: 'fa fa-download'
                   }
                 ]
@@ -141,7 +156,8 @@ export default {
                 [
                   {
                     code: 'clearAll',
-                    name: '清空数据'
+                    name: '清空数据',
+                    disabled: false
                   }
                 ]
               ],
@@ -152,9 +168,10 @@ export default {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 4)
           },
           methods: {
-            visibleMethod ({ type, row, column }) {
+            visibleMethod ({ type, column }) {
+              // 示例：只有 name 列允许操作
               // 显示之前处理按钮的操作权限
-              let privilege = !row
+              let privilege = !column || column.property !== 'name'
               this.bodyMenus.forEach(list => {
                 list.forEach(item => {
                   if (['copy', 'clear'].includes(item.code)) {
@@ -188,7 +205,7 @@ export default {
                   if (columnIndex === 0) {
                     return '和值'
                   }
-                  if (['age', 'rate'].includes(column.property)) {
+                  if (['age'].includes(column.property)) {
                     return XEUtils.sum(data, column.property)
                   }
                   return null
@@ -210,9 +227,10 @@ export default {
     })
   },
   methods: {
-    visibleMethod ({ type, row, column }) {
+    visibleMethod ({ type, column }) {
+      // 示例：只有 name 列允许操作
       // 显示之前处理按钮的操作权限
-      let privilege = !row
+      let privilege = !column || column.property !== 'name'
       this.bodyMenus.forEach(list => {
         list.forEach(item => {
           if (['copy', 'clear'].includes(item.code)) {
@@ -246,7 +264,7 @@ export default {
           if (columnIndex === 0) {
             return '和值'
           }
-          if (['age', 'rate'].includes(column.property)) {
+          if (['age'].includes(column.property)) {
             return XEUtils.sum(data, column.property)
           }
           return null
