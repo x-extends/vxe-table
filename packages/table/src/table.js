@@ -1266,7 +1266,8 @@ export default {
       let isColspan
       let letIndex = 0
       let leftList = []
-      let rightIndex = 0
+      let leftStartIndex = null
+      let rightEndIndex = null
       let centerList = []
       let rightList = []
       let { tableFullColumn, isGroup, columnStore, scrollXStore, optimizeOpts } = this
@@ -1282,6 +1283,9 @@ export default {
       // 重新分配列
       tableFullColumn.filter(column => column.visible).forEach((column, columnIndex) => {
         if (column.fixed === 'left') {
+          if (leftStartIndex === null) {
+            leftStartIndex = letIndex
+          }
           if (!isColspan) {
             if (columnIndex - letIndex !== 0) {
               isColspan = true
@@ -1292,13 +1296,13 @@ export default {
           leftList.push(column)
         } else if (column.fixed === 'right') {
           if (!isColspan) {
-            if (!rightIndex) {
-              rightIndex = columnIndex
+            if (rightEndIndex === null) {
+              rightEndIndex = columnIndex
             }
-            if (columnIndex - rightIndex !== 0) {
+            if (columnIndex - rightEndIndex !== 0) {
               isColspan = true
             } else {
-              rightIndex++
+              rightEndIndex++
             }
           }
           rightList.push(column)
@@ -1309,7 +1313,7 @@ export default {
       let visibleColumn = leftList.concat(centerList).concat(rightList)
       let scrollXLoad = scrollX && scrollX.gt && scrollX.gt < tableFullColumn.length
       Object.assign(columnStore, { leftList, centerList, rightList })
-      if ((isColspan && isGroup) || (rightIndex && rightIndex !== visibleColumn.length)) {
+      if (isGroup && (isColspan || leftStartIndex || (rightEndIndex !== null && rightEndIndex !== visibleColumn.length))) {
         throw new Error('[vxe-table] Fixed column must to the left and right sides.')
       }
       if (scrollXLoad) {
