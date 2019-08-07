@@ -11,7 +11,8 @@ module.exports = {
         use: '快速上手',
         theme: '自定义主题',
         i18n: '国际化',
-        advancedFunctions: '高级函数',
+        renderer: '渲染器',
+        interceptor: '事件交互拦截器',
 
         icon: '图标',
         basics: '基础功能',

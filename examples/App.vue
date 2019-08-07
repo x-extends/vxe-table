@@ -3,7 +3,7 @@
     <header class="page-header">
       <h1 class="title">
         <a href="https://github.com/xuliangzhan/vxe-table/tree/v1.6">
-          <span>vxe-table</span>
+          <span>🐬vxe-table</span>
           <img src="https://img.shields.io/npm/dm/vxe-table.svg?style=social&logo=github">
           <img src="https://img.shields.io/github/watchers/xuliangzhan/vxe-table.svg?style=social">
           <img src="https://img.shields.io/github/stars/xuliangzhan/vxe-table.svg?style=social">
@@ -92,9 +92,15 @@ export default {
               }
             },
             {
-              label: 'app.aside.nav.advancedFunctions',
+              label: 'app.aside.nav.renderer',
               locat: {
-                name: 'StartAdvanced'
+                name: 'StartRenderer'
+              }
+            },
+            {
+              label: 'app.aside.nav.interceptor',
+              locat: {
+                name: 'StartInterceptor'
               }
             }
           ]

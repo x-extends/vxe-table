@@ -6,12 +6,12 @@
     <h3>渲染器和插槽对比</h3>
     <p class="orange">渲染器：抽象一切可复用的功能，实现简单的可配置化；</p>
     <p class="orange">插槽：自定义程度高，但需要重复写冗余代码，比较繁琐；</p>
-    <h3>简单示例</h3>
-    <p>通过渲染器你可以轻松实现筛选模板、单元格模板，可以根据不同业务实现不一样的组件，这个功能将非常实用；比如这些插件 <a class="link" href="https://www.npmjs.com/package/vxe-table-plugin-element" target="_blank">vxe-table-plugin-element</a></p>
     <h3>API</h3>
     <p class="green">添加渲染器 renderer.add(name, options)</p>
     <p class="green">混合多个渲染器 renderer.mixin(renderMap)</p>
     <p class="green">删除渲染器 renderer.delete(name)</p>
+    <h3>简单示例</h3>
+    <p>通过渲染器你可以轻松实现筛选模板、单元格模板，可以根据不同业务实现不一样的组件，这个功能将非常实用；比如这些插件 <a class="link" href="https://www.npmjs.com/package/vxe-table-plugin-element" target="_blank">vxe-table-plugin-element</a></p>
     <h4>例子：实现一个简单的筛选渲染</h4>
     <pre>
       <code class="javascript">{{ demoCodes[0] }}</code>
@@ -26,17 +26,6 @@
     <pre>
       <code class="javascript">{{ demoCodes[4] }}</code>
       <code class="html">{{ demoCodes[5] }}</code>
-    </pre>
-    <h2>事件交互拦截器</h2>
-    <p>通过内置拦截器可以解决当表格交互与其他组件存在冲突的，可以通过返回 false 阻止默认的行为，从而可以集成其他组件互相兼容</p>
-    <h3>API</h3>
-    <p class="green">添加一个拦截器 interceptor.add(type, callback)</p>
-    <h3>type 可选值</h3>
-    <p class="orange">event.clear_filter（清除筛选面板时触发）</p>
-    <p class="orange">event.clear_actived（清除激活单元格时触发）</p>
-    <p>例子：比如自定义渲染某个组件后，由于弹出层面板不在单元格之内，按键事件的交互行为存在冲突，对于这些场景就很有用了</p>
-    <pre>
-      <code class="javascript">{{ demoCodes[6] }}</code>
     </pre>
   </div>
 </template>
@@ -177,14 +166,6 @@ export default {
           <vxe-table-column field="name" title="Name" :cell-render="{name: 'MyLink'}"></vxe-table-column>
           <vxe-table-column field="role" title="Role" :edit-render="{name: 'MyCell'}"></vxe-table-column>
         </vxe-table>
-        `,
-        `
-        VXETable.interceptor.add('event.clear_actived', (params, event) => {
-          // 比如点击了某个组件的弹出层面板之后，此时被激活单元格不应该被自动关闭，通过返回 false 可以阻止默认的行为。
-          if (event.target.className.indexOf('other-popper') > -1) {
-            return false
-          }
-        })
         `
       ]
     }
