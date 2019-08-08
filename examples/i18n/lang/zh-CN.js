@@ -289,11 +289,11 @@ module.exports = {
           filters: '配置筛选条件',
           filterMultiple: '只对 filters 有效，筛选是否允许多选',
           filterMethod: '只对 filters 有效，自定义筛选方法 Function({value, row, column})',
-          filterRender: '筛选渲染配置项',
+          filterRender: '筛选渲染器配置项',
           treeNode: '只对 tree-config 配置时有效，指定为树节点',
           columnKey: '列渲染的 key，对应列渲染中虚拟 DOM 的 key 属性（非特殊情况下不需要使用）',
-          cellRender: '单元格渲染配置项',
-          editRender: '单元格编辑渲染配置项',
+          cellRender: '默认的渲染器配置项',
+          editRender: '可编辑渲染器配置项',
           params: '额外的参数（自定义一些数据参数，对于某些特殊的场景可能会用到）'
         }
       },

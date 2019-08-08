@@ -12,17 +12,24 @@
     <p class="green">混合多个渲染器 renderer.mixin(renderMap)</p>
     <p class="green">删除渲染器 renderer.delete(name)</p>
     <h3>简单示例</h3>
-    <h4>例子：实现一个简单的筛选渲染</h4>
+    <p class="red">建议通过 JSX 实现更加简单，可维护性更好</p>
+    <h4>例子：实现一个筛选渲染器</h4>
+    <p class="green">renderFilter(h, filterRender, { column, columnIndex, $columnIndex }, context)：渲染函数</p>
+    <p class="green">filterMethod({ option, row, column })：筛选函数</p>
     <pre>
       <code class="javascript">{{ demoCodes[0] }}</code>
       <code class="html">{{ demoCodes[1] }}</code>
     </pre>
-    <h4>例子：实现一个简单的单元格渲染</h4>
+    <h4>例子：实现一个默认的渲染器</h4>
+    <p class="green">renderDefault(h, cellRender, { row, rowIndex, $rowIndex, column, columnIndex, $columnIndex })：渲染函数</p>
     <pre>
       <code class="javascript">{{ demoCodes[2] }}</code>
       <code class="html">{{ demoCodes[3] }}</code>
     </pre>
-    <h4>例子：（推荐）通过 JSX 实现更加简单，可维护性好</h4>
+    <h4>例子：实现一个可编辑渲染器</h4>
+    <p class="green">autofocus：自动聚焦的 className</p>
+    <p class="green">renderEdit(h, editRender, { row, rowIndex, $rowIndex, column, columnIndex, $columnIndex })：编辑的渲染函数</p>
+    <p class="green">renderCell(h, editRender, { row, rowIndex, $rowIndex, column, columnIndex, $columnIndex })：显示的渲染函数</p>
     <pre>
       <code class="javascript">{{ demoCodes[4] }}</code>
       <code class="html">{{ demoCodes[5] }}</code>
@@ -80,42 +87,10 @@ export default {
         </vxe-table>
         `,
         `
-        // 定义一个输入框渲染器
-        VXETable.renderer.add('MyCell', {
-          autofocus: '.my-cell',
-          // 编辑模板
-          renderEdit (h, editRender, params) {
-            let { row, column } = params
-            return [
-              h('input', {
-                class: 'my-cell',
-                attrs: {
-                  type: 'text'
-                },
-                domProps: {
-                  value: row[column.property]
-                },
-                on: {
-                  input (evnt) {
-                    row[column.property] = evnt.target.value
-                  }
-                }
-              })
-            ]
-          },
-          // 显示模板
-          renderCell (h, editRender, params) {
-            let { row, column } = params
-            return [
-              h('span', row[column.property])
-            ]
-          }
-        })
-
         // 定义一个链接渲染器
         VXETable.renderer.add('MyLink', {
-          // 显示模板
-          renderCell (h, editRender, params) {
+          // 默认显示模板
+          renderDefault (h, editRender, params) {
             let { row, column } = params
             let { events } = editRender
             return [
@@ -134,20 +109,21 @@ export default {
           <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
           <vxe-table-column field="age" title="Age"></vxe-table-column>
           <vxe-table-column field="name" title="Name" :cell-render="{name: 'MyLink', events: {click: linkEvent}}"></vxe-table-column>
-          <vxe-table-column field="role" title="Role" :edit-render="{name: 'MyCell'}"></vxe-table-column>
+          <vxe-table-column field="role" title="Role"></vxe-table-column>
         </vxe-table>
         `,
         `
         // 定义一个输入框渲染器
-        VXETable.renderer.add('MyCell', {
+        VXETable.renderer.add('MyInput', {
+          // 激活后自动聚焦
           autofocus: '.my-cell',
-          // 编辑模板
+          // 可编辑激活模板
           renderEdit (h, editRender, { row, column }) {
             return [
               <input class="my-cell" text="text" value={ row[column.property] } onInput={ evnt => { row[column.property] = evnt.target.value }}/>
             ]
           },
-          // 显示模板
+          // 可编辑显示模板
           renderCell (h, editRender, { row, column }) {
             return [
               <span>{row[column.property]}</span>
@@ -163,8 +139,8 @@ export default {
           :edit-config="{trigger: 'click', mode: 'row'}">
           <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
           <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" :cell-render="{name: 'MyLink'}"></vxe-table-column>
-          <vxe-table-column field="role" title="Role" :edit-render="{name: 'MyCell'}"></vxe-table-column>
+          <vxe-table-column field="name" title="Name"></vxe-table-column>
+          <vxe-table-column field="role" title="Role" :edit-render="{name: 'MyInput'}"></vxe-table-column>
         </vxe-table>
         `
       ]
