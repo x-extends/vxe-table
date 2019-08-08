@@ -54,6 +54,7 @@ export default {
           {
             code: 'exportAll',
             name: '导出所有.csv',
+            visible: true,
             disabled: false
           }
         ]
@@ -63,22 +64,26 @@ export default {
           {
             code: 'copy',
             name: '复制内容',
+            visible: true,
             disabled: false,
             prefixIcon: 'fa fa-copy'
           },
           {
             code: 'clear',
             name: '清除内容',
+            visible: true,
             disabled: false
           },
           {
             code: 'reload',
             name: '刷新表格',
+            visible: true,
             disabled: false
           },
           {
             code: 'export',
             name: '导出.csv',
+            visible: true,
             disabled: false,
             prefixIcon: 'fa fa-download'
           }
@@ -89,6 +94,7 @@ export default {
           {
             code: 'clearAll',
             name: '清空数据',
+            visible: true,
             disabled: false
           }
         ]
@@ -122,6 +128,7 @@ export default {
                   {
                     code: 'exportAll',
                     name: '导出所有.csv',
+                    visible: true,
                     disabled: false
                   }
                 ]
@@ -131,22 +138,26 @@ export default {
                   {
                     code: 'copy',
                     name: '复制内容',
+                    visible: true,
                     disabled: false,
                     prefixIcon: 'fa fa-copy'
                   },
                   {
                     code: 'clear',
                     name: '清除内容',
+                    visible: true,
                     disabled: false
                   },
                   {
                     code: 'reload',
                     name: '刷新表格',
+                    visible: true,
                     disabled: false
                   },
                   {
                     code: 'export',
                     name: '导出.csv',
+                    visible: true,
                     disabled: false,
                     prefixIcon: 'fa fa-download'
                   }
@@ -157,6 +168,7 @@ export default {
                   {
                     code: 'clearAll',
                     name: '清空数据',
+                    visible: true,
                     disabled: false
                   }
                 ]
@@ -169,13 +181,17 @@ export default {
           },
           methods: {
             visibleMethod ({ type, column }) {
-              // 示例：只有 name 列允许操作
+              // 示例：只有 name 列允许操作，清除按钮只能在 age 才显示
               // 显示之前处理按钮的操作权限
-              let privilege = !column || column.property !== 'name'
+              let isDisabled = !column || column.property !== 'name'
+              let isVisible = column && column.property === 'age'
               this.bodyMenus.forEach(list => {
                 list.forEach(item => {
-                  if (['copy', 'clear'].includes(item.code)) {
-                    item.disabled = privilege
+                  if (['copy'].includes(item.code)) {
+                    item.disabled = isDisabled
+                  }
+                  if (['clear'].includes(item.code)) {
+                    item.visible = isVisible
                   }
                 })
               })
@@ -228,13 +244,17 @@ export default {
   },
   methods: {
     visibleMethod ({ type, column }) {
-      // 示例：只有 name 列允许操作
+      // 示例：只有 name 列允许操作，清除按钮只能在 age 才显示
       // 显示之前处理按钮的操作权限
-      let privilege = !column || column.property !== 'name'
+      let isDisabled = !column || column.property !== 'name'
+      let isVisible = column && column.property === 'age'
       this.bodyMenus.forEach(list => {
         list.forEach(item => {
-          if (['copy', 'clear'].includes(item.code)) {
-            item.disabled = privilege
+          if (['copy'].includes(item.code)) {
+            item.disabled = isDisabled
+          }
+          if (['clear'].includes(item.code)) {
+            item.visible = isVisible
           }
         })
       })

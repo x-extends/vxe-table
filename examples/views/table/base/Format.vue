@@ -8,7 +8,7 @@
       :data.sync="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+      <vxe-table-column field="sex" title="Sex" :formatter="formatterSex"></vxe-table-column>
       <vxe-table-column field="time" title="Time" :formatter="formatTime"></vxe-table-column>
       <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
     </vxe-table>
@@ -57,7 +57,7 @@ export default {
           :data.sync="tableData">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+          <vxe-table-column field="sex" title="Sex" :formatter="formatterSex"></vxe-table-column>
           <vxe-table-column field="time" title="Time" :formatter="formatTime"></vxe-table-column>
           <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
         </vxe-table>
@@ -73,6 +73,9 @@ export default {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
           },
           methods: {
+            formatterSex (cellValue) {
+              return cellValue === '1' ? '男' : '女'
+            },
             formatTime ({ cellValue, row, column }) {
               return XEUtils.toDateString(cellValue, 'yyyy-MM-dd HH:ss:mm')
             }
@@ -114,6 +117,9 @@ export default {
     })
   },
   methods: {
+    formatterSex (cellValue) {
+      return cellValue === '1' ? '男' : '女'
+    },
     formatTime ({ cellValue, row, column }) {
       return XEUtils.toDateString(cellValue, 'yyyy-MM-dd HH:ss:mm')
     }

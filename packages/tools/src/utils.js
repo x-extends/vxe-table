@@ -109,7 +109,7 @@ export const UtilTools = {
       let cacheFormat = $table && $table.fullAllDataRowMap.has(row)
       if (cacheFormat) {
         let formatData = $table.fullAllDataRowMap.get(row).formatData
-        if (formatData && formatData.value === cellValue) {
+        if (formatData && formatData.column === column && formatData.value === cellValue) {
           return formatData.label
         }
       }
@@ -121,7 +121,7 @@ export const UtilTools = {
         cellLabel = formatter(Object.assign({ cellValue }, params))
       }
       if (cacheFormat) {
-        $table.fullAllDataRowMap.get(row).formatData = { value: cellValue, label: cellLabel }
+        $table.fullAllDataRowMap.get(row).formatData = { column, value: cellValue, label: cellLabel }
       }
     }
     return cellLabel
