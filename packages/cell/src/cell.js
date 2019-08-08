@@ -64,9 +64,10 @@ export const Cell = {
       return slots.default(params, h)
     }
     if (editRender) {
+      let funName = own.editRender ? 'renderCell' : 'renderDefault'
       let compConf = Renderer.get(editRender.name)
-      if (compConf && compConf.renderCell) {
-        return compConf.renderCell.call($table, h, editRender, params, { $excel: $table.$parent, $table, $column: column })
+      if (compConf && compConf[funName]) {
+        return compConf[funName].call($table, h, editRender, params, { $excel: $table.$parent, $table, $column: column })
       }
     }
     cellValue = UtilTools.getCellLabel(row, column, params)

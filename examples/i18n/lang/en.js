@@ -291,10 +291,10 @@ module.exports = {
           filters: 'Configure filter conditions',
           filterMultiple: '只对 filters 有效，筛选是否允许多选',
           filterMethod: '只对 filters 有效，自定义筛选方法 Function({value, row, column})',
-          filterRender: 'Filter render configuration',
+          filterRender: '筛选渲染器配置项',
           treeNode: '只对 tree-config 配置时有效，指定为树节点',
-          cellRender: '单元格渲染配置项',
-          editRender: '单元格编辑渲染配置项',
+          cellRender: '默认的渲染器配置项',
+          editRender: '可编辑渲染器配置项',
           params: '额外的参数（自定义一些数据参数，对于某些特殊的场景可能会用到）'
         }
       },
