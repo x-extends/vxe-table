@@ -73,8 +73,8 @@ export default {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
           },
           methods: {
-            formatterSex (cellValue) {
-              return cellValue === '1' ? '男' : '女'
+            formatterSex ({ cellValue }) {
+              return cellValue === '1' ? '男' : cellValue === '0' ? '女' : ''
             },
             formatTime ({ cellValue, row, column }) {
               return XEUtils.toDateString(cellValue, 'yyyy-MM-dd HH:ss:mm')
@@ -117,8 +117,8 @@ export default {
     })
   },
   methods: {
-    formatterSex (cellValue) {
-      return cellValue === '1' ? '男' : '女'
+    formatterSex ({ cellValue }) {
+      return cellValue === '1' ? '男' : cellValue === '0' ? '女' : ''
     },
     formatTime ({ cellValue, row, column }) {
       return XEUtils.toDateString(cellValue, 'yyyy-MM-dd HH:ss:mm')
