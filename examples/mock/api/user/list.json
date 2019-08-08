@@ -11,6 +11,8 @@
     "email": "{{ random.repeat('abcdefg',5,20) }}@{{ random.repeat(['qq','163'],1) }}.{{ random.repeat(['com','net'],1) }}",
     "age|number": "{{ random.num(18,30) }}",
     "rate|number": "{{ random.num(0,5) }}",
+    "slider|number": "{{ random.num(0,100) }}",
+    "color": "rgb({{ random.num(0,255) }}, {{ random.num(0,255) }}, 0)",
     "flag|boolean": "{{ random.num(0,1) }}",
     "phone": "136{{ random.num(10000000,99999999) }}",
     "describe": "{{ random.repeat('用户信息',2,6) }}",

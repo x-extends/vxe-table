@@ -108,24 +108,13 @@ export default {
           methods: {
             findSexList () {
               return XEAjax.doGet('/api/conf/sex/list').then(({ data }) => {
-                // 更新指定列的数据源
-                this.tableColumn.forEach(cloumn => {
-                  if (['sex', 'sex1'].includes(cloumn.field)) {
-                    cloumn.editRender.options = data
-                  }
-                })
-                return data
+                this.tableColumn[5].editRender.options = data
+                this.tableColumn[6].editRender.options = data
               })
             },
             findRegionList () {
               return XEAjax.doGet('/api/conf/region/list').then(({ data }) => {
-                // 更新指定列的数据源
-                this.tableColumn.forEach(cloumn => {
-                  if (['region'].includes(cloumn.field)) {
-                    cloumn.editRender.props.options = data
-                  }
-                })
-                return data
+                this.tableColumn[8].editRender.props.options = data
               })
             },
             findSexGroupList () {
@@ -149,12 +138,7 @@ export default {
                   ]
                 }
               ]
-              // 更新指定列的数据源
-              this.tableColumn.forEach(cloumn => {
-                if (['sex2'].includes(cloumn.field)) {
-                  cloumn.editRender.optionGroups = sexGroupList
-                }
-              })
+              this.tableColumn[7].editRender.optionGroups = sexGroupList
             },
             roleFetchSuggestions (queryString, cb) {
               var restaurants = this.restaurants
@@ -194,24 +178,13 @@ export default {
   methods: {
     findSexList () {
       return XEAjax.doGet('/api/conf/sex/list').then(({ data }) => {
-        // 更新指定列的数据源
-        this.tableColumn.forEach(cloumn => {
-          if (['sex', 'sex1'].includes(cloumn.field)) {
-            cloumn.editRender.options = data
-          }
-        })
-        return data
+        this.tableColumn[5].editRender.options = data
+        this.tableColumn[6].editRender.options = data
       })
     },
     findRegionList () {
       return XEAjax.doGet('/api/conf/region/list').then(({ data }) => {
-        // 更新指定列的数据源
-        this.tableColumn.forEach(cloumn => {
-          if (['region'].includes(cloumn.field)) {
-            cloumn.editRender.props.options = data
-          }
-        })
-        return data
+        this.tableColumn[8].editRender.props.options = data
       })
     },
     findSexGroupList () {
@@ -235,12 +208,7 @@ export default {
           ]
         }
       ]
-      // 更新指定列的数据源
-      this.tableColumn.forEach(cloumn => {
-        if (['sex2'].includes(cloumn.field)) {
-          cloumn.editRender.optionGroups = sexGroupList
-        }
-      })
+      this.tableColumn[7].editRender.optionGroups = sexGroupList
     },
     roleFetchSuggestions (queryString, cb) {
       var restaurants = this.restaurants

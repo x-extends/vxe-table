@@ -56,6 +56,7 @@
       <vxe-table-column field="date1" title="DateTimePicker" width="220" :edit-render="{name: 'ElDatePicker', props: {type: 'datetime', format: 'yyyy-MM-dd HH:mm:ss'}}"></vxe-table-column>
       <vxe-table-column field="date5" title="ElTimeSelect" width="200" :edit-render="{name: 'ElTimeSelect', props: {pickerOptions: {start: '08:30', step: '00:15', end: '18:30'}}}"></vxe-table-column>
       <vxe-table-column field="flag" title="ElSwitch" width="100" :edit-render="{name: 'ElSwitch', type: 'visible'}"></vxe-table-column>
+      <vxe-table-column field="slider" title="ElSlider" width="200" :edit-render="{name: 'ElSlider', type: 'visible'}"></vxe-table-column>
       <vxe-table-column field="rate" title="ElRate" width="200" fixed="right" :edit-render="{name: 'ElRate', type: 'visible'}"></vxe-table-column>
     </vxe-table>
 
@@ -150,7 +151,6 @@ export default {
             ref="xTable"
             class="vxe-table-element"
             height="460"
-            size="small"
             :loading="loading"
             :data.sync="tableData"
             :edit-rules="validRules"
@@ -166,6 +166,7 @@ export default {
             <vxe-table-column field="date1" title="DateTimePicker" width="220" :edit-render="{name: 'ElDatePicker', props: {type: 'datetime', format: 'yyyy-MM-dd HH:mm:ss'}}"></vxe-table-column>
             <vxe-table-column field="date5" title="ElTimeSelect" width="200" :edit-render="{name: 'ElTimeSelect', props: {pickerOptions: {start: '08:30', step: '00:15', end: '18:30'}}}"></vxe-table-column>
             <vxe-table-column field="flag" title="ElSwitch" width="100" :edit-render="{name: 'ElSwitch', type: 'visible'}"></vxe-table-column>
+            <vxe-table-column field="slider" title="ElSlider" width="200" :edit-render="{name: 'ElSlider', type: 'visible'}"></vxe-table-column>
             <vxe-table-column field="rate" title="ElRate" width="200" fixed="right" :edit-render="{name: 'ElRate', type: 'visible'}"></vxe-table-column>
           </vxe-table>
 
