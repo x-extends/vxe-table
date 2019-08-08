@@ -12,7 +12,7 @@
 [![npm license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/xuliangzhan/vxe-table/blob/master/LICENSE)
 
 A fully functional Vue table component, perfect compatibility with any component library.  
-一个功能齐全的Vue表组件，与任意组件库完美兼容
+一个功能齐全的 Vue 表组件，与任意组件库完美兼容
 
 * Design concept 设计理念
   * 精简的 API（简洁、高效）
