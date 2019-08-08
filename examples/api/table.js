@@ -446,7 +446,7 @@ const apis = [
           },
           {
             name: 'checkRowKey',
-            desc: '默认勾选开指定行（需要 row-id）',
+            desc: '默认勾选开指定行',
             type: 'String',
             enum: '',
             defVal: '',
@@ -503,7 +503,7 @@ const apis = [
           },
           {
             name: 'checkRowKeys',
-            desc: '默认勾选开指定行（需要 row-id）',
+            desc: '默认勾选开指定行',
             type: 'Array<String>',
             enum: '',
             defVal: '',
@@ -577,7 +577,7 @@ const apis = [
           },
           {
             name: 'expandRowKeys',
-            desc: '默认展开指定行（需要 row-id）',
+            desc: '默认展开指定行',
             type: 'Array',
             enum: '',
             defVal: '',
