@@ -1,7 +1,7 @@
 <template>
   <div>
-    <h2>Event interaction interceptor 事件交互拦截器</h2>
-    <p>通过内置拦截器可以解决当表格交互与其他组件存在冲突的，可以通过返回 false 阻止默认的行为，从而可以集成其他组件互相兼容</p>
+    <h2>Event collision interceptor 事件冲突拦截器</h2>
+    <p>通过内置拦截器可以解决当表格的事件处理与第三方组件存在冲突的问题，可以通过返回 false 阻止默认的行为，从而可以集成其他组件互相兼容</p>
     <h3>API</h3>
     <p class="green">添加一个拦截器 interceptor.add(type, callback)</p>
     <h3>type 可选值</h3>
