@@ -1,17 +1,19 @@
 <template>
   <div>
     <p>快捷菜单，实现对按钮的控制</p>
-    <p>通过 <table-api-link prop="visibleMethod"/> 和 <table-api-link prop="disabled"/> 属性来控制是否允许操作</p>
+    <p>通过 <table-api-link prop="visibleMethod"/> 和 <table-api-link prop="visible"/> | <table-api-link prop="disabled"/> 属性来控制菜单选项的操作权限</p>
 
     <vxe-grid
       border
       resizable
       show-footer
+      highlight-current-row
       ref="xGrid"
       :footer-method="footerMethod"
       :columns="tableColumn"
       :data.sync="tableData"
       :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}, footer: {options: footerMenus}, visibleMethod}"
+      @cell-context-menu="cellContextMenuEvent"
       @context-menu-click="contextMenuClickEvent"></vxe-grid>
 
     <pre>
@@ -92,8 +94,8 @@ export default {
       footerMenus: [
         [
           {
-            code: 'clearAll',
-            name: '清空数据',
+            code: 'exportAll',
+            name: '导出所有.csv',
             visible: true,
             disabled: false
           }
@@ -106,11 +108,13 @@ export default {
           border
           resizable
           show-footer
+          highlight-current-row
           ref="xGrid"
           :footer-method="footerMethod"
           :columns="tableColumn"
           :data.sync="tableData"
           :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}, footer: {options: footerMenus}, visibleMethod}"
+          @cell-context-menu="cellContextMenuEvent"
           @context-menu-click="contextMenuClickEvent"></vxe-grid>
         `,
         `
@@ -166,8 +170,8 @@ export default {
               footerMenus: [
                 [
                   {
-                    code: 'clearAll',
-                    name: '清空数据',
+                    code: 'exportAll',
+                    name: '导出所有.csv',
                     visible: true,
                     disabled: false
                   }
@@ -196,6 +200,9 @@ export default {
                 })
               })
               return true
+            },
+            cellContextMenuEvent ({ row }) {
+              this.$refs.xGrid.setCurrentRow(row)
             },
             contextMenuClickEvent ({ menu, row, column }) {
               let xGrid = this.$refs.xGrid
@@ -259,6 +266,9 @@ export default {
         })
       })
       return true
+    },
+    cellContextMenuEvent ({ row }) {
+      this.$refs.xGrid.setCurrentRow(row)
     },
     contextMenuClickEvent ({ menu, row, column }) {
       let xGrid = this.$refs.xGrid

@@ -1916,6 +1916,7 @@ export default {
     },
     // 处理菜单的移动
     moveCtxMenu (evnt, keyCode, ctxMenuStore, property, operKey, operRest, menuList) {
+      let selectItem
       let selectIndex = XEUtils.findIndexOf(menuList, item => ctxMenuStore[property] === item)
       if (keyCode === operKey) {
         if (operRest && UtilTools.hasChildrenList(ctxMenuStore.selected)) {
@@ -1925,9 +1926,21 @@ export default {
           ctxMenuStore.selectChild = null
         }
       } else if (keyCode === 38) {
-        ctxMenuStore[property] = menuList[selectIndex - 1] || menuList[menuList.length - 1]
+        for (let len = selectIndex - 1; len >= 0; len--) {
+          if (menuList[len].visible !== false) {
+            selectItem = menuList[len]
+            break
+          }
+        }
+        ctxMenuStore[property] = selectItem || menuList[menuList.length - 1]
       } else if (keyCode === 40) {
-        ctxMenuStore[property] = menuList[selectIndex + 1] || menuList[0]
+        for (let index = selectIndex + 1; index < menuList.length; index++) {
+          if (menuList[index].visible !== false) {
+            selectItem = menuList[index]
+            break
+          }
+        }
+        ctxMenuStore[property] = selectItem || menuList[0]
       } else if (ctxMenuStore[property] && (keyCode === 13 || keyCode === 32)) {
         this.ctxMenuLinkEvent(evnt, ctxMenuStore[property])
       }
