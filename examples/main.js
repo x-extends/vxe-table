@@ -12,7 +12,7 @@ import moment from 'moment'
 
 Vue.config.productionTip = false
 
-// 后台异步生成10万数据，为了避免大量运算卡主页面
+// 后台异步生成10万模拟数据
 var columns = window.MOCK_COLUMN_LIST = []
 var list = window.MOCK_DATA_LIST = []
 var currTime = Date.now()
@@ -75,6 +75,8 @@ function mockData () {
       date10: mDate,
       date11: [],
       num: 0.6789 * index,
+      color: index % 4 === 0 ? 'rgba(255, 0, 0, 0.8)' : index % 3 === 0 ? 'rgba(0, 255, 0, 0.8)' : null,
+      slider: index % 5 === 0 ? 40 : index % 4 === 0 ? 20 : index % 3 === 0 ? 60 : 0,
       list: [],
       time: currTime + 360000,
       sex: index % 3 ? '0' : '1',
@@ -82,7 +84,7 @@ function mockData () {
       sex2: index % 3 ? '0' : '1',
       age: index % 2 === 0 ? 26 : 28,
       region: index % 4 === 0 ? [19, 199, 1773] : index % 3 === 0 ? [9, 73, 719] : [1, 1, 5],
-      rate: index % 2 === 0 ? 2 : 0,
+      rate: index % 4 === 0 ? 2 : index % 3 === 0 ? 3 : 0,
       address: `地址 地址地址 地址地址 址地址 址地址  址地址 址地址址地址址地址 地址${index}`,
       address2: `地址 地址地址 地址${index}`,
       updateTime: currTime,

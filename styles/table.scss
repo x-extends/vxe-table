@@ -462,16 +462,19 @@
   /*暂无数据*/
   &.is--loading {
     .vxe-table--empty-block {
-      display: none;
+      visibility: hidden;
     }
   }
   .vxe-table--empty-block {
+    display: none;
     height: 100%;
     min-height: 60px;
-    display: flex;
     justify-content: center;
     align-items: center;
     text-align: center;
+    &.is--visible {
+      display: flex;
+    }
     .vxe-table--empty-text {
       display: block;
       width: 50%;

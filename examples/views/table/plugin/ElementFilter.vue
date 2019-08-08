@@ -10,12 +10,27 @@
       height="400"
       :data.sync="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="ElInput" :filters="[{data: ''}]" :filter-render="{name: 'ElInput', props: {placeholder: '请输入名称'}}"></vxe-table-column>
-      <vxe-table-column field="age" title="ElInputNumber" sortable :filters="[{data: 0}]" :filter-render="{name: 'ElInputNumber', props: {min: 0, max: 100}}"></vxe-table-column>
-      <vxe-table-column field="role" title="ElAutocomplete" :filters="[{data: ''}]" :filter-render="{name: 'ElAutocomplete', props: {fetchSuggestions: roleFetchSuggestions, placeholder: '请输入角色名称'}}"></vxe-table-column>
-      <vxe-table-column field="sex" title="ElSelect" :filters="[{data: null}]" :filter-render="{name: 'ElSelect', options: sexList, props: {placeholder: '请选择'}}"></vxe-table-column>
-      <vxe-table-column field="sex1" title="ElSelect" :filters="[{data: []}]" :filter-render="{name: 'ElSelect', options: sexList, props: {multiple: true, placeholder: '请选择'}}"></vxe-table-column>
-      <vxe-table-column field="date3" title="ElDatePicker" :filters="[{data: []}]" :filter-render="{name: 'ElDatePicker', props: {type: 'daterange', rangeSeparator: '至', startPlaceholder: '开始日期', endPlaceholder: '结束日期'}}"></vxe-table-column>
+      <vxe-table-column field="name" title="ElInput" width="100" :filters="[{data: ''}]" :filter-render="{name: 'ElInput', props: {placeholder: '请输入名称'}}"></vxe-table-column>
+      <vxe-table-column field="age" title="ElInputNumber" sortable width="160" :filters="[{data: 0}]" :filter-render="{name: 'ElInputNumber', props: {min: 0, max: 100}}"></vxe-table-column>
+      <vxe-table-column field="role" title="ElAutocomplete" width="160" :filters="[{data: ''}]" :filter-render="{name: 'ElAutocomplete', props: {fetchSuggestions: roleFetchSuggestions, placeholder: '请输入角色名称'}}"></vxe-table-column>
+      <vxe-table-column field="sex" title="ElSelect" width="100" :formatter="formatterSex" :filters="[{data: null}]" :filter-render="{name: 'ElSelect', options: sexList, props: {placeholder: '请选择'}}"></vxe-table-column>
+      <vxe-table-column field="sex1" title="ElSelect" width="100" :formatter="formatterSexs" :filters="[{data: []}]" :filter-render="{name: 'ElSelect', options: sexList, props: {multiple: true, placeholder: '请选择'}}"></vxe-table-column>
+      <vxe-table-column field="date3" title="ElDatePicker" width="140" :filters="[{data: []}]" :filter-render="{name: 'ElDatePicker', props: {type: 'daterange', rangeSeparator: '至', startPlaceholder: '开始日期', endPlaceholder: '结束日期'}}"></vxe-table-column>
+      <vxe-table-column field="flag" title="ElSwitch" width="100" :filters="[{data: false}]" :filter-render="{name: 'ElSwitch'}">
+        <template v-slot="{ row }">
+          <el-switch v-model="row.flag" disabled></el-switch>
+        </template>
+      </vxe-table-column>
+      <vxe-table-column field="rate" title="ElRate" width="180" sortable :filters="[{data: 0}]" :filter-render="{name: 'ElRate'}">
+        <template v-slot="{ row }">
+          <el-rate v-model="row.rate" disabled></el-rate>
+        </template>
+      </vxe-table-column>
+      <vxe-table-column field="slider" title="ElSlider" width="180" sortable :filters="[{data: 0}]" :filter-render="{name: 'ElSlider'}">
+        <template v-slot="{ row }">
+          <el-slider v-model="row.slider" disabled></el-slider>
+        </template>
+      </vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -52,12 +67,27 @@ export default {
           height="400"
           :data.sync="tableData">
           <vxe-table-column type="index" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="ElInput" :filters="[{data: ''}]" :filter-render="{name: 'ElInput', props: {placeholder: '请输入名称'}}"></vxe-table-column>
-          <vxe-table-column field="age" title="ElInputNumber" sortable :filters="[{data: 0}]" :filter-render="{name: 'ElInputNumber', props: {min: 0, max: 100}}"></vxe-table-column>
-          <vxe-table-column field="role" title="ElAutocomplete" :filters="[{data: ''}]" :filter-render="{name: 'ElAutocomplete', props: {fetchSuggestions: roleFetchSuggestions, placeholder: '请输入角色名称'}}"></vxe-table-column>
-          <vxe-table-column field="sex" title="ElSelect" :filters="[{data: null}]" :filter-render="{name: 'ElSelect', options: sexList, props: {placeholder: '请选择'}}"></vxe-table-column>
-          <vxe-table-column field="sex1" title="ElSelect" :filters="[{data: []}]" :filter-render="{name: 'ElSelect', options: sexList, props: {multiple: true, placeholder: '请选择'}}"></vxe-table-column>
-          <vxe-table-column field="date3" title="ElDatePicker" :filters="[{data: []}]" :filter-render="{name: 'ElDatePicker', props: {type: 'daterange', rangeSeparator: '至', startPlaceholder: '开始日期', endPlaceholder: '结束日期'}}"></vxe-table-column>
+          <vxe-table-column field="name" title="ElInput" width="100" :filters="[{data: ''}]" :filter-render="{name: 'ElInput', props: {placeholder: '请输入名称'}}"></vxe-table-column>
+          <vxe-table-column field="age" title="ElInputNumber" sortable width="160" :filters="[{data: 0}]" :filter-render="{name: 'ElInputNumber', props: {min: 0, max: 100}}"></vxe-table-column>
+          <vxe-table-column field="role" title="ElAutocomplete" width="160" :filters="[{data: ''}]" :filter-render="{name: 'ElAutocomplete', props: {fetchSuggestions: roleFetchSuggestions, placeholder: '请输入角色名称'}}"></vxe-table-column>
+          <vxe-table-column field="sex" title="ElSelect" width="100" :formatter="formatterSex" :filters="[{data: null}]" :filter-render="{name: 'ElSelect', options: sexList, props: {placeholder: '请选择'}}"></vxe-table-column>
+          <vxe-table-column field="sex1" title="ElSelect" width="100" :formatter="formatterSexs" :filters="[{data: []}]" :filter-render="{name: 'ElSelect', options: sexList, props: {multiple: true, placeholder: '请选择'}}"></vxe-table-column>
+          <vxe-table-column field="date3" title="ElDatePicker" width="140" :filters="[{data: []}]" :filter-render="{name: 'ElDatePicker', props: {type: 'daterange', rangeSeparator: '至', startPlaceholder: '开始日期', endPlaceholder: '结束日期'}}"></vxe-table-column>
+          <vxe-table-column field="flag" title="ElSwitch" width="100" :filters="[{data: false}]" :filter-render="{name: 'ElSwitch'}">
+            <template v-slot="{ row }">
+              <el-switch v-model="row.flag" disabled></el-switch>
+            </template>
+          </vxe-table-column>
+          <vxe-table-column field="rate" title="ElRate" width="180" sortable :filters="[{data: 0}]" :filter-render="{name: 'ElRate'}">
+            <template v-slot="{ row }">
+              <el-rate v-model="row.rate" disabled></el-rate>
+            </template>
+          </vxe-table-column>
+          <vxe-table-column field="slider" title="ElSlider" width="180" sortable :filters="[{data: 0}]" :filter-render="{name: 'ElSlider'}">
+            <template v-slot="{ row }">
+              <el-slider v-model="row.slider" disabled></el-slider>
+            </template>
+          </vxe-table-column>
         </vxe-table>
         `,
         `
@@ -76,7 +106,7 @@ export default {
           },
           created () {
             this.findSexList()
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 100)
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 10)
           },
           methods: {
             findSexList () {
@@ -84,6 +114,12 @@ export default {
                 this.sexList = data
                 return data
               })
+            },
+            formatterSex ({ cellValue }) {
+              return cellValue === '1' ? '男' : cellValue === '0' ? '女' : ''
+            },
+            formatterSexs ({ cellValue }) {
+              return cellValue ? cellValue.map(value => value === '1' ? '男' : value === '0' ? '女' : '').join(';') : ''
             },
             roleFetchSuggestions (queryString, cb) {
               var restaurants = this.restaurants
@@ -106,7 +142,7 @@ export default {
   },
   created () {
     this.findSexList()
-    this.tableData = window.MOCK_DATA_LIST.slice(0, 100)
+    this.tableData = window.MOCK_DATA_LIST.slice(0, 10)
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
@@ -119,6 +155,12 @@ export default {
         this.sexList = data
         return data
       })
+    },
+    formatterSex ({ cellValue }) {
+      return cellValue === '1' ? '男' : cellValue === '0' ? '女' : ''
+    },
+    formatterSexs ({ cellValue }) {
+      return cellValue ? cellValue.map(value => value === '1' ? '男' : value === '0' ? '女' : '').join(';') : ''
     },
     roleFetchSuggestions (queryString, cb) {
       var restaurants = this.restaurants

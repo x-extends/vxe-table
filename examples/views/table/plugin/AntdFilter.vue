@@ -11,10 +11,20 @@
       :data.sync="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="AInput" :filters="[{data: ''}]" :filter-render="{name: 'AInput', props: {placeholder: '请输入名称'}}"></vxe-table-column>
-      <vxe-table-column field="age" title="AInputNumber" sortable :filters="[{data: 0}]" :filter-render="{name: 'AInputNumber', props: {min: 0, max: 100}}"></vxe-table-column>
-      <vxe-table-column field="sex" title="ASelect" sortable :filters="[{data: null}]" :filter-render="{name: 'ASelect', options: sexList, props: {placeholder: '请选择'}}"></vxe-table-column>
-      <vxe-table-column field="sex1" title="ASelect" :filters="[{data: []}]" :filter-render="{name: 'ASelect', options: sexList, props: {mode: 'multiple', placeholder: '请选择'}}"></vxe-table-column>
-      <vxe-table-column field="role" title="AAutoComplete" :filters="[{data: ''}]" :filter-render="{name: 'AAutoComplete', props: ACProps, events: {search: roleSearchEvent}}"></vxe-table-column>
+      <vxe-table-column field="age" title="AInputNumber" sortable width="160" :filters="[{data: 0}]" :filter-render="{name: 'AInputNumber', props: {min: 0, max: 100}}"></vxe-table-column>
+      <vxe-table-column field="sex" title="ASelect" :formatter="formatterSex" :filters="[{data: null}]" :filter-render="{name: 'ASelect', options: sexList, props: {placeholder: '请选择'}}"></vxe-table-column>
+      <vxe-table-column field="sex1" title="ASelect" :formatter="formatterSexs" :filters="[{data: []}]" :filter-render="{name: 'ASelect', options: sexList, props: {mode: 'multiple', placeholder: '请选择'}}"></vxe-table-column>
+      <vxe-table-column field="role" title="AAutoComplete" width="160" :filters="[{data: ''}]" :filter-render="{name: 'AAutoComplete', props: ACProps, events: {search: roleSearchEvent}}"></vxe-table-column>
+      <vxe-table-column field="flag" title="ASwitch" width="100" :filters="[{data: false}]" :filter-render="{name: 'ASwitch'}">
+        <template v-slot="{ row }">
+          <a-switch v-model="row.flag" disabled></a-switch>
+        </template>
+      </vxe-table-column>
+      <vxe-table-column field="rate" title="ARate" width="180" sortable :filters="[{data: 0}]" :filter-render="{name: 'ARate'}">
+        <template v-slot="{ row }">
+          <a-rate v-model="row.rate" disabled></a-rate>
+        </template>
+      </vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -51,10 +61,20 @@ export default {
           :data.sync="tableData">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="AInput" :filters="[{data: ''}]" :filter-render="{name: 'AInput', props: {placeholder: '请输入名称'}}"></vxe-table-column>
-          <vxe-table-column field="age" title="AInputNumber" sortable :filters="[{data: 0}]" :filter-render="{name: 'AInputNumber', props: {min: 0, max: 100}}"></vxe-table-column>
-          <vxe-table-column field="sex" title="ASelect" sortable :filters="[{data: null}]" :filter-render="{name: 'ASelect', options: sexList, props: {placeholder: '请选择'}}"></vxe-table-column>
-          <vxe-table-column field="sex1" title="ASelect" :filters="[{data: []}]" :filter-render="{name: 'ASelect', options: sexList, props: {mode: 'multiple', placeholder: '请选择'}}"></vxe-table-column>
-          <vxe-table-column field="role" title="AAutoComplete" :filters="[{data: ''}]" :filter-render="{name: 'AAutoComplete', props: ACProps, events: {search: roleSearchEvent}}"></vxe-table-column>
+          <vxe-table-column field="age" title="AInputNumber" sortable width="160" :filters="[{data: 0}]" :filter-render="{name: 'AInputNumber', props: {min: 0, max: 100}}"></vxe-table-column>
+          <vxe-table-column field="sex" title="ASelect" :formatter="formatterSex" :filters="[{data: null}]" :filter-render="{name: 'ASelect', options: sexList, props: {placeholder: '请选择'}}"></vxe-table-column>
+          <vxe-table-column field="sex1" title="ASelect" :formatter="formatterSexs" :filters="[{data: []}]" :filter-render="{name: 'ASelect', options: sexList, props: {mode: 'multiple', placeholder: '请选择'}}"></vxe-table-column>
+          <vxe-table-column field="role" title="AAutoComplete" width="160" :filters="[{data: ''}]" :filter-render="{name: 'AAutoComplete', props: ACProps, events: {search: roleSearchEvent}}"></vxe-table-column>
+          <vxe-table-column field="flag" title="ASwitch" width="100" :filters="[{data: false}]" :filter-render="{name: 'ASwitch'}">
+            <template v-slot="{ row }">
+              <a-switch v-model="row.flag" disabled></a-switch>
+            </template>
+          </vxe-table-column>
+          <vxe-table-column field="rate" title="ARate" width="180" sortable :filters="[{data: 0}]" :filter-render="{name: 'ARate'}">
+            <template v-slot="{ row }">
+              <a-rate v-model="row.rate" disabled></a-rate>
+            </template>
+          </vxe-table-column>
         </vxe-table>
         `,
         `
@@ -71,7 +91,7 @@ export default {
           },
           created () {
             this.findSexList()
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 100)
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 10)
           },
           methods: {
             findSexList () {
@@ -79,6 +99,12 @@ export default {
                 this.sexList = data
                 return data
               })
+            },
+            formatterSex ({ cellValue }) {
+              return cellValue === '1' ? '男' : cellValue === '0' ? '女' : ''
+            },
+            formatterSexs ({ cellValue }) {
+              return cellValue ? cellValue.map(value => value === '1' ? '男' : value === '0' ? '女' : '').join(';') : ''
             },
             roleSearchEvent ({ row }, value) {
               this.ACProps.dataSource = this.restaurants.filter(option => option.toUpperCase().indexOf((value || '').toUpperCase()) !== -1)
@@ -91,7 +117,7 @@ export default {
   },
   created () {
     this.findSexList()
-    this.tableData = window.MOCK_DATA_LIST.slice(0, 100)
+    this.tableData = window.MOCK_DATA_LIST.slice(0, 10)
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
@@ -104,6 +130,12 @@ export default {
         this.sexList = data
         return data
       })
+    },
+    formatterSex ({ cellValue }) {
+      return cellValue === '1' ? '男' : cellValue === '0' ? '女' : ''
+    },
+    formatterSexs ({ cellValue }) {
+      return cellValue ? cellValue.map(value => value === '1' ? '男' : value === '0' ? '女' : '').join(';') : ''
     },
     roleSearchEvent ({ row }, value) {
       this.ACProps.dataSource = this.restaurants.filter(option => option.toUpperCase().indexOf((value || '').toUpperCase()) !== -1)

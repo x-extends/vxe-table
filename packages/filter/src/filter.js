@@ -24,7 +24,7 @@ export default {
   },
   methods: {
     renderOptions (h) {
-      let { $parent: $table, filterStore, filterCheckAllEvent, changeRadioOption, changeMultipleOption } = this
+      let { $parent: $table, filterStore } = this
       let { vSize } = $table
       let { args, column, multiple } = filterStore
       let { slots, own } = column
@@ -56,9 +56,7 @@ export default {
                   checked: filterStore.isAllSelected
                 },
                 on: {
-                  change (evnt) {
-                    filterCheckAllEvent(evnt, evnt.target.checked)
-                  }
+                  change: evnt => this.filterCheckAllEvent(evnt, evnt.target.checked)
                 }
               }),
               h('span', {
@@ -98,9 +96,7 @@ export default {
                     checked: item.checked
                   },
                   on: {
-                    change (evnt) {
-                      changeMultipleOption(evnt, evnt.target.checked, item)
-                    }
+                    change: evnt => this.changeMultipleOption(evnt, evnt.target.checked, item)
                   }
                 }),
                 h('span', {
@@ -113,9 +109,7 @@ export default {
               : h('span', {
                 class: 'vxe-table--filter-label',
                 on: {
-                  click (evnt) {
-                    changeRadioOption(evnt, !item.checked, item)
-                  }
+                  click: evnt => this.changeRadioOption(evnt, !item.checked, item)
                 }
               }, item.label)
           ])
