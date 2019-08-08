@@ -827,6 +827,9 @@ export default {
     getColumnIndex (column) {
       return this.fullColumnMap.has(column) ? this.fullColumnMap.get(column).index : -1
     },
+    hasIndexColumn (column) {
+      return column && column.type === 'index'
+    },
     insert (records) {
       return this.insertAt(records)
     },
@@ -1424,7 +1427,7 @@ export default {
         column.renderWidth = width
       })
       remainWidth -= tableWidth
-      meanWidth = remainWidth > 0 ? Math.max(Math.floor(remainWidth / (scaleMinList.length + pxMinList.length + autoList.length)), minCellWidth) : minCellWidth
+      meanWidth = remainWidth > 0 ? Math.floor(remainWidth / (scaleMinList.length + pxMinList.length + autoList.length)) : 0
       if (fit) {
         if (remainWidth > 0) {
           scaleMinList.concat(pxMinList).forEach(column => {
@@ -1437,8 +1440,9 @@ export default {
       }
       // 自适应
       autoList.forEach((column, index) => {
-        column.renderWidth = meanWidth
-        tableWidth += meanWidth
+        let width = Math.max(meanWidth, minCellWidth)
+        column.renderWidth = width
+        tableWidth += width
         if (fit && index === autoList.length - 1) {
           // 如果所有列足够放的情况下，修补列之间的误差
           let odiffer = bodyWidth - tableWidth
@@ -1860,42 +1864,67 @@ export default {
     },
     // 处理 Tab 键移动
     moveTabSelected (args, evnt) {
-      let { tableData, visibleColumn, editConfig } = this
-      let nextRow
-      let nextRowIndex
-      let nextColumn
-      let nextColumnIndex
+      let { tableData, visibleColumn, editConfig, hasIndexColumn } = this
+      let targetRow
+      let targetRowIndex
+      let targetColumn
+      let targetColumnIndex
+      let isShiftKey = evnt.shiftKey
       let params = Object.assign({}, args)
       let rowIndex = tableData.indexOf(params.row)
       let columnIndex = visibleColumn.indexOf(params.column)
-      for (let index = columnIndex + 1; index < visibleColumn.length; index++) {
-        if (visibleColumn[index]) {
-          nextColumnIndex = index
-          nextColumn = visibleColumn[index]
-          break
-        }
-      }
-      if (!nextColumn && rowIndex < tableData.length - 1) {
-        // 如果找不到从下一行开始找，如果一行都找不到就不需要继续找了，可能不存在可编辑的列
-        nextRowIndex = rowIndex + 1
-        nextRow = tableData[nextRowIndex]
-        for (let index = 0; index < visibleColumn.length; index++) {
-          if (visibleColumn[index]) {
-            nextColumnIndex = index
-            nextColumn = visibleColumn[index]
+      if (isShiftKey) {
+        // 向左
+        for (let len = columnIndex - 1; len >= 0; len--) {
+          if (!hasIndexColumn(visibleColumn[len])) {
+            targetColumnIndex = len
+            targetColumn = visibleColumn[len]
             break
           }
         }
+        if (!targetColumn && rowIndex > 0) {
+          // 如果找不到从上一行开始找，如果一行都找不到就不需要继续找了，可能不存在可编辑的列
+          targetRowIndex = rowIndex - 1
+          targetRow = tableData[targetRowIndex]
+          for (let len = visibleColumn.length - 1; len >= 0; len--) {
+            if (!hasIndexColumn(visibleColumn[len])) {
+              targetColumnIndex = len
+              targetColumn = visibleColumn[len]
+              break
+            }
+          }
+        }
+      } else {
+        // 向右
+        for (let index = columnIndex + 1; index < visibleColumn.length; index++) {
+          if (!hasIndexColumn(visibleColumn[index])) {
+            targetColumnIndex = index
+            targetColumn = visibleColumn[index]
+            break
+          }
+        }
+        if (!targetColumn && rowIndex < tableData.length - 1) {
+          // 如果找不到从下一行开始找，如果一行都找不到就不需要继续找了，可能不存在可编辑的列
+          targetRowIndex = rowIndex + 1
+          targetRow = tableData[targetRowIndex]
+          for (let index = 0; index < visibleColumn.length; index++) {
+            if (!hasIndexColumn(visibleColumn[index])) {
+              targetColumnIndex = index
+              targetColumn = visibleColumn[index]
+              break
+            }
+          }
+        }
       }
-      if (nextColumn) {
-        if (nextRow) {
-          params.rowIndex = nextRowIndex
-          params.row = nextRow
+      if (targetColumn) {
+        if (targetRow) {
+          params.rowIndex = targetRowIndex
+          params.row = targetRow
         } else {
           params.rowIndex = rowIndex
         }
-        params.columnIndex = nextColumnIndex
-        params.column = nextColumn
+        params.columnIndex = targetColumnIndex
+        params.column = targetColumn
         params.cell = DomTools.getCell(this, params)
         if (editConfig) {
           if (editConfig.trigger === 'click' || editConfig.trigger === 'dblclick') {
@@ -1937,7 +1966,7 @@ export default {
     },
     // 处理可编辑方向键移动
     moveSelected (args, isLeftArrow, isUpArrow, isRightArrow, isDwArrow, evnt) {
-      let { tableData, visibleColumn } = this
+      let { tableData, visibleColumn, hasIndexColumn } = this
       let params = Object.assign({}, args)
       if (isUpArrow && params.rowIndex) {
         params.rowIndex -= 1
@@ -1947,7 +1976,7 @@ export default {
         params.row = tableData[params.rowIndex]
       } else if (isLeftArrow && params.columnIndex) {
         for (let len = params.columnIndex - 1; len >= 0; len--) {
-          if (visibleColumn[len]) {
+          if (!hasIndexColumn(visibleColumn[len])) {
             params.columnIndex = len
             params.column = visibleColumn[len]
             break
@@ -1955,7 +1984,7 @@ export default {
         }
       } else if (isRightArrow) {
         for (let index = params.columnIndex + 1; index < visibleColumn.length; index++) {
-          if (visibleColumn[index]) {
+          if (!hasIndexColumn(visibleColumn[index])) {
             params.columnIndex = index
             params.column = visibleColumn[index]
             break

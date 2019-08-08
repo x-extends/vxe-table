@@ -166,14 +166,17 @@ export default {
   },
   methods: {
     ...methods,
-    handleRowClassName ({ row }) {
-      if (this.pendingRecords.some(item => item === row)) {
-        return 'row--pending'
+    handleRowClassName (params) {
+      let rowClassName = this.rowClassName
+      let clss = []
+      if (this.pendingRecords.some(item => item === params.row)) {
+        clss.push('row--pending')
       }
-      return ''
+      return clss.concat(rowClassName ? rowClassName(params) : [])
     },
-    handleActiveMethod ({ row }) {
-      return this.pendingRecords.indexOf(row) === -1
+    handleActiveMethod (params) {
+      let activeMethod = this.editConfig.activeMethod
+      return this.pendingRecords.indexOf(params.row) === -1 && (!activeMethod || activeMethod(params))
     },
     commitProxy (code) {
       let { proxyOpts, tablePage, pagerConfig, sortData, filterData, isMsg } = this

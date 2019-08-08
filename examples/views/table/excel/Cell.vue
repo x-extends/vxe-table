@@ -28,6 +28,7 @@
         | Arrow Left ← | 移动到当前活动单元格左边的单元格 |
         | Arrow Right → | 移动到当前活动单元格右边的单元格 |
         | Tab | 移动到当前选中或活动单元格的右侧单元格，如果到最后一列且存在下一行，则从下一行开始移动 |
+        | Tab + Shift | 移动到当前选中或活动单元格的左侧单元格，如果到第一列且存在上一行，则从上一行开始移动 |
         | Enter | 取消编辑并移动到当前活动单元格下面的单元格 |
         | Delete | 清空内容 |
         | Backspace | 清空内容并激活选中单元格为编辑状态 |
@@ -55,7 +56,7 @@ import XLSX from 'xlsx'
 
 export default {
   data () {
-    let columns = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P']
+    let columns = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N']
     return {
       columns: [
         {
@@ -68,7 +69,7 @@ export default {
         return {
           field: name,
           title: name,
-          width: 76,
+          minWidth: 76,
           headerAlign: 'center',
           editRender: {
             name: 'cell'
@@ -101,7 +102,7 @@ export default {
         `
         export default {
           data () {
-            let columns = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P']
+            let columns = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N']
             return {
               columns: [
                 {
@@ -114,7 +115,7 @@ export default {
                 return {
                   field: name,
                   title: name,
-                  width: 76,
+                  minWidth: 76,
                   headerAlign: 'center',
                   editRender: {
                     name: 'cell'
