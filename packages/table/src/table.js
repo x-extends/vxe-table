@@ -1705,6 +1705,7 @@ export default {
           // 如果是树形表格当前行回车移动到子节点
           let childrens = currentRow[treeConfig.children]
           if (childrens && childrens.length) {
+            evnt.preventDefault()
             let targetRow = childrens[0]
             params = { $table: this, row: targetRow }
             this.setTreeExpansion(currentRow, true)
@@ -1723,12 +1724,12 @@ export default {
       } else if (isF2) {
         // 如果按下了 F2 键
         if (selected.row && selected.column) {
+          evnt.preventDefault()
           this.handleActived(selected.args, evnt)
         }
       } else if (operArrow && keyboardConfig.isArrow) {
         // 如果按下了方向键
         if (selected.row && selected.column) {
-          evnt.preventDefault()
           this.moveSelected(selected.args, isLeftArrow, isUpArrow, isRightArrow, isDwArrow, evnt)
         } else if ((isUpArrow || isDwArrow) && highlightCurrentRow && currentRow) {
           // 当前行按键上下移动
@@ -1737,10 +1738,8 @@ export default {
       } else if (isTab && keyboardConfig.isTab) {
         // 如果按下了 Tab 键切换
         if (selected.row || selected.column) {
-          evnt.preventDefault()
           this.moveTabSelected(selected.args, evnt)
         } else if (actived.row || actived.column) {
-          evnt.preventDefault()
           this.moveTabSelected(actived.args, evnt)
         }
       } else if (isDel || (treeConfig && highlightCurrentRow && currentRow ? isBack && keyboardConfig.isArrow : isBack)) {
@@ -1754,6 +1753,7 @@ export default {
           // 如果树形表格回退键关闭当前行返回父节点
           let { parent: parentRow } = XEUtils.findTree(this.afterFullData, item => item === currentRow, treeConfig)
           if (parentRow) {
+            evnt.preventDefault()
             params = { $table: this, row: parentRow }
             this.setTreeExpansion(parentRow, false)
               .then(() => this.scrollToRow(parentRow))
@@ -1788,6 +1788,7 @@ export default {
       let params = Object.assign({}, args)
       let rowIndex = tableData.indexOf(params.row)
       let columnIndex = visibleColumn.indexOf(params.column)
+      evnt.preventDefault()
       if (isShiftKey) {
         // 向左
         for (let len = columnIndex - 1; len >= 0; len--) {
@@ -1887,6 +1888,7 @@ export default {
     moveSelected (args, isLeftArrow, isUpArrow, isRightArrow, isDwArrow, evnt) {
       let { tableData, visibleColumn } = this
       let params = Object.assign({}, args)
+      evnt.preventDefault()
       if (isUpArrow && params.rowIndex) {
         params.rowIndex -= 1
         params.row = tableData[params.rowIndex]
