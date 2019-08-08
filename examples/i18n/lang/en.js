@@ -231,9 +231,9 @@ module.exports = {
           contextMenu: 'context menu configuration',
           mouseConfig: 'Mouse configuration',
           keyboardConfig: 'Keyboard configuration',
-          editConfig: 'Editable configuration',
-          validConfig: 'Validate configuration',
-          editRules: 'Checksum rule configuration entries',
+          editConfig: 'Editable configuration（需要 row-id）',
+          validConfig: 'Validate configuration（需要 row-id）',
+          editRules: 'Checksum rule configuration entries（需要 row-id）',
           optimization: 'Optimize configuration',
 
           empty: '空数据时显示的文本内容',
