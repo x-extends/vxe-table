@@ -17,7 +17,7 @@ export default {
         key: gIndex
       }, options.map((item, index) => {
         let hasChild = item.children && item.children.length
-        return h('li', {
+        return item.visible === false ? _e() : h('li', {
           class: {
             'link--disabled': item.disabled,
             'link--active': item === ctxMenuStore.selected
@@ -53,7 +53,7 @@ export default {
               show: item === ctxMenuStore.selected && ctxMenuStore.showChild
             }]
           }, item.children.map((child, cIndex) => {
-            return h('li', {
+            return child.visible === false ? _e() : h('li', {
               class: {
                 'link--disabled': child.disabled,
                 'link--active': child === ctxMenuStore.selectChild

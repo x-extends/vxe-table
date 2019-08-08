@@ -49,6 +49,14 @@ const contextMenuApi = [
         list: []
       },
       {
+        name: 'visible ',
+        desc: '是否可视',
+        type: 'Boolean',
+        enum: '',
+        defVal: 'true',
+        list: []
+      },
+      {
         name: 'disabled ',
         desc: '是否禁用',
         type: 'Boolean',
@@ -85,6 +93,14 @@ const contextMenuApi = [
             type: 'String',
             enum: '',
             defVal: '',
+            list: []
+          },
+          {
+            name: 'visible ',
+            desc: '是否可视',
+            type: 'Boolean',
+            enum: '',
+            defVal: 'true',
             list: []
           },
           {
