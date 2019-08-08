@@ -1,7 +1,7 @@
 module.exports = {
   app: {
     header: {
-      desc: '一个全功能的 Vue 表格，与任意组件库完美兼容'
+      desc: '一个功能齐全的 Vue 表组件，与任意组件库完美兼容'
     },
     aside: {
       nav: {
