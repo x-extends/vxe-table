@@ -12,7 +12,7 @@ module.exports = {
         theme: 'Custom theme',
         i18n: 'Internationalization',
         renderer: 'Renderer',
-        interceptor: 'Event interaction interceptor',
+        interceptor: 'Event collision interceptor',
 
         icon: '图标',
         basics: '基础功能',
