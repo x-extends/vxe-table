@@ -1,6 +1,7 @@
 <template>
   <div>
     <h2>Renderer 渲染器</h2>
+    <p>通过渲染器你可以轻松实现筛选模板、单元格模板，可以根据不同业务实现不一样的组件，这个功能将非常实用；比如这些插件 <a class="link" href="https://www.npmjs.com/package/vxe-table-plugin-element" target="_blank">vxe-table-plugin-element</a></p>
     <h3>内置的渲染</h3>
     <p>默认自带的原生渲染器 input、textarea、select，你也可以根据不同业务去实现对应的渲染器</p>
     <h3>渲染器和插槽对比</h3>
@@ -11,7 +12,6 @@
     <p class="green">混合多个渲染器 renderer.mixin(renderMap)</p>
     <p class="green">删除渲染器 renderer.delete(name)</p>
     <h3>简单示例</h3>
-    <p>通过渲染器你可以轻松实现筛选模板、单元格模板，可以根据不同业务实现不一样的组件，这个功能将非常实用；比如这些插件 <a class="link" href="https://www.npmjs.com/package/vxe-table-plugin-element" target="_blank">vxe-table-plugin-element</a></p>
     <h4>例子：实现一个简单的筛选渲染</h4>
     <pre>
       <code class="javascript">{{ demoCodes[0] }}</code>
