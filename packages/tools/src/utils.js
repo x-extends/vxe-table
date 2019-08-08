@@ -105,12 +105,20 @@ export const UtilTools = {
     let cellValue = UtilTools.getCellValue(row, column)
     let cellLabel = cellValue
     if (params && formatter) {
+      let rest, formatData
       let { $table } = params
+      let colid = column.id
       let cacheFormat = $table && $table.fullAllDataRowMap.has(row)
       if (cacheFormat) {
-        let formatData = $table.fullAllDataRowMap.get(row).formatData
-        if (formatData && formatData.column === column && formatData.value === cellValue) {
-          return formatData.label
+        rest = $table.fullAllDataRowMap.get(row)
+        formatData = rest.formatData
+        if (!formatData) {
+          formatData = $table.fullAllDataRowMap.get(row).formatData = {}
+        }
+      }
+      if (rest && formatData[colid]) {
+        if (formatData[colid].value === cellValue) {
+          return formatData[colid].label
         }
       }
       if (XEUtils.isString(formatter)) {
@@ -120,8 +128,8 @@ export const UtilTools = {
       } else {
         cellLabel = formatter(Object.assign({ cellValue }, params))
       }
-      if (cacheFormat) {
-        $table.fullAllDataRowMap.get(row).formatData = { column, value: cellValue, label: cellLabel }
+      if (formatData) {
+        formatData[colid] = { value: cellValue, label: cellLabel }
       }
     }
     return cellLabel
