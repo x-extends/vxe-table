@@ -13,20 +13,20 @@
     <p class="green">删除渲染器 renderer.delete(name)</p>
     <h3>简单示例</h3>
     <p class="red">建议通过 JSX 实现更加简单，可维护性更好</p>
-    <h4>例子：实现一个筛选渲染器</h4>
+    <h4>例子：实现一个筛选渲染器 <table-column-api-link prop="filter-render"/></h4>
     <p class="green">renderFilter(h, filterRender, { column, columnIndex, $columnIndex }, context)：渲染函数</p>
     <p class="green">filterMethod({ option, row, column })：筛选函数</p>
     <pre>
       <code class="javascript">{{ demoCodes[0] }}</code>
       <code class="html">{{ demoCodes[1] }}</code>
     </pre>
-    <h4>例子：实现一个默认的渲染器</h4>
+    <h4>例子：实现一个默认的渲染器 <table-column-api-link prop="cell-render"/></h4>
     <p class="green">renderDefault(h, cellRender, { row, rowIndex, $rowIndex, column, columnIndex, $columnIndex })：渲染函数</p>
     <pre>
       <code class="javascript">{{ demoCodes[2] }}</code>
       <code class="html">{{ demoCodes[3] }}</code>
     </pre>
-    <h4>例子：实现一个可编辑渲染器</h4>
+    <h4>例子：实现一个可编辑渲染器 <table-column-api-link prop="edit-render"/></h4>
     <p class="green">autofocus：自动聚焦的 className</p>
     <p class="green">renderEdit(h, editRender, { row, rowIndex, $rowIndex, column, columnIndex, $columnIndex })：编辑的渲染函数</p>
     <p class="green">renderCell(h, editRender, { row, rowIndex, $rowIndex, column, columnIndex, $columnIndex })：显示的渲染函数</p>
