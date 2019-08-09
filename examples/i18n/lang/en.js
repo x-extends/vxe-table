@@ -217,8 +217,6 @@ module.exports = {
           spanMethod: '合并行或列，该函数 Function({seq, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, data}) 返回计算后的值',
           showOverflow: 'Sets all content to appear as ellipses if it is too long',
           showHeaderOverflow: 'Sets the header to show ellipsis when all content is too long',
-          showAllOverflow: '在 v2.0 中废弃，请使用 show-overflow',
-          showHeaderAllOverflow: '在 v2.0 中废弃，请使用 show-header-overflow',
           remoteSort: '所有列是否使用服务端排序，如果设置为 true 则所有列不会对数据进行处理',
           remoteFilter: '是否使用服务端筛选，如果设置为 true 则不会对数据进行处理',
           columnKey: 'Whether the key attribute needs to be set for each column VNode (not required for non-exceptional cases)',
@@ -271,9 +269,7 @@ module.exports = {
       tableColumn: {
         desc: {
           type: 'The type of the column',
-          prop: '在 v3.0 中废弃，请使用 field',
           field: 'Column field name',
-          label: '在 v3.0 中废弃，请使用 title',
           title: 'Column title',
           width: 'Column width',
           minWidth: 'Minimum height of the column,The remaining space is automatically allocated proportionally',
