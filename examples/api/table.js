@@ -1435,17 +1435,25 @@ const apis = [
       {
         name: 'refreshColumn()',
         desc: '刷新列配置（对于显示/隐藏列场景下可能会用到）',
-        type: 'Promise>',
+        type: 'Promise',
         enum: '',
         defVal: '',
         list: []
       },
       {
-        name: 'createRow(record)',
-        desc: '创建 Row 对象（对于某些特殊场景需要对数据进行手动插入时可能会用到）',
-        type: 'Row',
+        name: 'createRow(records)',
+        desc: '创建 Row|Rows 对象（对于某些特殊场景需要对数据进行手动插入时可能会用到）',
+        type: 'Promise<Row|Rows>',
         enum: '',
-        defVal: 'record',
+        defVal: 'records',
+        list: []
+      },
+      {
+        name: 'createData(records)',
+        desc: '创建 data 对象（对于某些特殊场景需要对数据进行字段名进行自动定义时可能会用到）',
+        type: 'Promise<Array>',
+        enum: '',
+        defVal: 'records',
         list: []
       },
       {

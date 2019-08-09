@@ -500,6 +500,9 @@ export default {
         offsetSize: scrollY.oSize
       })
     }
+    if (!UtilTools.getRowkey(this)) {
+      console.error('[vxe-table] The property row-id is not allowed to be empty')
+    }
     if (XEUtils.isBoolean(showAllOverflow)) {
       console.warn('[vxe-table] The property show-all-overflow is deprecated, please use show-overflow')
     }
@@ -915,12 +918,12 @@ export default {
      */
     insertAt (records, row) {
       let { tableData, editStore, scrollYLoad, tableFullData, treeConfig } = this
+      let args = arguments
       if (!XEUtils.isArray(records)) {
         records = [records]
       }
-      let newRecords = records.map(this.createRow)
-      return new Promise(resolve => {
-        if (arguments.length === 1) {
+      return this.createRow(records).then(newRecords => {
+        if (args.length === 1) {
           tableData.unshift.apply(tableData, newRecords)
           tableFullData.unshift.apply(tableFullData, newRecords)
           if (scrollYLoad) {
@@ -944,25 +947,40 @@ export default {
         [].unshift.apply(editStore.insertList, newRecords)
         this.updateCache()
         this.checkSelectionStatus()
-        this.$nextTick(() => {
+        return this.$nextTick().then(() => {
           this.recalculate()
-          resolve({ row: newRecords.length ? newRecords[newRecords.length - 1] : null, rows: newRecords })
+          return {
+            row: newRecords.length ? newRecords[newRecords.length - 1] : null,
+            rows: newRecords
+          }
         })
       })
     },
-    createRow (record) {
-      let recordItem = Object.assign({}, record)
+    defineField (row) {
       let rowkey = UtilTools.getRowkey(this)
       this.visibleColumn.forEach(column => {
-        if (column.property && !XEUtils.has(recordItem, column.property)) {
-          XEUtils.set(recordItem, column.property, null)
+        if (column.property && !XEUtils.has(row, column.property)) {
+          XEUtils.set(row, column.property, null)
         }
       })
-      // 如果设置了 Key 就必须要唯一，可以自行设置；如果为空，则默认生成一个随机数
-      if (rowkey && !XEUtils.get(recordItem, rowkey)) {
-        XEUtils.set(recordItem, rowkey, getRowUniqueId())
+      // 必须有行数据的唯一主键，可以自行设置；也可以默认生成一个随机数
+      if (!XEUtils.get(row, rowkey)) {
+        XEUtils.set(row, rowkey, getRowUniqueId())
       }
-      return recordItem
+      return row
+    },
+    createData (records) {
+      return this.$nextTick().then(() => records.map(this.defineField))
+    },
+    createRow (records) {
+      let isArr = XEUtils.isArray(records)
+      if (!isArr) {
+        records = [records]
+      }
+      return this.$nextTick().then(() => {
+        let rows = records.map(record => this.defineField(Object.assign({}, record)))
+        return isArr ? rows : rows[0]
+      })
     },
     /**
      * 删除指定行数据
