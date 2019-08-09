@@ -90,18 +90,6 @@ export default {
               locat: {
                 name: 'StartI18n'
               }
-            },
-            {
-              label: 'app.aside.nav.renderer',
-              locat: {
-                name: 'StartRenderer'
-              }
-            },
-            {
-              label: 'app.aside.nav.interceptor',
-              locat: {
-                name: 'StartInterceptor'
-              }
             }
           ]
         },
@@ -895,6 +883,50 @@ export default {
               label: 'app.aside.nav.antdPluginMore',
               locat: {
                 name: 'TablePluginAntdPage'
+              }
+            }
+          ]
+        },
+        {
+          label: 'app.aside.nav.renderer',
+          value: 'renderer',
+          expand: false,
+          children: [
+            {
+              label: 'app.aside.nav.api',
+              locat: {
+                name: 'RendererAPI'
+              }
+            },
+            {
+              label: 'app.aside.nav.rendererFilter',
+              locat: {
+                name: 'RendererFilter'
+              }
+            },
+            {
+              label: 'app.aside.nav.rendererDefault',
+              locat: {
+                name: 'RendererDefault'
+              }
+            },
+            {
+              label: 'app.aside.nav.rendererEdit',
+              locat: {
+                name: 'RendererEdit'
+              }
+            }
+          ]
+        },
+        {
+          label: 'app.aside.nav.interceptor',
+          value: 'interceptor',
+          expand: false,
+          children: [
+            {
+              label: 'app.aside.nav.api',
+              locat: {
+                name: 'InterceptorAPI'
               }
             }
           ]

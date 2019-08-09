@@ -173,6 +173,14 @@ export default {
       item.checked = checked
       this.checkOptions()
     },
+    // 筛选发生改变
+    changeOption (evnt, checked, item) {
+      if (this.filterStore.multiple) {
+        this.changeMultipleOption(evnt, checked, item)
+      } else {
+        this.changeRadioOption(evnt, checked, item)
+      }
+    },
     // 确认筛选
     confirmFilter () {
       this.$parent.confirmFilterEvent()
