@@ -1,7 +1,7 @@
 <template>
   <div>
-    <p>插入数据：树形结构默认不支持子节点插入</p>
-    <p>如果要往子节点插入数据，你可以把表格当成一个子组件进行封装，自行操作数据源即可</p>
+    <p>快捷菜单操作</p>
+    <p class="red">如果要往子节点插入数据，你可以把表格当成一个子组件进行封装，自行操作数据源即可</p>
 
     <vxe-toolbar :data="tableData" :setting="{storage: false}">
       <template v-slot:buttons>
