@@ -13,7 +13,7 @@
       resizable
       ref="xTree"
       :tree-config="treeConfig"
-      :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}}"
+      :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}, visibleMethod}"
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
       :data.sync="tableData"
       @context-menu-click="contextMenuClickEvent">
@@ -60,23 +60,32 @@ export default {
         [
           {
             code: 'hideColumn',
-            name: '隐藏列'
+            name: '隐藏列',
+            disabled: false
           },
           {
             code: 'showAllColumn',
-            name: '取消所有隐藏列'
+            name: '取消所有隐藏列',
+            disabled: false
           }
         ]
       ],
       bodyMenus: [
         [
           {
-            code: 'expandOrFold',
-            name: '展开或折叠'
+            code: 'insertAt',
+            name: '插入一行',
+            disabled: false
           },
           {
-            code: 'insertAt',
-            name: '插入一行'
+            code: 'expand',
+            name: '展开节点',
+            disabled: false
+          },
+          {
+            code: 'contract',
+            name: '收缩节点',
+            disabled: false
           }
         ]
       ],
@@ -92,7 +101,7 @@ export default {
           resizable
           ref="xTree"
           :tree-config="treeConfig"
-          :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}}"
+          :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}, visibleMethod}"
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
           :data.sync="tableData"
           @context-menu-click="contextMenuClickEvent">
@@ -115,23 +124,32 @@ export default {
                 [
                   {
                     code: 'hideColumn',
-                    name: '隐藏列'
+                    name: '隐藏列',
+                    disabled: false
                   },
                   {
                     code: 'showAllColumn',
-                    name: '取消所有隐藏列'
+                    name: '取消所有隐藏列',
+                    disabled: false
                   }
                 ]
               ],
               bodyMenus: [
                 [
                   {
-                    code: 'expandOrFold',
-                    name: '展开或折叠'
+                    code: 'insertAt',
+                    name: '插入一行',
+                    disabled: false
                   },
                   {
-                    code: 'insertAt',
-                    name: '插入一行'
+                    code: 'expand',
+                    name: '展开节点',
+                    disabled: false
+                  },
+                  {
+                    code: 'contract',
+                    name: '收缩节点',
+                    disabled: false
                   }
                 ]
               ]
@@ -159,6 +177,23 @@ export default {
             getInsertEvent () {
               let insertRecords = XEUtils.filterTree(this.tableData, item => item.isNew, this.treeConfig)
               this.$XMsg.alert(insertRecords.length)
+            },
+            visibleMethod  ({ row }) {
+              let xTree = this.$refs.xTree
+              let treeConfig = this.treeConfig
+              this.bodyMenus.forEach(list => {
+                list.forEach(item => {
+                  if (['expand', 'contract'].includes(item.code)) {
+                    if (row[treeConfig.children] && row[treeConfig.children].length) {
+                      let isExpand = xTree.hasTreeExpand(row)
+                      item.disabled = ['expand'].includes(item.code) ? isExpand : !isExpand
+                    } else {
+                      item.disabled = true
+                    }
+                  }
+                })
+              })
+              return true
             },
             contextMenuClickEvent ({ menu, row, column }) {
               let xTree = this.$refs.xTree
@@ -211,6 +246,23 @@ export default {
       let insertRecords = XEUtils.filterTree(this.tableData, item => item.isNew, this.treeConfig)
       this.$XMsg.alert(insertRecords.length)
     },
+    visibleMethod  ({ row }) {
+      let xTree = this.$refs.xTree
+      let treeConfig = this.treeConfig
+      this.bodyMenus.forEach(list => {
+        list.forEach(item => {
+          if (['expand', 'contract'].includes(item.code)) {
+            if (row[treeConfig.children] && row[treeConfig.children].length) {
+              let isExpand = xTree.hasTreeExpand(row)
+              item.disabled = ['expand'].includes(item.code) ? isExpand : !isExpand
+            } else {
+              item.disabled = true
+            }
+          }
+        })
+      })
+      return true
+    },
     contextMenuClickEvent ({ menu, row, column }) {
       let xTree = this.$refs.xTree
       switch (menu.code) {
@@ -223,8 +275,11 @@ export default {
         case 'insertAt':
           this.insertAtEvent(row, column)
           break
-        case 'expandOrFold':
-          xTree.toggleTreeExpansion(row)
+        case 'expand':
+          xTree.setTreeExpansion(row, true)
+          break
+        case 'contract':
+          xTree.setTreeExpansion(row, false)
           break
       }
     }
