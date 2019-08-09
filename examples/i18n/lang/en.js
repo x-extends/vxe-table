@@ -269,9 +269,9 @@ module.exports = {
       tableColumn: {
         desc: {
           type: 'The type of the column',
-          prop: '在 v3.0 中废弃，请使用 field',
+          prop: '在 v2.0 中废弃，请使用 field',
           field: 'Column field name',
-          label: '在 v3.0 中废弃，请使用 title',
+          label: '在 v2.0 中废弃，请使用 title',
           title: 'Column title',
           width: 'Column width',
           minWidth: 'Minimum height of the column,The remaining space is automatically allocated proportionally',

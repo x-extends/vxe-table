@@ -7,7 +7,6 @@ import { UtilTools, DomTools, ExportTools, GlobalEvent, ResizeEvent } from '../.
 var rowUniqueId = 0
 var browse = DomTools.browse
 var debounceScrollYDuration = browse.msie ? 40 : 20
-var isFieldWarn = false
 
 function getRowUniqueId () {
   return `row_${++rowUniqueId}`
@@ -464,13 +463,13 @@ export default {
         }
       }
       // 在 v3.0 中废弃 prop/label
-      if (!isFieldWarn) {
-        if (tableFullColumn.length) {
-          let cIndex = Math.floor((tableFullColumn.length - 1) / 2)
-          if (tableFullColumn[cIndex].prop || tableFullColumn[cIndex].label) {
-            isFieldWarn = true
-            console.warn('[vxe-table] The property prop/label is deprecated, please use field/title')
-          }
+      if (tableFullColumn.length) {
+        let cIndex = Math.floor((tableFullColumn.length - 1) / 2)
+        if (tableFullColumn[cIndex].prop) {
+          console.warn('[vxe-table] The property prop is deprecated, please use field')
+        }
+        if (tableFullColumn[cIndex].label) {
+          console.warn('[vxe-table] The property label is deprecated, please use title')
         }
       }
     },
