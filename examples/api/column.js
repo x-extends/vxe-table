@@ -207,35 +207,11 @@ const apis = [
             list: []
           },
           {
-            name: 'options',
-            desc: '只对 name=select 有效，下拉选项列表',
-            type: 'Array',
-            enum: '',
-            defVal: '',
-            list: []
-          },
-          {
-            name: 'optionProps',
-            desc: '只对 name=select 有效，下拉选项属性参数配置',
+            name: 'attrs',
+            desc: '渲染的属性（请查看目标渲染的 Attrs）',
             type: 'Object',
             enum: '',
-            defVal: '{ value, label }',
-            list: []
-          },
-          {
-            name: 'optionGroups',
-            desc: '只对 name=select 有效，下拉分组选项列表',
-            type: 'Array',
-            enum: '',
             defVal: '',
-            list: []
-          },
-          {
-            name: 'optionGroupProps',
-            desc: '只对 name=select 有效，下拉分组选项属性参数配置',
-            type: 'Object',
-            enum: '',
-            defVal: '{ options, label }',
             list: []
           },
           {
@@ -266,6 +242,14 @@ const apis = [
           {
             name: 'props',
             desc: '渲染的参数（请查看目标渲染的 Props）',
+            type: 'Object',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'attrs',
+            desc: '渲染的属性（请查看目标渲染的 Attrs）',
             type: 'Object',
             enum: '',
             defVal: '',
@@ -339,6 +323,14 @@ const apis = [
           {
             name: 'props',
             desc: '渲染的参数（请查看目标渲染的 Props）',
+            type: 'Object',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'attrs',
+            desc: '渲染的属性（请查看目标渲染的 Attrs）',
             type: 'Object',
             enum: '',
             defVal: '',

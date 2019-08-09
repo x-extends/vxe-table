@@ -12,6 +12,39 @@
   display: none;
 }
 
+/*默认的渲染*/
+.vxe-table,
+.vxe-table--filter-wrapper {
+  .vxe-default-input,
+  .vxe-default-textarea,
+  .vxe-default-select {
+    outline: 0;
+    padding: 0 2px;
+    height: 40px;
+    width: 100%;
+    color: $vxe-font-color;
+    border-radius: 4px;
+    border: 1px solid $vxe-input-border-color;
+    &:focus {
+      border: 1px solid $vxe-primary-color;
+    }
+  }
+  .vxe-input--wrapper {
+    width: 100%;
+    display: block;
+    .vxe-input,
+    .vxe-textarea {
+      padding: 0 2px;
+    }
+  }
+}
+.vxe-table--filter-wrapper {
+  .vxe-default-input,
+  .vxe-default-textarea {
+    padding: 0 10px;
+  }
+}
+
 /*table*/
 .vxe-table {
   position: relative;
@@ -235,29 +268,6 @@
           }
         }
       }
-    }
-  }
-  /*默认的渲染*/
-  .vxe-default-input,
-  .vxe-default-textarea,
-  .vxe-default-select {
-    outline: 0;
-    padding: 0 2px;
-    height: 40px;
-    width: 100%;
-    color: $vxe-font-color;
-    border-radius: 4px;
-    border: 1px solid $vxe-input-border-color;
-    &:focus {
-      border: 1px solid $vxe-primary-color;
-    }
-  }
-  .vxe-input--wrapper {
-    width: 100%;
-    display: block;
-    .vxe-input,
-    .vxe-textarea {
-      padding: 0 2px;
     }
   }
   .fixed--hidden {

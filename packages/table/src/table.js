@@ -3490,12 +3490,12 @@ export default {
     },
     // 关闭筛选
     closeFilter (evnt) {
-      Object.assign(this.filterStore, {
-        isAllSelected: false,
-        isIndeterminate: false,
-        options: [],
-        visible: false
-      })
+      // Object.assign(this.filterStore, {
+      //   isAllSelected: false,
+      //   isIndeterminate: false,
+      //   options: [],
+      //   visible: false
+      // })
       return this.$nextTick()
     },
     // 重置筛选

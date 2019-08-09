@@ -1,13 +1,21 @@
 import XEUtils from 'xe-utils'
 
+function getAttrs ({ name, attrs }) {
+  if (name === 'input') {
+    attrs = Object.assign({ type: 'text' }, attrs)
+  }
+  return attrs
+}
+
 /**
  * 内置渲染器
- * 只支持 input 和 textarea
+ * 支持原生的 input、 textarea、select
  */
-function defaultRenderer (h, attrs, editRender, params) {
+function defaultCellRender (h, renderOpts, params) {
   let { column } = params
-  let { name } = editRender
+  let { name } = renderOpts
   let { model } = column
+  let attrs = getAttrs(renderOpts)
   return [
     h(name, {
       class: `vxe-default-${name}`,
@@ -15,13 +23,13 @@ function defaultRenderer (h, attrs, editRender, params) {
       domProps: {
         value: model.value
       },
-      on: getEvents(editRender, params)
+      on: getEvents(renderOpts, params)
     })
   ]
 }
 
-function getEvents (editRender, params) {
-  let { name, events } = editRender
+function getEvents (renderOpts, params) {
+  let { name, events } = renderOpts
   let { $table, column } = params
   let { model } = column
   let type = name === 'select' ? 'change' : 'input'
@@ -41,8 +49,8 @@ function getEvents (editRender, params) {
   return on
 }
 
-function renderOptgroups (h, editRender, params) {
-  let { optionGroups, optionGroupProps = {} } = editRender
+function renderOptgroups (h, renderOpts, params) {
+  let { optionGroups, optionGroupProps = {} } = renderOpts
   let groupOptions = optionGroupProps.options || 'options'
   let groupLabel = optionGroupProps.label || 'label'
   return optionGroups.map((group, gIndex) => {
@@ -51,12 +59,12 @@ function renderOptgroups (h, editRender, params) {
         label: group[groupLabel]
       },
       key: gIndex
-    }, renderOptions(h, group[groupOptions], editRender, params))
+    }, renderOptions(h, group[groupOptions], renderOpts, params))
   })
 }
 
-function renderOptions (h, options, editRender, params) {
-  let { optionProps = {} } = editRender
+function renderOptions (h, options, renderOpts, params) {
+  let { optionProps = {} } = renderOpts
   let { column } = params
   let labelProp = optionProps.label || 'label'
   let valueProp = optionProps.value || 'value'
@@ -71,31 +79,76 @@ function renderOptions (h, options, editRender, params) {
   })
 }
 
+function getFilterEvents (item, renderOpts, params, context) {
+  let { column } = params
+  let { events } = renderOpts
+  let type = name === 'select' ? 'change' : 'input'
+  let on = {
+    [type] (evnt) {
+      item.data = evnt.target.value
+      handleConfirmFilter(context, column, !!item.data, item)
+    }
+  }
+  if (events) {
+    XEUtils.assign(on, XEUtils.objectMap(events, cb => function () {
+      cb.apply(null, [params].concat.apply(params, arguments))
+    }))
+  }
+  return on
+}
+
+function defaultFilterRender (h, renderOpts, params, context) {
+  let { column } = params
+  let { name } = renderOpts
+  let attrs = getAttrs(renderOpts)
+  return column.filters.map(item => {
+    return h(name, {
+      class: `vxe-default-${name}`,
+      attrs,
+      domProps: {
+        value: item.data
+      },
+      on: getFilterEvents(item, renderOpts, params, context)
+    })
+  })
+}
+
+function handleConfirmFilter (context, column, checked, item) {
+  context[column.filterMultiple ? 'changeMultipleOption' : 'changeRadioOption']({}, checked, item)
+}
+
+function defaultFilterMethod ({ option, row, column }) {
+  let { data } = option
+  let cellValue = XEUtils.get(row, column.property)
+  /* eslint-disable eqeqeq */
+  return cellValue == data
+}
+
 const renderMap = {
   input: {
     autofocus: 'input',
-    renderEdit (h, editRender, params) {
-      return defaultRenderer(h, { type: 'text' }, editRender, params)
-    }
+    renderEdit: defaultCellRender,
+    renderFilter: defaultFilterRender,
+    filterMethod: defaultFilterMethod
   },
   textarea: {
     autofocus: 'textarea',
-    renderEdit (h, editRender, params) {
-      return defaultRenderer(h, {}, editRender, params)
-    }
+    renderEdit: defaultCellRender,
+    renderFilter: defaultFilterRender,
+    filterMethod: defaultFilterMethod
   },
   select: {
-    renderEdit (h, editRender, params) {
+    renderEdit (h, renderOpts, params) {
       return [
         h('select', {
           class: 'vxe-default-select',
-          on: getEvents(editRender, params)
+          on: getEvents(renderOpts, params)
         },
-        editRender.optionGroups ? renderOptgroups(h, editRender, params) : renderOptions(h, editRender.options, editRender, params))
+        renderOpts.optionGroups ? renderOptgroups(h, renderOpts, params) : renderOptions(h, renderOpts.options, renderOpts, params))
       ]
     },
-    renderCell (h, editRender, params) {
-      let { options, optionGroups, optionProps = {}, optionGroupProps = {} } = editRender
+    renderCell (h, renderOpts, params) {
+      let { options, optionGroups, optionProps = {}, optionGroupProps = {} } = renderOpts
       let { row, column } = params
       let cellValue = XEUtils.get(row, column.property)
       if (!(cellValue === null || cellValue === undefined || cellValue === '')) {
@@ -117,7 +170,20 @@ const renderMap = {
         }
       }
       return ''
-    }
+    },
+    renderFilter (h, renderOpts, params, context) {
+      let { column } = params
+      let { attrs } = renderOpts
+      return column.filters.map(item => {
+        return h('select', {
+          class: 'vxe-default-select',
+          attrs,
+          on: getFilterEvents(item, renderOpts, params, context)
+        },
+        renderOpts.optionGroups ? renderOptgroups(h, renderOpts, params) : renderOptions(h, renderOpts.options, renderOpts, params))
+      })
+    },
+    filterMethod: defaultFilterMethod
   }
 }
 

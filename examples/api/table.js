@@ -446,8 +446,8 @@ const apis = [
           },
           {
             name: 'checkRowKey',
-            desc: '默认勾选开指定行',
-            type: 'String',
+            desc: '默认勾选开指定行（需要有 row-id）',
+            type: 'Row.rowId',
             enum: '',
             defVal: '',
             list: []
@@ -471,8 +471,8 @@ const apis = [
         list: [
           {
             name: 'reserve',
-            desc: '是否保留勾选状态，对于某些场景下非常有用，比如分页之后还保留之前选中的状态',
-            type: 'String',
+            desc: '是否保留勾选状态，对于某些场景下非常有用，比如分页之后还保留之前选中的状态（需要有 row-id）',
+            type: 'Boolean',
             enum: '',
             defVal: 'false',
             list: []
@@ -503,8 +503,8 @@ const apis = [
           },
           {
             name: 'checkRowKeys',
-            desc: '默认勾选开指定行',
-            type: 'Array<String>',
+            desc: '默认勾选开指定行（需要有 row-id）',
+            type: 'Array<Row.rowId>',
             enum: '',
             defVal: '',
             list: []
@@ -577,8 +577,8 @@ const apis = [
           },
           {
             name: 'expandRowKeys',
-            desc: '默认展开指定行',
-            type: 'Array',
+            desc: '默认展开指定行（需要有 row-id）',
+            type: 'Array<Row.rowId>',
             enum: '',
             defVal: '',
             list: []
@@ -634,8 +634,8 @@ const apis = [
           },
           {
             name: 'expandRowKeys',
-            desc: '默认展开指定树节点',
-            type: 'Array',
+            desc: '默认展开指定树节点（需要有 row-id）',
+            type: 'Array<Row.rowId>',
             enum: '',
             defVal: '',
             list: []
