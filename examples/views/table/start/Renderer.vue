@@ -90,9 +90,9 @@ export default {
         // 定义一个链接渲染器
         VXETable.renderer.add('MyLink', {
           // 默认显示模板
-          renderDefault (h, editRender, params) {
+          renderDefault (h, cellRender, params) {
             let { row, column } = params
-            let { events } = editRender
+            let { events } = cellRender
             return [
               <a class="my-link" onClick="{ () => events.click(params) }">{row[column.property]}</a>
             ]
