@@ -28,7 +28,9 @@
       :loading="loading"
       :edit-rules="validRules"
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
+      :select-config="{checkField: 'checked'}"
       :optimization ="{scrollY: {gt: 200, oSize: 10, rSize: 30}}">>
+      <vxe-table-column type="selection" width="60"></vxe-table-column>
       <vxe-table-column type="index" width="100"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable width="200" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="age" title="Age" width="200" :edit-render="{name: 'input'}"></vxe-table-column>
