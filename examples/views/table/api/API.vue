@@ -219,9 +219,13 @@ export default {
         }
         // 生成唯一 id
         let index = 1
+        let searchProps = ['name', 'desc', 'type', 'enum', 'defVal']
         XEUtils.eachTree(apis, item => {
           item.id = index++
           item.desc = item.descKey ? this.$t(item.descKey) : item.desc
+          searchProps.forEach(key => {
+            item[key] = XEUtils.escape(item[key])
+          })
         }, { children: 'list' })
         this.tableData = apis
         // 默认展开一级
