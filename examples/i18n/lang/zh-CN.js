@@ -11,8 +11,6 @@ module.exports = {
         use: '快速上手',
         theme: '自定义主题',
         i18n: '国际化',
-        renderer: '渲染器',
-        interceptor: '事件冲突拦截器',
 
         icon: '图标',
         basics: '基础功能',
@@ -121,6 +119,13 @@ module.exports = {
         antdPlugin: 'plugin-antd 基本配置',
         antdFilter: 'plugin-antd 筛选配置',
         antdPluginMore: 'plugin-antd 更多配置',
+
+        renderer: '渲染器',
+        rendererFilter: '筛选渲染器',
+        rendererDefault: '默认的渲染器',
+        rendererEdit: '可编辑渲染器',
+
+        interceptor: '事件冲突拦截器',
 
         optimize: '优化建议',
         optimizeScroller: '虚拟滚动优化',

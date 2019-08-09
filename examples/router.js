@@ -6,8 +6,13 @@ const StartUse = () => import(/* webpackChunkName: "start" */ './views/table/sta
 const StartGlobal = () => import(/* webpackChunkName: "start" */ './views/table/start/Global.vue')
 const StartTheme = () => import(/* webpackChunkName: "start" */ './views/table/start/Theme.vue')
 const StartI18n = () => import(/* webpackChunkName: "start" */ './views/table/start/I18n.vue')
-const StartRenderer = () => import(/* webpackChunkName: "start" */ './views/table/start/Renderer.vue')
-const StartInterceptor = () => import(/* webpackChunkName: "start" */ './views/table/start/Interceptor.vue')
+
+const RendererAPI = () => import(/* webpackChunkName: "start" */ './views/table/renderer/API.vue')
+const RendererFilter = () => import(/* webpackChunkName: "start" */ './views/table/renderer/Filter.vue')
+const RendererDefault = () => import(/* webpackChunkName: "start" */ './views/table/renderer/Default.vue')
+const RendererEdit = () => import(/* webpackChunkName: "start" */ './views/table/renderer/Edit.vue')
+
+const InterceptorAPI = () => import(/* webpackChunkName: "start" */ './views/table/interceptor/API.vue')
 
 const TableIcon = () => import(/* webpackChunkName: "base" */ './views/table/base/Icon.vue')
 const TableBasic = () => import(/* webpackChunkName: "base" */ './views/table/base/Basic.vue')
@@ -178,14 +183,29 @@ export default new Router({
       component: StartI18n
     },
     {
-      path: '/table/start/renderer',
-      name: 'StartRenderer',
-      component: StartRenderer
+      path: '/table/renderer/api',
+      name: 'RendererAPI',
+      component: RendererAPI
     },
     {
-      path: '/table/start/interceptor',
-      name: 'StartInterceptor',
-      component: StartInterceptor
+      path: '/table/renderer/filter',
+      name: 'RendererFilter',
+      component: RendererFilter
+    },
+    {
+      path: '/table/renderer/default',
+      name: 'RendererDefault',
+      component: RendererDefault
+    },
+    {
+      path: '/table/renderer/edit',
+      name: 'RendererEdit',
+      component: RendererEdit
+    },
+    {
+      path: '/table/interceptor/api',
+      name: 'InterceptorAPI',
+      component: InterceptorAPI
     },
     {
       path: '/table/base/icon',

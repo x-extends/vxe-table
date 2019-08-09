@@ -11,8 +11,6 @@ module.exports = {
         use: 'Quick start',
         theme: 'Custom theme',
         i18n: 'Internationalization',
-        renderer: 'Renderer',
-        interceptor: 'Event collision interceptor',
 
         icon: '图标',
         basics: '基础功能',
@@ -121,6 +119,13 @@ module.exports = {
         antdPlugin: 'plugin-antd 基本配置',
         antdFilter: 'plugin-antd 筛选配置',
         antdPluginMore: 'plugin-antd 更多配置',
+
+        renderer: 'Renderer',
+        rendererFilter: 'Filter renderer',
+        rendererDefault: 'Default renderer',
+        rendererEdit: 'Edit renderer',
+
+        interceptor: 'Event collision interceptor',
 
         optimize: 'Optimization and suggestion',
         optimizeScroller: '虚拟滚动优化',
