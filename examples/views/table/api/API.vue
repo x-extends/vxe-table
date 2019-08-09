@@ -22,17 +22,17 @@
       @header-cell-context-menu="headerCellContextMenuEvent"
       @cell-context-menu="cellContextMenuEvent"
       @context-menu-click="contextMenuClickEvent">
-      <vxe-table-column field="name" :title="$t('app.api.title.prop')" min-width="280" :filters="nameFilters" tree-node>
+      <vxe-table-column field="name" title="app.api.title.prop" min-width="280" :filters="nameFilters" tree-node>
         <template v-slot="{ row }">
           <span v-html="row.name || '&#12288;'"></span>
         </template>
       </vxe-table-column>
-      <vxe-table-column field="desc" :title="$t('app.api.title.desc')" min-width="200">
+      <vxe-table-column field="desc" title="app.api.title.desc" min-width="200">
         <template v-slot="{ row }">
           <span v-html="row.desc || '&#12288;'"></span>
         </template>
       </vxe-table-column>
-      <vxe-table-column field="type" :title="$t('app.api.title.type')" min-width="140">
+      <vxe-table-column field="type" title="app.api.title.type" min-width="140">
         <template v-slot="{ row }">
           <span v-html="row.type || '&#12288;'"></span>
         </template>
