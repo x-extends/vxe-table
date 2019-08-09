@@ -1384,7 +1384,7 @@ const apis = [
       },
       {
         name: 'createData(records)',
-        desc: '创建 data 对象（对于某些特殊场景需要对数据进行字段名进行自动定义时可能会用到）',
+        desc: '创建 data 对象（对于某些特殊场景可能会用到，会自动对数据的字段名进行检测，如果不存在就自动定义）',
         type: 'Promise<Array>',
         enum: '',
         defVal: 'records',
