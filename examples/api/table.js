@@ -2078,7 +2078,7 @@ const apis = [
       },
       {
         name: 'recalculate()',
-        desc: '重新计算表格（对于某些场景可能会用到，比如需要更新列宽时）',
+        desc: '重新计算表格（对于某些特殊场景可能会用到，比如隐藏的表格、更新列宽...等）',
         type: 'Promise',
         enum: '',
         defVal: '',
