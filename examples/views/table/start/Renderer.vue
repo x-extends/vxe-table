@@ -5,7 +5,7 @@
     <h3>内置的渲染</h3>
     <p>默认自带的原生渲染器 input、textarea、select，你也可以根据不同业务去实现对应的渲染器</p>
     <h3>渲染器和插槽对比</h3>
-    <p class="orange">渲染器：抽象一切可复用的功能，实现简单的可配置化；</p>
+    <p class="orange">渲染器：抽象一切可复用的功能（类似组件的概念），实现简单的可配置化；</p>
     <p class="orange">插槽：自定义程度高，但需要重复写冗余代码，比较繁琐；</p>
     <h3>API</h3>
     <p class="green">添加渲染器 renderer.add(name, options)</p>
