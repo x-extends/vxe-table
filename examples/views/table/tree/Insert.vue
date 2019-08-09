@@ -83,28 +83,30 @@ export default {
           methods: {
             insertEvent () {
               let xTree = this.$refs.xTree
-              let newRow = xTree.createRow({
+              xTree.createRow({
                 name: '新数据',
                 date: XEUtils.toDateString(new Date(), 'yyyy-MM-dd'),
                 isNew: true
+              }).then(newRow => {
+                // 插入到第一行
+                this.tableData.unshift(newRow)
+                xTree.refreshData().then(() => xTree.setActiveRow(newRow))
               })
-              // 插入到第一行
-              this.tableData.unshift(newRow)
-              xTree.refreshData().then(() => xTree.setActiveRow(newRow))
             },
             insertAtEvent () {
               let xTree = this.$refs.xTree
-              let newRow = xTree.createRow({
+              xTree.createRow({
                 name: '新数据',
                 date: XEUtils.toDateString(new Date(), 'yyyy-MM-dd'),
                 isNew: true
+              }).then(newRow => {
+                // 插入到 id 为 11000 的节点位置中
+                let rowNode = XEUtils.findTree(this.tableData, item => item.id === '11000', this.treeConfig)
+                if (rowNode) {
+                  rowNode.items.splice(rowNode.index, 0, newRow)
+                  xTree.refreshData().then(() => xTree.setActiveRow(newRow))
+                }
               })
-              // 插入到 id 为 11000 的节点位置中
-              let rowNode = XEUtils.findTree(this.tableData, item => item.id === '11000', this.treeConfig)
-              if (rowNode) {
-                rowNode.items.splice(rowNode.index, 0, newRow)
-                xTree.refreshData().then(() => xTree.setActiveRow(newRow))
-              }
             },
             getInsertEvent () {
               let insertRecords = XEUtils.filterTree(this.tableData, item => item.isNew, this.treeConfig)
@@ -127,28 +129,30 @@ export default {
   methods: {
     insertEvent () {
       let xTree = this.$refs.xTree
-      let newRow = xTree.createRow({
+      xTree.createRow({
         name: '新数据',
         date: XEUtils.toDateString(new Date(), 'yyyy-MM-dd'),
         isNew: true
+      }).then(newRow => {
+        // 插入到第一行
+        this.tableData.unshift(newRow)
+        xTree.refreshData().then(() => xTree.setActiveRow(newRow))
       })
-      // 插入到第一行
-      this.tableData.unshift(newRow)
-      xTree.refreshData().then(() => xTree.setActiveRow(newRow))
     },
     insertAtEvent () {
       let xTree = this.$refs.xTree
-      let newRow = xTree.createRow({
+      xTree.createRow({
         name: '新数据',
         date: XEUtils.toDateString(new Date(), 'yyyy-MM-dd'),
         isNew: true
+      }).then(newRow => {
+        // 插入到 id 为 11000 的节点位置中
+        let rowNode = XEUtils.findTree(this.tableData, item => item.id === '11000', this.treeConfig)
+        if (rowNode) {
+          rowNode.items.splice(rowNode.index, 0, newRow)
+          xTree.refreshData().then(() => xTree.setActiveRow(newRow))
+        }
       })
-      // 插入到 id 为 11000 的节点位置中
-      let rowNode = XEUtils.findTree(this.tableData, item => item.id === '11000', this.treeConfig)
-      if (rowNode) {
-        rowNode.items.splice(rowNode.index, 0, newRow)
-        xTree.refreshData().then(() => xTree.setActiveRow(newRow))
-      }
     },
     getInsertEvent () {
       let insertRecords = XEUtils.filterTree(this.tableData, item => item.isNew, this.treeConfig)

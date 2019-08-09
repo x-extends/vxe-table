@@ -143,17 +143,18 @@ export default {
           methods: {
             insertAtEvent (row, column) {
               let xTree = this.$refs.xTree
-              let newRow = xTree.createRow({
+              xTree.createRow({
                 name: '新数据',
                 date: XEUtils.toDateString(new Date(), 'yyyy-MM-dd'),
                 isNew: true
+              }).then(newRow => {
+                // 插入到指定节点位置中
+                let rowNode = XEUtils.findTree(this.tableData, item => item === row, this.treeConfig)
+                if (rowNode) {
+                  rowNode.items.splice(rowNode.index, 0, newRow)
+                  xTree.refreshData().then(() => xTree.setActiveCell(newRow, column.property))
+                }
               })
-              // 插入到指定节点位置中
-              let rowNode = XEUtils.findTree(this.tableData, item => item === row, this.treeConfig)
-              if (rowNode) {
-                rowNode.items.splice(rowNode.index, 0, newRow)
-                xTree.refreshData().then(() => xTree.setActiveCell(newRow, column.property))
-              }
             },
             getInsertEvent () {
               let insertRecords = XEUtils.filterTree(this.tableData, item => item.isNew, this.treeConfig)
@@ -193,17 +194,18 @@ export default {
   methods: {
     insertAtEvent (row, column) {
       let xTree = this.$refs.xTree
-      let newRow = xTree.createRow({
+      xTree.createRow({
         name: '新数据',
         date: XEUtils.toDateString(new Date(), 'yyyy-MM-dd'),
         isNew: true
+      }).then(newRow => {
+        // 插入到指定节点位置中
+        let rowNode = XEUtils.findTree(this.tableData, item => item === row, this.treeConfig)
+        if (rowNode) {
+          rowNode.items.splice(rowNode.index, 0, newRow)
+          xTree.refreshData().then(() => xTree.setActiveCell(newRow, column.property))
+        }
       })
-      // 插入到指定节点位置中
-      let rowNode = XEUtils.findTree(this.tableData, item => item === row, this.treeConfig)
-      if (rowNode) {
-        rowNode.items.splice(rowNode.index, 0, newRow)
-        xTree.refreshData().then(() => xTree.setActiveCell(newRow, column.property))
-      }
     },
     getInsertEvent () {
       let insertRecords = XEUtils.filterTree(this.tableData, item => item.isNew, this.treeConfig)
