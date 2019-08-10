@@ -15,8 +15,8 @@
       <vxe-table-column field="defVal" title="app.api.title.defVal" min-width="160"></vxe-table-column>
     </vxe-table>
     <h3>type 可选值</h3>
-    <p class="orange">Event.CLEAR_FILTER（清除筛选面板时触发）</p>
-    <p class="orange">Event.CLEAR_ACTIVED（清除激活单元格时触发）</p>
+    <p class="orange">event.clear_filter（清除筛选面板时触发）</p>
+    <p class="orange">event.clear_actived（清除激活单元格时触发）</p>
     <h3>示例</h3>
     <p>例子：比如自定义渲染某个组件后，由于弹出层面板不在单元格之内，按键事件的交互行为存在冲突，对于这些场景就很有用了</p>
     <pre>
@@ -59,7 +59,7 @@ export default {
       ],
       demoCodes: [
         `
-        VXETable.interceptor.add('Event.CLEAR_ACTIVED', (params, event) => {
+        VXETable.interceptor.add('event.clear_actived', (params, event) => {
           // 比如点击了某个组件的弹出层面板之后，此时被激活单元格不应该被自动关闭，通过返回 false 可以阻止默认的行为。
           if (event.target.className.indexOf('other-popper') > -1) {
             return false
