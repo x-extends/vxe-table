@@ -323,6 +323,7 @@ module.exports = {
           id: '唯一 ID 标识',
           size: 'Size',
           data: '与表格的 data 属性同步绑定',
+          refresh: '刷新按钮',
           resizable: '列宽拖动配置',
           setting: '列个性化配置'
         }

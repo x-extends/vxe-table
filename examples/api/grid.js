@@ -281,7 +281,7 @@ const apis = [
               {
                 name: 'query',
                 desc: '查询方法 Function({ page, sort, filters }, ...arguments)，默认处理的数据结构 {page: {total: 0}, result: []}；如果使用了服务端排序，sort 属性可以获取相关信息；如果使用了服务端过滤，filter 属性可以获取相关信息',
-                type: 'Promise',
+                type: 'Function / Promise',
                 enum: '',
                 defVal: '',
                 list: []
@@ -289,7 +289,7 @@ const apis = [
               {
                 name: 'delete',
                 desc: '删除方法 Function({ body }, ...arguments)，提交的参数 { removeRecords }',
-                type: 'Promise',
+                type: 'Function / Promise',
                 enum: '',
                 defVal: '',
                 list: []
@@ -297,7 +297,7 @@ const apis = [
               {
                 name: 'save',
                 desc: '保存方法 Function({ body }, ...arguments)，提交的参数 { insertRecords, updateRecords, removeRecords, pendingRecords}',
-                type: 'Promise',
+                type: 'Function / Promise',
                 enum: '',
                 defVal: '',
                 list: []
