@@ -24,7 +24,6 @@
     </pre>
 
     <p>设置 <table-api-link prop="edit-config"/>={trigger: 'click', mode: 'row'} 启用行点击编辑的功能</p>
-    <p>需要注意的 mode=row 时，事件中的 column 相关参数是不确定性的（会保留 column 相关参数，但不一定是准确的）</p>
 
     <vxe-table
       border

@@ -12,6 +12,25 @@ function getRowUniqueId () {
   return `row_${++rowUniqueId}`
 }
 
+class Rule {
+  constructor (rule) {
+    Object.assign(this, {
+      $options: rule,
+      required: rule.required,
+      min: rule.min,
+      max: rule.min,
+      type: rule.type,
+      pattern: rule.pattern,
+      validator: rule.validator,
+      trigger: rule.trigger,
+      maxWidth: rule.maxWidth
+    })
+  }
+  get message () {
+    return UtilTools.getFuncText(this.$options.message)
+  }
+}
+
 /**
  * 渲染浮固定列
  */
@@ -2605,7 +2624,7 @@ export default {
     triggerCellClickEvent (evnt, params) {
       let { $el, highlightCurrentRow, editStore, radioConfig = {}, selectConfig = {}, treeConfig = {}, editConfig } = this
       let { actived } = editStore
-      let { column, columnIndex, row, cell } = params
+      let { column } = params
       // 如果是树形表格
       if ((treeConfig.trigger === 'row' || (column.treeNode && treeConfig.trigger === 'cell'))) {
         this.triggerTreeExpandEvent(evnt, params)
@@ -2629,11 +2648,13 @@ export default {
           if (editConfig.trigger === 'click') {
             if (!actived.args || evnt.currentTarget !== actived.args.cell) {
               if (editConfig.mode === 'row') {
-                this.triggerValidate('blur').catch(e => e).then(() => {
-                  this.handleActived(params, evnt)
-                    .then(() => this.triggerValidate('change'))
-                    .catch(e => e)
-                })
+                this.triggerValidate('blur')
+                  .catch(e => e)
+                  .then(() => {
+                    this.handleActived(params, evnt)
+                      .then(() => this.triggerValidate('change'))
+                      .catch(e => e)
+                  })
               } else if (editConfig.mode === 'cell') {
                 this.handleActived(params, evnt)
                   .then(() => this.triggerValidate('change'))
@@ -2641,17 +2662,16 @@ export default {
               }
             }
           } else if (editConfig.trigger === 'dblclick') {
-            if (!actived.args || cell !== actived.args.cell) {
-              if (editConfig.mode === 'row') {
-                if (row === actived.row) {
-                  actived.args.columnIndex = columnIndex
-                  actived.column = actived.args.column = column
-                } else {
-                  this.handleSelected(params, evnt)
-                }
-              } else if (editConfig.mode === 'cell') {
-                this.handleSelected(params, evnt)
-              }
+            if (editConfig.mode === 'row' && actived.row === params.row) {
+              this.triggerValidate('blur')
+                .catch(e => e)
+                .then(() => {
+                  this.handleActived(params, evnt)
+                    .then(() => this.triggerValidate('change'))
+                    .catch(e => e)
+                })
+            } else {
+              this.handleSelected(params, evnt)
             }
           }
         }
@@ -2767,21 +2787,23 @@ export default {
      * 处理选中源
      */
     handleSelected (params, evnt) {
-      let { mouseConfig = {}, editStore } = this
-      let { selected } = editStore
+      let { mouseConfig = {}, editConfig, editStore } = this
+      let { actived, selected } = editStore
       let { row, column } = params
       let selectMethod = () => {
         if (selected.row !== row || selected.column !== column) {
-          this.clearChecked(evnt)
-          this.clearActived(evnt)
-          selected.args = params
-          selected.row = row
-          selected.column = column
-        }
-        // 如果配置了批量选中功能，则为批量选中状态
-        if (mouseConfig.checked) {
-          let select = DomTools.getCellIndexs(params.cell)
-          this.handleChecked(select, select, evnt)
+          if (actived.row !== row || (editConfig.mode === 'cell' ? actived.column !== column : false)) {
+            this.clearChecked(evnt)
+            this.clearActived(evnt)
+            selected.args = params
+            selected.row = row
+            selected.column = column
+            // 如果配置了批量选中功能，则为批量选中状态
+            if (mouseConfig.checked) {
+              let select = DomTools.getCellIndexs(params.cell)
+              this.handleChecked(select, select, evnt)
+            }
+          }
         }
         return this.$nextTick()
       }
@@ -3765,7 +3787,7 @@ export default {
                     rule.validator(rule, value, e => {
                       if (XEUtils.isError(e)) {
                         let cusRule = { type: 'custom', trigger: rule.trigger, message: e.message, rule }
-                        errorRules.push(cusRule)
+                        errorRules.push(new Rule(cusRule))
                       }
                       return resolve()
                     }, { rules, row, column, rowIndex: this.getRowIndex(row), columnIndex: this.getColumnMapIndex(column) })
@@ -3780,14 +3802,14 @@ export default {
                       len = XEUtils.getSize(restVal)
                     }
                     if (isRequired && isEmpty) {
-                      errorRules.push(rule)
+                      errorRules.push(new Rule(rule))
                     } else if (
                       (isNumber && isNaN(value)) ||
                       (XEUtils.isRegExp(rule.pattern) && !rule.pattern.test(value)) ||
                       (XEUtils.isNumber(rule.min) && (isNumber ? restVal < rule.min : len < rule.min)) ||
                       (XEUtils.isNumber(rule.max) && (isNumber ? restVal > rule.max : len > rule.max))
                     ) {
-                      errorRules.push(rule)
+                      errorRules.push(new Rule(rule))
                     }
                     resolve()
                   }
