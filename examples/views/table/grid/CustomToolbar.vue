@@ -57,6 +57,7 @@ export default {
       },
       toolbar: {
         id: 'toolbar_demo_2',
+        refresh: true,
         setting: {
           storage: true
         }
@@ -115,6 +116,7 @@ export default {
               },
               toolbar: {
                 id: 'toolbar_demo_2',
+                refresh: true,
                 setting: {
                   storage: true
                 }

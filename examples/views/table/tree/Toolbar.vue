@@ -2,7 +2,7 @@
   <div>
     <p>增删改查、工具栏</p>
 
-    <vxe-toolbar :data="tableData" :setting="{storage: false}">
+    <vxe-toolbar :data="tableData" setting>
       <template v-slot:buttons>
         <vxe-button @click="insertEvent">{{ $t('app.body.button.insert') }}</vxe-button>
         <vxe-button @click="$refs.xTree.removeSelecteds()">移除选中</vxe-button>
@@ -44,7 +44,7 @@ export default {
       tableData: [],
       demoCodes: [
         `
-        <vxe-toolbar :data="tableData" :setting="{storage: false}">
+        <vxe-toolbar :data="tableData" setting>
           <template v-slot:buttons>
             <vxe-button @click="insertEvent">新增</vxe-button>
             <vxe-button @click="$refs.xTree.removeSelecteds()">移除选中</vxe-button>

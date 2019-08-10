@@ -4,7 +4,7 @@
     <p>支持显示/隐藏列、列宽拖动状态的保存功能</p>
     <p class="red">组成一套完整的表格，工具栏和表格必须是上下相邻关系，渲染时会自动进行上下关联，不允许更换位置（如果是复杂的布局不建议使用工具栏，自行写模板即可）</p>
 
-    <vxe-toolbar :setting="{storage: false}">
+    <vxe-toolbar setting>
       <template v-slot:buttons>
         <vxe-button>{{ $t('app.body.button.insert') }}</vxe-button>
         <vxe-button>按钮2</vxe-button>
@@ -41,7 +41,7 @@ export default {
       tableData: [],
       demoCodes: [
         `
-        <vxe-toolbar :setting="{storage: false}">
+        <vxe-toolbar setting>
           <template v-slot:buttons>
             <vxe-button>{{ $t('app.body.button.insert') }}</vxe-button>
             <vxe-button>按钮2</vxe-button>

@@ -174,6 +174,7 @@
           },
           // 默认工具栏参数
           toolbar: {
+            refresh: false,
             resizable: {
               storage: false
             },

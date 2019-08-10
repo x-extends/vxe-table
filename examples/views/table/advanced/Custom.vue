@@ -91,7 +91,7 @@
         :key="index">{{ column.title }}</vxe-checkbox>
     </template>
 
-    <vxe-toolbar :data="tableData" :setting="{storage: false}">
+    <vxe-toolbar :data="tableData" setting>
       <template v-slot:buttons>
         <vxe-button @click="$refs.xTable3.refreshColumn()">刷新</vxe-button>
       </template>
@@ -336,7 +336,7 @@ export default {
             :key="index">{{ column.title }}</vxe-checkbox>
         </template>
 
-        <vxe-toolbar :data="tableData" :setting="{storage: false}">
+        <vxe-toolbar :data="tableData" setting>
           <template v-slot:buttons>
             <vxe-button @click="$refs.xTable.refreshColumn()">刷新</vxe-button>
           </template>

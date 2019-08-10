@@ -75,6 +75,7 @@ export default {
           { code: 'save', name: 'app.body.button.save' },
           { code: 'export', name: '导出.csv' }
         ],
+        refresh: true,
         resizable: {
           storage: true
         },
@@ -154,6 +155,7 @@ export default {
                   { code: 'save', name: 'app.body.button.save' },
                   { code: 'export', name: '导出.csv' }
                 ],
+                refresh: true,
                 resizable: {
                   storage: true
                 },

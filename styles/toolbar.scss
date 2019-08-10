@@ -16,22 +16,28 @@
     padding: 8px 0
   }
   &.size--medium {
+    .vxe-refresh--btn,
     .vxe-custom--setting-btn {
       font-size: 17px;
     }
   }
   &.size--small {
+    .vxe-refresh--btn,
     .vxe-custom--setting-btn {
       font-size: 15px;
     }
   }
   &.size--mini {
+    .vxe-refresh--btn,
     .vxe-custom--setting-btn {
       font-size: 14px;
     }
   }
+  .vxe-refresh--wrapper,
   .vxe-custom--wrapper {
     float: right;
+  }
+  .vxe-custom--wrapper {
     text-align: right;
     position: relative;
     &.is--active {
@@ -44,9 +50,9 @@
       }
     }
   }
+  .vxe-refresh--btn,
   .vxe-custom--setting-btn {
     font-size: 18px;
-    padding: 4px;
     vertical-align: middle;
     cursor: pointer;
     user-select: none;
@@ -54,6 +60,15 @@
       background-color: #F0F0F0;
       border-radius: 50%;
     }
+    & > i {
+      display: block;
+    }
+  }
+  .vxe-refresh--btn {
+    padding: 7px;
+  }
+  .vxe-custom--setting-btn {
+    padding: 4px;
   }
   .vxe-custom--option-wrapper {
     display: none;
