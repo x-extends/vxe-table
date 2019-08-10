@@ -102,9 +102,7 @@ export default {
         }
       ],
       toolbar: {
-        setting: {
-          storage: false
-        },
+        setting: true,
         slots: {
           buttons: () => {
             return [
@@ -200,9 +198,7 @@ export default {
                 }
               ],
               toolbar: {
-                setting: {
-                  storage: false
-                },
+                setting: true,
                 slots: {
                   buttons: () => {
                     return [

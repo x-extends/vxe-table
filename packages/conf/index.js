@@ -39,6 +39,8 @@ const GlobalConfig = {
     filter: 'vxe-icon--funnel',
     edit: 'vxe-icon--edit-outline',
     tree: 'vxe-icon--caret-right',
+    refresh: 'vxe-icon--refresh',
+    custom: 'vxe-icon--menu',
     jumpPrev: 'vxe-icon--d-arrow-left',
     jumpNext: 'vxe-icon--d-arrow-right',
     prevPage: 'vxe-icon--arrow-left',

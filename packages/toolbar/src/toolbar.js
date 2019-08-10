@@ -7,6 +7,7 @@ export default {
   props: {
     id: String,
     resizable: { type: [Boolean, Object], default: () => GlobalConfig.toolbar.resizable },
+    refresh: { type: [Boolean, Object], default: () => GlobalConfig.toolbar.refresh },
     setting: { type: [Boolean, Object], default: () => GlobalConfig.toolbar.setting },
     buttons: { type: Array, default: () => GlobalConfig.toolbar.buttons },
     size: String,
@@ -21,6 +22,7 @@ export default {
   data () {
     return {
       $table: null,
+      isRefresh: false,
       tableFullColumn: [],
       settingStore: {
         visible: false
@@ -58,7 +60,7 @@ export default {
     GlobalEvent.off(this, 'blur')
   },
   render (h) {
-    let { $scopedSlots, $grid, $table, settingStore, setting, settingOpts, buttons = [], vSize, tableFullColumn } = this
+    let { $scopedSlots, $grid, $table, settingStore, refresh, setting, settingOpts, buttons = [], vSize, tableFullColumn } = this
     let customBtnOns = {}
     let customWrapperOns = {}
     let $buttons = $scopedSlots.buttons
@@ -101,7 +103,7 @@ export default {
           on: customBtnOns
         }, [
           h('i', {
-            class: 'vxe-icon--menu'
+            class: GlobalConfig.icon.custom
           })
         ]),
         h('div', {
@@ -128,6 +130,22 @@ export default {
             }, headerTitle) : null
           }))
         ])
+      ]) : null,
+      refresh && $grid ? h('div', {
+        class: 'vxe-refresh--wrapper'
+      }, [
+        h('div', {
+          class: 'vxe-refresh--btn',
+          on: {
+            click: this.refreshEvent
+          }
+        }, [
+          h('i', {
+            class: [GlobalConfig.icon.refresh, {
+              roll: this.isRefresh
+            }]
+          })
+        ])
       ]) : null
     ])
   },
@@ -151,7 +169,10 @@ export default {
       }
     },
     loadStorage () {
-      let { $grid, $table, id, resizable, setting, resizableOpts, settingOpts } = this
+      let { $grid, $table, id, refresh, resizable, setting, resizableOpts, settingOpts } = this
+      if (refresh && !$grid) {
+        throw new Error('[vxe-table] It can only be used in <vxe-grid>')
+      }
       if (resizable || setting) {
         if ($grid || $table) {
           ($grid || $table).connect({ toolbar: this })
@@ -298,6 +319,14 @@ export default {
       if ($grid) {
         $grid.commitProxy(item.code)
         UtilTools.emitEvent($grid, 'toolbar-button-click', [{ button: item, $grid }, evnt])
+      }
+    },
+    refreshEvent () {
+      if (!this.isRefresh) {
+        this.isRefresh = true
+        this.$grid.commitProxy('reload').catch(e => e).then(() => {
+          this.isRefresh = false
+        })
       }
     }
   }

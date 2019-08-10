@@ -60,6 +60,7 @@ export default {
           { code: 'export', name: '导出.csv' },
           { code: 'myBtn', name: '自定义按钮' }
         ],
+        refresh: true,
         resizable: {
           storage: true
         },
@@ -121,6 +122,7 @@ export default {
                   { code: 'export', name: '导出.csv' },
                   { code: 'myBtn', name: '自定义按钮' }
                 ],
+                refresh: true,
                 resizable: {
                   storage: true
                 },

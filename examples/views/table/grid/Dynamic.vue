@@ -75,9 +75,8 @@ export default {
           { code: 'save', name: '保存' },
           { code: 'export', name: '导出.csv' }
         ],
-        setting: {
-          storage: false
-        }
+        refresh: true,
+        setting: true
       },
       tableColumn: [
         { type: 'selection', width: 50 },
@@ -119,9 +118,8 @@ export default {
           { code: 'save', name: '保存' },
           { code: 'export', name: '导出.csv' }
         ],
-        setting: {
-          storage: false
-        }
+        refresh: true,
+        setting: true
       },
       validRules2: null,
       tableColumn2: [],
@@ -165,9 +163,8 @@ export default {
                   { code: 'save', name: '保存' },
                   { code: 'export', name: '导出.csv' }
                 ],
-                setting: {
-                  storage: false
-                }
+                refresh: true,
+                setting: true
               },
               tableColumn: [
                 { type: 'selection', width: 50 },
@@ -235,9 +232,8 @@ export default {
                   { code: 'save', name: '保存' },
                   { code: 'export', name: '导出.csv' }
                 ],
-                setting: {
-                  storage: false
-                }
+                refresh: true,
+                setting: true
               },
               validRules: null,
               tableColumn: [],
