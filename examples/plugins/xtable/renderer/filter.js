@@ -1,4 +1,4 @@
-import VXETable from '../../../packages/v-x-e-table'
+import VXETable from '../../../../packages/v-x-e-table'
 import XEUtils from 'xe-utils'
 
 // 创建一个支持输入的筛选器
