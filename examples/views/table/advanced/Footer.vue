@@ -1,6 +1,7 @@
 <template>
   <div>
     <p>设置 <table-api-link prop="show-footer"/> show-footer 和 <table-api-link prop="footer-method"/> 自定义表尾合计</p>
+    <p class="red">需要注意的是表尾的的计算并非实时的，而是在 data 初始化时才会触发自动计算；如果要达到实时计算请手动调用 <table-api-link prop="updateFooter"/> 方法</p>
 
     <vxe-table
       class="mytable-footer"
@@ -122,7 +123,7 @@ export default {
                   if (['age', 'rate'].includes(column.property)) {
                     return XEUtils.mean(data, column.property)
                   }
-                  return '-'
+                  return null
                 }),
                 columns.map((column, columnIndex) => {
                   if (columnIndex === 0) {
@@ -131,7 +132,7 @@ export default {
                   if (['age', 'rate'].includes(column.property)) {
                     return XEUtils.sum(data, column.property)
                   }
-                  return '-'
+                  return null
                 })
               ]
             }
@@ -183,7 +184,7 @@ export default {
                   if (['age', 'rate'].includes(column.property)) {
                     return XEUtils.mean(data, column.property)
                   }
-                  return '-'
+                  return null
                 }),
                 columns.map((column, columnIndex) => {
                   if (columnIndex === 0) {
@@ -192,7 +193,7 @@ export default {
                   if (['age', 'rate'].includes(column.property)) {
                     return XEUtils.sum(data, column.property)
                   }
-                  return '-'
+                  return null
                 })
               ]
             }
@@ -247,7 +248,7 @@ export default {
                   if (['age', 'rate'].includes(column.property)) {
                     return XEUtils.mean(data, column.property)
                   }
-                  return '-'
+                  return null
                 }),
                 columns.map((column, columnIndex) => {
                   if (columnIndex === 0) {
@@ -256,7 +257,7 @@ export default {
                   if (['age', 'rate'].includes(column.property)) {
                     return XEUtils.sum(data, column.property)
                   }
-                  return '-'
+                  return null
                 })
               ]
             }

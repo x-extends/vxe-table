@@ -11,9 +11,6 @@
       highlight-current-row
       highlight-hover-row
       highlight-current-column
-      ref="xTable"
-      class="api-table"
-      row-id="id"
       :data.sync="tableData">
       <vxe-table-column field="name" title="app.api.title.prop" min-width="280" tree-node></vxe-table-column>
       <vxe-table-column field="desc" title="app.api.title.desc" min-width="200"></vxe-table-column>
@@ -33,23 +30,23 @@ export default {
       tableData: [
         {
           name: 'add(name, options)',
-          desc: '添加渲染器',
+          desc: '添加',
           type: '',
           enum: '',
           defVal: 'name, options',
           list: []
         },
         {
-          name: 'mixin(renderMap)',
-          desc: '混合多个渲染器',
+          name: 'mixin(map)',
+          desc: '混合多个',
           type: '',
           enum: '',
-          defVal: 'renderMap',
+          defVal: 'map',
           list: []
         },
         {
           name: 'delete(name)',
-          desc: '删除渲染器',
+          desc: '删除',
           type: '',
           enum: '',
           defVal: 'name',

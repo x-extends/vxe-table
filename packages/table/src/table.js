@@ -1634,7 +1634,7 @@ export default {
         } else if (this.getEventTargetNode(evnt, filterWrapper.$el).flag) {
           // 如果点击筛选容器
         } else {
-          this.preventEvent(evnt, 'event.clear_filter', filterStore.args, this.closeFilter)
+          this.preventEvent(evnt, 'Event.CLEAR_FILTER', filterStore.args, this.closeFilter)
         }
       }
       // 如果已激活了编辑状态
@@ -1644,7 +1644,7 @@ export default {
             // 如果是激活状态，且点击了校验提示框
           } else if (!this.lastCallTime || this.lastCallTime + 50 < Date.now()) {
             // 如果手动调用了激活单元格，避免触发源被移除后导致重复关闭
-            this.preventEvent(evnt, 'event.clear_actived', actived.args, () => {
+            this.preventEvent(evnt, 'Event.CLEAR_ACTIVED', actived.args, () => {
               let isClear
               let isReadonlyCol = !this.getEventTargetNode(evnt, this.$el, 'col--edit').flag
               // row 方式
