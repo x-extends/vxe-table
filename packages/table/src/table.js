@@ -9,6 +9,25 @@ var browse = DomTools.browse
 var isWebkit = browse['-webkit'] && !browse['-ms']
 var debounceScrollYDuration = browse.msie ? 40 : 20
 
+class Rule {
+  constructor (rule) {
+    Object.assign(this, {
+      $options: rule,
+      required: rule.required,
+      min: rule.min,
+      max: rule.min,
+      type: rule.type,
+      pattern: rule.pattern,
+      validator: rule.validator,
+      trigger: rule.trigger,
+      maxWidth: rule.maxWidth
+    })
+  }
+  get message () {
+    return UtilTools.getFuncText(this.$options.message)
+  }
+}
+
 function getRowUniqueId () {
   return `row_${++rowUniqueId}`
 }
@@ -309,9 +328,7 @@ export default {
       return this.size || this.$parent.size || this.$parent.vSize
     },
     validOpts () {
-      return Object.assign({
-        message: 'default'
-      }, GlobalConfig.validConfig, this.validConfig)
+      return Object.assign({ message: 'default' }, GlobalConfig.validConfig, this.validConfig)
     },
     optimizeOpts () {
       return Object.assign({}, GlobalConfig.optimization, this.optimization)
@@ -2810,7 +2827,7 @@ export default {
     triggerCellClickEvent (evnt, params) {
       let { $el, highlightCurrentRow, editStore, radioConfig = {}, selectConfig = {}, treeConfig = {}, editConfig, mouseConfig = {} } = this
       let { actived } = editStore
-      let { column, columnIndex, cell } = params
+      let { column, cell } = params
       // 如果是树形表格
       if ((treeConfig.trigger === 'row' || (column.treeNode && treeConfig.trigger === 'cell'))) {
         this.triggerTreeExpandEvent(evnt, params)
@@ -2834,10 +2851,6 @@ export default {
         if (!mouseConfig.checked) {
           if (editConfig) {
             if (!actived.args || cell !== actived.args.cell) {
-              if (editConfig.mode === 'row' && actived.args) {
-                Object.assign(actived.args, { cell, columnIndex, column })
-                actived.column = column
-              }
               if (editConfig.trigger === 'click') {
                 this.triggerValidate('blur')
                   .catch(e => e)
@@ -2847,7 +2860,17 @@ export default {
                       .catch(e => e)
                   })
               } else if (editConfig.trigger === 'dblclick') {
-                this.handleSelected(params, evnt)
+                if (editConfig.mode === 'row' && actived.row === params.row) {
+                  this.triggerValidate('blur')
+                    .catch(e => e)
+                    .then(() => {
+                      this.handleActived(params, evnt)
+                        .then(() => this.triggerValidate('change'))
+                        .catch(e => e)
+                    })
+                } else {
+                  this.handleSelected(params, evnt)
+                }
               }
             }
           }
@@ -2891,8 +2914,7 @@ export default {
       let { row, column, cell } = params
       let { model, editRender } = column
       if (editRender && cell) {
-        let isRowMode = editConfig.mode === 'row'
-        if (actived.row !== row || !(editConfig.mode === 'cell' && actived.column === column)) {
+        if (actived.row !== row || (editConfig.mode === 'cell' ? actived.column !== column : false)) {
           // 判断是否禁用编辑
           let type = 'edit-disabled'
           if (!activeMethod || activeMethod(params)) {
@@ -2906,7 +2928,7 @@ export default {
             actived.args = params
             actived.row = row
             actived.column = column
-            if (isRowMode) {
+            if (editConfig.mode === 'row') {
               tableColumn.forEach(column => {
                 if (column.editRender) {
                   column.model.value = UtilTools.getCellValue(row, column)
@@ -2992,33 +3014,35 @@ export default {
      * 处理选中源
      */
     handleSelected (params, evnt) {
-      let { mouseConfig = {}, editStore, elemStore } = this
-      let { selected } = editStore
+      let { mouseConfig = {}, editConfig, editStore, elemStore } = this
+      let { actived, selected } = editStore
       let { row, column, cell } = params
       let selectMethod = () => {
         if (selected.row !== row || selected.column !== column) {
-          this.clearChecked(evnt)
-          this.clearIndexChecked()
-          this.clearHeaderChecked()
-          this.clearSelected(evnt)
-          this.clearActived(evnt)
-          selected.args = params
-          selected.row = row
-          selected.column = column
-          if (mouseConfig.selected) {
-            let listElem = elemStore['main-body-list']
-            let rowid = UtilTools.getRowid(this, row)
-            let trElem = listElem.querySelector(`[data-rowid="${rowid}"]`)
-            let tdElem = trElem.querySelector(`.${column.id}`)
-            DomTools.addClass(tdElem, 'col--selected')
+          if (actived.row !== row || (editConfig.mode === 'cell' ? actived.column !== column : false)) {
+            this.clearChecked(evnt)
+            this.clearIndexChecked()
+            this.clearHeaderChecked()
+            this.clearSelected(evnt)
+            this.clearActived(evnt)
+            selected.args = params
+            selected.row = row
+            selected.column = column
+            if (mouseConfig.selected) {
+              let listElem = elemStore['main-body-list']
+              let rowid = UtilTools.getRowid(this, row)
+              let trElem = listElem.querySelector(`[data-rowid="${rowid}"]`)
+              let tdElem = trElem.querySelector(`.${column.id}`)
+              DomTools.addClass(tdElem, 'col--selected')
+            }
+            // 如果配置了批量选中功能，则为批量选中状态
+            if (mouseConfig.checked) {
+              let headerElem = elemStore['main-header-list']
+              this.handleChecked([[cell]])
+              this.handleHeaderChecked([[headerElem.querySelector(`.${column.id}`)]])
+              this.handleIndexChecked([[cell.parentNode.querySelector('.col--index')]])
+            }
           }
-        }
-        // 如果配置了批量选中功能，则为批量选中状态
-        if (mouseConfig.checked) {
-          let headerElem = elemStore['main-header-list']
-          this.handleChecked([[cell]])
-          this.handleHeaderChecked([[headerElem.querySelector(`.${column.id}`)]])
-          this.handleIndexChecked([[cell.parentNode.querySelector('.col--index')]])
         }
         return this.$nextTick()
       }
@@ -4201,8 +4225,8 @@ export default {
                   if (XEUtils.isFunction(rule.validator)) {
                     rule.validator(rule, cellValue, e => {
                       if (XEUtils.isError(e)) {
-                        let cusRule = { type: 'custom', trigger: rule.trigger, message: e.message, rule }
-                        errorRules.push(cusRule)
+                        let cusRule = { type: 'custom', trigger: rule.trigger, message: e.message, rule: new Rule(rule) }
+                        errorRules.push(new Rule(cusRule))
                       }
                       return resolve()
                     }, { rules, row, column, rowIndex: this.getRowIndex(row), columnIndex: this.getColumnIndex(column) })
@@ -4217,14 +4241,14 @@ export default {
                       len = XEUtils.getSize(restVal)
                     }
                     if (isRequired && isEmpty) {
-                      errorRules.push(rule)
+                      errorRules.push(new Rule(rule))
                     } else if (
                       (isNumber && isNaN(cellValue)) ||
                       (XEUtils.isRegExp(rule.pattern) && !rule.pattern.test(cellValue)) ||
                       (XEUtils.isNumber(rule.min) && (isNumber ? restVal < rule.min : len < rule.min)) ||
                       (XEUtils.isNumber(rule.max) && (isNumber ? restVal > rule.max : len > rule.max))
                     ) {
-                      errorRules.push(rule)
+                      errorRules.push(new Rule(rule))
                     }
                     resolve()
                   }

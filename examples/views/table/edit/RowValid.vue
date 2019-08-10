@@ -48,7 +48,7 @@ export default {
       tableData: [],
       validRules: {
         name: [
-          { required: true, message: () => this.$t('app.body.valid.rName') },
+          { required: true, message: 'app.body.valid.rName' },
           { min: 3, max: 50, message: '名称长度在 3 到 50 个字符' }
         ],
         sex: [
@@ -91,7 +91,7 @@ export default {
               tableData: [],
               validRules: {
                 name: [
-                  { required: true, message: () => this.$t('app.body.valid.rName') },
+                  { required: true, message: 'app.body.valid.rName' },
                   { min: 3, max: 50, message: '名称长度在 3 到 50 个字符' }
                 ],
                 sex: [
@@ -133,9 +133,7 @@ export default {
                       return [
                         <div class="red" style="max-height: 400px;overflow: auto;">
                           {
-                            msgList.map(msg => {
-                              return <div>{ msg }</div>
-                            })
+                            msgList.map(msg => <div>{ msg }</div>)
                           }
                         </div>
                       ]
@@ -229,9 +227,7 @@ export default {
               return [
                 <div class="red" style="max-height: 400px;overflow: auto;">
                   {
-                    msgList.map(msg => {
-                      return <div>{ msg }</div>
-                    })
+                    msgList.map(msg => <div>{ msg }</div>)
                   }
                 </div>
               ]
