@@ -33,6 +33,9 @@ export default {
     vSize () {
       return this.size || this.$parent.size || this.$parent.vSize
     },
+    refreshOpts () {
+      return Object.assign({}, GlobalConfig.toolbar.refresh, this.refresh)
+    },
     resizableOpts () {
       return Object.assign({ storageKey: 'VXE_TABLE_CUSTOM_COLUMN_WIDTH' }, GlobalConfig.toolbar.resizable, this.resizable)
     },
@@ -131,7 +134,7 @@ export default {
           }))
         ])
       ]) : null,
-      refresh && $grid ? h('div', {
+      refresh ? h('div', {
         class: 'vxe-refresh--wrapper'
       }, [
         h('div', {
@@ -169,9 +172,11 @@ export default {
       }
     },
     loadStorage () {
-      let { $grid, $table, id, refresh, resizable, setting, resizableOpts, settingOpts } = this
+      let { $grid, $table, id, refresh, resizable, setting, refreshOpts, resizableOpts, settingOpts } = this
       if (refresh && !$grid) {
-        throw new Error('[vxe-table] It can only be used in <vxe-grid>')
+        if (!refreshOpts.query) {
+          console.warn('[vxe-toolbar] refresh.query function does not exist')
+        }
       }
       if (resizable || setting) {
         if ($grid || $table) {
@@ -322,11 +327,19 @@ export default {
       }
     },
     refreshEvent () {
+      let { $grid, refreshOpts } = this
       if (!this.isRefresh) {
-        this.isRefresh = true
-        this.$grid.commitProxy('reload').catch(e => e).then(() => {
-          this.isRefresh = false
-        })
+        if ($grid) {
+          this.isRefresh = true
+          $grid.commitProxy('reload').catch(e => e).then(() => {
+            this.isRefresh = false
+          })
+        } else if (refreshOpts.query) {
+          this.isRefresh = true
+          refreshOpts.query().catch(e => e).then(() => {
+            this.isRefresh = false
+          })
+        }
       }
     }
   }

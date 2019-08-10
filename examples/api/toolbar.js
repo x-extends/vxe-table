@@ -31,6 +31,23 @@ const apis = [
       //   list: []
       // },
       {
+        name: 'refresh',
+        descKey: 'app.api.toolbar.desc.refresh',
+        type: 'Boolean,Object',
+        enum: '',
+        defVal: '',
+        list: [
+          {
+            name: 'query',
+            desc: '查询的方法',
+            type: 'Function / Promise',
+            enum: '',
+            defVal: '',
+            list: []
+          }
+        ]
+      },
+      {
         name: 'resizable',
         descKey: 'app.api.toolbar.desc.resizable',
         type: 'Boolean,Object',
