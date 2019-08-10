@@ -1,4 +1,4 @@
-import VXETable from '../../../packages/v-x-e-table'
+import VXETable from '../../../../packages/v-x-e-table'
 
 // 创建一个超链接渲染器
 VXETable.renderer.add('MyLink', {

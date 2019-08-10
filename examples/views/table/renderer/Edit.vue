@@ -29,7 +29,7 @@
 
 <script>
 import hljs from 'highlight.js'
-import '../../../plugins/renderer/edit'
+import '@/plugins/xtable/renderer/edit'
 
 export default {
   data  () {

@@ -25,7 +25,7 @@
 
 <script>
 import hljs from 'highlight.js'
-import '../../../plugins/renderer/default'
+import '@/plugins/xtable/renderer/default'
 
 export default {
   data  () {
