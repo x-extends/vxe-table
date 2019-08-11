@@ -291,10 +291,10 @@ export default {
               let isVisible = column && column.property === 'age'
               this.bodyMenus.forEach(list => {
                 list.forEach(item => {
-                  if (['copy'].includes(item.code)) {
+                  if (['copy', 'remove'].includes(item.code)) {
                     item.disabled = isDisabled
                   }
-                  if (['clear'].includes(item.code)) {
+                  if (['clear', 'filter'].includes(item.code)) {
                     item.visible = isVisible
                   }
                 })
@@ -360,7 +360,7 @@ export default {
           if (['copy', 'remove'].includes(item.code)) {
             item.disabled = isDisabled
           }
-          if (['clear'].includes(item.code)) {
+          if (['clear', 'filter'].includes(item.code)) {
             item.visible = isVisible
           }
         })
