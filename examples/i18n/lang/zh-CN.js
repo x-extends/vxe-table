@@ -172,7 +172,7 @@ module.exports = {
     },
     footer: {
       donation: '捐赠',
-      donationDesc: '维护一个项目需要耗费很大时间和精力，为了使项目能够健康持续的发展下去，你可以通过赞助来支持作者😊'
+      donationDesc: '为了使项目能够健康持续的发展下去，你可以通过赞助来支持作者 😊'
     },
     api: {
       form: {
