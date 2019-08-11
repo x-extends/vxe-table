@@ -2,7 +2,7 @@
   <div>
     <vxe-toolbar id="document_api" :resizable="{storage: true}" :setting="{storage: true}">
       <template v-slot:buttons>
-        <vxe-input class="search-input" v-model="filterName" type="search" :placeholder="`vxe-${apiName} ${$t('app.api.form.apiSearch')}`"></vxe-input>
+        <vxe-input class="search-input" v-model="filterName" type="search" :placeholder="`vxe-${apiName} ${$t('app.api.form.apiSearch')}`" @keyup="searchEvent"></vxe-input>
       </template>
     </vxe-toolbar>
 
@@ -75,6 +75,7 @@ export default {
   data () {
     return {
       filterName: this.$route.query.filterName,
+      apiList: [],
       defaultExpandRowKeys: [],
       loading: false,
       tableData: [],
@@ -142,22 +143,6 @@ export default {
   computed: {
     apiName () {
       return this.$route.params.name
-    },
-    apiList () {
-      let filterName = XEUtils.toString(this.filterName).trim().toLowerCase()
-      if (filterName) {
-        let filterRE = new RegExp(filterName, 'gi')
-        let options = { children: 'list' }
-        let searchProps = ['name', 'desc', 'type', 'enum', 'defVal']
-        let rest = XEUtils.searchTree(this.tableData, item => searchProps.some(key => item[key].toLowerCase().indexOf(filterName) > -1), options)
-        XEUtils.eachTree(rest, item => {
-          searchProps.forEach(key => {
-            item[key] = item[key].replace(filterRE, match => `<span class="keyword-lighten">${match}</span>`)
-          })
-        }, options)
-        return rest
-      }
-      return this.tableData
     }
   },
   watch: {
@@ -231,6 +216,7 @@ export default {
         // 默认展开一级
         this.defaultExpandRowKeys = apis.filter(item => item.list && item.list.length).map(item => item.id)
         this.loading = false
+        this.handleSearch()
       }, 100)
     },
     cellClassNameFunc ({ row, column }) {
@@ -290,7 +276,28 @@ export default {
           xTable.clearTreeExpand()
           break
       }
-    }
+    },
+    handleSearch () {
+      let filterName = XEUtils.toString(this.filterName).trim().toLowerCase()
+      if (filterName) {
+        let filterRE = new RegExp(filterName, 'gi')
+        let options = { children: 'list' }
+        let searchProps = ['name', 'desc', 'type', 'enum', 'defVal']
+        let rest = XEUtils.searchTree(this.tableData, item => searchProps.some(key => item[key].toLowerCase().indexOf(filterName) > -1), options)
+        XEUtils.eachTree(rest, item => {
+          searchProps.forEach(key => {
+            item[key] = item[key].replace(filterRE, match => `<span class="keyword-lighten">${match}</span>`)
+          })
+        }, options)
+        this.apiList = rest
+      } else {
+        this.apiList = this.tableData
+      }
+    },
+    // 创建一个防反跳策略函数，间隔 500 毫秒的执行赔率
+    searchEvent: XEUtils.debounce(function () {
+      this.handleSearch()
+    }, 500, { leading: false, trailing: true })
   },
   beforeRouteUpdate (to, from, next) {
     next()

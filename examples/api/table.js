@@ -1988,7 +1988,7 @@ const apis = [
       },
       {
         name: 'closeFilter()',
-        desc: '手动关闭筛选面板',
+        desc: '手动关闭筛选面板（某些特殊场景可能会用到）',
         type: 'Promise',
         enum: '',
         defVal: '',
@@ -1996,7 +1996,7 @@ const apis = [
       },
       {
         name: 'clostTooltip()',
-        desc: '手动关闭 tooltip 提示',
+        desc: '手动关闭 tooltip 提示（某些特殊场景可能会用到）',
         type: 'Promise',
         enum: '',
         defVal: '',
@@ -2004,7 +2004,7 @@ const apis = [
       },
       {
         name: 'closeMenu()',
-        desc: '手动关闭快捷菜单',
+        desc: '手动关闭快捷菜单（某些特殊场景可能会用到）',
         type: 'Promise',
         enum: '',
         defVal: '',
@@ -2086,10 +2086,18 @@ const apis = [
       },
       {
         name: 'sort(field, order)',
-        desc: '手动对表格进行排序；如果 order 为空则自动切换排序',
+        desc: '手动对表格进行排序（如果 order 为空则自动切换排序）',
         type: 'Promise',
         enum: '',
         defVal: 'field, order?',
+        list: []
+      },
+      {
+        name: 'filter(field)',
+        desc: '手动对表格进行筛选',
+        type: 'Promise<options>',
+        enum: '',
+        defVal: 'field',
         list: []
       },
       {
