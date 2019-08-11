@@ -646,7 +646,21 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.pageScroll',
+              disabled: true,
+              locat: {
+                name: 'TableScroll'
+              }
+            },
+            {
               label: 'app.aside.nav.infiniteScroll',
+              disabled: true,
+              locat: {
+                name: 'TableScroll'
+              }
+            },
+            {
+              label: 'app.aside.nav.full',
               disabled: true,
               locat: {
                 name: 'TableScroll'
@@ -904,6 +918,20 @@ export default {
               label: 'app.aside.nav.antdPluginMore',
               locat: {
                 name: 'TablePluginAntdPage'
+              }
+            },
+            {
+              label: 'app.aside.nav.spanPlugin',
+              disabled: true,
+              locat: {
+                name: 'TableBasic'
+              }
+            },
+            {
+              label: 'app.aside.nav.chartsPlugin',
+              disabled: true,
+              locat: {
+                name: 'TableBasic'
               }
             }
           ]

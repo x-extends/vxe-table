@@ -81,6 +81,7 @@ module.exports = {
         big1wRow1wCol: '1 万行 1 万列',
         big10wRow1wCol: '10 万行 1 万列 + 更复杂渲染',
         treeScroll: '树结构',
+        pageScroll: '滚动分页',
         infiniteScroll: '无限滚动',
 
         editable: '可编辑表格',
@@ -112,7 +113,7 @@ module.exports = {
         sortablejsColumn: 'sortablejs -> 列拖拽',
         xlsxRender: 'xlsx -> 导出 xlsx',
 
-        plugin: '使用插件',
+        plugin: '插件列表',
         elementPlugin: 'plugin-element 基本配置',
         elementFilterPlugin: 'plugin-element 筛选配置',
         elementPluginMore: 'plugin-element 更多配置',
@@ -122,6 +123,8 @@ module.exports = {
         antdPlugin: 'plugin-antd 基本配置',
         antdFilter: 'plugin-antd 筛选配置',
         antdPluginMore: 'plugin-antd 更多配置',
+        spanPlugin: '单元格选中合并',
+        chartsPlugin: '图表功能',
 
         renderer: '渲染器',
         rendererFilter: '筛选渲染器',
