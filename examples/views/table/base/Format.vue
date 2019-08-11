@@ -31,6 +31,7 @@
       <vxe-table-column field="time" title="转日期格式" :formatter="['toDateString', 'yyyy-MM-dd']"></vxe-table-column>
       <vxe-table-column field="num" title="转整数" formatter="toInteger"></vxe-table-column>
       <vxe-table-column field="num" title="截取两位小数" :formatter="['toFixedString', 2]"></vxe-table-column>
+      <vxe-table-column field="sex" title="格式化性别" formatter="toSex"></vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -45,6 +46,12 @@
 <script>
 import hljs from 'highlight.js'
 import XEUtils from 'xe-utils'
+
+XEUtils.mixin({
+  toSex (cellValue) {
+    return cellValue === '1' ? '男' : cellValue === '0' ? '女' : ''
+  }
+})
 
 export default {
   data () {
@@ -91,9 +98,16 @@ export default {
           <vxe-table-column field="time" title="转日期格式" :formatter="['toDateString', 'yyyy-MM-dd']"></vxe-table-column>
           <vxe-table-column field="num" title="转整数" formatter="toInteger"></vxe-table-column>
           <vxe-table-column field="num" title="截取两位小数" :formatter="['toFixedString', 2]"></vxe-table-column>
+          <vxe-table-column field="sex" title="格式化性别" formatter="toSex"></vxe-table-column>
         </vxe-table>
         `,
         `
+        XEUtils.mixin({
+          toSex (cellValue) {
+            return cellValue === '1' ? '男' : cellValue === '0' ? '女' : ''
+          }
+        })
+
         export default {
           data () {
             return {
