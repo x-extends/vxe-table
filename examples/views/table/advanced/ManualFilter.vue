@@ -7,7 +7,7 @@
       <template v-slot:buttons>
         <vxe-button @click="filterNameEvent">筛选 Name</vxe-button>
         <vxe-button @click="filterAgeEvent">筛选 Age</vxe-button>
-        <vxe-button @click="$refs.xTable.clearFilter($refs.xTable.getColumnByField('age'))">清除 Age 的筛选条件</vxe-button>
+        <vxe-button @click="$refs.xTable.clearFilter('age')">清除 Age 的筛选条件</vxe-button>
         <vxe-button @click="$refs.xTable.clearFilter()">清除所有的筛选条件</vxe-button>
       </template>
     </vxe-toolbar>
@@ -165,8 +165,7 @@ export default {
     },
     filterNameEvent () {
       let xTable = this.$refs.xTable
-      let column = xTable.getColumnByField('name')
-      xTable.filter(column)
+      xTable.filter('name')
         .then(options => {
           // 处理条件并设置选中的选项
           let option = options[1]
@@ -179,8 +178,7 @@ export default {
     },
     filterAgeEvent () {
       let xTable = this.$refs.xTable
-      let column = xTable.getColumnByField('age')
-      xTable.filter(column)
+      xTable.filter('age')
         .then(options => {
           // 处理条件并设置选中的选项
           let option = options[0]

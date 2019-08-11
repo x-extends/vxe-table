@@ -3451,8 +3451,8 @@ export default {
       this.tableFullData = this.data ? this.data.slice(0) : []
       return this.handleData(true)
     },
-    filter (column) {
-      return Promise.resolve(column.filters)
+    filter (field) {
+      return Promise.resolve(this.getColumnByField(field).filters)
     },
     /**
      * 点击筛选事件
@@ -3553,7 +3553,8 @@ export default {
       })
       this.confirmFilterEvent(evnt)
     },
-    clearFilter (column) {
+    clearFilter (field) {
+      let column = arguments.length ? this.getColumnByField(field) : null
       let filterStore = this.filterStore
       let handleClear = column => {
         let { filters } = column
