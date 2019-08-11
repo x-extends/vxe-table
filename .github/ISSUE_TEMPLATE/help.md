@@ -7,19 +7,19 @@ assignees: ''
 
 ---
 
-### 描述 Describe
+### （必填）描述 Describe
 
  ?
 
-### 能重现问题的链接（[jsfiddle](https://jsfiddle.net/w8q6unes/)、[codesandbox](https://codesandbox.io/s/vue-template-916h0)、[jsrun](https://jsrun.net/vIyKp/edit)） Reproduction link
+### （必填）能重现问题的链接（[jsfiddle](https://jsfiddle.net/w8q6unes/)、[codesandbox](https://codesandbox.io/s/vue-template-916h0)、[jsrun](https://jsrun.net/vIyKp/edit)） Reproduction link
 
  ?
 
-### 报错信息或截图 Error message or screenshots
+### （选填）报错信息或截图 Error message or screenshots
 
  ?
 
-### 版本 Version
+### （必填）版本 Version
 
 - os: ?
 - browser: ?
