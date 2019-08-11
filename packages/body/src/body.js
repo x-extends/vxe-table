@@ -78,14 +78,16 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
     showEllipsis = hasEllipsis = true
   }
   // hover 进入事件
-  if (showTooltip || tableListeners['cell-mouseenter']) {
+  if (showTitle || showTooltip || tableListeners['cell-mouseenter']) {
     tdOns.mouseenter = evnt => {
       if (isOperateMouse($table)) {
         return
       }
       let evntParams = { $table, seq, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, level: rowLevel, cell: evnt.currentTarget }
-      // 如果配置了显示 tooltip
-      if (showTooltip) {
+      if (showTitle) {
+        DomTools.updateCellTitle(evnt)
+      } else if (showTooltip) {
+        // 如果配置了显示 tooltip
         $table.triggerTooltipEvent(evnt, evntParams)
       }
       UtilTools.emitEvent($table, 'cell-mouseenter', [evntParams, evnt])
@@ -97,7 +99,9 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
       if (isOperateMouse($table)) {
         return
       }
-      $table.clostTooltip()
+      if (showTooltip) {
+        $table.clostTooltip()
+      }
       UtilTools.emitEvent($table, 'cell-mouseleave', [{ $table, seq, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, level: rowLevel, cell: evnt.currentTarget }, evnt])
     }
   }
@@ -183,9 +187,6 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
         'c--tooltip': showTooltip,
         'c--ellipsis': showEllipsis
       }],
-      attrs: {
-        title: showTitle ? UtilTools.getCellLabel(row, column, params) : null
-      },
       style: {
         width: hasEllipsis ? `${border ? renderWidth - 1 : renderWidth}px` : null
       }

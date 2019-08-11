@@ -164,7 +164,7 @@ export default {
           return h('tr', {
             class: ['vxe-header--row', headerRowClassName ? XEUtils.isFunction(headerRowClassName) ? headerRowClassName({ $table, $rowIndex, fixed: fixedType }) : headerRowClassName : '']
           }, cols.map((column, $columnIndex) => {
-            let { columnKey, showHeaderOverflow, headerAlign, align, renderWidth, own } = column
+            let { columnKey, showHeaderOverflow, headerAlign, align, renderWidth } = column
             let isColGroup = column.children && column.children.length
             let fixedHiddenColumn = fixedType ? column.fixed !== fixedType && !isColGroup : column.fixed && overflowX
             let headOverflow = XEUtils.isUndefined(showHeaderOverflow) || XEUtils.isNull(showHeaderOverflow) ? allColumnHeaderOverflow : showHeaderOverflow
@@ -176,8 +176,16 @@ export default {
             let thOns = {}
             // 确保任何情况下 columnIndex 都精准指向真实列索引
             let columnIndex = getColumnMapIndex(column)
+            if (showTitle || showTooltip) {
+              thOns.mouseover = evnt => {
+                if (showTitle) {
+                  DomTools.updateCellTitle(evnt)
+                } else if (showTooltip) {
+                  $table.triggerHeaderTooltipEvent(evnt, { $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType })
+                }
+              }
+            }
             if (showTooltip) {
-              thOns.mouseover = evnt => $table.triggerHeaderTooltipEvent(evnt, { $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType })
               thOns.mouseout = $table.clostTooltip
             }
             if (highlightCurrentColumn || tableListeners['header-cell-click'] || sortOpts.trigger === 'cell') {
@@ -210,9 +218,6 @@ export default {
                   'c--tooltip': showTooltip,
                   'c--ellipsis': showEllipsis
                 }],
-                attrs: {
-                  title: showTitle ? UtilTools.getFuncText(own.title || own.label) : null
-                },
                 style: {
                   width: hasEllipsis ? `${border ? renderWidth - 1 : renderWidth}px` : null
                 }

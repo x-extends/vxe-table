@@ -56,7 +56,7 @@
       border
       show-footer
       height="400"
-      show-overflow="tooltip"
+      show-overflow
       :footer-method="footerMethod"
       :footer-cell-class-name="footerCellClassName"
       :data.sync="tableData">
@@ -206,7 +206,7 @@ export default {
           border
           show-footer
           height="400"
-          show-overflow="tooltip"
+          show-overflow
           :footer-method="footerMethod"
           :footer-cell-class-name="footerCellClassName"
           :data.sync="tableData">

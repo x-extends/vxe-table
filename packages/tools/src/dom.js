@@ -16,6 +16,13 @@ export const DomTools = {
   hasClass (elem, cls) {
     return elem && elem.className && elem.className.split && elem.className.split(' ').indexOf(cls) > -1
   },
+  updateCellTitle (evnt) {
+    let cellElem = evnt.currentTarget.querySelector('.vxe-cell')
+    let content = cellElem.innerText
+    if (cellElem.getAttribute('title') !== content) {
+      cellElem.setAttribute('title', content)
+    }
+  },
   rowToVisible ($table, row) {
     let bodyElem = $table.$refs.tableBody.$el
     let trElem = bodyElem.querySelector(`[data-rowid="${UtilTools.getRowid($table, row)}"]`)

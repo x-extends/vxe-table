@@ -2120,20 +2120,21 @@ export default {
     /**
      * 触发表头 tooltip 事件
      */
-    triggerHeaderTooltipEvent (evnt, { column }) {
+    triggerHeaderTooltipEvent (evnt, params) {
       let { tooltipStore } = this
-      let { own } = column
+      let { column } = params
       if (tooltipStore.column !== column || !tooltipStore.visible) {
-        this.showTooltip(evnt, UtilTools.getFuncText(own.title || own.label), column)
+        this.showTooltip(evnt, column)
       }
     },
     /**
      * 触发表尾 tooltip 事件
      */
-    triggerFooterTooltipEvent (evnt, { $rowIndex, column }) {
+    triggerFooterTooltipEvent (evnt, params) {
+      let { column } = params
       let tooltipStore = this.tooltipStore
       if (tooltipStore.column !== column || !tooltipStore.visible) {
-        this.showTooltip(evnt, this.footerData[$rowIndex][this.tableColumn.indexOf(column)], column)
+        this.showTooltip(evnt, column)
       }
     },
     /**
@@ -2149,14 +2150,15 @@ export default {
         }
       }
       if (tooltipStore.column !== column || tooltipStore.row !== row || !tooltipStore.visible) {
-        this.showTooltip(evnt, UtilTools.getCellLabel(row, column, params), column, row)
+        this.showTooltip(evnt, column, row)
       }
     },
     // 显示 tooltip
-    showTooltip (evnt, content, column, row) {
+    showTooltip (evnt, column, row) {
       let cell = evnt.currentTarget
       let tooltip = this.$refs.tooltip
       let wrapperElem = cell.children[0]
+      let content = cell.innerText
       if (content && wrapperElem.scrollWidth > wrapperElem.clientWidth) {
         Object.assign(this.tooltipStore, {
           row,
@@ -2164,7 +2166,7 @@ export default {
           visible: true
         })
         if (tooltip) {
-          tooltip.toVisible(cell, UtilTools.formatText(content))
+          tooltip.toVisible(cell, content)
         }
       }
       return this.$nextTick()
