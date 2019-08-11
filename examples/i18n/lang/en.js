@@ -171,7 +171,7 @@ module.exports = {
     },
     footer: {
       donation: 'Donation',
-      donationDesc: 'If the project is very helpful to you, you can buy the author a cup of coffee.'
+      donationDesc: 'It takes a lot of time and energy to maintain a project. In order to make the project healthy and sustainable, you can support the author through sponsorship😊'
     },
     api: {
       form: {
@@ -303,6 +303,7 @@ module.exports = {
         desc: {
           value: '是否显示',
           content: '显示内容',
+          trigger: '触发方式',
           theme: '主题样式',
           zIndex: '自定义堆叠顺序（对于在弹框中使用是由于堆叠被覆盖时可能会用到）',
           isArrow: '是否显示箭头'

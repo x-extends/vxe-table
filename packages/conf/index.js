@@ -55,7 +55,8 @@ const GlobalConfig = {
   grid: {},
   menu: {},
   tooltip: {
-    // zIndex: 99,
+    // zIndex: 3000,
+    trigger: 'hover',
     theme: 'dark'
   },
   pager: {
