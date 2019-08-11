@@ -19,6 +19,9 @@
             <option value="2">V2</option>
             <option value="3">V3</option>
           </select>
+          <vxe-tooltip :content="$t('app.footer.donationDesc')">
+            <a class="donation" href="https://github.com/xuliangzhan/vxe-table#donation" target="_blank">☕{{ $t('app.footer.donation') }}</a>
+          </vxe-tooltip>
         </div>
         <div class="desc">{{ $t('app.header.desc') }}</div>
       </div>
@@ -44,7 +47,13 @@
       </div>
     </div>
     <footer class="page-footer">
-      <p class="copyright">github <a class="link" href="https://github.com/xuliangzhan/vxe-table">vxe-table</a> Copyright (c) 2019-present, Xu Liangzhan<a class="donation" href="https://github.com/xuliangzhan/vxe-table#donation" :title="$t('app.footer.donationDesc')" target="_blank">☕{{ $t('app.footer.donation') }}</a></p>
+      <p class="copyright">
+        <a class="link" href="https://github.com/xuliangzhan/vxe-table">vxe-table</a>
+        <span>MIT License, 2019-present, Xu Liangzhan</span>
+        <vxe-tooltip :content="$t('app.footer.donationDesc')">
+          <a class="donation" href="https://github.com/xuliangzhan/vxe-table#donation" target="_blank">☕{{ $t('app.footer.donation') }}</a>
+        </vxe-tooltip>
+      </p>
     </footer>
   </div>
 </template>

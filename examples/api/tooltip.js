@@ -23,6 +23,14 @@ const apis = [
         list: []
       },
       {
+        name: 'trigger',
+        descKey: 'app.api.tooltip.desc.trigger',
+        type: 'String',
+        enum: 'manual, hover, click',
+        defVal: 'hover',
+        list: []
+      },
+      {
         name: 'theme',
         descKey: 'app.api.tooltip.desc.theme',
         type: 'String',
@@ -35,7 +43,7 @@ const apis = [
         descKey: 'app.api.tooltip.desc.zIndex',
         type: 'Number',
         enum: '',
-        defVal: '99',
+        defVal: '3000',
         list: []
       },
       {

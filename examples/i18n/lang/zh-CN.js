@@ -170,7 +170,7 @@ module.exports = {
     },
     footer: {
       donation: '捐赠',
-      donationDesc: '如果这个项目对您有帮助，请作者喝杯咖啡吧'
+      donationDesc: '维护一个项目需要耗费很大时间和精力，为了使项目能够健康持续的发展下去，你可以通过赞助来支持作者😊'
     },
     api: {
       form: {
@@ -306,6 +306,7 @@ module.exports = {
         desc: {
           value: '是否显示',
           content: '显示内容',
+          trigger: '触发方式',
           theme: '主题样式',
           zIndex: '自定义堆叠顺序（对于在弹框中使用是由于堆叠被覆盖时可能会用到）',
           isArrow: '是否显示箭头'

@@ -1129,8 +1129,8 @@ export default {
       return this.getRowIndex(row) === -1
     },
     hasRowChange (row, field) {
-      let oRow
-      let { treeConfig, tableSourceData, fullDataRowIdData } = this
+      let oRow, property
+      let { visibleColumn, treeConfig, tableSourceData, fullDataRowIdData } = this
       let rowid = UtilTools.getRowid(this, row)
       // 新增的数据不需要检测
       if (!fullDataRowIdData[rowid]) {
@@ -1147,10 +1147,18 @@ export default {
         let oRowIndex = fullDataRowIdData[rowid].index
         oRow = tableSourceData[oRowIndex]
       }
-      if (arguments.length > 1) {
-        return oRow && !XEUtils.isEqual(XEUtils.get(oRow, field), XEUtils.get(row, field))
+      if (oRow) {
+        if (arguments.length > 1) {
+          return !XEUtils.isEqual(XEUtils.get(oRow, field), XEUtils.get(row, field))
+        }
+        for (let index = 0, len = visibleColumn.length; index < len; index++) {
+          property = visibleColumn[index].property
+          if (property && !XEUtils.isEqual(XEUtils.get(oRow, property), XEUtils.get(row, property))) {
+            return true
+          }
+        }
       }
-      return oRow && !XEUtils.isEqual(oRow, row)
+      return false
     },
     /**
      * 获取表格所有列

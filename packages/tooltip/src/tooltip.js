@@ -6,6 +6,7 @@ export default {
   name: 'VxeTooltip',
   props: {
     value: Boolean,
+    trigger: { type: String, default: () => GlobalConfig.tooltip.trigger },
     theme: { type: String, default: () => GlobalConfig.tooltip.theme },
     content: [String, Function],
     zIndex: { type: Number, default: () => GlobalConfig.tooltip.zIndex },
@@ -35,25 +36,45 @@ export default {
     }
   },
   mounted () {
-    let { $el, content, value } = this
+    let { $el, trigger, content, value } = this
     let parentNode = $el.parentNode
+    let target
     this.message = content
     Array.from($el.children).forEach((elem, index) => {
       if (index > 1) {
         parentNode.insertBefore(elem, $el)
-        this.target = elem
+        if (!target) {
+          target = elem
+        }
       }
     })
     parentNode.removeChild($el)
+    this.target = target
+    if (target) {
+      if (trigger === 'hover') {
+        target.onmouseleave = this.mouseleaveEvent
+        target.onmouseenter = this.mouseenterEvent
+      } else if (trigger === 'click') {
+        target.onclick = this.clickEvent
+      }
+    }
     if (value) {
       this.show()
     }
   },
   beforeDestroy () {
-    let { $el } = this
+    let { $el, target, trigger } = this
     let parentNode = $el.parentNode
     if (parentNode) {
       parentNode.removeChild($el)
+    }
+    if (target) {
+      if (trigger === 'hover') {
+        target.onmouseleave = null
+        target.onmouseenter = null
+      } else if (trigger === 'click') {
+        target.onclick = null
+      }
     }
   },
   render (h) {
@@ -119,7 +140,7 @@ export default {
           if (wrapperElem) {
             let clientHeight = wrapperElem.clientHeight
             let clientWidth = XEUtils.toNumber(getComputedStyle(wrapperElem).width)
-            tipLeft = left + Math.floor((target.clientWidth - clientWidth) / 2)
+            tipLeft = left + Math.floor((target.offsetWidth - clientWidth) / 2)
             tipStore.style = {
               zIndex,
               width: `${clientWidth}px`,
@@ -139,7 +160,7 @@ export default {
             })
             if (top - clientHeight < scrollTop + 6) {
               tipStore.placement = 'bottom'
-              tipStore.style.top = `${top + target.clientHeight + 6}px`
+              tipStore.style.top = `${top + target.offsetHeight + 6}px`
             }
             if (tipLeft < scrollLeft + 6) {
               // 超出左边界
@@ -156,6 +177,15 @@ export default {
         })
       }
       return this.$nextTick()
+    },
+    clickEvent (event) {
+      this[this.visible ? 'close' : 'show']()
+    },
+    mouseleaveEvent (evnt) {
+      this.close()
+    },
+    mouseenterEvent (evnt) {
+      this.show()
     }
   }
 }
