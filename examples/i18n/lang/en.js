@@ -80,6 +80,7 @@ module.exports = {
         big1wRow1wCol: '10,000 row 10,000 column',
         big10wRow1wCol: '100,000 row 10,000 column, More complex rendering',
         treeScroll: '树结构',
+        pageScroll: '滚动分页',
         infiniteScroll: 'The infinite scroll',
 
         editable: 'Editable',
@@ -111,7 +112,7 @@ module.exports = {
         sortablejsColumn: 'sortablejs -> column moving',
         xlsxRender: 'xlsx -> Export.xlsx',
 
-        plugin: 'Use plug-in',
+        plugin: 'The plugin list',
         elementPlugin: 'plugin-element 基本配置',
         elementFilterPlugin: 'plugin-element 筛选配置',
         elementPluginMore: 'plugin-element 更多配置',
@@ -121,6 +122,8 @@ module.exports = {
         antdPlugin: 'plugin-antd 基本配置',
         antdFilter: 'plugin-antd 筛选配置',
         antdPluginMore: 'plugin-antd 更多配置',
+        spanPlugin: '单元格选中合并',
+        chartsPlugin: '图表功能',
 
         renderer: 'Renderer',
         rendererFilter: 'Filter renderer',

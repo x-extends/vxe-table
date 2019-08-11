@@ -55,7 +55,7 @@ export default {
         `,
         `
         Vue.use(VXETable, {
-          // 对外部参数的内容进行国际化翻译
+          // 对参数的内容自动进行国际化翻译（只对支持国际化的有效）
           translate: : key => i18n.t(key)
         })
         `,
