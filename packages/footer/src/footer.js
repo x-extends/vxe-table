@@ -1,5 +1,5 @@
 import XEUtils from 'xe-utils'
-import { UtilTools } from '../../tools'
+import { UtilTools, DomTools } from '../../tools'
 
 export default {
   name: 'VxeTableFooter',
@@ -104,10 +104,16 @@ export default {
             let tfOns = {}
             // 确保任何情况下 columnIndex 都精准指向真实列索引
             let columnIndex = getColumnIndex(column)
-            if (showTooltip) {
+            if (showTitle || showTooltip) {
               tfOns.mouseover = evnt => {
-                $table.triggerFooterTooltipEvent(evnt, { $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType })
+                if (showTitle) {
+                  DomTools.updateCellTitle(evnt)
+                } else if (showTooltip) {
+                  $table.triggerFooterTooltipEvent(evnt, { $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType })
+                }
               }
+            }
+            if (showTooltip) {
               tfOns.mouseout = evnt => {
                 $table.clostTooltip()
               }

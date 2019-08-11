@@ -36,6 +36,13 @@ export const DomTools = {
       elem.className = `${elem.className} ${cls}`
     }
   },
+  updateCellTitle (evnt) {
+    let cellElem = evnt.currentTarget.querySelector('.vxe-cell')
+    let content = cellElem.innerText
+    if (cellElem.getAttribute('title') !== content) {
+      cellElem.setAttribute('title', content)
+    }
+  },
   rowToVisible ($table, row) {
     let bodyElem = $table.$refs.tableBody.$el
     let trElem = bodyElem.querySelector(`[data-rowid="${UtilTools.getRowid($table, row)}"]`)

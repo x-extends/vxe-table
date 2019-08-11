@@ -175,12 +175,7 @@ export default {
           return h('tr', {
             class: ['vxe-header--row', headerRowClassName ? XEUtils.isFunction(headerRowClassName) ? headerRowClassName({ $table, $rowIndex, fixed: fixedType }) : headerRowClassName : '']
           }, cols.map((column, $columnIndex) => {
-            let {
-              showHeaderOverflow,
-              headerAlign,
-              align,
-              own
-            } = column
+            let { showHeaderOverflow, headerAlign, align } = column
             let isColGroup = column.children && column.children.length
             let fixedHiddenColumn = fixedType ? column.fixed !== fixedType && !isColGroup : column.fixed && overflowX
             let headOverflow = XEUtils.isUndefined(showHeaderOverflow) || XEUtils.isNull(showHeaderOverflow) ? allColumnHeaderOverflow : showHeaderOverflow
@@ -192,16 +187,20 @@ export default {
             let thOns = {}
             // 确保任何情况下 columnIndex 都精准指向真实列索引
             let columnIndex = getColumnIndex(column)
-            if (showTooltip) {
+            if (showTitle || showTooltip) {
               thOns.mouseover = evnt => {
-                // 拖动过程中不需要触发
                 if ($table._isResize) {
                   return
                 }
-                $table.triggerHeaderTooltipEvent(evnt, { $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType })
+                if (showTitle) {
+                  DomTools.updateCellTitle(evnt)
+                } else if (showTooltip) {
+                  $table.triggerHeaderTooltipEvent(evnt, { $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType })
+                }
               }
+            }
+            if (showTooltip) {
               thOns.mouseout = evnt => {
-                // 拖动过程中不需要触发
                 if ($table._isResize) {
                   return
                 }
@@ -241,10 +240,7 @@ export default {
                   'c--title': showTitle,
                   'c--tooltip': showTooltip,
                   'c--ellipsis': showEllipsis
-                }],
-                attrs: {
-                  title: showTitle ? UtilTools.getFuncText(own.title || own.label) : null
-                }
+                }]
               }, column.renderHeader(h, { $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn })),
               /**
                * 列宽拖动
