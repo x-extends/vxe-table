@@ -29,7 +29,7 @@ class ColumnConfig {
       sortable: _vm.sortable,
       sortBy: _vm.sortBy,
       remoteSort: _vm.remoteSort,
-      filters: (_vm.filters || []).map(({ label, value, data }) => ({ label, value, data, _data: data, checked: false })),
+      filters: (_vm.filters || []).map(({ label, value, data, checked }) => ({ label, value, data, _data: data, checked: !!checked })),
       filterMultiple: XEUtils.isBoolean(_vm.filterMultiple) ? _vm.filterMultiple : true,
       filterMethod: _vm.filterMethod,
       filterRender: _vm.filterRender,

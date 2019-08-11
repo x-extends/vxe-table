@@ -304,6 +304,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.manualFilter',
+              locat: {
+                name: 'TableManualFilter'
+              }
+            },
+            {
               label: 'app.aside.nav.span',
               demoUrl: 'https://jsrun.net/5jXKp',
               locat: {

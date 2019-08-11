@@ -53,16 +53,18 @@
   }
   &.is--indeterminate {
     > input {
-      &+.vxe-checkbox--icon {
-        background-color: $vxe-primary-color;
-        border-color: $vxe-primary-color;
-        &:before {
-          top: 50%;
-          height: 0.15em;
-          width: 100%;
-          transform: translateY(-50%) scale(.5);
-          border: 0;
-          background-color: #fff;
+      &:not(:checked) {
+        &+.vxe-checkbox--icon {
+          background-color: $vxe-primary-color;
+          border-color: $vxe-primary-color;
+          &:before {
+            top: 50%;
+            height: 0.15em;
+            width: 100%;
+            transform: translateY(-50%) scale(.5);
+            border: 0;
+            background-color: #fff;
+          }
         }
       }
     }

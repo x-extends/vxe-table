@@ -1335,6 +1335,14 @@ const apis = [
         list: []
       },
       {
+        name: 'updateData()',
+        desc: '更新表格数据（对于手动更改了筛选...等条件后需要重新更新表格时可能会用到）',
+        type: 'Promise',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'refreshData()',
         desc: '刷新数据（对于某些特殊的场景可能会用到，比如树层节点元素发生变动）',
         type: 'Promise',
@@ -1460,6 +1468,14 @@ const apis = [
         type: 'Column',
         enum: '',
         defVal: 'colid',
+        list: []
+      },
+      {
+        name: 'getColumnByField(field)',
+        desc: '根据列的字段名获取列',
+        type: 'Column',
+        enum: '',
+        defVal: 'field',
         list: []
       },
       {
@@ -1817,11 +1833,11 @@ const apis = [
         list: []
       },
       {
-        name: 'clearFilter()',
-        desc: '手动清空筛选条件，数据会恢复成未筛选的状态',
+        name: 'clearFilter(column)',
+        desc: '手动清空筛选条件（如果不传 column 则清空所有筛选条件），数据会恢复成未筛选的状态',
         type: 'Promise',
         enum: '',
-        defVal: '',
+        defVal: 'column?',
         list: []
       },
       // {
