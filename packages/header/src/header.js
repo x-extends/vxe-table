@@ -225,6 +225,8 @@ export default {
                 'col--group': isColGroup,
                 'col--ellipsis': hasEllipsis,
                 'fixed--hidden': fixedHiddenColumn,
+                'is--sortable': column.sortable,
+                'is--filter': column.filters.length,
                 'filter--active': column.filters.some(item => item.checked)
               }, headerCellClassName ? XEUtils.isFunction(headerCellClassName) ? headerCellClassName({ $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType }) : headerCellClassName : ''],
               attrs: {

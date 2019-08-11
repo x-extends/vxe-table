@@ -18,6 +18,7 @@ var list = window.MOCK_DATA_LIST = []
 var currTime = Date.now()
 var fullIndex = 0
 var size = 100000
+var nList = XEUtils.shuffle(['a', 't', 'b', 'v', 'g', 'k', 'r', 'h', 'x', 'z', 'c', 'd', 'e', 'p', 'u', 'f', 's', 'n'])
 function mockData () {
   let len = XEUtils.browse().msie ? 500 : 2000
   for (var index = 0; index < len; index++) {
@@ -54,7 +55,7 @@ function mockData () {
     let mDate = moment(currTime)
     list.push({
       id: fullIndex,
-      name: 'test' + fullIndex,
+      name: nList[fullIndex % 10] + nList[fullIndex % 5] + fullIndex,
       nickname: (index % 4 === 0 ? '陈' : index % 3 === 0 ? '李' : '徐') + fullIndex,
       role: index % 2 === 0 ? '前端' : '后端',
       key: 'home.label.key' + Math.max(0, index % 2 === 0 ? index - 1 : index),
@@ -82,7 +83,7 @@ function mockData () {
       sex: index % 3 ? '0' : '1',
       sex1: index % 3 ? ['0'] : index % 4 ? ['0', '1'] : index % 5 ? [] : ['1'],
       sex2: index % 3 ? '0' : '1',
-      age: index % 2 === 0 ? 26 : 28,
+      age: index % 6 === 0 ? 18 : index % 4 === 0 ? 26 : index % 3 === 0 ? 28 : 30,
       region: index % 4 === 0 ? [19, 199, 1773] : index % 3 === 0 ? [9, 73, 719] : [1, 1, 5],
       rate: index % 4 === 0 ? 2 : index % 3 === 0 ? 3 : 0,
       address: `地址 地址地址 地址地址 址地址 址地址  址地址 址地址址地址址地址 地址${index}`,
