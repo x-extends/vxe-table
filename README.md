@@ -266,4 +266,4 @@ If the project is very helpful to you, you can buy the author a cup of coffee.
 
 ## License
 
-Copyright (c) 2019-present, Xu Liangzhan
+MIT License, 2019-present, Xu Liangzhan
