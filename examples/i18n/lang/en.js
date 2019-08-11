@@ -171,7 +171,7 @@ module.exports = {
     },
     footer: {
       donation: 'Donation',
-      donationDesc: 'It takes a lot of time and energy to maintain a project. In order to make the project healthy and sustainable, you can support the author through sponsorship😊'
+      donationDesc: 'To make the project sustainable, you can support the author through sponsorship 😊'
     },
     api: {
       form: {
