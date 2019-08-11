@@ -4,6 +4,8 @@
 
     <vxe-toolbar>
       <template v-slot:buttons>
+        <vxe-button @click="insertEvent">新增</vxe-button>
+        <vxe-button @click="$refs.xTable.removeSelecteds()">删除选中</vxe-button>
         <vxe-button @click="getInsertEvent">获取新增</vxe-button>
         <vxe-button @click="getRemoveEvent">获取删除</vxe-button>
         <vxe-button @click="getUpdateEvent">获取修改</vxe-button>
@@ -11,11 +13,12 @@
     </vxe-toolbar>
 
     <vxe-table
-      ref="xTable"
       border
       show-overflow
+      ref="xTable"
       :data.sync="tableData"
       :edit-config="{trigger: 'click', mode: 'cell', showStatus: true}">
+      <vxe-table-column type="selection" width="60"></vxe-table-column>
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
@@ -42,6 +45,8 @@ export default {
         `
         <vxe-toolbar>
           <template v-slot:buttons>
+            <vxe-button @click="insertEvent">新增</vxe-button>
+            <vxe-button @click="$refs.xTable.removeSelecteds()">删除选中</vxe-button>
             <vxe-button @click="getInsertEvent">获取新增</vxe-button>
             <vxe-button @click="getRemoveEvent">获取删除</vxe-button>
             <vxe-button @click="getUpdateEvent">获取修改</vxe-button>
@@ -49,11 +54,12 @@ export default {
         </vxe-toolbar>
 
         <vxe-table
-          ref="xTable"
           border
           show-overflow
+          ref="xTable"
           :data.sync="tableData"
           :edit-config="{trigger: 'click', mode: 'cell', showStatus: true}">
+          <vxe-table-column type="selection" width="60"></vxe-table-column>
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
@@ -71,6 +77,10 @@ export default {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
           },
           methods: {
+            insertEvent () {
+              this.$refs.xTable.insert()
+                .then(({ row }) => this.$refs.xTable.setActiveCell(row, 'name'))
+            },
             getInsertEvent () {
               let insertRecords = this.$refs.xTable.getInsertRecords()
               this.$XMsg.alert(insertRecords.length)
@@ -98,6 +108,10 @@ export default {
     })
   },
   methods: {
+    insertEvent () {
+      this.$refs.xTable.insert()
+        .then(({ row }) => this.$refs.xTable.setActiveCell(row, 'name'))
+    },
     getInsertEvent () {
       let insertRecords = this.$refs.xTable.getInsertRecords()
       this.$XMsg.alert(insertRecords.length)

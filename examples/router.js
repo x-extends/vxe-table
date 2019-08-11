@@ -40,21 +40,22 @@ const TableEmpty = () => import(/* webpackChunkName: "base" */ './views/table/ba
 const TableLoading = () => import(/* webpackChunkName: "base" */ './views/table/base/Loading.vue')
 const TableFormat = () => import(/* webpackChunkName: "base" */ './views/table/base/Format.vue')
 
-const TableEvent = () => import(/* webpackChunkName: "table" */ './views/table/advanced/Event.vue')
-const TableTemplate = () => import(/* webpackChunkName: "table" */ './views/table/advanced/Template.vue')
-const TableCustomSort = () => import(/* webpackChunkName: "table" */ './views/table/advanced/CustomSort.vue')
-const TableSpan = () => import(/* webpackChunkName: "table" */ './views/table/advanced/Span.vue')
-const TableFooter = () => import(/* webpackChunkName: "table" */ './views/table/advanced/Footer.vue')
-const TableExport = () => import(/* webpackChunkName: "table" */ './views/table/advanced/Export.vue')
-const TableMenu = () => import(/* webpackChunkName: "table" */ './views/table/advanced/Menu.vue')
-const TableExpand = () => import(/* webpackChunkName: "table" */ './views/table/advanced/Expand.vue')
-const TableSearch = () => import(/* webpackChunkName: "table" */ './views/table/advanced/Search.vue')
-const Toolbar = () => import(/* webpackChunkName: "table" */ './views/table/advanced/Toolbar.vue')
-const TableCustom = () => import(/* webpackChunkName: "table" */ './views/table/advanced/Custom.vue')
-const TableCustomStorage = () => import(/* webpackChunkName: "table" */ './views/table/advanced/CustomStorage.vue')
-const TableCustomlWidthStorage = () => import(/* webpackChunkName: "table" */ './views/table/advanced/CustomlWidthStorage.vue')
-const TablePage = () => import(/* webpackChunkName: "table" */ './views/table/advanced/Page.vue')
-const TableKeyboard = () => import(/* webpackChunkName: "table" */ './views/table/advanced/Keyboard.vue')
+const TableEvent = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Event.vue')
+const TableTemplate = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Template.vue')
+const TableCustomSort = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/CustomSort.vue')
+const TableSpan = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Span.vue')
+const TableFooter = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Footer.vue')
+const TableExport = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Export.vue')
+const TableMenu = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Menu.vue')
+const TableMenuPrivilege = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/MenuPrivilege.vue')
+const TableExpand = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Expand.vue')
+const TableSearch = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Search.vue')
+const Toolbar = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Toolbar.vue')
+const TableCustom = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Custom.vue')
+const TableCustomStorage = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/CustomStorage.vue')
+const TableCustomlWidthStorage = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/CustomlWidthStorage.vue')
+const TablePage = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Page.vue')
+const TableKeyboard = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Keyboard.vue')
 
 const GridBasic = () => import(/* webpackChunkName: "grid" */ './views/table/grid/Basic.vue')
 const GridReverse = () => import(/* webpackChunkName: "grid" */ './views/table/grid/Reverse.vue')
@@ -366,6 +367,11 @@ export default new Router({
       path: '/table/advanced/menu',
       name: 'TableMenu',
       component: TableMenu
+    },
+    {
+      path: '/table/advanced/menuPrivilege',
+      name: 'TableMenuPrivilege',
+      component: TableMenuPrivilege
     },
     {
       path: '/table/advanced/expand',

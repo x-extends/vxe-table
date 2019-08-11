@@ -332,6 +332,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.menuPrivilege',
+              locat: {
+                name: 'TableMenuPrivilege'
+              }
+            },
+            {
               label: 'app.aside.nav.expandRow',
               demoUrl: 'https://jsrun.net/eRXKp',
               locat: {
