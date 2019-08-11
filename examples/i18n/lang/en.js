@@ -43,6 +43,7 @@ module.exports = {
         events: 'Event',
         template: 'Template',
         customSort: '自定义列头排序',
+        manualFilter: '手动筛选',
         span: 'Rowspan and colspan',
         footer: 'Footer summary',
         export: 'Export CSV',

@@ -176,8 +176,16 @@ const apis = [
             list: []
           },
           {
+            name: 'checked',
+            desc: '默认是否选中',
+            type: 'Boolean',
+            enum: '',
+            defVal: 'false',
+            list: []
+          },
+          {
             name: 'data',
-            desc: '额外的数据属性（当使用自定义模板时可能会用到）',
+            desc: '自定义渲染的数据值（当使用自定义模板时可能会用到）',
             type: 'Any',
             enum: '',
             defVal: '',

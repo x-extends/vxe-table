@@ -472,6 +472,7 @@ export default {
         this.mergeCustomColumn(this.customs)
       }
       this.refreshColumn()
+      this.handleData(true)
       if (this._toolbar) {
         this._toolbar.updateColumn(tableFullColumn)
       }
@@ -778,8 +779,7 @@ export default {
         column.order = null
       })
       this.tableFullData = this.data ? this.data.slice(0) : []
-      this.tableData = this.getTableData(true).tableData
-      return this.$nextTick()
+      return this.handleData(true)
     },
     clearAll () {
       this.clearScroll()
@@ -792,14 +792,20 @@ export default {
       this.clearTreeExpand()
       this.clearChecked()
       this.clearSelected()
-      this.clearActived()
-      return this.$nextTick()
+      return this.clearActived()
     },
     refreshData () {
       return this.$nextTick().then(() => {
         this.tableData = []
         return this.$nextTick().then(() => this.loadData(this.tableFullData))
       })
+    },
+    updateData () {
+      return this.handleData(true).then(this.recalculate)
+    },
+    handleData (force) {
+      this.tableData = this.getTableData(force).tableData
+      return this.$nextTick()
     },
     loadData (datas, notRefresh) {
       let { height, maxHeight, editStore, optimizeOpts, recalculate } = this
@@ -818,7 +824,7 @@ export default {
       if (scrollYLoad && !(height || maxHeight)) {
         throw new Error('[vxe-table] The height/max-height must be set for the scroll load.')
       }
-      this.tableData = this.getTableData(true).tableData
+      this.handleData(true)
       this.reserveCheckSelection()
       this.checkSelectionStatus()
       let rest = this.$nextTick()
@@ -848,7 +854,7 @@ export default {
     updateCache (source) {
       let { treeConfig, tableFullData, fullDataRowIdData, fullDataRowMap, fullAllDataRowMap, fullAllDataRowIdData } = this
       let rowkey = UtilTools.getRowkey(this)
-      let handleData = (row, index) => {
+      let handleCache = (row, index) => {
         let rowid = UtilTools.getRowid(this, row)
         if (!rowid) {
           rowid = getRowUniqueId()
@@ -869,9 +875,9 @@ export default {
       fullAllDataRowIdData = this.fullAllDataRowIdData = {}
       fullAllDataRowMap.clear()
       if (treeConfig) {
-        XEUtils.eachTree(tableFullData, handleData, treeConfig)
+        XEUtils.eachTree(tableFullData, handleCache, treeConfig)
       } else {
-        tableFullData.forEach(handleData)
+        tableFullData.forEach(handleCache)
       }
     },
     // 更新列的 Map
@@ -1170,6 +1176,9 @@ export default {
     getColumnById (colid) {
       let fullColumnIdData = this.fullColumnIdData
       return fullColumnIdData[colid] ? fullColumnIdData[colid].column : null
+    },
+    getColumnByField (field) {
+      return this.visibleColumn.find(column => column.property === field)
     },
     /**
      * 获取表格可视列
@@ -3034,13 +3043,16 @@ export default {
           column.order = order
           // 如果是服务端排序，则跳过本地排序处理
           if (!isRemote) {
-            this.tableData = this.getTableData(true).tableData
+            this.handleData(true)
           }
           // 在 v3.0 中废弃 prop
           UtilTools.emitEvent(this, 'sort-change', [{ column, property: field, prop: field, field, order }])
         }
       }
       return this.$nextTick()
+    },
+    filter (column) {
+      return Promise.resolve(column.filters)
     },
     /**
      * 点击筛选事件
@@ -3070,7 +3082,7 @@ export default {
           visible: true
         })
         filterStore.isAllSelected = filterStore.options.every(item => item.checked)
-        filterStore.isIndeterminate = !this.isAllSelected && filterStore.options.some(item => item.checked)
+        filterStore.isIndeterminate = !filterStore.isAllSelected && filterStore.options.some(item => item.checked)
         this.$nextTick(() => {
           let filterWrapperElem = filterWrapper.$el
           filterStore.style.top = `${top + targetElem.clientHeight + 6}px`
@@ -3094,7 +3106,7 @@ export default {
       filterStore.visible = false
       // 如果是服务端筛选，则跳过本地筛选处理
       if (!remoteFilter) {
-        this.tableData = this.getTableData(true).tableData
+        this.handleData(true)
       }
       let filterList = []
       visibleColumn.filter(column => {
@@ -3138,27 +3150,34 @@ export default {
       })
       this.confirmFilterEvent(evnt)
     },
-    clearFilter () {
-      let { visibleColumn } = this
-      visibleColumn.forEach(column => {
+    clearFilter (column) {
+      let filterStore = this.filterStore
+      let handleClear = column => {
         let { filters } = column
         if (filters && filters.length) {
           filters.forEach(item => {
             item.checked = false
+            item.data = item._data
           })
         }
-      })
-      Object.assign(this.filterStore, {
-        isAllSelected: false,
-        isIndeterminate: false,
-        style: null,
-        options: [],
-        column: null,
-        multiple: false,
-        visible: false
-      })
-      this.tableData = this.getTableData(true).tableData
-      return this.$nextTick()
+      }
+      if (column) {
+        handleClear(column)
+      } else {
+        this.visibleColumn.forEach(handleClear)
+      }
+      if (!column || column !== filterStore.column) {
+        Object.assign(filterStore, {
+          isAllSelected: false,
+          isIndeterminate: false,
+          style: null,
+          options: [],
+          column: null,
+          multiple: false,
+          visible: false
+        })
+      }
+      return this.handleData(true).then(this.recalculate)
     },
     /**
      * 展开行事件
@@ -3909,7 +3928,7 @@ export default {
         }
       }
       let columns = visibleColumn
-      let oData = this.getTableData().fullData
+      let oData = this.tableFullData
       if (treeConfig) {
         oData = XEUtils.toTreeArray(oData, treeConfig)
       }

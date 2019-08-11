@@ -43,6 +43,7 @@ const TableFormat = () => import(/* webpackChunkName: "base" */ './views/table/b
 const TableEvent = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Event.vue')
 const TableTemplate = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Template.vue')
 const TableCustomSort = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/CustomSort.vue')
+const TableManualFilter = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/ManualFilter.vue')
 const TableSpan = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Span.vue')
 const TableFooter = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Footer.vue')
 const TableExport = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Export.vue')
@@ -347,6 +348,11 @@ export default new Router({
       path: '/table/advanced/customSort',
       name: 'TableCustomSort',
       component: TableCustomSort
+    },
+    {
+      path: '/table/advanced/manualFilter',
+      name: 'TableManualFilter',
+      component: TableManualFilter
     },
     {
       path: '/table/advanced/span',
