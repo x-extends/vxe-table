@@ -83,7 +83,7 @@ export default {
             name: '更多操作',
             children: [
               { code: 'export', name: '导出数据.csv' },
-              { code: 'reset_custom', name: '重置个性化数据' }
+              { code: 'reset_custom', name: '重置个性化信息' }
             ]
           }
         ],
@@ -175,7 +175,7 @@ export default {
                     name: '更多操作',
                     children: [
                       { code: 'export', name: '导出数据.csv' },
-                      { code: 'reset_custom', name: '重置个性化数据' }
+                      { code: 'reset_custom', name: '重置个性化信息' }
                     ]
                   }
                 ],
