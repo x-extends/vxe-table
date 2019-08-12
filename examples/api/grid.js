@@ -111,8 +111,24 @@ const apis = [
                     enum: '',
                     defVal: '',
                     list: []
+                  },
+                  {
+                    name: 'reset_custom',
+                    desc: '重置个性化数据（显示/隐藏列、列宽拖动状态）',
+                    type: '',
+                    enum: '',
+                    defVal: '',
+                    list: []
                   }
                 ]
+              },
+              {
+                name: 'children',
+                desc: '下拉按钮',
+                type: 'Array',
+                enum: '',
+                defVal: '',
+                list: []
               }
             ]
           }

@@ -177,7 +177,7 @@ export default {
         ref: 'sizeBtn'
       }, [
         h('i', {
-          class: 'vxe-pager--sizes-arrow vxe-icon--caret-bottom'
+          class: `vxe-pager--sizes-arrow ${GlobalConfig.icon.caretBottom}`
         }),
         h('span', {
           class: 'size--content'

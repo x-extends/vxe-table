@@ -1,4 +1,29 @@
 /**Variable**/
+@import './helpers/mixin.scss';
+
+%ButtonHover {
+  color: lighten($vxe-primary-color, 6%);
+  border-color: lighten($vxe-primary-color, 10%);
+}
+
+%ButtonPrimaryHover {
+  color: #fff;
+  background-color: lighten($vxe-primary-color, 4%);
+  border-color: lighten($vxe-primary-color, 4%);
+}
+
+%ButtonInterval {
+  margin-left: 10px;
+  &.size--medium {
+    margin-left: 8px;
+  }
+  &.size--small {
+    margin-left: 6px;
+  }
+  &.size--mini {
+    margin-left: 4px;
+  }
+}
 
 .vxe-button {
   text-align: center;
@@ -6,6 +31,7 @@
   outline: 0;
   font-size: $vxe-font-size;
   color: $vxe-font-color;
+  white-space: nowrap;
   user-select: none;
   appearance: none;
   cursor: pointer;
@@ -34,9 +60,7 @@
       border-color: $vxe-primary-color;
       background-color: $vxe-primary-color;
       &:hover {
-        color: #fff;
-        background-color: lighten($vxe-primary-color, 4%);
-        border-color: lighten($vxe-primary-color, 4%);
+        @extend %ButtonPrimaryHover;
       }
       &:active {
         color: #fff;
@@ -44,13 +68,14 @@
         border-color: darken($vxe-primary-color, 2%);
       }
     }
-    &:hover {
-      color: lighten($vxe-primary-color, 6%);
-      border-color: lighten($vxe-primary-color, 10%);
-    }
-    &:active {
-      color: darken($vxe-primary-color, 2%);
-      border-color: darken($vxe-primary-color, 2%);
+    &:not(.theme--primary) {
+      &:hover {
+        @extend %ButtonHover;
+      }
+      &:active {
+        color: darken($vxe-primary-color, 2%);
+        border-color: darken($vxe-primary-color, 2%);
+      }
     }
     &.size--medium {
       padding: 0 14px;
@@ -65,23 +90,79 @@
       line-height: 24px;
     }
   }
-  &+.vxe-button {
-    margin-left: 10px;
-    &.size--medium {
-      margin-left: 8px;
-    }
-    &.size--small {
-      margin-left: 6px;
-    }
-    &.size--mini {
-      margin-left: 4px;
-    }
+  &+.vxe-button,
+  &+.vxe-button--group {
+    @extend %ButtonInterval;
   }
   &.size--small,
   &.size--mini {
     font-size: 12px;
   }
 }
-.vxe-button--wrapper {
+.vxe-button--wrapper,
+.vxe-button--group {
   display: inline-block;
+}
+.vxe-button--group {
+  position: relative;
+  &.size--medium {
+    .vxe-button--group-wrapper {
+      top: 36px;
+    }
+  }
+  &.size--small {
+    .vxe-button--group-wrapper {
+      top: 32px;
+    }
+  }
+  &.size--mini {
+    .vxe-button--group-wrapper {
+      top: 30px;
+    }
+  }
+  &+.vxe-button,
+  &+.vxe-button--group {
+    @extend %ButtonInterval;
+  }
+  &.is--active {
+    & > .vxe-button {
+      &.theme--primary {
+        @extend %ButtonPrimaryHover;
+      }
+      &:not(.theme--primary) {
+        @extend %ButtonHover;
+      }
+    }
+    .vxe-button--group-wrapper {
+      display: block;
+    }
+    .vxe-button--group-arrow {
+      transform: rotate(360deg);
+    }
+  }
+  .vxe-button--group-arrow {
+    font-size: 12px;
+    margin-top: -2px;
+    margin-left: 5px;
+    @include animatTransition(transform, .2s);
+  }
+  .vxe-button--group-wrapper {
+    display: none;
+    position: absolute;
+    top: 38px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 99;
+    padding: 5px;
+    background-color: #fff;
+    border-radius: 4px;
+    border: 1px solid $vxe-input-border-color;
+    box-shadow: 0 1px 6px rgba(0,0,0,.2);
+    & > .vxe-button {
+      margin: 0;
+      display: block;
+      width: 100%;
+      border: 0;
+    }
+  }
 }

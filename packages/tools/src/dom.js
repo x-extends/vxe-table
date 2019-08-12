@@ -5,6 +5,15 @@ const browse = XEUtils.browse()
 const htmlElem = document.querySelector('html')
 const bodyElem = document.body
 
+function getClsRE (cls) {
+  if (!reClsMap[cls]) {
+    reClsMap[cls] = new RegExp(`(?:^|\\s)${cls}(?!\\S)`, 'g')
+  }
+  return reClsMap[cls]
+}
+
+const reClsMap = {}
+
 export const DomTools = {
   browse,
   isPx (val) {
@@ -14,7 +23,18 @@ export const DomTools = {
     return val && /^\d+%$/.test(val)
   },
   hasClass (elem, cls) {
-    return elem && elem.className && elem.className.split && elem.className.split(' ').indexOf(cls) > -1
+    return elem && elem.className && elem.className.match && elem.className.match(getClsRE(cls))
+  },
+  removeClass (elem, cls) {
+    if (elem && DomTools.hasClass(elem, cls)) {
+      elem.className = elem.className.replace(getClsRE(cls), '')
+    }
+  },
+  addClass (elem, cls) {
+    if (elem && !DomTools.hasClass(elem, cls)) {
+      DomTools.removeClass(elem, cls)
+      elem.className = `${elem.className} ${cls}`
+    }
   },
   updateCellTitle (evnt) {
     let cellElem = evnt.currentTarget.querySelector('.vxe-cell')

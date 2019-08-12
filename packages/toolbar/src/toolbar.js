@@ -2,6 +2,14 @@ import XEUtils from 'xe-utils'
 import GlobalConfig from '../../conf'
 import { UtilTools, DomTools, GlobalEvent } from '../../tools'
 
+function renderButton (h, _vm, item, isChild) {
+  return h('vxe-button', {
+    on: {
+      click: evnt => _vm.btnEvent(evnt, item, isChild)
+    }
+  }, UtilTools.getFuncText(item.name))
+}
+
 export default {
   name: 'VxeToolbar',
   props: {
@@ -89,11 +97,34 @@ export default {
       h('div', {
         class: 'vxe-button--wrapper'
       }, $buttons ? $buttons.call($grid || $table || this, { $grid, $table }, h) : buttons.map(item => {
-        return h('vxe-button', {
-          on: {
-            click: evnt => this.btnEvent(item, evnt)
-          }
-        }, UtilTools.getFuncText(item.name))
+        if (item.children && item.children.length) {
+          return h('div', {
+            class: ['vxe-button--group', {
+              [`size--${vSize}`]: vSize
+            }]
+          }, [
+            h('vxe-button', {
+              on: {
+                click: evnt => item.code ? this.btnEvent(evnt, item) : false,
+                mouseenter: this.mouseenterBtnEvent,
+                mouseleave: this.mouseleaveBtnEvent
+              }
+            }, [
+              h('span', UtilTools.getFuncText(item.name)),
+              h('i', {
+                class: `vxe-button--group-arrow ${GlobalConfig.icon.caretBottom}`
+              })
+            ]),
+            h('div', {
+              class: 'vxe-button--group-wrapper',
+              on: {
+                mouseenter: this.mouseenterBtnEvent,
+                mouseleave: this.mouseleaveBtnEvent
+              }
+            }, item.children.map(child => renderButton(h, this, child, 1)))
+          ])
+        }
+        return renderButton(h, this, item)
       })),
       setting ? h('div', {
         class: ['vxe-custom--wrapper', {
@@ -319,13 +350,6 @@ export default {
         }
       }, 300)
     },
-    btnEvent (item, evnt) {
-      let { $grid } = this
-      if ($grid) {
-        $grid.commitProxy(item.code)
-        UtilTools.emitEvent($grid, 'toolbar-button-click', [{ button: item, $grid }, evnt])
-      }
-    },
     refreshEvent () {
       let { $grid, refreshOpts } = this
       if (!this.isRefresh) {
@@ -341,6 +365,35 @@ export default {
           })
         }
       }
+    },
+    btnEvent (evnt, item, isChild) {
+      let { $grid } = this
+      if ($grid) {
+        if (isChild) {
+          let groupBtnElem = evnt.currentTarget.parentNode
+          let wrapperElem = groupBtnElem.parentNode
+          wrapperElem.dataset.active = 'N'
+          DomTools.removeClass(wrapperElem, 'is--active')
+        }
+        $grid.commitProxy(item.code)
+        UtilTools.emitEvent($grid, 'toolbar-button-click', [{ button: item, $grid }, evnt])
+      }
+    },
+    mouseenterBtnEvent (evnt) {
+      let groupBtnElem = evnt.currentTarget
+      let wrapperElem = groupBtnElem.parentNode
+      wrapperElem.dataset.active = 'Y'
+      DomTools.addClass(wrapperElem, 'is--active')
+    },
+    mouseleaveBtnEvent (evnt) {
+      let groupBtnElem = evnt.currentTarget
+      let wrapperElem = groupBtnElem.parentNode
+      wrapperElem.dataset.active = 'N'
+      setTimeout(() => {
+        if (wrapperElem.dataset.active !== 'Y') {
+          DomTools.removeClass(wrapperElem, 'is--active')
+        }
+      }, 300)
     }
   }
 }
