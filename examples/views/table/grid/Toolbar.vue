@@ -51,13 +51,23 @@ export default {
       toolbar: {
         id: 'toolbar_demo_1',
         buttons: [
-          { code: 'reload', name: 'app.body.button.refresh' },
-          { code: 'insert_actived', name: '新增并激活' },
-          { code: 'mark_cancel', name: 'app.body.button.markCancel' },
-          { code: 'delete_selection', name: 'app.body.button.deleteSelectedRecords' },
-          { code: 'remove_selection', name: '移除' },
+          { code: 'insert_actived', name: '新增' },
+          {
+            code: 'mark_cancel',
+            name: 'app.body.button.markCancel',
+            children: [
+              { code: 'delete_selection', name: 'app.body.button.deleteSelectedRecords' },
+              { code: 'remove_selection', name: '移除数据' }
+            ]
+          },
           { code: 'save', name: 'app.body.button.save' },
-          { code: 'export', name: '导出.csv' },
+          {
+            name: '数据导出',
+            children: [
+              { code: 'imput', name: '导入.csv' },
+              { code: 'export', name: '导出.csv' }
+            ]
+          },
           { code: 'myBtn', name: '自定义按钮' }
         ],
         refresh: true,
@@ -113,13 +123,23 @@ export default {
               },
               toolbar: {
                 buttons: [
-                  { code: 'reload', name: 'app.body.button.refresh' },
-                  { code: 'insert_actived', name: '新增并激活' },
-                  { code: 'mark_cancel', name: 'app.body.button.markCancel' },
-                  { code: 'delete_selection', name: 'app.body.button.deleteSelectedRecords' },
-                  { code: 'remove_selection', name: '移除' },
+                  { code: 'insert_actived', name: '新增' },
+                  {
+                    code: 'mark_cancel',
+                    name: 'app.body.button.markCancel',
+                    children: [
+                      { code: 'delete_selection', name: 'app.body.button.deleteSelectedRecords' },
+                      { code: 'remove_selection', name: '移除数据' }
+                    ]
+                  },
                   { code: 'save', name: 'app.body.button.save' },
-                  { code: 'export', name: '导出.csv' },
+                  {
+                    name: '数据导出',
+                    children: [
+                      { code: 'imput', name: '导入.csv' },
+                      { code: 'export', name: '导出.csv' }
+                    ]
+                  },
                   { code: 'myBtn', name: '自定义按钮' }
                 ],
                 refresh: true,

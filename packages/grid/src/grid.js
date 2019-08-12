@@ -202,6 +202,9 @@ export default {
           case 'export':
             this.exportCsv()
             break
+          case 'reset_custom':
+            this.resetAll()
+            break
           case 'reload':
           case 'query': {
             if (ajax.query) {

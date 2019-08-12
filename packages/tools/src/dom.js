@@ -5,14 +5,14 @@ const browse = XEUtils.browse()
 const htmlElem = document.querySelector('html')
 const bodyElem = document.body
 
-function rClass (cls) {
-  if (!rClsMap[cls]) {
-    rClsMap[cls] = new RegExp(`(?:^|\\s)${cls}(?!\\S)`, 'g')
+function getClsRE (cls) {
+  if (!reClsMap[cls]) {
+    reClsMap[cls] = new RegExp(`(?:^|\\s)${cls}(?!\\S)`, 'g')
   }
-  return rClsMap[cls]
+  return reClsMap[cls]
 }
 
-const rClsMap = {}
+const reClsMap = {}
 
 export const DomTools = {
   browse,
@@ -23,11 +23,11 @@ export const DomTools = {
     return val && /^\d+%$/.test(val)
   },
   hasClass (elem, cls) {
-    return elem && elem.className && elem.className.match && elem.className.match(rClass(cls))
+    return elem && elem.className && elem.className.match && elem.className.match(getClsRE(cls))
   },
   removeClass (elem, cls) {
     if (elem && DomTools.hasClass(elem, cls)) {
-      elem.className = elem.className.replace(rClass(cls), '')
+      elem.className = elem.className.replace(getClsRE(cls), '')
     }
   },
   addClass (elem, cls) {

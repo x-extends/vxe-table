@@ -69,11 +69,23 @@ export default {
         id: 'full_edit_1',
         buttons: [
           { code: 'reload', name: 'app.body.button.refresh' },
-          { code: 'insert_actived', name: 'app.body.button.insert' },
-          { code: 'mark_cancel', name: 'app.body.button.markCancel' },
-          { code: 'remove_selection', name: '移除' },
+          { code: 'insert_actived', name: '新增' },
+          {
+            code: 'mark_cancel',
+            name: 'app.body.button.markCancel',
+            children: [
+              { code: 'delete_selection', name: 'app.body.button.deleteSelectedRecords' },
+              { code: 'remove_selection', name: '移除数据' }
+            ]
+          },
           { code: 'save', name: 'app.body.button.save' },
-          { code: 'export', name: '导出.csv' }
+          {
+            name: '更多操作',
+            children: [
+              { code: 'export', name: '导出数据.csv' },
+              { code: 'reset_custom', name: '重置个性化数据' }
+            ]
+          }
         ],
         refresh: true,
         resizable: {
@@ -149,11 +161,23 @@ export default {
                 id: 'full_edit_1',
                 buttons: [
                   { code: 'reload', name: 'app.body.button.refresh' },
-                  { code: 'insert_actived', name: 'app.body.button.insert' },
-                  { code: 'mark_cancel', name: 'app.body.button.markCancel' },
-                  { code: 'remove_selection', name: '移除' },
+                  { code: 'insert_actived', name: '新增' },
+                  {
+                    code: 'mark_cancel',
+                    name: 'app.body.button.markCancel',
+                    children: [
+                      { code: 'delete_selection', name: 'app.body.button.deleteSelectedRecords' },
+                      { code: 'remove_selection', name: '移除数据' }
+                    ]
+                  },
                   { code: 'save', name: 'app.body.button.save' },
-                  { code: 'export', name: '导出.csv' }
+                  {
+                    name: '更多操作',
+                    children: [
+                      { code: 'export', name: '导出数据.csv' },
+                      { code: 'reset_custom', name: '重置个性化数据' }
+                    ]
+                  }
                 ],
                 refresh: true,
                 resizable: {
