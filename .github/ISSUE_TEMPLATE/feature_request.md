@@ -15,6 +15,6 @@ assignees: ''
 
  ?
 
-### （必填）是否已有其他不错的替代方案 Describe alternatives you've considered
+### 是否已有其他不错的替代方案 Describe alternatives you've considered
 
  ?

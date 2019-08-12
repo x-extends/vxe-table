@@ -15,7 +15,7 @@ assignees: ''
 
  ?
 
-### （选填）填写报错信息或截图 Error message or screenshots
+### 填写报错信息或截图 Error message or screenshots
 
  ?
 
