@@ -15,11 +15,11 @@ assignees: ''
 
  ?
 
-### （选填）报错信息或截图 Error message or screenshots
+### 报错信息或截图 Error message or screenshots
 
  ?
 
-### （必填）版本 Version
+### 版本 Version
 
 - os: ?
 - browser: ?
