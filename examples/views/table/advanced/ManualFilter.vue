@@ -113,7 +113,7 @@ export default {
                   option.checked = true
                 })
                 .then(() => {
-                  // 手动修改条件之后，需要调用 updateData 更新表格数据
+                  // 修改条件之后，需要手动调用 updateData 处理表格数据
                   xTable.updateData()
                 })
             },
@@ -127,7 +127,7 @@ export default {
                   option.checked = true
                 })
                 .then(() => {
-                  // 手动修改条件之后，需要调用 updateData 更新表格数据
+                  // 修改条件之后，需要手动调用 updateData 处理表格数据
                   xTable.updateData()
                 })
             }
@@ -171,7 +171,7 @@ export default {
           option.checked = true
         })
         .then(() => {
-          // 手动修改条件之后，需要调用 updateData 更新表格数据
+          // 修改条件之后，需要手动调用 updateData 处理表格数据
           xTable.updateData()
         })
     },
@@ -185,7 +185,7 @@ export default {
           option.checked = true
         })
         .then(() => {
-          // 手动修改条件之后，需要调用 updateData 更新表格数据
+          // 修改条件之后，需要手动调用 updateData 处理表格数据
           xTable.updateData()
         })
     }

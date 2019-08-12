@@ -1402,7 +1402,7 @@ const apis = [
       },
       {
         name: 'updateData()',
-        desc: '更新表格数据（对于手动更改了筛选...等条件后需要重新更新表格时可能会用到）',
+        desc: '手动处理数据（对于手动更改了筛选条件后需要重新处理数据时可能会用到）',
         type: 'Promise',
         enum: '',
         defVal: '',
@@ -1410,7 +1410,7 @@ const apis = [
       },
       {
         name: 'refreshData()',
-        desc: '刷新数据（对于某些特殊的场景可能会用到，比如树层节点元素发生变动）',
+        desc: '同步刷新数据（对于某些特殊的场景，比如树层节点元素发生变动时可能会用到）',
         type: 'Promise',
         enum: '',
         defVal: '',
