@@ -870,8 +870,7 @@ export default {
       if (!XEUtils.isArray(records)) {
         records = [records]
       }
-      let newRecords = records.map(this.createRow)
-      return new Promise(resolve => {
+      return this.createRow(records).then(newRecords => {
         if (args.length === 1) {
           tableData.unshift.apply(tableData, newRecords)
           tableFullData.unshift.apply(tableFullData, newRecords)
@@ -896,9 +895,12 @@ export default {
         [].unshift.apply(editStore.insertList, newRecords)
         this.updateCache()
         this.checkSelectionStatus()
-        this.$nextTick(() => {
+        return this.$nextTick().then(() => {
           this.recalculate()
-          resolve({ row: newRecords.length ? newRecords[newRecords.length - 1] : null, rows: newRecords })
+          return {
+            row: newRecords.length ? newRecords[newRecords.length - 1] : null,
+            rows: newRecords
+          }
         })
       })
     },

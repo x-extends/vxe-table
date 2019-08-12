@@ -32,6 +32,10 @@ export function Message (options) {
     lockView: false,
     lockScroll: false
   } : {}
+  defOpts.type = type
+  if (index === 1) {
+    defOpts.status = 'question'
+  }
   Message[type] = function (message, title, options) {
     let opts
     if (XEUtils.isObject(message)) {

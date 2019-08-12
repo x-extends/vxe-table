@@ -67,7 +67,7 @@ export default {
       }],
       style: {
         zIndex,
-        top: msgTop ? `${msgTop}px` : msgTop
+        top: msgTop ? `${msgTop}px` : null
       },
       on: {
         click: this.selfClickEvent
@@ -78,7 +78,10 @@ export default {
         ref: 'msgBox'
       }, [
         !isMsg ? h('div', {
-          class: 'vxe-msg--header'
+          class: 'vxe-msg--header',
+          on: {
+            mousedown: this.mousedownEvent
+          }
         }, [
           h('span', {
             class: 'vxe-msg--title'
@@ -188,7 +191,7 @@ export default {
     updateStyle () {
       this.$nextTick(() => {
         let offsetTop = 0
-        MsgQueue.forEach((comp, index) => {
+        MsgQueue.forEach(comp => {
           offsetTop += comp.top
           comp.msgTop = offsetTop
           offsetTop += comp.$refs.msgBox.clientHeight
@@ -214,6 +217,51 @@ export default {
             this.$emit('hide', type)
           }
         }, 200)
+      }
+    },
+    mousedownEvent (evnt) {
+      if (evnt.button === 0) {
+        evnt.preventDefault()
+        let msgBoxElem = this.$refs.msgBox
+        let demMousemove = document.onmousemove
+        let demMouseup = document.onmouseup
+        let disX = evnt.clientX - msgBoxElem.offsetLeft
+        let disY = evnt.clientY - msgBoxElem.offsetTop
+        document.onmousemove = evnt => {
+          evnt.preventDefault()
+          let clientVisibleWidth = document.documentElement.clientWidth || document.body.clientWidth
+          let clientVisibleHeight = document.documentElement.clientHeight || document.body.clientHeight
+          let offsetWidth = msgBoxElem.offsetWidth
+          let offsetHeight = msgBoxElem.offsetHeight
+          let minX = offsetWidth / 2
+          let maxX = clientVisibleWidth - offsetWidth / 2
+          let minY = 0
+          let maxY = clientVisibleHeight - offsetHeight
+          let left = evnt.clientX - disX
+          let top = evnt.clientY - disY
+          if (left > maxX) {
+            left = maxX
+          }
+          if (left < minX) {
+            left = minX
+          }
+          if (top > maxY) {
+            top = maxY
+          }
+          if (top < minY) {
+            top = minY
+          }
+          msgBoxElem.style.left = `${left}px`
+          msgBoxElem.style.top = `${top}px`
+          msgBoxElem.className = msgBoxElem.className.replace(/\s?drag-move/, '') + ` drag-move`
+        }
+        document.onmouseup = evnt => {
+          document.onmousemove = demMousemove
+          document.onmouseup = demMouseup
+          this.$nextTick(() => {
+            msgBoxElem.className = msgBoxElem.className.replace(/\s?drag-move/, '')
+          })
+        }
       }
     }
   }
