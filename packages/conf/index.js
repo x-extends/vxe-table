@@ -50,6 +50,7 @@ const GlobalConfig = {
     msgSuccess: 'vxe-icon--success',
     msgWarning: 'vxe-icon--warning',
     msgError: 'vxe-icon--error',
+    msgQuestion: 'vxe-icon--question',
     msgLoading: 'vxe-icon--refresh roll'
   },
   grid: {},
