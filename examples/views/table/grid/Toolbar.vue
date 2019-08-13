@@ -55,7 +55,7 @@ export default {
           {
             code: 'mark_cancel',
             name: 'app.body.button.markCancel',
-            children: [
+            dropdowns: [
               { code: 'delete_selection', name: 'app.body.button.deleteSelectedRecords' },
               { code: 'remove_selection', name: '移除数据' }
             ]
@@ -63,7 +63,7 @@ export default {
           { code: 'save', name: 'app.body.button.save' },
           {
             name: '数据导出',
-            children: [
+            dropdowns: [
               { code: 'imput', name: '导入.csv' },
               { code: 'export', name: '导出.csv' }
             ]
@@ -127,7 +127,7 @@ export default {
                   {
                     code: 'mark_cancel',
                     name: 'app.body.button.markCancel',
-                    children: [
+                    dropdowns: [
                       { code: 'delete_selection', name: 'app.body.button.deleteSelectedRecords' },
                       { code: 'remove_selection', name: '移除数据' }
                     ]
@@ -135,7 +135,7 @@ export default {
                   { code: 'save', name: 'app.body.button.save' },
                   {
                     name: '数据导出',
-                    children: [
+                    dropdowns: [
                       { code: 'imput', name: '导入.csv' },
                       { code: 'export', name: '导出.csv' }
                     ]

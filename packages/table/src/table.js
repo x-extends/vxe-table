@@ -866,22 +866,15 @@ export default {
      */
     insertAt (records, row) {
       let { tableData, editStore, scrollYLoad, tableFullData, treeConfig } = this
-      let args = arguments
       if (!XEUtils.isArray(records)) {
         records = [records]
       }
       return this.createRow(records).then(newRecords => {
-        if (args.length === 1) {
+        if (!row) {
           tableData.unshift.apply(tableData, newRecords)
           tableFullData.unshift.apply(tableFullData, newRecords)
-          if (scrollYLoad) {
-            this.updateAfterFullData()
-          }
         } else {
-          if (scrollYLoad) {
-            throw new Error('[vxe-table] Virtual scroller does not support this operation.')
-          }
-          if (!row || row === -1) {
+          if (row === -1) {
             tableData.push.apply(tableData, newRecords)
             tableFullData.push.apply(tableFullData, newRecords)
           } else {
@@ -893,6 +886,9 @@ export default {
           }
         }
         [].unshift.apply(editStore.insertList, newRecords)
+        if (scrollYLoad) {
+          this.updateData(true)
+        }
         this.updateCache()
         this.checkSelectionStatus()
         return this.$nextTick().then(() => {
@@ -3384,8 +3380,8 @@ export default {
      * 激活单元格编辑
      */
     setActiveCell (row, field) {
-      return new Promise(resolve => {
-        setTimeout(() => {
+      return this.scrollToRow(row).then(() => {
+        return new Promise(resolve => {
           if (row && field) {
             let column = this.visibleColumn.find(column => column.property === field)
             if (column && column.editRender) {
@@ -4013,7 +4009,7 @@ export default {
       return this.$nextTick()
     },
     scrollToRow (row, column) {
-      if (row && this.fullDataRowMap.has(row)) {
+      if (row && this.fullAllDataRowMap.has(row)) {
         DomTools.rowToVisible(this, row)
       }
       return this.scrollToColumn(column)
@@ -4022,7 +4018,10 @@ export default {
       if (column && this.fullColumnMap.has(column)) {
         DomTools.colToVisible(this, column)
       }
-      return this.$nextTick()
+      if (this.scrollYLoad) {
+        return new Promise(resolve => setTimeout(() => resolve(this.$nextTick()), 50))
+      }
+      return new Promise(resolve => resolve(this.$nextTick()))
     },
     clearScroll () {
       Object.assign(this.scrollXStore, {
@@ -4138,7 +4137,7 @@ export default {
     beginValidate (rows, cb, isAll) {
       let validRest = {}
       let status = true
-      let { editRules, tableData, tableFullData, scrollYLoad, scrollYStore } = this
+      let { editRules, tableData, tableFullData, scrollYLoad } = this
       let vaildDatas = scrollYLoad ? tableFullData : tableData
       if (rows) {
         if (XEUtils.isFunction(rows)) {
@@ -4188,7 +4187,6 @@ export default {
         }).catch(params => {
           let args = isAll ? validRest : { [params.column.property]: params }
           return new Promise((resolve, reject) => {
-            let { rowIndex } = params
             let finish = () => {
               params.cell = DomTools.getCell(this, params)
               this.handleValidError(params)
@@ -4200,14 +4198,10 @@ export default {
               }
             }
             if (scrollYLoad) {
-              let { startIndex, renderSize, rowHeight } = scrollYStore
-              if (rowIndex < startIndex || rowIndex > startIndex + renderSize) {
-                let bodyElem = this.$refs.tableBody.$el
-                bodyElem.scrollTop = (rowIndex - 1) * rowHeight
-                return setTimeout(finish, debounceScrollYDuration * 2)
-              }
+              this.scrollToRow(params.row).then(finish)
+            } else {
+              finish()
             }
-            finish()
           })
         })
       } else {

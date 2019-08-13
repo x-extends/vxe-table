@@ -325,7 +325,7 @@ module.exports = {
         desc: {
           id: '唯一 ID 标识',
           size: 'Size',
-          data: '与表格的 data 属性同步绑定',
+          loading: 'Loading',
           refresh: '刷新按钮',
           resizable: '列宽拖动配置',
           setting: '列个性化配置'
@@ -334,7 +334,7 @@ module.exports = {
       pager: {
         desc: {
           size: 'Size',
-          loading: '是否加载中',
+          loading: 'Loading',
           layouts: 'Custom layouts',
           currentPage: 'Current page',
           pageSize: 'Page size',

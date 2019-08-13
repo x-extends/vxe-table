@@ -123,8 +123,8 @@ const apis = [
                 ]
               },
               {
-                name: 'children',
-                desc: '下拉按钮',
+                name: 'dropdowns',
+                desc: '下拉按钮列表',
                 type: 'Array',
                 enum: '',
                 defVal: '',

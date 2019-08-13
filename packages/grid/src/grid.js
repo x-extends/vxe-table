@@ -143,7 +143,9 @@ export default {
     }, [
       toolbar ? h('vxe-toolbar', {
         ref: 'toolbar',
-        props: toolbar,
+        props: Object.assign({
+          loading: loading || tableLoading
+        }, toolbar),
         scopedSlots: $buttons ? {
           buttons: $buttons
         } : null

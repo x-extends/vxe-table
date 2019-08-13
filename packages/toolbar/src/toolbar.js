@@ -2,18 +2,11 @@ import XEUtils from 'xe-utils'
 import GlobalConfig from '../../conf'
 import { UtilTools, DomTools, GlobalEvent } from '../../tools'
 
-function renderButton (h, _vm, item, isChild) {
-  return h('vxe-button', {
-    on: {
-      click: evnt => _vm.btnEvent(evnt, item, isChild)
-    }
-  }, UtilTools.getFuncText(item.name))
-}
-
 export default {
   name: 'VxeToolbar',
   props: {
     id: String,
+    loading: false,
     resizable: { type: [Boolean, Object], default: () => GlobalConfig.toolbar.resizable },
     refresh: { type: [Boolean, Object], default: () => GlobalConfig.toolbar.refresh },
     setting: { type: [Boolean, Object], default: () => GlobalConfig.toolbar.setting },
@@ -71,7 +64,7 @@ export default {
     GlobalEvent.off(this, 'blur')
   },
   render (h) {
-    let { $scopedSlots, $grid, $table, settingStore, refresh, setting, settingOpts, buttons = [], vSize, tableFullColumn } = this
+    let { $scopedSlots, $grid, $table, loading, settingStore, refresh, setting, settingOpts, buttons = [], vSize, tableFullColumn } = this
     let customBtnOns = {}
     let customWrapperOns = {}
     let $buttons = $scopedSlots.buttons
@@ -91,40 +84,28 @@ export default {
     }
     return h('div', {
       class: ['vxe-toolbar', {
-        [`size--${vSize}`]: vSize
+        [`size--${vSize}`]: vSize,
+        'is--loading': loading
       }]
     }, [
       h('div', {
         class: 'vxe-button--wrapper'
       }, $buttons ? $buttons.call($grid || $table || this, { $grid, $table }, h) : buttons.map(item => {
-        if (item.children && item.children.length) {
-          return h('div', {
-            class: ['vxe-button--group', {
-              [`size--${vSize}`]: vSize
-            }]
-          }, [
-            h('vxe-button', {
-              on: {
-                click: evnt => item.code ? this.btnEvent(evnt, item) : false,
-                mouseenter: this.mouseenterBtnEvent,
-                mouseleave: this.mouseleaveBtnEvent
-              }
-            }, [
-              h('span', UtilTools.getFuncText(item.name)),
-              h('i', {
-                class: `vxe-button--group-arrow ${GlobalConfig.icon.caretBottom}`
-              })
-            ]),
-            h('div', {
-              class: 'vxe-button--group-wrapper',
-              on: {
-                mouseenter: this.mouseenterBtnEvent,
-                mouseleave: this.mouseleaveBtnEvent
-              }
-            }, item.children.map(child => renderButton(h, this, child, 1)))
-          ])
-        }
-        return renderButton(h, this, item)
+        return h('vxe-button', {
+          on: {
+            click: evnt => this.btnEvent(evnt, item)
+          },
+          scopedSlots: item.dropdowns && item.dropdowns.length ? {
+            default: () => UtilTools.getFuncText(item.name),
+            dropdown: () => item.dropdowns.map(child => {
+              return h('vxe-button', {
+                on: {
+                  click: evnt => this.btnEvent(evnt, child)
+                }
+              }, UtilTools.getFuncText(child.name))
+            })
+          } : null
+        }, UtilTools.getFuncText(item.name))
       })),
       setting ? h('div', {
         class: ['vxe-custom--wrapper', {
@@ -366,34 +347,12 @@ export default {
         }
       }
     },
-    btnEvent (evnt, item, isChild) {
+    btnEvent (evnt, item) {
       let { $grid } = this
-      if ($grid) {
-        if (isChild) {
-          let groupBtnElem = evnt.currentTarget.parentNode
-          let wrapperElem = groupBtnElem.parentNode
-          wrapperElem.dataset.active = 'N'
-          DomTools.removeClass(wrapperElem, 'is--active')
-        }
+      if (item.code && $grid) {
         $grid.commitProxy(item.code)
         UtilTools.emitEvent($grid, 'toolbar-button-click', [{ button: item, $grid }, evnt])
       }
-    },
-    mouseenterBtnEvent (evnt) {
-      let groupBtnElem = evnt.currentTarget
-      let wrapperElem = groupBtnElem.parentNode
-      wrapperElem.dataset.active = 'Y'
-      DomTools.addClass(wrapperElem, 'is--active')
-    },
-    mouseleaveBtnEvent (evnt) {
-      let groupBtnElem = evnt.currentTarget
-      let wrapperElem = groupBtnElem.parentNode
-      wrapperElem.dataset.active = 'N'
-      setTimeout(() => {
-        if (wrapperElem.dataset.active !== 'Y') {
-          DomTools.removeClass(wrapperElem, 'is--active')
-        }
-      }, 300)
     }
   }
 }
