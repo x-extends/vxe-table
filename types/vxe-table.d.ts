@@ -19,11 +19,6 @@ import { Message } from './message';
 import { Export } from './export';
 import { Resize } from './resize';
 
-export function install(vue: typeof Vue): void;
-export function t(obj: object, key: string): string | number;
-export function setup(options: VXETableOptions): any;
-export function use(Plugin: object, options?: object): any;
-
 export interface VXETableOptions {
   showOverflow?: boolean;
   showHeaderOverflow?: boolean;
@@ -62,36 +57,48 @@ export interface Renderer {
   delete(name: object): Renderer;
 }
 
+export interface PluginObject<T> {
+  install(xTable: typeof VXETable): any;
+}
+
+export function install(vue: typeof Vue): void;
+export function t(obj: object, key: string): string | number;
+export function setup(options: VXETableOptions): any;
+export function use(plugin: PluginObject<any>, ...options: any[]): VXETableStatic;
+
 export const interceptor: Interceptor;
 export const renderer: Renderer;
 
 export interface VXETableStatic {
   install(vue: typeof Vue): void;
   /**
-   * 国际化
+   * International translation
    */
   t(obj: object, key: string): string | number;
   /**
-   * 设置全局参数
-   * @param options 参数
+   * Set global parameters
+   * @param options
    */
   setup(options: VXETableOptions): any;
   /**
-   * 安装插件
-   * @param Plugin 插件 
-   * @param options 参数
+   * Installing a plug-in
+   * @param plugin 
+   * @param options
    */
-  use(Plugin: object, options?: object): any;
+  use(plugin: PluginObject<any>, ...options: any[]): VXETableStatic;
   /**
-   * 事件拦截器
+   * Event collision interceptor
    */
   interceptor: Interceptor;
   /**
-   * 单元格渲染器
+   * Renderer
    */
   renderer: Renderer;
 }
 
+/**
+ * A fully functional Vue table component.
+ */
 declare const VXETable: VXETableStatic;
 
 export {
