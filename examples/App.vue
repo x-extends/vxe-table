@@ -49,7 +49,7 @@
     <footer class="page-footer">
       <p class="copyright">
         <a class="link" href="https://github.com/xuliangzhan/vxe-table">vxe-table</a>
-        <span>MIT License, 2019-present, Xu Liangzhan</span>
+        <span> MIT License, 2019-present, Xu Liangzhan</span>
         <vxe-tooltip :content="$t('app.footer.donationDesc')">
           <a class="donation" href="https://github.com/xuliangzhan/vxe-table#donation" target="_blank">☕{{ $t('app.footer.donation') }}</a>
         </vxe-tooltip>
