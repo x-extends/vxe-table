@@ -122,7 +122,7 @@ module.exports = {
         antdPluginMore: 'plugin-antd 更多配置',
         spanPlugin: '单元格选中合并',
         chartsPlugin: '图表功能',
-        excelPlugin: '简单的 Excel',
+        excelPlugin: 'plugin-excel 简单的 Excel',
 
         renderer: '渲染器',
         rendererFilter: '筛选渲染器',
