@@ -1,6 +1,11 @@
 <template>
   <div>
-    <vxe-toolbar id="document_api" :resizable="{storage: true}" :setting="{storage: true}">
+    <vxe-toolbar
+      id="document_api"
+      :loading="loading"
+      :refresh="{query: loadList}"
+      :resizable="{storage: true}"
+      :setting="{storage: true}">
       <template v-slot:buttons>
         <vxe-input class="search-input" v-model="filterName" type="search" :placeholder="`vxe-${apiName} ${$t('app.api.form.apiSearch')}`" @keyup="searchEvent"></vxe-input>
       </template>
@@ -160,64 +165,67 @@ export default {
   methods: {
     loadList () {
       this.loading = true
-      setTimeout(() => {
-        let apis = []
-        switch (this.$route.params.name) {
-          case 'table':
-            apis = tableAPI
-            break
-          case 'table-column':
-            apis = tableColumnAPI
-            break
-          case 'toolbar':
-            apis = toolbarAPI
-            break
-          case 'grid': {
-            apis = gridAPI
-            break
+      return new Promise(resolve => {
+        setTimeout(() => {
+          let apis = []
+          switch (this.$route.params.name) {
+            case 'table':
+              apis = tableAPI
+              break
+            case 'table-column':
+              apis = tableColumnAPI
+              break
+            case 'toolbar':
+              apis = toolbarAPI
+              break
+            case 'grid': {
+              apis = gridAPI
+              break
+            }
+            case 'excel': {
+              apis = excelAPI
+              break
+            }
+            case 'pager':
+              apis = pagerAPI
+              break
+            case 'radio':
+              apis = radioAPI
+              break
+            case 'checkbox':
+              apis = checkboxAPI
+              break
+            case 'input':
+              apis = inputAPI
+              break
+            case 'button':
+              apis = buttonAPI
+              break
+            case 'tooltip':
+              apis = tooltipAPI
+              break
+            case 'message':
+              apis = messageAPI
+              break
           }
-          case 'excel': {
-            apis = excelAPI
-            break
-          }
-          case 'pager':
-            apis = pagerAPI
-            break
-          case 'radio':
-            apis = radioAPI
-            break
-          case 'checkbox':
-            apis = checkboxAPI
-            break
-          case 'input':
-            apis = inputAPI
-            break
-          case 'button':
-            apis = buttonAPI
-            break
-          case 'tooltip':
-            apis = tooltipAPI
-            break
-          case 'message':
-            apis = messageAPI
-            break
-        }
-        // 生成唯一 id
-        let index = 1
-        let searchProps = ['name', 'desc', 'type', 'enum', 'defVal']
-        XEUtils.eachTree(apis, item => {
-          item.id = index++
-          item.desc = item.descKey ? this.$t(item.descKey) : item.desc
-          searchProps.forEach(key => {
-            item[key] = XEUtils.escape(item[key])
-          })
-        }, { children: 'list' })
-        this.tableData = apis
-        // 默认展开一级
-        this.defaultExpandRowKeys = apis.filter(item => item.list && item.list.length).map(item => item.id)
-        this.loading = false
-        this.handleSearch()
-      }, 100)
+          // 生成唯一 id
+          let index = 1
+          let searchProps = ['name', 'desc', 'type', 'enum', 'defVal']
+          XEUtils.eachTree(apis, item => {
+            item.id = index++
+            item.desc = item.descKey ? this.$t(item.descKey) : item.desc
+            searchProps.forEach(key => {
+              item[key] = XEUtils.escape(item[key])
+            })
+          }, { children: 'list' })
+          this.tableData = apis
+          // 默认展开一级
+          this.defaultExpandRowKeys = apis.filter(item => item.list && item.list.length).map(item => item.id)
+          this.loading = false
+          this.handleSearch()
+          resolve()
+        }, 100)
+      })
     },
     cellClassNameFunc ({ row, column }) {
       return {
