@@ -74,12 +74,17 @@ export default {
     }
   },
   created () {
-    let { customs, pagerConfig } = this
+    let { customs, proxyOpts, pagerConfig } = this
+    let { props } = proxyOpts
     if (customs) {
       this.tableCustoms = customs
     }
     if (pagerConfig && pagerConfig.pageSize) {
       this.tablePage.pageSize = pagerConfig.pageSize
+    }
+    // （v3.0 中废弃 proxyConfig.props.data）
+    if (props && props.data) {
+      console.warn('[vxe-table] The property proxyConfig.props.data is deprecated, please use proxyConfig.props.result')
     }
   },
   mounted () {
@@ -138,7 +143,9 @@ export default {
     }, [
       toolbar ? h('vxe-toolbar', {
         ref: 'toolbar',
-        props: toolbar,
+        props: Object.assign({
+          loading: loading || tableLoading
+        }, toolbar),
         scopedSlots: $buttons ? {
           buttons: $buttons
         } : null
@@ -220,7 +227,6 @@ export default {
               return ajax.query.apply(this, [params].concat(args)).then(rest => {
                 if (rest) {
                   if (pagerConfig) {
-                    // （v3.0 中废弃 data）
                     tablePage.total = XEUtils.get(rest, props.total || 'page.total') || 0
                     this.tableData = XEUtils.get(rest, props.result || props.data || 'result') || []
                   } else {
@@ -324,7 +330,7 @@ export default {
     getPendingRecords () {
       return this.pendingRecords
     },
-    triggerPendingEvent (code, evnt) {
+    triggerPendingEvent (code) {
       let { pendingRecords, isMsg } = this
       let selectRecords = this.getSelectRecords()
       if (selectRecords.length) {
@@ -370,9 +376,8 @@ export default {
       if (isRemote) {
         Object.assign(sortData, params)
         this.commitProxy('query')
-      } else {
-        UtilTools.emitEvent(this, 'sort-change', [params])
       }
+      UtilTools.emitEvent(this, 'sort-change', [params])
     },
     filterChangeEvent (params) {
       let { remoteFilter } = this
@@ -381,9 +386,8 @@ export default {
       if (remoteFilter) {
         this.filterData = filters
         this.commitProxy('reload')
-      } else {
-        UtilTools.emitEvent(this, 'filter-change', [params])
       }
+      UtilTools.emitEvent(this, 'filter-change', [params])
     }
   }
 }

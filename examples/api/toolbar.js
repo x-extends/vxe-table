@@ -22,14 +22,14 @@ const apis = [
         defVal: '',
         list: []
       },
-      // {
-      //   name: 'data',
-      //   descKey: 'app.api.toolbar.desc.data',
-      //   type: 'Array',
-      //   enum: '',
-      //   defVal: '',
-      //   list: []
-      // },
+      {
+        name: 'loading',
+        descKey: 'app.api.toolbar.desc.loading',
+        type: 'Boolean',
+        enum: '',
+        defVal: 'false',
+        list: []
+      },
       {
         name: 'refresh',
         descKey: 'app.api.toolbar.desc.refresh',

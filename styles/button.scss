@@ -91,7 +91,7 @@
     }
   }
   &+.vxe-button,
-  &+.vxe-button--group {
+  &+.vxe-button--dropdown {
     @extend %ButtonInterval;
   }
   &.size--small,
@@ -100,28 +100,28 @@
   }
 }
 .vxe-button--wrapper,
-.vxe-button--group {
+.vxe-button--dropdown {
   display: inline-block;
 }
-.vxe-button--group {
+.vxe-button--dropdown {
   position: relative;
   &.size--medium {
-    .vxe-button--group-wrapper {
+    .vxe-button--dropdown-wrapper {
       top: 36px;
     }
   }
   &.size--small {
-    .vxe-button--group-wrapper {
+    .vxe-button--dropdown-wrapper {
       top: 32px;
     }
   }
   &.size--mini {
-    .vxe-button--group-wrapper {
+    .vxe-button--dropdown-wrapper {
       top: 30px;
     }
   }
   &+.vxe-button,
-  &+.vxe-button--group {
+  &+.vxe-button--dropdown {
     @extend %ButtonInterval;
   }
   &.is--active {
@@ -133,26 +133,26 @@
         @extend %ButtonHover;
       }
     }
-    .vxe-button--group-wrapper {
+    .vxe-button--dropdown-wrapper {
       display: block;
     }
-    .vxe-button--group-arrow {
+    .vxe-button--dropdown-arrow {
       transform: rotate(360deg);
     }
   }
-  .vxe-button--group-arrow {
+  .vxe-button--dropdown-arrow {
     font-size: 12px;
     margin-top: -2px;
     margin-left: 5px;
     @include animatTransition(transform, .2s);
   }
-  .vxe-button--group-wrapper {
+  .vxe-button--dropdown-wrapper {
     display: none;
     position: absolute;
     top: 38px;
     left: 50%;
     transform: translateX(-50%);
-    z-index: 99;
+    z-index: 100;
     padding: 5px;
     background-color: #fff;
     border-radius: 4px;
