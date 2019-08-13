@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>具体兼容请查看 <a class="link" href="https://www.npmjs.com/package/vxe-table-plugin-element" target="_blank">vxe-table-plugin-element</a> 适配插件的 API</p>
+    <p>具体兼容请查看 <a class="link" href="https://www.npmjs.com/package/vxe-table-plugin-element" target="_blank">vxe-table-plugin-element</a> 插件的 API</p>
 
     <vxe-grid
       border

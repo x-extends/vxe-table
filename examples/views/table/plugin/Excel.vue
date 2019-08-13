@@ -1,7 +1,6 @@
 <template>
   <div>
-    <p>使用 vxe-excel 渲染 Excel 表格</p>
-    <p class="red">注意：暂时不建议使用（完善中）</p>
+    <p>具体兼容请查看 <a class="link" href="https://www.npmjs.com/package/vxe-table-plugin-excel" target="_blank">vxe-table-plugin-excel</a> 插件的 API</p>
 
     <vxe-toolbar>
       <template v-slot:buttons>
@@ -71,8 +70,13 @@ export default {
           title: name,
           minWidth: 76,
           headerAlign: 'center',
+          sortable: true,
           editRender: {
             name: 'cell'
+          },
+          filters: [{ data: '' }],
+          filterRender: {
+            name: 'input'
           }
         }
       })),
@@ -117,8 +121,13 @@ export default {
                   title: name,
                   minWidth: 76,
                   headerAlign: 'center',
+                  sortable: true,
                   editRender: {
                     name: 'cell'
+                  },
+                  filters: [{ data: '' }],
+                  filterRender: {
+                    name: 'input'
                   }
                 }
               })),

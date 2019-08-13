@@ -118,8 +118,6 @@ const TableEditSpan = () => import(/* webpackChunkName: "edit" */ './views/table
 const TableEditTemplate = () => import(/* webpackChunkName: "edit" */ './views/table/edit/Template.vue')
 const TableEditFull = () => import(/* webpackChunkName: "edit" */ './views/table/edit/Full.vue')
 
-const TableExcelCell = () => import(/* webpackChunkName: "excel" */ './views/table/excel/Cell.vue')
-
 const TableOtherElement = () => import(/* webpackChunkName: "other" */ './views/table/other/Element.vue')
 const TableOtherIview = () => import(/* webpackChunkName: "other" */ './views/table/other/Iview.vue')
 const TableOtherAntd = () => import(/* webpackChunkName: "other" */ './views/table/other/Antd.vue')
@@ -136,6 +134,7 @@ const TablePluginIviewPage = () => import(/* webpackChunkName: "plugin" */ './vi
 const TablePluginAntdConfig = () => import(/* webpackChunkName: "plugin" */ './views/table/plugin/AntdConfig.vue')
 const TablePluginAntdFilter = () => import(/* webpackChunkName: "plugin" */ './views/table/plugin/AntdFilter.vue')
 const TablePluginAntdPage = () => import(/* webpackChunkName: "plugin" */ './views/table/plugin/AntdPage.vue')
+const TablePluginExcel = () => import(/* webpackChunkName: "excel" */ './views/table/plugin/Excel.vue')
 
 const TableOptimizeScroller = () => import(/* webpackChunkName: "optimize" */ './views/table/optimize/Scroller.vue')
 const TableOptimizeEdit = () => import(/* webpackChunkName: "optimize" */ './views/table/optimize/Edit.vue')
@@ -701,11 +700,6 @@ export default new Router({
       component: TableEditFull
     },
     {
-      path: '/table/excel/cell',
-      name: 'TableExcelCell',
-      component: TableExcelCell
-    },
-    {
       path: '/table/other/element',
       name: 'TableOtherElement',
       component: TableOtherElement
@@ -779,6 +773,11 @@ export default new Router({
       path: '/table/plugin/antdPage',
       name: 'TablePluginAntdPage',
       component: TablePluginAntdPage
+    },
+    {
+      path: '/table/plugin/excel',
+      name: 'TablePluginExcel',
+      component: TablePluginExcel
     },
     {
       path: '/table/optimize/scroller',

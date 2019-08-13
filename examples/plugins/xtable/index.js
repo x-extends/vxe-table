@@ -10,7 +10,6 @@ import Footer from '../../../packages/footer'
 import Filter from '../../../packages/filter'
 import Loading from '../../../packages/loading'
 import Grid from '../../../packages/grid'
-import Excel from '../../../packages/excel'
 import Menu from '../../../packages/menu'
 import Toolbar from '../../../packages/toolbar'
 import Pager from '../../../packages/pager'
@@ -27,12 +26,15 @@ import '../../../styles/index.scss'
 // import VXETablePluginElement from '../../../../vxe-table-plugin-element/index.js'
 // import VXETablePluginIView from '../../../../vxe-table-plugin-iview/index.js'
 // import VXETablePluginAntd from '../../../../vxe-table-plugin-antd/index.js'
+// import VXETablePluginExcel from '../../../../vxe-table-plugin-excel/index.js'
 import VXETablePluginElement from 'vxe-table-plugin-element'
 import VXETablePluginIView from 'vxe-table-plugin-iview'
 import VXETablePluginAntd from 'vxe-table-plugin-antd'
+import VXETablePluginExcel from 'vxe-table-plugin-excel'
 import 'vxe-table-plugin-element/dist/style.css'
 import 'vxe-table-plugin-iview/dist/style.css'
 import 'vxe-table-plugin-antd/dist/style.css'
+import 'vxe-table-plugin-excel/dist/style.css'
 
 VXETable.setup({
   translate: key => key && key.indexOf('app.') > -1 ? i18n.t(key) : key, // 自动翻译以 app. 开头的键值
@@ -47,7 +49,6 @@ Vue.use(Footer)
 Vue.use(Filter)
 Vue.use(Loading)
 Vue.use(Grid)
-Vue.use(Excel)
 Vue.use(Menu)
 Vue.use(Toolbar)
 Vue.use(Pager)
@@ -63,3 +64,4 @@ Vue.use(Resize)
 VXETable.use(VXETablePluginElement)
 VXETable.use(VXETablePluginIView)
 VXETable.use(VXETablePluginAntd)
+VXETable.use(VXETablePluginExcel)

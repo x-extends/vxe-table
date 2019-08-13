@@ -102,9 +102,6 @@ module.exports = {
         forceRowVaild: 'Validate row + lock',
         keyboard: 'Keyboard navigation',
 
-        excel: '更多实现',
-        cell: 'Cell',
-
         other: '更多集成',
         elementRender: 'element-ui -> Cell',
         iviewRender: 'iview -> Cell',
@@ -125,6 +122,7 @@ module.exports = {
         antdPluginMore: 'plugin-antd 更多配置',
         spanPlugin: '单元格选中合并',
         chartsPlugin: '图表功能',
+        excelPlugin: '简单的 Excel',
 
         renderer: 'Renderer',
         rendererFilter: 'Filter renderer',

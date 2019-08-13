@@ -109,8 +109,10 @@ export default {
               xTable.filter('name')
                 .then(options => {
                   // 处理条件并设置选中的选项
-                  let option = options[1]
-                  option.checked = true
+                  if (options.length) {
+                    let option = options[1]
+                    option.checked = true
+                  }
                 })
                 .then(() => {
                   // 修改条件之后，需要手动调用 updateData 处理表格数据
@@ -122,9 +124,11 @@ export default {
               xTable.filter('age')
                 .then(options => {
                   // 处理条件并设置选中的选项
-                  let option = options[0]
-                  option.data = '26'
-                  option.checked = true
+                  if (options.length) {
+                    let option = options[0]
+                    option.data = '26'
+                    option.checked = true
+                  }
                 })
                 .then(() => {
                   // 修改条件之后，需要手动调用 updateData 处理表格数据
@@ -167,8 +171,10 @@ export default {
       xTable.filter('name')
         .then(options => {
           // 处理条件并设置选中的选项
-          let option = options[1]
-          option.checked = true
+          if (options.length) {
+            let option = options[1]
+            option.checked = true
+          }
         })
         .then(() => {
           // 修改条件之后，需要手动调用 updateData 处理表格数据
@@ -180,9 +186,11 @@ export default {
       xTable.filter('age')
         .then(options => {
           // 处理条件并设置选中的选项
-          let option = options[0]
-          option.data = '26'
-          option.checked = true
+          if (options.length) {
+            let option = options[0]
+            option.data = '26'
+            option.checked = true
+          }
         })
         .then(() => {
           // 修改条件之后，需要手动调用 updateData 处理表格数据
