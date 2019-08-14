@@ -8,7 +8,7 @@
       highlight-hover-row
       :proxy-config="tableProxy"
       :columns="tableColumn"
-      :toolbar="toolbar"
+      :toolbar="tableToolbar"
       :select-config="{labelField: 'id'}"
       :tree-config="{children: 'children'}"
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"></vxe-grid>
@@ -37,7 +37,7 @@ export default {
           save: ({ body }) => XEAjax.doPost('/api/file/save', body)
         }
       },
-      toolbar: {
+      tableToolbar: {
         id: 'treeEdit_demo1',
         buttons: [
           { code: 'reload', name: 'app.body.button.refresh' },
@@ -68,7 +68,7 @@ export default {
           highlight-hover-row
           :proxy-config="tableProxy"
           :columns="tableColumn"
-          :toolbar="toolbar"
+          :toolbar="tableToolbar"
           :select-config="{labelField: 'id'}"
           :tree-config="{ children: 'children'}"
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"></vxe-grid>
@@ -84,7 +84,7 @@ export default {
                   save: ({ body }) => XEAjax.doPost('/api/file/save', body)
                 }
               },
-              toolbar: {
+              tableToolbar: {
                 id: 'treeEdit_demo1',
                 buttons: [
                   { code: 'reload', name: 'app.body.button.refresh' },

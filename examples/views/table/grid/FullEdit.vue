@@ -12,7 +12,7 @@
       height="530"
       row-id="id"
       :pager-config="{pageSize: 15}"
-      :toolbar="toolbar"
+      :toolbar="tableToolbar"
       :proxy-config="tableProxy"
       :columns="tableColumn"
       :select-config="{reserve: true}"
@@ -65,7 +65,7 @@ export default {
           save: ({ body }) => XEAjax.doPost('/api/user/save', body)
         }
       },
-      toolbar: {
+      tableToolbar: {
         id: 'full_edit_1',
         buttons: [
           { code: 'reload', name: 'app.body.button.refresh' },
@@ -125,7 +125,7 @@ export default {
           height="530"
           row-id="id"
           :pager-config="{pageSize: 15}"
-          :toolbar="toolbar"
+          :toolbar="tableToolbar"
           :proxy-config="tableProxy"
           :columns="tableColumn"
           :select-config="{reserve: true}"
@@ -157,7 +157,7 @@ export default {
                   save: ({ body }) => XEAjax.doPost('/api/user/save', body)
                 }
               },
-              toolbar: {
+              tableToolbar: {
                 id: 'full_edit_1',
                 buttons: [
                   { code: 'reload', name: 'app.body.button.refresh' },

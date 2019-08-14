@@ -11,7 +11,7 @@
       :pager-config="tablePage"
       :proxy-config="tableProxy"
       :columns="tableColumn"
-      :toolbar="toolbar"
+      :toolbar="tableToolbar"
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
       @toolbar-button-click="toolbarButtonClickEvent"></vxe-grid>
 
@@ -48,7 +48,7 @@ export default {
           save: ({ body }) => XEAjax.doPost('/api/user/save', body)
         }
       },
-      toolbar: {
+      tableToolbar: {
         id: 'toolbar_demo_1',
         buttons: [
           { code: 'insert_actived', name: '新增' },
@@ -95,7 +95,7 @@ export default {
           :pager-config="tablePage"
           :proxy-config="tableProxy"
           :columns="tableColumn"
-          :toolbar="toolbar"
+          :toolbar="tableToolbar"
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
           @toolbar-button-click="toolbarButtonClickEvent"></vxe-grid>
         `,
@@ -121,7 +121,7 @@ export default {
                   save: ({ body }) => XEAjax.doPost('/api/user/save', body)
                 }
               },
-              toolbar: {
+              tableToolbar: {
                 buttons: [
                   { code: 'insert_actived', name: '新增' },
                   {

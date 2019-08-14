@@ -819,6 +819,7 @@ export default {
       // 缓存数据
       this.updateCache(true)
       // 原始数据
+      this.tableSynchData = datas
       this.tableSourceData = XEUtils.clone(tableFullData, true)
       this.scrollYLoad = scrollYLoad
       if (scrollYLoad && !(height || maxHeight)) {
@@ -1194,8 +1195,8 @@ export default {
      * 获取表格所有数据
      */
     getData (rowIndex) {
-      let list = this.tableFullData
-      return arguments.length ? list[rowIndex] : list.slice(0)
+      let tableSynchData = this.data || this.tableSynchData
+      return arguments.length ? tableSynchData[rowIndex] : tableSynchData.slice(0)
     },
     // 在 v3.0 中废弃 getAllRecords
     getAllRecords () {

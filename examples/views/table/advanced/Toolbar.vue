@@ -7,7 +7,13 @@
     <vxe-toolbar setting :refresh="{query: findList}">
       <template v-slot:buttons>
         <vxe-button>{{ $t('app.body.button.insert') }}</vxe-button>
-        <vxe-button>按钮2</vxe-button>
+        <vxe-button>
+          <template>下拉按钮</template>
+          <template v-slot:dropdowns>
+            <vxe-button>删除</vxe-button>
+            <vxe-button>保存</vxe-button>
+          </template>
+        </vxe-button>
       </template>
     </vxe-toolbar>
 
@@ -46,7 +52,13 @@ export default {
         <vxe-toolbar setting :refresh="{query: findList}">
           <template v-slot:buttons>
             <vxe-button>{{ $t('app.body.button.insert') }}</vxe-button>
-            <vxe-button>按钮2</vxe-button>
+            <vxe-button>
+              <template>下拉按钮</template>
+              <template v-slot:dropdowns>
+                <vxe-button>删除</vxe-button>
+                <vxe-button>保存</vxe-button>
+              </template>
+            </vxe-button>
           </template>
         </vxe-toolbar>
 

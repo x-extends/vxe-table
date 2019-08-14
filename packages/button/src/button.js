@@ -17,7 +17,7 @@ export default {
   render (h) {
     let { $scopedSlots, $listeners, type, vSize, disabled } = this
     let isText = type === 'text'
-    return $scopedSlots.dropdown ? h('div', {
+    return $scopedSlots.dropdowns ? h('div', {
       class: ['vxe-button--dropdown', {
         [`size--${vSize}`]: vSize
       }]
@@ -47,7 +47,7 @@ export default {
           mouseenter: this.mouseenterEvent,
           mouseleave: this.mouseleaveEvent
         }
-      }, $scopedSlots.dropdown.call(this))
+      }, $scopedSlots.dropdowns.call(this))
     ]) : h('button', {
       class: ['vxe-button', `type--${isText ? type : 'button'}`, {
         [`size--${vSize}`]: vSize,

@@ -7,7 +7,7 @@
       <template v-slot:buttons>
         <vxe-button>
           <template>新增操作</template>
-          <template v-slot:dropdown>
+          <template v-slot:dropdowns>
             <vxe-button @click="insertEvent(null)">从第一行插入</vxe-button>
             <vxe-button @click="insertEvent(-1)">从最后插入</vxe-button>
             <vxe-button @click="insertEvent($refs.xTable.getData(100))">插入到 100 行</vxe-button>
@@ -16,7 +16,7 @@
         </vxe-button>
         <vxe-button>
           <template>删除操作</template>
-          <template v-slot:dropdown>
+          <template v-slot:dropdowns>
             <vxe-button @click="$refs.xTable.remove($refs.xTable.getData(0))">删除第一行</vxe-button>
             <vxe-button @click="$refs.xTable.remove($refs.xTable.getData($refs.xTable.getData().length - 1))">删除最后一行</vxe-button>
             <vxe-button @click="$refs.xTable.remove($refs.xTable.getData(100))">删除第 100 行</vxe-button>
@@ -24,7 +24,7 @@
         </vxe-button>
         <vxe-button>
           <template>校验操作</template>
-          <template v-slot:dropdown>
+          <template v-slot:dropdowns>
             <vxe-button @click="validEvent">基本校验</vxe-button>
             <vxe-button @click="fullValidEvent">完整校验</vxe-button>
             <vxe-button @click="selectValidEvent">选中校验</vxe-button>
@@ -35,7 +35,7 @@
         <vxe-button @click="getUpdateEvent">获取修改</vxe-button>
         <vxe-button>
           <template>滚动操作</template>
-          <template v-slot:dropdown>
+          <template v-slot:dropdowns>
             <vxe-button @click="$refs.xTable.scrollToRow($refs.xTable.getData(10))">滚动到第 10 行</vxe-button>
             <vxe-button @click="$refs.xTable.scrollToRow($refs.xTable.getData(4000))">滚动第 4000 行</vxe-button>
             <vxe-button @click="$refs.xTable.scrollToColumn($refs.xTable.getColumns(1))">滚动第 1 列</vxe-button>
@@ -119,7 +119,7 @@ export default {
           <template v-slot:buttons>
             <vxe-button>
               <template>新增操作</template>
-              <template v-slot:dropdown>
+              <template v-slot:dropdowns>
                 <vxe-button @click="insertEvent(null)">从第一行插入</vxe-button>
                 <vxe-button @click="insertEvent(-1)">从最后插入</vxe-button>
                 <vxe-button @click="insertEvent($refs.xTable.getData(100))">插入到 100 行</vxe-button>
@@ -128,7 +128,7 @@ export default {
             </vxe-button>
             <vxe-button>
               <template>校验操作</template>
-              <template v-slot:dropdown>
+              <template v-slot:dropdowns>
                 <vxe-button @click="validEvent">基本校验</vxe-button>
                 <vxe-button @click="fullValidEvent">完整校验</vxe-button>
                 <vxe-button @click="selectValidEvent">选中校验</vxe-button>
@@ -139,7 +139,7 @@ export default {
             <vxe-button @click="getUpdateEvent">获取修改</vxe-button>
             <vxe-button>
               <template>滚动操作</template>
-              <template v-slot:dropdown>
+              <template v-slot:dropdowns>
                 <vxe-button @click="$refs.xTable.scrollToRow($refs.xTable.getData(10))">滚动到第 10 行</vxe-button>
                 <vxe-button @click="$refs.xTable.scrollToRow($refs.xTable.getData(4000))">滚动第 4000 行</vxe-button>
                 <vxe-button @click="$refs.xTable.scrollToColumn($refs.xTable.getColumns(1))">滚动第 1 列</vxe-button>

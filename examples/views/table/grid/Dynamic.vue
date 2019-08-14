@@ -10,7 +10,7 @@
       :pager-config="tablePage"
       :proxy-config="tableProxy"
       :columns="tableColumn"
-      :toolbar="toolbar"
+      :toolbar="tableToolbar"
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"></vxe-grid>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -30,7 +30,7 @@
       :pager-config="tablePage2"
       :proxy-config="tableProxy2"
       :columns="tableColumn2"
-      :toolbar="toolbar2"
+      :toolbar="tableToolbar2"
       :edit-rules="validRules2"
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
       @toolbar-button-click="toolbarButtonClickEvent"></vxe-grid>
@@ -67,7 +67,7 @@ export default {
           save: ({ body }) => XEAjax.doPost('/api/column/save', body)
         }
       },
-      toolbar: {
+      tableToolbar: {
         buttons: [
           { code: 'reload', name: '刷新' },
           { code: 'insert_actived', name: '新增' },
@@ -109,7 +109,7 @@ export default {
           save: ({ body }) => XEAjax.doPost('/api/user/save', body)
         }
       },
-      toolbar2: {
+      tableToolbar2: {
         buttons: [
           { code: 'reloadColumn', name: '刷新列配置' },
           { code: 'reload', name: '刷新数据' },
@@ -133,7 +133,7 @@ export default {
           :pager-config="tablePage"
           :proxy-config="tableProxy"
           :columns="tableColumn"
-          :toolbar="toolbar"
+          :toolbar="tableToolbar"
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"></vxe-grid>
         `,
         `
@@ -155,7 +155,7 @@ export default {
                   save: ({ body }) => XEAjax.doPost('/api/column/save', body)
                 }
               },
-              toolbar: {
+              tableToolbar: {
                 buttons: [
                   { code: 'reload', name: '刷新' },
                   { code: 'insert_actived', name: '新增' },
@@ -200,7 +200,7 @@ export default {
           :pager-config="tablePage"
           :proxy-config="tableProxy"
           :columns="tableColumn"
-          :toolbar="toolbar"
+          :toolbar="tableToolbar"
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
           @toolbar-button-click="toolbarButtonClickEvent"></vxe-grid>
         `,
@@ -223,7 +223,7 @@ export default {
                   save: ({ body }) => XEAjax.doPost('/api/user/save', body)
                 }
               },
-              toolbar: {
+              tableToolbar: {
                 buttons: [
                   { code: 'reloadColumn', name: '刷新列配置' },
                   { code: 'reload', name: '刷新数据' },
