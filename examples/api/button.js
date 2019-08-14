@@ -38,6 +38,14 @@ const apis = [
         enum: '',
         defVal: '',
         list: []
+      },
+      {
+        name: 'dropdowns',
+        desc: '下拉按钮',
+        type: '',
+        enum: '',
+        defVal: '',
+        list: []
       }
     ]
   },

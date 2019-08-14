@@ -97,7 +97,7 @@ export default {
           },
           scopedSlots: item.dropdowns && item.dropdowns.length ? {
             default: () => UtilTools.getFuncText(item.name),
-            dropdown: () => item.dropdowns.map(child => {
+            dropdowns: () => item.dropdowns.map(child => {
               return h('vxe-button', {
                 on: {
                   click: evnt => this.btnEvent(evnt, child)
@@ -332,16 +332,16 @@ export default {
       }, 300)
     },
     refreshEvent () {
-      let { $grid, refreshOpts } = this
-      if (!this.isRefresh) {
-        if ($grid) {
-          this.isRefresh = true
-          $grid.commitProxy('reload').catch(e => e).then(() => {
-            this.isRefresh = false
-          })
-        } else if (refreshOpts.query) {
+      let { $grid, refreshOpts, isRefresh } = this
+      if (!isRefresh) {
+        if (refreshOpts.query) {
           this.isRefresh = true
           refreshOpts.query().catch(e => e).then(() => {
+            this.isRefresh = false
+          })
+        } else if ($grid) {
+          this.isRefresh = true
+          $grid.commitProxy('reload').catch(e => e).then(() => {
             this.isRefresh = false
           })
         }

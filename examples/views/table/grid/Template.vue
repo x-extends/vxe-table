@@ -13,7 +13,7 @@
       border
       resizable
       height="400"
-      :toolbar="toolbar"
+      :toolbar="tableToolbar"
       :columns="tableColumn"
       :data.sync="tableData"
       :edit-config="{trigger: 'click', mode: 'cell'}">
@@ -101,7 +101,7 @@ export default {
           }
         }
       ],
-      toolbar: {
+      tableToolbar: {
         setting: true,
         slots: {
           buttons: () => {
@@ -121,6 +121,7 @@ export default {
           border
           resizable
           height="400"
+          :toolbar="tableToolbar"
           :columns="tableColumn"
           :data.sync="tableData"
           :edit-config="{trigger: 'click', mode: 'cell'}">
@@ -197,7 +198,7 @@ export default {
                   }
                 }
               ],
-              toolbar: {
+              tableToolbar: {
                 setting: true,
                 slots: {
                   buttons: () => {
