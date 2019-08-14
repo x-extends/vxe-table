@@ -102,7 +102,7 @@ module.exports = {
         forceRowVaild: '数据校验 row + 强制锁定',
         keyboard: '键盘导航',
 
-        other: '更多集成',
+        other: '集成组件库',
         elementRender: 'element-ui -> 单元格',
         iviewRender: 'iview -> 单元格',
         antd: 'ant-design-vue -> 单元格',
@@ -170,6 +170,9 @@ module.exports = {
       },
       valid: {
         rName: '名称必须填写'
+      },
+      msg: {
+        copyToClipboard: '已复制到剪贴板！'
       }
     },
     footer: {

@@ -12,8 +12,8 @@ module.exports = {
         theme: 'Custom theme',
         i18n: 'Internationalization',
 
-        icon: '图标',
-        basics: '基础功能',
+        icon: 'Icon',
+        basics: 'Basic',
         base: 'Basics table',
         size: 'Size',
         ellipsis: 'Ellipsis',
@@ -29,8 +29,8 @@ module.exports = {
         fullFixed: 'Table with fixed columns and header ',
         group: 'Grouping table head',
         seq: 'Table sequence',
-        headerHighlight: '高亮列',
-        current: '高亮行',
+        headerHighlight: 'Highlight column',
+        current: 'Highlight row',
         radio: 'Radio',
         checkbox: 'Checkbox',
         sort: 'Sorting',
@@ -39,22 +39,22 @@ module.exports = {
         loading: 'Loading',
         format: 'Format content',
 
-        more: '更多功能',
+        more: 'More',
         events: 'Event',
         template: 'Template',
-        customSort: '自定义列头排序',
-        manualFilter: '手动筛选',
+        customSort: 'Custom column header sorting',
+        manualFilter: 'Manual screening',
         span: 'Rowspan and colspan',
-        spanRow: '更加复杂的合并行',
+        spanRow: 'More complex merge rows',
         footer: 'Footer summary',
         export: 'Export CSV',
         contextMenu: 'Context menu',
-        menuPrivilege: '快捷菜单 + 权限控制',
+        menuPrivilege: 'Context menu + permission',
         expandRow: 'Expandable row',
         toolbar: 'Toolbar',
         customs: 'Custom column',
         customStorage: 'Custom column + localStorage',
-        customlWidthStorage: '自定义列&列宽 + localStorage',
+        customlWidthStorage: 'Customize column & column width + localStorage',
         search: 'Table search',
         pager: 'Pager',
 
@@ -62,15 +62,15 @@ module.exports = {
         edit: 'Editable',
         crudToolbar: 'CRUD + Toolbar',
         lazy: 'Lazy loading',
-        full: '完整功能',
+        full: 'Full demo',
 
-        grid: '配置式表格',
-        reverse: '反转表格',
+        grid: 'Config table',
+        reverse: 'Reverse table',
         proxy: 'DataProxy',
         proxyPage: 'DataProxy + Pager',
-        fullQuery: '完整查询',
-        customToolbar: '自定义工具栏',
-        dynamicColumn: '实现可配置动态列',
+        fullQuery: 'Full query',
+        customToolbar: 'Custom toolbar',
+        dynamicColumn: 'Configurable dynamic columns',
         baseTree: 'Basics tree',
         crudTreeToolbar: 'Tree + CRUD + Toolbar',
 
@@ -80,8 +80,8 @@ module.exports = {
         big10wRow: '100,000 row, More complex rendering',
         big1wRow1wCol: '10,000 row 10,000 column',
         big10wRow1wCol: '100,000 row 10,000 column, More complex rendering',
-        treeScroll: '树结构',
-        pageScroll: '滚动分页',
+        treeScroll: 'Tree',
+        pageScroll: 'Scroll to page',
         infiniteScroll: 'The infinite scroll',
 
         editable: 'Editable',
@@ -102,7 +102,7 @@ module.exports = {
         forceRowVaild: 'Validate row + lock',
         keyboard: 'Keyboard navigation',
 
-        other: '更多集成',
+        other: 'Integrated component library',
         elementRender: 'element-ui -> Cell',
         iviewRender: 'iview -> Cell',
         antd: 'ant-design-vue -> Cell',
@@ -111,18 +111,18 @@ module.exports = {
         xlsxRender: 'xlsx -> Export.xlsx',
 
         plugin: 'The plugin list',
-        elementPlugin: 'plugin-element 基本配置',
-        elementFilterPlugin: 'plugin-element 筛选配置',
-        elementPluginMore: 'plugin-element 更多配置',
-        iviewPlugin: 'plugin-iview 基本配置',
-        iviewFilter: 'plugin-iview 筛选配置',
-        iviewPluginMore: 'plugin-iview 更多配置',
-        antdPlugin: 'plugin-antd 基本配置',
-        antdFilter: 'plugin-antd 筛选配置',
-        antdPluginMore: 'plugin-antd 更多配置',
-        spanPlugin: '单元格选中合并',
-        chartsPlugin: '图表功能',
-        excelPlugin: 'plugin-excel 简单的 Excel',
+        elementPlugin: 'plugin-element Basic config',
+        elementFilterPlugin: 'plugin-element Filter config',
+        elementPluginMore: 'plugin-element More config',
+        iviewPlugin: 'plugin-iview Basic config',
+        iviewFilter: 'plugin-iview Filter config',
+        iviewPluginMore: 'plugin-iview More config',
+        antdPlugin: 'plugin-antd Basic config',
+        antdFilter: 'plugin-antd Filter config',
+        antdPluginMore: 'plugin-antd More config',
+        spanPlugin: 'Select merge cells',
+        chartsPlugin: 'Charts toolbar',
+        excelPlugin: 'plugin-excel A simple excel',
 
         renderer: 'Renderer',
         rendererFilter: 'Filter renderer',
@@ -170,6 +170,9 @@ module.exports = {
       },
       valid: {
         rName: 'The name of the required.'
+      },
+      msg: {
+        copyToClipboard: 'Copied to clipboard'
       }
     },
     footer: {
@@ -205,14 +208,14 @@ module.exports = {
           size: 'Table size',
           fit: 'Whether the width of all columns is self-supporting',
           loading: 'Whether the table is loaded',
-          align: '所有的列对其方式',
-          headerAlign: '所有的表头列的对齐方式',
+          align: 'All columns on its way',
+          headerAlign: 'Alignment of all header columns',
           showHeader: 'Whether to display the header',
           startIndex: '只对 type=index 的列有效，动态索引的起始值',
           highlightCurrentRow: 'Whether to highlight the current row',
           highlightHoverRow: 'Mouse over a row to highlight',
-          highlightCurrentColumn: '是否要高亮当前列',
-          highlightHoverColumn: '鼠标移到列是否要高亮显示',
+          highlightCurrentColumn: 'Whether to highlight the current column',
+          highlightHoverColumn: 'Mouse over whether to highlight a column',
           highlightCell: '只对 editConfig 配置时有效，是否在编辑时高亮单元格边框',
           rowClassName: '给行附加 className，也可以是函数 Function({seq, row, rowIndex, $rowIndex})',
           cellClassName: '给单元格附加 className，也可以是函数 Function({seq, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex})',
@@ -225,8 +228,8 @@ module.exports = {
           spanMethod: '合并行或列，该函数 Function({seq, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, data}) 返回计算后的值',
           showOverflow: 'Sets all content to appear as ellipses if it is too long',
           showHeaderOverflow: 'Sets the header to show ellipsis when all content is too long',
-          remoteSort: '所有列是否使用服务端排序，如果设置为 true 则所有列不会对数据进行处理',
-          remoteFilter: '是否使用服务端筛选，如果设置为 true 则不会对数据进行处理',
+          remoteSort: 'Whether to use remote sorting',
+          remoteFilter: 'Whether to use remote filter',
           columnKey: 'Whether the key attribute needs to be set for each column VNode (not required for non-exceptional cases)',
           rowKey: 'Do you need to set the key attribute for VNode on each row (not necessary for non-exceptional cases)',
           rowId: 'Field names for custom row data unique primary keys (row data must have a unique primary key, automatically generated by default)',
@@ -244,34 +247,34 @@ module.exports = {
           editRules: 'Checksum rule configuration entries',
           optimization: 'Optimize configuration',
 
-          empty: '空数据时显示的文本内容',
+          empty: 'Text content displayed when empty data',
 
           currentChange: '只对 highlightCurrentRow 有效，当手动选中行并且值发生改变时触发的事件',
           radioChange: '只对 type=radio 有效，当手动勾选并且值发生改变时触发的事件',
           selectChange: '只对 type=selection 有效，当手动勾选并且值发生改变时触发的事件',
           selectAll: '只对 type=selection 有效，当手动勾选全选时触发的事件',
-          cellClick: '单元格被点击时会触发该事件',
-          cellDblclick: '单元格被双击时会触发该事件',
-          cellContextmenu: '单元格被鼠标右键点击时触发该事件',
-          headerCellClick: '表头单元格被点击时会触发该事件',
-          headerCellDblclick: '表头单元格被双击时会触发该事件',
-          headerCellContextmenu: '表头单元格被鼠标右键点击时触发该事件',
-          footerCellClick: '表尾单元格被点击时会触发该事件',
-          footerCellDblclick: '表尾单元格被双击时会触发该事件',
-          footerCellContextmenu: '表尾单元格被鼠标右键点击时触发该事件',
+          cellClick: 'This event is triggered when the cell is click',
+          cellDblclick: 'This event is triggered when a cell is dblclick',
+          cellContextmenu: 'This event is triggered when the cell is contextmenu',
+          headerCellClick: 'This event is triggered when the header cell is click',
+          headerCellDblclick: 'This event is triggered when a header cell is dblclick',
+          headerCellContextmenu: 'This event is triggered when the header cell is contextmenu',
+          footerCellClick: 'This event is triggered when a header cell is click',
+          footerCellDblclick: 'This event is triggered when a cell at the end of a table is dblclick',
+          footerCellContextmenu: 'This event is triggered when the footer cell is contextmenu',
           cellMouseenter: '当单元格 hover 进入时会触发该事件',
           cellMouseleave: '当单元格 hover 退出时会触发该事件',
-          sortChange: '当排序条件发生变化时会触发该事件',
-          filterChange: '当筛选条件发生变化时会触发该事件',
-          resizableChange: '当列宽拖动发生变化时会触发该事件',
-          toggleExpandChange: '当行展开或收起时会触发该事件',
-          toggleTreeChange: '当树节点展开或收起时会触发该事件',
+          sortChange: 'This event is triggered when the sort condition changes',
+          filterChange: 'This event is triggered when a filter condition changes',
+          resizableChange: 'This event is triggered when the column width is dragged to change',
+          toggleExpandChange: 'This event is triggered when a row is expanded or collapsed',
+          toggleTreeChange: 'This event is triggered when the tree node is expanded or collapsed',
           contextMenuClick: '只对 context-menu 配置时有效，当点击快捷菜单时会触发该事件',
-          editClosed: '单元格编辑状态下被关闭时会触发该事件',
-          editActived: '单元格被激活编辑时会触发该事件',
-          editDisabled: '当单元格激活时如果是禁用状态时会触发该事件',
-          validError: '当数据校验不通过时会触发该事件',
-          scroll: '表格滚动时会触发该事件'
+          editClosed: 'This event is triggered when the cell edit state is turned off',
+          editActived: 'This event is triggered when the cell is activated for editing',
+          editDisabled: 'This event is triggered if the cell is disabled when activated',
+          validError: 'This event is triggered when data validation does not pass',
+          scroll: 'This event is triggered when the table scrolls'
         }
       },
       tableColumn: {
@@ -291,42 +294,42 @@ module.exports = {
           indexMethod: '只对 type=index 有效，自定义索引方法 Function({row, rowIndex, column, columnIndex})',
           sortable: 'Whether column sorting is allowed',
           sortBy: '只对 sortable 有效，自定义排序的属性',
-          remoteSort: '是否使用服务端排序，如果设置为 true 则不会对数据进行处理',
+          remoteSort: 'Whether to use remote sorting',
           filters: 'Configure filter conditions',
           filterMultiple: '只对 filters 有效，筛选是否允许多选',
           filterMethod: '只对 filters 有效，自定义筛选方法 Function({value, row, column})',
-          filterRender: '筛选渲染器配置项',
+          filterRender: 'Filter renderer config',
           treeNode: '只对 tree-config 配置时有效，指定为树节点',
-          cellRender: '默认的渲染器配置项',
-          editRender: '可编辑渲染器配置项',
+          cellRender: 'Default renderer config',
+          editRender: 'Edit renderer config',
           params: '额外的参数（自定义一些数据参数，对于某些特殊的场景可能会用到）'
         }
       },
       tooltip: {
         desc: {
-          value: '是否显示',
-          content: '显示内容',
-          trigger: '触发方式',
-          theme: '主题样式',
-          zIndex: '自定义堆叠顺序（对于在弹框中使用是由于堆叠被覆盖时可能会用到）',
-          isArrow: '是否显示箭头'
+          value: 'Whether or not shown',
+          content: 'Content',
+          trigger: 'trigger type',
+          theme: 'The theme style',
+          zIndex: 'set style z-index',
+          isArrow: 'Show arrow or not'
         }
       },
       grid: {
         desc: {
-          toolbar: '工具栏配置',
-          pagerConfig: '分页配置项',
-          proxyConfig: '数据代理配置项'
+          toolbar: 'Toolbar config',
+          pagerConfig: 'Pager config',
+          proxyConfig: 'Data proxy config'
         }
       },
       toolbar: {
         desc: {
-          id: '唯一 ID 标识',
+          id: 'Unique ID identification',
           size: 'Size',
           loading: 'Loading',
-          refresh: '刷新按钮',
-          resizable: '列宽拖动配置',
-          setting: '列个性化配置'
+          refresh: 'Refresh button config',
+          resizable: 'Column width drag config',
+          setting: 'Custom column config'
         }
       },
       pager: {
@@ -337,8 +340,8 @@ module.exports = {
           currentPage: 'Current page',
           pageSize: 'Page size',
           total: 'Total number',
-          pagerCount: '显示页码按钮的数量',
-          pageSizes: '每页大小选项列表',
+          pagerCount: 'Displays the number of page number buttons',
+          pageSizes: 'List of options for page size',
           background: 'Show background color'
         }
       },
@@ -347,13 +350,13 @@ module.exports = {
           value: 'Binding values',
           size: 'Size',
           disabled: 'Whether to disable',
-          name: '原生 name 属性'
+          name: 'Native name attribute'
         }
       },
       checkbox: {
         desc: {
-          value: 'Size',
-          size: '尺寸',
+          value: 'Binding values',
+          size: 'Size',
           disabled: 'Whether to disable'
         }
       },
@@ -366,7 +369,7 @@ module.exports = {
       },
       button: {
         desc: {
-          type: '类型',
+          type: 'Type',
           size: 'Size'
         }
       },
@@ -377,14 +380,14 @@ module.exports = {
           title: 'Message title',
           type: 'Message type',
           status: '只对 type=message 有效，消息状态',
-          message: '提示框的内容',
-          lockView: '是否锁住页面，不允许提示框之外的任何操作',
-          lockScroll: '是否锁住滚动条，不允许页面滚动',
-          mask: '是否显示遮罩层',
-          maskClosable: '是否允许点击遮罩层关闭提示框',
+          message: 'message content',
+          lockView: 'Whether or not the page is locked does not allow any action outside the prompt box',
+          lockScroll: 'Whether the scroll bar is locked and does not allow page scrolling',
+          mask: 'Whether to display the mask layer',
+          maskClosable: 'Click the mask layer to close the prompt box',
           duration: '只对 type=message 有效，自动关闭的延时',
           top: '只对 type=message 有效，消息距离顶部的位置',
-          zIndex: '自定义堆叠顺序（对于在弹框中使用是由于堆叠被覆盖时可能会用到）'
+          zIndex: 'set style z-index'
         }
       }
     }
