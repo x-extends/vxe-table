@@ -932,7 +932,7 @@ export default {
      * 如果传 rows 则删除多行
      */
     remove (rows) {
-      let { tableData, tableFullData, editStore, treeConfig, selectConfig = {}, selection, hasRowInsert } = this
+      let { tableData, tableFullData, editStore, treeConfig, selectConfig = {}, selection, hasRowInsert, scrollYLoad } = this
       let { removeList, insertList } = editStore
       let { checkField: property } = selectConfig
       let rest = []
@@ -975,6 +975,9 @@ export default {
           XEUtils.remove(tableData, row => rows.indexOf(row) > -1)
         }
         XEUtils.remove(insertList, row => rows.indexOf(row) > -1)
+      }
+      if (scrollYLoad) {
+        this.updateData(true)
       }
       this.updateCache()
       this.checkSelectionStatus()
