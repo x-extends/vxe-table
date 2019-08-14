@@ -18,7 +18,7 @@
       height="400"
       :loading="loading"
       :data.sync="tableData"
-      :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}}"
+      :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}, visibleMethod}"
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
       @context-menu-click="contextMenuClickEvent">
       <vxe-table-column type="index" width="60"></vxe-table-column>
@@ -49,11 +49,13 @@ export default {
         [
           {
             code: 'hideColumn',
-            name: '隐藏列'
+            name: '隐藏列',
+            disabled: false
           },
           {
             code: 'showAllColumn',
-            name: '取消所有隐藏列'
+            name: '取消所有隐藏列',
+            disabled: false
           }
         ]
       ],
@@ -62,24 +64,29 @@ export default {
           {
             code: 'copy',
             name: '复制',
-            prefixIcon: 'fa fa-copy'
+            prefixIcon: 'fa fa-copy',
+            disabled: false
           },
           {
             code: 'reload',
-            name: '刷新'
+            name: '刷新',
+            disabled: false
           },
           {
             code: 'insertAt',
-            name: '插入'
+            name: '插入',
+            disabled: false
           },
           {
             code: 'remove',
-            name: '删除'
+            name: '删除',
+            disabled: false
           },
           {
             code: 'save',
             name: '保存',
-            prefixIcon: 'fa fa-save'
+            prefixIcon: 'fa fa-save',
+            disabled: false
           }
         ]
       ],
@@ -101,7 +108,7 @@ export default {
           height="400"
           :loading="loading"
           :data.sync="tableData"
-          :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}}"
+          :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}, visibleMethod}"
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
           @context-menu-click="contextMenuClickEvent">
           <vxe-table-column type="index" width="60"></vxe-table-column>
@@ -173,6 +180,15 @@ export default {
               xTable.insertAt(null, row)
                 .then(({ row }) => xTable.setActiveCell(row, column.property))
             },
+            visibleMethod ({ column }) {
+              let isDisabled = !column
+              this.bodyMenus.forEach(list => {
+                list.forEach(item => {
+                  item.disabled = isDisabled
+                })
+              })
+              return true
+            },
             contextMenuClickEvent ({ menu, row, column }) {
               let xTable = this.$refs.xTable
               switch (menu.code) {
@@ -183,12 +199,8 @@ export default {
                   xTable.resetCustoms()
                   break
                 case 'copy':
-                  if (row && column) {
-                    if (XEClipboard.copy(row[column.property])) {
-                      this.$XMsg.message({ message: '已复制到剪贴板！', status: 'success' })
-                    }
-                  } else {
-                    this.$XMsg.message({ message: '请在任意单元格上右键点击复制！', status: 'info' })
+                  if (XEClipboard.copy(row[column.property])) {
+                    this.$XMsg.message({ message: '已复制到剪贴板！', status: 'success' })
                   }
                   break
                 case 'reload':
@@ -246,6 +258,15 @@ export default {
       xTable.insertAt(null, row || -1)
         .then(({ row }) => xTable.setActiveCell(row, column ? column.property : 'name'))
     },
+    visibleMethod ({ column }) {
+      let isDisabled = !column
+      this.bodyMenus.forEach(list => {
+        list.forEach(item => {
+          item.disabled = isDisabled
+        })
+      })
+      return true
+    },
     contextMenuClickEvent ({ menu, row, column }) {
       let xTable = this.$refs.xTable
       switch (menu.code) {
@@ -256,12 +277,8 @@ export default {
           xTable.resetCustoms()
           break
         case 'copy':
-          if (row && column) {
-            if (XEClipboard.copy(row[column.property])) {
-              this.$XMsg.message({ message: '已复制到剪贴板！', status: 'success' })
-            }
-          } else {
-            this.$XMsg.message({ message: '请在任意单元格上右键点击复制！', status: 'info' })
+          if (XEClipboard.copy(row[column.property])) {
+            this.$XMsg.message({ message: '已复制到剪贴板！', status: 'success' })
           }
           break
         case 'reload':
