@@ -199,7 +199,7 @@ export const Cell = {
    */
   renderSelectionHeader (h, params) {
     let { $table, column, isHidden } = params
-    let { vSize } = $table
+    let { vSize, selectConfig } = $table
     let { slots, own } = column
     let headerTitle = own.title || own.label
     let options = {
@@ -209,6 +209,9 @@ export const Cell = {
     }
     if (slots && slots.header) {
       return slots.header(params, h)
+    }
+    if (selectConfig && selectConfig.checkStrictly) {
+      return []
     }
     if (!isHidden) {
       options.domProps = {
