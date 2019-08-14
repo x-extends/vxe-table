@@ -19,9 +19,9 @@
       :data.sync="tableData"
       :edit-config="{trigger: 'click', mode: 'cell'}">
       <vxe-table-column type="index" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="name" title="Name" sortable :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="age" title="Age" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="age" title="Age" sortable :edit-render="{name: 'input'}"></vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -50,7 +50,7 @@ export default {
             <vxe-button @click="getInsertEvent">获取新增</vxe-button>
           </template>
         </vxe-toolbar>
-        
+
         <vxe-table
           border
           show-overflow
@@ -59,9 +59,9 @@ export default {
           :data.sync="tableData"
           :edit-config="{trigger: 'click', mode: 'cell'}">
           <vxe-table-column type="index" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column field="name" title="Name" sortable :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="age" title="Age" :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column field="age" title="Age" sortable :edit-render="{name: 'input'}"></vxe-table-column>
         </vxe-table>
         `,
         `

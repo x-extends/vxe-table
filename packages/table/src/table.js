@@ -942,7 +942,7 @@ export default {
      * 从指定行插入数据
      */
     insertAt (records, row) {
-      let { tableData, editStore, scrollYLoad, tableFullData, treeConfig } = this
+      let { tableData, editStore, scrollYLoad, tableFullData, treeConfig, remoteSort } = this
       if (!XEUtils.isArray(records)) {
         records = [records]
       }
@@ -963,7 +963,7 @@ export default {
           }
         }
         [].unshift.apply(editStore.insertList, newRecords)
-        if (scrollYLoad) {
+        if (scrollYLoad || !remoteSort) {
           this.updateData(true)
         }
         this.updateCache()
