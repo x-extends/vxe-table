@@ -106,7 +106,7 @@
       :select-config="{checkRowKeys: ['2', '3']}"
       :radio-config="{labelField: 'name'}">
       <vxe-table-column type="selection" width="60"></vxe-table-column>
-      <vxe-table-column type="radio" width="300" title="Sex"></vxe-table-column>
+      <vxe-table-column type="radio" width="300" title="Name"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
       <vxe-table-column field="age" title="Age"></vxe-table-column>
       <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
@@ -119,11 +119,19 @@
       <code class="javascript">{{ demoCodes[8] }}</code>
     </pre>
 
-    <p>通过 <table-api-link prop="checkStrictly"/> 设置父子节点不互相关联</p>
+    <p>通过 <table-api-link prop="checkStrictly"/> 设置父子节点不互相关联，启用后 <table-api-link prop="showHeader"/> 默认为 false</p>
+
+    <vxe-toolbar>
+      <template v-slot:buttons>
+        <vxe-button @click="$refs.xTable5.setSelection(tableData, true)">设置所有行选中</vxe-button>
+        <vxe-button @click="$refs.xTable5.clearSelection()">清除所有行选中</vxe-button>
+      </template>
+    </vxe-toolbar>
 
     <vxe-table
       border
       highlight-hover-row
+      ref="xTable5"
       :data.sync="tableData"
       :select-config="{checkStrictly: true}">
       <vxe-table-column type="selection" width="60" tree-node></vxe-table-column>
@@ -148,7 +156,7 @@
       :data.sync="tableData"
       :radio-config="{labelField: 'name'}">
       <vxe-table-column type="selection" width="60"></vxe-table-column>
-      <vxe-table-column type="radio" width="300" title="Sex"></vxe-table-column>
+      <vxe-table-column type="radio" width="300" title="Name"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
       <vxe-table-column field="age" title="Age"></vxe-table-column>
       <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
@@ -171,7 +179,7 @@
       :data.sync="tableData"
       :radio-config="{labelField: 'role'}"
       :select-config="{labelField: 'name'}">
-      <vxe-table-column type="selection" title="Sex"></vxe-table-column>
+      <vxe-table-column type="selection" title="Name"></vxe-table-column>
       <vxe-table-column type="radio" title="Role"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
       <vxe-table-column field="age" title="Age"></vxe-table-column>
@@ -339,7 +347,7 @@ export default {
           :select-config="{checkRowKeys: ['2', '3']}"
           :radio-config="{labelField: 'name'}">
           <vxe-table-column type="selection" width="60"></vxe-table-column>
-          <vxe-table-column type="radio" width="300" title="Sex"></vxe-table-column>
+          <vxe-table-column type="radio" width="300" title="Name"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
           <vxe-table-column field="age" title="Age"></vxe-table-column>
           <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
@@ -358,9 +366,17 @@ export default {
         }
         `,
         `
+        <vxe-toolbar>
+          <template v-slot:buttons>
+            <vxe-button @click="$refs.xTable5.setSelection(tableData, true)">设置所有行选中</vxe-button>
+            <vxe-button @click="$refs.xTable5.clearSelection()">清除所有行选中</vxe-button>
+          </template>
+        </vxe-toolbar>
+
         <vxe-table
           border
           highlight-hover-row
+          ref="xTable5"
           :data.sync="tableData"
           :select-config="{checkStrictly: true}">
           <vxe-table-column type="selection" width="60" tree-node></vxe-table-column>
@@ -389,7 +405,7 @@ export default {
           :data.sync="tableData"
           :radio-config="{labelField: 'name'}">
           <vxe-table-column type="selection" width="60"></vxe-table-column>
-          <vxe-table-column type="radio" width="300" title="Sex"></vxe-table-column>
+          <vxe-table-column type="radio" width="300" title="Name"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
           <vxe-table-column field="age" title="Age"></vxe-table-column>
           <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
@@ -416,7 +432,7 @@ export default {
           :data.sync="tableData"
           :radio-config="{labelField: 'role'}"
           :select-config="{labelField: 'name'}">
-          <vxe-table-column type="selection" title="Sex"></vxe-table-column>
+          <vxe-table-column type="selection" title="Name"></vxe-table-column>
           <vxe-table-column type="radio" title="Role"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
           <vxe-table-column field="age" title="Age"></vxe-table-column>
