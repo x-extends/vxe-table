@@ -494,6 +494,14 @@ const apis = [
             list: []
           },
           {
+            name: 'showHeader',
+            desc: '是否显示全选按钮（如果 checkStrictly=true 则默认为 false）',
+            type: 'Boolean',
+            enum: '',
+            defVal: 'true',
+            list: []
+          },
+          {
             name: 'checkAll',
             desc: '默认勾选所有',
             type: 'Boolean',

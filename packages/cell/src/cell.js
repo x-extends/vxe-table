@@ -212,7 +212,7 @@ export const Cell = {
     if (slots && slots.header) {
       return slots.header(params, h)
     }
-    if (selectConfig && selectConfig.checkStrictly) {
+    if (selectConfig && (selectConfig.checkStrictly ? !selectConfig.showHeader : selectConfig.showHeader === false)) {
       return []
     }
     if (!isHidden) {
