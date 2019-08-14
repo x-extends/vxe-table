@@ -119,11 +119,19 @@
       <code class="javascript">{{ demoCodes[8] }}</code>
     </pre>
 
-    <p>通过 <table-api-link prop="checkStrictly"/> 设置父子节点不互相关联</p>
+    <p>通过 <table-api-link prop="checkStrictly"/> 设置父子节点不互相关联，启用后 <table-api-link prop="showHeader"/> 默认为 false</p>
+
+    <vxe-toolbar>
+      <template v-slot:buttons>
+        <vxe-button @click="$refs.xTable5.setSelection(tableData, true)">设置所有行选中</vxe-button>
+        <vxe-button @click="$refs.xTable5.clearSelection()">清除所有行选中</vxe-button>
+      </template>
+    </vxe-toolbar>
 
     <vxe-table
       border
       highlight-hover-row
+      ref="xTable5"
       :data.sync="tableData"
       :select-config="{checkStrictly: true}">
       <vxe-table-column type="selection" width="60" tree-node></vxe-table-column>
@@ -358,9 +366,17 @@ export default {
         }
         `,
         `
+        <vxe-toolbar>
+          <template v-slot:buttons>
+            <vxe-button @click="$refs.xTable5.setSelection(tableData, true)">设置所有行选中</vxe-button>
+            <vxe-button @click="$refs.xTable5.clearSelection()">清除所有行选中</vxe-button>
+          </template>
+        </vxe-toolbar>
+
         <vxe-table
           border
           highlight-hover-row
+          ref="xTable5"
           :data.sync="tableData"
           :select-config="{checkStrictly: true}">
           <vxe-table-column type="selection" width="60" tree-node></vxe-table-column>
