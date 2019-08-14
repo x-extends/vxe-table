@@ -1,7 +1,6 @@
 <template>
   <div>
-    <p>统计编辑列的表尾合计</p>
-    <p>对于某些场景下如果需要频繁计算的可以手动调用 <table-api-link prop="updateFooter"/> 函数</p>
+    <p class="tip">统计编辑列的表尾合计，对于某些场景下如果需要频繁计算的可以手动调用 <table-api-link prop="updateFooter"/> 函数</p>
 
     <vxe-toolbar>
       <template v-slot:buttons>

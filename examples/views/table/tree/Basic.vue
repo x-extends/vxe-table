@@ -1,7 +1,6 @@
 <template>
   <div>
-    <p>树表格，通过配置 <table-api-link prop="tree-config"/> 和指定列 <table-column-api-link prop="tree-node"/> 属性来开启树表格</p>
-    <p>还可以通过 <table-api-link prop="trigger"/> 指定触发方式</p>
+    <p class="tip">树表格，通过配置 <table-api-link prop="tree-config"/> 和指定列 <table-column-api-link prop="tree-node"/> 属性来开启树表格，还可以通过 <table-api-link prop="trigger"/> 指定触发方式</p>
 
     <vxe-table
       border
@@ -21,7 +20,7 @@
       <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
 
-    <p>默认展开所有树节点，通过 <table-api-link prop="expand-config"/> 参数设置默认展开树节点</p>
+    <p class="tip">默认展开所有树节点，通过 <table-api-link prop="expand-config"/> 参数设置默认展开树节点</p>
 
     <vxe-table
       :data.sync="tableData"

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>通过调用 <table-api-link prop="validate"/> 函数校验数据，<table-api-link prop="edit-rules"/> 校验规则配置</p>
+    <p class="tip">通过调用 <table-api-link prop="validate"/> 函数校验数据，<table-api-link prop="edit-rules"/> 校验规则配置</p>
 
     <vxe-toolbar>
       <template v-slot:buttons>

@@ -1,7 +1,6 @@
 <template>
   <div>
-    <p>自定义列头排序的实现</p>
-    <p class="red">你可以把表格封装成子组件进行定制，通过 <table-column-api-link prop="slot"/> 非常简单就可以实现自定义排序</p>
+    <p class="tip">自定义列头排序的实现，你可以把表格封装成子组件进行定制，通过 <table-column-api-link prop="slot"/> 非常简单就可以实现自定义排序</p>
 
     <vxe-table
       border

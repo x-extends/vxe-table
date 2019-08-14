@@ -1,7 +1,6 @@
 <template>
   <div>
-    <p>数据代理、固定列、服务端排序、服务端筛选、服务端分页</p>
-    <p>对于分页场景下，如果想要保留选中状态，可以通过设置 <table-api-link prop="select-config"/> 的 <table-api-link prop="reserve"/> 属性</p>
+    <p class="tip">数据代理、固定列、服务端排序、服务端筛选、服务端分页，对于分页场景下，如果想要保留选中状态，可以通过设置 <table-api-link prop="select-config"/> 的 <table-api-link prop="reserve"/> 属性</p>
 
     <vxe-grid
       ref="xGrid"
@@ -39,12 +38,12 @@ export default {
           query: ({ page, sort, filters }) => {
             // 处理排序条件
             let formData = {
-              sort: sort.property,
+              sort: sort.field,
               order: sort.order
             }
             // 处理筛选条件
-            filters.forEach(({ column, property, values }) => {
-              formData[property] = values.join(',')
+            filters.forEach(({ column, field, values }) => {
+              formData[field] = values.join(',')
             })
             return XEAjax.getJSON(`/api/user/page/list/${page.pageSize}/${page.currentPage}`, formData)
           }

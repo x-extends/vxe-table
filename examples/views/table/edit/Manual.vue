@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>设置 <table-api-link prop="edit-config"/>={trigger: 'manual', mode: 'row'} 启用行编辑的功能</p>
+    <p class="tip">设置 <table-api-link prop="edit-config"/>={trigger: 'manual', mode: 'row'} 启用行编辑的功能</p>
 
     <vxe-table
       ref="xTable"

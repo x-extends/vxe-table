@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>行的样色、单元格样式，表头的样式、表尾的样式、全部都可以完全自定义</p>
+    <p class="tip">行的样色、单元格样式，表头的样式、表尾的样式、全部都可以完全自定义</p>
 
     <vxe-table
       border
@@ -25,7 +25,7 @@
       <code class="scss">{{ demoCodes[2] }}</code>
     </pre>
 
-    <p>通过 <table-api-link prop="cell-click"/> 事件点击改变颜色</p>
+    <p class="tip">通过 <table-api-link prop="cell-click"/> 事件点击改变颜色</p>
 
     <vxe-table
       border

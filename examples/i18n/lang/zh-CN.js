@@ -163,6 +163,8 @@ module.exports = {
         deleteSelectedRecords: '删除选中'
       },
       label: {
+        translations: '语言',
+        version: '版本',
         name: '名字',
         age: '年龄',
         sex: '性别',

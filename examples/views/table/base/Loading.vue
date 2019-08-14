@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>通过设置 <table-api-link prop="loading"/> 属性可以使用自带的加载效果</p>
+    <p class="tip">通过设置 <table-api-link prop="loading"/> 属性可以使用自带的加载效果</p>
 
     <vxe-table
       border
@@ -21,7 +21,7 @@
       <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
 
-    <p>加载中</p>
+    <p class="tip">加载中</p>
 
     <vxe-table
       border

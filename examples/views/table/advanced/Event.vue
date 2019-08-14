@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>事件绑定</p>
+    <p class="tip">事件绑定</p>
 
     <vxe-table
       border

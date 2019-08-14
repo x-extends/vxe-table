@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>设置 <table-column-api-link prop="type"/>=index 开启序号列</p>
+    <p class="tip">设置 <table-column-api-link prop="type"/>=index 开启序号列</p>
 
     <vxe-table
       border
@@ -20,7 +20,7 @@
       <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
 
-    <p>使用 <table-api-link prop="start-index"/> 自定义起始序号</p>
+    <p class="tip">使用 <table-api-link prop="start-index"/> 自定义起始序号</p>
 
     <vxe-table
       border
@@ -42,7 +42,7 @@
       <code class="javascript">{{ demoCodes[3] }}</code>
     </pre>
 
-    <p>使用 <table-column-api-link prop="index-method"/> 自定义方法</p>
+    <p class="tip">使用 <table-column-api-link prop="index-method"/> 自定义方法</p>
 
     <vxe-table
       border

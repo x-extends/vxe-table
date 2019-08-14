@@ -1,8 +1,10 @@
 <template>
   <div>
-    <p>通过设置 <table-column-api-link prop="filters"/> 属性和 <table-column-api-link prop="filter-method"/> 方法可以支持列筛选功能</p>
-    <p>如果是服务端筛选，只需加上 <table-api-link prop="remote-filter"/> 和 <table-api-link prop="filter-change"/> 事件就可以实现</p>
-    <p>还可以使用 slot <table-column-api-link prop="filter"/> 和 context.changeOption(event, checked, option) 方法来自定义筛选模板</p>
+    <p class="tip">
+      通过设置 <table-column-api-link prop="filters"/> 属性和 <table-column-api-link prop="filter-method"/> 方法可以支持列筛选功能<br>
+      如果是服务端筛选，只需加上 <table-api-link prop="remote-filter"/> 和 <table-api-link prop="filter-change"/> 事件就可以实现<br>
+      还可以使用 slot <table-column-api-link prop="filter"/> 和 context.changeOption(event, checked, option) 方法来自定义筛选模板
+    </p>
 
     <vxe-table
       border
@@ -27,8 +29,7 @@
       <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
 
-    <p>默认的筛选</p>
-    <p>通过 <table-column-api-link prop="checked"/> 属性设置默认的选中的选项</p>
+    <p class="tip">默认的筛选，通过 <table-column-api-link prop="checked"/> 属性设置默认的选中的选项</p>
 
     <vxe-table
       border

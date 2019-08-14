@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>使用 <a class="link" href="https://www.npmjs.com/package/xlsx" target="_blank">xlsx</a> 和 <a class="link" href="https://www.npmjs.com/package/file-saver" target="_blank">file-saver</a> 实现导出 xlsx 文件</p>
+    <p class="tip">使用 <a class="link" href="https://www.npmjs.com/package/xlsx" target="_blank">xlsx</a> 和 <a class="link" href="https://www.npmjs.com/package/file-saver" target="_blank">file-saver</a> 实现导出 xlsx 文件</p>
 
     <vxe-toolbar>
       <template v-slot:buttons>
@@ -22,7 +22,7 @@
       <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
 
-    <p>简单的导出表格</p>
+    <p class="tip">简单的导出表格</p>
 
     <vxe-toolbar>
       <template v-slot:buttons>

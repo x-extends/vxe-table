@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>实现可配置动态列、数据代理、工具栏、增删改查</p>
+    <p class="tip">实现可配置动态列、数据代理、工具栏、增删改查</p>
 
     <vxe-grid
       border
@@ -20,7 +20,7 @@
       <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
 
-    <p>级联动态列渲染，可以非常简单的实现功能复杂的可配置动态列</p>
+    <p class="tip">级联动态列渲染，可以非常简单的实现功能复杂的可配置动态列</p>
 
     <vxe-grid
       border

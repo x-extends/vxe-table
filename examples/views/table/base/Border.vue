@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>带边框的表格，通过设置 <table-api-link prop="border"/> 参数</p>
+    <p class="tip">带边框的表格，通过设置 <table-api-link prop="border"/> 参数</p>
 
     <vxe-table
       border

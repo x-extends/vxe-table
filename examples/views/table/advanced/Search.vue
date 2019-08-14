@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>表格搜索功能，非常简单就可以实现表格内容搜索</p>
+    <p class="tip">表格搜索功能，非常简单就可以实现表格内容搜索</p>
 
     <vxe-toolbar>
       <template v-slot:buttons>
@@ -43,7 +43,7 @@
       <code class="scss">{{ demoCodes[2] }}</code>
     </pre>
 
-    <p>树表格搜索功能，非常简单就可以实现树表格内容搜索</p>
+    <p class="tip">树表格搜索功能，非常简单就可以实现树表格内容搜索</p>
 
     <vxe-toolbar>
       <template v-slot:buttons>
@@ -278,7 +278,7 @@ export default {
   },
   created () {
     this.tableData1 = window.MOCK_DATA_LIST.slice(0, 50)
-    this.tableData2 = window.MOCK_TREE_DATA_LIST.slice(0)
+    this.tableData2 = XEUtils.clone(window.MOCK_TREE_DATA_LIST, true)
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {

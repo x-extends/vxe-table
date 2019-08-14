@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>设置 <table-api-link prop="edit-config"/> 的 <table-api-link prop="activeMethod"/> 方法判断单元格是否禁用</p>
+    <p class="tip">设置 <table-api-link prop="edit-config"/> 的 <table-api-link prop="activeMethod"/> 方法判断单元格是否禁用</p>
 
     <vxe-table
       ref="xTable"
@@ -22,7 +22,7 @@
       <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
 
-    <P>禁用第二行编辑</P>
+    <p class="tip">禁用第二行编辑</p>
 
     <vxe-table
       ref="xTable"

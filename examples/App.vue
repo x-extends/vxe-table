@@ -2,7 +2,7 @@
   <div id="app" @click="clickEvent">
     <header class="page-header">
       <h1 class="title">
-        <a href="https://github.com/xuliangzhan/vxe-table/tree/v1.6">
+        <a href="https://github.com/xuliangzhan/vxe-table">
           <span>🐬vxe-table</span>
           <img src="https://img.shields.io/npm/dm/vxe-table.svg?style=social&logo=github">
           <img src="https://img.shields.io/github/watchers/xuliangzhan/vxe-table.svg?style=social">
@@ -12,15 +12,19 @@
       </h1>
       <div class="right">
         <div class="langs">
-          <vxe-radio v-model="$i18n.locale" name="lang" label="zh-CN">中文</vxe-radio>
-          <vxe-radio v-model="$i18n.locale" name="lang" label="en">English</vxe-radio>
+          <span>{{ $t('app.body.label.translations') }}:</span>
+          <select class="locale-switch" v-model="$i18n.locale">
+            <option value="zh-CN">中文</option>
+            <option value="en">English</option>
+          </select>
+          <span>{{ $t('app.body.label.version') }}: </span>
           <select class="version-switch" v-model="version" @change="vChangeEvent">
             <option value="1">V1</option>
             <option value="2">V2</option>
             <option value="3">V3</option>
           </select>
           <vxe-tooltip :content="$t('app.footer.donationDesc')">
-            <a class="donation" href="https://github.com/xuliangzhan/vxe-table#donation" target="_blank">☕{{ $t('app.footer.donation') }}</a>
+            <a class="donation" href="https://github.com/xuliangzhan/vxe-table#donation" target="_blank">{{ $t('app.footer.donation') }}☕</a>
           </vxe-tooltip>
         </div>
         <div class="desc">{{ $t('app.header.desc') }}</div>
@@ -30,7 +34,7 @@
       <div class="aside">
         <ul class="nav-menu">
           <li v-for="(item, index) in tableList" :key="index">
-            <a class="nav-link" @click="linkEvent(item)" :title="$t(item.label)">{{ $t(item.label) }}</a>
+            <a class="nav-link" @click="linkEvent(item)" :title="$t(item.label)" :class="{active: pageKey === item.value}">{{ $t(item.label) }}</a>
             <ul v-if="item.children" v-show="item.expand" class="nav-child-menu">
               <li v-for="(child, cIndex) in item.children" :key="cIndex">
                 <a class="nav-link disabled" v-if="child.disabled" title="由于比较忙，后续有时间会完善该功能！">{{ $t(child.label) }}</a>
@@ -41,20 +45,13 @@
         </ul>
       </div>
       <div class="body">
-        <a class="link tosrc" :href="`https://github.com/xuliangzhan/vxe-table/tree/master/examples/views/table/${pageKey}`" target="_blank">{{ $t('app.body.button.viewCode') }}</a>
-        <a v-if="demoLink" class="link todemo" :href="demoLink" target="_blank">{{ $t('app.body.button.runDemo') }}</a>
-        <router-view/>
+        <div class="content" :class="{full: $route.name && $route.name.indexOf('API') > 0}">
+          <a class="link tosrc" :href="`https://github.com/xuliangzhan/vxe-table/tree/master/examples/views/table/${pageKey}`" target="_blank">{{ $t('app.body.button.viewCode') }}</a>
+          <a v-if="demoLink" class="link todemo" :href="demoLink" target="_blank">{{ $t('app.body.button.runDemo') }}</a>
+          <router-view/>
+        </div>
       </div>
     </div>
-    <footer class="page-footer">
-      <p class="copyright">
-        <a class="link" href="https://github.com/xuliangzhan/vxe-table">vxe-table</a>
-        <span> MIT License, 2019-present, Xu Liangzhan</span>
-        <vxe-tooltip :content="$t('app.footer.donationDesc')">
-          <a class="donation" href="https://github.com/xuliangzhan/vxe-table#donation" target="_blank">☕{{ $t('app.footer.donation') }}</a>
-        </vxe-tooltip>
-      </p>
-    </footer>
   </div>
 </template>
 

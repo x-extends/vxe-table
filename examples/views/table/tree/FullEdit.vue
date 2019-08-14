@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>可编辑树表格</p>
+    <p class="tip">可编辑树表格</p>
 
     <vxe-table
       resizable
@@ -25,6 +25,7 @@
 
 <script>
 import hljs from 'highlight.js'
+import XEUtils from 'xe-utils'
 
 export default {
   data () {
@@ -37,7 +38,7 @@ export default {
           :tree-config="{children: 'children'}"
           :edit-config="{trigger: 'click', mode: 'row'}"
           :data.sync="tableData">
-          <vxe-table-column type="selection" field="checked" width="120" tree-node></vxe-table-column>
+          <vxe-table-column type="selection" prop="checked" width="120" tree-node></vxe-table-column>
           <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column field="size" title="Size" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column field="type" title="Type" :edit-render="{name: 'input'}"></vxe-table-column>
@@ -60,7 +61,7 @@ export default {
     }
   },
   created () {
-    this.tableData = window.MOCK_TREE_DATA_LIST.slice(0)
+    this.tableData = XEUtils.clone(window.MOCK_TREE_DATA_LIST, true)
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>可编辑树表格，还可以通过手动调用展开收起</p>
+    <p class="tip">可编辑树表格，还可以通过手动调用展开收起</p>
 
     <vxe-toolbar>
       <template v-slot:buttons>
@@ -36,6 +36,7 @@
 
 <script>
 import hljs from 'highlight.js'
+import XEUtils from 'xe-utils'
 
 export default {
   data () {
@@ -82,7 +83,7 @@ export default {
     }
   },
   created () {
-    this.tableData = window.MOCK_TREE_DATA_LIST.slice(0)
+    this.tableData = XEUtils.clone(window.MOCK_TREE_DATA_LIST, true)
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {

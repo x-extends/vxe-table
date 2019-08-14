@@ -1,8 +1,10 @@
 <template>
   <div>
-    <p><grid-api-link name="vxe-grid"/> 动态化表格，解决动态数据一切需求（动态列、动态数据、动态个性化...）</p>
-    <p class="orange">渲染性能对比：<grid-api-link name="vxe-grid"/>（性能最优，不需要为每一列创建实例） > <table-api-link name="vxe-table"/>（性能略差，需要为每一列创建实例）</p>
-    <p>通过 <grid-api-link prop="columns"/> 动态配置列信息，这非常适用于动态渲染的场景，完全使用数据进行配置</p>
+    <p class="tip">
+      <grid-api-link name="vxe-grid"/> 动态化表格，解决动态数据一切需求（动态列、动态数据、动态个性化...）<br>
+      渲染性能对比：<grid-api-link name="vxe-grid"/>（性能最优，不需要为每一列创建实例） > <table-api-link name="vxe-table"/>（性能略差，需要为每一列创建实例）<br>
+      通过 <grid-api-link prop="columns"/> 动态配置列信息，这非常适用于动态渲染的场景，完全使用数据进行配置
+    </p>
 
     <vxe-grid
       border
@@ -18,7 +20,7 @@
       <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
 
-    <p>分组表头、底部合计</p>
+    <p class="tip">分组表头、底部合计</p>
 
     <vxe-grid
       border

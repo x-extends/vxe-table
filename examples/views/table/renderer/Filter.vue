@@ -1,10 +1,12 @@
 <template>
   <div>
-    <p>筛选渲染器 <table-column-api-link prop="filter-render"/></p>
-    <h3>默认支持原生的：input、textarea、select</h3>
-    <h3>配置参数：</h3>
-    <p class="green">renderFilter (h, filterRender, { column, columnIndex, $columnIndex }, context) 渲染函数</p>
-    <p class="green">filterMethod ({ option, row, column }) 筛选函数</p>
+    <p class="tip">
+      筛选渲染器 <table-column-api-link prop="filter-render"/><br>
+      默认支持原生的：input、textarea、select<br>
+      配置参数：<br>
+      renderFilter (h, filterRender, { column, columnIndex, $columnIndex }, context) 渲染函数<br>
+      filterMethod ({ option, row, column }) 筛选函数
+    </p>
 
     <vxe-table
       border

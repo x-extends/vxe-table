@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>通过设置 <table-api-link prop="expand-config"/> 属性和 type=<table-api-link prop="expand"/> 与 <table-column-api-link prop="slot"/> 可以开启展开行功能</p>
+    <p class="tip">通过设置 <table-api-link prop="expand-config"/> 属性和 type=<table-api-link prop="expand"/> 与 <table-column-api-link prop="slot"/> 可以开启展开行功能</p>
 
     <vxe-toolbar>
       <template v-slot:buttons>
@@ -61,7 +61,7 @@
       <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
 
-    <p>默认展开指定行，通过 <table-api-link prop="expandRowKeys"/> 参数设置默认展开行，指定默认值需要有 <table-api-link prop="row-id"/></p>
+    <p class="tip">默认展开指定行，通过 <table-api-link prop="expandRowKeys"/> 参数设置默认展开行，指定默认值需要有 <table-api-link prop="row-id"/></p>
 
     <vxe-table
       border
@@ -113,7 +113,7 @@
       <code class="javascript">{{ demoCodes[3] }}</code>
     </pre>
 
-    <p>默认展开所有行，通过 <table-api-link prop="expandAll"/> 参数设置默认展开所有行</p>
+    <p class="tip">默认展开所有行，通过 <table-api-link prop="expandAll"/> 参数设置默认展开所有行</p>
 
     <vxe-table
       border

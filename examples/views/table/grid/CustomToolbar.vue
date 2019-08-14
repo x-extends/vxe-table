@@ -1,9 +1,10 @@
 <template>
   <div>
-    <p>工具栏：通过 <grid-api-link prop="toolbar"/> 属性配置，使用 <grid-api-link prop="slot"/> 自定义模板</p>
+    <p class="tip">工具栏：通过 <grid-api-link prop="toolbar"/> 属性配置，使用 <grid-api-link prop="slot"/> 自定义模板</p>
 
     <vxe-grid
       border
+      resizable
       ref="xGrid"
       height="530"
       :pager-config="tablePage"
@@ -74,6 +75,7 @@ export default {
         `
         <vxe-grid
           border
+          resizable
           ref="xGrid"
           height="530"
           :pager-config="tablePage"

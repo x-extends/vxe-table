@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>当数据结构比较复杂的时候，可以使用多级表头显示更加直观</p>
+    <p class="tip">当数据结构比较复杂的时候，可以使用多级表头显示更加直观</p>
 
     <vxe-table
       border
@@ -27,7 +27,7 @@
       <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
 
-    <p>如果使用了分组表头情，则需要按组来设置固定列，且固定列必须是在左右两侧位置，不允许跨列</p>
+    <p class="tip">如果使用了分组表头情，则需要按组来设置固定列，且固定列必须是在左右两侧位置，不允许跨列</p>
 
     <vxe-table
       border

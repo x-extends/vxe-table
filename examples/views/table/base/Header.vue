@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>隐藏头部，通过设置 <table-column-api-link prop="show-header"/> 参数</p>
+    <p class="tip">隐藏头部，通过设置 <table-column-api-link prop="show-header"/> 参数</p>
 
     <vxe-table
       :show-header="false"
@@ -19,7 +19,7 @@
       <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
 
-    <p>当纵向或横向内容过多时，自动出现滚动条</p>
+    <p class="tip">当纵向或横向内容过多时，自动出现滚动条</p>
 
     <vxe-table
       height="400"

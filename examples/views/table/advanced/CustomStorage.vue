@@ -1,7 +1,9 @@
 <template>
   <div>
-    <p>显示/隐藏列功能，通过设置 <toolbar-api-link prop="id"/> 和 <toolbar-api-link prop="setting"/>={storage: true} 参数开启将列个性化 localStorage 保存功能</p>
-    <p>也可以通过配合 <table-api-link prop="reloadCustoms"/> 函数实现服务端保存</p>
+    <p class="tip">
+      显示/隐藏列功能，通过设置 <toolbar-api-link prop="id"/> 和 <toolbar-api-link prop="setting"/>={storage: true} 参数开启将列个性化 localStorage 保存功能<br>
+      也可以通过配合 <table-api-link prop="reloadCustoms"/> 函数实现服务端保存
+    </p>
 
     <vxe-toolbar id="toolbar_demo3" :setting="{storage: true}">
       <template v-slot:buttons>

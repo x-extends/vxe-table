@@ -1,16 +1,15 @@
 <template>
   <div>
-    <h3>Internationalization 国际化</h3>
-    <p>目前支持的<a class="link" href="https://github.com/xuliangzhan/vxe-table/tree/master/locale/lang" target="_blank">国际化列表</a></p>
-    <p>若希望使用指定语言，则需要进行多语言设置。以中/英文为例</p>
+    <h2>Internationalization 国际化</h2>
+    <p class="tip">目前支持的<a class="link" href="https://github.com/xuliangzhan/vxe-table/tree/master/locale/lang" target="_blank">国际化列表</a>，若希望使用指定语言，则需要进行多语言设置。以中/英文为例</p>
     <pre>
       <code class="shell">
         npm install vue-i18n
       </code>
       <code class="javascript">{{ demoCodes[0] }}</code>
     </pre>
-    <h3>集成国际化</h3>
-    <p>若希望在项目中支持全局自动翻译，可以通过全局参数开启（将对列头、校验提示..进行自动翻译）</p>
+    <h2>集成国际化</h2>
+    <p class="tip">若希望在项目中支持全局自动翻译，可以通过全局参数开启（将对列头、校验提示..进行自动翻译）</p>
     <pre>
       <code class="javascript">{{ demoCodes[1] }}</code>
       <code class="html">{{ demoCodes[2] }}</code>

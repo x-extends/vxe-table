@@ -1,11 +1,13 @@
 <template>
   <div>
-    <p>可编辑渲染器 <table-column-api-link prop="edit-render"/></p>
-    <h3>默认支持原生的：input、textarea、select</h3>
-    <h3>配置参数：</h3>
-    <p class="green">autofocus 自动聚焦的类名</p>
-    <p class="green">renderEdit (h, editRender, { row, rowIndex, $rowIndex, column, columnIndex, $columnIndex }) 编辑的渲染函数</p>
-    <p class="green">renderCell (h, editRender, { row, rowIndex, $rowIndex, column, columnIndex, $columnIndex }) 显示的渲染函数</p>
+    <p class="tip">
+      可编辑渲染器 <table-column-api-link prop="edit-render"/><br>
+      默认支持原生的：input、textarea、select<br>
+      配置参数：<br>
+      autofocus 自动聚焦的类名<br>
+      renderEdit (h, editRender, { row, rowIndex, $rowIndex, column, columnIndex, $columnIndex }) 编辑的渲染函数<br>
+      renderCell (h, editRender, { row, rowIndex, $rowIndex, column, columnIndex, $columnIndex }) 显示的渲染函数
+    </p>
 
     <vxe-table
       border

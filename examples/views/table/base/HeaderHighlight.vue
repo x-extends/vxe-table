@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>列选中高亮，通过设置 <table-api-link prop="highlight-current-column"/> 参数</p>
+    <p class="tip">列选中高亮，通过设置 <table-api-link prop="highlight-current-column"/> 参数</p>
 
     <vxe-table
       border
@@ -21,7 +21,7 @@
       <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
 
-    <p>列和行选中高亮，通过设置 <table-api-link prop="highlight-hover-row"/>、<table-api-link prop="highlight-hover-column"/> 参数</p>
+    <p class="tip">列和行选中高亮，通过设置 <table-api-link prop="highlight-hover-row"/>、<table-api-link prop="highlight-hover-column"/> 参数</p>
 
     <vxe-table
       border

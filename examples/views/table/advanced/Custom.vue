@@ -1,8 +1,10 @@
 <template>
   <div>
-    <p>通过 <table-api-link prop="customs"/> 来初始化绑定动态列：{field: 字段名, visible: 默认是否显示}</p>
-    <p>通过函数式调用 <table-api-link prop="showColumn"/>、<table-api-link prop="hideColumn"/> 操作列的显示/隐藏</p>
-    <p>该功能对于列比较多的表格非常有用，可以轻松实现强大的显示/隐藏列的配置功能，实时调用 refreshColumn 刷新列</p>
+    <p class="tip">
+      通过 <table-api-link prop="customs"/> 来初始化绑定动态列：{field: 字段名, visible: 默认是否显示}<br>
+      通过函数式调用 <table-api-link prop="showColumn"/>、<table-api-link prop="hideColumn"/> 操作列的显示/隐藏<br>
+      该功能对于列比较多的表格非常有用，可以轻松实现强大的显示/隐藏列的配置功能，实时调用 refreshColumn 刷新列
+    </p>
 
     <div class="table-oper">
       <span class="menu-btn">
@@ -41,7 +43,7 @@
       <code class="scss">{{ demoCodes[2] }}</code>
     </pre>
 
-    <p>如果是根据服务端数据控制显示/隐藏列，则需要手动调用 <table-api-link prop="reloadCustoms"/> 更新即可</p>
+    <p class="tip">如果是根据服务端数据控制显示/隐藏列，则需要手动调用 <table-api-link prop="reloadCustoms"/> 更新即可</p>
 
     <div class="table-oper">
       <span class="menu-btn">
@@ -81,7 +83,7 @@
       <code class="scss">{{ demoCodes[5] }}</code>
     </pre>
 
-    <p>通过点击后才调用 <table-api-link prop="refreshColumn"/> 刷新列</p>
+    <p class="tip">通过点击后才调用 <table-api-link prop="refreshColumn"/> 刷新列</p>
 
     <template v-for="(column,index) in customColumns3">
       <vxe-checkbox

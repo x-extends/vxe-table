@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>单选表格，用户手动勾选时会触发事件 <table-api-link prop="radio-change"/></p>
+    <p class="tip">单选表格，用户手动勾选时会触发事件 <table-api-link prop="radio-change"/></p>
 
     <vxe-toolbar>
       <template v-slot:buttons>
@@ -36,7 +36,7 @@
       <code class="scss">{{ demoCodes[2] }}</code>
     </pre>
 
-    <p>默认选中，通过指定 <table-api-link prop="checkRowKey"/> 设置默认选中的行，指定默认值需要有 <table-api-link prop="row-id"/></p>
+    <p class="tip">默认选中，通过指定 <table-api-link prop="checkRowKey"/> 设置默认选中的行，指定默认值需要有 <table-api-link prop="row-id"/></p>
 
     <vxe-table
       border
@@ -57,7 +57,7 @@
       <code class="javascript">{{ demoCodes[4] }}</code>
     </pre>
 
-    <p>使用 <table-api-link prop="highlight-current-row"/> 高亮方式</p>
+    <p class="tip">使用 <table-api-link prop="highlight-current-row"/> 高亮方式</p>
 
     <vxe-table
       border
@@ -78,7 +78,7 @@
       <code class="javascript">{{ demoCodes[6] }}</code>
     </pre>
 
-    <p>两种方式混合使用</p>
+    <p class="tip">两种方式混合使用</p>
 
     <vxe-table
       ref="xTable"
@@ -101,7 +101,7 @@
       <code class="javascript">{{ demoCodes[8] }}</code>
     </pre>
 
-    <p>当然也可以两种方式同时使用</p>
+    <p class="tip">当然也可以两种方式同时使用</p>
 
     <vxe-table
       border

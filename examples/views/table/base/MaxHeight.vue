@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>当一个表格高度需要自适应的时候可以设置为流体高度</p>
+    <p class="tip">当一个表格高度需要自适应的时候可以设置为流体高度</p>
 
     <vxe-table
       border
@@ -21,7 +21,7 @@
       <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
 
-    <p>如果设置 <table-api-link prop="max-height"/>，当内容为达到最大高度时会自适应</p>
+    <p class="tip">如果设置 <table-api-link prop="max-height"/>，当内容为达到最大高度时会自适应</p>
 
     <vxe-table
       border
@@ -42,7 +42,7 @@
       <code class="javascript">{{ demoCodes[3] }}</code>
     </pre>
 
-    <p>也可以设置相对于父容器的百分比</p>
+    <p class="tip">也可以设置相对于父容器的百分比</p>
 
     <div style="height: 500px;">
       <vxe-table

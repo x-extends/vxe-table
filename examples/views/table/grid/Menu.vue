@@ -1,7 +1,6 @@
 <template>
   <div>
-    <p>快捷菜单，实现对按钮的控制</p>
-    <p>通过 <table-api-link prop="visibleMethod"/> 和 <table-api-link prop="visible"/> | <table-api-link prop="disabled"/> 属性来控制菜单选项的操作权限</p>
+    <p class="tip">快捷菜单，实现对按钮的控制，通过 <table-api-link prop="visibleMethod"/> 和 <table-api-link prop="visible"/> | <table-api-link prop="disabled"/> 属性来控制菜单选项的操作权限</p>
 
     <vxe-grid
       border

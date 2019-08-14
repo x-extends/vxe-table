@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>增删改查、工具栏</p>
+    <p class="tip">增删改查、工具栏</p>
 
     <vxe-toolbar :data="tableData" setting>
       <template v-slot:buttons>
@@ -104,7 +104,7 @@ export default {
     }
   },
   created () {
-    this.tableData = window.MOCK_TREE_DATA_LIST.slice(0)
+    this.tableData = XEUtils.clone(window.MOCK_TREE_DATA_LIST, true)
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
