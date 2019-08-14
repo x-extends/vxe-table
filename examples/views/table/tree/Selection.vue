@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>多选树表格</p>
+    <p class="tip">多选树表格</p>
 
     <vxe-table
       resizable
@@ -21,7 +21,7 @@
       <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
 
-    <p>默认选中，通过指定 <table-api-link prop="checkRowKeys"/> 设置默认选中的行</p>
+    <p class="tip">默认选中，通过指定 <table-api-link prop="checkRowKeys"/> 设置默认选中的行</p>
 
     <vxe-table
       resizable
@@ -43,7 +43,7 @@
       <code class="javascript">{{ demoCodes[3] }}</code>
     </pre>
 
-    <p>通过 <table-api-link prop="checkStrictly"/> 设置父子节点不互相关联</p>
+    <p class="tip">通过 <table-api-link prop="checkStrictly"/> 设置父子节点不互相关联</p>
 
     <vxe-table
       resizable
@@ -64,8 +64,7 @@
       <code class="javascript">{{ demoCodes[5] }}</code>
     </pre>
 
-    <!-- <p>还可以通过 <table-api-link prop="checkMethod"/> 方法控制 CheckBox 是否允许用户手动勾选，还可以配置 <table-api-link prop="labelField"/> 列显示属性</p>
-    <p class="red">禁止用户手动勾选，但是可以通过函数式调用强制勾选，该功能对于某些场景需要强制勾选指定行时非常有用</p>
+    <!-- <p class="tip">还可以通过 <table-api-link prop="checkMethod"/> 方法控制 CheckBox 是否允许用户手动勾选，还可以配置 <table-api-link prop="labelField"/> 列显示属性，禁止用户手动勾选，但是可以通过函数式调用强制勾选，该功能对于某些场景需要强制勾选指定行时非常有用</p>
 
     <vxe-table
       resizable

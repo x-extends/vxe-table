@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>可以设置大小尺寸：<table-api-link prop="medium"/> / <table-api-link prop="small"/> / <table-api-link prop="mini"/><p/>
+    <p class="tip">可以设置大小尺寸：<table-api-link prop="medium"/> / <table-api-link prop="small"/> / <table-api-link prop="mini"/><p/>
 
     <vxe-table
       :data.sync="tableData">
@@ -20,7 +20,7 @@
       <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
 
-    <p>设置大小为 <table-api-link prop="medium"/></p>
+    <p class="tip">设置大小为 <table-api-link prop="medium"/></p>
 
     <vxe-table
       size="medium"
@@ -41,7 +41,7 @@
       <code class="javascript">{{ demoCodes[3] }}</code>
     </pre>
 
-    <p>设置大小为 <table-api-link prop="small"/></p>
+    <p class="tip">设置大小为 <table-api-link prop="small"/></p>
 
     <vxe-table
       size="small"
@@ -62,7 +62,7 @@
       <code class="javascript">{{ demoCodes[5] }}</code>
     </pre>
 
-    <p>设置大小为 <table-api-link prop="mini"/></p>
+    <p class="tip">设置大小为 <table-api-link prop="mini"/></p>
 
     <vxe-table
       size="mini"

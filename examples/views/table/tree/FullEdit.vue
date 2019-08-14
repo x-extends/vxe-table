@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>可编辑树表格</p>
+    <p class="tip">可编辑树表格</p>
 
     <vxe-table
       resizable

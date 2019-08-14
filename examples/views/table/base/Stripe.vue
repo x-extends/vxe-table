@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>斑马线条纹</p>
+    <p class="tip">斑马线条纹</p>
 
     <vxe-table
       stripe
@@ -19,7 +19,7 @@
       <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
 
-    <p>使用 <table-api-link prop="highlight-hover-row"/> 属性启用 hover 行高亮</p>
+    <p class="tip">使用 <table-api-link prop="highlight-hover-row"/> 属性启用 hover 行高亮</p>
 
     <vxe-table
       stripe

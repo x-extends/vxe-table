@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>使用 <table-api-link prop="highlight-current-row"/> 显示高亮行；用户操作点击选项时会触发事件 <table-api-link prop="current-change"/></p>
+    <p class="tip">使用 <table-api-link prop="highlight-current-row"/> 显示高亮行；用户操作点击选项时会触发事件 <table-api-link prop="current-change"/></p>
 
     <vxe-toolbar>
       <template v-slot:buttons>

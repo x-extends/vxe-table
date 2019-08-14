@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>多选表格，用户手动勾选时会触发事件 <table-api-link prop="select-change"/></p>
+    <p class="tip">多选表格，用户手动勾选时会触发事件 <table-api-link prop="select-change"/></p>
 
     <vxe-toolbar>
       <template v-slot:buttons>
@@ -32,8 +32,10 @@
       <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
 
-    <p>还可以通过 <table-api-link prop="checkMethod"/> 方法控制 CheckBox 是否允许用户手动勾选，还可以配置 <table-api-link prop="labelField"/> 列显示属性</p>
-    <p class="red">禁止用户手动勾选，但是可以通过函数式调用强制勾选，该功能对于某些场景需要强制勾选指定行时非常有用</p>
+    <p class="tip">
+      还可以通过 <table-api-link prop="checkMethod"/> 方法控制 CheckBox 是否允许用户手动勾选，还可以配置 <table-api-link prop="labelField"/> 列显示属性<br>
+      禁止用户手动勾选，但是可以通过函数式调用强制勾选，该功能对于某些场景需要强制勾选指定行时非常有用
+    </p>
 
     <vxe-toolbar>
       <template v-slot:buttons>
@@ -62,7 +64,7 @@
       <code class="javascript">{{ demoCodes[3] }}</code>
     </pre>
 
-    <p>多选表格，通过配置 <table-api-link prop="trigger"/> 设置触发源，使用渲染最快的 <table-api-link prop="checkField"/> 属性绑定方式</p>
+    <p class="tip">多选表格，通过配置 <table-api-link prop="trigger"/> 设置触发源，使用渲染最快的 <table-api-link prop="checkField"/> 属性绑定方式</p>
 
     <vxe-toolbar>
       <template v-slot:buttons>
@@ -96,7 +98,7 @@
       <code class="scss">{{ demoCodes[6] }}</code>
     </pre>
 
-    <p>默认选中，通过指定 <table-api-link prop="checkRowKeys"/> 设置默认选中的行，指定默认值需要有 <table-api-link prop="row-id"/></p>
+    <p class="tip">默认选中，通过指定 <table-api-link prop="checkRowKeys"/> 设置默认选中的行，指定默认值需要有 <table-api-link prop="row-id"/></p>
 
     <vxe-table
       border
@@ -119,7 +121,7 @@
       <code class="javascript">{{ demoCodes[8] }}</code>
     </pre>
 
-    <p>通过 <table-api-link prop="checkStrictly"/> 设置父子节点不互相关联，启用后 <table-api-link prop="showHeader"/> 默认为 false</p>
+    <p class="tip">通过 <table-api-link prop="checkStrictly"/> 设置父子节点不互相关联，启用后 <table-api-link prop="showHeader"/> 默认为 false</p>
 
     <vxe-toolbar>
       <template v-slot:buttons>
@@ -148,7 +150,7 @@
       <code class="javascript">{{ demoCodes[10] }}</code>
     </pre>
 
-    <p>多选可单选同时使用</p>
+    <p class="tip">多选可单选同时使用</p>
 
     <vxe-table
       border
@@ -169,7 +171,7 @@
       <code class="javascript">{{ demoCodes[12] }}</code>
     </pre>
 
-    <p>不仅如此，还可以多种方式混合使用</p>
+    <p class="tip">不仅如此，还可以多种方式混合使用</p>
 
     <vxe-table
       border

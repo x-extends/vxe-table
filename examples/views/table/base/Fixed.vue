@@ -1,7 +1,9 @@
 <template>
   <div>
-    <p>固定列，通过设置 <table-column-api-link prop="fixed"/> 参数</p>
-    <p>当横向内容过多时，将列固定在左右两侧</p>
+    <p class="tip">
+      固定列，通过设置 <table-column-api-link prop="fixed"/> 参数<br>
+      当横向内容过多时，将列固定在左右两侧
+    </p>
 
     <vxe-table
       border
@@ -22,7 +24,7 @@
       <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
 
-    <p>如果列宽足够的情况下，固定列不会浮动</p>
+    <p class="tip">如果列宽足够的情况下，固定列不会浮动</p>
 
     <vxe-table
       border

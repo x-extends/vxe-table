@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>基础使用</p>
+    <p class="tip">基础使用</p>
 
     <vxe-table
       :data.sync="tableData">
@@ -17,7 +17,7 @@
       <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
 
-    <p>出现滚动条</p>
+    <p class="tip">出现滚动条</p>
 
     <vxe-table
       border
@@ -37,7 +37,7 @@
       <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
 
-    <p>配合 loading 使用，可以通过 slot=<table-api-link prop="empty"/> 自定义提示语</p>
+    <p class="tip">配合 loading 使用，可以通过 slot=<table-api-link prop="empty"/> 自定义提示语</p>
 
     <vxe-table
       border

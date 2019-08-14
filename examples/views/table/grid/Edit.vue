@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>可编辑表格</p>
+    <p class="tip">可编辑表格</p>
 
     <vxe-grid
       border

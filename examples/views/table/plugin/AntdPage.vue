@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>与 <a class="link" href="https://www.npmjs.com/package/ant-design-vue">ant-design-vue</a> 组合渲染 + 使用分页</p>
+    <p class="tip">与 <a class="link" href="https://www.npmjs.com/package/ant-design-vue">ant-design-vue</a> 组合渲染 + 使用分页</p>
 
     <a-form :form="form" layout="inline" @submit="searchEvent">
       <a-form-item title="名字">

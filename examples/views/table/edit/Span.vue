@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>可编辑的合并行</p>
+    <p class="tip">可编辑的合并行</p>
 
     <vxe-toolbar>
       <template v-slot:buttons>

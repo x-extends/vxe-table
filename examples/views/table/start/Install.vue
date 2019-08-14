@@ -1,8 +1,10 @@
 <template>
   <div>
-    <h3>npm install</h3>
-    <p>推荐使用 npm 的方式安装，它能更好地和 <a class="link" href="https://webpack.js.org/">webpack</a> 打包工具配合使用。</p>
-    <p>依赖库： <a class="link" href="https://www.npmjs.com/package/xe-utils">xe-utils1.9+</a>&nbsp;&nbsp;<a class="link" href="https://cn.vuejs.org/v2/guide/components-slots.html#%E5%8A%A8%E6%80%81%E6%8F%92%E6%A7%BD%E5%90%8D">vue2.6+</a></p>
+    <h2>npm install</h2>
+    <p class="tip">
+      推荐使用 npm 的方式安装，它能更好地和 <a class="link" href="https://webpack.js.org/">webpack</a> 打包工具配合使用。<br>
+      依赖库： <a class="link" href="https://www.npmjs.com/package/xe-utils">xe-utils1.9+</a>&nbsp;&nbsp;<a class="link" href="https://cn.vuejs.org/v2/guide/components-slots.html#%E5%8A%A8%E6%80%81%E6%8F%92%E6%A7%BD%E5%90%8D">vue2.6+</a>
+    </p>
     <pre>
       <code class="shell">
         npm install xe-utils vxe-table
@@ -15,8 +17,8 @@
         Vue.use(VXETable)
       </code>
     </pre>
-    <h3>CDN</h3>
-    <p>可以通过 <a class="link" href="https://unpkg.com/vxe-table/">unpkg</a> 或 <a class="link" href="https://cdn.jsdelivr.net/npm/vxe-table/">cdnjs</a> 获取到最新版本的资源，并在页面上引入即可</p>
+    <h2>CDN</h2>
+    <p class="tip">可以通过 <a class="link" href="https://unpkg.com/vxe-table/">unpkg</a> 或 <a class="link" href="https://cdn.jsdelivr.net/npm/vxe-table/">cdnjs</a> 获取到最新版本的资源，并在页面上引入即可</p>
     <pre>
       <code class="xml">
         &lt;!-- 引入样式 --&gt;

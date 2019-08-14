@@ -1,7 +1,6 @@
 <template>
   <div>
-    <p>设置 <table-api-link prop="mouse-config"/>={selected: true} 启用单元格选中功能</p>
-    <p>设置 <table-api-link prop="keyboard-config"/>={isArrow: true, isDel: true, isTab: true, isEdit: true} 启用按键功能及任意键编辑功能，方向键、Tab 键、Esc 键、F2 键、Del、Back 键</p>
+    <p class="tip">设置 <table-api-link prop="mouse-config"/>={selected: true} 启用单元格选中功能，设置 <table-api-link prop="keyboard-config"/>={isArrow: true, isDel: true, isTab: true, isEdit: true} 启用按键功能及任意键编辑功能，方向键、Tab 键、Esc 键、F2 键、Del、Back 键</p>
 
     <vxe-table
       border

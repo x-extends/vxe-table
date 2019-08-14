@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>通过快捷菜单增删改查</p>
+    <p class="tip">通过快捷菜单增删改查</p>
 
     <vxe-toolbar>
       <template v-slot:buttons>

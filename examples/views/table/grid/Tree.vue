@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>树表格、数据代理</p>
+    <p class="tip">树表格、数据代理</p>
 
     <vxe-grid
       border

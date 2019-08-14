@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p><table-api-link name="vxe-table"/> 静态化表格，基于模板方式使用简单、便捷</p>
+    <p class="tip"><table-api-link name="vxe-table"/> 静态化表格，基于模板方式使用简单、便捷</p>
 
     <vxe-table
       :data.sync="tableData">
@@ -17,7 +17,7 @@
       <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
 
-    <p>使用 <table-api-link prop="highlight-hover-row"/> 属性启用 hover 行高亮</p>
+    <p class="tip">使用 <table-api-link prop="highlight-hover-row"/> 属性启用 hover 行高亮</p>
 
     <vxe-table
       highlight-hover-row

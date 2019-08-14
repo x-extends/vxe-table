@@ -1,8 +1,10 @@
 <template>
   <div>
-    <p>默认的渲染器 <table-column-api-link prop="cell-render"/></p>
-    <h3>配置参数：</h3>
-    <p class="green">renderDefault (h, cellRender, { row, rowIndex, $rowIndex, column, columnIndex, $columnIndex }) 渲染函数</p>
+    <p class="tip">
+      默认的渲染器 <table-column-api-link prop="cell-render"/><br>
+      配置参数：<br>
+      renderDefault (h, cellRender, { row, rowIndex, $rowIndex, column, columnIndex, $columnIndex }) 渲染函数
+    </p>
 
     <vxe-table
       border

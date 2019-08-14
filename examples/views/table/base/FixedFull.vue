@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>横纵内容过多时，同时固定列和表头</p>
+    <p class="tip">横纵内容过多时，同时固定列和表头</p>
 
     <vxe-table
       border
@@ -23,7 +23,7 @@
       <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
 
-    <p>固定列建议设置 show-overflow 或 show-overflow 该值，禁用自动换行，大幅提升渲染速度</p>
+    <p class="tip">固定列建议设置 show-overflow 或 show-overflow 该值，禁用自动换行，大幅提升渲染速度</p>
 
     <keep-alive>
       <vxe-table

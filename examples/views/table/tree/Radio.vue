@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>使用 <table-api-link prop="highlight-current-row"/> 方式</p>
+    <p class="tip">使用 <table-api-link prop="highlight-current-row"/> 方式</p>
 
     <vxe-table
       highlight-current-row
@@ -19,7 +19,7 @@
       <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
 
-    <p>使用 radio 方式</p>
+    <p class="tip">使用 radio 方式</p>
 
     <vxe-table
       :tree-config="{children: 'children'}"
@@ -38,7 +38,7 @@
       <code class="javascript">{{ demoCodes[3] }}</code>
     </pre>
 
-    <p>当然也可以两种方式同时使用</p>
+    <p class="tip">当然也可以两种方式同时使用</p>
 
     <vxe-table
       resizable

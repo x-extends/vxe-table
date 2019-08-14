@@ -1,13 +1,13 @@
 <template>
   <div>
-    <h3>Theme 主题</h3>
-    <p>Case 1.使用默认的主题样式</p>
+    <h2>Theme 主题</h2>
+    <p class="tip">Case 1.使用默认的主题样式</p>
     <pre>
       <code class="scss">
         @import 'vxe-table/lib/index.css';
       </code>
     </pre>
-    <p>Case 2.修改主题颜色，并引入所有样式（<a class="link" href="https://github.com/xuliangzhan/vxe-table/blob/master/styles/variable.scss" target="_blank">查看所有变量</a>）</p>
+    <p class="tip">Case 2.修改主题颜色，并引入所有样式（<a class="link" href="https://github.com/xuliangzhan/vxe-table/blob/master/styles/variable.scss" target="_blank">查看所有变量</a>）</p>
     <pre>
       <code class="scss">
         @import 'vxe-table/styles/variable.scss';
@@ -16,7 +16,7 @@
         @import 'vxe-table/styles/default.scss';
       </code>
     </pre>
-    <p>Case 3.修改主题颜色，并按需引入样式（<a class="link" href="https://github.com/xuliangzhan/vxe-table/blob/master/styles/variable.scss" target="_blank">查看所有变量</a>）</p>
+    <p class="tip">Case 3.修改主题颜色，并按需引入样式（<a class="link" href="https://github.com/xuliangzhan/vxe-table/blob/master/styles/variable.scss" target="_blank">查看所有变量</a>）</p>
     <pre>
       <code class="scss">
         @import 'vxe-table/styles/variable.scss';

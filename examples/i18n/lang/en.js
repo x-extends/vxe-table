@@ -102,7 +102,7 @@ module.exports = {
         forceRowVaild: 'Validate row + lock',
         keyboard: 'Keyboard navigation',
 
-        other: 'Integrated component library',
+        other: 'Integrated component',
         elementRender: 'element-ui -> Cell',
         iviewRender: 'iview -> Cell',
         antd: 'ant-design-vue -> Cell',
@@ -129,7 +129,7 @@ module.exports = {
         rendererDefault: 'Default renderer',
         rendererEdit: 'Edit renderer',
 
-        interceptor: 'Event collision interceptor',
+        interceptor: 'Interceptor',
 
         optimize: 'Optimization and suggestion',
         optimizeScroller: '虚拟滚动优化',
@@ -162,6 +162,8 @@ module.exports = {
         deleteSelectedRecords: 'Delete selected records'
       },
       label: {
+        translations: 'Translations',
+        version: 'Version',
         name: 'Name',
         age: 'Age',
         sex: 'Sex',

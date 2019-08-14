@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>增删改查、工具栏</p>
+    <p class="tip">增删改查、工具栏</p>
 
     <vxe-toolbar :data="tableData" setting>
       <template v-slot:buttons>

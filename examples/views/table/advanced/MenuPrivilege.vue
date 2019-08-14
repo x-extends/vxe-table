@@ -1,7 +1,6 @@
 <template>
   <div>
-    <p>右键快捷菜单，支持表头菜单、内容菜单、表尾菜单</p>
-    <p>通过 <table-api-link prop="visibleMethod"/> 和 <table-api-link prop="visible"/> | <table-api-link prop="disabled"/> 属性来控制菜单选项的操作权限</p>
+    <p class="tip">右键快捷菜单，支持表头菜单、内容菜单、表尾菜单，通过 <table-api-link prop="visibleMethod"/> 和 <table-api-link prop="visible"/> | <table-api-link prop="disabled"/> 属性来控制菜单选项的操作权限</p>
 
     <vxe-table
       border

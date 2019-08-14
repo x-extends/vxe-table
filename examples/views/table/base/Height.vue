@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>当纵向内容过多时，固定表头就非常有用了，通过设置 <table-api-link prop="height"/> 参数</p>
+    <p class="tip">当纵向内容过多时，固定表头就非常有用了，通过设置 <table-api-link prop="height"/> 参数</p>
 
     <vxe-table
       border

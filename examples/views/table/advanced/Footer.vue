@@ -1,7 +1,9 @@
 <template>
   <div>
-    <p>设置 <table-api-link prop="show-footer"/> show-footer 和 <table-api-link prop="footer-method"/> 自定义表尾合计</p>
-    <p class="red">需要注意的是表尾的的计算并非实时的，而是在 data 初始化时才会触发自动计算；如果要达到实时计算请手动调用 <table-api-link prop="updateFooter"/> 方法</p>
+    <p class="tip">
+      设置 <table-api-link prop="show-footer"/> show-footer 和 <table-api-link prop="footer-method"/> 自定义表尾合计<br>
+      需要注意的是表尾的的计算并非实时的，而是在 data 初始化时才会触发自动计算；如果要达到实时计算请手动调用 <table-api-link prop="updateFooter"/> 方法
+    </p>
 
     <vxe-table
       class="mytable-footer"
@@ -25,7 +27,7 @@
       <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
 
-    <p>还可以配合 <table-api-link prop="footer-cell-class-name"/> 自定义不同列颜色</p>
+    <p class="tip">还可以配合 <table-api-link prop="footer-cell-class-name"/> 自定义不同列颜色</p>
 
     <vxe-table
       class="mytable-footer"
@@ -49,7 +51,7 @@
       <code class="javascript">{{ demoCodes[3] }}</code>
     </pre>
 
-    <p>还可以固定列</p>
+    <p class="tip">还可以固定列</p>
 
     <vxe-table
       class="mytable-footer"

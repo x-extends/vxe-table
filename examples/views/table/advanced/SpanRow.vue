@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>更加复杂的合并行，很轻松就能实现树形列</p>
+    <p class="tip">更加复杂的合并行，很轻松就能实现树形列</p>
 
     <vxe-table
       border

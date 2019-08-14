@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>调用 <table-api-link prop="revert"/> 还原数据</p>
+    <p class="tip">调用 <table-api-link prop="revert"/> 还原数据</p>
 
     <vxe-toolbar>
       <template v-slot:buttons>

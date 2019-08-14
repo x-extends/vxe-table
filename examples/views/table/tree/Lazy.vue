@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>树表格的懒加载，通过配置 tree-config={<table-api-link prop="hasLazy"/> 和 <table-api-link prop="lazyLoad"/>} 加载方法来开启树形懒加载</p>
+    <p class="tip">树表格的懒加载，通过配置 tree-config={<table-api-link prop="hasLazy"/> 和 <table-api-link prop="lazyLoad"/>} 加载方法来开启树形懒加载</p>
 
     <vxe-table
       border

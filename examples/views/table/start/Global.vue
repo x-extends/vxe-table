@@ -1,12 +1,12 @@
 <template>
   <div>
-    <h3>size</h3>
+    <h2>size</h2>
     <pre>
       <code class="xml">
         每个组件都有 size 属性，默认是继承父组件，所以只要给局部的父组件设置 size，所有后代组件一律继承，该功能对于很多场景中都非常有用
       </code>
     </pre>
-    <h3>Default Global Props</h3>
+    <h2>Default Global Props</h2>
     <pre>
       <code class="javascript">
         import Vue from 'vue'

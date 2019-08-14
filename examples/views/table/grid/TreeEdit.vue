@@ -1,7 +1,6 @@
 <template>
   <div>
-    <p>树表格、增删改查、工具栏</p>
-    <p>可以通过 <toolbar-api-link prop="storage"/> 开启将列个性化的设置状态保存到本地</p>
+    <p class="tip">树表格、增删改查、工具栏，可以通过 <toolbar-api-link prop="storage"/> 开启将列个性化的设置状态保存到本地</p>
 
     <vxe-grid
       resizable

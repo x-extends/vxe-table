@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>单元格点击编辑，还可以通过 <table-column-api-link prop="autoselect"/> 开启默认选中</p>
+    <p class="tip">单元格点击编辑，还可以通过 <table-column-api-link prop="autoselect"/> 开启默认选中</p>
 
     <vxe-table
       border

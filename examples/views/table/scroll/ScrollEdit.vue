@@ -1,7 +1,6 @@
 <template>
   <div>
-    <p>虚拟滚动渲染，可编辑表格</p>
-    <p class="red">数据量非常大时，由于需要进行大量数据运算，所以数据校验或者获取数据...等函数执行会比较慢的</p>
+    <p class="tip">虚拟滚动渲染，可编辑表格，数据量非常大时，由于需要进行大量数据运算，所以数据校验或者获取数据...等函数执行会比较慢的</p>
 
     <vxe-toolbar :refresh="{query: findList}">
       <template v-slot:buttons>

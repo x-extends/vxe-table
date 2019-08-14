@@ -1,7 +1,6 @@
 <template>
   <div>
-    <p><table-api-link name="vxe-table"/> 方式：使用 <a class="link" href="https://www.npmjs.com/package/sortablejs" target="_blank">sortablejs</a> 实现列移动</p>
-    <p>由于 sortablejs 操作了 Dom 节点，需要与 Vue 的数据同步，必须设置 <table-api-link prop="column-key"/></p>
+    <p class="tip"><table-api-link name="vxe-table"/> 方式：使用 <a class="link" href="https://www.npmjs.com/package/sortablejs" target="_blank">sortablejs</a> 实现列移动，由于 sortablejs 操作了 Dom 节点，需要与 Vue 的数据同步，必须设置 <table-api-link prop="column-key"/></p>
 
     <vxe-table
       border
@@ -23,7 +22,7 @@
       <code class="css">{{ demoCodes[2] }}</code>
     </pre>
 
-    <p><grid-api-link name="vxe-grid"/> 方式，更加简单的配置式调用</p>
+    <p class="tip"><grid-api-link name="vxe-grid"/> 方式，更加简单的配置式调用</p>
 
     <vxe-grid
       border

@@ -1,7 +1,6 @@
 <template>
   <div>
-    <p>通过调用 <table-api-link prop="exportCsv"/> 函数可以直接将表格导出为 .csv 格式的文件；</p>
-    <p class="red">建议的方式应该是放到后台做导出！</p>
+    <p class="tip">通过调用 <table-api-link prop="exportCsv"/> 函数可以直接将表格导出为 .csv 格式的文件</p>
 
     <vxe-toolbar>
       <template v-slot:buttons>
@@ -28,7 +27,7 @@
       <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
 
-    <p>配置 <table-api-link prop="columnFilterMethod"/> 参数过滤指定列</p>
+    <p class="tip">配置 <table-api-link prop="columnFilterMethod"/> 参数过滤指定列</p>
 
     <vxe-toolbar>
       <template v-slot:buttons>
@@ -55,7 +54,7 @@
       <code class="javascript">{{ demoCodes[3] }}</code>
     </pre>
 
-    <p>配置 <table-api-link prop="dataFilterMethod"/> 参数过滤指定行</p>
+    <p class="tip">配置 <table-api-link prop="dataFilterMethod"/> 参数过滤指定行</p>
 
     <vxe-toolbar>
       <template v-slot:buttons>
@@ -82,7 +81,7 @@
       <code class="javascript">{{ demoCodes[5] }}</code>
     </pre>
 
-    <p>不导出表头，指定文件名，导出源数据,格式化数据</p>
+    <p class="tip">不导出表头，指定文件名，导出源数据,格式化数据</p>
 
     <vxe-toolbar>
       <template v-slot:buttons>

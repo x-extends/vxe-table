@@ -1,7 +1,6 @@
 <template>
   <div>
-    <p><table-api-link name="vxe-table"/> 方式：使用 <a class="link" href="https://www.npmjs.com/package/sortablejs" target="_blank">sortablejs</a> 实现行拖动</p>
-    <p>由于 sortablejs 操作了 Dom 节点，需要与 Vue 的数据同步，必须设置 <table-api-link prop="row-key"/></p>
+    <p class="tip"><table-api-link name="vxe-table"/> 方式：使用 <a class="link" href="https://www.npmjs.com/package/sortablejs" target="_blank">sortablejs</a> 实现行拖动，由于 sortablejs 操作了 Dom 节点，需要与 Vue 的数据同步，必须设置 <table-api-link prop="row-key"/></p>
 
     <vxe-table
       border
@@ -35,7 +34,7 @@
       <code class="css">{{ demoCodes[2] }}</code>
     </pre>
 
-    <p><grid-api-link name="vxe-grid"/> 方式：树表格的移动也是一样的，由于树节点的深层结构，所以需要在树节点在变动之后调用 <table-api-link prop="refreshData"/> 方法刷新数据</p>
+    <p class="tip"><grid-api-link name="vxe-grid"/> 方式：树表格的移动也是一样的，由于树节点的深层结构，所以需要在树节点在变动之后调用 <table-api-link prop="refreshData"/> 方法刷新数据</p>
 
     <vxe-grid
       border

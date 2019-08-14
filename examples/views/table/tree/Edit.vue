@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>可编辑树表格，还可以通过手动调用展开收起</p>
+    <p class="tip">可编辑树表格，还可以通过手动调用展开收起</p>
 
     <vxe-toolbar>
       <template v-slot:buttons>
