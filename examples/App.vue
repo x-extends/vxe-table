@@ -34,8 +34,8 @@
     <div class="page-container">
       <div class="aside">
         <ul class="nav-menu">
-          <li v-for="(item, index) in tableList" :key="index">
-            <a class="nav-link" @click="linkEvent(item)" :title="$t(item.label)" :class="{active: pageKey === item.value}">{{ $t(item.label) }}</a>
+          <li v-for="(item, index) in tableList" :key="index" :class="{expand: item.expand}">
+            <a class="nav-link" @click="linkEvent(item)" :title="$t(item.label)" :class="{active: pageKey === item.value}"><i class="vxe-icon--arrow-right nav-link-icon"></i>{{ $t(item.label) }}</a>
             <ul v-if="item.children" v-show="item.expand" class="nav-child-menu">
               <li v-for="(child, cIndex) in item.children" :key="cIndex">
                 <a class="nav-link disabled" v-if="child.disabled" title="由于比较忙，后续有时间会完善该功能！">{{ $t(child.label) }}</a>

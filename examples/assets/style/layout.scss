@@ -138,6 +138,15 @@ body,
           font-weight: 700;
         }
       }
+      .expand {
+        .nav-link-icon {
+          transform: rotate(135deg);
+        }
+      }
+      .nav-link-icon {
+        margin-right: 5px;
+        transition: transform 0.2s ease-in-out;
+      }
     }
     .nav-child-menu {
       font-size: 15px;
@@ -146,7 +155,7 @@ body,
       text-overflow: ellipsis;
       font-weight: 400;
       > li {
-        padding-left: 15px;
+        padding-left: 22px;
       }
       .nav-link {
         display: block;
