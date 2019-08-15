@@ -239,6 +239,8 @@ export default {
               }).catch(e => {
                 this.tableLoading = false
               })
+            } else {
+              console.warn(`[vxe-table] proxy-config.query not exist.`)
             }
             break
           }
@@ -261,6 +263,8 @@ export default {
                   }
                 }
               })
+            } else {
+              console.warn(`[vxe-table] proxy-config.delete not exist.`)
             }
             break
           }
@@ -306,6 +310,8 @@ export default {
                   }
                 })
               })
+            } else {
+              console.warn(`[vxe-table] proxy-config.save not exist.`)
             }
             break
           }
@@ -317,7 +323,11 @@ export default {
       let selectRecords = this.getSelectRecords()
       if (this.isMsg) {
         if (selectRecords.length) {
-          this.$XMsg.confirm(GlobalConfig.i18n(alertKey)).then(callback).catch(e => e)
+          this.$XMsg.confirm(GlobalConfig.i18n(alertKey)).then(type => {
+            if (type === 'confirm') {
+              callback()
+            }
+          })
         } else {
           this.$XMsg.message({ id: code, message: GlobalConfig.i18n('vxe.grid.selectOneRecord'), status: 'warning' })
         }

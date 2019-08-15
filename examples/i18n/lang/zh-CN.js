@@ -181,6 +181,7 @@ module.exports = {
         rName: '名称必须填写'
       },
       msg: {
+        error: '错误提示',
         copyToClipboard: '已复制到剪贴板！'
       }
     },
@@ -392,7 +393,7 @@ module.exports = {
         desc: {
           value: '绑定值',
           id: '只对 type=message 有效，如果不想提示框重复点击，可以设置唯一的 id 防止重复提示',
-          title: '提示框的标题',
+          title: '提示框的标题（支持开启国际化）',
           type: '提示框类型',
           status: '只对 type=message 有效，消息状态',
           message: '提示框的内容',

@@ -64,6 +64,7 @@ export default {
             })
             return XEAjax.getJSON(`/api/user/page/list/${page.pageSize}/${page.currentPage}`, formData)
           },
+          delete: ({ body }) => XEAjax.doPost('/api/user/save', body),
           save: ({ body }) => XEAjax.doPost('/api/user/save', body)
         }
       },
@@ -156,6 +157,7 @@ export default {
                     })
                     return XEAjax.getJSON(\`/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`, formData)
                   },
+                  delete: ({ body }) => XEAjax.doPost('/api/user/save', body),
                   save: ({ body }) => XEAjax.doPost('/api/user/save', body)
                 }
               },
