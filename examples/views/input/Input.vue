@@ -7,7 +7,15 @@
     </p>
 
     <p>
-      <vxe-input v-model="value2" placeholder="请输入内容" disabled=""></vxe-input>
+      <vxe-input v-model="value2" placeholder="请输入内容" disabled></vxe-input>
+    </p>
+
+    <p>
+      <vxe-textarea v-model="value3" placeholder="请输入内容"></vxe-textarea>
+    </p>
+
+    <p>
+      <vxe-textarea v-model="value4" placeholder="请输入内容" disabled></vxe-textarea>
     </p>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -27,6 +35,8 @@ export default {
     return {
       value1: '',
       value2: '',
+      value3: '',
+      value4: '',
       demoCodes: [
         `
         <p>
@@ -34,7 +44,15 @@ export default {
         </p>
 
         <p>
-          <vxe-input v-model="value2" placeholder="请输入内容" disabled=""></vxe-input>
+          <vxe-input v-model="value2" placeholder="请输入内容" disabled></vxe-input>
+        </p>
+
+        <p>
+          <vxe-textarea v-model="value3" placeholder="请输入内容"></vxe-textarea>
+        </p>
+
+        <p>
+          <vxe-textarea v-model="value4" placeholder="请输入内容" disabled></vxe-textarea>
         </p>
         `,
         `
@@ -42,7 +60,9 @@ export default {
           data () {
             return {
               value1: '',
-              value2: ''
+              value2: '',
+              value3: '',
+              value4: ''
             }
           }
         }

@@ -148,7 +148,7 @@ const TablePluginExcel = () => import(/* webpackChunkName: "excel" */ './views/t
 const TableOptimizeScroller = () => import(/* webpackChunkName: "optimize" */ './views/table/optimize/Scroller.vue')
 const TableOptimizeEdit = () => import(/* webpackChunkName: "optimize" */ './views/table/optimize/Edit.vue')
 
-const TableAPI = () => import(/* webpackChunkName: "api" */ './views/table/api/API.vue')
+const VXEAPI = () => import(/* webpackChunkName: "api" */ './views/api/API.vue')
 
 Vue.use(Router)
 
@@ -840,8 +840,8 @@ export default new Router({
     },
     {
       path: '/:name/api',
-      name: 'TableAPI',
-      component: TableAPI
+      name: 'VXEAPI',
+      component: VXEAPI
     }
   ]
 })

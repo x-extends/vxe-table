@@ -65,11 +65,19 @@ const apis = [
     defVal: '',
     list: [
       {
+        name: '*',
+        desc: '在值发生改变时触发该事件',
+        type: '',
+        enum: '',
+        defVal: 'event',
+        list: []
+      },
+      {
         name: 'dropdown-click',
         desc: '下拉列表按钮点击时会触发该事件',
         type: '',
         enum: '',
-        defVal: '{name}, event',
+        defVal: '{ name }, event',
         list: []
       }
     ]

@@ -151,6 +151,7 @@ module.exports = {
         vxeRadio: 'vxe-radio',
         vxeCheckbox: 'vxe-checkbox',
         vxeInput: 'vxe-input',
+        vxeTextarea: 'vxe-textarea',
         vxeButton: 'vxe-button',
         vxeTooltip: 'vxe-tooltip',
         vxeMessageBox: 'vxe-message'

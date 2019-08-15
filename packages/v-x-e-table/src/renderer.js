@@ -9,7 +9,7 @@ function getAttrs ({ name, attrs }) {
 
 /**
  * 内置渲染器
- * 支持原生的 input、 textarea、select
+ * 支持原生的 input、textarea、select
  */
 function defaultCellRender (h, renderOpts, params) {
   let { column } = params

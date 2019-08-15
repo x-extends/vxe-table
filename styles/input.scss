@@ -2,14 +2,16 @@
 
 /*input*/
 .vxe-input--wrapper {
-  height: 40px;
   font-size: $vxe-font-size;
   display: inline-block;
+  &.type--textarea {
+    width: 100%;
+  }
   .vxe-input,
   .vxe-textarea {
+    border-radius: 4px;
     outline: 0;
-    padding: 0 10px;
-    height: 100%;
+    padding: 4px 8px;
     width: 100%;
     color: $vxe-font-color;
     border: 1px solid $vxe-input-border-color;
@@ -23,18 +25,24 @@
     }
   }
   .vxe-input {
-    border-radius: 4px;
+    height: 40px;
   }
   .vxe-textarea {
-    resize: none;
+    height: 100%;
   }
   &.size--medium {
-    height: 36px;
+    .vxe-input {
+      height: 36px;
+    }
   }
   &.size--small {
-    height: 32px;
+    .vxe-input {
+      height: 32px;
+    }
   }
   &.size--mini {
-    height: 28px;
+    .vxe-input {
+      height: 28px;
+    }
   }
 }
