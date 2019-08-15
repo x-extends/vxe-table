@@ -45,6 +45,8 @@
             filter: 'vxe-icon--funnel',
             edit: 'vxe-icon--edit-outline',
             tree: 'vxe-icon--caret-right',
+            refresh: 'vxe-icon--refresh',
+            custom: 'vxe-icon--menu',
             jumpPrev: 'vxe-icon--d-arrow-left',
             jumpNext: 'vxe-icon--d-arrow-right',
             prevPage: 'vxe-icon--arrow-left',
@@ -54,7 +56,10 @@
             msgSuccess: 'vxe-icon--success',
             msgWarning: 'vxe-icon--warning',
             msgError: 'vxe-icon--error',
-            msgLoading: 'vxe-icon--refresh roll'
+            msgQuestion: 'vxe-icon--question',
+            msgLoading: 'vxe-icon--refresh roll',
+            caretBottom: 'vxe-icon--caret-bottom',
+            dropdownBottom: 'vxe-icon--arrow-bottom'
           },
           // 配置式表格的默认参数
           grid: {
