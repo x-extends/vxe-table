@@ -12,7 +12,7 @@
     <p>
       <vxe-button @click="$XMsg.alert('基本提示框', '标题1')">基本提示框</vxe-button>
       <vxe-button @click="$XMsg.alert({ message: '成功提示框', status: 'success' })">成功提示框</vxe-button>
-      <vxe-button @click="$XMsg.alert({ message: '失败提示框', title: '错误提示', status: 'error' })">失败提示框</vxe-button>
+      <vxe-button @click="$XMsg.alert({ message: '失败提示框', title: 'app.body.msg.error', status: 'error' })">失败提示框</vxe-button>
       <vxe-button @click="$XMsg.confirm('您确定要删除吗？')">确认提示框</vxe-button>
     </p>
 
@@ -61,7 +61,7 @@ export default {
         <p>
           <vxe-button @click="$XMsg.alert('基本提示框', '标题1')">基本提示框</vxe-button>
           <vxe-button @click="$XMsg.alert({ message: '成功提示框', status: 'success' })">成功提示框</vxe-button>
-          <vxe-button @click="$XMsg.alert({ message: '失败提示框', title: '错误提示', status: 'error' })">失败提示框</vxe-button>
+          <vxe-button @click="$XMsg.alert({ message: '失败提示框', title: 'app.body.msg.error', status: 'error' })">失败提示框</vxe-button>
           <vxe-button @click="$XMsg.confirm('您确定要删除吗？')">确认提示框</vxe-button>
         </p>
 

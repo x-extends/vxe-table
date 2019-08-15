@@ -1,6 +1,7 @@
 import GlobalConfig from '../../conf'
 import XEUtils from 'xe-utils'
 import MsgQueue from './msgQueue'
+import { UtilTools } from '../../tools'
 
 export default {
   name: 'VxeMessage',
@@ -85,7 +86,7 @@ export default {
         }, [
           h('span', {
             class: 'vxe-msg--title'
-          }, title || GlobalConfig.i18n('vxe.alert.title')),
+          }, title ? UtilTools.getFuncText(title) : GlobalConfig.i18n('vxe.alert.title')),
           h('i', {
             class: ['vxe-msg--close-btn', GlobalConfig.icon.msgClose],
             on: {

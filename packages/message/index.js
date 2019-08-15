@@ -5,7 +5,7 @@ import MsgQueue from './src/msgQueue'
 var AlertController = null
 
 export function Message (options) {
-  return new Promise((resolve, reject) => {
+  return new Promise(resolve => {
     if (options && options.id && MsgQueue.some(comp => comp.id === options.id)) {
       resolve('exist')
     } else {
@@ -15,11 +15,7 @@ export function Message (options) {
       })
       $alert._handleCustom = function (type) {
         $alert.$destroy()
-        if (type === 'confirm' || options.type === 'message') {
-          resolve(type)
-        } else {
-          reject(type)
-        }
+        resolve(type)
       }
       setTimeout(() => $alert.open())
     }

@@ -180,6 +180,7 @@ module.exports = {
         rName: 'The name of the required.'
       },
       msg: {
+        error: 'Error message',
         copyToClipboard: 'Copied to clipboard'
       }
     },
@@ -289,7 +290,7 @@ module.exports = {
         desc: {
           type: 'The type of the column',
           field: 'Column field name',
-          title: 'Column title',
+          title: 'Column title (support internationalization)',
           width: 'Column width',
           minWidth: 'Minimum height of the column,The remaining space is automatically allocated proportionally',
           resizable: 'Whether column resizing allows dragging column widths',
@@ -387,7 +388,7 @@ module.exports = {
         desc: {
           value: 'Binding values',
           id: '只对 type=message 有效，如果不想提示框重复点击，可以设置唯一的 id 防止重复提示',
-          title: 'Message title',
+          title: 'Message title (support internationalization)',
           type: 'Message type',
           status: '只对 type=message 有效，消息状态',
           message: 'message content',
