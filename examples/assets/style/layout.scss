@@ -113,7 +113,6 @@ body,
 .page-container {
   display: flex;
   flex-grow: 1;
-  min-width: 1200px;
   border-bottom: 1px solid #dcdfe6;
   overflow: hidden;
   > .aside {
@@ -176,12 +175,14 @@ body,
     position: relative;
     flex-grow: 1;
     overflow: auto;
-    padding: 15px 60px 25px 25px;
+    padding: 15px 0 25px 0;
     & > .content {
       position: relative;
       margin: 0 auto;
+      padding: 0 25px 0 25px;
       &:not(.full) {
-        max-width: 1000px;
+        max-width: 1200px;
+        min-width: 800px;
       }
     }
     .full {
@@ -190,16 +191,16 @@ body,
         display: none;
       }
     }
-    .tosrc {
-      position: absolute;
-      top: -28px;
-      right: 100px;
-      font-size: 16px;
-    }
     .todemo {
       position: absolute;
-      top: -28px;
-      right: 20px;
+      top: -30px;
+      right: 120px;
+      font-size: 16px;
+    }
+    .tosrc {
+      position: absolute;
+      top: -30px;
+      right: 30px;
       font-size: 16px;
     }
   }
