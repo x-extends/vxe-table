@@ -109,12 +109,6 @@ export default {
           expand: false,
           children: [
             {
-              label: 'app.aside.nav.icon',
-              locat: {
-                name: 'TableIcon'
-              }
-            },
-            {
               label: 'app.aside.nav.base',
               demoUrl: 'https://jsrun.net/VrXKp',
               locat: {
@@ -801,6 +795,67 @@ export default {
               disabled: true,
               locat: {
                 name: 'TableEditFull'
+              }
+            }
+          ]
+        },
+        {
+          label: 'app.aside.nav.module',
+          value: 'module',
+          expand: false,
+          children: [
+            {
+              label: 'app.aside.nav.icon',
+              locat: {
+                name: 'ModuleIcon'
+              }
+            },
+            {
+              label: 'app.aside.nav.button',
+              locat: {
+                name: 'ModuleButton'
+              }
+            },
+            {
+              label: 'app.aside.nav.radio',
+              locat: {
+                name: 'ModuleRadio'
+              }
+            },
+            {
+              label: 'app.aside.nav.checkbox',
+              locat: {
+                name: 'ModuleCheckbox'
+              }
+            },
+            {
+              label: 'app.aside.nav.input',
+              locat: {
+                name: 'ModuleInput'
+              }
+            },
+            {
+              label: 'app.aside.nav.pager',
+              locat: {
+                name: 'ModulePager'
+              }
+            },
+            {
+              label: 'app.aside.nav.message',
+              locat: {
+                name: 'ModuleMessage'
+              }
+            },
+            {
+              label: 'app.aside.nav.tooltip',
+              locat: {
+                name: 'ModuleTooltip'
+              }
+            },
+            {
+              label: 'app.aside.nav.toolbar',
+              locat: {
+                name: 'ModuleToolbar'
               }
             }
           ]

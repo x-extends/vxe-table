@@ -14,7 +14,6 @@ const RendererEdit = () => import(/* webpackChunkName: "start" */ './views/table
 
 const InterceptorAPI = () => import(/* webpackChunkName: "start" */ './views/table/interceptor/API.vue')
 
-const TableIcon = () => import(/* webpackChunkName: "base" */ './views/table/base/Icon.vue')
 const TableBasic = () => import(/* webpackChunkName: "base" */ './views/table/base/Basic.vue')
 const TableSize = () => import(/* webpackChunkName: "base" */ './views/table/base/Size.vue')
 const TableOverflow = () => import(/* webpackChunkName: "base" */ './views/table/base/Overflow.vue')
@@ -118,6 +117,16 @@ const TableEditSpan = () => import(/* webpackChunkName: "edit" */ './views/table
 const TableEditTemplate = () => import(/* webpackChunkName: "edit" */ './views/table/edit/Template.vue')
 const TableEditFull = () => import(/* webpackChunkName: "edit" */ './views/table/edit/Full.vue')
 
+const ModuleIcon = () => import(/* webpackChunkName: "module" */ './views/icon/Icon.vue')
+const ModuleButton = () => import(/* webpackChunkName: "module" */ './views/button/Button.vue')
+const ModuleRadio = () => import(/* webpackChunkName: "module" */ './views/radio/Radio.vue')
+const ModuleCheckbox = () => import(/* webpackChunkName: "module" */ './views/checkbox/Checkbox.vue')
+const ModuleInput = () => import(/* webpackChunkName: "module" */ './views/input/Input.vue')
+const ModulePager = () => import(/* webpackChunkName: "module" */ './views/pager/Pager.vue')
+const ModuleMessage = () => import(/* webpackChunkName: "module" */ './views/message/Message.vue')
+const ModuleTooltip = () => import(/* webpackChunkName: "module" */ './views/tooltip/Tooltip.vue')
+const ModuleToolbar = () => import(/* webpackChunkName: "module" */ './views/toolbar/Toolbar.vue')
+
 const TableOtherElement = () => import(/* webpackChunkName: "other" */ './views/table/other/Element.vue')
 const TableOtherIview = () => import(/* webpackChunkName: "other" */ './views/table/other/Iview.vue')
 const TableOtherAntd = () => import(/* webpackChunkName: "other" */ './views/table/other/Antd.vue')
@@ -208,11 +217,6 @@ export default new Router({
       path: '/table/interceptor/api',
       name: 'InterceptorAPI',
       component: InterceptorAPI
-    },
-    {
-      path: '/table/base/icon',
-      name: 'TableIcon',
-      component: TableIcon
     },
     {
       path: '/table/base/basic',
@@ -698,6 +702,51 @@ export default new Router({
       path: '/table/edit/full',
       name: 'TableEditFull',
       component: TableEditFull
+    },
+    {
+      path: '/table/module/icon',
+      name: 'ModuleIcon',
+      component: ModuleIcon
+    },
+    {
+      path: '/table/module/button',
+      name: 'ModuleButton',
+      component: ModuleButton
+    },
+    {
+      path: '/table/module/radio',
+      name: 'ModuleRadio',
+      component: ModuleRadio
+    },
+    {
+      path: '/table/module/checkbox',
+      name: 'ModuleCheckbox',
+      component: ModuleCheckbox
+    },
+    {
+      path: '/table/module/input',
+      name: 'ModuleInput',
+      component: ModuleInput
+    },
+    {
+      path: '/table/module/pager',
+      name: 'ModulePager',
+      component: ModulePager
+    },
+    {
+      path: '/table/module/message',
+      name: 'ModuleMessage',
+      component: ModuleMessage
+    },
+    {
+      path: '/table/module/tooltip',
+      name: 'ModuleTooltip',
+      component: ModuleTooltip
+    },
+    {
+      path: '/table/module/toolbar',
+      name: 'ModuleToolbar',
+      component: ModuleToolbar
     },
     {
       path: '/table/other/element',

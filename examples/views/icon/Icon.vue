@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2>内置的小图标</h2>
+    <h2>图标</h2>
     <p class="tip">如果本身项目有合适的 icon 图标，可以通过全局参数 <router-link class="link" :to="{name: 'StartUse'}">icon</router-link> 替换自带的，可以减少一些体积</p>
 
     <ul class="icon-list">

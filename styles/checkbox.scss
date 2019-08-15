@@ -14,6 +14,9 @@
       }
     }
   }
+  &+.vxe-checkbox {
+    margin-left: 10px;
+  }
   > input {
     display: none;
     &+.vxe-checkbox--icon {

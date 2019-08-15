@@ -102,6 +102,12 @@ module.exports = {
         forceRowVaild: 'Validate row + lock',
         keyboard: 'Keyboard navigation',
 
+        module: 'Modules',
+        button: 'Button',
+        input: 'Input',
+        message: 'Message',
+        tooltip: 'Tooltip',
+
         other: 'Integrated component',
         elementRender: 'element-ui -> Cell',
         iviewRender: 'iview -> Cell',
@@ -372,7 +378,8 @@ module.exports = {
       button: {
         desc: {
           type: 'Type',
-          size: 'Size'
+          size: 'Size',
+          name: '用来标识这一项'
         }
       },
       msg: {

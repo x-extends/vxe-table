@@ -1,0 +1,136 @@
+<template>
+  <div>
+    <h2>分页</h2>
+
+    <vxe-pager
+      :current-page.sync="page1.currentPage"
+      :page-size.sync="page1.pageSize"
+      :total="page1.totalResult"
+      :layouts="['JumpNumber']">
+    </vxe-pager>
+
+    <vxe-pager
+      :current-page.sync="page2.currentPage"
+      :page-size.sync="page2.pageSize"
+      :total="page2.totalResult"
+      :layouts="['PrevPage', 'JumpNumber', 'NextPage', 'Sizes']">
+    </vxe-pager>
+
+    <vxe-pager
+      :current-page.sync="page3.currentPage"
+      :page-size.sync="page3.pageSize"
+      :total="page3.totalResult"
+      :layouts="['PrevJump', 'PrevPage', 'Jump', 'PageCount', 'NextPage', 'NextJump', 'Sizes', 'Total']">
+    </vxe-pager>
+
+    <vxe-pager
+      :current-page.sync="page4.currentPage"
+      :page-size.sync="page4.pageSize"
+      :total="page4.totalResult"
+      :layouts="['PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
+    </vxe-pager>
+
+    <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
+
+    <pre>
+      <code class="html">{{ demoCodes[0] }}</code>
+      <code class="javascript">{{ demoCodes[1] }}</code>
+    </pre>
+  </div>
+</template>
+
+<script>
+import hljs from 'highlight.js'
+
+export default {
+  data  () {
+    return {
+      page1: {
+        currentPage: 1,
+        pageSize: 10,
+        totalResult: 200
+      },
+      page2: {
+        currentPage: 1,
+        pageSize: 10,
+        totalResult: 200
+      },
+      page3: {
+        currentPage: 1,
+        pageSize: 10,
+        totalResult: 200
+      },
+      page4: {
+        currentPage: 1,
+        pageSize: 10,
+        totalResult: 300
+      },
+      value2: '',
+      demoCodes: [
+        `
+        <vxe-pager
+          :current-page.sync="page1.currentPage"
+          :page-size.sync="page1.pageSize"
+          :total="page1.totalResult"
+          :layouts="['JumpNumber']">
+        </vxe-pager>
+
+        <vxe-pager
+          :current-page.sync="page2.currentPage"
+          :page-size.sync="page2.pageSize"
+          :total="page2.totalResult"
+          :layouts="['PrevPage', 'JumpNumber', 'NextPage', 'Sizes']">
+        </vxe-pager>
+
+        <vxe-pager
+          :current-page.sync="page3.currentPage"
+          :page-size.sync="page3.pageSize"
+          :total="page3.totalResult"
+          :layouts="['PrevJump', 'PrevPage', 'Jump', 'PageCount', 'NextPage', 'NextJump', 'Sizes', 'Total']">
+        </vxe-pager>
+
+        <vxe-pager
+          :current-page.sync="page4.currentPage"
+          :page-size.sync="page4.pageSize"
+          :total="page4.totalResult"
+          :layouts="['PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
+        </vxe-pager>
+        `,
+        `
+        export default {
+          data () {
+            return {
+              page1: {
+                currentPage: 1,
+                pageSize: 10,
+                totalResult: 200
+              },
+              page2: {
+                currentPage: 1,
+                pageSize: 10,
+                totalResult: 200
+              },
+              page3: {
+                currentPage: 1,
+                pageSize: 10,
+                totalResult: 200
+              },
+              page4: {
+                currentPage: 1,
+                pageSize: 10,
+                totalResult: 300
+              }
+            }
+          }
+        }
+        `
+      ]
+    }
+  },
+  mounted () {
+    Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
+      hljs.highlightBlock(block)
+    })
+  }
+}
+</script>
