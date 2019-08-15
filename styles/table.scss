@@ -29,6 +29,10 @@
       border: 1px solid $vxe-primary-color;
     }
   }
+  .vxe-default-textarea {
+    resize: none;
+    vertical-align: middle;
+  }
   .vxe-input--wrapper {
     width: 100%;
     display: block;
