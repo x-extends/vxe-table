@@ -12,7 +12,7 @@
       </h1>
       <div class="right">
         <div class="langs">
-          <span class="performance">Memory used: {{ usedJSHeapSize }} MB.</span>
+          <span v-if="usedJSHeapSize" class="performance">Memory used: {{ usedJSHeapSize }} MB.</span>
           <span>{{ $t('app.body.label.translations') }}:</span>
           <select class="locale-switch" v-model="$i18n.locale">
             <option value="zh-CN">中文</option>
