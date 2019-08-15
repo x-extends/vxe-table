@@ -12,6 +12,7 @@
       </h1>
       <div class="right">
         <div class="langs">
+          <span class="performance">Memory used: {{ usedJSHeapSize }} MB.</span>
           <span>{{ $t('app.body.label.translations') }}:</span>
           <select class="locale-switch" v-model="$i18n.locale">
             <option value="zh-CN">中文</option>
@@ -56,11 +57,14 @@
 </template>
 
 <script>
+import XEUtils from 'xe-utils'
+
 export default {
   data () {
     return {
       selected: null,
       version: '1',
+      usedJSHeapSize: 0,
       tableList: [
         {
           label: 'app.aside.nav.start',
@@ -1130,6 +1134,14 @@ export default {
     }
   },
   created () {
+    if (process.env.NODE_ENV === 'development') {
+      setInterval(() => {
+        let performance = window.performance || window.webkitPerformance
+        if (performance) {
+          this.usedJSHeapSize = XEUtils.toFixedNumber(performance.memory.usedJSHeapSize / 1048576, 2)
+        }
+      }, 3000)
+    }
     this.init()
   },
   methods: {

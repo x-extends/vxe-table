@@ -30,20 +30,21 @@
   background-color: #fff;
   outline: 0;
   font-size: $vxe-font-size;
-  color: $vxe-font-color;
   white-space: nowrap;
   user-select: none;
   appearance: none;
-  cursor: pointer;
+  &[disabled] {
+    color: $vxe-disabled-color;
+    cursor: no-drop;
+  }
+  &:not([disabled]) {
+    color: $vxe-font-color;
+    cursor: pointer;
+  }
   &.type--text {
-    color: $vxe-primary-color;
     text-decoration: none;
     border: 0;
     background-color: transparent;
-    &[disabled] {
-      color: $vxe-disabled-color;
-      cursor: no-drop;
-    }
     &:not([disabled]) {
       &:hover {
         color: lighten($vxe-primary-color, 10%);
@@ -59,22 +60,26 @@
       color: #fff;
       border-color: $vxe-primary-color;
       background-color: $vxe-primary-color;
-      &:hover {
-        @extend %ButtonPrimaryHover;
-      }
-      &:active {
-        color: #fff;
-        background-color: darken($vxe-primary-color, 2%);
-        border-color: darken($vxe-primary-color, 2%);
+      &:not([disabled]) {
+        &:hover {
+          @extend %ButtonPrimaryHover;
+        }
+        &:active {
+          color: #fff;
+          background-color: darken($vxe-primary-color, 2%);
+          border-color: darken($vxe-primary-color, 2%);
+        }
       }
     }
     &:not(.theme--primary) {
-      &:hover {
-        @extend %ButtonHover;
-      }
-      &:active {
-        color: darken($vxe-primary-color, 2%);
-        border-color: darken($vxe-primary-color, 2%);
+      &:not([disabled]) {
+        &:hover {
+          @extend %ButtonHover;
+        }
+        &:active {
+          color: darken($vxe-primary-color, 2%);
+          border-color: darken($vxe-primary-color, 2%);
+        }
       }
     }
     &.size--medium {
@@ -129,8 +134,10 @@
       &.theme--primary {
         @extend %ButtonPrimaryHover;
       }
-      &:not(.theme--primary) {
-        @extend %ButtonHover;
+      &:not([disabled]) {
+        &:not(.theme--primary) {
+          @extend %ButtonHover;
+        }
       }
     }
     .vxe-button--dropdown-wrapper {

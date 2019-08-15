@@ -585,13 +585,6 @@ export default {
     if (ResizeEvent.off) {
       ResizeEvent.off(this, this.$el.parentNode)
     }
-    this.afterFullData.length = 0
-    this.fullAllDataRowMap.clear()
-    this.fullAllDataRowIdData = null
-    this.fullDataRowMap.clear()
-    this.fullDataRowIdData = null
-    this.fullColumnMap.clear()
-    this.fullColumnIdData = null
     this.closeFilter()
     this.closeMenu()
   },
