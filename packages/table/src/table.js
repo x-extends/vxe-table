@@ -505,10 +505,6 @@ export default {
     if (ResizeEvent.off) {
       ResizeEvent.off(this, this.$el.parentNode)
     }
-    this.afterFullData.length = 0
-    this.fullAllDataRowMap.clear()
-    this.fullDataRowMap.clear()
-    this.fullColumnMap.clear()
     this.closeFilter()
     this.closeMenu()
   },
