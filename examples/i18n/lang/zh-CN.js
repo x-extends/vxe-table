@@ -31,8 +31,8 @@ module.exports = {
         seq: '序号',
         headerHighlight: '高亮列',
         current: '高亮行',
-        radio: '单选',
-        checkbox: '多选',
+        radio: '单选框',
+        checkbox: '复选框',
         sort: '排序',
         filter: '筛选',
         empty: '空数据',
@@ -103,6 +103,12 @@ module.exports = {
 
         excel: '更多实现',
         cell: '单元格',
+
+        module: '功能模块',
+        button: '按钮',
+        input: '输入框',
+        message: '提示框',
+        tooltip: '文字提示',
 
         other: '集成组件库',
         elementRender: 'element-ui -> 单元格',
@@ -377,7 +383,8 @@ module.exports = {
       button: {
         desc: {
           type: '类型',
-          size: '尺寸'
+          size: '尺寸',
+          name: '用来标识这一项'
         }
       },
       msg: {

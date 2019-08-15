@@ -50,6 +50,7 @@ export function Message (options) {
 })
 
 Message.install = function (Vue) {
+  Vue.component(VxeMessageBox.name, VxeMessageBox)
   AlertController = Vue.extend(VxeMessageBox)
   Vue.prototype.$XMsg = Message
 }

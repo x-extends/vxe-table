@@ -21,6 +21,14 @@ const apis = [
         enum: 'medium,small,mini',
         defVal: '',
         list: []
+      },
+      {
+        name: 'name',
+        descKey: 'app.api.button.desc.name',
+        type: 'String, Number',
+        enum: '',
+        defVal: '',
+        list: []
       }
     ]
   },
@@ -55,7 +63,16 @@ const apis = [
     type: '',
     enum: '',
     defVal: '',
-    list: []
+    list: [
+      {
+        name: 'dropdown-click',
+        desc: '下拉列表按钮点击时会触发该事件',
+        type: '',
+        enum: '',
+        defVal: '{name}, event',
+        list: []
+      }
+    ]
   },
   {
     name: 'Methods',

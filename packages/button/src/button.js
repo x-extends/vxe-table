@@ -7,6 +7,7 @@ export default {
   props: {
     type: String,
     size: String,
+    name: [String, Number],
     disabled: Boolean
   },
   computed: {
@@ -15,7 +16,7 @@ export default {
     }
   },
   render (h) {
-    let { $scopedSlots, $listeners, type, vSize, disabled } = this
+    let { $scopedSlots, $listeners, type, vSize, name, disabled } = this
     let isText = type === 'text'
     return $scopedSlots.dropdowns ? h('div', {
       class: ['vxe-button--dropdown', {
@@ -28,7 +29,8 @@ export default {
           [`theme--${type}`]: type && !isText
         }],
         attrs: {
-          disabled: disabled
+          name,
+          disabled
         },
         on: Object.assign({
           mouseenter: this.mouseenterEvent,
@@ -54,7 +56,8 @@ export default {
         [`theme--${type}`]: type && !isText
       }],
       attrs: {
-        disabled: disabled
+        name,
+        disabled
       },
       on: XEUtils.objectMap($listeners, (cb, type) => evnt => this.$emit(type, evnt))
     }, $scopedSlots.default.call(this))
@@ -63,10 +66,11 @@ export default {
     clickDropdownEvent (evnt) {
       let dropdownElem = evnt.currentTarget
       let wrapperElem = dropdownElem.parentNode
-      if (DomTools.getEventTargetNode(evnt, dropdownElem, 'vxe-button').flag) {
+      let { flag, targetElem } = DomTools.getEventTargetNode(evnt, dropdownElem, 'vxe-button')
+      if (flag) {
         wrapperElem.dataset.active = 'N'
         DomTools.removeClass(wrapperElem, 'is--active')
-        UtilTools.emitEvent(this, 'dropdown-click', [{ $grid: this }, evnt])
+        UtilTools.emitEvent(this, 'dropdown-click', [{ name: targetElem.getAttribute('name') }, evnt])
       }
     },
     mouseenterEvent (evnt) {
