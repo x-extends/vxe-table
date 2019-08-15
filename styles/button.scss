@@ -137,12 +137,14 @@
       display: block;
     }
     .vxe-button--dropdown-arrow {
-      transform: rotate(360deg);
+      transform: rotate(315deg);
+      &.vxe-icon--arrow-bottom {
+        margin-top: -2px;
+      }
     }
   }
   .vxe-button--dropdown-arrow {
     font-size: 12px;
-    margin-top: -2px;
     margin-left: 5px;
     @include animatTransition(transform, .2s);
   }
