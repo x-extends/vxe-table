@@ -1058,7 +1058,7 @@ export default {
             {
               label: 'app.aside.nav.vxeTable',
               locat: {
-                name: 'TableAPI',
+                name: 'VXEAPI',
                 params: {
                   name: 'table'
                 }
@@ -1067,7 +1067,7 @@ export default {
             {
               label: 'app.aside.nav.vxeTableColumn',
               locat: {
-                name: 'TableAPI',
+                name: 'VXEAPI',
                 params: {
                   name: 'table-column'
                 }
@@ -1076,7 +1076,7 @@ export default {
             {
               label: 'app.aside.nav.vxeGrid',
               locat: {
-                name: 'TableAPI',
+                name: 'VXEAPI',
                 params: {
                   name: 'grid'
                 }
@@ -1085,7 +1085,7 @@ export default {
             // {
             //   label: 'app.aside.nav.vxeExcel',
             //   locat: {
-            //     name: 'TableAPI',
+            //     name: 'VXEAPI',
             //     params: {
             //       name: 'excel'
             //     }
@@ -1094,7 +1094,7 @@ export default {
             {
               label: 'app.aside.nav.vxeToolbar',
               locat: {
-                name: 'TableAPI',
+                name: 'VXEAPI',
                 params: {
                   name: 'toolbar'
                 }
@@ -1103,7 +1103,7 @@ export default {
             {
               label: 'app.aside.nav.vxePager',
               locat: {
-                name: 'TableAPI',
+                name: 'VXEAPI',
                 params: {
                   name: 'pager'
                 }
@@ -1112,7 +1112,7 @@ export default {
             {
               label: 'app.aside.nav.vxeRadio',
               locat: {
-                name: 'TableAPI',
+                name: 'VXEAPI',
                 params: {
                   name: 'radio'
                 }
@@ -1121,7 +1121,7 @@ export default {
             {
               label: 'app.aside.nav.vxeCheckbox',
               locat: {
-                name: 'TableAPI',
+                name: 'VXEAPI',
                 params: {
                   name: 'checkbox'
                 }
@@ -1130,16 +1130,25 @@ export default {
             {
               label: 'app.aside.nav.vxeInput',
               locat: {
-                name: 'TableAPI',
+                name: 'VXEAPI',
                 params: {
                   name: 'input'
                 }
               }
             },
             {
+              label: 'app.aside.nav.vxeTextarea',
+              locat: {
+                name: 'VXEAPI',
+                params: {
+                  name: 'textarea'
+                }
+              }
+            },
+            {
               label: 'app.aside.nav.vxeButton',
               locat: {
-                name: 'TableAPI',
+                name: 'VXEAPI',
                 params: {
                   name: 'button'
                 }
@@ -1148,7 +1157,7 @@ export default {
             {
               label: 'app.aside.nav.vxeMessageBox',
               locat: {
-                name: 'TableAPI',
+                name: 'VXEAPI',
                 params: {
                   name: 'message'
                 }
@@ -1157,7 +1166,7 @@ export default {
             {
               label: 'app.aside.nav.vxeTooltip',
               locat: {
-                name: 'TableAPI',
+                name: 'VXEAPI',
                 params: {
                   name: 'tooltip'
                 }

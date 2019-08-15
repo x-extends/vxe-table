@@ -60,21 +60,22 @@
 </template>
 
 <script>
-import pack from '../../../../package.json'
+import pack from '../../../package.json'
 import XEUtils from 'xe-utils'
 import XEClipboard from 'xe-clipboard'
-import tableAPI from '../../../api/table'
-import tableColumnAPI from '../../../api/column'
-import toolbarAPI from '../../../api/toolbar'
-import gridAPI from '../../../api/grid'
-import excelAPI from '../../../api/excel'
-import pagerAPI from '../../../api/pager'
-import radioAPI from '../../../api/radio'
-import checkboxAPI from '../../../api/checkbox'
-import inputAPI from '../../../api/input'
-import buttonAPI from '../../../api/button'
-import tooltipAPI from '../../../api/tooltip'
-import messageAPI from '../../../api/message'
+import tableAPI from '../../api/table'
+import tableColumnAPI from '../../api/column'
+import toolbarAPI from '../../api/toolbar'
+import gridAPI from '../../api/grid'
+import excelAPI from '../../api/excel'
+import pagerAPI from '../../api/pager'
+import radioAPI from '../../api/radio'
+import checkboxAPI from '../../api/checkbox'
+import inputAPI from '../../api/input'
+import textareaAPI from '../../api/textarea'
+import buttonAPI from '../../api/button'
+import tooltipAPI from '../../api/tooltip'
+import messageAPI from '../../api/message'
 
 export default {
   data () {
@@ -197,6 +198,9 @@ export default {
               break
             case 'input':
               apis = inputAPI
+              break
+            case 'textarea':
+              apis = textareaAPI
               break
             case 'button':
               apis = buttonAPI

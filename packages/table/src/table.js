@@ -2122,7 +2122,7 @@ export default {
      */
     ctxMenuLinkEvent (evnt, menu) {
       if (!menu.disabled && (!menu.children || !menu.children.length)) {
-        UtilTools.emitEvent(this, 'context-menu-click', [Object.assign({ menu }, this.ctxMenuStore.args), evnt])
+        UtilTools.emitEvent(this, 'context-menu-click', [Object.assign({ menu, $table: this }, this.ctxMenuStore.args), evnt])
         this.closeMenu()
       }
     },
@@ -2315,7 +2315,7 @@ export default {
     },
     triggerCheckRowEvent (evnt, params, value) {
       this.handleSelectRow(evnt, params, value)
-      UtilTools.emitEvent(this, 'select-change', [Object.assign({ selection: this.getSelectRecords(), checked: value }, params), evnt])
+      UtilTools.emitEvent(this, 'select-change', [Object.assign({ selection: this.getSelectRecords(), checked: value, $table: this }, params), evnt])
     },
     /**
      * 多选，切换某一行的选中状态
@@ -2432,7 +2432,7 @@ export default {
      */
     triggerCheckAllEvent (evnt, value) {
       this.setAllSelection(value)
-      UtilTools.emitEvent(this, 'select-all', [{ selection: this.getSelectRecords(), checked: value }, evnt])
+      UtilTools.emitEvent(this, 'select-all', [{ selection: this.getSelectRecords(), checked: value, $table: this }, evnt])
     },
     /**
      * 多选，切换所有行的选中状态
@@ -3038,7 +3038,7 @@ export default {
             this.handleData(true)
           }
           // 在 v3.0 中废弃 prop
-          UtilTools.emitEvent(this, 'sort-change', [{ column, property: field, prop: field, field, order }])
+          UtilTools.emitEvent(this, 'sort-change', [{ column, property: field, prop: field, field, order, $table: this }])
         }
       }
       return this.$nextTick()
@@ -3117,7 +3117,7 @@ export default {
         }
       })
       // 在 v3.0 中废弃 prop
-      UtilTools.emitEvent(this, 'filter-change', [{ column, property, field: property, prop: property, values, datas, filters: filterList }])
+      UtilTools.emitEvent(this, 'filter-change', [{ column, property, field: property, prop: property, values, datas, filters: filterList, $table: this }])
       if (scrollXLoad || scrollYLoad) {
         this.clearScroll()
       }

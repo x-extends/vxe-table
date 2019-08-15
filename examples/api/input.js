@@ -23,6 +23,54 @@ const apis = [
         list: []
       },
       {
+        name: 'type',
+        desc: '原生 type 属性',
+        type: 'String',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'name',
+        desc: '原生 name 属性',
+        type: 'String',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'placeholder',
+        desc: '原生 placeholder 属性',
+        type: 'String',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'autocomplete',
+        desc: '原生 autocomplete 属性',
+        type: 'String',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'maxlength',
+        desc: '最大长度',
+        type: 'String, Number',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'readonly',
+        desc: '是否只读',
+        type: 'Boolean',
+        enum: '',
+        defVal: 'false',
+        list: []
+      },
+      {
         name: 'disabled',
         descKey: 'app.api.input.desc.disabled',
         type: 'Boolean',
@@ -48,11 +96,11 @@ const apis = [
     defVal: '',
     list: [
       {
-        name: 'change',
+        name: '*',
         desc: '在值发生改变时触发该事件',
         type: '',
         enum: '',
-        defVal: 'value',
+        defVal: '{ value }, event',
         list: []
       }
     ]

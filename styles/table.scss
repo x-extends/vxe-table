@@ -276,6 +276,9 @@
     .vxe-textarea {
       padding: 0 2px;
     }
+    .vxe-textarea {
+      resize: none;
+    }
   }
   .fixed--hidden {
     visibility: hidden;
