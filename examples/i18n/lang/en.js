@@ -355,6 +355,7 @@ module.exports = {
           total: 'Total number',
           pagerCount: 'Displays the number of page number buttons',
           pageSizes: 'List of options for page size',
+          align: 'On the way',
           background: 'Show background color'
         }
       },

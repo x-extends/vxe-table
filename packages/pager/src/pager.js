@@ -20,6 +20,8 @@ export default {
     pagerCount: { type: Number, default: () => GlobalConfig.pager.pagerCount || 7 },
     // 每页大小选项列表
     pageSizes: { type: Array, default: () => GlobalConfig.pager.pageSizes || [10, 15, 20, 50, 100] },
+    // 列对其方式
+    align: String,
     // 带背景颜色
     background: Boolean
   },
@@ -70,10 +72,11 @@ export default {
     GlobalEvent.off(this, 'mousedown')
   },
   render (h) {
-    let { layouts, isSizes, loading, vSize, background } = this
+    let { layouts, isSizes, loading, vSize, align, background } = this
     return h('div', {
       class: ['vxe-pager', {
         [`size--${vSize}`]: vSize,
+        [`align--${align}`]: align,
         'p--background': background,
         'is--loading': loading
       }]

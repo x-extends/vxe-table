@@ -3,6 +3,7 @@
     <h2>分页</h2>
 
     <vxe-pager
+      align="left"
       :current-page.sync="page1.currentPage"
       :page-size.sync="page1.pageSize"
       :total="page1.totalResult"
@@ -10,10 +11,11 @@
     </vxe-pager>
 
     <vxe-pager
+      align="left"
       :current-page.sync="page2.currentPage"
       :page-size.sync="page2.pageSize"
       :total="page2.totalResult"
-      :layouts="['PrevPage', 'JumpNumber', 'NextPage', 'Sizes']">
+      :layouts="['Sizes', 'PrevPage', 'JumpNumber', 'NextPage']">
     </vxe-pager>
 
     <vxe-pager
@@ -69,6 +71,7 @@ export default {
       demoCodes: [
         `
         <vxe-pager
+          align="left"
           :current-page.sync="page1.currentPage"
           :page-size.sync="page1.pageSize"
           :total="page1.totalResult"
@@ -76,10 +79,11 @@ export default {
         </vxe-pager>
 
         <vxe-pager
+          align="left"
           :current-page.sync="page2.currentPage"
           :page-size.sync="page2.pageSize"
           :total="page2.totalResult"
-          :layouts="['PrevPage', 'JumpNumber', 'NextPage', 'Sizes']">
+          :layouts="['Sizes', 'PrevPage', 'JumpNumber', 'NextPage']">
         </vxe-pager>
 
         <vxe-pager

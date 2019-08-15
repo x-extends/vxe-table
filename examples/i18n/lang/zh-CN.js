@@ -355,6 +355,7 @@ module.exports = {
           total: '总条数',
           pagerCount: '显示页码按钮的数量',
           pageSizes: '每页大小选项列表',
+          align: '对其方式',
           background: '带背景颜色'
         }
       },

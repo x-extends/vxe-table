@@ -9,6 +9,12 @@
   font-family: $vxe-font-family;
   text-align: right;
   user-select: none;
+  &.align--left {
+    text-align: left;
+  }
+  &.align--center {
+    text-align: center;
+  }
   &.is--loading {
     position: relative;
     &:before {

@@ -71,6 +71,14 @@ const apis = [
         list: []
       },
       {
+        name: 'align',
+        descKey: 'app.api.pager.desc.align',
+        type: 'String',
+        enum: 'left（左对其）, center（居中对其）, right（右对齐）',
+        defVal: 'right',
+        list: []
+      },
+      {
         name: 'background',
         descKey: 'app.api.pager.desc.background',
         type: 'Boolean',
