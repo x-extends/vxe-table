@@ -8,9 +8,9 @@
       <vxe-button type="text">
         <template>下拉按钮</template>
         <template v-slot:dropdowns>
-          <vxe-button>下拉按钮1</vxe-button>
-          <vxe-button>下拉按钮2</vxe-button>
-          <vxe-button>下拉按钮3</vxe-button>
+          <vxe-button type="text">下拉按钮1</vxe-button>
+          <vxe-button type="text">下拉按钮2</vxe-button>
+          <vxe-button type="text">下拉按钮3</vxe-button>
         </template>
       </vxe-button>
     </p>

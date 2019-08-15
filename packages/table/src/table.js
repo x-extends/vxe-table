@@ -2989,7 +2989,7 @@ export default {
             if (column && column.editRender) {
               let cell = DomTools.getCell(this, { row, column })
               if (cell) {
-                this.handleActived({ row, column, cell })
+                this.handleActived({ row, rowIndex: this.getRowIndex(row), column, columnIndex: this.getColumnIndex(column), cell, $table: this })
                 this.lastCallTime = Date.now()
               }
             }
@@ -3697,7 +3697,7 @@ export default {
                   this.validCellRules('all', row, column)
                     .then(resolve)
                     .catch(({ rule, rules }) => {
-                      let rest = { rule, rules, rowIndex, row, columnIndex, column }
+                      let rest = { rule, rules, rowIndex, row, columnIndex, column, $table: this }
                       if (isAll) {
                         if (!validRest[column.property]) {
                           validRest[column.property] = []

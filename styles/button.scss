@@ -110,21 +110,6 @@
 }
 .vxe-button--dropdown {
   position: relative;
-  &.size--medium {
-    .vxe-button--dropdown-wrapper {
-      top: 36px;
-    }
-  }
-  &.size--small {
-    .vxe-button--dropdown-wrapper {
-      top: 32px;
-    }
-  }
-  &.size--mini {
-    .vxe-button--dropdown-wrapper {
-      top: 30px;
-    }
-  }
   &+.vxe-button,
   &+.vxe-button--dropdown {
     @extend %ButtonInterval;
@@ -158,9 +143,9 @@
   .vxe-button--dropdown-wrapper {
     display: none;
     position: absolute;
-    top: 38px;
     left: 50%;
     transform: translateX(-50%);
+    margin-top: 5px;
     z-index: 100;
     padding: 5px;
     background-color: #fff;
@@ -172,6 +157,9 @@
       display: block;
       width: 100%;
       border: 0;
+      &.type--text {
+        padding: 2px 8px;
+      }
     }
   }
 }
