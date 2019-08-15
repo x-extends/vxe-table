@@ -52,7 +52,8 @@ const GlobalConfig = {
     msgError: 'vxe-icon--error',
     msgQuestion: 'vxe-icon--question',
     msgLoading: 'vxe-icon--refresh roll',
-    caretBottom: 'vxe-icon--caret-bottom'
+    caretBottom: 'vxe-icon--caret-bottom',
+    dropdownBottom: 'vxe-icon--arrow-bottom'
   },
   grid: {},
   menu: {},

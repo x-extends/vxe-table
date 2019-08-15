@@ -946,35 +946,34 @@ export default {
       if (!XEUtils.isArray(records)) {
         records = [records]
       }
-      return this.createRow(records).then(newRecords => {
-        if (!row) {
-          tableData.unshift.apply(tableData, newRecords)
-          tableFullData.unshift.apply(tableFullData, newRecords)
+      let newRecords = records.map(record => this.defineField(Object.assign({}, record)))
+      if (!row) {
+        tableData.unshift.apply(tableData, newRecords)
+        tableFullData.unshift.apply(tableFullData, newRecords)
+      } else {
+        if (row === -1) {
+          tableData.push.apply(tableData, newRecords)
+          tableFullData.push.apply(tableFullData, newRecords)
         } else {
-          if (row === -1) {
-            tableData.push.apply(tableData, newRecords)
-            tableFullData.push.apply(tableFullData, newRecords)
-          } else {
-            if (treeConfig) {
-              throw new Error('[vxe-table] The tree table does not support this operation.')
-            }
-            tableData.splice.apply(tableData, [tableData.indexOf(row), 0].concat(newRecords))
-            tableFullData.splice.apply(tableFullData, [tableFullData.indexOf(row), 0].concat(newRecords))
+          if (treeConfig) {
+            throw new Error('[vxe-table] The tree table does not support this operation.')
           }
+          tableData.splice.apply(tableData, [tableData.indexOf(row), 0].concat(newRecords))
+          tableFullData.splice.apply(tableFullData, [tableFullData.indexOf(row), 0].concat(newRecords))
         }
-        [].unshift.apply(editStore.insertList, newRecords)
-        if (scrollYLoad || !remoteSort) {
-          this.updateData(true)
+      }
+      [].unshift.apply(editStore.insertList, newRecords)
+      if (scrollYLoad || !remoteSort) {
+        this.updateData(true)
+      }
+      this.updateCache()
+      this.checkSelectionStatus()
+      return this.$nextTick().then(() => {
+        this.recalculate()
+        return {
+          row: newRecords.length ? newRecords[newRecords.length - 1] : null,
+          rows: newRecords
         }
-        this.updateCache()
-        this.checkSelectionStatus()
-        return this.$nextTick().then(() => {
-          this.recalculate()
-          return {
-            row: newRecords.length ? newRecords[newRecords.length - 1] : null,
-            rows: newRecords
-          }
-        })
       })
     },
     defineField (row) {

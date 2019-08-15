@@ -37,7 +37,7 @@ export default {
       }, [
         h('span', $scopedSlots.default.call(this)),
         h('i', {
-          class: `vxe-button--dropdown-arrow ${GlobalConfig.icon.caretBottom}`
+          class: `vxe-button--dropdown-arrow ${GlobalConfig.icon.dropdownBottom}`
         })
       ]),
       h('div', {
