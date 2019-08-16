@@ -398,7 +398,7 @@ export default {
         this.mergeCustomColumn(this.customs)
       }
       this.refreshColumn()
-      this.tableData = this.getTableData(true).tableData
+      this.handleData(true)
       if (this._toolbar) {
         this._toolbar.updateColumn(tableFullColumn)
       }
@@ -743,7 +743,7 @@ export default {
       this.tableSourceData = XEUtils.clone(tableFullData, true)
       this.scrollYLoad = scrollYLoad
       if (scrollYLoad && !(height || maxHeight)) {
-        throw new Error('[vxe-table] The height/max-height must be set for the scroll load.')
+        UtilTools.error('vxe.error.scrollYHeight')
       }
       this.handleData(true)
       this.reserveCheckSelection()
@@ -862,29 +862,34 @@ export default {
      * 从指定行插入数据
      */
     insertAt (records, row) {
-      let { tableData, editStore, scrollYLoad, tableFullData, treeConfig, remoteSort } = this
+      let { afterFullData, tableData, editStore, scrollYLoad, tableFullData, treeConfig } = this
+      if (treeConfig) {
+        throw new Error(UtilTools.error('vxe.error.treeInsert'))
+      }
       if (!XEUtils.isArray(records)) {
         records = [records]
       }
+      let nowData = scrollYLoad ? afterFullData : tableData
       let newRecords = records.map(record => this.defineField(Object.assign({}, record)))
       if (!row) {
-        tableData.unshift.apply(tableData, newRecords)
+        nowData.unshift.apply(nowData, newRecords)
         tableFullData.unshift.apply(tableFullData, newRecords)
       } else {
         if (row === -1) {
-          tableData.push.apply(tableData, newRecords)
+          nowData.push.apply(nowData, newRecords)
           tableFullData.push.apply(tableFullData, newRecords)
         } else {
-          if (treeConfig) {
-            throw new Error('[vxe-table] The tree table does not support this operation.')
+          let targetIndex = nowData.indexOf(row)
+          if (targetIndex === -1) {
+            throw new Error('[vxe-table] Unable to insert to the specified location.')
           }
-          tableData.splice.apply(tableData, [tableData.indexOf(row), 0].concat(newRecords))
+          nowData.splice.apply(nowData, [targetIndex, 0].concat(newRecords))
           tableFullData.splice.apply(tableFullData, [tableFullData.indexOf(row), 0].concat(newRecords))
         }
       }
       [].unshift.apply(editStore.insertList, newRecords)
-      if (scrollYLoad || !remoteSort) {
-        this.updateData(true)
+      if (scrollYLoad) {
+        this.updateScrollYSpace()
       }
       this.updateCache()
       this.checkSelectionStatus()
@@ -973,7 +978,7 @@ export default {
         XEUtils.remove(insertList, row => rows.indexOf(row) > -1)
       }
       if (scrollYLoad) {
-        this.updateData(true)
+        this.updateScrollYSpace()
       }
       this.updateCache()
       this.checkSelectionStatus()
@@ -1184,8 +1189,8 @@ export default {
      */
     updateAfterFullData () {
       let { visibleColumn, tableFullData, remoteSort, remoteFilter } = this
-      let column = visibleColumn.find(column => column.order)
       let tableData = tableFullData
+      let column = visibleColumn.find(column => column.order)
       let filterColumn = visibleColumn.filter(({ filters }) => filters && filters.length)
       tableData = tableData.filter(row => {
         return filterColumn.every(column => {
@@ -1233,7 +1238,11 @@ export default {
     getTableData (force) {
       let { tableFullData, scrollYLoad, scrollYStore } = this
       let fullData = force ? this.updateAfterFullData() : this.afterFullData
-      return { fullData: tableFullData.slice(0), visibleData: fullData, tableData: scrollYLoad ? fullData.slice(scrollYStore.startIndex, scrollYStore.startIndex + scrollYStore.renderSize) : fullData.slice(0) }
+      return {
+        fullData: tableFullData.slice(0),
+        visibleData: fullData.slice(0),
+        tableData: scrollYLoad ? fullData.slice(scrollYStore.startIndex, scrollYStore.startIndex + scrollYStore.renderSize) : fullData.slice(0)
+      }
     },
     handleDefault () {
       if (this.selectConfig) {
@@ -3416,7 +3425,11 @@ export default {
      * 点击排序事件
      */
     triggerSortEvent (evnt, column, params, order) {
-      this.sort(column.property, order)
+      if (column.order === order) {
+        this.clearSort(column.property)
+      } else {
+        this.sort(column.property, order)
+      }
     },
     sort (field, order) {
       let { visibleColumn, tableFullColumn, remoteSort } = this
@@ -3442,11 +3455,15 @@ export default {
       }
       return this.$nextTick()
     },
-    clearSort () {
-      this.tableFullColumn.forEach(column => {
+    clearSort (field) {
+      let column = arguments.length ? this.getColumnByField(field) : null
+      if (column) {
         column.order = null
-      })
-      this.tableFullData = this.data ? this.data.slice(0) : []
+      } else {
+        this.tableFullColumn.forEach(column => {
+          column.order = null
+        })
+      }
       return this.handleData(true)
     },
     filter (field, callback) {

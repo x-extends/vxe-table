@@ -9,7 +9,15 @@ export default {
       groupFixed: '如果使用分组表头，固定列必须在左右两侧',
       notResizable: '横向虚拟滚动不支持 resizable',
       cellEditRender: '渲染器 cell-render 和 edit-render 不能同时使用',
-      scrollOriginal: '虚拟滚动启用后只能导出源数据，请将设置 original=true'
+      scrollOriginal: '虚拟滚动启用后只能导出源数据，请将设置 original=true',
+      treeInsert: '树结构不支持 insert 操作',
+      scrollYHeight: '启用虚拟滚动必须要设置 height 或 max-height',
+
+      notQuery: 'query 方法不存在',
+      notDelete: 'delete 方法不存在',
+      notSave: 'save 方法不存在',
+
+      toolbarId: '工具栏需要设置唯一 id'
     },
     table: {
       emptyText: '暂无数据',

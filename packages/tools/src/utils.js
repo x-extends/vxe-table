@@ -61,7 +61,9 @@ class ColumnConfig {
 
 function outLog (type) {
   return function (message) {
-    console[type](`[vxe-table] ${GlobalConfig.i18n(message)}`)
+    let msg = `[vxe-table] ${GlobalConfig.i18n(message)}`
+    console[type](msg)
+    return msg
   }
 }
 

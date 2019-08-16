@@ -1841,19 +1841,19 @@ const apis = [
         list: []
       },
       {
-        name: 'clearSort()',
-        desc: '手动清空排序条件，数据会恢复成未排序的状态',
+        name: 'clearSort(field)',
+        desc: '手动清空排序条件，数据会恢复成未排序的状态（如果不传 field 则清空所有排序条件）',
         type: 'Promise',
         enum: '',
-        defVal: '',
+        defVal: 'field?',
         list: []
       },
       {
-        name: 'clearFilter(column)',
-        desc: '手动清空筛选条件（如果不传 column 则清空所有筛选条件），数据会恢复成未筛选的状态',
+        name: 'clearFilter(field)',
+        desc: '手动清空筛选条件（如果不传 field 则清空所有筛选条件），数据会恢复成未筛选的状态',
         type: 'Promise',
         enum: '',
-        defVal: 'column?',
+        defVal: 'field?',
         list: []
       },
       // {

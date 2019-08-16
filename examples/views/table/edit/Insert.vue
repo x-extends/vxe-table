@@ -72,7 +72,7 @@ export default {
             }
           },
           created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 2)
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 4)
           },
           methods: {
             insertEvent () {
@@ -93,7 +93,7 @@ export default {
     }
   },
   created () {
-    let list = window.MOCK_DATA_LIST.slice(0, 2)
+    let list = window.MOCK_DATA_LIST.slice(0, 4)
     this.tableData = list
   },
   mounted () {

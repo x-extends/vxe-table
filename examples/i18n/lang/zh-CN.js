@@ -335,8 +335,8 @@ module.exports = {
           size: '尺寸',
           loading: '是否加载中',
           refresh: '刷新按钮',
-          resizable: '列宽拖动配置',
-          setting: '列个性化配置'
+          resizable: '列宽拖动配置（需要设置 id）',
+          setting: '列个性化配置（需要设置 id）'
         }
       },
       pager: {
