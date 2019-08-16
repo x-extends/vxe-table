@@ -3448,8 +3448,16 @@ export default {
       this.tableFullData = this.data ? this.data.slice(0) : []
       return this.handleData(true)
     },
-    filter (field) {
-      return Promise.resolve(this.getColumnByField(field).filters)
+    filter (field, callback) {
+      let column = this.getColumnByField(field)
+      let filters = column.filters
+      if (callback) {
+        let rest = callback(filters)
+        if (XEUtils.isArray(rest)) {
+          column.filters = UtilTools.getFilters(rest)
+        }
+      }
+      return Promise.resolve(filters)
     },
     /**
      * 点击筛选事件
