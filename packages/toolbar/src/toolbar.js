@@ -50,7 +50,7 @@ export default {
       this.tableFullColumn = customs
     }
     if (settingOpts.storage && !id) {
-      throw new Error('[vxe-table] Toolbar must have a unique primary id.')
+      throw new Error('[vxe-table] Toolbar must have a unique id.')
     }
     this.$nextTick(() => {
       this.updateConf()
