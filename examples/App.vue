@@ -46,8 +46,10 @@
       </div>
       <div class="body">
         <div class="content" :class="{full: $route.name && $route.name.indexOf('API') > 0}">
-          <a class="link tosrc" :href="`https://github.com/xuliangzhan/vxe-table/tree/master/examples/views/table/${pageKey}`" target="_blank">{{ $t('app.body.button.viewCode') }}</a>
-          <a v-if="demoLink" class="link todemo" :href="demoLink" target="_blank">{{ $t('app.body.button.runDemo') }}</a>
+          <template v-if="$route.path.indexOf('/module') === -1 && $route.path.indexOf('/api') === -1">
+            <a class="link tosrc" :href="`https://github.com/xuliangzhan/vxe-table/tree/master/examples/views/table/${pageKey}`" target="_blank">{{ $t('app.body.button.viewCode') }}</a>
+            <a v-if="demoLink" class="link todemo" :href="demoLink" target="_blank">{{ $t('app.body.button.runDemo') }}</a>
+          </template>
           <router-view/>
         </div>
       </div>
