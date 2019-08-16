@@ -41,8 +41,16 @@
       禁止用户手动选中，但是可以通过函数式调用强制选中，该功能对于某些场景需要强制选中指定行时非常有用
     </p>
 
+    <vxe-toolbar>
+      <template v-slot:buttons>
+        <vxe-button @click="$refs.xTable2.setRadioRow(tableData[0], true)">设置第一行选中</vxe-button>
+        <vxe-button @click="$refs.xTable2.clearRadioRow()">清除所有行选中</vxe-button>
+      </template>
+    </vxe-toolbar>
+
     <vxe-table
       border
+      ref="xTable2"
       height="300"
       :radio-config="{labelField: 'name', checkMethod}"
       :data.sync="tableData">
@@ -221,8 +229,16 @@ export default {
         }
         `,
         `
+        <vxe-toolbar>
+          <template v-slot:buttons>
+            <vxe-button @click="$refs.xTable2.setRadioRow(tableData[0], true)">设置第一行选中</vxe-button>
+            <vxe-button @click="$refs.xTable2.clearRadioRow()">清除所有行选中</vxe-button>
+          </template>
+        </vxe-toolbar>
+
         <vxe-table
           border
+          ref="xTable2"
           height="300"
           :radio-config="{labelField: 'name', checkMethod}"
           :data.sync="tableData">

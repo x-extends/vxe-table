@@ -29,7 +29,7 @@ class ColumnConfig {
       sortable: _vm.sortable,
       sortBy: _vm.sortBy,
       remoteSort: _vm.remoteSort,
-      filters: (_vm.filters || []).map(({ label, value, data, checked }) => ({ label, value, data, _data: data, checked: !!checked })),
+      filters: UtilTools.getFilters(_vm.filters),
       filterMultiple: XEUtils.isBoolean(_vm.filterMultiple) ? _vm.filterMultiple : true,
       filterMethod: _vm.filterMethod,
       filterRender: _vm.filterRender,
@@ -93,6 +93,9 @@ export const UtilTools = {
       result.push.apply(result, column.children && column.children.length ? UtilTools.getColumnList(column.children) : [column])
     })
     return result
+  },
+  getFilters (filters) {
+    return (filters || []).map(({ label, value, data, checked }) => ({ label, value, data, _data: data, checked: !!checked }))
   },
   formatText (value, placeholder) {
     return '' + (value === null || value === void 0 ? (placeholder ? GlobalConfig.emptyCell : '') : value)

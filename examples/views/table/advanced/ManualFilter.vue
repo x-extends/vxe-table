@@ -6,6 +6,7 @@
       <template v-slot:buttons>
         <vxe-button @click="filterNameEvent">筛选 Name</vxe-button>
         <vxe-button @click="filterAgeEvent">筛选 Age</vxe-button>
+        <vxe-button @click="updateNameFilterEvent">更改 Name 的筛选条件</vxe-button>
         <vxe-button @click="$refs.xTable.clearFilter('age')">清除 Age 的筛选条件</vxe-button>
         <vxe-button @click="$refs.xTable.clearFilter()">清除所有的筛选条件</vxe-button>
       </template>
@@ -52,6 +53,7 @@ export default {
           <template v-slot:buttons>
             <vxe-button @click="filterNameEvent">筛选 Name</vxe-button>
             <vxe-button @click="filterAgeEvent">筛选 Age</vxe-button>
+            <vxe-button @click="updateNameFilterEvent">更改 Name 的筛选条件</vxe-button>
             <vxe-button @click="$refs.xTable.clearFilter('age')">清除 Age 的筛选条件</vxe-button>
             <vxe-button @click="$refs.xTable.clearFilter()">清除所有的筛选条件</vxe-button>
           </template>
@@ -102,6 +104,34 @@ export default {
             },
             filterAgeMethod ({ option, row }) {
               return row.age === Number(option.data)
+            },
+            updateNameFilterEvent () {
+              let xTable = this.$refs.xTable
+              xTable.filter('name', options => {
+                // 修改筛选列表
+                return [
+                  {
+                    label: 'id大于10',
+                    value: 10
+                  },
+                  {
+                    label: 'id大于20',
+                    value: 20
+                  },
+                  {
+                    label: 'id大于30',
+                    value: 30,
+                    checked: true // 设置为选中状态
+                  },
+                  {
+                    label: 'id大于40',
+                    value: 40
+                  }
+                ]
+              }).then(() => {
+                // 修改条件之后，需要手动调用 updateData 处理表格数据
+                xTable.updateData()
+              })
             },
             filterNameEvent () {
               let xTable = this.$refs.xTable
@@ -164,6 +194,34 @@ export default {
     },
     filterAgeMethod ({ option, row }) {
       return row.age === Number(option.data)
+    },
+    updateNameFilterEvent () {
+      let xTable = this.$refs.xTable
+      xTable.filter('name', options => {
+        // 修改筛选列表
+        return [
+          {
+            label: 'id大于10',
+            value: 10
+          },
+          {
+            label: 'id大于20',
+            value: 20
+          },
+          {
+            label: 'id大于30',
+            value: 30,
+            checked: true // 设置为选中状态
+          },
+          {
+            label: 'id大于40',
+            value: 40
+          }
+        ]
+      }).then(() => {
+        // 修改条件之后，需要手动调用 updateData 处理表格数据
+        xTable.updateData()
+      })
     },
     filterNameEvent () {
       let xTable = this.$refs.xTable

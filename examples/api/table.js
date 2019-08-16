@@ -2109,11 +2109,11 @@ const apis = [
         list: []
       },
       {
-        name: 'filter(field)',
-        desc: '手动对表格进行筛选',
+        name: 'filter(field, callback)',
+        desc: '手动对表格进行筛选，还可以通过 callback 返回新的选项列表',
         type: 'Promise<options>',
         enum: '',
-        defVal: 'field',
+        defVal: 'field, callback?',
         list: []
       },
       {
