@@ -211,6 +211,7 @@ export default {
           case 'query': {
             if (ajax.query) {
               let params = {
+                $grid: this,
                 sort: sortData,
                 filters: filterData
               }
@@ -252,7 +253,7 @@ export default {
                 let body = { removeRecords }
                 if (removeRecords.length) {
                   this.tableLoading = true
-                  return ajax.delete.apply(this, [{ body }].concat(args)).then(result => {
+                  return ajax.delete.apply(this, [{ $grid: this, body }].concat(args)).then(result => {
                     this.tableLoading = false
                   }).catch(e => {
                     this.tableLoading = false
@@ -287,7 +288,7 @@ export default {
                     if (body.insertRecords.length || removeRecords.length || updateRecords.length || body.pendingRecords.length) {
                       this.tableLoading = true
                       resolve(
-                        ajax.save.apply(this, [{ body }].concat(args)).then(() => {
+                        ajax.save.apply(this, [{ $grid: this, body }].concat(args)).then(() => {
                           this.$XMsg.message({ id: code, message: GlobalConfig.i18n('vxe.grid.saveSuccess'), status: 'success' })
                           this.tableLoading = false
                         }).catch(e => {

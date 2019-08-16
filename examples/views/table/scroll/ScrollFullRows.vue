@@ -13,6 +13,7 @@
       border
       resizable
       show-overflow
+      show-header-overflow
       highlight-hover-row
       highlight-current-row
       height="600"
@@ -74,6 +75,7 @@ export default {
           border
           resizable
           show-overflow
+          show-header-overflow
           highlight-hover-row
           highlight-current-row
           height="600"

@@ -1537,7 +1537,7 @@ const apis = [
       {
         name: 'getRecords(rowIndex)',
         disabled: true,
-        desc: '在 v3.0 中废弃，请使用 getData',
+        desc: '即将废弃，请使用 getData',
         type: 'Array',
         enum: '',
         defVal: 'rowIndex?',
@@ -1554,7 +1554,7 @@ const apis = [
       {
         name: 'getAllRecords()',
         disabled: true,
-        desc: '在 v3.0 中废弃，请使用 getRecordset',
+        desc: '即将废弃，请使用 getRecordset',
         type: '{insertRecords, removeRecords, updateRecords}',
         enum: '',
         defVal: '',

@@ -406,10 +406,10 @@ export default {
       if (tableFullColumn.length) {
         let cIndex = Math.floor((tableFullColumn.length - 1) / 2)
         if (tableFullColumn[cIndex].prop) {
-          console.warn('[vxe-table] The property prop is deprecated, please use field')
+          UtilTools.warn('vxe.error.delProp')
         }
         if (tableFullColumn[cIndex].label) {
-          console.warn('[vxe-table] The property label is deprecated, please use title')
+          UtilTools.warn('vxe.error.delLabel')
         }
       }
     },
@@ -475,7 +475,7 @@ export default {
       })
     }
     if (!UtilTools.getRowkey(this)) {
-      console.error('[vxe-table] The property row-id is not allowed to be empty')
+      UtilTools.error('vxe.error.rowIdEmpty')
     }
     this.loadData(data, true).then(() => {
       this.handleDefault()
@@ -1103,7 +1103,7 @@ export default {
     },
     // 在 v3.0 中废弃 getRecords
     getRecords () {
-      console.warn('[vxe-table] The function getRecords is deprecated, please use getData')
+      UtilTools.warn('vxe.error.delGetRecords')
       return this.getData.apply(this, arguments)
     },
     /**
@@ -1115,7 +1115,7 @@ export default {
     },
     // 在 v3.0 中废弃 getAllRecords
     getAllRecords () {
-      console.warn('[vxe-table] The function getAllRecords is deprecated, please use getRecordset')
+      UtilTools.warn('vxe.error.delGetAllRecords')
       return this.getRecordset()
     },
     /**
@@ -1365,9 +1365,12 @@ export default {
       let scrollXLoad = scrollX && scrollX.gt && scrollX.gt < tableFullColumn.length
       Object.assign(columnStore, { leftList, centerList, rightList })
       if (isGroup && (isColspan || leftStartIndex || (rightEndIndex !== null && rightEndIndex !== visibleColumn.length))) {
-        throw new Error('[vxe-table] Fixed column must to the left and right sides.')
+        UtilTools.error('vxe.error.groupFixed')
       }
       if (scrollXLoad) {
+        if (this.resizable || visibleColumn.some(column => column.resizable)) {
+          UtilTools.warn('vxe.error.notResizable')
+        }
         Object.assign(scrollXStore, {
           startIndex: 0,
           visibleIndex: 0,
@@ -4365,7 +4368,7 @@ export default {
       if (!opts.original) {
         if (scrollXLoad || scrollYLoad) {
           opts.original = true
-          console.warn('[vxe-table] Virtual scrolling can only export source data, please set original=true.')
+          UtilTools.warn('vxe.error.scrollOriginal')
         }
       }
       let columns = visibleColumn
