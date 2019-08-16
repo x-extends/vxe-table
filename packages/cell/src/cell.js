@@ -153,7 +153,8 @@ export const Cell = {
     let { $table, column, isHidden } = params
     let { vSize, radioConfig = {} } = $table
     let { slots } = column
-    let { labelField } = radioConfig
+    let { labelField, checkMethod } = radioConfig
+    let isDisabled = !!checkMethod
     if (slots && slots.default) {
       return slots.default(params, h)
     }
@@ -166,6 +167,10 @@ export const Cell = {
       }
     }
     if (!isHidden) {
+      if (checkMethod) {
+        isDisabled = !checkMethod(params)
+        options.attrs.disabled = isDisabled
+      }
       options.domProps = {
         checked: row === selectRow
       }
@@ -178,7 +183,8 @@ export const Cell = {
     return [
       h('label', {
         class: ['vxe-radio', {
-          [`size--${vSize}`]: vSize
+          [`size--${vSize}`]: vSize,
+          'is--disabled': isDisabled
         }]
       }, [
         h('input', options),

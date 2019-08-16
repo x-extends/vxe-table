@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">单选表格，用户手动勾选时会触发事件 <table-api-link prop="radio-change"/></p>
+    <p class="tip">单选表格，用户手动选中时会触发事件 <table-api-link prop="radio-change"/></p>
 
     <vxe-toolbar>
       <template v-slot:buttons>
@@ -36,6 +36,29 @@
       <code class="scss">{{ demoCodes[2] }}</code>
     </pre>
 
+    <p class="tip">
+      还可以通过 <table-api-link prop="checkMethod"/> 方法控制 CheckBox 是否允许用户手动选中，还可以配置 <table-api-link prop="labelField"/> 列显示属性<br>
+      禁止用户手动选中，但是可以通过函数式调用强制选中，该功能对于某些场景需要强制选中指定行时非常有用
+    </p>
+
+    <vxe-table
+      border
+      height="300"
+      :radio-config="{labelField: 'name', checkMethod}"
+      :data.sync="tableData">
+      <vxe-table-column type="radio" title="请选择" width="100"></vxe-table-column>
+      <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+      <vxe-table-column field="age" title="Age"></vxe-table-column>
+      <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+    </vxe-table>
+
+    <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
+
+    <pre>
+      <code class="xml">{{ demoCodes[3] }}</code>
+      <code class="javascript">{{ demoCodes[4] }}</code>
+    </pre>
+
     <p class="tip">默认选中，通过指定 <table-api-link prop="checkRowKey"/> 设置默认选中的行，指定默认值需要有 <table-api-link prop="row-id"/></p>
 
     <vxe-table
@@ -53,8 +76,8 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[3] }}</code>
-      <code class="javascript">{{ demoCodes[4] }}</code>
+      <code class="xml">{{ demoCodes[5] }}</code>
+      <code class="javascript">{{ demoCodes[6] }}</code>
     </pre>
 
     <p class="tip">使用 <table-api-link prop="highlight-current-row"/> 高亮方式</p>
@@ -74,14 +97,13 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[5] }}</code>
-      <code class="javascript">{{ demoCodes[6] }}</code>
+      <code class="xml">{{ demoCodes[7] }}</code>
+      <code class="javascript">{{ demoCodes[8] }}</code>
     </pre>
 
     <p class="tip">两种方式混合使用</p>
 
     <vxe-table
-      ref="xTable"
       border
       highlight-current-row
       height="300"
@@ -97,8 +119,8 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[7] }}</code>
-      <code class="javascript">{{ demoCodes[8] }}</code>
+      <code class="xml">{{ demoCodes[9] }}</code>
+      <code class="javascript">{{ demoCodes[10] }}</code>
     </pre>
 
     <p class="tip">当然也可以两种方式同时使用</p>
@@ -120,8 +142,8 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[9] }}</code>
-      <code class="javascript">{{ demoCodes[10] }}</code>
+      <code class="xml">{{ demoCodes[11] }}</code>
+      <code class="javascript">{{ demoCodes[12] }}</code>
     </pre>
   </div>
 </template>
@@ -202,6 +224,35 @@ export default {
         <vxe-table
           border
           height="300"
+          :radio-config="{labelField: 'name', checkMethod}"
+          :data.sync="tableData">
+          <vxe-table-column type="radio" title="请选择" width="100"></vxe-table-column>
+          <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+          <vxe-table-column field="age" title="Age"></vxe-table-column>
+          <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+        </vxe-table>
+        `,
+        `
+        export default {
+          data () {
+            return {
+              tableData: []
+            }
+          },
+          created () {
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
+          },
+          methods: {
+            checkMethod ({ row }) {
+              return row.age > 26
+            }
+          }
+        }
+        `,
+        `
+        <vxe-table
+          border
+          height="300"
           row-id="id"
           :data.sync="tableData"
           :radio-config="{checkRowKey: '2'}">
@@ -255,7 +306,6 @@ export default {
         `,
         `
         <vxe-table
-          ref="xTable"
           border
           highlight-current-row
           height="300"
@@ -320,6 +370,9 @@ export default {
     this.tableData = list
   },
   methods: {
+    checkMethod ({ row }) {
+      return row.age > 26
+    },
     currentChangeEvent ({ row }) {
       console.log('行选中事件')
     },

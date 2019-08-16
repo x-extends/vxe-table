@@ -446,8 +446,16 @@ const apis = [
           },
           {
             name: 'checkRowKey',
-            desc: '默认勾选开指定行（需要有 row-id）',
+            desc: '默认选中开指定行（需要有 row-id）',
             type: 'Row.rowId',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'checkMethod',
+            desc: '是否允许选中的方法，该方法 Function({row, rowIndex}) 的返回值用来决定这一行的 Radio 是否可以选中',
+            type: 'Function',
             enum: '',
             defVal: '',
             list: []
