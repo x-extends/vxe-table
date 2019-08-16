@@ -340,8 +340,8 @@ module.exports = {
           size: 'Size',
           loading: 'Loading',
           refresh: 'Refresh button config',
-          resizable: 'Column width drag config',
-          setting: 'Custom column config'
+          resizable: 'Column width drag config（需要设置 id）',
+          setting: 'Custom column config（需要设置 id）'
         }
       },
       pager: {

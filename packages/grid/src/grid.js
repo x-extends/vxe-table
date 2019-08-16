@@ -241,7 +241,7 @@ export default {
                 this.tableLoading = false
               })
             } else {
-              console.warn(`[vxe-table] proxy-config.query not exist.`)
+              UtilTools.error('vxe.error.notQuery')
             }
             break
           }
@@ -265,7 +265,7 @@ export default {
                 }
               })
             } else {
-              console.warn(`[vxe-table] proxy-config.delete not exist.`)
+              UtilTools.error('vxe.error.notDelete')
             }
             break
           }
@@ -312,7 +312,7 @@ export default {
                 })
               })
             } else {
-              console.warn(`[vxe-table] proxy-config.save not exist.`)
+              UtilTools.error('vxe.error.notSave')
             }
             break
           }

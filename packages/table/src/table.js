@@ -767,13 +767,6 @@ export default {
     ])
   },
   methods: {
-    clearSort () {
-      this.tableFullColumn.forEach(column => {
-        column.order = null
-      })
-      this.tableFullData = this.data ? this.data.slice(0) : []
-      return this.handleData(true)
-    },
     clearAll () {
       this.clearScroll()
       this.clearSort()
@@ -816,7 +809,7 @@ export default {
       this.tableSourceData = XEUtils.clone(tableFullData, true)
       this.scrollYLoad = scrollYLoad
       if (scrollYLoad && !(height || maxHeight)) {
-        throw new Error('[vxe-table] The height/max-height must be set for the scroll load.')
+        UtilTools.error('vxe.error.scrollYHeight')
       }
       this.handleData(true)
       this.reserveCheckSelection()
@@ -935,29 +928,34 @@ export default {
      * 从指定行插入数据
      */
     insertAt (records, row) {
-      let { tableData, editStore, scrollYLoad, tableFullData, treeConfig, remoteSort } = this
+      let { afterFullData, tableData, editStore, scrollYLoad, tableFullData, treeConfig } = this
+      if (treeConfig) {
+        throw new Error(UtilTools.error('vxe.error.treeInsert'))
+      }
       if (!XEUtils.isArray(records)) {
         records = [records]
       }
+      let nowData = scrollYLoad ? afterFullData : tableData
       let newRecords = records.map(record => this.defineField(Object.assign({}, record)))
       if (!row) {
-        tableData.unshift.apply(tableData, newRecords)
+        nowData.unshift.apply(nowData, newRecords)
         tableFullData.unshift.apply(tableFullData, newRecords)
       } else {
         if (row === -1) {
-          tableData.push.apply(tableData, newRecords)
+          nowData.push.apply(nowData, newRecords)
           tableFullData.push.apply(tableFullData, newRecords)
         } else {
-          if (treeConfig) {
-            throw new Error('[vxe-table] The tree table does not support this operation.')
+          let targetIndex = nowData.indexOf(row)
+          if (targetIndex === -1) {
+            throw new Error('[vxe-table] Unable to insert to the specified location.')
           }
-          tableData.splice.apply(tableData, [tableData.indexOf(row), 0].concat(newRecords))
+          nowData.splice.apply(nowData, [targetIndex, 0].concat(newRecords))
           tableFullData.splice.apply(tableFullData, [tableFullData.indexOf(row), 0].concat(newRecords))
         }
       }
       [].unshift.apply(editStore.insertList, newRecords)
-      if (scrollYLoad || !remoteSort) {
-        this.updateData(true)
+      if (scrollYLoad) {
+        this.updateScrollYSpace()
       }
       this.updateCache()
       this.checkSelectionStatus()
@@ -1046,7 +1044,7 @@ export default {
         XEUtils.remove(insertList, row => rows.indexOf(row) > -1)
       }
       if (scrollYLoad) {
-        this.updateData(true)
+        this.updateScrollYSpace()
       }
       this.updateCache()
       this.checkSelectionStatus()
@@ -1260,8 +1258,8 @@ export default {
      */
     updateAfterFullData () {
       let { visibleColumn, tableFullData, remoteSort, remoteFilter } = this
-      let column = this.visibleColumn.find(column => column.order)
       let tableData = tableFullData
+      let column = this.visibleColumn.find(column => column.order)
       let filterColumn = visibleColumn.filter(({ filters }) => filters && filters.length)
       tableData = tableData.filter(row => {
         return filterColumn.every(column => {
@@ -1308,7 +1306,11 @@ export default {
     getTableData (force) {
       let { tableFullData, scrollYLoad, scrollYStore } = this
       let fullData = force ? this.updateAfterFullData() : this.afterFullData
-      return { fullData: tableFullData.slice(0), visibleData: fullData, tableData: scrollYLoad ? fullData.slice(scrollYStore.startIndex, scrollYStore.startIndex + scrollYStore.renderSize) : fullData.slice(0) }
+      return {
+        fullData: tableFullData.slice(0),
+        visibleData: fullData.slice(0),
+        tableData: scrollYLoad ? fullData.slice(scrollYStore.startIndex, scrollYStore.startIndex + scrollYStore.renderSize) : fullData.slice(0)
+      }
     },
     handleDefault () {
       if (this.selectConfig) {
@@ -3016,7 +3018,11 @@ export default {
      * 点击排序事件
      */
     triggerSortEvent (evnt, column, params, order) {
-      this.sort(column.property, order)
+      if (column.order === order) {
+        this.clearSort(column.property)
+      } else {
+        this.sort(column.property, order)
+      }
     },
     sort (field, order) {
       let { visibleColumn, tableFullColumn, remoteSort } = this
@@ -3040,6 +3046,17 @@ export default {
         }
       }
       return this.$nextTick()
+    },
+    clearSort (field) {
+      let column = arguments.length ? this.getColumnByField(field) : null
+      if (column) {
+        column.order = null
+      } else {
+        this.tableFullColumn.forEach(column => {
+          column.order = null
+        })
+      }
+      return this.handleData(true)
     },
     filter (field, callback) {
       let column = this.getColumnByField(field)
@@ -3420,7 +3437,7 @@ export default {
         if (isReload) {
           scrollXStore.visibleIndex = toVisibleIndex
           scrollXStore.startIndex = Math.min(Math.max(toVisibleIndex - preloadSize, 0), visibleColumn.length - renderSize)
-          this.updateScrollXSpace()
+          this.updateScrollXData()
           this.$nextTick(() => {
             scrollBodyElem.scrollLeft = scrollLeft
           })
@@ -3455,7 +3472,7 @@ export default {
         if (isReload) {
           scrollYStore.visibleIndex = toVisibleIndex
           scrollYStore.startIndex = Math.min(Math.max(toVisibleIndex - preloadSize, 0), tableFullData.length - renderSize)
-          this.updateScrollYSpace()
+          this.updateScrollYData()
           this.$nextTick(() => {
             scrollBodyElem.scrollTop = scrollTop
           })
@@ -3475,6 +3492,8 @@ export default {
           if (scrollXLoad) {
           // 无法预知，默认取前 10 条平均宽度进行运算
             scrollXStore.visibleSize = scrollX.vSize || Math.ceil(tableBodyElem.clientWidth / (visibleColumn.slice(0, 10).reduce((previous, column) => previous + column.renderWidth, 0) / 10))
+            this.updateScrollXData()
+          } else {
             this.updateScrollXSpace()
           }
           // 计算 Y 逻辑
@@ -3491,24 +3510,33 @@ export default {
               }
             }
             scrollYStore.visibleSize = scrollY.vSize || Math.ceil(tableBodyElem.clientHeight / scrollYStore.rowHeight)
-            this.updateScrollYSpace()
+            this.updateScrollYData()
+          } else {
+            this.updateScrollXSpace()
           }
         }
         return this.$nextTick()
       })
     },
+    updateScrollXData () {
+      let { visibleColumn, scrollXStore } = this
+      this.tableColumn = visibleColumn.slice(scrollXStore.startIndex, scrollXStore.startIndex + scrollXStore.renderSize)
+      this.updateScrollXSpace()
+    },
     // 更新横向 X 可视渲染上下剩余空间大小
     updateScrollXSpace () {
       let { visibleColumn, scrollXStore } = this
-      this.tableColumn = visibleColumn.slice(scrollXStore.startIndex, scrollXStore.startIndex + scrollXStore.renderSize)
       scrollXStore.leftSpaceWidth = visibleColumn.slice(0, scrollXStore.startIndex).reduce((previous, column) => previous + column.renderWidth, 0)
       scrollXStore.rightSpaceWidth = visibleColumn.slice(scrollXStore.startIndex + scrollXStore.renderSize, visibleColumn.length).reduce((previous, column) => previous + column.renderWidth, 0)
+    },
+    updateScrollYData () {
+      this.handleData()
+      this.updateScrollYSpace()
     },
     // 更新纵向 Y 可视渲染上下剩余空间大小
     updateScrollYSpace () {
       let { scrollYStore } = this
-      let { visibleData, tableData } = this.getTableData()
-      this.tableData = tableData
+      let { visibleData } = this.getTableData()
       scrollYStore.topSpaceHeight = Math.max(scrollYStore.startIndex * scrollYStore.rowHeight, 0)
       scrollYStore.bottomSpaceHeight = Math.max((visibleData.length - (scrollYStore.startIndex + scrollYStore.renderSize)) * scrollYStore.rowHeight, 0)
     },
