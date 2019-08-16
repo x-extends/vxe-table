@@ -1,5 +1,19 @@
 export default {
   vxe: {
+    error: {
+      rowIdEmpty: 'The property row-id is not allowed to be empty.',
+      delProp: 'The property prop is deprecated, please use field.',
+      delLabel: 'The property label is deprecated, please use title.',
+      delColumnKey: 'The property <column>.column-key is deprecated, please use <table>.column-key.',
+      delShowAllOverflow: 'The property show-all-overflow is deprecated, please use show-overflow',
+      delShowHeaderAllOverflow: 'The property show-header-all-overflow is deprecated, please use show-header-overflow',
+      delGetRecords: 'The function getRecords is deprecated, please use getData.',
+      delGetAllRecords: 'The function getAllRecords is deprecated, please use getRecordset.',
+      groupFixed: 'If grouping headers are used, fixed columns must be on the left and right sides.',
+      notResizable: 'Horizontal virtual scrolling does not support resizable.',
+      cellEditRender: 'The renderer cell-render and edit-render cannot be used together.',
+      scrollOriginal: 'Virtual scrolling can only export source data, please set original=true.'
+    },
     table: {
       emptyText: 'No Data',
       confirmFilter: 'Confirm',

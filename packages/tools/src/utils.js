@@ -6,7 +6,7 @@ var columnUniqueId = 0
 class ColumnConfig {
   constructor (_vm, { renderHeader, renderCell, renderData } = {}) {
     if (_vm.cellRender && _vm.editRender) {
-      console.warn('[vxe-table] Properties cell-render and edit-render cannot be used together.')
+      UtilTools.warn('vxe.error.cellEditRender')
     }
     Object.assign(this, {
       // 基本属性
@@ -59,7 +59,15 @@ class ColumnConfig {
   }
 }
 
+function outLog (type) {
+  return function (message) {
+    console[type](`[vxe-table] ${GlobalConfig.i18n(message)}`)
+  }
+}
+
 export const UtilTools = {
+  warn: outLog('warn'),
+  error: outLog('error'),
   getSize ({ size, $parent }) {
     return size || ($parent && ['medium', 'small', 'mini'].indexOf($parent.size) > -1 ? $parent.size : null)
   },

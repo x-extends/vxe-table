@@ -423,7 +423,7 @@ const apis = [
       {
         name: 'column-key',
         disabled: true,
-        desc: '在 v2.0 中废弃，请使用 table.column-key',
+        desc: '即将废弃，请使用 table.column-key',
         type: 'String',
         enum: '',
         defVal: '',

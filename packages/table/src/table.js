@@ -479,17 +479,17 @@ export default {
       // 在 v2.0 中废弃
       if (tableFullColumn.length) {
         if (tableFullColumn.some(column => column.columnKey)) {
-          console.warn('[vxe-table] The property column.column-key is deprecated, please use table.column-key')
+          UtilTools.warn('vxe.error.delColumnKey')
         }
       }
       // 在 v3.0 中废弃 prop/label
       if (tableFullColumn.length) {
         let cIndex = Math.floor((tableFullColumn.length - 1) / 2)
         if (tableFullColumn[cIndex].prop) {
-          console.warn('[vxe-table] The property prop is deprecated, please use field')
+          UtilTools.warn('vxe.error.delProp')
         }
         if (tableFullColumn[cIndex].label) {
-          console.warn('[vxe-table] The property label is deprecated, please use title')
+          UtilTools.warn('vxe.error.delLabel')
         }
       }
     },
@@ -520,13 +520,13 @@ export default {
       })
     }
     if (!UtilTools.getRowkey(this)) {
-      console.error('[vxe-table] The property row-id is not allowed to be empty')
+      UtilTools.error('vxe.error.rowIdEmpty')
     }
     if (XEUtils.isBoolean(showAllOverflow)) {
-      console.warn('[vxe-table] The property show-all-overflow is deprecated, please use show-overflow')
+      UtilTools.warn('vxe.error.delShowAllOverflow')
     }
     if (XEUtils.isBoolean(showHeaderAllOverflow)) {
-      console.warn('[vxe-table] The property show-header-all-overflow is deprecated, please use show-header-overflow')
+      UtilTools.warn('vxe.error.delShowHeaderAllOverflow')
     }
     if (radioConfig.labelProp) {
       console.warn('[vxe-table] The property labelProp is deprecated, please use labelField')
@@ -1180,7 +1180,7 @@ export default {
     },
     // 在 v3.0 中废弃 getRecords
     getRecords () {
-      console.warn('[vxe-table] The function getRecords is deprecated, please use getData')
+      UtilTools.warn('vxe.error.delGetRecords')
       return this.getData.apply(this, arguments)
     },
     /**
@@ -1192,7 +1192,7 @@ export default {
     },
     // 在 v3.0 中废弃 getAllRecords
     getAllRecords () {
-      console.warn('[vxe-table] The function getAllRecords is deprecated, please use getRecordset')
+      UtilTools.warn('vxe.error.delGetAllRecords')
       return this.getRecordset()
     },
     /**
@@ -1437,9 +1437,12 @@ export default {
       let scrollXLoad = scrollX && scrollX.gt && scrollX.gt < tableFullColumn.length
       Object.assign(columnStore, { leftList, centerList, rightList })
       if (isGroup && (isColspan || leftStartIndex || (rightEndIndex !== null && rightEndIndex !== visibleColumn.length))) {
-        throw new Error('[vxe-table] Fixed column must to the left and right sides.')
+        UtilTools.error('vxe.error.groupFixed')
       }
       if (scrollXLoad) {
+        if (this.resizable || visibleColumn.some(column => column.resizable)) {
+          UtilTools.warn('vxe.error.notResizable')
+        }
         Object.assign(scrollXStore, {
           startIndex: 0,
           visibleIndex: 0,
@@ -2471,9 +2474,6 @@ export default {
      * 单选，行选中事件
      */
     triggerRadioRowEvent (evnt, params) {
-      if (!this.$listeners['radio-change'] && this.$listeners['select-change']) {
-        console.warn('[vxe-table] Radio should use radio-change events')
-      }
       let isChange = this.selectRow !== params.row
       this.setRadioRow(params.row)
       if (isChange) {
@@ -3923,7 +3923,7 @@ export default {
       if (!opts.original) {
         if (scrollXLoad || scrollYLoad) {
           opts.original = true
-          console.warn('[vxe-table] Virtual scrolling can only export source data, please set original=true.')
+          UtilTools.warn('vxe.error.scrollOriginal')
         }
       }
       let columns = visibleColumn

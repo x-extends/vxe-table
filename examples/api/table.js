@@ -118,7 +118,7 @@ const contextMenuApi = [
   {
     name: 'visibleMethod',
     disabled: true,
-    desc: '在 v2.0 中废弃，请使用 context-menu.visibleMethod',
+    desc: '即将废弃，请使用 context-menu.visibleMethod',
     type: 'Function',
     enum: '',
     defVal: '',
@@ -458,7 +458,7 @@ const apis = [
           {
             name: 'labelProp',
             disabled: true,
-            desc: '在 v2.0 中废弃，请使用 labelField',
+            desc: '即将废弃，请使用 labelField',
             type: 'String',
             enum: '',
             defVal: '',
@@ -508,7 +508,7 @@ const apis = [
           {
             name: 'key',
             disabled: true,
-            desc: '在 v2.0 中废弃，请使用 row-id',
+            desc: '即将废弃，请使用 row-id',
             type: 'String',
             enum: '',
             defVal: '',
@@ -525,7 +525,7 @@ const apis = [
           {
             name: 'labelProp',
             disabled: true,
-            desc: '在 v2.0 中废弃，请使用 labelField',
+            desc: '即将废弃，请使用 labelField',
             type: 'String',
             enum: '',
             defVal: '',
@@ -542,7 +542,7 @@ const apis = [
           {
             name: 'checkProp',
             disabled: true,
-            desc: '在 v2.0 中废弃，请使用 checkField',
+            desc: '即将废弃，请使用 checkField',
             type: 'String',
             enum: '',
             defVal: '',
@@ -641,7 +641,7 @@ const apis = [
           {
             name: 'key',
             disabled: true,
-            desc: '在 v2.0 中废弃，请使用 row-id',
+            desc: '即将废弃，请使用 row-id',
             type: 'String',
             enum: '',
             defVal: '',
@@ -691,7 +691,7 @@ const apis = [
           {
             name: 'key',
             disabled: true,
-            desc: '在 v2.0 中废弃，请使用 row-id',
+            desc: '即将废弃，请使用 row-id',
             type: 'String',
             enum: '',
             defVal: '',
@@ -888,7 +888,7 @@ const apis = [
           {
             name: 'key',
             disabled: true,
-            desc: '在 v2.0 中废弃，请使用 row-id',
+            desc: '即将废弃，请使用 row-id',
             type: 'String',
             enum: '',
             defVal: '',
@@ -1603,7 +1603,7 @@ const apis = [
       {
         name: 'getRecords(rowIndex)',
         disabled: true,
-        desc: '在 v3.0 中废弃，请使用 getData',
+        desc: '即将废弃，请使用 getData',
         type: 'Array',
         enum: '',
         defVal: 'rowIndex?',
@@ -1620,7 +1620,7 @@ const apis = [
       {
         name: 'getAllRecords()',
         disabled: true,
-        desc: '在 v3.0 中废弃，请使用 getRecordset',
+        desc: '即将废弃，请使用 getRecordset',
         type: '{insertRecords, removeRecords, updateRecords}',
         enum: '',
         defVal: '',
@@ -2080,24 +2080,6 @@ const apis = [
         type: 'Promise',
         enum: '',
         defVal: 'column',
-        list: []
-      },
-      {
-        name: 'isScrollXLoad()',
-        disabled: true,
-        desc: '在 v2.0 中废弃，请使用 getVirtualScroller',
-        type: 'Boolean',
-        enum: '',
-        defVal: '',
-        list: []
-      },
-      {
-        name: 'isScrollYLoad()',
-        disabled: true,
-        desc: '在 v2.0 中废弃，请使用 getVirtualScroller',
-        type: 'Boolean',
-        enum: '',
-        defVal: '',
         list: []
       },
       {

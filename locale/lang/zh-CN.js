@@ -1,5 +1,19 @@
 export default {
   vxe: {
+    error: {
+      rowIdEmpty: '参数 row-id 不允许为空',
+      delProp: '参数 prop 已废弃，请使用 field',
+      delLabel: '参数 label 已废弃，请使用 title',
+      delColumnKey: '参数 <column>.column-key 已废弃，请使用 <table>.column-key',
+      delShowAllOverflow: '参数 show-all-overflow 已废弃，请使用 show-overflow',
+      delShowHeaderAllOverflow: '参数 show-header-all-overflow 已废弃，请使用 show-header-overflow',
+      delGetRecords: '方法 getRecords 已废弃，请使用 getData',
+      delGetAllRecords: '方法 getAllRecords 已废弃，请使用 getRecordset',
+      groupFixed: '如果使用分组表头，固定列必须在左右两侧',
+      notResizable: '横向虚拟滚动不支持 resizable',
+      cellEditRender: '渲染器 cell-render 和 edit-render 不能同时使用',
+      scrollOriginal: '虚拟滚动启用后只能导出源数据，请将设置 original=true'
+    },
     table: {
       emptyText: '暂无数据',
       confirmFilter: '筛选',

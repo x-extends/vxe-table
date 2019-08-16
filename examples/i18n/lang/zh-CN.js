@@ -235,8 +235,8 @@ module.exports = {
           spanMethod: '合并行或列，该函数 Function({seq, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, data}) 返回计算后的值',
           showOverflow: '设置所有内容过长时显示为省略号（如果是固定列建议设置该值，提升渲染速度）',
           showHeaderOverflow: '设置表头所有内容过长时显示为省略号',
-          showAllOverflow: '在 v2.0 中废弃，请使用 show-overflow',
-          showHeaderAllOverflow: '在 v2.0 中废弃，请使用 show-header-overflow',
+          showAllOverflow: '即将废弃，请使用 show-overflow',
+          showHeaderAllOverflow: '即将废弃，请使用 show-header-overflow',
           remoteSort: '所有列是否使用服务端排序，如果设置为 true 则不会对数据进行处理',
           remoteFilter: '是否使用服务端筛选，如果设置为 true 则不会对数据进行处理',
           columnKey: '是否需要为每一列的 VNode 设置 key 属性（非特殊情况下不需要使用）',
@@ -289,9 +289,9 @@ module.exports = {
       tableColumn: {
         desc: {
           type: '列的类型',
-          prop: '在 v2.0 中废弃，请使用 field',
+          prop: '即将废弃，请使用 field',
           field: '列属性',
-          label: '在 v2.0 中废弃，请使用 title',
+          label: '即将废弃，请使用 title',
           title: '列标题（支持开启国际化）',
           width: '列宽度',
           minWidth: '最小列宽度；会自动将剩余空间按比例分配',

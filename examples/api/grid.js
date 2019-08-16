@@ -263,7 +263,7 @@ const apis = [
               {
                 name: 'data',
                 disabled: true,
-                desc: '在 v3.0 中废弃，请使用 result',
+                desc: '即将废弃，请使用 result',
                 type: 'String',
                 enum: '',
                 defVal: 'result',
