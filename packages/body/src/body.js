@@ -277,7 +277,7 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
           'row--current': highlightCurrentRow && row === currentRow,
           'row--hover': row === hoverRow,
           'row--new': editStore.insertList.indexOf(row) > -1
-        }, rowClassName ? XEUtils.isFunction(rowClassName) ? rowClassName({ $table, seq, row, rowIndex }) : rowClassName : ''],
+        }, rowClassName ? XEUtils.isFunction(rowClassName) ? rowClassName({ $table, $seq, seq, fixedType, rowLevel, row, rowIndex, $rowIndex }) : rowClassName : ''],
         attrs: {
           'data-rowid': rowid
         },

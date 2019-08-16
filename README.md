@@ -11,8 +11,8 @@
 [![pull requests closed](https://img.shields.io/github/issues-pr-closed/xuliangzhan/vxe-table.svg)](https://github.com/xuliangzhan/vxe-table/pulls?q=is%3Apr+is%3Aclosed)
 [![npm license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/xuliangzhan/vxe-table/blob/master/LICENSE)
 
-A simple and practical Vue table components, with any component library perfect compatibility.  
-一个简单实用的 Vue 表组件，与任意组件库完美兼容
+A simple and practical Vue table components, Compatible with any component library.  
+一个简单实用的 Vue 表组件，与任意组件库兼容。
 
 * Design concept 设计理念
   * 精简的 API（简洁、高效）

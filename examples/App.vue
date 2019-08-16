@@ -1,17 +1,17 @@
 <template>
   <div id="app" @click="clickEvent">
     <header class="page-header">
-      <h1 class="title">
+      <div class="left">
         <a href="https://github.com/xuliangzhan/vxe-table">
-          <span>🐬vxe-table</span>
+          <span class="title">🐬vxe-table</span>
           <img src="https://img.shields.io/npm/dm/vxe-table.svg?style=social&logo=github">
           <img src="https://img.shields.io/github/watchers/xuliangzhan/vxe-table.svg?style=social">
           <img src="https://img.shields.io/github/stars/xuliangzhan/vxe-table.svg?style=social">
           <img src="https://img.shields.io/github/forks/xuliangzhan/vxe-table.svg?style=social">
         </a>
-      </h1>
+      </div>
       <div class="right">
-        <div class="langs">
+        <div class="content">
           <span v-if="usedJSHeapSize" class="performance">Memory used: {{ usedJSHeapSize }} MB.</span>
           <span>{{ $t('app.body.label.translations') }}:</span>
           <select class="locale-switch" v-model="$i18n.locale">
@@ -28,13 +28,12 @@
             <a class="donation" href="https://github.com/xuliangzhan/vxe-table#donation" target="_blank">{{ $t('app.footer.donation') }}☕</a>
           </vxe-tooltip>
         </div>
-        <div class="desc">{{ $t('app.header.desc') }}</div>
       </div>
     </header>
     <div class="page-container">
       <div class="aside">
         <ul class="nav-menu">
-          <li v-for="(item, index) in tableList" :key="index">
+          <li v-for="(item, index) in tableList" :key="index" :class="{expand: item.expand}">
             <a class="nav-link" @click="linkEvent(item)" :title="$t(item.label)" :class="{active: pageKey === item.value}"><i class="vxe-icon--arrow-right nav-link-icon"></i>{{ $t(item.label) }}</a>
             <ul v-if="item.children" v-show="item.expand" class="nav-child-menu">
               <li v-for="(child, cIndex) in item.children" :key="cIndex">
