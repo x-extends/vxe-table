@@ -3379,20 +3379,18 @@ export default {
      * 激活单元格编辑
      */
     setActiveCell (row, field) {
-      return this.scrollToRow(row).then(() => {
-        return new Promise(resolve => {
-          if (row && field) {
-            let column = this.visibleColumn.find(column => column.property === field)
-            if (column && column.editRender) {
-              let cell = DomTools.getCell(this, { row, column })
-              if (cell) {
-                this.handleActived({ row, rowIndex: this.getRowIndex(row), column, columnIndex: this.getColumnIndex(column), cell, $table: this })
-                this.lastCallTime = Date.now()
-              }
+      return this.scrollToRow(row, true).then(() => {
+        if (row && field) {
+          let column = this.visibleColumn.find(column => column.property === field)
+          if (column && column.editRender) {
+            let cell = DomTools.getCell(this, { row, column })
+            if (cell) {
+              this.handleActived({ row, rowIndex: this.getRowIndex(row), column, columnIndex: this.getColumnIndex(column), cell, $table: this })
+              this.lastCallTime = Date.now()
             }
           }
-          resolve(this.$nextTick())
-        })
+        }
+        return this.$nextTick()
       })
     },
     /**
@@ -4015,20 +4013,20 @@ export default {
       }
       return this.$nextTick()
     },
-    scrollToRow (row, column) {
+    scrollToRow (row, column, isDelay) {
       if (row && this.fullAllDataRowMap.has(row)) {
         DomTools.rowToVisible(this, row)
       }
-      return this.scrollToColumn(column)
+      return this.scrollToColumn(column, isDelay || XEUtils.isBoolean(column))
     },
-    scrollToColumn (column) {
+    scrollToColumn (column, isDelay) {
       if (column && this.fullColumnMap.has(column)) {
         DomTools.colToVisible(this, column)
       }
-      if (this.scrollYLoad) {
+      if (isDelay && this.scrollYLoad) {
         return new Promise(resolve => setTimeout(() => resolve(this.$nextTick()), 50))
       }
-      return new Promise(resolve => resolve(this.$nextTick()))
+      return this.$nextTick()
     },
     clearScroll () {
       Object.assign(this.scrollXStore, {
@@ -4205,7 +4203,7 @@ export default {
               }
             }
             if (scrollYLoad) {
-              this.scrollToRow(params.row).then(finish)
+              this.scrollToRow(params.row, true).then(finish)
             } else {
               finish()
             }
