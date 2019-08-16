@@ -376,7 +376,7 @@ export default {
       } else {
         UtilTools.emitEvent(this, 'page-size-change', [pageSize])
       }
-      UtilTools.emitEvent(this, 'page-change', [params])
+      UtilTools.emitEvent(this, 'page-change', [Object.assign({ $grid: this }, params)])
       this.commitProxy('query')
     },
     sortChangeEvent (params) {
@@ -388,7 +388,7 @@ export default {
         Object.assign(sortData, params)
         this.commitProxy('query')
       }
-      UtilTools.emitEvent(this, 'sort-change', [params])
+      UtilTools.emitEvent(this, 'sort-change', [Object.assign({ $grid: this }, params)])
     },
     filterChangeEvent (params) {
       let { remoteFilter } = this
@@ -398,7 +398,7 @@ export default {
         this.filterData = filters
         this.commitProxy('reload')
       }
-      UtilTools.emitEvent(this, 'filter-change', [params])
+      UtilTools.emitEvent(this, 'filter-change', [Object.assign({ $grid: this }, params)])
     }
   }
 }
