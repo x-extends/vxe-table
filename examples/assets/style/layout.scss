@@ -61,6 +61,7 @@ body,
   box-sizing: border-box;
   border-bottom: 1px solid #dcdfe6;
   box-shadow: -2px 2px 6px rgba(0, 0, 0, 0.12);
+  display: flex;
   &:after {
     content: "";
     display: block;
@@ -75,25 +76,29 @@ body,
     border-radius: 50%;
   }
   .title {
+    margin-right: 10px;
+  }
+  .left {
     font-size: 22px;
-    padding: 10px 0;
+    padding: 5px 0;
     a {
       color: #409eff;
       text-decoration: none;
       cursor: pointer;
     }
-    float: left;
   }
   .right {
-    float: right;
+    display: flex;
+    flex-grow: 1;
+    align-items: center;
     text-align: right;
-    margin: 5px 0;
+    & > .content {
+      width: 100%;
+      text-align: right;
+    }
   }
   .performance {
     margin-right: 15px;
-  }
-  .langs {
-    margin-bottom: 5px;
   }
   .locale-switch,
   .version-switch {

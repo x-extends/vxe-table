@@ -224,7 +224,7 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
         class: ['vxe-body--row', {
           [`row--level-${rowLevel}`]: treeConfig,
           'row--new': editStore.insertList.indexOf(row) > -1
-        }, rowClassName ? XEUtils.isFunction(rowClassName) ? rowClassName({ $table, seq, row, rowIndex }) : rowClassName : ''],
+        }, rowClassName ? XEUtils.isFunction(rowClassName) ? rowClassName({ $table, $seq, seq, fixedType, rowLevel, row, rowIndex, $rowIndex }) : rowClassName : ''],
         attrs: {
           'data-rowid': rowid
         },

@@ -31,7 +31,7 @@ export default {
       let filterRender = own.filterRender
       let compConf = filterRender ? Renderer.get(filterRender.name) : null
       if (slots && slots.filter) {
-        return slots.filter.call($table, Object.assign({ context: this }, args), h)
+        return slots.filter.call($table, Object.assign({ $table, context: this }, args), h)
       } else if (compConf && compConf.renderFilter) {
         return compConf.renderFilter(h, filterRender, args, this)
       }

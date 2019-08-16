@@ -348,10 +348,10 @@ export default {
       }
     },
     btnEvent (evnt, item) {
-      let { $grid } = this
+      let { $grid, $table } = this
       if (item.code && $grid) {
         $grid.commitProxy(item.code)
-        UtilTools.emitEvent($grid, 'toolbar-button-click', [{ button: item, $grid }, evnt])
+        UtilTools.emitEvent($grid, 'toolbar-button-click', [{ button: item, $grid, $table }, evnt])
       }
     }
   }
