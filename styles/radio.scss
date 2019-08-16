@@ -62,10 +62,6 @@
           border-color: #c0c4cc;
           background-color: #c0c4cc;
         }
-      }
-      &:checked+.vxe-radio--icon {
-        border-color: $vxe-input-border-color;
-        background-color: $vxe-input-disabled-color;
         &+.vxe-radio--label {
           color: $vxe-input-border-color;
         }
