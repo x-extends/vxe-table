@@ -13,8 +13,7 @@
       ref="xTable"
       height="300"
       :loading="loading"
-      :select-config="{checkField: 'checked'}"
-      :optimization ="{scrollY: {gt: 200, oSize: 10, rSize: 30}}">
+      :select-config="{checkField: 'checked'}">
     </vxe-grid>
 
     <pre>
@@ -51,8 +50,7 @@ export default {
           ref="xTable"
           height="300"
           :loading="loading"
-          :select-config="{checkField: 'checked'}"
-          :optimization ="{scrollY: {gt: 200, oSize: 10, rSize: 30}}">
+          :select-config="{checkField: 'checked'}">
         </vxe-grid>
         `,
         `

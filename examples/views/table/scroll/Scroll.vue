@@ -1,8 +1,8 @@
 <template>
   <div>
     <p class="tip">
-      如果列较多请使用 <grid-api-link name="vxe-grid"/>，使渲染性能达到最优<br>
-      虚拟滚动只会渲染可视区域的数据，对于海量数据的性能提升非常大<br>
+      如果列较多请使用 <grid-api-link name="vxe-grid"/>，使渲染性能达到最优，虚拟滚动只会渲染可视区域的数据，对于海量数据的性能提升非常大<br>
+      数据超大情况下必须使用：<table-api-link prop="show-overflow"/>，<table-api-link prop="show-header-overflow"/> 参数<br>
       相关参数说明 {seq: 序号, $rowIndex: 获取渲染中的行索引, rowIndex: 获取真实的行索引, row: 获取行数据, column: 获取列配置, columnIndex: 获取真实列索引，$columnIndex:获取渲染中的列索引}
     </p>
 
@@ -26,9 +26,9 @@
     </pre>
 
     <p class="tip">
-      高级配置项<br>
-      参数 <table-api-link prop="scrollX"/>: {gt: 16, oSize: 4, rSize: 10},<table-api-link prop="scrollY"/>: {gt: 200, oSize: 30, rSize: 80}，当数据量过大时请调整到适合的参数可以使渲染更快<br>
-      数据超大情况下必须使用：<table-api-link prop="show-overflow"/>，<table-api-link prop="show-header-overflow"/> 参数以及调整好 <table-api-link prop="optimization"/> ：{scrollX,scrollY} 适合的参数可以更加流畅
+      手动调优，默认自动优化<br>
+      通过指定 <table-api-link prop="optimization"/> ：{<table-api-link prop="scrollX"/>,<table-api-link prop="scrollY"/>} 适合的参数可以手动调优<br>
+      数据超大情况下必须使用：<table-api-link prop="show-overflow"/>，<table-api-link prop="show-header-overflow"/> 参数
     </p>
 
     <vxe-table

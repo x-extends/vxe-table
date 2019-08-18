@@ -15,7 +15,7 @@ function handleLocation (obj, rows, columns, row, column) {
 
 // 滚动、拖动过程中不需要触发
 function isOperateMouse ($table) {
-  return $table._isResize || ($table.lastScrollTime && Date.now() < $table.lastScrollTime + 100)
+  return $table._isResize || ($table.lastScrollTime && Date.now() < $table.lastScrollTime + 300)
 }
 
 /**
@@ -383,7 +383,7 @@ export default {
     this.$el.onscroll = null
   },
   render (h) {
-    let { $parent: $table, fixedColumn, fixedType } = this
+    let { _e, $parent: $table, fixedColumn, fixedType } = this
     let {
       maxHeight,
       height,
@@ -403,8 +403,7 @@ export default {
       scrollbarWidth,
       scrollXStore,
       scrollXLoad,
-      scrollYStore,
-      scrollYLoad
+      scrollYStore
     } = $table
     // v2.0 废弃属性，保留兼容
     let allColumnOverflow = XEUtils.isBoolean(oldShowAllOverflow) ? oldShowAllOverflow : allShowOverflow
@@ -428,7 +427,8 @@ export default {
     }
     let tableStyle = {
       width: tableWidth ? `${tableWidth}px` : tableWidth,
-      marginLeft: fixedType ? null : `${scrollXStore.leftSpaceWidth}px`
+      marginTop: scrollYStore.topSpaceHeight ? `${scrollYStore.topSpaceHeight}px` : null,
+      marginLeft: fixedType ? null : (scrollXStore.leftSpaceWidth ? `${scrollXStore.leftSpaceWidth}px` : null)
     }
     // 兼容火狐滚动条
     if (overflowY && fixedType && (DomTools.browse['-moz'] || DomTools.browse['safari'])) {
@@ -438,18 +438,18 @@ export default {
       class: ['vxe-table--body-wrapper', fixedType ? `fixed--${fixedType}-wrapper` : 'body--wrapper'],
       style
     }, [
-      scrollYLoad ? h('div', {
-        class: 'vxe-body--top-space',
-        style: {
-          height: `${scrollYStore.topSpaceHeight}px`
-        }
-      }) : null,
-      !fixedType && scrollXLoad ? h('div', {
+      fixedType ? _e() : h('div', {
         class: 'vxe-body--x-space',
         style: {
           width: `${$table.tableWidth}px`
         }
-      }) : null,
+      }),
+      h('div', {
+        class: 'vxe-body--y-space',
+        style: {
+          height: `${scrollYStore.ySpaceHeight}px`
+        }
+      }),
       h('table', {
         class: 'vxe-table--body',
         attrs: {
@@ -485,13 +485,7 @@ export default {
         h('span', {
           class: 'vxe-table--empty-text'
         }, $table.$slots.empty || GlobalConfig.i18n('vxe.table.emptyText'))
-      ]) : null,
-      scrollYLoad ? h('div', {
-        class: 'vxe-body--bottom-space',
-        style: {
-          height: `${scrollYStore.bottomSpaceHeight}px`
-        }
-      }) : null
+      ]) : null
     ])
   },
   methods: {
@@ -502,7 +496,7 @@ export default {
      */
     scrollEvent (evnt) {
       let { $parent: $table, fixedType, lastScrollTop, lastScrollLeft } = this
-      let { $refs, scrollXLoad, scrollYLoad, triggerScrollXEvent, triggerScrollYEvent } = $table
+      let { $refs, highlightHoverRow, scrollXLoad, scrollYLoad, triggerScrollXEvent, triggerScrollYEvent } = $table
       let { tableHeader, tableBody, leftBody, rightBody } = $refs
       let headerElem = tableHeader ? tableHeader.$el : null
       let bodyElem = tableBody.$el
@@ -512,6 +506,9 @@ export default {
       let scrollLeft = bodyElem.scrollLeft
       let isX = lastScrollLeft !== scrollLeft
       let isY = lastScrollTop !== scrollTop
+      if (highlightHoverRow) {
+        $table.clearHoverRow()
+      }
       if (leftElem && fixedType === 'left') {
         scrollTop = leftElem.scrollTop
         syncBodyScroll(scrollTop, bodyElem, rightElem)

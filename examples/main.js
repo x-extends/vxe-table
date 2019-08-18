@@ -33,11 +33,9 @@ function mockData () {
       if (fullIndex === 1) {
         colItem.type = 'selection'
         colItem.title = null
-        colItem.width = 60
       } else if (fullIndex === 2) {
         colItem.type = 'index'
         colItem.title = '序号'
-        colItem.width = 100
       }
       if (fullIndex < 4) {
         colItem.fixed = 'left'

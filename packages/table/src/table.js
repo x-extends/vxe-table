@@ -6,6 +6,7 @@ import { UtilTools, DomTools, ExportTools, GlobalEvent, ResizeEvent } from '../.
 
 var rowUniqueId = 0
 var browse = DomTools.browse
+var isWebkit = browse['-webkit'] && !browse.edge
 var debounceScrollYDuration = browse.msie ? 40 : 20
 
 function getRowUniqueId () {
@@ -187,10 +188,14 @@ export default {
     showOverflow: { type: [Boolean, String], default: () => GlobalConfig.showOverflow },
     // 设置表头所有内容过长时显示为省略号
     showHeaderOverflow: { type: [Boolean, String], default: () => GlobalConfig.showHeaderOverflow },
-    // 是否服务端筛选
+    // 是否所有服务端筛选
     remoteFilter: Boolean,
-    // 是否服务端排序
+    // 是否所有服务端排序
     remoteSort: Boolean,
+    // 所有列宽度
+    columnWidth: [Number, String],
+    // 所有列最小宽度，把剩余宽度按比例分配
+    columnMinWidth: [Number, String],
 
     /** 高级属性 */
     // 主键配置
@@ -224,7 +229,9 @@ export default {
     // 校验规则配置项
     editRules: Object,
     // 优化配置项
-    optimization: Object
+    optimization: Object,
+    // 额外的参数
+    params: Object
   },
   provide () {
     return {
@@ -346,7 +353,8 @@ export default {
         startIndex: 0,
         visibleIndex: 0,
         topSpaceHeight: 0,
-        bottomSpaceHeight: 0
+        bottomSpaceHeight: 0,
+        ySpaceHeight: 0
       },
       // 存放 tooltip 相关信息
       tooltipStore: {
@@ -515,8 +523,8 @@ export default {
       Object.assign(scrollYStore, {
         startIndex: 0,
         visibleIndex: 0,
-        renderSize: scrollY.rSize,
-        offsetSize: scrollY.oSize
+        renderSize: XEUtils.toNumber(scrollY.rSize),
+        offsetSize: XEUtils.toNumber(scrollY.oSize)
       })
     }
     if (!UtilTools.getRowkey(this)) {
@@ -1448,8 +1456,8 @@ export default {
         Object.assign(scrollXStore, {
           startIndex: 0,
           visibleIndex: 0,
-          renderSize: scrollX.rSize,
-          offsetSize: scrollX.oSize
+          renderSize: XEUtils.toNumber(scrollX.rSize),
+          offsetSize: XEUtils.toNumber(scrollX.oSize)
         })
         visibleColumn = visibleColumn.slice(scrollXStore.startIndex, scrollXStore.startIndex + scrollXStore.renderSize)
       }
@@ -1464,6 +1472,7 @@ export default {
      * 指定列宽的列进行拆分
      */
     analyColumnWidth () {
+      let { columnWidth, columnMinWidth } = this
       let resizeList = []
       let pxList = []
       let pxMinList = []
@@ -1471,16 +1480,22 @@ export default {
       let scaleMinList = []
       let autoList = []
       this.tableFullColumn.forEach(column => {
+        if (columnWidth && !column.width) {
+          column.width = columnWidth
+        }
+        if (columnMinWidth && !column.minWidth) {
+          column.minWidth = columnMinWidth
+        }
         if (column.visible) {
           if (column.resizeWidth) {
             resizeList.push(column)
-          } else if (DomTools.isPx(column.width)) {
+          } else if (DomTools.isPx(column.width || columnWidth)) {
             pxList.push(column)
-          } else if (DomTools.isScale(column.width)) {
+          } else if (DomTools.isScale(column.width || columnWidth)) {
             scaleList.push(column)
-          } else if (DomTools.isPx(column.minWidth)) {
+          } else if (DomTools.isPx(column.minWidth || columnMinWidth)) {
             pxMinList.push(column)
-          } else if (DomTools.isScale(column.minWidth)) {
+          } else if (DomTools.isScale(column.minWidth || columnMinWidth)) {
             scaleMinList.push(column)
           } else {
             autoList.push(column)
@@ -2524,6 +2539,9 @@ export default {
     triggerHoverEvent (evnt, { row }) {
       this.hoverRow = row
     },
+    clearHoverRow () {
+      this.hoverRow = null
+    },
     /**
      * 选中事件
      */
@@ -3412,6 +3430,7 @@ export default {
       let scrollLeft = scrollBodyElem.scrollLeft
       let toVisibleIndex = 0
       let width = 0
+      let preload = false
       for (let index = 0; index < visibleColumn.length; index++) {
         width += visibleColumn[index].renderWidth
         if (scrollLeft < width) {
@@ -3420,28 +3439,24 @@ export default {
         }
       }
       if (scrollXStore.visibleIndex !== toVisibleIndex) {
-        let isReload
-        let preloadSize = 0
-        let isLeft = scrollXStore.visibleIndex > toVisibleIndex
-        // 如果渲染数量不充足
-        let isTooLow = renderSize < visibleSize * 3
-        // 除去可视条数剩余数量
-        let residueSize = renderSize - visibleSize
-        if (isLeft) {
-          preloadSize = residueSize - (isTooLow ? Math.floor(residueSize / 2) : Math.floor(renderSize > visibleSize * 6 ? visibleSize * 3 : visibleSize * 1.5))
-          isReload = toVisibleIndex - offsetSize <= startIndex
+        let marginSize = Math.min(Math.floor((renderSize - visibleSize) / 2), visibleSize)
+        if (scrollXStore.visibleIndex > toVisibleIndex) {
+          // 向左
+          preload = toVisibleIndex - offsetSize <= startIndex
+          if (preload) {
+            scrollXStore.startIndex = Math.max(0, toVisibleIndex - Math.max(marginSize, renderSize - visibleSize))
+          }
         } else {
-          preloadSize = isTooLow ? Math.floor(residueSize / 2) : Math.floor(renderSize > visibleSize * 6 ? visibleSize * 3 : visibleSize * 1.5)
-          isReload = toVisibleIndex + visibleSize + offsetSize >= startIndex + renderSize
+          // 向右
+          preload = toVisibleIndex + visibleSize + offsetSize >= startIndex + renderSize
+          if (preload) {
+            scrollXStore.startIndex = Math.max(0, Math.min(visibleColumn.length - renderSize, toVisibleIndex - marginSize))
+          }
         }
-        if (isReload) {
-          scrollXStore.visibleIndex = toVisibleIndex
-          scrollXStore.startIndex = Math.min(Math.max(toVisibleIndex - preloadSize, 0), visibleColumn.length - renderSize)
+        if (preload) {
           this.updateScrollXData()
-          this.$nextTick(() => {
-            scrollBodyElem.scrollLeft = scrollLeft
-          })
         }
+        scrollXStore.visibleIndex = toVisibleIndex
       }
       this.clostTooltip()
     },
@@ -3449,40 +3464,37 @@ export default {
      * 纵向 Y 可视渲染事件处理
      */
     triggerScrollYEvent: XEUtils.debounce(function (evnt) {
-      let { tableFullData, scrollYStore } = this
+      let { afterFullData, scrollYStore } = this
       let { startIndex, renderSize, offsetSize, visibleSize, rowHeight } = scrollYStore
       let scrollBodyElem = evnt.target
       let scrollTop = scrollBodyElem.scrollTop
       let toVisibleIndex = Math.ceil(scrollTop / rowHeight)
+      let preload = false
       if (scrollYStore.visibleIndex !== toVisibleIndex) {
-        let isReload
-        let preloadSize = 0
-        let isTop = scrollYStore.visibleIndex > toVisibleIndex
-        // 如果渲染数量不充足
-        let isTooLow = renderSize < visibleSize * 3
-        // 除去可视条数剩余数量
-        let residueSize = renderSize - visibleSize
-        if (isTop) {
-          preloadSize = residueSize - (isTooLow ? Math.floor(residueSize / 2) : Math.floor(renderSize > visibleSize * 6 ? visibleSize * 3 : visibleSize * 1.5))
-          isReload = toVisibleIndex - offsetSize <= startIndex
+        let marginSize = Math.min(Math.floor((renderSize - visibleSize) / 2), visibleSize)
+        if (scrollYStore.visibleIndex > toVisibleIndex) {
+          // 向上
+          preload = toVisibleIndex - offsetSize <= startIndex
+          if (preload) {
+            scrollYStore.startIndex = Math.max(0, toVisibleIndex - Math.max(marginSize, renderSize - visibleSize))
+          }
         } else {
-          preloadSize = isTooLow ? Math.floor(residueSize / 2) : Math.floor(renderSize > visibleSize * 6 ? visibleSize * 3 : visibleSize * 1.5)
-          isReload = toVisibleIndex + visibleSize + offsetSize >= startIndex + renderSize
+          // 向下
+          preload = toVisibleIndex + visibleSize + offsetSize >= startIndex + renderSize
+          if (preload) {
+            scrollYStore.startIndex = Math.max(0, Math.min(afterFullData.length - renderSize, toVisibleIndex - marginSize))
+          }
         }
-        if (isReload) {
-          scrollYStore.visibleIndex = toVisibleIndex
-          scrollYStore.startIndex = Math.min(Math.max(toVisibleIndex - preloadSize, 0), tableFullData.length - renderSize)
+        if (preload) {
           this.updateScrollYData()
-          this.$nextTick(() => {
-            scrollBodyElem.scrollTop = scrollTop
-          })
         }
+        scrollYStore.visibleIndex = toVisibleIndex
       }
     }, debounceScrollYDuration, { leading: false, trailing: true }),
     // 计算可视渲染相关数据
     computeScrollLoad () {
       return this.$nextTick().then(() => {
-        let { scrollXLoad, scrollYLoad, scrollYStore, scrollXStore, visibleColumn, optimizeOpts } = this
+        let { vSize, scrollXLoad, scrollYLoad, scrollYStore, scrollXStore, visibleColumn, optimizeOpts } = this
         let { scrollX, scrollY } = optimizeOpts
         let tableBody = this.$refs.tableBody
         let tableBodyElem = tableBody ? tableBody.$el : null
@@ -3490,29 +3502,65 @@ export default {
         if (tableBodyElem) {
           // 计算 X 逻辑
           if (scrollXLoad) {
-          // 无法预知，默认取前 10 条平均宽度进行运算
-            scrollXStore.visibleSize = scrollX.vSize || Math.ceil(tableBodyElem.clientWidth / (visibleColumn.slice(0, 10).reduce((previous, column) => previous + column.renderWidth, 0) / 10))
+            let firstColumn = visibleColumn[0]
+            let cWidth = firstColumn ? firstColumn.renderWidth : 40
+            let visibleXSize = XEUtils.toNumber(scrollX.vSize || Math.ceil(tableBodyElem.clientWidth / cWidth))
+            scrollXStore.visibleSize = visibleXSize
+            // 自动优化
+            if (!scrollX.oSize) {
+              scrollXStore.offsetSize = visibleXSize
+            }
+            if (!scrollX.rSize) {
+              scrollXStore.renderSize = visibleXSize + 2
+            }
             this.updateScrollXData()
           } else {
             this.updateScrollXSpace()
           }
           // 计算 Y 逻辑
           if (scrollYLoad) {
+            let rHeight
             if (scrollY.rHeight) {
-              scrollYStore.rowHeight = scrollY.rHeight
+              rHeight = scrollY.rHeight
             } else {
               let firstTrElem = tableBodyElem.querySelector('tbody>tr')
               if (!firstTrElem && tableHeader) {
                 firstTrElem = tableHeader.$el.querySelector('thead>tr')
               }
               if (firstTrElem) {
-                scrollYStore.rowHeight = firstTrElem.clientHeight
+                rHeight = firstTrElem.clientHeight
               }
             }
-            scrollYStore.visibleSize = scrollY.vSize || Math.ceil(tableBodyElem.clientHeight / scrollYStore.rowHeight)
+            // 默认的行高
+            if (!rHeight) {
+              switch (vSize) {
+                case 'medium':
+                  rHeight = 44
+                  break
+                case 'small':
+                  rHeight = 40
+                  break
+                case 'mini':
+                  rHeight = 36
+                  break
+                default:
+                  rHeight = 48
+                  break
+              }
+            }
+            let visibleYSize = XEUtils.toNumber(scrollY.vSize || Math.ceil(tableBodyElem.clientHeight / rHeight))
+            scrollYStore.visibleSize = visibleYSize
+            scrollYStore.rowHeight = rHeight
+            // 自动优化
+            if (!scrollY.oSize) {
+              scrollYStore.offsetSize = visibleYSize
+            }
+            if (!scrollY.rSize) {
+              scrollYStore.renderSize = browse.firefox ? visibleYSize * 6 : (browse.edge ? visibleYSize * 10 : (isWebkit ? visibleYSize + 2 : visibleYSize * 6))
+            }
             this.updateScrollYData()
           } else {
-            this.updateScrollXSpace()
+            this.updateScrollYSpace()
           }
         }
         return this.$nextTick()
@@ -3535,8 +3583,10 @@ export default {
     },
     // 更新纵向 Y 可视渲染上下剩余空间大小
     updateScrollYSpace () {
-      let { scrollYStore } = this
+      let { scrollYStore, afterFullData } = this
       let { visibleData } = this.getTableData()
+      let bodyHeight = afterFullData.length * scrollYStore.rowHeight
+      scrollYStore.ySpaceHeight = bodyHeight
       scrollYStore.topSpaceHeight = Math.max(scrollYStore.startIndex * scrollYStore.rowHeight, 0)
       scrollYStore.bottomSpaceHeight = Math.max((visibleData.length - (scrollYStore.startIndex + scrollYStore.renderSize)) * scrollYStore.rowHeight, 0)
     },
@@ -3577,14 +3627,12 @@ export default {
     clearScroll () {
       if (this.scrollXLoad) {
         Object.assign(this.scrollXStore, {
-          visibleSize: 0,
           startIndex: 0
         })
         this.updateScrollXSpace()
       }
       if (this.scrollYLoad) {
         Object.assign(this.scrollYStore, {
-          visibleSize: 0,
           startIndex: 0
         })
         this.updateScrollYSpace()

@@ -408,6 +408,22 @@ const apis = [
         list: []
       },
       {
+        name: 'column-width',
+        descKey: 'app.api.table.desc.columnWidth',
+        type: 'Number, String',
+        enum: 'px，%',
+        defVal: '默认均匀分配',
+        list: []
+      },
+      {
+        name: 'column-min-width',
+        descKey: 'app.api.table.desc.columnMinWidth',
+        type: 'Number, String',
+        enum: 'px，%',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'column-key',
         descKey: 'app.api.table.desc.columnKey',
         type: 'Boolean',
@@ -1067,7 +1083,7 @@ const apis = [
           },
           {
             name: 'scrollX',
-            desc: '横向 X 虚拟滚动配置',
+            desc: '横向 X 虚拟滚动配置（用于特殊场景手动调优）',
             type: 'Object',
             enum: '',
             defVal: '',
@@ -1077,7 +1093,7 @@ const apis = [
                 desc: '指定大于多少范围时自动启动虚拟滚动（启用 X 虚拟滚动，必须固定所有列宽，否则无法兼容）',
                 type: 'Number',
                 enum: '',
-                defVal: '60',
+                defVal: '100',
                 list: []
               },
               {
@@ -1085,7 +1101,7 @@ const apis = [
                 desc: '当剩余数据少于指定范围时触发重新渲染',
                 type: 'Number',
                 enum: '',
-                defVal: '6',
+                defVal: '默认自动计算',
                 list: []
               },
               {
@@ -1093,7 +1109,7 @@ const apis = [
                 desc: '每次渲染条数',
                 type: 'Number',
                 enum: '',
-                defVal: '16',
+                defVal: '默认自动计算',
                 list: []
               },
               {
@@ -1108,7 +1124,7 @@ const apis = [
           },
           {
             name: 'scrollY',
-            desc: '纵向 Y 虚拟滚动配置',
+            desc: '纵向 Y 虚拟滚动配置（用于特殊场景手动调优）',
             type: 'Object',
             enum: '',
             defVal: '',
@@ -1126,7 +1142,7 @@ const apis = [
                 desc: '当剩余数据少于指定范围时触发重新渲染',
                 type: 'Number',
                 enum: '',
-                defVal: '25',
+                defVal: '默认自动计算',
                 list: []
               },
               {
@@ -1134,7 +1150,7 @@ const apis = [
                 desc: '每次渲染条数',
                 type: 'Number',
                 enum: '',
-                defVal: '70',
+                defVal: '默认自动计算',
                 list: []
               },
               {

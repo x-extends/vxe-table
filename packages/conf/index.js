@@ -20,15 +20,15 @@ const GlobalConfig = {
   optimization: {
     animat: true,
     scrollX: {
-      gt: 500,
-      oSize: 6,
-      rSize: 18
+      gt: 100
+      // oSize: 0,
+      // rSize: 0
       // vSize: 0
     },
     scrollY: {
-      gt: 500,
-      oSize: 30,
-      rSize: 100
+      gt: 500
+      // oSize: 0,
+      // rSize: 0
       // vSize: 0,
       // rHeight: 0
     }

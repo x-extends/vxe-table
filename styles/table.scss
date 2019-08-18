@@ -89,15 +89,15 @@
       }
     }
   }
-  &.row--highlight {
-    .vxe-body--row {
-      &:not(.row--current) {
-        &:hover {
-          background-color: $vxe-table-row-hover-background-color;
-        }
-      }
-    }
-  }
+  // &.row--highlight {
+  //   .vxe-body--row {
+  //     &:not(.row--current) {
+  //       &:hover {
+  //         background-color: $vxe-table-row-hover-background-color;
+  //       }
+  //     }
+  //   }
+  // }
   &.column--highlight {
     .vxe-header--column {
       &:hover {
@@ -353,6 +353,10 @@
     width: 100%;
     height: 1px;
     margin-bottom: -1px;
+  }
+  .vxe-body--y-space {
+    width: 0;
+    float: left;
   }
 
   /*排序*/
