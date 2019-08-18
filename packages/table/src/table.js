@@ -6,7 +6,7 @@ import { UtilTools, DomTools, ExportTools, ResizeEvent, GlobalEvent } from '../.
 
 var rowUniqueId = 0
 var browse = DomTools.browse
-var isWebkit = browse['-webkit'] && !browse['-ms']
+var isWebkit = browse['-webkit'] && !browse.edge
 var debounceScrollYDuration = browse.msie ? 40 : 20
 
 class Rule {
@@ -162,10 +162,14 @@ export default {
     showOverflow: { type: [Boolean, String], default: () => GlobalConfig.showOverflow },
     // 设置表头所有内容过长时显示为省略号
     showHeaderOverflow: { type: [Boolean, String], default: () => GlobalConfig.showHeaderOverflow },
-    // 是否服务端筛选
+    // 是否所有服务端筛选
     remoteFilter: Boolean,
-    // 是否服务端排序
+    // 是否所有服务端排序
     remoteSort: Boolean,
+    // 所有列宽度
+    columnWidth: [Number, String],
+    // 所有列最小宽度，把剩余宽度按比例分配
+    columnMinWidth: [Number, String],
 
     /** 高级属性 */
     // 主键配置
@@ -199,7 +203,9 @@ export default {
     // 校验规则配置项
     editRules: Object,
     // 优化配置项
-    optimization: Object
+    optimization: Object,
+    // 额外的参数
+    params: Object
   },
   provide () {
     return {
@@ -470,8 +476,8 @@ export default {
         startIndex: 0,
         visibleIndex: 0,
         adaptive: XEUtils.isBoolean(scrollY.adaptive) ? scrollY.adaptive : true,
-        renderSize: scrollY.rSize,
-        offsetSize: scrollY.oSize
+        renderSize: XEUtils.toNumber(scrollY.rSize),
+        offsetSize: XEUtils.toNumber(scrollY.oSize)
       })
     }
     if (!UtilTools.getRowkey(this)) {
@@ -1383,9 +1389,8 @@ export default {
         Object.assign(scrollXStore, {
           startIndex: 0,
           visibleIndex: 0,
-          adaptive: XEUtils.isBoolean(scrollX.adaptive) ? scrollX.adaptive : true,
-          renderSize: scrollX.rSize,
-          offsetSize: scrollX.oSize
+          renderSize: XEUtils.toNumber(scrollX.rSize),
+          offsetSize: XEUtils.toNumber(scrollX.oSize)
         })
         visibleColumn = visibleColumn.slice(scrollXStore.startIndex, scrollXStore.startIndex + scrollXStore.renderSize)
       }
@@ -1400,6 +1405,7 @@ export default {
      * 指定列宽的列进行拆分
      */
     analyColumnWidth () {
+      let { columnWidth, columnMinWidth } = this
       let resizeList = []
       let pxList = []
       let pxMinList = []
@@ -1407,6 +1413,12 @@ export default {
       let scaleMinList = []
       let autoList = []
       this.tableFullColumn.forEach(column => {
+        if (columnWidth && !column.width) {
+          column.width = columnWidth
+        }
+        if (columnMinWidth && !column.minWidth) {
+          column.minWidth = columnMinWidth
+        }
         if (column.visible) {
           if (column.resizeWidth) {
             resizeList.push(column)
@@ -3815,6 +3827,7 @@ export default {
       let scrollLeft = scrollBodyElem.scrollLeft
       let toVisibleIndex = 0
       let width = 0
+      let preload = false
       for (let index = 0; index < visibleColumn.length; index++) {
         width += visibleColumn[index].renderWidth
         if (scrollLeft < width) {
@@ -3823,29 +3836,24 @@ export default {
         }
       }
       if (scrollXStore.visibleIndex !== toVisibleIndex) {
-        let isReload
-        let preloadSize = 0
-        let isLeft = scrollXStore.visibleIndex > toVisibleIndex
-        // 如果渲染数量不充足
-        let isTooLow = renderSize < visibleSize * 3
-        // 除去可视条数剩余数量
-        let residueSize = renderSize - visibleSize
-        if (isLeft) {
-          preloadSize = residueSize - (isTooLow ? Math.floor(residueSize / 2) : Math.floor(renderSize > visibleSize * 6 ? visibleSize * 3 : visibleSize * 1.5))
-          isReload = toVisibleIndex - offsetSize <= startIndex
+        let marginSize = Math.min(Math.floor((renderSize - visibleSize) / 2), visibleSize)
+        if (scrollXStore.visibleIndex > toVisibleIndex) {
+          // 向左
+          preload = toVisibleIndex - offsetSize <= startIndex
+          if (preload) {
+            scrollXStore.startIndex = Math.max(0, toVisibleIndex - Math.max(marginSize, renderSize - visibleSize))
+          }
         } else {
-          preloadSize = isTooLow ? Math.floor(residueSize / 2) : Math.floor(renderSize > visibleSize * 6 ? visibleSize * 3 : visibleSize * 1.5)
-          isReload = toVisibleIndex + visibleSize + offsetSize >= startIndex + renderSize
+          // 向右
+          preload = toVisibleIndex + visibleSize + offsetSize >= startIndex + renderSize
+          if (preload) {
+            scrollXStore.startIndex = Math.max(0, Math.min(visibleColumn.length - renderSize, toVisibleIndex - marginSize))
+          }
         }
-        if (isReload) {
-          scrollXStore.visibleIndex = toVisibleIndex
-          scrollXStore.startIndex = Math.min(Math.max(toVisibleIndex - preloadSize, 0), visibleColumn.length - renderSize)
+        if (preload) {
           this.updateScrollXData()
-          this.$nextTick(() => {
-            // scrollBodyElem.scrollLeft = scrollLeft
-            this.updateStyle()
-          })
         }
+        scrollXStore.visibleIndex = toVisibleIndex
       }
       this.clostTooltip()
     },
@@ -3853,9 +3861,8 @@ export default {
      * 纵向 Y 可视渲染事件处理
      */
     triggerScrollYEvent (evnt) {
-      let { scrollYStore } = this
       // webkit 浏览器使用最佳的渲染方式
-      if (isWebkit && scrollYStore.adaptive) {
+      if (isWebkit && this.scrollYStore.adaptive) {
         this.loadScrollYData(evnt)
       } else {
         this.debounceScrollY(evnt)
@@ -3868,42 +3875,37 @@ export default {
      * 纵向 Y 可视渲染处理
      */
     loadScrollYData (evnt) {
-      let { tableFullData, scrollYStore } = this
+      let { afterFullData, scrollYStore } = this
       let { startIndex, renderSize, offsetSize, visibleSize, rowHeight } = scrollYStore
       let scrollBodyElem = evnt.target
       let scrollTop = scrollBodyElem.scrollTop
       let toVisibleIndex = Math.ceil(scrollTop / rowHeight)
+      let preload = false
       if (scrollYStore.visibleIndex !== toVisibleIndex) {
-        let isReload
-        let preloadSize = 0
-        let isTop = scrollYStore.visibleIndex > toVisibleIndex
-        // 如果渲染数量不充足
-        let isTooLow = renderSize < visibleSize * 3
-        // 除去可视条数剩余数量
-        let residueSize = renderSize - visibleSize
-        if (isTop) {
-          preloadSize = residueSize - (isTooLow ? Math.floor(residueSize / 2) : Math.floor(renderSize > visibleSize * 6 ? visibleSize * 3 : visibleSize * 1.5))
-          isReload = toVisibleIndex - offsetSize <= startIndex
+        let marginSize = Math.min(Math.floor((renderSize - visibleSize) / 2), visibleSize)
+        if (scrollYStore.visibleIndex > toVisibleIndex) {
+          // 向上
+          preload = toVisibleIndex - offsetSize <= startIndex
+          if (preload) {
+            scrollYStore.startIndex = Math.max(0, toVisibleIndex - Math.max(marginSize, renderSize - visibleSize))
+          }
         } else {
-          preloadSize = isTooLow ? Math.floor(residueSize / 2) : Math.floor(renderSize > visibleSize * 6 ? visibleSize * 3 : visibleSize * 1.5)
-          isReload = toVisibleIndex + visibleSize + offsetSize >= startIndex + renderSize
+          // 向下
+          preload = toVisibleIndex + visibleSize + offsetSize >= startIndex + renderSize
+          if (preload) {
+            scrollYStore.startIndex = Math.max(0, Math.min(afterFullData.length - renderSize, toVisibleIndex - marginSize))
+          }
         }
-        if (isReload) {
-          scrollYStore.visibleIndex = toVisibleIndex
-          scrollYStore.startIndex = Math.min(Math.max(toVisibleIndex - preloadSize, 0), tableFullData.length - renderSize)
+        if (preload) {
           this.updateScrollYData()
-          this.$nextTick(() => {
-            // scrollBodyElem.scrollTop = scrollTop
-            this.clearHoverRow()
-            this.updateStyle()
-          })
         }
+        scrollYStore.visibleIndex = toVisibleIndex
       }
     },
     // 计算可视渲染相关数据
     computeScrollLoad () {
       return this.$nextTick().then(() => {
-        let { scrollXLoad, scrollYLoad, scrollYStore, scrollXStore, visibleColumn, optimizeOpts } = this
+        let { vSize, scrollXLoad, scrollYLoad, scrollYStore, scrollXStore, visibleColumn, optimizeOpts } = this
         let { scrollX, scrollY } = optimizeOpts
         let tableBody = this.$refs.tableBody
         let tableBodyElem = tableBody ? tableBody.$el : null
@@ -3911,12 +3913,16 @@ export default {
         if (tableBodyElem) {
           // 计算 X 逻辑
           if (scrollXLoad) {
-            // 无法预知，默认取前 10 条平均宽度进行运算
-            let visibleSize = scrollX.vSize || Math.ceil(tableBodyElem.clientWidth / (visibleColumn.slice(0, 10).reduce((previous, column) => previous + column.renderWidth, 0) / 10))
-            scrollXStore.visibleSize = visibleSize
-            if (scrollXStore.adaptive) {
-              scrollXStore.offsetSize = visibleSize
-              scrollXStore.renderSize = visibleSize + 2
+            let firstColumn = visibleColumn[0]
+            let cWidth = firstColumn ? firstColumn.renderWidth : 40
+            let visibleXSize = XEUtils.toNumber(scrollX.vSize || Math.ceil(tableBodyElem.clientWidth / cWidth))
+            scrollXStore.visibleSize = visibleXSize
+            // 自动优化
+            if (!scrollX.oSize) {
+              scrollXStore.offsetSize = visibleXSize
+            }
+            if (!scrollX.rSize) {
+              scrollXStore.renderSize = visibleXSize + 2
             }
             this.updateScrollXData()
           } else {
@@ -3924,22 +3930,44 @@ export default {
           }
           // 计算 Y 逻辑
           if (scrollYLoad) {
+            let rHeight
             if (scrollY.rHeight) {
-              scrollYStore.rowHeight = scrollY.rHeight
+              rHeight = scrollY.rHeight
             } else {
               let firstTrElem = tableBodyElem.querySelector('tbody>tr')
               if (!firstTrElem && tableHeader) {
                 firstTrElem = tableHeader.$el.querySelector('thead>tr')
               }
               if (firstTrElem) {
-                scrollYStore.rowHeight = firstTrElem.clientHeight
+                rHeight = firstTrElem.clientHeight
               }
             }
-            let visibleSize = scrollY.vSize || Math.ceil(tableBodyElem.clientHeight / scrollYStore.rowHeight)
-            scrollYStore.visibleSize = visibleSize
-            if (isWebkit && scrollYStore.adaptive) {
-              scrollYStore.offsetSize = visibleSize
-              scrollYStore.renderSize = visibleSize + 2
+            // 默认的行高
+            if (!rHeight) {
+              switch (vSize) {
+                case 'medium':
+                  rHeight = 44
+                  break
+                case 'small':
+                  rHeight = 40
+                  break
+                case 'mini':
+                  rHeight = 36
+                  break
+                default:
+                  rHeight = 48
+                  break
+              }
+            }
+            let visibleYSize = XEUtils.toNumber(scrollY.vSize || Math.ceil(tableBodyElem.clientHeight / rHeight))
+            scrollYStore.visibleSize = visibleYSize
+            scrollYStore.rowHeight = rHeight
+            // 自动优化
+            if (!scrollY.oSize) {
+              scrollYStore.offsetSize = visibleYSize
+            }
+            if (!scrollY.rSize) {
+              scrollYStore.renderSize = browse.firefox ? visibleYSize * 6 : (browse.edge ? visibleYSize * 10 : (isWebkit ? visibleYSize + 2 : visibleYSize * 6))
             }
             this.updateScrollYData()
           } else {
@@ -3983,6 +4011,7 @@ export default {
           }
         })
       })
+      this.$nextTick(this.updateStyle)
     },
     updateScrollYData () {
       this.handleData()
@@ -4013,6 +4042,7 @@ export default {
           }
         })
       })
+      this.$nextTick(this.updateStyle)
     },
     scrollTo (scrollLeft, scrollTop) {
       let bodyElem = this.$refs.tableBody.$el

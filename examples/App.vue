@@ -1191,7 +1191,7 @@ export default {
     if (process.env.NODE_ENV === 'development') {
       setInterval(() => {
         let performance = window.performance || window.webkitPerformance
-        if (performance) {
+        if (performance && performance.memory) {
           this.usedJSHeapSize = XEUtils.toFixedNumber(performance.memory.usedJSHeapSize / 1048576, 2)
         }
       }, 3000)

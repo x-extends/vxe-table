@@ -35,7 +35,7 @@ const apis = [
         descKey: 'app.api.tableColumn.desc.width',
         type: 'Number, String',
         enum: 'px，%',
-        defVal: '默认均匀分配',
+        defVal: '继承 table 的 column-width',
         list: []
       },
       {
@@ -43,7 +43,7 @@ const apis = [
         descKey: 'app.api.tableColumn.desc.minWidth',
         type: 'Number, String',
         enum: 'px，%',
-        defVal: '',
+        defVal: '继承 table 的 column-min-width',
         list: []
       },
       {

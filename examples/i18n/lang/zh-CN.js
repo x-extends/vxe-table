@@ -236,7 +236,9 @@ module.exports = {
           showOverflow: '设置所有内容过长时显示为省略号（如果是固定列建议设置该值，提升渲染速度）',
           showHeaderOverflow: '设置表头所有内容过长时显示为省略号',
           remoteSort: '所有列是否使用服务端排序，如果设置为 true 则不会对数据进行处理',
-          remoteFilter: '是否使用服务端筛选，如果设置为 true 则不会对数据进行处理',
+          remoteFilter: '所有列是否使用服务端筛选，如果设置为 true 则不会对数据进行处理',
+          columnWidth: '所有列宽度',
+          columnMinWidth: '所有最小列宽度；会自动将剩余空间按比例分配',
           columnKey: '是否需要为每一列的 VNode 设置 key 属性（非特殊情况下不需要使用）',
           rowKey: '是否需要为每一行的 VNode 设置 key 属性（非特殊情况下没必要设置）',
           rowId: '自定义行数据唯一主键的字段名（行数据必须要有唯一主键，默认自动生成）',
@@ -253,6 +255,8 @@ module.exports = {
           validConfig: '校验配置项',
           editRules: '校验规则配置项',
           optimization: '优化配置项',
+
+          params: '额外的参数（自定义一些数据参数，对于某些特殊的场景可能会用到）',
 
           empty: '空数据时显示的文本内容',
 

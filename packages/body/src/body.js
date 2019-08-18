@@ -4,7 +4,7 @@ import { UtilTools, DomTools } from '../../tools'
 
 // 滚动、拖动过程中不需要触发
 function isOperateMouse ($table) {
-  return $table._isResize || ($table.lastScrollTime && Date.now() < $table.lastScrollTime + 100)
+  return $table._isResize || ($table.lastScrollTime && Date.now() < $table.lastScrollTime + 300)
 }
 
 function renderBorder (h, type) {
@@ -362,10 +362,7 @@ export default {
       }
     }
     return h('div', {
-      class: ['vxe-table--body-wrapper', fixedType ? `fixed-${fixedType}--wrapper` : 'body--wrapper'],
-      on: {
-        mouseleave: $table.clearHoverRow
-      }
+      class: ['vxe-table--body-wrapper', fixedType ? `fixed-${fixedType}--wrapper` : 'body--wrapper']
     }, [
       fixedType ? _e() : h('div', {
         class: 'vxe-body--x-space',
@@ -431,7 +428,7 @@ export default {
      */
     scrollEvent (evnt) {
       let { $parent: $table, fixedType } = this
-      let { $refs, scrollXLoad, scrollYLoad, lastScrollTop, lastScrollLeft } = $table
+      let { $refs, highlightHoverRow, scrollXLoad, scrollYLoad, lastScrollTop, lastScrollLeft } = $table
       let { tableHeader, tableBody, leftBody, rightBody } = $refs
       let headerElem = tableHeader ? tableHeader.$el : null
       let bodyElem = tableBody.$el
@@ -444,6 +441,9 @@ export default {
       $table.lastScrollTop = scrollTop
       $table.lastScrollLeft = scrollLeft
       $table.lastScrollTime = Date.now()
+      if (highlightHoverRow) {
+        $table.clearHoverRow()
+      }
       if (leftElem && fixedType === 'left') {
         scrollTop = leftElem.scrollTop
         syncBodyScroll(scrollTop, bodyElem, rightElem)

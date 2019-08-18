@@ -4,8 +4,6 @@
       虚拟滚动渲染，加载 10 万行，左右固定列<br>
       大数据不建议使用双向绑定的 data 属性（vue 监听会大数据会短暂的卡顿），建议使用 <table-api-link prop="loadData"/>/<table-api-link prop="reloadData"/> 函数<br>
       对于多选 type=<table-column-api-link prop="selection"/> 当数据量海量时应该绑定 <table-api-link prop="checkField"/> 属性渲染速度更快<br>
-      数据超大情况下必须使用：<table-api-link prop="show-overflow"/>，<table-api-link prop="show-header-overflow"/> 参数以及调整好 <table-api-link prop="optimization"/> ：{scrollX,scrollY} 适合的参数可以更加流畅<br>
-      <table-api-link prop="data"/> 和 <table-api-link prop="loadData"/>/<table-api-link prop="reloadData"/> 不应该同时使用，请根据数据量决定使用哪种方式，保证一致性
     </p>
 
     <vxe-table
@@ -18,8 +16,7 @@
       highlight-current-row
       height="600"
       :loading="loading"
-      :select-config="{checkField: 'checked'}"
-      :optimization ="{scrollY: {gt: 200, oSize: 20, rSize: 60}}">
+      :select-config="{checkField: 'checked'}">
       <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
       <vxe-table-column type="index" width="100" fixed="left"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable width="200"></vxe-table-column>
@@ -80,8 +77,7 @@ export default {
           highlight-current-row
           height="600"
           :loading="loading"
-          :select-config="{checkField: 'checked'}"
-          :optimization ="{scrollY: {gt: 200, oSize: 20, rSize: 60}}">
+          :select-config="{checkField: 'checked'}">
           <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
           <vxe-table-column type="index" width="100" fixed="left"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable width="200"></vxe-table-column>
