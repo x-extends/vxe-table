@@ -64,7 +64,7 @@
     "vue-i18n": "^8.11.2",
     "vue-router": "^3.0.3",
     "vue-template-compiler": "^2.6.10",
-    "vxe-table-plugin-antd": "1.4.0",
+    "vxe-table-plugin-antd": "1.4.1",
     "vxe-table-plugin-element": "1.4.0",
     "vxe-table-plugin-excel": "^1.0.0",
     "vxe-table-plugin-iview": "1.4.0",
