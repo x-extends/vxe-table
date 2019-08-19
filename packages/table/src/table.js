@@ -6,7 +6,6 @@ import { UtilTools, DomTools, ExportTools, GlobalEvent, ResizeEvent } from '../.
 
 var rowUniqueId = 0
 var browse = DomTools.browse
-var isWebkit = browse['-webkit'] && !browse.edge
 var debounceScrollYDuration = browse.msie ? 40 : 20
 
 function getRowUniqueId () {
@@ -3556,7 +3555,7 @@ export default {
               scrollYStore.offsetSize = visibleYSize
             }
             if (!scrollY.rSize) {
-              scrollYStore.renderSize = browse.firefox ? visibleYSize * 6 : (browse.edge ? visibleYSize * 10 : (isWebkit ? visibleYSize + 2 : visibleYSize * 6))
+              scrollYStore.renderSize = visibleYSize * (browse.edge ? 10 : 8)
             }
             this.updateScrollYData()
           } else {
