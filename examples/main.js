@@ -18,7 +18,7 @@ var list = window.MOCK_DATA_LIST = []
 var currTime = Date.now()
 var fullIndex = 0
 var size = 100000
-var nList = XEUtils.shuffle(['a', 't', 'b', 'v', 'g', 'k', 'r', 'h', 'x', 'z', 'c', 'd', 'e', 'p', 'u', 'f', 's', 'n'])
+var nList = XEUtils.shuffle(['a', 'T', 'b', 'v', 'G', 'k', 'r', 'H', 'x', 'z', 'c', 'd', 'e', 'p', 'U', 'f', 's', 'N'])
 function mockData () {
   let len = XEUtils.browse().msie ? 500 : 2000
   for (var index = 0; index < len; index++) {

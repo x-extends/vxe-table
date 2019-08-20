@@ -28,6 +28,7 @@ class ColumnConfig {
       formatter: _vm.formatter,
       sortable: _vm.sortable,
       sortBy: _vm.sortBy,
+      sortMethod: _vm.sortMethod,
       remoteSort: _vm.remoteSort,
       filters: UtilTools.getFilters(_vm.filters),
       filterMultiple: XEUtils.isBoolean(_vm.filterMultiple) ? _vm.filterMultiple : true,
