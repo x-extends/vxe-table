@@ -235,6 +235,7 @@ module.exports = {
           spanMethod: '合并行或列，该函数 Function({seq, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, data}) 返回计算后的值',
           showOverflow: 'Sets all content to appear as ellipses if it is too long',
           showHeaderOverflow: 'Sets the header to show ellipsis when all content is too long',
+          sortMethod: '自定义所有列的排序方法，当触发排序时会调用该函数 Function({ data, column, property, order  }) 返回排序后的结果',
           remoteSort: 'Whether to use remote sorting',
           remoteFilter: 'Whether to use remote filter',
           columnWidth: '所有列宽度',

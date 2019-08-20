@@ -235,6 +235,7 @@ module.exports = {
           spanMethod: '合并行或列，该函数 Function({seq, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, data}) 返回计算后的值',
           showOverflow: '设置所有内容过长时显示为省略号（如果是固定列建议设置该值，提升渲染速度）',
           showHeaderOverflow: '设置表头所有内容过长时显示为省略号',
+          sortMethod: '自定义所有列的排序方法，当触发排序时会调用该函数 Function({ data, column, property, order  }) 返回排序后的结果',
           remoteSort: '所有列是否使用服务端排序，如果设置为 true 则不会对数据进行处理',
           remoteFilter: '所有列是否使用服务端筛选，如果设置为 true 则不会对数据进行处理',
           columnWidth: '所有列宽度',

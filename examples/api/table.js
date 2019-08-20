@@ -373,6 +373,14 @@ const apis = [
         list: []
       },
       {
+        name: 'sort-method',
+        descKey: 'app.api.table.desc.sortMethod',
+        type: 'Function',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'remote-sort',
         descKey: 'app.api.table.desc.remoteSort',
         type: 'Boolean',

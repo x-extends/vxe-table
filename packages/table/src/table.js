@@ -166,6 +166,8 @@ export default {
     remoteFilter: Boolean,
     // 是否所有服务端排序
     remoteSort: Boolean,
+    // 自定义所有列的排序方法
+    sortMethod: Function,
     // 所有列宽度
     columnWidth: [Number, String],
     // 所有列最小宽度，把剩余宽度按比例分配
@@ -1228,8 +1230,12 @@ export default {
       if (column && column.order) {
         let isRemote = XEUtils.isBoolean(column.remoteSort) ? column.remoteSort : remoteSort
         if (!isRemote) {
-          let rest = column.sortMethod ? tableData.sort(column.sortMethod) : XEUtils.sortBy(tableData, column.property)
-          tableData = column.order === 'desc' ? rest.reverse() : rest
+          if (this.sortMethod) {
+            tableData = this.sortMethod({ data: tableData, column, property: column.property, order: column.order, $table: this }) || tableData
+          } else {
+            let rest = column.sortMethod ? tableData.sort(column.sortMethod) : XEUtils.sortBy(tableData, column.property)
+            tableData = column.order === 'desc' ? rest.reverse() : rest
+          }
         }
       }
       this.afterFullData = tableData
