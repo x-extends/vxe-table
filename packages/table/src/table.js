@@ -1228,7 +1228,7 @@ export default {
       if (column && column.order) {
         let isRemote = XEUtils.isBoolean(column.remoteSort) ? column.remoteSort : remoteSort
         if (!isRemote) {
-          let rest = XEUtils.sortBy(tableData, column.property)
+          let rest = column.sortMethod ? tableData.sort(column.sortMethod) : XEUtils.sortBy(tableData, column.property)
           tableData = column.order === 'desc' ? rest.reverse() : rest
         }
       }

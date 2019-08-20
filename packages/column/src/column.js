@@ -40,6 +40,8 @@ export default {
     remoteSort: { type: Boolean, default: null },
     // 自定义排序的属性
     sortBy: [String, Array],
+    // 自定义排序方法
+    sortMethod: Function,
     // 配置筛选条件数组
     filters: Array,
     // 筛选是否允许多选

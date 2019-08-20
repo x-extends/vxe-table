@@ -305,6 +305,7 @@ module.exports = {
           indexMethod: '只对 type=index 有效，自定义索引方法 Function({row, rowIndex, column, columnIndex})',
           sortable: 'Whether column sorting is allowed',
           sortBy: '只对 sortable 有效，自定义排序的属性',
+          sortMethod: '自定义排序方法，Array.sort(a, b)',
           remoteSort: 'Whether to use remote sorting',
           filters: 'Configure filter conditions',
           filterMultiple: '只对 filters 有效，筛选是否允许多选',
