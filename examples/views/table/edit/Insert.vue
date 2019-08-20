@@ -4,9 +4,9 @@
 
     <vxe-toolbar>
       <template v-slot:buttons>
-        <vxe-button @click="$refs.xTable.insert({name: Date.now()})">在第1行插入</vxe-button>
-        <vxe-button @click="insertEvent">在第3行插入并激活 Sex 单元格</vxe-button>
-        <vxe-button @click="$refs.xTable.insertAt({name: Date.now()}, -1)">在最后行插入</vxe-button>
+        <vxe-button @click="insertEvent()">在第1行插入</vxe-button>
+        <vxe-button @click="insertEvent(tableData[2])">在第3行插入并激活 Sex 单元格</vxe-button>
+        <vxe-button @click="insertEvent(-1)">在最后行插入</vxe-button>
         <vxe-button @click="getInsertEvent">获取新增</vxe-button>
       </template>
     </vxe-toolbar>
@@ -19,9 +19,9 @@
       :data.sync="tableData"
       :edit-config="{trigger: 'click', mode: 'cell'}">
       <vxe-table-column type="index" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" sortable :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="name" title="Name" sortable :edit-render="{name: 'input', defaultValue: '默认的名字'}"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="age" title="Age" sortable :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="age" title="Age" sortable :edit-render="{name: 'input', defaultValue: 18}"></vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -44,9 +44,9 @@ export default {
         `
         <vxe-toolbar>
           <template v-slot:buttons>
-            <vxe-button @click="$refs.xTable.insert({name: Date.now()})">在第1行插入</vxe-button>
-            <vxe-button @click="insertEvent">在第3行插入并激活 Sex 单元格</vxe-button>
-            <vxe-button @click="$refs.xTable.insertAt({name: Date.now()}, -1)">在最后行插入</vxe-button>
+            <vxe-button @click="insertEvent()">在第1行插入</vxe-button>
+            <vxe-button @click="insertEvent(tableData[2])">在第3行插入并激活 Sex 单元格</vxe-button>
+            <vxe-button @click="insertEvent(-1)">在最后行插入</vxe-button>
             <vxe-button @click="getInsertEvent">获取新增</vxe-button>
           </template>
         </vxe-toolbar>
@@ -59,9 +59,9 @@ export default {
           :data.sync="tableData"
           :edit-config="{trigger: 'click', mode: 'cell'}">
           <vxe-table-column type="index" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" sortable :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column field="name" title="Name" sortable :edit-render="{name: 'input', defaultValue: '默认的名字'}"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="age" title="Age" sortable :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column field="age" title="Age" sortable :edit-render="{name: 'input', defaultValue: 18}"></vxe-table-column>
         </vxe-table>
         `,
         `
@@ -75,11 +75,11 @@ export default {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 4)
           },
           methods: {
-            insertEvent () {
+            insertEvent (row) {
               let record = {
-                name: Date.now()
+                sex: '1'
               }
-              this.$refs.xTable.insertAt(record, this.tableData[2])
+              this.$refs.xTable.insertAt(record, row)
                 .then(({ row }) => this.$refs.xTable.setActiveCell(row, 'sex'))
             },
             getInsertEvent () {
@@ -102,11 +102,11 @@ export default {
     })
   },
   methods: {
-    insertEvent () {
+    insertEvent (row) {
       let record = {
-        name: Date.now()
+        sex: '1'
       }
-      this.$refs.xTable.insertAt(record, this.tableData[2])
+      this.$refs.xTable.insertAt(record, row)
         .then(({ row }) => this.$refs.xTable.setActiveCell(row, 'sex'))
     },
     getInsertEvent () {

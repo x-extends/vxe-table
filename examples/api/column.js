@@ -399,6 +399,14 @@ const apis = [
             enum: '',
             defVal: 'false',
             list: []
+          },
+          {
+            name: 'defaultValue',
+            desc: '默认值（插入数据时列的默认值）',
+            type: 'Any',
+            enum: '',
+            defVal: 'null',
+            list: []
           }
         ]
       },

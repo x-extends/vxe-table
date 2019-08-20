@@ -912,9 +912,9 @@ export default {
     },
     defineField (row) {
       let rowkey = UtilTools.getRowkey(this)
-      this.visibleColumn.forEach(column => {
-        if (column.property && !XEUtils.has(row, column.property)) {
-          XEUtils.set(row, column.property, null)
+      this.visibleColumn.forEach(({ property, editRender }) => {
+        if (property && !XEUtils.has(row, property)) {
+          XEUtils.set(row, property, editRender && !XEUtils.isUndefined(editRender.defaultValue) ? editRender.defaultValue : null)
         }
       })
       // 必须有行数据的唯一主键，可以自行设置；也可以默认生成一个随机数
@@ -3495,17 +3495,13 @@ export default {
      * 点击筛选事件
      */
     triggerFilterEvent (evnt, column, params) {
-      let { $refs, filterStore, overflowX } = this
+      let { $refs, filterStore } = this
       if (filterStore.column === column && filterStore.visible) {
         filterStore.visible = false
       } else {
         let targetElem = evnt.target
-        let bodyElem = $refs.tableBody.$el
         let filterWrapper = $refs.filterWrapper
-        let { top, left } = DomTools.getOffsetPos(targetElem)
-        if (overflowX) {
-          left -= bodyElem.scrollLeft
-        }
+        let { top, left } = DomTools.getAbsolutePos(targetElem)
         Object.assign(filterStore, {
           args: params,
           multiple: column.filterMultiple,
