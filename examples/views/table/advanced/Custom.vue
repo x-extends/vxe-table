@@ -83,7 +83,7 @@
       <code class="scss">{{ demoCodes[5] }}</code>
     </pre>
 
-    <p class="tip">通过点击后才调用 <table-api-link prop="refreshColumn"/> 刷新列</p>
+    <p class="tip">通过属性 <table-api-link prop="field"/> 和 <table-api-link prop="visible"/> 设置默认隐藏</p>
 
     <template v-for="(column,index) in customColumns3">
       <vxe-checkbox
@@ -143,7 +143,16 @@ export default {
         }
       ],
       customColumns2: [],
-      customColumns3: [],
+      customColumns3: [
+        {
+          field: 'name',
+          visible: false
+        },
+        {
+          field: 'sex',
+          visible: false
+        }
+      ],
       demoCodes: [
         `
         <div class="table-oper">

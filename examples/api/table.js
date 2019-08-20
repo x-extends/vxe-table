@@ -135,7 +135,7 @@ const apis = [
       {
         name: 'customs',
         descKey: 'app.api.table.desc.customs',
-        type: 'Array',
+        type: 'Array<{field, visible}>',
         enum: '',
         defVal: '',
         list: []
