@@ -237,6 +237,7 @@ module.exports = {
           showHeaderOverflow: 'Sets the header to show ellipsis when all content is too long',
           showAllOverflow: '即将废弃，请使用 show-overflow',
           showHeaderAllOverflow: '即将废弃，请使用 show-header-overflow',
+          sortMethod: '自定义所有列的排序方法，当触发排序时会调用该函数 Function({ data, column, property, order  }) 返回排序后的结果',
           remoteSort: 'Whether to use remote sorting',
           remoteFilter: 'Whether to use remote filter',
           columnWidth: '所有列宽度',

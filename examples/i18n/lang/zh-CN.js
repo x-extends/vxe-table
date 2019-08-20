@@ -237,6 +237,7 @@ module.exports = {
           showHeaderOverflow: '设置表头所有内容过长时显示为省略号',
           showAllOverflow: '即将废弃，请使用 show-overflow',
           showHeaderAllOverflow: '即将废弃，请使用 show-header-overflow',
+          sortMethod: '自定义所有列的排序方法，当触发排序时会调用该函数 Function({ data, column, property, order  }) 返回排序后的结果',
           remoteSort: '所有列是否使用服务端排序，如果设置为 true 则不会对数据进行处理',
           remoteFilter: '所有列是否使用服务端筛选，如果设置为 true 则不会对数据进行处理',
           columnWidth: '所有列宽度',
