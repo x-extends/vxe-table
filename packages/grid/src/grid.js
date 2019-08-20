@@ -222,6 +222,7 @@ export default {
               if (code === 'reload') {
                 if (pagerConfig) {
                   tablePage.currentPage = 1
+                  this.clearAll()
                 }
                 this.pendingRecords = []
               }
