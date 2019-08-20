@@ -224,6 +224,7 @@ export default {
                   tablePage.currentPage = 1
                 }
                 this.pendingRecords = []
+                this.clearAll()
               }
               return ajax.query.apply(this, [params].concat(args)).then(rest => {
                 if (rest) {

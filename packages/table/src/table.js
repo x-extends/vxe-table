@@ -730,7 +730,9 @@ export default {
       return this.handleData(true).then(this.recalculate)
     },
     handleData (force) {
-      this.tableData = this.getTableData(force).tableData
+      let { scrollYLoad, scrollYStore } = this
+      let fullData = force ? this.updateAfterFullData() : this.afterFullData
+      this.tableData = scrollYLoad ? fullData.slice(scrollYStore.startIndex, scrollYStore.startIndex + scrollYStore.renderSize) : fullData.slice(0)
       return this.$nextTick()
     },
     loadData (datas, notRefresh) {
@@ -868,14 +870,14 @@ export default {
      * 从指定行插入数据
      */
     insertAt (records, row) {
-      let { afterFullData, tableData, editStore, scrollYLoad, tableFullData, treeConfig } = this
+      let { afterFullData, editStore, scrollYLoad, tableFullData, treeConfig } = this
       if (treeConfig) {
         throw new Error(UtilTools.error('vxe.error.treeInsert'))
       }
       if (!XEUtils.isArray(records)) {
         records = [records]
       }
-      let nowData = scrollYLoad ? afterFullData : tableData
+      let nowData = afterFullData
       let newRecords = records.map(record => this.defineField(Object.assign({}, record)))
       if (!row) {
         nowData.unshift.apply(nowData, newRecords)
@@ -894,11 +896,12 @@ export default {
         }
       }
       [].unshift.apply(editStore.insertList, newRecords)
+      this.handleData()
+      this.updateCache()
+      this.checkSelectionStatus()
       if (scrollYLoad) {
         this.updateScrollYSpace()
       }
-      this.updateCache()
-      this.checkSelectionStatus()
       return this.$nextTick().then(() => {
         this.recalculate()
         return {
@@ -1241,13 +1244,12 @@ export default {
      * 如果存在筛选条件，继续处理
      * 如果存在排序，继续处理
      */
-    getTableData (force) {
-      let { tableFullData, scrollYLoad, scrollYStore } = this
-      let fullData = force ? this.updateAfterFullData() : this.afterFullData
+    getTableData () {
+      let { tableFullData, afterFullData, tableData } = this
       return {
         fullData: tableFullData.slice(0),
-        visibleData: fullData.slice(0),
-        tableData: scrollYLoad ? fullData.slice(scrollYStore.startIndex, scrollYStore.startIndex + scrollYStore.renderSize) : fullData.slice(0)
+        visibleData: afterFullData.slice(0),
+        tableData: tableData.slice(0)
       }
     },
     handleDefault () {
