@@ -123,6 +123,7 @@ module.exports = {
         antdPlugin: 'plugin-antd Basic config',
         antdFilter: 'plugin-antd Filter config',
         antdPluginMore: 'plugin-antd More config',
+        textareaPlugin: 'Textarea',
         spanPlugin: 'Select merge cells',
         chartsPlugin: 'Charts toolbar',
         excelPlugin: 'plugin-excel A simple excel',
