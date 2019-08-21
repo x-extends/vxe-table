@@ -973,6 +973,13 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.textareaPlugin',
+              disabled: true,
+              locat: {
+                name: 'TablePluginTextarea'
+              }
+            },
+            {
               label: 'app.aside.nav.spanPlugin',
               disabled: true,
               locat: {
