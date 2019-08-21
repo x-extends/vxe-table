@@ -1425,19 +1425,19 @@ const apis = [
     defVal: '',
     list: [
       {
-        name: 'loadData(datas)',
+        name: 'loadData(data)',
         desc: '加载数据（对于表格数据需要重载、局部递增场景下可能会用到）',
         type: 'Promise',
         enum: '',
-        defVal: 'datas',
+        defVal: 'data',
         list: []
       },
       {
-        name: 'reloadData(datas)',
+        name: 'reloadData(data)',
         desc: '加载数据并恢复到初始状态（对于表格数据需要重载、局部递增场景下可能会用到）',
         type: 'Promise',
         enum: '',
-        defVal: 'datas',
+        defVal: 'data',
         list: []
       },
       {

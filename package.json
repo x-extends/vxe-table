@@ -1,6 +1,6 @@
 {
   "name": "vxe-table",
-  "version": "1.13.4",
+  "version": "1.13.5",
   "description": "A fully functional Vue table component.",
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -71,7 +71,7 @@
     "xe-ajax": "^3.6.0",
     "xe-ajax-mock": "^1.8.0",
     "xe-clipboard": "^1.6.0",
-    "xe-utils": "^2.0.2",
+    "xe-utils": "^2.0.7",
     "xlsx": "^0.14.3"
   },
   "peerDependencies": {

@@ -39,6 +39,7 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
     cellClassName,
     spanMethod,
     keyboardConfig,
+    expandConfig = {},
     radioConfig = {},
     selectConfig = {},
     treeConfig = {},
@@ -113,6 +114,7 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
   if (highlightCurrentRow ||
     tableListeners['cell-click'] ||
     (editRender && editConfig) ||
+    (expandConfig.trigger === 'row' || (expandConfig.trigger === 'cell')) ||
     (radioConfig.trigger === 'row' || (column.type === 'radio' && radioConfig.trigger === 'cell')) ||
     (selectConfig.trigger === 'row' || (column.type === 'selection' && selectConfig.trigger === 'cell')) ||
     (treeConfig.trigger === 'row' || (column.treeNode && treeConfig.trigger === 'cell'))) {
