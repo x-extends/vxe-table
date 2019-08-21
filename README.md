@@ -78,13 +78,10 @@ A simple and practical Vue table components, Compatible with any component libra
 All modules support loading on demand.（所有的模块都支持按需加载）
 
 * ![Table](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/table/src/table.min.js?compression=gzip&label=Table)![style](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/table/style/style.css?compression=gzip&label=style&color=green) (核心)
-  * Extends （扩展模块）
-    * ![Grid](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/grid/src/grid.min.js?compression=gzip&label=Grid)![style](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/grid/style/style.css?compression=gzip&label=style&color=green) （高级表格）
-  * Modules （功能模块）
-    * ![Column](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/column/src/column.min.js?compression=gzip&label=Column)![style](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/column/style/style.css?compression=gzip&label=style&color=green) （列）
+  * Modules （内置模块）
     * ![Cell](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/cell/src/cell.min.js?compression=gzip&label=Cell)![style](https://img.shields.io/badge/style-none-blue.svg) （单元格）
     * ![Header](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/header/src/header.min.js?compression=gzip&label=Header)![style](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/header/style/style.css?compression=gzip&label=style&color=green) （表头）
-    * ![Body](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/body/src/body.min.js?compression=gzip&label=Body)![style](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/body/style/style.css?compression=gzip&label=style&color=green) （表内容）
+    * ![Body](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/body/src/body.min.js?compression=gzip&label=Body)![style](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/body/style/style.css?compression=gzip&label=style&color=green) （表主体）
     * ![Footer](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/footer/src/footer.min.js?compression=gzip&label=Footer)![style](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/footer/style/style.css?compression=gzip&label=style&color=green) （表尾）
     * ![Icon](https://img.shields.io/badge/Icon-none-blue.svg)![style](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/icon/style/style.css?compression=gzip&label=style&color=green) （图标）
     * ![Filter](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/filter/src/filter.min.js?compression=gzip&label=Filter)![style](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/filter/style/style.css?compression=gzip&label=style&color=green) （筛选）
@@ -93,6 +90,9 @@ All modules support loading on demand.（所有的模块都支持按需加载）
     * ![Menu](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/menu/src/menu.min.js?compression=gzip&label=Menu)![style](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/menu/style/style.css?compression=gzip&label=style&color=green) （快捷菜单）
     * ![Export](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/export/src/export.min.js?compression=gzip&label=Export)![style](https://img.shields.io/badge/style-none-blue.svg) （导出）
     * ![Resize](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/resize/src/resize.min.js?compression=gzip&label=Resize)![style](https://img.shields.io/badge/style-none-blue.svg) （响应式）
+  * Component （增强组件）
+    * ![Column](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/column/src/column.min.js?compression=gzip&label=Column)![style](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/column/style/style.css?compression=gzip&label=style&color=green) （静态列）
+    * ![Grid](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/grid/src/grid.min.js?compression=gzip&label=Grid)![style](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/grid/style/style.css?compression=gzip&label=style&color=green) （动态表格）
     * ![Pager](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/pager/src/pager.min.js?compression=gzip&label=Pager)![style](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/pager/style/style.css?compression=gzip&label=style&color=green) （分页 ）
     * ![Toolbar](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/toolbar/src/toolbar.min.js?compression=gzip&label=Toolbar)![style](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/toolbar/style/style.css?compression=gzip&label=style&color=green) （工具栏）
     * ![Checkbox](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/checkbox/src/checkbox.min.js?compression=gzip&label=Checkbox)![style](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/checkbox/style/style.css?compression=gzip&label=style&color=green) （复选框）
@@ -101,7 +101,6 @@ All modules support loading on demand.（所有的模块都支持按需加载）
     * ![Message](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/message/src/message.min.js?compression=gzip&label=Message)![style](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/message/style/style.css?compression=gzip&label=style&color=green) （消息提示框）
     * ![Button](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/button/src/button.min.js?compression=gzip&label=Button)![style](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/button/style/style.css?compression=gzip&label=style&color=green) （按钮）
   * Plugins（插件）
-    * [![vxe-table-plugin-excel](http://img.badgesize.io/https://unpkg.com/vxe-table-plugin-excel/dist/index.min.js?compression=gzip&label=vxe%20table%20plugin%20excel)](https://www.npmjs.org/package/vxe-table-plugin-excel)![style](http://img.badgesize.io/https://unpkg.com/vxe-table-plugin-excel/dist/style.min.css?compression=gzip&label=style&color=green) （[vxe-table-plugin-excel](https://www.npmjs.com/package/vxe-table-plugin-excel) Excel 增强插件）
     * [![vxe-table-plugin-element](http://img.badgesize.io/https://unpkg.com/vxe-table-plugin-element/dist/index.min.js?compression=gzip&label=vxe%20table%20plugin%20element)](https://www.npmjs.org/package/vxe-table-plugin-element)![style](http://img.badgesize.io/https://unpkg.com/vxe-table-plugin-element/dist/style.min.css?compression=gzip&label=style&color=green) （[element-ui](https://www.npmjs.com/package/element-ui) 适配插件）
     * [![vxe-table-plugin-iview](http://img.badgesize.io/https://unpkg.com/vxe-table-plugin-iview/dist/index.min.js?compression=gzip&label=vxe%20table%20plugin%20iview)](https://www.npmjs.org/package/vxe-table-plugin-iview)![style](http://img.badgesize.io/https://unpkg.com/vxe-table-plugin-iview/dist/style.min.css?compression=gzip&label=style&color=green) （[iview](https://www.npmjs.com/package/iview) 适配插件）
     * [![vxe-table-plugin-antd](http://img.badgesize.io/https://unpkg.com/vxe-table-plugin-antd/dist/index.min.js?compression=gzip&label=vxe%20table%20plugin%20antd)](https://www.npmjs.org/package/vxe-table-plugin-antd)![style](http://img.badgesize.io/https://unpkg.com/vxe-table-plugin-antd/dist/style.min.css?compression=gzip&label=style&color=green) （[ant-design-vue](https://www.npmjs.com/package/ant-design-vue) 适配插件）
@@ -139,8 +138,8 @@ Vue.use(VXETable)
 
 ## Import on demand
 
-By using the [babel-plugin-import](https://www.npmjs.com/package/babel-plugin-import) , you can load modules on demand and reduce the size of files. First installation, then update .babelrc file  
-借助插件 [babel-plugin-import](https://www.npmjs.com/package/babel-plugin-import) 可以实现按需加载模块，减少文件体积。然后在文件 .babelrc 中配置
+By using the [babel-plugin-import](https://www.npmjs.com/package/babel-plugin-import), you can load modules on demand and reduce the size of files. First installation, then update .babelrc or babel.config.js file  
+借助插件 [babel-plugin-import](https://www.npmjs.com/package/babel-plugin-import) 可以实现按需加载模块，减少文件体积。然后在文件 .babelrc 或者 babel.config.js 中配置
 
 ```shell
 npm install babel-plugin-import -D
@@ -167,20 +166,18 @@ Now you can import modules like (The minimal lib is ≈ 120KB, gzip ≈ 40KB)
 import {
   VXETable,
   Table,
-  Column,
-  Cell,
   Header,
   Body,
-  Icon
+  Column,
+  Cell,
 } from 'vxe-table'
 import zhCNLocat from 'vxe-table/lib/locale/lang/zh-CN'
 
 Vue.use(Table)
-Vue.use(Column)
-Vue.use(Cell)
 Vue.use(Header)
 Vue.use(Body)
-Vue.use(Icon)
+Vue.use(Column)
+Vue.use(Cell)
 
 // The on-demand mode is not internationalized by default and needs to be imported by itself
 // 按需加载的方式默认是不带国际化的，需要自行导入
@@ -228,7 +225,7 @@ new Vue({ i18n }).$mount('#app')
 ```html
 <template>
   <div>
-    <vxe-table ref="xTable" :data.sync="tableData">
+    <vxe-table :data.sync="tableData">
       <vxe-table-column type="index" title="Number" width="80"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -244,10 +241,10 @@ export default {
       tableData: [
         {
           id: 10001,
-          name: 'test1',
-          role: 'developer',
+          name: 'Test1',
+          role: 'Developer',
           sex: 'Man',
-          address: 'address abc123'
+          address: 'Address abc123'
         }
       ]
     }

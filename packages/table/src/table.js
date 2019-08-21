@@ -763,9 +763,10 @@ export default {
         rest = rest.then(recalculate)
       }
       return rest.then(() => {
-        // 如果启用虚拟滚动，重新加载数据需要重置滚动条
-        if (this.scrollXLoad || this.scrollYLoad) {
-          this.clearScroll()
+        // 如果启用了虚拟滚动，数据加载完成后还原指定位置
+        let { lastScrollLeft, lastScrollTop } = this
+        if ((lastScrollLeft || lastScrollTop) && (this.scrollXLoad || this.scrollYLoad)) {
+          return this.clearScroll().then(() => this.scrollTo(lastScrollLeft, lastScrollTop))
         }
       })
     },
@@ -2875,14 +2876,18 @@ export default {
      * 如果是双击模式，则单击后选中状态
      */
     triggerCellClickEvent (evnt, params) {
-      let { $el, highlightCurrentRow, editStore, radioConfig = {}, selectConfig = {}, treeConfig = {}, editConfig, mouseConfig = {} } = this
+      let { $el, highlightCurrentRow, editStore, radioConfig = {}, selectConfig = {}, expandConfig = {}, treeConfig = {}, editConfig, mouseConfig = {} } = this
       let { actived } = editStore
       let { column, cell } = params
+      // 如果是展开行
+      if ((expandConfig.trigger === 'row' || (column.type === 'expand' && expandConfig.trigger === 'cell')) && !this.getEventTargetNode(evnt, $el, 'vxe-table--expanded').flag) {
+        this.triggerRowExpandEvent(evnt, params)
+      }
       // 如果是树形表格
       if ((treeConfig.trigger === 'row' || (column.treeNode && treeConfig.trigger === 'cell'))) {
         this.triggerTreeExpandEvent(evnt, params)
       }
-      if (!column.treeNode || !this.getEventTargetNode(evnt, $el, 'vxe-tree-wrapper').flag) {
+      if ((!column.treeNode || !this.getEventTargetNode(evnt, $el, 'vxe-tree-wrapper').flag) && (column.type !== 'expand' || !this.getEventTargetNode(evnt, $el, 'vxe-table--expanded').flag)) {
         // 如果是高亮行
         if (highlightCurrentRow) {
           if (radioConfig.trigger === 'row' || (!this.getEventTargetNode(evnt, $el, 'vxe-checkbox').flag && !this.getEventTargetNode(evnt, $el, 'vxe-radio').flag)) {
@@ -4083,11 +4088,15 @@ export default {
       return this.$nextTick()
     },
     clearScroll () {
+      this.lastScrollLeft = 0
+      this.lastScrollTop = 0
       Object.assign(this.scrollXStore, {
-        startIndex: 0
+        startIndex: 0,
+        visibleIndex: 0
       })
       Object.assign(this.scrollYStore, {
-        startIndex: 0
+        startIndex: 0,
+        visibleIndex: 0
       })
       this.$nextTick(() => {
         let tableBody = this.$refs.tableBody
