@@ -966,7 +966,6 @@ export default {
             },
             {
               label: 'app.aside.nav.rendererPlugin',
-              disabled: true,
               locat: {
                 name: 'TablePluginRenderer'
               }

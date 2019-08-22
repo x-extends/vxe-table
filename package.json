@@ -68,6 +68,7 @@
     "vxe-table-plugin-element": "1.4.0",
     "vxe-table-plugin-excel": "^1.0.0",
     "vxe-table-plugin-iview": "1.4.0",
+    "vxe-table-plugin-renderer": "^1.0.1",
     "webpack-cli": "^3.3.1",
     "xe-ajax": "^3.6.0",
     "xe-ajax-mock": "^1.8.0",

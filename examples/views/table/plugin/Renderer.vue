@@ -52,6 +52,16 @@ export default {
           editRender: {
             name: 'XInput'
           }
+        },
+        {
+          field: 'sex',
+          title: 'Sex',
+          editRender: {
+            name: 'XInput',
+            props: {
+              suffixIcon: 'vxe-icon--more'
+            }
+          }
         }
       ],
       demoCodes: [
@@ -94,6 +104,16 @@ export default {
                   title: 'Nickname',
                   editRender: {
                     name: 'XInput'
+                  }
+                },
+                {
+                  field: 'sex',
+                  title: 'Sex',
+                  editRender: {
+                    name: 'XInput',
+                    props: {
+                      suffixIcon: 'vxe-icon--more'
+                    }
                   }
                 }
               ]

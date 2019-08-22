@@ -32,10 +32,12 @@ import VXETablePluginElement from 'vxe-table-plugin-element'
 import VXETablePluginIView from 'vxe-table-plugin-iview'
 import VXETablePluginAntd from 'vxe-table-plugin-antd'
 import VXETablePluginExcel from 'vxe-table-plugin-excel'
+import VXETablePluginRenderer from 'vxe-table-plugin-renderer'
 import 'vxe-table-plugin-element/dist/style.css'
 import 'vxe-table-plugin-iview/dist/style.css'
 import 'vxe-table-plugin-antd/dist/style.css'
 import 'vxe-table-plugin-excel/dist/style.css'
+import 'vxe-table-plugin-renderer/dist/style.css'
 
 VXETable.setup({
   translate: key => key && key.indexOf('app.') > -1 ? i18n.t(key) : key, // 自动翻译以 app. 开头的键值
@@ -66,4 +68,4 @@ VXETable.use(VXETablePluginElement)
 VXETable.use(VXETablePluginIView)
 VXETable.use(VXETablePluginAntd)
 VXETable.use(VXETablePluginExcel)
-// VXETable.use(VXETablePluginRenderer)
+VXETable.use(VXETablePluginRenderer)
