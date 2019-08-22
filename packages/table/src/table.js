@@ -945,10 +945,11 @@ export default {
      * 如果传 rows 则删除多行
      */
     remove (rows) {
-      let { tableData, tableFullData, editStore, treeConfig, selectConfig = {}, selection, hasRowInsert, scrollYLoad } = this
+      let { afterFullData, tableFullData, editStore, treeConfig, selectConfig = {}, selection, hasRowInsert, scrollYLoad } = this
       let { removeList, insertList } = editStore
       let { checkField: property } = selectConfig
       let rest = []
+      let nowData = afterFullData
       if (rows) {
         if (!XEUtils.isArray(rows)) {
           rows = [rows]
@@ -985,15 +986,16 @@ export default {
             XEUtils.remove(selection, row => rows.indexOf(row) > -1)
           }
           // 从列表中移除
-          XEUtils.remove(tableData, row => rows.indexOf(row) > -1)
+          XEUtils.remove(nowData, row => rows.indexOf(row) > -1)
         }
         XEUtils.remove(insertList, row => rows.indexOf(row) > -1)
       }
+      this.handleData()
+      this.updateCache()
+      this.checkSelectionStatus()
       if (scrollYLoad) {
         this.updateScrollYSpace()
       }
-      this.updateCache()
-      this.checkSelectionStatus()
       return this.$nextTick().then(() => {
         this.recalculate()
         return { row: rows && rows.length ? rows[rows.length - 1] : null, rows: rest }

@@ -27,6 +27,7 @@ import '../../../styles/index.scss'
 // import VXETablePluginIView from '../../../../vxe-table-plugin-iview/index.js'
 // import VXETablePluginAntd from '../../../../vxe-table-plugin-antd/index.js'
 // import VXETablePluginExcel from '../../../../vxe-table-plugin-excel/index.js'
+// import VXETablePluginRenderer from '../../../../vxe-table-plugin-renderer/index.js'
 import VXETablePluginElement from 'vxe-table-plugin-element'
 import VXETablePluginIView from 'vxe-table-plugin-iview'
 import VXETablePluginAntd from 'vxe-table-plugin-antd'
@@ -65,3 +66,4 @@ VXETable.use(VXETablePluginElement)
 VXETable.use(VXETablePluginIView)
 VXETable.use(VXETablePluginAntd)
 VXETable.use(VXETablePluginExcel)
+// VXETable.use(VXETablePluginRenderer)

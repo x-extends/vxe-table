@@ -4,6 +4,7 @@
 
     <vxe-toolbar>
       <template v-slot:buttons>
+        <vxe-button @click="insertEvent()">在第1行插入</vxe-button>
         <vxe-button @click="$refs.xTable.remove(tableData[1])">删除第2行</vxe-button>
         <vxe-button @click="$refs.xTable.removeSelecteds()">删除选中</vxe-button>
         <vxe-button @click="getRemoveEvent">获取删除</vxe-button>
@@ -44,6 +45,7 @@ export default {
         `
         <vxe-toolbar>
           <template v-slot:buttons>
+            <vxe-button @click="insertEvent()">在第1行插入</vxe-button>
             <vxe-button @click="$refs.xTable.remove(tableData[1])">删除第2行</vxe-button>
             <vxe-button @click="$refs.xTable.removeSelecteds()">删除选中</vxe-button>
             <vxe-button @click="getRemoveEvent">获取删除</vxe-button>
@@ -75,6 +77,13 @@ export default {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
           },
           methods: {
+            insertEvent (row) {
+              let record = {
+                sex: '1'
+              }
+              this.$refs.xTable.insertAt(record, row)
+                .then(({ row }) => this.$refs.xTable.setActiveCell(row, 'sex'))
+            },
             getRemoveEvent () {
               let removeRecords = this.$refs.xTable.getRemoveRecords()
               this.$XMsg.alert(removeRecords.length)
@@ -99,6 +108,13 @@ export default {
     })
   },
   methods: {
+    insertEvent (row) {
+      let record = {
+        sex: '1'
+      }
+      this.$refs.xTable.insertAt(record, row)
+        .then(({ row }) => this.$refs.xTable.setActiveCell(row, 'sex'))
+    },
     getRemoveEvent () {
       let removeRecords = this.$refs.xTable.getRemoveRecords()
       this.$XMsg.alert(removeRecords.length)
