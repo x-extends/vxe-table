@@ -168,6 +168,7 @@ Now you can import modules like (The minimal lib is ≈ 120KB, gzip ≈ 40KB)
 ```javascript
 import {
   VXETable,
+  Icon,
   Table,
   Header,
   Body,
@@ -176,6 +177,7 @@ import {
 } from 'vxe-table'
 import zhCNLocat from 'vxe-table/lib/locale/lang/zh-CN'
 
+Vue.use(Icon)
 Vue.use(Table)
 Vue.use(Header)
 Vue.use(Body)
