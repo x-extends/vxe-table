@@ -20,8 +20,7 @@
   "style": "lib/index.css",
   "unpkg": "lib/index.min.js",
   "jsdelivr": "lib/index.min.js",
-  "typings": "types/index.d.ts",
-  "dependencies": {},
+  "typings": "index.d.ts",
   "devDependencies": {
     "@babel/core": "^7.4.4",
     "@babel/preset-env": "^7.4.4",
@@ -70,15 +69,15 @@
     "vxe-table-plugin-iview": "1.4.0",
     "vxe-table-plugin-renderer": "^1.0.1",
     "webpack-cli": "^3.3.1",
-    "xe-ajax": "^3.6.0",
+    "xe-ajax": "^3.7.0",
     "xe-ajax-mock": "^1.8.0",
-    "xe-clipboard": "^1.6.0",
-    "xe-utils": "^2.0.10",
+    "xe-clipboard": "^1.7.0",
+    "xe-utils": "^2.2.0",
     "xlsx": "^0.14.3"
   },
   "peerDependencies": {
     "vue": "^2.6.10",
-    "xe-utils": "^1.9.0"
+    "xe-utils": "^2.2.0"
   },
   "postcss": {
     "plugins": {
