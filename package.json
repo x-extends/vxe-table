@@ -68,10 +68,10 @@
     "vxe-table-plugin-element": "1.4.0",
     "vxe-table-plugin-iview": "1.4.0",
     "webpack-cli": "^3.3.1",
-    "xe-ajax": "^3.6.0",
+    "xe-ajax": "^3.7.0",
     "xe-ajax-mock": "^1.8.0",
-    "xe-clipboard": "^1.6.0",
-    "xe-utils": "^2.0.10",
+    "xe-clipboard": "^1.7.0",
+    "xe-utils": "^2.2.0",
     "xlsx": "^0.14.3"
   },
   "peerDependencies": {
