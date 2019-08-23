@@ -2253,7 +2253,7 @@ export default {
       let { column } = params
       if (tooltipStore.column !== column || !tooltipStore.visible) {
         // 在 v3.0 中废弃 label
-        this.showTooltip(evnt, column)
+        this.handleTooltip(evnt, column)
       }
     },
     /**
@@ -2263,7 +2263,7 @@ export default {
       let { column } = params
       let tooltipStore = this.tooltipStore
       if (tooltipStore.column !== column || !tooltipStore.visible) {
-        this.showTooltip(evnt, column)
+        this.handleTooltip(evnt, column)
       }
     },
     /**
@@ -2279,11 +2279,11 @@ export default {
         }
       }
       if (tooltipStore.column !== column || tooltipStore.row !== row || !tooltipStore.visible) {
-        this.showTooltip(evnt, column, row)
+        this.handleTooltip(evnt, column, row)
       }
     },
     // 显示 tooltip
-    showTooltip (evnt, column, row) {
+    handleTooltip (evnt, column, row) {
       let cell = evnt.currentTarget
       let tooltip = this.$refs.tooltip
       let wrapperElem = cell.children[0]

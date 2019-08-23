@@ -134,6 +134,9 @@ export default {
               props: {
                 value: visible
               },
+              attrs: {
+                title: headerTitle
+              },
               on: {
                 change: value => {
                   column.visible = value
