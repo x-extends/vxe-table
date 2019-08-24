@@ -1,5 +1,5 @@
 /**
- * Japan
+ * ジャパン
  */
 export class ja {}
 
