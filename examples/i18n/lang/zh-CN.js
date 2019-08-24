@@ -123,7 +123,7 @@ module.exports = {
         antdPlugin: 'plugin-antd 基本配置',
         antdFilter: 'plugin-antd 筛选配置',
         antdPluginMore: 'plugin-antd 更多配置',
-        rendererPlugin: '更多的渲染器',
+        rendererPlugin: 'plugin-renderer 更多渲染器',
         spanPlugin: '单元格选中合并',
         chartsPlugin: '图表功能',
         menusPlugin: 'plugin-menus 快捷菜单集',

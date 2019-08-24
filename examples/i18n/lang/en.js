@@ -123,7 +123,7 @@ module.exports = {
         antdPlugin: 'plugin-antd Basic config',
         antdFilter: 'plugin-antd Filter config',
         antdPluginMore: 'plugin-antd More config',
-        rendererPlugin: 'More renderer',
+        rendererPlugin: 'plugin-renderer More renderer',
         spanPlugin: 'Select merge cells',
         chartsPlugin: 'Charts toolbar',
         menusPlugin: 'plugin-menus Context menus',

@@ -970,12 +970,6 @@ export default {
               }
             },
             {
-              label: 'app.aside.nav.rendererPlugin',
-              locat: {
-                name: 'TablePluginRenderer'
-              }
-            },
-            {
               label: 'app.aside.nav.spanPlugin',
               disabled: true,
               locat: {
@@ -987,6 +981,12 @@ export default {
               disabled: true,
               locat: {
                 name: 'TableBasic'
+              }
+            },
+            {
+              label: 'app.aside.nav.rendererPlugin',
+              locat: {
+                name: 'TablePluginRenderer'
               }
             },
             {
