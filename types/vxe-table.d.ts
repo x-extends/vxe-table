@@ -1,5 +1,7 @@
 import Vue from 'vue';
 import { Table } from './table';
+import { Icon } from './icon';
+import { Cell } from './cell';
 import { Column } from './column';
 import { Header } from './header';
 import { Body } from './body';
@@ -103,6 +105,8 @@ declare const VXETable: VXETableStatic;
 export {
   VXETable,
   Table,
+  Icon,
+  Cell,
   Column,
   Header,
   Body,
