@@ -4,10 +4,15 @@
       <div class="left">
         <a href="https://github.com/xuliangzhan/vxe-table">
           <span class="title">🐬vxe-table</span>
-          <img src="https://img.shields.io/npm/dm/vxe-table.svg?style=social&logo=github">
-          <img src="https://img.shields.io/github/watchers/xuliangzhan/vxe-table.svg?style=social">
+        </a>
+        <a href='https://gitee.com/xuliangzhan_admin/vxe-table/stargazers'>
+          <img src='https://gitee.com/xuliangzhan_admin/vxe-table/badge/star.svg?theme=dark' alt='star'>
+        </a>
+        <a href="https://github.com/xuliangzhan/vxe-table/stargazers">
           <img src="https://img.shields.io/github/stars/xuliangzhan/vxe-table.svg?style=social">
-          <img src="https://img.shields.io/github/forks/xuliangzhan/vxe-table.svg?style=social">
+        </a>
+        <a class="link">
+          <img src="https://img.shields.io/npm/dm/vxe-table.svg?style=social&logo=github">
         </a>
       </div>
       <div class="right">
