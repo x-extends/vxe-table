@@ -50,19 +50,22 @@ gulp.task('build_modules', () => {
 })
 
 gulp.task('build_locale', () => {
-  return gulp.src('locale/**/*.js')
-    .pipe(babel({
-      presets: ['@babel/env']
-    }))
-    .pipe(gulp.dest('lib/locale'))
-    .pipe(uglify())
-    .pipe(rename({
-      suffix: '.min',
-      extname: '.js'
-    }))
-    .pipe(gulp.dest('lib/locale'))
+  return Promise.all([
+    gulp.src('locale/**/*.js')
+      .pipe(babel({
+        presets: ['@babel/env']
+      }))
+      .pipe(gulp.dest('lib/locale'))
+      .pipe(uglify())
+      .pipe(rename({
+        suffix: '.min',
+        extname: '.js'
+      }))
+      .pipe(gulp.dest('lib/locale')),
+    gulp.src('locale/**/*.d.ts')
+      .pipe(gulp.dest('lib/locale'))
+  ])
 })
-
 gulp.task('build_rename', () => {
   return Promise.all([
     gulp.src('lib/index.umd.js')
