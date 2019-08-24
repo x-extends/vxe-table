@@ -9,10 +9,10 @@
           <img src='https://gitee.com/xuliangzhan_admin/vxe-table/badge/star.svg?theme=dark' alt='star'>
         </a>
         <a href="https://github.com/xuliangzhan/vxe-table/stargazers">
-          <img src="https://img.shields.io/github/stars/xuliangzhan/vxe-table.svg?style=social">
+          <img src="https://img.shields.io/github/stars/xuliangzhan/vxe-table.svg">
         </a>
         <a class="link">
-          <img src="https://img.shields.io/npm/dm/vxe-table.svg?style=social&logo=github">
+          <img src="https://img.shields.io/npm/dm/vxe-table.svg?logo=github">
         </a>
       </div>
       <div class="right">
