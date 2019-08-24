@@ -1,7 +1,7 @@
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../conf'
 import Cell from '../../cell'
-import { Interceptor, Renderer } from '../../v-x-e-table'
+import { Interceptor, Renderer, Menus } from '../../v-x-e-table'
 import { UtilTools, DomTools, ExportTools, ResizeEvent, GlobalEvent } from '../../tools'
 
 var rowUniqueId = 0
@@ -892,7 +892,7 @@ export default {
         } else {
           let targetIndex = nowData.indexOf(row)
           if (targetIndex === -1) {
-            throw new Error('[vxe-table] Unable to insert to the specified location.')
+            throw new Error(UtilTools.error('vxe.error.unableInsert'))
           }
           nowData.splice.apply(nowData, [targetIndex, 0].concat(newRecords))
           tableFullData.splice.apply(tableFullData, [tableFullData.indexOf(row), 0].concat(newRecords))
@@ -950,46 +950,52 @@ export default {
       let { checkField: property } = selectConfig
       let rest = []
       let nowData = afterFullData
-      if (rows) {
-        if (!XEUtils.isArray(rows)) {
-          rows = [rows]
-        }
-        if (treeConfig) {
-          rows.forEach(row => {
-            let matchObj = XEUtils.findTree(tableFullData, item => item === row, treeConfig)
-            if (matchObj) {
-              let { item, items, index } = matchObj
-              // 如果是新增，则保存记录
-              if (!hasRowInsert(item)) {
-                removeList.push(item)
-              }
-              // 从树节点中移除
-              let restRow = items.splice(index, 1)[0]
-              // 如果绑定了多选属性，则更新状态
-              if (!property) {
-                XEUtils.remove(selection, row => rows.indexOf(row) > -1)
-              }
-              rest.push(restRow)
+      if (!rows) {
+        rows = tableFullData
+      } else if (!XEUtils.isArray(rows)) {
+        rows = [rows]
+      }
+      if (treeConfig) {
+        rows.forEach(row => {
+          let matchObj = XEUtils.findTree(tableFullData, item => item === row, treeConfig)
+          if (matchObj) {
+            let { item, items, index } = matchObj
+            // 如果是新增，则保存记录
+            if (!hasRowInsert(item)) {
+              removeList.push(item)
             }
-          })
-        } else {
-          // 如果是新增，则保存记录
-          rows.forEach(row => {
-            if (!hasRowInsert(row)) {
-              removeList.push(row)
+            // 从树节点中移除
+            let restRow = items.splice(index, 1)[0]
+            // 如果绑定了多选属性，则更新状态
+            if (!property) {
+              XEUtils.remove(selection, row => rows.indexOf(row) > -1)
             }
-          })
-          // 从数据源中移除
-          rest = XEUtils.remove(tableFullData, row => rows.indexOf(row) > -1)
-          // 如果绑定了多选属性，则更新状态
-          if (!property) {
-            XEUtils.remove(selection, row => rows.indexOf(row) > -1)
+            rest.push(restRow)
           }
-          // 从列表中移除
+        })
+      } else {
+        // 如果是新增，则保存记录
+        rows.forEach(row => {
+          if (!hasRowInsert(row)) {
+            removeList.push(row)
+          }
+        })
+        // 如果绑定了多选属性，则更新状态
+        if (!property) {
+          XEUtils.remove(selection, row => rows.indexOf(row) > -1)
+        }
+        // 从数据源中移除
+        if (tableFullData === rows) {
+          rows = tableFullData.slice(0)
+          tableFullData.length = 0
+          nowData.length = 0
+        } else {
+          rest = XEUtils.remove(tableFullData, row => rows.indexOf(row) > -1)
           XEUtils.remove(nowData, row => rows.indexOf(row) > -1)
         }
-        XEUtils.remove(insertList, row => rows.indexOf(row) > -1)
       }
+      // 从新增中移除已删除的数据
+      XEUtils.remove(insertList, row => rows.indexOf(row) > -1)
       this.handleData()
       this.updateCache()
       this.checkSelectionStatus()
@@ -1010,6 +1016,10 @@ export default {
         return params
       })
     },
+    revert () {
+      UtilTools.warn('vxe.error.delRevert')
+      return this.revertData.apply(this, arguments)
+    },
     /**
      * 还原数据
      * 如果不传任何参数，则还原整个表格
@@ -1017,7 +1027,7 @@ export default {
      * 如果传 rows 则还原多行
      * 如果还额外传了 field 则还原指定单元格
      */
-    revert (rows, field) {
+    revertData (rows, field) {
       let { tableSourceData, getRowIndex } = this
       if (arguments.length) {
         if (rows && !XEUtils.isArray(rows)) {
@@ -2241,7 +2251,12 @@ export default {
      */
     ctxMenuLinkEvent (evnt, menu) {
       if (!menu.disabled && (!menu.children || !menu.children.length)) {
-        UtilTools.emitEvent(this, 'context-menu-click', [Object.assign({ menu, $table: this }, this.ctxMenuStore.args), evnt])
+        let ctxMenuMethod = Menus.get(menu.code)
+        let params = Object.assign({ menu, $table: this }, this.ctxMenuStore.args)
+        if (ctxMenuMethod) {
+          ctxMenuMethod.call(this, params, evnt)
+        }
+        UtilTools.emitEvent(this, 'context-menu-click', [params, evnt])
         this.closeMenu()
       }
     },
@@ -2721,7 +2736,6 @@ export default {
     triggerCellMousedownEvent (evnt, params) {
       let {
         $el,
-        tableData,
         visibleColumn,
         editStore,
         editConfig,
@@ -2798,8 +2812,7 @@ export default {
             // 除了双击其他都没有选中状态
             if (editConfig.trigger === 'dblclick') {
               // 如果不在所有选中的范围之内则重新选中
-              let select = DomTools.getCellIndexs(cell)
-              if (checked.rows.indexOf(tableData[select.rowIndex]) === -1 || checked.columns.indexOf(visibleColumn[select.columnIndex]) === -1) {
+              if (!checked.rowNodes || !checked.rowNodes.some(list => list.includes(cell))) {
                 handleSelected(params, evnt)
               }
             }

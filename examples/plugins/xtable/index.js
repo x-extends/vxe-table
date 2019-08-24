@@ -28,11 +28,13 @@ import '../../../styles/index.scss'
 // import VXETablePluginAntd from '../../../../vxe-table-plugin-antd/index.js'
 // import VXETablePluginExcel from '../../../../vxe-table-plugin-excel/index.js'
 // import VXETablePluginRenderer from '../../../../vxe-table-plugin-renderer/index.js'
+// import VXETablePluginMenus from '../../../../vxe-table-plugin-menus/index.js'
 import VXETablePluginElement from 'vxe-table-plugin-element'
 import VXETablePluginIView from 'vxe-table-plugin-iview'
 import VXETablePluginAntd from 'vxe-table-plugin-antd'
 import VXETablePluginExcel from 'vxe-table-plugin-excel'
 import VXETablePluginRenderer from 'vxe-table-plugin-renderer'
+import VXETablePluginMenus from 'vxe-table-plugin-menus'
 import 'vxe-table-plugin-element/dist/style.css'
 import 'vxe-table-plugin-iview/dist/style.css'
 import 'vxe-table-plugin-antd/dist/style.css'
@@ -69,3 +71,9 @@ VXETable.use(VXETablePluginIView)
 VXETable.use(VXETablePluginAntd)
 VXETable.use(VXETablePluginExcel)
 VXETable.use(VXETablePluginRenderer)
+VXETable.use(VXETablePluginMenus)
+
+VXETable.menus.add('exportCSV', (params, event) => {
+  let { $table } = params
+  $table.exportCsv()
+})

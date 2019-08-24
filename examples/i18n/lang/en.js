@@ -126,6 +126,7 @@ module.exports = {
         rendererPlugin: 'More renderer',
         spanPlugin: 'Select merge cells',
         chartsPlugin: 'Charts toolbar',
+        menusPlugin: 'plugin-menus Context menus',
         excelPlugin: 'plugin-excel A simple excel',
 
         renderer: 'Renderer',
@@ -133,6 +134,7 @@ module.exports = {
         rendererDefault: 'Default renderer',
         rendererEdit: 'Edit renderer',
 
+        menus: 'Context menu register',
         interceptor: 'Interceptor',
 
         optimize: 'Optimization and suggestion',

@@ -12,6 +12,7 @@ const RendererFilter = () => import(/* webpackChunkName: "start" */ './views/tab
 const RendererDefault = () => import(/* webpackChunkName: "start" */ './views/table/renderer/Default.vue')
 const RendererEdit = () => import(/* webpackChunkName: "start" */ './views/table/renderer/Edit.vue')
 
+const MenusAPI = () => import(/* webpackChunkName: "start" */ './views/table/menus/API.vue')
 const InterceptorAPI = () => import(/* webpackChunkName: "start" */ './views/table/interceptor/API.vue')
 
 const TableBasic = () => import(/* webpackChunkName: "base" */ './views/table/base/Basic.vue')
@@ -144,6 +145,7 @@ const TablePluginAntdConfig = () => import(/* webpackChunkName: "plugin" */ './v
 const TablePluginAntdFilter = () => import(/* webpackChunkName: "plugin" */ './views/table/plugin/AntdFilter.vue')
 const TablePluginAntdPage = () => import(/* webpackChunkName: "plugin" */ './views/table/plugin/AntdPage.vue')
 const TablePluginRenderer = () => import(/* webpackChunkName: "excel" */ './views/table/plugin/Renderer.vue')
+const TablePluginMenus = () => import(/* webpackChunkName: "excel" */ './views/table/plugin/Menus.vue')
 const TablePluginExcel = () => import(/* webpackChunkName: "excel" */ './views/table/plugin/Excel.vue')
 
 const TableOptimizeScroller = () => import(/* webpackChunkName: "optimize" */ './views/table/optimize/Scroller.vue')
@@ -213,6 +215,11 @@ export default new Router({
       path: '/table/renderer/edit',
       name: 'RendererEdit',
       component: RendererEdit
+    },
+    {
+      path: '/table/menus/api',
+      name: 'MenusAPI',
+      component: MenusAPI
     },
     {
       path: '/table/interceptor/api',
@@ -828,6 +835,11 @@ export default new Router({
       path: '/table/plugin/renderer',
       name: 'TablePluginRenderer',
       component: TablePluginRenderer
+    },
+    {
+      path: '/table/plugin/menus',
+      name: 'TablePluginMenus',
+      component: TablePluginMenus
     },
     {
       path: '/table/plugin/excel',

@@ -58,6 +58,13 @@ export interface Renderer {
   delete(name: object): Renderer;
 }
 
+export interface Menus {
+  mixin(map: object): Menus;
+  get(type: string): Function;
+  add(type: string, callback: Function): Menus;
+  delete(type: object): Menus;
+}
+
 export interface PluginObject<T> {
   install(xTable: typeof VXETable): any;
 }
@@ -69,6 +76,7 @@ export function use(plugin: PluginObject<any>, ...options: any[]): VXETableStati
 
 export const interceptor: Interceptor;
 export const renderer: Renderer;
+export const menus: Menus;
 
 export interface VXETableStatic {
   install(vue: typeof Vue): void;
@@ -77,7 +85,7 @@ export interface VXETableStatic {
    */
   t(obj: object, key: string): string | number;
   /**
-   * Set global parameters
+   * 设置全局参数
    * @param options
    */
   setup(options: VXETableOptions): any;
@@ -88,13 +96,17 @@ export interface VXETableStatic {
    */
   use(plugin: PluginObject<any>, ...options: any[]): VXETableStatic;
   /**
-   * Event collision interceptor
+   * 事件冲突拦截器
    */
   interceptor: Interceptor;
   /**
-   * Renderer
+   * 渲染器
    */
   renderer: Renderer;
+  /**
+   * 全局快捷菜单
+   */
+  menus: Menus
 }
 
 /**

@@ -126,6 +126,7 @@ module.exports = {
         rendererPlugin: '更多的渲染器',
         spanPlugin: '单元格选中合并',
         chartsPlugin: '图表功能',
+        menusPlugin: 'plugin-menus 快捷菜单集',
         excelPlugin: 'plugin-excel 简单的 Excel',
 
         renderer: '渲染器',
@@ -133,6 +134,7 @@ module.exports = {
         rendererDefault: '默认的渲染器',
         rendererEdit: '可编辑渲染器',
 
+        menus: '快捷菜单注册器',
         interceptor: '事件冲突拦截器',
 
         optimize: '优化建议',

@@ -990,6 +990,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.menusPlugin',
+              locat: {
+                name: 'TablePluginMenus'
+              }
+            },
+            {
               label: 'app.aside.nav.excelPlugin',
               locat: {
                 name: 'TablePluginExcel'
@@ -1024,6 +1030,19 @@ export default {
               label: 'app.aside.nav.rendererEdit',
               locat: {
                 name: 'RendererEdit'
+              }
+            }
+          ]
+        },
+        {
+          label: 'app.aside.nav.menus',
+          value: 'menus',
+          expand: false,
+          children: [
+            {
+              label: 'app.aside.nav.api',
+              locat: {
+                name: 'MenusAPI'
               }
             }
           ]

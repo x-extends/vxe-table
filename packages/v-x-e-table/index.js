@@ -1,6 +1,7 @@
 import XEUtils from 'xe-utils'
 import Interceptor from './src/interceptor'
 import Renderer from './src/renderer'
+import Menus from './src/menus'
 import Setup from './src/setup'
 
 const installedPlugins = []
@@ -21,9 +22,11 @@ export const VXETable = {
   use,
   setup: Setup,
   interceptor: Interceptor,
-  renderer: Renderer
+  renderer: Renderer,
+  menus: Menus
 }
 
 export * from './src/interceptor'
 export * from './src/renderer'
+export * from './src/menus'
 export default VXETable
