@@ -1,6 +1,6 @@
 {
   "name": "vxe-table",
-  "version": "1.13.7",
+  "version": "1.14.0",
   "description": "A fully functional Vue table component.",
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -21,7 +21,6 @@
   "unpkg": "lib/index.min.js",
   "jsdelivr": "lib/index.min.js",
   "typings": "types/index.d.ts",
-  "dependencies": {},
   "devDependencies": {
     "@babel/core": "^7.4.4",
     "@babel/preset-env": "^7.4.4",
@@ -67,6 +66,7 @@
     "vxe-table-plugin-antd": "1.4.2",
     "vxe-table-plugin-element": "1.4.1",
     "vxe-table-plugin-iview": "1.4.1",
+    "vxe-table-plugin-menus": "^1.0.0",
     "webpack-cli": "^3.3.1",
     "xe-ajax": "^3.8.0",
     "xe-ajax-mock": "^1.9.1",

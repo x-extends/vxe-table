@@ -12,6 +12,7 @@ const RendererFilter = () => import(/* webpackChunkName: "start" */ './views/tab
 const RendererDefault = () => import(/* webpackChunkName: "start" */ './views/table/renderer/Default.vue')
 const RendererEdit = () => import(/* webpackChunkName: "start" */ './views/table/renderer/Edit.vue')
 
+const MenusAPI = () => import(/* webpackChunkName: "start" */ './views/table/menus/API.vue')
 const InterceptorAPI = () => import(/* webpackChunkName: "start" */ './views/table/interceptor/API.vue')
 
 const TableBasic = () => import(/* webpackChunkName: "base" */ './views/table/base/Basic.vue')
@@ -212,6 +213,11 @@ export default new Router({
       path: '/table/renderer/edit',
       name: 'RendererEdit',
       component: RendererEdit
+    },
+    {
+      path: '/table/menus/api',
+      name: 'MenusAPI',
+      component: MenusAPI
     },
     {
       path: '/table/interceptor/api',

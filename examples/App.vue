@@ -1025,6 +1025,19 @@ export default {
           ]
         },
         {
+          label: 'app.aside.nav.menus',
+          value: 'menus',
+          expand: false,
+          children: [
+            {
+              label: 'app.aside.nav.api',
+              locat: {
+                name: 'MenusAPI'
+              }
+            }
+          ]
+        },
+        {
           label: 'app.aside.nav.interceptor',
           value: 'interceptor',
           expand: false,

@@ -1,10 +1,10 @@
 <template>
   <div>
-    <p class="tip">调用 <table-api-link prop="revert"/> 还原数据</p>
+    <p class="tip">调用 <table-api-link prop="revertData"/> 还原数据</p>
 
     <vxe-toolbar>
       <template v-slot:buttons>
-        <vxe-button @click="$refs.xTable.revert()">还原全部</vxe-button>
+        <vxe-button @click="$refs.xTable.revertData()">还原全部</vxe-button>
         <vxe-button @click="$refs.xTable.removeSelecteds()">删除选中</vxe-button>
       </template>
     </vxe-toolbar>
@@ -22,7 +22,7 @@
       <vxe-table-column field="age" title="Age" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column title="操作">
         <template v-slot="{ row }">
-          <vxe-button @click="$refs.xTable.revert(row)">还原</vxe-button>
+          <vxe-button @click="$refs.xTable.revertData(row)">还原</vxe-button>
         </template>
       </vxe-table-column>
     </vxe-table>
@@ -47,7 +47,7 @@ export default {
         `
         <vxe-toolbar>
           <template v-slot:buttons>
-            <vxe-button @click="$refs.xTable.revert()">还原全部</vxe-button>
+            <vxe-button @click="$refs.xTable.revertData()">还原全部</vxe-button>
             <vxe-button @click="$refs.xTable.removeSelecteds()">删除选中</vxe-button>
           </template>
         </vxe-toolbar>
@@ -65,7 +65,7 @@ export default {
           <vxe-table-column field="age" title="Age" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column title="操作">
             <template v-slot="{ row }">
-              <vxe-button @click="$refs.xTable.revert(row)">还原</vxe-button>
+              <vxe-button @click="$refs.xTable.revertData(row)">还原</vxe-button>
             </template>
           </vxe-table-column>
         </vxe-table>

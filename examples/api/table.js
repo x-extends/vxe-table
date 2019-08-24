@@ -1522,6 +1522,14 @@ const apis = [
       },
       {
         name: 'revert(rows, field)',
+        desc: '即将废弃，请使用 revertData',
+        type: 'Promise',
+        enum: '',
+        defVal: 'rows?, field?',
+        list: []
+      },
+      {
+        name: 'revertData(rows, field)',
         desc: '还原更改，还原指定行 row 或者整个表格的数据',
         type: 'Promise',
         enum: '',
@@ -1530,7 +1538,7 @@ const apis = [
       },
       {
         name: 'remove(rows)',
-        desc: '删除指定行数据，指定 row 或 [row, ...] 删除多条数据',
+        desc: '删除指定行数据，指定 row 或 [row, ...] 删除多条数据，如果为空则删除所有数据',
         type: 'Promise<{row, rows}>',
         enum: '',
         defVal: 'rows',

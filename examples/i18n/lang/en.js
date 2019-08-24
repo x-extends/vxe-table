@@ -133,6 +133,7 @@ module.exports = {
         rendererDefault: 'Default renderer',
         rendererEdit: 'Edit renderer',
 
+        menus: 'Context menu register',
         interceptor: 'Interceptor',
 
         optimize: 'Optimization and suggestion',

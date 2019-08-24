@@ -133,6 +133,7 @@ module.exports = {
         rendererDefault: '默认的渲染器',
         rendererEdit: '可编辑渲染器',
 
+        menus: '快捷菜单注册器',
         interceptor: '事件冲突拦截器',
 
         optimize: '优化建议',
