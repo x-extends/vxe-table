@@ -116,9 +116,10 @@ All modules support loading on demand.（所有的模块都支持按需加载）
 ## Installing
 
 require: Vue 2.6+
+require: xe-utils 2.2+
 
 ```shell
-npm install xe-utils vxe-table
+npm install vxe-table
 ```
 
 Get on [unpkg](https://unpkg.com/vxe-table/) and [cdnjs](https://cdn.jsdelivr.net/npm/vxe-table/)
