@@ -20,7 +20,7 @@
       <vxe-button @click="$XModal.alert({ message: '点击遮罩层可以关闭', maskClosable: true })">点击遮罩层可以关闭</vxe-button>
       <vxe-button @click="$XModal.alert({ message: '按 Esc 键可以关闭', escClosable: true })">按 Esc 键可以关闭</vxe-button>
       <vxe-button @click="$XModal.alert({ message: '不要遮罩层', mask: false })">不要遮罩层</vxe-button>
-      <vxe-button @click="$XModal.alert({ message: '不要锁界面', mask: false, lockView: false })">不要锁界面</vxe-button>
+      <vxe-button @click="$XModal.alert({ message: '不锁界面', mask: false, lockView: false })">不锁界面</vxe-button>
     </p>
 
     <p>
@@ -61,15 +61,17 @@ export default {
         </p>
 
         <p>
-          <vxe-button @click="$XModal.alert('基本提示框', '标题1')">基本提示框</vxe-button>
-          <vxe-button @click="$XModal.alert({ message: '成功提示框', status: 'success' })">成功提示框</vxe-button>
-          <vxe-button @click="$XModal.alert({ message: '失败提示框', title: 'app.body.msg.error', status: 'error' })">失败提示框</vxe-button>
-          <vxe-button @click="$XModal.confirm('您确定要删除吗？')">确认提示框</vxe-button>
+          <vxe-button @click="$XModal.alert('基本提示框', '标题1')">基本提示</vxe-button>
+          <vxe-button @click="$XModal.alert({ message: '成功提示框', status: 'success' })">成功提示</vxe-button>
+          <vxe-button @click="$XModal.alert({ message: '失败提示框', title: 'app.body.msg.error', status: 'error' })">失败提示</vxe-button>
+          <vxe-button @click="$XModal.confirm('您确定要删除吗？')">确认提示</vxe-button>
         </p>
 
         <p>
+          <vxe-button @click="$XModal.alert({ message: '点击遮罩层可以关闭', maskClosable: true })">点击遮罩层可以关闭</vxe-button>
+          <vxe-button @click="$XModal.alert({ message: '按 Esc 键可以关闭', escClosable: true })">按 Esc 键可以关闭</vxe-button>
           <vxe-button @click="$XModal.alert({ message: '不要遮罩层', mask: false })">不要遮罩层</vxe-button>
-          <vxe-button @click="$XModal.alert({ message: '不要锁界面', mask: false, lockView: false })">不要锁界面</vxe-button>
+          <vxe-button @click="$XModal.alert({ message: '不锁界面', mask: false, lockView: false })">不锁界面</vxe-button>
         </p>
 
         <p>
