@@ -4,6 +4,8 @@
 
     <vxe-table
       border
+      resizable
+      highlight-hover-row
       show-footer
       :footer-method="footerMethod"
       :data.sync="tableData"
@@ -125,6 +127,8 @@ export default {
         `
         <vxe-table
           border
+          resizable
+          highlight-hover-row
           show-footer
           :footer-method="footerMethod"
           :data.sync="tableData"

@@ -2837,14 +2837,16 @@ export default {
      * 展开树节点事件
      */
     triggerTreeExpandEvent (evnt, { row }) {
-      let { currentRow, currentColumn } = this
       let rest = this.toggleTreeExpansion(row)
       UtilTools.emitEvent(this, 'toggle-tree-change', [{ row, rowIndex: this.getRowIndex(row), $table: this }, evnt])
-      if (currentRow) {
-        this.$nextTick(() => this.setCurrentRow(currentRow))
-      } else if (currentColumn) {
-        this.$nextTick(() => this.setCurrentColumn(currentColumn))
-      }
+      this.$nextTick(() => {
+        let { currentRow, currentColumn } = this
+        if (currentRow) {
+          this.setCurrentRow(currentRow)
+        } else if (currentColumn) {
+          this.setCurrentColumn(currentColumn)
+        }
+      })
       return rest
     },
     /**
