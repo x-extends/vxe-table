@@ -38,13 +38,12 @@
       <code class="javascript">
         import {
           VXETable,
+          Icon,
           Table,
           Column,
-          Cell,
           Header,
           Body,
           Footer,
-          Icon,
           Filter,
           Loading,
           Tooltip,
@@ -63,13 +62,12 @@
         } from 'vxe-table'
         import zhCNLocat from 'vxe-table/lib/locale/lang/zh-CN'
 
+        Vue.use(Icon)
         Vue.use(Table)
         Vue.use(Column)
-        Vue.use(Cell)
         Vue.use(Header)
         Vue.use(Body)
         Vue.use(Footer)
-        Vue.use(Icon)
         Vue.use(Filter)
         Vue.use(Loading)
         Vue.use(Tooltip)

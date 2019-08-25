@@ -76,9 +76,8 @@ A simple and practical Vue table components, Compatible with any component libra
 
 All modules support loading on demand.（所有的模块都支持按需加载）
 
-* ![Table](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/table/src/table.min.js?compression=gzip&label=Table)![style](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/table/style/style.css?compression=gzip&label=style&color=green) (核心)
+* ![Table](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/table/src/table.min.js?compression=gzip&label=Table)![style](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/table/style/style.css?compression=gzip&label=style&color=green)![Cell](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/cell/src/cell.min.js?compression=gzip&label=Cell)![style](https://img.shields.io/badge/style-none-blue.svg) (核心)
   * Modules （内置模块）
-    * ![Cell](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/cell/src/cell.min.js?compression=gzip&label=Cell)![style](https://img.shields.io/badge/style-none-blue.svg) （单元格）
     * ![Header](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/header/src/header.min.js?compression=gzip&label=Header)![style](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/header/style/style.css?compression=gzip&label=style&color=green) （表头）
     * ![Body](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/body/src/body.min.js?compression=gzip&label=Body)![style](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/body/style/style.css?compression=gzip&label=style&color=green) （表主体）
     * ![Footer](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/footer/src/footer.min.js?compression=gzip&label=Footer)![style](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/footer/style/style.css?compression=gzip&label=style&color=green) （表尾）
@@ -172,8 +171,7 @@ import {
   Table,
   Header,
   Body,
-  Column,
-  Cell,
+  Column
 } from 'vxe-table'
 import zhCNLocat from 'vxe-table/lib/locale/lang/zh-CN'
 
@@ -182,7 +180,6 @@ Vue.use(Table)
 Vue.use(Header)
 Vue.use(Body)
 Vue.use(Column)
-Vue.use(Cell)
 
 // The on-demand mode is not internationalized by default and needs to be imported by itself
 // 按需加载的方式默认是不带国际化的，需要自行导入
