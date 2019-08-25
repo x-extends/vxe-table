@@ -1,8 +1,13 @@
-import VxeTableContextMenu from './src/menu'
+import Table from '../table'
+import GlobalConfig from '../conf'
+import Panel from './src/panel'
+import Methods from './src/methods'
 
-VxeTableContextMenu.install = function (Vue) {
-  Vue.component(VxeTableContextMenu.name, VxeTableContextMenu)
+Panel.install = function (Vue) {
+  GlobalConfig._menu = 1
+  Object.assign(Table.methods, Methods)
+  Vue.component(Panel.name, Panel)
 }
 
-export const TableContextMenu = VxeTableContextMenu
-export default VxeTableContextMenu
+export const Menu = Panel
+export default Panel

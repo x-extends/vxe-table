@@ -1,9 +1,12 @@
-import ResizeMethods from './src/resize'
-import { ResizeEvent } from '../tools'
+import Table from '../table'
+import GlobalConfig from '../conf'
+import Methods from './src/methods'
 
-ResizeMethods.install = function () {
-  Object.assign(ResizeEvent, ResizeMethods)
+export const Resize = {
+  install () {
+    GlobalConfig._resize = 1
+    Object.assign(Table.methods, Methods)
+  }
 }
 
-export const Resize = ResizeMethods
-export default ResizeMethods
+export default Resize

@@ -19,7 +19,10 @@ export default {
       notDelete: 'delete methodがありません',
       notSave: 'save methodがありません',
 
-      toolbarId: 'Toolbarはunique idが必要です'
+      toolbarId: 'Toolbarはunique idが必要です',
+
+      reqKeyboard: 'Keyboardモジュールが必要',
+      reqResize: 'Resizeモジュールが必要'
     },
     table: {
       emptyText: 'データがありません',

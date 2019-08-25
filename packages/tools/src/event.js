@@ -5,7 +5,9 @@ const wheelName = /Firefox/i.test(navigator.userAgent) ? 'DOMMouseScroll' : 'mou
 const eventStore = []
 export const GlobalEvent = {
   on (comp, type, cb) {
-    eventStore.push({ comp, type, cb })
+    if (cb) {
+      eventStore.push({ comp, type, cb })
+    }
   },
   off (comp, type) {
     XEUtils.remove(eventStore, item => item.comp === comp && item.type === type)
@@ -21,8 +23,6 @@ export const GlobalEvent = {
 
 document.addEventListener('keydown', GlobalEvent.trigger, false)
 document.addEventListener('contextmenu', GlobalEvent.trigger, false)
-// document.addEventListener('mouseover', GlobalEvent.trigger, false)
-// document.addEventListener('mouseout', GlobalEvent.trigger, false)
 window.addEventListener('mousedown', GlobalEvent.trigger, false)
 window.addEventListener('blur', GlobalEvent.trigger, false)
 window.addEventListener('resize', GlobalEvent.trigger, false)

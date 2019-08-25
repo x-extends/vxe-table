@@ -19,7 +19,10 @@ export default {
       notDelete: 'delete 方法不存在',
       notSave: 'save 方法不存在',
 
-      toolbarId: '工具栏需要设置唯一 id'
+      toolbarId: '工具栏需要设置唯一 id',
+
+      reqKeyboard: '缺少 Keyboard 模块',
+      reqResize: '缺少 Resize 模块'
     },
     table: {
       emptyText: '暫無資料',

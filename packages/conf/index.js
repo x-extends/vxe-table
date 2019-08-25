@@ -1,5 +1,9 @@
-// import XEUtils from 'xe-utils'
-// import zhCNLocat from '../lib/locale/lang/zh-CN'
+// _tip 是否导入了 Tooltip 模块
+// _export 是否导入了 Export 模块
+// _keyboard 是否导入了 Keyboard 模块
+// _filter 是否导入了 Filter 模块
+// _menu 是否导入了 Menu 模块
+// _resize 是否导入了 Resize 模块
 
 const GlobalConfig = {
   // showOverflow: null,
@@ -85,8 +89,7 @@ const GlobalConfig = {
     duration: 3000,
     animat: true
   },
-  i18n: key => key,
-  _tip: 0 // 是否按需加载了 tooltip
+  i18n: key => key
 }
 
 export default GlobalConfig

@@ -19,7 +19,10 @@ export default {
       notDelete: 'delete method not exist.',
       notSave: 'save method not exist.',
 
-      toolbarId: 'Toolbar must have a unique id'
+      toolbarId: 'Toolbar must have a unique id',
+
+      reqKeyboard: 'require Keyboard module.',
+      reqResize: 'require Resize module.'
     },
     table: {
       emptyText: 'No Data',

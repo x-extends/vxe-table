@@ -1,9 +1,12 @@
-import ExportMethods from './src/export'
-import { ExportTools } from '../tools'
+import Table from '../table'
+import GlobalConfig from '../conf'
+import Methods from './src/methods'
 
-ExportMethods.install = function () {
-  Object.assign(ExportTools, ExportMethods)
+export const Export = {
+  install () {
+    GlobalConfig._export = 1
+    Object.assign(Table.methods, Methods)
+  }
 }
 
-export const Export = ExportMethods
-export default ExportMethods
+export default Export

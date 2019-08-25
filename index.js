@@ -18,6 +18,7 @@ import Message from './packages/message'
 import Tooltip from './packages/tooltip'
 
 import Export from './packages/export'
+import Keyboard from './packages/keyboard'
 import Resize from './packages/resize'
 import VXETable from './packages/v-x-e-table'
 import zhCNLocat from './locale/lang/zh-CN'
@@ -46,6 +47,7 @@ export const components = [
   Tooltip,
 
   Export,
+  Keyboard,
   Resize
 ]
 
@@ -86,6 +88,7 @@ export * from './packages/button'
 export * from './packages/message'
 export * from './packages/tooltip'
 export * from './packages/export'
+export * from './packages/keyboard'
 export * from './packages/resize'
 export * from './packages/v-x-e-table'
 export default VXETable

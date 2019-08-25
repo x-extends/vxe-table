@@ -20,6 +20,7 @@ import Button from '../../../packages/button'
 import Message from '../../../packages/message'
 import Tooltip from '../../../packages/tooltip'
 import Export from '../../../packages/export'
+import Keyboard from '../../../packages/keyboard'
 import Resize from '../../../packages/resize'
 import '../../../styles/index.scss'
 
@@ -64,6 +65,7 @@ Vue.use(Button)
 Vue.use(Message)
 Vue.use(Tooltip)
 Vue.use(Export)
+Vue.use(Keyboard)
 Vue.use(Resize)
 
 VXETable.use(VXETablePluginElement)
