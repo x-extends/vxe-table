@@ -127,14 +127,16 @@ module.exports = {
         antdPluginMore: 'plugin-antd More config',
         spanPlugin: 'Select merge cells',
         chartsPlugin: 'Charts toolbar',
+        rendererPlugin: 'plugin-renderer More renderer',
+        menusPlugin: 'plugin-menus Context menus',
 
         renderer: 'Renderer',
         rendererFilter: 'Filter renderer',
         rendererDefault: 'Default renderer',
         rendererEdit: 'Edit renderer',
 
-        menus: 'Context menu register',
-        interceptor: 'Interceptor',
+        menus: 'Register context menu',
+        interceptor: 'Event interceptor',
 
         optimize: 'Optimization and suggestion',
         optimizeScroller: '虚拟滚动优化',

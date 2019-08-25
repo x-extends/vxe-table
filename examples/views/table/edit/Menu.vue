@@ -180,9 +180,9 @@ export default {
               xTable.insertAt(null, row)
                 .then(({ row }) => xTable.setActiveCell(row, column.property))
             },
-            visibleMethod ({ column }) {
+            visibleMethod ({ options, column }) {
               let isDisabled = !column
-              this.bodyMenus.forEach(list => {
+              options.forEach(list => {
                 list.forEach(item => {
                   item.disabled = isDisabled
                 })
@@ -258,9 +258,9 @@ export default {
       xTable.insertAt(null, row || -1)
         .then(({ row }) => xTable.setActiveCell(row, column ? column.property : 'name'))
     },
-    visibleMethod ({ column }) {
+    visibleMethod ({ options, column }) {
       let isDisabled = !column
-      this.bodyMenus.forEach(list => {
+      options.forEach(list => {
         list.forEach(item => {
           item.disabled = isDisabled
         })

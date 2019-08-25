@@ -990,6 +990,18 @@ export default {
               locat: {
                 name: 'TableBasic'
               }
+            },
+            {
+              label: 'app.aside.nav.rendererPlugin',
+              locat: {
+                name: 'TablePluginRenderer'
+              }
+            },
+            {
+              label: 'app.aside.nav.menusPlugin',
+              locat: {
+                name: 'TablePluginMenus'
+              }
             }
           ]
         },
