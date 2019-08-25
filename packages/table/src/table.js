@@ -2094,6 +2094,7 @@ export default {
         if (disabled) {
           evnt.preventDefault()
         } else if (options && options.length) {
+          params.options = options
           this.preventEvent(evnt, 'event.show_menu', params, null, () => {
             if (!visibleMethod || visibleMethod(params, evnt)) {
               evnt.preventDefault()
