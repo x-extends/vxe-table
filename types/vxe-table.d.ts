@@ -18,6 +18,7 @@ import { Input } from './input';
 import { Button } from './button';
 import { Message } from './message';
 import { Export } from './export';
+import { Keyboard } from './keyboard';
 import { Resize } from './resize';
 
 export interface VXETableOptions {
@@ -135,5 +136,6 @@ export {
   Button,
   Message,
   Export,
+  Keyboard,
   Resize
 }

@@ -1,6 +1,6 @@
 {
   "name": "vxe-table",
-  "version": "2.3.9",
+  "version": "2.4.0-beta.2",
   "description": "A fully functional Vue table component.",
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -20,7 +20,7 @@
   "style": "lib/index.css",
   "unpkg": "lib/index.min.js",
   "jsdelivr": "lib/index.min.js",
-  "typings": "index.d.ts",
+  "typings": "types/index.d.ts",
   "devDependencies": {
     "@babel/core": "^7.4.4",
     "@babel/preset-env": "^7.4.4",
