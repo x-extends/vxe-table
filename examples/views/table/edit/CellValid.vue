@@ -109,16 +109,16 @@ export default {
             validEvent () {
               this.$refs.xTable.validate(valid => {
                 if (valid) {
-                  this.$XMsg.message({ status: 'success', message: '校验成功！' })
+                  this.$XModal.message({ status: 'success', message: '校验成功！' })
                 } else {
-                  this.$XMsg.message({ status: 'error', message: '校验不通过！' })
+                  this.$XModal.message({ status: 'error', message: '校验不通过！' })
                 }
               })
             },
             fullValidEvent () {
               this.$refs.xTable.fullValidate((valid, errMap) => {
                 if (valid) {
-                  this.$XMsg.message({ status: 'success', message: '校验成功！' })
+                  this.$XModal.message({ status: 'success', message: '校验成功！' })
                 } else {
                   let msgList = []
                   Object.values(errMap).forEach(errList => {
@@ -129,7 +129,7 @@ export default {
                       })
                     })
                   })
-                  this.$XMsg.message({
+                  this.$XModal.message({
                     status: 'error',
                     message: () => {
                       return [
@@ -151,13 +151,13 @@ export default {
               if (selectRecords.length > 0) {
                 this.$refs.xTable.validate(selectRecords, valid => {
                   if (valid) {
-                    this.$XMsg.message({ status: 'success', message: '校验成功！' })
+                    this.$XModal.message({ status: 'success', message: '校验成功！' })
                   } else {
-                    this.$XMsg.message({ status: 'error', message: '校验不通过！' })
+                    this.$XModal.message({ status: 'error', message: '校验不通过！' })
                   }
                 })
               } else {
-                this.$XMsg.message({ status: 'warning', message: '未选中数据！' })
+                this.$XModal.message({ status: 'warning', message: '未选中数据！' })
               }
             },
             insertEvent () {
@@ -172,19 +172,19 @@ export default {
             },
             getSelectEvent () {
               let selectRecords = this.$refs.xTable.getSelectRecords()
-              this.$XMsg.alert(selectRecords.length)
+              this.$XModal.alert(selectRecords.length)
             },
             getInsertEvent () {
               let insertRecords = this.$refs.xTable.getInsertRecords()
-              this.$XMsg.alert(insertRecords.length)
+              this.$XModal.alert(insertRecords.length)
             },
             getRemoveEvent () {
               let removeRecords = this.$refs.xTable.getRemoveRecords()
-              this.$XMsg.alert(removeRecords.length)
+              this.$XModal.alert(removeRecords.length)
             },
             getUpdateEvent () {
               let updateRecords = this.$refs.xTable.getUpdateRecords()
-              this.$XMsg.alert(updateRecords.length)
+              this.$XModal.alert(updateRecords.length)
             }
           }
         }
@@ -205,16 +205,16 @@ export default {
     validEvent () {
       this.$refs.xTable.validate(valid => {
         if (valid) {
-          this.$XMsg.message({ status: 'success', message: '校验成功！' })
+          this.$XModal.message({ status: 'success', message: '校验成功！' })
         } else {
-          this.$XMsg.message({ status: 'error', message: '校验不通过！' })
+          this.$XModal.message({ status: 'error', message: '校验不通过！' })
         }
       })
     },
     fullValidEvent () {
       this.$refs.xTable.fullValidate((valid, errMap) => {
         if (valid) {
-          this.$XMsg.message({ status: 'success', message: '校验成功！' })
+          this.$XModal.message({ status: 'success', message: '校验成功！' })
         } else {
           let msgList = []
           Object.values(errMap).forEach(errList => {
@@ -225,7 +225,7 @@ export default {
               })
             })
           })
-          this.$XMsg.message({
+          this.$XModal.message({
             status: 'error',
             message: () => {
               return [
@@ -247,13 +247,13 @@ export default {
       if (selectRecords.length > 0) {
         this.$refs.xTable.validate(selectRecords, valid => {
           if (valid) {
-            this.$XMsg.message({ status: 'success', message: '校验成功！' })
+            this.$XModal.message({ status: 'success', message: '校验成功！' })
           } else {
-            this.$XMsg.message({ status: 'error', message: '校验不通过！' })
+            this.$XModal.message({ status: 'error', message: '校验不通过！' })
           }
         })
       } else {
-        this.$XMsg.message({ status: 'warning', message: '未选中数据！' })
+        this.$XModal.message({ status: 'warning', message: '未选中数据！' })
       }
     },
     insertEvent () {
@@ -268,19 +268,19 @@ export default {
     },
     getSelectEvent () {
       let selectRecords = this.$refs.xTable.getSelectRecords()
-      this.$XMsg.alert(selectRecords.length)
+      this.$XModal.alert(selectRecords.length)
     },
     getInsertEvent () {
       let insertRecords = this.$refs.xTable.getInsertRecords()
-      this.$XMsg.alert(insertRecords.length)
+      this.$XModal.alert(insertRecords.length)
     },
     getRemoveEvent () {
       let removeRecords = this.$refs.xTable.getRemoveRecords()
-      this.$XMsg.alert(removeRecords.length)
+      this.$XModal.alert(removeRecords.length)
     },
     getUpdateEvent () {
       let updateRecords = this.$refs.xTable.getUpdateRecords()
-      this.$XMsg.alert(updateRecords.length)
+      this.$XModal.alert(updateRecords.length)
     }
   }
 }

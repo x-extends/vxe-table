@@ -109,7 +109,7 @@ export default {
             },
             getInsertEvent () {
               let insertRecords = XEUtils.filterTree(this.tableData, item => item.isNew, this.treeConfig)
-              this.$XMsg.alert(insertRecords.length)
+              this.$XModal.alert(insertRecords.length)
             }
           }
         }
@@ -155,7 +155,7 @@ export default {
     },
     getInsertEvent () {
       let insertRecords = XEUtils.filterTree(this.tableData, item => item.isNew, this.treeConfig)
-      this.$XMsg.alert(insertRecords.length)
+      this.$XModal.alert(insertRecords.length)
     }
   }
 }

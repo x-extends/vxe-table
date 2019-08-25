@@ -75,7 +75,7 @@ import inputAPI from '../../api/input'
 import textareaAPI from '../../api/textarea'
 import buttonAPI from '../../api/button'
 import tooltipAPI from '../../api/tooltip'
-import messageAPI from '../../api/message'
+import modalAPI from '../../api/modal'
 
 export default {
   data () {
@@ -208,8 +208,8 @@ export default {
             case 'tooltip':
               apis = tooltipAPI
               break
-            case 'message':
-              apis = messageAPI
+            case 'modal':
+              apis = modalAPI
               break
           }
           // 生成唯一 id
@@ -264,7 +264,7 @@ export default {
         case 'copy':
           if (row && column) {
             if (XEClipboard.copy(row[column.property])) {
-              this.$XMsg.message({ message: this.$t('app.body.msg.copyToClipboard'), status: 'success' })
+              this.$XModal.message({ message: this.$t('app.body.msg.copyToClipboard'), status: 'success' })
             }
           }
           break

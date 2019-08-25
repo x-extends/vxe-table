@@ -162,7 +162,7 @@ export default {
             toolbarButtonClickEvent ({ button }, event) {
               switch (button.code) {
                 case 'myBtn':
-                  this.$XMsg.alert(button.name)
+                  this.$XModal.alert(button.name)
                   break
               }
             }
@@ -181,7 +181,7 @@ export default {
     toolbarButtonClickEvent ({ button }, event) {
       switch (button.code) {
         case 'myBtn':
-          this.$XMsg.alert(button.name)
+          this.$XModal.alert(button.name)
           break
       }
     }

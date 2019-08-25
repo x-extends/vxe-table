@@ -218,7 +218,7 @@ export default {
               }
             },
             getRadioEvent1 () {
-              this.$XMsg.alert(JSON.stringify(this.$refs.xTable1.getRadioRow()))
+              this.$XModal.alert(JSON.stringify(this.$refs.xTable1.getRadioRow()))
             }
           }
         }
@@ -406,7 +406,7 @@ export default {
       }
     },
     getRadioEvent1 () {
-      this.$XMsg.alert(JSON.stringify(this.$refs.xTable1.getRadioRow()))
+      this.$XModal.alert(JSON.stringify(this.$refs.xTable1.getRadioRow()))
     }
   }
 }

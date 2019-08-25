@@ -306,12 +306,12 @@ export default {
                   // 示例
                   if (row && column) {
                     if (XEClipboard.copy(row[column.property])) {
-                      this.$XMsg.message({ message: '已复制到剪贴板！', status: 'success' })
+                      this.$XModal.message({ message: '已复制到剪贴板！', status: 'success' })
                     }
                   }
                   break
                 default:
-                  this.$XMsg.message(\`点击了 \${menu.name} 选项\`)
+                  this.$XModal.message(\`点击了 \${menu.name} 选项\`)
               }
             },
             footerMethod ({ columns, data }) {
@@ -372,12 +372,12 @@ export default {
           // 示例
           if (row && column) {
             if (XEClipboard.copy(row[column.property])) {
-              this.$XMsg.message({ message: '已复制到剪贴板！', status: 'success' })
+              this.$XModal.message({ message: '已复制到剪贴板！', status: 'success' })
             }
           }
           break
         default:
-          this.$XMsg.message(`点击了 ${menu.name} 选项`)
+          this.$XModal.message(`点击了 ${menu.name} 选项`)
       }
     },
     footerMethod ({ columns, data }) {

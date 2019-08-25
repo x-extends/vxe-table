@@ -83,15 +83,15 @@ export default {
             },
             getInsertEvent () {
               let insertRecords = this.$refs.xTable.getInsertRecords()
-              this.$XMsg.alert(insertRecords.length)
+              this.$XModal.alert(insertRecords.length)
             },
             getRemoveEvent () {
               let removeRecords = this.$refs.xTable.getRemoveRecords()
-              this.$XMsg.alert(removeRecords.length)
+              this.$XModal.alert(removeRecords.length)
             },
             getUpdateEvent () {
               let updateRecords = this.$refs.xTable.getUpdateRecords()
-              this.$XMsg.alert(updateRecords.length)
+              this.$XModal.alert(updateRecords.length)
             }
           }
         }
@@ -114,15 +114,15 @@ export default {
     },
     getInsertEvent () {
       let insertRecords = this.$refs.xTable.getInsertRecords()
-      this.$XMsg.alert(insertRecords.length)
+      this.$XModal.alert(insertRecords.length)
     },
     getRemoveEvent () {
       let removeRecords = this.$refs.xTable.getRemoveRecords()
-      this.$XMsg.alert(removeRecords.length)
+      this.$XModal.alert(removeRecords.length)
     },
     getUpdateEvent () {
       let updateRecords = this.$refs.xTable.getUpdateRecords()
-      this.$XMsg.alert(updateRecords.length)
+      this.$XModal.alert(updateRecords.length)
     }
   }
 }

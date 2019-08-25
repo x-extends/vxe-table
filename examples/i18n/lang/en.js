@@ -102,7 +102,7 @@ module.exports = {
         module: 'Modules',
         button: 'Button',
         input: 'Input',
-        message: 'Message',
+        modal: 'Modal',
         tooltip: 'Tooltip',
 
         other: 'Integrated component',
@@ -154,7 +154,7 @@ module.exports = {
         vxeTextarea: 'vxe-textarea',
         vxeButton: 'vxe-button',
         vxeTooltip: 'vxe-tooltip',
-        vxeMessageBox: 'vxe-message'
+        vxeModal: 'vxe-modal'
       }
     },
     body: {
@@ -394,15 +394,16 @@ module.exports = {
       msg: {
         desc: {
           value: 'Binding values',
-          id: '只对 type=message 有效，如果不想提示框重复点击，可以设置唯一的 id 防止重复提示',
+          id: '只对 type=message 有效，如果不想对话框重复点击，可以设置唯一的 id 防止重复提示',
           title: 'Message title (support internationalization)',
           type: 'Message type',
           status: '只对 type=message 有效，消息状态',
           message: 'message content',
-          lockView: 'Whether or not the page is locked does not allow any action outside the prompt box',
+          lockView: 'Whether or not the page is locked does not allow any action outside the modal',
           lockScroll: 'Whether the scroll bar is locked and does not allow page scrolling',
           mask: 'Whether to display the mask layer',
-          maskClosable: 'Click the mask layer to close the prompt box',
+          maskClosable: 'Click the mask layer to close the modal',
+          escClosable: 'Whether Esc key is allowed to close the modal',
           duration: '只对 type=message 有效，自动关闭的延时',
           top: '只对 type=message 有效，消息距离顶部的位置',
           zIndex: 'set style z-index'

@@ -102,7 +102,7 @@ module.exports = {
         module: '功能模块',
         button: '按钮',
         input: '输入框',
-        message: '提示框',
+        modal: '对话框',
         tooltip: '文字提示',
 
         other: '集成组件库',
@@ -154,7 +154,7 @@ module.exports = {
         vxeTextarea: 'vxe-textarea',
         vxeButton: 'vxe-button',
         vxeTooltip: 'vxe-tooltip',
-        vxeMessageBox: 'vxe-message'
+        vxeModal: 'vxe-modal'
       }
     },
     body: {
@@ -394,15 +394,16 @@ module.exports = {
       msg: {
         desc: {
           value: '绑定值',
-          id: '只对 type=message 有效，如果不想提示框重复点击，可以设置唯一的 id 防止重复提示',
-          title: '提示框的标题（支持开启国际化）',
-          type: '提示框类型',
+          id: '只对 type=message 有效，如果不想对话框重复点击，可以设置唯一的 id 防止重复提示',
+          title: '对话框的标题（支持开启国际化）',
+          type: '对话框类型',
           status: '只对 type=message 有效，消息状态',
-          message: '提示框的内容',
-          lockView: '是否锁住页面，不允许提示框之外的任何操作',
+          message: '对话框的内容',
+          lockView: '是否锁住页面，不允许对话框之外的任何操作',
           lockScroll: '是否锁住滚动条，不允许页面滚动',
           mask: '是否显示遮罩层',
-          maskClosable: '是否允许点击遮罩层关闭提示框',
+          maskClosable: '是否允许点击遮罩层关闭对话框',
+          escClosable: '是否允许按 Esc 键关闭对话框',
           duration: '只对 type=message 有效，自动关闭的延时',
           top: '只对 type=message 有效，消息距离顶部的位置',
           zIndex: '自定义堆叠顺序（对于在弹框中使用是由于堆叠被覆盖时可能会用到）'

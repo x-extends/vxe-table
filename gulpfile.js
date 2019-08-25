@@ -9,6 +9,7 @@ const cleanCSS = require('gulp-clean-css')
 const prefixer = require('gulp-autoprefixer')
 
 const components = [
+  'icon',
   'table',
   'column',
   'cell',
@@ -25,11 +26,11 @@ const components = [
   'radio',
   'input',
   'button',
-  'message',
+  'modal',
   'tooltip',
 
-  'icon',
   'export',
+  'keyboard',
   'resize',
   'v-x-e-table'
 ]
