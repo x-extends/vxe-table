@@ -1,7 +1,7 @@
 <template>
   <div>
-    <h2>Event collision interceptor 事件冲突拦截器</h2>
-    <p class="tip">通过内置拦截器可以解决当表格的事件处理与第三方组件存在冲突的问题，从而可以集成其他组件互相兼容；比如这些插件 <a class="link" href="https://www.npmjs.com/package/vxe-table-plugin-element" target="_blank">vxe-table-plugin-element</a></p>
+    <h2><h2>Event interceptor 事件拦截器</h2></h2>
+    <p class="tip">通过内置拦截器可以处理表格事件行为与第三方组件的兼容性；比如这些插件 <a class="link" href="https://www.npmjs.com/package/vxe-table-plugin-element" target="_blank">vxe-table-plugin-element</a></p>
     <vxe-table
       resizable
       highlight-current-row

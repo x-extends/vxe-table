@@ -4,13 +4,16 @@
 
     <vxe-table
       border
+      show-footer
+      :footer-method="footerMethod"
       :data.sync="tableData"
-      :context-menu="{body: {options: bodyMenus}}"
+      :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}, footer: {options: footerMenus}}"
       :edit-config="{trigger: 'click', mode: 'cell'}">
       <vxe-table-column type="index" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="name" title="Name" sortable :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="sex" title="sex" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="age" title="Age" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="age" title="Age" sortable :filters="[{ data: [] }]" :filter-render="{name: 'input'}" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="rate" title="Rate" sortable></vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -24,28 +27,95 @@
 
 <script>
 import hljs from 'highlight.js'
+import XEUtils from 'xe-utils'
 
 export default {
   data () {
     return {
       tableData: [],
-      bodyMenus: [
+      headerMenus: [
+        [
+          {
+            code: 'HIDDEN_COLUMN',
+            name: '隐藏'
+          },
+          {
+            code: 'RESET_COLUMN',
+            name: '取消隐藏'
+          },
+          {
+            code: 'RESET_ALL',
+            name: '重置个性化数据',
+            prefixIcon: 'fa fa-undo'
+          }
+        ],
         [
           {
             code: 'EXPORT_ALL',
-            name: '导出.csv'
+            name: '导出表格.csv'
+          }
+        ]
+      ],
+      bodyMenus: [
+        [
+          {
+            code: 'INSERT_AT_ACTIVED_ROW',
+            name: '插入'
           },
           {
-            code: 'INSERT_ACTIVED_ROW',
-            name: '新增'
+            code: 'DELETE_ROW',
+            name: '删除'
           },
           {
-            code: 'INSERT_ACTIVED_ROW',
-            name: '新增2',
-            params: [
-              [{ name: '默认值 Name' }],
-              ['sex']
+            code: 'CLEAR_CELL',
+            name: '清除内容'
+          }
+        ],
+        [
+          {
+            name: '筛选',
+            prefixIcon: 'fa fa-filter',
+            children: [
+              {
+                code: 'CLEAR_FILTER',
+                name: '清除筛选'
+              },
+              {
+                code: 'CLEAR_ALL_FILTER',
+                name: '重置所有筛选'
+              },
+              {
+                code: 'FILTER_CELL',
+                name: '按所选单元格的值筛选'
+              }
             ]
+          },
+          {
+            name: '排序',
+            children: [
+              {
+                code: 'SORT_ASC',
+                name: '升序',
+                prefixIcon: 'fa fa-sort-alpha-desc'
+              },
+              {
+                code: 'SORT_DESC',
+                name: '倒序',
+                prefixIcon: 'fa fa-sort-alpha-desc'
+              },
+              {
+                code: 'CLEAR_SORT',
+                name: '清除排序'
+              }
+            ]
+          }
+        ]
+      ],
+      footerMenus: [
+        [
+          {
+            code: 'EXPORT_ALL',
+            name: '导出表格.csv'
           }
         ]
       ],
@@ -53,13 +123,16 @@ export default {
         `
         <vxe-table
           border
+          show-footer
+          :footer-method="footerMethod"
           :data.sync="tableData"
-          :context-menu="{body: {options: bodyMenus}}"
+          :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}, footer: {options: footerMenus}}"
           :edit-config="{trigger: 'click', mode: 'cell'}">
           <vxe-table-column type="index" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column field="name" title="Name" sortable :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column field="sex" title="sex" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="age" title="Age" :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column field="age" title="Age" sortable :filters="[{ data: [] }]" :filter-render="{name: 'input'}" :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column field="rate" title="Rate" sortable></vxe-table-column>
         </vxe-table>
         `,
         `
@@ -67,23 +140,89 @@ export default {
           data () {
             return {
               tableData: [],
-              bodyMenus: [
+              headerMenus: [
+                [
+                  {
+                    code: 'HIDDEN_COLUMN',
+                    name: '隐藏'
+                  },
+                  {
+                    code: 'RESET_COLUMN',
+                    name: '取消隐藏'
+                  },
+                  {
+                    code: 'RESET_ALL',
+                    name: '重置个性化数据',
+                    prefixIcon: 'fa fa-undo'
+                  }
+                ],
                 [
                   {
                     code: 'EXPORT_ALL',
-                    name: '导出.csv'
+                    name: '导出表格.csv'
+                  }
+                ]
+              ],
+              bodyMenus: [
+                [
+                  {
+                    code: 'INSERT_AT_ACTIVED_ROW',
+                    name: '插入'
                   },
                   {
-                    code: 'INSERT_ACTIVED_ROW',
-                    name: '新增'
+                    code: 'DELETE_ROW',
+                    name: '删除'
                   },
                   {
-                    code: 'INSERT_ACTIVED_ROW',
-                    name: '新增2',
-                    params: [
-                      [{ name: '默认值 Name' }],
-                      ['sex']
+                    code: 'CLEAR_CELL',
+                    name: '清除内容'
+                  }
+                ],
+                [
+                  {
+                    name: '筛选',
+                    prefixIcon: 'fa fa-filter',
+                    children: [
+                      {
+                        code: 'CLEAR_FILTER',
+                        name: '清除筛选'
+                      },
+                      {
+                        code: 'CLEAR_ALL_FILTER',
+                        name: '重置所有筛选'
+                      },
+                      {
+                        code: 'FILTER_CELL',
+                        name: '按所选单元格的值筛选'
+                      }
                     ]
+                  },
+                  {
+                    name: '排序',
+                    children: [
+                      {
+                        code: 'SORT_ASC',
+                        name: '升序',
+                        prefixIcon: 'fa fa-sort-alpha-desc'
+                      },
+                      {
+                        code: 'SORT_DESC',
+                        name: '倒序',
+                        prefixIcon: 'fa fa-sort-alpha-desc'
+                      },
+                      {
+                        code: 'CLEAR_SORT',
+                        name: '清除排序'
+                      }
+                    ]
+                  }
+                ]
+              ],
+              footerMenus: [
+                [
+                  {
+                    code: 'EXPORT_ALL',
+                    name: '导出表格.csv'
                   }
                 ]
               ]
@@ -91,6 +230,21 @@ export default {
           },
           created () {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 5)
+          },
+          methods: {
+            footerMethod ({ columns, data }) {
+              return [
+                columns.map((column, columnIndex) => {
+                  if (columnIndex === 0) {
+                    return '和值'
+                  }
+                  if (['age', 'rate'].includes(column.property)) {
+                    return XEUtils.sum(data, column.property)
+                  }
+                  return null
+                })
+              ]
+            }
           }
         }
         `
@@ -104,6 +258,21 @@ export default {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
       hljs.highlightBlock(block)
     })
+  },
+  methods: {
+    footerMethod ({ columns, data }) {
+      return [
+        columns.map((column, columnIndex) => {
+          if (columnIndex === 0) {
+            return '和值'
+          }
+          if (['age', 'rate'].includes(column.property)) {
+            return XEUtils.sum(data, column.property)
+          }
+          return null
+        })
+      ]
+    }
   }
 }
 </script>

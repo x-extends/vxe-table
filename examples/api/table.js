@@ -739,7 +739,7 @@ const apis = [
           },
           {
             name: 'visibleMethod',
-            desc: '该函数会在菜单显示之前执行，支持通过 Function({type, row?, rowIndex?, column?, columnIndex?}) 的返回值用来决定是否允许显示右键菜单（对于需要对菜单进行权限控制时可能会用到）',
+            desc: '该函数会在菜单显示之前执行，支持通过 Function({type, options, columns, row?, rowIndex?, column?, columnIndex?}) 的返回值用来决定是否允许显示右键菜单（对于需要对菜单进行权限控制时可能会用到）',
             type: 'Function',
             enum: '',
             defVal: '',
@@ -1873,11 +1873,11 @@ const apis = [
         list: []
       },
       {
-        name: 'clearSort(field)',
-        desc: '手动清空排序条件，数据会恢复成未排序的状态（如果不传 field 则清空所有排序条件）',
+        name: 'clearSort()',
+        desc: '手动清空排序条件，数据会恢复成未排序的状态',
         type: 'Promise',
         enum: '',
-        defVal: 'field?',
+        defVal: '',
         list: []
       },
       {

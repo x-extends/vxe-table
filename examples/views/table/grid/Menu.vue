@@ -183,12 +183,12 @@ export default {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 4)
           },
           methods: {
-            visibleMethod ({ type, column }) {
+            visibleMethod ({ type, options, column }) {
               // 示例：只有 name 列允许操作，清除按钮只能在 age 才显示
               // 显示之前处理按钮的操作权限
               let isDisabled = !column || column.property !== 'name'
               let isVisible = column && column.property === 'age'
-              this.bodyMenus.forEach(list => {
+              options.forEach(list => {
                 list.forEach(item => {
                   if (['copy'].includes(item.code)) {
                     item.disabled = isDisabled
@@ -249,12 +249,12 @@ export default {
     })
   },
   methods: {
-    visibleMethod ({ type, column }) {
+    visibleMethod ({ type, options, column }) {
       // 示例：只有 name 列允许操作，清除按钮只能在 age 才显示
       // 显示之前处理按钮的操作权限
       let isDisabled = !column || column.property !== 'name'
       let isVisible = column && column.property === 'age'
-      this.bodyMenus.forEach(list => {
+      options.forEach(list => {
         list.forEach(item => {
           if (['copy'].includes(item.code)) {
             item.disabled = isDisabled

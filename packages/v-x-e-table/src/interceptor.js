@@ -5,7 +5,9 @@ const _storeMap = {
   // 清除激活单元格之前触发拦截
   'event.clear_actived': [],
   // 清除筛选面板之前触发拦截
-  'event.clear_filter': []
+  'event.clear_filter': [],
+  // 显示快捷菜单之前触发
+  'event.show_menu': []
 }
 
 export const Interceptor = {

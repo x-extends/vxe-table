@@ -123,9 +123,9 @@ module.exports = {
         antdPlugin: 'plugin-antd 基本配置',
         antdFilter: 'plugin-antd 筛选配置',
         antdPluginMore: 'plugin-antd 更多配置',
-        rendererPlugin: 'plugin-renderer 更多渲染器',
         spanPlugin: '单元格选中合并',
         chartsPlugin: '图表功能',
+        rendererPlugin: 'plugin-renderer 更多渲染器',
         menusPlugin: 'plugin-menus 快捷菜单集',
         excelPlugin: 'plugin-excel 简单的 Excel',
 
@@ -134,8 +134,8 @@ module.exports = {
         rendererDefault: '默认的渲染器',
         rendererEdit: '可编辑渲染器',
 
-        menus: '快捷菜单注册器',
-        interceptor: '事件冲突拦截器',
+        menus: '注册快捷菜单',
+        interceptor: '事件拦截器',
 
         optimize: '优化建议',
         optimizeScroller: '虚拟滚动优化',

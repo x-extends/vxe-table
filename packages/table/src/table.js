@@ -729,7 +729,7 @@ export default {
       })
     },
     updateData () {
-      return this.handleData(true).then(this.recalculate)
+      return this.handleData(true).then(this.updateFooter).then(this.recalculate)
     },
     handleData (force) {
       let { scrollYLoad, scrollYStore } = this
@@ -1757,10 +1757,13 @@ export default {
         }
       }
     },
-    preventEvent (evnt, type, args, callback) {
+    preventEvent (evnt, type, args, next, end) {
       let evntList = Interceptor.get(type)
-      if (!evntList.some(func => func(args, evnt, this) === false)) {
-        callback()
+      if (!evntList.some(func => func(args, evnt, this) === false) && next) {
+        next()
+      }
+      if (end) {
+        end()
       }
     },
     /**
@@ -2140,7 +2143,7 @@ export default {
         for (let index = 0; index < layoutList.length; index++) {
           let layout = layoutList[index]
           let columnTargetNode = this.getEventTargetNode(evnt, this.$el, `vxe-${layout}--column`)
-          let params = { type: layout, $table: this }
+          let params = { type: layout, $table: this, columns: this.visibleColumn.slice(0) }
           if (columnTargetNode.flag) {
             let cell = columnTargetNode.targetElem
             let column = this.getColumnNode(cell).item
@@ -2180,39 +2183,42 @@ export default {
         if (disabled) {
           evnt.preventDefault()
         } else if (options && options.length) {
-          if (!visibleMethod || visibleMethod(params, evnt)) {
-            evnt.preventDefault()
-            let { scrollTop, scrollLeft, visibleHeight, visibleWidth } = DomTools.getDomNode()
-            let top = evnt.clientY + scrollTop
-            let left = evnt.clientX + scrollLeft
-            Object.assign(ctxMenuStore, {
-              args: params,
-              visible: true,
-              list: options,
-              selected: null,
-              selectChild: null,
-              showChild: false,
-              style: {
-                top: `${top}px`,
-                left: `${left}px`
-              }
-            })
-            this.$nextTick(() => {
-              let ctxElem = this.$refs.ctxWrapper.$el
-              let clientHeight = ctxElem.clientHeight
-              let clientWidth = ctxElem.clientWidth
-              let offsetTop = evnt.clientY + clientHeight - visibleHeight
-              let offsetLeft = evnt.clientX + clientWidth - visibleWidth
-              if (offsetTop > -10) {
-                ctxMenuStore.style.top = `${top - clientHeight}px`
-              }
-              if (offsetLeft > -10) {
-                ctxMenuStore.style.left = `${left - clientWidth}px`
-              }
-            })
-          } else {
-            this.closeMenu()
-          }
+          params.options = options
+          this.preventEvent(evnt, 'event.show_menu', params, null, () => {
+            if (!visibleMethod || visibleMethod(params, evnt)) {
+              evnt.preventDefault()
+              let { scrollTop, scrollLeft, visibleHeight, visibleWidth } = DomTools.getDomNode()
+              let top = evnt.clientY + scrollTop
+              let left = evnt.clientX + scrollLeft
+              Object.assign(ctxMenuStore, {
+                args: params,
+                visible: true,
+                list: options,
+                selected: null,
+                selectChild: null,
+                showChild: false,
+                style: {
+                  top: `${top}px`,
+                  left: `${left}px`
+                }
+              })
+              this.$nextTick(() => {
+                let ctxElem = this.$refs.ctxWrapper.$el
+                let clientHeight = ctxElem.clientHeight
+                let clientWidth = ctxElem.clientWidth
+                let offsetTop = evnt.clientY + clientHeight - visibleHeight
+                let offsetLeft = evnt.clientX + clientWidth - visibleWidth
+                if (offsetTop > -10) {
+                  ctxMenuStore.style.top = `${top - clientHeight}px`
+                }
+                if (offsetLeft > -10) {
+                  ctxMenuStore.style.left = `${left - clientWidth}px`
+                }
+              })
+            } else {
+              this.closeMenu()
+            }
+          })
         }
       }
       this.closeFilter()
@@ -3495,15 +3501,10 @@ export default {
       }
       return this.$nextTick()
     },
-    clearSort (field) {
-      let column = arguments.length ? this.getColumnByField(field) : null
-      if (column) {
+    clearSort () {
+      this.tableFullColumn.forEach(column => {
         column.order = null
-      } else {
-        this.tableFullColumn.forEach(column => {
-          column.order = null
-        })
-      }
+      })
       return this.handleData(true)
     },
     filter (field, callback) {
@@ -3585,6 +3586,7 @@ export default {
       })
       // 在 v3.0 中废弃 prop
       UtilTools.emitEvent(this, 'filter-change', [{ column, property, field: property, prop: property, values, datas, filters: filterList, $table: this }])
+      this.updateFooter()
       if (scrollXLoad || scrollYLoad) {
         this.clearScroll()
         if (scrollYLoad) {
@@ -3640,7 +3642,7 @@ export default {
           visible: false
         })
       }
-      return this.handleData(true).then(this.recalculate)
+      return this.updateData()
     },
     /**
      * 展开行事件
@@ -4134,7 +4136,7 @@ export default {
     updateFooter () {
       let { showFooter, tableColumn, footerMethod } = this
       if (showFooter && footerMethod) {
-        this.footerData = tableColumn.length ? footerMethod({ columns: tableColumn, data: this.tableFullData }) : []
+        this.footerData = tableColumn.length ? footerMethod({ columns: tableColumn, data: this.afterFullData }) : []
       }
       return this.$nextTick()
     },
