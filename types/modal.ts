@@ -2,9 +2,9 @@ import Vue from 'vue';
 import { VXETableModule } from './module';
 
 /**
- * 消息提示框
+ * 对话框
  */
-export declare class Message extends VXETableModule {
+export declare class Modal extends VXETableModule {
   /**
    * 表格的尺寸
    * @default 'default'
@@ -13,7 +13,7 @@ export declare class Message extends VXETableModule {
   size: 'medium' | 'small' | 'mini';
 }
 
-export interface XMessageOptions {
+export interface XModalOptions {
   id?: string,
   type?: string,
   status?: string,
@@ -29,51 +29,52 @@ export interface XMessageOptions {
   animat?: boolean
 }
 
-export interface XMessage {
+export interface XModal {
   /**
    * @param options 参数
    */
-  (options: XMessageOptions): Promise<string>;
+  (options: XModalOptions): Promise<string>;
   /**
    * Alert
    * @param message 消息内容
    * @param title 标题
    * @param options 参数
    */
-  alert (message: string, title?: string, options?: XMessageOptions): Promise<string>;
+  alert (message: string, title?: string, options?: XModalOptions): Promise<string>;
   /**
    * Alert
    * @param options 
    */
-  alert (options: XMessageOptions): Promise<string>;
+  alert (options: XModalOptions): Promise<string>;
   /**
    * Confirm
    * @param message 消息内容
    * @param title 标题
    * @param options 参数
    */
-  confirm (message: string, title?: string, options?: XMessageOptions): Promise<string>;
+  confirm (message: string, title?: string, options?: XModalOptions): Promise<string>;
   /**
    * Confirm
    * @param options 参数
    */
-  confirm (options: XMessageOptions): Promise<string>;
+  confirm (options: XModalOptions): Promise<string>;
   /**
-   * Message
+   * Modal
    * @param message 消息内容
    * @param title 标题
    * @param options 参数
    */
-  message (message: string, title?: string, options?: XMessageOptions): Promise<string>;
+  message (message: string, title?: string, options?: XModalOptions): Promise<string>;
   /**
-   * Message
+   * Modal
    * @param options 参数
    */
-  message (options: XMessageOptions): Promise<string>;
+  message (options: XModalOptions): Promise<string>;
 }
 
 declare module 'vue/types/vue' {
   interface Vue {
-    $XMsg: XMessage
+    $XMsg: XModal,
+    $XModal: XModal
   }
 }

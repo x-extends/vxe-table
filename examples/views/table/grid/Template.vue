@@ -221,13 +221,13 @@ export default {
           },
           methods: {
             clickEvent (row, column) {
-              this.$XMsg.alert(\`\${column.title}点击事件\`)
+              this.$XModal.alert(\`\${column.title}点击事件\`)
             },
             headerClickEvent (evnt) {
-              this.$XMsg.alert('头部点击事件')
+              this.$XModal.alert('头部点击事件')
             },
             addressClickEvent (row) {
-              this.$XMsg.alert(\`address点击事件：\${row.row}\`)
+              this.$XModal.alert(\`address点击事件：\${row.row}\`)
             },
             filterSexMethod ({ option, row }) {
               return row.sex === option.data
@@ -253,13 +253,13 @@ export default {
   },
   methods: {
     clickEvent (row, column) {
-      this.$XMsg.alert(`${column.title}点击事件`)
+      this.$XModal.alert(`${column.title}点击事件`)
     },
     headerClickEvent (evnt) {
-      this.$XMsg.alert('头部点击事件')
+      this.$XModal.alert('头部点击事件')
     },
     addressClickEvent (row) {
-      this.$XMsg.alert(`address点击事件：${row.row}`)
+      this.$XModal.alert(`address点击事件：${row.row}`)
     },
     filterSexMethod ({ option, row }) {
       return row.sex === option.data

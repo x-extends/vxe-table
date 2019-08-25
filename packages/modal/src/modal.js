@@ -1,10 +1,10 @@
 import GlobalConfig from '../../conf'
 import XEUtils from 'xe-utils'
-import MsgQueue from './msgQueue'
-import { UtilTools } from '../../tools'
+import MsgQueue from './queue'
+import { UtilTools, GlobalEvent } from '../../tools'
 
 export default {
-  name: 'VxeMessage',
+  name: 'VxeModal',
   props: {
     value: Boolean,
     id: String,
@@ -18,6 +18,7 @@ export default {
     lockScroll: { type: Boolean, default: () => GlobalConfig.message.lockScroll },
     mask: { type: Boolean, default: () => GlobalConfig.message.mask },
     maskClosable: Boolean,
+    escClosable: Boolean,
     zIndex: { type: Number, default: () => GlobalConfig.message.zIndex },
     animat: { type: Boolean, default: () => GlobalConfig.message.animat }
   },
@@ -48,9 +49,13 @@ export default {
     }
   },
   mounted () {
+    if (this.escClosable) {
+      GlobalEvent.on(this, 'keydown', this.handleGlobalKeydownEvent)
+    }
     document.body.appendChild(this.$el)
   },
   beforeDestroy () {
+    GlobalEvent.off(this, 'keydown')
     this.removeMsgQueue()
     this.$el.parentNode.removeChild(this.$el)
   },
@@ -218,6 +223,11 @@ export default {
             this.$emit('hide', type)
           }
         }, 200)
+      }
+    },
+    handleGlobalKeydownEvent (evnt) {
+      if (evnt.keyCode === 27) {
+        this.close()
       }
     },
     mousedownEvent (evnt) {

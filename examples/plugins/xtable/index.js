@@ -18,7 +18,7 @@ import Checkbox from '../../../packages/checkbox'
 import Radio from '../../../packages/radio'
 import Input from '../../../packages/input'
 import Button from '../../../packages/button'
-import Message from '../../../packages/message'
+import Modal from '../../../packages/modal'
 import Tooltip from '../../../packages/tooltip'
 import Export from '../../../packages/export'
 import Resize from '../../../packages/resize'
@@ -57,7 +57,7 @@ Vue.use(Checkbox)
 Vue.use(Radio)
 Vue.use(Input)
 Vue.use(Button)
-Vue.use(Message)
+Vue.use(Modal)
 Vue.use(Tooltip)
 Vue.use(Export)
 Vue.use(Resize)

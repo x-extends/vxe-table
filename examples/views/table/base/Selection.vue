@@ -248,7 +248,7 @@ export default {
             },
             getSelectEvent () {
               let updateRecords = this.$refs.xTable1.getSelectRecords()
-              this.$XMsg.alert(updateRecords.length)
+              this.$XModal.alert(updateRecords.length)
             }
           }
         }
@@ -481,7 +481,7 @@ export default {
     },
     getSelectEvent1 () {
       let updateRecords = this.$refs.xTable1.getSelectRecords()
-      this.$XMsg.alert(updateRecords.length)
+      this.$XModal.alert(updateRecords.length)
     }
   }
 }

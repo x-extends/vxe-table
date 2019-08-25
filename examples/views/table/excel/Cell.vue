@@ -135,19 +135,19 @@ export default {
             getValidEvent () {
               let fields = this.$refs.xExcel.getColumns().map(item => item.property).filter(key => key)
               let validRecords = this.tableData.filter(item => fields.some(key => item[key]))
-              this.$XMsg.alert(validRecords.length)
+              this.$XModal.alert(validRecords.length)
             },
             getInsertEvent () {
               let insertRecords = this.$refs.xExcel.getInsertRecords()
-              this.$XMsg.alert(insertRecords.length)
+              this.$XModal.alert(insertRecords.length)
             },
             getRemoveEvent () {
               let removeRecords = this.$refs.xExcel.getRemoveRecords()
-              this.$XMsg.alert(removeRecords.length)
+              this.$XModal.alert(removeRecords.length)
             },
             getUpdateEvent () {
               let updateRecords = this.$refs.xExcel.getUpdateRecords()
-              this.$XMsg.alert(updateRecords.length)
+              this.$XModal.alert(updateRecords.length)
             },
             exportCsvEvent () {
               this.$refs.xExcel.exportCsv()
@@ -195,19 +195,19 @@ export default {
     getValidEvent () {
       let fields = this.$refs.xExcel.getColumns().map(item => item.property).filter(key => key)
       let validRecords = this.tableData.filter(item => fields.some(key => item[key]))
-      this.$XMsg.alert(validRecords.length)
+      this.$XModal.alert(validRecords.length)
     },
     getInsertEvent () {
       let insertRecords = this.$refs.xExcel.getInsertRecords()
-      this.$XMsg.alert(insertRecords.length)
+      this.$XModal.alert(insertRecords.length)
     },
     getRemoveEvent () {
       let removeRecords = this.$refs.xExcel.getRemoveRecords()
-      this.$XMsg.alert(removeRecords.length)
+      this.$XModal.alert(removeRecords.length)
     },
     getUpdateEvent () {
       let updateRecords = this.$refs.xExcel.getUpdateRecords()
-      this.$XMsg.alert(updateRecords.length)
+      this.$XModal.alert(updateRecords.length)
     },
     exportCsvEvent () {
       this.$refs.xExcel.exportCsv()

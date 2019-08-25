@@ -235,7 +235,7 @@ export default {
                         // 错误的移动
                         let oldTrElem = wrapperElem.children[oldIndex]
                         wrapperElem.insertBefore(targetTrElem, oldTrElem)
-                        return this.$XMsg.message({ message: '不允许自己给自己拖动！', status: 'error' })
+                        return this.$XModal.message({ message: '不允许自己给自己拖动！', status: 'error' })
                       }
                       let currRow = selfNode.items.splice(selfNode.index, 1)[0]
                       if (xTable.hasTreeExpand(prevRow)) {
@@ -325,7 +325,7 @@ export default {
                 // 错误的移动
                 let oldTrElem = wrapperElem.children[oldIndex]
                 wrapperElem.insertBefore(targetTrElem, oldTrElem)
-                return this.$XMsg.message({ message: '不允许自己给自己拖动！', status: 'error' })
+                return this.$XModal.message({ message: '不允许自己给自己拖动！', status: 'error' })
               }
               let currRow = selfNode.items.splice(selfNode.index, 1)[0]
               if (xTable.hasTreeExpand(prevRow)) {

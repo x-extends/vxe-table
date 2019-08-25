@@ -139,10 +139,10 @@ export default {
                 this.$refs.xTable.validate(valid => {
                   if (valid) {
                     XEAjax.doPost('/api/i18n/save', body).then(() => {
-                      this.$XMsg.message({ message: '保存成功！', status: 'success' })
+                      this.$XModal.message({ message: '保存成功！', status: 'success' })
                       this.findList()
                     }).catch(() => {
-                      this.$XMsg.message({ message: '保存失败！', status: 'error' })
+                      this.$XModal.message({ message: '保存失败！', status: 'error' })
                     })
                   }
                 })
@@ -204,10 +204,10 @@ export default {
         this.$refs.xTable.validate(valid => {
           if (valid) {
             XEAjax.doPost('/api/i18n/save', body).then(() => {
-              this.$XMsg.message({ message: '保存成功！', status: 'success' })
+              this.$XModal.message({ message: '保存成功！', status: 'success' })
               this.findList()
             }).catch(() => {
-              this.$XMsg.message({ message: '保存失败！', status: 'error' })
+              this.$XModal.message({ message: '保存失败！', status: 'error' })
             })
           }
         })

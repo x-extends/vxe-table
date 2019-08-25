@@ -15,7 +15,7 @@ import Checkbox from './packages/checkbox'
 import Radio from './packages/radio'
 import Input from './packages/input'
 import Button from './packages/button'
-import Message from './packages/message'
+import Modal from './packages/modal'
 import Tooltip from './packages/tooltip'
 
 import Export from './packages/export'
@@ -44,7 +44,7 @@ export const components = [
   Radio,
   Input,
   Button,
-  Message,
+  Modal,
   Tooltip,
 
   Export,
@@ -86,7 +86,7 @@ export * from './packages/checkbox'
 export * from './packages/radio'
 export * from './packages/input'
 export * from './packages/button'
-export * from './packages/message'
+export * from './packages/modal'
 export * from './packages/tooltip'
 export * from './packages/export'
 export * from './packages/resize'

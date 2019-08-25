@@ -87,6 +87,14 @@ const apis = [
         list: []
       },
       {
+        name: 'esc-closable',
+        descKey: 'app.api.msg.desc.escClosable',
+        type: 'Boolean',
+        enum: '',
+        defVal: 'false',
+        list: []
+      },
+      {
         name: 'duration',
         descKey: 'app.api.msg.desc.duration',
         type: 'Number',
@@ -121,7 +129,7 @@ const apis = [
     list: [
       {
         name: '—',
-        desc: '提示框内容',
+        desc: '对话框内容',
         type: '',
         enum: '',
         defVal: '',
@@ -138,7 +146,7 @@ const apis = [
     list: [
       {
         name: 'show',
-        desc: '在提示框打开时会触发该事件',
+        desc: '在对话框打开时会触发该事件',
         type: '',
         enum: '',
         defVal: '',
@@ -146,7 +154,7 @@ const apis = [
       },
       {
         name: 'hide',
-        desc: '在提示框关闭时会触发该事件',
+        desc: '在对话框关闭时会触发该事件',
         type: '',
         enum: '',
         defVal: '',

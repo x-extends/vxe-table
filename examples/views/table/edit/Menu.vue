@@ -200,7 +200,7 @@ export default {
                   break
                 case 'copy':
                   if (XEClipboard.copy(row[column.property])) {
-                    this.$XMsg.message({ message: '已复制到剪贴板！', status: 'success' })
+                    this.$XModal.message({ message: '已复制到剪贴板！', status: 'success' })
                   }
                   break
                 case 'reload':
@@ -213,22 +213,22 @@ export default {
                   xTable.remove(row)
                   break
                 case 'save':
-                  this.$XMsg.message({ message: '保存成功', status: 'success' })
+                  this.$XModal.message({ message: '保存成功', status: 'success' })
                   this.findList()
                   break
               }
             },
             getInsertEvent () {
               let insertRecords = this.$refs.xTable.getInsertRecords()
-              this.$XMsg.alert(insertRecords.length)
+              this.$XModal.alert(insertRecords.length)
             },
             getRemoveEvent () {
               let removeRecords = this.$refs.xTable.getRemoveRecords()
-              this.$XMsg.alert(removeRecords.length)
+              this.$XModal.alert(removeRecords.length)
             },
             getUpdateEvent () {
               let updateRecords = this.$refs.xTable.getUpdateRecords()
-              this.$XMsg.alert(updateRecords.length)
+              this.$XModal.alert(updateRecords.length)
             }
           }
         }
@@ -278,7 +278,7 @@ export default {
           break
         case 'copy':
           if (XEClipboard.copy(row[column.property])) {
-            this.$XMsg.message({ message: '已复制到剪贴板！', status: 'success' })
+            this.$XModal.message({ message: '已复制到剪贴板！', status: 'success' })
           }
           break
         case 'reload':
@@ -291,22 +291,22 @@ export default {
           xTable.remove(row)
           break
         case 'save':
-          this.$XMsg.message({ message: '保存成功', status: 'success' })
+          this.$XModal.message({ message: '保存成功', status: 'success' })
           this.findList()
           break
       }
     },
     getInsertEvent () {
       let insertRecords = this.$refs.xTable.getInsertRecords()
-      this.$XMsg.alert(insertRecords.length)
+      this.$XModal.alert(insertRecords.length)
     },
     getRemoveEvent () {
       let removeRecords = this.$refs.xTable.getRemoveRecords()
-      this.$XMsg.alert(removeRecords.length)
+      this.$XModal.alert(removeRecords.length)
     },
     getUpdateEvent () {
       let updateRecords = this.$refs.xTable.getUpdateRecords()
-      this.$XMsg.alert(updateRecords.length)
+      this.$XModal.alert(updateRecords.length)
     }
   }
 }

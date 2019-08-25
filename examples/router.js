@@ -125,7 +125,7 @@ const ModuleRadio = () => import(/* webpackChunkName: "module" */ './views/radio
 const ModuleCheckbox = () => import(/* webpackChunkName: "module" */ './views/checkbox/Checkbox.vue')
 const ModuleInput = () => import(/* webpackChunkName: "module" */ './views/input/Input.vue')
 const ModulePager = () => import(/* webpackChunkName: "module" */ './views/pager/Pager.vue')
-const ModuleMessage = () => import(/* webpackChunkName: "module" */ './views/message/Message.vue')
+const ModuleModal = () => import(/* webpackChunkName: "module" */ './views/modal/Modal.vue')
 const ModuleTooltip = () => import(/* webpackChunkName: "module" */ './views/tooltip/Tooltip.vue')
 const ModuleToolbar = () => import(/* webpackChunkName: "module" */ './views/toolbar/Toolbar.vue')
 
@@ -742,9 +742,9 @@ export default new Router({
       component: ModulePager
     },
     {
-      path: '/table/module/message',
-      name: 'ModuleMessage',
-      component: ModuleMessage
+      path: '/table/module/modal',
+      name: 'ModuleModal',
+      component: ModuleModal
     },
     {
       path: '/table/module/tooltip',

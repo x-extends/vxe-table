@@ -855,9 +855,9 @@ export default {
               }
             },
             {
-              label: 'app.aside.nav.message',
+              label: 'app.aside.nav.modal',
               locat: {
-                name: 'ModuleMessage'
+                name: 'ModuleModal'
               }
             },
             {
@@ -1186,11 +1186,11 @@ export default {
               }
             },
             {
-              label: 'app.aside.nav.vxeMessageBox',
+              label: 'app.aside.nav.vxeModal',
               locat: {
                 name: 'VXEAPI',
                 params: {
-                  name: 'message'
+                  name: 'modal'
                 }
               }
             },
@@ -1280,7 +1280,7 @@ export default {
           break
         case '3':
           this.version = '2'
-          this.$XMsg.message({ message: '由于作者比较忙，该版本正在重构开发中，敬请期待！', status: 'info' })
+          this.$XModal.message({ message: '由于作者比较忙，该版本正在重构开发中，敬请期待！', status: 'info' })
           break
       }
     }

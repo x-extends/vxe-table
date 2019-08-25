@@ -96,7 +96,7 @@ export default {
               this.loading = true
               return new Promise(resolve => {
                 this.loading = false
-                this.$XMsg.message({ message: '刷新成功！', status: 'success' })
+                this.$XModal.message({ message: '刷新成功！', status: 'success' })
                 setTimeout(resolve, 800)
               })
             }
@@ -116,7 +116,7 @@ export default {
       this.loading = true
       return new Promise(resolve => {
         this.loading = false
-        this.$XMsg.message({ message: '刷新成功！', status: 'success' })
+        this.$XModal.message({ message: '刷新成功！', status: 'success' })
         setTimeout(resolve, 800)
       })
     }

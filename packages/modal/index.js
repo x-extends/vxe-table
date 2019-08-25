@@ -1,12 +1,12 @@
 import XEUtils from 'xe-utils'
-import VxeMessageBox from './src/message'
-import MsgQueue from './src/msgQueue'
+import VXEModal from './src/modal'
+import queue from './src/queue'
 
 var AlertController = null
 
-export function Message (options) {
+export function Modal (options) {
   return new Promise(resolve => {
-    if (options && options.id && MsgQueue.some(comp => comp.id === options.id)) {
+    if (options && options.id && queue.some(comp => comp.id === options.id)) {
       resolve('exist')
     } else {
       let $alert = new AlertController({
@@ -32,7 +32,7 @@ export function Message (options) {
   if (index === 1) {
     defOpts.status = 'question'
   }
-  Message[type] = function (message, title, options) {
+  Modal[type] = function (message, title, options) {
     let opts
     if (XEUtils.isObject(message)) {
       opts = message
@@ -41,14 +41,16 @@ export function Message (options) {
         opts = { title }
       }
     }
-    return Message(Object.assign({ message: XEUtils.toString(message), type }, defOpts, opts, options))
+    return Modal(Object.assign({ message: XEUtils.toString(message), type }, defOpts, opts, options))
   }
 })
 
-Message.install = function (Vue) {
-  Vue.component(VxeMessageBox.name, VxeMessageBox)
-  AlertController = Vue.extend(VxeMessageBox)
-  Vue.prototype.$XMsg = Message
+Modal.install = function (Vue) {
+  Vue.component('vxe-message', VXEModal)
+  Vue.component(VXEModal.name, VXEModal)
+  AlertController = Vue.extend(VXEModal)
+  Vue.prototype.$XMsg = Modal
+  Vue.prototype.$XModal = Modal
 }
 
-export default Message
+export default Modal

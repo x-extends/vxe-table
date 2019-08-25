@@ -94,7 +94,7 @@ export default {
               return rowIndex !== 1
             },
             editDisabledEvent ({ row, column }) {
-              this.$XMsg.alert('禁止编辑')
+              this.$XModal.alert('禁止编辑')
             }
           }
         }
@@ -161,7 +161,7 @@ export default {
       return column.property === 'age' && row.age < 26
     },
     editDisabledEvent ({ row, column }) {
-      this.$XMsg.alert('禁止编辑')
+      this.$XModal.alert('禁止编辑')
     }
   }
 }

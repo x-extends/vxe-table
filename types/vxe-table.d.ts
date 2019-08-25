@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import { Table } from './table';
 import { Icon } from './icon';
-import { Cell } from './cell';
 import { Column } from './column';
 import { Header } from './header';
 import { Body } from './body';
@@ -17,7 +16,7 @@ import { Checkbox } from './checkbox';
 import { Radio } from './radio';
 import { Input } from './input';
 import { Button } from './button';
-import { Message } from './message';
+import { Modal } from './modal';
 import { Export } from './export';
 import { Resize } from './resize';
 
@@ -119,7 +118,6 @@ export {
   VXETable,
   Table,
   Icon,
-  Cell,
   Column,
   Header,
   Body,
@@ -135,7 +133,7 @@ export {
   Radio,
   Input,
   Button,
-  Message,
+  Modal,
   Export,
   Resize
 }
