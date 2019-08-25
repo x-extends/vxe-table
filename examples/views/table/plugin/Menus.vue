@@ -52,7 +52,8 @@ export default {
         [
           {
             code: 'EXPORT_ALL',
-            name: '导出表格.csv'
+            name: '导出表格.csv',
+            prefixIcon: 'fa fa-download'
           }
         ]
       ],
@@ -115,7 +116,8 @@ export default {
         [
           {
             code: 'EXPORT_ALL',
-            name: '导出表格.csv'
+            name: '导出表格.csv',
+            prefixIcon: 'fa fa-download'
           }
         ]
       ],
@@ -159,7 +161,8 @@ export default {
                 [
                   {
                     code: 'EXPORT_ALL',
-                    name: '导出表格.csv'
+                    name: '导出表格.csv',
+                    prefixIcon: 'fa fa-download'
                   }
                 ]
               ],
@@ -222,7 +225,8 @@ export default {
                 [
                   {
                     code: 'EXPORT_ALL',
-                    name: '导出表格.csv'
+                    name: '导出表格.csv',
+                    prefixIcon: 'fa fa-download'
                   }
                 ]
               ]
