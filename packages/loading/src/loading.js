@@ -5,7 +5,7 @@ export default {
   },
   render (h) {
     return h('div', {
-      class: ['vxe-table--loading'],
+      class: 'vxe-table--loading',
       style: {
         display: this.visible ? 'block' : 'none'
       }
