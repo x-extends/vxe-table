@@ -17,15 +17,20 @@ export interface XModalOptions {
   id?: string,
   type?: string,
   status?: string,
-  top?: number,
+  top?: number | string,
   title?: string,
-  duration?: number,
+  duration?: number | string,
   message: string,
   lockView?: boolean,
   lockScroll?: boolean,
   mask?: boolean,
   maskClosable?: boolean,
-  zIndex?: number,
+  escClosable?: boolean,
+  resize: boolean,
+  width?: number | string,
+  height?: number | string,
+  zIndex?: number | string,
+  marginSize?: number | string,
   animat?: boolean
 }
 
