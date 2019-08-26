@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2>对话框</h2>
+    <h2>模态窗口</h2>
 
     <p>
       <vxe-button @click="$XModal.message({ message: '消息提示' })">消息提示</vxe-button>
@@ -19,18 +19,53 @@
     <p>
       <vxe-button @click="$XModal.alert({ message: '点击遮罩层可以关闭', maskClosable: true })">点击遮罩层可以关闭</vxe-button>
       <vxe-button @click="$XModal.alert({ message: '按 Esc 键可以关闭', escClosable: true })">按 Esc 键可以关闭</vxe-button>
-      <vxe-button @click="$XModal.alert({ message: '不要遮罩层', mask: false })">不要遮罩层</vxe-button>
-      <vxe-button @click="$XModal.alert({ message: '不锁界面', mask: false, lockView: false })">不锁界面</vxe-button>
+      <vxe-button @click="$XModal.alert({ message: '锁界面不要遮罩层', mask: false })">锁界面不要遮罩层</vxe-button>
+      <vxe-button @click="$XModal.alert({ message: '不锁界面不要遮罩层', lockView: false, mask: false })">不锁界面不要遮罩层</vxe-button>
     </p>
 
     <p>
-      <vxe-button @click="value1 = !value1">自定义模板</vxe-button>
-      <vxe-modal v-model="value1">
+      <vxe-button @click="value1 = !value1" lock-view>自定义模板</vxe-button>
+      <vxe-modal v-model="value1" :lock-scroll="false">
         <template>
-          <p style="color: red">自定义模板</p>
-          <p style="color: blue">11111111</p>
-          <p style="color: red">2222222222</p>
-          <p style="color: blue">333333333</p>
+          <vxe-table
+            height="auto"
+            :sync-resize="value1"
+            :data.sync="tableData">
+            <vxe-table-column type="index" width="60"></vxe-table-column>
+            <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
+            <vxe-table-column field="sex" title="app.body.label.sex"></vxe-table-column>
+            <vxe-table-column field="age" title="app.body.label.age"></vxe-table-column>
+          </vxe-table>
+        </template>
+      </vxe-modal>
+
+      <vxe-button @click="value2 = !value2">拖动调整大小</vxe-button>
+      <vxe-modal v-model="value2" resize>
+        <template>
+          <p style="color: red">按住头部移动！！！！！！！！！！！！！！！</p>
+          <p style="color: blue">按住左边距拖动！！！！！！！！！！！！！！！</p>
+          <p style="color: red">按住右边距拖动！！！！！！！！！！！！！！！</p>
+          <p style="color: blue">按住底边距拖动！！！！！！！！！！！！！！！</p>
+          <p style="color: blue">按住左下角拖动 ！！！！！！！！！！！！！！！</p>
+          <p style="color: blue">按住右下角拖动！！！！！！！！！！！！！！！</p>
+        </template>
+      </vxe-modal>
+
+      <vxe-button @click="value3 = !value3">完整功能的窗口</vxe-button>
+      <vxe-modal v-model="value3" title="支持拖动的表格" width="800" height="400" resize>
+        <template>
+          <vxe-table
+            border
+            resizable
+            auto-resize
+            height="auto"
+            :sync-resize="value3"
+            :data.sync="tableData">
+            <vxe-table-column type="index" width="60"></vxe-table-column>
+            <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
+            <vxe-table-column field="sex" title="app.body.label.sex"></vxe-table-column>
+            <vxe-table-column field="age" title="app.body.label.age"></vxe-table-column>
+          </vxe-table>
         </template>
       </vxe-modal>
     </p>
@@ -51,6 +86,8 @@ export default {
   data  () {
     return {
       value1: false,
+      value2: false,
+      value3: false,
       demoCodes: [
         `
         <p>
@@ -70,18 +107,53 @@ export default {
         <p>
           <vxe-button @click="$XModal.alert({ message: '点击遮罩层可以关闭', maskClosable: true })">点击遮罩层可以关闭</vxe-button>
           <vxe-button @click="$XModal.alert({ message: '按 Esc 键可以关闭', escClosable: true })">按 Esc 键可以关闭</vxe-button>
-          <vxe-button @click="$XModal.alert({ message: '不要遮罩层', mask: false })">不要遮罩层</vxe-button>
-          <vxe-button @click="$XModal.alert({ message: '不锁界面', mask: false, lockView: false })">不锁界面</vxe-button>
+          <vxe-button @click="$XModal.alert({ message: '锁界面不要遮罩层', mask: false })">锁界面不要遮罩层</vxe-button>
+          <vxe-button @click="$XModal.alert({ message: '不锁界面不要遮罩层', lockView: false, mask: false })">不锁界面不要遮罩层</vxe-button>
         </p>
 
         <p>
-          <vxe-button @click="value1 = !value1">自定义模板</vxe-button>
-          <vxe-modal v-model="value1">
+          <vxe-button @click="value1 = !value1" lock-view>自定义模板</vxe-button>
+          <vxe-modal v-model="value1" :lock-scroll="false">
             <template>
-              <p style="color: red">自定义模板</p>
-              <p style="color: blue">11111111</p>
-              <p style="color: red">2222222222</p>
-              <p style="color: blue">333333333</p>
+              <vxe-table
+                height="auto"
+                :sync-resize="value1"
+                :data.sync="tableData">
+                <vxe-table-column type="index" width="60"></vxe-table-column>
+                <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
+                <vxe-table-column field="sex" title="app.body.label.sex"></vxe-table-column>
+                <vxe-table-column field="age" title="app.body.label.age"></vxe-table-column>
+              </vxe-table>
+            </template>
+          </vxe-modal>
+
+          <vxe-button @click="value2 = !value2">拖动调整大小</vxe-button>
+          <vxe-modal v-model="value2" resize>
+            <template>
+              <p style="color: red">按住头部移动！！！！！！！！！！！！！！！</p>
+              <p style="color: blue">按住左边距拖动！！！！！！！！！！！！！！！</p>
+              <p style="color: red">按住右边距拖动！！！！！！！！！！！！！！！</p>
+              <p style="color: blue">按住底边距拖动！！！！！！！！！！！！！！！</p>
+              <p style="color: blue">按住左下角拖动 ！！！！！！！！！！！！！！！</p>
+              <p style="color: blue">按住右下角拖动！！！！！！！！！！！！！！！</p>
+            </template>
+          </vxe-modal>
+
+          <vxe-button @click="value3 = !value3">完整功能的窗口</vxe-button>
+          <vxe-modal v-model="value3" title="支持拖动的表格" width="800" height="400" resize>
+            <template>
+              <vxe-table
+                border
+                resizable
+                auto-resize
+                height="auto"
+                :sync-resize="value3"
+                :data.sync="tableData">
+                <vxe-table-column type="index" width="60"></vxe-table-column>
+                <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
+                <vxe-table-column field="sex" title="app.body.label.sex"></vxe-table-column>
+                <vxe-table-column field="age" title="app.body.label.age"></vxe-table-column>
+              </vxe-table>
             </template>
           </vxe-modal>
         </p>
@@ -90,13 +162,21 @@ export default {
         export default {
           data () {
             return {
-              value1: false
+              value1: false,
+              value2: false
+              value3: false
             }
+          },
+          created () {
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 8)
           }
         }
         `
       ]
     }
+  },
+  created () {
+    this.tableData = window.MOCK_DATA_LIST.slice(0, 8)
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {

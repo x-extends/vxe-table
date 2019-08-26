@@ -203,8 +203,10 @@ export default {
     columnKey: Boolean,
     rowKey: [Boolean, String],
     rowId: String,
-    // 是否自动根据父容器响应式调整表格宽高
+    // 是否自动监听父容器变化去更新响应式表格宽高
     autoResize: Boolean,
+    // 是否自动根据状态属性去更新响应式表格宽高
+    syncResize: Boolean,
     // 排序配置项
     sortConfig: Object,
     // 单选配置
@@ -511,6 +513,11 @@ export default {
     loading () {
       if (!this.isLoading) {
         this.isLoading = true
+      }
+    },
+    syncResize (value) {
+      if (value) {
+        this.$nextTick(this.recalculate)
       }
     }
   },

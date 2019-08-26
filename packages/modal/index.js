@@ -25,8 +25,7 @@ export function Modal (options) {
 ['alert', 'confirm', 'message'].forEach((type, index) => {
   let defOpts = index === 2 ? {
     mask: false,
-    lockView: false,
-    lockScroll: false
+    lockView: false
   } : {}
   defOpts.type = type
   if (index === 1) {

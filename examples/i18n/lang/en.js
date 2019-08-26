@@ -212,8 +212,8 @@ module.exports = {
           customs: 'Initialize the show/hide column (hide the column by default by setting visible to false)',
           height: 'Table height, supports adaptive or fixed width and height',
           maxHeight: 'Maximum height of the table',
-          autoResize: 'Whether to automatically listen to the parent container to adjust the table width and height in a responsive manner (this may be used if you need to automatically follow the parent container\'s height)',
-          resizable: 'Whether drag column width resizing is allowed for all columns',
+          autoResize: '是否自动监听父容器变化去更新响应式表格宽高（支持任意场景的响应式调整，但是会有额外的消耗，建议优先使用 sync-resize）',
+          syncResize: '是否自动根据状态属性去更新响应式表格宽高（如果表格本身被嵌入到隐藏容器中时，需要根据容器显示隐藏去自动调整宽高）',
           stripe: 'Whether with zebra stripes',
           border: 'Whether there is a vertical border',
           size: 'Table size',
@@ -399,7 +399,7 @@ module.exports = {
       msg: {
         desc: {
           value: 'Binding values',
-          id: '只对 type=message 有效，如果不想对话框重复点击，可以设置唯一的 id 防止重复提示',
+          id: '只对 type=message 有效，如果不想窗口重复点击，可以设置唯一的 id 防止重复提示',
           title: 'Message title (support internationalization)',
           type: 'Message type',
           status: '只对 type=message 有效，消息状态',
@@ -409,7 +409,10 @@ module.exports = {
           mask: 'Whether to display the mask layer',
           maskClosable: 'Click the mask layer to close the modal',
           escClosable: 'Whether Esc key is allowed to close the modal',
+          resize: '是否允许拖动调整窗口大小',
           duration: '只对 type=message 有效，自动关闭的延时',
+          width: '窗口的宽度',
+          height: '窗口的高度',
           top: '只对 type=message 有效，消息距离顶部的位置',
           zIndex: 'set style z-index'
         }

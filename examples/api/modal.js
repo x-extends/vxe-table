@@ -95,17 +95,41 @@ const apis = [
         list: []
       },
       {
+        name: 'resize',
+        descKey: 'app.api.msg.desc.resize',
+        type: 'Boolean',
+        enum: '',
+        defVal: 'false',
+        list: []
+      },
+      {
         name: 'duration',
         descKey: 'app.api.msg.desc.duration',
-        type: 'Number',
+        type: 'Number, String',
         enum: '',
         defVal: '3000',
         list: []
       },
       {
+        name: 'width',
+        descKey: 'app.api.msg.desc.width',
+        type: 'Number, String',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'height',
+        descKey: 'app.api.msg.desc.height',
+        type: 'Number, String',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'top',
         descKey: 'app.api.msg.desc.top',
-        type: 'Number',
+        type: 'Number, String',
         enum: '',
         defVal: '15',
         list: []
@@ -113,7 +137,7 @@ const apis = [
       {
         name: 'zIndex',
         descKey: 'app.api.msg.desc.zIndex',
-        type: 'Number',
+        type: 'Number, String',
         enum: '',
         defVal: '999',
         list: []
