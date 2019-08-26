@@ -97,6 +97,12 @@ export default {
         },
         {
           icon: 'vxe-icon--error'
+        },
+        {
+          icon: 'vxe-icon--zoomin'
+        },
+        {
+          icon: 'vxe-icon--zoomout'
         }
       ],
       demoCodes: [

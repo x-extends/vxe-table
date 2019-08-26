@@ -105,7 +105,7 @@ module.exports = {
         modal: 'Modal',
         tooltip: 'Tooltip',
 
-        other: 'Integrated component',
+        other: 'Integrating third-party libraries',
         elementRender: 'element-ui -> Cell',
         iviewRender: 'iview -> Cell',
         antd: 'ant-design-vue -> Cell',
@@ -113,7 +113,7 @@ module.exports = {
         sortablejsColumn: 'sortablejs -> column moving',
         xlsxRender: 'xlsx -> Export.xlsx',
 
-        plugin: 'The plugin list',
+        plugin: 'Plugins',
         elementPlugin: 'plugin-element Basic config',
         elementFilterPlugin: 'plugin-element Filter config',
         elementPluginMore: 'plugin-element More config',

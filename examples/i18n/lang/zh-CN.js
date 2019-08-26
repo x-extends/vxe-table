@@ -105,7 +105,7 @@ module.exports = {
         modal: '模态窗口',
         tooltip: '文字提示',
 
-        other: '集成组件库',
+        other: '集成第三方库',
         elementRender: 'element-ui -> 单元格',
         iviewRender: 'iview -> 单元格',
         antd: 'ant-design-vue -> 单元格',
@@ -113,7 +113,7 @@ module.exports = {
         sortablejsColumn: 'sortablejs -> 列拖拽',
         xlsxRender: 'xlsx -> 导出 xlsx',
 
-        plugin: '插件列表',
+        plugin: '插件库',
         elementPlugin: 'plugin-element 基本配置',
         elementFilterPlugin: 'plugin-element 筛选配置',
         elementPluginMore: 'plugin-element 更多配置',
