@@ -79,7 +79,6 @@ export interface XModal {
 
 declare module 'vue/types/vue' {
   interface Vue {
-    $XMsg: XModal,
     $XModal: XModal
   }
 }
