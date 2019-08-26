@@ -165,6 +165,14 @@ const apis = [
         list: []
       },
       {
+        name: 'sync-resize',
+        descKey: 'app.api.table.desc.syncResize',
+        type: 'Boolean',
+        enum: '',
+        defVal: 'false',
+        list: []
+      },
+      {
         name: 'resizable',
         descKey: 'app.api.table.desc.resizable',
         type: 'Boolean',

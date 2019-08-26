@@ -2,10 +2,21 @@
 @import './helpers/mixin.scss';
 @import './base/common.scss';
 
-%textEllipsis {
+%TextEllipsis {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+%CellEllipsis {
+  &:not(.col--actived) {
+    .vxe-cell {
+      @extend %TextEllipsis;
+      & > .vxe-checkbox {
+        @extend %TextEllipsis;
+      }
+    }
+  }
 }
 
 .vxe-table-hidden-column {
@@ -267,14 +278,14 @@
   .vxe-body--column,
   .vxe-footer--column {
     &.col--ellipsis {
-      &:not(.col--actived) {
-        .vxe-cell {
-          @extend %textEllipsis;
-          & > .vxe-checkbox {
-            @extend %textEllipsis;
-          }
-        }
-      }
+      @extend %CellEllipsis;
+    }
+  }
+  &.is--recalculate {
+    .vxe-header--column,
+    .vxe-body--column,
+    .vxe-footer--column {
+      @extend %CellEllipsis;
     }
   }
   .fixed--hidden {

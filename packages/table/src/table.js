@@ -178,8 +178,10 @@ export default {
     columnKey: Boolean,
     rowKey: Boolean,
     rowId: { type: String, default: () => GlobalConfig.rowId },
-    // 是否自动根据父容器响应式调整表格宽高
+    // 是否自动监听父容器变化去更新响应式表格宽高
     autoResize: Boolean,
+    // 是否自动根据状态属性去更新响应式表格宽高
+    syncResize: Boolean,
     // 排序配置项
     sortConfig: Object,
     // 单选配置
@@ -431,6 +433,11 @@ export default {
       if (!this._isLoading) {
         this._isLoading = true
       }
+    },
+    syncResize (value) {
+      if (value) {
+        this.$nextTick(this.recalculate)
+      }
     }
   },
   created () {
@@ -503,7 +510,7 @@ export default {
     GlobalEvent.on(this, 'contextmenu', this.handleGlobalContextmenuEvent)
   },
   mounted () {
-    if (GlobalConfig._resize) {
+    if (this.autoResize && GlobalConfig._resize) {
       this.bindResize(this, this.$el.parentNode, this.recalculate)
     }
     document.body.appendChild(this.$refs.tableWrapper)
@@ -1474,10 +1481,12 @@ export default {
      * 支持 width=? width=?px width=?% min-width=? min-width=?px min-width=?%
      */
     recalculate (refull) {
-      let { tableBody, tableHeader, tableFooter } = this.$refs
+      let { $el, $refs } = this
+      let { tableBody, tableHeader, tableFooter } = $refs
       let bodyElem = tableBody ? tableBody.$el : null
       let headerElem = tableHeader ? tableHeader.$el : null
       let footerElem = tableFooter ? tableFooter.$el : null
+      DomTools.addClass($el, 'is--recalculate')
       if (bodyElem) {
         this.autoCellWidth(headerElem, bodyElem, footerElem)
         if (refull === true) {
@@ -1485,9 +1494,11 @@ export default {
           return this.computeScrollLoad().then(() => {
             this.autoCellWidth(headerElem, bodyElem, footerElem)
             this.computeScrollLoad()
+            DomTools.removeClass($el, 'is--recalculate')
           })
         }
       }
+      DomTools.removeClass($el, 'is--recalculate')
       return this.computeScrollLoad()
     },
     // 列宽计算

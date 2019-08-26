@@ -49,13 +49,13 @@ const GlobalConfig = {
     jumpNext: 'vxe-icon--d-arrow-right',
     prevPage: 'vxe-icon--arrow-left',
     nextPage: 'vxe-icon--arrow-right',
-    msgClose: 'vxe-icon--close',
-    msgInfo: 'vxe-icon--info',
-    msgSuccess: 'vxe-icon--success',
-    msgWarning: 'vxe-icon--warning',
-    msgError: 'vxe-icon--error',
-    msgQuestion: 'vxe-icon--question',
-    msgLoading: 'vxe-icon--refresh roll',
+    modalClose: 'vxe-icon--close',
+    modalInfo: 'vxe-icon--info',
+    modalSuccess: 'vxe-icon--success',
+    modalWarning: 'vxe-icon--warning',
+    modalError: 'vxe-icon--error',
+    modalQuestion: 'vxe-icon--question',
+    modalLoading: 'vxe-icon--refresh roll',
     caretBottom: 'vxe-icon--caret-bottom',
     dropdownBottom: 'vxe-icon--arrow-bottom'
   },
@@ -84,9 +84,9 @@ const GlobalConfig = {
   message: {
     // zIndex: 999,
     lockView: true,
-    lockScroll: true,
     mask: true,
     duration: 3000,
+    marginSize: 10,
     animat: true
   },
   i18n: key => key
