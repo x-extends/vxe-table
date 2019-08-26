@@ -54,7 +54,7 @@ export default {
         [
           {
             code: 'EXPORT_ALL',
-            name: '导出表格.csv',
+            name: '导出数据.csv',
             prefixIcon: 'fa fa-download'
           }
         ]
@@ -112,13 +112,20 @@ export default {
               }
             ]
           }
+        ],
+        [
+          {
+            code: 'EXPORT_ALL',
+            name: '导出数据.csv',
+            prefixIcon: 'fa fa-download'
+          }
         ]
       ],
       footerMenus: [
         [
           {
             code: 'EXPORT_ALL',
-            name: '导出表格.csv',
+            name: '导出数据.csv',
             prefixIcon: 'fa fa-download'
           }
         ]
@@ -222,6 +229,13 @@ export default {
                         name: '清除排序'
                       }
                     ]
+                  }
+                ],
+                [
+                  {
+                    code: 'EXPORT_ALL',
+                    name: '导出数据.csv',
+                    prefixIcon: 'fa fa-download'
                   }
                 ]
               ],
