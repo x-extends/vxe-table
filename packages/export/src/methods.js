@@ -85,7 +85,7 @@ function getCsvUrl (opts, content) {
   return `data:attachment/csv;charset=utf-8,${encodeURIComponent(content)}`
 }
 
-const ExportMethods = {
+export default {
   /**
      * 导出 csv 文件
      * 如果是树表格，则默认是导出所有节点
@@ -121,5 +121,3 @@ const ExportMethods = {
     return downloadCsc(opts, getCsvContent(this, opts, columns, oData))
   }
 }
-
-export default ExportMethods

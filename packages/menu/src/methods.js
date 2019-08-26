@@ -2,7 +2,7 @@ import XEUtils from 'xe-utils'
 import { UtilTools, DomTools } from '../../tools'
 import { Menus } from '../../v-x-e-table'
 
-const contextMenuMethods = {
+export default {
   // 处理菜单的移动
   moveCtxMenu (evnt, keyCode, ctxMenuStore, property, operKey, operRest, menuList) {
     let selectItem
@@ -162,5 +162,3 @@ const contextMenuMethods = {
     }
   }
 }
-
-export default contextMenuMethods

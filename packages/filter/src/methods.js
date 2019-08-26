@@ -2,7 +2,7 @@ import XEUtils from 'xe-utils'
 import GlobalConfig from '../../conf'
 import { UtilTools, DomTools } from '../../tools'
 
-const filterMethods = {
+export default {
   filter (field, callback) {
     let column = this.getColumnByField(field)
     let filters = column.filters
@@ -131,5 +131,3 @@ const filterMethods = {
     return this.updateData()
   }
 }
-
-export default filterMethods

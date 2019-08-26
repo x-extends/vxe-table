@@ -1,6 +1,6 @@
 import Resize from './resize'
 
-const resizeMethods = {
+export default {
   bindResize () {
     Resize.on(this, this.$el.parentNode, this.recalculate)
   },
@@ -8,5 +8,3 @@ const resizeMethods = {
     Resize.off(this, this.$el.parentNode)
   }
 }
-
-export default resizeMethods

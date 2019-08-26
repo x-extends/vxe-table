@@ -1,7 +1,7 @@
 import XEUtils from 'xe-utils'
 import { UtilTools, DomTools } from '../../tools'
 
-const KeyboardMethods = {
+export default {
   // 处理 Tab 键移动
   moveTabSelected (args, evnt) {
     let { tableData, visibleColumn, editConfig, hasIndexColumn } = this
@@ -618,5 +618,3 @@ const KeyboardMethods = {
     }
   }
 }
-
-export default KeyboardMethods
