@@ -56,8 +56,9 @@
           Radio,
           Input,
           Button,
-          Message,
+          Modal,
           Export,
+          Keyboard,
           Resize
         } from 'vxe-table'
         import zhCNLocat from 'vxe-table/lib/locale/lang/zh-CN'
@@ -80,8 +81,9 @@
         Vue.use(Radio)
         Vue.use(Input)
         Vue.use(Button)
-        Vue.use(Message)
+        Vue.use(Modal)
         Vue.use(Export)
+        Vue.use(Keyboard)
         Vue.use(Resize)
 
         // 按需加载的方式默认是不带国际化的，需要自行导入
