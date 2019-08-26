@@ -48,7 +48,6 @@
           Loading,
           Tooltip,
           Grid,
-          Excel,
           Menu,
           Toolbar,
           Pager,
@@ -56,7 +55,6 @@
           Radio,
           Input,
           Button,
-          Message,
           Export,
           Keyboard,
           Resize
@@ -73,7 +71,6 @@
         Vue.use(Loading)
         Vue.use(Tooltip)
         Vue.use(Grid)
-        Vue.use(Excel)
         Vue.use(Menu)
         Vue.use(Toolbar)
         Vue.use(Pager)
@@ -81,7 +78,6 @@
         Vue.use(Radio)
         Vue.use(Input)
         Vue.use(Button)
-        Vue.use(Message)
         Vue.use(Export)
         Vue.use(Keyboard)
         Vue.use(Resize)
