@@ -1274,11 +1274,12 @@ export default {
      * 如果存在排序，继续处理
      */
     getTableData () {
-      let { tableFullData, afterFullData, tableData } = this
+      let { tableFullData, afterFullData, tableData, footerData } = this
       return {
         fullData: tableFullData.slice(0),
         visibleData: afterFullData.slice(0),
-        tableData: tableData.slice(0)
+        tableData: tableData.slice(0),
+        footerData: footerData.slice(0)
       }
     },
     handleDefault () {

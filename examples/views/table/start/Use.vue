@@ -55,6 +55,7 @@
           Radio,
           Input,
           Button,
+          Modal,
           Export,
           Keyboard,
           Resize
@@ -78,6 +79,7 @@
         Vue.use(Radio)
         Vue.use(Input)
         Vue.use(Button)
+        Vue.use(Modal)
         Vue.use(Export)
         Vue.use(Keyboard)
         Vue.use(Resize)
