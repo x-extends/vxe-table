@@ -3,17 +3,17 @@
     <h2>模态窗口</h2>
 
     <p>
-      <vxe-button @click="$XModal.message({ message: '消息提示' })">消息提示</vxe-button>
-      <vxe-button @click="$XModal.message({ message: '成功消息提示', status: 'success' })">成功消息提示</vxe-button>
-      <vxe-button @click="$XModal.message({ message: '失败消息提示', status: 'error' })">失败消息提示</vxe-button>
+      <vxe-button @click="$XModal.message({ message: '消息提示' })">消息提示框</vxe-button>
+      <vxe-button @click="$XModal.message({ message: '成功消息提示', status: 'success' })">成功消息提示框</vxe-button>
+      <vxe-button @click="$XModal.message({ message: '失败消息提示', status: 'error' })">失败消息提示框</vxe-button>
       <vxe-button @click="$XModal.message({ message: '不允许重复点击', id: 'unique1' })">不允许重复点击</vxe-button>
     </p>
 
     <p>
-      <vxe-button @click="$XModal.alert('基本提示框', '标题1')">基本提示</vxe-button>
-      <vxe-button @click="$XModal.alert({ message: '成功提示框', status: 'success' })">成功提示</vxe-button>
-      <vxe-button @click="$XModal.alert({ message: '失败提示框', title: 'app.body.msg.error', status: 'error' })">失败提示</vxe-button>
-      <vxe-button @click="$XModal.confirm('您确定要删除吗？')">确认提示</vxe-button>
+      <vxe-button @click="$XModal.alert('基本提示框', '标题1')">基本提示框</vxe-button>
+      <vxe-button @click="$XModal.alert({ message: '成功提示框', status: 'success' })">成功提示框</vxe-button>
+      <vxe-button @click="$XModal.alert({ message: '失败提示框', title: 'app.body.msg.error', status: 'error' })">失败提示框</vxe-button>
+      <vxe-button @click="$XModal.confirm('您确定要删除吗？')">确认提示框</vxe-button>
     </p>
 
     <p>
@@ -24,7 +24,7 @@
     </p>
 
     <p>
-      <vxe-button @click="value1 = !value1" lock-view>自定义模板</vxe-button>
+      <vxe-button @click="value1 = !value1">基本窗口</vxe-button>
       <vxe-modal v-model="value1" :lock-scroll="false">
         <template>
           <vxe-table
@@ -39,8 +39,8 @@
         </template>
       </vxe-modal>
 
-      <vxe-button @click="value2 = !value2">拖动调整大小</vxe-button>
-      <vxe-modal v-model="value2" resize>
+      <vxe-button @click="value2 = !value2">拖动窗口调整大小</vxe-button>
+      <vxe-modal v-model="value2" :show-footer="false" resize>
         <template>
           <p style="color: red">按住头部移动！！！！！！！！！！！！！！！</p>
           <p style="color: blue">按住左边距拖动！！！！！！！！！！！！！！！</p>
@@ -52,7 +52,7 @@
       </vxe-modal>
 
       <vxe-button @click="value3 = !value3">完整功能的窗口</vxe-button>
-      <vxe-modal v-model="value3" title="支持拖动的表格" width="800" height="400" resize>
+      <vxe-modal v-model="value3" title="支持拖动的表格" width="800" height="400" :show-footer="false" resize>
         <template>
           <vxe-table
             border
@@ -91,17 +91,17 @@ export default {
       demoCodes: [
         `
         <p>
-          <vxe-button @click="$XModal.message({ message: '消息提示' })">消息提示</vxe-button>
-          <vxe-button @click="$XModal.message({ message: '成功消息提示', status: 'success' })">成功消息提示</vxe-button>
-          <vxe-button @click="$XModal.message({ message: '失败消息提示', status: 'error' })">失败消息提示</vxe-button>
+          <vxe-button @click="$XModal.message({ message: '消息提示' })">消息提示框</vxe-button>
+          <vxe-button @click="$XModal.message({ message: '成功消息提示', status: 'success' })">成功消息提示框</vxe-button>
+          <vxe-button @click="$XModal.message({ message: '失败消息提示', status: 'error' })">失败消息提示框</vxe-button>
           <vxe-button @click="$XModal.message({ message: '不允许重复点击', id: 'unique1' })">不允许重复点击</vxe-button>
         </p>
 
         <p>
-          <vxe-button @click="$XModal.alert('基本提示框', '标题1')">基本提示</vxe-button>
-          <vxe-button @click="$XModal.alert({ message: '成功提示框', status: 'success' })">成功提示</vxe-button>
-          <vxe-button @click="$XModal.alert({ message: '失败提示框', title: 'app.body.msg.error', status: 'error' })">失败提示</vxe-button>
-          <vxe-button @click="$XModal.confirm('您确定要删除吗？')">确认提示</vxe-button>
+          <vxe-button @click="$XModal.alert('基本提示框', '标题1')">基本提示框</vxe-button>
+          <vxe-button @click="$XModal.alert({ message: '成功提示框', status: 'success' })">成功提示框</vxe-button>
+          <vxe-button @click="$XModal.alert({ message: '失败提示框', title: 'app.body.msg.error', status: 'error' })">失败提示框</vxe-button>
+          <vxe-button @click="$XModal.confirm('您确定要删除吗？')">确认提示框</vxe-button>
         </p>
 
         <p>
@@ -112,7 +112,7 @@ export default {
         </p>
 
         <p>
-          <vxe-button @click="value1 = !value1" lock-view>自定义模板</vxe-button>
+          <vxe-button @click="value1 = !value1">基本窗口</vxe-button>
           <vxe-modal v-model="value1" :lock-scroll="false">
             <template>
               <vxe-table
@@ -127,8 +127,8 @@ export default {
             </template>
           </vxe-modal>
 
-          <vxe-button @click="value2 = !value2">拖动调整大小</vxe-button>
-          <vxe-modal v-model="value2" resize>
+          <vxe-button @click="value2 = !value2">拖动窗口调整大小</vxe-button>
+          <vxe-modal v-model="value2" :show-footer="false" resize>
             <template>
               <p style="color: red">按住头部移动！！！！！！！！！！！！！！！</p>
               <p style="color: blue">按住左边距拖动！！！！！！！！！！！！！！！</p>
@@ -140,7 +140,7 @@ export default {
           </vxe-modal>
 
           <vxe-button @click="value3 = !value3">完整功能的窗口</vxe-button>
-          <vxe-modal v-model="value3" title="支持拖动的表格" width="800" height="400" resize>
+          <vxe-modal v-model="value3" title="支持拖动的表格" width="800" height="400" :show-footer="false" resize>
             <template>
               <vxe-table
                 border

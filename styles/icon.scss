@@ -15,6 +15,43 @@
   line-height: 1em;
 }
 
+.vxe-icon--zoomin {
+  width: 0.8em;
+  height: 0.8em;
+  margin: 0.1em;
+  border-width: 0.1em;
+  border-style: solid;
+  border-color: inherit;
+}
+
+.vxe-icon--zoomout {
+  @extend %DefaultWidthHeight;
+  position: relative;
+  &:before {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 0.7em;
+    height: 0.7em;
+    border-width: 0.1em;
+    border-style: solid;
+    border-color: inherit;
+  }
+  &:after {
+    content: "";
+    position: absolute;
+    left: 0.1em;
+    bottom: 0.1em;
+    width: 0.7em;
+    height: 0.7em;
+    border-width: 0.1em;
+    border-style: solid;
+    border-color: inherit;
+    background-color: #fff;
+  }
+}
+
 .vxe-icon--menu {
   width: 0.22em;
   height: 0.22em;
@@ -229,12 +266,12 @@
   }
   &:before {
     width: 1em;
-    border-bottom-width: 0.12em;
+    border-bottom-width: 0.1em;
     top: 0.45em;
   }
   &:after {
     height: 1em;
-    border-right-width: 0.12em;
+    border-right-width: 0.1em;
     left: 0.45em;
   }
 }

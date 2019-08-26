@@ -153,7 +153,15 @@ const apis = [
     list: [
       {
         name: '—',
-        desc: '对话框内容',
+        desc: '窗口内容模板',
+        type: '',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'footer',
+        desc: '窗口底部的模板',
         type: '',
         enum: '',
         defVal: '',
@@ -170,7 +178,7 @@ const apis = [
     list: [
       {
         name: 'show',
-        desc: '在对话框打开时会触发该事件',
+        desc: '在窗口打开时会触发该事件',
         type: '',
         enum: '',
         defVal: '',
@@ -178,7 +186,7 @@ const apis = [
       },
       {
         name: 'hide',
-        desc: '在对话框关闭时会触发该事件',
+        desc: '在窗口关闭时会触发该事件',
         type: '',
         enum: '',
         defVal: '',

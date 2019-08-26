@@ -51,6 +51,8 @@
             jumpNext: 'vxe-icon--d-arrow-right',
             prevPage: 'vxe-icon--arrow-left',
             nextPage: 'vxe-icon--arrow-right',
+            zoomIn: 'vxe-icon--zoomin',
+            zoomOut: 'vxe-icon--zoomout',
             modalClose: 'vxe-icon--close',
             modalInfo: 'vxe-icon--info',
             modalSuccess: 'vxe-icon--success',
