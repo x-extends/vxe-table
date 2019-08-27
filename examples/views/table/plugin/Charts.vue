@@ -103,10 +103,10 @@ export default {
           :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}}"
           :edit-config="{trigger: 'dblclick', mode: 'cell'}">
           <vxe-table-column type="index" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" sortable :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column field="nickname" title="Nickname" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column field="sex" title="sex" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="age" title="Age" sortable></vxe-table-column>
-          <vxe-table-column field="rate" title="Rate" sortable></vxe-table-column>
+          <vxe-table-column field="age" title="Age"></vxe-table-column>
+          <vxe-table-column field="rate" title="Rate"></vxe-table-column>
         </vxe-table>
         `,
         `
@@ -139,15 +139,28 @@ export default {
                 ],
                 [
                   {
-                    name: '图表工具',
+                    name: '创建图表',
+                    prefixIcon: 'fa fa-area-chart',
                     children: [
                       {
                         code: 'CHART_BAR_X',
-                        name: '横向柱状图'
+                        name: '横向柱状图',
+                        prefixIcon: 'fa fa-bar-chart'
                       },
                       {
                         code: 'CHART_BAR_Y',
-                        name: '纵向柱状图'
+                        name: '纵向柱状图',
+                        prefixIcon: 'fa fa-bar-chart'
+                      },
+                      {
+                        code: 'CHART_PIE',
+                        name: '饼图',
+                        prefixIcon: 'fa fa-pie-chart'
+                      },
+                      {
+                        code: 'CHART_LINE',
+                        name: '折线图',
+                        prefixIcon: 'fa fa-line-chart'
                       }
                     ]
                   }
