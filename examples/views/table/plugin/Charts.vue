@@ -5,15 +5,16 @@
     <vxe-table
       border
       resizable
-      highlight-hover-row
+      height="500"
       :data.sync="tableData"
+      :mouse-config="{ selected: true, checked: true }"
       :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}}"
       :edit-config="{trigger: 'dblclick', mode: 'cell'}">
       <vxe-table-column type="index" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" sortable :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="nickname" title="Nickname" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="sex" title="sex" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="age" title="Age" sortable></vxe-table-column>
-      <vxe-table-column field="rate" title="Rate" sortable></vxe-table-column>
+      <vxe-table-column field="age" title="Age"></vxe-table-column>
+      <vxe-table-column field="rate" title="Rate"></vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -37,22 +38,6 @@ export default {
           {
             code: 'HIDDEN_COLUMN',
             name: '隐藏'
-          },
-          {
-            code: 'RESET_COLUMN',
-            name: '取消隐藏'
-          },
-          {
-            code: 'RESET_ALL',
-            name: '重置个性化数据',
-            prefixIcon: 'fa fa-undo'
-          }
-        ],
-        [
-          {
-            code: 'EXPORT_ALL',
-            name: '导出数据.csv',
-            prefixIcon: 'fa fa-download'
           }
         ]
       ],
@@ -73,6 +58,34 @@ export default {
         ],
         [
           {
+            name: '创建图表',
+            prefixIcon: 'fa fa-area-chart',
+            children: [
+              {
+                code: 'CHART_BAR_X',
+                name: '横向柱状图',
+                prefixIcon: 'fa fa-bar-chart'
+              },
+              {
+                code: 'CHART_BAR_Y',
+                name: '纵向柱状图',
+                prefixIcon: 'fa fa-bar-chart'
+              },
+              {
+                code: 'CHART_PIE',
+                name: '饼图',
+                prefixIcon: 'fa fa-pie-chart'
+              },
+              {
+                code: 'CHART_LINE',
+                name: '折线图',
+                prefixIcon: 'fa fa-line-chart'
+              }
+            ]
+          }
+        ],
+        [
+          {
             code: 'EXPORT_ALL',
             name: '导出数据.csv',
             prefixIcon: 'fa fa-download'
@@ -84,17 +97,16 @@ export default {
         <vxe-table
           border
           resizable
-          highlight-hover-row
-          show-footer
-          :footer-method="footerMethod"
+          height="500"
           :data.sync="tableData"
-          :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}, footer: {options: footerMenus}}"
-          :edit-config="{trigger: 'click', mode: 'cell'}">
+          :mouse-config="{ selected: true, checked: true }"
+          :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}}"
+          :edit-config="{trigger: 'dblclick', mode: 'cell'}">
           <vxe-table-column type="index" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" sortable :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column field="nickname" title="Nickname" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column field="sex" title="sex" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="age" title="Age" sortable :filters="[{ data: [] }]" :filter-render="{name: 'input'}" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="rate" title="Rate" sortable></vxe-table-column>
+          <vxe-table-column field="age" title="Age"></vxe-table-column>
+          <vxe-table-column field="rate" title="Rate"></vxe-table-column>
         </vxe-table>
         `,
         `
@@ -107,22 +119,6 @@ export default {
                   {
                     code: 'HIDDEN_COLUMN',
                     name: '隐藏'
-                  },
-                  {
-                    code: 'RESET_COLUMN',
-                    name: '取消隐藏'
-                  },
-                  {
-                    code: 'RESET_ALL',
-                    name: '重置个性化数据',
-                    prefixIcon: 'fa fa-undo'
-                  }
-                ],
-                [
-                  {
-                    code: 'EXPORT_ALL',
-                    name: '导出表格.csv',
-                    prefixIcon: 'fa fa-download'
                   }
                 ]
               ],
@@ -143,6 +139,34 @@ export default {
                 ],
                 [
                   {
+                    name: '创建图表',
+                    prefixIcon: 'fa fa-area-chart',
+                    children: [
+                      {
+                        code: 'CHART_BAR_X',
+                        name: '横向柱状图',
+                        prefixIcon: 'fa fa-bar-chart'
+                      },
+                      {
+                        code: 'CHART_BAR_Y',
+                        name: '纵向柱状图',
+                        prefixIcon: 'fa fa-bar-chart'
+                      },
+                      {
+                        code: 'CHART_PIE',
+                        name: '饼图',
+                        prefixIcon: 'fa fa-pie-chart'
+                      },
+                      {
+                        code: 'CHART_LINE',
+                        name: '折线图',
+                        prefixIcon: 'fa fa-line-chart'
+                      }
+                    ]
+                  }
+                ],
+                [
+                  {
                     code: 'EXPORT_ALL',
                     name: '导出数据.csv',
                     prefixIcon: 'fa fa-download'
@@ -152,7 +176,7 @@ export default {
             }
           },
           created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 5)
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 50)
           }
         }
         `
@@ -160,7 +184,7 @@ export default {
     }
   },
   created () {
-    this.tableData = window.MOCK_DATA_LIST.slice(0, 5)
+    this.tableData = window.MOCK_DATA_LIST.slice(0, 50)
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
