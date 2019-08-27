@@ -9,6 +9,7 @@ import './highlight.js'
 import './element.js'
 import './iview.js'
 import './antd.js'
+import './echarts'
 import './xtable'
 
 Vue.component(TableAPILink.name, TableAPILink)

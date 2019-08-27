@@ -11,8 +11,11 @@
         <a href="https://github.com/xuliangzhan/vxe-table/stargazers">
           <img src="https://img.shields.io/github/stars/xuliangzhan/vxe-table.svg">
         </a>
-        <a class="link">
-          <img src="https://img.shields.io/npm/dm/vxe-table.svg?logo=github">
+        <a href="http://npm-stat.com/charts.html?package=vxe-table">
+          <img src="https://img.shields.io/npm/dm/vxe-table.svg">
+        </a>
+        <a href="https://github.com/xuliangzhan/vxe-table/blob/master/LICENSE">
+          <img src="https://img.shields.io/github/license/mashape/apistatus.svg">
         </a>
       </div>
       <div class="right">
@@ -978,9 +981,8 @@ export default {
             },
             {
               label: 'app.aside.nav.chartsPlugin',
-              disabled: true,
               locat: {
-                name: 'TableBasic'
+                name: 'TablePluginCharts'
               }
             },
             {

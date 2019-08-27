@@ -26,7 +26,7 @@ const contextMenuApi = [
       },
       {
         name: 'name',
-        desc: '菜单名称',
+        desc: '菜单名称（支持开启国际化）',
         type: 'String',
         enum: '',
         defVal: '',

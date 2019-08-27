@@ -360,6 +360,21 @@ export default {
     }
     return this.$nextTick()
   },
+  getMouseCheckeds () {
+    let { checked } = this.editStore
+    let { rowNodes = [] } = checked
+    let columns = []
+    let rows = []
+    if (rowNodes && rowNodes.length) {
+      rows = rowNodes.map(list => this.getRowNode(list[0].parentNode).item)
+      columns = rowNodes[0].map(cell => this.getColumnNode(cell).item)
+    }
+    return {
+      columns,
+      rows,
+      rowNodes
+    }
+  },
   /**
    * 处理所有选中
    */

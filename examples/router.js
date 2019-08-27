@@ -144,6 +144,7 @@ const TablePluginIviewPage = () => import(/* webpackChunkName: "plugin" */ './vi
 const TablePluginAntdConfig = () => import(/* webpackChunkName: "plugin" */ './views/table/plugin/AntdConfig.vue')
 const TablePluginAntdFilter = () => import(/* webpackChunkName: "plugin" */ './views/table/plugin/AntdFilter.vue')
 const TablePluginAntdPage = () => import(/* webpackChunkName: "plugin" */ './views/table/plugin/AntdPage.vue')
+const TablePluginCharts = () => import(/* webpackChunkName: "excel" */ './views/table/plugin/Charts.vue')
 const TablePluginRenderer = () => import(/* webpackChunkName: "excel" */ './views/table/plugin/Renderer.vue')
 const TablePluginMenus = () => import(/* webpackChunkName: "excel" */ './views/table/plugin/Menus.vue')
 const TablePluginExcel = () => import(/* webpackChunkName: "excel" */ './views/table/plugin/Excel.vue')
@@ -830,6 +831,11 @@ export default new Router({
       path: '/table/plugin/antdPage',
       name: 'TablePluginAntdPage',
       component: TablePluginAntdPage
+    },
+    {
+      path: '/table/plugin/charts',
+      name: 'TablePluginCharts',
+      component: TablePluginCharts
     },
     {
       path: '/table/plugin/renderer',

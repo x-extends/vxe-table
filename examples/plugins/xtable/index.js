@@ -30,17 +30,20 @@ import '../../../styles/index.scss'
 // import VXETablePluginExcel from '../../../../vxe-table-plugin-excel/index.js'
 // import VXETablePluginRenderer from '../../../../vxe-table-plugin-renderer/index.js'
 // import VXETablePluginMenus from '../../../../vxe-table-plugin-menus/index.js'
+// import VXETablePluginCharts from '../../../../vxe-table-plugin-charts/index.js'
 import VXETablePluginElement from 'vxe-table-plugin-element'
 import VXETablePluginIView from 'vxe-table-plugin-iview'
 import VXETablePluginAntd from 'vxe-table-plugin-antd'
 import VXETablePluginExcel from 'vxe-table-plugin-excel'
 import VXETablePluginRenderer from 'vxe-table-plugin-renderer'
 import VXETablePluginMenus from 'vxe-table-plugin-menus'
+import VXETablePluginCharts from 'vxe-table-plugin-charts'
 import 'vxe-table-plugin-element/dist/style.css'
 import 'vxe-table-plugin-iview/dist/style.css'
 import 'vxe-table-plugin-antd/dist/style.css'
 import 'vxe-table-plugin-excel/dist/style.css'
 import 'vxe-table-plugin-renderer/dist/style.css'
+import 'vxe-table-plugin-charts/dist/style.css'
 
 VXETable.setup({
   translate: key => key && key.indexOf('app.') > -1 ? i18n.t(key) : key, // 自动翻译以 app. 开头的键值
@@ -74,6 +77,7 @@ VXETable.use(VXETablePluginAntd)
 VXETable.use(VXETablePluginExcel)
 VXETable.use(VXETablePluginRenderer)
 VXETable.use(VXETablePluginMenus)
+VXETable.use(VXETablePluginCharts)
 
 VXETable.menus.add('exportCSV', (params, event) => {
   let { $table } = params

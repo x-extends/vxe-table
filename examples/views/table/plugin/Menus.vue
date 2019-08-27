@@ -67,7 +67,7 @@ export default {
           },
           {
             code: 'DELETE_ROW',
-            name: '删除'
+            name: 'app.body.label.delete'
           },
           {
             code: 'CLEAR_CELL',
@@ -76,7 +76,7 @@ export default {
         ],
         [
           {
-            name: '筛选',
+            name: 'app.body.label.filter',
             prefixIcon: 'fa fa-filter',
             children: [
               {
@@ -94,7 +94,7 @@ export default {
             ]
           },
           {
-            name: '排序',
+            name: 'app.body.label.sort',
             children: [
               {
                 code: 'SORT_ASC',
@@ -185,7 +185,7 @@ export default {
                   },
                   {
                     code: 'DELETE_ROW',
-                    name: '删除'
+                    name: 'app.body.label.delete'
                   },
                   {
                     code: 'CLEAR_CELL',
@@ -194,7 +194,7 @@ export default {
                 ],
                 [
                   {
-                    name: '筛选',
+                    name: 'app.body.label.filter',
                     prefixIcon: 'fa fa-filter',
                     children: [
                       {
@@ -212,7 +212,7 @@ export default {
                     ]
                   },
                   {
-                    name: '排序',
+                    name: 'app.body.label.sort',
                     children: [
                       {
                         code: 'SORT_ASC',

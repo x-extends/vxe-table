@@ -18,7 +18,8 @@ var list = window.MOCK_DATA_LIST = []
 var currTime = Date.now()
 var fullIndex = 0
 var size = 100000
-var nList = XEUtils.shuffle(['a', 'T', 'b', 'v', 'G', 'k', 'r', 'H', 'x', 'z', 'c', 'd', 'e', 'p', 'U', 'f', 's', 'N'])
+var nameList = XEUtils.shuffle(['a', 'T', 'b', 'v', 'G', 'k', 'r', 'H', 'x', 'z', 'c', 'd', 'e', 'p', 'U', 'f', 's', 'N'])
+var nickList = XEUtils.shuffle(['徐', '李', '雷', '赵', '马', '孙', '钱', '蒋', '老', '蔡', '吕', '项', '徐', '杨', '胡', '杜', '嬴', '叼'])
 function mockData () {
   let len = XEUtils.browse().msie ? 500 : 2000
   for (var index = 0; index < len; index++) {
@@ -53,8 +54,8 @@ function mockData () {
     let mDate = moment(currTime)
     list.push({
       id: fullIndex,
-      name: nList[fullIndex % 10] + nList[fullIndex % 5] + fullIndex,
-      nickname: (index % 4 === 0 ? '陈' : index % 3 === 0 ? '李' : '徐') + fullIndex,
+      name: nameList[fullIndex % 10] + nameList[fullIndex % 5] + fullIndex,
+      nickname: nickList[fullIndex % 10] + nickList[fullIndex % 5] + fullIndex,
       role: index % 2 === 0 ? '前端' : '后端',
       key: 'home.label.key' + Math.max(0, index % 2 === 0 ? index - 1 : index),
       language: index % 2 === 0 ? 'zh_CN' : 'en_US',

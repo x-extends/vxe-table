@@ -1,3 +1,5 @@
+import { UtilTools } from '../../tools'
+
 export default {
   name: 'VxeTableContextMenu',
   props: {
@@ -43,7 +45,7 @@ export default {
             }),
             h('span', {
               class: 'vxe-ctxmenu--link-content'
-            }, item.name),
+            }, UtilTools.getFuncText(item.name)),
             h('i', {
               class: ['vxe-ctxmenu--link-suffix', hasChild ? item.suffixIcon || 'suffix--haschild' : item.suffixIcon]
             })
@@ -79,7 +81,7 @@ export default {
                 }),
                 h('span', {
                   class: 'vxe-ctxmenu--link-content'
-                }, child.name)
+                }, UtilTools.getFuncText(child.name))
               ])
             ])
           })) : _e()
