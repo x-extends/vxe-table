@@ -1,7 +1,7 @@
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../conf'
 import Cell from '../../cell'
-import { Interceptor, Renderer, Menus } from '../../v-x-e-table'
+import VXETable, { Interceptor, Renderer, Menus } from '../../v-x-e-table'
 import { UtilTools, DomTools, ExportTools, GlobalEvent, ResizeEvent } from '../../tools'
 
 var rowUniqueId = 0
@@ -429,7 +429,7 @@ export default {
       return this.collectColumn.some(column => UtilTools.hasChildrenList(column))
     },
     hasTip () {
-      return GlobalConfig._tip
+      return VXETable._tooltip
     },
     visibleColumn () {
       return this.tableFullColumn ? this.tableFullColumn.filter(column => column.visible) : []
@@ -484,8 +484,8 @@ export default {
       }
       this.refreshColumn()
       this.handleData(true)
-      if (this._toolbar) {
-        this._toolbar.updateColumn(tableFullColumn)
+      if (this.$toolbar) {
+        this.$toolbar.updateColumn(tableFullColumn)
       }
       // 在 v2.0 中废弃
       if (tableFullColumn.length) {
@@ -1404,8 +1404,8 @@ export default {
           column.visible = true
         })
       }
-      if (this._toolbar) {
-        this._toolbar.updateSetting()
+      if (this.$toolbar) {
+        this.$toolbar.updateSetting()
       }
       return this.$nextTick()
     },
@@ -1651,8 +1651,8 @@ export default {
       this.visibleColumn.forEach(column => {
         column.resizeWidth = 0
       })
-      if (this._toolbar) {
-        this._toolbar.resetResizable()
+      if (this.$toolbar) {
+        this.$toolbar.resetResizable()
       }
       this.analyColumnWidth()
       return this.recalculate(true)
@@ -2896,6 +2896,14 @@ export default {
       checked.tColumns = []
       return this.$nextTick()
     },
+    getMouseCheckeds () {
+      let { checked } = this.editStore
+      let { rows, columns } = checked
+      return {
+        columns,
+        rows
+      }
+    },
     /**
      * 处理所有选中
      */
@@ -4049,7 +4057,7 @@ export default {
      *************************/
     // 与工具栏对接
     connect ({ toolbar }) {
-      this._toolbar = toolbar
+      this.$toolbar = toolbar
     },
     // 检查触发源是否属于目标节点
     getEventTargetNode: DomTools.getEventTargetNode

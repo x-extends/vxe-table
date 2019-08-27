@@ -326,8 +326,8 @@ export default {
         $table._lastResizeTime = Date.now()
         $table.analyColumnWidth()
         $table.recalculate(true)
-        if ($table._toolbar) {
-          $table._toolbar.updateResizable()
+        if ($table.$toolbar) {
+          $table.$toolbar.updateResizable()
         }
         UtilTools.emitEvent($table, 'resizable-change', [params])
       }

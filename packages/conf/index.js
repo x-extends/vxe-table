@@ -1,6 +1,3 @@
-// import XEUtils from 'xe-utils'
-// import zhCNLocat from '../lib/locale/lang/zh-CN'
-
 const GlobalConfig = {
   // showOverflow: null,
   // showHeaderOverflow: null,
@@ -87,8 +84,7 @@ const GlobalConfig = {
     marginSize: 10,
     animat: true
   },
-  i18n: key => key,
-  _tip: 0 // 是否按需加载了 tooltip
+  i18n: key => key
 }
 
 export default GlobalConfig
