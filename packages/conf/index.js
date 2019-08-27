@@ -1,10 +1,3 @@
-// _tip 是否导入了 Tooltip 模块
-// _export 是否导入了 Export 模块
-// _keyboard 是否导入了 Keyboard 模块
-// _filter 是否导入了 Filter 模块
-// _menu 是否导入了 Menu 模块
-// _resize 是否导入了 Resize 模块
-
 const GlobalConfig = {
   // showOverflow: null,
   // showHeaderOverflow: null,

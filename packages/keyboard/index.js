@@ -1,10 +1,10 @@
 import Table from '../table'
 import Methods from './src/methods'
-import GlobalConfig from '../conf'
+import VXETable from '../v-x-e-table'
 
 export const Keyboard = {
   install () {
-    GlobalConfig._keyboard = 1
+    VXETable._keyboard = 1
     Object.assign(Table.methods, Methods)
   }
 }

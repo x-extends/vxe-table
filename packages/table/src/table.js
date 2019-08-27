@@ -1,7 +1,7 @@
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../conf'
 import Cell from '../../cell'
-import { Interceptor, Renderer } from '../../v-x-e-table'
+import VXETable, { Interceptor, Renderer } from '../../v-x-e-table'
 import { UtilTools, DomTools, GlobalEvent } from '../../tools'
 
 var rowUniqueId = 0
@@ -354,7 +354,7 @@ export default {
       return this.collectColumn.some(column => UtilTools.hasChildrenList(column))
     },
     hasTip () {
-      return GlobalConfig._tip
+      return VXETable._tooltip
     },
     visibleColumn () {
       return this.tableFullColumn ? this.tableFullColumn.filter(column => column.visible) : []
@@ -409,8 +409,8 @@ export default {
       }
       this.refreshColumn()
       this.handleData(true)
-      if (this._toolbar) {
-        this._toolbar.updateColumn(tableFullColumn)
+      if (this.$toolbar) {
+        this.$toolbar.updateColumn(tableFullColumn)
       }
       // 在 v3.0 中废弃 prop、label
       if (tableFullColumn.length) {
@@ -483,10 +483,10 @@ export default {
     if (!UtilTools.getRowkey(this)) {
       UtilTools.error('vxe.error.rowIdEmpty')
     }
-    if (!GlobalConfig._keyboard && (this.keyboardConfig || this.mouseConfig)) {
+    if (!VXETable._keyboard && (this.keyboardConfig || this.mouseConfig)) {
       throw new Error(UtilTools.error('vxe.error.reqKeyboard'))
     }
-    if (!GlobalConfig._resize && this.autoResize) {
+    if (!VXETable._resize && this.autoResize) {
       throw new Error(UtilTools.error('vxe.error.reqResize'))
     }
     if (scrollY) {
@@ -510,7 +510,7 @@ export default {
     GlobalEvent.on(this, 'contextmenu', this.handleGlobalContextmenuEvent)
   },
   mounted () {
-    if (this.autoResize && GlobalConfig._resize) {
+    if (this.autoResize && VXETable._resize) {
       this.bindResize(this, this.$el.parentNode, this.recalculate)
     }
     document.body.appendChild(this.$refs.tableWrapper)
@@ -523,7 +523,7 @@ export default {
     if (tableWrapper && tableWrapper.parentNode) {
       tableWrapper.parentNode.removeChild(tableWrapper)
     }
-    if (GlobalConfig._resize) {
+    if (VXETable._resize) {
       this.unbindResize(this, this.$el.parentNode)
     }
     this.closeFilter()
@@ -727,7 +727,7 @@ export default {
       this.clearSelection()
       this.clearRowExpand()
       this.clearTreeExpand()
-      if (GlobalConfig._filter) {
+      if (VXETable._filter) {
         this.clearFilter()
       }
       if (this.keyboardConfig || this.mouseConfig) {
@@ -1348,8 +1348,8 @@ export default {
           column.visible = true
         })
       }
-      if (this._toolbar) {
-        this._toolbar.updateSetting()
+      if (this.$toolbar) {
+        this.$toolbar.updateSetting()
       }
       return this.$nextTick()
     },
@@ -1594,8 +1594,8 @@ export default {
       this.visibleColumn.forEach(column => {
         column.resizeWidth = 0
       })
-      if (this._toolbar) {
-        this._toolbar.resetResizable()
+      if (this.$toolbar) {
+        this.$toolbar.resetResizable()
       }
       this.analyColumnWidth()
       return this.recalculate(true)
@@ -3555,7 +3555,7 @@ export default {
      *************************/
     // 与工具栏对接
     connect ({ toolbar }) {
-      this._toolbar = toolbar
+      this.$toolbar = toolbar
     },
     // 检查触发源是否属于目标节点
     getEventTargetNode: DomTools.getEventTargetNode

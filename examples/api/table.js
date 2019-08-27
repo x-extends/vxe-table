@@ -1664,6 +1664,14 @@ const apis = [
         defVal: 'row',
         list: []
       },
+      // {
+      //   name: 'getMouseCheckeds()',
+      //   desc: '获取鼠标选中单元格的信息',
+      //   type: 'Array',
+      //   enum: '',
+      //   defVal: '',
+      //   list: []
+      // },
       {
         name: 'getVirtualScroller()',
         desc: '获取虚拟滚动相关状态',

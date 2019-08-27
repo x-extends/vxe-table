@@ -1,10 +1,10 @@
 import Table from '../table'
-import GlobalConfig from '../conf'
+import VXETable from '../v-x-e-table'
 import Methods from './src/methods'
 
 export const Resize = {
   install () {
-    GlobalConfig._resize = 1
+    VXETable._resize = 1
     Object.assign(Table.methods, Methods)
   }
 }

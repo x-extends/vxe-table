@@ -1,6 +1,7 @@
 import XEUtils from 'xe-utils'
 import VXEModal from './src/modal'
 import queue from './src/queue'
+import VXETable from '../v-x-e-table'
 
 var AlertController = null
 
@@ -53,6 +54,7 @@ export function Modal (options) {
 })
 
 Modal.install = function (Vue) {
+  VXETable._modal = 1
   Vue.component('vxe-message', VXEModal)
   Vue.component(VXEModal.name, VXEModal)
   AlertController = Vue.extend(VXEModal)

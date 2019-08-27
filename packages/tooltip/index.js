@@ -1,8 +1,8 @@
 import VxeTooltip from './src/tooltip'
-import GlobalConfig from '../conf'
+import VXETable from '../v-x-e-table'
 
 VxeTooltip.install = function (Vue) {
-  GlobalConfig._tip = 1
+  VXETable._tooltip = 1
   Vue.component(VxeTooltip.name, VxeTooltip)
 }
 

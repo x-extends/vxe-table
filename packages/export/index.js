@@ -1,10 +1,10 @@
 import Table from '../table'
-import GlobalConfig from '../conf'
+import VXETable from '../v-x-e-table'
 import Methods from './src/methods'
 
 export const Export = {
   install () {
-    GlobalConfig._export = 1
+    VXETable._export = 1
     Object.assign(Table.methods, Methods)
   }
 }
