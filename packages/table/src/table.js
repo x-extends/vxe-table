@@ -209,7 +209,9 @@ export default {
     // 优化配置项
     optimization: Object,
     // 额外的参数
-    params: Object
+    params: Object,
+    //自动声明未声明row参数
+    autoCreateData: { type: Boolean, default: false },
   },
   provide () {
     return {
@@ -755,6 +757,7 @@ export default {
       return this.$nextTick()
     },
     loadData (datas, notRefresh) {
+      if (this.autoCreateData) datas=this.initData(datas)
       let { height, maxHeight, editStore, optimizeOpts, recalculate } = this
       let { scrollY } = optimizeOpts
       let tableFullData = datas ? datas.slice(0) : []
@@ -942,6 +945,9 @@ export default {
         XEUtils.set(row, rowkey, getRowUniqueId())
       }
       return row
+    },
+    initData(datas){
+      return  XEUtils.isArray(datas)?XEUtils.clone(datas.map(this.defineField), true):[]
     },
     createData (records) {
       return this.$nextTick().then(() => records.map(this.defineField))
