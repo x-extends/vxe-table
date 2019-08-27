@@ -87,7 +87,7 @@ export default {
           },
           {
             code: 'filter',
-            name: '筛选',
+            name: 'app.body.label.filter',
             visible: true,
             disabled: false,
             children: [
@@ -107,7 +107,7 @@ export default {
           },
           {
             code: 'sort',
-            name: '排序',
+            name: 'app.body.label.sort',
             visible: true,
             disabled: false,
             children: [
@@ -210,7 +210,7 @@ export default {
                   },
                   {
                     code: 'filter',
-                    name: '筛选',
+                    name: 'app.body.label.filter',
                     visible: true,
                     disabled: false,
                     children: [
@@ -230,7 +230,7 @@ export default {
                   },
                   {
                     code: 'sort',
-                    name: '排序',
+                    name: 'app.body.label.sort',
                     visible: true,
                     disabled: false,
                     children: [

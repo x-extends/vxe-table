@@ -9,15 +9,21 @@ export function Modal (options) {
     if (options && options.id && queue.some(comp => comp.id === options.id)) {
       resolve('exist')
     } else {
-      let $alert = new AlertController({
+      let events = options.events || {}
+      options.events = Object.assign({}, events, {
+        close (params) {
+          if (events.close) {
+            events.close.call(this, params)
+          }
+          $modal.$destroy()
+          resolve(params)
+        }
+      })
+      let $modal = new AlertController({
         el: document.createElement('div'),
         propsData: options
       })
-      $alert._handleCustom = function (type) {
-        $alert.$destroy()
-        resolve(type)
-      }
-      setTimeout(() => $alert.open())
+      setTimeout(() => $modal.open())
     }
   })
 }

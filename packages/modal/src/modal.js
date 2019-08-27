@@ -26,7 +26,9 @@ export default {
     height: [Number, String],
     zIndex: { type: [Number, String], default: () => GlobalConfig.message.zIndex },
     marginSize: { type: [Number, String], default: GlobalConfig.message.marginSize },
-    animat: { type: Boolean, default: () => GlobalConfig.message.animat }
+    animat: { type: Boolean, default: () => GlobalConfig.message.animat },
+    slots: Object,
+    events: Object
   },
   data () {
     return {
@@ -67,6 +69,8 @@ export default {
   },
   render (h) {
     let {
+      $scopedSlots,
+      slots = {},
       vSize,
       type,
       resize,
@@ -88,6 +92,8 @@ export default {
       mask,
       isMsg
     } = this
+    let defaultSlot = $scopedSlots.default || slots.default
+    let footerSlot = $scopedSlots.footer || slots.footer
     return h('div', {
       class: ['vxe-modal--wrapper', `type--${type}`, {
         [`size--${vSize}`]: vSize,
@@ -149,11 +155,11 @@ export default {
           ]) : null,
           h('div', {
             class: 'vxe-modal--content'
-          }, this.$slots.default || (XEUtils.isFunction(message) ? message.call(this, h) : message))
+          }, defaultSlot ? defaultSlot.call(this, { $modal: this }, h) : (XEUtils.isFunction(message) ? message.call(this, h) : message))
         ]),
         showFooter ? h('div', {
           class: 'vxe-modal--footer'
-        }, this.$slots.footer || [
+        }, footerSlot ? footerSlot.call(this, { $modal: this }, h) : [
           type === 'confirm' ? h('vxe-button', {
             on: {
               click: this.cancelEvent
@@ -193,31 +199,37 @@ export default {
     },
     closeEvent (evnt) {
       let type = 'close'
-      this.$emit(type, evnt)
+      this.$emit(type, { type, $modal: this }, evnt)
       this.close(type)
     },
     confirmEvent (evnt) {
       let type = 'confirm'
-      this.$emit(type, evnt)
+      this.$emit(type, { type, $modal: this }, evnt)
       this.close(type)
     },
     cancelEvent (evnt) {
       let type = 'cancel'
-      this.$emit(type, evnt)
+      this.$emit(type, { type, $modal: this }, evnt)
       this.close(type)
     },
     open () {
-      let { duration, visible, _handleCustom, isMsg } = this
+      let { $listeners, events = {}, duration, visible, isMsg } = this
       if (!visible) {
+        let params = { type: 'show', $modal: this }
         this.visible = true
         this.contentVisible = false
+        if (!events.show) {
+          this.$emit('input', true)
+          this.$emit('show', params)
+        }
         setTimeout(() => {
           this.contentVisible = true
+          if (!$listeners.show && events.show) {
+            this.$nextTick(() => {
+              events.show.call(this, params)
+            })
+          }
         }, 10)
-        if (!_handleCustom) {
-          this.$emit('input', true)
-          this.$emit('show')
-        }
         if (isMsg) {
           this.addMsgQueue()
           setTimeout(this.close, XEUtils.toNumber(duration))
@@ -258,7 +270,7 @@ export default {
       })
     },
     close (type) {
-      let { visible, isMsg } = this
+      let { $listeners, events = {}, visible, isMsg } = this
       if (visible) {
         if (isMsg) {
           this.removeMsgQueue()
@@ -266,11 +278,12 @@ export default {
         this.contentVisible = false
         setTimeout(() => {
           this.visible = false
-          if (this._handleCustom) {
-            this._handleCustom(type)
-          } else {
+          let params = { type, $modal: this }
+          if ($listeners.close) {
             this.$emit('input', false)
-            this.$emit('hide', type)
+            this.$emit('hide', params)
+          } else if (events.close) {
+            events.close.call(this, params)
           }
         }, 200)
       }
@@ -281,9 +294,10 @@ export default {
       }
     },
     zoomInEvent (evnt) {
-      let { $refs, marginSize, zoomLocat } = this
+      let { $listeners, $refs, marginSize, zoomLocat, events = {} } = this
       let modalBoxElem = $refs.modalBox
       let { visibleHeight, visibleWidth } = DomTools.getDomNode()
+      let type = 'min'
       if (zoomLocat) {
         this.zoomLocat = null
         Object.assign(modalBoxElem.style, {
@@ -293,6 +307,7 @@ export default {
           height: `${zoomLocat.height}px`
         })
       } else {
+        type = 'max'
         this.zoomLocat = {
           top: modalBoxElem.offsetTop,
           left: modalBoxElem.offsetLeft,
@@ -305,6 +320,12 @@ export default {
           width: `${visibleWidth - marginSize * 2}px`,
           height: `${visibleHeight - marginSize * 2}px`
         })
+      }
+      let params = { type, $modal: this }
+      if ($listeners.zoom) {
+        this.$emit('zoom', params, evnt)
+      } else if (events.zoom) {
+        events.zoom.call(this, params, evnt)
       }
     },
     mousedownEvent (evnt) {
@@ -354,9 +375,9 @@ export default {
     },
     dragEvent (evnt) {
       evnt.preventDefault()
-      let type = evnt.target.dataset.type
-      let { marginSize } = this
-      let { visibleHeight, visibleWidth } = DomTools.getDomNode()
+      const { $listeners, marginSize, events = {} } = this
+      const { visibleHeight, visibleWidth } = DomTools.getDomNode()
+      const type = evnt.target.dataset.type
       const minWidth = 340
       const maxWidth = visibleWidth - 20
       const minHeight = 200
@@ -370,6 +391,7 @@ export default {
       const disY = evnt.clientY
       const offsetTop = modalBoxElem.offsetTop
       const offsetLeft = modalBoxElem.offsetLeft
+      const params = { type: 'resize', $modal: this }
       document.onmousemove = evnt => {
         evnt.preventDefault()
         let dragLeft
@@ -485,6 +507,11 @@ export default {
             break
         }
         modalBoxElem.className = modalBoxElem.className.replace(/\s?is--drag/, '') + ` is--drag`
+        if ($listeners.zoom) {
+          this.$emit('zoom', params, evnt)
+        } else if (events.zoom) {
+          events.zoom.call(this, params, evnt)
+        }
       }
       document.onmouseup = evnt => {
         document.onmousemove = demMousemove

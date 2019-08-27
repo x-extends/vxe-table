@@ -55,6 +55,22 @@ const apis = [
         list: []
       },
       {
+        name: 'showHeader',
+        descKey: 'app.api.msg.desc.showHeader',
+        type: 'Boolean',
+        enum: '',
+        defVal: 'true',
+        list: []
+      },
+      {
+        name: 'showFooter',
+        descKey: 'app.api.msg.desc.showFooter',
+        type: 'Boolean',
+        enum: '',
+        defVal: 'true',
+        list: []
+      },
+      {
         name: 'lock-view',
         descKey: 'app.api.msg.desc.lockView',
         type: 'Boolean',
@@ -179,7 +195,7 @@ const apis = [
       {
         name: 'show',
         desc: '在窗口打开时会触发该事件',
-        type: '',
+        type: '{type}',
         enum: '',
         defVal: '',
         list: []
@@ -187,7 +203,7 @@ const apis = [
       {
         name: 'hide',
         desc: '在窗口关闭时会触发该事件',
-        type: '',
+        type: '{type}',
         enum: '',
         defVal: '',
         list: []
@@ -195,7 +211,7 @@ const apis = [
       {
         name: 'confirm',
         desc: '点击确定按钮时会触发该事件',
-        type: '',
+        type: '{type}, event',
         enum: '',
         defVal: '',
         list: []
@@ -203,7 +219,15 @@ const apis = [
       {
         name: 'close',
         desc: '点击关闭按钮时会触发该事件',
-        type: '',
+        type: '{type}, event',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'zoom',
+        desc: '窗口缩放时会触发该事件',
+        type: '{type}, event',
         enum: '',
         defVal: '',
         list: []

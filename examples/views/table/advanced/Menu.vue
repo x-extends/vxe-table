@@ -63,7 +63,7 @@ export default {
         [
           {
             code: 'copy',
-            name: '复制',
+            name: 'app.body.label.copy',
             prefixIcon: 'fa fa-copy'
           }
         ],
@@ -74,7 +74,7 @@ export default {
           },
           {
             code: 'filter',
-            name: '筛选',
+            name: 'app.body.label.filter',
             children: [
               {
                 code: 'clearFilter',
@@ -88,7 +88,7 @@ export default {
           },
           {
             code: 'sort',
-            name: '排序',
+            name: 'app.body.label.sort',
             children: [
               {
                 code: 'clearSort',
@@ -157,7 +157,7 @@ export default {
                 [
                   {
                     code: 'copy',
-                    name: '复制',
+                    name: 'app.body.label.copy',
                     prefixIcon: 'fa fa-copy'
                   }
                 ],
@@ -168,7 +168,7 @@ export default {
                   },
                   {
                     code: 'filter',
-                    name: '筛选',
+                    name: 'app.body.label.filter',
                     children: [
                       {
                         code: 'clearFilter',
@@ -182,7 +182,7 @@ export default {
                   },
                   {
                     code: 'sort',
-                    name: '排序',
+                    name: 'app.body.label.sort',
                     children: [
                       {
                         code: 'clearSort',

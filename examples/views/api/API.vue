@@ -118,7 +118,7 @@ export default {
         [
           {
             code: 'copy',
-            name: '复制内容',
+            name: 'app.body.label.copy',
             prefixIcon: 'fa fa-copy'
           }
         ],
