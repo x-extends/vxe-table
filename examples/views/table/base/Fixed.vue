@@ -8,7 +8,7 @@
     <vxe-table
       border
       show-overflow
-      :data.sync="tableData">
+      :data="tableData">
       <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
       <vxe-table-column field="name" title="Name" width="300"></vxe-table-column>
       <vxe-table-column field="role" title="Role" width="300"></vxe-table-column>
@@ -29,7 +29,7 @@
     <vxe-table
       border
       show-overflow
-      :data.sync="tableData">
+      :data="tableData">
       <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
       <vxe-table-column field="role" title="Role"></vxe-table-column>
@@ -59,7 +59,7 @@ export default {
         <vxe-table
           border
           show-overflow
-          :data.sync="tableData">
+          :data="tableData">
           <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
           <vxe-table-column field="name" title="Name" width="300"></vxe-table-column>
           <vxe-table-column field="role" title="Role" width="300"></vxe-table-column>
@@ -84,7 +84,7 @@ export default {
         <vxe-table
           border
           show-overflow
-          :data.sync="tableData">
+          :data="tableData">
           <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
           <vxe-table-column field="role" title="Role"></vxe-table-column>

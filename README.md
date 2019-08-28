@@ -230,7 +230,7 @@ new Vue({ i18n }).$mount('#app')
 ```html
 <template>
   <div>
-    <vxe-table :data.sync="tableData">
+    <vxe-table :data="tableData">
       <vxe-table-column type="index" title="Number" width="80"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>

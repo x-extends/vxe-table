@@ -3,7 +3,7 @@
     <p class="tip"><table-api-link name="vxe-table"/> 静态化表格，基于模板方式使用简单、便捷</p>
 
     <vxe-table
-      :data.sync="tableData">
+      :data="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
       <vxe-table-column field="sex" title="app.body.label.sex"></vxe-table-column>
@@ -21,7 +21,7 @@
 
     <vxe-table
       highlight-hover-row
-      :data.sync="tableData">
+      :data="tableData">
       <vxe-table-column type="index" title="序号" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -48,7 +48,7 @@ export default {
       demoCodes: [
         `
         <vxe-table
-          :data.sync="tableData">
+          :data="tableData">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
           <vxe-table-column field="sex" title="app.body.label.sex"></vxe-table-column>
@@ -70,7 +70,7 @@ export default {
         `
         <vxe-table
           highlight-hover-row
-          :data.sync="tableData">
+          :data="tableData">
           <vxe-table-column type="index" title="序号" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>

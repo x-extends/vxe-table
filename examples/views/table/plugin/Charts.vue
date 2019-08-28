@@ -13,9 +13,13 @@
       :edit-config="{trigger: 'dblclick', mode: 'cell'}">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column field="nickname" title="Nickname" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="sex" title="sex" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="age" title="Age" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="rate" title="Rate" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="num" title="Num" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="num1" title="Num1" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="num2" title="Num2" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="num3" title="Num3" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="num4" title="Num4" :edit-render="{name: 'input'}"></vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -64,23 +68,55 @@ export default {
             children: [
               {
                 code: 'CHART_BAR_X_AXIS',
-                name: '横向柱状图',
+                name: '横向柱状图 - 自由选择',
+                prefixIcon: 'fa fa-bar-chart'
+              },
+              {
+                code: 'CHART_BAR_X_AXIS',
+                name: '横向柱状图 - 固定类别',
+                prefixIcon: 'fa fa-bar-chart',
+                params: {
+                  category: 'nickname'
+                }
+              },
+              {
+                code: 'CHART_BAR_Y_AXIS',
+                name: '纵向柱状图 - 自由选择',
                 prefixIcon: 'fa fa-bar-chart'
               },
               {
                 code: 'CHART_BAR_Y_AXIS',
-                name: '纵向柱状图',
-                prefixIcon: 'fa fa-bar-chart'
-              },
-              {
-                code: 'CHART_PIE',
-                name: '饼图',
-                prefixIcon: 'fa fa-pie-chart'
+                name: '纵向柱状图 - 固定类别',
+                prefixIcon: 'fa fa-bar-chart',
+                params: {
+                  category: 'nickname'
+                }
               },
               {
                 code: 'CHART_LINE',
-                name: '折线图',
+                name: '折线图 - 自由选择',
                 prefixIcon: 'fa fa-line-chart'
+              },
+              {
+                code: 'CHART_LINE',
+                name: '折线图 - 固定类别',
+                prefixIcon: 'fa fa-line-chart',
+                params: {
+                  category: 'nickname'
+                }
+              },
+              {
+                code: 'CHART_PIE',
+                name: '饼图 - 自由选择',
+                prefixIcon: 'fa fa-pie-chart'
+              },
+              {
+                code: 'CHART_PIE',
+                name: '饼图 - 固定类别',
+                prefixIcon: 'fa fa-pie-chart',
+                params: {
+                  category: 'nickname'
+                }
               }
             ]
           }
@@ -106,9 +142,13 @@ export default {
           :edit-config="{trigger: 'dblclick', mode: 'cell'}">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="nickname" title="Nickname" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="sex" title="sex" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column field="age" title="Age" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column field="rate" title="Rate" :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column field="num" title="Num" :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column field="num1" title="Num1" :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column field="num2" title="Num2" :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column field="num3" title="Num3" :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column field="num4" title="Num4" :edit-render="{name: 'input'}"></vxe-table-column>
         </vxe-table>
         `,
         `
@@ -146,23 +186,55 @@ export default {
                     children: [
                       {
                         code: 'CHART_BAR_X_AXIS',
-                        name: '横向柱状图',
+                        name: '横向柱状图 - 自由选择',
+                        prefixIcon: 'fa fa-bar-chart'
+                      },
+                      {
+                        code: 'CHART_BAR_X_AXIS',
+                        name: '横向柱状图 - 固定类别',
+                        prefixIcon: 'fa fa-bar-chart',
+                        params: {
+                          category: 'nickname'
+                        }
+                      },
+                      {
+                        code: 'CHART_BAR_Y_AXIS',
+                        name: '纵向柱状图 - 自由选择',
                         prefixIcon: 'fa fa-bar-chart'
                       },
                       {
                         code: 'CHART_BAR_Y_AXIS',
-                        name: '纵向柱状图',
-                        prefixIcon: 'fa fa-bar-chart'
-                      },
-                      {
-                        code: 'CHART_PIE',
-                        name: '饼图',
-                        prefixIcon: 'fa fa-pie-chart'
+                        name: '纵向柱状图 - 固定类别',
+                        prefixIcon: 'fa fa-bar-chart',
+                        params: {
+                          category: 'nickname'
+                        }
                       },
                       {
                         code: 'CHART_LINE',
-                        name: '折线图',
+                        name: '折线图 - 自由选择',
                         prefixIcon: 'fa fa-line-chart'
+                      },
+                      {
+                        code: 'CHART_LINE',
+                        name: '折线图 - 固定类别',
+                        prefixIcon: 'fa fa-line-chart',
+                        params: {
+                          category: 'nickname'
+                        }
+                      },
+                      {
+                        code: 'CHART_PIE',
+                        name: '饼图 - 自由选择',
+                        prefixIcon: 'fa fa-pie-chart'
+                      },
+                      {
+                        code: 'CHART_PIE',
+                        name: '饼图 - 固定类别',
+                        prefixIcon: 'fa fa-pie-chart',
+                        params: {
+                          category: 'nickname'
+                        }
                       }
                     ]
                   }

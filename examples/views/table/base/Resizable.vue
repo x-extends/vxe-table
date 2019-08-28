@@ -4,7 +4,7 @@
 
     <vxe-table
       resizable
-      :data.sync="tableData">
+      :data="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -27,7 +27,7 @@
       resizable
       show-header-overflow
       highlight-hover-row
-      :data.sync="tableData">
+      :data="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" width="300"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex" width="300"></vxe-table-column>
@@ -48,7 +48,7 @@
     <vxe-table
       border
       resizable
-      :data.sync="tableData">
+      :data="tableData">
       <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
       <vxe-table-column field="name" title="Name" width="100" fixed="left"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex" width="100" fixed="left"></vxe-table-column>
@@ -73,7 +73,7 @@
     <vxe-table
       border
       resizable
-      :data.sync="tableData">
+      :data="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" width="200"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex" width="200"></vxe-table-column>
@@ -101,7 +101,7 @@
       resizable
       show-overflow
       show-header-overflow
-      :data.sync="tableData">
+      :data="tableData">
       <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
       <vxe-table-column field="name" title="Name" width="100" fixed="left"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex" width="100" fixed="left"></vxe-table-column>
@@ -127,7 +127,7 @@
     <vxe-table
       border
       resizable
-      :data.sync="tableData">
+      :data="tableData">
       <vxe-table-column title="基本信息">
         <vxe-table-column type="index" width="60"></vxe-table-column>
         <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -155,7 +155,7 @@
     <vxe-table
       border
       resizable
-      :data.sync="tableData">
+      :data="tableData">
       <vxe-table-column title="基本信息">
         <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
         <vxe-table-column field="name" title="Name" fixed="left" width="100"></vxe-table-column>
@@ -194,7 +194,7 @@ export default {
         `
         <vxe-table
           resizable
-          :data.sync="tableData">
+          :data="tableData">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -221,7 +221,7 @@ export default {
           resizable
           show-header-overflow
           highlight-hover-row
-          :data.sync="tableData">
+          :data="tableData">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" width="300"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" width="300"></vxe-table-column>
@@ -246,7 +246,7 @@ export default {
         <vxe-table
           border
           resizable
-          :data.sync="tableData">
+          :data="tableData">
           <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
           <vxe-table-column field="name" title="Name" width="100" fixed="left"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" width="100" fixed="left"></vxe-table-column>
@@ -275,7 +275,7 @@ export default {
         <vxe-table
           border
           resizable
-          :data.sync="tableData">
+          :data="tableData">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" width="200"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" width="200"></vxe-table-column>
@@ -307,7 +307,7 @@ export default {
           resizable
           show-overflow
           show-header-overflow
-          :data.sync="tableData">
+          :data="tableData">
           <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
           <vxe-table-column field="name" title="Name" width="100" fixed="left"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" width="100" fixed="left"></vxe-table-column>
@@ -337,7 +337,7 @@ export default {
         <vxe-table
           border
           resizable
-          :data.sync="tableData">
+          :data="tableData">
           <vxe-table-column title="基本信息">
             <vxe-table-column type="index" width="60"></vxe-table-column>
             <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -369,7 +369,7 @@ export default {
         <vxe-table
           border
           resizable
-          :data.sync="tableData">
+          :data="tableData">
           <vxe-table-column title="基本信息">
             <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
             <vxe-table-column field="name" title="Name" fixed="left" width="100"></vxe-table-column>

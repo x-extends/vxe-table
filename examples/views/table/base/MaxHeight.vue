@@ -6,7 +6,7 @@
       border
       highlight-hover-row
       max-height="200"
-      :data.sync="tableData">
+      :data="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
       <vxe-table-column field="sex" title="Sex" align="center"></vxe-table-column>
@@ -27,7 +27,7 @@
       border
       highlight-hover-row
       max-height="200"
-      :data.sync="tableData2">
+      :data="tableData2">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -49,7 +49,7 @@
         border
         highlight-hover-row
         max-height="100%"
-        :data.sync="tableData">
+        :data="tableData">
         <vxe-table-column type="index" width="60"></vxe-table-column>
         <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
         <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -81,7 +81,7 @@ export default {
           border
           highlight-hover-row
           max-height="200"
-          :data.sync="tableData">
+          :data="tableData">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" align="center"></vxe-table-column>
@@ -106,7 +106,7 @@ export default {
           border
           highlight-hover-row
           max-height="200"
-          :data.sync="tableData2">
+          :data="tableData2">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -132,7 +132,7 @@ export default {
             border
             highlight-hover-row
             max-height="100%"
-            :data.sync="tableData">
+            :data="tableData">
             <vxe-table-column type="index" width="60"></vxe-table-column>
             <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
             <vxe-table-column field="sex" title="Sex"></vxe-table-column>

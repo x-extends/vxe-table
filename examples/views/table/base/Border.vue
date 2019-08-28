@@ -4,7 +4,7 @@
 
     <vxe-table
       border
-      :data.sync="tableData">
+      :data="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -32,7 +32,7 @@ export default {
         `
         <vxe-table
           border
-          :data.sync="tableData">
+          :data="tableData">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>

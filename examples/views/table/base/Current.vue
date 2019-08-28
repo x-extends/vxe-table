@@ -16,7 +16,7 @@
       highlight-current-row
       ref="xTable"
       height="300"
-      :data.sync="tableData"
+      :data="tableData"
       @current-change="currentChangeEvent">
       <vxe-table-column field="name" title="Name"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -56,7 +56,7 @@ export default {
           highlight-current-row
           ref="xTable"
           height="300"
-          :data.sync="tableData"
+          :data="tableData"
           @current-change="currentChangeEvent">
           <vxe-table-column field="name" title="Name"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>

@@ -8,7 +8,7 @@
       :header-cell-class-name="headerCellClassName"
       :row-class-name="rowClassName"
       :cell-class-name="cellClassName"
-      :data.sync="tableData">
+      :data="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -31,7 +31,7 @@
       border
       class="mytable-style"
       :cell-class-name="cellClassName2"
-      :data.sync="tableData"
+      :data="tableData"
       @cell-click="cellClickEvent2">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -68,7 +68,7 @@ export default {
           :header-cell-class-name="headerCellClassName"
           :row-class-name="rowClassName"
           :cell-class-name="cellClassName"
-          :data.sync="tableData">
+          :data="tableData">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -135,7 +135,7 @@ export default {
           border
           class="mytable-style"
           :cell-class-name="cellClassName"
-          :data.sync="tableData"
+          :data="tableData"
           @cell-click="cellClickEvent">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
