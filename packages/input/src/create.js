@@ -12,7 +12,7 @@ export default function (compName) {
       maxlength,
       autocomplete
     }
-  } : ({ name, readonly, disabled, maxlength, autocomplete, rows, resize }) => {
+  } : ({ name, readonly, disabled, maxlength, autocomplete, rows, form }) => {
     return {
       name,
       readonly,
@@ -20,7 +20,7 @@ export default function (compName) {
       maxlength,
       autocomplete,
       rows,
-      resize
+      form
     }
   }
   return {
@@ -35,7 +35,7 @@ export default function (compName) {
       placeholder: String,
       maxlength: [String, Number],
       rows: { type: [String, Number], default: 2 },
-      resize: String,
+      form: String,
       size: String
     },
     computed: {
