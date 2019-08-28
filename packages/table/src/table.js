@@ -1895,7 +1895,7 @@ export default {
           this.clearActived(evnt)
           // 如果配置了选中功能，则为选中状态
           if (mouseConfig.selected) {
-            this.handleSelected(params, evnt)
+            this.$nextTick(() => this.handleSelected(params, evnt))
           }
         }
       } else if (isEnter && (keyboardConfig.isArrow || keyboardConfig.isTab) && (selected.row || actived.row || (treeConfig && highlightCurrentRow && currentRow))) {

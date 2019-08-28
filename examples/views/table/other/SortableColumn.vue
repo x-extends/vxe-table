@@ -97,33 +97,33 @@ export default {
           methods: {
             columnDrop () {
               this.$nextTick(() => {
-                let xTable = this.$refs.xTable
-                this.sortable = Sortable.create(xTable.$el.querySelector('.body--wrapper>.vxe-table--header .vxe-header--row'), {
-                  handle: '.vxe-header--column:not(.col--fixed)',
-                  onEnd: ({ newIndex, oldIndex }) => {
-                    let { fullColumn, tableColumn } = xTable.getTableColumn()
-                    let targetThElem = item
-                    let wrapperElem = targetThElem.parentNode
-                    let newColumn = fullColumn[newIndex]
-                    if (newColumn.fixed) {
-                      // 错误的移动
-                      if (newIndex > oldIndex) {
-                        wrapperElem.insertBefore(targetThElem, wrapperElem.children[oldIndex])
-                      } else {
-                        wrapperElem.insertBefore(wrapperElem.children[oldIndex], targetThElem)
-                      }
-                      return this.$XModal.message({ message: '固定列不允许拖动！', status: 'error' })
+              let xTable = this.$refs.xTable
+              this.sortable = Sortable.create(xTable.$el.querySelector('.body--wrapper>.vxe-table--header .vxe-header--row'), {
+                handle: '.vxe-header--column:not(.col--fixed)',
+                onEnd: ({ item, newIndex, oldIndex }) => {
+                  let { fullColumn, tableColumn } = xTable.getTableColumn()
+                  let targetThElem = item
+                  let wrapperElem = targetThElem.parentNode
+                  let newColumn = fullColumn[newIndex]
+                  if (newColumn.fixed) {
+                    // 错误的移动
+                    if (newIndex > oldIndex) {
+                      wrapperElem.insertBefore(targetThElem, wrapperElem.children[oldIndex])
+                    } else {
+                      wrapperElem.insertBefore(wrapperElem.children[oldIndex], targetThElem)
                     }
-                    // 转换真实索引
-                    let oldColumnIndex = xTable.getColumnIndex(tableColumn[oldIndex])
-                    let newColumnIndex = xTable.getColumnIndex(tableColumn[newIndex])
-                    // 移动到目标列
-                    let currRow = fullColumn.splice(oldColumnIndex, 1)[0]
-                    fullColumn.splice(newColumnIndex, 0, currRow)
-                    xTable.loadColumn(fullColumn)
+                    return this.$XModal.message({ message: '固定列不允许拖动！', status: 'error' })
                   }
-                })
+                  // 转换真实索引
+                  let oldColumnIndex = xTable.getColumnIndex(tableColumn[oldIndex])
+                  let newColumnIndex = xTable.getColumnIndex(tableColumn[newIndex])
+                  // 移动到目标列
+                  let currRow = fullColumn.splice(oldColumnIndex, 1)[0]
+                  fullColumn.splice(newColumnIndex, 0, currRow)
+                  xTable.loadColumn(fullColumn)
+                }
               })
+            })
             }
           }
         }
@@ -197,33 +197,33 @@ export default {
             },
             columnDrop () {
               this.$nextTick(() => {
-                let xTable = this.$refs.xTable
-                this.sortable = Sortable.create(xTable.$el.querySelector('.body--wrapper>.vxe-table--header .vxe-header--row'), {
-                  handle: '.vxe-header--column:not(.col--fixed)',
-                  onEnd: ({ newIndex, oldIndex }) => {
-                    let { fullColumn, tableColumn } = xTable.getTableColumn()
-                    let targetThElem = item
-                    let wrapperElem = targetThElem.parentNode
-                    let newColumn = fullColumn[newIndex]
-                    if (newColumn.fixed) {
-                      // 错误的移动
-                      if (newIndex > oldIndex) {
-                        wrapperElem.insertBefore(targetThElem, wrapperElem.children[oldIndex])
-                      } else {
-                        wrapperElem.insertBefore(wrapperElem.children[oldIndex], targetThElem)
-                      }
-                      return this.$XModal.message({ message: '固定列不允许拖动！', status: 'error' })
+              let xTable = this.$refs.xTable
+              this.sortable = Sortable.create(xTable.$el.querySelector('.body--wrapper>.vxe-table--header .vxe-header--row'), {
+                handle: '.vxe-header--column:not(.col--fixed)',
+                onEnd: ({ item, newIndex, oldIndex }) => {
+                  let { fullColumn, tableColumn } = xTable.getTableColumn()
+                  let targetThElem = item
+                  let wrapperElem = targetThElem.parentNode
+                  let newColumn = fullColumn[newIndex]
+                  if (newColumn.fixed) {
+                    // 错误的移动
+                    if (newIndex > oldIndex) {
+                      wrapperElem.insertBefore(targetThElem, wrapperElem.children[oldIndex])
+                    } else {
+                      wrapperElem.insertBefore(wrapperElem.children[oldIndex], targetThElem)
                     }
-                    // 转换真实索引
-                    let oldColumnIndex = xTable.getColumnIndex(tableColumn[oldIndex])
-                    let newColumnIndex = xTable.getColumnIndex(tableColumn[newIndex])
-                    // 移动到目标列
-                    let currRow = fullColumn.splice(oldColumnIndex, 1)[0]
-                    fullColumn.splice(newColumnIndex, 0, currRow)
-                    xTable.loadColumn(fullColumn)
+                    return this.$XModal.message({ message: '固定列不允许拖动！', status: 'error' })
                   }
-                })
+                  // 转换真实索引
+                  let oldColumnIndex = xTable.getColumnIndex(tableColumn[oldIndex])
+                  let newColumnIndex = xTable.getColumnIndex(tableColumn[newIndex])
+                  // 移动到目标列
+                  let currRow = fullColumn.splice(oldColumnIndex, 1)[0]
+                  fullColumn.splice(newColumnIndex, 0, currRow)
+                  xTable.loadColumn(fullColumn)
+                }
               })
+            })
             }
           }
         }
