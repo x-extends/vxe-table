@@ -5,7 +5,7 @@
     <vxe-table
       border
       height="400"
-      :data.sync="tableData">
+      :data="tableData">
       <vxe-table-column title="基本信息">
         <vxe-table-column type="index" width="60"></vxe-table-column>
         <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -32,7 +32,7 @@
     <vxe-table
       border
       height="400"
-      :data.sync="tableData">
+      :data="tableData">
       <vxe-table-column title="基本信息">
         <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
         <vxe-table-column field="name" title="Name" fixed="left" width="100"></vxe-table-column>
@@ -69,7 +69,7 @@ export default {
         <vxe-table
           border
           height="400"
-          :data.sync="tableData">
+          :data="tableData">
           <vxe-table-column title="基本信息">
             <vxe-table-column type="index" width="60"></vxe-table-column>
             <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -100,7 +100,7 @@ export default {
         <vxe-table
           border
           height="400"
-          :data.sync="tableData">
+          :data="tableData">
           <vxe-table-column title="基本信息">
             <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
             <vxe-table-column field="name" title="Name" fixed="left" width="100"></vxe-table-column>

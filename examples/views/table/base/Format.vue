@@ -4,7 +4,7 @@
 
     <vxe-table
       border
-      :data.sync="tableData">
+      :data="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
       <vxe-table-column field="sex" title="Sex" :formatter="formatterSex"></vxe-table-column>
@@ -26,7 +26,7 @@
 
     <vxe-table
       border
-      :data.sync="tableData">
+      :data="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column field="date" title="转日期" formatter="toDateString"></vxe-table-column>
       <vxe-table-column field="time" title="转日期格式" :formatter="['toDateString', 'yyyy-MM-dd']"></vxe-table-column>
@@ -62,7 +62,7 @@ export default {
         `
         <vxe-table
           border
-          :data.sync="tableData">
+          :data="tableData">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" :formatter="formatterSex"></vxe-table-column>
@@ -93,7 +93,7 @@ export default {
         `
         <vxe-table
           border
-          :data.sync="tableData">
+          :data="tableData">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="date" title="转日期" formatter="toDateString"></vxe-table-column>
           <vxe-table-column field="time" title="转日期格式" :formatter="['toDateString', 'yyyy-MM-dd']"></vxe-table-column>

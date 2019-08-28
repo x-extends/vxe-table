@@ -3,7 +3,7 @@
     <p class="tip">可以设置大小尺寸：<table-api-link prop="medium"/> / <table-api-link prop="small"/> / <table-api-link prop="mini"/><p/>
 
     <vxe-table
-      :data.sync="tableData">
+      :data="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column type="radio" width="60"></vxe-table-column>
       <vxe-table-column type="selection" width="60"></vxe-table-column>
@@ -24,7 +24,7 @@
 
     <vxe-table
       size="medium"
-      :data.sync="tableData">
+      :data="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column type="radio" width="60"></vxe-table-column>
       <vxe-table-column type="selection" width="60"></vxe-table-column>
@@ -45,7 +45,7 @@
 
     <vxe-table
       size="small"
-      :data.sync="tableData">
+      :data="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column type="radio" width="60"></vxe-table-column>
       <vxe-table-column type="selection" width="60"></vxe-table-column>
@@ -66,7 +66,7 @@
 
     <vxe-table
       size="mini"
-      :data.sync="tableData">
+      :data="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column type="radio" width="60"></vxe-table-column>
       <vxe-table-column type="selection" width="60"></vxe-table-column>
@@ -95,7 +95,7 @@ export default {
       demoCodes: [
         `
         <vxe-table
-          :data.sync="tableData">
+          :data="tableData">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -118,7 +118,7 @@ export default {
         `
         <vxe-table
           size="medium"
-          :data.sync="tableData">
+          :data="tableData">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -141,7 +141,7 @@ export default {
         `
         <vxe-table
           size="small"
-          :data.sync="tableData">
+          :data="tableData">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -164,7 +164,7 @@ export default {
         `
         <vxe-table
           size="mini"
-          :data.sync="tableData">
+          :data="tableData">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>

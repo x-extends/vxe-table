@@ -9,7 +9,7 @@
 
     <vxe-table
       highlight-hover-row
-      :data.sync="tableData">
+      :data="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column field="address" title="超过隐藏时显示为省略号————————————" show-header-overflow show-overflow></vxe-table-column>
       <vxe-table-column field="date" title="内容超过隐藏时显示为省略号并用原生 title 显示" show-overflow="title">
@@ -36,7 +36,7 @@
 
     <vxe-table
       highlight-hover-row
-      :data.sync="tableData"
+      :data="tableData"
       :tooltip-config="{theme: 'light'}">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column field="address" title="超过隐藏时显示为省略号————————————" show-header-overflow show-overflow></vxe-table-column>
@@ -73,7 +73,7 @@ export default {
         `
         <vxe-table
           highlight-hover-row
-          :data.sync="tableData">
+          :data="tableData">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="address" title="超过隐藏时显示为省略号————————————" show-header-overflow show-overflow></vxe-table-column>
           <vxe-table-column field="date" title="内容超过隐藏时显示为省略号并用原生 title 显示" show-overflow="title">
@@ -104,7 +104,7 @@ export default {
         `
         <vxe-table
           highlight-hover-row
-          :data.sync="tableData"
+          :data="tableData"
           :tooltip-config="{theme: 'light'}">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="address" title="超过隐藏时显示为省略号————————————" show-header-overflow show-overflow></vxe-table-column>

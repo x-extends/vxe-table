@@ -15,7 +15,7 @@
       ref="xTable1"
       class="radio-table"
       height="300"
-      :data.sync="tableData"
+      :data="tableData"
       :row-class-name="rowClassName"
       @radio-change="radioChangeEvent">
       <vxe-table-column type="radio" width="60">
@@ -53,7 +53,7 @@
       ref="xTable2"
       height="300"
       :radio-config="{labelField: 'name', checkMethod}"
-      :data.sync="tableData">
+      :data="tableData">
       <vxe-table-column type="radio" title="请选择" width="100"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
       <vxe-table-column field="age" title="Age"></vxe-table-column>
@@ -73,7 +73,7 @@
       border
       height="300"
       row-id="id"
-      :data.sync="tableData"
+      :data="tableData"
       :radio-config="{checkRowKey: '2'}">
       <vxe-table-column type="radio" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -94,7 +94,7 @@
       border
       highlight-current-row
       height="300"
-      :data.sync="tableData"
+      :data="tableData"
       @current-change="currentChangeEvent">
       <vxe-table-column field="name" title="Name"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -116,7 +116,7 @@
       highlight-current-row
       height="300"
       :radio-config="{labelField: 'name'}"
-      :data.sync="tableData">
+      :data="tableData">
       <vxe-table-column type="radio" title="还可以这样" width="120"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -139,7 +139,7 @@
       highlight-current-row
       height="300"
       :radio-config="{labelField: 'name', trigger: 'row'}"
-      :data.sync="tableData">
+      :data="tableData">
       <vxe-table-column type="radio" title="还可以这样" width="120"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -179,7 +179,7 @@ export default {
           ref="xTable1"
           class="radio-table"
           height="300"
-          :data.sync="tableData"
+          :data="tableData"
           :row-class-name="rowClassName"
           @radio-change="radioChangeEvent">
           <vxe-table-column type="radio" width="60">
@@ -241,7 +241,7 @@ export default {
           ref="xTable2"
           height="300"
           :radio-config="{labelField: 'name', checkMethod}"
-          :data.sync="tableData">
+          :data="tableData">
           <vxe-table-column type="radio" title="请选择" width="100"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
           <vxe-table-column field="age" title="Age"></vxe-table-column>
@@ -270,7 +270,7 @@ export default {
           border
           height="300"
           row-id="id"
-          :data.sync="tableData"
+          :data="tableData"
           :radio-config="{checkRowKey: '2'}">
           <vxe-table-column type="radio" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -295,7 +295,7 @@ export default {
           border
           highlight-current-row
           height="300"
-          :data.sync="tableData"
+          :data="tableData"
           @current-change="currentChangeEvent">
           <vxe-table-column field="name" title="Name"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -326,7 +326,7 @@ export default {
           highlight-current-row
           height="300"
           :radio-config="{labelField: 'name'}"
-          :data.sync="tableData">
+          :data="tableData">
           <vxe-table-column type="radio" title="还可以这样" width="120"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -353,7 +353,7 @@ export default {
           highlight-current-row
           height="300"
           :radio-config="{labelField: 'name', trigger: 'row'}"
-          :data.sync="tableData">
+          :data="tableData">
           <vxe-table-column type="radio" title="还可以这样" width="120"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>

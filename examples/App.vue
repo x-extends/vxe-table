@@ -989,6 +989,7 @@ export default {
             },
             {
               label: 'app.aside.nav.chartsPlugin',
+              disabled: true,
               locat: {
                 name: 'TablePluginCharts'
               }

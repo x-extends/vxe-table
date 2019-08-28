@@ -5,7 +5,7 @@
     <vxe-table
       border
       height="300"
-      :data.sync="tableData">
+      :data="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -27,7 +27,7 @@
       highlight-hover-row
       height="300"
       :start-index="100"
-      :data.sync="tableData">
+      :data="tableData">
       <vxe-table-column type="index" title="序号" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -48,7 +48,7 @@
       border
       highlight-hover-row
       height="300"
-      :data.sync="tableData">
+      :data="tableData">
       <vxe-table-column type="index" title="序号" width="60" :index-method="indexMethod"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -77,7 +77,7 @@ export default {
         <vxe-table
           border
           height="300"
-          :data.sync="tableData">
+          :data="tableData">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -103,7 +103,7 @@ export default {
           highlight-hover-row
           height="300"
           :start-index="100"
-          :data.sync="tableData">
+          :data="tableData">
           <vxe-table-column type="index" title="序号" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -128,7 +128,7 @@ export default {
           border
           highlight-hover-row
           height="300"
-          :data.sync="tableData">
+          :data="tableData">
           <vxe-table-column type="index" title="序号" width="60" :index-method="indexMethod"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>

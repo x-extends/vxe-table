@@ -9,7 +9,7 @@
       border
       highlight-hover-row
       height="300"
-      :data.sync="tableData">
+      :data="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
       <vxe-table-column field="nickname" title="Nickname" sortable></vxe-table-column>
@@ -31,7 +31,7 @@
       border
       highlight-hover-row
       height="300"
-      :data.sync="tableData">
+      :data="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
       <vxe-table-column field="nickname" title="Nickname" sortable></vxe-table-column>
@@ -53,7 +53,7 @@
       border
       highlight-hover-row
       height="300"
-      :data.sync="tableData">
+      :data="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable :sort-method="sortNameMethod"></vxe-table-column>
       <vxe-table-column field="nickname" title="Nickname" sortable></vxe-table-column>
@@ -77,7 +77,7 @@
       highlight-hover-column
       ref="xTable"
       height="300"
-      :data.sync="tableData"
+      :data="tableData"
       :sort-config="{trigger: 'cell'}">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -109,7 +109,7 @@ export default {
           border
           highlight-hover-row
           height="300"
-          :data.sync="tableData">
+          :data="tableData">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
           <vxe-table-column field="nickname" title="Nickname" sortable></vxe-table-column>
@@ -135,7 +135,7 @@ export default {
           border
           highlight-hover-row
           height="300"
-          :data.sync="tableData">
+          :data="tableData">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
           <vxe-table-column field="nickname" title="Nickname" sortable></vxe-table-column>
@@ -161,7 +161,7 @@ export default {
           border
           highlight-hover-row
           height="300"
-          :data.sync="tableData">
+          :data="tableData">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable :sort-method="sortNameMethod"></vxe-table-column>
           <vxe-table-column field="nickname" title="Nickname" sortable></vxe-table-column>
@@ -197,7 +197,7 @@ export default {
           highlight-hover-column
           ref="xTable"
           height="300"
-          :data.sync="tableData"
+          :data="tableData"
           :sort-config="{trigger: 'cell'}">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>

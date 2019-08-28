@@ -15,7 +15,7 @@
     <vxe-table
       border
       ref="xTable1"
-      :data.sync="tableData"
+      :data="tableData"
       @select-all="selectAllEvent"
       @select-change="selectChangeEvent">
       <vxe-table-column type="selection" width="60"></vxe-table-column>
@@ -49,7 +49,7 @@
     <vxe-table
       border
       ref="xTable2"
-      :data.sync="tableData"
+      :data="tableData"
       :select-config="{labelField: 'name', checkMethod}">
       <vxe-table-column type="selection" title="All"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -81,7 +81,7 @@
       class="checkbox-table"
       ref="xTable3"
       :row-class-name="rowClassName"
-      :data.sync="tableData"
+      :data="tableData"
       :select-config="{checkField: 'checked', trigger: 'row'}">
       <vxe-table-column type="selection" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -104,7 +104,7 @@
       border
       highlight-hover-row
       row-id="id"
-      :data.sync="tableData"
+      :data="tableData"
       :select-config="{checkRowKeys: ['2', '3']}"
       :radio-config="{labelField: 'name'}">
       <vxe-table-column type="selection" width="60"></vxe-table-column>
@@ -134,7 +134,7 @@
       border
       highlight-hover-row
       ref="xTable5"
-      :data.sync="tableData"
+      :data="tableData"
       :select-config="{checkStrictly: true}">
       <vxe-table-column type="selection" width="60" tree-node></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -155,7 +155,7 @@
     <vxe-table
       border
       highlight-hover-row
-      :data.sync="tableData"
+      :data="tableData"
       :radio-config="{labelField: 'name'}">
       <vxe-table-column type="selection" width="60"></vxe-table-column>
       <vxe-table-column type="radio" width="300" title="Name"></vxe-table-column>
@@ -178,7 +178,7 @@
       resizable
       highlight-hover-row
       highlight-current-row
-      :data.sync="tableData"
+      :data="tableData"
       :radio-config="{labelField: 'role'}"
       :select-config="{labelField: 'name'}">
       <vxe-table-column type="selection" title="Name"></vxe-table-column>
@@ -219,7 +219,7 @@ export default {
         <vxe-table
           border
           ref="xTable1"
-          :data.sync="tableData"
+          :data="tableData"
           @select-all="selectAllEvent"
           @select-change="selectChangeEvent">
           <vxe-table-column type="selection" width="60"></vxe-table-column>
@@ -266,7 +266,7 @@ export default {
         <vxe-table
           border
           ref="xTable2"
-          :data.sync="tableData"
+          :data="tableData"
           :select-config="{labelField: 'name', checkMethod}">
           <vxe-table-column type="selection" title="All"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -307,7 +307,7 @@ export default {
           class="checkbox-table"
           ref="xTable3"
           :row-class-name="rowClassName"
-          :data.sync="tableData"
+          :data="tableData"
           :select-config="{checkField: 'checked', trigger: 'row'}">
           <vxe-table-column type="selection" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -345,7 +345,7 @@ export default {
           border
           highlight-hover-row
           row-id="id"
-          :data.sync="tableData"
+          :data="tableData"
           :select-config="{checkRowKeys: ['2', '3']}"
           :radio-config="{labelField: 'name'}">
           <vxe-table-column type="selection" width="60"></vxe-table-column>
@@ -379,7 +379,7 @@ export default {
           border
           highlight-hover-row
           ref="xTable5"
-          :data.sync="tableData"
+          :data="tableData"
           :select-config="{checkStrictly: true}">
           <vxe-table-column type="selection" width="60" tree-node></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -404,7 +404,7 @@ export default {
         <vxe-table
           border
           highlight-hover-row
-          :data.sync="tableData"
+          :data="tableData"
           :radio-config="{labelField: 'name'}">
           <vxe-table-column type="selection" width="60"></vxe-table-column>
           <vxe-table-column type="radio" width="300" title="Name"></vxe-table-column>
@@ -431,7 +431,7 @@ export default {
           resizable
           highlight-hover-row
           highlight-current-row
-          :data.sync="tableData"
+          :data="tableData"
           :radio-config="{labelField: 'role'}"
           :select-config="{labelField: 'name'}">
           <vxe-table-column type="selection" title="Name"></vxe-table-column>
