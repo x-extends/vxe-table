@@ -57,7 +57,6 @@ const GlobalConfig = {
   grid: {},
   menu: {},
   tooltip: {
-    // zIndex: 3000,
     trigger: 'hover',
     theme: 'dark'
   },
@@ -76,8 +75,8 @@ const GlobalConfig = {
     // },
     // buttons: []
   },
-  message: {
-    // zIndex: 999,
+  modal: {
+    zIndex: 2000,
     lockView: true,
     mask: true,
     duration: 3000,

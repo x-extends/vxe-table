@@ -20,7 +20,8 @@ function setup (options = {}) {
     Object.assign(icon, options.iconMap)
   }
   Object.assign(GlobalConfig, options, {
-    icon
+    icon,
+    menu
   })
 }
 
