@@ -7,11 +7,11 @@ assignees: ''
 
 ---
 
-### （必填）填写问题描述 Describe the bug
+### （必填）请填写问题描述 Describe the bug
 
  ?
 
-### （必填）填写能重现问题的链接（[jsfiddle](https://jsfiddle.net/w8q6unes/)、[codesandbox](https://codesandbox.io/s/vue-template-916h0)、[jsrun](https://jsrun.net/vIyKp/edit)） Reproduction link
+### （必填）请填写能重现问题的链接（[jsfiddle](https://jsfiddle.net/w8q6unes/)、[codesandbox](https://codesandbox.io/s/vue-template-916h0)、[jsrun](https://jsrun.net/vIyKp/edit)） Reproduction link
 
  ?
 
@@ -19,11 +19,11 @@ assignees: ''
 
  ?
 
-### （必填）填写期望的结果 Expected behavior
+### （必填）请填写期望的结果 Expected behavior
 
  ?
 
-### （必填）版本 Version
+### （必填）请填写版本号 Version
 
 - os: ?
 - browser: ?
