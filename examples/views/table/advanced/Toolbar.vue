@@ -6,18 +6,10 @@
       组成一套完整的表格，工具栏和表格必须是上下相邻关系，渲染时会自动进行上下关联，不允许更换位置（如果是复杂的布局不建议使用工具栏，自行写模板即可）
     </p>
 
-    <vxe-toolbar setting :refresh="{query: findList}">
-      <template v-slot:buttons>
-        <vxe-button>{{ $t('app.body.button.insert') }}</vxe-button>
-        <vxe-button>
-          <template>下拉按钮</template>
-          <template v-slot:dropdowns>
-            <vxe-button>删除</vxe-button>
-            <vxe-button>保存</vxe-button>
-          </template>
-        </vxe-button>
-      </template>
-    </vxe-toolbar>
+    <vxe-toolbar
+      setting
+      :buttons="toolbarButtons"
+      :refresh="{query: findList}"></vxe-toolbar>
 
     <vxe-table
       border
@@ -49,20 +41,31 @@ export default {
     return {
       loading: false,
       tableData: [],
+      toolbarButtons: [
+        {
+          code: 'btn1',
+          name: 'app.body.button.insert'
+        },
+        {
+          name: '下拉按钮',
+          dropdowns: [
+            {
+              name: '按钮111',
+              code: 'btn2'
+            },
+            {
+              name: '按钮222',
+              code: 'btn3'
+            }
+          ]
+        }
+      ],
       demoCodes: [
         `
-        <vxe-toolbar setting :refresh="{query: findList}">
-          <template v-slot:buttons>
-            <vxe-button>{{ $t('app.body.button.insert') }}</vxe-button>
-            <vxe-button>
-              <template>下拉按钮</template>
-              <template v-slot:dropdowns>
-                <vxe-button>删除</vxe-button>
-                <vxe-button>保存</vxe-button>
-              </template>
-            </vxe-button>
-          </template>
-        </vxe-toolbar>
+        <vxe-toolbar 
+          setting
+          :buttons="toolbarButtons" 
+          :refresh="{query: findList}"></vxe-toolbar>
 
         <vxe-table
           border
@@ -82,7 +85,26 @@ export default {
           data () {
             return {
               loading: false,
-              tableData: []
+              tableData: [],
+              toolbarButtons: [
+                {
+                  code: 'btn1',
+                  name: 'app.body.button.insert'
+                },
+                {
+                  name: '下拉按钮',
+                  dropdowns: [
+                    {
+                      name: '按钮111',
+                      code: 'btn2'
+                    },
+                    {
+                      name: '按钮222',
+                      code: 'btn3'
+                    }
+                  ]
+                }
+              ]
             }
           },
           created () {

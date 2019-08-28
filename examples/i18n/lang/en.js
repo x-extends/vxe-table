@@ -129,13 +129,14 @@ module.exports = {
         menusPlugin: 'plugin-menus Context menus',
         excelPlugin: 'plugin-excel A simple excel',
 
-        renderer: 'Renderer',
+        renderer: '(Abstract) Renderer',
         rendererFilter: 'Filter renderer',
         rendererDefault: 'Default renderer',
         rendererEdit: 'Edit renderer',
 
-        menus: 'Register context menu',
-        interceptor: 'Event interceptor',
+        bottons: '(Abstract) Toolbar button',
+        menus: '(Abstract) Context menu',
+        interceptor: '(Compatibility) Interceptor',
 
         optimize: 'Optimization and suggestion',
         optimizeScroller: '虚拟滚动优化',

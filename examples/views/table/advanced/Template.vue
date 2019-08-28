@@ -7,6 +7,19 @@
       <table-column-api-link prop="edit"/>：自定义可编辑模板（建议使用<router-link :to="{name: 'RendererAPI'}">渲染器</router-link>，可以更好的复用）
     </p>
 
+    <vxe-toolbar>
+      <template v-slot:buttons>
+        <vxe-button>{{ $t('app.body.button.insert') }}</vxe-button>
+        <vxe-button>
+          <template>下拉按钮</template>
+          <template v-slot:dropdowns>
+            <vxe-button>删除</vxe-button>
+            <vxe-button>保存</vxe-button>
+          </template>
+        </vxe-button>
+      </template>
+    </vxe-toolbar>
+
     <vxe-table
       border
       :data.sync="tableData">
@@ -76,6 +89,19 @@ export default {
       tableData: [],
       demoCodes: [
         `
+        <vxe-toolbar>
+          <template v-slot:buttons>
+            <vxe-button>{{ $t('app.body.button.insert') }}</vxe-button>
+            <vxe-button>
+              <template>下拉按钮</template>
+              <template v-slot:dropdowns>
+                <vxe-button>删除</vxe-button>
+                <vxe-button>保存</vxe-button>
+              </template>
+            </vxe-button>
+          </template>
+        </vxe-toolbar>
+
         <vxe-table
           border
           :data.sync="tableData">

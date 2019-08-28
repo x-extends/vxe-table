@@ -122,7 +122,16 @@ const apis = [
     type: '',
     enum: '',
     defVal: '',
-    list: []
+    list: [
+      {
+        name: 'button-click',
+        desc: '当工具栏的按钮被点击时会后触发该事件',
+        type: '',
+        enum: '',
+        defVal: '{code}, event',
+        list: []
+      }
+    ]
   },
   {
     name: 'Methods',

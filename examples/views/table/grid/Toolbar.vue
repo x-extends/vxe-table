@@ -159,10 +159,10 @@ export default {
             }
           },
           methods: {
-            toolbarButtonClickEvent ({ button }, event) {
-              switch (button.code) {
+            toolbarButtonClickEvent ({ code }, event) {
+              switch (code) {
                 case 'myBtn':
-                  this.$XModal.alert(button.name)
+                  this.$XModal.alert(code)
                   break
               }
             }
@@ -178,10 +178,10 @@ export default {
     })
   },
   methods: {
-    toolbarButtonClickEvent ({ button }, event) {
-      switch (button.code) {
+    toolbarButtonClickEvent ({ code }, event) {
+      switch (code) {
         case 'myBtn':
-          this.$XModal.alert(button.name)
+          this.$XModal.alert(code)
           break
       }
     }
