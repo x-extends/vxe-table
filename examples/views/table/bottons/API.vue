@@ -1,7 +1,7 @@
 <template>
   <div>
-    <h2>全局快捷菜单注册器</h2>
-    <p class="tip">你可以很简单的将常用的快捷菜单注册成全局可复用的</p>
+    <h2>全局工具栏按钮注册器</h2>
+    <p class="tip">你可以很简单的将工具栏中常用的按钮注册成全局可复用的</p>
     <vxe-table
       resizable
       highlight-current-row
@@ -56,9 +56,10 @@ export default {
       ],
       demoCodes: [
         `
+        <vxe-toolbar :buttons="toolbarButtons"></vxe-toolbar>
+
         <vxe-table
           border
-          :context-menu="{body: {options: bodyMenus}}"
           :data.sync="tableData">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
@@ -67,35 +68,20 @@ export default {
         </vxe-table>
         `,
         `
-        VXETable.menus.add('exportCSV', (params, event) => {
+        VXETable.buttons.add('exportCSV', (params) => {
           let { $table } = params
           $table.exportCsv()
-        })
-
-        VXETable.menus.add('insert', (params, event) => {
-          let { $table, menu } = params
-          // 读取自定义的参数
-          $table.insert(menu.record)
         })
 
         export default {
           data () {
             return {
               tableData: [],
-              bodyMenus: [
-                [
-                  {
-                    code: 'exportCSV',
-                    name: '导出.csv'
-                  },
-                  {
-                    code: 'insert',
-                    name: '新增',
-                    record: {
-                      name: '默认名称'
-                    }
-                  }
-                ]
+              toolbarButtons: [
+                {
+                  code: 'exportCSV',
+                  name: '导出.csv'
+                }
               ]
             }
           },

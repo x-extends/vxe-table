@@ -1,6 +1,7 @@
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../conf'
 import { UtilTools, DomTools, GlobalEvent } from '../../tools'
+import { Buttons } from '../../v-x-e-table'
 
 export default {
   name: 'VxeToolbar',
@@ -352,9 +353,18 @@ export default {
     },
     btnEvent (evnt, item) {
       let { $grid, $table } = this
-      if (item.code && $grid) {
-        $grid.commitProxy(item.code)
-        UtilTools.emitEvent($grid, 'toolbar-button-click', [{ button: item, $grid, $table }, evnt])
+      let { code } = item
+      if (code) {
+        if ($grid) {
+          $grid.triggerToolbarBtnEvent(item, evnt)
+        } else {
+          let btnMethod = Buttons.get(code)
+          let params = { code, button: item, $grid, $table }
+          if (btnMethod) {
+            btnMethod.call(this, params, evnt)
+          }
+          UtilTools.emitEvent(this, 'button-click', [params, evnt])
+        }
       }
     }
   }

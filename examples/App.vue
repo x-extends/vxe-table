@@ -1039,6 +1039,19 @@ export default {
           ]
         },
         {
+          label: 'app.aside.nav.bottons',
+          value: 'bottons',
+          expand: false,
+          children: [
+            {
+              label: 'app.aside.nav.api',
+              locat: {
+                name: 'BottonsAPI'
+              }
+            }
+          ]
+        },
+        {
           label: 'app.aside.nav.menus',
           value: 'menus',
           expand: false,

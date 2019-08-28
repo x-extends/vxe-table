@@ -2,6 +2,7 @@ import Table from '../../table'
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../conf'
 import { UtilTools } from '../../tools'
+import { Buttons } from '../../v-x-e-table'
 
 const methods = {}
 const propKeys = Object.keys(Table.props)
@@ -317,6 +318,11 @@ export default {
             }
             break
           }
+          default:
+            let btnMethod = Buttons.get(code)
+            if (btnMethod) {
+              btnMethod.apply(this, [{ code, $grid: this }].concat(args))
+            }
         }
       }
       return this.$nextTick()
@@ -341,6 +347,11 @@ export default {
     },
     getPendingRecords () {
       return this.pendingRecords
+    },
+    triggerToolbarBtnEvent (button, evnt) {
+      let { code } = button
+      this.commitProxy(code, evnt)
+      UtilTools.emitEvent(this, 'toolbar-button-click', [{ code, button, $grid: this }, evnt])
     },
     triggerPendingEvent (code) {
       let { pendingRecords, isMsg } = this

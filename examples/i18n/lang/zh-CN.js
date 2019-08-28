@@ -130,13 +130,14 @@ module.exports = {
         rendererPlugin: 'plugin-renderer 更多渲染器',
         menusPlugin: 'plugin-menus 快捷菜单集',
 
-        renderer: '渲染器',
+        renderer: '(抽象) 渲染器',
         rendererFilter: '筛选渲染器',
         rendererDefault: '默认的渲染器',
         rendererEdit: '可编辑渲染器',
 
-        menus: '注册快捷菜单',
-        interceptor: '事件拦截器',
+        bottons: '(抽象) 工具栏按钮',
+        menus: '(抽象) 快捷菜单',
+        interceptor: '(兼容) 事件拦截器',
 
         optimize: '优化建议',
         optimizeScroller: '虚拟滚动优化',

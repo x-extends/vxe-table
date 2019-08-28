@@ -368,7 +368,7 @@ const apis = [
         desc: '只对 toolbar.buttons 配置时有效，当工具栏的按钮被点击时会后触发该事件',
         type: '',
         enum: '',
-        defVal: '{menu ,type, row, rowIndex, column, columnIndex, cell}, event',
+        defVal: '{code}, event',
         list: []
       }
     ]

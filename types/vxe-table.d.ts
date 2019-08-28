@@ -65,6 +65,13 @@ export interface Menus {
   delete(type: object): Menus;
 }
 
+export interface Buttons {
+  mixin(map: object): Menus;
+  get(type: string): Function;
+  add(type: string, callback: Function): Menus;
+  delete(type: object): Menus;
+}
+
 export interface PluginObject<T> {
   install(xTable: typeof VXETable): any;
 }
@@ -77,6 +84,7 @@ export function use(plugin: PluginObject<any>, ...options: any[]): VXETableStati
 export const interceptor: Interceptor;
 export const renderer: Renderer;
 export const menus: Menus;
+export const buttons: Buttons;
 
 export interface VXETableStatic {
   install(vue: typeof Vue): void;
@@ -104,9 +112,13 @@ export interface VXETableStatic {
    */
   renderer: Renderer;
   /**
+   * 全局工具栏按钮
+   */
+  buttons: Buttons;
+  /**
    * 全局快捷菜单
    */
-  menus: Menus
+  menus: Menus;
 }
 
 /**

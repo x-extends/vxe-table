@@ -296,8 +296,8 @@ export default {
             formatterDate ({ cellValue }) {
               return XEUtils.toDateString(cellValue, 'yyyy-MM-dd HH:mm:ss')
             },
-            toolbarButtonClickEvent ({ button }, event) {
-              switch (button.code) {
+            toolbarButtonClickEvent ({ code }, event) {
+              switch (code) {
                 case 'reloadColumn':
                   this.findColumn()
                   break
@@ -379,8 +379,8 @@ export default {
     formatterDate ({ cellValue }) {
       return XEUtils.toDateString(cellValue, 'yyyy-MM-dd HH:mm:ss')
     },
-    toolbarButtonClickEvent ({ button }, event) {
-      switch (button.code) {
+    toolbarButtonClickEvent ({ code }, event) {
+      switch (code) {
         case 'reloadColumn':
           this.findColumn()
           break
