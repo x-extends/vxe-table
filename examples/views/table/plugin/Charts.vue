@@ -62,12 +62,12 @@ export default {
             prefixIcon: 'fa fa-area-chart',
             children: [
               {
-                code: 'CHART_BAR_X',
+                code: 'CHART_BAR_X_AXIS',
                 name: '横向柱状图',
                 prefixIcon: 'fa fa-bar-chart'
               },
               {
-                code: 'CHART_BAR_Y',
+                code: 'CHART_BAR_Y_AXIS',
                 name: '纵向柱状图',
                 prefixIcon: 'fa fa-bar-chart'
               },
@@ -143,12 +143,12 @@ export default {
                     prefixIcon: 'fa fa-area-chart',
                     children: [
                       {
-                        code: 'CHART_BAR_X',
+                        code: 'CHART_BAR_X_AXIS',
                         name: '横向柱状图',
                         prefixIcon: 'fa fa-bar-chart'
                       },
                       {
-                        code: 'CHART_BAR_Y',
+                        code: 'CHART_BAR_Y_AXIS',
                         name: '纵向柱状图',
                         prefixIcon: 'fa fa-bar-chart'
                       },
