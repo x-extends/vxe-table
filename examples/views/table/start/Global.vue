@@ -79,7 +79,7 @@
           menu: {},
           // 默认 tooltip 主题样式
           tooltip: {
-            zIndex: 99,
+            trigger: 'hover',
             theme: 'dark'
           },
           // 默认分页参数
@@ -100,9 +100,9 @@
             },
             buttons: []
           },
-          // 默认消息提示框参数
-          message: {
-            zIndex: 999,
+          // 默认模态窗口参数
+          modal: {
+            zIndex: 2000,
             lockView: true,
             lockScroll: true,
             mask: true,

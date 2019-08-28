@@ -3,6 +3,13 @@ import XEUtils from 'xe-utils'
 import MsgQueue from './queue'
 import { UtilTools, DomTools, GlobalEvent } from '../../tools'
 
+let cumsumZindex = 0
+let maxZindex = 0
+function getZIndex () {
+  maxZindex = GlobalConfig.modal.zIndex + cumsumZindex++
+  return maxZindex
+}
+
 export default {
   name: 'VxeModal',
   props: {
@@ -12,11 +19,11 @@ export default {
     status: String,
     top: { type: [Number, String], default: 15 },
     title: String,
-    duration: { type: [Number, String], default: () => GlobalConfig.message.duration },
+    duration: { type: [Number, String], default: () => GlobalConfig.modal.duration },
     message: [String, Function],
-    lockView: { type: Boolean, default: () => GlobalConfig.message.lockView },
+    lockView: { type: Boolean, default: () => GlobalConfig.modal.lockView },
     lockScroll: Boolean,
-    mask: { type: Boolean, default: () => GlobalConfig.message.mask },
+    mask: { type: Boolean, default: () => GlobalConfig.modal.mask },
     maskClosable: Boolean,
     escClosable: Boolean,
     resize: Boolean,
@@ -24,9 +31,9 @@ export default {
     showFooter: { type: Boolean, default: true },
     width: [Number, String],
     height: [Number, String],
-    zIndex: { type: [Number, String], default: () => GlobalConfig.message.zIndex },
-    marginSize: { type: [Number, String], default: GlobalConfig.message.marginSize },
-    animat: { type: Boolean, default: () => GlobalConfig.message.animat },
+    zIndex: [Number, String],
+    marginSize: { type: [Number, String], default: GlobalConfig.modal.marginSize },
+    animat: { type: Boolean, default: () => GlobalConfig.modal.animat },
     slots: Object,
     events: Object
   },
@@ -35,6 +42,7 @@ export default {
       visible: false,
       contentVisible: false,
       modalTop: 0,
+      modalZindex: 0,
       zoomLocat: null
     }
   },
@@ -55,6 +63,7 @@ export default {
     if (this.value) {
       this.open()
     }
+    this.modalZindex = this.zIndex || getZIndex()
   },
   mounted () {
     if (this.escClosable) {
@@ -77,7 +86,6 @@ export default {
       animat,
       width,
       height,
-      zIndex,
       status,
       showHeader,
       showFooter,
@@ -106,7 +114,7 @@ export default {
         active: visible
       }],
       style: {
-        zIndex,
+        zIndex: this.modalZindex,
         top: modalTop ? `${modalTop}px` : null
       },
       on: {
@@ -118,6 +126,9 @@ export default {
         style: {
           width: width ? (isNaN(width) ? width : `${width}px`) : null,
           height: height ? (isNaN(height) ? height : `${height}px`) : null
+        },
+        on: {
+          mousedown: this.updateZindex
         },
         ref: 'modalBox'
       }, [
@@ -197,6 +208,11 @@ export default {
         this.close(type)
       }
     },
+    updateZindex () {
+      if (this.modalZindex < maxZindex) {
+        this.modalZindex = getZIndex()
+      }
+    },
     closeEvent (evnt) {
       let type = 'close'
       this.$emit(type, { type, $modal: this }, evnt)
@@ -218,6 +234,7 @@ export default {
         let params = { type: 'show', $modal: this }
         this.visible = true
         this.contentVisible = false
+        this.updateZindex()
         if (!events.show) {
           this.$emit('input', true)
           this.$emit('show', params)
