@@ -11,7 +11,7 @@ assignees: ''
 
 ?
 
-### （必填）请填写版本号 Version
+### 请填写版本号 Version
 
 - os: ?
 - browser: ?
