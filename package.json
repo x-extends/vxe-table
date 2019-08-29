@@ -16,7 +16,7 @@
     "packages",
     "styles"
   ],
-  "main": "lib/index.common.js",
+  "main": "lib/vxe-table.js",
   "style": "lib/index.css",
   "unpkg": "lib/index.min.js",
   "jsdelivr": "lib/index.min.js",
@@ -63,11 +63,13 @@
     "vue-i18n": "^8.11.2",
     "vue-router": "^3.0.3",
     "vue-template-compiler": "^2.6.10",
+    "vxe-ajax": "^1.7.1",
     "vxe-table-plugin-antd": "1.4.2",
     "vxe-table-plugin-charts": "^1.0.1",
     "vxe-table-plugin-element": "1.4.1",
     "vxe-table-plugin-iview": "1.4.1",
     "vxe-table-plugin-menus": "^1.0.1",
+    "vxe-utils": "^1.7.1",
     "webpack-cli": "^3.3.1",
     "xe-ajax": "^3.8.0",
     "xe-ajax-mock": "^1.9.1",
@@ -106,7 +108,6 @@
   "homepage": "https://github.com/xuliangzhan/vxe-table#readme",
   "browserslist": [
     "> 1%",
-    "last 2 versions",
-    "not ie <= 8"
+    "last 2 versions"
   ]
 }

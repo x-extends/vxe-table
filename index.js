@@ -21,7 +21,7 @@ import Tooltip from './packages/tooltip'
 import Export from './packages/export'
 import Resize from './packages/resize'
 import VXETable from './packages/v-x-e-table'
-import zhCNLocat from './locale/lang/zh-CN'
+import zhCNLocat from './packages/locale/lang/zh-CN'
 
 // 默认主题
 import './styles/index.scss'

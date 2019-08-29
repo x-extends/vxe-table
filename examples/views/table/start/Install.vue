@@ -11,6 +11,7 @@
       </code>
       <code class="javascript">
         import Vue from 'vue'
+        import XEUtils from 'xe-utils'
         import VXETable from 'vxe-table'
         import 'vxe-table/lib/index.css'
 
