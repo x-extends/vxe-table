@@ -136,7 +136,7 @@ Get on [unpkg](https://unpkg.com/vxe-table/) and [cdnjs](https://cdn.jsdelivr.ne
 
 ```javascript
 import Vue from 'vue'
-import XEUtils from 'xe-utils'
+import 'xe-utils'
 import VXETable from 'vxe-table'
 import 'vxe-table/lib/index.css'
 
@@ -170,6 +170,7 @@ Now you can import modules like (The minimal lib is ≈ 120KB, gzip ≈ 40KB)
 最后这样按需引入模块，就可以减小体积了（最小的包大约是 ≈ 120KB, gzip ≈ 40KB）
 
 ```javascript
+import 'xe-utils'
 import {
   VXETable,
   Icon,
