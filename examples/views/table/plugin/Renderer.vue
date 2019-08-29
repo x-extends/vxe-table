@@ -7,7 +7,7 @@
       height="460"
       class="vxe-table-x-renderer"
       :loading="loading"
-      :data.sync="tableData"
+      :data="tableData"
       :columns="tableColumn"
       :edit-config="{trigger: 'click', mode: 'cell'}"></vxe-grid>
 
@@ -71,7 +71,7 @@ export default {
           height="460"
           class="vxe-table-x-renderer"
           :loading="loading"
-          :data.sync="tableData"
+          :data="tableData"
           :columns="tableColumn"
           :edit-config="{trigger: 'click', mode: 'cell'}"></vxe-grid>
         `,

@@ -13,7 +13,7 @@
       ref="xGrid1"
       height="300"
       :columns="tableColumn"
-      :data.sync="tableData"></vxe-grid>
+      :data="tableData"></vxe-grid>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
@@ -36,7 +36,7 @@
       height="300"
       :span-method="rowspanMethod"
       :columns="tableColumn"
-      :data.sync="tableData"></vxe-grid>
+      :data="tableData"></vxe-grid>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
@@ -76,7 +76,7 @@ export default {
           ref="xGrid"
           height="500"
           :columns="tableColumn"
-          :data.sync="tableData"></vxe-grid>
+          :data="tableData"></vxe-grid>
         `,
         `
         export default {
@@ -143,7 +143,7 @@ export default {
           height="300"
           :span-method="rowspanMethod"
           :columns="tableColumn"
-          :data.sync="tableData"></vxe-grid>
+          :data="tableData"></vxe-grid>
         `,
         `
         export default {

@@ -6,7 +6,7 @@
       border
       resizable
       height="500"
-      :data.sync="tableData"
+      :data="tableData"
       :mouse-config="{ selected: true, checked: true }"
       :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true}"
       :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}}"
@@ -99,7 +99,7 @@ export default {
           border
           resizable
           height="500"
-          :data.sync="tableData"
+          :data="tableData"
           :mouse-config="{ selected: true, checked: true }"
           :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true}"
           :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}}"

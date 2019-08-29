@@ -7,7 +7,7 @@
       class="reverse-table"
       :show-header="false"
       :columns="tableColumn"
-      :data.sync="tableData"></vxe-grid>
+      :data="tableData"></vxe-grid>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
@@ -26,7 +26,7 @@
       height="400"
       :show-header="false"
       :columns="tableColumn2"
-      :data.sync="tableData2"></vxe-grid>
+      :data="tableData2"></vxe-grid>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
@@ -73,7 +73,7 @@ export default {
           class="reverse-table"
           :show-header="false"
           :columns="tableColumn"
-          :data.sync="tableData"></vxe-grid>
+          :data="tableData"></vxe-grid>
         `,
         `
         export default {
@@ -138,7 +138,7 @@ export default {
           height="400"
           :show-header="false"
           :columns="tableColumn"
-          :data.sync="tableData"></vxe-grid>
+          :data="tableData"></vxe-grid>
         `,
         `
         export default {

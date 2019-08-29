@@ -15,7 +15,7 @@
       class="vxe-table-element"
       height="600"
       :loading="loading"
-      :data.sync="tableData"
+      :data="tableData"
       :footer-method="footerMethod"
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">
       <vxe-table-column type="selection" width="60"></vxe-table-column>
@@ -123,7 +123,7 @@ export default {
           class="vxe-table-element"
           height="600"
           :loading="loading"
-          :data.sync="tableData"
+          :data="tableData"
           :footer-method="footerMethod"
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">
           <vxe-table-column type="selection" width="60"></vxe-table-column>

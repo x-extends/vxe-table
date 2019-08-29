@@ -45,7 +45,7 @@
       class="vxe-table-antd"
       height="460"
       :loading="loading"
-      :data.sync="tableData"
+      :data="tableData"
       :edit-rules="validRules"
       :edit-config="{trigger: 'click', mode: 'row'}">
       <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
@@ -175,7 +175,7 @@ export default {
             class="vxe-table-antd"
             height="460"
             :loading="loading"
-            :data.sync="tableData"
+            :data="tableData"
             :edit-rules="validRules"
             :edit-config="{trigger: 'click', mode: 'row'}">
             <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>

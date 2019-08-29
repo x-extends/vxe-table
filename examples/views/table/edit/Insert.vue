@@ -16,7 +16,7 @@
       show-overflow
       ref="xTable"
       max-height="400"
-      :data.sync="tableData"
+      :data="tableData"
       :edit-config="{trigger: 'click', mode: 'cell'}">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable :edit-render="{name: 'input', defaultValue: '默认的名字'}"></vxe-table-column>
@@ -56,7 +56,7 @@ export default {
           show-overflow
           ref="xTable"
           max-height="400"
-          :data.sync="tableData"
+          :data="tableData"
           :edit-config="{trigger: 'click', mode: 'cell'}">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable :edit-render="{name: 'input', defaultValue: '默认的名字'}"></vxe-table-column>

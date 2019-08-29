@@ -7,7 +7,7 @@
       column-key
       ref="xTable1"
       class="sortable-column-demo"
-      :data.sync="tableData">
+      :data="tableData">
       <vxe-table-column field="name" title="Name"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
       <vxe-table-column field="age" title="Age"></vxe-table-column>
@@ -33,7 +33,7 @@
       :footer-method="footerMethod"
       :toolbar="toolbar"
       :columns="tableColumn"
-      :data.sync="tableData"></vxe-grid>
+      :data="tableData"></vxe-grid>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
@@ -72,7 +72,7 @@ export default {
           column-key
           ref="xTable"
           class="sortable-column-demo"
-          :data.sync="tableData">
+          :data="tableData">
           <vxe-table-column field="name" title="Name"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
           <vxe-table-column field="age" title="Age"></vxe-table-column>
@@ -144,7 +144,7 @@ export default {
           :footer-method="footerMethod"
           :toolbar="toolbar"
           :columns="tableColumn"
-          :data.sync="tableData"></vxe-grid>
+          :data="tableData"></vxe-grid>
         `,
         `
         export default {

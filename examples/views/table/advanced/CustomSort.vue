@@ -10,7 +10,7 @@
       class="my-sort"
       ref="xTable"
       height="300"
-      :data.sync="tableData"
+      :data="tableData"
       @header-cell-click="headerCellClickEvent">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable :filters="[{label: 'id大于10', value: 10}, {label: 'id大于40', value: 40}]" :filter-method="filterNameMethod">
@@ -60,7 +60,7 @@ export default {
           class="my-sort"
           ref="xTable"
           height="300"
-          :data.sync="tableData"
+          :data="tableData"
           @header-cell-click="headerCellClickEvent">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable :filters="[{label: 'id大于10', value: 10}, {label: 'id大于40', value: 40}]" :filter-method="filterNameMethod">

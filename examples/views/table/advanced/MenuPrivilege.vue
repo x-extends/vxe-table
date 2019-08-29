@@ -9,7 +9,7 @@
       highlight-current-column
       ref="xTable"
       :footer-method="footerMethod"
-      :data.sync="tableData"
+      :data="tableData"
       :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}, footer: {options: footerMenus}, visibleMethod}"
       @header-cell-context-menu="headerCellContextMenuEvent"
       @cell-context-menu="cellContextMenuEvent"
@@ -157,7 +157,7 @@ export default {
           highlight-current-column
           ref="xTable"
           :footer-method="footerMethod"
-          :data.sync="tableData"
+          :data="tableData"
           :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}, footer: {options: footerMenus}, visibleMethod}"
           @header-cell-context-menu="headerCellContextMenuEvent"
           @cell-context-menu="cellContextMenuEvent"

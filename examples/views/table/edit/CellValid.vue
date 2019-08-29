@@ -21,7 +21,7 @@
       show-overflow
       height="500"
       ref="xTable"
-      :data.sync="tableData"
+      :data="tableData"
       :edit-rules="validRules"
       :edit-config="{trigger: 'click', mode: 'cell', showStatus: true}">
       <vxe-table-column type="selection" width="60"></vxe-table-column>
@@ -76,7 +76,7 @@ export default {
           show-overflow
           height="500"
           ref="xTable"
-          :data.sync="tableData"
+          :data="tableData"
           :edit-rules="validRules"
           :edit-config="{trigger: 'click', mode: 'cell', showStatus: true}">
           <vxe-table-column type="selection" width="60"></vxe-table-column>

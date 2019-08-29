@@ -5,7 +5,7 @@
     <vxe-table
       resizable
       :tree-config="{children: 'children'}"
-      :data.sync="tableData"
+      :data="tableData"
       @select-change="selectChangeEvent">
       <vxe-table-column type="selection" width="120" tree-node></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -26,7 +26,7 @@
     <vxe-table
       resizable
       row-id="id"
-      :data.sync="tableData"
+      :data="tableData"
       :tree-config="{children: 'children'}"
       :select-config="{labelField: 'name', checkRowKeys: ['122000', '20000']}"
       @select-change="selectChangeEvent">
@@ -47,7 +47,7 @@
 
     <vxe-table
       resizable
-      :data.sync="tableData"
+      :data="tableData"
       :tree-config="{children: 'children'}"
       :select-config="{checkStrictly: true}">
       <vxe-table-column type="selection" width="120" tree-node></vxe-table-column>
@@ -68,7 +68,7 @@
 
     <vxe-table
       resizable
-      :data.sync="tableData"
+      :data="tableData"
       :tree-config="{children: 'children'}"
       :select-config="{labelField: 'name', checkMethod}"
       @select-change="selectChangeEvent">
@@ -93,7 +93,7 @@ export default {
         <vxe-table
           resizable
           :tree-config="{children: 'children'}"
-          :data.sync="tableData"
+          :data="tableData"
           @select-change="selectChangeEvent">
           <vxe-table-column type="selection" tree-node></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -123,7 +123,7 @@ export default {
         <vxe-table
           resizable
           row-id="id"
-          :data.sync="tableData"
+          :data="tableData"
           :tree-config="{children: 'children'}"
           :select-config="{labelField: 'name', checkRowKeys: ['122000', '20000']}"
           @select-change="selectChangeEvent">
@@ -153,7 +153,7 @@ export default {
         `
         <vxe-table
           resizable
-          :data.sync="tableData"
+          :data="tableData"
           :tree-config="{children: 'children'}"
           :select-config="{checkStrictly: true}">
           <vxe-table-column type="selection" width="120" tree-node></vxe-table-column>

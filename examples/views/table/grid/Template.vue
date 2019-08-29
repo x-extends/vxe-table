@@ -17,7 +17,7 @@
       height="400"
       :toolbar="tableToolbar"
       :columns="tableColumn"
-      :data.sync="tableData"
+      :data="tableData"
       :edit-config="{trigger: 'click', mode: 'cell'}">
     </vxe-grid>
 
@@ -125,7 +125,7 @@ export default {
           height="400"
           :toolbar="tableToolbar"
           :columns="tableColumn"
-          :data.sync="tableData"
+          :data="tableData"
           :edit-config="{trigger: 'click', mode: 'cell'}">
         </vxe-grid>
         `,

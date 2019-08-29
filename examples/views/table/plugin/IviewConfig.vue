@@ -8,7 +8,7 @@
       class="vxe-table-iview"
       height="460"
       :loading="loading"
-      :data.sync="tableData"
+      :data="tableData"
       :columns="tableColumn"
       :edit-config="{trigger: 'click', mode: 'row'}"></vxe-grid>
 
@@ -54,7 +54,7 @@ export default {
           class="vxe-table-iview"
           height="460"
           :loading="loading"
-          :data.sync="tableData"
+          :data="tableData"
           :columns="tableColumn"
           :edit-config="{trigger: 'click', mode: 'row'}"></vxe-grid>
         `,

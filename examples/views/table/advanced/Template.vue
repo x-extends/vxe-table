@@ -22,7 +22,7 @@
 
     <vxe-table
       border
-      :data.sync="tableData">
+      :data="tableData">
       <vxe-table-column type="index" width="80">
         <template v-slot="{ seq }">
           <span>seq= {{ seq }}</span>
@@ -104,7 +104,7 @@ export default {
 
         <vxe-table
           border
-          :data.sync="tableData">
+          :data="tableData">
           <vxe-table-column type="index" width="80">
             <template v-slot="{ seq }">
               <span>seq= {{ seq }}</span>

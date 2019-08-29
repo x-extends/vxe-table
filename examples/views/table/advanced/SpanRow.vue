@@ -6,7 +6,7 @@
       border
       height="600"
       :span-method="rowspanMethod"
-      :data.sync="tableData">
+      :data="tableData">
       <vxe-table-column field="name_1" title="功能模块"></vxe-table-column>
       <vxe-table-column field="name_2" title="详细功能"></vxe-table-column>
       <vxe-table-column field="name_3" title="权限类型">
@@ -200,7 +200,7 @@ export default {
           border
           height="600"
           :span-method="rowspanMethod"
-          :data.sync="tableData">
+          :data="tableData">
           <vxe-table-column field="name_1" title="功能模块"></vxe-table-column>
           <vxe-table-column field="name_2" title="详细功能"></vxe-table-column>
           <vxe-table-column field="name_3" title="权限类型">

@@ -6,7 +6,7 @@
       border
       resizable
       :tree-config="{children: 'children'}"
-      :data.sync="tableData">
+      :data="tableData">
       <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
       <vxe-table-column field="size" title="Size"></vxe-table-column>
       <vxe-table-column field="type" title="Type"></vxe-table-column>
@@ -23,7 +23,7 @@
     <p class="tip">默认展开所有树节点，通过 <table-api-link prop="expand-config"/> 参数设置默认展开树节点</p>
 
     <vxe-table
-      :data.sync="tableData"
+      :data="tableData"
       :tree-config="{children: 'children', expandAll: true}">
       <vxe-table-column type="index" width="160" title="序号" tree-node></vxe-table-column>
       <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
@@ -55,7 +55,7 @@ export default {
           border
           resizable
           :tree-config="{children: 'children'}"
-          :data.sync="tableData">
+          :data="tableData">
           <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
           <vxe-table-column field="size" title="Size"></vxe-table-column>
           <vxe-table-column field="type" title="Type"></vxe-table-column>
@@ -76,7 +76,7 @@ export default {
         `,
         `
         <vxe-table
-          :data.sync="tableData"
+          :data="tableData"
           :tree-config="{children: 'children', expandAll: true}">
           <vxe-table-column type="index" width="120" title="序号" tree-node></vxe-table-column>
           <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>

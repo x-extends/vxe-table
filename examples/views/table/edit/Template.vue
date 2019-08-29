@@ -5,7 +5,7 @@
     <vxe-table
       border
       show-overflow
-      :data.sync="tableData"
+      :data="tableData"
       :edit-config="{trigger: 'click', mode: 'cell'}">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}">
@@ -47,7 +47,7 @@ export default {
         <vxe-table
           border
           show-overflow
-          :data.sync="tableData"
+          :data="tableData"
           :edit-config="{trigger: 'click', mode: 'cell'}">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}">

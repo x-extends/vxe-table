@@ -8,7 +8,7 @@
       highlight-hover-row
       class="vxe-table-antd"
       height="400"
-      :data.sync="tableData">
+      :data="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="AInput" :filters="[{data: ''}]" :filter-render="{name: 'AInput', props: {placeholder: '请输入名称'}}"></vxe-table-column>
       <vxe-table-column field="age" title="AInputNumber" sortable width="160" :filters="[{data: 0}]" :filter-render="{name: 'AInputNumber', props: {min: 0, max: 100}}"></vxe-table-column>
@@ -50,7 +50,7 @@ export default {
           highlight-hover-row
           class="vxe-table-antd"
           height="400"
-          :data.sync="tableData">
+          :data="tableData">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="AInput" :filters="[{data: ''}]" :filter-render="{name: 'AInput', props: {placeholder: '请输入名称'}}"></vxe-table-column>
           <vxe-table-column field="age" title="AInputNumber" sortable width="160" :filters="[{data: 0}]" :filter-render="{name: 'AInputNumber', props: {min: 0, max: 100}}"></vxe-table-column>

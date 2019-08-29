@@ -10,7 +10,7 @@
       :start-index="(tablePage.currentPage - 1) * tablePage.pageSize"
       :pager-config="tablePage"
       :columns="tableColumn"
-      :data.sync="tableData"
+      :data="tableData"
       @page-change="handlePageChange"></vxe-grid>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -55,7 +55,7 @@ export default {
           :start-index="(tablePage.currentPage - 1) * tablePage.pageSize"
           :pager-config="tablePage"
           :columns="tableColumn"
-          :data.sync="tableData"
+          :data="tableData"
           @page-change="handlePageChange"></vxe-grid>
         `,
         `

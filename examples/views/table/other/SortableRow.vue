@@ -7,7 +7,7 @@
       row-key
       ref="xTable1"
       class="sortable-row-demo"
-      :data.sync="tableData">
+      :data="tableData">
       <vxe-table-column width="60">
         <template>
           <span class="drag-btn">
@@ -42,7 +42,7 @@
       ref="xTable2"
       class="sortable-tree-demo"
       :columns="tableColumn"
-      :data.sync="tableTreeData"
+      :data="tableTreeData"
       :tree-config="{children: 'children'}"></vxe-grid>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -99,7 +99,7 @@ export default {
           row-key
           ref="xTable1"
           class="sortable-row-demo"
-          :data.sync="tableData">
+          :data="tableData">
           <vxe-table-column width="60">
             <template>
               <span class="drag-btn">
@@ -168,7 +168,7 @@ export default {
           ref="xTable2"
           class="sortable-tree-demo"
           :columns="tableColumn"
-          :data.sync="tableTreeData"
+          :data="tableTreeData"
           :tree-config="{children: 'children'}"></vxe-grid>
         `,
         `

@@ -6,7 +6,7 @@
       border
       show-overflow
       height="500"
-      :data.sync="tableData"
+      :data="tableData"
       :mouse-config="{selected: true}"
       :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true}"
       :edit-config="{trigger: 'dblclick', mode: 'cell'}">
@@ -55,7 +55,7 @@ export default {
           border
           show-overflow
           height="500"
-          :data.sync="tableData"
+          :data="tableData"
           :mouse-config="{selected: true}"
           :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true}"
           :edit-config="{trigger: 'dblclick', mode: 'cell'}">

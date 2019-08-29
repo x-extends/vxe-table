@@ -62,7 +62,7 @@ export default {
         <vxe-table
           border
           height="600"
-          :data.sync="tableData">
+          :data="tableData">
           <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
           <vxe-table-column field="age" title="app.body.label.age"></vxe-table-column>
           <vxe-table-column field="sex" title="app.body.label.sex"></vxe-table-column>
