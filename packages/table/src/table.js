@@ -516,7 +516,10 @@ export default {
     document.body.appendChild(this.$refs.tableWrapper)
   },
   activated () {
-    this.scrollTo(this.lastScrollLeft, this.lastScrollTop)
+    let { lastScrollLeft, lastScrollTop } = this
+    if (lastScrollLeft || lastScrollTop) {
+      this.clearScroll().then(this.recalculate).then(() => this.scrollTo(lastScrollLeft, lastScrollTop))
+    }
   },
   beforeDestroy () {
     let tableWrapper = this.$refs.tableWrapper
