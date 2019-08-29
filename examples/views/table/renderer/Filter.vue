@@ -77,7 +77,7 @@ export default {
           // 筛选方法
           filterMethod ({ option, row, column }) {
             let { data } = option
-            let cellValue = XEUtils.get(row, column.property)
+            let cellValue = this.$utils.get(row, column.property)
             return cellValue == data
           }
         })

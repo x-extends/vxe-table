@@ -31,17 +31,19 @@ module.exports = {
     if (process.env.npm_lifecycle_event.indexOf('lib') === 0) {
       let XEUtils = {
         root: 'XEUtils',
-        commonjs: 'xe-utils',
-        commonjs2: 'xe-utils',
+        commonjs: 'xe-utils/methods/xe-utils',
+        commonjs2: 'xe-utils/methods/xe-utils',
         amd: 'xe-utils'
       }
       if (config.has('externals')) {
         config.externals
-          .set('xe-utils', XEUtils)
+          // .set('xe-utils', XEUtils)
+          .set('xe-utils/methods/xe-utils', XEUtils)
       } else {
         config
           .set('externals', {
-            'xe-utils': XEUtils
+            // 'xe-utils': XEUtils,
+            'xe-utils/methods/xe-utils': XEUtils
           })
       }
     }

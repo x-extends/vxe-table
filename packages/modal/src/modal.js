@@ -1,5 +1,5 @@
 import GlobalConfig from '../../conf'
-import XEUtils from 'xe-utils'
+import XEUtils from 'xe-utils/methods/xe-utils'
 import MsgQueue from './queue'
 import { UtilTools, DomTools, GlobalEvent } from '../../tools'
 

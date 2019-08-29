@@ -1,4 +1,4 @@
-import XEUtils from 'xe-utils'
+import XEUtils from 'xe-utils/methods/xe-utils'
 
 // 当渲染其他组件时，存在事件冲突时，可以通过该拦截器阻止单元格被自动关闭问题
 const _storeMap = {

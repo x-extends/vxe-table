@@ -112,7 +112,6 @@
 
 <script>
 import hljs from 'highlight.js'
-import XEUtils from 'xe-utils'
 
 export default {
   data () {
@@ -267,7 +266,7 @@ export default {
                 original: true,
                 isHeader: false,
                 data: this.tableData.map(row => {
-                  row.date = XEUtils.toDateString(row.date, 'yyyy-MM-dd')
+                  row.date = this.$utils.toDateString(row.date, 'yyyy-MM-dd')
                   return row
                 })
               })
@@ -306,7 +305,7 @@ export default {
         original: true,
         isHeader: false,
         data: this.tableData.map(row => {
-          row.date = XEUtils.toDateString(row.date, 'yyyy-MM-dd')
+          row.date = this.$utils.toDateString(row.date, 'yyyy-MM-dd')
           return row
         })
       })

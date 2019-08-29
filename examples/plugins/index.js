@@ -5,6 +5,8 @@ import PagerAPILink from '../components/PagerAPILink.vue'
 import ToolbarAPILink from '../components/ToolbarAPILink.vue'
 import GridAPILink from '../components/GridAPILink.vue'
 
+import './utils'
+import './ajax'
 import './highlight.js'
 import './element.js'
 import './iview.js'

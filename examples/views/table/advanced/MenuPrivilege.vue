@@ -44,7 +44,6 @@
 
 <script>
 import hljs from 'highlight.js'
-import XEUtils from 'xe-utils'
 import XEClipboard from 'xe-clipboard'
 
 export default {
@@ -321,7 +320,7 @@ export default {
                     return '平均'
                   }
                   if (['age', 'rate'].includes(column.property)) {
-                    return XEUtils.mean(data, column.property)
+                    return this.$utils.mean(data, column.property)
                   }
                   return null
                 })
@@ -387,7 +386,7 @@ export default {
             return '平均'
           }
           if (['age', 'rate'].includes(column.property)) {
-            return XEUtils.mean(data, column.property)
+            return this.$utils.mean(data, column.property)
           }
           return null
         })

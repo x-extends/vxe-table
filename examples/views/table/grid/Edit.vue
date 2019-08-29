@@ -23,7 +23,6 @@
 </template>
 
 <script>
-import XEAjax from 'xe-ajax'
 import hljs from 'highlight.js'
 
 export default {
@@ -86,7 +85,7 @@ export default {
             findList () {
               // 模拟后台接口
               this.loading = true
-              XEAjax.doGet(\`/api/user/page/list/\${this.tablePage.pageSize}/\${this.tablePage.currentPage}\`).then(response => {
+              this.$ajax.doGet(\`/api/user/page/list/\${this.tablePage.pageSize}/\${this.tablePage.currentPage}\`).then(response => {
                 let { page, result } = response.data
                 this.tableData = result
                 this.tablePage.total = page.total
@@ -122,7 +121,7 @@ export default {
     findList () {
       // 模拟后台接口
       this.loading = true
-      XEAjax.doGet(`/api/user/page/list/${this.tablePage.pageSize}/${this.tablePage.currentPage}`).then(response => {
+      this.$ajax.doGet(`/api/user/page/list/${this.tablePage.pageSize}/${this.tablePage.currentPage}`).then(response => {
         let { page, result } = response.data
         this.tableData = result
         this.tablePage.total = page.total

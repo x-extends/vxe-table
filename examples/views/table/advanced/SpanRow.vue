@@ -32,7 +32,6 @@
 
 <script>
 import hljs from 'highlight.js'
-import XEUtils from 'xe-utils'
 
 export default {
   data () {
@@ -401,7 +400,7 @@ export default {
             let options = { children: 'children' }
             let list = []
             let keyMap = {}
-            XEUtils.eachTree(this.treeData, (item, index, result, paths, parent) => {
+            this.$utils.eachTree(this.treeData, (item, index, result, paths, parent) => {
               keyMap[item.id] = item
               item.keys = parent ? parent.keys.concat([item.id]) : [item.id]
               if (!item.children || !item.children.length) {
@@ -472,7 +471,7 @@ export default {
       let options = { children: 'children' }
       let list = []
       let keyMap = {}
-      XEUtils.eachTree(this.treeData, (item, index, result, paths, parent) => {
+      this.$utils.eachTree(this.treeData, (item, index, result, paths, parent) => {
         keyMap[item.id] = item
         item.keys = parent ? parent.keys.concat([item.id]) : [item.id]
         if (!item.children || !item.children.length) {

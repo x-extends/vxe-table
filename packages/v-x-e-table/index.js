@@ -1,4 +1,4 @@
-import XEUtils from 'xe-utils'
+import XEUtils from 'xe-utils/methods/xe-utils'
 import Interceptor from './src/interceptor'
 import Renderer from './src/renderer'
 import Buttons from './src/buttons'

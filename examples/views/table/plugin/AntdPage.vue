@@ -81,7 +81,6 @@
 </template>
 
 <script>
-import XEAjax from 'xe-ajax'
 import hljs from 'highlight.js'
 
 export default {
@@ -258,7 +257,7 @@ export default {
           methods: {
             findList () {
               this.loading = true
-              XEAjax.doGet(\`/api/user/page/list/\${this.tablePage.pageSize}/\${this.tablePage.currentPage}\`, this.form.getFieldsValue()).then(response => {
+              this.$ajax.doGet(\`/api/user/page/list/\${this.tablePage.pageSize}/\${this.tablePage.currentPage}\`, this.form.getFieldsValue()).then(response => {
                 let { page, result } = response.data
                 this.tableData = result
                 this.tablePage.totalResult = page.totalResult
@@ -268,13 +267,13 @@ export default {
               })
             },
             findSexList () {
-              return XEAjax.doGet('/api/conf/sex/list').then(({ data }) => {
+              return this.$ajax.doGet('/api/conf/sex/list').then(({ data }) => {
                 this.sexList = data
                 return data
               })
             },
             findRegionList () {
-              return XEAjax.doGet('/api/conf/region/list').then(({ data }) => {
+              return this.$ajax.doGet('/api/conf/region/list').then(({ data }) => {
                 this.regionList = data
                 return data
               })
@@ -349,7 +348,7 @@ export default {
   methods: {
     findList () {
       this.loading = true
-      XEAjax.doGet(`/api/user/page/list/${this.tablePage.pageSize}/${this.tablePage.currentPage}`, this.form.getFieldsValue()).then(response => {
+      this.$ajax.doGet(`/api/user/page/list/${this.tablePage.pageSize}/${this.tablePage.currentPage}`, this.form.getFieldsValue()).then(response => {
         let { page, result } = response.data
         this.tableData = result
         this.tablePage.totalResult = page.totalResult
@@ -359,13 +358,13 @@ export default {
       })
     },
     findSexList () {
-      return XEAjax.doGet('/api/conf/sex/list').then(({ data }) => {
+      return this.$ajax.doGet('/api/conf/sex/list').then(({ data }) => {
         this.sexList = data
         return data
       })
     },
     findRegionList () {
-      return XEAjax.doGet('/api/conf/region/list').then(({ data }) => {
+      return this.$ajax.doGet('/api/conf/region/list').then(({ data }) => {
         this.regionList = data
         return data
       })

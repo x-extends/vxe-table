@@ -22,7 +22,6 @@
 </template>
 
 <script>
-import XEAjax from 'xe-ajax'
 import hljs from 'highlight.js'
 
 export default {
@@ -35,7 +34,7 @@ export default {
           total: 'page.total'
         },
         ajax: {
-          query: ({ page }) => XEAjax.getJSON(`/api/user/page/list/${page.pageSize}/${page.currentPage}`)
+          query: ({ page }) => this.$ajax.getJSON(`/api/user/page/list/${page.pageSize}/${page.currentPage}`)
         }
       },
       tableColumn: [
@@ -69,7 +68,7 @@ export default {
                   total: 'page.total'
                 },
                 ajax: {
-                  query: ({ page }) => XEAjax.getJSON(\`/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`)
+                  query: ({ page }) => this.$ajax.getJSON(\`/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`)
                 }
               },
               tableColumn: [

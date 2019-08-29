@@ -31,7 +31,6 @@
 </template>
 
 <script>
-import XEAjax from 'xe-ajax'
 import hljs from 'highlight.js'
 
 export default {
@@ -86,7 +85,7 @@ export default {
           },
           methods: {
             findSexList () {
-              return XEAjax.doGet('/api/conf/sex/list').then(({ data }) => {
+              return this.$ajax.doGet('/api/conf/sex/list').then(({ data }) => {
                 this.sexList = data
                 return data
               })
@@ -127,7 +126,7 @@ export default {
   },
   methods: {
     findSexList () {
-      return XEAjax.doGet('/api/conf/sex/list').then(({ data }) => {
+      return this.$ajax.doGet('/api/conf/sex/list').then(({ data }) => {
         this.sexList = data
         return data
       })

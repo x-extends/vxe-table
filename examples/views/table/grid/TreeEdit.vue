@@ -22,8 +22,6 @@
 </template>
 
 <script>
-import XEUtils from 'xe-utils'
-import XEAjax from 'xe-ajax'
 import hljs from 'highlight.js'
 
 export default {
@@ -32,8 +30,8 @@ export default {
       tableProxy: {
         ajax: {
           // 处理树结构转换
-          query: () => XEAjax.getJSON('/api/file/list').then(data => XEUtils.toArrayTree(data, { key: 'id', parentKey: 'parentId', children: 'children' })),
-          save: ({ body }) => XEAjax.doPost('/api/file/save', body)
+          query: () => this.$ajax.getJSON('/api/file/list').then(data => this.$utils.toArrayTree(data, { key: 'id', parentKey: 'parentId', children: 'children' })),
+          save: ({ body }) => this.$ajax.doPost('/api/file/save', body)
         }
       },
       tableToolbar: {
@@ -79,8 +77,8 @@ export default {
               tableProxy: {
                 ajax: {
                   // 处理树结构转换
-                  query: () => XEAjax.getJSON('/api/file/list').then(data => XEUtils.toArrayTree(data, { key: 'id', parentKey: 'parentId', children: 'children' })),
-                  save: ({ body }) => XEAjax.doPost('/api/file/save', body)
+                  query: () => this.$ajax.getJSON('/api/file/list').then(data => this.$utils.toArrayTree(data, { key: 'id', parentKey: 'parentId', children: 'children' })),
+                  save: ({ body }) => this.$ajax.doPost('/api/file/save', body)
                 }
               },
               tableToolbar: {
@@ -111,7 +109,7 @@ export default {
           },
           methods: {
             formatterDate ({ cellValue }) {
-              return XEUtils.toDateString(cellValue, 'yyyy-MM-dd HH:mm:ss')
+              return this.$utils.toDateString(cellValue, 'yyyy-MM-dd HH:mm:ss')
             }
           }
         }
@@ -126,7 +124,7 @@ export default {
   },
   methods: {
     formatterDate ({ cellValue }) {
-      return XEUtils.toDateString(cellValue, 'yyyy-MM-dd HH:mm:ss')
+      return this.$utils.toDateString(cellValue, 'yyyy-MM-dd HH:mm:ss')
     }
   }
 }

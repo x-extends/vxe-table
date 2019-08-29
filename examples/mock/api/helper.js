@@ -1,4 +1,4 @@
-import XEUtils from 'xe-utils'
+import XEUtils from 'xe-utils/methods/xe-utils'
 import { template } from 'xe-ajax-mock'
 
 var idIndex = 100000

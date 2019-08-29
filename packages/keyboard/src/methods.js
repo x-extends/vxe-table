@@ -1,4 +1,4 @@
-import XEUtils from 'xe-utils'
+import XEUtils from 'xe-utils/methods/xe-utils'
 import { UtilTools, DomTools } from '../../tools'
 
 export default {
@@ -338,7 +338,9 @@ export default {
     selected.column = null
     let headerElem = elemStore['main-header-list']
     let bodyElem = elemStore['main-body-list']
-    XEUtils.arrayEach(headerElem.querySelectorAll('.col--title-selected'), elem => DomTools.removeClass(elem, 'col--title-selected'))
+    if (headerElem) {
+      XEUtils.arrayEach(headerElem.querySelectorAll('.col--title-selected'), elem => DomTools.removeClass(elem, 'col--title-selected'))
+    }
     XEUtils.arrayEach([bodyElem.querySelector('.col--selected')], elem => DomTools.removeClass(elem, 'col--selected'))
     return this.$nextTick()
   },
@@ -481,7 +483,9 @@ export default {
   clearHeaderChecked () {
     let { elemStore } = this
     let headerElem = elemStore['main-header-list']
-    XEUtils.arrayEach(headerElem.querySelectorAll('.col--title-checked'), elem => DomTools.removeClass(elem, 'col--title-checked'))
+    if (headerElem) {
+      XEUtils.arrayEach(headerElem.querySelectorAll('.col--title-checked'), elem => DomTools.removeClass(elem, 'col--title-checked'))
+    }
     return this.$nextTick()
   },
   /**

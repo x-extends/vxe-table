@@ -1,5 +1,5 @@
 import Table from '../../table'
-import XEUtils from 'xe-utils'
+import XEUtils from 'xe-utils/methods/xe-utils'
 import GlobalConfig from '../../conf'
 import { UtilTools } from '../../tools'
 import { Buttons } from '../../v-x-e-table'

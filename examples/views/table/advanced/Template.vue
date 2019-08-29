@@ -80,7 +80,6 @@
 
 <script>
 import hljs from 'highlight.js'
-import XEUtils from 'xe-utils'
 
 export default {
   data () {
@@ -164,7 +163,7 @@ export default {
           },
           methods: {
             formatDate (value) {
-              return XEUtils.toDateString(value, 'yyyy-MM-dd HH:mm:ss.S')
+              return this.$utils.toDateString(value, 'yyyy-MM-dd HH:mm:ss.S')
             },
             filterSexMethod ({ option, row }) {
               return row.sex === option.data
@@ -189,7 +188,7 @@ export default {
   },
   methods: {
     formatDate (value) {
-      return XEUtils.toDateString(value, 'yyyy-MM-dd HH:mm:ss.S')
+      return this.$utils.toDateString(value, 'yyyy-MM-dd HH:mm:ss.S')
     },
     filterSexMethod ({ option, row }) {
       return row.sex === option.data

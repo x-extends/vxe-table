@@ -1,5 +1,5 @@
 import VXETable from '../../../../packages/v-x-e-table'
-import XEUtils from 'xe-utils'
+import XEUtils from 'xe-utils/methods/xe-utils'
 
 // 创建一个支持输入的筛选器
 VXETable.renderer.add('MyFilter', {

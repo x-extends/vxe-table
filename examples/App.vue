@@ -66,8 +66,6 @@
 </template>
 
 <script>
-import XEUtils from 'xe-utils'
-
 export default {
   data () {
     return {
@@ -1237,7 +1235,7 @@ export default {
       setInterval(() => {
         let performance = window.performance || window.webkitPerformance
         if (performance && performance.memory) {
-          this.usedJSHeapSize = XEUtils.toFixedNumber(performance.memory.usedJSHeapSize / 1048576, 2)
+          this.usedJSHeapSize = this.$utils.toFixedNumber(performance.memory.usedJSHeapSize / 1048576, 2)
         }
       }, 3000)
     }

@@ -46,7 +46,7 @@
 
 <script>
 import hljs from 'highlight.js'
-import XEUtils from 'xe-utils'
+import XEUtils from 'xe-utils/methods/xe-utils'
 
 XEUtils.mixin({
   toSex (cellValue) {
@@ -85,7 +85,7 @@ export default {
               return cellValue === '1' ? '男' : cellValue === '0' ? '女' : ''
             },
             formatTime ({ cellValue, row, column }) {
-              return XEUtils.toDateString(cellValue, 'yyyy-MM-dd HH:ss:mm')
+              return this.$utils.toDateString(cellValue, 'yyyy-MM-dd HH:ss:mm')
             }
           }
         }
@@ -103,7 +103,7 @@ export default {
         </vxe-table>
         `,
         `
-        XEUtils.mixin({
+        this.$utils.mixin({
           toSex (cellValue) {
             return cellValue === '1' ? '男' : cellValue === '0' ? '女' : ''
           }
@@ -136,7 +136,7 @@ export default {
       return cellValue === '1' ? '男' : cellValue === '0' ? '女' : ''
     },
     formatTime ({ cellValue, row, column }) {
-      return XEUtils.toDateString(cellValue, 'yyyy-MM-dd HH:ss:mm')
+      return this.$utils.toDateString(cellValue, 'yyyy-MM-dd HH:ss:mm')
     }
   }
 }

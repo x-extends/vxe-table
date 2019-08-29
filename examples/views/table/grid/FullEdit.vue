@@ -32,7 +32,6 @@
 </template>
 
 <script>
-import XEAjax from 'xe-ajax'
 import hljs from 'highlight.js'
 
 export default {
@@ -62,10 +61,10 @@ export default {
             filters.forEach(({ column, property, values }) => {
               formData[property] = values.join(',')
             })
-            return XEAjax.getJSON(`/api/user/page/list/${page.pageSize}/${page.currentPage}`, formData)
+            return this.$ajax.getJSON(`/api/user/page/list/${page.pageSize}/${page.currentPage}`, formData)
           },
-          delete: ({ body }) => XEAjax.doPost('/api/user/save', body),
-          save: ({ body }) => XEAjax.doPost('/api/user/save', body)
+          delete: ({ body }) => this.$ajax.doPost('/api/user/save', body),
+          save: ({ body }) => this.$ajax.doPost('/api/user/save', body)
         }
       },
       tableToolbar: {
@@ -155,10 +154,10 @@ export default {
                     filters.forEach(({ column, property, values }) => {
                       formData[property] = values.join(',')
                     })
-                    return XEAjax.getJSON(\`/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`, formData)
+                    return this.$ajax.getJSON(\`/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`, formData)
                   },
-                  delete: ({ body }) => XEAjax.doPost('/api/user/save', body),
-                  save: ({ body }) => XEAjax.doPost('/api/user/save', body)
+                  delete: ({ body }) => this.$ajax.doPost('/api/user/save', body),
+                  save: ({ body }) => this.$ajax.doPost('/api/user/save', body)
                 }
               },
               tableToolbar: {

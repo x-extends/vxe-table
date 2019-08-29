@@ -58,7 +58,6 @@
 <script>
 import hljs from 'highlight.js'
 import Sortable from 'sortablejs'
-import XEUtils from 'xe-utils'
 
 export default {
   data () {
@@ -226,12 +225,12 @@ export default {
                     let prevTrElem = targetTrElem.previousElementSibling
                     let tableTreeData = this.tableTreeData
                     let selfRow = xTable.getRowNode(targetTrElem).item
-                    let selfNode = XEUtils.findTree(tableTreeData, row => row === selfRow, options)
+                    let selfNode = this.$utils.findTree(tableTreeData, row => row === selfRow, options)
                     if (prevTrElem) {
                       // 移动到节点
                       let prevRow = xTable.getRowNode(prevTrElem).item
-                      let prevNode = XEUtils.findTree(tableTreeData, row => row === prevRow, options)
-                      if (XEUtils.findTree(selfRow[options.children], row => prevRow === row, options)) {
+                      let prevNode = this.$utils.findTree(tableTreeData, row => row === prevRow, options)
+                      if (this.$utils.findTree(selfRow[options.children], row => prevRow === row, options)) {
                         // 错误的移动
                         let oldTrElem = wrapperElem.children[oldIndex]
                         wrapperElem.insertBefore(targetTrElem, oldTrElem)
@@ -274,7 +273,7 @@ export default {
   },
   created () {
     this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
-    this.tableTreeData = XEUtils.clone(window.MOCK_TREE_DATA_LIST, true)
+    this.tableTreeData = this.$utils.clone(window.MOCK_TREE_DATA_LIST, true)
     this.rowDrop()
     this.treeDrop()
   },
@@ -316,12 +315,12 @@ export default {
             let prevTrElem = targetTrElem.previousElementSibling
             let tableTreeData = this.tableTreeData
             let selfRow = xTable.getRowNode(targetTrElem).item
-            let selfNode = XEUtils.findTree(tableTreeData, row => row === selfRow, options)
+            let selfNode = this.$utils.findTree(tableTreeData, row => row === selfRow, options)
             if (prevTrElem) {
               // 移动到节点
               let prevRow = xTable.getRowNode(prevTrElem).item
-              let prevNode = XEUtils.findTree(tableTreeData, row => row === prevRow, options)
-              if (XEUtils.findTree(selfRow[options.children], row => prevRow === row, options)) {
+              let prevNode = this.$utils.findTree(tableTreeData, row => row === prevRow, options)
+              if (this.$utils.findTree(selfRow[options.children], row => prevRow === row, options)) {
                 // 错误的移动
                 let oldTrElem = wrapperElem.children[oldIndex]
                 wrapperElem.insertBefore(targetTrElem, oldTrElem)

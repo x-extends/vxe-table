@@ -1,4 +1,5 @@
-import XEUtils from 'xe-utils'
+import XEUtils from 'xe-utils/methods/xe-utils'
+import VXETable from './packages/v-x-e-table'
 import Table from './packages/table'
 import Column from './packages/column'
 import Header from './packages/header'
@@ -20,8 +21,7 @@ import Tooltip from './packages/tooltip'
 import Export from './packages/export'
 import Keyboard from './packages/keyboard'
 import Resize from './packages/resize'
-import VXETable from './packages/v-x-e-table'
-import zhCNLocat from './locale/lang/zh-CN'
+import zhCNLocat from './packages/locale/lang/zh-CN'
 
 // 默认主题
 import './styles/index.scss'

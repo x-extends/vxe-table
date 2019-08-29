@@ -1,4 +1,4 @@
-import XEUtils from 'xe-utils'
+import XEUtils from 'xe-utils/methods/xe-utils'
 
 function getAttrs ({ name, attrs }) {
   if (name === 'input') {

@@ -1,4 +1,4 @@
-import XEUtils from 'xe-utils'
+import XEUtils from 'xe-utils/methods/xe-utils'
 import GlobalConfig from '../../conf'
 import Cell from '../../cell'
 import VXETable, { Interceptor, Renderer } from '../../v-x-e-table'
@@ -2719,7 +2719,9 @@ export default {
             if (mouseConfig.checked) {
               let headerElem = elemStore['main-header-list']
               this.handleChecked([[cell]])
-              this.handleHeaderChecked([[headerElem.querySelector(`.${column.id}`)]])
+              if (headerElem) {
+                this.handleHeaderChecked([[headerElem.querySelector(`.${column.id}`)]])
+              }
               this.handleIndexChecked([[cell.parentNode.querySelector('.col--index')]])
             }
           }

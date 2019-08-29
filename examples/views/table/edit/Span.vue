@@ -38,7 +38,6 @@
 
 <script>
 import hljs from 'highlight.js'
-import XEAjax from 'xe-ajax'
 
 export default {
   data () {
@@ -122,7 +121,7 @@ export default {
           methods: {
             findList () {
               this.loading = true
-              XEAjax.getJSON('/api/i18n/list', { sort: 'key', order: 'asc' }).then(data => {
+              this.$ajax.getJSON('/api/i18n/list', { sort: 'key', order: 'asc' }).then(data => {
                 this.tableData = data
                 this.loading = false
               })
@@ -138,7 +137,7 @@ export default {
               if (insertRecords.length || removeRecords.length || updateRecords.length) {
                 this.$refs.xTable.validate(valid => {
                   if (valid) {
-                    XEAjax.doPost('/api/i18n/save', body).then(() => {
+                    this.$ajax.doPost('/api/i18n/save', body).then(() => {
                       this.$XModal.message({ message: '保存成功！', status: 'success' })
                       this.findList()
                     }).catch(() => {
@@ -187,7 +186,7 @@ export default {
   methods: {
     findList () {
       this.loading = true
-      XEAjax.getJSON('/api/i18n/list', { sort: 'key', order: 'asc' }).then(data => {
+      this.$ajax.getJSON('/api/i18n/list', { sort: 'key', order: 'asc' }).then(data => {
         this.tableData = data
         this.loading = false
       })
@@ -203,7 +202,7 @@ export default {
       if (insertRecords.length || removeRecords.length || updateRecords.length) {
         this.$refs.xTable.validate(valid => {
           if (valid) {
-            XEAjax.doPost('/api/i18n/save', body).then(() => {
+            this.$ajax.doPost('/api/i18n/save', body).then(() => {
               this.$XModal.message({ message: '保存成功！', status: 'success' })
               this.findList()
             }).catch(() => {

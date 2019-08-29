@@ -1,4 +1,4 @@
-import XEUtils from 'xe-utils'
+import XEUtils from 'xe-utils/methods/xe-utils'
 import GlobalConfig from '../../conf'
 import { Renderer } from '../../v-x-e-table'
 import { UtilTools } from '../../tools'
