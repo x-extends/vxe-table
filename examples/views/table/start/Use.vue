@@ -37,7 +37,8 @@
     <p class="tip">最后这样按需引入模块，就可以减小体积了</p>
     <pre>
       <code class="javascript">
-        import XEUtils from 'xe-utils/methods/xe-utils'
+        import Vue from 'vue'
+        import 'xe-utils'
         import {
           VXETable,
           Icon,
@@ -63,10 +64,6 @@
           Resize
         } from 'vxe-table'
         import zhCNLocat from 'vxe-table/lib/locale/lang/zh-CN'
-        import dependencies from 'vxe-table/lib/utils/dependencies'
-
-        // 按需导入依赖函数库
-        XEUtils.mixin(dependencies)
 
         Vue.use(Icon)
         Vue.use(Table)
