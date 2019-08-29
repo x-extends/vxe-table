@@ -7,6 +7,7 @@
       </code>
       <code class="javascript">
         import Vue from 'vue'
+        import 'xe-utils'
         import VXETable from 'vxe-table'
         import 'vxe-table/lib/index.css'
 
@@ -14,7 +15,7 @@
       </code>
     </pre>
     <h2>Import on demand 按需引入</h2>
-    <p class="tip">借助插件 <a class="link" href="https://www.npmjs.com/package/babel-plugin-import">babel-plugin-import</a> 可以实现按需加载模块，减少文件体积。然后在文件 .babelrc 中配置</p>
+    <p class="tip"><a class="link" href="https://github.com/xuliangzhan/vxe-table-demo" target="_blank">查看项目</a><br>借助插件 <a class="link" href="https://www.npmjs.com/package/babel-plugin-import" target="_blank">babel-plugin-import</a> 可以实现按需加载模块，减少文件体积。然后在文件 .babelrc 中配置</p>
     <pre>
       <code class="shell">
         npm install babel-plugin-import -D
@@ -36,6 +37,7 @@
     <p class="tip">最后这样按需引入模块，就可以减小体积了</p>
     <pre>
       <code class="javascript">
+        import XEUtils from 'xe-utils/methods/xe-utils'
         import {
           VXETable,
           Icon,
@@ -61,6 +63,10 @@
           Resize
         } from 'vxe-table'
         import zhCNLocat from 'vxe-table/lib/locale/lang/zh-CN'
+        import dependencies from 'vxe-table/lib/utils/dependencies'
+
+        // 按需导入依赖函数库
+        XEUtils.mixin(dependencies)
 
         Vue.use(Icon)
         Vue.use(Table)
