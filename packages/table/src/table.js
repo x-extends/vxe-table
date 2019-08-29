@@ -1898,6 +1898,14 @@ export default {
             this.$nextTick(() => this.handleSelected(params, evnt))
           }
         }
+      } else if (isSpacebar && (keyboardConfig.isArrow || keyboardConfig.isTab) && selected.row && selected.column && (selected.column.type === 'selection' || selected.column.type === 'radio')) {
+        // 空格键支持选中复选列
+        evnt.preventDefault()
+        if (selected.column.type === 'selection') {
+          this.handleToggleCheckRowEvent(selected.args, evnt)
+        } else {
+          this.triggerRadioRowEvent(evnt, selected.args)
+        }
       } else if (isEnter && (keyboardConfig.isArrow || keyboardConfig.isTab) && (selected.row || actived.row || (treeConfig && highlightCurrentRow && currentRow))) {
         // 如果是激活状态，退则出到下一行
         if (selected.row || actived.row) {

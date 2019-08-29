@@ -11,6 +11,7 @@
       :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true}"
       :edit-config="{trigger: 'dblclick', mode: 'cell'}">
       <vxe-table-column type="index" width="60"></vxe-table-column>
+      <vxe-table-column type="selection" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="date" title="Date"></vxe-table-column>
@@ -25,6 +26,7 @@
         | Arrow Right → | 移动到当前活动单元格右边的单元格 |
         | Tab | 移动到当前选中或活动单元格的右侧单元格，如果到最后一列且存在下一行，则从下一行开始移动 |
         | Tab + Shift | 移动到当前选中或活动单元格的左侧单元格，如果到第一列且存在上一行，则从上一行开始移动 |
+        | Spacebar | 如果单元格是复选框或单选框则切换勾选状态 |
         | Enter | 取消编辑并移动到当前活动单元格下面的单元格 |
         | Delete | 清空内容 |
         | Backspace | 清空内容并激活选中单元格为编辑状态 |
@@ -60,10 +62,11 @@ export default {
           :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true}"
           :edit-config="{trigger: 'dblclick', mode: 'cell'}">
           <vxe-table-column type="index" width="60"></vxe-table-column>
+          <vxe-table-column type="selection" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column field="date" title="Date"></vxe-table-column>
-          <vxe-table-column field="address" title="Address" show-overflow :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column field="address" title="Address" :edit-render="{name: 'input'}"></vxe-table-column>
         </vxe-table>
         `,
         `
