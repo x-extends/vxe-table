@@ -16,7 +16,7 @@
       :loading="loading"
       :start-index="(tablePage.currentPage - 1) * tablePage.pageSize"
       :select-config="{reserve: true}"
-      :data.sync="tableData">
+      :data="tableData">
       <vxe-table-column type="selection" width="60"></vxe-table-column>
       <vxe-table-column type="index" title="序号" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
@@ -68,7 +68,7 @@ export default {
           :loading="loading"
           :start-index="(tablePage.currentPage - 1) * tablePage.pageSize"
           :select-config="{reserve: true}"
-          :data.sync="tableData">
+          :data="tableData">
           <vxe-table-column type="selection" width="60"></vxe-table-column>
           <vxe-table-column type="index" title="序号" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable></vxe-table-column>

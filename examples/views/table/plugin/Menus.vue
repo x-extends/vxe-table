@@ -8,7 +8,7 @@
       highlight-hover-row
       show-footer
       :footer-method="footerMethod"
-      :data.sync="tableData"
+      :data="tableData"
       :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}, footer: {options: footerMenus}}"
       :edit-config="{trigger: 'click', mode: 'cell'}">
       <vxe-table-column type="index" width="60"></vxe-table-column>
@@ -138,7 +138,7 @@ export default {
           highlight-hover-row
           show-footer
           :footer-method="footerMethod"
-          :data.sync="tableData"
+          :data="tableData"
           :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}, footer: {options: footerMenus}}"
           :edit-config="{trigger: 'click', mode: 'cell'}">
           <vxe-table-column type="index" width="60"></vxe-table-column>

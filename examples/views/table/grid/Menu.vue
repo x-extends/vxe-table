@@ -10,7 +10,7 @@
       ref="xGrid"
       :footer-method="footerMethod"
       :columns="tableColumn"
-      :data.sync="tableData"
+      :data="tableData"
       :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}, footer: {options: footerMenus}, visibleMethod}"
       @cell-context-menu="cellContextMenuEvent"
       @context-menu-click="contextMenuClickEvent"></vxe-grid>
@@ -111,7 +111,7 @@ export default {
           ref="xGrid"
           :footer-method="footerMethod"
           :columns="tableColumn"
-          :data.sync="tableData"
+          :data="tableData"
           :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}, footer: {options: footerMenus}, visibleMethod}"
           @cell-context-menu="cellContextMenuEvent"
           @context-menu-click="contextMenuClickEvent"></vxe-grid>

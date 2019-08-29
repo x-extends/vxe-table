@@ -30,7 +30,7 @@
           <vxe-table
             height="auto"
             :sync-resize="value1"
-            :data.sync="tableData">
+            :data="tableData">
             <vxe-table-column type="index" width="60"></vxe-table-column>
             <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
             <vxe-table-column field="sex" title="app.body.label.sex"></vxe-table-column>
@@ -60,7 +60,7 @@
             auto-resize
             height="auto"
             :sync-resize="value3"
-            :data.sync="tableData">
+            :data="tableData">
             <vxe-table-column type="index" width="60"></vxe-table-column>
             <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
             <vxe-table-column field="sex" title="app.body.label.sex"></vxe-table-column>
@@ -118,7 +118,7 @@ export default {
               <vxe-table
                 height="auto"
                 :sync-resize="value1"
-                :data.sync="tableData">
+                :data="tableData">
                 <vxe-table-column type="index" width="60"></vxe-table-column>
                 <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
                 <vxe-table-column field="sex" title="app.body.label.sex"></vxe-table-column>
@@ -148,7 +148,7 @@ export default {
                 auto-resize
                 height="auto"
                 :sync-resize="value3"
-                :data.sync="tableData">
+                :data="tableData">
                 <vxe-table-column type="index" width="60"></vxe-table-column>
                 <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
                 <vxe-table-column field="sex" title="app.body.label.sex"></vxe-table-column>

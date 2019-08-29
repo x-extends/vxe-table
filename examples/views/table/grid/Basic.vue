@@ -11,7 +11,7 @@
       resizable
       height="300"
       :columns="tableColumn"
-      :data.sync="tableData"></vxe-grid>
+      :data="tableData"></vxe-grid>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
@@ -30,7 +30,7 @@
       height="500"
       :footer-method="footerMethod"
       :columns="tableColumn2"
-      :data.sync="tableData"></vxe-grid>
+      :data="tableData"></vxe-grid>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
@@ -80,7 +80,7 @@ export default {
           resizable
           height="300"
           :columns="tableColumn"
-          :data.sync="tableData"></vxe-grid>
+          :data="tableData"></vxe-grid>
         `,
         `
         export default {
@@ -108,7 +108,7 @@ export default {
           height="500"
           :footer-method="footerMethod"
           :columns="tableColumn2"
-          :data.sync="tableData"></vxe-grid>
+          :data="tableData"></vxe-grid>
         `,
         `
         export default {

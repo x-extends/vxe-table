@@ -21,7 +21,7 @@
       row-id="id"
       :loading="loading"
       :cell-class-name="cellClassNameFunc"
-      :data.sync="apiList"
+      :data="apiList"
       :tree-config="{children: 'list', expandAll: !!filterName, expandRowKeys: defaultExpandRowKeys, trigger: 'cell'}"
       :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus},}"
       @header-cell-context-menu="headerCellContextMenuEvent"

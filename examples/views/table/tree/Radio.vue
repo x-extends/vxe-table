@@ -5,7 +5,7 @@
     <vxe-table
       highlight-current-row
       :tree-config="{children: 'children'}"
-      :data.sync="tableData">
+      :data="tableData">
       <vxe-table-column field="name" title="Name" tree-node></vxe-table-column>
       <vxe-table-column field="size" title="Size"></vxe-table-column>
       <vxe-table-column field="type" title="Type"></vxe-table-column>
@@ -24,7 +24,7 @@
     <vxe-table
       :tree-config="{children: 'children'}"
       :radio-config="{labelField: 'name'}"
-      :data.sync="tableData">
+      :data="tableData">
       <vxe-table-column type="radio" title="Sex" tree-node></vxe-table-column>
       <vxe-table-column field="size" title="Size"></vxe-table-column>
       <vxe-table-column field="type" title="Type"></vxe-table-column>
@@ -46,7 +46,7 @@
       ref="xTable3"
       :tree-config="{children: 'children'}"
       :radio-config="{trigger: 'row'}"
-      :data.sync="tableData"
+      :data="tableData"
       @current-change="currentChangeEvent">
       <vxe-table-column type="radio" width="120" tree-node>
         <template v-slot:header>
@@ -82,7 +82,7 @@ export default {
         <vxe-table
           highlight-current-row
           :tree-config="{children: 'children'}"
-          :data.sync="tableData">
+          :data="tableData">
           <vxe-table-column field="name" title="Name" tree-node></vxe-table-column>
           <vxe-table-column field="size" title="Size"></vxe-table-column>
           <vxe-table-column field="type" title="Type"></vxe-table-column>
@@ -104,7 +104,7 @@ export default {
         `
         <vxe-table
           :tree-config="{children: 'children'}"
-          :data.sync="tableData">
+          :data="tableData">
           <vxe-table-column type="radio" width="120" tree-node></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
           <vxe-table-column field="size" title="Size"></vxe-table-column>
@@ -131,7 +131,7 @@ export default {
           ref="xTable3"
           :tree-config="{children: 'children'}"
           :radio-config="{trigger: 'row'}"
-          :data.sync="tableData"
+          :data="tableData"
           @current-change="currentChangeEvent">
           <vxe-table-column type="radio" width="120" tree-node>
             <template v-slot:header>

@@ -7,7 +7,7 @@
       resizable
       highlight-current-row
       height="500"
-      :data.sync="tableData"
+      :data="tableData"
       :keyboard-config="{isArrow: true}">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -46,7 +46,7 @@ export default {
           resizable
           highlight-current-row
           height="500"
-          :data.sync="tableData"
+          :data="tableData"
           :keyboard-config="{isArrow: true}">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>

@@ -10,7 +10,7 @@
 
     <vxe-table
       border
-      :data.sync="tableData">
+      :data="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" :filters="[{data: null}]" :filter-render="{name: 'input', attrs: {placeholder: '请输入名字'}}"></vxe-table-column>
       <vxe-table-column field="sex" title="sex" :filters="[{data: null}]" :filter-render="{name: 'select', options: sexList}"></vxe-table-column>
@@ -85,7 +85,7 @@ export default {
         `
         <vxe-table
           border
-          :data.sync="tableData">
+          :data="tableData">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" :filters="[{data: null}]" :filter-render="{name: 'input', attrs: {placeholder: '请输入名字'}}"></vxe-table-column>
           <vxe-table-column field="sex" title="sex" :filters="[{data: null}]" :filter-render="{name: 'select', options: sexList}"></vxe-table-column>

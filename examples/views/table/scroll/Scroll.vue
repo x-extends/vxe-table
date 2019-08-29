@@ -10,7 +10,7 @@
       border
       highlight-hover-row
       height="300"
-      :data.sync="tableData">
+      :data="tableData">
       <vxe-table-column type="index" width="100"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -74,7 +74,7 @@ export default {
           border
           highlight-hover-row
           height="300"
-          :data.sync="tableData">
+          :data="tableData">
           <vxe-table-column type="index" width="100"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>

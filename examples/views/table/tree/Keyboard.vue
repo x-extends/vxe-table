@@ -4,7 +4,7 @@
 
     <vxe-table
       highlight-current-row
-      :data.sync="tableData"
+      :data="tableData"
       :tree-config="{children: 'children'}"
       :keyboard-config="{isArrow: true}">
       <vxe-table-column field="name" title="Name" tree-node></vxe-table-column>
@@ -44,7 +44,7 @@ export default {
         `
         <vxe-table
           highlight-current-row
-          :data.sync="tableData"
+          :data="tableData"
           :tree-config="{children: 'children'}"
           :keyboard-config="{isArrow: true}">
           <vxe-table-column field="name" title="Name" tree-node></vxe-table-column>

@@ -17,7 +17,7 @@
       ref="xTable"
       height="400"
       :loading="loading"
-      :data.sync="tableData"
+      :data="tableData"
       :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}, visibleMethod}"
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
       @context-menu-click="contextMenuClickEvent">
@@ -107,7 +107,7 @@ export default {
           ref="xTable"
           height="400"
           :loading="loading"
-          :data.sync="tableData"
+          :data="tableData"
           :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}, visibleMethod}"
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
           @context-menu-click="contextMenuClickEvent">

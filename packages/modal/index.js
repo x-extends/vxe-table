@@ -17,7 +17,7 @@ export function Modal (options) {
             events.close.call(this, params)
           }
           $modal.$destroy()
-          resolve(params)
+          resolve(params.type)
         }
       })
       let $modal = new AlertController({

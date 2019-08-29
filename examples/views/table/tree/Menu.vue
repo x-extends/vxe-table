@@ -14,7 +14,7 @@
       :tree-config="treeConfig"
       :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}, visibleMethod}"
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
-      :data.sync="tableData"
+      :data="tableData"
       @context-menu-click="contextMenuClickEvent">
       <vxe-table-column type="selection" width="120" tree-node></vxe-table-column>
       <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
@@ -102,7 +102,7 @@ export default {
           :tree-config="treeConfig"
           :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}, visibleMethod}"
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
-          :data.sync="tableData"
+          :data="tableData"
           @context-menu-click="contextMenuClickEvent">
           <vxe-table-column type="selection" width="120" tree-node></vxe-table-column>
           <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>

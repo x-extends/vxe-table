@@ -26,7 +26,7 @@
       ref="xTable1"
       border
       height="200"
-      :data.sync="tableData"
+      :data="tableData"
       :customs.sync="customColumns1">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -66,7 +66,7 @@
       border
       height="200"
       :loading="loading"
-      :data.sync="tableData"
+      :data="tableData"
       :customs.sync="customColumns2">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -103,7 +103,7 @@
       ref="xTable3"
       border
       height="300"
-      :data.sync="tableData"
+      :data="tableData"
       :customs.sync="customColumns3">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -175,7 +175,7 @@ export default {
           ref="xTable"
           border
           height="400"
-          :data.sync="tableData"
+          :data="tableData"
           :customs.sync="customColumns">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -265,7 +265,7 @@ export default {
           ref="xTable"
           border
           height="400"
-          :data.sync="tableData"
+          :data="tableData"
           :customs.sync="customColumns">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -357,7 +357,7 @@ export default {
           ref="xTable"
           border
           height="400"
-          :data.sync="tableData"
+          :data="tableData"
           :customs.sync="customColumns">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>

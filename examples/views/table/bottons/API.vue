@@ -7,7 +7,7 @@
       highlight-current-row
       highlight-hover-row
       highlight-current-column
-      :data.sync="tableData">
+      :data="tableData">
       <vxe-table-column field="name" title="app.api.title.prop" min-width="280" tree-node></vxe-table-column>
       <vxe-table-column field="desc" title="app.api.title.desc" min-width="200"></vxe-table-column>
       <vxe-table-column field="type" title="app.api.title.type" min-width="140"></vxe-table-column>
@@ -60,7 +60,7 @@ export default {
 
         <vxe-table
           border
-          :data.sync="tableData">
+          :data="tableData">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column field="sex" title="sex"></vxe-table-column>

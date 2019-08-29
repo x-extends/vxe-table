@@ -17,7 +17,7 @@
       ref="xExcel"
       max-height="600"
       :columns="columns"
-      :data.sync="tableData">
+      :data="tableData">
     </vxe-excel>
 
     <pre>
@@ -100,7 +100,7 @@ export default {
           ref="xExcel"
           max-height="600"
           :columns="columns"
-          :data.sync="tableData">
+          :data="tableData">
         </vxe-excel>
         `,
         `

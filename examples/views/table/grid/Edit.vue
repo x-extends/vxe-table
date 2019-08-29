@@ -9,7 +9,7 @@
       :loading="loading"
       :pager-config="tablePage"
       :columns="tableColumn"
-      :data.sync="tableData"
+      :data="tableData"
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
       @page-change="handlePageChange"></vxe-grid>
 
@@ -54,7 +54,7 @@ export default {
           :loading="loading"
           :pager-config="tablePage"
           :columns="tableColumn"
-          :data.sync="tableData"
+          :data="tableData"
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
           @page-change="handlePageChange"></vxe-grid>
         `,

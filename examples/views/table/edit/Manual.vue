@@ -7,7 +7,7 @@
       border
       resizable
       show-overflow
-      :data.sync="tableData"
+      :data="tableData"
       :edit-config="{trigger: 'manual', mode: 'row'}">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
@@ -50,7 +50,7 @@ export default {
           border
           resizable
           show-overflow
-          :data.sync="tableData"
+          :data="tableData"
           :edit-config="{trigger: 'manual', mode: 'row'}">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>

@@ -7,7 +7,7 @@
       show-overflow
       height="400"
       :span-method="colspanMethod"
-      :data.sync="tableData">
+      :data="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
       <vxe-table-column field="role" title="Role" sortable></vxe-table-column>
@@ -28,7 +28,7 @@
       border
       height="400"
       :span-method="rowspanMethod"
-      :data.sync="tableData">
+      :data="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column field="key" title="Key"></vxe-table-column>
       <vxe-table-column field="content" title="Translate"></vxe-table-column>
@@ -57,7 +57,7 @@ export default {
           border
           height="400"
           :span-method="colspanMethod"
-          :data.sync="tableData">
+          :data="tableData">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
           <vxe-table-column field="role" title="Role" sortable></vxe-table-column>
@@ -99,7 +99,7 @@ export default {
           border
           height="400"
           :span-method="rowspanMethod"
-          :data.sync="tableData">
+          :data="tableData">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="key" title="Key"></vxe-table-column>
           <vxe-table-column field="content" title="Translate"></vxe-table-column>
