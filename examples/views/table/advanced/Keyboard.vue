@@ -8,8 +8,10 @@
       highlight-current-row
       height="500"
       :data="tableData"
-      :keyboard-config="{isArrow: true}">
+      :keyboard-config="{isArrow: true}"
+      :radio-config="{trigger: 'row'}">
       <vxe-table-column type="index" width="60"></vxe-table-column>
+      <vxe-table-column type="radio" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
       <vxe-table-column field="age" title="Age"></vxe-table-column>
@@ -20,6 +22,7 @@
       <code>
         | Arrow Up ↑ | 移动到高亮行的上一行 |
         | Arrow Down ↓ | 移动到高亮行的下一行 |
+        | Spacebar | 如果单元格是复选框或单选框则切换勾选状态 |
       </code>
     </pre>
 
@@ -47,8 +50,10 @@ export default {
           highlight-current-row
           height="500"
           :data="tableData"
-          :keyboard-config="{isArrow: true}">
+          :keyboard-config="{isArrow: true}"
+          :radio-config="{trigger: 'row'}">
           <vxe-table-column type="index" width="60"></vxe-table-column>
+          <vxe-table-column type="radio" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
           <vxe-table-column field="age" title="Age"></vxe-table-column>
