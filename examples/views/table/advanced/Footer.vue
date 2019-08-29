@@ -242,7 +242,7 @@ export default {
               }
             },
             footerMethod ({ columns, data }) {
-              return [
+              const footerData = [
                 columns.map((column, columnIndex) => {
                   if (columnIndex === 0) {
                     return '平均'
@@ -262,6 +262,7 @@ export default {
                   return null
                 })
               ]
+              return footerData
             }
           }
         }
@@ -289,7 +290,7 @@ export default {
       }
     },
     footerMethod ({ columns, data }) {
-      return [
+      const footerData = [
         columns.map((column, columnIndex) => {
           if (columnIndex === 0) {
             return '平均'
@@ -309,6 +310,7 @@ export default {
           return null
         })
       ]
+      return footerData
     }
   }
 }
