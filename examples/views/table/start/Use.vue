@@ -37,6 +37,7 @@
     <p class="tip">最后这样按需引入模块，就可以减小体积了</p>
     <pre>
       <code class="javascript">
+        import Vue from 'vue'
         import 'xe-utils'
         import {
           VXETable,
