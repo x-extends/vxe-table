@@ -5,7 +5,6 @@
     <vxe-table
       border
       resizable
-      show-overflow
       :data="tableData"
       :edit-config="{trigger: 'dblclick', mode: 'cell'}"
       @edit-actived="editActivedEvent"
@@ -59,7 +58,6 @@ export default {
         <vxe-table
           border
           resizable
-          show-overflow
           :data="tableData"
           :edit-config="{trigger: 'dblclick', mode: 'cell'}">
           <vxe-table-column type="index" width="60"></vxe-table-column>

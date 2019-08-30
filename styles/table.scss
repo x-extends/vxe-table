@@ -8,6 +8,22 @@
   white-space: nowrap;
 }
 
+%DefaultColumnHeight {
+  height: 48px;
+}
+
+%MediumColumnHeight {
+  height: 44px;
+}
+
+%SmallColumnHeight {
+  height: 40px;
+}
+
+%MiniColumnHeight {
+  height: 36px;
+}
+
 %CellEllipsis {
   &:not(.col--actived) {
     .vxe-cell {
@@ -470,12 +486,35 @@
     padding: 20px;
   }
 
-  /*固定高度*/
+  /*固定列*/
+  &.vxe-editable {
+    .vxe-body--column {
+      @extend %DefaultColumnHeight;
+      line-height: inherit;
+    }
+    &.size--medium {
+      .vxe-body--column {
+        @extend %MediumColumnHeight;
+      }
+    }
+    &.size--small {
+      .vxe-body--column {
+        @extend %SmallColumnHeight;
+      }
+    }
+    &.size--mini {
+      .vxe-body--column {
+        @extend %MiniColumnHeight;
+      }
+    }
+  }
+
+  /*溢出列*/
   .vxe-header--column,
   .vxe-body--column,
   .vxe-footer--column {
     &.col--ellipsis {
-      height: 48px;
+      @extend %DefaultColumnHeight;
       line-height: inherit;
     }
   }
@@ -484,7 +523,7 @@
     .vxe-body--column,
     .vxe-footer--column {
       &.col--ellipsis {
-        height: 44px;
+        @extend %MediumColumnHeight;
       }
     }
   }
@@ -493,7 +532,7 @@
     .vxe-body--column,
     .vxe-footer--column {
       &.col--ellipsis {
-        height: 40px;
+        @extend %SmallColumnHeight;
       }
     }
   }
@@ -502,7 +541,7 @@
     .vxe-body--column,
     .vxe-footer--column {
       &.col--ellipsis {
-        height: 36px;
+        @extend %MiniColumnHeight;
       }
     }
   }
