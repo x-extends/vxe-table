@@ -23,9 +23,6 @@ import Resize from './resize'
 import VXETable from './v-x-e-table'
 import zhCNLocat from './locale/lang/zh-CN'
 
-// 默认主题
-import './styles/index.scss'
-
 // 按需加载的组件
 export const components = [
   Table,
