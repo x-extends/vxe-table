@@ -9,6 +9,7 @@ export default {
       delRevert: 'revert functionは非推奨です、revertDataを使用してください',
       groupFixed: 'Grouping headersが使われている場合、fixed columnsは左右になくてはなりません',
       notResizable: 'Horizontal virtual scrollingはresizableをサポートしていません',
+      notMouse: 'Horizontal virtual scrolling does not support mouse-config.',
       cellEditRender: 'Rendererはcell-renderとedit-renderを同時に仕様できません',
       scrollOriginal: 'Virtual scrollingはsource dataのみエクスポートできます、original=trueを設定してください',
       treeInsert: 'Tree structureはinsert operationsをサポートしていません',
