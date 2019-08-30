@@ -12,6 +12,7 @@ export default {
       delRevert: 'The function revert is deprecated, please use revertData.',
       groupFixed: 'If grouping headers are used, fixed columns must be on the left and right sides.',
       notResizable: 'Horizontal virtual scrolling does not support resizable.',
+      notMouse: 'Horizontal virtual scrolling does not support mouse-config.',
       cellEditRender: 'The renderer cell-render and edit-render cannot be used together.',
       scrollOriginal: 'Virtual scrolling can only export source data, please set original=true.',
       treeInsert: 'The tree structure does not support insert operations.',

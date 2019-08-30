@@ -839,8 +839,13 @@ export default {
       return rest.then(() => {
         // 如果启用了虚拟滚动，数据加载完成后还原指定位置
         let { lastScrollLeft, lastScrollTop } = this
-        if ((lastScrollLeft || lastScrollTop) && (this.scrollXLoad || this.scrollYLoad)) {
-          return this.clearScroll().then(() => this.scrollTo(lastScrollLeft, lastScrollTop))
+        if (this.scrollXLoad || this.scrollYLoad) {
+          if (this.mouseConfig) {
+            UtilTools.error('vxe.error.notMouse')
+          }
+          if (lastScrollLeft || lastScrollTop) {
+            return this.clearScroll().then(() => this.scrollTo(lastScrollLeft, lastScrollTop))
+          }
         }
       })
     },
