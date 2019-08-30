@@ -110,7 +110,7 @@ All modules support loading on demand.（所有的模块都支持按需加载）
 
 ## Docs
 
-[To view the project 查看项目](https://github.com/xuliangzhan/vxe-table-demo)
+[To view the user guide 使用指南](https://github.com/xuliangzhan/vxe-table-demo)
 
 [To view the example](https://xuliangzhan.github.io/vxe-table/#/table/base/basic) [查看演示](https://xuliangzhan_admin.gitee.io/vxe-table/#/table/base/basic)  
 [To view the document](https://xuliangzhan.github.io/vxe-table/#/table/api) [查看文档](https://xuliangzhan_admin.gitee.io/vxe-table/#/table/api)  
