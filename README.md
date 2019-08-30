@@ -117,7 +117,7 @@ All modules support loading on demand.（所有的模块都支持按需加载）
 
 ## Installing
 
-require: Vue 2.6+
+require: Vue 2.6+  
 require: xe-utils 2.2+
 
 ```shell
