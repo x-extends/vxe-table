@@ -305,13 +305,13 @@
       @extend %CellEllipsis;
     }
   }
-  &.is--recalculate {
-    .vxe-header--column,
-    .vxe-body--column,
-    .vxe-footer--column {
-      @extend %CellEllipsis;
-    }
-  }
+  // &.is--recalculate {
+  //   .vxe-header--column,
+  //   .vxe-body--column,
+  //   .vxe-footer--column {
+  //     @extend %CellEllipsis;
+  //   }
+  // }
   .fixed--hidden {
     visibility: hidden;
   }

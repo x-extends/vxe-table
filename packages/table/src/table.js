@@ -1489,12 +1489,12 @@ export default {
      * 支持 width=? width=?px width=?% min-width=? min-width=?px min-width=?%
      */
     recalculate (refull) {
-      let { $el, $refs } = this
+      let { $refs } = this
       let { tableBody, tableHeader, tableFooter } = $refs
       let bodyElem = tableBody ? tableBody.$el : null
       let headerElem = tableHeader ? tableHeader.$el : null
       let footerElem = tableFooter ? tableFooter.$el : null
-      DomTools.addClass($el, 'is--recalculate')
+      // DomTools.addClass($el, 'is--recalculate')
       if (bodyElem) {
         this.autoCellWidth(headerElem, bodyElem, footerElem)
         if (refull === true) {
@@ -1502,11 +1502,11 @@ export default {
           return this.computeScrollLoad().then(() => {
             this.autoCellWidth(headerElem, bodyElem, footerElem)
             this.computeScrollLoad()
-            DomTools.removeClass($el, 'is--recalculate')
+            // DomTools.removeClass($el, 'is--recalculate')
           })
         }
       }
-      DomTools.removeClass($el, 'is--recalculate')
+      // DomTools.removeClass($el, 'is--recalculate')
       return this.computeScrollLoad()
     },
     // 列宽计算
