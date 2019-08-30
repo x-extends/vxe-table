@@ -11,15 +11,14 @@
 [![pull requests closed](https://img.shields.io/github/issues-pr-closed/xuliangzhan/vxe-table.svg)](https://github.com/xuliangzhan/vxe-table/pulls?q=is%3Apr+is%3Aclosed)
 [![npm license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/xuliangzhan/vxe-table/blob/master/LICENSE)
 
-A simple and practical Vue table components, Compatible with any component library.  
 一个简单实用的 Vue 表组件，与任意组件库兼容。
 
-* Design concept 设计理念
+* 设计理念
   * 精简的 API（简洁、高效）
   * 模块化表格、插件化扩展（功能模块解耦，支持按需加载）
-  * 强大的功能的同时兼具性能（支持横向、纵向虚拟滚动、灵活的配置项；兼容任意组件库，不污染全局样式及变量）
+  * 强大的功能的同时兼具性能（支持横向、纵向虚拟滚动、灵活的配置项、不污染全局样式及变量）
 
-* Plan 计划
+* 计划
   * [x] v1 100% 实现表格的一切实用的功能
   * [x] v2 &nbsp;95% 性能优化，同时兼具功能与性能
   * [ ] v3 &nbsp;&nbsp;0% 实现重构，渲染性能大幅提升，基于 Vue3 并使用 typescript 开发
@@ -65,7 +64,6 @@ A simple and practical Vue table components, Compatible with any component libra
 * [x] Expandable row （展开行）
 * [x] Pager（分页）
 * [x] Toolbar（工具栏）
-* [x] Save the operational state of the column（保存列的操作状态）
 * [x] Tree table （树形表格)
 * [x] Editable CRUD（增删改查)
 * [x] Editable validate（数据校验）
@@ -73,8 +71,6 @@ A simple and practical Vue table components, Compatible with any component libra
 * [x] Keyboard navigation（全键盘操作）
 
 ## Modules
-
-All modules support loading on demand.（所有的模块都支持按需加载）
 
 * ![Table](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/table/src/table.min.js?compression=gzip&label=Table)![Cell](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/cell/src/cell.min.js?compression=gzip&label=Cell)![style](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/table/style/style.css?compression=gzip&label=style&color=green) (核心)
   * Modules （内置模块）
@@ -145,7 +141,6 @@ Vue.use(VXETable)
 
 ## Import on demand
 
-By using the [babel-plugin-import](https://www.npmjs.com/package/babel-plugin-import), you can load modules on demand and reduce the size of files. First installation, then update .babelrc or babel.config.js file  
 借助插件 [babel-plugin-import](https://www.npmjs.com/package/babel-plugin-import) 可以实现按需加载模块，减少文件体积。然后在文件 .babelrc 或者 babel.config.js 中配置
 
 ```shell
@@ -166,7 +161,6 @@ npm install babel-plugin-import -D
 }
 ```
 
-Now you can import modules like (The minimal lib is ≈ 120KB, gzip ≈ 40KB)  
 最后这样按需引入模块，就可以减小体积了（最小的包大约是 ≈ 120KB, gzip ≈ 40KB）
 
 ```javascript
@@ -188,7 +182,6 @@ Vue.use(Header)
 Vue.use(Body)
 Vue.use(Column)
 
-// The on-demand mode is not internationalized by default and needs to be imported by itself
 // 按需加载的方式默认是不带国际化的，需要自行导入
 VXETable.setup({
   i18n: (key, value) => VXETable.t(zhCNLocat, key)
@@ -235,10 +228,10 @@ new Vue({ i18n }).$mount('#app')
 <template>
   <div>
     <vxe-table :data="tableData">
-      <vxe-table-column type="index" title="Number" width="80"></vxe-table-column>
-      <vxe-table-column field="name" title="Name"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-      <vxe-table-column field="address" title="Address"></vxe-table-column>
+      <vxe-table-column type="index" title="序号" width="80"></vxe-table-column>
+      <vxe-table-column field="name" title="名字"></vxe-table-column>
+      <vxe-table-column field="sex" title="性别"></vxe-table-column>
+      <vxe-table-column field="address" title="地址"></vxe-table-column>
     </vxe-table>
   </div>
 </template>
@@ -250,10 +243,10 @@ export default {
       tableData: [
         {
           id: 10001,
-          name: 'Test1',
-          role: 'Developer',
-          sex: 'Man',
-          address: 'Address abc123'
+          name: '名字1',
+          role: '角色',
+          sex: '男',
+          address: '深圳市 圳市 市 xxx'
         }
       ]
     }
