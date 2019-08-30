@@ -1,8 +1,6 @@
 import { VXETableModule } from './module';
 
 /**
- * 响应式模块
+ * 响应式
  */
-export declare class Resize extends VXETableModule {
-
-}
+export declare class Resize extends VXETableModule {}

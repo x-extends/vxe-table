@@ -89,22 +89,22 @@ export const buttons: Buttons;
 export interface VXETableStatic {
   install(vue: typeof Vue): void;
   /**
-   * International translation
+   * 国际化翻译
    */
   t(obj: object, key: string): string | number;
   /**
    * 设置全局参数
-   * @param options
+   * @param options 参数
    */
   setup(options: VXETableOptions): any;
   /**
-   * Installing a plug-in
-   * @param plugin 
-   * @param options
+   * 安装插件
+   * @param plugin 插件
+   * @param options 参数
    */
   use(plugin: PluginObject<any>, ...options: any[]): VXETableStatic;
   /**
-   * 事件冲突拦截器
+   * 拦截器
    */
   interceptor: Interceptor;
   /**
@@ -122,7 +122,7 @@ export interface VXETableStatic {
 }
 
 /**
- * A fully functional Vue table component.
+ * 一个简单实用的 Vue 表组件
  */
 declare const VXETable: VXETableStatic;
 

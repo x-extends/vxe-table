@@ -1,7 +1,7 @@
 import { VXETableModule } from './module';
 
 /**
- * 多选框
+ * 复选框
  */
 export declare class Checkbox extends VXETableModule {
   /**

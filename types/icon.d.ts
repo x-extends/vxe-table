@@ -1,6 +1,6 @@
 import { VXETableModule } from './module';
 
 /**
- * Icon
+ * 内置图标库
  */
 export declare class Icon extends VXETableModule {}

@@ -1,6 +1,6 @@
 import { VXETableModule } from './module';
 
 /**
- * Cell
+ * 单元格
  */
 export declare class Cell extends VXETableModule {}
