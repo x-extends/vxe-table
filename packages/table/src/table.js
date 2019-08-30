@@ -511,7 +511,7 @@ export default {
   },
   mounted () {
     if (this.autoResize && VXETable._resize) {
-      this.bindResize(this, this.$el.parentNode, this.recalculate)
+      this.bindResize()
     }
     document.body.appendChild(this.$refs.tableWrapper)
   },
@@ -527,7 +527,7 @@ export default {
       tableWrapper.parentNode.removeChild(tableWrapper)
     }
     if (VXETable._resize) {
-      this.unbindResize(this, this.$el.parentNode)
+      this.unbindResize()
     }
     this.closeFilter()
     this.closeMenu()

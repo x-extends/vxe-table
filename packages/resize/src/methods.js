@@ -2,9 +2,14 @@ import Resize from './resize'
 
 export default {
   bindResize () {
-    Resize.on(this, this.$el.parentNode, this.recalculate)
+    const resizeObserver = new Resize(this.recalculate)
+    resizeObserver.observe(this.$el.parentNode)
+    this.$resize = resizeObserver
   },
   unbindResize () {
-    Resize.off(this, this.$el.parentNode)
+    const $resize = this.$resize
+    if ($resize) {
+      $resize.unobserve(this.$el.parentNode)
+    }
   }
 }

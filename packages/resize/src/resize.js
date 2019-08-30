@@ -2,12 +2,37 @@ import XEUtils from 'xe-utils/methods/xe-utils'
 import GlobalConfig from '../../conf'
 
 /**
- * 支持任意元素模拟 resize 事件行为，定时检测
- * 用于支持表格响应式布局，当宽度或高度发生变化时更新表格布局
+ * 监听 resize 事件
  */
+let resizeTimeout
 const eventStore = []
 const defaultInterval = 250
-var resizeTimeout = null
+
+class ResizeObserverPolyfill {
+  constructor (callback) {
+    this.callback = callback
+  }
+  observe (target) {
+    if (target) {
+      this.target = target
+      if (!eventStore.length) {
+        eventListener()
+      }
+      if (!eventStore.some(item => item.target === target)) {
+        this.width = target.clientWidth
+        this.heighe = target.clientHeight
+        eventStore.push(this)
+      }
+    }
+  }
+  unobserve (target) {
+    if (target) {
+      XEUtils.remove(eventStore, item => item.target === target)
+    }
+  }
+}
+
+const Resize = window.ResizeObserver || ResizeObserverPolyfill
 
 function eventListener () {
   clearTimeout(resizeTimeout)
@@ -16,32 +41,20 @@ function eventListener () {
 
 function eventHandle () {
   if (eventStore.length) {
-    eventStore.forEach(item => {
-      let { comp, target, cb, width, heighe } = item
-      let clientWidth = target.clientWidth
-      let clientHeight = target.clientHeight
-      let rWidth = clientWidth && width !== clientWidth
-      let rHeight = clientHeight && heighe !== clientHeight
+    eventStore.forEach(observer => {
+      const { target, width, heighe } = observer
+      const clientWidth = target.clientWidth
+      const clientHeight = target.clientHeight
+      const rWidth = clientWidth && width !== clientWidth
+      const rHeight = clientHeight && heighe !== clientHeight
       if (rWidth || rHeight) {
-        item.width = clientWidth
-        item.heighe = clientHeight
-        cb.call(comp, { type: 'resize', target, rWidth, rHeight, currentTarget: target })
+        observer.width = clientWidth
+        observer.heighe = clientHeight
+        observer.callback()
       }
     })
-    resizeTimeout = setTimeout(eventHandle, GlobalConfig.resizeInterval || defaultInterval)
+    eventListener()
   }
 }
 
-export default {
-  on (comp, target, cb) {
-    if (!eventStore.length) {
-      eventListener()
-    }
-    if (!eventStore.some(item => item.comp === comp && item.target === target)) {
-      eventStore.push({ comp, target, cb, width: target.clientWidth, heighe: target.clientWidth })
-    }
-  },
-  off (comp, target) {
-    XEUtils.remove(eventStore, item => item.comp === comp && item.target === target)
-  }
-}
+export default Resize
