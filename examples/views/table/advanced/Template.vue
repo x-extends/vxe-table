@@ -23,9 +23,9 @@
     <vxe-table
       border
       :data="tableData">
-      <vxe-table-column type="index" width="80">
+      <vxe-table-column type="index" width="100">
         <template v-slot="{ seq }">
-          <span>seq= {{ seq }}</span>
+          <vxe-button>按钮{{ seq }}</vxe-button>
         </template>
       </vxe-table-column>
       <vxe-table-column field="name" title="app.body.label.name" sortable>
@@ -104,9 +104,9 @@ export default {
         <vxe-table
           border
           :data="tableData">
-          <vxe-table-column type="index" width="80">
+          <vxe-table-column type="index" width="100">
             <template v-slot="{ seq }">
-              <span>seq= {{ seq }}</span>
+              <vxe-button>按钮{{ seq }}</vxe-button>
             </template>
           </vxe-table-column>
           <vxe-table-column field="name" title="app.body.label.name" sortable>

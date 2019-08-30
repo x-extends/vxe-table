@@ -144,9 +144,11 @@
   .vxe-header--column,
   .vxe-body--column,
   .vxe-footer--column {
-    padding: 12px 0;
     line-height: 23px;
     text-align: left;
+    &:not(.col--ellipsis) {
+      padding: 12px 0;
+    }
     &.col--current {
       background-color: $vxe-table-column-current-background-color;
     }
@@ -211,7 +213,9 @@
     .vxe-header--column,
     .vxe-body--column,
     .vxe-footer--column {
-      padding: 10px 0;
+      &:not(.col--ellipsis) {
+        padding: 10px 0;
+      }
     }
     .vxe-table--loading {
       .vxe-table--spinner {
@@ -231,7 +235,9 @@
     .vxe-header--column,
     .vxe-body--column,
     .vxe-footer--column {
-      padding: 8px 0;
+      &:not(.col--ellipsis) {
+        padding: 8px 0;
+      }
     }
     .vxe-table--loading {
       .vxe-table--spinner {
@@ -251,7 +257,9 @@
     .vxe-header--column,
     .vxe-body--column,
     .vxe-footer--column {
-      padding: 6px 0;
+      &:not(.col--ellipsis) {
+        padding: 6px 0;
+      }
     }
     .vxe-table--loading {
       .vxe-table--spinner {

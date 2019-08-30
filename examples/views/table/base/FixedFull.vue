@@ -13,7 +13,12 @@
       <vxe-table-column field="role" title="Role" width="300"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex" width="300"></vxe-table-column>
       <vxe-table-column field="date" title="Date" width="300"></vxe-table-column>
-      <vxe-table-column field="address" title="Address" fixed="right" width="300"></vxe-table-column>
+      <vxe-table-column title="操作" fixed="right" width="200">
+        <template>
+          <vxe-button type="text">按钮1</vxe-button>
+          <vxe-button type="text">按钮2</vxe-button>
+        </template>
+      </vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -25,22 +30,25 @@
 
     <p class="tip">固定列建议设置 show-overflow 或 show-overflow 该值，禁用自动换行，大幅提升渲染速度</p>
 
-    <keep-alive>
-      <vxe-table
-        border
-        height="300"
-        highlight-hover-row
-        show-overflow
-        v-if="visible"
-        :data="tableData">
-        <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
-        <vxe-table-column field="name" title="Name" width="300"></vxe-table-column>
-        <vxe-table-column field="role" title="Role" width="300"></vxe-table-column>
-        <vxe-table-column field="sex" title="Sex" width="300"></vxe-table-column>
-        <vxe-table-column field="date" title="Date" width="300"></vxe-table-column>
-        <vxe-table-column field="address" title="Address" fixed="right" width="300"></vxe-table-column>
-      </vxe-table>
-    </keep-alive>
+    <vxe-table
+      border
+      height="300"
+      highlight-hover-row
+      show-overflow
+      v-if="visible"
+      :data="tableData">
+      <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
+      <vxe-table-column field="name" title="Name" width="300"></vxe-table-column>
+      <vxe-table-column field="role" title="Role" width="300"></vxe-table-column>
+      <vxe-table-column field="sex" title="Sex" width="300"></vxe-table-column>
+      <vxe-table-column field="date" title="Date" width="300"></vxe-table-column>
+      <vxe-table-column title="操作" fixed="right" width="200">
+        <template>
+          <vxe-button type="primary">按钮1</vxe-button>
+          <vxe-button>按钮2</vxe-button>
+        </template>
+      </vxe-table-column>
+    </vxe-table>
 
     <pre>
       <code>
@@ -81,7 +89,12 @@ export default {
           <vxe-table-column field="role" title="Role" width="300"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" width="300"></vxe-table-column>
           <vxe-table-column field="date" title="Date" width="300"></vxe-table-column>
-          <vxe-table-column field="address" title="Address" fixed="right" width="300"></vxe-table-column>
+          <vxe-table-column title="操作" fixed="right" width="200">
+            <template>
+              <vxe-button type="text">按钮1</vxe-button>
+              <vxe-button type="text">按钮2</vxe-button>
+            </template>
+          </vxe-table-column>
         </vxe-table>
         `,
         `
@@ -102,13 +115,19 @@ export default {
           height="300"
           highlight-hover-row
           show-overflow
+          v-if="visible"
           :data="tableData">
           <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
           <vxe-table-column field="name" title="Name" width="300"></vxe-table-column>
           <vxe-table-column field="role" title="Role" width="300"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" width="300"></vxe-table-column>
           <vxe-table-column field="date" title="Date" width="300"></vxe-table-column>
-          <vxe-table-column field="address" title="Address" fixed="right" width="300"></vxe-table-column>
+          <vxe-table-column title="操作" fixed="right" width="200">
+            <template>
+              <vxe-button type="primary">按钮1</vxe-button>
+              <vxe-button>按钮2</vxe-button>
+            </template>
+          </vxe-table-column>
         </vxe-table>
         `,
         `
