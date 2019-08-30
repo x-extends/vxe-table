@@ -1,30 +1,30 @@
-const XEUtils = require('xe-utils/methods/xe-utils')
-const Table = require('./table')
-const Column = require('./column')
-const Header = require('./header')
-const Body = require('./body')
-const Footer = require('./footer')
-const Filter = require('./filter')
-const Loading = require('./loading')
-const Grid = require('./grid')
-const Menu = require('./menu')
-const Toolbar = require('./toolbar')
-const Pager = require('./pager')
-const Checkbox = require('./checkbox')
-const Radio = require('./radio')
-const Input = require('./input')
-const Button = require('./button')
-const Modal = require('./modal')
-const Tooltip = require('./tooltip')
+import XEUtils from 'xe-utils/methods/xe-utils'
+import VXETable from './v-x-e-table'
+import Table from './table'
+import Column from './column'
+import Header from './header'
+import Body from './body'
+import Footer from './footer'
+import Filter from './filter'
+import Loading from './loading'
+import Grid from './grid'
+import Menu from './menu'
+import Toolbar from './toolbar'
+import Pager from './pager'
+import Checkbox from './checkbox'
+import Radio from './radio'
+import Input from './input'
+import Button from './button'
+import Modal from './modal'
+import Tooltip from './tooltip'
 
-const Export = require('./export')
-const Keyboard = require('./keyboard')
-const Resize = require('./resize')
-const VXETable = require('./v-x-e-table')
-const zhCNLocat = require('./locale/lang/zh-CN')
+import Export from './export'
+import Keyboard from './keyboard'
+import Resize from './resize'
+import zhCNLocat from './locale/lang/zh-CN'
 
 // 按需加载的组件
-const components = [
+export const components = [
   Table,
   Column,
   Header,
@@ -67,27 +67,25 @@ if (typeof window !== 'undefined' && window.Vue) {
 
 VXETable.install = install
 
-module.exports = {
-  Table,
-  Column,
-  Header,
-  Body,
-  Footer,
-  Filter,
-  Loading,
-  Grid,
-  Menu,
-  Toolbar,
-  Pager,
-  Checkbox,
-  Radio,
-  Input,
-  Button,
-  Modal,
-  Tooltip,
-  Export,
-  Keyboard,
-  Resize,
-  VXETable
-}
-module.exports.default = VXETable
+export * from './table'
+export * from './column'
+export * from './header'
+export * from './body'
+export * from './footer'
+export * from './filter'
+export * from './loading'
+export * from './grid'
+export * from './menu'
+export * from './toolbar'
+export * from './pager'
+export * from './checkbox'
+export * from './radio'
+export * from './input'
+export * from './button'
+export * from './modal'
+export * from './tooltip'
+export * from './export'
+export * from './keyboard'
+export * from './resize'
+export * from './v-x-e-table'
+export default VXETable
