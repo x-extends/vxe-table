@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import i18n from '@/i18n'
 
-import XEUtils from 'xe-utils/methods/xe-utils'
 import VXETable from '../../../packages/v-x-e-table'
 import Table from '../../../packages/table'
 import Column from '../../../packages/column'
@@ -25,8 +24,6 @@ import Keyboard from '../../../packages/keyboard'
 import Resize from '../../../packages/resize'
 import '../../../styles/index.scss'
 
-import dependencies from '../../../packages/utils/dependencies'
-
 // import VXETablePluginElement from '../../../../vxe-table-plugin-element/index.js'
 // import VXETablePluginIView from '../../../../vxe-table-plugin-iview/index.js'
 // import VXETablePluginAntd from '../../../../vxe-table-plugin-antd/index.js'
@@ -47,9 +44,6 @@ import 'vxe-table-plugin-antd/dist/style.css'
 import 'vxe-table-plugin-excel/dist/style.css'
 import 'vxe-table-plugin-renderer/dist/style.css'
 import 'vxe-table-plugin-charts/dist/style.css'
-
-// 按需导入依赖函数库
-XEUtils.mixin(dependencies)
 
 VXETable.setup({
   translate: key => key && key.indexOf('app.') > -1 ? i18n.t(key) : key, // 自动翻译以 app. 开头的键值
