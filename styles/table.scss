@@ -470,26 +470,38 @@
     padding: 20px;
   }
 
-  /*固定列*/
-  &.fixed--left,
-  &.fixed--right,
-  &.vxe-editable {
-    .vxe-body--column {
+  /*固定高度*/
+  .vxe-header--column,
+  .vxe-body--column,
+  .vxe-footer--column {
+    &.col--ellipsis {
       height: 48px;
       line-height: inherit;
     }
-    &.size--medium {
-      .vxe-body--column {
+  }
+  &.size--medium {
+    .vxe-header--column,
+    .vxe-body--column,
+    .vxe-footer--column {
+      &.col--ellipsis {
         height: 44px;
       }
     }
-    &.size--small {
-      .vxe-body--column {
+  }
+  &.size--small {
+    .vxe-header--column,
+    .vxe-body--column,
+    .vxe-footer--column {
+      &.col--ellipsis {
         height: 40px;
       }
     }
-    &.size--mini {
-      .vxe-body--column {
+  }
+  &.size--mini {
+    .vxe-header--column,
+    .vxe-body--column,
+    .vxe-footer--column {
+      &.col--ellipsis {
         height: 36px;
       }
     }
