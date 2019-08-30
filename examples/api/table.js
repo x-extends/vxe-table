@@ -1575,29 +1575,11 @@ const apis = [
         list: []
       },
       {
-        name: 'getRecords(rowIndex)',
-        disabled: true,
-        desc: '即将废弃，请使用 getData',
-        type: 'Array',
-        enum: '',
-        defVal: 'rowIndex?',
-        list: []
-      },
-      {
         name: 'getData(rowIndex)',
         desc: '获取数据，和 data 的行为一致，也可以指定索引获取数据',
         type: 'Array',
         enum: '',
         defVal: 'rowIndex?',
-        list: []
-      },
-      {
-        name: 'getAllRecords()',
-        disabled: true,
-        desc: '即将废弃，请使用 getRecordset',
-        type: '{insertRecords, removeRecords, updateRecords}',
-        enum: '',
-        defVal: '',
         list: []
       },
       {

@@ -60,6 +60,7 @@
 </template>
 
 <script>
+import XEUtils from 'xe-utils/methods/xe-utils'
 import pack from '../../../package.json'
 import XEClipboard from 'xe-clipboard'
 import tableAPI from '../../api/table'
@@ -306,7 +307,7 @@ export default {
       }
     },
     // 创建一个防反跳策略函数，间隔 500 毫秒的执行赔率
-    searchEvent: this.$utils.debounce(function () {
+    searchEvent: XEUtils.debounce(function () {
       this.handleSearch()
     }, 500, { leading: false, trailing: true })
   },
