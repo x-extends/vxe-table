@@ -68,7 +68,7 @@
 * [x] Editable CRUD（增删改查)
 * [x] Editable validate（数据校验）
 * [x] DataProxy（数据代理）
-* [x] Keyboard navigation（全键盘操作）
+* [x] Keyboard navigation（键盘导航）
 
 ## Modules
 
