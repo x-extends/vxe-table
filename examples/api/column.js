@@ -52,7 +52,7 @@ const apis = [
         name: 'width',
         descKey: 'app.api.tableColumn.desc.width',
         type: 'Number, String',
-        enum: 'px，%',
+        enum: '整数, px，%',
         defVal: '继承 table 的 column-width',
         list: []
       },
@@ -60,7 +60,7 @@ const apis = [
         name: 'min-width',
         descKey: 'app.api.tableColumn.desc.minWidth',
         type: 'Number, String',
-        enum: 'px，%',
+        enum: '整数, px，%',
         defVal: '继承 table 的 column-min-width',
         list: []
       },
