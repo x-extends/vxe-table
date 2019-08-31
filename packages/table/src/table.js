@@ -758,7 +758,7 @@ export default {
       return this.$nextTick()
     },
     loadData (datas, notRefresh) {
-      let { height, maxHeight, editStore, optimizeOpts, recalculate } = this
+      let { height, maxHeight, editStore, optimizeOpts, lastScrollLeft, lastScrollTop } = this
       let { scrollY } = optimizeOpts
       let tableFullData = datas ? datas.slice(0) : []
       let scrollYLoad = scrollY && scrollY.gt && scrollY.gt < tableFullData.length
@@ -775,23 +775,22 @@ export default {
       if (scrollYLoad && !(height || maxHeight)) {
         UtilTools.error('vxe.error.scrollYHeight')
       }
+      this.clearScroll()
       this.handleData(true)
       this.reserveCheckSelection()
       this.checkSelectionStatus()
       let rest = this.$nextTick()
       if (!notRefresh) {
-        rest = rest.then(recalculate)
+        rest = rest.then(this.recalculate)
       }
       return rest.then(() => {
-        // 如果启用了虚拟滚动，数据加载完成后还原指定位置
-        let { lastScrollLeft, lastScrollTop } = this
         if (this.scrollXLoad || this.scrollYLoad) {
           if (this.mouseConfig) {
             UtilTools.error('vxe.error.notMouse')
           }
-          if (lastScrollLeft || lastScrollTop) {
-            return this.clearScroll().then(() => this.scrollTo(lastScrollLeft, lastScrollTop))
-          }
+        }
+        if (lastScrollLeft || lastScrollTop) {
+          return this.scrollTo(lastScrollLeft, lastScrollTop)
         }
       })
     },
