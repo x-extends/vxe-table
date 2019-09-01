@@ -15,9 +15,10 @@
       <vxe-table-column field="defVal" title="app.api.title.defVal" min-width="160"></vxe-table-column>
     </vxe-table>
     <h3>type 可选值</h3>
-    <p class="orange">event.clear_filter（清除筛选面板时触发）</p>
-    <p class="orange">event.clear_actived（清除激活单元格时触发）</p>
+    <p class="orange">event.clear_filter（清除激活单元格之前触发，允许返回 false 阻止默认行为）</p>
+    <p class="orange">event.clear_actived（清除筛选面板之前触发，允许返回 false 阻止默认行为）</p>
     <p class="orange">event.show_menu（显示快捷菜单之前触发）</p>
+    <p class="orange">event.keydown（键盘按下时触发）</p>
     <h3>示例</h3>
     <p>例子：比如自定义渲染某个组件后，由于弹出层面板不在单元格之内，按键事件的交互行为存在冲突，对于这些场景就很有用了</p>
     <pre>

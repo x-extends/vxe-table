@@ -1788,8 +1788,10 @@ export default {
     },
     preventEvent (evnt, type, args, next, end) {
       let evntList = Interceptor.get(type)
-      if (!evntList.some(func => func(args, evnt, this) === false) && next) {
-        next()
+      if (!evntList.some(func => func(args, evnt, this) === false)) {
+        if (next) {
+          next()
+        }
       }
       if (end) {
         end()
@@ -1994,6 +1996,7 @@ export default {
           }
         }
       }
+      this.preventEvent(evnt, 'event.keydown', { $table: this })
     },
     handleGlobalResizeEvent () {
       this.recalculate()

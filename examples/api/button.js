@@ -66,7 +66,7 @@ const apis = [
     list: [
       {
         name: '*',
-        desc: '在值发生改变时触发该事件',
+        desc: '原生事件',
         type: '',
         enum: '',
         defVal: 'event',
