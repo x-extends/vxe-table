@@ -1,13 +1,14 @@
-import XEUtils from 'xe-utils'
+import XEUtils from 'xe-utils/methods/xe-utils'
 
-// 当渲染其他组件时，存在事件冲突时，可以通过该拦截器阻止单元格被自动关闭问题
 const _storeMap = {
-  // 清除激活单元格之前触发拦截
+  // 清除激活单元格之前触发，允许返回 false 阻止默认行为
   'event.clear_actived': [],
-  // 清除筛选面板之前触发拦截
+  // 清除筛选面板之前触发，允许返回 false 阻止默认行为
   'event.clear_filter': [],
   // 显示快捷菜单之前触发
-  'event.show_menu': []
+  'event.show_menu': [],
+  // 键盘按下时触发
+  'event.keydown': []
 }
 
 export const Interceptor = {
