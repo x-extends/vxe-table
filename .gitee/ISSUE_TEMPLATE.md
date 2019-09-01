@@ -10,10 +10,6 @@
 
  ?
 
-### （必填）请填写期望的结果 Expected behavior
-
- ?
-
 ### （必填）请填写版本号 Version
 
 - os: ?
