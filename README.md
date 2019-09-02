@@ -140,55 +140,6 @@ import 'vxe-table/lib/index.css'
 Vue.use(VXETable)
 ```
 
-## Import on demand
-
-借助插件 [babel-plugin-import](https://www.npmjs.com/package/babel-plugin-import) 可以实现按需加载模块，减少文件体积。然后在文件 .babelrc 或者 babel.config.js 中配置
-
-```shell
-npm install babel-plugin-import -D
-```
-
-```javascript
-{
-  "plugins": [
-    [
-      "import",
-      {
-        "libraryName": "vxe-table",
-        "style": true
-      }
-    ]
-  ]
-}
-```
-
-最后这样按需引入模块，就可以减小体积了（最小的包大约是 ≈ 120KB, gzip ≈ 40KB）
-
-```javascript
-import Vue from 'vue'
-import 'xe-utils'
-import {
-  VXETable,
-  Icon,
-  Table,
-  Header,
-  Body,
-  Column
-} from 'vxe-table'
-import zhCNLocat from 'vxe-table/lib/locale/lang/zh-CN'
-
-Vue.use(Icon)
-Vue.use(Table)
-Vue.use(Header)
-Vue.use(Body)
-Vue.use(Column)
-
-// 按需加载的方式默认是不带国际化的，需要自行导入
-VXETable.setup({
-  i18n: (key, value) => VXETable.t(zhCNLocat, key)
-})
-```
-
 ## Internationalization
 
 ```shell
