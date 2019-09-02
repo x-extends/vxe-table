@@ -124,6 +124,16 @@ function defaultFilterMethod ({ option, row, column }) {
   return cellValue == data
 }
 
+function renderSelectEdit (h, renderOpts, params) {
+  return [
+    h('select', {
+      class: 'vxe-default-select',
+      on: getEvents(renderOpts, params)
+    },
+    renderOpts.optionGroups ? renderOptgroups(h, renderOpts, params) : renderOptions(h, renderOpts.options, renderOpts, params))
+  ]
+}
+
 const renderMap = {
   input: {
     autofocus: 'input',
@@ -138,15 +148,8 @@ const renderMap = {
     filterMethod: defaultFilterMethod
   },
   select: {
-    renderEdit (h, renderOpts, params) {
-      return [
-        h('select', {
-          class: 'vxe-default-select',
-          on: getEvents(renderOpts, params)
-        },
-        renderOpts.optionGroups ? renderOptgroups(h, renderOpts, params) : renderOptions(h, renderOpts.options, renderOpts, params))
-      ]
-    },
+    renderEdit: renderSelectEdit,
+    renderDefault: renderSelectEdit,
     renderCell (h, renderOpts, params) {
       let { options, optionGroups, optionProps = {}, optionGroupProps = {} } = renderOpts
       let { row, column } = params
