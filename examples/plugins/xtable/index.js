@@ -24,13 +24,14 @@ import Keyboard from '../../../packages/keyboard'
 import Resize from '../../../packages/resize'
 import '../../../styles/index.scss'
 
-// import VXETablePluginElement from '../../../../vxe-table-plugin-element/index.js'
-// import VXETablePluginIView from '../../../../vxe-table-plugin-iview/index.js'
-// import VXETablePluginAntd from '../../../../vxe-table-plugin-antd/index.js'
-// import VXETablePluginExcel from '../../../../vxe-table-plugin-excel/index.js'
-// import VXETablePluginRenderer from '../../../../vxe-table-plugin-renderer/index.js'
-// import VXETablePluginMenus from '../../../../vxe-table-plugin-menus/index.js'
-// import VXETablePluginCharts from '../../../../vxe-table-plugin-charts/index.js'
+// import VXETablePluginElement from '../../../../vxe-table-plugin-element/test.js'
+// import VXETablePluginIView from '../../../../vxe-table-plugin-iview/test.js'
+// import VXETablePluginAntd from '../../../../vxe-table-plugin-antd/test.js'
+// import VXETablePluginExcel from '../../../../vxe-table-plugin-excel/test.js'
+// import VXETablePluginRenderer from '../../../../vxe-table-plugin-renderer/test.js'
+// import VXETablePluginMenus from '../../../../vxe-table-plugin-menus/test.js'
+// import VXETablePluginCharts from '../../../../vxe-table-plugin-charts/test.js'
+// import VXETablePluginShortcutKey from '../../../../vxe-table-plugin-shortcut-key/test.js'
 import VXETablePluginElement from 'vxe-table-plugin-element'
 import VXETablePluginIView from 'vxe-table-plugin-iview'
 import VXETablePluginAntd from 'vxe-table-plugin-antd'
@@ -78,8 +79,6 @@ VXETable.use(VXETablePluginExcel)
 VXETable.use(VXETablePluginRenderer)
 VXETable.use(VXETablePluginMenus)
 VXETable.use(VXETablePluginCharts)
-
-VXETable.menus.add('exportCSV', (params, event) => {
-  let { $table } = params
-  $table.exportCsv()
-})
+// VXETable.use(VXETablePluginShortcutKey, {
+//   a: 1
+// })

@@ -88,6 +88,7 @@ const TableTreeSpan = () => import(/* webpackChunkName: "tree" */ './views/table
 const TableTreeKeyboard = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Keyboard.vue')
 const TableTreeLazy = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Lazy.vue')
 const TableTreeEdit = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Edit.vue')
+const TableTreeTemplate = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Template.vue')
 
 const TableScroll = () => import(/* webpackChunkName: "scroll" */ './views/table/scroll/Scroll.vue')
 const TableScrollRows = () => import(/* webpackChunkName: "scroll" */ './views/table/scroll/ScrollRows.vue')
@@ -497,6 +498,11 @@ export default new Router({
       path: '/table/tree/edit',
       name: 'TableTreeEdit',
       component: TableTreeEdit
+    },
+    {
+      path: '/table/tree/template',
+      name: 'TableTreeTemplate',
+      component: TableTreeTemplate
     },
     {
       path: '/table/grid/basic',
