@@ -287,7 +287,7 @@ export default {
       })
     },
     close (type) {
-      let { $listeners, events = {}, visible, isMsg } = this
+      let { events = {}, visible, isMsg } = this
       if (visible) {
         if (isMsg) {
           this.removeMsgQueue()
@@ -296,11 +296,11 @@ export default {
         setTimeout(() => {
           this.visible = false
           let params = { type, $modal: this }
-          if ($listeners.close) {
+          if (events.hide) {
+            events.hide.call(this, params)
+          } else {
             this.$emit('input', false)
             this.$emit('hide', params)
-          } else if (events.close) {
-            events.close.call(this, params)
           }
         }, 200)
       }

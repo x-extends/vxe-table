@@ -12,9 +12,9 @@ export function Modal (options) {
     } else {
       let events = options.events || {}
       options.events = Object.assign({}, events, {
-        close (params) {
-          if (events.close) {
-            events.close.call(this, params)
+        hide (params) {
+          if (events.hide) {
+            events.hide.call(this, params)
           }
           $modal.$destroy()
           resolve(params.type)
