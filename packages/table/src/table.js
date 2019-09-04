@@ -792,6 +792,7 @@ export default {
         if (lastScrollLeft || lastScrollTop) {
           return this.scrollTo(lastScrollLeft, lastScrollTop)
         }
+        return this.recalculate()
       })
     },
     reloadData (datas) {
@@ -1310,7 +1311,7 @@ export default {
         this.handleDefaultTreeExpand()
       }
       this.updateFooter()
-      this.$nextTick(this.recalculate)
+      this.$nextTick(() => setTimeout(this.recalculate))
     },
     /**
      * 动态列处理
