@@ -28,6 +28,7 @@
       <vxe-modal v-model="value1" :lock-scroll="false">
         <template>
           <vxe-table
+            show-overflow
             height="auto"
             :sync-resize="value1"
             :data="tableData">
@@ -57,6 +58,7 @@
           <vxe-table
             border
             resizable
+            show-overflow
             auto-resize
             height="auto"
             :sync-resize="value3"
@@ -116,6 +118,7 @@ export default {
           <vxe-modal v-model="value1" :lock-scroll="false">
             <template>
               <vxe-table
+                show-overflow
                 height="auto"
                 :sync-resize="value1"
                 :data="tableData">
@@ -145,6 +148,7 @@ export default {
               <vxe-table
                 border
                 resizable
+                show-overflow
                 auto-resize
                 height="auto"
                 :sync-resize="value3"
