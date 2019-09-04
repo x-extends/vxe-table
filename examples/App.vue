@@ -580,6 +580,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.template',
+              locat: {
+                name: 'TableTreeTemplate'
+              }
+            },
+            {
               label: 'app.aside.nav.full',
               disabled: true,
               locat: {
