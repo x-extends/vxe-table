@@ -241,6 +241,11 @@ export default {
       $table: this
     }
   },
+  inject: {
+    $grid: {
+      default: null
+    }
+  },
   data () {
     return {
       id: XEUtils.uniqueId(),

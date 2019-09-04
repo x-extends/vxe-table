@@ -163,7 +163,8 @@ export default {
         }, pagerConfig, proxyConfig ? tablePage : {}),
         on: {
           'page-change': this.pageChangeEvent
-        }
+        },
+        ref: 'pager'
       }) : null
     ])
   },
