@@ -65,7 +65,7 @@ export default {
     GlobalEvent.off(this, 'blur')
   },
   render (h) {
-    let { $scopedSlots, $grid, $table, loading, settingStore, refresh, setting, settingOpts, buttons = [], vSize, tableFullColumn } = this
+    let { _e, $scopedSlots, $grid, $table, loading, settingStore, refresh, setting, settingOpts, buttons = [], vSize, tableFullColumn } = this
     let customBtnOns = {}
     let customWrapperOns = {}
     let $buttons = $scopedSlots.buttons
@@ -92,16 +92,22 @@ export default {
       h('div', {
         class: 'vxe-button--wrapper'
       }, $buttons ? $buttons.call($grid || $table || this, { $grid, $table }, h) : buttons.map(item => {
-        return h('vxe-button', {
+        return item.visible === false ? _e() : h('vxe-button', {
           on: {
             click: evnt => this.btnEvent(evnt, item)
+          },
+          props: {
+            disabled: item.disabled
           },
           scopedSlots: item.dropdowns && item.dropdowns.length ? {
             default: () => UtilTools.getFuncText(item.name),
             dropdowns: () => item.dropdowns.map(child => {
-              return h('vxe-button', {
+              return child.visible === false ? _e() : h('vxe-button', {
                 on: {
                   click: evnt => this.btnEvent(evnt, child)
+                },
+                props: {
+                  disabled: child.disabled
                 }
               }, UtilTools.getFuncText(child.name))
             })

@@ -37,11 +37,33 @@ export default {
       tableToolbar: {
         id: 'treeEdit_demo1',
         buttons: [
-          { code: 'reload', name: 'app.body.button.refresh' },
-          { code: 'insert_actived', name: 'app.body.button.insert' },
-          { code: 'mark_cancel', name: 'app.body.button.markCancel' },
-          { code: 'save', name: 'app.body.button.save' },
-          { code: 'export', name: '导出.csv' }
+          { code: 'reload', name: 'app.body.button.refresh', disabled: false },
+          { code: 'insert_actived', name: 'app.body.button.insert', disabled: false },
+          { code: 'mark_cancel', name: 'app.body.button.markCancel', disabled: false },
+          { code: 'save', name: 'app.body.button.save', disabled: false },
+          { code: 'export', name: '导出.csv', disabled: false },
+          { code: 'other0', name: '禁用的按钮1', disabled: true },
+          {
+            name: '禁用下拉按钮',
+            disabled: false,
+            dropdowns: [
+              {
+                code: 'other1',
+                name: '下拉的按钮1',
+                disabled: false
+              },
+              {
+                code: 'other2',
+                name: '下拉的按钮2',
+                disabled: true
+              },
+              {
+                code: 'other3',
+                name: '下拉的按钮3',
+                disabled: false
+              }
+            ]
+          }
         ],
         refresh: true,
         resizable: {
@@ -84,11 +106,34 @@ export default {
               tableToolbar: {
                 id: 'treeEdit_demo1',
                 buttons: [
-                  { code: 'reload', name: 'app.body.button.refresh' },
-                  { code: 'insert_actived', name: 'app.body.button.insert' },
-                  { code: 'mark_cancel', name: 'app.body.button.markCancel' },
-                  { code: 'save', name: 'app.body.button.save' },
-                  { code: 'export', name: '导出.csv' }
+                  { code: 'reload', name: 'app.body.button.refresh', disabled: false },
+                  { code: 'insert_actived', name: 'app.body.button.insert', disabled: false },
+                  { code: 'mark_cancel', name: 'app.body.button.markCancel', disabled: false },
+                  { code: 'save', name: 'app.body.button.save', disabled: false },
+                  { code: 'export', name: '导出.csv', disabled: false },
+                  { code: 'other0', name: '禁用的按钮1', disabled: true },
+                    {
+                      name: '禁用下拉按钮',
+                      disabled: false,
+                      dropdowns: [
+                        {
+                          code: 'other1',
+                          name: '下拉的按钮1',
+                          disabled: false
+                        },
+                        {
+                          code: 'other2',
+                          name: '下拉的按钮2',
+                          disabled: true
+                        },
+                        {
+                          code: 'other3',
+                          name: '下拉的按钮3',
+                          disabled: false
+                        }
+                      ]
+                    }
+                  }
                 ],
                 refresh: true,
                 resizable: {

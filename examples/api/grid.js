@@ -17,122 +17,7 @@ const apis = [
         type: 'Object',
         enum: '',
         defVal: '',
-        list: XEUtils.clone(toolbarAPI.find(item => item.name === 'Props').list, true).concat([
-          {
-            name: 'buttons',
-            desc: '按钮列表',
-            type: 'Array',
-            enum: '',
-            defVal: '',
-            list: [
-              {
-                name: 'name',
-                desc: '按钮名称（支持开启国际化）',
-                type: 'String',
-                enum: '',
-                defVal: '',
-                list: []
-              },
-              {
-                name: 'code',
-                desc: '按钮编码',
-                type: 'String',
-                enum: '',
-                defVal: '',
-                list: [
-                  {
-                    name: 'reload',
-                    desc: '刷新数据，会重置分页；触发 ajax.query 方法',
-                    type: '',
-                    enum: '',
-                    defVal: '',
-                    list: []
-                  },
-                  {
-                    name: 'query',
-                    desc: '刷新数据；会自动触发 ajax.query 方法',
-                    type: '',
-                    enum: '',
-                    defVal: '',
-                    list: []
-                  },
-                  {
-                    name: 'insert',
-                    desc: '新增数据',
-                    type: '',
-                    enum: '',
-                    defVal: '',
-                    list: []
-                  },
-                  {
-                    name: 'insert_actived',
-                    desc: '新增数据并且默认激活第一个可编辑的单元格',
-                    type: '',
-                    enum: '',
-                    defVal: '',
-                    list: []
-                  },
-                  {
-                    name: 'mark_cancel',
-                    desc: '将选中的数据标记或取消删除',
-                    type: '',
-                    enum: '',
-                    defVal: '',
-                    list: []
-                  },
-                  {
-                    name: 'delete_selection',
-                    desc: '删除选中行；会自动触发 ajax.delete 方法',
-                    type: '',
-                    enum: '',
-                    defVal: '',
-                    list: []
-                  },
-                  {
-                    name: 'remove_selection',
-                    desc: '移除选中行',
-                    type: '',
-                    enum: '',
-                    defVal: '',
-                    list: []
-                  },
-                  {
-                    name: 'save',
-                    desc: '保存数据；会自动触发 ajax.save 方法，并且在 Promise 完成之后重新触发 ajax.query 方法',
-                    type: '',
-                    enum: '',
-                    defVal: '',
-                    list: []
-                  },
-                  {
-                    name: 'export',
-                    desc: '导出数据',
-                    type: '',
-                    enum: '',
-                    defVal: '',
-                    list: []
-                  },
-                  {
-                    name: 'reset_custom',
-                    desc: '重置个性化数据（显示/隐藏列、列宽拖动状态）',
-                    type: '',
-                    enum: '',
-                    defVal: '',
-                    list: []
-                  }
-                ]
-              },
-              {
-                name: 'dropdowns',
-                desc: '下拉按钮列表',
-                type: 'Array',
-                enum: '',
-                defVal: '',
-                list: []
-              }
-            ]
-          }
-        ]).concat([{
+        list: XEUtils.clone(toolbarAPI.find(item => item.name === 'Props').list, true).concat([{
           name: 'slots',
           descKey: 'app.api.title.slots',
           type: 'Object',
@@ -397,6 +282,93 @@ const gridAPI = XEUtils.clone(tableAPI, true).map(item => {
   rest.list = item.list.concat(rest.list)
   return rest
 })
+
+XEUtils.eachTree(gridAPI, (item, index, obj, paths, parent) => {
+  if (parent && parent.name === 'buttons' && item.name === 'code') {
+    item.list = [
+      {
+        name: 'reload',
+        desc: '刷新数据，会重置分页；触发 ajax.query 方法',
+        type: '',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'query',
+        desc: '刷新数据；会自动触发 ajax.query 方法',
+        type: '',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'insert',
+        desc: '新增数据',
+        type: '',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'insert_actived',
+        desc: '新增数据并且默认激活第一个可编辑的单元格',
+        type: '',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'mark_cancel',
+        desc: '将选中的数据标记或取消删除',
+        type: '',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'delete_selection',
+        desc: '删除选中行；会自动触发 ajax.delete 方法',
+        type: '',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'remove_selection',
+        desc: '移除选中行',
+        type: '',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'save',
+        desc: '保存数据；会自动触发 ajax.save 方法，并且在 Promise 完成之后重新触发 ajax.query 方法',
+        type: '',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'export',
+        desc: '导出数据',
+        type: '',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'reset_custom',
+        desc: '重置个性化数据（显示/隐藏列、列宽拖动状态）',
+        type: '',
+        enum: '',
+        defVal: '',
+        list: []
+      }
+    ]
+  }
+}, { children: 'list' })
 
 gridAPI.find(item => item.name === 'Props').list.splice(1, 0, {
   name: 'columns',
