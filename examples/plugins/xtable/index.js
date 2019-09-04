@@ -80,5 +80,6 @@ VXETable.use(VXETablePluginRenderer)
 VXETable.use(VXETablePluginMenus)
 VXETable.use(VXETablePluginCharts)
 // VXETable.use(VXETablePluginShortcutKey, {
-//   a: 1
+//   'pager.prevPage': 'ArrowLeft',
+//   'pager.nextPage': 'ArrowRight'
 // })

@@ -79,7 +79,7 @@ export default {
           'is--disabled': currentPage <= 1
         }],
         on: {
-          click: this.prevPageEvent
+          click: this.prevPage
         }
       }, [
         h('i', {
@@ -96,7 +96,7 @@ export default {
           'is--disabled': currentPage <= 1
         }],
         on: {
-          click: () => this.jumpPageEvent(Math.max(currentPage - numList.length, 1))
+          click: () => this.jumpPage(Math.max(currentPage - numList.length, 1))
         }
       }, [
         tagName ? h('i', {
@@ -128,7 +128,7 @@ export default {
           'is--disabled': currentPage >= pageCount
         }],
         on: {
-          click: () => this.jumpPageEvent(Math.min(currentPage + numList.length, pageCount))
+          click: () => this.jumpPage(Math.min(currentPage + numList.length, pageCount))
         }
       }, [
         tagName ? h('i', {
@@ -147,7 +147,7 @@ export default {
           'is--disabled': currentPage >= pageCount
         }],
         on: {
-          click: this.nextPageEvent
+          click: this.nextPage
         }
       }, [
         h('i', {
@@ -188,7 +188,7 @@ export default {
                 'is--active': num === pageSize
               }],
               on: {
-                click: () => this.sizeChangeEvent(num)
+                click: () => this.changePageSize(num)
               }
             }, `${num}${GlobalConfig.i18n('vxe.pager.pagesize')}`)
           }))
@@ -223,13 +223,13 @@ export default {
                 let value = XEUtils.toNumber(evnt.target.value)
                 let current = value <= 0 ? 1 : value >= pageCount ? pageCount : value
                 evnt.target.value = current
-                this.jumpPageEvent(current)
+                this.jumpPage(current)
               } else if (evnt.keyCode === 38) {
                 evnt.preventDefault()
-                this.nextPageEvent(evnt)
+                this.nextPage()
               } else if (evnt.keyCode === 40) {
                 evnt.preventDefault()
-                this.prevPageEvent(evnt)
+                this.prevPage()
               }
             }
           }
@@ -278,7 +278,7 @@ export default {
           h('li', {
             class: 'vxe-pager--num-btn',
             on: {
-              click: () => this.jumpPageEvent(1)
+              click: () => this.jumpPage(1)
             }
           }, 1),
           this.renderPrevJump(h, 'li')
@@ -293,7 +293,7 @@ export default {
                 'is--active': currentPage === number
               }],
               on: {
-                click: () => this.jumpPageEvent(number)
+                click: () => this.jumpPage(number)
               },
               key: number
             }, number)
@@ -306,7 +306,7 @@ export default {
           h('li', {
             class: 'vxe-pager--num-btn',
             on: {
-              click: () => this.jumpPageEvent(pageCount)
+              click: () => this.jumpPage(pageCount)
             }
           }, pageCount)
         )
@@ -321,19 +321,19 @@ export default {
         this.hideSizePanel()
       }
     },
-    prevPageEvent () {
+    prevPage () {
       let { currentPage } = this
       if (currentPage > 1) {
-        this.jumpPageEvent(Math.max(currentPage - 1, 1))
+        this.jumpPage(Math.max(currentPage - 1, 1))
       }
     },
-    nextPageEvent () {
+    nextPage () {
       let { currentPage, pageCount } = this
       if (currentPage < pageCount) {
-        this.jumpPageEvent(Math.min(currentPage + 1, pageCount))
+        this.jumpPage(Math.min(currentPage + 1, pageCount))
       }
     },
-    jumpPageEvent (currentPage) {
+    jumpPage (currentPage) {
       let type = 'current-change'
       if (currentPage !== this.currentPage) {
         this.$emit('update:currentPage', currentPage)
@@ -341,7 +341,7 @@ export default {
         this.emitPageChange(type, this.pageSize, currentPage)
       }
     },
-    sizeChangeEvent (pageSize) {
+    changePageSize (pageSize) {
       let type = 'size-change'
       if (pageSize !== this.pageSize) {
         this.$emit('update:pageSize', pageSize)

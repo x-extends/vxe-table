@@ -135,7 +135,40 @@ const apis = [
     type: '',
     enum: '',
     defVal: '',
-    list: []
+    list: [
+      {
+        name: 'prevPage()',
+        desc: '跳转到上一页',
+        type: '',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'nextPage()',
+        desc: '跳转到下一页',
+        type: '',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'jumpPage(currentPage)',
+        desc: '跳转到指定页',
+        type: '',
+        enum: '',
+        defVal: 'currentPage',
+        list: []
+      },
+      {
+        name: 'changePageSize(pageSize)',
+        desc: '更改每页大小',
+        type: '',
+        enum: '',
+        defVal: 'pageSize',
+        list: []
+      }
+    ]
   }
 ]
 
