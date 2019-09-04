@@ -32,7 +32,6 @@
 </template>
 
 <script>
-import XEAjax from 'xe-ajax'
 import hljs from 'highlight.js'
 
 export default {
@@ -62,31 +61,55 @@ export default {
             filters.forEach(({ column, property, values }) => {
               formData[property] = values.join(',')
             })
-            return XEAjax.getJSON(`/api/user/page/list/${page.pageSize}/${page.currentPage}`, formData)
+            return this.$ajax.getJSON(`/api/user/page/list/${page.pageSize}/${page.currentPage}`, formData)
           },
-          delete: ({ body }) => XEAjax.doPost('/api/user/save', body),
-          save: ({ body }) => XEAjax.doPost('/api/user/save', body)
+          delete: ({ body }) => this.$ajax.doPost('/api/user/save', body),
+          save: ({ body }) => this.$ajax.doPost('/api/user/save', body)
         }
       },
       tableToolbar: {
         id: 'full_edit_1',
         buttons: [
-          { code: 'reload', name: 'app.body.button.refresh' },
-          { code: 'insert_actived', name: '新增' },
+          { code: 'reload', name: 'app.body.button.refresh', disabled: false },
+          { code: 'insert_actived', name: '新增', disabled: false },
           {
             code: 'mark_cancel',
             name: 'app.body.button.markCancel',
+            disabled: false,
             dropdowns: [
-              { code: 'delete_selection', name: 'app.body.button.deleteSelectedRecords' },
-              { code: 'remove_selection', name: '移除数据' }
+              { code: 'delete_selection', name: 'app.body.button.deleteSelectedRecords', disabled: false },
+              { code: 'remove_selection', name: '移除数据', disabled: false }
             ]
           },
-          { code: 'save', name: 'app.body.button.save' },
+          { code: 'save', name: 'app.body.button.save', disabled: false },
           {
             name: '更多操作',
+            disabled: false,
             dropdowns: [
-              { code: 'export', name: '导出数据.csv' },
-              { code: 'reset_custom', name: '重置个性化信息' }
+              { code: 'export', name: '导出数据.csv', disabled: false },
+              { code: 'reset_custom', name: '重置个性化信息', disabled: false }
+            ]
+          },
+          { code: 'other0', name: '禁用的按钮1', disabled: true },
+          {
+            name: '禁用下拉按钮',
+            disabled: false,
+            dropdowns: [
+              {
+                code: 'other1',
+                name: '下拉的按钮1',
+                disabled: false
+              },
+              {
+                code: 'other2',
+                name: '下拉的按钮2',
+                disabled: true
+              },
+              {
+                code: 'other3',
+                name: '下拉的按钮3',
+                disabled: false
+              }
             ]
           }
         ],
@@ -155,31 +178,55 @@ export default {
                     filters.forEach(({ column, property, values }) => {
                       formData[property] = values.join(',')
                     })
-                    return XEAjax.getJSON(\`/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`, formData)
+                    return this.$ajax.getJSON(\`/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`, formData)
                   },
-                  delete: ({ body }) => XEAjax.doPost('/api/user/save', body),
-                  save: ({ body }) => XEAjax.doPost('/api/user/save', body)
+                  delete: ({ body }) => this.$ajax.doPost('/api/user/save', body),
+                  save: ({ body }) => this.$ajax.doPost('/api/user/save', body)
                 }
               },
               tableToolbar: {
                 id: 'full_edit_1',
                 buttons: [
-                  { code: 'reload', name: 'app.body.button.refresh' },
-                  { code: 'insert_actived', name: '新增' },
+                  { code: 'reload', name: 'app.body.button.refresh', disabled: false },
+                  { code: 'insert_actived', name: '新增', disabled: false },
                   {
                     code: 'mark_cancel',
                     name: 'app.body.button.markCancel',
+                    disabled: false,
                     dropdowns: [
-                      { code: 'delete_selection', name: 'app.body.button.deleteSelectedRecords' },
-                      { code: 'remove_selection', name: '移除数据' }
+                      { code: 'delete_selection', name: 'app.body.button.deleteSelectedRecords', disabled: false },
+                      { code: 'remove_selection', name: '移除数据', disabled: false }
                     ]
                   },
-                  { code: 'save', name: 'app.body.button.save' },
+                  { code: 'save', name: 'app.body.button.save', disabled: false },
                   {
                     name: '更多操作',
+                    disabled: false,
                     dropdowns: [
-                      { code: 'export', name: '导出数据.csv' },
-                      { code: 'reset_custom', name: '重置个性化信息' }
+                      { code: 'export', name: '导出数据.csv', disabled: false },
+                      { code: 'reset_custom', name: '重置个性化信息', disabled: false }
+                    ]
+                  },
+                  { code: 'other0', name: '禁用的按钮1', disabled: true },
+                  {
+                    name: '禁用下拉按钮',
+                    disabled: false,
+                    dropdowns: [
+                      {
+                        code: 'other1',
+                        name: '下拉的按钮1',
+                        disabled: false
+                      },
+                      {
+                        code: 'other2',
+                        name: '下拉的按钮2',
+                        disabled: true
+                      },
+                      {
+                        code: 'other3',
+                        name: '下拉的按钮3',
+                        disabled: false
+                      }
                     ]
                   }
                 ],

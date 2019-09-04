@@ -22,8 +22,6 @@
 </template>
 
 <script>
-import XEUtils from 'xe-utils'
-import XEAjax from 'xe-ajax'
 import hljs from 'highlight.js'
 
 export default {
@@ -32,18 +30,40 @@ export default {
       tableProxy: {
         ajax: {
           // 处理树结构转换
-          query: () => XEAjax.getJSON('/api/file/list').then(data => XEUtils.toArrayTree(data, { key: 'id', parentKey: 'parentId', children: 'children' })),
-          save: ({ body }) => XEAjax.doPost('/api/file/save', body)
+          query: () => this.$ajax.getJSON('/api/file/list').then(data => this.$utils.toArrayTree(data, { key: 'id', parentKey: 'parentId', children: 'children' })),
+          save: ({ body }) => this.$ajax.doPost('/api/file/save', body)
         }
       },
       tableToolbar: {
         id: 'treeEdit_demo1',
         buttons: [
-          { code: 'reload', name: 'app.body.button.refresh' },
-          { code: 'insert_actived', name: 'app.body.button.insert' },
-          { code: 'mark_cancel', name: 'app.body.button.markCancel' },
-          { code: 'save', name: 'app.body.button.save' },
-          { code: 'export', name: '导出.csv' }
+          { code: 'reload', name: 'app.body.button.refresh', disabled: false },
+          { code: 'insert_actived', name: 'app.body.button.insert', disabled: false },
+          { code: 'mark_cancel', name: 'app.body.button.markCancel', disabled: false },
+          { code: 'save', name: 'app.body.button.save', disabled: false },
+          { code: 'export', name: '导出.csv', disabled: false },
+          { code: 'other0', name: '禁用的按钮1', disabled: true },
+          {
+            name: '禁用下拉按钮',
+            disabled: false,
+            dropdowns: [
+              {
+                code: 'other1',
+                name: '下拉的按钮1',
+                disabled: false
+              },
+              {
+                code: 'other2',
+                name: '下拉的按钮2',
+                disabled: true
+              },
+              {
+                code: 'other3',
+                name: '下拉的按钮3',
+                disabled: false
+              }
+            ]
+          }
         ],
         refresh: true,
         resizable: {
@@ -79,18 +99,41 @@ export default {
               tableProxy: {
                 ajax: {
                   // 处理树结构转换
-                  query: () => XEAjax.getJSON('/api/file/list').then(data => XEUtils.toArrayTree(data, { key: 'id', parentKey: 'parentId', children: 'children' })),
-                  save: ({ body }) => XEAjax.doPost('/api/file/save', body)
+                  query: () => this.$ajax.getJSON('/api/file/list').then(data => this.$utils.toArrayTree(data, { key: 'id', parentKey: 'parentId', children: 'children' })),
+                  save: ({ body }) => this.$ajax.doPost('/api/file/save', body)
                 }
               },
               tableToolbar: {
                 id: 'treeEdit_demo1',
                 buttons: [
-                  { code: 'reload', name: 'app.body.button.refresh' },
-                  { code: 'insert_actived', name: 'app.body.button.insert' },
-                  { code: 'mark_cancel', name: 'app.body.button.markCancel' },
-                  { code: 'save', name: 'app.body.button.save' },
-                  { code: 'export', name: '导出.csv' }
+                  { code: 'reload', name: 'app.body.button.refresh', disabled: false },
+                  { code: 'insert_actived', name: 'app.body.button.insert', disabled: false },
+                  { code: 'mark_cancel', name: 'app.body.button.markCancel', disabled: false },
+                  { code: 'save', name: 'app.body.button.save', disabled: false },
+                  { code: 'export', name: '导出.csv', disabled: false },
+                  { code: 'other0', name: '禁用的按钮1', disabled: true },
+                    {
+                      name: '禁用下拉按钮',
+                      disabled: false,
+                      dropdowns: [
+                        {
+                          code: 'other1',
+                          name: '下拉的按钮1',
+                          disabled: false
+                        },
+                        {
+                          code: 'other2',
+                          name: '下拉的按钮2',
+                          disabled: true
+                        },
+                        {
+                          code: 'other3',
+                          name: '下拉的按钮3',
+                          disabled: false
+                        }
+                      ]
+                    }
+                  }
                 ],
                 refresh: true,
                 resizable: {
@@ -111,7 +154,7 @@ export default {
           },
           methods: {
             formatterDate ({ cellValue }) {
-              return XEUtils.toDateString(cellValue, 'yyyy-MM-dd HH:mm:ss')
+              return this.$utils.toDateString(cellValue, 'yyyy-MM-dd HH:mm:ss')
             }
           }
         }
@@ -126,7 +169,7 @@ export default {
   },
   methods: {
     formatterDate ({ cellValue }) {
-      return XEUtils.toDateString(cellValue, 'yyyy-MM-dd HH:mm:ss')
+      return this.$utils.toDateString(cellValue, 'yyyy-MM-dd HH:mm:ss')
     }
   }
 }

@@ -96,6 +96,55 @@ const apis = [
             list: []
           }
         ]
+      },
+      {
+        name: 'buttons',
+        desc: '按钮列表',
+        type: 'Array',
+        enum: '',
+        defVal: '',
+        list: [
+          {
+            name: 'name',
+            desc: '按钮名称（支持开启国际化）',
+            type: 'String',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'code',
+            desc: '按钮编码',
+            type: 'String',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'visible ',
+            desc: '是否可视',
+            type: 'Boolean',
+            enum: '',
+            defVal: 'true',
+            list: []
+          },
+          {
+            name: 'disabled ',
+            desc: '是否禁用',
+            type: 'Boolean',
+            enum: '',
+            defVal: 'false',
+            list: []
+          },
+          {
+            name: 'dropdowns',
+            desc: '下拉按钮列表',
+            type: 'Array',
+            enum: '',
+            defVal: '',
+            list: []
+          }
+        ]
       }
     ]
   },
