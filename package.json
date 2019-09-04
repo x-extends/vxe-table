@@ -1,6 +1,6 @@
 {
   "name": "vxe-table",
-  "version": "1.14.12",
+  "version": "1.14.13",
   "description": "一个简单实用的 Vue 表组件",
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -70,6 +70,7 @@
     "vxe-table-plugin-iview": "^1.4.3",
     "vxe-table-plugin-menus": "^1.0.3",
     "vxe-table-plugin-renderer": "^1.0.4",
+    "vxe-table-plugin-shortcut-key": "^1.0.0-beta.1",
     "vxe-utils": "^1.7.2",
     "webpack-cli": "^3.3.1",
     "xe-ajax": "^3.8.1",
