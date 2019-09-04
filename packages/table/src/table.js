@@ -390,7 +390,7 @@ export default {
   watch: {
     data (value) {
       if (!this._isUpdateData) {
-        this.loadData(value, true).then(this.handleDefault)
+        this.loadTableData(value, true).then(this.handleDefault)
       }
       this._isUpdateData = false
     },
@@ -408,7 +408,7 @@ export default {
         this.mergeCustomColumn(this.customs)
       }
       this.refreshColumn()
-      this.handleData(true)
+      this.handleTableData(true)
       if (this.$toolbar) {
         this.$toolbar.updateColumn(tableFullColumn)
       }
@@ -498,7 +498,7 @@ export default {
         offsetSize: XEUtils.toNumber(scrollY.oSize)
       })
     }
-    this.loadData(data, true).then(() => {
+    this.loadTableData(data, true).then(() => {
       this.handleDefault()
       this.updateStyle()
     })
@@ -745,19 +745,19 @@ export default {
     refreshData () {
       return this.$nextTick().then(() => {
         this.tableData = []
-        return this.$nextTick().then(() => this.loadData(this.tableFullData))
+        return this.$nextTick().then(() => this.loadTableData(this.tableFullData))
       })
     },
     updateData () {
-      return this.handleData(true).then(this.updateFooter).then(this.recalculate)
+      return this.handleTableData(true).then(this.updateFooter).then(this.recalculate)
     },
-    handleData (force) {
+    handleTableData (force) {
       let { scrollYLoad, scrollYStore } = this
       let fullData = force ? this.updateAfterFullData() : this.afterFullData
       this.tableData = scrollYLoad ? fullData.slice(scrollYStore.startIndex, scrollYStore.startIndex + scrollYStore.renderSize) : fullData.slice(0)
       return this.$nextTick()
     },
-    loadData (datas, notRefresh) {
+    loadTableData (datas, notRefresh) {
       let { height, maxHeight, editStore, optimizeOpts, lastScrollLeft, lastScrollTop } = this
       let { scrollY } = optimizeOpts
       let tableFullData = datas ? datas.slice(0) : []
@@ -776,7 +776,7 @@ export default {
         UtilTools.error('vxe.error.scrollYHeight')
       }
       this.clearScroll()
-      this.handleData(true)
+      this.handleTableData(true)
       this.reserveCheckSelection()
       this.checkSelectionStatus()
       let rest = this.$nextTick()
@@ -792,12 +792,14 @@ export default {
         if (lastScrollLeft || lastScrollTop) {
           return this.scrollTo(lastScrollLeft, lastScrollTop)
         }
-        return this.recalculate()
       })
+    },
+    loadData (datas) {
+      return this.loadTableData(datas).then(this.recalculate)
     },
     reloadData (datas) {
       this.clearAll()
-      return this.loadData(datas).then(this.handleDefault)
+      return this.loadTableData(datas).then(this.handleDefault)
     },
     loadColumn (columns) {
       this.collectColumn = XEUtils.mapTree(columns, column => Cell.createColumn(this, column), headerProps)
@@ -924,7 +926,7 @@ export default {
         }
       }
       [].unshift.apply(editStore.insertList, newRecords)
-      this.handleData()
+      this.handleTableData()
       this.updateCache()
       this.checkSelectionStatus()
       if (scrollYLoad) {
@@ -1021,7 +1023,7 @@ export default {
       }
       // 从新增中移除已删除的数据
       XEUtils.remove(insertList, row => rows.indexOf(row) > -1)
-      this.handleData()
+      this.handleTableData()
       this.updateCache()
       this.checkSelectionStatus()
       if (scrollYLoad) {
@@ -2766,7 +2768,7 @@ export default {
           column.order = order
           // 如果是服务端排序，则跳过本地排序处理
           if (!isRemote) {
-            this.handleData(true)
+            this.handleTableData(true)
           }
           // 在 v3.0 中废弃 prop
           UtilTools.emitEvent(this, 'sort-change', [{ column, property: field, prop: field, field, order, $table: this }])
@@ -2779,7 +2781,7 @@ export default {
       this.tableFullColumn.forEach(column => {
         column.order = null
       })
-      return this.handleData(true)
+      return this.handleTableData(true)
     },
     // 关闭筛选
     closeFilter (evnt) {
@@ -3189,7 +3191,7 @@ export default {
       this.$nextTick(this.updateStyle)
     },
     updateScrollYData () {
-      this.handleData()
+      this.handleTableData()
       this.updateScrollYSpace()
     },
     // 更新纵向 Y 可视渲染上下剩余空间大小
