@@ -66,8 +66,8 @@ export default {
     this.modalZindex = this.zIndex || getZIndex()
   },
   mounted () {
-    let { $refs, width, height } = this
-    let modalBoxElem = $refs.modalBox
+    let { width, height } = this
+    let modalBoxElem = this.getBox()
     Object.assign(modalBoxElem.style, {
       width: width ? (isNaN(width) ? width : `${width}px`) : null,
       height: height ? (isNaN(height) ? height : `${height}px`) : null
@@ -252,8 +252,8 @@ export default {
           setTimeout(this.close, XEUtils.toNumber(duration))
         } else {
           this.$nextTick(() => {
-            let { $refs, marginSize } = this
-            let modalBoxElem = $refs.modalBox
+            let { marginSize } = this
+            let modalBoxElem = this.getBox()
             let clientVisibleWidth = document.documentElement.clientWidth || document.body.clientWidth
             let clientVisibleHeight = document.documentElement.clientHeight || document.body.clientHeight
             modalBoxElem.style.left = `${clientVisibleWidth / 2 - modalBoxElem.offsetWidth / 2}px`
@@ -310,10 +310,13 @@ export default {
         this.close()
       }
     },
+    getBox () {
+      return this.$refs.modalBox
+    },
     zoomInEvent (evnt) {
-      let { $listeners, $refs, marginSize, zoomLocat, events = {} } = this
+      let { $listeners, marginSize, zoomLocat, events = {} } = this
       let { visibleHeight, visibleWidth } = DomTools.getDomNode()
-      let modalBoxElem = $refs.modalBox
+      let modalBoxElem = this.getBox()
       let type = 'min'
       if (zoomLocat) {
         this.zoomLocat = null
@@ -346,8 +349,8 @@ export default {
       }
     },
     mousedownEvent (evnt) {
-      let { $refs, marginSize } = this
-      let modalBoxElem = $refs.modalBox
+      let { marginSize } = this
+      let modalBoxElem = this.getBox()
       if (evnt.button === 0 && !DomTools.getEventTargetNode(evnt, modalBoxElem, 'trigger--btn').flag) {
         evnt.preventDefault()
         let demMousemove = document.onmousemove
@@ -399,7 +402,7 @@ export default {
       const maxWidth = visibleWidth - 20
       const minHeight = 200
       const maxHeight = visibleHeight - 20
-      const modalBoxElem = this.$refs.modalBox
+      const modalBoxElem = this.getBox()
       const demMousemove = document.onmousemove
       const demMouseup = document.onmouseup
       const clientWidth = modalBoxElem.clientWidth

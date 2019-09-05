@@ -256,6 +256,14 @@ const apis = [
         enum: '',
         defVal: '',
         list: []
+      },
+      {
+        name: 'getBox()',
+        desc: '获取当前窗口元素',
+        type: '',
+        enum: '',
+        defVal: '',
+        list: []
       }
     ]
   }
