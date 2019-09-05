@@ -62,7 +62,7 @@ export default {
     filterStore.visible = false
     // 如果是服务端筛选，则跳过本地筛选处理
     if (!remoteFilter) {
-      this.handleData(true)
+      this.handleTableData(true)
     }
     let filterList = []
     visibleColumn.filter(column => {

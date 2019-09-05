@@ -270,7 +270,7 @@ const apis = [
         desc: '给数据代理提交指令（支持额外的参数，对于很多特殊场景很有用）',
         type: '',
         enum: 'reload, query, delete, save',
-        defVal: '',
+        defVal: 'code: string',
         list: []
       }
     ]

@@ -157,7 +157,7 @@ const apis = [
         desc: '跳转到指定页',
         type: '',
         enum: '',
-        defVal: 'currentPage',
+        defVal: 'currentPage: number',
         list: []
       },
       {
@@ -165,7 +165,7 @@ const apis = [
         desc: '更改每页大小',
         type: '',
         enum: '',
-        defVal: 'pageSize',
+        defVal: 'pageSize: number',
         list: []
       }
     ]

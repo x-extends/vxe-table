@@ -1371,7 +1371,7 @@ const apis = [
         desc: '加载数据（对于表格数据需要重载、局部递增场景下可能会用到）',
         type: 'Promise',
         enum: '',
-        defVal: 'data',
+        defVal: 'data: array',
         list: []
       },
       {
@@ -1379,7 +1379,7 @@ const apis = [
         desc: '加载数据并恢复到初始状态（对于表格数据需要重载、局部递增场景下可能会用到）',
         type: 'Promise',
         enum: '',
-        defVal: 'data',
+        defVal: 'data: array',
         list: []
       },
       {
@@ -1403,7 +1403,7 @@ const apis = [
         desc: '初始化加载显示/隐藏列（对于异步更新的场景下可能会用到）',
         type: 'Promise',
         enum: '',
-        defVal: 'customs',
+        defVal: 'customs: array',
         list: []
       },
       {
@@ -1411,7 +1411,7 @@ const apis = [
         desc: '加载列配置（对于表格列需要重载、局部递增场景下可能会用到）',
         type: 'Promise',
         enum: '',
-        defVal: 'columns',
+        defVal: 'columns: array',
         list: []
       },
       {
@@ -1419,7 +1419,7 @@ const apis = [
         desc: '加载列配置并恢复到初始状态（对于表格列需要重载、局部递增场景下可能会用到）',
         type: 'Promise',
         enum: '',
-        defVal: 'columns',
+        defVal: 'columns: array',
         list: []
       },
       {
@@ -1435,7 +1435,7 @@ const apis = [
         desc: '创建 Row|Rows 对象（对于某些特殊场景需要对数据进行手动插入时可能会用到）',
         type: 'Promise<Row|Rows>',
         enum: '',
-        defVal: 'records',
+        defVal: 'records: object | array',
         list: []
       },
       {
@@ -1443,7 +1443,7 @@ const apis = [
         desc: '创建 data 对象（对于某些特殊场景可能会用到，会自动对数据的字段名进行检测，如果不存在就自动定义）',
         type: 'Promise<Array>',
         enum: '',
-        defVal: 'records',
+        defVal: 'records: array',
         list: []
       },
       {
@@ -1451,7 +1451,7 @@ const apis = [
         desc: '往表格插入数据，从第一行新增一行或多行新数据',
         type: 'Promise<{row, rows}>',
         enum: '',
-        defVal: 'records',
+        defVal: 'records?: object | array',
         list: []
       },
       {
@@ -1459,7 +1459,7 @@ const apis = [
         desc: '往表格插入数据，从指定位置插入一行或多行；第二个参数：row 指定位置（不支持树表格）、null从第一行插入、-1 从最后插入',
         type: 'Promise<{row, rows}>',
         enum: '',
-        defVal: 'records, row',
+        defVal: 'records: array<object>, row?: Row',
         list: []
       },
       {
@@ -1467,7 +1467,7 @@ const apis = [
         desc: '即将废弃，请使用 revertData',
         type: 'Promise',
         enum: '',
-        defVal: 'rows?, field?',
+        defVal: 'rows: Row | array<Row>, field?: string',
         list: []
       },
       {
@@ -1475,7 +1475,7 @@ const apis = [
         desc: '还原更改，还原指定行 row 或者整个表格的数据',
         type: 'Promise',
         enum: '',
-        defVal: 'rows?, field?',
+        defVal: 'rows: Row | array<Row>, field?: string',
         list: []
       },
       {
@@ -1483,7 +1483,7 @@ const apis = [
         desc: '删除指定行数据，指定 row 或 [row, ...] 删除多条数据，如果为空则删除所有数据',
         type: 'Promise<{row, rows}>',
         enum: '',
-        defVal: 'rows',
+        defVal: 'rows: Row | array<Row>',
         list: []
       },
       {
@@ -1499,7 +1499,7 @@ const apis = [
         desc: '根据 row 获取相对于 data 中的索引',
         type: 'Number',
         enum: '',
-        defVal: 'row',
+        defVal: 'row: Row',
         list: []
       },
       {
@@ -1507,7 +1507,7 @@ const apis = [
         desc: '根据 tr 元素获取对应的 row 信息',
         type: '{item, items, index, parent}',
         enum: '',
-        defVal: 'tr',
+        defVal: 'tr: Element',
         list: []
       },
       {
@@ -1515,7 +1515,7 @@ const apis = [
         desc: '获取表格的可视列，也可以指定索引获取列',
         type: 'Array',
         enum: '',
-        defVal: 'columnIndex?',
+        defVal: 'columnIndex?: number',
         list: []
       },
       {
@@ -1523,7 +1523,7 @@ const apis = [
         desc: '根据列的唯一主键获取列',
         type: 'Column',
         enum: '',
-        defVal: 'colid',
+        defVal: 'colid: string',
         list: []
       },
       {
@@ -1531,7 +1531,7 @@ const apis = [
         desc: '根据列的字段名获取列',
         type: 'Column',
         enum: '',
-        defVal: 'field',
+        defVal: 'field: string',
         list: []
       },
       {
@@ -1547,7 +1547,7 @@ const apis = [
         desc: '根据 column 获取相对于 columns 中的索引',
         type: 'Number',
         enum: '',
-        defVal: 'column',
+        defVal: 'column: ColumnConfig',
         list: []
       },
       {
@@ -1555,7 +1555,7 @@ const apis = [
         desc: '根据 th/td 元素获取对应的 column 信息',
         type: '{item, items, index, parent}',
         enum: '',
-        defVal: 'cell',
+        defVal: 'cell: Element',
         list: []
       },
       {
@@ -1571,7 +1571,7 @@ const apis = [
         desc: '根据行的唯一主键获取行',
         type: 'Row',
         enum: '',
-        defVal: 'rowid',
+        defVal: 'rowid: string',
         list: []
       },
       {
@@ -1579,7 +1579,7 @@ const apis = [
         desc: '获取数据，和 data 的行为一致，也可以指定索引获取数据',
         type: 'Array',
         enum: '',
-        defVal: 'rowIndex?',
+        defVal: 'rowIndex?: number',
         list: []
       },
       {
@@ -1667,7 +1667,7 @@ const apis = [
         desc: '检查行是否已激活为编辑状态',
         type: 'Boolean',
         enum: '',
-        defVal: 'row',
+        defVal: 'row: Row',
         list: []
       },
       {
@@ -1675,7 +1675,7 @@ const apis = [
         desc: '检查行或列数据是否发生改变',
         type: 'Boolean',
         enum: '',
-        defVal: 'row, field?',
+        defVal: 'row: Row, field?: string',
         list: []
       },
       {
@@ -1683,7 +1683,7 @@ const apis = [
         desc: '检查行是否已展开',
         type: 'Boolean',
         enum: '',
-        defVal: 'row',
+        defVal: 'row: Row',
         list: []
       },
       {
@@ -1691,7 +1691,7 @@ const apis = [
         desc: '检查树节点是否已展开',
         type: 'Boolean',
         enum: '',
-        defVal: 'row',
+        defVal: 'row: Row',
         list: []
       },
       {
@@ -1699,7 +1699,7 @@ const apis = [
         desc: '激活行编辑，如果是 mode=cell 则默认激活第一个单元格',
         type: 'Promise',
         enum: '',
-        defVal: 'row',
+        defVal: 'row: Row',
         list: []
       },
       {
@@ -1707,7 +1707,7 @@ const apis = [
         desc: '激活单元格编辑',
         type: 'Promise',
         enum: '',
-        defVal: 'row, field',
+        defVal: 'row: Row, field: string',
         list: []
       },
       {
@@ -1715,7 +1715,7 @@ const apis = [
         desc: '选中某个单元格',
         type: 'Promise',
         enum: '',
-        defVal: 'row, field',
+        defVal: 'row: Row, field: string',
         list: []
       },
       {
@@ -1723,7 +1723,7 @@ const apis = [
         desc: '设置展开行，二个参数设置这一行展开与否',
         type: 'Promise',
         enum: '',
-        defVal: 'rows, checked',
+        defVal: 'rows: Row | array<Row>, checked: boolean',
         list: []
       },
       {
@@ -1731,7 +1731,7 @@ const apis = [
         desc: '设置所有行的展开与否',
         type: 'Promise',
         enum: '',
-        defVal: 'checked',
+        defVal: 'checked: boolean',
         list: []
       },
       {
@@ -1739,7 +1739,7 @@ const apis = [
         desc: '设置展开树形节点，二个参数设置这一行展开与否',
         type: 'Promise',
         enum: '',
-        defVal: 'rows, checked',
+        defVal: 'rows: Row | array<Row>, checked: boolean',
         list: []
       },
       {
@@ -1747,7 +1747,7 @@ const apis = [
         desc: '设置所有树节点的展开与否',
         type: 'Promise',
         enum: '',
-        defVal: 'checked',
+        defVal: 'checked: boolean',
         list: []
       },
       {
@@ -1755,7 +1755,7 @@ const apis = [
         desc: '用于当前行，设置某一行为高亮状态',
         type: 'Promise',
         enum: '',
-        defVal: 'row',
+        defVal: 'row: Row',
         list: []
       },
       {
@@ -1763,7 +1763,7 @@ const apis = [
         desc: '用于当前列，设置某列行为高亮状态',
         type: 'Promise',
         enum: '',
-        defVal: 'column',
+        defVal: 'column: ColumnConfig',
         list: []
       },
       {
@@ -1771,7 +1771,7 @@ const apis = [
         desc: '用于单选行，设置某一行为选中状态',
         type: 'Promise',
         enum: '',
-        defVal: 'row',
+        defVal: 'row: Row',
         list: []
       },
       {
@@ -1779,7 +1779,7 @@ const apis = [
         desc: '用于多选行，设置行为选中状态，第二个参数为选中与否',
         type: 'Promise',
         enum: '',
-        defVal: 'rows, checked',
+        defVal: 'rows: Row | array<Row>, checked: boolean',
         list: []
       },
       {
@@ -1787,7 +1787,7 @@ const apis = [
         desc: '用于多选行，设置所有行的选中状态',
         type: 'Promise',
         enum: '',
-        defVal: 'checked',
+        defVal: 'checked: boolean',
         list: []
       },
       {
@@ -1795,7 +1795,7 @@ const apis = [
         desc: '用于多选行，切换某一行的选中状态',
         type: 'Promise',
         enum: '',
-        defVal: 'row',
+        defVal: 'row: Row',
         list: []
       },
       {
@@ -1811,7 +1811,7 @@ const apis = [
         desc: '用于可展开表格，切换展开行',
         type: 'Promise',
         enum: '',
-        defVal: 'row',
+        defVal: 'row: Row',
         list: []
       },
       {
@@ -1819,7 +1819,7 @@ const apis = [
         desc: '用于可树形表格，切换展开树形节点',
         type: 'Promise',
         enum: '',
-        defVal: 'row',
+        defVal: 'row: Row',
         list: []
       },
       {
@@ -1883,7 +1883,7 @@ const apis = [
         desc: '手动清空筛选条件（如果不传 field 则清空所有筛选条件），数据会恢复成未筛选的状态',
         type: 'Promise',
         enum: '',
-        defVal: 'field?',
+        defVal: 'field?: string',
         list: []
       },
       // {
@@ -1923,7 +1923,7 @@ const apis = [
         desc: '手动清空单元格内容，如果不创参数，则清空整个表格内容，如果传了行则清空指定行内容，如果传了指定字段，则清空该字段内容',
         type: 'Promise',
         enum: '',
-        defVal: 'rows?, field?',
+        defVal: 'rows?: Row | array<Row>, field?: string',
         list: []
       },
       {
@@ -2003,7 +2003,7 @@ const apis = [
         desc: '更新单元格状态（当使用自定义渲染时可能会用到）',
         type: 'Promise',
         enum: '',
-        defVal: '{ row, column }',
+        defVal: 'scope: { row, column }',
         list: []
       },
       {
@@ -2011,7 +2011,7 @@ const apis = [
         desc: '隐藏指定列',
         type: 'Promise',
         enum: '',
-        defVal: 'column',
+        defVal: 'column: ColumnConfig',
         list: []
       },
       {
@@ -2019,7 +2019,7 @@ const apis = [
         desc: '显示指定列',
         type: 'Promise',
         enum: '',
-        defVal: 'column',
+        defVal: 'column: ColumnConfig',
         list: []
       },
       {
@@ -2027,7 +2027,7 @@ const apis = [
         desc: '如果有滚动条，则滚动到对应的位置',
         type: 'Promise',
         enum: '',
-        defVal: 'scrollLeft?, scrollTop?',
+        defVal: 'scrollLeft?: number, scrollTop?: number',
         list: []
       },
       {
@@ -2035,7 +2035,7 @@ const apis = [
         desc: '如果有滚动条，则滚动到对应的行',
         type: 'Promise',
         enum: '',
-        defVal: 'row',
+        defVal: 'row: Row',
         list: []
       },
       {
@@ -2043,7 +2043,7 @@ const apis = [
         desc: '如果有滚动条，则滚动到对应的列',
         type: 'Promise',
         enum: '',
-        defVal: 'column',
+        defVal: 'column: ColumnConfig',
         list: []
       },
       {
@@ -2051,7 +2051,7 @@ const apis = [
         desc: '手动对表格进行排序（如果 order 为空则自动切换排序）',
         type: 'Promise',
         enum: '',
-        defVal: 'field, order?',
+        defVal: 'field: string, order?: \'desc\' | \'asc\'',
         list: []
       },
       {
@@ -2059,7 +2059,7 @@ const apis = [
         desc: '手动对表格进行筛选，还可以通过 callback 返回新的选项列表',
         type: 'Promise<options>',
         enum: '',
-        defVal: 'field, callback?',
+        defVal: 'field: string, callback?: Function',
         list: []
       },
       {
@@ -2075,7 +2075,7 @@ const apis = [
         desc: '表格校验函数，如果指定 row 或 rows 则校验指定一行或多行，否则校验整个表格。该回调函数会在校验结束后被调用，并传入两个参数：（是否校验成功，最近一列未通过校验的字段）。若不传入回调函数，则会返回一个 promise',
         type: 'Promise',
         enum: '',
-        defVal: 'rows?, callback?',
+        defVal: 'rows?: Row | array<Row>, callback?: Function',
         list: []
       },
       {
@@ -2083,7 +2083,7 @@ const apis = [
         desc: '表格完整校验函数，和 validate 的区别就是会对全量数据的所有规则进行完整校验',
         type: 'Promise',
         enum: '',
-        defVal: 'rows?, callback?',
+        defVal: 'rows?: Row | array<Row>, callback?: Function',
         list: []
       },
       {
@@ -2091,7 +2091,7 @@ const apis = [
         desc: '将表格数据导出为 .csv 文件（支持所有主流的浏览器，不支持合并行或列）',
         type: 'Promise',
         enum: '',
-        defVal: 'options',
+        defVal: 'options: object',
         list: [
           {
             name: 'filename',

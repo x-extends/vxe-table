@@ -109,7 +109,7 @@ const apis = [
         desc: '手动显示提示框（对于可复用高性能场景非常适合，只需要创建一个实例，后续通过该方法调用即可显示）',
         type: 'Promise',
         enum: '',
-        defVal: 'Event.target, message',
+        defVal: 'target: Element, message: string',
         list: []
       }
     ]

@@ -240,7 +240,24 @@ const apis = [
     type: '',
     enum: '',
     defVal: '',
-    list: []
+    list: [
+      {
+        name: 'open()',
+        desc: '打开窗口',
+        type: '',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'close()',
+        desc: '关闭窗口',
+        type: '',
+        enum: '',
+        defVal: '',
+        list: []
+      }
+    ]
   }
 ]
 
