@@ -10,7 +10,9 @@
       :footer-method="footerMethod"
       :data="tableData"
       :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}, footer: {options: footerMenus}}"
-      :edit-config="{trigger: 'click', mode: 'cell'}">
+      :mouse-config="{selected: true}"
+      :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true}"
+      :edit-config="{trigger: 'dblclick', mode: 'cell'}">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="sex" title="sex" :edit-render="{name: 'input'}"></vxe-table-column>
@@ -139,7 +141,9 @@ export default {
           :footer-method="footerMethod"
           :data="tableData"
           :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}, footer: {options: footerMenus}}"
-          :edit-config="{trigger: 'click', mode: 'cell'}">
+          :mouse-config="{selected: true}"
+          :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true}"
+          :edit-config="{trigger: 'dblclick', mode: 'cell'}">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column field="sex" title="sex" :edit-render="{name: 'input'}"></vxe-table-column>

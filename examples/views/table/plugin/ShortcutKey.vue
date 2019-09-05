@@ -62,8 +62,10 @@ export default {
         import VXETablePluginShortcutKey from 'vxe-table-plugin-shortcut-key'
 
         VXETable.use(VXETablePluginShortcutKey, {
-          'pager.prevPage': 'ArrowLeft',
-          'pager.nextPage': 'ArrowRight'
+          setting: {
+            'pager.prevPage': 'ArrowLeft',
+            'pager.nextPage': 'ArrowRight'
+          }
         })
         `,
         `

@@ -217,11 +217,7 @@ export default {
       elemStore
     } = this
     let { checked, actived } = editStore
-    let {
-      row,
-      column,
-      cell
-    } = params
+    let { row, column, cell } = params
     let { button } = evnt
     let isLeftBtn = button === 0
     if (editConfig) {
@@ -274,7 +270,10 @@ export default {
             handleHeaderChecked([headerList[0].querySelectorAll('.vxe-header--column:not(.col--index)')])
             handleIndexChecked(DomTools.getRowNodes(bodyList, DomTools.getCellNodeIndex(firstCell), DomTools.getCellNodeIndex(cell)))
           } else {
+            let firstCell = cell.parentNode.firstElementChild
             handleSelected(params, evnt)
+            handleHeaderChecked([[headerList[0].querySelector(`.${column.id}`)]])
+            handleIndexChecked([[firstCell]])
           }
           this.closeFilter()
           this.closeMenu()

@@ -977,15 +977,7 @@ export default {
               }
             },
             {
-              label: 'app.aside.nav.spanPlugin',
-              disabled: true,
-              locat: {
-                name: 'TableBasic'
-              }
-            },
-            {
               label: 'app.aside.nav.shortcutKeyPlugin',
-              disabled: true,
               locat: {
                 name: 'TablePluginShortcutKey'
               }

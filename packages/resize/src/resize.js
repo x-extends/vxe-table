@@ -3,6 +3,7 @@ import GlobalConfig from '../../conf'
 
 /**
  * 监听 resize 事件
+ * 如果项目中已使用了 resize-observer-polyfill，那么只需要将方法定义全局，该组件就会自动使用
  */
 let resizeTimeout
 const eventStore = []
