@@ -1,6 +1,7 @@
 <template>
   <div>
     <h2>工具栏</h2>
+    <p class="tip">查看 <router-link class="link" :to="{name: 'VXEAPI', params: {name: 'toolbar'}}">API</router-link></p>
 
     <vxe-toolbar>
       <template v-slot:buttons>

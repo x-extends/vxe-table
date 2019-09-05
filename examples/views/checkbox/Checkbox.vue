@@ -1,6 +1,7 @@
 <template>
   <div>
     <h2>按钮</h2>
+    <p class="tip">查看 <router-link class="link" :to="{name: 'VXEAPI', params: {name: 'checkbox'}}">API</router-link></p>
 
     <p>
       <vxe-checkbox indeterminate>不确定选项</vxe-checkbox>
