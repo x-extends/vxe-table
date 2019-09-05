@@ -1,6 +1,7 @@
 <template>
   <div>
     <h2>文字提示</h2>
+    <p class="tip">查看 <router-link class="link" :to="{name: 'VXEAPI', params: {name: 'tooltip'}}">API</router-link></p>
 
     <p>
       <vxe-tooltip content="我是提示内容">

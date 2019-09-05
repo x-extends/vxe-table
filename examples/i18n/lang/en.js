@@ -405,7 +405,7 @@ module.exports = {
           id: '只对 type=message 有效，如果不想窗口重复点击，可以设置唯一的 id 防止重复提示',
           title: 'Message title (support internationalization)',
           type: 'Message type',
-          status: '只对 type=message 有效，消息状态',
+          status: '只对 type=alert | confirm | message 有效，消息状态',
           message: 'message content',
           showHeader: '是否显示头部',
           showFooter: '是否显示底部',

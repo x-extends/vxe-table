@@ -1,6 +1,7 @@
 <template>
   <div>
     <h2>按钮</h2>
+    <p class="tip">查看 <router-link class="link" :to="{name: 'VXEAPI', params: {name: 'radio'}}">API</router-link></p>
 
     <p>
       <vxe-radio name="n1" v-model="value1" label="1">单选1</vxe-radio>
