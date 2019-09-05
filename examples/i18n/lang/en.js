@@ -126,6 +126,7 @@ module.exports = {
         antdFilter: 'plugin-antd Filter config',
         antdPluginMore: 'plugin-antd More config',
         spanPlugin: 'Select merge cells',
+        shortcutKeyPlugin: 'plugin-shortcut-key Shortcut key Settings',
         chartsPlugin: 'plugin-charts Chart tools',
         rendererPlugin: 'plugin-renderer More renderer',
         menusPlugin: 'plugin-menus Context menus',

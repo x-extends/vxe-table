@@ -126,6 +126,7 @@ module.exports = {
         antdFilter: 'plugin-antd 筛选配置',
         antdPluginMore: 'plugin-antd 更多配置',
         spanPlugin: '单元格选中合并',
+        shortcutKeyPlugin: 'plugin-shortcut-key 快捷键设置',
         chartsPlugin: 'plugin-charts 图表工具',
         rendererPlugin: 'plugin-renderer 更多渲染器',
         menusPlugin: 'plugin-menus 快捷菜单集',
