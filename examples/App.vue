@@ -984,6 +984,13 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.shortcutKeyPlugin',
+              disabled: true,
+              locat: {
+                name: 'TablePluginShortcutKey'
+              }
+            },
+            {
               label: 'app.aside.nav.chartsPlugin',
               locat: {
                 name: 'TablePluginCharts'

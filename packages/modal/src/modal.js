@@ -66,6 +66,12 @@ export default {
     this.modalZindex = this.zIndex || getZIndex()
   },
   mounted () {
+    let { $refs, width, height } = this
+    let modalBoxElem = $refs.modalBox
+    Object.assign(modalBoxElem.style, {
+      width: width ? (isNaN(width) ? width : `${width}px`) : null,
+      height: height ? (isNaN(height) ? height : `${height}px`) : null
+    })
     if (this.escClosable) {
       GlobalEvent.on(this, 'keydown', this.handleGlobalKeydownEvent)
     }
@@ -84,8 +90,6 @@ export default {
       type,
       resize,
       animat,
-      width,
-      height,
       status,
       showHeader,
       showFooter,
@@ -123,10 +127,6 @@ export default {
     }, [
       h('div', {
         class: 'vxe-modal--box',
-        style: {
-          width: width ? (isNaN(width) ? width : `${width}px`) : null,
-          height: height ? (isNaN(height) ? height : `${height}px`) : null
-        },
         on: {
           mousedown: this.updateZindex
         },
@@ -312,8 +312,8 @@ export default {
     },
     zoomInEvent (evnt) {
       let { $listeners, $refs, marginSize, zoomLocat, events = {} } = this
-      let modalBoxElem = $refs.modalBox
       let { visibleHeight, visibleWidth } = DomTools.getDomNode()
+      let modalBoxElem = $refs.modalBox
       let type = 'min'
       if (zoomLocat) {
         this.zoomLocat = null
