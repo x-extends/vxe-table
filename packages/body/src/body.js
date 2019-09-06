@@ -346,6 +346,7 @@ export default {
       fixedType
     } = this
     let {
+      $scopedSlots,
       tableData,
       tableColumn,
       showOverflow: allColumnOverflow,
@@ -416,7 +417,7 @@ export default {
       }, [
         h('span', {
           class: 'vxe-table--empty-text'
-        }, $table.$slots.empty || GlobalConfig.i18n('vxe.table.emptyText'))
+        }, $scopedSlots.empty ? $scopedSlots.empty.call(this, { $table }, h) : GlobalConfig.i18n('vxe.table.emptyText'))
       ]) : null
     ])
   },
