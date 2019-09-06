@@ -257,7 +257,9 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
               }
             }, [
               h('div', {
-                class: 'vxe-body--expanded-cell',
+                class: ['vxe-body--expanded-cell', {
+                  'fixed--hidden': fixedType
+                }],
                 style: cellStyle
               }, [
                 column.renderData(h, { $table, seq, row, rowIndex, column, columnIndex, fixed: fixedType, level: rowLevel })

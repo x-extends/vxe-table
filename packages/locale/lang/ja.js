@@ -13,6 +13,7 @@ export default {
       cellEditRender: 'Rendererはcell-renderとedit-renderを同時に仕様できません',
       scrollOriginal: 'Virtual scrollingはsource dataのみエクスポートできます、original=trueを設定してください',
       treeInsert: 'Tree structureはinsert operationsをサポートしていません',
+      treeFixedExpand: '樹木構造の固定柱は展開された行と矛盾する。',
       scrollYHeight: 'Virtual scrollingを有効にするにはheightかmax-heightを設定してください',
       unableInsert: '指定位置に挿入できません。',
 
