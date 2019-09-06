@@ -427,8 +427,9 @@ export default {
     scrollEvent (evnt) {
       let { $parent: $table, fixedType } = this
       let { $refs, highlightHoverRow, scrollXLoad, scrollYLoad, lastScrollTop, lastScrollLeft } = $table
-      let { tableHeader, tableBody, leftBody, rightBody } = $refs
+      let { tableHeader, tableBody, leftBody, rightBody, tableFooter } = $refs
       let headerElem = tableHeader ? tableHeader.$el : null
+      let footerElem = tableFooter ? tableFooter.$el : null
       let bodyElem = tableBody.$el
       let leftElem = leftBody ? leftBody.$el : null
       let rightElem = rightBody ? rightBody.$el : null
@@ -449,8 +450,13 @@ export default {
         scrollTop = rightElem.scrollTop
         syncBodyScroll(scrollTop, bodyElem, leftElem)
       } else {
-        if (isX && headerElem) {
-          headerElem.scrollLeft = bodyElem.scrollLeft
+        if (isX) {
+          if (headerElem) {
+            headerElem.scrollLeft = bodyElem.scrollLeft
+          }
+          if (footerElem) {
+            footerElem.scrollLeft = bodyElem.scrollLeft
+          }
         }
         if (leftElem || rightElem) {
           $table.checkScrolling()
