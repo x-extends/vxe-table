@@ -499,8 +499,9 @@ export default {
     scrollEvent (evnt) {
       let { $parent: $table, fixedType, lastScrollTop, lastScrollLeft } = this
       let { $refs, highlightHoverRow, scrollXLoad, scrollYLoad, triggerScrollXEvent, triggerScrollYEvent } = $table
-      let { tableHeader, tableBody, leftBody, rightBody } = $refs
+      let { tableHeader, tableBody, leftBody, rightBody, tableFooter } = $refs
       let headerElem = tableHeader ? tableHeader.$el : null
+      let footerElem = tableFooter ? tableFooter.$el : null
       let bodyElem = tableBody.$el
       let leftElem = leftBody ? leftBody.$el : null
       let rightElem = rightBody ? rightBody.$el : null
@@ -520,6 +521,9 @@ export default {
       } else {
         if (headerElem) {
           headerElem.scrollLeft = bodyElem.scrollLeft
+        }
+        if (footerElem) {
+          footerElem.scrollLeft = bodyElem.scrollLeft
         }
         // 缓解 IE 卡顿
         if (leftElem || rightElem) {
