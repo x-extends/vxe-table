@@ -508,6 +508,9 @@ export default {
           UtilTools.warn('vxe.error.delLabel')
         }
       }
+      if (this.treeConfig && tableFullColumn.some(column => column.fixed) && tableFullColumn.some(column => column.type === 'expand')) {
+        UtilTools.warn('vxe.error.treeFixedExpand')
+      }
     },
     tableColumn () {
       this.analyColumnWidth()
@@ -3313,7 +3316,7 @@ export default {
     },
     setAllRowExpansion (expanded) {
       this.expandeds = expanded ? this.tableFullData.slice(0) : []
-      return this.$nextTick()
+      return this.$nextTick().then(this.recalculate)
     },
     /**
      * 设置展开行，二个参数设置这一行展开与否
@@ -3345,14 +3348,15 @@ export default {
           }
         })
       }
-      return this.$nextTick()
+      return this.$nextTick().then(this.recalculate)
     },
     hasRowExpand (row) {
       return this.expandeds.indexOf(row) > -1
     },
     clearRowExpand () {
+      const isExists = this.expandeds.length
       this.expandeds = []
-      return this.$nextTick()
+      return this.$nextTick().then(() => isExists ? this.recalculate() : 0)
     },
     /**
      * 展开树节点事件
@@ -3411,7 +3415,7 @@ export default {
         }, treeConfig)
       }
       this.treeExpandeds = treeExpandeds
-      return this.$nextTick()
+      return this.$nextTick().then(this.recalculate)
     },
     /**
      * 设置展开树形节点，二个参数设置这一行展开与否
@@ -3450,14 +3454,15 @@ export default {
           }
         })
       }
-      return this.$nextTick()
+      return this.$nextTick().then(this.recalculate)
     },
     hasTreeExpand (row) {
       return this.treeExpandeds.indexOf(row) > -1
     },
     clearTreeExpand () {
+      const isExists = this.treeExpandeds.length
       this.treeExpandeds = []
-      return this.$nextTick()
+      return this.$nextTick().then(() => isExists ? this.recalculate() : 0)
     },
     /**
      * 是否启用了横向 X 可视渲染

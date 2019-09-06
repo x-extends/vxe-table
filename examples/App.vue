@@ -536,6 +536,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.fixed',
+              locat: {
+                name: 'TableTreeFixed'
+              }
+            },
+            {
               label: 'app.aside.nav.expandRow',
               locat: {
                 name: 'TableTreeExpand'

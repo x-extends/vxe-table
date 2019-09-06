@@ -16,6 +16,7 @@ export default {
       cellEditRender: 'The renderer cell-render and edit-render cannot be used together.',
       scrollOriginal: 'Virtual scrolling can only export source data, please set original=true.',
       treeInsert: 'The tree structure does not support insert operations.',
+      treeFixedExpand: 'The fixed columns of the tree structure conflict with the expanded row.',
       scrollYHeight: 'You must set the height or max-height to enable virtual scrolling.',
       unableInsert: 'Unable to insert to the specified location.',
 
