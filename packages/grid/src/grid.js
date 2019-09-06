@@ -154,6 +154,7 @@ export default {
       h('vxe-table', {
         props,
         on: tableOns,
+        scopedSlots: $scopedSlots,
         ref: 'xTable'
       }, $slots.default),
       pagerConfig ? h('vxe-pager', {

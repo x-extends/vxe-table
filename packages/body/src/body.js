@@ -389,6 +389,7 @@ export default {
   render (h) {
     let { _e, $parent: $table, fixedColumn, fixedType } = this
     let {
+      $scopedSlots,
       maxHeight,
       height,
       containerHeight,
@@ -488,7 +489,7 @@ export default {
       }, [
         h('span', {
           class: 'vxe-table--empty-text'
-        }, $table.$slots.empty || GlobalConfig.i18n('vxe.table.emptyText'))
+        }, $scopedSlots.empty ? $scopedSlots.empty.call(this, { $table }, h) : GlobalConfig.i18n('vxe.table.emptyText'))
       ]) : null
     ])
   },
