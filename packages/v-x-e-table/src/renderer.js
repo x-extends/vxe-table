@@ -12,7 +12,7 @@ function getAttrs ({ name, attrs }) {
  * 内置渲染器
  * 支持原生的 input、textarea、select
  */
-function defaultCellRender (h, renderOpts, params) {
+function defaultEditRender (h, renderOpts, params) {
   let { row, column } = params
   let { name } = renderOpts
   let attrs = getAttrs(renderOpts)
@@ -143,13 +143,15 @@ function renderSelectEdit (h, renderOpts, params) {
 const renderMap = {
   input: {
     autofocus: '.vxe-input',
-    renderEdit: defaultCellRender,
+    renderEdit: defaultEditRender,
+    renderDefault: defaultEditRender,
     renderFilter: defaultFilterRender,
     filterMethod: defaultFilterMethod
   },
   textarea: {
     autofocus: '.vxe-textarea',
-    renderEdit: defaultCellRender,
+    renderEdit: defaultEditRender,
+    renderDefault: defaultEditRender,
     renderFilter: defaultFilterRender,
     filterMethod: defaultFilterMethod
   },

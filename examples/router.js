@@ -123,6 +123,8 @@ const TableEditFull = () => import(/* webpackChunkName: "edit" */ './views/table
 
 const TableExcelCell = () => import(/* webpackChunkName: "excel" */ './views/table/excel/Cell.vue')
 
+const TableBadEdit = () => import(/* webpackChunkName: "edit" */ './views/table/bad/Edit.vue')
+
 const ModuleIcon = () => import(/* webpackChunkName: "module" */ './views/icon/Icon.vue')
 const ModuleButton = () => import(/* webpackChunkName: "module" */ './views/button/Button.vue')
 const ModuleRadio = () => import(/* webpackChunkName: "module" */ './views/radio/Radio.vue')
@@ -736,6 +738,11 @@ export default new Router({
       path: '/table/excel/cell',
       name: 'TableExcelCell',
       component: TableExcelCell
+    },
+    {
+      path: '/table/bad/edit',
+      name: 'TableBadEdit',
+      component: TableBadEdit
     },
     {
       path: '/table/module/icon',

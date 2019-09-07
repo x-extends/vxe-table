@@ -66,7 +66,7 @@ export const Cell = {
       let funName = own.editRender ? 'renderCell' : 'renderDefault'
       let compConf = Renderer.get(editRender.name)
       if (compConf && compConf[funName]) {
-        return compConf[funName].call($table, h, editRender, params, { $excel: $table.$parent, $table, $column: column })
+        return compConf[funName].call($table, h, editRender, params, { $type: own.editRender ? 'edit' : 'cell', $excel: $table.$parent, $table, $column: column })
       }
     }
     let cellValue = UtilTools.getCellLabel(row, column, params)
@@ -522,7 +522,7 @@ export const Cell = {
       if (slots && slots.edit) {
         return slots.edit(params, h)
       }
-      return compConf && compConf.renderEdit ? compConf.renderEdit.call($table, h, editRender, params, { $excel: $table.$parent, $table, $column: column }) : []
+      return compConf && compConf.renderEdit ? compConf.renderEdit.call($table, h, editRender, params, { $type: 'edit', $excel: $table.$parent, $table, $column: column }) : []
     }
     if (slots && slots.default) {
       return slots.default(params, h)

@@ -101,6 +101,8 @@ module.exports = {
         excel: '更多实现',
         cell: 'Cell',
 
+        bad: 'Bad usage',
+
         module: 'Modules',
         button: 'Button',
         input: 'Input',
