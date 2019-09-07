@@ -789,6 +789,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.expandRow',
+              locat: {
+                name: 'TableEditExpand'
+              }
+            },
+            {
               label: 'app.aside.nav.contextMenu',
               locat: {
                 name: 'TableEditMenu'
