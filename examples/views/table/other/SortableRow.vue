@@ -34,7 +34,11 @@
       <code class="css">{{ demoCodes[2] }}</code>
     </pre>
 
-    <p class="tip"><grid-api-link name="vxe-grid"/> 方式：树表格的移动也是一样的，由于树节点的深层结构，所以需要在树节点在变动之后调用 <table-api-link prop="refreshData"/> 方法刷新数据</p>
+    <p class="tip">
+      <grid-api-link name="vxe-grid"/> 方式：树表格的移动也是一样的<br>
+      由于树节点的深层结构，所以需要在树节点在变动之后调用 <table-api-link prop="refreshData"/> 方法刷新数据<br>
+      <span class="red">注意：树结构虽然可以任意跨层级拖动，但需要自行限制自己不能往自己子节点拖动</span>
+    </p>
 
     <vxe-grid
       border

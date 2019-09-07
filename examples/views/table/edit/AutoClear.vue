@@ -87,7 +87,9 @@ export default {
               this.cancelRowEvent()
             },
             cancelRowEvent (row) {
-              this.$refs.xTable.clearActived()
+              let xTable = this.$refs.xTable
+              xTable.clearActived()
+                .then(() => xTable.revertData(row))
             }
           }
         }
@@ -112,7 +114,9 @@ export default {
       this.$refs.xTable.clearActived()
     },
     cancelRowEvent (row) {
-      this.$refs.xTable.clearActived()
+      let xTable = this.$refs.xTable
+      xTable.clearActived()
+        .then(() => xTable.revertData(row))
     }
   }
 }

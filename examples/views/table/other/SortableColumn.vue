@@ -22,7 +22,10 @@
       <code class="css">{{ demoCodes[2] }}</code>
     </pre>
 
-    <p class="tip"><grid-api-link name="vxe-grid"/> 方式，更加简单的配置式调用</p>
+    <p class="tip">
+      <grid-api-link name="vxe-grid"/> 方式，更加简单的配置式调用<br>
+      <span class="red">注意：固定列是无法拖动的，需要自行限制</span>
+    </p>
 
     <vxe-grid
       border
@@ -48,7 +51,6 @@
 <script>
 import hljs from 'highlight.js'
 import Sortable from 'sortablejs'
-import XEUtils from 'xe-utils'
 
 export default {
   data () {
@@ -180,7 +182,7 @@ export default {
                     return '平均'
                   }
                   if (['age', 'sex'].includes(column.property)) {
-                    return XEUtils.mean(data, column.property)
+                    return this.$utils.mean(data, column.property)
                   }
                   return null
                 }),
@@ -189,7 +191,7 @@ export default {
                     return '和值'
                   }
                   if (['age', 'sex'].includes(column.property)) {
-                    return XEUtils.sum(data, column.property)
+                    return this.$utils.sum(data, column.property)
                   }
                   return null
                 })
@@ -263,7 +265,7 @@ export default {
             return '平均'
           }
           if (['age', 'sex'].includes(column.property)) {
-            return XEUtils.mean(data, column.property)
+            return this.$utils.mean(data, column.property)
           }
           return null
         }),
@@ -272,7 +274,7 @@ export default {
             return '和值'
           }
           if (['age', 'sex'].includes(column.property)) {
-            return XEUtils.sum(data, column.property)
+            return this.$utils.sum(data, column.property)
           }
           return null
         })
