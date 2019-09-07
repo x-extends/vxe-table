@@ -11,25 +11,31 @@ const defaultInterval = 250
 
 class ResizeObserverPolyfill {
   constructor (callback) {
+    this.tarList = []
     this.callback = callback
   }
   observe (target) {
     if (target) {
-      this.target = target
+      if (!this.tarList.includes(target)) {
+        this.tarList.push({
+          target,
+          width: target.clientWidth,
+          heighe: target.clientHeight
+        })
+      }
       if (!eventStore.length) {
         eventListener()
       }
-      if (!eventStore.some(item => item.target === target)) {
-        this.width = target.clientWidth
-        this.heighe = target.clientHeight
+      if (!eventStore.some(item => item === this)) {
         eventStore.push(this)
       }
     }
   }
   unobserve (target) {
-    if (target) {
-      XEUtils.remove(eventStore, item => item.target === target)
-    }
+    XEUtils.remove(eventStore, item => item.tarList.includes(target))
+  }
+  disconnect () {
+    XEUtils.remove(eventStore, item => item === this)
   }
 }
 
@@ -42,17 +48,19 @@ function eventListener () {
 
 function eventHandle () {
   if (eventStore.length) {
-    eventStore.forEach(observer => {
-      const { target, width, heighe } = observer
-      const clientWidth = target.clientWidth
-      const clientHeight = target.clientHeight
-      const rWidth = clientWidth && width !== clientWidth
-      const rHeight = clientHeight && heighe !== clientHeight
-      if (rWidth || rHeight) {
-        observer.width = clientWidth
-        observer.heighe = clientHeight
-        observer.callback()
-      }
+    eventStore.forEach(item => {
+      item.tarList.forEach(observer => {
+        const { target, width, heighe } = observer
+        const clientWidth = target.clientWidth
+        const clientHeight = target.clientHeight
+        const rWidth = clientWidth && width !== clientWidth
+        const rHeight = clientHeight && heighe !== clientHeight
+        if (rWidth || rHeight) {
+          observer.width = clientWidth
+          observer.heighe = clientHeight
+          requestAnimationFrame(item.callback)
+        }
+      })
     })
     eventListener()
   }

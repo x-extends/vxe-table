@@ -9,7 +9,7 @@ export default {
   unbindResize () {
     const $resize = this.$resize
     if ($resize) {
-      $resize.unobserve(this.$el.parentNode)
+      $resize.disconnect()
     }
   }
 }
