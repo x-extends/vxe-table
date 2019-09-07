@@ -2458,6 +2458,15 @@ export default {
       XEUtils.arrayEach(this.$el.querySelectorAll('.col--current'), elem => DomTools.removeClass(elem, 'col--current'))
       return this.$nextTick()
     },
+    handleChangeCell (evnt, params) {
+      this.triggerValidate('blur')
+        .catch(e => e)
+        .then(() => {
+          this.handleActived(params, evnt)
+            .then(() => this.triggerValidate('change'))
+            .catch(e => e)
+        })
+    },
     /**
      * 列点击事件
      * 如果是单击模式，则激活为编辑状态
@@ -2466,7 +2475,7 @@ export default {
     triggerCellClickEvent (evnt, params) {
       let { $el, highlightCurrentRow, editStore, radioConfig = {}, selectConfig = {}, expandConfig = {}, treeConfig = {}, editConfig, mouseConfig = {} } = this
       let { actived } = editStore
-      let { column, cell } = params
+      let { row, column, cell } = params
       // 如果是展开行
       if ((expandConfig.trigger === 'row' || (column.type === 'expand' && expandConfig.trigger === 'cell')) && !this.getEventTargetNode(evnt, $el, 'vxe-table--expanded').flag) {
         this.triggerRowExpandEvent(evnt, params)
@@ -2493,24 +2502,16 @@ export default {
         // 如果设置了单元格选中功能，则不会使用点击事件去处理（只能支持双击模式）
         if (!mouseConfig.checked) {
           if (editConfig) {
-            if (!actived.args || cell !== actived.args.cell) {
+            if (editConfig.trigger === 'manual') {
+              if (actived.args && actived.row === row && column !== actived.column) {
+                this.handleChangeCell(evnt, params)
+              }
+            } else if (!actived.args || cell !== actived.args.cell) {
               if (editConfig.trigger === 'click') {
-                this.triggerValidate('blur')
-                  .catch(e => e)
-                  .then(() => {
-                    this.handleActived(params, evnt)
-                      .then(() => this.triggerValidate('change'))
-                      .catch(e => e)
-                  })
+                this.handleChangeCell(evnt, params)
               } else if (editConfig.trigger === 'dblclick') {
                 if (editConfig.mode === 'row' && actived.row === params.row) {
-                  this.triggerValidate('blur')
-                    .catch(e => e)
-                    .then(() => {
-                      this.handleActived(params, evnt)
-                        .then(() => this.triggerValidate('change'))
-                        .catch(e => e)
-                    })
+                  this.handleChangeCell(evnt, params)
                 } else {
                   this.handleSelected(params, evnt)
                 }
