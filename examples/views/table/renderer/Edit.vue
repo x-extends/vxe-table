@@ -5,8 +5,8 @@
       默认支持原生的：input、textarea、select<br>
       配置参数：<br>
       autofocus 自动聚焦的类名<br>
-      renderEdit (h, editRender, { row, rowIndex, $rowIndex, column, columnIndex, $columnIndex }) 编辑的渲染函数<br>
-      renderCell (h, editRender, { row, rowIndex, $rowIndex, column, columnIndex, $columnIndex }) 显示的渲染函数
+      renderEdit (h, editRender, { row, rowIndex, $rowIndex, column, columnIndex, $columnIndex }, context) 编辑的渲染函数<br>
+      renderCell (h, editRender, { row, rowIndex, $rowIndex, column, columnIndex, $columnIndex }, context) 显示的渲染函数
     </p>
 
     <vxe-table

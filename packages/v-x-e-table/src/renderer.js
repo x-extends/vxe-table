@@ -1,4 +1,5 @@
 import XEUtils from 'xe-utils/methods/xe-utils'
+import { UtilTools } from '../../tools'
 
 function getAttrs ({ name, attrs }) {
   if (name === 'input') {
@@ -7,38 +8,46 @@ function getAttrs ({ name, attrs }) {
   return attrs
 }
 
+function isSyncCell (renderOpts, params, context) {
+  return renderOpts.type === 'visible' || context.$type === 'cell'
+}
+
 /**
  * 内置渲染器
  * 支持原生的 input、textarea、select
  */
-function defaultCellRender (h, renderOpts, params) {
-  let { column } = params
+function defaultEditRender (h, renderOpts, params, context) {
+  let { row, column } = params
   let { name } = renderOpts
-  let { model } = column
   let attrs = getAttrs(renderOpts)
+  let cellValue = isSyncCell(renderOpts, params, context) ? UtilTools.getCellValue(row, column) : column.model.value
   return [
     h(name, {
       class: `vxe-default-${name}`,
       attrs,
       domProps: {
-        value: model.value
+        value: cellValue
       },
-      on: getEvents(renderOpts, params)
+      on: getEvents(renderOpts, params, context)
     })
   ]
 }
 
-function getEvents (renderOpts, params) {
+function getEvents (renderOpts, params, context) {
   let { name, events } = renderOpts
-  let { $table, column } = params
+  let { $table, row, column } = params
   let { model } = column
   let type = name === 'select' ? 'change' : 'input'
   let on = {
     [type] (evnt) {
       let cellValue = evnt.target.value
-      model.update = true
-      model.value = cellValue
-      $table.updateStatus(params, cellValue)
+      if (isSyncCell(renderOpts, params, context)) {
+        UtilTools.setCellValue(row, column, cellValue)
+      } else {
+        model.update = true
+        model.value = cellValue
+        $table.updateStatus(params, cellValue)
+      }
     }
   }
   if (events) {
@@ -49,7 +58,7 @@ function getEvents (renderOpts, params) {
   return on
 }
 
-function renderOptgroups (h, renderOpts, params) {
+function renderOptgroups (h, renderOpts, params, context) {
   let { optionGroups, optionGroupProps = {} } = renderOpts
   let groupOptions = optionGroupProps.options || 'options'
   let groupLabel = optionGroupProps.label || 'label'
@@ -59,20 +68,21 @@ function renderOptgroups (h, renderOpts, params) {
         label: group[groupLabel]
       },
       key: gIndex
-    }, renderOptions(h, group[groupOptions], renderOpts, params))
+    }, renderOptions(h, group[groupOptions], renderOpts, params, context))
   })
 }
 
-function renderOptions (h, options, renderOpts, params) {
+function renderOptions (h, options, renderOpts, params, context) {
   let { optionProps = {} } = renderOpts
-  let { column } = params
+  let { row, column } = params
   let labelProp = optionProps.label || 'label'
   let valueProp = optionProps.value || 'value'
+  let cellValue = isSyncCell(renderOpts, params, context) ? UtilTools.getCellValue(row, column) : column.model.value
   return options.map((item, index) => {
     return h('option', {
       domProps: {
         value: item[valueProp],
-        selected: item.value === column.model.value
+        selected: item.value === cellValue
       },
       key: index
     }, item[labelProp])
@@ -124,33 +134,35 @@ function defaultFilterMethod ({ option, row, column }) {
   return cellValue == data
 }
 
-function renderSelectEdit (h, renderOpts, params) {
+function renderSelectEdit (h, renderOpts, params, context) {
   return [
     h('select', {
       class: 'vxe-default-select',
-      on: getEvents(renderOpts, params)
+      on: getEvents(renderOpts, params, context)
     },
-    renderOpts.optionGroups ? renderOptgroups(h, renderOpts, params) : renderOptions(h, renderOpts.options, renderOpts, params))
+    renderOpts.optionGroups ? renderOptgroups(h, renderOpts, params, context) : renderOptions(h, renderOpts.options, renderOpts, params, context))
   ]
 }
 
 const renderMap = {
   input: {
     autofocus: 'input',
-    renderEdit: defaultCellRender,
+    renderEdit: defaultEditRender,
+    renderDefault: defaultEditRender,
     renderFilter: defaultFilterRender,
     filterMethod: defaultFilterMethod
   },
   textarea: {
     autofocus: 'textarea',
-    renderEdit: defaultCellRender,
+    renderEdit: defaultEditRender,
+    renderDefault: defaultEditRender,
     renderFilter: defaultFilterRender,
     filterMethod: defaultFilterMethod
   },
   select: {
     renderEdit: renderSelectEdit,
     renderDefault: renderSelectEdit,
-    renderCell (h, renderOpts, params) {
+    renderCell (h, renderOpts, params, context) {
       let { options, optionGroups, optionProps = {}, optionGroupProps = {} } = renderOpts
       let { row, column } = params
       let cellValue = XEUtils.get(row, column.property)

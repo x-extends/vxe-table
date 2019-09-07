@@ -99,6 +99,8 @@ module.exports = {
         forceRowVaild: 'Validate row + lock',
         keyboard: 'Keyboard navigation',
 
+        bad: 'Bad usage',
+
         module: 'Modules',
         button: 'Button',
         input: 'Input',

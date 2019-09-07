@@ -3,7 +3,7 @@
     <p class="tip">
       默认的渲染器 <table-column-api-link prop="cell-render"/><br>
       配置参数：<br>
-      renderDefault (h, cellRender, { row, rowIndex, $rowIndex, column, columnIndex, $columnIndex }) 渲染函数
+      renderDefault (h, cellRender, { row, rowIndex, $rowIndex, column, columnIndex, $columnIndex }, context) 渲染函数
     </p>
 
     <vxe-table

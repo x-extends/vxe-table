@@ -825,6 +825,19 @@ export default {
           ]
         },
         {
+          label: 'app.aside.nav.bad',
+          value: 'bad',
+          expand: false,
+          children: [
+            {
+              label: 'app.aside.nav.edit',
+              locat: {
+                name: 'TableBadEdit'
+              }
+            }
+          ]
+        },
+        {
           label: 'app.aside.nav.module',
           value: 'module',
           expand: false,

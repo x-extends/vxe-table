@@ -122,6 +122,8 @@ const TableEditSpan = () => import(/* webpackChunkName: "edit" */ './views/table
 const TableEditTemplate = () => import(/* webpackChunkName: "edit" */ './views/table/edit/Template.vue')
 const TableEditFull = () => import(/* webpackChunkName: "edit" */ './views/table/edit/Full.vue')
 
+const TableBadEdit = () => import(/* webpackChunkName: "edit" */ './views/table/bad/Edit.vue')
+
 const ModuleIcon = () => import(/* webpackChunkName: "module" */ './views/icon/Icon.vue')
 const ModuleButton = () => import(/* webpackChunkName: "module" */ './views/button/Button.vue')
 const ModuleRadio = () => import(/* webpackChunkName: "module" */ './views/radio/Radio.vue')
@@ -736,6 +738,11 @@ export default new Router({
       path: '/table/edit/full',
       name: 'TableEditFull',
       component: TableEditFull
+    },
+    {
+      path: '/table/bad/edit',
+      name: 'TableBadEdit',
+      component: TableBadEdit
     },
     {
       path: '/table/module/icon',

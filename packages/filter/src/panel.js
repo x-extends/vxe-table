@@ -33,7 +33,7 @@ export default {
       if (slots && slots.filter) {
         return slots.filter.call($table, Object.assign({ $table, context: this }, args), h)
       } else if (compConf && compConf.renderFilter) {
-        return compConf.renderFilter(h, filterRender, args, this)
+        return compConf.renderFilter.call($table, h, filterRender, args, this)
       }
       let filterRens = [
         h('li', {
