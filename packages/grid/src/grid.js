@@ -7,7 +7,9 @@ import { Buttons } from '../../v-x-e-table'
 const methods = {}
 const propKeys = Object.keys(Table.props)
 
-Object.keys(Table.methods).forEach(name => {
+Object.keys(Table.methods).concat([
+  'exportCsv'
+]).forEach(name => {
   methods[name] = function () {
     return this.$refs.xTable[name].apply(this.$refs.xTable[name], arguments)
   }

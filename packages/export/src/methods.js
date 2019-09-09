@@ -91,7 +91,7 @@ export default {
      * 如果是树表格，则默认是导出所有节点
      * 如果是启用了可视渲染，则只能导出数据源，可以配合 dataFilterMethod 函数自行转换数据
      */
-  exportCsv (options) {
+  _exportCsv (options) {
     let { visibleColumn, scrollXLoad, scrollYLoad, treeConfig } = this
     let opts = Object.assign({
       filename: 'table.csv',

@@ -330,7 +330,7 @@ export default {
   /**
    * 清除所选中源状态
    */
-  clearSelected (evnt) {
+  _clearSelected (evnt) {
     let { editStore, elemStore } = this
     let { selected } = editStore
     selected.row = null
@@ -346,7 +346,7 @@ export default {
   /**
    * 清除所有选中状态
    */
-  clearChecked (evnt) {
+  _clearChecked (evnt) {
     let { $refs, editStore, mouseConfig } = this
     let { checked } = editStore
     if (mouseConfig && mouseConfig.checked) {
@@ -361,7 +361,7 @@ export default {
     }
     return this.$nextTick()
   },
-  getMouseCheckeds () {
+  _getMouseCheckeds () {
     let { checked } = this.editStore
     let { rowNodes = [] } = checked
     let columns = []
@@ -463,7 +463,7 @@ export default {
     })
     indexs.rowNodes = rowNodes
   },
-  clearIndexChecked () {
+  _clearIndexChecked () {
     let { elemStore } = this
     let bodyElem = elemStore['main-body-list']
     XEUtils.arrayEach(bodyElem.querySelectorAll('.col--index-checked'), elem => DomTools.removeClass(elem, 'col--index-checked'))
@@ -479,7 +479,7 @@ export default {
     })
     titles.rowNodes = rowNodes
   },
-  clearHeaderChecked () {
+  _clearHeaderChecked () {
     let { elemStore } = this
     let headerElem = elemStore['main-header-list']
     if (headerElem) {
@@ -521,7 +521,7 @@ export default {
   /**
    * 清空已复制的内容
    */
-  clearCopyed () {
+  _clearCopyed () {
     let { $refs, editStore, keyboardConfig } = this
     let { copyed } = editStore
     if (keyboardConfig && keyboardConfig.isCut) {
