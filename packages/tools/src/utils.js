@@ -22,6 +22,7 @@ class ColumnConfig {
       fixed: _vm.fixed,
       align: _vm.align,
       headerAlign: _vm.headerAlign,
+      footerAlign: _vm.footerAlign,
       showOverflow: _vm.showOverflow,
       showHeaderOverflow: _vm.showHeaderOverflow,
       indexMethod: _vm.indexMethod,

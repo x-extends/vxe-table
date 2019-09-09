@@ -79,6 +79,14 @@ const apis = [
         list: []
       },
       {
+        name: 'footer-align',
+        descKey: 'app.api.tableColumn.desc.footerAlign',
+        type: 'String',
+        enum: 'left（左对其）, center（居中对其）, right（右对齐）',
+        defVal: '继承 align > 继承 table 的 footer-align',
+        list: []
+      },
+      {
         name: 'show-overflow',
         descKey: 'app.api.tableColumn.desc.showOverflow',
         type: 'String,Boolean',

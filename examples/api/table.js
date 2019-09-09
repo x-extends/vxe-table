@@ -237,6 +237,14 @@ const apis = [
         list: []
       },
       {
+        name: 'footer-align',
+        descKey: 'app.api.table.desc.footerAlign',
+        type: 'String',
+        enum: 'left（左对其）, center（居中对其）, right（右对齐）',
+        defVal: '继承 align',
+        list: []
+      },
+      {
         name: 'show-header',
         descKey: 'app.api.table.desc.showHeader',
         type: 'Boolean',

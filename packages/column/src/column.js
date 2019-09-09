@@ -26,6 +26,8 @@ export default {
     align: String,
     // 表头对齐方式
     headerAlign: String,
+    // 表尾列的对齐方式
+    footerAlign: String,
     // 当内容过长时显示为省略号
     showOverflow: { type: [Boolean, String], default: null },
     // 当表头内容过长时显示为省略号
