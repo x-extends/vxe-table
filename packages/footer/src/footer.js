@@ -24,6 +24,8 @@ export default {
       border,
       footerRowClassName,
       footerCellClassName,
+      footerAlign: allFooterAlign,
+      align: allAlign,
       tableWidth,
       scrollbarWidth,
       scrollbarHeight,
@@ -95,10 +97,11 @@ export default {
           return h('tr', {
             class: ['vxe-footer--row', footerRowClassName ? XEUtils.isFunction(footerRowClassName) ? footerRowClassName({ $table, $rowIndex, fixed: fixedType }) : footerRowClassName : '']
           }, tableColumn.map((column, $columnIndex) => {
-            let { showOverflow, renderWidth, columnKey } = column
+            let { showOverflow, renderWidth, columnKey, footerAlign, align } = column
             let isColGroup = column.children && column.children.length
             let fixedHiddenColumn = fixedType ? column.fixed !== fixedType && !isColGroup : column.fixed && overflowX
             let cellOverflow = (XEUtils.isUndefined(showOverflow) || XEUtils.isNull(showOverflow)) ? allColumnOverflow : showOverflow
+            let footAlign = footerAlign || align || allFooterAlign || allAlign
             let showEllipsis = cellOverflow === 'ellipsis'
             let showTitle = cellOverflow === 'title'
             let showTooltip = cellOverflow === true || cellOverflow === 'tooltip'
@@ -132,7 +135,7 @@ export default {
             }
             return h('td', {
               class: ['vxe-footer--column', column.id, {
-                [`col--${column.headerAlign}`]: column.headerAlign,
+                [`col--${footAlign}`]: footAlign,
                 'fixed--hidden': fixedHiddenColumn,
                 'col--ellipsis': hasEllipsis,
                 'filter--active': column.filters.some(item => item.checked)
