@@ -143,6 +143,22 @@ const apis = [
         list: []
       },
       {
+        name: 'min-width',
+        descKey: 'app.api.msg.desc.minWidth',
+        type: 'Number, String',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'min-height',
+        descKey: 'app.api.msg.desc.minHeight',
+        type: 'Number, String',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'top',
         descKey: 'app.api.msg.desc.top',
         type: 'Number, String',

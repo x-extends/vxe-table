@@ -428,6 +428,8 @@ module.exports = {
           duration: '只对 type=message 有效，自动关闭的延时',
           width: '窗口的宽度',
           height: '窗口的高度',
+          minWidth: '窗口的最小宽度',
+          minHeight: '窗口的最小高度',
           top: '只对 type=message 有效，消息距离顶部的位置',
           zIndex: '自定义堆叠顺序（对于在弹框中使用是由于堆叠被覆盖时可能会用到）'
         }
