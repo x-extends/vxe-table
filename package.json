@@ -1,6 +1,6 @@
 {
   "name": "vxe-table",
-  "version": "1.14.13",
+  "version": "1.14.14",
   "description": "一个简单实用的 Vue 表组件",
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -34,7 +34,7 @@
     "babelify": "^10.0.0",
     "browserify": "^16.2.3",
     "core-js": "^2.6.5",
-    "element-ui": "^2.11.1",
+    "element-ui": "^2.12.0",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
     "file-saver": "^2.0.2",
