@@ -33,6 +33,10 @@
           </template>
         </vxe-button>
       </template>
+      <template v-slot:tools>
+        <i class="vxe-icon--question tool-btn"></i>
+        <i class="vxe-icon--funnel tool-btn"></i>
+      </template>
     </vxe-toolbar>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -40,6 +44,7 @@
     <pre>
       <code class="html">{{ demoCodes[0] }}</code>
       <code class="javascript">{{ demoCodes[1] }}</code>
+      <code class="css">{{ demoCodes[2] }}</code>
     </pre>
   </div>
 </template>
@@ -83,6 +88,10 @@ export default {
               </template>
             </vxe-button>
           </template>
+          <template v-slot:tools>
+            <i class="vxe-icon--question tool-btn"></i>
+            <i class="vxe-icon--funnel tool-btn"></i>
+          </template>
         </vxe-toolbar>
         `,
         `
@@ -102,6 +111,16 @@ export default {
               })
             }
           }
+        }
+        `,
+        `
+        .tool-btn {
+          font-size: 20px;
+          margin: 6px 10px 0 0;
+          cursor: pointer;
+        }
+        .tool-btn:hover {
+          color: #409eff;
         }
         `
       ]
@@ -124,3 +143,14 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.tool-btn {
+  font-size: 20px;
+  margin: 6px 10px 0 0;
+  cursor: pointer;
+}
+.tool-btn:hover {
+  color: #409eff;
+}
+</style>

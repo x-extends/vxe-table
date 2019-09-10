@@ -42,6 +42,12 @@ class Rule {
 }
 
 const Methods = {
+  getParentElem () {
+    return this.$grid ? this.$grid.$el.parentNode : this.$el.parentNode
+  },
+  getParentHeight () {
+    return this.$grid ? this.$grid.getParentHeight() : this.getParentElem().clientHeight
+  },
   clearAll () {
     this.clearScroll()
     this.clearSort()
@@ -838,7 +844,7 @@ const Methods = {
     let minCellWidth = 40 // 列宽最少限制 40px
     let bodyWidth = bodyElem.clientWidth
     let remainWidth = bodyWidth
-    let { $el, fit, columnStore } = this
+    let { fit, columnStore } = this
     let { resizeList, pxMinList, pxList, scaleList, scaleMinList, autoList } = columnStore
     // 最小宽
     pxMinList.forEach(column => {
@@ -903,7 +909,7 @@ const Methods = {
     this.overflowY = overflowY
     this.tableWidth = tableWidth
     this.tableHeight = tableHeight
-    this.parentHeight = $el.parentNode.clientHeight
+    this.parentHeight = this.getParentHeight()
     if (headerElem) {
       this.headerHeight = headerElem.offsetHeight
     }
