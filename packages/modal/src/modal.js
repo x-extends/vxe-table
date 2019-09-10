@@ -31,6 +31,8 @@ export default {
     showFooter: { type: Boolean, default: true },
     width: [Number, String],
     height: [Number, String],
+    minWidth: { type: [Number, String], default: () => GlobalConfig.modal.minWidth },
+    minHeight: { type: [Number, String], default: () => GlobalConfig.modal.minHeight },
     zIndex: [Number, String],
     marginSize: { type: [Number, String], default: GlobalConfig.modal.marginSize },
     animat: { type: Boolean, default: () => GlobalConfig.modal.animat },
@@ -398,9 +400,9 @@ export default {
       const { $listeners, marginSize, events = {} } = this
       const { visibleHeight, visibleWidth } = DomTools.getDomNode()
       const type = evnt.target.dataset.type
-      const minWidth = 340
+      const minWidth = XEUtils.toNumber(this.minWidth)
+      const minHeight = XEUtils.toNumber(this.minHeight)
       const maxWidth = visibleWidth - 20
-      const minHeight = 200
       const maxHeight = visibleHeight - 20
       const modalBoxElem = this.getBox()
       const demMousemove = document.onmousemove
