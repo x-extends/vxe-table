@@ -1530,8 +1530,12 @@ const Methods = {
     }
   },
   triggerCheckRowEvent (evnt, params, value) {
-    this.handleSelectRow(params, value)
-    UtilTools.emitEvent(this, 'select-change', [Object.assign({ selection: this.getSelectRecords(), checked: value, $table: this }, params), evnt])
+    let { selectConfig = {} } = this
+    let { checkMethod } = selectConfig
+    if (!checkMethod || checkMethod(params)) {
+      this.handleSelectRow(params, value)
+      UtilTools.emitEvent(this, 'select-change', [Object.assign({ selection: this.getSelectRecords(), checked: value, $table: this }, params), evnt])
+    }
   },
   /**
    * 多选，切换某一行的选中状态
@@ -1685,10 +1689,14 @@ const Methods = {
    * 单选，行选中事件
    */
   triggerRadioRowEvent (evnt, params) {
-    let isChange = this.selectRow !== params.row
-    this.setRadioRow(params.row)
-    if (isChange) {
-      UtilTools.emitEvent(this, 'radio-change', [params, evnt])
+    let { radioConfig = {} } = this
+    let { checkMethod } = radioConfig
+    if (!checkMethod || checkMethod(params)) {
+      let isChange = this.selectRow !== params.row
+      this.setRadioRow(params.row)
+      if (isChange) {
+        UtilTools.emitEvent(this, 'radio-change', [params, evnt])
+      }
     }
   },
   triggerCurrentRowEvent (evnt, params) {
