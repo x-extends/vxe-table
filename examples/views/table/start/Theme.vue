@@ -22,16 +22,15 @@
         @import 'vxe-table/styles/variable.scss';
         $vxe-font-color: #666; // 主题颜色
         $vxe-zindex: 3000; // 对于在某些场景中，由于堆叠被覆盖时可能会用到
+        @import 'vxe-table/styles/icon.scss';
         @import 'vxe-table/styles/table.scss';
         @import 'vxe-table/styles/column.scss';
         @import 'vxe-table/styles/header.scss';
         @import 'vxe-table/styles/body.scss';
         @import 'vxe-table/styles/footer.scss';
-        @import 'vxe-table/styles/icon.scss';
         @import 'vxe-table/styles/filter.scss';
         @import 'vxe-table/styles/loading.scss';
         @import 'vxe-table/styles/grid.scss';
-        @import 'vxe-table/styles/excel.scss';
         @import 'vxe-table/styles/menu.scss';
         @import 'vxe-table/styles/toolbar.scss';
         @import 'vxe-table/styles/pager.scss';
@@ -39,7 +38,7 @@
         @import 'vxe-table/styles/radio.scss';
         @import 'vxe-table/styles/input.scss';
         @import 'vxe-table/styles/button.scss';
-        @import 'vxe-table/styles/message.scss';
+        @import 'vxe-table/styles/modal.scss';
         @import 'vxe-table/styles/tooltip.scss';
       </code>
     </pre>
