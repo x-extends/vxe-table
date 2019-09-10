@@ -16,6 +16,7 @@
       border
       ref="xTable1"
       :data="tableData"
+      @cell-click="cellClickEvent"
       @select-all="selectAllEvent"
       @select-change="selectChangeEvent">
       <vxe-table-column type="selection" width="60"></vxe-table-column>
@@ -220,6 +221,7 @@ export default {
           border
           ref="xTable1"
           :data="tableData"
+          @cell-click="cellClickEvent"
           @select-all="selectAllEvent"
           @select-change="selectChangeEvent">
           <vxe-table-column type="selection" width="60"></vxe-table-column>
@@ -240,6 +242,9 @@ export default {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 5)
           },
           methods: {
+            cellClickEvent () {
+              console.log('单元格点击事件')
+            },
             selectAllEvent ({ checked }) {
               console.log(checked ? '所有勾选事件' : '所有取消事件')
             },
@@ -467,6 +472,9 @@ export default {
   methods: {
     checkMethod ({ row }) {
       return row.age > 26
+    },
+    cellClickEvent () {
+      console.log('单元格点击事件')
     },
     selectAllEvent ({ checked }) {
       console.log(checked ? '所有勾选事件' : '所有取消事件')
