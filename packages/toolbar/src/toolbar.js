@@ -69,6 +69,7 @@ export default {
     let customBtnOns = {}
     let customWrapperOns = {}
     let $buttons = $scopedSlots.buttons
+    let $tools = $scopedSlots.tools
     if (setting) {
       if (settingOpts.trigger === 'manual') {
         // 手动触发
@@ -91,7 +92,7 @@ export default {
     }, [
       h('div', {
         class: 'vxe-button--wrapper'
-      }, $buttons ? $buttons.call($grid || $table || this, { $grid, $table }, h) : buttons.map(item => {
+      }, $buttons ? $buttons.call(this, { $grid, $table }, h) : buttons.map(item => {
         return item.visible === false ? _e() : h('vxe-button', {
           on: {
             click: evnt => this.btnEvent(evnt, item)
@@ -171,7 +172,10 @@ export default {
             }]
           })
         ])
-      ]) : null
+      ]) : null,
+      $tools ? h('div', {
+        class: 'vxe-tools--wrapper'
+      }, $tools.call(this, { $grid, $table }, h)) : null
     ])
   },
   methods: {

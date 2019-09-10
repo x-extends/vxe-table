@@ -104,6 +104,7 @@ export default {
     })
     let tableOns = Object.assign({}, $listeners)
     let $buttons = $scopedSlots.buttons
+    let $tools = $scopedSlots.tools
     if (proxyConfig) {
       Object.assign(props, {
         loading: loading || tableLoading,
@@ -123,6 +124,7 @@ export default {
     if (toolbar) {
       if (toolbar.slots) {
         $buttons = toolbar.slots.buttons || $buttons
+        $tools = toolbar.slots.tools || $tools
       }
       if (!(toolbar.setting && toolbar.setting.storage)) {
         props.customs = tableCustoms
@@ -136,6 +138,13 @@ export default {
         activeMethod: this.handleActiveMethod
       })
     }
+    let toolbarScopedSlots = {}
+    if ($buttons) {
+      toolbarScopedSlots.buttons = $buttons
+    }
+    if ($tools) {
+      toolbarScopedSlots.tools = $tools
+    }
     return h('div', {
       class: [ 'vxe-grid', {
         [`size--${vSize}`]: vSize,
@@ -147,9 +156,7 @@ export default {
         props: Object.assign({
           loading: loading || tableLoading
         }, toolbar),
-        scopedSlots: $buttons ? {
-          buttons: $buttons
-        } : null
+        scopedSlots: toolbarScopedSlots
       }) : null,
       h('vxe-table', {
         props,
@@ -171,6 +178,10 @@ export default {
   },
   methods: {
     ...methods,
+    getParentHeight () {
+      let { $el, $refs } = this
+      return $el.parentNode.clientHeight - ($refs.toolbar ? $refs.toolbar.$el.clientHeight : 0) - ($refs.pager ? $refs.pager.$el.clientHeight : 0)
+    },
     handleRowClassName (params) {
       let rowClassName = this.rowClassName
       let clss = []

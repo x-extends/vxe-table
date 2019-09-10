@@ -601,7 +601,7 @@ export default {
   },
   mounted () {
     if (this.autoResize) {
-      ResizeEvent.on(this, this.$el.parentNode, this.recalculate)
+      ResizeEvent.on(this, this.getParentElem(), this.recalculate)
     }
     document.body.appendChild(this.$refs.tableWrapper)
   },
@@ -614,7 +614,7 @@ export default {
       tableWrapper.parentNode.removeChild(tableWrapper)
     }
     if (ResizeEvent.off) {
-      ResizeEvent.off(this, this.$el.parentNode)
+      ResizeEvent.off(this, this.getParentElem())
     }
     this.closeFilter()
     this.closeMenu()
@@ -798,6 +798,12 @@ export default {
     ])
   },
   methods: {
+    getParentElem () {
+      return this.$grid ? this.$grid.$el.parentNode : this.$el.parentNode
+    },
+    getParentHeight () {
+      return this.$grid ? this.$grid.getParentHeight() : this.getParentElem().clientHeight
+    },
     clearAll () {
       this.clearScroll()
       this.clearSort()
@@ -1586,7 +1592,7 @@ export default {
       let tableWidth = 0
       let minCellWidth = 40 // 列宽最少限制 40px
       let remainWidth = bodyWidth
-      let { $el, fit, columnStore } = this
+      let { fit, columnStore } = this
       let { resizeList, pxMinList, pxList, scaleList, scaleMinList, autoList } = columnStore
       // 最小宽
       pxMinList.forEach(column => {
@@ -1651,7 +1657,7 @@ export default {
       this.overflowY = overflowY
       this.tableWidth = tableWidth
       this.tableHeight = tableHeight
-      this.containerHeight = $el.parentNode.clientHeight
+      this.containerHeight = this.getParentHeight()
       if (headerElem) {
         this.headerHeight = headerElem.offsetHeight
       }

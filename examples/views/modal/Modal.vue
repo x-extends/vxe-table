@@ -53,8 +53,8 @@
         </template>
       </vxe-modal>
 
-      <vxe-button @click="value3 = !value3">完整功能的窗口</vxe-button>
-      <vxe-modal v-model="value3" title="支持拖动的表格" width="800" height="400" :show-footer="false" resize>
+      <vxe-button @click="value3 = !value3">缩放表格的窗口</vxe-button>
+      <vxe-modal v-model="value3" title="缩放表格的窗口" width="800" height="400" :show-footer="false" resize>
         <template>
           <vxe-table
             border
@@ -69,6 +69,23 @@
             <vxe-table-column field="sex" title="app.body.label.sex"></vxe-table-column>
             <vxe-table-column field="age" title="app.body.label.age"></vxe-table-column>
           </vxe-table>
+        </template>
+      </vxe-modal>
+
+      <vxe-button @click="value4 = !value4">完整功能的窗口</vxe-button>
+      <vxe-modal v-model="value4" title="完整功能的窗口" width="800" height="400" :show-footer="false" resize>
+        <template>
+          <vxe-grid
+            border
+            resizable
+            show-overflow
+            auto-resize
+            height="auto"
+            :sync-resize="value4"
+            :pager-config="tablePage"
+            :proxy-config="tableProxy"
+            :columns="tableColumn"
+            :toolbar="tableToolbar"></vxe-grid>
         </template>
       </vxe-modal>
     </p>
@@ -91,6 +108,35 @@ export default {
       value1: false,
       value2: false,
       value3: false,
+      value4: false,
+      tablePage: {
+        pageSize: 10
+      },
+      tableProxy: {
+        props: {
+          result: 'data.result',
+          total: 'data.page.total'
+        },
+        ajax: {
+          query: ({ page }) => this.$ajax.doGet(`/api/user/page/list/${page.pageSize}/${page.currentPage}`)
+        }
+      },
+      tableToolbar: {
+        buttons: [
+          { code: 'myBtn1', name: '按钮1' },
+          { code: 'myBtn2', name: '按钮2' }
+        ],
+        refresh: true,
+        setting: true
+      },
+      tableColumn: [
+        { type: 'selection', width: 50 },
+        { type: 'index', width: 60 },
+        { field: 'name', title: 'Name' },
+        { field: 'nickname', title: 'Nickname' },
+        { field: 'role', title: 'Role' },
+        { field: 'describe', title: 'Describe' }
+      ],
       demoCodes: [
         `
         <p>
@@ -143,8 +189,8 @@ export default {
             </template>
           </vxe-modal>
 
-          <vxe-button @click="value3 = !value3">完整功能的窗口</vxe-button>
-          <vxe-modal v-model="value3" title="支持拖动的表格" width="800" height="400" :show-footer="false" resize>
+          <vxe-button @click="value3 = !value3">缩放表格的窗口</vxe-button>
+          <vxe-modal v-model="value3" title="缩放表格的窗口" width="800" height="400" :show-footer="false" resize>
             <template>
               <vxe-table
                 border
@@ -161,6 +207,23 @@ export default {
               </vxe-table>
             </template>
           </vxe-modal>
+
+          <vxe-button @click="value4 = !value4">完整功能的窗口</vxe-button>
+          <vxe-modal v-model="value4" title="完整功能的窗口" width="800" height="400" :show-footer="false" resize>
+            <template>
+              <vxe-grid
+                border
+                resizable
+                show-overflow
+                auto-resize
+                height="auto"
+                :sync-resize="value4"
+                :pager-config="tablePage"
+                :proxy-config="tableProxy"
+                :columns="tableColumn"
+                :toolbar="tableToolbar"></vxe-grid>
+            </template>
+          </vxe-modal>
         </p>
         `,
         `
@@ -168,8 +231,37 @@ export default {
           data () {
             return {
               value1: false,
-              value2: false
-              value3: false
+              value2: false,
+              value3: false,
+              value4: false,
+              tablePage: {
+                pageSize: 10
+              },
+              tableProxy: {
+                props: {
+                  result: 'data.result',
+                  total: 'data.page.total'
+                },
+                ajax: {
+                  query: ({ page }) => this.$ajax.doGet(\`/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`)
+                }
+              },
+              tableToolbar: {
+                buttons: [
+                  { code: 'myBtn1', name: '按钮1' },
+                  { code: 'myBtn2', name: '按钮2' }
+                ],
+                refresh: true,
+                setting: true
+              },
+              tableColumn: [
+                { type: 'selection', width: 50 },
+                { type: 'index', width: 60 },
+                { field: 'name', title: 'Name' },
+                { field: 'nickname', title: 'Nickname' },
+                { field: 'role', title: 'Role' },
+                { field: 'describe', title: 'Describe' }
+              ]
             }
           },
           created () {

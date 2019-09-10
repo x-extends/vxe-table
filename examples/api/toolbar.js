@@ -162,6 +162,14 @@ const apis = [
         enum: '',
         defVal: '{}, h',
         list: []
+      },
+      {
+        name: 'tools',
+        desc: '右侧工具列表',
+        type: '',
+        enum: '',
+        defVal: '{}, h',
+        list: []
       }
     ]
   },
