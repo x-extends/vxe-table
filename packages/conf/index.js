@@ -77,6 +77,8 @@ const GlobalConfig = {
   },
   modal: {
     zIndex: 2000,
+    minWidth: 340,
+    minHeight: 200,
     lockView: true,
     mask: true,
     duration: 3000,
