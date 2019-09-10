@@ -17,6 +17,7 @@
       height="300"
       :data="tableData"
       :row-class-name="rowClassName"
+      @cell-click="cellClickEvent"
       @radio-change="radioChangeEvent">
       <vxe-table-column type="radio" width="60">
         <template v-slot:header>
@@ -181,6 +182,7 @@ export default {
           height="300"
           :data="tableData"
           :row-class-name="rowClassName"
+          @cell-click="cellClickEvent"
           @radio-change="radioChangeEvent">
           <vxe-table-column type="radio" width="60">
             <template v-slot:header>
@@ -204,6 +206,9 @@ export default {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
           },
           methods: {
+            cellClickEvent () {
+              console.log('单元格点击事件')
+            },
             radioChangeEvent ({ row }) {
               this.selectRow = row
               console.log('单选事件')
@@ -388,6 +393,9 @@ export default {
   methods: {
     checkMethod ({ row }) {
       return row.age > 26
+    },
+    cellClickEvent () {
+      console.log('单元格点击事件')
     },
     currentChangeEvent ({ row }) {
       console.log('行选中事件')

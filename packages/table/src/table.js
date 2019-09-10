@@ -12,6 +12,11 @@ function getRowUniqueId () {
   return `row_${++rowUniqueId}`
 }
 
+function isTargetRadioOrCheckbox (evnt, column, colType, targetType) {
+  const target = evnt.target
+  return target && column.type === colType && target.tagName.toLowerCase() === 'input' && target.type === (targetType || colType)
+}
+
 class Rule {
   constructor (rule) {
     Object.assign(this, {
@@ -2723,6 +2728,10 @@ export default {
       let { $el, highlightCurrentRow, editStore, radioConfig = {}, selectConfig = {}, expandConfig = {}, treeConfig = {}, editConfig } = this
       let { actived } = editStore
       let { column } = params
+      // 解决 checkbox 重复触发两次问题
+      if (isTargetRadioOrCheckbox(evnt, column, 'radio') || isTargetRadioOrCheckbox(evnt, column, 'selection', 'checkbox')) {
+        return
+      }
       // 如果是展开行
       if ((expandConfig.trigger === 'row' || (column.type === 'expand' && expandConfig.trigger === 'cell')) && !this.getEventTargetNode(evnt, $el, 'vxe-table--expanded').flag) {
         this.triggerRowExpandEvent(evnt, params)
