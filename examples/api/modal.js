@@ -280,6 +280,22 @@ const apis = [
         enum: '',
         defVal: '',
         list: []
+      },
+      {
+        name: 'maximized()',
+        desc: '最大化窗口',
+        type: '',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'minimized()',
+        desc: '最小化窗口',
+        type: '',
+        enum: '',
+        defVal: '',
+        list: []
       }
     ]
   }

@@ -92,6 +92,7 @@ function mockData () {
       rate: index % 4 === 0 ? 2 : index % 3 === 0 ? 3 : 0,
       address: `地址 地址地址 地址地址 址地址 址地址  址地址 址地址址地址址地址 地址${index}`,
       address2: `地址 地址地址 地址${index}`,
+      img: `https://github.com/xuliangzhan/vxe-table/blob/master/public/other/img${index % 3 ? '1' : '2'}.gif?raw=true`,
       updateTime: currTime,
       createTime: currTime,
       attr1: '',
