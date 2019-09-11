@@ -273,6 +273,25 @@
     text-align: right;
     padding: 6px 16px 10px 16px;
   }
+  &.is--maximize {
+    .vxe-modal--box {
+      .vxe-modal--header {
+        cursor: default;
+      }
+    }
+    .vxe-modal--resize {
+      .wl-resize,
+      .wr-resize,
+      .swst-resize,
+      .sest-resize,
+      .st-resize,
+      .swlb-resize,
+      .selb-resize,
+      .sb-resize {
+        display: none;
+      }
+    }
+  }
   .vxe-modal--resize {
     $SpaceSize: 8;
     .wl-resize,

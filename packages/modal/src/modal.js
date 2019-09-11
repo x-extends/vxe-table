@@ -116,6 +116,7 @@ export default {
         'lock--scroll': lockScroll,
         'lock--view': lockView,
         'is--mask': mask,
+        'is--maximize': zoomLocat,
         'is--visible': contentVisible,
         active: visible
       }],
@@ -146,7 +147,7 @@ export default {
           resize ? h('i', {
             class: ['vxe-modal--zoom-btn', 'trigger--btn', zoomLocat ? GlobalConfig.icon.zoomOut : GlobalConfig.icon.zoomIn],
             on: {
-              click: this.zoomInEvent
+              click: this.toggleZoomEvent
             }
           }) : null,
           h('i', {
@@ -315,45 +316,57 @@ export default {
     getBox () {
       return this.$refs.modalBox
     },
-    zoomInEvent (evnt) {
-      let { $listeners, marginSize, zoomLocat, events = {} } = this
-      let { visibleHeight, visibleWidth } = DomTools.getDomNode()
-      let modalBoxElem = this.getBox()
-      let type = 'min'
-      if (zoomLocat) {
-        this.zoomLocat = null
-        Object.assign(modalBoxElem.style, {
-          top: `${zoomLocat.top}px`,
-          left: `${zoomLocat.left}px`,
-          width: `${zoomLocat.width}px`,
-          height: `${zoomLocat.height}px`
-        })
-      } else {
-        type = 'max'
-        this.zoomLocat = {
-          top: modalBoxElem.offsetTop,
-          left: modalBoxElem.offsetLeft,
-          width: modalBoxElem.clientWidth,
-          height: modalBoxElem.clientHeight
+    maximized () {
+      return this.$nextTick().then(() => {
+        if (!this.zoomLocat) {
+          let marginSize = this.marginSize
+          let modalBoxElem = this.getBox()
+          let { visibleHeight, visibleWidth } = DomTools.getDomNode()
+          this.zoomLocat = {
+            top: modalBoxElem.offsetTop,
+            left: modalBoxElem.offsetLeft,
+            width: modalBoxElem.clientWidth,
+            height: modalBoxElem.clientHeight
+          }
+          Object.assign(modalBoxElem.style, {
+            top: `${marginSize}px`,
+            left: `${marginSize}px`,
+            width: `${visibleWidth - marginSize * 2}px`,
+            height: `${visibleHeight - marginSize * 2}px`
+          })
         }
-        Object.assign(modalBoxElem.style, {
-          top: `${marginSize}px`,
-          left: `${marginSize}px`,
-          width: `${visibleWidth - marginSize * 2}px`,
-          height: `${visibleHeight - marginSize * 2}px`
-        })
-      }
-      let params = { type, $modal: this }
-      if ($listeners.zoom) {
-        this.$emit('zoom', params, evnt)
-      } else if (events.zoom) {
-        events.zoom.call(this, params, evnt)
-      }
+      })
+    },
+    minimized () {
+      return this.$nextTick().then(() => {
+        let zoomLocat = this.zoomLocat
+        if (zoomLocat) {
+          let modalBoxElem = this.getBox()
+          this.zoomLocat = null
+          Object.assign(modalBoxElem.style, {
+            top: `${zoomLocat.top}px`,
+            left: `${zoomLocat.left}px`,
+            width: `${zoomLocat.width}px`,
+            height: `${zoomLocat.height}px`
+          })
+        }
+      })
+    },
+    toggleZoomEvent (evnt) {
+      let { $listeners, zoomLocat, events = {} } = this
+      let params = { type: zoomLocat ? 'min' : 'max', $modal: this }
+      return this[zoomLocat ? 'minimized' : 'maximized']().then(() => {
+        if ($listeners.zoom) {
+          this.$emit('zoom', params, evnt)
+        } else if (events.zoom) {
+          events.zoom.call(this, params, evnt)
+        }
+      })
     },
     mousedownEvent (evnt) {
-      let { marginSize } = this
+      let { marginSize, zoomLocat } = this
       let modalBoxElem = this.getBox()
-      if (evnt.button === 0 && !DomTools.getEventTargetNode(evnt, modalBoxElem, 'trigger--btn').flag) {
+      if (!zoomLocat && evnt.button === 0 && !DomTools.getEventTargetNode(evnt, modalBoxElem, 'trigger--btn').flag) {
         evnt.preventDefault()
         let demMousemove = document.onmousemove
         let demMouseup = document.onmouseup
@@ -536,6 +549,7 @@ export default {
         }
       }
       document.onmouseup = evnt => {
+        this.zoomLocat = null
         document.onmousemove = demMousemove
         document.onmouseup = demMouseup
         setTimeout(() => {

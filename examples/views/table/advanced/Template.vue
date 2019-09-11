@@ -67,6 +67,11 @@
           <a href="https://github.com/xuliangzhan/vxe-table">{{ row.name }}</a>
         </template>
       </vxe-table-column>
+      <vxe-table-column field="img" title="图片也行" width="120" show-overflow>
+        <template v-slot="{ row }">
+          <img :src="row.img" style="width: 100px;">
+        </template>
+      </vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -146,6 +151,11 @@ export default {
                 <option value="1">还可以这样</option>
               </select>
               <a href="https://github.com/xuliangzhan/vxe-table">{{ row.name }}</a>
+            </template>
+          </vxe-table-column>
+          <vxe-table-column field="img" title="图片也行" width="120" show-overflow>
+            <template v-slot="{ row }">
+              <img :src="row.img" style="width: 100px;">
             </template>
           </vxe-table-column>
         </vxe-table>
