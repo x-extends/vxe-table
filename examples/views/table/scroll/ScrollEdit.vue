@@ -84,6 +84,9 @@
         | Arrow Down ↓ | 匀速向下滚动数据 |
         | Arrow Left ← | 匀速向左滚动数据 |
         | Arrow Right → | 匀速向右滚动数据 |
+        | Spacebar | 翻页滚动 |
+        | ctrl + Home | 滚动到顶部 |
+        | ctrl + End | 滚动到底部 |
       </code>
     </pre>
 
