@@ -56,6 +56,7 @@ export default {
   data () {
     return {
       tableColumn: [
+        { type: 'selection', width: 60 },
         { field: 'name', title: 'Name' },
         { field: 'role', title: 'Role' },
         { field: 'sex', title: 'Sex' },
@@ -150,6 +151,7 @@ export default {
           data () {
             return {
               tableColumn: [
+                { type: 'selection', width: 60 },
                 { field: 'name', title: 'Name' },
                 { field: 'role', title: 'Role' },
                 { field: 'sex', title: 'Sex' },
