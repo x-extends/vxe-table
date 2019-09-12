@@ -259,7 +259,7 @@ const apis = [
     list: [
       {
         name: 'open()',
-        desc: '打开窗口',
+        desc: '手动打开窗口',
         type: '',
         enum: '',
         defVal: '',
@@ -267,7 +267,7 @@ const apis = [
       },
       {
         name: 'close()',
-        desc: '关闭窗口',
+        desc: '手动关闭窗口',
         type: '',
         enum: '',
         defVal: '',
@@ -282,16 +282,16 @@ const apis = [
         list: []
       },
       {
-        name: 'maximized()',
-        desc: '最大化窗口',
+        name: 'maximize()',
+        desc: '如果窗口处于可常规状态，则最大化窗口',
         type: '',
         enum: '',
         defVal: '',
         list: []
       },
       {
-        name: 'minimized()',
-        desc: '最小化窗口',
+        name: 'revert()',
+        desc: '如果窗口处于最大化状态，则还原窗口',
         type: '',
         enum: '',
         defVal: '',
