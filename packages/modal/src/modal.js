@@ -316,7 +316,7 @@ export default {
     getBox () {
       return this.$refs.modalBox
     },
-    maximized () {
+    maximize () {
       return this.$nextTick().then(() => {
         if (!this.zoomLocat) {
           let marginSize = this.marginSize
@@ -337,7 +337,7 @@ export default {
         }
       })
     },
-    minimized () {
+    revert () {
       return this.$nextTick().then(() => {
         let zoomLocat = this.zoomLocat
         if (zoomLocat) {
@@ -355,7 +355,7 @@ export default {
     toggleZoomEvent (evnt) {
       let { $listeners, zoomLocat, events = {} } = this
       let params = { type: zoomLocat ? 'min' : 'max', $modal: this }
-      return this[zoomLocat ? 'minimized' : 'maximized']().then(() => {
+      return this[zoomLocat ? 'revert' : 'maximize']().then(() => {
         if ($listeners.zoom) {
           this.$emit('zoom', params, evnt)
         } else if (events.zoom) {
