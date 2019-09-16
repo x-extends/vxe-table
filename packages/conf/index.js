@@ -16,6 +16,7 @@ const GlobalConfig = {
   version: 0, // 版本号，对于某些带数据缓存的功能有用到，上升版本号可以用于重置数据
   optimization: {
     animat: true,
+    delayHover: 250,
     scrollX: {
       gt: 100
       // oSize: 0,

@@ -15,7 +15,7 @@ function handleLocation (obj, rows, columns, row, column) {
 
 // 滚动、拖动过程中不需要触发
 function isOperateMouse ($table) {
-  return $table._isResize || ($table.lastScrollTime && Date.now() < $table.lastScrollTime + 300)
+  return $table._isResize || ($table.lastScrollTime && Date.now() < $table.lastScrollTime + $table.optimizeOpts.delayHover)
 }
 
 /**
