@@ -41,7 +41,7 @@ module.exports = {
         events: 'Event',
         template: 'Template',
         customSort: 'Custom column header sorting',
-        manualFilter: 'Manual screening',
+        manualFilter: 'Filtering advanced usage',
         span: 'Rowspan and colspan',
         footer: 'Footer summary',
         export: 'Export CSV',

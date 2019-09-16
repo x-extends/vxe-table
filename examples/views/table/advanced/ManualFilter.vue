@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">手动触发筛选，通过调用 <table-api-link prop="filter"/> 和 <table-api-link prop="updateData"/> 方法来处理手动筛选</p>
+    <p class="tip">手动触发筛选、动态更改筛选条件，通过调用 <table-api-link prop="filter"/> 和 <table-api-link prop="updateData"/> 方法来处理复杂场景的筛选逻辑</p>
 
     <vxe-toolbar>
       <template v-slot:buttons>

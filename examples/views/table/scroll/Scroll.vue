@@ -27,7 +27,7 @@
     </pre>
 
     <p class="tip">
-      手动调优，默认自动优化<br>
+      手动调优，默认自动优化（<span class="red">注：默认的优化一般情况下是最流畅的，如果某些场景下需要手动调优就自行去更改参数即可，至于流不流畅取决于渲染参数</span>）<br>
       通过指定 <table-api-link prop="optimization"/> ：{<table-api-link prop="scrollX"/>,<table-api-link prop="scrollY"/>} 适合的参数可以手动调优<br>
       数据超大情况下必须使用：<table-api-link prop="show-overflow"/>，<table-api-link prop="show-header-overflow"/> 参数
     </p>
