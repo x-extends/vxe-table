@@ -3,6 +3,7 @@
     <p class="tip">
       通过设置 <table-column-api-link prop="filters"/> 属性和 <table-column-api-link prop="filter-method"/> 方法可以支持列筛选功能<br>
       如果是服务端筛选，只需加上 <table-api-link prop="remote-filter"/> 和 <table-api-link prop="filter-change"/> 事件就可以实现<br>
+      如果是动态数据请配合 <table-api-link prop="filter"/> 方法（<router-link  class="link" :to="{name: 'TableManualFilter'}">查看示例</router-link>），参数 <table-column-api-link prop="filters"/> 不支持动态数据<br>
       还可以使用 slot <table-column-api-link prop="filter"/> 和 context.changeOption(event, checked, option) 方法来自定义筛选模板
     </p>
 
