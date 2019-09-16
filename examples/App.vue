@@ -93,6 +93,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.icons',
+              locat: {
+                name: 'StartIcons'
+              }
+            },
+            {
               label: 'app.aside.nav.global',
               locat: {
                 name: 'StartGlobal'
