@@ -4,6 +4,7 @@ module.exports = {
       nav: {
         start: 'Development',
         install: 'Install',
+        icons: 'Default icon',
         global: 'Global props',
         use: 'Quick start',
         theme: 'Custom theme',

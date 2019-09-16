@@ -38,31 +38,6 @@
           },
           // 版本号（对于某些带 Storage 数据储存的功能有用到，上升版本号可以用于重置 Storage 数据）
           version: 0,
-          // 自定义图标配置（如果全部图标都使用自定义，就不需要引入 Icon 模块了，减少体积）
-          icon: {
-            sortAsc: 'vxe-icon--caret-top',
-            sortDesc: 'vxe-icon--caret-bottom',
-            filter: 'vxe-icon--funnel',
-            edit: 'vxe-icon--edit-outline',
-            tree: 'vxe-icon--caret-right',
-            refresh: 'vxe-icon--refresh',
-            custom: 'vxe-icon--menu',
-            jumpPrev: 'vxe-icon--d-arrow-left',
-            jumpNext: 'vxe-icon--d-arrow-right',
-            prevPage: 'vxe-icon--arrow-left',
-            nextPage: 'vxe-icon--arrow-right',
-            zoomIn: 'vxe-icon--zoomin',
-            zoomOut: 'vxe-icon--zoomout',
-            modalClose: 'vxe-icon--close',
-            modalInfo: 'vxe-icon--info',
-            modalSuccess: 'vxe-icon--success',
-            modalWarning: 'vxe-icon--warning',
-            modalError: 'vxe-icon--error',
-            modalQuestion: 'vxe-icon--question',
-            modalLoading: 'vxe-icon--refresh roll',
-            caretBottom: 'vxe-icon--caret-bottom',
-            dropdownBottom: 'vxe-icon--arrow-bottom'
-          },
           // 配置式表格的默认参数
           grid: {
             proxyConfig: {

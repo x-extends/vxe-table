@@ -3,6 +3,7 @@ import Router from 'vue-router'
 
 const StartInstall = () => import(/* webpackChunkName: "start" */ './views/table/start/Install.vue')
 const StartUse = () => import(/* webpackChunkName: "start" */ './views/table/start/Use.vue')
+const StartIcons = () => import(/* webpackChunkName: "start" */ './views/table/start/Icons.vue')
 const StartGlobal = () => import(/* webpackChunkName: "start" */ './views/table/start/Global.vue')
 const StartTheme = () => import(/* webpackChunkName: "start" */ './views/table/start/Theme.vue')
 const StartI18n = () => import(/* webpackChunkName: "start" */ './views/table/start/I18n.vue')
@@ -188,6 +189,11 @@ export default new Router({
       path: '/table/start/use',
       name: 'StartUse',
       component: StartUse
+    },
+    {
+      path: '/table/start/icons',
+      name: 'StartIcons',
+      component: StartIcons
     },
     {
       path: '/table/start/global',
