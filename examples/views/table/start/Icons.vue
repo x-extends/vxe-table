@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2>Default Icons</h2>
+    <h2>Custom Icons</h2>
     <pre>
       <code class="javascript">
         import Vue from 'vue'
