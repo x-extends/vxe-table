@@ -87,11 +87,10 @@
           // 默认优化配置项
           optimization : {
             animat: true,
-            // 当表头大于 100 列时自动启用横向 X 滚动渲染
+            delayHover: 250,
             scrollX: {
               gt: 100
             },
-            // 当行数据大于 500 条时自动启用纵向 Y 滚动渲染
             scrollY: {
               gt: 500
             }

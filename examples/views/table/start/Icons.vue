@@ -6,7 +6,7 @@
         import VXETable from 'vxe-table'
 
         VXETable.setup({
-          // 自定义图标配置（如果全部图标都使用自定义，可以不需要引入 Icon 模块了，减少体积）
+          // 自定义图标配置
           icon: {
             sortAsc: 'vxe-icon--caret-top',
             sortDesc: 'vxe-icon--caret-bottom',
