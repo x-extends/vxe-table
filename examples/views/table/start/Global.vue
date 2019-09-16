@@ -9,9 +9,7 @@
     <h2>Default Global Props</h2>
     <pre>
       <code class="javascript">
-        import Vue from 'vue'
         import VXETable from 'vxe-table'
-        import 'vxe-table/lib/index.css'
 
         VXETable.setup({
           // 默认表格参数
