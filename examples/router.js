@@ -191,14 +191,14 @@ export default new Router({
       component: StartUse
     },
     {
-      path: '/table/start/icons',
-      name: 'StartIcons',
-      component: StartIcons
-    },
-    {
       path: '/table/start/global',
       name: 'StartGlobal',
       component: StartGlobal
+    },
+    {
+      path: '/table/start/icons',
+      name: 'StartIcons',
+      component: StartIcons
     },
     {
       path: '/table/start/theme',

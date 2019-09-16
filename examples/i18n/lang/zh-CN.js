@@ -4,9 +4,9 @@ module.exports = {
       nav: {
         start: '开发指南',
         install: '安装',
-        icons: '默认图标',
         global: '全局参数',
         use: '快速上手',
+        icons: '自定义图标',
         theme: '自定义主题',
         i18n: '国际化',
 
