@@ -1024,6 +1024,14 @@ const apis = [
             list: []
           },
           {
+            name: 'delayHover',
+            desc: '当表格发生拖动、滚动...等行为时，至少多少毫秒之后才允许触发 hover 事件',
+            type: 'Number',
+            enum: '',
+            defVal: '250',
+            list: []
+          },
+          {
             name: 'scrollX',
             desc: '横向 X 虚拟滚动配置（用于特殊场景手动调优）',
             type: 'Object',
