@@ -171,7 +171,7 @@ const apis = [
         descKey: 'app.api.msg.desc.zIndex',
         type: 'Number, String',
         enum: '',
-        defVal: '999',
+        defVal: '起始 2000',
         list: []
       }
     ]
