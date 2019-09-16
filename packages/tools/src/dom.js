@@ -2,8 +2,8 @@ import XEUtils from 'xe-utils'
 import UtilTools from './utils'
 
 const browse = XEUtils.browse()
-const htmlElem = document.querySelector('html')
-const bodyElem = document.body
+const htmlElem = browse.isDoc ? document.querySelector('html') : 0
+const bodyElem = browse.isDoc ? document.body : 0
 
 function getClsRE (cls) {
   if (!reClsMap[cls]) {

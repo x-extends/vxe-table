@@ -1,4 +1,5 @@
 import XEUtils from 'xe-utils'
+import DomTools from './dom'
 
 // 监听全局事件
 const wheelName = /Firefox/i.test(navigator.userAgent) ? 'DOMMouseScroll' : 'mousewheel'
@@ -19,13 +20,15 @@ export const GlobalEvent = {
   }
 }
 
-document.addEventListener('keydown', GlobalEvent.trigger, false)
-document.addEventListener('contextmenu', GlobalEvent.trigger, false)
-// document.addEventListener('mouseover', GlobalEvent.trigger, false)
-// document.addEventListener('mouseout', GlobalEvent.trigger, false)
-window.addEventListener('mousedown', GlobalEvent.trigger, false)
-window.addEventListener('blur', GlobalEvent.trigger, false)
-window.addEventListener('resize', GlobalEvent.trigger, false)
-window.addEventListener(wheelName, GlobalEvent.trigger, false)
+if (DomTools.browse.isDoc) {
+  document.addEventListener('keydown', GlobalEvent.trigger, false)
+  document.addEventListener('contextmenu', GlobalEvent.trigger, false)
+  // document.addEventListener('mouseover', GlobalEvent.trigger, false)
+  // document.addEventListener('mouseout', GlobalEvent.trigger, false)
+  window.addEventListener('mousedown', GlobalEvent.trigger, false)
+  window.addEventListener('blur', GlobalEvent.trigger, false)
+  window.addEventListener('resize', GlobalEvent.trigger, false)
+  window.addEventListener(wheelName, GlobalEvent.trigger, false)
+}
 
 export default GlobalEvent
