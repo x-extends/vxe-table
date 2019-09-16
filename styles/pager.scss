@@ -302,7 +302,8 @@
 .vxe-pager-size--select-wrapper {
   display: none;
   position: absolute;
-  bottom: 100%;
+  bottom: 0;
+  left: 0;
   width: 200px;
   text-align: center;
   z-index: $vxe-zindex;

@@ -71,7 +71,7 @@ export default {
     }, layouts.map(name => this[`render${name}`](h)))
   },
   methods: {
-    // prevPage
+    // 上一页
     renderPrevPage (h) {
       let { currentPage } = this
       return h('span', {
@@ -87,16 +87,15 @@ export default {
         })
       ])
     },
-    // prevJump
+    // 向上翻页
     renderPrevJump (h, tagName) {
-      let { numList, currentPage } = this
       return h(tagName || 'span', {
         class: ['vxe-pager--jump-prev', {
           'is--fixed': !tagName,
-          'is--disabled': currentPage <= 1
+          'is--disabled': this.currentPage <= 1
         }],
         on: {
-          click: () => this.jumpPage(Math.max(currentPage - numList.length, 1))
+          click: this.prevJump
         }
       }, [
         tagName ? h('i', {
@@ -119,16 +118,16 @@ export default {
         class: 'vxe-pager--btn-wrapper'
       }, this.renderPageBtn(h, true))
     },
-    // nextJump
+    // 向下翻页
     renderNextJump (h, tagName) {
-      let { numList, currentPage, pageCount } = this
+      let { currentPage, pageCount } = this
       return h(tagName || 'span', {
         class: ['vxe-pager--jump-next', {
           'is--fixed': !tagName,
           'is--disabled': currentPage >= pageCount
         }],
         on: {
-          click: () => this.jumpPage(Math.min(currentPage + numList.length, pageCount))
+          click: this.nextJump
         }
       }, [
         tagName ? h('i', {
@@ -139,7 +138,7 @@ export default {
         })
       ])
     },
-    // nextPage
+    // 下一页
     renderNextPage (h) {
       let { currentPage, pageCount } = this
       return h('span', {
@@ -332,6 +331,14 @@ export default {
       if (currentPage < pageCount) {
         this.jumpPage(Math.min(currentPage + 1, pageCount))
       }
+    },
+    prevJump () {
+      let { numList, currentPage } = this
+      this.jumpPage(Math.max(currentPage - numList.length, 1))
+    },
+    nextJump () {
+      let { numList, currentPage, pageCount } = this
+      this.jumpPage(Math.min(currentPage + numList.length, pageCount))
     },
     jumpPage (currentPage) {
       let type = 'current-change'

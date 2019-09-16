@@ -153,6 +153,22 @@ const apis = [
         list: []
       },
       {
+        name: 'prevJump()',
+        desc: '向上翻页',
+        type: '',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'nextJump()',
+        desc: '向下翻页',
+        type: '',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'jumpPage(currentPage)',
         desc: '跳转到指定页',
         type: '',

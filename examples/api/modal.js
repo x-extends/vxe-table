@@ -67,7 +67,7 @@ const apis = [
         descKey: 'app.api.msg.desc.showFooter',
         type: 'Boolean',
         enum: '',
-        defVal: 'true',
+        defVal: 'false',
         list: []
       },
       {

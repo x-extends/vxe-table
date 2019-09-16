@@ -28,7 +28,7 @@ export default {
     escClosable: Boolean,
     resize: Boolean,
     showHeader: { type: Boolean, default: true },
-    showFooter: { type: Boolean, default: true },
+    showFooter: Boolean,
     width: [Number, String],
     height: [Number, String],
     minWidth: { type: [Number, String], default: () => GlobalConfig.modal.minWidth },

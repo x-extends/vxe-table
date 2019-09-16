@@ -33,9 +33,10 @@ export function Modal (options) {
   let defOpts = index === 2 ? {
     mask: false,
     lockView: false,
-    showHeader: false,
-    showFooter: false
-  } : {}
+    showHeader: false
+  } : {
+    showFooter: true
+  }
   defOpts.type = type
   if (index === 1) {
     defOpts.status = 'question'
