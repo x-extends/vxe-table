@@ -3,9 +3,7 @@
     <h2>Custom Icons</h2>
     <pre>
       <code class="javascript">
-        import Vue from 'vue'
         import VXETable from 'vxe-table'
-        import 'vxe-table/lib/index.css'
 
         VXETable.setup({
           // 自定义图标配置（如果全部图标都使用自定义，可以不需要引入 Icon 模块了，减少体积）
