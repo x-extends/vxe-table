@@ -115,7 +115,7 @@
 
 ## Installing
 
-require: Vue 2.6+  
+require: vue 2.6+  
 require: xe-utils 2.2+
 
 ```shell
