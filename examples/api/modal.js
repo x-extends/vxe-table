@@ -283,7 +283,7 @@ const apis = [
       },
       {
         name: 'maximize()',
-        desc: '如果窗口处于可常规状态，则最大化窗口',
+        desc: '如果窗口处于常规状态，则最大化窗口',
         type: '',
         enum: '',
         defVal: '',
