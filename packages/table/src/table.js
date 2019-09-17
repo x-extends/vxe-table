@@ -4086,7 +4086,8 @@ export default {
         data: null,
         columns: null,
         columnFilterMethod: column => ['index', 'selection', 'radio'].indexOf(column.type) === -1 && column.property,
-        dataFilterMethod: null
+        dataFilterMethod: null,
+        footerFilterMethod: null
       }, options)
       if (opts.filename.indexOf('.csv') === -1) {
         opts.filename += '.csv'
