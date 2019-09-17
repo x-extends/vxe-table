@@ -2,7 +2,8 @@ import XEUtils from 'xe-utils/methods/xe-utils'
 import DomTools from './dom'
 
 // 监听全局事件
-const wheelName = /Firefox/i.test(navigator.userAgent) ? 'DOMMouseScroll' : 'mousewheel'
+const browse = DomTools.browse
+const wheelName = browse.isDoc && /Firefox/i.test(navigator.userAgent) ? 'DOMMouseScroll' : 'mousewheel'
 const eventStore = []
 export const GlobalEvent = {
   on (comp, type, cb) {
@@ -22,7 +23,7 @@ export const GlobalEvent = {
   }
 }
 
-if (DomTools.browse.isDoc) {
+if (browse.isDoc) {
   document.addEventListener('keydown', GlobalEvent.trigger, false)
   document.addEventListener('contextmenu', GlobalEvent.trigger, false)
   window.addEventListener('mousedown', GlobalEvent.trigger, false)

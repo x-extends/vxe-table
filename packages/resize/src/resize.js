@@ -1,5 +1,6 @@
 import XEUtils from 'xe-utils/methods/xe-utils'
 import GlobalConfig from '../../conf'
+import DomTools from '../../tools/src/dom'
 
 /**
  * 监听 resize 事件
@@ -39,7 +40,7 @@ class ResizeObserverPolyfill {
   }
 }
 
-const Resize = window.ResizeObserver || ResizeObserverPolyfill
+const Resize = DomTools.browse.isDoc ? (window.ResizeObserver || ResizeObserverPolyfill) : ResizeObserverPolyfill
 
 function eventListener () {
   clearTimeout(resizeTimeout)
