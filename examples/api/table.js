@@ -2167,7 +2167,7 @@ const apis = [
           },
           {
             name: 'columnFilterMethod',
-            desc: '列过滤方法，该函数 Function(column,columnIndex) 的返回值用来决定该列是否导出',
+            desc: '列过滤方法，该函数 Function(column,$columnIndex) 的返回值用来决定该列是否导出',
             type: 'Function',
             enum: '',
             defVal: '默认过滤掉 type=index,selection,radio 和 field 为空的列',
@@ -2175,7 +2175,15 @@ const apis = [
           },
           {
             name: 'dataFilterMethod',
-            desc: '数据过滤方法，该函数 Function(row,rowIndex) 的返回值用来决定该数据是否导出',
+            desc: '数据过滤方法，该函数 Function(row,$rowIndex) 的返回值用来决定该数据是否导出',
+            type: 'Function',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'footerFilterMethod',
+            desc: '表尾过滤方法，该函数 Function(cells,$rowIndex) 的返回值用来决定该数据是否导出',
             type: 'Function',
             enum: '',
             defVal: '',

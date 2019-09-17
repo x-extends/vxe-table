@@ -22,8 +22,11 @@ function getCsvContent ($table, opts, oColumns, oData) {
     }
   })
   if (opts.isFooter) {
-    $table.footerData.forEach(rows => {
-      content += rows.join(',') + '\n'
+    let footerData = $table.footerData
+    let footers = opts.footerFilterMethod ? footerData.filter(opts.footerFilterMethod) : footerData
+    let filterMaps = $table.tableColumn.map(column => columns.includes(column))
+    footers.forEach(rows => {
+      content += rows.filter((val, colIndex) => filterMaps[colIndex]).join(',') + '\n'
     })
   }
   return content
@@ -102,7 +105,8 @@ export default {
       data: null,
       columns: null,
       columnFilterMethod: column => ['index', 'selection', 'radio'].indexOf(column.type) === -1 && column.property,
-      dataFilterMethod: null
+      dataFilterMethod: null,
+      footerFilterMethod: null
     }, options)
     if (opts.filename.indexOf('.csv') === -1) {
       opts.filename += '.csv'
