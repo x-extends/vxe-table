@@ -1184,131 +1184,132 @@ const Methods = {
    * 全局键盘事件
    */
   handleGlobalKeydownEvent (evnt) {
-    let { isCtxMenu, ctxMenuStore, editStore, mouseConfig = {}, keyboardConfig = {}, treeConfig, highlightCurrentRow, currentRow } = this
-    let { selected, actived } = editStore
-    let keyCode = evnt.keyCode
-    let isBack = keyCode === 8
-    let isTab = keyCode === 9
-    let isEnter = keyCode === 13
-    let isEsc = keyCode === 27
-    let isSpacebar = keyCode === 32
-    let isLeftArrow = keyCode === 37
-    let isUpArrow = keyCode === 38
-    let isRightArrow = keyCode === 39
-    let isDwArrow = keyCode === 40
-    let isDel = keyCode === 46
-    let isA = keyCode === 65
-    let isC = keyCode === 67
-    let isV = keyCode === 86
-    let isX = keyCode === 88
-    let isF2 = keyCode === 113
-    let isCtrlKey = evnt.ctrlKey
-    let operArrow = isLeftArrow || isUpArrow || isRightArrow || isDwArrow
-    let operCtxMenu = isCtxMenu && ctxMenuStore.visible && (isEnter || isSpacebar || operArrow)
-    let params
-    if (isEsc) {
-      // 如果按下了 Esc 键，关闭快捷菜单、筛选
-      this.closeMenu()
-      this.closeFilter()
-      // 如果是激活编辑状态，则取消编辑
-      if (actived.row) {
-        params = actived.args
-        this.clearActived(evnt)
-        // 如果配置了选中功能，则为选中状态
-        if (mouseConfig.selected) {
-          this.$nextTick(() => this.handleSelected(params, evnt))
+    this.preventEvent(evnt, 'event.keydown', { $table: this }, () => {
+      let { isCtxMenu, ctxMenuStore, editStore, mouseConfig = {}, keyboardConfig = {}, treeConfig, highlightCurrentRow, currentRow } = this
+      let { selected, actived } = editStore
+      let keyCode = evnt.keyCode
+      let isBack = keyCode === 8
+      let isTab = keyCode === 9
+      let isEnter = keyCode === 13
+      let isEsc = keyCode === 27
+      let isSpacebar = keyCode === 32
+      let isLeftArrow = keyCode === 37
+      let isUpArrow = keyCode === 38
+      let isRightArrow = keyCode === 39
+      let isDwArrow = keyCode === 40
+      let isDel = keyCode === 46
+      let isA = keyCode === 65
+      let isC = keyCode === 67
+      let isV = keyCode === 86
+      let isX = keyCode === 88
+      let isF2 = keyCode === 113
+      let isCtrlKey = evnt.ctrlKey
+      let operArrow = isLeftArrow || isUpArrow || isRightArrow || isDwArrow
+      let operCtxMenu = isCtxMenu && ctxMenuStore.visible && (isEnter || isSpacebar || operArrow)
+      let params
+      if (isEsc) {
+        // 如果按下了 Esc 键，关闭快捷菜单、筛选
+        this.closeMenu()
+        this.closeFilter()
+        // 如果是激活编辑状态，则取消编辑
+        if (actived.row) {
+          params = actived.args
+          this.clearActived(evnt)
+          // 如果配置了选中功能，则为选中状态
+          if (mouseConfig.selected) {
+            this.$nextTick(() => this.handleSelected(params, evnt))
+          }
         }
-      }
-    } else if (isSpacebar && (keyboardConfig.isArrow || keyboardConfig.isTab) && selected.row && selected.column && (selected.column.type === 'selection' || selected.column.type === 'radio')) {
-      // 空格键支持选中复选列
-      evnt.preventDefault()
-      if (selected.column.type === 'selection') {
-        this.handleToggleCheckRowEvent(selected.args, evnt)
-      } else {
-        this.triggerRadioRowEvent(evnt, selected.args)
-      }
-    } else if (isEnter && (keyboardConfig.isArrow || keyboardConfig.isTab) && (selected.row || actived.row || (treeConfig && highlightCurrentRow && currentRow))) {
-      // 如果是激活状态，退则出到下一行
-      if (selected.row || actived.row) {
-        this.moveSelected(selected.row ? selected.args : actived.args, isLeftArrow, isUpArrow, isRightArrow, true, evnt)
-      } else if (treeConfig && highlightCurrentRow && currentRow) {
-        // 如果是树形表格当前行回车移动到子节点
-        let childrens = currentRow[treeConfig.children]
-        if (childrens && childrens.length) {
-          evnt.preventDefault()
-          let targetRow = childrens[0]
-          params = { $table: this, row: targetRow }
-          this.setTreeExpansion(currentRow, true)
-            .then(() => this.scrollToRow(targetRow))
-            .then(() => this.triggerCurrentRowEvent(evnt, params))
-        }
-      }
-    } else if (operCtxMenu) {
-      // 如果配置了右键菜单; 支持方向键操作、回车
-      evnt.preventDefault()
-      if (ctxMenuStore.showChild && UtilTools.hasChildrenList(ctxMenuStore.selected)) {
-        this.moveCtxMenu(evnt, keyCode, ctxMenuStore, 'selectChild', 37, false, ctxMenuStore.selected.children)
-      } else {
-        this.moveCtxMenu(evnt, keyCode, ctxMenuStore, 'selected', 39, true, this.ctxMenuList)
-      }
-    } else if (isF2) {
-      // 如果按下了 F2 键
-      if (selected.row && selected.column) {
+      } else if (isSpacebar && (keyboardConfig.isArrow || keyboardConfig.isTab) && selected.row && selected.column && (selected.column.type === 'selection' || selected.column.type === 'radio')) {
+        // 空格键支持选中复选列
         evnt.preventDefault()
-        this.handleActived(selected.args, evnt)
-      }
-    } else if (operArrow && keyboardConfig.isArrow) {
-      // 如果按下了方向键
-      if (selected.row && selected.column) {
-        this.moveSelected(selected.args, isLeftArrow, isUpArrow, isRightArrow, isDwArrow, evnt)
-      } else if ((isUpArrow || isDwArrow) && highlightCurrentRow && currentRow) {
-        // 当前行按键上下移动
-        this.moveCurrentRow(isUpArrow, isDwArrow, evnt)
-      }
-    } else if (isTab && keyboardConfig.isTab) {
-      // 如果按下了 Tab 键切换
-      if (selected.row || selected.column) {
-        this.moveTabSelected(selected.args, evnt)
-      } else if (actived.row || actived.column) {
-        this.moveTabSelected(actived.args, evnt)
-      }
-    } else if (isDel || (treeConfig && highlightCurrentRow && currentRow ? isBack && keyboardConfig.isArrow : isBack)) {
-      // 如果是删除键
-      if (keyboardConfig.isDel && (selected.row || selected.column)) {
-        UtilTools.setCellValue(selected.row, selected.column, null)
-        if (isBack) {
-          this.handleActived(selected.args, evnt)
+        if (selected.column.type === 'selection') {
+          this.handleToggleCheckRowEvent(selected.args, evnt)
+        } else {
+          this.triggerRadioRowEvent(evnt, selected.args)
         }
-      } else if (isBack && keyboardConfig.isArrow && treeConfig && highlightCurrentRow && currentRow) {
-        // 如果树形表格回退键关闭当前行返回父节点
-        let { parent: parentRow } = XEUtils.findTree(this.afterFullData, item => item === currentRow, treeConfig)
-        if (parentRow) {
+      } else if (isEnter && (keyboardConfig.isArrow || keyboardConfig.isTab) && (selected.row || actived.row || (treeConfig && highlightCurrentRow && currentRow))) {
+        // 如果是激活状态，退则出到下一行
+        if (selected.row || actived.row) {
+          this.moveSelected(selected.row ? selected.args : actived.args, isLeftArrow, isUpArrow, isRightArrow, true, evnt)
+        } else if (treeConfig && highlightCurrentRow && currentRow) {
+          // 如果是树形表格当前行回车移动到子节点
+          let childrens = currentRow[treeConfig.children]
+          if (childrens && childrens.length) {
+            evnt.preventDefault()
+            let targetRow = childrens[0]
+            params = { $table: this, row: targetRow }
+            this.setTreeExpansion(currentRow, true)
+              .then(() => this.scrollToRow(targetRow))
+              .then(() => this.triggerCurrentRowEvent(evnt, params))
+          }
+        }
+      } else if (operCtxMenu) {
+        // 如果配置了右键菜单; 支持方向键操作、回车
+        evnt.preventDefault()
+        if (ctxMenuStore.showChild && UtilTools.hasChildrenList(ctxMenuStore.selected)) {
+          this.moveCtxMenu(evnt, keyCode, ctxMenuStore, 'selectChild', 37, false, ctxMenuStore.selected.children)
+        } else {
+          this.moveCtxMenu(evnt, keyCode, ctxMenuStore, 'selected', 39, true, this.ctxMenuList)
+        }
+      } else if (isF2) {
+        // 如果按下了 F2 键
+        if (selected.row && selected.column) {
           evnt.preventDefault()
-          params = { $table: this, row: parentRow }
-          this.setTreeExpansion(parentRow, false)
-            .then(() => this.scrollToRow(parentRow))
-            .then(() => this.triggerCurrentRowEvent(evnt, params))
-        }
-      }
-    } else if (keyboardConfig.isCut && isCtrlKey && (isA || isX || isC || isV)) {
-      // 如果开启复制功能
-      if (isA) {
-        this.handleAllChecked(evnt)
-      } else if (isX || isC) {
-        this.handleCopyed(isX, evnt)
-      } else {
-        this.handlePaste(evnt)
-      }
-    } else if (keyboardConfig.isEdit && !isCtrlKey && ((keyCode >= 48 && keyCode <= 57) || (keyCode >= 65 && keyCode <= 90) || (keyCode >= 96 && keyCode <= 111) || (keyCode >= 186 && keyCode <= 192) || (keyCode >= 219 && keyCode <= 222) || keyCode === 32)) {
-      // 如果是按下非功能键之外允许直接编辑
-      if (selected.column && selected.row && selected.column.editRender) {
-        if (!keyboardConfig.editMethod || !(keyboardConfig.editMethod(selected.args, evnt) === false)) {
-          UtilTools.setCellValue(selected.row, selected.column, null)
           this.handleActived(selected.args, evnt)
         }
+      } else if (operArrow && keyboardConfig.isArrow) {
+        // 如果按下了方向键
+        if (selected.row && selected.column) {
+          this.moveSelected(selected.args, isLeftArrow, isUpArrow, isRightArrow, isDwArrow, evnt)
+        } else if ((isUpArrow || isDwArrow) && highlightCurrentRow && currentRow) {
+          // 当前行按键上下移动
+          this.moveCurrentRow(isUpArrow, isDwArrow, evnt)
+        }
+      } else if (isTab && keyboardConfig.isTab) {
+        // 如果按下了 Tab 键切换
+        if (selected.row || selected.column) {
+          this.moveTabSelected(selected.args, evnt)
+        } else if (actived.row || actived.column) {
+          this.moveTabSelected(actived.args, evnt)
+        }
+      } else if (isDel || (treeConfig && highlightCurrentRow && currentRow ? isBack && keyboardConfig.isArrow : isBack)) {
+        // 如果是删除键
+        if (keyboardConfig.isDel && (selected.row || selected.column)) {
+          UtilTools.setCellValue(selected.row, selected.column, null)
+          if (isBack) {
+            this.handleActived(selected.args, evnt)
+          }
+        } else if (isBack && keyboardConfig.isArrow && treeConfig && highlightCurrentRow && currentRow) {
+          // 如果树形表格回退键关闭当前行返回父节点
+          let { parent: parentRow } = XEUtils.findTree(this.afterFullData, item => item === currentRow, treeConfig)
+          if (parentRow) {
+            evnt.preventDefault()
+            params = { $table: this, row: parentRow }
+            this.setTreeExpansion(parentRow, false)
+              .then(() => this.scrollToRow(parentRow))
+              .then(() => this.triggerCurrentRowEvent(evnt, params))
+          }
+        }
+      } else if (keyboardConfig.isCut && isCtrlKey && (isA || isX || isC || isV)) {
+        // 如果开启复制功能
+        if (isA) {
+          this.handleAllChecked(evnt)
+        } else if (isX || isC) {
+          this.handleCopyed(isX, evnt)
+        } else {
+          this.handlePaste(evnt)
+        }
+      } else if (keyboardConfig.isEdit && !isCtrlKey && ((keyCode >= 48 && keyCode <= 57) || (keyCode >= 65 && keyCode <= 90) || (keyCode >= 96 && keyCode <= 111) || (keyCode >= 186 && keyCode <= 192) || (keyCode >= 219 && keyCode <= 222) || keyCode === 32)) {
+        // 如果是按下非功能键之外允许直接编辑
+        if (selected.column && selected.row && selected.column.editRender) {
+          if (!keyboardConfig.editMethod || !(keyboardConfig.editMethod(selected.args, evnt) === false)) {
+            UtilTools.setCellValue(selected.row, selected.column, null)
+            this.handleActived(selected.args, evnt)
+          }
+        }
       }
-    }
-    this.preventEvent(evnt, 'event.keydown', { $table: this })
+    })
   },
   handleGlobalResizeEvent () {
     this.recalculate()
@@ -2916,7 +2917,7 @@ const Methods = {
 }
 
 // Module methods
-const funcs = 'getMouseCheckeds,clearCopyed,clearChecked,clearHeaderChecked,clearIndexChecked,clearSelected,exportCsv'.split(',')
+const funcs = 'getMouseSelecteds,getMouseCheckeds,clearCopyed,clearChecked,clearHeaderChecked,clearIndexChecked,clearSelected,exportCsv'.split(',')
 
 funcs.forEach(name => {
   Methods[name] = function () {

@@ -82,7 +82,11 @@ VXETable.use(VXETablePluginMenus)
 VXETable.use(VXETablePluginCharts)
 // VXETable.use(VXETablePluginShortcutKey, {
 //   setting: {
+//     'table.edit.actived': 'Enter',
+//     'table.edit.closed': 'Esc',
 //     'pager.prevPage': 'ArrowLeft',
-//     'pager.nextPage': 'ArrowRight'
+//     'pager.nextPage': 'ArrowRight', // 单个按键
+//     'pager.prevJump': 'Ctrl + A',
+//     'pager.nextJump': 'Ctrl + D' // 组合键
 //   }
 // })

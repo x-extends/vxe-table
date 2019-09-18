@@ -361,6 +361,13 @@ export default {
     }
     return this.$nextTick()
   },
+  _getMouseSelecteds () {
+    let { selected } = this.editStore
+    return {
+      row: selected.row,
+      column: selected.column
+    }
+  },
   _getMouseCheckeds () {
     let { checked } = this.editStore
     let { rowNodes = [] } = checked
