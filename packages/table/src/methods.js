@@ -1747,7 +1747,7 @@ const Methods = {
     let triggerSort = this.getEventTargetNode(evnt, cell, 'vxe-sort-wrapper').flag
     let triggerFilter = this.getEventTargetNode(evnt, cell, 'vxe-filter-wrapper').flag
     if (sortOpts.trigger === 'cell' && !(triggerResizable || triggerSort || triggerFilter)) {
-      this.sort(column.property)
+      this.triggerSortEvent(evnt, column, params, column.order === 'desc' ? 'asc' : 'desc')
     }
     UtilTools.emitEvent(this, 'header-cell-click', [Object.assign({ triggerResizable, triggerSort, triggerFilter }, params), evnt])
     if (this.highlightCurrentColumn) {
@@ -2069,10 +2069,16 @@ const Methods = {
    * 点击排序事件
    */
   triggerSortEvent (evnt, column, params, order) {
-    if (column.order === order) {
-      this.clearSort(column.property)
-    } else {
-      this.sort(column.property, order)
+    let property = column.property
+    if (column.sortable || column.remoteSort) {
+      let evntParams = { column, property, field: property, prop: property, order, $table: this }
+      if (column.order === order) {
+        evntParams.order = null
+        this.clearSort(column.property)
+      } else {
+        this.sort(property, order)
+      }
+      UtilTools.emitEvent(this, 'sort-change', [evntParams])
     }
   },
   sort (field, order) {
@@ -2092,8 +2098,6 @@ const Methods = {
         if (!isRemote) {
           this.handleTableData(true)
         }
-        // 在 v3.0 中废弃 prop
-        UtilTools.emitEvent(this, 'sort-change', [{ column, property: field, prop: field, field, order, $table: this }])
       }
       return this.$nextTick().then(this.updateStyle)
     }

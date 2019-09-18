@@ -53,7 +53,8 @@
       border
       highlight-hover-row
       height="300"
-      :data="tableData">
+      :data="tableData"
+      @sort-change="sortChangeEvent">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable :sort-method="sortNameMethod"></vxe-table-column>
       <vxe-table-column field="nickname" title="Nickname" sortable></vxe-table-column>
@@ -78,7 +79,8 @@
       ref="xTable"
       height="300"
       :data="tableData"
-      :sort-config="{trigger: 'cell'}">
+      :sort-config="{trigger: 'cell'}"
+      @sort-change="sortChangeEvent">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
       <vxe-table-column field="nickname" title="Nickname" sortable></vxe-table-column>
@@ -161,7 +163,8 @@ export default {
           border
           highlight-hover-row
           height="300"
-          :data="tableData">
+          :data="tableData"
+          @sort-change="sortChangeEvent">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable :sort-method="sortNameMethod"></vxe-table-column>
           <vxe-table-column field="nickname" title="Nickname" sortable></vxe-table-column>
@@ -186,6 +189,9 @@ export default {
               var v1 = (a.name || '').toLowerCase()
               var v2 = (b.name || '').toLowerCase()
               return v1 < v2 ? -1 : v1 > v2 ? 1 : 0
+            },
+            sortChangeEvent ({ column, property, order }) {
+              console.info(property, order)
             }
           }
         }
@@ -198,7 +204,8 @@ export default {
           ref="xTable"
           height="300"
           :data="tableData"
-          :sort-config="{trigger: 'cell'}">
+          :sort-config="{trigger: 'cell'}"
+          @sort-change="sortChangeEvent">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
           <vxe-table-column field="nickname" title="Nickname" sortable></vxe-table-column>
@@ -216,6 +223,11 @@ export default {
           },
           created () {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 50)
+          },
+          methods: {
+            sortChangeEvent ({ column, property, order }) {
+              console.info(property, order)
+            }
           }
         }
         `
@@ -236,6 +248,9 @@ export default {
       var v1 = (a.name || '').toLowerCase()
       var v2 = (b.name || '').toLowerCase()
       return v1 < v2 ? -1 : v1 > v2 ? 1 : 0
+    },
+    sortChangeEvent ({ column, property, order }) {
+      console.info(property, order)
     }
   }
 }

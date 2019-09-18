@@ -426,7 +426,8 @@ module.exports = {
           minWidth: '窗口的最小宽度',
           minHeight: '窗口的最小高度',
           top: '只对 type=message 有效，消息距离顶部的位置',
-          zIndex: 'set style z-index'
+          zIndex: 'set style z-index',
+          fullscreen: '默认最大化显示'
         }
       }
     }

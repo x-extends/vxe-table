@@ -1,5 +1,5 @@
 import GlobalConfig from '../../conf'
-import XEUtils from 'xe-utils'
+import XEUtils from 'xe-utils/methods/xe-utils'
 import MsgQueue from './queue'
 import { UtilTools, DomTools, GlobalEvent } from '../../tools'
 
@@ -35,6 +35,7 @@ export default {
     minHeight: { type: [Number, String], default: () => GlobalConfig.modal.minHeight },
     zIndex: [Number, String],
     marginSize: { type: [Number, String], default: GlobalConfig.modal.marginSize },
+    fullscreen: Boolean,
     animat: { type: Boolean, default: () => GlobalConfig.modal.animat },
     slots: Object,
     events: Object
@@ -45,7 +46,8 @@ export default {
       contentVisible: false,
       modalTop: 0,
       modalZindex: 0,
-      zoomLocat: null
+      zoomLocat: null,
+      isFirst: true
     }
   },
   computed: {
@@ -255,13 +257,17 @@ export default {
           setTimeout(this.close, XEUtils.toNumber(duration))
         } else {
           this.$nextTick(() => {
-            let { marginSize } = this
+            let { isFirst, marginSize, fullscreen } = this
             let modalBoxElem = this.getBox()
             let clientVisibleWidth = document.documentElement.clientWidth || document.body.clientWidth
             let clientVisibleHeight = document.documentElement.clientHeight || document.body.clientHeight
             modalBoxElem.style.left = `${clientVisibleWidth / 2 - modalBoxElem.offsetWidth / 2}px`
             if (modalBoxElem.offsetHeight + modalBoxElem.offsetTop + marginSize > clientVisibleHeight) {
               modalBoxElem.style.top = `${marginSize}px`
+            }
+            if (isFirst && fullscreen) {
+              this.isFirst = false
+              this.$nextTick(this.maximize)
             }
           })
         }
