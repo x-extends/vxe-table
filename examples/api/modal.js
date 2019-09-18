@@ -173,6 +173,14 @@ const apis = [
         enum: '',
         defVal: '起始 2000',
         list: []
+      },
+      {
+        name: 'fullscreen',
+        descKey: 'app.api.msg.desc.fullscreen',
+        type: 'Boolean',
+        enum: '',
+        defVal: 'false',
+        list: []
       }
     ]
   },
