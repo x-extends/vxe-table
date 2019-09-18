@@ -1052,49 +1052,32 @@ export default {
       let property = selectConfig.checkField || selectConfig.checkProp
       let rest = []
       let nowData = afterFullData
+      if (treeConfig) {
+        throw new Error(UtilTools.error('vxe.error.treeRemove'))
+      }
       if (!rows) {
         rows = tableFullData
       } else if (!XEUtils.isArray(rows)) {
         rows = [rows]
       }
-      if (treeConfig) {
-        rows.forEach(row => {
-          let matchObj = XEUtils.findTree(tableFullData, item => item === row, treeConfig)
-          if (matchObj) {
-            let { item, items, index } = matchObj
-            // 如果是新增，则保存记录
-            if (!hasRowInsert(item)) {
-              removeList.push(item)
-            }
-            // 从树节点中移除
-            let restRow = items.splice(index, 1)[0]
-            // 如果绑定了多选属性，则更新状态
-            if (!property) {
-              XEUtils.remove(selection, row => rows.indexOf(row) > -1)
-            }
-            rest.push(restRow)
-          }
-        })
+      // 如果是新增，则保存记录
+      rows.forEach(row => {
+        if (!hasRowInsert(row)) {
+          removeList.push(row)
+        }
+      })
+      // 如果绑定了多选属性，则更新状态
+      if (!property) {
+        XEUtils.remove(selection, row => rows.indexOf(row) > -1)
+      }
+      // 从数据源中移除
+      if (tableFullData === rows) {
+        rows = tableFullData.slice(0)
+        tableFullData.length = 0
+        nowData.length = 0
       } else {
-        // 如果是新增，则保存记录
-        rows.forEach(row => {
-          if (!hasRowInsert(row)) {
-            removeList.push(row)
-          }
-        })
-        // 如果绑定了多选属性，则更新状态
-        if (!property) {
-          XEUtils.remove(selection, row => rows.indexOf(row) > -1)
-        }
-        // 从数据源中移除
-        if (tableFullData === rows) {
-          rows = tableFullData.slice(0)
-          tableFullData.length = 0
-          nowData.length = 0
-        } else {
-          rest = XEUtils.remove(tableFullData, row => rows.indexOf(row) > -1)
-          XEUtils.remove(nowData, row => rows.indexOf(row) > -1)
-        }
+        rest = XEUtils.remove(tableFullData, row => rows.indexOf(row) > -1)
+        XEUtils.remove(nowData, row => rows.indexOf(row) > -1)
       }
       // 从新增中移除已删除的数据
       XEUtils.remove(insertList, row => rows.indexOf(row) > -1)

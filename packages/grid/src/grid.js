@@ -421,7 +421,7 @@ export default {
       // 如果是服务端过滤
       if (remoteFilter) {
         this.filterData = filters
-        this.commitProxy('reload')
+        this.commitProxy('query')
       }
       UtilTools.emitEvent(this, 'filter-change', [Object.assign({ $grid: this }, params)])
     }

@@ -2,7 +2,7 @@
   <div>
     <p class="tip">
       将单元格渲染成可编辑<br>
-      <span class="red">由于不符合 vxe-table 的单行编辑设计原则，使用这个方式的所有逻辑都应该自行处理</span>
+      <span class="red">由于不符合 vxe-table 单行编辑的设计原则，使用这个方式的所有逻辑都应该自行处理</span>
     </p>
 
     <vxe-table
@@ -35,7 +35,7 @@
 
     <p class="tip">
       将可编辑全部设为可视类型<br>
-      <span class="red">由于不符合 vxe-table 的单行编辑设计原则，使用这个方式的所有逻辑都应该自行处理</span>
+      <span class="red">由于不符合 vxe-table 单行编辑的设计原则，使用这个方式的所有逻辑都应该自行处理</span>
     </p>
 
     <vxe-table

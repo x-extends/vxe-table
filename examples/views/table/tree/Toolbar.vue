@@ -5,7 +5,7 @@
     <vxe-toolbar :data="tableData" setting>
       <template v-slot:buttons>
         <vxe-button @click="insertEvent">{{ $t('app.body.button.insert') }}</vxe-button>
-        <vxe-button @click="$refs.xTree.removeSelecteds()">移除选中</vxe-button>
+        <vxe-button @click="removeEvent">移除选中</vxe-button>
         <vxe-button @click="getInsertEvent">获取新增</vxe-button>
         <vxe-button @click="getRemoveEvent">获取删除</vxe-button>
         <vxe-button @click="getUpdateEvent">获取修改</vxe-button>
@@ -15,7 +15,7 @@
     <vxe-table
       resizable
       ref="xTree"
-      :tree-config="{children: 'children'}"
+      :tree-config="treeConfig"
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
       :data="tableData">
       <vxe-table-column type="selection" width="120" tree-node></vxe-table-column>
@@ -36,12 +36,15 @@
 
 <script>
 import hljs from 'highlight.js'
-import XEUtils from 'xe-utils'
 
 export default {
   data () {
     return {
       tableData: [],
+      removeList: [],
+      treeConfig: {
+        children: 'children'
+      },
       demoCodes: [
         `
         <vxe-toolbar :data="tableData" setting>
@@ -57,7 +60,7 @@ export default {
         <vxe-table
           resizable
           ref="xTree"
-          :tree-config="{children: 'children'}"
+          :tree-config="treeConfig"
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
           :data="tableData">
           <vxe-table-column type="selection" width="120" tree-node></vxe-table-column>
@@ -71,7 +74,11 @@ export default {
         export default {
           data () {
             return {
-              tableData: []
+              ttableData: [],
+              removeList: [],
+              treeConfig: {
+                children: 'children'
+              }
             }
           },
           created () {
@@ -79,18 +86,37 @@ export default {
           },
           methods: {
             insertEvent () {
-              let record = {
-                date: XEUtils.toDateString(new Date(), 'yyyy-MM-dd')
-              }
-              this.$refs.xTree.insert(record)
-                .then(({ row }) => this.$refs.xTree.setActiveRow(row))
+              let xTree = this.$refs.xTree
+              xTree.createRow({
+                name: '新数据',
+                date: this.$utils.toDateString(new Date(), 'yyyy-MM-dd'),
+                isNew: true
+              }).then(newRow => {
+                // 插入到第一行
+                this.tableData.unshift(newRow)
+                xTree.refreshData().then(() => xTree.setActiveRow(newRow))
+              })
+            },
+            removeEvent () {
+              let xTree = this.$refs.xTree
+              let removeRecords = xTree.getSelectRecords()
+              removeRecords.forEach(row => {
+                let matchObj = this.$utils.findTree(this.tableData, item => item === row, this.treeConfig)
+                if (matchObj) {
+                  let { items, index } = matchObj
+                  // 从树节点中移除
+                  let restRow = items.splice(index, 1)[0]
+                  this.removeList.push(restRow)
+                }
+              })
+              xTree.refreshData()
             },
             getInsertEvent () {
-              let insertRecords = this.$refs.xTree.getInsertRecords()
+              let insertRecords = this.$utils.filterTree(this.tableData, item => item.isNew, this.treeConfig)
               this.$XModal.alert(insertRecords.length)
             },
             getRemoveEvent () {
-              let removeRecords = this.$refs.xTree.getRemoveRecords()
+              let removeRecords = this.removeList
               this.$XModal.alert(removeRecords.length)
             },
             getUpdateEvent () {
@@ -104,7 +130,7 @@ export default {
     }
   },
   created () {
-    this.tableData = XEUtils.clone(window.MOCK_TREE_DATA_LIST, true)
+    this.tableData = this.$utils.clone(window.MOCK_TREE_DATA_LIST, true)
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
@@ -113,18 +139,37 @@ export default {
   },
   methods: {
     insertEvent () {
-      let record = {
-        date: XEUtils.toDateString(new Date(), 'yyyy-MM-dd')
-      }
-      this.$refs.xTree.insert(record)
-        .then(({ row }) => this.$refs.xTree.setActiveRow(row))
+      let xTree = this.$refs.xTree
+      xTree.createRow({
+        name: '新数据',
+        date: this.$utils.toDateString(new Date(), 'yyyy-MM-dd'),
+        isNew: true
+      }).then(newRow => {
+        // 插入到第一行
+        this.tableData.unshift(newRow)
+        xTree.refreshData().then(() => xTree.setActiveRow(newRow))
+      })
+    },
+    removeEvent () {
+      let xTree = this.$refs.xTree
+      let removeRecords = xTree.getSelectRecords()
+      removeRecords.forEach(row => {
+        let matchObj = this.$utils.findTree(this.tableData, item => item === row, this.treeConfig)
+        if (matchObj) {
+          let { items, index } = matchObj
+          // 从树节点中移除
+          let restRow = items.splice(index, 1)[0]
+          this.removeList.push(restRow)
+        }
+      })
+      xTree.refreshData()
     },
     getInsertEvent () {
-      let insertRecords = this.$refs.xTree.getInsertRecords()
+      let insertRecords = this.$utils.filterTree(this.tableData, item => item.isNew, this.treeConfig)
       this.$XModal.alert(insertRecords.length)
     },
     getRemoveEvent () {
-      let removeRecords = this.$refs.xTree.getRemoveRecords()
+      let removeRecords = this.removeList
       this.$XModal.alert(removeRecords.length)
     },
     getUpdateEvent () {
