@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2>图标</h2>
-    <p class="tip">如果本身项目有合适的 icon 图标，可以通过全局参数 <router-link class="link" :to="{name: 'StartIcons'}">icon</router-link> 替换自带的，可以保持样式的整体性</p>
+    <p class="tip">内置轻量级的 icon 图标，还可以通过修改 <router-link class="link" :to="{name: 'StartIcons'}">icon</router-link> 替换默认的</p>
 
     <ul class="icon-list">
       <li v-for="item in list" :key="item.icon" @click="copyEvent(item)" title="点击复制内容">

@@ -1,12 +1,12 @@
 <template>
   <div>
-    <h2>Custom Icons</h2>
+    <h2>Custom Icons 自定义图标</h2>
+    <p class="tip">如果项目已有适合的图标，例如 <a class="link" href="https://www.npmjs.com/package/font-awesome" target="_black">font-awesome</a> 图标库，可通过配置替换并自行调整相关的样式即可</p>
     <pre>
       <code class="javascript">
         import VXETable from 'vxe-table'
 
         VXETable.setup({
-          // 自定义图标配置
           icon: {
             sortAsc: 'vxe-icon--caret-top',
             sortDesc: 'vxe-icon--caret-bottom',
