@@ -244,6 +244,7 @@ module.exports = {
           highlightHoverRow: '鼠标移到行是否要高亮显示',
           highlightCurrentColumn: '是否要高亮当前列',
           highlightHoverColumn: '鼠标移到列是否要高亮显示',
+          highlightCell: '只对 editConfig 配置时有效，是否在编辑时高亮单元格边框',
           rowClassName: '给行附加 className，也可以是函数 Function({seq, row, rowIndex, $rowIndex})',
           cellClassName: '给单元格附加 className，也可以是函数 Function({seq, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex})',
           headerRowClassName: '给表头的行附加 className，也可以是函数 Function({$rowIndex})',
@@ -411,7 +412,9 @@ module.exports = {
         desc: {
           type: '类型',
           size: '尺寸',
-          name: '用来标识这一项'
+          name: '用来标识这一项',
+          disabled: '是否禁用',
+          loading: '是否加载中'
         }
       },
       msg: {

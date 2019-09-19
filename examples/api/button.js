@@ -29,6 +29,22 @@ const apis = [
         enum: '',
         defVal: '',
         list: []
+      },
+      {
+        name: 'disabled',
+        descKey: 'app.api.button.desc.disabled',
+        type: 'Boolean',
+        enum: '',
+        defVal: 'false',
+        list: []
+      },
+      {
+        name: 'loading',
+        descKey: 'app.api.button.desc.loading',
+        type: 'Boolean',
+        enum: '',
+        defVal: 'false',
+        list: []
       }
     ]
   },
