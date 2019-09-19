@@ -194,6 +194,10 @@ module.exports = {
       msg: {
         error: 'Error message',
         copyToClipboard: 'Copied to clipboard'
+      },
+      other: {
+        newFunc: 'As the author is busy, there may be time to complete the support function!',
+        newDevelopment: 'Due to the author\'s busy schedule, this release is being refactored. Stay tuned!'
       }
     },
     footer: {
