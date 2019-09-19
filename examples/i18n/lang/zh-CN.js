@@ -406,7 +406,9 @@ module.exports = {
         desc: {
           type: '类型',
           size: '尺寸',
-          name: '用来标识这一项'
+          name: '用来标识这一项',
+          disabled: '是否禁用',
+          loading: '是否加载中'
         }
       },
       msg: {

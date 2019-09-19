@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2><h2>Event interceptor 事件拦截器</h2></h2>
+    <h2>Event interceptor 事件拦截器</h2>
     <p class="tip">通过内置拦截器可以处理表格事件行为与第三方组件的兼容性；比如这些插件 <a class="link" href="https://www.npmjs.com/package/vxe-table-plugin-element" target="_blank">vxe-table-plugin-element</a></p>
     <vxe-table
       resizable
