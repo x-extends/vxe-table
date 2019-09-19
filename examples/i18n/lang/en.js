@@ -140,7 +140,7 @@ module.exports = {
 
         bottons: '(Abstract) Toolbar button',
         menus: '(Abstract) Context menu',
-        interceptor: '(Compatibility) Interceptor',
+        interceptor: '(Advanced) Interceptor',
 
         optimize: 'Optimization and suggestion',
         optimizeScroller: '虚拟滚动优化',
