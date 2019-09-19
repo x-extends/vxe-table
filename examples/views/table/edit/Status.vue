@@ -115,7 +115,7 @@ export default {
               if (xTable.hasRowChange(row)) {
                 row.loading = true
                 this.submitSave(row).then(data => {
-                  // 局部保存，并将行数据恢复到初始状态
+                  // 局部保存，并将行数据恢复到初始状态（如果 record 为空则不改动行数据，只恢复状态）
                   xTable.reloadRow(row, null, field)
                   this.$XModal.message({ message: '保存成功！', status: 'success' })
                   row.loading = false
@@ -188,7 +188,7 @@ export default {
       if (xTable.hasRowChange(row)) {
         row.loading = true
         this.submitSave(row).then(data => {
-          // 局部保存，并将行数据恢复到初始状态
+          // 局部保存，并将行数据恢复到初始状态（如果 record 为空则不改动行数据，只恢复状态）
           xTable.reloadRow(row, null, field)
           this.$XModal.message({ message: '保存成功！', status: 'success' })
           row.loading = false
