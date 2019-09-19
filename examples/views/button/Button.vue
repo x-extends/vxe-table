@@ -6,6 +6,7 @@
     <p>
       <vxe-button type="text">文本按钮</vxe-button>
       <vxe-button type="text" disabled>禁用</vxe-button>
+      <vxe-button type="text" loading>加载中</vxe-button>
       <vxe-button type="text">
         <template>下拉按钮</template>
         <template v-slot:dropdowns>
@@ -19,7 +20,9 @@
     <p>
       <vxe-button>普通按钮</vxe-button>
       <vxe-button disabled>禁用</vxe-button>
+      <vxe-button loading>加载中</vxe-button>
       <vxe-button type="primary">主要按钮</vxe-button>
+      <vxe-button type="primary" loading>加载中</vxe-button>
       <vxe-button>
         <template>下拉按钮</template>
         <template v-slot:dropdowns>
@@ -49,12 +52,13 @@ export default {
         <p>
           <vxe-button type="text">文本按钮</vxe-button>
           <vxe-button type="text" disabled>禁用</vxe-button>
+          <vxe-button type="text" loading>加载中</vxe-button>
           <vxe-button type="text">
             <template>下拉按钮</template>
             <template v-slot:dropdowns>
-              <vxe-button>下拉按钮1</vxe-button>
-              <vxe-button>下拉按钮2</vxe-button>
-              <vxe-button>下拉按钮3</vxe-button>
+              <vxe-button type="text">下拉按钮1</vxe-button>
+              <vxe-button type="text">下拉按钮2</vxe-button>
+              <vxe-button type="text">下拉按钮3</vxe-button>
             </template>
           </vxe-button>
         </p>
@@ -62,7 +66,9 @@ export default {
         <p>
           <vxe-button>普通按钮</vxe-button>
           <vxe-button disabled>禁用</vxe-button>
+          <vxe-button loading>加载中</vxe-button>
           <vxe-button type="primary">主要按钮</vxe-button>
+          <vxe-button type="primary" loading>加载中</vxe-button>
           <vxe-button>
             <template>下拉按钮</template>
             <template v-slot:dropdowns>

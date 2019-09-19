@@ -65,7 +65,7 @@ function mockData () {
       date: date,
       date1: date,
       date2: '09:00:00',
-      date3: XEUtils.toDateString(currTime, 'yyyy-MM-dd'),
+      date3: index % 3 === 0 ? XEUtils.toDateString(currTime, 'yyyy-MM-dd') : '',
       date4: date,
       date5: '09:00',
       date6: null,
@@ -97,6 +97,7 @@ function mockData () {
       createTime: currTime,
       attr1: '',
       attr2: [],
+      loading: false,
       info: {
         name2: 'name2_' + fullIndex,
         more: {

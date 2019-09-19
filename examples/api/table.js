@@ -1392,7 +1392,7 @@ const apis = [
       },
       {
         name: 'reloadData(data)',
-        desc: '加载数据并恢复到初始状态（对于表格数据需要重载、局部递增场景下可能会用到）',
+        desc: '加载数据并恢复到初始状态（对于表格数据需要重载、局部递增的场景中可能会用到）',
         type: 'Promise',
         enum: '',
         defVal: 'data: array',
@@ -1412,6 +1412,14 @@ const apis = [
         type: 'Promise',
         enum: '',
         defVal: '',
+        list: []
+      },
+      {
+        name: 'reloadRow(row, record, field)',
+        desc: '局部加载行数据并恢复到初始状态（对于行数据需要局部更改的场景中可能会用到）',
+        type: 'Promise',
+        enum: '',
+        defVal: 'rows: Row, record: object, field?: string',
         list: []
       },
       {
@@ -1475,7 +1483,7 @@ const apis = [
         desc: '往表格插入数据，从指定位置插入一行或多行；第二个参数：row 指定位置（不支持树表格）、null从第一行插入、-1 从最后插入',
         type: 'Promise<{row, rows}>',
         enum: '',
-        defVal: 'records: array<object>, row?: Row',
+        defVal: 'records: Array<object>, row?: Row',
         list: []
       },
       {
@@ -1483,7 +1491,7 @@ const apis = [
         desc: '即将废弃，请使用 revertData',
         type: 'Promise',
         enum: '',
-        defVal: 'rows: Row | array<Row>, field?: string',
+        defVal: 'rows: Row | Array<Row>, field?: string',
         list: []
       },
       {
@@ -1491,7 +1499,7 @@ const apis = [
         desc: '还原更改，还原指定行 row 或者整个表格的数据',
         type: 'Promise',
         enum: '',
-        defVal: 'rows: Row | array<Row>, field?: string',
+        defVal: 'rows: Row | Array<Row>, field?: string',
         list: []
       },
       {
@@ -1499,7 +1507,7 @@ const apis = [
         desc: '删除指定行数据，指定 row 或 [row, ...] 删除多条数据，如果为空则删除所有数据',
         type: 'Promise<{row, rows}>',
         enum: '',
-        defVal: 'rows: Row | array<Row>',
+        defVal: 'rows: Row | Array<Row>',
         list: []
       },
       {
@@ -1659,7 +1667,7 @@ const apis = [
         desc: '获取已激活的行数据',
         type: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,cell}',
         enum: '',
-        defVal: 'row',
+        defVal: '',
         list: []
       },
       // {
@@ -1739,7 +1747,7 @@ const apis = [
         desc: '设置展开行，二个参数设置这一行展开与否',
         type: 'Promise',
         enum: '',
-        defVal: 'rows: Row | array<Row>, checked: boolean',
+        defVal: 'rows: Row | Array<Row>, checked: boolean',
         list: []
       },
       {
@@ -1755,7 +1763,7 @@ const apis = [
         desc: '设置展开树形节点，二个参数设置这一行展开与否',
         type: 'Promise',
         enum: '',
-        defVal: 'rows: Row | array<Row>, checked: boolean',
+        defVal: 'rows: Row | Array<Row>, checked: boolean',
         list: []
       },
       {
@@ -1795,7 +1803,7 @@ const apis = [
         desc: '用于多选行，设置行为选中状态，第二个参数为选中与否',
         type: 'Promise',
         enum: '',
-        defVal: 'rows: Row | array<Row>, checked: boolean',
+        defVal: 'rows: Row | Array<Row>, checked: boolean',
         list: []
       },
       {
@@ -1939,7 +1947,7 @@ const apis = [
         desc: '手动清空单元格内容，如果不创参数，则清空整个表格内容，如果传了行则清空指定行内容，如果传了指定字段，则清空该字段内容',
         type: 'Promise',
         enum: '',
-        defVal: 'rows?: Row | array<Row>, field?: string',
+        defVal: 'rows?: Row | Array<Row>, field?: string',
         list: []
       },
       {
@@ -2091,7 +2099,7 @@ const apis = [
         desc: '表格校验函数，如果指定 row 或 rows 则校验指定一行或多行，否则校验整个表格。该回调函数会在校验结束后被调用，并传入两个参数：（是否校验成功，最近一列未通过校验的字段）。若不传入回调函数，则会返回一个 promise',
         type: 'Promise',
         enum: '',
-        defVal: 'rows?: Row | array<Row>, callback?: Function',
+        defVal: 'rows?: Row | Array<Row>, callback?: Function',
         list: []
       },
       {
@@ -2099,7 +2107,7 @@ const apis = [
         desc: '表格完整校验函数，和 validate 的区别就是会对全量数据的所有规则进行完整校验',
         type: 'Promise',
         enum: '',
-        defVal: 'rows?: Row | array<Row>, callback?: Function',
+        defVal: 'rows?: Row | Array<Row>, callback?: Function',
         list: []
       },
       {
