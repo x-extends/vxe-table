@@ -1458,7 +1458,7 @@ const apis = [
       },
       {
         name: 'reloadData(data)',
-        desc: '加载数据并恢复到初始状态（对于表格数据需要重载、局部递增场景下可能会用到）',
+        desc: '加载数据并恢复到初始状态（对于表格数据需要重载、局部递增的场景中可能会用到）',
         type: 'Promise',
         enum: '',
         defVal: 'data',
@@ -1478,6 +1478,14 @@ const apis = [
         type: 'Promise',
         enum: '',
         defVal: '',
+        list: []
+      },
+      {
+        name: 'reloadRow(row, record, field)',
+        desc: '局部加载行数据并恢复到初始状态（对于行数据需要局部更改的场景中可能会用到）',
+        type: 'Promise',
+        enum: '',
+        defVal: 'rows: Row, record: object, field?: string',
         list: []
       },
       {

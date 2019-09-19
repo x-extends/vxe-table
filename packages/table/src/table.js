@@ -876,6 +876,27 @@ export default {
       this.clearAll()
       return this.loadTableData(datas).then(this.handleDefault)
     },
+    reloadRow (row, record, field) {
+      let { tableSourceData, tableData } = this
+      let rowIndex = this.getRowIndex(row)
+      let oRow = tableSourceData[rowIndex]
+      if (oRow && row) {
+        if (field) {
+          XEUtils.set(oRow, field, XEUtils.get(record || row, field))
+        } else {
+          if (record) {
+            tableSourceData[rowIndex] = record
+            XEUtils.clear(row, undefined)
+            Object.assign(row, this.defineField(Object.assign({}, record)))
+            this.updateCache(true)
+          } else {
+            XEUtils.destructuring(oRow, XEUtils.clone(row, true))
+          }
+        }
+      }
+      this.tableData = tableData.slice(0)
+      return this.$nextTick()
+    },
     loadColumn (columns) {
       this.collectColumn = XEUtils.mapTree(columns, column => Cell.createColumn(this, column), headerProps)
       return this.$nextTick()

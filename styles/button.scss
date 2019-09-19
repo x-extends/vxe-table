@@ -26,6 +26,7 @@
 }
 
 .vxe-button {
+  position: relative;
   text-align: center;
   background-color: #fff;
   outline: 0;
@@ -33,19 +34,34 @@
   white-space: nowrap;
   user-select: none;
   appearance: none;
-  &[disabled] {
+  &.is--disabled {
     color: $vxe-disabled-color;
-    cursor: no-drop;
+    &:not(.is--loading) {
+      cursor: no-drop;
+    }
   }
-  &:not([disabled]) {
+  &:not(.is--disabled) {
     color: $vxe-font-color;
     cursor: pointer;
+  }
+  &.is--loading {
+    &:before {
+      content: "";
+      position: absolute;
+      left: -1px;
+      top: -1px;
+      right: -1px;
+      bottom: -1px;
+      border-radius: inherit;
+      background-color: hsla(0,0%,100%,.35);
+      pointer-events: none;
+    }
   }
   &.type--text {
     text-decoration: none;
     border: 0;
     background-color: transparent;
-    &:not([disabled]) {
+    &:not(.is--disabled) {
       &:hover {
         color: lighten($vxe-primary-color, 10%);
       }
@@ -60,7 +76,7 @@
       color: #fff;
       border-color: $vxe-primary-color;
       background-color: $vxe-primary-color;
-      &:not([disabled]) {
+      &:not(.is--disabled) {
         &:hover {
           @extend %ButtonPrimaryHover;
         }
@@ -72,7 +88,7 @@
       }
     }
     &:not(.theme--primary) {
-      &:not([disabled]) {
+      &:not(.is--disabled) {
         &:hover {
           @extend %ButtonHover;
         }
@@ -104,6 +120,9 @@
     font-size: 12px;
   }
 }
+.vxe-button--loading-icon {
+  margin-right: 5px;
+}
 .vxe-button--wrapper,
 .vxe-button--dropdown {
   display: inline-block;
@@ -119,7 +138,7 @@
       &.theme--primary {
         @extend %ButtonPrimaryHover;
       }
-      &:not([disabled]) {
+      &:not(.is--disabled) {
         &:not(.theme--primary) {
           @extend %ButtonHover;
         }

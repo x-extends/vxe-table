@@ -1,4 +1,4 @@
-import XEUtils from 'xe-utils/methods/xe-utils'
+import XEUtils from 'xe-utils'
 
 const _storeMap = {
   // 清除激活单元格之前触发，允许返回 false 阻止默认行为

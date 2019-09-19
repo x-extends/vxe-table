@@ -8,7 +8,8 @@ export default {
     type: String,
     size: String,
     name: [String, Number],
-    disabled: Boolean
+    disabled: Boolean,
+    loading: Boolean
   },
   computed: {
     vSize () {
@@ -16,7 +17,7 @@ export default {
     }
   },
   render (h) {
-    let { $scopedSlots, $listeners, type, vSize, name, disabled } = this
+    let { $scopedSlots, $listeners, type, vSize, name, disabled, loading } = this
     let isText = type === 'text'
     return $scopedSlots.dropdowns ? h('div', {
       class: ['vxe-button--dropdown', {
@@ -26,11 +27,13 @@ export default {
       h('button', {
         class: ['vxe-button', `type--${isText ? type : 'button'}`, {
           [`size--${vSize}`]: vSize,
-          [`theme--${type}`]: type && !isText
+          [`theme--${type}`]: type && !isText,
+          'is--disabled': disabled || loading,
+          'is--loading': loading
         }],
         attrs: {
           name,
-          disabled
+          disabled: disabled || loading
         },
         on: Object.assign({
           mouseenter: this.mouseenterEvent,
@@ -53,14 +56,20 @@ export default {
     ]) : h('button', {
       class: ['vxe-button', `type--${isText ? type : 'button'}`, {
         [`size--${vSize}`]: vSize,
-        [`theme--${type}`]: type && !isText
+        [`theme--${type}`]: type && !isText,
+        'is--disabled': disabled || loading,
+        'is--loading': loading
       }],
       attrs: {
         name,
-        disabled
+        disabled: disabled || loading
       },
       on: XEUtils.objectMap($listeners, (cb, type) => evnt => this.$emit(type, evnt))
-    }, $scopedSlots.default.call(this))
+    }, (loading ? [
+      h('i', {
+        class: ['vxe-button--loading-icon', GlobalConfig.icon.btnLoading]
+      })
+    ] : []).concat($scopedSlots.default.call(this)))
   },
   methods: {
     clickDropdownEvent (evnt) {

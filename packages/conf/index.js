@@ -53,7 +53,8 @@ const GlobalConfig = {
     modalQuestion: 'vxe-icon--question',
     modalLoading: 'vxe-icon--refresh roll',
     caretBottom: 'vxe-icon--caret-bottom',
-    dropdownBottom: 'vxe-icon--arrow-bottom'
+    dropdownBottom: 'vxe-icon--arrow-bottom',
+    btnLoading: 'vxe-icon--refresh roll'
   },
   grid: {},
   menu: {},
