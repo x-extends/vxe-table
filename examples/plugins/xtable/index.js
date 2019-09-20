@@ -81,9 +81,30 @@ VXETable.use(VXETablePluginRenderer)
 VXETable.use(VXETablePluginMenus)
 VXETable.use(VXETablePluginCharts)
 // VXETable.use(VXETablePluginShortcutKey, {
+//   disabled: ['ArrowLeft'],
+//   listener: {
+//     'V' (params, evnt) {
+//       console.log('粘贴')
+//     },
+//     'Shift + V' (params, evnt) {
+//       console.log('粘贴')
+//     },
+//     'Ctrl + V' (params, evnt) {
+//       console.log('粘贴')
+//     },
+//     'C' (params, evnt) {
+//       console.log('粘贴')
+//     }
+//   },
 //   setting: {
-//     'table.edit.actived': 'Enter',
+//     'table.edit.actived': 'F2',
 //     'table.edit.closed': 'Esc',
+//     'table.edit.leftTabMove': 'Shift + Enter',
+//     'table.edit.rightTabMove': 'Enter',
+//     'table.cell.upMove': 'W',
+//     'table.cell.downMove': 'S',
+//     'table.cell.leftMove': 'A',
+//     'table.cell.rightMove': 'D',
 //     'pager.prevPage': 'ArrowLeft',
 //     'pager.nextPage': 'ArrowRight', // 单个按键
 //     'pager.prevJump': 'Ctrl + A',

@@ -3,18 +3,17 @@ import { UtilTools, DomTools } from '../../tools'
 
 export default {
   // 处理 Tab 键移动
-  moveTabSelected (args, evnt) {
+  moveTabSelected (args, isLeft, evnt) {
     let { tableData, visibleColumn, editConfig, hasIndexColumn } = this
     let targetRow
     let targetRowIndex
     let targetColumn
     let targetColumnIndex
-    let isShiftKey = evnt.shiftKey
     let params = Object.assign({}, args)
     let rowIndex = tableData.indexOf(params.row)
     let columnIndex = visibleColumn.indexOf(params.column)
     evnt.preventDefault()
-    if (isShiftKey) {
+    if (isLeft) {
       // 向左
       for (let len = columnIndex - 1; len >= 0; len--) {
         if (!hasIndexColumn(visibleColumn[len])) {
@@ -362,11 +361,11 @@ export default {
     return this.$nextTick()
   },
   _getMouseSelecteds () {
-    let { selected } = this.editStore
-    return {
-      row: selected.row,
-      column: selected.column
+    let { args, column } = this.editStore.selected
+    if (args && column) {
+      return Object.assign({}, args)
     }
+    return null
   },
   _getMouseCheckeds () {
     let { checked } = this.editStore

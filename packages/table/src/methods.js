@@ -1225,6 +1225,7 @@ const Methods = {
       let isX = keyCode === 88
       let isF2 = keyCode === 113
       let isCtrlKey = evnt.ctrlKey
+      let isShiftKey = evnt.shiftKey
       let operArrow = isLeftArrow || isUpArrow || isRightArrow || isDwArrow
       let operCtxMenu = isCtxMenu && ctxMenuStore.visible && (isEnter || isSpacebar || operArrow)
       let params
@@ -1290,9 +1291,9 @@ const Methods = {
       } else if (isTab && keyboardConfig.isTab) {
         // 如果按下了 Tab 键切换
         if (selected.row || selected.column) {
-          this.moveTabSelected(selected.args, evnt)
+          this.moveTabSelected(selected.args, isShiftKey, evnt)
         } else if (actived.row || actived.column) {
-          this.moveTabSelected(actived.args, evnt)
+          this.moveTabSelected(actived.args, isShiftKey, evnt)
         }
       } else if (isDel || (treeConfig && highlightCurrentRow && currentRow ? isBack && keyboardConfig.isArrow : isBack)) {
         // 如果是删除键
