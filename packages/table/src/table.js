@@ -1813,6 +1813,7 @@ export default {
         let isX = keyCode === 88
         let isF2 = keyCode === 113
         let isCtrlKey = evnt.ctrlKey
+        let isShiftKey = evnt.shiftKey
         let operArrow = isLeftArrow || isUpArrow || isRightArrow || isDwArrow
         let operCtxMenu = isCtxMenu && ctxMenuStore.visible && (isEnter || isSpacebar || operArrow)
         if (isEsc) {
@@ -1877,9 +1878,9 @@ export default {
         } else if (isTab && keyboardConfig.isTab) {
           // 如果按下了 Tab 键切换
           if (selected.row || selected.column) {
-            this.moveTabSelected(selected.args, evnt)
+            this.moveTabSelected(selected.args, isShiftKey, evnt)
           } else if (actived.row || actived.column) {
-            this.moveTabSelected(actived.args, evnt)
+            this.moveTabSelected(actived.args, isShiftKey, evnt)
           }
         } else if (isDel || (treeConfig && highlightCurrentRow && currentRow ? isBack && keyboardConfig.isArrow : isBack)) {
           // 如果是删除键
@@ -1918,18 +1919,17 @@ export default {
       })
     },
     // 处理 Tab 键移动
-    moveTabSelected (args, evnt) {
+    moveTabSelected (args, isLeft, evnt) {
       let { tableData, visibleColumn, editConfig } = this
       let targetRow
       let targetRowIndex
       let targetColumn
       let targetColumnIndex
-      let isShiftKey = evnt.shiftKey
       let params = Object.assign({}, args)
       let rowIndex = tableData.indexOf(params.row)
       let columnIndex = visibleColumn.indexOf(params.column)
       evnt.preventDefault()
-      if (isShiftKey) {
+      if (isLeft) {
         // 向左
         for (let len = columnIndex - 1; len >= 0; len--) {
           let item = visibleColumn[len]
@@ -2953,11 +2953,11 @@ export default {
       return this.$nextTick()
     },
     getMouseSelecteds () {
-      let { selected } = this.editStore
-      return {
-        row: selected.row,
-        column: selected.column
+      let { args, column } = this.editStore.selected
+      if (args && column) {
+        return Object.assign({}, args)
       }
+      return null
     },
     getMouseCheckeds () {
       let { checked } = this.editStore
