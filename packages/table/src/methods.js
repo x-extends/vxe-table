@@ -1769,7 +1769,7 @@ const Methods = {
     let triggerSort = this.getEventTargetNode(evnt, cell, 'vxe-sort-wrapper').flag
     let triggerFilter = this.getEventTargetNode(evnt, cell, 'vxe-filter-wrapper').flag
     if (sortOpts.trigger === 'cell' && !(triggerResizable || triggerSort || triggerFilter)) {
-      this.triggerSortEvent(evnt, column, params, column.order === 'desc' ? 'asc' : 'desc')
+      this.triggerSortEvent(evnt, column, column.order === 'desc' ? 'asc' : 'desc')
     }
     UtilTools.emitEvent(this, 'header-cell-click', [Object.assign({ triggerResizable, triggerSort, triggerFilter }, params), evnt])
     if (this.highlightCurrentColumn) {
@@ -2090,7 +2090,7 @@ const Methods = {
   /**
    * 点击排序事件
    */
-  triggerSortEvent (evnt, column, params, order) {
+  triggerSortEvent (evnt, column, order) {
     let property = column.property
     if (column.sortable || column.remoteSort) {
       let evntParams = { column, property, field: property, prop: property, order, $table: this }
