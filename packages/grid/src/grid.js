@@ -36,7 +36,7 @@ export default {
       tableCustoms: [],
       pendingRecords: [],
       filterData: [],
-      sortData: null,
+      sortData: {},
       tablePage: {
         total: 0,
         pageSize: 10,
@@ -236,7 +236,7 @@ export default {
                 if (pagerConfig) {
                   tablePage.currentPage = 1
                 }
-                this.sortData = params.sort = null
+                this.sortData = params.sort = {}
                 this.filterData = params.filters = []
                 this.pendingRecords = []
                 this.clearAll()
