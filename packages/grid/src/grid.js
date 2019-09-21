@@ -36,10 +36,7 @@ export default {
       tableCustoms: [],
       pendingRecords: [],
       filterData: [],
-      sortData: {
-        field: '',
-        order: ''
-      },
+      sortData: null,
       tablePage: {
         total: 0,
         pageSize: 10,
@@ -239,6 +236,8 @@ export default {
                 if (pagerConfig) {
                   tablePage.currentPage = 1
                 }
+                this.sortData = params.sort = null
+                this.filterData = params.filters = []
                 this.pendingRecords = []
                 this.clearAll()
               }
@@ -407,12 +406,12 @@ export default {
       this.commitProxy('query')
     },
     sortChangeEvent (params) {
-      let { remoteSort, sortData } = this
+      let { remoteSort } = this
       let { column } = params
       let isRemote = XEUtils.isBoolean(column.remoteSort) ? column.remoteSort : remoteSort
       // 如果是服务端排序
       if (isRemote) {
-        Object.assign(sortData, params)
+        this.sortData = params
         this.commitProxy('query')
       }
       UtilTools.emitEvent(this, 'sort-change', [Object.assign({ $grid: this }, params)])

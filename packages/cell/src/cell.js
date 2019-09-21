@@ -418,7 +418,7 @@ export const Cell = {
           }],
           on: {
             click (evnt) {
-              $table.triggerSortEvent(evnt, column, params, 'asc')
+              $table.triggerSortEvent(evnt, column, 'asc')
             }
           }
         }),
@@ -428,7 +428,7 @@ export const Cell = {
           }],
           on: {
             click (evnt) {
-              $table.triggerSortEvent(evnt, column, params, 'desc')
+              $table.triggerSortEvent(evnt, column, 'desc')
             }
           }
         })
