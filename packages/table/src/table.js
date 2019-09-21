@@ -3159,7 +3159,7 @@ export default {
         } else {
           this.sort(property, order)
         }
-        UtilTools.emitEvent(this, 'sort-change', [evntParams])
+        UtilTools.emitEvent(this, 'sort-change', [evntParams, evnt])
       }
     },
     sort (field, order) {
