@@ -3,6 +3,18 @@ import { UtilTools, DomTools } from '../../tools'
 import { Menus } from '../../v-x-e-table'
 
 export default {
+  /**
+   * 关闭快捷菜单
+   */
+  _closeMenu () {
+    Object.assign(this.ctxMenuStore, {
+      visible: false,
+      selected: null,
+      selectChild: null,
+      showChild: false
+    })
+    return this.$nextTick()
+  },
   // 处理菜单的移动
   moveCtxMenu (evnt, keyCode, ctxMenuStore, property, operKey, operRest, menuList) {
     let selectItem

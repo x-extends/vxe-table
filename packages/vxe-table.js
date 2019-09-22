@@ -18,8 +18,10 @@ import Button from './button'
 import Modal from './modal'
 import Tooltip from './tooltip'
 
+import Edit from './edit'
 import Export from './export'
 import Keyboard from './keyboard'
+import Validator from './validator'
 import Resize from './resize'
 import zhCNLocat from './locale/lang/zh-CN'
 
@@ -43,8 +45,10 @@ export const components = [
   Modal,
   Tooltip,
 
+  Edit,
   Export,
   Keyboard,
+  Validator,
   Resize
 ]
 
@@ -84,8 +88,10 @@ export * from './input'
 export * from './button'
 export * from './modal'
 export * from './tooltip'
+export * from './edit'
 export * from './export'
 export * from './keyboard'
+export * from './validator'
 export * from './resize'
 export * from './v-x-e-table'
 export default VXETable

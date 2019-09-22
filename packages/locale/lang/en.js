@@ -24,8 +24,7 @@ export default {
 
       toolbarId: 'Toolbar must have a unique id',
 
-      reqKeyboard: 'require Keyboard module.',
-      reqResize: 'require Resize module.'
+      reqModule: 'require {{name}} module.'
     },
     table: {
       emptyText: 'No Data',

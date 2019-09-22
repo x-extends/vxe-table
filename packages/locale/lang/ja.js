@@ -24,8 +24,7 @@ export default {
 
       toolbarId: 'Toolbarはunique idが必要です',
 
-      reqKeyboard: 'Keyboardモジュールが必要',
-      reqResize: 'Resizeモジュールが必要'
+      reqModule: '{{name}}モジュールが必要'
     },
     table: {
       emptyText: 'データがありません',

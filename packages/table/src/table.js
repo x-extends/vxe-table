@@ -460,11 +460,17 @@ export default {
     if (!UtilTools.getRowkey(this)) {
       UtilTools.error('vxe.error.rowIdEmpty')
     }
+    if (!VXETable._edit && this.editConfig) {
+      throw new Error(XEUtils.template(UtilTools.error('vxe.error.reqModule'), { name: 'Edit' }))
+    }
+    if (!VXETable._valid && this.editRules) {
+      throw new Error(XEUtils.template(UtilTools.error('vxe.error.reqModule'), { name: 'Validator' }))
+    }
     if (!VXETable._keyboard && (this.keyboardConfig || this.mouseConfig)) {
-      throw new Error(UtilTools.error('vxe.error.reqKeyboard'))
+      throw new Error(XEUtils.template(UtilTools.error('vxe.error.reqModule'), { name: 'Keyboard' }))
     }
     if (!VXETable._resize && this.autoResize) {
-      throw new Error(UtilTools.error('vxe.error.reqResize'))
+      throw new Error(XEUtils.template(UtilTools.error('vxe.error.reqModule'), { name: 'Resize' }))
     }
     if (scrollY) {
       Object.assign(scrollYStore, {

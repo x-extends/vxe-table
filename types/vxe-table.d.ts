@@ -16,8 +16,10 @@ import { Radio } from './radio';
 import { Input } from './input';
 import { Button } from './button';
 import { Modal } from './modal';
+import { Edit } from './edit'
 import { Export } from './export';
 import { Keyboard } from './keyboard';
+import { Validator } from './validator';
 import { Resize } from './resize';
 
 export interface VXETableOptions {
@@ -145,7 +147,9 @@ export {
   Input,
   Button,
   Modal,
+  Edit,
   Export,
   Keyboard,
+  Validator,
   Resize
 }

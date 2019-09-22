@@ -29,8 +29,10 @@ const components = [
   'modal',
   'tooltip',
 
+  'edit',
   'export',
   'keyboard',
+  'validator',
   'resize',
   'v-x-e-table'
 ]

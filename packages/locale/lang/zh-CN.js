@@ -24,8 +24,7 @@ export default {
 
       toolbarId: '工具栏需要设置唯一 id',
 
-      reqKeyboard: '缺少 Keyboard 模块',
-      reqResize: '缺少 Resize 模块'
+      reqModule: '缺少 {{name}} 模块'
     },
     table: {
       emptyText: '暂无数据',

@@ -19,8 +19,10 @@ import Input from '../../../packages/input'
 import Button from '../../../packages/button'
 import Modal from '../../../packages/modal'
 import Tooltip from '../../../packages/tooltip'
+import Edit from '../../../packages/edit'
 import Export from '../../../packages/export'
 import Keyboard from '../../../packages/keyboard'
+import Validator from '../../../packages/validator'
 import Resize from '../../../packages/resize'
 import '../../../styles/index.scss'
 
@@ -69,8 +71,10 @@ Vue.use(Input)
 Vue.use(Button)
 Vue.use(Modal)
 Vue.use(Tooltip)
+Vue.use(Edit)
 Vue.use(Export)
 Vue.use(Keyboard)
+Vue.use(Validator)
 Vue.use(Resize)
 
 VXETable.use(VXETablePluginElement)
