@@ -801,12 +801,12 @@ const Methods = {
             repairElem.style.width = `${tableWidth}px`
           }
 
-          let listElem = elemStore[`${name}-${layout}-list`]
-          if (listElem) {
-            XEUtils.arrayEach(listElem.querySelectorAll(`.col--gutter`), thElem => {
-              thElem.style.width = `${scrollbarWidth}px`
-            })
-          }
+          // let listElem = elemStore[`${name}-${layout}-list`]
+          // if (listElem) {
+          //   XEUtils.arrayEach(listElem.querySelectorAll(`.col--gutter`), thElem => {
+          //     thElem.style.width = `${scrollbarWidth}px`
+          //   })
+          // }
         } else if (layout === 'body') {
           let emptyBlockElem = elemStore[`${name}-${layout}-emptyBlock`]
           if (wrapperElem) {
@@ -871,12 +871,18 @@ const Methods = {
           if (tableElem) {
             tableElem.style.width = tWidth === null ? tWidth : `${tWidth + scrollbarWidth}px`
           }
+          // let listElem = elemStore[`${name}-${layout}-list`]
+          // if (listElem) {
+          //   XEUtils.arrayEach(listElem.querySelectorAll(`.col--gutter`), thElem => {
+          //     thElem.style.width = `${scrollbarWidth}px`
+          //   })
+          // }
         }
         let colgroupElem = elemStore[`${name}-${layout}-colgroup`]
         if (colgroupElem) {
           XEUtils.arrayEach(colgroupElem.children, colElem => {
             let colid = colElem.getAttribute('name')
-            if (colid === 'col-gutter') {
+            if (colid === 'col_gutter') {
               colElem.width = `${scrollbarWidth || ''}`
             }
             if (fullColumnIdData[colid]) {

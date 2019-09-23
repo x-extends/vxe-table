@@ -127,6 +127,8 @@ export default {
     footerCellClassName: [String, Function],
     // 合并行或列
     spanMethod: Function,
+    // 表尾合并行或列
+    footerSpanMethod: Function,
     // 设置所有内容过长时显示为省略号
     showOverflow: { type: [Boolean, String], default: () => GlobalConfig.showOverflow },
     // 设置表头所有内容过长时显示为省略号

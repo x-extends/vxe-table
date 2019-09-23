@@ -338,6 +338,13 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.footerSpan',
+              disabled: true,
+              locat: {
+                name: 'TableFooterSpan'
+              }
+            },
+            {
               label: 'app.aside.nav.export',
               demoUrl: 'https://jsrun.net/cmXKp',
               locat: {

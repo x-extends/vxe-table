@@ -162,7 +162,7 @@ export default {
         }).concat([
           h('col', {
             attrs: {
-              name: 'col-gutter'
+              name: 'col_gutter'
             }
           })
         ])),
