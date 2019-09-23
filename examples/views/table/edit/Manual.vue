@@ -3,10 +3,10 @@
     <p class="tip">设置 <table-api-link prop="edit-config"/>={trigger: 'manual', mode: 'row'} 启用行编辑的功能</p>
 
     <vxe-table
+      ref="xTable"
       border
       resizable
       show-overflow
-      ref="xTable"
       :data="tableData"
       :edit-config="{trigger: 'manual', mode: 'row'}">
       <vxe-table-column type="index" width="60"></vxe-table-column>
@@ -46,10 +46,10 @@ export default {
       demoCodes: [
         `
         <vxe-table
+          ref="xTable"
           border
           resizable
           show-overflow
-          ref="xTable"
           :data="tableData"
           :edit-config="{trigger: 'manual', mode: 'row'}">
           <vxe-table-column type="index" width="60"></vxe-table-column>
@@ -85,8 +85,9 @@ export default {
               this.$refs.xTable.setActiveRow(row)
             },
             saveRowEvent (row) {
-              this.$XModal.alert('success')
-              this.cancelRowEvent()
+              this.$refs.xTable.clearActived().then(() => {
+                this.$XModal.alert('success')
+              })
             },
             cancelRowEvent (row) {
               this.$refs.xTable.clearActived()
@@ -110,8 +111,9 @@ export default {
       this.$refs.xTable.setActiveRow(row)
     },
     saveRowEvent (row) {
-      this.$XModal.alert('success')
-      this.$refs.xTable.clearActived()
+      this.$refs.xTable.clearActived().then(() => {
+        this.$XModal.alert('success')
+      })
     },
     cancelRowEvent (row) {
       this.$refs.xTable.clearActived()
