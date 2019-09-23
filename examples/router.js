@@ -48,6 +48,7 @@ const TableCustomSort = () => import(/* webpackChunkName: "advanced" */ './views
 const TableManualFilter = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/ManualFilter.vue')
 const TableSpan = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Span.vue')
 const TableFooter = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Footer.vue')
+const TableFooterSpan = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/FooterSpan.vue')
 const TableExport = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Export.vue')
 const TableMenu = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Menu.vue')
 const TableMenuPrivilege = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/MenuPrivilege.vue')
@@ -394,6 +395,11 @@ export default new Router({
       path: '/table/advanced/footer',
       name: 'TableFooter',
       component: TableFooter
+    },
+    {
+      path: '/table/advanced/footerSpan',
+      name: 'TableFooterSpan',
+      component: TableFooterSpan
     },
     {
       path: '/table/advanced/export',

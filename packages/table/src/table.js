@@ -186,6 +186,8 @@ export default {
     footerCellClassName: [String, Function],
     // 合并行或列
     spanMethod: Function,
+    // 表尾合并行或列
+    footerSpanMethod: Function,
     // （v2.0 废弃）
     showAllOverflow: { type: [Boolean, String], default: () => GlobalConfig.showOverflow },
     // （v2.0 废弃）

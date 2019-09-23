@@ -25,6 +25,7 @@ export default {
       footerRowClassName,
       footerCellClassName,
       footerAlign: allFooterAlign,
+      footerSpanMethod,
       align: allAlign,
       tableWidth,
       scrollbarWidth,
@@ -86,6 +87,7 @@ export default {
         }).concat([
           h('col', {
             attrs: {
+              name: 'col_gutter',
               width: scrollbarWidth
             }
           })
@@ -106,6 +108,7 @@ export default {
             let showTitle = cellOverflow === 'title'
             let showTooltip = cellOverflow === true || cellOverflow === 'tooltip'
             let hasEllipsis = showTitle || showTooltip || showEllipsis
+            let attrs = { 'data-colid': column.id }
             let tfOns = {}
             // 确保任何情况下 columnIndex 都精准指向真实列索引
             let columnIndex = getColumnMapIndex(column)
@@ -133,6 +136,15 @@ export default {
                 UtilTools.emitEvent($table, 'header-cell-dblclick', [{ $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, cell: evnt.currentTarget }, evnt])
               }
             }
+            // 合并行或列
+            if (footerSpanMethod) {
+              let { rowspan = 1, colspan = 1 } = footerSpanMethod({ $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, data: footerData }) || {}
+              if (!rowspan || !colspan) {
+                return null
+              }
+              attrs.rowspan = rowspan
+              attrs.colspan = colspan
+            }
             return h('td', {
               class: ['vxe-footer--column', column.id, {
                 [`col--${footAlign}`]: footAlign,
@@ -140,9 +152,7 @@ export default {
                 'col--ellipsis': hasEllipsis,
                 'filter--active': column.filters.some(item => item.checked)
               }, footerCellClassName ? XEUtils.isFunction(footerCellClassName) ? footerCellClassName({ $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType }) : footerCellClassName : ''],
-              attrs: {
-                'data-colid': column.id
-              },
+              attrs,
               on: tfOns,
               key: columnKey || ($table.columnKey ? column.id : columnIndex)
             }, [

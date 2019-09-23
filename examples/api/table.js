@@ -373,6 +373,14 @@ const apis = [
         defVal: '{ rowspan: 1, colspan: 1}',
         list: []
       },
+      // {
+      //   name: 'footer-span-method',
+      //   descKey: 'app.api.table.desc.footerSpanMethod',
+      //   type: 'Object',
+      //   enum: '',
+      //   defVal: '{ rowspan: 1, colspan: 1}',
+      //   list: []
+      // },
       {
         name: 'show-overflow',
         descKey: 'app.api.table.desc.showOverflow',
