@@ -93,6 +93,7 @@ function mockData () {
       address: `地址 地址地址 地址地址 址地址 址地址  址地址 址地址址地址址地址 地址${index}`,
       address2: `地址 地址地址 地址${index}`,
       img: `https://github.com/xuliangzhan/vxe-table/blob/master/public/other/img${index % 3 ? '1' : '2'}.gif?raw=true`,
+      html1: '<span style="color:red;">我是一段Html代码</span><br><span style="color:blue;">我是一段Html代码</span>',
       updateTime: currTime,
       createTime: currTime,
       attr1: '',

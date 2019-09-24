@@ -22,6 +22,7 @@
 
     <vxe-table
       border
+      resizable
       :data="tableData">
       <vxe-table-column type="index" width="100">
         <template v-slot="{ seq }">
@@ -67,7 +68,12 @@
           <a href="https://github.com/xuliangzhan/vxe-table">{{ row.name }}</a>
         </template>
       </vxe-table-column>
-      <vxe-table-column field="img" title="图片也行" width="120" show-overflow>
+      <vxe-table-column field="html1" title="Html片段" width="160" show-overflow>
+        <template v-slot="{ row }">
+          <span v-html="row.html1"></span>
+        </template>
+      </vxe-table-column>
+      <vxe-table-column field="img" title="图片路径" width="120" show-overflow>
         <template v-slot="{ row }">
           <img :src="row.img" style="width: 100px;">
         </template>
@@ -108,6 +114,7 @@ export default {
 
         <vxe-table
           border
+          resizable
           :data="tableData">
           <vxe-table-column type="index" width="100">
             <template v-slot="{ seq }">
@@ -153,7 +160,12 @@ export default {
               <a href="https://github.com/xuliangzhan/vxe-table">{{ row.name }}</a>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="img" title="图片也行" width="120" show-overflow>
+          <vxe-table-column field="html1" title="Html片段" width="160" show-overflow>
+            <template v-slot="{ row }">
+              <span v-html="row.html1"></span>
+            </template>
+          </vxe-table-column>
+          <vxe-table-column field="img" title="图片路径" width="120" show-overflow>
             <template v-slot="{ row }">
               <img :src="row.img" style="width: 100px;">
             </template>
