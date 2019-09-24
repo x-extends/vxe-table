@@ -99,7 +99,7 @@ export default {
           return h('tr', {
             class: ['vxe-footer--row', footerRowClassName ? XEUtils.isFunction(footerRowClassName) ? footerRowClassName({ $table, $rowIndex, fixed: fixedType }) : footerRowClassName : '']
           }, tableColumn.map((column, $columnIndex) => {
-            let { showOverflow, renderWidth, columnKey, footerAlign, align } = column
+            let { showOverflow, renderWidth, columnKey, footerAlign, align, footerClassName } = column
             let isColGroup = column.children && column.children.length
             let fixedHiddenColumn = fixedType ? column.fixed !== fixedType && !isColGroup : column.fixed && overflowX
             let cellOverflow = (XEUtils.isUndefined(showOverflow) || XEUtils.isNull(showOverflow)) ? allColumnOverflow : showOverflow
@@ -112,6 +112,7 @@ export default {
             let tfOns = {}
             // 确保任何情况下 columnIndex 都精准指向真实列索引
             let columnIndex = getColumnMapIndex(column)
+            let params = { $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType }
             if (showTitle || showTooltip) {
               tfOns.mouseover = evnt => {
                 if (showTitle) {
@@ -151,7 +152,7 @@ export default {
                 'fixed--hidden': fixedHiddenColumn,
                 'col--ellipsis': hasEllipsis,
                 'filter--active': column.filters.some(item => item.checked)
-              }, footerCellClassName ? XEUtils.isFunction(footerCellClassName) ? footerCellClassName({ $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType }) : footerCellClassName : ''],
+              }, UtilTools.getClass(footerClassName, params), UtilTools.getClass(footerCellClassName, params)],
               attrs,
               on: tfOns,
               key: columnKey || ($table.columnKey ? column.id : columnIndex)

@@ -52,7 +52,7 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
   } = $table
   // v2.0 废弃属性，保留兼容
   let allColumnOverflow = XEUtils.isBoolean(oldShowAllOverflow) ? oldShowAllOverflow : allShowOverflow
-  let { editRender, align, showOverflow, renderWidth, columnKey } = column
+  let { editRender, align, showOverflow, renderWidth, columnKey, className } = column
   let { checked, selected, actived, copyed } = editStore
   let isMouseSelected = mouseConfig && mouseConfig.selected
   let isMouseChecked = mouseConfig && mouseConfig.checked
@@ -178,7 +178,7 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
       'col--current': currentColumn === column,
       'edit--visible': editRender && editRender.type === 'visible',
       'fixed--hidden': fixedHiddenColumn
-    }, cellClassName ? XEUtils.isFunction(cellClassName) ? cellClassName(params) : cellClassName : ''],
+    }, UtilTools.getClass(className, params), UtilTools.getClass(cellClassName, params)],
     key: columnKey || ($table.columnKey ? column.id : columnIndex),
     attrs,
     on: tdOns

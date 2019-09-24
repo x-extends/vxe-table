@@ -2,6 +2,7 @@ const apis = [
   {
     name: 'Props',
     descKey: 'app.api.title.props',
+    version: '',
     type: '',
     enum: '',
     defVal: '',
@@ -9,6 +10,7 @@ const apis = [
       {
         name: 'id',
         descKey: 'app.api.toolbar.desc.id',
+        version: '',
         type: 'String',
         enum: '',
         defVal: '',
@@ -17,6 +19,7 @@ const apis = [
       {
         name: 'size',
         descKey: 'app.api.toolbar.desc.size',
+        version: '',
         type: 'String',
         enum: 'medium,small,mini',
         defVal: '',
@@ -25,6 +28,7 @@ const apis = [
       {
         name: 'loading',
         descKey: 'app.api.toolbar.desc.loading',
+        version: '',
         type: 'Boolean',
         enum: '',
         defVal: 'false',
@@ -33,6 +37,7 @@ const apis = [
       {
         name: 'refresh',
         descKey: 'app.api.toolbar.desc.refresh',
+        version: '',
         type: 'Boolean,Object',
         enum: '',
         defVal: '',
@@ -40,6 +45,7 @@ const apis = [
           {
             name: 'query',
             desc: '查询的方法',
+            version: '',
             type: 'Function / Promise',
             enum: '',
             defVal: '',
@@ -50,6 +56,7 @@ const apis = [
       {
         name: 'resizable',
         descKey: 'app.api.toolbar.desc.resizable',
+        version: '',
         type: 'Boolean,Object',
         enum: '',
         defVal: '',
@@ -57,6 +64,7 @@ const apis = [
           {
             name: 'storage',
             desc: '是否启用 localStorage 本地保存，会将保存列宽拖动的状态保存到本地（需要设置 id）',
+            version: '',
             type: 'Boolean',
             enum: '',
             defVal: 'false',
@@ -67,6 +75,7 @@ const apis = [
       {
         name: 'setting',
         descKey: 'app.api.toolbar.desc.setting',
+        version: '',
         type: 'Boolean,Object',
         enum: '',
         defVal: '',
@@ -74,6 +83,7 @@ const apis = [
           {
             name: 'trigger',
             desc: '触发方式',
+            version: '',
             type: 'String',
             enum: 'manual,click,hover',
             defVal: 'click',
@@ -82,6 +92,7 @@ const apis = [
           {
             name: 'immediate',
             desc: '列勾选之后是否实时同步',
+            version: '',
             type: 'Boolean',
             enum: '',
             defVal: 'false',
@@ -90,6 +101,7 @@ const apis = [
           {
             name: 'storage',
             desc: '是否启用 localStorage 本地保存，会将列的隐藏状态保存到本地（需要设置 id）',
+            version: '',
             type: 'Boolean',
             enum: '',
             defVal: 'false',
@@ -100,6 +112,7 @@ const apis = [
       {
         name: 'buttons',
         desc: '按钮列表',
+        version: '',
         type: 'Array',
         enum: '',
         defVal: '',
@@ -107,6 +120,7 @@ const apis = [
           {
             name: 'name',
             desc: '按钮名称（支持开启国际化）',
+            version: '',
             type: 'String',
             enum: '',
             defVal: '',
@@ -115,6 +129,7 @@ const apis = [
           {
             name: 'code',
             desc: '按钮编码',
+            version: '',
             type: 'String',
             enum: '',
             defVal: '',
@@ -123,6 +138,7 @@ const apis = [
           {
             name: 'visible ',
             desc: '是否可视',
+            version: '',
             type: 'Boolean',
             enum: '',
             defVal: 'true',
@@ -131,6 +147,7 @@ const apis = [
           {
             name: 'disabled ',
             desc: '是否禁用',
+            version: '',
             type: 'Boolean',
             enum: '',
             defVal: 'false',
@@ -139,6 +156,7 @@ const apis = [
           {
             name: 'dropdowns',
             desc: '下拉按钮列表',
+            version: '',
             type: 'Array',
             enum: '',
             defVal: '',
@@ -151,6 +169,7 @@ const apis = [
   {
     name: 'Slots',
     descKey: 'app.api.title.slots',
+    version: '',
     type: '',
     enum: '',
     defVal: '',
@@ -158,6 +177,7 @@ const apis = [
       {
         name: 'buttons',
         desc: '按钮列表',
+        version: '',
         type: '',
         enum: '',
         defVal: '{}, h',
@@ -166,6 +186,7 @@ const apis = [
       {
         name: 'tools',
         desc: '右侧工具列表',
+        version: '',
         type: '',
         enum: '',
         defVal: '{}, h',
@@ -176,6 +197,7 @@ const apis = [
   {
     name: 'Events',
     descKey: 'app.api.title.events',
+    version: '',
     type: '',
     enum: '',
     defVal: '',
@@ -183,6 +205,7 @@ const apis = [
       {
         name: 'button-click',
         desc: '当工具栏的按钮被点击时会后触发该事件',
+        version: '',
         type: '',
         enum: '',
         defVal: '{code}, event',
@@ -193,6 +216,7 @@ const apis = [
   {
     name: 'Methods',
     descKey: 'app.api.title.methods',
+    version: '',
     type: '',
     enum: '',
     defVal: '',
@@ -216,6 +240,7 @@ const apis = [
       {
         name: 'updateSetting()',
         desc: '手动更新列自定义的操作状态',
+        version: '',
         type: '',
         enum: '',
         defVal: '',
@@ -224,6 +249,7 @@ const apis = [
       {
         name: 'updateResizable()',
         desc: '手动更新列宽拖动的操作状态',
+        version: '',
         type: '',
         enum: '',
         defVal: '',

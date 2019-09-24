@@ -2,6 +2,7 @@ const apis = [
   {
     name: 'Props',
     descKey: 'app.api.title.props',
+    version: '',
     type: '',
     enum: '',
     defVal: '',
@@ -9,6 +10,7 @@ const apis = [
       {
         name: 'value,v-model',
         descKey: 'app.api.tooltip.desc.value',
+        version: '',
         type: 'Boolean',
         enum: '',
         defVal: 'false',
@@ -17,6 +19,7 @@ const apis = [
       {
         name: 'content',
         descKey: 'app.api.tooltip.desc.content',
+        version: '',
         type: 'String',
         enum: '',
         defVal: '',
@@ -25,6 +28,7 @@ const apis = [
       {
         name: 'trigger',
         descKey: 'app.api.tooltip.desc.trigger',
+        version: '1.12.5',
         type: 'String',
         enum: 'manual, hover, click',
         defVal: 'hover',
@@ -33,6 +37,7 @@ const apis = [
       {
         name: 'theme',
         descKey: 'app.api.tooltip.desc.theme',
+        version: '',
         type: 'String',
         enum: 'dark,light',
         defVal: 'dark',
@@ -41,6 +46,7 @@ const apis = [
       {
         name: 'zIndex',
         descKey: 'app.api.tooltip.desc.zIndex',
+        version: '',
         type: 'Number',
         enum: '',
         defVal: '3000',
@@ -49,6 +55,7 @@ const apis = [
       {
         name: 'isArrow',
         descKey: 'app.api.tooltip.desc.isArrow',
+        version: '',
         type: 'Boolean',
         enum: '',
         defVal: 'true',
@@ -59,6 +66,7 @@ const apis = [
   {
     name: 'Slots',
     descKey: 'app.api.title.slots',
+    version: '',
     type: '',
     enum: '',
     defVal: '',
@@ -66,6 +74,7 @@ const apis = [
       {
         name: 'default',
         desc: '自定义显示内容模板',
+        version: '',
         type: '',
         enum: '',
         defVal: '',
@@ -76,6 +85,7 @@ const apis = [
   {
     name: 'Events',
     descKey: 'app.api.title.events',
+    version: '',
     type: '',
     enum: '',
     defVal: '',
@@ -84,6 +94,7 @@ const apis = [
   {
     name: 'Methods',
     descKey: 'app.api.title.methods',
+    version: '',
     type: '',
     enum: '',
     defVal: '',
@@ -91,6 +102,7 @@ const apis = [
       {
         name: 'show()',
         desc: '手动显示提示框',
+        version: '',
         type: 'Promise',
         enum: '',
         defVal: '',
@@ -99,6 +111,7 @@ const apis = [
       {
         name: 'close()',
         desc: '手动关闭提示框',
+        version: '',
         type: 'Promise',
         enum: '',
         defVal: '',
@@ -107,6 +120,7 @@ const apis = [
       {
         name: 'toVisible(target, message)',
         desc: '手动显示提示框（对于可复用高性能场景非常适合，只需要创建一个实例，后续通过该方法调用即可显示）',
+        version: '',
         type: 'Promise',
         enum: '',
         defVal: 'Event.target, message',

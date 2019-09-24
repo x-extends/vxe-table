@@ -52,6 +52,11 @@
           <span v-html="row.defVal || '&#12288;'"></span>
         </template>
       </vxe-table-column>
+      <vxe-table-column field="version" :title="$t('app.api.title.version')" width="120">
+        <template v-slot="{ row }">
+          <span v-show="row.version" class="compatibility">v{{  row.version }}</span>
+        </template>
+      </vxe-table-column>
       <template v-slot:empty>
         <span class="red">找不对应 API，请输入正确的关键字！</span>
       </template>
@@ -60,8 +65,8 @@
 </template>
 
 <script>
+import XEUtils from 'xe-utils/methods/xe-utils'
 import pack from '../../../package.json'
-import XEUtils from 'xe-utils'
 import XEClipboard from 'xe-clipboard'
 import tableAPI from '../../api/table'
 import tableColumnAPI from '../../api/column'
@@ -215,16 +220,16 @@ export default {
           // 生成唯一 id
           let index = 1
           let searchProps = ['name', 'desc', 'type', 'enum', 'defVal']
-          XEUtils.eachTree(apis, item => {
+          this.tableData = this.$utils.clone(apis, true)
+          this.$utils.eachTree(this.tableData, item => {
             item.id = index++
             item.desc = item.descKey ? this.$t(item.descKey) : item.desc
             searchProps.forEach(key => {
-              item[key] = XEUtils.escape(item[key])
+              item[key] = this.$utils.escape(item[key])
             })
           }, { children: 'list' })
-          this.tableData = apis
           // 默认展开一级
-          this.defaultExpandRowKeys = apis.filter(item => item.list && item.list.length).map(item => item.id)
+          this.defaultExpandRowKeys = this.tableData.filter(item => item.list && item.list.length).map(item => item.id)
           this.loading = false
           this.handleSearch()
           resolve()
@@ -257,7 +262,7 @@ export default {
           break
         case 'exportAll':
           xTable.exportCsv({
-            data: XEUtils.toTreeArray(this.tableData, { children: 'list' }),
+            data: this.$utils.toTreeArray(this.tableData, { children: 'list' }),
             filename: `vxe-${this.apiName}_v${pack.version}.csv`
           })
           break
@@ -290,13 +295,13 @@ export default {
       }
     },
     handleSearch () {
-      let filterName = XEUtils.toString(this.filterName).trim().toLowerCase()
+      let filterName = this.$utils.toString(this.filterName).trim().toLowerCase()
       if (filterName) {
         let filterRE = new RegExp(filterName, 'gi')
         let options = { children: 'list' }
         let searchProps = ['name', 'desc', 'type', 'enum', 'defVal']
-        let rest = XEUtils.searchTree(this.tableData, item => searchProps.some(key => item[key].toLowerCase().indexOf(filterName) > -1), options)
-        XEUtils.eachTree(rest, item => {
+        let rest = this.$utils.searchTree(this.tableData, item => searchProps.some(key => item[key].toLowerCase().indexOf(filterName) > -1), options)
+        this.$utils.eachTree(rest, item => {
           searchProps.forEach(key => {
             item[key] = item[key].replace(filterRE, match => `<span class="keyword-lighten">${match}</span>`)
           })
@@ -328,6 +333,13 @@ export default {
   }
   .disabled-line-through {
     text-decoration: line-through;
+  }
+  .compatibility {
+    background-color: #1081C2;
+    border-radius: 10px;
+    padding: 2px 8px;
+    color: #fff;
+    font-size: 12px;
   }
 }
 </style>

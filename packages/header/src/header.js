@@ -164,7 +164,7 @@ export default {
           return h('tr', {
             class: ['vxe-header--row', headerRowClassName ? XEUtils.isFunction(headerRowClassName) ? headerRowClassName({ $table, $rowIndex, fixed: fixedType }) : headerRowClassName : '']
           }, cols.map((column, $columnIndex) => {
-            let { columnKey, showHeaderOverflow, headerAlign, align, renderWidth } = column
+            let { columnKey, showHeaderOverflow, headerAlign, align, renderWidth, headerClassName } = column
             let isColGroup = column.children && column.children.length
             let fixedHiddenColumn = fixedType ? column.fixed !== fixedType && !isColGroup : column.fixed && overflowX
             let headOverflow = XEUtils.isUndefined(showHeaderOverflow) || XEUtils.isNull(showHeaderOverflow) ? allColumnHeaderOverflow : showHeaderOverflow
@@ -176,6 +176,7 @@ export default {
             let thOns = {}
             // 确保任何情况下 columnIndex 都精准指向真实列索引
             let columnIndex = getColumnMapIndex(column)
+            let params = { $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType }
             if (showTitle || showTooltip) {
               thOns.mouseover = evnt => {
                 if (showTitle) {
@@ -205,7 +206,7 @@ export default {
                 'is--filter': column.filters.length,
                 'col--current': currentColumn === column,
                 'filter--active': column.filters.some(item => item.checked)
-              }, headerCellClassName ? XEUtils.isFunction(headerCellClassName) ? headerCellClassName({ $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType }) : headerCellClassName : ''],
+              }, UtilTools.getClass(headerClassName, params), UtilTools.getClass(headerCellClassName, params)],
               attrs: {
                 'data-colid': column.id,
                 colspan: column.colSpan,

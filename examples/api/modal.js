@@ -2,6 +2,7 @@ const apis = [
   {
     name: 'Props',
     descKey: 'app.api.title.props',
+    version: '',
     type: '',
     enum: '',
     defVal: '',
@@ -9,6 +10,7 @@ const apis = [
       {
         name: 'value,v-model',
         descKey: 'app.api.msg.desc.value',
+        version: '',
         type: '',
         enum: '',
         defVal: '',
@@ -17,6 +19,7 @@ const apis = [
       {
         name: 'id',
         descKey: 'app.api.msg.desc.id',
+        version: '',
         type: 'String',
         enum: '',
         defVal: '',
@@ -25,6 +28,7 @@ const apis = [
       {
         name: 'title',
         descKey: 'app.api.msg.desc.title',
+        version: '',
         type: 'String',
         enum: '',
         defVal: '消息提示',
@@ -33,6 +37,7 @@ const apis = [
       {
         name: 'type',
         descKey: 'app.api.msg.desc.type',
+        version: '',
         type: 'String',
         enum: 'alert, confirm, message',
         defVal: '',
@@ -41,6 +46,7 @@ const apis = [
       {
         name: 'status',
         descKey: 'app.api.msg.desc.status',
+        version: '',
         type: 'String',
         enum: 'info, success, warning, error, loading',
         defVal: '',
@@ -49,6 +55,7 @@ const apis = [
       {
         name: 'message',
         descKey: 'app.api.msg.desc.message',
+        version: '',
         type: 'String',
         enum: '',
         defVal: '',
@@ -57,6 +64,7 @@ const apis = [
       {
         name: 'showHeader',
         descKey: 'app.api.msg.desc.showHeader',
+        version: '',
         type: 'Boolean',
         enum: '',
         defVal: 'true',
@@ -65,6 +73,7 @@ const apis = [
       {
         name: 'showFooter',
         descKey: 'app.api.msg.desc.showFooter',
+        version: '',
         type: 'Boolean',
         enum: '',
         defVal: 'true',
@@ -73,6 +82,7 @@ const apis = [
       {
         name: 'lock-view',
         descKey: 'app.api.msg.desc.lockView',
+        version: '',
         type: 'Boolean',
         enum: '',
         defVal: 'true',
@@ -81,6 +91,7 @@ const apis = [
       {
         name: 'lock-scroll',
         descKey: 'app.api.msg.desc.lockScroll',
+        version: '',
         type: 'Boolean',
         enum: '',
         defVal: 'true',
@@ -89,6 +100,7 @@ const apis = [
       {
         name: 'mask',
         descKey: 'app.api.msg.desc.mask',
+        version: '',
         type: 'Boolean',
         enum: '',
         defVal: 'true',
@@ -97,6 +109,7 @@ const apis = [
       {
         name: 'mask-closable',
         descKey: 'app.api.msg.desc.maskClosable',
+        version: '',
         type: 'Boolean',
         enum: '',
         defVal: 'false',
@@ -105,6 +118,7 @@ const apis = [
       {
         name: 'esc-closable',
         descKey: 'app.api.msg.desc.escClosable',
+        version: '',
         type: 'Boolean',
         enum: '',
         defVal: 'false',
@@ -113,6 +127,7 @@ const apis = [
       {
         name: 'resize',
         descKey: 'app.api.msg.desc.resize',
+        version: '',
         type: 'Boolean',
         enum: '',
         defVal: 'false',
@@ -121,6 +136,7 @@ const apis = [
       {
         name: 'duration',
         descKey: 'app.api.msg.desc.duration',
+        version: '',
         type: 'Number, String',
         enum: '',
         defVal: '3000',
@@ -129,6 +145,7 @@ const apis = [
       {
         name: 'width',
         descKey: 'app.api.msg.desc.width',
+        version: '',
         type: 'Number, String',
         enum: '',
         defVal: '',
@@ -137,6 +154,7 @@ const apis = [
       {
         name: 'height',
         descKey: 'app.api.msg.desc.height',
+        version: '',
         type: 'Number, String',
         enum: '',
         defVal: '',
@@ -145,6 +163,7 @@ const apis = [
       {
         name: 'min-width',
         descKey: 'app.api.msg.desc.minWidth',
+        version: '1.14.15',
         type: 'Number, String',
         enum: '',
         defVal: '',
@@ -153,6 +172,7 @@ const apis = [
       {
         name: 'min-height',
         descKey: 'app.api.msg.desc.minHeight',
+        version: '1.14.15',
         type: 'Number, String',
         enum: '',
         defVal: '',
@@ -161,6 +181,7 @@ const apis = [
       {
         name: 'top',
         descKey: 'app.api.msg.desc.top',
+        version: '',
         type: 'Number, String',
         enum: '',
         defVal: '15',
@@ -169,6 +190,7 @@ const apis = [
       {
         name: 'zIndex',
         descKey: 'app.api.msg.desc.zIndex',
+        version: '',
         type: 'Number, String',
         enum: '',
         defVal: '起始 2000',
@@ -177,6 +199,7 @@ const apis = [
       {
         name: 'fullscreen',
         descKey: 'app.api.msg.desc.fullscreen',
+        version: '1.14.17',
         type: 'Boolean',
         enum: '',
         defVal: 'false',
@@ -187,6 +210,7 @@ const apis = [
   {
     name: 'Slots',
     descKey: 'app.api.title.slots',
+    version: '',
     type: '',
     enum: '',
     defVal: '',
@@ -194,6 +218,7 @@ const apis = [
       {
         name: '—',
         desc: '窗口内容模板',
+        version: '',
         type: '',
         enum: '',
         defVal: '',
@@ -202,6 +227,7 @@ const apis = [
       {
         name: 'footer',
         desc: '窗口底部的模板',
+        version: '',
         type: '',
         enum: '',
         defVal: '',
@@ -212,6 +238,7 @@ const apis = [
   {
     name: 'Events',
     descKey: 'app.api.title.events',
+    version: '',
     type: '',
     enum: '',
     defVal: '',
@@ -219,6 +246,7 @@ const apis = [
       {
         name: 'show',
         desc: '在窗口打开时会触发该事件',
+        version: '',
         type: '{type}',
         enum: '',
         defVal: '',
@@ -227,6 +255,7 @@ const apis = [
       {
         name: 'hide',
         desc: '在窗口关闭时会触发该事件',
+        version: '',
         type: '{type}',
         enum: '',
         defVal: '',
@@ -235,6 +264,7 @@ const apis = [
       {
         name: 'confirm',
         desc: '点击确定按钮时会触发该事件',
+        version: '',
         type: '{type}, event',
         enum: '',
         defVal: '',
@@ -243,6 +273,7 @@ const apis = [
       {
         name: 'close',
         desc: '点击关闭按钮时会触发该事件',
+        version: '',
         type: '{type}, event',
         enum: '',
         defVal: '',
@@ -251,6 +282,7 @@ const apis = [
       {
         name: 'zoom',
         desc: '窗口缩放时会触发该事件',
+        version: '',
         type: '{type}, event',
         enum: '',
         defVal: '',
@@ -261,6 +293,7 @@ const apis = [
   {
     name: 'Methods',
     descKey: 'app.api.title.methods',
+    version: '',
     type: '',
     enum: '',
     defVal: '',
@@ -268,6 +301,7 @@ const apis = [
       {
         name: 'open()',
         desc: '手动打开窗口',
+        version: '',
         type: '',
         enum: '',
         defVal: '',
@@ -276,6 +310,7 @@ const apis = [
       {
         name: 'close()',
         desc: '手动关闭窗口',
+        version: '',
         type: '',
         enum: '',
         defVal: '',
@@ -284,6 +319,7 @@ const apis = [
       {
         name: 'getBox()',
         desc: '获取当前窗口元素',
+        version: '',
         type: '',
         enum: '',
         defVal: '',
@@ -292,6 +328,7 @@ const apis = [
       {
         name: 'maximize()',
         desc: '如果窗口处于常规状态，则最大化窗口',
+        version: '1.14.15',
         type: '',
         enum: '',
         defVal: '',
@@ -300,6 +337,7 @@ const apis = [
       {
         name: 'revert()',
         desc: '如果窗口处于最大化状态，则还原窗口',
+        version: '1.14.15',
         type: '',
         enum: '',
         defVal: '',

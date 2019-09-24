@@ -72,7 +72,7 @@ export default {
     }
   },
   created () {
-    let { customs, proxyOpts, pagerConfig } = this
+    let { customs, data, proxyConfig, proxyOpts, pagerConfig } = this
     let { props } = proxyOpts
     if (customs) {
       this.tableCustoms = customs
@@ -80,9 +80,12 @@ export default {
     if (pagerConfig && pagerConfig.pageSize) {
       this.tablePage.pageSize = pagerConfig.pageSize
     }
+    if (data && proxyConfig) {
+      console.warn('[vxe-grid] There is a conflict between the props proxy-config and data.')
+    }
     // （v3.0 中废弃 proxyConfig.props.data）
     if (props && props.data) {
-      console.warn('[vxe-table] The property proxyConfig.props.data is deprecated, please use proxyConfig.props.result')
+      console.warn('[vxe-table] The property proxy-config.props.data is deprecated, please use proxy-config.props.result')
     }
   },
   mounted () {
