@@ -34,6 +34,7 @@ export default {
         sort: true, // 启用排序代理
         filter: true, // 启用筛选代理
         ajax: {
+          // 任何支持 Promise API 的库都可以对接（fetch、jquery、axios、xe-ajax）
           query: ({ page, sort, filters }) => {
             // 处理排序条件
             let formData = {
@@ -92,6 +93,7 @@ export default {
                 sort: true, // 启用排序代理
                 filter: true, // 启用筛选代理
                 ajax: {
+                  // 任何支持 Promise API 的库都可以对接（fetch、jquery、axios、xe-ajax）
                   query: ({ page, sort, filters }) => {
                     // 处理排序条件
                     let formData = {

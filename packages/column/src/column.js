@@ -32,6 +32,12 @@ export default {
     showOverflow: { type: [Boolean, String], default: null },
     // 当表头内容过长时显示为省略号
     showHeaderOverflow: { type: [Boolean, String], default: null },
+    // 给单元格附加 className
+    className: [String, Function],
+    // 给表头单元格附加 className
+    headerClassName: [String, Function],
+    // 给表尾单元格附加 className
+    footerClassName: [String, Function],
     // 格式化显示内容
     formatter: [Function, Array, String],
     // 自定义索引方法

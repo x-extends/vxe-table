@@ -25,6 +25,9 @@ class ColumnConfig {
       footerAlign: _vm.footerAlign,
       showOverflow: _vm.showOverflow,
       showHeaderOverflow: _vm.showHeaderOverflow,
+      className: _vm.class || _vm.className,
+      headerClassName: _vm.headerClassName,
+      footerClassName: _vm.footerClassName,
       indexMethod: _vm.indexMethod,
       formatter: _vm.formatter,
       sortable: _vm.sortable,
@@ -100,6 +103,9 @@ export const UtilTools = {
       result.push.apply(result, column.children && column.children.length ? UtilTools.getColumnList(column.children) : [column])
     })
     return result
+  },
+  getClass (property, params) {
+    return property ? XEUtils.isFunction(property) ? property(params) : property : ''
   },
   getFilters (filters) {
     return (filters || []).map(({ label, value, data, checked }) => ({ label, value, data, _data: data, checked: !!checked }))

@@ -5,6 +5,7 @@ const apis = [
   {
     name: 'Props',
     descKey: 'app.api.title.props',
+    version: '',
     type: '',
     enum: '',
     defVal: '',
@@ -12,6 +13,7 @@ const apis = [
       {
         name: 'rows',
         desc: '原生 rows 属性',
+        version: '',
         type: 'String, Number',
         enum: '',
         defVal: '',
@@ -20,6 +22,7 @@ const apis = [
       {
         name: 'form',
         desc: '原生 form 属性',
+        version: '',
         type: 'String',
         enum: '',
         defVal: '',
@@ -30,6 +33,7 @@ const apis = [
   {
     name: 'Slots',
     descKey: 'app.api.title.slots',
+    version: '',
     type: '',
     enum: '',
     defVal: '',
@@ -38,6 +42,7 @@ const apis = [
   {
     name: 'Events',
     descKey: 'app.api.title.events',
+    version: '',
     type: '',
     enum: '',
     defVal: '',
@@ -45,6 +50,7 @@ const apis = [
       {
         name: '*',
         desc: '在值发生改变时触发该事件',
+        version: '',
         type: '',
         enum: '',
         defVal: '{ value }, event',
@@ -55,6 +61,7 @@ const apis = [
   {
     name: 'Methods',
     descKey: 'app.api.title.methods',
+    version: '',
     type: '',
     enum: '',
     defVal: '',

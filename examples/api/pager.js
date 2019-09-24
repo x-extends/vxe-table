@@ -2,6 +2,7 @@ const apis = [
   {
     name: 'Props',
     descKey: 'app.api.title.props',
+    version: '',
     type: '',
     enum: '',
     defVal: '',
@@ -9,6 +10,7 @@ const apis = [
       {
         name: 'size',
         descKey: 'app.api.pager.desc.size',
+        version: '',
         type: 'String',
         enum: 'medium,small,mini',
         defVal: '',
@@ -17,6 +19,7 @@ const apis = [
       {
         name: 'loading',
         descKey: 'app.api.pager.desc.loading',
+        version: '',
         type: 'Boolean',
         enum: '',
         defVal: 'false',
@@ -25,6 +28,7 @@ const apis = [
       {
         name: 'layouts',
         descKey: 'app.api.pager.desc.layouts',
+        version: '',
         type: 'Array',
         enum: 'PrevJump,PrevPage,Number,JumpNumber,NextPage,NextJump,Sizes,Jump,FullJump,PageCount,Total',
         defVal: '[PrevPage,NextPage,FullJump,Sizes,Total]',
@@ -33,6 +37,7 @@ const apis = [
       {
         name: 'current-page',
         descKey: 'app.api.pager.desc.currentPage',
+        version: '',
         type: 'Number',
         enum: '',
         defVal: '1',
@@ -41,6 +46,7 @@ const apis = [
       {
         name: 'page-size',
         descKey: 'app.api.pager.desc.pageSize',
+        version: '',
         type: 'Number',
         enum: '',
         defVal: '10',
@@ -49,6 +55,7 @@ const apis = [
       {
         name: 'total',
         descKey: 'app.api.pager.desc.total',
+        version: '',
         type: 'Number',
         enum: '',
         defVal: '0',
@@ -57,6 +64,7 @@ const apis = [
       {
         name: 'pager-count',
         descKey: 'app.api.pager.desc.pagerCount',
+        version: '',
         type: 'Number',
         enum: '',
         defVal: '7',
@@ -65,6 +73,7 @@ const apis = [
       {
         name: 'page-sizes',
         descKey: 'app.api.pager.desc.pageSizes',
+        version: '',
         type: 'Array',
         enum: '',
         defVal: '[10,15,20,50,100]',
@@ -73,6 +82,7 @@ const apis = [
       {
         name: 'align',
         descKey: 'app.api.pager.desc.align',
+        version: '2.2.4',
         type: 'String',
         enum: 'left（左对其）, center（居中对其）, right（右对齐）',
         defVal: 'right',
@@ -81,6 +91,7 @@ const apis = [
       {
         name: 'background',
         descKey: 'app.api.pager.desc.background',
+        version: '',
         type: 'Boolean',
         enum: '',
         defVal: 'false',
@@ -91,6 +102,7 @@ const apis = [
   {
     name: 'Slots',
     descKey: 'app.api.title.slots',
+    version: '',
     type: '',
     enum: '',
     defVal: '',
@@ -99,6 +111,7 @@ const apis = [
   {
     name: 'Events',
     descKey: 'app.api.title.events',
+    version: '',
     type: '',
     enum: '',
     defVal: '',
@@ -106,6 +119,7 @@ const apis = [
       {
         name: 'current-change',
         desc: '当前页发生改变时会触发该事件',
+        version: '',
         type: '',
         enum: '',
         defVal: 'currentPage',
@@ -114,6 +128,7 @@ const apis = [
       {
         name: 'size-change',
         desc: '每页大小发生改变时会触发该事件',
+        version: '',
         type: '',
         enum: '',
         defVal: 'pageSize',
@@ -122,6 +137,7 @@ const apis = [
       {
         name: 'page-change',
         desc: '分页发生改变时会触发该事件',
+        version: '',
         type: '',
         enum: '',
         defVal: '{type, currentPage, pageSize}',
@@ -132,6 +148,7 @@ const apis = [
   {
     name: 'Methods',
     descKey: 'app.api.title.methods',
+    version: '',
     type: '',
     enum: '',
     defVal: '',
@@ -139,6 +156,7 @@ const apis = [
       {
         name: 'prevPage()',
         desc: '跳转到上一页',
+        version: '',
         type: '',
         enum: '',
         defVal: '',
@@ -147,6 +165,7 @@ const apis = [
       {
         name: 'nextPage()',
         desc: '跳转到下一页',
+        version: '',
         type: '',
         enum: '',
         defVal: '',
@@ -155,6 +174,7 @@ const apis = [
       {
         name: 'prevJump()',
         desc: '向上翻页',
+        version: '',
         type: '',
         enum: '',
         defVal: '',
@@ -163,6 +183,7 @@ const apis = [
       {
         name: 'nextJump()',
         desc: '向下翻页',
+        version: '',
         type: '',
         enum: '',
         defVal: '',
@@ -171,6 +192,7 @@ const apis = [
       {
         name: 'jumpPage(currentPage)',
         desc: '跳转到指定页',
+        version: '',
         type: '',
         enum: '',
         defVal: 'currentPage: number',
@@ -179,6 +201,7 @@ const apis = [
       {
         name: 'changePageSize(pageSize)',
         desc: '更改每页大小',
+        version: '',
         type: '',
         enum: '',
         defVal: 'pageSize: number',

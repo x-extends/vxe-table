@@ -52,6 +52,11 @@
           <span v-html="row.defVal || '&#12288;'"></span>
         </template>
       </vxe-table-column>
+      <vxe-table-column field="version" :title="$t('app.api.title.version')" width="120">
+        <template v-slot="{ row }">
+          <span v-show="row.version" class="compatibility">v{{  row.version }}</span>
+        </template>
+      </vxe-table-column>
       <template v-slot:empty>
         <span class="red">找不对应 API，请输入正确的关键字！</span>
       </template>
@@ -328,6 +333,13 @@ export default {
   }
   .disabled-line-through {
     text-decoration: line-through;
+  }
+  .compatibility {
+    background-color: #1081C2;
+    border-radius: 10px;
+    padding: 2px 8px;
+    color: #fff;
+    font-size: 12px;
   }
 }
 </style>

@@ -2,6 +2,7 @@ const apis = [
   {
     name: 'Props',
     descKey: 'app.api.title.props',
+    version: '',
     type: '',
     enum: '',
     defVal: '',
@@ -9,6 +10,7 @@ const apis = [
       {
         name: 'type',
         descKey: 'app.api.button.desc.type',
+        version: '',
         type: '',
         enum: 'text,primary',
         defVal: '',
@@ -17,6 +19,7 @@ const apis = [
       {
         name: 'size',
         descKey: 'app.api.button.desc.size',
+        version: '',
         type: 'String',
         enum: 'medium,small,mini',
         defVal: '',
@@ -25,6 +28,7 @@ const apis = [
       {
         name: 'name',
         descKey: 'app.api.button.desc.name',
+        version: '',
         type: 'String, Number',
         enum: '',
         defVal: '',
@@ -33,6 +37,7 @@ const apis = [
       {
         name: 'disabled',
         descKey: 'app.api.button.desc.disabled',
+        version: '',
         type: 'Boolean',
         enum: '',
         defVal: 'false',
@@ -41,6 +46,7 @@ const apis = [
       {
         name: 'loading',
         descKey: 'app.api.button.desc.loading',
+        version: '2.5.18',
         type: 'Boolean',
         enum: '',
         defVal: 'false',
@@ -51,6 +57,7 @@ const apis = [
   {
     name: 'Slots',
     descKey: 'app.api.title.slots',
+    version: '',
     type: '',
     enum: '',
     defVal: '',
@@ -58,6 +65,7 @@ const apis = [
       {
         name: '—',
         desc: '按钮内容',
+        version: '',
         type: '',
         enum: '',
         defVal: '',
@@ -66,6 +74,7 @@ const apis = [
       {
         name: 'dropdowns',
         desc: '下拉按钮',
+        version: '',
         type: '',
         enum: '',
         defVal: '',
@@ -76,6 +85,7 @@ const apis = [
   {
     name: 'Events',
     descKey: 'app.api.title.events',
+    version: '',
     type: '',
     enum: '',
     defVal: '',
@@ -83,6 +93,7 @@ const apis = [
       {
         name: '*',
         desc: '原生事件',
+        version: '',
         type: '',
         enum: '',
         defVal: 'event',
@@ -91,6 +102,7 @@ const apis = [
       {
         name: 'dropdown-click',
         desc: '下拉列表按钮点击时会触发该事件',
+        version: '',
         type: '',
         enum: '',
         defVal: '{ name }, event',
@@ -101,6 +113,7 @@ const apis = [
   {
     name: 'Methods',
     descKey: 'app.api.title.methods',
+    version: '',
     type: '',
     enum: '',
     defVal: '',
