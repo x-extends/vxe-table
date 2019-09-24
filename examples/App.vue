@@ -335,7 +335,6 @@ export default {
             },
             {
               label: 'app.aside.nav.footerSpan',
-              disabled: true,
               locat: {
                 name: 'TableFooterSpan'
               }
