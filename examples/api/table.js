@@ -1625,7 +1625,7 @@ const apis = [
       {
         name: 'scroll',
         descKey: 'app.api.table.desc.scroll',
-        version: '1.10.1',
+        version: '',
         type: '',
         enum: '',
         defVal: '{type,fixed,scrollTop,scrollLeft,isX,isY},event',
@@ -2410,14 +2410,14 @@ const apis = [
         desc: '如果有滚动条，则滚动到对应的位置',
         version: '',
         type: 'Promise',
-        enum: '',
+        enum: '1.10.1',
         defVal: 'scrollLeft?, scrollTop?',
         list: []
       },
       {
         name: 'scrollToRow(row)',
         desc: '如果有滚动条，则滚动到对应的行',
-        version: '',
+        version: '1.10.1',
         type: 'Promise',
         enum: '',
         defVal: 'row',
@@ -2426,7 +2426,7 @@ const apis = [
       {
         name: 'scrollToColumn(column)',
         desc: '如果有滚动条，则滚动到对应的列',
-        version: '',
+        version: '1.10.1',
         type: 'Promise',
         enum: '',
         defVal: 'column',
