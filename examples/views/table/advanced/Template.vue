@@ -24,15 +24,14 @@
       border
       resizable
       :data="tableData">
-      <vxe-table-column type="index" width="100">
+      <vxe-table-column type="index" width="100" show-overflow>
         <template v-slot="{ seq }">
           <vxe-button>按钮{{ seq }}</vxe-button>
         </template>
       </vxe-table-column>
       <vxe-table-column field="name" title="app.body.label.name" sortable>
-        <template v-slot="{ rowIndex, columnIndex }">
-          <span>rowIndex= {{ rowIndex }}</span>
-          <span>columnIndex= {{ columnIndex }}</span>
+        <template v-slot="{ row }">
+          <a href="https://github.com/xuliangzhan/vxe-table" target="_black">我是超链接：{{ row.name }}</a>
         </template>
       </vxe-table-column>
       <vxe-table-column field="sex" title="app.body.label.sex" :filters="[{data: ''}]" :filter-method="filterSexMethod">
@@ -73,9 +72,10 @@
           <span v-html="row.html1"></span>
         </template>
       </vxe-table-column>
-      <vxe-table-column field="img" title="图片路径" width="120" show-overflow>
-        <template v-slot="{ row }">
-          <img :src="row.img" style="width: 100px;">
+      <vxe-table-column field="img1" title="图片路径" width="120" show-overflow>
+        <template v-slot="{ row, rowIndex }">
+          <img v-if="row.img1" :src="row.img1" style="width: 100px;">
+          <span v-else>无</span>
         </template>
       </vxe-table-column>
     </vxe-table>
@@ -116,15 +116,14 @@ export default {
           border
           resizable
           :data="tableData">
-          <vxe-table-column type="index" width="100">
+          <vxe-table-column type="index" width="100" show-overflow>
             <template v-slot="{ seq }">
               <vxe-button>按钮{{ seq }}</vxe-button>
             </template>
           </vxe-table-column>
           <vxe-table-column field="name" title="app.body.label.name" sortable>
-            <template v-slot="{ rowIndex, columnIndex }">
-              <span>rowIndex= {{ rowIndex }}</span>
-              <span>columnIndex= {{ columnIndex }}</span>
+            <template v-slot="{ row }">
+              <a href="https://github.com/xuliangzhan/vxe-table" target="_black">我是超链接：{{ row.name }}</a>
             </template>
           </vxe-table-column>
           <vxe-table-column field="sex" title="app.body.label.sex" :filters="[{data: ''}]" :filter-method="filterSexMethod">
@@ -165,9 +164,10 @@ export default {
               <span v-html="row.html1"></span>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="img" title="图片路径" width="120" show-overflow>
-            <template v-slot="{ row }">
-              <img :src="row.img" style="width: 100px;">
+          <vxe-table-column field="img1" title="图片路径" width="120" show-overflow>
+            <template v-slot="{ row, rowIndex }">
+              <img v-if="row.img1" :src="row.img1" style="width: 100px;">
+              <span v-else>无</span>
             </template>
           </vxe-table-column>
         </vxe-table>
