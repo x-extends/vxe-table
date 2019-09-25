@@ -104,7 +104,7 @@ export default {
       download: true,
       data: null,
       columns: null,
-      columnFilterMethod: column => ['index', 'selection', 'radio'].indexOf(column.type) === -1 && column.property,
+      columnFilterMethod: column => column.property && ['index', 'selection', 'radio'].indexOf(column.type) === -1,
       dataFilterMethod: null,
       footerFilterMethod: null
     }, options)

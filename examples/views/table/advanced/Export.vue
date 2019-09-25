@@ -1,6 +1,9 @@
 <template>
   <div>
-    <p class="tip">通过调用 <table-api-link prop="exportCsv"/> 函数可以直接将表格导出为 .csv 格式的文件</p>
+    <p class="tip">
+      通过调用 <table-api-link prop="exportCsv"/> 函数可以直接将表格导出为 .csv 格式的文件<br>
+      <span class="red">注：默认会排除 field 为空和 type 相关的功能列；如果需要导出索引，请通过 <table-api-link prop="columnFilterMethod"/> 自定义筛选条件</span>
+    </p>
 
     <vxe-toolbar>
       <template v-slot:buttons>
