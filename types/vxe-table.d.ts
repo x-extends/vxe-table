@@ -128,6 +128,12 @@ export interface VXETableStatic {
  */
 declare const VXETable: VXETableStatic;
 
+declare global {
+  interface Window {
+    VXETable: typeof VXETable;
+  }
+}
+
 export {
   VXETable,
   Table,

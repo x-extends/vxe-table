@@ -259,7 +259,9 @@ export default {
     actived.args = null
     actived.row = null
     actived.column = null
-    return this.clearValidate().then(this.recalculate)
+    return this.clearValidate()
+      .then(() => row || column ? new Promise(resolve => setTimeout(resolve)) : 0)
+      .then(this.recalculate)
   },
   _getActiveRow () {
     let { $el, editStore, tableData } = this

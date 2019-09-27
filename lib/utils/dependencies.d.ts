@@ -1,6 +1,3 @@
-/**
- * 按需加载依赖
- */
-declare class dependencies {}
+import * as methods from './methods'
 
-export default dependencies
+export default methods
