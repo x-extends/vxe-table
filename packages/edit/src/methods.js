@@ -186,7 +186,7 @@ export default {
     let { activeMethod } = editConfig
     let { actived } = editStore
     let { row, column, cell } = params
-    let { model, editRender } = column
+    let { editRender } = column
     if (editRender && cell) {
       if (actived.row !== row || (editConfig.mode === 'cell' ? actived.column !== column : false)) {
         // 判断是否禁用编辑
@@ -205,15 +205,9 @@ export default {
           actived.row = row
           actived.column = column
           if (editConfig.mode === 'row') {
-            tableColumn.forEach(column => {
-              if (column.editRender) {
-                column.model.value = UtilTools.getCellValue(row, column)
-                column.model.update = false
-              }
-            })
+            tableColumn.forEach(column => this._getColumnModel(row, column))
           } else {
-            model.value = UtilTools.getCellValue(row, column)
-            model.update = false
+            this._getColumnModel(row, column)
           }
           this.$nextTick(() => {
             this.handleFocus(params, evnt)
@@ -239,29 +233,41 @@ export default {
     }
     return this.$nextTick()
   },
+  _getColumnModel (row, column) {
+    let { model, editRender } = column
+    if (editRender) {
+      model.value = UtilTools.getCellValue(row, column)
+      model.update = false
+    }
+  },
+  _setColumnModel (row, column) {
+    let { model, editRender } = column
+    if (editRender) {
+      UtilTools.setCellValue(row, column, model.value)
+      model.update = false
+      model.value = null
+    }
+  },
   /**
    * 清除激活的编辑
    */
   _clearActived (evnt) {
-    let { editStore } = this
+    let { tableColumn, editStore, editConfig = {} } = this
     let { actived } = editStore
     let { args, row, column } = actived
     if (row || column) {
-      let { model } = column
-      if (model.update) {
-        UtilTools.setCellValue(row, column, model.value)
-        model.update = false
-        model.value = null
-        this.updateFooter()
+      if (editConfig.mode === 'row') {
+        tableColumn.forEach(column => this._setColumnModel(row, column))
+      } else {
+        this._setColumnModel(row, column)
       }
+      this.updateFooter()
       UtilTools.emitEvent(this, 'edit-closed', [args, evnt])
     }
     actived.args = null
     actived.row = null
     actived.column = null
-    return this.clearValidate()
-      .then(() => row || column ? new Promise(resolve => setTimeout(resolve)) : 0)
-      .then(this.recalculate)
+    return this.clearValidate().then(this.recalculate)
   },
   _getActiveRow () {
     let { $el, editStore, tableData } = this
