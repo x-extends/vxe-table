@@ -1,6 +1,6 @@
 {
   "name": "vxe-table",
-  "version": "2.6.0-beta.5",
+  "version": "2.6.0-beta.6",
   "description": "一个简单实用的 Vue 表组件",
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -34,7 +34,7 @@
     "babelify": "^10.0.0",
     "browserify": "^16.2.3",
     "core-js": "^2.6.5",
-    "echarts": "^4.2.1",
+    "echarts": "^4.3.0",
     "element-ui": "^2.12.0",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
@@ -65,11 +65,11 @@
     "vue-router": "^3.0.3",
     "vue-template-compiler": "^2.6.10",
     "vxe-ajax": "^1.7.2",
-    "vxe-table-plugin-antd": "^1.4.4",
-    "vxe-table-plugin-charts": "^1.0.4",
-    "vxe-table-plugin-element": "^1.4.3",
-    "vxe-table-plugin-excel": "^1.0.4",
-    "vxe-table-plugin-iview": "^1.4.3",
+    "vxe-table-plugin-antd": "^1.4.5",
+    "vxe-table-plugin-charts": "^1.0.6",
+    "vxe-table-plugin-element": "^1.4.4",
+    "vxe-table-plugin-excel": "^1.0.5",
+    "vxe-table-plugin-iview": "^1.4.4",
     "vxe-table-plugin-menus": "^1.0.4",
     "vxe-table-plugin-renderer": "^1.0.5",
     "vxe-table-plugin-shortcut-key": "^1.0.2",
@@ -78,7 +78,7 @@
     "xe-ajax": "^3.8.1",
     "xe-ajax-mock": "^1.9.2",
     "xe-clipboard": "^1.7.1",
-    "xe-utils": "^2.2.4",
+    "xe-utils": "^2.2.6",
     "xlsx": "^0.14.3"
   },
   "peerDependencies": {

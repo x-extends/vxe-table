@@ -90,6 +90,49 @@ export const buttons: Buttons;
 
 export interface VXETableStatic {
   install(vue: typeof Vue): void;
+  Vue: typeof Vue;
+  Table: any;
+  Grid: any;
+  /**
+   * Filter 模块的安装状态
+   */
+  _filter: number;
+  /**
+   * Menu 模块的安装状态
+   */
+  _menu: number;
+  /**
+   * Edit 模块的安装状态
+   */
+  _edit: number;
+  /**
+   * Validator 模块的安装状态
+   */
+  _valid: number;
+  /**
+   * Export 模块的安装状态
+   */
+  _export: number;
+  /**
+   * Keyboard 模块的安装状态
+   */
+  _keyboard: number;
+  /**
+   * Resize 模块的安装状态
+   */
+  _resize: number;
+  /**
+   * Modal 模块的安装状态
+   */
+  _modal: number;
+  /**
+   * Tooltip 模块的安装状态
+   */
+  _tooltip: number;
+  /**
+   * 版本号
+   */
+  v: string;
   /**
    * 国际化翻译
    */
