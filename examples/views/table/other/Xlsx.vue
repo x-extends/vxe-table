@@ -1,10 +1,10 @@
 <template>
   <div>
-    <p class="tip">使用 <a class="link" href="https://www.npmjs.com/package/xlsx" target="_blank">xlsx</a> 和 <a class="link" href="https://www.npmjs.com/package/file-saver" target="_blank">file-saver</a> 实现导出 xlsx 文件</p>
+    <p class="tip">使用 <a class="link" href="https://www.npmjs.com/package/xlsx" target="_blank">xlsx</a> 实现导入数据</p>
 
     <vxe-toolbar>
       <template v-slot:buttons>
-        <vxe-button @click="exportEvent1">导出选中.xlsx</vxe-button>
+        <input type="file" @change="impotEvent" accept=".xls,.xlsx">
       </template>
     </vxe-toolbar>
 
@@ -13,7 +13,7 @@
       ref="xGrid1"
       height="300"
       :columns="tableColumn"
-      :data="tableData"></vxe-grid>
+      :data="tableData1"></vxe-grid>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
@@ -22,11 +22,11 @@
       <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
 
-    <p class="tip">简单的导出表格</p>
+    <p class="tip">使用 <a class="link" href="https://www.npmjs.com/package/xlsx" target="_blank">xlsx</a> 和 <a class="link" href="https://www.npmjs.com/package/file-saver" target="_blank">file-saver</a> 实现导出 xlsx 文件</p>
 
     <vxe-toolbar>
       <template v-slot:buttons>
-        <vxe-button @click="exportEvent2">导出表格.xlsx</vxe-button>
+        <vxe-button @click="exportEvent">导出.xlsx</vxe-button>
       </template>
     </vxe-toolbar>
 
@@ -36,7 +36,7 @@
       height="300"
       :span-method="rowspanMethod"
       :columns="tableColumn"
-      :data="tableData"></vxe-grid>
+      :data="tableData2"></vxe-grid>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
@@ -63,21 +63,22 @@ export default {
         { field: 'date3', title: 'Date' },
         { field: 'address', title: 'Address', showOverflow: true }
       ],
-      tableData: [],
+      tableData1: [],
+      tableData2: [],
       demoCodes: [
         `
         <vxe-toolbar>
           <template v-slot:buttons>
-            <vxe-button @click="exportEvent">导出选中.xlsx</vxe-button>
+            <input type="file" @change="impotEvent" accept=".xls,.xlsx">
           </template>
         </vxe-toolbar>
 
         <vxe-grid
           border
-          ref="xGrid"
-          height="500"
+          ref="xGrid1"
+          height="300"
           :columns="tableColumn"
-          :data="tableData"></vxe-grid>
+          :data="tableData1"></vxe-grid>
         `,
         `
         export default {
@@ -91,42 +92,35 @@ export default {
                 { field: 'date3', title: 'Date' },
                 { field: 'address', title: 'Address', showOverflow: true }
               ],
-              tableData: []
+              tableData1: []
             }
           },
-          created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 20)
-          },
           methods: {
-            exportEvent () {
-              // 对数据预处理
-              let data = this.getExportData(true)
-              // 转换数据
-              let book = XLSX.utils.book_new()
-              let sheet = XLSX.utils.json_to_sheet(data, { skipHeader: true })
-              XLSX.utils.book_append_sheet(book, sheet)
-              let wbout = XLSX.write(book, { bookType: 'xlsx', bookSST: false, type: 'binary' })
-              let blob = new Blob([this.toBuffer(wbout)], { type: 'application/octet-stream' })
-              // 保存导出
-              FileSaver.saveAs(blob, '数据导出.xlsx')
-            },
-            getExportData (isHead) {
-              let datas = this.$refs.xGrid1.getSelectRecords()
-              let columns = this.tableColumn.filter(item => item.field)
-              let headers = isHead ? [columns.map(item => item.title)] : []
-              return headers.concat(
-                datas.map(row => {
-                  return columns.map(column => {
-                    return row[column.field]
-                  })
+            impotEvent (evnt) {
+              let files = evnt.target.files
+              let fileReader = new FileReader()
+              fileReader.onload = (ev) => {
+                let data = ev.target.result
+                let workbook = XLSX.read(data, { type: 'binary' })
+                let csvData = XLSX.utils.sheet_to_csv(workbook.Sheets.Sheet1)
+                let tableData = []
+                // 解析数据
+                csvData.split('\\n').forEach((vRow, rIndex) => {
+                  if (vRow) {
+                    let vCols = vRow.split(',')
+                    let item = {}
+                    vCols.forEach((val, cIndex) => {
+                      let column = this.tableColumn[cIndex]
+                      if (column.field) {
+                        item[column.field] = val
+                      }
+                    })
+                    tableData.push(item)
+                  }
                 })
-              )
-            },
-            toBuffer (wbout) {
-              let buf = new ArrayBuffer(wbout.length)
-              let view = new Uint8Array(buf)
-              for (let index = 0; index !== wbout.length; ++index) view[index] = wbout.charCodeAt(index) & 0xFF
-              return buf
+                this.tableData1 = tableData
+              }
+              fileReader.readAsBinaryString(files[0])
             }
           }
         }
@@ -134,7 +128,7 @@ export default {
         `
         <vxe-toolbar>
           <template v-slot:buttons>
-            <vxe-button @click="exportEvent2">合并行导出.xlsx</vxe-button>
+            <vxe-button @click="exportEvent">导出.xlsx</vxe-button>
           </template>
         </vxe-toolbar>
 
@@ -144,7 +138,7 @@ export default {
           height="300"
           :span-method="rowspanMethod"
           :columns="tableColumn"
-          :data="tableData"></vxe-grid>
+          :data="tableData2"></vxe-grid>
         `,
         `
         export default {
@@ -158,11 +152,11 @@ export default {
                 { field: 'date3', title: 'Date' },
                 { field: 'address', title: 'Address', showOverflow: true }
               ],
-              tableData: []
+              tableData2: []
             }
           },
           created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 20)
+            this.tableData2 = window.MOCK_DATA_LIST.slice(0, 20)
           },
           methods: {
             // 通用行合并函数（将相同多列数据合并为一行）
@@ -185,6 +179,12 @@ export default {
                 }
               }
             },
+            toBuffer (wbout) {
+              let buf = new ArrayBuffer(wbout.length)
+              let view = new Uint8Array(buf)
+              for (let index = 0; index !== wbout.length; ++index) view[index] = wbout.charCodeAt(index) & 0xFF
+              return buf
+            },
             exportEvent () {
               // 转换数据
               let table = this.$refs.xGrid2.$el.querySelector('.body--wrapper>.vxe-table--body')
@@ -203,7 +203,7 @@ export default {
     }
   },
   created () {
-    this.tableData = window.MOCK_DATA_LIST.slice(0, 20)
+    this.tableData2 = window.MOCK_DATA_LIST.slice(0, 20)
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
@@ -211,35 +211,31 @@ export default {
     })
   },
   methods: {
-    exportEvent1 () {
-      // 对数据预处理
-      let data = this.getExportData(true)
-      // 转换数据
-      let book = XLSX.utils.book_new()
-      let sheet = XLSX.utils.json_to_sheet(data, { skipHeader: true })
-      XLSX.utils.book_append_sheet(book, sheet)
-      let wbout = XLSX.write(book, { bookType: 'xlsx', bookSST: false, type: 'binary' })
-      let blob = new Blob([this.toBuffer(wbout)], { type: 'application/octet-stream' })
-      // 保存导出
-      FileSaver.saveAs(blob, '数据导出.xlsx')
-    },
-    getExportData (isHead) {
-      let datas = this.$refs.xGrid1.getSelectRecords()
-      let columns = this.tableColumn.filter(item => item.field)
-      let headers = isHead ? [columns.map(item => item.title)] : []
-      return headers.concat(
-        datas.map(row => {
-          return columns.map(column => {
-            return row[column.field]
-          })
+    impotEvent (evnt) {
+      let files = evnt.target.files
+      let fileReader = new FileReader()
+      fileReader.onload = (ev) => {
+        let data = ev.target.result
+        let workbook = XLSX.read(data, { type: 'binary' })
+        let csvData = XLSX.utils.sheet_to_csv(workbook.Sheets.Sheet1)
+        let tableData = []
+        // 解析数据
+        csvData.split('\n').forEach((vRow, rIndex) => {
+          if (vRow) {
+            let vCols = vRow.split(',')
+            let item = {}
+            vCols.forEach((val, cIndex) => {
+              let column = this.tableColumn[cIndex]
+              if (column.field) {
+                item[column.field] = val
+              }
+            })
+            tableData.push(item)
+          }
         })
-      )
-    },
-    toBuffer (wbout) {
-      let buf = new ArrayBuffer(wbout.length)
-      let view = new Uint8Array(buf)
-      for (let index = 0; index !== wbout.length; ++index) view[index] = wbout.charCodeAt(index) & 0xFF
-      return buf
+        this.tableData1 = tableData
+      }
+      fileReader.readAsBinaryString(files[0])
     },
     // 通用行合并函数（将相同多列数据合并为一行）
     rowspanMethod ({ row, $rowIndex, column, data }) {
@@ -261,7 +257,13 @@ export default {
         }
       }
     },
-    exportEvent2 () {
+    toBuffer (wbout) {
+      let buf = new ArrayBuffer(wbout.length)
+      let view = new Uint8Array(buf)
+      for (let index = 0; index !== wbout.length; ++index) view[index] = wbout.charCodeAt(index) & 0xFF
+      return buf
+    },
+    exportEvent () {
       // 转换数据
       let table = this.$refs.xGrid2.$el.querySelector('.body--wrapper>.vxe-table--body')
       let book = XLSX.utils.book_new()
