@@ -50,7 +50,7 @@ export default {
   beginValidate (rows, cb, isAll) {
     let validRest = {}
     let status = true
-    let { editRules, tableData, tableFullData, scrollYLoad } = this
+    let { editRules, tableData, tableFullData, treeConfig, scrollYLoad } = this
     let vaildDatas = scrollYLoad ? tableFullData : tableData
     if (rows) {
       if (XEUtils.isFunction(rows)) {
@@ -64,7 +64,7 @@ export default {
     this.clearValidate()
     if (editRules) {
       let columns = this.getColumns()
-      vaildDatas.forEach(row => {
+      let handleVaild = row => {
         let colVailds = []
         columns.forEach((column, columnIndex) => {
           if (XEUtils.has(editRules, column.property)) {
@@ -73,7 +73,7 @@ export default {
                 this.validCellRules('all', row, column)
                   .then(resolve)
                   .catch(({ rule, rules }) => {
-                    let rest = { rule, rules, rowIndex: this.getRowIndex(row), row, columnIndex, column, $table: this }
+                    let rest = { rule, rules, [`${treeConfig ? '$' : ''}rowIndex`]: this.getRowIndex(row), row, columnIndex, column, $table: this }
                     if (isAll) {
                       if (!validRest[column.property]) {
                         validRest[column.property] = []
@@ -88,7 +88,12 @@ export default {
           }
         })
         rowValids.push(Promise.all(colVailds))
-      })
+      }
+      if (treeConfig) {
+        XEUtils.eachTree(vaildDatas, handleVaild, treeConfig)
+      } else {
+        vaildDatas.forEach(handleVaild)
+      }
       return Promise.all(rowValids).then(() => {
         let ruleProps = Object.keys(validRest)
         if (ruleProps.length) {
@@ -110,7 +115,7 @@ export default {
               reject(args)
             }
           }
-          if (scrollYLoad) {
+          if (treeConfig || scrollYLoad) {
             this.scrollToRow(params.row, true).then(finish)
           } else {
             finish()
@@ -148,7 +153,7 @@ export default {
    *  trigger=blur|change 触发方式（除非特殊场景，否则默认为空就行）
    */
   validCellRules (type, row, column, val) {
-    let { editRules } = this
+    let { editRules, treeConfig } = this
     let { property } = column
     let errorRules = []
     let cellVailds = []
@@ -168,7 +173,7 @@ export default {
                       errorRules.push(new Rule(cusRule))
                     }
                     return resolve()
-                  }, { rules, row, column, rowIndex: this.getRowIndex(row), columnIndex: this.getColumnIndex(column) })
+                  }, { rules, row, column, [`${treeConfig ? '$' : ''}rowIndex`]: this.getRowIndex(row), columnIndex: this.getColumnIndex(column) })
                 } else {
                   let len
                   let restVal = cellValue

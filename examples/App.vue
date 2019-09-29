@@ -603,14 +603,12 @@ export default {
             },
             {
               label: 'app.aside.nav.cellValid',
-              disabled: true,
               locat: {
                 name: 'TableTreeEditCellValid'
               }
             },
             {
               label: 'app.aside.nav.rowValid',
-              disabled: true,
               locat: {
                 name: 'TableTreeEditRowValid'
               }

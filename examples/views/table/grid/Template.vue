@@ -60,7 +60,7 @@ export default {
           slots: {
             default: ({ row, column }) => {
               return [
-                <a class="link" href="https://xuliangzhan.github.io/vxe-table/">链接：{ row.sex }</a>
+                <a class="link" href="https://xuliangzhan.github.io/vxe-table/">我是超链接：{ row.sex }</a>
               ]
             },
             header: ({ column }) => {
@@ -98,6 +98,29 @@ export default {
                     click: () => this.addressClickEvent(row)
                   }
                 }, row.address)
+              ]
+            }
+          }
+        },
+        {
+          field: 'html1',
+          title: 'Html片段',
+          showOverflow: true,
+          slots: {
+            default: ({ row }, h) => {
+              return [
+                <span domPropsInnerHTML={ row.html1 }></span>
+              ]
+            }
+          }
+        },
+        {
+          field: 'img1',
+          title: '图片路径',
+          slots: {
+            default: ({ row }, h) => {
+              return [
+                row.img1 ? <img src={ row.img1 } style="width: 100px;"/> : <span>无</span>
               ]
             }
           }
@@ -139,7 +162,7 @@ export default {
                   field: 'name',
                   title: 'Name',
                   slots: {
-                    default: ({ row }) => {
+                    default: ({ row, column }) => {
                       return [
                         <span style="color: red;">{ row.name }</span>,
                         <button onClick={ () => this.clickEvent(row, column) }>按钮</button>
@@ -157,7 +180,7 @@ export default {
                   slots: {
                     default: ({ row, column }) => {
                       return [
-                        <a class="link" href="https://xuliangzhan.github.io/vxe-table/">链接：{ row.sex }</a>
+                        <a class="link" href="https://xuliangzhan.github.io/vxe-table/">我是超链接：{ row.sex }</a>
                       ]
                     },
                     header: ({ column }) => {
@@ -195,6 +218,29 @@ export default {
                             click: () => this.addressClickEvent(row)
                           }
                         }, row.address)
+                      ]
+                    }
+                  }
+                },
+                {
+                  field: 'html1',
+                  title: 'Html片段',
+                  showOverflow: true,
+                  slots: {
+                    default: ({ row }, h) => {
+                      return [
+                        <span domPropsInnerHTML={ row.html1 }></span>
+                      ]
+                    }
+                  }
+                },
+                {
+                  field: 'img1',
+                  title: '图片路径',
+                  slots: {
+                    default: ({ row }, h) => {
+                      return [
+                        row.img1 ? <img src={ row.img1 } style="width: 100px;"/> : <span>无</span>
                       ]
                     }
                   }
