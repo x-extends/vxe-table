@@ -546,12 +546,6 @@ export default {
               }
             },
             {
-              label: 'app.aside.nav.edit',
-              locat: {
-                name: 'TableTreeEdit'
-              }
-            },
-            {
               label: 'app.aside.nav.fixed',
               locat: {
                 name: 'TableTreeFixed'
@@ -599,6 +593,26 @@ export default {
               disabled: true,
               locat: {
                 name: 'TableTreeLazy'
+              }
+            },
+            {
+              label: 'app.aside.nav.edit',
+              locat: {
+                name: 'TableTreeEdit'
+              }
+            },
+            {
+              label: 'app.aside.nav.cellValid',
+              disabled: true,
+              locat: {
+                name: 'TableTreeEditCellValid'
+              }
+            },
+            {
+              label: 'app.aside.nav.rowValid',
+              disabled: true,
+              locat: {
+                name: 'TableTreeEditRowValid'
               }
             },
             {
@@ -767,13 +781,13 @@ export default {
               }
             },
             {
-              label: 'app.aside.nav.cellVaild',
+              label: 'app.aside.nav.cellValid',
               locat: {
                 name: 'TableEditCellValid'
               }
             },
             {
-              label: 'app.aside.nav.rowVaild',
+              label: 'app.aside.nav.rowValid',
               locat: {
                 name: 'TableEditRowValid'
               }
@@ -932,6 +946,12 @@ export default {
               label: 'app.aside.nav.antd',
               locat: {
                 name: 'TableOtherAntd'
+              }
+            },
+            {
+              label: 'app.aside.nav.elementUpload',
+              locat: {
+                name: 'TableOtherElementUpload'
               }
             },
             {

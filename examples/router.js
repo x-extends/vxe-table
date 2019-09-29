@@ -91,6 +91,8 @@ const TableTreeSpan = () => import(/* webpackChunkName: "tree" */ './views/table
 const TableTreeKeyboard = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Keyboard.vue')
 const TableTreeLazy = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Lazy.vue')
 const TableTreeEdit = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Edit.vue')
+const TableTreeEditCellValid = () => import(/* webpackChunkName: "tree" */ './views/table/tree/CellValid.vue')
+const TableTreeEditRowValid = () => import(/* webpackChunkName: "tree" */ './views/table/tree/RowValid.vue')
 const TableTreeTemplate = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Template.vue')
 
 const TableScroll = () => import(/* webpackChunkName: "scroll" */ './views/table/scroll/Scroll.vue')
@@ -139,6 +141,7 @@ const ModuleToolbar = () => import(/* webpackChunkName: "module" */ './views/too
 const TableOtherElement = () => import(/* webpackChunkName: "other" */ './views/table/other/Element.vue')
 const TableOtherIview = () => import(/* webpackChunkName: "other" */ './views/table/other/Iview.vue')
 const TableOtherAntd = () => import(/* webpackChunkName: "other" */ './views/table/other/Antd.vue')
+const TableOtherElementUpload = () => import(/* webpackChunkName: "other" */ './views/table/other/ElementUpload.vue')
 const TableSortableColumn = () => import(/* webpackChunkName: "other" */ './views/table/other/SortableColumn.vue')
 const TableSortableRow = () => import(/* webpackChunkName: "other" */ './views/table/other/SortableRow.vue')
 const TableXlsx = () => import(/* webpackChunkName: "other" */ './views/table/other/Xlsx.vue')
@@ -522,6 +525,16 @@ export default new Router({
       component: TableTreeEdit
     },
     {
+      path: '/table/tree/editCellValid',
+      name: 'TableTreeEditCellValid',
+      component: TableTreeEditCellValid
+    },
+    {
+      path: '/table/tree/editRowValid',
+      name: 'TableTreeEditRowValid',
+      component: TableTreeEditRowValid
+    },
+    {
       path: '/table/tree/template',
       name: 'TableTreeTemplate',
       component: TableTreeTemplate
@@ -815,6 +828,11 @@ export default new Router({
       path: '/table/other/antd',
       name: 'TableOtherAntd',
       component: TableOtherAntd
+    },
+    {
+      path: '/table/other/elementUpload',
+      name: 'TableOtherElementUpload',
+      component: TableOtherElementUpload
     },
     {
       path: '/table/other/sortableColumn',
