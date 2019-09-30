@@ -2331,6 +2331,15 @@ const apis = [
         list: []
       },
       {
+        name: 'scrollToTreeRow(row)',
+        desc: '对于树形结构中，可以直接滚动到指定深层节点中（对于某些特定的场景可能会用到，比如定位到某一节点）',
+        version: '2.6',
+        type: 'Promise',
+        enum: '',
+        defVal: 'column: ColumnConfig',
+        list: []
+      },
+      {
         name: 'sort(field, order)',
         desc: '手动对表格进行排序（如果 order 为空则自动切换排序）',
         version: '',
