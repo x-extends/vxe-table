@@ -3724,18 +3724,6 @@ export default {
     },
     scrollToRow (row, column, isDelay) {
       if (row && this.fullAllDataRowMap.has(row)) {
-        let { tableFullData, treeConfig } = this
-        if (treeConfig) {
-          let matchObj = XEUtils.findTree(tableFullData, item => item === row, treeConfig)
-          if (matchObj) {
-            let nodes = matchObj.nodes
-            nodes.forEach((row, index) => {
-              if (index < nodes.length - 1 && !this.hasTreeExpand(row)) {
-                this.setTreeExpansion(row, true)
-              }
-            })
-          }
-        }
         DomTools.rowToVisible(this, row)
       }
       return this.scrollToColumn(column, isDelay || XEUtils.isBoolean(column))
@@ -3746,6 +3734,21 @@ export default {
       }
       if (isDelay && this.scrollYLoad) {
         return new Promise(resolve => setTimeout(() => resolve(this.$nextTick()), 50))
+      }
+      return this.$nextTick()
+    },
+    scrollToTreeRow (row) {
+      let { tableFullData, treeConfig } = this
+      if (treeConfig) {
+        let matchObj = XEUtils.findTree(tableFullData, item => item === row, treeConfig)
+        if (matchObj) {
+          let nodes = matchObj.nodes
+          nodes.forEach((row, index) => {
+            if (index < nodes.length - 1 && !this.hasTreeExpand(row)) {
+              this.setTreeExpansion(row, true)
+            }
+          })
+        }
       }
       return this.$nextTick()
     },
@@ -3945,7 +3948,9 @@ export default {
                 reject(args)
               }
             }
-            if (treeConfig || scrollYLoad) {
+            if (treeConfig) {
+              this.scrollToTreeRow(params.row).then(finish)
+            } else if (scrollYLoad) {
               this.scrollToRow(params.row, true).then(finish)
             } else {
               finish()
