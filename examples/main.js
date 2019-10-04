@@ -100,6 +100,7 @@ function mockData () {
       img: `https://github.com/xuliangzhan/vxe-table/blob/master/public/other/img${index % 3 ? '1' : '2'}.gif?raw=true`,
       img1: index % 4 === 0 ? `https://github.com/xuliangzhan/vxe-table/blob/master/public/other/img${index % 3 ? '1' : '2'}.gif?raw=true` : '',
       html1: index % 3 === 0 ? `<span style="color:red;">我是一段Html代码</span><br><span style="color:blue;">我是一段Html代码${index}</span><br><span style="color:green;">绿到你发慌！</span>` : '',
+      html2: index % 3 === 0 ? `<span style="color:red;">我是一段Html代码</span><span style="color:blue;">我是一段Html代码${index}</span><span style="color:green;">绿到你发慌！</span>` : '',
       updateTime: currTime,
       createTime: currTime,
       attr1: '',

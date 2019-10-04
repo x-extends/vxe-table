@@ -53,16 +53,17 @@ export const DomTools = {
       let trHeight = trElem.clientHeight
       if (trOffsetTop < bodySrcollTop || trOffsetTop > bodySrcollTop + bodyHeight) {
         // 如果跨行滚动
-        bodyElem.scrollTop = trOffsetTop
+        return $table.scrollTo(null, trOffsetTop)
       } else if (trOffsetTop + trHeight >= bodyHeight + bodySrcollTop) {
-        bodyElem.scrollTop = bodySrcollTop + trHeight
+        return $table.scrollTo(null, bodySrcollTop + trHeight)
       }
     } else {
       // 如果是虚拟渲染跨行滚动
       if ($table.scrollYLoad) {
-        bodyElem.scrollTop = ($table.afterFullData.indexOf(row) - 1) * $table.scrollYStore.rowHeight
+        return $table.scrollTo(null, ($table.afterFullData.indexOf(row) - 1) * $table.scrollYStore.rowHeight)
       }
     }
+    return Promise.resolve()
   },
   colToVisible ($table, column) {
     let bodyElem = $table.$refs.tableBody.$el
@@ -74,9 +75,9 @@ export const DomTools = {
       let tdWidth = tdElem.clientWidth
       if (tdOffsetLeft < bodySrcollLeft || tdOffsetLeft > bodySrcollLeft + bodyWidth) {
         // 如果跨列滚动
-        bodyElem.scrollLeft = tdOffsetLeft
+        return $table.scrollTo(tdOffsetLeft)
       } else if (tdOffsetLeft + tdWidth >= bodyWidth + bodySrcollLeft) {
-        bodyElem.scrollLeft = bodySrcollLeft + tdWidth
+        return $table.scrollTo(bodySrcollLeft + tdWidth)
       }
     } else {
       // 如果是虚拟渲染跨行滚动
@@ -89,9 +90,10 @@ export const DomTools = {
           }
           scrollLeft += visibleColumn[index].renderWidth
         }
-        bodyElem.scrollLeft = scrollLeft
+        return $table.scrollTo(scrollLeft)
       }
     }
+    return Promise.resolve()
   },
   getDomNode () {
     let documentElement = document.documentElement

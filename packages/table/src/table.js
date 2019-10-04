@@ -861,11 +861,6 @@ export default {
         rest = rest.then(this.recalculate)
       }
       return rest.then(() => {
-        if (this.scrollXLoad || this.scrollYLoad) {
-          if (this.mouseConfig) {
-            UtilTools.error('vxe.error.notMouse')
-          }
-        }
         if (lastScrollLeft || lastScrollTop) {
           return this.scrollTo(lastScrollLeft, lastScrollTop)
         }
@@ -1922,13 +1917,13 @@ export default {
     },
     // 处理 Tab 键移动
     moveTabSelected (args, isLeft, evnt) {
-      let { tableData, visibleColumn, editConfig } = this
+      let { afterFullData, visibleColumn, editConfig } = this
       let targetRow
       let targetRowIndex
       let targetColumn
       let targetColumnIndex
       let params = Object.assign({}, args)
-      let rowIndex = tableData.indexOf(params.row)
+      let rowIndex = afterFullData.indexOf(params.row)
       let columnIndex = visibleColumn.indexOf(params.column)
       evnt.preventDefault()
       if (isLeft) {
@@ -1944,7 +1939,7 @@ export default {
         if (!targetColumn && rowIndex > 0) {
           // 如果找不到从上一行开始找，如果一行都找不到就不需要继续找了，可能不存在可编辑的列
           targetRowIndex = rowIndex - 1
-          targetRow = tableData[targetRowIndex]
+          targetRow = afterFullData[targetRowIndex]
           for (let len = visibleColumn.length - 1; len >= 0; len--) {
             let item = visibleColumn[len]
             if (item && item.type !== 'index') {
@@ -1964,10 +1959,10 @@ export default {
             break
           }
         }
-        if (!targetColumn && rowIndex < tableData.length - 1) {
+        if (!targetColumn && rowIndex < afterFullData.length - 1) {
           // 如果找不到从下一行开始找，如果一行都找不到就不需要继续找了，可能不存在可编辑的列
           targetRowIndex = rowIndex + 1
-          targetRow = tableData[targetRowIndex]
+          targetRow = afterFullData[targetRowIndex]
           for (let index = 0; index < visibleColumn.length; index++) {
             let item = visibleColumn[index]
             if (item && item.type !== 'index') {
@@ -2028,15 +2023,15 @@ export default {
     },
     // 处理方向键移动
     moveSelected (args, isLeftArrow, isUpArrow, isRightArrow, isDwArrow, evnt) {
-      let { tableData, visibleColumn } = this
+      let { afterFullData, visibleColumn } = this
       let params = Object.assign({}, args)
       evnt.preventDefault()
       if (isUpArrow && params.rowIndex) {
         params.rowIndex -= 1
-        params.row = tableData[params.rowIndex]
-      } else if (isDwArrow && params.rowIndex < tableData.length - 1) {
+        params.row = afterFullData[params.rowIndex]
+      } else if (isDwArrow && params.rowIndex < afterFullData.length - 1) {
         params.rowIndex += 1
-        params.row = tableData[params.rowIndex]
+        params.row = afterFullData[params.rowIndex]
       } else if (isLeftArrow && params.columnIndex) {
         for (let len = params.columnIndex - 1; len >= 0; len--) {
           if (visibleColumn[len].editRender) {
@@ -3118,7 +3113,7 @@ export default {
      * 激活单元格编辑
      */
     setActiveCell (row, field) {
-      return this.scrollToRow(row, true).then(() => {
+      return this.scrollToRow(row).then(() => {
         if (row && field) {
           let column = this.visibleColumn.find(column => column.property === field)
           if (column && column.editRender) {
@@ -3720,20 +3715,22 @@ export default {
         }
         bodyElem.scrollTop = scrollTop
       }
+      if (this.scrollXLoad || this.scrollYLoad) {
+        return new Promise(resolve => setTimeout(() => resolve(this.$nextTick()), 50))
+      }
       return this.$nextTick()
     },
-    scrollToRow (row, column, isDelay) {
+    scrollToRow (row, column) {
+      let rest = []
       if (row && this.fullAllDataRowMap.has(row)) {
-        DomTools.rowToVisible(this, row)
+        rest.push(DomTools.rowToVisible(this, row))
       }
-      return this.scrollToColumn(column, isDelay || XEUtils.isBoolean(column))
+      rest.push(this.scrollToColumn(column))
+      return Promise.all(rest)
     },
-    scrollToColumn (column, isDelay) {
+    scrollToColumn (column) {
       if (column && this.fullColumnMap.has(column)) {
-        DomTools.colToVisible(this, column)
-      }
-      if (isDelay && this.scrollYLoad) {
-        return new Promise(resolve => setTimeout(() => resolve(this.$nextTick()), 50))
+        return DomTools.colToVisible(this, column)
       }
       return this.$nextTick()
     },
@@ -3951,7 +3948,7 @@ export default {
             if (treeConfig) {
               this.scrollToTreeRow(params.row).then(finish)
             } else if (scrollYLoad) {
-              this.scrollToRow(params.row, true).then(finish)
+              this.scrollToRow(params.row).then(finish)
             } else {
               finish()
             }

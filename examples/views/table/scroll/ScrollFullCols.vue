@@ -13,7 +13,7 @@
       show-header-overflow
       highlight-hover-row
       highlight-current-row
-      ref="xTable"
+      ref="xGrid"
       height="600"
       :loading="loading"
       :select-config="{checkField: 'checked'}">
@@ -55,7 +55,7 @@ export default {
           show-header-overflow
           highlight-hover-row
           highlight-current-row
-          ref="xTable"
+          ref="xGrid"
           height="600"
           :loading="loading"
           :select-config="{checkField: 'checked'}">
@@ -74,9 +74,9 @@ export default {
               let tableData = window.MOCK_DATA_LIST.slice(0, 100000)
               let tableColumn = window.MOCK_COLUMN_LIST.slice(0, 10000)
               // 使用函数式加载，阻断 vue 对大数组的双向绑定，大数据性能翻倍提升
-              if (this.$refs.xTable) {
-                this.$refs.xTable.loadColumn(tableColumn)
-                this.$refs.xTable.loadData(tableData)
+              if (this.$refs.xGrid) {
+                this.$refs.xGrid.loadColumn(tableColumn)
+                this.$refs.xGrid.loadData(tableData)
               }
               this.loading = false
             }, 300)
@@ -92,9 +92,9 @@ export default {
       let tableData = window.MOCK_DATA_LIST.slice(0, 100000)
       let tableColumn = window.MOCK_COLUMN_LIST.slice(0, 10000)
       // 使用函数式加载，阻断 vue 对大数组的双向绑定，大数据性能翻倍提升
-      if (this.$refs.xTable) {
-        this.$refs.xTable.loadColumn(tableColumn)
-        this.$refs.xTable.loadData(tableData)
+      if (this.$refs.xGrid) {
+        this.$refs.xGrid.loadColumn(tableColumn)
+        this.$refs.xGrid.loadData(tableData)
       }
       this.loading = false
     }, 300)

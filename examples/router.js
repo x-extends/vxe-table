@@ -59,7 +59,7 @@ const TableCustom = () => import(/* webpackChunkName: "advanced" */ './views/tab
 const TableCustomStorage = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/CustomStorage.vue')
 const TableCustomlWidthStorage = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/CustomlWidthStorage.vue')
 const TablePage = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Page.vue')
-const TableKeyboard = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Keyboard.vue')
+const TableHighlight = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Highlight.vue')
 
 const GridBasic = () => import(/* webpackChunkName: "grid" */ './views/table/grid/Basic.vue')
 const GridReverse = () => import(/* webpackChunkName: "grid" */ './views/table/grid/Reverse.vue')
@@ -87,13 +87,14 @@ const TableTreeToolbar = () => import(/* webpackChunkName: "tree" */ './views/ta
 const TableTreeInsert = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Insert.vue')
 const TableTreeMenu = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Menu.vue')
 const TableTreeSpan = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Span.vue')
+const TableTreeHighlight = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Highlight.vue')
 const TableTreeKeyboard = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Keyboard.vue')
 const TableTreeLazy = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Lazy.vue')
 const TableTreeEdit = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Edit.vue')
 const TableTreeEditCellValid = () => import(/* webpackChunkName: "tree" */ './views/table/tree/CellValid.vue')
 const TableTreeEditRowValid = () => import(/* webpackChunkName: "tree" */ './views/table/tree/RowValid.vue')
-const TableTreeEditForceCellValid = () => import(/* webpackChunkName: "edit" */ './views/table/tree/ForceCellValid.vue')
-const TableTreeEditForceRowValid = () => import(/* webpackChunkName: "edit" */ './views/table/tree/ForceRowValid.vue')
+const TableTreeEditForceCellValid = () => import(/* webpackChunkName: "tree" */ './views/table/tree/ForceCellValid.vue')
+const TableTreeEditForceRowValid = () => import(/* webpackChunkName: "tree" */ './views/table/tree/ForceRowValid.vue')
 const TableTreeTemplate = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Template.vue')
 
 const TableScroll = () => import(/* webpackChunkName: "scroll" */ './views/table/scroll/Scroll.vue')
@@ -101,8 +102,15 @@ const TableScrollRows = () => import(/* webpackChunkName: "scroll" */ './views/t
 const TableScrollFullRows = () => import(/* webpackChunkName: "scroll" */ './views/table/scroll/ScrollFullRows.vue')
 const TableScrollCols = () => import(/* webpackChunkName: "scroll" */ './views/table/scroll/ScrollCols.vue')
 const TableScrollFullCols = () => import(/* webpackChunkName: "scroll" */ './views/table/scroll/ScrollFullCols.vue')
+const TableScrollHighlight = () => import(/* webpackChunkName: "scroll" */ './views/table/scroll/Highlight.vue')
 const TableScrollKeyboard = () => import(/* webpackChunkName: "scroll" */ './views/table/scroll/Keyboard.vue')
-const TableScrollEdit = () => import(/* webpackChunkName: "scroll" */ './views/table/scroll/ScrollEdit.vue')
+const TableScrollEdit = () => import(/* webpackChunkName: "scroll" */ './views/table/scroll/Edit.vue')
+const TableScrollTree = () => import(/* webpackChunkName: "scroll" */ './views/table/scroll/Tree.vue')
+const TableScrollCellValid = () => import(/* webpackChunkName: "scroll" */ './views/table/scroll/CellValid.vue')
+const TableScrollRowValid = () => import(/* webpackChunkName: "scroll" */ './views/table/scroll/RowValid.vue')
+const TableScrollForceCellValid = () => import(/* webpackChunkName: "scroll" */ './views/table/scroll/ForceCellValid.vue')
+const TableScrollForceRowValid = () => import(/* webpackChunkName: "scroll" */ './views/table/scroll/ForceRowValid.vue')
+const TableScrollTemplate = () => import(/* webpackChunkName: "scroll" */ './views/table/scroll/Template.vue')
 
 const TableEditManual = () => import(/* webpackChunkName: "edit" */ './views/table/edit/Manual.vue')
 const TableEditClick = () => import(/* webpackChunkName: "edit" */ './views/table/edit/Click.vue')
@@ -457,9 +465,9 @@ export default new Router({
       component: TablePage
     },
     {
-      path: '/table/advanced/keyboard',
-      name: 'TableKeyboard',
-      component: TableKeyboard
+      path: '/table/advanced/highlight',
+      name: 'TableHighlight',
+      component: TableHighlight
     },
     {
       path: '/table/tree/basic',
@@ -505,6 +513,11 @@ export default new Router({
       path: '/table/tree/span',
       name: 'TableTreeSpan',
       component: TableTreeSpan
+    },
+    {
+      path: '/table/tree/highlight',
+      name: 'TableTreeHighlight',
+      component: TableTreeHighlight
     },
     {
       path: '/table/tree/keyboard',
@@ -652,6 +665,11 @@ export default new Router({
       component: TableScrollFullCols
     },
     {
+      path: '/table/scroll/highlight',
+      name: 'TableScrollHighlight',
+      component: TableScrollHighlight
+    },
+    {
       path: '/table/scroll/keyboard',
       name: 'TableScrollKeyboard',
       component: TableScrollKeyboard
@@ -660,6 +678,36 @@ export default new Router({
       path: '/table/scroll/edit',
       name: 'TableScrollEdit',
       component: TableScrollEdit
+    },
+    {
+      path: '/table/scroll/tree',
+      name: 'TableScrollTree',
+      component: TableScrollTree
+    },
+    {
+      path: '/table/scroll/cellValid',
+      name: 'TableScrollCellValid',
+      component: TableScrollCellValid
+    },
+    {
+      path: '/table/scroll/rowValid',
+      name: 'TableScrollRowValid',
+      component: TableScrollRowValid
+    },
+    {
+      path: '/table/scroll/forceCellValid',
+      name: 'TableScrollForceCellValid',
+      component: TableScrollForceCellValid
+    },
+    {
+      path: '/table/scroll/forceRowValid',
+      name: 'TableScrollForceRowValid',
+      component: TableScrollForceRowValid
+    },
+    {
+      path: '/table/scroll/template',
+      name: 'TableScrollTemplate',
+      component: TableScrollTemplate
     },
     {
       path: '/table/edit/manual',

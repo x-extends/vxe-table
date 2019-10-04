@@ -78,7 +78,8 @@ module.exports = {
         big10wRow: '10 万行 + 更复杂渲染',
         big1wRow1wCol: '1 万行 1 万列',
         big10wRow1wCol: '10 万行 1 万列 + 更复杂渲染',
-        treeScroll: '树结构',
+        moveHighlight: '键盘移动高亮行',
+        virtualTree: '虚拟树',
         pageScroll: '滚动分页',
         infiniteScroll: '无限滚动',
 
@@ -97,7 +98,7 @@ module.exports = {
         cellValid: '数据校验 call',
         rowValid: '数据校验 row',
         forceCellValid: '数据校验 cell + 强制锁定',
-        forceRowVaild: '数据校验 row + 强制锁定',
+        forceRowValid: '数据校验 row + 强制锁定',
         keyboard: '键盘导航',
 
         excel: '更多实现',
