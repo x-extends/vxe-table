@@ -39,7 +39,7 @@ const apis = [
         descKey: 'app.api.tableColumn.desc.width',
         version: '',
         type: 'Number, String',
-        enum: '整数, px，%',
+        enum: '整数px, 百分比%',
         defVal: '继承 table 的 column-width',
         list: []
       },
@@ -48,7 +48,7 @@ const apis = [
         descKey: 'app.api.tableColumn.desc.minWidth',
         version: '',
         type: 'Number, String',
-        enum: '整数, px，%',
+        enum: '整数px, 百分比%',
         defVal: '继承 table 的 column-min-width',
         list: []
       },
@@ -118,7 +118,7 @@ const apis = [
       {
         name: 'class-name',
         descKey: 'app.api.tableColumn.desc.className',
-        version: '',
+        version: '2.6',
         type: 'String, Function',
         enum: '',
         defVal: '',
@@ -145,7 +145,7 @@ const apis = [
       {
         name: 'formatter',
         descKey: 'app.api.tableColumn.desc.formatter',
-        version: '2.6',
+        version: '',
         type: 'Function, Array, String',
         enum: '',
         defVal: '',
