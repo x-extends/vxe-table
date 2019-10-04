@@ -92,6 +92,8 @@ const TableTreeLazy = () => import(/* webpackChunkName: "tree" */ './views/table
 const TableTreeEdit = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Edit.vue')
 const TableTreeEditCellValid = () => import(/* webpackChunkName: "tree" */ './views/table/tree/CellValid.vue')
 const TableTreeEditRowValid = () => import(/* webpackChunkName: "tree" */ './views/table/tree/RowValid.vue')
+const TableTreeEditForceCellValid = () => import(/* webpackChunkName: "edit" */ './views/table/tree/ForceCellValid.vue')
+const TableTreeEditForceRowValid = () => import(/* webpackChunkName: "edit" */ './views/table/tree/ForceRowValid.vue')
 const TableTreeTemplate = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Template.vue')
 
 const TableScroll = () => import(/* webpackChunkName: "scroll" */ './views/table/scroll/Scroll.vue')
@@ -528,6 +530,16 @@ export default new Router({
       path: '/table/tree/editRowValid',
       name: 'TableTreeEditRowValid',
       component: TableTreeEditRowValid
+    },
+    {
+      path: '/table/tree/editForceCellValid',
+      name: 'TableTreeEditForceCellValid',
+      component: TableTreeEditForceCellValid
+    },
+    {
+      path: '/table/tree/editForceRowValid',
+      name: 'TableTreeEditForceRowValid',
+      component: TableTreeEditForceRowValid
     },
     {
       path: '/table/tree/template',

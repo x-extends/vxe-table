@@ -59,7 +59,7 @@ const apis = [
         descKey: 'app.api.tableColumn.desc.width',
         version: '',
         type: 'Number, String',
-        enum: '整数, px，%',
+        enum: '整数px, 百分比%',
         defVal: '继承 table 的 column-width',
         list: []
       },
@@ -68,7 +68,7 @@ const apis = [
         descKey: 'app.api.tableColumn.desc.minWidth',
         version: '',
         type: 'Number, String',
-        enum: '整数, px，%',
+        enum: '整数px, 百分比%',
         defVal: '继承 table 的 column-min-width',
         list: []
       },

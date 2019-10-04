@@ -498,7 +498,7 @@ const apis = [
         descKey: 'app.api.table.desc.columnWidth',
         version: '1.13',
         type: 'Number, String',
-        enum: '整数, px，%',
+        enum: '整数px, 百分比%',
         defVal: '默认均匀分配',
         list: []
       },
@@ -507,7 +507,7 @@ const apis = [
         descKey: 'app.api.table.desc.columnMinWidth',
         version: '1.13',
         type: 'Number, String',
-        enum: '整数, px，%',
+        enum: '整数px, 百分比%',
         defVal: '',
         list: []
       },

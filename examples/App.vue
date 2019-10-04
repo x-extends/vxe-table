@@ -611,6 +611,20 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.forceCellValid',
+              disabled: true,
+              locat: {
+                name: 'TableTreeEditForceCellValid'
+              }
+            },
+            {
+              label: 'app.aside.nav.forceRowVaild',
+              disabled: true,
+              locat: {
+                name: 'TableTreeEditForceRowValid'
+              }
+            },
+            {
               label: 'app.aside.nav.template',
               locat: {
                 name: 'TableTreeTemplate'

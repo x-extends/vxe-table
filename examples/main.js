@@ -74,6 +74,8 @@ function mockData () {
       date9: mDate,
       date10: mDate,
       date11: [],
+      date12: index % 3 === 0 ? XEUtils.toDateString(currTime - 666, 'yyyy-MM-dd') : '',
+      date13: index % 4 === 0 ? XEUtils.toDateString(currTime - 9999, 'yyyy-MM-dd') : '',
       num: (0.234 * index).toFixed(0),
       num1: (0.185 * index).toFixed(0),
       num2: (0.567 * index).toFixed(1),
