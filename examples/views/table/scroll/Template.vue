@@ -9,7 +9,7 @@
       &nbsp;&nbsp;<table-column-api-link prop="edit"/>：自定义可编辑模板（建议使用<router-link :to="{name: 'RendererAPI'}">渲染器</router-link>，可以更好的复用）<br>
       工具栏：<br>
       &nbsp;&nbsp;<table-column-api-link prop="buttons"/>：自定义按钮模板<br>
-      <span class="red">请注意处理好单元格显示的内容，虚拟滚动无法支持动态行高</span>
+      <span class="red">注意：请处理好单元格显示的内容，虚拟滚动无法支持动态行高</span>
     </p>
 
     <vxe-grid
