@@ -5,6 +5,7 @@
     <vxe-grid
       border
       resizable
+      ref="xGrid"
       height="530"
       :loading="loading"
       :pager-config="tablePage"
@@ -40,6 +41,7 @@ export default {
         { type: 'selection', width: 50 },
         { field: 'name', title: 'Name', editRender: { name: 'input' } },
         { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
+        { field: 'sex', title: 'Sex', editRender: { name: 'select', options: [] } },
         { field: 'role', title: 'Role', editRender: { name: 'input' } },
         { field: 'describe', title: 'Describe', showOverflow: true, editRender: { name: 'input' } }
       ],
@@ -49,6 +51,7 @@ export default {
         <vxe-grid
           border
           resizable
+          ref="xGrid"
           height="530"
           :loading="loading"
           :pager-config="tablePage"
@@ -72,6 +75,7 @@ export default {
                 { type: 'selection', width: 50 },
                 { field: 'name', title: 'Name', editRender: { name: 'input' } },
                 { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
+                { field: 'sex', title: 'Sex', editRender: { name: 'select', options: [] } },
                 { field: 'role', title: 'Role', editRender: { name: 'input' } },
                 { field: 'describe', title: 'Describe', showOverflow: true, editRender: { name: 'input' } }
               ],
@@ -80,10 +84,10 @@ export default {
           },
           created () {
             this.findList()
+            this.findSexList()
           },
           methods: {
             findList () {
-              // 模拟后台接口
               this.loading = true
               this.$ajax.doGet(\`/api/user/page/list/\${this.tablePage.pageSize}/\${this.tablePage.currentPage}\`).then(response => {
                 let { page, result } = response.data
@@ -92,6 +96,13 @@ export default {
                 this.loading = false
               }).catch(e => {
                 this.loading = false
+              })
+            },
+            findSexList () {
+              return this.$ajax.doGet('/api/conf/sex/list').then(response => {
+                // 异步更新下拉选项
+                let column = this.$refs.xGrid.getColumnByField('sex')
+                column.editRender.options = response.data
               })
             },
             searchEvent () {
@@ -111,6 +122,7 @@ export default {
   },
   created () {
     this.findList()
+    this.findSexList()
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
@@ -119,7 +131,6 @@ export default {
   },
   methods: {
     findList () {
-      // 模拟后台接口
       this.loading = true
       this.$ajax.doGet(`/api/user/page/list/${this.tablePage.pageSize}/${this.tablePage.currentPage}`).then(response => {
         let { page, result } = response.data
@@ -128,6 +139,13 @@ export default {
         this.loading = false
       }).catch(e => {
         this.loading = false
+      })
+    },
+    findSexList () {
+      return this.$ajax.doGet('/api/conf/sex/list').then(response => {
+        // 异步更新下拉选项
+        let column = this.$refs.xGrid.getColumnByField('sex')
+        column.editRender.options = response.data
       })
     },
     searchEvent () {

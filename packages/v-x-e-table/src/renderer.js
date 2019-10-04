@@ -81,8 +81,7 @@ function renderOptions (h, options, renderOpts, params, context) {
   return options.map((item, index) => {
     return h('option', {
       domProps: {
-        value: item[valueProp],
-        selected: item.value === cellValue
+        selected: item[valueProp] === cellValue
       },
       key: index
     }, item[labelProp])
@@ -166,25 +165,22 @@ const renderMap = {
       let { options, optionGroups, optionProps = {}, optionGroupProps = {} } = renderOpts
       let { row, column } = params
       let cellValue = XEUtils.get(row, column.property)
-      if (!(cellValue === null || cellValue === undefined || cellValue === '')) {
-        let selectItem
-        let labelProp = optionProps.label || 'label'
-        let valueProp = optionProps.value || 'value'
-        if (optionGroups) {
-          let groupOptions = optionGroupProps.options || 'options'
-          for (let index = 0; index < optionGroups.length; index++) {
-            selectItem = optionGroups[index][groupOptions].find(item => item[valueProp] === cellValue)
-            if (selectItem) {
-              break
-            }
+      let selectItem
+      let labelProp = optionProps.label || 'label'
+      let valueProp = optionProps.value || 'value'
+      if (optionGroups) {
+        let groupOptions = optionGroupProps.options || 'options'
+        for (let index = 0; index < optionGroups.length; index++) {
+          selectItem = optionGroups[index][groupOptions].find(item => item[valueProp] === cellValue)
+          if (selectItem) {
+            break
           }
-          return selectItem ? selectItem[labelProp] : null
-        } else {
-          selectItem = options.find(item => item[valueProp] === cellValue)
-          return selectItem ? selectItem[labelProp] : null
         }
+        return selectItem ? selectItem[labelProp] : cellValue
+      } else {
+        selectItem = options.find(item => item[valueProp] === cellValue)
+        return selectItem ? selectItem[labelProp] : cellValue
       }
-      return ''
     },
     renderFilter (h, renderOpts, params, context) {
       let { column } = params

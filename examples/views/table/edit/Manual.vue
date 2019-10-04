@@ -43,6 +43,7 @@ export default {
   data () {
     return {
       tableData: [],
+      sexList: [],
       demoCodes: [
         `
         <vxe-table
@@ -74,13 +75,20 @@ export default {
         export default {
           data () {
             return {
-              tableData: []
+              tableData: [],
+              sexList: []
             }
           },
           created () {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
+            this.findSexList()
           },
           methods: {
+            findSexList () {
+              return this.$ajax.getJSON('/api/conf/sex/list').then(data => {
+                this.sexList = data
+              })
+            },
             editRowEvent (row) {
               this.$refs.xTable.setActiveRow(row)
             },
@@ -100,6 +108,7 @@ export default {
   },
   created () {
     this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
+    this.findSexList()
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
@@ -107,6 +116,11 @@ export default {
     })
   },
   methods: {
+    findSexList () {
+      return this.$ajax.getJSON('/api/conf/sex/list').then(data => {
+        this.sexList = data
+      })
+    },
     editRowEvent (row) {
       this.$refs.xTable.setActiveRow(row)
     },

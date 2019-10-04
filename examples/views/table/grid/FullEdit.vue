@@ -11,6 +11,7 @@
       resizable
       highlight-hover-row
       remote-filter
+      ref="xGrid"
       height="530"
       row-id="id"
       :pager-config="{pageSize: 15}"
@@ -127,6 +128,7 @@ export default {
         { type: 'index', width: 60 },
         { field: 'name', title: 'Name', remoteSort: true, editRender: { name: 'input' } },
         { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
+        { field: 'sex', title: 'Sex', editRender: { name: 'select', options: [] } },
         {
           field: 'role',
           title: 'Role',
@@ -149,6 +151,7 @@ export default {
           resizable
           highlight-hover-row
           remote-filter
+          ref="xGrid"
           height="530"
           row-id="id"
           :pager-config="{pageSize: 15}"
@@ -164,6 +167,15 @@ export default {
         export default {
           data () {
             return {
+              validRules: {
+                name: [
+                  { required: true, message: '名称必须填写' },
+                  { min: 3, max: 50, message: '名称长度在 3 到 50 个字符' }
+                ],
+                role: [
+                  { required: true, message: '角色必须填写' }
+                ]
+              },
               tableProxy: {
                 index: true, // 启用动态序号代理
                 sort: true, // 启用排序代理
@@ -245,6 +257,7 @@ export default {
                 { type: 'index', width: 60 },
                 { field: 'name', title: 'Name', remoteSort: true, editRender: { name: 'input' } },
                 { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
+                { field: 'sex', title: 'Sex', editRender: { name: 'select', options: [] } },
                 {
                   field: 'role',
                   title: 'Role',
@@ -261,16 +274,40 @@ export default {
                 { field: 'describe', title: 'Describe', showOverflow: true, editRender: { name: 'input' } }
               ]
             }
+          },
+          created () {
+            this.findSexList()
+          },
+          methods: {
+            findSexList () {
+              return this.$ajax.getJSON('/api/conf/sex/list').then(data => {
+                // 异步更新下拉选项
+                let column = this.$refs.xGrid.getColumnByField('sex')
+                column.editRender.options = data
+              })
+            }
           }
         }
         `
       ]
     }
   },
+  created () {
+    this.findSexList()
+  },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
       hljs.highlightBlock(block)
     })
+  },
+  methods: {
+    findSexList () {
+      return this.$ajax.getJSON('/api/conf/sex/list').then(data => {
+        // 异步更新下拉选项
+        let column = this.$refs.xGrid.getColumnByField('sex')
+        column.editRender.options = data
+      })
+    }
   }
 }
 </script>

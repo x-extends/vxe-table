@@ -11,7 +11,7 @@
       @edit-closed="editClosedEvent">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'select', options: sexList}"></vxe-table-column>
       <vxe-table-column field="date" title="Date" :edit-render="{name: 'input'}"></vxe-table-column>
     </vxe-table>
 
@@ -32,7 +32,7 @@
       :edit-config="{trigger: 'click', mode: 'row'}">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="sex2" title="Sex" :edit-render="{name: 'select', options: sexList, optionProps: {value: 'value', label: 'spell'}}"></vxe-table-column>
       <vxe-table-column field="date" title="Date" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="address" title="Address" :edit-render="{name: 'input'}"></vxe-table-column>
     </vxe-table>
@@ -53,6 +53,7 @@ export default {
   data () {
     return {
       tableData: [],
+      sexList: [],
       demoCodes: [
         `
         <vxe-table
@@ -64,7 +65,7 @@ export default {
           @edit-closed="editClosedEvent">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'select', options: sexList}"></vxe-table-column>
           <vxe-table-column field="date" title="Date" :edit-render="{name: 'input'}"></vxe-table-column>
         </vxe-table>
         `,
@@ -72,13 +73,20 @@ export default {
         export default {
           data () {
             return {
-              tableData: []
+              tableData: [],
+              sexList: []
             }
           },
           created () {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
+            this.findSexList()
           },
           methods: {
+            findSexList () {
+              return this.$ajax.getJSON('/api/conf/sex/list').then(data => {
+                this.sexList = data
+              })
+            },
             editActivedEvent ({ row, column }, event) {
               console.log(\`打开 \${column.title} 列编辑\`)
             },
@@ -97,7 +105,7 @@ export default {
           :edit-config="{trigger: 'click', mode: 'row'}">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column field="sex2" title="Sex" :edit-render="{name: 'select', options: sexList, optionProps: {value: 'value', label: 'spell'}}"></vxe-table-column>
           <vxe-table-column field="date" title="Date" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column field="address" title="Address" :edit-render="{name: 'input'}"></vxe-table-column>
         </vxe-table>
@@ -106,11 +114,20 @@ export default {
         export default {
           data () {
             return {
-              tableData: []
+              tableData: [],
+              sexList: []
             }
           },
           created () {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
+            this.findSexList()
+          },
+          methods: {
+            findSexList () {
+              return this.$ajax.getJSON('/api/conf/sex/list').then(data => {
+                this.sexList = data
+              })
+            }
           }
         }
         `
@@ -119,6 +136,7 @@ export default {
   },
   created () {
     this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
+    this.findSexList()
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
@@ -126,6 +144,11 @@ export default {
     })
   },
   methods: {
+    findSexList () {
+      return this.$ajax.getJSON('/api/conf/sex/list').then(data => {
+        this.sexList = data
+      })
+    },
     editActivedEvent ({ row, column }, event) {
       console.log(`打开 ${column.title} 列编辑`)
     },
