@@ -20,7 +20,7 @@
       :edit-config="{trigger: 'click', mode: 'cell'}">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable :edit-render="{name: 'input', defaultValue: '默认的名字'}"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'select', options: sexList}"></vxe-table-column>
       <vxe-table-column field="age" title="Age" sortable :edit-render="{name: 'input', defaultValue: 18}"></vxe-table-column>
     </vxe-table>
 
@@ -40,6 +40,7 @@ export default {
   data () {
     return {
       tableData: [],
+      sexList: [],
       demoCodes: [
         `
         <vxe-toolbar>
@@ -68,13 +69,20 @@ export default {
         export default {
           data () {
             return {
-              tableData: []
+              tableData: [],
+              sexList: []
             }
           },
           created () {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 4)
+            this.findSexList()
           },
           methods: {
+            findSexList () {
+              return this.$ajax.getJSON('/api/conf/sex/list').then(data => {
+                this.sexList = data
+              })
+            },
             insertEvent (row) {
               let record = {
                 sex: '1'
@@ -93,8 +101,8 @@ export default {
     }
   },
   created () {
-    let list = window.MOCK_DATA_LIST.slice(0, 4)
-    this.tableData = list
+    this.tableData = window.MOCK_DATA_LIST.slice(0, 4)
+    this.findSexList()
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
@@ -102,6 +110,11 @@ export default {
     })
   },
   methods: {
+    findSexList () {
+      return this.$ajax.getJSON('/api/conf/sex/list').then(data => {
+        this.sexList = data
+      })
+    },
     insertEvent (row) {
       let record = {
         sex: '1'
