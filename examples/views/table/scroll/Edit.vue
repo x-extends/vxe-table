@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">虚拟滚动渲染，可编辑表格，数据量非常大时，由于需要进行大量数据运算，所以数据校验或者获取数据...等函数执行会比较慢的</p>
+    <p class="tip">虚拟滚动渲染，可编辑表格<br><span class="red">当数据量非常大时，由于需要进行大量数据运算，所以数据校验或者获取数据...等函数执行会相对耗时</span></p>
 
     <vxe-toolbar :refresh="{query: findList}">
       <template v-slot:buttons>
@@ -22,26 +22,9 @@
             <vxe-button @click="$refs.xTable.remove($refs.xTable.getData(100))">删除第 100 行</vxe-button>
           </template>
         </vxe-button>
-        <vxe-button>
-          <template>校验操作</template>
-          <template v-slot:dropdowns>
-            <vxe-button @click="validEvent">基本校验</vxe-button>
-            <vxe-button @click="fullValidEvent">完整校验</vxe-button>
-            <vxe-button @click="selectValidEvent">选中校验</vxe-button>
-          </template>
-        </vxe-button>
         <vxe-button @click="getInsertEvent">获取新增</vxe-button>
         <vxe-button @click="getRemoveEvent">获取删除</vxe-button>
         <vxe-button @click="getUpdateEvent">获取修改</vxe-button>
-        <vxe-button>
-          <template>滚动操作</template>
-          <template v-slot:dropdowns>
-            <vxe-button @click="$refs.xTable.scrollToRow($refs.xTable.getData(10))">滚动到第 10 行</vxe-button>
-            <vxe-button @click="$refs.xTable.scrollToRow($refs.xTable.getData(4000))">滚动第 4000 行</vxe-button>
-            <vxe-button @click="$refs.xTable.scrollToColumn($refs.xTable.getColumns(1))">滚动第 1 列</vxe-button>
-            <vxe-button @click="$refs.xTable.scrollToColumn($refs.xTable.getColumns(10))">滚动第 10 列</vxe-button>
-          </template>
-        </vxe-button>
       </template>
     </vxe-toolbar>
 
@@ -52,7 +35,6 @@
       ref="xTable"
       height="300"
       :loading="loading"
-      :edit-rules="validRules"
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
       :select-config="{checkField: 'checked'}">
       <vxe-table-column type="selection" width="60"></vxe-table-column>
@@ -78,20 +60,6 @@
       <vxe-table-column field="createTime" title="CreateTime" width="200"></vxe-table-column>
     </vxe-table>
 
-    <pre>
-      <code>
-        | Arrow Up ↑ | 匀速向上滚动数据 |
-        | Arrow Down ↓ | 匀速向下滚动数据 |
-        | Arrow Left ← | 匀速向左滚动数据 |
-        | Arrow Right → | 匀速向右滚动数据 |
-        | Page Up | 向上翻页滚动 |
-        | Page Down | 向下翻页滚动 |
-        | Spacebar | 翻页滚动 |
-        | Home | 滚动到顶部 |
-        | End | 滚动到底部 |
-      </code>
-    </pre>
-
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
@@ -108,15 +76,6 @@ export default {
   data () {
     return {
       loading: false,
-      validRules: {
-        name: [
-          { required: true, message: '名称必须填写' },
-          { min: 3, max: 50, message: '名称长度在 3 到 50 个字符' }
-        ],
-        sex: [
-          { required: true, message: '性别必须填写' }
-        ]
-      },
       demoCodes: [
         `
         <vxe-toolbar :refresh="{query: findList}">
@@ -139,26 +98,9 @@ export default {
                 <vxe-button @click="$refs.xTable.remove($refs.xTable.getData(100))">删除第 100 行</vxe-button>
               </template>
             </vxe-button>
-            <vxe-button>
-              <template>校验操作</template>
-              <template v-slot:dropdowns>
-                <vxe-button @click="validEvent">基本校验</vxe-button>
-                <vxe-button @click="fullValidEvent">完整校验</vxe-button>
-                <vxe-button @click="selectValidEvent">选中校验</vxe-button>
-              </template>
-            </vxe-button>
             <vxe-button @click="getInsertEvent">获取新增</vxe-button>
             <vxe-button @click="getRemoveEvent">获取删除</vxe-button>
             <vxe-button @click="getUpdateEvent">获取修改</vxe-button>
-            <vxe-button>
-              <template>滚动操作</template>
-              <template v-slot:dropdowns>
-                <vxe-button @click="$refs.xTable.scrollToRow($refs.xTable.getData(10))">滚动到第 10 行</vxe-button>
-                <vxe-button @click="$refs.xTable.scrollToRow($refs.xTable.getData(4000))">滚动第 4000 行</vxe-button>
-                <vxe-button @click="$refs.xTable.scrollToColumn($refs.xTable.getColumns(1))">滚动第 1 列</vxe-button>
-                <vxe-button @click="$refs.xTable.scrollToColumn($refs.xTable.getColumns(10))">滚动第 10 列</vxe-button>
-              </template>
-            </vxe-button>
           </template>
         </vxe-toolbar>
 
@@ -169,7 +111,6 @@ export default {
           ref="xTable"
           height="300"
           :loading="loading"
-          :edit-rules="validRules"
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
           :select-config="{checkField: 'checked'}">
           <vxe-table-column type="selection" width="60"></vxe-table-column>
@@ -183,32 +124,13 @@ export default {
           <vxe-table-column field="address" title="Address" width="300" show-overflow></vxe-table-column>
           <vxe-table-column field="updateTime" title="UpdateTime" width="200"></vxe-table-column>
           <vxe-table-column field="createTime" title="CreateTime" width="200"></vxe-table-column>
-          <vxe-table-column field="attr1" title="Attr1" width="200"></vxe-table-column>
-          <vxe-table-column field="attr2" title="Attr2" width="200"></vxe-table-column>
-          <vxe-table-column field="attr3" title="Attr3" width="200"></vxe-table-column>
-          <vxe-table-column field="attr4" title="Attr4" width="200"></vxe-table-column>
-          <vxe-table-column field="attr5" title="Attr5" width="200"></vxe-table-column>
-          <vxe-table-column field="attr6" title="Attr6" width="200"></vxe-table-column>
-          <vxe-table-column field="attr7" title="Attr7" width="200"></vxe-table-column>
-          <vxe-table-column field="attr8" title="Attr8" width="200"></vxe-table-column>
-          <vxe-table-column field="attr9" title="Attr9" width="200"></vxe-table-column>
-          <vxe-table-column field="createTime" title="CreateTime" width="200"></vxe-table-column>
         </vxe-table>
         `,
         `
         export default {
           data () {
             return {
-              loading: false,
-              validRules: {
-                name: [
-                  { required: true, message: '名称必须填写' },
-                  { min: 3, max: 50, message: '名称长度在 3 到 50 个字符' }
-                ],
-                sex: [
-                  { required: true, message: '性别必须填写' }
-                ]
-              }
+              loading: false
             }
           },
           created () {
@@ -228,60 +150,6 @@ export default {
                   this.loading = false
                 }, 300)
               })
-            },
-            validEvent () {
-              this.$refs.xTable.validate(valid => {
-                if (valid) {
-                  this.$XModal.message({ status: 'success', message: '校验成功！' })
-                } else {
-                  this.$XModal.message({ status: 'error', message: '校验不通过！' })
-                }
-              })
-            },
-            fullValidEvent () {
-              this.$refs.xTable.fullValidate((valid, errMap) => {
-                if (valid) {
-                  this.$XModal.message({ status: 'success', message: '校验成功！' })
-                } else {
-                  let msgList = []
-                  Object.values(errMap).forEach(errList => {
-                    errList.forEach(params => {
-                      let { rowIndex, column, rules } = params
-                      rules.forEach(rule => {
-                        msgList.push(\`第 \${rowIndex} 行 \${column.title} 校验错误：\${rule.message}\`)
-                      })
-                    })
-                  })
-                  this.$XModal.message({
-                    status: 'error',
-                    message: () => {
-                      return [
-                        <div class="red" style="max-height: 400px;overflow: auto;">
-                          {
-                            msgList.map(msg => {
-                              return <div>{ msg }</div>
-                            })
-                          }
-                        </div>
-                      ]
-                    }
-                  })
-                }
-              })
-            },
-            selectValidEvent () {
-              let selectRecords = this.$refs.xTable.getSelectRecords()
-              if (selectRecords.length > 0) {
-                this.$refs.xTable.validate(selectRecords, valid => {
-                  if (valid) {
-                    this.$XModal.message({ status: 'success', message: '校验成功！' })
-                  } else {
-                    this.$XModal.message({ status: 'error', message: '校验不通过！' })
-                  }
-                })
-              } else {
-                this.$XModal.message({ status: 'warning', message: '未选中数据！' })
-              }
             },
             insertEvent (row) {
               let xTable = this.$refs.xTable
@@ -330,60 +198,6 @@ export default {
           this.loading = false
         }, 300)
       })
-    },
-    validEvent () {
-      this.$refs.xTable.validate(valid => {
-        if (valid) {
-          this.$XModal.message({ status: 'success', message: '校验成功！' })
-        } else {
-          this.$XModal.message({ status: 'error', message: '校验不通过！' })
-        }
-      })
-    },
-    fullValidEvent () {
-      this.$refs.xTable.fullValidate((valid, errMap) => {
-        if (valid) {
-          this.$XModal.message({ status: 'success', message: '校验成功！' })
-        } else {
-          let msgList = []
-          Object.values(errMap).forEach(errList => {
-            errList.forEach(params => {
-              let { rowIndex, column, rules } = params
-              rules.forEach(rule => {
-                msgList.push(`第 ${rowIndex} 行 ${column.title} 校验错误：${rule.message}`)
-              })
-            })
-          })
-          this.$XModal.message({
-            status: 'error',
-            message: () => {
-              return [
-                <div class="red" style="max-height: 400px;overflow: auto;">
-                  {
-                    msgList.map(msg => {
-                      return <div>{ msg }</div>
-                    })
-                  }
-                </div>
-              ]
-            }
-          })
-        }
-      })
-    },
-    selectValidEvent () {
-      let selectRecords = this.$refs.xTable.getSelectRecords()
-      if (selectRecords.length > 0) {
-        this.$refs.xTable.validate(selectRecords, valid => {
-          if (valid) {
-            this.$XModal.message({ status: 'success', message: '校验成功！' })
-          } else {
-            this.$XModal.message({ status: 'error', message: '校验不通过！' })
-          }
-        })
-      } else {
-        this.$XModal.message({ status: 'warning', message: '未选中数据！' })
-      }
     },
     insertEvent (row) {
       let xTable = this.$refs.xTable

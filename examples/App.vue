@@ -408,9 +408,9 @@ export default {
               }
             },
             {
-              label: 'app.aside.nav.keyboard',
+              label: 'app.aside.nav.moveHighlight',
               locat: {
-                name: 'TableKeyboard'
+                name: 'TableHighlight'
               }
             }
           ]
@@ -583,7 +583,14 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.moveHighlight',
+              locat: {
+                name: 'TableTreeHighlight'
+              }
+            },
+            {
               label: 'app.aside.nav.keyboard',
+              disabled: true,
               locat: {
                 name: 'TableTreeKeyboard'
               }
@@ -621,7 +628,7 @@ export default {
               }
             },
             {
-              label: 'app.aside.nav.forceRowVaild',
+              label: 'app.aside.nav.forceRowValid',
               disabled: true,
               locat: {
                 name: 'TableTreeEditForceRowValid'
@@ -680,6 +687,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.moveHighlight',
+              locat: {
+                name: 'TableScrollHighlight'
+              }
+            },
+            {
               label: 'app.aside.nav.keyboard',
               locat: {
                 name: 'TableScrollKeyboard'
@@ -692,17 +705,36 @@ export default {
               }
             },
             {
-              label: 'app.aside.nav.treeScroll',
+              label: 'app.aside.nav.virtualTree',
               disabled: true,
               locat: {
-                name: 'TableScroll'
+                name: 'TableScrollTree'
               }
             },
             {
-              label: 'app.aside.nav.pageScroll',
+              label: 'app.aside.nav.cellValid',
+              locat: {
+                name: 'TableScrollCellValid'
+              }
+            },
+            {
+              label: 'app.aside.nav.rowValid',
+              locat: {
+                name: 'TableScrollRowValid'
+              }
+            },
+            {
+              label: 'app.aside.nav.forceCellValid',
               disabled: true,
               locat: {
-                name: 'TableScroll'
+                name: 'TableScrollForceCellValid'
+              }
+            },
+            {
+              label: 'app.aside.nav.forceRowValid',
+              disabled: true,
+              locat: {
+                name: 'TableScrollForceRowValid'
               }
             },
             {
@@ -710,6 +742,12 @@ export default {
               disabled: true,
               locat: {
                 name: 'TableScroll'
+              }
+            },
+            {
+              label: 'app.aside.nav.template',
+              locat: {
+                name: 'TableScrollTemplate'
               }
             },
             {
@@ -812,7 +850,7 @@ export default {
               }
             },
             {
-              label: 'app.aside.nav.forceRowVaild',
+              label: 'app.aside.nav.forceRowValid',
               disabled: true,
               locat: {
                 name: 'TableEditForceRowValid'

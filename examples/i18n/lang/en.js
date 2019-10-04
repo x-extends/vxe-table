@@ -79,7 +79,8 @@ module.exports = {
         big10wRow: '100,000 row, More complex rendering',
         big1wRow1wCol: '10,000 row 10,000 column',
         big10wRow1wCol: '100,000 row 10,000 column, More complex rendering',
-        treeScroll: 'Tree',
+        moveHighlight: 'Keyboard move highlight row',
+        virtualTree: 'Virtual tree',
         pageScroll: 'Scroll to page',
         infiniteScroll: 'The infinite scroll',
 
@@ -98,7 +99,7 @@ module.exports = {
         cellValid: 'Validate call',
         rowValid: 'Validate row',
         forceCellValid: 'Validate cell + lock',
-        forceRowVaild: 'Validate row + lock',
+        forceRowValid: 'Validate row + lock',
         keyboard: 'Keyboard navigation',
 
         bad: 'Bad usage',

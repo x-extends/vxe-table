@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">虚拟滚动渲染，全键盘操作</p>
+    <p class="tip">虚拟滚动渲染，可编辑表格<br><span class="red">当数据量非常大时，由于需要进行大量数据运算，所以数据校验或者获取数据...等函数执行会相对耗时</span></p>
 
     <vxe-toolbar :refresh="{query: findList}">
       <template v-slot:buttons>
@@ -33,15 +33,6 @@
         <vxe-button @click="getInsertEvent">获取新增</vxe-button>
         <vxe-button @click="getRemoveEvent">获取删除</vxe-button>
         <vxe-button @click="getUpdateEvent">获取修改</vxe-button>
-        <vxe-button>
-          <template>滚动操作</template>
-          <template v-slot:dropdowns>
-            <vxe-button @click="$refs.xTable.scrollToRow($refs.xTable.getData(10))">滚动到第 10 行</vxe-button>
-            <vxe-button @click="$refs.xTable.scrollToRow($refs.xTable.getData(4000))">滚动第 4000 行</vxe-button>
-            <vxe-button @click="$refs.xTable.scrollToColumn($refs.xTable.getColumns(1))">滚动第 1 列</vxe-button>
-            <vxe-button @click="$refs.xTable.scrollToColumn($refs.xTable.getColumns(10))">滚动第 10 列</vxe-button>
-          </template>
-        </vxe-button>
       </template>
     </vxe-toolbar>
 
@@ -53,9 +44,7 @@
       height="300"
       :loading="loading"
       :edit-rules="validRules"
-      :mouse-config="{selected: true}"
-      :edit-config="{trigger: 'dblclick', mode: 'cell', showStatus: true}"
-      :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true}"
+      :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
       :select-config="{checkField: 'checked'}">
       <vxe-table-column type="selection" width="60"></vxe-table-column>
       <vxe-table-column type="index" width="100"></vxe-table-column>
@@ -69,27 +58,6 @@
       <vxe-table-column field="updateTime" title="UpdateTime" width="200"></vxe-table-column>
       <vxe-table-column field="createTime" title="CreateTime" width="200"></vxe-table-column>
     </vxe-table>
-
-    <pre>
-      <code>
-        | Arrow Up ↑ | 移动到当前活动单元格上面的单元格 |
-        | Arrow Down ↓ | 移动到当前活动单元格下面的单元格 |
-        | Arrow Left ← | 移动到当前活动单元格左边的单元格 |
-        | Arrow Right → | 移动到当前活动单元格右边的单元格 |
-        | Tab | 移动到当前选中或活动单元格的右侧单元格，如果到最后一列且存在下一行，则从下一行开始移动 |
-        | Tab + Shift | 移动到当前选中或活动单元格的左侧单元格，如果到第一列且存在上一行，则从上一行开始移动 |
-        | Spacebar | 如果单元格是复选框或单选框则切换勾选状态 |
-        | Enter | 取消编辑并移动到当前活动单元格下面的单元格 |
-        | Delete | 清空内容 |
-        | Backspace | 清空内容并激活选中单元格为编辑状态 |
-        | F2 | 激活单元格编辑 |
-        | Esc | 取消单元格编辑 |
-        | Page Up | 向上翻页滚动 |
-        | Page Down | 向下翻页滚动 |
-        | Home | 滚动到顶部 |
-        | End | 滚动到底部 |
-      </code>
-    </pre>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
@@ -149,15 +117,6 @@ export default {
             <vxe-button @click="getInsertEvent">获取新增</vxe-button>
             <vxe-button @click="getRemoveEvent">获取删除</vxe-button>
             <vxe-button @click="getUpdateEvent">获取修改</vxe-button>
-            <vxe-button>
-              <template>滚动操作</template>
-              <template v-slot:dropdowns>
-                <vxe-button @click="$refs.xTable.scrollToRow($refs.xTable.getData(10))">滚动到第 10 行</vxe-button>
-                <vxe-button @click="$refs.xTable.scrollToRow($refs.xTable.getData(4000))">滚动第 4000 行</vxe-button>
-                <vxe-button @click="$refs.xTable.scrollToColumn($refs.xTable.getColumns(1))">滚动第 1 列</vxe-button>
-                <vxe-button @click="$refs.xTable.scrollToColumn($refs.xTable.getColumns(10))">滚动第 10 列</vxe-button>
-              </template>
-            </vxe-button>
           </template>
         </vxe-toolbar>
 
@@ -169,9 +128,7 @@ export default {
           height="300"
           :loading="loading"
           :edit-rules="validRules"
-          :mouse-config="{selected: true}"
-          :edit-config="{trigger: 'dblclick', mode: 'cell', showStatus: true}"
-          :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true}"
+          :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
           :select-config="{checkField: 'checked'}">
           <vxe-table-column type="selection" width="60"></vxe-table-column>
           <vxe-table-column type="index" width="100"></vxe-table-column>

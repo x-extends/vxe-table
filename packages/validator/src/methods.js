@@ -118,7 +118,7 @@ export default {
           if (treeConfig) {
             this.scrollToTreeRow(params.row).then(finish)
           } else if (scrollYLoad) {
-            this.scrollToRow(params.row, true).then(finish)
+            this.scrollToRow(params.row).then(finish)
           } else {
             finish()
           }

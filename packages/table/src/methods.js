@@ -91,11 +91,6 @@ const Methods = {
       rest = rest.then(this.recalculate)
     }
     return rest.then(() => {
-      if (this.scrollXLoad || this.scrollYLoad) {
-        if (this.mouseConfig) {
-          UtilTools.error('vxe.error.notMouse')
-        }
-      }
       if (lastScrollLeft || lastScrollTop) {
         return this.scrollTo(lastScrollLeft, lastScrollTop)
       }
@@ -770,7 +765,9 @@ const Methods = {
       scrollXLoad,
       columnStore,
       elemStore,
-      currentRow
+      editStore,
+      currentRow,
+      mouseConfig
     } = this
     let containerList = ['main', 'left', 'right']
     let customHeight = height === 'auto' ? parentHeight : (DomTools.isScale(height) ? Math.floor(parseInt(height) / 100 * parentHeight) : XEUtils.toNumber(height))
@@ -915,6 +912,10 @@ const Methods = {
     })
     if (currentRow) {
       this.setCurrentRow(currentRow)
+    }
+    if (mouseConfig && mouseConfig.selected && editStore.selected.row && editStore.selected.column) {
+      this.reColSdCls()
+      this.addColSdCls()
     }
     return this.$nextTick()
   },
@@ -2191,20 +2192,22 @@ const Methods = {
       }
       bodyElem.scrollTop = scrollTop
     }
+    if (this.scrollXLoad || this.scrollYLoad) {
+      return new Promise(resolve => setTimeout(() => resolve(this.$nextTick()), 50))
+    }
     return this.$nextTick()
   },
-  scrollToRow (row, column, isDelay) {
+  scrollToRow (row, column) {
+    let rest = []
     if (row && this.fullAllDataRowMap.has(row)) {
-      DomTools.rowToVisible(this, row)
+      rest.push(DomTools.rowToVisible(this, row))
     }
-    return this.scrollToColumn(column, isDelay || XEUtils.isBoolean(column))
+    rest.push(this.scrollToColumn(column))
+    return Promise.all(rest)
   },
-  scrollToColumn (column, isDelay) {
+  scrollToColumn (column) {
     if (column && this.fullColumnMap.has(column)) {
-      DomTools.colToVisible(this, column)
-    }
-    if (isDelay && this.scrollYLoad) {
-      return new Promise(resolve => setTimeout(() => resolve(this.$nextTick()), 50))
+      return DomTools.colToVisible(this, column)
     }
     return this.$nextTick()
   },

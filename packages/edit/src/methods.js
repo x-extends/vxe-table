@@ -369,11 +369,7 @@ export default {
           selected.row = row
           selected.column = column
           if (mouseConfig.selected) {
-            let listElem = elemStore['main-body-list']
-            let rowid = UtilTools.getRowid(this, row)
-            let trElem = listElem.querySelector(`[data-rowid="${rowid}"]`)
-            let tdElem = trElem.querySelector(`.${column.id}`)
-            DomTools.addClass(tdElem, 'col--selected')
+            this.addColSdCls()
           }
           // 如果配置了批量选中功能，则为批量选中状态
           if (mouseConfig.checked) {
@@ -389,5 +385,39 @@ export default {
       return this.$nextTick()
     }
     return selectMethod()
+  },
+  /**
+   * 清除所选中源状态
+   */
+  _clearSelected (evnt) {
+    let { selected } = this.editStore
+    selected.row = null
+    selected.column = null
+    this.reColTitleSdCls()
+    this.reColSdCls()
+    return this.$nextTick()
+  },
+  reColTitleSdCls () {
+    let headerElem = this.elemStore['main-header-list']
+    if (headerElem) {
+      XEUtils.arrayEach(headerElem.querySelectorAll('.col--title-selected'), elem => DomTools.removeClass(elem, 'col--title-selected'))
+    }
+  },
+  reColSdCls () {
+    let bodyElem = this.elemStore['main-body-list']
+    let cell = bodyElem.querySelector('.col--selected')
+    if (cell) {
+      DomTools.removeClass(cell, 'col--selected')
+    }
+  },
+  addColSdCls () {
+    let { selected } = this.editStore
+    let { row, column } = selected
+    if (row && column) {
+      let cell = DomTools.getCell(this, { row, column })
+      if (cell) {
+        DomTools.addClass(cell, 'col--selected')
+      }
+    }
   }
 }

@@ -4,13 +4,13 @@ import { UtilTools, DomTools } from '../../tools'
 export default {
   // 处理 Tab 键移动
   moveTabSelected (args, isLeft, evnt) {
-    let { tableData, visibleColumn, editConfig, hasIndexColumn } = this
+    let { afterFullData, visibleColumn, editConfig, hasIndexColumn } = this
     let targetRow
     let targetRowIndex
     let targetColumn
     let targetColumnIndex
     let params = Object.assign({}, args)
-    let rowIndex = tableData.indexOf(params.row)
+    let rowIndex = afterFullData.indexOf(params.row)
     let columnIndex = visibleColumn.indexOf(params.column)
     evnt.preventDefault()
     if (isLeft) {
@@ -25,7 +25,7 @@ export default {
       if (!targetColumn && rowIndex > 0) {
         // 如果找不到从上一行开始找，如果一行都找不到就不需要继续找了，可能不存在可编辑的列
         targetRowIndex = rowIndex - 1
-        targetRow = tableData[targetRowIndex]
+        targetRow = afterFullData[targetRowIndex]
         for (let len = visibleColumn.length - 1; len >= 0; len--) {
           if (!hasIndexColumn(visibleColumn[len])) {
             targetColumnIndex = len
@@ -43,10 +43,10 @@ export default {
           break
         }
       }
-      if (!targetColumn && rowIndex < tableData.length - 1) {
+      if (!targetColumn && rowIndex < afterFullData.length - 1) {
         // 如果找不到从下一行开始找，如果一行都找不到就不需要继续找了，可能不存在可编辑的列
         targetRowIndex = rowIndex + 1
-        targetRow = tableData[targetRowIndex]
+        targetRow = afterFullData[targetRowIndex]
         for (let index = 0; index < visibleColumn.length; index++) {
           if (!hasIndexColumn(visibleColumn[index])) {
             targetColumnIndex = index
@@ -71,8 +71,8 @@ export default {
           if (editConfig.mode === 'row') {
             this.handleActived(params, evnt)
           } else {
-            this.handleSelected(params, evnt)
             this.scrollToRow(params.row, params.column)
+              .then(() => this.handleSelected(params, evnt))
           }
         }
       }
@@ -106,15 +106,15 @@ export default {
   },
   // 处理可编辑方向键移动
   moveSelected (args, isLeftArrow, isUpArrow, isRightArrow, isDwArrow, evnt) {
-    let { tableData, visibleColumn, hasIndexColumn } = this
+    let { afterFullData, visibleColumn, hasIndexColumn } = this
     let params = Object.assign({}, args)
     evnt.preventDefault()
     if (isUpArrow && params.rowIndex) {
       params.rowIndex -= 1
-      params.row = tableData[params.rowIndex]
-    } else if (isDwArrow && params.rowIndex < tableData.length - 1) {
+      params.row = afterFullData[params.rowIndex]
+    } else if (isDwArrow && params.rowIndex < afterFullData.length - 1) {
       params.rowIndex += 1
-      params.row = tableData[params.rowIndex]
+      params.row = afterFullData[params.rowIndex]
     } else if (isLeftArrow && params.columnIndex) {
       for (let len = params.columnIndex - 1; len >= 0; len--) {
         if (!hasIndexColumn(visibleColumn[len])) {
@@ -132,9 +132,10 @@ export default {
         }
       }
     }
-    params.cell = DomTools.getCell(this, params)
-    this.handleSelected(params, evnt)
-    this.scrollToRow(params.row, params.column)
+    this.scrollToRow(params.row, params.column).then(() => {
+      params.cell = DomTools.getCell(this, params)
+      this.handleSelected(params, evnt)
+    })
   },
   /**
    * 表头按下事件
@@ -326,22 +327,6 @@ export default {
   //     }
   //   }
   // },
-  /**
-   * 清除所选中源状态
-   */
-  _clearSelected (evnt) {
-    let { editStore, elemStore } = this
-    let { selected } = editStore
-    selected.row = null
-    selected.column = null
-    let headerElem = elemStore['main-header-list']
-    let bodyElem = elemStore['main-body-list']
-    if (headerElem) {
-      XEUtils.arrayEach(headerElem.querySelectorAll('.col--title-selected'), elem => DomTools.removeClass(elem, 'col--title-selected'))
-    }
-    XEUtils.arrayEach([bodyElem.querySelector('.col--selected')], elem => DomTools.removeClass(elem, 'col--selected'))
-    return this.$nextTick()
-  },
   /**
    * 清除所有选中状态
    */
