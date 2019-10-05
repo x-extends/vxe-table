@@ -1,6 +1,8 @@
+import Language from './language'
+
 /**
  * ジャパン
  */
-export class ja {}
+declare const ja: Language
 
 export default ja
