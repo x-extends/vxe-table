@@ -1,7 +1,7 @@
 import { VXETableModule } from './module';
 
 /**
- * 列模块
+ * 列
  */
 export declare class Column extends VXETableModule {
   // 渲染类型 index,radio,selection,expand

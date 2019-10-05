@@ -1,6 +1,8 @@
+import Language from './language'
+
 /**
  * 简体中文
  */
-export class zh_CN {}
+declare const zh_CN: Language
 
 export default zh_CN
