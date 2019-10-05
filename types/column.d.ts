@@ -1,7 +1,7 @@
 import { VXETableModule } from './module';
 
 /**
- * 表格列
+ * 列
  */
 export declare class Column extends VXETableModule {
   /**

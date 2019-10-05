@@ -1,6 +1,8 @@
+import Language from './language'
+
 /**
  * English
  */
-export class en {}
+declare const en: Language
 
 export default en
