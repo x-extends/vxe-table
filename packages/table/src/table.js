@@ -613,6 +613,9 @@ export default {
     this.scrollTo(this.lastScrollLeft, this.lastScrollTop)
     this.preventEvent(null, 'activated', { $table: this })
   },
+  deactivated () {
+    this.preventEvent(null, 'deactivated', { $table: this })
+  },
   beforeDestroy () {
     let tableWrapper = this.$refs.tableWrapper
     if (tableWrapper && tableWrapper.parentNode) {

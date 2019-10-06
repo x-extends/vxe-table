@@ -325,21 +325,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss">
-.api-table {
-  .api-disabled {
-    color: #cb2431;
-  }
-  .disabled-line-through {
-    text-decoration: line-through;
-  }
-  .compatibility {
-    background-color: #1081C2;
-    border-radius: 10px;
-    padding: 2px 8px;
-    color: #fff;
-    font-size: 12px;
-  }
-}
-</style>
