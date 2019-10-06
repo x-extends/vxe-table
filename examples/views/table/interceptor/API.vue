@@ -7,23 +7,35 @@
       highlight-current-row
       highlight-hover-row
       highlight-current-column
+      class="api-table"
       :data="tableData">
       <vxe-table-column field="name" title="app.api.title.prop" min-width="280" tree-node></vxe-table-column>
       <vxe-table-column field="desc" title="app.api.title.desc" min-width="200"></vxe-table-column>
       <vxe-table-column field="type" title="app.api.title.type" min-width="140"></vxe-table-column>
       <vxe-table-column field="enum" title="app.api.title.enum" min-width="150"></vxe-table-column>
       <vxe-table-column field="defVal" title="app.api.title.defVal" min-width="160"></vxe-table-column>
+      <vxe-table-column field="version" :title="$t('app.api.title.version')" width="120">
+        <template v-slot="{ row }">
+          <span v-show="row.version" class="compatibility">v{{  row.version }}</span>
+        </template>
+      </vxe-table-column>
     </vxe-table>
     <h2>可选值</h2>
     <vxe-table
       resizable
       highlight-hover-row
+      class="api-table"
       :data="typeList">
       <vxe-table-column field="name" title="app.api.title.prop" min-width="280" tree-node></vxe-table-column>
       <vxe-table-column field="desc" title="app.api.title.desc" min-width="200"></vxe-table-column>
       <vxe-table-column field="type" title="app.api.title.type" min-width="140"></vxe-table-column>
       <vxe-table-column field="enum" title="app.api.title.enum" min-width="150"></vxe-table-column>
       <vxe-table-column field="defVal" title="app.api.title.defVal" min-width="160"></vxe-table-column>
+      <vxe-table-column field="version" :title="$t('app.api.title.version')" width="120">
+        <template v-slot="{ row }">
+          <span v-show="row.version" class="compatibility">v{{  row.version }}</span>
+        </template>
+      </vxe-table-column>
     </vxe-table>
     <h2>示例</h2>
     <p class="tip">例子：比如自定义渲染某个组件后，由于弹出层面板不在单元格之内，按键事件的交互行为存在冲突，对于这些场景就很有用了</p>
@@ -72,7 +84,7 @@ export default {
         {
           name: 'created',
           desc: '表格初始化时触发',
-          version: '',
+          version: '2.6',
           type: '',
           enum: '',
           defVal: '',
@@ -81,7 +93,7 @@ export default {
         {
           name: 'mounted',
           desc: '表格挂载时触发',
-          version: '',
+          version: '2.6',
           type: '',
           enum: '',
           defVal: '',
@@ -90,7 +102,16 @@ export default {
         {
           name: 'activated',
           desc: '表格激活时触发',
-          version: '',
+          version: '2.6',
+          type: '',
+          enum: '',
+          defVal: '',
+          list: []
+        },
+        {
+          name: 'deactivated',
+          desc: '表格停用时触发',
+          version: '2.6',
           type: '',
           enum: '',
           defVal: '',
@@ -99,7 +120,7 @@ export default {
         {
           name: 'beforeDestroy',
           desc: '表格销毁之前触发',
-          version: '',
+          version: '2.6',
           type: '',
           enum: '',
           defVal: '',
@@ -108,7 +129,7 @@ export default {
         {
           name: 'destroyed',
           desc: '表格销毁时触发',
-          version: '',
+          version: '2.6',
           type: '',
           enum: '',
           defVal: '',
@@ -117,7 +138,7 @@ export default {
         {
           name: 'event.clear_filter',
           desc: '清除激活单元格之前触发，允许返回 false 阻止默认行为',
-          version: '',
+          version: '2.1',
           type: 'Boolean',
           enum: '',
           defVal: '',
@@ -135,7 +156,7 @@ export default {
         {
           name: 'event.keydown',
           desc: '键盘按下之前触发，允许返回 false 阻止默认行为',
-          version: '',
+          version: '2.5.9',
           type: 'Boolean',
           enum: '',
           defVal: '',
@@ -144,7 +165,7 @@ export default {
         {
           name: 'event.show_menu',
           desc: '显示快捷菜单之前触发，允许返回 false 阻止默认行为',
-          version: '',
+          version: '2.4',
           type: 'Boolean',
           enum: '',
           defVal: '',
