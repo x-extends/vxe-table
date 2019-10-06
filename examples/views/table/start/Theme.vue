@@ -11,7 +11,10 @@
     <pre>
       <code class="scss">
         @import 'vxe-table/styles/variable.scss';
-        $vxe-font-color: #666; // 主题颜色
+
+        $vxe-font-color: #666; // 局部修改主题色
+
+        @import './assets/styles/xtable/variable.scss';
         @import 'vxe-table/styles/default.scss';
       </code>
     </pre>
@@ -19,7 +22,10 @@
     <pre>
       <code class="scss">
         @import 'vxe-table/styles/variable.scss';
-        $vxe-font-color: #666; // 主题颜色
+
+        $vxe-font-color: #666; // 局部修改主题色
+
+        @import './assets/styles/xtable/variable.scss';
         @import 'vxe-table/styles/icon.scss';
         @import 'vxe-table/styles/table.scss';
         @import 'vxe-table/styles/column.scss';

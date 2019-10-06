@@ -9,7 +9,7 @@ const apis = [
     list: [
       {
         name: 'value,v-model',
-        descKey: 'app.api.msg.desc.value',
+        descKey: 'app.api.modal.desc.value',
         version: '',
         type: '',
         enum: '',
@@ -18,7 +18,7 @@ const apis = [
       },
       {
         name: 'id',
-        descKey: 'app.api.msg.desc.id',
+        descKey: 'app.api.modal.desc.id',
         version: '',
         type: 'String',
         enum: '',
@@ -27,7 +27,7 @@ const apis = [
       },
       {
         name: 'title',
-        descKey: 'app.api.msg.desc.title',
+        descKey: 'app.api.modal.desc.title',
         version: '',
         type: 'String',
         enum: '',
@@ -36,7 +36,7 @@ const apis = [
       },
       {
         name: 'type',
-        descKey: 'app.api.msg.desc.type',
+        descKey: 'app.api.modal.desc.type',
         version: '',
         type: 'String',
         enum: 'alert, confirm, message',
@@ -45,7 +45,7 @@ const apis = [
       },
       {
         name: 'status',
-        descKey: 'app.api.msg.desc.status',
+        descKey: 'app.api.modal.desc.status',
         version: '',
         type: 'String',
         enum: 'info, success, warning, error, loading',
@@ -54,7 +54,7 @@ const apis = [
       },
       {
         name: 'message',
-        descKey: 'app.api.msg.desc.message',
+        descKey: 'app.api.modal.desc.message',
         version: '',
         type: 'String',
         enum: '',
@@ -63,7 +63,7 @@ const apis = [
       },
       {
         name: 'showHeader',
-        descKey: 'app.api.msg.desc.showHeader',
+        descKey: 'app.api.modal.desc.showHeader',
         version: '',
         type: 'Boolean',
         enum: '',
@@ -72,7 +72,7 @@ const apis = [
       },
       {
         name: 'showFooter',
-        descKey: 'app.api.msg.desc.showFooter',
+        descKey: 'app.api.modal.desc.showFooter',
         version: '',
         type: 'Boolean',
         enum: '',
@@ -81,7 +81,7 @@ const apis = [
       },
       {
         name: 'lock-view',
-        descKey: 'app.api.msg.desc.lockView',
+        descKey: 'app.api.modal.desc.lockView',
         version: '',
         type: 'Boolean',
         enum: '',
@@ -90,7 +90,7 @@ const apis = [
       },
       {
         name: 'lock-scroll',
-        descKey: 'app.api.msg.desc.lockScroll',
+        descKey: 'app.api.modal.desc.lockScroll',
         version: '',
         type: 'Boolean',
         enum: '',
@@ -99,7 +99,7 @@ const apis = [
       },
       {
         name: 'mask',
-        descKey: 'app.api.msg.desc.mask',
+        descKey: 'app.api.modal.desc.mask',
         version: '',
         type: 'Boolean',
         enum: '',
@@ -108,7 +108,7 @@ const apis = [
       },
       {
         name: 'mask-closable',
-        descKey: 'app.api.msg.desc.maskClosable',
+        descKey: 'app.api.modal.desc.maskClosable',
         version: '',
         type: 'Boolean',
         enum: '',
@@ -117,7 +117,7 @@ const apis = [
       },
       {
         name: 'esc-closable',
-        descKey: 'app.api.msg.desc.escClosable',
+        descKey: 'app.api.modal.desc.escClosable',
         version: '',
         type: 'Boolean',
         enum: '',
@@ -126,7 +126,7 @@ const apis = [
       },
       {
         name: 'resize',
-        descKey: 'app.api.msg.desc.resize',
+        descKey: 'app.api.modal.desc.resize',
         version: '2.4.3',
         type: 'Boolean',
         enum: '',
@@ -135,7 +135,7 @@ const apis = [
       },
       {
         name: 'duration',
-        descKey: 'app.api.msg.desc.duration',
+        descKey: 'app.api.modal.desc.duration',
         version: '',
         type: 'Number, String',
         enum: '',
@@ -144,7 +144,7 @@ const apis = [
       },
       {
         name: 'width',
-        descKey: 'app.api.msg.desc.width',
+        descKey: 'app.api.modal.desc.width',
         version: '',
         type: 'Number, String',
         enum: '',
@@ -153,7 +153,7 @@ const apis = [
       },
       {
         name: 'height',
-        descKey: 'app.api.msg.desc.height',
+        descKey: 'app.api.modal.desc.height',
         version: '',
         type: 'Number, String',
         enum: '',
@@ -162,7 +162,7 @@ const apis = [
       },
       {
         name: 'min-width',
-        descKey: 'app.api.msg.desc.minWidth',
+        descKey: 'app.api.modal.desc.minWidth',
         version: '2.5.15',
         type: 'Number, String',
         enum: '',
@@ -171,7 +171,7 @@ const apis = [
       },
       {
         name: 'min-height',
-        descKey: 'app.api.msg.desc.minHeight',
+        descKey: 'app.api.modal.desc.minHeight',
         version: '2.5.15',
         type: 'Number, String',
         enum: '',
@@ -180,7 +180,7 @@ const apis = [
       },
       {
         name: 'top',
-        descKey: 'app.api.msg.desc.top',
+        descKey: 'app.api.modal.desc.top',
         version: '',
         type: 'Number, String',
         enum: '',
@@ -189,7 +189,7 @@ const apis = [
       },
       {
         name: 'zIndex',
-        descKey: 'app.api.msg.desc.zIndex',
+        descKey: 'app.api.modal.desc.zIndex',
         version: '',
         type: 'Number, String',
         enum: '',
@@ -198,11 +198,20 @@ const apis = [
       },
       {
         name: 'fullscreen',
-        descKey: 'app.api.msg.desc.fullscreen',
+        descKey: 'app.api.modal.desc.fullscreen',
         version: '2.5.18',
         type: 'Boolean',
         enum: '',
         defVal: 'false',
+        list: []
+      },
+      {
+        name: 'dblclickZoom',
+        descKey: 'app.api.modal.desc.dblclickZoom',
+        version: '2.6.0',
+        type: 'Boolean',
+        enum: '',
+        defVal: 'true',
         list: []
       }
     ]

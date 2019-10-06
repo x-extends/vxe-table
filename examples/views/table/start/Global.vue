@@ -79,9 +79,10 @@
             minWidth: 340,
             minHeight: 200,
             lockView: true,
-            lockScroll: true,
             mask: true,
             duration: 3000,
+            marginSize: 8,
+            dblclickZoom: true,
             animat: true
           },
           // 默认优化配置项

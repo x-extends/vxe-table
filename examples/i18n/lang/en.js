@@ -418,7 +418,7 @@ module.exports = {
           loading: 'Loading or not'
         }
       },
-      msg: {
+      modal: {
         desc: {
           value: 'Binding values',
           id: 'Only works for type=message. If you don\'t want the window to click repeatedly, you can set a unique id to prevent repeated prompts',
@@ -441,7 +441,8 @@ module.exports = {
           minHeight: 'The minimum height of the modal window',
           top: 'Valid only for type=message, message from top',
           zIndex: 'set style z-index',
-          fullscreen: 'Default maximized display'
+          fullscreen: 'Default maximized display',
+          dblclickZoom: 'It is only valid for type=modal. Is it allowed to enlarge or restore the window by double-clicking the head'
         }
       }
     }
