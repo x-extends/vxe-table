@@ -84,7 +84,8 @@ const GlobalConfig = {
     lockView: true,
     mask: true,
     duration: 3000,
-    marginSize: 10,
+    marginSize: 8,
+    dblclickZoom: true,
     animat: true
   },
   i18n: key => key

@@ -29,6 +29,7 @@ export default {
     resize: Boolean,
     showHeader: { type: Boolean, default: true },
     showFooter: Boolean,
+    dblclickZoom: { type: Boolean, default: () => GlobalConfig.modal.dblclickZoom },
     width: [Number, String],
     height: [Number, String],
     minWidth: { type: [Number, String], default: () => GlobalConfig.modal.minWidth },
@@ -99,6 +100,7 @@ export default {
       showFooter,
       zoomLocat,
       modalTop,
+      dblclickZoom,
       contentVisible,
       visible,
       title,
@@ -110,6 +112,12 @@ export default {
     } = this
     let defaultSlot = $scopedSlots.default || slots.default
     let footerSlot = $scopedSlots.footer || slots.footer
+    let headerOns = {
+      mousedown: this.mousedownEvent
+    }
+    if (dblclickZoom && type === 'modal') {
+      headerOns.dblclick = this.toggleZoomEvent
+    }
     return h('div', {
       class: ['vxe-modal--wrapper', `type--${type}`, {
         [`size--${vSize}`]: vSize,
@@ -139,9 +147,7 @@ export default {
       }, [
         showHeader ? h('div', {
           class: 'vxe-modal--header',
-          on: {
-            mousedown: this.mousedownEvent
-          }
+          on: headerOns
         }, [
           h('span', {
             class: 'vxe-modal--title'

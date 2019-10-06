@@ -38,6 +38,7 @@ export function Modal (options) {
     showFooter: true
   }
   defOpts.type = type
+  defOpts.dblclickZoom = false
   if (index === 1) {
     defOpts.status = 'question'
   }

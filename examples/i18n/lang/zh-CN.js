@@ -425,7 +425,7 @@ module.exports = {
           loading: '是否加载中'
         }
       },
-      msg: {
+      modal: {
         desc: {
           value: '绑定值',
           id: '只对 type=message 有效，如果不想窗口重复点击，可以设置唯一的 id 防止重复提示',
@@ -448,7 +448,8 @@ module.exports = {
           minHeight: '窗口的最小高度',
           top: '只对 type=message 有效，消息距离顶部的位置',
           zIndex: '自定义堆叠顺序（对于在弹框中使用是由于堆叠被覆盖时可能会用到）',
-          fullscreen: '默认最大化显示'
+          fullscreen: '默认最大化显示',
+          dblclickZoom: '只对 type=modal 有效，是否允许通过双击头部放大或还原窗口'
         }
       }
     }
