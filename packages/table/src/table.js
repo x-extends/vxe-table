@@ -600,15 +600,18 @@ export default {
     GlobalEvent.on(this, 'mousewheel', this.handleGlobalMousewheelEvent)
     GlobalEvent.on(this, 'keydown', this.handleGlobalKeydownEvent)
     GlobalEvent.on(this, 'resize', this.handleGlobalResizeEvent)
+    this.preventEvent(null, 'created', { $table: this })
   },
   mounted () {
     if (this.autoResize) {
       ResizeEvent.on(this, this.getParentElem(), this.recalculate)
     }
     document.body.appendChild(this.$refs.tableWrapper)
+    this.preventEvent(null, 'mounted', { $table: this })
   },
   activated () {
     this.scrollTo(this.lastScrollLeft, this.lastScrollTop)
+    this.preventEvent(null, 'activated', { $table: this })
   },
   beforeDestroy () {
     let tableWrapper = this.$refs.tableWrapper
@@ -620,6 +623,7 @@ export default {
     }
     this.closeFilter()
     this.closeMenu()
+    this.preventEvent(null, 'beforeDestroy', { $table: this })
   },
   destroyed () {
     GlobalEvent.off(this, 'mousedown')
@@ -628,6 +632,7 @@ export default {
     GlobalEvent.off(this, 'mousewheel')
     GlobalEvent.off(this, 'keydown')
     GlobalEvent.off(this, 'resize')
+    this.preventEvent(null, 'destroyed', { $table: this })
   },
   render (h) {
     let {
@@ -835,10 +840,10 @@ export default {
       return this.$nextTick()
     },
     loadTableData (datas, notRefresh) {
-      let { height, maxHeight, editStore, optimizeOpts, lastScrollLeft, lastScrollTop } = this
+      let { height, maxHeight, treeConfig, editStore, optimizeOpts, lastScrollLeft, lastScrollTop } = this
       let { scrollY } = optimizeOpts
       let tableFullData = datas ? datas.slice(0) : []
-      let scrollYLoad = scrollY && scrollY.gt && scrollY.gt < tableFullData.length
+      let scrollYLoad = !treeConfig && scrollY && scrollY.gt && scrollY.gt < tableFullData.length
       editStore.insertList = []
       editStore.removeList = []
       // 全量数据
@@ -1725,7 +1730,7 @@ export default {
         } else if (this.getEventTargetNode(evnt, filterWrapper.$el).flag) {
           // 如果点击筛选容器
         } else {
-          this.preventEvent(evnt, 'event.clear_filter', filterStore.args, this.closeFilter)
+          this.preventEvent(evnt, 'event.clearFilter', filterStore.args, this.closeFilter)
         }
       }
       // 如果已激活了编辑状态
@@ -1735,7 +1740,7 @@ export default {
             // 如果是激活状态，且点击了校验提示框
           } else if (!this.lastCallTime || this.lastCallTime + 50 < Date.now()) {
             // 如果手动调用了激活单元格，避免触发源被移除后导致重复关闭
-            this.preventEvent(evnt, 'event.clear_actived', actived.args, () => {
+            this.preventEvent(evnt, 'event.clearActived', actived.args, () => {
               let isClear
               let isReadonlyCol = !this.getEventTargetNode(evnt, this.$el, 'col--edit').flag
               // row 方式
@@ -2144,7 +2149,7 @@ export default {
           evnt.preventDefault()
         } else if (options && options.length) {
           params.options = options
-          this.preventEvent(evnt, 'event.show_menu', params, null, () => {
+          this.preventEvent(evnt, 'event.showMenu', params, null, () => {
             if (!visibleMethod || visibleMethod(params, evnt)) {
               evnt.preventDefault()
               let { scrollTop, scrollLeft, visibleHeight, visibleWidth } = DomTools.getDomNode()

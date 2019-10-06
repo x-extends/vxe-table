@@ -1,11 +1,13 @@
 <template>
   <div>
-    <h2>Renderer 渲染器</h2>
+    <h1>Renderer 渲染器</h1>
     <p class="tip">通过渲染器你可以轻松实现筛选、单元格的复用，可以根据不同业务实现不一样的渲染器，这个功能将非常实用；比如这些插件 <a class="link" href="https://www.npmjs.com/package/vxe-table-plugin-element" target="_blank">vxe-table-plugin-element</a></p>
-    <h3>渲染器和插槽对比</h3>
-    <p class="orange">渲染器：抽象一切可复用的功能（类似组件的概念），实现非常简单的可配置化；</p>
-    <p class="orange">插槽：自定义程度高，但需要重复写冗余代码，比较繁琐；</p>
-    <p class="red">建议通过 JSX 实现更加简单，可维护性更好</p>
+    <h2>渲染器和插槽对比</h2>
+    <p class="tip">
+      <span class="orange">渲染器：抽象一切可复用的功能（类似组件的概念），实现非常简单的可配置化；</span><br>
+      <span class="orange">插槽：自定义程度高，但需要重复写冗余代码，比较繁琐；</span><br>
+      <span class="red">建议通过 JSX 实现更加简单，可维护性更好</span>
+    </p>
     <vxe-table
       resizable
       highlight-current-row
@@ -31,6 +33,7 @@ export default {
         {
           name: 'add(name, options)',
           desc: '添加',
+          version: '',
           type: '',
           enum: '',
           defVal: 'name, options',
@@ -39,6 +42,7 @@ export default {
         {
           name: 'mixin(map)',
           desc: '混合多个',
+          version: '',
           type: '',
           enum: '',
           defVal: 'map',
@@ -47,6 +51,7 @@ export default {
         {
           name: 'delete(name)',
           desc: '删除',
+          version: '',
           type: '',
           enum: '',
           defVal: 'name',

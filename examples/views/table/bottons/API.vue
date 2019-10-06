@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2>全局工具栏按钮注册器</h2>
+    <h1>全局工具栏按钮注册器</h1>
     <p class="tip">你可以很简单的将工具栏中常用的按钮注册成全局可复用的</p>
     <vxe-table
       resizable
@@ -14,7 +14,7 @@
       <vxe-table-column field="enum" title="app.api.title.enum" min-width="150"></vxe-table-column>
       <vxe-table-column field="defVal" title="app.api.title.defVal" min-width="160"></vxe-table-column>
     </vxe-table>
-    <h3>示例</h3>
+    <h2>示例</h2>
     <pre>
       <code class="javascript">{{ demoCodes[0] }}</code>
       <code class="html">{{ demoCodes[1] }}</code>
@@ -32,6 +32,7 @@ export default {
         {
           name: 'add(code, callback)',
           desc: '添加',
+          version: '',
           type: '',
           enum: '',
           defVal: 'code, callback',
@@ -40,6 +41,7 @@ export default {
         {
           name: 'mixin(map)',
           desc: '混合多个',
+          version: '',
           type: '',
           enum: '',
           defVal: 'map',
@@ -48,6 +50,7 @@ export default {
         {
           name: 'delete(code)',
           desc: '删除',
+          version: '',
           type: '',
           enum: '',
           defVal: 'name',
@@ -68,7 +71,7 @@ export default {
         </vxe-table>
         `,
         `
-        VXETable.buttons.add('exportCSV', (params) => {
+        VXETable.buttons.add('exportCSV', (params, event) => {
           let { $table } = params
           $table.exportCsv()
         })
