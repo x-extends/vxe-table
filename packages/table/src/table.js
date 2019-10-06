@@ -493,18 +493,21 @@ export default {
     GlobalEvent.on(this, 'keydown', this.handleGlobalKeydownEvent)
     GlobalEvent.on(this, 'resize', this.handleGlobalResizeEvent)
     GlobalEvent.on(this, 'contextmenu', this.handleGlobalContextmenuEvent)
+    this.preventEvent(null, 'created', { $table: this })
   },
   mounted () {
     if (this.autoResize && VXETable._resize) {
       this.bindResize()
     }
     document.body.appendChild(this.$refs.tableWrapper)
+    this.preventEvent(null, 'mounted', { $table: this })
   },
   activated () {
     let { lastScrollLeft, lastScrollTop } = this
     if (lastScrollLeft || lastScrollTop) {
       this.clearScroll().then(this.recalculate).then(() => this.scrollTo(lastScrollLeft, lastScrollTop))
     }
+    this.preventEvent(null, 'activated', { $table: this })
   },
   beforeDestroy () {
     let tableWrapper = this.$refs.tableWrapper
@@ -516,6 +519,7 @@ export default {
     }
     this.closeFilter()
     this.closeMenu()
+    this.preventEvent(null, 'beforeDestroy', { $table: this })
   },
   destroyed () {
     GlobalEvent.off(this, 'mousedown')
@@ -524,6 +528,7 @@ export default {
     GlobalEvent.off(this, 'keydown')
     GlobalEvent.off(this, 'resize')
     GlobalEvent.off(this, 'contextmenu')
+    this.preventEvent(null, 'destroyed', { $table: this })
   },
   render (h) {
     let {

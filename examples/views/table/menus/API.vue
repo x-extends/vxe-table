@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2>全局快捷菜单注册器</h2>
+    <h1>全局快捷菜单注册器</h1>
     <p class="tip">你可以很简单的将常用的快捷菜单注册成全局可复用的</p>
     <vxe-table
       resizable
@@ -14,7 +14,7 @@
       <vxe-table-column field="enum" title="app.api.title.enum" min-width="150"></vxe-table-column>
       <vxe-table-column field="defVal" title="app.api.title.defVal" min-width="160"></vxe-table-column>
     </vxe-table>
-    <h3>示例</h3>
+    <h2>示例</h2>
     <pre>
       <code class="javascript">{{ demoCodes[0] }}</code>
       <code class="html">{{ demoCodes[1] }}</code>

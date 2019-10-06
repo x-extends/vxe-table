@@ -1,15 +1,11 @@
-import XEUtils from 'xe-utils/methods/xe-utils'
+import XEUtils from 'xe-utils'
 
-const _storeMap = {
-  // 清除激活单元格之前触发，允许返回 false 阻止默认行为
-  'event.clear_actived': [],
-  // 清除筛选面板之前触发，允许返回 false 阻止默认行为
-  'event.clear_filter': [],
-  // 显示快捷菜单之前触发
-  'event.show_menu': [],
-  // 键盘按下时触发
-  'event.keydown': []
+function toType (type) {
+  return XEUtils.toString(type).replace('_', '').toLowerCase()
 }
+
+const eventTypes = 'created,mounted,activated,beforeDestroy,destroyed,event.clearActived,event.clearFilter,event.showMenu,event.keydown'.split(',').map(toType)
+const _storeMap = {}
 
 export const Interceptor = {
   mixin (map) {
@@ -17,17 +13,21 @@ export const Interceptor = {
     return Interceptor
   },
   get (type) {
-    return _storeMap[type] || []
+    return _storeMap[toType(type)] || []
   },
   add (type, callback) {
-    let eList = _storeMap[type]
-    if (eList && callback && eList.indexOf(callback) === -1) {
+    type = toType(type)
+    if (callback && eventTypes.includes(type)) {
+      let eList = _storeMap[type]
+      if (!eList) {
+        eList = _storeMap[type] = []
+      }
       eList.push(callback)
     }
     return Interceptor
   },
   delete (type, callback) {
-    let eList = _storeMap[type]
+    let eList = _storeMap[toType(type)]
     if (eList) {
       XEUtils.remove(eList, cb => cb === callback)
     }
