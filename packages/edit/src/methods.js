@@ -14,7 +14,7 @@ export default {
   _insertAt (records, row) {
     let { afterFullData, editStore, scrollYLoad, tableFullData, treeConfig } = this
     if (treeConfig) {
-      throw new Error(UtilTools.error('vxe.error.treeInsert'))
+      throw new Error(UtilTools.getLog('vxe.error.notFunc', ['insert']))
     }
     if (!XEUtils.isArray(records)) {
       records = [records]
@@ -64,7 +64,7 @@ export default {
     let rest = []
     let nowData = afterFullData
     if (treeConfig) {
-      throw new Error(UtilTools.error('vxe.error.treeRemove'))
+      throw new Error(UtilTools.getLog('vxe.error.notFunc', ['remove']))
     }
     if (!rows) {
       rows = tableFullData
@@ -113,7 +113,7 @@ export default {
     })
   },
   _revert () {
-    UtilTools.warn('vxe.error.delRevert')
+    UtilTools.warn('vxe.error.delFunc', ['revert', 'revertData'])
     return this.revertData.apply(this, arguments)
   },
   /**

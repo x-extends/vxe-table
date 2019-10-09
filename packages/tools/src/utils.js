@@ -65,8 +65,8 @@ class ColumnConfig {
 }
 
 function outLog (type) {
-  return function (message) {
-    let msg = `[vxe-table] ${GlobalConfig.i18n(message)}`
+  return function (message, params) {
+    let msg = UtilTools.getLog(message, params)
     console[type](msg)
     return msg
   }
@@ -75,6 +75,9 @@ function outLog (type) {
 export const UtilTools = {
   warn: outLog('warn'),
   error: outLog('error'),
+  getLog (message, params) {
+    return `[vxe-table] ${XEUtils.template(GlobalConfig.i18n(message), params)}`
+  },
   getSize ({ size, $parent }) {
     return size || ($parent && ['medium', 'small', 'mini'].indexOf($parent.size) > -1 ? $parent.size : null)
   },

@@ -326,7 +326,7 @@ const Methods = {
   },
   // 在 v3.0 中废弃 getRecords
   getRecords () {
-    UtilTools.warn('vxe.error.delGetRecords')
+    UtilTools.warn('vxe.error.delFunc', ['getRecords', 'getData'])
     return this.getData.apply(this, arguments)
   },
   /**
@@ -338,7 +338,7 @@ const Methods = {
   },
   // 在 v3.0 中废弃 getAllRecords
   getAllRecords () {
-    UtilTools.warn('vxe.error.delGetAllRecords')
+    UtilTools.warn('vxe.error.delFunc', ['getAllRecords', 'getRecordset'])
     return this.getRecordset()
   },
   /**

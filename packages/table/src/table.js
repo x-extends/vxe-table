@@ -392,10 +392,10 @@ export default {
       if (tableFullColumn.length) {
         let cIndex = Math.floor((tableFullColumn.length - 1) / 2)
         if (tableFullColumn[cIndex].prop) {
-          UtilTools.warn('vxe.error.delProp')
+          UtilTools.warn('vxe.error.delProp', ['prop', 'field'])
         }
         if (tableFullColumn[cIndex].label) {
-          UtilTools.warn('vxe.error.delLabel')
+          UtilTools.warn('vxe.error.delLabel', ['label', 'title'])
         }
       }
       if (this.treeConfig && tableFullColumn.some(column => column.fixed) && tableFullColumn.some(column => column.type === 'expand')) {
@@ -460,19 +460,21 @@ export default {
     // 是否加载过 Loading 模块
     this._isLoading = loading
     if (!UtilTools.getRowkey(this)) {
-      UtilTools.error('vxe.error.rowIdEmpty')
+      UtilTools.error('vxe.error.emptyProp', ['row-id'])
     }
+    // 检查是否有安装需要的模块
+    let errorModuleName
     if (!VXETable._edit && this.editConfig) {
-      throw new Error(XEUtils.template(UtilTools.error('vxe.error.reqModule'), { name: 'Edit' }))
+      errorModuleName = 'Edit'
+    } else if (!VXETable._valid && this.editRules) {
+      errorModuleName = 'Validator'
+    } else if (!VXETable._keyboard && (this.keyboardConfig || this.mouseConfig)) {
+      errorModuleName = 'Keyboard'
+    } else if (!VXETable._resize && this.autoResize) {
+      errorModuleName = 'Resize'
     }
-    if (!VXETable._valid && this.editRules) {
-      throw new Error(XEUtils.template(UtilTools.error('vxe.error.reqModule'), { name: 'Validator' }))
-    }
-    if (!VXETable._keyboard && (this.keyboardConfig || this.mouseConfig)) {
-      throw new Error(XEUtils.template(UtilTools.error('vxe.error.reqModule'), { name: 'Keyboard' }))
-    }
-    if (!VXETable._resize && this.autoResize) {
-      throw new Error(XEUtils.template(UtilTools.error('vxe.error.reqModule'), { name: 'Resize' }))
+    if (errorModuleName) {
+      throw new Error(UtilTools.getLog('vxe.error.reqModule', ['errorModuleName']))
     }
     if (scrollY) {
       Object.assign(scrollYStore, {
