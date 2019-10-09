@@ -21,6 +21,12 @@
       :edit-config="{trigger: 'click', mode: 'cell'}">
     </vxe-grid>
 
+    <vxe-modal v-model="showDetails" title="查看详情" width="800" height="400" resize>
+      <template>
+        <div v-if="selectRow" v-html="selectRow.html3"></div>
+      </template>
+    </vxe-modal>
+
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
@@ -36,6 +42,9 @@ import hljs from 'highlight.js'
 export default {
   data () {
     return {
+      showDetails: false,
+      selectRow: null,
+      tableData: [],
       tableColumn: [
         { type: 'index', width: 50 },
         {
@@ -45,7 +54,7 @@ export default {
             default: ({ row, column }) => {
               return [
                 <span style="color: red;">{ row.name }</span>,
-                <button onClick={ () => this.clickEvent(row, column) }>按钮</button>
+                <button onClick={ () => this.showDetailEvent(row, column) }>弹框</button>
               ]
             }
           }
@@ -139,7 +148,6 @@ export default {
           }
         }
       },
-      tableData: [],
       demoCodes: [
         `
         <vxe-grid
@@ -151,11 +159,20 @@ export default {
           :data="tableData"
           :edit-config="{trigger: 'click', mode: 'cell'}">
         </vxe-grid>
+
+        <vxe-modal v-model="showDetails" title="查看详情" width="800" height="400" resize>
+          <template>
+            <div v-if="selectRow" v-html="selectRow.html3"></div>
+          </template>
+        </vxe-modal>
         `,
         `
         export default {
           data () {
             return {
+              showDetails: false,
+              selectRow: null,
+              tableData: [],
               tableColumn: [
                 { type: 'index', width: 50 },
                 {
@@ -165,7 +182,7 @@ export default {
                     default: ({ row, column }) => {
                       return [
                         <span style="color: red;">{ row.name }</span>,
-                        <button onClick={ () => this.clickEvent(row, column) }>按钮</button>
+                        <button onClick={ () => this.showDetailEvent(row, column) }>弹框</button>
                       ]
                     }
                   }
@@ -258,8 +275,7 @@ export default {
                     ]
                   }
                 }
-              },
-              tableData: []
+              }
             }
           },
           created () {
@@ -298,8 +314,9 @@ export default {
     })
   },
   methods: {
-    clickEvent (row, column) {
-      this.$XModal.alert(`${column.title}点击事件`)
+    showDetailEvent (row) {
+      this.selectRow = row
+      this.showDetails = true
     },
     headerClickEvent (evnt) {
       this.$XModal.alert('头部点击事件')

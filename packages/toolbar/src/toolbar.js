@@ -201,14 +201,14 @@ export default {
       let { $grid, $table, id, refresh, resizable, setting, refreshOpts, resizableOpts, settingOpts } = this
       if (refresh && !$grid) {
         if (!refreshOpts.query) {
-          console.warn('[vxe-toolbar] refresh.query function does not exist')
+          UtilTools.warn('vxe.error.notFunc', ['query'])
         }
       }
       if (resizable || setting) {
         if ($grid || $table) {
           ($grid || $table).connect({ toolbar: this })
         } else {
-          throw new Error('[vxe-toolbar] Not found vxe-table.')
+          throw new Error(UtilTools.getLog('vxe.error.barUnableLink'))
         }
         let customMap = {}
         if (resizableOpts.storage) {
@@ -281,12 +281,12 @@ export default {
       return this.$nextTick()
     },
     hideColumn (column) {
-      console.warn('[vxe-table] The function hideColumn is deprecated')
+      UtilTools.warn('vxe.error.delFunc', ['hideColumn', 'table.hideColumn'])
       column.visible = false
       return this.updateSetting()
     },
     showColumn (column) {
-      console.warn('[vxe-table] The function showColumn is deprecated')
+      UtilTools.warn('vxe.error.delFunc', ['showColumn', 'table.showColumn'])
       column.visible = true
       return this.updateSetting()
     },

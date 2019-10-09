@@ -9,6 +9,7 @@ export default {
       scrollYHeight: '启用虚拟滚动必须要设置 height 或 max-height',
       unableInsert: '无法插入到指定位置',
 
+      barUnableLink: '工具栏无法关联表格',
       toolbarId: '工具栏需要设置唯一 id',
 
       reqModule: '缺少 {{0}} 模块',

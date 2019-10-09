@@ -7,9 +7,10 @@ export default {
       scrollOriginal: 'Virtual scrollingはsource dataのみエクスポートできます、original=trueを設定してください',
       treeFixedExpand: '樹木構造の固定柱は展開された行と矛盾する。',
       scrollYHeight: 'Virtual scrollingを有効にするにはheightかmax-heightを設定してください',
-      unableInsert: '指定位置に挿入できません。',
+      unableInsert: '指定された位置に挿入できない',
 
-      toolbarId: 'Toolbarはunique idが必要です',
+      barUnableLink: 'ツールバーはフォームを関連付けることができない',
+      toolbarId: 'ツールバーはユニークidを設定する必要がある',
 
       reqModule: '{{0}}モジュールが必要',
       emptyProp: '{{0}} propertyはemptyが許可されていません',
