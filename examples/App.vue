@@ -491,7 +491,6 @@ export default {
             },
             {
               label: 'app.aside.nav.baseTree',
-              disabled: true,
               locat: {
                 name: 'GridTree'
               }

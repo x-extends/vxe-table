@@ -25,8 +25,8 @@
       resizable
       :data="tableData">
       <vxe-table-column type="index" width="100" show-overflow>
-        <template v-slot="{ seq }">
-          <vxe-button>按钮{{ seq }}</vxe-button>
+        <template v-slot="{ row, seq }">
+          <vxe-button @click="showDetailEvent(row)">弹框{{ seq }}</vxe-button>
         </template>
       </vxe-table-column>
       <vxe-table-column field="name" title="app.body.label.name" sortable>
@@ -80,6 +80,10 @@
       </vxe-table-column>
     </vxe-table>
 
+    <vxe-modal v-model="showDetails" title="查看详情" width="800" height="400" resize>
+      <template>{{ selectRow ? selectRow.text : '' }}</template>
+    </vxe-modal>
+
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
@@ -96,6 +100,8 @@ export default {
   data () {
     return {
       showSexTip: false,
+      showDetails: false,
+      selectRow: null,
       tableData: [],
       demoCodes: [
         `
@@ -117,8 +123,8 @@ export default {
           resizable
           :data="tableData">
           <vxe-table-column type="index" width="100" show-overflow>
-            <template v-slot="{ seq }">
-              <vxe-button>按钮{{ seq }}</vxe-button>
+            <template v-slot="{ row, seq }">
+              <vxe-button @click="showDetailEvent(row)">弹框{{ seq }}</vxe-button>
             </template>
           </vxe-table-column>
           <vxe-table-column field="name" title="app.body.label.name" sortable>
@@ -171,12 +177,18 @@ export default {
             </template>
           </vxe-table-column>
         </vxe-table>
+
+        <vxe-modal v-model="showDetails" title="查看详情" width="800" height="400" resize>
+          <template>{{ selectRow ? selectRow.text : '' }}</template>
+        </vxe-modal>
         `,
         `
         export default {
           data () {
             return {
               showSexTip: false,
+              showDetails: false,
+              selectRow: null,
               tableData: []
             }
           },
@@ -192,6 +204,10 @@ export default {
             },
             changeFilterEvent (evnt, option, context) {
               context.changeMultipleOption(evnt, !!option.data, option)
+            },
+            showDetailEvent (row) {
+              this.selectRow = row
+              this.showDetails = true
             }
           }
         }
@@ -217,6 +233,10 @@ export default {
     },
     changeFilterEvent (evnt, option, context) {
       context.changeMultipleOption(evnt, !!option.data, option)
+    },
+    showDetailEvent (row) {
+      this.selectRow = row
+      this.showDetails = true
     }
   }
 }

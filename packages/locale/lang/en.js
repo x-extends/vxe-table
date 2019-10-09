@@ -9,6 +9,7 @@ export default {
       scrollYHeight: 'You must set the height or max-height to enable virtual scrolling.',
       unableInsert: 'Unable to insert to the specified location.',
 
+      barUnableLink: 'Toolbar cannot associate table.',
       toolbarId: 'Toolbar must have a unique id',
 
       reqModule: 'require {{0}} module.',
