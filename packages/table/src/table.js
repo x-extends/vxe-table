@@ -504,17 +504,17 @@ export default {
       // 在 v2.0 中废弃
       if (tableFullColumn.length) {
         if (tableFullColumn.some(column => column.columnKey)) {
-          UtilTools.warn('vxe.error.delColumnKey')
+          UtilTools.warn('vxe.error.delProp', ['column.column-key', 'table.column-key'])
         }
       }
       // 在 v3.0 中废弃 prop/label
       if (tableFullColumn.length) {
         let cIndex = Math.floor((tableFullColumn.length - 1) / 2)
         if (tableFullColumn[cIndex].prop) {
-          UtilTools.warn('vxe.error.delProp')
+          UtilTools.warn('vxe.error.delProp', ['prop', 'field'])
         }
         if (tableFullColumn[cIndex].label) {
-          UtilTools.warn('vxe.error.delLabel')
+          UtilTools.warn('vxe.error.delProp', ['label', 'title'])
         }
       }
       if (this.treeConfig && tableFullColumn.some(column => column.fixed) && tableFullColumn.some(column => column.type === 'expand')) {
@@ -553,13 +553,13 @@ export default {
       })
     }
     if (!UtilTools.getRowkey(this)) {
-      UtilTools.error('vxe.error.rowIdEmpty')
+      UtilTools.error('vxe.error.emptyProp', ['row-id'])
     }
     if (XEUtils.isBoolean(showAllOverflow)) {
-      UtilTools.warn('vxe.error.delShowAllOverflow')
+      UtilTools.warn('vxe.error.delProp', ['show-all-overflow', 'show-overflow'])
     }
     if (XEUtils.isBoolean(showHeaderAllOverflow)) {
-      UtilTools.warn('vxe.error.delShowHeaderAllOverflow')
+      UtilTools.warn('vxe.error.delProp', ['show-header-all-overflow', 'show-header-overflow'])
     }
     if (radioConfig.labelProp) {
       console.warn('[vxe-table] The property labelProp is deprecated, please use labelField')
@@ -1003,7 +1003,7 @@ export default {
     insertAt (records, row) {
       let { afterFullData, editStore, scrollYLoad, tableFullData, treeConfig } = this
       if (treeConfig) {
-        throw new Error(UtilTools.error('vxe.error.treeInsert'))
+        throw new Error(UtilTools.getLog('vxe.error.noTree', ['insert']))
       }
       if (!XEUtils.isArray(records)) {
         records = [records]
@@ -1079,7 +1079,7 @@ export default {
       let rest = []
       let nowData = afterFullData
       if (treeConfig) {
-        throw new Error(UtilTools.error('vxe.error.treeRemove'))
+        throw new Error(UtilTools.getLog('vxe.error.noTree', ['remove']))
       }
       if (!rows) {
         rows = tableFullData
@@ -1128,7 +1128,7 @@ export default {
       })
     },
     revert () {
-      UtilTools.warn('vxe.error.delRevert')
+      UtilTools.warn('vxe.error.delFunc', ['revert', 'revertData'])
       return this.revertData.apply(this, arguments)
     },
     /**
@@ -1247,7 +1247,7 @@ export default {
     },
     // 在 v3.0 中废弃 getRecords
     getRecords () {
-      UtilTools.warn('vxe.error.delGetRecords')
+      UtilTools.warn('vxe.error.delFunc', ['getRecords', 'getData'])
       return this.getData.apply(this, arguments)
     },
     /**
@@ -1259,7 +1259,7 @@ export default {
     },
     // 在 v3.0 中废弃 getAllRecords
     getAllRecords () {
-      UtilTools.warn('vxe.error.delGetAllRecords')
+      UtilTools.warn('vxe.error.delFunc', ['getAllRecords', 'getRecordset'])
       return this.getRecordset()
     },
     /**

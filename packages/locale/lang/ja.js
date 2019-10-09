@@ -1,30 +1,22 @@
 export default {
   vxe: {
     error: {
-      rowIdEmpty: 'row-id propertyはemptyが許可されていません',
-      delProp: 'prop propertyは非推奨です、fieldを使用してください',
-      delLabel: 'label propertyは非推奨です、titleを使用してください',
-      delColumnKey: '参数 <column>.column-key 已废弃，请使用 <table>.column-key',
-      delShowAllOverflow: '参数 show-all-overflow 已废弃，请使用 show-overflow',
-      delShowHeaderAllOverflow: '参数 show-header-all-overflow 已废弃，请使用 show-header-overflow',
-      delGetRecords: 'getRecords functionは非推奨です、getDataを使用してください',
-      delGetAllRecords: 'getAllRecords functionは非推奨です、getRecordsetを使用してください',
-      delRevert: 'revert functionは非推奨です、revertDataを使用してください',
       groupFixed: 'Grouping headersが使われている場合、fixed columnsは左右になくてはなりません',
       notResizable: 'Horizontal virtual scrollingはresizableをサポートしていません',
       cellEditRender: 'Rendererはcell-renderとedit-renderを同時に仕様できません',
       scrollOriginal: 'Virtual scrollingはsource dataのみエクスポートできます、original=trueを設定してください',
-      treeInsert: 'Tree structureはinsert operationsをサポートしていません',
-      treeRemove: 'Tree structureはremove operationsをサポートしていません',
       treeFixedExpand: '樹木構造の固定柱は展開された行と矛盾する。',
       scrollYHeight: 'Virtual scrollingを有効にするにはheightかmax-heightを設定してください',
       unableInsert: '指定位置に挿入できません。',
 
-      notQuery: 'query methodがありません',
-      notDelete: 'delete methodがありません',
-      notSave: 'save methodがありません',
+      toolbarId: 'Toolbarはunique idが必要です',
 
-      toolbarId: 'Toolbarはunique idが必要です'
+      reqModule: '{{0}}モジュールが必要',
+      emptyProp: '{{0}} propertyはemptyが許可されていません',
+      notFunc: '{{0}} methodがありません',
+      noTree: 'Tree structureは {{0}} をサポートしていません',
+      delFunc: '{{0}} functionは非推奨です、{{1}}を使用してください',
+      delProp: '{{0}} propertyは非推奨です、{{1}}を使用してください'
     },
     table: {
       emptyText: 'データがありません',

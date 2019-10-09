@@ -258,7 +258,7 @@ export default {
                 this.tableLoading = false
               })
             } else {
-              UtilTools.error('vxe.error.notQuery')
+              UtilTools.error('vxe.error.notFunc', [code])
             }
             break
           }
@@ -282,7 +282,7 @@ export default {
                 }
               })
             } else {
-              UtilTools.error('vxe.error.notDelete')
+              UtilTools.error('vxe.error.notFunc', [code])
             }
             break
           }
@@ -329,7 +329,7 @@ export default {
                 })
               })
             } else {
-              UtilTools.error('vxe.error.notSave')
+              UtilTools.error('vxe.error.notFunc', [code])
             }
             break
           }
