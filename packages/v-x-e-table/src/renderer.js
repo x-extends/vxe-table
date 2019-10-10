@@ -70,8 +70,13 @@ function renderOptions (h, options, renderOpts, params) {
   let { row, column } = params
   let labelProp = optionProps.label || 'label'
   let valueProp = optionProps.value || 'value'
+  let disabledProp = optionProps.value || 'disabled'
   return options.map((item, index) => {
     return h('option', {
+      attrs: {
+        value: item[valueProp],
+        disabled: item[disabledProp]
+      },
       domProps: {
         selected: item[valueProp] === UtilTools.getCellValue(row, column)
       },

@@ -100,6 +100,7 @@ module.exports = {
         forceCellValid: 'Validate cell + lock',
         forceRowValid: 'Validate row + lock',
         keyboard: 'Keyboard navigation',
+        uniqueSelect: 'Unique select option',
 
         excel: '更多实现',
         cell: 'Cell',
