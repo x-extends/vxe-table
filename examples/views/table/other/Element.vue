@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="tip">
-      自定义渲染 <a class="link" href="https://www.npmjs.com/package/element-ui" target="_blank">element-ui</a> 组件（建议使用 <a class="link" href="https://www.npmjs.com/package/vxe-table-plugin-element" target="_blank">vxe-table-plugin-element</a> 适配插件，当然你也可以自行处理兼容性）<br>
+      自定义渲染 <a class="link" href="https://www.npmjs.com/package/element-ui" target="_blank">element-ui</a> 组件<span class="red">（建议使用 <a class="link" href="https://www.npmjs.com/package/vxe-table-plugin-element" target="_blank">vxe-table-plugin-element</a> 适配插件，当然你也可以自行处理兼容性）</span><br>
       使用自定义模板可以实现对更多细节的控制，但会失去默认的一些功能，比如自动聚焦等。（可以通过设置 <table-column-api-link prop="autofocus"/> 属性强制聚焦）<br>
       如果很多页面都使用相同自定义模板的场景下建议使用<router-link class="link" :to="{name: 'RendererAPI'}">渲染器</router-link>，因为可以更好的复用<br>
       自定义渲染需要配合 <table-api-link prop="updateStatus"/> 方法使用，在对应单元格的值发生改变时调用更新状态
@@ -98,8 +98,6 @@
 </template>
 
 <script>
-import XEUtils from 'xe-utils'
-import XEAjax from 'xe-ajax'
 import hljs from 'highlight.js'
 
 export default {
@@ -219,10 +217,10 @@ export default {
           },
           methods: {
             formatDate (value, format) {
-              return XEUtils.toDateString(value, format)
+              return this.$utils.toDateString(value, format)
             },
             getSelectLabel (value, list, valueProp = 'value', labelField = 'label') {
-              let item = XEUtils.find(list, item => item[valueProp] === value)
+              let item = this.$utils.find(list, item => item[valueProp] === value)
               return item ? item[labelField] : null
             },
             getCascaderLabel (value, list) {
@@ -262,7 +260,7 @@ export default {
                     return '平均'
                   }
                   if (['age', 'rate'].includes(column.property)) {
-                    return XEUtils.mean(data, column.property)
+                    return this.$utils.mean(data, column.property)
                   }
                   return null
                 }),
@@ -271,7 +269,7 @@ export default {
                     return '和值'
                   }
                   if (['age', 'rate'].includes(column.property)) {
-                    return XEUtils.sum(data, column.property)
+                    return this.$utils.sum(data, column.property)
                   }
                   return null
                 })
@@ -300,22 +298,22 @@ export default {
   },
   methods: {
     findSexList () {
-      return XEAjax.doGet('/api/conf/sex/list').then(({ data }) => {
+      return this.$ajax.doGet('/api/conf/sex/list').then(({ data }) => {
         this.sexList = data
         return data
       })
     },
     findRegionList () {
-      return XEAjax.doGet('/api/conf/region/list').then(({ data }) => {
+      return this.$ajax.doGet('/api/conf/region/list').then(({ data }) => {
         this.regionList = data
         return data
       })
     },
     formatDate (value, format) {
-      return XEUtils.toDateString(value, format)
+      return this.$utils.toDateString(value, format)
     },
     getSelectLabel (value, list, valueProp = 'value', labelField = 'label') {
-      let item = XEUtils.find(list, item => item[valueProp] === value)
+      let item = this.$utils.find(list, item => item[valueProp] === value)
       return item ? item[labelField] : null
     },
     getCascaderLabel (value, list) {
@@ -355,7 +353,7 @@ export default {
             return '平均'
           }
           if (['age', 'rate'].includes(column.property)) {
-            return XEUtils.mean(data, column.property)
+            return this.$utils.mean(data, column.property)
           }
           return null
         }),
@@ -364,7 +362,7 @@ export default {
             return '和值'
           }
           if (['age', 'rate'].includes(column.property)) {
-            return XEUtils.sum(data, column.property)
+            return this.$utils.sum(data, column.property)
           }
           return null
         })
