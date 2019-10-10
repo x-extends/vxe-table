@@ -887,6 +887,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.uniqueSelect',
+              locat: {
+                name: 'TableEditUniqueSelect'
+              }
+            },
+            {
               label: 'app.aside.nav.template',
               locat: {
                 name: 'TableEditTemplate'

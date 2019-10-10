@@ -242,7 +242,7 @@ export default {
   },
   _setColumnModel (row, column) {
     let { model, editRender } = column
-    if (editRender) {
+    if (editRender && model.update) {
       UtilTools.setCellValue(row, column, model.value)
       model.update = false
       model.value = null

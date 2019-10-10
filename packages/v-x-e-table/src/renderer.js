@@ -37,7 +37,8 @@ function getEvents (renderOpts, params, context) {
   let { name, events } = renderOpts
   let { $table, row, column } = params
   let { model } = column
-  let type = name === 'select' ? 'change' : 'input'
+  let isSelect = name === 'select'
+  let type = isSelect ? 'change' : 'input'
   let on = {
     [type] (evnt) {
       let cellValue = evnt.target.value
@@ -77,9 +78,14 @@ function renderOptions (h, options, renderOpts, params, context) {
   let { row, column } = params
   let labelProp = optionProps.label || 'label'
   let valueProp = optionProps.value || 'value'
+  let disabledProp = optionProps.value || 'disabled'
   let cellValue = isSyncCell(renderOpts, params, context) ? UtilTools.getCellValue(row, column) : column.model.value
   return options.map((item, index) => {
     return h('option', {
+      attrs: {
+        value: item[valueProp],
+        disabled: item[disabledProp]
+      },
       domProps: {
         selected: item[valueProp] === cellValue
       },

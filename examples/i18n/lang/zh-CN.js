@@ -101,6 +101,7 @@ module.exports = {
         forceCellValid: '数据校验 cell + 强制锁定',
         forceRowValid: '数据校验 row + 强制锁定',
         keyboard: '键盘导航',
+        uniqueSelect: '唯一下拉选项',
 
         bad: '糟糕的用法',
 

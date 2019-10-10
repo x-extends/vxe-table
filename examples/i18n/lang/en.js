@@ -101,6 +101,7 @@ module.exports = {
         forceCellValid: 'Validate cell + lock',
         forceRowValid: 'Validate row + lock',
         keyboard: 'Keyboard navigation',
+        uniqueSelect: 'Unique select option',
 
         bad: 'Bad usage',
 
