@@ -101,6 +101,7 @@ module.exports = {
         forceRowValid: 'Validate row + lock',
         keyboard: 'Keyboard navigation',
         uniqueSelect: 'Unique select option',
+        cascadingSelect: 'Cascading select options',
 
         excel: '更多实现',
         cell: 'Cell',

@@ -101,6 +101,7 @@ module.exports = {
         forceRowValid: '数据校验 row + 强制锁定',
         keyboard: '键盘导航',
         uniqueSelect: '唯一下拉选项',
+        cascadingSelect: '联动下拉选项',
 
         excel: '更多实现',
         cell: '单元格',

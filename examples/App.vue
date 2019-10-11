@@ -896,6 +896,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.cascadingSelect',
+              locat: {
+                name: 'TableEditCascadingSelect'
+              }
+            },
+            {
               label: 'app.aside.nav.template',
               locat: {
                 name: 'TableEditTemplate'
