@@ -949,13 +949,13 @@ const Methods = {
    * 全局按下事件处理
    */
   handleGlobalMousedownEvent (evnt) {
-    let { $el, $refs, editStore, ctxMenuStore, editConfig = {}, filterStore } = this
+    let { $el, $refs, editStore, ctxMenuStore, editConfig = {}, filterStore, getEventTargetNode, getRowNode } = this
     let { actived } = editStore
     let { filterWrapper, validTip } = $refs
     if (filterWrapper) {
-      if (this.getEventTargetNode(evnt, $el, 'vxe-filter-wrapper').flag) {
+      if (getEventTargetNode(evnt, $el, 'vxe-filter-wrapper').flag) {
         // 如果点击了筛选按钮
-      } else if (this.getEventTargetNode(evnt, filterWrapper.$el).flag) {
+      } else if (getEventTargetNode(evnt, filterWrapper.$el).flag) {
         // 如果点击筛选容器
       } else {
         this.preventEvent(evnt, 'event.clearFilter', filterStore.args, this.closeFilter)
@@ -964,32 +964,24 @@ const Methods = {
     // 如果已激活了编辑状态
     if (actived.row) {
       if (!(editConfig.autoClear === false)) {
-        if (validTip && this.getEventTargetNode(evnt, validTip.$el).flag) {
+        if (validTip && getEventTargetNode(evnt, validTip.$el).flag) {
           // 如果是激活状态，且点击了校验提示框
         } else if (!this.lastCallTime || this.lastCallTime + 50 < Date.now()) {
           // 如果手动调用了激活单元格，避免触发源被移除后导致重复关闭
           this.preventEvent(evnt, 'event.clearActived', actived.args, () => {
             let isClear
-            let isReadonlyCol = !this.getEventTargetNode(evnt, $el, 'col--edit').flag
-            // row 方式
             if (editConfig.mode === 'row') {
-              let rowNode = this.getEventTargetNode(evnt, $el, 'vxe-body--row')
-              let isOtherRow = rowNode.flag ? rowNode.targetElem !== actived.args.cell.parentNode : 0
-              if (editConfig.trigger === 'manual') {
-                // manual 触发，如果点击了不同行
-                isClear = isOtherRow
-              } else {
-                // click,dblclick 触发，如果点击了不同行的非编辑列
-                isClear = isOtherRow && isReadonlyCol
-              }
+              let rowNode = getEventTargetNode(evnt, $el, 'vxe-body--row')
+              // row 方式，如果点击了不同行
+              isClear = rowNode.flag ? getRowNode(rowNode.targetElem).item !== getRowNode(actived.args.cell.parentNode).item : 0
             } else {
               // cell 方式，如果是非编辑列
-              isClear = isReadonlyCol
+              isClear = !getEventTargetNode(evnt, $el, 'col--edit').flag
             }
             if (
               isClear ||
               // 如果点击了当前表格之外
-              !this.getEventTargetNode(evnt, $el).flag
+              !getEventTargetNode(evnt, $el).flag
             ) {
               setTimeout(() => this.clearActived(evnt))
             }
@@ -998,7 +990,7 @@ const Methods = {
       }
     }
     // 如果配置了快捷菜单且，点击了其他地方则关闭
-    if (ctxMenuStore.visible && this.$refs.ctxWrapper && !this.getEventTargetNode(evnt, this.$refs.ctxWrapper.$el).flag) {
+    if (ctxMenuStore.visible && this.$refs.ctxWrapper && !getEventTargetNode(evnt, this.$refs.ctxWrapper.$el).flag) {
       this.closeMenu()
     }
   },
