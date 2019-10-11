@@ -70,7 +70,7 @@ function renderOptions (h, options, renderOpts, params) {
   let { row, column } = params
   let labelProp = optionProps.label || 'label'
   let valueProp = optionProps.value || 'value'
-  let disabledProp = optionProps.value || 'disabled'
+  let disabledProp = optionProps.disabled || 'disabled'
   return options.map((item, index) => {
     return h('option', {
       attrs: {

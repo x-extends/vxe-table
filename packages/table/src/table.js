@@ -432,6 +432,14 @@ export default {
     optimizeOpts () {
       return Object.assign({}, GlobalConfig.optimization, this.optimization)
     },
+    rowHeightMaps () {
+      return Object.assign({
+        default: 48,
+        medium: 44,
+        small: 40,
+        mini: 36
+      }, this.optimizeOpts.rHeights)
+    },
     vaildTipOpts () {
       return Object.assign({ isArrow: false }, this.tooltipConfig)
     },
@@ -3603,7 +3611,7 @@ export default {
     // 计算可视渲染相关数据
     computeScrollLoad () {
       return this.$nextTick().then(() => {
-        let { vSize, scrollXLoad, scrollYLoad, scrollYStore, scrollXStore, visibleColumn, optimizeOpts } = this
+        let { vSize, scrollXLoad, scrollYLoad, scrollYStore, scrollXStore, visibleColumn, optimizeOpts, rowHeightMaps } = this
         let { scrollX, scrollY } = optimizeOpts
         let tableBody = this.$refs.tableBody
         let tableBodyElem = tableBody ? tableBody.$el : null
@@ -3642,20 +3650,7 @@ export default {
             }
             // 默认的行高
             if (!rHeight) {
-              switch (vSize) {
-                case 'medium':
-                  rHeight = 44
-                  break
-                case 'small':
-                  rHeight = 40
-                  break
-                case 'mini':
-                  rHeight = 36
-                  break
-                default:
-                  rHeight = 48
-                  break
-              }
+              rHeight = rowHeightMaps[vSize || 'default']
             }
             let visibleYSize = XEUtils.toNumber(scrollY.vSize || Math.ceil(tableBodyElem.clientHeight / rHeight))
             scrollYStore.visibleSize = visibleYSize

@@ -1,8 +1,11 @@
 /*font-family*/
 $vxe-font-family: Helvetica Neue,Helvetica,PingFang SC,Hiragino Sans GB,Microsoft YaHei,\\5FAE\8F6F\96C5\9ED1,Arial,sans-serif;
 $vxe-font-color: #606266;
-$vxe-font-size: 14px;
 $vxe-zindex: 4000;
+$vxe-font-size: 14px;
+$vxe-font-size-medium: 14px;
+$vxe-font-size-small: 13px;
+$vxe-font-size-mini: 12px;
 
 /*primary color*/
 $vxe-primary-color: #409eff;
@@ -22,6 +25,11 @@ $vxe-table-resizable-color: #D9DDDF;
 $vxe-table-background-color: #ffffff;
 
 /*table row*/
+$vxe-table-row-height-default: 48px;
+$vxe-table-row-height-medium: 44px;
+$vxe-table-row-height-small: 40px;
+$vxe-table-row-height-mini: 36px;
+$vxe-table-row-line-height: 23px;
 $vxe-table-row-striped-background-color: #fafafa;
 $vxe-table-row-hover-background-color: #f5f7fa;
 $vxe-table-row-current-background-color: #e6f7ff;
