@@ -14,7 +14,7 @@
       ref="xTable"
       max-height="400"
       :data="tableData"
-      :edit-config="{trigger: 'click', mode: 'cell'}"
+      :edit-config="{trigger: 'click', mode: 'row'}"
       @edit-actived="editActivedEvent">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
@@ -85,7 +85,7 @@ export default {
           ref="xTable"
           max-height="400"
           :data="tableData"
-          :edit-config="{trigger: 'click', mode: 'cell'}"
+          :edit-config="{trigger: 'click', mode: 'row'}"
           @edit-actived="editActivedEvent">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>

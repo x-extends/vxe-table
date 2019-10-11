@@ -108,6 +108,9 @@ function mockData () {
       createTime: currTime,
       attr1: '',
       attr2: [],
+      attr3: index % 2 ? '1' : '',
+      attr4: '',
+      attr5: 0,
       loading: false,
       info: {
         name2: 'name2_' + fullIndex,

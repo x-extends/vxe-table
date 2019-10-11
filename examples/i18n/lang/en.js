@@ -102,6 +102,7 @@ module.exports = {
         forceRowValid: 'Validate row + lock',
         keyboard: 'Keyboard navigation',
         uniqueSelect: 'Unique select option',
+        cascadingSelect: 'Cascading select options',
 
         bad: 'Bad usage',
 
