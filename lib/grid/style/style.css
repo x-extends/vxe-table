@@ -1,0 +1,1 @@
+.vxe-grid .vxe-body--row.row--pending{color:#f56c6c;text-decoration:line-through;cursor:no-drop}.vxe-grid .vxe-body--row.row--pending .vxe-body--column{position:relative}.vxe-grid .vxe-body--row.row--pending .vxe-body--column:after{content:"";position:absolute;top:50%;left:0;width:100%;height:0;border-bottom:1px solid #f56c6c;z-index:1}
