@@ -1274,6 +1274,52 @@ const apis = [
                 list: []
               }
             ]
+          },
+          {
+            name: 'rHeights',
+            desc: '重写表格默认高度,必须和 scss 中的变量一致（用于重写表格默认行高的场景，谨慎使用）',
+            version: '',
+            type: 'Object',
+            enum: '',
+            defVal: '',
+            list: [
+              {
+                name: 'default',
+                desc: '表格 default size',
+                version: '',
+                type: 'Number',
+                enum: '',
+                defVal: '48',
+                list: []
+              },
+              {
+                name: 'medium',
+                desc: '表格 medium size',
+                version: '',
+                type: 'Number',
+                enum: '',
+                defVal: '44',
+                list: []
+              },
+              {
+                name: 'small',
+                desc: '表格 small size',
+                version: '',
+                type: 'Number',
+                enum: '',
+                defVal: '40',
+                list: []
+              },
+              {
+                name: 'mini',
+                desc: '表格 mini size',
+                version: '',
+                type: 'Number',
+                enum: '',
+                defVal: '36',
+                list: []
+              }
+            ]
           }
         ]
       },

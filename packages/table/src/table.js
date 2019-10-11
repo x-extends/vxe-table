@@ -319,6 +319,14 @@ export default {
     optimizeOpts () {
       return Object.assign({}, GlobalConfig.optimization, this.optimization)
     },
+    rowHeightMaps () {
+      return Object.assign({
+        default: 48,
+        medium: 44,
+        small: 40,
+        mini: 36
+      }, this.optimizeOpts.rHeights)
+    },
     vaildTipOpts () {
       return Object.assign({ isArrow: false }, this.tooltipConfig)
     },

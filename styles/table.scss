@@ -9,19 +9,19 @@
 }
 
 %DefaultColumnHeight {
-  height: 48px;
+  height: $vxe-table-row-height-default;
 }
 
 %MediumColumnHeight {
-  height: 44px;
+  height: $vxe-table-row-height-medium;
 }
 
 %SmallColumnHeight {
-  height: 40px;
+  height: $vxe-table-row-height-small;
 }
 
 %MiniColumnHeight {
-  height: 36px;
+  height: $vxe-table-row-height-mini;
 }
 
 %CellEllipsis {
@@ -47,7 +47,7 @@
   .vxe-default-select {
     outline: 0;
     padding: 0 2px;
-    height: 40px;
+    height: floor($vxe-table-row-height-default - 8);
     width: 100%;
     color: $vxe-font-color;
     border-radius: 4px;
@@ -160,10 +160,10 @@
   .vxe-header--column,
   .vxe-body--column,
   .vxe-footer--column {
-    line-height: 23px;
+    line-height: $vxe-table-row-line-height;
     text-align: left;
     &:not(.col--ellipsis) {
-      padding: 12px 0;
+      padding: #{floor(($vxe-table-row-height-default - $vxe-table-row-line-height) / 2)} 0;
     }
     &.col--current {
       background-color: $vxe-table-column-current-background-color;
@@ -226,11 +226,12 @@
     }
   }
   &.size--medium {
+    font-size: $vxe-font-size-medium;
     .vxe-header--column,
     .vxe-body--column,
     .vxe-footer--column {
       &:not(.col--ellipsis) {
-        padding: 10px 0;
+        padding: #{floor(($vxe-table-row-height-medium - $vxe-table-row-line-height) / 2)} 0;
       }
     }
     .vxe-table--loading {
@@ -243,16 +244,16 @@
     .vxe-default-textarea,
     .vxe-default-select,
     .vxe-input--wrapper {
-      height: 36px;
+      height: floor($vxe-table-row-height-medium - 8);
     }
   }
   &.size--small {
-    font-size: 12px;
+    font-size: $vxe-font-size-small;
     .vxe-header--column,
     .vxe-body--column,
     .vxe-footer--column {
       &:not(.col--ellipsis) {
-        padding: 8px 0;
+        padding: #{floor(($vxe-table-row-height-small - $vxe-table-row-line-height) / 2)} 0;
       }
     }
     .vxe-table--loading {
@@ -265,16 +266,16 @@
     .vxe-default-textarea,
     .vxe-default-select,
     .vxe-input--wrapper {
-      height: 32px;
+      height: floor($vxe-table-row-height-small - 8);
     }
   }
   &.size--mini {
-    font-size: 12px;
+    font-size: $vxe-font-size-mini;
     .vxe-header--column,
     .vxe-body--column,
     .vxe-footer--column {
       &:not(.col--ellipsis) {
-        padding: 6px 0;
+        padding: #{floor(($vxe-table-row-height-mini - $vxe-table-row-line-height) / 2)} 0;
       }
     }
     .vxe-table--loading {
@@ -287,7 +288,7 @@
     .vxe-default-textarea,
     .vxe-default-select,
     .vxe-input--wrapper {
-      height: 28px;
+      height: floor($vxe-table-row-height-mini - 8);
     }
   }
   .vxe-cell {

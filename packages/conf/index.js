@@ -17,6 +17,12 @@ const GlobalConfig = {
   optimization: {
     animat: true,
     delayHover: 250,
+    // rHeights: {
+    //   default: 48,
+    //   medium: 44,
+    //   small: 40,
+    //   mini: 36
+    // },
     scrollX: {
       gt: 100
       // oSize: 0,

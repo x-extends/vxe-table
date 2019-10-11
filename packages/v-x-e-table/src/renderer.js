@@ -78,7 +78,7 @@ function renderOptions (h, options, renderOpts, params, context) {
   let { row, column } = params
   let labelProp = optionProps.label || 'label'
   let valueProp = optionProps.value || 'value'
-  let disabledProp = optionProps.value || 'disabled'
+  let disabledProp = optionProps.disabled || 'disabled'
   let cellValue = isSyncCell(renderOpts, params, context) ? UtilTools.getCellValue(row, column) : column.model.value
   return options.map((item, index) => {
     return h('option', {
