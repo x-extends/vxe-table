@@ -1,6 +1,12 @@
 <template>
   <div>
-    <p class="tip">手动触发筛选、动态更改筛选条件，通过调用 <table-api-link prop="filter"/> 和 <table-api-link prop="updateData"/> 方法来处理复杂场景的筛选逻辑</p>
+    <p class="tip">
+      筛选高级用法、动态更改筛选条件、自定义更加复杂的模板事件，通过调用 <table-api-link prop="filter"/> 和 <table-api-link prop="updateData"/> 方法来处理复杂场景的筛选逻辑<br>
+      context 对象:<br>
+      &nbsp;&nbsp;<span class="orange">changeOption(event, checked, option) 更新选项的状态</span><br>
+      &nbsp;&nbsp;<span class="orange">confirmFilter() 确认筛选</span><br>
+      &nbsp;&nbsp;<span class="orange">resetFilter() 清除筛选条件</span>
+    </p>
 
     <vxe-toolbar>
       <template v-slot:buttons>
@@ -21,10 +27,19 @@
       :data="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable :filters="[{label: 'id大于10', value: 10}, {label: 'id大于40', value: 40}]" :filter-method="filterNameMethod"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex" sortable :filters="[{label: 'Man', value: '1'}, {label: 'Woman', value: '0'}]"></vxe-table-column>
+      <vxe-table-column field="role" title="Role" sortable :filters="[{ data: '' }]" :filter-method="filterRoleMethod">
+        <template v-slot:filter="{ column, context }">
+          <select class="my-select" v-model="option.data" v-for="(option, index) in column.filters" :key="index" @change="context.changeOption($event, !!option.data, option)">
+            <option v-for="(label, cIndex) in roleList" :key="cIndex" :value="label">{{ label }}</option>
+          </select>
+        </template>
+      </vxe-table-column>
+      <vxe-table-column field="sex" title="Sex" sortable :filter-multiple="false" :filters="[{label: 'Man', value: '1'}, {label: 'Woman', value: '0'}]"></vxe-table-column>
       <vxe-table-column field="age" title="Age" :filters="[{ data: '' }]" :filter-method="filterAgeMethod">
         <template v-slot:filter="{ column, context }">
-          <input type="type" v-for="(option, index) in column.filters" :key="index" v-model="option.data" @input="context.changeOption($event, !!option.data, option)">
+          <template v-for="(option, index) in column.filters">
+            <input class="my-input" type="type" :key="index" v-model="option.data" @input="context.changeOption($event, !!option.data, option)" @keyup.enter="context.confirmFilter()" placeholder="按回车确认筛选">
+          </template>
         </template>
       </vxe-table-column>
       <vxe-table-column field="time" title="Time" sortable></vxe-table-column>
@@ -35,6 +50,7 @@
     <pre>
       <code class="xml">{{ demoCodes[0] }}</code>
       <code class="javascript">{{ demoCodes[1] }}</code>
+      <code class="css">{{ demoCodes[2] }}</code>
     </pre>
   </div>
 </template>
@@ -47,6 +63,7 @@ export default {
     return {
       loading: false,
       tableData: [],
+      roleList: ['', '前端', '后端', '设计师'],
       demoCodes: [
         `
         <vxe-toolbar>
@@ -68,10 +85,19 @@ export default {
           :data="tableData">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable :filters="[{label: 'id大于10', value: 10}, {label: 'id大于40', value: 40}]" :filter-method="filterNameMethod"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex" sortable :filters="[{label: 'Man', value: '1'}, {label: 'Woman', value: '0'}]"></vxe-table-column>
+          <vxe-table-column field="role" title="Role" sortable :filters="[{ data: '' }]" :filter-method="filterRoleMethod">
+            <template v-slot:filter="{ column, context }">
+              <select class="my-select" v-model="option.data" v-for="(option, index) in column.filters" :key="index" @change="context.changeOption($event, !!option.data, option)">
+                <option v-for="(label, cIndex) in roleList" :key="cIndex" :value="label">{{ label }}</option>
+              </select>
+            </template>
+          </vxe-table-column>
+          <vxe-table-column field="sex" title="Sex" sortable :filter-multiple="false" :filters="[{label: 'Man', value: '1'}, {label: 'Woman', value: '0'}]"></vxe-table-column>
           <vxe-table-column field="age" title="Age" :filters="[{ data: '' }]" :filter-method="filterAgeMethod">
             <template v-slot:filter="{ column, context }">
-              <input type="type" v-for="(option, index) in column.filters" :key="index" v-model="option.data" @input="context.changeOption($event, !!option.data, option)">
+              <template v-for="(option, index) in column.filters">
+                <input class="my-input" type="type" :key="index" v-model="option.data" @input="context.changeOption($event, !!option.data, option)" @keyup.enter="context.confirmFilter()" placeholder="按回车确认筛选">
+              </template>
             </template>
           </vxe-table-column>
           <vxe-table-column field="time" title="Time" sortable></vxe-table-column>
@@ -82,7 +108,8 @@ export default {
           data () {
             return {
               loading: false,
-              tableData: []
+              tableData: [],
+              roleList: ['', '前端', '后端', '设计师']
             }
           },
           created () {
@@ -101,6 +128,9 @@ export default {
             },
             filterNameMethod ({ value, row, column }) {
               return row.id >= value
+            },
+            filterRoleMethod ({ option, row }) {
+              return row.role === option.data
             },
             filterAgeMethod ({ option, row }) {
               return row.age === Number(option.data)
@@ -166,6 +196,16 @@ export default {
             }
           }
         }
+        `,
+        `
+        .my-select {
+          width: 100px;
+          height: 32px;
+        }
+        .my-input {
+          width: 140px;
+          height: 32px;
+        }
         `
       ]
     }
@@ -191,6 +231,9 @@ export default {
     },
     filterNameMethod ({ value, row, column }) {
       return row.id >= value
+    },
+    filterRoleMethod ({ option, row }) {
+      return row.role === option.data
     },
     filterAgeMethod ({ option, row }) {
       return row.age === Number(option.data)
@@ -257,3 +300,14 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.my-select {
+  width: 100px;
+  height: 32px;
+}
+.my-input {
+  width: 140px;
+  height: 32px;
+}
+</style>

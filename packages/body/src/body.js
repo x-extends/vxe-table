@@ -215,6 +215,12 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
         }
         $table.triggerHoverEvent(evnt, { row, rowIndex })
       }
+      trOn.mouseleave = evnt => {
+        if (isOperateMouse($table)) {
+          return
+        }
+        $table.clearHoverRow()
+      }
     }
     let rowid = UtilTools.getRowid($table, row)
     rows.push(
