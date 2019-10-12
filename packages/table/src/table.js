@@ -954,7 +954,7 @@ export default {
       let fullColumnIdData = this.fullColumnIdData = {}
       fullColumnMap.clear()
       tableFullColumn.forEach((column, index) => {
-        let rest = { column, index }
+        let rest = { column, colid: column.id, index }
         fullColumnIdData[column.id] = rest
         fullColumnMap.set(column, rest)
       })
@@ -1240,6 +1240,10 @@ export default {
       let columns = this.visibleColumn
       return arguments.length ? columns[columnIndex] : columns.slice(0)
     },
+    getColid (column) {
+      let fullColumnMap = this.fullColumnMap
+      return fullColumnMap.has(column) ? fullColumnMap.get(column).colid : null
+    },
     getColumnById (colid) {
       let fullColumnIdData = this.fullColumnIdData
       return fullColumnIdData[colid] ? fullColumnIdData[colid].column : null
@@ -1378,6 +1382,10 @@ export default {
     getRowById (rowid) {
       let fullDataRowIdData = this.fullDataRowIdData
       return fullDataRowIdData[rowid] ? fullDataRowIdData[rowid].row : null
+    },
+    getRowid (row) {
+      let fullAllDataRowMap = this.fullAllDataRowMap
+      return fullAllDataRowMap.has(row) ? fullAllDataRowMap.get(row).rowid : null
     },
     /**
      * 获取处理后的表格数据

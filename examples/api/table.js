@@ -1868,6 +1868,15 @@ const apis = [
         list: []
       },
       {
+        name: 'getColid(column)',
+        desc: '根据列获取列的唯一主键',
+        version: '1.15.4',
+        type: 'String',
+        enum: '',
+        defVal: 'column',
+        list: []
+      },
+      {
         name: 'getColumnById(colid)',
         desc: '根据列的唯一主键获取列',
         version: '',
@@ -1928,6 +1937,15 @@ const apis = [
         type: 'Row',
         enum: '',
         defVal: 'rowid',
+        list: []
+      },
+      {
+        name: 'getRowid(row)',
+        desc: '根据行获取行的唯一主键',
+        version: '1.15.4',
+        type: 'String',
+        enum: '',
+        defVal: 'row: Row',
         list: []
       },
       {
