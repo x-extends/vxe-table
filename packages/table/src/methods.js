@@ -418,6 +418,10 @@ const Methods = {
     let fullDataRowIdData = this.fullDataRowIdData
     return fullDataRowIdData[rowid] ? fullDataRowIdData[rowid].row : null
   },
+  getRowid (row) {
+    let fullAllDataRowMap = this.fullAllDataRowMap
+    return fullAllDataRowMap.has(row) ? fullAllDataRowMap.get(row).rowid : null
+  },
   /**
    * 获取处理后的表格数据
    * 如果存在筛选条件，继续处理

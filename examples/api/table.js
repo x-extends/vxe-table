@@ -1786,9 +1786,18 @@ const apis = [
         list: []
       },
       {
+        name: 'getColid(column)',
+        desc: '根据列获取列的唯一主键',
+        version: '',
+        type: 'String',
+        enum: '',
+        defVal: 'column: ColumnConfig',
+        list: []
+      },
+      {
         name: 'getColumnById(colid)',
         desc: '根据列的唯一主键获取列',
-        version: '',
+        version: '2.6',
         type: 'Column',
         enum: '',
         defVal: 'colid: string',
@@ -1843,9 +1852,18 @@ const apis = [
         name: 'getRowById(rowid)',
         desc: '根据行的唯一主键获取行',
         version: '',
-        type: 'Row',
+        type: 'String',
         enum: '',
         defVal: 'rowid: string',
+        list: []
+      },
+      {
+        name: 'getRowid(row)',
+        desc: '根据行获取行的唯一主键',
+        version: '2.6',
+        type: 'Row',
+        enum: '',
+        defVal: 'row: Row',
         list: []
       },
       {
