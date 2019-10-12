@@ -4,7 +4,7 @@
       通过设置 <table-column-api-link prop="filters"/> 属性和 <table-column-api-link prop="filter-method"/> 方法可以支持列筛选功能<br>
       如果是服务端筛选，只需加上 <table-api-link prop="remote-filter"/> 和 <table-api-link prop="filter-change"/> 事件就可以实现<br>
       如果是动态数据请配合 <table-api-link prop="filter"/> 方法，参数 <table-column-api-link prop="filters"/> 不支持动态数据<br>
-      context 对象（<router-link  class="link" :to="{name: 'TableManualFilter'}">查看示例</router-link>）:<br>
+      context 对象（<router-link  class="link" :to="{name: 'TableManualFilter'}">查看高级用法</router-link>）:<br>
       &nbsp;&nbsp;<span class="orange">changeOption(event, checked, option) 更新选项的状态</span><br>
       &nbsp;&nbsp;<span class="orange">confirmFilter() 确认筛选</span><br>
       &nbsp;&nbsp;<span class="orange">resetFilter() 清除筛选条件</span>
