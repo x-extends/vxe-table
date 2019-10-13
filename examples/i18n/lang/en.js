@@ -20,7 +20,7 @@ module.exports = {
         style: 'Cell style',
         hideHead: 'Hidden header',
         resizable: 'Resizable',
-        fluidHeight: 'Fluid-height',
+        fluidHeight: 'Maximum table height',
         resize: 'Resize height and width',
         height: 'Table with fixed header',
         fixed: 'Table with fixed column',

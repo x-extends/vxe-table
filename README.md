@@ -41,7 +41,7 @@
 * [x] Table with border （带边框）
 * [x] Cell style （单元格样式）
 * [x] Column resizable （列宽拖动）
-* [x] Fluid-height table with fixed header （流体高度）
+* [x] Maximum table height （最大高度）
 * [x] Resize height and width （响应式宽高）
 * [x] Table with fixed header （固定表头）
 * [x] Table with fixed column （固定列）

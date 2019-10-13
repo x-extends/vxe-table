@@ -20,7 +20,7 @@ module.exports = {
         style: '单元格样式',
         hideHead: '隐藏头部',
         resizable: '列宽拖动',
-        fluidHeight: '流体高度',
+        fluidHeight: '最大高度',
         resize: '响应式宽高',
         height: '固定表头',
         fixed: '固定列',
