@@ -1428,7 +1428,7 @@ export default {
           location.href = '/vxe-table'
           break
         case '3':
-          this.version = '2'
+          this.version = '1'
           this.$XModal.message({ message: this.$t('app.body.other.newDevelopment'), status: 'info' })
           break
       }
