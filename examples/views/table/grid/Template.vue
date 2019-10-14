@@ -282,8 +282,9 @@ export default {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 100)
           },
           methods: {
-            clickEvent (row, column) {
-              this.$XModal.alert(\`\${column.title}点击事件\`)
+            showDetailEvent (row) {
+              this.selectRow = row
+              this.showDetails = true
             },
             headerClickEvent (evnt) {
               this.$XModal.alert('头部点击事件')
