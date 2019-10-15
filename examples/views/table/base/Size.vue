@@ -1,6 +1,9 @@
 <template>
   <div>
-    <p class="tip">可以设置大小尺寸：<table-api-link prop="medium"/> / <table-api-link prop="small"/> / <table-api-link prop="mini"/><p/>
+    <p class="tip">
+      可以设置大小尺寸：<table-api-link prop="medium"/> / <table-api-link prop="small"/> / <table-api-link prop="mini"/><br>
+      默认 48px 高度，可以通过 scss 变量修改（<a class="link" href="https://github.com/xuliangzhan/vxe-table/blob/master/styles/variable.scss" target="_blank">查看所有变量</a>）
+    </p>
 
     <vxe-table
       :data="tableData">
@@ -20,7 +23,7 @@
       <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
 
-    <p class="tip">设置大小为 <table-api-link prop="medium"/></p>
+    <p class="tip">设置大小为 <table-api-link prop="medium"/>，默认 44px 高度</p>
 
     <vxe-table
       size="medium"
@@ -41,7 +44,7 @@
       <code class="javascript">{{ demoCodes[3] }}</code>
     </pre>
 
-    <p class="tip">设置大小为 <table-api-link prop="small"/></p>
+    <p class="tip">设置大小为 <table-api-link prop="small"/>，默认 40px 高度</p>
 
     <vxe-table
       size="small"
@@ -62,7 +65,7 @@
       <code class="javascript">{{ demoCodes[5] }}</code>
     </pre>
 
-    <p class="tip">设置大小为 <table-api-link prop="mini"/></p>
+    <p class="tip">设置大小为 <table-api-link prop="mini"/>，默认 36px 高度</p>
 
     <vxe-table
       size="mini"
