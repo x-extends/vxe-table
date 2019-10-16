@@ -822,6 +822,12 @@ export default {
     getParentHeight () {
       return this.$grid ? this.$grid.getParentHeight() : this.getParentElem().clientHeight
     },
+    /**
+     * 获取需要排除的高度
+     */
+    getExcludeHeight () {
+      return this.$grid ? this.$grid.getExcludeHeight() : 0
+    },
     clearAll () {
       this.clearScroll()
       this.clearSort()
@@ -3221,8 +3227,9 @@ export default {
       if (filterStore.column === column && filterStore.visible) {
         filterStore.visible = false
       } else {
-        let targetElem = evnt.target
         let filterWrapper = $refs.filterWrapper
+        let { target: targetElem, pageX } = evnt
+        let { visibleWidth } = DomTools.getDomNode()
         let { top, left } = DomTools.getAbsolutePos(targetElem)
         Object.assign(filterStore, {
           args: params,
@@ -3240,8 +3247,13 @@ export default {
         filterStore.isIndeterminate = !filterStore.isAllSelected && filterStore.options.some(item => item.checked)
         this.$nextTick(() => {
           let filterWrapperElem = filterWrapper.$el
+          let clientWidth = filterWrapperElem.clientWidth
+          let wrapperLeft = left - clientWidth / 2 + 10
+          if (pageX + clientWidth > visibleWidth) {
+            wrapperLeft = left - clientWidth
+          }
+          filterStore.style.left = `${Math.max(20, wrapperLeft + 20)}px`
           filterStore.style.top = `${top + targetElem.clientHeight + 6}px`
-          filterStore.style.left = `${left - filterWrapperElem.clientWidth / 2 + 10}px`
         })
       }
     },
@@ -3753,20 +3765,18 @@ export default {
       return this.$nextTick()
     },
     clearScroll () {
-      Object.assign(this.scrollXStore, {
-        startIndex: 0,
-        visibleIndex: 0
-      })
-      Object.assign(this.scrollYStore, {
-        startIndex: 0,
-        visibleIndex: 0
-      })
+      let { scrollXStore, scrollYStore } = this
+      scrollXStore.startIndex = 0
+      scrollXStore.visibleIndex = 0
+      scrollYStore.startIndex = 0
+      scrollYStore.visibleIndex = 0
       this.updateScrollXSpace()
       this.updateScrollYSpace()
-      this.$nextTick(() => {
-        let tableBody = this.$refs.tableBody
+      return this.$nextTick().then(() => {
+        let $refs = this.$refs
+        let tableBody = $refs.tableBody
         let tableBodyElem = tableBody ? tableBody.$el : null
-        let tableFooter = this.$refs.tableFooter
+        let tableFooter = $refs.tableFooter
         let tableFooterElem = tableFooter ? tableFooter.$el : null
         if (tableBodyElem) {
           tableBodyElem.scrollTop = 0
@@ -3777,12 +3787,12 @@ export default {
         if (tableFooterElem) {
           tableFooterElem.scrollLeft = 0
         }
-        setTimeout(() => {
+        // 先跳过滚动逻辑，再重置最后滚动状态
+        setTimeout(() => this.$nextTick(() => {
           this.lastScrollLeft = 0
           this.lastScrollTop = 0
-        })
+        }))
       })
-      return this.$nextTick()
     },
     /**
      * 更新表尾合计
