@@ -3753,8 +3753,6 @@ export default {
       return this.$nextTick()
     },
     clearScroll () {
-      this.lastScrollLeft = 0
-      this.lastScrollTop = 0
       Object.assign(this.scrollXStore, {
         startIndex: 0,
         visibleIndex: 0
@@ -3772,11 +3770,17 @@ export default {
         let tableFooterElem = tableFooter ? tableFooter.$el : null
         if (tableBodyElem) {
           tableBodyElem.scrollTop = 0
-          tableBodyElem.scrollLeft = 0
+          if (!tableFooterElem) {
+            tableBodyElem.scrollLeft = 0
+          }
         }
         if (tableFooterElem) {
           tableFooterElem.scrollLeft = 0
         }
+        setTimeout(() => {
+          this.lastScrollLeft = 0
+          this.lastScrollTop = 0
+        })
       })
       return this.$nextTick()
     },

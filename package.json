@@ -73,7 +73,7 @@
     "vxe-table-plugin-shortcut-key": "^1.1.0",
     "vxe-utils": "^1.7.2",
     "webpack-cli": "^3.3.1",
-    "xe-ajax": "^3.8.1",
+    "xe-ajax": "^3.8.2",
     "xe-ajax-mock": "^1.9.2",
     "xe-clipboard": "^1.7.1",
     "xe-utils": "^2.2.11",
