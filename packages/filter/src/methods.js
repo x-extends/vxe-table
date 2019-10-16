@@ -22,8 +22,9 @@ export default {
     if (filterStore.column === column && filterStore.visible) {
       filterStore.visible = false
     } else {
-      let targetElem = evnt.target
       let filterWrapper = $refs.filterWrapper
+      let { target: targetElem, pageX } = evnt
+      let { visibleWidth } = DomTools.getDomNode()
       let { top, left } = DomTools.getAbsolutePos(targetElem)
       Object.assign(filterStore, {
         args: params,
@@ -41,8 +42,13 @@ export default {
       filterStore.isIndeterminate = !filterStore.isAllSelected && filterStore.options.some(item => item.checked)
       this.$nextTick(() => {
         let filterWrapperElem = filterWrapper.$el
+        let clientWidth = filterWrapperElem.clientWidth
+        let wrapperLeft = left - clientWidth / 2 + 10
+        if (pageX + clientWidth > visibleWidth) {
+          wrapperLeft = left - clientWidth
+        }
+        filterStore.style.left = `${Math.max(20, wrapperLeft + 20)}px`
         filterStore.style.top = `${top + targetElem.clientHeight + 6}px`
-        filterStore.style.left = `${left - filterWrapperElem.clientWidth / 2 + 10}px`
       })
     }
   },

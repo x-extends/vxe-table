@@ -181,8 +181,14 @@ export default {
   methods: {
     ...methods,
     getParentHeight () {
-      let { $el, $refs } = this
-      return $el.parentNode.clientHeight - ($refs.toolbar ? $refs.toolbar.$el.clientHeight : 0) - ($refs.pager ? $refs.pager.$el.clientHeight : 0)
+      return this.$el.parentNode.clientHeight - this.getExcludeHeight()
+    },
+    /**
+     * 获取需要排除的高度
+     */
+    getExcludeHeight () {
+      let { toolbar, pager } = this.$refs
+      return (toolbar && toolbar.$el ? toolbar.$el.offsetHeight : 0) + (pager && pager.$el ? pager.$el.offsetHeight : 0)
     },
     handleRowClassName (params) {
       let rowClassName = this.rowClassName
