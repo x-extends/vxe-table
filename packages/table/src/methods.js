@@ -2236,11 +2236,6 @@ const Methods = {
       if (tableFooterElem) {
         tableFooterElem.scrollLeft = 0
       }
-      // 先跳过滚动逻辑，再重置最后滚动状态
-      setTimeout(() => this.$nextTick(() => {
-        this.lastScrollLeft = 0
-        this.lastScrollTop = 0
-      }))
     })
   },
   /**
