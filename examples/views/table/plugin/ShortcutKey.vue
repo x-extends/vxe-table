@@ -38,7 +38,7 @@ export default {
       },
       tableColumn: [
         { type: 'index', width: 60 },
-        { type: 'selection', width: 50 },
+        { type: 'checkbox', width: 50 },
         { field: 'name', title: 'Name' },
         { field: 'nickname', title: 'Nickname' },
         { field: 'role', title: 'Role' },
@@ -80,7 +80,7 @@ export default {
               },
               tableColumn: [
                 { type: 'index', width: 60 },
-                { type: 'selection', width: 50 },
+                { type: 'checkbox', width: 50 },
                 { field: 'name', title: 'Name' },
                 { field: 'nickname', title: 'Nickname' },
                 { field: 'role', title: 'Role' },

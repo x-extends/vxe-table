@@ -29,7 +29,7 @@ export default {
       loading: false,
       tableData: [],
       tableColumn: [
-        { type: 'selection', width: 60 },
+        { type: 'checkbox', width: 60 },
         { type: 'index', title: 'Number', width: 80 },
         {
           field: 'name',
@@ -82,7 +82,7 @@ export default {
               loading: false,
               tableData: [],
               tableColumn: [
-                { type: 'selection', width: 60 },
+                { type: 'checkbox', width: 60 },
                 { type: 'index', title: 'Number', width: 80 },
                 {
                   field: 'name',

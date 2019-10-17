@@ -79,7 +79,7 @@ export default {
         setting: true
       },
       tableColumn: [
-        { type: 'selection', width: 50 },
+        { type: 'checkbox', width: 50 },
         { field: 'seq', title: '排序', width: 80, editRender: { name: 'input' } },
         { field: 'key', title: '列键值', width: 100, editRender: { name: 'input' } },
         { field: 'name', title: '列名称', width: 100, editRender: { name: 'input' } },
@@ -167,7 +167,7 @@ export default {
                 setting: true
               },
               tableColumn: [
-                { type: 'selection', width: 50 },
+                { type: 'checkbox', width: 50 },
                 { field: 'seq', title: '排序', width: 80, editRender: { name: 'input' } },
                 { field: 'key', title: '列键值', width: 100, editRender: { name: 'input' } },
                 { field: 'name', title: '列名称', width: 100, editRender: { name: 'input' } },

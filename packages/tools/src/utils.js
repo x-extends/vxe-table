@@ -8,6 +8,9 @@ class ColumnConfig {
     if (_vm.cellRender && _vm.editRender) {
       UtilTools.warn('vxe.error.cellEditRender')
     }
+    if (_vm.type === 'selection') {
+      UtilTools.warn('vxe.error.delProp', ['selection', 'checkbox'])
+    }
     Object.assign(this, {
       // 基本属性
       id: `col_${++columnUniqueId}`,
@@ -86,10 +89,12 @@ export const UtilTools = {
   },
   // 行主键 key
   getRowkey ($table) {
-    let { rowKey, rowId, selectConfig = {}, treeConfig = {}, expandConfig = {}, editConfig = {} } = $table
+    let { rowKey, rowId, treeConfig = {}, expandConfig = {}, editConfig = {} } = $table
+    // 在 v3.0 中废弃 selectConfig
+    let checkboxConfig = $table.checkboxConfig || $table.selectConfig || {}
     if (!rowKey || !XEUtils.isString(rowKey)) {
       // 在 v2.0 中废弃 key
-      rowKey = rowId || selectConfig.key || treeConfig.key || expandConfig.key || editConfig.key || GlobalConfig.rowId
+      rowKey = rowId || checkboxConfig.key || treeConfig.key || expandConfig.key || editConfig.key || GlobalConfig.rowId
     }
     return rowKey
   },

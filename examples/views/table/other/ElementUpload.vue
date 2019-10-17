@@ -29,7 +29,7 @@
       class="vxe-table-element"
       height="400"
       :data="tableData">
-      <vxe-table-column type="selection" width="60"></vxe-table-column>
+      <vxe-table-column type="checkbox" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="File Name"></vxe-table-column>
       <vxe-table-column field="size" title="File Size" :formatter="formatterSize"></vxe-table-column>
       <vxe-table-column field="createDate" title="Create Date"></vxe-table-column>
@@ -83,7 +83,7 @@ export default {
           class="vxe-table-element"
           height="400"
           :data="tableData">
-          <vxe-table-column type="selection" width="60"></vxe-table-column>
+          <vxe-table-column type="checkbox" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="File Name"></vxe-table-column>
           <vxe-table-column field="size" title="File Size" :formatter="formatterSize"></vxe-table-column>
           <vxe-table-column field="createDate" title="Create Date"></vxe-table-column>

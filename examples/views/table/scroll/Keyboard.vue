@@ -56,8 +56,8 @@
       :mouse-config="{selected: true}"
       :edit-config="{trigger: 'dblclick', mode: 'cell', showStatus: true}"
       :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true}"
-      :select-config="{checkField: 'checked'}">
-      <vxe-table-column type="selection" width="60"></vxe-table-column>
+      :checkbox-config="{checkField: 'checked'}">
+      <vxe-table-column type="checkbox" width="60"></vxe-table-column>
       <vxe-table-column type="index" width="100"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable width="200" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="age" title="Age" width="200" :edit-render="{name: 'input'}"></vxe-table-column>
@@ -171,8 +171,8 @@ export default {
           :mouse-config="{selected: true}"
           :edit-config="{trigger: 'dblclick', mode: 'cell', showStatus: true}"
           :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true}"
-          :select-config="{checkField: 'checked'}">
-          <vxe-table-column type="selection" width="60"></vxe-table-column>
+          :checkbox-config="{checkField: 'checked'}">
+          <vxe-table-column type="checkbox" width="60"></vxe-table-column>
           <vxe-table-column type="index" width="100"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable width="200" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column field="age" title="Age" width="200" :edit-render="{name: 'input'}"></vxe-table-column>

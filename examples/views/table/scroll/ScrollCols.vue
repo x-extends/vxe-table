@@ -13,7 +13,7 @@
       ref="xGrid"
       height="300"
       :loading="loading"
-      :select-config="{checkField: 'checked'}">
+      :checkbox-config="{checkField: 'checked'}">
     </vxe-grid>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -41,7 +41,7 @@ export default {
           ref="xGrid"
           height="300"
           :loading="loading"
-          :select-config="{checkField: 'checked'}">
+          :checkbox-config="{checkField: 'checked'}">
         </vxe-grid>
         `,
         `

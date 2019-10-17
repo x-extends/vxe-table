@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">数据代理、固定列、服务端排序、服务端筛选、服务端分页，对于分页场景下，如果想要保留选中状态，可以通过设置 <table-api-link prop="select-config"/> 的 <table-api-link prop="reserve"/> 属性</p>
+    <p class="tip">数据代理、固定列、服务端排序、服务端筛选、服务端分页，对于分页场景下，如果想要保留选中状态，可以通过设置 <table-api-link prop="checkbox-config"/> 的 <table-api-link prop="reserve"/> 属性</p>
 
     <vxe-grid
       ref="xGrid"
@@ -12,7 +12,7 @@
       :pager-config="{pageSize: 15}"
       :columns="tableColumn"
       :proxy-config="tableProxy"
-      :select-config="{reserve: true}"></vxe-grid>
+      :checkbox-config="{reserve: true}"></vxe-grid>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
@@ -51,7 +51,7 @@ export default {
         }
       },
       tableColumn: [
-        { type: 'selection', width: 50, fixed: 'left' },
+        { type: 'checkbox', width: 50, fixed: 'left' },
         { type: 'index', width: 60, fixed: 'left' },
         { field: 'id', title: 'ID', width: 100, remoteSort: true },
         { field: 'name', title: 'Name', width: 300, remoteSort: true },
@@ -83,7 +83,7 @@ export default {
           :pager-config="{pageSize: 15}"
           :columns="tableColumn"
           :proxy-config="tableProxy"
-          :select-config="{reserve: true}"></vxe-grid>
+          :checkbox-config="{reserve: true}"></vxe-grid>
         `,
         `
         export default {
@@ -110,7 +110,7 @@ export default {
                 }
               },
               tableColumn: [
-                { type: 'selection', width: 50, fixed: 'left' },
+                { type: 'checkbox', width: 50, fixed: 'left' },
                 { type: 'index', width: 60, fixed: 'left' },
                 { field: 'id', title: 'ID', width: 100, remoteSort: true },
                 { field: 'name', title: 'Name', width: 300, remoteSort: true },

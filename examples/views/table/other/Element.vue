@@ -18,7 +18,7 @@
       :data="tableData"
       :footer-method="footerMethod"
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">
-      <vxe-table-column type="selection" width="60"></vxe-table-column>
+      <vxe-table-column type="checkbox" width="60"></vxe-table-column>
       <vxe-table-column type="index" width="80">
         <template v-slot:header="{ column }">
           <span>序号</span>
@@ -124,7 +124,7 @@ export default {
           :data="tableData"
           :footer-method="footerMethod"
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">
-          <vxe-table-column type="selection" width="60"></vxe-table-column>
+          <vxe-table-column type="checkbox" width="60"></vxe-table-column>
           <vxe-table-column type="index" width="80">
             <template v-slot:header="{ column }">
               <span>序号</span>

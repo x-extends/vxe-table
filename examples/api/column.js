@@ -12,7 +12,7 @@ const apis = [
         descKey: 'app.api.tableColumn.desc.type',
         version: '',
         type: 'String',
-        enum: 'index（序号）, selection（复选框）, radio（单选框）, expand（展开行）',
+        enum: 'index（序号）, selection（已废弃）, checkbox（复选框）, radio（单选框）, expand（展开行）',
         defVal: '',
         list: []
       },

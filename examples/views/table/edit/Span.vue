@@ -21,7 +21,7 @@
       :mouse-config="{selected: true}"
       :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true}"
       :edit-config="{trigger: 'click', mode: 'cell'}">
-      <vxe-table-column type="selection" width="60"></vxe-table-column>
+      <vxe-table-column type="checkbox" width="60"></vxe-table-column>
       <vxe-table-column field="key" title="Key" :edit-render="{name: 'input', props: {placeholder: '请输入键值'}}"></vxe-table-column>
       <vxe-table-column field="name" title="Translate" :edit-render="{name: 'input', props: {placeholder: '请输入翻译的内容'}}"></vxe-table-column>
       <vxe-table-column field="language" title="Language" :edit-render="{name: 'select', options: optionList}"></vxe-table-column>
@@ -84,7 +84,7 @@ export default {
           :mouse-config="{selected: true}"
           :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true}"
           :edit-config="{trigger: 'click', mode: 'cell'}">
-          <vxe-table-column type="selection" width="60"></vxe-table-column>
+          <vxe-table-column type="checkbox" width="60"></vxe-table-column>
           <vxe-table-column field="key" title="Key" :edit-render="{name: 'input', props: {placeholder: '请输入键值'}}"></vxe-table-column>
           <vxe-table-column field="name" title="Translate" :edit-render="{name: 'input', props: {placeholder: '请输入翻译的内容'}}"></vxe-table-column>
           <vxe-table-column field="language" title="Language" :edit-render="{name: 'select', options: optionList}"></vxe-table-column>

@@ -31,7 +31,7 @@ export default {
       loading: false,
       tableData: [],
       tableColumn: [
-        { type: 'selection', width: 60 },
+        { type: 'checkbox', width: 60 },
         { type: 'index', title: 'Number', width: 80 },
         { field: 'name', title: 'AInput', minWidth: 140, editRender: { name: 'AInput' } },
         { field: 'role', title: 'AAutoComplete', width: 160, editRender: { name: 'AAutoComplete', props: { dataSource: [] }, events: { search: this.roleSearchEvent } } },
@@ -70,7 +70,7 @@ export default {
               loading: false,
               tableData: [],
               tableColumn: [
-                { type: 'selection', width: 60 },
+                { type: 'checkbox', width: 60 },
                 { type: 'index', title: 'Number', width: 80 },
                 { field: 'name', title: 'AInput', minWidth: 140, editRender: { name: 'AInput' } },
                 { field: 'role', title: 'AAutoComplete', width: 160, editRender: { name: 'AAutoComplete', props: { dataSource: [] }, events: { search: this.roleSearchEvent } } },

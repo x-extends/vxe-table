@@ -41,7 +41,6 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
     keyboardConfig,
     expandConfig = {},
     radioConfig = {},
-    selectConfig = {},
     treeConfig = {},
     mouseConfig,
     editConfig,
@@ -50,6 +49,8 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
     editStore,
     validStore
   } = $table
+  // 在 v3.0 中废弃 selectConfig
+  let checkboxConfig = $table.checkboxConfig || $table.selectConfig || {}
   // v2.0 废弃属性，保留兼容
   let allColumnOverflow = XEUtils.isBoolean(oldShowAllOverflow) ? oldShowAllOverflow : allShowOverflow
   let { editRender, align, showOverflow, renderWidth, columnKey, className } = column
@@ -116,7 +117,8 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
     (editRender && editConfig) ||
     (expandConfig.trigger === 'row' || (expandConfig.trigger === 'cell')) ||
     (radioConfig.trigger === 'row' || (column.type === 'radio' && radioConfig.trigger === 'cell')) ||
-    (selectConfig.trigger === 'row' || (column.type === 'selection' && selectConfig.trigger === 'cell')) ||
+    // 在 v3.0 中废弃 selection
+    (checkboxConfig.trigger === 'row' || ((column.type === 'checkbox' | column.type === 'selection') && checkboxConfig.trigger === 'cell')) ||
     (treeConfig.trigger === 'row' || (column.treeNode && treeConfig.trigger === 'cell'))) {
     tdOns.click = evnt => {
       $table.triggerCellClickEvent(evnt, { $table, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, level: rowLevel, cell: evnt.currentTarget })

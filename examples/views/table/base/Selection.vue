@@ -19,7 +19,7 @@
       @cell-click="cellClickEvent"
       @select-all="selectAllEvent"
       @select-change="selectChangeEvent">
-      <vxe-table-column type="selection" width="60"></vxe-table-column>
+      <vxe-table-column type="checkbox" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
       <vxe-table-column field="age" title="Age"></vxe-table-column>
@@ -51,8 +51,8 @@
       border
       ref="xTable2"
       :data="tableData"
-      :select-config="{labelField: 'name', checkMethod}">
-      <vxe-table-column type="selection" title="All"></vxe-table-column>
+      :checkbox-config="{labelField: 'name', checkMethod}">
+      <vxe-table-column type="checkbox" title="All"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
       <vxe-table-column field="age" title="Age"></vxe-table-column>
       <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
@@ -83,8 +83,8 @@
       ref="xTable3"
       :row-class-name="rowClassName"
       :data="tableData"
-      :select-config="{checkField: 'checked', trigger: 'row'}">
-      <vxe-table-column type="selection" width="60"></vxe-table-column>
+      :checkbox-config="{checkField: 'checked', trigger: 'row'}">
+      <vxe-table-column type="checkbox" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
       <vxe-table-column field="age" title="Age"></vxe-table-column>
@@ -106,9 +106,9 @@
       highlight-hover-row
       row-id="id"
       :data="tableData"
-      :select-config="{checkRowKeys: ['2', '3']}"
+      :checkbox-config="{checkRowKeys: ['2', '3']}"
       :radio-config="{labelField: 'name'}">
-      <vxe-table-column type="selection" width="60"></vxe-table-column>
+      <vxe-table-column type="checkbox" width="60"></vxe-table-column>
       <vxe-table-column type="radio" width="300" title="Name"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
       <vxe-table-column field="age" title="Age"></vxe-table-column>
@@ -136,8 +136,8 @@
       highlight-hover-row
       ref="xTable5"
       :data="tableData"
-      :select-config="{checkStrictly: true}">
-      <vxe-table-column type="selection" width="60" tree-node></vxe-table-column>
+      :checkbox-config="{checkStrictly: true}">
+      <vxe-table-column type="checkbox" width="60" tree-node></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
       <vxe-table-column field="age" title="Age"></vxe-table-column>
@@ -158,7 +158,7 @@
       highlight-hover-row
       :data="tableData"
       :radio-config="{labelField: 'name'}">
-      <vxe-table-column type="selection" width="60"></vxe-table-column>
+      <vxe-table-column type="checkbox" width="60"></vxe-table-column>
       <vxe-table-column type="radio" width="300" title="Name"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
       <vxe-table-column field="age" title="Age"></vxe-table-column>
@@ -181,8 +181,8 @@
       highlight-current-row
       :data="tableData"
       :radio-config="{labelField: 'role'}"
-      :select-config="{labelField: 'name'}">
-      <vxe-table-column type="selection" title="Name"></vxe-table-column>
+      :checkbox-config="{labelField: 'name'}">
+      <vxe-table-column type="checkbox" title="Name"></vxe-table-column>
       <vxe-table-column type="radio" title="Role"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
       <vxe-table-column field="age" title="Age"></vxe-table-column>
@@ -224,7 +224,7 @@ export default {
           @cell-click="cellClickEvent"
           @select-all="selectAllEvent"
           @select-change="selectChangeEvent">
-          <vxe-table-column type="selection" width="60"></vxe-table-column>
+          <vxe-table-column type="checkbox" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
           <vxe-table-column field="age" title="Age"></vxe-table-column>
@@ -272,8 +272,8 @@ export default {
           border
           ref="xTable2"
           :data="tableData"
-          :select-config="{labelField: 'name', checkMethod}">
-          <vxe-table-column type="selection" title="All"></vxe-table-column>
+          :checkbox-config="{labelField: 'name', checkMethod}">
+          <vxe-table-column type="checkbox" title="All"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
           <vxe-table-column field="age" title="Age"></vxe-table-column>
           <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
@@ -313,8 +313,8 @@ export default {
           ref="xTable3"
           :row-class-name="rowClassName"
           :data="tableData"
-          :select-config="{checkField: 'checked', trigger: 'row'}">
-          <vxe-table-column type="selection" width="60"></vxe-table-column>
+          :checkbox-config="{checkField: 'checked', trigger: 'row'}">
+          <vxe-table-column type="checkbox" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
           <vxe-table-column field="age" title="Age"></vxe-table-column>
@@ -351,9 +351,9 @@ export default {
           highlight-hover-row
           row-id="id"
           :data="tableData"
-          :select-config="{checkRowKeys: ['2', '3']}"
+          :checkbox-config="{checkRowKeys: ['2', '3']}"
           :radio-config="{labelField: 'name'}">
-          <vxe-table-column type="selection" width="60"></vxe-table-column>
+          <vxe-table-column type="checkbox" width="60"></vxe-table-column>
           <vxe-table-column type="radio" width="300" title="Name"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
           <vxe-table-column field="age" title="Age"></vxe-table-column>
@@ -385,8 +385,8 @@ export default {
           highlight-hover-row
           ref="xTable5"
           :data="tableData"
-          :select-config="{checkStrictly: true}">
-          <vxe-table-column type="selection" width="60" tree-node></vxe-table-column>
+          :checkbox-config="{checkStrictly: true}">
+          <vxe-table-column type="checkbox" width="60" tree-node></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
           <vxe-table-column field="age" title="Age"></vxe-table-column>
@@ -411,7 +411,7 @@ export default {
           highlight-hover-row
           :data="tableData"
           :radio-config="{labelField: 'name'}">
-          <vxe-table-column type="selection" width="60"></vxe-table-column>
+          <vxe-table-column type="checkbox" width="60"></vxe-table-column>
           <vxe-table-column type="radio" width="300" title="Name"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
           <vxe-table-column field="age" title="Age"></vxe-table-column>
@@ -438,8 +438,8 @@ export default {
           highlight-current-row
           :data="tableData"
           :radio-config="{labelField: 'role'}"
-          :select-config="{labelField: 'name'}">
-          <vxe-table-column type="selection" title="Name"></vxe-table-column>
+          :checkbox-config="{labelField: 'name'}">
+          <vxe-table-column type="checkbox" title="Name"></vxe-table-column>
           <vxe-table-column type="radio" title="Role"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
           <vxe-table-column field="age" title="Age"></vxe-table-column>
