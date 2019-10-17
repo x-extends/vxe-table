@@ -45,7 +45,7 @@
       :data="tableData"
       :edit-rules="validRules"
       :edit-config="{trigger: 'click', mode: 'row'}">
-      <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
+      <vxe-table-column type="checkbox" width="60" fixed="left"></vxe-table-column>
       <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
       <vxe-table-column field="name" title="Input" min-width="140" fixed="left" :edit-render="{name: 'Input'}"></vxe-table-column>
       <vxe-table-column field="role" title="AutoComplete" min-width="160" :edit-render="{name: 'AutoComplete', props: {data: restaurants, filterMethod: roleFilterMethod}}"></vxe-table-column>
@@ -154,7 +154,7 @@ export default {
           :data="tableData"
           :edit-rules="validRules"
           :edit-config="{trigger: 'click', mode: 'row'}">
-          <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
+          <vxe-table-column type="checkbox" width="60" fixed="left"></vxe-table-column>
           <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
           <vxe-table-column field="name" title="Input" min-width="140" :edit-render="{name: 'Input'}"></vxe-table-column>
           <vxe-table-column field="role" title="AutoComplete" min-width="160" :edit-render="{name: 'AutoComplete', props: {data: restaurants, filterMethod: roleFilterMethod}}"></vxe-table-column>

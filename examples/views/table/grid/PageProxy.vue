@@ -9,7 +9,7 @@
       row-id="id"
       :pager-config="{pageSize: 10}"
       :proxy-config="tableProxy"
-      :select-config="{reserve: true}"
+      :checkbox-config="{reserve: true}"
       :columns="tableColumn"></vxe-grid>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -39,7 +39,7 @@ export default {
         }
       },
       tableColumn: [
-        { type: 'selection', width: 50 },
+        { type: 'checkbox', width: 50 },
         { type: 'index', width: 60 },
         { field: 'name', title: 'Name' },
         { field: 'nickname', title: 'Nickname' },
@@ -55,7 +55,7 @@ export default {
           row-id="id"
           :pager-config="{pageSize: 10}"
           :proxy-config="tableProxy"
-          :select-config="{reserve: true}"
+          :checkbox-config="{reserve: true}"
           :columns="tableColumn"></vxe-grid>
         `,
         `
@@ -74,7 +74,7 @@ export default {
                 }
               },
               tableColumn: [
-                { type: 'selection', width: 50 },
+                { type: 'checkbox', width: 50 },
                 { type: 'index', width: 60 },
                 { field: 'name', title: 'Name' },
                 { field: 'nickname', title: 'Nickname' },

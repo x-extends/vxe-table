@@ -2,7 +2,7 @@
   <div>
     <p class="tip">
       查询代理、服务端排序代理、服务端筛选代理、分页代理、增删改查<br>
-      对于分页场景下，如果想要保留选中状态，可以通过设置 <table-api-link prop="select-config"/> 的 <table-api-link prop="reserve"/> 属性<br>
+      对于分页场景下，如果想要保留选中状态，可以通过设置 <table-api-link prop="checkbox-config"/> 的 <table-api-link prop="reserve"/> 属性<br>
       由 <grid-api-link name="vxe-grid"/> 代理数据转换，只需要配置好数据源即可；非常简单就可以渲染一个表格，从重复写冗余的代码中解放出来
     </p>
 
@@ -18,7 +18,7 @@
       :toolbar="tableToolbar"
       :proxy-config="tableProxy"
       :columns="tableColumn"
-      :select-config="{reserve: true}"
+      :checkbox-config="{reserve: true}"
       :edit-rules="validRules"
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">
     </vxe-grid>
@@ -124,7 +124,7 @@ export default {
         }
       },
       tableColumn: [
-        { type: 'selection', width: 50 },
+        { type: 'checkbox', width: 50 },
         { type: 'index', width: 60 },
         { field: 'name', title: 'Name', remoteSort: true, editRender: { name: 'input' } },
         { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
@@ -158,7 +158,7 @@ export default {
           :toolbar="tableToolbar"
           :proxy-config="tableProxy"
           :columns="tableColumn"
-          :select-config="{reserve: true}"
+          :checkbox-config="{reserve: true}"
           :edit-rules="validRules"
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">
         </vxe-grid>
@@ -253,7 +253,7 @@ export default {
                 }
               },
               tableColumn: [
-                { type: 'selection', width: 50 },
+                { type: 'checkbox', width: 50 },
                 { type: 'index', width: 60 },
                 { field: 'name', title: 'Name', remoteSort: true, editRender: { name: 'input' } },
                 { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },

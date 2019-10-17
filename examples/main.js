@@ -32,7 +32,7 @@ function mockData () {
         width: 160
       }
       if (fullIndex === 1) {
-        colItem.type = 'selection'
+        colItem.type = 'checkbox'
         colItem.title = null
       } else if (fullIndex === 2) {
         colItem.type = 'index'

@@ -38,7 +38,7 @@ export default {
       },
       tableColumn: [
         { type: 'index', width: 60 },
-        { type: 'selection', width: 50 },
+        { type: 'checkbox', width: 50 },
         { field: 'name', title: 'Name', editRender: { name: 'input' } },
         { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
         { field: 'sex', title: 'Sex', editRender: { name: 'select', options: [] } },
@@ -72,7 +72,7 @@ export default {
               },
               tableColumn: [
                 { type: 'index', width: 60 },
-                { type: 'selection', width: 50 },
+                { type: 'checkbox', width: 50 },
                 { field: 'name', title: 'Name', editRender: { name: 'input' } },
                 { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
                 { field: 'sex', title: 'Sex', editRender: { name: 'select', options: [] } },

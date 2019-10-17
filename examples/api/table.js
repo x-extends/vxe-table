@@ -585,7 +585,17 @@ const apis = [
       {
         name: 'select-config',
         descKey: 'app.api.table.desc.selectConfig',
+        disabled: true,
         version: '',
+        type: 'Object',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'checkbox-config',
+        descKey: 'app.api.table.desc.checkboxConfig',
+        version: '2.6',
         type: 'Object',
         enum: '',
         defVal: '',
@@ -648,6 +658,15 @@ const apis = [
             name: 'checkStrictly',
             desc: '是否严格的遵循父子不互相关联的做法',
             version: '',
+            type: 'Boolean',
+            enum: '',
+            defVal: 'false',
+            list: []
+          },
+          {
+            name: 'strict',
+            desc: '严格模式，当数据为空或全部禁用时，列表为禁用状态',
+            version: '2.6',
             type: 'Boolean',
             enum: '',
             defVal: 'false',

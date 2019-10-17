@@ -6,7 +6,9 @@ import { UtilTools } from '../../tools'
 export const Cell = {
   createColumn ($table, _vm) {
     let { type, sortable, remoteSort, filters, editRender, treeNode } = _vm
-    let { selectConfig, treeConfig } = $table
+    let { treeConfig } = $table
+    // 在 v3.0 中废弃 selectConfig
+    let checkboxConfig = $table.checkboxConfig || $table.selectConfig
     let isTreeNode = treeConfig && treeNode
     let renMaps = {
       renderHeader: this.renderHeader,
@@ -21,9 +23,11 @@ export const Cell = {
         renMaps.renderHeader = this.renderRadioHeader
         renMaps.renderCell = isTreeNode ? this.renderTreeRadioCell : this.renderRadioCell
         break
+      // 在 v3.0 中废弃 type=selection
+      case 'checkbox':
       case 'selection':
         renMaps.renderHeader = this.renderSelectionHeader
-        renMaps.renderCell = selectConfig && selectConfig.checkField ? (isTreeNode ? this.renderTreeSelectionCellByProp : this.renderSelectionCellByProp) : (isTreeNode ? this.renderTreeSelectionCell : this.renderSelectionCell)
+        renMaps.renderCell = checkboxConfig && checkboxConfig.checkField ? (isTreeNode ? this.renderTreeSelectionCellByProp : this.renderSelectionCellByProp) : (isTreeNode ? this.renderTreeSelectionCell : this.renderSelectionCell)
         break
       case 'expand':
         renMaps.renderCell = this.renderExpandCell
@@ -206,19 +210,22 @@ export const Cell = {
    */
   renderSelectionHeader (h, params) {
     let { $table, column, isHidden } = params
-    let { vSize, selectConfig } = $table
+    let { vSize, isIndeterminate, isAllCheckboxDisabled } = $table
     let { slots, own } = column
+    // 在 v3.0 中废弃 selectConfig
+    let checkboxConfig = $table.checkboxConfig || $table.selectConfig
     // 在 v3.0 中废弃 label
     let headerTitle = own.title || own.label
     let options = {
       attrs: {
-        type: 'checkbox'
+        type: 'checkbox',
+        disabled: isAllCheckboxDisabled
       }
     }
     if (slots && slots.header) {
       return slots.header(params, h)
     }
-    if (selectConfig && (selectConfig.checkStrictly ? !selectConfig.showHeader : selectConfig.showHeader === false)) {
+    if (checkboxConfig && (checkboxConfig.checkStrictly ? !checkboxConfig.showHeader : checkboxConfig.showHeader === false)) {
       return []
     }
     if (!isHidden) {
@@ -235,7 +242,8 @@ export const Cell = {
       h('label', {
         class: ['vxe-checkbox', {
           [`size--${vSize}`]: vSize,
-          'is--indeterminate': $table.isIndeterminate
+          'is--disabled': options.attrs.disabled,
+          'is--indeterminate': isIndeterminate
         }]
       }, [
         h('input', options),
@@ -250,8 +258,10 @@ export const Cell = {
   },
   renderSelectionCell (h, params) {
     let { $table, row, column, isHidden } = params
-    let { vSize, selectConfig = {}, treeConfig, treeIndeterminates } = $table
-    let { labelField, checkMethod } = selectConfig
+    let { vSize, treeConfig, treeIndeterminates } = $table
+    // 在 v3.0 中废弃 selectConfig
+    let checkboxConfig = $table.checkboxConfig || $table.selectConfig || {}
+    let { labelField, checkMethod } = checkboxConfig
     let { slots } = column
     let indeterminate = false
     let isDisabled = !!checkMethod
@@ -303,8 +313,10 @@ export const Cell = {
   },
   renderSelectionCellByProp (h, params) {
     let { $table, row, column, isHidden } = params
-    let { vSize, selectConfig = {}, treeConfig, treeIndeterminates } = $table
-    let { labelField, checkField: property, checkMethod } = selectConfig
+    let { vSize, treeConfig, treeIndeterminates } = $table
+    // 在 v3.0 中废弃 selectConfig
+    let checkboxConfig = $table.checkboxConfig || $table.selectConfig || {}
+    let { labelField, checkField: property, checkMethod } = checkboxConfig
     let { slots } = column
     let indeterminate = false
     let isDisabled = !!checkMethod

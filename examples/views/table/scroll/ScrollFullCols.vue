@@ -16,7 +16,7 @@
       ref="xGrid"
       height="600"
       :loading="loading"
-      :select-config="{checkField: 'checked'}">
+      :checkbox-config="{checkField: 'checked'}">
     </vxe-grid>
 
     <pre>
@@ -60,7 +60,7 @@ export default {
           ref="xGrid"
           height="600"
           :loading="loading"
-          :select-config="{checkField: 'checked'}">
+          :checkbox-config="{checkField: 'checked'}">
         </vxe-grid>
         `,
         `

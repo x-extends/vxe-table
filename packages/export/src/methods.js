@@ -104,7 +104,8 @@ export default {
       download: true,
       data: null,
       columns: null,
-      columnFilterMethod: column => column.property && ['index', 'selection', 'radio'].indexOf(column.type) === -1,
+      // 在 v3.0 中废弃 type=selection
+      columnFilterMethod: column => column.property && ['index', 'checkbox', 'selection', 'radio'].indexOf(column.type) === -1,
       dataFilterMethod: null,
       footerFilterMethod: null
     }, options)

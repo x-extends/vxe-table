@@ -58,9 +58,11 @@ export default {
    * 如果传 rows 则删除多行
    */
   _remove (rows) {
-    let { afterFullData, tableFullData, editStore, treeConfig, selectConfig = {}, selection, hasRowInsert, scrollYLoad } = this
+    let { afterFullData, tableFullData, editStore, treeConfig, selection, hasRowInsert, scrollYLoad } = this
     let { removeList, insertList } = editStore
-    let { checkField: property } = selectConfig
+    // 在 v3.0 中废弃 selectConfig
+    let checkboxConfig = this.checkboxConfig || this.selectConfig || {}
+    let { checkField: property } = checkboxConfig
     let rest = []
     let nowData = afterFullData
     if (treeConfig) {

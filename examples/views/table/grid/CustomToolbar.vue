@@ -63,7 +63,7 @@ export default {
         }
       },
       tableColumn: [
-        { type: 'selection', width: 50 },
+        { type: 'checkbox', width: 50 },
         { type: 'index', width: 60 },
         { field: 'name', title: 'Name', editRender: { name: 'input' } },
         { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
@@ -123,7 +123,7 @@ export default {
                 }
               },
               tableColumn: [
-                { type: 'selection', width: 50 },
+                { type: 'checkbox', width: 50 },
                 { type: 'index', width: 60 },
                 { field: 'name', title: 'Name', editRender: { name: 'input' } },
                 { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },

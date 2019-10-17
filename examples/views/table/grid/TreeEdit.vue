@@ -8,7 +8,7 @@
       :proxy-config="tableProxy"
       :columns="tableColumn"
       :toolbar="tableToolbar"
-      :select-config="{labelField: 'id'}"
+      :checkbox-config="{labelField: 'id'}"
       :tree-config="{children: 'children'}"
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"></vxe-grid>
 
@@ -74,7 +74,7 @@ export default {
         }
       },
       tableColumn: [
-        { type: 'selection', title: '全选', width: 180, treeNode: true },
+        { type: 'checkbox', title: '全选', width: 180, treeNode: true },
         { field: 'name', title: '名称', editRender: { name: 'input' } },
         { field: 'size', title: '大小', editRender: { name: 'input' } },
         { field: 'createTime', title: 'app.body.label.createTime', formatter: this.formatterDate },
@@ -88,7 +88,7 @@ export default {
           :proxy-config="tableProxy"
           :columns="tableColumn"
           :toolbar="tableToolbar"
-          :select-config="{labelField: 'id'}"
+          :checkbox-config="{labelField: 'id'}"
           :tree-config="{ children: 'children'}"
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"></vxe-grid>
         `,
@@ -144,7 +144,7 @@ export default {
                 }
               },
               tableColumn: [
-                { type: 'selection', title: '全选', width: 180, treeNode: true },
+                { type: 'checkbox', title: '全选', width: 180, treeNode: true },
                 { field: 'name', title: '名称', editRender: { name: 'input' } },
                 { field: 'size', title: '大小', editRender: { name: 'input' } },
                 { field: 'createTime', title: 'app.body.label.createTime', formatter: this.formatterDate },

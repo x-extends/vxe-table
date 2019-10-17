@@ -207,7 +207,7 @@ module.exports = {
     },
     footer: {
       donation: '捐赠',
-      donationDesc: '为了使项目能够健康持续的发展下去，你可以通过赞助来支持作者 😊'
+      donationDesc: '为了使项目能够健康持续的发展下去，您可以通过赞助来支持作者 😊'
     },
     api: {
       form: {
@@ -272,7 +272,8 @@ module.exports = {
           rowId: '自定义行数据唯一主键的字段名（行数据必须要有唯一主键，默认自动生成）',
           sortConfig: '排序配置项',
           radioConfig: '单选框配置项',
-          selectConfig: '复选框配置项',
+          selectConfig: '即将废弃，请使用 checkbox-config',
+          checkboxConfig: '复选框配置项',
           tooltipConfig: 'tooltip 配置项',
           expandConfig: '展开行配置项',
           treeConfig: '树形结构配置项',

@@ -45,7 +45,7 @@
       :data="tableData"
       :edit-rules="validRules"
       :edit-config="{trigger: 'click', mode: 'row'}">
-      <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
+      <vxe-table-column type="checkbox" width="60" fixed="left"></vxe-table-column>
       <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
       <vxe-table-column field="name" title="ElInput" min-width="140" fixed="left" :edit-render="{name: 'ElInput'}"></vxe-table-column>
       <vxe-table-column field="role" title="ElAutocomplete" width="160" :edit-render="{name: 'ElAutocomplete', props: {fetchSuggestions: roleFetchSuggestions}}"></vxe-table-column>
@@ -154,7 +154,7 @@ export default {
             :data="tableData"
             :edit-rules="validRules"
             :edit-config="{trigger: 'click', mode: 'row'}">
-            <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
+            <vxe-table-column type="checkbox" width="60" fixed="left"></vxe-table-column>
             <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
             <vxe-table-column field="name" title="ElInput" min-width="140" :edit-render="{name: 'ElInput'}"></vxe-table-column>
             <vxe-table-column field="role" title="ElAutocomplete" width="160" :edit-render="{name: 'ElAutocomplete', props: {fetchSuggestions: roleFetchSuggestions}}"></vxe-table-column>

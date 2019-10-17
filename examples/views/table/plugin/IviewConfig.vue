@@ -31,7 +31,7 @@ export default {
       loading: false,
       tableData: [],
       tableColumn: [
-        { type: 'selection', width: 60 },
+        { type: 'checkbox', width: 60 },
         { type: 'index', title: 'Number', width: 80 },
         { field: 'name', title: 'Number', minWidth: 140, editRender: { name: 'Input' } },
         { field: 'role', title: 'AutoComplete', width: 160, editRender: { name: 'AutoComplete', props: { data: restaurants, filterMethod: this.roleFilterMethod } } },
@@ -65,7 +65,7 @@ export default {
               loading: false,
               tableData: [],
               tableColumn: [
-                { type: 'selection', width: 60 },
+                { type: 'checkbox', width: 60 },
                 { type: 'index', title: 'Number', width: 80 },
                 { field: 'name', title: 'Number', minWidth: 140, editRender: { name: 'Input' } },
                 { field: 'role', title: 'AutoComplete', width: 160, editRender: { name: 'AutoComplete', props: { data: restaurants, filterMethod: this.roleFilterMethod } } },

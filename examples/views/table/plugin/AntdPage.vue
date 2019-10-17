@@ -48,7 +48,7 @@
       :data="tableData"
       :edit-rules="validRules"
       :edit-config="{trigger: 'click', mode: 'row'}">
-      <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
+      <vxe-table-column type="checkbox" width="60" fixed="left"></vxe-table-column>
       <vxe-table-column type="index" title="Number" width="80" fixed="left"></vxe-table-column>
       <vxe-table-column field="name" title="AInput" min-width="140" fixed="left" :edit-render="{name: 'AInput'}"></vxe-table-column>
       <vxe-table-column field="role" title="AAutoComplete" width="160" :edit-render="{name: 'AAutoComplete', props: ACProps, events: {search: roleSearchEvent}}"></vxe-table-column>
@@ -177,7 +177,7 @@ export default {
             :data="tableData"
             :edit-rules="validRules"
             :edit-config="{trigger: 'click', mode: 'row'}">
-            <vxe-table-column type="selection" width="60" fixed="left"></vxe-table-column>
+            <vxe-table-column type="checkbox" width="60" fixed="left"></vxe-table-column>
             <vxe-table-column type="index" title="Number" width="80" fixed="left"></vxe-table-column>
             <vxe-table-column field="name" title="AInput" min-width="140" :edit-render="{name: 'AInput'}"></vxe-table-column>
             <vxe-table-column field="role" title="AAutoComplete" width="160" :edit-render="{name: 'AAutoComplete', props: ACProps, events: {search: roleSearchEvent}}"></vxe-table-column>

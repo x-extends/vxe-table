@@ -30,7 +30,7 @@ export default {
       loading: false,
       tableData: [],
       tableColumn: [
-        { type: 'selection', width: 60 },
+        { type: 'checkbox', width: 60 },
         { type: 'index', title: 'Number', width: 80 },
         { field: 'name', title: 'ElInput', minWidth: 140, editRender: { name: 'ElInput' } },
         { field: 'role', title: 'ElAutocomplete', width: 160, editRender: { name: 'ElAutocomplete', props: { fetchSuggestions: this.roleFetchSuggestions } } },
@@ -70,7 +70,7 @@ export default {
               loading: false,
               tableData: [],
               tableColumn: [
-                { type: 'selection', width: 60 },
+                { type: 'checkbox', width: 60 },
                 { type: 'index', title: 'Number', width: 80 },
                 { field: 'name', title: 'ElInput', minWidth: 140, editRender: { name: 'ElInput' } },
                 { field: 'role', title: 'ElAutocomplete', width: 160, editRender: { name: 'ElAutocomplete', props: { fetchSuggestions: this.roleFetchSuggestions } } },

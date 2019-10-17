@@ -57,7 +57,7 @@ export default {
                 }
               },
               tableColumn: [
-                { type: 'selection', width: 100, treeNode: true },
+                { type: 'checkbox', width: 100, treeNode: true },
                 { field: 'id', title: 'ID', width: 0 },
                 { field: 'name', title: '名称' },
                 { field: 'size', title: '大小' },

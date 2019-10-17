@@ -7,7 +7,7 @@
       :tree-config="{children: 'children'}"
       :data="tableData"
       @select-change="selectChangeEvent">
-      <vxe-table-column type="selection" width="120" tree-node></vxe-table-column>
+      <vxe-table-column type="checkbox" width="120" tree-node></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
       <vxe-table-column field="size" title="Size"></vxe-table-column>
       <vxe-table-column field="type" title="Type"></vxe-table-column>
@@ -28,9 +28,9 @@
       row-id="id"
       :data="tableData"
       :tree-config="{children: 'children'}"
-      :select-config="{labelField: 'name', checkRowKeys: ['122000', '20000']}"
+      :checkbox-config="{labelField: 'name', checkRowKeys: ['122000', '20000']}"
       @select-change="selectChangeEvent">
-      <vxe-table-column type="selection" title="Sex" width="180" tree-node></vxe-table-column>
+      <vxe-table-column type="checkbox" title="Sex" width="180" tree-node></vxe-table-column>
       <vxe-table-column field="size" title="Size"></vxe-table-column>
       <vxe-table-column field="type" title="Type"></vxe-table-column>
       <vxe-table-column field="date" title="Date"></vxe-table-column>
@@ -49,8 +49,8 @@
       resizable
       :data="tableData"
       :tree-config="{children: 'children'}"
-      :select-config="{checkStrictly: true}">
-      <vxe-table-column type="selection" width="120" tree-node></vxe-table-column>
+      :checkbox-config="{checkStrictly: true}">
+      <vxe-table-column type="checkbox" width="120" tree-node></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
       <vxe-table-column field="size" title="Size"></vxe-table-column>
       <vxe-table-column field="type" title="Type"></vxe-table-column>
@@ -70,9 +70,9 @@
       resizable
       :data="tableData"
       :tree-config="{children: 'children'}"
-      :select-config="{labelField: 'name', checkMethod}"
+      :checkbox-config="{labelField: 'name', checkMethod}"
       @select-change="selectChangeEvent">
-      <vxe-table-column type="selection" width="180" title="Sex" tree-node></vxe-table-column>
+      <vxe-table-column type="checkbox" width="180" title="Sex" tree-node></vxe-table-column>
       <vxe-table-column field="size" title="Size"></vxe-table-column>
       <vxe-table-column field="type" title="Type"></vxe-table-column>
       <vxe-table-column field="date" title="Date"></vxe-table-column>
@@ -94,7 +94,7 @@ export default {
           :tree-config="{children: 'children'}"
           :data="tableData"
           @select-change="selectChangeEvent">
-          <vxe-table-column type="selection" tree-node></vxe-table-column>
+          <vxe-table-column type="checkbox" tree-node></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
           <vxe-table-column field="size" title="Size"></vxe-table-column>
           <vxe-table-column field="type" title="Type"></vxe-table-column>
@@ -124,9 +124,9 @@ export default {
           row-id="id"
           :data="tableData"
           :tree-config="{children: 'children'}"
-          :select-config="{labelField: 'name', checkRowKeys: ['122000', '20000']}"
+          :checkbox-config="{labelField: 'name', checkRowKeys: ['122000', '20000']}"
           @select-change="selectChangeEvent">
-          <vxe-table-column type="selection" title="Sex" width="180" tree-node></vxe-table-column>
+          <vxe-table-column type="checkbox" title="Sex" width="180" tree-node></vxe-table-column>
           <vxe-table-column field="size" title="Size"></vxe-table-column>
           <vxe-table-column field="type" title="Type"></vxe-table-column>
           <vxe-table-column field="date" title="Date"></vxe-table-column>
@@ -154,8 +154,8 @@ export default {
           resizable
           :data="tableData"
           :tree-config="{children: 'children'}"
-          :select-config="{checkStrictly: true}">
-          <vxe-table-column type="selection" width="120" tree-node></vxe-table-column>
+          :checkbox-config="{checkStrictly: true}">
+          <vxe-table-column type="checkbox" width="120" tree-node></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
           <vxe-table-column field="size" title="Size"></vxe-table-column>
           <vxe-table-column field="type" title="Type"></vxe-table-column>

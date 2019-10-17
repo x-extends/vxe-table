@@ -155,10 +155,12 @@ export default {
     syncResize: Boolean,
     // 排序配置项
     sortConfig: Object,
-    // 单选配置
+    // 单选框配置
     radioConfig: Object,
-    // 多选配置项
+    // （v3.0 废弃）
     selectConfig: Object,
+    // 复选框配置项
+    checkboxConfig: Object,
     // tooltip 配置项
     tooltipConfig: Object,
     // 展开行配置项
@@ -215,15 +217,15 @@ export default {
       scrollbarWidth: 0,
       // 横向滚动条的高度
       scrollbarHeight: 0,
-      // 是否全选
+      // 复选框属性，是否全选
       isAllSelected: false,
-      // 多选属性，有选中且非全选状态
+      // 复选框属性，有选中且非全选状态
       isIndeterminate: false,
-      // 多选属性，已选中的列
+      // 复选框属性，已选中的列
       selection: [],
       // 当前行
       currentRow: null,
-      // 单选属性，选中行
+      // 单选框属性，选中行
       selectRow: null,
       // 表尾合计数据
       footerData: [],
@@ -369,6 +371,29 @@ export default {
         })
       })
       return rest
+    },
+    /**
+     * 判断列全选的复选框是否禁用
+     */
+    isAllCheckboxDisabled () {
+      let { afterFullData, treeConfig } = this
+      // 在 v3.0 中废弃 selectConfig
+      let checkboxConfig = this.checkboxConfig || this.selectConfig || {}
+      let { strict, checkMethod } = checkboxConfig
+      if (strict) {
+        if (afterFullData.length) {
+          if (checkMethod) {
+            if (treeConfig) {
+              // 暂时不支持树形结构
+            }
+            // 如果所有行都被禁用
+            return afterFullData.some((row, $rowIndex) => !checkMethod({ row, $rowIndex }))
+          }
+          return false
+        }
+        return true
+      }
+      return false
     }
   },
   watch: {
@@ -403,7 +428,7 @@ export default {
           UtilTools.warn('vxe.error.delProp', ['prop', 'field'])
         }
         if (tableFullColumn[cIndex].label) {
-          UtilTools.warn('vxe.error.delLabel', ['label', 'title'])
+          UtilTools.warn('vxe.error.delProp', ['label', 'title'])
         }
       }
       if (this.treeConfig && tableFullColumn.some(column => column.fixed) && tableFullColumn.some(column => column.type === 'expand')) {
@@ -446,7 +471,7 @@ export default {
       headerHeight: 0,
       // 表尾高度
       footerHeight: 0,
-      // 单选属性，选中列
+      // 单选框属性，选中列
       // currentColumn: null,
       // 当前 hover 行
       // hoverRow: null,
@@ -469,6 +494,9 @@ export default {
     this._isLoading = loading
     if (!UtilTools.getRowkey(this)) {
       UtilTools.error('vxe.error.emptyProp', ['row-id'])
+    }
+    if (this.selectConfig) {
+      UtilTools.warn('vxe.error.delProp', ['select-config', 'checkbox-config'])
     }
     // 检查是否有安装需要的模块
     let errorModuleName

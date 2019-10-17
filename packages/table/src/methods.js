@@ -351,8 +351,10 @@ const Methods = {
    * 获取选中数据
    */
   getSelectRecords () {
-    let { tableFullData, editStore, treeConfig, selectConfig = {} } = this
-    let { checkField: property } = selectConfig
+    let { tableFullData, editStore, treeConfig } = this
+    // 在 v3.0 中废弃 selectConfig
+    let checkboxConfig = this.checkboxConfig || this.selectConfig || {}
+    let { checkField: property } = checkboxConfig
     let rowList = []
     let insList = []
     if (property) {
@@ -443,7 +445,9 @@ const Methods = {
     }
   },
   handleDefault () {
-    if (this.selectConfig) {
+    // 在 v3.0 中废弃 selectConfig
+    let checkboxConfig = this.checkboxConfig || this.selectConfig
+    if (checkboxConfig) {
       this.handleSelectionDefChecked()
     }
     if (this.radioConfig) {
@@ -1059,10 +1063,12 @@ const Methods = {
             this.$nextTick(() => this.handleSelected(params, evnt))
           }
         }
-      } else if (isSpacebar && (keyboardConfig.isArrow || keyboardConfig.isTab) && selected.row && selected.column && (selected.column.type === 'selection' || selected.column.type === 'radio')) {
+      } else if (isSpacebar && (keyboardConfig.isArrow || keyboardConfig.isTab) && selected.row && selected.column && (selected.column.type === 'checkbox' || selected.column.type === 'selection' || selected.column.type === 'radio')) {
+        // 在 v3.0 中废弃 type=selection
         // 空格键支持选中复选列
         evnt.preventDefault()
-        if (selected.column.type === 'selection') {
+        // 在 v3.0 中废弃 type=selection
+        if (selected.column.type === 'checkbox' || selected.column.type === 'selection') {
           this.handleToggleCheckRowEvent(selected.args, evnt)
         } else {
           this.triggerRadioRowEvent(evnt, selected.args)
@@ -1226,8 +1232,10 @@ const Methods = {
    * 处理默认勾选
    */
   handleSelectionDefChecked () {
-    let { selectConfig = {}, fullDataRowIdData } = this
-    let { checkAll, checkRowKeys } = selectConfig
+    let { fullDataRowIdData } = this
+    // 在 v3.0 中废弃 selectConfig
+    let checkboxConfig = this.checkboxConfig || this.selectConfig || {}
+    let { checkAll, checkRowKeys } = checkboxConfig
     if (checkAll) {
       this.setAllSelection(true)
     } else if (checkRowKeys) {
@@ -1252,8 +1260,10 @@ const Methods = {
    * value 选中true 不选false 不确定-1
    */
   handleSelectRow ({ row }, value) {
-    let { selection, tableFullData, selectConfig = {}, treeConfig, treeIndeterminates } = this
-    let { checkField: property, checkStrictly, checkMethod } = selectConfig
+    let { selection, tableFullData, treeConfig, treeIndeterminates } = this
+    // 在 v3.0 中废弃 selectConfig
+    let checkboxConfig = this.checkboxConfig || this.selectConfig || {}
+    let { checkField: property, checkStrictly, checkMethod } = checkboxConfig
     if (property) {
       if (treeConfig && !checkStrictly) {
         if (value === -1) {
@@ -1330,8 +1340,10 @@ const Methods = {
     this.checkSelectionStatus()
   },
   handleToggleCheckRowEvent (params, evnt) {
-    let { selectConfig = {}, selection } = this
-    let { checkField: property } = selectConfig
+    let { selection } = this
+    // 在 v3.0 中废弃 selectConfig
+    let checkboxConfig = this.checkboxConfig || this.selectConfig || {}
+    let { checkField: property } = checkboxConfig
     let { row } = params
     let value = property ? !XEUtils.get(row, property) : selection.indexOf(row) === -1
     if (evnt) {
@@ -1341,8 +1353,9 @@ const Methods = {
     }
   },
   triggerCheckRowEvent (evnt, params, value) {
-    let { selectConfig = {} } = this
-    let { checkMethod } = selectConfig
+    // 在 v3.0 中废弃 selectConfig
+    let checkboxConfig = this.checkboxConfig || this.selectConfig || {}
+    let { checkMethod } = checkboxConfig
     if (!checkMethod || checkMethod(params)) {
       this.handleSelectRow(params, value)
       UtilTools.emitEvent(this, 'select-change', [Object.assign({ selection: this.getSelectRecords(), checked: value, $table: this }, params), evnt])
@@ -1356,8 +1369,10 @@ const Methods = {
     return this.$nextTick()
   },
   setAllSelection (value) {
-    let { tableFullData, editStore, selectConfig = {}, treeConfig, selection } = this
-    let { checkField: property, reserve, checkStrictly, checkMethod } = selectConfig
+    let { tableFullData, editStore, treeConfig, selection } = this
+    // 在 v3.0 中废弃 selectConfig
+    let checkboxConfig = this.checkboxConfig || this.selectConfig || {}
+    let { checkField: property, reserve, checkStrictly, checkMethod } = checkboxConfig
     let { insertList } = editStore
     let selectRows = []
     // 包含新增的数据
@@ -1419,8 +1434,10 @@ const Methods = {
     this.checkSelectionStatus()
   },
   checkSelectionStatus () {
-    let { tableFullData, editStore, selectConfig = {}, selection, treeIndeterminates } = this
-    let { checkField: property, checkStrictly, checkMethod } = selectConfig
+    let { tableFullData, editStore, selection, treeIndeterminates } = this
+    // 在 v3.0 中废弃 selectConfig
+    let checkboxConfig = this.checkboxConfig || this.selectConfig || {}
+    let { checkField: property, checkStrictly, checkMethod } = checkboxConfig
     let { insertList } = editStore
     // 包含新增的数据
     if (insertList.length) {
@@ -1446,8 +1463,10 @@ const Methods = {
   },
   // 保留选中状态
   reserveCheckSelection () {
-    let { selectConfig = {}, selection, fullDataRowIdData } = this
-    let { reserve } = selectConfig
+    let { selection, fullDataRowIdData } = this
+    // 在 v3.0 中废弃 selectConfig
+    let checkboxConfig = this.checkboxConfig || this.selectConfig || {}
+    let { reserve } = checkboxConfig
     let rowkey = UtilTools.getRowkey(this)
     if (reserve && selection.length) {
       this.selection = selection.map(row => {
@@ -1471,8 +1490,10 @@ const Methods = {
     return this.$nextTick()
   },
   clearSelection () {
-    let { tableFullData, selectConfig = {}, treeConfig } = this
-    let { checkField: property } = selectConfig
+    let { tableFullData, treeConfig } = this
+    // 在 v3.0 中废弃 selectConfig
+    let checkboxConfig = this.checkboxConfig || this.selectConfig || {}
+    let { checkField: property } = checkboxConfig
     if (property) {
       if (treeConfig) {
         XEUtils.eachTree(tableFullData, item => XEUtils.set(item, property, false), treeConfig)
@@ -1614,11 +1635,14 @@ const Methods = {
    * 如果是双击模式，则单击后选中状态
    */
   triggerCellClickEvent (evnt, params) {
-    let { $el, highlightCurrentRow, editStore, radioConfig = {}, selectConfig = {}, expandConfig = {}, treeConfig = {}, editConfig, mouseConfig = {} } = this
+    let { $el, highlightCurrentRow, editStore, radioConfig = {}, expandConfig = {}, treeConfig = {}, editConfig, mouseConfig = {} } = this
     let { actived } = editStore
     let { row, column, cell } = params
+    // 在 v3.0 中废弃 selectConfig
+    let checkboxConfig = this.checkboxConfig || this.selectConfig || {}
     // 解决 checkbox 重复触发两次问题
-    if (isTargetRadioOrCheckbox(evnt, column, 'radio') || isTargetRadioOrCheckbox(evnt, column, 'selection', 'checkbox')) {
+    if (isTargetRadioOrCheckbox(evnt, column, 'radio') || isTargetRadioOrCheckbox(evnt, column, 'checkbox', 'checkbox') || isTargetRadioOrCheckbox(evnt, column, 'selection', 'checkbox')) {
+      // 在 v3.0 中废弃 type=selection
       return
     }
     // 如果是展开行
@@ -1636,12 +1660,13 @@ const Methods = {
           this.triggerCurrentRowEvent(evnt, params)
         }
       }
-      // 如果是单选
+      // 如果是单选框
       if ((radioConfig.trigger === 'row' || (column.type === 'radio' && radioConfig.trigger === 'cell')) && !this.getEventTargetNode(evnt, $el, 'vxe-radio').flag) {
         this.triggerRadioRowEvent(evnt, params)
       }
-      // 如果是多选
-      if ((selectConfig.trigger === 'row' || (column.type === 'selection' && selectConfig.trigger === 'cell')) && !this.getEventTargetNode(evnt, params.cell, 'vxe-checkbox').flag) {
+      // 如果是复选框
+      if ((checkboxConfig.trigger === 'row' || ((column.type === 'checkbox' || column.type === 'selection') && checkboxConfig.trigger === 'cell')) && !this.getEventTargetNode(evnt, params.cell, 'vxe-checkbox').flag) {
+        // 在 v3.0 中废弃 type=selection
         this.handleToggleCheckRowEvent(params, evnt)
       }
       // 如果设置了单元格选中功能，则不会使用点击事件去处理（只能支持双击模式）

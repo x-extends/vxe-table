@@ -16,9 +16,9 @@
       ref="xTree"
       :tree-config="{children: 'children'}"
       :edit-config="{trigger: 'click', mode: 'row'}"
-      :select-config="{labelField: 'id'}"
+      :checkbox-config="{labelField: 'id'}"
       :data="tableData">
-      <vxe-table-column type="selection" title="ID" tree-node></vxe-table-column>
+      <vxe-table-column type="checkbox" title="ID" tree-node></vxe-table-column>
       <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="size" title="Size" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="type" title="Type" :edit-render="{name: 'input'}"></vxe-table-column>
@@ -57,9 +57,9 @@ export default {
           ref="xTree"
           :tree-config="{children: 'children'}"
           :edit-config="{trigger: 'click', mode: 'row'}"
-          :select-config="{labelField: 'id'}"
+          :checkbox-config="{labelField: 'id'}"
           :data="tableData">
-          <vxe-table-column type="selection" title="ID" tree-node></vxe-table-column>
+          <vxe-table-column type="checkbox" title="ID" tree-node></vxe-table-column>
           <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column field="size" title="Size" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column field="type" title="Type" :edit-render="{name: 'input'}"></vxe-table-column>
