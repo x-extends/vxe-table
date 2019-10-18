@@ -489,18 +489,18 @@ export default {
      * 判断列全选的复选框是否禁用
      */
     isAllCheckboxDisabled () {
-      let { afterFullData, treeConfig } = this
+      let { tableFullData, treeConfig } = this
       // 在 v3.0 中废弃 selectConfig
       let checkboxConfig = this.checkboxConfig || this.selectConfig || {}
       let { strict, checkMethod } = checkboxConfig
       if (strict) {
-        if (afterFullData.length) {
+        if (tableFullData.length) {
           if (checkMethod) {
             if (treeConfig) {
               // 暂时不支持树形结构
             }
             // 如果所有行都被禁用
-            return afterFullData.every((row, $rowIndex) => !checkMethod({ row, $rowIndex }))
+            return tableFullData.every((row, rowIndex) => !checkMethod({ row, rowIndex, $rowIndex: rowIndex }))
           }
           return false
         }
@@ -2483,7 +2483,7 @@ export default {
       // 在 v3.0 中废弃 selectConfig
       let checkboxConfig = this.checkboxConfig || this.selectConfig || {}
       let { checkMethod } = checkboxConfig
-      if (!checkMethod || checkMethod(params)) {
+      if (!checkMethod || checkMethod({ row: params.row, rowIndex: params.rowIndex, $rowIndex: params.$rowIndex })) {
         this.handleSelectRow(evnt, params, value)
         UtilTools.emitEvent(this, 'select-change', [Object.assign({ selection: this.getSelectRecords(), checked: value, $table: this }, params), evnt])
       }
@@ -2511,12 +2511,12 @@ export default {
         if (property) {
           let indexKey = `${treeConfig ? '$' : ''}rowIndex`
           let setValFn = (row, rowIndex) => {
-            if (!checkMethod || checkMethod({ row, [indexKey]: rowIndex })) {
+            if (!checkMethod || checkMethod({ row, [indexKey]: rowIndex, $rowIndex: rowIndex })) {
               XEUtils.set(row, property, value)
             }
           }
           let clearValFn = (row, rowIndex) => {
-            if (!checkMethod || (checkMethod({ row, [indexKey]: rowIndex }) ? 0 : selection.indexOf(row) > -1)) {
+            if (!checkMethod || (checkMethod({ row, [indexKey]: rowIndex, $rowIndex: rowIndex }) ? 0 : selection.indexOf(row) > -1)) {
               XEUtils.set(row, property, value)
             }
           }
@@ -2545,13 +2545,13 @@ export default {
           } else {
             if (value) {
               if (checkMethod) {
-                selectRows = tableFullData.filter((row, rowIndex) => selection.indexOf(row) > -1 || checkMethod({ row, rowIndex }))
+                selectRows = tableFullData.filter((row, rowIndex) => selection.indexOf(row) > -1 || checkMethod({ row, rowIndex, $rowIndex: rowIndex }))
               } else {
                 selectRows = tableFullData.slice(0)
               }
             } else {
               if (checkMethod) {
-                selectRows = tableFullData.filter((row, rowIndex) => checkMethod({ row, rowIndex }) ? 0 : selection.indexOf(row) > -1)
+                selectRows = tableFullData.filter((row, rowIndex) => checkMethod({ row, rowIndex, $rowIndex: rowIndex }) ? 0 : selection.indexOf(row) > -1)
               }
             }
           }
@@ -2576,14 +2576,14 @@ export default {
         if (property) {
           this.isAllSelected = tableFullData.length && tableFullData.every(
             checkMethod
-              ? (row, rowIndex) => !checkMethod({ row, rowIndex }) || XEUtils.get(row, property)
+              ? (row, rowIndex) => !checkMethod({ row, rowIndex, $rowIndex: rowIndex }) || XEUtils.get(row, property)
               : row => XEUtils.get(row, property)
           )
           this.isIndeterminate = !this.isAllSelected && tableFullData.some(row => XEUtils.get(row, property) || treeIndeterminates.indexOf(row) > -1)
         } else {
           this.isAllSelected = tableFullData.length && tableFullData.every(
             checkMethod
-              ? (row, rowIndex) => !checkMethod({ row, rowIndex }) || selection.indexOf(row) > -1
+              ? (row, rowIndex) => !checkMethod({ row, rowIndex, $rowIndex: rowIndex }) || selection.indexOf(row) > -1
               : row => selection.indexOf(row) > -1
           )
           this.isIndeterminate = !this.isAllSelected && tableFullData.some(row => treeIndeterminates.indexOf(row) > -1 || selection.indexOf(row) > -1)
@@ -2652,7 +2652,7 @@ export default {
     triggerRadioRowEvent (evnt, params) {
       let { radioConfig = {} } = this
       let { checkMethod } = radioConfig
-      if (!checkMethod || checkMethod(params)) {
+      if (!checkMethod || checkMethod({ row: params.row, rowIndex: params.rowIndex, $rowIndex: params.$rowIndex })) {
         let isChange = this.selectRow !== params.row
         this.setRadioRow(params.row)
         if (isChange) {
