@@ -21,6 +21,7 @@
       <template v-slot:buttons>
         <Button @click="insertEvent">新增</Button>
         <Button @click="saveEvent">保存</Button>
+        <Button @click="vaildEvent">校验</Button>
         <Dropdown @on-click="dropdownMenuEvent">
           <Button>
             操作<Icon type="ios-arrow-down"></Icon>
@@ -80,7 +81,6 @@
 </template>
 
 <script>
-import XEAjax from 'xe-ajax'
 import hljs from 'highlight.js'
 
 export default {
@@ -130,6 +130,7 @@ export default {
           <template v-slot:buttons>
             <Button @click="insertEvent">新增</Button>
             <Button @click="saveEvent">保存</Button>
+            <Button @click="vaildEvent">校验</Button>
             <Dropdown @on-click="dropdownMenuEvent">
               <Button>
                 操作<Icon type="ios-arrow-down"></Icon>
@@ -217,7 +218,7 @@ export default {
             findList () {
               // 模拟后台数据
               this.loading = true
-              XEAjax.doGet(\`/api/user/page/list/\${this.tablePage.pageSize}/\${this.tablePage.currentPage}\`, this.formData).then(response => {
+              this.$ajax.doGet(\`/api/user/page/list/\${this.tablePage.pageSize}/\${this.tablePage.currentPage}\`, this.formData).then(response => {
                 let { page, result } = response.data
                 this.tableData = result
                 this.tablePage.totalResult = page.totalResult
@@ -227,13 +228,13 @@ export default {
               })
             },
             findSexList () {
-              return XEAjax.doGet('/api/conf/sex/list').then(({ data }) => {
+              return this.$ajax.doGet('/api/conf/sex/list').then(({ data }) => {
                 this.sexList = data
                 return data
               })
             },
             findRegionList () {
-              return XEAjax.doGet('/api/conf/region/list').then(({ data }) => {
+              return this.$ajax.doGet('/api/conf/region/list').then(({ data }) => {
                 this.regionList = data
                 return data
               })
@@ -256,6 +257,15 @@ export default {
               } else {
                 this.$Message.info('数据未改动！')
               }
+            },
+            vaildEvent () {
+              this.$refs.xTable.validate(valid => {
+                if (valid) {
+                  this.$XModal.message({ status: 'success', message: '校验成功！' })
+                } else {
+                  this.$XModal.message({ status: 'error', message: '校验不通过！' })
+                }
+              })
             },
             dropdownMenuEvent (name) {
               switch (name) {
@@ -308,7 +318,7 @@ export default {
   methods: {
     findList () {
       this.loading = true
-      XEAjax.doGet(`/api/user/page/list/${this.tablePage.pageSize}/${this.tablePage.currentPage}`, this.formData).then(response => {
+      this.$ajax.doGet(`/api/user/page/list/${this.tablePage.pageSize}/${this.tablePage.currentPage}`, this.formData).then(response => {
         let { page, result } = response.data
         this.tableData = result
         this.tablePage.totalResult = page.totalResult
@@ -318,13 +328,13 @@ export default {
       })
     },
     findSexList () {
-      return XEAjax.doGet('/api/conf/sex/list').then(({ data }) => {
+      return this.$ajax.doGet('/api/conf/sex/list').then(({ data }) => {
         this.sexList = data
         return data
       })
     },
     findRegionList () {
-      return XEAjax.doGet('/api/conf/region/list').then(({ data }) => {
+      return this.$ajax.doGet('/api/conf/region/list').then(({ data }) => {
         this.regionList = data
         return data
       })
@@ -347,6 +357,15 @@ export default {
       } else {
         this.$Message.info('数据未改动！')
       }
+    },
+    vaildEvent () {
+      this.$refs.xTable.validate(valid => {
+        if (valid) {
+          this.$XModal.message({ status: 'success', message: '校验成功！' })
+        } else {
+          this.$XModal.message({ status: 'error', message: '校验不通过！' })
+        }
+      })
     },
     dropdownMenuEvent (name) {
       switch (name) {

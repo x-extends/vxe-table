@@ -21,6 +21,7 @@
       <template v-slot:buttons>
         <el-button @click="insertEvent">新增</el-button>
         <el-button @click="saveEvent">保存</el-button>
+        <el-button @click="vaildEvent">校验</el-button>
         <el-dropdown @command="dropdownMenuEvent">
           <el-button>
             操作<i class="el-icon-arrow-down el-icon--right"></i>
@@ -80,7 +81,6 @@
 </template>
 
 <script>
-import XEAjax from 'xe-ajax'
 import hljs from 'highlight.js'
 
 export default {
@@ -131,6 +131,7 @@ export default {
             <template v-slot:buttons>
               <el-button @click="insertEvent">新增</el-button>
               <el-button @click="saveEvent">保存</el-button>
+              <el-button @click="vaildEvent">校验</el-button>
               <el-dropdown @command="dropdownMenuEvent">
                 <el-button>
                   操作<i class="el-icon-arrow-down el-icon--right"></i>
@@ -221,7 +222,7 @@ export default {
             findList () {
               // 模拟后台数据
               this.loading = true
-              XEAjax.doGet(\`/api/user/page/list/\${this.tablePage.pageSize}/\${this.tablePage.currentPage}\`, this.formData).then(response => {
+              this.$ajax.doGet(\`/api/user/page/list/\${this.tablePage.pageSize}/\${this.tablePage.currentPage}\`, this.formData).then(response => {
                 let { page, result } = response.data
                 this.tableData = result
                 this.tablePage.totalResult = page.totalResult
@@ -231,13 +232,13 @@ export default {
               })
             },
             findSexList () {
-              return XEAjax.doGet('/api/conf/sex/list').then(({ data }) => {
+              return this.$ajax.doGet('/api/conf/sex/list').then(({ data }) => {
                 this.sexList = data
                 return data
               })
             },
             findRegionList () {
-              return XEAjax.doGet('/api/conf/region/list').then(({ data }) => {
+              return this.$ajax.doGet('/api/conf/region/list').then(({ data }) => {
                 this.regionList = data
                 return data
               })
@@ -282,6 +283,15 @@ export default {
               this.tablePage.currentPage = 1
               this.findList()
             },
+            vaildEvent () {
+              this.$refs.xTable.validate(valid => {
+                if (valid) {
+                  this.$XModal.message({ status: 'success', message: '校验成功！' })
+                } else {
+                  this.$XModal.message({ status: 'error', message: '校验不通过！' })
+                }
+              })
+            },
             handleSizeChange (pageSize) {
               this.tablePage.pageSize = pageSize
               this.searchEvent()
@@ -322,7 +332,7 @@ export default {
   methods: {
     findList () {
       this.loading = true
-      XEAjax.doGet(`/api/user/page/list/${this.tablePage.pageSize}/${this.tablePage.currentPage}`, this.formData).then(response => {
+      this.$ajax.doGet(`/api/user/page/list/${this.tablePage.pageSize}/${this.tablePage.currentPage}`, this.formData).then(response => {
         let { page, result } = response.data
         this.tableData = result
         this.tablePage.totalResult = page.totalResult
@@ -332,13 +342,13 @@ export default {
       })
     },
     findSexList () {
-      return XEAjax.doGet('/api/conf/sex/list').then(({ data }) => {
+      return this.$ajax.doGet('/api/conf/sex/list').then(({ data }) => {
         this.sexList = data
         return data
       })
     },
     findRegionList () {
-      return XEAjax.doGet('/api/conf/region/list').then(({ data }) => {
+      return this.$ajax.doGet('/api/conf/region/list').then(({ data }) => {
         this.regionList = data
         return data
       })
@@ -361,6 +371,15 @@ export default {
       } else {
         this.$alert('数据未改动！')
       }
+    },
+    vaildEvent () {
+      this.$refs.xTable.validate(valid => {
+        if (valid) {
+          this.$XModal.message({ status: 'success', message: '校验成功！' })
+        } else {
+          this.$XModal.message({ status: 'error', message: '校验不通过！' })
+        }
+      })
     },
     dropdownMenuEvent (name) {
       switch (name) {

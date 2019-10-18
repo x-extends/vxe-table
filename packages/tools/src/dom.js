@@ -51,10 +51,12 @@ export const DomTools = {
       let bodySrcollTop = bodyElem.scrollTop
       let trOffsetTop = trElem.offsetTop + (trElem.offsetParent ? trElem.offsetParent.offsetTop : 0)
       let trHeight = trElem.clientHeight
+      // 检测行是否在可视区中
       if (trOffsetTop < bodySrcollTop || trOffsetTop > bodySrcollTop + bodyHeight) {
-        // 如果跨行滚动
+        // 向上定位
         return $table.scrollTo(null, trOffsetTop)
       } else if (trOffsetTop + trHeight >= bodyHeight + bodySrcollTop) {
+        // 向下定位
         return $table.scrollTo(null, bodySrcollTop + trHeight)
       }
     } else {
@@ -73,10 +75,12 @@ export const DomTools = {
       let bodySrcollLeft = bodyElem.scrollLeft
       let tdOffsetLeft = tdElem.offsetLeft + (tdElem.offsetParent ? tdElem.offsetParent.offsetLeft : 0)
       let tdWidth = tdElem.clientWidth
+      // 检测行是否在可视区中
       if (tdOffsetLeft < bodySrcollLeft || tdOffsetLeft > bodySrcollLeft + bodyWidth) {
-        // 如果跨列滚动
+        // 向左定位
         return $table.scrollTo(tdOffsetLeft)
       } else if (tdOffsetLeft + tdWidth >= bodyWidth + bodySrcollLeft) {
+        // 向右定位
         return $table.scrollTo(bodySrcollLeft + tdWidth)
       }
     } else {
@@ -141,7 +145,7 @@ export const DomTools = {
   },
   getCell ($table, { row, rowIndex, column }) {
     let rowid = UtilTools.getRowid($table, row, rowIndex)
-    return $table.$refs.tableBody.$el.querySelector(`.vxe-body--row[data-rowid="${rowid}"] .${column.id}`)
+    return ($table.$refs[`${column.fixed || 'table'}Body`]).$el.querySelector(`.vxe-body--row[data-rowid="${rowid}"] .${column.id}`)
   },
   getCursorPosition (textarea) {
     let rangeData = { text: '', start: 0, end: 0 }

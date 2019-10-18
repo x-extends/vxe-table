@@ -21,6 +21,7 @@
       <template v-slot:buttons>
         <a-button @click="insertEvent">新增</a-button>
         <a-button @click="saveEvent">保存</a-button>
+        <a-button @click="vaildEvent">校验</a-button>
         <a-dropdown :trigger="['click']">
           <a-button>操作<a-icon type="down" /></a-button>
           <a-menu slot="overlay">
@@ -81,7 +82,6 @@
 </template>
 
 <script>
-import XEAjax from 'xe-ajax'
 import hljs from 'highlight.js'
 
 export default {
@@ -151,6 +151,7 @@ export default {
             <template v-slot:buttons>
               <a-button @click="insertEvent">新增</a-button>
               <a-button @click="saveEvent">保存</a-button>
+              <a-button @click="vaildEvent">校验</a-button>
               <a-dropdown :trigger="['click']">
                 <a-button>操作<a-icon type="down" /></a-button>
                 <a-menu slot="overlay">
@@ -258,7 +259,7 @@ export default {
           methods: {
             findList () {
               this.loading = true
-              XEAjax.doGet(\`/api/user/page/list/\${this.tablePage.pageSize}/\${this.tablePage.currentPage}\`, this.form.getFieldsValue()).then(response => {
+              this.$ajax.doGet(\`/api/user/page/list/\${this.tablePage.pageSize}/\${this.tablePage.currentPage}\`, this.form.getFieldsValue()).then(response => {
                 let { page, result } = response.data
                 this.tableData = result
                 this.tablePage.totalResult = page.totalResult
@@ -268,13 +269,13 @@ export default {
               })
             },
             findSexList () {
-              return XEAjax.doGet('/api/conf/sex/list').then(({ data }) => {
+              return this.$ajax.doGet('/api/conf/sex/list').then(({ data }) => {
                 this.sexList = data
                 return data
               })
             },
             findRegionList () {
-              return XEAjax.doGet('/api/conf/region/list').then(({ data }) => {
+              return this.$ajax.doGet('/api/conf/region/list').then(({ data }) => {
                 this.regionList = data
                 return data
               })
@@ -297,6 +298,15 @@ export default {
               } else {
                 this.$message.warning('数据未改动！')
               }
+            },
+            vaildEvent () {
+              this.$refs.xTable.validate(valid => {
+                if (valid) {
+                  this.$XModal.message({ status: 'success', message: '校验成功！' })
+                } else {
+                  this.$XModal.message({ status: 'error', message: '校验不通过！' })
+                }
+              })
             },
             dropdownMenuEvent (name) {
               switch (name) {
@@ -349,7 +359,7 @@ export default {
   methods: {
     findList () {
       this.loading = true
-      XEAjax.doGet(`/api/user/page/list/${this.tablePage.pageSize}/${this.tablePage.currentPage}`, this.form.getFieldsValue()).then(response => {
+      this.$ajax.doGet(`/api/user/page/list/${this.tablePage.pageSize}/${this.tablePage.currentPage}`, this.form.getFieldsValue()).then(response => {
         let { page, result } = response.data
         this.tableData = result
         this.tablePage.totalResult = page.totalResult
@@ -359,13 +369,13 @@ export default {
       })
     },
     findSexList () {
-      return XEAjax.doGet('/api/conf/sex/list').then(({ data }) => {
+      return this.$ajax.doGet('/api/conf/sex/list').then(({ data }) => {
         this.sexList = data
         return data
       })
     },
     findRegionList () {
-      return XEAjax.doGet('/api/conf/region/list').then(({ data }) => {
+      return this.$ajax.doGet('/api/conf/region/list').then(({ data }) => {
         this.regionList = data
         return data
       })
@@ -388,6 +398,15 @@ export default {
       } else {
         this.$message.warning('数据未改动！')
       }
+    },
+    vaildEvent () {
+      this.$refs.xTable.validate(valid => {
+        if (valid) {
+          this.$XModal.message({ status: 'success', message: '校验成功！' })
+        } else {
+          this.$XModal.message({ status: 'error', message: '校验不通过！' })
+        }
+      })
     },
     dropdownMenuEvent (name) {
       switch (name) {
