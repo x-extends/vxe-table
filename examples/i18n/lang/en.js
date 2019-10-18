@@ -319,6 +319,11 @@ module.exports = {
       tableColumn: {
         desc: {
           type: 'The type of the column',
+          index: 'Sequence number',
+          selection: 'Obsolete, please use checkbox',
+          checkbox: 'Checkbox',
+          radio: 'Radio',
+          expand: 'Expansion',
           field: 'Column field name',
           title: 'Column title (support internationalization)',
           width: 'Column width',

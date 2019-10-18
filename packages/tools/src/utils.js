@@ -8,9 +8,9 @@ class ColumnConfig {
     if (_vm.cellRender && _vm.editRender) {
       UtilTools.warn('vxe.error.cellEditRender')
     }
-    if (_vm.type === 'selection') {
-      UtilTools.warn('vxe.error.delProp', ['selection', 'checkbox'])
-    }
+    // if (_vm.type === 'selection') {
+    //   UtilTools.warn('vxe.error.delProp', ['selection', 'checkbox'])
+    // }
     Object.assign(this, {
       // 基本属性
       id: `col_${++columnUniqueId}`,

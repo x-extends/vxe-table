@@ -12,9 +12,56 @@ const apis = [
         descKey: 'app.api.tableColumn.desc.type',
         version: '',
         type: 'String',
-        enum: 'index（序号）, selection（已废弃）, checkbox（复选框）, radio（单选框）, expand（展开行）',
+        enum: '',
         defVal: '',
-        list: []
+        list: [
+          {
+            name: 'index',
+            descKey: 'app.api.tableColumn.desc.index',
+            version: '',
+            type: '',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'selection',
+            descKey: 'app.api.tableColumn.desc.selection',
+            disabled: true,
+            version: '',
+            type: '',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'checkbox',
+            descKey: 'app.api.tableColumn.desc.checkbox',
+            version: '2.6',
+            type: '',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'radio',
+            descKey: 'app.api.tableColumn.desc.radio',
+            version: '',
+            type: '',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'expand',
+            descKey: 'app.api.tableColumn.desc.expand',
+            version: '',
+            type: '',
+            enum: '',
+            defVal: '',
+            list: []
+          }
+        ]
       },
       {
         name: 'field',
