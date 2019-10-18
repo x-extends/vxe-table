@@ -376,18 +376,18 @@ export default {
      * 判断列全选的复选框是否禁用
      */
     isAllCheckboxDisabled () {
-      let { afterFullData, treeConfig } = this
+      let { tableFullData, treeConfig } = this
       // 在 v3.0 中废弃 selectConfig
       let checkboxConfig = this.checkboxConfig || this.selectConfig || {}
       let { strict, checkMethod } = checkboxConfig
       if (strict) {
-        if (afterFullData.length) {
+        if (tableFullData.length) {
           if (checkMethod) {
             if (treeConfig) {
               // 暂时不支持树形结构
             }
             // 如果所有行都被禁用
-            return afterFullData.every((row, $rowIndex) => !checkMethod({ row, $rowIndex }))
+            return tableFullData.every((row, rowIndex) => !checkMethod({ row, rowIndex, $rowIndex: rowIndex }))
           }
           return false
         }
