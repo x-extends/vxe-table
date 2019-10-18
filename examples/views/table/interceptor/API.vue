@@ -136,7 +136,7 @@ export default {
           list: []
         },
         {
-          name: 'event.clear_filter',
+          name: 'event.clearFilter',
           desc: '清除激活单元格之前触发，允许返回 false 阻止默认行为',
           version: '2.1',
           type: 'Boolean',
@@ -145,7 +145,7 @@ export default {
           list: []
         },
         {
-          name: 'event.clear_actived',
+          name: 'event.clearActived',
           desc: '清除筛选面板之前触发，允许返回 false 阻止默认行为',
           version: '',
           type: 'Boolean',
@@ -163,7 +163,7 @@ export default {
           list: []
         },
         {
-          name: 'event.show_menu',
+          name: 'event.showMenu',
           desc: '显示快捷菜单之前触发，允许返回 false 阻止默认行为',
           version: '2.4',
           type: 'Boolean',

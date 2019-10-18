@@ -230,7 +230,7 @@ export const Cell = {
     }
     if (!isHidden) {
       options.domProps = {
-        checked: $table.isAllSelected
+        checked: isAllCheckboxDisabled ? false : $table.isAllSelected
       }
       options.on = {
         change (evnt) {

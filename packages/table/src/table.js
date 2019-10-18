@@ -387,7 +387,7 @@ export default {
               // 暂时不支持树形结构
             }
             // 如果所有行都被禁用
-            return afterFullData.some((row, $rowIndex) => !checkMethod({ row, $rowIndex }))
+            return afterFullData.every((row, $rowIndex) => !checkMethod({ row, $rowIndex }))
           }
           return false
         }
