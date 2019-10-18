@@ -286,7 +286,7 @@ export default {
    * 处理聚焦
    */
   handleFocus (params, evnt) {
-    let { column, cell } = params
+    let { row, column, cell } = params
     let { editRender } = column
     if (editRender) {
       let compRender = Renderer.get(editRender.name)
@@ -307,6 +307,9 @@ export default {
           textRange.collapse(false)
           textRange.select()
         }
+      } else {
+        // 显示到可视区中
+        this.scrollToRow(row, column)
       }
     }
   },

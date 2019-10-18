@@ -21,6 +21,7 @@
       <template v-slot:buttons>
         <Button @click="insertEvent">新增</Button>
         <Button @click="saveEvent">保存</Button>
+        <Button @click="vaildEvent">校验</Button>
         <Dropdown @on-click="dropdownMenuEvent">
           <Button>
             操作<Icon type="ios-arrow-down"></Icon>
@@ -129,6 +130,7 @@ export default {
           <template v-slot:buttons>
             <Button @click="insertEvent">新增</Button>
             <Button @click="saveEvent">保存</Button>
+            <Button @click="vaildEvent">校验</Button>
             <Dropdown @on-click="dropdownMenuEvent">
               <Button>
                 操作<Icon type="ios-arrow-down"></Icon>
@@ -256,6 +258,15 @@ export default {
                 this.$Message.info('数据未改动！')
               }
             },
+            vaildEvent () {
+              this.$refs.xTable.validate(valid => {
+                if (valid) {
+                  this.$XModal.message({ status: 'success', message: '校验成功！' })
+                } else {
+                  this.$XModal.message({ status: 'error', message: '校验不通过！' })
+                }
+              })
+            },
             dropdownMenuEvent (name) {
               switch (name) {
                 case 'remove': {
@@ -346,6 +357,15 @@ export default {
       } else {
         this.$Message.info('数据未改动！')
       }
+    },
+    vaildEvent () {
+      this.$refs.xTable.validate(valid => {
+        if (valid) {
+          this.$XModal.message({ status: 'success', message: '校验成功！' })
+        } else {
+          this.$XModal.message({ status: 'error', message: '校验不通过！' })
+        }
+      })
     },
     dropdownMenuEvent (name) {
       switch (name) {

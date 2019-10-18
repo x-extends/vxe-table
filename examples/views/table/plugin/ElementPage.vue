@@ -21,6 +21,7 @@
       <template v-slot:buttons>
         <el-button @click="insertEvent">新增</el-button>
         <el-button @click="saveEvent">保存</el-button>
+        <el-button @click="vaildEvent">校验</el-button>
         <el-dropdown @command="dropdownMenuEvent">
           <el-button>
             操作<i class="el-icon-arrow-down el-icon--right"></i>
@@ -130,6 +131,7 @@ export default {
             <template v-slot:buttons>
               <el-button @click="insertEvent">新增</el-button>
               <el-button @click="saveEvent">保存</el-button>
+              <el-button @click="vaildEvent">校验</el-button>
               <el-dropdown @command="dropdownMenuEvent">
                 <el-button>
                   操作<i class="el-icon-arrow-down el-icon--right"></i>
@@ -281,6 +283,15 @@ export default {
               this.tablePage.currentPage = 1
               this.findList()
             },
+            vaildEvent () {
+              this.$refs.xTable.validate(valid => {
+                if (valid) {
+                  this.$XModal.message({ status: 'success', message: '校验成功！' })
+                } else {
+                  this.$XModal.message({ status: 'error', message: '校验不通过！' })
+                }
+              })
+            },
             handleSizeChange (pageSize) {
               this.tablePage.pageSize = pageSize
               this.searchEvent()
@@ -360,6 +371,15 @@ export default {
       } else {
         this.$alert('数据未改动！')
       }
+    },
+    vaildEvent () {
+      this.$refs.xTable.validate(valid => {
+        if (valid) {
+          this.$XModal.message({ status: 'success', message: '校验成功！' })
+        } else {
+          this.$XModal.message({ status: 'error', message: '校验不通过！' })
+        }
+      })
     },
     dropdownMenuEvent (name) {
       switch (name) {
