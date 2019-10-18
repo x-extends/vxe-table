@@ -322,6 +322,11 @@ module.exports = {
       tableColumn: {
         desc: {
           type: 'The type of the column',
+          index: 'Sequence number',
+          selection: 'Obsolete, please use checkbox',
+          checkbox: 'Checkbox',
+          radio: 'Radio',
+          expand: 'Expansion',
           prop: 'Obsolete, please use field',
           field: 'Column field name',
           label: 'Obsolete, please use title',

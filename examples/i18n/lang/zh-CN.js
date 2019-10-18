@@ -323,6 +323,11 @@ module.exports = {
       tableColumn: {
         desc: {
           type: '列的类型',
+          index: '序号',
+          selection: '即将废弃，请使用 checkbox',
+          checkbox: '复选框',
+          radio: '单选框',
+          expand: '展开行',
           prop: '即将废弃，请使用 field',
           field: '列属性',
           label: '即将废弃，请使用 title',
