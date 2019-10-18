@@ -174,7 +174,7 @@ export default {
       ],
       demoCodes: [
         `
-        VXETable.interceptor.add('event.clear_actived', (params, event) => {
+        VXETable.interceptor.add('event.clearActived', (params, event) => {
           // 比如点击了某个组件的弹出层面板之后，此时被激活单元格不应该被自动关闭，通过返回 false 可以阻止默认的行为。
           if (event.target.className.indexOf('other-popper') > -1) {
             return false
