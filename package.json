@@ -1,6 +1,6 @@
 {
   "name": "vxe-table",
-  "version": "2.6.0-beta.25",
+  "version": "2.6.0-beta.26",
   "description": "一个简单实用的 Vue 表格组件",
   "scripts": {
     "serve": "vue-cli-service serve",
