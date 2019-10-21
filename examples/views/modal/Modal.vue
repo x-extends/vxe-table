@@ -134,7 +134,20 @@ export default {
         { type: 'index', width: 60 },
         { field: 'name', title: 'Name' },
         { field: 'nickname', title: 'Nickname' },
-        { field: 'role', title: 'Role' },
+        {
+          field: 'role',
+          title: 'Role',
+          filters: [
+            {
+              label: '前端',
+              value: '前端'
+            },
+            {
+              label: '后端',
+              value: '后端'
+            }
+          ]
+        },
         { field: 'describe', title: 'Describe' }
       ],
       demoCodes: [
@@ -259,7 +272,20 @@ export default {
                 { type: 'index', width: 60 },
                 { field: 'name', title: 'Name' },
                 { field: 'nickname', title: 'Nickname' },
-                { field: 'role', title: 'Role' },
+                {
+                  field: 'role',
+                  title: 'Role',
+                  filters: [
+                    {
+                      label: '前端',
+                      value: '前端'
+                    },
+                    {
+                      label: '后端',
+                      value: '后端'
+                    }
+                  ]
+                },
                 { field: 'describe', title: 'Describe' }
               ]
             }

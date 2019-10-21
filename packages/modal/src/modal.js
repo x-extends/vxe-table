@@ -3,13 +3,6 @@ import XEUtils from 'xe-utils/methods/xe-utils'
 import MsgQueue from './queue'
 import { UtilTools, DomTools, GlobalEvent } from '../../tools'
 
-let cumsumZindex = 0
-let maxZindex = 0
-function getZIndex () {
-  maxZindex = GlobalConfig.modal.zIndex + cumsumZindex++
-  return maxZindex
-}
-
 export default {
   name: 'VxeModal',
   props: {
@@ -68,7 +61,7 @@ export default {
     if (this.value) {
       this.open()
     }
-    this.modalZindex = this.zIndex || getZIndex()
+    this.modalZindex = this.zIndex || UtilTools.getZIndex()
   },
   mounted () {
     let { width, height } = this
@@ -220,8 +213,8 @@ export default {
       }
     },
     updateZindex () {
-      if (this.modalZindex < maxZindex) {
-        this.modalZindex = getZIndex()
+      if (this.modalZindex < UtilTools.getLastZIndex()) {
+        this.modalZindex = UtilTools.getZIndex()
       }
     },
     closeEvent (evnt) {

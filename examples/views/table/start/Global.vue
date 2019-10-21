@@ -27,6 +27,7 @@
           highlightHoverRow: false,
           highlightCurrentColumn: false,
           highlightHoverColumn: false,
+          zIndex: 100, // 全局 zIndex 起始值
           rowId: '_XID',
           sortConfig: {
             trigger: 'default'

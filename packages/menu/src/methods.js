@@ -106,6 +106,7 @@ export default {
         this.preventEvent(evnt, 'event.show_menu', params, null, () => {
           if (!visibleMethod || visibleMethod(params, evnt)) {
             evnt.preventDefault()
+            this.updateZindex()
             let { scrollTop, scrollLeft, visibleHeight, visibleWidth } = DomTools.getDomNode()
             let top = evnt.clientY + scrollTop
             let left = evnt.clientX + scrollLeft
@@ -117,6 +118,7 @@ export default {
               selectChild: null,
               showChild: false,
               style: {
+                zIndex: this.tZindex,
                 top: `${top}px`,
                 left: `${left}px`
               }

@@ -1,5 +1,4 @@
 import XEUtils from 'xe-utils/methods/xe-utils'
-import GlobalConfig from '../../conf'
 import { UtilTools, DomTools } from '../../tools'
 
 export default {
@@ -26,13 +25,16 @@ export default {
       let { target: targetElem, pageX } = evnt
       let { visibleWidth } = DomTools.getDomNode()
       let { top, left } = DomTools.getAbsolutePos(targetElem)
+      if (!filterStore.zIndex || filterStore.zIndex < UtilTools.getLastZIndex()) {
+        filterStore.zIndex = UtilTools.getZIndex()
+      }
       Object.assign(filterStore, {
         args: params,
         multiple: column.filterMultiple,
         options: column.filters,
         column: column,
         style: {
-          zIndex: GlobalConfig.tooltip.zIndex,
+          zIndex: filterStore.zIndex,
           top: `${top + targetElem.clientHeight + 6}px`,
           left: `${left}px`
         },

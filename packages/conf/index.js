@@ -12,6 +12,7 @@ const GlobalConfig = {
   fit: true,
   emptyCell: '　',
   showHeader: true,
+  zIndex: 100,
   rowId: '_XID', // 行数据的唯一主键字段名
   version: 0, // 版本号，对于某些带数据缓存的功能有用到，上升版本号可以用于重置数据
   optimization: {
@@ -84,7 +85,6 @@ const GlobalConfig = {
     // buttons: []
   },
   modal: {
-    zIndex: 2000,
     minWidth: 340,
     minHeight: 200,
     lockView: true,

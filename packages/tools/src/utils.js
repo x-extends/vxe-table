@@ -1,6 +1,8 @@
 import XEUtils from 'xe-utils/methods/xe-utils'
 import GlobalConfig from '../../conf'
 
+var zindexIndex = 0
+var lastZindex = 0
 var columnUniqueId = 0
 
 class ColumnConfig {
@@ -86,6 +88,13 @@ export const UtilTools = {
   },
   getFuncText (content) {
     return XEUtils.isFunction(content) ? content() : (GlobalConfig.translate ? GlobalConfig.translate(content) : content)
+  },
+  getZIndex () {
+    lastZindex = GlobalConfig.zIndex + zindexIndex++
+    return lastZindex
+  },
+  getLastZIndex () {
+    return lastZindex
   },
   // 行主键 key
   getRowkey ($table) {

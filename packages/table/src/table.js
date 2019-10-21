@@ -454,6 +454,7 @@ export default {
   },
   created () {
     let { scrollYStore, optimizeOpts, data, loading } = Object.assign(this, {
+      tZindex: 0,
       elemStore: {},
       // 存放横向 X 虚拟滚动相关的信息
       scrollXStore: {},

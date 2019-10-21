@@ -2307,6 +2307,11 @@ const Methods = {
       }
     })
   },
+  updateZindex () {
+    if (this.tZindex < UtilTools.getLastZIndex()) {
+      this.tZindex = UtilTools.getZIndex()
+    }
+  },
 
   /*************************
    * Publish methods

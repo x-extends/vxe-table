@@ -1,6 +1,6 @@
 import XEUtils from 'xe-utils/methods/xe-utils'
 import GlobalConfig from '../../conf'
-import { DomTools } from '../../tools'
+import { UtilTools, DomTools } from '../../tools'
 
 export default {
   name: 'VxeTooltip',
@@ -9,7 +9,7 @@ export default {
     trigger: { type: String, default: () => GlobalConfig.tooltip.trigger },
     theme: { type: String, default: () => GlobalConfig.tooltip.theme },
     content: [String, Function],
-    zIndex: { type: Number, default: () => GlobalConfig.tooltip.zIndex },
+    zIndex: [String, Number],
     isArrow: { type: Boolean, default: true }
   },
   data () {
@@ -17,6 +17,7 @@ export default {
       isUpdate: false,
       visible: false,
       message: '',
+      tipZindex: 0,
       tipStore: {
         style: {},
         placement: '',
@@ -40,6 +41,7 @@ export default {
     let parentNode = $el.parentNode
     let target
     this.message = content
+    this.tipZindex = UtilTools.getZIndex()
     Array.from($el.children).forEach((elem, index) => {
       if (index > 1) {
         parentNode.insertBefore(elem, $el)
@@ -118,6 +120,11 @@ export default {
         }
       }
     },
+    updateZindex () {
+      if (this.tipZindex < UtilTools.getLastZIndex()) {
+        this.tipZindex = UtilTools.getZIndex()
+      }
+    },
     toVisible (target, message) {
       if (target) {
         let { $el, tipStore, zIndex } = this
@@ -135,6 +142,7 @@ export default {
           this.message = message
         }
         this.update(true)
+        this.updateZindex()
         return this.$nextTick().then(() => {
           let wrapperElem = $el
           if (wrapperElem) {
@@ -142,7 +150,7 @@ export default {
             let clientWidth = XEUtils.toNumber(getComputedStyle(wrapperElem).width)
             tipLeft = left + Math.floor((target.offsetWidth - clientWidth) / 2)
             tipStore.style = {
-              zIndex,
+              zIndex: zIndex || this.tipZindex,
               width: `${clientWidth}px`,
               top: `${top - clientHeight - 6}px`,
               left: `${tipLeft}px`

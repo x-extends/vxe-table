@@ -33,7 +33,8 @@ export default {
   data () {
     return {
       showSizes: false,
-      panelStyle: null
+      panelStyle: null,
+      panelIndex: 0
     }
   },
   computed: {
@@ -54,6 +55,7 @@ export default {
     }
   },
   created () {
+    this.panelIndex = UtilTools.getZIndex()
     GlobalEvent.on(this, 'mousedown', this.handleGlobalMousedownEvent)
   },
   destroyed () {
@@ -363,12 +365,19 @@ export default {
     toggleSizePanel () {
       this[this.showSizes ? 'hideSizePanel' : 'showSizePanel']()
     },
+    updateZindex () {
+      if (this.panelIndex < UtilTools.getLastZIndex()) {
+        this.panelIndex = UtilTools.getZIndex()
+      }
+    },
     showSizePanel () {
       this.showSizes = true
+      this.updateZindex()
       this.$nextTick(() => {
         let { $refs } = this
         let { sizeBtn, sizePanel } = $refs
         this.panelStyle = {
+          zIndex: this.panelIndex,
           bottom: `${sizeBtn.clientHeight + 6}px`,
           left: `-${sizePanel.clientWidth / 2 - sizeBtn.clientWidth / 2}px`
         }
