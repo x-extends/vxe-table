@@ -528,12 +528,14 @@ export default {
           children: [
             {
               label: 'app.aside.nav.base',
+              demoUrl: 'https://jsrun.pro/YfWKp/edit',
               locat: {
                 name: 'TableTreeBasic'
               }
             },
             {
               label: 'app.aside.nav.radio',
+              demoUrl: 'https://jsrun.pro/kfWKp/edit',
               locat: {
                 name: 'TableTreeRadio'
               }
@@ -547,6 +549,7 @@ export default {
             },
             {
               label: 'app.aside.nav.fixed',
+              demoUrl: 'https://jsrun.pro/ifWKp/edit',
               locat: {
                 name: 'TableTreeFixed'
               }
@@ -766,24 +769,28 @@ export default {
           children: [
             {
               label: 'app.aside.nav.manual',
+              demoUrl: 'https://jsrun.pro/SWWKp/edit',
               locat: {
                 name: 'TableEditManual'
               }
             },
             {
               label: 'app.aside.nav.click',
+              demoUrl: 'https://jsrun.pro/4WWKp/edit',
               locat: {
                 name: 'TableEditClick'
               }
             },
             {
               label: 'app.aside.nav.dblclick',
+              demoUrl: 'https://jsrun.pro/KfWKp/edit',
               locat: {
                 name: 'TableEditDBLClick'
               }
             },
             {
               label: 'app.aside.nav.select',
+              demoUrl: 'https://jsrun.pro/pfWKp/edit',
               locat: {
                 name: 'TableEditSelect'
               }
