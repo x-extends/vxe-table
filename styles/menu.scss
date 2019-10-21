@@ -6,7 +6,6 @@
   position: absolute;
   top: 0;
   left: 0;
-  z-index: $vxe-zindex + 1000;
   font-size: 12px;
   background-color: #FFF;
   border: 1px solid $vxe-table-popup-border-color;
@@ -95,7 +94,6 @@
 .vxe-table--ctxmenu-clild-wrapper {
   @extend .vxe-table--ctxmenu-wrapper, .vxe-ctxmenu--option-wrapper;
   display: none;
-  z-index: $vxe-zindex + 1100;
   top: 0;
   left: 100%;
   &.show {

@@ -91,7 +91,6 @@ export default {
             this.findSexList()
             this.findRegionList()
             this.findSexGroupList()
-            this.findSexGroupList()
           },
           methods: {
             findSexList () {
@@ -145,7 +144,6 @@ export default {
     }, 500)
     this.findSexList()
     this.findRegionList()
-    this.findSexGroupList()
     this.findSexGroupList()
   },
   mounted () {

@@ -26,7 +26,7 @@
 
     <p>
       <vxe-button @click="value1 = !value1">基本窗口</vxe-button>
-      <vxe-modal v-model="value1" :lock-scroll="false">
+      <vxe-modal v-model="value1" :lock-scroll="false" show-footer>
         <template>
           <vxe-table
             show-overflow
@@ -42,7 +42,7 @@
       </vxe-modal>
 
       <vxe-button @click="value2 = !value2">拖动窗口调整大小</vxe-button>
-      <vxe-modal v-model="value2" :show-footer="false" resize>
+      <vxe-modal v-model="value2" resize>
         <template>
           <p style="color: red">按住头部移动！！！！！！！！！！！！！！！</p>
           <p style="color: blue">按住左边距拖动！！！！！！！！！！！！！！！</p>
@@ -54,7 +54,7 @@
       </vxe-modal>
 
       <vxe-button @click="value3 = !value3">缩放表格的窗口</vxe-button>
-      <vxe-modal v-model="value3" title="缩放表格的窗口" width="800" height="400" :show-footer="false" resize>
+      <vxe-modal v-model="value3" title="缩放表格的窗口" width="800" height="400" resize>
         <template>
           <vxe-table
             border
@@ -73,7 +73,7 @@
       </vxe-modal>
 
       <vxe-button @click="value4 = !value4">完整功能的窗口</vxe-button>
-      <vxe-modal v-model="value4" title="完整功能的窗口" width="800" height="400" min-width="400" min-height="320" :show-footer="false" resize>
+      <vxe-modal v-model="value4" title="完整功能的窗口" width="800" height="400" min-width="400" min-height="320" resize>
         <template>
           <vxe-grid
             border
@@ -134,7 +134,20 @@ export default {
         { type: 'index', width: 60 },
         { field: 'name', title: 'Name' },
         { field: 'nickname', title: 'Nickname' },
-        { field: 'role', title: 'Role' },
+        {
+          field: 'role',
+          title: 'Role',
+          filters: [
+            {
+              label: '前端',
+              value: '前端'
+            },
+            {
+              label: '后端',
+              value: '后端'
+            }
+          ]
+        },
         { field: 'describe', title: 'Describe' }
       ],
       demoCodes: [
@@ -162,7 +175,7 @@ export default {
 
         <p>
           <vxe-button @click="value1 = !value1">基本窗口</vxe-button>
-          <vxe-modal v-model="value1" :lock-scroll="false">
+          <vxe-modal v-model="value1" :lock-scroll="false" show-footer>
             <template>
               <vxe-table
                 show-overflow
@@ -178,7 +191,7 @@ export default {
           </vxe-modal>
 
           <vxe-button @click="value2 = !value2">拖动窗口调整大小</vxe-button>
-          <vxe-modal v-model="value2" :show-footer="false" resize>
+          <vxe-modal v-model="value2" resize>
             <template>
               <p style="color: red">按住头部移动！！！！！！！！！！！！！！！</p>
               <p style="color: blue">按住左边距拖动！！！！！！！！！！！！！！！</p>
@@ -190,7 +203,7 @@ export default {
           </vxe-modal>
 
           <vxe-button @click="value3 = !value3">缩放表格的窗口</vxe-button>
-          <vxe-modal v-model="value3" title="缩放表格的窗口" width="800" height="400" :show-footer="false" resize>
+          <vxe-modal v-model="value3" title="缩放表格的窗口" width="800" height="400" resize>
             <template>
               <vxe-table
                 border
@@ -209,7 +222,7 @@ export default {
           </vxe-modal>
 
           <vxe-button @click="value4 = !value4">完整功能的窗口</vxe-button>
-          <vxe-modal v-model="value4" title="完整功能的窗口" width="800" height="400" min-width="400" min-height="320" :show-footer="false" resize>
+          <vxe-modal v-model="value4" title="完整功能的窗口" width="800" height="400" min-width="400" min-height="320" resize>
             <template>
               <vxe-grid
                 border
@@ -259,7 +272,20 @@ export default {
                 { type: 'index', width: 60 },
                 { field: 'name', title: 'Name' },
                 { field: 'nickname', title: 'Nickname' },
-                { field: 'role', title: 'Role' },
+                {
+                  field: 'role',
+                  title: 'Role',
+                  filters: [
+                    {
+                      label: '前端',
+                      value: '前端'
+                    },
+                    {
+                      label: '后端',
+                      value: '后端'
+                    }
+                  ]
+                },
                 { field: 'describe', title: 'Describe' }
               ]
             }

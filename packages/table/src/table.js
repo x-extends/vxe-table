@@ -260,6 +260,7 @@ export default {
   data () {
     return {
       id: XEUtils.uniqueId(),
+      tZindex: 0,
       // 列分组配置
       collectColumn: [],
       // 完整所有列
@@ -2207,6 +2208,7 @@ export default {
           this.preventEvent(evnt, 'event.showMenu', params, null, () => {
             if (!visibleMethod || visibleMethod(params, evnt)) {
               evnt.preventDefault()
+              this.updateZindex()
               let { scrollTop, scrollLeft, visibleHeight, visibleWidth } = DomTools.getDomNode()
               let top = evnt.clientY + scrollTop
               let left = evnt.clientX + scrollLeft
@@ -2218,6 +2220,7 @@ export default {
                 selectChild: null,
                 showChild: false,
                 style: {
+                  zIndex: this.tZindex,
                   top: `${top}px`,
                   left: `${left}px`
                 }
@@ -3291,13 +3294,16 @@ export default {
         let { target: targetElem, pageX } = evnt
         let { visibleWidth } = DomTools.getDomNode()
         let { top, left } = DomTools.getAbsolutePos(targetElem)
+        if (!filterStore.zIndex || filterStore.zIndex < UtilTools.getLastZIndex()) {
+          filterStore.zIndex = UtilTools.getZIndex()
+        }
         Object.assign(filterStore, {
           args: params,
           multiple: column.filterMultiple,
           options: column.filters,
           column: column,
           style: {
-            zIndex: GlobalConfig.tooltip.zIndex,
+            zIndex: filterStore.zIndex,
             top: `${top + targetElem.clientHeight + 6}px`,
             left: `${left}px`
           },
@@ -4213,6 +4219,11 @@ export default {
         oData = XEUtils.toTreeArray(oData, treeConfig)
       }
       return ExportTools.downloadCsc(opts, ExportTools.getCsvContent(this, opts, columns, oData))
+    },
+    updateZindex () {
+      if (this.tZindex < UtilTools.getLastZIndex()) {
+        this.tZindex = UtilTools.getZIndex()
+      }
     },
 
     /*************************

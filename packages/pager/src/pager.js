@@ -33,7 +33,8 @@ export default {
   data () {
     return {
       showSizes: false,
-      panelStyle: null
+      panelStyle: null,
+      panelIndex: 0
     }
   },
   computed: {
@@ -54,6 +55,7 @@ export default {
     }
   },
   created () {
+    this.panelIndex = UtilTools.getZIndex()
     GlobalEvent.on(this, 'mousedown', this.handleGlobalMousedownEvent)
   },
   mounted () {
@@ -372,16 +374,22 @@ export default {
         this.showSizePanel()
       }
     },
+    updateZindex () {
+      if (this.panelIndex < UtilTools.getLastZIndex()) {
+        this.panelIndex = UtilTools.getZIndex()
+      }
+    },
     hideSizePanel () {
       this.showSizes = false
     },
     showSizePanel () {
-      let { $refs, zIndex = GlobalConfig.tooltip.zIndex } = this
+      let { $refs } = this
       let sizeBtnElem = $refs.sizeBtn
       let { left, top } = DomTools.getAbsolutePos(sizeBtnElem)
       let { scrollTop, scrollLeft, visibleWidth, visibleHeight } = DomTools.getDomNode()
+      this.updateZindex()
       this.panelStyle = {
-        zIndex,
+        zIndex: this.panelIndex,
         left: `${left}px`,
         top: `${top + sizeBtnElem.offsetHeight + 6}px`
       }

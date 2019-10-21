@@ -27,6 +27,7 @@
           highlightHoverRow: false,
           highlightCurrentColumn: false,
           highlightHoverColumn: false,
+          zIndex: 100, // 全局 zIndex 起始值
           rowId: '_XID',
           sortConfig: {
             trigger: 'default'
@@ -75,7 +76,6 @@
           },
           // 默认模态窗口参数
           modal: {
-            zIndex: 2000,
             minWidth: 340,
             minHeight: 200,
             lockView: true,

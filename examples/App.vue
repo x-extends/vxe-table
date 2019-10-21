@@ -1060,18 +1060,21 @@ export default {
           children: [
             {
               label: 'app.aside.nav.elementPlugin',
+              demoUrl: 'https://jsrun.pro/dwbKp/edit',
               locat: {
                 name: 'TablePluginElementConfig'
               }
             },
             {
               label: 'app.aside.nav.elementFilterPlugin',
+              demoUrl: 'https://jsrun.pro/BWWKp/edit',
               locat: {
                 name: 'TablePluginElementFilter'
               }
             },
             {
               label: 'app.aside.nav.elementPluginMore',
+              demoUrl: 'https://jsrun.pro/uWWKp/edit',
               locat: {
                 name: 'TablePluginElementPage'
               }
