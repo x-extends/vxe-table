@@ -194,6 +194,7 @@ export default {
       default: null
     }
   },
+  mixins: [],
   data () {
     return {
       id: XEUtils.uniqueId(),

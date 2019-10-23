@@ -54,7 +54,6 @@ VXETable.setup({
   i18n: (key, value) => i18n.t(key, value)
 })
 
-Vue.use(Table)
 Vue.use(Column)
 Vue.use(Header)
 Vue.use(Body)
@@ -76,6 +75,7 @@ Vue.use(Export)
 Vue.use(Keyboard)
 Vue.use(Validator)
 Vue.use(Resize)
+Vue.use(Table)
 
 VXETable.use(VXETablePluginElement)
 VXETable.use(VXETablePluginIView)

@@ -234,6 +234,24 @@ const apis = [
         list: []
       },
       {
+        name: 'header',
+        desc: '窗口头部的模板（如果使用了，则 solt title 无效）',
+        version: '2.6.1',
+        type: '',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'title',
+        desc: '窗口标题的模板',
+        version: '2.6.1',
+        type: '',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'footer',
         desc: '窗口底部的模板',
         version: '',

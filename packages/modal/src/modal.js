@@ -105,6 +105,8 @@ export default {
     } = this
     let defaultSlot = $scopedSlots.default || slots.default
     let footerSlot = $scopedSlots.footer || slots.footer
+    let headerSlot = $scopedSlots.header || slots.header
+    let titleSlot = $scopedSlots.title || slots.title
     let headerOns = {
       mousedown: this.mousedownEvent
     }
@@ -141,8 +143,8 @@ export default {
         showHeader ? h('div', {
           class: 'vxe-modal--header',
           on: headerOns
-        }, [
-          h('span', {
+        }, headerSlot ? headerSlot.call(this, { $modal: this }, h) : [
+          titleSlot ? titleSlot.call(this, { $modal: this }, h) : h('span', {
             class: 'vxe-modal--title'
           }, title ? UtilTools.getFuncText(title) : GlobalConfig.i18n('vxe.alert.title')),
           resize ? h('i', {

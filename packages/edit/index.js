@@ -1,11 +1,11 @@
 import Table from '../table'
-import Methods from './src/methods'
+import mixin from './src/mixin'
 import VXETable from '../v-x-e-table'
 
 export const Edit = {
   install () {
     VXETable._edit = 1
-    Object.assign(Table.methods, Methods)
+    Table.mixins.push(mixin)
   }
 }
 

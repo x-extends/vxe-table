@@ -40,9 +40,10 @@
         import Vue from 'vue'
         import 'xe-utils'
         import {
+          // 实例
           VXETable,
+          // 依赖
           Icon,
-          Table,
           Column,
           Header,
           Body,
@@ -63,12 +64,14 @@
           Export,
           Keyboard,
           Validator,
-          Resize
+          Resize,
+          // 核心
+          Table
         } from 'vxe-table'
         import zhCNLocat from 'vxe-table/lib/locale/lang/zh-CN'
 
+        // 先安装依赖模块
         Vue.use(Icon)
-        Vue.use(Table)
         Vue.use(Column)
         Vue.use(Header)
         Vue.use(Body)
@@ -90,6 +93,8 @@
         Vue.use(Keyboard)
         Vue.use(Validator)
         Vue.use(Resize)
+        // 再安装核心库
+        Vue.use(Table)
 
         // 按需加载的方式默认是不带国际化的，需要自行导入
         VXETable.setup({

@@ -27,7 +27,7 @@ import zhCNLocat from './locale/lang/zh-CN'
 
 // 按需加载的组件
 export const components = [
-  Table,
+  // 模块
   Column,
   Header,
   Body,
@@ -44,12 +44,13 @@ export const components = [
   Button,
   Modal,
   Tooltip,
-
   Edit,
   Export,
   Keyboard,
   Validator,
-  Resize
+  Resize,
+  // 核心
+  Table
 ]
 
 // 默认安装
@@ -71,7 +72,7 @@ if (typeof window !== 'undefined' && window.Vue) {
 
 VXETable.install = install
 
-export * from './table'
+export * from './v-x-e-table'
 export * from './column'
 export * from './header'
 export * from './body'
@@ -93,5 +94,5 @@ export * from './export'
 export * from './keyboard'
 export * from './validator'
 export * from './resize'
-export * from './v-x-e-table'
+export * from './table'
 export default VXETable
