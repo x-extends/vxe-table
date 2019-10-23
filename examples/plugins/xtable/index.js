@@ -2,7 +2,6 @@ import Vue from 'vue'
 import i18n from '@/i18n'
 
 import VXETable from '../../../packages/v-x-e-table'
-import Table from '../../../packages/table'
 import Column from '../../../packages/column'
 import Header from '../../../packages/header'
 import Body from '../../../packages/body'
@@ -22,6 +21,7 @@ import Modal from '../../../packages/modal'
 import Tooltip from '../../../packages/tooltip'
 import Export from '../../../packages/export'
 import Resize from '../../../packages/resize'
+import Table from '../../../packages/table'
 import '../../../styles/index.scss'
 
 // import VXETablePluginElement from '../../../../vxe-table-plugin-element/index.js'
@@ -41,7 +41,6 @@ VXETable.setup({
   i18n: (key, value) => i18n.t(key, value)
 })
 
-Vue.use(Table)
 Vue.use(Column)
 Vue.use(Header)
 Vue.use(Body)
@@ -61,6 +60,7 @@ Vue.use(Modal)
 Vue.use(Tooltip)
 Vue.use(Export)
 Vue.use(Resize)
+Vue.use(Table)
 
 VXETable.use(VXETablePluginElement)
 VXETable.use(VXETablePluginIView)
