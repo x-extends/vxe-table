@@ -108,12 +108,15 @@ function getFilterEvents (item, renderOpts, params, context) {
     [type] (evnt) {
       item.data = evnt.target.value
       handleConfirmFilter(context, column, !!item.data, item)
+      if (events && events[type]) {
+        events[type](params, evnt)
+      }
     }
   }
   if (events) {
-    XEUtils.assign(on, XEUtils.objectMap(events, cb => function () {
+    XEUtils.assign({}, XEUtils.objectMap(events, cb => function () {
       cb.apply(null, [params].concat.apply(params, arguments))
-    }))
+    }), on)
   }
   return on
 }
