@@ -146,7 +146,7 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
   }
   // 如果显示状态
   if (!fixedHiddenColumn && editConfig && editConfig.showStatus) {
-    isDirty = $table.hasRowChange(row, column.property)
+    isDirty = $table.isUpdateByRow(row, column.property)
   }
   return h('td', {
     class: ['vxe-body--column', column.id, {

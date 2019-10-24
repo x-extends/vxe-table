@@ -6,20 +6,14 @@ import methods from './methods'
 
 /**
  * 渲染浮固定列
+ * 分别渲染左边固定列和右边固定列
+ * 如果宽度足够情况下，则不需要渲染固定列
+ * @param {Function} h 创建 VNode 函数
+ * @param {Object} $table 表格实例
+ * @param {String} fixedType 固定列类型
  */
 function renderFixed (h, $table, fixedType) {
-  let {
-    tableData,
-    tableColumn,
-    visibleColumn,
-    collectColumn,
-    isGroup,
-    vSize,
-    showHeader,
-    showFooter,
-    columnStore,
-    footerData
-  } = $table
+  let { tableData, tableColumn, visibleColumn, collectColumn, isGroup, vSize, showHeader, showFooter, columnStore, footerData } = $table
   let fixedColumn = columnStore[`${fixedType}List`]
   return h('div', {
     class: `vxe-table--fixed-${fixedType}-wrapper`,
@@ -737,14 +731,14 @@ export default {
           ref: 'ctxWrapper'
         }) : _e(),
         /**
-         * Ellipsis tooltip
+         * 单元格内容溢出的 tooltip
          */
         hasTip ? h('vxe-tooltip', {
           ref: 'tooltip',
           props: tooltipConfig
         }) : _e(),
         /**
-         * valid error tooltip
+         * 校验不通过的 tooltip
          */
         hasTip && editRules && (validOpts.message === 'default' ? !height : validOpts.message === 'tooltip') ? h('vxe-tooltip', {
           class: 'vxe-table--valid-error',

@@ -1725,7 +1725,7 @@ const apis = [
       },
       {
         name: 'insert(records)',
-        desc: '往表格插入数据，从第一行新增一行或多行新数据',
+        desc: '往表格插入临时数据，从第一行新增一行或多行新数据',
         version: '',
         type: 'Promise<{row, rows}>',
         enum: '',
@@ -1734,7 +1734,7 @@ const apis = [
       },
       {
         name: 'insertAt(records, row)',
-        desc: '往表格插入数据，从指定位置插入一行或多行；第二个参数：row 指定位置（不支持树表格）、null从第一行插入、-1 从最后插入',
+        desc: '往表格插入临时数据，从指定位置插入一行或多行；第二个参数：row 指定位置（不支持树表格）、null从第一行插入、-1 从最后插入',
         version: '',
         type: 'Promise<{row, rows}>',
         enum: '',
@@ -1905,7 +1905,7 @@ const apis = [
       },
       {
         name: 'getInsertRecords()',
-        desc: '获取新增的数据',
+        desc: '获取新增的临时数据',
         version: '',
         type: 'Array',
         enum: '',
@@ -1985,8 +1985,27 @@ const apis = [
       },
       {
         name: 'hasActiveRow(row)',
-        desc: '检查行是否已激活为编辑状态',
+        disabled: true,
+        desc: '即将废弃，请使用 isActiveByRow',
         version: '',
+        type: 'Boolean',
+        enum: '',
+        defVal: 'row',
+        list: []
+      },
+      {
+        name: 'isActiveByRow(row)',
+        desc: '判断行是否为激活编辑状态',
+        version: '2.6.1',
+        type: 'Boolean',
+        enum: '',
+        defVal: 'row',
+        list: []
+      },
+      {
+        name: 'isInsertByRow(row)',
+        desc: '判断行是否为新增的临时数据',
+        version: '2.6.1',
         type: 'Boolean',
         enum: '',
         defVal: 'row: Row',
@@ -1994,7 +2013,8 @@ const apis = [
       },
       {
         name: 'hasRowChange(row, field)',
-        desc: '检查行或列数据是否发生改变',
+        disabled: true,
+        desc: '即将废弃，请使用 isUpdateByRow',
         version: '',
         type: 'Boolean',
         enum: '',
@@ -2002,8 +2022,37 @@ const apis = [
         list: []
       },
       {
+        name: 'isUpdateByRow(row, field)',
+        desc: '判断行数据是否发生改变',
+        version: '2.6.1',
+        type: 'Boolean',
+        enum: '',
+        defVal: 'row: Row, field?: string',
+        list: []
+      },
+      {
         name: 'hasRowExpand(row)',
-        desc: '检查行是否已展开',
+        disabled: true,
+        desc: '即将废弃，请使用 isExpandByRow',
+        version: '',
+        type: 'Boolean',
+        enum: '',
+        defVal: 'row',
+        list: []
+      },
+      {
+        name: 'isExpandByRow(row)',
+        desc: '判断行是否为展开状态',
+        version: '2.6.1',
+        type: 'Boolean',
+        enum: '',
+        defVal: 'row',
+        list: []
+      },
+      {
+        name: 'hasTreeExpand(row)',
+        disabled: true,
+        desc: '即将废弃，请使用 isTreeExpandByRow',
         version: '',
         type: 'Boolean',
         enum: '',
@@ -2011,9 +2060,9 @@ const apis = [
         list: []
       },
       {
-        name: 'hasTreeExpand(row)',
-        desc: '检查树节点是否已展开',
-        version: '',
+        name: 'isTreeExpandByRow(row)',
+        desc: '判断行是否为树形节点展开状态',
+        version: '2.6.1',
         type: 'Boolean',
         enum: '',
         defVal: 'row: Row',

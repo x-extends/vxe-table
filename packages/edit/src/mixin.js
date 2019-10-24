@@ -6,11 +6,21 @@ var browse = DomTools.browse
 
 export default {
   methods: {
+    /**
+     * 往表格中插入临时数据
+     *
+     * @param {*} records
+     */
     _insert (records) {
       return this.insertAt(records)
     },
     /**
-     * 从指定行插入数据
+     * 往表格指定行中插入临时数据
+     * 如果 row 为空则从插入到顶部
+     * 如果 row 为 -1 则从插入到底部
+     * 如果 row 为有效行则插入到该行的位置
+     * @param {Object/Array} records 新的数据
+     * @param {Row} row 指定行
      */
     _insertAt (records, row) {
       let { afterFullData, editStore, scrollYLoad, tableFullData, treeConfig } = this
@@ -57,9 +67,10 @@ export default {
      * 删除指定行数据
      * 如果传 row 则删除一行
      * 如果传 rows 则删除多行
+     * 如果为空则删除所有
      */
     _remove (rows) {
-      let { afterFullData, tableFullData, editStore, treeConfig, selection, hasRowInsert, scrollYLoad } = this
+      let { afterFullData, tableFullData, editStore, treeConfig, selection, isInsertByRow, scrollYLoad } = this
       let { removeList, insertList } = editStore
       // 在 v3.0 中废弃 selectConfig
       let checkboxConfig = this.checkboxConfig || this.selectConfig || {}
@@ -76,7 +87,7 @@ export default {
       }
       // 如果是新增，则保存记录
       rows.forEach(row => {
-        if (!hasRowInsert(row)) {
+        if (!isInsertByRow(row)) {
           removeList.push(row)
         }
       })
@@ -124,7 +135,7 @@ export default {
      * 如果不传任何参数，则还原整个表格
      * 如果传 row 则还原一行
      * 如果传 rows 则还原多行
-     * 如果还额外传了 field 则还原指定单元格
+     * 如果还额外传了 field 则还原指定的单元格数据
      */
     _revertData (rows, field) {
       let { tableSourceData, getRowIndex } = this
@@ -148,7 +159,7 @@ export default {
       return this.reloadData(tableSourceData)
     },
     /**
-     * 获取表格数据集
+     * 获取表格数据集，包含新增、删除、修改
      */
     _getRecordset () {
       return {
@@ -158,13 +169,13 @@ export default {
       }
     },
     /**
-     * 获取新增数据
+     * 获取新增的临时数据
      */
     _getInsertRecords () {
       return this.editStore.insertList
     },
     /**
-     * 获取删除数据
+     * 获取已删除的数据
      */
     _getRemoveRecords () {
       return this.editStore.removeList
@@ -175,11 +186,11 @@ export default {
      * 如果是树表格，子节点更改状态不会影响父节点的更新状态
      */
     _getUpdateRecords () {
-      let { tableFullData, hasRowChange, treeConfig } = this
+      let { tableFullData, isUpdateByRow, treeConfig } = this
       if (treeConfig) {
-        return XEUtils.filterTree(tableFullData, row => hasRowChange(row), treeConfig)
+        return XEUtils.filterTree(tableFullData, row => isUpdateByRow(row), treeConfig)
       }
-      return tableFullData.filter(row => hasRowChange(row))
+      return tableFullData.filter(row => isUpdateByRow(row))
     },
     /**
      * 处理激活编辑
@@ -280,7 +291,15 @@ export default {
       }
       return null
     },
+    // 在 v3.0 中废弃 hasActiveRow
     _hasActiveRow (row) {
+      return this.isActiveByRow(row)
+    },
+    /**
+     * 判断行是否为激活编辑状态
+     * @param {Row} row 行对象
+     */
+    _isActiveByRow (row) {
       return this.editStore.actived.row === row
     },
     /**

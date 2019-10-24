@@ -183,7 +183,7 @@ export default {
                 list.forEach(item => {
                   if (['expand', 'contract'].includes(item.code)) {
                     if (row[treeConfig.children] && row[treeConfig.children].length) {
-                      let isExpand = xTree.hasTreeExpand(row)
+                      let isExpand = xTree.isTreeExpandByRow(row)
                       item.disabled = ['expand'].includes(item.code) ? isExpand : !isExpand
                     } else {
                       item.disabled = true
@@ -251,7 +251,7 @@ export default {
         list.forEach(item => {
           if (['expand', 'contract'].includes(item.code)) {
             if (row[treeConfig.children] && row[treeConfig.children].length) {
-              let isExpand = xTree.hasTreeExpand(row)
+              let isExpand = xTree.isTreeExpandByRow(row)
               item.disabled = ['expand'].includes(item.code) ? isExpand : !isExpand
             } else {
               item.disabled = true

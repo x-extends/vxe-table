@@ -1,11 +1,11 @@
 import Table from '../table'
 import VXETable from '../v-x-e-table'
 import Panel from './src/panel'
-import Methods from './src/methods'
+import mixin from './src/mixin'
 
 Panel.install = function (Vue) {
   VXETable._filter = 1
-  Object.assign(Table.methods, Methods)
+  Table.mixins.push(mixin)
   Vue.component(Panel.name, Panel)
 }
 

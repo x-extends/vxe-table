@@ -13,6 +13,9 @@ const headerProps = {
   children: 'children'
 }
 
+/**
+ * 生成行的唯一主键
+ */
 function getRowUniqueId () {
   return `row_${++rowUniqueId}`
 }
@@ -23,18 +26,28 @@ function isTargetRadioOrCheckbox (evnt, column, colType, targetType) {
 }
 
 const Methods = {
+  /**
+   * 获取父容器元素
+   */
   getParentElem () {
     return this.$grid ? this.$grid.$el.parentNode : this.$el.parentNode
   },
+  /**
+   * 获取父容器的高度
+   */
   getParentHeight () {
     return this.$grid ? this.$grid.getParentHeight() : this.getParentElem().clientHeight
   },
   /**
    * 获取需要排除的高度
+   * 但渲染表格高度时，需要排除工具栏或分页等相关组件的高度
    */
   getExcludeHeight () {
     return this.$grid ? this.$grid.getExcludeHeight() : 0
   },
+  /**
+   * 重置表格的一切数据状态
+   */
   clearAll () {
     this.clearScroll()
     this.clearSort()
@@ -55,12 +68,21 @@ const Methods = {
     }
     return this.clearActived()
   },
+  /**
+   * 同步刷新 data 数据
+   * 如果用了该方法，那么组件将不再记录增删改的状态，只能自行实现对应逻辑
+   * 对于某些特殊的场景，比如深层树节点元素发生变动时可能会用到
+   */
   refreshData () {
     return this.$nextTick().then(() => {
       this.tableData = []
       return this.$nextTick().then(() => this.loadTableData(this.tableFullData))
     })
   },
+  /**
+   * 手动处理数据
+   * 对于手动更改了排序、筛选...等条件后需要重新处理数据时可能会用到
+   */
   updateData () {
     return this.handleTableData(true).then(this.updateFooter).then(this.recalculate)
   },
@@ -70,6 +92,11 @@ const Methods = {
     this.tableData = scrollYLoad ? fullData.slice(scrollYStore.startIndex, scrollYStore.startIndex + scrollYStore.renderSize) : fullData.slice(0)
     return this.$nextTick()
   },
+  /**
+   * 加载表格数据
+   * @param {Array} datas 数据
+   * @param {Boolean} notRefresh 是否不重新运算列宽
+   */
   loadTableData (datas, notRefresh) {
     let { height, maxHeight, treeConfig, editStore, optimizeOpts, lastScrollLeft, lastScrollTop } = this
     let { scrollY } = optimizeOpts
@@ -102,13 +129,28 @@ const Methods = {
       }
     })
   },
+  /**
+   * 重新加载数据，不会清空表格状态
+   * @param {Array} datas 数据
+   */
   loadData (datas) {
     return this.loadTableData(datas).then(this.recalculate)
   },
+  /**
+   * 重新加载数据，会清空表格状态
+   * @param {Array} datas 数据
+   */
   reloadData (datas) {
     this.clearAll()
     return this.loadTableData(datas).then(this.handleDefault)
   },
+  /**
+   * 局部加载行数据并恢复到初始状态
+   * 对于行数据需要局部更改的场景中可能会用到
+   * @param {Row} row 行对象
+   * @param {Object} record 新数据
+   * @param {String} field 字段名
+   */
   reloadRow (row, record, field) {
     let { tableSourceData, tableData } = this
     let rowIndex = this.getRowIndex(row)
@@ -130,15 +172,28 @@ const Methods = {
     this.tableData = tableData.slice(0)
     return this.$nextTick()
   },
+  /**
+   * 加载列配置
+   * 对于表格列需要重载、局部递增场景下可能会用到
+   * @param {ColumnConfig} columns 列配置
+   */
   loadColumn (columns) {
     this.collectColumn = XEUtils.mapTree(columns, column => Cell.createColumn(this, column), headerProps)
     return this.$nextTick()
   },
+  /**
+   * 加载列配置并恢复到初始状态
+   * 对于表格列需要重载、局部递增场景下可能会用到
+   * @param {ColumnConfig} columns 列配置
+   */
   reloadColumn (columns) {
     this.clearAll()
     return this.loadColumn(columns)
   },
-  // 更新数据的 Map
+  /**
+   * 更新数据行的 Map
+   * 牺牲数据组装的耗时，用来换取使用过程中的流畅
+   */
   updateCache (source) {
     let { treeConfig, tableFullData, fullDataRowIdData, fullDataRowMap, fullAllDataRowMap, fullAllDataRowIdData } = this
     let rowkey = UtilTools.getRowkey(this)
@@ -168,7 +223,10 @@ const Methods = {
       tableFullData.forEach(handleCache)
     }
   },
-  // 更新列的 Map
+  /**
+   * 更新数据列的 Map
+   * 牺牲数据组装的耗时，用来换取使用过程中的流畅
+   */
   cacheColumnMap () {
     let { tableFullColumn, fullColumnMap } = this
     let fullColumnIdData = this.fullColumnIdData = {}
@@ -179,6 +237,10 @@ const Methods = {
       fullColumnMap.set(column, rest)
     })
   },
+  /**
+   * 根据 tr 元素获取对应的 row 信息
+   * @param {Element} tr 元素
+   */
   getRowNode (tr) {
     if (tr) {
       let { treeConfig, tableFullData, fullAllDataRowIdData } = this
@@ -197,6 +259,10 @@ const Methods = {
     }
     return null
   },
+  /**
+   * 根据 th/td 元素获取对应的 column 信息
+   * @param {Element} cell 元素
+   */
   getColumnNode (cell) {
     if (cell) {
       let { isGroup, fullColumnIdData, tableFullColumn } = this
@@ -213,15 +279,31 @@ const Methods = {
     }
     return null
   },
+  /**
+   * 根据 row 获取相对于 data 中的索引
+   * @param {Row} row 行对象
+   */
   getRowIndex (row) {
     return this.fullDataRowMap.has(row) ? this.fullDataRowMap.get(row).index : -1
   },
+  /**
+   * 根据 column 获取相对于 columns 中的索引
+   * @param {ColumnConfig} column 列配置
+   */
   getColumnIndex (column) {
     return this.fullColumnMap.has(column) ? this.fullColumnMap.get(column).index : -1
   },
+  /**
+   * 判断是否为索引列
+   * @param {ColumnConfig} column 列配置
+   */
   hasIndexColumn (column) {
     return column && column.type === 'index'
   },
+  /**
+   * 定义行数据中的列属性，如果不存在则定义
+   * @param {Row} row 行数据
+   */
   defineField (row) {
     let rowkey = UtilTools.getRowkey(this)
     this.visibleColumn.forEach(({ property, editRender }) => {
@@ -235,9 +317,19 @@ const Methods = {
     }
     return row
   },
+  /**
+   * 创建 data 对象
+   * 对于某些特殊场景可能会用到，会自动对数据的字段名进行检测，如果不存在就自动定义
+   * @param {Array} records 新数据
+   */
   createData (records) {
     return this.$nextTick().then(() => records.map(this.defineField))
   },
+  /**
+   * 创建 Row|Rows 对象
+   * 对于某些特殊场景需要对数据进行手动插入时可能会用到
+   * @param {Array/Object} records 新数据
+   */
   createRow (records) {
     let isArr = XEUtils.isArray(records)
     if (!isArr) {
@@ -254,6 +346,8 @@ const Methods = {
    * 如果传 row 则清空一行内容
    * 如果传 rows 则清空多行内容
    * 如果还额外传了 field 则清空指定单元格内容
+   * @param {Array/Row} rows 行数据
+   * @param {String} field 字段名
    */
   clearData (rows, field) {
     let { tableFullData, visibleColumn } = this
@@ -275,10 +369,23 @@ const Methods = {
     }
     return this.$nextTick()
   },
-  hasRowInsert (row) {
+  /**
+   * 检查是否为临时行数据
+   * @param {Row} row 行对象
+   */
+  isInsertByRow (row) {
     return this.editStore.insertList.indexOf(row) > -1
   },
+  // 在 v3.0 中废弃 hasRowChange
   hasRowChange (row, field) {
+    return this.isUpdateByRow(row, field)
+  },
+  /**
+   * 检查行或列数据是否发生改变
+   * @param {Row} row 行对象
+   * @param {String} field 字段名
+   */
+  isUpdateByRow (row, field) {
     let oRow, property
     let { visibleColumn, treeConfig, tableSourceData, fullDataRowIdData } = this
     let rowid = UtilTools.getRowid(this, row)
@@ -311,21 +418,31 @@ const Methods = {
     return false
   },
   /**
-   * 获取表格所有列
+   * 获取表格的可视列，也可以指定索引获取列
+   * @param {Number} columnIndex 索引
    */
   getColumns (columnIndex) {
     let columns = this.visibleColumn
     return arguments.length ? columns[columnIndex] : columns.slice(0)
   },
+  /**
+   * 根据列的唯一主键获取列
+   * @param {String} colid 列主键
+   */
   getColumnById (colid) {
     let fullColumnIdData = this.fullColumnIdData
     return fullColumnIdData[colid] ? fullColumnIdData[colid].column : null
   },
+  /**
+   * 根据列的字段名获取列
+   * @param {String} field 字段名
+   */
   getColumnByField (field) {
     return this.visibleColumn.find(column => column.property === field)
   },
   /**
-   * 获取表格可视列
+   * 获取当前表格的列
+   * 完整的全量表头列、处理条件之后的全量表头列、当前渲染中的表头列
    */
   getTableColumn () {
     return { fullColumn: this.tableFullColumn.slice(0), visibleColumn: this.visibleColumn.slice(0), tableColumn: this.tableColumn.slice(0) }
@@ -336,7 +453,7 @@ const Methods = {
     return this.getData.apply(this, arguments)
   },
   /**
-   * 获取表格所有数据
+   * 获取数据，和 data 的行为一致，也可以指定索引获取数据
    */
   getData (rowIndex) {
     let tableSynchData = this.data || this.tableSynchData
@@ -348,7 +465,7 @@ const Methods = {
     return this.getRecordset()
   },
   /**
-   * 获取选中数据
+   * 用于多选行，获取已选中的数据
    */
   getSelectRecords () {
     let { tableFullData, editStore, treeConfig } = this
@@ -422,10 +539,18 @@ const Methods = {
     this.afterFullData = tableData
     return tableData
   },
+  /**
+   * 根据行的唯一主键获取行
+   * @param {String/Number} rowid 行主键
+   */
   getRowById (rowid) {
     let fullDataRowIdData = this.fullDataRowIdData
     return fullDataRowIdData[rowid] ? fullDataRowIdData[rowid].row : null
   },
+  /**
+   * 根据行获取行的唯一主键
+   * @param {Row} row 行对象
+   */
   getRowid (row) {
     let fullAllDataRowMap = this.fullAllDataRowMap
     return fullAllDataRowMap.has(row) ? fullAllDataRowMap.get(row).rowid : null
@@ -484,16 +609,32 @@ const Methods = {
     }
     this.$emit('update:customs', tableFullColumn)
   },
+  /**
+   * 手动重置列的所有操作，还原到初始状态
+   * 如果已关联工具栏，则会同步更新
+   */
   resetAll () {
     this.resetCustoms()
     this.resetResizable()
   },
+  /**
+   * 隐藏指定列
+   * @param {ColumnConfig} column 列配置
+   */
   hideColumn (column) {
     return this.handleVisibleColumn(column, false)
   },
+  /**
+   * 显示指定列
+   * @param {ColumnConfig} column 列配置
+   */
   showColumn (column) {
     return this.handleVisibleColumn(column, true)
   },
+  /**
+   * 手动重置列的显示/隐藏操作，还原到初始状态
+   * 如果已关联工具栏，则会同步更新
+   */
   resetCustoms () {
     return this.handleVisibleColumn()
   },
@@ -511,7 +652,9 @@ const Methods = {
     return this.$nextTick()
   },
   /**
-   * 初始化加载动态列
+   * 初始化加载显示/隐藏列
+   * 对于异步更新的场景下可能会用到
+   * @param {Array} customColumns 自定义列数组
    */
   reloadCustoms (customColumns) {
     return this.$nextTick().then(() => {
@@ -747,6 +890,10 @@ const Methods = {
       this.checkScrolling()
     }
   },
+  /**
+   * 手动重置列宽拖动的操作，还原到初始状态
+   * 如果已关联工具栏，则会同步更新
+   */
   resetResizable () {
     this.visibleColumn.forEach(column => {
       column.resizeWidth = 0
@@ -757,6 +904,9 @@ const Methods = {
     this.analyColumnWidth()
     return this.recalculate(true)
   },
+  /**
+   * 放弃 vue 的双向 dom 绑定，使用原生的方式更新 Dom，性能翻倍提升
+   */
   updateStyle () {
     let {
       $refs,
@@ -1196,7 +1346,12 @@ const Methods = {
       this.handleTooltip(evnt, column, row)
     }
   },
-  // 显示 tooltip
+  /**
+   * 处理显示 tooltip
+   * @param {Event} evnt 事件
+   * @param {ColumnConfig} column 列配置
+   * @param {Row} row 行对象
+   */
   handleTooltip (evnt, column, row) {
     let cell = evnt.currentTarget
     let tooltip = this.$refs.tooltip
@@ -1214,7 +1369,9 @@ const Methods = {
     }
     return this.$nextTick()
   },
-  // 关闭 tooltip
+  /**
+   * 关闭 tooltip
+   */
   clostTooltip () {
     let tooltip = this.$refs.tooltip
     Object.assign(this.tooltipStore, {
@@ -1248,6 +1405,11 @@ const Methods = {
       this.setSelection(defSelection, true)
     }
   },
+  /**
+   * 用于多选行，设置行为选中状态，第二个参数为选中与否
+   * @param {Array/Row} rows 行数据
+   * @param {Boolean} value 是否选中
+   */
   setSelection (rows, value) {
     if (rows && !XEUtils.isArray(rows)) {
       rows = [rows]
@@ -1368,6 +1530,10 @@ const Methods = {
     this.handleToggleCheckRowEvent({ row })
     return this.$nextTick()
   },
+  /**
+   * 用于多选行，设置所有行的选中状态
+   * @param {Boolean} value 是否选中
+   */
   setAllSelection (value) {
     let { tableFullData, editStore, treeConfig, selection } = this
     // 在 v3.0 中废弃 selectConfig
@@ -1489,6 +1655,9 @@ const Methods = {
     this.triggerCheckAllEvent(null, !this.isAllSelected)
     return this.$nextTick()
   },
+  /**
+   * 用于多选行，手动清空用户的选择
+   */
   clearSelection () {
     let { tableFullData, treeConfig } = this
     // 在 v3.0 中废弃 selectConfig
@@ -1539,7 +1708,8 @@ const Methods = {
     }
   },
   /**
-   * 高亮行，设置某一行为高亮状态，如果调不加参数，则会取消目前高亮行的选中状态
+   * 用于当前行，设置某一行为高亮状态
+   * @param {Row} row 行对象
    */
   setCurrentRow (row) {
     this.clearCurrentRow()
@@ -1550,6 +1720,10 @@ const Methods = {
     }
     return this.$nextTick()
   },
+  /**
+   * 用于单选行，设置某一行为选中状态
+   * @param {Row} row 行对象
+   */
   setRadioRow (row) {
     if (this.selectRow !== row) {
       this.clearRadioRow()
@@ -1557,19 +1731,31 @@ const Methods = {
     this.selectRow = row
     return this.$nextTick()
   },
+  /**
+   * 用于当前行，手动清空当前高亮的状态
+   */
   clearCurrentRow () {
     this.currentRow = null
     this.hoverRow = null
     XEUtils.arrayEach(this.$el.querySelectorAll('.row--current'), elem => DomTools.removeClass(elem, 'row--current'))
     return this.$nextTick()
   },
+  /**
+   * 用于单选行，手动清空用户的选择
+   */
   clearRadioRow () {
     this.selectRow = null
     return this.$nextTick()
   },
+  /**
+   * 用于当前行，获取当前行的数据
+   */
   getCurrentRow () {
     return this.currentRow
   },
+  /**
+   * 用于单选行，获取当已选中的数据
+   */
   getRadioRow () {
     return this.selectRow
   },
@@ -1604,6 +1790,10 @@ const Methods = {
     }
     return this.$nextTick()
   },
+  /**
+   * 用于当前列，设置某列行为高亮状态
+   * @param {ColumnConfig} column 列配置
+   */
   setCurrentColumn (column) {
     this.clearCurrentRow()
     this.clearCurrentColumn()
@@ -1611,6 +1801,9 @@ const Methods = {
     XEUtils.arrayEach(this.$el.querySelectorAll(`.${column.id}`), elem => DomTools.addClass(elem, 'col--current'))
     return this.$nextTick()
   },
+  /**
+   * 用于当前列，手动清空当前高亮的状态
+   */
   clearCurrentColumn () {
     this.currentColumn = null
     XEUtils.arrayEach(this.$el.querySelectorAll('.col--current'), elem => DomTools.removeClass(elem, 'col--current'))
@@ -1756,13 +1949,19 @@ const Methods = {
     }
     return this.$nextTick()
   },
+  /**
+   * 手动清空排序条件，数据会恢复成未排序的状态
+   */
   clearSort () {
     this.tableFullColumn.forEach(column => {
       column.order = null
     })
     return this.handleTableData(true)
   },
-  // 关闭筛选
+  /**
+   * 关闭筛选
+   * @param {Event} evnt 事件
+   */
   closeFilter (evnt) {
     Object.assign(this.filterStore, {
       isAllSelected: false,
@@ -1804,6 +2003,10 @@ const Methods = {
       this.expandeds = defExpandeds
     }
   },
+  /**
+   * 设置所有行的展开与否
+   * @param {Boolean} expanded 是否展开
+   */
   setAllRowExpansion (expanded) {
     this.expandeds = expanded ? this.tableFullData.slice(0) : []
     return this.$nextTick().then(this.recalculate)
@@ -1812,6 +2015,8 @@ const Methods = {
    * 设置展开行，二个参数设置这一行展开与否
    * 支持单行
    * 支持多行
+   * @param {Array/Row} rows 行数据
+   * @param {Boolean} expanded 是否展开
    */
   setRowExpansion (rows, expanded) {
     let { expandeds, expandConfig = {} } = this
@@ -1840,9 +2045,20 @@ const Methods = {
     }
     return this.$nextTick().then(this.recalculate)
   },
+  // 在 v3.0 中废弃 getRecords
   hasRowExpand (row) {
     return this.expandeds.indexOf(row) > -1
   },
+  /**
+   * 判断行是否为展开状态
+   * @param {Row} row 行对象
+   */
+  isExpandByRow (row) {
+    return this.expandeds.indexOf(row) > -1
+  },
+  /**
+   * 手动清空展开行状态，数据会恢复成未展开的状态
+   */
   clearRowExpand () {
     const isExists = this.expandeds.length
     this.expandeds = []
@@ -1900,6 +2116,10 @@ const Methods = {
       }
     }
   },
+  /**
+   * 设置所有树节点的展开与否
+   * @param {Boolean} expanded 是否展开
+   */
   setAllTreeExpansion (expanded) {
     let { tableFullData, treeConfig } = this
     let { children } = treeConfig
@@ -1919,6 +2139,8 @@ const Methods = {
    * 设置展开树形节点，二个参数设置这一行展开与否
    * 支持单行
    * 支持多行
+   * @param {Array/Row} rows 行数据
+   * @param {Boolean} expanded 是否展开
    */
   setTreeExpansion (rows, expanded) {
     let { tableFullData, treeExpandeds, treeConfig } = this
@@ -1954,9 +2176,20 @@ const Methods = {
     }
     return this.$nextTick().then(this.recalculate)
   },
+  // 在 v3.0 中废弃 hasTreeExpand
   hasTreeExpand (row) {
+    return this.isTreeExpandByRow(row)
+  },
+  /**
+   * 判断行是否为树形节点展开状态
+   * @param {Row} row 行对象
+   */
+  isTreeExpandByRow (row) {
     return this.treeExpandeds.indexOf(row) > -1
   },
+  /**
+   * 手动清空树形节点的展开状态，数据会恢复成未展开的状态
+   */
   clearTreeExpand () {
     const isExists = this.treeExpandeds.length
     this.treeExpandeds = []
@@ -2189,6 +2422,11 @@ const Methods = {
     })
     this.$nextTick(this.updateStyle)
   },
+  /**
+   * 如果有滚动条，则滚动到对应的位置
+   * @param {Number} scrollLeft 左距离
+   * @param {Number} scrollTop 上距离
+   */
   scrollTo (scrollLeft, scrollTop) {
     let bodyElem = this.$refs.tableBody.$el
     if (XEUtils.isNumber(scrollLeft)) {
@@ -2211,6 +2449,11 @@ const Methods = {
     }
     return this.$nextTick()
   },
+  /**
+   * 如果有滚动条，则滚动到对应的行
+   * @param {Row} row 行对象
+   * @param {ColumnConfig} column 列配置
+   */
   scrollToRow (row, column) {
     let rest = []
     if (row && this.fullAllDataRowMap.has(row)) {
@@ -2219,12 +2462,21 @@ const Methods = {
     rest.push(this.scrollToColumn(column))
     return Promise.all(rest)
   },
+  /**
+   * 如果有滚动条，则滚动到对应的列
+   * @param {ColumnConfig} column 列配置
+   */
   scrollToColumn (column) {
     if (column && this.fullColumnMap.has(column)) {
       return DomTools.colToVisible(this, column)
     }
     return this.$nextTick()
   },
+  /**
+   * 对于树形结构中，可以直接滚动到指定深层节点中
+   * 对于某些特定的场景可能会用到，比如定位到某一节点
+   * @param {Row} row 行对象
+   */
   scrollToTreeRow (row) {
     let { tableFullData, treeConfig } = this
     if (treeConfig) {
@@ -2232,7 +2484,7 @@ const Methods = {
       if (matchObj) {
         let nodes = matchObj.nodes
         nodes.forEach((row, index) => {
-          if (index < nodes.length - 1 && !this.hasTreeExpand(row)) {
+          if (index < nodes.length - 1 && !this.isTreeExpandByRow(row)) {
             this.setTreeExpansion(row, true)
           }
         })
@@ -2240,6 +2492,9 @@ const Methods = {
     }
     return this.$nextTick()
   },
+  /**
+   * 手动清除滚动相关信息，还原到初始状态
+   */
   clearScroll () {
     let { scrollXStore, scrollYStore } = this
     scrollXStore.startIndex = 0
@@ -2252,14 +2507,12 @@ const Methods = {
       let tableBodyElem = tableBody ? tableBody.$el : null
       let tableFooter = $refs.tableFooter
       let tableFooterElem = tableFooter ? tableFooter.$el : null
+      let footerTargetElem = tableFooterElem || tableBodyElem
       if (tableBodyElem) {
         tableBodyElem.scrollTop = 0
-        if (!tableFooterElem) {
-          tableBodyElem.scrollLeft = 0
-        }
       }
-      if (tableFooterElem) {
-        tableFooterElem.scrollLeft = 0
+      if (footerTargetElem) {
+        footerTargetElem.scrollLeft = 0
       }
     })
   },
@@ -2328,7 +2581,7 @@ const Methods = {
 }
 
 // Module methods
-const funcs = 'closeMenu,getMouseSelecteds,getMouseCheckeds,clearCopyed,clearChecked,clearHeaderChecked,clearIndexChecked,clearSelected,insert,insertAt,remove,removeSelecteds,revert,revertData,getRecordset,getInsertRecords,getRemoveRecords,getUpdateRecords,clearActived,getActiveRow,hasActiveRow,setActiveRow,setActiveCell,setSelectCell,clearValidate,fullValidate,validate,exportCsv'.split(',')
+const funcs = 'closeMenu,getMouseSelecteds,getMouseCheckeds,clearCopyed,clearChecked,clearHeaderChecked,clearIndexChecked,clearSelected,insert,insertAt,remove,removeSelecteds,revert,revertData,getRecordset,getInsertRecords,getRemoveRecords,getUpdateRecords,clearActived,getActiveRow,hasActiveRow,isActiveByRow,setActiveRow,setActiveCell,setSelectCell,clearValidate,fullValidate,validate,exportCsv'.split(',')
 
 funcs.forEach(name => {
   Methods[name] = function () {

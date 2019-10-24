@@ -242,7 +242,7 @@ export default {
                         return this.$XModal.message({ message: '不允许自己给自己拖动！', status: 'error' })
                       }
                       let currRow = selfNode.items.splice(selfNode.index, 1)[0]
-                      if (xTable.hasTreeExpand(prevRow)) {
+                      if (xTable.isTreeExpandByRow(prevRow)) {
                         // 移动到当前的子节点
                         prevRow[options.children].splice(0, 0, currRow)
                       } else {
@@ -332,7 +332,7 @@ export default {
                 return this.$XModal.message({ message: '不允许自己给自己拖动！', status: 'error' })
               }
               let currRow = selfNode.items.splice(selfNode.index, 1)[0]
-              if (xTable.hasTreeExpand(prevRow)) {
+              if (xTable.isTreeExpandByRow(prevRow)) {
                 // 移动到当前的子节点
                 prevRow[options.children].splice(0, 0, currRow)
               } else {

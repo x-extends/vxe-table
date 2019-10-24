@@ -7,6 +7,16 @@
       <span class="red">注意：如果要启用纵向虚拟滚动，所有的行度必须一致，否则无法兼容</span>
     </p>
 
+    <vxe-toolbar>
+      <template v-slot:buttons>
+        <vxe-button @click="$refs.xTable.toggleRowSelection($refs.xTable.getData(1))">切换第二行选中</vxe-button>
+        <vxe-button @click="$refs.xTable.setSelection([$refs.xTable.getData(2), $refs.xTable.getData(3)], true)">设置第三、四行选中</vxe-button>
+        <vxe-button @click="$refs.xTable.setAllSelection(true)">设置所有行选中</vxe-button>
+        <vxe-button @click="$refs.xTable.clearSelection()">清除所有行选中</vxe-button>
+        <vxe-button @click="getSelectEvent">获取选中</vxe-button>
+      </template>
+    </vxe-toolbar>
+
     <vxe-table
       ref="xTable"
       border
@@ -73,6 +83,16 @@ export default {
       loading: false,
       demoCodes: [
         `
+        <vxe-toolbar>
+          <template v-slot:buttons>
+            <vxe-button @click="$refs.xTable.toggleRowSelection($refs.xTable.getData(1))">切换第二行选中</vxe-button>
+            <vxe-button @click="$refs.xTable.setSelection([$refs.xTable.getData(2), $refs.xTable.getData(3)], true)">设置第三、四行选中</vxe-button>
+            <vxe-button @click="$refs.xTable.setAllSelection(true)">设置所有行选中</vxe-button>
+            <vxe-button @click="$refs.xTable.clearSelection()">清除所有行选中</vxe-button>
+            <vxe-button @click="getSelectEvent">获取选中</vxe-button>
+          </template>
+        </vxe-toolbar>
+
         <vxe-table
           ref="xTable"
           border
@@ -124,6 +144,12 @@ export default {
               }
               this.loading = false
             }, 500)
+          },
+          methods: {
+            getSelectEvent () {
+              let selectRecords = this.$refs.xTable.getSelectRecords()
+              this.$XModal.alert(selectRecords.length)
+            }
           }
         }
         `
@@ -145,6 +171,12 @@ export default {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
       hljs.highlightBlock(block)
     })
+  },
+  methods: {
+    getSelectEvent () {
+      let selectRecords = this.$refs.xTable.getSelectRecords()
+      this.$XModal.alert(selectRecords.length)
+    }
   }
 }
 </script>
