@@ -73,7 +73,10 @@
       </vxe-modal>
 
       <vxe-button @click="value4 = !value4">完整功能的窗口</vxe-button>
-      <vxe-modal v-model="value4" title="完整功能的窗口" width="800" height="400" min-width="400" min-height="320" resize>
+      <vxe-modal v-model="value4" width="800" height="400" min-width="400" min-height="320" resize>
+        <template v-slot:title>
+          <span style="color: red;">完整功能的窗口</span>
+        </template>
         <template>
           <vxe-grid
             border
@@ -223,6 +226,9 @@ export default {
 
           <vxe-button @click="value4 = !value4">完整功能的窗口</vxe-button>
           <vxe-modal v-model="value4" title="完整功能的窗口" width="800" height="400" min-width="400" min-height="320" resize>
+            <template v-slot:title>
+              <span style="color: red;">完整功能的窗口</span>
+            </template>
             <template>
               <vxe-grid
                 border

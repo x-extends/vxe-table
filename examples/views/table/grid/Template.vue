@@ -8,7 +8,7 @@
       <table-column-api-link prop="filter"/>：自定义筛选模板（建议使用<router-link :to="{name: 'RendererAPI'}">渲染器</router-link>，可以更好的复用）<br>
       <table-column-api-link prop="edit"/>：自定义可编辑模板（建议使用<router-link :to="{name: 'RendererAPI'}">渲染器</router-link>，可以更好的复用）<br>
       工具栏：<br>
-      <table-column-api-link prop="buttons"/>：自定义按钮模板
+      <grid-api-link prop="buttons"/>：自定义按钮模板
     </p>
 
     <vxe-grid

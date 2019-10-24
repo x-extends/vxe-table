@@ -252,8 +252,8 @@ export default {
               console.log(checked ? '勾选事件' : '取消事件')
             },
             getSelectEvent () {
-              let updateRecords = this.$refs.xTable1.getSelectRecords()
-              this.$XModal.alert(updateRecords.length)
+              let selectRecords = this.$refs.xTable1.getSelectRecords()
+              this.$XModal.alert(selectRecords.length)
             }
           }
         }
@@ -488,8 +488,8 @@ export default {
       }
     },
     getSelectEvent1 () {
-      let updateRecords = this.$refs.xTable1.getSelectRecords()
-      this.$XModal.alert(updateRecords.length)
+      let selectRecords = this.$refs.xTable1.getSelectRecords()
+      this.$XModal.alert(selectRecords.length)
     }
   }
 }

@@ -112,7 +112,7 @@ export default {
             },
             saveEvent (row, field) {
               let xTable = this.$refs.xTable
-              if (xTable.hasRowChange(row)) {
+              if (xTable.isUpdateByRow(row)) {
                 row.loading = true
                 this.submitSave(row).then(data => {
                   // 局部保存，并将行数据恢复到初始状态（如果 record 为空则不改动行数据，只恢复状态）
@@ -126,7 +126,7 @@ export default {
             },
             saveEvent2 (row, field) {
               let xTable = this.$refs.xTable
-              if (xTable.hasRowChange(row)) {
+              if (xTable.isUpdateByRow(row)) {
                 row.loading = true
                 this.submitSave(row).then(data => {
                   // 局部保存，并更新本地数据
@@ -185,7 +185,7 @@ export default {
     },
     saveEvent (row, field) {
       let xTable = this.$refs.xTable
-      if (xTable.hasRowChange(row)) {
+      if (xTable.isUpdateByRow(row)) {
         row.loading = true
         this.submitSave(row).then(data => {
           // 局部保存，并将行数据恢复到初始状态（如果 record 为空则不改动行数据，只恢复状态）
@@ -199,7 +199,7 @@ export default {
     },
     saveEvent2 (row, field) {
       let xTable = this.$refs.xTable
-      if (xTable.hasRowChange(row)) {
+      if (xTable.isUpdateByRow(row)) {
         row.loading = true
         this.submitSave(row).then(data => {
           // 局部保存，并更新本地数据

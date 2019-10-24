@@ -1118,7 +1118,7 @@ export default {
      * 如果传 rows 则删除多行
      */
     remove (rows) {
-      let { afterFullData, tableFullData, editStore, treeConfig, selection, hasRowInsert, scrollYLoad } = this
+      let { afterFullData, tableFullData, editStore, treeConfig, selection, hasInsertByRow, scrollYLoad } = this
       let { removeList, insertList } = editStore
       // 在 v3.0 中废弃 selectConfig
       let checkboxConfig = this.checkboxConfig || this.selectConfig || {}
@@ -1135,7 +1135,7 @@ export default {
       }
       // 如果是新增，则保存记录
       rows.forEach(row => {
-        if (!hasRowInsert(row)) {
+        if (!hasInsertByRow(row)) {
           removeList.push(row)
         }
       })
@@ -1233,14 +1233,18 @@ export default {
       }
       return this.$nextTick()
     },
-    hasRowInsert (row) {
+    hasInsertByRow (row) {
       let { treeConfig, tableSourceData } = this
       if (treeConfig) {
         return XEUtils.findTree(tableSourceData, item => item === row, treeConfig)
       }
       return this.getRowIndex(row) === -1
     },
+    // 在 v3.0 中废弃 hasRowChange
     hasRowChange (row, field) {
+      return this.isUpdateByRow(row, field)
+    },
+    isUpdateByRow (row, field) {
       let oRow, property
       let { visibleColumn, treeConfig, tableSourceData, fullDataRowIdData } = this
       let rowid = UtilTools.getRowid(this, row)
@@ -1368,11 +1372,11 @@ export default {
      * 如果是树表格，子节点更改状态不会影响父节点的更新状态
      */
     getUpdateRecords () {
-      let { tableFullData, hasRowChange, treeConfig } = this
+      let { tableFullData, isUpdateByRow, treeConfig } = this
       if (treeConfig) {
-        return XEUtils.filterTree(tableFullData, row => hasRowChange(row), treeConfig)
+        return XEUtils.filterTree(tableFullData, row => isUpdateByRow(row), treeConfig)
       }
-      return tableFullData.filter(row => hasRowChange(row))
+      return tableFullData.filter(row => isUpdateByRow(row))
     },
     /**
      * 获取处理后全量的表格数据
@@ -2979,7 +2983,15 @@ export default {
       }
       return null
     },
+    // v3 废弃
     hasActiveRow (row) {
+      return this.isActiveByRow(row)
+    },
+    /**
+     * 判断行是否为激活编辑状态
+     * @param {Row} row 行对象
+     */
+    isActiveByRow (row) {
       return this.editStore.actived.row === row
     },
     /**
@@ -3482,7 +3494,15 @@ export default {
       }
       return this.$nextTick().then(this.recalculate)
     },
+    // 在 v3.0 中废弃 hasRowExpand
     hasRowExpand (row) {
+      return this.expandeds.indexOf(row) > -1
+    },
+    /**
+     * 判断行是否为展开状态
+     * @param {Row} row 行对象
+     */
+    isExpandByRow (row) {
       return this.expandeds.indexOf(row) > -1
     },
     clearRowExpand () {
@@ -3588,7 +3608,15 @@ export default {
       }
       return this.$nextTick().then(this.recalculate)
     },
+    // 在 v3.0 中废弃 hasTreeExpand
     hasTreeExpand (row) {
+      return this.isTreeExpandByRow(row)
+    },
+    /**
+     * 判断行是否为树形节点展开状态
+     * @param {Row} row 行对象
+     */
+    isTreeExpandByRow (row) {
       return this.treeExpandeds.indexOf(row) > -1
     },
     clearTreeExpand () {
@@ -3844,14 +3872,12 @@ export default {
         let tableBodyElem = tableBody ? tableBody.$el : null
         let tableFooter = $refs.tableFooter
         let tableFooterElem = tableFooter ? tableFooter.$el : null
+        let footerTargetElem = tableFooterElem || tableBodyElem
         if (tableBodyElem) {
           tableBodyElem.scrollTop = 0
-          if (!tableFooterElem) {
-            tableBodyElem.scrollLeft = 0
-          }
         }
-        if (tableFooterElem) {
-          tableFooterElem.scrollLeft = 0
+        if (footerTargetElem) {
+          footerTargetElem.scrollLeft = 0
         }
       })
     },

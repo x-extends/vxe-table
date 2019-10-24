@@ -17,7 +17,7 @@
       <vxe-table-column field="address" title="Address" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column title="操作">
         <template v-slot="{ row }">
-          <template v-if="$refs.xTable.hasActiveRow(row)">
+          <template v-if="$refs.xTable.isActiveByRow(row)">
             <vxe-button @click="saveRowEvent(row)">保存</vxe-button>
             <vxe-button @click="cancelRowEvent(row)">取消</vxe-button>
           </template>
@@ -62,7 +62,7 @@ export default {
           <vxe-table-column field="address" title="Address" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column title="操作">
             <template v-slot="{ row }">
-              <template v-if="$refs.xTable.hasActiveRow(row)">
+              <template v-if="$refs.xTable.isActiveByRow(row)">
                 <vxe-button @click="saveRowEvent(row)">保存</vxe-button>
                 <vxe-button @click="cancelRowEvent(row)">取消</vxe-button>
               </template>

@@ -141,7 +141,7 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
   }
   // 如果显示状态
   if (!fixedHiddenColumn && editConfig && editConfig.showStatus) {
-    isDirty = $table.hasRowChange(row, column.property)
+    isDirty = $table.isUpdateByRow(row, column.property)
   }
   // 批量选中处理
   if (!fixedHiddenColumn && !fixedType) {
