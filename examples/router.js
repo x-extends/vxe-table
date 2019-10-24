@@ -130,6 +130,7 @@ const TableEditRowValid = () => import(/* webpackChunkName: "edit" */ './views/t
 const TableEditForceCellValid = () => import(/* webpackChunkName: "edit" */ './views/table/edit/ForceCellValid.vue')
 const TableEditForceRowValid = () => import(/* webpackChunkName: "edit" */ './views/table/edit/ForceRowValid.vue')
 const TableEditFooter = () => import(/* webpackChunkName: "edit" */ './views/table/edit/Footer.vue')
+const TableEditFooterImmediately = () => import(/* webpackChunkName: "edit" */ './views/table/edit/FooterImmediately.vue')
 const TableEditExpand = () => import(/* webpackChunkName: "edit" */ './views/table/edit/Expand.vue')
 const TableEditMenu = () => import(/* webpackChunkName: "edit" */ './views/table/edit/Menu.vue')
 const TableEditSpan = () => import(/* webpackChunkName: "edit" */ './views/table/edit/Span.vue')
@@ -800,6 +801,11 @@ export default new Router({
       path: '/table/edit/footer',
       name: 'TableEditFooter',
       component: TableEditFooter
+    },
+    {
+      path: '/table/edit/footerImmediately',
+      name: 'TableEditFooterImmediately',
+      component: TableEditFooterImmediately
     },
     {
       path: '/table/edit/expand',

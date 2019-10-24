@@ -49,6 +49,7 @@ module.exports = {
         export: 'Export CSV',
         contextMenu: 'Context menu',
         menuPrivilege: 'Context menu + permission',
+        footerImmediately: 'Footer summary + immediately',
         expandRow: 'Expandable row',
         toolbar: 'Toolbar',
         customs: 'Custom column',

@@ -9,7 +9,7 @@ function getAttrs ({ name, attrs }) {
 }
 
 function isSyncCell (renderOpts, params, context) {
-  return renderOpts.type === 'visible' || context.$type === 'cell'
+  return renderOpts.immediate || renderOpts.type === 'visible' || context.$type === 'cell'
 }
 
 /**
@@ -47,14 +47,20 @@ function getEvents (renderOpts, params, context) {
       } else {
         model.update = true
         model.value = cellValue
-        $table.updateStatus(params, cellValue)
+      }
+      $table.updateStatus(params, cellValue)
+      if (events && events[type]) {
+        events[type](params, evnt)
       }
     }
   }
   if (events) {
-    XEUtils.assign(on, XEUtils.objectMap(events, cb => function () {
-      cb.apply(null, [params].concat.apply(params, arguments))
-    }))
+    XEUtils.assign(
+      {},
+      XEUtils.objectMap(events, cb => function () {
+        cb.apply(null, [params].concat.apply(params, arguments))
+      }),
+      on)
   }
   return on
 }
