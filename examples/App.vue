@@ -879,6 +879,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.footerImmediately',
+              locat: {
+                name: 'TableEditFooterImmediately'
+              }
+            },
+            {
               label: 'app.aside.nav.expandRow',
               locat: {
                 name: 'TableEditExpand'

@@ -48,6 +48,7 @@ module.exports = {
         export: '导出 CSV',
         contextMenu: '快捷菜单',
         menuPrivilege: '快捷菜单 + 权限控制',
+        footerImmediately: '表尾合计 + 实时更新',
         expandRow: '展开行',
         toolbar: '工具栏',
         customs: '自定义列',

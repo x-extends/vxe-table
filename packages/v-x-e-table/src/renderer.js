@@ -41,12 +41,18 @@ function getEvents (renderOpts, params) {
       let cellValue = evnt.target.value
       UtilTools.setCellValue(row, column, cellValue)
       $table.updateStatus(params, cellValue)
+      if (events && events[type]) {
+        events[type](params, evnt)
+      }
     }
   }
   if (events) {
-    XEUtils.assign(on, XEUtils.objectMap(events, cb => function () {
-      cb.apply(null, [params].concat.apply(params, arguments))
-    }))
+    XEUtils.assign(
+      {},
+      XEUtils.objectMap(events, cb => function () {
+        cb.apply(null, [params].concat.apply(params, arguments))
+      }),
+      on)
   }
   return on
 }

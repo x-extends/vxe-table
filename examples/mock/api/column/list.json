@@ -100,7 +100,7 @@
     "visible": false,
     "width": "80",
     "align": "",
-    "type": "selection",
+    "type": "checkbox",
     "seq": 0,
     "link": "",
     "describe": "",
