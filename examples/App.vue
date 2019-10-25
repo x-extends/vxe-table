@@ -661,31 +661,6 @@ export default {
               }
             },
             {
-              label: 'app.aside.nav.big1wRow',
-              locat: {
-                name: 'TableScrollRows'
-              }
-            },
-            {
-              label: 'app.aside.nav.big10wRow',
-              locat: {
-                name: 'TableScrollFullRows'
-              }
-            },
-            {
-              label: 'app.aside.nav.big1wRow1wCol',
-              demoUrl: 'https://jsrun.net/ULyKp',
-              locat: {
-                name: 'TableScrollCols'
-              }
-            },
-            {
-              label: 'app.aside.nav.big10wRow1wCol',
-              locat: {
-                name: 'TableScrollFullCols'
-              }
-            },
-            {
               label: 'app.aside.nav.moveHighlight',
               locat: {
                 name: 'TableScrollHighlight'
@@ -737,10 +712,46 @@ export default {
               }
             },
             {
-              label: 'app.aside.nav.pageScroll',
-              disabled: true,
+              label: 'app.aside.nav.partialLoad',
               locat: {
-                name: 'TableScroll'
+                name: 'TableScrollPartialLoad'
+              }
+            },
+            {
+              label: 'app.aside.nav.fullPartialLoad',
+              locat: {
+                name: 'TableScrollFullPartialLoad'
+              }
+            },
+            {
+              label: 'app.aside.nav.template',
+              locat: {
+                name: 'TableScrollTemplate'
+              }
+            },
+            {
+              label: 'app.aside.nav.big1wRow',
+              locat: {
+                name: 'TableScrollRows'
+              }
+            },
+            {
+              label: 'app.aside.nav.big10wRow',
+              locat: {
+                name: 'TableScrollFullRows'
+              }
+            },
+            {
+              label: 'app.aside.nav.big1wRow1wCol',
+              demoUrl: 'https://jsrun.net/ULyKp',
+              locat: {
+                name: 'TableScrollCols'
+              }
+            },
+            {
+              label: 'app.aside.nav.big10wRow1wCol',
+              locat: {
+                name: 'TableScrollFullCols'
               }
             },
             {
@@ -748,12 +759,6 @@ export default {
               disabled: true,
               locat: {
                 name: 'TableScroll'
-              }
-            },
-            {
-              label: 'app.aside.nav.template',
-              locat: {
-                name: 'TableScrollTemplate'
               }
             },
             {

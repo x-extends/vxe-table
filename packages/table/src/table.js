@@ -530,7 +530,11 @@ export default {
       if (this.customs) {
         this.mergeCustomColumn(this.customs)
       }
-      this.refreshColumn()
+      this.refreshColumn().then(() => {
+        if (this.scrollXLoad) {
+          this.updateVirtualScrollX(true)
+        }
+      })
       this.handleTableData(true)
       if (this.$toolbar) {
         this.$toolbar.updateColumn(tableFullColumn)
@@ -573,8 +577,8 @@ export default {
     }
   },
   created () {
-    let { scrollYStore, optimizeOpts, ctxMenuOpts, radioConfig = {}, treeConfig, editConfig, loading, showAllOverflow, showHeaderAllOverflow } = this
-    let { scrollY } = optimizeOpts
+    let { scrollXStore, scrollYStore, optimizeOpts, ctxMenuOpts, radioConfig = {}, treeConfig, editConfig, loading, showAllOverflow, showHeaderAllOverflow } = this
+    let { scrollX, scrollY } = optimizeOpts
     // 在 v3.0 中废弃 selectConfig
     let checkboxConfig = this.checkboxConfig || this.selectConfig || {}
     if (loading) {
@@ -586,6 +590,14 @@ export default {
         visibleIndex: 0,
         renderSize: XEUtils.toNumber(scrollY.rSize),
         offsetSize: XEUtils.toNumber(scrollY.oSize)
+      })
+    }
+    if (scrollX) {
+      Object.assign(scrollXStore, {
+        startIndex: 0,
+        visibleIndex: 0,
+        renderSize: XEUtils.toNumber(scrollX.rSize),
+        offsetSize: XEUtils.toNumber(scrollX.oSize)
       })
     }
     if (!UtilTools.getRowkey(this)) {
@@ -860,7 +872,6 @@ export default {
       return this.$grid ? this.$grid.getExcludeHeight() : 0
     },
     clearAll () {
-      this.clearScroll()
       this.clearSort()
       this.clearFilter()
       this.clearCurrentRow()
@@ -870,7 +881,8 @@ export default {
       this.clearTreeExpand()
       this.clearChecked()
       this.clearSelected()
-      return this.clearActived()
+      this.clearActived()
+      return this.clearScroll()
     },
     refreshData () {
       return this.$nextTick().then(() => {
@@ -888,10 +900,12 @@ export default {
       return this.$nextTick()
     },
     loadTableData (datas, notRefresh) {
-      let { height, maxHeight, treeConfig, editStore, optimizeOpts, lastScrollLeft, lastScrollTop } = this
+      let { height, maxHeight, treeConfig, editStore, optimizeOpts, scrollYStore, lastScrollLeft, lastScrollTop } = this
       let { scrollY } = optimizeOpts
       let tableFullData = datas ? datas.slice(0) : []
       let scrollYLoad = !treeConfig && scrollY && scrollY.gt && scrollY.gt < tableFullData.length
+      scrollYStore.startIndex = 0
+      scrollYStore.visibleIndex = 0
       editStore.insertList = []
       editStore.removeList = []
       // 全量数据
@@ -905,6 +919,8 @@ export default {
       if (scrollYLoad && !(height || maxHeight)) {
         UtilTools.error('vxe.error.scrollYHeight')
       }
+      // 是否加载了数据
+      this.isLoadData = true
       this.clearScroll()
       this.handleTableData(true)
       this.reserveCheckSelection()
@@ -915,6 +931,10 @@ export default {
       }
       return rest.then(() => {
         if (lastScrollLeft || lastScrollTop) {
+          // 重置最后滚动状态
+          this.lastScrollLeft = 0
+          this.lastScrollTop = 0
+          // 还原滚动状态
           return this.scrollTo(lastScrollLeft, lastScrollTop)
         }
       })
@@ -923,8 +943,9 @@ export default {
       return this.loadTableData(datas)
     },
     reloadData (datas) {
-      this.clearAll()
-      return this.loadTableData(datas).then(this.handleDefault)
+      return this.clearAll()
+        .then(() => this.loadTableData(datas))
+        .then(this.handleDefault)
     },
     reloadRow (row, record, field) {
       let { tableSourceData, tableData } = this
@@ -1581,12 +1602,8 @@ export default {
         if (this.resizable || visibleColumn.some(column => column.resizable)) {
           UtilTools.warn('vxe.error.notResizable')
         }
-        Object.assign(scrollXStore, {
-          startIndex: 0,
-          visibleIndex: 0,
-          renderSize: XEUtils.toNumber(scrollX.rSize),
-          offsetSize: XEUtils.toNumber(scrollX.oSize)
-        })
+        scrollXStore.startIndex = 0
+        scrollXStore.visibleIndex = 0
         visibleColumn = visibleColumn.slice(scrollXStore.startIndex, scrollXStore.startIndex + scrollXStore.renderSize)
       }
       this.scrollXLoad = scrollXLoad
@@ -3628,14 +3645,14 @@ export default {
      * 是否启用了横向 X 可视渲染
      */
     isScrollXLoad () {
-      console.warn('[vxe-table] The function isScrollXLoad is deprecated, please use getVirtualScroller')
+      UtilTools.warn('vxe.error.delFunc', ['isScrollXLoad', 'getVirtualScroller'])
       return this.scrollXLoad
     },
     /**
      * 是否启用了纵向 Y 可视渲染
      */
     isScrollYLoad () {
-      console.warn('[vxe-table] The function isScrollXLoad is deprecated, please use getVirtualScroller')
+      UtilTools.warn('vxe.error.delFunc', ['isScrollYLoad', 'getVirtualScroller'])
       return this.scrollYLoad
     },
     /**
@@ -3655,13 +3672,16 @@ export default {
      * 横向 X 可视渲染事件处理
      */
     triggerScrollXEvent (evnt) {
+      this.updateVirtualScrollX()
+    },
+    updateVirtualScrollX (force) {
       let { $refs, visibleColumn, scrollXStore } = this
       let { startIndex, renderSize, offsetSize, visibleSize } = scrollXStore
       let scrollBodyElem = $refs.tableBody.$el
       let scrollLeft = scrollBodyElem.scrollLeft
       let toVisibleIndex = 0
       let width = 0
-      let preload = false
+      let preload = force || false
       for (let index = 0; index < visibleColumn.length; index++) {
         width += visibleColumn[index].renderWidth
         if (scrollLeft < width) {
@@ -3669,9 +3689,11 @@ export default {
           break
         }
       }
-      if (scrollXStore.visibleIndex !== toVisibleIndex) {
+      if (force || scrollXStore.visibleIndex !== toVisibleIndex) {
         let marginSize = Math.min(Math.floor((renderSize - visibleSize) / 2), visibleSize)
-        if (scrollXStore.visibleIndex > toVisibleIndex) {
+        if (scrollXStore.visibleIndex === toVisibleIndex) {
+          scrollXStore.startIndex = toVisibleIndex
+        } else if (scrollXStore.visibleIndex > toVisibleIndex) {
           // 向左
           preload = toVisibleIndex - offsetSize <= startIndex
           if (preload) {
@@ -3695,13 +3717,13 @@ export default {
      * 纵向 Y 可视渲染事件处理
      */
     triggerScrollYEvent: XEUtils.debounce(function (evnt) {
-      let { afterFullData, scrollYStore } = this
+      let { afterFullData, scrollYStore, isLoadData } = this
       let { startIndex, renderSize, offsetSize, visibleSize, rowHeight } = scrollYStore
       let scrollBodyElem = evnt.target
       let scrollTop = scrollBodyElem.scrollTop
       let toVisibleIndex = Math.ceil(scrollTop / rowHeight)
       let preload = false
-      if (scrollYStore.visibleIndex !== toVisibleIndex) {
+      if (isLoadData || scrollYStore.visibleIndex !== toVisibleIndex) {
         let marginSize = Math.min(Math.floor((renderSize - visibleSize) / 2), visibleSize)
         if (scrollYStore.visibleIndex > toVisibleIndex) {
           // 向上
@@ -3720,6 +3742,7 @@ export default {
           this.updateScrollYData()
         }
         scrollYStore.visibleIndex = toVisibleIndex
+        this.isLoadData = false
       }
     }, debounceScrollYDuration, { leading: false, trailing: true }),
     // 计算可视渲染相关数据
@@ -3859,11 +3882,6 @@ export default {
       return this.$nextTick()
     },
     clearScroll () {
-      let { scrollXStore, scrollYStore } = this
-      scrollXStore.startIndex = 0
-      scrollXStore.visibleIndex = 0
-      scrollYStore.startIndex = 0
-      scrollYStore.visibleIndex = 0
       this.updateScrollXSpace()
       this.updateScrollYSpace()
       return this.$nextTick().then(() => {
@@ -3879,6 +3897,7 @@ export default {
         if (footerTargetElem) {
           footerTargetElem.scrollLeft = 0
         }
+        return new Promise(resolve => setTimeout(() => resolve(this.$nextTick())))
       })
     },
     /**
