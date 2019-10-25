@@ -180,14 +180,14 @@ export const UtilTools = {
   },
   // 组装列配置
   assemColumn (_vm) {
-    let { $table, $parent, columnConfig } = _vm
-    let parentColumnConfig = $parent.columnConfig
+    let { $table, $column, columnConfig } = _vm
+    let groupConfig = $column ? $column.columnConfig : null
     columnConfig.slots = _vm.$scopedSlots
-    if (parentColumnConfig && $parent.$children.length > 0) {
-      if (!parentColumnConfig.children) {
-        parentColumnConfig.children = []
+    if (groupConfig && $column.$children.length > 0) {
+      if (!groupConfig.children) {
+        groupConfig.children = []
       }
-      parentColumnConfig.children.splice([].indexOf.call($parent.$el.children, _vm.$el), 0, columnConfig)
+      groupConfig.children.splice([].indexOf.call($column.$el.children, _vm.$el), 0, columnConfig)
     } else {
       $table.collectColumn.splice([].indexOf.call($table.$refs.hideColumn.children, _vm.$el), 0, columnConfig)
     }
