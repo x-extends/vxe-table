@@ -9,6 +9,7 @@
 
     <vxe-toolbar>
       <template v-slot:buttons>
+        <vxe-button @click="loadColumnAndData(10000, 100000)">加载1w列10w条</vxe-button>
         <vxe-button @click="$refs.xGrid.toggleRowSelection($refs.xGrid.getData(1))">切换第二行选中</vxe-button>
         <vxe-button @click="$refs.xGrid.setSelection([$refs.xGrid.getData(2), $refs.xGrid.getData(3)], true)">设置第三、四行选中</vxe-button>
         <vxe-button @click="$refs.xGrid.setAllSelection(true)">设置所有行选中</vxe-button>
@@ -35,9 +36,11 @@
         | Arrow Down ↓ | 匀速向下滚动数据 |
         | Arrow Left ← | 匀速向左滚动数据 |
         | Arrow Right → | 匀速向右滚动数据 |
+        | Page Up | 向上翻页滚动 |
+        | Page Down | 向下翻页滚动 |
         | Spacebar | 翻页滚动 |
-        | ctrl + Home | 滚动到顶部 |
-        | ctrl + End | 滚动到底部 |
+        | Home | 滚动到顶部 |
+        | End | 滚动到底部 |
       </code>
     </pre>
 
@@ -61,6 +64,7 @@ export default {
         `
         <vxe-toolbar>
           <template v-slot:buttons>
+            <vxe-button @click="loadColumnAndData(10000, 100000)">加载1w列10w条</vxe-button>
             <vxe-button @click="$refs.xGrid.toggleRowSelection($refs.xGrid.getData(1))">切换第二行选中</vxe-button>
             <vxe-button @click="$refs.xGrid.setSelection([$refs.xGrid.getData(2), $refs.xGrid.getData(3)], true)">设置第三、四行选中</vxe-button>
             <vxe-button @click="$refs.xGrid.setAllSelection(true)">设置所有行选中</vxe-button>
@@ -89,19 +93,40 @@ export default {
             }
           },
           created () {
-            this.loading = true
-            setTimeout(() => {
-              let tableData = window.MOCK_DATA_LIST.slice(0, 100000)
-              let tableColumn = window.MOCK_COLUMN_LIST.slice(0, 10000)
-              // 使用函数式加载，阻断 vue 对大数组的双向绑定，大数据性能翻倍提升
-              if (this.$refs.xGrid) {
-                this.$refs.xGrid.loadColumn(tableColumn)
-                this.$refs.xGrid.loadData(tableData)
-              }
-              this.loading = false
-            }, 300)
+            this.loadColumnAndData(200, 600)
           },
           methods: {
+            loadColumnAndData (colSize, rowSize) {
+              this.loading = true
+              Promise.all([
+                this.loadColumn(colSize),
+                this.loadList(rowSize)
+              ]).then(() => {
+                this.loading = false
+              })
+            },
+            loadColumn (size) {
+              return new Promise(resolve => {
+                setTimeout(() => {
+                  // 使用函数式加载，阻断 vue 对大数组的双向绑定，大数据性能翻倍提升
+                  let tableColumn = window.MOCK_COLUMN_LIST.slice(0, size).map(item => Object.assign({}, item, { fixed: undefined }))
+                  this.$refs.xGrid.loadColumn(tableColumn).then(() => {
+                    resolve()
+                  })
+                }, 300)
+              })
+            },
+            loadList (size) {
+              return new Promise(resolve => {
+                setTimeout(() => {
+                  // 使用函数式加载，阻断 vue 对大数组的双向绑定，大数据性能翻倍提升
+                  let tableData = window.MOCK_DATA_LIST.slice(0, size)
+                  this.$refs.xGrid.reloadData(tableData).then(() => {
+                    resolve()
+                  })
+                }, 300)
+              })
+            },
             getSelectEvent () {
               let selectRecords = this.$refs.xGrid.getSelectRecords()
               this.$XModal.alert(selectRecords.length)
@@ -113,17 +138,7 @@ export default {
     }
   },
   created () {
-    this.loading = true
-    setTimeout(() => {
-      let tableData = window.MOCK_DATA_LIST.slice(0, 100000)
-      let tableColumn = window.MOCK_COLUMN_LIST.slice(0, 10000)
-      // 使用函数式加载，阻断 vue 对大数组的双向绑定，大数据性能翻倍提升
-      if (this.$refs.xGrid) {
-        this.$refs.xGrid.loadColumn(tableColumn)
-        this.$refs.xGrid.loadData(tableData)
-      }
-      this.loading = false
-    }, 300)
+    this.loadColumnAndData(200, 600)
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
@@ -131,6 +146,37 @@ export default {
     })
   },
   methods: {
+    loadColumnAndData (colSize, rowSize) {
+      this.loading = true
+      Promise.all([
+        this.loadColumn(colSize),
+        this.loadList(rowSize)
+      ]).then(() => {
+        this.loading = false
+      })
+    },
+    loadColumn (size) {
+      return new Promise(resolve => {
+        setTimeout(() => {
+          // 使用函数式加载，阻断 vue 对大数组的双向绑定，大数据性能翻倍提升
+          let tableColumn = window.MOCK_COLUMN_LIST.slice(0, size).map(item => Object.assign({}, item, { fixed: undefined }))
+          this.$refs.xGrid.loadColumn(tableColumn).then(() => {
+            resolve()
+          })
+        }, 300)
+      })
+    },
+    loadList (size) {
+      return new Promise(resolve => {
+        setTimeout(() => {
+          // 使用函数式加载，阻断 vue 对大数组的双向绑定，大数据性能翻倍提升
+          let tableData = window.MOCK_DATA_LIST.slice(0, size)
+          this.$refs.xGrid.reloadData(tableData).then(() => {
+            resolve()
+          })
+        }, 300)
+      })
+    },
     getSelectEvent () {
       let selectRecords = this.$refs.xGrid.getSelectRecords()
       this.$XModal.alert(selectRecords.length)

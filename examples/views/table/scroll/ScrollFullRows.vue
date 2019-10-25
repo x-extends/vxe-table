@@ -9,6 +9,7 @@
 
     <vxe-toolbar>
       <template v-slot:buttons>
+        <vxe-button @click="loadList(100000)">加载10w条</vxe-button>
         <vxe-button @click="$refs.xTable.toggleRowSelection($refs.xTable.getData(1))">切换第二行选中</vxe-button>
         <vxe-button @click="$refs.xTable.setSelection([$refs.xTable.getData(2), $refs.xTable.getData(3)], true)">设置第三、四行选中</vxe-button>
         <vxe-button @click="$refs.xTable.setAllSelection(true)">设置所有行选中</vxe-button>
@@ -85,6 +86,7 @@ export default {
         `
         <vxe-toolbar>
           <template v-slot:buttons>
+            <vxe-button @click="loadList(100000)">加载10w条</vxe-button>
             <vxe-button @click="$refs.xTable.toggleRowSelection($refs.xTable.getData(1))">切换第二行选中</vxe-button>
             <vxe-button @click="$refs.xTable.setSelection([$refs.xTable.getData(2), $refs.xTable.getData(3)], true)">设置第三、四行选中</vxe-button>
             <vxe-button @click="$refs.xTable.setAllSelection(true)">设置所有行选中</vxe-button>
@@ -135,17 +137,23 @@ export default {
             }
           },
           created () {
-            this.loading = true
-            setTimeout(() => {
-              let tableData = window.MOCK_DATA_LIST.slice(0, 100000)
-              // 使用函数式加载，阻断 vue 对大数组的双向绑定，大数据性能翻倍提升
-              if (this.$refs.xTable) {
-                this.$refs.xTable.reloadData(tableData)
-              }
-              this.loading = false
-            }, 500)
+            this.loadList(600)
           },
           methods: {
+            loadList (size) {
+              this.loading = true
+              setTimeout(() => {
+                let xTable = this.$refs.xTable
+                if (xTable) {
+                  // 使用函数式加载，阻断 vue 对大数组的双向绑定，大数据性能翻倍提升
+                  xTable.reloadData(window.MOCK_DATA_LIST.slice(0, size)).then(() => {
+                    this.loading = false
+                  })
+                } else {
+                  this.loading = false
+                }
+              }, 300)
+            },
             getSelectEvent () {
               let selectRecords = this.$refs.xTable.getSelectRecords()
               this.$XModal.alert(selectRecords.length)
@@ -157,15 +165,7 @@ export default {
     }
   },
   created () {
-    this.loading = true
-    setTimeout(() => {
-      let tableData = window.MOCK_DATA_LIST.slice(0, 100000)
-      // 使用函数式加载，阻断 vue 对大数组的双向绑定，大数据性能翻倍提升
-      if (this.$refs.xTable) {
-        this.$refs.xTable.reloadData(tableData)
-      }
-      this.loading = false
-    }, 500)
+    this.loadList(600)
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
@@ -173,6 +173,20 @@ export default {
     })
   },
   methods: {
+    loadList (size) {
+      this.loading = true
+      setTimeout(() => {
+        let xTable = this.$refs.xTable
+        if (xTable) {
+          // 使用函数式加载，阻断 vue 对大数组的双向绑定，大数据性能翻倍提升
+          xTable.reloadData(window.MOCK_DATA_LIST.slice(0, size)).then(() => {
+            this.loading = false
+          })
+        } else {
+          this.loading = false
+        }
+      }, 300)
+    },
     getSelectEvent () {
       let selectRecords = this.$refs.xTable.getSelectRecords()
       this.$XModal.alert(selectRecords.length)
