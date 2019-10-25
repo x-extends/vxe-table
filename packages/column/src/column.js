@@ -67,9 +67,19 @@ export default {
     // 额外的参数
     params: Object
   },
-  inject: [
-    '$table'
-  ],
+  provide () {
+    return {
+      $column: this
+    }
+  },
+  inject: {
+    $table: {
+      default: null
+    },
+    $column: {
+      default: null
+    }
+  },
   created () {
     this.columnConfig = this.createColumn(this.$table, this)
   },
