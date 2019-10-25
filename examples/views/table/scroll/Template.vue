@@ -283,7 +283,7 @@ export default {
           created () {
             this.loading = true
             setTimeout(() => {
-              let tableData = window.MOCK_DATA_LIST.slice(0, 10000)
+              let tableData = window.MOCK_DATA_LIST.slice(0, 1000)
               // 使用函数式加载，阻断 vue 对大数组的双向绑定，大数据性能翻倍提升
               if (this.$refs.xGrid) {
                 this.$refs.xGrid.loadData(tableData)
@@ -318,7 +318,7 @@ export default {
   created () {
     this.loading = true
     setTimeout(() => {
-      let tableData = window.MOCK_DATA_LIST.slice(0, 10000)
+      let tableData = window.MOCK_DATA_LIST.slice(0, 1000)
       // 使用函数式加载，阻断 vue 对大数组的双向绑定，大数据性能翻倍提升
       if (this.$refs.xGrid) {
         this.$refs.xGrid.loadData(tableData)

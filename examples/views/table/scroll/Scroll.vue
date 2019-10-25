@@ -37,7 +37,7 @@
       show-overflow
       ref="xTable"
       height="300"
-      :optimization="{scrollX: {gt: 40}, scrollY: {gt: 200, rSize: 60}}">
+      :optimization="{scrollX: {gt: 40}, scrollY: {gt: 200}}">
       <vxe-table-column type="index" width="100"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -95,7 +95,7 @@ export default {
             }
           },
           created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 200)
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 600)
           }
         }
         `,
@@ -105,7 +105,7 @@ export default {
           show-overflow
           ref="xTable"
           height="300"
-          :optimization="{scrollX: {gt: 40}, scrollY: {gt: 200, rSize: 60}}">
+          :optimization="{scrollX: {gt: 40}, scrollY: {gt: 200}}">
           <vxe-table-column type="index" width="100"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -117,7 +117,7 @@ export default {
         export default {
           created () {
             this.$nextTick(() => {
-              this.$refs.xTable.reloadData(window.MOCK_DATA_LIST.slice(0, 10000))
+              this.$refs.xTable.reloadData(window.MOCK_DATA_LIST.slice(0, 1000))
             })
           }
         }
@@ -126,9 +126,9 @@ export default {
     }
   },
   created () {
-    this.tableData = window.MOCK_DATA_LIST.slice(0, 200)
+    this.tableData = window.MOCK_DATA_LIST.slice(0, 600)
     this.$nextTick(() => {
-      this.$refs.xTable.reloadData(window.MOCK_DATA_LIST.slice(0, 10000))
+      this.$refs.xTable.reloadData(window.MOCK_DATA_LIST.slice(0, 1000))
     })
   },
   mounted () {

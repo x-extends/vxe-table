@@ -411,7 +411,11 @@ export default {
       if (this.customs) {
         this.mergeCustomColumn(this.customs)
       }
-      this.refreshColumn()
+      this.refreshColumn().then(() => {
+        if (this.scrollXLoad) {
+          this.updateVirtualScrollX(true)
+        }
+      })
       this.handleTableData(true)
       if (this.$toolbar) {
         this.$toolbar.updateColumn(tableFullColumn)
@@ -448,7 +452,7 @@ export default {
     }
   },
   created () {
-    let { scrollYStore, optimizeOpts, data, loading } = Object.assign(this, {
+    let { scrollXStore, scrollYStore, optimizeOpts, data, loading } = Object.assign(this, {
       tZindex: 0,
       elemStore: {},
       // 存放横向 X 虚拟滚动相关的信息
@@ -485,7 +489,7 @@ export default {
       fullColumnMap: new Map(),
       fullColumnIdData: {}
     })
-    let { scrollY } = optimizeOpts
+    let { scrollX, scrollY } = optimizeOpts
     // 是否加载过 Loading 模块
     this._isLoading = loading
     if (!UtilTools.getRowkey(this)) {
@@ -515,6 +519,14 @@ export default {
         adaptive: XEUtils.isBoolean(scrollY.adaptive) ? scrollY.adaptive : true,
         renderSize: XEUtils.toNumber(scrollY.rSize),
         offsetSize: XEUtils.toNumber(scrollY.oSize)
+      })
+    }
+    if (scrollX) {
+      Object.assign(scrollXStore, {
+        startIndex: 0,
+        visibleIndex: 0,
+        renderSize: XEUtils.toNumber(scrollX.rSize),
+        offsetSize: XEUtils.toNumber(scrollX.oSize)
       })
     }
     this.loadTableData(data, true).then(() => {

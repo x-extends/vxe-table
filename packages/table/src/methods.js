@@ -49,13 +49,13 @@ const Methods = {
    * 重置表格的一切数据状态
    */
   clearAll () {
-    this.clearScroll()
     this.clearSort()
     this.clearCurrentRow()
     this.clearCurrentColumn()
     this.clearSelection()
     this.clearRowExpand()
     this.clearTreeExpand()
+    this.clearActived()
     if (VXETable._filter) {
       this.clearFilter()
     }
@@ -66,7 +66,7 @@ const Methods = {
       this.clearSelected()
       this.clearCopyed()
     }
-    return this.clearActived()
+    return this.clearScroll()
   },
   /**
    * 同步刷新 data 数据
@@ -98,10 +98,12 @@ const Methods = {
    * @param {Boolean} notRefresh 是否不重新运算列宽
    */
   loadTableData (datas, notRefresh) {
-    let { height, maxHeight, treeConfig, editStore, optimizeOpts, lastScrollLeft, lastScrollTop } = this
+    let { height, maxHeight, treeConfig, editStore, optimizeOpts, scrollYStore, lastScrollLeft, lastScrollTop } = this
     let { scrollY } = optimizeOpts
     let tableFullData = datas ? datas.slice(0) : []
     let scrollYLoad = !treeConfig && scrollY && scrollY.gt && scrollY.gt < tableFullData.length
+    scrollYStore.startIndex = 0
+    scrollYStore.visibleIndex = 0
     editStore.insertList = []
     editStore.removeList = []
     // 全量数据
@@ -115,6 +117,8 @@ const Methods = {
     if (scrollYLoad && !(height || maxHeight)) {
       UtilTools.error('vxe.error.scrollYHeight')
     }
+    // 是否加载了数据
+    this.isLoadData = true
     this.clearScroll()
     this.handleTableData(true)
     this.reserveCheckSelection()
@@ -125,6 +129,10 @@ const Methods = {
     }
     return rest.then(() => {
       if (lastScrollLeft || lastScrollTop) {
+        // 重置最后滚动状态
+        this.lastScrollLeft = 0
+        this.lastScrollTop = 0
+        // 还原滚动状态
         return this.scrollTo(lastScrollLeft, lastScrollTop)
       }
     })
@@ -141,8 +149,9 @@ const Methods = {
    * @param {Array} datas 数据
    */
   reloadData (datas) {
-    this.clearAll()
-    return this.loadTableData(datas).then(this.handleDefault)
+    return this.clearAll()
+      .then(() => this.loadTableData(datas))
+      .then(this.handleDefault)
   },
   /**
    * 局部加载行数据并恢复到初始状态
@@ -727,9 +736,7 @@ const Methods = {
       }
       Object.assign(scrollXStore, {
         startIndex: 0,
-        visibleIndex: 0,
-        renderSize: XEUtils.toNumber(scrollX.rSize),
-        offsetSize: XEUtils.toNumber(scrollX.oSize)
+        visibleIndex: 0
       })
       visibleColumn = visibleColumn.slice(scrollXStore.startIndex, scrollXStore.startIndex + scrollXStore.renderSize)
     }
@@ -876,6 +883,10 @@ const Methods = {
     this.parentHeight = this.getParentHeight()
     if (headerElem) {
       this.headerHeight = headerElem.offsetHeight
+      // 检测是否同步滚动
+      if (headerElem.scrollLeft !== bodyElem.scrollLeft) {
+        headerElem.scrollLeft = bodyElem.scrollLeft
+      }
     }
     if (footerElem) {
       let footerHeight = footerElem.offsetHeight
@@ -2212,13 +2223,16 @@ const Methods = {
    * 横向 X 可视渲染事件处理
    */
   triggerScrollXEvent (evnt) {
+    this.updateVirtualScrollX()
+  },
+  updateVirtualScrollX (force) {
     let { $refs, visibleColumn, scrollXStore } = this
     let { startIndex, renderSize, offsetSize, visibleSize } = scrollXStore
     let scrollBodyElem = $refs.tableBody.$el
     let scrollLeft = scrollBodyElem.scrollLeft
     let toVisibleIndex = 0
     let width = 0
-    let preload = false
+    let preload = force || false
     for (let index = 0; index < visibleColumn.length; index++) {
       width += visibleColumn[index].renderWidth
       if (scrollLeft < width) {
@@ -2226,9 +2240,11 @@ const Methods = {
         break
       }
     }
-    if (scrollXStore.visibleIndex !== toVisibleIndex) {
+    if (force || scrollXStore.visibleIndex !== toVisibleIndex) {
       let marginSize = Math.min(Math.floor((renderSize - visibleSize) / 2), visibleSize)
-      if (scrollXStore.visibleIndex > toVisibleIndex) {
+      if (scrollXStore.visibleIndex === toVisibleIndex) {
+        scrollXStore.startIndex = toVisibleIndex
+      } else if (scrollXStore.visibleIndex > toVisibleIndex) {
         // 向左
         preload = toVisibleIndex - offsetSize <= startIndex
         if (preload) {
@@ -2266,13 +2282,13 @@ const Methods = {
    * 纵向 Y 可视渲染处理
    */
   loadScrollYData (evnt) {
-    let { afterFullData, scrollYStore } = this
+    let { afterFullData, scrollYStore, isLoadData } = this
     let { startIndex, renderSize, offsetSize, visibleSize, rowHeight } = scrollYStore
     let scrollBodyElem = evnt.target
     let scrollTop = scrollBodyElem.scrollTop
     let toVisibleIndex = Math.ceil(scrollTop / rowHeight)
     let preload = false
-    if (scrollYStore.visibleIndex !== toVisibleIndex) {
+    if (isLoadData || scrollYStore.visibleIndex !== toVisibleIndex) {
       let marginSize = Math.min(Math.floor((renderSize - visibleSize) / 2), visibleSize)
       if (scrollYStore.visibleIndex > toVisibleIndex) {
         // 向上
@@ -2291,6 +2307,7 @@ const Methods = {
         this.updateScrollYData()
       }
       scrollYStore.visibleIndex = toVisibleIndex
+      this.isLoadData = false
     }
   },
   // 计算可视渲染相关数据
@@ -2496,25 +2513,19 @@ const Methods = {
    * 手动清除滚动相关信息，还原到初始状态
    */
   clearScroll () {
-    let { scrollXStore, scrollYStore } = this
-    scrollXStore.startIndex = 0
-    scrollXStore.visibleIndex = 0
-    scrollYStore.startIndex = 0
-    scrollYStore.visibleIndex = 0
-    return this.$nextTick().then(() => {
-      let $refs = this.$refs
-      let tableBody = $refs.tableBody
-      let tableBodyElem = tableBody ? tableBody.$el : null
-      let tableFooter = $refs.tableFooter
-      let tableFooterElem = tableFooter ? tableFooter.$el : null
-      let footerTargetElem = tableFooterElem || tableBodyElem
-      if (tableBodyElem) {
-        tableBodyElem.scrollTop = 0
-      }
-      if (footerTargetElem) {
-        footerTargetElem.scrollLeft = 0
-      }
-    })
+    let $refs = this.$refs
+    let tableBody = $refs.tableBody
+    let tableBodyElem = tableBody ? tableBody.$el : null
+    let tableFooter = $refs.tableFooter
+    let tableFooterElem = tableFooter ? tableFooter.$el : null
+    let footerTargetElem = tableFooterElem || tableBodyElem
+    if (tableBodyElem) {
+      tableBodyElem.scrollTop = 0
+    }
+    if (footerTargetElem) {
+      footerTargetElem.scrollLeft = 0
+    }
+    return new Promise(resolve => setTimeout(() => resolve(this.$nextTick())))
   },
   /**
    * 更新表尾合计
