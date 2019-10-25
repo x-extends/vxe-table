@@ -6,6 +6,12 @@
       <span class="red">注意：如果要启用横向虚拟滚动，所有的列宽度必须一致，否则无法兼容</span>
     </p>
 
+    <vxe-toolbar>
+      <template v-slot:buttons>
+        <vxe-button @click="loadColumnAndData(10000, 10000)">加载1w列1w条</vxe-button>
+      </template>
+    </vxe-toolbar>
+
     <vxe-grid
       border
       show-overflow
@@ -34,6 +40,12 @@ export default {
       loading: false,
       demoCodes: [
         `
+        <vxe-toolbar>
+          <template v-slot:buttons>
+            <vxe-button @click="loadColumnAndData(10000, 10000)">加载1w列1w条</vxe-button>
+          </template>
+        </vxe-toolbar>
+
         <vxe-grid
           border
           show-overflow
@@ -52,17 +64,40 @@ export default {
             }
           },
           created () {
-            this.loading = true
-            setTimeout(() => {
-              let tableData = window.MOCK_DATA_LIST.slice(0, 10000)
-              let tableColumn = window.MOCK_COLUMN_LIST.slice(0, 10000).map(item => Object.assign({}, item, { fixed: undefined }))
-              // 使用函数式加载，阻断 vue 对大数组的双向绑定，大数据性能翻倍提升
-              if (this.$refs.xGrid) {
-                this.$refs.xGrid.loadColumn(tableColumn)
-                this.$refs.xGrid.loadData(tableData)
-              }
-              this.loading = false
-            }, 500)
+            this.loadColumnAndData(200, 600)
+          },
+          methods: {
+            loadColumnAndData (colSize, rowSize) {
+              this.loading = true
+              Promise.all([
+                this.loadColumn(colSize),
+                this.loadList(rowSize)
+              ]).then(() => {
+                this.loading = false
+              })
+            },
+            loadColumn (size) {
+              return new Promise(resolve => {
+                setTimeout(() => {
+                  // 使用函数式加载，阻断 vue 对大数组的双向绑定，大数据性能翻倍提升
+                  let tableColumn = window.MOCK_COLUMN_LIST.slice(0, size).map(item => Object.assign({}, item, { fixed: undefined }))
+                  this.$refs.xGrid.loadColumn(tableColumn).then(() => {
+                    resolve()
+                  })
+                }, 300)
+              })
+            },
+            loadList (size) {
+              return new Promise(resolve => {
+                setTimeout(() => {
+                  // 使用函数式加载，阻断 vue 对大数组的双向绑定，大数据性能翻倍提升
+                  let tableData = window.MOCK_DATA_LIST.slice(0, size)
+                  this.$refs.xGrid.reloadData(tableData).then(() => {
+                    resolve()
+                  })
+                }, 300)
+              })
+            }
           }
         }
         `
@@ -70,22 +105,45 @@ export default {
     }
   },
   created () {
-    this.loading = true
-    setTimeout(() => {
-      let tableData = window.MOCK_DATA_LIST.slice(0, 10000)
-      let tableColumn = window.MOCK_COLUMN_LIST.slice(0, 10000).map(item => Object.assign({}, item, { fixed: undefined }))
-      // 使用函数式加载，阻断 vue 对大数组的双向绑定，大数据性能翻倍提升
-      if (this.$refs.xGrid) {
-        this.$refs.xGrid.loadColumn(tableColumn)
-        this.$refs.xGrid.loadData(tableData)
-      }
-      this.loading = false
-    }, 500)
+    this.loadColumnAndData(200, 600)
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
       hljs.highlightBlock(block)
     })
+  },
+  methods: {
+    loadColumnAndData (colSize, rowSize) {
+      this.loading = true
+      Promise.all([
+        this.loadColumn(colSize),
+        this.loadList(rowSize)
+      ]).then(() => {
+        this.loading = false
+      })
+    },
+    loadColumn (size) {
+      return new Promise(resolve => {
+        setTimeout(() => {
+          // 使用函数式加载，阻断 vue 对大数组的双向绑定，大数据性能翻倍提升
+          let tableColumn = window.MOCK_COLUMN_LIST.slice(0, size).map(item => Object.assign({}, item, { fixed: undefined }))
+          this.$refs.xGrid.loadColumn(tableColumn).then(() => {
+            resolve()
+          })
+        }, 300)
+      })
+    },
+    loadList (size) {
+      return new Promise(resolve => {
+        setTimeout(() => {
+          // 使用函数式加载，阻断 vue 对大数组的双向绑定，大数据性能翻倍提升
+          let tableData = window.MOCK_DATA_LIST.slice(0, size)
+          this.$refs.xGrid.reloadData(tableData).then(() => {
+            resolve()
+          })
+        }, 300)
+      })
+    }
   }
 }
 </script>

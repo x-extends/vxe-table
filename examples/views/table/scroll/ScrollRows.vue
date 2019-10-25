@@ -7,6 +7,12 @@
       <span class="red">注意：如果要启用纵向虚拟滚动，所有的行度必须一致，否则无法兼容</span>
     </p>
 
+    <vxe-toolbar>
+      <template v-slot:buttons>
+        <vxe-button @click="loadList(10000)">加载1w条</vxe-button>
+      </template>
+    </vxe-toolbar>
+
     <vxe-table
       ref="xTable"
       border
@@ -55,6 +61,12 @@ export default {
       loading: false,
       demoCodes: [
         `
+        <vxe-toolbar>
+          <template v-slot:buttons>
+            <vxe-button @click="loadList(10000)">加载1w条</vxe-button>
+          </template>
+        </vxe-toolbar>
+
         <vxe-table
           ref="xTable"
           border
@@ -93,15 +105,23 @@ export default {
             }
           },
           created () {
-            this.loading = true
-            setTimeout(() => {
-              let tableData = window.MOCK_DATA_LIST.slice(0, 10000)
-              // 使用函数式加载，阻断 vue 对大数组的双向绑定，大数据性能翻倍提升
-              if (this.$refs.xTable) {
-                this.$refs.xTable.loadData(tableData)
-              }
-              this.loading = false
-            }, 300)
+            this.loadList(600)
+          },
+          methods: {
+            loadList (size) {
+              this.loading = true
+              setTimeout(() => {
+                let xTable = this.$refs.xTable
+                if (xTable) {
+                  // 使用函数式加载，阻断 vue 对大数组的双向绑定，大数据性能翻倍提升
+                  xTable.reloadData(window.MOCK_DATA_LIST.slice(0, size)).then(() => {
+                    this.loading = false
+                  })
+                } else {
+                  this.loading = false
+                }
+              }, 300)
+            }
           }
         }
         `
@@ -109,20 +129,28 @@ export default {
     }
   },
   created () {
-    this.loading = true
-    setTimeout(() => {
-      let tableData = window.MOCK_DATA_LIST.slice(0, 10000)
-      // 使用函数式加载，阻断 vue 对大数组的双向绑定，大数据性能翻倍提升
-      if (this.$refs.xTable) {
-        this.$refs.xTable.loadData(tableData)
-      }
-      this.loading = false
-    }, 300)
+    this.loadList(600)
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
       hljs.highlightBlock(block)
     })
+  },
+  methods: {
+    loadList (size) {
+      this.loading = true
+      setTimeout(() => {
+        let xTable = this.$refs.xTable
+        if (xTable) {
+          // 使用函数式加载，阻断 vue 对大数组的双向绑定，大数据性能翻倍提升
+          xTable.reloadData(window.MOCK_DATA_LIST.slice(0, size)).then(() => {
+            this.loading = false
+          })
+        } else {
+          this.loading = false
+        }
+      }, 300)
+    }
   }
 }
 </script>
