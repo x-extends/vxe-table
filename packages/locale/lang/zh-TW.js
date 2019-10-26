@@ -8,11 +8,12 @@ export default {
       treeFixedExpand: '樹狀結構的固定列與展開行功能有冲衝突',
       scrollYHeight: '啓用虛擬滾動必须要設定 height 或 max-height',
       unableInsert: '無法插入到指定位置',
+      useErr: '安裝 {{0}} 模塊時發生錯誤，順序不正確',
 
       barUnableLink: '工具欄無法關聯表格',
       toolbarId: '工具欄需要設置唯一 id',
 
-      reqModule: '缺少 {{0}} 模块',
+      reqModule: '缺少 {{0}} 模塊',
       emptyProp: '參數 {{0}} 不允許為空',
       notFunc: '{{0}} 方法不存在',
       noTree: '樹狀結構不支援 {{0}}',

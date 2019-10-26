@@ -4,14 +4,10 @@
 
     <vxe-toolbar>
       <template v-slot:buttons>
-        <vxe-button @click="insertEvent">新增</vxe-button>
-        <vxe-button @click="$refs.xTree.removeSelecteds()">删除选中</vxe-button>
         <vxe-button @click="validEvent">校验</vxe-button>
         <vxe-button @click="fullValidEvent">完整校验</vxe-button>
         <vxe-button @click="selectValidEvent">选中校验</vxe-button>
         <vxe-button @click="getSelectEvent">获取选中</vxe-button>
-        <vxe-button @click="getInsertEvent">获取新增</vxe-button>
-        <vxe-button @click="getRemoveEvent">获取删除</vxe-button>
         <vxe-button @click="getUpdateEvent">获取修改</vxe-button>
       </template>
     </vxe-toolbar>
@@ -60,14 +56,10 @@ export default {
         `
         <vxe-toolbar>
           <template v-slot:buttons>
-            <vxe-button @click="insertEvent">新增</vxe-button>
-            <vxe-button @click="$refs.xTree.removeSelecteds()">删除选中</vxe-button>
             <vxe-button @click="validEvent">校验</vxe-button>
             <vxe-button @click="fullValidEvent">完整校验</vxe-button>
             <vxe-button @click="selectValidEvent">选中校验</vxe-button>
             <vxe-button @click="getSelectEvent">获取选中</vxe-button>
-            <vxe-button @click="getInsertEvent">获取新增</vxe-button>
-            <vxe-button @click="getRemoveEvent">获取删除</vxe-button>
             <vxe-button @click="getUpdateEvent">获取修改</vxe-button>
           </template>
         </vxe-toolbar>
@@ -163,27 +155,9 @@ export default {
                 this.$XModal.message({ status: 'warning', message: '未选中数据！' })
               }
             },
-            insertEvent () {
-              this.$refs.xTree.insert().then(({ row }) => {
-                // 插入一条数据并触发校验
-                this.$refs.xTree.validate(row, valid => {
-                  if (valid) {
-
-                  }
-                })
-              })
-            },
             getSelectEvent () {
               let selectRecords = this.$refs.xTree.getSelectRecords()
               this.$XModal.alert(selectRecords.length)
-            },
-            getInsertEvent () {
-              let insertRecords = this.$refs.xTree.getInsertRecords()
-              this.$XModal.alert(insertRecords.length)
-            },
-            getRemoveEvent () {
-              let removeRecords = this.$refs.xTree.getRemoveRecords()
-              this.$XModal.alert(removeRecords.length)
             },
             getUpdateEvent () {
               let updateRecords = this.$refs.xTree.getUpdateRecords()
@@ -260,27 +234,9 @@ export default {
         this.$XModal.message({ status: 'warning', message: '未选中数据！' })
       }
     },
-    insertEvent () {
-      this.$refs.xTree.insert().then(({ row }) => {
-        // 插入一条数据并触发校验
-        this.$refs.xTree.validate(row, valid => {
-          if (valid) {
-
-          }
-        })
-      })
-    },
     getSelectEvent () {
       let selectRecords = this.$refs.xTree.getSelectRecords()
       this.$XModal.alert(selectRecords.length)
-    },
-    getInsertEvent () {
-      let insertRecords = this.$refs.xTree.getInsertRecords()
-      this.$XModal.alert(insertRecords.length)
-    },
-    getRemoveEvent () {
-      let removeRecords = this.$refs.xTree.getRemoveRecords()
-      this.$XModal.alert(removeRecords.length)
     },
     getUpdateEvent () {
       let updateRecords = this.$refs.xTree.getUpdateRecords()

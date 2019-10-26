@@ -140,40 +140,6 @@ import 'vxe-table/lib/index.css'
 Vue.use(VXETable)
 ```
 
-## Internationalization
-
-```shell
-npm install vxe-i18n
-```
-
-```javascript
-import Vue from 'vue'
-import VueI18n from 'vxe-i18n'
-import VXETable from 'vxe-table'
-import zhCNLocat from 'vxe-table/lib/locale/lang/zh_CN'
-import enLocat from 'vxe-table/lib/locale/lang/en'
-
-const messages = {
-  zh_CN: {
-    ...zhCNLocat
-  },
-  en: {
-    ...enLocat
-  }
-}
-
-const i18n = new VueI18n({
-  locale: 'zh_CN',
-  messages,
-})
-
-Vue.use(VXETable, {
-  i18n: (key, value) => i18n.t(key, value)
-})
-
-new Vue({ i18n }).$mount('#app')
-```
-
 ## Example
 
 ```html

@@ -8,6 +8,7 @@ export default {
       treeFixedExpand: 'The fixed columns of the tree structure conflict with the expanded row.',
       scrollYHeight: 'You must set the height or max-height to enable virtual scrolling.',
       unableInsert: 'Unable to insert to the specified location.',
+      useErr: 'An error occurred while installing {{0}} module. The sequence is not correct.',
 
       barUnableLink: 'Toolbar cannot associate table.',
       toolbarId: 'Toolbar must have a unique id',
