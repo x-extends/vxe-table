@@ -49,11 +49,13 @@ import 'vxe-table-plugin-excel/dist/style.css'
 import 'vxe-table-plugin-renderer/dist/style.css'
 import 'vxe-table-plugin-charts/dist/style.css'
 
+// 设置默认参数
 VXETable.setup({
   translate: key => key && key.indexOf('app.') > -1 ? i18n.t(key) : key, // 自动翻译以 app. 开头的键值
   i18n: (key, value) => i18n.t(key, value)
 })
 
+// 先安装依赖模块
 Vue.use(Column)
 Vue.use(Header)
 Vue.use(Body)
@@ -75,6 +77,7 @@ Vue.use(Export)
 Vue.use(Keyboard)
 Vue.use(Validator)
 Vue.use(Resize)
+// 再安装核心
 Vue.use(Table)
 
 VXETable.use(VXETablePluginElement)

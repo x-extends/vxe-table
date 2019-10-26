@@ -4,7 +4,7 @@ import VXETable from '../v-x-e-table'
 
 export const Keyboard = {
   install () {
-    VXETable._keyboard = 1
+    VXETable.reg('keyboard')
     Table.mixins.push(mixin)
   }
 }

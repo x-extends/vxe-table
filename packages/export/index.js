@@ -4,7 +4,7 @@ import mixin from './src/mixin'
 
 export const Export = {
   install () {
-    VXETable._export = 1
+    VXETable.reg('export')
     Table.mixins.push(mixin)
   }
 }

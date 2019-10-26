@@ -4,7 +4,7 @@ import VXETable from '../v-x-e-table'
 
 export const Edit = {
   install () {
-    VXETable._edit = 1
+    VXETable.reg('edit')
     Table.mixins.push(mixin)
   }
 }

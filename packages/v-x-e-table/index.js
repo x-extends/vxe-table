@@ -4,6 +4,7 @@ import Renderer from './src/renderer'
 import Buttons from './src/buttons'
 import Menus from './src/menus'
 import Setup from './src/setup'
+import { UtilTools } from '../tools'
 
 const installedPlugins = []
 
@@ -17,7 +18,18 @@ function use (Plugin, options) {
   return VXETable
 }
 
+/**
+ * 检测模块的安装顺序是否正确
+ */
+function reg (key) {
+  if (VXETable.Table) {
+    UtilTools.error('vxe.error.useErr', [key])
+  }
+  VXETable[`_${key}`] = 1
+}
+
 export const VXETable = {
+  reg,
   t: XEUtils.get,
   v: 'v2',
   use,

@@ -4,7 +4,7 @@ import VXETable from '../v-x-e-table'
 
 export const Validator = {
   install () {
-    VXETable._valid = 1
+    VXETable.reg('valid')
     Table.mixins.push(mixin)
   }
 }

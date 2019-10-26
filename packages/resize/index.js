@@ -4,7 +4,7 @@ import mixin from './src/mixin'
 
 export const Resize = {
   install () {
-    VXETable._resize = 1
+    VXETable.reg('resize')
     Table.mixins.push(mixin)
   }
 }

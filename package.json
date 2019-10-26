@@ -1,6 +1,6 @@
 {
   "name": "vxe-table",
-  "version": "2.6.4",
+  "version": "2.6.5",
   "description": "一个简单实用的 Vue 表格组件",
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -113,5 +113,6 @@
   "browserslist": [
     "> 1%",
     "last 2 versions"
-  ]
+  ],
+  "dependencies": {}
 }
