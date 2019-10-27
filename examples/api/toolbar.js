@@ -35,6 +35,15 @@ const apis = [
         list: []
       },
       {
+        name: 'exps',
+        descKey: 'app.api.toolbar.desc.exps',
+        version: '1.15.8',
+        type: 'Boolean',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'refresh',
         descKey: 'app.api.toolbar.desc.refresh',
         version: '',

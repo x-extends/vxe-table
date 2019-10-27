@@ -45,6 +45,7 @@ const GlobalConfig = {
     edit: 'vxe-icon--edit-outline',
     tree: 'vxe-icon--caret-right',
     refresh: 'vxe-icon--refresh',
+    export: 'vxe-icon--download',
     custom: 'vxe-icon--menu',
     jumpPrev: 'vxe-icon--d-arrow-left',
     jumpNext: 'vxe-icon--d-arrow-right',
@@ -79,6 +80,7 @@ const GlobalConfig = {
     // resizable: {
     //   storage: false
     // },
+    // exps: false,
     // setting: {
     //   storage: false
     // },

@@ -271,6 +271,15 @@ const apis = [
     defVal: '',
     list: [
       {
+        name: 'inserted',
+        desc: '在窗口元素插入父节点时会触发该事件',
+        version: '1.15.8',
+        type: '{type}',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'show',
         desc: '在窗口打开时会触发该事件',
         version: '',

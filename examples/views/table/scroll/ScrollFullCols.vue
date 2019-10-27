@@ -7,17 +7,6 @@
       <span class="red">注意：如果要启用横向虚拟滚动，所有的列宽度必须一致，否则无法兼容</span>
     </p>
 
-    <vxe-toolbar>
-      <template v-slot:buttons>
-        <vxe-button @click="loadColumnAndData(10000, 100000)">加载1w列10w条</vxe-button>
-        <vxe-button @click="$refs.xGrid.toggleRowSelection($refs.xGrid.getData(1))">切换第二行选中</vxe-button>
-        <vxe-button @click="$refs.xGrid.setSelection([$refs.xGrid.getData(2), $refs.xGrid.getData(3)], true)">设置第三、四行选中</vxe-button>
-        <vxe-button @click="$refs.xGrid.setAllSelection(true)">设置所有行选中</vxe-button>
-        <vxe-button @click="$refs.xGrid.clearSelection()">清除所有行选中</vxe-button>
-        <vxe-button @click="getSelectEvent">获取选中</vxe-button>
-      </template>
-    </vxe-toolbar>
-
     <vxe-grid
       border
       show-overflow
@@ -27,7 +16,16 @@
       ref="xGrid"
       height="600"
       :loading="loading"
-      :checkbox-config="{checkField: 'checked'}">
+      :toolbar="tableToolbar"
+      :checkbox-config="{checkField: 'checked', labelField: 'nickname'}">
+      <template v-slot:buttons>
+        <vxe-button @click="loadColumnAndData(10000, 100000)">加载1w列10w条</vxe-button>
+        <vxe-button @click="$refs.xGrid.toggleRowSelection($refs.xGrid.getData(1))">切换第二行选中</vxe-button>
+        <vxe-button @click="$refs.xGrid.setSelection([$refs.xGrid.getData(2), $refs.xGrid.getData(3)], true)">设置第三、四行选中</vxe-button>
+        <vxe-button @click="$refs.xGrid.setAllSelection(true)">设置所有行选中</vxe-button>
+        <vxe-button @click="$refs.xGrid.clearSelection()">清除所有行选中</vxe-button>
+        <vxe-button @click="getSelectEvent">获取选中</vxe-button>
+      </template>
     </vxe-grid>
 
     <pre>
@@ -60,19 +58,11 @@ export default {
   data () {
     return {
       loading: false,
+      tableToolbar: {
+        exps: true
+      },
       demoCodes: [
         `
-        <vxe-toolbar>
-          <template v-slot:buttons>
-            <vxe-button @click="loadColumnAndData(10000, 100000)">加载1w列10w条</vxe-button>
-            <vxe-button @click="$refs.xGrid.toggleRowSelection($refs.xGrid.getData(1))">切换第二行选中</vxe-button>
-            <vxe-button @click="$refs.xGrid.setSelection([$refs.xGrid.getData(2), $refs.xGrid.getData(3)], true)">设置第三、四行选中</vxe-button>
-            <vxe-button @click="$refs.xGrid.setAllSelection(true)">设置所有行选中</vxe-button>
-            <vxe-button @click="$refs.xGrid.clearSelection()">清除所有行选中</vxe-button>
-            <vxe-button @click="getSelectEvent">获取选中</vxe-button>
-          </template>
-        </vxe-toolbar>
-
         <vxe-grid
           border
           show-overflow
@@ -82,14 +72,26 @@ export default {
           ref="xGrid"
           height="600"
           :loading="loading"
-          :checkbox-config="{checkField: 'checked'}">
+          :toolbar="tableToolbar"
+          :checkbox-config="{checkField: 'checked', labelField: 'nickname'}">
+          <template v-slot:buttons>
+            <vxe-button @click="loadColumnAndData(10000, 100000)">加载1w列10w条</vxe-button>
+            <vxe-button @click="$refs.xGrid.toggleRowSelection($refs.xGrid.getData(1))">切换第二行选中</vxe-button>
+            <vxe-button @click="$refs.xGrid.setSelection([$refs.xGrid.getData(2), $refs.xGrid.getData(3)], true)">设置第三、四行选中</vxe-button>
+            <vxe-button @click="$refs.xGrid.setAllSelection(true)">设置所有行选中</vxe-button>
+            <vxe-button @click="$refs.xGrid.clearSelection()">清除所有行选中</vxe-button>
+            <vxe-button @click="getSelectEvent">获取选中</vxe-button>
+          </template>
         </vxe-grid>
         `,
         `
         export default {
           data () {
             return {
-              loading: false
+              loading: false,
+              tableToolbar: {
+                exps: true
+              }
             }
           },
           created () {

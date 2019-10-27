@@ -8,6 +8,7 @@ export default {
     type: String,
     size: String,
     name: [String, Number],
+    icon: String,
     disabled: Boolean,
     loading: Boolean
   },
@@ -40,7 +41,7 @@ export default {
           mouseleave: this.mouseleaveEvent
         }, XEUtils.objectMap($listeners, (cb, type) => evnt => this.$emit(type, evnt)))
       }, [
-        h('span', $scopedSlots.default.call(this)),
+        h('span', $scopedSlots.default ? $scopedSlots.default.call(this) : ''),
         h('i', {
           class: `vxe-button--dropdown-arrow ${GlobalConfig.icon.dropdownBottom}`
         })
@@ -65,13 +66,32 @@ export default {
         disabled: disabled || loading
       },
       on: XEUtils.objectMap($listeners, (cb, type) => evnt => this.$emit(type, evnt))
-    }, (loading ? [
-      h('i', {
-        class: ['vxe-button--loading-icon', GlobalConfig.icon.btnLoading]
-      })
-    ] : []).concat($scopedSlots.default.call(this)))
+    }, this.renderContent(h))
   },
   methods: {
+    renderContent (h) {
+      let { $scopedSlots, icon, loading } = this
+      let contents = []
+      if (loading) {
+        contents.push(
+          h('i', {
+            class: ['vxe-button--loading-icon', GlobalConfig.icon.btnLoading]
+          })
+        )
+      } else if (icon) {
+        contents.push(
+          h('i', {
+            class: ['vxe-button--icon', icon]
+          })
+        )
+      }
+      if ($scopedSlots.default) {
+        contents.push(
+          $scopedSlots.default.call(this)
+        )
+      }
+      return contents
+    },
     clickDropdownEvent (evnt) {
       let dropdownElem = evnt.currentTarget
       let wrapperElem = dropdownElem.parentNode

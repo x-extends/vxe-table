@@ -116,6 +116,7 @@ export default {
           }
         ],
         refresh: true,
+        exps: true,
         resizable: {
           storage: true
         },
@@ -245,6 +246,7 @@ export default {
                   }
                 ],
                 refresh: true,
+                exps: true,
                 resizable: {
                   storage: true
                 },

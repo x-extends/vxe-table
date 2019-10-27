@@ -103,6 +103,9 @@ export default {
         },
         {
           icon: 'vxe-icon--zoomout'
+        },
+        {
+          icon: 'vxe-icon--download'
         }
       ],
       demoCodes: [

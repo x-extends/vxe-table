@@ -45,6 +45,19 @@ export default {
     button: {
       confirm: '确认',
       cancel: '取消'
+    },
+    toolbar: {
+      exportTitle: '导出数据',
+      exportName: '文件名',
+      exportNamePlaceholder: '请输入文件名',
+      exportSuffix: '文件类型',
+      exportType: '要导出的数据',
+      exportAll: '全部数据',
+      exportSelected: '选中数据',
+      exportOpts: '导出参数',
+      exportOptHeader: '表头',
+      exportOptIndex: '序号',
+      exportConfirm: '导出'
     }
   }
 }

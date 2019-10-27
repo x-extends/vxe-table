@@ -4,6 +4,13 @@
     <p class="tip">查看 <router-link class="link" :to="{name: 'VXEAPI', params: {name: 'button'}}">API</router-link></p>
 
     <p>
+      <vxe-button type="text" icon="vxe-icon--menu"></vxe-button>
+      <vxe-button type="text" icon="vxe-icon--download">图标按钮</vxe-button>
+      <vxe-button icon="vxe-icon--refresh"></vxe-button>
+      <vxe-button type="primary" icon="vxe-icon--download">图标按钮</vxe-button>
+    </p>
+
+    <p>
       <vxe-button type="text">文本按钮</vxe-button>
       <vxe-button type="text" disabled>禁用</vxe-button>
       <vxe-button type="text" loading>加载中</vxe-button>
@@ -49,6 +56,13 @@ export default {
     return {
       demoCodes: [
         `
+        <p>
+          <vxe-button type="text" icon="vxe-icon--menu"></vxe-button>
+          <vxe-button type="text" icon="vxe-icon--download">图标按钮</vxe-button>
+          <vxe-button icon="vxe-icon--refresh"></vxe-button>
+          <vxe-button type="primary" icon="vxe-icon--download">图标按钮</vxe-button>
+        </p>
+
         <p>
           <vxe-button type="text">文本按钮</vxe-button>
           <vxe-button type="text" disabled>禁用</vxe-button>

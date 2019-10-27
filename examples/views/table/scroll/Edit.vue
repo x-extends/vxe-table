@@ -2,7 +2,7 @@
   <div>
     <p class="tip">虚拟滚动渲染，可编辑表格<br><span class="red">当数据量非常大时，由于需要进行大量数据运算，所以数据校验或者获取数据...等函数执行会相对耗时</span></p>
 
-    <vxe-toolbar :refresh="{query: findList}">
+    <vxe-toolbar exps :refresh="{query: findList}">
       <template v-slot:buttons>
         <vxe-button>
           <template>新增操作</template>
@@ -78,7 +78,7 @@ export default {
       loading: false,
       demoCodes: [
         `
-        <vxe-toolbar :refresh="{query: findList}">
+        <vxe-toolbar exps :refresh="{query: findList}">
           <template v-slot:buttons>
             <vxe-button>
               <template>新增操作</template>

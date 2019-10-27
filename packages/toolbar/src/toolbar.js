@@ -10,6 +10,7 @@ export default {
     loading: false,
     resizable: { type: [Boolean, Object], default: () => GlobalConfig.toolbar.resizable },
     refresh: { type: [Boolean, Object], default: () => GlobalConfig.toolbar.refresh },
+    exps: { type: [Boolean, Object], default: () => GlobalConfig.toolbar.exps },
     setting: { type: [Boolean, Object], default: () => GlobalConfig.toolbar.setting },
     buttons: { type: Array, default: () => GlobalConfig.toolbar.buttons },
     size: String,
@@ -26,6 +27,24 @@ export default {
       $table: null,
       isRefresh: false,
       tableFullColumn: [],
+      exportSuffixs: ['csv'],
+      exportTypes: [
+        {
+          value: 'all',
+          label: 'vxe.toolbar.exportAll'
+        },
+        {
+          value: 'selected',
+          label: 'vxe.toolbar.exportSelected'
+        }
+      ],
+      exportStore: {
+        name: '',
+        suffix: 'csv',
+        type: 'all',
+        optHeader: true,
+        optIndex: false
+      },
       settingStore: {
         visible: false
       }
@@ -37,6 +56,9 @@ export default {
     },
     refreshOpts () {
       return Object.assign({}, GlobalConfig.toolbar.refresh, this.refresh)
+    },
+    expsOpts () {
+      return Object.assign({}, GlobalConfig.toolbar.exps, this.exps)
     },
     resizableOpts () {
       return Object.assign({ storageKey: 'VXE_TABLE_CUSTOM_COLUMN_WIDTH' }, GlobalConfig.toolbar.resizable, this.resizable)
@@ -65,7 +87,7 @@ export default {
     GlobalEvent.off(this, 'blur')
   },
   render (h) {
-    let { _e, $scopedSlots, $grid, $table, loading, settingStore, refresh, setting, settingOpts, buttons = [], vSize, tableFullColumn } = this
+    let { _e, $scopedSlots, $grid, $table, loading, settingStore, refresh, exps, setting, settingOpts, buttons = [], vSize, tableFullColumn } = this
     let customBtnOns = {}
     let customWrapperOns = {}
     let $buttons = $scopedSlots.buttons
@@ -115,64 +137,73 @@ export default {
           } : null
         }, UtilTools.getFuncText(item.name))
       })),
-      setting ? h('div', {
-        class: ['vxe-custom--wrapper', {
-          'is--active': settingStore.visible
-        }],
-        ref: 'customWrapper'
+      h('div', {
+        class: 'vxe-tools--operate'
       }, [
-        h('div', {
-          class: 'vxe-custom--setting-btn',
-          on: customBtnOns
-        }, [
-          h('i', {
-            class: GlobalConfig.icon.custom
-          })
-        ]),
-        h('div', {
-          class: 'vxe-custom--option-wrapper'
-        }, [
-          h('div', {
-            class: 'vxe-custom--option',
-            on: customWrapperOns
-          }, tableFullColumn.map(column => {
-            let { property, visible, own } = column
-            let headerTitle = UtilTools.getFuncText(own.title || own.label)
-            return property && headerTitle ? h('vxe-checkbox', {
-              props: {
-                value: visible
-              },
-              attrs: {
-                title: headerTitle
-              },
-              on: {
-                change: value => {
-                  column.visible = value
-                  if (setting && settingOpts.immediate) {
-                    this.updateSetting()
-                  }
-                }
-              }
-            }, headerTitle) : null
-          }))
-        ])
-      ]) : null,
-      refresh ? h('div', {
-        class: 'vxe-refresh--wrapper'
-      }, [
-        h('div', {
+        exps ? h('vxe-button', {
+          class: 'vxe-export--btn',
+          props: {
+            type: 'text',
+            icon: GlobalConfig.icon.export
+          },
+          on: {
+            click: this.exportEvent
+          }
+        }) : null,
+        refresh ? h('vxe-button', {
           class: 'vxe-refresh--btn',
+          props: {
+            type: 'text',
+            icon: GlobalConfig.icon.refresh,
+            loading: this.isRefresh
+          },
           on: {
             click: this.refreshEvent
           }
+        }) : null,
+        setting ? h('div', {
+          class: ['vxe-custom--wrapper', {
+            'is--active': settingStore.visible
+          }],
+          ref: 'customWrapper'
         }, [
-          h('i', {
-            class: [GlobalConfig.icon.refresh, {
-              roll: this.isRefresh
-            }]
-          })
-        ])
-      ]) : null,
+          h('div', {
+            class: 'vxe-custom--setting-btn',
+            on: customBtnOns
+          }, [
+            h('i', {
+              class: GlobalConfig.icon.custom
+            })
+          ]),
+          h('div', {
+            class: 'vxe-custom--option-wrapper'
+          }, [
+            h('div', {
+              class: 'vxe-custom--option',
+              on: customWrapperOns
+            }, tableFullColumn.map(column => {
+              let { property, visible, own } = column
+              let headerTitle = UtilTools.getFuncText(own.title || own.label)
+              return property && headerTitle ? h('vxe-checkbox', {
+                props: {
+                  value: visible
+                },
+                attrs: {
+                  title: headerTitle
+                },
+                on: {
+                  change: value => {
+                    column.visible = value
+                    if (setting && settingOpts.immediate) {
+                      this.updateSetting()
+                    }
+                  }
+                }
+              }, headerTitle) : null
+            }))
+          ])
+        ]) : null
+      ]),
       $tools ? h('div', {
         class: 'vxe-tools--wrapper'
       }, $tools.call(this, { $grid, $table }, h)) : null
@@ -376,6 +407,145 @@ export default {
           UtilTools.emitEvent(this, 'button-click', [params, evnt])
         }
       }
+    },
+    exportEvent () {
+      const { $grid, $table, vSize, exportStore, exportSuffixs, exportTypes } = this
+      const comp = $grid || $table
+      const selectRecords = comp.getSelectRecords()
+      Object.assign(exportStore, {
+        name: '',
+        type: selectRecords.length ? 'selected' : 'all',
+        optHeader: true,
+        optIndex: false
+      })
+      this.$XModal({
+        title: GlobalConfig.i18n('vxe.toolbar.exportTitle'),
+        width: 520,
+        mask: true,
+        lockView: true,
+        showFooter: false,
+        maskClosable: true,
+        size: vSize,
+        slots: {
+          default (params, h) {
+            const $modal = params.$modal
+            return [
+              h('div', {
+                class: 'vxe-export--panel'
+              }, [
+                h('table', [
+                  h('tr', [
+                    h('td', GlobalConfig.i18n('vxe.toolbar.exportName')),
+                    h('td', [
+                      h('input', {
+                        attrs: {
+                          type: 'text',
+                          placeholder: GlobalConfig.i18n('vxe.toolbar.exportNamePlaceholder')
+                        },
+                        domProps: {
+                          value: exportStore.name
+                        },
+                        on: {
+                          input (evnt) {
+                            exportStore.name = evnt.target.value
+                          }
+                        }
+                      })
+                    ])
+                  ]),
+                  h('tr', [
+                    h('td', GlobalConfig.i18n('vxe.toolbar.exportType')),
+                    h('td', [
+                      h('select', {
+                        on: {
+                          change (evnt) {
+                            exportStore.type = evnt.target.value
+                          }
+                        }
+                      }, exportTypes.map(item => {
+                        return h('option', {
+                          attrs: {
+                            value: item.value
+                          },
+                          domProps: {
+                            selected: exportStore.type === item.value
+                          }
+                        }, GlobalConfig.i18n(item.label))
+                      }))
+                    ])
+                  ]),
+                  h('tr', [
+                    h('td', GlobalConfig.i18n('vxe.toolbar.exportSuffix')),
+                    h('td', [
+                      h('select', {
+                        on: {
+                          change (evnt) {
+                            exportStore.type = evnt.target.value
+                          }
+                        }
+                      }, exportSuffixs.map(suffix => {
+                        return h('option', {
+                          attrs: {
+                            value: suffix
+                          },
+                          domProps: {
+                            selected: exportStore.suffix === suffix
+                          }
+                        }, suffix)
+                      }))
+                    ])
+                  ]),
+                  h('tr', [
+                    h('td', GlobalConfig.i18n('vxe.toolbar.exportOpts')),
+                    h('td', [
+                      h('vxe-checkbox', {
+                        model: {
+                          value: exportStore.optHeader,
+                          callback (value) {
+                            exportStore.optHeader = value
+                          }
+                        }
+                      }, GlobalConfig.i18n('vxe.toolbar.exportOptHeader')),
+                      h('vxe-checkbox', {
+                        model: {
+                          value: exportStore.optIndex,
+                          callback (value) {
+                            exportStore.optIndex = value
+                          }
+                        }
+                      }, GlobalConfig.i18n('vxe.toolbar.exportOptIndex'))
+                    ])
+                  ])
+                ]),
+                h('div', {
+                  class: 'vxe-export--panel-btns'
+                }, [
+                  h('vxe-button', {
+                    props: {
+                      type: 'primary',
+                      size: vSize
+                    },
+                    on: {
+                      click () {
+                        const options = {
+                          filename: exportStore.name || GlobalConfig.i18n('vxe.toolbar.exportTitle'),
+                          isHeader: exportStore.optHeader
+                        }
+                        if (exportStore.optIndex) {
+                          // 在 v3.0 中废弃 type=selection
+                          options.columnFilterMethod = column => column.type === 'index' || (column.property && ['checkbox', 'selection', 'radio'].indexOf(column.type) === -1)
+                        }
+                        comp.exportCsv(options)
+                        $modal.close()
+                      }
+                    }
+                  }, GlobalConfig.i18n('vxe.toolbar.exportConfirm'))
+                ])
+              ])
+            ]
+          }
+        }
+      })
     }
   }
 }
