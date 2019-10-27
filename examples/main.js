@@ -33,7 +33,7 @@ function mockData () {
       }
       if (fullIndex === 1) {
         colItem.type = 'checkbox'
-        colItem.title = null
+        colItem.title = '多选'
       } else if (fullIndex === 2) {
         colItem.type = 'index'
         colItem.title = '序号'

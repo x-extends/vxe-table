@@ -76,6 +76,9 @@
       color: #fff;
       border-color: $vxe-primary-color;
       background-color: $vxe-primary-color;
+      .vxe-button--icon {
+        border-color: #fff;
+      }
       &:not(.is--disabled) {
         &:hover {
           @extend %ButtonPrimaryHover;
@@ -120,7 +123,8 @@
     font-size: 12px;
   }
 }
-.vxe-button--loading-icon {
+.vxe-button--loading-icon,
+.vxe-button--icon {
   margin-right: 5px;
 }
 .vxe-button--wrapper,

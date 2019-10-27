@@ -380,6 +380,7 @@ module.exports = {
           id: '唯一 ID 标识',
           size: '尺寸',
           loading: '是否加载中',
+          exps: '导出按钮配置',
           refresh: '刷新按钮',
           resizable: '列宽拖动配置（需要设置 id）',
           setting: '列个性化配置（需要设置 id）'

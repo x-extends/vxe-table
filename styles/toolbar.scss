@@ -29,31 +29,32 @@
     padding: 8px 0
   }
   &.size--medium {
-    .vxe-refresh--btn,
+    .vxe-tools--operate > .vxe-button,
     .vxe-custom--setting-btn {
       font-size: 17px;
     }
   }
   &.size--small {
-    .vxe-refresh--btn,
+    .vxe-tools--operate > .vxe-button,
     .vxe-custom--setting-btn {
       font-size: 15px;
     }
   }
   &.size--mini {
-    .vxe-refresh--btn,
+    .vxe-tools--operate > .vxe-button,
     .vxe-custom--setting-btn {
       font-size: 14px;
     }
   }
   .vxe-tools--wrapper,
-  .vxe-refresh--wrapper,
-  .vxe-custom--wrapper {
+  .vxe-tools--operate {
     float: right;
   }
   .vxe-custom--wrapper {
+    display: inline-block;
     text-align: right;
     position: relative;
+    vertical-align: middle;
     &.is--active {
       .vxe-custom--setting-btn {
         background-color: #D9DADB;
@@ -64,12 +65,14 @@
       }
     }
   }
-  .vxe-refresh--btn,
+  .vxe-tools--operate > .vxe-button,
   .vxe-custom--setting-btn {
     font-size: 18px;
     vertical-align: middle;
-    cursor: pointer;
     user-select: none;
+    cursor: pointer;
+  }
+  .vxe-custom--setting-btn {
     &:hover {
       background-color: #F0F0F0;
       border-radius: 50%;
@@ -77,9 +80,6 @@
     & > i {
       display: block;
     }
-  }
-  .vxe-refresh--btn {
-    padding: 7px;
   }
   .vxe-custom--setting-btn {
     padding: 4px;
@@ -110,5 +110,39 @@
         white-space: nowrap;
       }
     }
+  }
+}
+
+.vxe-export--panel {
+  & > table {
+    tr {
+      td {
+        padding: 8px 10px;
+        &:nth-child(1) {
+          text-align: right;
+          width: 160px;
+          font-weight: 700;
+        }
+        &:nth-child(2) {
+          width: 240px;
+        }
+        & > input,
+        & > select {
+          outline: 0;
+          padding: 0 2px;
+          width: 100%;
+          padding: 5px 8px;
+          color: $vxe-font-color;
+          border-radius: 4px;
+          border: 1px solid $vxe-input-border-color;
+          &:focus {
+            border: 1px solid $vxe-primary-color;
+          }
+        }
+      }
+    }
+  }
+  .vxe-export--panel-btns {
+    text-align: right;
   }
 }

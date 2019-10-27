@@ -6,12 +6,6 @@
       <span class="red">注意：如果要启用横向虚拟滚动，所有的列宽度必须一致，否则无法兼容</span>
     </p>
 
-    <vxe-toolbar>
-      <template v-slot:buttons>
-        <vxe-button @click="loadColumnAndData(10000, 10000)">加载1w列1w条</vxe-button>
-      </template>
-    </vxe-toolbar>
-
     <vxe-grid
       border
       show-overflow
@@ -19,7 +13,11 @@
       ref="xGrid"
       height="300"
       :loading="loading"
-      :checkbox-config="{checkField: 'checked'}">
+      :toolbar="tableToolbar"
+      :checkbox-config="{checkField: 'checked', labelField: 'nickname'}">
+      <template v-slot:buttons>
+        <vxe-button @click="loadColumnAndData(10000, 10000)">加载1w列1w条</vxe-button>
+      </template>
     </vxe-grid>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -38,14 +36,11 @@ export default {
   data () {
     return {
       loading: false,
+      tableToolbar: {
+        exps: true
+      },
       demoCodes: [
         `
-        <vxe-toolbar>
-          <template v-slot:buttons>
-            <vxe-button @click="loadColumnAndData(10000, 10000)">加载1w列1w条</vxe-button>
-          </template>
-        </vxe-toolbar>
-
         <vxe-grid
           border
           show-overflow
@@ -53,14 +48,21 @@ export default {
           ref="xGrid"
           height="300"
           :loading="loading"
-          :checkbox-config="{checkField: 'checked'}">
+          :toolbar="tableToolbar"
+          :checkbox-config="{checkField: 'checked', labelField: 'nickname'}">
+          <template v-slot:buttons>
+            <vxe-button @click="loadColumnAndData(10000, 10000)">加载1w列1w条</vxe-button>
+          </template>
         </vxe-grid>
         `,
         `
         export default {
           data () {
             return {
-              loading: false
+              loading: false,
+              tableToolbar: {
+                exps: true
+              }
             }
           },
           created () {

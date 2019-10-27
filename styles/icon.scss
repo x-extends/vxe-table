@@ -15,6 +15,11 @@
   line-height: 1em;
 }
 
+%PseudoClass {
+  content: "";
+  position: absolute;
+}
+
 .vxe-icon--zoomin {
   width: 0.8em;
   height: 0.8em;
@@ -28,8 +33,7 @@
   @extend %DefaultWidthHeight;
   position: relative;
   &:before {
-    content: "";
-    position: absolute;
+    @extend %PseudoClass;
     right: 0;
     top: 0;
     width: 0.7em;
@@ -39,8 +43,7 @@
     border-color: inherit;
   }
   &:after {
-    content: "";
-    position: absolute;
+    @extend %PseudoClass;
     left: 0.1em;
     bottom: 0.1em;
     width: 0.7em;
@@ -63,10 +66,9 @@
 .vxe-icon--caret-top {
   @extend %DefaultWidthHeight;
   &:before {
-    content: "";
+    @extend %PseudoClass;
     left: 0;
     bottom: 0.25em;
-    position: absolute;
     border-width: 0.5em;
     border-style: solid;
     border-top-color: transparent;
@@ -94,8 +96,7 @@
 
 %BeforeArrowTop {
   &:before {
-    content: "";
-    position: absolute;
+    @extend %PseudoClass;
     top: 0.38em;
     left: 0.12em;
     width: 0.5em;
@@ -131,8 +132,7 @@
 
 %BeforeDArrowTop {
   &:before {
-    content: "";
-    position: absolute;
+    @extend %PseudoClass;
     top: 0.24em;
     left: 0.26em;
     width: 0.5em;
@@ -148,8 +148,7 @@
 
 %AfterDArrowTop {
   &:after {
-    content: "";
-    position: absolute;
+    @extend %PseudoClass;
     top: 0.42em;
     left: 0.1em;
     width: 0.5em;
@@ -186,8 +185,7 @@
 .vxe-icon--funnel {
   @extend %DefaultWidthHeight;
   &:before {
-    content: "";
-    position: absolute;
+    @extend %PseudoClass;
     top: 0.1em;
     left: 0;
     border-width: 0.5em;
@@ -198,8 +196,7 @@
     border-left-color: transparent;
   }
   &:after {
-    content: "";
-    position: absolute;
+    @extend %PseudoClass;
     left: 0.4em;
     top: 0.5em;
     width: 0;
@@ -217,8 +214,7 @@
   border-style: solid;
   border-color: inherit;
   &:before {
-    content: "";
-    position: absolute;
+    @extend %PseudoClass;
     top: -0.1em;
     right: -0.1em;
     width: 0.4em;
@@ -226,8 +222,7 @@
     background-color: #fff;
   }
   &:after {
-    content: "";
-    position: absolute;
+    @extend %PseudoClass;
     left: 0.15em;
     top: 0.12em;
     width: 0.9em;
@@ -256,8 +251,7 @@
   @extend %DefaultWidthHeight;
   &:before,
   &:after {
-    content: "";
-    position: absolute;
+    @extend %PseudoClass;
     left: 0;
     top: 0;
     transform: rotate(45deg);
@@ -295,8 +289,7 @@
   }
   &:before,
   &:after {
-    content: '';
-    position: absolute;
+    @extend %PseudoClass;
     width: 0;
     height: 0;
     border-width: 0.25em;
@@ -385,8 +378,7 @@
     @extend %BeforeSolidRadius;
   }
   &:after {
-    content: "";
-    position: absolute;
+    @extend %PseudoClass;
     height: 0.55em;
     width: 0.3em;
     left: 0.35em;
@@ -409,5 +401,39 @@
     @extend %AfterSolidRadius;
     content: "\2716";
     left: -0.1em;
+  }
+}
+
+.vxe-icon--download {
+  @extend %DefaultWidthHeight;
+  height: 0.9em;
+  border-width: 0;
+  border-style: solid;
+  border-color: inherit;
+  border-bottom-width: 0.1em;
+  margin-bottom: 0.1em;
+  &:before {
+    @extend %PseudoClass;
+    left: 0.47em;
+    bottom: 0.26em;
+    height: 0.6em;
+    border-width: 0;
+    border-style: solid;
+    border-color: inherit;
+    border-right-width: 0.1em;
+  }
+  &:after {
+    @extend %PseudoClass;
+    left: 0.23em;
+    bottom: 0.26em;
+    width: 0.6em;
+    height: 0.6em;
+    border-width: 0.1em;
+    border-style: solid;
+    border-top-color: inherit;
+    border-right-color: inherit;
+    border-bottom-color: transparent;
+    border-left-color: transparent;
+    transform: rotate(135deg);
   }
 }

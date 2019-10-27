@@ -64,7 +64,7 @@ export default {
     this.modalZindex = this.zIndex || UtilTools.getZIndex()
   },
   mounted () {
-    let { width, height } = this
+    let { $listeners, events = {}, width, height } = this
     let modalBoxElem = this.getBox()
     Object.assign(modalBoxElem.style, {
       width: width ? (isNaN(width) ? width : `${width}px`) : null,
@@ -74,6 +74,13 @@ export default {
       GlobalEvent.on(this, 'keydown', this.handleGlobalKeydownEvent)
     }
     document.body.appendChild(this.$el)
+    // 触发 inserted 事件
+    const params = { type: 'inserted', $modal: this }
+    if ($listeners.inserted) {
+      this.$emit('inserted', params)
+    } else if (events.inserted) {
+      events.inserted.call(this, params)
+    }
   },
   beforeDestroy () {
     GlobalEvent.off(this, 'keydown')
