@@ -56,6 +56,11 @@
       border: 1px solid $vxe-primary-color;
     }
   }
+  .vxe-default-input {
+    &::-webkit-inner-spin-button {
+      margin-top: floor($vxe-table-row-height-default - 38);
+    }
+  }
   .vxe-default-textarea {
     resize: none;
     vertical-align: middle;
@@ -246,6 +251,11 @@
     .vxe-input--wrapper {
       height: floor($vxe-table-row-height-medium - 8);
     }
+    .vxe-default-input {
+      &::-webkit-inner-spin-button {
+        margin-top: floor($vxe-table-row-height-medium - 36);
+      }
+    }
   }
   &.size--small {
     font-size: $vxe-font-size-small;
@@ -268,6 +278,11 @@
     .vxe-input--wrapper {
       height: floor($vxe-table-row-height-small - 8);
     }
+    .vxe-default-input {
+      &::-webkit-inner-spin-button {
+        margin-top: floor($vxe-table-row-height-small - 34);
+      }
+    }
   }
   &.size--mini {
     font-size: $vxe-font-size-mini;
@@ -289,6 +304,11 @@
     .vxe-default-select,
     .vxe-input--wrapper {
       height: floor($vxe-table-row-height-mini - 8);
+    }
+    .vxe-default-input {
+      &::-webkit-inner-spin-button {
+        margin-top: floor($vxe-table-row-height-mini - 32);
+      }
     }
   }
   .vxe-cell {

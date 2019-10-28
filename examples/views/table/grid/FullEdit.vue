@@ -126,7 +126,7 @@ export default {
       },
       tableColumn: [
         { type: 'checkbox', width: 50 },
-        { type: 'index', width: 60 },
+        { type: 'index', title: '序号', width: 80 },
         { field: 'name', title: 'Name', remoteSort: true, editRender: { name: 'input' } },
         { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
         { field: 'sex', title: 'Sex', editRender: { name: 'select', options: [] } },
@@ -256,7 +256,7 @@ export default {
               },
               tableColumn: [
                 { type: 'checkbox', width: 50 },
-                { type: 'index', width: 60 },
+                { type: 'index', title: '序号', width: 80 },
                 { field: 'name', title: 'Name', remoteSort: true, editRender: { name: 'input' } },
                 { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
                 { field: 'sex', title: 'Sex', editRender: { name: 'select', options: [] } },

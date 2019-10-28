@@ -26,6 +26,9 @@
   }
   .vxe-input {
     height: 40px;
+    &::-webkit-inner-spin-button {
+      margin-top: 10px;
+    }
   }
   .vxe-textarea {
     height: 100%;

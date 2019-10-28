@@ -26,6 +26,9 @@ export default {
       resetFilter: 'リセット',
       allFilter: '全て'
     },
+    column: {
+      indexTitle: '#'
+    },
     grid: {
       selectOneRecord: '少なくとも1つのレコードを選択してください',
       deleteSelectRecord: 'レコードを削除してもよろしいですか？',
@@ -54,9 +57,9 @@ export default {
       expType: '要导出的数据',
       expAll: '全部数据',
       expSelected: '选中数据',
+      expColumn: '要导出的字段',
       expOpts: '导出参数',
       expOptHeader: '表头',
-      expOptIndex: '序号',
       expOptOriginal: '源',
       expConfirm: '导出'
     }

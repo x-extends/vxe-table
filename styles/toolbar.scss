@@ -116,6 +116,8 @@
 .vxe-export--panel {
   & > table {
     width: 100%;
+    border: 0;
+    table-layout: fixed;
     tr {
       td {
         padding: 8px 10px;
@@ -130,7 +132,6 @@
         & > input,
         & > select {
           outline: 0;
-          padding: 0 2px;
           width: 80%;
           padding: 5px 8px;
           color: $vxe-font-color;
@@ -140,6 +141,45 @@
             border: 1px solid $vxe-primary-color;
           }
         }
+      }
+    }
+  }
+  .vxe-export--panel-column {
+    width: 80%;
+    max-height: 216px;
+    overflow: auto;
+    border-radius: 4px;
+    border: 1px solid $vxe-input-border-color;
+    padding: 5px 0;
+    margin: 0;
+    & > li {
+      position: relative;
+      padding: 4px 30px 4px 10px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-weight: 700;
+      cursor: pointer;
+      &.active {
+        color: $vxe-primary-color;
+        &:before {
+          content: "";
+          position: absolute;
+          height: 0.66em;
+          width: 0.34em;
+          top: 0.5em;
+          right: 15px;
+          border-width: 0.1em;
+          border-style: solid;
+          border-color: inherit;
+          border-left: 0;
+          border-top: 0;
+          -webkit-transform: rotate(45deg);
+          transform: rotate(45deg);
+        }
+      }
+      &:hover {
+        background-color: $vxe-table-row-hover-background-color;
       }
     }
   }
