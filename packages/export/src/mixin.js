@@ -1,10 +1,9 @@
 import XEUtils from 'xe-utils/methods/xe-utils'
 import { UtilTools, DomTools } from '../../tools'
 
-function getCsvContent ($table, opts, oColumns, oData) {
+function getCsvContent ($table, opts, oColumns, fullData) {
   let isOriginal = opts.original
-  let tableElem = $table.$el
-  let { columns, datas } = getCsvData(opts, oData, oColumns, tableElem)
+  let { columns, datas } = getCsvData($table, opts, fullData, oColumns)
   let content = '\ufeff'
   if (opts.isHeader) {
     content += columns.map(({ own }) => UtilTools.getFuncText(own.title || own.label)).join(',') + '\n'
@@ -56,29 +55,27 @@ function downloadCsc (opts, content) {
   }
 }
 
-function getCsvLabelData (columns, oData, tableElem) {
-  let trElemList = tableElem.querySelectorAll('.vxe-table--body-wrapper.body--wrapper .vxe-body--row')
-  return Array.from(trElemList).map(trElem => {
+function getCsvLabelData ($table, columns, datas) {
+  return datas.map(row => {
     let item = {}
     columns.forEach(column => {
-      let cell = trElem.querySelector(`.${column.id}`)
+      let cell = DomTools.getCell($table, { row, column })
       item[column.id] = cell ? cell.innerText.trim() : ''
     })
     return item
   })
 }
 
-function getCsvData (opts, oData, oColumns, tableElem) {
-  let isOriginal = opts.original
+function getCsvData ($table, opts, fullData, oColumns) {
   let columns = opts.columns ? opts.columns : oColumns
+  let datas = opts.data || fullData
   if (opts.columnFilterMethod) {
     columns = columns.filter(opts.columnFilterMethod)
   }
-  let datas = opts.data ? opts.data : (isOriginal ? oData : getCsvLabelData(columns, oData, tableElem))
   if (opts.dataFilterMethod) {
     datas = datas.filter(opts.dataFilterMethod)
   }
-  return { columns, datas }
+  return { columns, datas: opts.original ? datas : getCsvLabelData($table, columns, datas) }
 }
 
 function getCsvUrl (opts, content) {
@@ -99,7 +96,7 @@ export default {
     _exportCsv (options) {
       let { visibleColumn, scrollXLoad, scrollYLoad, treeConfig } = this
       let opts = Object.assign({
-        filename: 'table.csv',
+        filename: '',
         original: !!treeConfig,
         isHeader: true,
         isFooter: true,
@@ -111,7 +108,9 @@ export default {
         dataFilterMethod: null,
         footerFilterMethod: null
       }, options)
-      if (opts.filename.indexOf('.csv') === -1) {
+      if (!opts.filename) {
+        opts.filename = 'table.csv'
+      } else if (opts.filename.indexOf('.csv') === -1) {
         opts.filename += '.csv'
       }
       if (!opts.original) {
@@ -121,11 +120,11 @@ export default {
         }
       }
       let columns = visibleColumn
-      let oData = this.tableFullData
+      let fullData = this.tableFullData
       if (treeConfig) {
-        oData = XEUtils.toTreeArray(oData, treeConfig)
+        fullData = XEUtils.toTreeArray(fullData, treeConfig)
       }
-      return downloadCsc(opts, getCsvContent(this, opts, columns, oData))
+      return downloadCsc(opts, getCsvContent(this, opts, columns, fullData))
     }
   }
 }

@@ -47,17 +47,18 @@ export default {
       cancel: '取消'
     },
     toolbar: {
-      exportTitle: '匯出數據',
-      exportName: '檔名',
-      exportNamePlaceholder: '請輸入檔名',
-      exportSuffix: '檔案類型',
-      exportType: '要匯出的數據',
-      exportAll: '全部數據',
-      exportSelected: '選中數據',
-      exportOpts: '匯出參數',
-      exportOptHeader: '表頭',
-      exportOptIndex: '序號',
-      exportConfirm: '匯出'
+      expTitle: '匯出數據',
+      expName: '檔名',
+      expNamePlaceholder: '請輸入檔名',
+      expSuffix: '檔案類型',
+      expType: '要匯出的數據',
+      expAll: '全部數據',
+      expSelected: '選中數據',
+      expOpts: '匯出參數',
+      expOptHeader: '表頭',
+      expOptIndex: '序號',
+      expOptOriginal: '源',
+      expConfirm: '匯出'
     }
   }
 }

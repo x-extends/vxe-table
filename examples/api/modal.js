@@ -272,7 +272,7 @@ const apis = [
     list: [
       {
         name: 'inserted',
-        desc: '在窗口元素插入父节点时会触发该事件',
+        desc: '在窗口元素插入父节点时会触发该事件（只会执行一次）',
         version: '2.6.6',
         type: '{type}',
         enum: '',

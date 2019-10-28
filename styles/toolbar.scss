@@ -115,22 +115,23 @@
 
 .vxe-export--panel {
   & > table {
+    width: 100%;
     tr {
       td {
         padding: 8px 10px;
         &:nth-child(1) {
           text-align: right;
-          width: 160px;
+          width: 30%;
           font-weight: 700;
         }
         &:nth-child(2) {
-          width: 240px;
+          width: 70%;
         }
         & > input,
         & > select {
           outline: 0;
           padding: 0 2px;
-          width: 100%;
+          width: 80%;
           padding: 5px 8px;
           color: $vxe-font-color;
           border-radius: 4px;
@@ -144,5 +145,13 @@
   }
   .vxe-export--panel-btns {
     text-align: right;
+  }
+}
+.vxe-modal--wrapper {
+  &.size--mini,
+  &.size--small {
+    .vxe-export--panel {
+      font-size: 12px;
+    }
   }
 }
