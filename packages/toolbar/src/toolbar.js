@@ -418,7 +418,8 @@ export default {
       const selectRecords = comp.getSelectRecords()
       const virtualScroller = comp.getVirtualScroller()
       const exportColumns = fullColumn.filter(column => column.type === 'index' || (column.property && ['checkbox', 'selection', 'radio'].indexOf(column.type) === -1))
-      const original = virtualScroller.scrollX || virtualScroller.scrollY
+      const treeStatus = comp.getTreeStatus()
+      const original = !!treeStatus || virtualScroller.scrollX || virtualScroller.scrollY
       // 重置条件
       exportStore.mode = selectRecords.length ? 'selected' : 'all'
       Object.assign(exportOpts, {

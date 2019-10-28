@@ -67,6 +67,7 @@ export default {
           },
           { code: 'myBtn', name: '自定义按钮' }
         ],
+        exps: true,
         refresh: true,
         resizable: {
           storage: true
@@ -139,6 +140,7 @@ export default {
                   },
                   { code: 'myBtn', name: '自定义按钮' }
                 ],
+                exps: true,
                 refresh: true,
                 resizable: {
                   storage: true

@@ -2076,6 +2076,19 @@ const Methods = {
     return this.$nextTick().then(() => isExists ? this.recalculate() : 0)
   },
   /**
+   * 获取数表格状态
+   */
+  getTreeStatus () {
+    const { treeConfig, treeExpandeds } = this
+    if (treeConfig) {
+      return {
+        config: treeConfig,
+        expandeds: treeExpandeds
+      }
+    }
+    return null
+  },
+  /**
    * 展开树节点事件
    */
   triggerTreeExpandEvent (evnt, { row }) {
