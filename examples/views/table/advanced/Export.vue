@@ -1,13 +1,13 @@
 <template>
   <div>
     <p class="tip">
-      通过调用 <table-api-link prop="exportCsv"/> 函数可以直接将表格导出为 .csv 格式的文件<br>
+      通过调用 <table-api-link prop="exportData"/> 函数可以直接将表格导出为 .csv 格式的文件<br>
       <span class="red">注：默认会排除 field 为空和 type 相关的功能列；如果需要导出索引，请通过 <table-api-link prop="columnFilterMethod"/> 自定义筛选条件</span>
     </p>
 
     <vxe-toolbar>
       <template v-slot:buttons>
-        <vxe-button @click="exportCsvEvent">默认导出</vxe-button>
+        <vxe-button @click="exportDataEvent">默认导出</vxe-button>
       </template>
     </vxe-toolbar>
 
@@ -34,7 +34,7 @@
 
     <vxe-toolbar>
       <template v-slot:buttons>
-        <vxe-button @click="exportCsvEvent2">导出指定列 [name,sex]</vxe-button>
+        <vxe-button @click="exportDataEvent2">导出指定列 [name,sex]</vxe-button>
       </template>
     </vxe-toolbar>
 
@@ -61,7 +61,7 @@
 
     <vxe-toolbar>
       <template v-slot:buttons>
-        <vxe-button @click="exportCsvEvent3">导出指定第10-20行</vxe-button>
+        <vxe-button @click="exportDataEvent3">导出指定第10-20行</vxe-button>
       </template>
     </vxe-toolbar>
 
@@ -88,7 +88,7 @@
 
     <vxe-toolbar>
       <template v-slot:buttons>
-        <vxe-button @click="exportCsvEvent4">完整配置</vxe-button>
+        <vxe-button @click="exportDataEvent4">完整配置</vxe-button>
       </template>
     </vxe-toolbar>
 
@@ -124,7 +124,7 @@ export default {
         `
         <vxe-toolbar>
           <template v-slot:buttons>
-            <vxe-button @click="exportCsvEvent">默认导出</vxe-button>
+            <vxe-button @click="exportDataEvent">默认导出</vxe-button>
           </template>
         </vxe-toolbar>
 
@@ -151,8 +151,8 @@ export default {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 50)
           },
           methods: {
-            exportCsvEvent () {
-              this.$refs.xTable1.exportCsv()
+            exportDataEvent () {
+              this.$refs.xTable1.exportData()
             }
           }
         }
@@ -160,7 +160,7 @@ export default {
         `
         <vxe-toolbar>
           <template v-slot:buttons>
-            <vxe-button @click="exportCsvEvent2">导出指定列 [name,sex]</vxe-button>
+            <vxe-button @click="exportDataEvent2">导出指定列 [name,sex]</vxe-button>
           </template>
         </vxe-toolbar>
 
@@ -187,8 +187,8 @@ export default {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 50)
           },
           methods: {
-            exportCsvEvent2 () {
-              this.$refs.xTable2.exportCsv({
+            exportDataEvent2 () {
+              this.$refs.xTable2.exportData({
                 columnFilterMethod: column => ['name', 'sex'].includes(column.property)
               })
             }
@@ -198,7 +198,7 @@ export default {
         `
         <vxe-toolbar>
           <template v-slot:buttons>
-            <vxe-button @click="exportCsvEvent3">导出指定第10-20行</vxe-button>
+            <vxe-button @click="exportDataEvent3">导出指定第10-20行</vxe-button>
           </template>
         </vxe-toolbar>
 
@@ -225,8 +225,8 @@ export default {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 50)
           },
           methods: {
-            exportCsvEvent3 () {
-              this.$refs.xTable3.exportCsv({
+            exportDataEvent3 () {
+              this.$refs.xTable3.exportData({
                 dataFilterMethod: (row, rowIndex) => rowIndex >= 9 && rowIndex < 20
               })
             }
@@ -236,7 +236,7 @@ export default {
         `
         <vxe-toolbar>
           <template v-slot:buttons>
-            <vxe-button @click="exportCsvEvent4">完整配置</vxe-button>
+            <vxe-button @click="exportDataEvent4">完整配置</vxe-button>
           </template>
         </vxe-toolbar>
 
@@ -263,8 +263,8 @@ export default {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 50)
           },
           methods: {
-            exportCsvEvent4 () {
-              this.$refs.xTable1.exportCsv({
+            exportDataEvent4 () {
+              this.$refs.xTable1.exportData({
                 filename: '自定义文件名.csv',
                 original: true,
                 isHeader: false,
@@ -289,21 +289,21 @@ export default {
     })
   },
   methods: {
-    exportCsvEvent () {
-      this.$refs.xTable1.exportCsv()
+    exportDataEvent () {
+      this.$refs.xTable1.exportData()
     },
-    exportCsvEvent2 () {
-      this.$refs.xTable2.exportCsv({
+    exportDataEvent2 () {
+      this.$refs.xTable2.exportData({
         columnFilterMethod: column => ['name', 'sex'].includes(column.property)
       })
     },
-    exportCsvEvent3 () {
-      this.$refs.xTable3.exportCsv({
+    exportDataEvent3 () {
+      this.$refs.xTable3.exportData({
         dataFilterMethod: (row, rowIndex) => rowIndex >= 9 && rowIndex < 20
       })
     },
-    exportCsvEvent4 () {
-      this.$refs.xTable1.exportCsv({
+    exportDataEvent4 () {
+      this.$refs.xTable1.exportData({
         filename: '自定义文件名.csv',
         original: true,
         isHeader: false,

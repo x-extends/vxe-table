@@ -13,7 +13,6 @@
       ref="xGrid"
       height="300"
       :loading="loading"
-      :toolbar="tableToolbar"
       :checkbox-config="{checkField: 'checked', labelField: 'nickname'}">
       <template v-slot:buttons>
         <vxe-button @click="loadColumnAndData(10000, 10000)">加载1w列1w条</vxe-button>
@@ -36,9 +35,6 @@ export default {
   data () {
     return {
       loading: false,
-      tableToolbar: {
-        exps: true
-      },
       demoCodes: [
         `
         <vxe-grid
@@ -48,7 +44,6 @@ export default {
           ref="xGrid"
           height="300"
           :loading="loading"
-          :toolbar="tableToolbar"
           :checkbox-config="{checkField: 'checked', labelField: 'nickname'}">
           <template v-slot:buttons>
             <vxe-button @click="loadColumnAndData(10000, 10000)">加载1w列1w条</vxe-button>
@@ -59,10 +54,7 @@ export default {
         export default {
           data () {
             return {
-              loading: false,
-              tableToolbar: {
-                exps: true
-              }
+              loading: false
             }
           },
           created () {

@@ -67,9 +67,9 @@ export default {
         </vxe-table>
         `,
         `
-        VXETable.menus.add('exportCSV', (params, event) => {
+        VXETable.menus.add('exportData', (params, event) => {
           let { $table } = params
-          $table.exportCsv()
+          $table.exportData()
         })
 
         VXETable.menus.add('insert', (params, event) => {
@@ -85,7 +85,7 @@ export default {
               bodyMenus: [
                 [
                   {
-                    code: 'exportCSV',
+                    code: 'exportData',
                     name: '导出.csv'
                   },
                   {

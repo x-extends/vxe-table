@@ -7,9 +7,7 @@ import { Buttons } from '../../v-x-e-table'
 const methods = {}
 const propKeys = Object.keys(Table.props)
 
-Object.keys(Table.methods).concat([
-  'exportCsv'
-]).forEach(name => {
+Object.keys(Table.methods).forEach(name => {
   methods[name] = function () {
     return this.$refs.xTable[name].apply(this.$refs.xTable[name], arguments)
   }
@@ -224,7 +222,7 @@ export default {
             this.handleDeleteRow(code, 'vxe.grid.removeSelectRecord', () => this.removeSelecteds())
             break
           case 'export':
-            this.exportCsv()
+            this.exportData()
             break
           case 'reset_custom':
             this.resetAll()

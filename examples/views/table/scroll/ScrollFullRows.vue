@@ -7,7 +7,7 @@
       <span class="red">注意：如果要启用纵向虚拟滚动，所有的行度必须一致，否则无法兼容</span>
     </p>
 
-    <vxe-toolbar exps>
+    <vxe-toolbar>
       <template v-slot:buttons>
         <vxe-button @click="loadList(100000)">加载10w条</vxe-button>
         <vxe-button @click="$refs.xTable.toggleRowSelection($refs.xTable.getData(1))">切换第二行选中</vxe-button>
@@ -84,7 +84,7 @@ export default {
       loading: false,
       demoCodes: [
         `
-        <vxe-toolbar exps>
+        <vxe-toolbar>
           <template v-slot:buttons>
             <vxe-button @click="loadList(100000)">加载10w条</vxe-button>
             <vxe-button @click="$refs.xTable.toggleRowSelection($refs.xTable.getData(1))">切换第二行选中</vxe-button>

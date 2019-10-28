@@ -27,8 +27,8 @@ export default {
       $table: null,
       isRefresh: false,
       tableFullColumn: [],
-      exportSuffixs: ['csv'],
-      exportTypes: [
+      exportTypes: ['csv', 'html'],
+      exportModes: [
         {
           value: 'all',
           label: 'vxe.toolbar.expAll'
@@ -40,11 +40,11 @@ export default {
       ],
       exportStore: {
         name: '',
-        suffix: 'csv',
-        type: 'all'
+        mode: ''
       },
       exportOpts: {
         filename: '',
+        type: '',
         original: false,
         isHeader: false
       },
@@ -412,17 +412,19 @@ export default {
       }
     },
     exportEvent () {
-      const { $grid, $table, vSize, exportStore, exportOpts, exportSuffixs, exportTypes } = this
+      const { $grid, $table, vSize, exportStore, exportOpts, exportTypes, exportModes } = this
       const comp = $grid || $table
       const { fullColumn } = comp.getTableColumn()
       const selectRecords = comp.getSelectRecords()
       const virtualScroller = comp.getVirtualScroller()
       const exportColumns = fullColumn.filter(column => column.type === 'index' || (column.property && ['checkbox', 'selection', 'radio'].indexOf(column.type) === -1))
+      const original = virtualScroller.scrollX || virtualScroller.scrollY
       // 重置条件
-      exportStore.type = selectRecords.length ? 'selected' : 'all'
+      exportStore.mode = selectRecords.length ? 'selected' : 'all'
       Object.assign(exportOpts, {
         filename: '',
-        original: virtualScroller.scrollX || virtualScroller.scrollY,
+        type: 'csv',
+        original: original,
         isHeader: true
       })
       exportColumns.forEach(column => {
@@ -454,6 +456,7 @@ export default {
                     h('td', GlobalConfig.i18n('vxe.toolbar.expName')),
                     h('td', [
                       h('input', {
+                        ref: 'filename',
                         attrs: {
                           type: 'text',
                           placeholder: GlobalConfig.i18n('vxe.toolbar.expNamePlaceholder')
@@ -470,42 +473,42 @@ export default {
                     ])
                   ]),
                   h('tr', [
-                    h('td', GlobalConfig.i18n('vxe.toolbar.expSuffix')),
-                    h('td', [
-                      h('select', {
-                        on: {
-                          change (evnt) {
-                            exportStore.type = evnt.target.value
-                          }
-                        }
-                      }, exportSuffixs.map(suffix => {
-                        return h('option', {
-                          attrs: {
-                            value: suffix
-                          },
-                          domProps: {
-                            selected: exportStore.suffix === suffix
-                          }
-                        }, suffix)
-                      }))
-                    ])
-                  ]),
-                  h('tr', [
                     h('td', GlobalConfig.i18n('vxe.toolbar.expType')),
                     h('td', [
                       h('select', {
                         on: {
                           change (evnt) {
-                            exportStore.type = evnt.target.value
+                            exportOpts.type = evnt.target.value
                           }
                         }
-                      }, exportTypes.map(item => {
+                      }, exportTypes.map(type => {
+                        return h('option', {
+                          attrs: {
+                            value: type
+                          },
+                          domProps: {
+                            selected: exportOpts.type === type
+                          }
+                        }, type)
+                      }))
+                    ])
+                  ]),
+                  h('tr', [
+                    h('td', GlobalConfig.i18n('vxe.toolbar.expMode')),
+                    h('td', [
+                      h('select', {
+                        on: {
+                          change (evnt) {
+                            exportStore.mode = evnt.target.value
+                          }
+                        }
+                      }, exportModes.map(item => {
                         return h('option', {
                           attrs: {
                             value: item.value
                           },
                           domProps: {
-                            selected: exportStore.type === item.value
+                            selected: exportStore.mode === item.value
                           }
                         }, GlobalConfig.i18n(item.label))
                       }))
@@ -547,7 +550,8 @@ export default {
                       }, GlobalConfig.i18n('vxe.toolbar.expOptHeader')),
                       h('vxe-checkbox', {
                         props: {
-                          size: vSize
+                          size: vSize,
+                          disabled: original
                         },
                         model: {
                           value: exportOpts.original,
@@ -575,10 +579,10 @@ export default {
                         if (!options.filename) {
                           options.filename = GlobalConfig.i18n('vxe.toolbar.expTitle')
                         }
-                        if (exportStore.type === 'selected') {
+                        if (exportStore.mode === 'selected') {
                           options.data = selectRecords
                         }
-                        comp.exportCsv(options)
+                        comp.exportData(options)
                         $modal.close()
                       }
                     }
@@ -586,6 +590,11 @@ export default {
                 ])
               ])
             ]
+          }
+        },
+        events: {
+          show ({ $modal }) {
+            $modal.$refs.filename.focus()
           }
         }
       })
