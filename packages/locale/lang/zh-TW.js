@@ -59,7 +59,8 @@ export default {
       expSelected: '選中數據',
       expColumn: '要匯出的欄位',
       expOpts: '匯出參數',
-      expOptHeader: '表頭',
+      expOptHeader: '錶頭',
+      expOptFooter: '錶尾',
       expOptOriginal: '源',
       expConfirm: '匯出'
     }

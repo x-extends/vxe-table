@@ -46,7 +46,8 @@ export default {
         filename: '',
         type: '',
         original: false,
-        isHeader: false
+        isHeader: false,
+        isFooter: false
       },
       settingStore: {
         visible: false
@@ -415,18 +416,21 @@ export default {
       const { $grid, $table, vSize, exportStore, exportOpts, exportTypes, exportModes } = this
       const comp = $grid || $table
       const { fullColumn } = comp.getTableColumn()
+      const { footerData } = comp.getTableData()
       const selectRecords = comp.getSelectRecords()
       const virtualScroller = comp.getVirtualScroller()
       const exportColumns = fullColumn.filter(column => column.type === 'index' || (column.property && ['checkbox', 'selection', 'radio'].indexOf(column.type) === -1))
       const treeStatus = comp.getTreeStatus()
-      const original = !!treeStatus || virtualScroller.scrollX || virtualScroller.scrollY
+      const forceOriginal = !!treeStatus || virtualScroller.scrollX || virtualScroller.scrollY
+      const hasFooter = !!footerData.length
       // 重置条件
       exportStore.mode = selectRecords.length ? 'selected' : 'all'
       Object.assign(exportOpts, {
         filename: '',
         type: 'csv',
-        original: original,
-        isHeader: true
+        original: forceOriginal,
+        isHeader: true,
+        isFooter: hasFooter
       })
       exportColumns.forEach(column => {
         column.checked = column.type !== 'index'
@@ -552,7 +556,19 @@ export default {
                       h('vxe-checkbox', {
                         props: {
                           size: vSize,
-                          disabled: original
+                          disabled: !hasFooter
+                        },
+                        model: {
+                          value: exportOpts.isFooter,
+                          callback (value) {
+                            exportOpts.isFooter = value
+                          }
+                        }
+                      }, GlobalConfig.i18n('vxe.toolbar.expOptFooter')),
+                      h('vxe-checkbox', {
+                        props: {
+                          size: vSize,
+                          disabled: forceOriginal
                         },
                         model: {
                           value: exportOpts.original,

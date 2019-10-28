@@ -60,6 +60,7 @@ export default {
       expColumn: '要导出的字段',
       expOpts: '导出参数',
       expOptHeader: '表头',
+      expOptFooter: '表尾',
       expOptOriginal: '源',
       expConfirm: '导出'
     }

@@ -17,7 +17,7 @@
       </a-form-item>
     </a-form>
 
-    <vxe-toolbar setting>
+    <vxe-toolbar exps setting>
       <template v-slot:buttons>
         <a-button @click="insertEvent">新增</a-button>
         <a-button @click="saveEvent">保存</a-button>
@@ -147,7 +147,7 @@ export default {
             </a-form-item>
           </a-form>
 
-          <vxe-toolbar setting>
+          <vxe-toolbar exps setting>
             <template v-slot:buttons>
               <a-button @click="insertEvent">新增</a-button>
               <a-button @click="saveEvent">保存</a-button>
