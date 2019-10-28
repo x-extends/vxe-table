@@ -8,7 +8,7 @@
         <vxe-button  @click="getInsertEvent">获取新增</vxe-button>
         <vxe-button @click="getRemoveEvent">获取删除</vxe-button>
         <vxe-button @click="getUpdateEvent">获取修改</vxe-button>
-        <vxe-button @click="exportCsvEvent">导出.csv</vxe-button>
+        <vxe-button @click="exportDataEvent">导出.csv</vxe-button>
         <input type="file" @change="fileChangeEvent" accept=".csv,.xls,.xlsx">
       </template>
     </vxe-toolbar>
@@ -89,7 +89,7 @@ export default {
         <vxe-button  @click="getInsertEvent">获取新增</vxe-button>
         <vxe-button @click="getRemoveEvent">获取删除</vxe-button>
         <vxe-button @click="getUpdateEvent">获取修改</vxe-button>
-        <vxe-button @click="exportCsvEvent">导出.csv</vxe-button>
+        <vxe-button @click="exportDataEvent">导出.csv</vxe-button>
         <input type="file" @change="fileChangeEvent" accept=".csv,.xls,.xlsx">
 
         <vxe-excel
@@ -149,8 +149,8 @@ export default {
               let updateRecords = this.$refs.xExcel.getUpdateRecords()
               this.$XModal.alert(updateRecords.length)
             },
-            exportCsvEvent () {
-              this.$refs.xExcel.exportCsv()
+            exportDataEvent () {
+              this.$refs.xExcel.exportData()
             },
             fileChangeEvent (evnt) {
               let files = evnt.target.files
@@ -209,8 +209,8 @@ export default {
       let updateRecords = this.$refs.xExcel.getUpdateRecords()
       this.$XModal.alert(updateRecords.length)
     },
-    exportCsvEvent () {
-      this.$refs.xExcel.exportCsv()
+    exportDataEvent () {
+      this.$refs.xExcel.exportData()
     },
     fileChangeEvent (evnt) {
       let files = evnt.target.files

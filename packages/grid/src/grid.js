@@ -222,7 +222,7 @@ export default {
             this.handleDeleteRow(code, 'vxe.grid.removeSelectRecord', () => this.removeSelecteds())
             break
           case 'export':
-            this.exportCsv()
+            this.exportData()
             break
           case 'reset_custom':
             this.resetAll()

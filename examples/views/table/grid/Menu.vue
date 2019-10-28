@@ -217,7 +217,7 @@ export default {
                   xGrid.clearData(row, column.property)
                   break
                 case 'export':
-                  xGrid.exportCsv()
+                  xGrid.exportData()
                   break
               }
             },
@@ -283,7 +283,7 @@ export default {
           xGrid.clearData(row, column.property)
           break
         case 'export':
-          xGrid.exportCsv()
+          xGrid.exportData()
           break
       }
     },

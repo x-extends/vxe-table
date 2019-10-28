@@ -2620,8 +2620,18 @@ const apis = [
       },
       {
         name: 'exportCsv(options)',
-        desc: '将表格数据导出为 .csv 文件（支持所有主流的浏览器，不支持合并行或列）',
+        disabled: true,
+        desc: '即将废弃，请使用 exportData',
         version: '',
+        type: 'Promise',
+        enum: '',
+        defVal: 'options: object',
+        list: []
+      },
+      {
+        name: 'exportData(options)',
+        desc: '将表格数据导出为 csv/html 文件（不支持合并行或列）',
+        version: '1.15.8',
         type: 'Promise',
         enum: '',
         defVal: 'options',
@@ -2632,7 +2642,16 @@ const apis = [
             version: '',
             type: 'String',
             enum: '',
-            defVal: 'table.csv',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'type',
+            desc: '文件类型',
+            version: '1.15.8',
+            type: 'String',
+            enum: 'csv, html',
+            defVal: 'csv',
             list: []
           },
           {
@@ -2682,7 +2701,7 @@ const apis = [
           },
           {
             name: 'columns',
-            desc: '自定义列',
+            desc: '自定义列（如果指定了 columns 则 columnFilterMethod 默认为空）',
             version: '',
             type: 'Array',
             enum: '',

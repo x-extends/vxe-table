@@ -261,7 +261,7 @@ export default {
           xTable.resetAll()
           break
         case 'exportAll':
-          xTable.exportCsv({
+          xTable.exportData({
             data: this.$utils.toTreeArray(this.tableData, { children: 'list' }),
             filename: `vxe-${this.apiName}_v${pack.version}.csv`
           })
@@ -282,7 +282,7 @@ export default {
           })
           break
         case 'export':
-          xTable.exportCsv({
+          xTable.exportData({
             filename: `vxe-${this.apiName}_v${pack.version}.csv`
           })
           break

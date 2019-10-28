@@ -320,7 +320,7 @@ export default {
                   break
                 }
                 case 'export': {
-                  this.$refs.xTable.exportCsv()
+                  this.$refs.xTable.exportData()
                   break
                 }
               }
@@ -420,7 +420,7 @@ export default {
           break
         }
         case 'export': {
-          this.$refs.xTable.exportCsv()
+          this.$refs.xTable.exportData()
           break
         }
       }

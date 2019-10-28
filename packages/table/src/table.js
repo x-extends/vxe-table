@@ -4229,12 +4229,16 @@ export default {
         UtilTools.emitEvent(this, 'valid-error', [params])
       })
     },
+    // 在 v3.0 中废弃 exportCsv 方法
+    exportCsv (options) {
+      return this.exportData(options)
+    },
     /**
      * 导出 csv 文件
      * 如果是树表格，则默认是导出所有节点
      * 如果是启用了可视渲染，则只能导出数据源，可以配合 dataFilterMethod 函数自行转换数据
      */
-    exportCsv (options) {
+    exportData (options) {
       let { visibleColumn, scrollXLoad, scrollYLoad, treeConfig } = this
       let opts = Object.assign({
         filename: '',
@@ -4242,6 +4246,7 @@ export default {
         isHeader: true,
         isFooter: true,
         download: true,
+        type: '',
         data: null,
         columns: null,
         columnFilterMethod: null,
@@ -4249,9 +4254,10 @@ export default {
         footerFilterMethod: null
       }, options)
       if (!opts.filename) {
-        opts.filename = 'table.csv'
-      } else if (opts.filename.indexOf('.csv') === -1) {
-        opts.filename += '.csv'
+        opts.filename = 'table'
+      }
+      if (!['csv', 'html'].includes(opts.type)) {
+        opts.type = 'csv'
       }
       if (!opts.original) {
         if (scrollXLoad || scrollYLoad) {
@@ -4259,16 +4265,16 @@ export default {
           UtilTools.warn('vxe.error.scrollOriginal')
         }
       }
-      if (!options.columns) {
+      if (!options || !options.columns) {
         // 在 v3.0 中废弃 type=selection
         opts.columnFilterMethod = column => column.property && ['index', 'checkbox', 'selection', 'radio'].indexOf(column.type) === -1
       }
       let columns = visibleColumn
-      let oData = this.tableFullData
+      let fullData = this.tableFullData
       if (treeConfig) {
-        oData = XEUtils.toTreeArray(oData, treeConfig)
+        fullData = XEUtils.toTreeArray(fullData, treeConfig)
       }
-      return ExportTools.downloadCsc(opts, ExportTools.getCsvContent(this, opts, columns, oData))
+      return ExportTools.downloadCsc(opts, ExportTools.getCsvContent(this, opts, columns, fullData))
     },
     updateZindex () {
       if (this.tZindex < UtilTools.getLastZIndex()) {
