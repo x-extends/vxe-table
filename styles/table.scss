@@ -39,6 +39,13 @@
       border: 1px solid $vxe-primary-color;
     }
   }
+  .vxe-input--wrapper {
+    .vxe-input {
+      &::-webkit-inner-spin-button {
+        margin-top: floor($vxe-table-row-height-default - 38);
+      }
+    }
+  }
 }
 
 /*table*/
@@ -231,6 +238,13 @@
     .vxe-input--wrapper {
       height: floor($vxe-table-row-height-medium - 8);
     }
+    .vxe-input--wrapper {
+      .vxe-input {
+        &::-webkit-inner-spin-button {
+          margin-top: floor($vxe-table-row-height-medium - 36);
+        }
+      }
+    }
   }
   &.size--small {
     font-size: $vxe-font-size-small;
@@ -251,6 +265,13 @@
     .vxe-input--wrapper {
       height: floor($vxe-table-row-height-small - 8);
     }
+    .vxe-input--wrapper {
+      .vxe-input {
+        &::-webkit-inner-spin-button {
+          margin-top: floor($vxe-table-row-height-small - 34);
+        }
+      }
+    }
   }
   &.size--mini {
     font-size: $vxe-font-size-mini;
@@ -270,6 +291,13 @@
     .vxe-default-select,
     .vxe-input--wrapper {
       height: floor($vxe-table-row-height-mini - 8);
+    }
+    .vxe-input--wrapper {
+      .vxe-input {
+        &::-webkit-inner-spin-button {
+          margin-top: floor($vxe-table-row-height-mini - 32);
+        }
+      }
     }
   }
   .vxe-cell {
@@ -300,6 +328,11 @@
     .vxe-input,
     .vxe-textarea {
       padding: 0 2px;
+    }
+    .vxe-input {
+      &::-webkit-inner-spin-button {
+        margin-top: floor($vxe-table-row-height-default - 38);
+      }
     }
     .vxe-textarea {
       resize: none;

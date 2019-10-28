@@ -4244,8 +4244,7 @@ export default {
         download: true,
         data: null,
         columns: null,
-        // 在 v3.0 中废弃 selection
-        columnFilterMethod: column => ['index', 'checkbox', 'selection', 'radio'].indexOf(column.type) === -1 && column.property,
+        columnFilterMethod: null,
         dataFilterMethod: null,
         footerFilterMethod: null
       }, options)
@@ -4259,6 +4258,10 @@ export default {
           opts.original = true
           UtilTools.warn('vxe.error.scrollOriginal')
         }
+      }
+      if (!options.columns) {
+        // 在 v3.0 中废弃 type=selection
+        opts.columnFilterMethod = column => column.property && ['index', 'checkbox', 'selection', 'radio'].indexOf(column.type) === -1
       }
       let columns = visibleColumn
       let oData = this.tableFullData

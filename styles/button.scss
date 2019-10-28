@@ -33,7 +33,6 @@
   font-size: $vxe-font-size;
   white-space: nowrap;
   user-select: none;
-  appearance: none;
   &.is--disabled {
     color: $vxe-disabled-color;
     &:not(.is--loading) {

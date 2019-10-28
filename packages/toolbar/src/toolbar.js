@@ -41,8 +41,7 @@ export default {
       exportStore: {
         name: '',
         suffix: 'csv',
-        type: 'all',
-        isIndex: false
+        type: 'all'
       },
       exportOpts: {
         filename: '',
@@ -415,14 +414,19 @@ export default {
     exportEvent () {
       const { $grid, $table, vSize, exportStore, exportOpts, exportSuffixs, exportTypes } = this
       const comp = $grid || $table
+      const { fullColumn } = comp.getTableColumn()
       const selectRecords = comp.getSelectRecords()
       const virtualScroller = comp.getVirtualScroller()
+      const exportColumns = fullColumn.filter(column => column.type === 'index' || (column.property && ['checkbox', 'selection', 'radio'].indexOf(column.type) === -1))
       // 重置条件
       exportStore.type = selectRecords.length ? 'selected' : 'all'
       Object.assign(exportOpts, {
         filename: '',
         original: virtualScroller.scrollX || virtualScroller.scrollY,
         isHeader: true
+      })
+      exportColumns.forEach(column => {
+        column.checked = column.type !== 'index'
       })
       this.$XModal({
         title: GlobalConfig.i18n('vxe.toolbar.expTitle'),
@@ -439,7 +443,13 @@ export default {
               h('div', {
                 class: 'vxe-export--panel'
               }, [
-                h('table', [
+                h('table', {
+                  attrs: {
+                    cellspacing: 0,
+                    cellpadding: 0,
+                    border: 0
+                  }
+                }, [
                   h('tr', [
                     h('td', GlobalConfig.i18n('vxe.toolbar.expName')),
                     h('td', [
@@ -457,27 +467,6 @@ export default {
                           }
                         }
                       })
-                    ])
-                  ]),
-                  h('tr', [
-                    h('td', GlobalConfig.i18n('vxe.toolbar.expType')),
-                    h('td', [
-                      h('select', {
-                        on: {
-                          change (evnt) {
-                            exportStore.type = evnt.target.value
-                          }
-                        }
-                      }, exportTypes.map(item => {
-                        return h('option', {
-                          attrs: {
-                            value: item.value
-                          },
-                          domProps: {
-                            selected: exportStore.type === item.value
-                          }
-                        }, GlobalConfig.i18n(item.label))
-                      }))
                     ])
                   ]),
                   h('tr', [
@@ -502,6 +491,47 @@ export default {
                     ])
                   ]),
                   h('tr', [
+                    h('td', GlobalConfig.i18n('vxe.toolbar.expType')),
+                    h('td', [
+                      h('select', {
+                        on: {
+                          change (evnt) {
+                            exportStore.type = evnt.target.value
+                          }
+                        }
+                      }, exportTypes.map(item => {
+                        return h('option', {
+                          attrs: {
+                            value: item.value
+                          },
+                          domProps: {
+                            selected: exportStore.type === item.value
+                          }
+                        }, GlobalConfig.i18n(item.label))
+                      }))
+                    ])
+                  ]),
+                  h('tr', [
+                    h('td', GlobalConfig.i18n('vxe.toolbar.expColumn')),
+                    h('td', [
+                      h('ul', {
+                        class: 'vxe-export--panel-column'
+                      }, exportColumns.map(column => {
+                        const { own, checked, type } = column
+                        return h('li', {
+                          class: {
+                            active: checked
+                          },
+                          on: {
+                            click () {
+                              column.checked = !checked
+                            }
+                          }
+                        }, UtilTools.getFuncText(own.title || own.label || (type === 'index' ? GlobalConfig.i18n('vxe.column.indexTitle') : '')))
+                      }))
+                    ])
+                  ]),
+                  h('tr', [
                     h('td', GlobalConfig.i18n('vxe.toolbar.expOpts')),
                     h('td', [
                       h('vxe-checkbox', {
@@ -515,17 +545,6 @@ export default {
                           }
                         }
                       }, GlobalConfig.i18n('vxe.toolbar.expOptHeader')),
-                      h('vxe-checkbox', {
-                        props: {
-                          size: vSize
-                        },
-                        model: {
-                          value: exportStore.isIndex,
-                          callback (value) {
-                            exportStore.isIndex = value
-                          }
-                        }
-                      }, GlobalConfig.i18n('vxe.toolbar.expOptIndex')),
                       h('vxe-checkbox', {
                         props: {
                           size: vSize
@@ -550,16 +569,14 @@ export default {
                     },
                     on: {
                       click () {
-                        const options = Object.assign({}, exportOpts)
+                        const options = Object.assign({
+                          columns: exportColumns.filter(column => column.checked)
+                        }, exportOpts)
                         if (!options.filename) {
                           options.filename = GlobalConfig.i18n('vxe.toolbar.expTitle')
                         }
                         if (exportStore.type === 'selected') {
                           options.data = selectRecords
-                        }
-                        if (exportStore.isIndex) {
-                          // 在 v3.0 中废弃 type=selection
-                          options.columnFilterMethod = column => column.type === 'index' || (column.property && ['checkbox', 'selection', 'radio'].indexOf(column.type) === -1)
                         }
                         comp.exportCsv(options)
                         $modal.close()

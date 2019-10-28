@@ -26,6 +26,9 @@ export default {
       resetFilter: 'Reset',
       allFilter: 'All'
     },
+    column: {
+      indexTitle: '#'
+    },
     grid: {
       selectOneRecord: 'Please choose at least one piece of record!',
       deleteSelectRecord: 'Are you sure you want to delete the selected record?',
@@ -48,15 +51,15 @@ export default {
     },
     toolbar: {
       expTitle: 'Export data',
-      expName: 'File name',
+      expName: 'Filename',
       expNamePlaceholder: 'Please enter filename',
       expSuffix: 'File type',
       expType: 'Data to export',
       expAll: 'All data',
       expSelected: 'Selected data',
+      expColumn: 'The field to export',
       expOpts: 'Export parameter',
       expOptHeader: 'Header',
-      expOptIndex: 'Sequence',
       expOptOriginal: 'Original',
       expConfirm: 'Export'
     }
