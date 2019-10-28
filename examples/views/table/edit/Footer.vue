@@ -2,7 +2,7 @@
   <div>
     <p class="tip">统计编辑列的表尾合计，对于某些场景下如果需要频繁计算的可以手动调用 <table-api-link prop="updateFooter"/> 函数</p>
 
-    <vxe-toolbar>
+    <vxe-toolbar exps>
       <template v-slot:buttons>
         <vxe-button @click="insertEvent">新增</vxe-button>
         <vxe-button @click="getInsertEvent">获取新增</vxe-button>
@@ -39,7 +39,6 @@
 
 <script>
 import hljs from 'highlight.js'
-import XEUtils from 'xe-utils'
 
 export default {
   data () {
@@ -47,7 +46,7 @@ export default {
       tableData: [],
       demoCodes: [
         `
-        <vxe-toolbar>
+        <vxe-toolbar exps>
           <template v-slot:buttons>
             <vxe-button @click="insertEvent">新增</vxe-button>
             <vxe-button @click="getInsertEvent">获取新增</vxe-button>
@@ -100,7 +99,7 @@ export default {
                     return '平均'
                   }
                   if (['age'].includes(column.property)) {
-                    return XEUtils.mean(data, column.property)
+                    return this.$utils.mean(data, column.property)
                   }
                   return null
                 }),
@@ -109,7 +108,7 @@ export default {
                     return '和值'
                   }
                   if (['age'].includes(column.property)) {
-                    return XEUtils.sum(data, column.property)
+                    return this.$utils.sum(data, column.property)
                   }
                   return null
                 })
@@ -157,7 +156,7 @@ export default {
             return '平均'
           }
           if (['age'].includes(column.property)) {
-            return XEUtils.mean(data, column.property)
+            return this.$utils.mean(data, column.property)
           }
           return null
         }),
@@ -166,7 +165,7 @@ export default {
             return '和值'
           }
           if (['age'].includes(column.property)) {
-            return XEUtils.sum(data, column.property)
+            return this.$utils.sum(data, column.property)
           }
           return null
         })

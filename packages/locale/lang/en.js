@@ -60,6 +60,7 @@ export default {
       expColumn: 'The field to export',
       expOpts: 'Export parameter',
       expOptHeader: 'Header',
+      expOptFooter: 'Footer',
       expOptOriginal: 'Original',
       expConfirm: 'Export'
     }
