@@ -31,6 +31,7 @@ export default {
     marginSize: { type: [Number, String], default: GlobalConfig.modal.marginSize },
     fullscreen: Boolean,
     animat: { type: Boolean, default: () => GlobalConfig.modal.animat },
+    size: String,
     slots: Object,
     events: Object
   },

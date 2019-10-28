@@ -31,19 +31,23 @@ export default {
       exportTypes: [
         {
           value: 'all',
-          label: 'vxe.toolbar.exportAll'
+          label: 'vxe.toolbar.expAll'
         },
         {
           value: 'selected',
-          label: 'vxe.toolbar.exportSelected'
+          label: 'vxe.toolbar.expSelected'
         }
       ],
       exportStore: {
         name: '',
         suffix: 'csv',
         type: 'all',
-        optHeader: true,
-        optIndex: false
+        isIndex: false
+      },
+      exportOpts: {
+        filename: '',
+        original: false,
+        isHeader: false
       },
       settingStore: {
         visible: false
@@ -409,17 +413,19 @@ export default {
       }
     },
     exportEvent () {
-      const { $grid, $table, vSize, exportStore, exportSuffixs, exportTypes } = this
+      const { $grid, $table, vSize, exportStore, exportOpts, exportSuffixs, exportTypes } = this
       const comp = $grid || $table
       const selectRecords = comp.getSelectRecords()
-      Object.assign(exportStore, {
-        name: '',
-        type: selectRecords.length ? 'selected' : 'all',
-        optHeader: true,
-        optIndex: false
+      const virtualScroller = comp.getVirtualScroller()
+      // 重置条件
+      exportStore.type = selectRecords.length ? 'selected' : 'all'
+      Object.assign(exportOpts, {
+        filename: '',
+        original: virtualScroller.scrollX || virtualScroller.scrollY,
+        isHeader: true
       })
       this.$XModal({
-        title: GlobalConfig.i18n('vxe.toolbar.exportTitle'),
+        title: GlobalConfig.i18n('vxe.toolbar.expTitle'),
         width: 520,
         mask: true,
         lockView: true,
@@ -435,26 +441,26 @@ export default {
               }, [
                 h('table', [
                   h('tr', [
-                    h('td', GlobalConfig.i18n('vxe.toolbar.exportName')),
+                    h('td', GlobalConfig.i18n('vxe.toolbar.expName')),
                     h('td', [
                       h('input', {
                         attrs: {
                           type: 'text',
-                          placeholder: GlobalConfig.i18n('vxe.toolbar.exportNamePlaceholder')
+                          placeholder: GlobalConfig.i18n('vxe.toolbar.expNamePlaceholder')
                         },
                         domProps: {
-                          value: exportStore.name
+                          value: exportOpts.filename
                         },
                         on: {
                           input (evnt) {
-                            exportStore.name = evnt.target.value
+                            exportOpts.filename = evnt.target.value
                           }
                         }
                       })
                     ])
                   ]),
                   h('tr', [
-                    h('td', GlobalConfig.i18n('vxe.toolbar.exportType')),
+                    h('td', GlobalConfig.i18n('vxe.toolbar.expType')),
                     h('td', [
                       h('select', {
                         on: {
@@ -475,7 +481,7 @@ export default {
                     ])
                   ]),
                   h('tr', [
-                    h('td', GlobalConfig.i18n('vxe.toolbar.exportSuffix')),
+                    h('td', GlobalConfig.i18n('vxe.toolbar.expSuffix')),
                     h('td', [
                       h('select', {
                         on: {
@@ -496,24 +502,41 @@ export default {
                     ])
                   ]),
                   h('tr', [
-                    h('td', GlobalConfig.i18n('vxe.toolbar.exportOpts')),
+                    h('td', GlobalConfig.i18n('vxe.toolbar.expOpts')),
                     h('td', [
                       h('vxe-checkbox', {
+                        props: {
+                          size: vSize
+                        },
                         model: {
-                          value: exportStore.optHeader,
+                          value: exportOpts.isHeader,
                           callback (value) {
-                            exportStore.optHeader = value
+                            exportOpts.isHeader = value
                           }
                         }
-                      }, GlobalConfig.i18n('vxe.toolbar.exportOptHeader')),
+                      }, GlobalConfig.i18n('vxe.toolbar.expOptHeader')),
                       h('vxe-checkbox', {
+                        props: {
+                          size: vSize
+                        },
                         model: {
-                          value: exportStore.optIndex,
+                          value: exportStore.isIndex,
                           callback (value) {
-                            exportStore.optIndex = value
+                            exportStore.isIndex = value
                           }
                         }
-                      }, GlobalConfig.i18n('vxe.toolbar.exportOptIndex'))
+                      }, GlobalConfig.i18n('vxe.toolbar.expOptIndex')),
+                      h('vxe-checkbox', {
+                        props: {
+                          size: vSize
+                        },
+                        model: {
+                          value: exportOpts.original,
+                          callback (value) {
+                            exportOpts.original = value
+                          }
+                        }
+                      }, GlobalConfig.i18n('vxe.toolbar.expOptOriginal'))
                     ])
                   ])
                 ]),
@@ -527,11 +550,14 @@ export default {
                     },
                     on: {
                       click () {
-                        const options = {
-                          filename: exportStore.name || GlobalConfig.i18n('vxe.toolbar.exportTitle'),
-                          isHeader: exportStore.optHeader
+                        const options = Object.assign({}, exportOpts)
+                        if (!options.filename) {
+                          options.filename = GlobalConfig.i18n('vxe.toolbar.expTitle')
                         }
-                        if (exportStore.optIndex) {
+                        if (exportStore.type === 'selected') {
+                          options.data = selectRecords
+                        }
+                        if (exportStore.isIndex) {
                           // 在 v3.0 中废弃 type=selection
                           options.columnFilterMethod = column => column.type === 'index' || (column.property && ['checkbox', 'selection', 'radio'].indexOf(column.type) === -1)
                         }
@@ -539,7 +565,7 @@ export default {
                         $modal.close()
                       }
                     }
-                  }, GlobalConfig.i18n('vxe.toolbar.exportConfirm'))
+                  }, GlobalConfig.i18n('vxe.toolbar.expConfirm'))
                 ])
               ])
             ]

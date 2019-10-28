@@ -4237,7 +4237,7 @@ export default {
     exportCsv (options) {
       let { visibleColumn, scrollXLoad, scrollYLoad, treeConfig } = this
       let opts = Object.assign({
-        filename: 'table.csv',
+        filename: '',
         original: !!treeConfig,
         isHeader: true,
         isFooter: true,
@@ -4249,7 +4249,9 @@ export default {
         dataFilterMethod: null,
         footerFilterMethod: null
       }, options)
-      if (opts.filename.indexOf('.csv') === -1) {
+      if (!opts.filename) {
+        opts.filename = 'table.csv'
+      } else if (opts.filename.indexOf('.csv') === -1) {
         opts.filename += '.csv'
       }
       if (!opts.original) {

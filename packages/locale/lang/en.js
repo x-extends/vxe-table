@@ -47,17 +47,18 @@ export default {
       cancel: 'Cancel'
     },
     toolbar: {
-      exportTitle: 'Export data',
-      exportName: 'Filename',
-      exportNamePlaceholder: 'Please enter filename',
-      exportSuffix: 'File type',
-      exportType: 'Data to export',
-      exportAll: 'All data',
-      exportSelected: 'Selected data',
-      exportOpts: 'Export parameter',
-      exportOptHeader: 'Header',
-      exportOptIndex: 'Sequence',
-      exportConfirm: 'Export'
+      expTitle: 'Export data',
+      expName: 'File name',
+      expNamePlaceholder: 'Please enter filename',
+      expSuffix: 'File type',
+      expType: 'Data to export',
+      expAll: 'All data',
+      expSelected: 'Selected data',
+      expOpts: 'Export parameter',
+      expOptHeader: 'Header',
+      expOptIndex: 'Sequence',
+      expOptOriginal: 'Original',
+      expConfirm: 'Export'
     }
   }
 }

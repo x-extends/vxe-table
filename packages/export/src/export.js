@@ -1,10 +1,9 @@
 import { UtilTools, DomTools } from '../../tools'
 
 export default {
-  getCsvContent ($table, opts, oColumns, oData) {
+  getCsvContent ($table, opts, oColumns, fullData) {
     let isOriginal = opts.original
-    let tableElem = $table.$el
-    let { columns, datas } = getCsvData(opts, oData, oColumns, tableElem)
+    let { columns, datas } = getCsvData($table, opts, fullData, oColumns)
     let content = '\ufeff'
     if (opts.isHeader) {
       content += columns.map(({ own }) => UtilTools.getFuncText(own.title || own.label)).join(',') + '\n'
@@ -56,29 +55,27 @@ export default {
   }
 }
 
-function getCsvLabelData (columns, oData, tableElem) {
-  let trElemList = tableElem.querySelectorAll('.vxe-table--body-wrapper.body--wrapper .vxe-body--row')
-  return Array.from(trElemList).map(trElem => {
+function getCsvLabelData ($table, columns, datas) {
+  return datas.map(row => {
     let item = {}
     columns.forEach(column => {
-      let cell = trElem.querySelector(`.${column.id}`)
+      let cell = DomTools.getCell($table, { row, column })
       item[column.id] = cell ? cell.innerText.trim() : ''
     })
     return item
   })
 }
 
-function getCsvData (opts, oData, oColumns, tableElem) {
-  let isOriginal = opts.original
+function getCsvData ($table, opts, fullData, oColumns) {
   let columns = opts.columns ? opts.columns : oColumns
+  let datas = opts.data || fullData
   if (opts.columnFilterMethod) {
     columns = columns.filter(opts.columnFilterMethod)
   }
-  let datas = opts.data ? opts.data : (isOriginal ? oData : getCsvLabelData(columns, oData, tableElem))
   if (opts.dataFilterMethod) {
     datas = datas.filter(opts.dataFilterMethod)
   }
-  return { columns, datas }
+  return { columns, datas: opts.original ? datas : getCsvLabelData($table, columns, datas) }
 }
 
 function getCsvUrl (opts, content) {
