@@ -23,7 +23,6 @@
 </template>
 
 <script>
-import XEAjax from 'xe-ajax'
 import hljs from 'highlight.js'
 
 export default {
@@ -39,11 +38,11 @@ export default {
         },
         ajax: {
           // page 对象： { pageSize, currentPage }
-          query: ({ page }) => XEAjax.doGet(`/api/user/page/list/${page.pageSize}/${page.currentPage}`),
+          query: ({ page }) => this.$ajax.doGet(`/api/user/page/list/${page.pageSize}/${page.currentPage}`),
           // body 对象： { removeRecords }
-          delete: ({ body }) => XEAjax.doPost('/api/user/save', body),
+          delete: ({ body }) => this.$ajax.doPost('/api/user/save', body),
           // body 对象： { insertRecords, updateRecords, removeRecords, pendingRecords }
-          save: ({ body }) => XEAjax.doPost('/api/user/save', body)
+          save: ({ body }) => this.$ajax.doPost('/api/user/save', body)
         }
       },
       tableToolbar: {
@@ -68,6 +67,7 @@ export default {
           },
           { code: 'myBtn', name: '自定义按钮' }
         ],
+        exps: true,
         refresh: true,
         resizable: {
           storage: true
@@ -112,11 +112,11 @@ export default {
                 },
                 ajax: {
                   // page 对象： { pageSize, currentPage }
-                  query: ({ page }) => XEAjax.doGet(\`/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`), // 模拟请求
+                  query: ({ page }) => this.$ajax.doGet(\`/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`), // 模拟请求
                   // body 对象： { removeRecords }
-                  delete: ({ body }) => XEAjax.doPost('/api/user/save', body),
+                  delete: ({ body }) => this.$ajax.doPost('/api/user/save', body),
                   // body 对象： { insertRecords, updateRecords, removeRecords, pendingRecords }
-                  save: ({ body }) => XEAjax.doPost('/api/user/save', body)
+                  save: ({ body }) => this.$ajax.doPost('/api/user/save', body)
                 }
               },
               tableToolbar: {
@@ -140,6 +140,7 @@ export default {
                   },
                   { code: 'myBtn', name: '自定义按钮' }
                 ],
+                exps: true,
                 refresh: true,
                 resizable: {
                   storage: true
@@ -162,7 +163,7 @@ export default {
             toolbarButtonClickEvent ({ code }, event) {
               switch (code) {
                 case 'myBtn':
-                  this.$XModal.alert(name)
+                  this.$XModal.alert(code)
                   break
               }
             }
