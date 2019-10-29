@@ -5,12 +5,19 @@
     <vxe-grid
       border
       show-overflow
+      ref="xGrid"
       class="vxe-table-iview"
       height="460"
       :loading="loading"
       :data="tableData"
       :columns="tableColumn"
-      :edit-config="{trigger: 'click', mode: 'row'}"></vxe-grid>
+      :toolbar="tableToolbar"
+      :edit-config="{trigger: 'click', mode: 'row'}">
+      <template v-slot:buttons>
+        <el-button @click="insertEvent">新增</el-button>
+        <el-button @click="saveEvent">保存</el-button>
+      </template>
+    </vxe-grid>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
@@ -22,7 +29,6 @@
 </template>
 
 <script>
-import XEAjax from 'xe-ajax'
 import hljs from 'highlight.js'
 
 export default {
@@ -46,17 +52,24 @@ export default {
         { field: 'flag', title: 'iSwitch', width: 100, editRender: { name: 'iSwitch', type: 'visible' } },
         { field: 'rate', title: 'Rate', width: 200, editRender: { name: 'Rate', type: 'visible' } }
       ],
+      tableToolbar: {},
       demoCodes: [
         `
         <vxe-grid
           border
           show-overflow
+          ref="xGrid"
           class="vxe-table-iview"
           height="460"
           :loading="loading"
           :data="tableData"
           :columns="tableColumn"
-          :edit-config="{trigger: 'click', mode: 'row'}"></vxe-grid>
+          :edit-config="{trigger: 'click', mode: 'row'}">
+          <template v-slot:buttons>
+            <el-button @click="insertEvent">新增</el-button>
+            <el-button @click="saveEvent">保存</el-button>
+          </template>
+        </vxe-grid>
         `,
         `
         export default {
@@ -79,7 +92,8 @@ export default {
                 { field: 'date1', title: 'TimePicker', width: 200, editRender: { name: 'TimePicker', props: { type: 'time' } } },
                 { field: 'flag', title: 'iSwitch', width: 100, editRender: { name: 'iSwitch', type: 'visible' } },
                 { field: 'rate', title: 'Rate', width: 200, editRender: { name: 'Rate', type: 'visible' } }
-              ]
+              ],
+              tableToolbar: {}
             }
           },
           created () {
@@ -94,13 +108,13 @@ export default {
           },
           methods: {
             findSexList () {
-              return XEAjax.doGet('/api/conf/sex/list').then(({ data }) => {
+              return this.$ajax.doGet('/api/conf/sex/list').then(({ data }) => {
                 this.tableColumn[5].editRender.options = data
                 this.tableColumn[6].editRender.options = data
               })
             },
             findRegionList () {
-              return XEAjax.doGet('/api/conf/region/list').then(({ data }) => {
+              return this.$ajax.doGet('/api/conf/region/list').then(({ data }) => {
                 this.tableColumn[8].editRender.props.data = data
               })
             },
@@ -126,6 +140,25 @@ export default {
                 }
               ]
               this.tableColumn[7].editRender.optionGroups = sexGroupList
+            },
+            insertEvent () {
+              let xGrid = this.$refs.xGrid
+              let record = {
+                role: '',
+                age: 18,
+                region: [],
+                flag: false,
+                rate: 2
+              }
+              xGrid.insert(record).then(({ row }) => xGrid.setActiveRow(row))
+            },
+            saveEvent () {
+              let { insertRecords, removeRecords, updateRecords } = this.$refs.xGrid.getRecordset()
+              if (insertRecords.length || removeRecords.length || updateRecords.length) {
+                this.$alert(\`insertRecords=\${insertRecords.length}; removeRecords=\${removeRecords.length}; updateRecords=\${updateRecords.length}\`)
+              } else {
+                this.$alert('数据未改动！')
+              }
             },
             roleFilterMethod  (value, option) {
               return option.toUpperCase().indexOf((value || '').toUpperCase()) !== -1
@@ -153,13 +186,13 @@ export default {
   },
   methods: {
     findSexList () {
-      return XEAjax.doGet('/api/conf/sex/list').then(({ data }) => {
+      return this.$ajax.doGet('/api/conf/sex/list').then(({ data }) => {
         this.tableColumn[5].editRender.options = data
         this.tableColumn[6].editRender.options = data
       })
     },
     findRegionList () {
-      return XEAjax.doGet('/api/conf/region/list').then(({ data }) => {
+      return this.$ajax.doGet('/api/conf/region/list').then(({ data }) => {
         this.tableColumn[8].editRender.props.data = data
       })
     },
@@ -185,6 +218,25 @@ export default {
         }
       ]
       this.tableColumn[7].editRender.optionGroups = sexGroupList
+    },
+    insertEvent () {
+      let xGrid = this.$refs.xGrid
+      let record = {
+        role: '',
+        age: 18,
+        region: [],
+        flag: false,
+        rate: 2
+      }
+      xGrid.insert(record).then(({ row }) => xGrid.setActiveRow(row))
+    },
+    saveEvent () {
+      let { insertRecords, removeRecords, updateRecords } = this.$refs.xGrid.getRecordset()
+      if (insertRecords.length || removeRecords.length || updateRecords.length) {
+        this.$alert(`insertRecords=${insertRecords.length}; removeRecords=${removeRecords.length}; updateRecords=${updateRecords.length}`)
+      } else {
+        this.$alert('数据未改动！')
+      }
     },
     roleFilterMethod  (value, option) {
       return option.toUpperCase().indexOf((value || '').toUpperCase()) !== -1

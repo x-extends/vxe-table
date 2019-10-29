@@ -8,7 +8,7 @@
 
     <vxe-toolbar
       setting
-      exps
+      export
       :buttons="toolbarButtons"
       :refresh="{query: findList}"></vxe-toolbar>
 
@@ -65,7 +65,7 @@ export default {
         `
         <vxe-toolbar 
           setting
-          exps
+          export
           :buttons="toolbarButtons" 
           :refresh="{query: findList}"></vxe-toolbar>
 

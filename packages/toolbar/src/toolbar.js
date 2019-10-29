@@ -10,7 +10,7 @@ export default {
     loading: false,
     resizable: { type: [Boolean, Object], default: () => GlobalConfig.toolbar.resizable },
     refresh: { type: [Boolean, Object], default: () => GlobalConfig.toolbar.refresh },
-    exps: { type: [Boolean, Object], default: () => GlobalConfig.toolbar.exps },
+    export: { type: [Boolean, Object], default: () => GlobalConfig.toolbar.export },
     setting: { type: [Boolean, Object], default: () => GlobalConfig.toolbar.setting },
     buttons: { type: Array, default: () => GlobalConfig.toolbar.buttons },
     size: String,
@@ -62,7 +62,7 @@ export default {
       return Object.assign({}, GlobalConfig.toolbar.refresh, this.refresh)
     },
     expsOpts () {
-      return Object.assign({}, GlobalConfig.toolbar.exps, this.exps)
+      return Object.assign({}, GlobalConfig.toolbar.export, this.export)
     },
     resizableOpts () {
       return Object.assign({ storageKey: 'VXE_TABLE_CUSTOM_COLUMN_WIDTH' }, GlobalConfig.toolbar.resizable, this.resizable)
@@ -91,7 +91,7 @@ export default {
     GlobalEvent.off(this, 'blur')
   },
   render (h) {
-    let { _e, $scopedSlots, $grid, $table, loading, settingStore, refresh, exps, setting, settingOpts, buttons = [], vSize, tableFullColumn } = this
+    let { _e, $scopedSlots, $grid, $table, loading, settingStore, refresh, setting, settingOpts, buttons = [], vSize, tableFullColumn } = this
     let customBtnOns = {}
     let customWrapperOns = {}
     let $buttons = $scopedSlots.buttons
@@ -144,7 +144,7 @@ export default {
       h('div', {
         class: 'vxe-tools--operate'
       }, [
-        exps ? h('vxe-button', {
+        this.export ? h('vxe-button', {
           class: 'vxe-export--btn',
           props: {
             type: 'text',

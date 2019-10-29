@@ -17,7 +17,7 @@
       </FormItem>
     </Form>
 
-    <vxe-toolbar exps setting>
+    <vxe-toolbar export setting>
       <template v-slot:buttons>
         <Button @click="insertEvent">新增</Button>
         <Button @click="saveEvent">保存</Button>
@@ -126,7 +126,7 @@ export default {
           </FormItem>
         </Form>
 
-        <vxe-toolbar exps setting>
+        <vxe-toolbar export setting>
           <template v-slot:buttons>
             <Button @click="insertEvent">新增</Button>
             <Button @click="saveEvent">保存</Button>

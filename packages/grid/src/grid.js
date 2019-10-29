@@ -201,7 +201,7 @@ export default {
       return this.pendingRecords.indexOf(params.row) === -1 && (!activeMethod || activeMethod(params))
     },
     commitProxy (code) {
-      let { proxyOpts, tablePage, pagerConfig, sortData, filterData, isMsg } = this
+      let { toolbar, proxyOpts, tablePage, pagerConfig, sortData, filterData, isMsg } = this
       let { ajax, props = {} } = proxyOpts
       let args = XEUtils.slice(arguments, 1)
       if (ajax) {
@@ -342,7 +342,8 @@ export default {
           default:
             let btnMethod = Buttons.get(code)
             if (btnMethod) {
-              btnMethod.apply(this, [{ code, $grid: this }].concat(args))
+              let button = toolbar ? XEUtils.find(toolbar.buttons, item => item.code === code) : null
+              btnMethod.apply(this, [{ code, button: button, $grid: this, $table: this.$refs.xTable }].concat(args))
             }
         }
       }
