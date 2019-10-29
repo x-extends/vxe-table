@@ -113,7 +113,7 @@ export default {
             let columnIndex = getColumnIndex(column)
             let params = { $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType }
             if (showTitle || showTooltip) {
-              tfOns.mouseover = evnt => {
+              tfOns.mouseenter = evnt => {
                 if (showTitle) {
                   DomTools.updateCellTitle(evnt)
                 } else if (showTooltip) {
@@ -122,8 +122,10 @@ export default {
               }
             }
             if (showTooltip) {
-              tfOns.mouseout = evnt => {
-                $table.clostTooltip()
+              tfOns.mouseleave = evnt => {
+                if (showTooltip) {
+                  $table.handleTargetLeaveEvent(evnt)
+                }
               }
             }
             if (tableListeners['header-cell-click']) {

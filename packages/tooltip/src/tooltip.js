@@ -10,11 +10,14 @@ export default {
     theme: { type: String, default: () => GlobalConfig.tooltip.theme },
     content: [String, Function],
     zIndex: [String, Number],
-    isArrow: { type: Boolean, default: true }
+    isArrow: { type: Boolean, default: true },
+    enterable: Boolean,
+    leaveDelay: { type: Number, default: GlobalConfig.tooltip.leaveDelay }
   },
   data () {
     return {
       isUpdate: false,
+      isHover: false,
       visible: false,
       message: '',
       tipZindex: 0,
@@ -54,8 +57,8 @@ export default {
     this.target = target
     if (target) {
       if (trigger === 'hover') {
-        target.onmouseleave = this.mouseleaveEvent
-        target.onmouseenter = this.mouseenterEvent
+        target.onmouseleave = this.targetMouseleaveEvent
+        target.onmouseenter = this.targetMouseenterEvent
       } else if (trigger === 'click') {
         target.onclick = this.clickEvent
       }
@@ -72,22 +75,32 @@ export default {
     }
     if (target) {
       if (trigger === 'hover') {
-        target.onmouseleave = null
         target.onmouseenter = null
+        target.onmouseleave = null
       } else if (trigger === 'click') {
         target.onclick = null
       }
     }
   },
   render (h) {
-    let { theme, message, isArrow, visible, tipStore } = this
+    let { theme, message, isHover, isArrow, visible, tipStore, enterable } = this
+    let on = null
+    if (enterable) {
+      on = {
+        mouseenter: this.wrapperMouseenterEvent,
+        mouseleave: this.wrapperMouseleaveEvent
+      }
+    }
     return h('div', {
       class: ['vxe-table--tooltip-wrapper', `theme--${theme}`, `placement--${tipStore.placement}`, {
+        'is--enterable': enterable,
         'is--visible': visible,
-        'is--arrow': isArrow
+        'is--arrow': isArrow,
+        'is--hover': isHover
       }],
       style: tipStore.style,
-      ref: 'tipWrapper'
+      ref: 'tipWrapper',
+      on
     }, [
       h('div', {
         class: 'vxe-table--tooltip-content'
@@ -126,6 +139,7 @@ export default {
       }
     },
     toVisible (target, message) {
+      this.targetActive = true
       if (target) {
         let { $el, tipStore, zIndex } = this
         let { top, left } = DomTools.getAbsolutePos(target)
@@ -189,11 +203,37 @@ export default {
     clickEvent (event) {
       this[this.visible ? 'close' : 'show']()
     },
-    mouseleaveEvent (evnt) {
-      this.close()
-    },
-    mouseenterEvent (evnt) {
+    targetMouseenterEvent (evnt) {
       this.show()
+    },
+    targetMouseleaveEvent (evnt) {
+      const { trigger, enterable, leaveDelay } = this
+      this.targetActive = false
+      if (enterable && trigger === 'hover') {
+        setTimeout(() => {
+          if (!this.isHover) {
+            this.close()
+          }
+        }, leaveDelay)
+      } else {
+        this.close()
+      }
+    },
+    wrapperMouseenterEvent (evnt) {
+      this.isHover = true
+    },
+    wrapperMouseleaveEvent (evnt) {
+      const { $listeners, trigger, enterable, leaveDelay } = this
+      this.isHover = false
+      if ($listeners.leave) {
+        this.$emit('leave', evnt)
+      } else if (enterable && trigger === 'hover') {
+        setTimeout(() => {
+          if (!this.targetActive) {
+            this.close()
+          }
+        }, leaveDelay)
+      }
     }
   }
 }

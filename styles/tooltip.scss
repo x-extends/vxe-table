@@ -15,13 +15,25 @@
   box-shadow: 2px 2px 4px -2px rgba(0,0,0,.2);
   color: $vxe-font-color;
   font-family: $vxe-font-family;
-  pointer-events: none;
+  &:not(.is--enterable) {
+    pointer-events: none;
+  }
   &.is--visible {
     display: block;
   }
   &.is--arrow {
     .vxe-table--tooltip-arrow {
       display: block;
+    }
+  }
+  &.is--enterable {
+    &:after {
+      content: "";
+      position: absolute;
+      left: 0;
+      width: 100%;
+      height: 6px;
+      background-color: transparent;
     }
   }
   .vxe-table--tooltip-arrow {
@@ -41,6 +53,11 @@
     }
   }
   &.placement--top {
+    &.is--enterable {
+      &:after {
+        bottom: -6px;
+      }
+    }
     .vxe-table--tooltip-arrow {
       bottom: -12px;
       &:before {
@@ -49,6 +66,11 @@
     }
   }
   &.placement--bottom {
+    &.is--enterable {
+      &:after {
+        top: -6px;
+      }
+    }
     .vxe-table--tooltip-arrow {
       top: -12px;
       &:before {

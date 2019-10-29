@@ -191,9 +191,9 @@ const apis = [
         name: 'zIndex',
         descKey: 'app.api.modal.desc.zIndex',
         version: '',
-        type: 'Number, String',
+        type: 'Number',
         enum: '',
-        defVal: '起始 2000',
+        defVal: '继承 setup.zIndex',
         list: []
       },
       {

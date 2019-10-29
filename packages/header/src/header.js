@@ -189,7 +189,7 @@ export default {
             let columnIndex = getColumnIndex(column)
             let params = { $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType }
             if (showTitle || showTooltip) {
-              thOns.mouseover = evnt => {
+              thOns.mouseenter = evnt => {
                 if ($table._isResize) {
                   return
                 }
@@ -201,11 +201,13 @@ export default {
               }
             }
             if (showTooltip) {
-              thOns.mouseout = evnt => {
+              thOns.mouseleave = evnt => {
                 if ($table._isResize) {
                   return
                 }
-                $table.clostTooltip()
+                if (showTooltip) {
+                  $table.handleTargetLeaveEvent(evnt)
+                }
               }
             }
             if (highlightCurrentColumn || tableListeners['header-cell-click'] || mouseConfig.checked || sortOpts.trigger === 'cell') {

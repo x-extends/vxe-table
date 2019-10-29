@@ -49,7 +49,7 @@ const apis = [
         version: '',
         type: 'Number',
         enum: '',
-        defVal: '3000',
+        defVal: '继承 setup.zIndex',
         list: []
       },
       {
@@ -59,6 +59,24 @@ const apis = [
         type: 'Boolean',
         enum: '',
         defVal: 'true',
+        list: []
+      },
+      {
+        name: 'enterable',
+        descKey: 'app.api.tooltip.desc.enterable',
+        version: '2.6.7',
+        type: 'Boolean',
+        enum: '',
+        defVal: 'false',
+        list: []
+      },
+      {
+        name: 'leaveDelay',
+        descKey: 'app.api.tooltip.desc.leaveDelay',
+        version: '2.6.7',
+        type: 'Number',
+        enum: '',
+        defVal: '300',
         list: []
       }
     ]
@@ -89,7 +107,17 @@ const apis = [
     type: '',
     enum: '',
     defVal: '',
-    list: []
+    list: [
+      {
+        name: 'mouseenter',
+        desc: '重写默认的移开 tooltip 处理函数',
+        version: '',
+        type: 'Promise',
+        enum: '',
+        defVal: 'Event.target, message',
+        list: []
+      }
+    ]
   },
   {
     name: 'Methods',

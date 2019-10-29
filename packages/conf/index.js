@@ -6,6 +6,9 @@ const GlobalConfig = {
   // validConfig: {
   //   message: 'default'
   // },
+  // tooltipConfig: {
+  //   enterable: false
+  // },
   // resizable: false,
   // stripe: false,
   // border: false,
@@ -68,7 +71,8 @@ const GlobalConfig = {
   menu: {},
   tooltip: {
     trigger: 'hover',
-    theme: 'dark'
+    theme: 'dark',
+    leaveDelay: 300
   },
   pager: {
     // pageSize: 10,

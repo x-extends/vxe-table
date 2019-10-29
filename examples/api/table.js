@@ -518,6 +518,15 @@ const apis = [
         list: []
       },
       {
+        name: 'zIndex',
+        descKey: 'app.api.table.desc.zIndex',
+        version: '2.6.7',
+        type: 'Number',
+        enum: '',
+        defVal: '继承 setup.zIndex',
+        list: []
+      },
+      {
         name: 'sort-config',
         descKey: 'app.api.table.desc.sortConfig',
         version: '',
@@ -701,12 +710,12 @@ const apis = [
         defVal: '',
         list: [
           {
-            name: 'zIndex',
-            desc: '自定义 tooltip 的堆叠顺序（对于在弹框中使用是由于堆叠被覆盖时可能会用到）',
-            version: '',
-            type: 'Number',
+            name: 'enterable',
+            desc: '鼠标是否可进入到 tooltip 中',
+            version: '2.6.7',
+            type: 'Boolean',
             enum: '',
-            defVal: '99',
+            defVal: 'false',
             list: []
           },
           {

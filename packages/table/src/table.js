@@ -143,6 +143,7 @@ export default {
     columnKey: Boolean,
     rowKey: Boolean,
     rowId: { type: String, default: () => GlobalConfig.rowId },
+    zIndex: Number,
     // 是否自动监听父容器变化去更新响应式表格宽高
     autoResize: Boolean,
     // 是否自动根据状态属性去更新响应式表格宽高
@@ -747,7 +748,10 @@ export default {
          */
         hasTip ? h('vxe-tooltip', {
           ref: 'tooltip',
-          props: tooltipConfig
+          props: tooltipConfig,
+          on: tooltipConfig && tooltipConfig.enterable ? {
+            leave: this.handleTooltipLeaveEvent
+          } : null
         }) : _e(),
         /**
          * 校验不通过的 tooltip

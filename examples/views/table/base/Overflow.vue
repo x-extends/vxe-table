@@ -4,7 +4,8 @@
       当内容或表头超过隐藏时显示为省略号，<table-column-api-link prop="show-overflow"/> 和 <table-api-link prop="show-header-overflow"/><br>
       <table-column-api-link prop="ellipsis"/> 当内容超过时显示为省略号<br>
       <table-column-api-link prop="title"/> 当内容超过时显示为省略号并用原生 title 显示<br>
-      <table-column-api-link prop="tooltip"/> 当内容超过隐藏时显示为省略号并用 tooltip 显示
+      <table-column-api-link prop="tooltip"/> 当内容超过隐藏时显示为省略号并用 tooltip 显示<br>
+      还可以通过 <table-api-link prop="enterable"/> 开启鼠标是否可进入到 tooltip 中
     </p>
 
     <vxe-table

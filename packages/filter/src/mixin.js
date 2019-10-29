@@ -40,7 +40,7 @@ export default {
         let { visibleWidth } = DomTools.getDomNode()
         let { top, left } = DomTools.getAbsolutePos(targetElem)
         if (!filterStore.zIndex || filterStore.zIndex < UtilTools.getLastZIndex()) {
-          filterStore.zIndex = UtilTools.getZIndex()
+          filterStore.zIndex = UtilTools.getZIndex(this)
         }
         Object.assign(filterStore, {
           args: params,

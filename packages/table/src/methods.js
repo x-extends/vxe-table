@@ -1,4 +1,5 @@
 import XEUtils from 'xe-utils/methods/xe-utils'
+import GlobalConfig from '../../conf'
 import Cell from '../../cell'
 import VXETable, { Interceptor, Renderer } from '../../v-x-e-table'
 import { UtilTools, DomTools } from '../../tools'
@@ -1320,12 +1321,39 @@ const Methods = {
   handleGlobalResizeEvent () {
     this.recalculate()
   },
+  handleTooltipLeaveEvent (evnt) {
+    let { tooltipConfig = {} } = this
+    setTimeout(() => {
+      if (!this.tooltipActive) {
+        this.clostTooltip()
+      }
+    }, tooltipConfig.leaveDelay || GlobalConfig.tooltip.leaveDelay)
+  },
+  handleTargetEnterEvent (evnt) {
+    clearTimeout(this.tooltipTimeout)
+    this.tooltipActive = true
+    this.clostTooltip()
+  },
+  handleTargetLeaveEvent (evnt) {
+    let { tooltipConfig = {} } = this
+    this.tooltipActive = false
+    if (tooltipConfig.enterable) {
+      this.tooltipTimeout = setTimeout(() => {
+        if (!this.$refs.tooltip.isHover) {
+          this.clostTooltip()
+        }
+      }, tooltipConfig.leaveDelay || GlobalConfig.tooltip.leaveDelay)
+    } else {
+      this.clostTooltip()
+    }
+  },
   /**
    * 触发表头 tooltip 事件
    */
   triggerHeaderTooltipEvent (evnt, params) {
     let { tooltipStore } = this
     let { column } = params
+    this.handleTargetEnterEvent()
     if (tooltipStore.column !== column || !tooltipStore.visible) {
       // 在 v3.0 中废弃 label
       this.handleTooltip(evnt, column)
@@ -1337,6 +1365,7 @@ const Methods = {
   triggerFooterTooltipEvent (evnt, params) {
     let { column } = params
     let tooltipStore = this.tooltipStore
+    this.handleTargetEnterEvent()
     if (tooltipStore.column !== column || !tooltipStore.visible) {
       this.handleTooltip(evnt, column)
     }
@@ -1348,6 +1377,7 @@ const Methods = {
     let { editConfig, editStore, tooltipStore } = this
     let { actived } = editStore
     let { row, column } = params
+    this.handleTargetEnterEvent()
     if (editConfig) {
       if ((editConfig.mode === 'row' && actived.row === row) || (actived.row === row && actived.column === column)) {
         return
@@ -2586,7 +2616,7 @@ const Methods = {
   },
   updateZindex () {
     if (this.tZindex < UtilTools.getLastZIndex()) {
-      this.tZindex = UtilTools.getZIndex()
+      this.tZindex = UtilTools.getZIndex(this)
     }
   },
 
