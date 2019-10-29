@@ -97,7 +97,10 @@ export const UtilTools = {
   getFuncText (content) {
     return XEUtils.isFunction(content) ? content() : (GlobalConfig.translate ? GlobalConfig.translate(content) : content)
   },
-  getZIndex () {
+  getZIndex ($table) {
+    if ($table && $table.zIndex) {
+      return $table.zIndex
+    }
     lastZindex = GlobalConfig.zIndex + zindexIndex++
     return lastZindex
   },

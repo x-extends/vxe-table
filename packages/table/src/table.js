@@ -212,6 +212,7 @@ export default {
     columnKey: Boolean,
     rowKey: [Boolean, String],
     rowId: String,
+    zIndex: Number,
     // 是否自动监听父容器变化去更新响应式表格宽高
     autoResize: Boolean,
     // 是否自动根据状态属性去更新响应式表格宽高
@@ -845,7 +846,10 @@ export default {
          */
         hasTip ? h('vxe-tooltip', {
           ref: 'tooltip',
-          props: tooltipConfig
+          props: tooltipConfig,
+          on: tooltipConfig && tooltipConfig.enterable ? {
+            leave: this.handleTooltipLeaveEvent
+          } : null
         }) : _e(),
         /**
          * valid error tooltip
@@ -2310,12 +2314,39 @@ export default {
         this.closeMenu()
       }
     },
+    handleTooltipLeaveEvent (evnt) {
+      let { tooltipConfig = {} } = this
+      setTimeout(() => {
+        if (!this.tooltipActive) {
+          this.clostTooltip()
+        }
+      }, tooltipConfig.leaveDelay || GlobalConfig.tooltip.leaveDelay)
+    },
+    handleTargetEnterEvent (evnt) {
+      clearTimeout(this.tooltipTimeout)
+      this.tooltipActive = true
+      this.clostTooltip()
+    },
+    handleTargetLeaveEvent (evnt) {
+      let { tooltipConfig = {} } = this
+      this.tooltipActive = false
+      if (tooltipConfig.enterable) {
+        this.tooltipTimeout = setTimeout(() => {
+          if (!this.$refs.tooltip.isHover) {
+            this.clostTooltip()
+          }
+        }, tooltipConfig.leaveDelay || GlobalConfig.tooltip.leaveDelay)
+      } else {
+        this.clostTooltip()
+      }
+    },
     /**
      * 触发表头 tooltip 事件
      */
     triggerHeaderTooltipEvent (evnt, params) {
       let { tooltipStore } = this
       let { column } = params
+      this.handleTargetEnterEvent()
       if (tooltipStore.column !== column || !tooltipStore.visible) {
         this.handleTooltip(evnt, column)
       }
@@ -2326,6 +2357,7 @@ export default {
     triggerFooterTooltipEvent (evnt, params) {
       let { column } = params
       let tooltipStore = this.tooltipStore
+      this.handleTargetEnterEvent()
       if (tooltipStore.column !== column || !tooltipStore.visible) {
         this.handleTooltip(evnt, column)
       }
@@ -2337,6 +2369,7 @@ export default {
       let { editConfig, editStore, tooltipStore } = this
       let { actived } = editStore
       let { row, column } = params
+      this.handleTargetEnterEvent()
       if (editConfig) {
         if ((editConfig.mode === 'row' && actived.row === row) || (actived.row === row && actived.column === column)) {
           return
@@ -3324,7 +3357,7 @@ export default {
         let { visibleWidth } = DomTools.getDomNode()
         let { top, left } = DomTools.getAbsolutePos(targetElem)
         if (!filterStore.zIndex || filterStore.zIndex < UtilTools.getLastZIndex()) {
-          filterStore.zIndex = UtilTools.getZIndex()
+          filterStore.zIndex = UtilTools.getZIndex(this)
         }
         Object.assign(filterStore, {
           args: params,
@@ -4291,7 +4324,7 @@ export default {
     },
     updateZindex () {
       if (this.tZindex < UtilTools.getLastZIndex()) {
-        this.tZindex = UtilTools.getZIndex()
+        this.tZindex = UtilTools.getZIndex(this)
       }
     },
 

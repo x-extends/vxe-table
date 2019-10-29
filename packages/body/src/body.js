@@ -102,7 +102,7 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
         return
       }
       if (showTooltip) {
-        $table.clostTooltip()
+        $table.handleTargetLeaveEvent()
       }
       UtilTools.emitEvent($table, 'cell-mouseleave', [{ $table, seq, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, level: rowLevel, cell: evnt.currentTarget }, evnt])
     }

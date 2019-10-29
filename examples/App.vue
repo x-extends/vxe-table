@@ -32,7 +32,7 @@
             <option value="2">V2</option>
             <option value="3">V3</option>
           </select>
-          <vxe-tooltip :content="$t('app.footer.donationDesc')">
+          <vxe-tooltip :content="$t('app.footer.donationDesc')" enterable>
             <a class="donation" href="https://github.com/xuliangzhan/vxe-table#donation" target="_blank">{{ $t('app.footer.donation') }}☕</a>
           </vxe-tooltip>
         </div>

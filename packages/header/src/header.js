@@ -178,7 +178,7 @@ export default {
             let columnIndex = getColumnMapIndex(column)
             let params = { $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType }
             if (showTitle || showTooltip) {
-              thOns.mouseover = evnt => {
+              thOns.mouseenter = evnt => {
                 if (showTitle) {
                   DomTools.updateCellTitle(evnt)
                 } else if (showTooltip) {
@@ -187,7 +187,11 @@ export default {
               }
             }
             if (showTooltip) {
-              thOns.mouseout = $table.clostTooltip
+              thOns.mouseleave = evnt => {
+                if (showTooltip) {
+                  $table.handleTargetLeaveEvent(evnt)
+                }
+              }
             }
             if (highlightCurrentColumn || tableListeners['header-cell-click'] || sortOpts.trigger === 'cell') {
               thOns.click = evnt => $table.triggerHeaderCellClickEvent(evnt, { $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, cell: evnt.currentTarget })

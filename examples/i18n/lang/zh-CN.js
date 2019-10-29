@@ -277,6 +277,7 @@ module.exports = {
           columnKey: '是否需要为每一列的 VNode 设置 key 属性（非特殊情况下不需要使用）',
           rowKey: '是否需要为每一行的 VNode 设置 key 属性（非特殊情况下没必要设置）',
           rowId: '自定义行数据唯一主键的字段名（行数据必须要有唯一主键，默认自动生成）',
+          zIndex: '自定义堆叠顺序（对于某些特殊场景，比如被遮挡时可能会用到）',
           sortConfig: '排序配置项',
           radioConfig: '单选框配置项',
           selectConfig: '即将废弃，请使用 checkbox-config',
@@ -371,8 +372,10 @@ module.exports = {
           content: '显示内容',
           trigger: '触发方式',
           theme: '主题样式',
-          zIndex: '自定义堆叠顺序（对于在弹框中使用是由于堆叠被覆盖时可能会用到）',
-          isArrow: '是否显示箭头'
+          zIndex: '自定义堆叠顺序（对于某些特殊场景，比如被遮挡时可能会用到）',
+          isArrow: '是否显示箭头',
+          enterable: '鼠标是否可进入到 tooltip 中',
+          leaveDelay: '鼠标移出后延时多少才隐藏 tooltip'
         }
       },
       grid: {
@@ -460,7 +463,7 @@ module.exports = {
           minWidth: '窗口的最小宽度',
           minHeight: '窗口的最小高度',
           top: '只对 type=message 有效，消息距离顶部的位置',
-          zIndex: '自定义堆叠顺序（对于在弹框中使用是由于堆叠被覆盖时可能会用到）',
+          zIndex: '自定义堆叠顺序（对于某些特殊场景，比如被遮挡时可能会用到）',
           fullscreen: '默认最大化显示',
           dblclickZoom: '只对 type=modal 有效，是否允许通过双击头部放大或还原窗口'
         }
