@@ -44,6 +44,7 @@ const TableFormat = () => import(/* webpackChunkName: "base" */ './views/table/b
 
 const TableEvent = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Event.vue')
 const TableTemplate = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Template.vue')
+const TableDynamic = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Dynamic.vue')
 const TableCustomSort = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/CustomSort.vue')
 const TableManualFilter = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/ManualFilter.vue')
 const TableSpan = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Span.vue')
@@ -393,6 +394,11 @@ export default new Router({
       path: '/table/advanced/template',
       name: 'TableTemplate',
       component: TableTemplate
+    },
+    {
+      path: '/table/advanced/dynamic',
+      name: 'TableDynamic',
+      component: TableDynamic
     },
     {
       path: '/table/advanced/customSort',

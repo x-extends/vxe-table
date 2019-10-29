@@ -31,7 +31,7 @@ function toCsv ($table, opts, columns, datas) {
 
 function toHtml ($table, opts, columns, datas) {
   const isOriginal = opts.original
-  let html = '<table>'
+  let html = '<table border="1" cellspacing="0" cellpadding="0">'
   if (opts.isHeader) {
     html += '<thead><tr><th>' + columns.map(({ own }) => UtilTools.getFuncText(own.title || own.label)).join('</th><th>') + '</th></tr></thead>'
   }

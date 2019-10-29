@@ -1780,7 +1780,7 @@ const apis = [
       },
       {
         name: 'refreshColumn()',
-        desc: '刷新列配置（对于显示/隐藏列场景下可能会用到）',
+        desc: '刷新列配置（对于动态修改属性、显示/隐藏列等场景下可能会用到）',
         version: '',
         type: 'Promise',
         enum: '',

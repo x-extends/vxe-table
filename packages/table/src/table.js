@@ -3309,7 +3309,7 @@ export default {
           column.filters = UtilTools.getFilters(rest)
         }
       }
-      return Promise.resolve(filters)
+      return this.$nextTick().then(() => filters)
     },
     /**
      * 点击筛选事件

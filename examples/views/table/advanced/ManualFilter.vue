@@ -26,7 +26,7 @@
       :loading="loading"
       :data="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" sortable :filters="[{label: 'id大于10', value: 10}, {label: 'id大于40', value: 40}]" :filter-method="filterNameMethod"></vxe-table-column>
+      <vxe-table-column field="name" title="Name" sortable :filters="nameFilterList" :filter-method="filterNameMethod"></vxe-table-column>
       <vxe-table-column field="role" title="Role" sortable :filters="[{ data: '' }]" :filter-method="filterRoleMethod">
         <template v-slot:filter="{ column, context }">
           <select class="my-select" v-model="option.data" v-for="(option, index) in column.filters" :key="index" @change="context.changeOption($event, !!option.data, option)">
@@ -64,6 +64,10 @@ export default {
       loading: false,
       tableData: [],
       roleList: ['', '前端', '后端', '设计师'],
+      nameFilterList: [
+        { label: 'id大于10', value: 10 },
+        { label: 'id大于40', value: 40 }
+      ],
       demoCodes: [
         `
         <vxe-toolbar>
@@ -84,7 +88,7 @@ export default {
           :loading="loading"
           :data="tableData">
           <vxe-table-column type="index" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" sortable :filters="[{label: 'id大于10', value: 10}, {label: 'id大于40', value: 40}]" :filter-method="filterNameMethod"></vxe-table-column>
+          <vxe-table-column field="name" title="Name" sortable :filters="nameFilterList" :filter-method="filterNameMethod"></vxe-table-column>
           <vxe-table-column field="role" title="Role" sortable :filters="[{ data: '' }]" :filter-method="filterRoleMethod">
             <template v-slot:filter="{ column, context }">
               <select class="my-select" v-model="option.data" v-for="(option, index) in column.filters" :key="index" @change="context.changeOption($event, !!option.data, option)">
@@ -109,7 +113,11 @@ export default {
             return {
               loading: false,
               tableData: [],
-              roleList: ['', '前端', '后端', '设计师']
+              roleList: ['', '前端', '后端', '设计师'],
+              nameFilterList: [
+                { label: 'id大于10', value: 10 },
+                { label: 'id大于40', value: 40 }
+              ]
             }
           },
           created () {
@@ -136,31 +144,29 @@ export default {
               return row.age === Number(option.data)
             },
             updateNameFilterEvent () {
-              let xTable = this.$refs.xTable
-              xTable.filter('name', options => {
-                // 修改筛选列表
-                return [
-                  {
-                    label: 'id大于10',
-                    value: 10
-                  },
-                  {
-                    label: 'id大于20',
-                    value: 20
-                  },
-                  {
-                    label: 'id大于30',
-                    value: 30,
-                    checked: true // 设置为选中状态
-                  },
-                  {
-                    label: 'id大于40',
-                    value: 40
-                  }
-                ]
-              }).then(() => {
+              // 修改筛选列表
+              this.nameFilterList = [
+                {
+                  label: 'id大于10',
+                  value: 10
+                },
+                {
+                  label: 'id大于20',
+                  value: 20
+                },
+                {
+                  label: 'id大于30',
+                  value: 30,
+                  checked: true // 设置为选中状态
+                },
+                {
+                  label: 'id大于40',
+                  value: 40
+                }
+              ]
+              this.$nextTick(() => {
                 // 修改条件之后，需要手动调用 updateData 处理表格数据
-                xTable.updateData()
+                this.$refs.xTable.updateData()
               })
             },
             filterNameEvent () {
@@ -239,31 +245,29 @@ export default {
       return row.age === Number(option.data)
     },
     updateNameFilterEvent () {
-      let xTable = this.$refs.xTable
-      xTable.filter('name', options => {
-        // 修改筛选列表
-        return [
-          {
-            label: 'id大于10',
-            value: 10
-          },
-          {
-            label: 'id大于20',
-            value: 20
-          },
-          {
-            label: 'id大于30',
-            value: 30,
-            checked: true // 设置为选中状态
-          },
-          {
-            label: 'id大于40',
-            value: 40
-          }
-        ]
-      }).then(() => {
+      // 修改筛选列表
+      this.nameFilterList = [
+        {
+          label: 'id大于10',
+          value: 10
+        },
+        {
+          label: 'id大于20',
+          value: 20
+        },
+        {
+          label: 'id大于30',
+          value: 30,
+          checked: true // 设置为选中状态
+        },
+        {
+          label: 'id大于40',
+          value: 40
+        }
+      ]
+      this.$nextTick(() => {
         // 修改条件之后，需要手动调用 updateData 处理表格数据
-        xTable.updateData()
+        this.$refs.xTable.updateData()
       })
     },
     filterNameEvent () {
