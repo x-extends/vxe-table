@@ -2602,8 +2602,17 @@ const apis = [
       },
       {
         name: 'recalculate()',
-        desc: '重新计算表格（对于某些特殊场景可能会用到，比如隐藏的表格、更新列宽...等）',
+        desc: '重新计算表格（对于某些特殊场景可能会用到，比如隐藏的表格、更新列宽）',
         version: '',
+        type: 'Promise',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'refreshScroll()',
+        desc: '刷新滚动操作，手动同步滚动相关位置（对于某些特殊的操作，比如滚动条错位、固定列不同步）',
+        version: '1.15.10',
         type: 'Promise',
         enum: '',
         defVal: '',

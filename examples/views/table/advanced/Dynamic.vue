@@ -104,10 +104,13 @@ export default {
               this.tableColumn.pop()
             },
             toggleFixedColumn (index, value) {
+              const xTable = this.$refs.xTable
               this.tableColumn[index].fixed = this.tableColumn[index].fixed ? null : value
               // 更改了列属性，需要手动刷新列
               this.$nextTick(() => {
-                this.$refs.xTable.refreshColumn()
+                xTable.refreshColumn()
+                  // 由于固定列的动态切换是无状态的，所以需要手动刷新滚动位置
+                  .then(() => xTable.refreshScroll())
               })
             },
             updateWidthColumn (index, value) {
@@ -129,8 +132,7 @@ export default {
     })
   },
   created () {
-    let list = window.MOCK_DATA_LIST.slice(0, 6)
-    this.tableData = list
+    this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
   },
   methods: {
     addColumn () {
@@ -156,10 +158,13 @@ export default {
       })
     },
     toggleFixedColumn (index, value) {
+      const xTable = this.$refs.xTable
       this.tableColumn[index].fixed = this.tableColumn[index].fixed ? null : value
       // 更改了列属性，需要手动刷新列
       this.$nextTick(() => {
-        this.$refs.xTable.refreshColumn()
+        xTable.refreshColumn()
+          // 由于固定列的动态切换是无状态的，所以需要手动刷新滚动位置
+          .then(() => xTable.refreshScroll())
       })
     },
     updateWidthColumn (index, value) {
