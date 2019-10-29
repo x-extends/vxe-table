@@ -76,7 +76,6 @@
           },
           // 默认模态窗口参数
           modal: {
-            zIndex: 2000,
             minWidth: 340,
             minHeight: 200,
             lockView: true,

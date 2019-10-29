@@ -71,8 +71,8 @@ export default {
         </vxe-table>
         `,
         `
-        VXETable.buttons.add('exportData', (params, event) => {
-          let { $table } = params
+        VXETable.buttons.add('exportBtn', (params, event) => {
+          let { $table, code, button } = params
           $table.exportData()
         })
 
@@ -82,7 +82,7 @@ export default {
               tableData: [],
               toolbarButtons: [
                 {
-                  code: 'exportData',
+                  code: 'exportBtn',
                   name: '导出.csv'
                 }
               ]

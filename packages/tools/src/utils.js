@@ -68,6 +68,13 @@ class ColumnConfig {
       own: _vm
     })
   }
+  update (name, value) {
+    if (name === 'filters') {
+      this[name] = UtilTools.getFilters(value)
+    } else {
+      this[name] = value
+    }
+  }
 }
 
 function outLog (type) {

@@ -306,6 +306,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.dynamic',
+              locat: {
+                name: 'TableDynamic'
+              }
+            },
+            {
               label: 'app.aside.nav.customSort',
               locat: {
                 name: 'TableCustomSort'

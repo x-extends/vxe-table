@@ -1,4 +1,5 @@
 import XEUtils from 'xe-utils/methods/xe-utils'
+import GlobalConfig from '../conf'
 import Interceptor from './src/interceptor'
 import Renderer from './src/renderer'
 import Buttons from './src/buttons'
@@ -39,6 +40,12 @@ export const VXETable = {
   buttons: Buttons,
   menus: Menus
 }
+
+Object.defineProperty(VXETable, 'zIndex', {
+  get () {
+    return GlobalConfig.zIndex
+  }
+})
 
 export * from './src/interceptor'
 export * from './src/renderer'

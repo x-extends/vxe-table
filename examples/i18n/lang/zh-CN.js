@@ -40,6 +40,7 @@ module.exports = {
         more: '更多功能',
         events: '事件绑定',
         template: '自定义模板',
+        dynamic: '使用 v-for 动态实现',
         customSort: '自定义列头排序',
         manualFilter: '筛选高级用法',
         span: '合并行或列',

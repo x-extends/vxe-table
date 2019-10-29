@@ -40,6 +40,7 @@ module.exports = {
         more: 'More',
         events: 'Event',
         template: 'Template',
+        dynamic: 'Use v-for dynamic implementation',
         customSort: 'Custom column header sorting',
         manualFilter: 'Filtering advanced usage',
         span: 'Rowspan and colspan',
