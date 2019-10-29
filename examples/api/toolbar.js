@@ -35,8 +35,8 @@ const apis = [
         list: []
       },
       {
-        name: 'exps',
-        descKey: 'app.api.toolbar.desc.exps',
+        name: 'export',
+        descKey: 'app.api.toolbar.desc.export',
         version: '2.6.6',
         type: 'Boolean',
         enum: '',

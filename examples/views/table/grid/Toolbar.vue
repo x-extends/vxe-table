@@ -65,9 +65,9 @@ export default {
               { code: 'export', name: '导出.csv' }
             ]
           },
-          { code: 'myBtn', name: '自定义按钮' }
+          { code: 'exportData111', name: '自定义按钮' }
         ],
-        exps: true,
+        export: true,
         refresh: true,
         resizable: {
           storage: true
@@ -140,7 +140,7 @@ export default {
                   },
                   { code: 'myBtn', name: '自定义按钮' }
                 ],
-                exps: true,
+                export: true,
                 refresh: true,
                 resizable: {
                   storage: true

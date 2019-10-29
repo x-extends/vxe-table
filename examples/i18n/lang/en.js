@@ -380,7 +380,7 @@ module.exports = {
           id: 'Unique ID identification',
           size: 'Size',
           loading: 'Loading',
-          exps: 'Export button config',
+          export: 'Export button config',
           refresh: 'Refresh button config',
           resizable: 'Column width drag config(id needs to be set)',
           setting: 'Custom column config(id needs to be set)'

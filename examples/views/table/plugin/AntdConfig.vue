@@ -5,12 +5,19 @@
     <vxe-grid
       border
       show-overflow
+      ref="xGrid"
       class="vxe-table-antd"
       height="460"
       :loading="loading"
       :data="tableData"
       :columns="tableColumn"
-      :edit-config="{trigger: 'click', mode: 'row'}"></vxe-grid>
+      :toolbar="tableToolbar"
+      :edit-config="{trigger: 'click', mode: 'row'}">
+      <template v-slot:buttons>
+        <el-button @click="insertEvent">新增</el-button>
+        <el-button @click="saveEvent">保存</el-button>
+      </template>
+    </vxe-grid>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
@@ -49,18 +56,25 @@ export default {
         { field: 'flag', title: 'ASwitch', width: 100, editRender: { name: 'ASwitch', type: 'visible' } },
         { field: 'rate', title: 'ARate', width: 200, editRender: { name: 'ARate', type: 'visible' } }
       ],
+      tableToolbar: {},
       restaurants: ['前端', '后端', '开发', '测试'],
       demoCodes: [
         `
         <vxe-grid
           border
           show-overflow
+          ref="xGrid"
           class="vxe-table-antd"
           height="460"
           :loading="loading"
           :data="tableData"
           :columns="tableColumn"
-          :edit-config="{trigger: 'click', mode: 'row'}"></vxe-grid>
+          :edit-config="{trigger: 'click', mode: 'row'}">
+          <template v-slot:buttons>
+            <el-button @click="insertEvent">新增</el-button>
+            <el-button @click="saveEvent">保存</el-button>
+          </template>
+        </vxe-grid>
         `,
         `
         export default {
@@ -88,6 +102,7 @@ export default {
                 { field: 'flag', title: 'ASwitch', width: 100, editRender: { name: 'ASwitch', type: 'visible' } },
                 { field: 'rate', title: 'ARate', width: 200, editRender: { name: 'ARate', type: 'visible' } }
               ],
+              tableToolbar: {},
               restaurants: ['前端', '后端', '开发', '测试']
             }
           },
@@ -168,6 +183,25 @@ export default {
               }]
               this.tableColumn[14].editRender.props.treeData = treeData
               this.tableColumn[15].editRender.props.treeData = treeData
+            },
+            insertEvent () {
+              let xGrid = this.$refs.xGrid
+              let record = {
+                role: '',
+                age: 18,
+                region: [],
+                flag: false,
+                rate: 2
+              }
+              xGrid.insert(record).then(({ row }) => xGrid.setActiveRow(row))
+            },
+            saveEvent () {
+              let { insertRecords, removeRecords, updateRecords } = this.$refs.xGrid.getRecordset()
+              if (insertRecords.length || removeRecords.length || updateRecords.length) {
+                this.$alert(\`insertRecords=\${insertRecords.length}; removeRecords=\${removeRecords.length}; updateRecords=\${updateRecords.length}\`)
+              } else {
+                this.$alert('数据未改动！')
+              }
             },
             roleSearchEvent ({ row }, value) {
               let dataSource = this.restaurants.filter(option => option.toUpperCase().indexOf((value || '').toUpperCase()) !== -1)
@@ -261,6 +295,25 @@ export default {
       }]
       this.tableColumn[14].editRender.props.treeData = treeData
       this.tableColumn[15].editRender.props.treeData = treeData
+    },
+    insertEvent () {
+      let xGrid = this.$refs.xGrid
+      let record = {
+        role: '',
+        age: 18,
+        region: [],
+        flag: false,
+        rate: 2
+      }
+      xGrid.insert(record).then(({ row }) => xGrid.setActiveRow(row))
+    },
+    saveEvent () {
+      let { insertRecords, removeRecords, updateRecords } = this.$refs.xGrid.getRecordset()
+      if (insertRecords.length || removeRecords.length || updateRecords.length) {
+        this.$alert(`insertRecords=${insertRecords.length}; removeRecords=${removeRecords.length}; updateRecords=${updateRecords.length}`)
+      } else {
+        this.$alert('数据未改动！')
+      }
     },
     roleSearchEvent ({ row }, value) {
       let dataSource = this.restaurants.filter(option => option.toUpperCase().indexOf((value || '').toUpperCase()) !== -1)

@@ -5,12 +5,19 @@
     <vxe-grid
       border
       show-overflow
+      ref="xGrid"
       class="vxe-table-element"
       height="460"
       :loading="loading"
       :data="tableData"
       :columns="tableColumn"
-      :edit-config="{trigger: 'click', mode: 'row'}"></vxe-grid>
+      :toolbar="tableToolbar"
+      :edit-config="{trigger: 'click', mode: 'row'}">
+      <template v-slot:buttons>
+        <el-button @click="insertEvent">新增</el-button>
+        <el-button @click="saveEvent">保存</el-button>
+      </template>
+    </vxe-grid>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
@@ -45,6 +52,7 @@ export default {
         { field: 'flag', title: 'ElSwitch', width: 100, editRender: { name: 'ElSwitch', type: 'visible' } },
         { field: 'rate', title: 'ElRate', width: 200, editRender: { name: 'ElRate', type: 'visible' } }
       ],
+      tableToolbar: {},
       restaurants: [
         { value: '前端', name: '前端' },
         { value: '后端', name: '后端' },
@@ -56,12 +64,19 @@ export default {
         <vxe-grid
           border
           show-overflow
+          ref="xGrid"
           class="vxe-table-element"
           height="460"
           :loading="loading"
           :data="tableData"
           :columns="tableColumn"
-          :edit-config="{trigger: 'click', mode: 'row'}"></vxe-grid>
+          :toolbar="tableToolbar"
+          :edit-config="{trigger: 'click', mode: 'row'}">
+          <template v-slot:buttons>
+            <el-button @click="insertEvent">新增</el-button>
+            <el-button @click="saveEvent">保存</el-button>
+          </template>
+        </vxe-grid>
         `,
         `
         export default {
@@ -85,6 +100,7 @@ export default {
                 { field: 'flag', title: 'ElSwitch', width: 100, editRender: { name: 'ElSwitch', type: 'visible' } },
                 { field: 'rate', title: 'ElRate', width: 200, editRender: { name: 'ElRate', type: 'visible' } }
               ],
+              tableToolbar: {},
               restaurants: [
                 { value: '前端', name: '前端' },
                 { value: '后端', name: '后端' },
@@ -137,6 +153,25 @@ export default {
                 }
               ]
               this.tableColumn[7].editRender.optionGroups = sexGroupList
+            },
+            nsertEvent () {
+              let xGrid = this.$refs.xGrid
+              let record = {
+                role: '',
+                age: 18,
+                region: [],
+                flag: false,
+                rate: 2
+              }
+              xGrid.insert(record).then(({ row }) => xGrid.setActiveRow(row))
+            },
+            saveEvent () {
+              let { insertRecords, removeRecords, updateRecords } = this.$refs.xGrid.getRecordset()
+              if (insertRecords.length || removeRecords.length || updateRecords.length) {
+                this.$alert(\`insertRecords=\${insertRecords.length}; removeRecords=\${removeRecords.length}; updateRecords=\${updateRecords.length}\`)
+              } else {
+                this.$alert('数据未改动！')
+              }
             },
             roleFetchSuggestions (queryString, cb) {
               var restaurants = this.restaurants
@@ -206,6 +241,25 @@ export default {
         }
       ]
       this.tableColumn[7].editRender.optionGroups = sexGroupList
+    },
+    insertEvent () {
+      let xGrid = this.$refs.xGrid
+      let record = {
+        role: '',
+        age: 18,
+        region: [],
+        flag: false,
+        rate: 2
+      }
+      xGrid.insert(record).then(({ row }) => xGrid.setActiveRow(row))
+    },
+    saveEvent () {
+      let { insertRecords, removeRecords, updateRecords } = this.$refs.xGrid.getRecordset()
+      if (insertRecords.length || removeRecords.length || updateRecords.length) {
+        this.$alert(`insertRecords=${insertRecords.length}; removeRecords=${removeRecords.length}; updateRecords=${updateRecords.length}`)
+      } else {
+        this.$alert('数据未改动！')
+      }
     },
     roleFetchSuggestions (queryString, cb) {
       var restaurants = this.restaurants

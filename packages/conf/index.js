@@ -80,7 +80,7 @@ const GlobalConfig = {
     // resizable: {
     //   storage: false
     // },
-    // exps: false,
+    // export: false,
     // setting: {
     //   storage: false
     // },
