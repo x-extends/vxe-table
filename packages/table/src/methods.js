@@ -99,7 +99,7 @@ const Methods = {
    * @param {Boolean} notRefresh 是否不重新运算列宽
    */
   loadTableData (datas, notRefresh) {
-    let { height, maxHeight, treeConfig, editStore, optimizeOpts, scrollYStore, lastScrollLeft, lastScrollTop } = this
+    let { height, maxHeight, treeConfig, editStore, optimizeOpts, scrollYStore } = this
     let { scrollY } = optimizeOpts
     let tableFullData = datas ? datas.slice(0) : []
     let scrollYLoad = !treeConfig && scrollY && scrollY.gt && scrollY.gt < tableFullData.length
@@ -120,7 +120,6 @@ const Methods = {
     }
     // 是否加载了数据
     this.isLoadData = true
-    this.clearScroll()
     this.handleTableData(true)
     this.reserveCheckSelection()
     this.checkSelectionStatus()
@@ -128,15 +127,7 @@ const Methods = {
     if (!notRefresh) {
       rest = rest.then(this.recalculate)
     }
-    return rest.then(() => {
-      if (lastScrollLeft || lastScrollTop) {
-        // 重置最后滚动状态
-        this.lastScrollLeft = 0
-        this.lastScrollTop = 0
-        // 还原滚动状态
-        return this.scrollTo(lastScrollLeft, lastScrollTop)
-      }
-    })
+    return rest.then(this.refreshScroll)
   },
   /**
    * 重新加载数据，不会清空表格状态
@@ -783,6 +774,22 @@ const Methods = {
       }
     })
     Object.assign(this.columnStore, { resizeList, pxList, pxMinList, scaleList, scaleMinList, autoList })
+  },
+  /**
+   * 刷新滚动操作，手动同步滚动相关位置（对于某些特殊的操作，比如滚动条错位、固定列不同步）
+   */
+  refreshScroll () {
+    const { lastScrollLeft, lastScrollTop } = this
+    this.clearScroll()
+    return this.$nextTick().then(() => {
+      if (lastScrollLeft || lastScrollTop) {
+        // 重置最后滚动状态
+        this.lastScrollLeft = 0
+        this.lastScrollTop = 0
+        // 还原滚动状态
+        return this.scrollTo(lastScrollLeft, lastScrollTop)
+      }
+    })
   },
   /**
    * 计算单元格列宽，动态分配可用剩余空间
