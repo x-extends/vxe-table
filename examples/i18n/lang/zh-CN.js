@@ -206,7 +206,7 @@ module.exports = {
         copyToClipboard: '已复制到剪贴板！'
       },
       other: {
-        newFunc: '由于作者比较忙，后续有时间可能会完支持功能！',
+        newFunc: '由于作者比较忙，后续有时间可能会支持该功能！',
         newDevelopment: '由于作者比较忙，该版本正在重构中，敬请期待！'
       }
     },
