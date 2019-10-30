@@ -10,7 +10,7 @@
             <vxe-button @click="insertEvent(null)">从第一行插入</vxe-button>
             <vxe-button @click="insertEvent(-1)">从最后插入</vxe-button>
             <vxe-button @click="insertEvent($refs.xTable.getData(100))">插入到 100 行</vxe-button>
-            <vxe-button @click="insertEvent($refs.xTable.getData(2000))">插入到 2000 行</vxe-button>
+            <vxe-button @click="insertEvent($refs.xTable.getData(500))">插入到 500 行</vxe-button>
           </template>
         </vxe-button>
         <vxe-button>
@@ -86,7 +86,7 @@ export default {
                 <vxe-button @click="insertEvent(null)">从第一行插入</vxe-button>
                 <vxe-button @click="insertEvent(-1)">从最后插入</vxe-button>
                 <vxe-button @click="insertEvent($refs.xTable.getData(100))">插入到 100 行</vxe-button>
-                <vxe-button @click="insertEvent($refs.xTable.getData(2000))">插入到 2000 行</vxe-button>
+                <vxe-button @click="insertEvent($refs.xTable.getData(500))">插入到 500 行</vxe-button>
               </template>
             </vxe-button>
             <vxe-button>
