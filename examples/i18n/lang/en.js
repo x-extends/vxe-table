@@ -205,7 +205,7 @@ module.exports = {
         copyToClipboard: 'Copied to clipboard'
       },
       other: {
-        newFunc: 'As the author is busy, there may be time to complete the support function!',
+        newFunc: 'Since the author is busy, there may be time to support this function later!',
         newDevelopment: 'Due to the author\'s busy schedule, this release is being refactored. Stay tuned!'
       }
     },
