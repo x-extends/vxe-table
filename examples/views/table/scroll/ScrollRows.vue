@@ -4,7 +4,7 @@
       虚拟滚动渲染，加载 1 万行<br>
       大数据不建议使用双向绑定的 <table-api-link name="data"/> 属性（vue 监听会大数据会短暂的卡顿），建议使用 <table-api-link prop="loadData"/>/<table-api-link prop="reloadData"/> 函数<br>
       <table-api-link prop="data"/> 和 <table-api-link prop="loadData"/>/<table-api-link prop="reloadData"/> 不应该同时使用，请根据数据量决定使用哪种方式，保证一致性<br>
-      <span class="red">注意：如果要启用纵向虚拟滚动，所有的行度必须一致，否则无法兼容</span>
+      <span class="red">注意：如果要启用纵向虚拟滚动，所有的行高必须一致，否则无法兼容</span>
     </p>
 
     <vxe-toolbar>
