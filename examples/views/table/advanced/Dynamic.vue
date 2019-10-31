@@ -103,6 +103,19 @@ export default {
             removeColumn () {
               this.tableColumn.pop()
             },
+            updateFilter (index) {
+              let xTable = this.$refs.xTable
+              xTable.filter(this.tableColumn[index].field, options => {
+                // 修改筛选列表，可以通过 checked 属性设置默认勾选
+                return [
+                  { value: '1', label: '男' },
+                  { value: '0', label: '女', checked: true }
+                ]
+              }).then(() => {
+                // 修改条件之后，需要手动调用 updateData 处理表格数据
+                xTable.updateData()
+              })
+            },
             toggleFixedColumn (index, value) {
               const xTable = this.$refs.xTable
               this.tableColumn[index].fixed = this.tableColumn[index].fixed ? null : value
@@ -147,14 +160,16 @@ export default {
       this.tableColumn.pop()
     },
     updateFilter (index) {
-      // 可以通过 checked 属性设置默认勾选
-      this.tableColumn[index].filters = [
-        { value: '1', label: '男' },
-        { value: '0', label: '女', checked: true }
-      ]
-      // 修改条件之后，需要手动调用 updateData 处理表格数据
-      this.$nextTick(() => {
-        this.$refs.xTable.updateData()
+      let xTable = this.$refs.xTable
+      xTable.filter(this.tableColumn[index].field, options => {
+        // 修改筛选列表，可以通过 checked 属性设置默认勾选
+        return [
+          { value: '1', label: '男' },
+          { value: '0', label: '女', checked: true }
+        ]
+      }).then(() => {
+        // 修改条件之后，需要手动调用 updateData 处理表格数据
+        xTable.updateData()
       })
     },
     toggleFixedColumn (index, value) {
