@@ -144,29 +144,31 @@ export default {
               return row.age === Number(option.data)
             },
             updateNameFilterEvent () {
-              // 修改筛选列表
-              this.nameFilterList = [
-                {
-                  label: 'id大于10',
-                  value: 10
-                },
-                {
-                  label: 'id大于20',
-                  value: 20
-                },
-                {
-                  label: 'id大于30',
-                  value: 30,
-                  checked: true // 设置为选中状态
-                },
-                {
-                  label: 'id大于40',
-                  value: 40
-                }
-              ]
-              this.$nextTick(() => {
+              let xTable = this.$refs.xTable
+              xTable.filter('name', options => {
+                // 修改筛选列表
+                return [
+                  {
+                    label: 'id大于10',
+                    value: 10
+                  },
+                  {
+                    label: 'id大于20',
+                    value: 20
+                  },
+                  {
+                    label: 'id大于30',
+                    value: 30,
+                    checked: true // 设置为选中状态
+                  },
+                  {
+                    label: 'id大于40',
+                    value: 40
+                  }
+                ]
+              }).then(() => {
                 // 修改条件之后，需要手动调用 updateData 处理表格数据
-                this.$refs.xTable.updateData()
+                xTable.updateData()
               })
             },
             filterNameEvent () {
@@ -245,29 +247,31 @@ export default {
       return row.age === Number(option.data)
     },
     updateNameFilterEvent () {
-      // 修改筛选列表
-      this.nameFilterList = [
-        {
-          label: 'id大于10',
-          value: 10
-        },
-        {
-          label: 'id大于20',
-          value: 20
-        },
-        {
-          label: 'id大于30',
-          value: 30,
-          checked: true // 设置为选中状态
-        },
-        {
-          label: 'id大于40',
-          value: 40
-        }
-      ]
-      this.$nextTick(() => {
+      let xTable = this.$refs.xTable
+      xTable.filter('name', options => {
+        // 修改筛选列表
+        return [
+          {
+            label: 'id大于10',
+            value: 10
+          },
+          {
+            label: 'id大于20',
+            value: 20
+          },
+          {
+            label: 'id大于30',
+            value: 30,
+            checked: true // 设置为选中状态
+          },
+          {
+            label: 'id大于40',
+            value: 40
+          }
+        ]
+      }).then(() => {
         // 修改条件之后，需要手动调用 updateData 处理表格数据
-        this.$refs.xTable.updateData()
+        xTable.updateData()
       })
     },
     filterNameEvent () {

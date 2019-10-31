@@ -69,9 +69,8 @@ class ColumnConfig {
     })
   }
   update (name, value) {
-    if (name === 'filters') {
-      this[name] = UtilTools.getFilters(value)
-    } else {
+    // 不支持双向的属性
+    if (!['filters'].includes(name)) {
       this[name] = value
     }
   }

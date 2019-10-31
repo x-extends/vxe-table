@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="tip">
-      大数据虚拟树<br>
+      实现支持大数据的虚拟树表格<br>
       <span class="red">注意：如果要启用纵向虚拟滚动，所有的行度必须一致，否则无法兼容</span>
     </p>
 
@@ -123,32 +123,40 @@ export default {
     findCityAll () {
       this.loading = true
       this.$ajax.getJSON('/api/conf/city/all').then(data => {
-        // 定义相关属性
-        this.$utils.eachTree(data, (item, index, obj, paths, parent, nodes) => {
-          let level = nodes.length
-          item.seq = level > 1 ? `${level}.${index + 1}` : `${index + 1}`
-          item.expand = false
-          item.level = level - 1
-        })
-        // 将树平铺为列表
-        let treeList = this.$utils.toTreeArray(data)
-        this.$refs.xTable.loadData(data)
-        this.treeList = treeList
-        this.tableData = data
+        const list = this.toVirtualTree(data)
+        this.$refs.xTable.loadData(list)
         this.loading = false
       })
     },
+    // 通用虚拟树平铺方法
+    toVirtualTree (treeData) {
+      // 定义相关属性
+      this.$utils.eachTree(treeData, (item, index, obj, paths, parent, nodes) => {
+        let level = nodes.length
+        item.seq = level > 1 ? `${level}.${index + 1}` : `${index + 1}`
+        item.expand = false
+        item.level = level - 1
+      })
+      // 将树平铺为列表
+      let treeList = this.$utils.toTreeArray(treeData)
+      this.treeList = treeList
+      this.tableData = treeData
+      return treeData
+    },
+    // 通用虚拟树展开方法
     toggleExpand (row) {
       let tableData = this.tableData
       let rowIndex = tableData.indexOf(row)
       let children = row.children
       if (row.expand) {
+        // 展开节点
         let childList = []
         this.$utils.eachTree(children, item => {
           childList.push(item)
         })
         tableData = tableData.filter(item => childList.indexOf(item) === -1)
       } else {
+        // 收起节点
         let expandList = []
         this.$utils.eachTree(children, (item, index, obj, paths, parent, nodes) => {
           if (!parent || parent.expand) {
