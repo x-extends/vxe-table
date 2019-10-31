@@ -55,7 +55,7 @@ export default {
     }
   },
   created () {
-    this.panelIndex = UtilTools.getZIndex()
+    this.panelIndex = UtilTools.nextZIndex()
     GlobalEvent.on(this, 'mousedown', this.handleGlobalMousedownEvent)
   },
   destroyed () {
@@ -367,7 +367,7 @@ export default {
     },
     updateZindex () {
       if (this.panelIndex < UtilTools.getLastZIndex()) {
-        this.panelIndex = UtilTools.getZIndex()
+        this.panelIndex = UtilTools.nextZIndex()
       }
     },
     showSizePanel () {

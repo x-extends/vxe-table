@@ -2623,7 +2623,7 @@ const Methods = {
   },
   updateZindex () {
     if (this.tZindex < UtilTools.getLastZIndex()) {
-      this.tZindex = UtilTools.getZIndex(this)
+      this.tZindex = UtilTools.nextZIndex(this)
     }
   },
 

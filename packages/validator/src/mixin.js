@@ -51,8 +51,8 @@ export default {
     beginValidate (rows, cb, isAll) {
       let validRest = {}
       let status = true
-      let { editRules, tableData, tableFullData, treeConfig, scrollYLoad } = this
-      let vaildDatas = scrollYLoad ? tableFullData : tableData
+      let { editRules, afterFullData, treeConfig } = this
+      let vaildDatas = afterFullData
       if (rows) {
         if (XEUtils.isFunction(rows)) {
           cb = rows
@@ -116,12 +116,19 @@ export default {
                 reject(args)
               }
             }
+            /**
+             * 当校验不通过时
+             * 将表格滚动到可视区
+             * 由于提示信息至少需要占一行，定位向上偏移一行
+             */
+            let row = params.row
+            let rowIndex = afterFullData.indexOf(row)
+            let locatRow = rowIndex > 0 ? afterFullData[rowIndex - 1] : row
+            DomTools.toView(this.$el)
             if (treeConfig) {
-              this.scrollToTreeRow(params.row).then(finish)
-            } else if (scrollYLoad) {
-              this.scrollToRow(params.row).then(finish)
+              this.scrollToTreeRow(locatRow).then(finish)
             } else {
-              finish()
+              this.scrollToRow(locatRow).then(finish)
             }
           })
         })
@@ -244,7 +251,7 @@ export default {
               }
             }
           }).catch(({ rule }) => {
-          // 如果校验不通过与触发方式一致，则聚焦提示错误，否则跳过并不作任何处理
+            // 如果校验不通过与触发方式一致，则聚焦提示错误，否则跳过并不作任何处理
             if (!rule.trigger || type === rule.trigger) {
               let rest = { rule, row, column, cell }
               this.showValidTooltip(rest)

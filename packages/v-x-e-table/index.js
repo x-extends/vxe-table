@@ -1,5 +1,4 @@
 import XEUtils from 'xe-utils/methods/xe-utils'
-import GlobalConfig from '../conf'
 import Interceptor from './src/interceptor'
 import Renderer from './src/renderer'
 import Buttons from './src/buttons'
@@ -41,11 +40,15 @@ export const VXETable = {
   menus: Menus
 }
 
-Object.defineProperty(VXETable, 'zIndex', {
-  get () {
-    return GlobalConfig.zIndex
-  }
-})
+/**
+ * 获取当前的 zIndex
+ */
+Object.defineProperty(VXETable, 'zIndex', { get: UtilTools.getLastZIndex })
+
+/**
+ * 获取下一个 zIndex
+ */
+Object.defineProperty(VXETable, 'nextZIndex', { get: UtilTools.nextZIndex })
 
 export * from './src/interceptor'
 export * from './src/renderer'

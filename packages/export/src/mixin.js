@@ -147,7 +147,7 @@ export default {
   methods: {
     // 在 v3.0 中废弃 exportCsv 方法
     _exportCsv (options) {
-      return this._exportData(options)
+      return this.exportData(options)
     },
     /**
      * 导出文件，支持 csv/html/xml
