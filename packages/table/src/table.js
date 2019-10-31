@@ -3365,7 +3365,7 @@ export default {
         let { visibleWidth } = DomTools.getDomNode()
         let { top, left } = DomTools.getAbsolutePos(targetElem)
         if (!filterStore.zIndex || filterStore.zIndex < UtilTools.getLastZIndex()) {
-          filterStore.zIndex = UtilTools.getZIndex(this)
+          filterStore.zIndex = UtilTools.nextZIndex(this)
         }
         Object.assign(filterStore, {
           args: params,
@@ -4057,8 +4057,8 @@ export default {
     beginValidate (rows, cb, isAll) {
       let validRest = {}
       let status = true
-      let { editRules, tableData, tableFullData, treeConfig, scrollYLoad } = this
-      let vaildDatas = scrollYLoad ? tableFullData : tableData
+      let { editRules, afterFullData, treeConfig } = this
+      let vaildDatas = afterFullData
       if (rows) {
         if (XEUtils.isFunction(rows)) {
           cb = rows
@@ -4122,12 +4122,19 @@ export default {
                 reject(args)
               }
             }
+            /**
+             * 当校验不通过时
+             * 将表格滚动到可视区
+             * 由于提示信息至少需要占一行，定位向上偏移一行
+             */
+            let row = params.row
+            let rowIndex = afterFullData.indexOf(row)
+            let locatRow = rowIndex > 0 ? afterFullData[rowIndex - 1] : row
+            DomTools.toView(this.$el)
             if (treeConfig) {
-              this.scrollToTreeRow(params.row).then(finish)
-            } else if (scrollYLoad) {
-              this.scrollToRow(params.row).then(finish)
+              this.scrollToTreeRow(locatRow).then(finish)
             } else {
-              finish()
+              this.scrollToRow(locatRow).then(finish)
             }
           })
         })
@@ -4332,7 +4339,7 @@ export default {
     },
     updateZindex () {
       if (this.tZindex < UtilTools.getLastZIndex()) {
-        this.tZindex = UtilTools.getZIndex(this)
+        this.tZindex = UtilTools.nextZIndex(this)
       }
     },
 

@@ -62,7 +62,7 @@ export default {
     if (this.value) {
       this.open()
     }
-    this.modalZindex = this.zIndex || UtilTools.getZIndex()
+    this.modalZindex = this.zIndex || UtilTools.nextZIndex()
   },
   mounted () {
     let { $listeners, events = {}, width, height } = this
@@ -224,7 +224,7 @@ export default {
     },
     updateZindex () {
       if (this.modalZindex < UtilTools.getLastZIndex()) {
-        this.modalZindex = UtilTools.getZIndex()
+        this.modalZindex = UtilTools.nextZIndex()
       }
     },
     closeEvent (evnt) {

@@ -44,7 +44,7 @@ export default {
     let parentNode = $el.parentNode
     let target
     this.message = content
-    this.tipZindex = UtilTools.getZIndex()
+    this.tipZindex = UtilTools.nextZIndex()
     Array.from($el.children).forEach((elem, index) => {
       if (index > 1) {
         parentNode.insertBefore(elem, $el)
@@ -135,7 +135,7 @@ export default {
     },
     updateZindex () {
       if (this.tipZindex < UtilTools.getLastZIndex()) {
-        this.tipZindex = UtilTools.getZIndex()
+        this.tipZindex = UtilTools.nextZIndex()
       }
     },
     toVisible (target, message) {

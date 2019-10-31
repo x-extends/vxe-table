@@ -184,6 +184,17 @@ export const DomTools = {
         textRange.select()
       }
     }
+  },
+  toView (elem) {
+    let scrollIntoViewIfNeeded = 'scrollIntoViewIfNeeded'
+    let scrollIntoView = 'scrollIntoView'
+    if (elem) {
+      if (elem[scrollIntoViewIfNeeded]) {
+        elem[scrollIntoViewIfNeeded]()
+      } else if (elem[scrollIntoView]) {
+        elem[scrollIntoView]()
+      }
+    }
   }
 }
 

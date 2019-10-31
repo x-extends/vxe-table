@@ -26,6 +26,7 @@
     </vxe-table>
 
     <vxe-pager
+      background
       :loading="loading"
       :current-page="tablePage.currentPage"
       :page-size="tablePage.pageSize"
