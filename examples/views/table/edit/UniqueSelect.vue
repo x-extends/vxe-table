@@ -156,7 +156,7 @@ export default {
               })
             },
             roleChangeEvent ({ row }, evnt) {
-              // 由于重写了内部的 model 事件，所以需要自行处理赋值相关的逻辑
+              // 使用内置 select 需要手动更新，使用第三方组件如果是 v-model 就不需要手动赋值
               row.role1 = evnt.target.value
               this.updateRoleList()
             },
@@ -199,7 +199,7 @@ export default {
       })
     },
     roleChangeEvent ({ row }, evnt) {
-      // 由于重写了内部的 model 事件，所以需要自行处理赋值相关的逻辑
+      // 使用内置 select 需要手动更新，使用第三方组件如果是 v-model 就不需要手动赋值
       row.role1 = evnt.target.value
       this.updateRoleList()
     },
