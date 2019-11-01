@@ -79,7 +79,7 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
   let checkboxConfig = $table.checkboxConfig || $table.selectConfig || {}
   // 滚动的渲染不支持动态行高
   if ((scrollXLoad || scrollYLoad) && !hasEllipsis) {
-    showEllipsis = true
+    showEllipsis = hasEllipsis = true
   }
   // hover 进入事件
   if (showTitle || showTooltip || tableListeners['cell-mouseenter']) {
