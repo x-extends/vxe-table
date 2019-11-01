@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">更加复杂的合并行，实现横向树结构</p>
+    <p class="tip">更加复杂的合并行，实现横向树结构<br><span class="red">（注：<table-api-link prop="span-method"/> 合并的逻辑都是自行实现的，该示例仅供参考）</span></p>
 
     <vxe-table
       border
