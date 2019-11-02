@@ -106,7 +106,7 @@ function renderFixed (h, $table, fixedType) {
     }),
     showFooter ? h('vxe-table-footer', {
       style: {
-        top: `${customHeight ? customHeight - footerHeight : tableHeight + headerHeight}px`
+        top: `${customHeight > 0 ? customHeight - footerHeight : tableHeight + headerHeight}px`
       },
       props: {
         fixedType,
