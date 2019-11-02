@@ -99,7 +99,7 @@ const Methods = {
    * @param {Boolean} notRefresh 是否不重新运算列宽
    */
   loadTableData (datas, notRefresh) {
-    let { height, maxHeight, treeConfig, editStore, optimizeOpts, scrollYStore } = this
+    let { height, maxHeight, showOverflow, treeConfig, editStore, optimizeOpts, scrollYStore } = this
     let { scrollY } = optimizeOpts
     let tableFullData = datas ? datas.slice(0) : []
     let scrollYLoad = !treeConfig && scrollY && scrollY.gt && scrollY.gt < tableFullData.length
@@ -116,7 +116,10 @@ const Methods = {
     this.tableSourceData = XEUtils.clone(tableFullData, true)
     this.scrollYLoad = scrollYLoad
     if (scrollYLoad && !(height || maxHeight)) {
-      UtilTools.error('vxe.error.scrollYHeight')
+      UtilTools.error('vxe.error.scrollYReqProp', ['height | max-height'])
+    }
+    if (scrollYLoad && !showOverflow) {
+      UtilTools.warn('vxe.error.scrollYReqProp', ['show-overflow'])
     }
     // 是否加载了数据
     this.isLoadData = true
@@ -723,8 +726,11 @@ const Methods = {
       UtilTools.error('vxe.error.groupFixed')
     }
     if (scrollXLoad) {
+      if (this.isGroup) {
+        UtilTools.warn('vxe.error.scrollXNotGroup')
+      }
       if (this.resizable || visibleColumn.some(column => column.resizable)) {
-        UtilTools.warn('vxe.error.notResizable')
+        UtilTools.warn('vxe.error.scrollXNotResizable')
       }
       Object.assign(scrollXStore, {
         startIndex: 0,
@@ -946,6 +952,7 @@ const Methods = {
       scrollbarHeight,
       scrollbarWidth,
       scrollXLoad,
+      scrollYLoad,
       columnStore,
       elemStore,
       editStore,
@@ -1080,6 +1087,10 @@ const Methods = {
               let showTooltip = cellOverflow === true || cellOverflow === 'tooltip'
               let hasEllipsis = showTitle || showTooltip || showEllipsis
               let listElem = elemStore[`${name}-${layout}-list`]
+              // 滚动的渲染不支持动态行高
+              if ((scrollXLoad || scrollYLoad) && !hasEllipsis) {
+                hasEllipsis = true
+              }
               if (listElem && hasEllipsis) {
                 XEUtils.arrayEach(listElem.querySelectorAll(`.${column.id}`), thElem => {
                   let cellElem = thElem.querySelector('.vxe-cell')

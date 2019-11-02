@@ -521,6 +521,7 @@ export default {
             },
             {
               label: 'app.aside.nav.full',
+              demoUrl: 'https://jsrun.pro/r6WKp',
               locat: {
                 name: 'GridFullEdit'
               }
@@ -534,28 +535,28 @@ export default {
           children: [
             {
               label: 'app.aside.nav.base',
-              demoUrl: 'https://jsrun.pro/YfWKp/edit',
+              demoUrl: 'https://jsrun.pro/YfWKp',
               locat: {
                 name: 'TableTreeBasic'
               }
             },
             {
               label: 'app.aside.nav.radio',
-              demoUrl: 'https://jsrun.pro/kfWKp/edit',
+              demoUrl: 'https://jsrun.pro/kfWKp',
               locat: {
                 name: 'TableTreeRadio'
               }
             },
             {
               label: 'app.aside.nav.checkbox',
-              demoUrl: 'https://jsrun.pro/B6bKp/edit',
+              demoUrl: 'https://jsrun.pro/B6bKp',
               locat: {
                 name: 'TableTreeSelection'
               }
             },
             {
               label: 'app.aside.nav.fixed',
-              demoUrl: 'https://jsrun.pro/ifWKp/edit',
+              demoUrl: 'https://jsrun.pro/ifWKp',
               locat: {
                 name: 'TableTreeFixed'
               }
@@ -787,28 +788,28 @@ export default {
           children: [
             {
               label: 'app.aside.nav.manual',
-              demoUrl: 'https://jsrun.pro/SWWKp/edit',
+              demoUrl: 'https://jsrun.pro/SWWKp',
               locat: {
                 name: 'TableEditManual'
               }
             },
             {
               label: 'app.aside.nav.click',
-              demoUrl: 'https://jsrun.pro/4WWKp/edit',
+              demoUrl: 'https://jsrun.pro/4WWKp',
               locat: {
                 name: 'TableEditClick'
               }
             },
             {
               label: 'app.aside.nav.dblclick',
-              demoUrl: 'https://jsrun.pro/KfWKp/edit',
+              demoUrl: 'https://jsrun.pro/KfWKp',
               locat: {
                 name: 'TableEditDBLClick'
               }
             },
             {
               label: 'app.aside.nav.select',
-              demoUrl: 'https://jsrun.pro/pfWKp/edit',
+              demoUrl: 'https://jsrun.pro/pfWKp',
               locat: {
                 name: 'TableEditSelect'
               }
@@ -1055,7 +1056,7 @@ export default {
             },
             {
               label: 'app.aside.nav.sortablejsColumn',
-              demoUrl: 'https://jsrun.net/MibKp/edit',
+              demoUrl: 'https://jsrun.net/MibKp',
               locat: {
                 name: 'TableSortableColumn'
               }
@@ -1075,21 +1076,21 @@ export default {
           children: [
             {
               label: 'app.aside.nav.elementPlugin',
-              demoUrl: 'https://jsrun.pro/dwbKp/edit',
+              demoUrl: 'https://jsrun.pro/dwbKp',
               locat: {
                 name: 'TablePluginElementConfig'
               }
             },
             {
               label: 'app.aside.nav.elementFilterPlugin',
-              demoUrl: 'https://jsrun.pro/BWWKp/edit',
+              demoUrl: 'https://jsrun.pro/BWWKp',
               locat: {
                 name: 'TablePluginElementFilter'
               }
             },
             {
               label: 'app.aside.nav.elementPluginMore',
-              demoUrl: 'https://jsrun.pro/uWWKp/edit',
+              demoUrl: 'https://jsrun.pro/uWWKp',
               locat: {
                 name: 'TablePluginElementPage'
               }

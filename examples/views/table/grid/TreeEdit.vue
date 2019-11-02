@@ -41,7 +41,7 @@ export default {
           { code: 'insert_actived', name: 'app.body.button.insert', disabled: false },
           { code: 'mark_cancel', name: 'app.body.button.markCancel', disabled: false },
           { code: 'save', name: 'app.body.button.save', disabled: false },
-          { code: 'export', name: '导出.csv', disabled: false },
+          { code: 'export_csv', name: '导出.csv', disabled: false },
           { code: 'other0', name: '禁用的按钮1', disabled: true },
           {
             name: '禁用下拉按钮',
@@ -110,7 +110,7 @@ export default {
                   { code: 'insert_actived', name: 'app.body.button.insert', disabled: false },
                   { code: 'mark_cancel', name: 'app.body.button.markCancel', disabled: false },
                   { code: 'save', name: 'app.body.button.save', disabled: false },
-                  { code: 'export', name: '导出.csv', disabled: false },
+                  { code: 'export_csv', name: '导出.csv', disabled: false },
                   { code: 'other0', name: '禁用的按钮1', disabled: true },
                     {
                       name: '禁用下拉按钮',
