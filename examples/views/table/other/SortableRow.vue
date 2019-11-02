@@ -15,7 +15,7 @@
           </span>
         </template>
         <template v-slot:header>
-          <vxe-tooltip v-model="showHelpTip1" content="按住后可以上下拖动排序！">
+          <vxe-tooltip v-model="showHelpTip1" content="按住后可以上下拖动排序！" enterable>
             <i class="vxe-icon--question" @click="showHelpTip1 = !showHelpTip1"></i>
           </vxe-tooltip>
         </template>
@@ -83,7 +83,7 @@ export default {
             },
             header: () => {
               return [
-                <vxe-tooltip v-model={ this.showHelpTip2 } content="按住后可以上下拖动排序！">
+                <vxe-tooltip v-model={ this.showHelpTip2 } content="按住后可以上下拖动排序！" enterable>
                   <i class="vxe-icon--question" onClick={ () => { this.showHelpTip2 = !this.showHelpTip2 } }></i>
                 </vxe-tooltip>
               ]
@@ -111,7 +111,7 @@ export default {
               </span>
             </template>
             <template v-slot:header>
-              <vxe-tooltip v-model="showHelpTip1" content="按住后可以上下拖动排序！">
+              <vxe-tooltip v-model="showHelpTip1" content="按住后可以上下拖动排序！" enterable>
                 <i class="vxe-icon--question" @click="showHelpTip1 = !showHelpTip1"></i>
               </vxe-tooltip>
             </template>
@@ -194,7 +194,7 @@ export default {
                     },
                     header: () => {
                       return [
-                        <vxe-tooltip v-model={ this.showHelpTip2 } content="按住后可以上下拖动排序！">
+                        <vxe-tooltip v-model={ this.showHelpTip2 } content="按住后可以上下拖动排序！" enterable>
                           <i class="vxe-icon--question" onClick={ () => { this.showHelpTip2 = !this.showHelpTip2 } }></i>
                         </vxe-tooltip>
                       ]

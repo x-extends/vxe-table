@@ -1051,7 +1051,7 @@ const Methods = {
           if (wrapperElem) {
             // 如果是固定列
             if (fixedWrapperElem) {
-              wrapperElem.style.top = `${customHeight ? customHeight - footerHeight : tableHeight + headerHeight}px`
+              wrapperElem.style.top = `${customHeight > 0 ? customHeight - footerHeight : tableHeight + headerHeight}px`
             }
             wrapperElem.style.marginTop = `${-scrollbarHeight - 1}px`
           }
