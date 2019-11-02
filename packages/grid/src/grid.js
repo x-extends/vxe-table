@@ -202,150 +202,155 @@ export default {
     },
     commitProxy (code) {
       let { toolbar, proxyOpts, tablePage, pagerConfig, sortData, filterData, isMsg } = this
-      let { ajax, props = {} } = proxyOpts
+      let { ajax = {}, props = {} } = proxyOpts
       let args = XEUtils.slice(arguments, 1)
-      if (ajax) {
-        switch (code) {
-          case 'insert':
-            this.insert()
-            break
-          case 'insert_actived':
-            this.insert().then(({ row }) => this.setActiveRow(row))
-            break
-          case 'mark_cancel':
-            this.triggerPendingEvent(code)
-            break
-          case 'delete_selection':
-            this.handleDeleteRow(code, 'vxe.grid.deleteSelectRecord', () => this.commitProxy.apply(this, ['delete'].concat(args)))
-            break
-          case 'remove_selection':
-            this.handleDeleteRow(code, 'vxe.grid.removeSelectRecord', () => this.removeSelecteds())
-            break
-          case 'export':
-            this.exportData()
-            break
-          case 'reset_custom':
-            this.resetAll()
-            break
-          case 'reload':
-          case 'query': {
-            if (ajax.query) {
-              let params = {
-                $grid: this,
-                sort: sortData,
-                filters: filterData
-              }
-              this.tableLoading = true
+      switch (code) {
+        case 'insert':
+          this.insert()
+          break
+        case 'insert_actived':
+          this.insert().then(({ row }) => this.setActiveRow(row))
+          break
+        case 'mark_cancel':
+          this.triggerPendingEvent(code)
+          break
+        case 'delete_selection':
+          this.handleDeleteRow(code, 'vxe.grid.deleteSelectRecord', () => this.commitProxy.apply(this, ['delete'].concat(args)))
+          break
+        case 'remove_selection':
+          this.handleDeleteRow(code, 'vxe.grid.removeSelectRecord', () => this.removeSelecteds())
+          break
+        case 'export':
+          UtilTools.warn('vxe.error.toolbarDelBtn', ['export', 'export_csv | export_html'])
+          this.exportData()
+          break
+        case 'export_csv':
+          this.exportData({ type: 'csv' })
+          break
+        case 'export_html':
+          this.exportData({ type: 'html' })
+          break
+        case 'reset_custom':
+          this.resetAll()
+          break
+        case 'reload':
+        case 'query': {
+          if (ajax.query) {
+            let params = {
+              $grid: this,
+              sort: sortData,
+              filters: filterData
+            }
+            this.tableLoading = true
+            if (pagerConfig) {
+              params.page = tablePage
+            }
+            if (code === 'reload') {
               if (pagerConfig) {
-                params.page = tablePage
+                tablePage.currentPage = 1
               }
-              if (code === 'reload') {
+              this.sortData = params.sort = {}
+              this.filterData = params.filters = []
+              this.pendingRecords = []
+              this.clearAll()
+            }
+            return ajax.query.apply(this, [params].concat(args)).then(rest => {
+              if (rest) {
                 if (pagerConfig) {
-                  tablePage.currentPage = 1
-                }
-                this.sortData = params.sort = {}
-                this.filterData = params.filters = []
-                this.pendingRecords = []
-                this.clearAll()
-              }
-              return ajax.query.apply(this, [params].concat(args)).then(rest => {
-                if (rest) {
-                  if (pagerConfig) {
-                    tablePage.total = XEUtils.get(rest, props.total || 'page.total') || 0
-                    this.tableData = XEUtils.get(rest, props.result || props.data || 'result') || []
-                  } else {
-                    this.tableData = (props.list ? XEUtils.get(rest, props.list) : rest) || []
-                  }
+                  tablePage.total = XEUtils.get(rest, props.total || 'page.total') || 0
+                  this.tableData = XEUtils.get(rest, props.result || props.data || 'result') || []
                 } else {
-                  this.tableData = []
+                  this.tableData = (props.list ? XEUtils.get(rest, props.list) : rest) || []
                 }
-                this.tableLoading = false
-              }).catch(e => {
-                this.tableLoading = false
-              })
-            } else {
-              UtilTools.error('vxe.error.notFunc', [code])
-            }
-            break
-          }
-          case 'delete': {
-            if (ajax.delete) {
-              let selectRecords = this.getSelectRecords()
-              this.remove(selectRecords).then(() => {
-                let removeRecords = this.getRemoveRecords()
-                let body = { removeRecords }
-                if (removeRecords.length) {
-                  this.tableLoading = true
-                  return ajax.delete.apply(this, [{ $grid: this, body }].concat(args)).then(result => {
-                    this.tableLoading = false
-                  }).catch(e => {
-                    this.tableLoading = false
-                  }).then(() => this.commitProxy('reload'))
-                } else {
-                  if (isMsg && !selectRecords.length) {
-                    this.$XModal.message({ id: code, message: GlobalConfig.i18n('vxe.grid.selectOneRecord'), status: 'warning' })
-                  }
-                }
-              })
-            } else {
-              UtilTools.error('vxe.error.notFunc', [code])
-            }
-            break
-          }
-          case 'save': {
-            if (ajax.save) {
-              let body = Object.assign({ pendingRecords: this.pendingRecords }, this.getRecordset())
-              let { insertRecords, removeRecords, updateRecords, pendingRecords } = body
-              // 排除掉新增且标记为删除的数据
-              if (insertRecords.length) {
-                body.pendingRecords = pendingRecords.filter(row => insertRecords.indexOf(row) === -1)
+              } else {
+                this.tableData = []
               }
-              // 排除已标记为删除的数据
-              if (pendingRecords.length) {
-                body.insertRecords = insertRecords.filter(row => pendingRecords.indexOf(row) === -1)
-              }
-              // 只校验新增和修改的数据
-              return new Promise(resolve => {
-                this.validate(body.insertRecords.concat(updateRecords), vaild => {
-                  if (vaild) {
-                    if (body.insertRecords.length || removeRecords.length || updateRecords.length || body.pendingRecords.length) {
-                      this.tableLoading = true
-                      resolve(
-                        ajax.save.apply(this, [{ $grid: this, body }].concat(args)).then(() => {
-                          this.$XModal.message({ id: code, message: GlobalConfig.i18n('vxe.grid.saveSuccess'), status: 'success' })
-                          this.tableLoading = false
-                        }).catch(e => {
-                          this.tableLoading = false
-                        }).then(() => this.commitProxy('reload'))
-                      )
-                    } else {
-                      if (isMsg) {
-                        // 直接移除未保存且标记为删除的数据
-                        if (pendingRecords.length) {
-                          this.remove(pendingRecords)
-                        } else {
-                          this.$XModal.message({ id: code, message: GlobalConfig.i18n('vxe.grid.dataUnchanged'), status: 'info' })
-                        }
-                      }
-                      resolve()
-                    }
-                  } else {
-                    resolve(vaild)
-                  }
-                })
-              })
-            } else {
-              UtilTools.error('vxe.error.notFunc', [code])
-            }
-            break
+              this.tableLoading = false
+            }).catch(e => {
+              this.tableLoading = false
+            })
+          } else {
+            UtilTools.error('vxe.error.notFunc', [code])
           }
-          default:
-            let btnMethod = Buttons.get(code)
-            if (btnMethod) {
-              let button = toolbar ? XEUtils.find(toolbar.buttons, item => item.code === code) : null
-              btnMethod.apply(this, [{ code, button: button, $grid: this, $table: this.$refs.xTable }].concat(args))
-            }
+          break
         }
+        case 'delete': {
+          if (ajax.delete) {
+            let selectRecords = this.getSelectRecords()
+            this.remove(selectRecords).then(() => {
+              let removeRecords = this.getRemoveRecords()
+              let body = { removeRecords }
+              if (removeRecords.length) {
+                this.tableLoading = true
+                return ajax.delete.apply(this, [{ $grid: this, body }].concat(args)).then(result => {
+                  this.tableLoading = false
+                }).catch(e => {
+                  this.tableLoading = false
+                }).then(() => this.commitProxy('reload'))
+              } else {
+                if (isMsg && !selectRecords.length) {
+                  this.$XModal.message({ id: code, message: GlobalConfig.i18n('vxe.grid.selectOneRecord'), status: 'warning' })
+                }
+              }
+            })
+          } else {
+            UtilTools.error('vxe.error.notFunc', [code])
+          }
+          break
+        }
+        case 'save': {
+          if (ajax.save) {
+            let body = Object.assign({ pendingRecords: this.pendingRecords }, this.getRecordset())
+            let { insertRecords, removeRecords, updateRecords, pendingRecords } = body
+            // 排除掉新增且标记为删除的数据
+            if (insertRecords.length) {
+              body.pendingRecords = pendingRecords.filter(row => insertRecords.indexOf(row) === -1)
+            }
+            // 排除已标记为删除的数据
+            if (pendingRecords.length) {
+              body.insertRecords = insertRecords.filter(row => pendingRecords.indexOf(row) === -1)
+            }
+            // 只校验新增和修改的数据
+            return new Promise(resolve => {
+              this.validate(body.insertRecords.concat(updateRecords), vaild => {
+                if (vaild) {
+                  if (body.insertRecords.length || removeRecords.length || updateRecords.length || body.pendingRecords.length) {
+                    this.tableLoading = true
+                    resolve(
+                      ajax.save.apply(this, [{ $grid: this, body }].concat(args)).then(() => {
+                        this.$XModal.message({ id: code, message: GlobalConfig.i18n('vxe.grid.saveSuccess'), status: 'success' })
+                        this.tableLoading = false
+                      }).catch(e => {
+                        this.tableLoading = false
+                      }).then(() => this.commitProxy('reload'))
+                    )
+                  } else {
+                    if (isMsg) {
+                      // 直接移除未保存且标记为删除的数据
+                      if (pendingRecords.length) {
+                        this.remove(pendingRecords)
+                      } else {
+                        this.$XModal.message({ id: code, message: GlobalConfig.i18n('vxe.grid.dataUnchanged'), status: 'info' })
+                      }
+                    }
+                    resolve()
+                  }
+                } else {
+                  resolve(vaild)
+                }
+              })
+            })
+          } else {
+            UtilTools.error('vxe.error.notFunc', [code])
+          }
+          break
+        }
+        default:
+          let btnMethod = Buttons.get(code)
+          if (btnMethod) {
+            let button = toolbar ? XEUtils.find(toolbar.buttons, item => item.code === code) : null
+            btnMethod.apply(this, [{ code, button: button, $grid: this, $table: this.$refs.xTable }].concat(args))
+          }
       }
       return this.$nextTick()
     },

@@ -133,7 +133,7 @@ export default {
             name: '重新加载'
           },
           {
-            code: 'export',
+            code: 'exportAPI',
             name: '导出文档',
             prefixIcon: 'fa fa-download'
           }
@@ -281,7 +281,7 @@ export default {
             this.loadList()
           })
           break
-        case 'export':
+        case 'exportAPI':
           xTable.exportData({
             filename: `vxe-${this.apiName}_v${pack.version}.csv`
           })

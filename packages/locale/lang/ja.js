@@ -2,23 +2,23 @@ export default {
   vxe: {
     error: {
       groupFixed: 'Grouping headersが使われている場合、fixed columnsは左右になくてはなりません',
-      notResizable: 'Horizontal virtual scrollingはresizableをサポートしていません',
-      cellEditRender: 'Rendererはcell-renderとedit-renderを同時に仕様できません',
-      scrollOriginal: 'Virtual scrollingはsource dataのみエクスポートできます、original=trueを設定してください',
+      scrollXNotResizable: 'Horizontal virtual scrollingは"resizable"をサポートしていません',
+      cellEditRender: 'Rendererは"cell-render"と"edit-render"を同時に仕様できません',
       treeFixedExpand: '樹木構造の固定柱は展開された行と矛盾する。',
-      scrollYHeight: 'Virtual scrollingを有効にするにはheightかmax-heightを設定してください',
+      scrollOriginal: 'Virtual scrollingはsource dataのみエクスポートできます、"original=true"を設定してください',
+      scrollXNotGroup: '横向虚拟滚动不支持分组表头',
+      scrollYReqProp: 'Virtual scrollingを有効にするには"{{0}}を設定してください',
       unableInsert: '指定された位置に挿入できない',
-      useErr: '{{0}} モジュールのインストール時にエラーが発生し、エラーのインストール順序',
-
+      useErr: '"{{0}}" モジュールのインストール時にエラーが発生し、エラーのインストール順序',
       barUnableLink: 'ツールバーはフォームを関連付けることができない',
-      toolbarId: 'ツールバーはユニークidを設定する必要がある',
-
-      reqModule: '{{0}}モジュールが必要',
-      emptyProp: '{{0}} propertyはemptyが許可されていません',
-      notFunc: '{{0}} methodがありません',
-      noTree: 'Tree structureは {{0}} をサポートしていません',
-      delFunc: '{{0}} functionは非推奨です、{{1}}を使用してください',
-      delProp: '{{0}} propertyは非推奨です、{{1}}を使用してください'
+      toolbarId: 'ツールバーはユニーク"id"を設定する必要がある',
+      toolbarDelBtn: '工具栏按钮 "{{0}}" 已废弃，请使用 "{{1}}"',
+      reqModule: '"{{0}}"モジュールが必要',
+      emptyProp: '"{{0}}" propertyはemptyが許可されていません',
+      notFunc: '"{{0}}" methodがありません',
+      noTree: 'Tree structureは "{{0}}" をサポートしていません',
+      delFunc: '"{{0}}" functionは非推奨です、"{{1}}"を使用してください',
+      delProp: '"{{0}}" propertyは非推奨です、"{{1}}"を使用してください'
     },
     table: {
       emptyText: 'データがありません',

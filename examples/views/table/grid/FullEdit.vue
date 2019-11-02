@@ -88,7 +88,7 @@ export default {
             name: '更多操作',
             disabled: false,
             dropdowns: [
-              { code: 'export', name: '导出数据.csv', disabled: false },
+              { code: 'export_csv', name: '导出数据.csv', disabled: false },
               { code: 'reset_custom', name: '重置个性化信息', disabled: false }
             ]
           },
@@ -218,7 +218,7 @@ export default {
                     name: '更多操作',
                     disabled: false,
                     dropdowns: [
-                      { code: 'export', name: '导出数据.csv', disabled: false },
+                      { code: 'export_csv', name: '导出数据.csv', disabled: false },
                       { code: 'reset_custom', name: '重置个性化信息', disabled: false }
                     ]
                   },

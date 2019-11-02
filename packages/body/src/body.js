@@ -343,6 +343,7 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
  * 同步滚动条
  * scroll 方式：可以使固定列与内容保持一致的滚动效果，处理相对麻烦
  * mousewheel 方式：对于同步滚动效果就略差了，左右滚动，内容跟随即可
+ * css3 translate 方式：可以利用硬件加速，各方面较优，失去table布局能力
  */
 var scrollProcessTimeout
 var updateLeftScrollingTimeput

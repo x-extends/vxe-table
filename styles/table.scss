@@ -542,6 +542,9 @@
     &.col--ellipsis {
       @extend %DefaultColumnHeight;
       line-height: inherit;
+      .vxe-cell {
+        max-height: $vxe-table-row-height-default - 1;
+      }
     }
   }
   &.size--medium {
@@ -550,6 +553,9 @@
     .vxe-footer--column {
       &.col--ellipsis {
         @extend %MediumColumnHeight;
+        .vxe-cell {
+          max-height: $vxe-table-row-height-medium - 1;
+        }
       }
     }
   }
@@ -559,6 +565,9 @@
     .vxe-footer--column {
       &.col--ellipsis {
         @extend %SmallColumnHeight;
+        .vxe-cell {
+          max-height: $vxe-table-row-height-small - 1;
+        }
       }
     }
   }
@@ -568,6 +577,9 @@
     .vxe-footer--column {
       &.col--ellipsis {
         @extend %MiniColumnHeight;
+        .vxe-cell {
+          max-height: $vxe-table-row-height-mini - 1;
+        }
       }
     }
   }

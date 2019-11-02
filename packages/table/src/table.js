@@ -904,7 +904,7 @@ export default {
       return this.$nextTick()
     },
     loadTableData (datas, notRefresh) {
-      let { height, maxHeight, treeConfig, editStore, optimizeOpts, scrollYStore } = this
+      let { height, maxHeight, showOverflow, treeConfig, editStore, optimizeOpts, scrollYStore } = this
       let { scrollY } = optimizeOpts
       let tableFullData = datas ? datas.slice(0) : []
       let scrollYLoad = !treeConfig && scrollY && scrollY.gt && scrollY.gt < tableFullData.length
@@ -921,7 +921,10 @@ export default {
       this.tableSourceData = XEUtils.clone(tableFullData, true)
       this.scrollYLoad = scrollYLoad
       if (scrollYLoad && !(height || maxHeight)) {
-        UtilTools.error('vxe.error.scrollYHeight')
+        UtilTools.error('vxe.error.scrollYReqProp', ['height | max-height'])
+      }
+      if (scrollYLoad && !showOverflow) {
+        UtilTools.warn('vxe.error.scrollYReqProp', ['show-overflow'])
       }
       // 是否加载了数据
       this.isLoadData = true
@@ -1595,8 +1598,11 @@ export default {
         UtilTools.error('vxe.error.groupFixed')
       }
       if (scrollXLoad) {
+        if (this.isGroup) {
+          UtilTools.warn('vxe.error.scrollXNotGroup')
+        }
         if (this.resizable || visibleColumn.some(column => column.resizable)) {
-          UtilTools.warn('vxe.error.notResizable')
+          UtilTools.warn('vxe.error.scrollXNotResizable')
         }
         scrollXStore.startIndex = 0
         scrollXStore.visibleIndex = 0

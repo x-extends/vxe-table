@@ -82,7 +82,7 @@ export default {
             disabled: false
           },
           {
-            code: 'export',
+            code: 'myExport',
             name: '导出.csv',
             visible: true,
             disabled: false,
@@ -158,7 +158,7 @@ export default {
                     disabled: false
                   },
                   {
-                    code: 'export',
+                    code: 'myExport',
                     name: '导出.csv',
                     visible: true,
                     disabled: false,
@@ -216,7 +216,7 @@ export default {
                 case 'clear':
                   xGrid.clearData(row, column.property)
                   break
-                case 'export':
+                case 'myExport':
                   xGrid.exportData()
                   break
               }
@@ -282,7 +282,7 @@ export default {
         case 'clear':
           xGrid.clearData(row, column.property)
           break
-        case 'export':
+        case 'myExport':
           xGrid.exportData()
           break
       }
