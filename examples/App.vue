@@ -491,6 +491,7 @@ export default {
             },
             {
               label: 'app.aside.nav.contextMenu',
+              demoUrl: 'https://jsrun.pro/m6WKp',
               locat: {
                 name: 'GridMenu'
               }
