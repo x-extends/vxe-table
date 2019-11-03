@@ -106,7 +106,7 @@ function toXML ($table, opts, columns, datas) {
     '<ProtectStructure>False</ProtectStructure>',
     '<ProtectWindows>False</ProtectWindows>',
     '</ExcelWorkbook>',
-    '<Worksheet ss:Name="vxe-table">',
+    `<Worksheet ss:Name="${opts.filename}">`,
     '<Table>',
     columns.map(column => `<Column ss:Width="${column.renderWidth}"/>`).join('')
   ].join('')
