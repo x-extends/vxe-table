@@ -1,4 +1,5 @@
 import XEUtils from 'xe-utils/methods/xe-utils'
+import VXETable from '../../v-x-e-table'
 import { UtilTools, DomTools } from '../../tools'
 
 export default {
@@ -200,6 +201,7 @@ export default {
         }
         this.closeMenu()
       }
+      VXETable.actived = this.id
     },
     /**
      * 单元格按下事件
@@ -291,6 +293,7 @@ export default {
       } else if (mouseConfig.selected) {
         handleSelected(params, evnt)
       }
+      VXETable.actived = this.id
     },
     /**
      * 边角事件

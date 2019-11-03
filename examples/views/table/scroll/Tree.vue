@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">实现支持大数据的虚拟树表格，简单示例供参考</p>
+    <p class="tip">简单示例供参考：实现支持大数据的虚拟树表格，基于表格组件很容易就可以封装一个高性能的虚拟树</p>
 
     <vxe-toolbar>
       <template v-slot:buttons>

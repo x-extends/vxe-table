@@ -694,7 +694,6 @@ export default {
             },
             {
               label: 'app.aside.nav.virtualTree',
-              disabled: true,
               locat: {
                 name: 'TableScrollTree'
               }

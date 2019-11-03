@@ -16,6 +16,7 @@
       ref="xGrid"
       height="600"
       :loading="loading"
+      :toolbar="tableToolbar"
       :checkbox-config="{checkField: 'checked', labelField: 'nickname'}">
       <template v-slot:buttons>
         <vxe-button @click="loadColumnAndData(10000, 100000)">加载1w列10w条</vxe-button>
@@ -57,6 +58,7 @@ export default {
   data () {
     return {
       loading: false,
+      tableToolbar: {},
       demoCodes: [
         `
         <vxe-grid
@@ -68,6 +70,7 @@ export default {
           ref="xGrid"
           height="600"
           :loading="loading"
+          :toolbar="tableToolbar"
           :checkbox-config="{checkField: 'checked', labelField: 'nickname'}">
           <template v-slot:buttons>
             <vxe-button @click="loadColumnAndData(10000, 100000)">加载1w列10w条</vxe-button>
@@ -83,7 +86,8 @@ export default {
         export default {
           data () {
             return {
-              loading: false
+              loading: false,
+              tableToolbar: {}
             }
           },
           created () {
@@ -103,7 +107,7 @@ export default {
               return new Promise(resolve => {
                 setTimeout(() => {
                   // 使用函数式加载，阻断 vue 对大数组的双向绑定，大数据性能翻倍提升
-                  let tableColumn = window.MOCK_COLUMN_LIST.slice(0, size).map(item => Object.assign({}, item, { fixed: undefined }))
+                  let tableColumn = window.MOCK_COLUMN_LIST.slice(0, size)
                   this.$refs.xGrid.loadColumn(tableColumn).then(() => {
                     resolve()
                   })
@@ -153,7 +157,7 @@ export default {
       return new Promise(resolve => {
         setTimeout(() => {
           // 使用函数式加载，阻断 vue 对大数组的双向绑定，大数据性能翻倍提升
-          let tableColumn = window.MOCK_COLUMN_LIST.slice(0, size).map(item => Object.assign({}, item, { fixed: undefined }))
+          let tableColumn = window.MOCK_COLUMN_LIST.slice(0, size)
           this.$refs.xGrid.loadColumn(tableColumn).then(() => {
             resolve()
           })
