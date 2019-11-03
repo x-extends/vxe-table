@@ -2564,9 +2564,9 @@ const apis = [
           {
             name: 'type',
             desc: '文件类型',
-            version: '2.6.6',
+            version: '2.6.12',
             type: 'String',
-            enum: 'csv, html',
+            enum: 'csv, html, xml',
             defVal: 'csv',
             list: []
           },

@@ -72,7 +72,7 @@
           <span v-html="row.html1"></span>
         </template>
       </vxe-table-column>
-      <vxe-table-column field="img1" title="图片路径" width="120" show-overflow>
+      <vxe-table-column field="img1" title="图片路径" width="120">
         <template v-slot="{ row, rowIndex }">
           <img v-if="row.img1" :src="row.img1" style="width: 100px;">
           <span v-else>无</span>
@@ -170,7 +170,7 @@ export default {
               <span v-html="row.html1"></span>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="img1" title="图片路径" width="120" show-overflow>
+          <vxe-table-column field="img1" title="图片路径" width="120">
             <template v-slot="{ row, rowIndex }">
               <img v-if="row.img1" :src="row.img1" style="width: 100px;">
               <span v-else>无</span>
