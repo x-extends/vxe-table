@@ -449,12 +449,14 @@ export default {
             },
             {
               label: 'app.aside.nav.proxy',
+              demoUrl: 'https://jsrun.pro/XwWKp',
               locat: {
                 name: 'GridProxy'
               }
             },
             {
               label: 'app.aside.nav.proxyPage',
+              demoUrl: 'https://jsrun.pro/ywWKp',
               locat: {
                 name: 'GridPageProxy'
               }
