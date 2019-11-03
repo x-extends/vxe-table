@@ -230,6 +230,9 @@ export default {
         case 'export_html':
           this.exportData({ type: 'html' })
           break
+        case 'export_xml':
+          this.exportData({ type: 'xml' })
+          break
         case 'reset_custom':
           this.resetAll()
           break
