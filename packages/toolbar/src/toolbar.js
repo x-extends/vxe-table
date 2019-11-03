@@ -27,7 +27,7 @@ export default {
       $table: null,
       isRefresh: false,
       tableFullColumn: [],
-      exportTypes: ['csv', 'html'],
+      exportTypes: ['csv', 'html', 'xml'],
       exportModes: [
         {
           value: 'all',

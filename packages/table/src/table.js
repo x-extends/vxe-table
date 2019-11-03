@@ -4330,7 +4330,7 @@ export default {
       if (!opts.filename) {
         opts.filename = 'table'
       }
-      if (!['csv', 'html'].includes(opts.type)) {
+      if (!['csv', 'html', 'xml'].includes(opts.type)) {
         opts.type = 'csv'
       }
       if (!opts.original) {
