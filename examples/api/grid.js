@@ -403,7 +403,7 @@ XEUtils.eachTree(gridAPI, (item, index, obj, paths, parent) => {
       {
         name: 'export_csv',
         desc: '导出数据为 CSV 格式',
-        version: '2.6.11',
+        version: '2.6.12',
         type: '',
         enum: '',
         defVal: '',
@@ -412,7 +412,16 @@ XEUtils.eachTree(gridAPI, (item, index, obj, paths, parent) => {
       {
         name: 'export_html',
         desc: '导出数据为 HTML 格式',
-        version: '2.6.11',
+        version: '2.6.12',
+        type: '',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'export_xml',
+        desc: '导出数据为 XML 格式',
+        version: '2.6.12',
         type: '',
         enum: '',
         defVal: '',
