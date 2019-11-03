@@ -2829,6 +2829,7 @@ export default {
           }
         }
       }
+      VXETable.actived = this.id
     },
     /**
      * 边角事件
@@ -2865,6 +2866,7 @@ export default {
           }
         }
       }
+      VXETable.actived = this.id
     },
     triggerHeaderCellClickEvent (evnt, params) {
       let { _lastResizeTime, sortOpts } = this

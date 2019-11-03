@@ -5,6 +5,7 @@ GET('/api/conf/region/list', require('./conf/region.json'))
 GET('/api/conf/sex/list', require('./conf/sex.json'))
 GET('/api/conf/columns/list', require('./conf/columns.json'))
 GET('/api/conf/languages/list', require('./conf/languages.json'))
+GET('/api/conf/city/all', require('./city/all.json'))
 
 class RoleVO {
   constructor (data) {
