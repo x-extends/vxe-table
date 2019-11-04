@@ -76,7 +76,7 @@ export default {
       return UtilTools.error('vxe.error.toolbarId')
     }
     if (!VXETable._export && this.export) {
-      throw new Error(UtilTools.getLog('vxe.error.reqModule', ['Export']))
+      UtilTools.error('vxe.error.reqModule', ['Export'])
     }
     this.$nextTick(() => {
       this.updateConf()
@@ -209,9 +209,9 @@ export default {
       ]),
       this.export ? h('vxe-export-panel', {
         props: {
-          exportOpts,
-          exportStore,
-          exportParams
+          defaultOptions: exportParams,
+          storeData: exportStore,
+          typeList: exportOpts.types
         },
         on: {
           export: this.confirmExportEvent

@@ -4,9 +4,9 @@ import { UtilTools } from '../../tools'
 export default {
   name: 'VxeExportPanel',
   props: {
-    exportParams: Object,
-    exportStore: Object,
-    exportOpts: Object
+    defaultOptions: Object,
+    storeData: Object,
+    typeList: Array
   },
   data () {
     return {
@@ -28,13 +28,13 @@ export default {
     }
   },
   render (h) {
-    const { exportParams, exportStore, exportOpts, modeList } = this
+    const { defaultOptions, storeData, typeList, modeList } = this
     return h('vxe-modal', {
       res: 'modal',
       model: {
-        value: exportStore.visible,
+        value: storeData.visible,
         callback (value) {
-          exportStore.visible = value
+          storeData.visible = value
         }
       },
       props: {
@@ -69,11 +69,11 @@ export default {
                   placeholder: GlobalConfig.i18n('vxe.toolbar.expNamePlaceholder')
                 },
                 domProps: {
-                  value: exportParams.filename
+                  value: defaultOptions.filename
                 },
                 on: {
                   input (evnt) {
-                    exportParams.filename = evnt.target.value
+                    defaultOptions.filename = evnt.target.value
                   }
                 }
               })
@@ -85,16 +85,16 @@ export default {
               h('select', {
                 on: {
                   change (evnt) {
-                    exportParams.type = evnt.target.value
+                    defaultOptions.type = evnt.target.value
                   }
                 }
-              }, exportOpts.types.map(type => {
+              }, typeList.map(type => {
                 return h('option', {
                   attrs: {
                     value: type
                   },
                   domProps: {
-                    selected: exportParams.type === type
+                    selected: defaultOptions.type === type
                   }
                 }, type)
               }))
@@ -106,7 +106,7 @@ export default {
               h('select', {
                 on: {
                   change (evnt) {
-                    exportStore.mode = evnt.target.value
+                    storeData.mode = evnt.target.value
                   }
                 }
               }, modeList.map(item => {
@@ -115,7 +115,7 @@ export default {
                     value: item.value
                   },
                   domProps: {
-                    selected: exportStore.mode === item.value
+                    selected: storeData.mode === item.value
                   }
                 }, GlobalConfig.i18n(item.label))
               }))
@@ -126,7 +126,7 @@ export default {
             h('td', [
               h('ul', {
                 class: 'vxe-export--panel-column'
-              }, exportStore.columns.map(column => {
+              }, storeData.columns.map(column => {
                 const { own, checked, type } = column
                 return h('li', {
                   class: {
@@ -146,31 +146,31 @@ export default {
             h('td', [
               h('vxe-checkbox', {
                 model: {
-                  value: exportParams.isHeader,
+                  value: defaultOptions.isHeader,
                   callback (value) {
-                    exportParams.isHeader = value
+                    defaultOptions.isHeader = value
                   }
                 }
               }, GlobalConfig.i18n('vxe.toolbar.expOptHeader')),
               h('vxe-checkbox', {
                 props: {
-                  disabled: !exportStore.hasFooter
+                  disabled: !storeData.hasFooter
                 },
                 model: {
-                  value: exportParams.isFooter,
+                  value: defaultOptions.isFooter,
                   callback (value) {
-                    exportParams.isFooter = value
+                    defaultOptions.isFooter = value
                   }
                 }
               }, GlobalConfig.i18n('vxe.toolbar.expOptFooter')),
               h('vxe-checkbox', {
                 props: {
-                  disabled: exportStore.forceOriginal
+                  disabled: storeData.forceOriginal
                 },
                 model: {
-                  value: exportParams.original,
+                  value: defaultOptions.original,
                   callback (value) {
-                    exportParams.original = value
+                    defaultOptions.original = value
                   }
                 }
               }, GlobalConfig.i18n('vxe.toolbar.expOptOriginal'))
@@ -199,18 +199,18 @@ export default {
       })
     },
     exportEvent () {
-      const { exportStore, exportParams } = this
-      const options = Object.assign({
-        columns: exportStore.columns.filter(column => column.checked)
-      }, exportParams)
-      if (!options.filename) {
-        options.filename = GlobalConfig.i18n('vxe.toolbar.expTitle')
+      const { storeData, defaultOptions } = this
+      const opts = Object.assign({
+        columns: storeData.columns.filter(column => column.checked)
+      }, defaultOptions)
+      if (!opts.filename) {
+        opts.filename = GlobalConfig.i18n('vxe.toolbar.expTitle')
       }
-      if (exportStore.mode === 'selected') {
-        options.data = exportStore.selectRecords
+      if (storeData.mode === 'selected') {
+        opts.data = storeData.selectRecords
       }
-      exportStore.visible = false
-      this.$emit('export', options)
+      storeData.visible = false
+      this.$emit('export', opts)
     }
   }
 }
