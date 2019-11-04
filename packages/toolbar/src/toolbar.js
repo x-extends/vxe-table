@@ -209,9 +209,9 @@ export default {
       ]),
       this.export ? h('vxe-export-panel', {
         props: {
-          exportOpts,
-          exportStore,
-          exportParams
+          defaultOptions: exportParams,
+          storeData: exportStore,
+          typeList: exportOpts.types
         },
         on: {
           export: this.confirmExportEvent
