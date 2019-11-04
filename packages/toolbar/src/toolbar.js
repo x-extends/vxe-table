@@ -1,7 +1,7 @@
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../conf'
+import VXETable, { Buttons } from '../../v-x-e-table'
 import { UtilTools, DomTools, GlobalEvent } from '../../tools'
-import { Buttons } from '../../v-x-e-table'
 
 export default {
   name: 'VxeToolbar',
@@ -27,22 +27,16 @@ export default {
       $table: null,
       isRefresh: false,
       tableFullColumn: [],
-      exportTypes: ['csv', 'html', 'xml'],
-      exportModes: [
-        {
-          value: 'all',
-          label: 'vxe.toolbar.expAll'
-        },
-        {
-          value: 'selected',
-          label: 'vxe.toolbar.expSelected'
-        }
-      ],
       exportStore: {
         name: '',
-        mode: ''
+        mode: '',
+        columns: [],
+        selectRecords: [],
+        hasFooter: false,
+        forceOriginal: false,
+        visible: false
       },
-      exportOpts: {
+      exportParams: {
         filename: '',
         type: '',
         original: false,
@@ -61,8 +55,10 @@ export default {
     refreshOpts () {
       return Object.assign({}, GlobalConfig.toolbar.refresh, this.refresh)
     },
-    expsOpts () {
-      return Object.assign({}, GlobalConfig.toolbar.export, this.export)
+    exportOpts () {
+      return Object.assign({
+        types: ['csv', 'html', 'xml']
+      }, GlobalConfig.toolbar.export, this.export)
     },
     resizableOpts () {
       return Object.assign({ storageKey: 'VXE_TABLE_CUSTOM_COLUMN_WIDTH' }, GlobalConfig.toolbar.resizable, this.resizable)
@@ -79,6 +75,9 @@ export default {
     if (settingOpts.storage && !id) {
       return UtilTools.error('vxe.error.toolbarId')
     }
+    if (!VXETable._export && this.export) {
+      throw new Error(UtilTools.getLog('vxe.error.reqModule', ['Export']))
+    }
     this.$nextTick(() => {
       this.updateConf()
       this.loadStorage()
@@ -91,7 +90,7 @@ export default {
     GlobalEvent.off(this, 'blur')
   },
   render (h) {
-    let { _e, $scopedSlots, $grid, $table, loading, settingStore, refresh, setting, settingOpts, buttons = [], vSize, tableFullColumn } = this
+    let { _e, $scopedSlots, $grid, $table, loading, settingStore, refresh, setting, settingOpts, buttons = [], vSize, tableFullColumn, exportOpts, exportStore, exportParams } = this
     let customBtnOns = {}
     let customWrapperOns = {}
     let $buttons = $scopedSlots.buttons
@@ -151,7 +150,7 @@ export default {
             icon: GlobalConfig.icon.export
           },
           on: {
-            click: this.exportEvent
+            click: this.clickExportEvent
           }
         }) : null,
         refresh ? h('vxe-button', {
@@ -208,6 +207,16 @@ export default {
           ])
         ]) : null
       ]),
+      this.export ? h('vxe-export-panel', {
+        props: {
+          exportOpts,
+          exportStore,
+          exportParams
+        },
+        on: {
+          export: this.confirmExportEvent
+        }
+      }) : _e(),
       $tools ? h('div', {
         class: 'vxe-tools--wrapper'
       }, $tools.call(this, { $grid, $table }, h)) : null
@@ -412,8 +421,8 @@ export default {
         }
       }
     },
-    exportEvent () {
-      const { $grid, $table, vSize, exportStore, exportOpts, exportTypes, exportModes } = this
+    clickExportEvent () {
+      const { $grid, $table, exportOpts, exportStore, exportParams } = this
       const comp = $grid || $table
       const { fullColumn } = comp.getTableColumn()
       const { footerData } = comp.getTableData()
@@ -423,198 +432,32 @@ export default {
       const treeStatus = comp.getTreeStatus()
       const forceOriginal = !!treeStatus || virtualScroller.scrollX || virtualScroller.scrollY
       const hasFooter = !!footerData.length
-      // 重置条件
-      exportStore.mode = selectRecords.length ? 'selected' : 'all'
-      Object.assign(exportOpts, {
-        filename: '',
-        type: 'csv',
+      // 索引列默认不选中
+      exportColumns.forEach(column => {
+        column.checked = column.type !== 'index'
+      })
+      // 更新条件
+      Object.assign(exportStore, {
+        columns: exportColumns,
+        selectRecords: selectRecords,
+        mode: selectRecords.length ? 'selected' : 'all',
+        forceOriginal: !!treeStatus || virtualScroller.scrollX || virtualScroller.scrollY,
+        hasFooter: !!footerData.length,
+        visible: true
+      })
+      // 重置参数
+      Object.assign(exportParams, {
+        filename: exportOpts.filename,
+        type: exportOpts.types[0],
         original: forceOriginal,
         isHeader: true,
         isFooter: hasFooter
       })
-      exportColumns.forEach(column => {
-        column.checked = column.type !== 'index'
-      })
-      this.$XModal({
-        title: GlobalConfig.i18n('vxe.toolbar.expTitle'),
-        width: 520,
-        mask: true,
-        lockView: true,
-        showFooter: false,
-        maskClosable: true,
-        size: vSize,
-        slots: {
-          default (params, h) {
-            const $modal = params.$modal
-            return [
-              h('div', {
-                class: 'vxe-export--panel'
-              }, [
-                h('table', {
-                  attrs: {
-                    cellspacing: 0,
-                    cellpadding: 0,
-                    border: 0
-                  }
-                }, [
-                  h('tr', [
-                    h('td', GlobalConfig.i18n('vxe.toolbar.expName')),
-                    h('td', [
-                      h('input', {
-                        ref: 'filename',
-                        attrs: {
-                          type: 'text',
-                          placeholder: GlobalConfig.i18n('vxe.toolbar.expNamePlaceholder')
-                        },
-                        domProps: {
-                          value: exportOpts.filename
-                        },
-                        on: {
-                          input (evnt) {
-                            exportOpts.filename = evnt.target.value
-                          }
-                        }
-                      })
-                    ])
-                  ]),
-                  h('tr', [
-                    h('td', GlobalConfig.i18n('vxe.toolbar.expType')),
-                    h('td', [
-                      h('select', {
-                        on: {
-                          change (evnt) {
-                            exportOpts.type = evnt.target.value
-                          }
-                        }
-                      }, exportTypes.map(type => {
-                        return h('option', {
-                          attrs: {
-                            value: type
-                          },
-                          domProps: {
-                            selected: exportOpts.type === type
-                          }
-                        }, type)
-                      }))
-                    ])
-                  ]),
-                  h('tr', [
-                    h('td', GlobalConfig.i18n('vxe.toolbar.expMode')),
-                    h('td', [
-                      h('select', {
-                        on: {
-                          change (evnt) {
-                            exportStore.mode = evnt.target.value
-                          }
-                        }
-                      }, exportModes.map(item => {
-                        return h('option', {
-                          attrs: {
-                            value: item.value
-                          },
-                          domProps: {
-                            selected: exportStore.mode === item.value
-                          }
-                        }, GlobalConfig.i18n(item.label))
-                      }))
-                    ])
-                  ]),
-                  h('tr', [
-                    h('td', GlobalConfig.i18n('vxe.toolbar.expColumn')),
-                    h('td', [
-                      h('ul', {
-                        class: 'vxe-export--panel-column'
-                      }, exportColumns.map(column => {
-                        const { own, checked, type } = column
-                        return h('li', {
-                          class: {
-                            active: checked
-                          },
-                          on: {
-                            click () {
-                              column.checked = !checked
-                            }
-                          }
-                        }, UtilTools.getFuncText(own.title || own.label || (type === 'index' ? GlobalConfig.i18n('vxe.column.indexTitle') : '')))
-                      }))
-                    ])
-                  ]),
-                  h('tr', [
-                    h('td', GlobalConfig.i18n('vxe.toolbar.expOpts')),
-                    h('td', [
-                      h('vxe-checkbox', {
-                        props: {
-                          size: vSize
-                        },
-                        model: {
-                          value: exportOpts.isHeader,
-                          callback (value) {
-                            exportOpts.isHeader = value
-                          }
-                        }
-                      }, GlobalConfig.i18n('vxe.toolbar.expOptHeader')),
-                      h('vxe-checkbox', {
-                        props: {
-                          size: vSize,
-                          disabled: !hasFooter
-                        },
-                        model: {
-                          value: exportOpts.isFooter,
-                          callback (value) {
-                            exportOpts.isFooter = value
-                          }
-                        }
-                      }, GlobalConfig.i18n('vxe.toolbar.expOptFooter')),
-                      h('vxe-checkbox', {
-                        props: {
-                          size: vSize,
-                          disabled: forceOriginal
-                        },
-                        model: {
-                          value: exportOpts.original,
-                          callback (value) {
-                            exportOpts.original = value
-                          }
-                        }
-                      }, GlobalConfig.i18n('vxe.toolbar.expOptOriginal'))
-                    ])
-                  ])
-                ]),
-                h('div', {
-                  class: 'vxe-export--panel-btns'
-                }, [
-                  h('vxe-button', {
-                    props: {
-                      type: 'primary',
-                      size: vSize
-                    },
-                    on: {
-                      click () {
-                        const options = Object.assign({
-                          columns: exportColumns.filter(column => column.checked)
-                        }, exportOpts)
-                        if (!options.filename) {
-                          options.filename = GlobalConfig.i18n('vxe.toolbar.expTitle')
-                        }
-                        if (exportStore.mode === 'selected') {
-                          options.data = selectRecords
-                        }
-                        comp.exportData(options)
-                        $modal.close()
-                      }
-                    }
-                  }, GlobalConfig.i18n('vxe.toolbar.expConfirm'))
-                ])
-              ])
-            ]
-          }
-        },
-        events: {
-          show ({ $modal }) {
-            $modal.$refs.filename.focus()
-          }
-        }
-      })
+    },
+    confirmExportEvent (options) {
+      const { $grid, $table } = this
+      const comp = $grid || $table
+      comp.exportData(options)
     }
   }
 }

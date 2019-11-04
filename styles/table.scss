@@ -93,6 +93,9 @@
   }
   .vxe-body--row {
     background-color: $vxe-table-background-color;
+    &.row--stripe {
+      background-color: $vxe-table-row-striped-background-color;
+    }
     &.row--hover {
       background-color: $vxe-table-row-hover-background-color;
     }
@@ -103,15 +106,15 @@
       border-bottom: 1px solid $vxe-table-border-color;
     }
   }
-  &.t--stripe {
-    .vxe-body--row {
-      &:not(.row--current) {
-        &:nth-child(2n) {
-          background-color: $vxe-table-row-striped-background-color;
-        }
-      }
-    }
-  }
+  // &.t--stripe {
+  //   .vxe-body--row {
+  //     &:not(.row--current) {
+  //       &:nth-child(2n) {
+  //         background-color: $vxe-table-row-striped-background-color;
+  //       }
+  //     }
+  //   }
+  // }
   // &.row--highlight {
   //   .vxe-body--row {
   //     &:not(.row--current) {

@@ -37,17 +37,45 @@ const apis = [
       {
         name: 'export',
         descKey: 'app.api.toolbar.desc.export',
-        version: '1.15.8',
-        type: 'Boolean',
+        version: '1.15.12',
+        type: 'Boolean, Object',
         enum: '',
         defVal: '',
-        list: []
+        list: [
+          {
+            name: 'filename',
+            desc: '默认的文件名',
+            version: '',
+            type: 'String',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'type',
+            desc: '默认选中的类型',
+            version: '',
+            type: 'String',
+            enum: '',
+            defVal: '默认选中 types 第一个值',
+            list: []
+          },
+          {
+            name: 'types',
+            desc: '支持导出的类型列表',
+            version: '',
+            type: 'Array',
+            enum: 'csv, html, xml',
+            defVal: '',
+            list: []
+          }
+        ]
       },
       {
         name: 'refresh',
         descKey: 'app.api.toolbar.desc.refresh',
         version: '',
-        type: 'Boolean,Object',
+        type: 'Boolean, Object',
         enum: '',
         defVal: '',
         list: [
@@ -66,7 +94,7 @@ const apis = [
         name: 'resizable',
         descKey: 'app.api.toolbar.desc.resizable',
         version: '',
-        type: 'Boolean,Object',
+        type: 'Boolean, Object',
         enum: '',
         defVal: '',
         list: [
@@ -85,7 +113,7 @@ const apis = [
         name: 'setting',
         descKey: 'app.api.toolbar.desc.setting',
         version: '',
-        type: 'Boolean,Object',
+        type: 'Boolean, Object',
         enum: '',
         defVal: '',
         list: [

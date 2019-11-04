@@ -77,6 +77,9 @@ const GlobalConfig = {
     // layouts: ['PrevJump', 'PrevPage', 'Jump', 'PageCount', 'NextPage', 'NextJump', 'Sizes', 'Total']
   },
   toolbar: {
+    // export: {
+    //   types: ['csv', 'html', 'xml']
+    // }
     // resizable: {
     //   storage: false
     // },

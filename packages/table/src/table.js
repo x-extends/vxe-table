@@ -1870,9 +1870,7 @@ export default {
         this.closeMenu()
       }
       // 最后激活的表格
-      if (getEventTargetNode(evnt, this.$el).flag) {
-        VXETable.actived = this.id
-      }
+      this.isActivated = getEventTargetNode(evnt, this.$el).flag
     },
     /**
      * 窗口失焦事件处理
@@ -1893,7 +1891,7 @@ export default {
      */
     handleGlobalKeydownEvent (evnt) {
       // 该行为只对当前激活的表格有效
-      if (VXETable.actived === this.id) {
+      if (this.isActivated) {
         this.preventEvent(evnt, 'event.keydown', { $table: this }, () => {
           let params
           let { isCtxMenu, ctxMenuStore, editStore, mouseConfig = {}, keyboardConfig = {}, treeConfig, highlightCurrentRow, currentRow } = this
@@ -2829,7 +2827,7 @@ export default {
           }
         }
       }
-      VXETable.actived = this.id
+      this.isActivated = true
     },
     /**
      * 边角事件
@@ -2866,7 +2864,7 @@ export default {
           }
         }
       }
-      VXETable.actived = this.id
+      this.isActivated = true
     },
     triggerHeaderCellClickEvent (evnt, params) {
       let { _lastResizeTime, sortOpts } = this
@@ -3085,7 +3083,7 @@ export default {
       let { actived, selected } = editStore
       let { row, column } = params
       let selectMethod = () => {
-        if (selected.row !== row || selected.column !== column) {
+        if ((mouseConfig.selected || mouseConfig.checked) && (selected.row !== row || selected.column !== column)) {
           if (actived.row !== row || (editConfig.mode === 'cell' ? actived.column !== column : false)) {
             this.clearChecked(evnt)
             this.clearActived(evnt)
