@@ -57,7 +57,12 @@ export default {
     },
     exportOpts () {
       return Object.assign({
-        types: ['csv', 'html', 'xml']
+        types: Object.keys(VXETable.types).map(value => {
+          return {
+            value,
+            label: `vxe.types.${value}`
+          }
+        })
       }, GlobalConfig.toolbar.export, this.export)
     },
     resizableOpts () {
@@ -448,7 +453,7 @@ export default {
       // 重置参数
       Object.assign(exportParams, {
         filename: exportOpts.filename,
-        type: exportOpts.types[0],
+        type: exportOpts.types[0].value,
         original: forceOriginal,
         isHeader: true,
         isFooter: hasFooter

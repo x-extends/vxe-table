@@ -142,6 +142,7 @@ module.exports = {
         spanPlugin: '单元格选中合并',
         shortcutKeyPlugin: 'plugin-shortcut-key 快捷键设置',
         chartsPlugin: 'plugin-charts 图表工具',
+        exportPlugin: 'plugin-export 导出插件',
         rendererPlugin: 'plugin-renderer 更多渲染器',
         menusPlugin: 'plugin-menus 快捷菜单集',
 

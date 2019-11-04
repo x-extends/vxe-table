@@ -88,15 +88,15 @@ export default {
                     defaultOptions.type = evnt.target.value
                   }
                 }
-              }, typeList.map(type => {
+              }, typeList.map(item => {
                 return h('option', {
                   attrs: {
-                    value: type
+                    value: item.value
                   },
                   domProps: {
-                    selected: defaultOptions.type === type
+                    selected: defaultOptions.type === item.value
                   }
-                }, type)
+                }, GlobalConfig.i18n(item.label))
               }))
             ])
           ]),

@@ -712,11 +712,14 @@ export default {
       vSize,
       editConfig,
       validOpts,
+      mouseConfig = {},
       editRules,
       showFooter,
       footerMethod,
       overflowX,
       overflowY,
+      scrollXLoad,
+      scrollYLoad,
       scrollbarHeight,
       optimizeOpts,
       vaildTipOpts,
@@ -733,15 +736,19 @@ export default {
         'vxe-editable': editConfig,
         'show--head': showHeader,
         'show--foot': showFooter,
-        'scroll--y': overflowY,
-        'scroll--x': overflowX,
         'fixed--left': leftList.length,
         'fixed--right': rightList.length,
         't--animat': optimizeOpts.animat,
         't--stripe': stripe,
         't--border': border,
+        't--selected': mouseConfig.selected,
+        't--checked': mouseConfig.checked,
         'row--highlight': highlightHoverRow,
-        'column--highlight': highlightHoverColumn
+        'column--highlight': highlightHoverColumn,
+        'scroll--y': overflowY,
+        'scroll--x': overflowX,
+        'virtual--x': scrollXLoad,
+        'virtual--y': scrollYLoad
       }]
     }, [
       /**
@@ -1809,14 +1816,16 @@ export default {
     },
     preventEvent (evnt, type, args, next, end) {
       let evntList = Interceptor.get(type)
+      let rest
       if (!evntList.some(func => func(args, evnt, this) === false)) {
         if (next) {
-          next()
+          rest = next()
         }
       }
       if (end) {
         end()
       }
+      return rest
     },
     /**
      * 全局按下事件处理
@@ -4314,13 +4323,14 @@ export default {
      */
     exportData (options) {
       let { visibleColumn, scrollXLoad, scrollYLoad, treeConfig } = this
+      let types = Object.keys(VXETable.types)
       let opts = Object.assign({
         filename: '',
         original: !!treeConfig,
         isHeader: true,
         isFooter: true,
         download: true,
-        type: '',
+        type: 'csv',
         data: null,
         columns: null,
         columnFilterMethod: null,
@@ -4330,8 +4340,8 @@ export default {
       if (!opts.filename) {
         opts.filename = 'table'
       }
-      if (!['csv', 'html', 'xml'].includes(opts.type)) {
-        opts.type = 'csv'
+      if (!types.includes(opts.type)) {
+        throw new Error(UtilTools.getLog('vxe.error.notType', [opts.type]))
       }
       if (!opts.original) {
         if (scrollXLoad || scrollYLoad) {
@@ -4348,7 +4358,7 @@ export default {
       if (treeConfig) {
         fullData = XEUtils.toTreeArray(fullData, treeConfig)
       }
-      return ExportTools.downloadCsc(opts, ExportTools.getCsvContent(this, opts, columns, fullData))
+      return ExportTools.handleExport(this, opts, columns, fullData)
     },
     updateZindex () {
       if (this.tZindex < UtilTools.getLastZIndex()) {

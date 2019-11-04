@@ -1,31 +1,72 @@
 import { UtilTools, DomTools } from '../../tools'
 
+function getContent ($table, opts, columns, datas) {
+  const { type } = opts
+  if (type === 'csv') {
+    return toCsv($table, opts, columns, datas)
+  } else if (type === 'txt') {
+    return toTxt($table, opts, columns, datas)
+  } else if (type === 'html') {
+    return toHtml($table, opts, columns, datas)
+  } else if (type === 'xml') {
+    return toXML($table, opts, columns, datas)
+  }
+  return ''
+}
+
 function toCsv ($table, opts, columns, datas) {
   const isOriginal = opts.original
   let content = '\ufeff'
   if (opts.isHeader) {
-    content += columns.map(({ own }) => `"${UtilTools.getFuncText(own.title || own.label)}"`).join(',') + '\n'
+    content += columns.map(column => `"${column.getTitle()}"`).join(',') + '\n'
   }
-  if (datas.length) {
-    datas.forEach((row, rowIndex) => {
-      if (isOriginal) {
-        content += columns.map(column => {
-          if (column.type === 'index') {
-            return `"${column.indexMethod ? column.indexMethod(rowIndex) : rowIndex + 1}"`
-          }
-          return `"${UtilTools.getCellValue(row, column) || ''}"`
-        }).join(',') + '\n'
-      } else {
-        content += columns.map(column => `"${row[column.id]}"`).join(',') + '\n'
-      }
-    })
-  }
+  datas.forEach((row, rowIndex) => {
+    if (isOriginal) {
+      content += columns.map(column => {
+        if (column.type === 'index') {
+          return `"${column.indexMethod ? column.indexMethod(rowIndex) : rowIndex + 1}"`
+        }
+        return `"${UtilTools.getCellValue(row, column) || ''}"`
+      }).join(',') + '\n'
+    } else {
+      content += columns.map(column => `"${row[column.id]}"`).join(',') + '\n'
+    }
+  })
   if (opts.isFooter) {
     let footerData = $table.footerData
     let footers = opts.footerFilterMethod ? footerData.filter(opts.footerFilterMethod) : footerData
     let filterMaps = $table.tableColumn.map(column => columns.includes(column))
     footers.forEach(rows => {
       content += rows.filter((val, colIndex) => `"${filterMaps[colIndex]}"`).join(',') + '\n'
+    })
+  }
+  return content
+}
+
+function toTxt ($table, opts, columns, datas) {
+  const isOriginal = opts.original
+  let content = ''
+  if (opts.isHeader) {
+    content += columns.map(column => `${column.getTitle()}`).join('\t') + '\n'
+  }
+  datas.forEach((row, rowIndex) => {
+    if (isOriginal) {
+      content += columns.map(column => {
+        if (column.type === 'index') {
+          return `${column.indexMethod ? column.indexMethod(rowIndex) : rowIndex + 1}`
+        }
+        return `"${UtilTools.getCellValue(row, column) || ''}"`
+      }).join('\t') + '\n'
+    } else {
+      content += columns.map(column => `${row[column.id]}`).join('\t') + '\n'
+    }
+  })
+  if (opts.isFooter) {
+    let footerData = $table.footerData
+    let footers = opts.footerFilterMethod ? footerData.filter(opts.footerFilterMethod) : footerData
+    let filterMaps = $table.tableColumn.map(column => columns.includes(column))
+    footers.forEach(rows => {
+      content += rows.filter((val, colIndex) => `${filterMaps[colIndex]}`).join('\t') + '\n'
     })
   }
   return content
@@ -42,7 +83,7 @@ function toHtml ($table, opts, columns, datas) {
     `<colgroup>${columns.map(column => `<col width="${column.renderWidth}">`).join('')}</colgroup>`
   ].join('')
   if (opts.isHeader) {
-    html += `<thead><tr>${columns.map(({ own }) => `<th>${UtilTools.getFuncText(own.title || own.label)}</th>`).join('')}</tr></thead>`
+    html += `<thead><tr>${columns.map(column => `<th>${column.getTitle()}</th>`).join('')}</tr></thead>`
   }
   if (datas.length) {
     html += '<tbody>'
@@ -99,7 +140,7 @@ function toXML ($table, opts, columns, datas) {
     columns.map(column => `<Column ss:Width="${column.renderWidth}"/>`).join('')
   ].join('')
   if (opts.isHeader) {
-    xml += `<Row>${columns.map(({ own }) => `<Cell><Data ss:Type="String">${UtilTools.getFuncText(own.title || own.label)}</Data></Cell>`).join('')}</Row>`
+    xml += `<Row>${columns.map(column => `<Cell><Data ss:Type="String">${column.getTitle()}</Data></Cell>`).join('')}</Row>`
   }
   datas.forEach((row, rowIndex) => {
     xml += '<Row>'
@@ -126,6 +167,32 @@ function toXML ($table, opts, columns, datas) {
     }
   }
   return `${xml}</Table></Worksheet></Workbook>`
+}
+
+function downloadFile (opts, content) {
+  const { filename, type, download } = opts
+  const name = `${filename}.${type}`
+  if (!download) {
+    return Promise.resolve(content)
+  }
+  if (navigator.msSaveBlob && window.Blob) {
+    navigator.msSaveBlob(new Blob([content], { type: `text/${type}` }), name)
+  } else if (DomTools.browse['-ms']) {
+    var win = window.top.open('about:blank', '_blank')
+    win.document.charset = 'utf-8'
+    win.document.write(content)
+    win.document.close()
+    win.document.execCommand('SaveAs', name)
+    win.close()
+  } else {
+    var linkElem = document.createElement('a')
+    linkElem.target = '_blank'
+    linkElem.download = name
+    linkElem.href = getDownloadUrl(opts, content)
+    document.body.appendChild(linkElem)
+    linkElem.click()
+    document.body.removeChild(linkElem)
+  }
 }
 
 function getLabelData ($table, columns, datas) {
@@ -156,6 +223,7 @@ function getDownloadUrl (opts, content) {
     case 'csv':
     case 'html':
     case 'xml':
+    case 'txt':
       return getAttachmentUrl(opts, content)
   }
   return ''
@@ -169,41 +237,10 @@ function getAttachmentUrl ({ type }, content) {
 }
 
 export default {
-  getCsvContent ($table, opts, oColumns, fullData) {
-    const { type } = opts
+  handleExport ($table, opts, oColumns, fullData) {
     const { columns, datas } = getExportData($table, opts, fullData, oColumns)
-    if (type === 'csv') {
-      return toCsv($table, opts, columns, datas)
-    } else if (type === 'html') {
-      return toHtml($table, opts, columns, datas)
-    } else if (type === 'xml') {
-      return toXML($table, opts, columns, datas)
-    }
-    return ''
-  },
-  downloadCsc (opts, content) {
-    const { filename, type, download } = opts
-    const name = `${filename}.${type}`
-    if (!download) {
-      return Promise.resolve(content)
-    }
-    if (navigator.msSaveBlob && window.Blob) {
-      navigator.msSaveBlob(new Blob([content], { type: `text/${type}` }), name)
-    } else if (DomTools.browse['-ms']) {
-      var win = window.top.open('about:blank', '_blank')
-      win.document.charset = 'utf-8'
-      win.document.write(content)
-      win.document.close()
-      win.document.execCommand('SaveAs', name)
-      win.close()
-    } else {
-      var linkElem = document.createElement('a')
-      linkElem.target = '_blank'
-      linkElem.download = name
-      linkElem.href = getDownloadUrl(opts, content)
-      document.body.appendChild(linkElem)
-      linkElem.click()
-      document.body.removeChild(linkElem)
-    }
+    return $table.preventEvent(null, 'event.export', { $table, options: opts, columns, datas }, () => {
+      return downloadFile(opts, getContent($table, opts, columns, datas))
+    })
   }
 }

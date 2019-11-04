@@ -119,11 +119,11 @@ export const Cell = {
    */
   renderIndexHeader (h, params) {
     let { column } = params
-    let { slots, own } = column
+    let { slots } = column
     if (slots && slots.header) {
       return slots.header(params, h)
     }
-    return [UtilTools.formatText(UtilTools.getFuncText(own.title || own.label || GlobalConfig.i18n('vxe.column.indexTitle')), 1)]
+    return [UtilTools.formatText(column.getTitle(), 1)]
   },
   renderIndexCell (h, params) {
     let { $table, column } = params

@@ -1169,6 +1169,13 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.exportPlugin',
+              disabled: true,
+              locat: {
+                name: 'TablePluginExport'
+              }
+            },
+            {
               label: 'app.aside.nav.rendererPlugin',
               disabled: true,
               locat: {

@@ -222,6 +222,10 @@
       }
     }
   }
+  &.t--checked,
+  &.t--selected {
+    user-select: none;
+  }
   &.size--medium {
     font-size: $vxe-font-size-medium;
     .vxe-header--column,
@@ -545,6 +549,11 @@
     &.col--ellipsis {
       @extend %DefaultColumnHeight;
       line-height: inherit;
+    }
+  }
+  &.virtual--x,
+  &.virtual--y {
+    .col--ellipsis {
       .vxe-cell {
         max-height: $vxe-table-row-height-default - 1;
       }
@@ -556,6 +565,11 @@
     .vxe-footer--column {
       &.col--ellipsis {
         @extend %MediumColumnHeight;
+      }
+    }
+    &.virtual--x,
+    &.virtual--y {
+      .col--ellipsis {
         .vxe-cell {
           max-height: $vxe-table-row-height-medium - 1;
         }
@@ -568,6 +582,11 @@
     .vxe-footer--column {
       &.col--ellipsis {
         @extend %SmallColumnHeight;
+      }
+    }
+    &.virtual--x,
+    &.virtual--y {
+      .col--ellipsis {
         .vxe-cell {
           max-height: $vxe-table-row-height-small - 1;
         }
@@ -580,6 +599,11 @@
     .vxe-footer--column {
       &.col--ellipsis {
         @extend %MiniColumnHeight;
+      }
+    }
+    &.virtual--x,
+    &.virtual--y {
+      .col--ellipsis {
         .vxe-cell {
           max-height: $vxe-table-row-height-mini - 1;
         }

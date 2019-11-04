@@ -409,7 +409,7 @@ export default {
       }
     },
     pageChangeEvent (params) {
-      let { tablePage } = this
+      let { proxyConfig, tablePage } = this
       let { currentPage, pageSize } = params
       tablePage.currentPage = currentPage
       tablePage.pageSize = pageSize
@@ -419,16 +419,20 @@ export default {
         UtilTools.emitEvent(this, 'page-size-change', [pageSize])
       }
       UtilTools.emitEvent(this, 'page-change', [Object.assign({ $grid: this }, params)])
-      this.commitProxy('query')
+      if (proxyConfig) {
+        this.commitProxy('query')
+      }
     },
     sortChangeEvent (params) {
-      let { remoteSort } = this
+      let { proxyConfig, remoteSort } = this
       let { column } = params
       let isRemote = XEUtils.isBoolean(column.remoteSort) ? column.remoteSort : remoteSort
       // 如果是服务端排序
       if (isRemote) {
         this.sortData = params
-        this.commitProxy('query')
+        if (proxyConfig) {
+          this.commitProxy('query')
+        }
       }
       UtilTools.emitEvent(this, 'sort-change', [Object.assign({ $grid: this }, params)])
     },
