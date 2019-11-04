@@ -33,6 +33,7 @@ export const VXETable = {
   t: XEUtils.get,
   v: 'v2',
   use,
+  types: {},
   setup: Setup,
   interceptor: Interceptor,
   renderer: Renderer,

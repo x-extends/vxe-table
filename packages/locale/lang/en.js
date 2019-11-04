@@ -18,7 +18,8 @@ export default {
       notFunc: '"{{0}}" method not exist.',
       noTree: 'The tree structure does not support "{{0}}".',
       delFunc: 'The property "{{0}}" is deprecated, please use "{{1}}".',
-      delProp: 'The function "{{0}}" is deprecated, please use "{{1}}".'
+      delProp: 'The function "{{0}}" is deprecated, please use "{{1}}".',
+      notType: 'Unsupported types "{{0}}"'
     },
     table: {
       emptyText: 'No Data',
@@ -48,6 +49,13 @@ export default {
     button: {
       confirm: 'Confirm',
       cancel: 'Cancel'
+    },
+    types: {
+      csv: 'CSV (逗号分隔)(*.csv)',
+      html: '网页(*.html)',
+      xml: 'XML 数据(*.xml)',
+      txt: '文本文件(制表符分隔)(*.txt)',
+      xlsx: 'Excel 工作簿(*.xlsx)'
     },
     toolbar: {
       expTitle: 'Export data',

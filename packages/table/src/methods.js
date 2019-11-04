@@ -1130,14 +1130,16 @@ const Methods = {
   },
   preventEvent (evnt, type, args, next, end) {
     let evntList = Interceptor.get(type)
+    let rest
     if (!evntList.some(func => func(args, evnt, this) === false)) {
       if (next) {
-        next()
+        rest = next()
       }
     }
     if (end) {
       end()
     }
+    return rest
   },
   /**
    * 全局按下事件处理

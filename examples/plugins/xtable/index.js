@@ -41,6 +41,7 @@ import VXETablePluginExcel from 'vxe-table-plugin-excel'
 import VXETablePluginRenderer from 'vxe-table-plugin-renderer'
 import VXETablePluginMenus from 'vxe-table-plugin-menus'
 import VXETablePluginCharts from 'vxe-table-plugin-charts'
+import VXETablePluginExport from 'vxe-table-plugin-export'
 // import VXETablePluginShortcutKey from 'vxe-table-plugin-shortcut-key'
 import 'vxe-table-plugin-element/dist/style.css'
 import 'vxe-table-plugin-iview/dist/style.css'
@@ -87,6 +88,7 @@ VXETable.use(VXETablePluginExcel)
 VXETable.use(VXETablePluginRenderer)
 VXETable.use(VXETablePluginMenus)
 VXETable.use(VXETablePluginCharts)
+VXETable.use(VXETablePluginExport)
 // VXETable.use(VXETablePluginShortcutKey, {
 //   disabled: ['ArrowLeft'],
 //   listener: {

@@ -6,6 +6,7 @@ import mixin from './src/mixin'
 export const Export = {
   install (Vue) {
     VXETable.reg('export')
+    Object.assign(VXETable.types, { csv: 1, html: 1, xml: 1, txt: 1 })
     Table.mixins.push(mixin)
     Vue.component(Panel.name, Panel)
   }

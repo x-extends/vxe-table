@@ -134,6 +134,10 @@ export interface VXETableStatic {
    */
   v: string;
   /**
+   * 支持导出的文件类型
+   */
+  types: string[];
+  /**
    * 国际化翻译
    */
   t(obj: object, key: string): string | number;

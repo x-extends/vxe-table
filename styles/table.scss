@@ -208,8 +208,11 @@
       }
     }
   }
-  &.t--checked {
+  &.t--checked,
+  &.t--selected {
     user-select: none;
+  }
+  &.t--checked {
     .vxe-header--column,
     .vxe-body--column {
       &.col--index {
@@ -533,6 +536,11 @@
     &.col--ellipsis {
       @extend %CellEllipsis, %DefaultColumnHeight;
       line-height: inherit;
+    }
+  }
+  &.virtual--x,
+  &.virtual--y {
+    .col--ellipsis {
       .vxe-cell {
         max-height: $vxe-table-row-height-default - 1;
       }
@@ -544,6 +552,11 @@
     .vxe-footer--column {
       &.col--ellipsis {
         @extend %MediumColumnHeight;
+      }
+    }
+    &.virtual--x,
+    &.virtual--y {
+      .col--ellipsis {
         .vxe-cell {
           max-height: $vxe-table-row-height-medium - 1;
         }
@@ -561,6 +574,14 @@
         }
       }
     }
+    &.virtual--x,
+    &.virtual--y {
+      .col--ellipsis {
+        .vxe-cell {
+          max-height: $vxe-table-row-height-small - 1;
+        }
+      }
+    }
   }
   &.size--mini {
     .vxe-header--column,
@@ -568,6 +589,14 @@
     .vxe-footer--column {
       &.col--ellipsis {
         @extend %MiniColumnHeight;
+        .vxe-cell {
+          max-height: $vxe-table-row-height-mini - 1;
+        }
+      }
+    }
+    &.virtual--x,
+    &.virtual--y {
+      .col--ellipsis {
         .vxe-cell {
           max-height: $vxe-table-row-height-mini - 1;
         }

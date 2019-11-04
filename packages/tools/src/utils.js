@@ -10,9 +10,9 @@ class ColumnConfig {
     if (_vm.cellRender && _vm.editRender) {
       UtilTools.warn('vxe.error.cellEditRender')
     }
-    // if (_vm.type === 'selection') {
-    //   UtilTools.warn('vxe.error.delProp', ['selection', 'checkbox'])
-    // }
+    if (_vm.type === 'selection') {
+      UtilTools.warn('vxe.error.delProp', ['selection', 'checkbox'])
+    }
     Object.assign(this, {
       // 基本属性
       id: `col_${++columnUniqueId}`,
@@ -67,6 +67,10 @@ class ColumnConfig {
       slots: _vm.slots,
       own: _vm
     })
+  }
+  getTitle () {
+    // 在 v3.0 中废弃 label
+    return UtilTools.getFuncText(this.own.title || this.own.label || (this.type === 'index' ? GlobalConfig.i18n('vxe.column.indexTitle') : ''))
   }
   update (name, value) {
     // 不支持双向的属性

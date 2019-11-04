@@ -9,7 +9,8 @@ import './plugins'
 import './mock'
 import XEUtils from 'xe-utils/methods/xe-utils'
 import moment from 'moment'
-
+import XLSX from 'xlsx'
+window.XLSX = XLSX
 Vue.config.productionTip = false
 
 // 后台异步生成10万模拟数据

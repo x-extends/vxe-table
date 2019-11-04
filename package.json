@@ -1,6 +1,6 @@
 {
   "name": "vxe-table",
-  "version": "2.6.12-alpha.2",
+  "version": "2.6.12-beta.2",
   "description": "一个简单实用的 Vue 表格组件",
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -69,6 +69,7 @@
     "vxe-table-plugin-charts": "^1.1.1",
     "vxe-table-plugin-element": "^1.5.6",
     "vxe-table-plugin-excel": "^1.1.0",
+    "vxe-table-plugin-export": "^1.0.0",
     "vxe-table-plugin-iview": "^1.5.4",
     "vxe-table-plugin-menus": "^1.1.1",
     "vxe-table-plugin-renderer": "^1.1.0",
@@ -79,7 +80,7 @@
     "xe-ajax-mock": "^1.9.2",
     "xe-clipboard": "^1.7.1",
     "xe-utils": "^2.2.11",
-    "xlsx": "^0.14.3"
+    "xlsx": "^0.15.1"
   },
   "peerDependencies": {
     "vue": ">=2.6.10",
@@ -113,6 +114,5 @@
   "browserslist": [
     "> 1%",
     "last 2 versions"
-  ],
-  "dependencies": {}
+  ]
 }

@@ -612,6 +612,8 @@ export default {
       footerMethod,
       overflowX,
       overflowY,
+      scrollXLoad,
+      scrollYLoad,
       scrollbarHeight,
       optimizeOpts,
       vaildTipOpts,
@@ -630,8 +632,6 @@ export default {
         'vxe-editable': editConfig,
         'show--head': showHeader,
         'show--foot': showFooter,
-        'scroll--y': overflowY,
-        'scroll--x': overflowX,
         'fixed--left': leftList.length,
         'fixed--right': rightList.length,
         'all-overflow': showOverflow,
@@ -640,10 +640,15 @@ export default {
         't--animat': optimizeOpts.animat,
         't--stripe': stripe,
         't--border': border,
+        't--selected': mouseConfig.selected,
         't--checked': mouseConfig.checked,
-        'is--loading': loading,
         'row--highlight': highlightHoverRow,
-        'column--highlight': highlightHoverColumn
+        'column--highlight': highlightHoverColumn,
+        'is--loading': loading,
+        'scroll--y': overflowY,
+        'scroll--x': overflowX,
+        'virtual--x': scrollXLoad,
+        'virtual--y': scrollYLoad
       }
     }, [
       /**

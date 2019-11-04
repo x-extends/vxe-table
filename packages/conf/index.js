@@ -82,7 +82,7 @@ const GlobalConfig = {
   },
   toolbar: {
     // export: {
-    //   types: ['csv', 'html', 'xml']
+    //   types: ['csv', 'html', 'xml', 'txt']
     // }
     // resizable: {
     //   storage: false
