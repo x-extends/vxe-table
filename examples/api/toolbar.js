@@ -65,7 +65,7 @@ const apis = [
             desc: '支持导出的类型列表',
             version: '',
             type: 'Array',
-            enum: 'csv, html, xml',
+            enum: 'csv, html, xml, txt',
             defVal: '',
             list: []
           }
