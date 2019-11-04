@@ -184,3 +184,5 @@ export {
   Export,
   Resize
 }
+
+export default VXETable
