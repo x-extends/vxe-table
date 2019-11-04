@@ -206,3 +206,5 @@ export {
   Validator,
   Resize
 }
+
+export default VXETable
