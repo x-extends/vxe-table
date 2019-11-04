@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">斑马线条纹</p>
+    <p class="tip">斑马线条纹<br><span class="red">（注：在可编辑表格场景下，临时插入的数据不会有斑马纹样式）</span></p>
 
     <vxe-table
       stripe

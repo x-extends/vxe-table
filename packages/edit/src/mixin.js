@@ -381,9 +381,9 @@ export default {
       let { actived, selected } = editStore
       let { row, column, cell } = params
       let selectMethod = () => {
-        if (selected.row !== row || selected.column !== column) {
+        if ((mouseConfig.selected || mouseConfig.checked) && (selected.row !== row || selected.column !== column)) {
           if (actived.row !== row || (editConfig.mode === 'cell' ? actived.column !== column : false)) {
-            if (this.keyboardConfig || this.mouseConfig) {
+            if (this.keyboardConfig) {
               this.clearChecked(evnt)
               this.clearIndexChecked()
               this.clearHeaderChecked()

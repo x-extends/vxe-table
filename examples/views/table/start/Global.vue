@@ -66,6 +66,9 @@
           // 默认工具栏参数
           toolbar: {
             refresh: false,
+            export: {
+              types: ['csv', 'html', 'xml']
+            },
             resizable: {
               storage: false
             },

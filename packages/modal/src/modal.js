@@ -249,17 +249,17 @@ export default {
         this.visible = true
         this.contentVisible = false
         this.updateZindex()
-        if (!events.show) {
-          this.$emit('input', true)
-          this.$emit('show', params)
-        }
         setTimeout(() => {
           this.contentVisible = true
-          if (!$listeners.show && events.show) {
-            this.$nextTick(() => {
+          this.$nextTick(() => {
+            if (!events.show) {
+              this.$emit('input', true)
+              this.$emit('show', params)
+            }
+            if (!$listeners.show && events.show) {
               events.show.call(this, params)
-            })
-          }
+            }
+          })
         }, 10)
         if (isMsg) {
           this.addMsgQueue()

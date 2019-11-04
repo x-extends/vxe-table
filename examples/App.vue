@@ -350,10 +350,22 @@ export default {
               }
             },
             {
-              label: 'app.aside.nav.export',
+              label: 'app.aside.nav.exportCSV',
               demoUrl: 'https://jsrun.net/cmXKp',
               locat: {
-                name: 'TableExport'
+                name: 'TableExportCSV'
+              }
+            },
+            {
+              label: 'app.aside.nav.exportHTML',
+              locat: {
+                name: 'TableExportHTML'
+              }
+            },
+            {
+              label: 'app.aside.nav.exportXML',
+              locat: {
+                name: 'TableExportXML'
               }
             },
             {

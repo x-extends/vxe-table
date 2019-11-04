@@ -511,7 +511,7 @@ export default {
       errorModuleName = 'Resize'
     }
     if (errorModuleName) {
-      throw new Error(UtilTools.getLog('vxe.error.reqModule', ['errorModuleName']))
+      throw new Error(UtilTools.getLog('vxe.error.reqModule', [errorModuleName]))
     }
     if (scrollY) {
       Object.assign(scrollYStore, {

@@ -1188,9 +1188,7 @@ const Methods = {
       this.closeMenu()
     }
     // 最后激活的表格
-    if (getEventTargetNode(evnt, this.$el).flag) {
-      VXETable.actived = this.id
-    }
+    this.isActivated = getEventTargetNode(evnt, this.$el).flag
   },
   /**
    * 窗口失焦事件处理
@@ -1211,7 +1209,7 @@ const Methods = {
    */
   handleGlobalKeydownEvent (evnt) {
     // 该行为只对当前激活的表格有效
-    if (VXETable.actived === this.id) {
+    if (this.isActivated) {
       this.preventEvent(evnt, 'event.keydown', { $table: this }, () => {
         let { isCtxMenu, ctxMenuStore, editStore, mouseConfig = {}, keyboardConfig = {}, treeConfig, highlightCurrentRow, currentRow } = this
         let { selected, actived } = editStore

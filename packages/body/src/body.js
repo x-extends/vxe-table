@@ -228,6 +228,7 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
     rows.push(
       h('tr', {
         class: ['vxe-body--row', {
+          'row--stripe': rowIndex > 0 && (rowIndex + 1) % 2 === 0,
           [`row--level-${rowLevel}`]: treeConfig,
           'row--new': editStore.insertList.indexOf(row) > -1
         }, rowClassName ? XEUtils.isFunction(rowClassName) ? rowClassName({ $table, $seq, seq, fixedType, rowLevel, row, rowIndex, $rowIndex }) : rowClassName : ''],
