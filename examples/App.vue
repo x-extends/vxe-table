@@ -1168,6 +1168,7 @@ export default {
             },
             {
               label: 'app.aside.nav.exportPlugin',
+              demoUrl: 'https://jsrun.pro/PIWKp',
               locat: {
                 name: 'TablePluginExport'
               }

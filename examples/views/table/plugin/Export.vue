@@ -35,6 +35,9 @@ export default {
       loading: false,
       tableData: [],
       tableExport: {
+        // 默认选中类型
+        type: 'xlsx',
+        // 自定义类型顺序
         types: ['xlsx', 'csv', 'html', 'xml', 'txt']
       },
       demoCodes: [
@@ -61,6 +64,9 @@ export default {
               loading: false,
               tableData: [],
               tableExport: {
+                // 默认选中类型
+                type: 'xlsx',
+                // 自定义类型顺序
                 types: ['xlsx', 'csv', 'html', 'xml', 'txt']
               }
             }
