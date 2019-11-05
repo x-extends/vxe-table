@@ -178,7 +178,7 @@ module.exports = {
       button: {
         viewCode: 'View source',
         runDemo: 'Run demo',
-        showCode: 'Show code',
+        showCode: 'Show demo',
         refresh: 'Refresh',
         insert: 'Insert',
         save: 'Save',

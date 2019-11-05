@@ -176,21 +176,23 @@ export default {
               let insertRecords = this.$utils.filterTree(this.tableData, item => item.isNew, this.treeConfig)
               this.$XModal.alert(insertRecords.length)
             },
-            visibleMethod  ({ row }) {
+            visibleMethod  ({ row, type }) {
               let xTree = this.$refs.xTree
               let treeConfig = this.treeConfig
-              this.bodyMenus.forEach(list => {
-                list.forEach(item => {
-                  if (['expand', 'contract'].includes(item.code)) {
-                    if (row[treeConfig.children] && row[treeConfig.children].length) {
-                      let isExpand = xTree.isTreeExpandByRow(row)
-                      item.disabled = ['expand'].includes(item.code) ? isExpand : !isExpand
-                    } else {
-                      item.disabled = true
+              if (type === 'body') {
+                this.bodyMenus.forEach(list => {
+                  list.forEach(item => {
+                    if (['expand', 'contract'].includes(item.code)) {
+                      if (row[treeConfig.children] && row[treeConfig.children].length) {
+                        let isExpand = xTree.isTreeExpandByRow(row)
+                        item.disabled = ['expand'].includes(item.code) ? isExpand : !isExpand
+                      } else {
+                        item.disabled = true
+                      }
                     }
-                  }
+                  })
                 })
-              })
+              }
               return true
             },
             contextMenuClickEvent ({ menu, row, column }) {
@@ -244,21 +246,23 @@ export default {
       let insertRecords = this.$utils.filterTree(this.tableData, item => item.isNew, this.treeConfig)
       this.$XModal.alert(insertRecords.length)
     },
-    visibleMethod  ({ row }) {
+    visibleMethod  ({ row, type }) {
       let xTree = this.$refs.xTree
       let treeConfig = this.treeConfig
-      this.bodyMenus.forEach(list => {
-        list.forEach(item => {
-          if (['expand', 'contract'].includes(item.code)) {
-            if (row[treeConfig.children] && row[treeConfig.children].length) {
-              let isExpand = xTree.isTreeExpandByRow(row)
-              item.disabled = ['expand'].includes(item.code) ? isExpand : !isExpand
-            } else {
-              item.disabled = true
+      if (type === 'body') {
+        this.bodyMenus.forEach(list => {
+          list.forEach(item => {
+            if (['expand', 'contract'].includes(item.code)) {
+              if (row[treeConfig.children] && row[treeConfig.children].length) {
+                let isExpand = xTree.isTreeExpandByRow(row)
+                item.disabled = ['expand'].includes(item.code) ? isExpand : !isExpand
+              } else {
+                item.disabled = true
+              }
             }
-          }
+          })
         })
-      })
+      }
       return true
     },
     contextMenuClickEvent ({ menu, row, column }) {
