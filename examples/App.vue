@@ -447,6 +447,7 @@ export default {
             },
             {
               label: 'app.aside.nav.reverse',
+              demoUrl: 'https://jsrun.pro/zIWKp',
               locat: {
                 name: 'GridReverse'
               }

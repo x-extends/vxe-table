@@ -119,14 +119,8 @@ export default {
         }
         `,
         `
-        .reverse-table {
-          .vxe-body--row {
-            .vxe-body--column {
-              &:first-child {
-                background-color: #f8f8f9;
-              }
-            }
-          }
+        .reverse-table .vxe-body--row .vxe-body--column:first-child {
+          background-color: #f8f8f9;
         }
         `,
         `
@@ -188,14 +182,8 @@ export default {
         }
         `,
         `
-        .reverse-table {
-          .vxe-body--row {
-            .vxe-body--column {
-              &:first-child {
-                background-color: #f8f8f9;
-              }
-            }
-          }
+        .reverse-table .vxe-body--row .vxe-body--column:first-child {
+          background-color: #f8f8f9;
         }
         `
       ]
@@ -259,13 +247,7 @@ export default {
 </script>
 
 <style lang="scss">
-.reverse-table {
-  .vxe-body--row {
-    .vxe-body--column {
-      &:first-child {
-        background-color: #f8f8f9;
-      }
-    }
-  }
+.reverse-table .vxe-body--row .vxe-body--column:first-child {
+  background-color: #f8f8f9;
 }
 </style>
