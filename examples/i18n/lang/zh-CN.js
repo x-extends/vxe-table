@@ -179,7 +179,7 @@ module.exports = {
       button: {
         viewCode: '查看代码',
         runDemo: '在线运行',
-        showCode: '显示代码',
+        showCode: '查看示例',
         refresh: '刷新',
         insert: '新增',
         save: '保存',

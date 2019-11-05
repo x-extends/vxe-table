@@ -697,6 +697,7 @@ export default {
             },
             {
               label: 'app.aside.nav.edit',
+              demoUrl: 'https://jsrun.pro/MIWKp',
               locat: {
                 name: 'TableScrollEdit'
               }
@@ -983,6 +984,7 @@ export default {
           children: [
             {
               label: 'app.aside.nav.edit',
+              demoUrl: 'https://jsrun.pro/uIWKp',
               locat: {
                 name: 'TableBadEdit'
               }
