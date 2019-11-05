@@ -946,6 +946,7 @@ export default {
             },
             {
               label: 'app.aside.nav.events',
+              demoUrl: 'https://jsrun.pro/QIWKp',
               locat: {
                 name: 'TableEditEvents'
               }
