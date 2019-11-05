@@ -3,7 +3,7 @@
     <p class="tip">
       通过 <table-api-link prop="customs"/> 来初始化绑定动态列：{field: 字段名, visible: 默认是否显示}<br>
       通过函数式调用 <table-api-link prop="showColumn"/>、<table-api-link prop="hideColumn"/> 操作列的显示/隐藏<br>
-      该功能对于列比较多的表格非常有用，可以轻松实现强大的显示/隐藏列的配置功能，实时调用 refreshColumn 刷新列
+      该功能对于列比较多的表格非常有用，可以轻松实现强大的显示/隐藏列的配置功能，实时调用 <table-api-link prop="refreshColumn"/> 刷新列
     </p>
 
     <div class="table-oper">
