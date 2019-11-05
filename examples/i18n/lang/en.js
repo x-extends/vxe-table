@@ -55,9 +55,9 @@ module.exports = {
         footerImmediately: 'Footer summary + immediately',
         expandRow: 'Expandable row',
         toolbar: 'Toolbar',
-        customs: 'Custom column',
-        customStorage: 'Custom column + localStorage',
-        customlWidthStorage: 'Customize column & column width + localStorage',
+        customs: 'Show/hide column',
+        customStorage: 'Show/hide column + localStorage',
+        customlWidthStorage: 'Show/hide & column width + localStorage',
         search: 'Table search',
         pager: 'Pager',
 
