@@ -382,6 +382,7 @@ const Methods = {
   },
   // 在 v3.0 中废弃 hasRowChange
   hasRowChange (row, field) {
+    UtilTools.warn('vxe.error.delFunc', ['hasRowChange', 'isUpdateByRow'])
     return this.isUpdateByRow(row, field)
   },
   /**
@@ -948,7 +949,6 @@ const Methods = {
       footerHeight,
       tableHeight,
       tableWidth,
-      overflowY,
       scrollbarHeight,
       scrollbarWidth,
       scrollXLoad,
@@ -1029,9 +1029,7 @@ const Methods = {
           if (tableElem) {
             tableElem.style.width = tWidth ? `${tWidth}px` : tWidth
             // 兼容性处理
-            if (overflowY && fixedType && (browse['-moz'] || browse['safari'])) {
-              tableElem.style.paddingRight = `${scrollbarWidth}px`
-            }
+            tableElem.style.paddingRight = scrollbarWidth && fixedType && (browse['-moz'] || browse['safari']) ? `${scrollbarWidth}px` : ''
           }
           if (emptyBlockElem) {
             emptyBlockElem.style.width = tWidth ? `${tWidth}px` : tWidth
@@ -2113,7 +2111,8 @@ const Methods = {
   },
   // 在 v3.0 中废弃 getRecords
   hasRowExpand (row) {
-    return this.expandeds.indexOf(row) > -1
+    UtilTools.warn('vxe.error.delFunc', ['hasRowExpand', 'isExpandByRow'])
+    return this.isExpandByRow(row)
   },
   /**
    * 判断行是否为展开状态
@@ -2257,6 +2256,7 @@ const Methods = {
   },
   // 在 v3.0 中废弃 hasTreeExpand
   hasTreeExpand (row) {
+    UtilTools.warn('vxe.error.delFunc', ['hasTreeExpand', 'isTreeExpandByRow'])
     return this.isTreeExpandByRow(row)
   },
   /**

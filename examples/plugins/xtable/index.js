@@ -114,6 +114,8 @@ VXETable.use(VXETablePluginExport)
 //     'table.cell.downMove': 'S',
 //     'table.cell.leftMove': 'A',
 //     'table.cell.rightMove': 'D',
+//     'table.row.current.topMove': 'Shift + W',
+//     'table.row.current.downMove': 'Shift + S',
 //     'pager.prevPage': 'ArrowLeft',
 //     'pager.nextPage': 'ArrowRight', // 单个按键
 //     'pager.prevJump': 'Ctrl + A',

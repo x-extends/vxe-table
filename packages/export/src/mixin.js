@@ -228,6 +228,7 @@ export default {
   methods: {
     // 在 v3.0 中废弃 exportCsv 方法
     _exportCsv (options) {
+      UtilTools.warn('vxe.error.delFunc', ['exportCsv', 'exportData'])
       return this.exportData(options)
     },
     /**

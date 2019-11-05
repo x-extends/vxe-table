@@ -293,6 +293,7 @@ export default {
     },
     // 在 v3.0 中废弃 hasActiveRow
     _hasActiveRow (row) {
+      UtilTools.warn('vxe.error.delFunc', ['hasActiveRow', 'isActiveByRow'])
       return this.isActiveByRow(row)
     },
     /**
