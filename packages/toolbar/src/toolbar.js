@@ -57,14 +57,14 @@ export default {
       return Object.assign({}, GlobalConfig.toolbar.refresh, this.refresh)
     },
     exportOpts () {
-      return Object.assign({
-        types: Object.keys(VXETable.types).map(value => {
-          return {
-            value,
-            label: `vxe.types.${value}`
-          }
-        })
-      }, GlobalConfig.toolbar.export, this.export)
+      let opts = Object.assign({ types: Object.keys(VXETable.types) }, GlobalConfig.toolbar.export, this.export)
+      opts.types = opts.types.map(value => {
+        return {
+          value,
+          label: `vxe.types.${value}`
+        }
+      })
+      return opts
     },
     resizableOpts () {
       return Object.assign({ storageKey: 'VXE_TABLE_CUSTOM_COLUMN_WIDTH' }, GlobalConfig.toolbar.resizable, this.resizable)
