@@ -1269,6 +1269,7 @@ export default {
     },
     // 在 v3.0 中废弃 hasRowChange
     hasRowChange (row, field) {
+      UtilTools.warn('vxe.error.delFunc', ['hasRowChange', 'isUpdateByRow'])
       return this.isUpdateByRow(row, field)
     },
     isUpdateByRow (row, field) {
@@ -3065,6 +3066,7 @@ export default {
     },
     // v3 废弃
     hasActiveRow (row) {
+      UtilTools.warn('vxe.error.delFunc', ['hasActiveRow', 'isActiveByRow'])
       return this.isActiveByRow(row)
     },
     /**
@@ -3576,7 +3578,8 @@ export default {
     },
     // 在 v3.0 中废弃 hasRowExpand
     hasRowExpand (row) {
-      return this.expandeds.indexOf(row) > -1
+      UtilTools.warn('vxe.error.delFunc', ['hasRowExpand', 'isExpandByRow'])
+      return this.isExpandByRow(row)
     },
     /**
      * 判断行是否为展开状态
@@ -3703,6 +3706,7 @@ export default {
     },
     // 在 v3.0 中废弃 hasTreeExpand
     hasTreeExpand (row) {
+      UtilTools.warn('vxe.error.delFunc', ['hasTreeExpand', 'isTreeExpandByRow'])
       return this.isTreeExpandByRow(row)
     },
     /**
@@ -4314,6 +4318,7 @@ export default {
     },
     // 在 v3.0 中废弃 exportCsv 方法
     exportCsv (options) {
+      UtilTools.warn('vxe.error.delFunc', ['exportCsv', 'exportData'])
       return this.exportData(options)
     },
     /**

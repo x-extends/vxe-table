@@ -71,7 +71,7 @@
     "vxe-table-plugin-iview": "^1.5.6",
     "vxe-table-plugin-menus": "^1.1.1",
     "vxe-table-plugin-renderer": "^1.1.0",
-    "vxe-table-plugin-shortcut-key": "^1.1.0",
+    "vxe-table-plugin-shortcut-key": "^1.1.1",
     "vxe-utils": "^1.7.2",
     "webpack-cli": "^3.3.1",
     "xe-ajax": "^3.8.3",

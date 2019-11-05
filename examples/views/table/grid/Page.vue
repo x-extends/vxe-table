@@ -1,6 +1,9 @@
 <template>
   <div>
-    <p class="tip">通过配置 <grid-api-link prop="pager-config"/> 参数开启分页功能，对于分页场景下，如果要实现分页动态序号，可以通过 <table-api-link prop="start-index"/> 属性设置起始值</p>
+    <p class="tip">
+      数据代理：通过配置 <grid-api-link prop="proxy-config"/> 启用数据代理将不需要再主动发送请求，由表格代理增删改查的相关调用逻辑，只需要配好对应的接口即可自动渲染<br>
+      响应结果默认必须是数组，非数组情况下可以通过 <grid-api-link prop="props"/> 修改
+    </p>
 
     <vxe-grid
       border
