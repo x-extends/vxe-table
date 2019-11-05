@@ -309,6 +309,7 @@ export default {
             },
             {
               label: 'app.aside.nav.dynamic',
+              demoUrl: 'https://jsrun.pro/SIWKp',
               locat: {
                 name: 'TableDynamic'
               }
