@@ -175,23 +175,20 @@ function downloadFile (opts, content) {
   if (!download) {
     return Promise.resolve(content)
   }
-  if (navigator.msSaveBlob && window.Blob) {
-    navigator.msSaveBlob(new Blob([content], { type: `text/${type}` }), name)
-  } else if (DomTools.browse['-ms']) {
-    var win = window.top.open('about:blank', '_blank')
-    win.document.charset = 'utf-8'
-    win.document.write(content)
-    win.document.close()
-    win.document.execCommand('SaveAs', name)
-    win.close()
+  if (window.Blob) {
+    if (navigator.msSaveBlob) {
+      navigator.msSaveBlob(new Blob([content]), name)
+    } else {
+      var linkElem = document.createElement('a')
+      linkElem.target = '_blank'
+      linkElem.download = name
+      linkElem.href = URL.createObjectURL(new Blob([content]))
+      document.body.appendChild(linkElem)
+      linkElem.click()
+      document.body.removeChild(linkElem)
+    }
   } else {
-    var linkElem = document.createElement('a')
-    linkElem.target = '_blank'
-    linkElem.download = name
-    linkElem.href = getDownloadUrl(opts, content)
-    document.body.appendChild(linkElem)
-    linkElem.click()
-    document.body.removeChild(linkElem)
+    UtilTools.error('vxe.error.notExp')
   }
 }
 
@@ -216,24 +213,6 @@ function getExportData ($table, opts, fullData, oColumns) {
     datas = datas.filter(opts.dataFilterMethod)
   }
   return { columns, datas: opts.original ? datas : getLabelData($table, columns, datas) }
-}
-
-function getDownloadUrl (opts, content) {
-  switch (opts.type) {
-    case 'csv':
-    case 'html':
-    case 'xml':
-    case 'txt':
-      return getAttachmentUrl(opts, content)
-  }
-  return ''
-}
-
-function getAttachmentUrl ({ type }, content) {
-  if (window.Blob && window.URL && window.URL.createObjectURL && !DomTools.browse.safari) {
-    return URL.createObjectURL(new Blob([content], { type: `text/${type}` }))
-  }
-  return `data:attachment/${type};charset=utf-8,${encodeURIComponent(content)}`
 }
 
 export default {

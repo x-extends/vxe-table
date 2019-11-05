@@ -67,7 +67,7 @@
     "vxe-table-plugin-antd": "^1.5.6",
     "vxe-table-plugin-charts": "^1.1.1",
     "vxe-table-plugin-element": "^1.5.8",
-    "vxe-table-plugin-export": "^1.0.1",
+    "vxe-table-plugin-export": "^1.0.3",
     "vxe-table-plugin-iview": "^1.5.6",
     "vxe-table-plugin-menus": "^1.1.1",
     "vxe-table-plugin-renderer": "^1.1.0",
