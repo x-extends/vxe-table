@@ -86,7 +86,7 @@ function toHtml ($table, opts, columns, datas) {
   let html = [
     '<!DOCTYPE html>',
     '<html>',
-    `<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,minimal-ui"><title>${opts.filename}</title></head>`,
+    `<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,minimal-ui"><title>${opts.sheetName}</title></head>`,
     '<body>',
     '<table border="1" cellspacing="0" cellpadding="0">',
     `<colgroup>${columns.map(column => `<col width="${column.renderWidth}">`).join('')}</colgroup>`
@@ -144,7 +144,7 @@ function toXML ($table, opts, columns, datas) {
     '<ProtectStructure>False</ProtectStructure>',
     '<ProtectWindows>False</ProtectWindows>',
     '</ExcelWorkbook>',
-    `<Worksheet ss:Name="${opts.filename}">`,
+    `<Worksheet ss:Name="${opts.sheetName}">`,
     '<Table>',
     columns.map(column => `<Column ss:Width="${column.renderWidth}"/>`).join('')
   ].join('')
@@ -262,6 +262,7 @@ export default {
       let types = Object.keys(VXETable.types)
       let opts = Object.assign({
         filename: '',
+        sheetName: '',
         original: !!treeConfig,
         isHeader: true,
         isFooter: true,
@@ -274,7 +275,10 @@ export default {
         footerFilterMethod: null
       }, options)
       if (!opts.filename) {
-        opts.filename = 'table'
+        opts.filename = 'export'
+      }
+      if (!opts.sheetName) {
+        opts.sheetName = 'Sheet1'
       }
       if (!types.includes(opts.type)) {
         throw new Error(UtilTools.getLog('vxe.error.notType', [opts.type]))

@@ -29,6 +29,9 @@
     &::-webkit-inner-spin-button {
       margin-top: 10px;
     }
+    &::placeholder {
+      color: $vxe-input-placeholder-color;
+    }
   }
   .vxe-textarea {
     height: 100%;

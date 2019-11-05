@@ -945,6 +945,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.events',
+              locat: {
+                name: 'TableEditEvents'
+              }
+            },
+            {
               label: 'app.aside.nav.template',
               locat: {
                 name: 'TableEditTemplate'

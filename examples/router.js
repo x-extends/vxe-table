@@ -141,6 +141,7 @@ const TableEditMenu = () => import(/* webpackChunkName: "edit" */ './views/table
 const TableEditSpan = () => import(/* webpackChunkName: "edit" */ './views/table/edit/Span.vue')
 const TableEditUniqueSelect = () => import(/* webpackChunkName: "edit" */ './views/table/edit/UniqueSelect.vue')
 const TableEditCascadingSelect = () => import(/* webpackChunkName: "edit" */ './views/table/edit/CascadingSelect.vue')
+const TableEditEvents = () => import(/* webpackChunkName: "edit" */ './views/table/edit/Events.vue')
 const TableEditTemplate = () => import(/* webpackChunkName: "edit" */ './views/table/edit/Template.vue')
 const TableEditFull = () => import(/* webpackChunkName: "edit" */ './views/table/edit/Full.vue')
 
@@ -862,6 +863,11 @@ export default new Router({
       path: '/table/edit/cascadingSelect',
       name: 'TableEditCascadingSelect',
       component: TableEditCascadingSelect
+    },
+    {
+      path: '/table/edit/events',
+      name: 'TableEditEvents',
+      component: TableEditEvents
     },
     {
       path: '/table/edit/template',

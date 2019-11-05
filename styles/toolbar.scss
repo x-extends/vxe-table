@@ -141,6 +141,11 @@
             border: 1px solid $vxe-primary-color;
           }
         }
+        & > input {
+          &::placeholder {
+            color: $vxe-input-placeholder-color;
+          }
+        }
       }
     }
   }
