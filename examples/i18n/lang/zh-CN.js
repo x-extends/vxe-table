@@ -54,9 +54,9 @@ module.exports = {
         footerImmediately: '表尾合计 + 实时更新',
         expandRow: '展开行',
         toolbar: '工具栏',
-        customs: '自定义列',
-        customStorage: '自定义列 + localStorage',
-        customlWidthStorage: '自定义列&列宽 + localStorage',
+        customs: '显示/隐藏列',
+        customStorage: '显示/隐藏列 + localStorage',
+        customlWidthStorage: '显示/隐藏/列宽 + localStorage',
         search: '全表搜索',
         pager: '分页',
 
