@@ -1178,7 +1178,6 @@ export default {
             },
             {
               label: 'app.aside.nav.exportPlugin',
-              disabled: true,
               locat: {
                 name: 'TablePluginExport'
               }
