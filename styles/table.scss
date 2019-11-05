@@ -44,6 +44,9 @@
       &::-webkit-inner-spin-button {
         margin-top: floor($vxe-table-row-height-default - 38);
       }
+      &::placeholder {
+        color: $vxe-input-placeholder-color;
+      }
     }
   }
 }

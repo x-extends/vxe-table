@@ -61,6 +61,8 @@ export default {
       expTitle: 'Export data',
       expName: 'Filename',
       expNamePlaceholder: 'Please enter filename',
+      expSheetName: 'Sheet name',
+      expSheetNamePlaceholder: 'Please enter a sheet name.',
       expType: 'File type',
       expMode: 'Data to export',
       expAll: 'All data',

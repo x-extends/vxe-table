@@ -47,12 +47,9 @@ function getEvents (renderOpts, params) {
     }
   }
   if (events) {
-    XEUtils.assign(
-      {},
-      XEUtils.objectMap(events, cb => function () {
-        cb.apply(null, [params].concat.apply(params, arguments))
-      }),
-      on)
+    return XEUtils.assign({}, XEUtils.objectMap(events, cb => function () {
+      cb.apply(null, [params].concat.apply(params, arguments))
+    }), on)
   }
   return on
 }
@@ -100,12 +97,13 @@ function getFilterEvents (item, renderOpts, params, context) {
       item.data = evnt.target.value
       handleConfirmFilter(context, column, !!item.data, item)
       if (events && events[type]) {
-        events[type](params, evnt)
+        events[type](Object.assign({ context }, params), evnt)
       }
     }
   }
   if (events) {
-    XEUtils.assign({}, XEUtils.objectMap(events, cb => function () {
+    return XEUtils.assign({}, XEUtils.objectMap(events, cb => function () {
+      params = Object.assign({ context }, params)
       cb.apply(null, [params].concat.apply(params, arguments))
     }), on)
   }

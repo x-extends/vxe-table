@@ -38,6 +38,7 @@ export default {
       },
       exportParams: {
         filename: '',
+        sheetName: '',
         type: '',
         original: false,
         isHeader: false,
@@ -452,7 +453,8 @@ export default {
       })
       // 重置参数
       Object.assign(exportParams, {
-        filename: exportOpts.filename,
+        filename: exportOpts.filename || '',
+        sheetName: exportOpts.sheetName || '',
         type: exportOpts.types[0].value,
         original: forceOriginal,
         isHeader: true,

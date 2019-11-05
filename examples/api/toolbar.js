@@ -52,6 +52,15 @@ const apis = [
             list: []
           },
           {
+            name: 'sheetName',
+            desc: '默认的表名（只对支持的文档类型有效）',
+            version: '',
+            type: 'String',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
             name: 'type',
             desc: '默认选中的类型',
             version: '',

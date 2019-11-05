@@ -61,6 +61,8 @@ export default {
       expTitle: '导出数据',
       expName: '文件名',
       expNamePlaceholder: '请输入文件名',
+      expSheetName: '工作表名称',
+      expSheetNamePlaceholder: '请输入工作表名称',
       expType: '文件类型',
       expMode: '要导出的数据',
       expAll: '全部数据',

@@ -4326,6 +4326,7 @@ export default {
       let types = Object.keys(VXETable.types)
       let opts = Object.assign({
         filename: '',
+        sheetName: '',
         original: !!treeConfig,
         isHeader: true,
         isFooter: true,
@@ -4338,7 +4339,10 @@ export default {
         footerFilterMethod: null
       }, options)
       if (!opts.filename) {
-        opts.filename = 'table'
+        opts.filename = 'export'
+      }
+      if (!opts.sheetName) {
+        opts.sheetName = 'Sheet1'
       }
       if (!types.includes(opts.type)) {
         throw new Error(UtilTools.getLog('vxe.error.notType', [opts.type]))

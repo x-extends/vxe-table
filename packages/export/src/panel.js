@@ -25,10 +25,13 @@ export default {
   computed: {
     vSize () {
       return this.size || this.$parent.size || this.$parent.vSize
+    },
+    showSheet () {
+      return ['html', 'xml', 'xlsx'].includes(this.defaultOptions.type)
     }
   },
   render (h) {
-    const { defaultOptions, storeData, typeList, modeList } = this
+    const { _e, showSheet, defaultOptions, storeData, typeList, modeList } = this
     return h('vxe-modal', {
       res: 'modal',
       model: {
@@ -39,7 +42,7 @@ export default {
       },
       props: {
         title: GlobalConfig.i18n('vxe.toolbar.expTitle'),
-        width: 520,
+        width: 660,
         mask: true,
         lockView: true,
         showFooter: false,
@@ -100,6 +103,25 @@ export default {
               }))
             ])
           ]),
+          showSheet ? h('tr', [
+            h('td', GlobalConfig.i18n('vxe.toolbar.expSheetName')),
+            h('td', [
+              h('input', {
+                attrs: {
+                  type: 'text',
+                  placeholder: GlobalConfig.i18n('vxe.toolbar.expSheetNamePlaceholder')
+                },
+                domProps: {
+                  value: defaultOptions.sheetName
+                },
+                on: {
+                  input (evnt) {
+                    defaultOptions.sheetName = evnt.target.value
+                  }
+                }
+              })
+            ])
+          ]) : _e(),
           h('tr', [
             h('td', GlobalConfig.i18n('vxe.toolbar.expMode')),
             h('td', [
