@@ -88,8 +88,18 @@ export default {
             name: '更多操作',
             disabled: false,
             dropdowns: [
-              { code: 'export_csv', name: '导出数据.csv', disabled: false },
               { code: 'reset_custom', name: '重置个性化信息', disabled: false }
+            ]
+          },
+          {
+            name: '导入/导出',
+            dropdowns: [
+              { code: 'import', name: '导入数据', disabled: false },
+              { code: 'export', name: '导出数据', disabled: false },
+              { code: 'export_csv', name: '直接导出.csv', disabled: false },
+              { code: 'export_xml', name: '直接导出.xml', disabled: false },
+              { code: 'export_html', name: '直接导出.html', disabled: false },
+              { code: 'export_txt', name: '直接导出.txt', disabled: false }
             ]
           },
           { code: 'other0', name: '禁用的按钮1', disabled: true },
@@ -218,8 +228,18 @@ export default {
                     name: '更多操作',
                     disabled: false,
                     dropdowns: [
-                      { code: 'export_csv', name: '导出数据.csv', disabled: false },
                       { code: 'reset_custom', name: '重置个性化信息', disabled: false }
+                    ]
+                  },
+                  {
+                    name: '导入/导出',
+                    dropdowns: [
+                      { code: 'import', name: '导入数据', disabled: false },
+                      { code: 'export', name: '导出数据', disabled: false },
+                      { code: 'export_csv', name: '直接导出.csv', disabled: false },
+                      { code: 'export_xml', name: '直接导出.xml', disabled: false },
+                      { code: 'export_html', name: '直接导出.html', disabled: false },
+                      { code: 'export_txt', name: '直接导出.txt', disabled: false }
                     ]
                   },
                   { code: 'other0', name: '禁用的按钮1', disabled: true },

@@ -48,9 +48,10 @@ export interface VXETableOptions {
 }
 
 export interface Interceptor {
+  mixin(map: object): Interceptor;
   get(type: string): any;
-  add(type: string, callback: Function): Renderer;
-  delete(type: object): Renderer;
+  add(type: string, callback: Function): Interceptor;
+  delete(type: object): Interceptor;
 }
 
 export interface Renderer {
@@ -68,10 +69,10 @@ export interface Menus {
 }
 
 export interface Buttons {
-  mixin(map: object): Menus;
+  mixin(map: object): Buttons;
   get(type: string): Function;
-  add(type: string, callback: Function): Menus;
-  delete(type: object): Menus;
+  add(type: string, callback: Function): Buttons;
+  delete(type: object): Buttons;
 }
 
 export interface PluginObject<T> {

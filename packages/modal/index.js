@@ -4,6 +4,7 @@ import queue from './src/queue'
 import VXETable from '../v-x-e-table'
 
 var AlertController = null
+var AllActivedModal = []
 
 export function Modal (options) {
   return new Promise(resolve => {
@@ -17,6 +18,7 @@ export function Modal (options) {
             events.hide.call(this, params)
           }
           $modal.$destroy()
+          XEUtils.remove(AllActivedModal, item => item === $modal)
           resolve(params.type)
         }
       })
@@ -25,6 +27,7 @@ export function Modal (options) {
         propsData: options
       })
       setTimeout(() => $modal.open())
+      AllActivedModal.push($modal)
     }
   })
 }
@@ -54,6 +57,10 @@ export function Modal (options) {
     return Modal(Object.assign({ message: XEUtils.toString(message), type }, defOpts, opts, options))
   }
 })
+
+Modal.closeAll = function () {
+  AllActivedModal.forEach($modal => $modal.close('close'))
+}
 
 Modal.install = function (Vue) {
   VXETable._modal = 1

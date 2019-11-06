@@ -20,7 +20,8 @@ export default {
       delFunc: 'The property "{{0}}" is deprecated, please use "{{1}}".',
       delProp: 'The function "{{0}}" is deprecated, please use "{{1}}".',
       notType: 'Unsupported types "{{0}}"',
-      notExp: 'The browser does not support export.'
+      notExp: 'The browser does not support import / export.',
+      impFields: 'Import failed, please check that the field name and data format are correct.'
     },
     table: {
       emptyText: 'No Data',
@@ -72,7 +73,7 @@ export default {
       expOpts: 'Export parameter',
       expOptHeader: 'Header',
       expOptFooter: 'Footer',
-      expOptOriginal: 'Original',
+      expOptOriginal: 'Original(import support)',
       expConfirm: 'Export'
     }
   }

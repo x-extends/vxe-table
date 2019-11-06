@@ -658,47 +658,51 @@ export default {
         class: 'vxe-table-hidden-column',
         ref: 'hideColumn'
       }, this.$slots.default),
-      /**
-       * 主头部
-       */
-      showHeader ? h('vxe-table-header', {
-        ref: 'tableHeader',
-        props: {
-          tableData,
-          tableColumn,
-          visibleColumn,
-          collectColumn,
-          size: vSize,
-          isGroup
-        }
-      }) : _e(),
-      /**
-       * 主内容
-       */
-      h('vxe-table-body', {
-        ref: 'tableBody',
-        props: {
-          tableData,
-          tableColumn,
-          visibleColumn,
-          collectColumn,
-          size: vSize,
-          isGroup
-        }
-      }),
-      /**
-       * 底部汇总
-       */
-      showFooter ? h('vxe-table-footer', {
-        props: {
-          footerData,
-          footerMethod,
-          tableColumn,
-          visibleColumn,
-          size: vSize
-        },
-        ref: 'tableFooter'
-      }) : _e(),
+      h('div', {
+        class: 'vxe-table--main-wrapper'
+      }, [
+        /**
+         * 主头部
+         */
+        showHeader ? h('vxe-table-header', {
+          ref: 'tableHeader',
+          props: {
+            tableData,
+            tableColumn,
+            visibleColumn,
+            collectColumn,
+            size: vSize,
+            isGroup
+          }
+        }) : _e(),
+        /**
+         * 主内容
+         */
+        h('vxe-table-body', {
+          ref: 'tableBody',
+          props: {
+            tableData,
+            tableColumn,
+            visibleColumn,
+            collectColumn,
+            size: vSize,
+            isGroup
+          }
+        }),
+        /**
+         * 底部汇总
+         */
+        showFooter ? h('vxe-table-footer', {
+          props: {
+            footerData,
+            footerMethod,
+            tableColumn,
+            visibleColumn,
+            size: vSize
+          },
+          ref: 'tableFooter'
+        }) : null
+      ]),
       /**
        * 左侧固定列
        */
@@ -729,6 +733,22 @@ export default {
         class: `vxe-table${id}-wrapper ${this.$vnode.data.staticClass || ''}`,
         ref: 'tableWrapper'
       }, [
+        // 使用导出模块
+        VXETable._export ? h('form', {
+          class: 'vxe-table--import-form',
+          ref: 'impForm'
+        }, [
+          h('input', {
+            ref: 'impInput',
+            attrs: {
+              type: 'file',
+              name: 'file'
+            },
+            on: {
+              change: this.fileChangeEvent
+            }
+          })
+        ]) : _e(),
         /**
          * 筛选
          */

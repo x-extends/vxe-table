@@ -156,7 +156,7 @@ export default {
             icon: GlobalConfig.icon.export
           },
           on: {
-            click: this.clickExportEvent
+            click: this.exportEvent
           }
         }) : null,
         refresh ? h('vxe-button', {
@@ -213,7 +213,7 @@ export default {
           ])
         ]) : null
       ]),
-      this.export ? h('vxe-export-panel', {
+      VXETable._export ? h('vxe-export-panel', {
         props: {
           defaultOptions: exportParams,
           storeData: exportStore,
@@ -254,12 +254,14 @@ export default {
           UtilTools.warn('vxe.error.notFunc', ['query'])
         }
       }
-      if (resizable || setting) {
-        if ($grid || $table) {
-          ($grid || $table).connect({ toolbar: this })
-        } else {
+      if ($grid || $table) {
+        ($grid || $table).connect({ toolbar: this })
+      } else {
+        if (resizable || setting) {
           throw new Error(UtilTools.getLog('vxe.error.barUnableLink'))
         }
+      }
+      if (resizable || setting) {
         let customMap = {}
         if (resizableOpts.storage) {
           let columnWidthStorage = this.getStorageMap(resizableOpts.storageKey)[id]
@@ -427,7 +429,10 @@ export default {
         }
       }
     },
-    clickExportEvent () {
+    exportEvent () {
+      this.openExport()
+    },
+    openExport (options) {
       const { $grid, $table, exportOpts, exportStore, exportParams } = this
       const comp = $grid || $table
       const { fullColumn } = comp.getTableColumn()
@@ -438,6 +443,7 @@ export default {
       const treeStatus = comp.getTreeStatus()
       const forceOriginal = !!treeStatus || virtualScroller.scrollX || virtualScroller.scrollY
       const hasFooter = !!footerData.length
+      const defOpts = Object.assign({ original: true }, options, exportOpts)
       // 索引列默认不选中
       exportColumns.forEach(column => {
         column.checked = column.type !== 'index'
@@ -453,13 +459,14 @@ export default {
       })
       // 重置参数
       Object.assign(exportParams, {
-        filename: exportOpts.filename || '',
-        sheetName: exportOpts.sheetName || '',
-        type: exportOpts.types[0].value,
-        original: forceOriginal,
+        filename: defOpts.filename || '',
+        sheetName: defOpts.sheetName || '',
+        type: defOpts.types[0].value,
+        original: forceOriginal || defOpts.original,
         isHeader: true,
         isFooter: hasFooter
       })
+      return this.$nextTick()
     },
     confirmExportEvent (options) {
       const { $grid, $table } = this

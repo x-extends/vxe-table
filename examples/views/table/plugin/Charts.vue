@@ -9,7 +9,7 @@
       :data="tableData"
       :mouse-config="{ selected: true, checked: true }"
       :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true}"
-      :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}}"
+      :context-menu="{body: {options: bodyMenus}}"
       :edit-config="{trigger: 'dblclick', mode: 'cell'}">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column field="nickname" title="Nickname" :edit-render="{name: 'input'}"></vxe-table-column>
@@ -38,14 +38,6 @@ export default {
   data () {
     return {
       tableData: [],
-      headerMenus: [
-        [
-          {
-            code: 'HIDDEN_COLUMN',
-            name: '隐藏'
-          }
-        ]
-      ],
       bodyMenus: [
         [
           {
@@ -120,13 +112,6 @@ export default {
               }
             ]
           }
-        ],
-        [
-          {
-            code: 'EXPORT_ALL',
-            name: '导出数据.csv',
-            prefixIcon: 'fa fa-download'
-          }
         ]
       ],
       demoCodes: [
@@ -138,7 +123,7 @@ export default {
           :data="tableData"
           :mouse-config="{ selected: true, checked: true }"
           :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true}"
-          :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}}"
+          :context-menu="{body: {options: bodyMenus}}"
           :edit-config="{trigger: 'dblclick', mode: 'cell'}">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="nickname" title="Nickname" :edit-render="{name: 'input'}"></vxe-table-column>
@@ -156,14 +141,6 @@ export default {
           data () {
             return {
               tableData: [],
-              headerMenus: [
-                [
-                  {
-                    code: 'HIDDEN_COLUMN',
-                    name: '隐藏'
-                  }
-                ]
-              ],
               bodyMenus: [
                 [
                   {
@@ -237,13 +214,6 @@ export default {
                         }
                       }
                     ]
-                  }
-                ],
-                [
-                  {
-                    code: 'EXPORT_ALL',
-                    name: '导出数据.csv',
-                    prefixIcon: 'fa fa-download'
                   }
                 ]
               ]

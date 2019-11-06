@@ -61,6 +61,15 @@ const apis = [
             list: []
           },
           {
+            name: 'original',
+            desc: '默认是否导出源数据（如果需要支持导入，则必须设置为 true）',
+            version: '',
+            type: 'Boolean',
+            enum: '',
+            defVal: 'true',
+            list: []
+          },
+          {
             name: 'type',
             desc: '默认选中的类型',
             version: '',

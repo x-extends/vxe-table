@@ -20,7 +20,8 @@ export default {
       delFunc: '方法 "{{0}}" 已停用，請使用 "{{1}}"',
       delProp: '參數 "{{0}}" 已停用，請使用 "{{1}}"',
       notType: '不支持的類型 "{{0}}"',
-      notExp: '該瀏覽器不支持匯出功能'
+      notExp: '該瀏覽器不支持導入/匯出功能',
+      impFields: '導入失敗，請檢查欄位名和數據格式是否正確'
     },
     table: {
       emptyText: '暫無資料',
@@ -72,7 +73,7 @@ export default {
       expOpts: '匯出參數',
       expOptHeader: '錶頭',
       expOptFooter: '錶尾',
-      expOptOriginal: '源',
+      expOptOriginal: '源(支持導入)',
       expConfirm: '匯出'
     }
   }

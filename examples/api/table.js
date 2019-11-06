@@ -252,7 +252,7 @@ const apis = [
         descKey: 'app.api.table.desc.align',
         version: '',
         type: 'String',
-        enum: 'left（左对其）, center（居中对其）, right（右对齐）',
+        enum: 'left（左对齐）, center（居中对齐）, right（右对齐）',
         defVal: 'left',
         list: []
       },
@@ -261,7 +261,7 @@ const apis = [
         descKey: 'app.api.table.desc.headerAlign',
         version: '',
         type: 'String',
-        enum: 'left（左对其）, center（居中对其）, right（右对齐）',
+        enum: 'left（左对齐）, center（居中对齐）, right（右对齐）',
         defVal: '继承 align',
         list: []
       },
@@ -270,7 +270,7 @@ const apis = [
         descKey: 'app.api.table.desc.footerAlign',
         version: '2.5.15',
         type: 'String',
-        enum: 'left（左对其）, center（居中对其）, right（右对齐）',
+        enum: 'left（左对齐）, center（居中对齐）, right（右对齐）',
         defVal: '继承 align',
         list: []
       },
@@ -2581,7 +2581,7 @@ const apis = [
           },
           {
             name: 'original',
-            desc: '是否导出源数据（特殊场景只能是 true， 比如虚拟滚动、优化的固定列..）',
+            desc: '是否导出源数据（某些场景下支持 true， 比如虚拟滚动、优化的固定列..，如果需要支持导入，则必须设置为 true）',
             version: '',
             type: 'Boolean',
             enum: '',
@@ -2657,6 +2657,61 @@ const apis = [
             version: '2.5.18',
             type: 'Function',
             enum: '',
+            defVal: '',
+            list: []
+          }
+        ]
+      },
+      {
+        name: 'openExport(options)',
+        desc: '打开高级导出',
+        version: '2.6.14',
+        type: 'Promise',
+        enum: '',
+        defVal: 'options: object',
+        list: [
+          {
+            name: 'filename',
+            desc: '默认的文件名',
+            version: '',
+            type: 'String',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'sheetName',
+            desc: '默认的表名（只对支持的文档类型有效）',
+            version: '',
+            type: 'String',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'original',
+            desc: '默认是否导出源数据（如果需要支持导入，则必须设置为 true）',
+            version: '',
+            type: 'Boolean',
+            enum: '',
+            defVal: 'true',
+            list: []
+          },
+          {
+            name: 'type',
+            desc: '默认选中的类型',
+            version: '',
+            type: 'String',
+            enum: '',
+            defVal: '默认选中 types 第一个值',
+            list: []
+          },
+          {
+            name: 'types',
+            desc: '支持导出的类型列表',
+            version: '',
+            type: 'Array',
+            enum: 'csv, html, xml, txt',
             defVal: '',
             list: []
           }

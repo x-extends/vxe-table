@@ -122,7 +122,7 @@ const apis = [
         descKey: 'app.api.tableColumn.desc.align',
         version: '',
         type: 'String',
-        enum: 'left（左对其）, center（居中对其）, right（右对齐）',
+        enum: 'left（左对齐）, center（居中对齐）, right（右对齐）',
         defVal: '继承 table 的 align',
         list: []
       },
@@ -131,7 +131,7 @@ const apis = [
         descKey: 'app.api.tableColumn.desc.headerAlign',
         version: '',
         type: 'String',
-        enum: 'left（左对其）, center（居中对其）, right（右对齐）',
+        enum: 'left（左对齐）, center（居中对齐）, right（右对齐）',
         defVal: '继承 align > 继承 table 的 header-align',
         list: []
       },
@@ -140,7 +140,7 @@ const apis = [
         descKey: 'app.api.tableColumn.desc.footerAlign',
         version: '',
         type: 'String',
-        enum: 'left（左对其）, center（居中对其）, right（右对齐）',
+        enum: 'left（左对齐）, center（居中对齐）, right（右对齐）',
         defVal: '继承 align > 继承 table 的 footer-align',
         list: []
       },

@@ -51,9 +51,8 @@ const TableSpan = () => import(/* webpackChunkName: "advanced" */ './views/table
 const TableSpanRow = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/SpanRow.vue')
 const TableFooter = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Footer.vue')
 const TableFooterSpan = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/FooterSpan.vue')
-const TableExportCSV = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/ExportCSV.vue')
-const TableExportHTML = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/ExportHTML.vue')
-const TableExportXML = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/ExportXML.vue')
+const TableImport = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Import.vue')
+const TableExport = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Export.vue')
 const TableMenu = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Menu.vue')
 const TableMenuPrivilege = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/MenuPrivilege.vue')
 const TableExpand = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Expand.vue')
@@ -435,19 +434,14 @@ export default new Router({
       component: TableFooterSpan
     },
     {
-      path: '/table/advanced/exportCSV',
-      name: 'TableExportCSV',
-      component: TableExportCSV
+      path: '/table/advanced/import',
+      name: 'TableImport',
+      component: TableImport
     },
     {
-      path: '/table/advanced/exportHTML',
-      name: 'TableExportHTML',
-      component: TableExportHTML
-    },
-    {
-      path: '/table/advanced/exportXML',
-      name: 'TableExportXML',
-      component: TableExportXML
+      path: '/table/advanced/export',
+      name: 'TableExport',
+      component: TableExport
     },
     {
       path: '/table/advanced/menu',
