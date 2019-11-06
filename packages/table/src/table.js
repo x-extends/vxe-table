@@ -17,6 +17,10 @@ function isTargetRadioOrCheckbox (evnt, column, colType, targetType) {
   return target && column.type === colType && target.tagName.toLowerCase() === 'input' && target.type === (targetType || colType)
 }
 
+function getFileTypes () {
+  return Object.keys(VXETable.types)
+}
+
 class Rule {
   constructor (rule) {
     Object.assign(this, {
@@ -758,47 +762,51 @@ export default {
         class: 'vxe-table-hidden-column',
         ref: 'hideColumn'
       }, this.$slots.default),
-      /**
-       * 主头部
-       */
-      showHeader ? h('vxe-table-header', {
-        ref: 'tableHeader',
-        props: {
-          tableData,
-          tableColumn,
-          visibleColumn,
-          collectColumn,
-          size: vSize,
-          isGroup
-        }
-      }) : _e(),
-      /**
-       * 主内容
-       */
-      h('vxe-table-body', {
-        ref: 'tableBody',
-        props: {
-          tableData,
-          tableColumn,
-          visibleColumn,
-          collectColumn,
-          size: vSize,
-          isGroup
-        }
-      }),
-      /**
-       * 底部汇总
-       */
-      showFooter ? h('vxe-table-footer', {
-        props: {
-          footerData,
-          footerMethod,
-          tableColumn,
-          visibleColumn,
-          size: vSize
-        },
-        ref: 'tableFooter'
-      }) : _e(),
+      h('div', {
+        class: 'vxe-table--main-wrapper'
+      }, [
+        /**
+         * 主头部
+         */
+        showHeader ? h('vxe-table-header', {
+          ref: 'tableHeader',
+          props: {
+            tableData,
+            tableColumn,
+            visibleColumn,
+            collectColumn,
+            size: vSize,
+            isGroup
+          }
+        }) : _e(),
+        /**
+         * 主内容
+         */
+        h('vxe-table-body', {
+          ref: 'tableBody',
+          props: {
+            tableData,
+            tableColumn,
+            visibleColumn,
+            collectColumn,
+            size: vSize,
+            isGroup
+          }
+        }),
+        /**
+         * 底部汇总
+         */
+        showFooter ? h('vxe-table-footer', {
+          props: {
+            footerData,
+            footerMethod,
+            tableColumn,
+            visibleColumn,
+            size: vSize
+          },
+          ref: 'tableFooter'
+        }) : null
+      ]),
       /**
        * 左侧固定列
        */
@@ -829,6 +837,22 @@ export default {
         class: `vxe-table${id}-wrapper ${this.$vnode.data.staticClass || ''}`,
         ref: 'tableWrapper'
       }, [
+        // 使用导出模块
+        VXETable._export ? h('form', {
+          class: 'vxe-table--import-form',
+          ref: 'impForm'
+        }, [
+          h('input', {
+            ref: 'impInput',
+            attrs: {
+              type: 'file',
+              name: 'file'
+            },
+            on: {
+              change: this.fileChangeEvent
+            }
+          })
+        ]) : _e(),
         /**
          * 筛选
          */
@@ -4321,6 +4345,13 @@ export default {
       UtilTools.warn('vxe.error.delFunc', ['exportCsv', 'exportData'])
       return this.exportData(options)
     },
+    openExport (options) {
+      const $toolbar = this.$toolbar
+      if ($toolbar) {
+        return $toolbar.openExport(options)
+      }
+      return this.exportData()
+    },
     /**
      * 导出 csv 文件
      * 如果是树表格，则默认是导出所有节点
@@ -4368,6 +4399,39 @@ export default {
         fullData = XEUtils.toTreeArray(fullData, treeConfig)
       }
       return ExportTools.handleExport(this, opts, columns, fullData)
+    },
+    importData (callback) {
+      const { impForm, impInput } = this.$refs
+      impInput.accept = `.${getFileTypes().join(', .')}`
+      impForm.reset()
+      impInput.click()
+      this.importCallback = callback
+    },
+    fileChangeEvent (evnt) {
+      if (window.FileReader) {
+        const file = evnt.target.files[0]
+        const name = file.name
+        const tIndex = XEUtils.lastIndexOf(name, '.')
+        const type = name.substring(tIndex + 1, name.length)
+        const filename = name.substring(0, tIndex)
+        const options = { filename, type }
+        if (getFileTypes().includes(type)) {
+          this.preventEvent(evnt, 'event.import', { $table: this, options, columns: this.tableFullColumn }, () => {
+            const reader = new FileReader()
+            reader.onerror = e => {
+              UtilTools.error('vxe.error.notType', [type])
+            }
+            reader.onload = e => {
+              ExportTools.handleImport(this, e.target.result, options)
+            }
+            reader.readAsText(file, 'UTF-8')
+          })
+        } else {
+          UtilTools.error('vxe.error.notType', [type])
+        }
+      } else {
+        UtilTools.error('vxe.error.notExp')
+      }
     },
     updateZindex () {
       if (this.tZindex < UtilTools.getLastZIndex()) {

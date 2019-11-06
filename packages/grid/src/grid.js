@@ -220,9 +220,11 @@ export default {
         case 'remove_selection':
           this.handleDeleteRow(code, 'vxe.grid.removeSelectRecord', () => this.removeSelecteds())
           break
+        case 'import':
+          this.importData()
+          break
         case 'export':
-          UtilTools.warn('vxe.error.toolbarDelBtn', ['export', 'export_csv | export_html'])
-          this.exportData()
+          this.openExport()
           break
         case 'export_csv':
           this.exportData({ type: 'csv' })
@@ -232,6 +234,9 @@ export default {
           break
         case 'export_xml':
           this.exportData({ type: 'xml' })
+          break
+        case 'export_txt':
+          this.exportData({ type: 'txt' })
           break
         case 'reset_custom':
           this.resetAll()

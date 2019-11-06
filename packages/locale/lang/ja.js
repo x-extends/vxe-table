@@ -20,7 +20,8 @@ export default {
       delFunc: '"{{0}}" functionは非推奨です、"{{1}}"を使用してください',
       delProp: '"{{0}}" propertyは非推奨です、"{{1}}"を使用してください',
       notType: '不支持的类型 "{{0}}"',
-      notExp: '该浏览器不支持导出功能'
+      notExp: '该浏览器不支持导入/导出功能',
+      impFields: '导入失败，请检查字段名和数据格式是否正确'
     },
     table: {
       emptyText: 'データがありません',
@@ -72,7 +73,7 @@ export default {
       expOpts: '导出参数',
       expOptHeader: '表头',
       expOptFooter: '表尾',
-      expOptOriginal: '源',
+      expOptOriginal: '源(支持导入)',
       expConfirm: '导出'
     }
   }

@@ -347,22 +347,17 @@ export default {
               }
             },
             {
-              label: 'app.aside.nav.exportCSV',
+              label: 'app.aside.nav.import',
+              demoUrl: 'https://jsrun.pro/UaWKp',
+              locat: {
+                name: 'TableImport'
+              }
+            },
+            {
+              label: 'app.aside.nav.export',
               demoUrl: 'https://jsrun.net/cmXKp',
               locat: {
-                name: 'TableExportCSV'
-              }
-            },
-            {
-              label: 'app.aside.nav.exportHTML',
-              locat: {
-                name: 'TableExportHTML'
-              }
-            },
-            {
-              label: 'app.aside.nav.exportXML',
-              locat: {
-                name: 'TableExportXML'
+                name: 'TableExport'
               }
             },
             {
@@ -1174,6 +1169,7 @@ export default {
             },
             {
               label: 'app.aside.nav.chartsPlugin',
+              demoUrl: 'https://jsrun.pro/9aWKp',
               disabled: true,
               locat: {
                 name: 'TablePluginCharts'

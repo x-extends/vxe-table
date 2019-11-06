@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="tip">
-      通过调用 <table-api-link prop="exportData"/> 函数指定 type='xml' 可以直接将表格导出为 XML 格式的文件<br>
+      通过调用 <table-api-link prop="exportData"/> 函数指定 type='csv' 可以直接将表格导出为 CSV/HTML/XML/TXT 格式的文件<br>
       <span class="red">注：默认会排除 field 为空和 type 相关的功能列；如果需要导出索引，请通过 <table-api-link prop="columnFilterMethod"/> 自定义筛选条件</span>
     </p>
 
@@ -152,7 +152,7 @@ export default {
           },
           methods: {
             exportDataEvent () {
-              this.$refs.xTable1.exportData({ type: ''xml })
+              this.$refs.xTable1.exportData({ type: 'csv' })
             }
           }
         }
@@ -189,7 +189,7 @@ export default {
           methods: {
             exportDataEvent2 () {
               this.$refs.xTable2.exportData({
-                type: 'xml',
+                type: 'csv',
                 columnFilterMethod: column => ['name', 'sex'].includes(column.property)
               })
             }
@@ -228,7 +228,7 @@ export default {
           methods: {
             exportDataEvent3 () {
               this.$refs.xTable3.exportData({
-                type: 'xml',
+                type: 'csv',
                 dataFilterMethod: (row, rowIndex) => rowIndex >= 9 && rowIndex < 20
               })
             }
@@ -268,7 +268,7 @@ export default {
             exportDataEvent4 () {
               this.$refs.xTable1.exportData({
                 filename: '自定义文件名',
-                type: 'xml'
+                type: 'csv',
                 original: true,
                 isHeader: false,
                 data: this.tableData.map(row => {
@@ -293,24 +293,24 @@ export default {
   },
   methods: {
     exportDataEvent () {
-      this.$refs.xTable1.exportData({ type: 'xml' })
+      this.$refs.xTable1.exportData({ type: 'csv' })
     },
     exportDataEvent2 () {
       this.$refs.xTable2.exportData({
-        type: 'xml',
+        type: 'csv',
         columnFilterMethod: column => ['name', 'sex'].includes(column.property)
       })
     },
     exportDataEvent3 () {
       this.$refs.xTable3.exportData({
-        type: 'xml',
+        type: 'csv',
         dataFilterMethod: (row, rowIndex) => rowIndex >= 9 && rowIndex < 20
       })
     },
     exportDataEvent4 () {
       this.$refs.xTable1.exportData({
         filename: '自定义文件名',
-        type: 'xml',
+        type: 'csv',
         original: true,
         isHeader: false,
         data: this.tableData.map(row => {

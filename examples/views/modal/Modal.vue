@@ -1,7 +1,8 @@
 <template>
   <div>
     <h2>模态窗口</h2>
-    <p class="tip">查看 <router-link class="link" :to="{name: 'VXEAPI', params: {name: 'modal'}}">API</router-link></p>
+
+    <p class="tip">查看 <router-link class="link" :to="{name: 'VXEAPI', params: {name: 'modal'}}">API</router-link>，对于某些场景如果需要关闭所有动态的窗口，可以通过 this.$XModal.closeAll()</p>
 
     <p>
       <vxe-button @click="$XModal.message({ message: '消息提示' })">消息提示框</vxe-button>
