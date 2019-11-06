@@ -485,7 +485,7 @@ export default {
               UtilTools.error('vxe.error.notType', [type])
             }
             reader.onload = e => {
-              handleImport(this, e.target.result, options)
+              handleImport(this, e.target.result.trim(), options)
             }
             reader.readAsText(file, 'UTF-8')
           })
