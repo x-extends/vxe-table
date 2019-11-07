@@ -39,11 +39,10 @@ function toCsv ($table, opts, columns, datas) {
     }
   })
   if (opts.isFooter) {
-    let footerData = $table.footerData
-    let footers = opts.footerFilterMethod ? footerData.filter(opts.footerFilterMethod) : footerData
-    let filterMaps = $table.tableColumn.map(column => columns.includes(column))
+    const footerData = $table.footerData
+    const footers = opts.footerFilterMethod ? footerData.filter(opts.footerFilterMethod) : footerData
     footers.forEach(rows => {
-      content += rows.map((val, colIndex) => `"${filterMaps[colIndex]}"`).join(',') + '\n'
+      content += columns.map(column => `"${rows[$table.getColumnIndex(column)] || ''}"`).join(',') + '\n'
     })
   }
   return content
@@ -68,11 +67,10 @@ function toTxt ($table, opts, columns, datas) {
     }
   })
   if (opts.isFooter) {
-    let footerData = $table.footerData
-    let footers = opts.footerFilterMethod ? footerData.filter(opts.footerFilterMethod) : footerData
-    let filterMaps = $table.tableColumn.map(column => columns.includes(column))
+    const footerData = $table.footerData
+    const footers = opts.footerFilterMethod ? footerData.filter(opts.footerFilterMethod) : footerData
     footers.forEach(rows => {
-      content += rows.map((val, colIndex) => `${filterMaps[colIndex]}`).join('\t') + '\n'
+      content += columns.map(column => `${rows[$table.getColumnIndex(column)] || ''}`).join(',') + '\n'
     })
   }
   return content
@@ -110,13 +108,12 @@ function toHtml ($table, opts, columns, datas) {
     html += '</tbody>'
   }
   if (opts.isFooter) {
-    let footerData = $table.footerData
-    let footers = opts.footerFilterMethod ? footerData.filter(opts.footerFilterMethod) : footerData
-    let filterMaps = $table.tableColumn.map(column => columns.includes(column))
+    const footerData = $table.footerData
+    const footers = opts.footerFilterMethod ? footerData.filter(opts.footerFilterMethod) : footerData
     if (footers.length) {
       html += '<tfoot>'
       footers.forEach(rows => {
-        html += `<tr>${rows.map((val, colIndex) => `<td>${filterMaps[colIndex]}</td>`).join('')}</tr>`
+        html += `<tr>${columns.map(column => `<td>${rows[$table.getColumnIndex(column)] || ''}</td>`).join('')}</tr>`
       })
       html += '</tfoot>'
     }
@@ -163,14 +160,11 @@ function toXML ($table, opts, columns, datas) {
     xml += '</Row>'
   })
   if (opts.isFooter) {
-    let footerData = $table.footerData
-    let footers = opts.footerFilterMethod ? footerData.filter(opts.footerFilterMethod) : footerData
-    let filterMaps = $table.tableColumn.map(column => columns.includes(column))
-    if (footers.length) {
-      footers.forEach(rows => {
-        xml += `<Row>${rows.map((val, colIndex) => `<Cell><Data ss:Type="String">${filterMaps[colIndex]}</Data></Cell>`).join('')}</Row>`
-      })
-    }
+    const footerData = $table.footerData
+    const footers = opts.footerFilterMethod ? footerData.filter(opts.footerFilterMethod) : footerData
+    footers.forEach(rows => {
+      xml += `<Row>${columns.map(column => `<Cell><Data ss:Type="String">${rows[$table.getColumnIndex(column) || '']}</Data></Cell>`).join('')}</Row>`
+    })
   }
   return `${xml}</Table></Worksheet></Workbook>`
 }
