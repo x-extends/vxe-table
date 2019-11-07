@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">调用 <table-api-link prop="insert"/>、<table-api-link prop="insertAt"/> 函数插入临时数据</p>
+    <p class="tip">调用 <table-api-link prop="insert"/>、<table-api-link prop="insertAt"/> 函数插入临时数据<span class="red">注：原生的 select 只支持字符串的 value</span></p>
 
     <vxe-toolbar>
       <template v-slot:buttons>

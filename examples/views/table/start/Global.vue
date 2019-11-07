@@ -58,6 +58,7 @@
           },
           // 默认分页参数
           pager: {
+            perfect: true,
             pageSize: 10,
             pagerCount: 7,
             pageSizes: [10, 15, 20, 50, 100],
@@ -66,6 +67,9 @@
           // 默认工具栏参数
           toolbar: {
             refresh: false,
+            import: {
+              mode: 'covering'
+            },
             export: {
               types: ['csv', 'html', 'xml', 'txt']
             },

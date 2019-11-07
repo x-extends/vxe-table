@@ -35,6 +35,34 @@ const apis = [
         list: []
       },
       {
+        name: 'import',
+        descKey: 'app.api.toolbar.desc.import',
+        version: '2.6.12',
+        type: 'Boolean, Object',
+        enum: '',
+        defVal: '',
+        list: [
+          {
+            name: 'mode',
+            desc: '默认导入数据的方式',
+            version: '',
+            type: 'String',
+            enum: 'covering, append',
+            defVal: 'covering',
+            list: []
+          },
+          {
+            name: 'message',
+            desc: '默认显示内置的消息提示',
+            version: '',
+            type: 'Boolean',
+            enum: '',
+            defVal: 'true',
+            list: []
+          }
+        ]
+      },
+      {
         name: 'export',
         descKey: 'app.api.toolbar.desc.export',
         version: '1.15.12',
@@ -85,6 +113,15 @@ const apis = [
             type: 'Array',
             enum: 'csv, html, xml, txt',
             defVal: '',
+            list: []
+          },
+          {
+            name: 'message',
+            desc: '默认显示内置的消息提示',
+            version: '',
+            type: 'Boolean',
+            enum: '',
+            defVal: 'true',
             list: []
           }
         ]

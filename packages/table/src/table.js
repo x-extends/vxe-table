@@ -4346,11 +4346,10 @@ export default {
       return this.exportData(options)
     },
     openExport (options) {
-      const $toolbar = this.$toolbar
-      if ($toolbar) {
-        return $toolbar.openExport(options)
+      if (this.$toolbar) {
+        return this.$toolbar.openExport(options)
       }
-      return this.exportData()
+      throw new Error(UtilTools.getLog('vxe.error.barUnableLink'))
     },
     /**
      * 导出 csv 文件
@@ -4364,6 +4363,7 @@ export default {
         filename: '',
         sheetName: '',
         original: !!treeConfig,
+        message: false,
         isHeader: true,
         isFooter: true,
         download: true,
@@ -4400,23 +4400,18 @@ export default {
       }
       return ExportTools.handleExport(this, opts, columns, fullData)
     },
-    importData (callback) {
-      const { impForm, impInput } = this.$refs
-      impInput.accept = `.${getFileTypes().join(', .')}`
-      impForm.reset()
-      impInput.click()
-      this.importCallback = callback
+    openImport (options) {
+      if (this.$toolbar) {
+        return this.$toolbar.openImport(options)
+      }
+      throw new Error(UtilTools.getLog('vxe.error.barUnableLink'))
     },
-    fileChangeEvent (evnt) {
+    importByFile (file, opts) {
       if (window.FileReader) {
-        const file = evnt.target.files[0]
-        const name = file.name
-        const tIndex = XEUtils.lastIndexOf(name, '.')
-        const type = name.substring(tIndex + 1, name.length)
-        const filename = name.substring(0, tIndex)
-        const options = { filename, type }
+        const { type, filename } = UtilTools.parseFile(file)
+        const options = Object.assign({ mode: 'covering' }, opts, { type, filename })
         if (getFileTypes().includes(type)) {
-          this.preventEvent(evnt, 'event.import', { $table: this, options, columns: this.tableFullColumn }, () => {
+          this.preventEvent(null, 'event.import', { $table: this, file, options, columns: this.tableFullColumn }, () => {
             const reader = new FileReader()
             reader.onerror = e => {
               UtilTools.error('vxe.error.notType', [type])
@@ -4432,6 +4427,26 @@ export default {
       } else {
         UtilTools.error('vxe.error.notExp')
       }
+    },
+    importData (options) {
+      this.readFile()
+        .then(evnt => this.importByFile(evnt.target.files[0], options))
+      return new Promise(resolve => {
+        this._importCallback = resolve
+      })
+    },
+    readFile () {
+      const { impForm, impInput } = this.$refs
+      impInput.accept = `.${getFileTypes().join(', .')}`
+      impForm.reset()
+      impInput.click()
+      return new Promise(resolve => {
+        this._fileCallback = resolve
+      })
+    },
+    fileChangeEvent (evnt) {
+      this._fileCallback(evnt)
+      this._fileCallback = null
     },
     updateZindex () {
       if (this.tZindex < UtilTools.getLastZIndex()) {

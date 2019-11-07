@@ -27,7 +27,9 @@ export default {
       emptyText: 'No Data',
       confirmFilter: 'Confirm',
       resetFilter: 'Reset',
-      allFilter: 'All'
+      allFilter: 'All',
+      impSuccess: 'Import success',
+      expSuccess: 'Export success'
     },
     column: {
       indexTitle: '#'
@@ -60,7 +62,15 @@ export default {
       xlsx: 'Excel 工作簿(*.xlsx)'
     },
     toolbar: {
-      expTitle: 'Export data',
+      impTitle: 'Import parameter settings',
+      impFile: 'Filename',
+      impSelect: 'Select file',
+      impType: 'File type',
+      impOpts: 'Import option',
+      impConfirm: 'Click import',
+      impModeCovering: 'Covering',
+      impModeAppend: 'Append',
+      expTitle: 'Export parameter settings',
       expName: 'Filename',
       expNamePlaceholder: 'Please enter filename',
       expSheetName: 'Sheet name',
@@ -70,11 +80,11 @@ export default {
       expAll: 'All data',
       expSelected: 'Selected data',
       expColumn: 'The field to export',
-      expOpts: 'Export parameter',
+      expOpts: 'Export option',
       expOptHeader: 'Header',
       expOptFooter: 'Footer',
       expOptOriginal: 'Original(import support)',
-      expConfirm: 'Export'
+      expConfirm: 'Click export'
     }
   }
 }

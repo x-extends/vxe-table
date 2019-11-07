@@ -111,7 +111,7 @@ const apis = [
           },
           {
             name: 'message',
-            desc: '是否显示消息提示',
+            desc: '是否显示内置的消息提示（可以设为 false 关闭内置的消息提示）',
             version: '',
             type: 'Boolean',
             enum: '',
@@ -392,7 +392,16 @@ XEUtils.eachTree(gridAPI, (item, index, obj, paths, parent) => {
       },
       {
         name: 'import',
-        desc: '导入',
+        desc: '直接导入',
+        version: '2.6.14',
+        type: '',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'open_import',
+        desc: '高级导入',
         version: '2.6.14',
         type: '',
         enum: '',
@@ -401,7 +410,7 @@ XEUtils.eachTree(gridAPI, (item, index, obj, paths, parent) => {
       },
       {
         name: 'export',
-        desc: '导出',
+        desc: '直接导出',
         version: '',
         type: '',
         enum: '',
@@ -409,36 +418,9 @@ XEUtils.eachTree(gridAPI, (item, index, obj, paths, parent) => {
         list: []
       },
       {
-        name: 'export_csv',
-        desc: '直接导出数据为 CSV 格式',
-        version: '1.15.12',
-        type: '',
-        enum: '',
-        defVal: '',
-        list: []
-      },
-      {
-        name: 'export_html',
-        desc: '直接导出数据为 HTML 格式',
-        version: '1.15.12',
-        type: '',
-        enum: '',
-        defVal: '',
-        list: []
-      },
-      {
-        name: 'export_xml',
-        desc: '直接导出数据为 XML 格式',
-        version: '1.15.12',
-        type: '',
-        enum: '',
-        defVal: '',
-        list: []
-      },
-      {
-        name: 'export_txt',
-        desc: '直接导出数据为 Txt 格式',
-        version: '2.6.12',
+        name: 'open_export',
+        desc: '高级导出',
+        version: '2.6.14',
         type: '',
         enum: '',
         defVal: '',

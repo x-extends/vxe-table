@@ -1,18 +1,18 @@
 <template>
   <div>
-    <p class="tip">设置 <table-api-link prop="edit-config"/> 的 <table-api-link prop="activeMethod"/> 方法判断单元格是否禁用</p>
+    <p class="tip">设置 <table-api-link prop="edit-config"/> 的 <table-api-link prop="activeMethod"/> 方法判断单元格是否禁用，例如：限制第一行不允许编辑</p>
 
     <vxe-table
-      ref="xTable"
       border
       show-overflow
+      height="400"
       :data="tableData"
       :edit-config="{trigger: 'click', mode: 'row', activeMethod: activeRowMethod}"
       @edit-disabled="editDisabledEvent">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="date" title="Date" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="date12" title="Date" :edit-render="{name: 'input'}"></vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -22,30 +22,19 @@
       <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
 
-    <p class="tip">配合自定义渲染，第三行name禁止编辑禁 age 小于 26</p>
+    <p class="tip">配合  <table-api-link prop="edit-actived"/> 事件，实现行编辑中对列的权限控制，例如：限制 age 小于 27 的与 name 为 'a' 开头的列禁止编辑</p>
 
     <vxe-table
-      ref="xTable"
       border
       show-overflow
+      height="400"
       :data="tableData"
-      :edit-config="{trigger: 'click', mode: 'row'}">
+      :edit-config="{trigger: 'click', mode: 'row'}"
+      @edit-actived="editActivedEvent">
       <vxe-table-column type="index" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" :edit-render="{type: 'default'}">
-        <template v-slot:edit="{ row }">
-          <input type="text" v-model="row.name">
-        </template>
-      </vxe-table-column>
-      <vxe-table-column field="age" title="Age" :edit-render="{type: 'default'}">
-        <template v-slot:edit="scope">
-          <input type="text" v-model="scope.row.age" :disabled="disableMethod(scope)">
-        </template>
-      </vxe-table-column>
-      <vxe-table-column field="date" title="Date" :edit-render="{type: 'default'}">
-        <template v-slot:edit="{ row }">
-          <input type="date" v-model="row.date">
-        </template>
-      </vxe-table-column>
+      <vxe-table-column field="name" title="Name" :edit-render="{name: 'input', attrs: {disabled: isNameDisabled}}"></vxe-table-column>
+      <vxe-table-column field="age" title="Age" :edit-render="{name: 'input', attrs: {disabled: isAgeDisabled}}"></vxe-table-column>
+      <vxe-table-column field="date12" title="Date" :edit-render="{name: 'input'}"></vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -63,20 +52,22 @@ import hljs from 'highlight.js'
 export default {
   data () {
     return {
+      isNameDisabled: false,
+      isAgeDisabled: false,
       tableData: [],
       demoCodes: [
         `
         <vxe-table
-          ref="xTable"
           border
           show-overflow
+          height="400"
           :data="tableData"
           :edit-config="{trigger: 'click', mode: 'row', activeMethod: activeRowMethod}"
           @edit-disabled="editDisabledEvent">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="date" title="Date" :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column field="date12" title="Date" :edit-render="{name: 'input'}"></vxe-table-column>
         </vxe-table>
         `,
         `
@@ -101,43 +92,37 @@ export default {
         `,
         `
         <vxe-table
-          ref="xTable"
           border
           show-overflow
+          height="400"
           :data="tableData"
-          :edit-config="{trigger: 'click', mode: 'row'}">
+          :edit-config="{trigger: 'click', mode: 'row'}"
+          @edit-actived="editActivedEvent">
           <vxe-table-column type="index" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" :edit-render="{type: 'default'}">
-            <template v-slot:edit="{ row }">
-              <input type="text" v-model="row.name">
-            </template>
-          </vxe-table-column>
-          <vxe-table-column field="sex" title="Sex" :edit-render="{type: 'default'}">
-            <template v-slot:edit="{ row }">
-              <input type="sex" v-model="row.sex" :disabled="row.disabled">
-            </template>
-          </vxe-table-column>
-          <vxe-table-column field="date" title="Date" :edit-render="{type: 'default'}">
-            <template v-slot:edit="{ row }">
-              <input type="date" v-model="row.date">
-            </template>
-          </vxe-table-column>
+          <vxe-table-column field="name" title="Name" :edit-render="{name: 'input', attrs: {disabled: isNameDisabled}}"></vxe-table-column>
+          <vxe-table-column field="age" title="Age" :edit-render="{name: 'input', attrs: {disabled: isAgeDisabled}}"></vxe-table-column>
+          <vxe-table-column field="date12" title="Date" :edit-render="{name: 'input'}"></vxe-table-column>
         </vxe-table>
         `,
         `
         export default {
           data () {
             return {
+              isNameDisabled: false,
+              isAgeDisabled: false,
               tableData: []
             }
           },
           created () {
-            let list = window.MOCK_DATA_LIST.slice(0, 6)
-            this.tableData = list.map((item, index) => {
-              return Object.assign({
-                disabled: index === 2
-              }, item)
-            })
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 20)
+          },
+          methods: {
+            editActivedEvent ({ row, rowIndex }) {
+              // name 为 'x' 开头的列禁止编辑
+              this.isNameDisabled = (row.name || '').indexOf('a') === 0
+              // age 小于 27 的列禁止编辑
+              this.isAgeDisabled = row.age < 27
+            }
           }
         }
         `
@@ -145,8 +130,7 @@ export default {
     }
   },
   created () {
-    let list = window.MOCK_DATA_LIST.slice(0, 6)
-    this.tableData = list
+    this.tableData = window.MOCK_DATA_LIST.slice(0, 20)
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
@@ -157,11 +141,14 @@ export default {
     activeRowMethod ({ row, rowIndex }) {
       return rowIndex !== 1
     },
-    disableMethod ({ row, column }) {
-      return column.property === 'age' && row.age < 26
-    },
     editDisabledEvent ({ row, column }) {
       this.$XModal.alert('禁止编辑')
+    },
+    editActivedEvent ({ row, rowIndex }) {
+      // name 为 'x' 开头的列禁止编辑
+      this.isNameDisabled = (row.name || '').indexOf('a') === 0
+      // age 小于 27 的列禁止编辑
+      this.isAgeDisabled = row.age < 27
     }
   }
 }

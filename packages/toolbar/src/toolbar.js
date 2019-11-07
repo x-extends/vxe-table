@@ -10,6 +10,7 @@ export default {
     loading: false,
     resizable: { type: [Boolean, Object], default: () => GlobalConfig.toolbar.resizable },
     refresh: { type: [Boolean, Object], default: () => GlobalConfig.toolbar.refresh },
+    import: { type: [Boolean, Object], default: () => GlobalConfig.toolbar.import },
     export: { type: [Boolean, Object], default: () => GlobalConfig.toolbar.export },
     setting: { type: [Boolean, Object], default: () => GlobalConfig.toolbar.setting },
     buttons: { type: Array, default: () => GlobalConfig.toolbar.buttons },
@@ -27,6 +28,15 @@ export default {
       $table: null,
       isRefresh: false,
       tableFullColumn: [],
+      importStore: {
+        file: null,
+        type: '',
+        filename: '',
+        visible: false
+      },
+      importParams: {
+        mode: ''
+      },
       exportStore: {
         name: '',
         mode: '',
@@ -41,6 +51,7 @@ export default {
         sheetName: '',
         type: '',
         original: false,
+        message: true,
         isHeader: false,
         isFooter: false
       },
@@ -55,6 +66,9 @@ export default {
     },
     refreshOpts () {
       return Object.assign({}, GlobalConfig.toolbar.refresh, this.refresh)
+    },
+    importOpts () {
+      return Object.assign({}, GlobalConfig.toolbar.import, this.import)
     },
     exportOpts () {
       let opts = Object.assign({ types: Object.keys(VXETable.types) }, GlobalConfig.toolbar.export, this.export)
@@ -81,7 +95,7 @@ export default {
     if (settingOpts.storage && !id) {
       return UtilTools.error('vxe.error.toolbarId')
     }
-    if (!VXETable._export && this.export) {
+    if (!VXETable._export && (this.export || this.import)) {
       UtilTools.error('vxe.error.reqModule', ['Export'])
     }
     this.$nextTick(() => {
@@ -96,7 +110,7 @@ export default {
     GlobalEvent.off(this, 'blur')
   },
   render (h) {
-    let { _e, $scopedSlots, $grid, $table, loading, settingStore, refresh, setting, settingOpts, buttons = [], vSize, tableFullColumn, exportOpts, exportStore, exportParams } = this
+    let { _e, $scopedSlots, $grid, $table, loading, settingStore, refresh, setting, settingOpts, buttons = [], vSize, tableFullColumn, importStore, importParams, exportOpts, exportStore, exportParams } = this
     let customBtnOns = {}
     let customWrapperOns = {}
     let $buttons = $scopedSlots.buttons
@@ -149,6 +163,16 @@ export default {
       h('div', {
         class: 'vxe-tools--operate'
       }, [
+        this.import ? h('vxe-button', {
+          class: 'vxe-export--btn',
+          props: {
+            type: 'text',
+            icon: GlobalConfig.icon.import
+          },
+          on: {
+            click: this.importEvent
+          }
+        }) : null,
         this.export ? h('vxe-button', {
           class: 'vxe-export--btn',
           props: {
@@ -213,6 +237,15 @@ export default {
           ])
         ]) : null
       ]),
+      VXETable._export ? h('vxe-import-panel', {
+        props: {
+          defaultOptions: importParams,
+          storeData: importStore
+        },
+        on: {
+          import: this.confirmImportEvent
+        }
+      }) : _e(),
       VXETable._export ? h('vxe-export-panel', {
         props: {
           defaultOptions: exportParams,
@@ -429,6 +462,25 @@ export default {
         }
       }
     },
+    importEvent () {
+      this.openImport()
+    },
+    openImport (options) {
+      const { importParams, importStore, importOpts } = this
+      const defOpts = Object.assign({ mode: 'covering', message: true }, options, importOpts)
+      Object.assign(importStore, {
+        file: null,
+        type: '',
+        filename: '',
+        visible: true
+      })
+      Object.assign(importParams, defOpts)
+    },
+    confirmImportEvent (options) {
+      const { $grid, $table } = this
+      const comp = $grid || $table
+      comp.importByFile(this.importStore.file, options)
+    },
     exportEvent () {
       this.openExport()
     },
@@ -443,7 +495,7 @@ export default {
       const treeStatus = comp.getTreeStatus()
       const forceOriginal = !!treeStatus || virtualScroller.scrollX || virtualScroller.scrollY
       const hasFooter = !!footerData.length
-      const defOpts = Object.assign({ original: true }, options, exportOpts)
+      const defOpts = Object.assign({ original: true, message: true }, options, exportOpts)
       // 索引列默认不选中
       exportColumns.forEach(column => {
         column.checked = column.type !== 'index'
@@ -461,8 +513,9 @@ export default {
       Object.assign(exportParams, {
         filename: defOpts.filename || '',
         sheetName: defOpts.sheetName || '',
-        type: defOpts.types[0].value,
+        type: defOpts.type || defOpts.types[0].value,
         original: forceOriginal || defOpts.original,
+        message: defOpts.message,
         isHeader: true,
         isFooter: hasFooter
       })

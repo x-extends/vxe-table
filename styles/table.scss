@@ -47,6 +47,10 @@
       &::placeholder {
         color: $vxe-input-placeholder-color;
       }
+      &[disabled] {
+        cursor: not-allowed;
+        background-color: #f3f3f3;
+      }
     }
   }
 }

@@ -3,7 +3,6 @@
     <p class="tip">设置 <table-api-link prop="edit-config"/> 的 <table-api-link prop="activeMethod"/> 方法判断单元格是否禁用</p>
 
     <vxe-table
-      ref="xTable"
       border
       show-overflow
       :data="tableData"
@@ -12,7 +11,7 @@
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="date" title="Date" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="date12" title="Date" :edit-render="{name: 'input'}"></vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -25,7 +24,6 @@
     <p class="tip">禁用第二行编辑</p>
 
     <vxe-table
-      ref="xTable"
       border
       show-overflow
       :data="tableData"
@@ -34,7 +32,7 @@
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="date" title="Date" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="date12" title="Date" :edit-render="{name: 'input'}"></vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -56,7 +54,6 @@ export default {
       demoCodes: [
         `
         <vxe-table
-          ref="xTable"
           border
           show-overflow
           :data="tableData"
@@ -65,7 +62,7 @@ export default {
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="date" title="Date" :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column field="date12" title="Date" :edit-render="{name: 'input'}"></vxe-table-column>
         </vxe-table>
         `,
         `
@@ -93,7 +90,6 @@ export default {
         `,
         `
         <vxe-table
-          ref="xTable"
           border
           show-overflow
           :data="tableData"
@@ -102,7 +98,7 @@ export default {
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="date" title="Date" :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column field="date12" title="Date" :edit-render="{name: 'input'}"></vxe-table-column>
         </vxe-table>
         `,
         `
@@ -132,8 +128,7 @@ export default {
     }
   },
   created () {
-    let list = window.MOCK_DATA_LIST.slice(0, 6)
-    this.tableData = list
+    this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {

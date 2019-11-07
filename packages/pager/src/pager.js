@@ -22,8 +22,12 @@ export default {
     pageSizes: { type: Array, default: () => GlobalConfig.pager.pageSizes || [10, 15, 20, 50, 100] },
     // 列对其方式
     align: String,
+    // 带边框
+    border: { type: Boolean, default: () => GlobalConfig.pager.border },
     // 带背景颜色
-    background: Boolean
+    background: { type: Boolean, default: () => GlobalConfig.pager.background },
+    // 默认的样式
+    perfect: { type: Boolean, default: () => GlobalConfig.pager.perfect }
   },
   inject: {
     $grid: {
@@ -58,34 +62,24 @@ export default {
     this.panelIndex = UtilTools.nextZIndex()
     GlobalEvent.on(this, 'mousedown', this.handleGlobalMousedownEvent)
   },
-  mounted () {
-    let sizePanel = this.$refs.sizePanel
-    if (sizePanel) {
-      document.body.appendChild(this.$refs.sizePanel)
-    }
-  },
-  beforeDestroy () {
-    let sizePanel = this.$refs.sizePanel
-    if (sizePanel && sizePanel.parentNode) {
-      sizePanel.parentNode.removeChild(sizePanel)
-    }
-  },
   destroyed () {
     GlobalEvent.off(this, 'mousedown')
   },
   render (h) {
-    let { layouts, isSizes, loading, vSize, align, background } = this
+    let { layouts, loading, vSize, align, border, background, perfect } = this
     return h('div', {
       class: ['vxe-pager', {
         [`size--${vSize}`]: vSize,
         [`align--${align}`]: align,
+        'p--border': border,
         'p--background': background,
+        'p--perfect': perfect,
         'is--loading': loading
       }]
-    }, layouts.map(name => this[`render${name}`](h)).concat(isSizes ? this.renderSizePanel(h) : []))
+    }, layouts.map(name => this[`render${name}`](h)))
   },
   methods: {
-    // prevPage
+    // 上一页
     renderPrevPage (h) {
       let { currentPage } = this
       return h('span', {
@@ -101,16 +95,15 @@ export default {
         })
       ])
     },
-    // prevJump
+    // 向上翻页
     renderPrevJump (h, tagName) {
-      let { numList, currentPage } = this
       return h(tagName || 'span', {
         class: ['vxe-pager--jump-prev', {
           'is--fixed': !tagName,
-          'is--disabled': currentPage <= 1
+          'is--disabled': this.currentPage <= 1
         }],
         on: {
-          click: () => this.jumpPage(Math.max(currentPage - numList.length, 1))
+          click: this.prevJump
         }
       }, [
         tagName ? h('i', {
@@ -133,16 +126,16 @@ export default {
         class: 'vxe-pager--btn-wrapper'
       }, this.renderPageBtn(h, true))
     },
-    // nextJump
+    // 向下翻页
     renderNextJump (h, tagName) {
-      let { numList, currentPage, pageCount } = this
+      let { currentPage, pageCount } = this
       return h(tagName || 'span', {
         class: ['vxe-pager--jump-next', {
           'is--fixed': !tagName,
           'is--disabled': currentPage >= pageCount
         }],
         on: {
-          click: () => this.jumpPage(Math.min(currentPage + numList.length, pageCount))
+          click: this.nextJump
         }
       }, [
         tagName ? h('i', {
@@ -153,7 +146,7 @@ export default {
         })
       ])
     },
-    // nextPage
+    // 下一页
     renderNextPage (h) {
       let { currentPage, pageCount } = this
       return h('span', {
@@ -171,43 +164,43 @@ export default {
     },
     // sizes
     renderSizes (h) {
-      let { pageSize } = this
+      let { pageSizes, showSizes, pageSize, panelStyle } = this
       return h('span', {
         class: ['vxe-pager--sizes', {
-          'is--active': this.showSizes
+          'is--active': showSizes
         }],
-        on: {
-          click: this.toggleSizePanel
-        },
         ref: 'sizeBtn'
       }, [
-        h('i', {
-          class: `vxe-pager--sizes-arrow ${GlobalConfig.icon.caretBottom}`
-        }),
         h('span', {
-          class: 'size--content'
-        }, `${pageSize}${GlobalConfig.i18n('vxe.pager.pagesize')}`)
-      ])
-    },
-    // 分页面板
-    renderSizePanel (h) {
-      let { panelStyle, pageSize, pageSizes, showSizes } = this
-      return h('ul', {
-        class: ['vxe-pager-size--select', {
-          'is--show': showSizes
-        }],
-        style: panelStyle,
-        ref: 'sizePanel'
-      }, pageSizes.map(num => {
-        return h('li', {
-          class: ['size--option', {
-            'is--active': num === pageSize
-          }],
+          class: 'size--content',
           on: {
-            click: () => this.changePageSize(num)
+            click: this.toggleSizePanel
           }
-        }, `${num}${GlobalConfig.i18n('vxe.pager.pagesize')}`)
-      }))
+        }, [
+          h('span', `${pageSize}${GlobalConfig.i18n('vxe.pager.pagesize')}`),
+          h('i', {
+            class: `vxe-pager--sizes-arrow ${GlobalConfig.icon.caretBottom}`
+          })
+        ]),
+        h('div', {
+          class: 'vxe-pager-size--select-wrapper',
+          style: panelStyle,
+          ref: 'sizePanel'
+        }, [
+          h('ul', {
+            class: 'vxe-pager-size--select'
+          }, pageSizes.map(num => {
+            return h('li', {
+              class: ['size--option', {
+                'is--active': num === pageSize
+              }],
+              on: {
+                click: () => this.changePageSize(num)
+              }
+            }, `${num}${GlobalConfig.i18n('vxe.pager.pagesize')}`)
+          }))
+        ])
+      ])
     },
     // FullJump
     renderFullJump (h) {
@@ -240,10 +233,10 @@ export default {
                 this.jumpPage(current)
               } else if (evnt.keyCode === 38) {
                 evnt.preventDefault()
-                this.nextPage(evnt)
+                this.nextPage()
               } else if (evnt.keyCode === 40) {
                 evnt.preventDefault()
-                this.prevPage(evnt)
+                this.prevPage()
               }
             }
           }
@@ -347,6 +340,14 @@ export default {
         this.jumpPage(Math.min(currentPage + 1, pageCount))
       }
     },
+    prevJump () {
+      let { numList, currentPage } = this
+      this.jumpPage(Math.max(currentPage - numList.length, 1))
+    },
+    nextJump () {
+      let { numList, currentPage, pageCount } = this
+      this.jumpPage(Math.min(currentPage + numList.length, pageCount))
+    },
     jumpPage (currentPage) {
       let type = 'current-change'
       if (currentPage !== this.currentPage) {
@@ -368,52 +369,28 @@ export default {
       UtilTools.emitEvent(this, 'page-change', [{ type, pageSize, currentPage }])
     },
     toggleSizePanel () {
-      if (this.showSizes) {
-        this.hideSizePanel()
-      } else {
-        this.showSizePanel()
-      }
+      this[this.showSizes ? 'hideSizePanel' : 'showSizePanel']()
     },
     updateZindex () {
       if (this.panelIndex < UtilTools.getLastZIndex()) {
         this.panelIndex = UtilTools.nextZIndex()
       }
     },
-    hideSizePanel () {
-      this.showSizes = false
-    },
     showSizePanel () {
-      let { $refs } = this
-      let sizeBtnElem = $refs.sizeBtn
-      let { left, top } = DomTools.getAbsolutePos(sizeBtnElem)
-      let { scrollTop, scrollLeft, visibleWidth, visibleHeight } = DomTools.getDomNode()
-      this.updateZindex()
-      this.panelStyle = {
-        zIndex: this.panelIndex,
-        left: `${left}px`,
-        top: `${top + sizeBtnElem.offsetHeight + 6}px`
-      }
       this.showSizes = true
-      this.$nextTick().then(() => {
-        let sizePanelElem = $refs.sizePanel
-        if (sizePanelElem) {
-          this.panelStyle.top = `${top + sizeBtnElem.offsetHeight + 6}px`
-          this.panelStyle.left = `${left + Math.floor((sizeBtnElem.offsetWidth - sizePanelElem.offsetWidth) / 2)}px`
-          return this.$nextTick()
-        }
-      }).then(() => {
-        let sizePanelElem = $refs.sizePanel
-        if (sizePanelElem) {
-          let offsetHeight = sizePanelElem.offsetHeight
-          let offsetWidth = sizePanelElem.offsetWidth
-          if (top + sizeBtnElem.offsetHeight + offsetHeight > scrollTop + visibleHeight) {
-            this.panelStyle.top = `${top - offsetHeight - 6}px`
-          }
-          if (left + offsetWidth > scrollLeft + visibleWidth) {
-            this.panelStyle.left = `${scrollLeft + visibleWidth - offsetWidth - 6}px`
-          }
+      this.updateZindex()
+      this.$nextTick(() => {
+        let { $refs } = this
+        let { sizeBtn, sizePanel } = $refs
+        this.panelStyle = {
+          zIndex: this.panelIndex,
+          bottom: `${sizeBtn.clientHeight + 6}px`,
+          left: `-${sizePanel.clientWidth / 2 - sizeBtn.clientWidth / 2}px`
         }
       })
+    },
+    hideSizePanel () {
+      this.showSizes = false
     }
   }
 }

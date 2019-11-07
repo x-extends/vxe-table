@@ -85,7 +85,7 @@ export default {
     }
     // （v3.0 中废弃 proxyConfig.props.data）
     if (props && props.data) {
-      console.warn('[vxe-table] The property proxy-config.props.data is deprecated, please use proxy-config.props.result')
+      UtilTools.warn('vxe.error.delProp', ['proxy-config.props.data', 'proxy-config.props.result'])
     }
   },
   mounted () {
@@ -200,10 +200,23 @@ export default {
       let activeMethod = this.editConfig.activeMethod
       return this.pendingRecords.indexOf(params.row) === -1 && (!activeMethod || activeMethod(params))
     },
+    /**
+     * 提交指令，支持 code 或 button
+     * @param {String/Object} code 字符串或对象
+     */
     commitProxy (code) {
-      let { toolbar, proxyOpts, tablePage, pagerConfig, sortData, filterData, isMsg } = this
-      let { ajax = {}, props = {} } = proxyOpts
-      let args = XEUtils.slice(arguments, 1)
+      const { toolbar, proxyOpts, tablePage, pagerConfig, sortData, filterData, isMsg } = this
+      const { ajax = {}, props = {} } = proxyOpts
+      const args = XEUtils.slice(arguments, 1)
+      let button
+      if (XEUtils.isString(code)) {
+        const matchObj = toolbar ? XEUtils.findTree(toolbar.buttons, item => item.code === code, { children: 'dropdowns' }) : null
+        button = matchObj ? matchObj.item : null
+      } else {
+        button = code
+        code = button.code
+      }
+      const btnParams = button ? button.params : null
       switch (code) {
         case 'insert':
           this.insert()
@@ -221,22 +234,16 @@ export default {
           this.handleDeleteRow(code, 'vxe.grid.removeSelectRecord', () => this.removeSelecteds())
           break
         case 'import':
-          this.importData()
+          this.importData(btnParams)
+          break
+        case 'open_import':
+          this.openImport(btnParams)
           break
         case 'export':
-          this.openExport()
+          this.exportData(btnParams)
           break
-        case 'export_csv':
-          this.exportData({ type: 'csv' })
-          break
-        case 'export_html':
-          this.exportData({ type: 'html' })
-          break
-        case 'export_xml':
-          this.exportData({ type: 'xml' })
-          break
-        case 'export_txt':
-          this.exportData({ type: 'txt' })
+        case 'open_export':
+          this.openExport(btnParams)
           break
         case 'reset_custom':
           this.resetAll()
@@ -356,8 +363,7 @@ export default {
         default:
           let btnMethod = Buttons.get(code)
           if (btnMethod) {
-            let button = toolbar ? XEUtils.find(toolbar.buttons, item => item.code === code) : null
-            btnMethod.apply(this, [{ code, button: button, $grid: this, $table: this.$refs.xTable }].concat(args))
+            btnMethod.apply(this, [{ code, button, $grid: this, $table: this.$refs.xTable }].concat(args))
           }
       }
       return this.$nextTick()
@@ -384,9 +390,8 @@ export default {
       return this.pendingRecords
     },
     triggerToolbarBtnEvent (button, evnt) {
-      let { code } = button
-      this.commitProxy(code, evnt)
-      UtilTools.emitEvent(this, 'toolbar-button-click', [{ code, button, $grid: this }, evnt])
+      this.commitProxy(button, evnt)
+      UtilTools.emitEvent(this, 'toolbar-button-click', [{ code: button.code, button, $grid: this }, evnt])
     },
     triggerPendingEvent (code) {
       let { pendingRecords, isMsg } = this

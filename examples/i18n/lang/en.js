@@ -391,6 +391,7 @@ module.exports = {
           id: 'Unique ID identification',
           size: 'Size',
           loading: 'Loading',
+          import: 'Import button config',
           export: 'Export button config',
           refresh: 'Refresh button config',
           resizable: 'Column width drag config(id needs to be set)',
@@ -408,7 +409,9 @@ module.exports = {
           pagerCount: 'Displays the number of page number buttons',
           pageSizes: 'List of options for page size',
           align: 'On the way',
-          background: 'Show background color'
+          border: 'Show border',
+          background: 'Show background color',
+          perfect: 'Default style'
         }
       },
       radio: {

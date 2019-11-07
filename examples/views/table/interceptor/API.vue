@@ -84,7 +84,7 @@ export default {
         {
           name: 'created',
           desc: '表格初始化时触发',
-          version: '2.6',
+          version: '1.15',
           type: '',
           enum: '',
           defVal: '',
@@ -93,7 +93,7 @@ export default {
         {
           name: 'mounted',
           desc: '表格挂载时触发',
-          version: '2.6',
+          version: '1.15',
           type: '',
           enum: '',
           defVal: '',
@@ -102,7 +102,7 @@ export default {
         {
           name: 'activated',
           desc: '表格激活时触发',
-          version: '2.6',
+          version: '1.15',
           type: '',
           enum: '',
           defVal: '',
@@ -111,7 +111,7 @@ export default {
         {
           name: 'deactivated',
           desc: '表格停用时触发',
-          version: '2.6',
+          version: '1.15',
           type: '',
           enum: '',
           defVal: '',
@@ -120,7 +120,7 @@ export default {
         {
           name: 'beforeDestroy',
           desc: '表格销毁之前触发',
-          version: '2.6',
+          version: '1.15',
           type: '',
           enum: '',
           defVal: '',
@@ -129,7 +129,7 @@ export default {
         {
           name: 'destroyed',
           desc: '表格销毁时触发',
-          version: '2.6',
+          version: '1.15',
           type: '',
           enum: '',
           defVal: '',
@@ -138,7 +138,7 @@ export default {
         {
           name: 'event.clearFilter',
           desc: '清除激活单元格之前触发，允许返回 false 阻止默认行为',
-          version: '2.1',
+          version: '1.14',
           type: 'Boolean',
           enum: '',
           defVal: '',
@@ -156,7 +156,7 @@ export default {
         {
           name: 'event.keydown',
           desc: '键盘按下之前触发，允许返回 false 阻止默认行为',
-          version: '2.5.9',
+          version: '1.14',
           type: 'Boolean',
           enum: '',
           defVal: '',
@@ -165,7 +165,25 @@ export default {
         {
           name: 'event.showMenu',
           desc: '显示快捷菜单之前触发，允许返回 false 阻止默认行为',
-          version: '2.4',
+          version: '1.14',
+          type: 'Boolean',
+          enum: '',
+          defVal: '',
+          list: []
+        },
+        {
+          name: 'event.import',
+          desc: '导入之前触发，允许返回 false 阻止默认行为',
+          version: '1.15.12',
+          type: 'Boolean',
+          enum: '',
+          defVal: '',
+          list: []
+        },
+        {
+          name: 'event.export',
+          desc: '导出之前触发，允许返回 false 阻止默认行为',
+          version: '1.15.12',
           type: 'Boolean',
           enum: '',
           defVal: '',

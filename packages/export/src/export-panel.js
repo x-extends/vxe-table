@@ -225,9 +225,6 @@ export default {
       const opts = Object.assign({
         columns: storeData.columns.filter(column => column.checked)
       }, defaultOptions)
-      if (!opts.filename) {
-        opts.filename = GlobalConfig.i18n('vxe.toolbar.expTitle')
-      }
       if (storeData.mode === 'selected') {
         opts.data = storeData.selectRecords
       }

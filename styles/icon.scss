@@ -404,18 +404,16 @@
   }
 }
 
+.vxe-icon--upload,
 .vxe-icon--download {
   @extend %DefaultWidthHeight;
   height: 0.9em;
   border-width: 0;
   border-style: solid;
   border-color: inherit;
-  border-bottom-width: 0.1em;
-  margin-bottom: 0.1em;
   &:before {
     @extend %PseudoClass;
     left: 0.47em;
-    bottom: 0.26em;
     height: 0.6em;
     border-width: 0;
     border-style: solid;
@@ -430,10 +428,34 @@
     height: 0.6em;
     border-width: 0.1em;
     border-style: solid;
+    transform: rotate(135deg);
+  }
+}
+
+.vxe-icon--upload {
+  border-top-width: 0.1em;
+  &:before {
+    top: 0.2em;
+  }
+  &:after {
+    top: 0.2em;
+    border-top-color: transparent;
+    border-right-color: transparent;
+    border-bottom-color: inherit;
+    border-left-color: inherit;
+  }
+}
+
+.vxe-icon--download {
+  border-bottom-width: 0.1em;
+  &:before {
+    bottom: 0.2em;
+  }
+  &:after {
+    bottom: 0.2em;
     border-top-color: inherit;
     border-right-color: inherit;
     border-bottom-color: transparent;
     border-left-color: transparent;
-    transform: rotate(135deg);
   }
 }

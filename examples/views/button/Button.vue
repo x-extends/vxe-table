@@ -29,6 +29,7 @@
       <vxe-button disabled>禁用</vxe-button>
       <vxe-button loading>加载中</vxe-button>
       <vxe-button type="primary">主要按钮</vxe-button>
+      <vxe-button type="primary" disabled>禁用</vxe-button>
       <vxe-button type="primary" loading>加载中</vxe-button>
       <vxe-button>
         <template>下拉按钮</template>
@@ -82,6 +83,7 @@ export default {
           <vxe-button disabled>禁用</vxe-button>
           <vxe-button loading>加载中</vxe-button>
           <vxe-button type="primary">主要按钮</vxe-button>
+          <vxe-button type="primary" disabled>禁用</vxe-button>
           <vxe-button type="primary" loading>加载中</vxe-button>
           <vxe-button>
             <template>下拉按钮</template>
