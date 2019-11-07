@@ -55,7 +55,8 @@ export default {
         [
           {
             code: 'EXPORT_ALL',
-            name: '导出数据.csv',
+            name: '导出 HTML',
+            params: { type: 'html' },
             prefixIcon: 'fa fa-download'
           }
         ]
@@ -117,7 +118,8 @@ export default {
         [
           {
             code: 'EXPORT_ALL',
-            name: '导出数据.csv',
+            name: '导出 CSV',
+            params: { type: 'csv' },
             prefixIcon: 'fa fa-download'
           }
         ]
@@ -126,7 +128,8 @@ export default {
         [
           {
             code: 'EXPORT_ALL',
-            name: '导出数据.csv',
+            name: '导出 XML',
+            params: { type: 'xml' },
             prefixIcon: 'fa fa-download'
           }
         ]
@@ -175,7 +178,8 @@ export default {
                 [
                   {
                     code: 'EXPORT_ALL',
-                    name: '导出表格.csv',
+                    name: '导出 HTML',
+                    params: { type: 'html' },
                     prefixIcon: 'fa fa-download'
                   }
                 ]
@@ -237,7 +241,8 @@ export default {
                 [
                   {
                     code: 'EXPORT_ALL',
-                    name: '导出数据.csv',
+                    name: '导出 CSV',
+                    params: { type: 'csv' },
                     prefixIcon: 'fa fa-download'
                   }
                 ]
@@ -246,7 +251,8 @@ export default {
                 [
                   {
                     code: 'EXPORT_ALL',
-                    name: '导出表格.csv',
+                    name: '导出 XML',
+                    params: { type: 'xml' },
                     prefixIcon: 'fa fa-download'
                   }
                 ]

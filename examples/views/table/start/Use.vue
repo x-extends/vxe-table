@@ -38,7 +38,7 @@
     <pre>
       <code class="javascript">
         import Vue from 'vue'
-        import 'xe-utils'
+        import XEUtils from 'xe-utils'
         import {
           // 实例
           VXETable,
@@ -98,7 +98,7 @@
 
         // 按需加载的方式默认是不带国际化的，需要自行导入
         VXETable.setup({
-          i18n: (key, value) => VXETable.t(zhCNLocat, key)
+          i18n: (key, value) => XEUtils.get(zhCNLocat, key)
         })
       </code>
     </pre>

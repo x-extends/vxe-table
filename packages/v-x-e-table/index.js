@@ -1,9 +1,9 @@
-import XEUtils from 'xe-utils/methods/xe-utils'
 import Interceptor from './src/interceptor'
 import Renderer from './src/renderer'
 import Buttons from './src/buttons'
 import Menus from './src/menus'
 import Setup from './src/setup'
+import GlobalConfig from '../conf'
 import { UtilTools } from '../tools'
 
 const installedPlugins = []
@@ -29,9 +29,9 @@ function reg (key) {
 }
 
 export const VXETable = {
-  reg,
-  t: XEUtils.get,
+  t: key => GlobalConfig.i18n(key),
   v: 'v2',
+  reg,
   use,
   types: {},
   setup: Setup,

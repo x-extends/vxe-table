@@ -139,9 +139,9 @@ export interface VXETableStatic {
    */
   types: string[];
   /**
-   * 国际化翻译
+   * 读取内置国际化
    */
-  t(obj: object, key: string): string | number;
+  t(key: string): any;
   /**
    * 设置全局参数
    * @param options 参数

@@ -61,8 +61,8 @@ export default {
           {
             name: '数据导出',
             dropdowns: [
-              { code: 'imput', name: '导入.csv' },
-              { code: 'export_csv', name: '导出.csv' }
+              { code: 'open_import', name: '高级导入' },
+              { code: 'open_export', name: '高级导出' }
             ]
           },
           { code: 'exportData111', name: '自定义按钮' }
@@ -134,8 +134,8 @@ export default {
                   {
                     name: '数据导出',
                     dropdowns: [
-                      { code: 'imput', name: '导入.csv' },
-                      { code: 'export_csv', name: '导出.csv' }
+                      { code: 'open_import', name: '高级导入' },
+                      { code: 'open_export', name: '高级导出' }
                     ]
                   },
                   { code: 'myBtn', name: '自定义按钮' }

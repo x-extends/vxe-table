@@ -71,7 +71,7 @@ export default {
           { code: 'insert_actived', name: '新增' },
           { code: 'mark_cancel', name: '标记/取消' },
           { code: 'save', name: '保存' },
-          { code: 'export_csv', name: '导出.csv' }
+          { code: 'export', name: '导出.csv' }
         ],
         refresh: true,
         setting: true
@@ -114,7 +114,7 @@ export default {
           { code: 'insert_actived', name: '新增' },
           { code: 'mark_cancel', name: '标记/取消' },
           { code: 'save', name: '保存' },
-          { code: 'export_csv', name: '导出.csv' }
+          { code: 'export', name: '导出.csv' }
         ],
         refresh: true,
         setting: true
@@ -159,7 +159,7 @@ export default {
                   { code: 'insert_actived', name: '新增' },
                   { code: 'mark_cancel', name: '标记/取消' },
                   { code: 'save', name: '保存' },
-                  { code: 'export_csv', name: '导出.csv' }
+                  { code: 'export', name: '导出.csv' }
                 ],
                 refresh: true,
                 setting: true
@@ -228,7 +228,7 @@ export default {
                   { code: 'insert_actived', name: '新增' },
                   { code: 'mark_cancel', name: '标记/取消' },
                   { code: 'save', name: '保存' },
-                  { code: 'export_csv', name: '导出.csv' }
+                  { code: 'export', name: '导出.csv' }
                 ],
                 refresh: true,
                 setting: true
