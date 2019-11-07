@@ -170,6 +170,24 @@ export default {
           enum: '',
           defVal: '',
           list: []
+        },
+        {
+          name: 'event.import',
+          desc: '导入之前触发，允许返回 false 阻止默认行为',
+          version: '2.6.14',
+          type: 'Boolean',
+          enum: '',
+          defVal: '',
+          list: []
+        },
+        {
+          name: 'event.export',
+          desc: '导出之前触发，允许返回 false 阻止默认行为',
+          version: '2.6.14',
+          type: 'Boolean',
+          enum: '',
+          defVal: '',
+          list: []
         }
       ],
       demoCodes: [

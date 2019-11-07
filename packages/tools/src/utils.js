@@ -209,6 +209,13 @@ export const UtilTools = {
   },
   hasChildrenList (item) {
     return item && item.children && item.children.length > 0
+  },
+  parseFile (file) {
+    const name = file.name
+    const tIndex = XEUtils.lastIndexOf(name, '.')
+    const type = name.substring(tIndex + 1, name.length)
+    const filename = name.substring(0, tIndex)
+    return { filename, type }
   }
 }
 

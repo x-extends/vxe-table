@@ -105,6 +105,9 @@ export default {
           icon: 'vxe-icon--zoomout'
         },
         {
+          icon: 'vxe-icon--upload'
+        },
+        {
           icon: 'vxe-icon--download'
         }
       ],

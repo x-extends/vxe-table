@@ -1,4 +1,5 @@
 import XEUtils from 'xe-utils/methods/xe-utils'
+import toolbarAPI from './toolbar'
 
 const contextMenuApi = [
   {
@@ -2546,7 +2547,7 @@ const apis = [
       },
       {
         name: 'exportData(options)',
-        desc: '将表格数据导出为 csv/html 文件（不支持合并行或列）',
+        desc: '将表格数据导出（只支持基本数据结构）',
         version: '2.6.6',
         type: 'Promise',
         enum: '',
@@ -2582,6 +2583,15 @@ const apis = [
           {
             name: 'original',
             desc: '是否导出源数据（某些场景下支持 true， 比如虚拟滚动、优化的固定列..，如果需要支持导入，则必须设置为 true）',
+            version: '',
+            type: 'Boolean',
+            enum: '',
+            defVal: 'false',
+            list: []
+          },
+          {
+            name: 'message',
+            desc: '是否显示内置的消息提示',
             version: '',
             type: 'Boolean',
             enum: '',
@@ -2669,53 +2679,44 @@ const apis = [
         type: 'Promise',
         enum: '',
         defVal: 'options: object',
+        list: XEUtils.clone(toolbarAPI.find(item => item.name === 'Props').list.find(item => item.name === 'export').list, true)
+      },
+      {
+        name: 'importData(options)',
+        desc: '将数据导入表格（只支持基本数据结构）',
+        version: '2.6.14',
+        type: 'Promise',
+        enum: '',
+        defVal: 'options: object',
         list: [
           {
-            name: 'filename',
-            desc: '默认的文件名',
+            name: 'mode',
+            desc: '导入数据的方式（默认是覆盖式操作，需要注意的是任何动态数据都属于临时数据，不会同步 data）',
             version: '',
             type: 'String',
-            enum: '',
-            defVal: '',
+            enum: 'covering, append',
+            defVal: 'covering',
             list: []
           },
           {
-            name: 'sheetName',
-            desc: '默认的表名（只对支持的文档类型有效）',
-            version: '',
-            type: 'String',
-            enum: '',
-            defVal: '',
-            list: []
-          },
-          {
-            name: 'original',
-            desc: '默认是否导出源数据（如果需要支持导入，则必须设置为 true）',
+            name: 'message',
+            desc: '是否显示内置的消息提示',
             version: '',
             type: 'Boolean',
             enum: '',
-            defVal: 'true',
-            list: []
-          },
-          {
-            name: 'type',
-            desc: '默认选中的类型',
-            version: '',
-            type: 'String',
-            enum: '',
-            defVal: '默认选中 types 第一个值',
-            list: []
-          },
-          {
-            name: 'types',
-            desc: '支持导出的类型列表',
-            version: '',
-            type: 'Array',
-            enum: 'csv, html, xml, txt',
-            defVal: '',
+            defVal: 'false',
             list: []
           }
         ]
+      },
+      {
+        name: 'openImport(options)',
+        desc: '打开高级导入',
+        version: '2.6.14',
+        type: 'Promise',
+        enum: '',
+        defVal: 'options: object',
+        list: XEUtils.clone(toolbarAPI.find(item => item.name === 'Props').list.find(item => item.name === 'import').list, true)
       }
     ]
   }

@@ -89,12 +89,30 @@ const apis = [
         list: []
       },
       {
+        name: 'border',
+        descKey: 'app.api.pager.desc.border',
+        version: '2.6.14',
+        type: 'Boolean',
+        enum: '',
+        defVal: 'false',
+        list: []
+      },
+      {
         name: 'background',
         descKey: 'app.api.pager.desc.background',
         version: '',
         type: 'Boolean',
         enum: '',
         defVal: 'false',
+        list: []
+      },
+      {
+        name: 'perfect',
+        descKey: 'app.api.pager.desc.perfect',
+        version: '2.6.14',
+        type: 'Boolean',
+        enum: '',
+        defVal: 'true',
         list: []
       }
     ]

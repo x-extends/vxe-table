@@ -22,8 +22,12 @@ export default {
     pageSizes: { type: Array, default: () => GlobalConfig.pager.pageSizes || [10, 15, 20, 50, 100] },
     // 列对其方式
     align: String,
+    // 带边框
+    border: { type: Boolean, default: () => GlobalConfig.pager.border },
     // 带背景颜色
-    background: Boolean
+    background: { type: Boolean, default: () => GlobalConfig.pager.background },
+    // 默认的样式
+    perfect: { type: Boolean, default: () => GlobalConfig.pager.perfect }
   },
   inject: {
     $grid: {
@@ -62,12 +66,14 @@ export default {
     GlobalEvent.off(this, 'mousedown')
   },
   render (h) {
-    let { layouts, loading, vSize, align, background } = this
+    let { layouts, loading, vSize, align, border, background, perfect } = this
     return h('div', {
       class: ['vxe-pager', {
         [`size--${vSize}`]: vSize,
         [`align--${align}`]: align,
+        'p--border': border,
         'p--background': background,
+        'p--perfect': perfect,
         'is--loading': loading
       }]
     }, layouts.map(name => this[`render${name}`](h)))

@@ -1,6 +1,7 @@
 import XEUtils from 'xe-utils/methods/xe-utils'
-import { UtilTools, DomTools } from '../../tools'
+import GlobalConfig from '../../conf'
 import VXETable from '../../v-x-e-table'
+import { UtilTools, DomTools } from '../../tools'
 
 function getFileTypes () {
   return Object.keys(VXETable.types)
@@ -9,7 +10,7 @@ function getFileTypes () {
 function handleExport ($table, opts, oColumns, fullData) {
   const { columns, datas } = getExportData($table, opts, fullData, oColumns)
   return $table.preventEvent(null, 'event.export', { $table, options: opts, columns, datas }, () => {
-    return downloadFile(opts, getContent($table, opts, columns, datas))
+    return downloadFile($table, opts, getContent($table, opts, columns, datas))
   })
 }
 
@@ -54,7 +55,7 @@ function toCsv ($table, opts, columns, datas) {
     let footers = opts.footerFilterMethod ? footerData.filter(opts.footerFilterMethod) : footerData
     let filterMaps = $table.tableColumn.map(column => columns.includes(column))
     footers.forEach(rows => {
-      content += rows.filter((val, colIndex) => `"${filterMaps[colIndex]}"`).join(',') + '\n'
+      content += rows.map((val, colIndex) => `"${filterMaps[colIndex]}"`).join(',') + '\n'
     })
   }
   return content
@@ -83,7 +84,7 @@ function toTxt ($table, opts, columns, datas) {
     let footers = opts.footerFilterMethod ? footerData.filter(opts.footerFilterMethod) : footerData
     let filterMaps = $table.tableColumn.map(column => columns.includes(column))
     footers.forEach(rows => {
-      content += rows.filter((val, colIndex) => `${filterMaps[colIndex]}`).join('\t') + '\n'
+      content += rows.map((val, colIndex) => `${filterMaps[colIndex]}`).join('\t') + '\n'
     })
   }
   return content
@@ -127,7 +128,7 @@ function toHtml ($table, opts, columns, datas) {
     if (footers.length) {
       html += '<tfoot>'
       footers.forEach(rows => {
-        html += `<tr>${rows.filter((val, colIndex) => `<td>${filterMaps[colIndex]}</td>`).join('')}</tr>`
+        html += `<tr>${rows.map((val, colIndex) => `<td>${filterMaps[colIndex]}</td>`).join('')}</tr>`
       })
       html += '</tfoot>'
     }
@@ -179,14 +180,14 @@ function toXML ($table, opts, columns, datas) {
     let filterMaps = $table.tableColumn.map(column => columns.includes(column))
     if (footers.length) {
       footers.forEach(rows => {
-        xml += `<Row>${rows.filter((val, colIndex) => `<Cell><Data ss:Type="String">${filterMaps[colIndex]}</Data></Cell>`).join('')}</Row>`
+        xml += `<Row>${rows.map((val, colIndex) => `<Cell><Data ss:Type="String">${filterMaps[colIndex]}</Data></Cell>`).join('')}</Row>`
       })
     }
   }
   return `${xml}</Table></Worksheet></Workbook>`
 }
 
-function downloadFile (opts, content) {
+function downloadFile ($table, opts, content) {
   const { filename, type, download } = opts
   const name = `${filename}.${type}`
   if (!download) {
@@ -204,6 +205,9 @@ function downloadFile (opts, content) {
       document.body.appendChild(linkElem)
       linkElem.click()
       document.body.removeChild(linkElem)
+    }
+    if (opts.message) {
+      $table.$XModal.message({ message: GlobalConfig.i18n('vxe.table.expSuccess'), status: 'success' })
     }
   } else {
     UtilTools.error('vxe.error.notExp')
@@ -289,27 +293,27 @@ function parseTxt (columns, content) {
 function parseHTML (columns, content) {
   const domParser = new DOMParser()
   const xmlDoc = domParser.parseFromString(content, 'text/html')
-  const bodyNodes = xmlDoc.getElementsByTagName('body')
+  const bodyNodes = getElementsByTagName(xmlDoc, 'body')
   const fields = []
   const rows = []
   if (bodyNodes.length) {
-    const tableNodes = bodyNodes[0].getElementsByTagName('table')
+    const tableNodes = getElementsByTagName(bodyNodes[0], 'table')
     if (tableNodes.length) {
-      const theadNodes = tableNodes[0].getElementsByTagName('thead')
+      const theadNodes = getElementsByTagName(tableNodes[0], 'thead')
       if (theadNodes.length) {
-        XEUtils.arrayEach(theadNodes[0].getElementsByTagName('tr'), rowNode => {
-          XEUtils.arrayEach(rowNode.getElementsByTagName('th'), cellNode => {
+        XEUtils.arrayEach(getElementsByTagName(theadNodes[0], 'tr'), rowNode => {
+          XEUtils.arrayEach(getElementsByTagName(rowNode, 'th'), cellNode => {
             const field = cellNode.textContent
             if (field) {
               fields.push(field)
             }
           })
         })
-        const tbodyNodes = tableNodes[0].getElementsByTagName('tbody')
+        const tbodyNodes = getElementsByTagName(tableNodes[0], 'tbody')
         if (tbodyNodes.length) {
-          XEUtils.arrayEach(tbodyNodes[0].getElementsByTagName('tr'), rowNode => {
+          XEUtils.arrayEach(getElementsByTagName(tbodyNodes[0], 'tr'), rowNode => {
             const item = {}
-            XEUtils.arrayEach(rowNode.getElementsByTagName('td'), (cellNode, colIndex) => {
+            XEUtils.arrayEach(getElementsByTagName(rowNode, 'td'), (cellNode, colIndex) => {
               item[fields[colIndex]] = cellNode.textContent || ''
             })
             rows.push(item)
@@ -324,15 +328,15 @@ function parseHTML (columns, content) {
 function parseXML (columns, content) {
   const domParser = new DOMParser()
   const xmlDoc = domParser.parseFromString(content, 'application/xml')
-  const sheetNodes = xmlDoc.getElementsByTagName('Worksheet')
+  const sheetNodes = getElementsByTagName(xmlDoc, 'Worksheet')
   const fields = []
   const rows = []
   if (sheetNodes.length) {
-    const tableNodes = sheetNodes[0].getElementsByTagName('Table')
+    const tableNodes = getElementsByTagName(sheetNodes[0], 'Table')
     if (tableNodes.length) {
-      const rowNodes = tableNodes[0].getElementsByTagName('Row')
+      const rowNodes = getElementsByTagName(tableNodes[0], 'Row')
       if (rowNodes.length) {
-        XEUtils.arrayEach(rowNodes[0].getElementsByTagName('Cell'), cellNode => {
+        XEUtils.arrayEach(getElementsByTagName(rowNodes[0], 'Cell'), cellNode => {
           const field = cellNode.textContent
           if (field) {
             fields.push(field)
@@ -341,7 +345,7 @@ function parseXML (columns, content) {
         XEUtils.arrayEach(rowNodes, (rowNode, index) => {
           if (index) {
             const item = {}
-            const cellNodes = rowNode.getElementsByTagName('Cell')
+            const cellNodes = getElementsByTagName(rowNode, 'Cell')
             XEUtils.arrayEach(cellNodes, (cellNode, colIndex) => {
               item[fields[colIndex]] = cellNode.textContent
             })
@@ -352,6 +356,10 @@ function parseXML (columns, content) {
     }
   }
   return { fields, rows }
+}
+
+function getElementsByTagName (elem, qualifiedName) {
+  return elem.getElementsByTagName(qualifiedName)
 }
 
 /**
@@ -371,7 +379,7 @@ function checkImportData (columns, fields, rows) {
 }
 
 function handleImport ($table, content, opts) {
-  const { tableFullColumn, importCallback } = $table
+  const { tableFullColumn, _importCallback } = $table
   let rest = { fields: [], rows: [] }
   switch (opts.type) {
     case 'csv':
@@ -391,12 +399,21 @@ function handleImport ($table, content, opts) {
   const status = checkImportData(tableFullColumn, fields, rows)
   if (status) {
     $table.createData(rows)
-      .then(data => $table.reloadData(data))
-  } else if (!importCallback) {
-    UtilTools.error('vxe.error.impFields')
+      .then(data => {
+        if (opts.mode === 'append') {
+          $table.insertAt(data, -1)
+        } else {
+          $table.reloadData(data)
+        }
+      })
+    if (opts.message) {
+      $table.$XModal.message({ message: GlobalConfig.i18n('vxe.table.impSuccess'), status: 'success' })
+    }
+  } else if (opts.message) {
+    $table.$XModal.message({ message: GlobalConfig.i18n('vxe.error.impFields'), status: 'error' })
   }
-  if (importCallback) {
-    importCallback(status)
+  if (_importCallback) {
+    _importCallback(status)
   }
 }
 
@@ -408,11 +425,10 @@ export default {
       return this.exportData(options)
     },
     _openExport (options) {
-      const $toolbar = this.$toolbar
-      if ($toolbar) {
-        return $toolbar.openExport(options)
+      if (this.$toolbar) {
+        return this.$toolbar.openExport(options)
       }
-      return this.exportData()
+      throw new Error(UtilTools.getLog('vxe.error.barUnableLink'))
     },
     /**
      * 导出文件，支持 csv/html/xml
@@ -427,6 +443,7 @@ export default {
         filename: '',
         sheetName: '',
         original: !!treeConfig,
+        message: false,
         isHeader: true,
         isFooter: true,
         download: true,
@@ -463,23 +480,18 @@ export default {
       }
       return handleExport(this, opts, columns, fullData)
     },
-    _importData (callback) {
-      const { impForm, impInput } = this.$refs
-      impInput.accept = `.${getFileTypes().join(', .')}`
-      impForm.reset()
-      impInput.click()
-      this.importCallback = callback
+    _openImport (options) {
+      if (this.$toolbar) {
+        return this.$toolbar.openImport(options)
+      }
+      throw new Error(UtilTools.getLog('vxe.error.barUnableLink'))
     },
-    fileChangeEvent (evnt) {
+    _importByFile (file, opts) {
       if (window.FileReader) {
-        const file = evnt.target.files[0]
-        const name = file.name
-        const tIndex = XEUtils.lastIndexOf(name, '.')
-        const type = name.substring(tIndex + 1, name.length)
-        const filename = name.substring(0, tIndex)
-        const options = { filename, type }
+        const { type, filename } = UtilTools.parseFile(file)
+        const options = Object.assign({ mode: 'covering' }, opts, { type, filename })
         if (getFileTypes().includes(type)) {
-          this.preventEvent(evnt, 'event.import', { $table: this, options, columns: this.tableFullColumn }, () => {
+          this.preventEvent(null, 'event.import', { $table: this, file, options, columns: this.tableFullColumn }, () => {
             const reader = new FileReader()
             reader.onerror = e => {
               UtilTools.error('vxe.error.notType', [type])
@@ -495,6 +507,26 @@ export default {
       } else {
         UtilTools.error('vxe.error.notExp')
       }
+    },
+    _importData (options) {
+      this.readFile()
+        .then(evnt => this.importByFile(evnt.target.files[0], options))
+      return new Promise(resolve => {
+        this._importCallback = resolve
+      })
+    },
+    _readFile () {
+      const { impForm, impInput } = this.$refs
+      impInput.accept = `.${getFileTypes().join(', .')}`
+      impForm.reset()
+      impInput.click()
+      return new Promise(resolve => {
+        this._fileCallback = resolve
+      })
+    },
+    fileChangeEvent (evnt) {
+      this._fileCallback(evnt)
+      this._fileCallback = null
     }
   }
 }

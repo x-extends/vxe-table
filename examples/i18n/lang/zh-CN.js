@@ -386,8 +386,9 @@ module.exports = {
           id: '唯一 ID 标识',
           size: '尺寸',
           loading: '是否加载中',
+          import: '导入按钮配置',
           export: '导出按钮配置',
-          refresh: '刷新按钮',
+          refresh: '刷新按钮配置',
           resizable: '列宽拖动配置（需要设置 id）',
           setting: '列个性化配置（需要设置 id）'
         }
@@ -403,7 +404,9 @@ module.exports = {
           pagerCount: '显示页码按钮的数量',
           pageSizes: '每页大小选项列表',
           align: '对齐方式',
-          background: '带背景颜色'
+          border: '带边框',
+          background: '带背景颜色',
+          perfect: '默认的样式'
         }
       },
       radio: {

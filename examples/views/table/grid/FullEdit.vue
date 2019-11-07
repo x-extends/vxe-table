@@ -92,14 +92,20 @@ export default {
             ]
           },
           {
-            name: '导入/导出',
+            name: '导入/导出1',
             dropdowns: [
-              { code: 'import', name: '导入数据', disabled: false },
-              { code: 'export', name: '导出数据', disabled: false },
-              { code: 'export_csv', name: '直接导出.csv', disabled: false },
-              { code: 'export_xml', name: '直接导出.xml', disabled: false },
-              { code: 'export_html', name: '直接导出.html', disabled: false },
-              { code: 'export_txt', name: '直接导出.txt', disabled: false }
+              { code: 'import', name: '直接导入', disabled: false },
+              { code: 'export', name: '直接导出 CSV', params: { type: 'csv' }, disabled: false },
+              { code: 'export', name: '直接导出 XML', params: { type: 'xml' }, disabled: false },
+              { code: 'export', name: '直接导出 HTML', params: { type: 'html' }, disabled: false },
+              { code: 'export', name: '直接导出 TXT', params: { type: 'txt' }, disabled: false }
+            ]
+          },
+          {
+            name: '导入/导出2',
+            dropdowns: [
+              { code: 'open_import', name: '高级导入', disabled: false },
+              { code: 'open_export', name: '高级导出', disabled: false }
             ]
           },
           { code: 'other0', name: '禁用的按钮1', disabled: true },
@@ -126,6 +132,7 @@ export default {
           }
         ],
         refresh: true,
+        import: true,
         export: true,
         resizable: {
           storage: true
@@ -232,14 +239,20 @@ export default {
                     ]
                   },
                   {
-                    name: '导入/导出',
+                    name: '导入/导出1',
                     dropdowns: [
-                      { code: 'import', name: '导入数据', disabled: false },
-                      { code: 'export', name: '导出数据', disabled: false },
-                      { code: 'export_csv', name: '直接导出.csv', disabled: false },
-                      { code: 'export_xml', name: '直接导出.xml', disabled: false },
-                      { code: 'export_html', name: '直接导出.html', disabled: false },
-                      { code: 'export_txt', name: '直接导出.txt', disabled: false }
+                      { code: 'import', name: '直接导入', disabled: false },
+                      { code: 'export', name: '直接导出 CSV', params: { type: 'csv' }, disabled: false },
+                      { code: 'export', name: '直接导出 XML', params: { type: 'xml' }, disabled: false },
+                      { code: 'export', name: '直接导出 HTML', params: { type: 'html' }, disabled: false },
+                      { code: 'export', name: '直接导出 TXT', params: { type: 'txt' }, disabled: false }
+                    ]
+                  },
+                  {
+                    name: '导入/导出2',
+                    dropdowns: [
+                      { code: 'open_import', name: '高级导入', disabled: false },
+                      { code: 'open_export', name: '高级导出', disabled: false }
                     ]
                   },
                   { code: 'other0', name: '禁用的按钮1', disabled: true },
@@ -266,6 +279,7 @@ export default {
                   }
                 ],
                 refresh: true,
+                import: true,
                 export: true,
                 resizable: {
                   storage: true

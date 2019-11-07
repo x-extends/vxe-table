@@ -28,7 +28,20 @@
       background-color: $vxe-loading-background-color;
     }
   }
-  &.p--background {
+  &.p--border,
+  &.p--perfect {
+    &:not(.p--background) {
+      .vxe-pager--prev-btn,
+      .vxe-pager--next-btn,
+      .vxe-pager--num-btn,
+      .vxe-pager--jump-prev,
+      .vxe-pager--jump-next {
+        border: 1px solid $vxe-input-border-color;
+      }
+    }
+  }
+  &.p--background,
+  &.p--perfect {
     .vxe-pager--prev-btn,
     .vxe-pager--next-btn {
       background-color: #f4f4f5;
@@ -46,6 +59,18 @@
         color: #fff;
         background-color: $vxe-primary-color;
       }
+    }
+  }
+  &.p--perfect {
+    border: 1px solid $vxe-table-border-color;
+    border-top-width: 0;
+    background-color: $vxe-table-header-background-color;
+    .vxe-pager--prev-btn,
+    .vxe-pager--next-btn,
+    .vxe-pager--jump-prev,
+    .vxe-pager--num-btn,
+    .vxe-pager--jump-next {
+      background-color: #fff;
     }
   }
   &.size--medium {
@@ -230,6 +255,7 @@
   .vxe-pager--next-btn,
   .vxe-pager--jump-next {
     font-size: 20px;
+    padding: 0 4px;
   }
   .vxe-pager--num-btn {
     min-width: 30px;

@@ -56,6 +56,10 @@
     &:focus {
       border: 1px solid $vxe-primary-color;
     }
+    &[disabled] {
+      cursor: not-allowed;
+      background-color: #f3f3f3;
+    }
   }
   .vxe-default-input {
     &::-webkit-inner-spin-button {

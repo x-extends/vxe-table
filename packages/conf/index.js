@@ -48,6 +48,7 @@ const GlobalConfig = {
     edit: 'vxe-icon--edit-outline',
     tree: 'vxe-icon--caret-right',
     refresh: 'vxe-icon--refresh',
+    import: 'vxe-icon--upload',
     export: 'vxe-icon--download',
     custom: 'vxe-icon--menu',
     jumpPrev: 'vxe-icon--d-arrow-left',
@@ -75,15 +76,19 @@ const GlobalConfig = {
     leaveDelay: 300
   },
   pager: {
+    perfect: true
     // pageSize: 10,
     // pagerCount: 7,
     // pageSizes: [10, 15, 20, 50, 100],
     // layouts: ['PrevJump', 'PrevPage', 'Jump', 'PageCount', 'NextPage', 'NextJump', 'Sizes', 'Total']
   },
   toolbar: {
+    // import: {
+    //   mode: 'covering'
+    // },
     // export: {
     //   types: ['csv', 'html', 'xml', 'txt']
-    // }
+    // },
     // resizable: {
     //   storage: false
     // },

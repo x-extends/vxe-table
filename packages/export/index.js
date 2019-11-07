@@ -1,6 +1,7 @@
 import Table from '../table'
 import VXETable from '../v-x-e-table'
-import Panel from './src/panel'
+import ExportPanel from './src/export-panel'
+import ImportPanel from './src/import-panel'
 import mixin from './src/mixin'
 
 export const Export = {
@@ -8,7 +9,8 @@ export const Export = {
     VXETable.reg('export')
     Object.assign(VXETable.types, { csv: 1, html: 1, xml: 1, txt: 1 })
     Table.mixins.push(mixin)
-    Vue.component(Panel.name, Panel)
+    Vue.component(ExportPanel.name, ExportPanel)
+    Vue.component(ImportPanel.name, ImportPanel)
   }
 }
 

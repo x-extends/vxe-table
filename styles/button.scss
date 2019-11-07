@@ -73,12 +73,12 @@
     border-radius: 4px;
     &.theme--primary {
       color: #fff;
-      border-color: $vxe-primary-color;
-      background-color: $vxe-primary-color;
       .vxe-button--icon {
         border-color: #fff;
       }
       &:not(.is--disabled) {
+        border-color: $vxe-primary-color;
+        background-color: $vxe-primary-color;
         &:hover {
           @extend %ButtonPrimaryHover;
         }
@@ -87,6 +87,14 @@
           background-color: darken($vxe-primary-color, 2%);
           border-color: darken($vxe-primary-color, 2%);
         }
+      }
+      &.is--disabled {
+        border-color: #a0cfff;
+        background-color: #a0cfff;
+      }
+      &.is--loading {
+        border-color: $vxe-primary-color;
+        background-color: $vxe-primary-color;
       }
     }
     &:not(.theme--primary) {

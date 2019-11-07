@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2>分页</h2>
-    <p class="tip">查看 <router-link class="link" :to="{name: 'VXEAPI', params: {name: 'pager'}}">API</router-link></p>
+    <p class="tip">查看 <router-link class="link" :to="{name: 'VXEAPI', params: {name: 'pager'}}">API</router-link>，建议通过 <router-link :to="{name: 'StartGlobal'}">setup</router-link> 设置全局样式</p>
 
     <vxe-pager
       align="left"
@@ -27,9 +27,26 @@
     </vxe-pager>
 
     <vxe-pager
+      border
       :current-page.sync="page4.currentPage"
       :page-size.sync="page4.pageSize"
       :total="page4.totalResult"
+      :layouts="['PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
+    </vxe-pager>
+
+    <vxe-pager
+      background
+      :current-page.sync="page5.currentPage"
+      :page-size.sync="page5.pageSize"
+      :total="page5.totalResult"
+      :layouts="['PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
+    </vxe-pager>
+
+    <vxe-pager
+      perfect
+      :current-page.sync="page6.currentPage"
+      :page-size.sync="page6.pageSize"
+      :total="page6.totalResult"
       :layouts="['PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
     </vxe-pager>
 
@@ -68,6 +85,16 @@ export default {
         pageSize: 10,
         totalResult: 300
       },
+      page5: {
+        currentPage: 1,
+        pageSize: 10,
+        totalResult: 300
+      },
+      page6: {
+        currentPage: 1,
+        pageSize: 10,
+        totalResult: 300
+      },
       value2: '',
       demoCodes: [
         `
@@ -95,9 +122,26 @@ export default {
         </vxe-pager>
 
         <vxe-pager
+          border
           :current-page.sync="page4.currentPage"
           :page-size.sync="page4.pageSize"
           :total="page4.totalResult"
+          :layouts="['PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
+        </vxe-pager>
+
+        <vxe-pager
+          background
+          :current-page.sync="page5.currentPage"
+          :page-size.sync="page5.pageSize"
+          :total="page5.totalResult"
+          :layouts="['PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
+        </vxe-pager>
+
+        <vxe-pager
+          perfect
+          :current-page.sync="page6.currentPage"
+          :page-size.sync="page6.pageSize"
+          :total="page6.totalResult"
           :layouts="['PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
         </vxe-pager>
         `,
@@ -121,6 +165,16 @@ export default {
                 totalResult: 200
               },
               page4: {
+                currentPage: 1,
+                pageSize: 10,
+                totalResult: 300
+              },
+              page5: {
+                currentPage: 1,
+                pageSize: 10,
+                totalResult: 300
+              },
+              page6: {
                 currentPage: 1,
                 pageSize: 10,
                 totalResult: 300
