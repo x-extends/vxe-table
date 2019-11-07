@@ -72,7 +72,7 @@ const GlobalConfig = {
     theme: 'dark'
   },
   pager: {
-    perfect: true
+    // perfect: true,
     // pageSize: 10,
     // pagerCount: 7,
     // pageSizes: [10, 15, 20, 50, 100],
