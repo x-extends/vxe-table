@@ -12,11 +12,11 @@
 [![pull requests closed](https://img.shields.io/github/issues-pr-closed/xuliangzhan/vxe-table.svg)](https://github.com/xuliangzhan/vxe-table/pulls?q=is%3Apr+is%3Aclosed)
 [![npm license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/xuliangzhan/vxe-table/blob/master/LICENSE)
 
-一个简单实用的 Vue 表格组件，与任意组件库兼容。
+一个另类的 Vue 表格解决方案
 
 * 设计理念
-  * 精简的 API（简洁、高效）
-  * 模块化表格、插件化扩展（功能模块解耦，支持按需加载）
+  * 面向现代浏览器（简洁、高效的 API 设计）
+  * 模块化表格、插件化扩展（功能模块解耦，支持按需加载、与任意组件库兼容）
   * 强大的功能的同时兼具性能（支持横向、纵向虚拟滚动、灵活的配置项、不污染全局样式及变量）
 
 * 计划

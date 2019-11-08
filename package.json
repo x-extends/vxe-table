@@ -1,7 +1,7 @@
 {
   "name": "vxe-table",
   "version": "1.15.12",
-  "description": "一个简单实用的 Vue 表格组件",
+  "description": "一个另类的 Vue 表格解决方案",
   "scripts": {
     "serve": "vue-cli-service serve",
     "lint": "vue-cli-service lint",
