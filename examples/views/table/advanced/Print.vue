@@ -5,6 +5,7 @@
     <vxe-toolbar>
       <template v-slot:buttons>
         <vxe-button @click="printEvent">打印</vxe-button>
+        <vxe-button @click="exportDataEvent">导出与打印</vxe-button>
       </template>
     </vxe-toolbar>
 
@@ -38,12 +39,22 @@ export default {
       tableData: [],
       demoCodes: [
         `
+        <vxe-toolbar>
+          <template v-slot:buttons>
+            <vxe-button @click="printEvent">打印</vxe-button>
+            <vxe-button @click="exportDataEvent">导出与打印</vxe-button>
+          </template>
+        </vxe-toolbar>
+
         <vxe-table
+          ref="xTable"
+          height="500"
           :data="tableData">
           <vxe-table-column type="index" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
-          <vxe-table-column field="sex" title="app.body.label.sex"></vxe-table-column>
-          <vxe-table-column field="age" title="app.body.label.age"></vxe-table-column>
+          <vxe-table-column field="name" title="Name"></vxe-table-column>
+          <vxe-table-column field="role" title="Role"></vxe-table-column>
+          <vxe-table-column field="age" title="Age"></vxe-table-column>
+          <vxe-table-column field="date12" title="Date"></vxe-table-column>
         </vxe-table>
         `,
         `
@@ -55,6 +66,14 @@ export default {
           },
           created () {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 20)
+          },
+          methods: {
+            printEvent () {
+              this.$refs.xTable.print()
+            },
+            exportDataEvent () {
+              this.$refs.xTable.openExport()
+            }
           }
         }
         `
@@ -72,6 +91,9 @@ export default {
   methods: {
     printEvent () {
       this.$refs.xTable.print()
+    },
+    exportDataEvent () {
+      this.$refs.xTable.openExport()
     }
   }
 }
