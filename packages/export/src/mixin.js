@@ -3,6 +3,26 @@ import GlobalConfig from '../../conf'
 import VXETable from '../../v-x-e-table'
 import { UtilTools, DomTools } from '../../tools'
 
+// 默认导出或打印的 HTML 样式
+const defaultHtmlStyle = 'body{margin:0;font-size:14px}table{text-align:center;border-width:1px 0 0 1px}table,th,td{border-style:solid;border-color:#e8eaec}thead,tfoot{background-color:#f8f8f9}th,td{padding:6px 0;border-width:0 1px 1px 0}'
+
+// 导入
+const impForm = document.createElement('form')
+const impInput = document.createElement('input')
+impForm.className = 'vxe-table--import-form'
+impInput.name = 'file'
+impInput.type = 'file'
+impForm.appendChild(impInput)
+
+// 打印
+var printFrame
+
+function createFrame () {
+  const frame = document.createElement('iframe')
+  frame.className = 'vxe-table--print-frame'
+  return frame
+}
+
 function getFileTypes () {
   return Object.keys(VXETable.types)
 }
@@ -29,7 +49,7 @@ function getContent ($table, opts, columns, datas) {
 }
 
 function getHeaderTitle (opts, column) {
-  return opts.original ? column.property : column.getTitle()
+  return (opts.original ? column.property : column.getTitle()) || ''
 }
 
 function toCsv ($table, opts, columns, datas) {
@@ -91,9 +111,11 @@ function toTxt ($table, opts, columns, datas) {
 function toHtml ($table, opts, columns, datas) {
   const isOriginal = opts.original
   let html = [
-    '<!DOCTYPE html>',
     '<html>',
-    `<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,minimal-ui"><title>${opts.sheetName}</title></head>`,
+    `<head>`,
+    `<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,minimal-ui"><title>${opts.sheetName}</title>`,
+    `<style>${opts.style || defaultHtmlStyle}</style>`,
+    '</head>',
     '<body>',
     '<table border="1" cellspacing="0" cellpadding="0">',
     `<colgroup>${columns.map(column => `<col width="${column.renderWidth}">`).join('')}</colgroup>`
@@ -184,11 +206,11 @@ function toXML ($table, opts, columns, datas) {
 function downloadFile ($table, opts, content) {
   const { filename, type, download } = opts
   const name = `${filename}.${type}`
-  if (!download) {
-    return Promise.resolve(content)
-  }
   if (window.Blob) {
     const blob = new Blob([content], { type: `text/${type}` })
+    if (!download) {
+      return Promise.resolve({ type, content, blob })
+    }
     if (navigator.msSaveBlob) {
       navigator.msSaveBlob(blob, name)
     } else {
@@ -200,7 +222,7 @@ function downloadFile ($table, opts, content) {
       linkElem.click()
       document.body.removeChild(linkElem)
     }
-    if (opts.message) {
+    if (opts.message !== false) {
       $table.$XModal.message({ message: GlobalConfig.i18n('vxe.table.expSuccess'), status: 'success' })
     }
   } else {
@@ -400,10 +422,10 @@ function handleImport ($table, content, opts) {
           $table.reloadData(data)
         }
       })
-    if (opts.message) {
+    if (opts.message !== false) {
       $table.$XModal.message({ message: GlobalConfig.i18n('vxe.table.impSuccess'), status: 'success' })
     }
-  } else if (opts.message) {
+  } else if (opts.message !== false) {
     $table.$XModal.message({ message: GlobalConfig.i18n('vxe.error.impFields'), status: 'error' })
   }
   if (_importCallback) {
@@ -510,17 +532,52 @@ export default {
       })
     },
     _readFile () {
-      const { impForm, impInput } = this.$refs
+      if (!impForm.parentNode) {
+        document.body.appendChild(impForm)
+      }
       impInput.accept = `.${getFileTypes().join(', .')}`
+      impInput.onchange = evnt => {
+        this._fileCallback(evnt)
+        this._fileCallback = null
+      }
       impForm.reset()
       impInput.click()
       return new Promise(resolve => {
         this._fileCallback = resolve
       })
     },
-    fileChangeEvent (evnt) {
-      this._fileCallback(evnt)
-      this._fileCallback = null
+    _print (options) {
+      this.exportData(Object.assign({
+        original: this.scrollXLoad || this.scrollYLoad
+      }, options, {
+        type: 'html',
+        download: false
+      })).then(({ content, blob }) => {
+        if (DomTools.browse.msie) {
+          if (printFrame) {
+            try {
+              printFrame.contentDocument.write('')
+              printFrame.contentDocument.clear()
+            } catch (e) {}
+            document.body.removeChild(printFrame)
+          }
+          printFrame = createFrame()
+          document.body.appendChild(printFrame)
+          printFrame.contentDocument.write(content)
+          printFrame.contentDocument.execCommand('print')
+        } else {
+          if (!printFrame) {
+            printFrame = createFrame()
+            printFrame.onload = evnt => {
+              if (evnt.target.src) {
+                evnt.target.contentWindow.print()
+              }
+            }
+            document.body.appendChild(printFrame)
+          }
+          printFrame.src = URL.createObjectURL(blob)
+        }
+      })
     }
   }
 }

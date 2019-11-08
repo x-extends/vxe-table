@@ -204,7 +204,7 @@ const renderMap = {
           attrs,
           on: getFilterEvents(item, renderOpts, params, context)
         },
-        renderOpts.optionGroups ? renderOptgroups(h, renderOpts, params) : renderOptions(h, renderOpts.options, renderOpts, params))
+        renderOpts.optionGroups ? renderOptgroups(h, renderOpts, params) : renderOptions(h, renderOpts.options, renderOpts, params, context))
       })
     },
     filterMethod: defaultFilterMethod

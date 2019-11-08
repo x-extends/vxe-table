@@ -174,7 +174,8 @@ export const DomTools = {
   },
   getCell ($table, { row, column }) {
     let rowid = UtilTools.getRowid($table, row)
-    return ($table.$refs[`${column.fixed || 'table'}Body`]).$el.querySelector(`.vxe-body--row[data-rowid="${rowid}"] .${column.id}`)
+    let bodyElem = $table.$refs[`${column.fixed || 'table'}Body`]
+    return (bodyElem || $table.$refs.tableBody).$el.querySelector(`.vxe-body--row[data-rowid="${rowid}"] .${column.id}`)
   },
   toView (elem) {
     let scrollIntoViewIfNeeded = 'scrollIntoViewIfNeeded'

@@ -203,6 +203,11 @@ export default {
           class: 'vxe-export--panel-btns'
         }, [
           h('vxe-button', {
+            on: {
+              click: this.printEvent
+            }
+          }, GlobalConfig.i18n('vxe.toolbar.expPrint')),
+          h('vxe-button', {
             props: {
               type: 'primary'
             },
@@ -220,7 +225,7 @@ export default {
         this.$refs.filename.focus()
       })
     },
-    exportEvent () {
+    getExportOptions () {
       const { storeData, defaultOptions } = this
       const opts = Object.assign({
         columns: storeData.columns.filter(column => column.checked)
@@ -228,8 +233,15 @@ export default {
       if (storeData.mode === 'selected') {
         opts.data = storeData.selectRecords
       }
-      storeData.visible = false
-      this.$emit('export', opts)
+      return opts
+    },
+    printEvent () {
+      this.storeData.visible = false
+      this.$emit('print', this.getExportOptions())
+    },
+    exportEvent () {
+      this.storeData.visible = false
+      this.$emit('export', this.getExportOptions())
     }
   }
 }

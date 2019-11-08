@@ -304,7 +304,8 @@ export default {
         content: '',
         rule: null,
         isArrow: false
-      }
+      },
+      printUrl: ''
     }
   },
   computed: {
@@ -733,22 +734,6 @@ export default {
         class: `vxe-table${id}-wrapper ${this.$vnode.data.staticClass || ''}`,
         ref: 'tableWrapper'
       }, [
-        // 使用导出模块
-        VXETable._export ? h('form', {
-          class: 'vxe-table--import-form',
-          ref: 'impForm'
-        }, [
-          h('input', {
-            ref: 'impInput',
-            attrs: {
-              type: 'file',
-              name: 'file'
-            },
-            on: {
-              change: this.fileChangeEvent
-            }
-          })
-        ]) : _e(),
         /**
          * 筛选
          */

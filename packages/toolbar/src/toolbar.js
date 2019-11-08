@@ -253,6 +253,7 @@ export default {
           typeList: exportOpts.types
         },
         on: {
+          print: this.confirmPrintEvent,
           export: this.confirmExportEvent
         }
       }) : _e(),
@@ -521,10 +522,11 @@ export default {
       })
       return this.$nextTick()
     },
+    confirmPrintEvent (options) {
+      (this.$grid || this.$table).print(options)
+    },
     confirmExportEvent (options) {
-      const { $grid, $table } = this
-      const comp = $grid || $table
-      comp.exportData(options)
+      (this.$grid || this.$table).exportData(options)
     }
   }
 }

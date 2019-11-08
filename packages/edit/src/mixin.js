@@ -430,8 +430,7 @@ export default {
       }
     },
     reColSdCls () {
-      let bodyElem = this.elemStore['main-body-list']
-      let cell = bodyElem.querySelector('.col--selected')
+      let cell = this.$el.querySelector('.col--selected')
       if (cell) {
         DomTools.removeClass(cell, 'col--selected')
       }
@@ -439,6 +438,7 @@ export default {
     addColSdCls () {
       let { selected } = this.editStore
       let { row, column } = selected
+      this.reColSdCls()
       if (row && column) {
         let cell = DomTools.getCell(this, { row, column })
         if (cell) {

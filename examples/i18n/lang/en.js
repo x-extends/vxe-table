@@ -49,6 +49,7 @@ module.exports = {
         footerSpan: 'Footer rowspan and colspan',
         import: 'Import data',
         export: 'Export data',
+        print: 'Print',
         contextMenu: 'Context menu',
         menuPrivilege: 'Context menu + permission',
         footerImmediately: 'Footer summary + immediately',
