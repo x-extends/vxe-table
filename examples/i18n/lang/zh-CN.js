@@ -48,6 +48,7 @@ module.exports = {
         footerSpan: '表尾合并行或列',
         import: '导入数据',
         export: '导出数据',
+        print: '打印',
         exportXML: '导出 XML',
         contextMenu: '快捷菜单',
         menuPrivilege: '快捷菜单 + 权限控制',

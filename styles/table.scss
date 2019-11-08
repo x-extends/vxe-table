@@ -24,6 +24,20 @@
   height: $vxe-table-row-height-mini;
 }
 
+.vxe-table-hidden-column,
+.vxe-table--import-form {
+  display: none;
+}
+
+.vxe-table--print-frame {
+  position: fixed;
+  bottom: -100%;
+  left: -100%;
+  height: 0;
+  width: 0;
+  border: 0;
+}
+
 /*默认的渲染*/
 .vxe-table,
 .vxe-table--filter-wrapper {

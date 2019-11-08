@@ -84,6 +84,7 @@ export default {
       expOptHeader: 'Header',
       expOptFooter: 'Footer',
       expOptOriginal: 'Original(import support)',
+      expPrint: 'Print',
       expConfirm: 'Click export'
     }
   }

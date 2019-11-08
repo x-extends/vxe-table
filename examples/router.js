@@ -52,6 +52,7 @@ const TableFooter = () => import(/* webpackChunkName: "advanced" */ './views/tab
 const TableFooterSpan = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/FooterSpan.vue')
 const TableImport = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Import.vue')
 const TableExport = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Export.vue')
+const TablePrint = () => import(/* webpackChunkName: "other" */ './views/table/advanced/Print.vue')
 const TableMenu = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Menu.vue')
 const TableMenuPrivilege = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/MenuPrivilege.vue')
 const TableExpand = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Expand.vue')
@@ -437,6 +438,11 @@ export default new Router({
       path: '/table/advanced/export',
       name: 'TableExport',
       component: TableExport
+    },
+    {
+      path: '/table/advanced/print',
+      name: 'TablePrint',
+      component: TablePrint
     },
     {
       path: '/table/advanced/menu',

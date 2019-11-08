@@ -84,6 +84,7 @@ export default {
       expOptHeader: '錶頭',
       expOptFooter: '錶尾',
       expOptOriginal: '源(支持導入)',
+      expPrint: '列印',
       expConfirm: '點擊匯出'
     }
   }

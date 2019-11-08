@@ -84,6 +84,7 @@ export default {
       expOptHeader: '表头',
       expOptFooter: '表尾',
       expOptOriginal: '源(支持导入)',
+      expPrint: '打印',
       expConfirm: '点击导出'
     }
   }

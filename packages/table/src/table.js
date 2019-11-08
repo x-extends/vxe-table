@@ -8,6 +8,23 @@ var rowUniqueId = 0
 var browse = DomTools.browse
 var debounceScrollYDuration = browse.msie ? 40 : 20
 
+// 导入
+const impForm = document.createElement('form')
+const impInput = document.createElement('input')
+impForm.className = 'vxe-table--import-form'
+impInput.name = 'file'
+impInput.type = 'file'
+impForm.appendChild(impInput)
+
+// 打印
+var printFrame
+
+function createFrame () {
+  const frame = document.createElement('iframe')
+  frame.className = 'vxe-table--print-frame'
+  return frame
+}
+
 function getRowUniqueId () {
   return `row_${++rowUniqueId}`
 }
@@ -837,22 +854,6 @@ export default {
         class: `vxe-table${id}-wrapper ${this.$vnode.data.staticClass || ''}`,
         ref: 'tableWrapper'
       }, [
-        // 使用导出模块
-        VXETable._export ? h('form', {
-          class: 'vxe-table--import-form',
-          ref: 'impForm'
-        }, [
-          h('input', {
-            ref: 'impInput',
-            attrs: {
-              type: 'file',
-              name: 'file'
-            },
-            on: {
-              change: this.fileChangeEvent
-            }
-          })
-        ]) : _e(),
         /**
          * 筛选
          */
@@ -4436,17 +4437,52 @@ export default {
       })
     },
     readFile () {
-      const { impForm, impInput } = this.$refs
+      if (!impForm.parentNode) {
+        document.body.appendChild(impForm)
+      }
       impInput.accept = `.${getFileTypes().join(', .')}`
+      impInput.onchange = evnt => {
+        this._fileCallback(evnt)
+        this._fileCallback = null
+      }
       impForm.reset()
       impInput.click()
       return new Promise(resolve => {
         this._fileCallback = resolve
       })
     },
-    fileChangeEvent (evnt) {
-      this._fileCallback(evnt)
-      this._fileCallback = null
+    print (options) {
+      this.exportData(Object.assign({
+        original: this.scrollXLoad || this.scrollYLoad
+      }, options, {
+        type: 'html',
+        download: false
+      })).then(({ content, blob }) => {
+        if (DomTools.browse.msie) {
+          if (printFrame) {
+            try {
+              printFrame.contentDocument.write('')
+              printFrame.contentDocument.clear()
+            } catch (e) {}
+            document.body.removeChild(printFrame)
+          }
+          printFrame = createFrame()
+          document.body.appendChild(printFrame)
+          printFrame.contentDocument.write(content)
+          printFrame.contentDocument.execCommand('print')
+        } else {
+          if (!printFrame) {
+            printFrame = createFrame()
+            printFrame.onload = evnt => {
+              if (evnt.target.src) {
+                evnt.target.contentWindow.print()
+              }
+            }
+            document.body.appendChild(printFrame)
+          }
+          printFrame.src = URL.createObjectURL(blob)
+        }
+      })
     },
     updateZindex () {
       if (this.tZindex < UtilTools.getLastZIndex()) {

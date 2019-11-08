@@ -144,8 +144,9 @@ export const DomTools = {
     return { rowid, rowIndex, columnIndex }
   },
   getCell ($table, { row, rowIndex, column }) {
-    let rowid = UtilTools.getRowid($table, row, rowIndex)
-    return ($table.$refs[`${column.fixed || 'table'}Body`]).$el.querySelector(`.vxe-body--row[data-rowid="${rowid}"] .${column.id}`)
+    let rowid = UtilTools.getRowid($table, row)
+    let bodyElem = $table.$refs[`${column.fixed || 'table'}Body`]
+    return (bodyElem || $table.$refs.tableBody).$el.querySelector(`.vxe-body--row[data-rowid="${rowid}"] .${column.id}`)
   },
   getCursorPosition (textarea) {
     let rangeData = { text: '', start: 0, end: 0 }

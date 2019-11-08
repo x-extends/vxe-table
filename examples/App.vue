@@ -361,6 +361,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.print',
+              locat: {
+                name: 'TablePrint'
+              }
+            },
+            {
               label: 'app.aside.nav.contextMenu',
               demoUrl: 'https://jsrun.net/VjXKp',
               locat: {
