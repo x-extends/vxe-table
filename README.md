@@ -56,6 +56,7 @@
 * [x] Rowspan and colspan （合并行或列）
 * [x] Footer summary （表尾合计）
 * [x] Import/Export （导入/导出)
+* [x] Print （打印)
 * [x] Show/hide columns （显示/隐藏列）
 * [x] Loading （加载中）
 * [x] Format content （格式化内容）
