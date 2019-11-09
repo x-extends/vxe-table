@@ -551,10 +551,7 @@ export default {
     this.preventEvent(null, 'mounted', { $table: this })
   },
   activated () {
-    let { lastScrollLeft, lastScrollTop } = this
-    if (lastScrollLeft || lastScrollTop) {
-      this.clearScroll().then(this.recalculate).then(() => this.scrollTo(lastScrollLeft, lastScrollTop))
-    }
+    this.refreshScroll()
     this.preventEvent(null, 'activated', { $table: this })
   },
   deactivated () {
