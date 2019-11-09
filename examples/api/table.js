@@ -2728,7 +2728,7 @@ const apis = [
         type: 'Promise',
         enum: '',
         defVal: 'options: object',
-        list: XEUtils.clone(exportDataAPI.filter(item => !['type', 'download'].includes(item.name)), true)
+        list: XEUtils.clone(exportDataAPI.filter(item => !['filename', 'sheetName', 'type', 'download', 'message'].includes(item.name)), true)
       }
     ]
   }
