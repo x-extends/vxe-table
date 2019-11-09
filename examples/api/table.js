@@ -1,7 +1,7 @@
 import XEUtils from 'xe-utils/methods/xe-utils'
 import toolbarAPI from './toolbar'
 
-const contextMenuApi = [
+const contextMenuAPI = [
   {
     name: 'disabled',
     desc: '是否禁用右键',
@@ -131,6 +131,127 @@ const contextMenuApi = [
     ]
   }
 ]
+
+const exportDataAPI = [
+  {
+    name: 'filename',
+    desc: '文件名',
+    version: '',
+    type: 'String',
+    enum: '',
+    defVal: '',
+    list: []
+  },
+  {
+    name: 'sheetName',
+    desc: '默认的表名（只对支持的文档类型有效）',
+    version: '',
+    type: 'String',
+    enum: '',
+    defVal: '',
+    list: []
+  },
+  {
+    name: 'type',
+    desc: '文件类型',
+    version: '2.6.15',
+    type: 'String',
+    enum: 'csv, html, xml, txt',
+    defVal: 'csv',
+    list: []
+  },
+  {
+    name: 'original',
+    desc: '是否导出源数据（某些场景下支持 true， 比如虚拟滚动、优化的固定列..，如果需要支持导入，则必须设置为 true）',
+    version: '',
+    type: 'Boolean',
+    enum: '',
+    defVal: 'false',
+    list: []
+  },
+  {
+    name: 'message',
+    desc: '是否显示内置的消息提示',
+    version: '',
+    type: 'Boolean',
+    enum: '',
+    defVal: 'false',
+    list: []
+  },
+  {
+    name: 'isHeader',
+    desc: '是否导出表头',
+    version: '',
+    type: 'Boolean',
+    enum: '',
+    defVal: 'true',
+    list: []
+  },
+  {
+    name: 'isFooter',
+    desc: '是否导出表尾',
+    version: '',
+    type: 'Boolean',
+    enum: '',
+    defVal: 'true',
+    list: []
+  },
+  {
+    name: 'download',
+    desc: '是否马上下载，如果设置为 false 则通过返回结果为内容的 Promise',
+    version: '',
+    type: 'Boolean',
+    enum: '',
+    defVal: 'true',
+    list: []
+  },
+  {
+    name: 'data',
+    desc: '自定义数据',
+    version: '',
+    type: 'Array',
+    enum: '',
+    defVal: '',
+    list: []
+  },
+  {
+    name: 'columns',
+    desc: '自定义列（如果指定了 columns 则 columnFilterMethod 默认为空）',
+    version: '',
+    type: 'Array',
+    enum: '',
+    defVal: '',
+    list: []
+  },
+  {
+    name: 'columnFilterMethod',
+    desc: '列过滤方法，该函数 Function(column,$columnIndex) 的返回值用来决定该列是否导出',
+    version: '',
+    type: 'Function',
+    enum: '',
+    defVal: '默认过滤掉 type=index,selection,radio 和 field 为空的列',
+    list: []
+  },
+  {
+    name: 'dataFilterMethod',
+    desc: '数据过滤方法，该函数 Function(row,$rowIndex) 的返回值用来决定该数据是否导出',
+    version: '',
+    type: 'Function',
+    enum: '',
+    defVal: '',
+    list: []
+  },
+  {
+    name: 'footerFilterMethod',
+    desc: '表尾过滤方法，该函数 Function(cells,$rowIndex) 的返回值用来决定该数据是否导出',
+    version: '',
+    type: 'Function',
+    enum: '',
+    defVal: '',
+    list: []
+  }
+]
+
 const apis = [
   {
     name: 'Props',
@@ -855,7 +976,7 @@ const apis = [
             type: 'Object',
             enum: '',
             defVal: '',
-            list: XEUtils.clone(contextMenuApi, true)
+            list: XEUtils.clone(contextMenuAPI, true)
           },
           {
             name: 'body',
@@ -864,7 +985,7 @@ const apis = [
             type: 'Object',
             enum: '',
             defVal: '',
-            list: XEUtils.clone(contextMenuApi, true)
+            list: XEUtils.clone(contextMenuAPI, true)
           },
           {
             name: 'footer',
@@ -873,7 +994,7 @@ const apis = [
             type: 'Object',
             enum: '',
             defVal: '',
-            list: XEUtils.clone(contextMenuApi, true)
+            list: XEUtils.clone(contextMenuAPI, true)
           },
           {
             name: 'trigger',
@@ -2547,134 +2668,16 @@ const apis = [
       },
       {
         name: 'exportData(options)',
-        desc: '将表格数据导出（只支持基本数据结构）',
+        desc: '将表格数据导出（只支持基本数据结构，目前不支持分组、合并等）',
         version: '2.6.6',
         type: 'Promise',
         enum: '',
         defVal: 'options: object',
-        list: [
-          {
-            name: 'filename',
-            desc: '文件名',
-            version: '',
-            type: 'String',
-            enum: '',
-            defVal: '',
-            list: []
-          },
-          {
-            name: 'sheetName',
-            desc: '默认的表名（只对支持的文档类型有效）',
-            version: '',
-            type: 'String',
-            enum: '',
-            defVal: '',
-            list: []
-          },
-          {
-            name: 'type',
-            desc: '文件类型',
-            version: '2.6.12',
-            type: 'String',
-            enum: 'csv, html, xml, txt',
-            defVal: 'csv',
-            list: []
-          },
-          {
-            name: 'original',
-            desc: '是否导出源数据（某些场景下支持 true， 比如虚拟滚动、优化的固定列..，如果需要支持导入，则必须设置为 true）',
-            version: '',
-            type: 'Boolean',
-            enum: '',
-            defVal: 'false',
-            list: []
-          },
-          {
-            name: 'message',
-            desc: '是否显示内置的消息提示',
-            version: '',
-            type: 'Boolean',
-            enum: '',
-            defVal: 'false',
-            list: []
-          },
-          {
-            name: 'isHeader',
-            desc: '是否导出表头',
-            version: '',
-            type: 'Boolean',
-            enum: '',
-            defVal: 'true',
-            list: []
-          },
-          {
-            name: 'isFooter',
-            desc: '是否导出表尾',
-            version: '',
-            type: 'Boolean',
-            enum: '',
-            defVal: 'true',
-            list: []
-          },
-          {
-            name: 'download',
-            desc: '是否马上下载，如果设置为 false 则通过返回结果为内容的 Promise',
-            version: '',
-            type: 'Boolean',
-            enum: '',
-            defVal: 'true',
-            list: []
-          },
-          {
-            name: 'data',
-            desc: '自定义数据',
-            version: '',
-            type: 'Array',
-            enum: '',
-            defVal: '',
-            list: []
-          },
-          {
-            name: 'columns',
-            desc: '自定义列（如果指定了 columns 则 columnFilterMethod 默认为空）',
-            version: '',
-            type: 'Array',
-            enum: '',
-            defVal: '',
-            list: []
-          },
-          {
-            name: 'columnFilterMethod',
-            desc: '列过滤方法，该函数 Function(column,$columnIndex) 的返回值用来决定该列是否导出',
-            version: '',
-            type: 'Function',
-            enum: '',
-            defVal: '默认过滤掉 type=index,selection,radio 和 field 为空的列',
-            list: []
-          },
-          {
-            name: 'dataFilterMethod',
-            desc: '数据过滤方法，该函数 Function(row,$rowIndex) 的返回值用来决定该数据是否导出',
-            version: '',
-            type: 'Function',
-            enum: '',
-            defVal: '',
-            list: []
-          },
-          {
-            name: 'footerFilterMethod',
-            desc: '表尾过滤方法，该函数 Function(cells,$rowIndex) 的返回值用来决定该数据是否导出',
-            version: '2.5.18',
-            type: 'Function',
-            enum: '',
-            defVal: '',
-            list: []
-          }
-        ]
+        list: XEUtils.clone(exportDataAPI, true)
       },
       {
         name: 'openExport(options)',
-        desc: '打开高级导出',
+        desc: '打开高级导出（只支持基本数据结构，目前不支持分组、合并等）',
         version: '2.6.14',
         type: 'Promise',
         enum: '',
@@ -2683,7 +2686,7 @@ const apis = [
       },
       {
         name: 'importData(options)',
-        desc: '将数据导入表格（只支持基本数据结构）',
+        desc: '将数据导入表格（只支持基本数据结构，目前不支持分组、合并等）',
         version: '2.6.14',
         type: 'Promise',
         enum: '',
@@ -2711,12 +2714,21 @@ const apis = [
       },
       {
         name: 'openImport(options)',
-        desc: '打开高级导入',
+        desc: '打开高级导入（只支持基本数据结构，目前不支持分组、合并等）',
         version: '2.6.14',
         type: 'Promise',
         enum: '',
         defVal: 'options: object',
         list: XEUtils.clone(toolbarAPI.find(item => item.name === 'Props').list.find(item => item.name === 'import').list, true)
+      },
+      {
+        name: 'print(options)',
+        desc: '打印（只支持基本数据结构，目前不支持分组、合并等）',
+        version: '2.6.16',
+        type: 'Promise',
+        enum: '',
+        defVal: 'options: object',
+        list: XEUtils.clone(exportDataAPI.filter(item => !['type', 'download'].includes(item.name)), true)
       }
     ]
   }
