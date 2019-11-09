@@ -162,7 +162,7 @@ const exportDataAPI = [
   },
   {
     name: 'original',
-    desc: '是否导出源数据（某些场景下支持 true， 比如虚拟滚动、优化的固定列..，如果需要支持导入，则必须设置为 true）',
+    desc: '是否为源数据（某些场景下支持 true， 比如虚拟滚动、优化的固定列..，如果需要支持导入，则必须设置为 true）',
     version: '',
     type: 'Boolean',
     enum: '',
@@ -180,7 +180,7 @@ const exportDataAPI = [
   },
   {
     name: 'isHeader',
-    desc: '是否导出表头',
+    desc: '是否需要表头',
     version: '',
     type: 'Boolean',
     enum: '',
@@ -189,7 +189,7 @@ const exportDataAPI = [
   },
   {
     name: 'isFooter',
-    desc: '是否导出表尾',
+    desc: '是否需要表尾',
     version: '',
     type: 'Boolean',
     enum: '',
@@ -225,7 +225,7 @@ const exportDataAPI = [
   },
   {
     name: 'columnFilterMethod',
-    desc: '列过滤方法，该函数 Function(column,$columnIndex) 的返回值用来决定该列是否导出',
+    desc: '列过滤方法，该函数 Function(column,$columnIndex) 的返回值用来决定是否过滤掉列',
     version: '',
     type: 'Function',
     enum: '',
@@ -234,7 +234,7 @@ const exportDataAPI = [
   },
   {
     name: 'dataFilterMethod',
-    desc: '数据过滤方法，该函数 Function(row,$rowIndex) 的返回值用来决定该数据是否导出',
+    desc: '数据过滤方法，该函数 Function(row,$rowIndex) 的返回值用来决定是否过滤掉数据行',
     version: '',
     type: 'Function',
     enum: '',
@@ -243,7 +243,7 @@ const exportDataAPI = [
   },
   {
     name: 'footerFilterMethod',
-    desc: '表尾过滤方法，该函数 Function(cells,$rowIndex) 的返回值用来决定该数据是否导出',
+    desc: '表尾过滤方法，该函数 Function(cells,$rowIndex) 的返回值用来决定是否过滤掉表尾行',
     version: '',
     type: 'Function',
     enum: '',
