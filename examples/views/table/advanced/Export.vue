@@ -8,6 +8,7 @@
     <vxe-toolbar>
       <template v-slot:buttons>
         <vxe-button @click="exportDataEvent">默认导出</vxe-button>
+        <vxe-button @click="exportSelectEvent">导出选中</vxe-button>
       </template>
     </vxe-toolbar>
 
@@ -16,6 +17,7 @@
       highlight-hover-row
       height="300"
       :data="tableData">
+      <vxe-table-column type="checkbox" width="60"></vxe-table-column>
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -125,6 +127,7 @@ export default {
         <vxe-toolbar>
           <template v-slot:buttons>
             <vxe-button @click="exportDataEvent">默认导出</vxe-button>
+            <vxe-button @click="exportSelectEvent">导出选中</vxe-button>
           </template>
         </vxe-toolbar>
 
@@ -153,6 +156,11 @@ export default {
           methods: {
             exportDataEvent () {
               this.$refs.xTable1.exportData({ type: 'csv' })
+            },
+            exportSelectEvent () {
+              this.$refs.xTable1.exportData({
+                data: this.$refs.xTable1.getSelectRecords()
+              })
             }
           }
         }
@@ -294,6 +302,11 @@ export default {
   methods: {
     exportDataEvent () {
       this.$refs.xTable1.exportData({ type: 'csv' })
+    },
+    exportSelectEvent () {
+      this.$refs.xTable1.exportData({
+        data: this.$refs.xTable1.getSelectRecords()
+      })
     },
     exportDataEvent2 () {
       this.$refs.xTable2.exportData({
