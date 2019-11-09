@@ -8,13 +8,28 @@
       filterMethod ({ option, row, column }) 筛选函数
     </p>
 
-    <vxe-table
-      border
-      :data="tableData">
+    <vxe-table border :data="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" :filters="[{data: null}]" :filter-render="{name: 'input', attrs: {placeholder: '请输入名字'}}"></vxe-table-column>
-      <vxe-table-column field="sex" title="sex" :filters="[{data: null}]" :filter-render="{name: 'select', options: sexList}"></vxe-table-column>
-      <vxe-table-column field="age" title="Age" :filters="[{data: null}]" :filter-render="{name: 'MyFilter'}"></vxe-table-column>
+      <vxe-table-column
+        field="nickname"
+        title="Nickname"
+        :filters="[{data: null}]"
+        :filter-render="{name: 'input', attrs: {placeholder: '请输入名字'}}"></vxe-table-column>
+      <vxe-table-column
+        field="sex"
+        title="sex"
+        :filters="[{data: null}]"
+        :filter-render="{name: 'select', options: sexList}"></vxe-table-column>
+      <vxe-table-column
+        field="age"
+        title="Age"
+        :filters="[{data: null}]"
+        :filter-render="{name: 'MyFilter'}"></vxe-table-column>
+      <vxe-table-column
+        field="name"
+        title="高级筛选（实现复杂的筛选）"
+        :filters="[{data: {type: 'has', isCase: true, name: ''}}]"
+        :filter-render="{name: 'MyComplexFilter'}"></vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -23,6 +38,7 @@
       <code class="javascript">{{ demoCodes[0] }}</code>
       <code class="xml">{{ demoCodes[1] }}</code>
       <code class="javascript">{{ demoCodes[2] }}</code>
+      <code class="CSS">{{ demoCodes[3] }}</code>
     </pre>
   </div>
 </template>
@@ -57,39 +73,96 @@ export default {
           renderFilter (h, filterRender, params, context) {
             let { column } = params
             return column.filters.map(item => {
-              return h('input', {
-                attrs: {
-                  type: 'text'
-                },
-                domProps: {
-                  value: item.data
-                },
-                on: {
-                  input (evnt) {
-                    item.data = evnt.target.value
-                    let checked = !!item.data
-                    context.changeOption(evnt, checked, item)
-                  }
-                }
-              })
+              return <input
+                type="text"
+                value={ item.data }
+                onInput={ evnt => {
+                  item.data = evnt.target.value
+                  let checked = !!item.data
+                  context.changeOption(evnt, checked, item)
+                } }/>
             })
           },
           // 筛选方法
           filterMethod ({ option, row, column }) {
             let { data } = option
-            let cellValue = this.$utils.get(row, column.property)
+            let cellValue = XEUtils.get(row, column.property)
+            /* eslint-disable eqeqeq */
             return cellValue == data
+          }
+        })
+
+        // 创建一个复杂的渲染器
+        VXETable.renderer.add('MyComplexFilter', {
+          // 筛选模板
+          renderFilter (h, filterRender, params, context) {
+            const { column } = params
+            return column.filters.map((item, index) => {
+              const { data } = item
+              return <div class="cmplex-filter">
+                <div class="f-type">
+                  <vxe-radio v-model={ data.type } name="fType" label="has">包含</vxe-radio>
+                  <vxe-radio v-model={ data.type } name="fType" label="eq">等于</vxe-radio>
+                  <vxe-radio v-model={ data.type } name="fType" label="gt">大于</vxe-radio>
+                  <vxe-radio v-model={ data.type } name="fType" label="lt">小于</vxe-radio>
+                </div>
+                <div class="f-name">
+                  <vxe-input v-model={ data.name } type="text" placeholder="请输入名称" onInput={ evnt => { context.changeOption(evnt, !!data.name, item) } }></vxe-input>
+                </div>
+                <div class="f-iscase">
+                  <vxe-checkbox v-model={ data.isCase }>不区分大小写</vxe-checkbox>
+                </div>
+              </div>
+            })
+          },
+          // 筛选方法
+          filterMethod ({ option, row, column }) {
+            let cellValue = XEUtils.get(row, column.property)
+            let { type, name, isCase } = option.data
+            if (cellValue) {
+              if (isCase) {
+                cellValue = cellValue.toLowerCase()
+                name = name.toLowerCase()
+              }
+              switch (type) {
+                case 'has':
+                  return cellValue.indexOf(name) > -1
+                case 'eq':
+                  /* eslint-disable eqeqeq */
+                  return cellValue == name
+                case 'gt':
+                  return cellValue > name
+                case 'lt':
+                  return cellValue < name
+              }
+            }
+            return false
           }
         })
         `,
         `
-        <vxe-table
-          border
-          :data="tableData">
+        <<vxe-table border :data="tableData">
           <vxe-table-column type="index" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" :filters="[{data: null}]" :filter-render="{name: 'input', attrs: {placeholder: '请输入名字'}}"></vxe-table-column>
-          <vxe-table-column field="sex" title="sex" :filters="[{data: null}]" :filter-render="{name: 'select', options: sexList}"></vxe-table-column>
-          <vxe-table-column field="age" title="Age" :filters="[{data: null}]" :filter-render="{name: 'MyFilter'}"></vxe-table-column>
+          <vxe-table-column
+            field="nickname"
+            title="Nickname"
+            :filters="[{data: null}]"
+            :filter-render="{name: 'input', attrs: {placeholder: '请输入名字'}}"></vxe-table-column>
+          <vxe-table-column
+            field="sex"
+            title="sex"
+            :filters="[{data: null}]"
+            :filter-render="{name: 'select', options: sexList}"></vxe-table-column>
+          <vxe-table-column
+            field="age"
+            title="Age"
+            :filters="[{data: null}]"
+            :filter-render="{name: 'MyFilter'}"></vxe-table-column>
+          <vxe-table-column
+            field="name"
+            title="高级筛选（实现复杂的筛选）"
+            :filters="[{data: {type: 'has', isCase: true, name: ''}}]"
+            :filter-render="{name: 'MyComplexFilter'}"></vxe-table-column>
         </vxe-table>
         `,
         `
@@ -117,6 +190,14 @@ export default {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
           }
         }
+        `,
+        `
+        .cmplex-filter .f-type {
+          padding: 8px 8px 12px 2px;
+        }
+        .cmplex-filter .f-iscase {
+          padding: 12px 8px 6px 2px;
+        }
         `
       ]
     }
@@ -131,3 +212,12 @@ export default {
   }
 }
 </script>
+
+<style>
+.cmplex-filter .f-type {
+  padding: 8px 8px 12px 2px;
+}
+.cmplex-filter .f-iscase {
+  padding: 12px 8px 6px 2px;
+}
+</style>
