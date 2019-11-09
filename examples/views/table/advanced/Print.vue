@@ -5,6 +5,7 @@
     <vxe-toolbar>
       <template v-slot:buttons>
         <vxe-button @click="printEvent">打印</vxe-button>
+        <vxe-button @click="printSelectEvent">打印选中</vxe-button>
         <vxe-button @click="exportDataEvent">导出与打印</vxe-button>
       </template>
     </vxe-toolbar>
@@ -13,6 +14,7 @@
       ref="xTable"
       height="500"
       :data="tableData">
+      <vxe-table-column type="checkbox" width="60"></vxe-table-column>
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
       <vxe-table-column field="role" title="Role"></vxe-table-column>
@@ -42,6 +44,7 @@ export default {
         <vxe-toolbar>
           <template v-slot:buttons>
             <vxe-button @click="printEvent">打印</vxe-button>
+            <vxe-button @click="printSelectEvent">打印选中</vxe-button>
             <vxe-button @click="exportDataEvent">导出与打印</vxe-button>
           </template>
         </vxe-toolbar>
@@ -50,6 +53,7 @@ export default {
           ref="xTable"
           height="500"
           :data="tableData">
+          <vxe-table-column type="checkbox" width="60"></vxe-table-column>
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
           <vxe-table-column field="role" title="Role"></vxe-table-column>
@@ -71,6 +75,11 @@ export default {
             printEvent () {
               this.$refs.xTable.print()
             },
+            printSelectEvent () {
+              this.$refs.xTable.print({
+                data: this.$refs.xTable.getSelectRecords()
+              })
+            },
             exportDataEvent () {
               this.$refs.xTable.openExport()
             }
@@ -91,6 +100,11 @@ export default {
   methods: {
     printEvent () {
       this.$refs.xTable.print()
+    },
+    printSelectEvent () {
+      this.$refs.xTable.print({
+        data: this.$refs.xTable.getSelectRecords()
+      })
     },
     exportDataEvent () {
       this.$refs.xTable.openExport()
