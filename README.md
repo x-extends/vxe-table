@@ -12,11 +12,11 @@
 [![pull requests closed](https://img.shields.io/github/issues-pr-closed/xuliangzhan/vxe-table.svg)](https://github.com/xuliangzhan/vxe-table/pulls?q=is%3Apr+is%3Aclosed)
 [![npm license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/xuliangzhan/vxe-table/blob/master/LICENSE)
 
-基于 vue 的表格解决方案
+一个基于 [vue](https://www.npmjs.com/package/vue) 的表格组件，支持虚拟滚动、支持筛选、单元格任意扩展、与第三方组件库兼容
 
 * 设计理念
   * 面向现代浏览器（简洁、高效的 API 设计）
-  * 模块化表格、插件化扩展（功能模块解耦，支持按需加载、与任意组件库兼容）
+  * 模块化表格、插件化扩展（功能模块解耦，支持按需加载）
   * 强大的功能的同时兼具性能（支持横向、纵向虚拟滚动、灵活的配置项、不污染全局样式及变量）
 
 * 计划
@@ -43,12 +43,10 @@
 * [x] Column resizable （列宽拖动）
 * [x] Maximum table height （最大高度）
 * [x] Resize height and width （响应式宽高）
-* [x] Table with fixed header （固定表头）
-* [x] Table with fixed column （固定列）
-* [x] Table with fixed columns and header （固定表头和列）
+* [x] Fixed column （固定列）
 * [x] Grouping table head （表头分组）
-* [x] Table sequence （序号)
 * [x] Highlight row and column （高亮行、列)
+* [x] Table sequence （序号)
 * [x] Radio （单选)
 * [x] Checkbox （多选）
 * [x] Sorting （排序）
@@ -57,10 +55,10 @@
 * [x] Footer summary （表尾合计）
 * [x] Import/Export （导入/导出)
 * [x] Print （打印)
-* [x] Show/hide columns （显示/隐藏列）
+* [x] Show/hide column （显示/隐藏列）
 * [x] Loading （加载中）
-* [x] Format content （格式化内容）
-* [x] Custom column template （自定义模板）
+* [x] Formatted content （格式化内容）
+* [x] Custom template （自定义模板）
 * [x] Context menu（快捷菜单）
 * [x] Virtual Scroller（虚拟滚动）
 * [x] Expandable row （展开行）
@@ -69,8 +67,10 @@
 * [x] Tree table （树形表格)
 * [x] Editable CRUD（增删改查)
 * [x] Editable validate（数据校验）
-* [x] DataProxy（数据代理）
+* [x] Data Proxy（数据代理）
 * [x] Keyboard navigation（键盘导航）
+* [x] Modal window（模态窗口）
+* [x] Charts（图表工具）
 
 ## Modules
 
