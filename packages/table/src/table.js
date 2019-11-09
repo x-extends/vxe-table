@@ -683,7 +683,7 @@ export default {
     this.preventEvent(null, 'mounted', { $table: this })
   },
   activated () {
-    this.scrollTo(this.lastScrollLeft, this.lastScrollTop)
+    this.refreshScroll()
     this.preventEvent(null, 'activated', { $table: this })
   },
   deactivated () {
