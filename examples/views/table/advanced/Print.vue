@@ -11,6 +11,7 @@
     </vxe-toolbar>
 
     <vxe-table
+      border
       ref="xTable"
       height="500"
       :data="tableData">
@@ -50,6 +51,7 @@ export default {
         </vxe-toolbar>
 
         <vxe-table
+          border
           ref="xTable"
           height="500"
           :data="tableData">
