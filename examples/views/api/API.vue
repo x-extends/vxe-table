@@ -113,8 +113,8 @@ export default {
         ],
         [
           {
-            code: 'exportAll',
-            name: '导出完整文档',
+            code: 'exportXLSXAPI',
+            name: '完整文档',
             prefixIcon: 'fa fa-download'
           }
         ]
@@ -133,8 +133,13 @@ export default {
             name: '重新加载'
           },
           {
-            code: 'exportAPI',
-            name: '导出文档',
+            code: 'exportHTMLAPI',
+            name: '导出 HTML 文档',
+            prefixIcon: 'fa fa-download'
+          },
+          {
+            code: 'exportXLSXAPI',
+            name: '导出 XLSX 文档',
             prefixIcon: 'fa fa-download'
           }
         ],
@@ -260,10 +265,18 @@ export default {
         case 'resetColumn':
           xTable.resetAll()
           break
-        case 'exportAll':
+        case 'exportHTMLAPI':
           xTable.exportData({
+            type: 'html',
             data: this.$utils.toTreeArray(this.tableData, { children: 'list' }),
-            filename: `vxe-${this.apiName}_v${pack.version}.csv`
+            filename: `vxe-${this.apiName}_v${pack.version}`
+          })
+          break
+        case 'exportXLSXAPI':
+          xTable.exportData({
+            type: 'xlsx',
+            data: this.$utils.toTreeArray(this.tableData, { children: 'list' }),
+            filename: `vxe-${this.apiName}_v${pack.version}`
           })
           break
         case 'copy':
