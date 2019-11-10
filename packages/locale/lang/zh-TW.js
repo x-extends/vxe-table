@@ -79,6 +79,7 @@ export default {
       expMode: '要匯出的數據',
       expAll: '全部數據',
       expSelected: '選中數據',
+      expAllColumn: '全部欄位',
       expColumn: '要匯出的欄位',
       expOpts: '匯出選項',
       expOptHeader: '錶頭',

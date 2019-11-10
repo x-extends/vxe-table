@@ -79,6 +79,7 @@ export default {
       expMode: '要导出的数据',
       expAll: '全部数据',
       expSelected: '选中数据',
+      expAllColumn: '全部字段',
       expColumn: '要导出的字段',
       expOpts: '导出选项',
       expOptHeader: '表头',

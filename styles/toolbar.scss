@@ -152,40 +152,50 @@
   }
   .vxe-export--panel-column {
     width: 80%;
-    max-height: 216px;
-    overflow: auto;
-    border-radius: 4px;
     border: 1px solid $vxe-input-border-color;
-    padding: 5px 0;
-    margin: 0;
-    & > li {
-      position: relative;
-      padding: 4px 30px 4px 10px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+    margin: 3px 0;
+    border-radius: 4px;
+    user-select: none;
+    & > .vxe-checkbox {
+      padding: 5px 5px 5px 10px;
       font-weight: 700;
-      cursor: pointer;
-      &.active {
-        color: $vxe-primary-color;
-        &:before {
-          content: "";
-          position: absolute;
-          height: 0.66em;
-          width: 0.34em;
-          top: 0.5em;
-          right: 15px;
-          border-width: 0.1em;
-          border-style: solid;
-          border-color: inherit;
-          border-left: 0;
-          border-top: 0;
-          -webkit-transform: rotate(45deg);
-          transform: rotate(45deg);
+      display: block;
+      background-color: #f8f8f9;
+    }
+    & > ul {
+      max-height: 208px;
+      overflow: auto;
+      margin: 0;
+      & > li {
+        position: relative;
+        padding: 4px 30px 4px 32px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: 0.9em;
+        cursor: pointer;
+        &.active {
+          color: $vxe-primary-color;
+          font-weight: 700;
+          &:before {
+            content: "";
+            position: absolute;
+            height: 0.66em;
+            width: 0.34em;
+            top: 0.5em;
+            left: 15px;
+            border-width: 0.1em;
+            border-style: solid;
+            border-color: inherit;
+            border-left: 0;
+            border-top: 0;
+            -webkit-transform: rotate(45deg);
+            transform: rotate(45deg);
+          }
         }
-      }
-      &:hover {
-        background-color: $vxe-table-row-hover-background-color;
+        &:hover {
+          background-color: $vxe-table-row-hover-background-color;
+        }
       }
     }
   }
