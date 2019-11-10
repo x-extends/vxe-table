@@ -958,17 +958,22 @@ export default {
       if (scrollYLoad && !showOverflow) {
         UtilTools.warn('vxe.error.scrollYReqProp', ['show-overflow'])
       }
-      // 是否加载了数据
-      this.isLoadData = true
-      this.clearScroll()
-      this.handleTableData(true)
-      this.reserveCheckSelection()
-      this.checkSelectionStatus()
-      let rest = this.$nextTick()
-      if (!notRefresh) {
-        rest = rest.then(this.recalculate)
+      let rest = Promise.resolve()
+      if (scrollYLoad) {
+        rest = this.computeScrollLoad()
       }
-      return rest.then(this.refreshScroll)
+      return rest.then(() => {
+      // 是否加载了数据
+        this.isLoadData = true
+        this.handleTableData(true)
+        this.reserveCheckSelection()
+        this.checkSelectionStatus()
+        rest = this.$nextTick()
+        if (!notRefresh) {
+          rest = rest.then(this.recalculate)
+        }
+        return rest.then(this.refreshScroll)
+      })
     },
     loadData (datas) {
       return this.loadTableData(datas)
