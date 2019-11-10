@@ -11,6 +11,9 @@ export default {
     vSize () {
       return this.size || this.$parent.size || this.$parent.vSize
     },
+    selectName () {
+      return `${this.storeData.filename}.${this.storeData.type}`
+    },
     hasFile () {
       return this.storeData.file && this.storeData.type
     },
@@ -23,7 +26,7 @@ export default {
     }
   },
   render (h) {
-    const { hasFile, parseTypeLabel, defaultOptions, storeData } = this
+    const { hasFile, parseTypeLabel, defaultOptions, storeData, selectName } = this
     return h('vxe-modal', {
       res: 'modal',
       model: {
@@ -54,10 +57,21 @@ export default {
           h('tr', [
             h('td', GlobalConfig.i18n('vxe.toolbar.impFile')),
             h('td', [
-              hasFile ? h('span', `${storeData.filename}.${storeData.type}`) : h('vxe-button', {
-                props: {
-                  type: 'text'
-                },
+              hasFile ? h('div', {
+                class: 'vxe-import-selected--file',
+                attrs: {
+                  title: selectName
+                }
+              }, [
+                h('span', selectName),
+                h('i', {
+                  class: GlobalConfig.icon.importRemove,
+                  on: {
+                    click: this.clearFileEvent
+                  }
+                })
+              ]) : h('span', {
+                class: 'vxe-import-select--file',
                 on: {
                   click: this.selectFileEvent
                 }
@@ -115,6 +129,13 @@ export default {
     ])
   },
   methods: {
+    clearFileEvent () {
+      Object.assign(this.storeData, {
+        filename: '',
+        sheetName: '',
+        type: ''
+      })
+    },
     selectFileEvent () {
       const { $grid, $table } = this.$parent
       const comp = $grid || $table

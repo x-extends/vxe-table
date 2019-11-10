@@ -67,7 +67,7 @@ export default {
       impSelect: '選擇檔案',
       impType: '檔案類型',
       impOpts: '導入選項',
-      impConfirm: '點擊導入',
+      impConfirm: '導入',
       impModeCovering: '覆蓋',
       impModeAppend: '追加',
       expTitle: '匯出參數設置',
@@ -85,7 +85,7 @@ export default {
       expOptFooter: '錶尾',
       expOptOriginal: '源(支持導入)',
       expPrint: '列印',
-      expConfirm: '點擊匯出'
+      expConfirm: '匯出'
     }
   }
 }

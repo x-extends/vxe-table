@@ -67,7 +67,7 @@ export default {
       impSelect: '选择文件',
       impType: '文件类型',
       impOpts: '导入选项',
-      impConfirm: '点击导入',
+      impConfirm: '导入',
       impModeCovering: '覆盖',
       impModeAppend: '追加',
       expTitle: '导出参数设置',
@@ -85,7 +85,7 @@ export default {
       expOptFooter: '表尾',
       expOptOriginal: '源(支持导入)',
       expPrint: '打印',
-      expConfirm: '点击导出'
+      expConfirm: '导出'
     }
   }
 }

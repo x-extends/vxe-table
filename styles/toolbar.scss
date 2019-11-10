@@ -120,11 +120,12 @@
     table-layout: fixed;
     tr {
       td {
-        padding: 8px 10px;
+        padding: 0 10px;
         &:nth-child(1) {
           text-align: right;
           width: 30%;
           font-weight: 700;
+          padding: 8px 10px;
         }
         &:nth-child(2) {
           width: 70%;
@@ -186,6 +187,40 @@
       &:hover {
         background-color: $vxe-table-row-hover-background-color;
       }
+    }
+  }
+  .vxe-import-selected--file {
+    padding-right: 40px;
+    position: relative;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    user-select: none;
+    & > i {
+      display: none;
+      position: absolute;
+      top: 50%;
+      right: 15px;
+      transform: translateY(-50%);
+      font-size: 16px;
+      cursor: pointer;
+    }
+    &:hover {
+      & > i {
+        display: block;
+      }
+      color: $vxe-primary-color;
+    }
+  }
+  .vxe-import-select--file {
+    border: 1px dashed $vxe-input-border-color;
+    padding: 6px 34px;
+    border-radius: 4px;
+    user-select: none;
+    cursor: pointer;
+    &:hover {
+      color: $vxe-primary-color;
+      border-color: $vxe-primary-color;
     }
   }
   .vxe-export--panel-btns {
