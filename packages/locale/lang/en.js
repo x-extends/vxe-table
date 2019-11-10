@@ -83,7 +83,7 @@ export default {
       expOpts: 'Export option',
       expOptHeader: 'Header',
       expOptFooter: 'Footer',
-      expOptOriginal: 'Original(Support for importing)',
+      expOptOriginal: 'Original (Support for importing)',
       expPrint: 'Print',
       expConfirm: 'Click export'
     }
