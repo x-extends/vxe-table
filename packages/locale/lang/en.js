@@ -67,7 +67,7 @@ export default {
       impSelect: 'Select file',
       impType: 'File type',
       impOpts: 'Import option',
-      impConfirm: 'Click import',
+      impConfirm: 'Import',
       impModeCovering: 'Covering',
       impModeAppend: 'Append',
       expTitle: 'Export parameter settings',
@@ -85,7 +85,7 @@ export default {
       expOptFooter: 'Footer',
       expOptOriginal: 'Original (Support for importing)',
       expPrint: 'Print',
-      expConfirm: 'Click export'
+      expConfirm: 'Export'
     }
   }
 }

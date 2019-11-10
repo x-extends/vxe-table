@@ -49,6 +49,7 @@ const GlobalConfig = {
     tree: 'vxe-icon--caret-right',
     refresh: 'vxe-icon--refresh',
     import: 'vxe-icon--upload',
+    importRemove: 'vxe-icon--close',
     export: 'vxe-icon--download',
     custom: 'vxe-icon--menu',
     jumpPrev: 'vxe-icon--d-arrow-left',
