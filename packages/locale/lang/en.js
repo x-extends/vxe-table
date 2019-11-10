@@ -79,6 +79,7 @@ export default {
       expMode: 'Data to export',
       expAll: 'All data',
       expSelected: 'Selected data',
+      expAllColumn: 'All the field',
       expColumn: 'The field to export',
       expOpts: 'Export option',
       expOptHeader: 'Header',

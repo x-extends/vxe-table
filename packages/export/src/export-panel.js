@@ -10,6 +10,8 @@ export default {
   },
   data () {
     return {
+      isAll: false,
+      isIndeterminate: false,
       modeList: [
         {
           value: 'all',
@@ -31,7 +33,7 @@ export default {
     }
   },
   render (h) {
-    const { _e, showSheet, defaultOptions, storeData, typeList, modeList } = this
+    const { _e, isAll, isIndeterminate, showSheet, defaultOptions, storeData, typeList, modeList } = this
     return h('vxe-modal', {
       res: 'modal',
       model: {
@@ -144,23 +146,40 @@ export default {
             ])
           ]),
           h('tr', [
-            h('td', GlobalConfig.i18n('vxe.toolbar.expColumn')),
+            h('td', [GlobalConfig.i18n('vxe.toolbar.expColumn')]),
             h('td', [
-              h('ul', {
+              h('div', {
                 class: 'vxe-export--panel-column'
-              }, storeData.columns.map(column => {
-                const { own, checked, type } = column
-                return h('li', {
-                  class: {
-                    active: checked
+              }, [
+                h('vxe-checkbox', {
+                  props: {
+                    indeterminate: isIndeterminate
+                  },
+                  model: {
+                    value: isAll,
+                    callback: (value) => {
+                      this.isAll = value
+                    }
                   },
                   on: {
-                    click () {
-                      column.checked = !checked
-                    }
+                    change: this.allColumnEvent
                   }
-                }, UtilTools.getFuncText(own.title || own.label || (type === 'index' ? GlobalConfig.i18n('vxe.column.indexTitle') : '')))
-              }))
+                }, GlobalConfig.i18n('vxe.toolbar.expAllColumn')),
+                h('ul', storeData.columns.map(column => {
+                  const { own, checked, type } = column
+                  return h('li', {
+                    class: {
+                      active: checked
+                    },
+                    on: {
+                      click: () => {
+                        column.checked = !checked
+                        this.checkStatus()
+                      }
+                    }
+                  }, UtilTools.getFuncText(own.title || own.label || (type === 'index' ? GlobalConfig.i18n('vxe.column.indexTitle') : '')))
+                }))
+              ])
             ])
           ]),
           h('tr', [
@@ -220,10 +239,23 @@ export default {
     ])
   },
   methods: {
+    checkStatus () {
+      let columns = this.storeData.columns
+      this.isAll = this.storeData.columns.every(column => column.checked)
+      this.isIndeterminate = !this.isAll && columns.some(column => column.checked)
+    },
+    allColumnEvent () {
+      let isAll = this.isAll
+      this.storeData.columns.forEach(column => {
+        column.checked = isAll
+      })
+      this.checkStatus()
+    },
     showEvent () {
       this.$nextTick(() => {
         this.$refs.filename.focus()
       })
+      this.checkStatus()
     },
     getExportOptions () {
       const { storeData, defaultOptions } = this
