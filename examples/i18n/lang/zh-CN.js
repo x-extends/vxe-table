@@ -62,6 +62,7 @@ module.exports = {
         pager: '分页',
 
         tree: '树形表格',
+        groupBy: '分组统计',
         edit: '可编辑',
         crudToolbar: '增删改查 + 工具栏',
         lazy: '懒加载',
