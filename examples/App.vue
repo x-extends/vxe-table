@@ -576,6 +576,13 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.groupBy',
+              demoUrl: 'https://jsrun.pro/KVWKp',
+              locat: {
+                name: 'TableTreeGroupBy'
+              }
+            },
+            {
               label: 'app.aside.nav.expandRow',
               locat: {
                 name: 'TableTreeExpand'
