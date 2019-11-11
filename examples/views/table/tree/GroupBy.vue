@@ -157,7 +157,7 @@ export default {
             name: '',
             num: `总和:${this.$utils.sum(children, 'num')}`,
             level: `总和:${this.$utils.sum(children, 'level')}`,
-            age: `平均:${this.$utils.mean(children, 'age')}`,
+            age: `平均:${parseInt(this.$utils.mean(children, 'age'))}`,
             rate: `总和:${this.$utils.sum(children, 'rate')}`
           }
           children.push(total)
