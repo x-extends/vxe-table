@@ -2134,15 +2134,20 @@ const Methods = {
     this.expandeds = []
     return this.$nextTick().then(() => isExists ? this.recalculate() : 0)
   },
+  getRowExpandRecords () {
+    return this.expandeds.slice(0)
+  },
+  getTreeExpandRecords () {
+    return this.treeExpandeds.slice(0)
+  },
   /**
    * 获取数表格状态
    */
   getTreeStatus () {
-    const { treeConfig, treeExpandeds } = this
-    if (treeConfig) {
+    if (this.treeConfig) {
       return {
-        config: treeConfig,
-        expandeds: treeExpandeds
+        config: this.treeConfig,
+        expandeds: this.getTreeExpandRecords()
       }
     }
     return null
