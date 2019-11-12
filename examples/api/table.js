@@ -2829,6 +2829,15 @@ const apis = [
             enum: '',
             defVal: 'false',
             list: []
+          },
+          {
+            name: 'types',
+            desc: '导入的文件类型列表',
+            version: '',
+            type: 'Array',
+            enum: 'csv, html, xml, txt',
+            defVal: '支持所有类型',
+            list: []
           }
         ]
       },

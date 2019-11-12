@@ -19,7 +19,7 @@ export default {
       noTree: '树结构不支持 "{{0}}"',
       delFunc: '方法 "{{0}}" 已废弃，请使用 "{{1}}"',
       delProp: '参数 "{{0}}" 已废弃，请使用 "{{1}}"',
-      notType: '不支持的类型 "{{0}}"',
+      notType: '不支持的文件类型 "{{0}}"',
       notExp: '该浏览器不支持导入/导出功能',
       impFields: '导入失败，请检查字段名和数据格式是否正确'
     },
@@ -75,7 +75,7 @@ export default {
       expNamePlaceholder: '请输入文件名',
       expSheetName: '工作表名称',
       expSheetNamePlaceholder: '请输入工作表名称',
-      expType: '文件类型',
+      expType: '保存类型',
       expMode: '要导出的数据',
       expAll: '全部数据',
       expSelected: '选中数据',
