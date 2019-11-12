@@ -5,8 +5,7 @@ export default {
   name: 'VxeExportPanel',
   props: {
     defaultOptions: Object,
-    storeData: Object,
-    typeList: Array
+    storeData: Object
   },
   data () {
     return {
@@ -33,7 +32,7 @@ export default {
     }
   },
   render (h) {
-    const { _e, isAll, isIndeterminate, showSheet, defaultOptions, storeData, typeList, modeList } = this
+    const { _e, isAll, isIndeterminate, showSheet, defaultOptions, storeData, modeList } = this
     return h('vxe-modal', {
       res: 'modal',
       model: {
@@ -93,7 +92,7 @@ export default {
                     defaultOptions.type = evnt.target.value
                   }
                 }
-              }, typeList.map(item => {
+              }, defaultOptions.types.map(item => {
                 return h('option', {
                   attrs: {
                     value: item.value

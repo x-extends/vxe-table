@@ -27,6 +27,8 @@
           highlightHoverRow: false,
           highlightCurrentColumn: false,
           highlightHoverColumn: false,
+          export: {}, // 导出默认参数
+          import: {}, // 导入默认参数
           zIndex: 100, // 全局 zIndex 起始值
           rowId: '_XID',
           sortConfig: {

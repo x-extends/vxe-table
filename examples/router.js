@@ -23,6 +23,7 @@ const TableOverflow = () => import(/* webpackChunkName: "base" */ './views/table
 const TableStripe = () => import(/* webpackChunkName: "base" */ './views/table/base/Stripe.vue')
 const TableBorder = () => import(/* webpackChunkName: "base" */ './views/table/base/Border.vue')
 const TableStyle = () => import(/* webpackChunkName: "base" */ './views/table/base/Style.vue')
+const TableDynamicStyle = () => import(/* webpackChunkName: "base" */ './views/table/base/DynamicStyle.vue')
 const TableHeader = () => import(/* webpackChunkName: "base" */ './views/table/base/Header.vue')
 const TableHeaderHighlight = () => import(/* webpackChunkName: "base" */ './views/table/base/HeaderHighlight.vue')
 const TableResizable = () => import(/* webpackChunkName: "base" */ './views/table/base/Resizable.vue')
@@ -54,6 +55,7 @@ const TableFooterSpan = () => import(/* webpackChunkName: "advanced" */ './views
 const TableImport = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Import.vue')
 const TableExport = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Export.vue')
 const TablePrint = () => import(/* webpackChunkName: "other" */ './views/table/advanced/Print.vue')
+const TableFixedType = () => import(/* webpackChunkName: "other" */ './views/table/advanced/FixedType.vue')
 const TableMenu = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Menu.vue')
 const TableMenuPrivilege = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/MenuPrivilege.vue')
 const TableExpand = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Expand.vue')
@@ -296,6 +298,11 @@ export default new Router({
       component: TableBorder
     },
     {
+      path: '/table/base/dynamicStyle',
+      name: 'TableDynamicStyle',
+      component: TableDynamicStyle
+    },
+    {
       path: '/table/base/style',
       name: 'TableStyle',
       component: TableStyle
@@ -449,6 +456,11 @@ export default new Router({
       path: '/table/advanced/print',
       name: 'TablePrint',
       component: TablePrint
+    },
+    {
+      path: '/table/advanced/fixedType',
+      name: 'TableFixedType',
+      component: TableFixedType
     },
     {
       path: '/table/advanced/menu',

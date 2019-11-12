@@ -514,6 +514,60 @@ const apis = [
         list: []
       },
       {
+        name: 'cell-style',
+        descKey: 'app.api.table.desc.cellStyle',
+        version: '2.6.19',
+        type: 'Object, Function',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'header-cell-style',
+        descKey: 'app.api.table.desc.headerCellStyle',
+        version: '2.6.19',
+        type: 'Object, Function',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'footer-cell-style',
+        descKey: 'app.api.table.desc.footerCellStyle',
+        version: '2.6.19',
+        type: 'Object, Function',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'row-style',
+        descKey: 'app.api.table.desc.rowStyle',
+        version: '2.6.19',
+        type: 'Object, Function',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'header-row-style',
+        descKey: 'app.api.table.desc.headerRowStyle',
+        version: '2.6.19',
+        type: 'Object, Function',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'footer-row-style',
+        descKey: 'app.api.table.desc.footerRowStyle',
+        version: '2.6.19',
+        type: 'Object, Function',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'show-footer',
         descKey: 'app.api.table.desc.showFooter',
         version: '',
@@ -2099,7 +2153,7 @@ const apis = [
       },
       {
         name: 'getTreeExpandRecords()',
-        desc: '用于树表格，获取已展开的节点',
+        desc: '用于树表格，获取已展开的节点（注意，即使父节点被收起，只要该节点还处于展开状态都能获取到）',
         version: '2.6.19',
         type: 'Array<Row>',
         enum: '',
@@ -2731,7 +2785,7 @@ const apis = [
           {
             name: 'types',
             desc: '导入的文件类型列表',
-            version: '',
+            version: '2.6.19',
             type: 'Array',
             enum: 'csv, html, xml, txt',
             defVal: '支持所有类型',

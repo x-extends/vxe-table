@@ -34,6 +34,8 @@ export default {
       $listeners: tableListeners,
       footerRowClassName,
       footerCellClassName,
+      footerRowStyle,
+      footerCellStyle,
       footerAlign: allFooterAlign,
       footerSpanMethod,
       align: allAlign,
@@ -96,7 +98,8 @@ export default {
           ref: 'tfoot'
         }, footerData.map((list, $rowIndex) => {
           return h('tr', {
-            class: ['vxe-footer--row', footerRowClassName ? XEUtils.isFunction(footerRowClassName) ? footerRowClassName({ $table, $rowIndex, fixed: fixedType }) : footerRowClassName : '']
+            class: ['vxe-footer--row', footerRowClassName ? XEUtils.isFunction(footerRowClassName) ? footerRowClassName({ $table, $rowIndex, fixed: fixedType }) : footerRowClassName : ''],
+            style: footerRowStyle ? (XEUtils.isFunction(footerRowStyle) ? footerRowStyle({ $table, $rowIndex, fixed: fixedType }) : footerRowStyle) : null
           }, tableColumn.map((column, $columnIndex) => {
             let { showOverflow, footerAlign, align, footerClassName } = column
             let isColGroup = column.children && column.children.length
@@ -155,6 +158,7 @@ export default {
                 'filter--active': column.filters.some(item => item.checked)
               }, UtilTools.getClass(footerClassName, params), UtilTools.getClass(footerCellClassName, params)],
               attrs,
+              style: footerCellStyle ? (XEUtils.isFunction(footerCellStyle) ? footerCellStyle({ $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType }) : footerCellStyle) : null,
               on: tfOns,
               key: columnKey ? column.id : columnIndex
             }, [

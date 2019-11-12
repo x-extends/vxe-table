@@ -2,9 +2,18 @@
   <div>
     <p class="tip">树表格，通过配置 <table-api-link prop="tree-config"/> 和指定列 <table-column-api-link prop="tree-node"/> 属性来开启树表格，还可以通过 <table-api-link prop="trigger"/> 指定触发方式</p>
 
+    <vxe-toolbar>
+      <template v-slot:buttons>
+        <vxe-button @click="getTreeExpansionEvent">获取已展开</vxe-button>
+        <vxe-button @click="$refs.xTree.setAllTreeExpansion(true)">展开所有</vxe-button>
+        <vxe-button @click="$refs.xTree.clearTreeExpand()">关闭所有</vxe-button>
+      </template>
+    </vxe-toolbar>
+
     <vxe-table
       border
       resizable
+      ref="xTree"
       :tree-config="{children: 'children'}"
       :data="tableData">
       <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
@@ -73,6 +82,12 @@ export default {
           },
           created () {
             this.tableData = window.MOCK_TREE_DATA_LIST.slice(0)
+          },
+          methods: {
+            getTreeExpansionEvent () {
+              let treeExpandRecords = this.$refs.xTree.getTreeExpandRecords()
+              this.$XModal.alert(treeExpandRecords.length)
+            }
           }
         }
         `,
@@ -112,6 +127,12 @@ export default {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
       hljs.highlightBlock(block)
     })
+  },
+  methods: {
+    getTreeExpansionEvent () {
+      let treeExpandRecords = this.$refs.xTree.getTreeExpandRecords()
+      this.$XModal.alert(treeExpandRecords.length)
+    }
   }
 }
 </script>
