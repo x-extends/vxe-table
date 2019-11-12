@@ -373,7 +373,7 @@ export default {
     })
   },
   handleImport ($table, content, opts) {
-    const { tableFullColumn, _importCallback } = $table
+    const { tableFullColumn, _importResolve } = $table
     let rest = { fields: [], rows: [] }
     switch (opts.type) {
       case 'csv':
@@ -406,8 +406,8 @@ export default {
     } else if (opts.message !== false) {
       $table.$XModal.message({ message: GlobalConfig.i18n('vxe.error.impFields'), status: 'error' })
     }
-    if (_importCallback) {
-      _importCallback(status)
+    if (_importResolve) {
+      _importResolve(status)
     }
   }
 }

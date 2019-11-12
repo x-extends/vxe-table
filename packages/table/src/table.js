@@ -34,7 +34,7 @@ function isTargetRadioOrCheckbox (evnt, column, colType, targetType) {
   return target && column.type === colType && target.tagName.toLowerCase() === 'input' && target.type === (targetType || colType)
 }
 
-function getFileTypes () {
+function getFileTypes (options) {
   return Object.keys(VXETable.types)
 }
 
@@ -4421,7 +4421,7 @@ export default {
       if (window.FileReader) {
         const { type, filename } = UtilTools.parseFile(file)
         const options = Object.assign({ mode: 'covering' }, opts, { type, filename })
-        if (getFileTypes().includes(type)) {
+        if (getFileTypes(options).includes(type)) {
           this.preventEvent(null, 'event.import', { $table: this, file, options, columns: this.tableFullColumn }, () => {
             const reader = new FileReader()
             reader.onerror = e => {
@@ -4440,25 +4440,41 @@ export default {
       }
     },
     importData (options) {
-      this.readFile()
-        .then(evnt => this.importByFile(evnt.target.files[0], options))
-      return new Promise(resolve => {
-        this._importCallback = resolve
+      let rest = new Promise((resolve, reject) => {
+        this._importResolve = resolve
+        this._importReject = reject
       })
+      this.readFile(options)
+        .then(evnt => this.importByFile(evnt.target.files[0], options))
+        .catch(evnt => {
+          this._importReject(evnt)
+          this._importReject = null
+        })
+      return rest
     },
-    readFile () {
+    readFile (options = {}) {
       if (!impForm.parentNode) {
         document.body.appendChild(impForm)
       }
-      impInput.accept = `.${getFileTypes().join(', .')}`
+      const types = getFileTypes(options)
+      impInput.accept = `.${types.join(', .')}`
       impInput.onchange = evnt => {
-        this._fileCallback(evnt)
-        this._fileCallback = null
+        const { type } = UtilTools.parseFile(evnt.target.files[0])
+        if (types.includes(type)) {
+          this._fileResolve(evnt)
+        } else {
+          if (options.message !== false) {
+            this.$XModal.message({ message: XEUtils.template(GlobalConfig.i18n('vxe.error.notType'), [type]), status: 'error' })
+          }
+          this._fileReject(evnt)
+        }
+        this._fileResolve = null
       }
       impForm.reset()
       impInput.click()
-      return new Promise(resolve => {
-        this._fileCallback = resolve
+      return new Promise((resolve, reject) => {
+        this._fileResolve = resolve
+        this._fileReject = reject
       })
     },
     print (options) {

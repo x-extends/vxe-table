@@ -143,7 +143,7 @@ export default {
         comp.readFile().then(evnt => {
           const file = evnt.target.files[0]
           Object.assign(this.storeData, UtilTools.parseFile(file), { file })
-        })
+        }).catch(e => e)
       }
     },
     importEvent () {
