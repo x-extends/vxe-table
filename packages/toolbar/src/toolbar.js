@@ -35,7 +35,9 @@ export default {
         visible: false
       },
       importParams: {
-        mode: ''
+        mode: '',
+        types: null,
+        message: true
       },
       exportStore: {
         name: '',
@@ -50,6 +52,7 @@ export default {
         filename: '',
         sheetName: '',
         type: '',
+        types: [],
         original: false,
         message: true,
         isHeader: false,
@@ -71,14 +74,7 @@ export default {
       return Object.assign({}, GlobalConfig.toolbar.import, this.import)
     },
     exportOpts () {
-      let opts = Object.assign({ types: Object.keys(VXETable.types) }, GlobalConfig.toolbar.export, this.export)
-      opts.types = opts.types.map(value => {
-        return {
-          value,
-          label: `vxe.types.${value}`
-        }
-      })
-      return opts
+      return Object.assign({ types: Object.keys(VXETable.types) }, GlobalConfig.toolbar.export, this.export)
     },
     resizableOpts () {
       return Object.assign({ storageKey: 'VXE_TABLE_CUSTOM_COLUMN_WIDTH' }, GlobalConfig.toolbar.resizable, this.resizable)
@@ -110,7 +106,7 @@ export default {
     GlobalEvent.off(this, 'blur')
   },
   render (h) {
-    let { _e, $scopedSlots, $grid, $table, loading, settingStore, refresh, setting, settingOpts, buttons = [], vSize, tableFullColumn, importStore, importParams, exportOpts, exportStore, exportParams } = this
+    let { _e, $scopedSlots, $grid, $table, loading, settingStore, refresh, setting, settingOpts, buttons = [], vSize, tableFullColumn, importStore, importParams, exportStore, exportParams } = this
     let customBtnOns = {}
     let customWrapperOns = {}
     let $buttons = $scopedSlots.buttons
@@ -249,8 +245,7 @@ export default {
       VXETable._export ? h('vxe-export-panel', {
         props: {
           defaultOptions: exportParams,
-          storeData: exportStore,
-          typeList: exportOpts.types
+          storeData: exportStore
         },
         on: {
           print: this.confirmPrintEvent,
@@ -496,7 +491,14 @@ export default {
       const treeStatus = comp.getTreeStatus()
       const forceOriginal = !!treeStatus || virtualScroller.scrollX || virtualScroller.scrollY
       const hasFooter = !!footerData.length
-      const defOpts = Object.assign({ original: true, message: true }, options, exportOpts)
+      const defOpts = Object.assign({ original: true, message: true }, exportOpts, options)
+      // 处理类型
+      defOpts.types = defOpts.types.map(value => {
+        return {
+          value,
+          label: `vxe.types.${value}`
+        }
+      })
       // 索引列默认不选中
       exportColumns.forEach(column => {
         column.checked = column.type !== 'index'
@@ -515,6 +517,7 @@ export default {
         filename: defOpts.filename || '',
         sheetName: defOpts.sheetName || '',
         type: defOpts.type || defOpts.types[0].value,
+        types: defOpts.types,
         original: forceOriginal || defOpts.original,
         message: defOpts.message,
         isHeader: true,

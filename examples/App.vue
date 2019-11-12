@@ -165,6 +165,13 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.dynamicStyle',
+              demoUrl: 'https://jsrun.pro/mVWKp',
+              locat: {
+                name: 'TableDynamicStyle'
+              }
+            },
+            {
               label: 'app.aside.nav.hideHead',
               demoUrl: 'https://jsrun.net/7mXKp',
               locat: {
@@ -364,6 +371,12 @@ export default {
               label: 'app.aside.nav.print',
               locat: {
                 name: 'TablePrint'
+              }
+            },
+            {
+              label: 'app.aside.nav.fixedType',
+              locat: {
+                name: 'TableFixedType'
               }
             },
             {

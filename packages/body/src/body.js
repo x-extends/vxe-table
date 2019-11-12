@@ -37,6 +37,7 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
     align: allAlign,
     currentColumn,
     cellClassName,
+    cellStyle,
     spanMethod,
     keyboardConfig,
     expandConfig = {},
@@ -183,6 +184,7 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
     }, UtilTools.getClass(className, params), UtilTools.getClass(cellClassName, params)],
     key: columnKey || ($table.columnKey ? column.id : columnIndex),
     attrs,
+    style: cellStyle ? (XEUtils.isFunction(cellStyle) ? cellStyle(params) : cellStyle) : null,
     on: tdOns
   }, allColumnOverflow && fixedHiddenColumn ? [] : [
     h('div', {
@@ -235,6 +237,7 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
     highlightHoverRow,
     highlightCurrentRow,
     rowClassName,
+    rowStyle,
     currentRow,
     hoverRow,
     treeConfig,
@@ -287,6 +290,7 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
         attrs: {
           'data-rowid': rowid
         },
+        style: rowStyle ? (XEUtils.isFunction(rowStyle) ? rowStyle({ $table, $seq, seq, fixedType, rowLevel, row, rowIndex, $rowIndex }) : rowStyle) : null,
         key: rowKey || treeConfig ? rowid : $rowIndex,
         on: trOn
       }, tableColumn.map((column, $columnIndex) => {
@@ -309,6 +313,7 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
           h('tr', {
             class: 'vxe-body--expanded-row',
             key: `expand_${rowid}`,
+            style: rowStyle ? (XEUtils.isFunction(rowStyle) ? rowStyle({ $table, $seq, seq, fixedType, rowLevel, row, rowIndex, $rowIndex, isExpanded: true }) : rowStyle) : null,
             on: trOn
           }, [
             h('td', {

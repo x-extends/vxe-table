@@ -96,6 +96,8 @@ export default {
       overflowX,
       headerRowClassName,
       headerCellClassName,
+      headerRowStyle,
+      headerCellStyle,
       showHeaderOverflow: allHeaderOverflow,
       showHeaderAllOverflow: oldHeaderOverflow,
       headerAlign: allHeaderAlign,
@@ -162,7 +164,8 @@ export default {
          */
         h('thead', headerColumn.map((cols, $rowIndex) => {
           return h('tr', {
-            class: ['vxe-header--row', headerRowClassName ? XEUtils.isFunction(headerRowClassName) ? headerRowClassName({ $table, $rowIndex, fixed: fixedType }) : headerRowClassName : '']
+            class: ['vxe-header--row', headerRowClassName ? XEUtils.isFunction(headerRowClassName) ? headerRowClassName({ $table, $rowIndex, fixed: fixedType }) : headerRowClassName : ''],
+            style: headerRowStyle ? (XEUtils.isFunction(headerRowStyle) ? headerRowStyle({ $table, $rowIndex, fixed: fixedType }) : headerRowStyle) : null
           }, cols.map((column, $columnIndex) => {
             let { columnKey, showHeaderOverflow, headerAlign, align, renderWidth, headerClassName } = column
             let isColGroup = column.children && column.children.length
@@ -216,6 +219,7 @@ export default {
                 colspan: column.colSpan,
                 rowspan: column.rowSpan
               },
+              style: headerCellStyle ? (XEUtils.isFunction(headerCellStyle) ? headerCellStyle({ $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType }) : headerCellStyle) : null,
               on: thOns,
               key: columnKey || (isColGroup || $table.columnKey ? column.id : columnIndex)
             }, [
