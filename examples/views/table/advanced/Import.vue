@@ -81,13 +81,7 @@ export default {
               this.$refs.xTable.openExport()
             },
             importDataEvent () {
-              this.$refs.xTable.importData(status => {
-                if (status) {
-                  this.$XModal.message({ message: '导入成功', status: 'success' })
-                } else {
-                  this.$XModal.alert({ message: '导入失败，请检查格式是否正确', status: 'error' })
-                }
-              })
+              this.$refs.xTable.importData()
             }
           }
         }
@@ -111,13 +105,7 @@ export default {
       this.$refs.xTable.openExport()
     },
     importDataEvent () {
-      this.$refs.xTable.importData(status => {
-        if (status) {
-          this.$XModal.message({ message: '导入成功', status: 'success' })
-        } else {
-          this.$XModal.alert({ message: '导入失败，请检查格式是否正确', status: 'error' })
-        }
-      })
+      this.$refs.xTable.importData()
     }
   }
 }

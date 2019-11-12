@@ -2165,7 +2165,7 @@ const apis = [
       },
       {
         name: 'getCurrentRow()',
-        desc: '用于当前行，获取当前行的数据',
+        desc: '用于当前行，获取当前行的行数据',
         version: '',
         type: 'Row',
         enum: '',
@@ -2174,7 +2174,7 @@ const apis = [
       },
       {
         name: 'getRadioRow()',
-        desc: '用于单选行，获取当已选中的数据',
+        desc: '用于单选行，获取当已选中的行数据',
         version: '',
         type: 'Row',
         enum: '',
@@ -2183,8 +2183,26 @@ const apis = [
       },
       {
         name: 'getSelectRecords()',
-        desc: '用于多选行，获取已选中的数据',
+        desc: '用于多选行，获取已选中的行数据',
         version: '',
+        type: 'Array<Row>',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'getRowExpandRecords()',
+        desc: '用于展开行，获取已展开的行数据',
+        version: '1.15.13',
+        type: 'Array<Row>',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'getTreeExpandRecords()',
+        desc: '用于树表格，获取已展开的节点',
+        version: '1.15.13',
         type: 'Array<Row>',
         enum: '',
         defVal: '',
