@@ -42,6 +42,7 @@ const Methods = {
   /**
    * 获取需要排除的高度
    * 但渲染表格高度时，需要排除工具栏或分页等相关组件的高度
+   * 如果存在表尾合计滚动条，则需要排除滚动条高度
    */
   getExcludeHeight () {
     return this.$grid ? this.$grid.getExcludeHeight() : 0
@@ -736,9 +737,9 @@ const Methods = {
       if (this.isGroup) {
         UtilTools.warn('vxe.error.scrollXNotGroup')
       }
-      if (this.resizable || visibleColumn.some(column => column.resizable)) {
-        UtilTools.warn('vxe.error.scrollXNotResizable')
-      }
+      // if (this.resizable || visibleColumn.some(column => column.resizable)) {
+      //   UtilTools.warn('vxe.error.scrollXNotResizable')
+      // }
       Object.assign(scrollXStore, {
         startIndex: 0,
         visibleIndex: 0
@@ -967,6 +968,9 @@ const Methods = {
     } = this
     let containerList = ['main', 'left', 'right']
     let customHeight = height === 'auto' ? parentHeight : ((DomTools.isScale(height) ? Math.floor(parseInt(height) / 100 * parentHeight) : XEUtils.toNumber(height)) - this.getExcludeHeight())
+    if (showFooter) {
+      customHeight += scrollbarHeight + 1
+    }
     containerList.forEach((name, index) => {
       let fixedType = index > 0 ? name : ''
       let layoutList = ['header', 'body', 'footer']
@@ -2326,7 +2330,7 @@ const Methods = {
         // 向左
         preload = toVisibleIndex - offsetSize <= startIndex
         if (preload) {
-          scrollXStore.startIndex = Math.max(0, toVisibleIndex - Math.max(marginSize, renderSize - visibleSize))
+          scrollXStore.startIndex = Math.max(0, Math.max(marginSize, toVisibleIndex - marginSize))
         }
       } else {
         // 向右
@@ -2408,7 +2412,7 @@ const Methods = {
             scrollXStore.offsetSize = visibleXSize
           }
           if (!scrollX.rSize) {
-            scrollXStore.renderSize = visibleXSize + 2
+            scrollXStore.renderSize = visibleXSize + 4
           }
           this.updateScrollXData()
         } else {

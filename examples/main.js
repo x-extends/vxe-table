@@ -27,7 +27,11 @@ function mockData () {
       let colItem = {
         field: fullIndex % 2 === 0 ? 'age' : (fullIndex % 3 === 0 ? 'rate' : 'name'),
         title: 'cloumn_' + fullIndex,
-        width: 160
+        width: fullIndex % 6 === 0 ? 300 : index % 4 === 0 ? 220 : index % 3 === 0 ? 140 : 160,
+        resizable: true
+      }
+      if (fullIndex === 0) {
+        colItem.width = 100
       }
       if (fullIndex === 1) {
         colItem.type = 'checkbox'

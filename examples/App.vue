@@ -749,12 +749,14 @@ export default {
             },
             {
               label: 'app.aside.nav.partialLoad',
+              demoUrl: 'https://jsrun.pro/EVWKp',
               locat: {
                 name: 'TableScrollPartialLoad'
               }
             },
             {
               label: 'app.aside.nav.fullPartialLoad',
+              demoUrl: 'https://jsrun.pro/sVWKp',
               locat: {
                 name: 'TableScrollFullPartialLoad'
               }

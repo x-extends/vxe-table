@@ -2,7 +2,7 @@ export default {
   vxe: {
     error: {
       groupFixed: '如果使用分组表头，固定列必须在左右两侧',
-      scrollXNotResizable: '横向虚拟滚动不支持 "resizable"',
+      // scrollXNotResizable: '横向虚拟滚动不支持 "resizable"',
       cellEditRender: '渲染器 "cell-render" 和 "edit-render" 不能同时使用',
       treeFixedExpand: '树结构的固定列与展开行功能有冲突',
       scrollOriginal: '虚拟滚动启用后只能导出源数据，请将设置 "original=true"',

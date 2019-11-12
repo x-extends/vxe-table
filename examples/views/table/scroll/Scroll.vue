@@ -9,6 +9,7 @@
 
     <vxe-table
       border
+      show-overflow
       highlight-hover-row
       height="300"
       :data="tableData">
@@ -77,6 +78,7 @@ export default {
         `
         <vxe-table
           border
+          show-overflow
           highlight-hover-row
           height="300"
           :data="tableData">
