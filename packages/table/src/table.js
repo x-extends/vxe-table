@@ -85,6 +85,9 @@ function renderFixed (h, $table, fixedType) {
   let isRightFixed = fixedType === 'right'
   let fixedColumn = columnStore[`${fixedType}List`]
   let customHeight = height === 'auto' ? containerHeight : (DomTools.isScale(height) ? Math.floor(parseInt(height) / 100 * containerHeight) : XEUtils.toNumber(height))
+  if (showFooter) {
+    customHeight += scrollbarHeight + 1
+  }
   let style = {
     height: `${(customHeight > 0 ? customHeight - headerHeight - footerHeight : tableHeight) + headerHeight + footerHeight - scrollbarHeight * (showFooter ? 2 : 1)}px`,
     width: `${fixedColumn.reduce((previous, column) => previous + column.renderWidth, isRightFixed ? scrollbarWidth : 0)}px`
@@ -1639,9 +1642,9 @@ export default {
         if (this.isGroup) {
           UtilTools.warn('vxe.error.scrollXNotGroup')
         }
-        if (this.resizable || visibleColumn.some(column => column.resizable)) {
-          UtilTools.warn('vxe.error.scrollXNotResizable')
-        }
+        // if (this.resizable || visibleColumn.some(column => column.resizable)) {
+        //   UtilTools.warn('vxe.error.scrollXNotResizable')
+        // }
         scrollXStore.startIndex = 0
         scrollXStore.visibleIndex = 0
         visibleColumn = visibleColumn.slice(scrollXStore.startIndex, scrollXStore.startIndex + scrollXStore.renderSize)
@@ -3812,7 +3815,7 @@ export default {
           // 向左
           preload = toVisibleIndex - offsetSize <= startIndex
           if (preload) {
-            scrollXStore.startIndex = Math.max(0, toVisibleIndex - Math.max(marginSize, renderSize - visibleSize))
+            scrollXStore.startIndex = Math.max(0, Math.max(marginSize, toVisibleIndex - marginSize))
           }
         } else {
           // 向右
@@ -3880,7 +3883,7 @@ export default {
               scrollXStore.offsetSize = visibleXSize
             }
             if (!scrollX.rSize) {
-              scrollXStore.renderSize = visibleXSize + 2
+              scrollXStore.renderSize = visibleXSize + 4
             }
             this.updateScrollXData()
           } else {
