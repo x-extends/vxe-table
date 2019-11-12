@@ -35,7 +35,9 @@ export default {
         visible: false
       },
       importParams: {
-        mode: ''
+        mode: '',
+        types: null,
+        message: true
       },
       exportStore: {
         name: '',
@@ -50,6 +52,7 @@ export default {
         filename: '',
         sheetName: '',
         type: '',
+        types: null,
         original: false,
         message: true,
         isHeader: false,

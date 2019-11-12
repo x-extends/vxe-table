@@ -1,4 +1,5 @@
 import GlobalConfig from '../../conf'
+import VXETable from '../../v-x-e-table'
 import { UtilTools } from '../../tools'
 
 export default {
@@ -22,7 +23,7 @@ export default {
       if (storeData.type) {
         return GlobalConfig.i18n(`vxe.types.${storeData.type}`)
       }
-      return ''
+      return `*.${(this.defaultOptions.types || Object.keys(VXETable.types)).join(', *.')}`
     }
   },
   render (h) {
@@ -140,7 +141,7 @@ export default {
       const { $grid, $table } = this.$parent
       const comp = $grid || $table
       if (comp) {
-        comp.readFile().then(evnt => {
+        comp.readFile(this.defaultOptions).then(evnt => {
           const file = evnt.target.files[0]
           Object.assign(this.storeData, UtilTools.parseFile(file), { file })
         }).catch(e => e)

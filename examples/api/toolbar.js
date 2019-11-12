@@ -59,6 +59,15 @@ const apis = [
             enum: '',
             defVal: 'true',
             list: []
+          },
+          {
+            name: 'types',
+            desc: '导入的文件类型列表',
+            version: '',
+            type: 'Array',
+            enum: 'csv, html, xml, txt',
+            defVal: '支持所有类型',
+            list: []
           }
         ]
       },
@@ -108,7 +117,7 @@ const apis = [
           },
           {
             name: 'types',
-            desc: '支持导出的类型列表',
+            desc: '导出的文件类型列表',
             version: '',
             type: 'Array',
             enum: 'csv, html, xml, txt',

@@ -24,7 +24,7 @@ function createFrame () {
 }
 
 function getFileTypes (options) {
-  return Object.keys(VXETable.types)
+  return options.types || Object.keys(VXETable.types)
 }
 
 function handleExport ($table, opts, oColumns, fullData) {
@@ -470,7 +470,7 @@ export default {
         columnFilterMethod: null,
         dataFilterMethod: null,
         footerFilterMethod: null
-      }, options)
+      }, GlobalConfig.export, options)
       if (!opts.filename) {
         opts.filename = 'export'
       }
@@ -526,12 +526,13 @@ export default {
       }
     },
     _importData (options) {
+      let opts = Object.assign({}, GlobalConfig.import, options)
       let rest = new Promise((resolve, reject) => {
         this._importResolve = resolve
         this._importReject = reject
       })
-      this.readFile(options)
-        .then(evnt => this.importByFile(evnt.target.files[0], options))
+      this.readFile(opts)
+        .then(evnt => this.importByFile(evnt.target.files[0], opts))
         .catch(evnt => {
           this._importReject(evnt)
           this._importReject = null

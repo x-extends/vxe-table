@@ -19,7 +19,7 @@ export default {
       noTree: 'The tree structure does not support "{{0}}".',
       delFunc: 'The property "{{0}}" is deprecated, please use "{{1}}".',
       delProp: 'The function "{{0}}" is deprecated, please use "{{1}}".',
-      notType: 'Unsupported types "{{0}}"',
+      notType: 'Unsupported file types "{{0}}"',
       notExp: 'The browser does not support import / export.',
       impFields: 'Import failed, please check that the field name and data format are correct.'
     },
@@ -75,7 +75,7 @@ export default {
       expNamePlaceholder: 'Please enter filename',
       expSheetName: 'Sheet name',
       expSheetNamePlaceholder: 'Please enter a sheet name.',
-      expType: 'File type',
+      expType: 'Save the type',
       expMode: 'Data to export',
       expAll: 'All data',
       expSelected: 'Selected data',
