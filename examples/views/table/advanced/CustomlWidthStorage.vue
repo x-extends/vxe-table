@@ -2,7 +2,7 @@
   <div>
     <p class="tip">
       显示/隐藏列和列宽拖动保存功能，通过设置 <toolbar-api-link prop="id"/> 和 <toolbar-api-link prop="resizable"/>={storage: true} 参数开启列宽拖动 localStorage 保存功能<br>
-      还可以通过 <toolbar-api-link prop="checkMethod"/> 设置列禁止勾选<br>
+      还可以通过 <toolbar-api-link prop="checkMethod"/> 设置个性化列禁止勾选<br>
       也可以通过配合 <table-api-link prop="resizable-change"/> 事件实现服务端保存
     </p>
 
