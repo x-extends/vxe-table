@@ -27,7 +27,7 @@
   .vxe-input {
     height: 40px;
     &::-webkit-inner-spin-button {
-      margin-top: 10px;
+      margin-top: 6px;
     }
     &::placeholder {
       color: $vxe-input-placeholder-color;
@@ -39,16 +39,25 @@
   &.size--medium {
     .vxe-input {
       height: 36px;
+      &::-webkit-inner-spin-button {
+        margin-top: 4px;
+      }
     }
   }
   &.size--small {
     .vxe-input {
       height: 32px;
+      &::-webkit-inner-spin-button {
+        margin-top: 2px;
+      }
     }
   }
   &.size--mini {
     .vxe-input {
       height: 28px;
+      &::-webkit-inner-spin-button {
+        margin-top: 0px;
+      }
     }
   }
 }
