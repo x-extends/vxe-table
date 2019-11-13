@@ -3,7 +3,20 @@ import GlobalConfig from '../../conf'
 import { UtilTools, DomTools } from '../../tools'
 
 // 默认导出或打印的 HTML 样式
-const defaultHtmlStyle = 'body{margin:0;font-size:14px}table{text-align:center;border-width:1px 0 0 1px}table,th,td{border-style:solid;border-color:#e8eaec}thead,tfoot{background-color:#f8f8f9}th,td{padding:6px 0;border-width:0 1px 1px 0}'
+const defaultHtmlStyle = 'body{margin:0;font-size:14px}table{text-align:left;border-width:1px 0 0 1px}table,td,th{border-style:solid;border-color:#e8eaec}tfoot,thead{background-color:#f8f8f9}td,th{padding:6px;border-width:0 1px 1px 0}.tree-icon-wrapper{position:relative;display:inline-block;width:18px}.tree-icon{position:absolute;top:-9px;left:0;width:0;height:0;border-style:solid;border-width:6px;border-top-color:#939599;border-right-color:transparent;border-bottom-color:transparent;border-left-color:transparent}.tree-node{text-align:left}.tree-indent{display:inline-block}'
+
+// 导入
+const impForm = document.createElement('form')
+const impInput = document.createElement('input')
+impForm.className = 'vxe-table--import-form'
+impInput.name = 'file'
+impInput.type = 'file'
+impForm.appendChild(impInput)
+
+function hasTreeChildren ($table, row) {
+  const treeConfig = $table.treeConfig
+  return row[treeConfig.children] && row[treeConfig.children].length
+}
 
 function getContent ($table, opts, columns, datas) {
   switch (opts.type) {
@@ -80,6 +93,7 @@ function toTxt ($table, opts, columns, datas) {
 }
 
 function toHtml ($table, opts, columns, datas) {
+  const { treeConfig, tableFullData } = $table
   const isOriginal = opts.original
   let html = [
     '<html>',
@@ -96,20 +110,59 @@ function toHtml ($table, opts, columns, datas) {
   }
   if (datas.length) {
     html += '<tbody>'
-    datas.forEach((row, rowIndex) => {
-      html += '<tr>'
-      if (isOriginal) {
-        html += columns.map((column, columnIndex) => {
-          if (column.type === 'index') {
-            return `<td>${column.indexMethod ? column.indexMethod({ row, rowIndex, column, columnIndex }) : rowIndex + 1}</td>`
-          }
-          return `<td>${UtilTools.getCellValue(row, column) || ''}</td>`
-        }).join('')
-      } else {
-        html += columns.map(column => `<td>${row[column.id]}</td>`).join('')
-      }
-      html += '</tr>'
-    })
+    if (treeConfig) {
+      XEUtils.eachTree(opts.data ? datas : tableFullData, (row, rowIndex, items, path, parent, nodes) => {
+        html += '<tr>'
+        if (isOriginal) {
+          html += columns.map((column, columnIndex) => {
+            let cellValue = ''
+            if (column.type === 'index') {
+              cellValue = column.indexMethod ? column.indexMethod({ row, rowIndex, column, columnIndex }) : (rowIndex + 1)
+            } else {
+              cellValue = UtilTools.getCellValue(row, column) || ''
+            }
+            if (treeConfig && column.treeNode) {
+              let treeIcon = ''
+              if (hasTreeChildren($table, row)) {
+                treeIcon = `<i class="tree-icon"></i>`
+              }
+              return `<td class="tree-node"><span class="tree-indent" style="width: ${(nodes.length - 1) * (treeConfig.indent || 16)}px"></span><span class="tree-icon-wrapper">${treeIcon}</span>${cellValue}</td>`
+            }
+            return `<td>${cellValue}</td>`
+          }).join('')
+        } else {
+          html += columns.map(column => {
+            if (treeConfig && column.treeNode) {
+              let treeIcon = ''
+              if (row.hasChild) {
+                treeIcon = `<i class="tree-icon"></i>`
+              }
+              return `<td class="tree-node"><span class="tree-indent" style="width: ${(nodes.length - 1) * (treeConfig.indent || 16)}px"></span><span class="tree-icon-wrapper">${treeIcon}</span>${row[column.id]}</td>`
+            }
+            return `<td>${row[column.id]}</td>`
+          }).join('')
+        }
+        html += '</tr>'
+      }, treeConfig)
+    } else {
+      datas.forEach((row, rowIndex) => {
+        html += '<tr>'
+        if (isOriginal) {
+          html += columns.map((column, columnIndex) => {
+            let cellValue = ''
+            if (column.type === 'index') {
+              cellValue = column.indexMethod ? column.indexMethod({ row, rowIndex, column, columnIndex }) : (rowIndex + 1)
+            } else {
+              cellValue = UtilTools.getCellValue(row, column) || ''
+            }
+            return `<td>${cellValue}</td>`
+          }).join('')
+        } else {
+          html += columns.map(column => `<td>${row[column.id]}</td>`).join('')
+        }
+        html += '</tr>'
+      })
+    }
     html += '</tbody>'
   }
   if (opts.isFooter) {
@@ -202,8 +255,11 @@ function downloadFile ($table, opts, content) {
 }
 
 function getLabelData ($table, columns, datas) {
+  const treeConfig = $table.treeConfig
   return datas.map(row => {
-    let item = {}
+    let item = {
+      hasChild: treeConfig && hasTreeChildren($table, row)
+    }
     columns.forEach(column => {
       let cell = DomTools.getCell($table, { row, column })
       item[column.id] = cell ? cell.innerText.trim() : ''
@@ -408,6 +464,7 @@ export default {
     }
     if (_importResolve) {
       _importResolve(status)
+      $table._importResolve = null
     }
   }
 }
