@@ -23,10 +23,6 @@ function createFrame () {
   return frame
 }
 
-function getFileTypes (options) {
-  return options.types || Object.keys(VXETable.types)
-}
-
 function handleExport ($table, opts, oColumns, fullData) {
   const { columns, datas } = getExportData($table, opts, fullData, oColumns)
   return $table.preventEvent(null, 'event.export', { $table, options: opts, columns, datas }, () => {
@@ -60,9 +56,9 @@ function toCsv ($table, opts, columns, datas) {
   }
   datas.forEach((row, rowIndex) => {
     if (isOriginal) {
-      content += columns.map(column => {
+      content += columns.map((column, columnIndex) => {
         if (column.type === 'index') {
-          return `"${column.indexMethod ? column.indexMethod(rowIndex) : rowIndex + 1}"`
+          return `"${column.indexMethod ? column.indexMethod({ row, rowIndex, column, columnIndex }) : rowIndex + 1}"`
         }
         return `"${UtilTools.getCellValue(row, column) || ''}"`
       }).join(',') + '\n'
@@ -88,9 +84,9 @@ function toTxt ($table, opts, columns, datas) {
   }
   datas.forEach((row, rowIndex) => {
     if (isOriginal) {
-      content += columns.map(column => {
+      content += columns.map((column, columnIndex) => {
         if (column.type === 'index') {
-          return `${column.indexMethod ? column.indexMethod(rowIndex) : rowIndex + 1}`
+          return `${column.indexMethod ? column.indexMethod({ row, rowIndex, column, columnIndex }) : rowIndex + 1}`
         }
         return `${UtilTools.getCellValue(row, column) || ''}`
       }).join('\t') + '\n'
@@ -128,9 +124,9 @@ function toHtml ($table, opts, columns, datas) {
     datas.forEach((row, rowIndex) => {
       html += '<tr>'
       if (isOriginal) {
-        html += columns.map(column => {
+        html += columns.map((column, columnIndex) => {
           if (column.type === 'index') {
-            return `<td>${column.indexMethod ? column.indexMethod(rowIndex) : rowIndex + 1}</td>`
+            return `<td>${column.indexMethod ? column.indexMethod({ row, rowIndex, column, columnIndex }) : rowIndex + 1}</td>`
           }
           return `<td>${UtilTools.getCellValue(row, column) || ''}</td>`
         }).join('')
@@ -182,9 +178,9 @@ function toXML ($table, opts, columns, datas) {
   datas.forEach((row, rowIndex) => {
     xml += '<Row>'
     if (isOriginal) {
-      xml += columns.map(column => {
+      xml += columns.map((column, columnIndex) => {
         if (column.type === 'index') {
-          return `<Cell><Data ss:Type="String">${column.indexMethod ? column.indexMethod(rowIndex) : rowIndex + 1}</Data></Cell>`
+          return `<Cell><Data ss:Type="String">${column.indexMethod ? column.indexMethod({ row, rowIndex, column, columnIndex }) : rowIndex + 1}</Data></Cell>`
         }
         return `<Cell><Data ss:Type="String">${UtilTools.getCellValue(row, column) || ''}</Data></Cell>`
       }).join('')
@@ -455,7 +451,6 @@ export default {
      */
     _exportData (options) {
       let { visibleColumn, scrollXLoad, scrollYLoad, treeConfig } = this
-      let types = Object.keys(VXETable.types)
       let opts = Object.assign({
         filename: '',
         sheetName: '',
@@ -477,7 +472,7 @@ export default {
       if (!opts.sheetName) {
         opts.sheetName = 'Sheet1'
       }
-      if (!types.includes(opts.type)) {
+      if (!VXETable.exportTypes.includes(opts.type)) {
         throw new Error(UtilTools.getLog('vxe.error.notType', [opts.type]))
       }
       if (!opts.original) {
@@ -507,7 +502,8 @@ export default {
       if (window.FileReader) {
         const { type, filename } = UtilTools.parseFile(file)
         const options = Object.assign({ mode: 'covering' }, opts, { type, filename })
-        if (getFileTypes(options).includes(type)) {
+        const types = options.types || VXETable.importTypes
+        if (types.includes(type)) {
           this.preventEvent(null, 'event.import', { $table: this, file, options, columns: this.tableFullColumn }, () => {
             const reader = new FileReader()
             reader.onerror = e => {
@@ -543,7 +539,7 @@ export default {
       if (!impForm.parentNode) {
         document.body.appendChild(impForm)
       }
-      const types = getFileTypes(options)
+      const types = options.types || VXETable.importTypes
       impInput.accept = `.${types.join(', .')}`
       impInput.onchange = evnt => {
         const { type } = UtilTools.parseFile(evnt.target.files[0])

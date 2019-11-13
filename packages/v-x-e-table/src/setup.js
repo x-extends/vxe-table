@@ -1,20 +1,21 @@
 import GlobalConfig from '../../conf'
+import XEUtils from 'xe-utils/methods/xe-utils'
+
+function mergeOpts (data1, data2) {
+  if (data1 && XEUtils.isObject(data2)) {
+    XEUtils.objectEach(data2, (val, key) => {
+      data1[key] = data1[key] && val ? mergeOpts(data1[key], val) : val
+    })
+    return data1
+  }
+  return data2
+}
 
 /**
  * 全局参数设置
  */
 function setup (options = {}) {
-  let { icon, menu } = GlobalConfig
-  if (options.menu) {
-    Object.assign(menu, options.menu)
-  }
-  if (options.icon) {
-    Object.assign(icon, options.icon)
-  }
-  Object.assign(GlobalConfig, options, {
-    icon,
-    menu
-  })
+  mergeOpts(GlobalConfig, options)
 }
 
 export default setup

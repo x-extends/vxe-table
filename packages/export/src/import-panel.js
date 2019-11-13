@@ -23,7 +23,7 @@ export default {
       if (storeData.type) {
         return GlobalConfig.i18n(`vxe.types.${storeData.type}`)
       }
-      return `*.${(this.defaultOptions.types || Object.keys(VXETable.types)).join(', *.')}`
+      return `*.${(this.defaultOptions.types || VXETable.importTypes).join(', *.')}`
     }
   },
   render (h) {
