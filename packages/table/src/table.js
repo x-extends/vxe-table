@@ -34,10 +34,6 @@ function isTargetRadioOrCheckbox (evnt, column, colType, targetType) {
   return target && column.type === colType && target.tagName.toLowerCase() === 'input' && target.type === (targetType || colType)
 }
 
-function getFileTypes (options) {
-  return options.types || Object.keys(VXETable.types)
-}
-
 class Rule {
   constructor (rule) {
     Object.assign(this, {
@@ -4384,7 +4380,6 @@ export default {
      */
     exportData (options) {
       let { visibleColumn, scrollXLoad, scrollYLoad, treeConfig } = this
-      let types = Object.keys(VXETable.types)
       let opts = Object.assign({
         filename: '',
         sheetName: '',
@@ -4406,7 +4401,7 @@ export default {
       if (!opts.sheetName) {
         opts.sheetName = 'Sheet1'
       }
-      if (!types.includes(opts.type)) {
+      if (!VXETable.exportTypes.includes(opts.type)) {
         throw new Error(UtilTools.getLog('vxe.error.notType', [opts.type]))
       }
       if (!opts.original) {
@@ -4436,7 +4431,8 @@ export default {
       if (window.FileReader) {
         const { type, filename } = UtilTools.parseFile(file)
         const options = Object.assign({ mode: 'covering' }, opts, { type, filename })
-        if (getFileTypes(options).includes(type)) {
+        const types = options.types || VXETable.importTypes
+        if (types.includes(type)) {
           this.preventEvent(null, 'event.import', { $table: this, file, options, columns: this.tableFullColumn }, () => {
             const reader = new FileReader()
             reader.onerror = e => {
@@ -4472,7 +4468,7 @@ export default {
       if (!impForm.parentNode) {
         document.body.appendChild(impForm)
       }
-      const types = getFileTypes(options)
+      const types = options.types || VXETable.importTypes
       impInput.accept = `.${types.join(', .')}`
       impInput.onchange = evnt => {
         const { type } = UtilTools.parseFile(evnt.target.files[0])

@@ -74,7 +74,7 @@ export default {
       return Object.assign({}, GlobalConfig.toolbar.import, this.import)
     },
     exportOpts () {
-      return Object.assign({ types: Object.keys(VXETable.types) }, GlobalConfig.toolbar.export, this.export)
+      return Object.assign({}, GlobalConfig.toolbar.export, this.export)
     },
     resizableOpts () {
       return Object.assign({ storageKey: 'VXE_TABLE_CUSTOM_COLUMN_WIDTH' }, GlobalConfig.toolbar.resizable, this.resizable)
@@ -492,8 +492,9 @@ export default {
       const forceOriginal = !!treeStatus || virtualScroller.scrollX || virtualScroller.scrollY
       const hasFooter = !!footerData.length
       const defOpts = Object.assign({ original: true, message: true }, exportOpts, options)
+      const types = defOpts.types || VXETable.exportTypes
       // 处理类型
-      defOpts.types = defOpts.types.map(value => {
+      defOpts.types = types.map(value => {
         return {
           value,
           label: `vxe.types.${value}`

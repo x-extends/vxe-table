@@ -29,7 +29,7 @@ function mockData () {
       let colItem = {
         field: fullIndex % 2 === 0 ? 'age' : (fullIndex % 3 === 0 ? 'rate' : 'name'),
         title: 'cloumn_' + fullIndex,
-        width: fullIndex % 6 === 0 ? 300 : index % 4 === 0 ? 220 : index % 3 === 0 ? 140 : 160,
+        width: fullIndex % 6 === 0 ? 340 : index % 4 === 0 ? 260 : index % 3 === 0 ? 120 : 160,
         resizable: true
       }
       if (fullIndex === 0) {

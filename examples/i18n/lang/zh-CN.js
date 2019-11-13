@@ -45,7 +45,7 @@ module.exports = {
         customSort: '自定义列头排序',
         manualFilter: '筛选高级用法',
         span: '合并行或列',
-
+        spanRow: '更加复杂的合并行',
         footer: '表尾合计',
         footerSpan: '表尾合并行或列',
         import: '导入数据',
@@ -146,9 +146,11 @@ module.exports = {
         spanPlugin: '单元格选中合并',
         shortcutKeyPlugin: 'plugin-shortcut-key 快捷键设置',
         chartsPlugin: 'plugin-charts 图表工具',
-        exportPlugin: 'plugin-export 导出插件',
+        exportXLSXPlugin: 'plugin-export 导出 xlsx',
+        exportPDFPlugin: 'plugin-export 导出 pdf',
         rendererPlugin: 'plugin-renderer 更多渲染器',
         menusPlugin: 'plugin-menus 快捷菜单集',
+        excelPlugin: 'plugin-excel 简单的 Excel',
 
         renderer: '(抽象) 渲染器',
         rendererFilter: '筛选渲染器',
@@ -240,7 +242,7 @@ module.exports = {
       table: {
         desc: {
           data: '显示的数据',
-          columns: '列配置项',
+          columns: '列配置',
           customs: '初始化显示/隐藏列（通过 visible 设置为 false 则默认隐藏列）',
           height: '表格的高度；支持铺满父容器或者固定宽高',
           maxHeight: '表格的最大高度',
@@ -373,7 +375,7 @@ module.exports = {
           filterMethod: '只对 filters 有效，自定义筛选方法 Function({value, row, column})',
           filterRender: '筛选渲染器配置项',
           treeNode: '只对 tree-config 配置时有效，指定为树节点',
-          columnKey: '列渲染的 key，对应列渲染中虚拟 DOM 的 key 属性（非特殊情况下不需要使用）',
+          columnKey: '即将废弃，请使用 table.column-key',
           cellRender: '默认的渲染器配置项',
           editRender: '可编辑渲染器配置项',
           params: '额外的参数（自定义一些数据参数，对于某些特殊的场景可能会用到）'

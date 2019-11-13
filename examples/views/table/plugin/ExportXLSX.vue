@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">具体兼容请查看 <a class="link" href="https://www.npmjs.com/package/vxe-table-plugin-export" target="_blank">vxe-table-plugin-export</a> 插件的 API</p>
+    <p class="tip">具体兼容请查看 <a class="link" href="https://www.npmjs.com/package/vxe-table-plugin-export-xlsx" target="_blank">vxe-table-plugin-export-xlsx</a> 插件的 API</p>
 
     <vxe-toolbar setting :export="tableExport"></vxe-toolbar>
 
@@ -37,8 +37,8 @@ export default {
       tableExport: {
         // 默认选中类型
         type: 'xlsx',
-        // 自定义类型顺序
-        types: ['xlsx', 'csv', 'html', 'xml', 'txt']
+        // 自定义类型
+        types: ['xlsx', 'csv']
       },
       demoCodes: [
         `
@@ -66,8 +66,8 @@ export default {
               tableExport: {
                 // 默认选中类型
                 type: 'xlsx',
-                // 自定义类型顺序
-                types: ['xlsx', 'csv', 'html', 'xml', 'txt']
+                // 自定义类型
+                types: ['xlsx', 'csv']
               }
             }
           },
@@ -78,7 +78,17 @@ export default {
             findList () {
               this.loading = true
               setTimeout(() => {
-                this.tableData = window.MOCK_DATA_LIST.slice(0, 10)
+                this.tableData = [
+                  { name: 'name1', role: 'role1', sex: '0', age: 22, rate: 5 },
+                  { name: 'name2', role: 'role2', sex: '1', age: 32, rate: 1 },
+                  { name: 'name3', role: 'role3', sex: '1', age: 26, rate: 1 },
+                  { name: 'name4', role: 'role4', sex: '0', age: 28, rate: 4 },
+                  { name: 'name5', role: 'role5', sex: '1', age: 24, rate: 3 },
+                  { name: 'name6', role: 'role6', sex: '1', age: 19, rate: 3 },
+                  { name: 'name7', role: 'role7', sex: '1', age: 18, rate: 3 },
+                  { name: 'name8', role: 'role8', sex: '2', age: 29, rate: 3 },
+                  { name: 'name9', role: 'role9', sex: '1', age: 21, rate: 3 }
+                ]
                 this.loading = false
               }, 100)
             }
@@ -100,7 +110,17 @@ export default {
     findList () {
       this.loading = true
       setTimeout(() => {
-        this.tableData = window.MOCK_DATA_LIST.slice(0, 10)
+        this.tableData = [
+          { name: 'name1', role: 'role1', sex: '0', age: 22, rate: 5 },
+          { name: 'name2', role: 'role2', sex: '1', age: 32, rate: 1 },
+          { name: 'name3', role: 'role3', sex: '1', age: 26, rate: 1 },
+          { name: 'name4', role: 'role4', sex: '0', age: 28, rate: 4 },
+          { name: 'name5', role: 'role5', sex: '1', age: 24, rate: 3 },
+          { name: 'name6', role: 'role6', sex: '1', age: 19, rate: 3 },
+          { name: 'name7', role: 'role7', sex: '1', age: 18, rate: 3 },
+          { name: 'name8', role: 'role8', sex: '2', age: 29, rate: 3 },
+          { name: 'name9', role: 'role9', sex: '1', age: 21, rate: 3 }
+        ]
         this.loading = false
       }, 100)
     }

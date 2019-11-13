@@ -59,7 +59,8 @@ export default {
       html: '网页(*.html)',
       xml: 'XML 数据(*.xml)',
       txt: '文本文件(制表符分隔)(*.txt)',
-      xlsx: 'Excel 工作簿(*.xlsx)'
+      xlsx: 'Excel 工作簿(*.xlsx)',
+      pdf: 'PDF (*.pdf)'
     },
     toolbar: {
       impTitle: '导入参数设置',

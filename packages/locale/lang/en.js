@@ -59,7 +59,8 @@ export default {
       html: 'Web Page (*.html)',
       xml: 'XML Data(*.xml)',
       txt: 'Text (Tab delimited) (*.txt)',
-      xlsx: 'Excel Workbook (*.xlsx)'
+      xlsx: 'Excel Workbook (*.xlsx)',
+      pdf: 'PDF (*.pdf)'
     },
     toolbar: {
       impTitle: 'Import parameter settings',

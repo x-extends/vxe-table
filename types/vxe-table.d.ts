@@ -121,9 +121,18 @@ export interface VXETableStatic {
    */
   v: string;
   /**
-   * 支持导出的文件类型
+   * 导出/导出文件类型设置
+   * 0只支持导出 1 支持导入导出
    */
-  types: string[];
+  types: any;
+  /**
+   * 获取导出的所有文件类型
+   */
+  exportTypes: string[];
+  /**
+   * 获取导入的所有文件类型
+   */
+  importTypes: string[];
   /**
    * 读取内置国际化
    */

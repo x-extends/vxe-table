@@ -1204,10 +1204,17 @@ export default {
               }
             },
             {
-              label: 'app.aside.nav.exportPlugin',
+              label: 'app.aside.nav.exportXLSXPlugin',
               demoUrl: 'https://jsrun.pro/PIWKp',
               locat: {
-                name: 'TablePluginExport'
+                name: 'TablePluginExportXLSX'
+              }
+            },
+            {
+              label: 'app.aside.nav.exportPDFPlugin',
+              demoUrl: 'https://jsrun.pro/I8WKp',
+              locat: {
+                name: 'TablePluginExportPDF'
               }
             },
             {

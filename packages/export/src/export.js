@@ -31,9 +31,9 @@ function toCsv ($table, opts, columns, datas) {
   }
   datas.forEach((row, rowIndex) => {
     if (isOriginal) {
-      content += columns.map(column => {
+      content += columns.map((column, columnIndex) => {
         if (column.type === 'index') {
-          return `"${column.indexMethod ? column.indexMethod(rowIndex) : rowIndex + 1}"`
+          return `"${column.indexMethod ? column.indexMethod({ row, rowIndex, column, columnIndex }) : rowIndex + 1}"`
         }
         return `"${UtilTools.getCellValue(row, column) || ''}"`
       }).join(',') + '\n'
@@ -59,9 +59,9 @@ function toTxt ($table, opts, columns, datas) {
   }
   datas.forEach((row, rowIndex) => {
     if (isOriginal) {
-      content += columns.map(column => {
+      content += columns.map((column, columnIndex) => {
         if (column.type === 'index') {
-          return `${column.indexMethod ? column.indexMethod(rowIndex) : rowIndex + 1}`
+          return `${column.indexMethod ? column.indexMethod({ row, rowIndex, column, columnIndex }) : rowIndex + 1}`
         }
         return `${UtilTools.getCellValue(row, column) || ''}`
       }).join('\t') + '\n'
@@ -99,9 +99,9 @@ function toHtml ($table, opts, columns, datas) {
     datas.forEach((row, rowIndex) => {
       html += '<tr>'
       if (isOriginal) {
-        html += columns.map(column => {
+        html += columns.map((column, columnIndex) => {
           if (column.type === 'index') {
-            return `<td>${column.indexMethod ? column.indexMethod(rowIndex) : rowIndex + 1}</td>`
+            return `<td>${column.indexMethod ? column.indexMethod({ row, rowIndex, column, columnIndex }) : rowIndex + 1}</td>`
           }
           return `<td>${UtilTools.getCellValue(row, column) || ''}</td>`
         }).join('')
@@ -153,9 +153,9 @@ function toXML ($table, opts, columns, datas) {
   datas.forEach((row, rowIndex) => {
     xml += '<Row>'
     if (isOriginal) {
-      xml += columns.map(column => {
+      xml += columns.map((column, columnIndex) => {
         if (column.type === 'index') {
-          return `<Cell><Data ss:Type="String">${column.indexMethod ? column.indexMethod(rowIndex) : rowIndex + 1}</Data></Cell>`
+          return `<Cell><Data ss:Type="String">${column.indexMethod ? column.indexMethod({ row, rowIndex, column, columnIndex }) : rowIndex + 1}</Data></Cell>`
         }
         return `<Cell><Data ss:Type="String">${UtilTools.getCellValue(row, column) || ''}</Data></Cell>`
       }).join('')
