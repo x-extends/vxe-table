@@ -215,7 +215,8 @@ export default {
               let headerTitle = UtilTools.getFuncText(own.title || own.label)
               return property && headerTitle ? h('vxe-checkbox', {
                 props: {
-                  value: visible
+                  value: visible,
+                  disabled: settingOpts.checkMethod ? !settingOpts.checkMethod({ column }) : false
                 },
                 attrs: {
                   title: headerTitle
