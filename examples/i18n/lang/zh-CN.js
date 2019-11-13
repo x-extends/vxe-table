@@ -45,6 +45,7 @@ module.exports = {
         customSort: '自定义列头排序',
         manualFilter: '筛选高级用法',
         span: '合并行或列',
+
         footer: '表尾合计',
         footerSpan: '表尾合并行或列',
         import: '导入数据',
