@@ -1,5 +1,6 @@
 import GlobalConfig from '../../conf'
 import { UtilTools } from '../../tools'
+import XEUtils from 'xe-utils/methods/xe-utils'
 
 export default {
   name: 'VxeExportPanel',
@@ -256,7 +257,26 @@ export default {
       })
       this.checkStatus()
     },
-    getExportOptions () {
+    printEvent () {
+      const { storeData, defaultOptions } = this
+      const { $grid, $table } = this.$parent
+      const comp = $grid || $table
+      const { treeConfig } = comp
+      const selectRecords = storeData.selectRecords
+      const opts = Object.assign({
+        columns: storeData.columns.filter(column => column.checked)
+      }, defaultOptions)
+      if (storeData.mode === 'selected') {
+        if (treeConfig) {
+          opts.data = XEUtils.searchTree(comp.tableFullData, item => selectRecords.indexOf(item) > -1, treeConfig)
+        } else {
+          opts.data = selectRecords
+        }
+      }
+      this.storeData.visible = false
+      this.$emit('print', opts)
+    },
+    exportEvent () {
       const { storeData, defaultOptions } = this
       const opts = Object.assign({
         columns: storeData.columns.filter(column => column.checked)
@@ -264,15 +284,7 @@ export default {
       if (storeData.mode === 'selected') {
         opts.data = storeData.selectRecords
       }
-      return opts
-    },
-    printEvent () {
-      this.storeData.visible = false
-      this.$emit('print', this.getExportOptions())
-    },
-    exportEvent () {
-      this.storeData.visible = false
-      this.$emit('export', this.getExportOptions())
+      this.$emit('export', opts)
     }
   }
 }
