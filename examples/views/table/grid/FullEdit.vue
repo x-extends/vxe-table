@@ -3,6 +3,7 @@
     <p class="tip">
       查询代理、服务端排序代理、服务端筛选代理、分页代理、增删改查<br>
       对于分页场景下，如果想要保留选中状态，可以通过设置 <table-api-link prop="checkbox-config"/> 的 <table-api-link prop="reserve"/> 属性<br>
+      还可以通过 <toolbar-api-link prop="checkMethod"/> 设置个性化列禁止勾选<br>
       由 <grid-api-link name="vxe-grid"/> 代理数据转换，只需要配置好数据源即可；非常简单就可以渲染一个表格，从重复写冗余的代码中解放出来
     </p>
 
@@ -138,7 +139,8 @@ export default {
           storage: true
         },
         setting: {
-          storage: true
+          storage: true,
+          checkMethod: this.checkColumnMethod
         }
       },
       tableColumn: [
@@ -285,7 +287,8 @@ export default {
                   storage: true
                 },
                 setting: {
-                  storage: true
+                  storage: true,
+                  checkMethod: this.checkColumnMethod
                 }
               },
               tableColumn: [
@@ -321,6 +324,12 @@ export default {
                 let column = this.$refs.xGrid.getColumnByField('sex')
                 column.editRender.options = data
               })
+            },
+            checkColumnMethod ({ column }) {
+              if (['nickname', 'role'].includes(column.property)) {
+                return false
+              }
+              return true
             }
           }
         }
@@ -343,6 +352,12 @@ export default {
         let column = this.$refs.xGrid.getColumnByField('sex')
         column.editRender.options = data
       })
+    },
+    checkColumnMethod ({ column }) {
+      if (['nickname', 'role'].includes(column.property)) {
+        return false
+      }
+      return true
     }
   }
 }
