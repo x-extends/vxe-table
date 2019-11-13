@@ -1,5 +1,5 @@
 import XEUtils from 'xe-utils/methods/xe-utils'
-import { Renderer } from '../../v-x-e-table'
+import VXETable, { Renderer } from '../../v-x-e-table'
 import { UtilTools, DomTools } from '../../tools'
 
 var browse = DomTools.browse
@@ -281,7 +281,7 @@ export default {
       actived.args = null
       actived.row = null
       actived.column = null
-      return this.clearValidate().then(this.recalculate)
+      return (VXETable._valid ? this.clearValidate() : this.$nextTick()).then(this.recalculate)
     },
     _getActiveRow () {
       let { $el, editStore, tableData } = this

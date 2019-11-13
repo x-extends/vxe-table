@@ -1882,16 +1882,22 @@ const Methods = {
     XEUtils.arrayEach(this.$el.querySelectorAll('.col--current'), elem => DomTools.removeClass(elem, 'col--current'))
     return this.$nextTick()
   },
+  checkValidate (type) {
+    if (VXETable._valid) {
+      return this.triggerValidate(type)
+    }
+    return this.$nextTick()
+  },
   /**
    * 当单元格发生改变时
    * 如果存在规则，则校验
    */
   handleChangeCell (evnt, params) {
-    this.triggerValidate('blur')
+    this.checkValidate('blur')
       .catch(e => e)
       .then(() => {
         this.handleActived(params, evnt)
-          .then(() => this.triggerValidate('change'))
+          .then(() => this.checkValidate('change'))
           .catch(e => e)
       })
   },
@@ -1968,16 +1974,16 @@ const Methods = {
     if (editConfig && editConfig.trigger === 'dblclick') {
       if (!actived.args || evnt.currentTarget !== actived.args.cell) {
         if (editConfig.mode === 'row') {
-          this.triggerValidate('blur')
+          this.checkValidate('blur')
             .catch(e => e)
             .then(() => {
               this.handleActived(params, evnt)
-                .then(() => this.triggerValidate('change'))
+                .then(() => this.checkValidate('change'))
                 .catch(e => e)
             })
         } else if (editConfig.mode === 'cell') {
           this.handleActived(params, evnt)
-            .then(() => this.triggerValidate('change'))
+            .then(() => this.checkValidate('change'))
             .catch(e => e)
         }
       }

@@ -113,6 +113,9 @@ module.exports = {
         uniqueSelect: 'Unique select option',
         cascadingSelect: 'Cascading select options',
 
+        excel: '更多实现',
+        cell: 'Cell',
+
         bad: 'Bad usage',
 
         module: 'Modules',
@@ -277,6 +280,8 @@ module.exports = {
           footerSpanMethod: 'Footer merge rows or columns, Function({$rowIndex, column, columnIndex, $columnIndex, data})',
           showOverflow: 'Sets all content to appear as ellipses if it is too long',
           showHeaderOverflow: 'Sets the header to show ellipsis when all content is too long',
+          showAllOverflow: 'It is about to be abandoned, please use show-overflow',
+          showHeaderAllOverflow: 'It is about to be abandoned, please use show-header-overflow',
           sortMethod: 'Custom sort method for all columns, called when the sort is triggered, Function({ data, column, property, order  })',
           remoteSort: 'Whether to use remote sorting',
           remoteFilter: 'Whether to use remote filter',
@@ -341,7 +346,9 @@ module.exports = {
           checkbox: 'Checkbox',
           radio: 'Radio',
           expand: 'Expansion',
+          prop: 'Obsolete, please use field',
           field: 'Column field name',
+          label: 'Obsolete, please use title',
           title: 'Column title (support internationalization)',
           width: 'Column width',
           minWidth: 'Minimum height of the column,The remaining space is automatically allocated proportionally',
@@ -366,6 +373,7 @@ module.exports = {
           filterMethod: 'Works only for filters, custom filtering methods, Function({value, row, column})',
           filterRender: 'Filter renderer config',
           treeNode: 'Only valid for tree-config configuration, specified as the tree node',
+          columnKey: 'Obsolete, please use table.column-key',
           cellRender: 'Default renderer config',
           editRender: 'Edit renderer config',
           params: 'Additional parameters (custom data parameters that may be used for special scenarios)'

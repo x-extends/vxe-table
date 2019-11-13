@@ -113,6 +113,9 @@ module.exports = {
         uniqueSelect: '唯一下拉选项',
         cascadingSelect: '联动下拉选项',
 
+        excel: '更多实现',
+        cell: '单元格',
+
         bad: '糟糕的用法',
 
         module: '功能模块',
@@ -278,6 +281,8 @@ module.exports = {
           footerSpanMethod: '表尾合并行或列，该函数 Function({$rowIndex, column, columnIndex, $columnIndex, data}) 返回计算后的值',
           showOverflow: '设置所有内容过长时显示为省略号（如果是固定列建议设置该值，提升渲染速度）',
           showHeaderOverflow: '设置表头所有内容过长时显示为省略号',
+          showAllOverflow: '即将废弃，请使用 show-overflow',
+          showHeaderAllOverflow: '即将废弃，请使用 show-header-overflow',
           sortMethod: '自定义所有列的排序方法，当触发排序时会调用该函数 Function({ data, column, property, order  }) 返回排序后的结果',
           remoteSort: '所有列是否使用服务端排序，如果设置为 true 则不会对数据进行处理',
           remoteFilter: '所有列是否使用服务端筛选，如果设置为 true 则不会对数据进行处理',
@@ -342,7 +347,9 @@ module.exports = {
           checkbox: '复选框',
           radio: '单选框',
           expand: '展开行',
+          prop: '即将废弃，请使用 field',
           field: '列属性',
+          label: '即将废弃，请使用 title',
           title: '列标题（支持开启国际化）',
           width: '列宽度',
           minWidth: '最小列宽度；会自动将剩余空间按比例分配',
@@ -367,6 +374,7 @@ module.exports = {
           filterMethod: '只对 filters 有效，自定义筛选方法 Function({value, row, column})',
           filterRender: '筛选渲染器配置项',
           treeNode: '只对 tree-config 配置时有效，指定为树节点',
+          columnKey: '即将废弃，请使用 table.column-key',
           cellRender: '默认的渲染器配置项',
           editRender: '可编辑渲染器配置项',
           params: '额外的参数（自定义一些数据参数，对于某些特殊的场景可能会用到）'
