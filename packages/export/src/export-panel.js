@@ -257,34 +257,30 @@ export default {
       })
       this.checkStatus()
     },
-    printEvent () {
+    getExportOption () {
       const { storeData, defaultOptions } = this
       const { $grid, $table } = this.$parent
       const comp = $grid || $table
-      const { treeConfig } = comp
       const selectRecords = storeData.selectRecords
       const opts = Object.assign({
         columns: storeData.columns.filter(column => column.checked)
       }, defaultOptions)
       if (storeData.mode === 'selected') {
-        if (treeConfig) {
-          opts.data = XEUtils.searchTree(comp.tableFullData, item => selectRecords.indexOf(item) > -1, treeConfig)
+        if (['html', 'pdf'].includes(defaultOptions.type) && comp.treeConfig) {
+          opts.data = XEUtils.searchTree(comp.tableFullData, item => selectRecords.indexOf(item) > -1, comp.treeConfig)
         } else {
           opts.data = selectRecords
         }
       }
+      return opts
+    },
+    printEvent () {
       this.storeData.visible = false
-      this.$emit('print', opts)
+      this.$emit('print', this.getExportOption())
     },
     exportEvent () {
-      const { storeData, defaultOptions } = this
-      const opts = Object.assign({
-        columns: storeData.columns.filter(column => column.checked)
-      }, defaultOptions)
-      if (storeData.mode === 'selected') {
-        opts.data = storeData.selectRecords
-      }
-      this.$emit('export', opts)
+      this.storeData.visible = false
+      this.$emit('export', this.getExportOption())
     }
   }
 }

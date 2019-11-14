@@ -12,6 +12,7 @@
       height="400"
       :loading="loading"
       :data="tableData">
+      <vxe-table-column type="checkbox" width="60"></vxe-table-column>
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
       <vxe-table-column field="role" title="Role"></vxe-table-column>
@@ -52,6 +53,7 @@ export default {
           height="400"
           :loading="loading"
           :data="tableData">
+          <vxe-table-column type="checkbox" width="60"></vxe-table-column>
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
           <vxe-table-column field="role" title="Role"></vxe-table-column>

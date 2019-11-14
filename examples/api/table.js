@@ -1589,7 +1589,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{selection,checked,row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,cell},event',
+        defVal: '{selection,reserves,checked,row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,cell},event',
         list: []
       },
       {
@@ -1598,7 +1598,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{selection,checked},event',
+        defVal: '{selection,checked,reserves},event',
         list: []
       },
       {
@@ -2137,6 +2137,15 @@ const apis = [
         name: 'getSelectRecords()',
         desc: '用于多选行，获取已选中的行数据',
         version: '',
+        type: 'Array<Row>',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'getSelectReserveRecords()',
+        desc: '用于多选行，获取已保留选中的行数据（只对 checkboxConfig.reserve 启用后有效）',
+        version: '2.6.20',
         type: 'Array<Row>',
         enum: '',
         defVal: '',

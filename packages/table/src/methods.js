@@ -1593,7 +1593,7 @@ const Methods = {
     let { checkMethod } = checkboxConfig
     if (!checkMethod || checkMethod({ row: params.row, rowIndex: params.rowIndex, $rowIndex: params.$rowIndex })) {
       this.handleSelectRow(params, value)
-      UtilTools.emitEvent(this, 'select-change', [Object.assign({ selection: this.getSelectRecords(), checked: value, $table: this }, params), evnt])
+      UtilTools.emitEvent(this, 'select-change', [Object.assign({ selection: this.getSelectRecords(), reserves: this.getSelectReserveRecords(), checked: value, $table: this }, params), evnt])
     }
   },
   /**
@@ -1715,11 +1715,25 @@ const Methods = {
     }
   },
   /**
+   * 获取保留选中的行
+   */
+  getSelectReserveRecords () {
+    let { selection, fullDataRowIdData } = this
+    // 在 v3.0 中废弃 selectConfig
+    let checkboxConfig = this.checkboxConfig || this.selectConfig || {}
+    let { reserve } = checkboxConfig
+    let rowkey = UtilTools.getRowkey(this)
+    if (reserve && selection.length) {
+      return selection.filter(row => !fullDataRowIdData['' + XEUtils.get(row, rowkey)])
+    }
+    return []
+  },
+  /**
    * 多选，选中所有事件
    */
   triggerCheckAllEvent (evnt, value) {
     this.setAllSelection(value)
-    UtilTools.emitEvent(this, 'select-all', [{ selection: this.getSelectRecords(), checked: value, $table: this }, evnt])
+    UtilTools.emitEvent(this, 'select-all', [{ selection: this.getSelectRecords(), reserves: this.getSelectReserveRecords(), checked: value, $table: this }, evnt])
   },
   /**
    * 多选，切换所有行的选中状态
