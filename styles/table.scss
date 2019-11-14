@@ -55,7 +55,7 @@
   }
   .vxe-input--wrapper {
     .vxe-input {
-      &::-webkit-inner-spin-button {
+      &[type="date"]::-webkit-inner-spin-button {
         margin-top: floor($vxe-table-row-height-default - 38);
       }
       &::placeholder {
@@ -268,7 +268,7 @@
     }
     .vxe-input--wrapper {
       .vxe-input {
-        &::-webkit-inner-spin-button {
+        &[type="date"]::-webkit-inner-spin-button {
           margin-top: floor($vxe-table-row-height-medium - 36);
         }
       }
@@ -295,7 +295,7 @@
     }
     .vxe-input--wrapper {
       .vxe-input {
-        &::-webkit-inner-spin-button {
+        &[type="date"]::-webkit-inner-spin-button {
           margin-top: floor($vxe-table-row-height-small - 34);
         }
       }
@@ -322,7 +322,7 @@
     }
     .vxe-input--wrapper {
       .vxe-input {
-        &::-webkit-inner-spin-button {
+        &[type="date"]::-webkit-inner-spin-button {
           margin-top: floor($vxe-table-row-height-mini - 32);
         }
       }
@@ -358,7 +358,7 @@
       padding: 0 2px;
     }
     .vxe-input {
-      &::-webkit-inner-spin-button {
+      &[type="date"]::-webkit-inner-spin-button {
         margin-top: floor($vxe-table-row-height-default - 38);
       }
     }

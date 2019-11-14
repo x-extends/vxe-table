@@ -1,15 +1,12 @@
 <template>
   <div>
-    <p class="tip">
-      <grid-api-link name="vxe-grid"/> 动态化表格，解决动态数据一切需求（动态列、动态数据、动态个性化...）<br>
-      渲染性能对比：<grid-api-link name="vxe-grid"/>（性能最优，不需要为每一列创建实例） > <table-api-link name="vxe-table"/>（性能略差，需要为每一列创建实例）<br>
-      通过 <grid-api-link prop="columns"/> 动态配置列信息，这非常适用于动态渲染的场景，完全使用数据进行配置
-    </p>
+    <p class="tip">分组表头</p>
 
     <vxe-grid
       border
+      stripe
       resizable
-      height="300"
+      height="500"
       :columns="tableColumn"
       :data="tableData"></vxe-grid>
 
@@ -30,8 +27,20 @@ export default {
     return {
       tableColumn: [
         { type: 'index', width: 50 },
-        { field: 'name', title: 'app.body.label.name' },
-        { field: 'sex', title: 'app.body.label.sex', showHeaderOverflow: true },
+        {
+          title: '基本信息',
+          children: [
+            { field: 'name', title: 'Name' },
+            {
+              title: '其他信息',
+              children: [
+                { field: 'rate', title: 'Rate' },
+                { field: 'age', title: 'Age' }
+              ]
+            },
+            { field: 'sex', title: 'Sex' }
+          ]
+        },
         { field: 'address', title: 'Address', showOverflow: true }
       ],
       tableData: [],
@@ -39,8 +48,9 @@ export default {
         `
         <vxe-grid
           border
+          stripe
           resizable
-          height="300"
+          height="500"
           :columns="tableColumn"
           :data="tableData"></vxe-grid>
         `,
@@ -50,8 +60,20 @@ export default {
             return {
               tableColumn: [
                 { type: 'index', width: 50 },
-                { field: 'name', title: 'app.body.label.name' },
-                { field: 'sex', title: 'app.body.label.sex', showHeaderOverflow: true },
+                {
+                  title: '基本信息',
+                  children: [
+                    { field: 'name', title: 'Name' },
+                    {
+                      title: '其他信息',
+                      children: [
+                        { field: 'rate', title: 'Rate' },
+                        { field: 'age', title: 'Age' }
+                      ]
+                    },
+                    { field: 'sex', title: 'Sex' }
+                  ]
+                },
                 { field: 'address', title: 'Address', showOverflow: true }
               ],
               tableData: []

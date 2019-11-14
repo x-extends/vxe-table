@@ -457,6 +457,13 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.group',
+              demoUrl: 'https://jsrun.pro/M8WKp',
+              locat: {
+                name: 'GridGroup'
+              }
+            },
+            {
               label: 'app.aside.nav.reverse',
               demoUrl: 'https://jsrun.pro/zIWKp',
               locat: {
@@ -467,6 +474,12 @@ export default {
               label: 'app.aside.nav.template',
               locat: {
                 name: 'GridTemplate'
+              }
+            },
+            {
+              label: 'app.aside.nav.footer',
+              locat: {
+                name: 'GridFooter'
               }
             },
             {

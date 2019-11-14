@@ -67,8 +67,10 @@ const TablePage = () => import(/* webpackChunkName: "advanced" */ './views/table
 const TableHighlight = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Highlight.vue')
 
 const GridBasic = () => import(/* webpackChunkName: "grid" */ './views/table/grid/Basic.vue')
+const GridGroup = () => import(/* webpackChunkName: "grid" */ './views/table/grid/Group.vue')
 const GridReverse = () => import(/* webpackChunkName: "grid" */ './views/table/grid/Reverse.vue')
 const GridTemplate = () => import(/* webpackChunkName: "grid" */ './views/table/grid/Template.vue')
+const GridFooter = () => import(/* webpackChunkName: "grid" */ './views/table/grid/Footer.vue')
 const GridPage = () => import(/* webpackChunkName: "grid" */ './views/table/grid/Page.vue')
 const GridFullQuery = () => import(/* webpackChunkName: "grid" */ './views/table/grid/FullQuery.vue')
 const GridProxy = () => import(/* webpackChunkName: "grid" */ './views/table/grid/Proxy.vue')
@@ -609,6 +611,11 @@ export default new Router({
       component: GridBasic
     },
     {
+      path: '/table/grid/group',
+      name: 'GridGroup',
+      component: GridGroup
+    },
+    {
       path: '/table/grid/reverse',
       name: 'GridReverse',
       component: GridReverse
@@ -617,6 +624,11 @@ export default new Router({
       path: '/table/grid/template',
       name: 'GridTemplate',
       component: GridTemplate
+    },
+    {
+      path: '/table/grid/footer',
+      name: 'GridFooter',
+      component: GridFooter
     },
     {
       path: '/table/grid/page',
