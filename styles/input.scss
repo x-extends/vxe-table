@@ -11,7 +11,7 @@
   .vxe-textarea {
     border-radius: 4px;
     outline: 0;
-    padding: 4px 8px;
+    padding: 0 8px;
     width: 100%;
     color: $vxe-font-color;
     border: 1px solid $vxe-input-border-color;
@@ -28,6 +28,10 @@
     height: 40px;
     &[type="date"]::-webkit-inner-spin-button {
       margin-top: 6px;
+    }
+    &[type="date"]::-webkit-inner-spin-button,
+    &[type="number"]::-webkit-inner-spin-button {
+      height: 24px;
     }
     &::placeholder {
       color: $vxe-input-placeholder-color;
@@ -56,7 +60,7 @@
     .vxe-input {
       height: 28px;
       &[type="date"]::-webkit-inner-spin-button {
-        margin-top: 0px;
+        margin-top: 0;
       }
     }
   }

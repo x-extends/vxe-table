@@ -56,7 +56,11 @@
   .vxe-input--wrapper {
     .vxe-input {
       &[type="date"]::-webkit-inner-spin-button {
-        margin-top: floor($vxe-table-row-height-default - 38);
+        margin-top: 6px;
+      }
+      &[type="date"]::-webkit-inner-spin-button,
+      &[type="number"]::-webkit-inner-spin-button {
+        height: 24px;
       }
       &::placeholder {
         color: $vxe-input-placeholder-color;
@@ -269,7 +273,7 @@
     .vxe-input--wrapper {
       .vxe-input {
         &[type="date"]::-webkit-inner-spin-button {
-          margin-top: floor($vxe-table-row-height-medium - 36);
+          margin-top: 4px;
         }
       }
     }
@@ -296,7 +300,7 @@
     .vxe-input--wrapper {
       .vxe-input {
         &[type="date"]::-webkit-inner-spin-button {
-          margin-top: floor($vxe-table-row-height-small - 34);
+          margin-top: 2px;
         }
       }
     }
@@ -323,7 +327,7 @@
     .vxe-input--wrapper {
       .vxe-input {
         &[type="date"]::-webkit-inner-spin-button {
-          margin-top: floor($vxe-table-row-height-mini - 32);
+          margin-top: 0;
         }
       }
     }
@@ -359,7 +363,7 @@
     }
     .vxe-input {
       &[type="date"]::-webkit-inner-spin-button {
-        margin-top: floor($vxe-table-row-height-default - 38);
+        margin-top: 6px;
       }
     }
     .vxe-textarea {
