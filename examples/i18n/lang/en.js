@@ -65,6 +65,7 @@ module.exports = {
 
         tree: 'Tree table',
         groupSummary: 'Group summary',
+        groupSummaryCount: 'Group summary count',
         edit: 'Editable',
         crudToolbar: 'CRUD + Toolbar',
         lazy: 'Lazy loading',

@@ -91,6 +91,7 @@ const TableTreeSelection = () => import(/* webpackChunkName: "tree" */ './views/
 const TableTreeRadio = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Radio.vue')
 const TableTreeFixed = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Fixed.vue')
 const TableTreeGroupSummary = () => import(/* webpackChunkName: "tree" */ './views/table/tree/GroupSummary.vue')
+const TableTreeGroupSummaryCount = () => import(/* webpackChunkName: "tree" */ './views/table/tree/GroupSummaryCount.vue')
 const TableTreeExpand = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Expand.vue')
 const TableTreeToolbar = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Toolbar.vue')
 const TableTreeInsert = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Insert.vue')
@@ -539,6 +540,11 @@ export default new Router({
       path: '/table/tree/groupSummary',
       name: 'TableTreeGroupSummary',
       component: TableTreeGroupSummary
+    },
+    {
+      path: '/table/tree/groupSummaryCount',
+      name: 'TableTreeGroupSummaryCount',
+      component: TableTreeGroupSummaryCount
     },
     {
       path: '/table/tree/expand',
