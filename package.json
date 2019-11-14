@@ -69,7 +69,7 @@
     "vxe-table-plugin-charts": "^1.1.1",
     "vxe-table-plugin-element": "^1.5.10",
     "vxe-table-plugin-export": "^1.0.10",
-    "vxe-table-plugin-export-pdf": "^1.0.0",
+    "vxe-table-plugin-export-pdf": "^1.0.1",
     "vxe-table-plugin-export-xlsx": "^1.1.0",
     "vxe-table-plugin-iview": "^1.5.6",
     "vxe-table-plugin-menus": "^1.1.2",
@@ -80,7 +80,7 @@
     "xe-ajax": "^3.8.4",
     "xe-ajax-mock": "^1.9.2",
     "xe-clipboard": "^1.7.2",
-    "xe-utils": "^2.2.11",
+    "xe-utils": "^2.2.12",
     "xlsx": "^0.15.1"
   },
   "peerDependencies": {
