@@ -184,14 +184,14 @@ const renderMap = {
       if (optionGroups) {
         let groupOptions = optionGroupProps.options || 'options'
         for (let index = 0; index < optionGroups.length; index++) {
-          selectItem = optionGroups[index][groupOptions].find(item => item[valueProp] === cellValue)
+          selectItem = XEUtils.find(optionGroups[index][groupOptions], item => item[valueProp] === cellValue)
           if (selectItem) {
             break
           }
         }
         return selectItem ? selectItem[labelProp] : cellValue
       } else {
-        selectItem = options.find(item => item[valueProp] === cellValue)
+        selectItem = XEUtils.find(options, item => item[valueProp] === cellValue)
         return selectItem ? selectItem[labelProp] : cellValue
       }
     },

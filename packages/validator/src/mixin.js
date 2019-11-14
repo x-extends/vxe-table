@@ -144,7 +144,7 @@ export default {
       let { property } = column
       if (property && editRules) {
         let rules = XEUtils.get(editRules, property)
-        return rules && rules.find(rule => type === 'all' || !rule.trigger || type === rule.trigger)
+        return rules && XEUtils.find(rules, rule => type === 'all' || !rule.trigger || type === rule.trigger)
       }
       return false
     },

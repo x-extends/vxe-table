@@ -435,7 +435,7 @@ function checkImportData (columns, fields, rows) {
       tableFields.push(field)
     }
   })
-  return tableFields.every(field => fields.includes(field))
+  return tableFields.every(field => XEUtils.includes(fields, field))
 }
 
 function handleImport ($table, content, opts) {
@@ -520,7 +520,7 @@ export default {
       if (!opts.sheetName) {
         opts.sheetName = 'Sheet1'
       }
-      if (!VXETable.exportTypes.includes(opts.type)) {
+      if (!XEUtils.includes(VXETable.exportTypes, opts.type)) {
         throw new Error(UtilTools.getLog('vxe.error.notType', [opts.type]))
       }
       if (!opts.original) {
@@ -551,7 +551,7 @@ export default {
         const { type, filename } = UtilTools.parseFile(file)
         const options = Object.assign({ mode: 'covering' }, opts, { type, filename })
         const types = options.types || VXETable.importTypes
-        if (types.includes(type)) {
+        if (XEUtils.includes(types, type)) {
           this.preventEvent(null, 'event.import', { $table: this, file, options, columns: this.tableFullColumn }, () => {
             const reader = new FileReader()
             reader.onerror = e => {
@@ -591,7 +591,7 @@ export default {
       impInput.accept = `.${types.join(', .')}`
       impInput.onchange = evnt => {
         const { type } = UtilTools.parseFile(evnt.target.files[0])
-        if (types.includes(type)) {
+        if (XEUtils.includes(types, type)) {
           this._fileResolve(evnt)
         } else {
           if (options.message !== false) {

@@ -450,7 +450,7 @@ const Methods = {
    * @param {String} field 字段名
    */
   getColumnByField (field) {
-    return this.visibleColumn.find(column => column.property === field)
+    return XEUtils.find(this.visibleColumn, column => column.property === field)
   },
   /**
    * 获取当前表格的列
@@ -511,7 +511,7 @@ const Methods = {
   updateAfterFullData () {
     let { visibleColumn, tableFullData, remoteSort, remoteFilter } = this
     let tableData = tableFullData
-    let column = visibleColumn.find(column => column.order)
+    let column = XEUtils.find(visibleColumn, column => column.order)
     let filterColumn = visibleColumn.filter(({ filters }) => filters && filters.length)
     tableData = tableData.filter(row => {
       return filterColumn.every(column => {
@@ -608,7 +608,7 @@ const Methods = {
     if (customColumns.length) {
       tableFullColumn.forEach(column => {
         // 在 v3.0 中废弃 prop
-        let item = customColumns.find(item => column.property && (item.field || item.prop) === column.property)
+        let item = XEUtils.find(customColumns, item => column.property && (item.field || item.prop) === column.property)
         if (item) {
           if (XEUtils.isNumber(item.resizeWidth)) {
             column.resizeWidth = item.resizeWidth
@@ -1518,7 +1518,7 @@ const Methods = {
         if (matchObj && matchObj.parent) {
           let parentStatus
           let vItems = checkMethod ? matchObj.items.filter((item, $rowIndex) => checkMethod({ row: item, $rowIndex })) : matchObj.items
-          let indeterminatesItem = matchObj.items.find(item => treeIndeterminates.indexOf(item) > -1)
+          let indeterminatesItem = XEUtils.find(matchObj.items, item => treeIndeterminates.indexOf(item) > -1)
           if (indeterminatesItem) {
             parentStatus = -1
           } else {
@@ -1553,7 +1553,7 @@ const Methods = {
         if (matchObj && matchObj.parent) {
           let parentStatus
           let vItems = checkMethod ? matchObj.items.filter((item, $rowIndex) => checkMethod({ row: item, $rowIndex })) : matchObj.items
-          let indeterminatesItem = matchObj.items.find(item => treeIndeterminates.indexOf(item) > -1)
+          let indeterminatesItem = XEUtils.find(matchObj.items, item => treeIndeterminates.indexOf(item) > -1)
           if (indeterminatesItem) {
             parentStatus = -1
           } else {
@@ -2022,7 +2022,7 @@ const Methods = {
   },
   sort (field, order) {
     let { visibleColumn, tableFullColumn, remoteSort } = this
-    let column = visibleColumn.find(item => item.property === field)
+    let column = XEUtils.find(visibleColumn, item => item.property === field)
     let isRemote = XEUtils.isBoolean(column.remoteSort) ? column.remoteSort : remoteSort
     if (column.sortable || column.remoteSort) {
       if (!order) {

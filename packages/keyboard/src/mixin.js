@@ -283,7 +283,7 @@ export default {
             // 除了双击其他都没有选中状态
             if (editConfig.trigger === 'dblclick') {
               // 如果不在所有选中的范围之内则重新选中
-              if (!checked.rowNodes || !checked.rowNodes.some(list => list.includes(cell))) {
+              if (!checked.rowNodes || !checked.rowNodes.some(list => XEUtils.includes(list, cell))) {
                 handleSelected(params, evnt)
               }
             }
@@ -428,7 +428,7 @@ export default {
         let headerListElem = elemStore['main-header-list']
         let headerList = headerListElem.children
         let bodyList = elemStore['main-body-list'].children
-        let column = visibleColumn.find(column => column.type === 'index') || visibleColumn[0]
+        let column = XEUtils.find(visibleColumn, column => column.type === 'index') || visibleColumn[0]
         let cell = headerListElem.querySelector(`.${column.id}`)
         let firstTrElem = bodyList[0]
         let lastTrElem = bodyList[bodyList.length - 1]
@@ -437,7 +437,7 @@ export default {
           $table: this,
           rowIndex: 0,
           row: tableData[0],
-          column: visibleColumn.find(column => column.property)
+          column: XEUtils.find(visibleColumn, column => column.property)
         }
         params.columnIndex = this.getColumnIndex(params.column)
         params.cell = DomTools.getCell(this, params)

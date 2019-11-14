@@ -263,7 +263,7 @@ export default {
       let { $parent, data } = this
       let { $children } = $parent
       let selfIndex = $children.indexOf(this)
-      this.$table = $children.find((comp, index) => comp && comp.refreshColumn && index > selfIndex && (data ? comp.data === data : comp.$vnode.componentOptions.tag === 'vxe-table'))
+      this.$table = XEUtils.find($children, (comp, index) => comp && comp.refreshColumn && index > selfIndex && (data ? comp.data === data : comp.$vnode.componentOptions.tag === 'vxe-table'))
     },
     openSetting () {
       this.settingStore.visible = true

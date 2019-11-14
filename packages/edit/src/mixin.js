@@ -338,7 +338,7 @@ export default {
      * 激活行编辑
      */
     _setActiveRow (row) {
-      return this.setActiveCell(row, this.visibleColumn.find(column => column.editRender).property)
+      return this.setActiveCell(row, XEUtils.find(this.visibleColumn, column => column.editRender).property)
     },
     /**
      * 激活单元格编辑
@@ -346,7 +346,7 @@ export default {
     _setActiveCell (row, field) {
       return this.scrollToRow(row, true).then(() => {
         if (row && field) {
-          let column = this.visibleColumn.find(column => column.property === field)
+          let column = XEUtils.find(this.visibleColumn, column => column.property === field)
           if (column && column.editRender) {
             let cell = DomTools.getCell(this, { row, column })
             if (cell) {
@@ -364,7 +364,7 @@ export default {
     _setSelectCell (row, field) {
       let { tableData, editConfig, visibleColumn } = this
       if (row && field && editConfig.trigger !== 'manual') {
-        let column = visibleColumn.find(column => column.property === field)
+        let column = XEUtils.find(visibleColumn, column => column.property === field)
         let rowIndex = tableData.indexOf(row)
         if (rowIndex > -1 && column) {
           let cell = DomTools.getCell(this, { row, rowIndex, column })
