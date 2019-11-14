@@ -4,6 +4,7 @@
 
     <vxe-table
       border
+      resizable
       height="300"
       highlight-hover-row
       :data="tableData">
@@ -82,6 +83,7 @@ export default {
         `
         <vxe-table
           border
+          resizable
           height="300"
           highlight-hover-row
           :data="tableData">
