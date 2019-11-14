@@ -35,7 +35,7 @@
 ## Features
 
 * [x] Basic table （基础功能）
-* [x] Dynamic Grid （配置式表格）
+* [x] Grid （配置式表格）
 * [x] Size （尺寸）
 * [x] Striped （斑马线条纹）
 * [x] Table with border （带边框）
@@ -53,9 +53,10 @@
 * [x] Filter （筛选）
 * [x] Rowspan and colspan （合并行或列）
 * [x] Footer summary （表尾合计）
-* [x] Import/Export （导入/导出)
+* [x] Import CSV/HTML/XML/TXT （导入)
+* [x] Export CSV/HTML/XML/TXT（导入)
 * [x] Print （打印)
-* [x] Show/hide column （显示/隐藏列）
+* [x] Show/Hide column （显示/隐藏列）
 * [x] Loading （加载中）
 * [x] Formatted content （格式化内容）
 * [x] Custom template （自定义模板）
@@ -66,7 +67,7 @@
 * [x] Toolbar（工具栏）
 * [x] Tree table （树形表格)
 * [x] Editable CRUD（增删改查)
-* [x] Editable validate（数据校验）
+* [x] Validate（数据校验）
 * [x] Data Proxy（数据代理）
 * [x] Keyboard navigation（键盘导航）
 * [x] Modal window（模态窗口）
