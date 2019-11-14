@@ -609,6 +609,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.groupSummaryCount',
+              locat: {
+                name: 'TableTreeGroupSummaryCount'
+              }
+            },
+            {
               label: 'app.aside.nav.expandRow',
               locat: {
                 name: 'TableTreeExpand'
