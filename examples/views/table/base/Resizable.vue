@@ -25,7 +25,6 @@
     <vxe-table
       border
       resizable
-      show-header-overflow
       highlight-hover-row
       :data="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
@@ -100,16 +99,15 @@
       border
       resizable
       show-overflow
-      show-header-overflow
       :data="tableData">
       <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
       <vxe-table-column field="name" title="Name" width="100" fixed="left"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex" width="100" fixed="left"></vxe-table-column>
       <vxe-table-column field="age" title="Age" width="100" fixed="left"></vxe-table-column>
       <vxe-table-column field="atrr1" title="atrr1" width="200"></vxe-table-column>
-      <vxe-table-column field="atrr2" title="atrr2" width="200"></vxe-table-column>
+      <vxe-table-column field="atrr2" title="atrr2 其他2" width="200"></vxe-table-column>
       <vxe-table-column field="atrr3" title="atrr3" width="200"></vxe-table-column>
-      <vxe-table-column field="atrr4" title="atrr4" width="200"></vxe-table-column>
+      <vxe-table-column field="atrr4" title="atrr4 其他4" width="200"></vxe-table-column>
       <vxe-table-column field="date" title="Date" width="100" fixed="right"></vxe-table-column>
       <vxe-table-column field="time" title="Time" width="100" fixed="right"></vxe-table-column>
       <vxe-table-column field="address" title="Address" width="100" fixed="right"></vxe-table-column>
@@ -219,7 +217,6 @@ export default {
         <vxe-table
           border
           resizable
-          show-header-overflow
           highlight-hover-row
           :data="tableData">
           <vxe-table-column type="index" width="60"></vxe-table-column>
@@ -306,16 +303,15 @@ export default {
           border
           resizable
           show-overflow
-          show-header-overflow
           :data="tableData">
           <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
           <vxe-table-column field="name" title="Name" width="100" fixed="left"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" width="100" fixed="left"></vxe-table-column>
           <vxe-table-column field="age" title="Age" width="100" fixed="left"></vxe-table-column>
           <vxe-table-column field="atrr1" title="atrr1" width="200"></vxe-table-column>
-          <vxe-table-column field="atrr2" title="atrr2" width="200"></vxe-table-column>
+          <vxe-table-column field="atrr2" title="atrr2 其他2" width="200"></vxe-table-column>
           <vxe-table-column field="atrr3" title="atrr3" width="200"></vxe-table-column>
-          <vxe-table-column field="atrr4" title="atrr4" width="200"></vxe-table-column>
+          <vxe-table-column field="atrr4" title="atrr4 其他4" width="200"></vxe-table-column>
           <vxe-table-column field="date" title="Date" width="100" fixed="right"></vxe-table-column>
           <vxe-table-column field="time" title="Time" width="100" fixed="right"></vxe-table-column>
           <vxe-table-column field="address" title="Address" width="100" fixed="right"></vxe-table-column>
