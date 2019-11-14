@@ -64,7 +64,7 @@ module.exports = {
         pager: 'Pager',
 
         tree: 'Tree table',
-        groupBy: 'Group by',
+        groupSummary: 'Group summary',
         edit: 'Editable',
         crudToolbar: 'CRUD + Toolbar',
         lazy: 'Lazy loading',

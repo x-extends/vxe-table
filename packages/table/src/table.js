@@ -662,6 +662,7 @@ export default {
     this.lastScrollLeft = 0
     this.lastScrollTop = 0
     this.afterFullData = []
+    this.selectReserveRowMap = {}// 复选框属性，已选中保留的行
     this.fullAllDataRowMap = new Map()
     this.fullAllDataRowIdData = {}
     this.fullDataRowMap = new Map()
@@ -719,6 +720,7 @@ export default {
     GlobalEvent.off(this, 'mousewheel')
     GlobalEvent.off(this, 'keydown')
     GlobalEvent.off(this, 'resize')
+    this.clearAll()
     this.preventEvent(null, 'destroyed', { $table: this })
   },
   render (h) {
@@ -924,6 +926,7 @@ export default {
       this.clearCurrentRow()
       this.clearCurrentColumn()
       this.clearSelection()
+      this.clearSelectReserve()
       this.clearRowExpand()
       this.clearTreeExpand()
       this.clearChecked()
@@ -2528,6 +2531,7 @@ export default {
             XEUtils.eachTree([row], (item, $rowIndex) => {
               if (row === item || (!checkMethod || checkMethod({ row: item, $rowIndex }))) {
                 XEUtils.set(item, property, value)
+                this.handleSelectReserveRow(row, value)
               }
             }, treeConfig)
             XEUtils.remove(treeIndeterminates, item => item === row)
@@ -2548,6 +2552,7 @@ export default {
           }
         } else {
           XEUtils.set(row, property, value)
+          this.handleSelectReserveRow(row, value)
         }
       } else {
         if (treeConfig && !checkStrictly) {
@@ -2563,6 +2568,7 @@ export default {
                 } else {
                   XEUtils.remove(selection, select => select === item)
                 }
+                this.handleSelectReserveRow(row, value)
               }
             }, treeConfig)
             XEUtils.remove(treeIndeterminates, item => item === row)
@@ -2589,6 +2595,7 @@ export default {
           } else {
             XEUtils.remove(selection, item => item === row)
           }
+          this.handleSelectReserveRow(row, value)
         }
       }
       this.checkSelectionStatus()
@@ -2623,7 +2630,7 @@ export default {
       return this.$nextTick()
     },
     setAllSelection (value) {
-      let { tableFullData, editStore, treeConfig, selection } = this
+      let { tableFullData, editStore, treeConfig, selection, selectReserveRowMap } = this
       // 在 v3.0 中废弃 selectConfig
       let checkboxConfig = this.checkboxConfig || this.selectConfig || {}
       let { reserve, checkStrictly, checkMethod } = checkboxConfig
@@ -2683,7 +2690,21 @@ export default {
             }
           }
         }
-        this.selection = value && reserve ? selection.concat(selectRows.filter(row => selection.indexOf(row) === -1)) : selectRows
+        if (reserve) {
+          if (value) {
+            selectRows.forEach(row => {
+              selectReserveRowMap[UtilTools.getRowid(this, row)] = row
+            })
+          } else {
+            tableFullData.forEach(row => {
+              const rowid = UtilTools.getRowid(this, row)
+              if (selectReserveRowMap[rowid]) {
+                delete selectReserveRowMap[rowid]
+              }
+            })
+          }
+        }
+        this.selection = selectRows
       }
       this.treeIndeterminates = []
       this.checkSelectionStatus()
@@ -2719,31 +2740,52 @@ export default {
     },
     // 保留选中状态
     reserveCheckSelection () {
-      let { selection, fullDataRowIdData } = this
+      let { fullDataRowIdData, selectReserveRowMap } = this
       // 在 v3.0 中废弃 selectConfig
       let checkboxConfig = this.checkboxConfig || this.selectConfig || {}
-      let { reserve } = checkboxConfig
-      let rowkey = UtilTools.getRowkey(this)
-      if (reserve && selection.length) {
-        this.selection = selection.map(row => {
-          let rowid = '' + XEUtils.get(row, rowkey)
-          return fullDataRowIdData[rowid] ? fullDataRowIdData[rowid].row : row
+      let reserveSelection = []
+      if (checkboxConfig.reserve) {
+        Object.keys(selectReserveRowMap).forEach(rowid => {
+          if (fullDataRowIdData[rowid]) {
+            reserveSelection.push(fullDataRowIdData[rowid].row)
+          }
         })
       }
+      this.selection = reserveSelection
     },
     /**
      * 获取保留选中的行
      */
     getSelectReserveRecords () {
-      let { selection, fullDataRowIdData } = this
+      let { fullDataRowIdData, selectReserveRowMap } = this
+      // 在 v3.0 中废弃 selectConfig
+      let checkboxConfig = this.checkboxConfig || this.selectConfig || {}
+      let reserveSelection = []
+      if (checkboxConfig.reserve) {
+        Object.keys(selectReserveRowMap).forEach(rowid => {
+          if (!fullDataRowIdData[rowid]) {
+            reserveSelection.push(selectReserveRowMap[rowid])
+          }
+        })
+      }
+      return reserveSelection
+    },
+    clearSelectReserve () {
+      this.selectReserveRowMap = {}
+    },
+    handleSelectReserveRow (row, checked) {
+      const { selectReserveRowMap } = this
       // 在 v3.0 中废弃 selectConfig
       let checkboxConfig = this.checkboxConfig || this.selectConfig || {}
       let { reserve } = checkboxConfig
-      let rowkey = UtilTools.getRowkey(this)
-      if (reserve && selection.length) {
-        return selection.filter(row => !fullDataRowIdData['' + XEUtils.get(row, rowkey)])
+      if (reserve) {
+        const rowid = UtilTools.getRowid(this, row)
+        if (checked) {
+          selectReserveRowMap[rowid] = row
+        } else if (selectReserveRowMap[rowid]) {
+          delete selectReserveRowMap[rowid]
+        }
       }
-      return []
     },
     /**
      * 多选，选中所有事件
