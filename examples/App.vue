@@ -606,10 +606,10 @@ export default {
               }
             },
             {
-              label: 'app.aside.nav.groupBy',
+              label: 'app.aside.nav.groupSummary',
               demoUrl: 'https://jsrun.pro/KVWKp',
               locat: {
-                name: 'TableTreeGroupBy'
+                name: 'TableTreeGroupSummary'
               }
             },
             {

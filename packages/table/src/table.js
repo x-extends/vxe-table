@@ -229,7 +229,7 @@ export default {
       isAllSelected: false,
       // 复选框属性，有选中且非全选状态
       isIndeterminate: false,
-      // 复选框属性，已选中的列
+      // 复选框属性，已选中的行
       selection: [],
       // 当前行
       currentRow: null,
@@ -492,6 +492,8 @@ export default {
       // 最后滚动位置
       lastScrollLeft: 0,
       lastScrollTop: 0,
+      // 复选框属性，已选中保留的行
+      selectReserveRowMap: {},
       // 完整数据、条件处理后
       tableFullData: [],
       afterFullData: [],
@@ -588,6 +590,7 @@ export default {
     GlobalEvent.off(this, 'keydown')
     GlobalEvent.off(this, 'resize')
     GlobalEvent.off(this, 'contextmenu')
+    this.clearAll()
     this.preventEvent(null, 'destroyed', { $table: this })
   },
   render (h) {
