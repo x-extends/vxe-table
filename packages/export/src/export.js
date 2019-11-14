@@ -418,7 +418,7 @@ function checkImportData (columns, fields, rows) {
       tableFields.push(field)
     }
   })
-  return tableFields.every(field => fields.includes(field))
+  return tableFields.every(field => XEUtils.includes(fields, field))
 }
 
 export default {

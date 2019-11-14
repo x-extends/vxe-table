@@ -1361,7 +1361,7 @@ export default {
       return fullColumnIdData[colid] ? fullColumnIdData[colid].column : null
     },
     getColumnByField (field) {
-      return this.visibleColumn.find(column => column.property === field)
+      return XEUtils.find(this.visibleColumn, column => column.property === field)
     },
     /**
      * 获取表格可视列
@@ -1454,7 +1454,7 @@ export default {
     updateAfterFullData () {
       let { visibleColumn, tableFullData, remoteSort, remoteFilter } = this
       let tableData = tableFullData
-      let column = this.visibleColumn.find(column => column.order)
+      let column = XEUtils.find(this.visibleColumn, column => column.order)
       let filterColumn = visibleColumn.filter(({ filters }) => filters && filters.length)
       tableData = tableData.filter(row => {
         return filterColumn.every(column => {
@@ -1540,7 +1540,7 @@ export default {
       this.isUpdateCustoms = true
       this.tableFullColumn.forEach(column => {
         // 在 v3.0 中废弃 prop
-        let item = customColumns.find(item => column.property && (item.field || item.prop) === column.property)
+        let item = XEUtils.find(customColumns, item => column.property && (item.field || item.prop) === column.property)
         if (item) {
           if (XEUtils.isNumber(item.resizeWidth)) {
             column.resizeWidth = item.resizeWidth
@@ -2537,7 +2537,7 @@ export default {
           if (matchObj && matchObj.parent) {
             let parentStatus
             let vItems = checkMethod ? matchObj.items.filter((item, $rowIndex) => checkMethod({ row: item, $rowIndex })) : matchObj.items
-            let indeterminatesItem = matchObj.items.find(item => treeIndeterminates.indexOf(item) > -1)
+            let indeterminatesItem = XEUtils.find(matchObj.items, item => treeIndeterminates.indexOf(item) > -1)
             if (indeterminatesItem) {
               parentStatus = -1
             } else {
@@ -2572,7 +2572,7 @@ export default {
           if (matchObj && matchObj.parent) {
             let parentStatus
             let vItems = checkMethod ? matchObj.items.filter((item, $rowIndex) => checkMethod({ row: item, $rowIndex })) : matchObj.items
-            let indeterminatesItem = matchObj.items.find(item => treeIndeterminates.indexOf(item) > -1)
+            let indeterminatesItem = XEUtils.find(matchObj.items, item => treeIndeterminates.indexOf(item) > -1)
             if (indeterminatesItem) {
               parentStatus = -1
             } else {
@@ -3341,7 +3341,7 @@ export default {
      * 激活行编辑
      */
     setActiveRow (row) {
-      return this.setActiveCell(row, this.visibleColumn.find(column => column.editRender).property)
+      return this.setActiveCell(row, XEUtils.find(this.visibleColumn, column => column.editRender).property)
     },
     /**
      * 激活单元格编辑
@@ -3349,7 +3349,7 @@ export default {
     setActiveCell (row, field) {
       return this.scrollToRow(row).then(() => {
         if (row && field) {
-          let column = this.visibleColumn.find(column => column.property === field)
+          let column = XEUtils.find(this.visibleColumn, column => column.property === field)
           if (column && column.editRender) {
             let cell = DomTools.getCell(this, { row, column })
             if (cell) {
@@ -3367,7 +3367,7 @@ export default {
     setSelectCell (row, field) {
       let { tableData, editConfig, visibleColumn } = this
       if (row && field && editConfig.trigger !== 'manual') {
-        let column = visibleColumn.find(column => column.property === field)
+        let column = XEUtils.find(visibleColumn, column => column.property === field)
         let rowIndex = tableData.indexOf(row)
         if (rowIndex > -1 && column) {
           let cell = DomTools.getCell(this, { row, rowIndex, column })
@@ -3395,7 +3395,7 @@ export default {
     },
     sort (field, order) {
       let { visibleColumn, tableFullColumn, remoteSort } = this
-      let column = visibleColumn.find(item => item.property === field)
+      let column = XEUtils.find(visibleColumn, item => item.property === field)
       let isRemote = XEUtils.isBoolean(column.remoteSort) ? column.remoteSort : remoteSort
       if (column.sortable || column.remoteSort) {
         if (!order) {
@@ -4256,7 +4256,7 @@ export default {
       let { property } = column
       if (property && editRules) {
         let rules = XEUtils.get(editRules, property)
-        return rules && rules.find(rule => type === 'all' || !rule.trigger || type === rule.trigger)
+        return rules && XEUtils.find(rules, rule => type === 'all' || !rule.trigger || type === rule.trigger)
       }
       return false
     },
@@ -4415,7 +4415,7 @@ export default {
       if (!opts.sheetName) {
         opts.sheetName = 'Sheet1'
       }
-      if (!VXETable.exportTypes.includes(opts.type)) {
+      if (!XEUtils.includes(VXETable.exportTypes, opts.type)) {
         throw new Error(UtilTools.getLog('vxe.error.notType', [opts.type]))
       }
       if (!opts.original) {
@@ -4446,7 +4446,7 @@ export default {
         const { type, filename } = UtilTools.parseFile(file)
         const options = Object.assign({ mode: 'covering' }, opts, { type, filename })
         const types = options.types || VXETable.importTypes
-        if (types.includes(type)) {
+        if (XEUtils.includes(types, type)) {
           this.preventEvent(null, 'event.import', { $table: this, file, options, columns: this.tableFullColumn }, () => {
             const reader = new FileReader()
             reader.onerror = e => {
@@ -4486,7 +4486,7 @@ export default {
       impInput.accept = `.${types.join(', .')}`
       impInput.onchange = evnt => {
         const { type } = UtilTools.parseFile(evnt.target.files[0])
-        if (types.includes(type)) {
+        if (XEUtils.includes(types, type)) {
           this._fileResolve(evnt)
         } else {
           if (options.message !== false) {

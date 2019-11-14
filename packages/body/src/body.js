@@ -300,7 +300,7 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
     )
     // 如果行被展开了
     if (expandeds.length && expandeds.indexOf(row) > -1) {
-      let column = tableColumn.find(column => column.type === 'expand')
+      let column = XEUtils.find(tableColumn, column => column.type === 'expand')
       let columnIndex = getColumnMapIndex(column)
       let cellStyle
       if (treeConfig) {

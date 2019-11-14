@@ -74,7 +74,7 @@ class ColumnConfig {
   }
   update (name, value) {
     // 不支持双向的属性
-    if (!['filters'].includes(name)) {
+    if (!XEUtils.includes(['filters'], name)) {
       this[name] = value
     }
   }
