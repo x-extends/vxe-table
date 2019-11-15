@@ -581,6 +581,7 @@ export default {
     }
     this.closeFilter()
     this.closeMenu()
+    this.clearAll()
     this.preventEvent(null, 'beforeDestroy', { $table: this })
   },
   destroyed () {
@@ -590,7 +591,6 @@ export default {
     GlobalEvent.off(this, 'keydown')
     GlobalEvent.off(this, 'resize')
     GlobalEvent.off(this, 'contextmenu')
-    this.clearAll()
     this.preventEvent(null, 'destroyed', { $table: this })
   },
   render (h) {
