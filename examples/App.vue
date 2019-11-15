@@ -610,6 +610,7 @@ export default {
             },
             {
               label: 'app.aside.nav.groupSummaryCount',
+              demoUrl: 'https://jsrun.pro/GTWKp',
               locat: {
                 name: 'TableTreeGroupSummaryCount'
               }
