@@ -39,7 +39,7 @@ export default {
         // 默认选中类型
         type: 'xlsx',
         // 自定义类型
-        types: ['xlsx', 'csv']
+        types: ['xlsx', 'csv', 'html', 'xml', 'txt']
       },
       demoCodes: [
         `
@@ -69,7 +69,7 @@ export default {
                 // 默认选中类型
                 type: 'xlsx',
                 // 自定义类型
-                types: ['xlsx', 'csv']
+                types: ['xlsx', 'csv', 'html', 'xml', 'txt']
               }
             }
           },

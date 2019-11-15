@@ -65,6 +65,11 @@ const TableCustomStorage = () => import(/* webpackChunkName: "advanced" */ './vi
 const TableCustomlWidthStorage = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/CustomlWidthStorage.vue')
 const TablePage = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Page.vue')
 const TableHighlight = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Highlight.vue')
+const TableTabs = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Tabs.vue')
+const TableKeepAlives = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/KeepAlives.vue')
+const TableKeepAliveTable1 = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/keepAlives/Table1.vue')
+const TableKeepAliveTable2 = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/keepAlives/Table2.vue')
+const TableKeepAliveTable3 = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/keepAlives/Table3.vue')
 
 const GridBasic = () => import(/* webpackChunkName: "grid" */ './views/table/grid/Basic.vue')
 const GridGroup = () => import(/* webpackChunkName: "grid" */ './views/table/grid/Group.vue')
@@ -122,6 +127,11 @@ const TableScrollForceRowValid = () => import(/* webpackChunkName: "scroll" */ '
 const TableScrollPartialLoad = () => import(/* webpackChunkName: "scroll" */ './views/table/scroll/PartialLoad.vue')
 const TableScrollFullPartialLoad = () => import(/* webpackChunkName: "scroll" */ './views/table/scroll/FullPartialLoad.vue')
 const TableScrollTemplate = () => import(/* webpackChunkName: "scroll" */ './views/table/scroll/Template.vue')
+const TableScrollTabs = () => import(/* webpackChunkName: "scroll" */ './views/table/scroll/Tabs.vue')
+const TableScrollKeepAlives = () => import(/* webpackChunkName: "scroll" */ './views/table/scroll/KeepAlives.vue')
+const TableScrollKeepAliveTable1 = () => import(/* webpackChunkName: "scroll" */ './views/table/scroll/keepAlives/Table1.vue')
+const TableScrollKeepAliveTable2 = () => import(/* webpackChunkName: "scroll" */ './views/table/scroll/keepAlives/Table2.vue')
+const TableScrollKeepAliveTable3 = () => import(/* webpackChunkName: "scroll" */ './views/table/scroll/keepAlives/Table3.vue')
 
 const TableEditManual = () => import(/* webpackChunkName: "edit" */ './views/table/edit/Manual.vue')
 const TableEditClick = () => import(/* webpackChunkName: "edit" */ './views/table/edit/Click.vue')
@@ -512,6 +522,32 @@ export default new Router({
       component: TableHighlight
     },
     {
+      path: '/table/advanced/tabs',
+      name: 'TableTabs',
+      component: TableTabs
+    },
+    {
+      path: '/table/advanced/keepAlives',
+      component: TableKeepAlives,
+      children: [
+        {
+          path: 'table1',
+          name: 'TableKeepAliveTable1',
+          component: TableKeepAliveTable1
+        },
+        {
+          path: 'table2',
+          name: 'TableKeepAliveTable2',
+          component: TableKeepAliveTable2
+        },
+        {
+          path: 'table3',
+          name: 'TableKeepAliveTable3',
+          component: TableKeepAliveTable3
+        }
+      ]
+    },
+    {
       path: '/table/tree/basic',
       name: 'TableTreeBasic',
       component: TableTreeBasic
@@ -780,6 +816,32 @@ export default new Router({
       path: '/table/scroll/template',
       name: 'TableScrollTemplate',
       component: TableScrollTemplate
+    },
+    {
+      path: '/table/scroll/tabs',
+      name: 'TableScrollTabs',
+      component: TableScrollTabs
+    },
+    {
+      path: '/table/scroll/keepAlives',
+      component: TableScrollKeepAlives,
+      children: [
+        {
+          path: 'table1',
+          name: 'TableScrollKeepAliveTable1',
+          component: TableScrollKeepAliveTable1
+        },
+        {
+          path: 'table2',
+          name: 'TableScrollKeepAliveTable2',
+          component: TableScrollKeepAliveTable2
+        },
+        {
+          path: 'table3',
+          name: 'TableScrollKeepAliveTable3',
+          component: TableScrollKeepAliveTable3
+        }
+      ]
     },
     {
       path: '/table/edit/manual',

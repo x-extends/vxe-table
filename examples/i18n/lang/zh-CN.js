@@ -62,6 +62,8 @@ module.exports = {
         customlWidthStorage: '显示/隐藏/列宽 + localStorage',
         search: '全表搜索',
         pager: '分页',
+        tabs: '多页签切换',
+        keepAlives: 'keep-alive 切换',
 
         tree: '树形表格',
         groupSummary: '分组汇总',
