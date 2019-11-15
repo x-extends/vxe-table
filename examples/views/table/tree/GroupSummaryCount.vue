@@ -4,10 +4,12 @@
 
     <vxe-table
       resizable
+      show-footer
       ref="xTree"
       :loading="loading"
       :tree-config="tableTreeConfig"
       :span-method="colspanMethod"
+      :footer-method="footerMethod"
       :data="tableData">
       <vxe-table-column field="name" title="名称" tree-node :formatter="formatName"></vxe-table-column>
       <vxe-table-column field="level" title="级别"></vxe-table-column>
@@ -40,10 +42,12 @@ export default {
         `
         <vxe-table
           resizable
+          show-footer
           ref="xTree"
           :loading="loading"
           :tree-config="tableTreeConfig"
           :span-method="colspanMethod"
+          :footer-method="footerMethod"
           :data="tableData">
           <vxe-table-column field="name" title="名称" tree-node :formatter="formatName"></vxe-table-column>
           <vxe-table-column field="level" title="级别"></vxe-table-column>
@@ -225,6 +229,24 @@ export default {
                   }
                 }
               }
+            },
+            footerMethod ({ columns, data }) {
+              return [
+                columns.map((column, columnIndex) => {
+                  if (columnIndex === 0) {
+                    return \`合计 (\${this.$utils.sum(data, 'num')}人)\`
+                  }
+                  switch (column.property) {
+                    case 'level':
+                      return \`总共 \${Math.floor(this.$utils.sum(data, 'level'))}\`
+                    case 'age':
+                      return \`平均年龄 \${parseInt(this.$utils.mean(data, 'age'))}\`
+                    case 'rate':
+                      return \`总分 \${this.$utils.sum(data, 'rate')}\`
+                  }
+                  return '-'
+                })
+              ]
             }
           }
         }
@@ -399,6 +421,24 @@ export default {
           }
         }
       }
+    },
+    footerMethod ({ columns, data }) {
+      return [
+        columns.map((column, columnIndex) => {
+          if (columnIndex === 0) {
+            return `合计 (${this.$utils.sum(data, 'num')}人)`
+          }
+          switch (column.property) {
+            case 'level':
+              return `总共 ${Math.floor(this.$utils.sum(data, 'level'))}`
+            case 'age':
+              return `平均年龄 ${parseInt(this.$utils.mean(data, 'age'))}`
+            case 'rate':
+              return `总分 ${this.$utils.sum(data, 'rate')}`
+          }
+          return '-'
+        })
+      ]
     }
   }
 }
