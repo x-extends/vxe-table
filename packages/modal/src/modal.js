@@ -118,7 +118,7 @@ export default {
     let headerOns = {
       mousedown: this.mousedownEvent
     }
-    if (dblclickZoom && type === 'modal') {
+    if (resize && dblclickZoom && type === 'modal') {
       headerOns.dblclick = this.toggleZoomEvent
     }
     return h('div', {

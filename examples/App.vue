@@ -445,6 +445,18 @@ export default {
               locat: {
                 name: 'TableHighlight'
               }
+            },
+            {
+              label: 'app.aside.nav.tabs',
+              locat: {
+                name: 'TableTabs'
+              }
+            },
+            {
+              label: 'app.aside.nav.keepAlives',
+              locat: {
+                name: 'TableKeepAliveTable1'
+              }
             }
           ]
         },
@@ -798,6 +810,18 @@ export default {
               label: 'app.aside.nav.template',
               locat: {
                 name: 'TableScrollTemplate'
+              }
+            },
+            {
+              label: 'app.aside.nav.tabs',
+              locat: {
+                name: 'TableScrollTabs'
+              }
+            },
+            {
+              label: 'app.aside.nav.keepAlives',
+              locat: {
+                name: 'TableScrollKeepAliveTable1'
               }
             },
             {

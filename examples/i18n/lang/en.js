@@ -62,6 +62,8 @@ module.exports = {
         customlWidthStorage: 'Show/hide & column width + localStorage',
         search: 'Table search',
         pager: 'Pager',
+        tabs: 'Switch tabs',
+        keepAlives: 'Switch keep-alive',
 
         tree: 'Tree table',
         groupSummary: 'Group summary',

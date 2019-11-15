@@ -42,7 +42,7 @@ export default {
         // 默认选中类型
         type: 'pdf',
         // 自定义类型
-        types: ['pdf', 'csv']
+        types: ['pdf', 'csv', 'html', 'xml', 'txt']
       },
       demoCodes: [
         `
