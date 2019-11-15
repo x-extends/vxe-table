@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">基于树表格实现分组汇总统计</p>
+    <p class="tip">基于树表格实现分组汇总合计</p>
 
     <vxe-table
       resizable
@@ -195,7 +195,36 @@ export default {
                   }
                 }
               }, this.tableTreeConfig)
+              this.$utils.eachTree(data, (row) => {
+                let children = row.children
+                if (children && children.length) {
+                  // 动态增加一行汇总
+                  children.push({
+                    name: \`合计 (\${row.name})\`,
+                    level: row.level,
+                    age: row.age,
+                    rate: row.rate
+                  })
+                }
+              }, this.tableTreeConfig)
               return data
+            },
+            colspanMethod ({ row, column }) {
+              // 当行被展开时将行合并
+              let xTree = this.$refs.xTree
+              if (row.children && row.children.length && xTree && xTree.isTreeExpandByRow(row)) {
+                if (column.treeNode) {
+                  return {
+                    rowspan: 1,
+                    colspan: 4
+                  }
+                } else {
+                  return {
+                    rowspan: 0,
+                    colspan: 0
+                  }
+                }
+              }
             }
           }
         }
@@ -345,7 +374,7 @@ export default {
         if (children && children.length) {
           // 动态增加一行汇总
           children.push({
-            name: '汇总',
+            name: `合计 (${row.name})`,
             level: row.level,
             age: row.age,
             rate: row.rate

@@ -85,7 +85,7 @@ import modalAPI from '../../api/modal'
 export default {
   data () {
     return {
-      filterName: this.$route.query.filterName,
+      filterName: this.$route.query.filterName ? decodeURIComponent(this.$route.query.filterName) : '',
       apiList: [],
       defaultExpandRowKeys: [],
       loading: false,
