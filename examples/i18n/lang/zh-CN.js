@@ -65,7 +65,7 @@ module.exports = {
 
         tree: '树形表格',
         groupSummary: '分组汇总',
-        groupSummaryCount: '分组汇总统计',
+        groupSummaryCount: '分组汇总合计',
         edit: '可编辑',
         crudToolbar: '增删改查 + 工具栏',
         lazy: '懒加载',
