@@ -1,13 +1,14 @@
 <template>
   <div>
-    <p class="tip">调用 <table-api-link prop="insert"/>、<table-api-link prop="insertAt"/> 函数插入临时数据<span class="red">注：原生的 select 只支持字符串的 value</span></p>
+    <p class="tip">调用 <table-api-link prop="insert"/>、<table-api-link prop="insertAt"/> 函数插入临时数据<br><span class="red">注：原生的 select 只支持字符串的 value</span></p>
 
     <vxe-toolbar>
       <template v-slot:buttons>
         <vxe-button @click="insertEvent()">在第1行插入</vxe-button>
         <vxe-button @click="insertEvent(tableData[2])">在第3行插入并激活 Sex 单元格</vxe-button>
         <vxe-button @click="insertEvent(-1)">在最后行插入</vxe-button>
-        <vxe-button @click="getInsertEvent">获取新增</vxe-button>
+        <vxe-button @click="$refs.xTable.removeSelecteds()">删除选中</vxe-button>
+        <vxe-button @click="getInsertEvent">保存</vxe-button>
       </template>
     </vxe-toolbar>
 
@@ -18,6 +19,7 @@
       max-height="400"
       :data="tableData"
       :edit-config="{trigger: 'click', mode: 'cell'}">
+      <vxe-table-column type="checkbox" width="60"></vxe-table-column>
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable :edit-render="{name: 'input', defaultValue: '默认的名字'}"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'select', options: sexList}"></vxe-table-column>
@@ -48,7 +50,8 @@ export default {
             <vxe-button @click="insertEvent()">在第1行插入</vxe-button>
             <vxe-button @click="insertEvent(tableData[2])">在第3行插入并激活 Sex 单元格</vxe-button>
             <vxe-button @click="insertEvent(-1)">在最后行插入</vxe-button>
-            <vxe-button @click="getInsertEvent">获取新增</vxe-button>
+            <vxe-button @click="$refs.xTable.removeSelecteds()">删除选中</vxe-button>
+            <vxe-button @click="getInsertEvent">保存</vxe-button>
           </template>
         </vxe-toolbar>
 
@@ -59,6 +62,7 @@ export default {
           max-height="400"
           :data="tableData"
           :edit-config="{trigger: 'click', mode: 'cell'}">
+          <vxe-table-column type="checkbox" width="60"></vxe-table-column>
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable :edit-render="{name: 'input', defaultValue: '默认的名字'}"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>

@@ -2899,7 +2899,7 @@ const apis = [
             version: '1.15.13',
             type: 'Array',
             enum: 'csv, html, xml, txt',
-            defVal: '支持所有类型',
+            defVal: '[\'csv\', \'html\', \'xml\', \'txt\']',
             list: []
           }
         ]
@@ -2907,7 +2907,7 @@ const apis = [
       {
         name: 'openImport(options)',
         desc: '打开高级导入',
-        version: '2.5.12',
+        version: '1.15.13',
         type: 'Promise',
         enum: '',
         defVal: 'options: object',
@@ -2916,11 +2916,48 @@ const apis = [
       {
         name: 'print(options)',
         desc: '打印（只支持基本数据结构，目前不支持分组、合并等）',
-        version: '2.6.16',
+        version: '1.15.13',
         type: 'Promise',
         enum: '',
         defVal: 'options: object',
         list: XEUtils.clone(exportDataAPI.filter(item => !['filename', 'sheetName', 'type', 'download', 'message'].includes(item.name)), true)
+      },
+      {
+        name: 'readFile(options)',
+        desc: '读取本地文件',
+        version: '1.15.14',
+        type: 'Promise<Event>',
+        enum: '',
+        defVal: 'options: object',
+        list: [
+          {
+            name: 'multiple',
+            desc: '是否允许多选',
+            version: '',
+            type: 'Boolean',
+            enum: '',
+            defVal: 'false',
+            list: []
+          },
+          {
+            name: 'types',
+            desc: '支持选取的文件类型',
+            version: '',
+            type: 'Array',
+            enum: '',
+            defVal: '[\'csv\', \'html\', \'xml\', \'txt\']',
+            list: []
+          },
+          {
+            name: 'message',
+            desc: '是否显示内置的消息提示',
+            version: '',
+            type: 'Boolean',
+            enum: '',
+            defVal: 'true',
+            list: []
+          }
+        ]
       }
     ]
   }

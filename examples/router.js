@@ -154,6 +154,7 @@ const TableEditExpand = () => import(/* webpackChunkName: "edit" */ './views/tab
 const TableEditFooterImmediately = () => import(/* webpackChunkName: "edit" */ './views/table/edit/FooterImmediately.vue')
 const TableEditMenu = () => import(/* webpackChunkName: "edit" */ './views/table/edit/Menu.vue')
 const TableEditSpan = () => import(/* webpackChunkName: "edit" */ './views/table/edit/Span.vue')
+const TableEditUpload = () => import(/* webpackChunkName: "edit" */ './views/table/edit/Upload.vue')
 const TableEditUniqueSelect = () => import(/* webpackChunkName: "edit" */ './views/table/edit/UniqueSelect.vue')
 const TableEditCascadingSelect = () => import(/* webpackChunkName: "edit" */ './views/table/edit/CascadingSelect.vue')
 const TableEditEvents = () => import(/* webpackChunkName: "edit" */ './views/table/edit/Events.vue')
@@ -947,6 +948,11 @@ export default new Router({
       path: '/table/edit/span',
       name: 'TableEditSpan',
       component: TableEditSpan
+    },
+    {
+      path: '/table/edit/upload',
+      name: 'TableEditUpload',
+      component: TableEditUpload
     },
     {
       path: '/table/edit/uniqueSelect',

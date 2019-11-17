@@ -9,12 +9,12 @@ var browse = DomTools.browse
 var debounceScrollYDuration = browse.msie ? 40 : 20
 
 // 导入
-const impForm = document.createElement('form')
-const impInput = document.createElement('input')
-impForm.className = 'vxe-table--import-form'
-impInput.name = 'file'
-impInput.type = 'file'
-impForm.appendChild(impInput)
+const fileForm = document.createElement('form')
+const fileInput = document.createElement('input')
+fileForm.className = 'vxe-table--import-form'
+fileInput.name = 'file'
+fileInput.type = 'file'
+fileForm.appendChild(fileInput)
 
 // 打印
 var printFrame
@@ -770,6 +770,7 @@ export default {
         'vxe-editable': editConfig,
         'show--head': showHeader,
         'show--foot': showFooter,
+        'has--height': height,
         'fixed--left': leftList.length,
         'fixed--right': rightList.length,
         't--animat': optimizeOpts.animat,
@@ -845,6 +846,20 @@ export default {
        * 右侧固定列
        */
       rightList && rightList.length && overflowX ? renderFixed(h, this, 'right') : _e(),
+      /**
+       * 空数据
+       */
+      !loading && !tableData.length ? h('div', {
+        ref: 'emptyPlaceholder',
+        class: 'vxe-table--empty-placeholder',
+        style: height ? null : {
+          top: `${this.headerHeight}px`
+        }
+      }, [
+        h('div', {
+          class: 'vxe-table--empty-content'
+        }, this.$scopedSlots.empty ? this.$scopedSlots.empty.call(this, { $table: this }, h) : GlobalConfig.i18n('vxe.table.emptyText'))
+      ]) : _e(),
       /**
        * 列宽线
        */
@@ -4521,12 +4536,15 @@ export default {
       return rest
     },
     readFile (options = {}) {
-      if (!impForm.parentNode) {
-        document.body.appendChild(impForm)
+      if (!fileForm.parentNode) {
+        document.body.appendChild(fileForm)
       }
       const types = options.types || VXETable.importTypes
-      impInput.accept = `.${types.join(', .')}`
-      impInput.onchange = evnt => {
+      if (options.multiple) {
+        fileInput.multiple = 'multiple'
+      }
+      fileInput.accept = `.${types.join(', .')}`
+      fileInput.onchange = evnt => {
         const { type } = UtilTools.parseFile(evnt.target.files[0])
         if (XEUtils.includes(types, type)) {
           this._fileResolve(evnt)
@@ -4538,8 +4556,8 @@ export default {
         }
         this._fileResolve = null
       }
-      impForm.reset()
-      impInput.click()
+      fileForm.reset()
+      fileInput.click()
       return new Promise((resolve, reject) => {
         this._fileResolve = resolve
         this._fileReject = reject

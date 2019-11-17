@@ -115,6 +115,7 @@ module.exports = {
         keyboard: '键盘导航',
         uniqueSelect: '唯一下拉选项',
         cascadingSelect: '联动下拉选项',
+        upload: '文件上传',
 
         excel: '更多实现',
         cell: '单元格',

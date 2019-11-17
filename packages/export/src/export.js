@@ -43,7 +43,7 @@ function toCsv ($table, opts, columns, datas) {
     content += columns.map(column => `"${getHeaderTitle(opts, column)}"`).join(',') + '\n'
   }
   datas.forEach((row, rowIndex) => {
-    if (isOriginal) {
+    if (isOriginal || opts.data) {
       content += columns.map((column, columnIndex) => {
         if (column.type === 'index') {
           return `"${column.indexMethod ? column.indexMethod({ row, rowIndex, column, columnIndex }) : rowIndex + 1}"`
@@ -71,7 +71,7 @@ function toTxt ($table, opts, columns, datas) {
     content += columns.map(column => `${getHeaderTitle(opts, column)}`).join('\t') + '\n'
   }
   datas.forEach((row, rowIndex) => {
-    if (isOriginal) {
+    if (isOriginal || opts.data) {
       content += columns.map((column, columnIndex) => {
         if (column.type === 'index') {
           return `${column.indexMethod ? column.indexMethod({ row, rowIndex, column, columnIndex }) : rowIndex + 1}`
@@ -147,7 +147,7 @@ function toHtml ($table, opts, columns, datas) {
     } else {
       datas.forEach((row, rowIndex) => {
         html += '<tr>'
-        if (isOriginal) {
+        if (isOriginal || opts.data) {
           html += columns.map((column, columnIndex) => {
             let cellValue = ''
             if (column.type === 'index') {
@@ -205,7 +205,7 @@ function toXML ($table, opts, columns, datas) {
   }
   datas.forEach((row, rowIndex) => {
     xml += '<Row>'
-    if (isOriginal) {
+    if (isOriginal || opts.data) {
       xml += columns.map((column, columnIndex) => {
         if (column.type === 'index') {
           return `<Cell><Data ss:Type="String">${column.indexMethod ? column.indexMethod({ row, rowIndex, column, columnIndex }) : rowIndex + 1}</Data></Cell>`

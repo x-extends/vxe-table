@@ -400,10 +400,10 @@ export default {
     let { _e, $parent: $table, fixedColumn, fixedType } = this
     let {
       $scopedSlots,
+      loading,
       maxHeight,
       height,
       containerHeight,
-      loading,
       tableData,
       tableColumn,
       headerHeight,
@@ -500,9 +500,9 @@ export default {
           width: tableWidth ? `${tableWidth}px` : tableWidth
         }
       }, [
-        h('span', {
-          class: 'vxe-table--empty-text'
-        }, $scopedSlots.empty ? $scopedSlots.empty.call(this, { $table }, h) : GlobalConfig.i18n('vxe.table.emptyText'))
+        h('div', {
+          class: 'vxe-table--empty-content'
+        }, $scopedSlots.empty ? $scopedSlots.empty.call(this, { $table: this }, h) : GlobalConfig.i18n('vxe.table.emptyText'))
       ]) : null
     ])
   },
