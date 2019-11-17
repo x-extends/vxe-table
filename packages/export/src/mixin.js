@@ -7,12 +7,12 @@ import { UtilTools, DomTools } from '../../tools'
 const defaultHtmlStyle = 'body{margin:0;font-size:14px}table{text-align:left;border-width:1px 0 0 1px}table,td,th{border-style:solid;border-color:#e8eaec}tfoot,thead{background-color:#f8f8f9}td,th{padding:6px;border-width:0 1px 1px 0}.tree-icon-wrapper{position:relative;display:inline-block;width:18px}.tree-icon{position:absolute;top:-9px;left:0;width:0;height:0;border-style:solid;border-width:6px;border-top-color:#939599;border-right-color:transparent;border-bottom-color:transparent;border-left-color:transparent}.tree-node{text-align:left}.tree-indent{display:inline-block}'
 
 // 导入
-const impForm = document.createElement('form')
-const impInput = document.createElement('input')
-impForm.className = 'vxe-table--import-form'
-impInput.name = 'file'
-impInput.type = 'file'
-impForm.appendChild(impInput)
+const fileForm = document.createElement('form')
+const fileInput = document.createElement('input')
+fileForm.className = 'vxe-table--import-form'
+fileInput.name = 'file'
+fileInput.type = 'file'
+fileForm.appendChild(fileInput)
 
 // 打印
 var printFrame
@@ -60,7 +60,7 @@ function toCsv ($table, opts, columns, datas) {
     content += columns.map(column => `"${getHeaderTitle(opts, column)}"`).join(',') + '\n'
   }
   datas.forEach((row, rowIndex) => {
-    if (isOriginal) {
+    if (isOriginal || opts.data) {
       content += columns.map((column, columnIndex) => {
         if (column.type === 'index') {
           return `"${column.indexMethod ? column.indexMethod({ row, rowIndex, column, columnIndex }) : rowIndex + 1}"`
@@ -88,7 +88,7 @@ function toTxt ($table, opts, columns, datas) {
     content += columns.map(column => `${getHeaderTitle(opts, column)}`).join('\t') + '\n'
   }
   datas.forEach((row, rowIndex) => {
-    if (isOriginal) {
+    if (isOriginal || opts.data) {
       content += columns.map((column, columnIndex) => {
         if (column.type === 'index') {
           return `${column.indexMethod ? column.indexMethod({ row, rowIndex, column, columnIndex }) : rowIndex + 1}`
@@ -164,7 +164,7 @@ function toHtml ($table, opts, columns, datas) {
     } else {
       datas.forEach((row, rowIndex) => {
         html += '<tr>'
-        if (isOriginal) {
+        if (isOriginal || opts.data) {
           html += columns.map((column, columnIndex) => {
             let cellValue = ''
             if (column.type === 'index') {
@@ -222,7 +222,7 @@ function toXML ($table, opts, columns, datas) {
   }
   datas.forEach((row, rowIndex) => {
     xml += '<Row>'
-    if (isOriginal) {
+    if (isOriginal || opts.data) {
       xml += columns.map((column, columnIndex) => {
         if (column.type === 'index') {
           return `<Cell><Data ss:Type="String">${column.indexMethod ? column.indexMethod({ row, rowIndex, column, columnIndex }) : rowIndex + 1}</Data></Cell>`
@@ -584,12 +584,15 @@ export default {
       return rest
     },
     _readFile (options = {}) {
-      if (!impForm.parentNode) {
-        document.body.appendChild(impForm)
+      if (!fileForm.parentNode) {
+        document.body.appendChild(fileForm)
       }
       const types = options.types || VXETable.importTypes
-      impInput.accept = `.${types.join(', .')}`
-      impInput.onchange = evnt => {
+      if (options.multiple) {
+        fileInput.multiple = 'multiple'
+      }
+      fileInput.accept = `.${types.join(', .')}`
+      fileInput.onchange = evnt => {
         const { type } = UtilTools.parseFile(evnt.target.files[0])
         if (XEUtils.includes(types, type)) {
           this._fileResolve(evnt)
@@ -601,8 +604,8 @@ export default {
         }
         this._fileResolve = null
       }
-      impForm.reset()
-      impInput.click()
+      fileForm.reset()
+      fileInput.click()
       return new Promise((resolve, reject) => {
         this._fileResolve = resolve
         this._fileReject = reject

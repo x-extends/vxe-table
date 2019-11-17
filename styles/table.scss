@@ -626,24 +626,34 @@
   }
 
   /*暂无数据*/
-  &.is--loading {
-    .vxe-table--empty-block {
-      visibility: hidden;
-    }
-  }
+  .vxe-table--empty-placeholder,
   .vxe-table--empty-block {
-    display: none;
-    height: 100%;
+    display: flex;
     min-height: 60px;
     justify-content: center;
     align-items: center;
     text-align: center;
-    &.is--visible {
-      display: flex;
-    }
-    .vxe-table--empty-text {
-      display: block;
-      width: 50%;
+    overflow: hidden;
+    width: 100%;
+    pointer-events: none;
+  }
+  .vxe-table--empty-placeholder {
+    position: absolute;
+    top: 0;
+    z-index: 12;
+  }
+  .vxe-table--empty-content {
+    display: block;
+    width: 50%;
+    pointer-events: auto;
+  }
+  .vxe-table--empty-block {
+    visibility: hidden;
+  }
+  &.has--height {
+    .vxe-table--empty-placeholder {
+      top: 50%;
+      transform: translateY(-50%);
     }
   }
 

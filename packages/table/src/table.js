@@ -645,6 +645,7 @@ export default {
         'vxe-editable': editConfig,
         'show--head': showHeader,
         'show--foot': showFooter,
+        'has--height': height,
         'fixed--left': leftList.length,
         'fixed--right': rightList.length,
         'all-overflow': showOverflow,
@@ -724,6 +725,20 @@ export default {
        * 右侧固定列
        */
       rightList && rightList.length && overflowX ? renderFixed(h, this, 'right') : _e(),
+      /**
+       * 空数据
+       */
+      !loading && !tableData.length ? h('div', {
+        ref: 'emptyPlaceholder',
+        class: 'vxe-table--empty-placeholder',
+        style: height ? null : {
+          top: `${this.headerHeight}px`
+        }
+      }, [
+        h('div', {
+          class: 'vxe-table--empty-content'
+        }, this.$scopedSlots.empty ? this.$scopedSlots.empty.call(this, { $table: this }, h) : GlobalConfig.i18n('vxe.table.emptyText'))
+      ]) : _e(),
       /**
        * 列宽线
        */

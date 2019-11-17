@@ -1003,6 +1003,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.upload',
+              locat: {
+                name: 'TableEditUpload'
+              }
+            },
+            {
               label: 'app.aside.nav.uniqueSelect',
               locat: {
                 name: 'TableEditUniqueSelect'

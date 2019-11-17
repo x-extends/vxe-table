@@ -427,13 +427,13 @@ export default {
         mouseConfig.checked ? renderBorder(h, 'check') : null,
         keyboardConfig.isCut ? renderBorder(h, 'copy') : null
       ]) : null,
-      !fixedType ? h('div', {
-        class: `vxe-table--empty-block${tableData.length ? '' : ' is--visible'}`,
+      !fixedType && !tableData.length ? h('div', {
+        class: 'vxe-table--empty-block',
         ref: 'emptyBlock'
       }, [
-        h('span', {
-          class: 'vxe-table--empty-text'
-        }, $scopedSlots.empty ? $scopedSlots.empty.call(this, { $table }, h) : GlobalConfig.i18n('vxe.table.emptyText'))
+        h('div', {
+          class: 'vxe-table--empty-content'
+        }, $scopedSlots.empty ? $scopedSlots.empty.call(this, { $table: this }, h) : GlobalConfig.i18n('vxe.table.emptyText'))
       ]) : null
     ])
   },

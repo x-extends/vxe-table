@@ -42,13 +42,25 @@
       :layouts="['PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
     </vxe-pager>
 
-    <vxe-pager
-      perfect
-      :current-page.sync="page6.currentPage"
-      :page-size.sync="page6.pageSize"
-      :total="page6.totalResult"
-      :layouts="['PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
-    </vxe-pager>
+    <p>
+      <vxe-tooltip ref="xTip"></vxe-tooltip>
+      <vxe-table
+        border
+        height="200"
+        :data="tableData">
+        <vxe-table-column type="index" width="60"></vxe-table-column>
+        <vxe-table-column field="name" title="Name"></vxe-table-column>
+        <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+        <vxe-table-column field="age" title="Age"></vxe-table-column>
+      </vxe-table>
+      <vxe-pager
+        perfect
+        :current-page.sync="page6.currentPage"
+        :page-size.sync="page6.pageSize"
+        :total="page6.totalResult"
+        :layouts="['PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
+      </vxe-pager>
+    </p>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
@@ -95,7 +107,7 @@ export default {
         pageSize: 10,
         totalResult: 300
       },
-      value2: '',
+      tableData: [],
       demoCodes: [
         `
         <vxe-pager
@@ -137,13 +149,25 @@ export default {
           :layouts="['PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
         </vxe-pager>
 
-        <vxe-pager
-          perfect
-          :current-page.sync="page6.currentPage"
-          :page-size.sync="page6.pageSize"
-          :total="page6.totalResult"
-          :layouts="['PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
-        </vxe-pager>
+        <p>
+          <vxe-tooltip ref="xTip"></vxe-tooltip>
+          <vxe-table
+            border
+            height="200"
+            :data="tableData">
+            <vxe-table-column type="index" width="60"></vxe-table-column>
+            <vxe-table-column field="name" title="Name"></vxe-table-column>
+            <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+            <vxe-table-column field="age" title="Age"></vxe-table-column>
+          </vxe-table>
+          <vxe-pager
+            perfect
+            :current-page.sync="page6.currentPage"
+            :page-size.sync="page6.pageSize"
+            :total="page6.totalResult"
+            :layouts="['PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
+          </vxe-pager>
+        </p>
         `,
         `
         export default {
@@ -178,7 +202,8 @@ export default {
                 currentPage: 1,
                 pageSize: 10,
                 totalResult: 300
-              }
+              },
+              tableData: []
             }
           }
         }
@@ -190,6 +215,9 @@ export default {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
       hljs.highlightBlock(block)
     })
+  },
+  created () {
+    this.tableData = window.MOCK_DATA_LIST.slice(0, 8)
   }
 }
 </script>
