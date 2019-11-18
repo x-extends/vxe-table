@@ -2,10 +2,15 @@
   <div>
     <p class="tip">具体兼容请查看 <a class="link" href="https://www.npmjs.com/package/vxe-table-plugin-export-xlsx" target="_blank">vxe-table-plugin-export-xlsx</a> 插件的 API</p>
 
-    <vxe-toolbar setting :export="tableExport"></vxe-toolbar>
+    <vxe-toolbar setting :export="tableExport">
+      <template v-slot:buttons>
+        <vxe-button @click="exportDataEvent">导出数据</vxe-button>
+      </template>
+    </vxe-toolbar>
 
     <vxe-table
       border
+      ref="xTable"
       height="400"
       :loading="loading"
       :data="tableData">
@@ -43,10 +48,15 @@ export default {
       },
       demoCodes: [
         `
-        <vxe-toolbar setting :export="tableExport"></vxe-toolbar>
+        <vxe-toolbar setting :export="tableExport">
+          <template v-slot:buttons>
+            <vxe-button @click="exportDataEvent">导出数据</vxe-button>
+          </template>
+        </vxe-toolbar>
 
         <vxe-table
           border
+          ref="xTable"
           height="400"
           :loading="loading"
           :data="tableData">
@@ -69,7 +79,7 @@ export default {
                 // 默认选中类型
                 type: 'xlsx',
                 // 自定义类型
-                types: ['xlsx', 'csv']
+                types: ['xlsx', 'csv', 'html', 'xml', 'txt']
               }
             }
           },
@@ -93,6 +103,13 @@ export default {
                 ]
                 this.loading = false
               }, 100)
+            },
+            exportDataEvent () {
+              this.$refs.xTable.exportData({
+                filename: '导出',
+                sheetName: 'Sheet1',
+                type: 'xlsx'
+              })
             }
           }
         }
@@ -125,6 +142,13 @@ export default {
         ]
         this.loading = false
       }, 100)
+    },
+    exportDataEvent () {
+      this.$refs.xTable.exportData({
+        filename: '导出',
+        sheetName: 'Sheet1',
+        type: 'xlsx'
+      })
     }
   }
 }
