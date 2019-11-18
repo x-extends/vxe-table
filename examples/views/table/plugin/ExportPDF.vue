@@ -5,10 +5,15 @@
       <span class="red">注：目前无法支持中文字体，会乱码，可自行引入字体库解决</span>
     </p>
 
-    <vxe-toolbar setting :export="tableExport"></vxe-toolbar>
+    <vxe-toolbar setting :export="tableExport">
+          <template v-slot:buttons>
+            <vxe-button @click="exportDataEvent">导出数据</vxe-button>
+          </template>
+        </vxe-toolbar>
 
     <vxe-table
       border
+      ref="xTable"
       height="400"
       :loading="loading"
       :data="tableData">
@@ -46,10 +51,15 @@ export default {
       },
       demoCodes: [
         `
-        <vxe-toolbar setting :export="tableExport"></vxe-toolbar>
+        <vxe-toolbar setting :export="tableExport">
+          <template v-slot:buttons>
+            <vxe-button @click="exportDataEvent">导出数据</vxe-button>
+          </template>
+        </vxe-toolbar>
 
         <vxe-table
           border
+          ref="xTable"
           height="400"
           :loading="loading"
           :data="tableData">
@@ -92,6 +102,12 @@ export default {
                 ]
                 this.loading = false
               }, 100)
+            },
+            exportDataEvent () {
+              this.$refs.xTable.exportData({
+                filename: '导出',
+                type: 'pdf'
+              })
             }
           }
         }
@@ -124,6 +140,12 @@ export default {
         ]
         this.loading = false
       }, 100)
+    },
+    exportDataEvent () {
+      this.$refs.xTable.exportData({
+        filename: '导出',
+        type: 'pdf'
+      })
     }
   }
 }
