@@ -18,6 +18,9 @@
           </template>
         </vxe-button>
       </template>
+      <template v-slot:tools>
+        <vxe-input size="small" placeholder="搜索"></vxe-input>
+      </template>
     </vxe-toolbar>
 
     <vxe-table
@@ -115,6 +118,9 @@ export default {
                 <vxe-button>保存</vxe-button>
               </template>
             </vxe-button>
+          </template>
+          <template v-slot:tools>
+            <vxe-input size="small" placeholder="搜索"></vxe-input>
           </template>
         </vxe-toolbar>
 
