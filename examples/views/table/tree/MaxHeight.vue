@@ -1,11 +1,9 @@
 <template>
   <div>
-    <p class="tip">树表格，固定列</p>
+    <p class="tip">当一个表格高度需要自适应的时候可以通过 <table-api-link prop="max-height"/> 设置为最大高度</p>
 
     <vxe-toolbar>
       <template v-slot:buttons>
-        <vxe-button @click="$refs.xTree.toggleTreeExpansion(tableData[0], true)">切换第一个</vxe-button>
-        <vxe-button @click="$refs.xTree.setTreeExpansion(tableData[2], true)">展开第三个</vxe-button>
         <vxe-button @click="$refs.xTree.setAllTreeExpansion(true)">展开所有</vxe-button>
         <vxe-button @click="$refs.xTree.clearTreeExpand()">关闭所有</vxe-button>
       </template>
@@ -15,14 +13,13 @@
       border
       resizable
       ref="xTree"
+      max-height="400"
       :tree-config="{children: 'children'}"
-      :checkbox-config="{labelField: 'id'}"
       :data="tableData">
-      <vxe-table-column type="checkbox" title="ID" fixed="left" width="200" tree-node></vxe-table-column>
-      <vxe-table-column field="name" title="Name" width="300"></vxe-table-column>
-      <vxe-table-column field="size" title="Size" width="300"></vxe-table-column>
-      <vxe-table-column field="type" title="Type" width="300"></vxe-table-column>
-      <vxe-table-column field="date" title="Date" width="300"></vxe-table-column>
+      <vxe-table-column field="name" title="app.body.label.name" tree-node></vxe-table-column>
+      <vxe-table-column field="size" title="Size"></vxe-table-column>
+      <vxe-table-column field="type" title="Type"></vxe-table-column>
+      <vxe-table-column field="date" title="Date"></vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -45,8 +42,6 @@ export default {
         `
         <vxe-toolbar>
           <template v-slot:buttons>
-            <vxe-button @click="$refs.xTree.toggleTreeExpansion(tableData[0], true)">切换第一个</vxe-button>
-            <vxe-button @click="$refs.xTree.setTreeExpansion(tableData[2], true)">展开第三个</vxe-button>
             <vxe-button @click="$refs.xTree.setAllTreeExpansion(true)">展开所有</vxe-button>
             <vxe-button @click="$refs.xTree.clearTreeExpand()">关闭所有</vxe-button>
           </template>
@@ -56,14 +51,13 @@ export default {
           border
           resizable
           ref="xTree"
+          max-height="400"
           :tree-config="{children: 'children'}"
-          :checkbox-config="{labelField: 'id'}"
           :data="tableData">
-          <vxe-table-column type="checkbox" title="ID" fixed="left" width="200" tree-node></vxe-table-column>
-          <vxe-table-column field="name" title="Name" width="300"></vxe-table-column>
-          <vxe-table-column field="size" title="Size" width="300"></vxe-table-column>
-          <vxe-table-column field="type" title="Type" width="300"></vxe-table-column>
-          <vxe-table-column field="date" title="Date" width="300"></vxe-table-column>
+          <vxe-table-column field="name" title="app.body.label.name" tree-node></vxe-table-column>
+          <vxe-table-column field="size" title="Size"></vxe-table-column>
+          <vxe-table-column field="type" title="Type"></vxe-table-column>
+          <vxe-table-column field="date" title="Date"></vxe-table-column>
         </vxe-table>
         `,
         `

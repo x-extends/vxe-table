@@ -2,10 +2,18 @@
   <div>
     <p class="tip">基于树表格实现分组汇总合计</p>
 
+    <vxe-toolbar>
+      <template v-slot:buttons>
+        <vxe-button @click="$refs.xTree.setAllTreeExpansion(true)">展开所有</vxe-button>
+        <vxe-button @click="$refs.xTree.clearTreeExpand()">关闭所有</vxe-button>
+      </template>
+    </vxe-toolbar>
+
     <vxe-table
       resizable
       show-footer
       ref="xTree"
+      max-height="400"
       :loading="loading"
       :tree-config="tableTreeConfig"
       :span-method="colspanMethod"
@@ -40,10 +48,18 @@ export default {
       },
       demoCodes: [
         `
+        <vxe-toolbar>
+          <template v-slot:buttons>
+            <vxe-button @click="$refs.xTree.setAllTreeExpansion(true)">展开所有</vxe-button>
+            <vxe-button @click="$refs.xTree.clearTreeExpand()">关闭所有</vxe-button>
+          </template>
+        </vxe-toolbar>
+
         <vxe-table
           resizable
           show-footer
           ref="xTree"
+          max-height="400"
           :loading="loading"
           :tree-config="tableTreeConfig"
           :span-method="colspanMethod"

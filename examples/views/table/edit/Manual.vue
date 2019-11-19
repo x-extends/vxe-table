@@ -102,7 +102,11 @@ export default {
               })
             },
             cancelRowEvent (row) {
-              this.$refs.xTable.clearActived()
+              const xTable = this.$refs.xTable
+              xTable.clearActived().then(() => {
+                // 还原行数据
+                xTable.revertData(row)
+              })
             }
           }
         }
@@ -134,7 +138,11 @@ export default {
       })
     },
     cancelRowEvent (row) {
-      this.$refs.xTable.clearActived()
+      const xTable = this.$refs.xTable
+      xTable.clearActived().then(() => {
+        // 还原行数据
+        xTable.revertData(row)
+      })
     }
   }
 }

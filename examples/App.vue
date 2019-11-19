@@ -618,6 +618,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.fluidHeight',
+              locat: {
+                name: 'TableTreeMaxHeight'
+              }
+            },
+            {
               label: 'app.aside.nav.groupSummary',
               demoUrl: 'https://jsrun.pro/KVWKp',
               locat: {

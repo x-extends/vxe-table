@@ -8,15 +8,14 @@ export default {
   props: {
     id: String,
     loading: false,
-    resizable: { type: [Boolean, Object], default: () => GlobalConfig.toolbar.resizable },
-    refresh: { type: [Boolean, Object], default: () => GlobalConfig.toolbar.refresh },
-    import: { type: [Boolean, Object], default: () => GlobalConfig.toolbar.import },
-    export: { type: [Boolean, Object], default: () => GlobalConfig.toolbar.export },
-    zoom: { type: [Boolean, Object], default: () => GlobalConfig.toolbar.zoom },
-    setting: { type: [Boolean, Object], default: () => GlobalConfig.toolbar.setting },
+    resizable: [Boolean, Object],
+    refresh: [Boolean, Object],
+    import: [Boolean, Object],
+    export: [Boolean, Object],
+    zoom: [Boolean, Object],
+    setting: [Boolean, Object],
     buttons: { type: Array, default: () => GlobalConfig.toolbar.buttons },
     size: String,
-    data: Array,
     customs: Array
   },
   inject: {
@@ -290,10 +289,10 @@ export default {
   },
   methods: {
     updateConf () {
-      let { $parent, data } = this
+      let { $parent } = this
       let { $children } = $parent
       let selfIndex = $children.indexOf(this)
-      this.$table = XEUtils.find($children, (comp, index) => comp && comp.refreshColumn && index > selfIndex && (data ? comp.data === data : comp.$vnode.componentOptions.tag === 'vxe-table'))
+      this.$table = XEUtils.find($children, (comp, index) => comp && comp.refreshColumn && index > selfIndex && comp.$vnode.componentOptions.tag === 'vxe-table')
     },
     openSetting () {
       this.settingStore.visible = true

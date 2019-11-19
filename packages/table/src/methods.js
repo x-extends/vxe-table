@@ -968,9 +968,12 @@ const Methods = {
       mouseConfig
     } = this
     let containerList = ['main', 'left', 'right']
-    let customHeight = height === 'auto' ? parentHeight : ((DomTools.isScale(height) ? Math.floor(parseInt(height) / 100 * parentHeight) : XEUtils.toNumber(height)) - this.getExcludeHeight())
-    if (showFooter) {
-      customHeight += scrollbarHeight + 1
+    let customHeight = 0
+    if (height) {
+      customHeight = height === 'auto' ? parentHeight : ((DomTools.isScale(height) ? Math.floor(parseInt(height) / 100 * parentHeight) : XEUtils.toNumber(height)) - this.getExcludeHeight())
+      if (showFooter) {
+        customHeight += scrollbarHeight + 1
+      }
     }
     containerList.forEach((name, index) => {
       let fixedType = index > 0 ? name : ''

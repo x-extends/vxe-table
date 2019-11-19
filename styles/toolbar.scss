@@ -93,21 +93,32 @@
     z-index: 19;
     max-height: 210px;
     overflow: auto;
-    box-shadow: 0 2px 2px 0 rgba(0,0,0,.2);
+    box-shadow: 4px 4px 2px -2px rgba(0, 0, 0, 0.2);
     .vxe-custom--option {
-      padding: 5px 5px;
+      padding: 5px 0;
       border: 1px solid $vxe-table-border-color;
       border-radius: 2px;
-      font-weight: 700;
+      // font-weight: 700;
       font-size: 14px;
       > .vxe-checkbox {
         display: block;
-        padding: 5px;
+        padding: 5px 10px;
         margin: 0;
         max-width: 180px;
+        min-width: 80px;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+        &:hover {
+          background-color: #F0F0F0;
+        }
+        & > input {
+          &:checked+.vxe-checkbox--icon {
+            &+.vxe-checkbox--label {
+              font-weight: 700;
+            }
+          }
+        }
         .vxe-checkbox--label {
           display: inline;
         }
