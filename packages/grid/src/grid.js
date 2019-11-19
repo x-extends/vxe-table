@@ -473,6 +473,9 @@ export default {
         }
       }
       return this.$nextTick().then(() => this.recalculate(true)).then(() => this.maximize)
+    },
+    isMaximized () {
+      return this.maximize
     }
   }
 }

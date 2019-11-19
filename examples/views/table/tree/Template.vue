@@ -2,6 +2,17 @@
   <div>
     <p class="tip">树表格，使用自定义模板渲染</p>
 
+    <vxe-toolbar>
+      <template v-slot:buttons>
+         <vxe-input size="small" placeholder="搜索"></vxe-input>
+      </template>
+      <template v-slot:tools>
+        <vxe-button type="primary">操作1</vxe-button>
+        <vxe-button type="primary">操作2</vxe-button>
+        <vxe-button type="primary">操作3</vxe-button>
+      </template>
+    </vxe-toolbar>
+
     <vxe-table
       border
       resizable
@@ -14,7 +25,12 @@
           <span>{{ `类型：${row.type || '无'}` }}</span>
         </template>
       </vxe-table-column>
-      <vxe-table-column field="date" title="Date" tree-node>
+      <vxe-table-column field="type" title="Image" tree-node>
+        <template>
+          <img src="https://xuliangzhan.github.io/vxe-table/other/img1.gif" height="50">
+        </template>
+      </vxe-table-column>
+      <vxe-table-column field="date" title="Date">
         <template v-slot="{ row }">
           <span>{{ $utils.toDateString(row.date, 'yyyy-MM-dd HH:mm:ss.S') }}</span>
         </template>
@@ -39,6 +55,17 @@ export default {
       tableData: [],
       demoCodes: [
         `
+        <vxe-toolbar>
+          <template v-slot:buttons>
+            <vxe-input size="small" placeholder="搜索"></vxe-input>
+          </template>
+          <template v-slot:tools>
+            <vxe-button type="primary">操作1</vxe-button>
+            <vxe-button type="primary">操作2</vxe-button>
+            <vxe-button type="primary">操作3</vxe-button>
+          </template>
+        </vxe-toolbar>
+
         <vxe-table
           border
           resizable
@@ -51,7 +78,12 @@ export default {
               <span>{{ \`类型：\${row.type || '无'}\` }}</span>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="date" title="Date" tree-node>
+          <vxe-table-column field="type" title="Image" tree-node>
+            <template>
+              <img src="https://xuliangzhan.github.io/vxe-table/other/img1.gif" height="50">
+            </template>
+          </vxe-table-column>
+          <vxe-table-column field="date" title="Date">
             <template v-slot="{ row }">
               <span>{{ $utils.toDateString(row.date, 'yyyy-MM-dd HH:mm:ss.S') }}</span>
             </template>

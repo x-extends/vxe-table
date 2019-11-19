@@ -209,14 +209,14 @@ export default {
         zoom && this.$grid ? h('div', {
           class: 'vxe-tools--operate-btn',
           attrs: {
-            title: GlobalConfig.i18n(`vxe.toolbar.zoom${this.$grid.maximize ? 'Out' : 'In'}`)
+            title: GlobalConfig.i18n(`vxe.toolbar.zoom${this.$grid.isMaximized() ? 'Out' : 'In'}`)
           },
           on: {
             click: () => this.$grid.zoom()
           }
         }, [
           h('i', {
-            class: GlobalConfig.icon[`zoom${this.$grid.maximize ? 'Out' : 'In'}`]
+            class: GlobalConfig.icon[`zoom${this.$grid.isMaximized() ? 'Out' : 'In'}`]
           })
         ]) : null,
         setting ? h('div', {
@@ -420,7 +420,7 @@ export default {
     },
     handleGlobalKeydownEvent (evnt) {
       let isEsc = evnt.keyCode === 27
-      if (isEsc && this.$grid && this.$grid.maximize && this.zoomOpts && this.zoomOpts.escRestore !== false) {
+      if (isEsc && this.$grid && this.$grid.isMaximized() && this.zoomOpts && this.zoomOpts.escRestore !== false) {
         this.$grid.zoom()
       }
     },

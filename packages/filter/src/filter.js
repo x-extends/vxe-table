@@ -125,8 +125,10 @@ export default {
     },
     renderFooter (h) {
       let { filterStore } = this
-      let { multiple } = filterStore
-      return multiple ? h('div', {
+      let { column, multiple } = filterStore
+      let filterRender = column.own.filterRender
+      let compConf = filterRender ? Renderer.get(filterRender.name) : null
+      return multiple && (!compConf || compConf.isFooter !== false) ? h('div', {
         class: ['vxe-table--filter-footer']
       }, [
         h('button', {
