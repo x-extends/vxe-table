@@ -23,31 +23,35 @@ class Rule {
 export default {
   methods: {
     /**
-   * 与 validate 一致行为，区别就是会校验所有并返回所有不通过的所有列
-   */
+     * 与 validate 一致行为，区别就是会校验所有并返回所有不通过的所有列
+     */
     _fullValidate (rows, cb) {
       return this.beginValidate(rows, cb, true)
     },
     /**
-   * 对表格数据进行校验
-   */
+     * 对表格数据进行校验
+     */
     _validate (rows, cb) {
       return this.beginValidate(rows, cb)
     },
     /**
-   * 聚焦到校验通过的单元格并弹出校验错误提示
-   */
+     * 聚焦到校验通过的单元格并弹出校验错误提示
+     */
     handleValidError (params) {
-      this.handleActived(params, { type: 'valid-error', trigger: 'call' })
-        .then(() => this.showValidTooltip(params))
+      if (this.validOpts.autoPos === false) {
+        UtilTools.emitEvent(this, 'valid-error', [params])
+      } else {
+        this.handleActived(params, { type: 'valid-error', trigger: 'call' })
+          .then(() => this.showValidTooltip(params))
+      }
     },
     /**
-   * 对表格数据进行校验
-   * 如果传 row 指定行记录，则只验证传入的行
-   * 如果传 rows 为多行记录，则只验证传入的行
-   * 如果只传 callback 否则默认验证整个表格数据
-   * 返回 Promise 对象，或者使用回调方式
-   */
+     * 对表格数据进行校验
+     * 如果传 row 指定行记录，则只验证传入的行
+     * 如果传 rows 为多行记录，则只验证传入的行
+     * 如果只传 callback 否则默认验证整个表格数据
+     * 返回 Promise 对象，或者使用回调方式
+     */
     beginValidate (rows, cb, isAll) {
       let validRest = {}
       let status = true
@@ -104,11 +108,9 @@ export default {
             cb(status)
           }
         }).catch(params => {
-          let args = isAll ? validRest : { [params.column.property]: params }
+          const args = isAll ? validRest : { [params.column.property]: params }
           return new Promise((resolve, reject) => {
-            let finish = () => {
-              params.cell = DomTools.getCell(this, params)
-              this.handleValidError(params)
+            const finish = () => {
               if (cb) {
                 status = false
                 resolve(cb(status, args))
@@ -116,19 +118,28 @@ export default {
                 reject(args)
               }
             }
+            const posAndFinish = () => {
+              params.cell = DomTools.getCell(this, params)
+              this.handleValidError(params)
+              finish()
+            }
             /**
              * 当校验不通过时
              * 将表格滚动到可视区
              * 由于提示信息至少需要占一行，定位向上偏移一行
              */
-            let row = params.row
-            let rowIndex = afterFullData.indexOf(row)
-            let locatRow = rowIndex > 0 ? afterFullData[rowIndex - 1] : row
+            const row = params.row
+            const rowIndex = afterFullData.indexOf(row)
+            const locatRow = rowIndex > 0 ? afterFullData[rowIndex - 1] : row
             DomTools.toView(this.$el)
-            if (treeConfig) {
-              this.scrollToTreeRow(locatRow).then(finish)
+            if (this.validOpts.autoPos === false) {
+              finish()
             } else {
-              this.scrollToRow(locatRow).then(finish)
+              if (treeConfig) {
+                this.scrollToTreeRow(locatRow).then(posAndFinish)
+              } else {
+                this.scrollToRow(locatRow).then(posAndFinish)
+              }
             }
           })
         })
@@ -149,19 +160,19 @@ export default {
       return false
     },
     /**
-   * 校验数据
-   * 按表格行、列顺序依次校验（同步或异步）
-   * 校验规则根据索引顺序依次校验，如果是异步则会等待校验完成才会继续校验下一列
-   * 如果校验失败则，触发回调或者Promise，结果返回一个 Boolean 值
-   * 如果是传回调方式这返回一个 Boolean 值和校验不通过列的错误消息
-   *
-   * rule 配置：
-   *  required=Boolean 是否必填
-   *  min=Number 最小长度
-   *  max=Number 最大长度
-   *  validator=Function(rule, value, callback, {rules, row, column, rowIndex, columnIndex}) 自定义校验
-   *  trigger=blur|change 触发方式（除非特殊场景，否则默认为空就行）
-   */
+     * 校验数据
+     * 按表格行、列顺序依次校验（同步或异步）
+     * 校验规则根据索引顺序依次校验，如果是异步则会等待校验完成才会继续校验下一列
+     * 如果校验失败则，触发回调或者Promise，结果返回一个 Boolean 值
+     * 如果是传回调方式这返回一个 Boolean 值和校验不通过列的错误消息
+     *
+     * rule 配置：
+     *  required=Boolean 是否必填
+     *  min=Number 最小长度
+     *  max=Number 最大长度
+     *  validator=Function(rule, value, callback, {rules, row, column, rowIndex, columnIndex}) 自定义校验
+     *  trigger=blur|change 触发方式（除非特殊场景，否则默认为空就行）
+     */
     validCellRules (type, row, column, val) {
       let { editRules, treeConfig } = this
       let { property } = column
@@ -236,8 +247,8 @@ export default {
       return this.$nextTick()
     },
     /**
-   * 触发校验
-   */
+     * 触发校验
+     */
     triggerValidate (type) {
       let { editConfig, editStore, editRules, validStore } = this
       let { actived } = editStore
@@ -264,8 +275,8 @@ export default {
       return Promise.resolve()
     },
     /**
-   * 弹出校验错误提示
-   */
+     * 弹出校验错误提示
+     */
     showValidTooltip (params) {
       let { $refs, height, tableData, validOpts } = this
       let { rule, row, column, cell } = params

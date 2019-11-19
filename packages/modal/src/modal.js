@@ -156,7 +156,7 @@ export default {
             class: 'vxe-modal--title'
           }, title ? UtilTools.getFuncText(title) : GlobalConfig.i18n('vxe.alert.title')),
           resize ? h('i', {
-            class: ['vxe-modal--zoom-btn', 'trigger--btn', zoomLocat ? GlobalConfig.icon.zoomOut : GlobalConfig.icon.zoomIn],
+            class: ['vxe-modal--zoom-btn', 'trigger--btn', zoomLocat ? GlobalConfig.icon.modalZoomOut : GlobalConfig.icon.modalZoomIn],
             on: {
               click: this.toggleZoomEvent
             }

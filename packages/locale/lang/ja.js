@@ -2,7 +2,6 @@ export default {
   vxe: {
     error: {
       groupFixed: 'Grouping headersが使われている場合、fixed columnsは左右になくてはなりません',
-      // scrollXNotResizable: 'Horizontal virtual scrollingは"resizable"をサポートしていません',
       cellEditRender: 'Rendererは"cell-render"と"edit-render"を同時に仕様できません',
       treeFixedExpand: '樹木構造の固定柱は展開された行と矛盾する。',
       scrollOriginal: 'Virtual scrollingはsource dataのみエクスポートできます、"original=true"を設定してください',
@@ -63,6 +62,12 @@ export default {
       pdf: 'PDF (*.pdf)'
     },
     toolbar: {
+      import: '导入数据',
+      export: '导出数据',
+      refresh: '刷新',
+      zoomIn: '最大化',
+      zoomOut: '向下还原',
+      setting: '列设置',
       impTitle: '导入参数设置',
       impFile: '文件名',
       impSelect: '选择文件',

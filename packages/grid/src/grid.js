@@ -1,7 +1,7 @@
 import Table from '../../table'
 import XEUtils from 'xe-utils/methods/xe-utils'
 import GlobalConfig from '../../conf'
-import { UtilTools } from '../../tools'
+import { UtilTools, DomTools } from '../../tools'
 import { Buttons } from '../../v-x-e-table'
 
 const methods = {}
@@ -30,11 +30,13 @@ export default {
   data () {
     return {
       tableLoading: false,
+      maximize: false,
       tableData: [],
       tableCustoms: [],
       pendingRecords: [],
       filterData: [],
       sortData: {},
+      tZindex: 0,
       tablePage: {
         total: 0,
         pageSize: 10,
@@ -98,13 +100,20 @@ export default {
     }
   },
   render (h) {
-    let { $slots, $scopedSlots, $listeners, pagerConfig, vSize, loading, toolbar, editConfig, proxyConfig, proxyOpts, tableProps, tableLoading, tablePage, tableData, tableCustoms, optimization } = this
+    let { $slots, $scopedSlots, $listeners, maximize, pagerConfig, vSize, loading, toolbar, editConfig, proxyConfig, proxyOpts, tableProps, tableLoading, tablePage, tableData, tableCustoms, optimization } = this
     let props = Object.assign({}, tableProps, {
       optimization: Object.assign({}, GlobalConfig.optimization, optimization)
     })
     let tableOns = Object.assign({}, $listeners)
     let $buttons = $scopedSlots.buttons
     let $tools = $scopedSlots.tools
+    if (this.maximize) {
+      if (tableProps.height) {
+        props.height = 'auto'
+      } else if (tableProps.maxHeight) {
+        props.maxHeight = 'auto'
+      }
+    }
     if (proxyConfig) {
       Object.assign(props, {
         loading: loading || tableLoading,
@@ -148,8 +157,12 @@ export default {
     return h('div', {
       class: [ 'vxe-grid', {
         [`size--${vSize}`]: vSize,
-        't--animat': props.optimization.animat
-      }]
+        't--animat': props.optimization.animat,
+        'is--maximize': maximize
+      }],
+      style: maximize ? {
+        zIndex: this.tZindex
+      } : null
     }, [
       toolbar ? h('vxe-toolbar', {
         ref: 'toolbar',
@@ -179,7 +192,7 @@ export default {
   methods: {
     ...methods,
     getParentHeight () {
-      return this.$el.parentNode.clientHeight - this.getExcludeHeight()
+      return (this.maximize ? DomTools.getDomNode().visibleHeight : this.$el.parentNode.clientHeight) - this.getExcludeHeight()
     },
     /**
      * 获取需要排除的高度
@@ -455,6 +468,15 @@ export default {
         this.commitProxy('query')
       }
       UtilTools.emitEvent(this, 'filter-change', [Object.assign({ $grid: this }, params)])
+    },
+    zoom () {
+      this.maximize = !this.maximize
+      if (this.maximize) {
+        if (this.tZindex < UtilTools.getLastZIndex()) {
+          this.tZindex = UtilTools.nextZIndex()
+        }
+      }
+      return this.$nextTick().then(() => this.recalculate(true)).then(() => this.maximize)
     }
   }
 }

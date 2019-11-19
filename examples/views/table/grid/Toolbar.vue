@@ -67,8 +67,10 @@ export default {
           },
           { code: 'exportData111', name: '自定义按钮' }
         ],
-        export: true,
         refresh: true,
+        import: true,
+        export: true,
+        zoom: true,
         resizable: {
           storage: true
         },
@@ -140,11 +142,15 @@ export default {
                   },
                   { code: 'myBtn', name: '自定义按钮' }
                 ],
-                export: true,
-                refresh: true,
+                refresh: true, // 刷新按钮
+                import: true, // 导入按钮
+                export: true, // 导出按钮
+                zoom: true, // 最大化按钮
+                // 列宽操作记录
                 resizable: {
                   storage: true
                 },
+                // 列操作记录
                 setting: {
                   storage: true
                 }

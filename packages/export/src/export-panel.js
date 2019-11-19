@@ -48,6 +48,7 @@ export default {
         mask: true,
         lockView: true,
         showFooter: false,
+        escClosable: true,
         maskClosable: true
       },
       on: {

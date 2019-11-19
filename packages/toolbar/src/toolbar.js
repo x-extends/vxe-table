@@ -12,6 +12,7 @@ export default {
     refresh: { type: [Boolean, Object], default: () => GlobalConfig.toolbar.refresh },
     import: { type: [Boolean, Object], default: () => GlobalConfig.toolbar.import },
     export: { type: [Boolean, Object], default: () => GlobalConfig.toolbar.export },
+    zoom: { type: [Boolean, Object], default: () => GlobalConfig.toolbar.zoom },
     setting: { type: [Boolean, Object], default: () => GlobalConfig.toolbar.setting },
     buttons: { type: Array, default: () => GlobalConfig.toolbar.buttons },
     size: String,
@@ -79,6 +80,9 @@ export default {
     resizableOpts () {
       return Object.assign({ storageKey: 'VXE_TABLE_CUSTOM_COLUMN_WIDTH' }, GlobalConfig.toolbar.resizable, this.resizable)
     },
+    zoomOpts () {
+      return Object.assign({}, GlobalConfig.toolbar.zoom, this.zoom)
+    },
     settingOpts () {
       return Object.assign({ storageKey: 'VXE_TABLE_CUSTOM_COLUMN_HIDDEN' }, GlobalConfig.toolbar.setting, this.setting)
     }
@@ -98,15 +102,17 @@ export default {
       this.updateConf()
       this.loadStorage()
     })
+    GlobalEvent.on(this, 'keydown', this.handleGlobalKeydownEvent)
     GlobalEvent.on(this, 'mousedown', this.handleGlobalMousedownEvent)
     GlobalEvent.on(this, 'blur', this.handleGlobalBlurEvent)
   },
   destroyed () {
+    GlobalEvent.off(this, 'keydown')
     GlobalEvent.off(this, 'mousedown')
     GlobalEvent.off(this, 'blur')
   },
   render (h) {
-    let { _e, $scopedSlots, $grid, $table, loading, settingStore, refresh, setting, settingOpts, buttons = [], vSize, tableFullColumn, importStore, importParams, exportStore, exportParams } = this
+    let { _e, $scopedSlots, $grid, $table, loading, settingStore, refresh, zoom, setting, settingOpts, buttons = [], vSize, tableFullColumn, importStore, importParams, exportStore, exportParams } = this
     let customBtnOns = {}
     let customWrapperOns = {}
     let $buttons = $scopedSlots.buttons
@@ -156,40 +162,64 @@ export default {
           } : null
         }, UtilTools.getFuncText(item.name))
       })),
+      $tools ? h('div', {
+        class: 'vxe-tools--wrapper'
+      }, $tools.call(this, { $grid, $table }, h)) : null,
       h('div', {
         class: 'vxe-tools--operate'
       }, [
-        this.import ? h('vxe-button', {
-          class: 'vxe-export--btn',
-          props: {
-            type: 'text',
-            icon: GlobalConfig.icon.import
+        this.import ? h('div', {
+          class: 'vxe-tools--operate-btn',
+          attrs: {
+            title: GlobalConfig.i18n('vxe.toolbar.import')
           },
           on: {
             click: this.importEvent
           }
-        }) : null,
-        this.export ? h('vxe-button', {
-          class: 'vxe-export--btn',
-          props: {
-            type: 'text',
-            icon: GlobalConfig.icon.export
+        }, [
+          h('i', {
+            class: GlobalConfig.icon.import
+          })
+        ]) : null,
+        this.export ? h('div', {
+          class: 'vxe-tools--operate-btn',
+          attrs: {
+            title: GlobalConfig.i18n('vxe.toolbar.export')
           },
           on: {
             click: this.exportEvent
           }
-        }) : null,
-        refresh ? h('vxe-button', {
-          class: 'vxe-refresh--btn',
-          props: {
-            type: 'text',
-            icon: GlobalConfig.icon.refresh,
-            loading: this.isRefresh
+        }, [
+          h('i', {
+            class: GlobalConfig.icon.export
+          })
+        ]) : null,
+        refresh ? h('div', {
+          class: 'vxe-tools--operate-btn',
+          attrs: {
+            title: GlobalConfig.i18n('vxe.toolbar.refresh')
           },
           on: {
             click: this.refreshEvent
           }
-        }) : null,
+        }, [
+          h('i', {
+            class: GlobalConfig.icon[`refresh${this.isRefresh ? 'Loading' : ''}`]
+          })
+        ]) : null,
+        zoom && this.$grid ? h('div', {
+          class: 'vxe-tools--operate-btn',
+          attrs: {
+            title: GlobalConfig.i18n(`vxe.toolbar.zoom${this.$grid.maximize ? 'Out' : 'In'}`)
+          },
+          on: {
+            click: () => this.$grid.zoom()
+          }
+        }, [
+          h('i', {
+            class: GlobalConfig.icon[`zoom${this.$grid.maximize ? 'Out' : 'In'}`]
+          })
+        ]) : null,
         setting ? h('div', {
           class: ['vxe-custom--wrapper', {
             'is--active': settingStore.visible
@@ -197,7 +227,10 @@ export default {
           ref: 'customWrapper'
         }, [
           h('div', {
-            class: 'vxe-custom--setting-btn',
+            class: 'vxe-tools--operate-btn vxe-custom--setting-btn',
+            attrs: {
+              title: GlobalConfig.i18n('vxe.toolbar.setting')
+            },
             on: customBtnOns
           }, [
             h('i', {
@@ -252,10 +285,7 @@ export default {
           print: this.confirmPrintEvent,
           export: this.confirmExportEvent
         }
-      }) : _e(),
-      $tools ? h('div', {
-        class: 'vxe-tools--wrapper'
-      }, $tools.call(this, { $grid, $table }, h)) : null
+      }) : _e()
     ])
   },
   methods: {
@@ -389,6 +419,12 @@ export default {
       (this.$grid || this.$table).refreshColumn()
       return this.saveColumnHide()
     },
+    handleGlobalKeydownEvent (evnt) {
+      let isEsc = evnt.keyCode === 27
+      if (isEsc && this.$grid && this.$grid.maximize && this.zoomOpts && this.zoomOpts.escRestore !== false) {
+        this.$grid.zoom()
+      }
+    },
     handleGlobalMousedownEvent (evnt) {
       if (!DomTools.getEventTargetNode(evnt, this.$refs.customWrapper).flag) {
         this.closeSetting()
@@ -460,7 +496,11 @@ export default {
       }
     },
     importEvent () {
-      this.openImport()
+      if (this.$grid || this.$table) {
+        this.openImport()
+      } else {
+        throw new Error(UtilTools.getLog('vxe.error.barUnableLink'))
+      }
     },
     openImport (options) {
       const { importParams, importStore, importOpts } = this
@@ -479,7 +519,11 @@ export default {
       comp.importByFile(this.importStore.file, options)
     },
     exportEvent () {
-      this.openExport()
+      if (this.$grid || this.$table) {
+        this.openExport()
+      } else {
+        throw new Error(UtilTools.getLog('vxe.error.barUnableLink'))
+      }
     },
     openExport (options) {
       const { $grid, $table, exportOpts, exportStore, exportParams } = this

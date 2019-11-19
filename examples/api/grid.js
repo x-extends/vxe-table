@@ -20,8 +20,27 @@ const apis = [
         enum: '',
         defVal: '',
         list: XEUtils.clone(toolbarAPI.find(item => item.name === 'Props').list, true).concat([{
+          name: 'zoom',
+          desc: '是否允许最大化显示',
+          version: '2.6.23',
+          type: 'Boolean',
+          enum: '',
+          defVal: '',
+          list: [
+            {
+              name: 'escRestore',
+              desc: '是否允许按 Esc 键还原',
+              version: '',
+              type: 'Boolean',
+              enum: '',
+              defVal: 'true',
+              list: []
+            }
+          ]
+        }, {
           name: 'slots',
           descKey: 'app.api.title.slots',
+          version: '',
           type: 'Object',
           enum: '',
           defVal: '',

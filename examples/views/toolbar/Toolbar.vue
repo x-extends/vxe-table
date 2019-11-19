@@ -34,8 +34,8 @@
         </vxe-button>
       </template>
       <template v-slot:tools>
-        <i class="vxe-icon--question tool-btn"></i>
-        <i class="vxe-icon--funnel tool-btn"></i>
+        <vxe-button type="text" icon="vxe-icon--question" class="tool-btn"></vxe-button>
+        <vxe-button type="text" icon="vxe-icon--funnel" class="tool-btn"></vxe-button>
       </template>
     </vxe-toolbar>
 
@@ -116,7 +116,6 @@ export default {
         `
         .tool-btn {
           font-size: 20px;
-          margin: 6px 10px 0 0;
           cursor: pointer;
         }
         .tool-btn:hover {
@@ -147,7 +146,6 @@ export default {
 <style scoped>
 .tool-btn {
   font-size: 20px;
-  margin: 6px 10px 0 0;
   cursor: pointer;
 }
 .tool-btn:hover {

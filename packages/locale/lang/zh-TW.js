@@ -2,7 +2,6 @@ export default {
   vxe: {
     error: {
       groupFixed: '如果使用分组表頭，固定列必须在左右兩側',
-      // scrollXNotResizable: '橫向虛擬滾動不支援 "resizable"',
       cellEditRender: '渲染器 "cell-render" 和 "edit-render" 不能同時使用',
       treeFixedExpand: '樹狀結構的固定列與展開行功能有冲衝突',
       scrollOriginal: '虛擬滾動啓用後只能匯出來源資料，請將設定 "original=true"',
@@ -63,6 +62,12 @@ export default {
       pdf: 'PDF (*.pdf)'
     },
     toolbar: {
+      import: '導入數據',
+      export: '匯出數據',
+      refresh: '重繪',
+      zoomIn: '最大化',
+      zoomOut: '向下還原',
+      setting: '列設定',
       impTitle: '導入參數設置',
       impFile: '檔名',
       impSelect: '選擇檔案',
