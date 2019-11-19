@@ -21,9 +21,8 @@
 }
 
 .vxe-icon--zoomin {
-  width: 0.8em;
-  height: 0.8em;
-  margin: 0.1em;
+  width: 0.9em;
+  height: 0.9em;
   border-width: 0.1em;
   border-style: solid;
   border-color: inherit;
@@ -56,11 +55,15 @@
 }
 
 .vxe-icon--menu {
-  width: 0.22em;
-  height: 0.22em;
-  box-shadow: 0 -0.4em 0, -0.4em -0.4em 0, 0.4em -0.4em 0, 0 0 0 1em inset, -0.4em 0 0, 0.4em 0 0, 0 0.4em 0, -0.4em 0.4em 0, 0.4em 0.4em 0;
-  margin: 0.58em;
-  @include animatTransition(all, .2s);
+  @extend %DefaultWidthHeight;
+  &:before {
+    content: "";
+    display: inline-block;
+    width: 0.24em;
+    height: 0.24em;
+    box-shadow: 0 -0.38em 0, -0.38em -0.38em 0, 0.38em -0.38em 0, 0 0 0 1em inset, -0.38em 0 0, 0.38em 0 0, 0 0.38em 0, -0.38em 0.38em 0, 0.38em 0.38em 0;
+    margin: 0.24em;
+  }
 }
 
 .vxe-icon--caret-top {
@@ -75,7 +78,6 @@
     border-right-color: transparent;
     border-bottom-color: inherit;
     border-left-color: transparent;
-    @include animatTransition(border);
   }
 }
 
@@ -312,7 +314,6 @@
   }
 }
  
-
 %BeforeSolidRadius {
   content: "";
   border-radius: 50%;

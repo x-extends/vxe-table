@@ -4253,11 +4253,9 @@ export default {
             cb(status)
           }
         }).catch(params => {
-          let args = isAll ? validRest : { [params.column.property]: params }
+          const args = isAll ? validRest : { [params.column.property]: params }
           return new Promise((resolve, reject) => {
-            let finish = () => {
-              params.cell = DomTools.getCell(this, params)
-              this.handleValidError(params)
+            const finish = () => {
               if (cb) {
                 status = false
                 resolve(cb(status, args))
@@ -4265,19 +4263,28 @@ export default {
                 reject(args)
               }
             }
+            const posAndFinish = () => {
+              params.cell = DomTools.getCell(this, params)
+              this.handleValidError(params)
+              finish()
+            }
             /**
              * 当校验不通过时
              * 将表格滚动到可视区
              * 由于提示信息至少需要占一行，定位向上偏移一行
              */
-            let row = params.row
-            let rowIndex = afterFullData.indexOf(row)
-            let locatRow = rowIndex > 0 ? afterFullData[rowIndex - 1] : row
+            const row = params.row
+            const rowIndex = afterFullData.indexOf(row)
+            const locatRow = rowIndex > 0 ? afterFullData[rowIndex - 1] : row
             DomTools.toView(this.$el)
-            if (treeConfig) {
-              this.scrollToTreeRow(locatRow).then(finish)
+            if (this.validOpts.autoPos === false) {
+              finish()
             } else {
-              this.scrollToRow(locatRow).then(finish)
+              if (treeConfig) {
+                this.scrollToTreeRow(locatRow).then(posAndFinish)
+              } else {
+                this.scrollToRow(locatRow).then(posAndFinish)
+              }
             }
           })
         })
@@ -4408,8 +4415,12 @@ export default {
      * 聚焦到校验通过的单元格并弹出校验错误提示
      */
     handleValidError (params) {
-      this.handleActived(params, { type: 'valid-error', trigger: 'call' })
-        .then(() => this.showValidTooltip(params))
+      if (this.validOpts.autoPos === false) {
+        UtilTools.emitEvent(this, 'valid-error', [params])
+      } else {
+        this.handleActived(params, { type: 'valid-error', trigger: 'call' })
+          .then(() => this.showValidTooltip(params))
+      }
     },
     /**
      * 弹出校验错误提示

@@ -111,7 +111,7 @@ export default {
           },
           { code: 'other0', name: '禁用的按钮1', disabled: true },
           {
-            name: '禁用下拉按钮',
+            name: '禁用按钮',
             disabled: false,
             dropdowns: [
               {
@@ -135,6 +135,7 @@ export default {
         refresh: true,
         import: true,
         export: true,
+        zoom: true,
         resizable: {
           storage: true
         },
@@ -259,7 +260,7 @@ export default {
                   },
                   { code: 'other0', name: '禁用的按钮1', disabled: true },
                   {
-                    name: '禁用下拉按钮',
+                    name: '禁用按钮',
                     disabled: false,
                     dropdowns: [
                       {
@@ -283,6 +284,7 @@ export default {
                 refresh: true,
                 import: true,
                 export: true,
+                zoom: true,
                 resizable: {
                   storage: true
                 },

@@ -1324,6 +1324,15 @@ const apis = [
         defVal: '',
         list: [
           {
+            name: 'autoPos',
+            desc: '是否自动定位到校验不通过的单元格',
+            version: '1.15.14',
+            type: 'Boolean',
+            enum: '',
+            defVal: 'true',
+            list: []
+          },
+          {
             name: 'message',
             desc: '校验提示框的方式',
             version: '',
