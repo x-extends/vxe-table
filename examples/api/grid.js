@@ -323,6 +323,24 @@ const apis = [
         enum: 'reload, query, delete, save',
         defVal: 'code: string',
         list: []
+      },
+      {
+        name: 'zoom()',
+        desc: '切换表格最大化/还原',
+        version: '2.6.23',
+        type: 'Promise<status>',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'isMaximized()',
+        desc: '判断是否最大化显示',
+        version: '2.6.23',
+        type: 'Boolean',
+        enum: '',
+        defVal: '',
+        list: []
       }
     ]
   }

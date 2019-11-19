@@ -4,8 +4,10 @@
       筛选渲染器 <table-column-api-link prop="filter-render"/><br>
       默认支持原生的：input、textarea、select<br>
       配置参数：<br>
+      isFooter 是否显示底部按钮<br>
       renderFilter (h, filterRender, { column, columnIndex, $columnIndex }, context) 渲染函数<br>
-      filterMethod ({ option, row, column }) 筛选函数
+      filterMethod ({ option, row, column }) 筛选函数<br>
+      <span class="red">（注：实际开发中应该将业务封装成一个组件，不要把复杂的渲染逻辑写在渲染器中）</span>
     </p>
 
     <vxe-table border :data="tableData">
@@ -67,7 +69,7 @@ export default {
       ],
       demoCodes: [
         `
-        // 创建一个支持输入的筛选器
+        // 创建一个支持输入的筛选器（仅用于简单示例，实际开发中应该封装成一个组件，不应该把复杂的渲染逻辑写在渲染器中）
         VXETable.renderer.add('MyFilter', {
           // 筛选模板
           renderFilter (h, filterRender, params, context) {
@@ -92,8 +94,10 @@ export default {
           }
         })
 
-        // 创建一个复杂的渲染器
+        // 创建一个复杂的渲染器（仅用于简单示例，实际开发中应该封装成一个组件，不应该把复杂的渲染逻辑写在渲染器中）
         VXETable.renderer.add('MyComplexFilter', {
+          // 不显示底部按钮，使用自定义的按钮
+          isFooter: false,
           // 筛选模板
           renderFilter (h, filterRender, params, context) {
             const { column } = params
@@ -107,10 +111,14 @@ export default {
                   <vxe-radio v-model={ data.type } name="fType" label="lt">小于</vxe-radio>
                 </div>
                 <div class="f-name">
-                  <vxe-input v-model={ data.name } type="text" placeholder="请输入名称" onInput={ evnt => { context.changeOption(evnt, !!data.name, item) } }></vxe-input>
+                  <vxe-input v-model={ data.name } type="text" placeholder="请输入名称" onInput={ e => { context.changeOption(e, !!data.name, item) } }></vxe-input>
                 </div>
                 <div class="f-iscase">
                   <vxe-checkbox v-model={ data.isCase }>不区分大小写</vxe-checkbox>
+                </div>
+                <div class="f-footer">
+                  <vxe-button type="primary" onClick={ e => { context.confirmFilter() } }>确认</vxe-button>
+                  <vxe-button onClick={ e => { context.resetFilter() } }>重置</vxe-button>
                 </div>
               </div>
             })
@@ -198,6 +206,9 @@ export default {
         .cmplex-filter .f-iscase {
           padding: 12px 8px 6px 2px;
         }
+        .cmplex-filter .f-footer {
+          text-align: center;
+        }
         `
       ]
     }
@@ -219,5 +230,8 @@ export default {
 }
 .cmplex-filter .f-iscase {
   padding: 12px 8px 6px 2px;
+}
+.cmplex-filter .f-footer {
+  text-align: center;
 }
 </style>
