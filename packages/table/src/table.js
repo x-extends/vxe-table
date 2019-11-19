@@ -80,9 +80,12 @@ function renderFixed (h, $table, fixedType) {
   } = $table
   let isRightFixed = fixedType === 'right'
   let fixedColumn = columnStore[`${fixedType}List`]
-  let customHeight = height === 'auto' ? containerHeight : (DomTools.isScale(height) ? Math.floor(parseInt(height) / 100 * containerHeight) : XEUtils.toNumber(height))
-  if (showFooter) {
-    customHeight += scrollbarHeight + 1
+  let customHeight = 0
+  if (height) {
+    customHeight = height === 'auto' ? containerHeight : (DomTools.isScale(height) ? Math.floor(parseInt(height) / 100 * containerHeight) : XEUtils.toNumber(height))
+    if (showFooter) {
+      customHeight += scrollbarHeight + 1
+    }
   }
   let style = {
     height: `${(customHeight > 0 ? customHeight - headerHeight - footerHeight : tableHeight) + headerHeight + footerHeight - scrollbarHeight * (showFooter ? 2 : 1)}px`,

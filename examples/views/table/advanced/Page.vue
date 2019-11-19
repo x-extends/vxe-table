@@ -4,7 +4,7 @@
       使用自带的分页 <pager-api-link name="vxe-pager"/><br>
       如果要支持动态序号，可以通过 <table-api-link prop="start-index"/> 属性设置起始值<br>
       如果要支持保留选中状态，可以通过设置 <table-api-link prop="checkbox-config"/> 的 <table-api-link prop="reserve"/> 属性<br>
-      启用 reserve 功能需要有 row-id 唯一主键
+      启用 reserve 功能需要有 row-id 唯一主键，可以通过调用 <table-api-link prop="getSelectReserveRecords"/> 方法获取获取已保留选中的行数据
     </p>
 
     <p class="tip">设置分页 border 样式</p>
@@ -77,9 +77,16 @@
 
     <p class="tip">设置分页 perfect 样式</p>
 
+    <vxe-toolbar>
+      <template v-slot:buttons>
+        <vxe-button @click="getSelectReserveEvent">获取已保留选中的行数据</vxe-button>
+      </template>
+    </vxe-toolbar>
+
     <vxe-table
       border
       show-overflow
+      ref="xTable"
       height="200"
       row-id="id"
       :loading="loading"
@@ -252,9 +259,16 @@ export default {
         }
         `,
         `
+        <vxe-toolbar>
+          <template v-slot:buttons>
+            <vxe-button @click="getSelectReserveEvent">获取已保留选中的行数据</vxe-button>
+          </template>
+        </vxe-toolbar>
+
         <vxe-table
           border
           show-overflow
+          ref="xTable"
           height="200"
           row-id="id"
           :loading="loading"
@@ -311,6 +325,10 @@ export default {
               this.tablePage.currentPage = currentPage
               this.tablePage.pageSize = pageSize
               this.findList()
+            },
+            getSelectReserveEvent () {
+              let selectReserveRecords = this.$refs.xTable.getSelectReserveRecords()
+              this.$XModal.alert(selectReserveRecords.length)
             }
           }
         }
@@ -342,6 +360,10 @@ export default {
       this.tablePage.currentPage = currentPage
       this.tablePage.pageSize = pageSize
       this.findList()
+    },
+    getSelectReserveEvent () {
+      let selectReserveRecords = this.$refs.xTable.getSelectReserveRecords()
+      this.$XModal.alert(selectReserveRecords.length)
     }
   }
 }

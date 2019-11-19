@@ -422,10 +422,13 @@ export default {
     } = $table
     // v2.0 废弃属性，保留兼容
     let allColumnOverflow = XEUtils.isBoolean(oldShowAllOverflow) ? oldShowAllOverflow : allShowOverflow
-    let customHeight = height === 'auto' ? containerHeight : (DomTools.isScale(height) ? Math.floor(parseInt(height) / 100 * containerHeight) : XEUtils.toNumber(height))
+    let customHeight = 0
     let style = {}
-    if (showFooter) {
-      customHeight += scrollbarHeight + 1
+    if (height) {
+      customHeight = height === 'auto' ? containerHeight : (DomTools.isScale(height) ? Math.floor(parseInt(height) / 100 * containerHeight) : XEUtils.toNumber(height))
+      if (showFooter) {
+        customHeight += scrollbarHeight + 1
+      }
     }
     if (customHeight > 0) {
       style.height = `${fixedType ? (customHeight > 0 ? customHeight - headerHeight - footerHeight : tableHeight) - (showFooter ? 0 : scrollbarHeight) : customHeight - headerHeight - footerHeight}px`
