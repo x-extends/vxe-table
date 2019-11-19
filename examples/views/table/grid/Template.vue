@@ -140,10 +140,13 @@ export default {
         slots: {
           buttons: () => {
             return [
-              <button>按钮</button>,
-              <input type="text"/>,
-              <vxe-button>按钮1</vxe-button>,
-              <vxe-button>按钮2</vxe-button>
+              <vxe-input size="small" placeholder="搜索"></vxe-input>,
+              <vxe-button>搜索</vxe-button>
+            ]
+          },
+          tools: () => {
+            return [
+              <vxe-input size="small" placeholder="搜索"></vxe-input>
             ]
           }
         }
@@ -268,10 +271,13 @@ export default {
                 slots: {
                   buttons: () => {
                     return [
-                      <button>按钮</button>,
-                      <input type="text"/>,
-                      <vxe-button>按钮1</vxe-button>,
-                      <vxe-button>按钮2</vxe-button>
+                      <vxe-input size="small" placeholder="搜索"></vxe-input>,
+                      <vxe-button>搜索</vxe-button>,
+                    ]
+                  },
+                  tools: () => {
+                    return [
+                      <vxe-input size="small" placeholder="搜索"></vxe-input>
                     ]
                   }
                 }
