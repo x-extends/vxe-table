@@ -23,7 +23,7 @@ const apis = [
           name: 'zoom',
           desc: '是否允许最大化显示',
           version: '1.15.14',
-          type: 'Boolean',
+          type: 'Boolean, Object',
           enum: '',
           defVal: '',
           list: [
