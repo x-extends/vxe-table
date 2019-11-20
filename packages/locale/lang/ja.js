@@ -44,7 +44,11 @@ export default {
       goto: '移動',
       pagesize: '件/ページ',
       total: '全 {{total}} 件',
-      pageClassifier: ''
+      pageClassifier: '',
+      prevPage: '上一页',
+      nextPage: '下一页',
+      prevJump: '向上跳页',
+      nextJump: '向下跳页'
     },
     alert: {
       title: 'メッセージ'
@@ -60,6 +64,11 @@ export default {
       txt: '文本文件(制表符分隔)(*.txt)',
       xlsx: 'Excel 工作簿(*.xlsx)',
       pdf: 'PDF (*.pdf)'
+    },
+    modal: {
+      zoomIn: '最大化',
+      zoomOut: '向下还原',
+      close: '关闭'
     },
     toolbar: {
       import: '导入数据',

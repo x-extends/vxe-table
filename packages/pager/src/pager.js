@@ -86,6 +86,9 @@ export default {
         class: ['vxe-pager--prev-btn', {
           'is--disabled': currentPage <= 1
         }],
+        attrs: {
+          title: GlobalConfig.i18n('vxe.pager.prevPage')
+        },
         on: {
           click: this.prevPage
         }
@@ -102,6 +105,9 @@ export default {
           'is--fixed': !tagName,
           'is--disabled': this.currentPage <= 1
         }],
+        attrs: {
+          title: GlobalConfig.i18n('vxe.pager.prevJump')
+        },
         on: {
           click: this.prevJump
         }
@@ -134,6 +140,9 @@ export default {
           'is--fixed': !tagName,
           'is--disabled': currentPage >= pageCount
         }],
+        attrs: {
+          title: GlobalConfig.i18n('vxe.pager.nextJump')
+        },
         on: {
           click: this.nextJump
         }
@@ -153,6 +162,9 @@ export default {
         class: ['vxe-pager--next-btn', {
           'is--disabled': currentPage >= pageCount
         }],
+        attrs: {
+          title: GlobalConfig.i18n('vxe.pager.nextPage')
+        },
         on: {
           click: this.nextPage
         }

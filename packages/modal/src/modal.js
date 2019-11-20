@@ -156,13 +156,19 @@ export default {
             class: 'vxe-modal--title'
           }, title ? UtilTools.getFuncText(title) : GlobalConfig.i18n('vxe.alert.title')),
           resize ? h('i', {
-            class: ['vxe-modal--zoom-btn', 'trigger--btn', zoomLocat ? GlobalConfig.icon.zoomOut : GlobalConfig.icon.zoomIn],
+            class: ['vxe-modal--zoom-btn', 'trigger--btn', zoomLocat ? GlobalConfig.icon.modalZoomOut : GlobalConfig.icon.modalZoomIn],
+            attrs: {
+              title: GlobalConfig.i18n(`vxe.toolbar.zoom${zoomLocat ? 'Out' : 'In'}`)
+            },
             on: {
               click: this.toggleZoomEvent
             }
           }) : null,
           h('i', {
             class: ['vxe-modal--close-btn', 'trigger--btn', GlobalConfig.icon.modalClose],
+            attrs: {
+              title: GlobalConfig.i18n('vxe.modal.close')
+            },
             on: {
               click: this.closeEvent
             }
