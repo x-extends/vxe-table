@@ -452,7 +452,7 @@ export default {
       this.analyColumnWidth()
     },
     height () {
-      this.$nextTick(this.recalculate)
+      this.$nextTick(() => this.recalculate(true))
     },
     loading () {
       if (!this._isLoading) {
@@ -461,7 +461,7 @@ export default {
     },
     syncResize (value) {
       if (value) {
-        this.$nextTick(this.recalculate)
+        this.$nextTick(() => this.recalculate(true))
       }
     }
   },

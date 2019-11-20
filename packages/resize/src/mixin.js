@@ -3,7 +3,7 @@ import Resize from './resize'
 export default {
   methods: {
     bindResize () {
-      const resizeObserver = new Resize(this.recalculate)
+      const resizeObserver = new Resize(() => this.recalculate(true))
       resizeObserver.observe(this.getParentElem())
       this.$resize = resizeObserver
     },
