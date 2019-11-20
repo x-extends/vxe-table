@@ -21,8 +21,8 @@
         <template v-slot="{ row }">
           <span :class="[`level-${row.level}`]" :style="{paddingLeft: `${row.level * treeIndent}px`}">
             <i
-              class="virtual-tree-icon"
-              :class="[`vxe-icon--arrow-${ row.expand ? 'bottom' : 'right' }`, {visible: row.children && row.children.length}]"
+              class="virtual-tree-icon vxe-icon--arrow-right"
+              :class="{expand: row.expand, visible: row.children && row.children.length}"
               @click="toggleTreeExpansion(row)"></i>
             <span>{{ row.name }}</span>
           </span>
@@ -73,8 +73,8 @@ export default {
             <template v-slot="{ row }">
               <span :class="[\`level-\${row.level}\`]" :style="{paddingLeft: \`\${row.level * treeIndent}px\`}">
                 <i
-                  class="virtual-tree-icon"
-                  :class="[\`vxe-icon--arrow-\${ row.expand ? 'bottom' : 'right' }\`, {visible: row.children && row.children.length}]"
+                  class="virtual-tree-icon vxe-icon--arrow-right"
+                  :class="{expand: row.expand, visible: row.children && row.children.length}"
                   @click="toggleTreeExpansion(row)"></i>
                 <span>{{ row.name }}</span>
               </span>
@@ -172,6 +172,10 @@ export default {
           visibility: hidden;
           cursor: pointer;
           margin-right: 4px;
+          transition: all 0.1s ease-in-out;
+        }
+        .virtual-tree-icon.expand {
+          transform: rotate(90deg);
         }
         .virtual-tree-icon.visible {
           visibility: visible;
@@ -264,6 +268,10 @@ export default {
   visibility: hidden;
   cursor: pointer;
   margin-right: 4px;
+  transition: all 0.1s ease-in-out;
+}
+.virtual-tree-icon.expand {
+  transform: rotate(90deg);
 }
 .virtual-tree-icon.visible {
   visibility: visible;

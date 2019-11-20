@@ -51,12 +51,6 @@ export default {
           icon: 'vxe-icon--arrow-right'
         },
         {
-          icon: 'vxe-icon--d-arrow-top'
-        },
-        {
-          icon: 'vxe-icon--d-arrow-bottom'
-        },
-        {
           icon: 'vxe-icon--d-arrow-left'
         },
         {
@@ -73,6 +67,12 @@ export default {
         },
         {
           icon: 'vxe-icon--close'
+        },
+        {
+          icon: 'vxe-icon--plus'
+        },
+        {
+          icon: 'vxe-icon--minus'
         },
         {
           icon: 'vxe-icon--refresh'
@@ -97,6 +97,12 @@ export default {
         },
         {
           icon: 'vxe-icon--error'
+        },
+        {
+          icon: 'vxe-icon--remove'
+        },
+        {
+          icon: 'vxe-icon--circle-plus'
         },
         {
           icon: 'vxe-icon--zoomin'

@@ -244,9 +244,13 @@
     font-weight: 700;
     padding: 10px 40px 8px 16px;
     border-bottom: 1px solid #eee;
-    background-color: #F8F8F8;
+    background-color: $vxe-modal-header-background-color;
     border-radius: 2px 2px 0 0;
     user-select: none;
+    .vxe-icon--zoomin,
+    .vxe-icon--zoomout:after {
+      background-color: $vxe-modal-header-background-color;
+    }
   }
   .vxe-modal--zoom-btn,
   .vxe-modal--close-btn {
