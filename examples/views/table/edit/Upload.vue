@@ -80,9 +80,10 @@ export default {
               this.$refs.xTable.readFile(opts).then(evnt => {
                 let records = Array.from(evnt.target.files).map(file => {
                   let ns = file.name.split('.')
+                  let name = ns.slice(0, ns.length - 1).join('')
                   let type = ns[ns.length - 1]
                   return {
-                    name: file.name,
+                    name: name,
                     size: file.size,
                     type: type,
                     date: this.$utils.toDateString(new Date())
@@ -111,9 +112,10 @@ export default {
       this.$refs.xTable.readFile(opts).then(evnt => {
         let records = Array.from(evnt.target.files).map(file => {
           let ns = file.name.split('.')
+          let name = ns.slice(0, ns.length - 1).join('')
           let type = ns[ns.length - 1]
           return {
-            name: file.name,
+            name: name,
             size: file.size,
             type: type,
             date: this.$utils.toDateString(new Date())

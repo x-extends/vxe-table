@@ -19,14 +19,12 @@
       @include animatTransition(border);
     }
   }
-  .vxe-table--expand-icon{
-    @include animatTransition(all);
-  }
   .vxe-input--wrapper {
     .vxe-input {
       @include animatTransition(border);
     }
   }
+  .vxe-table--expand-btn,
   .vxe-tree--node-btn {
     @include animatTransition(transform);
   }

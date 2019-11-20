@@ -44,6 +44,7 @@ const GlobalConfig = {
     filter: 'vxe-icon--funnel',
     edit: 'vxe-icon--edit-outline',
     tree: 'vxe-icon--caret-right',
+    expand: 'vxe-icon--arrow-right',
     refresh: 'vxe-icon--refresh',
     refreshLoading: 'vxe-icon--refresh roll',
     import: 'vxe-icon--upload',
