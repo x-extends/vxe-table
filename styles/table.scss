@@ -503,9 +503,15 @@
     display: block;
     text-align: center;
     cursor: pointer;
-    &.expand--active {
+    &.is--active {
       .vxe-table--expand-btn {
         transform: rotate(90deg);
+      }
+    }
+    .vxe-table--expand-btn {
+      color: lighten($vxe-font-color, 20%);
+      &:hover {
+        color: $vxe-font-color;
       }
     }
   }

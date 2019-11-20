@@ -146,9 +146,9 @@
     @extend %PseudoClass;
     top: 0.4em;
     left: 0.14em;
-    width: 0.68em;
-    height: 0.68em;
-    border-width: 0.1em;
+    width: 0.7em;
+    height: 0.7em;
+    border-width: 0.15em;
     border-style: solid;
     border-top-color: inherit;
     border-right-color: inherit;
@@ -191,15 +191,15 @@
     left: 0.20em;
   }
   &:after {
-    left: 0.56em;
+    left: 0.58em;
   }
   &:before,
   &:after {
     @extend %PseudoClass;
     top: 0.14em;
-    width: 0.68em;
-    height: 0.68em;
-    border-width: 0.1em;
+    width: 0.7em;
+    height: 0.7em;
+    border-width: 0.15em;
     border-style: solid;
     border-top-color: inherit;
     border-right-color: transparent;
@@ -216,7 +216,7 @@
     transform: rotate(135deg);
   }
   &:before {
-    left: -0.20em;
+    left: -0.22em;
   }
   &:after {
     left: 0.16em;
