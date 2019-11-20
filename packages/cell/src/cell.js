@@ -387,7 +387,7 @@ export const Cell = {
         }
       }, [
         h('i', {
-          class: 'vxe-table--expand-icon'
+          class: ['vxe-table--expand-btn', GlobalConfig.icon.expand]
         })
       ])
     ]

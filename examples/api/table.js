@@ -1235,7 +1235,7 @@ const apis = [
           {
             name: 'autoPos',
             desc: '是否自动定位到校验不通过的单元格',
-            version: '2.6.23',
+            version: '2.7.0',
             type: 'Boolean',
             enum: '',
             defVal: 'true',

@@ -491,7 +491,6 @@
       }
     }
     .vxe-tree--node-btn {
-      font-size: 12px;
       color: lighten($vxe-font-color, 20%);
       &:hover {
         color: $vxe-font-color;
@@ -504,19 +503,9 @@
     display: block;
     text-align: center;
     cursor: pointer;
-    .vxe-table--expand-icon {
-      display: inline-block;
-      width: 6px;
-      height: 6px;
-      border: 1px solid #666;
-      vertical-align: middle;
-      border-width: 1px 1px 0 0;
-      transform: rotate(45deg);
-      background-color: transparent;
-    }
     &.expand--active {
-      .vxe-table--expand-icon {
-        transform: rotate(135deg);
+      .vxe-table--expand-btn {
+        transform: rotate(90deg);
       }
     }
   }

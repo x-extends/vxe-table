@@ -22,7 +22,7 @@ const apis = [
         list: XEUtils.clone(toolbarAPI.find(item => item.name === 'Props').list, true).concat([{
           name: 'zoom',
           desc: '是否允许最大化显示',
-          version: '2.6.23',
+          version: '2.7.0',
           type: 'Boolean',
           enum: '',
           defVal: '',
@@ -327,7 +327,7 @@ const apis = [
       {
         name: 'zoom()',
         desc: '切换表格最大化/还原',
-        version: '2.6.23',
+        version: '2.7.0',
         type: 'Promise<status>',
         enum: '',
         defVal: '',
@@ -336,7 +336,7 @@ const apis = [
       {
         name: 'isMaximized()',
         desc: '判断是否最大化显示',
-        version: '2.6.23',
+        version: '2.7.0',
         type: 'Boolean',
         enum: '',
         defVal: '',

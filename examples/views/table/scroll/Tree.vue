@@ -10,9 +10,10 @@
     </vxe-toolbar>
 
     <vxe-table
-      ref="xTable"
       resizable
       show-overflow
+      row-key
+      ref="xTable"
       height="500"
       row-id="id"
       :loading="loading">
@@ -62,9 +63,10 @@ export default {
         </vxe-toolbar>
 
         <vxe-table
-          ref="xTable"
           resizable
           show-overflow
+          row-key
+          ref="xTable"
           height="500"
           row-id="id"
           :loading="loading">
