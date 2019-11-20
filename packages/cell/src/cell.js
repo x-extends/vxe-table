@@ -384,7 +384,7 @@ export const Cell = {
     return [
       h('span', {
         class: ['vxe-table--expanded', {
-          'expand--active': expandActive
+          'is--active': expandActive
         }],
         on: {
           click (evnt) {
