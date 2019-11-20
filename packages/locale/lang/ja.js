@@ -27,6 +27,9 @@ export default {
       confirmFilter: '完了',
       resetFilter: 'リセット',
       allFilter: '全て',
+      sortAsc: '升序：最低到最高',
+      sortDesc: '降序：最高到最低',
+      filter: '对所选的列启用筛选',
       impSuccess: '导入成功',
       expSuccess: '导出成功'
     },

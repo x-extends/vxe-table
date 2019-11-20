@@ -5,9 +5,14 @@
   display: inline-block;
   user-select: none;
   cursor: pointer;
-  &.size--small,
+  &.size--small {
+    font-size: 13px;
+  }
   &.size--mini {
     font-size: 12px;
+  }
+  &.size--small,
+  &.size--mini {
     > input {
       &+.vxe-radio--icon {
         font-size: 14px;

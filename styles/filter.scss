@@ -2,18 +2,16 @@
 
 /*筛选*/
 .vxe-filter-wrapper {
-  padding: 0 2px;
+  padding: 0 0.2em;
   vertical-align: middle;
   display: inline-block;
-  line-height: 15px;
-  margin-top: -2px;
+  line-height: 0;
   &.is--active {
     .vxe-filter--btn {
       color: $vxe-font-color;
     }
   }
   .vxe-filter--btn {
-    font-size: 13px;
     color: $vxe-table-column-icon-border-color;
     cursor: pointer;
     &:hover {
