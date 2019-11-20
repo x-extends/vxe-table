@@ -599,7 +599,7 @@ export default {
       this.analyColumnWidth()
     },
     height () {
-      this.$nextTick(this.recalculate)
+      this.$nextTick(() => this.recalculate(true))
     },
     loading () {
       if (!this.isLoading) {
@@ -608,7 +608,7 @@ export default {
     },
     syncResize (value) {
       if (value) {
-        this.$nextTick(this.recalculate)
+        this.$nextTick(() => this.recalculate(true))
       }
     }
   },
@@ -692,7 +692,7 @@ export default {
   },
   mounted () {
     if (this.autoResize) {
-      ResizeEvent.on(this, this.getParentElem(), this.recalculate)
+      ResizeEvent.on(this, this.getParentElem(), () => this.recalculate(true))
     }
     document.body.appendChild(this.$refs.tableWrapper)
     this.preventEvent(null, 'mounted', { $table: this })
