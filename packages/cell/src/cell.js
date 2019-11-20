@@ -423,16 +423,18 @@ export const Cell = {
     return Cell.renderHeader(h, params).concat(Cell.renderSortIcon(h, params))
   },
   renderSortIcon (h, params) {
-    let { icon } = GlobalConfig
     let { $table, column } = params
     return [
       h('span', {
         class: 'vxe-sort-wrapper'
       }, [
         h('i', {
-          class: ['vxe-sort--asc-btn', icon.sortAsc, {
+          class: ['vxe-sort--asc-btn', GlobalConfig.icon.sortAsc, {
             'sort--active': column.order === 'asc'
           }],
+          attrs: {
+            title: GlobalConfig.i18n('vxe.table.sortAsc')
+          },
           on: {
             click (evnt) {
               $table.triggerSortEvent(evnt, column, 'asc')
@@ -440,9 +442,12 @@ export const Cell = {
           }
         }),
         h('i', {
-          class: ['vxe-sort--desc-btn', icon.sortDesc, {
+          class: ['vxe-sort--desc-btn', GlobalConfig.icon.sortDesc, {
             'sort--active': column.order === 'desc'
           }],
+          attrs: {
+            title: GlobalConfig.i18n('vxe.table.sortDesc')
+          },
           on: {
             click (evnt) {
               $table.triggerSortEvent(evnt, column, 'desc')
@@ -471,6 +476,9 @@ export const Cell = {
       }, [
         h('i', {
           class: `vxe-filter--btn ${icon.filter}`,
+          attrs: {
+            title: GlobalConfig.i18n('vxe.table.filter')
+          },
           on: {
             click (evnt) {
               $table.triggerFilterEvent(evnt, params.column, params)

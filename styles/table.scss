@@ -451,22 +451,25 @@
 
   /*排序*/
   .vxe-sort-wrapper {
-    padding: 0 2px;
+    padding: 0 0.2em;
     vertical-align: middle;
     display: inline-block;
-    height: 22px;
-    margin-top: -2px;
     .vxe-icon--caret-top {
       &:before {
-        bottom: 0.1em;
+        bottom: 0.2em;
+      }
+    }
+    .vxe-icon--caret-bottom {
+      &:before {
+        bottom: -0.2em;
       }
     }
     .vxe-sort--asc-btn,
     .vxe-sort--desc-btn {
       display: block;
-      font-size: 12px;
       color: $vxe-table-column-icon-border-color;
       cursor: pointer;
+      height: 0.74em;
       &:hover {
         color: $vxe-font-color;
       }

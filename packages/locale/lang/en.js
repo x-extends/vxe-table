@@ -27,6 +27,9 @@ export default {
       confirmFilter: 'Confirm',
       resetFilter: 'Reset',
       allFilter: 'All',
+      sortAsc: 'Ascending: lowest to highest',
+      sortDesc: 'Descending: highest to lowest',
+      filter: 'Enable filtering on selected columns',
       impSuccess: 'Import success',
       expSuccess: 'Export success'
     },

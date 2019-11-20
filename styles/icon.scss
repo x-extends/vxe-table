@@ -227,7 +227,7 @@
   @extend %DefaultWidthHeight;
   &:before {
     @extend %PseudoClass;
-    top: 0.1em;
+    top: 0.05em;
     left: 0;
     border-width: 0.5em;
     border-style: solid;
@@ -238,10 +238,10 @@
   }
   &:after {
     @extend %PseudoClass;
-    left: 0.4em;
-    top: 0.5em;
+    left: 0.41em;
+    top: 0.4em;
     width: 0;
-    height: 0.4em;
+    height: 0.5em;
     border-width: 0 0.2em 0 0;
     border-style: solid;
     border-right-color: inherit;
