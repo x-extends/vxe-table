@@ -21,11 +21,28 @@
 }
 
 .vxe-icon--zoomin {
-  width: 0.9em;
-  height: 0.9em;
+  @extend %DefaultWidthHeight;
   border-width: 0.1em;
   border-style: solid;
   border-color: inherit;
+  background-color: #fff;
+  &:before,
+  &:after {
+    @extend %PseudoClass;
+    background-color: inherit;
+  }
+  &:before {
+    left: -0.1em;
+    top: 0.2em;
+    width: 1em;
+    height: 0.4em;
+  }
+  &:after {
+    top: -0.1em;
+    left: 0.2em;
+    width: 0.4em;
+    height: 1em;
+  }
 }
 
 .vxe-icon--zoomout {
@@ -83,26 +100,37 @@
 
 .vxe-icon--caret-bottom {
   @extend .vxe-icon--caret-top;
-  transform: rotate(180deg);
+  &:before {
+    bottom: -0.25em;
+    transform: rotate(180deg);
+  }
 }
 
 .vxe-icon--caret-left {
   @extend .vxe-icon--caret-top;
-  transform: rotate(-90deg);
+  &:before {
+    left: -0.25em;
+    bottom: 0;
+    transform: rotate(-90deg);
+  }
 }
 
 .vxe-icon--caret-right {
   @extend .vxe-icon--caret-top;
-  transform: rotate(90deg);
+  &:before {
+    left: 0.25em;
+    bottom: 0;
+    transform: rotate(90deg);
+  }
 }
 
 %BeforeArrowTop {
   &:before {
     @extend %PseudoClass;
-    top: 0.38em;
+    top: 0.32em;
     left: 0.12em;
-    width: 0.5em;
-    height: 0.5em;
+    width: 0.6em;
+    height: 0.6em;
     border-width: 0.1em;
     border-style: solid;
     border-top-color: inherit;
@@ -113,75 +141,86 @@
 }
 
 .vxe-icon--arrow-top {
-  @extend %DefaultWidthHeight, %BeforeArrowTop;
-  transform: rotate(-45deg);
+  @extend %DefaultWidthHeight;
+  &:before {
+    @extend %PseudoClass;
+    top: 0.4em;
+    left: 0.14em;
+    width: 0.68em;
+    height: 0.68em;
+    border-width: 0.1em;
+    border-style: solid;
+    border-top-color: inherit;
+    border-right-color: inherit;
+    border-bottom-color: transparent;
+    border-left-color: transparent;
+    transform: rotate(-45deg);
+  }
 }
 
 .vxe-icon--arrow-bottom {
-  @extend %DefaultWidthHeight, %BeforeArrowTop;
-  transform: rotate(135deg);
+  @extend .vxe-icon--arrow-top;
+  &:before {
+    top: 0;
+    left: 0.14em;
+    transform: rotate(135deg);
+  }
 }
 
 .vxe-icon--arrow-left {
-  @extend %DefaultWidthHeight, %BeforeArrowTop;
-  transform: rotate(-135deg);
+  @extend .vxe-icon--arrow-top;
+  &:before {
+    top: 0.14em;
+    left: 0.4em;
+    transform: rotate(-135deg);
+  }
 }
 
 .vxe-icon--arrow-right {
-  @extend %DefaultWidthHeight, %BeforeArrowTop;
-  transform: rotate(45deg);
-}
-
-%BeforeDArrowTop {
+  @extend .vxe-icon--arrow-top;
   &:before {
-    @extend %PseudoClass;
-    top: 0.24em;
-    left: 0.26em;
-    width: 0.5em;
-    height: 0.5em;
-    border-width: 0.08em;
-    border-style: solid;
-    border-top-color: inherit;
-    border-right-color: inherit;
-    border-bottom-color: transparent;
-    border-left-color: transparent;
+    top: 0.14em;
+    left: 0;
+    transform: rotate(45deg);
   }
-}
-
-%AfterDArrowTop {
-  &:after {
-    @extend %PseudoClass;
-    top: 0.42em;
-    left: 0.1em;
-    width: 0.5em;
-    height: 0.5em;
-    border-width: 0.08em;
-    border-style: solid;
-    border-top-color: inherit;
-    border-right-color: inherit;
-    border-bottom-color: transparent;
-    border-left-color: transparent;
-  }
-}
-
-.vxe-icon--d-arrow-top {
-  @extend %DefaultWidthHeight, %BeforeDArrowTop, %AfterDArrowTop;
-  transform: rotate(-45deg);
-}
-
-.vxe-icon--d-arrow-bottom {
-  @extend %DefaultWidthHeight, %BeforeDArrowTop, %AfterDArrowTop;
-  transform: rotate(135deg);
 }
 
 .vxe-icon--d-arrow-left {
-  @extend %DefaultWidthHeight, %BeforeDArrowTop, %AfterDArrowTop;
-  transform: rotate(-135deg);
+  @extend %DefaultWidthHeight;
+  &:before {
+    left: 0.20em;
+  }
+  &:after {
+    left: 0.56em;
+  }
+  &:before,
+  &:after {
+    @extend %PseudoClass;
+    top: 0.14em;
+    width: 0.68em;
+    height: 0.68em;
+    border-width: 0.1em;
+    border-style: solid;
+    border-top-color: inherit;
+    border-right-color: transparent;
+    border-bottom-color: transparent;
+    border-left-color: inherit;
+    transform: rotate(-45deg);
+  }
 }
 
 .vxe-icon--d-arrow-right {
-  @extend %DefaultWidthHeight, %BeforeDArrowTop, %AfterDArrowTop;
-  transform: rotate(45deg);
+  @extend .vxe-icon--d-arrow-left;
+  &:before,
+  &:after {
+    transform: rotate(135deg);
+  }
+  &:before {
+    left: -0.20em;
+  }
+  &:after {
+    left: 0.16em;
+  }
 }
 
 .vxe-icon--funnel {
@@ -249,26 +288,36 @@
   }
 }
 
-.vxe-icon--close {
+.vxe-icon--plus {
   @extend %DefaultWidthHeight;
-  &:before,
-  &:after {
+  &:before {
+    @extend %PseudoClass;
+    content: "+";
+    top: 0.01em;
+    left: -0.08em;
+    font-size: 2em;
+    font-weight: normal;
+  }
+}
+
+.vxe-icon--close {
+  @extend .vxe-icon--plus;
+  &:before {
+    transform: rotate(45deg);
+  }
+}
+
+.vxe-icon--minus {
+  @extend %DefaultWidthHeight;
+  &:before {
     @extend %PseudoClass;
     left: 0;
-    top: 0;
-    transform: rotate(45deg);
+    top: 0.42em;
+    border-width: 0 0 0.15em 0;
+    border-color: inherit;
     border-style: solid;
-    border-width: 0;
-  }
-  &:before {
-    width: 1em;
-    border-bottom-width: 0.1em;
-    top: 0.45em;
-  }
-  &:after {
-    height: 1em;
-    border-right-width: 0.1em;
-    left: 0.45em;
+    height: 0;
+    width: 100%;
   }
 }
 
@@ -325,27 +374,19 @@
   left: 0;
 }
 
-%AfterSolidRadius {
-  position: absolute;
-  color: #fff;
-  font-size: .7em;
-  display: inline-block;
-  top: 0;
-  left: 0;
-  width: inherit;
-  height: inherit;
-  text-align: center;
-  font-weight: 700;
-}
-
 .vxe-icon--question {
   @extend %DefaultWidthHeight;
   &:before {
     @extend %BeforeSolidRadius;
   }
   &:after {
-    @extend %AfterSolidRadius;
+    @extend %PseudoClass;
     content: "?";
+    top: 0.04em;
+    left: 0.28em;
+    font-size: 0.8em;
+    font-weight: 700;
+    color: #fff;
   }
 }
 
@@ -355,9 +396,13 @@
     @extend %BeforeSolidRadius;
   }
   &:after {
-    @extend %AfterSolidRadius;
+    @extend %PseudoClass;
     content: "!";
-    top: 0.05em;
+    top: -0.04em;
+    left: 0.46em;
+    font-size: 0.8em;
+    font-weight: 700;
+    color: #fff;
     transform: rotate(180deg);
   }
 }
@@ -368,8 +413,13 @@
     @extend %BeforeSolidRadius;
   }
   &:after {
-    @extend %AfterSolidRadius;
+    @extend %PseudoClass;
     content: "!";
+    top: 0.02em;
+    left: 0.4em;
+    font-size: 0.8em;
+    font-weight: 700;
+    color: #fff;
   }
 }
 
@@ -393,15 +443,40 @@
   }
 }
 
-.vxe-icon--error {
+.vxe-icon--circle-plus {
   @extend %DefaultWidthHeight;
   &:before {
     @extend %BeforeSolidRadius;
   }
   &:after {
-    @extend %AfterSolidRadius;
-    content: "\2716";
-    left: -0.1em;
+    @extend %PseudoClass;
+    content: "+";
+    top: 0;
+    left: 0.08em;
+    font-size: 1.22em;
+    font-weight: normal;
+    color: #fff;
+  }
+}
+
+.vxe-icon--remove {
+  @extend .vxe-icon--circle-plus;
+  &:after {
+    content: "-";
+    top: 0.38em;
+    left: 0.22em;
+    border-width: 0 0 0.1em 0;
+    border-color: #fff;
+    border-style: solid;
+    height: 0;
+    width: 0.4em;
+  }
+}
+
+.vxe-icon--error {
+  @extend .vxe-icon--circle-plus;
+  &:after {
+    transform: rotate(45deg);
   }
 }
 

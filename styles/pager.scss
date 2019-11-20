@@ -101,12 +101,6 @@
     .vxe-pager--jump .vxe-pager--goto {
       height: 28px;
     }
-    .vxe-pager--jump-prev,
-    .vxe-pager--prev-btn,
-    .vxe-pager--next-btn,
-    .vxe-pager--jump-next {
-      font-size: 19px;
-    }
   }
   &.size--small {
     font-size: 12px;
@@ -137,12 +131,6 @@
     .vxe-pager--jump .vxe-pager--goto {
       height: 26px;
     }
-    .vxe-pager--jump-prev,
-    .vxe-pager--prev-btn,
-    .vxe-pager--next-btn,
-    .vxe-pager--jump-next {
-      font-size: 17px;
-    }
   }
   &.size--mini {
     font-size: 12px;
@@ -172,12 +160,6 @@
     }
     .vxe-pager--jump .vxe-pager--goto {
       height: 24px;
-    }
-    .vxe-pager--jump-prev,
-    .vxe-pager--prev-btn,
-    .vxe-pager--next-btn,
-    .vxe-pager--jump-next {
-      font-size: 14px;
     }
   }
   .vxe-pager--total,
@@ -254,7 +236,6 @@
   .vxe-pager--prev-btn,
   .vxe-pager--next-btn,
   .vxe-pager--jump-next {
-    font-size: 20px;
     padding: 0 4px;
   }
   .vxe-pager--num-btn {
@@ -278,7 +259,7 @@
     &.is--active {
       border: 1px solid $vxe-primary-color;
       .vxe-pager--sizes-arrow {
-        transform: rotate(360deg);
+        transform: rotate(180deg);
       }
       .vxe-pager-size--select-wrapper {
         display: block;
