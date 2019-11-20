@@ -303,6 +303,9 @@
 .vxe-icon--close {
   @extend .vxe-icon--plus;
   &:before {
+    top: -0.02em;
+    left: -0.12em;
+    font-size: 2.4em;
     transform: rotate(45deg);
   }
 }

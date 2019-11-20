@@ -44,7 +44,11 @@ export default {
       goto: 'Go to',
       pagesize: '/page',
       total: 'Total {{total}} record',
-      pageClassifier: ''
+      pageClassifier: '',
+      prevPage: 'Previous page',
+      nextPage: 'next page',
+      prevJump: 'Jump previous page',
+      nextJump: 'Jump next page'
     },
     alert: {
       title: 'Message notification'
@@ -60,6 +64,11 @@ export default {
       txt: 'Text (Tab delimited) (*.txt)',
       xlsx: 'Excel Workbook (*.xlsx)',
       pdf: 'PDF (*.pdf)'
+    },
+    modal: {
+      zoomIn: 'Maximization',
+      zoomOut: 'Downward reduction',
+      close: 'Close'
     },
     toolbar: {
       import: 'Import data',
