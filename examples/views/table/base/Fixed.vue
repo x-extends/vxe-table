@@ -6,7 +6,6 @@
     </p>
 
     <vxe-table
-      border
       show-overflow
       :data="tableData">
       <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
@@ -57,7 +56,6 @@ export default {
       demoCodes: [
         `
         <vxe-table
-          border
           show-overflow
           :data="tableData">
           <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>

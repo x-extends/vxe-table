@@ -35,7 +35,6 @@
       height="300"
       highlight-hover-row
       show-overflow
-      v-if="visible"
       :data="tableData">
       <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
       <vxe-table-column field="name" title="Name" width="300"></vxe-table-column>
@@ -77,7 +76,6 @@ import hljs from 'highlight.js'
 export default {
   data () {
     return {
-      visible: true,
       tableData: [],
       demoCodes: [
         `
@@ -118,7 +116,6 @@ export default {
           height="300"
           highlight-hover-row
           show-overflow
-          v-if="visible"
           :data="tableData">
           <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
           <vxe-table-column field="name" title="Name" width="300"></vxe-table-column>

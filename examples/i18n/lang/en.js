@@ -114,6 +114,7 @@ module.exports = {
         forceCellValid: 'Validate cell + lock',
         forceRowValid: 'Validate row + lock',
         keyboard: 'Keyboard navigation',
+        dataCount: 'Data count',
         uniqueSelect: 'Unique select option',
         cascadingSelect: 'Cascading select options',
         upload: 'File upload',

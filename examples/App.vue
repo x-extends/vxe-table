@@ -1029,6 +1029,13 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.dataCount',
+              demoUrl: 'https://jsrun.pro/JQWKp',
+              locat: {
+                name: 'TableEditDataCount'
+              }
+            },
+            {
               label: 'app.aside.nav.uniqueSelect',
               locat: {
                 name: 'TableEditUniqueSelect'
