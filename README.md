@@ -34,8 +34,8 @@
 
 ## Features
 
-* [x] Basic table （基础功能）
-* [x] Grid （配置式表格）
+* [x] Basic table （基础表格）
+* [x] Grid （高级表格）
 * [x] Size （尺寸）
 * [x] Striped （斑马线条纹）
 * [x] Table with border （带边框）

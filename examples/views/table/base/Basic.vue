@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip"><table-api-link name="vxe-table"/> 静态化表格，基于模板方式使用简单、便捷</p>
+    <p class="tip"><table-api-link name="vxe-table"/> 基础表格，基于模板方式使用简单、便捷</p>
 
     <vxe-table
       :data="tableData">
