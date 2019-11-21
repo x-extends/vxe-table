@@ -859,7 +859,7 @@ const apis = [
           },
           {
             name: 'checkMethod',
-            desc: '是否允许勾选的方法，该方法 Function({row}) 的返回值用来决定这一行的 CheckBox 是否可以勾选',
+            desc: '是否允许勾选的方法，该方法 Function({row}) 的返回值用来决定这一行的 checkbox 是否可以勾选',
             version: '',
             type: 'Function',
             enum: '',

@@ -210,7 +210,7 @@ const apis = [
           },
           {
             name: 'checkMethod',
-            desc: '是否允许选中的方法，该方法 Function({column}) 的返回值用来决定这一列的 Checkbox 是否可以选中',
+            desc: '是否允许选中的方法，该方法 Function({column}) 的返回值用来决定这一列的 checkbox 是否可以选中',
             version: '2.6.19',
             type: 'Function',
             enum: '',
