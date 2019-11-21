@@ -79,6 +79,7 @@ module.exports = {
         proxyPage: 'DataProxy + Pager',
         fullQuery: 'Full query',
         customToolbar: 'Custom toolbar',
+        fullscreen: 'Full screen zoom',
         dynamicColumn: 'Configurable dynamic columns',
         baseTree: 'Basics tree',
         crudTreeToolbar: 'Tree + CRUD + Toolbar',

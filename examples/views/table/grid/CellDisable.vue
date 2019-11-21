@@ -2,17 +2,14 @@
   <div>
     <p class="tip">设置 <table-api-link prop="edit-config"/> 的 <table-api-link prop="activeMethod"/> 方法判断单元格是否禁用</p>
 
-    <vxe-table
+    <vxe-grid
       border
       show-overflow
+      :columns="tableColumn"
       :data="tableData"
       :edit-config="{trigger: 'click', mode: 'cell', activeMethod: activeCellMethod}"
       @edit-disabled="editDisabledEvent">
-      <vxe-table-column type="index" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="date12" title="Date" :edit-render="{name: 'input'}"></vxe-table-column>
-    </vxe-table>
+    </vxe-grid>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
@@ -23,17 +20,14 @@
 
     <p class="tip">禁用第二行编辑</p>
 
-    <vxe-table
+    <vxe-grid
       border
       show-overflow
+      :columns="tableColumn2"
       :data="tableData"
       :edit-config="{trigger: 'click', mode: 'cell', activeMethod: activeRowMethod}"
       @edit-disabled="editDisabledEvent">
-      <vxe-table-column type="index" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="date12" title="Date" :edit-render="{name: 'input'}"></vxe-table-column>
-    </vxe-table>
+    </vxe-grid>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
@@ -51,25 +45,43 @@ export default {
   data () {
     return {
       tableData: [],
+      tableColumn: [
+        { type: 'index', width: 50 },
+        { field: 'name', title: 'app.body.label.name', editRender: { name: 'input' } },
+        { field: 'sex', title: 'app.body.label.sex', editRender: { name: 'input' } },
+        { field: 'age', title: 'Age', editRender: { name: 'input' } },
+        { field: 'address', title: 'Address', editRender: { name: 'input' } }
+      ],
+      tableColumn2: [
+        { type: 'index', width: 50 },
+        { field: 'name', title: 'app.body.label.name', editRender: { name: 'input' } },
+        { field: 'sex', title: 'app.body.label.sex', editRender: { name: 'input' } },
+        { field: 'age', title: 'Age', editRender: { name: 'input' } },
+        { field: 'address', title: 'Address', editRender: { name: 'input' } }
+      ],
       demoCodes: [
         `
-        <vxe-table
+        <vxe-grid
           border
           show-overflow
+          :columns="tableColumn"
           :data="tableData"
           :edit-config="{trigger: 'click', mode: 'cell', activeMethod: activeCellMethod}"
           @edit-disabled="editDisabledEvent">
-          <vxe-table-column type="index" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="date12" title="Date" :edit-render="{name: 'input'}"></vxe-table-column>
-        </vxe-table>
+        </vxe-grid>
         `,
         `
         export default {
           data () {
             return {
-              tableData: []
+              tableData: [],
+              tableColumn: [
+                { type: 'index', width: 50 },
+                { field: 'name', title: 'app.body.label.name', editRender: { name: 'input' } },
+                { field: 'sex', title: 'app.body.label.sex', editRender: { name: 'input' } },
+                { field: 'age', title: 'Age', editRender: { name: 'input' } },
+                { field: 'address', title: 'Address', editRender: { name: 'input' } }
+              ]
             }
           },
           created () {
@@ -89,23 +101,27 @@ export default {
         }
         `,
         `
-        <vxe-table
+        <vxe-grid
           border
           show-overflow
+          :columns="tableColumn"
           :data="tableData"
-          :edit-config="{trigger: 'click', mode: 'row', , activeMethod: activeRowMethod}"
+          :edit-config="{trigger: 'click', mode: 'cell', activeMethod: activeRowMethod}"
           @edit-disabled="editDisabledEvent">
-          <vxe-table-column type="index" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="date12" title="Date" :edit-render="{name: 'input'}"></vxe-table-column>
-        </vxe-table>
+        </vxe-grid>
         `,
         `
         export default {
           data () {
             return {
-              tableData: []
+              tableData: [],
+              tableColumn: [
+                { type: 'index', width: 50 },
+                { field: 'name', title: 'app.body.label.name', editRender: { name: 'input' } },
+                { field: 'sex', title: 'app.body.label.sex', editRender: { name: 'input' } },
+                { field: 'age', title: 'Age', editRender: { name: 'input' } },
+                { field: 'address', title: 'Address', editRender: { name: 'input' } }
+              ]
             }
           },
           created () {

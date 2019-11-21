@@ -26,6 +26,7 @@
 </template>
 
 <script>
+import XEAjax from 'xe-ajax'
 import hljs from 'highlight.js'
 
 export default {
@@ -36,7 +37,10 @@ export default {
         total: 0,
         currentPage: 1,
         pageSize: 10,
-        pageSizes: [10, 20, 50, 100, 200, 500]
+        align: 'left',
+        pageSizes: [10, 20, 50, 100, 200, 500],
+        layouts: ['Sizes', 'PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'FullJump', 'Total'],
+        perfect: true
       },
       tableColumn: [
         { type: 'index', width: 60 },
@@ -68,7 +72,11 @@ export default {
               tablePage: {
                 total: 0,
                 currentPage: 1,
-                pageSize: 10
+                pageSize: 10,
+                align: 'left',
+                pageSizes: [10, 20, 50, 100, 200, 500],
+                layouts: ['Sizes', 'PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'FullJump', 'Total'],
+                perfect: true
               },
               tableColumn: [
                 { type: 'index', width: 60 },
@@ -88,7 +96,7 @@ export default {
             findList () {
               // 模拟后台接口
               this.loading = true
-              this.$ajax.doGet(\`/api/user/page/list/\${this.tablePage.pageSize}/\${this.tablePage.currentPage}\`).then(response => {
+              XEAjax.doGet(\`/api/user/page/list/\${this.tablePage.pageSize}/\${this.tablePage.currentPage}\`).then(response => {
                 let { page, result } = response.data
                 this.tableData = result
                 this.tablePage.total = page.total
@@ -124,7 +132,7 @@ export default {
     findList () {
       // 模拟后台接口
       this.loading = true
-      this.$ajax.doGet(`/api/user/page/list/${this.tablePage.pageSize}/${this.tablePage.currentPage}`).then(response => {
+      XEAjax.doGet(`/api/user/page/list/${this.tablePage.pageSize}/${this.tablePage.currentPage}`).then(response => {
         let { page, result } = response.data
         this.tableData = result
         this.tablePage.total = page.total
