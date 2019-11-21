@@ -2,19 +2,22 @@
   <div>
     <p class="tip">增删改查、工具栏<br><span class="red">注：树形结构默认不支持 insert 相关方法，如果要往子节点插入数据，你可以把表格当成一个子组件进行封装，自行操作数据源即可</span></p>
 
-    <vxe-toolbar :data="tableData" export setting>
+    <vxe-toolbar :data="tableData" :refresh="{query: reload}" export setting>
       <template v-slot:buttons>
         <vxe-button @click="insertEvent">{{ $t('app.body.button.insert') }}</vxe-button>
         <vxe-button @click="removeEvent">移除选中</vxe-button>
         <vxe-button @click="getInsertEvent">获取新增</vxe-button>
         <vxe-button @click="getRemoveEvent">获取删除</vxe-button>
         <vxe-button @click="getUpdateEvent">获取修改</vxe-button>
+        <vxe-button @click="saveEvent">保存</vxe-button>
       </template>
     </vxe-toolbar>
 
     <vxe-table
       resizable
       ref="xTree"
+      row-id="id"
+      :loading="loading"
       :tree-config="treeConfig"
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
       :data="tableData">
@@ -40,6 +43,7 @@ import hljs from 'highlight.js'
 export default {
   data () {
     return {
+      loading: false,
       tableData: [],
       removeList: [],
       treeConfig: {
@@ -47,19 +51,22 @@ export default {
       },
       demoCodes: [
         `
-        <vxe-toolbar :data="tableData" export setting>
+        <vxe-toolbar :data="tableData" :refresh="{query: reload}" export setting>
           <template v-slot:buttons>
             <vxe-button @click="insertEvent">{{ $t('app.body.button.insert') }}</vxe-button>
             <vxe-button @click="removeEvent">移除选中</vxe-button>
             <vxe-button @click="getInsertEvent">获取新增</vxe-button>
             <vxe-button @click="getRemoveEvent">获取删除</vxe-button>
             <vxe-button @click="getUpdateEvent">获取修改</vxe-button>
+            <vxe-button @click="saveEvent">保存</vxe-button>
           </template>
         </vxe-toolbar>
 
         <vxe-table
           resizable
           ref="xTree"
+          row-id="id"
+          :loading="loading"
           :tree-config="treeConfig"
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
           :data="tableData">
@@ -74,6 +81,7 @@ export default {
         export default {
           data () {
             return {
+              loading: false,
               ttableData: [],
               removeList: [],
               treeConfig: {
@@ -82,9 +90,19 @@ export default {
             }
           },
           created () {
-            this.tableData = window.MOCK_TREE_DATA_LIST.slice(0)
+            this.findList()
           },
           methods: {
+            findList () {
+              this.loading = true
+              return new Promise(resolve => {
+                setTimeout(() => {
+                  this.tableData = this.$utils.clone(window.MOCK_TREE_DATA_LIST, true)
+                  this.loading = false
+                  resolve(this.tableData)
+                }, 300)
+              })
+            },
             insertEvent () {
               let xTree = this.$refs.xTree
               xTree.createRow({
@@ -111,6 +129,14 @@ export default {
               })
               xTree.refreshData()
             },
+            reload () {
+              // 清除所有状态
+              this.$refs.xTree.clearAll()
+              return this.findList()
+            },
+            saveEvent () {
+              this.findList()
+            },
             getInsertEvent () {
               let insertRecords = this.$utils.filterTree(this.tableData, item => item.isNew, this.treeConfig)
               this.$XModal.alert(insertRecords.length)
@@ -130,7 +156,7 @@ export default {
     }
   },
   created () {
-    this.tableData = this.$utils.clone(window.MOCK_TREE_DATA_LIST, true)
+    this.findList()
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
@@ -138,6 +164,16 @@ export default {
     })
   },
   methods: {
+    findList () {
+      this.loading = true
+      return new Promise(resolve => {
+        setTimeout(() => {
+          this.tableData = this.$utils.clone(window.MOCK_TREE_DATA_LIST, true)
+          this.loading = false
+          resolve(this.tableData)
+        }, 300)
+      })
+    },
     insertEvent () {
       let xTree = this.$refs.xTree
       xTree.createRow({
@@ -163,6 +199,14 @@ export default {
         }
       })
       xTree.refreshData()
+    },
+    reload () {
+      // 清除所有状态
+      this.$refs.xTree.clearAll()
+      return this.findList()
+    },
+    saveEvent () {
+      this.findList()
     },
     getInsertEvent () {
       let insertRecords = this.$utils.filterTree(this.tableData, item => item.isNew, this.treeConfig)

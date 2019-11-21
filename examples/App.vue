@@ -584,7 +584,6 @@ export default {
             },
             {
               label: 'app.aside.nav.crudTreeToolbar',
-              disabled: true,
               locat: {
                 name: 'GridTreeEdit'
               }

@@ -209,8 +209,8 @@ export const Cell = {
    * 多选
    */
   renderSelectionHeader (h, params) {
-    let { $table, column, isHidden, isIndeterminate, isAllCheckboxDisabled } = params
-    let { vSize } = $table
+    let { $table, column, isHidden } = params
+    let { vSize, isIndeterminate, isAllCheckboxDisabled } = $table
     let { slots, own } = column
     let headerTitle = own.title || own.label
     // 在 v3.0 中废弃 selectConfig
@@ -379,7 +379,7 @@ export const Cell = {
     let { $table, isHidden } = params
     let expandActive = false
     if (!isHidden) {
-      expandActive = $table.expandeds.indexOf(params.row) > -1
+      expandActive = $table.rowExpandeds.indexOf(params.row) > -1
     }
     return [
       h('span', {

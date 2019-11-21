@@ -247,7 +247,7 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
     columnStore,
     scrollYStore,
     editStore,
-    expandeds,
+    rowExpandeds,
     getColumnMapIndex } = $table
   let { leftList, rightList } = columnStore
   let rows = []
@@ -299,7 +299,7 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
       }))
     )
     // 如果行被展开了
-    if (expandeds.length && expandeds.indexOf(row) > -1) {
+    if (rowExpandeds.length && rowExpandeds.indexOf(row) > -1) {
       let column = XEUtils.find(tableColumn, column => column.type === 'expand')
       let columnIndex = getColumnMapIndex(column)
       let cellStyle

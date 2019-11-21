@@ -349,7 +349,7 @@ export default {
       // 表尾合计数据
       footerData: [],
       // 已展开的行
-      expandeds: [],
+      rowExpandeds: [],
       // 已展开树节点
       treeExpandeds: [],
       // 树节点不确定状态的列表
@@ -998,7 +998,7 @@ export default {
       // 是否加载了数据
         this.isLoadData = true
         this.handleTableData(true)
-        this.reserveCheckSelection()
+        this.handleReserveStatus()
         this.checkSelectionStatus()
         rest = this.$nextTick()
         if (!notRefresh) {
@@ -2756,20 +2756,48 @@ export default {
         }
       }
     },
-    // 保留选中状态
-    reserveCheckSelection () {
-      let { fullDataRowIdData, selectReserveRowMap } = this
+    // 还原展开、选中等相关状态
+    handleReserveStatus () {
+      let { rowId, treeConfig, fullDataRowIdData, selectReserveRowMap } = this
       // 在 v3.0 中废弃 selectConfig
       let checkboxConfig = this.checkboxConfig || this.selectConfig || {}
       let reserveSelection = []
+      let reserveRowExpandeds = []
+      let reserveTreeExpandeds = []
+      let reserveTreeIndeterminates = []
+      // 复选框
+      if (rowId) {
+        this.handleReserveByRowid(this.selection, reserveSelection)
+      }
       if (checkboxConfig.reserve) {
         Object.keys(selectReserveRowMap).forEach(rowid => {
-          if (fullDataRowIdData[rowid]) {
+          if (fullDataRowIdData[rowid] && reserveSelection.indexOf(fullDataRowIdData[rowid].row) === -1) {
             reserveSelection.push(fullDataRowIdData[rowid].row)
           }
         })
       }
       this.selection = reserveSelection
+      // 行展开
+      if (rowId) {
+        this.handleReserveByRowid(this.rowExpandeds, reserveRowExpandeds)
+      }
+      this.rowExpandeds = reserveRowExpandeds
+      // 树展开
+      if (rowId && treeConfig) {
+        this.handleReserveByRowid(this.treeIndeterminates, reserveTreeIndeterminates)
+        this.handleReserveByRowid(this.treeExpandeds, reserveTreeExpandeds)
+      }
+      this.treeExpandeds = reserveTreeExpandeds
+      this.treeIndeterminates = reserveTreeIndeterminates
+    },
+    handleReserveByRowid (list, rest) {
+      let fullDataRowIdData = this.fullDataRowIdData
+      list.forEach(row => {
+        const rowid = UtilTools.getRowid(this, row)
+        if (fullDataRowIdData[rowid]) {
+          rest.push(fullDataRowIdData[rowid].row)
+        }
+      })
     },
     /**
      * 获取保留选中的行
@@ -3644,7 +3672,7 @@ export default {
       let { expandConfig = {}, tableFullData, fullDataRowIdData } = this
       let { expandAll, expandRowKeys } = expandConfig
       if (expandAll) {
-        this.expandeds = tableFullData.slice(0)
+        this.rowExpandeds = tableFullData.slice(0)
       } else if (expandRowKeys) {
         let defExpandeds = []
         expandRowKeys.forEach(rowid => {
@@ -3652,11 +3680,11 @@ export default {
             defExpandeds.push(fullDataRowIdData[rowid].row)
           }
         })
-        this.expandeds = defExpandeds
+        this.rowExpandeds = defExpandeds
       }
     },
     setAllRowExpansion (expanded) {
-      this.expandeds = expanded ? this.tableFullData.slice(0) : []
+      this.rowExpandeds = expanded ? this.tableFullData.slice(0) : []
       return this.$nextTick().then(this.recalculate)
     },
     /**
@@ -3665,7 +3693,7 @@ export default {
      * 支持多行
      */
     setRowExpansion (rows, expanded) {
-      let { expandeds, expandConfig = {} } = this
+      let { rowExpandeds, expandConfig = {} } = this
       let isToggle = arguments.length === 1
       if (rows) {
         if (!XEUtils.isArray(rows)) {
@@ -3673,18 +3701,18 @@ export default {
         }
         if (expandConfig.accordion) {
           // 只能同时展开一个
-          expandeds.length = 0
+          rowExpandeds.length = 0
           rows = rows.slice(rows.length - 1, rows.length)
         }
         rows.forEach(row => {
-          let index = expandeds.indexOf(row)
+          let index = rowExpandeds.indexOf(row)
           if (index > -1) {
             if (isToggle || !expanded) {
-              expandeds.splice(index, 1)
+              rowExpandeds.splice(index, 1)
             }
           } else {
             if (isToggle || expanded) {
-              expandeds.push(row)
+              rowExpandeds.push(row)
             }
           }
         })
@@ -3701,15 +3729,15 @@ export default {
      * @param {Row} row 行对象
      */
     isExpandByRow (row) {
-      return this.expandeds.indexOf(row) > -1
+      return this.rowExpandeds.indexOf(row) > -1
     },
     clearRowExpand () {
-      const isExists = this.expandeds.length
-      this.expandeds = []
+      const isExists = this.rowExpandeds.length
+      this.rowExpandeds = []
       return this.$nextTick().then(() => isExists ? this.recalculate() : 0)
     },
     getRowExpandRecords () {
-      return this.expandeds.slice(0)
+      return this.rowExpandeds.slice(0)
     },
     getTreeExpandRecords () {
       return this.treeExpandeds.slice(0)
@@ -3721,7 +3749,7 @@ export default {
       if (this.treeConfig) {
         return {
           config: this.treeConfig,
-          expandeds: this.getTreeExpandRecords()
+          rowExpandeds: this.getTreeExpandRecords()
         }
       }
       return null

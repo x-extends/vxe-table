@@ -82,7 +82,7 @@ module.exports = {
         fullscreen: '全屏缩放',
         dynamicColumn: '实现可配置动态列',
         baseTree: '基础树',
-        crudTreeToolbar: '树 + 增删改查 + 工具栏',
+        crudTreeToolbar: '树表格 + 工具栏',
 
         scroll: '大数据表格',
         bigData: '虚拟滚动',
@@ -247,7 +247,7 @@ module.exports = {
       },
       table: {
         desc: {
-          data: '显示的数据',
+          data: '表格数据（需要注意更新数据是不会重置状态）',
           columns: '列配置',
           customs: '初始化显示/隐藏列（通过 visible 设置为 false 则默认隐藏列）',
           height: '表格的高度；支持铺满父容器或者固定宽高',

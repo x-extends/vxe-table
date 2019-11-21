@@ -82,7 +82,7 @@ module.exports = {
         fullscreen: 'Full screen zoom',
         dynamicColumn: 'Configurable dynamic columns',
         baseTree: 'Basics tree',
-        crudTreeToolbar: 'Tree + CRUD + Toolbar',
+        crudTreeToolbar: 'Tree + Toolbar',
 
         scroll: 'Big table',
         bigData: 'Virtual Scroller',
@@ -247,7 +247,7 @@ module.exports = {
       },
       table: {
         desc: {
-          data: 'Table data',
+          data: 'Table data(note that updating data does not reset the status)',
           columns: 'Column configuration',
           customs: 'Initialize the show/hide column (hide the column by default by setting visible to false)',
           height: 'Table height, supports adaptive or fixed width and height',
