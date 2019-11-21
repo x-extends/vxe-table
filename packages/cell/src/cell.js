@@ -373,7 +373,7 @@ export const Cell = {
     let { $table, isHidden } = params
     let expandActive = false
     if (!isHidden) {
-      expandActive = $table.expandeds.indexOf(params.row) > -1
+      expandActive = $table.rowExpandeds.indexOf(params.row) > -1
     }
     return [
       h('span', {

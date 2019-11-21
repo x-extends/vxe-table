@@ -238,7 +238,7 @@ export default {
       // 表尾合计数据
       footerData: [],
       // 已展开的行
-      expandeds: [],
+      rowExpandeds: [],
       // 已展开树节点
       treeExpandeds: [],
       // 树节点不确定状态的列表

@@ -201,7 +201,7 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
     scrollYLoad,
     scrollYStore,
     editStore,
-    expandeds,
+    rowExpandeds,
     getColumnIndex } = $table
   let rows = []
   tableData.forEach((row, $rowIndex) => {
@@ -248,7 +248,7 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
       }))
     )
     // 如果行被展开了
-    if (expandeds.length && expandeds.indexOf(row) > -1) {
+    if (rowExpandeds.length && rowExpandeds.indexOf(row) > -1) {
       let column = XEUtils.find(tableColumn, column => column.type === 'expand')
       let columnIndex = getColumnIndex(column)
       let cellStyle
