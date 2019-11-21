@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">通过 <table-column-api-link prop="slot"/>插槽（实时） 或者 <table-column-api-link prop="formatter"/> 格式化内容（值改变时），自动计算联动的行数据</p>
+    <p class="tip">通过 <table-column-api-link prop="slot"/>插槽（实时） 或者 <table-column-api-link prop="formatter"/> 格式化内容（值改变时），自动计算联动的行数据，还可以通过添加 <table-column-api-link prop="immediate"/> 启用实时运算</p>
 
     <vxe-table
       border
