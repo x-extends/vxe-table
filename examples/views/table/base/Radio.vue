@@ -38,7 +38,7 @@
     </pre>
 
     <p class="tip">
-      还可以通过 <table-api-link prop="checkMethod"/> 方法控制 CheckBox 是否允许用户手动选中，还可以配置 <table-api-link prop="labelField"/> 列显示属性<br>
+      还可以通过 <table-api-link prop="checkMethod"/> 方法控制 checkbox 是否允许用户手动选中，还可以配置 <table-api-link prop="labelField"/> 列显示属性<br>
       禁止用户手动选中，但是可以通过函数式调用强制选中，该功能对于某些场景需要强制选中指定行时非常有用
     </p>
 

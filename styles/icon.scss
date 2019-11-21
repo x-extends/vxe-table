@@ -385,7 +385,7 @@
   &:after {
     @extend %PseudoClass;
     content: "?";
-    top: 0.04em;
+    top: 0.06em;
     left: 0.28em;
     font-size: 0.8em;
     font-weight: 700;
@@ -401,7 +401,7 @@
   &:after {
     @extend %PseudoClass;
     content: "!";
-    top: -0.04em;
+    top: -0.02em;
     left: 0.46em;
     font-size: 0.8em;
     font-weight: 700;
