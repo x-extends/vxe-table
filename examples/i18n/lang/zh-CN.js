@@ -114,6 +114,7 @@ module.exports = {
         forceCellValid: '数据校验 cell + 强制锁定',
         forceRowValid: '数据校验 row + 强制锁定',
         keyboard: '键盘导航',
+        dataCount: '数据联动计算',
         uniqueSelect: '唯一下拉选项',
         cascadingSelect: '联动下拉选项',
         upload: '文件上传',
