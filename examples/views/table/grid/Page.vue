@@ -37,7 +37,10 @@ export default {
         total: 0,
         currentPage: 1,
         pageSize: 10,
-        pageSizes: [10, 20, 50, 100, 200, 500]
+        align: 'left',
+        pageSizes: [10, 20, 50, 100, 200, 500],
+        layouts: ['Sizes', 'PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'FullJump', 'Total'],
+        perfect: true
       },
       tableColumn: [
         { type: 'index', width: 60 },
@@ -69,7 +72,11 @@ export default {
               tablePage: {
                 total: 0,
                 currentPage: 1,
-                pageSize: 10
+                pageSize: 10,
+                align: 'left',
+                pageSizes: [10, 20, 50, 100, 200, 500],
+                layouts: ['Sizes', 'PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'FullJump', 'Total'],
+                perfect: true
               },
               tableColumn: [
                 { type: 'index', width: 60 },

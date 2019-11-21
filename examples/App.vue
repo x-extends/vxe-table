@@ -527,6 +527,18 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.cellDisable',
+              locat: {
+                name: 'GridCellDisable'
+              }
+            },
+            {
+              label: 'app.aside.nav.rowDisable',
+              locat: {
+                name: 'GridRowDisable'
+              }
+            },
+            {
               label: 'app.aside.nav.crudToolbar',
               locat: {
                 name: 'GridToolbar'
@@ -536,6 +548,12 @@ export default {
               label: 'app.aside.nav.customToolbar',
               locat: {
                 name: 'GridCustomToolbar'
+              }
+            },
+            {
+              label: 'app.aside.nav.fullscreen',
+              locat: {
+                name: 'GridFullscreen'
               }
             },
             {

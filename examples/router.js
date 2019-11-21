@@ -81,8 +81,11 @@ const GridFullQuery = () => import(/* webpackChunkName: "grid" */ './views/table
 const GridProxy = () => import(/* webpackChunkName: "grid" */ './views/table/grid/Proxy.vue')
 const GridPageProxy = () => import(/* webpackChunkName: "grid" */ './views/table/grid/PageProxy.vue')
 const GridEdit = () => import(/* webpackChunkName: "grid" */ './views/table/grid/Edit.vue')
+const GridCellDisable = () => import(/* webpackChunkName: "grid" */ './views/table/grid/CellDisable.vue')
+const GridRowDisable = () => import(/* webpackChunkName: "grid" */ './views/table/grid/RowDisable.vue')
 const GridToolbar = () => import(/* webpackChunkName: "grid" */ './views/table/grid/Toolbar.vue')
 const GridCustomToolbar = () => import(/* webpackChunkName: "grid" */ './views/table/grid/CustomToolbar.vue')
+const GridFullscreen = () => import(/* webpackChunkName: "grid" */ './views/table/grid/Fullscreen.vue')
 const GridDynamic = () => import(/* webpackChunkName: "grid" */ './views/table/grid/Dynamic.vue')
 const GridMenu = () => import(/* webpackChunkName: "grid" */ './views/table/grid/Menu.vue')
 const GridSpan = () => import(/* webpackChunkName: "grid" */ './views/table/grid/Span.vue')
@@ -700,6 +703,16 @@ export default new Router({
       component: GridEdit
     },
     {
+      path: '/table/grid/cellDisable',
+      name: 'GridCellDisable',
+      component: GridCellDisable
+    },
+    {
+      path: '/table/grid/rowDisable',
+      name: 'GridRowDisable',
+      component: GridRowDisable
+    },
+    {
       path: '/table/grid/toolbar',
       name: 'GridToolbar',
       component: GridToolbar
@@ -708,6 +721,11 @@ export default new Router({
       path: '/table/grid/customToolbar',
       name: 'GridCustomToolbar',
       component: GridCustomToolbar
+    },
+    {
+      path: '/table/grid/fullscreen',
+      name: 'GridFullscreen',
+      component: GridFullscreen
     },
     {
       path: '/table/grid/dynamic',
