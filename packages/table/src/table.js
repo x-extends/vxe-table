@@ -511,9 +511,9 @@ export default {
     if (!UtilTools.getRowkey(this)) {
       UtilTools.error('vxe.error.emptyProp', ['row-id'])
     }
-    // if (this.selectConfig) {
-    //   UtilTools.warn('vxe.error.delProp', ['select-config', 'checkbox-config'])
-    // }
+    if (this.selectConfig) {
+      UtilTools.warn('vxe.error.delProp', ['select-config', 'checkbox-config'])
+    }
     // 检查是否有安装需要的模块
     let errorModuleName
     if (!VXETable._edit && this.editConfig) {
