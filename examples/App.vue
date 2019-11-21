@@ -125,14 +125,14 @@ export default {
           children: [
             {
               label: 'app.aside.nav.base',
-              demoUrl: 'https://jsrun.net/VrXKp',
+              demoUrl: 'https://jsrun.net/VrXKp/edit',
               locat: {
                 name: 'TableBasic'
               }
             },
             {
               label: 'app.aside.nav.size',
-              demoUrl: 'https://jsrun.net/PmXKp',
+              demoUrl: 'https://jsrun.net/PmXKp/edit',
               locat: {
                 name: 'TableSize'
               }
@@ -145,49 +145,49 @@ export default {
             },
             {
               label: 'app.aside.nav.stripe',
-              demoUrl: 'https://jsrun.net/zrXKp',
+              demoUrl: 'https://jsrun.net/zrXKp/edit',
               locat: {
                 name: 'TableStripe'
               }
             },
             {
               label: 'app.aside.nav.border',
-              demoUrl: 'https://jsrun.net/QrXKp',
+              demoUrl: 'https://jsrun.net/QrXKp/edit',
               locat: {
                 name: 'TableBorder'
               }
             },
             {
               label: 'app.aside.nav.style',
-              demoUrl: 'https://jsrun.net/EmXKp',
+              demoUrl: 'https://jsrun.net/EmXKp/edit',
               locat: {
                 name: 'TableStyle'
               }
             },
             {
               label: 'app.aside.nav.dynamicStyle',
-              demoUrl: 'https://jsrun.pro/mVWKp',
+              demoUrl: 'https://jsrun.pro/mVWKp/edit',
               locat: {
                 name: 'TableDynamicStyle'
               }
             },
             {
               label: 'app.aside.nav.hideHead',
-              demoUrl: 'https://jsrun.net/7mXKp',
+              demoUrl: 'https://jsrun.net/7mXKp/edit',
               locat: {
                 name: 'TableHeader'
               }
             },
             {
               label: 'app.aside.nav.resizable',
-              demoUrl: 'https://jsrun.net/5AXKp',
+              demoUrl: 'https://jsrun.net/5AXKp/edit',
               locat: {
                 name: 'TableResizable'
               }
             },
             {
               label: 'app.aside.nav.fluidHeight',
-              demoUrl: 'https://jsrun.net/smXKp',
+              demoUrl: 'https://jsrun.net/smXKp/edit',
               locat: {
                 name: 'TableMaxHeight'
               }
@@ -200,35 +200,35 @@ export default {
             },
             {
               label: 'app.aside.nav.height',
-              demoUrl: 'https://jsrun.net/JrXKp',
+              demoUrl: 'https://jsrun.net/JrXKp/edit',
               locat: {
                 name: 'TableHeight'
               }
             },
             {
               label: 'app.aside.nav.fixed',
-              demoUrl: 'https://jsrun.net/TrXKp',
+              demoUrl: 'https://jsrun.net/TrXKp/edit',
               locat: {
                 name: 'TableFixed'
               }
             },
             {
               label: 'app.aside.nav.fullFixed',
-              demoUrl: 'https://jsrun.net/8rXKp',
+              demoUrl: 'https://jsrun.net/8rXKp/edit',
               locat: {
                 name: 'TableFixedFull'
               }
             },
             {
               label: 'app.aside.nav.group',
-              demoUrl: 'https://jsrun.net/7rXKp',
+              demoUrl: 'https://jsrun.net/7rXKp/edit',
               locat: {
                 name: 'TableGroup'
               }
             },
             {
               label: 'app.aside.nav.seq',
-              demoUrl: 'https://jsrun.net/xrXKp',
+              demoUrl: 'https://jsrun.net/xrXKp/edit',
               locat: {
                 name: 'TableIndex'
               }
@@ -247,28 +247,28 @@ export default {
             },
             {
               label: 'app.aside.nav.radio',
-              demoUrl: 'https://jsrun.net/9rXKp',
+              demoUrl: 'https://jsrun.net/9rXKp/edit',
               locat: {
                 name: 'TableRadio'
               }
             },
             {
               label: 'app.aside.nav.checkbox',
-              demoUrl: 'https://jsrun.net/erXKp',
+              demoUrl: 'https://jsrun.net/erXKp/edit',
               locat: {
                 name: 'TableSelection'
               }
             },
             {
               label: 'app.aside.nav.sort',
-              demoUrl: 'https://jsrun.net/crXKp',
+              demoUrl: 'https://jsrun.net/crXKp/edit',
               locat: {
                 name: 'TableSort'
               }
             },
             {
               label: 'app.aside.nav.filter',
-              demoUrl: 'https://jsrun.net/drXKp',
+              demoUrl: 'https://jsrun.net/drXKp/edit',
               locat: {
                 name: 'TableFilter'
               }
@@ -281,14 +281,14 @@ export default {
             },
             {
               label: 'app.aside.nav.loading',
-              demoUrl: 'https://jsrun.net/GjXKp',
+              demoUrl: 'https://jsrun.net/GjXKp/edit',
               locat: {
                 name: 'TableLoading'
               }
             },
             {
               label: 'app.aside.nav.format',
-              demoUrl: 'https://jsrun.net/FrXKp',
+              demoUrl: 'https://jsrun.net/FrXKp/edit',
               locat: {
                 name: 'TableFormat'
               }
@@ -309,14 +309,14 @@ export default {
             },
             {
               label: 'app.aside.nav.template',
-              demoUrl: 'https://jsrun.net/DjXKp',
+              demoUrl: 'https://jsrun.net/DjXKp/edit',
               locat: {
                 name: 'TableTemplate'
               }
             },
             {
               label: 'app.aside.nav.dynamic',
-              demoUrl: 'https://jsrun.pro/SIWKp',
+              demoUrl: 'https://jsrun.pro/SIWKp/edit',
               locat: {
                 name: 'TableDynamic'
               }
@@ -335,14 +335,14 @@ export default {
             },
             {
               label: 'app.aside.nav.span',
-              demoUrl: 'https://jsrun.net/5jXKp',
+              demoUrl: 'https://jsrun.net/5jXKp/edit',
               locat: {
                 name: 'TableSpan'
               }
             },
             {
               label: 'app.aside.nav.footer',
-              demoUrl: 'https://jsrun.net/dmXKp',
+              demoUrl: 'https://jsrun.net/dmXKp/edit',
               locat: {
                 name: 'TableFooter'
               }
@@ -355,14 +355,14 @@ export default {
             },
             {
               label: 'app.aside.nav.import',
-              demoUrl: 'https://jsrun.pro/UaWKp',
+              demoUrl: 'https://jsrun.pro/UaWKp/edit',
               locat: {
                 name: 'TableImport'
               }
             },
             {
               label: 'app.aside.nav.export',
-              demoUrl: 'https://jsrun.net/cmXKp',
+              demoUrl: 'https://jsrun.net/cmXKp/edit',
               locat: {
                 name: 'TableExport'
               }
@@ -381,7 +381,7 @@ export default {
             },
             {
               label: 'app.aside.nav.contextMenu',
-              demoUrl: 'https://jsrun.net/VjXKp',
+              demoUrl: 'https://jsrun.net/VjXKp/edit',
               locat: {
                 name: 'TableMenu'
               }
@@ -394,7 +394,7 @@ export default {
             },
             {
               label: 'app.aside.nav.expandRow',
-              demoUrl: 'https://jsrun.net/eRXKp',
+              demoUrl: 'https://jsrun.net/eRXKp/edit',
               locat: {
                 name: 'TableExpand'
               }
@@ -407,7 +407,7 @@ export default {
             },
             {
               label: 'app.aside.nav.customs',
-              demoUrl: 'https://jsrun.net/PrXKp',
+              demoUrl: 'https://jsrun.net/PrXKp/edit',
               locat: {
                 name: 'TableCustom'
               }
@@ -463,21 +463,21 @@ export default {
           children: [
             {
               label: 'app.aside.nav.base',
-              demoUrl: 'https://jsrun.net/5RXKp',
+              demoUrl: 'https://jsrun.net/5RXKp/edit',
               locat: {
                 name: 'GridBasic'
               }
             },
             {
               label: 'app.aside.nav.group',
-              demoUrl: 'https://jsrun.pro/M8WKp',
+              demoUrl: 'https://jsrun.pro/M8WKp/edit',
               locat: {
                 name: 'GridGroup'
               }
             },
             {
               label: 'app.aside.nav.reverse',
-              demoUrl: 'https://jsrun.pro/zIWKp',
+              demoUrl: 'https://jsrun.pro/zIWKp/edit',
               locat: {
                 name: 'GridReverse'
               }
@@ -502,14 +502,14 @@ export default {
             },
             {
               label: 'app.aside.nav.proxy',
-              demoUrl: 'https://jsrun.pro/XwWKp',
+              demoUrl: 'https://jsrun.pro/XwWKp/edit',
               locat: {
                 name: 'GridProxy'
               }
             },
             {
               label: 'app.aside.nav.proxyPage',
-              demoUrl: 'https://jsrun.pro/ywWKp',
+              demoUrl: 'https://jsrun.pro/ywWKp/edit',
               locat: {
                 name: 'GridPageProxy'
               }
@@ -564,7 +564,7 @@ export default {
             },
             {
               label: 'app.aside.nav.contextMenu',
-              demoUrl: 'https://jsrun.pro/m6WKp',
+              demoUrl: 'https://jsrun.pro/m6WKp/edit',
               locat: {
                 name: 'GridMenu'
               }
@@ -591,7 +591,7 @@ export default {
             },
             {
               label: 'app.aside.nav.full',
-              demoUrl: 'https://jsrun.pro/r6WKp',
+              demoUrl: 'https://jsrun.pro/r6WKp/edit',
               locat: {
                 name: 'GridFullEdit'
               }
@@ -605,28 +605,28 @@ export default {
           children: [
             {
               label: 'app.aside.nav.base',
-              demoUrl: 'https://jsrun.pro/YfWKp',
+              demoUrl: 'https://jsrun.pro/YfWKp/edit',
               locat: {
                 name: 'TableTreeBasic'
               }
             },
             {
               label: 'app.aside.nav.radio',
-              demoUrl: 'https://jsrun.pro/kfWKp',
+              demoUrl: 'https://jsrun.pro/kfWKp/edit',
               locat: {
                 name: 'TableTreeRadio'
               }
             },
             {
               label: 'app.aside.nav.checkbox',
-              demoUrl: 'https://jsrun.pro/B6bKp',
+              demoUrl: 'https://jsrun.pro/B6bKp/edit',
               locat: {
                 name: 'TableTreeSelection'
               }
             },
             {
               label: 'app.aside.nav.fixed',
-              demoUrl: 'https://jsrun.pro/ifWKp',
+              demoUrl: 'https://jsrun.pro/ifWKp/edit',
               locat: {
                 name: 'TableTreeFixed'
               }
@@ -639,14 +639,14 @@ export default {
             },
             {
               label: 'app.aside.nav.groupSummary',
-              demoUrl: 'https://jsrun.pro/KVWKp',
+              demoUrl: 'https://jsrun.pro/KVWKp/edit',
               locat: {
                 name: 'TableTreeGroupSummary'
               }
             },
             {
               label: 'app.aside.nav.groupSummaryCount',
-              demoUrl: 'https://jsrun.pro/GTWKp',
+              demoUrl: 'https://jsrun.pro/GTWKp/edit',
               locat: {
                 name: 'TableTreeGroupSummaryCount'
               }
@@ -756,7 +756,7 @@ export default {
           children: [
             {
               label: 'app.aside.nav.bigData',
-              demoUrl: 'https://jsrun.net/XRXKp',
+              demoUrl: 'https://jsrun.net/XRXKp/edit',
               locat: {
                 name: 'TableScroll'
               }
@@ -775,7 +775,7 @@ export default {
             },
             {
               label: 'app.aside.nav.edit',
-              demoUrl: 'https://jsrun.pro/MIWKp',
+              demoUrl: 'https://jsrun.pro/MIWKp/edit',
               locat: {
                 name: 'TableScrollEdit'
               }
@@ -814,14 +814,14 @@ export default {
             },
             {
               label: 'app.aside.nav.partialLoad',
-              demoUrl: 'https://jsrun.pro/EVWKp',
+              demoUrl: 'https://jsrun.pro/EVWKp/edit',
               locat: {
                 name: 'TableScrollPartialLoad'
               }
             },
             {
               label: 'app.aside.nav.fullPartialLoad',
-              demoUrl: 'https://jsrun.pro/sVWKp',
+              demoUrl: 'https://jsrun.pro/sVWKp/edit',
               locat: {
                 name: 'TableScrollFullPartialLoad'
               }
@@ -858,7 +858,7 @@ export default {
             },
             {
               label: 'app.aside.nav.big1wRow1wCol',
-              demoUrl: 'https://jsrun.net/ULyKp',
+              demoUrl: 'https://jsrun.net/ULyKp/edit',
               locat: {
                 name: 'TableScrollCols'
               }
@@ -892,28 +892,28 @@ export default {
           children: [
             {
               label: 'app.aside.nav.manual',
-              demoUrl: 'https://jsrun.pro/SWWKp',
+              demoUrl: 'https://jsrun.pro/SWWKp/edit',
               locat: {
                 name: 'TableEditManual'
               }
             },
             {
               label: 'app.aside.nav.click',
-              demoUrl: 'https://jsrun.pro/4WWKp',
+              demoUrl: 'https://jsrun.pro/4WWKp/edit',
               locat: {
                 name: 'TableEditClick'
               }
             },
             {
               label: 'app.aside.nav.dblclick',
-              demoUrl: 'https://jsrun.pro/KfWKp',
+              demoUrl: 'https://jsrun.pro/KfWKp/edit',
               locat: {
                 name: 'TableEditDBLClick'
               }
             },
             {
               label: 'app.aside.nav.select',
-              demoUrl: 'https://jsrun.pro/pfWKp',
+              demoUrl: 'https://jsrun.pro/pfWKp/edit',
               locat: {
                 name: 'TableEditSelect'
               }
@@ -1030,7 +1030,7 @@ export default {
             },
             {
               label: 'app.aside.nav.dataCount',
-              demoUrl: 'https://jsrun.pro/JQWKp',
+              demoUrl: 'https://jsrun.pro/JQWKp/edit',
               locat: {
                 name: 'TableEditDataCount'
               }
@@ -1049,7 +1049,7 @@ export default {
             },
             {
               label: 'app.aside.nav.events',
-              demoUrl: 'https://jsrun.pro/QIWKp',
+              demoUrl: 'https://jsrun.pro/QIWKp/edit',
               locat: {
                 name: 'TableEditEvents'
               }
@@ -1089,7 +1089,7 @@ export default {
           children: [
             {
               label: 'app.aside.nav.edit',
-              demoUrl: 'https://jsrun.pro/uIWKp',
+              demoUrl: 'https://jsrun.pro/uIWKp/edit',
               locat: {
                 name: 'TableBadEdit'
               }
@@ -1194,7 +1194,7 @@ export default {
             },
             {
               label: 'app.aside.nav.sortablejsColumn',
-              demoUrl: 'https://jsrun.net/MibKp',
+              demoUrl: 'https://jsrun.net/MibKp/edit',
               locat: {
                 name: 'TableSortableColumn'
               }
@@ -1214,21 +1214,21 @@ export default {
           children: [
             {
               label: 'app.aside.nav.elementPlugin',
-              demoUrl: 'https://jsrun.pro/dwbKp',
+              demoUrl: 'https://jsrun.pro/dwbKp/edit',
               locat: {
                 name: 'TablePluginElementConfig'
               }
             },
             {
               label: 'app.aside.nav.elementFilterPlugin',
-              demoUrl: 'https://jsrun.pro/BWWKp',
+              demoUrl: 'https://jsrun.pro/BWWKp/edit',
               locat: {
                 name: 'TablePluginElementFilter'
               }
             },
             {
               label: 'app.aside.nav.elementPluginMore',
-              demoUrl: 'https://jsrun.pro/uWWKp',
+              demoUrl: 'https://jsrun.pro/uWWKp/edit',
               locat: {
                 name: 'TablePluginElementPage'
               }
@@ -1278,7 +1278,7 @@ export default {
             },
             {
               label: 'app.aside.nav.chartsPlugin',
-              demoUrl: 'https://jsrun.pro/9aWKp',
+              demoUrl: 'https://jsrun.pro/9aWKp/edit',
               disabled: true,
               locat: {
                 name: 'TablePluginCharts'
@@ -1286,14 +1286,14 @@ export default {
             },
             {
               label: 'app.aside.nav.exportXLSXPlugin',
-              demoUrl: 'https://jsrun.pro/PIWKp',
+              demoUrl: 'https://jsrun.pro/PIWKp/edit',
               locat: {
                 name: 'TablePluginExportXLSX'
               }
             },
             {
               label: 'app.aside.nav.exportPDFPlugin',
-              demoUrl: 'https://jsrun.pro/I8WKp',
+              demoUrl: 'https://jsrun.pro/I8WKp/edit',
               locat: {
                 name: 'TablePluginExportPDF'
               }

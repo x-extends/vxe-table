@@ -648,9 +648,9 @@ export default {
     if (radioConfig.labelProp) {
       UtilTools.warn('vxe.error.delProp', ['radio-config.labelProp', 'radio-config.labelField'])
     }
-    // if (this.selectConfig) {
-    //   UtilTools.warn('vxe.error.delProp', ['select-config', 'checkbox-config'])
-    // }
+    if (this.selectConfig) {
+      UtilTools.warn('vxe.error.delProp', ['select-config', 'checkbox-config'])
+    }
     if (checkboxConfig.checkProp) {
       UtilTools.warn('vxe.error.delProp', ['select-config.checkProp', 'select-config.checkField'])
     }
