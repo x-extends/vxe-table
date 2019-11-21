@@ -22,7 +22,7 @@
 * 计划
   * [x] v1 100% 实现表格的一切实用的功能
   * [x] v2 &nbsp;95% 性能优化（小部分脱离 vue 使用原生实现），同时兼具功能与性能
-  * [ ] v3 &nbsp;&nbsp;0% 实现重构（除了数据双向之外大部分脱离 vue 使用原生实现，不再支持IE），渲染性能大幅提升，基于 Vue3 并使用 typescript 开发
+  * [ ] v3 &nbsp;&nbsp;0% 实现重构（除了数据双向之外绝大部分脱离 vue 使用原生实现，不再支持IE，面向现代浏览器），渲染性能大幅提升，基于 Vue3 并使用 typescript 开发
 
 🐬 如果有更好的建议、优化点或 Bug 都欢迎提 [Issues](https://github.com/xuliangzhan/vxe-table/issues)
 
