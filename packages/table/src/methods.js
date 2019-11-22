@@ -995,6 +995,12 @@ const Methods = {
           }
           if (tableElem) {
             tableElem.style.width = tWidth === null ? tWidth : `${tWidth + scrollbarWidth}px`
+            // 修复 IE 中高度无法自适应问题
+            if (browse.msie) {
+              XEUtils.arrayEach(tableElem.querySelectorAll('.vxe-resizable'), resizeElem => {
+                resizeElem.style.height = `${resizeElem.parentNode.offsetHeight}px`
+              })
+            }
           }
 
           let repairElem = elemStore[`${name}-${layout}-repair`]
