@@ -3,7 +3,9 @@ export default {
     error: {
       groupFixed: '如果使用分组表头，固定列必须在左右两侧',
       cellEditRender: '渲染器 "cell-render" 和 "edit-render" 不能同时使用',
-      treeFixedExpand: '树结构的固定列与展开行功能有冲突',
+      treeFixedExpand: '树结构的固定列与展开行有冲突',
+      treeLineExpand: '树结构的节点线与展开行有冲突',
+      treeLineReqProp: '启用树节点线需要设置 "{{0}}"',
       scrollOriginal: '虚拟滚动启用后只能导出源数据，请将设置 "original=true"',
       scrollXNotGroup: '横向虚拟滚动不支持分组表头',
       scrollYReqProp: '纵向虚拟滚动需要设置 "{{0}}"',
@@ -11,7 +13,6 @@ export default {
       useErr: '安装 "{{0}}" 模块时发生错误，顺序不正确',
       barUnableLink: '工具栏无法关联表格',
       toolbarId: '工具栏需要设置唯一 "id"',
-      toolbarDelBtn: '工具栏按钮 "{{0}}" 已废弃，请使用 "{{1}}"',
       reqModule: '缺少 "{{0}}" 模块',
       emptyProp: '参数 "{{0}}" 不允许为空',
       notFunc: '"{{0}}" 方法不存在',

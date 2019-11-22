@@ -334,6 +334,8 @@ export default {
       scrollLeftToRight: false,
       // 右侧固定列是否向左滚动了
       scrollRightToLeft: false,
+      // 行高
+      rowHeight: 0,
       // 复选框，是否全选
       isAllSelected: false,
       // 复选框属性，有选中且非全选状态
@@ -613,7 +615,7 @@ export default {
     }
   },
   created () {
-    let { scrollXStore, scrollYStore, optimizeOpts, ctxMenuOpts, radioConfig = {}, treeConfig, editConfig, loading, showAllOverflow, showHeaderAllOverflow } = this
+    let { scrollXStore, scrollYStore, optimizeOpts, ctxMenuOpts, showOverflow, radioConfig = {}, treeConfig, editConfig, loading, showAllOverflow, showHeaderAllOverflow } = this
     let { scrollX, scrollY } = optimizeOpts
     // 在 v3.0 中废弃 selectConfig
     let checkboxConfig = this.checkboxConfig || this.selectConfig || {}
@@ -650,6 +652,9 @@ export default {
     }
     if (this.selectConfig) {
       UtilTools.warn('vxe.error.delProp', ['select-config', 'checkbox-config'])
+    }
+    if (treeConfig && treeConfig.line && !showOverflow) {
+      UtilTools.warn('vxe.error.treeLineReqProp', ['show-overflow'])
     }
     if (checkboxConfig.checkProp) {
       UtilTools.warn('vxe.error.delProp', ['select-config.checkProp', 'select-config.checkField'])
@@ -741,6 +746,7 @@ export default {
       loading,
       isLoading,
       showHeader,
+      treeConfig,
       border,
       stripe,
       height,
@@ -774,6 +780,7 @@ export default {
         'show--head': showHeader,
         'show--foot': showFooter,
         'has--height': height,
+        'has--tree-line': treeConfig && treeConfig.line,
         'fixed--left': leftList.length,
         'fixed--right': rightList.length,
         't--animat': optimizeOpts.animat,
@@ -1003,6 +1010,7 @@ export default {
       return rest.then(() => {
       // 是否加载了数据
         this.isLoadData = true
+        this.computeRowHeight()
         this.handleTableData(true)
         this.handleReserveStatus()
         this.checkSelectionStatus()
@@ -3979,6 +3987,26 @@ export default {
         this.isLoadData = false
       }
     }, debounceScrollYDuration, { leading: false, trailing: true }),
+    computeRowHeight () {
+      let tableBody = this.$refs.tableBody
+      let tableBodyElem = tableBody ? tableBody.$el : null
+      let tableHeader = this.$refs.tableHeader
+      let rowHeight
+      if (tableBodyElem) {
+        let firstTrElem = tableBodyElem.querySelector('tbody>tr')
+        if (!firstTrElem && tableHeader) {
+          firstTrElem = tableHeader.$el.querySelector('thead>tr')
+        }
+        if (firstTrElem) {
+          rowHeight = firstTrElem.clientHeight
+        }
+      }
+      // 默认的行高
+      if (!rowHeight) {
+        rowHeight = this.rowHeightMaps[this.vSize || 'default']
+      }
+      this.rowHeight = rowHeight
+    },
     // 计算可视渲染相关数据
     computeScrollLoad () {
       return this.$nextTick().then(() => {

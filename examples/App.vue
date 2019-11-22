@@ -400,6 +400,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.expandRowIcon',
+              locat: {
+                name: 'TableExpandIcon'
+              }
+            },
+            {
               label: 'app.aside.nav.toolbar',
               locat: {
                 name: 'Toolbar'
@@ -610,6 +616,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.customIcon',
+              locat: {
+                name: 'TableTreeIcon'
+              }
+            },
+            {
               label: 'app.aside.nav.radio',
               demoUrl: 'https://jsrun.pro/kfWKp/edit',
               locat: {
@@ -699,6 +711,12 @@ export default {
               disabled: true,
               locat: {
                 name: 'TableTreeLazy'
+              }
+            },
+            {
+              label: 'app.aside.nav.treeLine',
+              locat: {
+                name: 'TableTreeLine'
               }
             },
             {

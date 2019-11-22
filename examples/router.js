@@ -58,6 +58,7 @@ const TableFixedType = () => import(/* webpackChunkName: "other" */ './views/tab
 const TableMenu = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Menu.vue')
 const TableMenuPrivilege = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/MenuPrivilege.vue')
 const TableExpand = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Expand.vue')
+const TableExpandIcon = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/ExpandIcon.vue')
 const TableSearch = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Search.vue')
 const Toolbar = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Toolbar.vue')
 const TableCustom = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Custom.vue')
@@ -94,6 +95,7 @@ const GridTreeEdit = () => import(/* webpackChunkName: "grid" */ './views/table/
 const GridFullEdit = () => import(/* webpackChunkName: "grid" */ './views/table/grid/FullEdit.vue')
 
 const TableTreeBasic = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Basic.vue')
+const TableTreeIcon = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Icon.vue')
 const TableTreeSelection = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Selection.vue')
 const TableTreeRadio = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Radio.vue')
 const TableTreeFixed = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Fixed.vue')
@@ -108,6 +110,7 @@ const TableTreeSpan = () => import(/* webpackChunkName: "tree" */ './views/table
 const TableTreeHighlight = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Highlight.vue')
 const TableTreeKeyboard = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Keyboard.vue')
 const TableTreeLazy = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Lazy.vue')
+const TableTreeLine = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Line.vue')
 const TableTreeEdit = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Edit.vue')
 const TableTreeEditCellValid = () => import(/* webpackChunkName: "tree" */ './views/table/tree/CellValid.vue')
 const TableTreeEditRowValid = () => import(/* webpackChunkName: "tree" */ './views/table/tree/RowValid.vue')
@@ -493,6 +496,11 @@ export default new Router({
       component: TableExpand
     },
     {
+      path: '/table/advanced/expandIcon',
+      name: 'TableExpandIcon',
+      component: TableExpandIcon
+    },
+    {
       path: '/table/advanced/search',
       name: 'TableSearch',
       component: TableSearch
@@ -557,6 +565,11 @@ export default new Router({
       path: '/table/tree/basic',
       name: 'TableTreeBasic',
       component: TableTreeBasic
+    },
+    {
+      path: '/table/tree/treeIcon',
+      name: 'TableTreeIcon',
+      component: TableTreeIcon
     },
     {
       path: '/table/tree/selection',
@@ -627,6 +640,11 @@ export default new Router({
       path: '/table/tree/lazy',
       name: 'TableTreeLazy',
       component: TableTreeLazy
+    },
+    {
+      path: '/table/tree/line',
+      name: 'TableTreeLine',
+      component: TableTreeLine
     },
     {
       path: '/table/tree/edit',

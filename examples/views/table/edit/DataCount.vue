@@ -65,8 +65,7 @@ export default {
         export default {
           data () {
             return {
-              tableData: [],
-              sexList: []
+              tableData: []
             }
           },
           methods: {

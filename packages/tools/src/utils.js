@@ -6,12 +6,14 @@ var lastZindex = 0
 var columnUniqueId = 0
 
 class ColumnConfig {
-  constructor (_vm, { renderHeader, renderCell, renderData } = {}) {
+  constructor ($table, _vm, { renderHeader, renderCell, renderData } = {}) {
     if (_vm.cellRender && _vm.editRender) {
       UtilTools.warn('vxe.error.cellEditRender')
     }
     if (_vm.type === 'selection') {
       UtilTools.warn('vxe.error.delProp', ['selection', 'checkbox'])
+    } else if (_vm.type === 'expand' && $table.treeConfig && $table.treeConfig.line) {
+      UtilTools.error('vxe.error.treeLineExpand')
     }
     Object.assign(this, {
       // 基本属性
@@ -189,8 +191,8 @@ export const UtilTools = {
   setCellValue (row, column, value) {
     return XEUtils.set(row, column.property, value)
   },
-  getColumnConfig (_vm, options) {
-    return _vm instanceof ColumnConfig ? _vm : new ColumnConfig(_vm, options)
+  getColumnConfig ($table, _vm, options) {
+    return _vm instanceof ColumnConfig ? _vm : new ColumnConfig($table, _vm, options)
   },
   // 组装列配置
   assemColumn (_vm) {

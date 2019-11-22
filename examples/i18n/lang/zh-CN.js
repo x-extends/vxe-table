@@ -56,6 +56,7 @@ module.exports = {
         menuPrivilege: '快捷菜单 + 权限控制',
         footerImmediately: '表尾合计 + 实时更新',
         expandRow: '展开行',
+        expandRowIcon: '展开行 + 自定义图标',
         toolbar: '工具栏',
         customs: '显示/隐藏列',
         customStorage: '显示/隐藏列 + localStorage',
@@ -66,11 +67,13 @@ module.exports = {
         keepAlives: 'keep-alive 切换',
 
         tree: '树形表格',
+        customIcon: '自定义图标',
         groupSummary: '分组汇总',
         groupSummaryCount: '分组汇总合计',
         edit: '可编辑',
         crudToolbar: '增删改查 + 工具栏',
         lazy: '懒加载',
+        treeLine: '节点线',
         full: '完整功能',
 
         grid: '配置式表格',
