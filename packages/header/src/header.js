@@ -204,7 +204,6 @@ export default {
             }
             return h('th', {
               class: ['vxe-header--column', column.id, {
-                'col--last': $columnIndex === tableColumn.length - 1,
                 [`col--${headAlign}`]: headAlign,
                 'col--fixed': column.fixed,
                 'col--group': isColGroup,
