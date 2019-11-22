@@ -153,6 +153,7 @@ export default {
             }
             return h('td', {
               class: ['vxe-footer--column', column.id, {
+                'col--last': $columnIndex === tableColumn.length - 1,
                 [`col--${footAlign}`]: footAlign,
                 'fixed--hidden': fixedHiddenColumn,
                 'col--ellipsis': hasEllipsis,
