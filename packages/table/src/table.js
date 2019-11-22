@@ -750,6 +750,12 @@ export default {
         ref: 'resizeBar'
       }) : _e(),
       /**
+       * 边框线
+       */
+      h('div', {
+        class: 'vxe-table--border-line'
+      }),
+      /**
        * 加载中
        */
       _isLoading ? h('vxe-table-loading', {

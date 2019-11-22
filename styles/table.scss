@@ -109,8 +109,6 @@
 .vxe-table {
   position: relative;
   overflow: hidden;
-  border-left: 1px solid $vxe-table-border-color;
-  border-right: 1px solid $vxe-table-border-color;
   font-size: $vxe-font-size;
   color: $vxe-font-color;
   font-family: $vxe-font-family;
@@ -196,26 +194,16 @@
     }
   }
   &.t--border {
-    .vxe-body--column {
-      &:not(:last-child) {
-        border-right: 1px solid $vxe-table-border-color;
-      }
-    }
     .vxe-header--column,
+    .vxe-body--column,
     .vxe-footer--column {
-      &:not(.col--last) {
-        border-right: 1px solid $vxe-table-border-color;
-      }
+      border-right: 1px solid $vxe-table-border-color;
     }
     &.scroll--y {
-      .vxe-body--column {
-        &:last-child {
-          border-right: 1px solid $vxe-table-border-color;
-        }
-      }
       .vxe-header--column,
+      .vxe-body--column,
       .vxe-footer--column {
-        &.col--last {
+        &:last-child {
           border-right: 1px solid $vxe-table-border-color;
         }
       }
@@ -477,6 +465,26 @@
       display: block;
       height: 100%;
       background-color: $vxe-table-resizable-color;
+    }
+  }
+
+  /*边框线*/
+  .vxe-table--border-line {
+    &:before,
+    &:after {
+      content: "";
+      position: absolute;
+      top: 0;
+      width: 1px;
+      height: 100%;
+      background-color: $vxe-table-border-color;
+      z-index: 1;
+    }
+    &:before {
+      left: 0;
+    }
+    &:after {
+      right: 0;
     }
   }
 
