@@ -3,7 +3,9 @@ export default {
     error: {
       groupFixed: 'If grouping headers are used, fixed columns must be on the left and right sides.',
       cellEditRender: 'The renderer "cell-render" and "edit-render" cannot be used together.',
-      treeFixedExpand: 'The fixed columns of the tree structure conflict with the expanded row.',
+      treeFixedExpand: 'The fixed column of the tree structure conflicts with the expanded row.',
+      treeLineExpand: 'The node line of tree structure conflicts with the expanded line.',
+      treeLineReqProp: 'To enable tree node line, you need to set "{{0}}"',
       scrollOriginal: 'Virtual scrolling can only export source data, please set "original=true".',
       scrollXNotGroup: 'Horizontal Virtual scrolling does not support grouping headers',
       scrollYReqProp: 'Vertical virtual scrolling requires setting the "{{0}}".',
@@ -11,7 +13,6 @@ export default {
       useErr: 'An error occurred while installing "{{0}}" module. The sequence is not correct.',
       barUnableLink: 'Toolbar cannot associate table.',
       toolbarId: 'Toolbar must have a unique "id"',
-      toolbarDelBtn: 'Toolbar button "{{0}}" is deprecated, please use "{{1}}"',
       reqModule: 'require "{{0}}" module.',
       emptyProp: 'The property "{{0}}" is not allowed to be empty.',
       notFunc: '"{{0}}" method not exist.',

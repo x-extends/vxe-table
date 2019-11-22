@@ -7,6 +7,12 @@
   position: relative;
   direction: ltr;
   font-family: $vxe-font-family;
+  &.rotate45 {
+    transform: rotate(45deg);
+  }
+  &.rotate90 {
+    transform: rotate(90deg);
+  }
 }
 
 %DefaultWidthHeight {
@@ -110,7 +116,7 @@
   @extend .vxe-icon--caret-top;
   &:before {
     left: -0.25em;
-    bottom: 0;
+    bottom: 0.05em;
     transform: rotate(-90deg);
   }
 }
@@ -119,7 +125,7 @@
   @extend .vxe-icon--caret-top;
   &:before {
     left: 0.25em;
-    bottom: 0;
+    bottom: 0.05em;
     transform: rotate(90deg);
   }
 }

@@ -45,7 +45,7 @@ export const Cell = {
           renMaps.renderHeader = this.renderFilterHeader
         }
     }
-    return UtilTools.getColumnConfig(_vm, renMaps)
+    return UtilTools.getColumnConfig($table, _vm, renMaps)
   },
   /**
    * 单元格
@@ -85,13 +85,16 @@ export const Cell = {
    * 树节点
    */
   renderTreeIcon (h, params) {
-    let { icon } = GlobalConfig
-    let { $table } = params
+    let { $table, isHidden } = params
     let { treeConfig, treeExpandeds } = $table
     let { row, level } = params
-    let { children, indent, trigger } = treeConfig
+    let { children, indent, trigger, iconOpen, iconClose } = treeConfig
     let rowChildren = row[children]
+    let isAceived = false
     let on = {}
+    if (!isHidden) {
+      isAceived = treeExpandeds.indexOf(row) > -1
+    }
     if (!trigger || trigger === 'default') {
       on.click = evnt => $table.triggerTreeExpandEvent(evnt, params)
     }
@@ -99,18 +102,22 @@ export const Cell = {
       h('span', {
         class: 'vxe-tree--indent',
         style: {
-          width: `${level * (indent || 16)}px`
+          width: `${level * (indent || 20)}px`
         }
       }),
       h('span', {
         class: ['vxe-tree-wrapper', {
-          'is--active': treeExpandeds.indexOf(row) > -1
+          'is--active': isAceived
         }],
         on
       }, rowChildren && rowChildren.length ? [
-        h('i', {
-          class: `vxe-tree--node-btn ${icon.tree}`
-        })
+        h('span', {
+          class: 'vxe-tree--btn-wrapper'
+        }, [
+          h('i', {
+            class: ['vxe-tree--node-btn', isAceived ? (iconOpen || GlobalConfig.icon.treeOpen) : (iconClose || GlobalConfig.icon.treeClose)]
+          })
+        ])
       ] : [])
     ]
   },
@@ -371,14 +378,15 @@ export const Cell = {
    */
   renderExpandCell (h, params) {
     let { $table, isHidden } = params
-    let expandActive = false
+    let { iconOpen, iconClose } = $table.expandConfig || {}
+    let isAceived = false
     if (!isHidden) {
-      expandActive = $table.rowExpandeds.indexOf(params.row) > -1
+      isAceived = $table.rowExpandeds.indexOf(params.row) > -1
     }
     return [
       h('span', {
         class: ['vxe-table--expanded', {
-          'is--active': expandActive
+          'is--active': isAceived
         }],
         on: {
           click (evnt) {
@@ -387,7 +395,7 @@ export const Cell = {
         }
       }, [
         h('i', {
-          class: ['vxe-table--expand-btn', GlobalConfig.icon.expand]
+          class: ['vxe-table--expand-btn', isAceived ? (iconOpen || GlobalConfig.icon.expandOpen) : (iconClose || GlobalConfig.icon.expandClose)]
         })
       ])
     ]

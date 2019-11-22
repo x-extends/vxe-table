@@ -150,12 +150,21 @@
     background-color: $vxe-table-background-color;
     &.row--stripe {
       background-color: $vxe-table-row-striped-background-color;
+      .vxe-tree--btn-wrapper {
+        background-color: $vxe-table-row-striped-background-color;
+      }
     }
     &.row--hover {
       background-color: $vxe-table-row-hover-background-color;
+      .vxe-tree--btn-wrapper {
+        background-color: $vxe-table-row-hover-background-color;
+      }
     }
     &.row--current {
       background-color: $vxe-table-row-current-background-color;
+      .vxe-tree--btn-wrapper {
+        background-color: $vxe-table-row-current-background-color;
+      }
     }
     .vxe-body--column {
       border-bottom: 1px solid $vxe-table-border-color;
@@ -489,20 +498,57 @@
   }
 
   /*树形节点*/
-  .vxe-tree--indent {
-    display: inline-block;
-  }
-  .vxe-tree-wrapper {
-    display: inline-block;
-    vertical-align: bottom;
-    width: 18px;
-    cursor: pointer;
-    &.is--active {
-      .vxe-tree--node-btn {
-        transform: rotate(90deg);
+  &.has--tree-line {
+    .vxe-body--row {
+      &:first-child {
+        .vxe-tree--line {
+          border-width: 0 0 1px 0;
+        }
       }
     }
+    .vxe-body--column {
+      border-bottom-color: transparent;
+    }
+  }
+  .vxe-tree--indent {
+    position: relative;
+    display: inline-block;
+  }
+  .vxe-tree--line-wrapper {
+    position: relative;
+    display: block;
+    height: 0;
+  }
+  .vxe-tree--line {
+    content: "";
+    position: absolute;
+    bottom: -0.8em;
+    width: 0.8em;
+    border-width: 0 0 1px 1px;
+    border-style: dotted;
+    border-color: $vxe-table-tree-node-line-color;
+    pointer-events: none;
+  }
+  .vxe-tree-wrapper {
+    position: relative;
+    user-select: none;
+    cursor: pointer;
+    &:before {
+      content: "";
+      display: inline-block;
+      vertical-align: middle;
+      width: 1.5em;
+      height: 1.2em;
+    }
+    .vxe-tree--btn-wrapper {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      z-index: 1;
+      background-color: $vxe-table-background-color;
+    }
     .vxe-tree--node-btn {
+      display: block;
       color: lighten($vxe-font-color, 20%);
       &:hover {
         color: $vxe-font-color;
@@ -515,11 +561,6 @@
     display: block;
     text-align: center;
     cursor: pointer;
-    &.is--active {
-      .vxe-table--expand-btn {
-        transform: rotate(90deg);
-      }
-    }
     .vxe-table--expand-btn {
       color: lighten($vxe-font-color, 20%);
       &:hover {

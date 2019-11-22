@@ -3,7 +3,9 @@ export default {
     error: {
       groupFixed: '如果使用分组表頭，固定列必须在左右兩側',
       cellEditRender: '渲染器 "cell-render" 和 "edit-render" 不能同時使用',
-      treeFixedExpand: '樹狀結構的固定列與展開行功能有冲衝突',
+      treeFixedExpand: '樹結構的固定列與展開行有衝突',
+      treeLineExpand: '樹結構的節點線與展開行有衝突',
+      treeLineReqProp: '啟用樹節點線需要設定 "{{0}}"',
       scrollOriginal: '虛擬滾動啓用後只能匯出來源資料，請將設定 "original=true"',
       scrollXNotGroup: '橫向虛擬滾動不支持分組表頭',
       scrollYReqProp: '縱向虛擬滾動需要設定 "{{0}}"',
@@ -11,7 +13,6 @@ export default {
       useErr: '安裝 "{{0}}" 模塊時發生錯誤，順序不正確',
       barUnableLink: '工具欄無法關聯表格',
       toolbarId: '工具欄需要設置唯一 "id"',
-      toolbarDelBtn: '工具列按鈕 "{{0}}" 已废弃，请使用 "{{1}}"',
       reqModule: '缺少 "{{0}}" 模塊',
       emptyProp: '參數 "{{0}}" 不允許為空',
       notFunc: '"{{0}}" 方法不存在',

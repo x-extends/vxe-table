@@ -56,6 +56,7 @@ module.exports = {
         menuPrivilege: 'Context menu + permission',
         footerImmediately: 'Footer summary + immediately',
         expandRow: 'Expandable row',
+        expandRowIcon: 'Expandable row + custom icon',
         toolbar: 'Toolbar',
         customs: 'Show/hide column',
         customStorage: 'Show/hide column + localStorage',
@@ -66,11 +67,13 @@ module.exports = {
         keepAlives: 'Switch keep-alive',
 
         tree: 'Tree table',
+        customIcon: 'Custom icon',
         groupSummary: 'Group summary',
         groupSummaryCount: 'Group summary total',
         edit: 'Editable',
         crudToolbar: 'CRUD + Toolbar',
         lazy: 'Lazy loading',
+        treeLine: 'Nodal line',
         full: 'Full demo',
 
         grid: 'Config table',

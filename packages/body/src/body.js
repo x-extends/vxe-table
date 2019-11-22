@@ -7,6 +7,27 @@ function isOperateMouse ($table) {
   return $table._isResize || ($table.lastScrollTime && Date.now() < $table.lastScrollTime + $table.optimizeOpts.delayHover)
 }
 
+function countTreeExpand (prevRow, params) {
+  const $table = params.$table
+  const rowChildren = prevRow[$table.treeConfig.children]
+  let count = 1
+  if ($table.isTreeExpandByRow(prevRow)) {
+    for (let index = 0; index < rowChildren.length; index++) {
+      count += countTreeExpand(rowChildren[index], params)
+    }
+  }
+  return count
+}
+
+function calcTreeLine (params) {
+  const { $table, $rowIndex, items } = params
+  let expandSize = 1
+  if ($rowIndex) {
+    expandSize = countTreeExpand(items[$rowIndex - 1], params)
+  }
+  return $table.rowHeight * expandSize - ($rowIndex ? 1 : 8)
+}
+
 function renderBorder (h, type) {
   return h('div', {
     class: `vxe-table-${type}ed-borders`,
@@ -34,7 +55,7 @@ function renderBorder (h, type) {
 /**
  * 渲染列
  */
-function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex) {
+function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, items) {
   let {
     _e,
     $listeners: tableListeners,
@@ -60,7 +81,7 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
     editStore,
     validStore
   } = $table
-  let { editRender, align, showOverflow, className } = column
+  let { editRender, align, showOverflow, className, treeNode } = column
   let { actived } = editStore
   let fixedHiddenColumn = fixedType ? column.fixed !== fixedType : column.fixed && overflowX
   let cellOverflow = (XEUtils.isUndefined(showOverflow) || XEUtils.isNull(showOverflow)) ? allColumnOverflow : showOverflow
@@ -75,7 +96,7 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
   let hasDefaultTip = editRules && (validOpts.message === 'default' ? (height || tableData.length > 1) : validOpts.message === 'inline')
   let attrs = { 'data-colid': column.id }
   let triggerDblclick = (editRender && editConfig && editConfig.trigger === 'dblclick')
-  let params = { $table, $seq, seq, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn, level: rowLevel, data: tableData }
+  let params = { $table, $seq, seq, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn, level: rowLevel, items, data: tableData }
   // 在 v3.0 中废弃 selectConfig
   let checkboxConfig = $table.checkboxConfig || $table.selectConfig || {}
   // 滚动的渲染不支持动态行高
@@ -152,6 +173,7 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
   return h('td', {
     class: ['vxe-body--column', column.id, {
       [`col--${cellAlign}`]: cellAlign,
+      'col--tree-node': treeNode,
       'col--edit': editRender,
       'col--index': column.type === 'index',
       'col--ellipsis': hasEllipsis,
@@ -166,6 +188,17 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
     style: cellStyle ? (XEUtils.isFunction(cellStyle) ? cellStyle(params) : cellStyle) : null,
     on: tdOns
   }, allColumnOverflow && fixedHiddenColumn ? [] : [
+    treeNode && treeConfig && treeConfig.line ? h('div', {
+      class: 'vxe-tree--line-wrapper'
+    }, [
+      h('div', {
+        class: 'vxe-tree--line',
+        style: {
+          height: `${calcTreeLine(params)}px`,
+          left: `${rowLevel * (treeConfig.indent || 20) + 16}px`
+        }
+      })
+    ]) : null,
     h('div', {
       class: ['vxe-cell', {
         'c--title': showTitle,
@@ -244,7 +277,7 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
         on: trOn
       }, tableColumn.map((column, $columnIndex) => {
         let columnIndex = getColumnIndex(column)
-        return renderColumn(h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex)
+        return renderColumn(h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, tableData)
       }))
     )
     // 如果行被展开了

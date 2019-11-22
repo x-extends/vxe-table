@@ -948,6 +948,24 @@ const apis = [
             enum: 'default（点击按钮触发）,cell（点击单元格触发）,row（点击行触发）',
             defVal: 'default',
             list: []
+          },
+          {
+            name: 'iconOpen',
+            desc: '展开后显示的图标',
+            version: '2.7.0',
+            type: 'String',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'iconClose',
+            desc: '收起后显示的图标',
+            version: '2.7.0',
+            type: 'String',
+            enum: '',
+            defVal: '',
+            list: []
           }
         ]
       },
@@ -974,7 +992,16 @@ const apis = [
             version: '',
             type: 'Number',
             enum: '',
-            defVal: '16',
+            defVal: '20',
+            list: []
+          },
+          {
+            name: 'line',
+            desc: '树节点的连接线（启用连接线会降低渲染性能）',
+            version: '2.7.0',
+            type: 'Boolean',
+            enum: '',
+            defVal: 'false',
             list: []
           },
           {
@@ -1011,6 +1038,24 @@ const apis = [
             type: 'String',
             enum: 'default（点击按钮触发）, cell（点击单元格触发）, row（点击行触发）',
             defVal: 'default',
+            list: []
+          },
+          {
+            name: 'iconOpen',
+            desc: '展开后显示的图标',
+            version: '2.7.0',
+            type: 'String',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'iconClose',
+            desc: '收起后显示的图标',
+            version: '2.7.0',
+            type: 'String',
+            enum: '',
+            defVal: '',
             list: []
           }
         ]

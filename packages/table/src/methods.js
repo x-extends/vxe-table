@@ -130,6 +130,7 @@ const Methods = {
     return rest.then(() => {
       // 是否加载了数据
       this.isLoadData = true
+      this.computeRowHeight()
       this.handleTableData(true)
       this.handleReserveStatus()
       this.checkSelectionStatus()
@@ -2488,6 +2489,26 @@ const Methods = {
       scrollYStore.visibleIndex = toVisibleIndex
       this.isLoadData = false
     }
+  },
+  computeRowHeight () {
+    let tableBody = this.$refs.tableBody
+    let tableBodyElem = tableBody ? tableBody.$el : null
+    let tableHeader = this.$refs.tableHeader
+    let rowHeight
+    if (tableBodyElem) {
+      let firstTrElem = tableBodyElem.querySelector('tbody>tr')
+      if (!firstTrElem && tableHeader) {
+        firstTrElem = tableHeader.$el.querySelector('thead>tr')
+      }
+      if (firstTrElem) {
+        rowHeight = firstTrElem.clientHeight
+      }
+    }
+    // 默认的行高
+    if (!rowHeight) {
+      rowHeight = this.rowHeightMaps[this.vSize || 'default']
+    }
+    this.rowHeight = rowHeight
   },
   // 计算可视渲染相关数据
   computeScrollLoad () {

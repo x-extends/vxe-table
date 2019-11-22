@@ -175,6 +175,29 @@ window.MOCK_TREE_DATA_LIST = [
             size: '80k',
             type: 'avi',
             date: '2019-05-16'
+          },
+          {
+            id: '123000',
+            name: '文件 123000',
+            size: '81k',
+            type: 'mp4',
+            date: '2019-05-17',
+            children: [
+              {
+                id: '123100',
+                name: '文件 123100',
+                size: '105k',
+                type: 'avi',
+                date: '2019-05-16'
+              },
+              {
+                id: '123200',
+                name: '文件 123200',
+                size: '105k',
+                type: 'avi',
+                date: '2019-05-20'
+              }
+            ]
           }
         ]
       }
@@ -230,8 +253,63 @@ window.MOCK_TREE_DATA_LIST = [
             size: '35k',
             type: 'mp4',
             date: '2019-05-16'
+          },
+          {
+            id: '32200',
+            name: '文件夹 32000',
+            size: '33k',
+            type: '',
+            date: '2019-08-16',
+            children: [
+              {
+                id: '32210',
+                name: '文件 32210',
+                size: '75k',
+                type: 'txt',
+                date: '2019-06-16'
+              },
+              {
+                id: '32220',
+                name: '文件夹 32220',
+                size: '33k',
+                type: '',
+                date: '2019-08-31',
+                children: [
+                  {
+                    id: '32221',
+                    name: '文件 32221',
+                    size: '85k',
+                    type: 'mp3',
+                    date: '2019-06-30'
+                  }
+                ]
+              }
+            ]
           }
         ]
+      },
+      {
+        id: '33000',
+        name: '文件 33000',
+        size: '95k',
+        type: 'txt',
+        date: '2019-06-16'
+      }
+    ]
+  },
+  {
+    id: '40000',
+    name: '文件 40000',
+    size: '26k',
+    type: 'mp4',
+    date: '2019-03-16',
+    children: [
+      {
+        id: '41000',
+        name: '文件 41000',
+        size: '135k',
+        type: 'mp3',
+        date: '2019-06-02'
       }
     ]
   }

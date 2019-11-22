@@ -225,6 +225,8 @@ export default {
       scrollbarWidth: 0,
       // 横向滚动条的高度
       scrollbarHeight: 0,
+      // 行高
+      rowHeight: 0,
       // 复选框属性，是否全选
       isAllSelected: false,
       // 复选框属性，有选中且非全选状态
@@ -466,7 +468,7 @@ export default {
     }
   },
   created () {
-    let { scrollXStore, scrollYStore, optimizeOpts, data, loading } = Object.assign(this, {
+    let { scrollXStore, scrollYStore, optimizeOpts, data, loading, treeConfig, showOverflow } = Object.assign(this, {
       tZindex: 0,
       elemStore: {},
       // 存放横向 X 虚拟滚动相关的信息
@@ -513,6 +515,9 @@ export default {
     }
     if (this.selectConfig) {
       UtilTools.warn('vxe.error.delProp', ['select-config', 'checkbox-config'])
+    }
+    if (treeConfig && treeConfig.line && !showOverflow) {
+      UtilTools.warn('vxe.error.treeLineReqProp', ['show-overflow'])
     }
     // 检查是否有安装需要的模块
     let errorModuleName
@@ -608,6 +613,7 @@ export default {
       loading,
       _isLoading,
       showHeader,
+      treeConfig,
       border,
       stripe,
       height,
@@ -646,6 +652,7 @@ export default {
         'show--head': showHeader,
         'show--foot': showFooter,
         'has--height': height,
+        'has--tree-line': treeConfig && treeConfig.line,
         'fixed--left': leftList.length,
         'fixed--right': rightList.length,
         'all-overflow': showOverflow,
