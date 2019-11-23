@@ -117,9 +117,11 @@ module.exports = {
         forceCellValid: 'Validate cell + lock',
         forceRowValid: 'Validate row + lock',
         keyboard: 'Keyboard navigation',
+        keyboardEdit: 'Keyboard navigation + Override the default edit behavior',
         dataCount: 'Data count',
         uniqueSelect: 'Unique select option',
         cascadingSelect: 'Cascading select options',
+        realtimeSave: 'Realtime save',
         upload: 'File upload',
 
         excel: '更多实现',

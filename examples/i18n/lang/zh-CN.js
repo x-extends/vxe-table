@@ -117,9 +117,11 @@ module.exports = {
         forceCellValid: '数据校验 cell + 强制锁定',
         forceRowValid: '数据校验 row + 强制锁定',
         keyboard: '键盘导航',
+        keyboardEdit: '键盘导航 + 重写默认编辑行为',
         dataCount: '数据联动计算',
         uniqueSelect: '唯一下拉选项',
         cascadingSelect: '联动下拉选项',
+        realtimeSave: '实时保存',
         upload: '文件上传',
 
         excel: '更多实现',
