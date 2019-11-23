@@ -107,6 +107,7 @@
 .vxe-icon--caret-bottom {
   @extend .vxe-icon--caret-top;
   &:before {
+    left: 0;
     bottom: -0.25em;
     transform: rotate(180deg);
   }
@@ -116,7 +117,7 @@
   @extend .vxe-icon--caret-top;
   &:before {
     left: -0.25em;
-    bottom: 0.05em;
+    bottom: 0;
     transform: rotate(-90deg);
   }
 }
@@ -125,7 +126,7 @@
   @extend .vxe-icon--caret-top;
   &:before {
     left: 0.25em;
-    bottom: 0.05em;
+    bottom: 0;
     transform: rotate(90deg);
   }
 }

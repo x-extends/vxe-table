@@ -358,6 +358,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.fluidHeight',
+              locat: {
+                name: 'TableFooterMaxHeight'
+              }
+            },
+            {
               label: 'app.aside.nav.import',
               demoUrl: 'https://jsrun.pro/UaWKp/edit',
               locat: {

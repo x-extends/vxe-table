@@ -21,10 +21,9 @@
       <vxe-table-column field="name" title="省市区">
         <template v-slot="{ row }">
           <span :class="[`level-${row.level}`]" :style="{paddingLeft: `${row.level * treeIndent}px`}">
-            <i
-              class="virtual-tree-icon vxe-icon--arrow-right"
-              :class="{expand: row.expand, visible: row.children && row.children.length}"
-              @click="toggleTreeExpansion(row)"></i>
+            <template v-if="row.children && row.children.length">
+              <i class="virtual-tree-icon fa" :class="row.expand ? 'fa-minus-square-o' : 'fa-plus-square-o'" @click="toggleTreeExpansion(row)"></i>
+            </template>
             <span>{{ row.name }}</span>
           </span>
         </template>
@@ -74,10 +73,9 @@ export default {
           <vxe-table-column field="name" title="省市区">
             <template v-slot="{ row }">
               <span :class="[\`level-\${row.level}\`]" :style="{paddingLeft: \`\${row.level * treeIndent}px\`}">
-                <i
-                  class="virtual-tree-icon vxe-icon--arrow-right"
-                  :class="{expand: row.expand, visible: row.children && row.children.length}"
-                  @click="toggleTreeExpansion(row)"></i>
+                <template v-if="row.children && row.children.length">
+                  <i class="virtual-tree-icon fa" :class="row.expand ? 'fa-minus-square-o' : 'fa-plus-square-o'" @click="toggleTreeExpansion(row)"></i>
+                </template>
                 <span>{{ row.name }}</span>
               </span>
             </template>
@@ -171,16 +169,8 @@ export default {
         `,
         `
         .virtual-tree-icon {
-          visibility: hidden;
           cursor: pointer;
           margin-right: 4px;
-          transition: all 0.1s ease-in-out;
-        }
-        .virtual-tree-icon.expand {
-          transform: rotate(90deg);
-        }
-        .virtual-tree-icon.visible {
-          visibility: visible;
         }
         `
       ]
@@ -267,15 +257,7 @@ export default {
 
 <style scoped>
 .virtual-tree-icon {
-  visibility: hidden;
   cursor: pointer;
   margin-right: 4px;
-  transition: all 0.1s ease-in-out;
-}
-.virtual-tree-icon.expand {
-  transform: rotate(90deg);
-}
-.virtual-tree-icon.visible {
-  visibility: visible;
 }
 </style>
