@@ -1010,6 +1010,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.keyboardEdit',
+              locat: {
+                name: 'TableEditKeyboardEdit'
+              }
+            },
+            {
               label: 'app.aside.nav.footer',
               locat: {
                 name: 'TableEditFooter'
@@ -1043,6 +1049,12 @@ export default {
               label: 'app.aside.nav.upload',
               locat: {
                 name: 'TableEditUpload'
+              }
+            },
+            {
+              label: 'app.aside.nav.realtimeSave',
+              locat: {
+                name: 'TableEditRealtimeSave'
               }
             },
             {

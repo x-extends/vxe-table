@@ -152,6 +152,7 @@ const TableEditStatus = () => import(/* webpackChunkName: "edit" */ './views/tab
 const TableEditCellDisable = () => import(/* webpackChunkName: "edit" */ './views/table/edit/CellDisable.vue')
 const TableEditRowDisable = () => import(/* webpackChunkName: "edit" */ './views/table/edit/RowDisable.vue')
 const TableEditKeyboard = () => import(/* webpackChunkName: "edit" */ './views/table/edit/Keyboard.vue')
+const TableEditKeyboardEdit = () => import(/* webpackChunkName: "edit" */ './views/table/edit/KeyboardEdit.vue')
 const TableEditCellValid = () => import(/* webpackChunkName: "edit" */ './views/table/edit/CellValid.vue')
 const TableEditRowValid = () => import(/* webpackChunkName: "edit" */ './views/table/edit/RowValid.vue')
 const TableEditForceCellValid = () => import(/* webpackChunkName: "edit" */ './views/table/edit/ForceCellValid.vue')
@@ -162,6 +163,7 @@ const TableEditFooterImmediately = () => import(/* webpackChunkName: "edit" */ '
 const TableEditMenu = () => import(/* webpackChunkName: "edit" */ './views/table/edit/Menu.vue')
 const TableEditSpan = () => import(/* webpackChunkName: "edit" */ './views/table/edit/Span.vue')
 const TableEditUpload = () => import(/* webpackChunkName: "edit" */ './views/table/edit/Upload.vue')
+const TableEditRealtimeSave = () => import(/* webpackChunkName: "edit" */ './views/table/edit/RealtimeSave.vue')
 const TableEditDataCount = () => import(/* webpackChunkName: "edit" */ './views/table/edit/DataCount.vue')
 const TableEditUniqueSelect = () => import(/* webpackChunkName: "edit" */ './views/table/edit/UniqueSelect.vue')
 const TableEditCascadingSelect = () => import(/* webpackChunkName: "edit" */ './views/table/edit/CascadingSelect.vue')
@@ -948,6 +950,11 @@ export default new Router({
       component: TableEditKeyboard
     },
     {
+      path: '/table/edit/keyboardEdit',
+      name: 'TableEditKeyboardEdit',
+      component: TableEditKeyboardEdit
+    },
+    {
       path: '/table/edit/cellValid',
       name: 'TableEditCellValid',
       component: TableEditCellValid
@@ -996,6 +1003,11 @@ export default new Router({
       path: '/table/edit/upload',
       name: 'TableEditUpload',
       component: TableEditUpload
+    },
+    {
+      path: '/table/edit/realtimeSave',
+      name: 'TableEditRealtimeSave',
+      component: TableEditRealtimeSave
     },
     {
       path: '/table/edit/dataCount',
