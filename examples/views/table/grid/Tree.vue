@@ -19,8 +19,6 @@
 </template>
 
 <script>
-import XEUtils from 'xe-utils'
-import XEAjax from 'xe-ajax'
 import hljs from 'highlight.js'
 
 export default {
@@ -29,11 +27,11 @@ export default {
       tableProxy: {
         ajax: {
           // 处理树结构转换
-          query: () => XEAjax.getJSON('/api/file/list').then(data => XEUtils.toArrayTree(data, { key: 'id', parentKey: 'parentId', children: 'children' }))
+          query: () => this.$ajax.getJSON('/api/file/list').then(data => this.$utils.toArrayTree(data, { key: 'id', parentKey: 'parentId', children: 'children' }))
         }
       },
       tableColumn: [
-        { field: 'id', title: 'ID', width: 120, treeNode: true },
+        { field: 'id', title: 'ID', width: 180, treeNode: true },
         { field: 'name', title: '名称' },
         { field: 'size', title: '大小' },
         { field: 'createTime', title: '创建时间', formatter: this.formatterDate },
@@ -55,22 +53,21 @@ export default {
               tableProxy: {
                 ajax: {
                   // 处理树结构转换
-                  query: () => XEAjax.getJSON('/api/file/list').then(data => XEUtils.toArrayTree(data, { key: 'id', parentKey: 'parentId', children: 'children' }))
+                  query: () => this.$ajax.getJSON('/api/file/list').then(data => this.$utils.toArrayTree(data, { key: 'id', parentKey: 'parentId', children: 'children' }))
                 }
               },
               tableColumn: [
-                { type: 'checkbox', width: 100, treeNode: true },
-                { field: 'id', title: 'ID', width: 0 },
+                { field: 'id', title: 'ID', width: 180, treeNode: true },
                 { field: 'name', title: '名称' },
                 { field: 'size', title: '大小' },
-                { field: 'createTime', title: '创建时间' },
-                { field: 'updateTime', title: '修改时间' }
+                { field: 'createTime', title: '创建时间', formatter: this.formatterDate },
+                { field: 'updateTime', title: '修改时间', formatter: this.formatterDate }
               ]
             }
           },
           methods: {
             formatterDate ({ cellValue }) {
-              return XEUtils.toDateString(cellValue, 'yyyy-MM-dd HH:mm:ss')
+              return this.$utils.toDateString(cellValue, 'yyyy-MM-dd HH:mm:ss')
             }
           }
         }
@@ -85,7 +82,7 @@ export default {
   },
   methods: {
     formatterDate ({ cellValue }) {
-      return XEUtils.toDateString(cellValue, 'yyyy-MM-dd HH:mm:ss')
+      return this.$utils.toDateString(cellValue, 'yyyy-MM-dd HH:mm:ss')
     }
   }
 }
