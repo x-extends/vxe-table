@@ -126,6 +126,7 @@ const TableScrollCols = () => import(/* webpackChunkName: "scroll" */ './views/t
 const TableScrollFullCols = () => import(/* webpackChunkName: "scroll" */ './views/table/scroll/ScrollFullCols.vue')
 const TableScrollHighlight = () => import(/* webpackChunkName: "scroll" */ './views/table/scroll/Highlight.vue')
 const TableScrollKeyboard = () => import(/* webpackChunkName: "scroll" */ './views/table/scroll/Keyboard.vue')
+const TableScrollMaxHeight = () => import(/* webpackChunkName: "scroll" */ './views/table/scroll/MaxHeight.vue')
 const TableScrollEdit = () => import(/* webpackChunkName: "scroll" */ './views/table/scroll/Edit.vue')
 const TableScrollTree = () => import(/* webpackChunkName: "scroll" */ './views/table/scroll/Tree.vue')
 const TableScrollCellValid = () => import(/* webpackChunkName: "scroll" */ './views/table/scroll/CellValid.vue')
@@ -822,6 +823,11 @@ export default new Router({
       path: '/table/scroll/keyboard',
       name: 'TableScrollKeyboard',
       component: TableScrollKeyboard
+    },
+    {
+      path: '/table/scroll/maxHeight',
+      name: 'TableScrollMaxHeight',
+      component: TableScrollMaxHeight
     },
     {
       path: '/table/scroll/edit',

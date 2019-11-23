@@ -10,7 +10,7 @@ export default {
      * @param {String} field 字段名
      * @param {Function} callback 重置列表的回调函数，返回新的选项列表
      */
-    filter (field, callback) {
+    _filter (field, callback) {
       let column = this.getColumnByField(field)
       let filters = column.filters
       if (callback) {
@@ -135,7 +135,7 @@ export default {
      * 如果为空则清空所有列的筛选条件
      * @param {String} field 字段名
      */
-    clearFilter (field) {
+    _clearFilter (field) {
       let column = arguments.length ? this.getColumnByField(field) : null
       let filterStore = this.filterStore
       let handleClear = column => {
