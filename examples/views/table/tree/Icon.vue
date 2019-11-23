@@ -28,6 +28,40 @@
       <code class="xml">{{ demoCodes[0] }}</code>
       <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
+
+    <p class="tip">更多自定义</p>
+
+    <vxe-table
+      resizable
+      show-overflow
+      ref="xTree"
+      :tree-config="{children: 'children', iconOpen: 'fa fa-minus-square-o', iconClose: 'fa fa-plus-square-o'}"
+      :data="tableData">
+      <vxe-table-column field="name" title="Name" tree-node>
+        <template v-slot="{ row }">
+          <span>
+            <template v-if="row.children && row.children.length">
+              <i class="tree-node-icon fa" :class="$refs.xTree.isTreeExpandByRow(row) ? 'fa-folder-open-o' : 'fa-folder-o'"></i>
+            </template>
+            <template v-else>
+              <i class="tree-node-icon fa fa-file-o"></i>
+            </template>
+            <span>{{ row.name }}</span>
+          </span>
+        </template>
+      </vxe-table-column>
+      <vxe-table-column field="size" title="Size"></vxe-table-column>
+      <vxe-table-column field="type" title="Type"></vxe-table-column>
+      <vxe-table-column field="date" title="Date"></vxe-table-column>
+    </vxe-table>
+
+    <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
+
+    <pre>
+      <code class="xml">{{ demoCodes[2] }}</code>
+      <code class="javascript">{{ demoCodes[3] }}</code>
+      <code class="css">{{ demoCodes[4] }}</code>
+    </pre>
   </div>
 </template>
 
@@ -77,6 +111,48 @@ export default {
             }
           }
         }
+        `,
+        `
+        <vxe-table
+          resizable
+          show-overflow
+          ref="xTree"
+          :tree-config="{children: 'children', iconOpen: 'fa fa-minus-square-o', iconClose: 'fa fa-plus-square-o'}"
+          :data="tableData">
+          <vxe-table-column field="name" title="Name" tree-node>
+            <template v-slot="{ row }">
+              <span>
+                <template v-if="row.children && row.children.length">
+                  <i class="tree-node-icon fa" :class="$refs.xTree.isTreeExpandByRow(row) ? 'fa-folder-open-o' : 'fa-folder-o'"></i>
+                </template>
+                <template v-else>
+                  <i class="tree-node-icon fa fa-file-o"></i>
+                </template>
+                <span>{{ row.name }}</span>
+              </span>
+            </template>
+          </vxe-table-column>
+          <vxe-table-column field="size" title="Size"></vxe-table-column>
+          <vxe-table-column field="type" title="Type"></vxe-table-column>
+          <vxe-table-column field="date" title="Date"></vxe-table-column>
+        </vxe-table>
+        `,
+        `
+        export default {
+          data () {
+            return {
+              tableData: []
+            }
+          },
+          created () {
+            this.tableData = window.MOCK_TREE_DATA_LIST.slice(0)
+          }
+        }
+        `,
+        `
+        .tree-node-icon {
+          width: 20px;
+        }
         `
       ]
     }
@@ -97,3 +173,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.tree-node-icon {
+  width: 20px;
+}
+</style>
