@@ -25,8 +25,8 @@ function countTreeExpand (prevRow, params) {
   return count
 }
 
-function calcTreeLine (params) {
-  const { $table, $rowIndex, items } = params
+function calcTreeLine (params, items) {
+  const { $table, $rowIndex } = params
   let expandSize = 1
   if ($rowIndex) {
     expandSize = countTreeExpand(items[$rowIndex - 1], params)
@@ -96,7 +96,7 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
   let hasDefaultTip = editRules && (validOpts.message === 'default' ? (height || tableData.length > 1) : validOpts.message === 'inline')
   let attrs = { 'data-colid': column.id }
   let triggerDblclick = (editRender && editConfig && editConfig.trigger === 'dblclick')
-  let params = { $table, $seq, seq, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, level: rowLevel, isHidden: fixedHiddenColumn, items, data: tableData }
+  let params = { $table, $seq, seq, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, level: rowLevel, isHidden: fixedHiddenColumn, data: tableData }
   // 滚动的渲染不支持动态行高
   if ((scrollXLoad || scrollYLoad) && !hasEllipsis) {
     showEllipsis = hasEllipsis = true
@@ -215,7 +215,7 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
       h('div', {
         class: 'vxe-tree--line',
         style: {
-          height: `${calcTreeLine(params)}px`,
+          height: `${calcTreeLine(params, items)}px`,
           left: `${rowLevel * (treeConfig.indent || 20) + 16}px`
         }
       })
