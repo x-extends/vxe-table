@@ -51,6 +51,7 @@ const TableManualFilter = () => import(/* webpackChunkName: "advanced" */ './vie
 const TableSpan = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Span.vue')
 const TableFooter = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Footer.vue')
 const TableFooterSpan = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/FooterSpan.vue')
+const TableFooterMaxHeight = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/MaxHeight.vue')
 const TableImport = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Import.vue')
 const TableExport = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Export.vue')
 const TablePrint = () => import(/* webpackChunkName: "other" */ './views/table/advanced/Print.vue')
@@ -462,6 +463,11 @@ export default new Router({
       path: '/table/advanced/footerSpan',
       name: 'TableFooterSpan',
       component: TableFooterSpan
+    },
+    {
+      path: '/table/advanced/footerMaxHeight',
+      name: 'TableFooterMaxHeight',
+      component: TableFooterMaxHeight
     },
     {
       path: '/table/advanced/import',
