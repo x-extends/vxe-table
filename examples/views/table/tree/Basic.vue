@@ -35,7 +35,7 @@
       border
       :data="tableData"
       :tree-config="{children: 'children', expandAll: true}">
-      <vxe-table-column type="index" width="160" title="序号" tree-node></vxe-table-column>
+      <vxe-table-column type="index" width="180" title="序号" tree-node></vxe-table-column>
       <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
       <vxe-table-column title="基本信息">
         <vxe-table-column field="size" title="Size"></vxe-table-column>
@@ -96,7 +96,7 @@ export default {
           border
           :data="tableData"
           :tree-config="{children: 'children', expandAll: true}">
-          <vxe-table-column type="index" width="160" title="序号" tree-node></vxe-table-column>
+          <vxe-table-column type="index" width="180" title="序号" tree-node></vxe-table-column>
           <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
           <vxe-table-column title="基本信息">
             <vxe-table-column field="size" title="Size"></vxe-table-column>

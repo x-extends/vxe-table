@@ -31,7 +31,7 @@ export default {
         }
       },
       tableColumn: [
-        { field: 'id', title: 'ID', width: 120, treeNode: true },
+        { field: 'id', title: 'ID', width: 180, treeNode: true },
         { field: 'name', title: '名称' },
         { field: 'size', title: '大小' },
         { field: 'createTime', title: '创建时间', formatter: this.formatterDate },
@@ -57,12 +57,11 @@ export default {
                 }
               },
               tableColumn: [
-                { type: 'checkbox', width: 100, treeNode: true },
-                { field: 'id', title: 'ID', width: 0 },
+                { field: 'id', title: 'ID', width: 180, treeNode: true },
                 { field: 'name', title: '名称' },
                 { field: 'size', title: '大小' },
-                { field: 'createTime', title: '创建时间' },
-                { field: 'updateTime', title: '修改时间' }
+                { field: 'createTime', title: '创建时间', formatter: this.formatterDate },
+                { field: 'updateTime', title: '修改时间', formatter: this.formatterDate }
               ]
             }
           },
