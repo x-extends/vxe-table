@@ -1095,7 +1095,7 @@ const Methods = {
             }
             if (fullColumnIdData[colid]) {
               let column = fullColumnIdData[colid].column
-              let { showHeaderOverflow, showOverflow, renderWidth } = column
+              let { showHeaderOverflow, showOverflow } = column
               let cellOverflow
               colElem.width = `${column.renderWidth || ''}`
               if (layout === 'header') {
@@ -1113,10 +1113,21 @@ const Methods = {
                 hasEllipsis = true
               }
               if (listElem && hasEllipsis) {
-                XEUtils.arrayEach(listElem.querySelectorAll(`.${column.id}`), thElem => {
-                  let cellElem = thElem.querySelector('.vxe-cell')
+                XEUtils.arrayEach(listElem.querySelectorAll(`.${column.id}`), elem => {
+                  let colspan = parseInt(elem.getAttribute('colspan') || 1)
+                  let cellElem = elem.querySelector('.vxe-cell')
+                  let colWidth = column.renderWidth
                   if (cellElem) {
-                    cellElem.style.width = `${border ? renderWidth - 1 : renderWidth}px`
+                    if (colspan > 1) {
+                      let columnIndex = this.getColumnIndex(column)
+                      for (let index = 1; index < colspan; index++) {
+                        let nextColumn = this.getColumns(columnIndex + index)
+                        if (nextColumn) {
+                          colWidth += nextColumn.renderWidth
+                        }
+                      }
+                    }
+                    cellElem.style.width = `${border ? colWidth - (1 * colspan) : colWidth}px`
                   }
                 })
               }

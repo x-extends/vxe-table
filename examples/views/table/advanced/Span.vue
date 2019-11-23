@@ -7,12 +7,13 @@
 
     <vxe-table
       border
+      resizable
       height="400"
       :span-method="colspanMethod"
       :data="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
-      <vxe-table-column field="role" title="Role" sortable></vxe-table-column>
+      <vxe-table-column field="name" title="Name"></vxe-table-column>
+      <vxe-table-column field="role" title="Role"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
       <vxe-table-column field="age" title="Age"></vxe-table-column>
     </vxe-table>
@@ -28,6 +29,7 @@
 
     <vxe-table
       border
+      resizable
       height="400"
       :span-method="rowspanMethod"
       :data="tableData">
@@ -57,6 +59,7 @@ export default {
         `
         <vxe-table
           border
+          resizable
           height="400"
           :span-method="colspanMethod"
           :data="tableData">
@@ -99,6 +102,7 @@ export default {
         `
         <vxe-table
           border
+          resizable
           height="400"
           :span-method="rowspanMethod"
           :data="tableData">
