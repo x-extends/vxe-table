@@ -76,7 +76,7 @@
       show-overflow
       ref="xTree"
       size="mini"
-      :tree-config="{children: 'children', line: true, iconOpen: 'fa fa-hand-o-down', iconClose: 'fa fa-hand-o-right'}"
+      :tree-config="{children: 'children', line: true, iconOpen: 'fa fa-minus-square-o', iconClose: 'fa fa-plus-square-o'}"
       :data="tableData">
       <vxe-table-column field="name" title="Name" tree-node>
         <template v-slot="{ row }">
@@ -198,16 +198,16 @@ export default {
           show-overflow
           ref="xTree"
           size="mini"
-          :tree-config="{children: 'children', line: true}"
+          :tree-config="{children: 'children', line: true, iconOpen: 'fa fa-minus-square-o', iconClose: 'fa fa-plus-square-o'}"
           :data="tableData">
           <vxe-table-column field="name" title="Name" tree-node>
             <template v-slot="{ row }">
               <span>
                 <template v-if="row.children && row.children.length">
-                  <i class="fa" :class="$refs.xTree.isTreeExpandByRow(row) ? 'fa-folder-open-o' : 'fa-folder-o'"></i>
+                  <i class="tree-node-icon fa" :class="$refs.xTree.isTreeExpandByRow(row) ? 'fa-folder-open-o' : 'fa-folder-o'"></i>
                 </template>
                 <template v-else>
-                  <i class="fa fa-file-o"></i>
+                  <i class="tree-node-icon fa fa-file-o"></i>
                 </template>
                 <span>{{ row.name }}</span>
               </span>
