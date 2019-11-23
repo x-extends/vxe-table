@@ -791,6 +791,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.fluidHeight',
+              locat: {
+                name: 'TableScrollMaxHeight'
+              }
+            },
+            {
               label: 'app.aside.nav.edit',
               demoUrl: 'https://jsrun.pro/MIWKp/edit',
               locat: {
