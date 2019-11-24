@@ -1956,7 +1956,7 @@ export default {
         this.closeMenu()
       }
       // 最后激活的表格
-      this.isActivated = getEventTargetNode(evnt, this.$el).flag
+      this.isActivated = getEventTargetNode(evnt, (this.$grid || this).$el).flag
     },
     /**
      * 窗口失焦事件处理
