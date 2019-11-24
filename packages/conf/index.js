@@ -28,13 +28,13 @@ const GlobalConfig = {
     //   mini: 36
     // },
     scrollX: {
-      gt: 100
+      gt: 40
       // oSize: 0,
       // rSize: 0
       // vSize: 0
     },
     scrollY: {
-      gt: 500
+      gt: 200
       // oSize: 0,
       // rSize: 0
       // vSize: 0,

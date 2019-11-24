@@ -1437,7 +1437,7 @@ const apis = [
                 version: '',
                 type: 'Number',
                 enum: '',
-                defVal: '100',
+                defVal: '40',
                 list: []
               },
               {
@@ -1483,7 +1483,7 @@ const apis = [
                 version: '',
                 type: 'Number',
                 enum: '',
-                defVal: '500',
+                defVal: '200',
                 list: []
               },
               {
