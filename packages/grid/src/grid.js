@@ -19,7 +19,7 @@ export default {
     columns: Array,
     pagerConfig: Object,
     proxyConfig: Object,
-    toolbar: Object,
+    toolbar: [Boolean, Object],
     ...Table.props
   },
   provide () {
@@ -52,6 +52,9 @@ export default {
     },
     proxyOpts () {
       return Object.assign({}, GlobalConfig.grid.proxyConfig, this.proxyConfig)
+    },
+    toolbarOpts () {
+      return Object.assign({}, GlobalConfig.grid.toolbar, this.toolbar)
     },
     tableProps () {
       let rest = {}
@@ -99,7 +102,7 @@ export default {
     }
   },
   render (h) {
-    let { $slots, $scopedSlots, $listeners, maximize, pagerConfig, vSize, loading, toolbar, editConfig, proxyConfig, proxyOpts, tableProps, tableLoading, tablePage, tableData, tableCustoms, optimization } = this
+    let { $slots, $scopedSlots, $listeners, maximize, pagerConfig, vSize, loading, toolbar, toolbarOpts, editConfig, proxyConfig, proxyOpts, tableProps, tableLoading, tablePage, tableData, tableCustoms, optimization } = this
     let props = Object.assign({}, tableProps, {
       optimization: Object.assign({}, GlobalConfig.optimization, optimization)
     })
@@ -130,11 +133,11 @@ export default {
       }
     }
     if (toolbar) {
-      if (toolbar.slots) {
-        $buttons = toolbar.slots.buttons || $buttons
-        $tools = toolbar.slots.tools || $tools
+      if (toolbarOpts.slots) {
+        $buttons = toolbarOpts.slots.buttons || $buttons
+        $tools = toolbarOpts.slots.tools || $tools
       }
-      if (!(toolbar.setting && toolbar.setting.storage)) {
+      if (!(toolbarOpts.setting && toolbarOpts.setting.storage)) {
         props.customs = tableCustoms
       }
       tableOns['update:customs'] = value => {
@@ -146,12 +149,12 @@ export default {
         activeMethod: this.handleActiveMethod
       })
     }
-    let toolbarScopedSlots = {}
+    let tbScopedSlots = {}
     if ($buttons) {
-      toolbarScopedSlots.buttons = $buttons
+      tbScopedSlots.buttons = $buttons
     }
     if ($tools) {
-      toolbarScopedSlots.tools = $tools
+      tbScopedSlots.tools = $tools
     }
     return h('div', {
       class: [ 'vxe-grid', {
@@ -164,8 +167,8 @@ export default {
         ref: 'toolbar',
         props: Object.assign({
           loading: loading || tableLoading
-        }, toolbar),
-        scopedSlots: toolbarScopedSlots
+        }, toolbarOpts),
+        scopedSlots: tbScopedSlots
       }) : null,
       h('vxe-table', {
         props,
@@ -214,12 +217,12 @@ export default {
      * @param {String/Object} code 字符串或对象
      */
     commitProxy (code) {
-      const { toolbar, proxyOpts, tablePage, pagerConfig, sortData, filterData, isMsg } = this
+      const { toolbar, toolbarOpts, proxyOpts, tablePage, pagerConfig, sortData, filterData, isMsg } = this
       const { ajax = {}, props = {} } = proxyOpts
       const args = XEUtils.slice(arguments, 1)
       let button
       if (XEUtils.isString(code)) {
-        const matchObj = toolbar ? XEUtils.findTree(toolbar.buttons, item => item.code === code, { children: 'dropdowns' }) : null
+        const matchObj = toolbar ? XEUtils.findTree(toolbarOpts.buttons, item => item.code === code, { children: 'dropdowns' }) : null
         button = matchObj ? matchObj.item : null
       } else {
         button = code

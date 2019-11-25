@@ -16,7 +16,7 @@ const apis = [
         name: 'toolbar',
         descKey: 'app.api.grid.desc.toolbar',
         version: '',
-        type: 'Object',
+        type: 'Boolean, Object',
         enum: '',
         defVal: '',
         list: XEUtils.clone(toolbarAPI.find(item => item.name === 'Props').list, true).concat([{

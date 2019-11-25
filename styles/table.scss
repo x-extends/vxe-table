@@ -562,16 +562,12 @@
     pointer-events: none;
   }
   .vxe-tree-wrapper {
+    display: inline;
+    padding-right: 1.5em;
+    vertical-align: middle;
     position: relative;
     user-select: none;
     cursor: pointer;
-    &:before {
-      content: "";
-      display: inline-block;
-      vertical-align: middle;
-      width: 1.5em;
-      height: 1.2em;
-    }
     .vxe-tree--btn-wrapper {
       position: absolute;
       left: 0;

@@ -5,10 +5,19 @@
       <span class="red">（注：<table-api-link prop="span-method"/> 合并的逻辑都是自行实现的，该示例仅供参考）</span>
     </p>
 
+    <vxe-toolbar>
+      <template v-slot:buttons>
+        <vxe-button @click="allAlign = 'left'">居左</vxe-button>
+        <vxe-button @click="allAlign = 'center'">居中</vxe-button>
+        <vxe-button @click="allAlign = 'right'">居右</vxe-button>
+      </template>
+    </vxe-toolbar>
+
     <vxe-table
       border
       resizable
       height="400"
+      :align="allAlign"
       :span-method="colspanMethod"
       :data="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
@@ -54,18 +63,28 @@ import hljs from 'highlight.js'
 export default {
   data () {
     return {
+      allAlign: null,
       tableData: [],
       demoCodes: [
         `
+        <vxe-toolbar>
+          <template v-slot:buttons>
+            <vxe-button @click="allAlign = 'left'">居左</vxe-button>
+            <vxe-button @click="allAlign = 'center'">居中</vxe-button>
+            <vxe-button @click="allAlign = 'right'">居右</vxe-button>
+          </template>
+        </vxe-toolbar>
+
         <vxe-table
           border
           resizable
           height="400"
+          :align="allAlign"
           :span-method="colspanMethod"
           :data="tableData">
           <vxe-table-column type="index" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
-          <vxe-table-column field="role" title="Role" sortable></vxe-table-column>
+          <vxe-table-column field="name" title="Name"></vxe-table-column>
+          <vxe-table-column field="role" title="Role"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
           <vxe-table-column field="age" title="Age"></vxe-table-column>
         </vxe-table>
@@ -74,6 +93,7 @@ export default {
         export default {
           data () {
             return {
+              allAlign: null,
               tableData: []
             }
           },
