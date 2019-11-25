@@ -334,6 +334,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.filterIcon',
+              locat: {
+                name: 'TableFilterIcon'
+              }
+            },
+            {
               label: 'app.aside.nav.span',
               demoUrl: 'https://jsrun.net/5jXKp/edit',
               locat: {

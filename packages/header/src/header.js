@@ -177,9 +177,11 @@ export default {
             let showTooltip = headOverflow === true || headOverflow === 'tooltip'
             let hasEllipsis = showTitle || showTooltip || showEllipsis
             let thOns = {}
+            let isFilter = column.filters.length
+            let hasFilter = isFilter && column.filters.some(item => item.checked)
             // 确保任何情况下 columnIndex 都精准指向真实列索引
             let columnIndex = getColumnMapIndex(column)
-            let params = { $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType }
+            let params = { $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn, hasFilter }
             if (showTitle || showTooltip) {
               thOns.mouseenter = evnt => {
                 if (showTitle) {
@@ -210,16 +212,16 @@ export default {
                 'col--ellipsis': hasEllipsis,
                 'fixed--hidden': fixedHiddenColumn,
                 'is--sortable': column.sortable,
-                'is--filter': column.filters.length,
-                'col--current': currentColumn === column,
-                'filter--active': column.filters.some(item => item.checked)
+                'is--filter': isFilter,
+                'filter--active': hasFilter,
+                'col--current': currentColumn === column
               }, UtilTools.getClass(headerClassName, params), UtilTools.getClass(headerCellClassName, params)],
               attrs: {
                 'data-colid': column.id,
                 colspan: column.colSpan,
                 rowspan: column.rowSpan
               },
-              style: headerCellStyle ? (XEUtils.isFunction(headerCellStyle) ? headerCellStyle({ $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType }) : headerCellStyle) : null,
+              style: headerCellStyle ? (XEUtils.isFunction(headerCellStyle) ? headerCellStyle(params) : headerCellStyle) : null,
               on: thOns,
               key: columnKey || (isColGroup || $table.columnKey ? column.id : columnIndex)
             }, [
@@ -232,7 +234,7 @@ export default {
                 style: {
                   width: hasEllipsis ? `${border ? renderWidth - 1 : renderWidth}px` : null
                 }
-              }, column.renderHeader(h, { $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn })),
+              }, column.renderHeader(h, params)),
               /**
                * 列宽拖动
                * 固定列不允许拖动 -> 待解决 需要处理的逻辑复杂、涉及场景较大
@@ -242,7 +244,7 @@ export default {
                   'is--line': !border
                 }],
                 on: {
-                  mousedown: evnt => this.resizeMousedown(evnt, { $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn })
+                  mousedown: evnt => this.resizeMousedown(evnt, params)
                 }
               }) : null
             ])
