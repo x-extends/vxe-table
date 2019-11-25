@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="tip">
-      将单元格渲染成可编辑<span class="red">（该方式将无法使用 v3 的极速渲染模式）</span><br>
+      将单元格渲染成可编辑<span class="red">（注：该方式将无法兼容 v3）</span><br>
       <span class="red">由于不符合 vxe-table 单行编辑的设计原则，使用这个方式的所有逻辑都应该自行处理</span>
     </p>
 
@@ -34,7 +34,7 @@
     </pre>
 
     <p class="tip">
-      将可编辑全部设为可视类型<span class="red">（该方式将无法使用 v3 的极速渲染模式）</span><br>
+      将可编辑全部设为可视类型<span class="red">（注：该方式将无法兼容 v3）</span><br>
       <span class="red">由于不符合 vxe-table 单行编辑的设计原则，使用这个方式的所有逻辑都应该自行处理</span>
     </p>
 

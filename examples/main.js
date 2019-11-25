@@ -285,6 +285,45 @@ window.MOCK_TREE_DATA_LIST = [
                 ]
               }
             ]
+          },
+          {
+            id: '32300',
+            name: '文件夹 32300',
+            size: '678k',
+            type: '',
+            date: '2019-01-10',
+            children: [
+              {
+                id: '32310',
+                name: '文件 32310',
+                size: '75k',
+                type: 'mp4',
+                date: '2019-06-16'
+              },
+              {
+                id: '32320',
+                name: '文件夹 32320',
+                size: '88k',
+                type: '',
+                date: '2019-08-31',
+                children: [
+                  {
+                    id: '32321',
+                    name: '文件 32321',
+                    size: '5k',
+                    type: 'mp3',
+                    date: '2019-06-06'
+                  },
+                  {
+                    id: '32322',
+                    name: '文件 32322',
+                    size: '5k',
+                    type: 'avi',
+                    date: '2019-09-09'
+                  }
+                ]
+              }
+            ]
           }
         ]
       },

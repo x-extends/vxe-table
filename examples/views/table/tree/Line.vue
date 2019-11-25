@@ -53,6 +53,7 @@
     <vxe-table
       resizable
       show-overflow
+      highlight-hover-row
       size="small"
       :tree-config="{children: 'children', line: true, iconOpen: 'fa fa-minus-square-o', iconClose: 'fa fa-plus-square-o'}"
       :data="tableData">
@@ -74,6 +75,7 @@
     <vxe-table
       resizable
       show-overflow
+      highlight-hover-row
       ref="xTree"
       size="mini"
       :tree-config="{children: 'children', line: true, iconOpen: 'fa fa-minus-square-o', iconClose: 'fa fa-plus-square-o'}"
@@ -171,6 +173,7 @@ export default {
         <vxe-table
           resizable
           show-overflow
+          highlight-hover-row
           size="small"
           :tree-config="{children: 'children', line: true, iconOpen: 'fa fa-minus-square-o', iconClose: 'fa fa-plus-square-o'}"
           :data="tableData">
@@ -196,6 +199,7 @@ export default {
         <vxe-table
           resizable
           show-overflow
+          highlight-hover-row
           ref="xTree"
           size="mini"
           :tree-config="{children: 'children', line: true, iconOpen: 'fa fa-minus-square-o', iconClose: 'fa fa-plus-square-o'}"

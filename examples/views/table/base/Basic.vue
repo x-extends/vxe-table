@@ -2,7 +2,16 @@
   <div>
     <p class="tip"><table-api-link name="vxe-table"/> 基础表格，基于模板方式使用简单、便捷</p>
 
+    <vxe-toolbar>
+      <template v-slot:buttons>
+        <vxe-button @click="allAlign = 'left'">居左</vxe-button>
+        <vxe-button @click="allAlign = 'center'">居中</vxe-button>
+        <vxe-button @click="allAlign = 'right'">居右</vxe-button>
+      </template>
+    </vxe-toolbar>
+
     <vxe-table
+      :align="allAlign"
       :data="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
@@ -20,6 +29,7 @@
     <p class="tip">使用 <table-api-link prop="highlight-hover-row"/> 属性启用 hover 行高亮</p>
 
     <vxe-table
+      border
       highlight-hover-row
       :data="tableData">
       <vxe-table-column type="index" title="序号" width="60"></vxe-table-column>
@@ -44,10 +54,20 @@ import hljs from 'highlight.js'
 export default {
   data () {
     return {
+      allAlign: null,
       tableData: [],
       demoCodes: [
         `
+        <vxe-toolbar>
+          <template v-slot:buttons>
+            <vxe-button @click="allAlign = 'left'">居左</vxe-button>
+            <vxe-button @click="allAlign = 'center'">居中</vxe-button>
+            <vxe-button @click="allAlign = 'right'">居右</vxe-button>
+          </template>
+        </vxe-toolbar>
+
         <vxe-table
+          :align="allAlign"
           :data="tableData">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
@@ -59,6 +79,7 @@ export default {
         export default {
           data () {
             return {
+              allAlign: null,
               tableData: []
             }
           },
@@ -69,6 +90,7 @@ export default {
         `,
         `
         <vxe-table
+          border
           highlight-hover-row
           :data="tableData">
           <vxe-table-column type="index" title="序号" width="60"></vxe-table-column>

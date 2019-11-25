@@ -9,9 +9,17 @@
     <vxe-grid
       border
       resizable
+      toolbar
       height="300"
+      :align="allAlign"
       :columns="tableColumn"
-      :data="tableData"></vxe-grid>
+      :data="tableData">
+      <template v-slot:buttons>
+        <vxe-button @click="allAlign = 'left'">居左</vxe-button>
+        <vxe-button @click="allAlign = 'center'">居中</vxe-button>
+        <vxe-button @click="allAlign = 'right'">居右</vxe-button>
+      </template>
+    </vxe-grid>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
@@ -28,6 +36,7 @@ import hljs from 'highlight.js'
 export default {
   data () {
     return {
+      allAlign: null,
       tableColumn: [
         { type: 'index', width: 50 },
         { field: 'name', title: 'app.body.label.name' },
@@ -48,6 +57,7 @@ export default {
         export default {
           data () {
             return {
+              allAlign: null,
               tableColumn: [
                 { type: 'index', width: 50 },
                 { field: 'name', title: 'app.body.label.name' },
