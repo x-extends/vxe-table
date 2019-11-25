@@ -67,6 +67,7 @@ module.exports = {
         keepAlives: 'keep-alive 切换',
 
         tree: '树形表格',
+        treeNormal: '普通树',
         customIcon: '自定义图标',
         groupSummary: '分组汇总',
         groupSummaryCount: '分组汇总合计',
