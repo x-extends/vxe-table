@@ -626,6 +626,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.treeNormal',
+              locat: {
+                name: 'TableTreeNormal'
+              }
+            },
+            {
               label: 'app.aside.nav.customIcon',
               locat: {
                 name: 'TableTreeIcon'

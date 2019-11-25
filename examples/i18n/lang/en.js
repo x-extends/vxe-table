@@ -67,6 +67,7 @@ module.exports = {
         keepAlives: 'Switch keep-alive',
 
         tree: 'Tree table',
+        treeNormal: 'Normal tree',
         customIcon: 'Custom icon',
         groupSummary: 'Group summary',
         groupSummaryCount: 'Group summary total',
