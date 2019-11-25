@@ -141,9 +141,9 @@ window.MOCK_TREE_DATA_LIST = [
     children: [
       {
         id: '11000',
-        name: '文件 11000',
+        name: '某 11000.avi',
         size: '11k',
-        type: 'js',
+        type: 'avi',
         date: '2019-05-16'
       },
       {
@@ -155,7 +155,7 @@ window.MOCK_TREE_DATA_LIST = [
         children: [
           {
             id: '12100',
-            name: '文件夹 12100',
+            name: '图片 12100.png',
             size: '60k',
             type: '',
             date: '2019-05-16',
