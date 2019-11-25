@@ -36,7 +36,7 @@ const apis = [
       },
       {
         name: 'import',
-        descKey: 'app.api.toolbar.desc.export',
+        descKey: 'app.api.toolbar.desc.import',
         version: '2.6.14',
         type: 'Boolean, Object',
         enum: '',

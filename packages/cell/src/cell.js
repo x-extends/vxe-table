@@ -467,9 +467,9 @@ export const Cell = {
     return Cell.renderHeader(h, params).concat(Cell.renderFilterIcon(h, params))
   },
   renderFilterIcon (h, params) {
-    let { icon } = GlobalConfig
-    let { $table, column } = params
-    let { filterStore } = $table
+    let { $table, column, hasFilter } = params
+    let { filterStore, filterConfig = {} } = $table
+    let { iconNone, iconMatch } = filterConfig
     return [
       h('span', {
         class: ['vxe-filter-wrapper', {
@@ -477,7 +477,7 @@ export const Cell = {
         }]
       }, [
         h('i', {
-          class: `vxe-filter--btn ${icon.filter}`,
+          class: ['vxe-filter--btn', hasFilter ? (iconMatch || GlobalConfig.icon.filterMatch) : (iconNone || GlobalConfig.icon.filterNone)],
           attrs: {
             title: GlobalConfig.i18n('vxe.table.filter')
           },

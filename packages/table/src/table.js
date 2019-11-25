@@ -162,6 +162,8 @@ export default {
     syncResize: Boolean,
     // 排序配置项
     sortConfig: Object,
+    // 筛选配置项
+    filterConfig: Object,
     // 单选框配置
     radioConfig: Object,
     // （v3.0 废弃）

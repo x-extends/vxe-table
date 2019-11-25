@@ -188,9 +188,11 @@ export default {
             let showTooltip = headOverflow === true || headOverflow === 'tooltip'
             let hasEllipsis = showTitle || showTooltip || showEllipsis
             let thOns = {}
+            let isFilter = column.filters.length
+            let hasFilter = isFilter && column.filters.some(item => item.checked)
             // 确保任何情况下 columnIndex 都精准指向真实列索引
             let columnIndex = getColumnIndex(column)
-            let params = { $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType }
+            let params = { $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn, hasFilter }
             if (showTitle || showTooltip) {
               thOns.mouseenter = evnt => {
                 if ($table._isResize) {
@@ -233,14 +235,14 @@ export default {
                 'fixed--hidden': fixedHiddenColumn,
                 'is--sortable': column.sortable,
                 'is--filter': column.filters.length,
-                'filter--active': column.filters.some(item => item.checked)
+                'filter--active': hasFilter
               }, UtilTools.getClass(headerClassName, params), UtilTools.getClass(headerCellClassName, params)],
               attrs: {
                 'data-colid': column.id,
                 colspan: column.colSpan,
                 rowspan: column.rowSpan
               },
-              style: headerCellStyle ? (XEUtils.isFunction(headerCellStyle) ? headerCellStyle({ $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn }) : headerCellStyle) : null,
+              style: headerCellStyle ? (XEUtils.isFunction(headerCellStyle) ? headerCellStyle(params) : headerCellStyle) : null,
               on: thOns,
               key: columnKey || isColGroup ? column.id : columnIndex
             }, [
@@ -250,7 +252,7 @@ export default {
                   'c--tooltip': showTooltip,
                   'c--ellipsis': showEllipsis
                 }]
-              }, column.renderHeader(h, { $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn })),
+              }, column.renderHeader(h, params)),
               /**
                * 列宽拖动
                */
@@ -259,7 +261,7 @@ export default {
                   'is--line': !border
                 }],
                 on: {
-                  mousedown: evnt => this.resizeMousedown(evnt, { $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn })
+                  mousedown: evnt => this.resizeMousedown(evnt, params)
                 }
               }) : null
             ])

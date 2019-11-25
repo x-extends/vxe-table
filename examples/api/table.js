@@ -722,6 +722,34 @@ const apis = [
         ]
       },
       {
+        name: 'filter-config',
+        descKey: 'app.api.table.desc.filterConfig',
+        version: '2.7.0',
+        type: 'Object',
+        enum: '',
+        defVal: '',
+        list: [
+          {
+            name: 'iconNone',
+            desc: '无条件时显示的图标',
+            version: '',
+            type: 'String',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'iconMatch',
+            desc: '带条件时显示的图标',
+            version: '',
+            type: 'String',
+            enum: '',
+            defVal: '',
+            list: []
+          }
+        ]
+      },
+      {
         name: 'radio-config',
         descKey: 'app.api.table.desc.radioConfig',
         version: '',
