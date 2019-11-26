@@ -78,9 +78,10 @@
       highlight-hover-row
       ref="xTree"
       size="mini"
+      :checkbox-config="{labelField: 'name'}"
       :tree-config="{children: 'children', line: true, iconOpen: 'fa fa-minus-square-o', iconClose: 'fa fa-plus-square-o'}"
       :data="tableData">
-      <vxe-table-column field="name" title="Name" tree-node>
+      <vxe-table-column type="checkbox" title="Name" tree-node>
         <template v-slot="{ row }">
           <span>
             <template v-if="row.children && row.children.length">
@@ -237,6 +238,7 @@ export default {
         `
         .tree-node-icon {
           width: 16px;
+          text-align: center;
         }
         `
       ]
@@ -255,6 +257,7 @@ export default {
 
 <style scoped>
 .tree-node-icon {
-  width: 16px;
+  width: 18px;
+  text-align: center;
 }
 </style>

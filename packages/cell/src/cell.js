@@ -166,9 +166,6 @@ export const Cell = {
     let isDisabled = !!checkMethod
     // 在 v2.0 中废弃 labelProp
     let labelProp = radioConfig.labelField || radioConfig.labelProp
-    if (slots && slots.default) {
-      return slots.default(params, h)
-    }
     let { selectRow } = $table
     let { row } = params
     let options = {
@@ -204,7 +201,7 @@ export const Cell = {
         }),
         labelProp ? h('span', {
           class: 'vxe-radio--label'
-        }, XEUtils.get(row, labelProp)) : null
+        }, slots && slots.default ? slots.default(params, h) : XEUtils.get(row, labelProp)) : null
       ])
     ]
   },
@@ -227,9 +224,6 @@ export const Cell = {
         type: 'checkbox',
         disabled: isAllCheckboxDisabled
       }
-    }
-    if (slots && slots.header) {
-      return slots.header(params, h)
     }
     if (checkboxConfig && (checkboxConfig.checkStrictly ? !checkboxConfig.showHeader : checkboxConfig.showHeader === false)) {
       return []
@@ -258,7 +252,7 @@ export const Cell = {
         }),
         headerTitle ? h('span', {
           class: 'vxe-checkbox--label'
-        }, UtilTools.getFuncText(headerTitle)) : null
+        }, slots && slots.header ? slots.header(params, h) : UtilTools.getFuncText(headerTitle)) : null
       ])
     ]
   },
@@ -277,9 +271,6 @@ export const Cell = {
       attrs: {
         type: 'checkbox'
       }
-    }
-    if (slots && slots.default) {
-      return slots.default(params, h)
     }
     if (!isHidden) {
       if (checkMethod) {
@@ -312,7 +303,7 @@ export const Cell = {
         }),
         labelProp ? h('span', {
           class: 'vxe-checkbox--label'
-        }, XEUtils.get(row, labelProp)) : null
+        }, slots && slots.default ? slots.default(params, h) : XEUtils.get(row, labelProp)) : null
       ])
     ]
   },
@@ -336,9 +327,6 @@ export const Cell = {
       attrs: {
         type: 'checkbox'
       }
-    }
-    if (slots && slots.default) {
-      return slots.default(params, h)
     }
     if (!isHidden) {
       if (checkMethod) {
@@ -371,7 +359,7 @@ export const Cell = {
         }),
         labelProp ? h('span', {
           class: 'vxe-checkbox--label'
-        }, XEUtils.get(row, labelProp)) : null
+        }, slots && slots.default ? slots.default(params, h) : XEUtils.get(row, labelProp)) : null
       ])
     ]
   },
