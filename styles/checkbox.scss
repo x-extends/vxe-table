@@ -2,18 +2,9 @@
 
 /*checkbox*/
 .vxe-checkbox {
-  display: inline-block;
+  display: inline;
   user-select: none;
   cursor: pointer;
-  &.size--small,
-  &.size--mini {
-    font-size: 12px;
-    > input {
-      &+.vxe-checkbox--icon {
-        font-size: 14px;
-      }
-    }
-  }
   &+.vxe-checkbox {
     margin-left: 10px;
   }
@@ -28,7 +19,7 @@
       background-color: #fff;
       vertical-align: middle;
       border-radius: 0.2em;
-      font-size: 16px;
+      font-size: 1.2em;
       &:before {
         content: "";
         position: absolute;
@@ -38,11 +29,11 @@
       background-color: $vxe-primary-color;
       border-color: $vxe-primary-color;
       &:before {
-        height: 0.6em;
-        width: 0.3em;
-        left: 0.32em;
-        top: 0.06em;
-        border-width: 0.15em;
+        height: 0.68em;
+        width: 0.32em;
+        left: 0.28em;
+        top: 0.04em;
+        border-width: 0.12em;
         border-style: solid;
         border-color: #fff;
         border-left: 0;

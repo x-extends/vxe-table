@@ -2,23 +2,9 @@
 
 /*radio*/
 .vxe-radio {
-  display: inline-block;
+  display: inline;
   user-select: none;
   cursor: pointer;
-  &.size--small {
-    font-size: 13px;
-  }
-  &.size--mini {
-    font-size: 12px;
-  }
-  &.size--small,
-  &.size--mini {
-    > input {
-      &+.vxe-radio--icon {
-        font-size: 14px;
-      }
-    }
-  }
   &+.vxe-radio {
     margin-left: 10px;
   }
@@ -33,7 +19,7 @@
       background-color: #fff;
       vertical-align: middle;
       border-radius: 50%;
-      font-size: 16px;
+      font-size: 1.2em;
     }
     &:checked+.vxe-radio--icon {
       background-color: $vxe-primary-color;

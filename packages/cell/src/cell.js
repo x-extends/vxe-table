@@ -483,7 +483,6 @@ export const Cell = {
    * 可编辑
    */
   renderEditHeader (h, params) {
-    let { icon } = GlobalConfig
     let { $table, column } = params
     let { editRules, editConfig } = $table
     let { sortable, remoteSort, filters } = column
@@ -499,7 +498,7 @@ export const Cell = {
         class: 'vxe-required-icon'
       }) : null,
       editConfig && editConfig.showIcon === false ? null : h('i', {
-        class: `vxe-edit-icon ${icon.edit}`
+        class: ['vxe-edit-icon', editConfig.icon || GlobalConfig.icon.edit]
       })
     ].concat(Cell.renderHeader(h, params))
       .concat(sortable || remoteSort ? Cell.renderSortIcon(h, params) : [])

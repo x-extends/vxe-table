@@ -731,7 +731,7 @@ const apis = [
         list: [
           {
             name: 'iconNone',
-            desc: '无条件时显示的图标',
+            desc: '自定义无条件时显示的图标',
             version: '',
             type: 'String',
             enum: '',
@@ -740,7 +740,7 @@ const apis = [
           },
           {
             name: 'iconMatch',
-            desc: '带条件时显示的图标',
+            desc: '自定义带条件时显示的图标',
             version: '',
             type: 'String',
             enum: '',
@@ -979,7 +979,7 @@ const apis = [
           },
           {
             name: 'iconOpen',
-            desc: '展开后显示的图标',
+            desc: '自定义展开后显示的图标',
             version: '2.7.0',
             type: 'String',
             enum: '',
@@ -988,7 +988,7 @@ const apis = [
           },
           {
             name: 'iconClose',
-            desc: '收起后显示的图标',
+            desc: '自定义收起后显示的图标',
             version: '2.7.0',
             type: 'String',
             enum: '',
@@ -1070,7 +1070,7 @@ const apis = [
           },
           {
             name: 'iconOpen',
-            desc: '展开后显示的图标',
+            desc: '自定义展开后显示的图标',
             version: '2.7.0',
             type: 'String',
             enum: '',
@@ -1079,7 +1079,7 @@ const apis = [
           },
           {
             name: 'iconClose',
-            desc: '收起后显示的图标',
+            desc: '自定义收起后显示的图标',
             version: '2.7.0',
             type: 'String',
             enum: '',
@@ -1291,6 +1291,15 @@ const apis = [
             desc: '该方法 Function({row, rowIndex, column, columnIndex}) 决定该单元格是否允许编辑',
             version: '',
             type: 'Function',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'icon',
+            desc: '自定义可编辑列的状态图标',
+            version: '2.7.0',
+            type: 'String',
             enum: '',
             defVal: '',
             list: []

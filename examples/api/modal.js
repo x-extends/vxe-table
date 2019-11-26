@@ -53,6 +53,15 @@ const apis = [
         list: []
       },
       {
+        name: 'iconStatus',
+        descKey: 'app.api.modal.desc.iconStatus',
+        version: '2.7.0',
+        type: 'String',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'message',
         descKey: 'app.api.modal.desc.message',
         version: '',

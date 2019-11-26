@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="tip">
-      设置 <table-api-link prop="edit-config"/>={trigger: 'click', mode: 'cell', showStatus: true} 开启编辑状态显示功能<br>
+      设置 <table-api-link prop="edit-config"/>={trigger: 'click', mode: 'cell', showStatus: true} 开启编辑状态显示功能，还可以通过 icon 自定义编辑状态的图标<br>
       对于某些需要局部保存的场景，可以在数据保存完成后调用 <table-api-link prop="reloadRow"/> 方法加载行数据并恢复到初始状态
     </p>
 
@@ -20,7 +20,7 @@
       show-overflow
       ref="xTable"
       :data="tableData"
-      :edit-config="{trigger: 'click', mode: 'cell', showStatus: true}">
+      :edit-config="{trigger: 'click', mode: 'cell', showStatus: true, icon: 'fa fa-edit'}">
       <vxe-table-column type="checkbox" width="60"></vxe-table-column>
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
@@ -74,7 +74,7 @@ export default {
           show-overflow
           ref="xTable"
           :data="tableData"
-          :edit-config="{trigger: 'click', mode: 'cell', showStatus: true}">
+          :edit-config="{trigger: 'click', mode: 'cell', showStatus: true, icon: 'fa fa-edit'}">
           <vxe-table-column type="checkbox" width="60"></vxe-table-column>
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
