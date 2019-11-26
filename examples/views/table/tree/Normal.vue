@@ -6,14 +6,14 @@
       <template v-slot:buttons>
         <vxe-button @click="getTreeRadioEvent">获取选中</vxe-button>
         <vxe-button @click="getTreeExpansionEvent">获取已展开</vxe-button>
-        <vxe-button @click="$refs.xTree.setAllTreeExpansion(true)">展开所有</vxe-button>
-        <vxe-button @click="$refs.xTree.clearTreeExpand()">关闭所有</vxe-button>
+        <vxe-button @click="$refs.xTree1.setAllTreeExpansion(true)">展开所有</vxe-button>
+        <vxe-button @click="$refs.xTree1.clearTreeExpand()">关闭所有</vxe-button>
       </template>
     </vxe-toolbar>
 
     <vxe-table
       show-overflow
-      ref="xTree"
+      ref="xTree1"
       :show-header="false"
       :tree-config="{children: 'children'}"
       :radio-config="{labelField: 'name'}"
@@ -28,7 +28,7 @@
       <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
 
-    <p class="tip">更多功能</p>
+    <p class="tip">带连接线</p>
 
     <vxe-table
       show-overflow
@@ -38,6 +38,38 @@
       :checkbox-config="{labelField: 'name'}"
       :tree-config="{children: 'children', line: true, iconOpen: 'fa fa-minus-square-o', iconClose: 'fa fa-plus-square-o'}">
       <vxe-table-column type="checkbox" tree-node></vxe-table-column>
+    </vxe-table>
+
+    <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
+
+    <pre>
+      <code class="xml">{{ demoCodes[2] }}</code>
+      <code class="javascript">{{ demoCodes[3] }}</code>
+    </pre>
+
+    <p class="tip">更多功能</p>
+
+    <vxe-table
+      show-overflow
+      highlight-hover-row
+      ref="xTree3"
+      :show-header="false"
+      :data="tableData"
+      :checkbox-config="{labelField: 'name'}"
+      :tree-config="{children: 'children', line: true, iconOpen: 'fa fa-minus-square-o', iconClose: 'fa fa-plus-square-o'}">
+      <vxe-table-column type="checkbox" tree-node>
+        <template v-slot="{ row }">
+          <span>
+            <template v-if="row.children && row.children.length">
+              <i class="tree-node-icon fa" :class="$refs.xTree3.isTreeExpandByRow(row) ? 'fa-folder-open-o' : 'fa-folder-o'"></i>
+            </template>
+            <template v-else>
+              <i class="tree-node-icon fa fa-file-o"></i>
+            </template>
+            <span>{{ row.name }}</span>
+          </span>
+        </template>
+      </vxe-table-column>
       <vxe-table-column title="操作" width="140">
         <template>
           <vxe-button type="text" icon="fa fa-eye"></vxe-button>
@@ -53,6 +85,7 @@
     <pre>
       <code class="xml">{{ demoCodes[2] }}</code>
       <code class="javascript">{{ demoCodes[3] }}</code>
+      <code class="css">{{ demoCodes[4] }}</code>
     </pre>
   </div>
 </template>
@@ -116,6 +149,29 @@ export default {
           :checkbox-config="{labelField: 'name'}"
           :tree-config="{children: 'children', line: true, iconOpen: 'fa fa-minus-square-o', iconClose: 'fa fa-plus-square-o'}">
           <vxe-table-column type="checkbox" tree-node></vxe-table-column>
+        </vxe-table>
+        `,
+        `
+        export default {
+          data () {
+            return {
+              tableData: []
+            }
+          },
+          created () {
+            this.tableData = window.MOCK_TREE_DATA_LIST.slice(0)
+          }
+        }
+        `,
+        `
+        <vxe-table
+          show-overflow
+          highlight-hover-row
+          :show-header="false"
+          :data="tableData"
+          :checkbox-config="{labelField: 'name'}"
+          :tree-config="{children: 'children', line: true, iconOpen: 'fa fa-minus-square-o', iconClose: 'fa fa-plus-square-o'}">
+          <vxe-table-column type="checkbox" tree-node></vxe-table-column>
           <vxe-table-column title="操作" width="140">
             <template>
               <vxe-button type="text" icon="fa fa-eye"></vxe-button>
@@ -137,6 +193,12 @@ export default {
             this.tableData = window.MOCK_TREE_DATA_LIST.slice(0)
           }
         }
+        `,
+        `
+        .tree-node-icon {
+          width: 24px;
+          text-align: center;
+        }
         `
       ]
     }
@@ -151,13 +213,20 @@ export default {
   },
   methods: {
     getTreeRadioEvent () {
-      let selectRow = this.$refs.xTree.getRadioRow()
+      let selectRow = this.$refs.xTree1.getRadioRow()
       this.$XModal.alert(selectRow ? selectRow.name : 'null')
     },
     getTreeExpansionEvent () {
-      let treeExpandRecords = this.$refs.xTree.getTreeExpandRecords()
+      let treeExpandRecords = this.$refs.xTree1.getTreeExpandRecords()
       this.$XModal.alert(treeExpandRecords.length)
     }
   }
 }
 </script>
+
+<style scoped>
+.tree-node-icon {
+  width: 24px;
+  text-align: center;
+}
+</style>
