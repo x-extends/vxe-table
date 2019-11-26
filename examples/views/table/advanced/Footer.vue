@@ -83,7 +83,6 @@
 
 <script>
 import hljs from 'highlight.js'
-import XEUtils from 'xe-utils'
 
 export default {
   data () {
@@ -124,7 +123,7 @@ export default {
                     return '平均'
                   }
                   if (['age', 'rate'].includes(column.property)) {
-                    return XEUtils.mean(data, column.property)
+                    return this.$utils.mean(data, column.property)
                   }
                   return null
                 }),
@@ -133,9 +132,18 @@ export default {
                     return '和值'
                   }
                   if (['age', 'rate'].includes(column.property)) {
-                    return XEUtils.sum(data, column.property)
+                    return this.$utils.sum(data, column.property)
                   }
                   return null
+                }),
+                columns.map((column, columnIndex) => {
+                  if (columnIndex === 0) {
+                    return '其他'
+                  }
+                  if (['age', 'sex', 'name'].includes(column.property)) {
+                    return '无'
+                  }
+                  return '-'
                 })
               ]
             }
@@ -185,7 +193,7 @@ export default {
                     return '平均'
                   }
                   if (['age', 'rate'].includes(column.property)) {
-                    return XEUtils.mean(data, column.property)
+                    return this.$utils.mean(data, column.property)
                   }
                   return null
                 }),
@@ -194,9 +202,18 @@ export default {
                     return '和值'
                   }
                   if (['age', 'rate'].includes(column.property)) {
-                    return XEUtils.sum(data, column.property)
+                    return this.$utils.sum(data, column.property)
                   }
                   return null
+                }),
+                columns.map((column, columnIndex) => {
+                  if (columnIndex === 0) {
+                    return '其他'
+                  }
+                  if (['age', 'sex', 'name'].includes(column.property)) {
+                    return '无'
+                  }
+                  return '-'
                 })
               ]
             }
@@ -249,7 +266,7 @@ export default {
                     return '平均'
                   }
                   if (['age', 'rate'].includes(column.property)) {
-                    return XEUtils.mean(data, column.property)
+                    return this.$utils.mean(data, column.property)
                   }
                   return null
                 }),
@@ -258,9 +275,18 @@ export default {
                     return '和值'
                   }
                   if (['age', 'rate'].includes(column.property)) {
-                    return XEUtils.sum(data, column.property)
+                    return this.$utils.sum(data, column.property)
                   }
                   return null
+                }),
+                columns.map((column, columnIndex) => {
+                  if (columnIndex === 0) {
+                    return '其他'
+                  }
+                  if (['age', 'sex', 'name'].includes(column.property)) {
+                    return '无'
+                  }
+                  return '-'
                 })
               ]
               return footerData
@@ -297,7 +323,7 @@ export default {
             return '平均'
           }
           if (['age', 'rate'].includes(column.property)) {
-            return XEUtils.mean(data, column.property)
+            return this.$utils.mean(data, column.property)
           }
           return null
         }),
@@ -306,9 +332,18 @@ export default {
             return '和值'
           }
           if (['age', 'rate'].includes(column.property)) {
-            return XEUtils.sum(data, column.property)
+            return this.$utils.sum(data, column.property)
           }
           return null
+        }),
+        columns.map((column, columnIndex) => {
+          if (columnIndex === 0) {
+            return '其他'
+          }
+          if (['age', 'sex', 'name'].includes(column.property)) {
+            return '无'
+          }
+          return '-'
         })
       ]
       return footerData
