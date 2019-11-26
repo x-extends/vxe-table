@@ -83,9 +83,9 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[2] }}</code>
-      <code class="javascript">{{ demoCodes[3] }}</code>
-      <code class="css">{{ demoCodes[4] }}</code>
+      <code class="xml">{{ demoCodes[4] }}</code>
+      <code class="javascript">{{ demoCodes[5] }}</code>
+      <code class="css">{{ demoCodes[6] }}</code>
     </pre>
   </div>
 </template>
@@ -167,11 +167,24 @@ export default {
         <vxe-table
           show-overflow
           highlight-hover-row
+          ref="xTree"
           :show-header="false"
           :data="tableData"
           :checkbox-config="{labelField: 'name'}"
           :tree-config="{children: 'children', line: true, iconOpen: 'fa fa-minus-square-o', iconClose: 'fa fa-plus-square-o'}">
-          <vxe-table-column type="checkbox" tree-node></vxe-table-column>
+          <vxe-table-column type="checkbox" tree-node>
+            <template v-slot="{ row }">
+              <span>
+                <template v-if="row.children && row.children.length">
+                  <i class="tree-node-icon fa" :class="$refs.xTree.isTreeExpandByRow(row) ? 'fa-folder-open-o' : 'fa-folder-o'"></i>
+                </template>
+                <template v-else>
+                  <i class="tree-node-icon fa fa-file-o"></i>
+                </template>
+                <span>{{ row.name }}</span>
+              </span>
+            </template>
+          </vxe-table-column>
           <vxe-table-column title="操作" width="140">
             <template>
               <vxe-button type="text" icon="fa fa-eye"></vxe-button>
