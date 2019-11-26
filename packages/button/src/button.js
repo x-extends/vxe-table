@@ -40,12 +40,11 @@ export default {
           mouseenter: this.mouseenterEvent,
           mouseleave: this.mouseleaveEvent
         }, XEUtils.objectMap($listeners, (cb, type) => evnt => this.$emit(type, evnt)))
-      }, [
-        h('span', $scopedSlots.default ? $scopedSlots.default.call(this) : ''),
+      }, this.renderContent(h).concat([
         h('i', {
           class: `vxe-button--dropdown-arrow ${GlobalConfig.icon.dropdownBottom}`
         })
-      ]),
+      ])),
       h('div', {
         class: 'vxe-button--dropdown-wrapper',
         on: {

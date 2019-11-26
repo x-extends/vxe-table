@@ -2,6 +2,7 @@ import XEUtils from 'xe-utils'
 import tableAPI from './table'
 import columnAPI from './column'
 import toolbarAPI from './toolbar'
+import pagerAPI from './pager'
 
 const apis = [
   {
@@ -35,6 +36,24 @@ const apis = [
               enum: '',
               defVal: 'true',
               list: []
+            },
+            {
+              name: 'iconIn',
+              desc: '自定义最大化图标',
+              version: '',
+              type: 'String',
+              enum: '',
+              defVal: '',
+              list: []
+            },
+            {
+              name: 'iconOut',
+              desc: '自定义还原图标',
+              version: '',
+              type: 'String',
+              enum: '',
+              defVal: '',
+              list: []
             }
           ]
         }, {
@@ -53,62 +72,7 @@ const apis = [
         type: 'Object',
         enum: '',
         defVal: '',
-        list: [
-          {
-            name: 'current-page',
-            desc: '当前页',
-            version: '',
-            type: 'Number',
-            enum: '',
-            defVal: '1',
-            list: []
-          },
-          {
-            name: 'page-size',
-            desc: '每页大小',
-            version: '',
-            type: 'Number',
-            enum: '',
-            defVal: '10',
-            list: []
-          },
-          {
-            name: 'total',
-            desc: '总条数',
-            version: '',
-            type: 'Number',
-            enum: '',
-            defVal: '0',
-            list: []
-          },
-          {
-            name: 'pager-count',
-            desc: '显示页码按钮的数量',
-            version: '',
-            type: 'Number',
-            enum: '',
-            defVal: '7',
-            list: []
-          },
-          {
-            name: 'page-sizes',
-            desc: '每页大小选项列表',
-            version: '',
-            type: 'Array',
-            enum: '',
-            defVal: '[10,15,20,50,100]',
-            list: []
-          },
-          {
-            name: 'background',
-            desc: '带背景颜色',
-            version: '',
-            type: 'Boolean',
-            enum: '',
-            defVal: 'false',
-            list: []
-          }
-        ]
+        list: XEUtils.mapTree(pagerAPI.find(item => item.name === 'Props').list.filter(item => !['size', 'loading'].includes(item.name)), item => Object.assign({}, item, { name: XEUtils.camelCase(item.name) }))
       },
       {
         name: 'proxy-config',

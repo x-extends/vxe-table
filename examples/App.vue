@@ -455,6 +455,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.pageIcon',
+              locat: {
+                name: 'TablePageIcon'
+              }
+            },
+            {
               label: 'app.aside.nav.moveHighlight',
               locat: {
                 name: 'TableHighlight'
@@ -569,6 +575,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.toolbarIcon',
+              locat: {
+                name: 'GridToolbarIcon'
+              }
+            },
+            {
               label: 'app.aside.nav.fullscreen',
               locat: {
                 name: 'GridFullscreen'
@@ -585,6 +597,12 @@ export default {
               demoUrl: 'https://jsrun.pro/m6WKp/edit',
               locat: {
                 name: 'GridMenu'
+              }
+            },
+            {
+              label: 'app.aside.nav.upload',
+              locat: {
+                name: 'GridUpload'
               }
             },
             {

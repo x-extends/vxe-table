@@ -114,6 +114,51 @@ const apis = [
         enum: '',
         defVal: 'false',
         list: []
+      },
+      {
+        name: 'icon-prev-page',
+        descKey: 'app.api.pager.desc.iconPrevPage',
+        version: '1.15.15',
+        type: 'String',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'icon-jump-prev',
+        descKey: 'app.api.pager.desc.iconJumpPrev',
+        version: '1.15.15',
+        type: 'String',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'icon-jump-next',
+        descKey: 'app.api.pager.desc.iconJumpNext',
+        version: '1.15.15',
+        type: 'String',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'iconnext-page',
+        descKey: 'app.api.pager.desc.iconNextPage',
+        version: '1.15.15',
+        type: 'String',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'icon-jump-more',
+        descKey: 'app.api.pager.desc.iconJumpMore',
+        version: '1.15.15',
+        type: 'String',
+        enum: '',
+        defVal: '',
+        list: []
       }
     ]
   },

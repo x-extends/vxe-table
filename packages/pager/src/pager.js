@@ -27,7 +27,13 @@ export default {
     // 带背景颜色
     background: { type: Boolean, default: () => GlobalConfig.pager.background },
     // 默认的样式
-    perfect: { type: Boolean, default: () => GlobalConfig.pager.perfect }
+    perfect: { type: Boolean, default: () => GlobalConfig.pager.perfect },
+    // 自定义图标
+    iconPrevPage: String,
+    iconJumpPrev: String,
+    iconJumpNext: String,
+    iconNextPage: String,
+    iconJumpMore: String
   },
   inject: {
     $grid: {
@@ -81,7 +87,7 @@ export default {
   methods: {
     // 上一页
     renderPrevPage (h) {
-      let { currentPage } = this
+      let { currentPage, iconPrevPage } = this
       return h('span', {
         class: ['vxe-pager--prev-btn', {
           'is--disabled': currentPage <= 1
@@ -94,7 +100,7 @@ export default {
         }
       }, [
         h('i', {
-          class: ['vxe-icon--page-icon', GlobalConfig.icon.prevPage]
+          class: ['vxe-pager--btn-icon', iconPrevPage || GlobalConfig.icon.prevPage]
         })
       ])
     },
@@ -113,10 +119,10 @@ export default {
         }
       }, [
         tagName ? h('i', {
-          class: 'vxe-pager--jump-more vxe-icon--more'
+          class: ['vxe-pager--jump-more', this.iconJumpMore || GlobalConfig.icon.jumpMore]
         }) : null,
         h('i', {
-          class: ['vxe-pager--jump-icon', GlobalConfig.icon.jumpPrev]
+          class: ['vxe-pager--jump-icon', this.iconJumpPrev || GlobalConfig.icon.jumpPrev]
         })
       ])
     },
@@ -134,7 +140,7 @@ export default {
     },
     // 向下翻页
     renderNextJump (h, tagName) {
-      let { currentPage, pageCount } = this
+      let { currentPage, pageCount, iconJumpNext } = this
       return h(tagName || 'span', {
         class: ['vxe-pager--jump-next', {
           'is--fixed': !tagName,
@@ -148,16 +154,16 @@ export default {
         }
       }, [
         tagName ? h('i', {
-          class: 'vxe-pager--jump-more vxe-icon--more'
+          class: ['vxe-pager--jump-more', this.iconJumpMore || GlobalConfig.icon.jumpMore]
         }) : null,
         h('i', {
-          class: ['vxe-pager--jump-icon', GlobalConfig.icon.jumpNext]
+          class: ['vxe-pager--jump-icon', iconJumpNext || GlobalConfig.icon.jumpNext]
         })
       ])
     },
     // 下一页
     renderNextPage (h) {
-      let { currentPage, pageCount } = this
+      let { currentPage, pageCount, iconNextPage } = this
       return h('span', {
         class: ['vxe-pager--next-btn', {
           'is--disabled': currentPage >= pageCount
@@ -170,7 +176,7 @@ export default {
         }
       }, [
         h('i', {
-          class: ['vxe-icon--page-icon', GlobalConfig.icon.nextPage]
+          class: ['vxe-pager--btn-icon', iconNextPage || GlobalConfig.icon.nextPage]
         })
       ])
     },

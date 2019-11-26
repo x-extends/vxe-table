@@ -29,6 +29,7 @@
             jumpNext: 'vxe-icon--d-arrow-right',
             prevPage: 'vxe-icon--arrow-left',
             nextPage: 'vxe-icon--arrow-right',
+            jumpMore: 'vxe-icon--more',
             modalZoomIn: 'vxe-icon--zoomin',
             modalZoomOut: 'vxe-icon--zoomout',
             modalClose: 'vxe-icon--close',

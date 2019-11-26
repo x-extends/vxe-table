@@ -68,6 +68,15 @@ const apis = [
             enum: 'csv, html, xml, txt',
             defVal: '支持所有类型',
             list: []
+          },
+          {
+            name: 'icon',
+            desc: '自定义图标',
+            version: '1.15.15',
+            type: 'String',
+            enum: '',
+            defVal: '',
+            list: []
           }
         ]
       },
@@ -132,6 +141,15 @@ const apis = [
             enum: '',
             defVal: 'true',
             list: []
+          },
+          {
+            name: 'icon',
+            desc: '自定义图标',
+            version: '1.15.15',
+            type: 'String',
+            enum: '',
+            defVal: '',
+            list: []
           }
         ]
       },
@@ -148,6 +166,24 @@ const apis = [
             desc: '查询的方法',
             version: '',
             type: 'Function / Promise',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'icon',
+            desc: '自定义图标',
+            version: '1.15.15',
+            type: 'String',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'iconLoading',
+            desc: '自定义加载中图标',
+            version: '1.15.15',
+            type: 'String',
             enum: '',
             defVal: '',
             list: []
@@ -216,6 +252,15 @@ const apis = [
             enum: '',
             defVal: '',
             list: []
+          },
+          {
+            name: 'icon',
+            desc: '自定义图标',
+            version: '1.15.15',
+            type: 'String',
+            enum: '',
+            defVal: '',
+            list: []
           }
         ]
       },
@@ -255,6 +300,15 @@ const apis = [
             list: []
           },
           {
+            name: 'icon ',
+            desc: '按钮图标',
+            version: '1.15.15',
+            type: 'String',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
             name: 'disabled ',
             desc: '是否禁用',
             version: '',
@@ -270,7 +324,53 @@ const apis = [
             type: 'Array',
             enum: '',
             defVal: '',
-            list: []
+            list: [
+              {
+                name: 'name',
+                desc: '按钮名称（支持开启国际化）',
+                version: '',
+                type: 'String',
+                enum: '',
+                defVal: '',
+                list: []
+              },
+              {
+                name: 'code',
+                desc: '按钮编码',
+                version: '',
+                type: 'String',
+                enum: '',
+                defVal: '',
+                list: []
+              },
+              {
+                name: 'visible ',
+                desc: '是否可视',
+                version: '',
+                type: 'Boolean',
+                enum: '',
+                defVal: 'true',
+                list: []
+              },
+              {
+                name: 'disabled ',
+                desc: '是否禁用',
+                version: '',
+                type: 'Boolean',
+                enum: '',
+                defVal: 'false',
+                list: []
+              },
+              {
+                name: 'icon ',
+                desc: '按钮图标',
+                version: '1.15.15',
+                type: 'String',
+                enum: '',
+                defVal: '',
+                list: []
+              }
+            ]
           }
         ]
       }
