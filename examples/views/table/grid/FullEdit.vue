@@ -73,43 +73,37 @@ export default {
       tableToolbar: {
         id: 'full_edit_1',
         buttons: [
-          { code: 'reload', name: 'app.body.button.refresh', disabled: false },
-          { code: 'insert_actived', name: '新增', disabled: false },
+          { code: 'reload', name: 'app.body.button.refresh', icon: 'fa fa-refresh', disabled: false },
+          { code: 'insert_actived', name: '新增', icon: 'fa fa-plus', disabled: false },
           {
             code: 'mark_cancel',
             name: 'app.body.button.markCancel',
+            icon: 'fa fa-bookmark-o',
             disabled: false,
             dropdowns: [
-              { code: 'delete_selection', name: 'app.body.button.deleteSelectedRecords', disabled: false },
-              { code: 'remove_selection', name: '移除数据', disabled: false }
+              { code: 'delete_selection', icon: 'fa fa-trash-o', name: 'app.body.button.deleteSelectedRecords', disabled: false },
+              { code: 'remove_selection', icon: 'fa fa-remove', name: '移除数据', disabled: false }
             ]
           },
-          { code: 'save', name: 'app.body.button.save', disabled: false },
-          {
-            name: '更多操作',
-            disabled: false,
-            dropdowns: [
-              { code: 'reset_custom', name: '重置个性化信息', disabled: false }
-            ]
-          },
+          { code: 'save', name: 'app.body.button.save', icon: 'fa fa-save', disabled: false },
           {
             name: '导入/导出1',
             dropdowns: [
-              { code: 'import', name: '直接导入', disabled: false },
-              { code: 'export', name: '直接导出 CSV', params: { type: 'csv' }, disabled: false },
-              { code: 'export', name: '直接导出 XML', params: { type: 'xml' }, disabled: false },
-              { code: 'export', name: '直接导出 HTML', params: { type: 'html' }, disabled: false },
-              { code: 'export', name: '直接导出 TXT', params: { type: 'txt' }, disabled: false }
+              { code: 'import', name: '直接导入', icon: 'fa fa-cloud-upload', disabled: false },
+              { code: 'export', name: '直接导出 CSV', icon: 'fa fa-download', params: { type: 'csv' }, disabled: false },
+              { code: 'export', name: '直接导出 XML', icon: 'fa fa-download', params: { type: 'xml' }, disabled: false },
+              { code: 'export', name: '直接导出 HTML', icon: 'fa fa-download', params: { type: 'html' }, disabled: false },
+              { code: 'export', name: '直接导出 TXT', icon: 'fa fa-download', params: { type: 'txt' }, disabled: false }
             ]
           },
           {
             name: '导入/导出2',
+            icon: 'fa fa-cloud-download',
             dropdowns: [
-              { code: 'open_import', name: '高级导入', disabled: false },
-              { code: 'open_export', name: '高级导出', disabled: false }
+              { code: 'open_import', name: '高级导入', icon: 'fa fa-cloud-upload', disabled: false },
+              { code: 'open_export', name: '高级导出', icon: 'fa fa-download', disabled: false }
             ]
           },
-          { code: 'other0', name: '禁用的按钮1', disabled: true },
           {
             name: '禁用按钮',
             disabled: false,
@@ -129,6 +123,13 @@ export default {
                 name: '下拉的按钮3',
                 disabled: false
               }
+            ]
+          },
+          {
+            name: '更多操作',
+            disabled: false,
+            dropdowns: [
+              { code: 'reset_custom', name: '重置个性化信息', disabled: false }
             ]
           }
         ],
@@ -222,43 +223,37 @@ export default {
               tableToolbar: {
                 id: 'full_edit_1',
                 buttons: [
-                  { code: 'reload', name: 'app.body.button.refresh', disabled: false },
-                  { code: 'insert_actived', name: '新增', disabled: false },
+                  { code: 'reload', name: 'app.body.button.refresh', icon: 'fa fa-refresh', disabled: false },
+                  { code: 'insert_actived', name: '新增', icon: 'fa fa-plus', disabled: false },
                   {
                     code: 'mark_cancel',
                     name: 'app.body.button.markCancel',
+                    icon: 'fa fa-bookmark-o',
                     disabled: false,
                     dropdowns: [
-                      { code: 'delete_selection', name: 'app.body.button.deleteSelectedRecords', disabled: false },
-                      { code: 'remove_selection', name: '移除数据', disabled: false }
+                      { code: 'delete_selection', icon: 'fa fa-trash-o', name: 'app.body.button.deleteSelectedRecords', disabled: false },
+                      { code: 'remove_selection', icon: 'fa fa-remove', name: '移除数据', disabled: false }
                     ]
                   },
-                  { code: 'save', name: 'app.body.button.save', disabled: false },
-                  {
-                    name: '更多操作',
-                    disabled: false,
-                    dropdowns: [
-                      { code: 'reset_custom', name: '重置个性化信息', disabled: false }
-                    ]
-                  },
+                  { code: 'save', name: 'app.body.button.save', icon: 'fa fa-save', disabled: false },
                   {
                     name: '导入/导出1',
                     dropdowns: [
-                      { code: 'import', name: '直接导入', disabled: false },
-                      { code: 'export', name: '直接导出 CSV', params: { type: 'csv' }, disabled: false },
-                      { code: 'export', name: '直接导出 XML', params: { type: 'xml' }, disabled: false },
-                      { code: 'export', name: '直接导出 HTML', params: { type: 'html' }, disabled: false },
-                      { code: 'export', name: '直接导出 TXT', params: { type: 'txt' }, disabled: false }
+                      { code: 'import', name: '直接导入', icon: 'fa fa-cloud-upload', disabled: false },
+                      { code: 'export', name: '直接导出 CSV', icon: 'fa fa-download', params: { type: 'csv' }, disabled: false },
+                      { code: 'export', name: '直接导出 XML', icon: 'fa fa-download', params: { type: 'xml' }, disabled: false },
+                      { code: 'export', name: '直接导出 HTML', icon: 'fa fa-download', params: { type: 'html' }, disabled: false },
+                      { code: 'export', name: '直接导出 TXT', icon: 'fa fa-download', params: { type: 'txt' }, disabled: false }
                     ]
                   },
                   {
                     name: '导入/导出2',
+                    icon: 'fa fa-cloud-download',
                     dropdowns: [
-                      { code: 'open_import', name: '高级导入', disabled: false },
-                      { code: 'open_export', name: '高级导出', disabled: false }
+                      { code: 'open_import', name: '高级导入', icon: 'fa fa-cloud-upload', disabled: false },
+                      { code: 'open_export', name: '高级导出', icon: 'fa fa-download', disabled: false }
                     ]
                   },
-                  { code: 'other0', name: '禁用的按钮1', disabled: true },
                   {
                     name: '禁用按钮',
                     disabled: false,
@@ -278,6 +273,13 @@ export default {
                         name: '下拉的按钮3',
                         disabled: false
                       }
+                    ]
+                  },
+                  {
+                    name: '更多操作',
+                    disabled: false,
+                    dropdowns: [
+                      { code: 'reset_custom', name: '重置个性化信息', disabled: false }
                     ]
                   }
                 ],

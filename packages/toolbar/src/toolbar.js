@@ -111,7 +111,7 @@ export default {
     GlobalEvent.off(this, 'blur')
   },
   render (h) {
-    let { _e, $scopedSlots, $grid, $table, loading, settingStore, refresh, zoom, setting, settingOpts, buttons = [], vSize, tableFullColumn, importStore, importParams, exportStore, exportParams } = this
+    let { _e, $scopedSlots, $grid, $table, loading, settingStore, importOpts, exportOpts, refresh, refreshOpts, zoom, zoomOpts, setting, settingOpts, buttons = [], vSize, tableFullColumn, importStore, importParams, exportStore, exportParams } = this
     let customBtnOns = {}
     let customWrapperOns = {}
     let $buttons = $scopedSlots.buttons
@@ -144,6 +144,7 @@ export default {
             click: evnt => this.btnEvent(evnt, item)
           },
           props: {
+            icon: item.icon,
             disabled: item.disabled
           },
           scopedSlots: item.dropdowns && item.dropdowns.length ? {
@@ -154,6 +155,7 @@ export default {
                   click: evnt => this.btnEvent(evnt, child)
                 },
                 props: {
+                  icon: child.icon,
                   disabled: child.disabled
                 }
               }, UtilTools.getFuncText(child.name))
@@ -177,7 +179,7 @@ export default {
           }
         }, [
           h('i', {
-            class: GlobalConfig.icon.import
+            class: importOpts.icon || GlobalConfig.icon.import
           })
         ]) : null,
         this.export ? h('div', {
@@ -190,7 +192,7 @@ export default {
           }
         }, [
           h('i', {
-            class: GlobalConfig.icon.export
+            class: exportOpts.icon || GlobalConfig.icon.export
           })
         ]) : null,
         refresh ? h('div', {
@@ -203,7 +205,7 @@ export default {
           }
         }, [
           h('i', {
-            class: GlobalConfig.icon[`refresh${this.isRefresh ? 'Loading' : ''}`]
+            class: this.isRefresh ? (refreshOpts.iconLoading || GlobalConfig.icon.refreshLoading) : (refreshOpts.icon || GlobalConfig.icon.refresh)
           })
         ]) : null,
         zoom && this.$grid ? h('div', {
@@ -216,7 +218,7 @@ export default {
           }
         }, [
           h('i', {
-            class: GlobalConfig.icon[`zoom${this.$grid.isMaximized() ? 'Out' : 'In'}`]
+            class: this.$grid.isMaximized() ? (zoomOpts.iconOut || GlobalConfig.icon.zoomOut) : (zoomOpts.iconIn || GlobalConfig.icon.zoomIn)
           })
         ]) : null,
         setting ? h('div', {
@@ -233,7 +235,7 @@ export default {
             on: customBtnOns
           }, [
             h('i', {
-              class: GlobalConfig.icon.custom
+              class: settingOpts.icon || GlobalConfig.icon.custom
             })
           ]),
           h('div', {

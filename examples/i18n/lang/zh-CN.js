@@ -64,6 +64,7 @@ module.exports = {
         customlWidthStorage: '显示/隐藏/列宽 + localStorage',
         search: '全表搜索',
         pager: '分页',
+        pageIcon: '分页 + 自定义图标',
         tabs: '多页签切换',
         keepAlives: 'keep-alive 切换',
 
@@ -84,6 +85,7 @@ module.exports = {
         proxyPage: '数据代理 + 分页',
         fullQuery: '完整查询',
         customToolbar: '自定义工具栏',
+        toolbarIcon: '自定义工具栏按钮图标',
         fullscreen: '全屏缩放',
         dynamicColumn: '实现可配置动态列',
         baseTree: '基础树',
@@ -439,7 +441,12 @@ module.exports = {
           align: '对齐方式',
           border: '带边框',
           background: '带背景颜色',
-          perfect: '默认的样式'
+          perfect: '默认的样式',
+          iconPrevPage: '自定义上一页图标',
+          iconJumpPrev: '自定义向上跳页图标',
+          iconJumpNext: '自定义向下跳页图标',
+          iconNextPage: '自定义下一页图标',
+          iconJumpMore: '自定义跳页显示图标'
         }
       },
       radio: {

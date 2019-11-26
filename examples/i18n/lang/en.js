@@ -64,6 +64,7 @@ module.exports = {
         customlWidthStorage: 'Show/hide & column width + localStorage',
         search: 'Table search',
         pager: 'Pager',
+        pageIcon: 'Pagination + custom icon',
         tabs: 'Switch tabs',
         keepAlives: 'Switch keep-alive',
 
@@ -84,6 +85,7 @@ module.exports = {
         proxyPage: 'DataProxy + Pager',
         fullQuery: 'Full query',
         customToolbar: 'Custom toolbar',
+        toolbarIcon: 'Custom toolbar button icon',
         fullscreen: 'Full screen zoom',
         dynamicColumn: 'Configurable dynamic columns',
         baseTree: 'Basics tree',
@@ -438,7 +440,12 @@ module.exports = {
           align: 'On the way',
           border: 'Show border',
           background: 'Show background color',
-          perfect: 'Default style'
+          perfect: 'Default style',
+          iconPrevPage: 'Custom the previous page icon',
+          iconJumpPrev: 'Custom jump previous page icon',
+          iconJumpNext: 'Custom jump next page icon',
+          iconNextPage: 'Custom the next page icon',
+          iconJumpMore: 'Custom jump more icon'
         }
       },
       radio: {

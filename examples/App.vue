@@ -459,6 +459,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.pageIcon',
+              locat: {
+                name: 'TablePageIcon'
+              }
+            },
+            {
               label: 'app.aside.nav.moveHighlight',
               locat: {
                 name: 'TableHighlight'
@@ -573,6 +579,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.toolbarIcon',
+              locat: {
+                name: 'GridToolbarIcon'
+              }
+            },
+            {
               label: 'app.aside.nav.fullscreen',
               locat: {
                 name: 'GridFullscreen'
@@ -596,6 +608,12 @@ export default {
               disabled: true,
               locat: {
                 name: 'GridSpan'
+              }
+            },
+            {
+              label: 'app.aside.nav.upload',
+              locat: {
+                name: 'GridUpload'
               }
             },
             {

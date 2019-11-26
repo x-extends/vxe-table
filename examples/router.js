@@ -68,6 +68,7 @@ const TableCustom = () => import(/* webpackChunkName: "advanced" */ './views/tab
 const TableCustomStorage = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/CustomStorage.vue')
 const TableCustomlWidthStorage = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/CustomlWidthStorage.vue')
 const TablePage = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Page.vue')
+const TablePageIcon = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/PageIcon.vue')
 const TableHighlight = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Highlight.vue')
 const TableTabs = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Tabs.vue')
 const TableKeepAlives = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/KeepAlives.vue')
@@ -89,10 +90,12 @@ const GridCellDisable = () => import(/* webpackChunkName: "grid" */ './views/tab
 const GridRowDisable = () => import(/* webpackChunkName: "grid" */ './views/table/grid/RowDisable.vue')
 const GridToolbar = () => import(/* webpackChunkName: "grid" */ './views/table/grid/Toolbar.vue')
 const GridCustomToolbar = () => import(/* webpackChunkName: "grid" */ './views/table/grid/CustomToolbar.vue')
+const GridToolbarIcon = () => import(/* webpackChunkName: "grid" */ './views/table/grid/ToolbarIcon.vue')
 const GridFullscreen = () => import(/* webpackChunkName: "grid" */ './views/table/grid/Fullscreen.vue')
 const GridDynamic = () => import(/* webpackChunkName: "grid" */ './views/table/grid/Dynamic.vue')
 const GridMenu = () => import(/* webpackChunkName: "grid" */ './views/table/grid/Menu.vue')
 const GridSpan = () => import(/* webpackChunkName: "grid" */ './views/table/grid/Span.vue')
+const GridUpload = () => import(/* webpackChunkName: "grid" */ './views/table/grid/Upload.vue')
 const GridTree = () => import(/* webpackChunkName: "grid" */ './views/table/grid/Tree.vue')
 const GridTreeEdit = () => import(/* webpackChunkName: "grid" */ './views/table/grid/TreeEdit.vue')
 const GridFullEdit = () => import(/* webpackChunkName: "grid" */ './views/table/grid/FullEdit.vue')
@@ -552,6 +555,11 @@ export default new Router({
       component: TablePage
     },
     {
+      path: '/table/advanced/pageIcon',
+      name: 'TablePageIcon',
+      component: TablePageIcon
+    },
+    {
       path: '/table/advanced/highlight',
       name: 'TableHighlight',
       component: TableHighlight
@@ -768,6 +776,11 @@ export default new Router({
       component: GridCustomToolbar
     },
     {
+      path: '/table/grid/toolbarIcon',
+      name: 'GridToolbarIcon',
+      component: GridToolbarIcon
+    },
+    {
       path: '/table/grid/fullscreen',
       name: 'GridFullscreen',
       component: GridFullscreen
@@ -786,6 +799,11 @@ export default new Router({
       path: '/table/grid/span',
       name: 'GridSpan',
       component: GridSpan
+    },
+    {
+      path: '/table/grid/upload',
+      name: 'GridUpload',
+      component: GridUpload
     },
     {
       path: '/table/grid/tree',

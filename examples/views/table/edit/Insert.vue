@@ -4,11 +4,11 @@
 
     <vxe-toolbar>
       <template v-slot:buttons>
-        <vxe-button @click="insertEvent()">在第1行插入</vxe-button>
+        <vxe-button icon="fa fa-plus" @click="insertEvent()">新增</vxe-button>
         <vxe-button @click="insertEvent(tableData[2])">在第3行插入并激活 Sex 单元格</vxe-button>
         <vxe-button @click="insertEvent(-1)">在最后行插入</vxe-button>
         <vxe-button @click="$refs.xTable.removeSelecteds()">删除选中</vxe-button>
-        <vxe-button @click="getInsertEvent">保存</vxe-button>
+        <vxe-button icon="fa fa-save" @click="getInsertEvent">保存</vxe-button>
       </template>
     </vxe-toolbar>
 
@@ -47,11 +47,11 @@ export default {
         `
         <vxe-toolbar>
           <template v-slot:buttons>
-            <vxe-button @click="insertEvent()">在第1行插入</vxe-button>
+            <vxe-button icon="fa fa-plus" @click="insertEvent()">新增</vxe-button>
             <vxe-button @click="insertEvent(tableData[2])">在第3行插入并激活 Sex 单元格</vxe-button>
             <vxe-button @click="insertEvent(-1)">在最后行插入</vxe-button>
             <vxe-button @click="$refs.xTable.removeSelecteds()">删除选中</vxe-button>
-            <vxe-button @click="getInsertEvent">保存</vxe-button>
+            <vxe-button icon="fa fa-save" @click="getInsertEvent">保存</vxe-button>
           </template>
         </vxe-toolbar>
 
