@@ -10,6 +10,7 @@ export default {
     id: String,
     type: { type: String, default: 'modal' },
     status: String,
+    iconStatus: String,
     top: { type: [Number, String], default: 15 },
     title: String,
     duration: { type: [Number, String], default: () => GlobalConfig.modal.duration },
@@ -97,6 +98,7 @@ export default {
       resize,
       animat,
       status,
+      iconStatus,
       showHeader,
       showFooter,
       zoomLocat,
@@ -181,7 +183,7 @@ export default {
             class: 'vxe-modal--status-wrapper'
           }, [
             h('i', {
-              class: ['vxe-modal--status-icon', GlobalConfig.icon[`modal${status.replace(/\b(\w)/, word => word.toUpperCase())}`]]
+              class: ['vxe-modal--status-icon', iconStatus || GlobalConfig.icon[`modal${status.replace(/\b(\w)/, word => word.toUpperCase())}`]]
             })
           ]) : null,
           h('div', {

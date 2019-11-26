@@ -479,6 +479,7 @@ module.exports = {
           title: 'Message title (support internationalization)',
           type: 'Message type',
           status: 'Only valid for type=alert | confirm | message, message status',
+          iconStatus: '自定义状态图标',
           message: 'message content',
           showHeader: 'Whether to display the head',
           showFooter: 'Whether to show bottom',

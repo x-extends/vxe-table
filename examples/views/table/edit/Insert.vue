@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">调用 <table-api-link prop="insert"/>、<table-api-link prop="insertAt"/> 函数插入临时数据<br><span class="red">注：原生的 select 只支持字符串的 value</span></p>
+    <p class="tip">调用 <table-api-link prop="insert"/>、<table-api-link prop="insertAt"/> 函数插入临时数据，还可以通过 <table-api-link prop="icon"/> 自定义编辑状态的图标<br><span class="red">注：原生的 select 只支持字符串的 value</span></p>
 
     <vxe-toolbar>
       <template v-slot:buttons>
@@ -18,7 +18,7 @@
       ref="xTable"
       max-height="400"
       :data="tableData"
-      :edit-config="{trigger: 'click', mode: 'cell'}">
+      :edit-config="{trigger: 'click', mode: 'cell', icon: 'fa fa-pencil'}">
       <vxe-table-column type="checkbox" width="60"></vxe-table-column>
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable :edit-render="{name: 'input', defaultValue: '默认的名字'}"></vxe-table-column>
@@ -61,7 +61,7 @@ export default {
           ref="xTable"
           max-height="400"
           :data="tableData"
-          :edit-config="{trigger: 'click', mode: 'cell'}">
+          :edit-config="{trigger: 'click', mode: 'cell', icon: 'fa fa-pencil'}">
           <vxe-table-column type="checkbox" width="60"></vxe-table-column>
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable :edit-render="{name: 'input', defaultValue: '默认的名字'}"></vxe-table-column>

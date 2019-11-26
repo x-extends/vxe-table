@@ -480,6 +480,7 @@ module.exports = {
           title: '窗口的标题（支持开启国际化）',
           type: '窗口类型',
           status: '只对 type=alert | confirm | message 有效，消息状态',
+          iconStatus: '自定义状态图标',
           message: '窗口的内容',
           showHeader: '是否显示头部',
           showFooter: '是否显示底部',

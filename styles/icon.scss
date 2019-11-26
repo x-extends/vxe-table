@@ -308,11 +308,14 @@
 }
 
 .vxe-icon--close {
-  @extend .vxe-icon--plus;
+  @extend %DefaultWidthHeight;
   &:before {
-    top: -0.02em;
-    left: -0.12em;
+    @extend %PseudoClass;
+    content: "+";
+    top: 0.01em;
+    left: -0.08em;
     font-size: 2.4em;
+    font-weight: normal;
     transform: rotate(45deg);
   }
 }
