@@ -1279,24 +1279,28 @@ export default {
             },
             {
               label: 'app.aside.nav.iviewPlugin',
+              demoUrl: 'https://jsrun.pro/HPWKp/edit',
               locat: {
                 name: 'TablePluginIviewConfig'
               }
             },
             {
               label: 'app.aside.nav.iviewFilter',
+              demoUrl: 'https://jsrun.pro/nPWKp/edit',
               locat: {
                 name: 'TablePluginIviewFilter'
               }
             },
             {
               label: 'app.aside.nav.iviewPluginMore',
+              demoUrl: 'https://jsrun.pro/rPWKp/edit',
               locat: {
                 name: 'TablePluginIviewPage'
               }
             },
             {
               label: 'app.aside.nav.antdPlugin',
+              demoUrl: 'https://jsrun.pro/APWKp/edit',
               locat: {
                 name: 'TablePluginAntdConfig'
               }
