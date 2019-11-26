@@ -135,6 +135,15 @@ export default {
                     return this.$utils.sum(data, column.property)
                   }
                   return null
+                }),
+                columns.map((column, columnIndex) => {
+                  if (columnIndex === 0) {
+                    return '其他'
+                  }
+                  if (['age', 'sex', 'name'].includes(column.property)) {
+                    return '无'
+                  }
+                  return '-'
                 })
               ]
             }
@@ -196,6 +205,15 @@ export default {
                     return this.$utils.sum(data, column.property)
                   }
                   return null
+                }),
+                columns.map((column, columnIndex) => {
+                  if (columnIndex === 0) {
+                    return '其他'
+                  }
+                  if (['age', 'sex', 'name'].includes(column.property)) {
+                    return '无'
+                  }
+                  return '-'
                 })
               ]
             }
@@ -260,6 +278,15 @@ export default {
                     return this.$utils.sum(data, column.property)
                   }
                   return null
+                }),
+                columns.map((column, columnIndex) => {
+                  if (columnIndex === 0) {
+                    return '其他'
+                  }
+                  if (['age', 'sex', 'name'].includes(column.property)) {
+                    return '无'
+                  }
+                  return '-'
                 })
               ]
               return footerData
@@ -308,6 +335,15 @@ export default {
             return this.$utils.sum(data, column.property)
           }
           return null
+        }),
+        columns.map((column, columnIndex) => {
+          if (columnIndex === 0) {
+            return '其他'
+          }
+          if (['age', 'sex', 'name'].includes(column.property)) {
+            return '无'
+          }
+          return '-'
         })
       ]
       return footerData
