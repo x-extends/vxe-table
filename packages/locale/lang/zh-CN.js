@@ -13,7 +13,7 @@ export default {
       useErr: '安装 "{{0}}" 模块时发生错误，顺序不正确',
       barUnableLink: '工具栏无法关联表格',
       toolbarId: '工具栏需要设置唯一 "id"',
-      expandContent: '展开行的插槽是应该 "content"，请检查是否正确',
+      expandContent: '展开行的插槽应该是 "content"，请检查是否正确',
       reqModule: '缺少 "{{0}}" 模块',
       emptyProp: '参数 "{{0}}" 不允许为空',
       notFunc: '"{{0}}" 方法不存在',

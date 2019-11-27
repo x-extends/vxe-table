@@ -13,7 +13,7 @@ export default {
       useErr: '安裝 "{{0}}" 模塊時發生錯誤，順序不正確',
       barUnableLink: '工具欄無法關聯表格',
       toolbarId: '工具欄需要設置唯一 "id"',
-      expandContent: '展開行的插槽是應該“content”，請檢查是否正確',
+      expandContent: '展開行的插槽應該是 “content”，請檢查是否正確',
       reqModule: '缺少 "{{0}}" 模塊',
       emptyProp: '參數 "{{0}}" 不允許為空',
       notFunc: '"{{0}}" 方法不存在',
