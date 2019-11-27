@@ -200,7 +200,7 @@ module.exports = {
       button: {
         viewCode: '查看 Github',
         runDemo: '入门示例',
-        showCode: '项目示例',
+        showCode: '高级示例',
         refresh: '刷新',
         insert: '新增',
         save: '保存',
