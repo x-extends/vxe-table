@@ -150,6 +150,7 @@ function renderSelectEdit (h, renderOpts, params, context) {
   return [
     h('select', {
       class: 'vxe-default-select',
+      attrs: getAttrs(renderOpts),
       on: getEvents(renderOpts, params, context)
     },
     renderOpts.optionGroups ? renderOptgroups(h, renderOpts, params, context) : renderOptions(h, renderOpts.options, renderOpts, params, context))
@@ -197,11 +198,10 @@ const renderMap = {
     },
     renderFilter (h, renderOpts, params, context) {
       let { column } = params
-      let { attrs } = renderOpts
       return column.filters.map(item => {
         return h('select', {
           class: 'vxe-default-select',
-          attrs,
+          attrs: getAttrs(renderOpts),
           on: getFilterEvents(item, renderOpts, params, context)
         },
         renderOpts.optionGroups ? renderOptgroups(h, renderOpts, params) : renderOptions(h, renderOpts.options, renderOpts, params, context))

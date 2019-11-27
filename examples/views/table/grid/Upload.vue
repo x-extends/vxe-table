@@ -7,7 +7,6 @@
       resizable
       ref="xGrid"
       max-height="500"
-      :expand-config="{expandAll: true}"
       :columns="tableColumn"
       :data="tableData">
     </vxe-grid>
@@ -34,6 +33,11 @@ export default {
           type: 'expand',
           width: 60,
           slots: {
+            content: ({ column }) => {
+              return [
+                <span>（1）</span>
+              ]
+            },
             default: ({ row, column }) => {
               return [
                 row.fileList.length
@@ -81,7 +85,6 @@ export default {
           resizable
           ref="xGrid"
           max-height="500"
-          :expand-config="{expandAll: true}"
           :columns="tableColumn"
           :data="tableData">
         </vxe-grid>
@@ -141,6 +144,7 @@ export default {
           methods: {
             uploadFileEvent (row) {
               this.$refs.xGrid.readFile({
+                multiple: true,
                 types: ['xlsx', 'csv', 'html']
               }).then(evnt => {
                 Array.from(evnt.target.files).forEach(file => {
@@ -180,6 +184,7 @@ export default {
   methods: {
     uploadFileEvent (row) {
       this.$refs.xGrid.readFile({
+        multiple: true,
         types: ['xlsx', 'csv', 'html']
       }).then(evnt => {
         Array.from(evnt.target.files).forEach(file => {

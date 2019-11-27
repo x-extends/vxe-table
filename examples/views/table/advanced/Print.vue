@@ -12,8 +12,10 @@
 
     <vxe-table
       border
+      show-footer
       ref="xTable"
       height="500"
+      :footer-method="footerMethod"
       :data="tableData">
       <vxe-table-column type="checkbox" width="60"></vxe-table-column>
       <vxe-table-column type="index" width="60"></vxe-table-column>
@@ -52,8 +54,10 @@ export default {
 
         <vxe-table
           border
+          show-footer
           ref="xTable"
           height="500"
+          :footer-method="footerMethod"
           :data="tableData">
           <vxe-table-column type="checkbox" width="60"></vxe-table-column>
           <vxe-table-column type="index" width="60"></vxe-table-column>
@@ -84,6 +88,29 @@ export default {
             },
             exportDataEvent () {
               this.$refs.xTable.openExport()
+            },
+            footerMethod ({ columns, data }) {
+              const footerData = [
+                columns.map((column, columnIndex) => {
+                  if (columnIndex === 0) {
+                    return '平均'
+                  }
+                  if (['age', 'rate'].includes(column.property)) {
+                    return this.$utils.mean(data, column.property)
+                  }
+                  return null
+                }),
+                columns.map((column, columnIndex) => {
+                  if (columnIndex === 0) {
+                    return '和值'
+                  }
+                  if (['age', 'rate'].includes(column.property)) {
+                    return this.$utils.sum(data, column.property)
+                  }
+                  return null
+                })
+              ]
+              return footerData
             }
           }
         }
@@ -110,6 +137,29 @@ export default {
     },
     exportDataEvent () {
       this.$refs.xTable.openExport()
+    },
+    footerMethod ({ columns, data }) {
+      const footerData = [
+        columns.map((column, columnIndex) => {
+          if (columnIndex === 0) {
+            return '平均'
+          }
+          if (['age', 'rate'].includes(column.property)) {
+            return this.$utils.mean(data, column.property)
+          }
+          return null
+        }),
+        columns.map((column, columnIndex) => {
+          if (columnIndex === 0) {
+            return '和值'
+          }
+          if (['age', 'rate'].includes(column.property)) {
+            return this.$utils.sum(data, column.property)
+          }
+          return null
+        })
+      ]
+      return footerData
     }
   }
 }

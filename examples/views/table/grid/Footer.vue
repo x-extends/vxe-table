@@ -8,6 +8,7 @@
       resizable
       show-footer
       height="500"
+      :toolbar="tableToolbar"
       :footer-method="footerMethod"
       :columns="tableColumn"
       :data="tableData"></vxe-grid>
@@ -29,13 +30,16 @@ export default {
   data () {
     return {
       tableColumn: [
-        { type: 'index', width: 50 },
+        { type: 'index', width: 60 },
         { field: 'name', title: 'app.body.label.name' },
         { field: 'sex', title: 'app.body.label.sex' },
         { field: 'age', title: 'Age' },
-        { field: 'rate', title: 'Rate' },
-        { field: 'address', title: 'Address', showOverflow: true }
+        { field: 'rate', title: 'Rate' }
       ],
+      tableToolbar: {
+        export: true,
+        zoom: true
+      },
       tableData: [],
       demoCodes: [
         `
@@ -45,6 +49,7 @@ export default {
           resizable
           show-footer
           height="500"
+          :toolbar="tableToolbar"
           :footer-method="footerMethod"
           :columns="tableColumn"
           :data="tableData"></vxe-grid>
@@ -54,18 +59,21 @@ export default {
           data () {
             return {
               tableColumn: [
-                { type: 'index', width: 50 },
+                { type: 'index', width: 60 },
                 { field: 'name', title: 'app.body.label.name' },
                 { field: 'sex', title: 'app.body.label.sex' },
                 { field: 'age', title: 'Age' },
-                { field: 'rate', title: 'Rate' },
-                { field: 'address', title: 'Address', showOverflow: true }
+                { field: 'rate', title: 'Rate' }
               ],
+              tableToolbar: {
+                export: true,
+                zoom: true
+              },
               tableData: []
             }
           },
           created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 50)
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 15)
           },
           methods: {
             footerMethod ({ columns, data }) {
@@ -97,7 +105,7 @@ export default {
     }
   },
   created () {
-    this.tableData = window.MOCK_DATA_LIST.slice(0, 50)
+    this.tableData = window.MOCK_DATA_LIST.slice(0, 15)
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {

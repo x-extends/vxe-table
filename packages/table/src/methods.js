@@ -302,11 +302,25 @@ const Methods = {
     return this.fullDataRowMap.has(row) ? this.fullDataRowMap.get(row).index : -1
   },
   /**
+   * 根据 row 获取渲染中的虚拟索引
+   * @param {Row} row 行对象
+   */
+  $getRowIndex (row) {
+    return this.afterFullData.indexOf(row)
+  },
+  /**
    * 根据 column 获取相对于 columns 中的索引
    * @param {ColumnConfig} column 列配置
    */
   getColumnIndex (column) {
     return this.fullColumnMap.has(column) ? this.fullColumnMap.get(column).index : -1
+  },
+  /**
+   * 根据 column 获取渲染中的虚拟索引
+   * @param {ColumnConfig} column 列配置
+   */
+  $getColumnIndex (column) {
+    return this.visibleColumn.indexOf(column)
   },
   /**
    * 判断是否为索引列

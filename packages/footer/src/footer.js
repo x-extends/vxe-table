@@ -153,6 +153,7 @@ export default {
             return h('td', {
               class: ['vxe-footer--column', column.id, {
                 [`col--${footAlign}`]: footAlign,
+                [`col--${column.type}`]: column.type,
                 'fixed--hidden': fixedHiddenColumn,
                 'col--ellipsis': hasEllipsis,
                 'filter--active': column.filters.some(item => item.checked)

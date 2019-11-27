@@ -13,6 +13,7 @@ export default {
       useErr: 'An error occurred while installing "{{0}}" module. The sequence is not correct.',
       barUnableLink: 'Toolbar cannot associate table.',
       toolbarId: 'Toolbar must have a unique "id"',
+      expandContent: 'Expand row slot should be "content", please check if it is correct.',
       reqModule: 'require "{{0}}" module.',
       emptyProp: 'The property "{{0}}" is not allowed to be empty.',
       notFunc: '"{{0}}" method not exist.',

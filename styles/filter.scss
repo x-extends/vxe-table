@@ -31,7 +31,7 @@
 .vxe-table--filter-wrapper {
   display: none;
   position: absolute;
-  min-width: 80px;
+  min-width: 100px;
   border-radius: 2px;
   color: $vxe-font-color;
   background-color: #fff;
@@ -39,6 +39,7 @@
   box-shadow: 0 2px 12px 0 rgba(0,0,0,.2);
   font-size: 13px;
   font-family: $vxe-font-family;
+  z-index: 10;
   &.filter--active {
     display: block;
   }
@@ -87,12 +88,12 @@
   }
   .vxe-table--filter-footer {
     border-top: 1px solid $vxe-table-popup-border-color;
-    padding: 8px;
+    padding: 0.8em;
+    user-select: none;
     button {
       background-color: transparent;
-      padding: 0 3px;
+      padding: 0 0.4em;
       border: 0;
-      font-size: 13px;
       color: $vxe-font-color;
       cursor: pointer;
       &:focus {

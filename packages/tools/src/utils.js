@@ -12,8 +12,13 @@ class ColumnConfig {
     }
     if (_vm.type === 'selection') {
       UtilTools.warn('vxe.error.delProp', ['selection', 'checkbox'])
-    } else if (_vm.type === 'expand' && $table.treeConfig && $table.treeConfig.line) {
-      UtilTools.error('vxe.error.treeLineExpand')
+    } else if (_vm.type === 'expand') {
+      if ($table.treeConfig && $table.treeConfig.line) {
+        UtilTools.error('vxe.error.treeLineExpand')
+      }
+      if (_vm.slots && !_vm.slots.content && _vm.slots.default) {
+        UtilTools.warn('vxe.error.expandContent')
+      }
     }
     Object.assign(this, {
       // 基本属性

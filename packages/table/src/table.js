@@ -772,20 +772,20 @@ export default {
           visible: loading
         }
       }) : _e(),
+      /**
+       * 筛选
+       */
+      hasFilter ? h('vxe-table-filter', {
+        props: {
+          optimizeOpts,
+          filterStore
+        },
+        ref: 'filterWrapper'
+      }) : _e(),
       h('div', {
         class: `vxe-table${id}-wrapper ${this.$vnode.data.staticClass || ''}`,
         ref: 'tableWrapper'
       }, [
-        /**
-         * 筛选
-         */
-        hasFilter ? h('vxe-table-filter', {
-          props: {
-            optimizeOpts,
-            filterStore
-          },
-          ref: 'filterWrapper'
-        }) : _e(),
         /**
          * 快捷菜单
          */

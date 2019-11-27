@@ -173,9 +173,9 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
   return h('td', {
     class: ['vxe-body--column', column.id, {
       [`col--${cellAlign}`]: cellAlign,
+      [`col--${column.type}`]: column.type,
       'col--tree-node': treeNode,
       'col--edit': editRender,
-      'col--index': column.type === 'index',
       'col--ellipsis': hasEllipsis,
       'edit--visible': editRender && editRender.type === 'visible',
       'fixed--hidden': fixedHiddenColumn,

@@ -228,8 +228,8 @@ export default {
             return h('th', {
               class: ['vxe-header--column', column.id, {
                 [`col--${headAlign}`]: headAlign,
+                [`col--${column.type}`]: column.type,
                 'col--fixed': column.fixed,
-                'col--index': column.type === 'index',
                 'col--group': isColGroup,
                 'col--ellipsis': hasEllipsis,
                 'fixed--hidden': fixedHiddenColumn,

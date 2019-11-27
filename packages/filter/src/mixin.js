@@ -36,35 +36,49 @@ export default {
         filterStore.visible = false
       } else {
         let filterWrapper = $refs.filterWrapper
+        let bodyElem = $refs.tableBody.$el
         let { target: targetElem, pageX } = evnt
         let { visibleWidth } = DomTools.getDomNode()
-        let { top, left } = DomTools.getAbsolutePos(targetElem)
-        if (!filterStore.zIndex || filterStore.zIndex < UtilTools.getLastZIndex()) {
-          filterStore.zIndex = UtilTools.nextZIndex(this)
-        }
         Object.assign(filterStore, {
           args: params,
           multiple: column.filterMultiple,
           options: column.filters,
-          column: column,
-          style: {
-            zIndex: filterStore.zIndex,
-            top: `${top + targetElem.clientHeight + 6}px`,
-            left: `${left}px`
-          },
+          column,
+          style: null,
           visible: true
         })
         filterStore.isAllSelected = filterStore.options.every(item => item.checked)
         filterStore.isIndeterminate = !filterStore.isAllSelected && filterStore.options.some(item => item.checked)
         this.$nextTick(() => {
           let filterWrapperElem = filterWrapper.$el
-          let clientWidth = filterWrapperElem.clientWidth
-          let wrapperLeft = left - clientWidth / 2 + 10
-          if (pageX + clientWidth > visibleWidth) {
-            wrapperLeft = left - clientWidth
+          let filterWidth = filterWrapperElem.offsetWidth
+          let centerWidth = filterWidth / 2
+          let minMargin = 32
+          let left, right
+          let style = {
+            top: `${targetElem.offsetTop + targetElem.offsetParent.offsetTop + targetElem.offsetHeight + 8}px`
           }
-          filterStore.style.left = `${Math.max(20, wrapperLeft + 20)}px`
-          filterStore.style.top = `${top + targetElem.clientHeight + 6}px`
+          if (column.fixed === 'left') {
+            left = targetElem.offsetLeft + targetElem.offsetParent.offsetLeft - centerWidth
+          } else if (column.fixed === 'right') {
+            right = (targetElem.offsetParent.offsetWidth - targetElem.offsetLeft) + (targetElem.offsetParent.offsetParent.offsetWidth - targetElem.offsetParent.offsetLeft) - column.renderWidth - centerWidth
+          } else {
+            left = targetElem.offsetLeft + targetElem.offsetParent.offsetLeft - centerWidth - bodyElem.scrollLeft
+          }
+          if (left) {
+            let overflowWidth = (pageX + filterWidth - centerWidth + minMargin) - visibleWidth
+            if (overflowWidth > 0) {
+              left -= overflowWidth
+            }
+            style.left = `${Math.max(minMargin, left)}px`
+          } else if (right) {
+            let overflowWidth = (pageX + filterWidth - centerWidth + minMargin) - visibleWidth
+            if (overflowWidth > 0) {
+              right += overflowWidth
+            }
+            style.right = `${right}px`
+          }
+          filterStore.style = style
         })
       }
     },

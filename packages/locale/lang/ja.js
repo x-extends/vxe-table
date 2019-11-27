@@ -13,6 +13,7 @@ export default {
       useErr: '"{{0}}" モジュールのインストール時にエラーが発生し、エラーのインストール順序',
       barUnableLink: 'ツールバーはフォームを関連付けることができない',
       toolbarId: 'ツールバーはユニーク"id"を設定する必要がある',
+      expandContent: '展开行的插槽是应该 "content"，请检查是否正确',
       reqModule: '"{{0}}"モジュールが必要',
       emptyProp: '"{{0}}" propertyはemptyが許可されていません',
       notFunc: '"{{0}}" methodがありません',
