@@ -17,8 +17,8 @@
       :data="tableData"
       @toggle-expand-change="toggleExpandChangeEvent">
       <vxe-table-column type="index" width="60"></vxe-table-column>
-      <vxe-table-column type="expand" width="60">
-        <template v-slot="{ row, rowIndex }">
+      <vxe-table-column type="expand" width="80">
+        <template v-slot:content="{ row, rowIndex }">
           <template v-if="rowIndex === 1">
             <vxe-table
               border
@@ -70,7 +70,7 @@
       :data="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column type="expand" width="60">
-        <template v-slot="{ row, rowIndex }">
+        <template v-slot:content="{ row, rowIndex }">
           <template v-if="rowIndex === 1">
             <vxe-table
               border
@@ -113,15 +113,18 @@
       <code class="javascript">{{ demoCodes[3] }}</code>
     </pre>
 
-    <p class="tip">默认展开所有行，通过 <table-api-link prop="expandAll"/> 参数设置默认展开所有行</p>
+    <p class="tip">
+      默认展开所有行，通过 <table-api-link prop="expandAll"/> 参数设置默认展开所有行<br>
+      还可以配置 <table-api-link prop="labelField"/> 列显示属性
+    </p>
 
     <vxe-table
       border
       :data="tableData"
-      :expand-config="{expandAll: true}">
+      :expand-config="{labelField: 'name', expandAll: true}">
       <vxe-table-column type="index" width="60"></vxe-table-column>
-      <vxe-table-column type="expand" width="60">
-        <template v-slot="{ row }">
+      <vxe-table-column type="expand" title="Name">
+        <template v-slot:content="{ row }">
           <ul>
             <li>
               <span>ID：</span>
@@ -142,7 +145,6 @@
           </ul>
         </template>
       </vxe-table-column>
-      <vxe-table-column field="name" title="Name"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
       <vxe-table-column field="age" title="Age"></vxe-table-column>
     </vxe-table>
@@ -181,7 +183,7 @@ export default {
           @toggle-expand-change="toggleExpandChangeEvent">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column type="expand" width="60">
-            <template v-slot="{ row, rowIndex }">
+            <template v-slot:content="{ row, rowIndex }">
               <template v-if="rowIndex === 1">
                 <vxe-table
                   border
@@ -242,7 +244,7 @@ export default {
           :data="tableData">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column type="expand" width="60">
-            <template v-slot="{ row, rowIndex }">
+            <template v-slot:content="{ row, rowIndex }">
               <template v-if="rowIndex === 1">
                 <vxe-table
                   border
@@ -293,12 +295,11 @@ export default {
         `
         <vxe-table
           border
-          :data=
-          "tableData"
-          :expand-config="{expandAll: true}">
+          :data="tableData"
+          :expand-config="{labelField: 'name', expandAll: true}">
           <vxe-table-column type="index" width="60"></vxe-table-column>
-          <vxe-table-column type="expand" width="60">
-            <template v-slot="{ row }">
+          <vxe-table-column type="expand" title="Name">
+            <template v-slot:content="{ row }">
               <ul>
                 <li>
                   <span>ID：</span>
@@ -319,7 +320,6 @@ export default {
               </ul>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="name" title="Name"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
           <vxe-table-column field="age" title="Age"></vxe-table-column>
         </vxe-table>

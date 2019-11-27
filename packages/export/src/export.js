@@ -3,7 +3,7 @@ import GlobalConfig from '../../conf'
 import { UtilTools, DomTools } from '../../tools'
 
 // 默认导出或打印的 HTML 样式
-const defaultHtmlStyle = 'body{margin:0;font-size:14px}table{text-align:left;border-width:1px 0 0 1px}table,td,th{border-style:solid;border-color:#e8eaec}tfoot,thead{background-color:#f8f8f9}td,th{padding:6px;border-width:0 1px 1px 0}.tree-icon-wrapper{position:relative;display:inline-block;width:18px}.tree-icon{position:absolute;top:-9px;left:0;width:0;height:0;border-style:solid;border-width:6px;border-top-color:#939599;border-right-color:transparent;border-bottom-color:transparent;border-left-color:transparent}.tree-node{text-align:left}.tree-indent{display:inline-block}'
+const defaultHtmlStyle = 'body{margin:0}table{font-size:14px;text-align:left;border-width:1px 0 0 1px}table,td,th{border-style:solid;border-color:#e8eaec}tfoot,thead{background-color:#f8f8f9}td,th{padding:.5em .4em;border-width:0 1px 1px 0}.tree-icon-wrapper{position:relative;display:inline-block;vertical-align:middle;width:1.2em}.tree-icon{position:absolute;top:-.3em;left:0;width:0;height:0;border-style:solid;border-width:.5em;border-top-color:#939599;border-right-color:transparent;border-bottom-color:transparent;border-left-color:transparent}.tree-node{text-align:left}.tree-indent{display:inline-block}'
 
 // 导入
 const impForm = document.createElement('form')
@@ -58,7 +58,7 @@ function toCsv ($table, opts, columns, datas) {
     const footerData = $table.footerData
     const footers = opts.footerFilterMethod ? footerData.filter(opts.footerFilterMethod) : footerData
     footers.forEach(rows => {
-      content += columns.map(column => `"${rows[$table.getColumnIndex(column)] || ''}"`).join(',') + '\n'
+      content += columns.map(column => `"${rows[$table.$getColumnIndex(column)] || ''}"`).join(',') + '\n'
     })
   }
   return content
@@ -86,7 +86,7 @@ function toTxt ($table, opts, columns, datas) {
     const footerData = $table.footerData
     const footers = opts.footerFilterMethod ? footerData.filter(opts.footerFilterMethod) : footerData
     footers.forEach(rows => {
-      content += columns.map(column => `${rows[$table.getColumnIndex(column)] || ''}`).join(',') + '\n'
+      content += columns.map(column => `${rows[$table.$getColumnIndex(column)] || ''}`).join(',') + '\n'
     })
   }
   return content
@@ -171,7 +171,7 @@ function toHtml ($table, opts, columns, datas) {
     if (footers.length) {
       html += '<tfoot>'
       footers.forEach(rows => {
-        html += `<tr>${columns.map(column => `<td>${rows[$table.getColumnIndex(column)] || ''}</td>`).join('')}</tr>`
+        html += `<tr>${columns.map(column => `<td>${rows[$table.$getColumnIndex(column)] || ''}</td>`).join('')}</tr>`
       })
       html += '</tfoot>'
     }
@@ -221,7 +221,7 @@ function toXML ($table, opts, columns, datas) {
     const footerData = $table.footerData
     const footers = opts.footerFilterMethod ? footerData.filter(opts.footerFilterMethod) : footerData
     footers.forEach(rows => {
-      xml += `<Row>${columns.map(column => `<Cell><Data ss:Type="String">${rows[$table.getColumnIndex(column) || '']}</Data></Cell>`).join('')}</Row>`
+      xml += `<Row>${columns.map(column => `<Cell><Data ss:Type="String">${rows[$table.$getColumnIndex(column) || '']}</Data></Cell>`).join('')}</Row>`
     })
   }
   return `${xml}</Table></Worksheet></Workbook>`

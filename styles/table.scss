@@ -76,7 +76,6 @@
 /*table*/
 .vxe-table {
   position: relative;
-  overflow: hidden;
   font-size: $vxe-font-size;
   color: $vxe-font-color;
   font-family: $vxe-font-family;
@@ -591,8 +590,7 @@
 
   /*展开行*/
   .vxe-table--expanded {
-    display: block;
-    text-align: center;
+    padding-right: 0.5em;
     cursor: pointer;
     .vxe-table--expand-btn {
       color: lighten($vxe-font-color, 20%);

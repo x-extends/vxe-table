@@ -1,6 +1,9 @@
 <template>
   <div>
-    <p class="tip">改变图标，通过设置 <table-api-link prop="expand-config"/>={<table-api-link prop="iconOpen"/>, <table-api-link prop="iconClose"/>} 局部替换默认的图标</p>
+    <p class="tip">
+      改变图标，通过设置 <table-api-link prop="expand-config"/>={<table-api-link prop="iconOpen"/>, <table-api-link prop="iconClose"/>} 局部替换默认的图标<br>
+      也可以通过 <table-column-api-link prop="slot"/> 自定义内容模板
+    </p>
 
     <vxe-toolbar>
       <template v-slot:buttons>
@@ -17,8 +20,11 @@
       :expand-config="{iconOpen: 'fa fa-minus-square', iconClose: 'fa fa-plus-square'}"
       :data="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
-      <vxe-table-column type="expand" width="60">
+      <vxe-table-column type="expand" title="Name">
         <template v-slot="{ row, rowIndex }">
+          <span>{{ row.name }}</span>
+        </template>
+        <template v-slot:content="{ row, rowIndex }">
           <template v-if="rowIndex === 1">
             <vxe-table
               border
@@ -49,7 +55,6 @@
           </template>
         </template>
       </vxe-table-column>
-      <vxe-table-column field="name" title="Name"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
       <vxe-table-column field="age" title="Age"></vxe-table-column>
     </vxe-table>
@@ -78,8 +83,11 @@ export default {
           :expand-config="{iconOpen: 'fa fa-minus-square', iconClose: 'fa fa-plus-square'}"
           :data="tableData">
           <vxe-table-column type="index" width="60"></vxe-table-column>
-          <vxe-table-column type="expand" width="60">
+          <vxe-table-column type="expand" title="Name">
             <template v-slot="{ row, rowIndex }">
+              <span>{{ row.name }}</span>
+            </template>
+            <template v-slot:content="{ row, rowIndex }">
               <template v-if="rowIndex === 1">
                 <vxe-table
                   border
@@ -110,7 +118,6 @@ export default {
               </template>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="name" title="Name"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
           <vxe-table-column field="age" title="Age"></vxe-table-column>
         </vxe-table>

@@ -630,8 +630,17 @@ const apis = [
         list: []
       },
       {
+        name: 'content',
+        desc: '只对 type=expand 有效，自定义展开后的内容模板',
+        version: '1.15.15',
+        type: '',
+        enum: '',
+        defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,fixed,isHidden}, h',
+        list: []
+      },
+      {
         name: 'filter',
-        desc: '自定义筛选模板',
+        desc: '只对 filter-render 启用时有效，自定义筛选模板',
         version: '',
         type: '',
         enum: '',
@@ -640,7 +649,7 @@ const apis = [
       },
       {
         name: 'edit',
-        desc: '自定义可编辑组件模板',
+        desc: '只对 edit-render 启用时有效，自定义可编辑组件模板',
         version: '',
         type: '',
         enum: '',

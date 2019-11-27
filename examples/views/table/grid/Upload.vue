@@ -141,6 +141,7 @@ export default {
           methods: {
             uploadFileEvent (row) {
               this.$refs.xGrid.readFile({
+                multiple: true,
                 types: ['xlsx', 'csv', 'html']
               }).then(evnt => {
                 Array.from(evnt.target.files).forEach(file => {
@@ -180,6 +181,7 @@ export default {
   methods: {
     uploadFileEvent (row) {
       this.$refs.xGrid.readFile({
+        multiple: true,
         types: ['xlsx', 'csv', 'html']
       }).then(evnt => {
         Array.from(evnt.target.files).forEach(file => {

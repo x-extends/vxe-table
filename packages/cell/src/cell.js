@@ -371,8 +371,9 @@ export const Cell = {
    * 展开行
    */
   renderExpandCell (h, params) {
-    let { $table, isHidden } = params
-    let { iconOpen, iconClose } = $table.expandConfig || {}
+    let { $table, isHidden, row, column } = params
+    let { labelField, iconOpen, iconClose } = $table.expandConfig || {}
+    let { slots } = column
     let isAceived = false
     if (!isHidden) {
       isAceived = $table.rowExpandeds.indexOf(params.row) > -1
@@ -391,14 +392,21 @@ export const Cell = {
         h('i', {
           class: ['vxe-table--expand-btn', isAceived ? (iconOpen || GlobalConfig.icon.expandOpen) : (iconClose || GlobalConfig.icon.expandClose)]
         })
-      ])
+      ]),
+      slots.content && slots.default ? slots.default(params, h) : (labelField ? XEUtils.get(row, labelField) : null)
     ]
   },
   renderExpandData (h, params) {
     let { column } = params
     let { slots } = column
-    if (slots && slots.default) {
-      return slots.default(params, h)
+    if (slots) {
+      if (slots.content) {
+        return slots.content(params, h)
+      }
+      // 在 v3.0 中将严格区分 default 与 content
+      if (slots.default) {
+        return slots.default(params, h)
+      }
     }
     return []
   },

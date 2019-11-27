@@ -1013,6 +1013,15 @@ const apis = [
             list: []
           },
           {
+            name: 'labelField',
+            desc: '展开列显示的字段名，可以直接显示在单元格中',
+            version: '1.15.15',
+            type: 'String',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
             name: 'expandAll',
             desc: '默认展开所有行',
             version: '',
@@ -2145,6 +2154,15 @@ const apis = [
         list: []
       },
       {
+        name: '$getRowIndex(row)',
+        desc: '根据 row 获取渲染中的虚拟索引',
+        version: '1.15.15',
+        type: 'Number',
+        enum: '',
+        defVal: 'row: Row',
+        list: []
+      },
+      {
         name: 'getRowNode(tr)',
         desc: '根据 tr 元素获取对应的 row 信息',
         version: '',
@@ -2202,6 +2220,15 @@ const apis = [
         name: 'getColumnIndex(column)',
         desc: '根据 column 获取相对于 columns 中的索引',
         version: '',
+        type: 'Number',
+        enum: '',
+        defVal: 'column',
+        list: []
+      },
+      {
+        name: '$getColumnIndex(column)',
+        desc: '根据 column 获取渲染中的索虚拟引',
+        version: '1.15.15',
         type: 'Number',
         enum: '',
         defVal: 'column',
