@@ -2,12 +2,22 @@
   <div>
     <p class="tip">
       通过给需要排序功能的列加上 <table-api-link prop="sortable"/> 属性可以支持排序，还可以通过设置 <table-api-link prop="sort-by"/> 多字段进行排序<br>
-      如果是服务端排序，只需加上 <table-column-api-link prop="remote-sort"/> 和 <table-api-link prop="sort-change"/> 事件就可以实现
+      如果是服务端排序，只需加上 <table-column-api-link prop="remote-sort"/> 和 <table-api-link prop="sort-change"/> 事件就可以实现<br>
+      还可以通过调用 <table-api-link prop="sort"/> 方法实现手动排序
     </p>
+
+    <vxe-toolbar>
+      <template v-slot:buttons>
+        <vxe-button @click="$refs.xTable.sort('name', 'asc')">Name 升序</vxe-button>
+        <vxe-button @click="$refs.xTable.sort('name', 'desc')">Name 降序</vxe-button>
+        <vxe-button @click="$refs.xTable.clearSort()">清除排序</vxe-button>
+      </template>
+    </vxe-toolbar>
 
     <vxe-table
       border
       highlight-hover-row
+      ref="xTable"
       height="300"
       :data="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
@@ -76,7 +86,6 @@
       border
       highlight-hover-row
       highlight-hover-column
-      ref="xTable"
       height="300"
       :data="tableData"
       :sort-config="{trigger: 'cell'}"
@@ -107,9 +116,18 @@ export default {
       tableData: [],
       demoCodes: [
         `
+        <vxe-toolbar>
+          <template v-slot:buttons>
+            <vxe-button @click="$refs.xTable.sort('name', 'asc')">Name 升序</vxe-button>
+            <vxe-button @click="$refs.xTable.sort('name', 'desc')">Name 降序</vxe-button>
+            <vxe-button @click="$refs.xTable.clearSort()">清除排序</vxe-button>
+          </template>
+        </vxe-toolbar>
+
         <vxe-table
           border
           highlight-hover-row
+          ref="xTable"
           height="300"
           :data="tableData">
           <vxe-table-column type="index" width="60"></vxe-table-column>
@@ -201,7 +219,6 @@ export default {
           border
           highlight-hover-row
           highlight-hover-column
-          ref="xTable"
           height="300"
           :data="tableData"
           :sort-config="{trigger: 'cell'}"
