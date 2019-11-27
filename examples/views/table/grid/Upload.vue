@@ -7,7 +7,6 @@
       resizable
       ref="xGrid"
       max-height="500"
-      :expand-config="{expandAll: true}"
       :columns="tableColumn"
       :data="tableData">
     </vxe-grid>
@@ -32,9 +31,9 @@ export default {
         { type: 'index', width: 50 },
         {
           type: 'expand',
-          width: 60,
+          width: 120,
           slots: {
-            default: ({ row, column }) => {
+            content: ({ row, column }) => {
               return [
                 row.fileList.length
                   ? <ul class="file-list">
@@ -50,6 +49,11 @@ export default {
                     }
                   </ul>
                   : <div class="file-empty">暂无附件</div>
+              ]
+            },
+            default: ({ row, column }) => {
+              return [
+                <span>（{ row.fileList.length }）</span>
               ]
             }
           }
@@ -81,7 +85,6 @@ export default {
           resizable
           ref="xGrid"
           max-height="500"
-          :expand-config="{expandAll: true}"
           :columns="tableColumn"
           :data="tableData">
         </vxe-grid>
@@ -94,9 +97,9 @@ export default {
                 { type: 'index', width: 50 },
                 {
                   type: 'expand',
-                  width: 60,
+                  width: 120,
                   slots: {
-                    default: ({ row, column }) => {
+                    content: ({ row, column }) => {
                       return [
                         row.fileList.length
                           ? <ul class="file-list">
@@ -112,6 +115,11 @@ export default {
                             }
                           </ul>
                           : <div class="file-empty">暂无附件</div>
+                      ]
+                    },
+                    default: ({ row, column }) => {
+                      return [
+                        <span>（{ row.fileList.length }）</span>
                       ]
                     }
                   }
