@@ -31,14 +31,9 @@ export default {
         { type: 'index', width: 50 },
         {
           type: 'expand',
-          width: 60,
+          width: 120,
           slots: {
-            content: ({ column }) => {
-              return [
-                <span>（1）</span>
-              ]
-            },
-            default: ({ row, column }) => {
+            content: ({ row, column }) => {
               return [
                 row.fileList.length
                   ? <ul class="file-list">
@@ -54,6 +49,11 @@ export default {
                     }
                   </ul>
                   : <div class="file-empty">暂无附件</div>
+              ]
+            },
+            default: ({ row, column }) => {
+              return [
+                <span>（{ row.fileList.length }）</span>
               ]
             }
           }
@@ -97,9 +97,9 @@ export default {
                 { type: 'index', width: 50 },
                 {
                   type: 'expand',
-                  width: 60,
+                  width: 120,
                   slots: {
-                    default: ({ row, column }) => {
+                    content: ({ row, column }) => {
                       return [
                         row.fileList.length
                           ? <ul class="file-list">
@@ -115,6 +115,11 @@ export default {
                             }
                           </ul>
                           : <div class="file-empty">暂无附件</div>
+                      ]
+                    },
+                    default: ({ row, column }) => {
+                      return [
+                        <span>（{ row.fileList.length }）</span>
                       ]
                     }
                   }
