@@ -198,9 +198,9 @@ module.exports = {
     },
     body: {
       button: {
-        viewCode: '查看代码',
-        runDemo: '在线运行',
-        showCode: '查看示例',
+        viewCode: '查看 Github',
+        runDemo: '入门示例',
+        showCode: '项目示例',
         refresh: '刷新',
         insert: '新增',
         save: '保存',
