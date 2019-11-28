@@ -1034,11 +1034,15 @@ const Methods = {
         } else if (layout === 'body') {
           let emptyBlockElem = elemStore[`${name}-${layout}-emptyBlock`]
           if (wrapperElem) {
-            if (customHeight > 0) {
-              wrapperElem.style.height = `${fixedType ? (customHeight > 0 ? customHeight - headerHeight - footerHeight : tableHeight) - (showFooter ? 0 : scrollbarHeight) : customHeight - headerHeight - footerHeight}px`
-            } else if (maxHeight) {
-              maxHeight = DomTools.isScale(maxHeight) ? Math.floor(parseInt(maxHeight) / 100 * parentHeight) : XEUtils.toNumber(maxHeight)
+            if (maxHeight) {
+              maxHeight = maxHeight === 'auto' ? parentHeight : (DomTools.isScale(maxHeight) ? Math.floor(parseInt(maxHeight) / 100 * parentHeight) : XEUtils.toNumber(maxHeight))
               wrapperElem.style.maxHeight = `${fixedType ? maxHeight - headerHeight - (showFooter ? 0 : scrollbarHeight) : maxHeight - headerHeight}px`
+            } else {
+              if (customHeight > 0) {
+                wrapperElem.style.height = `${fixedType ? (customHeight > 0 ? customHeight - headerHeight - footerHeight : tableHeight) - (showFooter ? 0 : scrollbarHeight) : customHeight - headerHeight - footerHeight}px`
+              } else {
+                wrapperElem.style.height = ''
+              }
             }
           }
 
@@ -2700,8 +2704,12 @@ const Methods = {
    */
   scrollToRow (row, column) {
     let rest = []
-    if (row && this.fullAllDataRowMap.has(row)) {
-      rest.push(DomTools.rowToVisible(this, row))
+    if (row) {
+      if (this.treeConfig) {
+        rest.push(this.scrollToTreeRow(row))
+      } else if (this.fullAllDataRowMap.has(row)) {
+        rest.push(DomTools.rowToVisible(this, row))
+      }
     }
     rest.push(this.scrollToColumn(column))
     return Promise.all(rest)

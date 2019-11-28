@@ -7,7 +7,7 @@
       :tree-config="{children: 'children'}"
       :data="tableData"
       @select-change="selectChangeEvent">
-      <vxe-table-column type="checkbox" width="120" tree-node></vxe-table-column>
+      <vxe-table-column type="checkbox" width="280" tree-node></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
       <vxe-table-column field="size" title="Size"></vxe-table-column>
       <vxe-table-column field="type" title="Type"></vxe-table-column>
@@ -30,7 +30,7 @@
       :tree-config="{children: 'children'}"
       :checkbox-config="{labelField: 'name', checkRowKeys: ['122000', '20000']}"
       @select-change="selectChangeEvent">
-      <vxe-table-column type="checkbox" title="Sex" width="180" tree-node></vxe-table-column>
+      <vxe-table-column type="checkbox" title="Sex" width="400" tree-node></vxe-table-column>
       <vxe-table-column field="size" title="Size"></vxe-table-column>
       <vxe-table-column field="type" title="Type"></vxe-table-column>
       <vxe-table-column field="date" title="Date"></vxe-table-column>
@@ -43,15 +43,14 @@
       <code class="javascript">{{ demoCodes[3] }}</code>
     </pre>
 
-    <p class="tip">通过 <table-api-link prop="checkStrictly"/> 设置父子节点不互相关联</p>
+    <p class="tip">通过 <table-api-link prop="checkStrictly"/> 设置父子节点不互相关联，默认不显示头部复选框，可以通过 checkbox-config={<table-api-link prop="showHeader"/>} 设置</p>
 
     <vxe-table
       resizable
       :data="tableData"
       :tree-config="{children: 'children'}"
-      :checkbox-config="{checkStrictly: true}">
-      <vxe-table-column type="checkbox" width="120" tree-node></vxe-table-column>
-      <vxe-table-column field="name" title="Name"></vxe-table-column>
+      :checkbox-config="{labelField: 'name', checkStrictly: true}">
+      <vxe-table-column type="checkbox" title="Name" width="280" tree-node></vxe-table-column>
       <vxe-table-column field="size" title="Size"></vxe-table-column>
       <vxe-table-column field="type" title="Type"></vxe-table-column>
       <vxe-table-column field="date" title="Date"></vxe-table-column>
@@ -82,6 +81,7 @@
 
 <script>
 import hljs from 'highlight.js'
+import XEUtils from 'xe-utils'
 
 export default {
   data () {
@@ -94,7 +94,7 @@ export default {
           :tree-config="{children: 'children'}"
           :data="tableData"
           @select-change="selectChangeEvent">
-          <vxe-table-column type="checkbox" tree-node></vxe-table-column>
+          <vxe-table-column type="checkbox" width="280" tree-node></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
           <vxe-table-column field="size" title="Size"></vxe-table-column>
           <vxe-table-column field="type" title="Type"></vxe-table-column>
@@ -126,7 +126,7 @@ export default {
           :tree-config="{children: 'children'}"
           :checkbox-config="{labelField: 'name', checkRowKeys: ['122000', '20000']}"
           @select-change="selectChangeEvent">
-          <vxe-table-column type="checkbox" title="Sex" width="180" tree-node></vxe-table-column>
+          <vxe-table-column type="checkbox" title="Sex" width="400" tree-node></vxe-table-column>
           <vxe-table-column field="size" title="Size"></vxe-table-column>
           <vxe-table-column field="type" title="Type"></vxe-table-column>
           <vxe-table-column field="date" title="Date"></vxe-table-column>
@@ -154,9 +154,8 @@ export default {
           resizable
           :data="tableData"
           :tree-config="{children: 'children'}"
-          :checkbox-config="{checkStrictly: true}">
-          <vxe-table-column type="checkbox" width="120" tree-node></vxe-table-column>
-          <vxe-table-column field="name" title="Name"></vxe-table-column>
+          :checkbox-config="{labelField: 'name', checkStrictly: true}">
+          <vxe-table-column type="checkbox" title="Name" width="280" tree-node></vxe-table-column>
           <vxe-table-column field="size" title="Size"></vxe-table-column>
           <vxe-table-column field="type" title="Type"></vxe-table-column>
           <vxe-table-column field="date" title="Date"></vxe-table-column>
@@ -178,7 +177,7 @@ export default {
     }
   },
   created () {
-    this.tableData = this.$utils.clone(window.MOCK_TREE_DATA_LIST, true)
+    this.tableData = XEUtils.clone(window.MOCK_TREE_DATA_LIST, true)
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {

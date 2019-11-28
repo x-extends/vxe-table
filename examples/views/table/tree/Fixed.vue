@@ -18,7 +18,7 @@
       :tree-config="{children: 'children'}"
       :checkbox-config="{labelField: 'id'}"
       :data="tableData">
-      <vxe-table-column type="checkbox" title="ID" fixed="left" width="200" tree-node></vxe-table-column>
+      <vxe-table-column type="checkbox" title="ID" fixed="left" width="280" tree-node></vxe-table-column>
       <vxe-table-column field="name" title="Name" width="300"></vxe-table-column>
       <vxe-table-column field="size" title="Size" width="300"></vxe-table-column>
       <vxe-table-column field="type" title="Type" width="300"></vxe-table-column>
@@ -59,7 +59,7 @@ export default {
           :tree-config="{children: 'children'}"
           :checkbox-config="{labelField: 'id'}"
           :data="tableData">
-          <vxe-table-column type="checkbox" title="ID" fixed="left" width="200" tree-node></vxe-table-column>
+          <vxe-table-column type="checkbox" title="ID" fixed="left" width="280" tree-node></vxe-table-column>
           <vxe-table-column field="name" title="Name" width="300"></vxe-table-column>
           <vxe-table-column field="size" title="Size" width="300"></vxe-table-column>
           <vxe-table-column field="type" title="Type" width="300"></vxe-table-column>

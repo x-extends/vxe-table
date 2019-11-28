@@ -35,7 +35,7 @@
       resizable
       show-overflow
       ref="xTree2"
-      :tree-config="{children: 'children', iconOpen: 'fa fa-minus-square-o', iconClose: 'fa fa-plus-square-o'}"
+      :tree-config="{children: 'children', iconOpen: 'fa fa-minus-circle', iconClose: 'fa fa-plus-circle'}"
       :data="tableData">
       <vxe-table-column field="name" title="Name" tree-node>
         <template v-slot="{ row }">
@@ -117,7 +117,7 @@ export default {
           resizable
           show-overflow
           ref="xTree"
-          :tree-config="{children: 'children', iconOpen: 'fa fa-minus-square-o', iconClose: 'fa fa-plus-square-o'}"
+          :tree-config="{children: 'children', iconOpen: 'fa fa-minus-circle', iconClose: 'fa fa-plus-circle'}"
           :data="tableData">
           <vxe-table-column field="name" title="Name" tree-node>
             <template v-slot="{ row }">

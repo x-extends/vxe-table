@@ -111,10 +111,10 @@ export default {
     let $buttons = $scopedSlots.buttons
     let $tools = $scopedSlots.tools
     if (this.maximize) {
-      if (tableProps.height) {
-        props.height = 'auto'
-      } else if (tableProps.maxHeight) {
+      if (tableProps.maxHeight) {
         props.maxHeight = 'auto'
+      } else {
+        props.height = 'auto'
       }
     }
     if (proxyConfig) {
