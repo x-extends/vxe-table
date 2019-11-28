@@ -924,8 +924,8 @@ const Methods = {
       let dynamicSize = dynamicList.length - 1
       if (dynamicSize) {
         let odiffer = bodyWidth - tableWidth
-        if (odiffer) {
-          while (odiffer && dynamicSize >= 0) {
+        if (odiffer > 0) {
+          while (odiffer > 0 && dynamicSize >= 0) {
             odiffer--
             dynamicList[dynamicSize--].renderWidth++
           }
