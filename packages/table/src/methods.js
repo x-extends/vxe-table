@@ -889,7 +889,34 @@ const Methods = {
       column.renderWidth = width
     })
     remainWidth -= tableWidth
-    meanWidth = remainWidth > 0 ? Math.floor(remainWidth / (scaleMinList.length + pxMinList.length + autoList.length)) : 0
+    // meanWidth = remainWidth > 0 ? Math.floor(remainWidth / (scaleMinList.length + pxMinList.length + autoList.length)) : 0
+    if (remainWidth > 0) {
+      // debugger
+      const num = scaleMinList.length + pxMinList.length + autoList.length
+      meanWidth = Math.floor(remainWidth / num)
+      // 获得因计算舍去的宽度合计
+      let remainder = remainWidth % num
+      tableWidth += remainder
+
+      const reviseWidth = (remainder, columnData) => {
+        const length = Math.min(remainder, columnData.length)
+        for (let i = 0; i < length; i++) {
+          columnData[i].renderWidth++
+        }
+        return remainder - length
+      }
+      if (remainder > 0) {
+        remainder = reviseWidth(remainder, scaleMinList)
+      }
+      if (remainder > 0) {
+        remainder = reviseWidth(remainder, pxMinList)
+      }
+      if (remainder > 0) {
+        remainder = reviseWidth(remainder, autoList)
+      }
+    } else {
+      meanWidth = 0
+    }
     if (fit) {
       if (remainWidth > 0) {
         scaleMinList.concat(pxMinList).forEach(column => {
