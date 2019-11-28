@@ -7,6 +7,7 @@
         <vxe-button @click="insertEvent()">插入第一行</vxe-button>
         <vxe-button @click="insertAtEvent()">插入指定行</vxe-button>
         <vxe-button @click="getInsertEvent">获取新增</vxe-button>
+        <vxe-button @click="getSelectEvent">获取选中</vxe-button>
       </template>
     </vxe-toolbar>
 
@@ -34,7 +35,6 @@
 
 <script>
 import hljs from 'highlight.js'
-import XEUtils from 'xe-utils'
 
 export default {
   data () {
@@ -50,6 +50,7 @@ export default {
             <vxe-button @click="insertEvent()">插入第一行</vxe-button>
             <vxe-button @click="insertAtEvent()">插入指定行</vxe-button>
             <vxe-button @click="getInsertEvent">获取新增</vxe-button>
+            <vxe-button @click="getSelectEvent">获取选中</vxe-button>
           </template>
         </vxe-toolbar>
 
@@ -84,7 +85,7 @@ export default {
               let xTree = this.$refs.xTree
               xTree.createRow({
                 name: '新数据',
-                date: XEUtils.toDateString(new Date(), 'yyyy-MM-dd'),
+                date: this.$utils.toDateString(new Date(), 'yyyy-MM-dd'),
                 isNew: true
               }).then(newRow => {
                 // 插入到第一行
@@ -96,11 +97,11 @@ export default {
               let xTree = this.$refs.xTree
               xTree.createRow({
                 name: '新数据',
-                date: XEUtils.toDateString(new Date(), 'yyyy-MM-dd'),
+                date: this.$utils.toDateString(new Date(), 'yyyy-MM-dd'),
                 isNew: true
               }).then(newRow => {
                 // 插入到 id 为 11000 的节点位置中
-                let rowNode = XEUtils.findTree(this.tableData, item => item.id === '11000', this.treeConfig)
+                let rowNode = this.$utils.findTree(this.tableData, item => item.id === '11000', this.treeConfig)
                 if (rowNode) {
                   rowNode.items.splice(rowNode.index, 0, newRow)
                   xTree.refreshData().then(() => xTree.setActiveRow(newRow))
@@ -108,8 +109,12 @@ export default {
               })
             },
             getInsertEvent () {
-              let insertRecords = XEUtils.filterTree(this.tableData, item => item.isNew, this.treeConfig)
+              let insertRecords = this.$utils.filterTree(this.tableData, item => item.isNew, this.treeConfig)
               this.$XModal.alert(insertRecords.length)
+            },
+            getSelectEvent () {
+              let selectRecords = this.$refs.xTree.getSelectRecords()
+              this.$XModal.alert(selectRecords.length)
             }
           }
         }
@@ -118,7 +123,7 @@ export default {
     }
   },
   created () {
-    this.tableData = XEUtils.clone(window.MOCK_TREE_DATA_LIST, true)
+    this.tableData = this.$utils.clone(window.MOCK_TREE_DATA_LIST, true)
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
@@ -130,7 +135,7 @@ export default {
       let xTree = this.$refs.xTree
       xTree.createRow({
         name: '新数据',
-        date: XEUtils.toDateString(new Date(), 'yyyy-MM-dd'),
+        date: this.$utils.toDateString(new Date(), 'yyyy-MM-dd'),
         isNew: true
       }).then(newRow => {
         // 插入到第一行
@@ -142,11 +147,11 @@ export default {
       let xTree = this.$refs.xTree
       xTree.createRow({
         name: '新数据',
-        date: XEUtils.toDateString(new Date(), 'yyyy-MM-dd'),
+        date: this.$utils.toDateString(new Date(), 'yyyy-MM-dd'),
         isNew: true
       }).then(newRow => {
         // 插入到 id 为 11000 的节点位置中
-        let rowNode = XEUtils.findTree(this.tableData, item => item.id === '11000', this.treeConfig)
+        let rowNode = this.$utils.findTree(this.tableData, item => item.id === '11000', this.treeConfig)
         if (rowNode) {
           rowNode.items.splice(rowNode.index, 0, newRow)
           xTree.refreshData().then(() => xTree.setActiveRow(newRow))
@@ -154,8 +159,12 @@ export default {
       })
     },
     getInsertEvent () {
-      let insertRecords = XEUtils.filterTree(this.tableData, item => item.isNew, this.treeConfig)
+      let insertRecords = this.$utils.filterTree(this.tableData, item => item.isNew, this.treeConfig)
       this.$XModal.alert(insertRecords.length)
+    },
+    getSelectEvent () {
+      let selectRecords = this.$refs.xTree.getSelectRecords()
+      this.$XModal.alert(selectRecords.length)
     }
   }
 }

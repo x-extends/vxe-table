@@ -9,6 +9,7 @@ import Footer from '../../../packages/footer'
 import Filter from '../../../packages/filter'
 import Loading from '../../../packages/loading'
 import Grid from '../../../packages/grid'
+import VirtualTree from '../../../packages/virtual-tree'
 import Excel from '../../../packages/excel'
 import Menu from '../../../packages/menu'
 import Toolbar from '../../../packages/toolbar'
@@ -55,6 +56,7 @@ Vue.use(Footer)
 Vue.use(Filter)
 Vue.use(Loading)
 Vue.use(Grid)
+Vue.use(VirtualTree)
 Vue.use(Excel)
 Vue.use(Menu)
 Vue.use(Toolbar)

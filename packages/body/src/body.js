@@ -437,7 +437,7 @@ export default {
       loading,
       maxHeight,
       height,
-      containerHeight,
+      parentHeight,
       tableData,
       tableColumn,
       headerHeight,
@@ -459,16 +459,18 @@ export default {
     let customHeight = 0
     let style = {}
     if (height) {
-      customHeight = height === 'auto' ? containerHeight : (DomTools.isScale(height) ? Math.floor(parseInt(height) / 100 * containerHeight) : XEUtils.toNumber(height))
+      customHeight = height === 'auto' ? parentHeight : (DomTools.isScale(height) ? Math.floor(parseInt(height) / 100 * parentHeight) : XEUtils.toNumber(height))
       if (showFooter) {
         customHeight += scrollbarHeight + 1
       }
     }
-    if (customHeight > 0) {
-      style.height = `${fixedType ? (customHeight > 0 ? customHeight - headerHeight - footerHeight : tableHeight) - (showFooter ? 0 : scrollbarHeight) : customHeight - headerHeight - footerHeight}px`
-    } else if (maxHeight) {
-      maxHeight = DomTools.isScale(maxHeight) ? Math.floor(parseInt(maxHeight) / 100 * containerHeight) : XEUtils.toNumber(maxHeight)
-      style['max-height'] = `${fixedType ? maxHeight - headerHeight - (showFooter ? 0 : scrollbarHeight) : maxHeight - headerHeight}px`
+    if (maxHeight) {
+      maxHeight = maxHeight === 'auto' ? parentHeight : (DomTools.isScale(maxHeight) ? Math.floor(parseInt(maxHeight) / 100 * parentHeight) : XEUtils.toNumber(maxHeight))
+      style.maxHeight = `${fixedType ? maxHeight - headerHeight - (showFooter ? 0 : scrollbarHeight) : maxHeight - headerHeight}px`
+    } else {
+      if (customHeight > 0) {
+        style.height = `${fixedType ? (customHeight > 0 ? customHeight - headerHeight - footerHeight : tableHeight) - (showFooter ? 0 : scrollbarHeight) : customHeight - headerHeight - footerHeight}px`
+      }
     }
     // 如果是固定列与设置了超出隐藏
     if (fixedType && allColumnOverflow) {

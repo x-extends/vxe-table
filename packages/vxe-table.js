@@ -7,6 +7,7 @@ import Footer from './footer'
 import Filter from './filter'
 import Loading from './loading'
 import Grid from './grid'
+import VirtualTree from './virtual-tree'
 import Excel from './excel'
 import Menu from './menu'
 import Toolbar from './toolbar'
@@ -33,6 +34,7 @@ export const components = [
   Filter,
   Loading,
   Grid,
+  VirtualTree,
   Excel,
   Menu,
   Toolbar,
@@ -75,6 +77,7 @@ export * from './footer'
 export * from './filter'
 export * from './loading'
 export * from './grid'
+export * from './virtual-tree'
 export * from './excel'
 export * from './menu'
 export * from './toolbar'

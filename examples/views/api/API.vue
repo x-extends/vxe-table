@@ -72,6 +72,7 @@ import tableAPI from '../../api/table'
 import tableColumnAPI from '../../api/column'
 import toolbarAPI from '../../api/toolbar'
 import gridAPI from '../../api/grid'
+import virtualTreeAPI from '../../api/virtual-tree'
 import excelAPI from '../../api/excel'
 import pagerAPI from '../../api/pager'
 import radioAPI from '../../api/radio'
@@ -189,14 +190,15 @@ export default {
             case 'toolbar':
               apis = toolbarAPI
               break
-            case 'grid': {
+            case 'grid':
               apis = gridAPI
               break
-            }
-            case 'excel': {
+            case 'virtual-tree':
+              apis = virtualTreeAPI
+              break
+            case 'excel':
               apis = excelAPI
               break
-            }
             case 'pager':
               apis = pagerAPI
               break
@@ -330,7 +332,7 @@ export default {
         this.apiList = this.tableData
       }
     },
-    // 创建一个防反跳策略函数，间隔 500 毫秒的执行赔率
+    // 创建一个防反跳策略函数，调用频率间隔 500 毫秒
     searchEvent: XEUtils.debounce(function () {
       this.handleSearch()
     }, 500, { leading: false, trailing: true })

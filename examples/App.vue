@@ -42,7 +42,7 @@
       <div class="aside">
         <ul class="nav-menu">
           <li v-for="(item, index) in tableList" :key="index" :class="{expand: item.expand}">
-            <a class="nav-link" @click="linkEvent(item)" :title="$t(item.label)" :class="{active: pageKey === item.value}"><i class="vxe-icon--arrow-right nav-link-icon"></i>{{ $t(item.label) }}</a>
+            <a class="nav-link" @click="linkEvent(item)" :title="$t(item.disabled ? 'app.body.other.newFunc' : item.label)" :class="{disabled: item.disabled, active: pageKey === item.value}"><i class="vxe-icon--arrow-right nav-link-icon"></i>{{ $t(item.label) }}</a>
             <ul v-if="item.children" v-show="item.expand" class="nav-child-menu">
               <li v-for="(child, cIndex) in item.children" :key="cIndex">
                 <a class="nav-link disabled" v-if="child.disabled" :title="$t('app.body.other.newFunc')">{{ $t(child.label) }}</a>
@@ -803,6 +803,80 @@ export default {
           ]
         },
         {
+          label: 'app.aside.nav.virtualTree',
+          value: 'virtualTree',
+          expand: false,
+          disabled: true,
+          children: [
+            {
+              label: 'app.aside.nav.base',
+              locat: {
+                name: 'TableVirtualTreeBasic'
+              }
+            },
+            {
+              label: 'app.aside.nav.treeNormal',
+              locat: {
+                name: 'TableVirtualTreeNormal'
+              }
+            },
+            {
+              label: 'app.aside.nav.radio',
+              locat: {
+                name: 'TableVirtualTreeRadio'
+              }
+            },
+            {
+              label: 'app.aside.nav.checkbox',
+              locat: {
+                name: 'TableVirtualTreeCheckbox'
+              }
+            },
+            {
+              label: 'app.aside.nav.icon',
+              locat: {
+                name: 'TableVirtualTreeIcon'
+              }
+            },
+            {
+              label: 'app.aside.nav.fixed',
+              locat: {
+                name: 'TableVirtualTreeFixed'
+              }
+            },
+            {
+              label: 'app.aside.nav.fluidHeight',
+              locat: {
+                name: 'TableVirtualTreeMaxHeight'
+              }
+            },
+            {
+              label: 'app.aside.nav.edit',
+              locat: {
+                name: 'TableVirtualTreeEdit'
+              }
+            },
+            {
+              label: 'app.aside.nav.insert',
+              locat: {
+                name: 'TableVirtualTreeInsert'
+              }
+            },
+            {
+              label: 'app.aside.nav.contextMenu',
+              locat: {
+                name: 'TableVirtualTreeMenu'
+              }
+            },
+            {
+              label: 'app.aside.nav.template',
+              locat: {
+                name: 'TableVirtualTreeTemplate'
+              }
+            }
+          ]
+        },
+        {
           label: 'app.aside.nav.scroll',
           value: 'scroll',
           expand: false,
@@ -840,15 +914,10 @@ export default {
               }
             },
             {
-              label: 'app.aside.nav.virtualTree',
+              label: 'app.aside.nav.scrollTree',
+              disabled: true,
               locat: {
                 name: 'TableScrollTree'
-              }
-            },
-            {
-              label: 'app.aside.nav.cellValid',
-              locat: {
-                name: 'TableScrollCellValid'
               }
             },
             {
@@ -1510,6 +1579,15 @@ export default {
               }
             },
             // {
+            //   label: 'app.aside.nav.vxeVirtualTree',
+            //   locat: {
+            //     name: 'VXEAPI',
+            //     params: {
+            //       name: 'virtual-tree'
+            //     }
+            //   }
+            // },
+            // {
             //   label: 'app.aside.nav.vxeExcel',
             //   locat: {
             //     name: 'VXEAPI',
@@ -1659,12 +1737,14 @@ export default {
       }
     },
     linkEvent (item) {
-      this.tableList.forEach(group => {
-        if (item !== group) {
-          group.expand = false
-        }
-      })
-      item.expand = !item.expand
+      if (!item.disabled) {
+        this.tableList.forEach(group => {
+          if (item !== group) {
+            group.expand = false
+          }
+        })
+        item.expand = !item.expand
+      }
     },
     vChangeEvent () {
       switch (this.version) {

@@ -21,6 +21,7 @@ const components = [
   'menu',
   'toolbar',
   'grid',
+  'virtual-tree',
   'excel',
   'pager',
   'checkbox',

@@ -64,7 +64,7 @@ function renderFixed (h, $table, fixedType) {
     collectColumn,
     isGroup,
     height,
-    containerHeight,
+    parentHeight,
     vSize,
     headerHeight,
     footerHeight,
@@ -82,7 +82,7 @@ function renderFixed (h, $table, fixedType) {
   let fixedColumn = columnStore[`${fixedType}List`]
   let customHeight = 0
   if (height) {
-    customHeight = height === 'auto' ? containerHeight : (DomTools.isScale(height) ? Math.floor(parseInt(height) / 100 * containerHeight) : XEUtils.toNumber(height))
+    customHeight = height === 'auto' ? parentHeight : (DomTools.isScale(height) ? Math.floor(parseInt(height) / 100 * parentHeight) : XEUtils.toNumber(height))
     if (showFooter) {
       customHeight += scrollbarHeight + 1
     }
@@ -311,7 +311,7 @@ export default {
       // 渲染中的数据
       tableData: [],
       // 表格父容器的高度
-      containerHeight: 0,
+      parentHeight: 0,
       // 表格宽度
       tableWidth: 0,
       // 表格高度
@@ -552,10 +552,7 @@ export default {
   },
   watch: {
     data (value) {
-      if (!this.isUpdateData) {
-        this.loadTableData(value, true).then(this.handleDefault)
-      }
-      this.isUpdateData = false
+      this.loadTableData(value, true).then(this.handleDefault)
     },
     customs (value) {
       if (!this.isUpdateCustoms) {
@@ -1864,7 +1861,7 @@ export default {
       this.overflowY = overflowY
       this.tableWidth = tableWidth
       this.tableHeight = tableHeight
-      this.containerHeight = this.getParentHeight()
+      this.parentHeight = this.getParentHeight()
       if (headerElem) {
         this.headerHeight = headerElem.offsetHeight
       }
@@ -4146,8 +4143,12 @@ export default {
     },
     scrollToRow (row, column) {
       let rest = []
-      if (row && this.fullAllDataRowMap.has(row)) {
-        rest.push(DomTools.rowToVisible(this, row))
+      if (row) {
+        if (this.treeConfig) {
+          rest.push(this.scrollToTreeRow(row))
+        } else if (this.fullAllDataRowMap.has(row)) {
+          rest.push(DomTools.rowToVisible(this, row))
+        }
       }
       rest.push(this.scrollToColumn(column))
       return Promise.all(rest)

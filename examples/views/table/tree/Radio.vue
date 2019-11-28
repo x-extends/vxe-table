@@ -25,7 +25,7 @@
       :tree-config="{children: 'children'}"
       :radio-config="{labelField: 'name'}"
       :data="tableData">
-      <vxe-table-column type="radio" title="Sex" tree-node></vxe-table-column>
+      <vxe-table-column type="radio" title="Name" width="400" tree-node></vxe-table-column>
       <vxe-table-column field="size" title="Size"></vxe-table-column>
       <vxe-table-column field="type" title="Type"></vxe-table-column>
       <vxe-table-column field="date" title="Date"></vxe-table-column>
@@ -45,15 +45,14 @@
       highlight-current-row
       ref="xTable3"
       :tree-config="{children: 'children'}"
-      :radio-config="{trigger: 'row'}"
+      :radio-config="{labelField: 'name', trigger: 'row'}"
       :data="tableData"
       @current-change="currentChangeEvent">
-      <vxe-table-column type="radio" width="120" tree-node>
+      <vxe-table-column type="radio" width="400" tree-node>
         <template v-slot:header>
           <vxe-button type="text" @click="clearCurrentRowEvent" :disabled="!selectRow">取消</vxe-button>
         </template>
       </vxe-table-column>
-      <vxe-table-column field="name" title="Name"></vxe-table-column>
       <vxe-table-column field="size" title="Size"></vxe-table-column>
       <vxe-table-column field="type" title="Type"></vxe-table-column>
       <vxe-table-column field="date" title="Date"></vxe-table-column>
@@ -70,7 +69,6 @@
 
 <script>
 import hljs from 'highlight.js'
-import XEUtils from 'xe-utils'
 
 export default {
   data () {
@@ -104,9 +102,9 @@ export default {
         `
         <vxe-table
           :tree-config="{children: 'children'}"
+          :radio-config="{labelField: 'name'}"
           :data="tableData">
-          <vxe-table-column type="radio" width="120" tree-node></vxe-table-column>
-          <vxe-table-column field="name" title="Name"></vxe-table-column>
+          <vxe-table-column type="radio" title="Name" width="400" tree-node></vxe-table-column>
           <vxe-table-column field="size" title="Size"></vxe-table-column>
           <vxe-table-column field="type" title="Type"></vxe-table-column>
           <vxe-table-column field="date" title="Date"></vxe-table-column>
@@ -128,17 +126,16 @@ export default {
         <vxe-table
           resizable
           highlight-current-row
-          ref="xTable3"
+          ref="xTable"
           :tree-config="{children: 'children'}"
-          :radio-config="{trigger: 'row'}"
+          :radio-config="{labelField: 'name', trigger: 'row'}"
           :data="tableData"
           @current-change="currentChangeEvent">
-          <vxe-table-column type="radio" width="120" tree-node>
+          <vxe-table-column type="radio" width="400" tree-node>
             <template v-slot:header>
               <vxe-button type="text" @click="clearCurrentRowEvent" :disabled="!selectRow">取消</vxe-button>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="name" title="Name"></vxe-table-column>
           <vxe-table-column field="size" title="Size"></vxe-table-column>
           <vxe-table-column field="type" title="Type"></vxe-table-column>
           <vxe-table-column field="date" title="Date"></vxe-table-column>
@@ -161,7 +158,8 @@ export default {
             },
             clearCurrentRowEvent () {
               this.selectRow = null
-              this.$refs.xTable3.clearRadioRow()
+              this.$refs.xTable.clearRadioRow()
+              this.$refs.xTable.clearCurrentRow()
             }
           }
         }
@@ -170,7 +168,7 @@ export default {
     }
   },
   created () {
-    this.tableData = XEUtils.clone(window.MOCK_TREE_DATA_LIST, true)
+    this.tableData = this.$utils.clone(window.MOCK_TREE_DATA_LIST, true)
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
