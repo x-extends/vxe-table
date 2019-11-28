@@ -148,6 +148,18 @@ const TableScrollKeepAliveTable1 = () => import(/* webpackChunkName: "scroll" */
 const TableScrollKeepAliveTable2 = () => import(/* webpackChunkName: "scroll" */ './views/table/scroll/keepAlives/Table2.vue')
 const TableScrollKeepAliveTable3 = () => import(/* webpackChunkName: "scroll" */ './views/table/scroll/keepAlives/Table3.vue')
 
+const TableVirtualTreeBasic = () => import(/* webpackChunkName: "virtual-tree" */ './views/table/virtual-tree/Basic.vue')
+const TableVirtualTreeNormal = () => import(/* webpackChunkName: "virtual-tree" */ './views/table/virtual-tree/Normal.vue')
+const TableVirtualTreeRadio = () => import(/* webpackChunkName: "virtual-tree" */ './views/table/virtual-tree/Radio.vue')
+const TableVirtualTreeCheckbox = () => import(/* webpackChunkName: "virtual-tree" */ './views/table/virtual-tree/Checkbox.vue')
+const TableVirtualTreeIcon = () => import(/* webpackChunkName: "virtual-tree" */ './views/table/virtual-tree/Icon.vue')
+const TableVirtualTreeFixed = () => import(/* webpackChunkName: "virtual-tree" */ './views/table/virtual-tree/Fixed.vue')
+const TableVirtualTreeMaxHeight = () => import(/* webpackChunkName: "virtual-tree" */ './views/table/virtual-tree/MaxHeight.vue')
+const TableVirtualTreeEdit = () => import(/* webpackChunkName: "virtual-tree" */ './views/table/virtual-tree/Edit.vue')
+const TableVirtualTreeInsert = () => import(/* webpackChunkName: "virtual-tree" */ './views/table/virtual-tree/Insert.vue')
+const TableVirtualTreeMenu = () => import(/* webpackChunkName: "virtual-tree" */ './views/table/virtual-tree/Menu.vue')
+const TableVirtualTreeTemplate = () => import(/* webpackChunkName: "virtual-tree" */ './views/table/virtual-tree/Template.vue')
+
 const TableEditManual = () => import(/* webpackChunkName: "edit" */ './views/table/edit/Manual.vue')
 const TableEditClick = () => import(/* webpackChunkName: "edit" */ './views/table/edit/Click.vue')
 const TableEditDBLClick = () => import(/* webpackChunkName: "edit" */ './views/table/edit/DBLClick.vue')
@@ -709,6 +721,61 @@ export default new Router({
       path: '/table/tree/template',
       name: 'TableTreeTemplate',
       component: TableTreeTemplate
+    },
+    {
+      path: '/table/virtualTree/basic',
+      name: 'TableVirtualTreeBasic',
+      component: TableVirtualTreeBasic
+    },
+    {
+      path: '/table/virtualTree/normal',
+      name: 'TableVirtualTreeNormal',
+      component: TableVirtualTreeNormal
+    },
+    {
+      path: '/table/virtualTree/radio',
+      name: 'TableVirtualTreeRadio',
+      component: TableVirtualTreeRadio
+    },
+    {
+      path: '/table/virtualTree/checkbox',
+      name: 'TableVirtualTreeCheckbox',
+      component: TableVirtualTreeCheckbox
+    },
+    {
+      path: '/table/virtualTree/icon',
+      name: 'TableVirtualTreeIcon',
+      component: TableVirtualTreeIcon
+    },
+    {
+      path: '/table/virtualTree/fixed',
+      name: 'TableVirtualTreeFixed',
+      component: TableVirtualTreeFixed
+    },
+    {
+      path: '/table/virtualTree/maxHeight',
+      name: 'TableVirtualTreeMaxHeight',
+      component: TableVirtualTreeMaxHeight
+    },
+    {
+      path: '/table/virtualTree/edit',
+      name: 'TableVirtualTreeEdit',
+      component: TableVirtualTreeEdit
+    },
+    {
+      path: '/table/virtualTree/insert',
+      name: 'TableVirtualTreeInsert',
+      component: TableVirtualTreeInsert
+    },
+    {
+      path: '/table/virtualTree/menu',
+      name: 'TableVirtualTreeMenu',
+      component: TableVirtualTreeMenu
+    },
+    {
+      path: '/table/virtualTree/template',
+      name: 'TableVirtualTreeTemplate',
+      component: TableVirtualTreeTemplate
     },
     {
       path: '/table/grid/basic',

@@ -6,28 +6,26 @@ import { UtilTools } from '../../tools'
 export const Cell = {
   createColumn ($table, _vm) {
     let { type, sortable, remoteSort, filters, editRender, treeNode } = _vm
-    let { treeConfig } = $table
     // 在 v3.0 中废弃 selectConfig
     let checkboxConfig = $table.checkboxConfig || $table.selectConfig
-    let isTreeNode = treeConfig && treeNode
     let renMaps = {
       renderHeader: this.renderHeader,
-      renderCell: isTreeNode ? this.renderTreeCell : this.renderCell
+      renderCell: treeNode ? this.renderTreeCell : this.renderCell
     }
     switch (type) {
       case 'index':
         renMaps.renderHeader = this.renderIndexHeader
-        renMaps.renderCell = isTreeNode ? this.renderTreeIndexCell : this.renderIndexCell
+        renMaps.renderCell = treeNode ? this.renderTreeIndexCell : this.renderIndexCell
         break
       case 'radio':
         renMaps.renderHeader = this.renderRadioHeader
-        renMaps.renderCell = isTreeNode ? this.renderTreeRadioCell : this.renderRadioCell
+        renMaps.renderCell = treeNode ? this.renderTreeRadioCell : this.renderRadioCell
         break
       // 在 v3.0 中废弃 type=selection
       case 'checkbox':
       case 'selection':
         renMaps.renderHeader = this.renderSelectionHeader
-        renMaps.renderCell = checkboxConfig && checkboxConfig.checkField ? (isTreeNode ? this.renderTreeSelectionCellByProp : this.renderSelectionCellByProp) : (isTreeNode ? this.renderTreeSelectionCell : this.renderSelectionCell)
+        renMaps.renderCell = checkboxConfig && checkboxConfig.checkField ? (treeNode ? this.renderTreeSelectionCellByProp : this.renderSelectionCellByProp) : (treeNode ? this.renderTreeSelectionCell : this.renderSelectionCell)
         break
       case 'expand':
         renMaps.renderCell = this.renderExpandCell
@@ -36,7 +34,7 @@ export const Cell = {
       default:
         if (editRender) {
           renMaps.renderHeader = this.renderEditHeader
-          renMaps.renderCell = $table.editConfig && $table.editConfig.mode === 'cell' ? (isTreeNode ? this.renderTreeCellEdit : this.renderCellEdit) : (isTreeNode ? this.renderTreeRadioCell : this.renderRowEdit)
+          renMaps.renderCell = $table.editConfig && $table.editConfig.mode === 'cell' ? (treeNode ? this.renderTreeCellEdit : this.renderCellEdit) : (treeNode ? this.renderTreeRadioCell : this.renderRowEdit)
         } else if (filters && filters.length && (sortable || remoteSort)) {
           renMaps.renderHeader = this.renderSortAndFilterHeader
         } else if (sortable || remoteSort) {
@@ -86,12 +84,16 @@ export const Cell = {
    */
   renderTreeIcon (h, params) {
     let { $table, isHidden } = params
-    let { treeConfig, treeExpandeds } = $table
-    let { row, level } = params
+    let { treeConfig = {}, treeExpandeds } = $table
+    let { row, column, level } = params
+    let { slots } = column
     let { children, indent, trigger, iconOpen, iconClose } = treeConfig
     let rowChildren = row[children]
     let isAceived = false
     let on = {}
+    if (slots && slots.icon) {
+      return slots.icon(params, h)
+    }
     if (!isHidden) {
       isAceived = treeExpandeds.indexOf(row) > -1
     }
@@ -226,7 +228,7 @@ export const Cell = {
       }
     }
     if (checkboxConfig && (checkboxConfig.checkStrictly ? !checkboxConfig.showHeader : checkboxConfig.showHeader === false)) {
-      return []
+      return slots && slots.header ? slots.header(params, h) : [UtilTools.getFuncText(headerTitle)]
     }
     if (!isHidden) {
       options.domProps = {
@@ -369,6 +371,9 @@ export const Cell = {
     let { labelField, iconOpen, iconClose } = $table.expandConfig || {}
     let { slots } = column
     let isAceived = false
+    if (slots && slots.icon) {
+      return slots.icon(params, h)
+    }
     if (!isHidden) {
       isAceived = $table.rowExpandeds.indexOf(params.row) > -1
     }

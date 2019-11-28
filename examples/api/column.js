@@ -634,6 +634,15 @@ const apis = [
         enum: '',
         defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,fixed,isHidden}, h',
         list: []
+      },
+      {
+        name: 'icon',
+        desc: '只对 type=expand 或 tree-node 有效，自定义图标模板',
+        version: '2.7.0',
+        type: '',
+        enum: '',
+        defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,fixed,isHidden}, h',
+        list: []
       }
     ]
   },

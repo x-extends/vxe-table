@@ -411,10 +411,7 @@ export default {
   },
   watch: {
     data (value) {
-      if (!this._isUpdateData) {
-        this.loadTableData(value, true).then(this.handleDefault)
-      }
-      this._isUpdateData = false
+      this.loadTableData(value, true).then(this.handleDefault)
     },
     customs (value) {
       if (!this.isUpdateCustoms) {

@@ -7,6 +7,7 @@
         <vxe-button @click="insertEvent()">插入第一行</vxe-button>
         <vxe-button @click="insertAtEvent()">插入指定行</vxe-button>
         <vxe-button @click="getInsertEvent">获取新增</vxe-button>
+        <vxe-button @click="getSelectEvent">获取选中</vxe-button>
       </template>
     </vxe-toolbar>
 
@@ -49,6 +50,7 @@ export default {
             <vxe-button @click="insertEvent()">插入第一行</vxe-button>
             <vxe-button @click="insertAtEvent()">插入指定行</vxe-button>
             <vxe-button @click="getInsertEvent">获取新增</vxe-button>
+            <vxe-button @click="getSelectEvent">获取选中</vxe-button>
           </template>
         </vxe-toolbar>
 
@@ -109,6 +111,10 @@ export default {
             getInsertEvent () {
               let insertRecords = this.$utils.filterTree(this.tableData, item => item.isNew, this.treeConfig)
               this.$XModal.alert(insertRecords.length)
+            },
+            getSelectEvent () {
+              let selectRecords = this.$refs.xTree.getSelectRecords()
+              this.$XModal.alert(selectRecords.length)
             }
           }
         }
@@ -155,6 +161,10 @@ export default {
     getInsertEvent () {
       let insertRecords = this.$utils.filterTree(this.tableData, item => item.isNew, this.treeConfig)
       this.$XModal.alert(insertRecords.length)
+    },
+    getSelectEvent () {
+      let selectRecords = this.$refs.xTree.getSelectRecords()
+      this.$XModal.alert(selectRecords.length)
     }
   }
 }

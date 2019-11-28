@@ -932,14 +932,15 @@ const Methods = {
       let width = Math.max(meanWidth, minCellWidth)
       column.renderWidth = width
       tableWidth += width
-      if (fit && index === autoList.length - 1) {
-        // 如果所有列足够放的情况下，修补列之间的误差
-        let odiffer = bodyWidth - tableWidth
-        if (odiffer > 0) {
-          column.renderWidth += odiffer
-          tableWidth = bodyWidth
-        }
-      }
+      // 在上面修复了宽度,这里应该不需要了
+      // if (fit && index === autoList.length - 1) {
+      //   // 如果所有列足够放的情况下，修补列之间的误差
+      //   let odiffer = bodyWidth - tableWidth
+      //   if (odiffer > 0) {
+      //     column.renderWidth += odiffer
+      //     tableWidth = bodyWidth
+      //   }
+      // }
     })
     let tableHeight = bodyElem.offsetHeight
     let overflowY = bodyElem.scrollHeight > bodyElem.clientHeight

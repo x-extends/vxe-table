@@ -1020,7 +1020,7 @@ const apis = [
             version: '',
             type: 'String',
             enum: '',
-            defVal: 'children',
+            defVal: '',
             list: []
           },
           {

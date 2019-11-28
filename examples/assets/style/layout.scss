@@ -142,6 +142,10 @@ body,
         &.active {
           font-weight: 700;
         }
+        &.disabled {
+          color: #c0c4cc;
+          cursor: not-allowed;
+        }
       }
       .expand {
         .nav-link-icon {
