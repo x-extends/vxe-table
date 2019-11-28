@@ -848,7 +848,16 @@ const Methods = {
     // DomTools.removeClass($el, 'is--recalculate')
     return this.computeScrollLoad()
   },
-  // 列宽计算
+  /**
+   * 列宽算法
+   * 支持 px、%、固定 混合分配
+   * 支持动态列表调整分配
+   * 支持自动分配偏移量
+   * @param {Element} headerElem
+   * @param {Element} bodyElem
+   * @param {Element} footerElem
+   * @param {Number} bodyWidth
+   */
   autoCellWidth (headerElem, bodyElem, footerElem) {
     let meanWidth
     let tableWidth = 0
@@ -905,15 +914,25 @@ const Methods = {
       let width = Math.max(meanWidth, minCellWidth)
       column.renderWidth = width
       tableWidth += width
-      if (fit && index === autoList.length - 1) {
-        // 如果所有列足够放的情况下，修补列之间的误差
+    })
+    if (fit) {
+      /**
+       * 偏移量算法
+       * 如果所有列足够放的情况下，从最后动态列开始分配
+       */
+      let dynamicList = scaleList.concat(scaleMinList).concat(pxMinList).concat(autoList)
+      let dynamicSize = dynamicList.length - 1
+      if (dynamicSize) {
         let odiffer = bodyWidth - tableWidth
-        if (odiffer > 0) {
-          column.renderWidth += odiffer
+        if (odiffer) {
+          while (odiffer && dynamicSize >= 0) {
+            odiffer--
+            dynamicList[dynamicSize--].renderWidth++
+          }
           tableWidth = bodyWidth
         }
       }
-    })
+    }
     let tableHeight = bodyElem.offsetHeight
     let overflowY = bodyElem.scrollHeight > bodyElem.clientHeight
     this.scrollbarWidth = overflowY ? bodyElem.offsetWidth - bodyWidth : 0
