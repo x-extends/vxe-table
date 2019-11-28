@@ -27,7 +27,7 @@
       </vxe-table-column>
       <vxe-table-column field="type" title="Image" tree-node>
         <template>
-          <img src="https://xuliangzhan.github.io/vxe-table/other/img1.gif" height="50">
+          <img src="static/other/img1.gif" height="50">
         </template>
       </vxe-table-column>
       <vxe-table-column field="date" title="Date">
@@ -80,7 +80,7 @@ export default {
           </vxe-table-column>
           <vxe-table-column field="type" title="Image" tree-node>
             <template>
-              <img src="https://xuliangzhan.github.io/vxe-table/other/img1.gif" height="50">
+              <img src="static/other/img1.gif" height="50">
             </template>
           </vxe-table-column>
           <vxe-table-column field="date" title="Date">
