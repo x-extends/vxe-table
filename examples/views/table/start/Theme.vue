@@ -12,7 +12,10 @@
       <code class="scss">
         @import 'vxe-table/styles/variable.scss';
 
-        $vxe-font-color: #666; // 局部修改主题色
+        // 局部修改变量
+        $vxe-font-size: 14px;
+        $vxe-font-color: #666;
+        $vxe-primary-color: #409eff;
 
         @import './assets/styles/xtable/variable.scss';
         @import 'vxe-table/styles/default.scss';
@@ -23,7 +26,10 @@
       <code class="scss">
         @import 'vxe-table/styles/variable.scss';
 
-        $vxe-font-color: #666; // 局部修改主题色
+        // 局部修改变量
+        $vxe-font-size: 14px;
+        $vxe-font-color: #666;
+        $vxe-primary-color: #409eff;
 
         @import './assets/styles/xtable/variable.scss';
         @import 'vxe-table/styles/icon.scss';
@@ -35,7 +41,6 @@
         @import 'vxe-table/styles/filter.scss';
         @import 'vxe-table/styles/loading.scss';
         @import 'vxe-table/styles/grid.scss';
-        @import 'vxe-table/styles/excel.scss';
         @import 'vxe-table/styles/menu.scss';
         @import 'vxe-table/styles/toolbar.scss';
         @import 'vxe-table/styles/pager.scss';
