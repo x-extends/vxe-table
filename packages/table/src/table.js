@@ -548,6 +548,31 @@ export default {
         return true
       }
       return false
+    },
+    renderOptions () {
+      const { treeConfig, mouseConfig, columnStore } = this
+      return {
+        class: ['vxe-table', this.vSize ? `size--${this.vSize}` : '', {
+          'vxe-editable': this.editConfig,
+          'show--head': this.showHeader,
+          'show--foot': this.showFooter,
+          'has--height': this.height,
+          'has--tree-line': treeConfig && treeConfig.line,
+          'fixed--left': columnStore.leftList.length,
+          'fixed--right': columnStore.rightList.length,
+          't--animat': this.optimizeOpts.animat,
+          't--stripe': this.stripe,
+          't--border': this.border,
+          't--selected': mouseConfig && mouseConfig.selected,
+          't--checked': mouseConfig && mouseConfig.checked,
+          'row--highlight': this.highlightHoverRow,
+          'column--highlight': this.highlightHoverColumn,
+          'scroll--y': this.overflowY,
+          'scroll--x': this.overflowX,
+          'virtual--x': this.scrollXLoad,
+          'virtual--y': this.scrollYLoad
+        }]
+      }
     }
   },
   watch: {
@@ -661,6 +686,15 @@ export default {
     if (checkboxConfig.labelProp) {
       UtilTools.warn('vxe.error.delProp', ['select-config.labelProp', 'select-config.labelField'])
     }
+    if (this.sortMethod) {
+      UtilTools.warn('vxe.error.delProp', ['sort-method', 'sort-config.sortMethod'])
+    }
+    if (this.remoteSort) {
+      UtilTools.warn('vxe.error.delProp', ['remote-sort', 'sort-config.remote'])
+    }
+    if (this.remoteFilter) {
+      UtilTools.warn('vxe.error.delProp', ['remote-filter', 'filter-config.remote'])
+    }
     ['header', 'body', 'footer'].forEach(name => {
       if (ctxMenuOpts[name] && ctxMenuOpts[name].visibleMethod) {
         UtilTools.warn('vxe.error.delProp', [`context-menu.${name}.visibleMethod`, 'context-menu.visibleMethod'])
@@ -745,23 +779,13 @@ export default {
       loading,
       isLoading,
       showHeader,
-      treeConfig,
-      border,
-      stripe,
       height,
-      highlightHoverRow,
-      highlightHoverColumn,
       vSize,
-      editConfig,
       validOpts,
-      mouseConfig = {},
       editRules,
       showFooter,
       footerMethod,
       overflowX,
-      overflowY,
-      scrollXLoad,
-      scrollYLoad,
       scrollbarHeight,
       optimizeOpts,
       vaildTipOpts,
@@ -773,28 +797,7 @@ export default {
       hasTip
     } = this
     let { leftList, rightList } = columnStore
-    return h('div', {
-      class: ['vxe-table', vSize ? `size--${vSize}` : '', {
-        'vxe-editable': editConfig,
-        'show--head': showHeader,
-        'show--foot': showFooter,
-        'has--height': height,
-        'has--tree-line': treeConfig && treeConfig.line,
-        'fixed--left': leftList.length,
-        'fixed--right': rightList.length,
-        't--animat': optimizeOpts.animat,
-        't--stripe': stripe,
-        't--border': border,
-        't--selected': mouseConfig.selected,
-        't--checked': mouseConfig.checked,
-        'row--highlight': highlightHoverRow,
-        'column--highlight': highlightHoverColumn,
-        'scroll--y': overflowY,
-        'scroll--x': overflowX,
-        'virtual--x': scrollXLoad,
-        'virtual--y': scrollYLoad
-      }]
-    }, [
+    return h('div', this.renderOptions, [
       /**
        * 隐藏列
        */
@@ -1261,7 +1264,7 @@ export default {
       }
       // 从数据源中移除
       if (tableFullData === rows) {
-        rows = tableFullData.slice(0)
+        rows = rest = tableFullData.slice(0)
         tableFullData.length = 0
         nowData.length = 0
       } else {
@@ -1278,7 +1281,7 @@ export default {
       }
       return this.$nextTick().then(() => {
         this.recalculate()
-        return { row: rows && rows.length ? rows[rows.length - 1] : null, rows: rest }
+        return { row: rest && rest.length ? rest[rest.length - 1] : null, rows: rest }
       })
     },
     /**
@@ -1500,7 +1503,7 @@ export default {
      * 如果存在筛选条件，继续处理
      */
     updateAfterFullData () {
-      let { visibleColumn, tableFullData, remoteSort, remoteFilter } = this
+      let { visibleColumn, tableFullData, remoteSort, remoteFilter, filterConfig = {}, sortConfig = {} } = this
       let tableData = tableFullData
       let column = XEUtils.find(this.visibleColumn, column => column.order)
       let filterColumn = visibleColumn.filter(({ filters }) => filters && filters.length)
@@ -1517,7 +1520,7 @@ export default {
                 valueList.push(item.value)
               }
             })
-            if (valueList.length && !remoteFilter) {
+            if (valueList.length && !(filterConfig.remote || remoteFilter)) {
               if (!filterMethod && compConf && compConf.renderFilter) {
                 filterMethod = compConf.filterMethod
               }
@@ -1528,10 +1531,11 @@ export default {
         })
       })
       if (column && column.order) {
-        let isRemote = XEUtils.isBoolean(column.remoteSort) ? column.remoteSort : remoteSort
+        let allSortMethod = sortConfig.sortMethod || this.sortMethod
+        let isRemote = XEUtils.isBoolean(column.remoteSort) ? column.remoteSort : (sortConfig.remote || remoteSort)
         if (!isRemote) {
-          if (this.sortMethod) {
-            tableData = this.sortMethod({ data: tableData, column, property: column.property, order: column.order, $table: this }) || tableData
+          if (allSortMethod) {
+            tableData = allSortMethod({ data: tableData, column, property: column.property, order: column.order, $table: this }) || tableData
           } else {
             let rest = column.sortMethod ? tableData.sort(column.sortMethod) : XEUtils.sortBy(tableData, column.property)
             tableData = column.order === 'desc' ? rest.reverse() : rest
@@ -1571,6 +1575,9 @@ export default {
       }
       if (this.radioConfig) {
         this.handleRadioDefChecked()
+      }
+      if (this.sortConfig) {
+        this.handleDefaultSort()
       }
       if (this.expandConfig) {
         this.handleDefaultRowExpand()
@@ -3511,6 +3518,15 @@ export default {
       }
       return this.$nextTick()
     },
+    handleDefaultSort () {
+      let defaultSort = this.sortConfig.defaultSort
+      if (defaultSort) {
+        let { field, order } = defaultSort
+        if (field && order) {
+          this.sort(field, order)
+        }
+      }
+    },
     /**
      * 点击排序事件
      */
@@ -3528,9 +3544,9 @@ export default {
       }
     },
     sort (field, order) {
-      let { visibleColumn, tableFullColumn, remoteSort } = this
+      let { visibleColumn, tableFullColumn, remoteSort, sortConfig = {} } = this
       let column = XEUtils.find(visibleColumn, item => item.property === field)
-      let isRemote = XEUtils.isBoolean(column.remoteSort) ? column.remoteSort : remoteSort
+      let isRemote = XEUtils.isBoolean(column.remoteSort) ? column.remoteSort : (sortConfig.remote || remoteSort)
       if (column.sortable || column.remoteSort) {
         if (!order) {
           order = column.order === 'desc' ? 'asc' : 'desc'
@@ -3622,7 +3638,7 @@ export default {
     },
     // 确认筛选
     confirmFilterEvent (evnt) {
-      let { visibleColumn, filterStore, remoteFilter, scrollXLoad, scrollYLoad } = this
+      let { visibleColumn, filterStore, remoteFilter, filterConfig = {}, scrollXLoad, scrollYLoad } = this
       let { column } = filterStore
       let { property } = column
       let values = []
@@ -3635,7 +3651,7 @@ export default {
       })
       filterStore.visible = false
       // 如果是服务端筛选，则跳过本地筛选处理
-      if (!remoteFilter) {
+      if (!(filterConfig.remote || remoteFilter)) {
         this.handleTableData(true)
       }
       let filterList = []

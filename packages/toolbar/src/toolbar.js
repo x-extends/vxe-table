@@ -291,8 +291,7 @@ export default {
   },
   methods: {
     updateConf () {
-      let { $parent } = this
-      let { $children } = $parent
+      let { $children } = this.$parent
       let selfIndex = $children.indexOf(this)
       this.$table = XEUtils.find($children, (comp, index) => comp && comp.refreshColumn && index > selfIndex && comp.$vnode.componentOptions.tag === 'vxe-table')
     },
@@ -352,8 +351,7 @@ export default {
       this.tableFullColumn = fullColumn
     },
     updateCustoms (customs) {
-      let { $grid, $table } = this
-      let comp = $grid || $table
+      let comp = this.$grid || this.$table
       if (comp) {
         comp.reloadCustoms(customs).then(fullColumn => {
           this.tableFullColumn = fullColumn
@@ -410,8 +408,7 @@ export default {
       this.updateResizable(this)
     },
     updateResizable (isReset) {
-      let { $grid, $table } = this
-      let comp = $grid || $table
+      let comp = this.$grid || this.$table
       this.saveColumnWidth(isReset)
       comp.analyColumnWidth()
       return comp.recalculate(true)
@@ -435,8 +432,7 @@ export default {
       this.closeSetting()
     },
     handleClickSettingEvent (evnt) {
-      let { settingStore } = this
-      settingStore.visible = !settingStore.visible
+      this.settingStore.visible = !this.settingStore.visible
     },
     handleMouseenterSettingEvent (evnt) {
       this.settingStore.activeBtn = true
@@ -504,19 +500,17 @@ export default {
       }
     },
     openImport (options) {
-      const { importParams, importStore, importOpts } = this
-      const defOpts = Object.assign({ mode: 'covering', message: true }, options, importOpts)
-      Object.assign(importStore, {
+      const defOpts = Object.assign({ mode: 'covering', message: true }, options, this.importOpts)
+      Object.assign(this.importStore, {
         file: null,
         type: '',
         filename: '',
         visible: true
       })
-      Object.assign(importParams, defOpts)
+      Object.assign(this.importParams, defOpts)
     },
     confirmImportEvent (options) {
-      const { $grid, $table } = this
-      const comp = $grid || $table
+      const comp = this.$grid || this.$table
       comp.importByFile(this.importStore.file, options)
     },
     exportEvent () {
@@ -527,8 +521,7 @@ export default {
       }
     },
     openExport (options) {
-      const { $grid, $table, exportOpts, exportStore, exportParams } = this
-      const comp = $grid || $table
+      const comp = this.$grid || this.$table
       const { fullColumn } = comp.getTableColumn()
       const { footerData } = comp.getTableData()
       const selectRecords = comp.getSelectRecords()
@@ -537,7 +530,7 @@ export default {
       const treeStatus = comp.getTreeStatus()
       const forceOriginal = !!treeStatus || virtualScroller.scrollX || virtualScroller.scrollY
       const hasFooter = !!footerData.length
-      const defOpts = Object.assign({ original: true, message: true }, exportOpts, options)
+      const defOpts = Object.assign({ original: true, message: true }, this.exportOpts, options)
       const types = defOpts.types || VXETable.exportTypes
       // 处理类型
       defOpts.types = types.map(value => {
@@ -551,16 +544,16 @@ export default {
         column.checked = column.type !== 'index'
       })
       // 更新条件
-      Object.assign(exportStore, {
+      Object.assign(this.exportStore, {
         columns: exportColumns,
         selectRecords: selectRecords,
         mode: selectRecords.length ? 'selected' : 'all',
         forceOriginal: !!treeStatus || virtualScroller.scrollX || virtualScroller.scrollY,
-        hasFooter: !!footerData.length,
+        hasFooter: hasFooter,
         visible: true
       })
       // 重置参数
-      Object.assign(exportParams, {
+      Object.assign(this.exportParams, {
         filename: defOpts.filename || '',
         sheetName: defOpts.sheetName || '',
         type: defOpts.type || defOpts.types[0].value,

@@ -6,18 +6,60 @@ import { UtilTools } from '../../tools'
 
 const propKeys = Object.keys(Table.props).filter(name => ['data', 'treeConfig'].indexOf(name) === -1)
 
+function countTreeExpand ($xTree, prevRow) {
+  const rowChildren = prevRow[$xTree.treeConfig.children]
+  let count = 1
+  if ($xTree.isTreeExpandByRow(prevRow)) {
+    for (let index = 0; index < rowChildren.length; index++) {
+      count += countTreeExpand($xTree, rowChildren[index])
+    }
+  }
+  return count
+}
+
+function getOffsetSize ($xTree) {
+  switch ($xTree.vSize) {
+    case 'mini':
+      return 3
+    case 'small':
+      return 2
+    case 'medium':
+      return 1
+  }
+  return 0
+}
+
+function calcTreeLine ($table, $xTree, matchObj) {
+  const { index, items } = matchObj
+  let expandSize = 1
+  if (index) {
+    expandSize = countTreeExpand($xTree, items[index - 1])
+  }
+  return $table.rowHeight * expandSize - (index ? 1 : (12 - getOffsetSize($xTree)))
+}
+
 export default {
   name: 'VxeVirtualTree',
   extends: Grid,
   data () {
     return {
+      removeList: []
     }
   },
   computed: {
     vSize () {
       return this.size || this.$parent.size || this.$parent.vSize
     },
-    tableProps () {
+    renderClass () {
+      const { tableProps, vSize, maximize, treeConfig } = this
+      return [ 'vxe-grid vxe-virtual-tree', {
+        [`size--${vSize}`]: vSize,
+        't--animat': tableProps.optimization.animat,
+        'has--tree-line': treeConfig && treeConfig.line,
+        'is--maximize': maximize
+      }]
+    },
+    tableExtendProps () {
       let rest = {}
       propKeys.forEach(key => {
         rest[key] = this[key]
@@ -34,11 +76,11 @@ export default {
     }
   },
   created () {
-    window.aa = this
     const { data } = this
     Object.assign(this, {
       fullTreeData: [],
-      tableData: []
+      tableData: [],
+      fullTreeRowMap: new Map()
     })
     this.handleColumns()
     if (data) {
@@ -46,6 +88,30 @@ export default {
     }
   },
   methods: {
+    renderTreeLine (params, h) {
+      const { treeConfig, fullTreeRowMap } = this
+      const { $table, row, column } = params
+      const { treeNode } = column
+      if (treeNode && treeConfig && treeConfig.line) {
+        const $xTree = this
+        const rowLevel = row._X_LEVEL
+        const matchObj = fullTreeRowMap.get(row)
+        return [
+          treeNode && treeConfig && treeConfig.line ? h('div', {
+            class: 'vxe-tree--line-wrapper'
+          }, [
+            h('div', {
+              class: 'vxe-tree--line',
+              style: {
+                height: `${calcTreeLine($table, $xTree, matchObj)}px`,
+                left: `${rowLevel * (treeConfig.indent || 20) + (rowLevel ? 2 - getOffsetSize($xTree) : 0) + 16}px`
+              }
+            })
+          ]) : null
+        ]
+      }
+      return []
+    },
     renderTreeIcon (params, h) {
       let { isHidden } = params
       let { row } = params
@@ -129,6 +195,7 @@ export default {
         if (conf.treeNode) {
           let slots = conf.slots || {}
           slots.icon = this.renderTreeIcon
+          slots.line = this.renderTreeLine
           conf.slots = slots
         }
         return conf
@@ -164,7 +231,7 @@ export default {
       return this.insertAt(records)
     },
     insertAt (records, row) {
-      const { fullTreeData, tableData } = this
+      const { fullTreeData, tableData, treeConfig } = this
       if (!XEUtils.isArray(records)) {
         records = [records]
       }
@@ -181,7 +248,7 @@ export default {
           fullTreeData.push.apply(fullTreeData, newRecords)
           tableData.push.apply(tableData, newRecords)
         } else {
-          let matchObj = XEUtils.findTree(fullTreeData, item => item === row)
+          let matchObj = XEUtils.findTree(fullTreeData, item => item === row, treeConfig)
           if (!matchObj || matchObj.index === -1) {
             throw new Error(UtilTools.error('vxe.error.unableInsert'))
           }
@@ -201,6 +268,57 @@ export default {
           row: newRecords.length ? newRecords[newRecords.length - 1] : null,
           rows: newRecords
         }
+      })
+    },
+    /**
+     * 获取已删除的数据
+     */
+    getRemoveRecords () {
+      return this.removeList
+    },
+    /**
+     * 删除选中数据
+     */
+    removeSelecteds () {
+      return this.remove(this.getSelectRecords()).then(params => {
+        this.clearSelection()
+        return params
+      })
+    },
+    remove (rows) {
+      const { removeList, fullTreeData, treeConfig } = this
+      let rest = []
+      if (!rows) {
+        rows = fullTreeData
+      } else if (!XEUtils.isArray(rows)) {
+        rows = [rows]
+      }
+      rows.forEach(row => {
+        let matchObj = XEUtils.findTree(fullTreeData, item => item === row, treeConfig)
+        if (matchObj) {
+          const { item, items, index, parent } = matchObj
+          if (!this.isInsertByRow(row)) {
+            removeList.push(row)
+          }
+          if (parent) {
+            let isExpand = this.isTreeExpandByRow(parent)
+            if (isExpand) {
+              this.handleCollapsing(parent)
+            }
+            items.splice(index, 1)
+            if (isExpand) {
+              this.handleExpanding(parent)
+            }
+          } else {
+            this.handleCollapsing(item)
+            items.splice(index, 1)
+            this.tableData.splice(this.tableData.indexOf(item), 1)
+          }
+          rest.push(item)
+        }
+      })
+      return this._loadTreeData(this.tableData).then(() => {
+        return { row: rest.length ? rest[rest.length - 1] : null, rows: rest }
       })
     },
     /**
@@ -229,10 +347,13 @@ export default {
      * 定义树属性
      */
     toVirtualTree (treeData) {
-      XEUtils.eachTree(treeData, (item, index, obj, paths, parent, nodes) => {
+      let fullTreeRowMap = this.fullTreeRowMap
+      fullTreeRowMap.clear()
+      XEUtils.eachTree(treeData, (item, index, items, paths, parent, nodes) => {
         item._X_EXPAND = false
         item._X_INSERT = false
         item._X_LEVEL = nodes.length - 1
+        fullTreeRowMap.set(item, { item, index, items, paths, parent, nodes })
       })
       this.fullTreeData = treeData.slice(0)
       this.tableData = treeData.slice(0)
@@ -242,35 +363,46 @@ export default {
      * 展开/收起树节点
      */
     virtualExpand (row, expanded) {
-      let { children } = this.treeConfig
       if (row._X_EXPAND !== expanded) {
-        if (this.hasChilds(row)) {
-          let childRows = row[children]
-          let tableData = this.tableData
-          if (row._X_EXPAND) {
-            // 展开节点
-            let nodeChildList = []
-            XEUtils.eachTree(childRows, item => {
-              nodeChildList.push(item)
-            }, this.treeConfig)
-            tableData = tableData.filter(item => nodeChildList.indexOf(item) === -1)
-          } else {
-            // 收起节点
-            let expandList = []
-            let rowIndex = tableData.indexOf(row)
-            if (rowIndex === -1) {
-              throw new Error('错误的操作！')
-            }
-            XEUtils.eachTree(childRows, (item, index, obj, paths, parent, nodes) => {
-              if (!parent || parent._X_EXPAND) {
-                expandList.push(item)
-              }
-            }, this.treeConfig)
-            tableData.splice.apply(tableData, [rowIndex + 1, 0].concat(expandList))
-          }
-          row._X_EXPAND = !row._X_EXPAND
-          this.tableData = tableData
+        if (row._X_EXPAND) {
+          this.handleCollapsing(row)
+        } else {
+          this.handleExpanding(row)
         }
+      }
+      return this.tableData
+    },
+    // 展开节点
+    handleExpanding (row) {
+      if (this.hasChilds(row)) {
+        const { tableData, treeConfig } = this
+        let childRows = row[treeConfig.children]
+        let expandList = []
+        let rowIndex = tableData.indexOf(row)
+        if (rowIndex === -1) {
+          throw new Error('错误的操作！')
+        }
+        XEUtils.eachTree(childRows, (item, index, obj, paths, parent, nodes) => {
+          if (!parent || parent._X_EXPAND) {
+            expandList.push(item)
+          }
+        }, treeConfig)
+        row._X_EXPAND = true
+        tableData.splice.apply(tableData, [rowIndex + 1, 0].concat(expandList))
+      }
+      return this.tableData
+    },
+    // 收起节点
+    handleCollapsing (row) {
+      if (this.hasChilds(row)) {
+        const { tableData, treeConfig } = this
+        let childRows = row[treeConfig.children]
+        let nodeChildList = []
+        XEUtils.eachTree(childRows, item => {
+          nodeChildList.push(item)
+        }, treeConfig)
+        row._X_EXPAND = false
+        this.tableData = tableData.filter(item => nodeChildList.indexOf(item) === -1)
       }
       return this.tableData
     },

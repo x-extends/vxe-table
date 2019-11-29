@@ -11,10 +11,10 @@
       border
       resizable
       highlight-hover-row
-      remote-filter
       ref="xGrid"
       height="530"
       row-id="id"
+      :filter-config="{remote: true}"
       :pager-config="{pageSize: 15}"
       :toolbar="tableToolbar"
       :proxy-config="tableProxy"
@@ -172,10 +172,10 @@ export default {
           border
           resizable
           highlight-hover-row
-          remote-filter
           ref="xGrid"
           height="530"
           row-id="id"
+          :filter-config="{remote: true}"
           :pager-config="{pageSize: 15}"
           :toolbar="tableToolbar"
           :proxy-config="tableProxy"

@@ -36,6 +36,7 @@ export default {
       pendingRecords: [],
       filterData: [],
       sortData: {},
+      tZindex: 0,
       tablePage: {
         total: 0,
         pageSize: 10,
@@ -56,12 +57,131 @@ export default {
     toolbarOpts () {
       return Object.assign({}, GlobalConfig.grid.toolbar, this.toolbar)
     },
-    tableProps () {
+    toolbarSlots () {
+      let { $scopedSlots, toolbar, toolbarOpts } = this
+      let $buttons = $scopedSlots.buttons
+      let $tools = $scopedSlots.tools
+      let slots = {}
+      if (toolbar) {
+        if (toolbarOpts.slots) {
+          $buttons = toolbarOpts.slots.buttons || $buttons
+          $tools = toolbarOpts.slots.tools || $tools
+        }
+      }
+      if ($buttons) {
+        slots.buttons = $buttons
+      }
+      if ($tools) {
+        slots.tools = $tools
+      }
+      return slots
+    },
+    renderOptions () {
+      return {
+        class: this.renderClass,
+        style: this.renderStyle
+      }
+    },
+    renderClass () {
+      const { tableProps, vSize, maximize } = this
+      return [ 'vxe-grid', {
+        [`size--${vSize}`]: vSize,
+        't--animat': tableProps.optimization.animat,
+        'is--maximize': maximize
+      }]
+    },
+    renderStyle () {
+      return this.maximize ? { zIndex: this.tZindex } : null
+    },
+    tableOptions () {
+      return {
+        props: this.tableProps,
+        on: this.tableOns,
+        scopedSlots: this.$scopedSlots,
+        ref: 'xTable'
+      }
+    },
+    tableExtendProps () {
       let rest = {}
       propKeys.forEach(key => {
         rest[key] = this[key]
       })
       return rest
+    },
+    tableProps () {
+      const { maximize, pagerConfig, loading, toolbar, toolbarOpts, editConfig, proxyConfig, proxyOpts, tableExtendProps, tableLoading, tablePage, tableData, tableCustoms, optimization } = this
+      let props = Object.assign({}, tableExtendProps, {
+        optimization: Object.assign({}, GlobalConfig.optimization, optimization)
+      })
+      if (maximize) {
+        if (tableExtendProps.maxHeight) {
+          props.maxHeight = 'auto'
+        } else {
+          props.height = 'auto'
+        }
+      }
+      if (proxyConfig) {
+        Object.assign(props, {
+          loading: loading || tableLoading,
+          data: tableData,
+          rowClassName: this.handleRowClassName
+        })
+        if (proxyOpts.index && pagerConfig) {
+          props.startIndex = (tablePage.currentPage - 1) * tablePage.pageSize
+        }
+      }
+      if (toolbar) {
+        if (!(toolbarOpts.setting && toolbarOpts.setting.storage)) {
+          props.customs = tableCustoms
+        }
+      }
+      if (editConfig) {
+        props.editConfig = Object.assign({}, editConfig, { activeMethod: this.handleActiveMethod })
+      }
+      return props
+    },
+    tableOns () {
+      let { $listeners, toolbar, proxyConfig, proxyOpts } = this
+      let ons = Object.assign({}, $listeners)
+      if (proxyConfig) {
+        if (proxyOpts.sort) {
+          ons['sort-change'] = this.sortChangeEvent
+        }
+        if (proxyOpts.filter) {
+          ons['filter-change'] = this.filterChangeEvent
+        }
+      }
+      if (toolbar) {
+        ons['update:customs'] = this.updateCustomsEent
+      }
+      return ons
+    },
+    toolbarOptions () {
+      return {
+        ref: 'toolbar',
+        props: this.toolbarProps,
+        scopedSlots: this.toolbarSlots
+      }
+    },
+    toolbarProps () {
+      return Object.assign({
+        loading: this.loading || this.tableLoading
+      }, this.toolbarOpts)
+    },
+    pagerOptions () {
+      return {
+        props: this.pagerProps,
+        on: {
+          'page-change': this.pageChangeEvent
+        },
+        ref: 'pager'
+      }
+    },
+    pagerProps () {
+      return Object.assign({
+        size: this.vSize,
+        loading: this.loading || this.tableLoading
+      }, this.pagerConfig, this.proxyConfig ? this.tablePage : {})
     }
   },
   watch: {
@@ -102,90 +222,19 @@ export default {
     }
   },
   render (h) {
-    let { $slots, $scopedSlots, $listeners, maximize, pagerConfig, vSize, loading, toolbar, toolbarOpts, editConfig, proxyConfig, proxyOpts, tableProps, tableLoading, tablePage, tableData, tableCustoms, optimization } = this
-    let props = Object.assign({}, tableProps, {
-      optimization: Object.assign({}, GlobalConfig.optimization, optimization)
-    })
-    let tableOns = Object.assign({}, $listeners)
-    let $buttons = $scopedSlots.buttons
-    let $tools = $scopedSlots.tools
-    if (this.maximize) {
-      if (tableProps.maxHeight) {
-        props.maxHeight = 'auto'
-      } else {
-        props.height = 'auto'
-      }
-    }
-    if (proxyConfig) {
-      Object.assign(props, {
-        loading: loading || tableLoading,
-        data: tableData,
-        rowClassName: this.handleRowClassName
-      })
-      if (proxyOpts.index && pagerConfig) {
-        props.startIndex = (tablePage.currentPage - 1) * tablePage.pageSize
-      }
-      if (proxyOpts.sort) {
-        tableOns['sort-change'] = this.sortChangeEvent
-      }
-      if (proxyOpts.filter) {
-        tableOns['filter-change'] = this.filterChangeEvent
-      }
-    }
-    if (toolbar) {
-      if (toolbarOpts.slots) {
-        $buttons = toolbarOpts.slots.buttons || $buttons
-        $tools = toolbarOpts.slots.tools || $tools
-      }
-      if (!(toolbarOpts.setting && toolbarOpts.setting.storage)) {
-        props.customs = tableCustoms
-      }
-      tableOns['update:customs'] = value => {
-        this.tableCustoms = value
-      }
-    }
-    if (editConfig) {
-      props.editConfig = Object.assign({}, editConfig, {
-        activeMethod: this.handleActiveMethod
-      })
-    }
-    let tbScopedSlots = {}
-    if ($buttons) {
-      tbScopedSlots.buttons = $buttons
-    }
-    if ($tools) {
-      tbScopedSlots.tools = $tools
-    }
-    return h('div', {
-      class: [ 'vxe-grid', {
-        [`size--${vSize}`]: vSize,
-        't--animat': props.optimization.animat,
-        'is--maximize': maximize
-      }]
-    }, [
-      toolbar ? h('vxe-toolbar', {
-        ref: 'toolbar',
-        props: Object.assign({
-          loading: loading || tableLoading
-        }, toolbarOpts),
-        scopedSlots: tbScopedSlots
-      }) : null,
-      h('vxe-table', {
-        props,
-        on: tableOns,
-        scopedSlots: $scopedSlots,
-        ref: 'xTable'
-      }, $slots.default),
-      pagerConfig ? h('vxe-pager', {
-        props: Object.assign({
-          size: vSize,
-          loading: loading || tableLoading
-        }, pagerConfig, proxyConfig ? tablePage : {}),
-        on: {
-          'page-change': this.pageChangeEvent
-        },
-        ref: 'pager'
-      }) : null
+    return h('div', this.renderOptions, [
+      /**
+       * 渲染工具栏
+       */
+      this.toolbar ? h('vxe-toolbar', this.toolbarOptions) : null,
+      /**
+       * 渲染表格
+       */
+      h('vxe-table', this.tableOptions, this.$slots.default),
+      /**
+       * 渲染分页
+       */
+      this.pagerConfig ? h('vxe-pager', this.pagerOptions) : null
     ])
   },
   methods: {
@@ -400,6 +449,9 @@ export default {
     },
     getPendingRecords () {
       return this.pendingRecords
+    },
+    updateCustomsEent (value) {
+      this.tableCustoms = value
     },
     triggerToolbarBtnEvent (button, evnt) {
       this.commitProxy(button, evnt)

@@ -645,6 +645,7 @@ const apis = [
       {
         name: 'sort-method',
         descKey: 'app.api.table.desc.sortMethod',
+        disabled: true,
         version: '1.13.4',
         type: 'Function',
         enum: '',
@@ -654,6 +655,7 @@ const apis = [
       {
         name: 'remote-sort',
         descKey: 'app.api.table.desc.remoteSort',
+        disabled: true,
         version: '',
         type: 'Boolean',
         enum: '',
@@ -663,6 +665,7 @@ const apis = [
       {
         name: 'remote-filter',
         descKey: 'app.api.table.desc.remoteFilter',
+        disabled: true,
         version: '',
         type: 'Boolean',
         enum: '',
@@ -732,6 +735,52 @@ const apis = [
         defVal: '',
         list: [
           {
+            name: 'defaultSort',
+            desc: '默认排序',
+            version: '1.15.15',
+            type: 'Object',
+            enum: '',
+            defVal: '',
+            list: [
+              {
+                name: 'field',
+                desc: '列字段名',
+                version: '',
+                type: 'String',
+                enum: '',
+                defVal: '',
+                list: []
+              },
+              {
+                name: 'order',
+                desc: '排序方式',
+                version: '',
+                type: 'String',
+                enum: 'asc（升序）,desc（降序）',
+                defVal: '',
+                list: []
+              }
+            ]
+          },
+          {
+            name: 'sortMethod',
+            desc: '自定义所有列的排序方法，当触发排序时会调用该函数 Function({ data, column, property, order  }) 返回排序后的结果',
+            version: '1.15.15',
+            type: 'Function',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'remote',
+            desc: '所有列是否使用服务端排序，如果设置为 true 则不会对数据进行处理',
+            version: '1.15.15',
+            type: 'Boolean',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
             name: 'trigger',
             desc: '触发方式',
             version: '',
@@ -750,6 +799,15 @@ const apis = [
         enum: '',
         defVal: '',
         list: [
+          {
+            name: 'remote',
+            desc: '所有列是否使用服务端筛选，如果设置为 true 则不会对数据进行处理',
+            version: '',
+            type: 'Boolean',
+            enum: '',
+            defVal: '',
+            list: []
+          },
           {
             name: 'iconNone',
             desc: '自定义无条件时显示的图标',
@@ -1562,7 +1620,7 @@ const apis = [
           },
           {
             name: 'scrollX',
-            desc: '横向 X 虚拟滚动配置（用于特殊场景手动调优）',
+            desc: '横向 X 虚拟滚动配置（tree-config 启用后无效）',
             version: '',
             type: 'Object',
             enum: '',
@@ -1608,7 +1666,7 @@ const apis = [
           },
           {
             name: 'scrollY',
-            desc: '纵向 Y 虚拟滚动配置（用于特殊场景手动调优）',
+            desc: '纵向 Y 虚拟滚动配置（tree-config 启用后无效）',
             version: '',
             type: 'Object',
             enum: '',

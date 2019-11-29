@@ -25,13 +25,25 @@ function countTreeExpand (prevRow, params) {
   return count
 }
 
+function getOffsetSize ($table) {
+  switch ($table.vSize) {
+    case 'mini':
+      return 3
+    case 'small':
+      return 2
+    case 'medium':
+      return 1
+  }
+  return 0
+}
+
 function calcTreeLine (params, items) {
   const { $table, $rowIndex } = params
   let expandSize = 1
   if ($rowIndex) {
     expandSize = countTreeExpand(items[$rowIndex - 1], params)
   }
-  return $table.rowHeight * expandSize - ($rowIndex ? 1 : 8)
+  return $table.rowHeight * expandSize - ($rowIndex ? 1 : (12 - getOffsetSize($table)))
 }
 
 // 滚动、拖动过程中不需要触发
@@ -96,7 +108,7 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
   let hasDefaultTip = editRules && (validOpts.message === 'default' ? (height || tableData.length > 1) : validOpts.message === 'inline')
   let attrs = { 'data-colid': column.id }
   let triggerDblclick = (editRender && editConfig && editConfig.trigger === 'dblclick')
-  let params = { $table, $seq, seq, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, level: rowLevel, isHidden: fixedHiddenColumn, data: tableData }
+  let params = { $table, $seq, seq, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, level: rowLevel, isHidden: fixedHiddenColumn, data: tableData, items }
   // 滚动的渲染不支持动态行高
   if ((scrollXLoad || scrollYLoad) && !hasEllipsis) {
     showEllipsis = hasEllipsis = true
@@ -209,59 +221,70 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
     attrs,
     style: cellStyle ? (XEUtils.isFunction(cellStyle) ? cellStyle(params) : cellStyle) : null,
     on: tdOns
-  }, allColumnOverflow && fixedHiddenColumn ? [] : [
-    treeNode && treeConfig && treeConfig.line ? h('div', {
-      class: 'vxe-tree--line-wrapper'
-    }, [
+  }, allColumnOverflow && fixedHiddenColumn
+    ? []
+    : renderLine(h, _vm, $table, rowLevel, items, params).concat([
       h('div', {
-        class: 'vxe-tree--line',
+        class: ['vxe-cell', {
+          'c--title': showTitle,
+          'c--tooltip': showTooltip,
+          'c--ellipsis': showEllipsis
+        }],
         style: {
-          height: `${calcTreeLine(params, items)}px`,
-          left: `${rowLevel * (treeConfig.indent || 20) + 16}px`
+          width: hasEllipsis ? `${border ? renderWidth - 1 : renderWidth}px` : null
         }
-      })
-    ]) : null,
-    h('div', {
-      class: ['vxe-cell', {
-        'c--title': showTitle,
-        'c--tooltip': showTooltip,
-        'c--ellipsis': showEllipsis
-      }],
-      style: {
-        width: hasEllipsis ? `${border ? renderWidth - 1 : renderWidth}px` : null
-      }
-    }, column.renderCell(h, params)),
-    hasDefaultTip ? validError ? h('div', {
-      class: 'vxe-cell--valid',
-      style: validStore.rule && validStore.rule.width ? {
-        width: `${validStore.rule.width}px`
-      } : null
-    }, [
-      h('span', {
-        class: 'vxe-cell--valid-msg'
-      }, validStore.content)
-    ]) : _e() : null,
-    isMouseChecked && !fixedType ? h('span', {
-      class: 'vxe-body--column-checked-lt'
-    }) : null,
-    isMouseChecked && !fixedType ? h('span', {
-      class: 'vxe-body--column-checked-rb'
-    }) : null,
-    isKeyboardCut && !fixedType ? h('span', {
-      class: 'vxe-body--column-copyed-lt'
-    }) : null,
-    isKeyboardCut && !fixedType ? h('span', {
-      class: 'vxe-body--column-copyed-rb'
-    }) : null,
-    checkedLocat.bottom && checkedLocat.right ? h('span', {
-      class: 'vxe-body--column-checked-corner',
-      on: {
-        mousedown (evnt) {
-          $table.triggerCornerMousedownEvent({ $table, seq, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, level: rowLevel, cell: evnt.target.parentNode }, evnt)
+      }, column.renderCell(h, params)),
+      hasDefaultTip ? validError ? h('div', {
+        class: 'vxe-cell--valid',
+        style: validStore.rule && validStore.rule.width ? {
+          width: `${validStore.rule.width}px`
+        } : null
+      }, [
+        h('span', {
+          class: 'vxe-cell--valid-msg'
+        }, validStore.content)
+      ]) : _e() : null,
+      isMouseChecked && !fixedType ? h('span', {
+        class: 'vxe-body--column-checked-lt'
+      }) : null,
+      isMouseChecked && !fixedType ? h('span', {
+        class: 'vxe-body--column-checked-rb'
+      }) : null,
+      isKeyboardCut && !fixedType ? h('span', {
+        class: 'vxe-body--column-copyed-lt'
+      }) : null,
+      isKeyboardCut && !fixedType ? h('span', {
+        class: 'vxe-body--column-copyed-rb'
+      }) : null,
+      checkedLocat.bottom && checkedLocat.right ? h('span', {
+        class: 'vxe-body--column-checked-corner',
+        on: {
+          mousedown (evnt) {
+            $table.triggerCornerMousedownEvent({ $table, seq, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, level: rowLevel, cell: evnt.target.parentNode }, evnt)
+          }
         }
-      }
-    }) : null
-  ])
+      }) : null
+    ]))
+}
+
+function renderLine (h, _vm, $table, rowLevel, items, params) {
+  const column = params.column
+  const treeConfig = $table.treeConfig
+  return column.slots && column.slots.line
+    ? column.slots.line.call($table, params, h)
+    : column.treeNode && treeConfig && treeConfig.line ? [
+      h('div', {
+        class: 'vxe-tree--line-wrapper'
+      }, [
+        h('div', {
+          class: 'vxe-tree--line',
+          style: {
+            height: `${calcTreeLine(params, items)}px`,
+            left: `${rowLevel * (treeConfig.indent || 20) + (rowLevel ? 2 - getOffsetSize($table) : 0) + 16}px`
+          }
+        })
+      ])
+    ] : []
 }
 
 function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, tableColumn) {

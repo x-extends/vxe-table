@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">使用 <table-api-link prop="highlight-current-row"/> 方式</p>
+    <p class="tip">使用 <virtual-tree-api-link prop="highlight-current-row"/> 方式</p>
 
     <vxe-virtual-tree
       row-key

@@ -2,23 +2,22 @@
   <div>
     <p class="tip">虚拟树的使用</p>
 
-    <vxe-toolbar>
-      <template v-slot:buttons>
-        <vxe-button @click="$refs.xTree.setAllTreeExpansion(true)">展开所有</vxe-button>
-        <vxe-button @click="$refs.xTree.setAllTreeExpansion(false)">收起所有</vxe-button>
-      </template>
-    </vxe-toolbar>
-
     <vxe-virtual-tree
       resizable
       show-overflow
       row-key
+      toolbar
       ref="xTree"
       height="500"
       :loading="loading"
       :data="tableData"
+      :radio-config="{labelField: 'name'}"
       :tree-config="{children: 'children'}"
       :columns="tableColumn">
+      <template v-slot:buttons>
+        <vxe-button @click="$refs.xTree.setAllTreeExpansion(true)">展开所有</vxe-button>
+        <vxe-button @click="$refs.xTree.setAllTreeExpansion(false)">收起所有</vxe-button>
+      </template>
     </vxe-virtual-tree>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -40,29 +39,28 @@ export default {
       tableData: [],
       tableColumn: [
         { type: 'index', title: '序号', width: 100 },
-        { field: 'name', title: 'Name', treeNode: true },
+        { type: 'radio', title: 'Name', treeNode: true },
         { field: 'id', title: '邮政编码' },
         { field: 'date', title: '更新时间' }
       ],
       demoCodes: [
         `
-        <vxe-toolbar>
-          <template v-slot:buttons>
-            <vxe-button @click="$refs.xTree.setAllTreeExpansion(true)">展开所有</vxe-button>
-            <vxe-button @click="$refs.xTree.setAllTreeExpansion(false)">收起所有</vxe-button>
-          </template>
-        </vxe-toolbar>
-
         <vxe-virtual-tree
           resizable
           show-overflow
           row-key
+          toolbar
           ref="xTree"
           height="500"
           :loading="loading"
           :data="tableData"
+          :radio-config="{labelField: 'name'}"
           :tree-config="{children: 'children'}"
           :columns="tableColumn">
+          <template v-slot:buttons>
+            <vxe-button @click="$refs.xTree.setAllTreeExpansion(true)">展开所有</vxe-button>
+            <vxe-button @click="$refs.xTree.setAllTreeExpansion(false)">收起所有</vxe-button>
+          </template>
         </vxe-virtual-tree>
         `,
         `
@@ -73,7 +71,7 @@ export default {
               tableData: [],
               tableColumn: [
                 { type: 'index', title: '序号', width: 100 },
-                { field: 'name', title: 'Name', treeNode: true },
+                { type: 'radio', title: 'Name', treeNode: true },
                 { field: 'id', title: '邮政编码' },
                 { field: 'date', title: '更新时间' }
               ]
