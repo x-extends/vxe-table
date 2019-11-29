@@ -427,12 +427,13 @@ export const Cell = {
   },
   renderSortIcon (h, params) {
     let { $table, column } = params
+    let { iconAsc, iconDesc } = $table.sortConfig || {}
     return [
       h('span', {
         class: 'vxe-sort-wrapper'
       }, [
         h('i', {
-          class: ['vxe-sort--asc-btn', GlobalConfig.icon.sortAsc, {
+          class: ['vxe-sort--asc-btn', iconAsc || GlobalConfig.icon.sortAsc, {
             'sort--active': column.order === 'asc'
           }],
           attrs: {
@@ -445,7 +446,7 @@ export const Cell = {
           }
         }),
         h('i', {
-          class: ['vxe-sort--desc-btn', GlobalConfig.icon.sortDesc, {
+          class: ['vxe-sort--desc-btn', iconDesc || GlobalConfig.icon.sortDesc, {
             'sort--active': column.order === 'desc'
           }],
           attrs: {
