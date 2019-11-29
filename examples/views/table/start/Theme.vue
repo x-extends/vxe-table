@@ -12,7 +12,10 @@
       <code class="scss">
         @import 'vxe-table/styles/variable.scss';
 
-        $vxe-font-color: #666; // 局部修改主题色
+        // 局部修改变量
+        $vxe-font-size: 14px;
+        $vxe-font-color: #666;
+        $vxe-primary-color: #409eff;
 
         @import './assets/styles/xtable/variable.scss';
         @import 'vxe-table/styles/default.scss';
@@ -23,7 +26,10 @@
       <code class="scss">
         @import 'vxe-table/styles/variable.scss';
 
-        $vxe-font-color: #666; // 局部修改主题色
+        // 局部修改变量
+        $vxe-font-size: 14px;
+        $vxe-font-color: #666;
+        $vxe-primary-color: #409eff;
 
         @import './assets/styles/xtable/variable.scss';
         @import 'vxe-table/styles/icon.scss';
