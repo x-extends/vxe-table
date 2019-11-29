@@ -8,7 +8,6 @@ import Footer from './footer'
 import Filter from './filter'
 import Loading from './loading'
 import Grid from './grid'
-import VirtualTree from './virtual-tree'
 import Menu from './menu'
 import Toolbar from './toolbar'
 import Pager from './pager'
@@ -36,7 +35,6 @@ export const components = [
   Filter,
   Loading,
   Grid,
-  VirtualTree,
   Menu,
   Toolbar,
   Pager,
@@ -82,7 +80,6 @@ export * from './footer'
 export * from './filter'
 export * from './loading'
 export * from './grid'
-export * from './virtual-tree'
 export * from './menu'
 export * from './toolbar'
 export * from './pager'
