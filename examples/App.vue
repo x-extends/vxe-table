@@ -322,6 +322,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.sortIcon',
+              locat: {
+                name: 'TableSortIcon'
+              }
+            },
+            {
               label: 'app.aside.nav.customSort',
               locat: {
                 name: 'TableCustomSort'

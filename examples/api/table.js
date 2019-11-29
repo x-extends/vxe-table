@@ -788,6 +788,24 @@ const apis = [
             enum: 'default（点击按钮触发）,cell（点击表头触发）',
             defVal: 'default',
             list: []
+          },
+          {
+            name: 'iconAsc',
+            desc: '自定义升序的图标',
+            version: '1.15.15',
+            type: 'String',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'iconDesc',
+            desc: '自定义降序的图标',
+            version: '1.15.15',
+            type: 'String',
+            enum: '',
+            defVal: '',
+            list: []
           }
         ]
       },

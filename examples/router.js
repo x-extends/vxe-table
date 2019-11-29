@@ -46,6 +46,7 @@ const TableFormat = () => import(/* webpackChunkName: "base" */ './views/table/b
 const TableEvent = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Event.vue')
 const TableTemplate = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Template.vue')
 const TableDynamic = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Dynamic.vue')
+const TableSortIcon = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/SortIcon.vue')
 const TableCustomSort = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/CustomSort.vue')
 const TableManualFilter = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/ManualFilter.vue')
 const TableFilterIcon = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/FilterIcon.vue')
@@ -456,6 +457,16 @@ export default new Router({
       path: '/table/advanced/dynamic',
       name: 'TableDynamic',
       component: TableDynamic
+    },
+    {
+      path: '/table/advanced/sortIcon',
+      name: 'TableSortIcon',
+      component: TableSortIcon
+    },
+    {
+      path: '/table/advanced/customSort',
+      name: 'TableCustomSort',
+      component: TableCustomSort
     },
     {
       path: '/table/advanced/customSort',

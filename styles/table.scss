@@ -468,31 +468,32 @@
 
   /*排序*/
   .vxe-sort-wrapper {
-    padding: 0 0.2em;
+    width: 1.2em;
+    height: 1.5em;
     vertical-align: middle;
+    text-align: center;
     display: inline-block;
-    .vxe-icon--caret-top {
-      &:before {
-        bottom: 0.2em;
-      }
-    }
-    .vxe-icon--caret-bottom {
-      &:before {
-        bottom: -0.2em;
-      }
-    }
+    position: relative;
     .vxe-sort--asc-btn,
     .vxe-sort--desc-btn {
-      display: block;
+      position: absolute;
+      left: 0.1em;
       color: $vxe-table-column-icon-border-color;
+      width: 1em;
+      text-align: center;
       cursor: pointer;
-      height: 0.74em;
       &:hover {
         color: $vxe-font-color;
       }
       &.sort--active {
         color: $vxe-primary-color;
       }
+    }
+    .vxe-sort--asc-btn {
+      top: -0.1em;
+    }
+    .vxe-sort--desc-btn {
+      bottom: -0.1em;
     }
   }
 
