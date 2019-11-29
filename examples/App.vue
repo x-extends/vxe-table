@@ -867,6 +867,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.delete',
+              locat: {
+                name: 'TableVirtualTreeRemove'
+              }
+            },
+            {
               label: 'app.aside.nav.contextMenu',
               locat: {
                 name: 'TableVirtualTreeMenu'

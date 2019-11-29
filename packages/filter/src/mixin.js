@@ -88,7 +88,7 @@ export default {
      * @param {Event} evnt 事件
      */
     confirmFilterEvent (evnt) {
-      let { visibleColumn, filterStore, remoteFilter, scrollXLoad, scrollYLoad } = this
+      let { visibleColumn, filterStore, remoteFilter, filterConfig = {}, scrollXLoad, scrollYLoad } = this
       let { column } = filterStore
       let { property } = column
       let values = []
@@ -101,7 +101,7 @@ export default {
       })
       filterStore.visible = false
       // 如果是服务端筛选，则跳过本地筛选处理
-      if (!remoteFilter) {
+      if (!(filterConfig.remote || remoteFilter)) {
         this.handleTableData(true)
       }
       let filterList = []

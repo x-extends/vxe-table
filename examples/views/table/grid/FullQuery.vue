@@ -6,9 +6,9 @@
       ref="xGrid"
       border
       resizable
-      remote-filter
       height="548"
       row-id="id"
+      :filter-config="{remote: true}"
       :pager-config="{pageSize: 15}"
       :columns="tableColumn"
       :proxy-config="tableProxy"
@@ -76,9 +76,9 @@ export default {
           ref="xGrid"
           border
           resizable
-          remote-filter
           height="548"
           row-id="id"
+          :filter-config="{remote: true}"
           :pager-config="{pageSize: 15}"
           :columns="tableColumn"
           :proxy-config="tableProxy"

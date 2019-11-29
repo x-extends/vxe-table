@@ -97,7 +97,7 @@ export default {
       }
       // 从数据源中移除
       if (tableFullData === rows) {
-        rows = tableFullData.slice(0)
+        rows = rest = tableFullData.slice(0)
         tableFullData.length = 0
         nowData.length = 0
       } else {
@@ -114,7 +114,7 @@ export default {
       }
       return this.$nextTick().then(() => {
         this.recalculate()
-        return { row: rows && rows.length ? rows[rows.length - 1] : null, rows: rest }
+        return { row: rest.length ? rest[rest.length - 1] : null, rows: rest }
       })
     },
     /**

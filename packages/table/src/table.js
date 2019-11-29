@@ -407,6 +407,35 @@ export default {
         return true
       }
       return false
+    },
+    renderOptions () {
+      const { treeConfig, mouseConfig, columnStore } = this
+      return {
+        class: ['vxe-table', this.vSize ? `size--${this.vSize}` : '', {
+          'vxe-editable': this.editConfig,
+          'show--head': this.showHeader,
+          'show--foot': this.showFooter,
+          'has--height': this.height,
+          'has--tree-line': treeConfig && treeConfig.line,
+          'fixed--left': columnStore.leftList.length,
+          'fixed--right': columnStore.rightList.length,
+          'all-overflow': this.showOverflow,
+          'all-head-overflow': this.showHeaderOverflow,
+          'c--highlight': this.highlightCell,
+          't--animat': this.optimizeOpts.animat,
+          't--stripe': this.stripe,
+          't--border': this.border,
+          't--selected': mouseConfig && mouseConfig.selected,
+          't--checked': mouseConfig && mouseConfig.checked,
+          'row--highlight': this.highlightHoverRow,
+          'column--highlight': this.highlightHoverColumn,
+          'is--loading': this.loading,
+          'scroll--y': this.overflowY,
+          'scroll--x': this.overflowX,
+          'virtual--x': this.scrollXLoad,
+          'virtual--y': this.scrollYLoad
+        }]
+      }
     }
   },
   watch: {
@@ -518,6 +547,15 @@ export default {
     if (treeConfig && treeConfig.line && !showOverflow) {
       UtilTools.warn('vxe.error.treeLineReqProp', ['show-overflow'])
     }
+    if (this.sortMethod) {
+      UtilTools.warn('vxe.error.delProp', ['sort-method', 'sort-config.sortMethod'])
+    }
+    if (this.remoteSort) {
+      UtilTools.warn('vxe.error.delProp', ['remote-sort', 'sort-config.remote'])
+    }
+    if (this.remoteFilter) {
+      UtilTools.warn('vxe.error.delProp', ['remote-filter', 'filter-config.remote'])
+    }
     // 检查是否有安装需要的模块
     let errorModuleName
     if (!VXETable._edit && this.editConfig) {
@@ -612,26 +650,13 @@ export default {
       loading,
       _isLoading,
       showHeader,
-      treeConfig,
-      border,
-      stripe,
       height,
-      highlightHoverRow,
-      highlightHoverColumn,
-      highlightCell,
       vSize,
-      showOverflow,
-      showHeaderOverflow,
-      editConfig,
       validOpts,
-      mouseConfig = {},
       editRules,
       showFooter,
       footerMethod,
       overflowX,
-      overflowY,
-      scrollXLoad,
-      scrollYLoad,
       scrollbarHeight,
       optimizeOpts,
       vaildTipOpts,
@@ -643,34 +668,7 @@ export default {
       hasTip
     } = this
     let { leftList, rightList } = columnStore
-    return h('div', {
-      class: {
-        'vxe-table': 1,
-        [`size--${vSize}`]: vSize,
-        'vxe-editable': editConfig,
-        'show--head': showHeader,
-        'show--foot': showFooter,
-        'has--height': height,
-        'has--tree-line': treeConfig && treeConfig.line,
-        'fixed--left': leftList.length,
-        'fixed--right': rightList.length,
-        'all-overflow': showOverflow,
-        'all-head-overflow': showHeaderOverflow,
-        'c--highlight': highlightCell,
-        't--animat': optimizeOpts.animat,
-        't--stripe': stripe,
-        't--border': border,
-        't--selected': mouseConfig.selected,
-        't--checked': mouseConfig.checked,
-        'row--highlight': highlightHoverRow,
-        'column--highlight': highlightHoverColumn,
-        'is--loading': loading,
-        'scroll--y': overflowY,
-        'scroll--x': overflowX,
-        'virtual--x': scrollXLoad,
-        'virtual--y': scrollYLoad
-      }
-    }, [
+    return h('div', this.renderOptions, [
       /**
        * 隐藏列
        */

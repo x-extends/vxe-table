@@ -19,7 +19,7 @@
       <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
 
-    <p class="tip">默认选中，通过指定 <table-api-link prop="checkRowKeys"/> 设置默认选中的行</p>
+    <p class="tip">默认选中，通过指定 <virtual-tree-api-link prop="checkRowKeys"/> 设置默认选中的行</p>
 
     <vxe-virtual-tree
       resizable
@@ -39,7 +39,7 @@
       <code class="javascript">{{ demoCodes[3] }}</code>
     </pre>
 
-    <p class="tip">通过 <table-api-link prop="checkStrictly"/> 设置父子节点不互相关联，默认不显示头部复选框，可以通过 checkbox-config={<table-api-link prop="showHeader"/>} 设置</p>
+    <p class="tip">通过 <virtual-tree-api-link prop="checkStrictly"/> 设置父子节点不互相关联，默认不显示头部复选框，可以通过 checkbox-config={<virtual-tree-api-link prop="showHeader"/>} 设置</p>
 
     <vxe-virtual-tree
       resizable

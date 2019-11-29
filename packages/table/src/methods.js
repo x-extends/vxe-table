@@ -527,7 +527,7 @@ const Methods = {
    * 如果存在筛选条件，继续处理
    */
   updateAfterFullData () {
-    let { visibleColumn, tableFullData, remoteSort, remoteFilter } = this
+    let { visibleColumn, tableFullData, remoteSort, remoteFilter, filterConfig = {}, sortConfig = {} } = this
     let tableData = tableFullData
     let column = XEUtils.find(visibleColumn, column => column.order)
     let filterColumn = visibleColumn.filter(({ filters }) => filters && filters.length)
@@ -544,7 +544,7 @@ const Methods = {
               valueList.push(item.value)
             }
           })
-          if (valueList.length && !remoteFilter) {
+          if (valueList.length && !(filterConfig.remote || remoteFilter)) {
             let { property, filterMethod } = column
             if (!filterMethod && compConf && compConf.renderFilter) {
               filterMethod = compConf.filterMethod
@@ -556,10 +556,11 @@ const Methods = {
       })
     })
     if (column && column.order) {
-      let isRemote = XEUtils.isBoolean(column.remoteSort) ? column.remoteSort : remoteSort
+      let allSortMethod = sortConfig.sortMethod || this.sortMethod
+      let isRemote = XEUtils.isBoolean(column.remoteSort) ? column.remoteSort : (sortConfig.remote || remoteSort)
       if (!isRemote) {
-        if (this.sortMethod) {
-          tableData = this.sortMethod({ data: tableData, column, property: column.property, order: column.order, $table: this }) || tableData
+        if (allSortMethod) {
+          tableData = allSortMethod({ data: tableData, column, property: column.property, order: column.order, $table: this }) || tableData
         } else {
           let rest = column.sortMethod ? tableData.sort(column.sortMethod) : XEUtils.sortBy(tableData, column.property)
           tableData = column.order === 'desc' ? rest.reverse() : rest
@@ -607,6 +608,9 @@ const Methods = {
     }
     if (this.radioConfig) {
       this.handleRadioDefChecked()
+    }
+    if (this.sortConfig) {
+      this.handleDefaultSort()
     }
     if (this.expandConfig) {
       this.handleDefaultRowExpand()
@@ -2132,6 +2136,15 @@ const Methods = {
     }
     UtilTools.emitEvent(this, 'cell-dblclick', [params, evnt])
   },
+  handleDefaultSort () {
+    let defaultSort = this.sortConfig.defaultSort
+    if (defaultSort) {
+      let { field, order } = defaultSort
+      if (field && order) {
+        this.sort(field, order)
+      }
+    }
+  },
   /**
    * 点击排序事件
    */
@@ -2149,9 +2162,9 @@ const Methods = {
     }
   },
   sort (field, order) {
-    let { visibleColumn, tableFullColumn, remoteSort } = this
+    let { visibleColumn, tableFullColumn, remoteSort, sortConfig = {} } = this
     let column = XEUtils.find(visibleColumn, item => item.property === field)
-    let isRemote = XEUtils.isBoolean(column.remoteSort) ? column.remoteSort : remoteSort
+    let isRemote = XEUtils.isBoolean(column.remoteSort) ? column.remoteSort : (sortConfig.remote || remoteSort)
     if (column.sortable || column.remoteSort) {
       if (!order) {
         order = column.order === 'desc' ? 'asc' : 'desc'

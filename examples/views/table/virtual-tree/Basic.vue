@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">树表格（适用于大数据树结构），通过配置 <table-api-link prop="tree-config"/> 和指定列 <table-column-api-link prop="tree-node"/> 属性来开启树表格</p>
+    <p class="tip">树表格（适用于大数据树结构），通过配置 <virtual-tree-api-link prop="tree-config"/> 和指定列 <table-column-api-link prop="tree-node"/> 属性来开启树表格</p>
 
     <vxe-virtual-tree
       border
@@ -25,7 +25,7 @@
       <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
 
-    <p class="tip">默认展开所有树节点，通过 <table-api-link prop="tree-config"/>={<table-api-link prop="expandAll"/>: true} 参数设置默认展开所有树节点</p>
+    <p class="tip">默认展开所有树节点，通过 <virtual-tree-api-link prop="tree-config"/>={<virtual-tree-api-link prop="expandAll"/>: true} 参数设置默认展开所有树节点</p>
 
     <vxe-virtual-tree
       border

@@ -157,6 +157,7 @@ const TableVirtualTreeFixed = () => import(/* webpackChunkName: "virtual-tree" *
 const TableVirtualTreeMaxHeight = () => import(/* webpackChunkName: "virtual-tree" */ './views/table/virtual-tree/MaxHeight.vue')
 const TableVirtualTreeEdit = () => import(/* webpackChunkName: "virtual-tree" */ './views/table/virtual-tree/Edit.vue')
 const TableVirtualTreeInsert = () => import(/* webpackChunkName: "virtual-tree" */ './views/table/virtual-tree/Insert.vue')
+const TableVirtualTreeRemove = () => import(/* webpackChunkName: "virtual-tree" */ './views/table/virtual-tree/Remove.vue')
 const TableVirtualTreeMenu = () => import(/* webpackChunkName: "virtual-tree" */ './views/table/virtual-tree/Menu.vue')
 const TableVirtualTreeTemplate = () => import(/* webpackChunkName: "virtual-tree" */ './views/table/virtual-tree/Template.vue')
 
@@ -766,6 +767,11 @@ export default new Router({
       path: '/table/virtualTree/insert',
       name: 'TableVirtualTreeInsert',
       component: TableVirtualTreeInsert
+    },
+    {
+      path: '/table/virtualTree/remove',
+      name: 'TableVirtualTreeRemove',
+      component: TableVirtualTreeRemove
     },
     {
       path: '/table/virtualTree/menu',

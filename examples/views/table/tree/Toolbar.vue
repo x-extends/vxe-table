@@ -2,7 +2,7 @@
   <div>
     <p class="tip">增删改查、工具栏<br><span class="red">注：树形结构默认不支持 insert 相关方法，如果要往子节点插入数据，你可以把表格当成一个子组件进行封装，自行操作数据源即可</span></p>
 
-    <vxe-toolbar :data="tableData" :refresh="{query: reload}" export setting>
+    <vxe-toolbar :data="tableData" :refresh="{query: reload}" import export setting>
       <template v-slot:buttons>
         <vxe-button @click="insertEvent">{{ $t('app.body.button.insert') }}</vxe-button>
         <vxe-button @click="removeEvent">移除选中</vxe-button>
@@ -21,7 +21,7 @@
       :tree-config="treeConfig"
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
       :data="tableData">
-      <vxe-table-column type="checkbox" width="120"></vxe-table-column>
+      <vxe-table-column type="checkbox" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" tree-node></vxe-table-column>
       <vxe-table-column field="size" title="Size" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="type" title="Type" :edit-render="{name: 'input'}"></vxe-table-column>
@@ -51,7 +51,7 @@ export default {
       },
       demoCodes: [
         `
-        <vxe-toolbar :data="tableData" :refresh="{query: reload}" export setting>
+        <vxe-toolbar :data="tableData" :refresh="{query: reload}" import export setting>
           <template v-slot:buttons>
             <vxe-button @click="insertEvent">{{ $t('app.body.button.insert') }}</vxe-button>
             <vxe-button @click="removeEvent">移除选中</vxe-button>
@@ -70,7 +70,7 @@ export default {
           :tree-config="treeConfig"
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
           :data="tableData">
-          <vxe-table-column type="checkbox" width="120"></vxe-table-column>
+          <vxe-table-column type="checkbox" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" tree-node></vxe-table-column>
           <vxe-table-column field="size" title="Size" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column field="type" title="Type" :edit-render="{name: 'input'}"></vxe-table-column>

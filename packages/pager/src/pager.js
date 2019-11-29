@@ -72,25 +72,24 @@ export default {
     GlobalEvent.off(this, 'mousedown')
   },
   render (h) {
-    let { layouts, loading, vSize, align, border, background, perfect } = this
+    let { vSize, align } = this
     return h('div', {
       class: ['vxe-pager', {
         [`size--${vSize}`]: vSize,
         [`align--${align}`]: align,
-        'p--border': border,
-        'p--background': background,
-        'p--perfect': perfect,
-        'is--loading': loading
+        'p--border': this.border,
+        'p--background': this.background,
+        'p--perfect': this.perfect,
+        'is--loading': this.loading
       }]
-    }, layouts.map(name => this[`render${name}`](h)))
+    }, this.layouts.map(name => this[`render${name}`](h)))
   },
   methods: {
     // 上一页
     renderPrevPage (h) {
-      let { currentPage, iconPrevPage } = this
       return h('span', {
         class: ['vxe-pager--prev-btn', {
-          'is--disabled': currentPage <= 1
+          'is--disabled': this.currentPage <= 1
         }],
         attrs: {
           title: GlobalConfig.i18n('vxe.pager.prevPage')
@@ -100,7 +99,7 @@ export default {
         }
       }, [
         h('i', {
-          class: ['vxe-pager--btn-icon', iconPrevPage || GlobalConfig.icon.prevPage]
+          class: ['vxe-pager--btn-icon', this.iconPrevPage || GlobalConfig.icon.prevPage]
         })
       ])
     },
@@ -140,11 +139,10 @@ export default {
     },
     // 向下翻页
     renderNextJump (h, tagName) {
-      let { currentPage, pageCount, iconJumpNext } = this
       return h(tagName || 'span', {
         class: ['vxe-pager--jump-next', {
           'is--fixed': !tagName,
-          'is--disabled': currentPage >= pageCount
+          'is--disabled': this.currentPage >= this.pageCount
         }],
         attrs: {
           title: GlobalConfig.i18n('vxe.pager.nextJump')
@@ -157,16 +155,15 @@ export default {
           class: ['vxe-pager--jump-more', this.iconJumpMore || GlobalConfig.icon.jumpMore]
         }) : null,
         h('i', {
-          class: ['vxe-pager--jump-icon', iconJumpNext || GlobalConfig.icon.jumpNext]
+          class: ['vxe-pager--jump-icon', this.iconJumpNext || GlobalConfig.icon.jumpNext]
         })
       ])
     },
     // 下一页
     renderNextPage (h) {
-      let { currentPage, pageCount, iconNextPage } = this
       return h('span', {
         class: ['vxe-pager--next-btn', {
-          'is--disabled': currentPage >= pageCount
+          'is--disabled': this.currentPage >= this.pageCount
         }],
         attrs: {
           title: GlobalConfig.i18n('vxe.pager.nextPage')
@@ -176,16 +173,15 @@ export default {
         }
       }, [
         h('i', {
-          class: ['vxe-pager--btn-icon', iconNextPage || GlobalConfig.icon.nextPage]
+          class: ['vxe-pager--btn-icon', this.iconNextPage || GlobalConfig.icon.nextPage]
         })
       ])
     },
     // sizes
     renderSizes (h) {
-      let { pageSizes, showSizes, pageSize, panelStyle } = this
       return h('span', {
         class: ['vxe-pager--sizes', {
-          'is--active': showSizes
+          'is--active': this.showSizes
         }],
         ref: 'sizeBtn'
       }, [
@@ -195,22 +191,22 @@ export default {
             click: this.toggleSizePanel
           }
         }, [
-          h('span', `${pageSize}${GlobalConfig.i18n('vxe.pager.pagesize')}`),
+          h('span', `${this.pageSize}${GlobalConfig.i18n('vxe.pager.pagesize')}`),
           h('i', {
             class: `vxe-pager--sizes-arrow ${GlobalConfig.icon.caretBottom}`
           })
         ]),
         h('div', {
           class: 'vxe-pager-size--select-wrapper',
-          style: panelStyle,
+          style: this.panelStyle,
           ref: 'sizePanel'
         }, [
           h('ul', {
             class: 'vxe-pager-size--select'
-          }, pageSizes.map(num => {
+          }, this.pageSizes.map(num => {
             return h('li', {
               class: ['size--option', {
-                'is--active': num === pageSize
+                'is--active': num === this.pageSize
               }],
               on: {
                 click: () => this.changePageSize(num)
@@ -226,7 +222,6 @@ export default {
     },
     // Jump
     renderJump (h, isFull) {
-      let { currentPage, pageCount } = this
       return h('span', {
         class: 'vxe-pager--jump'
       }, [
@@ -236,27 +231,14 @@ export default {
         h('input', {
           class: 'vxe-pager--goto',
           domProps: {
-            value: currentPage
+            value: this.currentPage
           },
           attrs: {
             type: 'text',
             autocomplete: 'off'
           },
           on: {
-            keydown: evnt => {
-              if (evnt.keyCode === 13) {
-                let value = XEUtils.toNumber(evnt.target.value)
-                let current = value <= 0 ? 1 : value >= pageCount ? pageCount : value
-                evnt.target.value = current
-                this.jumpPage(current)
-              } else if (evnt.keyCode === 38) {
-                evnt.preventDefault()
-                this.nextPage()
-              } else if (evnt.keyCode === 40) {
-                evnt.preventDefault()
-                this.prevPage()
-              }
-            }
+            keydown: this.jumpKeydownEvent
           }
         }),
         isFull ? h('span', {
@@ -266,22 +248,20 @@ export default {
     },
     // PageCount
     renderPageCount (h) {
-      let { pageCount } = this
       return h('span', {
         class: 'vxe-pager--count'
       }, [
         h('span', {
           class: 'vxe-pager--separator'
         }, '/'),
-        h('span', pageCount)
+        h('span', this.pageCount)
       ])
     },
     // total
     renderTotal (h) {
-      let { total } = this
       return h('span', {
         class: 'vxe-pager--total'
-      }, XEUtils.template(GlobalConfig.i18n('vxe.pager.total'), { total }))
+      }, XEUtils.template(GlobalConfig.i18n('vxe.pager.total'), { total: this.total }))
     },
     // number
     renderPageBtn (h, showJump) {
@@ -342,12 +322,13 @@ export default {
       return Math.max(Math.ceil(total / size), 1)
     },
     handleGlobalMousedownEvent (evnt) {
-      if (this.showSizes && !(DomTools.getEventTargetNode(evnt, this.$refs.sizeBtn).flag || DomTools.getEventTargetNode(evnt, this.$refs.sizePanel).flag)) {
+      let $refs = this.$refs
+      if (this.showSizes && !(DomTools.getEventTargetNode(evnt, $refs.sizeBtn).flag || DomTools.getEventTargetNode(evnt, $refs.sizePanel).flag)) {
         this.hideSizePanel()
       }
     },
     prevPage () {
-      let { currentPage } = this
+      let currentPage = this.currentPage
       if (currentPage > 1) {
         this.jumpPage(Math.max(currentPage - 1, 1))
       }
@@ -359,12 +340,10 @@ export default {
       }
     },
     prevJump () {
-      let { numList, currentPage } = this
-      this.jumpPage(Math.max(currentPage - numList.length, 1))
+      this.jumpPage(Math.max(this.currentPage - this.numList.length, 1))
     },
     nextJump () {
-      let { numList, currentPage, pageCount } = this
-      this.jumpPage(Math.min(currentPage + numList.length, pageCount))
+      this.jumpPage(Math.min(this.currentPage + this.numList.length, this.pageCount))
     },
     jumpPage (currentPage) {
       let type = 'current-change'
@@ -383,6 +362,20 @@ export default {
       }
       this.hideSizePanel()
     },
+    jumpKeydownEvent (evnt) {
+      if (evnt.keyCode === 13) {
+        let value = XEUtils.toNumber(evnt.target.value)
+        let current = value <= 0 ? 1 : value >= this.pageCount ? this.pageCount : value
+        evnt.target.value = current
+        this.jumpPage(current)
+      } else if (evnt.keyCode === 38) {
+        evnt.preventDefault()
+        this.nextPage()
+      } else if (evnt.keyCode === 40) {
+        evnt.preventDefault()
+        this.prevPage()
+      }
+    },
     emitPageChange (type, pageSize, currentPage) {
       UtilTools.emitEvent(this, 'page-change', [{ type, pageSize, currentPage }])
     },
@@ -398,8 +391,7 @@ export default {
       this.showSizes = true
       this.updateZindex()
       this.$nextTick(() => {
-        let { $refs } = this
-        let { sizeBtn, sizePanel } = $refs
+        let { sizeBtn, sizePanel } = this.$refs
         this.panelStyle = {
           zIndex: this.panelIndex,
           bottom: `${sizeBtn.clientHeight + 6}px`,
