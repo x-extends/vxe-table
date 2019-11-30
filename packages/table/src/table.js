@@ -407,35 +407,6 @@ export default {
         return true
       }
       return false
-    },
-    renderOptions () {
-      const { treeConfig, mouseConfig, columnStore } = this
-      return {
-        class: ['vxe-table', this.vSize ? `size--${this.vSize}` : '', {
-          'vxe-editable': this.editConfig,
-          'show--head': this.showHeader,
-          'show--foot': this.showFooter,
-          'has--height': this.height,
-          'has--tree-line': treeConfig && treeConfig.line,
-          'fixed--left': columnStore.leftList.length,
-          'fixed--right': columnStore.rightList.length,
-          'all-overflow': this.showOverflow,
-          'all-head-overflow': this.showHeaderOverflow,
-          'c--highlight': this.highlightCell,
-          't--animat': this.optimizeOpts.animat,
-          't--stripe': this.stripe,
-          't--border': this.border,
-          't--selected': mouseConfig && mouseConfig.selected,
-          't--checked': mouseConfig && mouseConfig.checked,
-          'row--highlight': this.highlightHoverRow,
-          'column--highlight': this.highlightHoverColumn,
-          'is--loading': this.loading,
-          'scroll--y': this.overflowY,
-          'scroll--x': this.overflowX,
-          'virtual--x': this.scrollXLoad,
-          'virtual--y': this.scrollYLoad
-        }]
-      }
     }
   },
   watch: {
@@ -652,6 +623,8 @@ export default {
       showHeader,
       height,
       vSize,
+      treeConfig,
+      mouseConfig,
       validOpts,
       editRules,
       showFooter,
@@ -668,7 +641,32 @@ export default {
       hasTip
     } = this
     let { leftList, rightList } = columnStore
-    return h('div', this.renderOptions, [
+    return h('div', {
+      class: ['vxe-table', this.vSize ? `size--${this.vSize}` : '', {
+        'vxe-editable': this.editConfig,
+        'show--head': this.showHeader,
+        'show--foot': this.showFooter,
+        'has--height': this.height,
+        'has--tree-line': treeConfig && treeConfig.line,
+        'fixed--left': leftList.length,
+        'fixed--right': rightList.length,
+        'all-overflow': this.showOverflow,
+        'all-head-overflow': this.showHeaderOverflow,
+        'c--highlight': this.highlightCell,
+        't--animat': this.optimizeOpts.animat,
+        't--stripe': this.stripe,
+        't--border': this.border,
+        't--selected': mouseConfig && mouseConfig.selected,
+        't--checked': mouseConfig && mouseConfig.checked,
+        'row--highlight': this.highlightHoverRow,
+        'column--highlight': this.highlightHoverColumn,
+        'is--loading': this.loading,
+        'scroll--y': this.overflowY,
+        'scroll--x': this.overflowX,
+        'virtual--x': this.scrollXLoad,
+        'virtual--y': this.scrollYLoad
+      }]
+    }, [
       /**
        * 隐藏列
        */
