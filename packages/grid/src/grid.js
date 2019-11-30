@@ -76,12 +76,6 @@ export default {
       }
       return slots
     },
-    renderOptions () {
-      return {
-        class: this.renderClass,
-        style: this.renderStyle
-      }
-    },
     renderClass () {
       const { tableProps, vSize, maximize } = this
       return [ 'vxe-grid', {
@@ -92,14 +86,6 @@ export default {
     },
     renderStyle () {
       return this.maximize ? { zIndex: this.tZindex } : null
-    },
-    tableOptions () {
-      return {
-        props: this.tableProps,
-        on: this.tableOns,
-        scopedSlots: this.$scopedSlots,
-        ref: 'xTable'
-      }
     },
     tableExtendProps () {
       let rest = {}
@@ -156,26 +142,10 @@ export default {
       }
       return ons
     },
-    toolbarOptions () {
-      return {
-        ref: 'toolbar',
-        props: this.toolbarProps,
-        scopedSlots: this.toolbarSlots
-      }
-    },
     toolbarProps () {
       return Object.assign({
         loading: this.loading || this.tableLoading
       }, this.toolbarOpts)
-    },
-    pagerOptions () {
-      return {
-        props: this.pagerProps,
-        on: {
-          'page-change': this.pageChangeEvent
-        },
-        ref: 'pager'
-      }
     },
     pagerProps () {
       return Object.assign({
@@ -222,19 +192,37 @@ export default {
     }
   },
   render (h) {
-    return h('div', this.renderOptions, [
+    return h('div', {
+      class: this.renderClass,
+      style: this.renderStyle
+    }, [
       /**
        * 渲染工具栏
        */
-      this.toolbar ? h('vxe-toolbar', this.toolbarOptions) : null,
+      this.toolbar ? h('vxe-toolbar', {
+        ref: 'toolbar',
+        props: this.toolbarProps,
+        scopedSlots: this.toolbarSlots
+      }) : null,
       /**
        * 渲染表格
        */
-      h('vxe-table', this.tableOptions, this.$slots.default),
+      h('vxe-table', {
+        props: this.tableProps,
+        on: this.tableOns,
+        scopedSlots: this.$scopedSlots,
+        ref: 'xTable'
+      }, this.$slots.default),
       /**
        * 渲染分页
        */
-      this.pagerConfig ? h('vxe-pager', this.pagerOptions) : null
+      this.pagerConfig ? h('vxe-pager', {
+        props: this.pagerProps,
+        on: {
+          'page-change': this.pageChangeEvent
+        },
+        ref: 'pager'
+      }) : null
     ])
   },
   methods: {
