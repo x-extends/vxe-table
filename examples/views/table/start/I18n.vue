@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2>Internationalization 国际化</h2>
-    <p class="tip">目前支持的<a class="link" href="https://github.com/xuliangzhan/vxe-table/tree/master/packages/locale/lang" target="_blank">国际化列表</a>，若希望使用指定语言，则需要进行多语言设置。以中/英文为例</p>
+    <p class="tip">目前支持的<a class="link" href="https://github.com/xuliangzhan/vxe-table/tree/master/packages/locale/lang" target="_blank">国际化列表</a>，若希望使用指定语言，则需要进行多语言设置。以中/英文为例<br><a class="link" href="https://github.com/xuliangzhan/vxe-table-demo/tree/master/vxe-table-by-vue-i18n" target="_blank">项目示例</a></p>
     <pre>
       <code class="shell">
         npm install vue-i18n
@@ -9,7 +9,7 @@
       <code class="javascript">{{ demoCodes[0] }}</code>
     </pre>
     <h2>集成国际化</h2>
-    <p class="tip">若希望在项目中支持全局自动翻译，可以通过全局参数开启（将对列头、校验提示..进行自动翻译）</p>
+    <p class="tip">若希望在项目中支持全局自动翻译，可以通过全局参数开启（将对列头、校验提示..进行自动翻译）<br><a class="link" href="https://github.com/xuliangzhan/vxe-table-demo/tree/master/vxe-table-by-vue-i18n" target="_blank">项目示例</a></p>
     <pre>
       <code class="javascript">{{ demoCodes[1] }}</code>
       <code class="html">{{ demoCodes[2] }}</code>
@@ -55,7 +55,7 @@ export default {
         `
         Vue.use(VXETable, {
           // 对参数的内容自动进行国际化翻译（只对支持国际化的有效）
-          translate: : key => i18n.t(key)
+          translate: key => i18n.t(key)
         })
         `,
         `
