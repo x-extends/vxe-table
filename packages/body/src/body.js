@@ -483,8 +483,8 @@ export default {
         mouseConfig.checked ? renderBorder(h, 'check') : null,
         keyboardConfig.isCut ? renderBorder(h, 'copy') : null
       ]) : null,
-      !fixedType && !tableData.length ? h('div', {
-        class: 'vxe-table--empty-block',
+      !fixedType ? h('div', {
+        class: ['vxe-table--empty-block', tableData.length ? '' : 'is--empty'],
         ref: 'emptyBlock'
       }, [
         h('div', {

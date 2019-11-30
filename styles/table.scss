@@ -671,7 +671,6 @@
   /*暂无数据*/
   .vxe-table--empty-placeholder,
   .vxe-table--empty-block {
-    display: flex;
     min-height: 60px;
     justify-content: center;
     align-items: center;
@@ -680,7 +679,15 @@
     width: 100%;
     pointer-events: none;
   }
+  .vxe-table--empty-block {
+    display: none;
+    visibility: hidden;
+    &.is--empty {
+      display: flex;
+    }
+  }
   .vxe-table--empty-placeholder {
+    display: flex;
     position: absolute;
     top: 0;
     z-index: 12;
@@ -689,9 +696,6 @@
     display: block;
     width: 50%;
     pointer-events: auto;
-  }
-  .vxe-table--empty-block {
-    visibility: hidden;
   }
   &.has--height {
     .vxe-table--empty-placeholder {
