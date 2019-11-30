@@ -556,8 +556,8 @@ export default {
          */
         h('tbody', renderRows(h, this, $table, '', 0, fixedType, tableData, tableColumn))
       ]),
-      !fixedType && !loading && !tableData.length ? h('div', {
-        class: 'vxe-table--empty-block',
+      !fixedType ? h('div', {
+        class: ['vxe-table--empty-block', loading || tableData.length ? '' : 'is--empty'],
         style: {
           width: tableWidth ? `${tableWidth}px` : tableWidth
         }
