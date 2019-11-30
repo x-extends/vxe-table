@@ -3,7 +3,9 @@
 
 /*pager*/
 .vxe-pager {
-  padding: 10px 0;
+  height: $vxe-table-row-height-default;
+  display: flex;
+  align-items: center;
   font-size: $vxe-font-size;
   color: $vxe-font-color;
   font-family: $vxe-font-family;
@@ -74,7 +76,8 @@
     }
   }
   &.size--medium {
-    padding: 8px 0;
+    font-size: $vxe-font-size-medium;
+    height: $vxe-table-row-height-medium;
     .vxe-pager--count,
     .size--content,
     .vxe-pager--prev-btn,
@@ -95,8 +98,8 @@
     }
   }
   &.size--small {
-    font-size: 12px;
-    padding: 8px 0;
+    font-size: $vxe-font-size-small;
+    height: $vxe-table-row-height-small;
     .vxe-pager--count,
     .size--content,
     .vxe-pager--prev-btn,
@@ -117,8 +120,8 @@
     }
   }
   &.size--mini {
-    font-size: 12px;
-    padding: 8px 0;
+    font-size: $vxe-font-size-mini;
+    height: $vxe-table-row-height-mini;
     .vxe-pager--count,
     .size--content,
     .vxe-pager--prev-btn,
@@ -137,6 +140,9 @@
     .vxe-pager--jump .vxe-pager--goto {
       height: 24px;
     }
+  }
+  .vxe-pager--wrapper {
+    flex-grow: 1;
   }
   .vxe-pager--total,
   .vxe-pager--prev-btn,
@@ -172,6 +178,7 @@
   .vxe-pager--btn-wrapper {
     list-style-type: none;
     padding: 0;
+    margin: 0;
     display: inline-block;
     text-align: center;
     .vxe-pager--jump-prev,

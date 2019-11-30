@@ -82,7 +82,11 @@ export default {
         'p--perfect': this.perfect,
         'is--loading': this.loading
       }]
-    }, this.layouts.map(name => this[`render${name}`](h)))
+    }, [
+      h('div', {
+        class: 'vxe-pager--wrapper'
+      }, this.layouts.map(name => this[`render${name}`](h)))
+    ])
   },
   methods: {
     // 上一页
