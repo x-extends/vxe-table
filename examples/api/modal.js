@@ -222,6 +222,15 @@ const apis = [
         enum: '',
         defVal: 'true',
         list: []
+      },
+      {
+        name: 'remember',
+        descKey: 'app.api.modal.desc.remember',
+        version: '2.7.0',
+        type: 'Boolean',
+        enum: '',
+        defVal: 'false',
+        list: []
       }
     ]
   },

@@ -64,8 +64,21 @@
         </template>
       </vxe-modal>
 
-      <vxe-button @click="value3 = !value3">缩放表格的窗口</vxe-button>
-      <vxe-modal v-model="value3" title="缩放表格的窗口" width="800" height="400" resize>
+      <vxe-button @click="value3 = !value3">记忆功能的窗口</vxe-button>
+      <vxe-modal v-model="value3" title="记忆功能的窗口" width="600" height="400" resize remember>
+        <template>
+          <p style="color: red">会记忆最后一次操作的状态，单重新打开后悔还原</p>
+          <p style="color: red">按住头部移动！！！！！！！！！！！！！！！</p>
+          <p style="color: blue">按住左边距拖动！！！！！！！！！！！！！！！</p>
+          <p style="color: red">按住右边距拖动！！！！！！！！！！！！！！！</p>
+          <p style="color: blue">按住底边距拖动！！！！！！！！！！！！！！！</p>
+          <p style="color: blue">按住左下角拖动 ！！！！！！！！！！！！！！！</p>
+          <p style="color: blue">按住右下角拖动！！！！！！！！！！！！！！！</p>
+        </template>
+      </vxe-modal>
+
+      <vxe-button @click="value4 = !value4">缩放表格的窗口</vxe-button>
+      <vxe-modal v-model="value4" title="缩放表格的窗口" width="800" height="400" resize>
         <template>
           <vxe-table
             border
@@ -73,7 +86,7 @@
             show-overflow
             auto-resize
             height="auto"
-            :sync-resize="value3"
+            :sync-resize="value4"
             :data="tableData">
             <vxe-table-column type="index" width="60"></vxe-table-column>
             <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
@@ -83,8 +96,8 @@
         </template>
       </vxe-modal>
 
-      <vxe-button @click="value4 = !value4">完整功能的窗口</vxe-button>
-      <vxe-modal v-model="value4" width="800" height="400" min-width="400" min-height="320" resize>
+      <vxe-button @click="value5 = !value5">完整功能的窗口</vxe-button>
+      <vxe-modal v-model="value5" width="800" height="400" min-width="400" min-height="320" resize remember>
         <template v-slot:title>
           <span style="color: red;">完整功能的窗口</span>
         </template>
@@ -95,7 +108,7 @@
             show-overflow
             auto-resize
             height="auto"
-            :sync-resize="value4"
+            :sync-resize="value5"
             :pager-config="tablePage"
             :proxy-config="tableProxy"
             :columns="tableColumn"
@@ -123,6 +136,7 @@ export default {
       value2: false,
       value3: false,
       value4: false,
+      value5: false,
       tablePage: {
         pageSize: 10
       },
@@ -226,8 +240,21 @@ export default {
             </template>
           </vxe-modal>
 
-          <vxe-button @click="value3 = !value3">缩放表格的窗口</vxe-button>
-          <vxe-modal v-model="value3" title="缩放表格的窗口" width="800" height="400" resize>
+          <vxe-button @click="value3 = !value3">记忆功能的窗口</vxe-button>
+          <vxe-modal v-model="value3" title="记忆功能的窗口" width="600" height="400" resize remember>
+            <template>
+              <p style="color: red">会记忆最后一次操作的状态，单重新打开后悔还原</p>
+              <p style="color: red">按住头部移动！！！！！！！！！！！！！！！</p>
+              <p style="color: blue">按住左边距拖动！！！！！！！！！！！！！！！</p>
+              <p style="color: red">按住右边距拖动！！！！！！！！！！！！！！！</p>
+              <p style="color: blue">按住底边距拖动！！！！！！！！！！！！！！！</p>
+              <p style="color: blue">按住左下角拖动 ！！！！！！！！！！！！！！！</p>
+              <p style="color: blue">按住右下角拖动！！！！！！！！！！！！！！！</p>
+            </template>
+          </vxe-modal>
+
+          <vxe-button @click="value4 = !value4">缩放表格的窗口</vxe-button>
+          <vxe-modal v-model="value4" title="缩放表格的窗口" width="800" height="400" resize>
             <template>
               <vxe-table
                 border
@@ -235,7 +262,7 @@ export default {
                 show-overflow
                 auto-resize
                 height="auto"
-                :sync-resize="value3"
+                :sync-resize="value4"
                 :data="tableData">
                 <vxe-table-column type="index" width="60"></vxe-table-column>
                 <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
@@ -245,8 +272,8 @@ export default {
             </template>
           </vxe-modal>
 
-          <vxe-button @click="value4 = !value4">完整功能的窗口</vxe-button>
-          <vxe-modal v-model="value4" title="完整功能的窗口" width="800" height="400" min-width="400" min-height="320" resize>
+          <vxe-button @click="value5 = !value5">完整功能的窗口</vxe-button>
+          <vxe-modal v-model="value5" width="800" height="400" min-width="400" min-height="320" resize remember>
             <template v-slot:title>
               <span style="color: red;">完整功能的窗口</span>
             </template>
@@ -257,7 +284,7 @@ export default {
                 show-overflow
                 auto-resize
                 height="auto"
-                :sync-resize="value4"
+                :sync-resize="value5"
                 :pager-config="tablePage"
                 :proxy-config="tableProxy"
                 :columns="tableColumn"
@@ -274,6 +301,7 @@ export default {
               value2: false,
               value3: false,
               value4: false,
+              value5: false,
               tablePage: {
                 pageSize: 10
               },
