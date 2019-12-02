@@ -2372,9 +2372,17 @@ const apis = [
         defVal: '',
         list: []
       },
+      {
+        name: 'getMouseSelecteds()',
+        desc: '获取鼠标选中单元格的信息',
+        type: 'Array',
+        enum: '',
+        defVal: '',
+        list: []
+      },
       // {
       //   name: 'getMouseCheckeds()',
-      //   desc: '获取鼠标选中单元格的信息',
+      //   desc: '获取鼠标选中的所有单元格的信息',
       //   type: 'Array',
       //   enum: '',
       //   defVal: '',
