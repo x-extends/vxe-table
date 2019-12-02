@@ -31,6 +31,7 @@ export default {
     zIndex: Number,
     marginSize: { type: [Number, String], default: GlobalConfig.modal.marginSize },
     fullscreen: Boolean,
+    remember: { type: Boolean, default: () => GlobalConfig.modal.remember },
     animat: { type: Boolean, default: () => GlobalConfig.modal.animat },
     size: String,
     slots: Object,
@@ -55,6 +56,12 @@ export default {
     }
   },
   watch: {
+    width () {
+      this.recalculate()
+    },
+    height () {
+      this.recalculate()
+    },
     value (visible) {
       this[visible ? 'open' : 'close']()
     }
@@ -66,12 +73,8 @@ export default {
     this.modalZindex = this.zIndex || UtilTools.nextZIndex()
   },
   mounted () {
-    let { $listeners, events = {}, width, height } = this
-    let modalBoxElem = this.getBox()
-    Object.assign(modalBoxElem.style, {
-      width: width ? (isNaN(width) ? width : `${width}px`) : null,
-      height: height ? (isNaN(height) ? height : `${height}px`) : null
-    })
+    let { $listeners, events = {} } = this
+    this.recalculate()
     if (this.escClosable) {
       GlobalEvent.on(this, 'keydown', this.handleGlobalKeydownEvent)
     }
@@ -224,6 +227,13 @@ export default {
     ])
   },
   methods: {
+    recalculate () {
+      let { width, height } = this
+      let modalBoxElem = this.getBox()
+      modalBoxElem.style.width = width ? (isNaN(width) ? width : `${width}px`) : null
+      modalBoxElem.style.height = height ? (isNaN(height) ? height : `${height}px`) : null
+      return this.$nextTick()
+    },
     selfClickEvent (evnt) {
       if (this.maskClosable && evnt.target === this.$el) {
         let type = 'mask'
@@ -251,9 +261,12 @@ export default {
       this.close(type)
     },
     open () {
-      let { $listeners, events = {}, duration, visible, isMsg } = this
+      let { $listeners, events = {}, duration, visible, isMsg, remember } = this
       if (!visible) {
         let params = { type: 'show', $modal: this }
+        if (!remember) {
+          this.recalculate()
+        }
         this.visible = true
         this.contentVisible = false
         this.updateZindex()

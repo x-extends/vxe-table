@@ -510,7 +510,8 @@ module.exports = {
           top: '只对 type=message 有效，消息距离顶部的位置',
           zIndex: '自定义堆叠顺序（对于某些特殊场景，比如被遮挡时可能会用到）',
           fullscreen: '默认最大化显示',
-          dblclickZoom: '只对 type=modal 有效，是否允许通过双击头部放大或还原窗口'
+          dblclickZoom: '只对 type=modal 有效，是否允许通过双击头部放大或还原窗口',
+          remember: '记忆功能，会记住最后操作状态，再次打开窗口时还原窗口状态'
         }
       }
     }

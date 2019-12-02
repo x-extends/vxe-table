@@ -92,6 +92,7 @@
             duration: 3000,
             marginSize: 8,
             dblclickZoom: true,
+            remember: false,
             animat: true
           },
           // 默认优化配置项
