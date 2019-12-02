@@ -45,13 +45,16 @@
       :loading="loading"
       :data="tableData"
       :edit-rules="validRules"
-      :edit-config="{trigger: 'click', mode: 'row'}">
+      :edit-config="{trigger: 'click', mode: 'row'}"
+      @edit-actived="editActivedEvent"
+      @edit-closed="editClosedEvent">
       <vxe-table-column type="checkbox" width="60" fixed="left"></vxe-table-column>
       <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
       <vxe-table-column field="name" title="ElInput" min-width="140" fixed="left" :edit-render="{name: 'ElInput'}"></vxe-table-column>
       <vxe-table-column field="role" title="ElAutocomplete" width="160" :edit-render="{name: 'ElAutocomplete', props: {fetchSuggestions: roleFetchSuggestions}}"></vxe-table-column>
       <vxe-table-column field="age" title="ElInputNumber" width="160" :edit-render="{name: 'ElInputNumber', props: {max: 35, min: 18}}"></vxe-table-column>
       <vxe-table-column field="sex" title="ElSelect" width="140" :edit-render="{name: 'ElSelect', options: sexList}"></vxe-table-column>
+      <vxe-table-column field="state" title="ElSelect" width="140" :edit-render="{name: 'ElSelect', options: stateOptions, props: {remote: true, filterable: true, loading: stateloading, remoteMethod: remoteStateMethod}}"></vxe-table-column>
       <vxe-table-column field="region" title="ElCascader" width="200" :edit-render="{name: 'ElCascader', props: {options: regionList}}"></vxe-table-column>
       <vxe-table-column field="date" title="ElDatePicker" width="200" :edit-render="{name: 'ElDatePicker', props: {type: 'date', format: 'yyyy/MM/dd'}}"></vxe-table-column>
       <vxe-table-column field="date1" title="DateTimePicker" width="220" :edit-render="{name: 'ElDatePicker', props: {type: 'datetime', format: 'yyyy-MM-dd HH:mm:ss'}}"></vxe-table-column>
@@ -99,6 +102,28 @@ export default {
       },
       sexList: [],
       regionList: [],
+      stateList: [],
+      stateOptions: [],
+      stateloading: false,
+      states: [
+        'Alabama', 'Alaska', 'Arizona',
+        'Arkansas', 'California', 'Colorado',
+        'Connecticut', 'Delaware', 'Florida',
+        'Georgia', 'Hawaii', 'Idaho', 'Illinois',
+        'Indiana', 'Iowa', 'Kansas', 'Kentucky',
+        'Louisiana', 'Maine', 'Maryland',
+        'Massachusetts', 'Michigan', 'Minnesota',
+        'Mississippi', 'Missouri', 'Montana',
+        'Nebraska', 'Nevada', 'New Hampshire',
+        'New Jersey', 'New Mexico', 'New York',
+        'North Carolina', 'North Dakota', 'Ohio',
+        'Oklahoma', 'Oregon', 'Pennsylvania',
+        'Rhode Island', 'South Carolina',
+        'South Dakota', 'Tennessee', 'Texas',
+        'Utah', 'Vermont', 'Virginia',
+        'Washington', 'West Virginia', 'Wisconsin',
+        'Wyoming'
+      ],
       restaurants: [
         { value: '前端', name: '前端' },
         { value: '后端', name: '后端' }
@@ -114,72 +139,77 @@ export default {
       },
       demoCodes: [
         `
-          <el-form ref="tableform" class="click-table2-form" size="mini" :inline="true" :model="formData">
-            <el-form-item title="名字" prop="name">
-              <el-input v-model="formData.name" placeholder="名字"></el-input>
-            </el-form-item>
-            <el-form-item title="角色" prop="role">
-              <el-input v-model="formData.role" placeholder="请输入角色"></el-input>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary" @click="searchEvent">查询</el-button>
-              <el-button @click="$refs.tableform.resetFields()">重置</el-button>
-            </el-form-item>
-          </el-form>
+        <el-form ref="tableform" :model="formData" inline>
+          <el-form-item title="名字" prop="name">
+            <el-input v-model="formData.name" placeholder="名字"></el-input>
+          </el-form-item>
+          <el-form-item title="性别" prop="sex">
+            <el-select v-model="formData.sex" placeholder="性别">
+              <el-option v-for="item in sexList" :key="item.value" :label="item.label" :value="item.value"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="searchEvent">查询</el-button>
+            <el-button @click="$refs.tableform.resetFields()">重置</el-button>
+          </el-form-item>
+        </el-form>
 
-          <vxe-toolbar export setting>
-            <template v-slot:buttons>
-              <el-button @click="insertEvent">新增</el-button>
-              <el-button @click="saveEvent">保存</el-button>
-              <el-button @click="vaildEvent">校验</el-button>
-              <el-dropdown @command="dropdownMenuEvent">
-                <el-button>
-                  操作<i class="el-icon-arrow-down el-icon--right"></i>
-                </el-button>
-                <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item command="remove">删除选中</el-dropdown-item>
-                  <el-dropdown-item command="export">导出数据</el-dropdown-item>
-                </el-dropdown-menu>
-              </el-dropdown>
-            </template>
-          </vxe-toolbar>
+        <vxe-toolbar export setting>
+          <template v-slot:buttons>
+            <el-button @click="insertEvent">新增</el-button>
+            <el-button @click="saveEvent">保存</el-button>
+            <el-button @click="vaildEvent">校验</el-button>
+            <el-dropdown @command="dropdownMenuEvent">
+              <el-button>
+                操作<i class="el-icon-arrow-down el-icon--right"></i>
+              </el-button>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item command="remove">删除选中</el-dropdown-item>
+                <el-dropdown-item command="export">导出数据</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+          </template>
+        </vxe-toolbar>
 
-          <vxe-table
-            border
-            resizable
-            show-overflow
-            highlight-hover-row
-            ref="xTable"
-            class="vxe-table-element"
-            height="460"
-            :loading="loading"
-            :data="tableData"
-            :edit-rules="validRules"
-            :edit-config="{trigger: 'click', mode: 'row'}">
-            <vxe-table-column type="checkbox" width="60" fixed="left"></vxe-table-column>
-            <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
-            <vxe-table-column field="name" title="ElInput" min-width="140" :edit-render="{name: 'ElInput'}"></vxe-table-column>
-            <vxe-table-column field="role" title="ElAutocomplete" width="160" :edit-render="{name: 'ElAutocomplete', props: {fetchSuggestions: roleFetchSuggestions}}"></vxe-table-column>
-            <vxe-table-column field="age" title="ElInputNumber" width="160" :edit-render="{name: 'ElInputNumber', props: {max: 35, min: 18}}"></vxe-table-column>
-            <vxe-table-column field="sex" title="ElSelect" width="140" :edit-render="{name: 'ElSelect', options: sexList}"></vxe-table-column>
-            <vxe-table-column field="region" title="ElCascader" width="200" :edit-render="{name: 'ElCascader', props: {options: regionList}}"></vxe-table-column>
-            <vxe-table-column field="date" title="ElDatePicker" width="200" :edit-render="{name: 'ElDatePicker', props: {type: 'date', format: 'yyyy/MM/dd'}}"></vxe-table-column>
-            <vxe-table-column field="date1" title="DateTimePicker" width="220" :edit-render="{name: 'ElDatePicker', props: {type: 'datetime', format: 'yyyy-MM-dd HH:mm:ss'}}"></vxe-table-column>
-            <vxe-table-column field="date5" title="ElTimeSelect" width="200" :edit-render="{name: 'ElTimeSelect', props: {pickerOptions: {start: '08:30', step: '00:15', end: '18:30'}}}"></vxe-table-column>
-            <vxe-table-column field="flag" title="ElSwitch" width="100" :edit-render="{name: 'ElSwitch', type: 'visible'}"></vxe-table-column>
-            <vxe-table-column field="slider" title="ElSlider" width="200" :edit-render="{name: 'ElSlider', type: 'visible'}"></vxe-table-column>
-            <vxe-table-column field="rate" title="ElRate" width="200" fixed="right" :edit-render="{name: 'ElRate', type: 'visible'}"></vxe-table-column>
-          </vxe-table>
+        <vxe-table
+          border
+          resizable
+          show-overflow
+          highlight-hover-row
+          ref="xTable"
+          class="vxe-table-element"
+          height="460"
+          :loading="loading"
+          :data="tableData"
+          :edit-rules="validRules"
+          :edit-config="{trigger: 'click', mode: 'row'}"
+          @edit-actived="editActivedEvent"
+          @edit-closed="editClosedEvent">
+          <vxe-table-column type="checkbox" width="60" fixed="left"></vxe-table-column>
+          <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
+          <vxe-table-column field="name" title="ElInput" min-width="140" fixed="left" :edit-render="{name: 'ElInput'}"></vxe-table-column>
+          <vxe-table-column field="role" title="ElAutocomplete" width="160" :edit-render="{name: 'ElAutocomplete', props: {fetchSuggestions: roleFetchSuggestions}}"></vxe-table-column>
+          <vxe-table-column field="age" title="ElInputNumber" width="160" :edit-render="{name: 'ElInputNumber', props: {max: 35, min: 18}}"></vxe-table-column>
+          <vxe-table-column field="sex" title="ElSelect" width="140" :edit-render="{name: 'ElSelect', options: sexList}"></vxe-table-column>
+          <vxe-table-column field="state" title="ElSelect" width="140" :edit-render="{name: 'ElSelect', options: stateOptions, props: {remote: true, filterable: true, loading: stateloading, remoteMethod: remoteStateMethod}}"></vxe-table-column>
+          <vxe-table-column field="region" title="ElCascader" width="200" :edit-render="{name: 'ElCascader', props: {options: regionList}}"></vxe-table-column>
+          <vxe-table-column field="date" title="ElDatePicker" width="200" :edit-render="{name: 'ElDatePicker', props: {type: 'date', format: 'yyyy/MM/dd'}}"></vxe-table-column>
+          <vxe-table-column field="date1" title="DateTimePicker" width="220" :edit-render="{name: 'ElDatePicker', props: {type: 'datetime', format: 'yyyy-MM-dd HH:mm:ss'}}"></vxe-table-column>
+          <vxe-table-column field="date5" title="ElTimeSelect" width="200" :edit-render="{name: 'ElTimeSelect', props: {pickerOptions: {start: '08:30', step: '00:15', end: '18:30'}}}"></vxe-table-column>
+          <vxe-table-column field="flag" title="ElSwitch" width="100" :edit-render="{name: 'ElSwitch', type: 'visible'}"></vxe-table-column>
+          <vxe-table-column field="slider" title="ElSlider" width="200" :edit-render="{name: 'ElSlider', type: 'visible'}"></vxe-table-column>
+          <vxe-table-column field="rate" title="ElRate" width="200" fixed="right" :edit-render="{name: 'ElRate', type: 'visible'}"></vxe-table-column>
+        </vxe-table>
 
-          <el-pager
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            :current-page="tablePage.currentPage"
-            :page-sizes="[5, 10, 15, 20, 50, 100, 150, 200]"
-            :page-size="tablePage.pageSize"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="tablePage.totalResult">
-          </el-pager>
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="tablePage.currentPage"
+          :page-sizes="[5, 10, 15, 20, 50, 100, 150, 200]"
+          :page-size="tablePage.pageSize"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="tablePage.totalResult">
+        </el-pagination>
         `,
         `
         export default {
@@ -198,6 +228,28 @@ export default {
               },
               sexList: [],
               regionList: [],
+              stateList: [],
+              stateOptions: [],
+              stateloading: false,
+              states: [
+                'Alabama', 'Alaska', 'Arizona',
+                'Arkansas', 'California', 'Colorado',
+                'Connecticut', 'Delaware', 'Florida',
+                'Georgia', 'Hawaii', 'Idaho', 'Illinois',
+                'Indiana', 'Iowa', 'Kansas', 'Kentucky',
+                'Louisiana', 'Maine', 'Maryland',
+                'Massachusetts', 'Michigan', 'Minnesota',
+                'Mississippi', 'Missouri', 'Montana',
+                'Nebraska', 'Nevada', 'New Hampshire',
+                'New Jersey', 'New Mexico', 'New York',
+                'North Carolina', 'North Dakota', 'Ohio',
+                'Oklahoma', 'Oregon', 'Pennsylvania',
+                'Rhode Island', 'South Carolina',
+                'South Dakota', 'Tennessee', 'Texas',
+                'Utah', 'Vermont', 'Virginia',
+                'Washington', 'West Virginia', 'Wisconsin',
+                'Wyoming'
+              ],
               restaurants: [
                 { value: '前端', name: '前端' },
                 { value: '后端', name: '后端' }
@@ -214,6 +266,9 @@ export default {
             }
           },
           created () {
+            this.stateList = this.states.map(item => {
+              return { value: \`value:\${item}\`, label: \`label:\${item}\` }
+            })
             this.findList()
             this.findSexList()
             this.findRegionList()
@@ -227,6 +282,7 @@ export default {
                 this.tableData = result
                 this.tablePage.totalResult = page.totalResult
                 this.loading = false
+                this.updateStateList()
               }).catch(e => {
                 this.loading = false
               })
@@ -242,6 +298,53 @@ export default {
                 this.regionList = data
                 return data
               })
+            },
+            remoteStateMethod (query) {
+              if (query !== '') {
+                this.stateloading = true
+                setTimeout(() => {
+                  this.stateloading = false
+                  this.stateOptions = this.stateList.filter(item => {
+                    return item.label.toLowerCase()
+                      .indexOf(query.toLowerCase()) > -1
+                  })
+                }, 200)
+              } else {
+                this.stateOptions = []
+              }
+            },
+            // 模拟后台查当前页出远程下拉值
+            updateStateList () {
+              setTimeout(() => {
+                let defaultStateList = []
+                this.tableData.forEach(row => {
+                  if (row.state && !defaultStateList.some(item => item.value === row.state)) {
+                    defaultStateList.push({
+                      label: row.state.replace('value', 'label'),
+                      value: row.state
+                    })
+                  }
+                })
+                this._defaultStateList = defaultStateList
+                this.stateOptions = defaultStateList
+              }, 100)
+            },
+            editActivedEvent ({ row }) {
+              // 当激活编辑时，重新更新远程下拉值
+              if (row.state) {
+                if (row._stateOptions) {
+                  this.stateOptions = row._stateOptions
+                } else {
+                  // 如果是第一次点击则使用默认的列表
+                  this.stateOptions = this._defaultStateList
+                }
+              } else {
+                this.stateOptions = []
+              }
+            },
+            editClosedEvent ({ row }) {
+              // 当激活编辑时，记录当前远程下拉值
+              row._stateOptions = this.stateOptions
             },
             insertEvent () {
               let record = {
@@ -320,6 +423,9 @@ export default {
     }
   },
   created () {
+    this.stateList = this.states.map(item => {
+      return { value: `value:${item}`, label: `label:${item}` }
+    })
     this.findList()
     this.findSexList()
     this.findRegionList()
@@ -337,6 +443,7 @@ export default {
         this.tableData = result
         this.tablePage.totalResult = page.totalResult
         this.loading = false
+        this.updateStateList()
       }).catch(e => {
         this.loading = false
       })
@@ -352,6 +459,53 @@ export default {
         this.regionList = data
         return data
       })
+    },
+    remoteStateMethod (query) {
+      if (query !== '') {
+        this.stateloading = true
+        setTimeout(() => {
+          this.stateloading = false
+          this.stateOptions = this.stateList.filter(item => {
+            return item.label.toLowerCase()
+              .indexOf(query.toLowerCase()) > -1
+          })
+        }, 200)
+      } else {
+        this.stateOptions = []
+      }
+    },
+    // 模拟后台查当前页出远程下拉值
+    updateStateList () {
+      setTimeout(() => {
+        let defaultStateList = []
+        this.tableData.forEach(row => {
+          if (row.state && !defaultStateList.some(item => item.value === row.state)) {
+            defaultStateList.push({
+              label: row.state.replace('value', 'label'),
+              value: row.state
+            })
+          }
+        })
+        this._defaultStateList = defaultStateList
+        this.stateOptions = defaultStateList
+      }, 100)
+    },
+    editActivedEvent ({ row }) {
+      // 当激活编辑时，重新更新远程下拉值
+      if (row.state) {
+        if (row._stateOptions) {
+          this.stateOptions = row._stateOptions
+        } else {
+          // 如果是第一次点击则使用默认的列表
+          this.stateOptions = this._defaultStateList
+        }
+      } else {
+        this.stateOptions = []
+      }
+    },
+    editClosedEvent ({ row }) {
+      // 当激活编辑时，记录当前远程下拉值
+      row._stateOptions = this.stateOptions
     },
     insertEvent () {
       let record = {

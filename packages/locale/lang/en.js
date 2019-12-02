@@ -22,7 +22,8 @@ export default {
       delProp: 'The function "{{0}}" is deprecated, please use "{{1}}".',
       notType: 'Unsupported file types "{{0}}"',
       notExp: 'The browser does not support import / export.',
-      impFields: 'Import failed, please check that the field name and data format are correct.'
+      impFields: 'Import failed, please check that the field name and data format are correct.',
+      treeNotImp: 'Tree table does not support import.'
     },
     table: {
       emptyText: 'No Data',
@@ -104,7 +105,8 @@ export default {
       expOpts: 'Export option',
       expOptHeader: 'Header',
       expOptFooter: 'Footer',
-      expOptOriginal: 'Original (Support for importing)',
+      expOptOriginal: 'Original (Support import)',
+      expOptOriginNotImp: 'Original (Import not supported)',
       expPrint: 'Print',
       expConfirm: 'Export'
     }

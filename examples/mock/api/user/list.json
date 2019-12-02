@@ -14,6 +14,7 @@
     "slider|number": "{{ random.num(0,100) }}",
     "color": "rgb({{ random.num(0,255) }}, {{ random.num(0,255) }}, 0)",
     "flag|boolean": "{{ random.num(0,1) }}",
+    "state|random(1)": ["", "value:Washington", "value:Delaware", "", "", "value:Indiana", "value:Iowa", "value:Kentucky", ""],
     "phone": "136{{ random.num(10000000,99999999) }}",
     "describe": "{{ random.repeat('用户信息',2,6) }}",
     "describe2": "{{ random.repeat('用户信息',4,10) }}",

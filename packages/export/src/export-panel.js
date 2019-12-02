@@ -30,10 +30,13 @@ export default {
     },
     showSheet () {
       return XEUtils.includes(['html', 'xml', 'xlsx'], this.defaultOptions.type)
+    },
+    isNotImport () {
+      return this.storeData.isTree
     }
   },
   render (h) {
-    const { _e, isAll, isIndeterminate, showSheet, defaultOptions, storeData, modeList } = this
+    const { _e, isAll, isIndeterminate, showSheet, defaultOptions, storeData, modeList, isNotImport } = this
     return h('vxe-modal', {
       res: 'modal',
       model: {
@@ -215,7 +218,7 @@ export default {
                     defaultOptions.original = value
                   }
                 }
-              }, GlobalConfig.i18n('vxe.toolbar.expOptOriginal'))
+              }, GlobalConfig.i18n(isNotImport ? 'vxe.toolbar.expOptOriginNotImp' : 'vxe.toolbar.expOptOriginal'))
             ])
           ])
         ]),

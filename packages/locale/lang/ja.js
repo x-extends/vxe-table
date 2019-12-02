@@ -22,7 +22,8 @@ export default {
       delProp: '"{{0}}" propertyは非推奨です、"{{1}}"を使用してください',
       notType: '不支持的文件类型 "{{0}}"',
       notExp: '该浏览器不支持导入/导出功能',
-      impFields: '导入失败，请检查字段名和数据格式是否正确'
+      impFields: '导入失败，请检查字段名和数据格式是否正确',
+      treeNotImp: '树表格不支持导入'
     },
     table: {
       emptyText: 'データがありません',
@@ -105,6 +106,7 @@ export default {
       expOptHeader: '表头',
       expOptFooter: '表尾',
       expOptOriginal: '源(支持导入)',
+      expOptOriginNotImp: '源(不支持导入)',
       expPrint: '打印',
       expConfirm: '导出'
     }
