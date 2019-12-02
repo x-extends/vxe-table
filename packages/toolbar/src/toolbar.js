@@ -46,7 +46,8 @@ export default {
         selectRecords: [],
         hasFooter: false,
         forceOriginal: false,
-        visible: false
+        visible: false,
+        isTree: false
       },
       exportParams: {
         filename: '',
@@ -500,7 +501,15 @@ export default {
       }
     },
     openImport (options) {
+      const comp = this.$grid || this.$table
       const defOpts = Object.assign({ mode: 'covering', message: true }, options, this.importOpts)
+      const isTree = !!comp.getTreeStatus()
+      if (isTree) {
+        if (defOpts.message) {
+          this.$XModal.message({ message: GlobalConfig.i18n('vxe.error.treeNotImp'), status: 'error' })
+        }
+        return
+      }
       Object.assign(this.importStore, {
         file: null,
         type: '',
@@ -528,7 +537,8 @@ export default {
       const virtualScroller = comp.getVirtualScroller()
       const exportColumns = fullColumn.filter(column => column.type === 'index' || (column.property && ['checkbox', 'selection', 'radio'].indexOf(column.type) === -1))
       const treeStatus = comp.getTreeStatus()
-      const forceOriginal = !!treeStatus || virtualScroller.scrollX || virtualScroller.scrollY
+      const isTree = !!treeStatus
+      const forceOriginal = isTree || virtualScroller.scrollX || virtualScroller.scrollY
       const hasFooter = !!footerData.length
       const defOpts = Object.assign({ original: true, message: true }, this.exportOpts, options)
       const types = defOpts.types || VXETable.exportTypes
@@ -550,7 +560,8 @@ export default {
         mode: selectRecords.length ? 'selected' : 'all',
         forceOriginal: !!treeStatus || virtualScroller.scrollX || virtualScroller.scrollY,
         hasFooter: hasFooter,
-        visible: true
+        visible: true,
+        isTree
       })
       // 重置参数
       Object.assign(this.exportParams, {

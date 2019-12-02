@@ -167,12 +167,13 @@ export const UtilTools = {
       let rest, formatData
       let { $table } = params
       let colid = column.id
-      let cacheFormat = $table && $table.fullAllDataRowMap.has(row)
+      let fullAllDataRowMap = $table.fullAllDataRowMap
+      let cacheFormat = fullAllDataRowMap.has(row)
       if (cacheFormat) {
-        rest = $table.fullAllDataRowMap.get(row)
+        rest = fullAllDataRowMap.get(row)
         formatData = rest.formatData
         if (!formatData) {
-          formatData = $table.fullAllDataRowMap.get(row).formatData = {}
+          formatData = fullAllDataRowMap.get(row).formatData = {}
         }
       }
       if (rest && formatData[colid]) {

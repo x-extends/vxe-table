@@ -103,6 +103,7 @@ function mockData () {
       region: index % 4 === 0 ? [19, 199, 1773] : index % 3 === 0 ? [9, 73, 719] : [1, 1, 5],
       rate: index % 4 === 0 ? 2 : index % 3 === 0 ? 3 : 0,
       rate1: `${index % 4 === 0 ? 2 : index % 3 === 0 ? 3 : 0}`,
+      state: `${index % 4 === 0 ? 'value:Washington' : index % 3 === 0 ? 'value:Delaware' : ''}`,
       address: `地址 地址地址 地址地址 址地址 址地址  址地址 址地址址地址址地址 地址${index}`,
       address2: `地址 地址地址 地址${index}`,
       img: `static/other/img${index % 3 ? '1' : '2'}.gif`,
