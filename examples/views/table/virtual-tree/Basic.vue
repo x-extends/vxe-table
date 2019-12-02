@@ -1,6 +1,10 @@
 <template>
   <div>
-    <p class="tip">树表格（适用于大数据树结构），通过配置 <virtual-tree-api-link prop="tree-config"/> 和指定列 <table-column-api-link prop="tree-node"/> 属性来开启树表格</p>
+    <p class="tip">
+      虚拟树表格，具体兼容性看 <a class="link" href="https://www.npmjs.com/package/vxe-table-plugin-virtual-tree" target="_blank">vxe-table-plugin-virtual-tree</a> 插件的 API<br>
+      虚拟树的实现原理就是把一颗树结构平铺为列表结构进行渲染<span class="red">(可以支持虚拟滚动，但是会导致无法支持某些特定功能)</span><br>
+      通过配置 <virtual-tree-api-link prop="tree-config"/> 和指定列 <table-column-api-link prop="tree-node"/> 属性来开启树表格
+    </p>
 
     <vxe-virtual-tree
       border

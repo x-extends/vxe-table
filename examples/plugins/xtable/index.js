@@ -9,7 +9,6 @@ import Footer from '../../../packages/footer'
 import Filter from '../../../packages/filter'
 import Loading from '../../../packages/loading'
 import Grid from '../../../packages/grid'
-import VirtualTree from '../../../packages/virtual-tree'
 import Excel from '../../../packages/excel'
 import Menu from '../../../packages/menu'
 import Toolbar from '../../../packages/toolbar'
@@ -33,11 +32,13 @@ import VXETablePluginElement from 'vxe-table-plugin-element'
 import VXETablePluginIView from 'vxe-table-plugin-iview'
 import VXETablePluginAntd from 'vxe-table-plugin-antd'
 import VXETablePluginMenus from 'vxe-table-plugin-menus'
+import VXETablePluginVirtualTree from 'vxe-table-plugin-virtual-tree'
 import VXETablePluginExportXLSX from 'vxe-table-plugin-export-xlsx'
 import VXETablePluginExportPDF from 'vxe-table-plugin-export-pdf'
 import 'vxe-table-plugin-element/dist/style.css'
 import 'vxe-table-plugin-iview/dist/style.css'
 import 'vxe-table-plugin-antd/dist/style.css'
+import 'vxe-table-plugin-virtual-tree/dist/style.css'
 
 VXETable.setup({
   toolbar: {
@@ -56,7 +57,6 @@ Vue.use(Footer)
 Vue.use(Filter)
 Vue.use(Loading)
 Vue.use(Grid)
-Vue.use(VirtualTree)
 Vue.use(Excel)
 Vue.use(Menu)
 Vue.use(Toolbar)
@@ -75,5 +75,6 @@ VXETable.use(VXETablePluginElement)
 VXETable.use(VXETablePluginIView)
 VXETable.use(VXETablePluginAntd)
 VXETable.use(VXETablePluginMenus)
+VXETable.use(VXETablePluginVirtualTree)
 VXETable.use(VXETablePluginExportXLSX)
 VXETable.use(VXETablePluginExportPDF)

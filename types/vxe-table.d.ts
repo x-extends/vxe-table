@@ -79,7 +79,7 @@ export interface PluginObject<T> {
 
 export function install(vue: typeof Vue): void;
 export function t(obj: object, key: string): string | number;
-export function setup(options: VXETableOptions): any;
+export function setup(options?: VXETableOptions): any;
 export function use(plugin: PluginObject<any>, ...options: any[]): VXETableStatic;
 
 export const interceptor: Interceptor;
@@ -138,10 +138,10 @@ export interface VXETableStatic {
    */
   t(key: string): any;
   /**
-   * 设置全局参数
+   * 设置全局参数/获取所有参数
    * @param options
    */
-  setup(options: VXETableOptions): any;
+  setup(options?: VXETableOptions): any;
   /**
    * Installing a plug-in
    * @param plugin 
