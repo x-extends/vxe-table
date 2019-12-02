@@ -16,6 +16,7 @@ function mergeOpts (data1, data2) {
  */
 function setup (options = {}) {
   mergeOpts(GlobalConfig, options)
+  return GlobalConfig
 }
 
 export default setup

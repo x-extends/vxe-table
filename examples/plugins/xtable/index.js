@@ -10,7 +10,6 @@ import Footer from '../../../packages/footer'
 import Filter from '../../../packages/filter'
 import Loading from '../../../packages/loading'
 import Grid from '../../../packages/grid'
-import VirtualTree from '../../../packages/virtual-tree'
 import Menu from '../../../packages/menu'
 import Toolbar from '../../../packages/toolbar'
 import Pager from '../../../packages/pager'
@@ -40,6 +39,7 @@ import VXETablePluginIView from 'vxe-table-plugin-iview'
 import VXETablePluginAntd from 'vxe-table-plugin-antd'
 import VXETablePluginExcel from 'vxe-table-plugin-excel'
 import VXETablePluginRenderer from 'vxe-table-plugin-renderer'
+import VXETablePluginVirtualTree from 'vxe-table-plugin-virtual-tree'
 import VXETablePluginMenus from 'vxe-table-plugin-menus'
 import VXETablePluginCharts from 'vxe-table-plugin-charts'
 import VXETablePluginExportXLSX from 'vxe-table-plugin-export-xlsx'
@@ -49,6 +49,7 @@ import 'vxe-table-plugin-element/dist/style.css'
 import 'vxe-table-plugin-iview/dist/style.css'
 import 'vxe-table-plugin-antd/dist/style.css'
 import 'vxe-table-plugin-excel/dist/style.css'
+import 'vxe-table-plugin-virtual-tree/dist/style.css'
 import 'vxe-table-plugin-renderer/dist/style.css'
 import 'vxe-table-plugin-charts/dist/style.css'
 
@@ -71,7 +72,6 @@ Vue.use(Footer)
 Vue.use(Filter)
 Vue.use(Loading)
 Vue.use(Grid)
-Vue.use(VirtualTree)
 Vue.use(Menu)
 Vue.use(Toolbar)
 Vue.use(Pager)
@@ -94,6 +94,7 @@ VXETable.use(VXETablePluginIView)
 VXETable.use(VXETablePluginAntd)
 VXETable.use(VXETablePluginExcel)
 VXETable.use(VXETablePluginRenderer)
+VXETable.use(VXETablePluginVirtualTree)
 VXETable.use(VXETablePluginMenus)
 VXETable.use(VXETablePluginCharts)
 VXETable.use(VXETablePluginExportXLSX)
