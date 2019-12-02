@@ -486,9 +486,9 @@ export default {
       }
     },
     sortChangeEvent (params) {
-      let { proxyConfig, remoteSort } = this
+      let { proxyConfig, remoteSort, sortConfig = {} } = this
       let { column } = params
-      let isRemote = XEUtils.isBoolean(column.remoteSort) ? column.remoteSort : remoteSort
+      let isRemote = XEUtils.isBoolean(column.remoteSort) ? column.remoteSort : (sortConfig.remote || remoteSort)
       // 如果是服务端排序
       if (isRemote) {
         this.sortData = params
@@ -499,10 +499,10 @@ export default {
       UtilTools.emitEvent(this, 'sort-change', [Object.assign({ $grid: this }, params)])
     },
     filterChangeEvent (params) {
-      let { remoteFilter } = this
+      let { remoteFilter, filterConfig = {} } = this
       let { filters } = params
       // 如果是服务端过滤
-      if (remoteFilter) {
+      if (filterConfig.remote || remoteFilter) {
         this.filterData = filters
         this.commitProxy('query')
       }
