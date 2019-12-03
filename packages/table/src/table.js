@@ -3544,19 +3544,21 @@ export default {
     sort (field, order) {
       let { visibleColumn, tableFullColumn, remoteSort, sortConfig = {} } = this
       let column = XEUtils.find(visibleColumn, item => item.property === field)
-      let isRemote = XEUtils.isBoolean(column.remoteSort) ? column.remoteSort : (sortConfig.remote || remoteSort)
-      if (column.sortable || column.remoteSort) {
-        if (!order) {
-          order = column.order === 'desc' ? 'asc' : 'desc'
-        }
-        if (column.order !== order) {
-          tableFullColumn.forEach(column => {
-            column.order = null
-          })
-          column.order = order
-          // 如果是服务端排序，则跳过本地排序处理
-          if (!isRemote) {
-            this.handleTableData(true)
+      if (column) {
+        let isRemote = XEUtils.isBoolean(column.remoteSort) ? column.remoteSort : (sortConfig.remote || remoteSort)
+        if (column.sortable || column.remoteSort) {
+          if (!order) {
+            order = column.order === 'desc' ? 'asc' : 'desc'
+          }
+          if (column.order !== order) {
+            tableFullColumn.forEach(column => {
+              column.order = null
+            })
+            column.order = order
+            // 如果是服务端排序，则跳过本地排序处理
+            if (!isRemote) {
+              this.handleTableData(true)
+            }
           }
         }
       }
@@ -3570,14 +3572,17 @@ export default {
     },
     filter (field, callback) {
       let column = this.getColumnByField(field)
-      let filters = column.filters
-      if (callback) {
-        let rest = callback(filters)
-        if (XEUtils.isArray(rest)) {
-          column.filters = UtilTools.getFilters(rest)
+      if (column) {
+        let filters = column.filters
+        if (callback) {
+          let rest = callback(filters)
+          if (XEUtils.isArray(rest)) {
+            column.filters = UtilTools.getFilters(rest)
+          }
         }
+        return this.$nextTick().then(() => filters)
       }
-      return this.$nextTick().then(() => filters)
+      return this.$nextTick()
     },
     /**
      * 点击筛选事件

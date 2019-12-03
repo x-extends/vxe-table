@@ -149,7 +149,7 @@ export default {
         })
         `,
         `
-        <<vxe-table border :data="tableData">
+        <vxe-table border :data="tableData">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column
             field="nickname"
@@ -200,11 +200,15 @@ export default {
         }
         `,
         `
+        .cmplex-filter {
+          width: 260px;
+          padding: 0 8px;
+        }
         .cmplex-filter .f-type {
-          padding: 8px 8px 12px 2px;
+          padding: 8px 0;
         }
         .cmplex-filter .f-iscase {
-          padding: 12px 8px 6px 2px;
+          padding: 12px 0;
         }
         .cmplex-filter .f-footer {
           text-align: center;
@@ -225,11 +229,15 @@ export default {
 </script>
 
 <style>
+.cmplex-filter {
+  width: 260px;
+  padding: 0 8px;
+}
 .cmplex-filter .f-type {
-  padding: 8px 8px 12px 2px;
+  padding: 8px 0;
 }
 .cmplex-filter .f-iscase {
-  padding: 12px 8px 6px 2px;
+  padding: 12px 0;
 }
 .cmplex-filter .f-footer {
   text-align: center;
