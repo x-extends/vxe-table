@@ -111,9 +111,10 @@ export default {
           const args = isAll ? validRest : { [params.column.property]: params }
           return new Promise((resolve, reject) => {
             const finish = () => {
+              status = false
               if (cb) {
-                status = false
-                resolve(cb(status, args))
+                cb(status, args)
+                resolve()
               } else {
                 reject(args)
               }
@@ -143,12 +144,11 @@ export default {
             }
           })
         })
-      } else {
-        if (cb) {
-          cb(status)
-        }
       }
-      return Promise.resolve(true)
+      if (cb) {
+        cb(status)
+      }
+      return Promise.resolve()
     },
     hasCellRules (type, row, column) {
       let { editRules } = this

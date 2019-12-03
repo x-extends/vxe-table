@@ -77,12 +77,12 @@ export default {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
           },
           methods: {
-            insertEvent (row) {
+            async insertEvent (row) {
               let record = {
                 sex: '1'
               }
-              this.$refs.xTable.insertAt(record, row)
-                .then(({ row }) => this.$refs.xTable.setActiveCell(row, 'sex'))
+              const { row: newRow } = await this.$refs.xTable.insertAt(record, row)
+              await this.$refs.xTable.setActiveCell(newRow, 'sex')
             },
             getRemoveEvent () {
               let removeRecords = this.$refs.xTable.getRemoveRecords()
@@ -108,12 +108,12 @@ export default {
     })
   },
   methods: {
-    insertEvent (row) {
+    async insertEvent (row) {
       let record = {
         sex: '1'
       }
-      this.$refs.xTable.insertAt(record, row)
-        .then(({ row }) => this.$refs.xTable.setActiveCell(row, 'sex'))
+      const { row: newRow } = await this.$refs.xTable.insertAt(record, row)
+      await this.$refs.xTable.setActiveCell(newRow, 'sex')
     },
     getRemoveEvent () {
       let removeRecords = this.$refs.xTable.getRemoveRecords()

@@ -82,17 +82,15 @@ export default {
             this.findSexList()
           },
           methods: {
-            findSexList () {
-              return this.$ajax.getJSON('/api/conf/sex/list').then(data => {
-                this.sexList = data
-              })
+            async findSexList () {
+              this.sexList = await this.$ajax.getJSON('/api/conf/sex/list')
             },
-            insertEvent (row) {
+            async insertEvent (row) {
               let record = {
                 sex: '1'
               }
-              this.$refs.xTable.insertAt(record, row)
-                .then(({ row }) => this.$refs.xTable.setActiveCell(row, 'sex'))
+              await this.$refs.xTable.insertAt(record, row)
+              await this.$refs.xTable.setActiveCell(row, 'sex')
             },
             getInsertEvent () {
               let insertRecords = this.$refs.xTable.getInsertRecords()
@@ -114,17 +112,15 @@ export default {
     })
   },
   methods: {
-    findSexList () {
-      return this.$ajax.getJSON('/api/conf/sex/list').then(data => {
-        this.sexList = data
-      })
+    async findSexList () {
+      this.sexList = await this.$ajax.getJSON('/api/conf/sex/list')
     },
-    insertEvent (row) {
+    async insertEvent (row) {
       let record = {
         sex: '1'
       }
-      this.$refs.xTable.insertAt(record, row)
-        .then(({ row }) => this.$refs.xTable.setActiveCell(row, 'sex'))
+      await this.$refs.xTable.insertAt(record, row)
+      await this.$refs.xTable.setActiveCell(row, 'sex')
     },
     getInsertEvent () {
       let insertRecords = this.$refs.xTable.getInsertRecords()

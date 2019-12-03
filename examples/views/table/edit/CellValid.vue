@@ -106,69 +106,61 @@ export default {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
           },
           methods: {
-            validEvent () {
-              this.$refs.xTable.validate(valid => {
-                if (valid) {
-                  this.$XModal.message({ status: 'success', message: '校验成功！' })
-                } else {
-                  this.$XModal.message({ status: 'error', message: '校验不通过！' })
-                }
-              })
+            async validEvent () {
+              try {
+                await this.$refs.xTable.validate()
+                this.$XModal.message({ status: 'success', message: '校验成功！' })
+              } catch (errMap) {
+                this.$XModal.message({ status: 'error', message: '校验不通过！' })
+              }
             },
-            fullValidEvent () {
-              this.$refs.xTable.fullValidate((valid, errMap) => {
-                if (valid) {
-                  this.$XModal.message({ status: 'success', message: '校验成功！' })
-                } else {
-                  let msgList = []
-                  Object.values(errMap).forEach(errList => {
-                    errList.forEach(params => {
-                      let { rowIndex, column, rules } = params
-                      rules.forEach(rule => {
-                        msgList.push(\`第 \${rowIndex} 行 \${column.title} 校验错误：\${rule.message}\`)
-                      })
+            async fullValidEvent () {
+              try {
+                await this.$refs.xTable.fullValidate()
+                this.$XModal.message({ status: 'success', message: '校验成功！' })
+              } catch (errMap) {
+                let msgList = []
+                Object.values(errMap).forEach(errList => {
+                  errList.forEach(params => {
+                    let { rowIndex, column, rules } = params
+                    rules.forEach(rule => {
+                      msgList.push(\`第 \${rowIndex} 行 \${column.title} 校验错误：\${rule.message}\`)
                     })
                   })
-                  this.$XModal.message({
-                    status: 'error',
-                    message: () => {
-                      return [
-                        <div class="red" style="max-height: 400px;overflow: auto;">
-                          {
-                            msgList.map(msg => {
-                              return <div>{ msg }</div>
-                            })
-                          }
-                        </div>
-                      ]
-                    }
-                  })
-                }
-              })
-            },
-            selectValidEvent () {
-              let selectRecords = this.$refs.xTable.getSelectRecords()
-              if (selectRecords.length > 0) {
-                this.$refs.xTable.validate(selectRecords, valid => {
-                  if (valid) {
-                    this.$XModal.message({ status: 'success', message: '校验成功！' })
-                  } else {
-                    this.$XModal.message({ status: 'error', message: '校验不通过！' })
+                })
+                this.$XModal.message({
+                  status: 'error',
+                  message: () => {
+                    return [
+                      <div class="red" style="max-height: 400px;overflow: auto;">
+                        {
+                          msgList.map(msg => <div>{ msg }</div>)
+                        }
+                      </div>
+                    ]
                   }
                 })
+              }
+            },
+            async selectValidEvent () {
+              let selectRecords = this.$refs.xTable.getSelectRecords()
+              if (selectRecords.length > 0) {
+                try {
+                  await this.$refs.xTable.validate(selectRecords)
+                  this.$XModal.message({ status: 'success', message: '校验成功！' })
+                } catch (errMap) {
+                  this.$XModal.message({ status: 'error', message: '校验不通过！' })
+                }
               } else {
                 this.$XModal.message({ status: 'warning', message: '未选中数据！' })
               }
             },
-            insertEvent () {
-              this.$refs.xTable.insert().then(({ row }) => {
+            async insertEvent () {
+              const { row: newRow } = await this.$refs.xTable.insert()
+              try {
                 // 插入一条数据并触发校验
-                this.$refs.xTable.validate(row, valid => {
-                  if (valid) {
-
-                  }
-                })
-              })
+                await this.$refs.xTable.validate(newRow)
+              } catch (errMap) {}
             },
             getSelectEvent () {
               let selectRecords = this.$refs.xTable.getSelectRecords()
@@ -202,69 +194,61 @@ export default {
     })
   },
   methods: {
-    validEvent () {
-      this.$refs.xTable.validate(valid => {
-        if (valid) {
-          this.$XModal.message({ status: 'success', message: '校验成功！' })
-        } else {
-          this.$XModal.message({ status: 'error', message: '校验不通过！' })
-        }
-      })
+    async validEvent () {
+      try {
+        await this.$refs.xTable.validate()
+        this.$XModal.message({ status: 'success', message: '校验成功！' })
+      } catch (errMap) {
+        this.$XModal.message({ status: 'error', message: '校验不通过！' })
+      }
     },
-    fullValidEvent () {
-      this.$refs.xTable.fullValidate((valid, errMap) => {
-        if (valid) {
-          this.$XModal.message({ status: 'success', message: '校验成功！' })
-        } else {
-          let msgList = []
-          Object.values(errMap).forEach(errList => {
-            errList.forEach(params => {
-              let { rowIndex, column, rules } = params
-              rules.forEach(rule => {
-                msgList.push(`第 ${rowIndex} 行 ${column.title} 校验错误：${rule.message}`)
-              })
+    async fullValidEvent () {
+      try {
+        await this.$refs.xTable.fullValidate()
+        this.$XModal.message({ status: 'success', message: '校验成功！' })
+      } catch (errMap) {
+        let msgList = []
+        Object.values(errMap).forEach(errList => {
+          errList.forEach(params => {
+            let { rowIndex, column, rules } = params
+            rules.forEach(rule => {
+              msgList.push(`第 ${rowIndex} 行 ${column.title} 校验错误：${rule.message}`)
             })
           })
-          this.$XModal.message({
-            status: 'error',
-            message: () => {
-              return [
-                <div class="red" style="max-height: 400px;overflow: auto;">
-                  {
-                    msgList.map(msg => {
-                      return <div>{ msg }</div>
-                    })
-                  }
-                </div>
-              ]
-            }
-          })
-        }
-      })
-    },
-    selectValidEvent () {
-      let selectRecords = this.$refs.xTable.getSelectRecords()
-      if (selectRecords.length > 0) {
-        this.$refs.xTable.validate(selectRecords, valid => {
-          if (valid) {
-            this.$XModal.message({ status: 'success', message: '校验成功！' })
-          } else {
-            this.$XModal.message({ status: 'error', message: '校验不通过！' })
+        })
+        this.$XModal.message({
+          status: 'error',
+          message: () => {
+            return [
+              <div class="red" style="max-height: 400px;overflow: auto;">
+                {
+                  msgList.map(msg => <div>{ msg }</div>)
+                }
+              </div>
+            ]
           }
         })
+      }
+    },
+    async selectValidEvent () {
+      let selectRecords = this.$refs.xTable.getSelectRecords()
+      if (selectRecords.length > 0) {
+        try {
+          await this.$refs.xTable.validate(selectRecords)
+          this.$XModal.message({ status: 'success', message: '校验成功！' })
+        } catch (errMap) {
+          this.$XModal.message({ status: 'error', message: '校验不通过！' })
+        }
       } else {
         this.$XModal.message({ status: 'warning', message: '未选中数据！' })
       }
     },
-    insertEvent () {
-      this.$refs.xTable.insert().then(({ row }) => {
+    async insertEvent () {
+      const { row: newRow } = await this.$refs.xTable.insert()
+      try {
         // 插入一条数据并触发校验
-        this.$refs.xTable.validate(row, valid => {
-          if (valid) {
-
-          }
-        })
-      })
+        await this.$refs.xTable.validate(newRow)
+      } catch (errMap) {}
     },
     getSelectEvent () {
       let selectRecords = this.$refs.xTable.getSelectRecords()
