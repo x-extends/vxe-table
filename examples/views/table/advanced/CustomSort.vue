@@ -30,7 +30,14 @@
           </span>
         </template>
       </vxe-table-column>
-      <vxe-table-column field="time" title="Time"></vxe-table-column>
+      <vxe-table-column field="amount" title="Amount" formatter="commafy" sortable>
+        <template v-slot:header="{ column }">
+          <span>{{ column.title }}</span>
+          <span class="custom-sort" :class="{'is-order': column.order}">
+            <i class="fa" :class="[column.order ? `fa-sort-amount-${column.order}` : 'fa-long-arrow-down']"></i>
+          </span>
+        </template>
+      </vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -80,7 +87,14 @@ export default {
               </span>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="time" title="Time"></vxe-table-column>
+          <vxe-table-column field="amount" title="Amount" formatter="commafy" sortable>
+            <template v-slot:header="{ column }">
+              <span>{{ column.title }}</span>
+              <span class="custom-sort" :class="{'is-order': column.order}">
+                <i class="fa" :class="[column.order ? \`fa-sort-amount-\${column.order}\` : 'fa-long-arrow-down']"></i>
+              </span>
+            </template>
+          </vxe-table-column>
         </vxe-table>
         `,
         `

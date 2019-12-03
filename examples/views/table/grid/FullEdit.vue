@@ -322,12 +322,11 @@ export default {
             this.findSexList()
           },
           methods: {
-            findSexList () {
-              return this.$ajax.getJSON('/api/conf/sex/list').then(data => {
-                // 异步更新下拉选项
-                let column = this.$refs.xGrid.getColumnByField('sex')
-                column.editRender.options = data
-              })
+            async findSexList () {
+              const sexList = await this.$ajax.getJSON('/api/conf/sex/list')
+              // 异步更新下拉选项
+              let column = this.$refs.xGrid.getColumnByField('sex')
+              column.editRender.options = sexList
             },
             checkColumnMethod ({ column }) {
               if (['nickname', 'role'].includes(column.property)) {
@@ -350,12 +349,11 @@ export default {
     })
   },
   methods: {
-    findSexList () {
-      return this.$ajax.getJSON('/api/conf/sex/list').then(data => {
-        // 异步更新下拉选项
-        let column = this.$refs.xGrid.getColumnByField('sex')
-        column.editRender.options = data
-      })
+    async findSexList () {
+      const sexList = await this.$ajax.getJSON('/api/conf/sex/list')
+      // 异步更新下拉选项
+      let column = this.$refs.xGrid.getColumnByField('sex')
+      column.editRender.options = sexList
     },
     checkColumnMethod ({ column }) {
       if (['nickname', 'role'].includes(column.property)) {

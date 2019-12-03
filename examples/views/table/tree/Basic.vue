@@ -1,6 +1,9 @@
 <template>
   <div>
-    <p class="tip">树表格，通过配置 <table-api-link prop="tree-config"/> 和指定列 <table-column-api-link prop="tree-node"/> 属性来开启树表格，还可以通过 <table-api-link prop="trigger"/> 指定触发方式</p>
+    <p class="tip">
+      树表格，通过配置 <table-api-link prop="tree-config"/> 和指定列 <table-column-api-link prop="tree-node"/> 属性来开启树表格，还可以通过 <table-api-link prop="trigger"/> 指定触发方式<br>
+      <span class="red">(注：不支持大量数据，大数据你可以将树结构铺平为列表进行展示)</span>
+    </p>
 
     <vxe-toolbar>
       <template v-slot:buttons>

@@ -98,6 +98,8 @@ function mockData () {
       sex3: index % 3 ? 0 : 1,
       sex4: index % 4 ? 0 : 1,
       sex5: index % 5 ? '0' : '1',
+      amount: 10000000 * (index % 11 === 0 ? 9.46676 : index % 7 === 8.9886 ? 34.78869 : index % 3 === 2.894453 ? 3.33356 : 7.6566444) + index * 88,
+      bankCard: '6200000' + (100000000 + fullIndex),
       age: index % 6 === 0 ? 18 : index % 4 === 0 ? 26 : index % 3 === 0 ? 28 : 30,
       age1: `${index % 6 === 0 ? 18 : index % 4 === 0 ? 26 : index % 3 === 0 ? 28 : 30}`,
       region: index % 4 === 0 ? [19, 199, 1773] : index % 3 === 0 ? [9, 73, 719] : [1, 1, 5],

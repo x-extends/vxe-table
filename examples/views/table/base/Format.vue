@@ -28,11 +28,13 @@
       border
       :data="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
-      <vxe-table-column field="date" title="转日期" formatter="toDateString"></vxe-table-column>
-      <vxe-table-column field="time" title="转日期格式" :formatter="['toDateString', 'yyyy-MM-dd']"></vxe-table-column>
+      <vxe-table-column field="date" title="转日期" width="180" formatter="toDateString"></vxe-table-column>
+      <vxe-table-column field="time" title="转日期格式" width="140" :formatter="['toDateString', 'yyyy-MM-dd']"></vxe-table-column>
+      <vxe-table-column field="amount" title="格式化金额" formatter="commafy"></vxe-table-column>
+      <vxe-table-column field="bankCard" title="银行卡" width="180" :formatter="['commafy', {spaceNumber: 4, separator: ' '}]"></vxe-table-column>
       <vxe-table-column field="num" title="转整数" formatter="toInteger"></vxe-table-column>
       <vxe-table-column field="num" title="截取两位小数" :formatter="['toFixedString', 2]"></vxe-table-column>
-      <vxe-table-column field="sex" title="格式化性别" formatter="toSex"></vxe-table-column>
+      <vxe-table-column field="sex" title="格式化性别" :formatter="['formatSelect', sexList]"></vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -46,11 +48,13 @@
 
 <script>
 import hljs from 'highlight.js'
-import XEUtils from 'xe-utils'
+import XEUtils from 'xe-utils/methods/xe-utils'
 
 XEUtils.mixin({
-  toSex (cellValue) {
-    return cellValue === '1' ? '男' : cellValue === '0' ? '女' : ''
+  // 自定义全局的格式化处理函数
+  formatSelect (cellValue, list) {
+    let item = list.find(item => item.value === cellValue)
+    return item ? item.label : ''
   }
 })
 
@@ -58,6 +62,16 @@ export default {
   data () {
     return {
       tableData: [],
+      sexList: [
+        {
+          label: '女',
+          value: '0'
+        },
+        {
+          label: '男',
+          value: '1'
+        }
+      ],
       demoCodes: [
         `
         <vxe-table
@@ -74,7 +88,17 @@ export default {
         export default {
           data () {
             return {
-              tableData: []
+              tableData: [],
+              sexList: [
+                {
+                  label: '女',
+                  value: '0'
+                },
+                {
+                  label: '男',
+                  value: '1'
+                }
+              ]
             }
           },
           created () {
@@ -82,10 +106,11 @@ export default {
           },
           methods: {
             formatterSex ({ cellValue }) {
-              return cellValue === '1' ? '男' : cellValue === '0' ? '女' : ''
+              let item = this.sexList.find(item => item.value === cellValue)
+              return item ? item.label : ''
             },
             formatTime ({ cellValue, row, column }) {
-              return XEUtils.toDateString(cellValue, 'yyyy-MM-dd HH:ss:mm')
+              return this.$utils.toDateString(cellValue, 'yyyy-MM-dd HH:ss:mm')
             }
           }
         }
@@ -95,24 +120,38 @@ export default {
           border
           :data="tableData">
           <vxe-table-column type="index" width="60"></vxe-table-column>
-          <vxe-table-column field="date" title="转日期" formatter="toDateString"></vxe-table-column>
-          <vxe-table-column field="time" title="转日期格式" :formatter="['toDateString', 'yyyy-MM-dd']"></vxe-table-column>
+          <vxe-table-column field="date" title="转日期" width="180" formatter="toDateString"></vxe-table-column>
+          <vxe-table-column field="time" title="转日期格式" width="140" :formatter="['toDateString', 'yyyy-MM-dd']"></vxe-table-column>
+          <vxe-table-column field="amount" title="格式化金额" formatter="commafy"></vxe-table-column>
+          <vxe-table-column field="bankCard" title="银行卡" width="180" :formatter="['commafy', {spaceNumber: 4, separator: ' '}]"></vxe-table-column>
           <vxe-table-column field="num" title="转整数" formatter="toInteger"></vxe-table-column>
           <vxe-table-column field="num" title="截取两位小数" :formatter="['toFixedString', 2]"></vxe-table-column>
-          <vxe-table-column field="sex" title="格式化性别" formatter="toSex"></vxe-table-column>
+          <vxe-table-column field="sex" title="格式化性别" :formatter="['formatSelect', sexList]"></vxe-table-column>
         </vxe-table>
         `,
         `
         XEUtils.mixin({
-          toSex (cellValue) {
-            return cellValue === '1' ? '男' : cellValue === '0' ? '女' : ''
+          // 自定义全局的格式化处理函数
+          formatSelect (cellValue, list) {
+            let item = list.find(item => item.value === cellValue)
+            return item ? item.label : ''
           }
         })
 
         export default {
           data () {
             return {
-              tableData: []
+              tableData: [],
+              sexList: [
+                {
+                  label: '女',
+                  value: '0'
+                },
+                {
+                  label: '男',
+                  value: '1'
+                }
+              ]
             }
           },
           created () {
@@ -133,10 +172,11 @@ export default {
   },
   methods: {
     formatterSex ({ cellValue }) {
-      return cellValue === '1' ? '男' : cellValue === '0' ? '女' : ''
+      let item = this.sexList.find(item => item.value === cellValue)
+      return item ? item.label : ''
     },
     formatTime ({ cellValue, row, column }) {
-      return XEUtils.toDateString(cellValue, 'yyyy-MM-dd HH:ss:mm')
+      return this.$utils.toDateString(cellValue, 'yyyy-MM-dd HH:ss:mm')
     }
   }
 }

@@ -1060,18 +1060,21 @@ export default {
             },
             {
               label: 'app.aside.nav.autoClear',
+              demoUrl: 'https://jsrun.pro/LcWKp',
               locat: {
                 name: 'TableAutoClearManual'
               }
             },
             {
               label: 'app.aside.nav.insert',
+              demoUrl: 'https://jsrun.pro/vcWKp',
               locat: {
                 name: 'TableEditInsert'
               }
             },
             {
               label: 'app.aside.nav.delete',
+              demoUrl: 'https://jsrun.pro/6cWKp',
               locat: {
                 name: 'TableEditRemove'
               }
@@ -1102,12 +1105,14 @@ export default {
             },
             {
               label: 'app.aside.nav.cellValid',
+              demoUrl: 'https://jsrun.pro/IcWKp',
               locat: {
                 name: 'TableEditCellValid'
               }
             },
             {
               label: 'app.aside.nav.rowValid',
+              demoUrl: 'https://jsrun.pro/wcWKp',
               locat: {
                 name: 'TableEditRowValid'
               }
