@@ -63,6 +63,7 @@ const TableMenu = () => import(/* webpackChunkName: "advanced" */ './views/table
 const TableMenuPrivilege = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/MenuPrivilege.vue')
 const TableExpand = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Expand.vue')
 const TableExpandIcon = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/ExpandIcon.vue')
+const TableExpandAccordion = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/ExpandAccordion.vue')
 const TableSearch = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Search.vue')
 const Toolbar = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Toolbar.vue')
 const TableCustom = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Custom.vue')
@@ -104,6 +105,7 @@ const GridFullEdit = () => import(/* webpackChunkName: "grid" */ './views/table/
 const TableTreeBasic = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Basic.vue')
 const TableTreeNormal = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Normal.vue')
 const TableTreeIcon = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Icon.vue')
+const TableTreeAccordion = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Accordion.vue')
 const TableTreeSelection = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Selection.vue')
 const TableTreeRadio = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Radio.vue')
 const TableTreeFixed = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Fixed.vue')
@@ -544,6 +546,11 @@ export default new Router({
       component: TableExpandIcon
     },
     {
+      path: '/table/advanced/expandAccordion',
+      name: 'TableExpandAccordion',
+      component: TableExpandAccordion
+    },
+    {
       path: '/table/advanced/search',
       name: 'TableSearch',
       component: TableSearch
@@ -623,6 +630,11 @@ export default new Router({
       path: '/table/tree/treeIcon',
       name: 'TableTreeIcon',
       component: TableTreeIcon
+    },
+    {
+      path: '/table/tree/accordion',
+      name: 'TableTreeAccordion',
+      component: TableTreeAccordion
     },
     {
       path: '/table/tree/selection',

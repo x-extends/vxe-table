@@ -428,6 +428,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.accordion',
+              locat: {
+                name: 'TableExpandAccordion'
+              }
+            },
+            {
               label: 'app.aside.nav.toolbar',
               locat: {
                 name: 'Toolbar'
@@ -672,6 +678,12 @@ export default {
               demoUrl: 'https://jsrun.pro/kfWKp/edit',
               locat: {
                 name: 'TableTreeRadio'
+              }
+            },
+            {
+              label: 'app.aside.nav.accordion',
+              locat: {
+                name: 'TableTreeAccordion'
               }
             },
             {
