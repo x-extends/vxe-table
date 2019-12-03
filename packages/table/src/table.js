@@ -3737,7 +3737,7 @@ export default {
      * 切换展开行
      */
     toggleRowExpansion (row) {
-      return this.setRowExpansion(row)
+      return this.setRowExpansion(row, this.rowExpandeds.indexOf(row) === -1)
     },
     /**
      * 处理默认展开行
@@ -3768,29 +3768,26 @@ export default {
      */
     setRowExpansion (rows, expanded) {
       let { rowExpandeds, expandConfig = {} } = this
-      let isToggle = arguments.length === 1
       if (rows) {
         if (!XEUtils.isArray(rows)) {
           rows = [rows]
         }
         if (expandConfig.accordion) {
           // 只能同时展开一个
-          rowExpandeds.length = 0
+          rowExpandeds = []
           rows = rows.slice(rows.length - 1, rows.length)
         }
-        rows.forEach(row => {
-          let index = rowExpandeds.indexOf(row)
-          if (index > -1) {
-            if (isToggle || !expanded) {
-              rowExpandeds.splice(index, 1)
-            }
-          } else {
-            if (isToggle || expanded) {
+        if (expanded) {
+          rows.forEach(row => {
+            if (rowExpandeds.indexOf(row) === -1) {
               rowExpandeds.push(row)
             }
-          }
-        })
+          })
+        } else {
+          XEUtils.remove(rowExpandeds, row => rows.indexOf(row) > -1)
+        }
       }
+      this.rowExpandeds = rowExpandeds
       return this.$nextTick().then(this.recalculate)
     },
     // 在 v3.0 中废弃 hasRowExpand
@@ -3840,7 +3837,7 @@ export default {
      * 切换/展开树节点
      */
     toggleTreeExpansion (row) {
-      return this.setTreeExpansion(row)
+      return this.setTreeExpansion(row, this.treeExpandeds.indexOf(row) === -1)
     },
     /**
      * 处理默认展开树节点
@@ -3895,34 +3892,28 @@ export default {
     setTreeExpansion (rows, expanded) {
       let { tableFullData, treeExpandeds, treeConfig } = this
       let { children } = treeConfig
-      let isToggle = arguments.length === 1
       if (rows) {
         if (!XEUtils.isArray(rows)) {
           rows = [rows]
         }
-        if (treeConfig.accordion) {
-          rows = rows.slice(rows.length - 1, rows.length)
-        }
-        rows.forEach(row => {
-          let rowChildren = row[children]
-          if (rowChildren && rowChildren.length) {
-            let index = treeExpandeds.indexOf(row)
-            if (treeConfig.accordion) {
-              // 同一级只能展开一个
-              let matchObj = XEUtils.findTree(tableFullData, item => item === row, treeConfig)
-              XEUtils.remove(treeExpandeds, item => matchObj.items.indexOf(item) > -1)
-            }
-            if (index > -1) {
-              if (isToggle || !expanded) {
-                treeExpandeds.splice(index, 1)
-              }
-            } else {
-              if (isToggle || expanded) {
+        if (rows.length) {
+          if (treeConfig.accordion) {
+            rows = rows.slice(rows.length - 1, rows.length)
+            // 同一级只能展开一个
+            let matchObj = XEUtils.findTree(tableFullData, item => item === rows[0], treeConfig)
+            XEUtils.remove(treeExpandeds, item => matchObj.items.indexOf(item) > -1)
+          }
+          if (expanded) {
+            rows.forEach(row => {
+              let rowChildren = row[children]
+              if (rowChildren && rowChildren.length && treeExpandeds.indexOf(row) === -1) {
                 treeExpandeds.push(row)
               }
-            }
+            })
+          } else {
+            XEUtils.remove(treeExpandeds, row => rows.indexOf(row) > -1)
           }
-        })
+        }
       }
       return this.$nextTick().then(this.recalculate)
     },

@@ -59,6 +59,7 @@ module.exports = {
         footerImmediately: '表尾合计 + 实时更新',
         expandRow: '展开行',
         expandRowIcon: '展开行 + 自定义图标',
+        accordion: '手风琴展开效果',
         toolbar: '工具栏',
         customs: '显示/隐藏列',
         customStorage: '显示/隐藏列 + localStorage',
