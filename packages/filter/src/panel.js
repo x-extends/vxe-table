@@ -39,7 +39,10 @@ export default {
         h('li', {
           class: ['vxe-table--filter-option', {
             'is--active': !filterStore.options.some(item => item.checked)
-          }]
+          }],
+          attrs: {
+            title: GlobalConfig.i18n('vxe.table.allFilter')
+          }
         }, [
           multiple
             ? h('label', {
@@ -80,6 +83,9 @@ export default {
             class: ['vxe-table--filter-option', {
               'is--active': item.checked
             }],
+            attrs: {
+              title: item.label
+            },
             key: index
           }, [
             multiple
