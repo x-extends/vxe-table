@@ -466,9 +466,9 @@ export default new Router({
       component: TableSortIcon
     },
     {
-      path: '/table/advanced/customSort',
-      name: 'TableCustomSort',
-      component: TableCustomSort
+      path: '/table/advanced/sortIcon',
+      name: 'TableSortIcon',
+      component: TableSortIcon
     },
     {
       path: '/table/advanced/customSort',

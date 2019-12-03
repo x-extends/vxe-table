@@ -166,7 +166,7 @@ export default {
     // 是否带有斑马纹
     stripe: { type: Boolean, default: () => GlobalConfig.stripe },
     // 是否带有纵向边框
-    border: { type: Boolean, default: () => GlobalConfig.border },
+    border: { type: [Boolean, String], default: () => GlobalConfig.border },
     // 表格的尺寸
     size: { type: String, default: () => GlobalConfig.size },
     // 列的宽度是否自撑开
@@ -755,6 +755,7 @@ export default {
       isLoading,
       showHeader,
       height,
+      border,
       treeConfig,
       mouseConfig,
       vSize,
@@ -775,7 +776,7 @@ export default {
     } = this
     let { leftList, rightList } = columnStore
     return h('div', {
-      class: ['vxe-table', this.vSize ? `size--${this.vSize}` : '', {
+      class: ['vxe-table', this.vSize ? `size--${this.vSize}` : '', border && XEUtils.isString(border) ? `b--style-${border}` : '', {
         'vxe-editable': this.editConfig,
         'show--head': this.showHeader,
         'show--foot': this.showFooter,
@@ -785,7 +786,7 @@ export default {
         'fixed--right': rightList.length,
         't--animat': this.optimizeOpts.animat,
         't--stripe': this.stripe,
-        't--border': this.border,
+        't--border': border,
         't--selected': mouseConfig && mouseConfig.selected,
         't--checked': mouseConfig && mouseConfig.checked,
         'row--highlight': this.highlightHoverRow,
