@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">带边框的表格，通过设置 <table-api-link prop="border"/> 参数</p>
+    <p class="tip">通过设置 <table-api-link prop="border"/>=none 去掉外部边框</p>
 
     <vxe-table
       border="none"
@@ -19,7 +19,7 @@
       <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
 
-    <p class="tip">通过设置 <table-api-link prop="border"/>=none 去掉外部边框</p>
+    <p class="tip">通过设置 <table-api-link prop="border"/>=false 只显示外边框</p>
 
     <vxe-table
       :data="tableData">
