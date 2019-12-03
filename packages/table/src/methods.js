@@ -2164,22 +2164,24 @@ const Methods = {
   sort (field, order) {
     let { visibleColumn, tableFullColumn, remoteSort, sortConfig = {} } = this
     let column = XEUtils.find(visibleColumn, item => item.property === field)
-    let isRemote = XEUtils.isBoolean(column.remoteSort) ? column.remoteSort : (sortConfig.remote || remoteSort)
-    if (column.sortable || column.remoteSort) {
-      if (!order) {
-        order = column.order === 'desc' ? 'asc' : 'desc'
-      }
-      if (column.order !== order) {
-        tableFullColumn.forEach(column => {
-          column.order = null
-        })
-        column.order = order
-        // 如果是服务端排序，则跳过本地排序处理
-        if (!isRemote) {
-          this.handleTableData(true)
+    if (column) {
+      let isRemote = XEUtils.isBoolean(column.remoteSort) ? column.remoteSort : (sortConfig.remote || remoteSort)
+      if (column.sortable || column.remoteSort) {
+        if (!order) {
+          order = column.order === 'desc' ? 'asc' : 'desc'
         }
+        if (column.order !== order) {
+          tableFullColumn.forEach(column => {
+            column.order = null
+          })
+          column.order = order
+          // 如果是服务端排序，则跳过本地排序处理
+          if (!isRemote) {
+            this.handleTableData(true)
+          }
+        }
+        return this.$nextTick().then(this.updateStyle)
       }
-      return this.$nextTick().then(this.updateStyle)
     }
     return this.$nextTick()
   },
