@@ -270,7 +270,7 @@ module.exports = {
           syncResize: 'Synchronization a property in response (may be used in scenarios where a property controls the show/hide switch)',
           autoResize: 'Parent element responsive listening (for scenarios where the parent may be dynamically changing)',
           stripe: 'Whether with zebra stripes(note that in the editable table scenario, the temporarily inserted data will not have a zebra-like pattern)',
-          border: 'Whether there is a vertical border',
+          border: 'Whether there is a border (if true, horizontal border, vertical border and external border are displayed; if false, horizontal border and external border are displayed; if "none", horizontal border is displayed)',
           size: 'Table size',
           fit: 'Whether the width of all columns is self-supporting',
           loading: 'Whether the table is loaded',
