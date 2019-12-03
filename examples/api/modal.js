@@ -299,7 +299,7 @@ const apis = [
       },
       {
         name: 'show',
-        desc: '在窗口打开时会触发该事件',
+        desc: '在窗口显示时会触发该事件',
         version: '',
         type: '{type}',
         enum: '',

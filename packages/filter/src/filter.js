@@ -46,7 +46,10 @@ export default {
               class: ['vxe-checkbox', {
                 [`size--${vSize}`]: vSize,
                 'is--indeterminate': filterStore.isIndeterminate
-              }]
+              }],
+              attrs: {
+                title: GlobalConfig.i18n('vxe.table.allFilter')
+              }
             }, [
               h('input', {
                 attrs: {
@@ -82,6 +85,9 @@ export default {
             class: ['vxe-table--filter-option', {
               'is--active': item.checked
             }],
+            attrs: {
+              title: item.label
+            },
             key: index
           }, [
             multiple

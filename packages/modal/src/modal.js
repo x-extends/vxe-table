@@ -270,6 +270,7 @@ export default {
         this.visible = true
         this.contentVisible = false
         this.updateZindex()
+        this.$emit('activated', params)
         setTimeout(() => {
           this.contentVisible = true
           this.$nextTick(() => {
@@ -327,20 +328,23 @@ export default {
     },
     close (type) {
       let { events = {}, visible, isMsg } = this
+      let params = { type, $modal: this }
       if (visible) {
         if (isMsg) {
           this.removeMsgQueue()
         }
         this.contentVisible = false
+        if (events.hide) {
+          events.hide.call(this, params)
+        } else {
+          this.$emit('hide', params)
+        }
         setTimeout(() => {
           this.visible = false
-          let params = { type, $modal: this }
-          if (events.hide) {
-            events.hide.call(this, params)
-          } else {
+          if (!events.hide) {
             this.$emit('input', false)
-            this.$emit('hide', params)
           }
+          this.$emit('deactivated', params)
         }, 200)
       }
     },

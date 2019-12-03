@@ -53,8 +53,9 @@
       show-overflow
       highlight-hover-row
       ref="xTree3"
+      border="none"
       :show-header="false"
-      :data="tableData"
+      :data="tableData3"
       :checkbox-config="{labelField: 'name'}"
       :tree-config="{children: 'children', line: true, iconOpen: 'fa fa-minus-square-o', iconClose: 'fa fa-plus-square-o'}">
       <vxe-table-column type="checkbox" tree-node>
@@ -71,10 +72,10 @@
         </template>
       </vxe-table-column>
       <vxe-table-column title="操作" width="140">
-        <template>
+        <template v-slot="{ row }">
           <vxe-button type="text" icon="fa fa-eye"></vxe-button>
           <vxe-button type="text" icon="fa fa-edit"></vxe-button>
-          <vxe-button type="text" icon="fa fa-trash-o"></vxe-button>
+          <vxe-button type="text" icon="fa fa-trash-o" @click="removeRowEvent(row)"></vxe-button>
           <vxe-button type="text" icon="fa fa-id-card-o"></vxe-button>
         </template>
       </vxe-table-column>
@@ -97,6 +98,7 @@ export default {
   data () {
     return {
       tableData: [],
+      tableData3: [],
       demoCodes: [
         `
         <vxe-toolbar>
@@ -167,7 +169,8 @@ export default {
         <vxe-table
           show-overflow
           highlight-hover-row
-          ref="xTree"
+          ref="xTree3"
+          border="none"
           :show-header="false"
           :data="tableData"
           :checkbox-config="{labelField: 'name'}"
@@ -176,7 +179,7 @@ export default {
             <template v-slot="{ row }">
               <span>
                 <template v-if="row.children && row.children.length">
-                  <i class="tree-node-icon fa" :class="$refs.xTree.isTreeExpandByRow(row) ? 'fa-folder-open-o' : 'fa-folder-o'"></i>
+                  <i class="tree-node-icon fa" :class="$refs.xTree3.isTreeExpandByRow(row) ? 'fa-folder-open-o' : 'fa-folder-o'"></i>
                 </template>
                 <template v-else>
                   <i class="tree-node-icon fa fa-file-o"></i>
@@ -186,10 +189,10 @@ export default {
             </template>
           </vxe-table-column>
           <vxe-table-column title="操作" width="140">
-            <template>
+            <template v-slot="{ row }">
               <vxe-button type="text" icon="fa fa-eye"></vxe-button>
               <vxe-button type="text" icon="fa fa-edit"></vxe-button>
-              <vxe-button type="text" icon="fa fa-trash-o"></vxe-button>
+              <vxe-button type="text" icon="fa fa-trash-o" @click="removeRowEvent(row)"></vxe-button>
               <vxe-button type="text" icon="fa fa-id-card-o"></vxe-button>
             </template>
           </vxe-table-column>
@@ -204,6 +207,19 @@ export default {
           },
           created () {
             this.tableData = window.MOCK_TREE_DATA_LIST.slice(0)
+          },
+          methods: {
+            removeRowEvent (row) {
+              this.$XModal.confirm('您确定要删除吗？').then(type => {
+                if (type === 'confirm') {
+                  let matchObj = this.$utils.findTree(this.tableData, item => item === row, this.treeConfig)
+                  if (matchObj) {
+                    // 从树节点中移除
+                    matchObj.items.splice(matchObj.index, 1)
+                  }
+                }
+              })
+            }
           }
         }
         `,
@@ -218,6 +234,7 @@ export default {
   },
   created () {
     this.tableData = this.$utils.clone(window.MOCK_TREE_DATA_LIST, true)
+    this.tableData3 = this.$utils.clone(window.MOCK_TREE_DATA_LIST, true)
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
@@ -225,6 +242,17 @@ export default {
     })
   },
   methods: {
+    removeRowEvent (row) {
+      this.$XModal.confirm('您确定要删除吗？').then(type => {
+        if (type === 'confirm') {
+          let matchObj = this.$utils.findTree(this.tableData3, item => item === row, this.treeConfig)
+          if (matchObj) {
+            // 从树节点中移除
+            matchObj.items.splice(matchObj.index, 1)
+          }
+        }
+      })
+    },
     getTreeRadioEvent () {
       let selectRow = this.$refs.xTree1.getRadioRow()
       this.$XModal.alert(selectRow ? selectRow.name : 'null')

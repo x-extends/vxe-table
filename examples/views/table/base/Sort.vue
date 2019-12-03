@@ -23,8 +23,8 @@
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
       <vxe-table-column field="nickname" title="Nickname" sortable></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-      <vxe-table-column field="age" title="Age"></vxe-table-column>
+      <vxe-table-column field="sex" title="Sex" sortable></vxe-table-column>
+      <vxe-table-column field="age" title="Age" sortable></vxe-table-column>
       <vxe-table-column field="time" title="Time" sortable></vxe-table-column>
     </vxe-table>
 
@@ -45,8 +45,8 @@
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
       <vxe-table-column field="nickname" title="Nickname" sortable></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-      <vxe-table-column field="age" title="Age"></vxe-table-column>
+      <vxe-table-column field="sex" title="Sex" sortable></vxe-table-column>
+      <vxe-table-column field="age" title="Age" sortable></vxe-table-column>
       <vxe-table-column field="time" title="Time" sortable :sort-by="['time', 'name']"></vxe-table-column>
     </vxe-table>
 
@@ -68,9 +68,9 @@
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable :sort-method="sortNameMethod"></vxe-table-column>
       <vxe-table-column field="nickname" title="Nickname" sortable></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-      <vxe-table-column field="age" title="Age"></vxe-table-column>
-      <vxe-table-column field="time" title="Time"></vxe-table-column>
+      <vxe-table-column field="sex" title="Sex" sortable></vxe-table-column>
+      <vxe-table-column field="age" title="Age" sortable></vxe-table-column>
+      <vxe-table-column field="time" title="Time" sortable></vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -133,8 +133,8 @@ export default {
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
           <vxe-table-column field="nickname" title="Nickname" sortable></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-          <vxe-table-column field="age" title="Age"></vxe-table-column>
+          <vxe-table-column field="sex" title="Sex" sortable></vxe-table-column>
+          <vxe-table-column field="age" title="Age" sortable></vxe-table-column>
           <vxe-table-column field="time" title="Time" sortable></vxe-table-column>
         </vxe-table>
         `,
@@ -159,8 +159,8 @@ export default {
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
           <vxe-table-column field="nickname" title="Nickname" sortable></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-          <vxe-table-column field="age" title="Age"></vxe-table-column>
+          <vxe-table-column field="sex" title="Sex" sortable></vxe-table-column>
+          <vxe-table-column field="age" title="Age" sortable></vxe-table-column>
           <vxe-table-column field="time" title="Time" sortable :sort-by="['time', 'name']"></vxe-table-column>
         </vxe-table>
         `,
@@ -186,9 +186,9 @@ export default {
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable :sort-method="sortNameMethod"></vxe-table-column>
           <vxe-table-column field="nickname" title="Nickname" sortable></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-          <vxe-table-column field="age" title="Age"></vxe-table-column>
-          <vxe-table-column field="time" title="Time"></vxe-table-column>
+          <vxe-table-column field="sex" title="Sex" sortable></vxe-table-column>
+          <vxe-table-column field="age" title="Age" sortable></vxe-table-column>
+          <vxe-table-column field="time" title="Time" sortable></vxe-table-column>
         </vxe-table>
         `,
         `
