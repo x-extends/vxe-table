@@ -19,6 +19,7 @@ const InterceptorAPI = () => import(/* webpackChunkName: "start" */ './views/tab
 
 const TableBasic = () => import(/* webpackChunkName: "base" */ './views/table/base/Basic.vue')
 const TableSize = () => import(/* webpackChunkName: "base" */ './views/table/base/Size.vue')
+const TableWidth = () => import(/* webpackChunkName: "base" */ './views/table/base/Width.vue')
 const TableOverflow = () => import(/* webpackChunkName: "base" */ './views/table/base/Overflow.vue')
 const TableStripe = () => import(/* webpackChunkName: "base" */ './views/table/base/Stripe.vue')
 const TableBorder = () => import(/* webpackChunkName: "base" */ './views/table/base/Border.vue')
@@ -329,6 +330,11 @@ export default new Router({
       path: '/table/base/size',
       name: 'TableSize',
       component: TableSize
+    },
+    {
+      path: '/table/base/width',
+      name: 'TableWidth',
+      component: TableWidth
     },
     {
       path: '/table/base/overflow',
