@@ -926,7 +926,7 @@ const Methods = {
        */
       let dynamicList = scaleList.concat(scaleMinList).concat(pxMinList).concat(autoList)
       let dynamicSize = dynamicList.length - 1
-      if (dynamicSize) {
+      if (dynamicSize > 0) {
         let odiffer = bodyWidth - tableWidth
         if (odiffer > 0) {
           while (odiffer > 0 && dynamicSize >= 0) {
