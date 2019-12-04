@@ -195,6 +195,9 @@
     }
     &.col--current {
       background-color: $vxe-table-column-current-background-color;
+      .vxe-tree--btn-wrapper {
+        background-color: $vxe-table-column-current-background-color;
+      }
     }
     &.col--center {
       text-align: center;
