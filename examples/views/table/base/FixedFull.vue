@@ -28,7 +28,7 @@
       <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
 
-    <p class="tip">固定列建议设置 show-overflow 或 show-overflow 该值，禁用自动换行，大幅提升渲染速度</p>
+    <p class="tip">固定列建议设置 <table-api-link prop="show-overflow"/> 该值，禁用自动换行，大幅提升渲染速度</p>
 
     <vxe-table
       border
@@ -55,9 +55,11 @@
         | Arrow Down ↓ | 匀速向下滚动数据 |
         | Arrow Left ← | 匀速向左滚动数据 |
         | Arrow Right → | 匀速向右滚动数据 |
+        | Page Up | 向上翻页滚动 |
+        | Page Down | 向下翻页滚动 |
         | Spacebar | 翻页滚动 |
-        | ctrl + Home | 滚动到顶部 |
-        | ctrl + End | 滚动到底部 |
+        | Home | 滚动到顶部 |
+        | End | 滚动到底部 |
       </code>
     </pre>
 
@@ -106,7 +108,7 @@ export default {
             }
           },
           created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 50)
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 20)
           }
         }
         `,
@@ -138,7 +140,7 @@ export default {
             }
           },
           created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 50)
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 20)
           }
         }
         `
@@ -146,7 +148,7 @@ export default {
     }
   },
   created () {
-    this.tableData = window.MOCK_DATA_LIST.slice(0, 50)
+    this.tableData = window.MOCK_DATA_LIST.slice(0, 20)
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {

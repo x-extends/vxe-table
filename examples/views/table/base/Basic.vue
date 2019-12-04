@@ -11,6 +11,7 @@
     </vxe-toolbar>
 
     <vxe-table
+      border="none"
       :align="allAlign"
       :data="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
@@ -67,6 +68,7 @@ export default {
         </vxe-toolbar>
 
         <vxe-table
+          border="none"
           :align="allAlign"
           :data="tableData">
           <vxe-table-column type="index" width="60"></vxe-table-column>

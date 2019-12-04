@@ -138,6 +138,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.width',
+              locat: {
+                name: 'TableWidth'
+              }
+            },
+            {
               label: 'app.aside.nav.ellipsis',
               locat: {
                 name: 'TableOverflow'
