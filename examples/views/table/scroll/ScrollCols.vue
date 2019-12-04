@@ -10,8 +10,9 @@
       border
       show-overflow
       show-header-overflow
+      toolbar
       ref="xGrid"
-      height="300"
+      height="500"
       :loading="loading"
       :checkbox-config="{checkField: 'checked', labelField: 'nickname'}">
       <template v-slot:buttons>
@@ -41,8 +42,9 @@ export default {
           border
           show-overflow
           show-header-overflow
+          toolbar
           ref="xGrid"
-          height="300"
+          height="500"
           :loading="loading"
           :checkbox-config="{checkField: 'checked', labelField: 'nickname'}">
           <template v-slot:buttons>
