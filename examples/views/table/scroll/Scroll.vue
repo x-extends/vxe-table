@@ -97,7 +97,9 @@ export default {
             }
           },
           created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 600)
+            this.$ajax.mockList(600).then(data => {
+              this.tableData = data
+            })
           }
         }
         `,
@@ -118,8 +120,8 @@ export default {
         `
         export default {
           created () {
-            this.$nextTick(() => {
-              this.$refs.xTable.reloadData(window.MOCK_DATA_LIST.slice(0, 1000))
+            this.$ajax.mockList(1000).then(data => {
+              this.$refs.xTable.reloadData(data)
             })
           }
         }
@@ -128,9 +130,11 @@ export default {
     }
   },
   created () {
-    this.tableData = window.MOCK_DATA_LIST.slice(0, 600)
-    this.$nextTick(() => {
-      this.$refs.xTable.reloadData(window.MOCK_DATA_LIST.slice(0, 1000))
+    this.$ajax.mockList(600).then(data => {
+      this.tableData = data
+    })
+    this.$ajax.mockList(1000).then(data => {
+      this.$refs.xTable.reloadData(data)
     })
   },
   mounted () {

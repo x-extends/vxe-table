@@ -13,12 +13,14 @@
       show-header-overflow
       highlight-hover-row
       highlight-current-row
-      toolbar
       ref="xGrid"
       height="600"
       :loading="loading"
+      :toolbar="{export: true}"
       :checkbox-config="{checkField: 'checked', labelField: 'nickname'}">
       <template v-slot:buttons>
+        <vxe-button @click="loadColumnAndData(10000, 30000)">加载1w列3w条</vxe-button>
+        <vxe-button @click="loadColumnAndData(10000, 60000)">加载1w列6w条</vxe-button>
         <vxe-button @click="loadColumnAndData(10000, 100000)">加载1w列10w条</vxe-button>
         <vxe-button @click="$refs.xGrid.toggleRowSelection($refs.xGrid.getData(1))">切换第二行选中</vxe-button>
         <vxe-button @click="$refs.xGrid.setSelection([$refs.xGrid.getData(2), $refs.xGrid.getData(3)], true)">设置第三、四行选中</vxe-button>
@@ -66,12 +68,14 @@ export default {
           show-header-overflow
           highlight-hover-row
           highlight-current-row
-          toolbar
           ref="xGrid"
           height="600"
           :loading="loading"
+          :toolbar="{export: true}"
           :checkbox-config="{checkField: 'checked', labelField: 'nickname'}">
           <template v-slot:buttons>
+            <vxe-button @click="loadColumnAndData(10000, 30000)">加载1w列3w条</vxe-button>
+            <vxe-button @click="loadColumnAndData(10000, 60000)">加载1w列6w条</vxe-button>
             <vxe-button @click="loadColumnAndData(10000, 100000)">加载1w列10w条</vxe-button>
             <vxe-button @click="$refs.xGrid.toggleRowSelection($refs.xGrid.getData(1))">切换第二行选中</vxe-button>
             <vxe-button @click="$refs.xGrid.setSelection([$refs.xGrid.getData(2), $refs.xGrid.getData(3)], true)">设置第三、四行选中</vxe-button>
@@ -102,25 +106,15 @@ export default {
               })
             },
             loadColumn (size) {
-              return new Promise(resolve => {
-                setTimeout(() => {
-                  // 使用函数式加载，阻断 vue 对大数组的双向绑定，大数据性能翻倍提升
-                  let tableColumn = window.MOCK_COLUMN_LIST.slice(0, size)
-                  this.$refs.xGrid.loadColumn(tableColumn).then(() => {
-                    resolve()
-                  })
-                }, 300)
+              return this.$ajax.mockColumns(size).then(columns => {
+                // 使用函数式加载，阻断 vue 对大数组的双向绑定
+                return this.$refs.xGrid.reloadColumn(columns)
               })
             },
             loadList (size) {
-              return new Promise(resolve => {
-                setTimeout(() => {
-                  // 使用函数式加载，阻断 vue 对大数组的双向绑定，大数据性能翻倍提升
-                  let tableData = window.MOCK_DATA_LIST.slice(0, size)
-                  this.$refs.xGrid.reloadData(tableData).then(() => {
-                    resolve()
-                  })
-                }, 300)
+              return this.$ajax.mockList(size).then(data => {
+                // 使用函数式加载，阻断 vue 对大数组的双向绑定
+                return this.$refs.xGrid.reloadData(data)
               })
             },
             getSelectEvent () {
@@ -152,25 +146,15 @@ export default {
       })
     },
     loadColumn (size) {
-      return new Promise(resolve => {
-        setTimeout(() => {
-          // 使用函数式加载，阻断 vue 对大数组的双向绑定，大数据性能翻倍提升
-          let tableColumn = window.MOCK_COLUMN_LIST.slice(0, size)
-          this.$refs.xGrid.loadColumn(tableColumn).then(() => {
-            resolve()
-          })
-        }, 300)
+      return this.$ajax.mockColumns(size).then(columns => {
+        // 使用函数式加载，阻断 vue 对大数组的双向绑定
+        return this.$refs.xGrid.reloadColumn(columns)
       })
     },
     loadList (size) {
-      return new Promise(resolve => {
-        setTimeout(() => {
-          // 使用函数式加载，阻断 vue 对大数组的双向绑定，大数据性能翻倍提升
-          let tableData = window.MOCK_DATA_LIST.slice(0, size)
-          this.$refs.xGrid.reloadData(tableData).then(() => {
-            resolve()
-          })
-        }, 300)
+      return this.$ajax.mockList(size).then(data => {
+        // 使用函数式加载，阻断 vue 对大数组的双向绑定
+        return this.$refs.xGrid.reloadData(data)
       })
     },
     getSelectEvent () {

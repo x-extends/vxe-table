@@ -10,7 +10,7 @@
             <vxe-button @click="insertEvent(null)">从第一行插入</vxe-button>
             <vxe-button @click="insertEvent(-1)">从最后插入</vxe-button>
             <vxe-button @click="insertEvent($refs.xTable.getData(100))">插入到 100 行</vxe-button>
-            <vxe-button @click="insertEvent($refs.xTable.getData(2000))">插入到 2000 行</vxe-button>
+            <vxe-button @click="insertEvent($refs.xTable.getData(400))">插入到 400 行</vxe-button>
           </template>
         </vxe-button>
         <vxe-button>
@@ -94,7 +94,7 @@ export default {
                 <vxe-button @click="insertEvent(null)">从第一行插入</vxe-button>
                 <vxe-button @click="insertEvent(-1)">从最后插入</vxe-button>
                 <vxe-button @click="insertEvent($refs.xTable.getData(100))">插入到 100 行</vxe-button>
-                <vxe-button @click="insertEvent($refs.xTable.getData(2000))">插入到 2000 行</vxe-button>
+                <vxe-button @click="insertEvent($refs.xTable.getData(400))">插入到 400 行</vxe-button>
               </template>
             </vxe-button>
             <vxe-button>
@@ -167,7 +167,7 @@ export default {
               this.loading = true
               return new Promise(resolve => {
                 setTimeout(() => {
-                  let tableData = window.MOCK_DATA_LIST.slice(0, 1000)
+                  let tableData = window.MOCK_DATA_LIST.slice(0, 600)
                   // 阻断 vue 对大数组的双向绑定，避免 vue 绑定大数据造成短暂的卡顿
                   if (this.$refs.xTable) {
                     this.$refs.xTable.loadData(tableData)
@@ -269,7 +269,7 @@ export default {
       this.loading = true
       return new Promise(resolve => {
         setTimeout(() => {
-          let tableData = window.MOCK_DATA_LIST.slice(0, 1000)
+          let tableData = window.MOCK_DATA_LIST.slice(0, 600)
           // 阻断 vue 对大数组的双向绑定，避免 vue 绑定大数据造成短暂的卡顿
           if (this.$refs.xTable) {
             this.$refs.xTable.loadData(tableData)

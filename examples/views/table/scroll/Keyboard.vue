@@ -10,7 +10,7 @@
             <vxe-button @click="insertEvent(null)">从第一行插入</vxe-button>
             <vxe-button @click="insertEvent(-1)">从最后插入</vxe-button>
             <vxe-button @click="insertEvent($refs.xTable.getData(100))">插入到 100 行</vxe-button>
-            <vxe-button @click="insertEvent($refs.xTable.getData(2000))">插入到 2000 行</vxe-button>
+            <vxe-button @click="insertEvent($refs.xTable.getData(400))">插入到 400 行</vxe-button>
           </template>
         </vxe-button>
         <vxe-button>
@@ -78,6 +78,7 @@
         | Arrow Right → | 移动到当前活动单元格右边的单元格 |
         | Tab | 移动到当前选中或活动单元格的右侧单元格，如果到最后一列且存在下一行，则从下一行开始移动 |
         | Tab + Shift | 移动到当前选中或活动单元格的左侧单元格，如果到第一列且存在上一行，则从上一行开始移动 |
+        | Spacebar | 如果单元格是复选框或单选框则切换勾选状态 |
         | Enter | 取消编辑并移动到当前活动单元格下面的单元格 |
         | Delete | 清空内容 |
         | Backspace | 清空内容并激活选中单元格为编辑状态 |
@@ -125,7 +126,7 @@ export default {
                 <vxe-button @click="insertEvent(null)">从第一行插入</vxe-button>
                 <vxe-button @click="insertEvent(-1)">从最后插入</vxe-button>
                 <vxe-button @click="insertEvent($refs.xTable.getData(100))">插入到 100 行</vxe-button>
-                <vxe-button @click="insertEvent($refs.xTable.getData(2000))">插入到 2000 行</vxe-button>
+                <vxe-button @click="insertEvent($refs.xTable.getData(400))">插入到 400 行</vxe-button>
               </template>
             </vxe-button>
             <vxe-button>
@@ -209,7 +210,7 @@ export default {
               this.loading = true
               return new Promise(resolve => {
                 setTimeout(() => {
-                  let tableData = window.MOCK_DATA_LIST.slice(0, 2000)
+                  let tableData = window.MOCK_DATA_LIST.slice(0, 600)
                   // 阻断 vue 对大数组的双向绑定，避免 vue 绑定大数据造成短暂的卡顿
                   if (this.$refs.xTable) {
                     this.$refs.xTable.loadData(tableData)
@@ -311,7 +312,7 @@ export default {
       this.loading = true
       return new Promise(resolve => {
         setTimeout(() => {
-          let tableData = window.MOCK_DATA_LIST.slice(0, 2000)
+          let tableData = window.MOCK_DATA_LIST.slice(0, 600)
           // 阻断 vue 对大数组的双向绑定，避免 vue 绑定大数据造成短暂的卡顿
           if (this.$refs.xTable) {
             this.$refs.xTable.loadData(tableData)
