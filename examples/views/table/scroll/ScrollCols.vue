@@ -10,9 +10,9 @@
       border
       show-overflow
       show-header-overflow
+      toolbar
       ref="xGrid"
       height="500"
-      :toolbar="{export: true}"
       :loading="loading"
       :checkbox-config="{checkField: 'checked', labelField: 'nickname'}">
       <template v-slot:buttons>
@@ -44,9 +44,9 @@ export default {
           border
           show-overflow
           show-header-overflow
+          toolbar
           ref="xGrid"
           height="500"
-          :toolbar="{export: true}"
           :loading="loading"
           :checkbox-config="{checkField: 'checked', labelField: 'nickname'}">
           <template v-slot:buttons>
@@ -78,13 +78,13 @@ export default {
             },
             loadColumn (size) {
               return this.$ajax.mockColumns(size).then(columns => {
-                // 使用函数式加载，阻断 vue 对大数组的双向绑定
+                // 使用函数式加载，阻断 vue 对大数组的监听
                 return this.$refs.xGrid.reloadColumn(columns)
               })
             },
             loadList (size) {
               return this.$ajax.mockList(size).then(data => {
-                // 使用函数式加载，阻断 vue 对大数组的双向绑定
+                // 使用函数式加载，阻断 vue 对大数组的监听
                 return this.$refs.xGrid.reloadData(data)
               })
             }
@@ -114,13 +114,13 @@ export default {
     },
     loadColumn (size) {
       return this.$ajax.mockColumns(size).then(columns => {
-        // 使用函数式加载，阻断 vue 对大数组的双向绑定
+        // 使用函数式加载，阻断 vue 对大数组的监听
         return this.$refs.xGrid.reloadColumn(columns)
       })
     },
     loadList (size) {
       return this.$ajax.mockList(size).then(data => {
-        // 使用函数式加载，阻断 vue 对大数组的双向绑定
+        // 使用函数式加载，阻断 vue 对大数组的监听
         return this.$refs.xGrid.reloadData(data)
       })
     }

@@ -4,7 +4,7 @@ import XEAjaxMock from 'xe-ajax-mock'
 XEAjaxMock.setup({
   template: true,
   pathVariable: 'auto',
-  timeout: '40-300',
+  timeout: '50-350',
   error: true,
   log: true
 })

@@ -211,7 +211,7 @@ export default {
               return new Promise(resolve => {
                 setTimeout(() => {
                   let tableData = window.MOCK_DATA_LIST.slice(0, 600)
-                  // 阻断 vue 对大数组的双向绑定，避免 vue 绑定大数据造成短暂的卡顿
+                  // 阻断 vue 对大数组的监听，避免 vue 绑定大数据造成短暂的卡顿
                   if (this.$refs.xTable) {
                     this.$refs.xTable.loadData(tableData)
                   }
@@ -313,7 +313,7 @@ export default {
       return new Promise(resolve => {
         setTimeout(() => {
           let tableData = window.MOCK_DATA_LIST.slice(0, 600)
-          // 阻断 vue 对大数组的双向绑定，避免 vue 绑定大数据造成短暂的卡顿
+          // 阻断 vue 对大数组的监听，避免 vue 绑定大数据造成短暂的卡顿
           if (this.$refs.xTable) {
             this.$refs.xTable.loadData(tableData)
           }

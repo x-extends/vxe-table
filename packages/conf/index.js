@@ -44,6 +44,7 @@ const GlobalConfig = {
     filterNone: 'vxe-icon--funnel',
     filterMatch: 'vxe-icon--funnel',
     edit: 'vxe-icon--edit-outline',
+    treeLoaded: 'vxe-icon--refresh roll',
     treeOpen: 'vxe-icon--caret-right rotate90',
     treeClose: 'vxe-icon--caret-right',
     expandOpen: 'vxe-icon--arrow-right rotate90',

@@ -1,83 +1,226 @@
 [
   {
-    "id": 100,
-    "parentId": null,
-    "name": "一级目录",
-    "size": null,
-    "type": "0",
-    "createTime": 1550923830095,
-    "updateTime": 1551923830095
+    "id": "10000",
+    "parentId": "",
+    "name": "文件夹 10000",
+    "size": "53k",
+    "type": "",
+    "date": "2019-05-16"
   },
   {
-    "id": 101,
-    "parentId": 100,
-    "name": "二级目录",
-    "size": null,
-    "type": "0",
-    "createTime": 1550923830095,
-    "updateTime": 1552923830095
+    "id": "11000",
+    "parentId": "10000",
+    "name": "某 11000.avi",
+    "size": "11k",
+    "type": "avi",
+    "date": "2019-05-16"
   },
   {
-    "id": 10100,
-    "parentId": 101,
-    "name": "文件10100.pdf",
-    "size": 218,
-    "type": "1",
-    "createTime": 1550923830095,
-    "updateTime": 1553924830095
+    "id": "12000",
+    "parentId": "10000",
+    "name": "文件夹 12000",
+    "size": "22k",
+    "type": "",
+    "date": "2019-05-16"
   },
   {
-    "id": 10101,
-    "parentId": 101,
-    "name": "文件10101.excel",
-    "size": 512,
-    "type": "1",
-    "createTime": 1550923830095,
-    "updateTime": 1550925830095
+    "id": "12100",
+    "parentId": "12000",
+    "name": "图片 12100.png",
+    "size": "60k",
+    "type": "",
+    "date": "2019-05-16"
   },
   {
-    "id": 102,
-    "parentId": 100,
-    "name": "文件102.word",
-    "size": 101024,
-    "type": "1",
-    "createTime": 1550923830095,
-    "updateTime": 1550963830095
+    "id": "12110",
+    "parentId": "12100",
+    "name": "某个页面 12110.html",
+    "size": "100k",
+    "type": "html",
+    "date": "2019-05-16"
   },
   {
-    "id": 200,
-    "parentId": null,
-    "name": "我的文件",
-    "size": null,
-    "type": "0",
-    "createTime": 1550923830095,
-    "updateTime": 1550983830095
+    "id": "122000",
+    "parentId": "12000",
+    "name": "xxx 122000.avi",
+    "size": "80k",
+    "type": "avi",
+    "date": "2019-05-16"
   },
   {
-    "id": 201,
-    "parentId": 200,
-    "name": "文件201.zip",
-    "size": 1024,
-    "type": "1",
-    "createTime": 1550923830095,
-    "updateTime": 1550927830095
+    "id": "123000",
+    "parentId": "12000",
+    "name": "文件 123000",
+    "size": "81k",
+    "type": "mp4",
+    "date": "2019-05-17"
   },
   {
-    "id": 202,
-    "parentId": 200,
-    "name": "文件202.text",
-    "size": 4096,
-    "type": "1",
-    "createTime": 1550923830095,
-    "updateTime": 1550926830095
+    "id": "123100",
+    "name": "xxx 123100.avi",
+    "size": "105k",
+    "type": "avi",
+    "date": "2019-05-16",
+    "parentId": "123000"
   },
   {
-    "id": 301,
-    "parentId": null,
-    "name": "文件301.zip",
-    "size": 4024,
-    "type": "1",
-    "createTime": 1550923830095,
-    "updateTime": 1550823830095
+    "id": "123200",
+    "name": "文件 123200",
+    "size": "105k",
+    "type": "avi",
+    "date": "2019-05-20",
+    "parentId": "123000"
+  },
+  {
+    "id": "20000",
+    "parentId": "",
+    "name": "图片 20000.png",
+    "size": "66k",
+    "type": "png",
+    "date": "2019-05-16"
+  },
+  {
+    "id": "30000",
+    "parentId": "",
+    "name": "文件夹 30000",
+    "size": "3k",
+    "type": "",
+    "date": "2019-05-16"
+  },
+  {
+    "id": "31000",
+    "name": "文件夹 31000",
+    "size": "9k",
+    "type": "",
+    "date": "2019-05-16",
+    "parentId": "30000"
+  },
+  {
+    "id": "31100",
+    "name": "从入门到放弃 31100.js",
+    "size": "40k",
+    "type": "js",
+    "date": "2019-05-16",
+    "parentId": "31000"
+  },
+  {
+    "id": "31200",
+    "name": "文件 31200",
+    "size": "224k",
+    "type": "java",
+    "date": "2019-05-16",
+    "parentId": "31000"
+  },
+  {
+    "id": "32000",
+    "name": "文件夹 32000",
+    "size": "33k",
+    "type": "",
+    "date": "2019-05-16",
+    "parentId": "30000"
+  },
+  {
+    "id": "32100",
+    "name": "入门教程 32100.mp4",
+    "size": "35k",
+    "type": "mp4",
+    "date": "2019-05-16",
+    "parentId": "32000"
+  },
+  {
+    "id": "32200",
+    "name": "文件夹 32000",
+    "size": "33k",
+    "type": "",
+    "date": "2019-08-16",
+    "parentId": "32000"
+  },
+  {
+    "id": "32210",
+    "name": "vxe-table 从入门到住院 32210.pdf",
+    "size": "75k",
+    "type": "pdf",
+    "date": "2019-06-16",
+    "parentId": "32200"
+  },
+  {
+    "id": "32220",
+    "name": "文件夹 32220",
+    "size": "33k",
+    "type": "",
+    "date": "2019-08-31",
+    "parentId": "32200"
+  },
+  {
+    "id": "32221",
+    "name": "vxe-table 从入门到放弃 32221.pdf",
+    "size": "85k",
+    "type": "pdf",
+    "date": "2019-06-30",
+    "parentId": "32220"
+  },
+  {
+    "id": "32300",
+    "name": "文件夹 32300",
+    "size": "678k",
+    "type": "",
+    "date": "2019-01-10",
+    "parentId": "32000"
+  },
+  {
+    "id": "32310",
+    "name": "某视频 32310.mp4",
+    "size": "75k",
+    "type": "mp4",
+    "date": "2019-06-16",
+    "parentId": "32300"
+  },
+  {
+    "id": "32320",
+    "name": "文件夹 32320",
+    "size": "88k",
+    "type": "",
+    "date": "2019-08-31",
+    "parentId": "32300"
+  },
+  {
+    "id": "32321",
+    "name": "音乐 32321.mp3",
+    "size": "5k",
+    "type": "mp3",
+    "date": "2019-06-06",
+    "parentId": "32320"
+  },
+  {
+    "id": "32322",
+    "name": "在线观看 32322.avi",
+    "size": "5k",
+    "type": "avi",
+    "date": "2019-09-09",
+    "parentId": "32320"
+  },
+  {
+    "id": "33000",
+    "name": "在线文档 33000.txt",
+    "size": "95k",
+    "type": "txt",
+    "date": "2019-06-16",
+    "parentId": "30000"
+  },
+  {
+    "id": "40000",
+    "parentId": "",
+    "name": "文件夹 40000",
+    "size": "26k",
+    "type": "mp4",
+    "date": "2019-03-16"
+  },
+  {
+    "id": "41000",
+    "parentId": "40000",
+    "name": "xxx 41000.mp4",
+    "size": "135k",
+    "type": "mp4",
+    "date": "2019-06-02"
   }
 ]

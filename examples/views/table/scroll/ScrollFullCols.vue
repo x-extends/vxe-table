@@ -13,10 +13,10 @@
       show-header-overflow
       highlight-hover-row
       highlight-current-row
+      toolbar
       ref="xGrid"
       height="600"
       :loading="loading"
-      :toolbar="{export: true}"
       :checkbox-config="{checkField: 'checked', labelField: 'nickname'}">
       <template v-slot:buttons>
         <vxe-button @click="loadColumnAndData(10000, 30000)">加载1w列3w条</vxe-button>
@@ -68,10 +68,10 @@ export default {
           show-header-overflow
           highlight-hover-row
           highlight-current-row
+          toolbar
           ref="xGrid"
           height="600"
           :loading="loading"
-          :toolbar="{export: true}"
           :checkbox-config="{checkField: 'checked', labelField: 'nickname'}">
           <template v-slot:buttons>
             <vxe-button @click="loadColumnAndData(10000, 30000)">加载1w列3w条</vxe-button>
