@@ -772,7 +772,6 @@ export default {
             },
             {
               label: 'app.aside.nav.lazy',
-              disabled: true,
               locat: {
                 name: 'TableTreeLazy'
               }

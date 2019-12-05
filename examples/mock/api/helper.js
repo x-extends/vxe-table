@@ -47,7 +47,7 @@ class Helper {
       let sortProp = sort
       let orderPrpo = order
       if (params) {
-        let filterProps = XEUtils.keys(params).filter(key => !['sort', 'order'].includes(key) && params[key])
+        let filterProps = XEUtils.keys(params).filter(key => !['sort', 'order', parentKey, key].includes(key) && params[key])
         if (filterProps) {
           rest = rest.filter(data => filterProps.every(key => '' + data[key] === '' + params[key]))
         }
@@ -58,10 +58,16 @@ class Helper {
           sortProp = params.sort.split(',')
         }
       }
-      rest = XEUtils.toArrayTree(list, { key, parentKey, sortKey: sortProp })
-      if (params && params[key]) {
-        let matchObj = XEUtils.findTree(rest, item => '' + item[key] === '' + params[key], { key, parentKey })
-        rest = matchObj ? matchObj.item.children : []
+      rest = XEUtils.toArrayTree(rest, { key, parentKey, sortKey: sortProp })
+      if (params) {
+        if (params[key]) {
+          let matchObj = XEUtils.findTree(rest, item => '' + item[key] === '' + params[key], { key, parentKey })
+          rest = matchObj ? matchObj.item.children : []
+        }
+        if (params[parentKey]) {
+          let matchObj = XEUtils.findTree(rest, item => '' + item[key] === '' + params[parentKey], { key, parentKey })
+          rest = matchObj ? matchObj.item.children : []
+        }
       }
       rest = rest.map(item => {
         if (item.children && item.children.length) {

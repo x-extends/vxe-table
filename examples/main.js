@@ -100,6 +100,7 @@ function mockData () {
 window.MOCK_TREE_DATA_LIST = [
   {
     id: '10000',
+    parentId: '',
     name: '文件夹 10000',
     size: '53k',
     type: '',
@@ -107,6 +108,7 @@ window.MOCK_TREE_DATA_LIST = [
     children: [
       {
         id: '11000',
+        parentId: '10000',
         name: '某 11000.avi',
         size: '11k',
         type: 'avi',
@@ -114,6 +116,7 @@ window.MOCK_TREE_DATA_LIST = [
       },
       {
         id: '12000',
+        parentId: '10000',
         name: '文件夹 12000',
         size: '22k',
         type: '',
@@ -121,6 +124,7 @@ window.MOCK_TREE_DATA_LIST = [
         children: [
           {
             id: '12100',
+            parentId: '12000',
             name: '图片 12100.png',
             size: '60k',
             type: '',
@@ -128,6 +132,7 @@ window.MOCK_TREE_DATA_LIST = [
             children: [
               {
                 id: '12110',
+                parentId: '12100',
                 name: '某个页面 12110.html',
                 size: '100k',
                 type: 'html',
@@ -137,6 +142,7 @@ window.MOCK_TREE_DATA_LIST = [
           },
           {
             id: '122000',
+            parentId: '12000',
             name: 'xxx 122000.avi',
             size: '80k',
             type: 'avi',
@@ -144,6 +150,7 @@ window.MOCK_TREE_DATA_LIST = [
           },
           {
             id: '123000',
+            parentId: '12000',
             name: '文件 123000',
             size: '81k',
             type: 'mp4',
@@ -171,6 +178,7 @@ window.MOCK_TREE_DATA_LIST = [
   },
   {
     id: '20000',
+    parentId: '',
     name: '图片 20000.png',
     size: '66k',
     type: 'png',
@@ -178,6 +186,7 @@ window.MOCK_TREE_DATA_LIST = [
   },
   {
     id: '30000',
+    parentId: '',
     name: '文件夹 30000',
     size: '3k',
     type: '',
@@ -304,6 +313,7 @@ window.MOCK_TREE_DATA_LIST = [
   },
   {
     id: '40000',
+    parentId: '',
     name: '文件夹 40000',
     size: '26k',
     type: 'mp4',
@@ -311,6 +321,7 @@ window.MOCK_TREE_DATA_LIST = [
     children: [
       {
         id: '41000',
+        parentId: '40000',
         name: 'xxx 41000.mp4',
         size: '135k',
         type: 'mp4',

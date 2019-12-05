@@ -84,18 +84,24 @@ export const Cell = {
    */
   renderTreeIcon (h, params) {
     let { $table, isHidden } = params
-    let { treeConfig = {}, treeExpandeds } = $table
+    let { treeConfig = {}, treeExpandeds, treeLazyLoadeds } = $table
     let { row, column, level } = params
     let { slots } = column
-    let { children, indent, trigger, iconOpen, iconClose } = treeConfig
-    let rowChildren = row[children]
+    let { children, hasChildren, indent, lazy, trigger, iconLoaded, iconOpen, iconClose } = treeConfig
+    let rowChilds = row[children]
+    let hasLazyChilds = false
     let isAceived = false
+    let isLazyLoaded = false
     let on = {}
     if (slots && slots.icon) {
       return slots.icon(params, h)
     }
     if (!isHidden) {
       isAceived = treeExpandeds.indexOf(row) > -1
+      if (lazy) {
+        isLazyLoaded = treeLazyLoadeds.indexOf(row) > -1
+        hasLazyChilds = row[hasChildren]
+      }
     }
     if (!trigger || trigger === 'default') {
       on.click = evnt => $table.triggerTreeExpandEvent(evnt, params)
@@ -112,12 +118,12 @@ export const Cell = {
           'is--active': isAceived
         }],
         on
-      }, rowChildren && rowChildren.length ? [
+      }, (rowChilds && rowChilds.length) || hasLazyChilds ? [
         h('span', {
           class: 'vxe-tree--btn-wrapper'
         }, [
           h('i', {
-            class: ['vxe-tree--node-btn', isAceived ? (iconOpen || GlobalConfig.icon.treeOpen) : (iconClose || GlobalConfig.icon.treeClose)]
+            class: ['vxe-tree--node-btn', isLazyLoaded ? (iconLoaded || GlobalConfig.icon.treeLoaded) : (isAceived ? (iconOpen || GlobalConfig.icon.treeOpen) : (iconClose || GlobalConfig.icon.treeClose))]
           })
         ])
       ] : [])

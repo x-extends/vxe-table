@@ -1154,6 +1154,24 @@ const apis = [
             list: []
           },
           {
+            name: 'lazy',
+            desc: '是否使用懒加载（启用后只有指定 hasChildren 的节点才允许被点击）',
+            version: '2.7.0',
+            type: 'Boolean',
+            enum: '',
+            defVal: 'false',
+            list: []
+          },
+          {
+            name: 'hasChildren',
+            desc: '只对 lazy 启用后有效，标识是否存在子节点，从而控制是否允许被点击',
+            version: '2.7.0',
+            type: 'String',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
             name: 'iconOpen',
             desc: '自定义展开后显示的图标',
             version: '2.7.0',
@@ -1165,6 +1183,15 @@ const apis = [
           {
             name: 'iconClose',
             desc: '自定义收起后显示的图标',
+            version: '2.7.0',
+            type: 'String',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'iconLoaded',
+            desc: '自定义懒加载中显示的图标',
             version: '2.7.0',
             type: 'String',
             enum: '',
@@ -2657,6 +2684,15 @@ const apis = [
         name: 'clearSelection()',
         desc: '用于多选行，手动清空用户的选择',
         version: '',
+        type: 'Promise',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'clearSelectReserve()',
+        desc: '用于多选行，手动清空用户保留选中的行数据',
+        version: '2.6.20',
         type: 'Promise',
         enum: '',
         defVal: '',

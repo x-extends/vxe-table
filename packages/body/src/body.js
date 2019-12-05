@@ -67,7 +67,7 @@ function renderBorder (h, type) {
 /**
  * 渲染列
  */
-function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, items) {
+function renderColumn (h, _vm, $table, $seq, seq, rowid, fixedType, rowLevel, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, items) {
   let {
     _e,
     $listeners: tableListeners,
@@ -108,7 +108,7 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
   let hasDefaultTip = editRules && (validOpts.message === 'default' ? (height || tableData.length > 1) : validOpts.message === 'inline')
   let attrs = { 'data-colid': column.id }
   let triggerDblclick = (editRender && editConfig && editConfig.trigger === 'dblclick')
-  let params = { $table, $seq, seq, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn, level: rowLevel, data: tableData, items }
+  let params = { $table, $seq, seq, rowid, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn, level: rowLevel, data: tableData, items }
   // 在 v3.0 中废弃 selectConfig
   let checkboxConfig = $table.checkboxConfig || $table.selectConfig || {}
   // 滚动的渲染不支持动态行高
@@ -121,7 +121,7 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
       if (isOperateMouse($table)) {
         return
       }
-      let evntParams = { $table, seq, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn, level: rowLevel, cell: evnt.currentTarget }
+      let evntParams = { $table, $seq, seq, rowid, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn, level: rowLevel, cell: evnt.currentTarget }
       if (showTitle) {
         DomTools.updateCellTitle(evnt)
       } else if (showTooltip) {
@@ -140,13 +140,13 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
       if (showTooltip) {
         $table.handleTargetLeaveEvent(evnt)
       }
-      UtilTools.emitEvent($table, 'cell-mouseleave', [{ $table, seq, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn, level: rowLevel, cell: evnt.currentTarget }, evnt])
+      UtilTools.emitEvent($table, 'cell-mouseleave', [{ $table, $seq, seq, rowid, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn, level: rowLevel, cell: evnt.currentTarget }, evnt])
     }
   }
   // 按下事件处理
   if (mouseConfig.checked || mouseConfig.selected) {
     tdOns.mousedown = evnt => {
-      $table.triggerCellMousedownEvent(evnt, { $table, seq, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn, level: rowLevel, cell: evnt.currentTarget })
+      $table.triggerCellMousedownEvent(evnt, { $table, $seq, seq, rowid, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn, level: rowLevel, cell: evnt.currentTarget })
     }
   }
   // 点击事件处理
@@ -160,13 +160,13 @@ function renderColumn (h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowI
     (checkboxConfig.trigger === 'row' || ((column.type === 'checkbox' || column.type === 'selection') && checkboxConfig.trigger === 'cell')) ||
     (treeConfig.trigger === 'row' || (column.treeNode && treeConfig.trigger === 'cell'))) {
     tdOns.click = evnt => {
-      $table.triggerCellClickEvent(evnt, { $table, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn, level: rowLevel, cell: evnt.currentTarget })
+      $table.triggerCellClickEvent(evnt, { $table, $seq, seq, rowid, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn, level: rowLevel, cell: evnt.currentTarget })
     }
   }
   // 双击事件处理
   if (triggerDblclick || tableListeners['cell-dblclick']) {
     tdOns.dblclick = evnt => {
-      $table.triggerCellDBLClickEvent(evnt, { $table, seq, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn, level: rowLevel, cell: evnt.currentTarget })
+      $table.triggerCellDBLClickEvent(evnt, { $table, $seq, seq, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn, level: rowLevel, cell: evnt.currentTarget })
     }
   }
   // 合并行或列
@@ -291,16 +291,16 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
           'row--stripe': stripe && rowIndex > 0 && (rowIndex + 1) % 2 === 0,
           [`row--level-${rowLevel}`]: treeConfig,
           'row--new': editStore.insertList.indexOf(row) > -1
-        }, rowClassName ? XEUtils.isFunction(rowClassName) ? rowClassName({ $table, $seq, seq, fixedType, rowLevel, row, rowIndex, $rowIndex }) : rowClassName : ''],
+        }, rowClassName ? XEUtils.isFunction(rowClassName) ? rowClassName({ $table, $seq, seq, rowid, fixedType, rowLevel, row, rowIndex, $rowIndex }) : rowClassName : ''],
         attrs: {
           'data-rowid': rowid
         },
-        style: rowStyle ? (XEUtils.isFunction(rowStyle) ? rowStyle({ $table, $seq, seq, fixedType, rowLevel, row, rowIndex, $rowIndex }) : rowStyle) : null,
+        style: rowStyle ? (XEUtils.isFunction(rowStyle) ? rowStyle({ $table, $seq, seq, rowid, fixedType, rowLevel, row, rowIndex, $rowIndex }) : rowStyle) : null,
         key: rowKey || treeConfig ? rowid : $rowIndex,
         on: trOn
       }, tableColumn.map((column, $columnIndex) => {
         let columnIndex = getColumnIndex(column)
-        return renderColumn(h, _vm, $table, $seq, seq, fixedType, rowLevel, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, tableData)
+        return renderColumn(h, _vm, $table, $seq, seq, rowid, fixedType, rowLevel, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, tableData)
       }))
     )
     // 如果行被展开了
@@ -318,7 +318,7 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
           h('tr', {
             class: 'vxe-body--expanded-row',
             key: `expand_${rowid}`,
-            style: rowStyle ? (XEUtils.isFunction(rowStyle) ? rowStyle({ $table, $seq, seq, fixedType, rowLevel, row, rowIndex, $rowIndex, isExpanded: true }) : rowStyle) : null,
+            style: rowStyle ? (XEUtils.isFunction(rowStyle) ? rowStyle({ $table, $seq, seq, rowid, fixedType, rowLevel, row, rowIndex, $rowIndex, isExpanded: true }) : rowStyle) : null,
             on: trOn
           }, [
             h('td', {
@@ -333,7 +333,7 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
                 }],
                 style: cellStyle
               }, [
-                column.renderData(h, { $table, seq, row, rowIndex, column, columnIndex, fixed: fixedType, level: rowLevel })
+                column.renderData(h, { $table, seq, rowid, row, rowIndex, column, columnIndex, fixed: fixedType, level: rowLevel })
               ])
             ])
           ])

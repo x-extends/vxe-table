@@ -174,7 +174,7 @@ export default {
     loadList (size) {
       this.loading = true
       this.$ajax.mockList(size).then(data => {
-        // 使用函数式加载，阻断 vue 对大数组的双向绑定
+        // 使用函数式加载，对大数组的监听
         this.$refs.xTable.reloadData(data)
         this.loading = false
       })

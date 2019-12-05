@@ -212,11 +212,15 @@ const Methods = {
   updateCache (source) {
     let { treeConfig, tableFullData, fullDataRowIdData, fullDataRowMap, fullAllDataRowMap, fullAllDataRowIdData } = this
     let rowkey = UtilTools.getRowkey(this)
+    let isLazy = treeConfig && treeConfig.lazy
     let handleCache = (row, index) => {
       let rowid = UtilTools.getRowid(this, row)
       if (!rowid) {
         rowid = getRowUniqueId()
         XEUtils.set(row, rowkey, rowid)
+      }
+      if (isLazy && row[treeConfig.hasChildren] && XEUtils.isUndefined(row[treeConfig.children])) {
+        row[treeConfig.children] = null
       }
       let rest = { row, rowid, index }
       if (source) {
@@ -237,6 +241,25 @@ const Methods = {
     } else {
       tableFullData.forEach(handleCache)
     }
+  },
+  appendTreeCache (childs) {
+    let { treeConfig, fullDataRowIdData, fullDataRowMap, fullAllDataRowMap, fullAllDataRowIdData } = this
+    let rowkey = UtilTools.getRowkey(this)
+    XEUtils.eachTree(childs, (row, index) => {
+      let rowid = UtilTools.getRowid(this, row)
+      if (!rowid) {
+        rowid = getRowUniqueId()
+        XEUtils.set(row, rowkey, rowid)
+      }
+      if (row[treeConfig.hasChildren] && XEUtils.isUndefined(row[treeConfig.children])) {
+        row[treeConfig.children] = null
+      }
+      let rest = { row, rowid, index }
+      fullDataRowIdData[rowid] = rest
+      fullDataRowMap.set(row, rest)
+      fullAllDataRowIdData[rowid] = rest
+      fullAllDataRowMap.set(row, rest)
+    }, treeConfig)
   },
   /**
    * 更新数据列的 Map
@@ -334,12 +357,16 @@ const Methods = {
    * @param {Row} row 行数据
    */
   defineField (row) {
+    let treeConfig = this.treeConfig
     let rowkey = UtilTools.getRowkey(this)
     this.visibleColumn.forEach(({ property, editRender }) => {
       if (property && !XEUtils.has(row, property)) {
         XEUtils.set(row, property, editRender && !XEUtils.isUndefined(editRender.defaultValue) ? editRender.defaultValue : null)
       }
     })
+    if (treeConfig && treeConfig.lazy && XEUtils.isUndefined(row[treeConfig.children])) {
+      row[treeConfig.children] = null
+    }
     // 必须有行数据的唯一主键，可以自行设置；也可以默认生成一个随机数
     if (!XEUtils.get(row, rowkey)) {
       XEUtils.set(row, rowkey, getRowUniqueId())
@@ -2317,11 +2344,52 @@ const Methods = {
     return null
   },
   /**
+   * 判断树节点是否懒加载完成
+   * @param {Row} row 行对象
+   */
+  isTreeLoadedByRow (row) {
+    let rest = this.fullAllDataRowMap.get(row)
+    return rest && rest.loaded
+  },
+  /**
    * 展开树节点事件
    */
-  triggerTreeExpandEvent (evnt, { row }) {
-    let rest = this.toggleTreeExpansion(row)
+  triggerTreeExpandEvent (evnt, params) {
+    let { row } = params
     UtilTools.emitEvent(this, 'toggle-tree-change', [{ row, rowIndex: this.getRowIndex(row), $table: this }, evnt])
+    this.handleTreeLazyExpand(params)
+  },
+  handleTreeLazyExpand (params) {
+    let { fullAllDataRowMap, treeConfig = {}, treeLazyLoadeds } = this
+    let { children, lazy, hasChildren, loadMethod } = treeConfig
+    let { row } = params
+    let rest = fullAllDataRowMap.get(row)
+    // 是否使用懒加载
+    let isLoad = lazy && row[hasChildren] && !rest.loaded && treeLazyLoadeds.indexOf(row) === -1
+    return new Promise(resolve => {
+      if (isLoad) {
+        treeLazyLoadeds.push(row)
+        loadMethod(params).catch(e => []).then(childs => {
+          rest.loaded = true
+          XEUtils.remove(treeLazyLoadeds, item => item === row)
+          if (!XEUtils.isArray(childs)) {
+            childs = []
+          }
+          if (childs) {
+            row[children] = childs
+            this.appendTreeCache(childs)
+            this.toTreeExpand(params)
+          }
+          resolve()
+        })
+      } else {
+        this.toTreeExpand(params)
+        resolve()
+      }
+    })
+  },
+  toTreeExpand (params) {
+    this.toggleTreeExpansion(params.row)
     this.$nextTick(() => {
       let { currentRow, currentColumn } = this
       if (currentRow) {
@@ -2330,13 +2398,12 @@ const Methods = {
         this.setCurrentColumn(currentColumn)
       }
     })
-    return rest
   },
   /**
    * 切换/展开树节点
    */
   toggleTreeExpansion (row) {
-    return this.setTreeExpansion(row, this.treeExpandeds.indexOf(row) === -1)
+    return this.setTreeExpansion(row, !this.isTreeExpandByRow(row))
   },
   /**
    * 处理默认展开树节点
@@ -2344,24 +2411,33 @@ const Methods = {
   handleDefaultTreeExpand () {
     let { treeConfig, tableFullData } = this
     if (treeConfig) {
-      let { expandAll, expandRowKeys } = treeConfig
-      let { children } = treeConfig
+      let { lazy, children, expandAll, expandRowKeys } = treeConfig
       let treeExpandeds = []
       if (expandAll) {
-        XEUtils.filterTree(tableFullData, row => {
-          let rowChildren = row[children]
-          if (rowChildren && rowChildren.length) {
-            treeExpandeds.push(row)
-          }
-        }, treeConfig)
+        if (lazy) {
+          tableFullData.forEach(row => {
+            this.handleTreeLazyExpand({ row })
+          })
+        } else {
+          XEUtils.filterTree(tableFullData, row => {
+            let rowChildren = row[children]
+            if (rowChildren && rowChildren.length) {
+              treeExpandeds.push(row)
+            }
+          }, treeConfig)
+        }
         this.treeExpandeds = treeExpandeds
       } else if (expandRowKeys) {
         let rowkey = UtilTools.getRowkey(this)
         expandRowKeys.forEach(rowid => {
           let matchObj = XEUtils.findTree(tableFullData, item => rowid === XEUtils.get(item, rowkey), treeConfig)
           let rowChildren = matchObj ? matchObj.item[children] : 0
-          if (rowChildren && rowChildren.length) {
-            treeExpandeds.push(matchObj.item)
+          if (lazy) {
+            this.handleTreeLazyExpand({ row: matchObj.item })
+          } else {
+            if (rowChildren && rowChildren.length) {
+              treeExpandeds.push(matchObj.item)
+            }
           }
         })
         this.treeExpandeds = treeExpandeds

@@ -245,6 +245,8 @@ export default {
       rowExpandeds: [],
       // 已展开树节点
       treeExpandeds: [],
+      // 懒加载中的树节点的列表
+      treeLazyLoadeds: [],
       // 树节点不确定状态的列表
       treeIndeterminates: [],
       // 当前选中的筛选列
