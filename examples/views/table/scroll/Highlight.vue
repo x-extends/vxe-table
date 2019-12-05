@@ -79,7 +79,7 @@ export default {
           created () {
             this.loading = true
             setTimeout(() => {
-              let tableData = window.MOCK_DATA_LIST.slice(0, 2000)
+              let tableData = window.MOCK_DATA_LIST.slice(0, 600)
               // 使用函数式加载，阻断 vue 对大数组的双向绑定，大数据性能翻倍提升
               if (this.$refs.xTable) {
                 this.$refs.xTable.loadData(tableData)
@@ -95,7 +95,7 @@ export default {
   created () {
     this.loading = true
     setTimeout(() => {
-      let tableData = window.MOCK_DATA_LIST.slice(0, 2000)
+      let tableData = window.MOCK_DATA_LIST.slice(0, 600)
       // 阻断 vue 对大数组的双向绑定，大数据性能翻倍提升
       if (this.$refs.xTable) {
         this.$refs.xTable.loadData(tableData)

@@ -7,17 +7,19 @@
       <span class="red">注意：如果要启用纵向虚拟滚动，所有的行高必须一致，否则无法兼容</span>
     </p>
 
-    <vxe-toolbar>
+    <vxe-toolbar export>
       <template v-slot:buttons>
+        <vxe-button @click="loadList(3000)">加载3k条</vxe-button>
+        <vxe-button @click="loadList(6000)">加载6k条</vxe-button>
         <vxe-button @click="loadList(10000)">加载1w条</vxe-button>
       </template>
     </vxe-toolbar>
 
     <vxe-table
-      ref="xTable"
       border
       resizable
       show-overflow
+      ref="xTable"
       height="300"
       :loading="loading">
       <vxe-table-column type="index" width="100"></vxe-table-column>
@@ -61,17 +63,19 @@ export default {
       loading: false,
       demoCodes: [
         `
-        <vxe-toolbar>
+        <vxe-toolbar export>
           <template v-slot:buttons>
+            <vxe-button @click="loadList(3000)">加载3k条</vxe-button>
+            <vxe-button @click="loadList(6000)">加载6k条</vxe-button>
             <vxe-button @click="loadList(10000)">加载1w条</vxe-button>
           </template>
         </vxe-toolbar>
 
         <vxe-table
-          ref="xTable"
           border
           resizable
           show-overflow
+          ref="xTable"
           height="300"
           :loading="loading">
           <vxe-table-column type="index" width="100"></vxe-table-column>
@@ -110,17 +114,11 @@ export default {
           methods: {
             loadList (size) {
               this.loading = true
-              setTimeout(() => {
-                let xTable = this.$refs.xTable
-                if (xTable) {
-                  // 使用函数式加载，阻断 vue 对大数组的双向绑定，大数据性能翻倍提升
-                  xTable.reloadData(window.MOCK_DATA_LIST.slice(0, size)).then(() => {
-                    this.loading = false
-                  })
-                } else {
-                  this.loading = false
-                }
-              }, 300)
+              this.$ajax.mockList(size).then(data => {
+                // 使用函数式加载，阻断 vue 对大数组的双向绑定
+                this.$refs.xTable.reloadData(data)
+                this.loading = false
+              })
             }
           }
         }
@@ -139,17 +137,11 @@ export default {
   methods: {
     loadList (size) {
       this.loading = true
-      setTimeout(() => {
-        let xTable = this.$refs.xTable
-        if (xTable) {
-          // 使用函数式加载，阻断 vue 对大数组的双向绑定，大数据性能翻倍提升
-          xTable.reloadData(window.MOCK_DATA_LIST.slice(0, size)).then(() => {
-            this.loading = false
-          })
-        } else {
-          this.loading = false
-        }
-      }, 300)
+      this.$ajax.mockList(size).then(data => {
+        // 使用函数式加载，阻断 vue 对大数组的双向绑定
+        this.$refs.xTable.reloadData(data)
+        this.loading = false
+      })
     }
   }
 }

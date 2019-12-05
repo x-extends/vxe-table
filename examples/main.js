@@ -10,54 +10,20 @@ import './mock'
 import XEUtils from 'xe-utils/methods/xe-utils'
 import moment from 'moment'
 
-// 后台异步生成10万模拟数据
-var columns = window.MOCK_COLUMN_LIST = []
+// 生成模拟数据
 var list = window.MOCK_DATA_LIST = []
 var currTime = Date.now()
-var fullIndex = 0
-var size = 100000
 var nameList = XEUtils.shuffle(['a', 'T', 'b', 'v', 'G', 'k', 'r', 'H', 'x', 'z', 'c', 'd', 'e', 'p', 'U', 'f', 's', 'N'])
 var nickList = XEUtils.shuffle(['徐', '李', '雷', '赵', '马', '孙', '钱', '蒋', '老', '蔡', '吕', '项', '徐', '杨', '胡', '杜', '嬴', '叼'])
 function mockData () {
-  let len = XEUtils.browse().msie ? 500 : 2000
-  for (var index = 0; index < len; index++) {
+  for (var index = 0; index < 600; index++) {
     currTime += 7200000
-    fullIndex++
-    if (columns.length < 10000) {
-      let colItem = {
-        field: fullIndex % 2 === 0 ? 'age' : (fullIndex % 3 === 0 ? 'rate' : 'name'),
-        title: 'cloumn_' + fullIndex,
-        width: fullIndex % 6 === 0 ? 340 : index % 4 === 0 ? 260 : index % 3 === 0 ? 120 : 160,
-        resizable: true
-      }
-      if (fullIndex === 0) {
-        colItem.width = 100
-      }
-      if (fullIndex === 1) {
-        colItem.type = 'checkbox'
-        colItem.title = '多选'
-      } else if (fullIndex === 2) {
-        colItem.type = 'index'
-        colItem.title = '序号'
-      }
-      if (fullIndex < 4) {
-        colItem.fixed = 'left'
-        colItem.sortable = true
-      } else if (fullIndex === 5) {
-        colItem.filters = [
-          { label: 'id < 100', value: 100 },
-          { label: 'id < 2000', value: 2000 }
-        ]
-        colItem.filterMethod = ({ value, row, column }) => row.id < value
-      }
-      columns.push(colItem)
-    }
     let date = new Date(currTime)
     let mDate = moment(currTime)
     list.push({
-      id: fullIndex,
-      name: nameList[fullIndex % 10] + nameList[fullIndex % 5] + fullIndex,
-      nickname: nickList[fullIndex % 10] + nickList[fullIndex % 5] + fullIndex,
+      id: index,
+      name: nameList[index % 10] + nameList[index % 5] + index,
+      nickname: nickList[index % 10] + nickList[index % 5] + index,
       role: index % 2 === 0 ? '前端' : '后端',
       role1: index === 1 ? '1' : '',
       key: 'home.label.key' + Math.max(0, index % 2 === 0 ? index - 1 : index),
@@ -97,7 +63,7 @@ function mockData () {
       sex4: index % 4 ? 0 : 1,
       sex5: index % 5 ? '0' : '1',
       amount: 10000000 * (index % 11 === 0 ? 9.46676 : index % 7 === 8.9886 ? 34.78869 : index % 3 === 2.894453 ? 3.33356 : 7.6566444) + index * 88,
-      bankCard: '6200000' + (100000000 + fullIndex),
+      bankCard: '6200000' + (100000000 + index),
       age: index % 6 === 0 ? 18 : index % 4 === 0 ? 26 : index % 3 === 0 ? 28 : 30,
       age1: `${index % 6 === 0 ? 18 : index % 4 === 0 ? 26 : index % 3 === 0 ? 28 : 30}`,
       region: index % 4 === 0 ? [19, 199, 1773] : index % 3 === 0 ? [9, 73, 719] : [1, 1, 5],
@@ -121,16 +87,13 @@ function mockData () {
       attr5: 0,
       loading: false,
       info: {
-        name2: 'name2_' + fullIndex,
+        name2: 'name2_' + index,
         more: {
           sex2: index % 3 ? '0' : '1',
           age2: index % 2 === 0 ? 26 : 30
         }
       }
     })
-  }
-  if (fullIndex < size) {
-    setTimeout(mockData, 200)
   }
 }
 

@@ -2618,7 +2618,7 @@ const Methods = {
             scrollYStore.offsetSize = visibleYSize
           }
           if (!scrollY.rSize) {
-            scrollYStore.renderSize = browse.firefox ? visibleYSize * 6 : (browse.edge ? visibleYSize * 10 : (isWebkit ? visibleYSize + 2 : visibleYSize * 6))
+            scrollYStore.renderSize = browse.edge ? visibleYSize * 10 : (isWebkit ? visibleYSize + 2 : visibleYSize * 6)
           }
           this.updateScrollYData()
         } else {

@@ -7,8 +7,10 @@
       <span class="red">注意：如果要启用纵向虚拟滚动，所有的行高必须一致，否则无法兼容</span>
     </p>
 
-    <vxe-toolbar>
+    <vxe-toolbar export>
       <template v-slot:buttons>
+        <vxe-button @click="loadList(30000)">加载3w条</vxe-button>
+        <vxe-button @click="loadList(60000)">加载6w条</vxe-button>
         <vxe-button @click="loadList(100000)">加载10w条</vxe-button>
         <vxe-button @click="$refs.xTable.toggleRowSelection($refs.xTable.getData(1))">切换第二行选中</vxe-button>
         <vxe-button @click="$refs.xTable.setSelection([$refs.xTable.getData(2), $refs.xTable.getData(3)], true)">设置第三、四行选中</vxe-button>
@@ -19,13 +21,13 @@
     </vxe-toolbar>
 
     <vxe-table
-      ref="xTable"
       border
       resizable
       show-overflow
       show-header-overflow
       highlight-hover-row
       highlight-current-row
+      ref="xTable"
       height="600"
       :loading="loading"
       :checkbox-config="{checkField: 'checked'}">
@@ -84,8 +86,10 @@ export default {
       loading: false,
       demoCodes: [
         `
-        <vxe-toolbar>
+        <vxe-toolbar export>
           <template v-slot:buttons>
+            <vxe-button @click="loadList(30000)">加载3w条</vxe-button>
+            <vxe-button @click="loadList(60000)">加载6w条</vxe-button>
             <vxe-button @click="loadList(100000)">加载10w条</vxe-button>
             <vxe-button @click="$refs.xTable.toggleRowSelection($refs.xTable.getData(1))">切换第二行选中</vxe-button>
             <vxe-button @click="$refs.xTable.setSelection([$refs.xTable.getData(2), $refs.xTable.getData(3)], true)">设置第三、四行选中</vxe-button>
@@ -96,13 +100,13 @@ export default {
         </vxe-toolbar>
 
         <vxe-table
-          ref="xTable"
           border
           resizable
           show-overflow
           show-header-overflow
           highlight-hover-row
           highlight-current-row
+          ref="xTable"
           height="600"
           :loading="loading"
           :checkbox-config="{checkField: 'checked'}">
@@ -142,17 +146,11 @@ export default {
           methods: {
             loadList (size) {
               this.loading = true
-              setTimeout(() => {
-                let xTable = this.$refs.xTable
-                if (xTable) {
-                  // 使用函数式加载，阻断 vue 对大数组的双向绑定，大数据性能翻倍提升
-                  xTable.reloadData(window.MOCK_DATA_LIST.slice(0, size)).then(() => {
-                    this.loading = false
-                  })
-                } else {
-                  this.loading = false
-                }
-              }, 300)
+              this.$ajax.mockList(size).then(data => {
+                // 使用函数式加载，阻断 vue 对大数组的双向绑定
+                this.$refs.xTable.reloadData(data)
+                this.loading = false
+              })
             },
             getSelectEvent () {
               let selectRecords = this.$refs.xTable.getSelectRecords()
@@ -175,17 +173,11 @@ export default {
   methods: {
     loadList (size) {
       this.loading = true
-      setTimeout(() => {
-        let xTable = this.$refs.xTable
-        if (xTable) {
-          // 使用函数式加载，阻断 vue 对大数组的双向绑定，大数据性能翻倍提升
-          xTable.reloadData(window.MOCK_DATA_LIST.slice(0, size)).then(() => {
-            this.loading = false
-          })
-        } else {
-          this.loading = false
-        }
-      }, 300)
+      this.$ajax.mockList(size).then(data => {
+        // 使用函数式加载，阻断 vue 对大数组的双向绑定
+        this.$refs.xTable.reloadData(data)
+        this.loading = false
+      })
     },
     getSelectEvent () {
       let selectRecords = this.$refs.xTable.getSelectRecords()
