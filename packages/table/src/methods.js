@@ -1683,10 +1683,10 @@ const Methods = {
     let { checkField: property, reserve, checkStrictly, checkMethod } = checkboxConfig
     let { insertList } = editStore
     let selectRows = []
-    // 包含新增的数据
-    if (insertList.length) {
-      tableFullData = tableFullData.concat(insertList)
-    }
+    // 包含新增的数据  以下注释代码会导致增行时，全选操作获取选中的数据重复
+    //if (insertList.length) {
+      //tableFullData = tableFullData.concat(insertList)
+    //}
     if (!checkStrictly) {
       if (property) {
         let indexKey = `${treeConfig ? '$' : ''}rowIndex`
