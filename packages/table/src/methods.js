@@ -1192,7 +1192,7 @@ const Methods = {
                         }
                       }
                     }
-                    cellElem.style.width = `${border ? colWidth - (1 * colspan) : colWidth}px`
+                    cellElem.style.width = `${border ? colWidth - (2 * colspan) : colWidth}px`
                   }
                 })
               }
