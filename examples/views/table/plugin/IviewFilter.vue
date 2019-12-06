@@ -73,7 +73,7 @@ export default {
           },
           methods: {
             findSexList () {
-              return this.$ajax.get('/api/conf/sex/list').then(({ data }) => {
+              return this.$ajax.get('/api/conf/sex/list').then(data => {
                 this.sexList = data
                 return data
               })
@@ -104,7 +104,7 @@ export default {
   },
   methods: {
     findSexList () {
-      return this.$ajax.get('/api/conf/sex/list').then(({ data }) => {
+      return this.$ajax.get('/api/conf/sex/list').then(data => {
         this.sexList = data
         return data
       })

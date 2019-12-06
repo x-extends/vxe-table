@@ -142,8 +142,8 @@ export default {
       },
       tableProxy: {
         props: {
-          result: 'data.result',
-          total: 'data.page.total'
+          result: 'result',
+          total: 'page.total'
         },
         ajax: {
           query: ({ page }) => this.$ajax.get(`/api/user/page/list/${page.pageSize}/${page.currentPage}`)
@@ -307,8 +307,8 @@ export default {
               },
               tableProxy: {
                 props: {
-                  result: 'data.result',
-                  total: 'data.page.total'
+                  result: 'result',
+                  total: 'page.total'
                 },
                 ajax: {
                   query: ({ page }) => this.$ajax.get(\`/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`)

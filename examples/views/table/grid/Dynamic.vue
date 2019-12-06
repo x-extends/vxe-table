@@ -56,8 +56,8 @@ export default {
       },
       tableProxy: {
         props: {
-          result: 'data.result',
-          total: 'data.page.total'
+          result: 'result',
+          total: 'page.total'
         },
         ajax: {
           query: ({ page }) => this.$ajax.get(`/api/column/page/list/${page.pageSize}/${page.currentPage}`, { sort: 'seq', order: 'asc' }),
@@ -98,8 +98,8 @@ export default {
       },
       tableProxy2: {
         props: {
-          result: 'data.result',
-          total: 'data.page.total'
+          result: 'result',
+          total: 'page.total'
         },
         ajax: {
           query: ({ page }) => this.$ajax.get(`/api/user/page/list/${page.pageSize}/${page.currentPage}`),
@@ -144,8 +144,8 @@ export default {
               },
               tableProxy: {
                 props: {
-                  result: 'data.result',
-                  total: 'data.page.total'
+                  result: 'result',
+                  total: 'page.total'
                 },
                 ajax: {
                   query: ({ page }) => this.$ajax.get(\`/api/column/page/list/\${page.pageSize}/\${page.currentPage}\`, { sort: 'seq', order: 'asc' }),
@@ -212,8 +212,8 @@ export default {
               },
               tableProxy: {
                 props: {
-                  result: 'data.result',
-                  total: 'data.page.total'
+                  result: 'result',
+                  total: 'page.total'
                 },
                 ajax: {
                   query: ({ page }) => this.$ajax.get(\`/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`),
