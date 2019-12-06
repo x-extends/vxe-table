@@ -103,11 +103,14 @@
     border-spacing: 0;
     border-collapse: separate;
   }
+  .vxe-table--header-wrapper,
+  .vxe-table--footer-wrapper {
+    overflow-x: hidden;
+    overflow-y: hidden;
+  }
   &:not(.b--style-none) {
     .vxe-table--header-wrapper,
     .vxe-table--footer-wrapper {
-      overflow-x: hidden;
-      overflow-y: hidden;
       border-top: 1px solid $vxe-table-border-color;
     }
   }
