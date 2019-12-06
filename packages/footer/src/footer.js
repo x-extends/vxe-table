@@ -81,16 +81,20 @@ export default {
         h('colgroup', tableColumn.map((column, columnIndex) => {
           return h('col', {
             attrs: {
-              name: column.id,
-              width: column.renderWidth
+              name: column.id
+            },
+            style: {
+              width: `${column.renderWidth}px`
             },
             key: columnIndex
           })
         }).concat([
           h('col', {
             attrs: {
-              name: 'col_gutter',
-              width: scrollbarWidth
+              name: 'col_gutter'
+            },
+            style: {
+              width: `${scrollbarWidth}px`
             }
           })
         ])),

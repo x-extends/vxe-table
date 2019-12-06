@@ -545,8 +545,10 @@ export default {
         h('colgroup', tableColumn.map((column, columnIndex) => {
           return h('col', {
             attrs: {
-              name: column.id,
-              width: column.renderWidth
+              name: column.id
+            },
+            style: {
+              width: `${column.renderWidth}px`
             },
             key: columnIndex
           })
