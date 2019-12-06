@@ -495,7 +495,7 @@ const Methods = {
    * @param {String} field 字段名
    */
   getColumnByField (field) {
-    return XEUtils.find(this.visibleColumn, column => column.property === field)
+    return XEUtils.find(this.tableFullColumn, column => column.property === field)
   },
   /**
    * 获取当前表格的列
@@ -708,7 +708,7 @@ const Methods = {
       })
     }
     if (this.$toolbar) {
-      this.$toolbar.updateSetting()
+      this.$toolbar.handleCustoms()
     }
     return this.$nextTick()
   },

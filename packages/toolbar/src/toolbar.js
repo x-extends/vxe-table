@@ -14,9 +14,9 @@ export default {
     export: [Boolean, Object],
     zoom: [Boolean, Object],
     setting: [Boolean, Object],
+    customs: [Boolean, Object],
     buttons: { type: Array, default: () => GlobalConfig.toolbar.buttons },
-    size: String,
-    customs: Array
+    size: String
   },
   inject: {
     $grid: {
@@ -59,7 +59,7 @@ export default {
         isHeader: false,
         isFooter: false
       },
-      settingStore: {
+      customStore: {
         visible: false
       }
     }
@@ -83,16 +83,13 @@ export default {
     zoomOpts () {
       return Object.assign({}, GlobalConfig.toolbar.zoom, this.zoom)
     },
-    settingOpts () {
-      return Object.assign({ storageKey: 'VXE_TABLE_CUSTOM_COLUMN_HIDDEN' }, GlobalConfig.toolbar.setting, this.setting)
+    customOpts () {
+      return Object.assign({ storageKey: 'VXE_TABLE_CUSTOM_COLUMN_HIDDEN' }, GlobalConfig.toolbar.customs || GlobalConfig.toolbar.setting, this.customs || this.setting)
     }
   },
   created () {
-    let { settingOpts, id, customs } = this
-    if (customs) {
-      this.tableFullColumn = customs
-    }
-    if (settingOpts.storage && !id) {
+    let { customOpts, id } = this
+    if (customOpts.storage && !id) {
       return UtilTools.error('vxe.error.toolbarId')
     }
     if (!VXETable._export && (this.export || this.import)) {
@@ -112,15 +109,15 @@ export default {
     GlobalEvent.off(this, 'blur')
   },
   render (h) {
-    let { _e, $scopedSlots, $grid, $table, loading, settingStore, importOpts, exportOpts, refresh, refreshOpts, zoom, zoomOpts, setting, settingOpts, buttons = [], vSize, tableFullColumn, importStore, importParams, exportStore, exportParams } = this
+    let { _e, $scopedSlots, $grid, $table, loading, customStore, importOpts, exportOpts, refresh, refreshOpts, zoom, zoomOpts, customs, setting, customOpts, buttons = [], vSize, tableFullColumn, importStore, importParams, exportStore, exportParams } = this
     let customBtnOns = {}
     let customWrapperOns = {}
     let $buttons = $scopedSlots.buttons
     let $tools = $scopedSlots.tools
-    if (setting) {
-      if (settingOpts.trigger === 'manual') {
+    if (customs || setting) {
+      if (customOpts.trigger === 'manual') {
         // 手动触发
-      } else if (settingOpts.trigger === 'hover') {
+      } else if (customOpts.trigger === 'hover') {
         // hover 触发
         customBtnOns.mouseenter = this.handleMouseenterSettingEvent
         customBtnOns.mouseleave = this.handleMouseleaveSettingEvent
@@ -222,21 +219,21 @@ export default {
             class: this.$grid.isMaximized() ? (zoomOpts.iconOut || GlobalConfig.icon.zoomOut) : (zoomOpts.iconIn || GlobalConfig.icon.zoomIn)
           })
         ]) : null,
-        setting ? h('div', {
+        customs || setting ? h('div', {
           class: ['vxe-custom--wrapper', {
-            'is--active': settingStore.visible
+            'is--active': customStore.visible
           }],
           ref: 'customWrapper'
         }, [
           h('div', {
-            class: 'vxe-tools--operate-btn vxe-custom--setting-btn',
+            class: 'vxe-tools--operate-btn',
             attrs: {
-              title: GlobalConfig.i18n('vxe.toolbar.setting')
+              title: GlobalConfig.i18n('vxe.toolbar.customs')
             },
             on: customBtnOns
           }, [
             h('i', {
-              class: settingOpts.icon || GlobalConfig.icon.custom
+              class: customOpts.icon || GlobalConfig.icon.custom
             })
           ]),
           h('div', {
@@ -246,12 +243,12 @@ export default {
               class: 'vxe-custom--option',
               on: customWrapperOns
             }, tableFullColumn.map(column => {
-              let { property, visible, own } = column
+              let { visible, own } = column
               let headerTitle = UtilTools.getFuncText(own.title || own.label)
-              return property && headerTitle ? h('vxe-checkbox', {
+              return headerTitle ? h('vxe-checkbox', {
                 props: {
                   value: visible,
-                  disabled: settingOpts.checkMethod ? !settingOpts.checkMethod({ column }) : false
+                  disabled: customOpts.checkMethod ? !customOpts.checkMethod({ column }) : false
                 },
                 attrs: {
                   title: headerTitle
@@ -259,8 +256,8 @@ export default {
                 on: {
                   change: value => {
                     column.visible = value
-                    if (setting && settingOpts.immediate) {
-                      this.updateSetting()
+                    if ((customs || setting) && customOpts.immediate) {
+                      this.handleCustoms()
                     }
                   }
                 }
@@ -297,19 +294,19 @@ export default {
       this.$table = XEUtils.find($children, (comp, index) => comp && comp.refreshColumn && index > selfIndex && comp.$vnode.componentOptions.tag === 'vxe-table')
     },
     openSetting () {
-      this.settingStore.visible = true
+      this.customStore.visible = true
     },
-    closeSetting () {
-      let { setting, settingStore } = this
-      if (settingStore.visible) {
-        settingStore.visible = false
-        if (setting && !settingStore.immediate) {
-          this.updateSetting()
+    closeCustom () {
+      let { customs, setting, customStore } = this
+      if (customStore.visible) {
+        customStore.visible = false
+        if ((customs || setting) && !customStore.immediate) {
+          this.handleCustoms()
         }
       }
     },
     loadStorage () {
-      let { $grid, $table, id, refresh, resizable, setting, refreshOpts, resizableOpts, settingOpts } = this
+      let { $grid, $table, id, refresh, resizable, customs, setting, refreshOpts, resizableOpts, customOpts } = this
       if (refresh && !$grid) {
         if (!refreshOpts.query) {
           UtilTools.warn('vxe.error.notFunc', ['query'])
@@ -318,11 +315,11 @@ export default {
       if ($grid || $table) {
         ($grid || $table).connect({ toolbar: this })
       } else {
-        if (resizable || setting) {
+        if (resizable || customs || setting) {
           throw new Error(UtilTools.getLog('vxe.error.barUnableLink'))
         }
       }
-      if (resizable || setting) {
+      if (resizable || customs || setting) {
         let customMap = {}
         if (resizableOpts.storage) {
           let columnWidthStorage = this.getStorageMap(resizableOpts.storageKey)[id]
@@ -332,8 +329,8 @@ export default {
             })
           }
         }
-        if (settingOpts.storage) {
-          let columnHideStorage = this.getStorageMap(settingOpts.storageKey)[id]
+        if (customOpts.storage) {
+          let columnHideStorage = this.getStorageMap(customOpts.storageKey)[id]
           if (columnHideStorage) {
             columnHideStorage.split(',').forEach(field => {
               if (customMap[field]) {
@@ -365,12 +362,12 @@ export default {
       return rest && rest._v === version ? rest : { _v: version }
     },
     saveColumnHide () {
-      let { id, tableFullColumn, settingOpts } = this
-      if (settingOpts.storage) {
-        let columnHideStorageMap = this.getStorageMap(settingOpts.storageKey)
+      let { id, tableFullColumn, customOpts } = this
+      if (customOpts.storage) {
+        let columnHideStorageMap = this.getStorageMap(customOpts.storageKey)
         let colHides = tableFullColumn.filter(column => column.property && !column.visible)
         columnHideStorageMap[id] = colHides.length ? colHides.map(column => column.property).join(',') : undefined
-        localStorage.setItem(settingOpts.storageKey, XEUtils.toJSONString(columnHideStorageMap))
+        localStorage.setItem(customOpts.storageKey, XEUtils.toJSONString(columnHideStorageMap))
       }
       return this.$nextTick()
     },
@@ -395,15 +392,15 @@ export default {
     hideColumn (column) {
       UtilTools.warn('vxe.error.delFunc', ['hideColumn', 'table.hideColumn'])
       column.visible = false
-      return this.updateSetting()
+      return this.handleCustoms()
     },
     showColumn (column) {
       UtilTools.warn('vxe.error.delFunc', ['showColumn', 'table.showColumn'])
       column.visible = true
-      return this.updateSetting()
+      return this.handleCustoms()
     },
     resetCustoms () {
-      return this.updateSetting()
+      return this.handleCustoms()
     },
     resetResizable () {
       this.updateResizable(this)
@@ -414,7 +411,7 @@ export default {
       comp.analyColumnWidth()
       return comp.recalculate(true)
     },
-    updateSetting () {
+    handleCustoms () {
       (this.$grid || this.$table).refreshColumn()
       return this.saveColumnHide()
     },
@@ -426,38 +423,38 @@ export default {
     },
     handleGlobalMousedownEvent (evnt) {
       if (!DomTools.getEventTargetNode(evnt, this.$refs.customWrapper).flag) {
-        this.closeSetting()
+        this.closeCustom()
       }
     },
     handleGlobalBlurEvent (evnt) {
-      this.closeSetting()
+      this.closeCustom()
     },
     handleClickSettingEvent (evnt) {
-      this.settingStore.visible = !this.settingStore.visible
+      this.customStore.visible = !this.customStore.visible
     },
     handleMouseenterSettingEvent (evnt) {
-      this.settingStore.activeBtn = true
+      this.customStore.activeBtn = true
       this.openSetting()
     },
     handleMouseleaveSettingEvent (evnt) {
-      let { settingStore } = this
-      settingStore.activeBtn = false
+      let { customStore } = this
+      customStore.activeBtn = false
       setTimeout(() => {
-        if (!settingStore.activeBtn && !settingStore.activeWrapper) {
-          this.closeSetting()
+        if (!customStore.activeBtn && !customStore.activeWrapper) {
+          this.closeCustom()
         }
       }, 300)
     },
     handleWrapperMouseenterEvent (evnt) {
-      this.settingStore.activeWrapper = true
+      this.customStore.activeWrapper = true
       this.openSetting()
     },
     handleWrapperMouseleaveEvent (evnt) {
-      let { settingStore } = this
-      settingStore.activeWrapper = false
+      let { customStore } = this
+      customStore.activeWrapper = false
       setTimeout(() => {
-        if (!settingStore.activeBtn && !settingStore.activeWrapper) {
-          this.closeSetting()
+        if (!customStore.activeBtn && !customStore.activeWrapper) {
+          this.closeCustom()
         }
       }, 300)
     },

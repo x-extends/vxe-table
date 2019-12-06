@@ -1,34 +1,23 @@
 <template>
   <div>
     <p class="tip">
-      通过 <table-api-link prop="customs"/> 来初始化绑定动态列：{field: 字段名, visible: 默认是否显示}<br>
-      通过函数式调用 <table-api-link prop="showColumn"/>、<table-api-link prop="hideColumn"/> 操作列的显示/隐藏<br>
-      还可以通过修改列的 visible 属性，可以轻松实现强大的显示/隐藏列的配置功能，最后调用 <table-api-link prop="refreshColumn"/> 刷新列
+      通过 <table-api-link prop="customs"/> 来双向绑定列配置，通过 <table-column-api-link prop="visible"/> 属性设置默认是否显示<br>
+      也可以通过函数式调用 <table-api-link prop="showColumn"/>、<table-api-link prop="hideColumn"/> 操作列的显示/隐藏<br>
+      还可以通过动态修改列的 visible 属性，可以轻松实现远程读取配置后控制是否显示，最后调用 <table-api-link prop="refreshColumn"/> 刷新列
     </p>
 
-    <div class="table-oper">
-      <span class="menu-btn">
-        <i class="icon-menu"></i>
-        <div class="menu-wrapper">
-          <template v-for="(column,index) in customColumns1">
-            <vxe-checkbox
-              v-if="column.property"
-              class="checkbox-item"
-              v-model="column.visible"
-              :key="index"
-              @change="$refs.xTable1.refreshColumn()">{{ column.title }}</vxe-checkbox>
-          </template>
-        </div>
-      </span>
+    <div>
+      <template v-for="(column,index) in columns1">
+        <vxe-checkbox v-model="column.visible" :key="index" @change="$refs.xTable1.refreshColumn()">{{ column.title }}</vxe-checkbox>
+      </template>
     </div>
 
     <vxe-table
-      ref="xTable1"
       border
+      ref="xTable1"
       height="200"
       :data="tableData"
-      :customs.sync="customColumns1">
-      <vxe-table-column type="index" width="60"></vxe-table-column>
+      :customs.sync="columns1">
       <vxe-table-column field="name" title="Name"></vxe-table-column>
       <vxe-table-column field="role" title="Role"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -40,35 +29,24 @@
     <pre>
       <code class="xml">{{ demoCodes[0] }}</code>
       <code class="javascript">{{ demoCodes[1] }}</code>
-      <code class="scss">{{ demoCodes[2] }}</code>
     </pre>
 
-    <p class="tip">如果是根据服务端数据控制显示/隐藏列，则需要手动调用 <table-api-link prop="reloadCustoms"/> 更新即可</p>
+    <p class="tip">如果是根据服务端数据控制显示/隐藏列，在获取到配置信息后动态更改列的 <table-column-api-link prop="visible"/> 属性，然后调用 <table-api-link prop="refreshColumn"/> 属性列即可</p>
 
-    <div class="table-oper">
-      <span class="menu-btn">
-        <i class="icon-menu"></i>
-        <div class="menu-wrapper">
-          <template v-for="(column,index) in customColumns2">
-            <vxe-checkbox
-              v-if="column.property"
-              class="checkbox-item"
-              v-model="column.visible"
-              :key="index"
-              @change="$refs.xTable2.refreshColumn()">{{ column.title }}</vxe-checkbox>
-          </template>
-        </div>
-      </span>
+    <div>
+      <template v-for="(column,index) in columns2">
+        <vxe-checkbox v-model="column.visible" :key="index" @change="$refs.xTable2.refreshColumn()">{{ column.title }}</vxe-checkbox>
+      </template>
     </div>
 
     <vxe-table
-      ref="xTable2"
       border
+      ref="xTable2"
       height="200"
       :loading="loading"
       :data="tableData"
-      :customs.sync="customColumns2">
-      <vxe-table-column type="index" width="60"></vxe-table-column>
+      :customs.sync="columns2">
+      <vxe-table-column type="index" title="序号" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
       <vxe-table-column field="role" title="Role"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -78,38 +56,31 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[3] }}</code>
-      <code class="javascript">{{ demoCodes[4] }}</code>
-      <code class="scss">{{ demoCodes[5] }}</code>
+      <code class="xml">{{ demoCodes[2] }}</code>
+      <code class="javascript">{{ demoCodes[3] }}</code>
     </pre>
 
-    <p class="tip">通过属性 <table-api-link prop="field"/> 和 <table-api-link prop="visible"/> 设置默认隐藏</p>
+    <p class="tip">通过 <table-column-api-link prop="visible"/> 属性设置默认是否显示，通过 <table-api-link prop="resetCustoms"/> 函数重置全部列为可视状态</p>
 
-    <template v-for="(column,index) in customColumns3">
-      <vxe-checkbox
-        v-if="column.property"
-        class="checkbox-item"
-        v-model="column.visible"
-        :key="index">{{ column.title }}</vxe-checkbox>
-    </template>
-
-    <vxe-toolbar :data="tableData" setting>
-      <template v-slot:buttons>
-        <vxe-button @click="$refs.xTable3.refreshColumn()">刷新</vxe-button>
+    <div>
+      <template v-for="(column,index) in columns3">
+        <vxe-checkbox v-if="column.title" v-model="column.visible" :key="index">{{ column.title }}</vxe-checkbox>
       </template>
-    </vxe-toolbar>
+      <vxe-button @click="$refs.xTable3.refreshColumn()">刷新列信息</vxe-button>
+      <vxe-button @click="$refs.xTable3.resetCustoms()">重置自定义列</vxe-button>
+    </div>
 
     <vxe-table
-      ref="xTable3"
       border
+      ref="xTable3"
       height="300"
       :data="tableData"
-      :customs.sync="customColumns3">
-      <vxe-table-column type="index" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name"></vxe-table-column>
+      :customs.sync="columns3">
+      <vxe-table-column type="checkbox" width="60"></vxe-table-column>
+      <vxe-table-column field="name" title="Name" :visible="false"></vxe-table-column>
       <vxe-table-column field="role" title="Role"></vxe-table-column>
       <vxe-table-column title="基本信息">
-        <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+        <vxe-table-column field="sex" title="Sex" :visible="false"></vxe-table-column>
         <vxe-table-column field="age" title="Age"></vxe-table-column>
         <vxe-table-column title="其他信息">
           <vxe-table-column field="rate" title="Rate"></vxe-table-column>
@@ -121,8 +92,8 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[6] }}</code>
-      <code class="javascript">{{ demoCodes[7] }}</code>
+      <code class="xml">{{ demoCodes[4] }}</code>
+      <code class="javascript">{{ demoCodes[5] }}</code>
     </pre>
   </div>
 </template>
@@ -135,49 +106,23 @@ export default {
     return {
       loading: false,
       tableData: [],
-      // 如果为空则默认全部显示，也可以指定默认的隐藏列
-      customColumns1: [
-        {
-          field: 'age',
-          visible: false
-        }
-      ],
-      customColumns2: [],
-      customColumns3: [
-        {
-          field: 'name',
-          visible: false
-        },
-        {
-          field: 'sex',
-          visible: false
-        }
-      ],
+      columns1: [],
+      columns2: [],
+      columns3: [],
       demoCodes: [
         `
-        <div class="table-oper">
-          <span class="menu-btn">
-            <i class="icon-menu"></i>
-            <div class="menu-wrapper">
-              <template v-for="(column,index) in customColumns">
-                <vxe-checkbox
-                  v-if="column.property"
-                  class="checkbox-item"
-                  v-model="column.visible"
-                  :key="index"
-                  @change="$refs.xTable.refreshColumn()">{{ column.title }}</vxe-checkbox>
-              </template>
-            </div>
-          </span>
+        <div>
+          <template v-for="(column,index) in columns">
+            <vxe-checkbox v-model="column.visible" :key="index" @change="$refs.xTable.refreshColumn()">{{ column.title }}</vxe-checkbox>
+          </template>
         </div>
 
         <vxe-table
-          ref="xTable"
           border
-          height="400"
+          ref="xTable"
+          height="200"
           :data="tableData"
-          :customs.sync="customColumns">
-          <vxe-table-column type="index" width="60"></vxe-table-column>
+          :customs.sync="columns">
           <vxe-table-column field="name" title="Name"></vxe-table-column>
           <vxe-table-column field="role" title="Role"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -189,13 +134,7 @@ export default {
           data () {
             return {
               tableData: [],
-              // 如果为空则默认全部显示，也可以指定默认的隐藏列
-              customColumns: [
-                {
-                  field: 'age',
-                  visible: false
-                }
-              ]
+              columns: []
             }
           },
           created () {
@@ -204,70 +143,20 @@ export default {
         }
         `,
         `
-        .table-oper {
-          height: 20px;
-          width: 100%;
-        }
-        .menu-btn {
-          position: relative;
-          width: 20px;
-          height: 20px;
-          float: right;
-          &:hover {
-            .menu-wrapper {
-              display: block;
-            }
-          }
-        }
-        .menu-wrapper {
-          display: none;
-          position: absolute;
-          width: 80px;
-          top: 16px;
-          right: 0;
-          z-index: 9;
-          background-color: #fff;
-          font-size: 14px;
-          padding: 4px 10px;
-          user-select: none;
-          border: 1px solid #e8eaec;
-          .checkbox-item {
-            display: block;
-            margin: 4px 0;
-          }
-        }
-        .icon-menu {
-          width: 16px;
-          height: 0px;
-          display: inline-block;
-          margin-bottom: 16px;
-          box-shadow: 0 6px 0 2px #606266, 0 0 0 2px #606266, 0 12px 0 2px #606266;
-        }
-        `,
-        `
-        <div class="table-oper">
-          <span class="menu-btn">
-            <i class="icon-menu"></i>
-            <div class="menu-wrapper">
-              <template v-for="(column,index) in customColumns">
-                <vxe-checkbox
-                  v-if="column.property"
-                  class="checkbox-item"
-                  v-model="column.visible"
-                  :key="index"
-                  @change="$refs.xTable.refreshColumn()">{{ column.title }}</vxe-checkbox>
-              </template>
-            </div>
-          </span>
+        <div>
+          <template v-for="(column,index) in columns">
+            <vxe-checkbox v-model="column.visible" :key="index" @change="$refs.xTable.refreshColumn()">{{ column.title }}</vxe-checkbox>
+          </template>
         </div>
 
         <vxe-table
-          ref="xTable"
           border
-          height="400"
+          ref="xTable"
+          height="200"
+          :loading="loading"
           :data="tableData"
-          :customs.sync="customColumns">
-          <vxe-table-column type="index" width="60"></vxe-table-column>
+          :customs.sync="columns">
+          <vxe-table-column type="index" title="序号" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
           <vxe-table-column field="role" title="Role"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -279,91 +168,45 @@ export default {
           data () {
             return {
               tableData: [],
-              customColumns: []
+              columns: []
             }
           },
           created () {
             this.loading = true
             this.tableData = window.MOCK_DATA_LIST.slice(0, 20)
             setTimeout(() => {
-              this.loading = false
-              this.$refs.xTable.reloadCustoms([
-                {
-                  field: 'name',
-                  visible: false
+              // 将指定列设置为隐藏状态
+              this.columns.forEach(column => {
+                if (['name'].includes(column.property)) {
+                  column.visible = false
                 }
-              ])
-            }, 300)
+              })
+              this.$refs.xTable.refreshColumn()
+              this.loading = false
+            }, 800)
           }
         }
         `,
         `
-        .table-oper {
-          height: 20px;
-          width: 100%;
-        }
-        .menu-btn {
-          position: relative;
-          width: 20px;
-          height: 20px;
-          float: right;
-          &:hover {
-            .menu-wrapper {
-              display: block;
-            }
-          }
-        }
-        .menu-wrapper {
-          display: none;
-          position: absolute;
-          width: 80px;
-          top: 16px;
-          right: 0;
-          z-index: 9;
-          background-color: #fff;
-          font-size: 14px;
-          padding: 4px 10px;
-          user-select: none;
-          border: 1px solid #e8eaec;
-          .checkbox-item {
-            display: block;
-            margin: 4px 0;
-          }
-        }
-        .icon-menu {
-          width: 16px;
-          height: 0px;
-          display: inline-block;
-          margin-bottom: 16px;
-          box-shadow: 0 6px 0 2px #606266, 0 0 0 2px #606266, 0 12px 0 2px #606266;
-        }
-        `,
-        `
-        <template v-for="(column,index) in customColumns">
-          <vxe-checkbox
-            v-if="column.property"
-            class="checkbox-item"
-            v-model="column.visible"
-            :key="index">{{ column.title }}</vxe-checkbox>
-        </template>
-
-        <vxe-toolbar :data="tableData" setting>
-          <template v-slot:buttons>
-            <vxe-button @click="$refs.xTable.refreshColumn()">刷新</vxe-button>
+        <div>
+          <template v-for="(column,index) in columns">
+            <vxe-checkbox v-if="column.title" v-model="column.visible" :key="index">{{ column.title }}</vxe-checkbox>
           </template>
-        </vxe-toolbar>
+          <vxe-button @click="$refs.xTable.refreshColumn()">刷新列信息</vxe-button>
+          <vxe-button @click="$refs.xTable.resetCustoms()">重置自定义列</vxe-button>
+        </div>
 
         <vxe-table
-          ref="xTable"
           border
-          height="400"
+          ref="xTable"
+          height="300"
           :data="tableData"
-          :customs.sync="customColumns">
-          <vxe-table-column type="index" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name"></vxe-table-column>
+          :customs.sync="columns">
+          <vxe-table-column type="checkbox" width="60"></vxe-table-column>
+          <vxe-table-column field="name" title="Name" :visible="false"></vxe-table-column>
           <vxe-table-column field="role" title="Role"></vxe-table-column>
           <vxe-table-column title="基本信息">
-            <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+            <vxe-table-column field="sex" title="Sex" :visible="false"></vxe-table-column>
             <vxe-table-column field="age" title="Age"></vxe-table-column>
             <vxe-table-column title="其他信息">
               <vxe-table-column field="rate" title="Rate"></vxe-table-column>
@@ -377,7 +220,7 @@ export default {
           data () {
             return {
               tableData: [],
-              customColumns: []
+              columns: []
             }
           },
           created () {
@@ -392,16 +235,15 @@ export default {
     this.loading = true
     this.tableData = window.MOCK_DATA_LIST.slice(0, 20)
     setTimeout(() => {
+      // 将指定列设置为隐藏状态
+      this.columns2.forEach(column => {
+        if (['name'].includes(column.property)) {
+          column.visible = false
+        }
+      })
+      this.$refs.xTable2.refreshColumn()
       this.loading = false
-      if (this.$refs.xTable2) {
-        this.$refs.xTable2.reloadCustoms([
-          {
-            field: 'name',
-            visible: false
-          }
-        ])
-      }
-    }, 300)
+    }, 800)
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
@@ -410,45 +252,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-.table-oper {
-  height: 20px;
-  width: 100%;
-}
-.menu-btn {
-  position: relative;
-  width: 20px;
-  height: 20px;
-  float: right;
-  &:hover {
-    .menu-wrapper {
-      display: block;
-    }
-  }
-}
-.menu-wrapper {
-  display: none;
-  position: absolute;
-  width: 80px;
-  top: 16px;
-  right: 0;
-  z-index: 9;
-  background-color: #fff;
-  font-size: 14px;
-  padding: 4px 10px;
-  user-select: none;
-  border: 1px solid #e8eaec;
-  .checkbox-item {
-    display: block;
-    margin: 4px 0;
-  }
-}
-.icon-menu {
-  width: 16px;
-  height: 0px;
-  display: inline-block;
-  margin-bottom: 16px;
-  box-shadow: 0 6px 0 2px #606266, 0 0 0 2px #606266, 0 12px 0 2px #606266;
-}
-</style>

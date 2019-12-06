@@ -432,7 +432,8 @@ module.exports = {
           export: '导出按钮配置',
           refresh: '刷新按钮配置',
           resizable: '列宽拖动配置（需要设置 id）',
-          setting: '列个性化配置（需要设置 id）'
+          setting: '即将废弃，请使用 customs',
+          customs: '自定义列配置（需要设置 id）'
         }
       },
       pager: {

@@ -431,7 +431,8 @@ module.exports = {
           export: 'Export button config',
           refresh: 'Refresh button config',
           resizable: 'Column width drag config(id needs to be set)',
-          setting: 'Custom column config(id needs to be set)'
+          setting: 'Obsolete, please use "customs"',
+          customs: 'Custom column config(id needs to be set)'
         }
       },
       pager: {

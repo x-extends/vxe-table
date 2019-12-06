@@ -78,7 +78,7 @@
             resizable: {
               storage: false
             },
-            setting: {
+            customs: {
               storage: false
             },
             buttons: []

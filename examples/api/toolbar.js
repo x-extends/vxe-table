@@ -211,8 +211,18 @@ const apis = [
       },
       {
         name: 'setting',
+        disabled: true,
         descKey: 'app.api.toolbar.desc.setting',
         version: '',
+        type: 'Boolean, Object',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'customs',
+        descKey: 'app.api.toolbar.desc.customs',
+        version: '2.7.0',
         type: 'Boolean, Object',
         enum: '',
         defVal: '',
