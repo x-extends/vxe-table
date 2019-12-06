@@ -235,7 +235,7 @@ export default {
                   'c--ellipsis': showEllipsis
                 }],
                 style: {
-                  width: hasEllipsis ? `${border ? renderWidth - 1 : renderWidth}px` : null
+                  width: hasEllipsis ? `${border ? renderWidth - 2 : renderWidth}px` : null
                 }
               }, column.renderHeader(h, params)),
               /**

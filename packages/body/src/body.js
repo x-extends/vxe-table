@@ -231,7 +231,7 @@ function renderColumn (h, _vm, $table, $seq, seq, rowid, fixedType, rowLevel, ro
           'c--ellipsis': showEllipsis
         }],
         style: {
-          width: hasEllipsis ? `${border ? renderWidth - 1 : renderWidth}px` : null
+          width: hasEllipsis ? `${border ? renderWidth - 2 : renderWidth}px` : null
         }
       }, column.renderCell(h, params)),
       hasDefaultTip ? validError ? h('div', {
