@@ -82,7 +82,7 @@ export default {
       refresh: '重繪',
       zoomIn: '最大化',
       zoomOut: '向下還原',
-      customs: '列設定',
+      customs: '自定義列',
       impTitle: '導入參數設置',
       impFile: '檔名',
       impSelect: '選擇檔案',
