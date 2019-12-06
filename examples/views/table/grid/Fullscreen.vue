@@ -38,11 +38,11 @@ export default {
         },
         ajax: {
           // page 对象： { pageSize, currentPage }
-          query: ({ page }) => this.$ajax.doGet(`/api/user/page/list/${page.pageSize}/${page.currentPage}`),
+          query: ({ page }) => this.$ajax.get(`/api/user/page/list/${page.pageSize}/${page.currentPage}`),
           // body 对象： { removeRecords }
-          delete: ({ body }) => this.$ajax.doPost('/api/user/save', body),
+          delete: ({ body }) => this.$ajax.post('/api/user/save', body),
           // body 对象： { insertRecords, updateRecords, removeRecords, pendingRecords }
-          save: ({ body }) => this.$ajax.doPost('/api/user/save', body)
+          save: ({ body }) => this.$ajax.post('/api/user/save', body)
         }
       },
       tableToolbar: {
@@ -86,11 +86,11 @@ export default {
                 },
                 ajax: {
                   // page 对象： { pageSize, currentPage }
-                  query: ({ page }) => this.$ajax.doGet(\`/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`), // 模拟请求
+                  query: ({ page }) => this.$ajax.get(\`/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`), // 模拟请求
                   // body 对象： { removeRecords }
-                  delete: ({ body }) => this.$ajax.doPost('/api/user/save', body),
+                  delete: ({ body }) => this.$ajax.post('/api/user/save', body),
                   // body 对象： { insertRecords, updateRecords, removeRecords, pendingRecords }
-                  save: ({ body }) => this.$ajax.doPost('/api/user/save', body)
+                  save: ({ body }) => this.$ajax.post('/api/user/save', body)
                 }
               },
               tableToolbar: {

@@ -66,8 +66,8 @@ export default {
             })
             return this.$ajax.get(`/api/user/page/list/${page.pageSize}/${page.currentPage}`, formData)
           },
-          delete: ({ body }) => this.$ajax.doPost('/api/user/save', body),
-          save: ({ body }) => this.$ajax.doPost('/api/user/save', body)
+          delete: ({ body }) => this.$ajax.post('/api/user/save', body),
+          save: ({ body }) => this.$ajax.post('/api/user/save', body)
         }
       },
       tableToolbar: {
@@ -216,8 +216,8 @@ export default {
                     })
                     return this.$ajax.get(\`/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`, formData)
                   },
-                  delete: ({ body }) => this.$ajax.doPost('/api/user/save', body),
-                  save: ({ body }) => this.$ajax.doPost('/api/user/save', body)
+                  delete: ({ body }) => this.$ajax.post('/api/user/save', body),
+                  save: ({ body }) => this.$ajax.post('/api/user/save', body)
                 }
               },
               tableToolbar: {
