@@ -58,7 +58,7 @@ class ColumnConfig {
       checked: false,
       params: _vm.params,
       // 渲染属性
-      visible: true,
+      visible: XEUtils.isBoolean(_vm.visible) ? _vm.visible : true,
       level: 1,
       rowSpan: 1,
       colSpan: 1,

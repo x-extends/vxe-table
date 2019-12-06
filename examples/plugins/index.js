@@ -13,6 +13,7 @@ import './element.js'
 import './iview.js'
 import './antd.js'
 import './xtable'
+import './xtable/renderer'
 
 Vue.component(TableAPILink.name, TableAPILink)
 Vue.component(TableColumnAPILink.name, TableColumnAPILink)

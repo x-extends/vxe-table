@@ -4,7 +4,7 @@ import router from './router'
 import i18n from './i18n'
 
 import 'font-awesome/scss/font-awesome.scss'
-import './assets/style/layout.scss'
+import './assets/style/index.scss'
 import './plugins'
 import './mock'
 import XEUtils from 'xe-utils'

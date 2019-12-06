@@ -58,6 +58,8 @@ const props = {
   filterRender: Object,
   // 指定为树节点
   treeNode: Boolean,
+  // 是否可视
+  visible: { type: Boolean, default: null },
   // 列的 key
   columnKey: [String, Number],
   // 单元格渲染配置项

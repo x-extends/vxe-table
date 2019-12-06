@@ -1440,7 +1440,7 @@ export default {
       return fullColumnIdData[colid] ? fullColumnIdData[colid].column : null
     },
     getColumnByField (field) {
-      return XEUtils.find(this.visibleColumn, column => column.property === field)
+      return XEUtils.find(this.tableFullColumn, column => column.property === field)
     },
     /**
      * 获取表格可视列
@@ -1491,28 +1491,26 @@ export default {
      * 获取选中数据
      */
     getSelectRecords () {
-      let { tableFullData, editStore, treeConfig, selection } = this
+      let { tableFullData, treeConfig } = this
       // 在 v3.0 中废弃 selectConfig
       let checkboxConfig = this.checkboxConfig || this.selectConfig || {}
-      let property = checkboxConfig.checkField || checkboxConfig.checkProp
+      let { checkField: property } = checkboxConfig
       let rowList = []
-      let insList = []
       if (property) {
         if (treeConfig) {
           rowList = XEUtils.filterTree(tableFullData, row => XEUtils.get(row, property), treeConfig)
         } else {
           rowList = tableFullData.filter(row => XEUtils.get(row, property))
         }
-        insList = editStore.insertList.filter(row => XEUtils.get(row, property))
       } else {
+        let { selection } = this
         if (treeConfig) {
           rowList = XEUtils.filterTree(tableFullData, row => selection.indexOf(row) > -1, treeConfig)
         } else {
           rowList = tableFullData.filter(row => selection.indexOf(row) > -1)
         }
-        insList = editStore.insertList.filter(row => selection.indexOf(row) > -1)
       }
-      return rowList.concat(insList)
+      return rowList
     },
     /**
      * 获取更新数据
@@ -1657,7 +1655,7 @@ export default {
         })
       }
       if (this.$toolbar) {
-        this.$toolbar.updateSetting()
+        this.$toolbar.handleCustoms()
       }
       return this.$nextTick()
     },

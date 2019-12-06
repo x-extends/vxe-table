@@ -173,7 +173,7 @@ module.exports = {
         menusPlugin: 'plugin-menus 快捷菜单集',
         excelPlugin: 'plugin-excel 简单的 Excel',
 
-        renderer: '(抽象) 渲染器',
+        renderer: '(进阶) 渲染器',
         rendererFilter: '筛选渲染器',
         rendererDefault: '默认的渲染器',
         rendererEdit: '可编辑渲染器',
@@ -265,7 +265,7 @@ module.exports = {
         desc: {
           data: '表格数据（需要注意更新数据是不会重置状态）',
           columns: '列配置',
-          customs: '初始化显示/隐藏列（通过 visible 设置为 false 则默认隐藏列）',
+          customs: '初始化双向绑定列',
           height: '表格的高度；支持铺满父容器或者固定宽高（如果设置自适应时，必须确保存在父节点且不允许存在相邻元素）',
           maxHeight: '表格的最大高度',
           syncResize: '响应式跟随某个属性（对于通过某个属性来控制显示/隐藏切换的场景可能会用到，和 autoResize 二选一）',
@@ -432,7 +432,8 @@ module.exports = {
           export: '导出按钮配置',
           refresh: '刷新按钮配置',
           resizable: '列宽拖动配置（需要设置 id）',
-          setting: '列个性化配置（需要设置 id）'
+          setting: '即将废弃，请使用 customs',
+          customs: '自定义列配置（需要设置 id）'
         }
       },
       pager: {
