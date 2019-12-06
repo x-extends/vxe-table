@@ -32,8 +32,8 @@ export default {
       },
       tableProxy: {
         props: {
-          result: 'data.result',
-          total: 'data.page.total'
+          result: 'result',
+          total: 'page.total'
         },
         ajax: {
           // page 对象： { pageSize, currentPage }
@@ -115,8 +115,8 @@ export default {
               tableProxy: {
                 // 配置响应的数据属性
                 props: {
-                  result: 'data.result',
-                  total: 'data.page.total'
+                  result: 'result',
+                  total: 'page.total'
                 },
                 ajax: {
                   // page 对象： { pageSize, currentPage }
