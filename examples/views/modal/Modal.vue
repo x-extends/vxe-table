@@ -146,7 +146,7 @@ export default {
           total: 'data.page.total'
         },
         ajax: {
-          query: ({ page }) => this.$ajax.doGet(`/api/user/page/list/${page.pageSize}/${page.currentPage}`)
+          query: ({ page }) => this.$ajax.get(`/api/user/page/list/${page.pageSize}/${page.currentPage}`)
         }
       },
       tableToolbar: {
@@ -311,7 +311,7 @@ export default {
                   total: 'data.page.total'
                 },
                 ajax: {
-                  query: ({ page }) => this.$ajax.doGet(\`/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`)
+                  query: ({ page }) => this.$ajax.get(\`/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`)
                 }
               },
               tableToolbar: {

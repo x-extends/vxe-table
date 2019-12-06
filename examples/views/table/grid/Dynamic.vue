@@ -60,9 +60,9 @@ export default {
           total: 'data.page.total'
         },
         ajax: {
-          query: ({ page }) => this.$ajax.doGet(`/api/column/page/list/${page.pageSize}/${page.currentPage}`, { sort: 'seq', order: 'asc' }),
-          delete: ({ body }) => this.$ajax.doPost('/api/column/save', body),
-          save: ({ body }) => this.$ajax.doPost('/api/column/save', body)
+          query: ({ page }) => this.$ajax.get(`/api/column/page/list/${page.pageSize}/${page.currentPage}`, { sort: 'seq', order: 'asc' }),
+          delete: ({ body }) => this.$ajax.post('/api/column/save', body),
+          save: ({ body }) => this.$ajax.post('/api/column/save', body)
         }
       },
       tableToolbar: {
@@ -102,9 +102,9 @@ export default {
           total: 'data.page.total'
         },
         ajax: {
-          query: ({ page }) => this.$ajax.doGet(`/api/user/page/list/${page.pageSize}/${page.currentPage}`),
-          delete: ({ body }) => this.$ajax.doPost('/api/user/save', body),
-          save: ({ body }) => this.$ajax.doPost('/api/user/save', body)
+          query: ({ page }) => this.$ajax.get(`/api/user/page/list/${page.pageSize}/${page.currentPage}`),
+          delete: ({ body }) => this.$ajax.post('/api/user/save', body),
+          save: ({ body }) => this.$ajax.post('/api/user/save', body)
         }
       },
       tableToolbar2: {
@@ -148,9 +148,9 @@ export default {
                   total: 'data.page.total'
                 },
                 ajax: {
-                  query: ({ page }) => this.$ajax.doGet(\`/api/column/page/list/\${page.pageSize}/\${page.currentPage}\`, { sort: 'seq', order: 'asc' }),
-                  delete: ({ body }) => this.$ajax.doPost('/api/column/save', body),
-                  save: ({ body }) => this.$ajax.doPost('/api/column/save', body)
+                  query: ({ page }) => this.$ajax.get(\`/api/column/page/list/\${page.pageSize}/\${page.currentPage}\`, { sort: 'seq', order: 'asc' }),
+                  delete: ({ body }) => this.$ajax.post('/api/column/save', body),
+                  save: ({ body }) => this.$ajax.post('/api/column/save', body)
                 }
               },
               tableToolbar: {
@@ -216,9 +216,9 @@ export default {
                   total: 'data.page.total'
                 },
                 ajax: {
-                  query: ({ page }) => this.$ajax.doGet(\`/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`),
-                  delete: ({ body }) => this.$ajax.doPost('/api/user/save', body),
-                  save: ({ body }) => this.$ajax.doPost('/api/user/save', body)
+                  query: ({ page }) => this.$ajax.get(\`/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`),
+                  delete: ({ body }) => this.$ajax.post('/api/user/save', body),
+                  save: ({ body }) => this.$ajax.post('/api/user/save', body)
                 }
               },
               tableToolbar: {

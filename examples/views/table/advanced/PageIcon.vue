@@ -103,7 +103,7 @@ export default {
           methods: {
             findList () {
               this.loading = true
-              this.$ajax.doGet(\`/api/user/page/list/\${this.tablePage.pageSize}/\${this.tablePage.currentPage}\`, this.formData).then(response => {
+              this.$ajax.get(\`/api/user/page/list/\${this.tablePage.pageSize}/\${this.tablePage.currentPage}\`, this.formData).then(response => {
                 let { page, result } = response.data
                 this.tableData = result
                 this.tablePage.totalResult = page.totalResult
@@ -134,7 +134,7 @@ export default {
   methods: {
     findList () {
       this.loading = true
-      this.$ajax.doGet(`/api/user/page/list/${this.tablePage.pageSize}/${this.tablePage.currentPage}`, this.formData).then(response => {
+      this.$ajax.get(`/api/user/page/list/${this.tablePage.pageSize}/${this.tablePage.currentPage}`, this.formData).then(response => {
         let { page, result } = response.data
         this.tableData = result
         this.tablePage.totalResult = page.totalResult

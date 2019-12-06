@@ -34,7 +34,7 @@ export default {
             // 将带层级的列表转成树结构
             return this.$utils.toArrayTree(data, { key: 'id', parentKey: 'parentId', children: 'children' })
           }),
-          save: ({ body }) => this.$ajax.doPost('/api/file/save', body)
+          save: ({ body }) => this.$ajax.post('/api/file/save', body)
         }
       },
       tableToolbar: {
@@ -79,7 +79,7 @@ export default {
                     // 将带层级的列表转成树结构
                     return this.$utils.toArrayTree(data, { key: 'id', parentKey: 'parentId', children: 'children' })
                   }),
-                  save: ({ body }) => this.$ajax.doPost('/api/file/save', body)
+                  save: ({ body }) => this.$ajax.post('/api/file/save', body)
                 }
               },
               tableToolbar: {

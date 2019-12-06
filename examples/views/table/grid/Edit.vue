@@ -89,7 +89,7 @@ export default {
           methods: {
             findList () {
               this.loading = true
-              this.$ajax.doGet(\`/api/user/page/list/\${this.tablePage.pageSize}/\${this.tablePage.currentPage}\`).then(response => {
+              this.$ajax.get(\`/api/user/page/list/\${this.tablePage.pageSize}/\${this.tablePage.currentPage}\`).then(response => {
                 let { page, result } = response.data
                 this.tableData = result
                 this.tablePage.total = page.total
@@ -99,7 +99,7 @@ export default {
               })
             },
             findSexList () {
-              return this.$ajax.doGet('/api/conf/sex/list').then(response => {
+              return this.$ajax.get('/api/conf/sex/list').then(response => {
                 // 异步更新下拉选项
                 let column = this.$refs.xGrid.getColumnByField('sex')
                 column.editRender.options = response.data
@@ -132,7 +132,7 @@ export default {
   methods: {
     findList () {
       this.loading = true
-      this.$ajax.doGet(`/api/user/page/list/${this.tablePage.pageSize}/${this.tablePage.currentPage}`).then(response => {
+      this.$ajax.get(`/api/user/page/list/${this.tablePage.pageSize}/${this.tablePage.currentPage}`).then(response => {
         let { page, result } = response.data
         this.tableData = result
         this.tablePage.total = page.total
@@ -142,7 +142,7 @@ export default {
       })
     },
     findSexList () {
-      return this.$ajax.doGet('/api/conf/sex/list').then(response => {
+      return this.$ajax.get('/api/conf/sex/list').then(response => {
         // 异步更新下拉选项
         let column = this.$refs.xGrid.getColumnByField('sex')
         column.editRender.options = response.data

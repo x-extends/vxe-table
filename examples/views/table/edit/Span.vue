@@ -137,7 +137,7 @@ export default {
               if (insertRecords.length || removeRecords.length || updateRecords.length) {
                 this.$refs.xTable.validate(valid => {
                   if (valid) {
-                    this.$ajax.doPost('/api/i18n/save', body).then(() => {
+                    this.$ajax.post('/api/i18n/save', body).then(() => {
                       this.$XModal.message({ message: '保存成功！', status: 'success' })
                       this.findList()
                     }).catch(() => {
@@ -202,7 +202,7 @@ export default {
       if (insertRecords.length || removeRecords.length || updateRecords.length) {
         this.$refs.xTable.validate(valid => {
           if (valid) {
-            this.$ajax.doPost('/api/i18n/save', body).then(() => {
+            this.$ajax.post('/api/i18n/save', body).then(() => {
               this.$XModal.message({ message: '保存成功！', status: 'success' })
               this.findList()
             }).catch(() => {

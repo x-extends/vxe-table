@@ -271,7 +271,7 @@ export default {
             findList () {
               // 模拟后台数据
               this.loading = true
-              this.$ajax.doGet(\`/api/user/page/list/\${this.tablePage.pageSize}/\${this.tablePage.currentPage}\`, this.formData).then(response => {
+              this.$ajax.get(\`/api/user/page/list/\${this.tablePage.pageSize}/\${this.tablePage.currentPage}\`, this.formData).then(response => {
                 let { page, result } = response.data
                 this.tableData = result
                 this.tablePage.totalResult = page.totalResult
@@ -282,13 +282,13 @@ export default {
               })
             },
             findSexList () {
-              return this.$ajax.doGet('/api/conf/sex/list').then(({ data }) => {
+              return this.$ajax.get('/api/conf/sex/list').then(({ data }) => {
                 this.sexList = data
                 return data
               })
             },
             findRegionList () {
-              return this.$ajax.doGet('/api/conf/region/list').then(({ data }) => {
+              return this.$ajax.get('/api/conf/region/list').then(({ data }) => {
                 this.regionList = data
                 return data
               })
@@ -422,7 +422,7 @@ export default {
   methods: {
     findList () {
       this.loading = true
-      this.$ajax.doGet(`/api/user/page/list/${this.tablePage.pageSize}/${this.tablePage.currentPage}`, this.formData).then(response => {
+      this.$ajax.get(`/api/user/page/list/${this.tablePage.pageSize}/${this.tablePage.currentPage}`, this.formData).then(response => {
         let { page, result } = response.data
         this.tableData = result
         this.tablePage.totalResult = page.totalResult
@@ -433,13 +433,13 @@ export default {
       })
     },
     findSexList () {
-      return this.$ajax.doGet('/api/conf/sex/list').then(({ data }) => {
+      return this.$ajax.get('/api/conf/sex/list').then(({ data }) => {
         this.sexList = data
         return data
       })
     },
     findRegionList () {
-      return this.$ajax.doGet('/api/conf/region/list').then(({ data }) => {
+      return this.$ajax.get('/api/conf/region/list').then(({ data }) => {
         this.regionList = data
         return data
       })
