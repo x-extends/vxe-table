@@ -6,21 +6,13 @@
       还可以通过动态修改列的 visible 属性，可以轻松实现远程读取配置后控制是否显示，最后调用 <table-api-link prop="refreshColumn"/> 刷新列
     </p>
 
-    <div>
-      <template v-for="(column,index) in columns1">
-        <vxe-checkbox v-model="column.visible" :key="index" @change="$refs.xTable1.refreshColumn()">{{ column.title }}</vxe-checkbox>
-      </template>
-    </div>
-
     <vxe-table
       border
-      ref="xTable1"
       height="200"
-      :data="tableData"
-      :customs.sync="columns1">
+      :data="tableData">
       <vxe-table-column field="name" title="Name"></vxe-table-column>
       <vxe-table-column field="role" title="Role"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+      <vxe-table-column field="sex" title="Sex" :visible="false"></vxe-table-column>
       <vxe-table-column field="age" title="Age"></vxe-table-column>
     </vxe-table>
 
@@ -106,26 +98,17 @@ export default {
     return {
       loading: false,
       tableData: [],
-      columns1: [],
       columns2: [],
       columns3: [],
       demoCodes: [
         `
-        <div>
-          <template v-for="(column,index) in columns">
-            <vxe-checkbox v-model="column.visible" :key="index" @change="$refs.xTable.refreshColumn()">{{ column.title }}</vxe-checkbox>
-          </template>
-        </div>
-
         <vxe-table
           border
-          ref="xTable"
           height="200"
-          :data="tableData"
-          :customs.sync="columns">
+          :data="tableData">
           <vxe-table-column field="name" title="Name"></vxe-table-column>
           <vxe-table-column field="role" title="Role"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+          <vxe-table-column field="sex" title="Sex" :visible="false"></vxe-table-column>
           <vxe-table-column field="age" title="Age"></vxe-table-column>
         </vxe-table>
         `,
@@ -133,8 +116,7 @@ export default {
         export default {
           data () {
             return {
-              tableData: [],
-              columns: []
+              tableData: []
             }
           },
           created () {

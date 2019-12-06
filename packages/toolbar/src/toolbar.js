@@ -88,9 +88,12 @@ export default {
     }
   },
   created () {
-    let { customOpts, id } = this
+    let { customOpts, setting, id } = this
     if (customOpts.storage && !id) {
       return UtilTools.error('vxe.error.toolbarId')
+    }
+    if (setting) {
+      UtilTools.warn('vxe.error.delProp', ['setting', 'customs'])
     }
     if (!VXETable._export && (this.export || this.import)) {
       UtilTools.error('vxe.error.reqModule', ['Export'])

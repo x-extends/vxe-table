@@ -530,7 +530,6 @@ const Methods = {
     let checkboxConfig = this.checkboxConfig || this.selectConfig || {}
     let { checkField: property } = checkboxConfig
     let rowList = []
-    let insList = []
     if (property) {
       if (treeConfig) {
         rowList = XEUtils.filterTree(tableFullData, row => XEUtils.get(row, property), treeConfig)

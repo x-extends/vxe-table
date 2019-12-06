@@ -227,19 +227,3 @@ export default {
   }
 }
 </script>
-
-<style>
-.cmplex-filter {
-  width: 260px;
-  padding: 0 8px;
-}
-.cmplex-filter .f-type {
-  padding: 8px 0;
-}
-.cmplex-filter .f-iscase {
-  padding: 12px 0;
-}
-.cmplex-filter .f-footer {
-  text-align: center;
-}
-</style>
