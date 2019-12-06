@@ -6,7 +6,7 @@
       也可以通过配合 <table-api-link prop="resizable-change"/> 事件实现服务端保存
     </p>
 
-    <vxe-toolbar id="toolbar_demo5" :resizable="{storage: true}" :customs="{storage: true, checkMethod: checkColumnMethod}">
+    <vxe-toolbar id="toolbar_demo5" :resizable="{storage: true}" :custom="{storage: true, checkMethod: checkColumnMethod}">
       <template v-slot:buttons>
         <vxe-button>按钮1</vxe-button>
         <vxe-button>按钮2</vxe-button>
@@ -43,7 +43,7 @@ export default {
       tableData: [],
       demoCodes: [
         `
-        <vxe-toolbar id="toolbar_demo5" :resizable="{storage: true}" :customs="{storage: true, checkMethod: checkColumnMethod}">
+        <vxe-toolbar id="toolbar_demo5" :resizable="{storage: true}" :custom="{storage: true, checkMethod: checkColumnMethod}">
           <template v-slot:buttons>
             <vxe-button>按钮1</vxe-button>
             <vxe-button>按钮2</vxe-button>

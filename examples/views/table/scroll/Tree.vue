@@ -83,7 +83,7 @@ export default {
           methods: {
             findCityAll () {
               this.loading = true
-              this.$ajax.getJSON('/api/conf/city/all').then(data => {
+              this.$ajax.get('/api/conf/city/all').then(data => {
                 this.tableData = data
                 this.loading = false
               })
@@ -105,7 +105,7 @@ export default {
   methods: {
     findCityAll () {
       this.loading = true
-      this.$ajax.getJSON('/api/conf/city/all').then(data => {
+      this.$ajax.get('/api/conf/city/all').then(data => {
         this.tableData = data
         this.loading = false
       })

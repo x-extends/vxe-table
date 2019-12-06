@@ -30,7 +30,7 @@ export default {
     return {
       tableProxy: {
         ajax: {
-          query: () => this.$ajax.getJSON('/api/file/list').then(data => {
+          query: () => this.$ajax.get('/api/file/list').then(data => {
             // 将带层级的列表转成树结构
             return this.$utils.toArrayTree(data, { key: 'id', parentKey: 'parentId', children: 'children' })
           }),
@@ -75,7 +75,7 @@ export default {
             return {
               tableProxy: {
                 ajax: {
-                  query: () => this.$ajax.getJSON('/api/file/list').then(data => {
+                  query: () => this.$ajax.get('/api/file/list').then(data => {
                     // 将带层级的列表转成树结构
                     return this.$utils.toArrayTree(data, { key: 'id', parentKey: 'parentId', children: 'children' })
                   }),

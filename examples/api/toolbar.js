@@ -220,8 +220,8 @@ const apis = [
         list: []
       },
       {
-        name: 'customs',
-        descKey: 'app.api.toolbar.desc.customs',
+        name: 'custom',
+        descKey: 'app.api.toolbar.desc.custom',
         version: '2.7.0',
         type: 'Boolean, Object',
         enum: '',

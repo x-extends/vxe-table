@@ -1,13 +1,13 @@
 <template>
   <div>
-    <p class="tip">树表格、数据代理</p>
+    <p class="tip">懒加载树表格、数据代理</p>
 
     <vxe-grid
       border
       resizable
       :proxy-config="tableProxy"
       :columns="tableColumn"
-      :tree-config="{children: 'children'}"></vxe-grid>
+      :tree-config="{lazy: true, children: 'children', hasChildren: 'hasChildren', loadMethod: loadChildrenMethod}"></vxe-grid>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
@@ -26,8 +26,8 @@ export default {
     return {
       tableProxy: {
         ajax: {
-          // 处理树结构转换
-          query: () => this.$ajax.get('/api/file/list').then(data => this.$utils.toArrayTree(data, { key: 'id', parentKey: 'parentId', children: 'children' }))
+          // 查询根节点
+          query: () => this.$ajax.get('/api/file/node/list', { parentId: null })
         }
       },
       tableColumn: [
@@ -44,7 +44,7 @@ export default {
           resizable
           :proxy-config="tableProxy"
           :columns="tableColumn"
-          :tree-config="{children: 'children'}"></vxe-grid>
+          :tree-config="{lazy: true, children: 'children', hasChildren: 'hasChildren', loadMethod: loadChildrenMethod}"></vxe-grid>
         `,
         `
         export default {
@@ -52,8 +52,8 @@ export default {
             return {
               tableProxy: {
                 ajax: {
-                  // 处理树结构转换
-                  query: () => this.$ajax.get('/api/file/list').then(data => this.$utils.toArrayTree(data, { key: 'id', parentKey: 'parentId', children: 'children' }))
+                  // 查询根节点
+                  query: () => this.$ajax.get('/api/file/node/list', { parentId: null })
                 }
               },
               tableColumn: [
@@ -68,6 +68,10 @@ export default {
           methods: {
             formatterDate ({ cellValue }) {
               return this.$utils.toDateString(cellValue, 'yyyy-MM-dd HH:mm:ss')
+            },
+            loadChildrenMethod ({ row }) {
+              // 异步加载子节点
+              return this.$ajax.get('/api/file/node/list', { parentId: row.id })
             }
           }
         }
@@ -83,6 +87,10 @@ export default {
   methods: {
     formatterDate ({ cellValue }) {
       return this.$utils.toDateString(cellValue, 'yyyy-MM-dd HH:mm:ss')
+    },
+    loadChildrenMethod ({ row }) {
+      // 异步加载子节点
+      return this.$ajax.get('/api/file/node/list', { parentId: row.id })
     }
   }
 }

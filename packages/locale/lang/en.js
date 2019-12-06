@@ -82,7 +82,7 @@ export default {
       refresh: 'Refresh',
       zoomIn: 'Maximization',
       zoomOut: 'Downward reduction',
-      customs: 'Custom columns',
+      custom: 'Custom columns',
       impTitle: 'Import parameter settings',
       impFile: 'Filename',
       impSelect: 'Select file',

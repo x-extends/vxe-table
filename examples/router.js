@@ -99,6 +99,7 @@ const GridMenu = () => import(/* webpackChunkName: "grid" */ './views/table/grid
 const GridSpan = () => import(/* webpackChunkName: "grid" */ './views/table/grid/Span.vue')
 const GridUpload = () => import(/* webpackChunkName: "grid" */ './views/table/grid/Upload.vue')
 const GridTree = () => import(/* webpackChunkName: "grid" */ './views/table/grid/Tree.vue')
+const GridTreeLazy = () => import(/* webpackChunkName: "grid" */ './views/table/grid/TreeLazy.vue')
 const GridTreeEdit = () => import(/* webpackChunkName: "grid" */ './views/table/grid/TreeEdit.vue')
 const GridFullEdit = () => import(/* webpackChunkName: "grid" */ './views/table/grid/FullEdit.vue')
 
@@ -901,6 +902,11 @@ export default new Router({
       path: '/table/grid/tree',
       name: 'GridTree',
       component: GridTree
+    },
+    {
+      path: '/table/grid/treeLazy',
+      name: 'GridTreeLazy',
+      component: GridTreeLazy
     },
     {
       path: '/table/grid/treeEdit',

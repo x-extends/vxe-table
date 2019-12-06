@@ -618,6 +618,13 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.span',
+              disabled: true,
+              locat: {
+                name: 'GridSpan'
+              }
+            },
+            {
               label: 'app.aside.nav.upload',
               locat: {
                 name: 'GridUpload'
@@ -630,10 +637,9 @@ export default {
               }
             },
             {
-              label: 'app.aside.nav.span',
-              disabled: true,
+              label: 'app.aside.nav.lazyTree',
               locat: {
-                name: 'GridSpan'
+                name: 'GridTreeLazy'
               }
             },
             {
