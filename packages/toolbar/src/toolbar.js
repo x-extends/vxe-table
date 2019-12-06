@@ -14,7 +14,7 @@ export default {
     export: [Boolean, Object],
     zoom: [Boolean, Object],
     setting: [Boolean, Object],
-    customs: [Boolean, Object],
+    custom: [Boolean, Object],
     buttons: { type: Array, default: () => GlobalConfig.toolbar.buttons },
     size: String
   },
@@ -84,7 +84,7 @@ export default {
       return Object.assign({}, GlobalConfig.toolbar.zoom, this.zoom)
     },
     customOpts () {
-      return Object.assign({ storageKey: 'VXE_TABLE_CUSTOM_COLUMN_HIDDEN' }, GlobalConfig.toolbar.customs || GlobalConfig.toolbar.setting, this.customs || this.setting)
+      return Object.assign({ storageKey: 'VXE_TABLE_CUSTOM_COLUMN_HIDDEN' }, GlobalConfig.toolbar.custom || GlobalConfig.toolbar.setting, this.custom || this.setting)
     }
   },
   created () {
@@ -93,7 +93,7 @@ export default {
       return UtilTools.error('vxe.error.toolbarId')
     }
     if (setting) {
-      UtilTools.warn('vxe.error.delProp', ['setting', 'customs'])
+      UtilTools.warn('vxe.error.delProp', ['setting', 'custom'])
     }
     if (!VXETable._export && (this.export || this.import)) {
       UtilTools.error('vxe.error.reqModule', ['Export'])
@@ -112,12 +112,12 @@ export default {
     GlobalEvent.off(this, 'blur')
   },
   render (h) {
-    let { _e, $scopedSlots, $grid, $table, loading, customStore, importOpts, exportOpts, refresh, refreshOpts, zoom, zoomOpts, customs, setting, customOpts, buttons = [], vSize, tableFullColumn, importStore, importParams, exportStore, exportParams } = this
+    let { _e, $scopedSlots, $grid, $table, loading, customStore, importOpts, exportOpts, refresh, refreshOpts, zoom, zoomOpts, custom, setting, customOpts, buttons = [], vSize, tableFullColumn, importStore, importParams, exportStore, exportParams } = this
     let customBtnOns = {}
     let customWrapperOns = {}
     let $buttons = $scopedSlots.buttons
     let $tools = $scopedSlots.tools
-    if (customs || setting) {
+    if (custom || setting) {
       if (customOpts.trigger === 'manual') {
         // 手动触发
       } else if (customOpts.trigger === 'hover') {
@@ -222,7 +222,7 @@ export default {
             class: this.$grid.isMaximized() ? (zoomOpts.iconOut || GlobalConfig.icon.zoomOut) : (zoomOpts.iconIn || GlobalConfig.icon.zoomIn)
           })
         ]) : null,
-        customs || setting ? h('div', {
+        custom || setting ? h('div', {
           class: ['vxe-custom--wrapper', {
             'is--active': customStore.visible
           }],
@@ -231,7 +231,7 @@ export default {
           h('div', {
             class: 'vxe-tools--operate-btn',
             attrs: {
-              title: GlobalConfig.i18n('vxe.toolbar.customs')
+              title: GlobalConfig.i18n('vxe.toolbar.custom')
             },
             on: customBtnOns
           }, [
@@ -259,7 +259,7 @@ export default {
                 on: {
                   change: value => {
                     column.visible = value
-                    if ((customs || setting) && customOpts.immediate) {
+                    if ((custom || setting) && customOpts.immediate) {
                       this.handleCustoms()
                     }
                   }
@@ -300,16 +300,16 @@ export default {
       this.customStore.visible = true
     },
     closeCustom () {
-      let { customs, setting, customStore } = this
+      let { custom, setting, customStore } = this
       if (customStore.visible) {
         customStore.visible = false
-        if ((customs || setting) && !customStore.immediate) {
+        if ((custom || setting) && !customStore.immediate) {
           this.handleCustoms()
         }
       }
     },
     loadStorage () {
-      let { $grid, $table, id, refresh, resizable, customs, setting, refreshOpts, resizableOpts, customOpts } = this
+      let { $grid, $table, id, refresh, resizable, custom, setting, refreshOpts, resizableOpts, customOpts } = this
       if (refresh && !$grid) {
         if (!refreshOpts.query) {
           UtilTools.warn('vxe.error.notFunc', ['query'])
@@ -318,11 +318,11 @@ export default {
       if ($grid || $table) {
         ($grid || $table).connect({ toolbar: this })
       } else {
-        if (resizable || customs || setting) {
+        if (resizable || custom || setting) {
           throw new Error(UtilTools.getLog('vxe.error.barUnableLink'))
         }
       }
-      if (resizable || customs || setting) {
+      if (resizable || custom || setting) {
         let customMap = {}
         if (resizableOpts.storage) {
           let columnWidthStorage = this.getStorageMap(resizableOpts.storageKey)[id]

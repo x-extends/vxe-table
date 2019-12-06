@@ -103,7 +103,7 @@ const GlobalConfig = {
     //   storage: false
     // },
     // export: false,
-    // customs: {
+    // custom: {
     //   storage: false
     // },
     // buttons: []

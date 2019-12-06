@@ -9,7 +9,7 @@
       border
       resizable
       row-id="id"
-      :tree-config="{children: 'children', hasChildren: 'hasChildren', lazy: true, loadMethod: loadChildrenMethod}"
+      :tree-config="{lazy: true, children: 'children', hasChildren: 'hasChildren', loadMethod: loadChildrenMethod}"
       :data="tableData">
       <vxe-table-column field="name" title="Name" width="400" tree-node></vxe-table-column>
       <vxe-table-column field="size" title="Size"></vxe-table-column>
@@ -63,7 +63,7 @@ export default {
           border
           resizable
           row-id="id"
-          :tree-config="{children: 'children', hasChildren: 'hasChildren', lazy: true, loadMethod: loadChildrenMethod}"
+          :tree-config="{lazy: true, children: 'children', hasChildren: 'hasChildren', loadMethod: loadChildrenMethod}"
           :data="tableData">
           <vxe-table-column field="name" title="Name" width="400" tree-node></vxe-table-column>
           <vxe-table-column field="size" title="Size"></vxe-table-column>
@@ -83,13 +83,13 @@ export default {
           },
           methods: {
             findList () {
-              this.$ajax.getJSON('/api/file/node/list', { parentId: null }).then(data => {
+              this.$ajax.get('/api/file/node/list', { parentId: null }).then(data => {
                 this.tableData = data
               })
             },
             loadChildrenMethod ({ row }) {
               // 异步加载子节点
-              return this.$ajax.getJSON('/api/file/node/list', { parentId: row.id })
+              return this.$ajax.get('/api/file/node/list', { parentId: row.id })
             }
           }
         }
@@ -121,7 +121,7 @@ export default {
           },
           methods: {
             findList () {
-              this.$ajax.getJSON('/api/file/node/list', { parentId: null }).then(data => {
+              this.$ajax.get('/api/file/node/list', { parentId: null }).then(data => {
                 // 默认展开的节点必须在数据初始化之前赋值且只会执行一次
                 this.defaultExpandRowKeys = ['10000', '40000']
                 this.tableData = data
@@ -129,7 +129,7 @@ export default {
             },
             loadChildrenMethod ({ row }) {
               // 异步加载子节点
-              return this.$ajax.getJSON('/api/file/node/list', { parentId: row.id })
+              return this.$ajax.get('/api/file/node/list', { parentId: row.id })
             }
           }
         }
@@ -148,12 +148,12 @@ export default {
   },
   methods: {
     findList () {
-      this.$ajax.getJSON('/api/file/node/list', { parentId: null }).then(data => {
+      this.$ajax.get('/api/file/node/list', { parentId: null }).then(data => {
         this.tableData = data
       })
     },
     findList2 () {
-      this.$ajax.getJSON('/api/file/node/list', { parentId: null }).then(data => {
+      this.$ajax.get('/api/file/node/list', { parentId: null }).then(data => {
         // 默认展开的节点必须在数据初始化之前赋值且只会执行一次
         this.defaultExpandRowKeys = ['10000', '40000']
         this.tableData2 = data
@@ -161,7 +161,7 @@ export default {
     },
     loadChildrenMethod ({ row }) {
       // 异步加载子节点
-      return this.$ajax.getJSON('/api/file/node/list', { parentId: row.id })
+      return this.$ajax.get('/api/file/node/list', { parentId: row.id })
     }
   }
 }

@@ -1241,13 +1241,13 @@ const Methods = {
    * 全局按下事件处理
    */
   handleGlobalMousedownEvent (evnt) {
-    let { $el, $refs, editStore, ctxMenuStore, editConfig = {}, filterStore, getEventTargetNode, getRowNode } = this
+    let { $el, $refs, editStore, ctxMenuStore, editConfig = {}, filterStore, getRowNode } = this
     let { actived } = editStore
     let { filterWrapper, validTip } = $refs
     if (filterWrapper) {
-      if (getEventTargetNode(evnt, $el, 'vxe-filter-wrapper').flag) {
+      if (DomTools.getEventTargetNode(evnt, $el, 'vxe-filter-wrapper').flag) {
         // 如果点击了筛选按钮
-      } else if (getEventTargetNode(evnt, filterWrapper.$el).flag) {
+      } else if (DomTools.getEventTargetNode(evnt, filterWrapper.$el).flag) {
         // 如果点击筛选容器
       } else {
         this.preventEvent(evnt, 'event.clearFilter', filterStore.args, this.closeFilter)
@@ -1256,24 +1256,24 @@ const Methods = {
     // 如果已激活了编辑状态
     if (actived.row) {
       if (!(editConfig.autoClear === false)) {
-        if (validTip && getEventTargetNode(evnt, validTip.$el).flag) {
+        if (validTip && DomTools.getEventTargetNode(evnt, validTip.$el).flag) {
           // 如果是激活状态，且点击了校验提示框
         } else if (!this.lastCallTime || this.lastCallTime + 50 < Date.now()) {
           // 如果手动调用了激活单元格，避免触发源被移除后导致重复关闭
           this.preventEvent(evnt, 'event.clearActived', actived.args, () => {
             let isClear
             if (editConfig.mode === 'row') {
-              let rowNode = getEventTargetNode(evnt, $el, 'vxe-body--row')
+              let rowNode = DomTools.getEventTargetNode(evnt, $el, 'vxe-body--row')
               // row 方式，如果点击了不同行
               isClear = rowNode.flag ? getRowNode(rowNode.targetElem).item !== getRowNode(actived.args.cell.parentNode).item : 0
             } else {
               // cell 方式，如果是非编辑列
-              isClear = !getEventTargetNode(evnt, $el, 'col--edit').flag
+              isClear = !DomTools.getEventTargetNode(evnt, $el, 'col--edit').flag
             }
             if (
               isClear ||
                 // 如果点击了当前表格之外
-                !getEventTargetNode(evnt, $el).flag
+                !DomTools.getEventTargetNode(evnt, $el).flag
             ) {
               setTimeout(() => this.clearActived(evnt))
             }
@@ -1282,11 +1282,11 @@ const Methods = {
       }
     }
     // 如果配置了快捷菜单且，点击了其他地方则关闭
-    if (ctxMenuStore.visible && this.$refs.ctxWrapper && !getEventTargetNode(evnt, this.$refs.ctxWrapper.$el).flag) {
+    if (ctxMenuStore.visible && this.$refs.ctxWrapper && !DomTools.getEventTargetNode(evnt, this.$refs.ctxWrapper.$el).flag) {
       this.closeMenu()
     }
     // 最后激活的表格
-    this.isActivated = getEventTargetNode(evnt, (this.$grid || this).$el).flag
+    this.isActivated = DomTools.getEventTargetNode(evnt, (this.$grid || this).$el).flag
   },
   /**
    * 窗口失焦事件处理
@@ -2017,8 +2017,8 @@ const Methods = {
     let { _lastResizeTime, sortOpts } = this
     let { column, cell } = params
     let triggerResizable = _lastResizeTime && _lastResizeTime > Date.now() - 300
-    let triggerSort = this.getEventTargetNode(evnt, cell, 'vxe-sort-wrapper').flag
-    let triggerFilter = this.getEventTargetNode(evnt, cell, 'vxe-filter-wrapper').flag
+    let triggerSort = DomTools.getEventTargetNode(evnt, cell, 'vxe-sort-wrapper').flag
+    let triggerFilter = DomTools.getEventTargetNode(evnt, cell, 'vxe-filter-wrapper').flag
     if (sortOpts.trigger === 'cell' && !(triggerResizable || triggerSort || triggerFilter)) {
       this.triggerSortEvent(evnt, column, column.order === 'desc' ? 'asc' : 'desc')
     }
@@ -2083,26 +2083,26 @@ const Methods = {
       return
     }
     // 如果是展开行
-    if ((expandConfig.trigger === 'row' || (column.type === 'expand' && expandConfig.trigger === 'cell')) && !this.getEventTargetNode(evnt, $el, 'vxe-table--expanded').flag) {
+    if ((expandConfig.trigger === 'row' || (column.type === 'expand' && expandConfig.trigger === 'cell')) && !DomTools.getEventTargetNode(evnt, $el, 'vxe-table--expanded').flag) {
       this.triggerRowExpandEvent(evnt, params)
     }
     // 如果是树形表格
     if ((treeConfig.trigger === 'row' || (column.treeNode && treeConfig.trigger === 'cell'))) {
       this.triggerTreeExpandEvent(evnt, params)
     }
-    if ((!column.treeNode || !this.getEventTargetNode(evnt, $el, 'vxe-tree-wrapper').flag) && (column.type !== 'expand' || !this.getEventTargetNode(evnt, $el, 'vxe-table--expanded').flag)) {
+    if ((!column.treeNode || !DomTools.getEventTargetNode(evnt, $el, 'vxe-tree-wrapper').flag) && (column.type !== 'expand' || !DomTools.getEventTargetNode(evnt, $el, 'vxe-table--expanded').flag)) {
       // 如果是高亮行
       if (highlightCurrentRow) {
-        if (radioConfig.trigger === 'row' || (!this.getEventTargetNode(evnt, $el, 'vxe-checkbox').flag && !this.getEventTargetNode(evnt, $el, 'vxe-radio').flag)) {
+        if (radioConfig.trigger === 'row' || (!DomTools.getEventTargetNode(evnt, $el, 'vxe-checkbox').flag && !DomTools.getEventTargetNode(evnt, $el, 'vxe-radio').flag)) {
           this.triggerCurrentRowEvent(evnt, params)
         }
       }
       // 如果是单选框
-      if ((radioConfig.trigger === 'row' || (column.type === 'radio' && radioConfig.trigger === 'cell')) && !this.getEventTargetNode(evnt, $el, 'vxe-radio').flag) {
+      if ((radioConfig.trigger === 'row' || (column.type === 'radio' && radioConfig.trigger === 'cell')) && !DomTools.getEventTargetNode(evnt, $el, 'vxe-radio').flag) {
         this.triggerRadioRowEvent(evnt, params)
       }
       // 如果是复选框
-      if ((checkboxConfig.trigger === 'row' || ((column.type === 'checkbox' || column.type === 'selection') && checkboxConfig.trigger === 'cell')) && !this.getEventTargetNode(evnt, params.cell, 'vxe-checkbox').flag) {
+      if ((checkboxConfig.trigger === 'row' || ((column.type === 'checkbox' || column.type === 'selection') && checkboxConfig.trigger === 'cell')) && !DomTools.getEventTargetNode(evnt, params.cell, 'vxe-checkbox').flag) {
         // 在 v3.0 中废弃 type=selection
         this.handleToggleCheckRowEvent(params, evnt)
       }

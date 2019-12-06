@@ -45,7 +45,7 @@ export default {
             filters.forEach(({ column, field, values }) => {
               formData[field] = values.join(',')
             })
-            return this.$ajax.getJSON(`/api/user/page/list/${page.pageSize}/${page.currentPage}`, formData)
+            return this.$ajax.get(`/api/user/page/list/${page.pageSize}/${page.currentPage}`, formData)
           }
         }
       },
@@ -104,7 +104,7 @@ export default {
                     filters.forEach(({ column, property, values }) => {
                       formData[property] = values.join(',')
                     })
-                    return this.$ajax.getJSON(\`/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`, formData)
+                    return this.$ajax.get(\`/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`, formData)
                   }
                 }
               },

@@ -64,7 +64,7 @@ export default {
             filters.forEach(({ column, property, values }) => {
               formData[property] = values.join(',')
             })
-            return this.$ajax.getJSON(`/api/user/page/list/${page.pageSize}/${page.currentPage}`, formData)
+            return this.$ajax.get(`/api/user/page/list/${page.pageSize}/${page.currentPage}`, formData)
           },
           delete: ({ body }) => this.$ajax.doPost('/api/user/save', body),
           save: ({ body }) => this.$ajax.doPost('/api/user/save', body)
@@ -214,7 +214,7 @@ export default {
                     filters.forEach(({ column, property, values }) => {
                       formData[property] = values.join(',')
                     })
-                    return this.$ajax.getJSON(\`/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`, formData)
+                    return this.$ajax.get(\`/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`, formData)
                   },
                   delete: ({ body }) => this.$ajax.doPost('/api/user/save', body),
                   save: ({ body }) => this.$ajax.doPost('/api/user/save', body)
@@ -323,7 +323,7 @@ export default {
           },
           methods: {
             async findSexList () {
-              const sexList = await this.$ajax.getJSON('/api/conf/sex/list')
+              const sexList = await this.$ajax.get('/api/conf/sex/list')
               // 异步更新下拉选项
               let column = this.$refs.xGrid.getColumnByField('sex')
               column.editRender.options = sexList
@@ -350,7 +350,7 @@ export default {
   },
   methods: {
     async findSexList () {
-      const sexList = await this.$ajax.getJSON('/api/conf/sex/list')
+      const sexList = await this.$ajax.get('/api/conf/sex/list')
       // 异步更新下拉选项
       let column = this.$refs.xGrid.getColumnByField('sex')
       column.editRender.options = sexList

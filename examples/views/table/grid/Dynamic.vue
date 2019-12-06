@@ -243,7 +243,7 @@ export default {
           methods: {
             findColumn () {
               this.loading = true
-              this.$ajax.getJSON('/api/column/list', { sort: 'seq', order: 'asc' }).then(data => {
+              this.$ajax.get('/api/column/list', { sort: 'seq', order: 'asc' }).then(data => {
                 let validRules = {}
                 this.tableColumn2 = data.map(item => {
                   let config = {
@@ -318,7 +318,7 @@ export default {
   methods: {
     findColumn () {
       this.loading2 = true
-      this.$ajax.getJSON('/api/column/list', { sort: 'seq', order: 'asc' }).then(data => {
+      this.$ajax.get('/api/column/list', { sort: 'seq', order: 'asc' }).then(data => {
         let validRules = {}
         this.tableColumn2 = data.map(item => {
           let config = {

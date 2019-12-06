@@ -81,6 +81,7 @@ module.exports = {
         fullscreen: 'Full screen zoom',
         dynamicColumn: 'Configurable dynamic columns',
         baseTree: 'Basics tree',
+        lazyTree: 'Lazy loading tree',
         crudTreeToolbar: 'Tree + Toolbar',
 
         tree: 'Tree table',
@@ -431,8 +432,8 @@ module.exports = {
           export: 'Export button config',
           refresh: 'Refresh button config',
           resizable: 'Column width drag config(id needs to be set)',
-          setting: 'Obsolete, please use "customs"',
-          customs: 'Custom column config(id needs to be set)'
+          setting: 'Obsolete, please use "custom"',
+          custom: 'Custom column config(id needs to be set)'
         }
       },
       pager: {

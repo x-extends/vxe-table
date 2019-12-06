@@ -27,7 +27,7 @@ export default {
       tableProxy: {
         ajax: {
           // 处理树结构转换
-          query: () => this.$ajax.getJSON('/api/file/list').then(data => this.$utils.toArrayTree(data, { key: 'id', parentKey: 'parentId', children: 'children' }))
+          query: () => this.$ajax.get('/api/file/list').then(data => this.$utils.toArrayTree(data, { key: 'id', parentKey: 'parentId', children: 'children' }))
         }
       },
       tableColumn: [
@@ -53,7 +53,7 @@ export default {
               tableProxy: {
                 ajax: {
                   // 处理树结构转换
-                  query: () => this.$ajax.getJSON('/api/file/list').then(data => this.$utils.toArrayTree(data, { key: 'id', parentKey: 'parentId', children: 'children' }))
+                  query: () => this.$ajax.get('/api/file/list').then(data => this.$utils.toArrayTree(data, { key: 'id', parentKey: 'parentId', children: 'children' }))
                 }
               },
               tableColumn: [

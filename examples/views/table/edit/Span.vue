@@ -121,7 +121,7 @@ export default {
           methods: {
             findList () {
               this.loading = true
-              this.$ajax.getJSON('/api/i18n/list', { sort: 'key', order: 'asc' }).then(data => {
+              this.$ajax.get('/api/i18n/list', { sort: 'key', order: 'asc' }).then(data => {
                 this.tableData = data
                 this.loading = false
               })
@@ -186,7 +186,7 @@ export default {
   methods: {
     findList () {
       this.loading = true
-      this.$ajax.getJSON('/api/i18n/list', { sort: 'key', order: 'asc' }).then(data => {
+      this.$ajax.get('/api/i18n/list', { sort: 'key', order: 'asc' }).then(data => {
         this.tableData = data
         this.loading = false
       })
