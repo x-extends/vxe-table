@@ -1058,7 +1058,7 @@ const Methods = {
             tWidth = tableColumn.reduce((previous, column) => previous + column.renderWidth, 0)
           }
           if (tableElem) {
-            tableElem.style.width = tWidth === null ? tWidth : `${tWidth + scrollbarWidth}px`
+            tableElem.style.width = tWidth ? `${tWidth + scrollbarWidth}px` : ''
             // 修复 IE 中高度无法自适应问题
             if (browse.msie) {
               XEUtils.arrayEach(tableElem.querySelectorAll('.vxe-resizable'), resizeElem => {
@@ -1115,12 +1115,12 @@ const Methods = {
           }
 
           if (tableElem) {
-            tableElem.style.width = tWidth ? `${tWidth}px` : tWidth
+            tableElem.style.width = tWidth ? `${tWidth}px` : ''
             // 兼容性处理
             tableElem.style.paddingRight = scrollbarWidth && fixedType && (browse['-moz'] || browse['safari']) ? `${scrollbarWidth}px` : ''
           }
           if (emptyBlockElem) {
-            emptyBlockElem.style.width = tWidth ? `${tWidth}px` : tWidth
+            emptyBlockElem.style.width = tWidth ? `${tWidth}px` : ''
           }
         } else if (layout === 'footer') {
           // 如果是使用优化模式
@@ -1142,7 +1142,7 @@ const Methods = {
             wrapperElem.style.marginTop = `${-scrollbarHeight - 1}px`
           }
           if (tableElem) {
-            tableElem.style.width = tWidth === null ? tWidth : `${tWidth + scrollbarWidth}px`
+            tableElem.style.width = tWidth ? `${tWidth + scrollbarWidth}px` : ''
           }
           // let listElem = elemStore[`${name}-${layout}-list`]
           // if (listElem) {
