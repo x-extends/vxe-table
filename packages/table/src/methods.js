@@ -1156,13 +1156,13 @@ const Methods = {
           XEUtils.arrayEach(colgroupElem.children, colElem => {
             let colid = colElem.getAttribute('name')
             if (colid === 'col_gutter') {
-              colElem.width = `${scrollbarWidth || ''}`
+              colElem.style.width = `${scrollbarWidth}px`
             }
             if (fullColumnIdData[colid]) {
               let column = fullColumnIdData[colid].column
               let { showHeaderOverflow, showOverflow } = column
               let cellOverflow
-              colElem.width = `${column.renderWidth || ''}`
+              colElem.style.width = `${column.renderWidth}px`
               if (layout === 'header') {
                 cellOverflow = XEUtils.isUndefined(showHeaderOverflow) || XEUtils.isNull(showHeaderOverflow) ? allColumnHeaderOverflow : showHeaderOverflow
               } else {
