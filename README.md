@@ -53,8 +53,8 @@
 * [x] Filter （筛选）
 * [x] Rowspan and colspan （合并行或列）
 * [x] Footer summary （表尾合计）
-* [x] Import CSV/HTML/XML/TXT （导入)
-* [x] Export CSV/HTML/XML/TXT（导出)
+* [x] Import （导入)
+* [x] Export （导出)
 * [x] Print （打印)
 * [x] Show/Hide column （显示/隐藏列）
 * [x] Loading （加载中）
