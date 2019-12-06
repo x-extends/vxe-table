@@ -525,7 +525,7 @@ const Methods = {
    * 用于多选行，获取已选中的数据
    */
   getSelectRecords () {
-    let { tableFullData, editStore, treeConfig } = this
+    let { tableFullData, treeConfig } = this
     // 在 v3.0 中废弃 selectConfig
     let checkboxConfig = this.checkboxConfig || this.selectConfig || {}
     let { checkField: property } = checkboxConfig
@@ -537,7 +537,6 @@ const Methods = {
       } else {
         rowList = tableFullData.filter(row => XEUtils.get(row, property))
       }
-      insList = editStore.insertList.filter(row => XEUtils.get(row, property))
     } else {
       let { selection } = this
       if (treeConfig) {
@@ -545,9 +544,8 @@ const Methods = {
       } else {
         rowList = tableFullData.filter(row => selection.indexOf(row) > -1)
       }
-      insList = editStore.insertList.filter(row => selection.indexOf(row) > -1)
     }
-    return rowList.concat(insList)
+    return rowList
   },
   /**
    * 获取处理后全量的表格数据
@@ -1704,16 +1702,11 @@ const Methods = {
    * @param {Boolean} value 是否选中
    */
   setAllSelection (value) {
-    let { tableFullData, editStore, treeConfig, selection, selectReserveRowMap } = this
+    let { tableFullData, treeConfig, selection, selectReserveRowMap } = this
     // 在 v3.0 中废弃 selectConfig
     let checkboxConfig = this.checkboxConfig || this.selectConfig || {}
     let { checkField: property, reserve, checkStrictly, checkMethod } = checkboxConfig
-    let { insertList } = editStore
     let selectRows = []
-    // 包含新增的数据
-    if (insertList.length) {
-      tableFullData = tableFullData.concat(insertList)
-    }
     if (!checkStrictly) {
       if (property) {
         let indexKey = `${treeConfig ? '$' : ''}rowIndex`
