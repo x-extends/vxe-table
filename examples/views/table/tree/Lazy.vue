@@ -9,7 +9,7 @@
       border
       resizable
       row-id="id"
-      :tree-config="{children: 'children', hasChildren: 'hasChildren', lazy: true, loadMethod: loadChildrenMethod}"
+      :tree-config="{lazy: true, children: 'children', hasChildren: 'hasChildren', loadMethod: loadChildrenMethod}"
       :data="tableData">
       <vxe-table-column field="name" title="Name" width="400" tree-node></vxe-table-column>
       <vxe-table-column field="size" title="Size"></vxe-table-column>
@@ -24,7 +24,7 @@
       <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
 
-    <p class="tip">通过设置 <table-api-link prop="expandRowKeys"/> 属性默认展开指定节点<span class="red">（懒加载启用后只能默认展开根节点）</span></p>
+    <p class="tip">通过设置 <table-api-link prop="expandRowKeys"/> 属性默认展开指定节点<span class="red">（懒加载启用后默认只允许展开根节点）</span></p>
 
     <vxe-table
       border
@@ -63,7 +63,7 @@ export default {
           border
           resizable
           row-id="id"
-          :tree-config="{children: 'children', hasChildren: 'hasChildren', lazy: true, loadMethod: loadChildrenMethod}"
+          :tree-config="{lazy: true, children: 'children', hasChildren: 'hasChildren', loadMethod: loadChildrenMethod}"
           :data="tableData">
           <vxe-table-column field="name" title="Name" width="400" tree-node></vxe-table-column>
           <vxe-table-column field="size" title="Size"></vxe-table-column>

@@ -32,7 +32,7 @@
       highlight-hover-row
       highlight-current-row
       size="medium"
-      :tree-config="{children: 'children', line: true}"
+      :tree-config="{children: 'children', line: true, iconOpen: 'vxe-icon--caret-right rotate45', iconClose: 'vxe-icon--caret-right'}"
       :checkbox-config="{labelField: 'name'}"
       :data="tableData">
       <vxe-table-column type="checkbox" title="Name" width="280" tree-node></vxe-table-column>
@@ -150,7 +150,7 @@ export default {
           highlight-hover-row
           highlight-current-row
           size="medium"
-          :tree-config="{children: 'children', line: true}"
+          :tree-config="{children: 'children', line: true, iconOpen: 'vxe-icon--caret-right rotate45', iconClose: 'vxe-icon--caret-right'}"
           :checkbox-config="{labelField: 'name'}"
           :data="tableData">
           <vxe-table-column type="checkbox" title="Name" width="280" tree-node></vxe-table-column>

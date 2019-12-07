@@ -1253,6 +1253,15 @@ const apis = [
             list: []
           },
           {
+            name: 'loadMethod',
+            desc: '该方法 Function({row}) 用于异步加载子节点（必须返回 Promise<any[]> 对象）',
+            version: '1.15.15',
+            type: 'Function',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
             name: 'iconOpen',
             desc: '自定义展开后显示的图标',
             version: '1.15.15',

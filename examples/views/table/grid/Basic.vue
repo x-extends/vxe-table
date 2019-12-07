@@ -12,6 +12,7 @@
       toolbar
       height="300"
       :align="allAlign"
+      :loading="loading"
       :columns="tableColumn"
       :data="tableData">
       <template v-slot:buttons>
@@ -37,6 +38,7 @@ export default {
   data () {
     return {
       allAlign: null,
+      loading: false,
       tableColumn: [
         { type: 'index', width: 50 },
         { field: 'name', title: 'app.body.label.name' },
@@ -50,6 +52,7 @@ export default {
           border
           resizable
           height="300"
+          :loading="loading"
           :columns="tableColumn"
           :data="tableData"></vxe-grid>
         `,
@@ -58,6 +61,7 @@ export default {
           data () {
             return {
               allAlign: null,
+              loading: false,
               tableColumn: [
                 { type: 'index', width: 50 },
                 { field: 'name', title: 'app.body.label.name' },
@@ -68,7 +72,11 @@ export default {
             }
           },
           created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 50)
+            this.loading = true
+            this.$ajax.mockList(50).then(data => {
+              this.tableData = data
+              this.loading = false
+            })
           }
         }
         `
@@ -76,7 +84,11 @@ export default {
     }
   },
   created () {
-    this.tableData = window.MOCK_DATA_LIST.slice(0, 50)
+    this.loading = true
+    this.$ajax.mockList(50).then(data => {
+      this.tableData = data
+      this.loading = false
+    })
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
