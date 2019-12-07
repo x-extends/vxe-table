@@ -4,6 +4,7 @@
 
     <vxe-grid
       resizable
+      highlight-hover-column
       border="none"
       ref="xGrid"
       height="548"
@@ -75,6 +76,7 @@ export default {
         `
         <vxe-grid
           resizable
+          highlight-hover-column
           border="none"
           ref="xGrid"
           height="548"

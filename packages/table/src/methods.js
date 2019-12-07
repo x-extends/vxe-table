@@ -1578,6 +1578,15 @@ const Methods = {
     rows.forEach(row => this.handleSelectRow({ row }, !!value))
     return this.$nextTick()
   },
+  isCheckedByRow (row) {
+    // 在 v3.0 中废弃 selectConfig
+    let checkboxConfig = this.checkboxConfig || this.selectConfig || {}
+    let { checkField: property } = checkboxConfig
+    if (property) {
+      return XEUtils.get(row, property)
+    }
+    return this.selection.indexOf(row) > -1
+  },
   /**
    * 多选，行选中事件
    * value 选中true 不选false 不确定-1
@@ -2370,6 +2379,9 @@ const Methods = {
             row[children] = childs
             this.appendTreeCache(childs)
             this.toTreeExpand(params)
+            if (this.isCheckedByRow(row)) {
+              this.setSelection(childs, true)
+            }
           }
           resolve()
         })

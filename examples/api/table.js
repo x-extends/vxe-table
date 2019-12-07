@@ -2490,6 +2490,15 @@ const apis = [
         list: []
       },
       {
+        name: 'isCheckedByRow(row)',
+        desc: '判断复选行数据是否勾选',
+        version: '2.7.0',
+        type: 'Boolean',
+        enum: '',
+        defVal: 'row: Row',
+        list: []
+      },
+      {
         name: 'hasRowExpand(row)',
         disabled: true,
         desc: '即将废弃，请使用 isExpandByRow',
