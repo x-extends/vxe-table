@@ -3,9 +3,9 @@
     <p class="tip">数据代理、固定列、服务端排序、服务端筛选、服务端分页，对于分页场景下，如果想要保留选中状态，可以通过设置 <table-api-link prop="checkbox-config"/> 的 <table-api-link prop="reserve"/> 属性</p>
 
     <vxe-grid
-      ref="xGrid"
-      border
       resizable
+      border="none"
+      ref="xGrid"
       height="548"
       row-id="id"
       :sort-config="{trigger: 'cell'}"
@@ -74,9 +74,9 @@ export default {
       demoCodes: [
         `
         <vxe-grid
-          ref="xGrid"
-          border
           resizable
+          border="none"
+          ref="xGrid"
           height="548"
           row-id="id"
           :sort-config="{trigger: 'cell'}"
