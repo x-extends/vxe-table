@@ -14,13 +14,13 @@
     </vxe-toolbar>
 
     <vxe-table
-      border
       resizable
       tree-config
+      border="none"
       ref="xTree"
       :data="tableData">
-      <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
-      <vxe-table-column field="size" title="Size" tree-node></vxe-table-column>
+      <vxe-table-column field="name" title="app.body.label.name" tree-node></vxe-table-column>
+      <vxe-table-column field="size" title="Size"></vxe-table-column>
       <vxe-table-column field="type" title="Type"></vxe-table-column>
       <vxe-table-column field="date" title="Date"></vxe-table-column>
     </vxe-table>
@@ -74,13 +74,13 @@ export default {
         </vxe-toolbar>
 
         <vxe-table
-          border
           resizable
           tree-config
+          border="none"
           ref="xTree"
           :data="tableData">
-          <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
-          <vxe-table-column field="size" title="Size" tree-node></vxe-table-column>
+          <vxe-table-column field="name" title="app.body.label.name" tree-node></vxe-table-column>
+          <vxe-table-column field="size" title="Size"></vxe-table-column>
           <vxe-table-column field="type" title="Type"></vxe-table-column>
           <vxe-table-column field="date" title="Date"></vxe-table-column>
         </vxe-table>
