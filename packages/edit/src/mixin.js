@@ -186,9 +186,9 @@ export default {
      * 如果是树表格，子节点更改状态不会影响父节点的更新状态
      */
     _getUpdateRecords () {
-      let { tableFullData, isUpdateByRow, treeConfig } = this
+      let { tableFullData, isUpdateByRow, treeConfig, treeOpts } = this
       if (treeConfig) {
-        return XEUtils.filterTree(tableFullData, row => isUpdateByRow(row), treeConfig)
+        return XEUtils.filterTree(tableFullData, row => isUpdateByRow(row), treeOpts)
       }
       return tableFullData.filter(row => isUpdateByRow(row))
     },

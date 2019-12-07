@@ -24,8 +24,8 @@ function createFrame () {
 }
 
 function hasTreeChildren ($table, row) {
-  const treeConfig = $table.treeConfig
-  return row[treeConfig.children] && row[treeConfig.children].length
+  const treeOpts = $table.treeOpts
+  return row[treeOpts.children] && row[treeOpts.children].length
 }
 
 function handleExport ($table, opts, oColumns, fullData) {
@@ -110,7 +110,7 @@ function toTxt ($table, opts, columns, datas) {
 }
 
 function toHtml ($table, opts, columns, datas) {
-  const { treeConfig, tableFullData } = $table
+  const { treeConfig, treeOpts, tableFullData } = $table
   const isOriginal = opts.original
   let html = [
     '<html>',
@@ -138,29 +138,29 @@ function toHtml ($table, opts, columns, datas) {
             } else {
               cellValue = UtilTools.getCellValue(row, column) || ''
             }
-            if (treeConfig && column.treeNode) {
+            if (column.treeNode) {
               let treeIcon = ''
               if (hasTreeChildren($table, row)) {
                 treeIcon = `<i class="tree-icon"></i>`
               }
-              return `<td class="tree-node"><span class="tree-indent" style="width: ${(nodes.length - 1) * (treeConfig.indent || 16)}px"></span><span class="tree-icon-wrapper">${treeIcon}</span>${cellValue}</td>`
+              return `<td class="tree-node"><span class="tree-indent" style="width: ${(nodes.length - 1) * treeOpts.indent}px"></span><span class="tree-icon-wrapper">${treeIcon}</span>${cellValue}</td>`
             }
             return `<td>${cellValue}</td>`
           }).join('')
         } else {
           html += columns.map(column => {
-            if (treeConfig && column.treeNode) {
+            if (column.treeNode) {
               let treeIcon = ''
-              if (row.hasChild) {
+              if (row._hasChild) {
                 treeIcon = `<i class="tree-icon"></i>`
               }
-              return `<td class="tree-node"><span class="tree-indent" style="width: ${(nodes.length - 1) * (treeConfig.indent || 16)}px"></span><span class="tree-icon-wrapper">${treeIcon}</span>${row[column.id]}</td>`
+              return `<td class="tree-node"><span class="tree-indent" style="width: ${(nodes.length - 1) * treeOpts.indent}px"></span><span class="tree-icon-wrapper">${treeIcon}</span>${row[column.id]}</td>`
             }
             return `<td>${row[column.id]}</td>`
           }).join('')
         }
         html += '</tr>'
-      }, treeConfig)
+      }, treeOpts)
     } else {
       datas.forEach((row, rowIndex) => {
         html += '<tr>'
@@ -275,7 +275,7 @@ function getLabelData ($table, columns, datas) {
   const treeConfig = $table.treeConfig
   return datas.map(row => {
     let item = {
-      hasChild: treeConfig && hasTreeChildren($table, row)
+      _hasChild: treeConfig && hasTreeChildren($table, row)
     }
     columns.forEach(column => {
       let cell = DomTools.getCell($table, { row, column })
@@ -498,7 +498,7 @@ export default {
      * @param {Object} options 参数
      */
     _exportData (options) {
-      let { visibleColumn, scrollXLoad, scrollYLoad, treeConfig } = this
+      let { visibleColumn, scrollXLoad, scrollYLoad, treeConfig, treeOpts } = this
       let opts = Object.assign({
         filename: '',
         sheetName: '',
@@ -536,7 +536,7 @@ export default {
       let columns = visibleColumn
       let fullData = this.tableFullData
       if (treeConfig) {
-        fullData = XEUtils.toTreeArray(fullData, treeConfig)
+        fullData = XEUtils.toTreeArray(fullData, treeOpts)
       }
       return handleExport(this, opts, columns, fullData)
     },

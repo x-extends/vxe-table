@@ -8,6 +8,7 @@
       resizable
       height="548"
       row-id="id"
+      :sort-config="{trigger: 'cell'}"
       :filter-config="{remote: true}"
       :pager-config="{pageSize: 15}"
       :columns="tableColumn"
@@ -78,6 +79,7 @@ export default {
           resizable
           height="548"
           row-id="id"
+          :sort-config="{trigger: 'cell'}"
           :filter-config="{remote: true}"
           :pager-config="{pageSize: 15}"
           :columns="tableColumn"

@@ -18,7 +18,7 @@ export default {
         class: 'vxe-ctxmenu--option-wrapper',
         key: gIndex
       }, options.map((item, index) => {
-        let hasChild = item.children && item.children.length
+        let hasChildMenus = item.children && item.children.length
         return item.visible === false ? _e() : h('li', {
           class: {
             'link--disabled': item.disabled,
@@ -47,10 +47,10 @@ export default {
               class: 'vxe-ctxmenu--link-content'
             }, UtilTools.getFuncText(item.name)),
             h('i', {
-              class: ['vxe-ctxmenu--link-suffix', hasChild ? item.suffixIcon || 'suffix--haschild' : item.suffixIcon]
+              class: ['vxe-ctxmenu--link-suffix', hasChildMenus ? item.suffixIcon || 'suffix--haschild' : item.suffixIcon]
             })
           ]),
-          hasChild ? h('ul', {
+          hasChildMenus ? h('ul', {
             class: ['vxe-table--ctxmenu-clild-wrapper', {
               show: item === ctxMenuStore.selected && ctxMenuStore.showChild
             }]

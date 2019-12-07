@@ -175,7 +175,7 @@ export default {
     // 展开行配置项
     expandConfig: Object,
     // 树形结构配置项
-    treeConfig: Object,
+    treeConfig: [Boolean, Object],
     // 快捷菜单配置项
     contextMenu: Object,
     // 鼠标配置项
@@ -387,6 +387,13 @@ export default {
       })
       return rest
     },
+    treeOpts () {
+      return Object.assign({
+        children: 'children',
+        hasChild: 'hasChild',
+        indent: 20
+      }, GlobalConfig.treeConfig, this.treeConfig)
+    },
     /**
      * 判断列全选的复选框是否禁用
      */
@@ -469,7 +476,7 @@ export default {
     }
   },
   created () {
-    let { scrollXStore, scrollYStore, optimizeOpts, data, loading, treeConfig, showOverflow } = Object.assign(this, {
+    let { scrollXStore, scrollYStore, optimizeOpts, data, loading, treeOpts, treeConfig, showOverflow } = Object.assign(this, {
       tZindex: 0,
       elemStore: {},
       // 存放横向 X 虚拟滚动相关的信息
@@ -517,7 +524,7 @@ export default {
     if (this.selectConfig) {
       UtilTools.warn('vxe.error.delProp', ['select-config', 'checkbox-config'])
     }
-    if (treeConfig && treeConfig.line && !showOverflow) {
+    if (treeConfig && treeOpts.line && !showOverflow) {
       UtilTools.warn('vxe.error.treeLineReqProp', ['show-overflow'])
     }
     if (this.sortMethod) {
@@ -626,6 +633,7 @@ export default {
       height,
       border,
       vSize,
+      treeOpts,
       treeConfig,
       mouseConfig,
       validOpts,
@@ -650,7 +658,7 @@ export default {
         'show--head': this.showHeader,
         'show--foot': this.showFooter,
         'has--height': this.height,
-        'has--tree-line': treeConfig && treeConfig.line,
+        'has--tree-line': treeConfig && treeOpts.line,
         'fixed--left': leftList.length,
         'fixed--right': rightList.length,
         'c--highlight': this.highlightCell,

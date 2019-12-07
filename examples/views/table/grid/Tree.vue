@@ -5,9 +5,9 @@
     <vxe-grid
       border
       resizable
+      tree-config
       :proxy-config="tableProxy"
-      :columns="tableColumn"
-      :tree-config="{children: 'children'}"></vxe-grid>
+      :columns="tableColumn"></vxe-grid>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
@@ -42,9 +42,9 @@ export default {
         <vxe-grid
           border
           resizable
+          tree-config
           :proxy-config="tableProxy"
-          :columns="tableColumn"
-          :tree-config="{children: 'children'}"></vxe-grid>
+          :columns="tableColumn"></vxe-grid>
         `,
         `
         export default {

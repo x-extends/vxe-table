@@ -71,7 +71,7 @@ class Helper {
       }
       rest = rest.map(item => {
         if (item.children && item.children.length) {
-          item.hasChildren = true
+          item.hasChild = true
         }
         delete item.children
         return item

@@ -9,7 +9,7 @@ function isOperateMouse ($table) {
 
 function countTreeExpand (prevRow, params) {
   const $table = params.$table
-  const rowChildren = prevRow[$table.treeConfig.children]
+  const rowChildren = prevRow[$table.treeOpts.children]
   let count = 1
   if ($table.isTreeExpandByRow(prevRow)) {
     for (let index = 0; index < rowChildren.length; index++) {
@@ -85,7 +85,7 @@ function renderColumn (h, _vm, $table, $seq, seq, rowid, fixedType, rowLevel, ro
     spanMethod,
     radioConfig = {},
     expandConfig = {},
-    treeConfig = {},
+    treeOpts,
     mouseConfig = {},
     editConfig,
     editRules,
@@ -158,7 +158,7 @@ function renderColumn (h, _vm, $table, $seq, seq, rowid, fixedType, rowLevel, ro
     (radioConfig.trigger === 'row' || (column.type === 'radio' && radioConfig.trigger === 'cell')) ||
     // 在 v3.0 中废弃 type=selection
     (checkboxConfig.trigger === 'row' || ((column.type === 'checkbox' || column.type === 'selection') && checkboxConfig.trigger === 'cell')) ||
-    (treeConfig.trigger === 'row' || (column.treeNode && treeConfig.trigger === 'cell'))) {
+    (treeOpts.trigger === 'row' || (column.treeNode && treeOpts.trigger === 'cell'))) {
     tdOns.click = evnt => {
       $table.triggerCellClickEvent(evnt, { $table, $seq, seq, rowid, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn, level: rowLevel, cell: evnt.currentTarget })
     }
@@ -227,10 +227,10 @@ function renderColumn (h, _vm, $table, $seq, seq, rowid, fixedType, rowLevel, ro
 
 function renderLine (h, _vm, $table, rowLevel, items, params) {
   const column = params.column
-  const treeConfig = $table.treeConfig
+  const { treeOpts, treeConfig } = $table
   return column.slots && column.slots.line
     ? column.slots.line.call($table, params, h)
-    : column.treeNode && treeConfig && treeConfig.line ? [
+    : column.treeNode && treeConfig && treeOpts.line ? [
       h('div', {
         class: 'vxe-tree--line-wrapper'
       }, [
@@ -238,7 +238,7 @@ function renderLine (h, _vm, $table, rowLevel, items, params) {
           class: 'vxe-tree--line',
           style: {
             height: `${calcTreeLine(params, items)}px`,
-            left: `${rowLevel * (treeConfig.indent || 20) + (rowLevel ? 2 - getOffsetSize($table) : 0) + 16}px`
+            left: `${(rowLevel * treeOpts.indent) + (rowLevel ? 2 - getOffsetSize($table) : 0) + 16}px`
           }
         })
       ])
@@ -253,6 +253,7 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
     rowClassName,
     rowStyle,
     treeConfig,
+    treeOpts,
     treeExpandeds,
     scrollYLoad,
     scrollYStore,
@@ -310,7 +311,7 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
       let cellStyle
       if (treeConfig) {
         cellStyle = {
-          paddingLeft: `${rowLevel * (treeConfig.indent || 16) + 30}px`
+          paddingLeft: `${(rowLevel * treeOpts.indent) + 30}px`
         }
       }
       if (column) {
@@ -342,7 +343,7 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
     }
     // 如果是树形表格
     if (treeConfig && treeExpandeds.length) {
-      let rowChildren = row[treeConfig.children]
+      let rowChildren = row[treeOpts.children]
       if (rowChildren && rowChildren.length && treeExpandeds.indexOf(row) > -1) {
         rows.push.apply(rows, renderRows(h, _vm, $table, $seq ? `${$seq}.${seq}` : `${seq}`, rowLevel + 1, fixedType, rowChildren, tableColumn))
       }

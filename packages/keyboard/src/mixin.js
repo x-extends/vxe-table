@@ -81,11 +81,11 @@ export default {
     },
     // 处理当前行方向键移动
     moveCurrentRow (isUpArrow, isDwArrow, evnt) {
-      let { currentRow, treeConfig, afterFullData } = this
+      let { currentRow, treeConfig, treeOpts, afterFullData } = this
       let targetRow
       evnt.preventDefault()
       if (treeConfig) {
-        let { index, items } = XEUtils.findTree(afterFullData, item => item === currentRow, treeConfig)
+        let { index, items } = XEUtils.findTree(afterFullData, item => item === currentRow, treeOpts)
         if (isUpArrow && index > 0) {
           targetRow = items[index - 1]
         } else if (isDwArrow && index < items.length - 1) {

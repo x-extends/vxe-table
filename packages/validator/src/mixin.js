@@ -55,7 +55,7 @@ export default {
     beginValidate (rows, cb, isAll) {
       let validRest = {}
       let status = true
-      let { editRules, afterFullData, treeConfig } = this
+      let { editRules, afterFullData, treeConfig, treeOpts } = this
       let vaildDatas = afterFullData
       if (rows) {
         if (XEUtils.isFunction(rows)) {
@@ -95,7 +95,7 @@ export default {
           rowValids.push(Promise.all(colVailds))
         }
         if (treeConfig) {
-          XEUtils.eachTree(vaildDatas, handleVaild, treeConfig)
+          XEUtils.eachTree(vaildDatas, handleVaild, treeOpts)
         } else {
           vaildDatas.forEach(handleVaild)
         }

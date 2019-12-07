@@ -13,7 +13,7 @@ class ColumnConfig {
     if (_vm.type === 'selection') {
       UtilTools.warn('vxe.error.delProp', ['selection', 'checkbox'])
     } else if (_vm.type === 'expand') {
-      if ($table.treeConfig && $table.treeConfig.line) {
+      if ($table.treeConfig && $table.treeOpts.line) {
         UtilTools.error('vxe.error.treeLineExpand')
       }
       if (_vm.slots && !_vm.slots.content && _vm.slots.default) {
