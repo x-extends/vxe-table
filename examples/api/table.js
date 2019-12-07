@@ -732,7 +732,7 @@ const apis = [
         version: '1.11.10',
         type: 'Object',
         enum: '',
-        defVal: '',
+        defVal: '继承 setup.sort-config',
         list: [
           {
             name: 'defaultSort',
@@ -815,7 +815,7 @@ const apis = [
         version: '1.15.15',
         type: 'Object',
         enum: '',
-        defVal: '',
+        defVal: '继承 setup.filter-config',
         list: [
           {
             name: 'remote',
@@ -1048,8 +1048,17 @@ const apis = [
         version: '',
         type: 'Object',
         enum: '',
-        defVal: '',
+        defVal: '继承 setup.tooltip-config',
         list: [
+          {
+            name: 'theme',
+            desc: '列 tooltip 的主题',
+            version: '',
+            type: 'String',
+            enum: 'dark,light',
+            defVal: 'dark',
+            list: []
+          },
           {
             name: 'enterable',
             desc: '鼠标是否可进入到 tooltip 中',
@@ -1060,12 +1069,12 @@ const apis = [
             list: []
           },
           {
-            name: 'theme',
-            desc: '列 tooltip 的主题',
-            version: '',
-            type: 'String',
-            enum: 'dark,light',
-            defVal: 'dark',
+            name: 'leaveDelay',
+            desc: '鼠标移出后延时多少才隐藏 tooltip',
+            version: '1.15.15',
+            type: 'Number',
+            enum: '',
+            defVal: '300',
             list: []
           }
         ]
@@ -1159,7 +1168,7 @@ const apis = [
         version: '',
         type: 'Boolean, Object',
         enum: '',
-        defVal: '',
+        defVal: '继承 setup.tree-config',
         list: [
           {
             name: 'key',

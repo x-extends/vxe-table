@@ -32,12 +32,19 @@
           zIndex: 100, // 全局 zIndex 起始值
           rowId: '_XID',
           sortConfig: {
+            remote: false,
             trigger: 'default'
+          },
+          filterConfig: {
+            remote: false
           },
           treeConfig: {
             children: 'children',
             hasChild: 'hasChild',
             indent: 20
+          },
+          tooltipConfig: {
+            theme: 'dark'
           },
           validConfig: {
             message: 'default'

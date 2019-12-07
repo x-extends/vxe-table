@@ -485,11 +485,17 @@ export default {
         mini: 36
       }, this.optimizeOpts.rHeights)
     },
+    tooltipOpts () {
+      return Object.assign({ leaveDelay: 300 }, GlobalConfig.tooltipConfig, this.tooltipConfig)
+    },
     vaildTipOpts () {
-      return Object.assign({ isArrow: false }, this.tooltipConfig)
+      return Object.assign({ isArrow: false }, this.tooltipOpts)
     },
     sortOpts () {
       return Object.assign({}, GlobalConfig.sortConfig, this.sortConfig)
+    },
+    filterOpts () {
+      return Object.assign({}, GlobalConfig.filterConfig, this.filterConfig)
     },
     // 是否使用了分组表头
     isGroup () {
@@ -777,7 +783,7 @@ export default {
       scrollbarHeight,
       optimizeOpts,
       vaildTipOpts,
-      tooltipConfig,
+      tooltipOpts,
       columnStore,
       filterStore,
       ctxMenuStore,
@@ -933,8 +939,8 @@ export default {
          */
         hasTip ? h('vxe-tooltip', {
           ref: 'tooltip',
-          props: tooltipConfig,
-          on: tooltipConfig && tooltipConfig.enterable ? {
+          props: tooltipOpts,
+          on: tooltipOpts.enterable ? {
             leave: this.handleTooltipLeaveEvent
           } : null
         }) : _e(),
@@ -1537,7 +1543,7 @@ export default {
      * 如果存在筛选条件，继续处理
      */
     updateAfterFullData () {
-      let { visibleColumn, tableFullData, remoteSort, remoteFilter, filterConfig = {}, sortConfig = {} } = this
+      let { visibleColumn, tableFullData, remoteSort, remoteFilter, filterOpts, sortOpts } = this
       let tableData = tableFullData
       let column = XEUtils.find(this.visibleColumn, column => column.order)
       let filterColumn = visibleColumn.filter(({ filters }) => filters && filters.length)
@@ -1554,7 +1560,7 @@ export default {
                 valueList.push(item.value)
               }
             })
-            if (valueList.length && !(filterConfig.remote || remoteFilter)) {
+            if (valueList.length && !(filterOpts.remote || remoteFilter)) {
               if (!filterMethod && compConf && compConf.renderFilter) {
                 filterMethod = compConf.filterMethod
               }
@@ -1565,8 +1571,8 @@ export default {
         })
       })
       if (column && column.order) {
-        let allSortMethod = sortConfig.sortMethod || this.sortMethod
-        let isRemote = XEUtils.isBoolean(column.remoteSort) ? column.remoteSort : (sortConfig.remote || remoteSort)
+        let allSortMethod = sortOpts.sortMethod || this.sortMethod
+        let isRemote = XEUtils.isBoolean(column.remoteSort) ? column.remoteSort : (sortOpts.remote || remoteSort)
         if (!isRemote) {
           if (allSortMethod) {
             tableData = allSortMethod({ data: tableData, column, property: column.property, order: column.order, $table: this }) || tableData
@@ -2493,12 +2499,12 @@ export default {
       }
     },
     handleTooltipLeaveEvent (evnt) {
-      let { tooltipConfig = {} } = this
+      let tooltipOpts = this.tooltipOpts
       setTimeout(() => {
         if (!this.tooltipActive) {
           this.clostTooltip()
         }
-      }, tooltipConfig.leaveDelay || GlobalConfig.tooltip.leaveDelay)
+      }, tooltipOpts.leaveDelay)
     },
     handleTargetEnterEvent (evnt) {
       clearTimeout(this.tooltipTimeout)
@@ -2506,14 +2512,14 @@ export default {
       this.clostTooltip()
     },
     handleTargetLeaveEvent (evnt) {
-      let { tooltipConfig = {} } = this
+      let tooltipOpts = this.tooltipOpts
       this.tooltipActive = false
-      if (tooltipConfig.enterable) {
+      if (tooltipOpts.enterable) {
         this.tooltipTimeout = setTimeout(() => {
           if (!this.$refs.tooltip.isHover) {
             this.clostTooltip()
           }
-        }, tooltipConfig.leaveDelay || GlobalConfig.tooltip.leaveDelay)
+        }, tooltipOpts.leaveDelay)
       } else {
         this.clostTooltip()
       }
@@ -3553,7 +3559,7 @@ export default {
       return this.$nextTick()
     },
     handleDefaultSort () {
-      let defaultSort = this.sortConfig.defaultSort
+      let defaultSort = this.sortOpts.defaultSort
       if (defaultSort) {
         let { field, order } = defaultSort
         if (field && order) {
@@ -3578,10 +3584,10 @@ export default {
       }
     },
     sort (field, order) {
-      let { visibleColumn, tableFullColumn, remoteSort, sortConfig = {} } = this
+      let { visibleColumn, tableFullColumn, remoteSort, sortOpts } = this
       let column = XEUtils.find(visibleColumn, item => item.property === field)
       if (column) {
-        let isRemote = XEUtils.isBoolean(column.remoteSort) ? column.remoteSort : (sortConfig.remote || remoteSort)
+        let isRemote = XEUtils.isBoolean(column.remoteSort) ? column.remoteSort : (sortOpts.remote || remoteSort)
         if (column.sortable || column.remoteSort) {
           if (!order) {
             order = column.order === 'desc' ? 'asc' : 'desc'
@@ -3677,7 +3683,7 @@ export default {
     },
     // 确认筛选
     confirmFilterEvent (evnt) {
-      let { visibleColumn, filterStore, remoteFilter, filterConfig = {}, scrollXLoad, scrollYLoad } = this
+      let { visibleColumn, filterStore, remoteFilter, filterOpts, scrollXLoad, scrollYLoad } = this
       let { column } = filterStore
       let { property } = column
       let values = []
@@ -3690,7 +3696,7 @@ export default {
       })
       filterStore.visible = false
       // 如果是服务端筛选，则跳过本地筛选处理
-      if (!(filterConfig.remote || remoteFilter)) {
+      if (!(filterOpts.remote || remoteFilter)) {
         this.handleTableData(true)
       }
       let filterList = []

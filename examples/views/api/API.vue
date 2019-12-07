@@ -5,7 +5,7 @@
       :loading="loading"
       :refresh="{query: loadList}"
       :resizable="{storage: true}"
-      :setting="{storage: true, checkMethod: checkColumnMethod}">
+      :custom="{storage: true, checkMethod: checkColumnMethod}">
       <template v-slot:buttons>
         <vxe-input class="search-input" v-model="filterName" type="search" :placeholder="`vxe-${apiName} ${$t('app.api.form.apiSearch')}`" @keyup="searchEvent"></vxe-input>
       </template>
