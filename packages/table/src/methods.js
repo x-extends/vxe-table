@@ -2408,7 +2408,7 @@ const Methods = {
       if (expandAll) {
         if (lazy) {
           tableFullData.forEach(row => {
-            this.handleTreeLazyExpand({ row })
+            this.handleTreeLazyExpand({ $table: this, row, rowid: UtilTools.getRowid(this, row) })
           })
         } else {
           XEUtils.filterTree(tableFullData, row => {
@@ -2425,7 +2425,7 @@ const Methods = {
           let matchObj = XEUtils.findTree(tableFullData, item => rowid === XEUtils.get(item, rowkey), treeConfig)
           let rowChildren = matchObj ? matchObj.item[children] : 0
           if (lazy) {
-            this.handleTreeLazyExpand({ row: matchObj.item })
+            this.handleTreeLazyExpand({ $table: this, row: matchObj.item, rowid })
           } else {
             if (rowChildren && rowChildren.length) {
               treeExpandeds.push(matchObj.item)

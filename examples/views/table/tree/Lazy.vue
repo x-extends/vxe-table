@@ -24,7 +24,7 @@
       <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
 
-    <p class="tip">通过设置 <table-api-link prop="expandRowKeys"/> 属性默认展开指定节点<span class="red">（懒加载启用后只能默认展开根节点）</span></p>
+    <p class="tip">通过设置 <table-api-link prop="expandRowKeys"/> 属性默认展开指定节点<span class="red">（懒加载启用后默认只允许展开根节点）</span></p>
 
     <vxe-table
       border
