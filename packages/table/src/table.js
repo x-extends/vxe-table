@@ -344,11 +344,17 @@ export default {
         mini: 36
       }, this.optimizeOpts.rHeights)
     },
+    tooltipOpts () {
+      return Object.assign({ leaveDelay: 300 }, GlobalConfig.tooltipConfig, this.tooltipConfig)
+    },
     vaildTipOpts () {
-      return Object.assign({ isArrow: false }, this.tooltipConfig)
+      return Object.assign({ isArrow: false }, this.tooltipOpts)
     },
     sortOpts () {
       return Object.assign({}, GlobalConfig.sortConfig, this.sortConfig)
+    },
+    filterOpts () {
+      return Object.assign({}, GlobalConfig.filterConfig, this.filterConfig)
     },
     // 是否使用了分组表头
     isGroup () {
@@ -644,7 +650,7 @@ export default {
       scrollbarHeight,
       optimizeOpts,
       vaildTipOpts,
-      tooltipConfig,
+      tooltipOpts,
       columnStore,
       filterStore,
       ctxMenuStore,
@@ -802,8 +808,8 @@ export default {
          */
         hasTip ? h('vxe-tooltip', {
           ref: 'tooltip',
-          props: tooltipConfig,
-          on: tooltipConfig && tooltipConfig.enterable ? {
+          props: tooltipOpts,
+          on: tooltipOpts.enterable ? {
             leave: this.handleTooltipLeaveEvent
           } : null
         }) : _e(),

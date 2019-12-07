@@ -3,11 +3,23 @@ const GlobalConfig = {
   // showHeaderOverflow: null,
   // resizeInterval: 250,
   // size: null,
-  // validConfig: {
-  //   message: 'default'
+  // sortConfig: {
+  //   remote: false,
+  //   trigger: 'default'
+  // },
+  // filterConfig: {
+  //   remote: false
+  // },
+  // treeConfig: {
+  //   children: 'children',
+  //   hasChild: 'hasChild',
+  //   indent: 20
   // },
   // tooltipConfig: {
-  //   enterable: false
+  //   theme: 'dark'
+  // },
+  // validConfig: {
+  //   message: 'default'
   // },
   // resizable: false,
   // stripe: false,

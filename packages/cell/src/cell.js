@@ -433,7 +433,7 @@ export const Cell = {
   },
   renderSortIcon (h, params) {
     let { $table, column } = params
-    let { iconAsc, iconDesc } = $table.sortConfig || {}
+    let { iconAsc, iconDesc } = $table.sortOpts
     return [
       h('span', {
         class: 'vxe-sort-wrapper'
@@ -476,8 +476,8 @@ export const Cell = {
   },
   renderFilterIcon (h, params) {
     let { $table, column, hasFilter } = params
-    let { filterStore, filterConfig = {} } = $table
-    let { iconNone, iconMatch } = filterConfig
+    let { filterStore, filterOpts } = $table
+    let { iconNone, iconMatch } = filterOpts
     return [
       h('span', {
         class: ['vxe-filter-wrapper', {

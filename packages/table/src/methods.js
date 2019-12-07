@@ -1,5 +1,4 @@
 import XEUtils from 'xe-utils/methods/xe-utils'
-import GlobalConfig from '../../conf'
 import Cell from '../../cell'
 import VXETable, { Interceptor, Renderer } from '../../v-x-e-table'
 import { UtilTools, DomTools } from '../../tools'
@@ -551,7 +550,7 @@ const Methods = {
    * 如果存在筛选条件，继续处理
    */
   updateAfterFullData () {
-    let { visibleColumn, tableFullData, remoteSort, remoteFilter, filterConfig = {}, sortConfig = {} } = this
+    let { visibleColumn, tableFullData, remoteSort, remoteFilter, filterOpts, sortOpts } = this
     let tableData = tableFullData
     let column = XEUtils.find(visibleColumn, column => column.order)
     let filterColumn = visibleColumn.filter(({ filters }) => filters && filters.length)
@@ -568,7 +567,7 @@ const Methods = {
               valueList.push(item.value)
             }
           })
-          if (valueList.length && !(filterConfig.remote || remoteFilter)) {
+          if (valueList.length && !(filterOpts.remote || remoteFilter)) {
             let { property, filterMethod } = column
             if (!filterMethod && compConf && compConf.renderFilter) {
               filterMethod = compConf.filterMethod
@@ -580,8 +579,8 @@ const Methods = {
       })
     })
     if (column && column.order) {
-      let allSortMethod = sortConfig.sortMethod || this.sortMethod
-      let isRemote = XEUtils.isBoolean(column.remoteSort) ? column.remoteSort : (sortConfig.remote || remoteSort)
+      let allSortMethod = sortOpts.sortMethod || this.sortMethod
+      let isRemote = XEUtils.isBoolean(column.remoteSort) ? column.remoteSort : (sortOpts.remote || remoteSort)
       if (!isRemote) {
         if (allSortMethod) {
           tableData = allSortMethod({ data: tableData, column, property: column.property, order: column.order, $table: this }) || tableData
@@ -1443,12 +1442,12 @@ const Methods = {
     this.recalculate()
   },
   handleTooltipLeaveEvent (evnt) {
-    let { tooltipConfig = {} } = this
+    let tooltipOpts = this.tooltipOpts
     setTimeout(() => {
       if (!this.tooltipActive) {
         this.clostTooltip()
       }
-    }, tooltipConfig.leaveDelay || GlobalConfig.tooltip.leaveDelay)
+    }, tooltipOpts.leaveDelay)
   },
   handleTargetEnterEvent (evnt) {
     clearTimeout(this.tooltipTimeout)
@@ -1456,14 +1455,14 @@ const Methods = {
     this.clostTooltip()
   },
   handleTargetLeaveEvent (evnt) {
-    let { tooltipConfig = {} } = this
+    let tooltipOpts = this.tooltipOpts
     this.tooltipActive = false
-    if (tooltipConfig.enterable) {
+    if (tooltipOpts.enterable) {
       this.tooltipTimeout = setTimeout(() => {
         if (!this.$refs.tooltip.isHover) {
           this.clostTooltip()
         }
-      }, tooltipConfig.leaveDelay || GlobalConfig.tooltip.leaveDelay)
+      }, tooltipOpts.leaveDelay)
     } else {
       this.clostTooltip()
     }
@@ -2156,7 +2155,7 @@ const Methods = {
     UtilTools.emitEvent(this, 'cell-dblclick', [params, evnt])
   },
   handleDefaultSort () {
-    let defaultSort = this.sortConfig.defaultSort
+    let defaultSort = this.sortOpts.defaultSort
     if (defaultSort) {
       let { field, order } = defaultSort
       if (field && order) {
@@ -2181,10 +2180,10 @@ const Methods = {
     }
   },
   sort (field, order) {
-    let { visibleColumn, tableFullColumn, remoteSort, sortConfig = {} } = this
+    let { visibleColumn, tableFullColumn, remoteSort, sortOpts } = this
     let column = XEUtils.find(visibleColumn, item => item.property === field)
     if (column) {
-      let isRemote = XEUtils.isBoolean(column.remoteSort) ? column.remoteSort : (sortConfig.remote || remoteSort)
+      let isRemote = XEUtils.isBoolean(column.remoteSort) ? column.remoteSort : (sortOpts.remote || remoteSort)
       if (column.sortable || column.remoteSort) {
         if (!order) {
           order = column.order === 'desc' ? 'asc' : 'desc'
