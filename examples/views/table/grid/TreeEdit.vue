@@ -5,12 +5,12 @@
     <vxe-grid
       resizable
       highlight-hover-row
+      tree-config
       row-id="id"
       :proxy-config="tableProxy"
       :columns="tableColumn"
       :toolbar="tableToolbar"
       :checkbox-config="{labelField: 'id'}"
-      :tree-config="{children: 'children'}"
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"></vxe-grid>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -61,12 +61,12 @@ export default {
         <vxe-grid
           resizable
           highlight-hover-row
+          tree-config
           row-id="id"
           :proxy-config="tableProxy"
           :columns="tableColumn"
           :toolbar="tableToolbar"
           :checkbox-config="{labelField: 'id'}"
-          :tree-config="{children: 'children'}"
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"></vxe-grid>
         `,
         `

@@ -8,6 +8,7 @@
       resizable
       height="548"
       row-id="id"
+      :sort-config="{trigger: 'cell'}"
       :filter-config="{remote: true}"
       :pager-config="{pageSize: 15}"
       :columns="tableColumn"
@@ -24,7 +25,6 @@
 </template>
 
 <script>
-import XEAjax from 'xe-ajax'
 import hljs from 'highlight.js'
 
 export default {
@@ -46,7 +46,7 @@ export default {
             filters.forEach(({ column, field, values }) => {
               formData[field] = values.join(',')
             })
-            return XEAjax.getJSON(`/api/user/page/list/${page.pageSize}/${page.currentPage}`, formData)
+            return this.$ajax.get(`/api/user/page/list/${page.pageSize}/${page.currentPage}`, formData)
           }
         }
       },
@@ -79,6 +79,7 @@ export default {
           resizable
           height="548"
           row-id="id"
+          :sort-config="{trigger: 'cell'}"
           :filter-config="{remote: true}"
           :pager-config="{pageSize: 15}"
           :columns="tableColumn"
@@ -105,7 +106,7 @@ export default {
                     filters.forEach(({ column, property, values }) => {
                       formData[property] = values.join(',')
                     })
-                    return XEAjax.getJSON(\`/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`, formData)
+                    return this.$ajax.get(\`/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`, formData)
                   }
                 }
               },

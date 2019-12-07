@@ -1157,7 +1157,7 @@ const apis = [
         name: 'tree-config',
         descKey: 'app.api.table.desc.treeConfig',
         version: '',
-        type: 'Object',
+        type: 'Boolean, Object',
         enum: '',
         defVal: '',
         list: [
@@ -1177,7 +1177,7 @@ const apis = [
             version: '',
             type: 'String',
             enum: '',
-            defVal: '',
+            defVal: 'children',
             list: []
           },
           {
@@ -1236,7 +1236,7 @@ const apis = [
           },
           {
             name: 'lazy',
-            desc: '是否使用懒加载（启用后只有指定 hasChildren 的节点才允许被点击）',
+            desc: '是否使用懒加载（启用后只有指定 hasChild 的节点才允许被点击）',
             version: '1.15.15',
             type: 'Boolean',
             enum: '',
@@ -1244,12 +1244,12 @@ const apis = [
             list: []
           },
           {
-            name: 'hasChildren',
+            name: 'hasChild',
             desc: '只对 lazy 启用后有效，标识是否存在子节点，从而控制是否允许被点击',
             version: '1.15.15',
             type: 'String',
             enum: '',
-            defVal: '',
+            defVal: 'hasChild',
             list: []
           },
           {

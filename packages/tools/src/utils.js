@@ -13,7 +13,7 @@ class ColumnConfig {
     if (_vm.type === 'selection') {
       UtilTools.warn('vxe.error.delProp', ['selection', 'checkbox'])
     } else if (_vm.type === 'expand') {
-      if ($table.treeConfig && $table.treeConfig.line) {
+      if ($table.treeConfig && $table.treeOpts.line) {
         UtilTools.error('vxe.error.treeLineExpand')
       }
       if (_vm.slots && !_vm.slots.content && _vm.slots.default) {
@@ -119,12 +119,12 @@ export const UtilTools = {
   },
   // 行主键 key
   getRowkey ($table) {
-    let { rowKey, rowId, treeConfig = {}, expandConfig = {}, editConfig = {} } = $table
+    let { rowKey, rowId, treeOpts, expandConfig = {}, editConfig = {} } = $table
     // 在 v3.0 中废弃 selectConfig
     let checkboxConfig = $table.checkboxConfig || $table.selectConfig || {}
     if (!rowKey || !XEUtils.isString(rowKey)) {
       // 在 v2.0 中废弃 key
-      rowKey = rowId || checkboxConfig.key || treeConfig.key || expandConfig.key || editConfig.key || GlobalConfig.rowId
+      rowKey = rowId || checkboxConfig.key || treeOpts.key || expandConfig.key || editConfig.key || GlobalConfig.rowId
     }
     return rowKey
   },

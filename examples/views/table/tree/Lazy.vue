@@ -2,14 +2,14 @@
   <div>
     <p class="tip">
       树表格的懒加载，通过配置 <table-api-link prop="row-id"/> 和 <table-api-link prop="tree-config"/>={<table-api-link prop="lazy"/>, <table-api-link prop="loadMethod"/>} 加载方法来开启树形懒加载<br>
-      当启用懒加载后，必须通过 <table-api-link prop="hasChildren"/> 属性来标识是否存在子节点，从而控制该节点是否允许被点击
+      当启用懒加载后，必须通过 <table-api-link prop="hasChild"/> 属性来标识是否存在子节点，从而控制该节点是否允许被点击
     </p>
 
     <vxe-table
       border
       resizable
       row-id="id"
-      :tree-config="{lazy: true, children: 'children', hasChildren: 'hasChildren', loadMethod: loadChildrenMethod}"
+      :tree-config="{lazy: true, children: 'children', hasChild: 'hasChild', loadMethod: loadChildrenMethod}"
       :data="tableData">
       <vxe-table-column field="name" title="Name" width="400" tree-node></vxe-table-column>
       <vxe-table-column field="size" title="Size"></vxe-table-column>
@@ -31,7 +31,7 @@
       resizable
       row-id="id"
       :checkbox-config="{labelField: 'name'}"
-      :tree-config="{lazy: true, children: 'children', hasChildren: 'hasChildren', expandRowKeys: defaultExpandRowKeys, loadMethod: loadChildrenMethod, iconOpen: 'fa fa-minus-square-o', iconClose: 'fa fa-plus-square-o'}"
+      :tree-config="{lazy: true, children: 'children', hasChild: 'hasChild', expandRowKeys: defaultExpandRowKeys, loadMethod: loadChildrenMethod, iconOpen: 'fa fa-minus-square-o', iconClose: 'fa fa-plus-square-o'}"
       :data="tableData2">
       <vxe-table-column type="checkbox" title="Name" width="400" tree-node></vxe-table-column>
       <vxe-table-column field="size" title="Size"></vxe-table-column>
@@ -63,7 +63,7 @@ export default {
           border
           resizable
           row-id="id"
-          :tree-config="{lazy: true, children: 'children', hasChildren: 'hasChildren', loadMethod: loadChildrenMethod}"
+          :tree-config="{lazy: true, children: 'children', hasChild: 'hasChild', loadMethod: loadChildrenMethod}"
           :data="tableData">
           <vxe-table-column field="name" title="Name" width="400" tree-node></vxe-table-column>
           <vxe-table-column field="size" title="Size"></vxe-table-column>
@@ -100,7 +100,7 @@ export default {
           resizable
           row-id="id"
           :checkbox-config="{labelField: 'name'}"
-          :tree-config="{lazy: true, children: 'children', hasChildren: 'hasChildren', expandRowKeys: defaultExpandRowKeys, loadMethod: loadChildrenMethod, iconOpen: 'fa fa-minus-square-o', iconClose: 'fa fa-plus-square-o'}"
+          :tree-config="{lazy: true, children: 'children', hasChild: 'hasChild', expandRowKeys: defaultExpandRowKeys, loadMethod: loadChildrenMethod, iconOpen: 'fa fa-minus-square-o', iconClose: 'fa fa-plus-square-o'}"
           :data="tableData">
           <vxe-table-column type="checkbox" title="Name" width="400" tree-node></vxe-table-column>
           <vxe-table-column field="size" title="Size"></vxe-table-column>

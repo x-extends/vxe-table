@@ -267,7 +267,7 @@ export default {
     // 展开行配置项
     expandConfig: Object,
     // 树形结构配置项
-    treeConfig: Object,
+    treeConfig: [Boolean, Object],
     // 快捷菜单配置项
     contextMenu: Object,
     // 鼠标配置项
@@ -528,6 +528,13 @@ export default {
       })
       return rest
     },
+    treeOpts () {
+      return Object.assign({
+        children: 'children',
+        hasChild: 'hasChild',
+        indent: 20
+      }, GlobalConfig.treeConfig, this.treeConfig)
+    },
     /**
      * 判断列全选的复选框是否禁用
      */
@@ -616,7 +623,7 @@ export default {
     }
   },
   created () {
-    let { scrollXStore, scrollYStore, optimizeOpts, ctxMenuOpts, showOverflow, radioConfig = {}, treeConfig, editConfig, loading, showAllOverflow, showHeaderAllOverflow } = this
+    let { scrollXStore, scrollYStore, optimizeOpts, ctxMenuOpts, showOverflow, radioConfig = {}, treeConfig, treeOpts, editConfig, loading, showAllOverflow, showHeaderAllOverflow } = this
     let { scrollX, scrollY } = optimizeOpts
     // 在 v3.0 中废弃 selectConfig
     let checkboxConfig = this.checkboxConfig || this.selectConfig || {}
@@ -654,7 +661,7 @@ export default {
     if (this.selectConfig) {
       UtilTools.warn('vxe.error.delProp', ['select-config', 'checkbox-config'])
     }
-    if (treeConfig && treeConfig.line && !showOverflow) {
+    if (treeConfig && treeOpts.line && !showOverflow) {
       UtilTools.warn('vxe.error.treeLineReqProp', ['show-overflow'])
     }
     if (checkboxConfig.checkProp) {
@@ -690,7 +697,7 @@ export default {
     this.loadTableData(this.data, true).then(() => {
       if (checkboxConfig.key) {
         UtilTools.warn('vxe.error.delProp', ['select-config.key', 'row-id'])
-      } else if (treeConfig && treeConfig.key) {
+      } else if (treeConfig && treeOpts.key) {
         UtilTools.warn('vxe.error.delProp', ['tree-config.key', 'row-id'])
       } else if (editConfig && editConfig.key) {
         UtilTools.warn('vxe.error.delProp', ['edit-config.key', 'row-id'])
@@ -758,6 +765,7 @@ export default {
       showHeader,
       height,
       border,
+      treeOpts,
       treeConfig,
       mouseConfig,
       vSize,
@@ -783,7 +791,7 @@ export default {
         'show--head': this.showHeader,
         'show--foot': this.showFooter,
         'has--height': this.height,
-        'has--tree-line': treeConfig && treeConfig.line,
+        'has--tree-line': treeConfig && treeOpts.line,
         'fixed--left': leftList.length,
         'fixed--right': rightList.length,
         't--animat': this.optimizeOpts.animat,
@@ -1063,17 +1071,17 @@ export default {
     },
     // 更新数据的 Map
     updateCache (source) {
-      let { treeConfig, tableFullData, fullDataRowIdData, fullDataRowMap, fullAllDataRowMap, fullAllDataRowIdData } = this
+      let { treeConfig, treeOpts, tableFullData, fullDataRowIdData, fullDataRowMap, fullAllDataRowMap, fullAllDataRowIdData } = this
       let rowkey = UtilTools.getRowkey(this)
-      let isLazy = treeConfig && treeConfig.lazy
+      let isLazy = treeConfig && treeOpts.lazy
       let handleCache = (row, index) => {
         let rowid = UtilTools.getRowid(this, row)
         if (!rowid) {
           rowid = getRowUniqueId()
           XEUtils.set(row, rowkey, rowid)
         }
-        if (isLazy && row[treeConfig.hasChildren] && XEUtils.isUndefined(row[treeConfig.children])) {
-          row[treeConfig.children] = null
+        if (isLazy && row[treeOpts.hasChild] && XEUtils.isUndefined(row[treeOpts.children])) {
+          row[treeOpts.children] = null
         }
         let rest = { row, rowid, index }
         if (source) {
@@ -1090,13 +1098,13 @@ export default {
       fullAllDataRowIdData = this.fullAllDataRowIdData = {}
       fullAllDataRowMap.clear()
       if (treeConfig) {
-        XEUtils.eachTree(tableFullData, handleCache, treeConfig)
+        XEUtils.eachTree(tableFullData, handleCache, treeOpts)
       } else {
         tableFullData.forEach(handleCache)
       }
     },
     appendTreeCache (childs) {
-      let { treeConfig, fullDataRowIdData, fullDataRowMap, fullAllDataRowMap, fullAllDataRowIdData } = this
+      let { treeOpts, fullDataRowIdData, fullDataRowMap, fullAllDataRowMap, fullAllDataRowIdData } = this
       let rowkey = UtilTools.getRowkey(this)
       XEUtils.eachTree(childs, (row, index) => {
         let rowid = UtilTools.getRowid(this, row)
@@ -1104,15 +1112,15 @@ export default {
           rowid = getRowUniqueId()
           XEUtils.set(row, rowkey, rowid)
         }
-        if (row[treeConfig.hasChildren] && XEUtils.isUndefined(row[treeConfig.children])) {
-          row[treeConfig.children] = null
+        if (row[treeOpts.hasChild] && XEUtils.isUndefined(row[treeOpts.children])) {
+          row[treeOpts.children] = null
         }
         let rest = { row, rowid, index }
         fullDataRowIdData[rowid] = rest
         fullDataRowMap.set(row, rest)
         fullAllDataRowIdData[rowid] = rest
         fullAllDataRowMap.set(row, rest)
-      }, treeConfig)
+      }, treeOpts)
     },
     // 更新列的 Map
     cacheColumnMap () {
@@ -1127,10 +1135,10 @@ export default {
     },
     getRowNode (tr) {
       if (tr) {
-        let { treeConfig, tableFullData, fullAllDataRowIdData } = this
+        let { treeConfig, treeOpts, tableFullData, fullAllDataRowIdData } = this
         let rowid = tr.getAttribute('data-rowid')
         if (treeConfig) {
-          let matchObj = XEUtils.findTree(tableFullData, row => UtilTools.getRowid(this, row) === rowid, treeConfig)
+          let matchObj = XEUtils.findTree(tableFullData, row => UtilTools.getRowid(this, row) === rowid, treeOpts)
           if (matchObj) {
             return matchObj
           }
@@ -1230,15 +1238,15 @@ export default {
       })
     },
     defineField (row) {
-      let treeConfig = this.treeConfig
+      let { treeConfig, treeOpts } = this
       let rowkey = UtilTools.getRowkey(this)
       this.visibleColumn.forEach(({ property, editRender }) => {
         if (property && !XEUtils.has(row, property)) {
           XEUtils.set(row, property, editRender && !XEUtils.isUndefined(editRender.defaultValue) ? editRender.defaultValue : null)
         }
       })
-      if (treeConfig && treeConfig.lazy && XEUtils.isUndefined(row[treeConfig.children])) {
-        row[treeConfig.children] = null
+      if (treeConfig && treeOpts.lazy && XEUtils.isUndefined(row[treeOpts.children])) {
+        row[treeOpts.children] = null
       }
       // 必须有行数据的唯一主键，可以自行设置；也可以默认生成一个随机数
       if (!XEUtils.get(row, rowkey)) {
@@ -1381,9 +1389,9 @@ export default {
       return this.$nextTick()
     },
     hasInsertByRow (row) {
-      let { treeConfig, tableSourceData } = this
+      let { treeConfig, treeOpts, tableSourceData } = this
       if (treeConfig) {
-        return XEUtils.findTree(tableSourceData, item => item === row, treeConfig)
+        return XEUtils.findTree(tableSourceData, item => item === row, treeOpts)
       }
       return this.getRowIndex(row) === -1
     },
@@ -1394,15 +1402,15 @@ export default {
     },
     isUpdateByRow (row, field) {
       let oRow, property
-      let { visibleColumn, treeConfig, tableSourceData, fullDataRowIdData } = this
+      let { visibleColumn, treeConfig, treeOpts, tableSourceData, fullDataRowIdData } = this
       let rowid = UtilTools.getRowid(this, row)
       // 新增的数据不需要检测
       if (!fullDataRowIdData[rowid]) {
         return false
       }
       if (treeConfig) {
-        let children = treeConfig.children
-        let matchObj = XEUtils.findTree(tableSourceData, item => rowid === UtilTools.getRowid(this, item), treeConfig)
+        let children = treeOpts.children
+        let matchObj = XEUtils.findTree(tableSourceData, item => rowid === UtilTools.getRowid(this, item), treeOpts)
         row = Object.assign({}, row, { [ children ]: null })
         if (matchObj) {
           oRow = Object.assign({}, matchObj.item, { [ children ]: null })
@@ -1491,21 +1499,21 @@ export default {
      * 获取选中数据
      */
     getSelectRecords () {
-      let { tableFullData, treeConfig } = this
+      let { tableFullData, treeConfig, treeOpts } = this
       // 在 v3.0 中废弃 selectConfig
       let checkboxConfig = this.checkboxConfig || this.selectConfig || {}
       let { checkField: property } = checkboxConfig
       let rowList = []
       if (property) {
         if (treeConfig) {
-          rowList = XEUtils.filterTree(tableFullData, row => XEUtils.get(row, property), treeConfig)
+          rowList = XEUtils.filterTree(tableFullData, row => XEUtils.get(row, property), treeOpts)
         } else {
           rowList = tableFullData.filter(row => XEUtils.get(row, property))
         }
       } else {
         let { selection } = this
         if (treeConfig) {
-          rowList = XEUtils.filterTree(tableFullData, row => selection.indexOf(row) > -1, treeConfig)
+          rowList = XEUtils.filterTree(tableFullData, row => selection.indexOf(row) > -1, treeOpts)
         } else {
           rowList = tableFullData.filter(row => selection.indexOf(row) > -1)
         }
@@ -1518,9 +1526,9 @@ export default {
      * 如果是树表格，子节点更改状态不会影响父节点的更新状态
      */
     getUpdateRecords () {
-      let { tableFullData, isUpdateByRow, treeConfig } = this
+      let { tableFullData, isUpdateByRow, treeConfig, treeOpts } = this
       if (treeConfig) {
-        return XEUtils.filterTree(tableFullData, row => isUpdateByRow(row), treeConfig)
+        return XEUtils.filterTree(tableFullData, row => isUpdateByRow(row), treeOpts)
       }
       return tableFullData.filter(row => isUpdateByRow(row))
     },
@@ -2045,7 +2053,7 @@ export default {
       if (this.isActivated) {
         this.preventEvent(evnt, 'event.keydown', { $table: this }, () => {
           let params
-          let { isCtxMenu, ctxMenuStore, editStore, mouseConfig = {}, keyboardConfig = {}, treeConfig, highlightCurrentRow, currentRow } = this
+          let { isCtxMenu, ctxMenuStore, editStore, mouseConfig = {}, keyboardConfig = {}, treeConfig, treeOpts, highlightCurrentRow, currentRow } = this
           let { selected, actived } = editStore
           let keyCode = evnt.keyCode
           let isBack = keyCode === 8
@@ -2095,7 +2103,7 @@ export default {
               this.moveSelected(selected.row ? selected.args : actived.args, isLeftArrow, isUpArrow, isRightArrow, true, evnt)
             } else if (treeConfig && highlightCurrentRow && currentRow) {
             // 如果是树形表格当前行回车移动到子节点
-              let childrens = currentRow[treeConfig.children]
+              let childrens = currentRow[treeOpts.children]
               if (childrens && childrens.length) {
                 evnt.preventDefault()
                 let targetRow = childrens[0]
@@ -2143,7 +2151,7 @@ export default {
               }
             } else if (isBack && keyboardConfig.isArrow && treeConfig && highlightCurrentRow && currentRow) {
             // 如果树形表格回退键关闭当前行返回父节点
-              let { parent: parentRow } = XEUtils.findTree(this.afterFullData, item => item === currentRow, treeConfig)
+              let { parent: parentRow } = XEUtils.findTree(this.afterFullData, item => item === currentRow, treeOpts)
               if (parentRow) {
                 evnt.preventDefault()
                 params = { $table: this, row: parentRow }
@@ -2253,11 +2261,11 @@ export default {
     },
     // 处理当前行方向键移动
     moveCurrentRow (isUpArrow, isDwArrow, evnt) {
-      let { currentRow, treeConfig, afterFullData } = this
+      let { currentRow, treeConfig, treeOpts, afterFullData } = this
       let targetRow
       evnt.preventDefault()
       if (treeConfig) {
-        let { index, items } = XEUtils.findTree(afterFullData, item => item === currentRow, treeConfig)
+        let { index, items } = XEUtils.findTree(afterFullData, item => item === currentRow, treeOpts)
         if (isUpArrow && index > 0) {
           targetRow = items[index - 1]
         } else if (isDwArrow && index < items.length - 1) {
@@ -2613,7 +2621,7 @@ export default {
      * value 选中true 不选false 不确定-1
      */
     handleSelectRow (evnt, { row }, value) {
-      let { selection, tableFullData, treeConfig, treeIndeterminates } = this
+      let { selection, tableFullData, treeConfig, treeOpts, treeIndeterminates } = this
       // 在 v3.0 中废弃 selectConfig
       let checkboxConfig = this.checkboxConfig || this.selectConfig || {}
       let { checkStrictly, checkMethod } = checkboxConfig
@@ -2630,11 +2638,11 @@ export default {
                 XEUtils.set(item, property, value)
                 this.handleSelectReserveRow(row, value)
               }
-            }, treeConfig)
+            }, treeOpts)
             XEUtils.remove(treeIndeterminates, item => item === row)
           }
           // 如果存在父节点，更新父节点状态
-          let matchObj = XEUtils.findTree(tableFullData, item => item === row, treeConfig)
+          let matchObj = XEUtils.findTree(tableFullData, item => item === row, treeOpts)
           if (matchObj && matchObj.parent) {
             let parentStatus
             let vItems = checkMethod ? matchObj.items.filter((item, $rowIndex) => checkMethod({ row: item, $rowIndex })) : matchObj.items
@@ -2667,11 +2675,11 @@ export default {
                 }
                 this.handleSelectReserveRow(row, value)
               }
-            }, treeConfig)
+            }, treeOpts)
             XEUtils.remove(treeIndeterminates, item => item === row)
           }
           // 如果存在父节点，更新父节点状态
-          let matchObj = XEUtils.findTree(tableFullData, item => item === row, treeConfig)
+          let matchObj = XEUtils.findTree(tableFullData, item => item === row, treeOpts)
           if (matchObj && matchObj.parent) {
             let parentStatus
             let vItems = checkMethod ? matchObj.items.filter((item, $rowIndex) => checkMethod({ row: item, $rowIndex })) : matchObj.items
@@ -2727,7 +2735,7 @@ export default {
       return this.$nextTick()
     },
     setAllSelection (value) {
-      let { tableFullData, editStore, treeConfig, selection, selectReserveRowMap } = this
+      let { tableFullData, editStore, treeConfig, treeOpts, selection, selectReserveRowMap } = this
       // 在 v3.0 中废弃 selectConfig
       let checkboxConfig = this.checkboxConfig || this.selectConfig || {}
       let { reserve, checkStrictly, checkMethod } = checkboxConfig
@@ -2752,7 +2760,7 @@ export default {
             }
           }
           if (treeConfig) {
-            XEUtils.eachTree(tableFullData, value ? setValFn : clearValFn, treeConfig)
+            XEUtils.eachTree(tableFullData, value ? setValFn : clearValFn, treeOpts)
           } else {
             tableFullData.forEach(value ? setValFn : clearValFn)
           }
@@ -2763,14 +2771,14 @@ export default {
                 if (!checkMethod || checkMethod({ row, $rowIndex })) {
                   selectRows.push(row)
                 }
-              }, treeConfig)
+              }, treeOpts)
             } else {
               if (checkMethod) {
                 XEUtils.eachTree(tableFullData, (row, $rowIndex) => {
                   if (checkMethod({ row, $rowIndex }) ? 0 : selection.indexOf(row) > -1) {
                     selectRows.push(row)
                   }
-                }, treeConfig)
+                }, treeOpts)
               }
             }
           } else {
@@ -2927,13 +2935,13 @@ export default {
       return this.$nextTick()
     },
     clearSelection () {
-      let { tableFullData, treeConfig } = this
+      let { tableFullData, treeConfig, treeOpts } = this
       // 在 v3.0 中废弃 selectConfig
       let checkboxConfig = this.checkboxConfig || this.selectConfig || {}
       let property = checkboxConfig.checkField || checkboxConfig.checkProp
       if (property) {
         if (treeConfig) {
-          XEUtils.eachTree(tableFullData, item => XEUtils.set(item, property, false), treeConfig)
+          XEUtils.eachTree(tableFullData, item => XEUtils.set(item, property, false), treeOpts)
         } else {
           tableFullData.forEach(item => XEUtils.set(item, property, false))
         }
@@ -3126,7 +3134,7 @@ export default {
      * 如果是双击模式，则单击后选中状态
      */
     triggerCellClickEvent (evnt, params) {
-      let { $el, highlightCurrentRow, editStore, radioConfig = {}, expandConfig = {}, treeConfig = {}, editConfig } = this
+      let { $el, highlightCurrentRow, editStore, radioConfig = {}, expandConfig = {}, treeOpts, editConfig } = this
       let { actived } = editStore
       let { column } = params
       // 在 v3.0 中废弃 selectConfig
@@ -3141,7 +3149,7 @@ export default {
         this.triggerRowExpandEvent(evnt, params)
       }
       // 如果是树形表格
-      if ((treeConfig.trigger === 'row' || (column.treeNode && treeConfig.trigger === 'cell'))) {
+      if ((treeOpts.trigger === 'row' || (column.treeNode && treeOpts.trigger === 'cell'))) {
         this.triggerTreeExpandEvent(evnt, params)
       }
       if ((!column.treeNode || !DomTools.getEventTargetNode(evnt, $el, 'vxe-tree-wrapper').flag) && (column.type !== 'expand' || !DomTools.getEventTargetNode(evnt, $el, 'vxe-table--expanded').flag)) {
@@ -3852,7 +3860,7 @@ export default {
     getTreeStatus () {
       if (this.treeConfig) {
         return {
-          config: this.treeConfig,
+          config: this.treeOpts,
           rowExpandeds: this.getTreeExpandRecords()
         }
       }
@@ -3867,12 +3875,12 @@ export default {
       this.handleTreeLazyExpand(params)
     },
     handleTreeLazyExpand (params) {
-      let { fullAllDataRowMap, treeConfig = {}, treeLazyLoadeds } = this
-      let { children, lazy, hasChildren, loadMethod } = treeConfig
+      let { fullAllDataRowMap, treeOpts, treeLazyLoadeds } = this
+      let { children, lazy, hasChild, loadMethod } = treeOpts
       let { row } = params
       let rest = fullAllDataRowMap.get(row)
       // 是否使用懒加载
-      let isLoad = lazy && row[hasChildren] && !rest.loaded && treeLazyLoadeds.indexOf(row) === -1
+      let isLoad = lazy && row[hasChild] && !rest.loaded && treeLazyLoadeds.indexOf(row) === -1
       return new Promise(resolve => {
         if (isLoad) {
           treeLazyLoadeds.push(row)
@@ -3916,9 +3924,9 @@ export default {
      * 处理默认展开树节点
      */
     handleDefaultTreeExpand () {
-      let { treeConfig, tableFullData } = this
+      let { treeConfig, treeOpts, tableFullData } = this
       if (treeConfig) {
-        let { lazy, children, expandAll, expandRowKeys } = treeConfig
+        let { lazy, children, expandAll, expandRowKeys } = treeOpts
         let treeExpandeds = []
         if (expandAll) {
           if (lazy) {
@@ -3931,13 +3939,13 @@ export default {
               if (rowChildren && rowChildren.length) {
                 treeExpandeds.push(row)
               }
-            }, treeConfig)
+            }, treeOpts)
           }
           this.treeExpandeds = treeExpandeds
         } else if (expandRowKeys) {
           let rowkey = UtilTools.getRowkey(this)
           expandRowKeys.forEach(rowid => {
-            let matchObj = XEUtils.findTree(tableFullData, item => rowid === XEUtils.get(item, rowkey), treeConfig)
+            let matchObj = XEUtils.findTree(tableFullData, item => rowid === XEUtils.get(item, rowkey), treeOpts)
             let rowChildren = matchObj ? matchObj.item[children] : 0
             if (lazy) {
               this.handleTreeLazyExpand({ $table: this, row: matchObj.item, rowid })
@@ -3952,8 +3960,8 @@ export default {
       }
     },
     setAllTreeExpansion (expanded) {
-      let { tableFullData, treeConfig } = this
-      let { children } = treeConfig
+      let { tableFullData, treeOpts } = this
+      let { children } = treeOpts
       let treeExpandeds = []
       if (expanded) {
         XEUtils.eachTree(tableFullData, row => {
@@ -3961,7 +3969,7 @@ export default {
           if (rowChildren && rowChildren.length) {
             treeExpandeds.push(row)
           }
-        }, treeConfig)
+        }, treeOpts)
       }
       this.treeExpandeds = treeExpandeds
       return this.$nextTick().then(this.recalculate)
@@ -3972,17 +3980,17 @@ export default {
      * 支持多行
      */
     setTreeExpansion (rows, expanded) {
-      let { tableFullData, treeExpandeds, treeConfig } = this
-      let { children } = treeConfig
+      let { tableFullData, treeExpandeds, treeOpts } = this
+      let { children, accordion } = treeOpts
       if (rows) {
         if (!XEUtils.isArray(rows)) {
           rows = [rows]
         }
         if (rows.length) {
-          if (treeConfig.accordion) {
+          if (accordion) {
             rows = rows.slice(rows.length - 1, rows.length)
             // 同一级只能展开一个
-            let matchObj = XEUtils.findTree(tableFullData, item => item === rows[0], treeConfig)
+            let matchObj = XEUtils.findTree(tableFullData, item => item === rows[0], treeOpts)
             XEUtils.remove(treeExpandeds, item => matchObj.items.indexOf(item) > -1)
           }
           if (expanded) {
@@ -4266,9 +4274,9 @@ export default {
       return this.$nextTick()
     },
     scrollToTreeRow (row) {
-      let { tableFullData, treeConfig } = this
+      let { tableFullData, treeConfig, treeOpts } = this
       if (treeConfig) {
-        let matchObj = XEUtils.findTree(tableFullData, item => item === row, treeConfig)
+        let matchObj = XEUtils.findTree(tableFullData, item => item === row, treeOpts)
         if (matchObj) {
           let nodes = matchObj.nodes
           nodes.forEach((row, index) => {
@@ -4402,7 +4410,7 @@ export default {
     beginValidate (rows, cb, isAll) {
       let validRest = {}
       let status = true
-      let { editRules, afterFullData, treeConfig } = this
+      let { editRules, afterFullData, treeConfig, treeOpts } = this
       let vaildDatas = afterFullData
       if (rows) {
         if (XEUtils.isFunction(rows)) {
@@ -4442,7 +4450,7 @@ export default {
           rowValids.push(Promise.all(colVailds))
         }
         if (treeConfig) {
-          XEUtils.eachTree(vaildDatas, handleVaild, treeConfig)
+          XEUtils.eachTree(vaildDatas, handleVaild, treeOpts)
         } else {
           vaildDatas.forEach(handleVaild)
         }
@@ -4663,7 +4671,7 @@ export default {
      * 如果是启用了可视渲染，则只能导出数据源，可以配合 dataFilterMethod 函数自行转换数据
      */
     exportData (options) {
-      let { visibleColumn, scrollXLoad, scrollYLoad, treeConfig } = this
+      let { visibleColumn, scrollXLoad, scrollYLoad, treeConfig, treeOpts } = this
       let opts = Object.assign({
         filename: '',
         sheetName: '',
@@ -4701,7 +4709,7 @@ export default {
       let columns = visibleColumn
       let fullData = this.tableFullData
       if (treeConfig) {
-        fullData = XEUtils.toTreeArray(fullData, treeConfig)
+        fullData = XEUtils.toTreeArray(fullData, treeOpts)
       }
       return ExportTools.handleExport(this, opts, columns, fullData)
     },

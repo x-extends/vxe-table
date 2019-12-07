@@ -14,8 +14,8 @@ impInput.type = 'file'
 impForm.appendChild(impInput)
 
 function hasTreeChildren ($table, row) {
-  const treeConfig = $table.treeConfig
-  return row[treeConfig.children] && row[treeConfig.children].length
+  const treeOpts = $table.treeOpts
+  return row[treeOpts.children] && row[treeOpts.children].length
 }
 
 function getContent ($table, opts, columns, datas) {
@@ -93,7 +93,7 @@ function toTxt ($table, opts, columns, datas) {
 }
 
 function toHtml ($table, opts, columns, datas) {
-  const { treeConfig, tableFullData } = $table
+  const { treeConfig, treeOpts, tableFullData } = $table
   const isOriginal = opts.original
   let html = [
     '<html>',
@@ -126,7 +126,7 @@ function toHtml ($table, opts, columns, datas) {
               if (hasTreeChildren($table, row)) {
                 treeIcon = `<i class="tree-icon"></i>`
               }
-              return `<td class="tree-node"><span class="tree-indent" style="width: ${(nodes.length - 1) * (treeConfig.indent || 16)}px"></span><span class="tree-icon-wrapper">${treeIcon}</span>${cellValue}</td>`
+              return `<td class="tree-node"><span class="tree-indent" style="width: ${(nodes.length - 1) * (treeOpts.indent)}px"></span><span class="tree-icon-wrapper">${treeIcon}</span>${cellValue}</td>`
             }
             return `<td>${cellValue}</td>`
           }).join('')
@@ -134,16 +134,16 @@ function toHtml ($table, opts, columns, datas) {
           html += columns.map(column => {
             if (treeConfig && column.treeNode) {
               let treeIcon = ''
-              if (row.hasChild) {
+              if (row._hasChild) {
                 treeIcon = `<i class="tree-icon"></i>`
               }
-              return `<td class="tree-node"><span class="tree-indent" style="width: ${(nodes.length - 1) * (treeConfig.indent || 16)}px"></span><span class="tree-icon-wrapper">${treeIcon}</span>${row[column.id]}</td>`
+              return `<td class="tree-node"><span class="tree-indent" style="width: ${(nodes.length - 1) * (treeOpts.indent)}px"></span><span class="tree-icon-wrapper">${treeIcon}</span>${row[column.id]}</td>`
             }
             return `<td>${row[column.id]}</td>`
           }).join('')
         }
         html += '</tr>'
-      }, treeConfig)
+      }, treeOpts)
     } else {
       datas.forEach((row, rowIndex) => {
         html += '<tr>'
@@ -258,7 +258,7 @@ function getLabelData ($table, columns, datas) {
   const treeConfig = $table.treeConfig
   return datas.map(row => {
     let item = {
-      hasChild: treeConfig && hasTreeChildren($table, row)
+      _hasChild: treeConfig && hasTreeChildren($table, row)
     }
     columns.forEach(column => {
       let cell = DomTools.getCell($table, { row, column })

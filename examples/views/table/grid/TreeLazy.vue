@@ -7,7 +7,7 @@
       resizable
       :proxy-config="tableProxy"
       :columns="tableColumn"
-      :tree-config="{lazy: true, children: 'children', hasChildren: 'hasChildren', loadMethod: loadChildrenMethod}"></vxe-grid>
+      :tree-config="{lazy: true, children: 'children', hasChild: 'hasChild', loadMethod: loadChildrenMethod}"></vxe-grid>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
@@ -44,7 +44,7 @@ export default {
           resizable
           :proxy-config="tableProxy"
           :columns="tableColumn"
-          :tree-config="{lazy: true, children: 'children', hasChildren: 'hasChildren', loadMethod: loadChildrenMethod}"></vxe-grid>
+          :tree-config="{lazy: true, children: 'children', hasChild: 'hasChild', loadMethod: loadChildrenMethod}"></vxe-grid>
         `,
         `
         export default {

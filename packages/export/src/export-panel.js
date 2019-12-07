@@ -271,7 +271,7 @@ export default {
       }, defaultOptions)
       if (storeData.mode === 'selected') {
         if (XEUtils.includes(['html', 'pdf'], defaultOptions.type) && comp.treeConfig) {
-          opts.data = XEUtils.searchTree(comp.tableFullData, item => selectRecords.indexOf(item) > -1, comp.treeConfig)
+          opts.data = XEUtils.searchTree(comp.getTableData().fullData, item => selectRecords.indexOf(item) > -1, comp.getTreeStatus().config)
         } else {
           opts.data = selectRecords
         }

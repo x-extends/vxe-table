@@ -21,6 +21,7 @@
       show-overflow
       ref="xTable"
       height="300"
+      :sort-config="{trigger: 'cell'}"
       :loading="loading">
       <vxe-table-column type="index" width="100"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable width="200"></vxe-table-column>
@@ -77,6 +78,7 @@ export default {
           show-overflow
           ref="xTable"
           height="300"
+          :sort-config="{trigger: 'cell'}"
           :loading="loading">
           <vxe-table-column type="index" width="100"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable width="200"></vxe-table-column>

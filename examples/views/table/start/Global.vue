@@ -34,6 +34,11 @@
           sortConfig: {
             trigger: 'default'
           },
+          treeConfig: {
+            children: 'children',
+            hasChild: 'hasChild',
+            indent: 20
+          },
           validConfig: {
             message: 'default'
           },

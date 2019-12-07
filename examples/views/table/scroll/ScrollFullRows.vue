@@ -30,6 +30,7 @@
       ref="xTable"
       height="600"
       :loading="loading"
+      :sort-config="{trigger: 'cell'}"
       :checkbox-config="{checkField: 'checked'}">
       <vxe-table-column type="checkbox" width="60" fixed="left"></vxe-table-column>
       <vxe-table-column type="index" width="100" fixed="left"></vxe-table-column>
@@ -109,6 +110,7 @@ export default {
           ref="xTable"
           height="600"
           :loading="loading"
+          :sort-config="{trigger: 'cell'}"
           :checkbox-config="{checkField: 'checked'}">
           <vxe-table-column type="checkbox" width="60" fixed="left"></vxe-table-column>
           <vxe-table-column type="index" width="100" fixed="left"></vxe-table-column>

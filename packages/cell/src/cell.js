@@ -83,10 +83,10 @@ export const Cell = {
    */
   renderTreeIcon (h, params) {
     let { $table, isHidden } = params
-    let { treeConfig = {}, treeExpandeds, treeLazyLoadeds } = $table
+    let { treeOpts, treeExpandeds, treeLazyLoadeds } = $table
     let { row, column, level } = params
     let { slots } = column
-    let { children, hasChildren, indent, lazy, trigger, iconLoaded, iconOpen, iconClose } = treeConfig
+    let { children, hasChild, indent, lazy, trigger, iconLoaded, iconOpen, iconClose } = treeOpts
     let rowChilds = row[children]
     let hasLazyChilds = false
     let isAceived = false
@@ -99,7 +99,7 @@ export const Cell = {
       isAceived = treeExpandeds.indexOf(row) > -1
       if (lazy) {
         isLazyLoaded = treeLazyLoadeds.indexOf(row) > -1
-        hasLazyChilds = row[hasChildren]
+        hasLazyChilds = row[hasChild]
       }
     }
     if (!trigger || trigger === 'default') {
