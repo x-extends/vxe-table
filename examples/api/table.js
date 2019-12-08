@@ -852,7 +852,7 @@ const apis = [
         version: '',
         type: 'Object',
         enum: '',
-        defVal: '',
+        defVal: '继承 setup.radio-config',
         list: [
           {
             name: 'labelProp',
@@ -918,7 +918,7 @@ const apis = [
         version: '1.15.5',
         type: 'Object',
         enum: '',
-        defVal: '',
+        defVal: '继承 setup.checkbox-config',
         list: [
           {
             name: 'key',

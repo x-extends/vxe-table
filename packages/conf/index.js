@@ -3,6 +3,12 @@ const GlobalConfig = {
   // showHeaderOverflow: null,
   // resizeInterval: 250,
   // size: null,
+  // radioConfig: {
+  //   trigger: 'default'
+  // },
+  // checkboxConfig: {
+  //   trigger: 'default'
+  // },
   // sortConfig: {
   //   remote: false,
   //   trigger: 'default'

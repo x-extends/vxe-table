@@ -6,8 +6,7 @@ import { UtilTools } from '../../tools'
 export const Cell = {
   createColumn ($table, _vm) {
     let { type, sortable, remoteSort, filters, editRender, treeNode } = _vm
-    // 在 v3.0 中废弃 selectConfig
-    let checkboxConfig = $table.checkboxConfig || $table.selectConfig
+    let checkboxOpts = $table.checkboxOpts
     let renMaps = {
       renderHeader: this.renderHeader,
       renderCell: treeNode ? this.renderTreeCell : this.renderCell
@@ -26,7 +25,7 @@ export const Cell = {
       case 'selection':
         renMaps.renderHeader = this.renderSelectionHeader
         // 在 v2.0 中废弃 checkProp
-        renMaps.renderCell = checkboxConfig && (checkboxConfig.checkField || checkboxConfig.checkProp) ? (treeNode ? this.renderTreeSelectionCellByProp : this.renderSelectionCellByProp) : (treeNode ? this.renderTreeSelectionCell : this.renderSelectionCell)
+        renMaps.renderCell = checkboxOpts.checkField || checkboxOpts.checkProp ? (treeNode ? this.renderTreeSelectionCellByProp : this.renderSelectionCellByProp) : (treeNode ? this.renderTreeSelectionCell : this.renderSelectionCell)
         break
       case 'expand':
         renMaps.renderCell = this.renderExpandCell
@@ -168,12 +167,12 @@ export const Cell = {
   },
   renderRadioCell (h, params) {
     let { $table, column } = params
-    let { vSize, radioConfig = {} } = $table
+    let { vSize, radioOpts } = $table
     let { slots } = column
-    let { checkMethod } = radioConfig
+    let { checkMethod } = radioOpts
     let isDisabled = !!checkMethod
     // 在 v2.0 中废弃 labelProp
-    let labelProp = radioConfig.labelField || radioConfig.labelProp
+    let labelProp = radioOpts.labelField || radioOpts.labelProp
     let { selectRow } = $table
     let { row } = params
     let options = {
@@ -222,18 +221,16 @@ export const Cell = {
    */
   renderSelectionHeader (h, params) {
     let { $table, column, isHidden } = params
-    let { vSize, isIndeterminate, isAllCheckboxDisabled } = $table
+    let { vSize, isIndeterminate, isAllCheckboxDisabled, checkboxOpts } = $table
     let { slots, own } = column
     let headerTitle = own.title || own.label
-    // 在 v3.0 中废弃 selectConfig
-    let checkboxConfig = $table.checkboxConfig || $table.selectConfig
     let options = {
       attrs: {
         type: 'checkbox',
         disabled: isAllCheckboxDisabled
       }
     }
-    if (checkboxConfig && (checkboxConfig.checkStrictly ? !checkboxConfig.showHeader : checkboxConfig.showHeader === false)) {
+    if (checkboxOpts.checkStrictly ? !checkboxOpts.showHeader : checkboxOpts.showHeader === false) {
       return slots && slots.header ? slots.header(params, h) : [UtilTools.getFuncText(headerTitle)]
     }
     if (!isHidden) {
@@ -266,13 +263,11 @@ export const Cell = {
   },
   renderSelectionCell (h, params) {
     let { $table, row, column, isHidden } = params
-    let { vSize, treeConfig, treeIndeterminates } = $table
-    // 在 v3.0 中废弃 selectConfig
-    let checkboxConfig = $table.checkboxConfig || $table.selectConfig || {}
-    let { checkMethod } = checkboxConfig
+    let { vSize, treeConfig, treeIndeterminates, checkboxOpts } = $table
+    let { checkMethod } = checkboxOpts
     let { slots } = column
     // 在 v2.0 中废弃 labelProp
-    let labelProp = checkboxConfig.labelField || checkboxConfig.labelProp
+    let labelProp = checkboxOpts.labelField || checkboxOpts.labelProp
     let indeterminate = false
     let isDisabled = !!checkMethod
     let options = {
@@ -320,17 +315,15 @@ export const Cell = {
   },
   renderSelectionCellByProp (h, params) {
     let { $table, row, column, isHidden } = params
-    let { vSize, treeConfig, treeIndeterminates } = $table
-    // 在 v3.0 中废弃 selectConfig
-    let checkboxConfig = $table.checkboxConfig || $table.selectConfig || {}
-    let { checkMethod } = checkboxConfig
+    let { vSize, treeConfig, treeIndeterminates, checkboxOpts } = $table
+    let { checkMethod } = checkboxOpts
     let { slots } = column
     // 在 v2.0 中废弃 labelProp
-    let labelProp = checkboxConfig.labelField || checkboxConfig.labelProp
+    let labelProp = checkboxOpts.labelField || checkboxOpts.labelProp
     let indeterminate = false
     let isDisabled = !!checkMethod
     // 在 v2.0 中废弃 checkProp
-    let property = checkboxConfig.checkField || checkboxConfig.checkProp
+    let property = checkboxOpts.checkField || checkboxOpts.checkProp
     let options = {
       attrs: {
         type: 'checkbox'

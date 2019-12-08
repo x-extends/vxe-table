@@ -487,6 +487,12 @@ export default {
         mini: 36
       }, this.optimizeOpts.rHeights)
     },
+    radioOpts () {
+      return Object.assign({}, GlobalConfig.radioConfig, this.radioConfig)
+    },
+    checkboxOpts () {
+      return Object.assign({}, GlobalConfig.checkboxConfig, this.checkboxConfig || this.selectConfig)
+    },
     tooltipOpts () {
       return Object.assign({ leaveDelay: 300 }, GlobalConfig.tooltipConfig, this.tooltipConfig)
     },
@@ -550,10 +556,8 @@ export default {
      * 判断列全选的复选框是否禁用
      */
     isAllCheckboxDisabled () {
-      let { tableFullData, treeConfig } = this
-      // 在 v3.0 中废弃 selectConfig
-      let checkboxConfig = this.checkboxConfig || this.selectConfig || {}
-      let { strict, checkMethod } = checkboxConfig
+      let { tableFullData, treeConfig, checkboxOpts } = this
+      let { strict, checkMethod } = checkboxOpts
       if (strict) {
         if (tableFullData.length) {
           if (checkMethod) {
@@ -634,10 +638,8 @@ export default {
     }
   },
   created () {
-    let { scrollXStore, scrollYStore, optimizeOpts, ctxMenuOpts, showOverflow, radioConfig = {}, treeConfig, treeOpts, editConfig, loading, showAllOverflow, showHeaderAllOverflow } = this
+    let { scrollXStore, scrollYStore, optimizeOpts, ctxMenuOpts, showOverflow, radioOpts, checkboxOpts, treeConfig, treeOpts, editConfig, loading, showAllOverflow, showHeaderAllOverflow } = this
     let { scrollX, scrollY } = optimizeOpts
-    // 在 v3.0 中废弃 selectConfig
-    let checkboxConfig = this.checkboxConfig || this.selectConfig || {}
     if (loading) {
       this.isLoading = true
     }
@@ -666,7 +668,7 @@ export default {
     if (XEUtils.isBoolean(showHeaderAllOverflow)) {
       UtilTools.warn('vxe.error.delProp', ['show-header-all-overflow', 'show-header-overflow'])
     }
-    if (radioConfig.labelProp) {
+    if (radioOpts.labelProp) {
       UtilTools.warn('vxe.error.delProp', ['radio-config.labelProp', 'radio-config.labelField'])
     }
     if (this.selectConfig) {
@@ -675,10 +677,10 @@ export default {
     if (treeConfig && treeOpts.line && !showOverflow) {
       UtilTools.warn('vxe.error.treeLineReqProp', ['show-overflow'])
     }
-    if (checkboxConfig.checkProp) {
+    if (checkboxOpts.checkProp) {
       UtilTools.warn('vxe.error.delProp', ['select-config.checkProp', 'select-config.checkField'])
     }
-    if (checkboxConfig.labelProp) {
+    if (checkboxOpts.labelProp) {
       UtilTools.warn('vxe.error.delProp', ['select-config.labelProp', 'select-config.labelField'])
     }
     if (this.sortMethod) {
@@ -706,7 +708,7 @@ export default {
     this.fullColumnMap = new Map()
     this.fullColumnIdData = {}
     this.loadTableData(this.data, true).then(() => {
-      if (checkboxConfig.key) {
+      if (checkboxOpts.key) {
         UtilTools.warn('vxe.error.delProp', ['select-config.key', 'row-id'])
       } else if (treeConfig && treeOpts.key) {
         UtilTools.warn('vxe.error.delProp', ['tree-config.key', 'row-id'])
@@ -1284,11 +1286,9 @@ export default {
      * 如果传 rows 则删除多行
      */
     remove (rows) {
-      let { afterFullData, tableFullData, editStore, treeConfig, selection, hasInsertByRow, scrollYLoad } = this
+      let { afterFullData, tableFullData, editStore, treeConfig, checkboxOpts, selection, hasInsertByRow, scrollYLoad } = this
       let { removeList, insertList } = editStore
-      // 在 v3.0 中废弃 selectConfig
-      let checkboxConfig = this.checkboxConfig || this.selectConfig || {}
-      let property = checkboxConfig.checkField || checkboxConfig.checkProp
+      let property = checkboxOpts.checkField || checkboxOpts.checkProp
       let rest = []
       let nowData = afterFullData
       if (treeConfig) {
@@ -1510,10 +1510,8 @@ export default {
      * 获取选中数据
      */
     getSelectRecords () {
-      let { tableFullData, treeConfig, treeOpts } = this
-      // 在 v3.0 中废弃 selectConfig
-      let checkboxConfig = this.checkboxConfig || this.selectConfig || {}
-      let { checkField: property } = checkboxConfig
+      let { tableFullData, treeConfig, treeOpts, checkboxOpts } = this
+      let { checkField: property } = checkboxOpts
       let rowList = []
       if (property) {
         if (treeConfig) {
@@ -2604,10 +2602,8 @@ export default {
      * 处理复选框默认勾选
      */
     handleSelectionDefChecked () {
-      let { fullDataRowIdData } = this
-      // 在 v3.0 中废弃 selectConfig
-      let checkboxConfig = this.checkboxConfig || this.selectConfig || {}
-      let { checkAll, checkRowKeys } = checkboxConfig
+      let { fullDataRowIdData, checkboxOpts } = this
+      let { checkAll, checkRowKeys } = checkboxOpts
       if (checkAll) {
         this.setAllSelection(true)
       } else if (checkRowKeys) {
@@ -2628,9 +2624,7 @@ export default {
       return this.$nextTick()
     },
     isCheckedByRow (row) {
-      // 在 v3.0 中废弃 selectConfig
-      let checkboxConfig = this.checkboxConfig || this.selectConfig || {}
-      let { checkField: property } = checkboxConfig
+      let { checkField: property } = this.checkboxOpts
       if (property) {
         return XEUtils.get(row, property)
       }
@@ -2641,11 +2635,9 @@ export default {
      * value 选中true 不选false 不确定-1
      */
     handleSelectRow (evnt, { row }, value) {
-      let { selection, tableFullData, treeConfig, treeOpts, treeIndeterminates } = this
-      // 在 v3.0 中废弃 selectConfig
-      let checkboxConfig = this.checkboxConfig || this.selectConfig || {}
-      let { checkStrictly, checkMethod } = checkboxConfig
-      let property = checkboxConfig.checkField || checkboxConfig.checkProp
+      let { selection, tableFullData, treeConfig, treeOpts, treeIndeterminates, checkboxOpts } = this
+      let { checkStrictly, checkMethod } = checkboxOpts
+      let property = checkboxOpts.checkField || checkboxOpts.checkProp
       if (property) {
         if (treeConfig && !checkStrictly) {
           if (value === -1) {
@@ -2726,10 +2718,8 @@ export default {
       this.checkSelectionStatus()
     },
     handleToggleCheckRowEvent (params, evnt) {
-      let { selection } = this
-      // 在 v3.0 中废弃 selectConfig
-      let checkboxConfig = this.checkboxConfig || this.selectConfig || {}
-      let { checkField: property } = checkboxConfig
+      let { selection, checkboxOpts } = this
+      let { checkField: property } = checkboxOpts
       let { row } = params
       let value = property ? !XEUtils.get(row, property) : selection.indexOf(row) === -1
       if (evnt) {
@@ -2739,9 +2729,7 @@ export default {
       }
     },
     triggerCheckRowEvent (evnt, params, value) {
-      // 在 v3.0 中废弃 selectConfig
-      let checkboxConfig = this.checkboxConfig || this.selectConfig || {}
-      let { checkMethod } = checkboxConfig
+      let { checkMethod } = this.checkboxOpts
       if (!checkMethod || checkMethod({ row: params.row, rowIndex: params.rowIndex, $rowIndex: params.$rowIndex })) {
         this.handleSelectRow(evnt, params, value)
         UtilTools.emitEvent(this, 'select-change', [Object.assign({ selection: this.getSelectRecords(), reserves: this.getSelectReserveRecords(), checked: value, $table: this }, params), evnt])
@@ -2755,12 +2743,10 @@ export default {
       return this.$nextTick()
     },
     setAllSelection (value) {
-      let { tableFullData, editStore, treeConfig, treeOpts, selection, selectReserveRowMap } = this
-      // 在 v3.0 中废弃 selectConfig
-      let checkboxConfig = this.checkboxConfig || this.selectConfig || {}
-      let { reserve, checkStrictly, checkMethod } = checkboxConfig
+      let { tableFullData, editStore, treeConfig, treeOpts, selection, selectReserveRowMap, checkboxOpts } = this
+      let { reserve, checkStrictly, checkMethod } = checkboxOpts
       let { insertList } = editStore
-      let property = checkboxConfig.checkField || checkboxConfig.checkProp
+      let property = checkboxOpts.checkField || checkboxOpts.checkProp
       let selectRows = []
       // 包含新增的数据
       if (insertList.length) {
@@ -2835,11 +2821,9 @@ export default {
       this.checkSelectionStatus()
     },
     checkSelectionStatus () {
-      let { tableFullData, editStore, selection, treeIndeterminates } = this
-      // 在 v3.0 中废弃 selectConfig
-      let checkboxConfig = this.checkboxConfig || this.selectConfig || {}
-      let { checkStrictly, checkMethod } = checkboxConfig
-      let property = checkboxConfig.checkField || checkboxConfig.checkProp
+      let { tableFullData, editStore, selection, treeIndeterminates, checkboxOpts } = this
+      let { checkStrictly, checkMethod } = checkboxOpts
+      let property = checkboxOpts.checkField || checkboxOpts.checkProp
       let { insertList } = editStore
       // 包含新增的数据
       if (insertList.length) {
@@ -2865,9 +2849,7 @@ export default {
     },
     // 还原展开、选中等相关状态
     handleReserveStatus () {
-      let { rowId, treeConfig, fullDataRowIdData, selectReserveRowMap } = this
-      // 在 v3.0 中废弃 selectConfig
-      let checkboxConfig = this.checkboxConfig || this.selectConfig || {}
+      let { rowId, treeConfig, fullDataRowIdData, selectReserveRowMap, checkboxOpts } = this
       let reserveSelection = []
       let reserveRowExpandeds = []
       let reserveTreeExpandeds = []
@@ -2876,7 +2858,7 @@ export default {
       if (rowId) {
         this.handleReserveByRowid(this.selection, reserveSelection)
       }
-      if (checkboxConfig.reserve) {
+      if (checkboxOpts.reserve) {
         Object.keys(selectReserveRowMap).forEach(rowid => {
           if (fullDataRowIdData[rowid] && reserveSelection.indexOf(fullDataRowIdData[rowid].row) === -1) {
             reserveSelection.push(fullDataRowIdData[rowid].row)
@@ -2910,11 +2892,9 @@ export default {
      * 获取保留选中的行
      */
     getSelectReserveRecords () {
-      let { fullDataRowIdData, selectReserveRowMap } = this
-      // 在 v3.0 中废弃 selectConfig
-      let checkboxConfig = this.checkboxConfig || this.selectConfig || {}
+      let { fullDataRowIdData, selectReserveRowMap, checkboxOpts } = this
       let reserveSelection = []
-      if (checkboxConfig.reserve) {
+      if (checkboxOpts.reserve) {
         Object.keys(selectReserveRowMap).forEach(rowid => {
           if (!fullDataRowIdData[rowid]) {
             reserveSelection.push(selectReserveRowMap[rowid])
@@ -2927,10 +2907,8 @@ export default {
       this.selectReserveRowMap = {}
     },
     handleSelectReserveRow (row, checked) {
-      const { selectReserveRowMap } = this
-      // 在 v3.0 中废弃 selectConfig
-      let checkboxConfig = this.checkboxConfig || this.selectConfig || {}
-      let { reserve } = checkboxConfig
+      const { selectReserveRowMap, checkboxOpts } = this
+      let { reserve } = checkboxOpts
       if (reserve) {
         const rowid = UtilTools.getRowid(this, row)
         if (checked) {
@@ -2955,10 +2933,8 @@ export default {
       return this.$nextTick()
     },
     clearSelection () {
-      let { tableFullData, treeConfig, treeOpts } = this
-      // 在 v3.0 中废弃 selectConfig
-      let checkboxConfig = this.checkboxConfig || this.selectConfig || {}
-      let property = checkboxConfig.checkField || checkboxConfig.checkProp
+      let { tableFullData, treeConfig, treeOpts, checkboxOpts } = this
+      let property = checkboxOpts.checkField || checkboxOpts.checkProp
       if (property) {
         if (treeConfig) {
           XEUtils.eachTree(tableFullData, item => XEUtils.set(item, property, false), treeOpts)
@@ -2976,8 +2952,8 @@ export default {
      * 处理单选框默认勾选
      */
     handleRadioDefChecked () {
-      let { radioConfig = {}, fullDataRowIdData } = this
-      let { checkRowKey: rowid } = radioConfig
+      let { radioOpts, fullDataRowIdData } = this
+      let { checkRowKey: rowid } = radioOpts
       if (rowid) {
         this.setRadioRow(fullDataRowIdData[rowid].row)
       }
@@ -2986,8 +2962,8 @@ export default {
      * 单选，行选中事件
      */
     triggerRadioRowEvent (evnt, params) {
-      let { radioConfig = {} } = this
-      let { checkMethod } = radioConfig
+      let { radioOpts } = this
+      let { checkMethod } = radioOpts
       if (!checkMethod || checkMethod({ row: params.row, rowIndex: params.rowIndex, $rowIndex: params.$rowIndex })) {
         let isChange = this.selectRow !== params.row
         this.setRadioRow(params.row)
@@ -3154,11 +3130,9 @@ export default {
      * 如果是双击模式，则单击后选中状态
      */
     triggerCellClickEvent (evnt, params) {
-      let { $el, highlightCurrentRow, editStore, radioConfig = {}, expandOpts, treeOpts, editConfig } = this
+      let { $el, highlightCurrentRow, editStore, radioOpts, expandOpts, treeOpts, editConfig, checkboxOpts } = this
       let { actived } = editStore
       let { column } = params
-      // 在 v3.0 中废弃 selectConfig
-      let checkboxConfig = this.checkboxConfig || this.selectConfig || {}
       // 解决 checkbox 重复触发两次问题
       if (isTargetRadioOrCheckbox(evnt, column, 'radio') || isTargetRadioOrCheckbox(evnt, column, 'checkbox', 'checkbox') || isTargetRadioOrCheckbox(evnt, column, 'selection', 'checkbox')) {
         // 在 v3.0 中废弃 selection
@@ -3175,16 +3149,16 @@ export default {
       if ((!column.treeNode || !DomTools.getEventTargetNode(evnt, $el, 'vxe-tree-wrapper').flag) && (column.type !== 'expand' || !DomTools.getEventTargetNode(evnt, $el, 'vxe-table--expanded').flag)) {
         // 如果是高亮行
         if (highlightCurrentRow) {
-          if (radioConfig.trigger === 'row' || (!DomTools.getEventTargetNode(evnt, $el, 'vxe-checkbox').flag && !DomTools.getEventTargetNode(evnt, $el, 'vxe-radio').flag)) {
+          if (radioOpts.trigger === 'row' || (!DomTools.getEventTargetNode(evnt, $el, 'vxe-checkbox').flag && !DomTools.getEventTargetNode(evnt, $el, 'vxe-radio').flag)) {
             this.triggerCurrentRowEvent(evnt, params)
           }
         }
         // 如果是单选框
-        if ((radioConfig.trigger === 'row' || (column.type === 'radio' && radioConfig.trigger === 'cell')) && !DomTools.getEventTargetNode(evnt, $el, 'vxe-radio').flag) {
+        if ((radioOpts.trigger === 'row' || (column.type === 'radio' && radioOpts.trigger === 'cell')) && !DomTools.getEventTargetNode(evnt, $el, 'vxe-radio').flag) {
           this.triggerRadioRowEvent(evnt, params)
         }
         // 如果是复选框
-        if ((checkboxConfig.trigger === 'row' || ((column.type === 'checkbox' || column.type === 'selection') && checkboxConfig.trigger === 'cell')) && !DomTools.getEventTargetNode(evnt, params.cell, 'vxe-checkbox').flag) {
+        if ((checkboxOpts.trigger === 'row' || ((column.type === 'checkbox' || column.type === 'selection') && checkboxOpts.trigger === 'cell')) && !DomTools.getEventTargetNode(evnt, params.cell, 'vxe-checkbox').flag) {
           // 在 v3.0 中废弃 selection
           this.handleToggleCheckRowEvent(params, evnt)
         }
@@ -3785,6 +3759,14 @@ export default {
         })
       }
       return this.updateData()
+    },
+    /**
+     * 判断展开行是否懒加载完成
+     * @param {Row} row 行对象
+     */
+    isExpandLoadedByRow (row) {
+      let rest = this.fullAllDataRowMap.get(row)
+      return rest && rest.expandLoaded
     },
     /**
      * 展开行事件

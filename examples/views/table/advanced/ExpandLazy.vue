@@ -124,6 +124,15 @@ export default {
             loadContentMethod ({ row }) {
               return new Promise(resolve => {
                 setTimeout(() => {
+                  let detailList = [
+                    { role: 'Develop', age: 20, sex: '女' },
+                    { role: 'Develop', age: 22, sex: '女' },
+                    { role: 'Develop', age: 24, sex: '男' },
+                    { role: 'Develop', age: 26, sex: '女' },
+                    { role: 'Develop', age: 28, sex: '男' },
+                    { role: 'Develop', age: 30, sex: '男' }
+                  ]
+                  row.detailList = detailList
                   resolve()
                 }, 500)
               })

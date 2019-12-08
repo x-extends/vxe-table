@@ -119,12 +119,10 @@ export const UtilTools = {
   },
   // 行主键 key
   getRowkey ($table) {
-    let { rowKey, rowId, treeOpts, expandOpts, editConfig = {} } = $table
-    // 在 v3.0 中废弃 selectConfig
-    let checkboxConfig = $table.checkboxConfig || $table.selectConfig || {}
+    let { rowKey, rowId, treeOpts, expandOpts, checkboxOpts, editConfig = {} } = $table
     if (!rowKey || !XEUtils.isString(rowKey)) {
       // 在 v2.0 中废弃 key
-      rowKey = rowId || checkboxConfig.key || treeOpts.key || expandOpts.key || editConfig.key || GlobalConfig.rowId
+      rowKey = rowId || checkboxOpts.key || treeOpts.key || expandOpts.key || editConfig.key || GlobalConfig.rowId
     }
     return rowKey
   },

@@ -31,6 +31,12 @@
           import: {}, // 导入默认参数
           zIndex: 100, // 全局 zIndex 起始值
           rowId: '_XID',
+          radioConfig: {
+            trigger: 'default'
+          },
+          checkboxConfig: {
+            trigger: 'default'
+          },
           sortConfig: {
             remote: false,
             trigger: 'default'
