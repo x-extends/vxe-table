@@ -64,6 +64,7 @@ const TableMenu = () => import(/* webpackChunkName: "advanced" */ './views/table
 const TableMenuPrivilege = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/MenuPrivilege.vue')
 const TableExpand = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Expand.vue')
 const TableExpandIcon = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/ExpandIcon.vue')
+const TableExpandLazy = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/ExpandLazy.vue')
 const TableExpandAccordion = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/ExpandAccordion.vue')
 const TableSearch = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Search.vue')
 const Toolbar = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Toolbar.vue')
@@ -551,6 +552,11 @@ export default new Router({
       path: '/table/advanced/expandIcon',
       name: 'TableExpandIcon',
       component: TableExpandIcon
+    },
+    {
+      path: '/table/advanced/expandLazy',
+      name: 'TableExpandLazy',
+      component: TableExpandLazy
     },
     {
       path: '/table/advanced/expandAccordion',

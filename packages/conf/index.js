@@ -10,6 +10,9 @@ const GlobalConfig = {
   // filterConfig: {
   //   remote: false
   // },
+  // expandConfig: {
+  //   trigger: 'default'
+  // },
   // treeConfig: {
   //   children: 'children',
   //   hasChild: 'hasChild',
@@ -62,6 +65,7 @@ const GlobalConfig = {
     treeLoaded: 'vxe-icon--refresh roll',
     treeOpen: 'vxe-icon--caret-right rotate90',
     treeClose: 'vxe-icon--caret-right',
+    expandLoaded: 'vxe-icon--refresh roll',
     expandOpen: 'vxe-icon--arrow-right rotate90',
     expandClose: 'vxe-icon--arrow-right',
     refresh: 'vxe-icon--refresh',

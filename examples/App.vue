@@ -434,6 +434,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.expandRowLazy',
+              locat: {
+                name: 'TableExpandLazy'
+              }
+            },
+            {
               label: 'app.aside.nav.accordion',
               locat: {
                 name: 'TableExpandAccordion'

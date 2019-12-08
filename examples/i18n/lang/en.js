@@ -60,6 +60,7 @@ module.exports = {
         footerImmediately: 'Footer summary + immediately',
         expandRow: 'Expandable row',
         expandRowIcon: 'Expandable row + custom icon',
+        expandRowLazy: 'Expandable row + lazy loading',
         accordion: 'Accordion expandable',
         toolbar: 'Toolbar',
         customs: 'Show/hide column',

@@ -38,6 +38,9 @@
           filterConfig: {
             remote: false
           },
+          expandConfig: {
+            trigger: 'default'
+          },
           treeConfig: {
             children: 'children',
             hasChild: 'hasChild',

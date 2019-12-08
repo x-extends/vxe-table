@@ -243,6 +243,8 @@ export default {
       footerData: [],
       // 已展开的行
       rowExpandeds: [],
+      // 懒加载中的展开行的列表
+      expandLazyLoadeds: [],
       // 已展开树节点
       treeExpandeds: [],
       // 懒加载中的树节点的列表
@@ -392,6 +394,9 @@ export default {
         })
       })
       return rest
+    },
+    expandOpts () {
+      return Object.assign({}, GlobalConfig.expandConfig, this.expandConfig)
     },
     treeOpts () {
       return Object.assign({
