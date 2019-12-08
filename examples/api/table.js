@@ -831,7 +831,7 @@ const apis = [
         version: '',
         type: 'Object',
         enum: '',
-        defVal: '',
+        defVal: '继承 setup.radio-config',
         list: [
           {
             name: 'labelField',
@@ -887,7 +887,7 @@ const apis = [
         version: '2.6',
         type: 'Object',
         enum: '',
-        defVal: '',
+        defVal: '继承 setup.checkbox-config',
         list: [
           {
             name: 'reserve',

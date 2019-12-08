@@ -346,6 +346,12 @@ export default {
         mini: 36
       }, this.optimizeOpts.rHeights)
     },
+    radioOpts () {
+      return Object.assign({}, GlobalConfig.radioConfig, this.radioConfig)
+    },
+    checkboxOpts () {
+      return Object.assign({}, GlobalConfig.checkboxConfig, this.checkboxConfig || this.selectConfig)
+    },
     tooltipOpts () {
       return Object.assign({ leaveDelay: 300 }, GlobalConfig.tooltipConfig, this.tooltipConfig)
     },
@@ -409,10 +415,8 @@ export default {
      * 判断列全选的复选框是否禁用
      */
     isAllCheckboxDisabled () {
-      let { tableFullData, treeConfig } = this
-      // 在 v3.0 中废弃 selectConfig
-      let checkboxConfig = this.checkboxConfig || this.selectConfig || {}
-      let { strict, checkMethod } = checkboxConfig
+      let { tableFullData, treeConfig, checkboxOpts } = this
+      let { strict, checkMethod } = checkboxOpts
       if (strict) {
         if (tableFullData.length) {
           if (checkMethod) {

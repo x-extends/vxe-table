@@ -6,8 +6,7 @@ import { UtilTools } from '../../tools'
 export const Cell = {
   createColumn ($table, _vm) {
     let { type, sortable, remoteSort, filters, editRender, treeNode } = _vm
-    // 在 v3.0 中废弃 selectConfig
-    let checkboxConfig = $table.checkboxConfig || $table.selectConfig
+    let checkboxOpts = $table.checkboxOpts
     let renMaps = {
       renderHeader: this.renderHeader,
       renderCell: treeNode ? this.renderTreeCell : this.renderCell
@@ -25,7 +24,7 @@ export const Cell = {
       case 'checkbox':
       case 'selection':
         renMaps.renderHeader = this.renderSelectionHeader
-        renMaps.renderCell = checkboxConfig && checkboxConfig.checkField ? (treeNode ? this.renderTreeSelectionCellByProp : this.renderSelectionCellByProp) : (treeNode ? this.renderTreeSelectionCell : this.renderSelectionCell)
+        renMaps.renderCell = checkboxOpts.checkField ? (treeNode ? this.renderTreeSelectionCellByProp : this.renderSelectionCellByProp) : (treeNode ? this.renderTreeSelectionCell : this.renderSelectionCell)
         break
       case 'expand':
         renMaps.renderCell = this.renderExpandCell
@@ -169,9 +168,9 @@ export const Cell = {
   },
   renderRadioCell (h, params) {
     let { $table, column, isHidden } = params
-    let { vSize, radioConfig = {} } = $table
+    let { vSize, radioOpts } = $table
     let { slots } = column
-    let { labelField, checkMethod } = radioConfig
+    let { labelField, checkMethod } = radioOpts
     let isDisabled = !!checkMethod
     let { selectRow } = $table
     let { row } = params
@@ -223,8 +222,7 @@ export const Cell = {
     let { $table, column, isHidden } = params
     let { vSize, isIndeterminate, isAllCheckboxDisabled } = $table
     let { slots, own } = column
-    // 在 v3.0 中废弃 selectConfig
-    let checkboxConfig = $table.checkboxConfig || $table.selectConfig
+    let checkboxOpts = $table.checkboxOpts
     // 在 v3.0 中废弃 label
     let headerTitle = own.title || own.label
     let options = {
@@ -233,7 +231,7 @@ export const Cell = {
         disabled: isAllCheckboxDisabled
       }
     }
-    if (checkboxConfig && (checkboxConfig.checkStrictly ? !checkboxConfig.showHeader : checkboxConfig.showHeader === false)) {
+    if (checkboxOpts.checkStrictly ? !checkboxOpts.showHeader : checkboxOpts.showHeader === false) {
       return slots && slots.header ? slots.header(params, h) : [UtilTools.getFuncText(headerTitle)]
     }
     if (!isHidden) {
@@ -267,9 +265,7 @@ export const Cell = {
   renderSelectionCell (h, params) {
     let { $table, row, column, isHidden } = params
     let { vSize, treeConfig, treeIndeterminates } = $table
-    // 在 v3.0 中废弃 selectConfig
-    let checkboxConfig = $table.checkboxConfig || $table.selectConfig || {}
-    let { labelField, checkMethod } = checkboxConfig
+    let { labelField, checkMethod } = $table.checkboxOpts
     let { slots } = column
     let indeterminate = false
     let isDisabled = !!checkMethod
@@ -319,9 +315,7 @@ export const Cell = {
   renderSelectionCellByProp (h, params) {
     let { $table, row, column, isHidden } = params
     let { vSize, treeConfig, treeIndeterminates } = $table
-    // 在 v3.0 中废弃 selectConfig
-    let checkboxConfig = $table.checkboxConfig || $table.selectConfig || {}
-    let { labelField, checkField: property, checkMethod } = checkboxConfig
+    let { labelField, checkField: property, checkMethod } = $table.checkboxOpts
     let { slots } = column
     let indeterminate = false
     let isDisabled = !!checkMethod

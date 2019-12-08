@@ -70,11 +70,9 @@ export default {
      * 如果为空则删除所有
      */
     _remove (rows) {
-      let { afterFullData, tableFullData, editStore, treeConfig, selection, isInsertByRow, scrollYLoad } = this
+      let { afterFullData, tableFullData, editStore, treeConfig, checkboxOpts, selection, isInsertByRow, scrollYLoad } = this
       let { removeList, insertList } = editStore
-      // 在 v3.0 中废弃 selectConfig
-      let checkboxConfig = this.checkboxConfig || this.selectConfig || {}
-      let { checkField: property } = checkboxConfig
+      let { checkField: property } = checkboxOpts
       let rest = []
       let nowData = afterFullData
       if (treeConfig) {

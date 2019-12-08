@@ -524,10 +524,8 @@ const Methods = {
    * 用于多选行，获取已选中的数据
    */
   getSelectRecords () {
-    let { tableFullData, treeConfig, treeOpts } = this
-    // 在 v3.0 中废弃 selectConfig
-    let checkboxConfig = this.checkboxConfig || this.selectConfig || {}
-    let { checkField: property } = checkboxConfig
+    let { tableFullData, treeConfig, treeOpts, checkboxOpts } = this
+    let { checkField: property } = checkboxOpts
     let rowList = []
     if (property) {
       if (treeConfig) {
@@ -1550,10 +1548,8 @@ const Methods = {
    * 处理默认勾选
    */
   handleSelectionDefChecked () {
-    let { fullDataRowIdData } = this
-    // 在 v3.0 中废弃 selectConfig
-    let checkboxConfig = this.checkboxConfig || this.selectConfig || {}
-    let { checkAll, checkRowKeys } = checkboxConfig
+    let { fullDataRowIdData, checkboxOpts } = this
+    let { checkAll, checkRowKeys } = checkboxOpts
     if (checkAll) {
       this.setAllSelection(true)
     } else if (checkRowKeys) {
@@ -1579,9 +1575,7 @@ const Methods = {
     return this.$nextTick()
   },
   isCheckedByRow (row) {
-    // 在 v3.0 中废弃 selectConfig
-    let checkboxConfig = this.checkboxConfig || this.selectConfig || {}
-    let { checkField: property } = checkboxConfig
+    let { checkField: property } = this.checkboxOpts
     if (property) {
       return XEUtils.get(row, property)
     }
@@ -1592,10 +1586,8 @@ const Methods = {
    * value 选中true 不选false 不确定-1
    */
   handleSelectRow ({ row }, value) {
-    let { selection, tableFullData, treeConfig, treeOpts, treeIndeterminates } = this
-    // 在 v3.0 中废弃 selectConfig
-    let checkboxConfig = this.checkboxConfig || this.selectConfig || {}
-    let { checkField: property, checkStrictly, checkMethod } = checkboxConfig
+    let { selection, tableFullData, treeConfig, treeOpts, treeIndeterminates, checkboxOpts } = this
+    let { checkField: property, checkStrictly, checkMethod } = checkboxOpts
     if (property) {
       if (treeConfig && !checkStrictly) {
         if (value === -1) {
@@ -1676,10 +1668,8 @@ const Methods = {
     this.checkSelectionStatus()
   },
   handleToggleCheckRowEvent (params, evnt) {
-    let { selection } = this
-    // 在 v3.0 中废弃 selectConfig
-    let checkboxConfig = this.checkboxConfig || this.selectConfig || {}
-    let { checkField: property } = checkboxConfig
+    let { selection, checkboxOpts } = this
+    let { checkField: property } = checkboxOpts
     let { row } = params
     let value = property ? !XEUtils.get(row, property) : selection.indexOf(row) === -1
     if (evnt) {
@@ -1689,9 +1679,7 @@ const Methods = {
     }
   },
   triggerCheckRowEvent (evnt, params, value) {
-    // 在 v3.0 中废弃 selectConfig
-    let checkboxConfig = this.checkboxConfig || this.selectConfig || {}
-    let { checkMethod } = checkboxConfig
+    let { checkMethod } = this.checkboxOpts
     if (!checkMethod || checkMethod({ row: params.row, rowIndex: params.rowIndex, $rowIndex: params.$rowIndex })) {
       this.handleSelectRow(params, value)
       UtilTools.emitEvent(this, 'select-change', [Object.assign({ selection: this.getSelectRecords(), reserves: this.getSelectReserveRecords(), checked: value, $table: this }, params), evnt])
@@ -1709,10 +1697,8 @@ const Methods = {
    * @param {Boolean} value 是否选中
    */
   setAllSelection (value) {
-    let { tableFullData, treeConfig, treeOpts, selection, selectReserveRowMap } = this
-    // 在 v3.0 中废弃 selectConfig
-    let checkboxConfig = this.checkboxConfig || this.selectConfig || {}
-    let { checkField: property, reserve, checkStrictly, checkMethod } = checkboxConfig
+    let { tableFullData, treeConfig, treeOpts, selection, selectReserveRowMap, checkboxOpts } = this
+    let { checkField: property, reserve, checkStrictly, checkMethod } = checkboxOpts
     let selectRows = []
     if (!checkStrictly) {
       if (property) {
@@ -1783,10 +1769,8 @@ const Methods = {
     this.checkSelectionStatus()
   },
   checkSelectionStatus () {
-    let { tableFullData, editStore, selection, treeIndeterminates } = this
-    // 在 v3.0 中废弃 selectConfig
-    let checkboxConfig = this.checkboxConfig || this.selectConfig || {}
-    let { checkField: property, checkStrictly, checkMethod } = checkboxConfig
+    let { tableFullData, editStore, selection, treeIndeterminates, checkboxOpts } = this
+    let { checkField: property, checkStrictly, checkMethod } = checkboxOpts
     let { insertList } = editStore
     // 包含新增的数据
     if (insertList.length) {
@@ -1812,9 +1796,7 @@ const Methods = {
   },
   // 还原展开、选中等相关状态
   handleReserveStatus () {
-    let { rowId, treeConfig, fullDataRowIdData, selectReserveRowMap } = this
-    // 在 v3.0 中废弃 selectConfig
-    let checkboxConfig = this.checkboxConfig || this.selectConfig || {}
+    let { rowId, treeConfig, fullDataRowIdData, selectReserveRowMap, checkboxOpts } = this
     let reserveSelection = []
     let reserveRowExpandeds = []
     let reserveTreeExpandeds = []
@@ -1823,7 +1805,7 @@ const Methods = {
     if (rowId) {
       this.handleReserveByRowid(this.selection, reserveSelection)
     }
-    if (checkboxConfig.reserve) {
+    if (checkboxOpts.reserve) {
       Object.keys(selectReserveRowMap).forEach(rowid => {
         if (fullDataRowIdData[rowid] && reserveSelection.indexOf(fullDataRowIdData[rowid].row) === -1) {
           reserveSelection.push(fullDataRowIdData[rowid].row)
@@ -1857,11 +1839,9 @@ const Methods = {
    * 获取保留选中的行
    */
   getSelectReserveRecords () {
-    let { fullDataRowIdData, selectReserveRowMap } = this
-    // 在 v3.0 中废弃 selectConfig
-    let checkboxConfig = this.checkboxConfig || this.selectConfig || {}
+    let { fullDataRowIdData, selectReserveRowMap, checkboxOpts } = this
     let reserveSelection = []
-    if (checkboxConfig.reserve) {
+    if (checkboxOpts.reserve) {
       Object.keys(selectReserveRowMap).forEach((rowid, row) => {
         if (!fullDataRowIdData[rowid]) {
           reserveSelection.push(selectReserveRowMap[rowid])
@@ -1874,10 +1854,8 @@ const Methods = {
     this.selectReserveRowMap = {}
   },
   handleSelectReserveRow (row, checked) {
-    const { selectReserveRowMap } = this
-    // 在 v3.0 中废弃 selectConfig
-    let checkboxConfig = this.checkboxConfig || this.selectConfig || {}
-    let { reserve } = checkboxConfig
+    const { selectReserveRowMap, checkboxOpts } = this
+    let { reserve } = checkboxOpts
     if (reserve) {
       const rowid = UtilTools.getRowid(this, row)
       if (checked) {
@@ -1905,10 +1883,8 @@ const Methods = {
    * 用于多选行，手动清空用户的选择
    */
   clearSelection () {
-    let { tableFullData, treeConfig, treeOpts } = this
-    // 在 v3.0 中废弃 selectConfig
-    let checkboxConfig = this.checkboxConfig || this.selectConfig || {}
-    let { checkField: property } = checkboxConfig
+    let { tableFullData, treeConfig, treeOpts, checkboxOpts } = this
+    let { checkField: property } = checkboxOpts
     if (property) {
       if (treeConfig) {
         XEUtils.eachTree(tableFullData, item => XEUtils.set(item, property, false), treeOpts)
@@ -1926,8 +1902,8 @@ const Methods = {
    * 处理单选框默认勾选
    */
   handleRadioDefChecked () {
-    let { radioConfig = {}, fullDataRowIdData } = this
-    let { checkRowKey: rowid } = radioConfig
+    let { radioOpts, fullDataRowIdData } = this
+    let { checkRowKey: rowid } = radioOpts
     if (rowid && fullDataRowIdData[rowid]) {
       this.setRadioRow(fullDataRowIdData[rowid].row)
     }
@@ -1936,8 +1912,8 @@ const Methods = {
    * 单选，行选中事件
    */
   triggerRadioRowEvent (evnt, params) {
-    let { radioConfig = {} } = this
-    let { checkMethod } = radioConfig
+    let { radioOpts } = this
+    let { checkMethod } = radioOpts
     if (!checkMethod || checkMethod({ row: params.row, rowIndex: params.rowIndex, $rowIndex: params.$rowIndex })) {
       let isChange = this.selectRow !== params.row
       this.setRadioRow(params.row)
@@ -2080,11 +2056,9 @@ const Methods = {
    * 如果是双击模式，则单击后选中状态
    */
   triggerCellClickEvent (evnt, params) {
-    let { $el, highlightCurrentRow, editStore, radioConfig = {}, expandOpts, treeOpts, editConfig, mouseConfig = {} } = this
+    let { $el, highlightCurrentRow, editStore, radioOpts, expandOpts, treeOpts, editConfig, checkboxOpts, mouseConfig = {} } = this
     let { actived } = editStore
     let { row, column, cell } = params
-    // 在 v3.0 中废弃 selectConfig
-    let checkboxConfig = this.checkboxConfig || this.selectConfig || {}
     // 解决 checkbox 重复触发两次问题
     if (isTargetRadioOrCheckbox(evnt, column, 'radio') || isTargetRadioOrCheckbox(evnt, column, 'checkbox', 'checkbox') || isTargetRadioOrCheckbox(evnt, column, 'selection', 'checkbox')) {
       // 在 v3.0 中废弃 type=selection
@@ -2101,16 +2075,16 @@ const Methods = {
     if ((!column.treeNode || !DomTools.getEventTargetNode(evnt, $el, 'vxe-tree-wrapper').flag) && (column.type !== 'expand' || !DomTools.getEventTargetNode(evnt, $el, 'vxe-table--expanded').flag)) {
       // 如果是高亮行
       if (highlightCurrentRow) {
-        if (radioConfig.trigger === 'row' || (!DomTools.getEventTargetNode(evnt, $el, 'vxe-checkbox').flag && !DomTools.getEventTargetNode(evnt, $el, 'vxe-radio').flag)) {
+        if (radioOpts.trigger === 'row' || (!DomTools.getEventTargetNode(evnt, $el, 'vxe-checkbox').flag && !DomTools.getEventTargetNode(evnt, $el, 'vxe-radio').flag)) {
           this.triggerCurrentRowEvent(evnt, params)
         }
       }
       // 如果是单选框
-      if ((radioConfig.trigger === 'row' || (column.type === 'radio' && radioConfig.trigger === 'cell')) && !DomTools.getEventTargetNode(evnt, $el, 'vxe-radio').flag) {
+      if ((radioOpts.trigger === 'row' || (column.type === 'radio' && radioOpts.trigger === 'cell')) && !DomTools.getEventTargetNode(evnt, $el, 'vxe-radio').flag) {
         this.triggerRadioRowEvent(evnt, params)
       }
       // 如果是复选框
-      if ((checkboxConfig.trigger === 'row' || ((column.type === 'checkbox' || column.type === 'selection') && checkboxConfig.trigger === 'cell')) && !DomTools.getEventTargetNode(evnt, params.cell, 'vxe-checkbox').flag) {
+      if ((checkboxOpts.trigger === 'row' || ((column.type === 'checkbox' || column.type === 'selection') && checkboxOpts.trigger === 'cell')) && !DomTools.getEventTargetNode(evnt, params.cell, 'vxe-checkbox').flag) {
         // 在 v3.0 中废弃 type=selection
         this.handleToggleCheckRowEvent(params, evnt)
       }
@@ -2233,6 +2207,14 @@ const Methods = {
       visible: false
     })
     return this.$nextTick()
+  },
+  /**
+   * 判断展开行是否懒加载完成
+   * @param {Row} row 行对象
+   */
+  isExpandLoadedByRow (row) {
+    let rest = this.fullAllDataRowMap.get(row)
+    return rest && rest.expandLoaded
   },
   /**
    * 展开行事件
