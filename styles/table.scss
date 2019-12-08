@@ -494,7 +494,7 @@
 
   /*排序*/
   .vxe-sort-wrapper {
-    width: 1.2em;
+    width: 1.5em;
     height: 1.5em;
     vertical-align: middle;
     text-align: center;
@@ -503,7 +503,7 @@
     .vxe-sort--asc-btn,
     .vxe-sort--desc-btn {
       position: absolute;
-      left: 0.1em;
+      left: 0.35em;
       color: $vxe-table-column-icon-border-color;
       width: 1em;
       text-align: center;
@@ -516,10 +516,10 @@
       }
     }
     .vxe-sort--asc-btn {
-      top: -0.1em;
+      top: -0.12em;
     }
     .vxe-sort--desc-btn {
-      bottom: -0.1em;
+      bottom: -0.02em;
     }
   }
 

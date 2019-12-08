@@ -13,6 +13,7 @@
       <vxe-table-column field="name" title="Name"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex" sortable></vxe-table-column>
       <vxe-table-column field="age" title="Age" :filters="[{value:'0',label:'女'},{value:'1',label:'男'}]"></vxe-table-column>
+      <vxe-table-column field="age1" title="Age1" sortable :filters="[{value:'0',label:'女'},{value:'1',label:'男'}]"></vxe-table-column>
       <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
     </vxe-table>
 
@@ -34,6 +35,7 @@
       <vxe-table-column field="name" title="Name"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex" sortable></vxe-table-column>
       <vxe-table-column field="age" title="Age" :filters="[{value:'0',label:'女'},{value:'1',label:'男'}]"></vxe-table-column>
+      <vxe-table-column field="age1" title="Age1" sortable :filters="[{value:'0',label:'女'},{value:'1',label:'男'}]"></vxe-table-column>
       <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
     </vxe-table>
 
@@ -55,6 +57,7 @@
       <vxe-table-column field="name" title="Name"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex" sortable></vxe-table-column>
       <vxe-table-column field="age" title="Age" :filters="[{value:'0',label:'女'},{value:'1',label:'男'}]"></vxe-table-column>
+      <vxe-table-column field="age1" title="Age1" sortable :filters="[{value:'0',label:'女'},{value:'1',label:'男'}]"></vxe-table-column>
       <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
     </vxe-table>
 
@@ -76,6 +79,7 @@
       <vxe-table-column field="name" title="Name"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex" sortable></vxe-table-column>
       <vxe-table-column field="age" title="Age" :filters="[{value:'0',label:'女'},{value:'1',label:'男'}]"></vxe-table-column>
+      <vxe-table-column field="age1" title="Age1" sortable :filters="[{value:'0',label:'女'},{value:'1',label:'男'}]"></vxe-table-column>
       <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
     </vxe-table>
 
@@ -103,6 +107,7 @@ export default {
           <vxe-table-column field="name" title="Name"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" sortable></vxe-table-column>
           <vxe-table-column field="age" title="Age" :filters="[{value:'0',label:'女'},{value:'1',label:'男'}]"></vxe-table-column>
+          <vxe-table-column field="age1" title="Age1" sortable :filters="[{value:'0',label:'女'},{value:'1',label:'男'}]"></vxe-table-column>
           <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
         </vxe-table>
         `,
@@ -126,6 +131,7 @@ export default {
           <vxe-table-column field="name" title="Name"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" sortable></vxe-table-column>
           <vxe-table-column field="age" title="Age" :filters="[{value:'0',label:'女'},{value:'1',label:'男'}]"></vxe-table-column>
+          <vxe-table-column field="age1" title="Age1" sortable :filters="[{value:'0',label:'女'},{value:'1',label:'男'}]"></vxe-table-column>
           <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
         </vxe-table>
         `,
@@ -149,6 +155,7 @@ export default {
           <vxe-table-column field="name" title="Name"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" sortable></vxe-table-column>
           <vxe-table-column field="age" title="Age" :filters="[{value:'0',label:'女'},{value:'1',label:'男'}]"></vxe-table-column>
+          <vxe-table-column field="age1" title="Age1" sortable :filters="[{value:'0',label:'女'},{value:'1',label:'男'}]"></vxe-table-column>
           <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
         </vxe-table>
         `,
@@ -172,6 +179,7 @@ export default {
           <vxe-table-column field="name" title="Name"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" sortable></vxe-table-column>
           <vxe-table-column field="age" title="Age" :filters="[{value:'0',label:'女'},{value:'1',label:'男'}]"></vxe-table-column>
+          <vxe-table-column field="age1" title="Age1" sortable :filters="[{value:'0',label:'女'},{value:'1',label:'男'}]"></vxe-table-column>
           <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
         </vxe-table>
         `,
