@@ -73,7 +73,7 @@ function renderColumn (h, _vm, $table, $seq, seq, rowid, fixedType, rowLevel, ro
     cellStyle,
     spanMethod,
     keyboardConfig,
-    expandConfig = {},
+    expandOpts,
     radioConfig = {},
     treeOpts,
     mouseConfig,
@@ -149,7 +149,7 @@ function renderColumn (h, _vm, $table, $seq, seq, rowid, fixedType, rowLevel, ro
   if (highlightCurrentRow ||
     tableListeners['cell-click'] ||
     (editRender && editConfig) ||
-    (expandConfig.trigger === 'row' || (expandConfig.trigger === 'cell')) ||
+    (expandOpts.trigger === 'row' || (expandOpts.trigger === 'cell')) ||
     (radioConfig.trigger === 'row' || (column.type === 'radio' && radioConfig.trigger === 'cell')) ||
     // 在 v3.0 中废弃 selection
     (checkboxConfig.trigger === 'row' || ((column.type === 'checkbox' | column.type === 'selection') && checkboxConfig.trigger === 'cell')) ||

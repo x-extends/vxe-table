@@ -1085,7 +1085,7 @@ const apis = [
         version: '',
         type: 'Object',
         enum: '',
-        defVal: '',
+        defVal: '继承 setup.expand-config',
         list: [
           {
             name: 'key',
@@ -1143,6 +1143,24 @@ const apis = [
             list: []
           },
           {
+            name: 'lazy',
+            desc: '是否使用懒加载',
+            version: '1.15.15',
+            type: 'Boolean',
+            enum: '',
+            defVal: 'false',
+            list: []
+          },
+          {
+            name: 'loadMethod',
+            desc: '该方法 Function({row}) 用于异步加载展开后的内容（必须返回 Promise<any[]> 对象）',
+            version: '1.15.15',
+            type: 'Function',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
             name: 'iconOpen',
             desc: '自定义展开后显示的图标',
             version: '1.15.15',
@@ -1154,6 +1172,15 @@ const apis = [
           {
             name: 'iconClose',
             desc: '自定义收起后显示的图标',
+            version: '1.15.15',
+            type: 'String',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'iconLoaded',
+            desc: '自定义懒加载中显示的图标',
             version: '1.15.15',
             type: 'String',
             enum: '',

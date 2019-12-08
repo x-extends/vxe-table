@@ -2,12 +2,23 @@
   <div>
     <p class="tip">
       树表格的懒加载，通过配置 <table-api-link prop="row-id"/> 和 <table-api-link prop="tree-config"/>={<table-api-link prop="lazy"/>, <table-api-link prop="loadMethod"/>} 加载方法来开启树形懒加载<br>
-      当启用懒加载后，必须通过 <table-api-link prop="hasChild"/> 属性来标识是否存在子节点，从而控制该节点是否允许被点击
+      当启用懒加载后，必须通过 <table-api-link prop="hasChild"/> 属性来标识是否存在子节点，从而控制该节点是否允许被点击<br>
+      <span class="red">（注：懒加载启用后一次只允许异步加载一层根节点）</span>
     </p>
+
+    <vxe-toolbar>
+      <template v-slot:buttons>
+        <vxe-button @click="$refs.xTree.toggleTreeExpansion(tableData[1])">切换第二行展开</vxe-button>
+        <vxe-button @click="$refs.xTree.setTreeExpansion([tableData[1], tableData[3]], true)">设置第二、四行展开</vxe-button>
+        <vxe-button @click="$refs.xTree.setAllTreeExpansion(true)">展开所有</vxe-button>
+        <vxe-button @click="$refs.xTree.clearTreeExpand()">关闭所有</vxe-button>
+      </template>
+    </vxe-toolbar>
 
     <vxe-table
       border
       resizable
+      ref="xTree"
       row-id="id"
       :tree-config="{lazy: true, children: 'children', hasChild: 'hasChild', loadMethod: loadChildrenMethod}"
       :data="tableData">
@@ -24,7 +35,7 @@
       <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
 
-    <p class="tip">通过设置 <table-api-link prop="expandRowKeys"/> 属性默认展开指定节点<span class="red">（懒加载启用后默认只允许展开根节点）</span></p>
+    <p class="tip">通过设置 <table-api-link prop="expandRowKeys"/> 属性默认展开指定节点</p>
 
     <vxe-table
       border
@@ -59,9 +70,19 @@ export default {
       defaultExpandRowKeys: [],
       demoCodes: [
         `
+        <vxe-toolbar>
+          <template v-slot:buttons>
+            <vxe-button @click="$refs.xTree.toggleTreeExpansion(tableData[1])">切换第二行展开</vxe-button>
+            <vxe-button @click="$refs.xTree.setTreeExpansion([tableData[1], tableData[3]], true)">设置第二、四行展开</vxe-button>
+            <vxe-button @click="$refs.xTree.setAllTreeExpansion(true)">展开所有</vxe-button>
+            <vxe-button @click="$refs.xTree.clearTreeExpand()">关闭所有</vxe-button>
+          </template>
+        </vxe-toolbar>
+
         <vxe-table
           border
           resizable
+          ref="xTree"
           row-id="id"
           :tree-config="{lazy: true, children: 'children', hasChild: 'hasChild', loadMethod: loadChildrenMethod}"
           :data="tableData">
