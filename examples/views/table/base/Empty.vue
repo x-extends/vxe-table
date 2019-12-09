@@ -39,8 +39,8 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[0] }}</code>
-      <code class="javascript">{{ demoCodes[1] }}</code>
+      <code class="xml">{{ demoCodes[2] }}</code>
+      <code class="javascript">{{ demoCodes[3] }}</code>
     </pre>
 
     <p class="tip">出现滚动条</p>
@@ -59,7 +59,7 @@
       <template v-slot:empty>
         <span style="color: red;">
           <img src="static/other/img1.gif">
-          <p>没有更多数据了！</p>
+          <p>不用再看了，没有更多数据了！</p>
         </span>
       </template>
     </vxe-table>
@@ -67,8 +67,8 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[2] }}</code>
-      <code class="javascript">{{ demoCodes[3] }}</code>
+      <code class="xml">{{ demoCodes[4] }}</code>
+      <code class="javascript">{{ demoCodes[5] }}</code>
     </pre>
   </div>
 </template>
@@ -156,7 +156,7 @@ export default {
           <template v-slot:empty>
             <span style="color: red;">
               <img src="static/other/img1.gif">
-              <p>没有更多数据了！</p>
+              <p>不用再看了，没有更多数据了！</p>
             </span>
           </template>
         </vxe-table>
