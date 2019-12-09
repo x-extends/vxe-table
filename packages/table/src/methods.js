@@ -2241,11 +2241,11 @@ const Methods = {
    * 判断展开行是否懒加载完成
    * @param {Row} row 行对象
    */
-  isExpandLoadedByRow (row) {
+  isRowExpandLoaded (row) {
     let rest = this.fullAllDataRowMap.get(row)
     return rest && rest.expandLoaded
   },
-  clearExpandLoaded (row) {
+  clearRowExpandLoaded (row) {
     let { expandOpts, expandLazyLoadeds, fullAllDataRowMap } = this
     let { lazy } = expandOpts
     let rest = fullAllDataRowMap.get(row)
@@ -2263,7 +2263,7 @@ const Methods = {
     let { expandOpts, expandLazyLoadeds } = this
     let { lazy } = expandOpts
     if (lazy && expandLazyLoadeds.indexOf(row) === -1) {
-      this.clearExpandLoaded(row)
+      this.clearRowExpandLoaded(row)
         .then(() => this.handleAsyncRowExpand(row))
     }
     return this.$nextTick()
@@ -2410,11 +2410,11 @@ const Methods = {
    * 判断树节点是否懒加载完成
    * @param {Row} row 行对象
    */
-  isTreeLoadedByRow (row) {
+  isTreeExpandLoaded (row) {
     let rest = this.fullAllDataRowMap.get(row)
     return rest && rest.treeLoaded
   },
-  clearTreeLoaded (row) {
+  clearTreeExpandLoaded (row) {
     let { treeOpts, treeExpandeds, fullAllDataRowMap } = this
     let { lazy } = treeOpts
     let rest = fullAllDataRowMap.get(row)
@@ -2432,7 +2432,7 @@ const Methods = {
     let { treeOpts, treeLazyLoadeds } = this
     let { lazy, hasChild } = treeOpts
     if (lazy && row[hasChild] && treeLazyLoadeds.indexOf(row) === -1) {
-      this.clearTreeLoaded(row)
+      this.clearTreeExpandLoaded(row)
         .then(() => this.handleAsyncTreeExpandChilds(row))
     }
     return this.$nextTick()
