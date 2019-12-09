@@ -122,6 +122,7 @@ const TableTreeSpan = () => import(/* webpackChunkName: "tree" */ './views/table
 const TableTreeHighlight = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Highlight.vue')
 const TableTreeKeyboard = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Keyboard.vue')
 const TableTreeLazy = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Lazy.vue')
+const TableTreeLazyEdit = () => import(/* webpackChunkName: "tree" */ './views/table/tree/LazyEdit.vue')
 const TableTreeLine = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Line.vue')
 const TableTreeEdit = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Edit.vue')
 const TableTreeEditCellValid = () => import(/* webpackChunkName: "tree" */ './views/table/tree/CellValid.vue')
@@ -713,6 +714,11 @@ export default new Router({
       path: '/table/tree/lazy',
       name: 'TableTreeLazy',
       component: TableTreeLazy
+    },
+    {
+      path: '/table/tree/lazyEdit',
+      name: 'TableTreeLazyEdit',
+      component: TableTreeLazyEdit
     },
     {
       path: '/table/tree/line',

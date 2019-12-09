@@ -1116,17 +1116,23 @@ export default {
         tableFullData.forEach(handleCache)
       }
     },
-    appendTreeCache (childs) {
-      let { treeOpts, fullDataRowIdData, fullDataRowMap, fullAllDataRowMap, fullAllDataRowIdData } = this
+    appendTreeCache (row, childs) {
+      let { tableSourceData, treeOpts, fullDataRowIdData, fullDataRowMap, fullAllDataRowMap, fullAllDataRowIdData } = this
+      let { children, hasChild } = treeOpts
       let rowkey = UtilTools.getRowkey(this)
+      let rowid = UtilTools.getRowid(this, row)
+      let matchObj = XEUtils.findTree(tableSourceData, item => rowid === UtilTools.getRowid(this, item), treeOpts)
+      if (matchObj) {
+        matchObj.item[children] = XEUtils.clone(childs, true)
+      }
       XEUtils.eachTree(childs, (row, index) => {
         let rowid = UtilTools.getRowid(this, row)
         if (!rowid) {
           rowid = getRowUniqueId()
           XEUtils.set(row, rowkey, rowid)
         }
-        if (row[treeOpts.hasChild] && XEUtils.isUndefined(row[treeOpts.children])) {
-          row[treeOpts.children] = null
+        if (row[hasChild] && XEUtils.isUndefined(row[children])) {
+          row[children] = null
         }
         let rest = { row, rowid, index }
         fullDataRowIdData[rowid] = rest
@@ -4009,7 +4015,7 @@ export default {
                         }
                         if (childs) {
                           row[children] = childs
-                          this.appendTreeCache(childs)
+                          this.appendTreeCache(row, childs)
                           if (childs.length) {
                             treeExpandeds.push(row)
                           }
