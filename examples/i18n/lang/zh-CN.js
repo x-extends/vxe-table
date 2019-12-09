@@ -93,6 +93,7 @@ module.exports = {
         edit: '可编辑',
         crudToolbar: '增删改查 + 工具栏',
         lazy: '懒加载',
+        lazyMenu: '懒加载 + 快捷菜单',
         lazyEdit: '懒加载 + 可编辑',
         treeLine: '连接线',
         full: '完整功能',

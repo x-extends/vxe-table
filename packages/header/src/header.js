@@ -155,11 +155,12 @@ export default {
         h('colgroup', {
           ref: 'colgroup'
         }, tableColumn.map((column, columnIndex) => {
+          let isColGroup = column.children && column.children.length
           return h('col', {
             attrs: {
               name: column.id
             },
-            key: columnIndex
+            key: columnKey || isColGroup ? column.id : columnIndex
           })
         }).concat([
           h('col', {

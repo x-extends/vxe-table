@@ -93,6 +93,7 @@ module.exports = {
         edit: 'Editable',
         crudToolbar: 'CRUD + Toolbar',
         lazy: 'Lazy loading',
+        lazyMenu: 'Lazy loading + contextmenu',
         lazyEdit: 'Lazy loading + editable',
         treeLine: 'Nodal line',
         full: 'Full demo',

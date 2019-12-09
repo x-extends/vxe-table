@@ -282,9 +282,9 @@ export default {
       return (VXETable._valid ? this.clearValidate() : this.$nextTick()).then(this.recalculate)
     },
     _getActiveRow () {
-      let { $el, editStore, tableData } = this
+      let { $el, editStore, afterFullData } = this
       let { args, row } = editStore.actived
-      if (args && tableData.indexOf(row) > -1 && $el.querySelectorAll('.vxe-body--column.col--actived').length) {
+      if (args && afterFullData.indexOf(row) > -1 && $el.querySelectorAll('.vxe-body--column.col--actived').length) {
         return Object.assign({}, args)
       }
       return null

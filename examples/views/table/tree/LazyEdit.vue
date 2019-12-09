@@ -39,7 +39,6 @@ export default {
   data () {
     return {
       tableData: [],
-      defaultExpandRowKeys: [],
       demoCodes: [
         `
         <vxe-toolbar>

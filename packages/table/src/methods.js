@@ -271,14 +271,23 @@ const Methods = {
    * 牺牲数据组装的耗时，用来换取使用过程中的流畅
    */
   cacheColumnMap () {
-    let { tableFullColumn, fullColumnMap } = this
+    let { isGroup, tableFullColumn, collectColumn, fullColumnMap } = this
     let fullColumnIdData = this.fullColumnIdData = {}
     fullColumnMap.clear()
+    if (isGroup) {
+      XEUtils.eachTree(collectColumn, (column, index) => {
+        if (column.children && column.children.length) {
+          let rest = { column, colid: column.id, index }
+          fullColumnIdData[column.id] = rest
+          fullColumnMap.set(column, rest)
+        }
+      }, headerProps)
+    }
     tableFullColumn.forEach((column, index) => {
       let rest = { column, colid: column.id, index }
       fullColumnIdData[column.id] = rest
       fullColumnMap.set(column, rest)
-    })
+    }, headerProps)
   },
   /**
    * 根据 tr 元素获取对应的 row 信息
@@ -308,17 +317,10 @@ const Methods = {
    */
   getColumnNode (cell) {
     if (cell) {
-      let { isGroup, fullColumnIdData, tableFullColumn } = this
+      let { fullColumnIdData, tableFullColumn } = this
       let colid = cell.getAttribute('data-colid')
-      if (isGroup) {
-        let matchObj = XEUtils.findTree(tableFullColumn, column => column.id === colid, headerProps)
-        if (matchObj) {
-          return matchObj
-        }
-      } else {
-        let { column, index } = fullColumnIdData[colid]
-        return { item: column, index, items: tableFullColumn }
-      }
+      let { column, index } = fullColumnIdData[colid]
+      return { item: column, index, items: tableFullColumn }
     }
     return null
   },
@@ -1011,6 +1013,7 @@ const Methods = {
   updateStyle () {
     let {
       $refs,
+      isGroup,
       fullColumnIdData,
       maxHeight,
       height,
@@ -1075,12 +1078,32 @@ const Methods = {
             repairElem.style.width = `${tableWidth}px`
           }
 
-          // let listElem = elemStore[`${name}-${layout}-list`]
-          // if (listElem) {
-          //   XEUtils.arrayEach(listElem.querySelectorAll(`.col--gutter`), thElem => {
-          //     thElem.style.width = `${scrollbarWidth}px`
-          //   })
-          // }
+          let listElem = elemStore[`${name}-${layout}-list`]
+          if (isGroup && listElem) {
+            // XEUtils.arrayEach(listElem.querySelectorAll(`.col--gutter`), thElem => {
+            //   thElem.style.width = `${scrollbarWidth}px`
+            // })
+            XEUtils.arrayEach(listElem.querySelectorAll(`.col--group`), thElem => {
+              let column = this.getColumnNode(thElem).item
+              let { showHeaderOverflow } = column
+              let cellOverflow = XEUtils.isBoolean(showHeaderOverflow) ? showHeaderOverflow : allColumnHeaderOverflow
+              let showEllipsis = cellOverflow === 'ellipsis'
+              let showTitle = cellOverflow === 'title'
+              let showTooltip = cellOverflow === true || cellOverflow === 'tooltip'
+              let hasEllipsis = showTitle || showTooltip || showEllipsis
+              let childWidth = 0
+              let countChild = 0
+              if (hasEllipsis) {
+                XEUtils.eachTree(column.children, item => {
+                  if (!item.children || !column.children.length) {
+                    countChild++
+                  }
+                  childWidth += item.renderWidth
+                })
+                thElem.style.width = `${childWidth - countChild - (border ? 2 : 0)}px`
+              }
+            })
+          }
         } else if (layout === 'body') {
           let emptyBlockElem = elemStore[`${name}-${layout}-emptyBlock`]
           if (wrapperElem) {
@@ -2064,7 +2087,7 @@ const Methods = {
   triggerCellClickEvent (evnt, params) {
     let { $el, highlightCurrentRow, editStore, radioOpts, expandOpts, treeOpts, editConfig, checkboxOpts, mouseConfig = {} } = this
     let { actived } = editStore
-    let { row, column, cell } = params
+    let { row, column } = params
     // 解决 checkbox 重复触发两次问题
     if (isTargetRadioOrCheckbox(evnt, column, 'radio') || isTargetRadioOrCheckbox(evnt, column, 'checkbox', 'checkbox') || isTargetRadioOrCheckbox(evnt, column, 'selection', 'checkbox')) {
       // 在 v3.0 中废弃 type=selection
@@ -2101,11 +2124,11 @@ const Methods = {
             if (actived.args && actived.row === row && column !== actived.column) {
               this.handleChangeCell(evnt, params)
             }
-          } else if (!actived.args || cell !== actived.args.cell) {
+          } else if (!actived.args || row !== actived.row || column !== actived.column) {
             if (editConfig.trigger === 'click') {
               this.handleChangeCell(evnt, params)
             } else if (editConfig.trigger === 'dblclick') {
-              if (editConfig.mode === 'row' && actived.row === params.row) {
+              if (editConfig.mode === 'row' && actived.row === row) {
                 this.handleChangeCell(evnt, params)
               } else {
                 this.handleSelected(params, evnt)
@@ -2222,6 +2245,29 @@ const Methods = {
     let rest = this.fullAllDataRowMap.get(row)
     return rest && rest.expandLoaded
   },
+  clearExpandLoaded (row) {
+    let { expandOpts, expandLazyLoadeds, fullAllDataRowMap } = this
+    let { lazy } = expandOpts
+    let rest = fullAllDataRowMap.get(row)
+    if (lazy && rest) {
+      rest.expandLoaded = false
+      XEUtils.remove(expandLazyLoadeds, item => row === item)
+    }
+    return this.$nextTick()
+  },
+  /**
+   * 重新加载展开行的内容
+   * @param {Row} row 行对象
+   */
+  reloadExpandContent (row) {
+    let { expandOpts, expandLazyLoadeds } = this
+    let { lazy } = expandOpts
+    if (lazy && expandLazyLoadeds.indexOf(row) === -1) {
+      this.clearExpandLoaded(row)
+        .then(() => this.handleAsyncRowExpand(row))
+    }
+    return this.$nextTick()
+  },
   /**
    * 展开行事件
    */
@@ -2269,6 +2315,20 @@ const Methods = {
     this.rowExpandeds = expanded ? this.tableFullData.slice(0) : []
     return this.$nextTick().then(this.recalculate)
   },
+  handleAsyncRowExpand (row) {
+    let { fullAllDataRowMap, rowExpandeds, expandLazyLoadeds, expandOpts } = this
+    let { loadMethod } = expandOpts
+    let rest = fullAllDataRowMap.get(row)
+    return new Promise(resolve => {
+      expandLazyLoadeds.push(row)
+      loadMethod({ $table: this, row }).catch(e => e).then(() => {
+        rest.expandLoaded = true
+        XEUtils.remove(expandLazyLoadeds, item => item === row)
+        rowExpandeds.push(row)
+        resolve(this.$nextTick().then(this.recalculate))
+      })
+    })
+  },
   /**
    * 设置展开行，二个参数设置这一行展开与否
    * 支持单行
@@ -2278,7 +2338,8 @@ const Methods = {
    */
   setRowExpansion (rows, expanded) {
     let { fullAllDataRowMap, rowExpandeds, expandLazyLoadeds, expandOpts } = this
-    let { lazy, loadMethod, accordion } = expandOpts
+    let { lazy, accordion } = expandOpts
+    let result = []
     if (rows) {
       if (!XEUtils.isArray(rows)) {
         rows = [rows]
@@ -2294,13 +2355,7 @@ const Methods = {
             let rest = fullAllDataRowMap.get(row)
             let isLoad = lazy && !rest.expandLoaded && expandLazyLoadeds.indexOf(row) === -1
             if (isLoad) {
-              expandLazyLoadeds.push(row)
-              loadMethod({ $table: this, row }).catch(e => e).then(() => {
-                rest.expandLoaded = true
-                XEUtils.remove(expandLazyLoadeds, item => item === row)
-                rowExpandeds.push(row)
-                this.recalculate()
-              })
+              result.push(this.handleAsyncRowExpand(row))
             } else {
               rowExpandeds.push(row)
             }
@@ -2311,7 +2366,7 @@ const Methods = {
       }
     }
     this.rowExpandeds = rowExpandeds
-    return this.$nextTick().then(this.recalculate)
+    return Promise.all(result).then(this.recalculate)
   },
   // 在 v3.0 中废弃 getRecords
   hasRowExpand (row) {
@@ -2359,6 +2414,29 @@ const Methods = {
     let rest = this.fullAllDataRowMap.get(row)
     return rest && rest.treeLoaded
   },
+  clearTreeLoaded (row) {
+    let { treeOpts, treeExpandeds, fullAllDataRowMap } = this
+    let { lazy } = treeOpts
+    let rest = fullAllDataRowMap.get(row)
+    if (lazy && rest) {
+      rest.treeLoaded = false
+      XEUtils.remove(treeExpandeds, item => row === item)
+    }
+    return this.$nextTick()
+  },
+  /**
+   * 重新加载树的子节点
+   * @param {Row} row 行对象
+   */
+  reloadTreeChilds (row) {
+    let { treeOpts, treeLazyLoadeds } = this
+    let { lazy, hasChild } = treeOpts
+    if (lazy && row[hasChild] && treeLazyLoadeds.indexOf(row) === -1) {
+      this.clearTreeLoaded(row)
+        .then(() => this.handleAsyncTreeExpandChilds(row))
+    }
+    return this.$nextTick()
+  },
   /**
    * 展开树节点事件
    */
@@ -2399,6 +2477,33 @@ const Methods = {
       }
     }
   },
+  handleAsyncTreeExpandChilds (row) {
+    let { fullAllDataRowMap, treeExpandeds, treeOpts, treeLazyLoadeds } = this
+    let { loadMethod, children } = treeOpts
+    let rest = fullAllDataRowMap.get(row)
+    return new Promise(resolve => {
+      treeLazyLoadeds.push(row)
+      loadMethod({ $table: this, row }).catch(e => []).then(childs => {
+        rest.treeLoaded = true
+        XEUtils.remove(treeLazyLoadeds, item => item === row)
+        if (!XEUtils.isArray(childs)) {
+          childs = []
+        }
+        if (childs) {
+          row[children] = childs
+          this.appendTreeCache(row, childs)
+          if (childs.length && treeExpandeds.indexOf(row) === -1) {
+            treeExpandeds.push(row)
+          }
+          // 如果当前节点已选中，则展开后子节点也被选中
+          if (this.isCheckedByRow(row)) {
+            this.setSelection(childs, true)
+          }
+        }
+        resolve(this.$nextTick().then(this.recalculate))
+      })
+    })
+  },
   /**
    * 设置所有树节点的展开与否
    * @param {Boolean} expanded 是否展开
@@ -2435,7 +2540,7 @@ const Methods = {
    */
   setTreeExpansion (rows, expanded) {
     let { fullAllDataRowMap, tableFullData, treeExpandeds, treeOpts, treeLazyLoadeds } = this
-    let { lazy, hasChild, loadMethod, children, accordion } = treeOpts
+    let { lazy, hasChild, children, accordion } = treeOpts
     let result = []
     if (rows) {
       if (!XEUtils.isArray(rows)) {
@@ -2455,30 +2560,7 @@ const Methods = {
               let isLoad = lazy && row[hasChild] && !rest.treeLoaded && treeLazyLoadeds.indexOf(row) === -1
               // 是否使用懒加载
               if (isLoad) {
-                result.push(
-                  new Promise(resolve => {
-                    treeLazyLoadeds.push(row)
-                    loadMethod({ $table: this, row }).catch(e => []).then(childs => {
-                      rest.treeLoaded = true
-                      XEUtils.remove(treeLazyLoadeds, item => item === row)
-                      if (!XEUtils.isArray(childs)) {
-                        childs = []
-                      }
-                      if (childs) {
-                        row[children] = childs
-                        this.appendTreeCache(row, childs)
-                        if (childs.length) {
-                          treeExpandeds.push(row)
-                        }
-                        // 如果当前节点已选中，则展开后子节点也被选中
-                        if (this.isCheckedByRow(row)) {
-                          this.setSelection(childs, true)
-                        }
-                      }
-                      resolve(this.$nextTick().then(this.recalculate))
-                    })
-                  })
-                )
+                result.push(this.handleAsyncTreeExpandChilds(row))
               } else {
                 if (row[children] && row[children].length) {
                   treeExpandeds.push(row)
