@@ -789,6 +789,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.lazyEdit',
+              locat: {
+                name: 'TableTreeLazyEdit'
+              }
+            },
+            {
               label: 'app.aside.nav.treeLine',
               locat: {
                 name: 'TableTreeLine'
