@@ -2665,7 +2665,7 @@ const apis = [
         list: []
       },
       {
-        name: 'isExpandLoadedByRow(row)',
+        name: 'isRowExpandLoaded(row)',
         desc: '判断展开行是否懒加载完成',
         version: '1.15.15',
         type: 'Boolean',
@@ -2891,7 +2891,7 @@ const apis = [
         list: []
       },
       {
-        name: 'clearExpandLoaded()',
+        name: 'clearRowExpandLoaded()',
         desc: '手动清空懒加载展开行的状态，数据会恢复成未展开的状态，当再次展开时会重新加载',
         version: '1.15.15',
         type: 'Promise',
@@ -2909,7 +2909,7 @@ const apis = [
         list: []
       },
       {
-        name: 'clearTreeLoaded()',
+        name: 'clearTreeExpandLoaded()',
         desc: '手动清空懒加载树节点的状态，数据会恢复成未展开的状态，当再次展开时会重新加载',
         version: '1.15.15',
         type: 'Promise',

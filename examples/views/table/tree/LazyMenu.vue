@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">树表格的懒加载和快捷菜单，通过调用 <table-api-link prop="clearTreeLoaded"/> 方法清除加载完成状态，通过调用 <table-api-link prop="reloadTreeChilds"/> 方法重新加载子节点</p>
+    <p class="tip">树表格的懒加载和快捷菜单，通过调用 <table-api-link prop="clearTreeExpandLoaded"/> 方法清除加载完成状态，通过调用 <table-api-link prop="reloadTreeChilds"/> 方法重新加载子节点</p>
 
     <vxe-table
       border
@@ -124,7 +124,7 @@ export default {
                 this.bodyMenus.forEach(list => {
                   list.forEach(item => {
                     if (['clearLoaded', 'reloadNodes'].includes(item.code)) {
-                      item.disabled = !row.hasChild || !xTree.isTreeLoadedByRow(row)
+                      item.disabled = !row.hasChild || !xTree.isTreeExpandLoaded(row)
                     } else if (['expand', 'contract'].includes(item.code)) {
                       if (row.hasChild) {
                         let isExpand = xTree.isTreeExpandByRow(row)
@@ -142,7 +142,7 @@ export default {
               let xTree = this.$refs.xTree
               switch (menu.code) {
                 case 'clearLoaded':
-                  xTree.clearTreeLoaded(row)
+                  xTree.clearTreeExpandLoaded(row)
                   break
                 case 'reloadNodes':
                   xTree.reloadTreeChilds(row)
@@ -185,7 +185,7 @@ export default {
         this.bodyMenus.forEach(list => {
           list.forEach(item => {
             if (['clearLoaded', 'reloadNodes'].includes(item.code)) {
-              item.disabled = !row.hasChild || !xTree.isTreeLoadedByRow(row)
+              item.disabled = !row.hasChild || !xTree.isTreeExpandLoaded(row)
             } else if (['expand', 'contract'].includes(item.code)) {
               if (row.hasChild) {
                 let isExpand = xTree.isTreeExpandByRow(row)
@@ -203,7 +203,7 @@ export default {
       let xTree = this.$refs.xTree
       switch (menu.code) {
         case 'clearLoaded':
-          xTree.clearTreeLoaded(row)
+          xTree.clearTreeExpandLoaded(row)
           break
         case 'reloadNodes':
           xTree.reloadTreeChilds(row)

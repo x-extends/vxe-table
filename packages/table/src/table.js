@@ -3772,9 +3772,32 @@ export default {
      * 判断展开行是否懒加载完成
      * @param {Row} row 行对象
      */
-    isExpandLoadedByRow (row) {
+    isRowExpandLoaded (row) {
       let rest = this.fullAllDataRowMap.get(row)
       return rest && rest.expandLoaded
+    },
+    clearRowExpandLoaded (row) {
+      let { expandOpts, expandLazyLoadeds, fullAllDataRowMap } = this
+      let { lazy } = expandOpts
+      let rest = fullAllDataRowMap.get(row)
+      if (lazy && rest) {
+        rest.expandLoaded = false
+        XEUtils.remove(expandLazyLoadeds, item => row === item)
+      }
+      return this.$nextTick()
+    },
+    /**
+     * 重新加载展开行的内容
+     * @param {Row} row 行对象
+     */
+    reloadExpandContent (row) {
+      let { expandOpts, expandLazyLoadeds } = this
+      let { lazy } = expandOpts
+      if (lazy && expandLazyLoadeds.indexOf(row) === -1) {
+        this.clearRowExpandLoaded(row)
+          .then(() => this.handleAsyncRowExpand(row))
+      }
+      return this.$nextTick()
     },
     /**
      * 展开行事件
@@ -3823,6 +3846,20 @@ export default {
       this.rowExpandeds = expanded ? this.tableFullData.slice(0) : []
       return this.$nextTick().then(this.recalculate)
     },
+    handleAsyncRowExpand (row) {
+      let { fullAllDataRowMap, rowExpandeds, expandLazyLoadeds, expandOpts } = this
+      let { loadMethod } = expandOpts
+      let rest = fullAllDataRowMap.get(row)
+      return new Promise(resolve => {
+        expandLazyLoadeds.push(row)
+        loadMethod({ $table: this, row }).catch(e => e).then(() => {
+          rest.expandLoaded = true
+          XEUtils.remove(expandLazyLoadeds, item => item === row)
+          rowExpandeds.push(row)
+          resolve(this.$nextTick().then(this.recalculate))
+        })
+      })
+    },
     /**
      * 设置展开行，二个参数设置这一行展开与否
      * 支持单行
@@ -3832,7 +3869,8 @@ export default {
      */
     setRowExpansion (rows, expanded) {
       let { fullAllDataRowMap, rowExpandeds, expandLazyLoadeds, expandOpts } = this
-      let { lazy, loadMethod, accordion } = expandOpts
+      let { lazy, accordion } = expandOpts
+      let result = []
       if (rows) {
         if (!XEUtils.isArray(rows)) {
           rows = [rows]
@@ -3848,13 +3886,7 @@ export default {
               let rest = fullAllDataRowMap.get(row)
               let isLoad = lazy && !rest.expandLoaded && expandLazyLoadeds.indexOf(row) === -1
               if (isLoad) {
-                expandLazyLoadeds.push(row)
-                loadMethod({ $table: this, row }).catch(e => e).then(() => {
-                  rest.expandLoaded = true
-                  XEUtils.remove(expandLazyLoadeds, item => item === row)
-                  rowExpandeds.push(row)
-                  this.recalculate()
-                })
+                result.push(this.handleAsyncRowExpand(row))
               } else {
                 rowExpandeds.push(row)
               }
@@ -3865,7 +3897,7 @@ export default {
         }
       }
       this.rowExpandeds = rowExpandeds
-      return this.$nextTick().then(this.recalculate)
+      return Promise.all(result).then(this.recalculate)
     },
     // 在 v3.0 中废弃 hasRowExpand
     hasRowExpand (row) {
@@ -3906,11 +3938,11 @@ export default {
      * 判断树节点是否懒加载完成
      * @param {Row} row 行对象
      */
-    isTreeLoadedByRow (row) {
+    isTreeExpandLoaded (row) {
       let rest = this.fullAllDataRowMap.get(row)
       return rest && rest.treeLoaded
     },
-    clearTreeLoaded (row) {
+    clearTreeExpandLoaded (row) {
       let { treeOpts, treeExpandeds, fullAllDataRowMap } = this
       let { lazy } = treeOpts
       let rest = fullAllDataRowMap.get(row)
@@ -3928,7 +3960,7 @@ export default {
       let { treeOpts, treeLazyLoadeds } = this
       let { lazy, hasChild } = treeOpts
       if (lazy && row[hasChild] && treeLazyLoadeds.indexOf(row) === -1) {
-        this.clearTreeLoaded(row)
+        this.clearTreeExpandLoaded(row)
           .then(() => this.handleAsyncTreeExpandChilds(row))
       }
       return this.$nextTick()
