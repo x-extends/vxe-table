@@ -376,7 +376,7 @@ module.exports = {
           radio: '单选框',
           expand: '展开行',
           prop: '即将废弃，请使用 field',
-          field: '列属性',
+          field: '列属性（注：属性层级越深，渲染性能将直线下降）',
           label: '即将废弃，请使用 title',
           title: '列标题（支持开启国际化）',
           width: '列宽度（如果为空则自适应，如果全部列固定了，可能会存在宽屏下不会铺满，可以配合 "%" 或者 "min-width" 布局）',
