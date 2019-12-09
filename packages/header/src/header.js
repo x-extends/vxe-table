@@ -94,6 +94,7 @@ export default {
       $listeners: tableListeners,
       resizable, border,
       overflowX,
+      columnKey,
       headerRowClassName,
       headerCellClassName,
       headerRowStyle,
@@ -145,6 +146,7 @@ export default {
          * 列宽
          */
         h('colgroup', tableColumn.map((column, columnIndex) => {
+          let isColGroup = column.children && column.children.length
           return h('col', {
             attrs: {
               name: column.id
@@ -152,7 +154,7 @@ export default {
             style: {
               width: `${column.renderWidth}px`
             },
-            key: columnIndex
+            key: columnKey || isColGroup ? column.id : columnIndex
           })
         }).concat([
           h('col', {
@@ -169,7 +171,7 @@ export default {
             class: ['vxe-header--row', headerRowClassName ? XEUtils.isFunction(headerRowClassName) ? headerRowClassName({ $table, $rowIndex, fixed: fixedType }) : headerRowClassName : ''],
             style: headerRowStyle ? (XEUtils.isFunction(headerRowStyle) ? headerRowStyle({ $table, $rowIndex, fixed: fixedType }) : headerRowStyle) : null
           }, cols.map((column, $columnIndex) => {
-            let { columnKey, showHeaderOverflow, headerAlign, align, renderWidth, headerClassName } = column
+            let { showHeaderOverflow, headerAlign, align, renderWidth, headerClassName } = column
             let isColGroup = column.children && column.children.length
             let fixedHiddenColumn = fixedType ? column.fixed !== fixedType && !isColGroup : column.fixed && overflowX
             let headOverflow = XEUtils.isUndefined(showHeaderOverflow) || XEUtils.isNull(showHeaderOverflow) ? allColumnHeaderOverflow : showHeaderOverflow
@@ -200,6 +202,17 @@ export default {
                 }
               }
             }
+            if (hasEllipsis && isColGroup) {
+              let childWidth = 0
+              let countChild = 0
+              XEUtils.eachTree(column.children, item => {
+                if (!item.children || !column.children.length) {
+                  countChild++
+                }
+                childWidth += item.renderWidth
+              })
+              renderWidth = childWidth - countChild
+            }
             if (highlightCurrentColumn || tableListeners['header-cell-click'] || sortOpts.trigger === 'cell') {
               thOns.click = evnt => $table.triggerHeaderCellClickEvent(evnt, { $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, cell: evnt.currentTarget })
             }
@@ -226,7 +239,7 @@ export default {
               },
               style: headerCellStyle ? (XEUtils.isFunction(headerCellStyle) ? headerCellStyle(params) : headerCellStyle) : null,
               on: thOns,
-              key: columnKey || (isColGroup || $table.columnKey ? column.id : columnIndex)
+              key: columnKey || isColGroup ? column.id : columnIndex
             }, [
               h('div', {
                 class: ['vxe-cell', {

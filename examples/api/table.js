@@ -2185,6 +2185,24 @@ const apis = [
         list: []
       },
       {
+        name: 'reloadExpandContent(row)',
+        desc: '用于懒加载展开行，重新加载展开行的内容',
+        version: '1.15.15',
+        type: 'Promise',
+        enum: '',
+        defVal: 'rows: Row',
+        list: []
+      },
+      {
+        name: 'reloadTreeChilds(row)',
+        desc: '用于懒加载树表格，重新加载子节点',
+        version: '1.15.15',
+        type: 'Promise',
+        enum: '',
+        defVal: 'rows: Row',
+        list: []
+      },
+      {
         name: 'reloadCustoms(customs)',
         desc: '初始化加载显示/隐藏列（对于异步更新的场景下可能会用到）',
         version: '',
@@ -2647,6 +2665,15 @@ const apis = [
         list: []
       },
       {
+        name: 'isExpandLoadedByRow(row)',
+        desc: '判断展开行是否懒加载完成',
+        version: '1.15.15',
+        type: 'Boolean',
+        enum: '',
+        defVal: 'row',
+        list: []
+      },
+      {
         name: 'hasTreeExpand(row)',
         disabled: true,
         desc: '即将废弃，请使用 isTreeExpandByRow',
@@ -2864,9 +2891,27 @@ const apis = [
         list: []
       },
       {
+        name: 'clearExpandLoaded()',
+        desc: '手动清空懒加载展开行的状态，数据会恢复成未展开的状态，当再次展开时会重新加载',
+        version: '1.15.15',
+        type: 'Promise',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'clearTreeExpand()',
         desc: '手动清空树形节点的展开状态，数据会恢复成未展开的状态',
         version: '',
+        type: 'Promise',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'clearTreeLoaded()',
+        desc: '手动清空懒加载树节点的状态，数据会恢复成未展开的状态，当再次展开时会重新加载',
+        version: '1.15.15',
         type: 'Promise',
         enum: '',
         defVal: '',

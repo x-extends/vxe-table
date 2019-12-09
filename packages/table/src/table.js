@@ -1143,14 +1143,23 @@ export default {
     },
     // 更新列的 Map
     cacheColumnMap () {
-      let { tableFullColumn, fullColumnMap } = this
+      let { isGroup, tableFullColumn, collectColumn, fullColumnMap } = this
       let fullColumnIdData = this.fullColumnIdData = {}
       fullColumnMap.clear()
+      if (isGroup) {
+        XEUtils.eachTree(collectColumn, (column, index) => {
+          if (column.children && column.children.length) {
+            let rest = { column, colid: column.id, index }
+            fullColumnIdData[column.id] = rest
+            fullColumnMap.set(column, rest)
+          }
+        }, headerProps)
+      }
       tableFullColumn.forEach((column, index) => {
         let rest = { column, colid: column.id, index }
         fullColumnIdData[column.id] = rest
         fullColumnMap.set(column, rest)
-      })
+      }, headerProps)
     },
     getRowNode (tr) {
       if (tr) {
@@ -1172,17 +1181,10 @@ export default {
     },
     getColumnNode (cell) {
       if (cell) {
-        let { isGroup, fullColumnIdData, tableFullColumn } = this
+        let { fullColumnIdData, tableFullColumn } = this
         let colid = cell.getAttribute('data-colid')
-        if (isGroup) {
-          let matchObj = XEUtils.findTree(tableFullColumn, column => column.id === colid, headerProps)
-          if (matchObj) {
-            return matchObj
-          }
-        } else {
-          let column = fullColumnIdData[colid].column
-          return { item: column, index: this.getColumnMapIndex(column), items: tableFullColumn }
-        }
+        let { column, index } = fullColumnIdData[colid]
+        return { item: column, index, items: tableFullColumn }
       }
       return null
     },
@@ -3138,7 +3140,7 @@ export default {
     triggerCellClickEvent (evnt, params) {
       let { $el, highlightCurrentRow, editStore, radioOpts, expandOpts, treeOpts, editConfig, checkboxOpts } = this
       let { actived } = editStore
-      let { column } = params
+      let { column, row } = params
       // 解决 checkbox 重复触发两次问题
       if (isTargetRadioOrCheckbox(evnt, column, 'radio') || isTargetRadioOrCheckbox(evnt, column, 'checkbox', 'checkbox') || isTargetRadioOrCheckbox(evnt, column, 'selection', 'checkbox')) {
         // 在 v3.0 中废弃 selection
@@ -3170,7 +3172,7 @@ export default {
         }
         if (editConfig) {
           if (editConfig.trigger === 'click') {
-            if (!actived.args || evnt.currentTarget !== actived.args.cell) {
+            if (!actived.args || row !== actived.row || column !== actived.column) {
               if (editConfig.mode === 'row') {
                 this.triggerValidate('blur')
                   .catch(e => e)
@@ -3186,7 +3188,7 @@ export default {
               }
             }
           } else if (editConfig.trigger === 'dblclick') {
-            if (editConfig.mode === 'row' && actived.row === params.row) {
+            if (editConfig.mode === 'row' && actived.row === row) {
               this.triggerValidate('blur')
                 .catch(e => e)
                 .then(() => {
@@ -3287,9 +3289,9 @@ export default {
       return this.clearValidate()
     },
     getActiveRow () {
-      let { $el, editStore, tableData } = this
+      let { $el, editStore, afterFullData } = this
       let { args, row } = editStore.actived
-      if (args && tableData.indexOf(row) > -1 && $el.querySelectorAll('.vxe-body--column.col--actived').length) {
+      if (args && afterFullData.indexOf(row) > -1 && $el.querySelectorAll('.vxe-body--column.col--actived').length) {
         return Object.assign({}, args)
       }
       return null
@@ -3908,6 +3910,29 @@ export default {
       let rest = this.fullAllDataRowMap.get(row)
       return rest && rest.treeLoaded
     },
+    clearTreeLoaded (row) {
+      let { treeOpts, treeExpandeds, fullAllDataRowMap } = this
+      let { lazy } = treeOpts
+      let rest = fullAllDataRowMap.get(row)
+      if (lazy && rest) {
+        rest.treeLoaded = false
+        XEUtils.remove(treeExpandeds, item => row === item)
+      }
+      return this.$nextTick()
+    },
+    /**
+     * 重新加载树的子节点
+     * @param {Row} row 行对象
+     */
+    reloadTreeChilds (row) {
+      let { treeOpts, treeLazyLoadeds } = this
+      let { lazy, hasChild } = treeOpts
+      if (lazy && row[hasChild] && treeLazyLoadeds.indexOf(row) === -1) {
+        this.clearTreeLoaded(row)
+          .then(() => this.handleAsyncTreeExpandChilds(row))
+      }
+      return this.$nextTick()
+    },
     /**
      * 展开树节点事件
      */
@@ -3948,6 +3973,33 @@ export default {
         }
       }
     },
+    handleAsyncTreeExpandChilds (row) {
+      let { fullAllDataRowMap, treeExpandeds, treeOpts, treeLazyLoadeds } = this
+      let { loadMethod, children } = treeOpts
+      let rest = fullAllDataRowMap.get(row)
+      return new Promise(resolve => {
+        treeLazyLoadeds.push(row)
+        loadMethod({ $table: this, row }).catch(e => []).then(childs => {
+          rest.treeLoaded = true
+          XEUtils.remove(treeLazyLoadeds, item => item === row)
+          if (!XEUtils.isArray(childs)) {
+            childs = []
+          }
+          if (childs) {
+            row[children] = childs
+            this.appendTreeCache(row, childs)
+            if (childs.length && treeExpandeds.indexOf(row) === -1) {
+              treeExpandeds.push(row)
+            }
+            // 如果当前节点已选中，则展开后子节点也被选中
+            if (this.isCheckedByRow(row)) {
+              this.setSelection(childs, true)
+            }
+          }
+          resolve(this.$nextTick().then(this.recalculate))
+        })
+      })
+    },
     /**
      * 设置所有树节点的展开与否
      * @param {Boolean} expanded 是否展开
@@ -3984,7 +4036,7 @@ export default {
      */
     setTreeExpansion (rows, expanded) {
       let { fullAllDataRowMap, tableFullData, treeExpandeds, treeOpts, treeLazyLoadeds } = this
-      let { lazy, hasChild, loadMethod, children, accordion } = treeOpts
+      let { lazy, hasChild, children, accordion } = treeOpts
       let result = []
       if (rows) {
         if (!XEUtils.isArray(rows)) {
@@ -4004,30 +4056,7 @@ export default {
                 let isLoad = lazy && row[hasChild] && !rest.treeLoaded && treeLazyLoadeds.indexOf(row) === -1
                 // 是否使用懒加载
                 if (isLoad) {
-                  result.push(
-                    new Promise(resolve => {
-                      treeLazyLoadeds.push(row)
-                      loadMethod({ $table: this, row }).catch(e => []).then(childs => {
-                        rest.treeLoaded = true
-                        XEUtils.remove(treeLazyLoadeds, item => item === row)
-                        if (!XEUtils.isArray(childs)) {
-                          childs = []
-                        }
-                        if (childs) {
-                          row[children] = childs
-                          this.appendTreeCache(row, childs)
-                          if (childs.length) {
-                            treeExpandeds.push(row)
-                          }
-                          // 如果当前节点已选中，则展开后子节点也被选中
-                          if (this.isCheckedByRow(row)) {
-                            this.setSelection(childs, true)
-                          }
-                        }
-                        resolve(this.$nextTick().then(this.recalculate))
-                      })
-                    })
-                  )
+                  result.push(this.handleAsyncTreeExpandChilds(row))
                 } else {
                   if (row[children] && row[children].length) {
                     treeExpandeds.push(row)

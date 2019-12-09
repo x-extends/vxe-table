@@ -785,6 +785,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.lazyMenu',
+              locat: {
+                name: 'TableTreeLazyMenu'
+              }
+            },
+            {
               label: 'app.aside.nav.lazyEdit',
               locat: {
                 name: 'TableTreeLazyEdit'
