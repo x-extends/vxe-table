@@ -20,7 +20,7 @@
       :data="tableData">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+      <vxe-table-column field="sex" title="Sex" :formatter="formatterSex"></vxe-table-column>
       <vxe-table-column field="age" title="Age" sortable></vxe-table-column>
       <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
     </vxe-table>
@@ -41,6 +41,16 @@ export default {
   data () {
     return {
       tableData: [],
+      sexList: [
+        {
+          label: '女',
+          value: '0'
+        },
+        {
+          label: '男',
+          value: '1'
+        }
+      ],
       demoCodes: [
         `
         <vxe-toolbar>
@@ -58,7 +68,7 @@ export default {
           :data="tableData">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+          <vxe-table-column field="sex" title="Sex" :formatter="formatterSex"></vxe-table-column>
           <vxe-table-column field="age" title="Age" sortable></vxe-table-column>
           <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
         </vxe-table>
@@ -74,11 +84,18 @@ export default {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 10)
           },
           methods: {
+            formatterSex ({ cellValue }) {
+              let item = this.sexList.find(item => item.value === cellValue)
+              return item ? item.label : ''
+            },
             clearDataEvent () {
               this.tableData = []
             },
             exportDataEvent () {
-              this.$refs.xTable.openExport()
+              this.$refs.xTable.openExport({
+                // 默认勾选源
+                original: true
+              })
             },
             importDataEvent () {
               this.$refs.xTable.importData()
@@ -98,11 +115,18 @@ export default {
     })
   },
   methods: {
+    formatterSex ({ cellValue }) {
+      let item = this.sexList.find(item => item.value === cellValue)
+      return item ? item.label : ''
+    },
     clearDataEvent () {
       this.tableData = []
     },
     exportDataEvent () {
-      this.$refs.xTable.openExport()
+      this.$refs.xTable.openExport({
+        // 默认勾选源
+        original: true
+      })
     },
     importDataEvent () {
       this.$refs.xTable.importData()
