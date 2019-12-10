@@ -32,12 +32,12 @@
 .vxe-table--filter-wrapper {
   display: none;
   position: absolute;
-  min-width: 100px;
+  min-width: 180px;
   border-radius: 2px;
   color: $vxe-font-color;
   background-color: #fff;
   border: 1px solid $vxe-table-popup-border-color;
-  box-shadow: 0 2px 12px 0 rgba(0,0,0,.2);
+  box-shadow: 0 2px 4px 0 rgba(0,0,0,.2);
   font-size: 13px;
   font-family: $vxe-font-family;
   z-index: 10;
