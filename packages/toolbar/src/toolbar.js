@@ -540,7 +540,7 @@ export default {
       const isTree = !!treeStatus
       const forceOriginal = isTree || virtualScroller.scrollX || virtualScroller.scrollY
       const hasFooter = !!footerData.length
-      const defOpts = Object.assign({ original: true, message: true }, this.exportOpts, options)
+      const defOpts = Object.assign({ message: true }, this.exportOpts, options)
       const types = defOpts.types || VXETable.exportTypes
       // 处理类型
       defOpts.types = types.map(value => {
