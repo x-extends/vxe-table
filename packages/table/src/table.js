@@ -365,7 +365,7 @@ export default {
       // 当前 hover 行
       hoverRow: null,
       // 是否加载了 Loading 模块
-      isLoading: false,
+      _isLoading: false,
       // 当前选中的筛选列
       filterStore: {
         isAllSelected: false,
@@ -627,8 +627,8 @@ export default {
       this.$nextTick(() => this.recalculate(true))
     },
     loading () {
-      if (!this.isLoading) {
-        this.isLoading = true
+      if (!this._isLoading) {
+        this._isLoading = true
       }
     },
     syncResize (value) {
@@ -641,7 +641,7 @@ export default {
     let { scrollXStore, scrollYStore, optimizeOpts, ctxMenuOpts, showOverflow, radioOpts, checkboxOpts, treeConfig, treeOpts, editConfig, loading, showAllOverflow, showHeaderAllOverflow } = this
     let { scrollX, scrollY } = optimizeOpts
     if (loading) {
-      this.isLoading = true
+      this._isLoading = true
     }
     if (scrollY) {
       Object.assign(scrollYStore, {
@@ -774,8 +774,10 @@ export default {
       isResizable,
       isCtxMenu,
       loading,
-      isLoading,
+      stripe,
+      _isLoading,
       showHeader,
+      headerHeight,
       height,
       border,
       treeOpts,
@@ -787,7 +789,13 @@ export default {
       showFooter,
       footerMethod,
       overflowX,
+      overflowY,
+      scrollXLoad,
+      scrollYLoad,
       scrollbarHeight,
+      highlightHoverRow,
+      highlightHoverColumn,
+      editConfig,
       optimizeOpts,
       vaildTipOpts,
       tooltipOpts,
@@ -799,25 +807,25 @@ export default {
     } = this
     let { leftList, rightList } = columnStore
     return h('div', {
-      class: ['vxe-table', this.vSize ? `size--${this.vSize}` : '', border && XEUtils.isString(border) ? `b--style-${border}` : '', {
-        'vxe-editable': this.editConfig,
-        'show--head': this.showHeader,
-        'show--foot': this.showFooter,
-        'has--height': this.height,
+      class: ['vxe-table', vSize ? `size--${vSize}` : '', border && XEUtils.isString(border) ? `b--style-${border}` : '', {
+        'vxe-editable': editConfig,
+        'show--head': showHeader,
+        'show--foot': showFooter,
+        'has--height': height,
         'has--tree-line': treeConfig && treeOpts.line,
         'fixed--left': leftList.length,
         'fixed--right': rightList.length,
-        't--animat': this.optimizeOpts.animat,
-        't--stripe': this.stripe,
+        't--animat': optimizeOpts.animat,
+        't--stripe': stripe,
         't--border': border,
         't--selected': mouseConfig && mouseConfig.selected,
         't--checked': mouseConfig && mouseConfig.checked,
-        'row--highlight': this.highlightHoverRow,
-        'column--highlight': this.highlightHoverColumn,
-        'scroll--y': this.overflowY,
-        'scroll--x': this.overflowX,
-        'virtual--x': this.scrollXLoad,
-        'virtual--y': this.scrollYLoad
+        'row--highlight': highlightHoverRow,
+        'column--highlight': highlightHoverColumn,
+        'scroll--y': overflowY,
+        'scroll--x': overflowX,
+        'virtual--x': scrollXLoad,
+        'virtual--y': scrollYLoad
       }]
     }, [
       /**
@@ -887,7 +895,7 @@ export default {
         ref: 'emptyPlaceholder',
         class: 'vxe-table--empty-placeholder',
         style: height ? null : {
-          top: `${this.headerHeight}px`
+          top: `${headerHeight}px`
         }
       }, [
         h('div', {
@@ -913,7 +921,7 @@ export default {
       /**
        * 加载中
        */
-      isLoading ? h('vxe-table-loading', {
+      _isLoading ? h('vxe-table-loading', {
         props: {
           visible: loading
         }
@@ -1556,31 +1564,36 @@ export default {
     updateAfterFullData () {
       let { visibleColumn, tableFullData, remoteSort, remoteFilter, filterOpts, sortOpts } = this
       let tableData = tableFullData
-      let column = XEUtils.find(this.visibleColumn, column => column.order)
-      let filterColumn = visibleColumn.filter(({ filters }) => filters && filters.length)
-      tableData = tableData.filter(row => {
-        return filterColumn.every(column => {
-          let { property, filters, filterMethod, filterRender } = column
-          let compConf = filterRender ? Renderer.get(filterRender.name) : null
+      let column = XEUtils.find(visibleColumn, column => column.order)
+      let filterColumns = []
+      visibleColumn.forEach(column => {
+        if (column.filters && column.filters.length) {
           let valueList = []
           let itemList = []
-          if (filters && filters.length) {
-            filters.forEach(item => {
-              if (item.checked) {
-                itemList.push(item)
-                valueList.push(item.value)
-              }
-            })
+          column.filters.forEach(item => {
+            if (item.checked) {
+              itemList.push(item)
+              valueList.push(item.value)
+            }
+          })
+          filterColumns.push({ column, valueList, itemList })
+        }
+      })
+      if (filterColumns.length) {
+        tableData = tableData.filter(row => {
+          return filterColumns.every(({ column, valueList, itemList }) => {
             if (valueList.length && !(filterOpts.remote || remoteFilter)) {
+              let { filterRender, property, filterMethod } = column
+              let compConf = filterRender ? Renderer.get(filterRender.name) : null
               if (!filterMethod && compConf && compConf.renderFilter) {
                 filterMethod = compConf.filterMethod
               }
               return filterMethod ? itemList.some(item => filterMethod({ value: item.value, option: item, row, column })) : valueList.indexOf(XEUtils.get(row, property)) > -1
             }
-          }
-          return true
+            return true
+          })
         })
-      })
+      }
       if (column && column.order) {
         let allSortMethod = sortOpts.sortMethod || this.sortMethod
         let isRemote = XEUtils.isBoolean(column.remoteSort) ? column.remoteSort : (sortOpts.remote || remoteSort)

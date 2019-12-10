@@ -146,9 +146,9 @@ window.MOCK_TREE_DATA_LIST = [
           },
           {
             id: '123000',
-            name: '文件 123000',
-            size: '81k',
-            type: 'mp4',
+            name: '文件夹 123000',
+            size: '',
+            type: '',
             date: '2019-05-17',
             children: [
               {
