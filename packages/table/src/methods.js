@@ -559,31 +559,35 @@ const Methods = {
     let { visibleColumn, tableFullData, remoteSort, remoteFilter, filterOpts, sortOpts } = this
     let tableData = tableFullData
     let column = XEUtils.find(visibleColumn, column => column.order)
-    let filterColumn = visibleColumn.filter(({ filters }) => filters && filters.length)
-    tableData = tableData.filter(row => {
-      return filterColumn.every(column => {
-        let { filters, filterRender } = column
-        let compConf = filterRender ? Renderer.get(filterRender.name) : null
+    let filterColumns = []
+    visibleColumn.forEach(column => {
+      if (column.filters && column.filters.length) {
         let valueList = []
         let itemList = []
-        if (filters && filters.length) {
-          filters.forEach(item => {
-            if (item.checked) {
-              itemList.push(item)
-              valueList.push(item.value)
-            }
-          })
+        column.filters.forEach(item => {
+          if (item.checked) {
+            itemList.push(item)
+            valueList.push(item.value)
+          }
+        })
+        filterColumns.push({ column, valueList, itemList })
+      }
+    })
+    if (filterColumns.length) {
+      tableData = tableData.filter(row => {
+        return filterColumns.every(({ column, valueList, itemList }) => {
           if (valueList.length && !(filterOpts.remote || remoteFilter)) {
-            let { property, filterMethod } = column
+            let { filterRender, property, filterMethod } = column
+            let compConf = filterRender ? Renderer.get(filterRender.name) : null
             if (!filterMethod && compConf && compConf.renderFilter) {
               filterMethod = compConf.filterMethod
             }
             return filterMethod ? itemList.some(item => filterMethod({ value: item.value, option: item, row, column })) : valueList.indexOf(XEUtils.get(row, property)) > -1
           }
-        }
-        return true
+          return true
+        })
       })
-    })
+    }
     if (column && column.order) {
       let allSortMethod = sortOpts.sortMethod || this.sortMethod
       let isRemote = XEUtils.isBoolean(column.remoteSort) ? column.remoteSort : (sortOpts.remote || remoteSort)
@@ -1044,6 +1048,10 @@ const Methods = {
       if (showFooter) {
         customHeight += scrollbarHeight + 1
       }
+    }
+    let emptyPlaceholderElem = $refs.emptyPlaceholder
+    if (emptyPlaceholderElem) {
+      emptyPlaceholderElem.style.top = height ? '' : `${headerHeight}px`
     }
     containerList.forEach((name, index) => {
       let fixedType = index > 0 ? name : ''

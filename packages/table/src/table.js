@@ -643,20 +643,28 @@ export default {
       isResizable,
       isCtxMenu,
       loading,
+      stripe,
       _isLoading,
       showHeader,
       height,
       border,
-      vSize,
       treeOpts,
       treeConfig,
       mouseConfig,
+      vSize,
       validOpts,
       editRules,
       showFooter,
       footerMethod,
       overflowX,
+      overflowY,
+      scrollXLoad,
+      scrollYLoad,
       scrollbarHeight,
+      highlightCell,
+      highlightHoverRow,
+      highlightHoverColumn,
+      editConfig,
       optimizeOpts,
       vaildTipOpts,
       tooltipOpts,
@@ -668,27 +676,27 @@ export default {
     } = this
     let { leftList, rightList } = columnStore
     return h('div', {
-      class: ['vxe-table', this.vSize ? `size--${this.vSize}` : '', border && XEUtils.isString(border) ? `b--style-${border}` : '', {
-        'vxe-editable': this.editConfig,
-        'show--head': this.showHeader,
-        'show--foot': this.showFooter,
-        'has--height': this.height,
+      class: ['vxe-table', vSize ? `size--${vSize}` : '', border && XEUtils.isString(border) ? `b--style-${border}` : '', {
+        'vxe-editable': editConfig,
+        'show--head': showHeader,
+        'show--foot': showFooter,
+        'has--height': height,
         'has--tree-line': treeConfig && treeOpts.line,
         'fixed--left': leftList.length,
         'fixed--right': rightList.length,
-        'c--highlight': this.highlightCell,
-        't--animat': this.optimizeOpts.animat,
-        't--stripe': this.stripe,
+        'c--highlight': highlightCell,
+        't--animat': optimizeOpts.animat,
+        't--stripe': stripe,
         't--border': border,
         't--selected': mouseConfig && mouseConfig.selected,
         't--checked': mouseConfig && mouseConfig.checked,
-        'row--highlight': this.highlightHoverRow,
-        'column--highlight': this.highlightHoverColumn,
-        'is--loading': this.loading,
-        'scroll--y': this.overflowY,
-        'scroll--x': this.overflowX,
-        'virtual--x': this.scrollXLoad,
-        'virtual--y': this.scrollYLoad
+        'row--highlight': highlightHoverRow,
+        'column--highlight': highlightHoverColumn,
+        'is--loading': loading,
+        'scroll--y': overflowY,
+        'scroll--x': overflowX,
+        'virtual--x': scrollXLoad,
+        'virtual--y': scrollYLoad
       }]
     }, [
       /**
@@ -756,10 +764,7 @@ export default {
        */
       !loading && !tableData.length ? h('div', {
         ref: 'emptyPlaceholder',
-        class: 'vxe-table--empty-placeholder',
-        style: height ? null : {
-          top: `${this.headerHeight}px`
-        }
+        class: 'vxe-table--empty-placeholder'
       }, [
         h('div', {
           class: 'vxe-table--empty-content'

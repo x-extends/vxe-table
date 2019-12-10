@@ -52,6 +52,7 @@
     </vxe-toolbar>
 
     <vxe-table
+      max-height="400"
       :data="list2"
       :tree-config="{children: 'children', expandAll: !!filterName2}">
       <vxe-table-column type="index" width="160" title="序号" tree-node></vxe-table-column>
@@ -177,6 +178,7 @@ export default {
         </vxe-toolbar>
 
         <vxe-table
+          max-height="400"
           :data="list"
           :tree-config="{children: 'children', expandAll: !!filterName}">
           <vxe-table-column type="index" width="160" title="序号" tree-node></vxe-table-column>
