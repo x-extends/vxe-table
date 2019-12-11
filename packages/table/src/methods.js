@@ -557,7 +557,7 @@ const Methods = {
    */
   updateAfterFullData () {
     let { visibleColumn, tableFullData, remoteSort, remoteFilter, filterOpts, sortOpts } = this
-    let tableData = tableFullData
+    let tableData = tableFullData.slice(0)
     let column = XEUtils.find(visibleColumn, column => column.order)
     let filterColumns = []
     visibleColumn.forEach(column => {
