@@ -37,7 +37,7 @@ export default {
       expSuccess: '匯出成功'
     },
     column: {
-      indexTitle: '#'
+      seqTitle: '#'
     },
     grid: {
       selectOneRecord: '請至少選擇一條記錄！',

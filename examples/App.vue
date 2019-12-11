@@ -138,6 +138,13 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.seq',
+              demoUrl: 'https://jsrun.net/xrXKp/edit',
+              locat: {
+                name: 'TableSeq'
+              }
+            },
+            {
               label: 'app.aside.nav.width',
               locat: {
                 name: 'TableWidth'
@@ -230,13 +237,6 @@ export default {
               demoUrl: 'https://jsrun.net/7rXKp/edit',
               locat: {
                 name: 'TableGroup'
-              }
-            },
-            {
-              label: 'app.aside.nav.seq',
-              demoUrl: 'https://jsrun.net/xrXKp/edit',
-              locat: {
-                name: 'TableIndex'
               }
             },
             {

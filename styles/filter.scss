@@ -32,7 +32,7 @@
 .vxe-table--filter-wrapper {
   display: none;
   position: absolute;
-  min-width: 180px;
+  min-width: 120px;
   border-radius: 2px;
   color: $vxe-font-color;
   background-color: #fff;
@@ -41,6 +41,9 @@
   font-size: 13px;
   font-family: $vxe-font-family;
   z-index: 10;
+  &:not(.is--multiple) {
+    text-align: center;
+  }
   &.filter--active {
     display: block;
   }

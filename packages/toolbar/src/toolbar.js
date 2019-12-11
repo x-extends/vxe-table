@@ -535,7 +535,8 @@ export default {
       const { footerData } = comp.getTableData()
       const selectRecords = comp.getSelectRecords()
       const virtualScroller = comp.getVirtualScroller()
-      const exportColumns = fullColumn.filter(column => column.type === 'index' || (column.property && ['checkbox', 'selection', 'radio'].indexOf(column.type) === -1))
+      // v3.0 废弃 type=index
+      const exportColumns = fullColumn.filter(column => (column.type === 'seq' || column.type === 'index') || (column.property && ['checkbox', 'selection', 'radio'].indexOf(column.type) === -1))
       const treeStatus = comp.getTreeStatus()
       const isTree = !!treeStatus
       const forceOriginal = isTree || virtualScroller.scrollX || virtualScroller.scrollY
@@ -551,7 +552,7 @@ export default {
       })
       // 索引列默认不选中
       exportColumns.forEach(column => {
-        column.checked = column.type !== 'index'
+        column.checked = (column.type !== 'seq' && column.type !== 'index')
       })
       // 更新条件
       Object.assign(this.exportStore, {

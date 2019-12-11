@@ -181,7 +181,7 @@ export default {
     footerAlign: { type: String, default: () => GlobalConfig.footerAlign },
     // 是否显示表头
     showHeader: { type: Boolean, default: () => GlobalConfig.showHeader },
-    // 只对 type=index 时有效，自定义序号的起始值
+    // （v3.0 废弃）
     startIndex: { type: Number, default: 0 },
     // 是否要高亮当前选中行
     highlightCurrentRow: { type: Boolean, default: () => GlobalConfig.highlightCurrentRow },
@@ -252,6 +252,8 @@ export default {
     autoResize: Boolean,
     // 是否自动根据状态属性去更新响应式表格宽高
     syncResize: Boolean,
+    // 序号配置项
+    seqConfig: Object,
     // 排序配置项
     sortConfig: Object,
     // 筛选配置项
@@ -487,6 +489,9 @@ export default {
         mini: 36
       }, this.optimizeOpts.rHeights)
     },
+    seqOpts () {
+      return Object.assign({ startIndex: 0 }, GlobalConfig.seqConfig, this.seqConfig)
+    },
     radioOpts () {
       return Object.assign({}, GlobalConfig.radioConfig, this.radioConfig)
     },
@@ -661,6 +666,9 @@ export default {
     }
     if (!UtilTools.getRowkey(this)) {
       UtilTools.error('vxe.error.emptyProp', ['row-id'])
+    }
+    if (this.startIndex) {
+      // UtilTools.warn('vxe.error.delProp', ['start-index', 'seq-config.startIndex'])
     }
     if (XEUtils.isBoolean(showAllOverflow)) {
       UtilTools.warn('vxe.error.delProp', ['show-all-overflow', 'show-overflow'])
@@ -1218,6 +1226,13 @@ export default {
    */
     $getColumnIndex (column) {
       return this.visibleColumn.indexOf(column)
+    },
+    /**
+     * 判断是否为索引列
+     * @param {ColumnConfig} column 列配置
+     */
+    isSeqColumn (column) {
+      return column && (column.type === 'seq' || column.type === 'index')
     },
     insert (records) {
       return this.insertAt(records)
@@ -2211,7 +2226,7 @@ export default {
     },
     // 处理 Tab 键移动
     moveTabSelected (args, isLeft, evnt) {
-      let { afterFullData, visibleColumn, editConfig } = this
+      let { afterFullData, visibleColumn, editConfig, isSeqColumn } = this
       let targetRow
       let targetRowIndex
       let targetColumn
@@ -2223,10 +2238,9 @@ export default {
       if (isLeft) {
         // 向左
         for (let len = columnIndex - 1; len >= 0; len--) {
-          let item = visibleColumn[len]
-          if (item && item.type !== 'index') {
+          if (!isSeqColumn(visibleColumn[len])) {
             targetColumnIndex = len
-            targetColumn = item
+            targetColumn = visibleColumn[len]
             break
           }
         }
@@ -2235,10 +2249,9 @@ export default {
           targetRowIndex = rowIndex - 1
           targetRow = afterFullData[targetRowIndex]
           for (let len = visibleColumn.length - 1; len >= 0; len--) {
-            let item = visibleColumn[len]
-            if (item && item.type !== 'index') {
+            if (!isSeqColumn(visibleColumn[len])) {
               targetColumnIndex = len
-              targetColumn = item
+              targetColumn = visibleColumn[len]
               break
             }
           }
@@ -2246,10 +2259,9 @@ export default {
       } else {
         // 向右
         for (let index = columnIndex + 1; index < visibleColumn.length; index++) {
-          let item = visibleColumn[index]
-          if (item && item.type !== 'index') {
+          if (!isSeqColumn(visibleColumn[index])) {
             targetColumnIndex = index
-            targetColumn = item
+            targetColumn = visibleColumn[index]
             break
           }
         }
@@ -2258,10 +2270,9 @@ export default {
           targetRowIndex = rowIndex + 1
           targetRow = afterFullData[targetRowIndex]
           for (let index = 0; index < visibleColumn.length; index++) {
-            let item = visibleColumn[index]
-            if (item && item.type !== 'index') {
+            if (!isSeqColumn(visibleColumn[index])) {
               targetColumnIndex = index
-              targetColumn = item
+              targetColumn = visibleColumn[index]
               break
             }
           }
@@ -4814,7 +4825,7 @@ export default {
       }
       if (!options || !options.columns) {
         // 在 v3.0 中废弃 type=selection
-        opts.columnFilterMethod = column => column.property && ['index', 'checkbox', 'selection', 'radio'].indexOf(column.type) === -1
+        opts.columnFilterMethod = column => column.property && ['seq', 'index', 'checkbox', 'selection', 'radio'].indexOf(column.type) === -1
       }
       let columns = visibleColumn
       let fullData = this.tableFullData

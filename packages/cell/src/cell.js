@@ -12,6 +12,7 @@ export const Cell = {
       renderCell: treeNode ? this.renderTreeCell : this.renderCell
     }
     switch (type) {
+      case 'seq':
       case 'index':
         renMaps.renderHeader = this.renderIndexHeader
         renMaps.renderCell = treeNode ? this.renderTreeIndexCell : this.renderIndexCell
@@ -141,13 +142,15 @@ export const Cell = {
   },
   renderIndexCell (h, params) {
     let { $table, column } = params
-    let { startIndex } = $table
+    let { seqOpts, startIndex } = $table
     let { slots, indexMethod } = column
     if (slots && slots.default) {
       return slots.default(params, h)
     }
     let { $seq, seq, level } = params
-    return [UtilTools.formatText(indexMethod ? indexMethod(params) : level ? `${$seq}.${seq}` : startIndex + seq, 1)]
+    // 在 v3.0 中废弃 startIndex、indexMethod
+    let seqMethod = seqOpts.seqMethod || indexMethod
+    return [UtilTools.formatText(seqMethod ? seqMethod(params) : level ? `${$seq}.${seq}` : (seqOpts.startIndex || startIndex) + seq, 1)]
   },
   renderTreeIndexCell (h, params) {
     return Cell.renderTreeIcon(h, params).concat(Cell.renderIndexCell(h, params))

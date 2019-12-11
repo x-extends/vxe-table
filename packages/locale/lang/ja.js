@@ -37,7 +37,7 @@ export default {
       expSuccess: '导出成功'
     },
     column: {
-      indexTitle: '#'
+      seqTitle: '#'
     },
     grid: {
       selectOneRecord: '少なくとも1つのレコードを選択してください',

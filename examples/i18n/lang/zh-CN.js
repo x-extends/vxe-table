@@ -284,7 +284,7 @@ module.exports = {
           headerAlign: '所有的表头列的对齐方式',
           footerAlign: '所有的表尾列的对齐方式',
           showHeader: '是否显示表头',
-          startIndex: '只对 type=index 的列有效，动态索引的起始值',
+          startIndex: '即将废弃，请使用 seq-config.startIndex',
           highlightCurrentRow: '是否要高亮当前行',
           highlightHoverRow: '鼠标移到行是否要高亮显示',
           highlightCurrentColumn: '是否要高亮当前列',
@@ -319,6 +319,7 @@ module.exports = {
           rowKey: '是否需要为每一行的 VNode 设置 key 属性（非特殊情况下没必要设置）',
           rowId: '自定义行数据唯一主键的字段名（行数据必须要有唯一主键，默认自动生成）',
           zIndex: '自定义堆叠顺序（对于某些特殊场景，比如被遮挡时可能会用到）',
+          seqConfig: '序号配置项',
           sortConfig: '排序配置项',
           filterConfig: '筛选配置项',
           radioConfig: '单选框配置项',
@@ -370,7 +371,8 @@ module.exports = {
       tableColumn: {
         desc: {
           type: '列的类型',
-          index: '序号',
+          index: '即将废弃，请使用 seq',
+          seq: '序号',
           selection: '即将废弃，请使用 checkbox',
           checkbox: '复选框',
           radio: '单选框',

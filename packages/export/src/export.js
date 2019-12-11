@@ -32,6 +32,13 @@ function getContent ($table, opts, columns, datas) {
   return ''
 }
 
+function getSeq ($table, row, rowIndex, column, columnIndex) {
+  // 在 v3.0 中废弃 startIndex、indexMethod
+  let seqOpts = $table.seqOpts
+  let seqMethod = seqOpts.seqMethod || column.indexMethod
+  return seqMethod ? seqMethod({ row, rowIndex, column, columnIndex }) : ((seqOpts.startIndex || $table.startIndex) + rowIndex + 1)
+}
+
 function getHeaderTitle (opts, column) {
   return (opts.original ? column.property : column.getTitle()) || ''
 }
@@ -45,8 +52,9 @@ function toCsv ($table, opts, columns, datas) {
   datas.forEach((row, rowIndex) => {
     if (isOriginal || opts.data) {
       content += columns.map((column, columnIndex) => {
-        if (column.type === 'index') {
-          return `"${column.indexMethod ? column.indexMethod({ row, rowIndex, column, columnIndex }) : rowIndex + 1}"`
+        // v3.0 废弃 type=index
+        if (column.type === 'seq' || column.type === 'index') {
+          return `"${getSeq($table, row, rowIndex, column, columnIndex)}"`
         }
         return `"${UtilTools.getCellValue(row, column) || ''}"`
       }).join(',') + '\n'
@@ -73,8 +81,9 @@ function toTxt ($table, opts, columns, datas) {
   datas.forEach((row, rowIndex) => {
     if (isOriginal || opts.data) {
       content += columns.map((column, columnIndex) => {
-        if (column.type === 'index') {
-          return `${column.indexMethod ? column.indexMethod({ row, rowIndex, column, columnIndex }) : rowIndex + 1}`
+        // v3.0 废弃 type=index
+        if (column.type === 'seq' || column.type === 'index') {
+          return `${getSeq($table, row, rowIndex, column, columnIndex)}`
         }
         return `${UtilTools.getCellValue(row, column) || ''}`
       }).join('\t') + '\n'
@@ -116,8 +125,9 @@ function toHtml ($table, opts, columns, datas) {
         if (isOriginal) {
           html += columns.map((column, columnIndex) => {
             let cellValue = ''
-            if (column.type === 'index') {
-              cellValue = column.indexMethod ? column.indexMethod({ row, rowIndex, column, columnIndex }) : (rowIndex + 1)
+            // v3.0 废弃 type=index
+            if (column.type === 'seq' || column.type === 'index') {
+              cellValue = getSeq($table, row, rowIndex, column, columnIndex)
             } else {
               cellValue = UtilTools.getCellValue(row, column) || ''
             }
@@ -150,8 +160,9 @@ function toHtml ($table, opts, columns, datas) {
         if (isOriginal || opts.data) {
           html += columns.map((column, columnIndex) => {
             let cellValue = ''
-            if (column.type === 'index') {
-              cellValue = column.indexMethod ? column.indexMethod({ row, rowIndex, column, columnIndex }) : (rowIndex + 1)
+            // v3.0 废弃 type=index
+            if (column.type === 'seq' || column.type === 'index') {
+              cellValue = getSeq($table, row, rowIndex, column, columnIndex)
             } else {
               cellValue = UtilTools.getCellValue(row, column) || ''
             }
@@ -207,8 +218,9 @@ function toXML ($table, opts, columns, datas) {
     xml += '<Row>'
     if (isOriginal || opts.data) {
       xml += columns.map((column, columnIndex) => {
-        if (column.type === 'index') {
-          return `<Cell><Data ss:Type="String">${column.indexMethod ? column.indexMethod({ row, rowIndex, column, columnIndex }) : rowIndex + 1}</Data></Cell>`
+        // v3.0 废弃 type=index
+        if (column.type === 'seq' || column.type === 'index') {
+          return `<Cell><Data ss:Type="String">${getSeq($table, row, rowIndex, column, columnIndex)}</Data></Cell>`
         }
         return `<Cell><Data ss:Type="String">${UtilTools.getCellValue(row, column) || ''}</Data></Cell>`
       }).join('')

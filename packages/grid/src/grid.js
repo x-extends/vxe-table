@@ -95,7 +95,7 @@ export default {
       return rest
     },
     tableProps () {
-      const { maximize, pagerConfig, loading, toolbar, toolbarOpts, editConfig, proxyConfig, proxyOpts, tableExtendProps, tableLoading, tablePage, tableData, tableCustoms, optimization } = this
+      const { maximize, seqConfig, pagerConfig, loading, toolbar, toolbarOpts, editConfig, proxyConfig, proxyOpts, tableExtendProps, tableLoading, tablePage, tableData, tableCustoms, optimization } = this
       let props = Object.assign({}, tableExtendProps, {
         optimization: Object.assign({}, GlobalConfig.optimization, optimization)
       })
@@ -113,7 +113,7 @@ export default {
           rowClassName: this.handleRowClassName
         })
         if (proxyOpts.index && pagerConfig) {
-          props.startIndex = (tablePage.currentPage - 1) * tablePage.pageSize
+          props.seqConfig = Object.assign({}, seqConfig, { startIndex: (tablePage.currentPage - 1) * tablePage.pageSize })
         }
       }
       if (toolbar) {

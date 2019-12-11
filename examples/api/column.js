@@ -18,7 +18,17 @@ const apis = [
           {
             name: 'index',
             descKey: 'app.api.tableColumn.desc.index',
+            disabled: true,
             version: '',
+            type: '',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'seq',
+            descKey: 'app.api.tableColumn.desc.seq',
+            version: '1.15.15',
             type: '',
             enum: '',
             defVal: '',

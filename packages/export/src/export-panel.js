@@ -181,7 +181,8 @@ export default {
                         this.checkStatus()
                       }
                     }
-                  }, UtilTools.getFuncText(own.title || own.label || (type === 'index' ? GlobalConfig.i18n('vxe.column.indexTitle') : '')))
+                    // v3.0 废弃 type=index
+                  }, UtilTools.getFuncText(own.title || own.label || (type === 'seq' || type === 'index' ? GlobalConfig.i18n('vxe.column.seqTitle') : '')))
                 }))
               ])
             ])

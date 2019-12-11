@@ -12,6 +12,7 @@ export default {
     return h('div', {
       class: ['vxe-table--filter-wrapper filter--prevent-default', {
         't--animat': optimizeOpts.animat,
+        'is--multiple': filterStore.multiple,
         'filter--active': filterStore.visible
       }],
       style: filterStore.style

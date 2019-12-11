@@ -417,6 +417,7 @@ const apis = [
       },
       {
         name: 'start-index',
+        disabled: true,
         descKey: 'app.api.table.desc.startIndex',
         version: '',
         type: 'Number',
@@ -725,6 +726,34 @@ const apis = [
         enum: '',
         defVal: '继承 setup.zIndex',
         list: []
+      },
+      {
+        name: 'seq-config',
+        descKey: 'app.api.table.desc.seqConfig',
+        version: '1.15.15',
+        type: 'Object',
+        enum: '',
+        defVal: '继承 setup.seq-config',
+        list: [
+          {
+            name: 'startIndex',
+            desc: '设置序号的起始值',
+            version: '',
+            type: 'Number',
+            enum: '',
+            defVal: '0',
+            list: []
+          },
+          {
+            name: 'seqMethod',
+            desc: '自定义序号的方法 Function({ row, rowIndex, column, columnIndex }) 返回处理后的值',
+            version: '',
+            type: 'Function',
+            enum: '',
+            defVal: '',
+            list: []
+          }
+        ]
       },
       {
         name: 'sort-config',
