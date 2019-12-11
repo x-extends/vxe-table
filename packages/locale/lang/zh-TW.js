@@ -16,6 +16,7 @@ export default {
       expandContent: '展開行的插槽應該是 “content”，請檢查是否正確',
       reqModule: '缺少 "{{0}}" 模塊',
       emptyProp: '參數 "{{0}}" 不允許為空',
+      errProp: '參數 "{{0}}" 類型錯誤',
       notFunc: '"{{0}}" 方法不存在',
       noTree: '樹狀結構不支援 {{0}}',
       delFunc: '方法 "{{0}}" 已停用，請使用 "{{1}}"',
