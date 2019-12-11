@@ -9,7 +9,7 @@
         <vxe-button @click="insertEvent(-1)">在最后行插入</vxe-button>
         <vxe-button @click="$refs.xTable.removeSelecteds()">删除选中</vxe-button>
         <vxe-button @click="getSelectionEvent">获取选中</vxe-button>
-        <vxe-button icon="fa fa-save" @click="getInsertEvent">保存</vxe-button>
+        <vxe-button icon="fa fa-save" @click="getInsertEvent">获取新增</vxe-button>
       </template>
     </vxe-toolbar>
 
@@ -53,7 +53,7 @@ export default {
             <vxe-button @click="insertEvent(-1)">在最后行插入</vxe-button>
             <vxe-button @click="$refs.xTable.removeSelecteds()">删除选中</vxe-button>
             <vxe-button @click="getSelectionEvent">获取选中</vxe-button>
-            <vxe-button icon="fa fa-save" @click="getInsertEvent">保存</vxe-button>
+            <vxe-button icon="fa fa-save" @click="getInsertEvent">获取新增</vxe-button>
           </template>
         </vxe-toolbar>
 

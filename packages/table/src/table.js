@@ -1526,16 +1526,34 @@ export default {
       }
     },
     /**
-     * 获取新增数据
+     * 获取新增的临时数据
      */
     getInsertRecords () {
-      return this.editStore.insertList
+      const insertList = this.editStore.insertList
+      const insertRecords = []
+      if (insertList.length) {
+        this.tableFullData.forEach(row => {
+          if (insertList.indexOf(row) > -1) {
+            insertRecords.push(row)
+          }
+        })
+      }
+      return insertRecords
     },
     /**
-     * 获取删除数据
+     * 获取已删除的数据
      */
     getRemoveRecords () {
-      return this.editStore.removeList
+      const removeList = this.editStore.removeList
+      const removeRecords = []
+      if (removeList.length) {
+        this.tableFullData.forEach(row => {
+          if (removeList.indexOf(row) > -1) {
+            removeRecords.push(row)
+          }
+        })
+      }
+      return removeRecords
     },
     /**
      * 获取选中数据
