@@ -407,6 +407,7 @@ const apis = [
       },
       {
         name: 'start-index',
+        disabled: true,
         descKey: 'app.api.table.desc.startIndex',
         version: '',
         type: 'Number',
@@ -706,6 +707,34 @@ const apis = [
         list: []
       },
       {
+        name: 'seq-config',
+        descKey: 'app.api.table.desc.seqConfig',
+        version: '2.7',
+        type: 'Object',
+        enum: '',
+        defVal: '继承 setup.seq-config',
+        list: [
+          {
+            name: 'startIndex',
+            desc: '设置序号的起始值',
+            version: '',
+            type: 'Number',
+            enum: '',
+            defVal: '0',
+            list: []
+          },
+          {
+            name: 'seqMethod',
+            desc: '自定义序号的方法 Function({ row, rowIndex, column, columnIndex }) 返回处理后的值',
+            version: '',
+            type: 'Function',
+            enum: '',
+            defVal: '',
+            list: []
+          }
+        ]
+      },
+      {
         name: 'sort-config',
         descKey: 'app.api.table.desc.sortConfig',
         version: '',
@@ -716,7 +745,7 @@ const apis = [
           {
             name: 'defaultSort',
             desc: '默认排序',
-            version: '2.7.0',
+            version: '2.7',
             type: 'Object',
             enum: '',
             defVal: '',
@@ -744,7 +773,7 @@ const apis = [
           {
             name: 'sortMethod',
             desc: '自定义所有列的排序方法，当触发排序时会调用该函数 Function({ data, column, property, order  }) 返回排序后的结果',
-            version: '2.7.0',
+            version: '2.7',
             type: 'Function',
             enum: '',
             defVal: '',
@@ -753,7 +782,7 @@ const apis = [
           {
             name: 'remote',
             desc: '所有列是否使用服务端排序，如果设置为 true 则不会对数据进行处理',
-            version: '2.7.0',
+            version: '2.7',
             type: 'Boolean',
             enum: '',
             defVal: '',
@@ -771,7 +800,7 @@ const apis = [
           {
             name: 'iconAsc',
             desc: '自定义升序的图标',
-            version: '2.7.0',
+            version: '2.7',
             type: 'String',
             enum: '',
             defVal: '',
@@ -780,7 +809,7 @@ const apis = [
           {
             name: 'iconDesc',
             desc: '自定义降序的图标',
-            version: '2.7.0',
+            version: '2.7',
             type: 'String',
             enum: '',
             defVal: '',
@@ -791,7 +820,7 @@ const apis = [
       {
         name: 'filter-config',
         descKey: 'app.api.table.desc.filterConfig',
-        version: '2.7.0',
+        version: '2.7',
         type: 'Object',
         enum: '',
         defVal: '继承 setup.filter-config',
@@ -1010,7 +1039,7 @@ const apis = [
           {
             name: 'leaveDelay',
             desc: '鼠标移出后延时多少才隐藏 tooltip',
-            version: '2.7.0',
+            version: '2.7',
             type: 'Number',
             enum: '',
             defVal: '300',
@@ -1029,7 +1058,7 @@ const apis = [
           {
             name: 'labelField',
             desc: '展开列显示的字段名，可以直接显示在单元格中',
-            version: '2.7.0',
+            version: '2.7',
             type: 'String',
             enum: '',
             defVal: '',
@@ -1074,7 +1103,7 @@ const apis = [
           {
             name: 'lazy',
             desc: '是否使用懒加载',
-            version: '2.7.0',
+            version: '2.7',
             type: 'Boolean',
             enum: '',
             defVal: 'false',
@@ -1083,7 +1112,7 @@ const apis = [
           {
             name: 'loadMethod',
             desc: '该方法 Function({row}) 用于异步加载展开后的内容（必须返回 Promise<any[]> 对象）',
-            version: '2.7.0',
+            version: '2.7',
             type: 'Function',
             enum: '',
             defVal: '',
@@ -1092,7 +1121,7 @@ const apis = [
           {
             name: 'iconOpen',
             desc: '自定义展开后显示的图标',
-            version: '2.7.0',
+            version: '2.7',
             type: 'String',
             enum: '',
             defVal: '',
@@ -1101,7 +1130,7 @@ const apis = [
           {
             name: 'iconClose',
             desc: '自定义收起后显示的图标',
-            version: '2.7.0',
+            version: '2.7',
             type: 'String',
             enum: '',
             defVal: '',
@@ -1110,7 +1139,7 @@ const apis = [
           {
             name: 'iconLoaded',
             desc: '自定义懒加载中显示的图标',
-            version: '2.7.0',
+            version: '2.7',
             type: 'String',
             enum: '',
             defVal: '',
@@ -1147,7 +1176,7 @@ const apis = [
           {
             name: 'line',
             desc: '树节点的连接线（启用连接线会降低渲染性能）',
-            version: '2.7.0',
+            version: '2.7',
             type: 'Boolean',
             enum: '',
             defVal: 'false',
@@ -1192,7 +1221,7 @@ const apis = [
           {
             name: 'lazy',
             desc: '是否使用懒加载（启用后只有指定 hasChild 的节点才允许被点击）',
-            version: '2.7.0',
+            version: '2.7',
             type: 'Boolean',
             enum: '',
             defVal: 'false',
@@ -1201,7 +1230,7 @@ const apis = [
           {
             name: 'hasChild',
             desc: '只对 lazy 启用后有效，标识是否存在子节点，从而控制是否允许被点击',
-            version: '2.7.0',
+            version: '2.7',
             type: 'String',
             enum: '',
             defVal: 'hasChild',
@@ -1210,7 +1239,7 @@ const apis = [
           {
             name: 'loadMethod',
             desc: '该方法 Function({row}) 用于异步加载子节点（必须返回 Promise<any[]> 对象）',
-            version: '2.7.0',
+            version: '2.7',
             type: 'Function',
             enum: '',
             defVal: '',
@@ -1219,7 +1248,7 @@ const apis = [
           {
             name: 'iconOpen',
             desc: '自定义展开后显示的图标',
-            version: '2.7.0',
+            version: '2.7',
             type: 'String',
             enum: '',
             defVal: '',
@@ -1228,7 +1257,7 @@ const apis = [
           {
             name: 'iconClose',
             desc: '自定义收起后显示的图标',
-            version: '2.7.0',
+            version: '2.7',
             type: 'String',
             enum: '',
             defVal: '',
@@ -1237,7 +1266,7 @@ const apis = [
           {
             name: 'iconLoaded',
             desc: '自定义懒加载中显示的图标',
-            version: '2.7.0',
+            version: '2.7',
             type: 'String',
             enum: '',
             defVal: '',
@@ -1455,7 +1484,7 @@ const apis = [
           {
             name: 'icon',
             desc: '自定义可编辑列的状态图标',
-            version: '2.7.0',
+            version: '2.7',
             type: 'String',
             enum: '',
             defVal: '',
@@ -1474,7 +1503,7 @@ const apis = [
           {
             name: 'autoPos',
             desc: '是否自动定位到校验不通过的单元格',
-            version: '2.7.0',
+            version: '2.7',
             type: 'Boolean',
             enum: '',
             defVal: 'true',
@@ -2105,7 +2134,7 @@ const apis = [
       {
         name: 'reloadExpandContent(row)',
         desc: '用于懒加载展开行，重新加载展开行的内容',
-        version: '2.7.0',
+        version: '2.7',
         type: 'Promise',
         enum: '',
         defVal: 'rows: Row',
@@ -2114,7 +2143,7 @@ const apis = [
       {
         name: 'reloadTreeChilds(row)',
         desc: '用于懒加载树表格，重新加载子节点',
-        version: '2.7.0',
+        version: '2.7',
         type: 'Promise',
         enum: '',
         defVal: 'rows: Row',
@@ -2240,7 +2269,7 @@ const apis = [
       {
         name: '$getRowIndex(row)',
         desc: '根据 row 获取渲染中的虚拟索引',
-        version: '2.7.0',
+        version: '2.7',
         type: 'Number',
         enum: '',
         defVal: 'row: Row',
@@ -2312,7 +2341,7 @@ const apis = [
       {
         name: '$getColumnIndex(column)',
         desc: '根据 column 获取渲染中的索虚拟引',
-        version: '2.7.0',
+        version: '2.7',
         type: 'Number',
         enum: '',
         defVal: 'column',
@@ -2537,7 +2566,7 @@ const apis = [
       {
         name: 'isCheckedByRow(row)',
         desc: '判断复选行数据是否勾选',
-        version: '2.7.0',
+        version: '2.7',
         type: 'Boolean',
         enum: '',
         defVal: 'row: Row',
@@ -2565,7 +2594,7 @@ const apis = [
       {
         name: 'isRowExpandLoaded(row)',
         desc: '判断展开行是否懒加载完成',
-        version: '2.7.0',
+        version: '2.7',
         type: 'Boolean',
         enum: '',
         defVal: 'row',
@@ -2593,7 +2622,7 @@ const apis = [
       {
         name: 'isTreeExpandLoaded(row)',
         desc: '用于懒加载树表格，判断树节点是否懒加载完成',
-        version: '2.7.0',
+        version: '2.7',
         type: 'Boolean',
         enum: '',
         defVal: 'row: Row',
@@ -2800,7 +2829,7 @@ const apis = [
       {
         name: 'clearRowExpandLoaded()',
         desc: '手动清空懒加载展开行的状态，数据会恢复成未展开的状态，当再次展开时会重新加载',
-        version: '2.7.0',
+        version: '2.7',
         type: 'Promise',
         enum: '',
         defVal: '',
@@ -2818,7 +2847,7 @@ const apis = [
       {
         name: 'clearTreeExpandLoaded()',
         desc: '手动清空懒加载树节点的状态，数据会恢复成未展开的状态，当再次展开时会重新加载',
-        version: '2.7.0',
+        version: '2.7',
         type: 'Promise',
         enum: '',
         defVal: '',

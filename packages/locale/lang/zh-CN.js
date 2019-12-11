@@ -37,7 +37,7 @@ export default {
       expSuccess: '导出成功'
     },
     column: {
-      indexTitle: '#'
+      seqTitle: '#'
     },
     grid: {
       selectOneRecord: '请至少选择一条记录！',

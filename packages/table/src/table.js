@@ -91,7 +91,7 @@ export default {
     footerAlign: { type: String, default: () => GlobalConfig.footerAlign },
     // 是否显示表头
     showHeader: { type: Boolean, default: () => GlobalConfig.showHeader },
-    // 只对 type=index 时有效，自定义序号的起始值
+    // （v3.0 废弃）
     startIndex: { type: Number, default: 0 },
     // 是否要高亮当前选中行
     highlightCurrentRow: { type: Boolean, default: () => GlobalConfig.highlightCurrentRow },
@@ -160,6 +160,8 @@ export default {
     autoResize: Boolean,
     // 是否自动根据状态属性去更新响应式表格宽高
     syncResize: Boolean,
+    // 序号配置项
+    seqConfig: Object,
     // 排序配置项
     sortConfig: Object,
     // 筛选配置项
@@ -345,6 +347,9 @@ export default {
         small: 40,
         mini: 36
       }, this.optimizeOpts.rHeights)
+    },
+    seqOpts () {
+      return Object.assign({ startIndex: 0 }, GlobalConfig.seqConfig, this.seqConfig)
     },
     radioOpts () {
       return Object.assign({}, GlobalConfig.radioConfig, this.radioConfig)
@@ -535,6 +540,9 @@ export default {
     this._isLoading = loading
     if (!UtilTools.getRowkey(this)) {
       UtilTools.error('vxe.error.emptyProp', ['row-id'])
+    }
+    if (this.startIndex) {
+      // UtilTools.warn('vxe.error.delProp', ['start-index', 'seq-config.startIndex'])
     }
     if (this.selectConfig) {
       UtilTools.warn('vxe.error.delProp', ['select-config', 'checkbox-config'])

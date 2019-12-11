@@ -37,7 +37,7 @@ export default {
       expSuccess: 'Export success'
     },
     column: {
-      indexTitle: '#'
+      seqTitle: '#'
     },
     grid: {
       selectOneRecord: 'Please choose at least one piece of record!',

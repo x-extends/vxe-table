@@ -1,12 +1,12 @@
 <template>
   <div>
-    <p class="tip">设置 <table-column-api-link prop="type"/>=index 开启序号列</p>
+    <p class="tip">设置 <table-column-api-link prop="type"/>=<table-column-api-link prop="seq"/> 开启序号列</p>
 
     <vxe-table
       border
       height="300"
       :data="tableData">
-      <vxe-table-column type="index" width="60"></vxe-table-column>
+      <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
       <vxe-table-column field="age" title="Age"></vxe-table-column>
@@ -20,15 +20,15 @@
       <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
 
-    <p class="tip">使用 <table-api-link prop="start-index"/> 自定义起始序号</p>
+    <p class="tip">使用 <table-api-link prop="seq-config"/>={<table-api-link prop="startIndex"/>} 自定义起始序号</p>
 
     <vxe-table
       border
       highlight-hover-row
       height="300"
-      :start-index="100"
+      :seq-config="{startIndex: 100}"
       :data="tableData">
-      <vxe-table-column type="index" title="序号" width="60"></vxe-table-column>
+      <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
       <vxe-table-column field="age" title="Age"></vxe-table-column>
@@ -42,14 +42,15 @@
       <code class="javascript">{{ demoCodes[3] }}</code>
     </pre>
 
-    <p class="tip">使用 <table-column-api-link prop="index-method"/> 自定义方法</p>
+    <p class="tip">使用 <table-api-link prop="seq-config"/>={<table-api-link prop="seqMethod"/>} 自定义方法</p>
 
     <vxe-table
       border
       highlight-hover-row
       height="300"
+      :seq-config="{seqMethod: seqMethod}"
       :data="tableData">
-      <vxe-table-column type="index" title="序号" width="60" :index-method="indexMethod"></vxe-table-column>
+      <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
       <vxe-table-column field="age" title="Age"></vxe-table-column>
@@ -78,7 +79,7 @@ export default {
           border
           height="300"
           :data="tableData">
-          <vxe-table-column type="index" width="60"></vxe-table-column>
+          <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
           <vxe-table-column field="age" title="Age"></vxe-table-column>
@@ -102,9 +103,9 @@ export default {
           border
           highlight-hover-row
           height="300"
-          :start-index="100"
+          :seq-config="{startIndex: 100}"
           :data="tableData">
-          <vxe-table-column type="index" title="序号" width="60"></vxe-table-column>
+          <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
           <vxe-table-column field="age" title="Age"></vxe-table-column>
@@ -128,8 +129,9 @@ export default {
           border
           highlight-hover-row
           height="300"
+          :seq-config="{seqMethod: seqMethod}"
           :data="tableData">
-          <vxe-table-column type="index" title="序号" width="60" :index-method="indexMethod"></vxe-table-column>
+          <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
           <vxe-table-column field="age" title="Age"></vxe-table-column>
@@ -160,7 +162,7 @@ export default {
     })
   },
   methods: {
-    indexMethod ({ rowIndex }) {
+    seqMethod ({ rowIndex }) {
       return rowIndex * 2
     }
   }

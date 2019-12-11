@@ -5,7 +5,7 @@ export default {
   methods: {
     // 处理 Tab 键移动
     moveTabSelected (args, isLeft, evnt) {
-      let { afterFullData, visibleColumn, editConfig, hasIndexColumn } = this
+      let { afterFullData, visibleColumn, editConfig, isSeqColumn } = this
       let targetRow
       let targetRowIndex
       let targetColumn
@@ -17,7 +17,7 @@ export default {
       if (isLeft) {
         // 向左
         for (let len = columnIndex - 1; len >= 0; len--) {
-          if (!hasIndexColumn(visibleColumn[len])) {
+          if (!isSeqColumn(visibleColumn[len])) {
             targetColumnIndex = len
             targetColumn = visibleColumn[len]
             break
@@ -28,7 +28,7 @@ export default {
           targetRowIndex = rowIndex - 1
           targetRow = afterFullData[targetRowIndex]
           for (let len = visibleColumn.length - 1; len >= 0; len--) {
-            if (!hasIndexColumn(visibleColumn[len])) {
+            if (!isSeqColumn(visibleColumn[len])) {
               targetColumnIndex = len
               targetColumn = visibleColumn[len]
               break
@@ -38,7 +38,7 @@ export default {
       } else {
         // 向右
         for (let index = columnIndex + 1; index < visibleColumn.length; index++) {
-          if (!hasIndexColumn(visibleColumn[index])) {
+          if (!isSeqColumn(visibleColumn[index])) {
             targetColumnIndex = index
             targetColumn = visibleColumn[index]
             break
@@ -49,7 +49,7 @@ export default {
           targetRowIndex = rowIndex + 1
           targetRow = afterFullData[targetRowIndex]
           for (let index = 0; index < visibleColumn.length; index++) {
-            if (!hasIndexColumn(visibleColumn[index])) {
+            if (!isSeqColumn(visibleColumn[index])) {
               targetColumnIndex = index
               targetColumn = visibleColumn[index]
               break
@@ -107,7 +107,7 @@ export default {
     },
     // 处理可编辑方向键移动
     moveSelected (args, isLeftArrow, isUpArrow, isRightArrow, isDwArrow, evnt) {
-      let { afterFullData, visibleColumn, hasIndexColumn } = this
+      let { afterFullData, visibleColumn, isSeqColumn } = this
       let params = Object.assign({}, args)
       evnt.preventDefault()
       if (isUpArrow && params.rowIndex) {
@@ -118,7 +118,7 @@ export default {
         params.row = afterFullData[params.rowIndex]
       } else if (isLeftArrow && params.columnIndex) {
         for (let len = params.columnIndex - 1; len >= 0; len--) {
-          if (!hasIndexColumn(visibleColumn[len])) {
+          if (!isSeqColumn(visibleColumn[len])) {
             params.columnIndex = len
             params.column = visibleColumn[len]
             break
@@ -126,7 +126,7 @@ export default {
         }
       } else if (isRightArrow) {
         for (let index = params.columnIndex + 1; index < visibleColumn.length; index++) {
-          if (!hasIndexColumn(visibleColumn[index])) {
+          if (!isSeqColumn(visibleColumn[index])) {
             params.columnIndex = index
             params.column = visibleColumn[index]
             break
@@ -146,7 +146,8 @@ export default {
       let { button } = evnt
       let { column, cell } = params
       let isLeftBtn = button === 0
-      let isIndex = column.type === 'index'
+      // v3.0 废弃 type=index
+      let isIndex = column.type === 'seq' || column.type === 'index'
       if (isLeftBtn && mouseConfig.checked) {
         let headerList = elemStore['main-header-list'].children
         let bodyList = elemStore['main-body-list'].children
@@ -232,7 +233,8 @@ export default {
             let domMousemove = document.onmousemove
             let domMouseup = document.onmouseup
             let startCellNode = DomTools.getCellNodeIndex(cell)
-            let isIndex = column.type === 'index'
+            // v3.0 废弃 type=index
+            let isIndex = column.type === 'seq' || column.type === 'index'
             let bodyList = elemStore['main-body-list'].children
             let headerList = elemStore['main-header-list'].children
             let cellLastElementChild = cell.parentNode.lastElementChild
@@ -428,7 +430,8 @@ export default {
         let headerListElem = elemStore['main-header-list']
         let headerList = headerListElem.children
         let bodyList = elemStore['main-body-list'].children
-        let column = XEUtils.find(visibleColumn, column => column.type === 'index') || visibleColumn[0]
+        // v3.0 废弃 type=index
+        let column = XEUtils.find(visibleColumn, column => column.type === 'seq' || column.type === 'index') || visibleColumn[0]
         let cell = headerListElem.querySelector(`.${column.id}`)
         let firstTrElem = bodyList[0]
         let lastTrElem = bodyList[bodyList.length - 1]

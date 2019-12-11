@@ -356,8 +356,8 @@ const Methods = {
    * 判断是否为索引列
    * @param {ColumnConfig} column 列配置
    */
-  hasIndexColumn (column) {
-    return column && column.type === 'index'
+  isSeqColumn (column) {
+    return column && (column.type === 'seq' || column.type === 'index')
   },
   /**
    * 定义行数据中的列属性，如果不存在则定义

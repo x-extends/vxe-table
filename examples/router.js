@@ -34,7 +34,7 @@ const TableAutoHeight = () => import(/* webpackChunkName: "base" */ './views/tab
 const TableFixed = () => import(/* webpackChunkName: "base" */ './views/table/base/Fixed.vue')
 const TableFixedFull = () => import(/* webpackChunkName: "base" */ './views/table/base/FixedFull.vue')
 const TableGroup = () => import(/* webpackChunkName: "base" */ './views/table/base/Group.vue')
-const TableIndex = () => import(/* webpackChunkName: "base" */ './views/table/base/Index.vue')
+const TableSeq = () => import(/* webpackChunkName: "base" */ './views/table/base/Seq.vue')
 const TableCurrent = () => import(/* webpackChunkName: "base" */ './views/table/base/Current.vue')
 const TableRadio = () => import(/* webpackChunkName: "base" */ './views/table/base/Radio.vue')
 const TableSelection = () => import(/* webpackChunkName: "base" */ './views/table/base/Selection.vue')
@@ -411,9 +411,9 @@ export default new Router({
       component: TableGroup
     },
     {
-      path: '/table/base/index',
-      name: 'TableIndex',
-      component: TableIndex
+      path: '/table/base/seq',
+      name: 'TableSeq',
+      component: TableSeq
     },
     {
       path: '/table/base/current',
