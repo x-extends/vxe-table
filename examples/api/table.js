@@ -2089,6 +2089,7 @@ const apis = [
       {
         name: 'toggle-expand-change',
         descKey: 'app.api.table.desc.toggleExpandChange',
+        disabled: true,
         version: '',
         type: '',
         enum: '',
@@ -2096,12 +2097,31 @@ const apis = [
         list: []
       },
       {
+        name: 'toggle-row-expand',
+        descKey: 'app.api.table.desc.toggleExpandChange',
+        version: '1.15.15',
+        type: '',
+        enum: '',
+        defVal: '{expanded,row,rowIndex},event',
+        list: []
+      },
+      {
         name: 'toggle-tree-change',
         descKey: 'app.api.table.desc.toggleTreeChange',
+        disabled: true,
         version: '',
         type: '',
         enum: '',
         defVal: '{row,rowIndex},event',
+        list: []
+      },
+      {
+        name: 'toggle-tree-expand',
+        descKey: 'app.api.table.desc.toggleTreeChange',
+        version: '1.15.15',
+        type: '',
+        enum: '',
+        defVal: '{expanded,row,rowIndex},event',
         list: []
       },
       {

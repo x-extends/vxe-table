@@ -230,8 +230,8 @@ export default {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 3)
           },
           methods: {
-            toggleExpandChangeEvent ({ row }) {
-              console.log('行展开、收起事件')
+            toggleExpandChangeEvent ({ row, expanded }) {
+              console.log('行展开、收起事件' + expanded)
             }
           }
         }
@@ -348,8 +348,8 @@ export default {
     })
   },
   methods: {
-    toggleExpandChangeEvent ({ row }) {
-      console.log('行展开、收起事件')
+    toggleExpandChangeEvent ({ row, expanded }) {
+      console.log('行展开、收起事件' + expanded)
     }
   }
 }
