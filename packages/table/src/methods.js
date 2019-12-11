@@ -2280,12 +2280,17 @@ const Methods = {
    * 展开行事件
    */
   triggerRowExpandEvent (evnt, params) {
-    let { expandOpts, expandLazyLoadeds } = this
+    let { $listeners, expandOpts, expandLazyLoadeds } = this
     let { row } = params
     let { lazy } = expandOpts
     if (!lazy || expandLazyLoadeds.indexOf(row) === -1) {
-      UtilTools.emitEvent(this, 'toggle-expand-change', [{ row, rowIndex: this.getRowIndex(row), $table: this }, evnt])
       this.toggleRowExpansion(params.row)
+      if ($listeners['toggle-expand-change']) {
+        UtilTools.warn('vxe.error.delEvent', ['toggle-expand-change', 'toggle-row-expand'])
+        UtilTools.emitEvent(this, 'toggle-expand-change', [{ row, rowIndex: this.getRowIndex(row), $table: this }, evnt])
+      } else {
+        UtilTools.emitEvent(this, 'toggle-row-expand', [{ row, rowIndex: this.getRowIndex(row), expanded: !this.isExpandByRow(row), $table: this }, evnt])
+      }
     }
   },
   /**
@@ -2449,12 +2454,17 @@ const Methods = {
    * 展开树节点事件
    */
   triggerTreeExpandEvent (evnt, params) {
-    let { treeOpts, treeLazyLoadeds } = this
+    let { $listeners, treeOpts, treeLazyLoadeds } = this
     let { row } = params
     let { lazy } = treeOpts
     if (!lazy || treeLazyLoadeds.indexOf(row) === -1) {
-      UtilTools.emitEvent(this, 'toggle-tree-change', [{ row, rowIndex: this.getRowIndex(row), $table: this }, evnt])
       this.toggleTreeExpansion(params.row)
+      if ($listeners['toggle-tree-change']) {
+        UtilTools.warn('vxe.error.delEvent', ['toggle-tree-change', 'toggle-tree-expand'])
+        UtilTools.emitEvent(this, 'toggle-tree-change', [{ row, rowIndex: this.getRowIndex(row), $table: this }, evnt])
+      } else {
+        UtilTools.emitEvent(this, 'toggle-tree-expand', [{ row, rowIndex: this.getRowIndex(row), expanded: !this.isTreeExpandByRow(row), $table: this }, evnt])
+      }
     }
   },
   /**
