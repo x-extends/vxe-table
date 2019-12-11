@@ -7,6 +7,7 @@ var columnUniqueId = 0
 
 class ColumnConfig {
   constructor ($table, _vm, { renderHeader, renderCell, renderData } = {}) {
+    let formatter = _vm.formatter
     if (_vm.cellRender && _vm.editRender) {
       UtilTools.warn('vxe.error.cellEditRender')
     }
@@ -20,6 +21,17 @@ class ColumnConfig {
       }
       if (_vm.slots && !_vm.slots.content && _vm.slots.default) {
         UtilTools.warn('vxe.error.expandContent')
+      }
+    }
+    if (formatter) {
+      if (XEUtils.isString(formatter)) {
+        if (!XEUtils.isFunction(XEUtils[formatter])) {
+          UtilTools.error('vxe.error.notFunc', [formatter])
+        }
+      } else if (XEUtils.isArray(formatter)) {
+        if (!XEUtils.isFunction(XEUtils[formatter[0]])) {
+          UtilTools.error('vxe.error.notFunc', [formatter[0]])
+        }
       }
     }
     Object.assign(this, {
@@ -43,7 +55,7 @@ class ColumnConfig {
       headerClassName: _vm.headerClassName,
       footerClassName: _vm.footerClassName,
       indexMethod: _vm.indexMethod,
-      formatter: _vm.formatter,
+      formatter: formatter,
       sortable: _vm.sortable,
       sortBy: _vm.sortBy,
       sortMethod: _vm.sortMethod,
@@ -177,9 +189,9 @@ export const UtilTools = {
         }
       }
       if (XEUtils.isString(formatter)) {
-        cellLabel = XEUtils[formatter](cellValue)
+        cellLabel = XEUtils[formatter] ? XEUtils[formatter](cellValue) : ''
       } else if (XEUtils.isArray(formatter)) {
-        cellLabel = XEUtils[formatter[0]].apply(XEUtils, [cellValue].concat(formatter.slice(1)))
+        cellLabel = XEUtils[formatter[0]] ? XEUtils[formatter[0]].apply(XEUtils, [cellValue].concat(formatter.slice(1))) : ''
       } else {
         cellLabel = formatter(Object.assign({ cellValue }, params))
       }
