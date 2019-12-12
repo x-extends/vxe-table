@@ -13,6 +13,7 @@
       resizable
       ref="xTree"
       row-id="id"
+      :loading="loading"
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
       :tree-config="{lazy: true, children: 'children', hasChild: 'hasChild', loadMethod: loadChildrenMethod}"
       :data="tableData">
@@ -38,7 +39,9 @@ import hljs from 'highlight.js'
 export default {
   data () {
     return {
+      loading: false,
       tableData: [],
+      defaultExpandRowKeys: [],
       demoCodes: [
         `
         <vxe-toolbar>
@@ -52,6 +55,7 @@ export default {
           resizable
           ref="xTree"
           row-id="id"
+          :loading="loading"
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
           :tree-config="{lazy: true, children: 'children', hasChild: 'hasChild', loadMethod: loadChildrenMethod}"
           :data="tableData">
@@ -66,6 +70,7 @@ export default {
         export default {
           data () {
             return {
+              loading: false,
               tableData: []
             }
           },
@@ -74,8 +79,10 @@ export default {
           },
           methods: {
             findList () {
+              this.loading = true
               this.$ajax.get('/api/file/node/list', { parentId: null }).then(data => {
                 this.tableData = data
+                this.loading = false
               })
             },
             loadChildrenMethod ({ row }) {
@@ -98,8 +105,10 @@ export default {
   },
   methods: {
     findList () {
+      this.loading = true
       this.$ajax.get('/api/file/node/list', { parentId: null }).then(data => {
         this.tableData = data
+        this.loading = false
       })
     },
     loadChildrenMethod ({ row }) {

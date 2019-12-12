@@ -2284,12 +2284,13 @@ const Methods = {
     let { row } = params
     let { lazy } = expandOpts
     if (!lazy || expandLazyLoadeds.indexOf(row) === -1) {
-      this.toggleRowExpansion(params.row)
+      let expanded = !this.isExpandByRow(row)
+      this.setRowExpansion(row, expanded)
       if ($listeners['toggle-expand-change']) {
         UtilTools.warn('vxe.error.delEvent', ['toggle-expand-change', 'toggle-row-expand'])
-        UtilTools.emitEvent(this, 'toggle-expand-change', [{ row, rowIndex: this.getRowIndex(row), $table: this }, evnt])
+        UtilTools.emitEvent(this, 'toggle-expand-change', [{ expanded, row, rowIndex: this.getRowIndex(row), $table: this }, evnt])
       } else {
-        UtilTools.emitEvent(this, 'toggle-row-expand', [{ row, rowIndex: this.getRowIndex(row), expanded: !this.isExpandByRow(row), $table: this }, evnt])
+        UtilTools.emitEvent(this, 'toggle-row-expand', [{ expanded, row, rowIndex: this.getRowIndex(row), $table: this }, evnt])
       }
     }
   },
@@ -2297,7 +2298,7 @@ const Methods = {
    * 切换展开行
    */
   toggleRowExpansion (row) {
-    return this.setRowExpansion(row, this.rowExpandeds.indexOf(row) === -1)
+    return this.setRowExpansion(row, !this.isExpandByRow(row))
   },
   /**
    * 处理默认展开行
@@ -2458,12 +2459,13 @@ const Methods = {
     let { row } = params
     let { lazy } = treeOpts
     if (!lazy || treeLazyLoadeds.indexOf(row) === -1) {
-      this.toggleTreeExpansion(params.row)
+      let expanded = !this.isTreeExpandByRow(row)
+      this.setTreeExpansion(row, expanded)
       if ($listeners['toggle-tree-change']) {
         UtilTools.warn('vxe.error.delEvent', ['toggle-tree-change', 'toggle-tree-expand'])
-        UtilTools.emitEvent(this, 'toggle-tree-change', [{ row, rowIndex: this.getRowIndex(row), $table: this }, evnt])
+        UtilTools.emitEvent(this, 'toggle-tree-change', [{ expanded, row, rowIndex: this.getRowIndex(row), $table: this }, evnt])
       } else {
-        UtilTools.emitEvent(this, 'toggle-tree-expand', [{ row, rowIndex: this.getRowIndex(row), expanded: !this.isTreeExpandByRow(row), $table: this }, evnt])
+        UtilTools.emitEvent(this, 'toggle-tree-expand', [{ expanded, row, rowIndex: this.getRowIndex(row), $table: this }, evnt])
       }
     }
   },
