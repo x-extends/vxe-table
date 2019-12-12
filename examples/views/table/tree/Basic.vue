@@ -18,7 +18,8 @@
       tree-config
       border="none"
       ref="xTree"
-      :data="tableData">
+      :data="tableData"
+      @toggle-tree-expand="toggleExpandChangeEvent">
       <vxe-table-column field="name" title="app.body.label.name" tree-node></vxe-table-column>
       <vxe-table-column field="size" title="Size"></vxe-table-column>
       <vxe-table-column field="type" title="Type"></vxe-table-column>
@@ -78,7 +79,8 @@ export default {
           tree-config
           border="none"
           ref="xTree"
-          :data="tableData">
+          :data="tableData"
+          @toggle-tree-expand="toggleExpandChangeEvent">
           <vxe-table-column field="name" title="app.body.label.name" tree-node></vxe-table-column>
           <vxe-table-column field="size" title="Size"></vxe-table-column>
           <vxe-table-column field="type" title="Type"></vxe-table-column>
@@ -96,6 +98,9 @@ export default {
             this.tableData = window.MOCK_TREE_DATA_LIST.slice(0)
           },
           methods: {
+            toggleExpandChangeEvent ({ row, expanded }) {
+              console.log('节点展开事件' + expanded)
+            },
             getTreeExpansionEvent () {
               let treeExpandRecords = this.$refs.xTree.getTreeExpandRecords()
               this.$XModal.alert(treeExpandRecords.length)
@@ -141,6 +146,9 @@ export default {
     })
   },
   methods: {
+    toggleExpandChangeEvent ({ row, expanded }) {
+      console.log('节点展开事件' + expanded)
+    },
     getTreeExpansionEvent () {
       let treeExpandRecords = this.$refs.xTree.getTreeExpandRecords()
       this.$XModal.alert(treeExpandRecords.length)

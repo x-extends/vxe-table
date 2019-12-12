@@ -15,7 +15,7 @@
       ref="xTable"
       border
       :data="tableData"
-      @toggle-expand-change="toggleExpandChangeEvent">
+      @toggle-row-expand="toggleExpandChangeEvent">
       <vxe-table-column type="index" width="60"></vxe-table-column>
       <vxe-table-column type="expand" width="80">
         <template v-slot:content="{ row, rowIndex }">
@@ -180,7 +180,7 @@ export default {
           ref="xTable"
           border
           :data="tableData"
-          @toggle-expand-change="toggleExpandChangeEvent">
+          @toggle-row-expand="toggleExpandChangeEvent">
           <vxe-table-column type="index" width="60"></vxe-table-column>
           <vxe-table-column type="expand" width="60">
             <template v-slot:content="{ row, rowIndex }">
@@ -231,7 +231,7 @@ export default {
           },
           methods: {
             toggleExpandChangeEvent ({ row, expanded }) {
-              console.log('行展开、收起事件' + expanded)
+              console.log('行展开事件' + expanded)
             }
           }
         }
@@ -349,7 +349,7 @@ export default {
   },
   methods: {
     toggleExpandChangeEvent ({ row, expanded }) {
-      console.log('行展开、收起事件' + expanded)
+      console.log('行展开事件' + expanded)
     }
   }
 }
