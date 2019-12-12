@@ -94,8 +94,8 @@ export default {
               let record = {
                 sex: '1'
               }
-              await this.$refs.xTable.insertAt(record, row)
-              await this.$refs.xTable.setActiveCell(row, 'sex')
+              let { row: newRow } = await this.$refs.xTable.insertAt(record, row)
+              await this.$refs.xTable.setActiveCell(newRow, 'sex')
             },
             getInsertEvent () {
               let insertRecords = this.$refs.xTable.getInsertRecords()
@@ -133,8 +133,8 @@ export default {
       let record = {
         sex: '1'
       }
-      await this.$refs.xTable.insertAt(record, row)
-      await this.$refs.xTable.setActiveCell(row, 'sex')
+      let { row: newRow } = await this.$refs.xTable.insertAt(record, row)
+      await this.$refs.xTable.setActiveCell(newRow, 'sex')
     },
     getInsertEvent () {
       let insertRecords = this.$refs.xTable.getInsertRecords()
