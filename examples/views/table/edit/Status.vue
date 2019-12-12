@@ -19,6 +19,7 @@
       border
       show-overflow
       ref="xTable"
+      class="my_table_status"
       :data="tableData"
       :edit-config="{trigger: 'click', mode: 'cell', showStatus: true, icon: 'fa fa-edit'}">
       <vxe-table-column type="checkbox" width="60"></vxe-table-column>
@@ -46,6 +47,7 @@
     <pre>
       <code class="xml">{{ demoCodes[0] }}</code>
       <code class="javascript">{{ demoCodes[1] }}</code>
+      <code class="css">{{ demoCodes[2] }}</code>
     </pre>
   </div>
 </template>
@@ -73,6 +75,7 @@ export default {
           border
           show-overflow
           ref="xTable"
+          class="my_table_status"
           :data="tableData"
           :edit-config="{trigger: 'click', mode: 'cell', showStatus: true, icon: 'fa fa-edit'}">
           <vxe-table-column type="checkbox" width="60"></vxe-table-column>
@@ -166,6 +169,11 @@ export default {
             }
           }
         }
+        `,
+        `
+        .my_table_status .vxe-body--row.row--new {
+          background-color: #f1fdf1;
+        }
         `
       ]
     }
@@ -240,3 +248,9 @@ export default {
   }
 }
 </script>
+
+<style>
+.my_table_status .vxe-body--row.row--new {
+  background-color: #f1fdf1;
+}
+</style>
