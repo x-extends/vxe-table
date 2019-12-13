@@ -21,7 +21,6 @@
           stripe: false,
           border: false,
           resizable: false,
-          fit: true,
           showHeader: true,
           highlightCurrentRow: false,
           highlightHoverRow: false,

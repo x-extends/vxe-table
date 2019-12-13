@@ -361,15 +361,15 @@ const apis = [
         defVal: '',
         list: []
       },
-      {
-        name: 'fit',
-        descKey: 'app.api.table.desc.fit',
-        version: '',
-        type: 'Boolean',
-        enum: '',
-        defVal: 'true',
-        list: []
-      },
+      // {
+      //   name: 'fit',
+      //   descKey: 'app.api.table.desc.fit',
+      //   version: '',
+      //   type: 'Boolean',
+      //   enum: '',
+      //   defVal: 'true',
+      //   list: []
+      // },
       {
         name: 'loading',
         descKey: 'app.api.table.desc.loading',
