@@ -83,6 +83,7 @@ module.exports = {
         dynamicColumn: 'Configurable dynamic columns',
         baseTree: 'Basics tree',
         lazyTree: 'Lazy loading tree',
+        treeLazyEdit: 'Lazy loading tree + editable',
         crudTreeToolbar: 'Tree + Toolbar',
 
         tree: 'Tree table',

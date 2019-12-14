@@ -102,6 +102,7 @@ const GridSpan = () => import(/* webpackChunkName: "grid" */ './views/table/grid
 const GridUpload = () => import(/* webpackChunkName: "grid" */ './views/table/grid/Upload.vue')
 const GridTree = () => import(/* webpackChunkName: "grid" */ './views/table/grid/Tree.vue')
 const GridTreeLazy = () => import(/* webpackChunkName: "grid" */ './views/table/grid/TreeLazy.vue')
+const GridTreeLazyEdit = () => import(/* webpackChunkName: "grid" */ './views/table/grid/TreeLazyEdit.vue')
 const GridTreeEdit = () => import(/* webpackChunkName: "grid" */ './views/table/grid/TreeEdit.vue')
 const GridFullEdit = () => import(/* webpackChunkName: "grid" */ './views/table/grid/FullEdit.vue')
 
@@ -930,6 +931,11 @@ export default new Router({
       path: '/table/grid/treeLazy',
       name: 'GridTreeLazy',
       component: GridTreeLazy
+    },
+    {
+      path: '/table/grid/treeLazyEdit',
+      name: 'GridTreeLazyEdit',
+      component: GridTreeLazyEdit
     },
     {
       path: '/table/grid/treeEdit',

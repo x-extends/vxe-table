@@ -9,7 +9,7 @@
   font-size: 12px;
   background-color: #FFF;
   border: 1px solid $vxe-table-popup-border-color;
-  box-shadow: 2px 2px 4px -2px rgba(0,0,0,.2);
+  box-shadow: 3px 3px 4px -2px rgba(0,0,0,.6);
   padding: 0 1px;
   user-select: none;
   color: $vxe-font-color;
@@ -50,8 +50,8 @@
     .vxe-ctxmenu--link {
       display: block;
       padding: 0 30px;
-      min-width: 120px;
-      max-width: 180px;
+      min-width: 160px;
+      max-width: 200px;
       line-height: 26px;
       color: $vxe-font-color;
       .vxe-ctxmenu--link-prefix,

@@ -83,6 +83,7 @@ module.exports = {
         dynamicColumn: '实现可配置动态列',
         baseTree: '基础树',
         lazyTree: '懒加载树',
+        treeLazyEdit: '懒加载树 + 可编辑',
         crudTreeToolbar: '树表格 + 工具栏',
 
         tree: '树表格',
