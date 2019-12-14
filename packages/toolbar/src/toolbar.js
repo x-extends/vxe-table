@@ -550,9 +550,9 @@ export default {
           label: `vxe.types.${value}`
         }
       })
-      // 索引列默认不选中
+      // 默认全部选中
       exportColumns.forEach(column => {
-        column.checked = (column.type !== 'seq' && column.type !== 'index')
+        column.checked = true
       })
       // 更新条件
       Object.assign(this.exportStore, {

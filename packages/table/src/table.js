@@ -4834,7 +4834,8 @@ export default {
         type: 'csv',
         data: null,
         columns: null,
-        columnFilterMethod: null,
+        // 在 v3.0 中废弃 type=selection
+        columnFilterMethod: options.columns ? null : column => ['seq', 'index'].indexOf(column.type) || (column.property && ['checkbox', 'selection', 'radio'].indexOf(column.type) === -1),
         dataFilterMethod: null,
         footerFilterMethod: null
       }, GlobalConfig.export, options)
@@ -4852,10 +4853,6 @@ export default {
           opts.original = true
           UtilTools.warn('vxe.error.scrollOriginal')
         }
-      }
-      if (!options || !options.columns) {
-        // 在 v3.0 中废弃 type=selection
-        opts.columnFilterMethod = column => column.property && ['seq', 'index', 'checkbox', 'selection', 'radio'].indexOf(column.type) === -1
       }
       let columns = visibleColumn
       let fullData = this.tableFullData
