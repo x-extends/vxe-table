@@ -1138,9 +1138,6 @@ export default {
       let rowkey = UtilTools.getRowkey(this)
       let rowid = UtilTools.getRowid(this, row)
       let matchObj = XEUtils.findTree(tableSourceData, item => rowid === UtilTools.getRowid(this, item), treeOpts)
-      if (matchObj) {
-        matchObj.item[children] = XEUtils.clone(childs, true)
-      }
       XEUtils.eachTree(childs, (row, index) => {
         let rowid = UtilTools.getRowid(this, row)
         if (!rowid) {
@@ -1156,6 +1153,9 @@ export default {
         fullAllDataRowIdData[rowid] = rest
         fullAllDataRowMap.set(row, rest)
       }, treeOpts)
+      if (matchObj) {
+        matchObj.item[children] = XEUtils.clone(childs, true)
+      }
     },
     // 更新列的 Map
     cacheColumnMap () {

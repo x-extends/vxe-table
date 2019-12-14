@@ -649,6 +649,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.treeLazyEdit',
+              locat: {
+                name: 'GridTreeLazyEdit'
+              }
+            },
+            {
               label: 'app.aside.nav.crudTreeToolbar',
               locat: {
                 name: 'GridTreeEdit'
