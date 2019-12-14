@@ -668,7 +668,7 @@ export default {
       UtilTools.error('vxe.error.emptyProp', ['row-id'])
     }
     if (this.startIndex) {
-      // UtilTools.warn('vxe.error.delProp', ['start-index', 'seq-config.startIndex'])
+      UtilTools.warn('vxe.error.delProp', ['start-index', 'seq-config.startIndex'])
     }
     if (XEUtils.isBoolean(showAllOverflow)) {
       UtilTools.warn('vxe.error.delProp', ['show-all-overflow', 'show-overflow'])
