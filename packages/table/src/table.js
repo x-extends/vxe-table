@@ -542,7 +542,7 @@ export default {
       UtilTools.error('vxe.error.emptyProp', ['row-id'])
     }
     if (this.startIndex) {
-      // UtilTools.warn('vxe.error.delProp', ['start-index', 'seq-config.startIndex'])
+      UtilTools.warn('vxe.error.delProp', ['start-index', 'seq-config.startIndex'])
     }
     if (this.selectConfig) {
       UtilTools.warn('vxe.error.delProp', ['select-config', 'checkbox-config'])
