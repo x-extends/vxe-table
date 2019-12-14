@@ -47,56 +47,27 @@ export default {
         { type: 'index', width: 50 },
         { field: 'name', title: 'app.body.label.name' },
         { field: 'age', title: 'app.body.label.age' },
-        { field: 'address', title: 'Address', showOverflow: true }
+        { field: 'date3', title: 'Date', showOverflow: true }
       ],
       headerMenus: [
         [
-          {
-            code: 'exportAll',
-            name: '导出所有.csv',
-            visible: true,
-            disabled: false
-          }
+          { code: 'exportAll', name: '导出所有.csv', prefixIcon: 'fa fa-download', visible: true, disabled: false }
         ]
       ],
       bodyMenus: [
         [
-          {
-            code: 'copy',
-            name: '复制内容',
-            visible: true,
-            disabled: false,
-            prefixIcon: 'fa fa-copy'
-          },
-          {
-            code: 'clear',
-            name: '清除内容',
-            visible: true,
-            disabled: false
-          },
-          {
-            code: 'reload',
-            name: '刷新表格',
-            visible: true,
-            disabled: false
-          },
-          {
-            code: 'myExport',
-            name: '导出.csv',
-            visible: true,
-            disabled: false,
-            prefixIcon: 'fa fa-download'
-          }
+          { code: 'copy', name: '复制内容', prefixIcon: 'fa fa-copy', visible: true, disabled: false },
+          { code: 'clear', name: '清除内容', visible: true, disabled: false },
+          { code: 'reload', name: '刷新表格', visible: true, disabled: false }
+        ],
+        [
+          { code: 'myPrint', name: '打印', prefixIcon: 'fa fa-print', visible: true, disabled: false },
+          { code: 'myExport', name: '导出.csv', prefixIcon: 'fa fa-download', visible: true, disabled: false }
         ]
       ],
       footerMenus: [
         [
-          {
-            code: 'exportAll',
-            name: '导出所有.csv',
-            visible: true,
-            disabled: false
-          }
+          { code: 'exportAll', name: '导出所有.csv', prefixIcon: 'fa fa-download', visible: true, disabled: false }
         ]
       ],
       tableData: [],
@@ -123,56 +94,27 @@ export default {
                 { type: 'index', width: 50 },
                 { field: 'name', title: 'app.body.label.name' },
                 { field: 'age', title: 'app.body.label.age' },
-                { field: 'address', title: 'Address', showOverflow: true }
+                { field: 'date3', title: 'Date', showOverflow: true }
               ],
               headerMenus: [
                 [
-                  {
-                    code: 'exportAll',
-                    name: '导出所有.csv',
-                    visible: true,
-                    disabled: false
-                  }
+                  { code: 'exportAll', name: '导出所有.csv', prefixIcon: 'fa fa-download', visible: true, disabled: false }
                 ]
               ],
               bodyMenus: [
                 [
-                  {
-                    code: 'copy',
-                    name: '复制内容',
-                    visible: true,
-                    disabled: false,
-                    prefixIcon: 'fa fa-copy'
-                  },
-                  {
-                    code: 'clear',
-                    name: '清除内容',
-                    visible: true,
-                    disabled: false
-                  },
-                  {
-                    code: 'reload',
-                    name: '刷新表格',
-                    visible: true,
-                    disabled: false
-                  },
-                  {
-                    code: 'myExport',
-                    name: '导出.csv',
-                    visible: true,
-                    disabled: false,
-                    prefixIcon: 'fa fa-download'
-                  }
+                  { code: 'copy', name: '复制内容', prefixIcon: 'fa fa-copy', visible: true, disabled: false },
+                  { code: 'clear', name: '清除内容', visible: true, disabled: false },
+                  { code: 'reload', name: '刷新表格', visible: true, disabled: false }
+                ],
+                [
+                  { code: 'myPrint', name: '打印', prefixIcon: 'fa fa-print', visible: true, disabled: false },
+                  { code: 'myExport', name: '导出.csv', prefixIcon: 'fa fa-download', visible: true, disabled: false }
                 ]
               ],
               footerMenus: [
                 [
-                  {
-                    code: 'exportAll',
-                    name: '导出所有.csv',
-                    visible: true,
-                    disabled: false
-                  }
+                  { code: 'exportAll', name: '导出所有.csv', prefixIcon: 'fa fa-download', visible: true, disabled: false }
                 ]
               ],
               tableData: []
@@ -214,6 +156,9 @@ export default {
                   break
                 case 'clear':
                   xGrid.clearData(row, column.property)
+                  break
+                case 'myPrint':
+                  xGrid.print()
                   break
                 case 'myExport':
                   xGrid.exportData()
@@ -280,6 +225,9 @@ export default {
           break
         case 'clear':
           xGrid.clearData(row, column.property)
+          break
+        case 'myPrint':
+          xGrid.print()
           break
         case 'myExport':
           xGrid.exportData()
