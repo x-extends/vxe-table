@@ -6,10 +6,10 @@
     </p>
 
     <vxe-toolbar setting :export="tableExport">
-          <template v-slot:buttons>
-            <vxe-button @click="exportDataEvent">导出数据</vxe-button>
-          </template>
-        </vxe-toolbar>
+      <template v-slot:buttons>
+        <vxe-button @click="exportDataEvent">导出数据</vxe-button>
+      </template>
+    </vxe-toolbar>
 
     <vxe-table
       border
