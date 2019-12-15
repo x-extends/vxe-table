@@ -46,7 +46,7 @@ export default {
       selectRow: null,
       tableData: [],
       tableColumn: [
-        { type: 'index', width: 50 },
+        { type: 'seq', width: 50 },
         {
           field: 'name',
           title: 'Name',
@@ -136,7 +136,7 @@ export default {
         }
       ],
       tableToolbar: {
-        setting: true,
+        custom: true,
         slots: {
           buttons: () => {
             return [
@@ -177,7 +177,7 @@ export default {
               selectRow: null,
               tableData: [],
               tableColumn: [
-                { type: 'index', width: 50 },
+                { type: 'seq', width: 50 },
                 {
                   field: 'name',
                   title: 'Name',
@@ -267,7 +267,7 @@ export default {
                 }
               ],
               tableToolbar: {
-                setting: true,
+                custom: true,
                 slots: {
                   buttons: () => {
                     return [

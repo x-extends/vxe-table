@@ -39,7 +39,7 @@ export default {
       tableData: [],
       tableColumn: [
         { type: 'checkbox', width: 60 },
-        { type: 'index', title: 'Number', width: 80 },
+        { type: 'seq', title: 'Number', width: 80 },
         { field: 'name', title: 'Number', minWidth: 140, editRender: { name: 'Input' } },
         { field: 'role', title: 'AutoComplete', width: 160, editRender: { name: 'AutoComplete', props: { data: restaurants, filterMethod: this.roleFilterMethod } } },
         { field: 'age', title: 'InputNumber', width: 160, editRender: { name: 'InputNumber', props: { max: 35, min: 18 } } },
@@ -80,7 +80,7 @@ export default {
               tableData: [],
               tableColumn: [
                 { type: 'checkbox', width: 60 },
-                { type: 'index', title: 'Number', width: 80 },
+                { type: 'seq', title: 'Number', width: 80 },
                 { field: 'name', title: 'Number', minWidth: 140, editRender: { name: 'Input' } },
                 { field: 'role', title: 'AutoComplete', width: 160, editRender: { name: 'AutoComplete', props: { data: restaurants, filterMethod: this.roleFilterMethod } } },
                 { field: 'age', title: 'InputNumber', width: 160, editRender: { name: 'InputNumber', props: { max: 35, min: 18 } } },

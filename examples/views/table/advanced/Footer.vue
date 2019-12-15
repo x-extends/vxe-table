@@ -14,7 +14,7 @@
       height="400"
       :footer-method="footerMethod"
       :data="tableData">
-      <vxe-table-column type="index" width="60"></vxe-table-column>
+      <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
       <vxe-table-column field="age" title="Age"></vxe-table-column>
@@ -38,7 +38,7 @@
       :footer-method="footerMethod"
       :footer-cell-class-name="footerCellClassName"
       :data="tableData">
-      <vxe-table-column type="index" width="60"></vxe-table-column>
+      <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
       <vxe-table-column field="age" title="Age"></vxe-table-column>
@@ -63,7 +63,7 @@
       :footer-method="footerMethod"
       :footer-cell-class-name="footerCellClassName"
       :data="tableData">
-      <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
+      <vxe-table-column type="seq" width="60" fixed="left"></vxe-table-column>
       <vxe-table-column title="基本信息">
         <vxe-table-column field="name" title="Name" min-width="600" sortable></vxe-table-column>
         <vxe-table-column field="age" title="Age" min-width="600"></vxe-table-column>
@@ -98,7 +98,7 @@ export default {
           height="400"
           :footer-method="footerMethod"
           :data="tableData">
-          <vxe-table-column type="index" width="60"></vxe-table-column>
+          <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
           <vxe-table-column field="age" title="Age"></vxe-table-column>
@@ -159,7 +159,7 @@ export default {
           :footer-method="footerMethod"
           :footer-cell-class-name="footerCellClassName"
           :data="tableData">
-          <vxe-table-column type="index" width="60"></vxe-table-column>
+          <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
           <vxe-table-column field="age" title="Age"></vxe-table-column>
@@ -230,7 +230,7 @@ export default {
           :footer-method="footerMethod"
           :footer-cell-class-name="footerCellClassName"
           :data="tableData">
-          <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
+          <vxe-table-column type="seq" width="60" fixed="left"></vxe-table-column>
           <vxe-table-column title="基本信息">
             <vxe-table-column field="name" title="Name" min-width="600" sortable></vxe-table-column>
             <vxe-table-column field="age" title="Age" min-width="600"></vxe-table-column>

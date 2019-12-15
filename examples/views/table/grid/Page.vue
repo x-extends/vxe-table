@@ -42,7 +42,7 @@ export default {
         perfect: true
       },
       tableColumn: [
-        { type: 'index', width: 60 },
+        { type: 'seq', width: 60 },
         { type: 'checkbox', width: 50 },
         { field: 'name', title: 'Name' },
         { field: 'nickname', title: 'Nickname' },
@@ -78,7 +78,7 @@ export default {
                 perfect: true
               },
               tableColumn: [
-                { type: 'index', width: 60 },
+                { type: 'seq', width: 60 },
                 { type: 'checkbox', width: 50 },
                 { field: 'name', title: 'Name' },
                 { field: 'nickname', title: 'Nickname' },

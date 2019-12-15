@@ -7,7 +7,7 @@
       row-key
       ref="xTree"
       row-id="id"
-      :toolbar="{export: true, zoom: true, setting: true}"
+      :toolbar="{export: true, zoom: true, custom: true}"
       :tree-config="{children: 'children'}"
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
       :data="tableData"
@@ -61,7 +61,7 @@ export default {
           row-key
           ref="xTree"
           row-id="id"
-          :toolbar="{export: true, zoom: true, setting: true}"
+          :toolbar="{export: true, zoom: true, custom: true}"
           :tree-config="{children: 'children'}"
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
           :data="tableData"

@@ -41,7 +41,7 @@ export default {
     return {
       tableData: [],
       tableColumn: [
-        { type: 'index', width: 60, fixed: null },
+        { type: 'seq', width: 60, fixed: null },
         { type: 'checkbox', width: 50, fixed: null },
         { field: 'name', title: 'Name', width: 200 },
         { field: 'nickname', title: 'Nickname', width: 300 },
@@ -78,7 +78,7 @@ export default {
             return {
               tableData: [],
               tableColumn: [
-                { type: 'index', width: 60, fixed: null },
+                { type: 'seq', width: 60, fixed: null },
                 { type: 'checkbox', width: 50, fixed: null },
                 { field: 'name', title: 'Name', width: 200 },
                 { field: 'nickname', title: 'Nickname', width: 300 },

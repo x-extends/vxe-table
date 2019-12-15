@@ -6,7 +6,7 @@
       border
       :expand-config="{accordion: true}"
       :data="tableData">
-      <vxe-table-column type="index" width="60"></vxe-table-column>
+      <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column type="expand" width="80">
         <template v-slot:content="{ row, rowIndex }">
           <template v-if="rowIndex === 1">
@@ -67,7 +67,7 @@ export default {
           border
           :expand-config="{accordion: true}"
           :data="tableData">
-          <vxe-table-column type="index" width="60"></vxe-table-column>
+          <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column type="expand" width="80">
             <template v-slot:content="{ row, rowIndex }">
               <template v-if="rowIndex === 1">

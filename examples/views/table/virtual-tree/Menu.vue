@@ -7,7 +7,7 @@
       row-key
       ref="xTree"
       row-id="id"
-      :toolbar="{setting: true}"
+      :toolbar="{custom: true}"
       :tree-config="{children: 'children'}"
       :checkbox-config="{labelField: 'id'}"
       :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}, visibleMethod}"
@@ -95,7 +95,7 @@ export default {
           row-key
           ref="xTree"
           row-id="id"
-          :toolbar="{setting: true}"
+          :toolbar="{custom: true}"
           :tree-config="{children: 'children'}"
           :checkbox-config="{labelField: 'id'}"
           :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}, visibleMethod}"

@@ -53,7 +53,7 @@ export default {
       },
       tableColumn: [
         { type: 'checkbox', width: 50, fixed: 'left' },
-        { type: 'index', width: 60, fixed: 'left' },
+        { type: 'seq', width: 60, fixed: 'left' },
         { field: 'id', title: 'ID', width: 100, remoteSort: true },
         { field: 'name', title: 'Name', width: 300, remoteSort: true },
         { field: 'nickname', title: 'Nickname', remoteSort: true, width: 300 },
@@ -114,7 +114,7 @@ export default {
               },
               tableColumn: [
                 { type: 'checkbox', width: 50, fixed: 'left' },
-                { type: 'index', width: 60, fixed: 'left' },
+                { type: 'seq', width: 60, fixed: 'left' },
                 { field: 'id', title: 'ID', width: 100, remoteSort: true },
                 { field: 'name', title: 'Name', width: 300, remoteSort: true },
                 { field: 'nickname', title: 'Nickname', remoteSort: true, width: 300 },

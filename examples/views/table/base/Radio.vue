@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">单选表格，用户手动选中时会触发事件 <table-api-link prop="radio-change"/></p>
+    <p class="tip">单选表格，用户手动选中时会触发事件 <table-api-link prop="radio-change"/>，还通过 <table-api-link prop="highlight"/> 设置高亮选中行</p>
 
     <vxe-toolbar>
       <template v-slot:buttons>
@@ -16,7 +16,7 @@
       class="radio-table"
       height="300"
       :data="tableData"
-      :row-class-name="rowClassName"
+      :radio-config="{highlight: true}"
       @cell-click="cellClickEvent"
       @radio-change="radioChangeEvent">
       <vxe-table-column type="radio" width="60">
@@ -34,7 +34,6 @@
     <pre>
       <code class="xml">{{ demoCodes[0] }}</code>
       <code class="javascript">{{ demoCodes[1] }}</code>
-      <code class="scss">{{ demoCodes[2] }}</code>
     </pre>
 
     <p class="tip">
@@ -64,8 +63,8 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[3] }}</code>
-      <code class="javascript">{{ demoCodes[4] }}</code>
+      <code class="xml">{{ demoCodes[2] }}</code>
+      <code class="javascript">{{ demoCodes[3] }}</code>
     </pre>
 
     <p class="tip">默认选中，通过指定 <table-api-link prop="checkRowKey"/> 设置默认选中的行，指定默认值需要有 <table-api-link prop="row-id"/></p>
@@ -85,8 +84,8 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[5] }}</code>
-      <code class="javascript">{{ demoCodes[6] }}</code>
+      <code class="xml">{{ demoCodes[4] }}</code>
+      <code class="javascript">{{ demoCodes[5] }}</code>
     </pre>
 
     <p class="tip">使用 <table-api-link prop="highlight-current-row"/> 高亮方式</p>
@@ -106,8 +105,8 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[7] }}</code>
-      <code class="javascript">{{ demoCodes[8] }}</code>
+      <code class="xml">{{ demoCodes[6] }}</code>
+      <code class="javascript">{{ demoCodes[7] }}</code>
     </pre>
 
     <p class="tip">两种方式混合使用</p>
@@ -128,8 +127,8 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[9] }}</code>
-      <code class="javascript">{{ demoCodes[10] }}</code>
+      <code class="xml">{{ demoCodes[8] }}</code>
+      <code class="javascript">{{ demoCodes[9] }}</code>
     </pre>
 
     <p class="tip">当然也可以两种方式同时使用</p>
@@ -151,8 +150,8 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[11] }}</code>
-      <code class="javascript">{{ demoCodes[12] }}</code>
+      <code class="xml">{{ demoCodes[10] }}</code>
+      <code class="javascript">{{ demoCodes[11] }}</code>
     </pre>
   </div>
 </template>
@@ -181,7 +180,7 @@ export default {
           class="radio-table"
           height="300"
           :data="tableData"
-          :row-class-name="rowClassName"
+          :radio-config="{highlight: true}"
           @cell-click="cellClickEvent"
           @radio-change="radioChangeEvent">
           <vxe-table-column type="radio" width="60">
@@ -217,20 +216,10 @@ export default {
               this.selectRow = null
               this.$refs.xTable1.clearRadioRow()
             },
-            rowClassName ({ row }) {
-              return {
-                'row-checked': this.selectRow === row
-              }
-            },
             getRadioEvent1 () {
               this.$XModal.alert(JSON.stringify(this.$refs.xTable1.getRadioRow()))
             }
           }
-        }
-        `,
-        `
-        .radio-table.vxe-table .vxe-body--row.row-checked {
-          background-color: #fbf8ec;
         }
         `,
         `
@@ -408,20 +397,9 @@ export default {
       this.selectRow = null
       this.$refs.xTable1.clearRadioRow()
     },
-    rowClassName ({ row }) {
-      return {
-        'row-checked': this.selectRow === row
-      }
-    },
     getRadioEvent1 () {
       this.$XModal.alert(JSON.stringify(this.$refs.xTable1.getRadioRow()))
     }
   }
 }
 </script>
-
-<style lang="scss">
-.radio-table.vxe-table .vxe-body--row.row-checked {
-  background-color: #fbf8ec;
-}
-</style>

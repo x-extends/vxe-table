@@ -13,7 +13,7 @@
       :footer-span-method="footerColspanMethod"
       :footer-method="footerMethod"
       :data="tableData">
-      <vxe-table-column type="index" width="60"></vxe-table-column>
+      <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
       <vxe-table-column field="role" title="Role" sortable></vxe-table-column>
       <vxe-table-column field="rate" title="Rate" footer-align="center"></vxe-table-column>
@@ -37,7 +37,7 @@
       :footer-span-method="footerRowspanMethod"
       :footer-method="footerMethod"
       :data="tableData">
-      <vxe-table-column type="index" width="60"></vxe-table-column>
+      <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="key" title="Key"></vxe-table-column>
       <vxe-table-column field="content" title="Translate"></vxe-table-column>
       <vxe-table-column field="language" title="Language" :filters="[{label: '中文', value: 'zh_CN'}, {label: 'English', value: 'en_US'}]"></vxe-table-column>
@@ -69,7 +69,7 @@ export default {
           :footer-span-method="footerColspanMethod"
           :footer-method="footerMethod"
           :data="tableData">
-          <vxe-table-column type="index" width="60"></vxe-table-column>
+          <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
           <vxe-table-column field="role" title="Role" sortable></vxe-table-column>
           <vxe-table-column field="rate" title="Rate" footer-align="center"></vxe-table-column>
@@ -152,7 +152,7 @@ export default {
           :footer-span-method="footerRowspanMethod"
           :footer-method="footerMethod"
           :data="tableData">
-          <vxe-table-column type="index" width="60"></vxe-table-column>
+          <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="key" title="Key"></vxe-table-column>
           <vxe-table-column field="content" title="Translate"></vxe-table-column>
           <vxe-table-column field="language" title="Language" :filters="[{label: '中文', value: 'zh_CN'}, {label: 'English', value: 'en_US'}]"></vxe-table-column>

@@ -38,7 +38,7 @@ export default {
       tableData: [],
       tableColumn: [
         { type: 'checkbox', width: 60 },
-        { type: 'index', title: 'Number', width: 80 },
+        { type: 'seq', title: 'Number', width: 80 },
         { field: 'name', title: 'ElInput', minWidth: 140, editRender: { name: 'ElInput' } },
         { field: 'role', title: 'ElAutocomplete', width: 160, editRender: { name: 'ElAutocomplete', props: { fetchSuggestions: this.roleFetchSuggestions } } },
         { field: 'age', title: 'ElInputNumber', width: 160, editRender: { name: 'ElInputNumber', props: { max: 35, min: 18 } } },
@@ -86,7 +86,7 @@ export default {
               tableData: [],
               tableColumn: [
                 { type: 'checkbox', width: 60 },
-                { type: 'index', title: 'Number', width: 80 },
+                { type: 'seq', title: 'Number', width: 80 },
                 { field: 'name', title: 'ElInput', minWidth: 140, editRender: { name: 'ElInput' } },
                 { field: 'role', title: 'ElAutocomplete', width: 160, editRender: { name: 'ElAutocomplete', props: { fetchSuggestions: this.roleFetchSuggestions } } },
                 { field: 'age', title: 'ElInputNumber', width: 160, editRender: { name: 'ElInputNumber', props: { max: 35, min: 18 } } },

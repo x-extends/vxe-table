@@ -14,7 +14,7 @@
       border
       :data="tableData"
       :edit-config="{trigger: 'click', mode: 'row'}">
-      <vxe-table-column type="index" width="60"></vxe-table-column>
+      <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" :edit-render="{name: 'MyInput'}"></vxe-table-column>
       <vxe-table-column field="sex" title="sex" :edit-render="{name: 'MyInput'}"></vxe-table-column>
       <vxe-table-column field="age" title="Age" :edit-render="{name: 'MyInput'}"></vxe-table-column>
@@ -61,7 +61,7 @@ export default {
           border
           :data="tableData"
           :edit-config="{trigger: 'click', mode: 'row'}">
-          <vxe-table-column type="index" width="60"></vxe-table-column>
+          <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" :edit-render="{name: 'MyInput'}"></vxe-table-column>
           <vxe-table-column field="sex" title="sex" :edit-render="{name: 'MyInput'}"></vxe-table-column>
           <vxe-table-column field="age" title="Age" :edit-render="{name: 'MyInput'}"></vxe-table-column>

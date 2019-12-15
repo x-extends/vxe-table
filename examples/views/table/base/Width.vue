@@ -8,7 +8,7 @@
     <vxe-table
       border
       :data="tableData">
-      <vxe-table-column type="index"></vxe-table-column>
+      <vxe-table-column type="seq"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
       <vxe-table-column field="role" title="Role"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -27,7 +27,7 @@
     <vxe-table
       border
       :data="tableData">
-      <vxe-table-column type="index" width="80"></vxe-table-column>
+      <vxe-table-column type="seq" width="80"></vxe-table-column>
       <vxe-table-column field="name" title="Name" width="200"></vxe-table-column>
       <vxe-table-column field="role" title="Role"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex" width="140"></vxe-table-column>
@@ -46,7 +46,7 @@
     <vxe-table
       border
       :data="tableData">
-      <vxe-table-column type="index" width="80"></vxe-table-column>
+      <vxe-table-column type="seq" width="80"></vxe-table-column>
       <vxe-table-column field="name" title="Name" min-width="200"></vxe-table-column>
       <vxe-table-column field="role" title="Role" min-width="140"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex" min-width="120"></vxe-table-column>
@@ -65,7 +65,7 @@
     <vxe-table
       border
       :data="tableData">
-      <vxe-table-column type="index" width="10%"></vxe-table-column>
+      <vxe-table-column type="seq" width="10%"></vxe-table-column>
       <vxe-table-column field="name" title="Name" width="30%"></vxe-table-column>
       <vxe-table-column field="role" title="Role" width="20%"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex" width="20%"></vxe-table-column>
@@ -93,7 +93,7 @@ export default {
         <vxe-table
           border
           :data="tableData">
-          <vxe-table-column type="index"></vxe-table-column>
+          <vxe-table-column type="seq"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
           <vxe-table-column field="role" title="Role"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -116,7 +116,7 @@ export default {
         <vxe-table
           border
           :data="tableData">
-          <vxe-table-column type="index" width="80"></vxe-table-column>
+          <vxe-table-column type="seq" width="80"></vxe-table-column>
           <vxe-table-column field="name" title="Name" width="200"></vxe-table-column>
           <vxe-table-column field="role" title="Role"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" width="140"></vxe-table-column>
@@ -139,7 +139,7 @@ export default {
         <vxe-table
           border
           :data="tableData">
-          <vxe-table-column type="index" width="80"></vxe-table-column>
+          <vxe-table-column type="seq" width="80"></vxe-table-column>
           <vxe-table-column field="name" title="Name" min-width="200"></vxe-table-column>
           <vxe-table-column field="role" title="Role" min-width="140"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" min-width="120"></vxe-table-column>
@@ -162,7 +162,7 @@ export default {
         <vxe-table
           border
           :data="tableData">
-          <vxe-table-column type="index" width="10%"></vxe-table-column>
+          <vxe-table-column type="seq" width="10%"></vxe-table-column>
           <vxe-table-column field="name" title="Name" width="30%"></vxe-table-column>
           <vxe-table-column field="role" title="Role" width="20%"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" width="20%"></vxe-table-column>

@@ -46,10 +46,10 @@ export default {
         ],
         export: true,
         zoom: true,
-        setting: true
+        custom: true
       },
       tableColumn: [
-        { type: 'index', title: '序号', width: 180, treeNode: true },
+        { type: 'seq', title: '序号', width: 180, treeNode: true },
         { type: 'checkbox', title: '全选', width: 120 },
         { field: 'name', title: '名称', editRender: { name: 'input' } },
         { field: 'size', title: '大小', editRender: { name: 'input' } },
@@ -91,10 +91,10 @@ export default {
                 ],
                 export: true,
                 zoom: true,
-                setting: true
+                custom: true
               },
               tableColumn: [
-                { type: 'index', title: '序号', width: 180, treeNode: true },
+                { type: 'seq', title: '序号', width: 180, treeNode: true },
                 { type: 'checkbox', title: '全选', width: 120 },
                 { field: 'name', title: '名称', editRender: { name: 'input' } },
                 { field: 'size', title: '大小', editRender: { name: 'input' } },

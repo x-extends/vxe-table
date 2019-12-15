@@ -7,7 +7,7 @@
     </p>
 
     <vxe-toolbar
-      setting
+      custom
       export
       :buttons="toolbarButtons"
       :refresh="{query: findList}"></vxe-toolbar>
@@ -17,7 +17,7 @@
       height="400"
       :loading="loading"
       :data="tableData">
-      <vxe-table-column type="index" width="60"></vxe-table-column>
+      <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
       <vxe-table-column field="role" title="Role"></vxe-table-column>
       <vxe-table-column field="sex" title="app.body.label.sex"></vxe-table-column>
@@ -64,7 +64,7 @@ export default {
       demoCodes: [
         `
         <vxe-toolbar 
-          setting
+          custom
           export
           :buttons="toolbarButtons" 
           :refresh="{query: findList}"></vxe-toolbar>
@@ -74,7 +74,7 @@ export default {
           height="400"
           :loading="loading"
           :data="tableData">
-          <vxe-table-column type="index" width="60"></vxe-table-column>
+          <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
           <vxe-table-column field="role" title="Role"></vxe-table-column>
           <vxe-table-column field="sex" title="app.body.label.sex"></vxe-table-column>

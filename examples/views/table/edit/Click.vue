@@ -9,7 +9,7 @@
       :edit-config="{trigger: 'click', mode: 'cell'}"
       @edit-actived="editActivedEvent"
       @edit-closed="editClosedEvent">
-      <vxe-table-column type="index" width="60"></vxe-table-column>
+      <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="role" title="Role" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'select', options: sexList}"></vxe-table-column>
@@ -32,7 +32,7 @@
       show-overflow
       :data="tableData"
       :edit-config="{trigger: 'click', mode: 'row'}">
-      <vxe-table-column type="index" width="60"></vxe-table-column>
+      <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="role" title="Role" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="sex2" title="Sex" :edit-render="{name: 'select', options: sexList, optionProps: {value: 'value', label: 'spell'}}"></vxe-table-column>
@@ -67,7 +67,7 @@ export default {
           :edit-config="{trigger: 'click', mode: 'cell'}"
           @edit-actived="editActivedEvent"
           @edit-closed="editClosedEvent">
-          <vxe-table-column type="index" width="60"></vxe-table-column>
+          <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column field="role" title="Role" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'select', options: sexList}"></vxe-table-column>
@@ -109,7 +109,7 @@ export default {
           show-overflow
           :data="tableData"
           :edit-config="{trigger: 'click', mode: 'row'}">
-          <vxe-table-column type="index" width="60"></vxe-table-column>
+          <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column field="role" title="Role" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column field="sex2" title="Sex" :edit-render="{name: 'select', options: sexList, optionProps: {value: 'value', label: 'spell'}}"></vxe-table-column>

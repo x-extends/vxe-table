@@ -300,13 +300,13 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
     treeOpts,
     treeExpandeds,
     scrollYLoad,
-    overflowX,
-    columnStore,
     scrollYStore,
     editStore,
     rowExpandeds,
-    getColumnMapIndex } = $table
-  let { leftList, rightList } = columnStore
+    radioOpts,
+    checkboxOpts,
+    getColumnMapIndex
+  } = $table
   let rows = []
   tableData.forEach((row, $rowIndex) => {
     let trOn = {}
@@ -318,7 +318,7 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
     // 确保任何情况下 rowIndex 都精准指向真实 data 索引
     rowIndex = $table.getRowIndex(row)
     // 事件绑定
-    if (highlightHoverRow && (leftList.length || rightList.length) && overflowX) {
+    if (highlightHoverRow) {
       trOn.mouseenter = evnt => {
         if (isOperateMouse($table)) {
           return
@@ -342,7 +342,9 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
           [`row--level-${rowLevel}`]: treeConfig,
           'row--current': highlightCurrentRow && row === currentRow,
           'row--hover': row === hoverRow,
-          'row--new': editStore.insertList.indexOf(row) > -1
+          'row--new': editStore.insertList.indexOf(row) > -1,
+          'row--radio': radioOpts.highlight && $table.selectRow === row,
+          'row--cheched': checkboxOpts.highlight && $table.isCheckedByRow(row)
         }, rowClassName ? XEUtils.isFunction(rowClassName) ? rowClassName({ $table, $seq, seq, rowid, fixedType, rowLevel, row, rowIndex, $rowIndex }) : rowClassName : ''],
         attrs: {
           'data-rowid': rowid

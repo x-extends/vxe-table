@@ -59,7 +59,7 @@ export default {
     return {
       columns: [
         {
-          type: 'index',
+          type: 'seq',
           width: 50,
           fixed: 'left',
           align: 'center',
@@ -106,7 +106,7 @@ export default {
             return {
               columns: [
                 {
-                  type: 'index',
+                  type: 'seq',
                   width: 50,
                   align: 'center',
                   headerAlign: 'center'

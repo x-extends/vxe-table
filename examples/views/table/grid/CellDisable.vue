@@ -46,14 +46,14 @@ export default {
     return {
       tableData: [],
       tableColumn: [
-        { type: 'index', width: 50 },
+        { type: 'seq', width: 50 },
         { field: 'name', title: 'app.body.label.name', editRender: { name: 'input' } },
         { field: 'sex', title: 'app.body.label.sex', editRender: { name: 'input' } },
         { field: 'age', title: 'Age', editRender: { name: 'input' } },
         { field: 'address', title: 'Address', editRender: { name: 'input' } }
       ],
       tableColumn2: [
-        { type: 'index', width: 50 },
+        { type: 'seq', width: 50 },
         { field: 'name', title: 'app.body.label.name', editRender: { name: 'input' } },
         { field: 'sex', title: 'app.body.label.sex', editRender: { name: 'input' } },
         { field: 'age', title: 'Age', editRender: { name: 'input' } },
@@ -76,7 +76,7 @@ export default {
             return {
               tableData: [],
               tableColumn: [
-                { type: 'index', width: 50 },
+                { type: 'seq', width: 50 },
                 { field: 'name', title: 'app.body.label.name', editRender: { name: 'input' } },
                 { field: 'sex', title: 'app.body.label.sex', editRender: { name: 'input' } },
                 { field: 'age', title: 'Age', editRender: { name: 'input' } },
@@ -116,7 +116,7 @@ export default {
             return {
               tableData: [],
               tableColumn: [
-                { type: 'index', width: 50 },
+                { type: 'seq', width: 50 },
                 { field: 'name', title: 'app.body.label.name', editRender: { name: 'input' } },
                 { field: 'sex', title: 'app.body.label.sex', editRender: { name: 'input' } },
                 { field: 'age', title: 'Age', editRender: { name: 'input' } },

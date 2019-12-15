@@ -13,7 +13,7 @@
       highlight-hover-row
       height="300"
       :data="tableData">
-      <vxe-table-column type="index" width="100"></vxe-table-column>
+      <vxe-table-column type="seq" width="100"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
       <vxe-table-column field="age" title="Age"></vxe-table-column>
@@ -39,7 +39,7 @@
       ref="xTable"
       height="300"
       :optimization="{scrollX: {gt: 40}, scrollY: {gt: 200}}">
-      <vxe-table-column type="index" width="100"></vxe-table-column>
+      <vxe-table-column type="seq" width="100"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
       <vxe-table-column field="age" title="Age"></vxe-table-column>
@@ -82,7 +82,7 @@ export default {
           highlight-hover-row
           height="300"
           :data="tableData">
-          <vxe-table-column type="index" width="100"></vxe-table-column>
+          <vxe-table-column type="seq" width="100"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
           <vxe-table-column field="age" title="Age"></vxe-table-column>
@@ -110,7 +110,7 @@ export default {
           ref="xTable"
           height="300"
           :optimization="{scrollX: {gt: 40}, scrollY: {gt: 200}}">
-          <vxe-table-column type="index" width="100"></vxe-table-column>
+          <vxe-table-column type="seq" width="100"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
           <vxe-table-column field="age" title="Age"></vxe-table-column>

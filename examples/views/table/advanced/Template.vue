@@ -27,7 +27,7 @@
       border
       resizable
       :data="tableData">
-      <vxe-table-column type="index" width="100" show-overflow>
+      <vxe-table-column type="seq" width="100" show-overflow>
         <template v-slot="{ row, seq }">
           <vxe-button @click="showDetailEvent(row)">弹框{{ seq }}</vxe-button>
         </template>
@@ -128,7 +128,7 @@ export default {
           border
           resizable
           :data="tableData">
-          <vxe-table-column type="index" width="100" show-overflow>
+          <vxe-table-column type="seq" width="100" show-overflow>
             <template v-slot="{ row, seq }">
               <vxe-button @click="showDetailEvent(row)">弹框{{ seq }}</vxe-button>
             </template>

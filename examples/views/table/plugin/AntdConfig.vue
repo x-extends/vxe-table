@@ -38,7 +38,7 @@ export default {
       tableData: [],
       tableColumn: [
         { type: 'checkbox', width: 60 },
-        { type: 'index', title: 'Number', width: 80 },
+        { type: 'seq', title: 'Number', width: 80 },
         { field: 'name', title: 'AInput', minWidth: 140, editRender: { name: 'AInput' } },
         { field: 'role', title: 'AAutoComplete', width: 160, editRender: { name: 'AAutoComplete', props: { dataSource: [] }, events: { search: this.roleSearchEvent } } },
         { field: 'age', title: 'AInputNumber', width: 160, editRender: { name: 'AInputNumber', props: { max: 35, min: 18 } } },
@@ -84,7 +84,7 @@ export default {
               tableData: [],
               tableColumn: [
                 { type: 'checkbox', width: 60 },
-                { type: 'index', title: 'Number', width: 80 },
+                { type: 'seq', title: 'Number', width: 80 },
                 { field: 'name', title: 'AInput', minWidth: 140, editRender: { name: 'AInput' } },
                 { field: 'role', title: 'AAutoComplete', width: 160, editRender: { name: 'AAutoComplete', props: { dataSource: [] }, events: { search: this.roleSearchEvent } } },
                 { field: 'age', title: 'AInputNumber', width: 160, editRender: { name: 'AInputNumber', props: { max: 35, min: 18 } } },

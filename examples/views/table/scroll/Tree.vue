@@ -38,7 +38,7 @@ export default {
       loading: false,
       tableData: [],
       tableColumn: [
-        { type: 'index', title: '序号', width: 100 },
+        { type: 'seq', title: '序号', width: 100 },
         { type: 'radio', title: 'Name', treeNode: true },
         { field: 'id', title: '邮政编码' },
         { field: 'date', title: '更新时间' }
@@ -70,7 +70,7 @@ export default {
               loading: false,
               tableData: [],
               tableColumn: [
-                { type: 'index', title: '序号', width: 100 },
+                { type: 'seq', title: '序号', width: 100 },
                 { type: 'radio', title: 'Name', treeNode: true },
                 { field: 'id', title: '邮政编码' },
                 { field: 'date', title: '更新时间' }

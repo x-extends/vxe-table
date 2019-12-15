@@ -16,7 +16,7 @@
       ref="xTable"
       :data="tableData"
       :expand-config="{lazy: true, loadMethod: loadContentMethod}">
-      <vxe-table-column type="index" width="60"></vxe-table-column>
+      <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column type="expand" width="80">
         <template v-slot:content="{ row }">
           <ul>
@@ -70,7 +70,7 @@ export default {
           ref="xTable"
           :data="tableData"
           :expand-config="{lazy: true, loadMethod: loadContentMethod}">
-          <vxe-table-column type="index" width="60"></vxe-table-column>
+          <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column type="expand" width="80">
             <template v-slot:content="{ row, rowIndex }">
               <template v-if="rowIndex === 1">

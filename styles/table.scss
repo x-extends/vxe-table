@@ -129,16 +129,52 @@
         background-color: $vxe-table-row-striped-background-color;
       }
     }
-    &.row--hover {
-      background-color: $vxe-table-row-hover-background-color;
+    &.row--radio {
+      background-color: $vxe-table-row-radio-background-color;
       .vxe-tree--btn-wrapper {
-        background-color: $vxe-table-row-hover-background-color;
+        background-color: $vxe-table-row-radio-background-color;
+      }
+    }
+    &.row--cheched {
+      background-color: $vxe-table-row-cheched-background-color;
+      .vxe-tree--btn-wrapper {
+        background-color: $vxe-table-row-cheched-background-color;
       }
     }
     &.row--current {
       background-color: $vxe-table-row-current-background-color;
       .vxe-tree--btn-wrapper {
         background-color: $vxe-table-row-current-background-color;
+      }
+    }
+    &.row--hover {
+      background-color: $vxe-table-row-hover-background-color;
+      .vxe-tree--btn-wrapper {
+        background-color: $vxe-table-row-hover-background-color;
+      }
+      &.row--stripe {
+        background-color: $vxe-table-row-hover-striped-background-color;
+        .vxe-tree--btn-wrapper {
+          background-color: $vxe-table-row-hover-striped-background-color;
+        }
+      }
+      &.row--radio {
+        background-color: $vxe-table-row-hover-radio-background-color;
+        .vxe-tree--btn-wrapper {
+          background-color: $vxe-table-row-hover-radio-background-color;
+        }
+      }
+      &.row--cheched {
+        background-color: $vxe-table-row-hover-cheched-background-color;
+        .vxe-tree--btn-wrapper {
+          background-color: $vxe-table-row-hover-cheched-background-color;
+        }
+      }
+      &.row--current {
+        background-color: $vxe-table-row-hover-current-background-color;
+        .vxe-tree--btn-wrapper {
+          background-color: $vxe-table-row-hover-current-background-color;
+        }
       }
     }
     .vxe-body--column {
@@ -154,18 +190,18 @@
   //     }
   //   }
   // }
-  &.row--highlight {
-    .vxe-body--row {
-      &:not(.row--current) {
-        &:hover {
-          background-color: $vxe-table-row-hover-background-color;
-          .vxe-tree--btn-wrapper {
-            background-color: $vxe-table-row-hover-background-color;
-          }
-        }
-      }
-    }
-  }
+  // &.row--highlight {
+  //   .vxe-body--row {
+  //     &:not(.row--current) {
+  //       &:hover {
+  //         background-color: $vxe-table-row-hover-background-color;
+  //         .vxe-tree--btn-wrapper {
+  //           background-color: $vxe-table-row-hover-background-color;
+  //         }
+  //       }
+  //     }
+  //   }
+  // }
   &.column--highlight {
     .vxe-header--column {
       &:hover {

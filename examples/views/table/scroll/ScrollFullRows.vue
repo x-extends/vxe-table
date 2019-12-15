@@ -33,7 +33,7 @@
       :sort-config="{trigger: 'cell'}"
       :checkbox-config="{checkField: 'checked'}">
       <vxe-table-column type="checkbox" width="60" fixed="left"></vxe-table-column>
-      <vxe-table-column type="index" width="100" fixed="left"></vxe-table-column>
+      <vxe-table-column type="seq" width="100" fixed="left"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable width="200"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex" width="200"></vxe-table-column>
       <vxe-table-column field="rate" title="Rate" width="200"></vxe-table-column>
@@ -113,7 +113,7 @@ export default {
           :sort-config="{trigger: 'cell'}"
           :checkbox-config="{checkField: 'checked'}">
           <vxe-table-column type="checkbox" width="60" fixed="left"></vxe-table-column>
-          <vxe-table-column type="index" width="100" fixed="left"></vxe-table-column>
+          <vxe-table-column type="seq" width="100" fixed="left"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable width="200"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" width="200"></vxe-table-column>
           <vxe-table-column field="rate" title="Rate" width="200"></vxe-table-column>

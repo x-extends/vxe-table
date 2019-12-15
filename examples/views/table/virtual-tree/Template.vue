@@ -37,7 +37,7 @@ export default {
     return {
       tableData: [],
       tableColumn: [
-        { type: 'index', title: '序号', width: 80 },
+        { type: 'seq', title: '序号', width: 80 },
         { field: 'name', title: 'app.body.label.name' },
         { field: 'size', title: 'Size' },
         {
@@ -100,7 +100,7 @@ export default {
             return {
               tableData: [],
               tableColumn: [
-                { type: 'index', title: '序号', width: 80 },
+                { type: 'seq', title: '序号', width: 80 },
                 { field: 'name', title: 'app.body.label.name' },
                 { field: 'size', title: 'Size' },
                 {

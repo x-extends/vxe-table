@@ -48,11 +48,11 @@ export default {
       tableToolbar: {
         refresh: true,
         zoom: true,
-        setting: true
+        custom: true
       },
       tableColumn: [
         { type: 'checkbox', width: 50 },
-        { type: 'index', width: 60 },
+        { type: 'seq', width: 60 },
         { field: 'name', title: 'Name', editRender: { name: 'input' } },
         { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
         { field: 'role', title: 'Role', editRender: { name: 'input' } },
@@ -96,11 +96,11 @@ export default {
               tableToolbar: {
                 refresh: true,
                 zoom: true,
-                setting: true
+                custom: true
               },
               tableColumn: [
                 { type: 'checkbox', width: 50 },
-                { type: 'index', width: 60 },
+                { type: 'seq', width: 60 },
                 { field: 'name', title: 'Name', editRender: { name: 'input' } },
                 { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
                 { field: 'role', title: 'Role', editRender: { name: 'input' } },

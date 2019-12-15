@@ -19,7 +19,7 @@
       :toolbar="tableToolbar"
       :proxy-config="tableProxy"
       :columns="tableColumn"
-      :checkbox-config="{reserve: true}"
+      :checkbox-config="{reserve: true, highlight: true}"
       :edit-rules="validRules"
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">
     </vxe-grid>
@@ -140,14 +140,14 @@ export default {
         resizable: {
           storage: true
         },
-        setting: {
+        custom: {
           storage: true,
           checkMethod: this.checkColumnMethod
         }
       },
       tableColumn: [
         { type: 'checkbox', width: 50 },
-        { type: 'index', title: '序号', width: 80 },
+        { type: 'seq', title: '序号', width: 80 },
         { field: 'name', title: 'Name', remoteSort: true, editRender: { name: 'input' } },
         { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
         { field: 'sex', title: 'Sex', editRender: { name: 'select', options: [] } },
@@ -180,7 +180,7 @@ export default {
           :toolbar="tableToolbar"
           :proxy-config="tableProxy"
           :columns="tableColumn"
-          :checkbox-config="{reserve: true}"
+          :checkbox-config="{reserve: true, highlight: true}"
           :edit-rules="validRules"
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">
         </vxe-grid>
@@ -290,14 +290,14 @@ export default {
                 resizable: {
                   storage: true
                 },
-                setting: {
+                custom: {
                   storage: true,
                   checkMethod: this.checkColumnMethod
                 }
               },
               tableColumn: [
                 { type: 'checkbox', width: 50 },
-                { type: 'index', title: '序号', width: 80 },
+                { type: 'seq', title: '序号', width: 80 },
                 { field: 'name', title: 'Name', remoteSort: true, editRender: { name: 'input' } },
                 { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
                 { field: 'sex', title: 'Sex', editRender: { name: 'select', options: [] } },

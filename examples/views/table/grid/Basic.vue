@@ -40,7 +40,7 @@ export default {
       allAlign: null,
       loading: false,
       tableColumn: [
-        { type: 'index', width: 50 },
+        { type: 'seq', width: 50 },
         { field: 'name', title: 'app.body.label.name' },
         { field: 'sex', title: 'app.body.label.sex', showHeaderOverflow: true },
         { field: 'address', title: 'Address', showOverflow: true }
@@ -63,7 +63,7 @@ export default {
               allAlign: null,
               loading: false,
               tableColumn: [
-                { type: 'index', width: 50 },
+                { type: 'seq', width: 50 },
                 { field: 'name', title: 'app.body.label.name' },
                 { field: 'sex', title: 'app.body.label.sex', showHeaderOverflow: true },
                 { field: 'address', title: 'Address', showOverflow: true }
