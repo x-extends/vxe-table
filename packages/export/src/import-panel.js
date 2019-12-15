@@ -90,7 +90,8 @@ export default {
               h('vxe-radio', {
                 props: {
                   name: 'mode',
-                  label: 'covering'
+                  label: 'covering',
+                  title: GlobalConfig.i18n('vxe.toolbar.impCoveringTitle')
                 },
                 model: {
                   value: defaultOptions.mode,
@@ -102,7 +103,8 @@ export default {
               h('vxe-radio', {
                 props: {
                   name: 'mode',
-                  label: 'append'
+                  label: 'append',
+                  title: GlobalConfig.i18n('vxe.toolbar.impAppendTitle')
                 },
                 model: {
                   value: defaultOptions.mode,

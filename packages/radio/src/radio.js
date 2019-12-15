@@ -3,6 +3,7 @@ export default {
   props: {
     value: [String, Number],
     label: [String, Number],
+    title: [String, Number],
     disabled: Boolean,
     name: String,
     size: String
@@ -13,12 +14,17 @@ export default {
     }
   },
   render (h) {
-    let { $slots, disabled, vSize, value, label, name } = this
+    let { $slots, disabled, title, vSize, value, label, name } = this
+    let attrs = {}
+    if (title) {
+      attrs.title = title
+    }
     return h('label', {
       class: ['vxe-radio', {
         [`size--${vSize}`]: vSize,
         'is--disabled': disabled
-      }]
+      }],
+      attrs
     }, [
       h('input', {
         attrs: {

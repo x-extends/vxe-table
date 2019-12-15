@@ -1,5 +1,4 @@
 import GlobalConfig from '../../conf'
-import { UtilTools } from '../../tools'
 import XEUtils from 'xe-utils/methods/xe-utils'
 
 export default {
@@ -157,7 +156,8 @@ export default {
               }, [
                 h('vxe-checkbox', {
                   props: {
-                    indeterminate: isIndeterminate
+                    indeterminate: isIndeterminate,
+                    title: GlobalConfig.i18n('vxe.table.allTitle')
                   },
                   model: {
                     value: isAll,
@@ -170,19 +170,21 @@ export default {
                   }
                 }, GlobalConfig.i18n('vxe.toolbar.expAllColumn')),
                 h('ul', storeData.columns.map(column => {
-                  const { own, checked, type } = column
+                  let headerTitle = column.getTitle()
                   return h('li', {
                     class: {
-                      active: checked
+                      active: column.checked
+                    },
+                    attrs: {
+                      title: headerTitle
                     },
                     on: {
                       click: () => {
-                        column.checked = !checked
+                        column.checked = !column.checked
                         this.checkStatus()
                       }
                     }
-                    // v3.0 废弃 type=index
-                  }, UtilTools.getFuncText(own.title || own.label || (type === 'seq' || type === 'index' ? GlobalConfig.i18n('vxe.table.seqTitle') : '')))
+                  }, headerTitle)
                 }))
               ])
             ])
@@ -191,6 +193,9 @@ export default {
             h('td', GlobalConfig.i18n('vxe.toolbar.expOpts')),
             h('td', [
               h('vxe-checkbox', {
+                props: {
+                  title: GlobalConfig.i18n('vxe.toolbar.expHeaderTitle')
+                },
                 model: {
                   value: defaultOptions.isHeader,
                   callback (value) {
@@ -200,7 +205,8 @@ export default {
               }, GlobalConfig.i18n('vxe.toolbar.expOptHeader')),
               h('vxe-checkbox', {
                 props: {
-                  disabled: !storeData.hasFooter
+                  disabled: !storeData.hasFooter,
+                  title: GlobalConfig.i18n('vxe.toolbar.expFooterTitle')
                 },
                 model: {
                   value: defaultOptions.isFooter,
@@ -211,7 +217,8 @@ export default {
               }, GlobalConfig.i18n('vxe.toolbar.expOptFooter')),
               h('vxe-checkbox', {
                 props: {
-                  disabled: storeData.forceOriginal
+                  disabled: storeData.forceOriginal,
+                  title: GlobalConfig.i18n('vxe.toolbar.expOriginalTitle')
                 },
                 model: {
                   value: defaultOptions.original,
