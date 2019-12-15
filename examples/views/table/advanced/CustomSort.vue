@@ -12,7 +12,7 @@
       height="300"
       :data="tableData"
       @header-cell-click="headerCellClickEvent">
-      <vxe-table-column type="index" width="60"></vxe-table-column>
+      <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable :filters="[{label: 'id大于10', value: 10}, {label: 'id大于40', value: 40}]" :filter-method="filterNameMethod">
         <template v-slot:header="{ column }">
           <span>{{ column.title }}</span>
@@ -69,7 +69,7 @@ export default {
           height="300"
           :data="tableData"
           @header-cell-click="headerCellClickEvent">
-          <vxe-table-column type="index" width="60"></vxe-table-column>
+          <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable :filters="[{label: 'id大于10', value: 10}, {label: 'id大于40', value: 40}]" :filter-method="filterNameMethod">
             <template v-slot:header="{ column }">
               <span>{{ column.title }}</span>

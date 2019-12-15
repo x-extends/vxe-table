@@ -26,7 +26,7 @@
       height="400"
       :loading="loading"
       :data="tableData">
-      <vxe-table-column type="index" width="60"></vxe-table-column>
+      <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column
         field="role"
         title="Role"
@@ -99,7 +99,7 @@ export default {
           height="400"
           :loading="loading"
           :data="tableData">
-          <vxe-table-column type="index" width="60"></vxe-table-column>
+          <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column
             field="role"
             title="Role"

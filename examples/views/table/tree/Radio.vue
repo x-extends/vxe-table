@@ -23,7 +23,7 @@
 
     <vxe-table
       :tree-config="{children: 'children'}"
-      :radio-config="{labelField: 'name'}"
+      :radio-config="{labelField: 'name', highlight: true}"
       :data="tableData">
       <vxe-table-column type="radio" title="Name" width="400" tree-node></vxe-table-column>
       <vxe-table-column field="size" title="Size"></vxe-table-column>
@@ -102,7 +102,7 @@ export default {
         `
         <vxe-table
           :tree-config="{children: 'children'}"
-          :radio-config="{labelField: 'name'}"
+          :radio-config="{labelField: 'name', highlight: true}"
           :data="tableData">
           <vxe-table-column type="radio" title="Name" width="400" tree-node></vxe-table-column>
           <vxe-table-column field="size" title="Size"></vxe-table-column>

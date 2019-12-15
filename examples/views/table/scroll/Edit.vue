@@ -38,7 +38,7 @@
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
       :checkbox-config="{checkField: 'checked'}">
       <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-      <vxe-table-column type="index" width="100"></vxe-table-column>
+      <vxe-table-column type="seq" width="100"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable width="200" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="age" title="Age" width="200" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex" width="200" :edit-render="{name: 'input'}"></vxe-table-column>
@@ -114,7 +114,7 @@ export default {
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
           :checkbox-config="{checkField: 'checked'}">
           <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-          <vxe-table-column type="index" width="100"></vxe-table-column>
+          <vxe-table-column type="seq" width="100"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable width="200" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column field="age" title="Age" width="200" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" width="200" :edit-render="{name: 'input'}"></vxe-table-column>

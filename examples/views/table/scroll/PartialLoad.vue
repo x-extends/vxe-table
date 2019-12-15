@@ -24,7 +24,7 @@
       height="500"
       row-id="id"
       :loading="loading">
-      <vxe-table-column type="index" width="100"></vxe-table-column>
+      <vxe-table-column type="seq" width="100"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
       <vxe-table-column field="role" title="Role"></vxe-table-column>
       <vxe-table-column field="age" title="Age"></vxe-table-column>
@@ -70,7 +70,7 @@ export default {
           height="500"
           row-id="id"
           :loading="loading">
-          <vxe-table-column type="index" width="100"></vxe-table-column>
+          <vxe-table-column type="seq" width="100"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
           <vxe-table-column field="role" title="Role"></vxe-table-column>
           <vxe-table-column field="age" title="Age"></vxe-table-column>

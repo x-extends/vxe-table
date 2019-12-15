@@ -37,7 +37,7 @@ export default {
         pageSizes: [10, 20, 50, 100, 200, 500]
       },
       tableColumn: [
-        { type: 'index', width: 60 },
+        { type: 'seq', width: 60 },
         { type: 'checkbox', width: 50 },
         { field: 'name', title: 'Name', editRender: { name: 'input' } },
         { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
@@ -71,7 +71,7 @@ export default {
                 pageSize: 10
               },
               tableColumn: [
-                { type: 'index', width: 60 },
+                { type: 'seq', width: 60 },
                 { type: 'checkbox', width: 50 },
                 { field: 'name', title: 'Name', editRender: { name: 'input' } },
                 { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },

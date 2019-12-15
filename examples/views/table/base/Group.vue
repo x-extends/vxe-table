@@ -7,7 +7,7 @@
       height="400"
       :data="tableData">
       <vxe-table-column title="基本信息">
-        <vxe-table-column type="index" width="60"></vxe-table-column>
+        <vxe-table-column type="seq" width="60"></vxe-table-column>
         <vxe-table-column field="name" title="Name"></vxe-table-column>
       </vxe-table-column>
       <vxe-table-column title="更多信息">
@@ -36,7 +36,7 @@
       height="400"
       :data="tableData">
       <vxe-table-column title="基本信息">
-        <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
+        <vxe-table-column type="seq" width="60" fixed="left"></vxe-table-column>
         <vxe-table-column field="name" title="Name" fixed="left" width="100"></vxe-table-column>
       </vxe-table-column>
       <vxe-table-column title="更多信息">
@@ -73,7 +73,7 @@ export default {
           height="400"
           :data="tableData">
           <vxe-table-column title="基本信息">
-            <vxe-table-column type="index" width="60"></vxe-table-column>
+            <vxe-table-column type="seq" width="60"></vxe-table-column>
             <vxe-table-column field="name" title="Name"></vxe-table-column>
           </vxe-table-column>
           <vxe-table-column title="更多信息">
@@ -104,7 +104,7 @@ export default {
           height="400"
           :data="tableData">
           <vxe-table-column title="基本信息">
-            <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
+            <vxe-table-column type="seq" width="60" fixed="left"></vxe-table-column>
             <vxe-table-column field="name" title="Name" fixed="left" width="100"></vxe-table-column>
           </vxe-table-column>
           <vxe-table-column title="更多信息">

@@ -12,7 +12,7 @@
       border
       height="300"
       :data="list1">
-      <vxe-table-column type="index" width="80"></vxe-table-column>
+      <vxe-table-column type="seq" width="80"></vxe-table-column>
       <vxe-table-column field="name" title="Name">
         <template v-slot="{ row }">
           <span v-html="row.name"></span>
@@ -55,7 +55,7 @@
       max-height="400"
       :data="list2"
       :tree-config="{children: 'children', expandAll: !!filterName2}">
-      <vxe-table-column type="index" width="160" title="序号" tree-node></vxe-table-column>
+      <vxe-table-column type="seq" width="160" title="序号" tree-node></vxe-table-column>
       <vxe-table-column field="name" title="Name">
         <template v-slot="{ row }">
           <span v-html="row.name"></span>
@@ -110,7 +110,7 @@ export default {
           border
           height="300"
           :data="list">
-          <vxe-table-column type="index" width="80"></vxe-table-column>
+          <vxe-table-column type="seq" width="80"></vxe-table-column>
           <vxe-table-column field="name" title="Name">
             <template v-slot="{ row }">
               <span v-html="row.name"></span>
@@ -181,7 +181,7 @@ export default {
           max-height="400"
           :data="list"
           :tree-config="{children: 'children', expandAll: !!filterName}">
-          <vxe-table-column type="index" width="160" title="序号" tree-node></vxe-table-column>
+          <vxe-table-column type="seq" width="160" title="序号" tree-node></vxe-table-column>
           <vxe-table-column field="name" title="Name">
             <template v-slot="{ row }">
               <span v-html="row.name"></span>

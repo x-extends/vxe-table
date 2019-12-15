@@ -12,7 +12,7 @@
       :data="tableData1"
       :footer-method="footerMethod">
       <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-      <vxe-table-column type="index" width="100"></vxe-table-column>
+      <vxe-table-column type="seq" width="100"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable width="200"></vxe-table-column>
       <vxe-table-column field="age" title="Age" width="120"></vxe-table-column>
       <vxe-table-column field="rate" title="Rate" width="120"></vxe-table-column>
@@ -41,7 +41,7 @@
       :data="tableData2"
       :footer-method="footerMethod">
       <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-      <vxe-table-column type="index" width="100"></vxe-table-column>
+      <vxe-table-column type="seq" width="100"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable width="200"></vxe-table-column>
       <vxe-table-column field="age" title="Age" width="120"></vxe-table-column>
       <vxe-table-column field="rate" title="Rate" width="120"></vxe-table-column>
@@ -80,7 +80,7 @@ export default {
           :data="tableData"
           :footer-method="footerMethod">
           <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-          <vxe-table-column type="index" width="100"></vxe-table-column>
+          <vxe-table-column type="seq" width="100"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable width="200"></vxe-table-column>
           <vxe-table-column field="age" title="Age" width="120"></vxe-table-column>
           <vxe-table-column field="rate" title="Rate" width="120"></vxe-table-column>
@@ -143,7 +143,7 @@ export default {
           :data="tableData"
           :footer-method="footerMethod">
           <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-          <vxe-table-column type="index" width="100"></vxe-table-column>
+          <vxe-table-column type="seq" width="100"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable width="200"></vxe-table-column>
           <vxe-table-column field="age" title="Age" width="120"></vxe-table-column>
           <vxe-table-column field="rate" title="Rate" width="120"></vxe-table-column>

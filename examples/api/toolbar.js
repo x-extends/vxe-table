@@ -457,24 +457,24 @@ const apis = [
       //   defVal: 'column',
       //   list: []
       // },
-      {
-        name: 'updateSetting()',
-        desc: '手动更新列自定义的操作状态',
-        version: '',
-        type: '',
-        enum: '',
-        defVal: '',
-        list: []
-      },
-      {
-        name: 'updateResizable()',
-        desc: '手动更新列宽拖动的操作状态',
-        version: '',
-        type: '',
-        enum: '',
-        defVal: '',
-        list: []
-      }
+      // {
+      //   name: 'updateSetting()',
+      //   desc: '手动更新列自定义的操作状态',
+      //   version: '',
+      //   type: '',
+      //   enum: '',
+      //   defVal: '',
+      //   list: []
+      // },
+      // {
+      //   name: 'updateResizable()',
+      //   desc: '手动更新列宽拖动的操作状态',
+      //   version: '',
+      //   type: '',
+      //   enum: '',
+      //   defVal: '',
+      //   list: []
+      // }
     ]
   }
 ]

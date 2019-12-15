@@ -74,7 +74,7 @@ export default {
           { code: 'export', name: '导出.csv' }
         ],
         refresh: true,
-        setting: true
+        custom: true
       },
       tableColumn: [
         { type: 'checkbox', width: 50 },
@@ -117,7 +117,7 @@ export default {
           { code: 'export', name: '导出.csv' }
         ],
         refresh: true,
-        setting: true
+        custom: true
       },
       validRules2: null,
       tableColumn2: [],
@@ -162,7 +162,7 @@ export default {
                   { code: 'export', name: '导出.csv' }
                 ],
                 refresh: true,
-                setting: true
+                custom: true
               },
               tableColumn: [
                 { type: 'checkbox', width: 50 },
@@ -231,7 +231,7 @@ export default {
                   { code: 'export', name: '导出.csv' }
                 ],
                 refresh: true,
-                setting: true
+                custom: true
               },
               validRules: null,
               tableColumn: [],

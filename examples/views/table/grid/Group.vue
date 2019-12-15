@@ -26,7 +26,7 @@ export default {
   data () {
     return {
       tableColumn: [
-        { type: 'index', width: 50 },
+        { type: 'seq', width: 50 },
         {
           title: '基本信息',
           children: [
@@ -59,7 +59,7 @@ export default {
           data () {
             return {
               tableColumn: [
-                { type: 'index', width: 50 },
+                { type: 'seq', width: 50 },
                 {
                   title: '基本信息',
                   children: [

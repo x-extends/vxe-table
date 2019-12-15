@@ -16,7 +16,7 @@
       :data="tableData"
       :edit-config="{trigger: 'click', mode: 'row'}"
       @edit-actived="editActivedEvent">
-      <vxe-table-column type="index" width="60"></vxe-table-column>
+      <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="attr3" title="Project type" :edit-render="{name: 'select', options: ptypeList, events: {change: ptypeChangeEvent}}"></vxe-table-column>
       <vxe-table-column field="attr4" title="Project name" :formatter="formatPanmeLabel" :edit-render="{}">
@@ -82,7 +82,7 @@ export default {
           :data="tableData"
           :edit-config="{trigger: 'click', mode: 'row'}"
           @edit-actived="editActivedEvent">
-          <vxe-table-column type="index" width="60"></vxe-table-column>
+          <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column field="attr3" title="Project type" :edit-render="{name: 'select', options: ptypeList, events: {change: ptypeChangeEvent}}"></vxe-table-column>
           <vxe-table-column field="attr4" title="Project name" :formatter="formatPanmeLabel" :edit-render="{}">

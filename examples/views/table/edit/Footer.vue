@@ -24,7 +24,7 @@
       :footer-cell-class-name="footerCellClassName"
       :data="tableData"
       :edit-config="{trigger: 'click', mode: 'row'}">
-      <vxe-table-column type="index" width="60"></vxe-table-column>
+      <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="age" title="Age" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="date" title="Date" :edit-render="{name: 'input'}"></vxe-table-column>
@@ -68,7 +68,7 @@ export default {
           :footer-cell-class-name="footerCellClassName"
           :data="tableData"
           :edit-config="{trigger: 'click', mode: 'row'}">
-          <vxe-table-column type="index" width="60"></vxe-table-column>
+          <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column field="age" title="Age" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column field="date" title="Date" :edit-render="{name: 'input'}"></vxe-table-column>

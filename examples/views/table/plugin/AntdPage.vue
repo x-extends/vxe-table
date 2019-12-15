@@ -17,7 +17,7 @@
       </a-form-item>
     </a-form>
 
-    <vxe-toolbar export setting>
+    <vxe-toolbar export custom>
       <template v-slot:buttons>
         <a-button @click="insertEvent">新增</a-button>
         <a-button @click="saveEvent">保存</a-button>
@@ -50,7 +50,7 @@
       :edit-rules="validRules"
       :edit-config="{trigger: 'click', mode: 'row'}">
       <vxe-table-column type="checkbox" width="60" fixed="left"></vxe-table-column>
-      <vxe-table-column type="index" title="Number" width="80" fixed="left"></vxe-table-column>
+      <vxe-table-column type="seq" title="Number" width="80" fixed="left"></vxe-table-column>
       <vxe-table-column field="name" title="AInput" min-width="140" fixed="left" :edit-render="{name: 'AInput'}"></vxe-table-column>
       <vxe-table-column field="role" title="AAutoComplete" width="160" :edit-render="{name: 'AAutoComplete', props: ACProps, events: {search: roleSearchEvent}}"></vxe-table-column>
       <vxe-table-column field="age" title="AInputNumber" width="160" :edit-render="{name: 'AInputNumber', props: {max: 35, min: 18}}"></vxe-table-column>
@@ -147,7 +147,7 @@ export default {
             </a-form-item>
           </a-form>
 
-          <vxe-toolbar export setting>
+          <vxe-toolbar export custom>
             <template v-slot:buttons>
               <a-button @click="insertEvent">新增</a-button>
               <a-button @click="saveEvent">保存</a-button>
@@ -180,7 +180,7 @@ export default {
             :edit-rules="validRules"
             :edit-config="{trigger: 'click', mode: 'row'}">
             <vxe-table-column type="checkbox" width="60" fixed="left"></vxe-table-column>
-            <vxe-table-column type="index" title="Number" width="80" fixed="left"></vxe-table-column>
+            <vxe-table-column type="seq" title="Number" width="80" fixed="left"></vxe-table-column>
             <vxe-table-column field="name" title="AInput" min-width="140" :edit-render="{name: 'AInput'}"></vxe-table-column>
             <vxe-table-column field="role" title="AAutoComplete" width="160" :edit-render="{name: 'AAutoComplete', props: ACProps, events: {search: roleSearchEvent}}"></vxe-table-column>
             <vxe-table-column field="age" title="AInputNumber" width="160" :edit-render="{name: 'AInputNumber', props: {max: 35, min: 18}}"></vxe-table-column>

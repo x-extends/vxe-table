@@ -16,7 +16,7 @@
       border
       :data="tableData"
       @toggle-row-expand="toggleExpandChangeEvent">
-      <vxe-table-column type="index" width="60"></vxe-table-column>
+      <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column type="expand" width="80">
         <template v-slot:content="{ row, rowIndex }">
           <template v-if="rowIndex === 1">
@@ -68,7 +68,7 @@
       row-id="id"
       :expand-config="{expandRowKeys: ['1']}"
       :data="tableData">
-      <vxe-table-column type="index" width="60"></vxe-table-column>
+      <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column type="expand" width="60">
         <template v-slot:content="{ row, rowIndex }">
           <template v-if="rowIndex === 1">
@@ -122,7 +122,7 @@
       border
       :data="tableData"
       :expand-config="{labelField: 'name', expandAll: true}">
-      <vxe-table-column type="index" width="60"></vxe-table-column>
+      <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column type="expand" title="Name">
         <template v-slot:content="{ row }">
           <ul>
@@ -181,7 +181,7 @@ export default {
           border
           :data="tableData"
           @toggle-row-expand="toggleExpandChangeEvent">
-          <vxe-table-column type="index" width="60"></vxe-table-column>
+          <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column type="expand" width="60">
             <template v-slot:content="{ row, rowIndex }">
               <template v-if="rowIndex === 1">
@@ -242,7 +242,7 @@ export default {
           row-id="id"
           :expand-config="{expandRowKeys: ['1']}"
           :data="tableData">
-          <vxe-table-column type="index" width="60"></vxe-table-column>
+          <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column type="expand" width="60">
             <template v-slot:content="{ row, rowIndex }">
               <template v-if="rowIndex === 1">
@@ -297,7 +297,7 @@ export default {
           border
           :data="tableData"
           :expand-config="{labelField: 'name', expandAll: true}">
-          <vxe-table-column type="index" width="60"></vxe-table-column>
+          <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column type="expand" title="Name">
             <template v-slot:content="{ row }">
               <ul>

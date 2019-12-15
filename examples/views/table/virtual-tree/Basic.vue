@@ -63,7 +63,7 @@ export default {
         { field: 'date', title: 'Date', treeNode: true }
       ],
       tableColumn2: [
-        { type: 'index', title: '序号', width: 280, treeNode: true },
+        { type: 'seq', title: '序号', width: 280, treeNode: true },
         { field: 'name', title: 'Name' },
         {
           title: '基本信息',
@@ -132,7 +132,7 @@ export default {
             return {
               tableData: [],
               tableColumn: [
-                { type: 'index', title: '序号', width: 280, treeNode: true },
+                { type: 'seq', title: '序号', width: 280, treeNode: true },
                 { field: 'name', title: 'Name' },
                 {
                   title: '基本信息',

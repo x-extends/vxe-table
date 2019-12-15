@@ -18,7 +18,7 @@
       :footer-method="footerMethod"
       :data="tableData">
       <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-      <vxe-table-column type="index" width="60"></vxe-table-column>
+      <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
       <vxe-table-column field="role" title="Role"></vxe-table-column>
       <vxe-table-column field="age" title="Age"></vxe-table-column>
@@ -60,7 +60,7 @@ export default {
           :footer-method="footerMethod"
           :data="tableData">
           <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-          <vxe-table-column type="index" width="60"></vxe-table-column>
+          <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
           <vxe-table-column field="role" title="Role"></vxe-table-column>
           <vxe-table-column field="age" title="Age"></vxe-table-column>

@@ -20,7 +20,7 @@
       ref="xTable"
       height="300"
       :data="tableData">
-      <vxe-table-column type="index" width="60"></vxe-table-column>
+      <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
       <vxe-table-column field="nickname" title="Nickname" sortable></vxe-table-column>
       <vxe-table-column field="sex" title="Sex" sortable></vxe-table-column>
@@ -42,7 +42,7 @@
       highlight-hover-row
       height="300"
       :data="tableData">
-      <vxe-table-column type="index" width="60"></vxe-table-column>
+      <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
       <vxe-table-column field="nickname" title="Nickname" sortable></vxe-table-column>
       <vxe-table-column field="sex" title="Sex" sortable></vxe-table-column>
@@ -65,7 +65,7 @@
       height="300"
       :data="tableData"
       @sort-change="sortChangeEvent">
-      <vxe-table-column type="index" width="60"></vxe-table-column>
+      <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable :sort-method="sortNameMethod"></vxe-table-column>
       <vxe-table-column field="nickname" title="Nickname" sortable></vxe-table-column>
       <vxe-table-column field="sex" title="Sex" sortable></vxe-table-column>
@@ -90,7 +90,7 @@
       :data="tableData"
       :sort-config="{trigger: 'cell', defaultSort: {field: 'age', order: 'desc'}}"
       @sort-change="sortChangeEvent">
-      <vxe-table-column type="index" width="60"></vxe-table-column>
+      <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
       <vxe-table-column field="nickname" title="Nickname" sortable></vxe-table-column>
       <vxe-table-column field="sex" title="Sex" sortable></vxe-table-column>
@@ -130,7 +130,7 @@ export default {
           ref="xTable"
           height="300"
           :data="tableData">
-          <vxe-table-column type="index" width="60"></vxe-table-column>
+          <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
           <vxe-table-column field="nickname" title="Nickname" sortable></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" sortable></vxe-table-column>
@@ -156,7 +156,7 @@ export default {
           highlight-hover-row
           height="300"
           :data="tableData">
-          <vxe-table-column type="index" width="60"></vxe-table-column>
+          <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
           <vxe-table-column field="nickname" title="Nickname" sortable></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" sortable></vxe-table-column>
@@ -183,7 +183,7 @@ export default {
           height="300"
           :data="tableData"
           @sort-change="sortChangeEvent">
-          <vxe-table-column type="index" width="60"></vxe-table-column>
+          <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable :sort-method="sortNameMethod"></vxe-table-column>
           <vxe-table-column field="nickname" title="Nickname" sortable></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" sortable></vxe-table-column>
@@ -223,7 +223,7 @@ export default {
           :data="tableData"
           :sort-config="{trigger: 'cell', defaultSort: {field: 'age', order: 'desc'}}"
           @sort-change="sortChangeEvent">
-          <vxe-table-column type="index" width="60"></vxe-table-column>
+          <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
           <vxe-table-column field="nickname" title="Nickname" sortable></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" sortable></vxe-table-column>

@@ -30,7 +30,7 @@ export default {
       tableData: [],
       tableColumn: [
         { type: 'checkbox', width: 60 },
-        { type: 'index', title: 'Number', width: 80 },
+        { type: 'seq', title: 'Number', width: 80 },
         {
           field: 'name',
           title: 'Name',
@@ -83,7 +83,7 @@ export default {
               tableData: [],
               tableColumn: [
                 { type: 'checkbox', width: 60 },
-                { type: 'index', title: 'Number', width: 80 },
+                { type: 'seq', title: 'Number', width: 80 },
                 {
                   field: 'name',
                   title: 'Name',

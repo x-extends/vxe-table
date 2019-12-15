@@ -5,7 +5,7 @@
       <span class="red">注：目前无法支持中文字体，会乱码，可自行引入字体库解决</span>
     </p>
 
-    <vxe-toolbar setting :export="tableExport">
+    <vxe-toolbar custom :export="tableExport">
       <template v-slot:buttons>
         <vxe-button @click="exportDataEvent">导出数据</vxe-button>
       </template>
@@ -18,7 +18,7 @@
       :loading="loading"
       :data="tableData">
       <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-      <vxe-table-column type="index" width="60"></vxe-table-column>
+      <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
       <vxe-table-column field="role" title="Role"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -51,7 +51,7 @@ export default {
       },
       demoCodes: [
         `
-        <vxe-toolbar setting :export="tableExport">
+        <vxe-toolbar custom :export="tableExport">
           <template v-slot:buttons>
             <vxe-button @click="exportDataEvent">导出数据</vxe-button>
           </template>
@@ -64,7 +64,7 @@ export default {
           :loading="loading"
           :data="tableData">
           <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-          <vxe-table-column type="index" width="60"></vxe-table-column>
+          <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
           <vxe-table-column field="role" title="Role"></vxe-table-column>
           <vxe-table-column field="sex" title="app.body.label.sex"></vxe-table-column>

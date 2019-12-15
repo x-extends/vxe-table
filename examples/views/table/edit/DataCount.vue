@@ -9,7 +9,7 @@
       :data="tableData"
       :footer-method="footerMethod"
       :edit-config="{trigger: 'click', mode: 'cell'}">
-      <vxe-table-column type="index" width="60"></vxe-table-column>
+      <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="书名" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="amount" title="单价" :edit-render="{name: 'input', attrs: {type: 'number'}}"></vxe-table-column>
       <vxe-table-column field="number" title="数量" :edit-render="{name: 'input', attrs: {type: 'number'}}"></vxe-table-column>
@@ -50,7 +50,7 @@ export default {
           :data="tableData"
           :footer-method="footerMethod"
           :edit-config="{trigger: 'click', mode: 'cell'}">
-          <vxe-table-column type="index" width="60"></vxe-table-column>
+          <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="书名" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column field="amount" title="单价" :edit-render="{name: 'input', attrs: {type: 'number'}}"></vxe-table-column>
           <vxe-table-column field="number" title="数量" :edit-render="{name: 'input', attrs: {type: 'number'}}"></vxe-table-column>

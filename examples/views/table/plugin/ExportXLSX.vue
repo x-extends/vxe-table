@@ -2,7 +2,7 @@
   <div>
     <p class="tip">具体兼容请查看 <a class="link" href="https://www.npmjs.com/package/vxe-table-plugin-export-xlsx" target="_blank">vxe-table-plugin-export-xlsx</a> 插件的 API</p>
 
-    <vxe-toolbar setting :export="tableExport">
+    <vxe-toolbar custom :export="tableExport">
       <template v-slot:buttons>
         <vxe-button @click="exportDataEvent">导出数据</vxe-button>
       </template>
@@ -15,7 +15,7 @@
       :loading="loading"
       :data="tableData">
       <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-      <vxe-table-column type="index" width="60"></vxe-table-column>
+      <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
       <vxe-table-column field="role" title="Role"></vxe-table-column>
       <vxe-table-column field="sex" title="app.body.label.sex"></vxe-table-column>
@@ -48,7 +48,7 @@ export default {
       },
       demoCodes: [
         `
-        <vxe-toolbar setting :export="tableExport">
+        <vxe-toolbar custom :export="tableExport">
           <template v-slot:buttons>
             <vxe-button @click="exportDataEvent">导出数据</vxe-button>
           </template>
@@ -61,7 +61,7 @@ export default {
           :loading="loading"
           :data="tableData">
           <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-          <vxe-table-column type="index" width="60"></vxe-table-column>
+          <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
           <vxe-table-column field="role" title="Role"></vxe-table-column>
           <vxe-table-column field="sex" title="app.body.label.sex"></vxe-table-column>

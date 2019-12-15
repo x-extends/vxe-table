@@ -81,7 +81,6 @@
       highlight-hover-row
       class="checkbox-table"
       ref="xTable3"
-      :row-class-name="rowClassName"
       :data="tableData"
       :checkbox-config="{checkField: 'checked', trigger: 'row'}">
       <vxe-table-column type="checkbox" width="60"></vxe-table-column>
@@ -96,17 +95,16 @@
     <pre>
       <code class="xml">{{ demoCodes[4] }}</code>
       <code class="javascript">{{ demoCodes[5] }}</code>
-      <code class="scss">{{ demoCodes[6] }}</code>
     </pre>
 
-    <p class="tip">默认选中，通过指定 <table-api-link prop="checkRowKeys"/> 设置默认选中的行，指定默认值需要有 <table-api-link prop="row-id"/></p>
+    <p class="tip">默认选中，通过指定 <table-api-link prop="checkRowKeys"/> 设置默认选中的行，指定默认值需要有 <table-api-link prop="row-id"/>，通过 <table-api-link prop="highlight"/> 设置高亮选中行</p>
 
     <vxe-table
       border
       highlight-hover-row
       row-id="id"
       :data="tableData"
-      :checkbox-config="{checkRowKeys: ['2', '3']}"
+      :checkbox-config="{checkRowKeys: ['2', '3'], highlight: true}"
       :radio-config="{labelField: 'name'}">
       <vxe-table-column type="checkbox" width="60"></vxe-table-column>
       <vxe-table-column type="radio" width="300" title="Name"></vxe-table-column>
@@ -118,8 +116,8 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[7] }}</code>
-      <code class="javascript">{{ demoCodes[8] }}</code>
+      <code class="xml">{{ demoCodes[6] }}</code>
+      <code class="javascript">{{ demoCodes[7] }}</code>
     </pre>
 
     <p class="tip">通过 <table-api-link prop="checkStrictly"/> 设置父子节点不互相关联，启用后 <table-api-link prop="showHeader"/> 默认为 false</p>
@@ -147,8 +145,8 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[9] }}</code>
-      <code class="javascript">{{ demoCodes[10] }}</code>
+      <code class="xml">{{ demoCodes[8] }}</code>
+      <code class="javascript">{{ demoCodes[9] }}</code>
     </pre>
 
     <p class="tip">多选可单选同时使用</p>
@@ -181,7 +179,7 @@
       highlight-current-row
       :data="tableData"
       :radio-config="{labelField: 'role'}"
-      :checkbox-config="{labelField: 'name'}">
+      :checkbox-config="{labelField: 'name', highlight: true}">
       <vxe-table-column type="checkbox" title="Name"></vxe-table-column>
       <vxe-table-column type="radio" title="Role"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -311,7 +309,6 @@ export default {
           highlight-hover-row
           class="checkbox-table"
           ref="xTable3"
-          :row-class-name="rowClassName"
           :data="tableData"
           :checkbox-config="{checkField: 'checked', trigger: 'row'}">
           <vxe-table-column type="checkbox" width="60"></vxe-table-column>
@@ -330,19 +327,7 @@ export default {
           },
           created () {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 5)
-          },
-          methods: {
-            rowClassName ({ row }) {
-              return {
-                'row-checked': row.checked
-              }
-            }
           }
-        }
-        `,
-        `
-        .checkbox-table.vxe-table .vxe-body--row.row-checked {
-          background-color: #fbf8ec;
         }
         `,
         `
@@ -351,7 +336,7 @@ export default {
           highlight-hover-row
           row-id="id"
           :data="tableData"
-          :checkbox-config="{checkRowKeys: ['2', '3']}"
+          :checkbox-config="{checkRowKeys: ['2', '3'], highlight: true}"
           :radio-config="{labelField: 'name'}">
           <vxe-table-column type="checkbox" width="60"></vxe-table-column>
           <vxe-table-column type="radio" width="300" title="Name"></vxe-table-column>
@@ -438,7 +423,7 @@ export default {
           highlight-current-row
           :data="tableData"
           :radio-config="{labelField: 'role'}"
-          :checkbox-config="{labelField: 'name'}">
+          :checkbox-config="{labelField: 'name', highlight: true}">
           <vxe-table-column type="checkbox" title="Name"></vxe-table-column>
           <vxe-table-column type="radio" title="Role"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -482,11 +467,6 @@ export default {
     selectChangeEvent ({ checked, row }) {
       console.log(checked ? '勾选事件' : '取消事件')
     },
-    rowClassName ({ row }) {
-      return {
-        'row-checked': row.checked
-      }
-    },
     getSelectEvent1 () {
       let selectRecords = this.$refs.xTable1.getSelectRecords()
       this.$XModal.alert(selectRecords.length)
@@ -494,9 +474,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss">
-.checkbox-table.vxe-table .vxe-body--row.row-checked {
-  background-color: #fbf8ec;
-}
-</style>

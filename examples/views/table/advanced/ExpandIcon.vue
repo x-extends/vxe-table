@@ -19,7 +19,7 @@
       border
       :expand-config="{iconOpen: 'fa fa-minus-square', iconClose: 'fa fa-plus-square'}"
       :data="tableData">
-      <vxe-table-column type="index" width="60"></vxe-table-column>
+      <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column type="expand" title="Name">
         <template v-slot="{ row, rowIndex }">
           <span>{{ row.name }}</span>
@@ -82,7 +82,7 @@ export default {
           border
           :expand-config="{iconOpen: 'fa fa-minus-square', iconClose: 'fa fa-plus-square'}"
           :data="tableData">
-          <vxe-table-column type="index" width="60"></vxe-table-column>
+          <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column type="expand" title="Name">
             <template v-slot="{ row, rowIndex }">
               <span>{{ row.name }}</span>

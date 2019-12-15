@@ -36,7 +36,7 @@ export default {
         pageSizes: [10, 20, 50, 100, 200, 500]
       },
       tableColumn: [
-        { type: 'index', width: 60 },
+        { type: 'seq', width: 60 },
         { type: 'checkbox', width: 50 },
         { field: 'name', title: 'Name' },
         { field: 'nickname', title: 'Nickname' },
@@ -61,7 +61,7 @@ export default {
         import VXETablePluginShortcutKey from 'vxe-table-plugin-shortcut-key'
 
         VXETable.use(VXETablePluginShortcutKey, {
-          setting: {
+          custom: {
             'pager.prevPage': 'ArrowLeft',
             'pager.nextPage': 'ArrowRight'
           }
@@ -78,7 +78,7 @@ export default {
                 pageSize: 10
               },
               tableColumn: [
-                { type: 'index', width: 60 },
+                { type: 'seq', width: 60 },
                 { type: 'checkbox', width: 50 },
                 { field: 'name', title: 'Name' },
                 { field: 'nickname', title: 'Nickname' },

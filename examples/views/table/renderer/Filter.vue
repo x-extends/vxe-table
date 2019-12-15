@@ -11,7 +11,7 @@
     </p>
 
     <vxe-table border :data="tableData">
-      <vxe-table-column type="index" width="60"></vxe-table-column>
+      <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column
         field="nickname"
         title="Nickname"
@@ -150,7 +150,7 @@ export default {
         `,
         `
         <vxe-table border :data="tableData">
-          <vxe-table-column type="index" width="60"></vxe-table-column>
+          <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column
             field="nickname"
             title="Nickname"

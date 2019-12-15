@@ -10,7 +10,7 @@
       resizable
       show-overflow
       :data="tableData">
-      <vxe-table-column type="index" width="60"></vxe-table-column>
+      <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" :cell-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex" :cell-render="{name: 'select', options: sexList}"></vxe-table-column>
       <vxe-table-column field="age" title="Age" :cell-render="{name: 'input', attrs: {type: 'number'}}"></vxe-table-column>
@@ -44,7 +44,7 @@
       show-overflow
       :data="tableData"
       :edit-config="{trigger: 'click', mode: 'row'}">
-      <vxe-table-column type="index" width="60"></vxe-table-column>
+      <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" :edit-render="{name: 'input', type: 'visible'}"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'select', type: 'visible', options: sexList}"></vxe-table-column>
       <vxe-table-column field="age" title="Age" :edit-render="{name: 'input', type: 'visible', attrs: {type: 'number'}}"></vxe-table-column>
@@ -89,7 +89,7 @@ export default {
           resizable
           show-overflow
           :data="tableData">
-          <vxe-table-column type="index" width="60"></vxe-table-column>
+          <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" :cell-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" :cell-render="{name: 'select', options: sexList}"></vxe-table-column>
           <vxe-table-column field="age" title="Age" :cell-render="{name: 'input', attrs: {type: 'number'}}"></vxe-table-column>
@@ -124,7 +124,7 @@ export default {
           show-overflow
           :data="tableData"
           :edit-config="{trigger: 'click', mode: 'row'}">
-          <vxe-table-column type="index" width="60"></vxe-table-column>
+          <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" :edit-render="{name: 'input', type: 'visible'}"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'select', type: 'visible', options: sexList}"></vxe-table-column>
           <vxe-table-column field="age" title="Age" :edit-render="{name: 'input', type: 'visible', attrs: {type: 'number'}}"></vxe-table-column>

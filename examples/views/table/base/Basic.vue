@@ -14,7 +14,7 @@
       border="none"
       :align="allAlign"
       :data="tableData">
-      <vxe-table-column type="index" width="60"></vxe-table-column>
+      <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
       <vxe-table-column field="sex" title="app.body.label.sex"></vxe-table-column>
       <vxe-table-column field="age" title="app.body.label.age"></vxe-table-column>
@@ -33,7 +33,7 @@
       border
       highlight-hover-row
       :data="tableData">
-      <vxe-table-column type="index" title="序号" width="60"></vxe-table-column>
+      <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
       <vxe-table-column field="age" title="Age"></vxe-table-column>
@@ -71,7 +71,7 @@ export default {
           border="none"
           :align="allAlign"
           :data="tableData">
-          <vxe-table-column type="index" width="60"></vxe-table-column>
+          <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
           <vxe-table-column field="sex" title="app.body.label.sex"></vxe-table-column>
           <vxe-table-column field="age" title="app.body.label.age"></vxe-table-column>
@@ -95,7 +95,7 @@ export default {
           border
           highlight-hover-row
           :data="tableData">
-          <vxe-table-column type="index" title="序号" width="60"></vxe-table-column>
+          <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
           <vxe-table-column field="age" title="Age"></vxe-table-column>

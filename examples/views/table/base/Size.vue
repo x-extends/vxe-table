@@ -7,7 +7,7 @@
 
     <vxe-table
       :data="tableData">
-      <vxe-table-column type="index" width="60"></vxe-table-column>
+      <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column type="radio" width="60"></vxe-table-column>
       <vxe-table-column type="checkbox" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -29,7 +29,7 @@
     <vxe-table
       size="medium"
       :data="tableData">
-      <vxe-table-column type="index" width="60"></vxe-table-column>
+      <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column type="radio" width="60"></vxe-table-column>
       <vxe-table-column type="checkbox" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -51,7 +51,7 @@
     <vxe-table
       size="small"
       :data="tableData">
-      <vxe-table-column type="index" width="60"></vxe-table-column>
+      <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column type="radio" width="60"></vxe-table-column>
       <vxe-table-column type="checkbox" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -73,7 +73,7 @@
     <vxe-table
       size="mini"
       :data="tableData">
-      <vxe-table-column type="index" width="60"></vxe-table-column>
+      <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column type="radio" width="60"></vxe-table-column>
       <vxe-table-column type="checkbox" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -103,7 +103,7 @@ export default {
         `
         <vxe-table
           :data="tableData">
-          <vxe-table-column type="index" width="60"></vxe-table-column>
+          <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" sortable></vxe-table-column>
           <vxe-table-column field="age" title="Age" :filters="[{value:'0',label:'女'},{value:'1',label:'男'}]"></vxe-table-column>
@@ -127,7 +127,7 @@ export default {
         <vxe-table
           size="medium"
           :data="tableData">
-          <vxe-table-column type="index" width="60"></vxe-table-column>
+          <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" sortable></vxe-table-column>
           <vxe-table-column field="age" title="Age" :filters="[{value:'0',label:'女'},{value:'1',label:'男'}]"></vxe-table-column>
@@ -151,7 +151,7 @@ export default {
         <vxe-table
           size="small"
           :data="tableData">
-          <vxe-table-column type="index" width="60"></vxe-table-column>
+          <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" sortable></vxe-table-column>
           <vxe-table-column field="age" title="Age" :filters="[{value:'0',label:'女'},{value:'1',label:'男'}]"></vxe-table-column>
@@ -175,7 +175,7 @@ export default {
         <vxe-table
           size="mini"
           :data="tableData">
-          <vxe-table-column type="index" width="60"></vxe-table-column>
+          <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" sortable></vxe-table-column>
           <vxe-table-column field="age" title="Age" :filters="[{value:'0',label:'女'},{value:'1',label:'男'}]"></vxe-table-column>

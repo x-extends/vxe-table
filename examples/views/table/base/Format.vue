@@ -5,7 +5,7 @@
     <vxe-table
       border
       :data="tableData">
-      <vxe-table-column type="index" width="60"></vxe-table-column>
+      <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
       <vxe-table-column field="sex" title="Sex" :formatter="formatterSex"></vxe-table-column>
       <vxe-table-column field="time" title="Time" :formatter="formatTime"></vxe-table-column>
@@ -27,7 +27,7 @@
     <vxe-table
       border
       :data="tableData">
-      <vxe-table-column type="index" width="60"></vxe-table-column>
+      <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="date" title="转日期" width="180" formatter="toDateString"></vxe-table-column>
       <vxe-table-column field="time" title="转日期格式" width="140" :formatter="['toDateString', 'yyyy-MM-dd']"></vxe-table-column>
       <vxe-table-column field="amount" title="格式化金额" formatter="commafy"></vxe-table-column>
@@ -77,7 +77,7 @@ export default {
         <vxe-table
           border
           :data="tableData">
-          <vxe-table-column type="index" width="60"></vxe-table-column>
+          <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" :formatter="formatterSex"></vxe-table-column>
           <vxe-table-column field="time" title="Time" :formatter="formatTime"></vxe-table-column>
@@ -119,7 +119,7 @@ export default {
         <vxe-table
           border
           :data="tableData">
-          <vxe-table-column type="index" width="60"></vxe-table-column>
+          <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="date" title="转日期" width="180" formatter="toDateString"></vxe-table-column>
           <vxe-table-column field="time" title="转日期格式" width="140" :formatter="['toDateString', 'yyyy-MM-dd']"></vxe-table-column>
           <vxe-table-column field="amount" title="格式化金额" formatter="commafy"></vxe-table-column>

@@ -38,7 +38,7 @@
       :loading="loading"
       :data="tableData"
       :customs.sync="columns2">
-      <vxe-table-column type="index" title="序号" width="60"></vxe-table-column>
+      <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
       <vxe-table-column field="role" title="Role"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -138,7 +138,7 @@ export default {
           :loading="loading"
           :data="tableData"
           :customs.sync="columns">
-          <vxe-table-column type="index" title="序号" width="60"></vxe-table-column>
+          <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
           <vxe-table-column field="role" title="Role"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>

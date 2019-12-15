@@ -15,7 +15,7 @@
         height="400"
         :sync-resize="selectTab === 'tab1'"
         :data="tableData">
-        <vxe-table-column type="index" width="60"></vxe-table-column>
+        <vxe-table-column type="seq" width="60"></vxe-table-column>
         <vxe-table-column field="name" title="Name"></vxe-table-column>
         <vxe-table-column field="sex" title="Sex"></vxe-table-column>
         <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
@@ -86,7 +86,7 @@ export default {
             height="400"
             :sync-resize="selectTab === 'tab1'"
             :data="tableData">
-            <vxe-table-column type="index" width="60"></vxe-table-column>
+            <vxe-table-column type="seq" width="60"></vxe-table-column>
             <vxe-table-column field="name" title="Name"></vxe-table-column>
             <vxe-table-column field="sex" title="Sex"></vxe-table-column>
             <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>

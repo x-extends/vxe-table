@@ -44,7 +44,7 @@
             height="auto"
             :sync-resize="value1"
             :data="tableData">
-            <vxe-table-column type="index" width="60"></vxe-table-column>
+            <vxe-table-column type="seq" width="60"></vxe-table-column>
             <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
             <vxe-table-column field="sex" title="app.body.label.sex"></vxe-table-column>
             <vxe-table-column field="age" title="app.body.label.age"></vxe-table-column>
@@ -88,7 +88,7 @@
             height="auto"
             :sync-resize="value4"
             :data="tableData">
-            <vxe-table-column type="index" width="60"></vxe-table-column>
+            <vxe-table-column type="seq" width="60"></vxe-table-column>
             <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
             <vxe-table-column field="sex" title="app.body.label.sex"></vxe-table-column>
             <vxe-table-column field="age" title="app.body.label.age"></vxe-table-column>
@@ -155,11 +155,11 @@ export default {
           { code: 'myBtn2', name: '按钮2' }
         ],
         refresh: true,
-        setting: true
+        custom: true
       },
       tableColumn: [
         { type: 'checkbox', width: 50 },
-        { type: 'index', width: 60 },
+        { type: 'seq', width: 60 },
         { field: 'name', title: 'Name' },
         { field: 'nickname', title: 'Nickname' },
         {
@@ -220,7 +220,7 @@ export default {
                 height="auto"
                 :sync-resize="value1"
                 :data="tableData">
-                <vxe-table-column type="index" width="60"></vxe-table-column>
+                <vxe-table-column type="seq" width="60"></vxe-table-column>
                 <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
                 <vxe-table-column field="sex" title="app.body.label.sex"></vxe-table-column>
                 <vxe-table-column field="age" title="app.body.label.age"></vxe-table-column>
@@ -264,7 +264,7 @@ export default {
                 height="auto"
                 :sync-resize="value4"
                 :data="tableData">
-                <vxe-table-column type="index" width="60"></vxe-table-column>
+                <vxe-table-column type="seq" width="60"></vxe-table-column>
                 <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
                 <vxe-table-column field="sex" title="app.body.label.sex"></vxe-table-column>
                 <vxe-table-column field="age" title="app.body.label.age"></vxe-table-column>
@@ -320,11 +320,11 @@ export default {
                   { code: 'myBtn2', name: '按钮2' }
                 ],
                 refresh: true,
-                setting: true
+                custom: true
               },
               tableColumn: [
                 { type: 'checkbox', width: 50 },
-                { type: 'index', width: 60 },
+                { type: 'seq', width: 60 },
                 { field: 'name', title: 'Name' },
                 { field: 'nickname', title: 'Nickname' },
                 {

@@ -28,7 +28,7 @@ export default {
   data () {
     return {
       tableColumn: [
-        { type: 'index', width: 50 },
+        { type: 'seq', width: 50 },
         {
           type: 'expand',
           width: 120,
@@ -94,7 +94,7 @@ export default {
           data () {
             return {
               tableColumn: [
-                { type: 'index', width: 50 },
+                { type: 'seq', width: 50 },
                 {
                   type: 'expand',
                   width: 120,

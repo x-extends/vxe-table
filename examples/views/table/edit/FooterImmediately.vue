@@ -21,7 +21,7 @@
       :footer-cell-class-name="footerCellClassName"
       :data="tableData"
       :edit-config="{trigger: 'click', mode: 'row'}">
-      <vxe-table-column type="index" width="60"></vxe-table-column>
+      <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="age1" title="Age" :edit-render="{name: 'input', immediate: true, events: {input: updateFooterEvent}}"></vxe-table-column>
       <vxe-table-column field="num6" title="Num" :edit-render="{name: 'input', immediate: true, events: {input: updateFooterEvent}}"></vxe-table-column>
@@ -65,7 +65,7 @@ export default {
           :footer-cell-class-name="footerCellClassName"
           :data="tableData"
           :edit-config="{trigger: 'click', mode: 'row'}">
-          <vxe-table-column type="index" width="60"></vxe-table-column>
+          <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column field="age1" title="Age" :edit-render="{name: 'input', immediate: true, events: {input: updateFooterEvent}}"></vxe-table-column>
           <vxe-table-column field="num6" title="Num" :edit-render="{name: 'input', immediate: true, events: {input: updateFooterEvent}}"></vxe-table-column>

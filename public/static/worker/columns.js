@@ -9,7 +9,7 @@ function mockColumns (size) {
     }
     if (index === 0) {
       colItem.width = 100
-      colItem.type = 'index'
+      colItem.type = 'seq'
       colItem.title = '序号'
     }
     if (index === 1) {

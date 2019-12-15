@@ -64,7 +64,7 @@ export default {
         { field: 'address', title: 'Address', minWidth: 300, showOverflow: true }
       ],
       toolbar: {
-        setting: true
+        custom: true
       },
       tableData: [],
       demoCodes: [
@@ -161,7 +161,7 @@ export default {
                 { field: 'address', title: 'Address', minWidth: 300, showOverflow: true }
               ],
               toolbar: {
-                setting: true
+                custom: true
               },
               tableData: []
             }

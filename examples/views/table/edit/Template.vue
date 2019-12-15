@@ -7,7 +7,7 @@
       show-overflow
       :data="tableData"
       :edit-config="{trigger: 'click', mode: 'cell'}">
-      <vxe-table-column type="index" width="60"></vxe-table-column>
+      <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}">
         <template v-slot:edit="{ row }">
           <input type="text" v-model="row.name" class="custom-input">
@@ -49,7 +49,7 @@ export default {
           show-overflow
           :data="tableData"
           :edit-config="{trigger: 'click', mode: 'cell'}">
-          <vxe-table-column type="index" width="60"></vxe-table-column>
+          <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}">
             <template v-slot:edit="{ row }">
               <input type="text" v-model="row.name" class="custom-input">

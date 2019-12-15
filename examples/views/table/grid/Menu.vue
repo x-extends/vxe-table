@@ -44,7 +44,7 @@ export default {
   data () {
     return {
       tableColumn: [
-        { type: 'index', width: 50 },
+        { type: 'seq', width: 50 },
         { field: 'name', title: 'app.body.label.name' },
         { field: 'age', title: 'app.body.label.age' },
         { field: 'date3', title: 'Date', showOverflow: true }
@@ -91,7 +91,7 @@ export default {
           data () {
             return {
               tableColumn: [
-                { type: 'index', width: 50 },
+                { type: 'seq', width: 50 },
                 { field: 'name', title: 'app.body.label.name' },
                 { field: 'age', title: 'app.body.label.age' },
                 { field: 'date3', title: 'Date', showOverflow: true }

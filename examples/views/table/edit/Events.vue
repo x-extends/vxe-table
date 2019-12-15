@@ -7,7 +7,7 @@
       resizable
       :data="tableData"
       :edit-config="{trigger: 'click', mode: 'cell'}">
-      <vxe-table-column type="index" width="60"></vxe-table-column>
+      <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" :edit-render="{name: 'input', events: {keydown: keydownEvent}}"></vxe-table-column>
       <vxe-table-column
         field="role"
@@ -42,7 +42,7 @@ export default {
           resizable
           :data="tableData"
           :edit-config="{trigger: 'click', mode: 'cell'}">
-          <vxe-table-column type="index" width="60"></vxe-table-column>
+          <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" :edit-render="{name: 'input', events: {keydown: keydownEvent}}"></vxe-table-column>
           <vxe-table-column
             field="role"

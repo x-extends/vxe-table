@@ -60,7 +60,7 @@ export default {
           border
           :context-menu="{body: {options: bodyMenus}}"
           :data="tableData">
-          <vxe-table-column type="index" width="60"></vxe-table-column>
+          <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column field="sex" title="sex"></vxe-table-column>
           <vxe-table-column field="age" title="Age"></vxe-table-column>

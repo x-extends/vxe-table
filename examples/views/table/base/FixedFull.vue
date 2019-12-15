@@ -8,7 +8,7 @@
       height="300"
       highlight-hover-row
       :data="tableData">
-      <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
+      <vxe-table-column type="seq" width="60" fixed="left"></vxe-table-column>
       <vxe-table-column field="name" title="Name" width="300"></vxe-table-column>
       <vxe-table-column field="role" title="Role" width="300"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex" width="300"></vxe-table-column>
@@ -36,7 +36,7 @@
       highlight-hover-row
       show-overflow
       :data="tableData">
-      <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
+      <vxe-table-column type="seq" width="60" fixed="left"></vxe-table-column>
       <vxe-table-column field="name" title="Name" width="300"></vxe-table-column>
       <vxe-table-column field="role" title="Role" width="300"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex" width="300"></vxe-table-column>
@@ -87,7 +87,7 @@ export default {
           height="300"
           highlight-hover-row
           :data="tableData">
-          <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
+          <vxe-table-column type="seq" width="60" fixed="left"></vxe-table-column>
           <vxe-table-column field="name" title="Name" width="300"></vxe-table-column>
           <vxe-table-column field="role" title="Role" width="300"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" width="300"></vxe-table-column>
@@ -119,7 +119,7 @@ export default {
           highlight-hover-row
           show-overflow
           :data="tableData">
-          <vxe-table-column type="index" width="60" fixed="left"></vxe-table-column>
+          <vxe-table-column type="seq" width="60" fixed="left"></vxe-table-column>
           <vxe-table-column field="name" title="Name" width="300"></vxe-table-column>
           <vxe-table-column field="role" title="Role" width="300"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" width="300"></vxe-table-column>

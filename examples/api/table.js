@@ -897,6 +897,15 @@ const apis = [
             enum: 'default（默认）,cell（点击单元格触发）,row（点击行触发）',
             defVal: 'default',
             list: []
+          },
+          {
+            name: 'highlight',
+            desc: '高亮选中行',
+            version: '2.7',
+            type: 'Boolean',
+            enum: '',
+            defVal: 'false',
+            list: []
           }
         ]
       },
@@ -1006,6 +1015,15 @@ const apis = [
             type: 'String',
             enum: 'default（默认）,cell（点击单元格触发）,row（点击行触发）',
             defVal: 'default',
+            list: []
+          },
+          {
+            name: 'highlight',
+            desc: '高亮选中行',
+            version: '2.7',
+            type: 'Boolean',
+            enum: '',
+            defVal: 'false',
             list: []
           }
         ]

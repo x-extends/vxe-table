@@ -30,7 +30,7 @@ export default {
   data () {
     return {
       tableColumn: [
-        { type: 'index', width: 60 },
+        { type: 'seq', width: 60 },
         { field: 'name', title: 'app.body.label.name' },
         { field: 'sex', title: 'app.body.label.sex' },
         { field: 'age', title: 'Age' },
@@ -59,7 +59,7 @@ export default {
           data () {
             return {
               tableColumn: [
-                { type: 'index', width: 60 },
+                { type: 'seq', width: 60 },
                 { field: 'name', title: 'app.body.label.name' },
                 { field: 'sex', title: 'app.body.label.sex' },
                 { field: 'age', title: 'Age' },
