@@ -246,11 +246,10 @@ export default {
               class: 'vxe-custom--option',
               on: customWrapperOns
             }, tableFullColumn.map(column => {
-              let { visible, own } = column
-              let headerTitle = UtilTools.getFuncText(own.title || own.label)
+              let headerTitle = column.getTitle()
               return headerTitle ? h('vxe-checkbox', {
                 props: {
-                  value: visible,
+                  value: column.visible,
                   disabled: customOpts.checkMethod ? !customOpts.checkMethod({ column }) : false
                 },
                 attrs: {

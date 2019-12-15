@@ -91,7 +91,9 @@ export default {
       impOpts: '导入选项',
       impConfirm: '导入',
       impModeCovering: '覆盖',
+      impCoveringTitle: '使用覆盖的方式将数据导入到表格中',
       impModeAppend: '追加',
+      impAppendTitle: '使用追加的方式将数据导入到表格中',
       expTitle: '导出参数设置',
       expName: '文件名',
       expNamePlaceholder: '请输入文件名',
@@ -105,9 +107,12 @@ export default {
       expColumn: '要导出的字段',
       expOpts: '导出选项',
       expOptHeader: '表头',
+      expHeaderTitle: '是否需要导出表头',
       expOptFooter: '表尾',
+      expFooterTitle: '是否需要导出表尾',
       expOptOriginal: '源(支持导入)',
       expOptOriginNotImp: '源(不支持导入)',
+      expOriginalTitle: '是否需要导出数据源，如果勾上则支持导入到表格中',
       expPrint: '打印',
       expConfirm: '导出'
     }

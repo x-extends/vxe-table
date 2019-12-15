@@ -3,6 +3,7 @@ export default {
   props: {
     value: Boolean,
     indeterminate: Boolean,
+    title: [String, Number],
     disabled: Boolean,
     name: String,
     size: String
@@ -13,13 +14,18 @@ export default {
     }
   },
   render (h) {
-    let { disabled, vSize, indeterminate, value } = this
+    let { disabled, title, vSize, indeterminate, value } = this
+    let attrs = {}
+    if (title) {
+      attrs.title = title
+    }
     return h('label', {
       class: ['vxe-checkbox', {
         [`size--${vSize}`]: vSize,
         'is--indeterminate': indeterminate,
         'is--disabled': disabled
-      }]
+      }],
+      attrs
     }, [
       h('input', {
         attrs: {
