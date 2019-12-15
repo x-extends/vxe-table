@@ -29,6 +29,8 @@ export default {
     },
     table: {
       emptyText: '暂无数据',
+      allTitle: '全选/取消',
+      seqTitle: '#',
       confirmFilter: '筛选',
       resetFilter: '重置',
       allFilter: '全部',
@@ -37,9 +39,6 @@ export default {
       filter: '对所选的列启用筛选',
       impSuccess: '导入成功',
       expSuccess: '导出成功'
-    },
-    column: {
-      seqTitle: '#'
     },
     grid: {
       selectOneRecord: '请至少选择一条记录！',

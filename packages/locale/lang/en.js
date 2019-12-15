@@ -29,6 +29,8 @@ export default {
     },
     table: {
       emptyText: 'No Data',
+      allTitle: 'Select all / cancel',
+      seqTitle: '#',
       confirmFilter: 'Confirm',
       resetFilter: 'Reset',
       allFilter: 'All',
@@ -37,9 +39,6 @@ export default {
       filter: 'Enable filtering on selected columns',
       impSuccess: 'Import success',
       expSuccess: 'Export success'
-    },
-    column: {
-      seqTitle: '#'
     },
     grid: {
       selectOneRecord: 'Please choose at least one piece of record!',

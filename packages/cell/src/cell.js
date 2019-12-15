@@ -252,7 +252,10 @@ export const Cell = {
           [`size--${vSize}`]: vSize,
           'is--disabled': options.attrs.disabled,
           'is--indeterminate': isIndeterminate
-        }]
+        }],
+        attrs: {
+          title: GlobalConfig.i18n('vxe.table.allTitle')
+        }
       }, [
         h('input', options),
         h('span', {

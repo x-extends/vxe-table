@@ -49,7 +49,7 @@ export default {
                 'is--indeterminate': filterStore.isIndeterminate
               }],
               attrs: {
-                title: GlobalConfig.i18n('vxe.table.allFilter')
+                title: GlobalConfig.i18n('vxe.table.allTitle')
               }
             }, [
               h('input', {
