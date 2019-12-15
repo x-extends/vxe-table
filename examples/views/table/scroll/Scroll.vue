@@ -12,6 +12,7 @@
       show-overflow
       highlight-hover-row
       height="300"
+      :sort-config="{trigger: 'cell'}"
       :data="tableData">
       <vxe-table-column type="seq" width="100"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
@@ -38,6 +39,7 @@
       show-overflow
       ref="xTable"
       height="300"
+      :sort-config="{trigger: 'cell'}"
       :optimization="{scrollX: {gt: 40}, scrollY: {gt: 200}}">
       <vxe-table-column type="seq" width="100"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
@@ -81,6 +83,7 @@ export default {
           show-overflow
           highlight-hover-row
           height="300"
+          :sort-config="{trigger: 'cell'}"
           :data="tableData">
           <vxe-table-column type="seq" width="100"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
@@ -109,6 +112,7 @@ export default {
           show-overflow
           ref="xTable"
           height="300"
+          :sort-config="{trigger: 'cell'}"
           :optimization="{scrollX: {gt: 40}, scrollY: {gt: 200}}">
           <vxe-table-column type="seq" width="100"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable></vxe-table-column>

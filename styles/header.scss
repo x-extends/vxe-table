@@ -19,6 +19,14 @@
 
 .vxe-header--column {
   position: relative;
+  user-select: none;
+  .vxe-edit-icon {
+    &.vxe-icon--edit-outline {
+      &:before {
+        background-color: $vxe-table-header-background-color;
+      }
+    }
+  }
   &.col--title-checked {
     background-color: $vxe-table-column-header-checked-background-color;
     .vxe-edit-icon {
@@ -36,7 +44,6 @@
     width: 0.85em;
     height: 1em;
     position: relative;
-    user-select: none;
     &:before {
       content: "*";
       position: absolute;
@@ -47,9 +54,6 @@
   .vxe-edit-icon {
     margin-right: 0.15em;
     vertical-align: middle;
-    &.vxe-icon--edit-outline {
-      font-size: 0.9em;
-    }
   }
   .vxe-resizable {
     position: absolute;
@@ -59,7 +63,6 @@
     height: 100%;
     text-align: center;
     z-index: 1;
-    user-select: none;
     cursor: col-resize;
     &.is--line {
       &:before,

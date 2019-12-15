@@ -439,13 +439,13 @@
     left: 0;
     width: 200px;
     &.scrolling--middle {
-      box-shadow: 4px 4px 6px rgba(0, 0, 0, 0.12);
+      box-shadow: 4px 3px 4px 0px rgba(0, 0, 0, 0.12);
     }
   }
   .vxe-table--fixed-right-wrapper {
     right: 0;
     &.scrolling--middle {
-      box-shadow: -4px 4px 6px rgba(0, 0, 0, 0.12);
+      box-shadow: -4px 3px 4px 0px rgba(0, 0, 0, 0.12);
     }
   }
   &:not(.b--style-none) {

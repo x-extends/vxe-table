@@ -256,7 +256,9 @@
 }
 
 .vxe-icon--edit-outline {
-  @extend %DefaultWidthHeight;
+  height: 0.88em;
+  width: 0.88em;
+  margin: 0 0.06em 0.12em 0.06em;
   border-radius: 0.2em;
   border-width: 0.1em;
   border-style: solid;
@@ -273,7 +275,7 @@
     @extend %PseudoClass;
     left: 0.15em;
     top: 0.12em;
-    width: 0.9em;
+    width: 0.8em;
     height: 0;
     border-radius: 0.2em;
     border-width: 0 0 0.15em 0;
