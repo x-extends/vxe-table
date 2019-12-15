@@ -173,12 +173,13 @@ export default {
                   let headerTitle = column.getTitle()
                   return h('li', {
                     class: {
-                      active: column.checked
+                      active: column.checked,
+                      disabled: column.disabled
                     },
                     attrs: {
                       title: headerTitle
                     },
-                    on: {
+                    on: column.disabled ? null : {
                       click: () => {
                         column.checked = !column.checked
                         this.checkStatus()
@@ -253,13 +254,15 @@ export default {
   methods: {
     checkStatus () {
       let columns = this.storeData.columns
-      this.isAll = this.storeData.columns.every(column => column.checked)
-      this.isIndeterminate = !this.isAll && columns.some(column => column.checked)
+      this.isAll = this.storeData.columns.every(column => column.disabled || column.checked)
+      this.isIndeterminate = !this.isAll && columns.some(column => !column.disabled && column.checked)
     },
     allColumnEvent () {
       let isAll = this.isAll
       this.storeData.columns.forEach(column => {
-        column.checked = isAll
+        if (!column.disabled) {
+          column.checked = isAll
+        }
       })
       this.checkStatus()
     },

@@ -56,14 +56,14 @@
     cursor: not-allowed;
     > input {
       &+.vxe-radio--icon {
-        border-color: $vxe-input-border-color;
-        background-color: $vxe-input-disabled-color;
+        border-color: $vxe-input-disabled-color;
+        background-color: $vxe-input-disabled-background-color;
         &:before {
           border-color: #c0c4cc;
           background-color: #c0c4cc;
         }
         &+.vxe-radio--label {
-          color: $vxe-input-border-color;
+          color: $vxe-input-disabled-color;
         }
       }
     }

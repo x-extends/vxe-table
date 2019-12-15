@@ -174,8 +174,7 @@
     border-radius: 4px;
     user-select: none;
     & > .vxe-checkbox {
-      padding: 5px 5px 5px 10px;
-      font-weight: 700;
+      padding: 5px 5px 5px 0.6em;
       display: block;
       background-color: #f8f8f9;
     }
@@ -189,25 +188,48 @@
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
-        font-size: 0.9em;
         cursor: pointer;
+        &:before {
+          content: "";
+          position: absolute;
+          height: 1.2em;
+          width: 1.2em;
+          top: 0.4em;
+          left: 0.6em;
+          border-radius: 0.2em;
+          border: 2px solid $vxe-input-border-color;
+        }
         &.active {
           color: $vxe-primary-color;
-          font-weight: 700;
           &:before {
+            border-color: $vxe-primary-color;
+            background-color: $vxe-primary-color;
+          }
+          &:after {
             content: "";
             position: absolute;
-            height: 0.66em;
+            height: 0.7em;
             width: 0.34em;
-            top: 0.5em;
-            left: 15px;
-            border-width: 0.1em;
-            border-style: solid;
-            border-color: inherit;
+            top: 0.6em;
+            left: 1em;
+            border: 2px solid #ffffff;
             border-left: 0;
             border-top: 0;
             -webkit-transform: rotate(45deg);
             transform: rotate(45deg);
+          }
+        }
+        &.disabled {
+          cursor: not-allowed;
+          color: $vxe-input-disabled-color;
+          &.active {
+            &:before {
+              border-color: $vxe-input-disabled-color;
+              background-color: $vxe-input-disabled-background-color;
+            }
+            &:after {
+              border-color: $vxe-input-disabled-color;
+            }
           }
         }
         &:hover {

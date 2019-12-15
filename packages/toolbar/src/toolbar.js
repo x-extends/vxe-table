@@ -529,6 +529,7 @@ export default {
       }
     },
     openExport (options) {
+      const customOpts = this.customOpts
       const comp = this.$grid || this.$table
       const { fullColumn } = comp.getTableColumn()
       const { footerData } = comp.getTableData()
@@ -552,6 +553,7 @@ export default {
       // 默认全部选中
       exportColumns.forEach(column => {
         column.checked = column.visible
+        column.disabled = customOpts.checkMethod ? !customOpts.checkMethod({ column }) : false
       })
       // 更新条件
       Object.assign(this.exportStore, {
