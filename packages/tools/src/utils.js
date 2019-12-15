@@ -69,10 +69,11 @@ class ColumnConfig {
       cellRender: _vm.cellRender,
       editRender: _vm.editRender,
       // 自定义参数
-      checked: false,
       params: _vm.params,
       // 渲染属性
       visible: XEUtils.isBoolean(_vm.visible) ? _vm.visible : true,
+      checked: false,
+      disabled: false,
       level: 1,
       rowSpan: 1,
       colSpan: 1,
