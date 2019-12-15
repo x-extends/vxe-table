@@ -42,7 +42,7 @@ export default {
       visible: false,
       contentVisible: false,
       modalTop: 0,
-      modalZindex: 0,
+      modalZindex: this.zIndex || UtilTools.nextZIndex(),
       zoomLocat: null,
       isFirst: true
     }
@@ -66,14 +66,11 @@ export default {
       this[visible ? 'open' : 'close']()
     }
   },
-  created () {
+  mounted () {
+    let { $listeners, events = {} } = this
     if (this.value) {
       this.open()
     }
-    this.modalZindex = this.zIndex || UtilTools.nextZIndex()
-  },
-  mounted () {
-    let { $listeners, events = {} } = this
     this.recalculate()
     if (this.escClosable) {
       GlobalEvent.on(this, 'keydown', this.handleGlobalKeydownEvent)
