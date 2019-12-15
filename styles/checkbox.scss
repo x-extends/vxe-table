@@ -15,7 +15,7 @@
       display: inline-block;
       width: 1em;
       height: 1em;
-      border: 1px solid $vxe-input-border-color;
+      border: 2px solid $vxe-input-border-color;
       background-color: #fff;
       vertical-align: middle;
       border-radius: 0.2em;
@@ -29,10 +29,10 @@
       background-color: $vxe-primary-color;
       border-color: $vxe-primary-color;
       &:before {
-        height: 0.68em;
+        height: 0.64em;
         width: 0.32em;
-        left: 0.28em;
-        top: 0.04em;
+        left: 0.24em;
+        bottom: 0.1em;
         border-width: 0.12em;
         border-style: solid;
         border-color: #fff;
@@ -55,10 +55,19 @@
             top: 50%;
             height: 0.15em;
             width: 100%;
-            transform: translateY(-50%) scale(.5);
+            transform: translateY(-50%) scale(.6);
             border: 0;
             background-color: #fff;
           }
+        }
+      }
+    }
+  }
+  &:not(.is--disabled) {
+    &:hover {
+      > input {
+        &+.vxe-checkbox--icon {
+          border-color: $vxe-primary-color;
         }
       }
     }

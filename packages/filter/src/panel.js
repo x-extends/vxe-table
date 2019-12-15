@@ -42,7 +42,7 @@ export default {
             'is--active': !filterStore.options.some(item => item.checked)
           }],
           attrs: {
-            title: GlobalConfig.i18n('vxe.table.allFilter')
+            title: GlobalConfig.i18n('vxe.table.allTitle')
           }
         }, [
           multiple

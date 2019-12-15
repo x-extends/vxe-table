@@ -182,7 +182,7 @@ export default {
                       }
                     }
                     // v3.0 废弃 type=index
-                  }, UtilTools.getFuncText(own.title || own.label || (type === 'seq' || type === 'index' ? GlobalConfig.i18n('vxe.column.seqTitle') : '')))
+                  }, UtilTools.getFuncText(own.title || own.label || (type === 'seq' || type === 'index' ? GlobalConfig.i18n('vxe.table.seqTitle') : '')))
                 }))
               ])
             ])

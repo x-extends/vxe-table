@@ -552,7 +552,7 @@ export default {
       })
       // 默认全部选中
       exportColumns.forEach(column => {
-        column.checked = true
+        column.checked = column.visible
       })
       // 更新条件
       Object.assign(this.exportStore, {

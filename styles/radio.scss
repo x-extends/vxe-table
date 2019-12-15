@@ -15,7 +15,7 @@
       display: inline-block;
       width: 1em;
       height: 1em;
-      border: 1px solid $vxe-input-border-color;
+      border: 2px solid $vxe-input-border-color;
       background-color: #fff;
       vertical-align: middle;
       border-radius: 50%;
@@ -32,14 +32,23 @@
         border-color: #fff;
         background-color: #fff;
         border-radius: 50%;
-        height: 0.4em;
-        width: 0.4em;
+        height: 0.3em;
+        width: 0.3em;
         top: 50%;
         left: 50%;
         transform: translate(-50%,-50%);
       }
       &+.vxe-radio--label {
         color: $vxe-primary-color;
+      }
+    }
+  }
+  &:not(.is--disabled) {
+    &:hover {
+      > input {
+        &+.vxe-radio--icon {
+          border-color: $vxe-primary-color;
+        }
       }
     }
   }

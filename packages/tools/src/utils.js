@@ -91,7 +91,7 @@ class ColumnConfig {
   }
   getTitle () {
     // 在 v3.0 中废弃 label、type=index
-    return UtilTools.getFuncText(this.own.title || this.own.label || (this.type === 'seq' || this.type === 'index' ? GlobalConfig.i18n('vxe.column.seqTitle') : ''))
+    return UtilTools.getFuncText(this.own.title || this.own.label || (this.type === 'seq' || this.type === 'index' ? GlobalConfig.i18n('vxe.table.seqTitle') : ''))
   }
   update (name, value) {
     // 不支持双向的属性
