@@ -276,13 +276,13 @@ export default {
                 on: {
                   click: this.confirmCustomEvent
                 }
-              }, '确认'),
+              }, GlobalConfig.i18n('vxe.toolbar.customConfirm')),
               h('button', {
                 class: 'btn--reset',
                 on: {
                   click: this.resetCustomEvent
                 }
-              }, '重置')
+              }, GlobalConfig.i18n('vxe.toolbar.customReset'))
             ])
           ])
         ]) : null
