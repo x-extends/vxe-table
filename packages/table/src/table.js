@@ -1393,9 +1393,9 @@ export default {
           let oRow = tableSourceData[rowIndex]
           if (oRow && row) {
             if (field) {
-              XEUtils.set(row, field, XEUtils.get(oRow, field))
+              XEUtils.set(row, field, XEUtils.clone(XEUtils.get(oRow, field), true))
             } else {
-              XEUtils.destructuring(row, oRow)
+              XEUtils.destructuring(row, XEUtils.clone(oRow, true))
             }
           }
         })
