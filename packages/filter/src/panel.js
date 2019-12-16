@@ -9,35 +9,36 @@ export default {
   },
   render (h) {
     let { filterStore, optimizeOpts } = this
+    let { column } = filterStore
+    let filterRender = column ? column.own.filterRender : null
+    let compConf = filterRender ? Renderer.get(filterRender.name) : null
     return h('div', {
-      class: ['vxe-table--filter-wrapper', 'filter--prevent-default', {
+      class: ['vxe-table--filter-wrapper', 'filter--prevent-default', compConf && compConf.className ? compConf.className : '', {
         't--animat': optimizeOpts.animat,
         'is--multiple': filterStore.multiple,
         'filter--active': filterStore.visible
       }],
       style: filterStore.style
     }, filterStore.visible ? [
-      h('ul', {
+      h('div', {
         class: 'vxe-table--filter-body'
-      }, this.renderOptions(h)),
+      }, this.renderOptions(h, filterRender, compConf)),
       this.renderFooter(h)
     ] : [])
   },
   methods: {
-    renderOptions (h) {
+    renderOptions (h, filterRender, compConf) {
       let { $parent: $table, filterStore } = this
       let { vSize } = $table
       let { args, column, multiple } = filterStore
-      let { slots, own } = column
-      let filterRender = own.filterRender
-      let compConf = filterRender ? Renderer.get(filterRender.name) : null
+      let { slots } = column
       if (slots && slots.filter) {
         return slots.filter.call($table, Object.assign({ $table, context: this }, args), h)
       } else if (compConf && compConf.renderFilter) {
         return compConf.renderFilter.call($table, h, filterRender, args, this)
       }
       let filterRens = [
-        h('li', {
+        h('div', {
           class: ['vxe-table--filter-option', {
             'is--active': !filterStore.options.some(item => item.checked)
           }],

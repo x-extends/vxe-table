@@ -185,16 +185,7 @@ export default {
      * 获取已删除的数据
      */
     _getRemoveRecords () {
-      const removeList = this.editStore.removeList
-      const removeRecords = []
-      if (removeList.length) {
-        this.tableFullData.forEach(row => {
-          if (removeList.indexOf(row) > -1) {
-            removeRecords.push(row)
-          }
-        })
-      }
-      return removeRecords
+      return this.editStore.removeList
     },
     /**
      * 获取更新数据
