@@ -11,3 +11,148 @@
 .cmplex-filter .f-footer {
   text-align: center;
 }
+
+.vxe-table--filter-wrapper.myexcel-filter-render .vxe-table--filter-body {
+  overflow: initial;
+  max-height: initial;
+  padding: 0;
+}
+.myexcel-filter {
+  user-select: none;
+}
+.myexcel-filter .me-list .me-group {
+  position: relative;
+  margin: 0;
+  padding: 0;
+}
+.myexcel-filter .me-list .me-group:after {
+  content: "";
+  position: absolute;
+  width: 190px;
+  right: 0;
+  bottom: 0;
+  border-bottom: 1px solid #E2E4E7;
+}
+.myexcel-filter .me-list .me-group .me-menu {
+  position: relative;
+  padding: 4px 20px 4px 30px;
+  cursor: pointer;
+}
+.myexcel-filter .me-list .me-group .me-menu:hover {
+  background-color: #C5C5C5;
+}
+.myexcel-filter .me-list .me-group .me-menu-left-icon {
+  position: absolute;
+  left: 10px;
+  top: 6px;
+}
+.myexcel-filter .me-list .me-group .me-menu-right-icon {
+  position: absolute;
+  right: 10px;
+  top: 6px;
+}
+.myexcel-filter .me-list .me-group .me-menu:hover .me-child-list {
+  display: block;
+}
+.myexcel-filter .me-list .me-group .me-menu .me-child-list {
+  display: none;
+  position: absolute;
+  top: 0;
+  right: -120px;
+  width: 120px;
+  background-color: #fff;
+  border: 1px solid #DADCE0;
+  box-shadow: 3px 3px 4px -2px rgba(0, 0, 0, 0.6);
+}
+.myexcel-filter .me-list .me-group .me-menu .me-child-group {
+  position: relative;
+}
+.myexcel-filter .me-list .me-group .me-menu .me-child-group:after {
+  content: "";
+  position: absolute;
+  width: 90px;
+  right: 0;
+  bottom: 0;
+  border-bottom: 1px solid #E2E4E7;
+}
+.myexcel-filter .me-list .me-group .me-menu .me-child-group > .me-child-menu {
+  padding: 4px 20px 4px 30px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.myexcel-filter .me-list .me-group .me-menu .me-child-group > .me-child-menu:hover {
+  background-color: #C5C5C5;
+}
+.myexcel-filter .me-search {
+  padding: 0 10px 0 30px;
+}
+.myexcel-filter .me-search .header {
+  position: relative;
+  padding: 5px 0;
+}
+.myexcel-filter .me-search .header > input {
+  border: 1px solid #ABABAB;
+  padding: 0 20px 0 2px;
+  width: 200px;
+  height: 22px;
+  line-height: 22px;
+}
+.myexcel-filter .me-search .header > .me-search-icon {
+  position: absolute;
+  right: 5px;
+  top: 10px;
+}
+.myexcel-filter .me-search .body {
+  margin: 0;
+  border: 1px solid #E2E4E7;
+  padding: 2px 10px;
+  overflow: auto;
+  height: 140px;
+}
+.myexcel-filter .me-search .body .me-search-empty {
+  text-align: center;
+  padding-top: 20px;
+}
+.myexcel-filter .me-search .body .me-val-item {
+  cursor: pointer;
+  padding: 2px 0;
+}
+.myexcel-filter .me-search .body .me-val-item .me-val-icon {
+  width: 16px;
+}
+.myexcel-filter .me-footer {
+  text-align: right;
+  padding: 10px 10px 10px 0;
+}
+.myexcel-filter .me-footer button {
+  padding: 0 15px;
+  margin-left: 15px;
+}
+.me-popup .me-popup-filter {
+  padding-left: 30px;
+}
+.me-popup .me-popup-filter > select {
+  height: 22px;
+  line-height: 22px;
+  width: 100px;
+}
+.me-popup .me-popup-filter > input {
+  height: 22px;
+  line-height: 22px;
+  margin-left: 10px;
+  width: 400px;
+}
+.me-popup .me-popup-describe {
+  padding: 20px 0 10px 0;
+}
+.me-popup .me-popup-concat {
+  padding-left: 50px;
+}
+.me-popup .me-popup-footer {
+  text-align: right;
+}
+.me-popup .me-popup-footer button {
+  padding: 0 15px;
+  margin-left: 15px;
+}

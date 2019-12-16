@@ -9,48 +9,49 @@ export default {
   },
   render (h) {
     let { filterStore, optimizeOpts } = this
+    let { column } = filterStore
+    let filterRender = column ? column.own.filterRender : null
+    let compConf = filterRender ? Renderer.get(filterRender.name) : null
     return h('div', {
-      class: ['vxe-table--filter-wrapper filter--prevent-default', {
+      class: ['vxe-table--filter-wrapper', 'filter--prevent-default', compConf && compConf.className ? compConf.className : '', {
         't--animat': optimizeOpts.animat,
         'is--multiple': filterStore.multiple,
         'filter--active': filterStore.visible
       }],
       style: filterStore.style
     }, filterStore.visible ? [
-      h('ul', {
-        class: ['vxe-table--filter-body']
-      }, this.renderOptions(h)),
+      h('div', {
+        class: 'vxe-table--filter-body'
+      }, this.renderOptions(h, filterRender, compConf)),
       this.renderFooter(h)
     ] : [])
   },
   methods: {
-    renderOptions (h) {
-      let { $parent: $table, filterStore, filterCheckAllEvent, changeRadioOption, changeMultipleOption } = this
+    renderOptions (h, filterRender, compConf) {
+      let { $parent: $table, filterStore } = this
       let { vSize } = $table
       let { args, column, multiple } = filterStore
-      let { slots, own } = column
-      let filterRender = own.filterRender
-      let compConf = filterRender ? Renderer.get(filterRender.name) : null
+      let { slots } = column
       if (slots && slots.filter) {
         return slots.filter.call($table, Object.assign({ $table, context: this }, args), h)
       } else if (compConf && compConf.renderFilter) {
         return compConf.renderFilter.call($table, h, filterRender, args, this)
       }
       let filterRens = [
-        h('li', {
+        h('div', {
           class: ['vxe-table--filter-option', {
             'is--active': !filterStore.options.some(item => item.checked)
-          }]
+          }],
+          attrs: {
+            title: GlobalConfig.i18n('vxe.table.allTitle')
+          }
         }, [
           multiple
             ? h('label', {
               class: ['vxe-checkbox', {
                 [`size--${vSize}`]: vSize,
                 'is--indeterminate': filterStore.isIndeterminate
-              }],
-              attrs: {
-                title: GlobalConfig.i18n('vxe.table.allTitle')
-              }
+              }]
             }, [
               h('input', {
                 attrs: {
@@ -60,16 +61,14 @@ export default {
                   checked: filterStore.isAllSelected
                 },
                 on: {
-                  change (evnt) {
-                    filterCheckAllEvent(evnt, evnt.target.checked)
-                  }
+                  change: evnt => this.filterCheckAllEvent(evnt, evnt.target.checked)
                 }
               }),
               h('span', {
-                class: ['vxe-checkbox--icon']
+                class: 'vxe-checkbox--icon'
               }),
               h('span', {
-                class: ['vxe-checkbox--label']
+                class: 'vxe-checkbox--label'
               }, GlobalConfig.i18n('vxe.table.allFilter'))
             ])
             : h('span', {
@@ -105,9 +104,7 @@ export default {
                     checked: item.checked
                   },
                   on: {
-                    change (evnt) {
-                      changeMultipleOption(evnt, evnt.target.checked, item)
-                    }
+                    change: evnt => this.changeMultipleOption(evnt, evnt.target.checked, item)
                   }
                 }),
                 h('span', {
@@ -120,9 +117,7 @@ export default {
               : h('span', {
                 class: 'vxe-table--filter-label',
                 on: {
-                  click (evnt) {
-                    changeRadioOption(evnt, !item.checked, item)
-                  }
+                  click: evnt => this.changeRadioOption(evnt, !item.checked, item)
                 }
               }, item.label)
           ])
@@ -136,7 +131,7 @@ export default {
       let filterRender = column.own.filterRender
       let compConf = filterRender ? Renderer.get(filterRender.name) : null
       return multiple && (!compConf || compConf.isFooter !== false) ? h('div', {
-        class: ['vxe-table--filter-footer']
+        class: 'vxe-table--filter-footer'
       }, [
         h('button', {
           class: {

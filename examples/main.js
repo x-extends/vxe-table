@@ -26,7 +26,7 @@ function mockData () {
       id: index,
       name: nameList[index % 10] + nameList[index % 5] + index,
       nickname: nickList[index % 10] + nickList[index % 5] + index,
-      role: index % 2 === 0 ? '前端' : '后端',
+      role: index % 5 === 0 ? '前端' : index % 4 === 0 ? '后端' : index % 3 === 0 ? '测试' : '项目经理',
       role1: index === 1 ? '1' : '',
       key: 'home.label.key' + Math.max(0, index % 2 === 0 ? index - 1 : index),
       language: index % 2 === 0 ? 'zh_CN' : 'en_US',
