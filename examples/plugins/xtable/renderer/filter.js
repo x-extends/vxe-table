@@ -1,5 +1,5 @@
 import VXETable from '../../../../packages/v-x-e-table'
-import XEUtils from 'xe-utils'
+import XEUtils from 'xe-utils/methods/xe-utils'
 
 // 创建一个支持输入的筛选器（仅用于简单示例，实际开发中应该封装成一个组件，不应该把复杂的渲染逻辑写在渲染器中）
 VXETable.renderer.add('MyFilter', {
@@ -141,7 +141,7 @@ VXETable.renderer.add('MyExcelFilter', {
             </li>
           </ul>
           <ul class="me-group">
-            <li class="me-menu">
+            <li class="me-menu" onClick={ e => { context.resetFilter() } }>
               <span>清除筛选</span>
             </li>
             <li class="me-menu">
@@ -155,39 +155,42 @@ VXETable.renderer.add('MyExcelFilter', {
                       {
                         cList.map(cItem => {
                           return <li class="me-child-menu" onClick={ e => {
-                            data.fType = 'and'
+                            data.fMode = 'and'
+                            data.f1Val = ''
+                            data.f2Val = ''
                             switch (cItem.value) {
                               case 'equal':
-                                data.f1 = '1'
-                                data.f2 = ''
+                                data.f1Type = '1'
+                                data.f2Type = ''
                                 break
                               case 'ne':
-                                data.f1 = '2'
-                                data.f2 = ''
+                                data.f1Type = '2'
+                                data.f2Type = ''
                                 break
                               case 'greater':
-                                data.f1 = '3'
-                                data.f2 = ''
+                                data.f1Type = '3'
+                                data.f2Type = ''
                                 break
                               case 'ge':
-                                data.f1 = '4'
-                                data.f2 = ''
+                                data.f1Type = '4'
+                                data.f2Type = ''
                                 break
                               case 'less':
-                                data.f1 = '5'
-                                data.f2 = ''
+                                data.f1Type = '5'
+                                data.f2Type = ''
                                 break
                               case 'le':
-                                data.f1 = '6'
-                                data.f2 = ''
+                                data.f1Type = '6'
+                                data.f2Type = ''
                                 break
                               case 'between':
-                                data.f1 = '4'
-                                data.f2 = '6'
+                                data.f1Type = '4'
+                                data.f2Type = '6'
                                 break
                               default:
                                 return
                             }
+                            $table.closeFilter()
                             $table.$XModal({
                               title: '自定义自动筛选方式',
                               width: 600,
@@ -197,34 +200,38 @@ VXETable.renderer.add('MyExcelFilter', {
                                     <div class="me-popup">
                                       <div class="me-popup-title">显示行</div>
                                       <div class="me-popup-filter me-popup-f1">
-                                        <select v-model={ data.f1 }>
+                                        <select v-model={ data.f1Type }>
                                           {
                                             allCaseList.map(cItem => {
                                               return <option value={ cItem.value }>{ cItem.label }</option>
                                             })
                                           }
                                         </select>
-                                        <input />
+                                        <input v-model={ data.f1Val }/>
                                       </div>
                                       <div class="me-popup-concat">
-                                        <vxe-radio v-model={ data.fType } label="and" name="ftype">与</vxe-radio>
-                                        <vxe-radio v-model={ data.fType } label="or" name="ftype">或</vxe-radio>
+                                        <vxe-radio v-model={ data.fMode } label="and" name="fmode">与</vxe-radio>
+                                        <vxe-radio v-model={ data.fMode } label="or" name="fmode">或</vxe-radio>
                                       </div>
                                       <div class="me-popup-filter me-popup-f2">
-                                        <select v-model={ data.f2 }>
+                                        <select v-model={ data.f2Type }>
                                           {
                                             allCaseList.map(cItem => {
                                               return <option value={ cItem.value }>{ cItem.label }</option>
                                             })
                                           }
                                         </select>
-                                        <input />
+                                        <input v-model={ data.f2Val }/>
                                       </div>
                                       <div class="me-popup-describe">
                                         <span>可用 ? 代表单个字符<br/>用 * 代表任意多个字符</span>
                                       </div>
                                       <div class="me-popup-footer">
-                                        <button onClick={ e => { $modal.close() } }>确认</button>
+                                        <button onClick={ e => {
+                                          item.checked = true
+                                          $modal.close()
+                                          context.confirmFilter()
+                                        } }>确认</button>
                                         <button onClick={ e => { $modal.close() } }>取消</button>
                                       </div>
                                     </div>
@@ -257,7 +264,7 @@ VXETable.renderer.add('MyExcelFilter', {
                     data.vals = sValues
                   }
                 } }>
-                  <i class={ `${isAll ? 'fa fa-check-square-o me-val-icon' : 'fa fa-square-o me-val-icon'}` } ></i>
+                  <i class={ isAll ? 'fa fa-check-square-o me-val-icon' : 'fa fa-square-o me-val-icon' } ></i>
                   <span>(全选)</span>
                 </li>
                 {
@@ -270,7 +277,7 @@ VXETable.renderer.add('MyExcelFilter', {
                         data.vals.splice(vIndex, 1)
                       }
                     } }>
-                      <i class={ `${data.vals.indexOf(val) === -1 ? 'fa fa-square-o me-val-icon' : 'fa fa-check-square-o me-val-icon'}` } ></i>
+                      <i class={ data.vals.indexOf(val) === -1 ? 'fa fa-square-o me-val-icon' : 'fa fa-check-square-o me-val-icon' } ></i>
                       <span>{ val }</span>
                     </li>
                   })
@@ -282,7 +289,12 @@ VXETable.renderer.add('MyExcelFilter', {
           }
         </div>
         <div class="me-footer">
-          <button onClick={ e => { context.confirmFilter() } }>确认</button>
+          <button onClick={ e => {
+            data.f1 = ''
+            data.f2 = ''
+            item.checked = true
+            context.confirmFilter()
+          } }>确认</button>
           <button onClick={ e => { context.resetFilter() } }>重置</button>
         </div>
       </div>
@@ -291,22 +303,35 @@ VXETable.renderer.add('MyExcelFilter', {
   // 筛选方法
   filterMethod ({ option, row, column }) {
     let cellValue = XEUtils.get(row, column.property)
-    let { type, name, isCase } = option.data
+    let { vals, f1Type, f1Val, fMode, f2Type, f2Val } = option.data
     if (cellValue) {
-      if (isCase) {
-        cellValue = cellValue.toLowerCase()
-        name = name.toLowerCase()
-      }
-      switch (type) {
-        case 'has':
-          return cellValue.indexOf(name) > -1
-        case 'eq':
-          /* eslint-disable eqeqeq */
-          return cellValue == name
-        case 'gt':
-          return cellValue > name
-        case 'lt':
-          return cellValue < name
+      if (f1Type || f2Type) {
+        // 筛选条件
+        let f1Rest = true
+        let f2Rest = true
+        switch (f1Type) {
+          case '1':
+            f1Rest = cellValue == f1Val
+            break
+          case '2':
+            f1Rest = cellValue != f1Val
+            break
+        }
+        switch (f2Type) {
+          case '1':
+            f2Rest = cellValue == f2Val
+            break
+          case '2':
+            f2Rest = cellValue != f2Val
+            break
+        }
+        if (fMode === 'and') {
+          return f1Rest && f2Rest
+        }
+        return f1Rest || f2Rest
+      } else if (vals.length) {
+        // 确定
+        return vals.includes(cellValue)
       }
     }
     return false
