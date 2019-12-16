@@ -209,17 +209,17 @@ export default {
             class: this.isRefresh ? (refreshOpts.iconLoading || GlobalConfig.icon.refreshLoading) : (refreshOpts.icon || GlobalConfig.icon.refresh)
           })
         ]) : null,
-        zoom && this.$grid ? h('div', {
+        zoom && $grid ? h('div', {
           class: 'vxe-tools--operate-btn',
           attrs: {
-            title: GlobalConfig.i18n(`vxe.toolbar.zoom${this.$grid.isMaximized() ? 'Out' : 'In'}`)
+            title: GlobalConfig.i18n(`vxe.toolbar.zoom${$grid.isMaximized() ? 'Out' : 'In'}`)
           },
           on: {
-            click: () => this.$grid.zoom()
+            click: () => $grid.zoom()
           }
         }, [
           h('i', {
-            class: this.$grid.isMaximized() ? (zoomOpts.iconOut || GlobalConfig.icon.zoomOut) : (zoomOpts.iconIn || GlobalConfig.icon.zoomIn)
+            class: $grid.isMaximized() ? (zoomOpts.iconOut || GlobalConfig.icon.zoomOut) : (zoomOpts.iconIn || GlobalConfig.icon.zoomIn)
           })
         ]) : null,
         custom || setting ? h('div', {
@@ -242,29 +242,48 @@ export default {
           h('div', {
             class: 'vxe-custom--option-wrapper'
           }, [
-            h('div', {
+            h('ul', {
               class: 'vxe-custom--option',
               on: customWrapperOns
             }, tableFullColumn.map(column => {
               let headerTitle = column.getTitle()
-              return headerTitle ? h('vxe-checkbox', {
-                props: {
-                  value: column.visible,
-                  disabled: customOpts.checkMethod ? !customOpts.checkMethod({ column }) : false
+              let isDisabled = customOpts.checkMethod ? !customOpts.checkMethod({ column }) : false
+              return headerTitle ? h('li', {
+                class: {
+                  'is--active': column.visible,
+                  'is--disabled': isDisabled
                 },
                 attrs: {
                   title: headerTitle
                 },
                 on: {
-                  change: value => {
-                    column.visible = value
-                    if ((custom || setting) && customOpts.immediate) {
-                      this.handleCustoms()
+                  click: () => {
+                    if (!isDisabled) {
+                      column.visible = !column.visible
+                      if ((custom || setting) && customOpts.immediate) {
+                        this.handleCustoms()
+                      }
                     }
                   }
                 }
               }, headerTitle) : null
-            }))
+            })),
+            customOpts.isFooter === false ? null : h('div', {
+              class: 'vxe-custom--footer'
+            }, [
+              h('button', {
+                class: 'btn--confirm',
+                on: {
+                  click: this.confirmCustomEvent
+                }
+              }, '确认'),
+              h('button', {
+                class: 'btn--reset',
+                on: {
+                  click: this.resetCustomEvent
+                }
+              }, '重置')
+            ])
           ])
         ]) : null
       ]),
@@ -406,6 +425,18 @@ export default {
     },
     resetResizable () {
       this.updateResizable(this)
+    },
+    confirmCustomEvent () {
+      this.closeCustom()
+    },
+    resetCustomEvent () {
+      this.tableFullColumn.forEach(column => {
+        column.visible = true
+        column.resizeWidth = 0
+      })
+      this.resetCustoms()
+      this.resetResizable()
+      this.closeCustom()
     },
     updateResizable (isReset) {
       let comp = this.$grid || this.$table

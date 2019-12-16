@@ -31,7 +31,7 @@ const apis = [
         version: '',
         type: 'Array',
         enum: 'PrevJump,PrevPage,Number,JumpNumber,NextPage,NextJump,Sizes,Jump,FullJump,PageCount,Total',
-        defVal: '[PrevPage,NextPage,FullJump,Sizes,Total]',
+        defVal: '默认 [PrevPage,NextPage,FullJump,Sizes,Total]，继承 setup.pager.layouts',
         list: []
       },
       {
@@ -49,7 +49,7 @@ const apis = [
         version: '',
         type: 'Number',
         enum: '',
-        defVal: '10',
+        defVal: '默认 10，继承 setup.pager.pageSize',
         list: []
       },
       {
@@ -67,7 +67,7 @@ const apis = [
         version: '',
         type: 'Number',
         enum: '',
-        defVal: '7',
+        defVal: '默认 7，继承 setup.pager.pagerCount',
         list: []
       },
       {
@@ -76,7 +76,7 @@ const apis = [
         version: '',
         type: 'Array',
         enum: '',
-        defVal: '[10,15,20,50,100]',
+        defVal: '默认 [10,15,20,50,100]，继承 setup.pager.pageSizes',
         list: []
       },
       {
@@ -85,7 +85,7 @@ const apis = [
         version: '',
         type: 'String',
         enum: 'left（左对其）, center（居中对其）, right（右对齐）',
-        defVal: 'right',
+        defVal: '默认 right，继承 setup.pager.align',
         list: []
       },
       {
@@ -94,7 +94,7 @@ const apis = [
         version: '2.6.14',
         type: 'Boolean',
         enum: '',
-        defVal: 'false',
+        defVal: '默认 false，继承 setup.pager.border',
         list: []
       },
       {
@@ -103,7 +103,7 @@ const apis = [
         version: '',
         type: 'Boolean',
         enum: '',
-        defVal: 'false',
+        defVal: '默认 false，继承 setup.pager.background',
         list: []
       },
       {
@@ -112,7 +112,7 @@ const apis = [
         version: '1.15.12',
         type: 'Boolean',
         enum: '',
-        defVal: 'false',
+        defVal: '默认 false，继承 setup.pager.perfect',
         list: []
       },
       {

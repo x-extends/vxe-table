@@ -2003,7 +2003,7 @@ export default {
       return tableWidth
     },
     resetResizable () {
-      this.visibleColumn.forEach(column => {
+      this.tableFullColumn.forEach(column => {
         column.resizeWidth = 0
       })
       if (this.$toolbar) {

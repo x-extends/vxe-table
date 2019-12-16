@@ -123,9 +123,9 @@ const GlobalConfig = {
     // resizable: {
     //   storage: false
     // },
-    // export: false,
     // custom: {
-    //   storage: false
+    //   storage: false,
+    //   isFooter: true
     // },
     // buttons: []
   },
