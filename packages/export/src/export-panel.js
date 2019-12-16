@@ -173,16 +173,18 @@ export default {
                   let headerTitle = column.getTitle()
                   return h('li', {
                     class: {
-                      active: column.checked,
-                      disabled: column.disabled
+                      'is--active': column.checked,
+                      'is--disabled': column.disabled
                     },
                     attrs: {
                       title: headerTitle
                     },
-                    on: column.disabled ? null : {
+                    on: {
                       click: () => {
-                        column.checked = !column.checked
-                        this.checkStatus()
+                        if (!column.disabled) {
+                          column.checked = !column.checked
+                          this.checkStatus()
+                        }
                       }
                     }
                   }, headerTitle)

@@ -99,7 +99,8 @@
               storage: false
             },
             custom: {
-              storage: false
+              storage: false,
+              isFooter: true
             },
             buttons: []
           },

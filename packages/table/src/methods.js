@@ -1002,7 +1002,7 @@ const Methods = {
    * 如果已关联工具栏，则会同步更新
    */
   resetResizable () {
-    this.visibleColumn.forEach(column => {
+    this.tableFullColumn.forEach(column => {
       column.resizeWidth = 0
     })
     if (this.$toolbar) {

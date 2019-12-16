@@ -33,9 +33,15 @@
   }
   &.size--small {
     height: 48px;
+    .vxe-custom--option-wrapper {
+      font-size: 13px;
+    }
   }
   &.size--mini {
     height: 46px;
+    .vxe-custom--option-wrapper {
+      font-size: 12px;
+    }
   }
   &.size--small,
   &.size--mini {
@@ -94,38 +100,95 @@
     text-align: left;
     background-color: #fff;
     z-index: 19;
-    max-height: 210px;
-    overflow: auto;
+    border: 1px solid $vxe-table-border-color;
+    border-radius: 2px;
     box-shadow: 3px 3px 4px -2px rgba(0, 0, 0, 0.6);
     .vxe-custom--option {
-      padding: 5px 0;
-      border: 1px solid $vxe-table-border-color;
-      border-radius: 2px;
-      // font-weight: 700;
-      font-size: 14px;
-      > .vxe-checkbox {
-        display: block;
-        padding: 5px 10px;
-        margin: 0;
+      max-height: 240px;
+      padding: 4px 0;
+      & > li {
         max-width: 180px;
-        min-width: 80px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
+        min-width: 100px;
+        padding: 4px 8px 4px 32px;
+      }
+    }
+    .vxe-custom--footer {
+      border-top: 1px solid $vxe-table-popup-border-color;
+      padding: 0.4em;
+      text-align: right;
+      button {
+        background-color: transparent;
+        width: 50%;
+        border: 0;
+        color: $vxe-font-color;
+        cursor: pointer;
+        &:focus {
+          outline: none;
+        }
         &:hover {
-          background-color: #F0F0F0;
-        }
-        & > input {
-          &:checked+.vxe-checkbox--icon {
-            &+.vxe-checkbox--label {
-              font-weight: 700;
-            }
-          }
-        }
-        .vxe-checkbox--label {
-          display: inline;
+          color: $vxe-primary-color;
         }
       }
+    }
+  }
+}
+
+.vxe-custom--option-wrapper .vxe-custom--option,
+.vxe-export--panel-column > ul {
+  overflow: auto;
+  margin: 0;
+  user-select: none;
+  & > li {
+    position: relative;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    cursor: pointer;
+    &:before {
+      content: "";
+      position: absolute;
+      height: 1.2em;
+      width: 1.2em;
+      top: 0.4em;
+      left: 0.6em;
+      border-radius: 0.2em;
+      border: 2px solid $vxe-input-border-color;
+    }
+    &.is--active {
+      color: $vxe-primary-color;
+      &:before {
+        border-color: $vxe-primary-color;
+        background-color: $vxe-primary-color;
+      }
+      &:after {
+        content: "";
+        position: absolute;
+        height: 0.7em;
+        width: 0.34em;
+        top: 0.6em;
+        left: 1em;
+        border: 2px solid #ffffff;
+        border-left: 0;
+        border-top: 0;
+        -webkit-transform: rotate(45deg);
+        transform: rotate(45deg);
+      }
+    }
+    &.is--disabled {
+      cursor: not-allowed;
+      color: $vxe-input-disabled-color;
+      &.is--active {
+        &:before {
+          border-color: $vxe-input-disabled-color;
+          background-color: $vxe-input-disabled-background-color;
+        }
+        &:after {
+          border-color: $vxe-input-disabled-color;
+        }
+      }
+    }
+    &:hover {
+      background-color: $vxe-table-row-hover-background-color;
     }
   }
 }
@@ -180,61 +243,8 @@
     }
     & > ul {
       max-height: 208px;
-      overflow: auto;
-      margin: 0;
       & > li {
-        position: relative;
         padding: 4px 30px 4px 32px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        cursor: pointer;
-        &:before {
-          content: "";
-          position: absolute;
-          height: 1.2em;
-          width: 1.2em;
-          top: 0.4em;
-          left: 0.6em;
-          border-radius: 0.2em;
-          border: 2px solid $vxe-input-border-color;
-        }
-        &.active {
-          color: $vxe-primary-color;
-          &:before {
-            border-color: $vxe-primary-color;
-            background-color: $vxe-primary-color;
-          }
-          &:after {
-            content: "";
-            position: absolute;
-            height: 0.7em;
-            width: 0.34em;
-            top: 0.6em;
-            left: 1em;
-            border: 2px solid #ffffff;
-            border-left: 0;
-            border-top: 0;
-            -webkit-transform: rotate(45deg);
-            transform: rotate(45deg);
-          }
-        }
-        &.disabled {
-          cursor: not-allowed;
-          color: $vxe-input-disabled-color;
-          &.active {
-            &:before {
-              border-color: $vxe-input-disabled-color;
-              background-color: $vxe-input-disabled-background-color;
-            }
-            &:after {
-              border-color: $vxe-input-disabled-color;
-            }
-          }
-        }
-        &:hover {
-          background-color: $vxe-table-row-hover-background-color;
-        }
       }
     }
   }

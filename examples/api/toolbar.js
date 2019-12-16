@@ -40,7 +40,7 @@ const apis = [
         version: '2.6.14',
         type: 'Boolean, Object',
         enum: '',
-        defVal: '',
+        defVal: '默认继承 setup.toolbar.import',
         list: [
           {
             name: 'mode',
@@ -86,7 +86,7 @@ const apis = [
         version: '2.6.14',
         type: 'Boolean, Object',
         enum: '',
-        defVal: '',
+        defVal: '默认继承 setup.toolbar.export',
         list: [
           {
             name: 'filename',
@@ -159,7 +159,7 @@ const apis = [
         version: '',
         type: 'Boolean, Object',
         enum: '',
-        defVal: '',
+        defVal: '默认继承 setup.toolbar.refresh',
         list: [
           {
             name: 'query',
@@ -196,7 +196,7 @@ const apis = [
         version: '',
         type: 'Boolean, Object',
         enum: '',
-        defVal: '',
+        defVal: '默认继承 setup.toolbar.resizable',
         list: [
           {
             name: 'storage',
@@ -225,7 +225,7 @@ const apis = [
         version: '2.7.0',
         type: 'Boolean, Object',
         enum: '',
-        defVal: '',
+        defVal: '默认继承 setup.toolbar.custom',
         list: [
           {
             name: 'trigger',
@@ -264,6 +264,15 @@ const apis = [
             list: []
           },
           {
+            name: 'isFooter',
+            desc: '是否显示底部操作按钮',
+            version: '2.7.0',
+            type: 'Boolean',
+            enum: '',
+            defVal: 'true',
+            list: []
+          },
+          {
             name: 'icon',
             desc: '自定义图标',
             version: '2.7.0',
@@ -280,7 +289,7 @@ const apis = [
         version: '',
         type: 'Array',
         enum: '',
-        defVal: '',
+        defVal: '默认继承 setup.toolbar.buttons',
         list: [
           {
             name: 'name',

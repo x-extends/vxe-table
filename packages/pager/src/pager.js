@@ -21,7 +21,7 @@ export default {
     // 每页大小选项列表
     pageSizes: { type: Array, default: () => GlobalConfig.pager.pageSizes || [10, 15, 20, 50, 100] },
     // 列对其方式
-    align: String,
+    align: { type: String, default: () => GlobalConfig.pager.align },
     // 带边框
     border: { type: Boolean, default: () => GlobalConfig.pager.border },
     // 带背景颜色
