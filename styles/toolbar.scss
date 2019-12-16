@@ -116,11 +116,13 @@
       border-top: 1px solid $vxe-table-popup-border-color;
       padding: 0.4em;
       text-align: right;
+      min-width: 110px;
       button {
         background-color: transparent;
         width: 50%;
         border: 0;
         color: $vxe-font-color;
+        text-align: center;
         cursor: pointer;
         &:focus {
           outline: none;

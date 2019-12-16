@@ -84,6 +84,8 @@ export default {
       zoomIn: '最大化',
       zoomOut: '向下还原',
       custom: '自定义列',
+      customConfirm: '确认',
+      customReset: '重置',
       impTitle: '导入参数设置',
       impFile: '文件名',
       impSelect: '选择文件',
