@@ -164,7 +164,7 @@ VXETable.renderer.add('MyExcelFilter', {
                             data.fMode = 'and'
                             data.f1Val = ''
                             data.f2Val = ''
-                            switch (cItem.value === 'custom' ? data.fMenu : cItem.value) {
+                            switch (cItem.value === 'custom' ? (data.fMenu || cItem.value) : cItem.value) {
                               case 'equal':
                                 data.f1Type = '1'
                                 data.f2Type = ''
