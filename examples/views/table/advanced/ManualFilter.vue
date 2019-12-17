@@ -28,6 +28,12 @@
       :data="tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column
+        field="name"
+        title="Name"
+        sortable
+        :filters="[{ label: 'id大于25', value: 25 }]"
+        :filter-method="filterNameMethod"></vxe-table-column>
+      <vxe-table-column
         field="role"
         title="Role"
         sortable
@@ -54,7 +60,7 @@
       </vxe-table-column>
       <vxe-table-column field="time" title="Time" sortable></vxe-table-column>
       <vxe-table-column
-        field="name"
+        field="nickname"
         title="渲染器（实现复杂的筛选）"
         width="240"
         :filters="[{data: {type: 'has', isCase: true, name: ''}}]"
@@ -101,6 +107,12 @@ export default {
           :data="tableData">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column
+            field="name"
+            title="Name"
+            sortable
+            :filters="[{ label: 'id大于25', value: 25 }]"
+            :filter-method="filterNameMethod"></vxe-table-column>
+          <vxe-table-column
             field="role"
             title="Role"
             sortable
@@ -127,7 +139,7 @@ export default {
           </vxe-table-column>
           <vxe-table-column field="time" title="Time" sortable></vxe-table-column>
           <vxe-table-column
-            field="name"
+            field="nickname"
             title="渲染器（实现复杂的筛选）"
             width="240"
             :filters="[{data: {type: 'has', isCase: true, name: ''}}]"
