@@ -567,7 +567,7 @@ export default {
       const selectRecords = comp.getSelectRecords()
       const virtualScroller = comp.getVirtualScroller()
       // v3.0 废弃 type=index
-      const exportColumns = fullColumn.filter(column => (column.type === 'seq' || column.type === 'index') || (column.property && ['checkbox', 'selection', 'radio'].indexOf(column.type) === -1))
+      const exportColumns = fullColumn.filter(column => ['seq', 'index'].indexOf(column.type) > -1 || column.property)
       const treeStatus = comp.getTreeStatus()
       const isTree = !!treeStatus
       const forceOriginal = isTree || virtualScroller.scrollX || virtualScroller.scrollY

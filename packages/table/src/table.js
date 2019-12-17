@@ -1798,6 +1798,9 @@ export default {
         if (this.isGroup) {
           UtilTools.warn('vxe.error.scrollXNotGroup')
         }
+        if (!this.showHeaderOverflow) {
+          UtilTools.warn('vxe.error.scrollXReqProp', ['show-header-overflow'])
+        }
         // if (this.resizable || visibleColumn.some(column => column.resizable)) {
         //   UtilTools.warn('vxe.error.scrollXNotResizable')
         // }
@@ -4227,10 +4230,11 @@ export default {
       let toVisibleIndex = 0
       let width = 0
       let preload = force || false
-      for (let index = 0; index < visibleColumn.length; index++) {
-        width += visibleColumn[index].renderWidth
+      let colLen = visibleColumn.length
+      for (let colIndex = 0; colIndex < colLen; colIndex++) {
+        width += visibleColumn[colIndex].renderWidth
         if (scrollLeft < width) {
-          toVisibleIndex = index
+          toVisibleIndex = colIndex
           break
         }
       }
@@ -4242,7 +4246,7 @@ export default {
           // 向左
           preload = toVisibleIndex - offsetSize <= startIndex
           if (preload) {
-            scrollXStore.startIndex = Math.max(0, Math.max(marginSize, toVisibleIndex - marginSize))
+            scrollXStore.startIndex = Math.max(0, Math.max(0, toVisibleIndex - marginSize))
           }
         } else {
           // 向右
@@ -4846,7 +4850,7 @@ export default {
         data: null,
         columns: null,
         // 在 v3.0 中废弃 type=selection
-        columnFilterMethod: options.columns ? null : column => ['seq', 'index'].indexOf(column.type) || (column.property && ['checkbox', 'selection', 'radio'].indexOf(column.type) === -1),
+        columnFilterMethod: options.columns ? null : column => ['seq', 'index'].indexOf(column.type) > -1 || column.property,
         dataFilterMethod: null,
         footerFilterMethod: null
       }, GlobalConfig.export, options)

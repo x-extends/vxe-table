@@ -8,6 +8,7 @@ export default {
       treeLineReqProp: '启用树节点线需要设置 "{{0}}"',
       scrollOriginal: 'Virtual scrollingはsource dataのみエクスポートできます、"original=true"を設定してください',
       scrollXNotGroup: '横向虚拟滚动不支持分组表头',
+      scrollXReqProp: '横向虚拟滚动需要设置 "{{0}}"',
       scrollYReqProp: 'Virtual scrollingを有効にするには"{{0}}を設定してください',
       unableInsert: '指定された位置に挿入できない',
       useErr: '"{{0}}" モジュールのインストール時にエラーが発生し、エラーのインストール順序',

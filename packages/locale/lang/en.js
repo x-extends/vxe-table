@@ -8,6 +8,7 @@ export default {
       treeLineReqProp: 'To enable tree node line, you need to set "{{0}}"',
       scrollOriginal: 'Virtual scrolling can only export source data, please set "original=true".',
       scrollXNotGroup: 'Horizontal Virtual scrolling does not support grouping headers',
+      scrollXReqProp: 'Horizontal virtual scrolling requires setting the "{{0}}".',
       scrollYReqProp: 'Vertical virtual scrolling requires setting the "{{0}}".',
       unableInsert: 'Unable to insert to the specified location.',
       useErr: 'An error occurred while installing "{{0}}" module. The sequence is not correct.',
