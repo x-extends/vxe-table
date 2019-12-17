@@ -49,7 +49,7 @@ const GlobalConfig = {
     //   mini: 36
     // },
     scrollX: {
-      gt: 40
+      gt: 80
       // oSize: 0,
       // rSize: 0
       // vSize: 0
