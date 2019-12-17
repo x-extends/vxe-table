@@ -254,6 +254,7 @@
     .vxe-footer--column {
       border-right: 1px solid $vxe-table-border-color;
     }
+    // 只有铺满内容且不带分组表头和未出现纵向滚动条的情况下不需要显示最后一列的边框
     &.is--cover {
       &:not(.is--group) {
         &:not(.scroll--y) {
