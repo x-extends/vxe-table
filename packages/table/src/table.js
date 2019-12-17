@@ -338,6 +338,8 @@ export default {
       scrollLeftToRight: false,
       // 右侧固定列是否向左滚动了
       scrollRightToLeft: false,
+      // 所有列是否覆盖整个表格
+      isCoverBody: false,
       // 行高
       rowHeight: 0,
       // 复选框，是否全选
@@ -773,6 +775,7 @@ export default {
     let {
       _e,
       id,
+      isCoverBody,
       tableData,
       tableColumn,
       visibleColumn,
@@ -819,6 +822,7 @@ export default {
         'vxe-editable': editConfig,
         'show--head': showHeader,
         'show--foot': showFooter,
+        'is--group': isGroup,
         'has--height': height,
         'has--tree-line': treeConfig && treeOpts.line,
         'fixed--left': leftList.length,
@@ -830,6 +834,7 @@ export default {
         't--checked': mouseConfig && mouseConfig.checked,
         'row--highlight': highlightHoverRow,
         'column--highlight': highlightHoverColumn,
+        'is--cover': isCoverBody,
         'scroll--y': overflowY,
         'scroll--x': overflowX,
         'virtual--x': scrollXLoad,
@@ -1975,6 +1980,7 @@ export default {
       this.overflowY = overflowY
       this.tableWidth = tableWidth
       this.tableHeight = tableHeight
+      this.isCoverBody = tableWidth >= bodyWidth - 2
       this.parentHeight = this.getParentHeight()
       if (headerElem) {
         this.headerHeight = headerElem.offsetHeight
@@ -3641,6 +3647,9 @@ export default {
       })
       return this.handleTableData(true)
     },
+    getSortColumn () {
+      return this.visibleColumn.fild(column => column.sortable && column.order)
+    },
     filter (field, callback) {
       let column = this.getColumnByField(field)
       if (column) {
@@ -3762,6 +3771,17 @@ export default {
         visible: false
       })
       return this.$nextTick()
+    },
+    /**
+     * 判断指定列是否为筛选状态，如果为空则判断所有列
+     * @param {String} field 字段名
+     */
+    isFilter (field) {
+      if (field) {
+        const column = this.getColumnByField(field)
+        return column.filters && column.filters.some(option => option.checked)
+      }
+      return this.visibleColumn.some(column => column.filters && column.filters.some(option => option.checked))
     },
     // 重置筛选
     resetFilterEvent (evnt) {

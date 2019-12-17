@@ -239,12 +239,16 @@
     .vxe-footer--column {
       border-right: 1px solid $vxe-table-border-color;
     }
-    &.scroll--y {
-      .vxe-header--column,
-      .vxe-body--column,
-      .vxe-footer--column {
-        &:last-child {
-          border-right: 1px solid $vxe-table-border-color;
+    &.is--cover {
+      &:not(.is--group) {
+        &:not(.scroll--y) {
+          .vxe-header--column,
+          .vxe-body--column,
+          .vxe-footer--column{
+            &.col--last {
+              border-right: transparent;
+            }
+          }
         }
       }
     }

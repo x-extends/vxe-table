@@ -54,7 +54,7 @@ function isOperateMouse ($table) {
 /**
  * 渲染列
  */
-function renderColumn (h, _vm, $table, $seq, seq, rowid, fixedType, rowLevel, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, items) {
+function renderColumn (h, _vm, $table, $seq, seq, rowid, fixedType, rowLevel, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, columns, items) {
   let {
     _e,
     $listeners: tableListeners,
@@ -190,6 +190,7 @@ function renderColumn (h, _vm, $table, $seq, seq, rowid, fixedType, rowLevel, ro
     class: ['vxe-body--column', column.id, {
       [`col--${cellAlign}`]: cellAlign,
       [`col--${column.type}`]: column.type,
+      'col--last': $columnIndex === columns.length - 1,
       'col--tree-node': treeNode,
       'col--edit': editRender,
       'edit--visible': editRender && editRender.type === 'visible',
@@ -354,7 +355,7 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
         on: trOn
       }, tableColumn.map((column, $columnIndex) => {
         let columnIndex = getColumnMapIndex(column)
-        return renderColumn(h, _vm, $table, $seq, seq, rowid, fixedType, rowLevel, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, tableData)
+        return renderColumn(h, _vm, $table, $seq, seq, rowid, fixedType, rowLevel, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, tableColumn, tableData)
       }))
     )
     // 如果行被展开了

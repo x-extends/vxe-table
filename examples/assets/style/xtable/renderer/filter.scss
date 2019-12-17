@@ -1,3 +1,4 @@
+// 简单的渲染器
 .cmplex-filter {
   width: 260px;
   padding: 0 8px;
@@ -12,6 +13,7 @@
   text-align: center;
 }
 
+// 模仿 Excel 的渲染器
 .vxe-table--filter-wrapper.myexcel-filter-render .vxe-table--filter-body {
   overflow: initial;
   max-height: initial;
@@ -76,6 +78,7 @@
   border-bottom: 1px solid #E2E4E7;
 }
 .myexcel-filter .me-list .me-group .me-menu .me-child-group > .me-child-menu {
+  position: relative;
   padding: 4px 20px 4px 30px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -83,6 +86,15 @@
 }
 .myexcel-filter .me-list .me-group .me-menu .me-child-group > .me-child-menu:hover {
   background-color: #C5C5C5;
+}
+.myexcel-filter .me-list .me-group .me-menu .me-child-group > .me-child-menu .me-child-menu-left-icon {
+  display: none;
+  position: absolute;
+  left: 10px;
+  top: 6px;
+}
+.myexcel-filter .me-list .me-group .me-menu .me-child-group > .me-child-menu.active .me-child-menu-left-icon {
+  display: block;
 }
 .myexcel-filter .me-search {
   padding: 0 10px 0 30px;

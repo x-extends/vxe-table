@@ -2477,6 +2477,15 @@ const apis = [
         list: []
       },
       {
+        name: 'getSortColumn()',
+        desc: '获取当前排序的 column 信息',
+        version: '1.15.16',
+        type: 'Column',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'getTableData()',
         desc: '获取当前表格的数据（完整的全量表体数据、处理条件之后的全量表体数据、当前渲染中的表体数据、当前渲染中的表尾数据）',
         version: '',
@@ -2733,7 +2742,7 @@ const apis = [
       },
       {
         name: 'isRowExpandLoaded(row)',
-        desc: '判断展开行是否懒加载完成',
+        desc: '用于懒加载展开行，判断展开行是否懒加载完成',
         version: '1.15.15',
         type: 'Boolean',
         enum: '',
@@ -2757,6 +2766,24 @@ const apis = [
         type: 'Boolean',
         enum: '',
         defVal: 'row: Row',
+        list: []
+      },
+      {
+        name: 'isTreeExpandLoaded(row)',
+        desc: '用于懒加载树表格，判断树节点是否懒加载完成',
+        version: '1.15.15',
+        type: 'Boolean',
+        enum: '',
+        defVal: 'row: Row',
+        list: []
+      },
+      {
+        name: 'isFilter(column)',
+        desc: '判断指定列是否为筛选状态，如果为空则判断所有列',
+        version: '1.15.16',
+        type: 'Boolean',
+        enum: '',
+        defVal: 'column?: Column',
         list: []
       },
       {
