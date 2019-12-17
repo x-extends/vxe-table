@@ -8,6 +8,7 @@ export default {
       treeLineReqProp: '啟用樹節點線需要設定 "{{0}}"',
       scrollOriginal: '虛擬滾動啓用後只能匯出來源資料，請將設定 "original=true"',
       scrollXNotGroup: '橫向虛擬滾動不支持分組表頭',
+      scrollXReqProp: '橫向虛擬滾動需要設定 "{{0}}"',
       scrollYReqProp: '縱向虛擬滾動需要設定 "{{0}}"',
       unableInsert: '無法插入到指定位置',
       useErr: '安裝 "{{0}}" 模塊時發生錯誤，順序不正確',

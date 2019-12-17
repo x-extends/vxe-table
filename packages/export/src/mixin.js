@@ -523,7 +523,7 @@ export default {
         data: null,
         columns: null,
         // 在 v3.0 中废弃 type=selection
-        columnFilterMethod: options.columns ? null : column => ['seq', 'index'].indexOf(column.type) || (column.property && ['checkbox', 'selection', 'radio'].indexOf(column.type) === -1),
+        columnFilterMethod: options.columns ? null : column => ['seq', 'index'].indexOf(column.type) > -1 || column.property,
         dataFilterMethod: null,
         footerFilterMethod: null
       }, GlobalConfig.export, options)

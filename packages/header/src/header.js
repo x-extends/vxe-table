@@ -123,6 +123,7 @@ export default {
       highlightCurrentColumn,
       mouseConfig = {},
       scrollXLoad,
+      scrollYLoad,
       overflowX,
       getColumnIndex,
       sortOpts
@@ -194,6 +195,10 @@ export default {
             // 确保任何情况下 columnIndex 都精准指向真实列索引
             let columnIndex = getColumnIndex(column)
             let params = { $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn, hasFilter }
+            // 虚拟滚动不支持动态高度
+            if ((scrollXLoad || scrollYLoad) && !hasEllipsis) {
+              showEllipsis = hasEllipsis = true
+            }
             if (showTitle || showTooltip) {
               thOns.mouseenter = evnt => {
                 if ($table._isResize) {

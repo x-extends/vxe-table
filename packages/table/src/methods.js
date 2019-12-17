@@ -792,6 +792,9 @@ const Methods = {
       if (this.isGroup) {
         UtilTools.warn('vxe.error.scrollXNotGroup')
       }
+      if (!this.showHeaderOverflow) {
+        UtilTools.warn('vxe.error.scrollXReqProp', ['show-header-overflow'])
+      }
       // if (this.resizable || visibleColumn.some(column => column.resizable)) {
       //   UtilTools.warn('vxe.error.scrollXNotResizable')
       // }
@@ -2658,10 +2661,11 @@ const Methods = {
     let toVisibleIndex = 0
     let width = 0
     let preload = force || false
-    for (let index = 0; index < visibleColumn.length; index++) {
-      width += visibleColumn[index].renderWidth
+    let colLen = visibleColumn.length
+    for (let colIndex = 0; colIndex < colLen; colIndex++) {
+      width += visibleColumn[colIndex].renderWidth
       if (scrollLeft < width) {
-        toVisibleIndex = index
+        toVisibleIndex = colIndex
         break
       }
     }
@@ -2673,7 +2677,7 @@ const Methods = {
         // 向左
         preload = toVisibleIndex - offsetSize <= startIndex
         if (preload) {
-          scrollXStore.startIndex = Math.max(0, Math.max(marginSize, toVisibleIndex - marginSize))
+          scrollXStore.startIndex = Math.max(0, Math.max(0, toVisibleIndex - marginSize))
         }
       } else {
         // 向右
@@ -2766,9 +2770,21 @@ const Methods = {
       if (tableBodyElem) {
         // 计算 X 逻辑
         if (scrollXLoad) {
-          let firstColumn = visibleColumn[0]
-          let cWidth = firstColumn ? firstColumn.renderWidth : 40
-          let visibleXSize = XEUtils.toNumber(scrollX.vSize || Math.ceil(tableBodyElem.clientWidth / cWidth))
+          let bodyWidth = tableBodyElem.clientWidth
+          let visibleXSize = XEUtils.toNumber(scrollX.vSize)
+          if (!scrollX.vSize) {
+            let len = visibleXSize = visibleColumn.length
+            let countWidth = 0
+            let column
+            for (let colIndex = 0; colIndex < len; colIndex++) {
+              column = visibleColumn[colIndex]
+              countWidth += column.renderWidth
+              if (countWidth > bodyWidth) {
+                visibleXSize = colIndex + 1
+                break
+              }
+            }
+          }
           scrollXStore.visibleSize = visibleXSize
           // 自动优化
           if (!scrollX.oSize) {

@@ -1678,7 +1678,7 @@ const apis = [
                 version: '',
                 type: 'Number',
                 enum: '',
-                defVal: '40',
+                defVal: '80',
                 list: []
               },
               {
