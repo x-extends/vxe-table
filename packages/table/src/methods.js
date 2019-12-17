@@ -122,7 +122,7 @@ const Methods = {
       UtilTools.error('vxe.error.scrollYReqProp', ['height | max-height'])
     }
     if (scrollYLoad && !showOverflow) {
-      UtilTools.warn('vxe.error.scrollYReqProp', ['show-overflow'])
+      UtilTools.warn('vxe.error.scrollYReqProp', ['show-header-overflow & show-overflow'])
     }
     let rest = Promise.resolve()
     if (scrollYLoad) {
@@ -793,7 +793,7 @@ const Methods = {
         UtilTools.warn('vxe.error.scrollXNotGroup')
       }
       if (!this.showHeaderOverflow) {
-        UtilTools.warn('vxe.error.scrollXReqProp', ['show-header-overflow'])
+        UtilTools.warn('vxe.error.scrollXReqProp', ['show-header-overflow & show-overflow'])
       }
       // if (this.resizable || visibleColumn.some(column => column.resizable)) {
       //   UtilTools.warn('vxe.error.scrollXNotResizable')
