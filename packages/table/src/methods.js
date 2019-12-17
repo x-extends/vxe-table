@@ -976,6 +976,7 @@ const Methods = {
     this.overflowY = overflowY
     this.tableWidth = tableWidth
     this.tableHeight = tableHeight
+    this.isCoverBody = tableWidth >= bodyWidth - 2
     this.parentHeight = this.getParentHeight()
     if (headerElem) {
       this.headerHeight = headerElem.offsetHeight
@@ -2232,6 +2233,9 @@ const Methods = {
     })
     return this.handleTableData(true)
   },
+  getSortColumn () {
+    return this.visibleColumn.fild(column => column.sortable && column.order)
+  },
   /**
    * 关闭筛选
    * @param {Event} evnt 事件
@@ -2244,6 +2248,17 @@ const Methods = {
       visible: false
     })
     return this.$nextTick()
+  },
+  /**
+   * 判断指定列是否为筛选状态，如果为空则判断所有列
+   * @param {String} field 字段名
+   */
+  isFilter (field) {
+    if (field) {
+      const column = this.getColumnByField(field)
+      return column.filters && column.filters.some(option => option.checked)
+    }
+    return this.visibleColumn.some(column => column.filters && column.filters.some(option => option.checked))
   },
   /**
    * 判断展开行是否懒加载完成

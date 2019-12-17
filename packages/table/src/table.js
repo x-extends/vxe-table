@@ -229,6 +229,8 @@ export default {
       scrollbarWidth: 0,
       // 横向滚动条的高度
       scrollbarHeight: 0,
+      // 所有列是否覆盖整个表格
+      isCoverBody: false,
       // 行高
       rowHeight: 0,
       // 复选框属性，是否全选
@@ -642,6 +644,7 @@ export default {
     let {
       _e,
       id,
+      isCoverBody,
       tableData,
       tableColumn,
       visibleColumn,
@@ -688,6 +691,7 @@ export default {
         'vxe-editable': editConfig,
         'show--head': showHeader,
         'show--foot': showFooter,
+        'is--group': isGroup,
         'has--height': height,
         'has--tree-line': treeConfig && treeOpts.line,
         'fixed--left': leftList.length,
@@ -700,6 +704,7 @@ export default {
         't--checked': mouseConfig && mouseConfig.checked,
         'row--highlight': highlightHoverRow,
         'column--highlight': highlightHoverColumn,
+        'is--cover': isCoverBody,
         'is--loading': loading,
         'scroll--y': overflowY,
         'scroll--x': overflowX,

@@ -36,7 +36,8 @@
       <vxe-table-column
         field="role"
         title="仿Excel复杂筛选"
-        :filters="[{data: {vals: [], sVal: '', f1Type:'', f1Val: '', fMode: 'and', f2Type: '', f2Val: ''}}]"
+        sortable
+        :filters="[{data: {vals: [], sVal: '', fMenu: '', f1Type:'', f1Val: '', fMode: 'and', f2Type: '', f2Val: ''}}]"
         :filter-render="{name: 'MyExcelFilter'}"></vxe-table-column>
     </vxe-table>
 

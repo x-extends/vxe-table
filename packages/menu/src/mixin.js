@@ -5,8 +5,8 @@ import { Menus } from '../../v-x-e-table'
 export default {
   methods: {
     /**
-   * 关闭快捷菜单
-   */
+     * 关闭快捷菜单
+     */
     _closeMenu () {
       Object.assign(this.ctxMenuStore, {
         visible: false,
@@ -48,8 +48,8 @@ export default {
       }
     },
     /**
-   * 快捷菜单事件处理
-   */
+     * 快捷菜单事件处理
+     */
     handleGlobalContextmenuEvent (evnt) {
       let { isCtxMenu, ctxMenuStore, ctxMenuOpts } = this
       let layoutList = ['header', 'body', 'footer']
@@ -92,8 +92,8 @@ export default {
       this.closeFilter()
     },
     /**
-   * 显示快捷菜单
-   */
+     * 显示快捷菜单
+     */
     openContextMenu (evnt, type, params) {
       let { ctxMenuStore, ctxMenuOpts } = this
       let config = ctxMenuOpts[type]
@@ -163,8 +163,8 @@ export default {
       ctxMenuStore.selectChild = null
     },
     /**
-   * 快捷菜单点击事件
-   */
+     * 快捷菜单点击事件
+     */
     ctxMenuLinkEvent (evnt, menu) {
       if (!menu.disabled && (!menu.children || !menu.children.length)) {
         let ctxMenuMethod = Menus.get(menu.code)

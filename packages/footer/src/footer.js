@@ -154,6 +154,7 @@ export default {
               class: ['vxe-footer--column', column.id, {
                 [`col--${footAlign}`]: footAlign,
                 [`col--${column.type}`]: column.type,
+                'col--last': $columnIndex === tableColumn.length - 1,
                 'fixed--hidden': fixedHiddenColumn,
                 'col--ellipsis': hasEllipsis,
                 'filter--active': column.filters.some(item => item.checked)

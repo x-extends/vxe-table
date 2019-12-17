@@ -103,9 +103,9 @@ VXETable.renderer.add('MyExcelFilter', {
         { value: 'between', label: '介于' }
       ],
       [
-        { value: 'top10', label: '前 10 项' },
-        { value: 'gt_mean', label: '高于平均值' },
-        { value: 'lt_mean', label: '低于平均值' },
+        // { value: 'top10', label: '前 10 项' },
+        // { value: 'gt_mean', label: '高于平均值' },
+        // { value: 'lt_mean', label: '低于平均值' },
         { value: 'custom', label: '自定义筛选' }
       ]
     ]
@@ -117,12 +117,12 @@ VXETable.renderer.add('MyExcelFilter', {
       { value: '4', label: '大于或等于' },
       { value: '5', label: '小于' },
       { value: '6', label: '小于或等于' },
-      { value: '8', label: '开头是' },
-      { value: '9', label: '开头不是' },
-      { value: '10', label: '结尾是' },
-      { value: '11', label: '结尾不是' },
-      { value: '12', label: '包含' },
-      { value: '13', label: '不包含' }
+      { value: '7', label: '开头是' },
+      { value: '8', label: '开头不是' },
+      { value: '9', label: '结尾是' },
+      { value: '10', label: '结尾不是' },
+      { value: '11', label: '包含' },
+      { value: '12', label: '不包含' }
     ]
     return column.filters.map((item, index) => {
       const { data } = item
@@ -131,11 +131,17 @@ VXETable.renderer.add('MyExcelFilter', {
       return <div class="myexcel-filter">
         <div class="me-list">
           <ul class="me-group">
-            <li class="me-menu">
+            <li class="me-menu" onClick={ e => {
+              $table.closeFilter()
+              $table.sort(column.property, 'asc')
+            } }>
               <i class="fa fa-sort-alpha-asc me-menu-left-icon"></i>
               <span>升序</span>
             </li>
-            <li class="me-menu">
+            <li class="me-menu" onClick={ e => {
+              $table.closeFilter()
+              $table.sort(column.property, 'desc')
+            } }>
               <i class="fa fa-sort-alpha-desc me-menu-left-icon"></i>
               <span>降序</span>
             </li>
@@ -154,11 +160,11 @@ VXETable.renderer.add('MyExcelFilter', {
                     return <ul class="me-child-group">
                       {
                         cList.map(cItem => {
-                          return <li class="me-child-menu" onClick={ e => {
+                          return <li class={ data.fMenu === cItem.value ? 'me-child-menu active' : 'me-child-menu'} onClick={ e => {
                             data.fMode = 'and'
                             data.f1Val = ''
                             data.f2Val = ''
-                            switch (cItem.value) {
+                            switch (cItem.value === 'custom' ? data.fMenu : cItem.value) {
                               case 'equal':
                                 data.f1Type = '1'
                                 data.f2Type = ''
@@ -187,6 +193,8 @@ VXETable.renderer.add('MyExcelFilter', {
                                 data.f1Type = '4'
                                 data.f2Type = '6'
                                 break
+                              case 'custom':
+                                break
                               default:
                                 return
                             }
@@ -202,8 +210,8 @@ VXETable.renderer.add('MyExcelFilter', {
                                       <div class="me-popup-filter me-popup-f1">
                                         <select v-model={ data.f1Type }>
                                           {
-                                            allCaseList.map(cItem => {
-                                              return <option value={ cItem.value }>{ cItem.label }</option>
+                                            allCaseList.map(fItem => {
+                                              return <option value={ fItem.value }>{ fItem.label }</option>
                                             })
                                           }
                                         </select>
@@ -216,8 +224,8 @@ VXETable.renderer.add('MyExcelFilter', {
                                       <div class="me-popup-filter me-popup-f2">
                                         <select v-model={ data.f2Type }>
                                           {
-                                            allCaseList.map(cItem => {
-                                              return <option value={ cItem.value }>{ cItem.label }</option>
+                                            allCaseList.map(fItem => {
+                                              return <option value={ fItem.value }>{ fItem.label }</option>
                                             })
                                           }
                                         </select>
@@ -228,6 +236,7 @@ VXETable.renderer.add('MyExcelFilter', {
                                       </div>
                                       <div class="me-popup-footer">
                                         <button onClick={ e => {
+                                          data.fMenu = cItem.value
                                           item.checked = true
                                           $modal.close()
                                           context.confirmFilter()
@@ -239,7 +248,10 @@ VXETable.renderer.add('MyExcelFilter', {
                                 }
                               }
                             })
-                          } }>{ cItem.label }</li>
+                          } }>
+                            <i class="fa fa-check me-child-menu-left-icon"></i>
+                            <span>{ cItem.label }</span>
+                          </li>
                         })
                       }
                     </ul>
@@ -306,31 +318,44 @@ VXETable.renderer.add('MyExcelFilter', {
     let { vals, f1Type, f1Val, fMode, f2Type, f2Val } = option.data
     if (cellValue) {
       if (f1Type || f2Type) {
-        // 筛选条件
-        let f1Rest = true
-        let f2Rest = true
-        switch (f1Type) {
-          case '1':
-            f1Rest = cellValue == f1Val
-            break
-          case '2':
-            f1Rest = cellValue != f1Val
-            break
+        // 通过筛选条件
+        let calculate = (type, val) => {
+          switch (type) {
+            case '1':
+              return cellValue == val
+            case '2':
+              return cellValue != val
+            case '3':
+              return cellValue > val
+            case '4':
+              return cellValue > val || cellValue == val
+            case '5':
+              return cellValue < val
+            case '6':
+              return cellValue < val || cellValue == val
+            case '7':
+              return cellValue.indexOf(val) === 0
+            case '8':
+              return cellValue.indexOf(val) !== 0
+            case '9':
+              return cellValue.lastIndexOf(val) === 0
+            case '10':
+              return cellValue.lastIndexOf(val) === -1
+            case '11':
+              return cellValue.indexOf(val) > -1
+            case '12':
+              return cellValue.indexOf(val) === -1
+          }
+          return true
         }
-        switch (f2Type) {
-          case '1':
-            f2Rest = cellValue == f2Val
-            break
-          case '2':
-            f2Rest = cellValue != f2Val
-            break
-        }
+        let f1Rest = calculate(f1Type, f1Val)
+        let f2Rest = calculate(f2Type, f2Val)
         if (fMode === 'and') {
           return f1Rest && f2Rest
         }
         return f1Rest || f2Rest
       } else if (vals.length) {
-        // 确定
+        // 通过指定值筛选
         return vals.includes(cellValue)
       }
     }

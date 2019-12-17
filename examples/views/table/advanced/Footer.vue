@@ -11,9 +11,9 @@
       border
       highlight-hover-row
       show-footer
-      height="400"
+      max-height="400"
       :footer-method="footerMethod"
-      :data="tableData">
+      :data="tableData1">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -87,6 +87,7 @@ import hljs from 'highlight.js'
 export default {
   data () {
     return {
+      tableData1: [],
       tableData: [],
       demoCodes: [
         `
@@ -95,7 +96,7 @@ export default {
           border
           highlight-hover-row
           show-footer
-          height="400"
+          max-height="400"
           :footer-method="footerMethod"
           :data="tableData">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
@@ -113,7 +114,7 @@ export default {
             }
           },
           created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 50)
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 3)
           },
           methods: {
             footerMethod ({ columns, data }) {
@@ -298,8 +299,8 @@ export default {
     }
   },
   created () {
-    let list = window.MOCK_DATA_LIST.slice(0, 50)
-    this.tableData = list
+    this.tableData1 = window.MOCK_DATA_LIST.slice(0, 3)
+    this.tableData = window.MOCK_DATA_LIST.slice(0, 50)
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {

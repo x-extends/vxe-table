@@ -230,6 +230,7 @@ export default {
               class: ['vxe-header--column', column.id, {
                 [`col--${headAlign}`]: headAlign,
                 [`col--${column.type}`]: column.type,
+                'col--last': $columnIndex === cols.length - 1,
                 'col--fixed': column.fixed,
                 'col--group': isColGroup,
                 'col--ellipsis': hasEllipsis,
