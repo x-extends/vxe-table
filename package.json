@@ -1,6 +1,6 @@
 {
   "name": "vxe-table",
-  "version": "2.7.5-alpha.4",
+  "version": "2.7.5",
   "description": "vxe-table 表格解决方案",
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -64,8 +64,8 @@
     "vxe-table-plugin-charts": "^1.1.1",
     "vxe-table-plugin-element": "^1.5.13",
     "vxe-table-plugin-excel": "^1.1.0",
-    "vxe-table-plugin-export-pdf": "^1.1.0",
-    "vxe-table-plugin-export-xlsx": "^1.1.0",
+    "vxe-table-plugin-export-pdf": "^1.2.0",
+    "vxe-table-plugin-export-xlsx": "^1.2.0",
     "vxe-table-plugin-iview": "^1.5.9",
     "vxe-table-plugin-menus": "^1.2.0",
     "vxe-table-plugin-renderer": "^1.1.0",

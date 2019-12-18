@@ -301,7 +301,6 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
       h('tr', {
         class: ['vxe-body--row', {
           'row--stripe': stripe && rowIndex > 0 && (rowIndex + 1) % 2 === 0,
-          [`row--level-${rowLevel}`]: treeConfig,
           'row--new': editStore.insertList.indexOf(row) > -1,
           'row--radio': radioOpts.highlight && $table.selectRow === row,
           'row--cheched': checkboxOpts.highlight && $table.isCheckedByRow(row)

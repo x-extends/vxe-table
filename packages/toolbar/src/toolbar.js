@@ -45,7 +45,6 @@ export default {
         columns: [],
         selectRecords: [],
         hasFooter: false,
-        forceOriginal: false,
         visible: false,
         isTree: false
       },
@@ -565,12 +564,10 @@ export default {
       const { fullColumn } = comp.getTableColumn()
       const { footerData } = comp.getTableData()
       const selectRecords = comp.getSelectRecords()
-      const virtualScroller = comp.getVirtualScroller()
       // v3.0 废弃 type=index
       const exportColumns = fullColumn.filter(column => ['seq', 'index'].indexOf(column.type) > -1 || column.property)
       const treeStatus = comp.getTreeStatus()
       const isTree = !!treeStatus
-      const forceOriginal = isTree || virtualScroller.scrollX || virtualScroller.scrollY
       const hasFooter = !!footerData.length
       const defOpts = Object.assign({ message: true }, this.exportOpts, options)
       const types = defOpts.types || VXETable.exportTypes
@@ -591,7 +588,6 @@ export default {
         columns: exportColumns,
         selectRecords: selectRecords,
         mode: selectRecords.length ? 'selected' : 'all',
-        forceOriginal: !!treeStatus || virtualScroller.scrollX || virtualScroller.scrollY,
         hasFooter: hasFooter,
         visible: true,
         isTree
@@ -602,7 +598,7 @@ export default {
         sheetName: defOpts.sheetName || '',
         type: defOpts.type || defOpts.types[0].value,
         types: defOpts.types,
-        original: forceOriginal || defOpts.original,
+        original: defOpts.original,
         message: defOpts.message,
         isHeader: true,
         isFooter: hasFooter

@@ -4,7 +4,7 @@ import VXETable from '../../v-x-e-table'
 import { UtilTools, DomTools } from '../../tools'
 
 // 默认导出或打印的 HTML 样式
-const defaultHtmlStyle = 'body{margin:0}body *{-webkit-box-sizing:border-box;box-sizing:border-box;}table{font-size:14px;text-align:left;border-width:1px 0 0 1px}table,td,th{border-style:solid;border-color:#e8eaec}tfoot,thead{background-color:#f8f8f9}td,th{border-width:0 1px 1px 0}td>div,th>div{padding:.5em .4em;}.col--ellipsis>div{overflow:hidden;text-overflow:ellipsis;white-space: nowrap;word-break:break-all}.tree-icon-wrapper{position:relative;display:inline-block;vertical-align:middle;width:1.2em}.tree-icon{position:absolute;top:-.3em;left:0;width:0;height:0;border-style:solid;border-width:.5em;border-top-color:#939599;border-right-color:transparent;border-bottom-color:transparent;border-left-color:transparent}.tree-node{text-align:left}.tree-indent{display:inline-block}'
+const defaultHtmlStyle = 'body{margin:0}body *{-webkit-box-sizing:border-box;box-sizing:border-box;}table{font-size:14px;text-align:left;border-width:1px 0 0 1px}table,td,th{border-style:solid;border-color:#e8eaec}tfoot,thead{background-color:#f8f8f9}td,th{border-width:0 1px 1px 0}td>div,th>div{padding:.5em .4em;}.col--center{text-align:center}.col--right {text-align:right}.col--ellipsis>div{overflow:hidden;text-overflow:ellipsis;white-space: nowrap;word-break:break-all}.tree-icon-wrapper{position:relative;display:inline-block;vertical-align:middle;width:1.2em}.tree-icon{position:absolute;top:-.3em;left:0;width:0;height:0;border-style:solid;border-width:.5em;border-top-color:#939599;border-right-color:transparent;border-bottom-color:transparent;border-left-color:transparent}.tree-node{text-align:left}.tree-indent{display:inline-block}'
 
 // 导入
 const fileForm = document.createElement('form')
@@ -61,23 +61,12 @@ function getHeaderTitle (opts, column) {
 }
 
 function toCsv ($table, opts, columns, datas) {
-  const isOriginal = opts.original
   let content = '\ufeff'
   if (opts.isHeader) {
     content += columns.map(column => `"${getHeaderTitle(opts, column)}"`).join(',') + '\n'
   }
   datas.forEach((row, rowIndex) => {
-    if (isOriginal || opts.data) {
-      content += columns.map((column, columnIndex) => {
-        // v3.0 废弃 type=index
-        if (column.type === 'seq' || column.type === 'index') {
-          return `"${getSeq($table, row, rowIndex, column, columnIndex)}"`
-        }
-        return `"${UtilTools.getCellValue(row, column) || ''}"`
-      }).join(',') + '\n'
-    } else {
-      content += columns.map(column => `"${row[column.id]}"`).join(',') + '\n'
-    }
+    content += columns.map(column => `"${row[column.id]}"`).join(',') + '\n'
   })
   if (opts.isFooter) {
     const footerData = $table.footerData
@@ -90,23 +79,12 @@ function toCsv ($table, opts, columns, datas) {
 }
 
 function toTxt ($table, opts, columns, datas) {
-  const isOriginal = opts.original
   let content = ''
   if (opts.isHeader) {
     content += columns.map(column => `${getHeaderTitle(opts, column)}`).join('\t') + '\n'
   }
   datas.forEach((row, rowIndex) => {
-    if (isOriginal || opts.data) {
-      content += columns.map((column, columnIndex) => {
-        // v3.0 废弃 type=index
-        if (column.type === 'seq' || column.type === 'index') {
-          return `${getSeq($table, row, rowIndex, column, columnIndex)}`
-        }
-        return `${UtilTools.getCellValue(row, column) || ''}`
-      }).join('\t') + '\n'
-    } else {
-      content += columns.map(column => `${row[column.id]}`).join('\t') + '\n'
-    }
+    content += columns.map(column => `${row[column.id]}`).join('\t') + '\n'
   })
   if (opts.isFooter) {
     const footerData = $table.footerData
@@ -118,9 +96,22 @@ function toTxt ($table, opts, columns, datas) {
   return content
 }
 
+function hasEllipsis ($table, column, property, allColumnOverflow) {
+  let columnOverflow = column[property]
+  let headOverflow = XEUtils.isUndefined(columnOverflow) || XEUtils.isNull(columnOverflow) ? allColumnOverflow : columnOverflow
+  let showEllipsis = headOverflow === 'ellipsis'
+  let showTitle = headOverflow === 'title'
+  let showTooltip = headOverflow === true || headOverflow === 'tooltip'
+  let hasEllipsis = showTitle || showTooltip || showEllipsis
+  // 虚拟滚动不支持动态高度
+  if (($table.scrollXLoad || $table.scrollYLoad) && !hasEllipsis) {
+    showEllipsis = hasEllipsis = true
+  }
+  return hasEllipsis
+}
+
 function toHtml ($table, opts, columns, datas) {
-  const { treeConfig, treeOpts, tableFullData, showOverflow: allShowOverflow, showAllOverflow: oldShowAllOverflow, showHeaderOverflow: allHeaderOverflow, showHeaderAllOverflow: oldHeaderOverflow, scrollXLoad, scrollYLoad } = $table
-  const isOriginal = opts.original
+  const { treeConfig, treeOpts, headerAlign: allHeaderAlign, align: allAlign, footerAlign: allFooterAlign, showOverflow: allShowOverflow, showAllOverflow: oldShowAllOverflow, showHeaderOverflow: allHeaderOverflow, showHeaderAllOverflow: oldHeaderOverflow } = $table
   // v2.0 废弃属性，保留兼容
   let allColumnOverflow = XEUtils.isBoolean(oldShowAllOverflow) ? oldShowAllOverflow : allShowOverflow
   let allColumnHeaderOverflow = XEUtils.isBoolean(oldHeaderOverflow) ? oldHeaderOverflow : allHeaderOverflow
@@ -136,119 +127,48 @@ function toHtml ($table, opts, columns, datas) {
   ].join('')
   if (opts.isHeader) {
     html += `<thead><tr>${columns.map(column => {
-      let { showHeaderOverflow } = column
-      let headOverflow = XEUtils.isUndefined(showHeaderOverflow) || XEUtils.isNull(showHeaderOverflow) ? allColumnHeaderOverflow : showHeaderOverflow
-      let showEllipsis = headOverflow === 'ellipsis'
-      let showTitle = headOverflow === 'title'
-      let showTooltip = headOverflow === true || headOverflow === 'tooltip'
-      let hasEllipsis = showTitle || showTooltip || showEllipsis
-      let classNames = hasEllipsis ? ['col--ellipsis'] : []
-      return `<th class="${classNames.join(' ')}"><div style="width: ${column.renderWidth}px">${getHeaderTitle(opts, column)}</div></th>`
+      let headAlign = column.headerAlign || column.align || allHeaderAlign || allAlign
+      let classNames = hasEllipsis($table, column, 'showHeaderOverflow', allColumnHeaderOverflow) ? ['col--ellipsis'] : []
+      let cellTitle = getHeaderTitle(opts, column)
+      if (headAlign) {
+        classNames.push(`col--${headAlign}`)
+      }
+      return `<th class="${classNames.join(' ')}" title="${cellTitle}"><div style="width: ${column.renderWidth}px">${cellTitle}</div></th>`
     }).join('')}</tr></thead>`
   }
   if (datas.length) {
     html += '<tbody>'
     if (treeConfig) {
-      XEUtils.eachTree(opts.data ? datas : tableFullData, (row, rowIndex, items, path, parent, nodes) => {
-        html += '<tr>'
-        if (isOriginal) {
-          html += columns.map((column, columnIndex) => {
-            let { showOverflow } = column
-            let cellValue = ''
-            let cellOverflow = (XEUtils.isUndefined(showOverflow) || XEUtils.isNull(showOverflow)) ? allColumnOverflow : showOverflow
-            let showEllipsis = cellOverflow === 'ellipsis'
-            let showTitle = cellOverflow === 'title'
-            let showTooltip = cellOverflow === true || cellOverflow === 'tooltip'
-            let hasEllipsis = showTitle || showTooltip || showEllipsis
-            // 虚拟滚动不支持动态高度
-            if ((scrollXLoad || scrollYLoad) && !hasEllipsis) {
-              showEllipsis = hasEllipsis = true
+      datas.forEach(row => {
+        html += '<tr>' + columns.map(column => {
+          let cellAlign = column.align || allAlign
+          let classNames = hasEllipsis($table, column, 'showOverflow', allColumnOverflow) ? ['col--ellipsis'] : []
+          let cellValue = row[column.id]
+          if (cellAlign) {
+            classNames.push(`col--${cellAlign}`)
+          }
+          if (column.treeNode) {
+            let treeIcon = ''
+            if (row._hasChild) {
+              treeIcon = `<i class="tree-icon"></i>`
             }
-            // v3.0 废弃 type=index
-            if (column.type === 'seq' || column.type === 'index') {
-              cellValue = getSeq($table, row, rowIndex, column, columnIndex)
-            } else {
-              cellValue = UtilTools.getCellValue(row, column) || ''
-            }
-            let classNames = hasEllipsis ? ['col--ellipsis'] : []
-            if (treeConfig && column.treeNode) {
-              let treeIcon = ''
-              if (hasTreeChildren($table, row)) {
-                treeIcon = `<i class="tree-icon"></i>`
-              }
-              classNames.push('tree-node')
-              return `<td class="${classNames.join(' ')}"><div style="width: ${column.renderWidth}px"><span class="tree-indent" style="width: ${(nodes.length - 1) * (treeOpts.indent)}px"></span><span class="tree-icon-wrapper">${treeIcon}</span>${cellValue}</div></td>`
-            }
-            return `<td class="${classNames.join(' ')}"><div style="width: ${column.renderWidth}px">${cellValue}</div></td>`
-          }).join('')
-        } else {
-          html += columns.map(column => {
-            let { showOverflow } = column
-            let cellOverflow = (XEUtils.isUndefined(showOverflow) || XEUtils.isNull(showOverflow)) ? allColumnOverflow : showOverflow
-            let showEllipsis = cellOverflow === 'ellipsis'
-            let showTitle = cellOverflow === 'title'
-            let showTooltip = cellOverflow === true || cellOverflow === 'tooltip'
-            let hasEllipsis = showTitle || showTooltip || showEllipsis
-            // 虚拟滚动不支持动态高度
-            if ((scrollXLoad || scrollYLoad) && !hasEllipsis) {
-              showEllipsis = hasEllipsis = true
-            }
-            let classNames = hasEllipsis ? ['col--ellipsis'] : []
-            if (treeConfig && column.treeNode) {
-              let treeIcon = ''
-              if (row._hasChild) {
-                treeIcon = `<i class="tree-icon"></i>`
-              }
-              classNames.push('tree-node')
-              return `<td class="${classNames.join(' ')}"><div style="width: ${column.renderWidth}px"><span class="tree-indent" style="width: ${(nodes.length - 1) * (treeOpts.indent)}px"></span><span class="tree-icon-wrapper">${treeIcon}</span>${row[column.id]}</div></td>`
-            }
-            return `<td class="${classNames.join(' ')}"><div style="width: ${column.renderWidth}px">${row[column.id]}</div></td>`
-          }).join('')
-        }
-        html += '</tr>'
-      }, treeOpts)
+            classNames.push('tree-node')
+            return `<td class="${classNames.join(' ')}" title="${cellValue}"><div style="width: ${column.renderWidth}px"><span class="tree-indent" style="width: ${row._level * treeOpts.indent}px"></span><span class="tree-icon-wrapper">${treeIcon}</span>${cellValue}</div></td>`
+          }
+          return `<td class="${classNames.join(' ')}" title="${cellValue}"><div style="width: ${column.renderWidth}px">${cellValue}</div></td>`
+        }).join('') + '</tr>'
+      })
     } else {
-      datas.forEach((row, rowIndex) => {
-        html += '<tr>'
-        if (isOriginal || opts.data) {
-          html += columns.map((column, columnIndex) => {
-            let { showOverflow } = column
-            let cellValue = ''
-            let cellOverflow = (XEUtils.isUndefined(showOverflow) || XEUtils.isNull(showOverflow)) ? allColumnOverflow : showOverflow
-            let showEllipsis = cellOverflow === 'ellipsis'
-            let showTitle = cellOverflow === 'title'
-            let showTooltip = cellOverflow === true || cellOverflow === 'tooltip'
-            let hasEllipsis = showTitle || showTooltip || showEllipsis
-            // 虚拟滚动不支持动态高度
-            if ((scrollXLoad || scrollYLoad) && !hasEllipsis) {
-              showEllipsis = hasEllipsis = true
-            }
-            // v3.0 废弃 type=index
-            if (column.type === 'seq' || column.type === 'index') {
-              cellValue = getSeq($table, row, rowIndex, column, columnIndex)
-            } else {
-              cellValue = UtilTools.getCellValue(row, column) || ''
-            }
-            let classNames = hasEllipsis ? ['col--ellipsis'] : []
-            return `<td class="${classNames.join(' ')}"><div style="width: ${column.renderWidth}px">${cellValue}</div></td>`
-          }).join('')
-        } else {
-          html += columns.map(column => {
-            let { showOverflow } = column
-            let cellOverflow = (XEUtils.isUndefined(showOverflow) || XEUtils.isNull(showOverflow)) ? allColumnOverflow : showOverflow
-            let showEllipsis = cellOverflow === 'ellipsis'
-            let showTitle = cellOverflow === 'title'
-            let showTooltip = cellOverflow === true || cellOverflow === 'tooltip'
-            let hasEllipsis = showTitle || showTooltip || showEllipsis
-            // 虚拟滚动不支持动态高度
-            if ((scrollXLoad || scrollYLoad) && !hasEllipsis) {
-              showEllipsis = hasEllipsis = true
-            }
-            let classNames = hasEllipsis ? ['col--ellipsis'] : []
-            return `<td class="${classNames.join(' ')}"><div style="width: ${column.renderWidth}px">${row[column.id]}</div></td>`
-          }).join('')
-        }
-        html += '</tr>'
+      datas.forEach(row => {
+        html += '<tr>' + columns.map(column => {
+          let cellAlign = column.align || allAlign
+          let classNames = hasEllipsis($table, column, 'showOverflow', allColumnOverflow) ? ['col--ellipsis'] : []
+          let cellValue = row[column.id]
+          if (cellAlign) {
+            classNames.push(`col--${cellAlign}`)
+          }
+          return `<td class="${classNames.join(' ')}" title="${cellValue}"><div style="width: ${column.renderWidth}px">${cellValue}</div></td>`
+        }).join('') + '</tr>'
       })
     }
     html += '</tbody>'
@@ -260,18 +180,13 @@ function toHtml ($table, opts, columns, datas) {
       html += '<tfoot>'
       footers.forEach(rows => {
         html += `<tr>${columns.map(column => {
-          let { showOverflow } = column
-          let cellOverflow = (XEUtils.isUndefined(showOverflow) || XEUtils.isNull(showOverflow)) ? allColumnOverflow : showOverflow
-          let showEllipsis = cellOverflow === 'ellipsis'
-          let showTitle = cellOverflow === 'title'
-          let showTooltip = cellOverflow === true || cellOverflow === 'tooltip'
-          let hasEllipsis = showTitle || showTooltip || showEllipsis
-          // 虚拟滚动不支持动态高度
-          if ((scrollXLoad || scrollYLoad) && !hasEllipsis) {
-            showEllipsis = hasEllipsis = true
+          let footAlign = column.footerAlign || column.align || allFooterAlign || allAlign
+          let classNames = hasEllipsis($table, column, 'showOverflow', allColumnOverflow) ? ['col--ellipsis'] : []
+          let cellValue = XEUtils.toString(rows[$table.$getColumnIndex(column)])
+          if (footAlign) {
+            classNames.push(`col--${footAlign}`)
           }
-          let classNames = hasEllipsis ? ['col--ellipsis'] : []
-          return `<td class="${classNames.join(' ')}"><div style="width: ${column.renderWidth}px">${rows[$table.$getColumnIndex(column)] || ''}</div></td>`
+          return `<td class="${classNames.join(' ')}" title="${cellValue}"><div style="width: ${column.renderWidth}px">${cellValue}</div></td>`
         }).join('')}</tr>`
       })
       html += '</tfoot>'
@@ -281,7 +196,6 @@ function toHtml ($table, opts, columns, datas) {
 }
 
 function toXML ($table, opts, columns, datas) {
-  const isOriginal = opts.original
   let xml = [
     '<?xml version="1.0"?>',
     '<?mso-application progid="Excel.Sheet"?>',
@@ -305,19 +219,7 @@ function toXML ($table, opts, columns, datas) {
     xml += `<Row>${columns.map(column => `<Cell><Data ss:Type="String">${getHeaderTitle(opts, column)}</Data></Cell>`).join('')}</Row>`
   }
   datas.forEach((row, rowIndex) => {
-    xml += '<Row>'
-    if (isOriginal || opts.data) {
-      xml += columns.map((column, columnIndex) => {
-        // v3.0 废弃 type=index
-        if (column.type === 'seq' || column.type === 'index') {
-          return `<Cell><Data ss:Type="String">${getSeq($table, row, rowIndex, column, columnIndex)}</Data></Cell>`
-        }
-        return `<Cell><Data ss:Type="String">${UtilTools.getCellValue(row, column) || ''}</Data></Cell>`
-      }).join('')
-    } else {
-      xml += columns.map(column => `<Cell><Data ss:Type="String">${row[column.id]}</Data></Cell>`).join('')
-    }
-    xml += '</Row>'
+    xml += '<Row>' + columns.map(column => `<Cell><Data ss:Type="String">${row[column.id]}</Data></Cell>`).join('') + '</Row>'
   })
   if (opts.isFooter) {
     const footerData = $table.footerData
@@ -357,14 +259,34 @@ function downloadFile ($table, opts, content) {
 }
 
 function getLabelData ($table, columns, datas) {
-  const treeConfig = $table.treeConfig
-  return datas.map(row => {
-    let item = {
-      _hasChild: treeConfig && hasTreeChildren($table, row)
-    }
-    columns.forEach(column => {
-      let cell = DomTools.getCell($table, { row, column })
-      item[column.id] = cell ? cell.innerText.trim() : ''
+  const { treeConfig, treeOpts, scrollXLoad, scrollYLoad } = $table
+  if (treeConfig) {
+    // 如果是树表格只允许导出数据源
+    const rest = []
+    XEUtils.eachTree(datas, (row, rowIndex, items, path, parent, nodes) => {
+      let item = {
+        _level: nodes.length - 1,
+        _hasChild: hasTreeChildren($table, row)
+      }
+      columns.forEach((column, columnIndex) => {
+        // v3.0 废弃 type=index
+        item[column.id] = XEUtils.toString(['seq', 'index'].indexOf(column.type) > -1 ? getSeq($table, row, rowIndex, column, columnIndex) : XEUtils.get(row, column.property))
+      })
+      rest.push(Object.assign(item, row))
+    }, treeOpts)
+    return rest
+  }
+  return datas.map((row, rowIndex) => {
+    let item = {}
+    columns.forEach((column, columnIndex) => {
+      // 如果是启用虚拟滚动后只允许导出数据源
+      if (scrollXLoad || scrollYLoad) {
+        // v3.0 废弃 type=index
+        item[column.id] = XEUtils.toString(['seq', 'index'].indexOf(column.type) > -1 ? getSeq($table, row, rowIndex, column, columnIndex) : row[column.property])
+      } else {
+        let cell = DomTools.getCell($table, { row, column })
+        item[column.id] = cell ? cell.innerText.trim() : ''
+      }
     })
     return item
   })
@@ -379,7 +301,7 @@ function getExportData ($table, opts, fullData, oColumns) {
   if (opts.dataFilterMethod) {
     datas = datas.filter(opts.dataFilterMethod)
   }
-  return { columns, datas: opts.original || opts.data ? datas : getLabelData($table, columns, datas) }
+  return { columns, datas: opts.data ? datas : getLabelData($table, columns, datas) }
 }
 
 function replaceDoubleQuotation (val) {
@@ -576,11 +498,11 @@ export default {
      * @param {Object} options 参数
      */
     _exportData (options) {
-      let { visibleColumn, scrollXLoad, scrollYLoad, treeConfig, treeOpts } = this
+      let { visibleColumn, tableFullData, treeConfig, scrollXLoad, scrollYLoad } = this
       let opts = Object.assign({
         filename: '',
         sheetName: '',
-        original: !!treeConfig,
+        original: false,
         message: false,
         isHeader: true,
         isFooter: true,
@@ -594,26 +516,20 @@ export default {
         footerFilterMethod: null
       }, GlobalConfig.export, options)
       if (!opts.filename) {
-        opts.filename = 'export'
+        opts.filename = GlobalConfig.i18n('vxe.table.expFilename', [XEUtils.toDateString(Date.now(), 'yyyyMMddHHmmss')])
       }
       if (!opts.sheetName) {
-        opts.sheetName = 'Sheet1'
+        opts.sheetName = GlobalConfig.i18n('vxe.table.expSheetName')
       }
       if (!XEUtils.includes(VXETable.exportTypes, opts.type)) {
         throw new Error(UtilTools.getLog('vxe.error.notType', [opts.type]))
       }
       if (!opts.original) {
-        if (scrollXLoad || scrollYLoad) {
-          opts.original = true
+        if (treeConfig || scrollXLoad || scrollYLoad) {
           UtilTools.warn('vxe.error.scrollOriginal')
         }
       }
-      let columns = visibleColumn
-      let fullData = this.tableFullData
-      if (treeConfig) {
-        fullData = XEUtils.toTreeArray(fullData, treeOpts)
-      }
-      return handleExport(this, opts, columns, fullData)
+      return handleExport(this, opts, visibleColumn, tableFullData)
     },
     _openImport (options) {
       if (this.$toolbar) {
@@ -688,7 +604,7 @@ export default {
     },
     _print (options) {
       this.exportData(Object.assign({
-        original: this.scrollXLoad || this.scrollYLoad
+        original: false
       }, options, {
         type: 'html',
         download: false
