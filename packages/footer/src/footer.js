@@ -21,7 +21,6 @@ export default {
     } = this
     let {
       $listeners: tableListeners,
-      border,
       footerRowClassName,
       footerCellClassName,
       footerRowStyle,
@@ -34,6 +33,7 @@ export default {
       scrollbarHeight,
       scrollXLoad,
       scrollXStore,
+      cellOffsetWidth,
       showOverflow: allColumnOverflow,
       overflowX,
       getColumnMapIndex
@@ -172,7 +172,7 @@ export default {
               h('div', {
                 class: 'vxe-cell',
                 style: {
-                  width: hasEllipsis ? `${border ? renderWidth - 2 : renderWidth}px` : null
+                  width: hasEllipsis ? `${renderWidth - cellOffsetWidth}px` : null
                 }
               }, UtilTools.formatText(list[$table.tableColumn.indexOf(column)], 1))
             ])

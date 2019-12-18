@@ -110,6 +110,7 @@ export default {
       scrollYLoad,
       scrollXStore,
       scrollbarWidth,
+      cellOffsetWidth,
       getColumnMapIndex,
       sortOpts
     } = $table
@@ -254,7 +255,7 @@ export default {
                   'c--ellipsis': showEllipsis
                 }],
                 style: {
-                  width: hasEllipsis ? `${border ? renderWidth - 2 : renderWidth}px` : null
+                  width: hasEllipsis ? `${renderWidth - cellOffsetWidth}px` : null
                 }
               }, column.renderHeader(h, params)),
               /**

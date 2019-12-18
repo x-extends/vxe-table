@@ -3,15 +3,15 @@ import GlobalConfig from '../../conf'
 import { UtilTools, DomTools } from '../../tools'
 
 // 默认导出或打印的 HTML 样式
-const defaultHtmlStyle = 'body{margin:0}table{font-size:14px;text-align:left;border-width:1px 0 0 1px}table,td,th{border-style:solid;border-color:#e8eaec}tfoot,thead{background-color:#f8f8f9}td,th{padding:.5em .4em;border-width:0 1px 1px 0}.tree-icon-wrapper{position:relative;display:inline-block;vertical-align:middle;width:1.2em}.tree-icon{position:absolute;top:-.3em;left:0;width:0;height:0;border-style:solid;border-width:.5em;border-top-color:#939599;border-right-color:transparent;border-bottom-color:transparent;border-left-color:transparent}.tree-node{text-align:left}.tree-indent{display:inline-block}'
+const defaultHtmlStyle = 'body{margin:0}body *{-webkit-box-sizing:border-box;box-sizing:border-box;}table{font-size:14px;text-align:left;border-width:1px 0 0 1px}table,td,th{border-style:solid;border-color:#e8eaec}tfoot,thead{background-color:#f8f8f9}td,th{border-width:0 1px 1px 0}td>div,th>div{padding:.5em .4em;}.col--ellipsis>div{overflow:hidden;text-overflow:ellipsis;white-space: nowrap;word-break:break-all}.tree-icon-wrapper{position:relative;display:inline-block;vertical-align:middle;width:1.2em}.tree-icon{position:absolute;top:-.3em;left:0;width:0;height:0;border-style:solid;border-width:.5em;border-top-color:#939599;border-right-color:transparent;border-bottom-color:transparent;border-left-color:transparent}.tree-node{text-align:left}.tree-indent{display:inline-block}'
 
 // 导入
-const impForm = document.createElement('form')
-const impInput = document.createElement('input')
-impForm.className = 'vxe-table--import-form'
-impInput.name = 'file'
-impInput.type = 'file'
-impForm.appendChild(impInput)
+const fileForm = document.createElement('form')
+const fileInput = document.createElement('input')
+fileForm.className = 'vxe-table--import-form'
+fileInput.name = 'file'
+fileInput.type = 'file'
+fileForm.appendChild(fileInput)
 
 function hasTreeChildren ($table, row) {
   const treeOpts = $table.treeOpts
@@ -102,8 +102,11 @@ function toTxt ($table, opts, columns, datas) {
 }
 
 function toHtml ($table, opts, columns, datas) {
-  const { treeConfig, treeOpts, tableFullData } = $table
+  const { treeConfig, treeOpts, tableFullData, showOverflow: allShowOverflow, showAllOverflow: oldShowAllOverflow, showHeaderOverflow: allHeaderOverflow, showHeaderAllOverflow: oldHeaderOverflow, scrollXLoad, scrollYLoad } = $table
   const isOriginal = opts.original
+  // v2.0 废弃属性，保留兼容
+  let allColumnOverflow = XEUtils.isBoolean(oldShowAllOverflow) ? oldShowAllOverflow : allShowOverflow
+  let allColumnHeaderOverflow = XEUtils.isBoolean(oldHeaderOverflow) ? oldHeaderOverflow : allHeaderOverflow
   let html = [
     '<html>',
     `<head>`,
@@ -111,11 +114,20 @@ function toHtml ($table, opts, columns, datas) {
     `<style>${opts.style || defaultHtmlStyle}</style>`,
     '</head>',
     '<body>',
-    '<table border="1" cellspacing="0" cellpadding="0">',
-    `<colgroup>${columns.map(column => `<col width="${column.renderWidth}">`).join('')}</colgroup>`
+    `<table border="1" cellspacing="0" cellpadding="0">`,
+    `<colgroup>${columns.map(column => `<col style="width:${column.renderWidth}px">`).join('')}</colgroup>`
   ].join('')
   if (opts.isHeader) {
-    html += `<thead><tr>${columns.map(column => `<th>${getHeaderTitle(opts, column)}</th>`).join('')}</tr></thead>`
+    html += `<thead><tr>${columns.map(column => {
+      let { showHeaderOverflow } = column
+      let headOverflow = XEUtils.isUndefined(showHeaderOverflow) || XEUtils.isNull(showHeaderOverflow) ? allColumnHeaderOverflow : showHeaderOverflow
+      let showEllipsis = headOverflow === 'ellipsis'
+      let showTitle = headOverflow === 'title'
+      let showTooltip = headOverflow === true || headOverflow === 'tooltip'
+      let hasEllipsis = showTitle || showTooltip || showEllipsis
+      let classNames = hasEllipsis ? ['col--ellipsis'] : []
+      return `<th class="${classNames.join(' ')}"><div style="width: ${column.renderWidth}px">${getHeaderTitle(opts, column)}</div></th>`
+    }).join('')}</tr></thead>`
   }
   if (datas.length) {
     html += '<tbody>'
@@ -124,32 +136,56 @@ function toHtml ($table, opts, columns, datas) {
         html += '<tr>'
         if (isOriginal) {
           html += columns.map((column, columnIndex) => {
+            let { showOverflow } = column
             let cellValue = ''
+            let cellOverflow = (XEUtils.isUndefined(showOverflow) || XEUtils.isNull(showOverflow)) ? allColumnOverflow : showOverflow
+            let showEllipsis = cellOverflow === 'ellipsis'
+            let showTitle = cellOverflow === 'title'
+            let showTooltip = cellOverflow === true || cellOverflow === 'tooltip'
+            let hasEllipsis = showTitle || showTooltip || showEllipsis
+            // 虚拟滚动不支持动态高度
+            if ((scrollXLoad || scrollYLoad) && !hasEllipsis) {
+              showEllipsis = hasEllipsis = true
+            }
             // v3.0 废弃 type=index
             if (column.type === 'seq' || column.type === 'index') {
               cellValue = getSeq($table, row, rowIndex, column, columnIndex)
             } else {
               cellValue = UtilTools.getCellValue(row, column) || ''
             }
+            let classNames = hasEllipsis ? ['col--ellipsis'] : []
             if (treeConfig && column.treeNode) {
               let treeIcon = ''
               if (hasTreeChildren($table, row)) {
                 treeIcon = `<i class="tree-icon"></i>`
               }
-              return `<td class="tree-node"><span class="tree-indent" style="width: ${(nodes.length - 1) * (treeOpts.indent)}px"></span><span class="tree-icon-wrapper">${treeIcon}</span>${cellValue}</td>`
+              classNames.push('tree-node')
+              return `<td class="${classNames.join(' ')}"><div style="width: ${column.renderWidth}px"><span class="tree-indent" style="width: ${(nodes.length - 1) * (treeOpts.indent)}px"></span><span class="tree-icon-wrapper">${treeIcon}</span>${cellValue}</div></td>`
             }
-            return `<td>${cellValue}</td>`
+            return `<td class="${classNames.join(' ')}"><div style="width: ${column.renderWidth}px">${cellValue}</div></td>`
           }).join('')
         } else {
           html += columns.map(column => {
+            let { showOverflow } = column
+            let cellOverflow = (XEUtils.isUndefined(showOverflow) || XEUtils.isNull(showOverflow)) ? allColumnOverflow : showOverflow
+            let showEllipsis = cellOverflow === 'ellipsis'
+            let showTitle = cellOverflow === 'title'
+            let showTooltip = cellOverflow === true || cellOverflow === 'tooltip'
+            let hasEllipsis = showTitle || showTooltip || showEllipsis
+            // 虚拟滚动不支持动态高度
+            if ((scrollXLoad || scrollYLoad) && !hasEllipsis) {
+              showEllipsis = hasEllipsis = true
+            }
+            let classNames = hasEllipsis ? ['col--ellipsis'] : []
             if (treeConfig && column.treeNode) {
               let treeIcon = ''
               if (row._hasChild) {
                 treeIcon = `<i class="tree-icon"></i>`
               }
-              return `<td class="tree-node"><span class="tree-indent" style="width: ${(nodes.length - 1) * (treeOpts.indent)}px"></span><span class="tree-icon-wrapper">${treeIcon}</span>${row[column.id]}</td>`
+              classNames.push('tree-node')
+              return `<td class="${classNames.join(' ')}"><div style="width: ${column.renderWidth}px"><span class="tree-indent" style="width: ${(nodes.length - 1) * (treeOpts.indent)}px"></span><span class="tree-icon-wrapper">${treeIcon}</span>${row[column.id]}</div></td>`
             }
-            return `<td>${row[column.id]}</td>`
+            return `<td class="${classNames.join(' ')}"><div style="width: ${column.renderWidth}px">${row[column.id]}</div></td>`
           }).join('')
         }
         html += '</tr>'
@@ -159,17 +195,41 @@ function toHtml ($table, opts, columns, datas) {
         html += '<tr>'
         if (isOriginal || opts.data) {
           html += columns.map((column, columnIndex) => {
+            let { showOverflow } = column
             let cellValue = ''
+            let cellOverflow = (XEUtils.isUndefined(showOverflow) || XEUtils.isNull(showOverflow)) ? allColumnOverflow : showOverflow
+            let showEllipsis = cellOverflow === 'ellipsis'
+            let showTitle = cellOverflow === 'title'
+            let showTooltip = cellOverflow === true || cellOverflow === 'tooltip'
+            let hasEllipsis = showTitle || showTooltip || showEllipsis
+            // 虚拟滚动不支持动态高度
+            if ((scrollXLoad || scrollYLoad) && !hasEllipsis) {
+              showEllipsis = hasEllipsis = true
+            }
             // v3.0 废弃 type=index
             if (column.type === 'seq' || column.type === 'index') {
               cellValue = getSeq($table, row, rowIndex, column, columnIndex)
             } else {
               cellValue = UtilTools.getCellValue(row, column) || ''
             }
-            return `<td>${cellValue}</td>`
+            let classNames = hasEllipsis ? ['col--ellipsis'] : []
+            return `<td class="${classNames.join(' ')}"><div style="width: ${column.renderWidth}px">${cellValue}</div></td>`
           }).join('')
         } else {
-          html += columns.map(column => `<td>${row[column.id]}</td>`).join('')
+          html += columns.map(column => {
+            let { showOverflow } = column
+            let cellOverflow = (XEUtils.isUndefined(showOverflow) || XEUtils.isNull(showOverflow)) ? allColumnOverflow : showOverflow
+            let showEllipsis = cellOverflow === 'ellipsis'
+            let showTitle = cellOverflow === 'title'
+            let showTooltip = cellOverflow === true || cellOverflow === 'tooltip'
+            let hasEllipsis = showTitle || showTooltip || showEllipsis
+            // 虚拟滚动不支持动态高度
+            if ((scrollXLoad || scrollYLoad) && !hasEllipsis) {
+              showEllipsis = hasEllipsis = true
+            }
+            let classNames = hasEllipsis ? ['col--ellipsis'] : []
+            return `<td class="${classNames.join(' ')}"><div style="width: ${column.renderWidth}px">${row[column.id]}</div></td>`
+          }).join('')
         }
         html += '</tr>'
       })
@@ -182,7 +242,20 @@ function toHtml ($table, opts, columns, datas) {
     if (footers.length) {
       html += '<tfoot>'
       footers.forEach(rows => {
-        html += `<tr>${columns.map(column => `<td>${rows[$table.$getColumnIndex(column)] || ''}</td>`).join('')}</tr>`
+        html += `<tr>${columns.map(column => {
+          let { showOverflow } = column
+          let cellOverflow = (XEUtils.isUndefined(showOverflow) || XEUtils.isNull(showOverflow)) ? allColumnOverflow : showOverflow
+          let showEllipsis = cellOverflow === 'ellipsis'
+          let showTitle = cellOverflow === 'title'
+          let showTooltip = cellOverflow === true || cellOverflow === 'tooltip'
+          let hasEllipsis = showTitle || showTooltip || showEllipsis
+          // 虚拟滚动不支持动态高度
+          if ((scrollXLoad || scrollYLoad) && !hasEllipsis) {
+            showEllipsis = hasEllipsis = true
+          }
+          let classNames = hasEllipsis ? ['col--ellipsis'] : []
+          return `<td class="${classNames.join(' ')}"><div style="width: ${column.renderWidth}px">${rows[$table.$getColumnIndex(column)] || ''}</div></td>`
+        }).join('')}</tr>`
       })
       html += '</tfoot>'
     }
@@ -298,21 +371,18 @@ function replaceDoubleQuotation (val) {
 
 function parseCsv (columns, content) {
   const list = content.split('\n')
-  const fields = []
   const rows = []
+  let fields = []
   if (list.length) {
     const rList = list.slice(1)
-    list[0].split(',').forEach(val => {
-      const field = replaceDoubleQuotation(val)
-      if (field) {
-        fields.push(field)
-      }
-    })
+    fields = list[0].split(',').map(replaceDoubleQuotation)
     rList.forEach(r => {
       if (r) {
         const item = {}
         r.split(',').forEach((val, colIndex) => {
-          item[fields[colIndex]] = replaceDoubleQuotation(val)
+          if (fields[colIndex]) {
+            item[fields[colIndex]] = replaceDoubleQuotation(val)
+          }
         })
         rows.push(item)
       }
@@ -323,20 +393,18 @@ function parseCsv (columns, content) {
 
 function parseTxt (columns, content) {
   const list = content.split('\n')
-  const fields = []
   const rows = []
+  let fields = []
   if (list.length) {
     const rList = list.slice(1)
-    list[0].split('\t').forEach(field => {
-      if (field) {
-        fields.push(field)
-      }
-    })
+    fields = list[0].split('\t')
     rList.forEach(r => {
       if (r) {
         const item = {}
         r.split('\t').forEach((val, colIndex) => {
-          item[fields[colIndex]] = replaceDoubleQuotation(val)
+          if (fields[colIndex]) {
+            item[fields[colIndex]] = replaceDoubleQuotation(val)
+          }
         })
         rows.push(item)
       }
@@ -349,8 +417,8 @@ function parseHTML (columns, content) {
   const domParser = new DOMParser()
   const xmlDoc = domParser.parseFromString(content, 'text/html')
   const bodyNodes = getElementsByTagName(xmlDoc, 'body')
-  const fields = []
   const rows = []
+  let fields = []
   if (bodyNodes.length) {
     const tableNodes = getElementsByTagName(bodyNodes[0], 'table')
     if (tableNodes.length) {
@@ -358,10 +426,7 @@ function parseHTML (columns, content) {
       if (theadNodes.length) {
         XEUtils.arrayEach(getElementsByTagName(theadNodes[0], 'tr'), rowNode => {
           XEUtils.arrayEach(getElementsByTagName(rowNode, 'th'), cellNode => {
-            const field = cellNode.textContent
-            if (field) {
-              fields.push(field)
-            }
+            fields.push(cellNode.textContent)
           })
         })
         const tbodyNodes = getElementsByTagName(tableNodes[0], 'tbody')
@@ -369,7 +434,9 @@ function parseHTML (columns, content) {
           XEUtils.arrayEach(getElementsByTagName(tbodyNodes[0], 'tr'), rowNode => {
             const item = {}
             XEUtils.arrayEach(getElementsByTagName(rowNode, 'td'), (cellNode, colIndex) => {
-              item[fields[colIndex]] = cellNode.textContent || ''
+              if (fields[colIndex]) {
+                item[fields[colIndex]] = cellNode.textContent || ''
+              }
             })
             rows.push(item)
           })
@@ -384,25 +451,24 @@ function parseXML (columns, content) {
   const domParser = new DOMParser()
   const xmlDoc = domParser.parseFromString(content, 'application/xml')
   const sheetNodes = getElementsByTagName(xmlDoc, 'Worksheet')
-  const fields = []
   const rows = []
+  let fields = []
   if (sheetNodes.length) {
     const tableNodes = getElementsByTagName(sheetNodes[0], 'Table')
     if (tableNodes.length) {
       const rowNodes = getElementsByTagName(tableNodes[0], 'Row')
       if (rowNodes.length) {
         XEUtils.arrayEach(getElementsByTagName(rowNodes[0], 'Cell'), cellNode => {
-          const field = cellNode.textContent
-          if (field) {
-            fields.push(field)
-          }
+          fields.push(cellNode.textContent)
         })
         XEUtils.arrayEach(rowNodes, (rowNode, index) => {
           if (index) {
             const item = {}
             const cellNodes = getElementsByTagName(rowNode, 'Cell')
             XEUtils.arrayEach(cellNodes, (cellNode, colIndex) => {
-              item[fields[colIndex]] = cellNode.textContent
+              if (fields[colIndex]) {
+                item[fields[colIndex]] = cellNode.textContent
+              }
             })
             rows.push(item)
           }

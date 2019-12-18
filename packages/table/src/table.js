@@ -559,6 +559,9 @@ export default {
         indent: 20
       }, GlobalConfig.treeConfig, this.treeConfig)
     },
+    cellOffsetWidth () {
+      return this.border ? Math.max(2, Math.ceil(this.scrollbarWidth / this.tableColumn.length)) : 1
+    },
     /**
      * 判断列全选的复选框是否禁用
      */

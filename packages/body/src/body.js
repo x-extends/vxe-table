@@ -63,7 +63,7 @@ function renderColumn (h, _vm, $table, $seq, seq, rowid, fixedType, rowLevel, ro
     overflowX,
     scrollXLoad,
     scrollYLoad,
-    border,
+    cellOffsetWidth,
     highlightCurrentRow,
     showOverflow: allShowOverflow,
     showAllOverflow: oldShowAllOverflow,
@@ -222,7 +222,15 @@ function renderColumn (h, _vm, $table, $seq, seq, rowid, fixedType, rowLevel, ro
     style: cellStyle ? (XEUtils.isFunction(cellStyle) ? cellStyle(params) : cellStyle) : null,
     on: tdOns
   }, allColumnOverflow && fixedHiddenColumn
-    ? []
+    ? [
+      h('div', {
+        class: ['vxe-cell', {
+          'c--title': showTitle,
+          'c--tooltip': showTooltip,
+          'c--ellipsis': showEllipsis
+        }]
+      })
+    ]
     : renderLine(h, _vm, $table, rowLevel, items, params).concat([
       h('div', {
         class: ['vxe-cell', {
@@ -231,7 +239,7 @@ function renderColumn (h, _vm, $table, $seq, seq, rowid, fixedType, rowLevel, ro
           'c--ellipsis': showEllipsis
         }],
         style: {
-          width: hasEllipsis ? `${border ? renderWidth - 2 : renderWidth}px` : null
+          width: hasEllipsis ? `${renderWidth - cellOffsetWidth}px` : null
         }
       }, column.renderCell(h, params)),
       hasDefaultTip ? validError ? h('div', {
