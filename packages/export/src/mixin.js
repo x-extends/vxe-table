@@ -498,7 +498,7 @@ export default {
      * @param {Object} options 参数
      */
     _exportData (options) {
-      let { visibleColumn, tableFullData, treeConfig, scrollXLoad, scrollYLoad } = this
+      let { visibleColumn, tableFullData } = this
       let opts = Object.assign({
         filename: '',
         sheetName: '',
@@ -523,11 +523,6 @@ export default {
       }
       if (!XEUtils.includes(VXETable.exportTypes, opts.type)) {
         throw new Error(UtilTools.getLog('vxe.error.notType', [opts.type]))
-      }
-      if (!opts.original) {
-        if (treeConfig || scrollXLoad || scrollYLoad) {
-          UtilTools.warn('vxe.error.scrollOriginal')
-        }
       }
       return handleExport(this, opts, visibleColumn, tableFullData)
     },
