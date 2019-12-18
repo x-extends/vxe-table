@@ -4846,7 +4846,7 @@ export default {
      * 如果是启用了可视渲染，则只能导出数据源，可以配合 dataFilterMethod 函数自行转换数据
      */
     exportData (options) {
-      let { visibleColumn, tableFullData, treeConfig, scrollXLoad, scrollYLoad } = this
+      let { visibleColumn, tableFullData } = this
       let opts = Object.assign({
         filename: '',
         sheetName: '',
@@ -4871,11 +4871,6 @@ export default {
       }
       if (!XEUtils.includes(VXETable.exportTypes, opts.type)) {
         throw new Error(UtilTools.getLog('vxe.error.notType', [opts.type]))
-      }
-      if (!opts.original) {
-        if (treeConfig || scrollXLoad || scrollYLoad) {
-          UtilTools.warn('vxe.error.scrollOriginal')
-        }
       }
       return ExportTools.handleExport(this, opts, visibleColumn, tableFullData)
     },
