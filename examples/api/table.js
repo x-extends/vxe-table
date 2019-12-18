@@ -320,7 +320,7 @@ const apis = [
         name: 'sync-resize',
         descKey: 'app.api.table.desc.syncResize',
         version: '1.14.3',
-        type: 'Boolean',
+        type: 'Boolean, String',
         enum: '',
         defVal: '',
         list: []
@@ -3282,7 +3282,7 @@ const apis = [
       },
       {
         name: 'exportData(options)',
-        desc: '将表格数据导出（只支持基本数据结构，目前不支持分组、合并等）',
+        desc: '将表格数据导出（只支持基本数据结构，目前不支持分组、合并等；树结构和虚拟滚动只允许导出数据源）',
         version: '1.15.8',
         type: 'Promise',
         enum: '',
@@ -3291,7 +3291,7 @@ const apis = [
       },
       {
         name: 'openExport(options)',
-        desc: '打开高级导出（只支持基本数据结构，目前不支持分组、合并等）',
+        desc: '打开高级导出（只支持基本数据结构，目前不支持分组、合并等；树结构和虚拟滚动只允许导出数据源）',
         version: '1.5.12',
         type: 'Promise',
         enum: '',

@@ -4846,11 +4846,11 @@ export default {
      * 如果是启用了可视渲染，则只能导出数据源，可以配合 dataFilterMethod 函数自行转换数据
      */
     exportData (options) {
-      let { visibleColumn, scrollXLoad, scrollYLoad, treeConfig, treeOpts } = this
+      let { visibleColumn, tableFullData, treeConfig, scrollXLoad, scrollYLoad } = this
       let opts = Object.assign({
         filename: '',
         sheetName: '',
-        original: !!treeConfig,
+        original: false,
         message: false,
         isHeader: true,
         isFooter: true,
@@ -4864,26 +4864,20 @@ export default {
         footerFilterMethod: null
       }, GlobalConfig.export, options)
       if (!opts.filename) {
-        opts.filename = 'export'
+        opts.filename = GlobalConfig.i18n('vxe.table.expFilename', [XEUtils.toDateString(Date.now(), 'yyyyMMddHHmmss')])
       }
       if (!opts.sheetName) {
-        opts.sheetName = 'Sheet1'
+        opts.sheetName = GlobalConfig.i18n('vxe.table.expSheetName')
       }
       if (!XEUtils.includes(VXETable.exportTypes, opts.type)) {
         throw new Error(UtilTools.getLog('vxe.error.notType', [opts.type]))
       }
       if (!opts.original) {
-        if (scrollXLoad || scrollYLoad) {
-          opts.original = true
+        if (treeConfig || scrollXLoad || scrollYLoad) {
           UtilTools.warn('vxe.error.scrollOriginal')
         }
       }
-      let columns = visibleColumn
-      let fullData = this.tableFullData
-      if (treeConfig) {
-        fullData = XEUtils.toTreeArray(fullData, treeOpts)
-      }
-      return ExportTools.handleExport(this, opts, columns, fullData)
+      return ExportTools.handleExport(this, opts, visibleColumn, tableFullData)
     },
     openImport (options) {
       if (this.$toolbar) {

@@ -39,7 +39,9 @@ export default {
       sortDesc: 'Descending: highest to lowest',
       filter: 'Enable filtering on selected columns',
       impSuccess: 'Import success',
-      expSuccess: 'Export success'
+      expSuccess: 'Export success',
+      expFilename: 'Export_{0}',
+      expSheetName: 'Sheet1'
     },
     grid: {
       selectOneRecord: 'Please choose at least one piece of record!',
@@ -113,8 +115,7 @@ export default {
       expHeaderTitle: 'Need to export header',
       expOptFooter: 'Footer',
       expFooterTitle: 'Need to export footer',
-      expOptOriginal: 'Original (Support import)',
-      expOptOriginNotImp: 'Original (Import not supported)',
+      expOptOriginal: 'Source data',
       expOriginalTitle: 'Need to export data source? If it is checked, import to table is supported',
       expPrint: 'Print',
       expConfirm: 'Export'

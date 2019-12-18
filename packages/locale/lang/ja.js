@@ -39,7 +39,9 @@ export default {
       sortDesc: '降序：最高到最低',
       filter: '对所选的列启用筛选',
       impSuccess: '导入成功',
-      expSuccess: '导出成功'
+      expSuccess: '导出成功',
+      expFilename: '导出_{0}',
+      expSheetName: 'Sheet1'
     },
     grid: {
       selectOneRecord: '少なくとも1つのレコードを選択してください',
@@ -113,8 +115,7 @@ export default {
       expHeaderTitle: '是否需要导出表头',
       expOptFooter: '表尾',
       expFooterTitle: '是否需要导出表尾',
-      expOptOriginal: '源(支持导入)',
-      expOptOriginNotImp: '源(不支持导入)',
+      expOptOriginal: '源数据',
       expOriginalTitle: '是否需要导出数据源，如果勾上则支持导入到表格中',
       expPrint: '打印',
       expConfirm: '导出'
