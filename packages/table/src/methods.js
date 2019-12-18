@@ -1039,6 +1039,7 @@ const Methods = {
       scrollbarWidth,
       scrollXLoad,
       scrollYLoad,
+      cellOffsetWidth,
       columnStore,
       elemStore,
       editStore,
@@ -1230,7 +1231,7 @@ const Methods = {
                         }
                       }
                     }
-                    cellElem.style.width = `${border ? colWidth - (2 * colspan) : colWidth}px`
+                    cellElem.style.width = `${colWidth - (cellOffsetWidth * colspan)}px`
                   }
                 })
               }

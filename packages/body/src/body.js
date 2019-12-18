@@ -200,7 +200,15 @@ function renderColumn (h, _vm, $table, $seq, seq, rowid, fixedType, rowLevel, ro
     style: cellStyle ? (XEUtils.isFunction(cellStyle) ? cellStyle(params) : cellStyle) : null,
     on: tdOns
   }, allColumnOverflow && fixedHiddenColumn
-    ? []
+    ? [
+      h('div', {
+        class: ['vxe-cell', {
+          'c--title': showTitle,
+          'c--tooltip': showTooltip,
+          'c--ellipsis': showEllipsis
+        }]
+      })
+    ]
     : renderLine(h, _vm, $table, rowLevel, items, params).concat([
       h('div', {
         class: ['vxe-cell', {
