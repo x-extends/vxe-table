@@ -11,7 +11,7 @@
     <div v-show="selectTab === 'tab1'">
       <vxe-table
         border
-        :sync-resize="selectTab === 'tab1'"
+        :sync-resize="selectTab"
         :data="tableData">
         <vxe-table-column type="seq" width="60"></vxe-table-column>
         <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -23,7 +23,7 @@
     <div v-show="selectTab === 'tab2'">
       <vxe-table
         border
-        :sync-resize="selectTab === 'tab2'"
+        :sync-resize="selectTab"
         :data="tableData">
         <vxe-table-column type="radio" width="60"></vxe-table-column>
         <vxe-table-column field="role" title="Rolw"></vxe-table-column>
@@ -36,7 +36,7 @@
     <div v-show="selectTab === 'tab3'">
       <vxe-table
         border
-        :sync-resize="selectTab === 'tab3'"
+        :sync-resize="selectTab"
         :data="tableData">
         <vxe-table-column type="checkbox" width="60"></vxe-table-column>
         <vxe-table-column field="nickname" title="nickname"></vxe-table-column>
@@ -76,7 +76,7 @@ export default {
         <div v-show="selectTab === 'tab1'">
           <vxe-table
             border
-            :sync-resize="selectTab === 'tab1'"
+            :sync-resize="selectTab"
             :data="tableData">
             <vxe-table-column type="seq" width="60"></vxe-table-column>
             <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -88,7 +88,7 @@ export default {
         <div v-show="selectTab === 'tab2'">
           <vxe-table
             border
-            :sync-resize="selectTab === 'tab2'"
+            :sync-resize="selectTab"
             :data="tableData">
             <vxe-table-column type="radio" width="60"></vxe-table-column>
             <vxe-table-column field="role" title="Rolw"></vxe-table-column>
@@ -101,7 +101,7 @@ export default {
         <div v-show="selectTab === 'tab3'">
           <vxe-table
             border
-            :sync-resize="selectTab === 'tab3'"
+            :sync-resize="selectTab"
             :data="tableData">
             <vxe-table-column type="checkbox" width="60"></vxe-table-column>
             <vxe-table-column field="nickname" title="nickname"></vxe-table-column>

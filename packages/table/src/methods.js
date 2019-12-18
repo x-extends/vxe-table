@@ -982,7 +982,7 @@ const Methods = {
     this.isCoverBody = tableWidth >= bodyWidth - 2
     this.parentHeight = this.getParentHeight()
     if (headerElem) {
-      this.headerHeight = headerElem.offsetHeight
+      this.headerHeight = headerElem.clientHeight + 1
       // 检测是否同步滚动
       if (headerElem.scrollLeft !== bodyElem.scrollLeft) {
         headerElem.scrollLeft = bodyElem.scrollLeft
@@ -1138,7 +1138,7 @@ const Methods = {
             let fixedColumn = columnStore[`${fixedType}List`]
             wrapperElem.style.top = `${headerHeight}px`
             fixedWrapperElem.style.height = `${(customHeight > 0 ? customHeight - headerHeight - footerHeight : tableHeight) + headerHeight + footerHeight - scrollbarHeight * (showFooter ? 2 : 1)}px`
-            fixedWrapperElem.style.width = `${fixedColumn.reduce((previous, column) => previous + column.renderWidth, isRightFixed ? scrollbarWidth : 0)}px`
+            fixedWrapperElem.style.width = `${fixedColumn.reduce((previous, column) => previous + column.renderWidth, isRightFixed ? scrollbarWidth : 0) - (border ? 1 : 0)}px`
           }
 
           let tWidth = tableWidth
