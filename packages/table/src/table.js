@@ -63,6 +63,7 @@ function renderFixed (h, $table, fixedType) {
     visibleColumn,
     collectColumn,
     isGroup,
+    border,
     height,
     parentHeight,
     vSize,
@@ -89,7 +90,7 @@ function renderFixed (h, $table, fixedType) {
   }
   let style = {
     height: `${(customHeight > 0 ? customHeight - headerHeight - footerHeight : tableHeight) + headerHeight + footerHeight - scrollbarHeight * (showFooter ? 2 : 1)}px`,
-    width: `${fixedColumn.reduce((previous, column) => previous + column.renderWidth, isRightFixed ? scrollbarWidth : 0)}px`
+    width: `${fixedColumn.reduce((previous, column) => previous + column.renderWidth, isRightFixed ? scrollbarWidth : 0) - (border ? 1 : 0)}px`
   }
   return h('div', {
     class: [`vxe-table--fixed-${fixedType}-wrapper`, {
@@ -251,7 +252,7 @@ export default {
     // 是否自动监听父容器变化去更新响应式表格宽高
     autoResize: Boolean,
     // 是否自动根据状态属性去更新响应式表格宽高
-    syncResize: Boolean,
+    syncResize: [Boolean, String],
     // 序号配置项
     seqConfig: Object,
     // 排序配置项
@@ -643,7 +644,12 @@ export default {
     },
     syncResize (value) {
       if (value) {
-        this.$nextTick(() => this.recalculate(true))
+        this.$nextTick(() => {
+          // 只在可视状态下才去更新
+          if (this.$el.clientWidth && this.$el.clientHeight) {
+            this.recalculate(true)
+          }
+        })
       }
     }
   },
@@ -1989,7 +1995,7 @@ export default {
       this.isCoverBody = tableWidth >= bodyWidth - 2
       this.parentHeight = this.getParentHeight()
       if (headerElem) {
-        this.headerHeight = headerElem.offsetHeight
+        this.headerHeight = headerElem.clientHeight + 1
       }
       if (footerElem) {
         let footerHeight = footerElem.offsetHeight
