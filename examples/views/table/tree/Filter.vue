@@ -3,10 +3,11 @@
     <p class="tip">简单实现树结构查找功能</p>
 
     <vxe-table
+      ref="xTree"
       max-height="600"
       :loading="loading"
       :data="tableData"
-      :tree-config="{children: 'children', expandAll: !!filterName}">
+      :tree-config="{children: 'children'}">
       <vxe-table-column field="name" title="名称" tree-node>
         <template v-slot:header="{ row }">
           <div>名称</div>
@@ -41,10 +42,11 @@ export default {
       demoCodes: [
         `
         <vxe-table
+          ref="xTree"
           max-height="600"
           :loading="loading"
           :data="tableData"
-          :tree-config="{children: 'children', line: true, expandAll: !!filterName}">
+          :tree-config="{children: 'children'}">
           <vxe-table-column field="name" title="名称" tree-node>
             <template v-slot:header="{ row }">
               <div>名称</div>
@@ -81,6 +83,10 @@ export default {
                 let options = { children: 'children' }
                 let searchProps = ['name']
                 this.tableData = this.$utils.searchTree(this.originData, item => searchProps.some(key => this.$utils.toString(item[key]).indexOf(filterName) > -1), options)
+                // 搜索之后默认展开所有子节点
+                this.$nextTick(() => {
+                  this.$refs.xTree.setAllTreeExpansion(true)
+                })
               } else {
                 this.tableData = this.originData
               }
@@ -114,6 +120,10 @@ export default {
         let options = { children: 'children' }
         let searchProps = ['name']
         this.tableData = this.$utils.searchTree(this.originData, item => searchProps.some(key => this.$utils.toString(item[key]).indexOf(filterName) > -1), options)
+        // 搜索之后默认展开所有子节点
+        this.$nextTick(() => {
+          this.$refs.xTree.setAllTreeExpansion(true)
+        })
       } else {
         this.tableData = this.originData
       }

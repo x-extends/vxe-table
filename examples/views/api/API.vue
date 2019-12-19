@@ -22,7 +22,7 @@
       :loading="loading"
       :cell-class-name="cellClassNameFunc"
       :data="apiList"
-      :tree-config="{children: 'list', expandAll: !!filterName, expandRowKeys: defaultExpandRowKeys, trigger: 'cell'}"
+      :tree-config="{children: 'list', expandRowKeys: defaultExpandRowKeys, trigger: 'cell'}"
       :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus},}"
       @header-cell-context-menu="headerCellContextMenuEvent"
       @cell-context-menu="cellContextMenuEvent"
@@ -328,6 +328,9 @@ export default {
           })
         }, options)
         this.apiList = rest
+        this.$nextTick(() => {
+          this.$refs.xTable.setAllTreeExpansion(true)
+        })
       } else {
         this.apiList = this.tableData
       }

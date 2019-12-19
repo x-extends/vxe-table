@@ -587,7 +587,12 @@ export default {
   },
   watch: {
     data (value) {
-      this.loadTableData(value, true).then(this.handleDefault)
+      this.loadTableData(value, true).then(() => {
+        if (!this.inited) {
+          this.inited = true
+          this.handleDefaults()
+        }
+      })
     },
     customs (value) {
       if (!this.isUpdateCustoms) {
@@ -654,7 +659,7 @@ export default {
     }
   },
   created () {
-    let { scrollXStore, scrollYStore, optimizeOpts, ctxMenuOpts, showOverflow, radioOpts, checkboxOpts, treeConfig, treeOpts, editConfig, loading, showAllOverflow, showHeaderAllOverflow } = this
+    let { data, scrollXStore, scrollYStore, optimizeOpts, ctxMenuOpts, showOverflow, radioOpts, checkboxOpts, treeConfig, treeOpts, editConfig, loading, showAllOverflow, showHeaderAllOverflow } = this
     let { scrollX, scrollY } = optimizeOpts
     if (loading) {
       this._isLoading = true
@@ -726,7 +731,7 @@ export default {
     this.fullDataRowIdData = {}
     this.fullColumnMap = new Map()
     this.fullColumnIdData = {}
-    this.loadTableData(this.data, true).then(() => {
+    this.loadTableData(data, true).then(() => {
       if (checkboxOpts.key) {
         UtilTools.warn('vxe.error.delProp', ['select-config.key', 'row-id'])
       } else if (treeConfig && treeOpts.key) {
@@ -734,7 +739,10 @@ export default {
       } else if (editConfig && editConfig.key) {
         UtilTools.warn('vxe.error.delProp', ['edit-config.key', 'row-id'])
       }
-      this.handleDefault()
+      if (data && data.length) {
+        this.inited = true
+        this.handleDefaults()
+      }
     })
     GlobalEvent.on(this, 'mousedown', this.handleGlobalMousedownEvent)
     GlobalEvent.on(this, 'blur', this.handleGlobalBlurEvent)
@@ -1076,12 +1084,14 @@ export default {
       })
     },
     loadData (datas) {
+      this.inited = true
       return this.loadTableData(datas)
     },
     reloadData (datas) {
+      this.inited = true
       return this.clearAll()
         .then(() => this.loadTableData(datas))
-        .then(this.handleDefault)
+        .then(this.handleDefaults)
     },
     reloadRow (row, record, field) {
       let { tableSourceData, tableData } = this
@@ -1669,14 +1679,17 @@ export default {
         footerData: footerData.slice(0)
       }
     },
-    handleDefault () {
+    /**
+     * 默认行为只允许执行一次
+     */
+    handleDefaults () {
       // 在 v3.0 中废弃 selectConfig
       let checkboxConfig = this.checkboxConfig || this.selectConfig
       if (checkboxConfig) {
-        this.handleSelectionDefChecked()
+        this.handleDefaultSelectionChecked()
       }
       if (this.radioConfig) {
-        this.handleRadioDefChecked()
+        this.handleDefaultRadioChecked()
       }
       if (this.sortConfig) {
         this.handleDefaultSort()
@@ -2660,7 +2673,7 @@ export default {
     /**
      * 处理复选框默认勾选
      */
-    handleSelectionDefChecked () {
+    handleDefaultSelectionChecked () {
       let { fullDataRowIdData, checkboxOpts } = this
       let { checkAll, checkRowKeys } = checkboxOpts
       if (checkAll) {
@@ -3010,7 +3023,7 @@ export default {
     /**
      * 处理单选框默认勾选
      */
-    handleRadioDefChecked () {
+    handleDefaultRadioChecked () {
       let { radioOpts, fullDataRowIdData } = this
       let { checkRowKey: rowid } = radioOpts
       if (rowid) {
@@ -3610,7 +3623,10 @@ export default {
       if (defaultSort) {
         let { field, order } = defaultSort
         if (field && order) {
-          this.sort(field, order)
+          let column = XEUtils.find(this.visibleColumn, item => item.property === field)
+          if (column && !column.order) {
+            this.sort(field, order)
+          }
         }
       }
     },

@@ -183,9 +183,23 @@ export default {
     }
   },
   mounted () {
-    let { columns, proxyConfig, proxyOpts } = this
+    let { $refs, columns, proxyConfig, proxyOpts } = this
+    let $table = $refs.xTable
+    let defaultSort = $table.sortOpts.defaultSort
     if (columns && columns.length) {
       this.loadColumn(this.columns)
+    }
+    // 如果使用默认排序
+    if (defaultSort) {
+      let { field, order } = defaultSort
+      this.sortData = {
+        column: columns.find(column => column.property === field),
+        property: field,
+        field: field,
+        prop: field,
+        order,
+        $table
+      }
     }
     if (proxyConfig && proxyOpts.autoLoad !== false) {
       this.commitProxy('query')
