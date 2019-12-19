@@ -32,6 +32,9 @@ export const Cell = {
         renMaps.renderCell = this.renderExpandCell
         renMaps.renderData = this.renderExpandData
         break
+      case 'html':
+        renMaps.renderCell = this.renderHTMLCell
+        break
       default:
         if (editRender) {
           renMaps.renderHeader = this.renderEditHeader
@@ -68,11 +71,10 @@ export const Cell = {
       let funName = own.editRender ? 'renderCell' : 'renderDefault'
       let compConf = Renderer.get(editRender.name)
       if (compConf && compConf[funName]) {
-        return compConf[funName].call($table, h, editRender, params, { $type: own.editRender ? 'edit' : 'cell', $excel: $table.$parent, $table, $column: column })
+        return compConf[funName].call($table, h, editRender, params, { $type: own.editRender ? 'edit' : 'cell', $grid: $table.$grid, $excel: $table.$parent, $table, $column: column })
       }
     }
-    let cellValue = UtilTools.getCellLabel(row, column, params)
-    return [UtilTools.formatText(cellValue, 1)]
+    return [UtilTools.formatText(UtilTools.getCellLabel(row, column, params), 1)]
   },
   renderTreeCell (h, params) {
     return Cell.renderTreeIcon(h, params).concat(Cell.renderCell.call(this, h, params))
@@ -427,6 +429,25 @@ export const Cell = {
   },
 
   /**
+   * HTML 标签
+   */
+  renderHTMLCell (h, params) {
+    let { row, column } = params
+    let { slots } = column
+    if (slots && slots.default) {
+      return slots.default(params, h)
+    }
+    return [
+      h('span', {
+        class: 'vxe-cell--html',
+        domProps: {
+          innerHTML: UtilTools.formatText(UtilTools.getCellLabel(row, column, params), 1)
+        }
+      })
+    ]
+  },
+
+  /**
    * 排序和筛选
    */
   renderSortAndFilterHeader (h, params) {
@@ -561,7 +582,7 @@ export const Cell = {
       if (slots && slots.edit) {
         return slots.edit(params, h)
       }
-      return compConf && compConf.renderEdit ? compConf.renderEdit.call($table, h, editRender, params, { $type: 'edit', $excel: $table.$parent, $table, $column: column }) : []
+      return compConf && compConf.renderEdit ? compConf.renderEdit.call($table, h, editRender, params, { $type: 'edit', $grid: $table.$grid, $excel: $table.$parent, $table, $column: column }) : []
     }
     if (slots && slots.default) {
       return slots.default(params, h)
