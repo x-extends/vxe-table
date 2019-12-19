@@ -727,6 +727,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.filter',
+              locat: {
+                name: 'TableTreeFilter'
+              }
+            },
+            {
               label: 'app.aside.nav.groupSummary',
               demoUrl: 'https://jsrun.pro/KVWKp/edit',
               locat: {

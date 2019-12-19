@@ -113,6 +113,7 @@ const TableTreeSelection = () => import(/* webpackChunkName: "tree" */ './views/
 const TableTreeRadio = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Radio.vue')
 const TableTreeFixed = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Fixed.vue')
 const TableTreeMaxHeight = () => import(/* webpackChunkName: "tree" */ './views/table/tree/MaxHeight.vue')
+const TableTreeFilter = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Filter.vue')
 const TableTreeGroupSummary = () => import(/* webpackChunkName: "tree" */ './views/table/tree/GroupSummary.vue')
 const TableTreeGroupSummaryCount = () => import(/* webpackChunkName: "tree" */ './views/table/tree/GroupSummaryCount.vue')
 const TableTreeExpand = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Expand.vue')
@@ -666,6 +667,11 @@ export default new Router({
       path: '/table/tree/maxHeight',
       name: 'TableTreeMaxHeight',
       component: TableTreeMaxHeight
+    },
+    {
+      path: '/table/tree/filter',
+      name: 'TableTreeFilter',
+      component: TableTreeFilter
     },
     {
       path: '/table/tree/groupSummary',

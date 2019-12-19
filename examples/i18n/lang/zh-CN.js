@@ -400,7 +400,7 @@ module.exports = {
           sortBy: '只对 sortable 有效，自定义排序的属性',
           sortMethod: '自定义排序方法，Array.sort(a, b)',
           remoteSort: '是否使用服务端排序，如果设置为 true 则不会对数据进行处理',
-          filters: '配置筛选条件',
+          filters: '配置筛选条件（注：筛选只能用于列表，如果是树结构则过滤根节点）',
           filterMultiple: '只对 filters 有效，筛选是否允许多选',
           filterMethod: '只对 filters 有效，自定义筛选方法 Function({value, row, column})',
           filterRender: '筛选渲染器配置项',
