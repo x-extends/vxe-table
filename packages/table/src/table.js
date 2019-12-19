@@ -445,7 +445,12 @@ export default {
   },
   watch: {
     data (value) {
-      this.loadTableData(value, true).then(this.handleDefault)
+      this.loadTableData(value, true).then(() => {
+        if (!this.inited) {
+          this.inited = true
+          this.handleDefaults()
+        }
+      })
     },
     customs (value) {
       if (!this.isUpdateCustoms) {
@@ -601,7 +606,10 @@ export default {
       })
     }
     this.loadTableData(data, true).then(() => {
-      this.handleDefault()
+      if (data && data.length) {
+        this.inited = true
+        this.handleDefaults()
+      }
       this.updateStyle()
     })
     GlobalEvent.on(this, 'mousedown', this.handleGlobalMousedownEvent)

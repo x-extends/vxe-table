@@ -147,6 +147,7 @@ const Methods = {
    * @param {Array} datas 数据
    */
   loadData (datas) {
+    this.inited = true
     return this.loadTableData(datas).then(this.recalculate)
   },
   /**
@@ -154,9 +155,10 @@ const Methods = {
    * @param {Array} datas 数据
    */
   reloadData (datas) {
+    this.inited = true
     return this.clearAll()
       .then(() => this.loadTableData(datas))
-      .then(this.handleDefault)
+      .then(this.handleDefaults)
   },
   /**
    * 局部加载行数据并恢复到初始状态
@@ -633,14 +635,17 @@ const Methods = {
       footerData: footerData.slice(0)
     }
   },
-  handleDefault () {
+  /**
+   * 默认行为只允许执行一次
+   */
+  handleDefaults () {
     // 在 v3.0 中废弃 selectConfig
     let checkboxConfig = this.checkboxConfig || this.selectConfig
     if (checkboxConfig) {
-      this.handleSelectionDefChecked()
+      this.handleDefaultSelectionChecked()
     }
     if (this.radioConfig) {
-      this.handleRadioDefChecked()
+      this.handleDefaultRadioChecked()
     }
     if (this.sortConfig) {
       this.handleDefaultSort()
@@ -1589,7 +1594,7 @@ const Methods = {
   /**
    * 处理默认勾选
    */
-  handleSelectionDefChecked () {
+  handleDefaultSelectionChecked () {
     let { fullDataRowIdData, checkboxOpts } = this
     let { checkAll, checkRowKeys } = checkboxOpts
     if (checkAll) {
@@ -1943,7 +1948,7 @@ const Methods = {
   /**
    * 处理单选框默认勾选
    */
-  handleRadioDefChecked () {
+  handleDefaultRadioChecked () {
     let { radioOpts, fullDataRowIdData } = this
     let { checkRowKey: rowid } = radioOpts
     if (rowid && fullDataRowIdData[rowid]) {
@@ -2184,7 +2189,10 @@ const Methods = {
     if (defaultSort) {
       let { field, order } = defaultSort
       if (field && order) {
-        this.sort(field, order)
+        let column = XEUtils.find(this.visibleColumn, item => item.property === field)
+        if (column && !column.order) {
+          this.sort(field, order)
+        }
       }
     }
   },

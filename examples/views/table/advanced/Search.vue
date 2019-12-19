@@ -52,9 +52,10 @@
     </vxe-toolbar>
 
     <vxe-table
+      tree-config
+      ref="xTree"
       max-height="400"
-      :data="list2"
-      :tree-config="{children: 'children', expandAll: !!filterName2}">
+      :data="list2">
       <vxe-table-column type="seq" width="160" title="序号" tree-node></vxe-table-column>
       <vxe-table-column field="name" title="Name">
         <template v-slot="{ row }">
@@ -178,9 +179,10 @@ export default {
         </vxe-toolbar>
 
         <vxe-table
+          tree-config
+          ref="xTree"
           max-height="400"
           :data="list"
-          :tree-config="{children: 'children', expandAll: !!filterName}">
           <vxe-table-column type="seq" width="160" title="序号" tree-node></vxe-table-column>
           <vxe-table-column field="name" title="Name">
             <template v-slot="{ row }">
@@ -225,6 +227,10 @@ export default {
                     item[key] = this.$utils.toString(item[key]).replace(filterRE, match => \`<span class="keyword-lighten">\${match}</span>\`)
                   })
                 }, options)
+                // 搜索之后默认展开所有子节点
+                this.$nextTick(() => {
+                  this.$refs.xTree.setAllTreeExpansion(true)
+                })
                 return rest
               }
               return this.tableData
@@ -272,6 +278,10 @@ export default {
             item[key] = this.$utils.toString(item[key]).replace(filterRE, match => `<span class="keyword-lighten">${match}</span>`)
           })
         }, options)
+        // 搜索之后默认展开所有子节点
+        this.$nextTick(() => {
+          this.$refs.xTree.setAllTreeExpansion(true)
+        })
         return rest
       }
       return this.tableData2

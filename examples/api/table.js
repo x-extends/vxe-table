@@ -744,7 +744,7 @@ const apis = [
         list: [
           {
             name: 'defaultSort',
-            desc: '默认排序',
+            desc: '默认排序（只会在初始化时被触发一次）',
             version: '2.7',
             type: 'Object',
             enum: '',
@@ -873,7 +873,7 @@ const apis = [
           },
           {
             name: 'checkRowKey',
-            desc: '默认选中开指定行（需要有 row-id）',
+            desc: '默认选中开指定行（只会在初始化时被触发一次，需要有 row-id）',
             version: '',
             type: 'Row.rowId',
             enum: '',
@@ -965,7 +965,7 @@ const apis = [
           },
           {
             name: 'checkAll',
-            desc: '默认勾选所有',
+            desc: '默认勾选所有（只会在初始化时被触发一次）',
             version: '',
             type: 'Boolean',
             enum: '',
@@ -974,7 +974,7 @@ const apis = [
           },
           {
             name: 'checkRowKeys',
-            desc: '默认勾选开指定行（需要有 row-id）',
+            desc: '默认勾选开指定行（只会在初始化时被触发一次，需要有 row-id）',
             version: '',
             type: 'Array<Row.rowId>',
             enum: '',
@@ -1084,7 +1084,7 @@ const apis = [
           },
           {
             name: 'expandAll',
-            desc: '默认展开所有行',
+            desc: '默认展开所有行（只会在初始化时被触发一次）',
             version: '',
             type: 'Boolean',
             enum: '',
@@ -1093,7 +1093,7 @@ const apis = [
           },
           {
             name: 'expandRowKeys',
-            desc: '默认展开指定行（需要有 row-id）',
+            desc: '默认展开指定行（只会在初始化时被触发一次，需要有 row-id）',
             version: '',
             type: 'Array<Row.rowId>',
             enum: '',
@@ -1202,7 +1202,7 @@ const apis = [
           },
           {
             name: 'expandAll',
-            desc: '默认展开所有子孙树节点',
+            desc: '默认展开所有子孙树节点（只会在初始化时被触发一次）',
             version: '',
             type: 'Boolean',
             enum: '',
@@ -1211,7 +1211,7 @@ const apis = [
           },
           {
             name: 'expandRowKeys',
-            desc: '默认展开指定树节点（需要有 row-id）',
+            desc: '默认展开指定树节点（只会在初始化时被触发一次，需要有 row-id）',
             version: '',
             type: 'Array<Row.rowId>',
             enum: '',
