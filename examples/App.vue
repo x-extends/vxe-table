@@ -728,6 +728,7 @@ export default {
             },
             {
               label: 'app.aside.nav.filter',
+              demoUrl: 'https://jsrun.pro/CDWKp/edit',
               locat: {
                 name: 'TableTreeFilter'
               }
