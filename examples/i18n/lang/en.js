@@ -38,6 +38,7 @@ module.exports = {
         empty: 'Empty data',
         loading: 'Loading',
         format: 'Format content',
+        html: 'HTML tag',
 
         more: 'More',
         events: 'Event',
@@ -377,6 +378,7 @@ module.exports = {
           checkbox: 'Checkbox',
           radio: 'Radio',
           expand: 'Expansion',
+          html: 'HTML tag',
           prop: 'Obsolete, please use "field"',
           field: 'Column field name',
           label: 'Obsolete, please use "title"',

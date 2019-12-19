@@ -296,6 +296,13 @@ export default {
               locat: {
                 name: 'TableFormat'
               }
+            },
+            {
+              label: 'app.aside.nav.html',
+              demoUrl: 'https://jsrun.pro/ItWKp/edit',
+              locat: {
+                name: 'TableHTML'
+              }
             }
           ]
         },

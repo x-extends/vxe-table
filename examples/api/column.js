@@ -70,6 +70,15 @@ const apis = [
             enum: '',
             defVal: '',
             list: []
+          },
+          {
+            name: 'html',
+            descKey: 'app.api.tableColumn.desc.html',
+            version: '2.7.6',
+            type: '',
+            enum: '',
+            defVal: '',
+            list: []
           }
         ]
       },

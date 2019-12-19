@@ -43,6 +43,7 @@ const TableFilter = () => import(/* webpackChunkName: "base" */ './views/table/b
 const TableEmpty = () => import(/* webpackChunkName: "base" */ './views/table/base/Empty.vue')
 const TableLoading = () => import(/* webpackChunkName: "base" */ './views/table/base/Loading.vue')
 const TableFormat = () => import(/* webpackChunkName: "base" */ './views/table/base/Format.vue')
+const TableHTML = () => import(/* webpackChunkName: "base" */ './views/table/base/HTML.vue')
 
 const TableEvent = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Event.vue')
 const TableTemplate = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Template.vue')
@@ -456,6 +457,11 @@ export default new Router({
       path: '/table/base/format',
       name: 'TableFormat',
       component: TableFormat
+    },
+    {
+      path: '/table/base/html',
+      name: 'TableHTML',
+      component: TableHTML
     },
     {
       path: '/table/advanced/event',
