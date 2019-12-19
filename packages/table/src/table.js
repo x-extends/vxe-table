@@ -557,8 +557,8 @@ export default {
     if (this.selectConfig) {
       UtilTools.warn('vxe.error.delProp', ['select-config', 'checkbox-config'])
     }
-    if (treeConfig && treeOpts.line && !showOverflow) {
-      UtilTools.warn('vxe.error.treeLineReqProp', ['show-overflow'])
+    if (treeConfig && treeOpts.line && (!this.rowKey || !showOverflow)) {
+      UtilTools.warn('vxe.error.treeLineReqProp', ['row-key | show-overflow'])
     }
     if (this.sortMethod) {
       UtilTools.warn('vxe.error.delProp', ['sort-method', 'sort-config.sortMethod'])

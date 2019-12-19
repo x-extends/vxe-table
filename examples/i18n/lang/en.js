@@ -399,7 +399,7 @@ module.exports = {
           sortBy: 'Only valid for sortable, custom sort attributes',
           sortMethod: 'Custom sort method, Array.sort(a, b)',
           remoteSort: 'Whether to use remote sorting',
-          filters: 'Configure filter conditions',
+          filters: 'Configure filter conditions(note: filtering can only be used for lists, if it is a tree, filter the root node)',
           filterMultiple: 'Works only for filters, filtering whether multiple selections are allowed',
           filterMethod: 'Works only for filters, custom filtering methods, Function({value, row, column})',
           filterRender: 'Filter renderer config',

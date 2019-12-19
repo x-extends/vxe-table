@@ -104,7 +104,7 @@ window.MOCK_TREE_DATA_LIST = [
     name: '文件夹 10000',
     size: '53k',
     type: '',
-    date: '2019-05-16',
+    date: '2019-10-22',
     children: [
       {
         id: '11000',
@@ -112,7 +112,7 @@ window.MOCK_TREE_DATA_LIST = [
         name: '某 11000.avi',
         size: '11k',
         type: 'avi',
-        date: '2019-05-16'
+        date: '2019-05-21'
       },
       {
         id: '12000',
@@ -120,7 +120,7 @@ window.MOCK_TREE_DATA_LIST = [
         name: '文件夹 12000',
         size: '22k',
         type: '',
-        date: '2019-05-16',
+        date: '2019-08-16',
         children: [
           {
             id: '12100',
@@ -128,7 +128,7 @@ window.MOCK_TREE_DATA_LIST = [
             name: '图片 12100.png',
             size: '60k',
             type: '',
-            date: '2019-05-16',
+            date: '2019-08-20',
             children: [
               {
                 id: '12110',
@@ -136,7 +136,7 @@ window.MOCK_TREE_DATA_LIST = [
                 name: '某个页面 12110.html',
                 size: '100k',
                 type: 'html',
-                date: '2019-05-16'
+                date: '2019-05-19'
               }
             ]
           },
@@ -146,7 +146,7 @@ window.MOCK_TREE_DATA_LIST = [
             name: 'xxx 122000.avi',
             size: '80k',
             type: 'avi',
-            date: '2019-05-16'
+            date: '2019-04-18'
           },
           {
             id: '123000',
@@ -154,7 +154,7 @@ window.MOCK_TREE_DATA_LIST = [
             name: '文件夹 123000',
             size: '',
             type: '',
-            date: '2019-05-17',
+            date: '2019-06-17',
             children: [
               {
                 id: '123100',
@@ -168,7 +168,7 @@ window.MOCK_TREE_DATA_LIST = [
                 name: '文件 123200',
                 size: '105k',
                 type: 'avi',
-                date: '2019-05-20'
+                date: '2019-02-20'
               }
             ]
           }
@@ -182,7 +182,7 @@ window.MOCK_TREE_DATA_LIST = [
     name: '图片 20000.png',
     size: '66k',
     type: 'png',
-    date: '2019-05-16'
+    date: '2019-08-23'
   },
   {
     id: '30000',
@@ -190,28 +190,28 @@ window.MOCK_TREE_DATA_LIST = [
     name: '文件夹 30000',
     size: '3k',
     type: '',
-    date: '2019-05-16',
+    date: '2019-05-14',
     children: [
       {
         id: '31000',
         name: '文件夹 31000',
         size: '9k',
         type: '',
-        date: '2019-05-16',
+        date: '2019-07-24',
         children: [
           {
             id: '31100',
             name: '从入门到放弃 31100.js',
             size: '40k',
             type: 'js',
-            date: '2019-05-16'
+            date: '2019-05-27'
           },
           {
             id: '31200',
             name: '文件 31200',
             size: '224k',
             type: 'java',
-            date: '2019-05-16'
+            date: '2019-10-25'
           }
         ]
       },
@@ -220,42 +220,42 @@ window.MOCK_TREE_DATA_LIST = [
         name: '文件夹 32000',
         size: '33k',
         type: '',
-        date: '2019-05-16',
+        date: '2019-05-25',
         children: [
           {
             id: '32100',
             name: '入门教程 32100.mp4',
             size: '35k',
             type: 'mp4',
-            date: '2019-05-16'
+            date: '2019-05-28'
           },
           {
             id: '32200',
             name: '文件夹 32000',
             size: '33k',
             type: '',
-            date: '2019-08-16',
+            date: '2019-02-29',
             children: [
               {
                 id: '32210',
                 name: 'vxe-table 从入门到住院 32210.pdf',
                 size: '75k',
                 type: 'pdf',
-                date: '2019-06-16'
+                date: '2019-12-13'
               },
               {
                 id: '32220',
                 name: '文件夹 32220',
                 size: '33k',
                 type: '',
-                date: '2019-08-31',
+                date: '2019-08-12',
                 children: [
                   {
                     id: '32221',
                     name: 'vxe-table 从入门到放弃 32221.pdf',
                     size: '85k',
                     type: 'pdf',
-                    date: '2019-06-30'
+                    date: '2019-12-30'
                   }
                 ]
               }
@@ -273,21 +273,21 @@ window.MOCK_TREE_DATA_LIST = [
                 name: '某视频 32310.mp4',
                 size: '75k',
                 type: 'mp4',
-                date: '2019-06-16'
+                date: '2019-11-09'
               },
               {
                 id: '32320',
                 name: '文件夹 32320',
                 size: '88k',
                 type: '',
-                date: '2019-08-31',
+                date: '2019-08-08',
                 children: [
                   {
                     id: '32321',
                     name: '音乐 32321.mp3',
                     size: '5k',
                     type: 'mp3',
-                    date: '2019-06-06'
+                    date: '2019-03-07'
                   },
                   {
                     id: '32322',
@@ -307,7 +307,7 @@ window.MOCK_TREE_DATA_LIST = [
         name: '在线文档 33000.txt',
         size: '95k',
         type: 'txt',
-        date: '2019-06-16'
+        date: '2019-01-05'
       }
     ]
   },
@@ -317,7 +317,7 @@ window.MOCK_TREE_DATA_LIST = [
     name: '文件夹 40000',
     size: '26k',
     type: 'mp4',
-    date: '2019-03-16',
+    date: '2019-03-04',
     children: [
       {
         id: '41000',
@@ -325,7 +325,7 @@ window.MOCK_TREE_DATA_LIST = [
         name: 'xxx 41000.mp4',
         size: '135k',
         type: 'mp4',
-        date: '2019-06-02'
+        date: '2019-02-03'
       }
     ]
   }
