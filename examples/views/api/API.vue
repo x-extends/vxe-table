@@ -236,7 +236,8 @@ export default {
             })
           }, { children: 'list' })
           // 默认展开一级
-          this.defaultExpandRowKeys = this.tableData.filter(item => item.list && item.list.length).map(item => item.id)
+          this.defaultExpandRows = this.tableData.filter(item => item.list && item.list.length)
+          this.defaultExpandRowKeys = this.defaultExpandRows.map(item => item.id)
           this.loading = false
           this.handleSearch()
           resolve()
@@ -333,6 +334,9 @@ export default {
         })
       } else {
         this.apiList = this.tableData
+        this.$nextTick(() => {
+          this.$refs.xTable.setTreeExpansion(this.defaultExpandRows, true)
+        })
       }
     },
     // 创建一个防反跳策略函数，调用频率间隔 500 毫秒
