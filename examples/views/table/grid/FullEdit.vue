@@ -139,7 +139,6 @@ export default {
         }
       },
       tableColumn: [
-        { type: 'seq', title: '序号', width: 80 },
         { type: 'checkbox', title: 'ID', width: 120 },
         { field: 'name', title: 'Name', remoteSort: true, editRender: { name: 'input' } },
         { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
@@ -282,7 +281,6 @@ export default {
                 }
               },
               tableColumn: [
-                { type: 'seq', title: '序号', width: 80 },
                 { type: 'checkbox', title: 'ID', width: 120 },
                 { field: 'name', title: 'Name', remoteSort: true, editRender: { name: 'input' } },
                 { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },

@@ -301,7 +301,7 @@ function getExportData ($table, opts, fullData, oColumns) {
   if (opts.dataFilterMethod) {
     datas = datas.filter(opts.dataFilterMethod)
   }
-  return { columns, datas: opts.data ? datas : getLabelData($table, columns, datas) }
+  return { columns, datas: getLabelData($table, columns, datas) }
 }
 
 function replaceDoubleQuotation (val) {
@@ -516,7 +516,7 @@ export default {
         footerFilterMethod: null
       }, GlobalConfig.export, options)
       if (!opts.filename) {
-        opts.filename = GlobalConfig.i18n('vxe.table.expFilename', [XEUtils.toDateString(Date.now(), 'yyyyMMddHHmmss')])
+        opts.filename = GlobalConfig.i18n(opts.original ? 'vxe.table.expOriginFilename' : 'vxe.table.expFilename', [XEUtils.toDateString(Date.now(), 'yyyyMMddHHmmss')])
       }
       if (!opts.sheetName) {
         opts.sheetName = GlobalConfig.i18n('vxe.table.expSheetName')

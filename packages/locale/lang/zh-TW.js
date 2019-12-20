@@ -39,7 +39,8 @@ export default {
       filter: '對所選的列啟用篩選',
       impSuccess: '導入成功',
       expSuccess: '匯出成功',
-      expFilename: '匯出_{0}',
+      expOriginFilename: '匯出_{0}',
+      expSrcFilename: '匯出_據_{0}',
       expSheetName: 'Sheet1'
     },
     grid: {
@@ -115,7 +116,7 @@ export default {
       expOptFooter: '錶尾',
       expFooterTitle: '是否需要匯出錶尾',
       expOptOriginal: '源數據',
-      expOriginalTitle: '是否需要匯出資料來源，如果勾上則支持導入到表格中',
+      expOriginalTitle: '是否需要匯出源數據，如果勾上則支持導入到表格中',
       expPrint: '列印',
       expConfirm: '匯出'
     }

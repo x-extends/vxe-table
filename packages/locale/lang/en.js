@@ -40,6 +40,7 @@ export default {
       impSuccess: 'Import success',
       expSuccess: 'Export success',
       expFilename: 'Export_{0}',
+      expOriginFilename: 'Export_original_{0}',
       expSheetName: 'Sheet1'
     },
     grid: {
@@ -114,8 +115,8 @@ export default {
       expHeaderTitle: 'Need to export header',
       expOptFooter: 'Footer',
       expFooterTitle: 'Need to export footer',
-      expOptOriginal: 'Source data',
-      expOriginalTitle: 'Need to export data source? If it is checked, import to table is supported',
+      expOptOriginal: 'Original data',
+      expOriginalTitle: 'Need to export original data? If it is checked, import to table is supported',
       expPrint: 'Print',
       expConfirm: 'Export'
     }
