@@ -692,6 +692,7 @@ export default {
       highlightHoverRow,
       highlightHoverColumn,
       editConfig,
+      checkboxOpts,
       optimizeOpts,
       vaildTipOpts,
       tooltipOpts,
@@ -837,6 +838,13 @@ export default {
         class: `vxe-table${id}-wrapper ${this.$vnode.data.staticClass || ''}`,
         ref: 'tableWrapper'
       }, [
+        /**
+         * 复选框-范围选择
+         */
+        checkboxOpts.range ? h('div', {
+          class: 'vxe-table--checkbox-range',
+          ref: 'checkboxRange'
+        }) : _e(),
         /**
          * 快捷菜单
          */

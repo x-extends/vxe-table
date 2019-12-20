@@ -270,7 +270,7 @@ function getLabelData ($table, columns, datas) {
       }
       columns.forEach((column, columnIndex) => {
         // v3.0 废弃 type=index
-        item[column.id] = XEUtils.toString(['seq', 'index'].includes(column.type) ? getSeq($table, row, rowIndex, column, columnIndex) : XEUtils.get(row, column.property))
+        item[column.id] = XEUtils.toString(['seq', 'index'].indexOf(column.type) > -1 ? getSeq($table, row, rowIndex, column, columnIndex) : XEUtils.get(row, column.property))
       })
       rest.push(Object.assign(item, row))
     }, treeOpts)
@@ -282,7 +282,7 @@ function getLabelData ($table, columns, datas) {
       // 如果是启用虚拟滚动后只允许导出数据源
       if (scrollXLoad || scrollYLoad) {
         // v3.0 废弃 type=index
-        item[column.id] = XEUtils.toString(['seq', 'index'].includes(column.type) ? getSeq($table, row, rowIndex, column, columnIndex) : row[column.property])
+        item[column.id] = XEUtils.toString(['seq', 'index'].indexOf(column.type) > -1 ? getSeq($table, row, rowIndex, column, columnIndex) : row[column.property])
       } else {
         let cell = DomTools.getCell($table, { row, column })
         item[column.id] = cell ? cell.innerText.trim() : ''
@@ -435,7 +435,7 @@ function checkImportData (columns, fields, rows) {
       tableFields.push(field)
     }
   })
-  return tableFields.every(field => fields.includes(field))
+  return tableFields.every(field => fields.indexOf(field) > -1)
 }
 
 function handleImport ($table, content, opts) {
@@ -511,7 +511,7 @@ export default {
         data: null,
         columns: null,
         // 在 v3.0 中废弃 type=selection
-        columnFilterMethod: options.columns ? null : column => ['seq', 'index'].includes(column.type) || column.property,
+        columnFilterMethod: options && options.columns ? null : column => ['seq', 'index'].indexOf(column.type) > -1 || column.property,
         dataFilterMethod: null,
         footerFilterMethod: null
       }, GlobalConfig.export, options)
@@ -521,7 +521,7 @@ export default {
       if (!opts.sheetName) {
         opts.sheetName = GlobalConfig.i18n('vxe.table.expSheetName')
       }
-      if (!VXETable.exportTypes.includes(opts.type)) {
+      if (VXETable.exportTypes.indexOf(opts.type) === -1) {
         throw new Error(UtilTools.getLog('vxe.error.notType', [opts.type]))
       }
       return handleExport(this, opts, visibleColumn, tableFullData)
@@ -537,7 +537,7 @@ export default {
         const { type, filename } = UtilTools.parseFile(file)
         const options = Object.assign({ mode: 'covering' }, opts, { type, filename })
         const types = options.types || VXETable.importTypes
-        if (types.includes(type)) {
+        if (types.indexOf(type) > -1) {
           this.preventEvent(null, 'event.import', { $table: this, file, options, columns: this.tableFullColumn }, () => {
             const reader = new FileReader()
             reader.onerror = e => {
@@ -580,7 +580,7 @@ export default {
       fileInput.accept = `.${types.join(', .')}`
       fileInput.onchange = evnt => {
         const { type } = UtilTools.parseFile(evnt.target.files[0])
-        if (types.includes(type)) {
+        if (types.indexOf(type) > -1) {
           this._fileResolve(evnt)
         } else {
           if (options.message !== false) {

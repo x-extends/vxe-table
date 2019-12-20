@@ -19,7 +19,7 @@
       :toolbar="tableToolbar"
       :proxy-config="tableProxy"
       :columns="tableColumn"
-      :checkbox-config="{reserve: true, highlight: true}"
+      :checkbox-config="{labelField: 'id', reserve: true, highlight: true, range: true}"
       :edit-rules="validRules"
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">
     </vxe-grid>
@@ -124,13 +124,6 @@ export default {
                 disabled: false
               }
             ]
-          },
-          {
-            name: '更多操作',
-            disabled: false,
-            dropdowns: [
-              { code: 'reset_custom', name: '重置个性化信息', disabled: false }
-            ]
           }
         ],
         refresh: true,
@@ -146,8 +139,8 @@ export default {
         }
       },
       tableColumn: [
-        { type: 'checkbox', width: 50 },
         { type: 'seq', title: '序号', width: 80 },
+        { type: 'checkbox', title: 'ID', width: 120 },
         { field: 'name', title: 'Name', remoteSort: true, editRender: { name: 'input' } },
         { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
         { field: 'sex', title: 'Sex', editRender: { name: 'select', options: [] } },
@@ -180,7 +173,7 @@ export default {
           :toolbar="tableToolbar"
           :proxy-config="tableProxy"
           :columns="tableColumn"
-          :checkbox-config="{reserve: true, highlight: true}"
+          :checkbox-config="{labelField: 'id', reserve: true, highlight: true, range: true}"
           :edit-rules="validRules"
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">
         </vxe-grid>
@@ -274,13 +267,6 @@ export default {
                         disabled: false
                       }
                     ]
-                  },
-                  {
-                    name: '更多操作',
-                    disabled: false,
-                    dropdowns: [
-                      { code: 'reset_custom', name: '重置个性化信息', disabled: false }
-                    ]
                   }
                 ],
                 refresh: true,
@@ -296,8 +282,8 @@ export default {
                 }
               },
               tableColumn: [
-                { type: 'checkbox', width: 50 },
                 { type: 'seq', title: '序号', width: 80 },
+                { type: 'checkbox', title: 'ID', width: 120 },
                 { field: 'name', title: 'Name', remoteSort: true, editRender: { name: 'input' } },
                 { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
                 { field: 'sex', title: 'Sex', editRender: { name: 'select', options: [] } },

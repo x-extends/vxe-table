@@ -70,6 +70,7 @@ module.exports = {
         search: '全表搜索',
         pager: '分页',
         pageIcon: '分页 + 自定义图标',
+        rangeSelect: '复选框的范围选中',
         tabs: '多页签切换',
         keepAlives: 'keep-alive 切换',
 

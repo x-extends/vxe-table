@@ -58,7 +58,12 @@ export default {
       return this.getPageCount(this.total, this.pageSize)
     },
     numList () {
-      return Array.from(new Array(this.pageCount > this.pagerCount ? this.pagerCount - 2 : this.pagerCount))
+      let len = this.pageCount > this.pagerCount ? this.pagerCount - 2 : this.pagerCount
+      let rest = []
+      for (let index = 0; index < len; index++) {
+        rest.push(index)
+      }
+      return rest
     },
     offsetNumber () {
       return Math.floor((this.pagerCount - 2) / 2)

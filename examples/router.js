@@ -75,6 +75,7 @@ const TableCustomlWidthStorage = () => import(/* webpackChunkName: "advanced" */
 const TablePage = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Page.vue')
 const TablePageIcon = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/PageIcon.vue')
 const TableHighlight = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Highlight.vue')
+const TableRangeSelect = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/RangeSelect.vue')
 const TableTabs = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Tabs.vue')
 const TableKeepAlives = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/KeepAlives.vue')
 const TableKeepAliveTable1 = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/keepAlives/Table1.vue')
@@ -612,6 +613,11 @@ export default new Router({
       path: '/table/advanced/highlight',
       name: 'TableHighlight',
       component: TableHighlight
+    },
+    {
+      path: '/table/advanced/rangeSelect',
+      name: 'TableRangeSelect',
+      component: TableRangeSelect
     },
     {
       path: '/table/advanced/tabs',

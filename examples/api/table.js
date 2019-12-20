@@ -1043,6 +1043,15 @@ const apis = [
             enum: '',
             defVal: 'false',
             list: []
+          },
+          {
+            name: 'range',
+            desc: '开启范围选中功能',
+            version: '2.7.7',
+            type: 'Boolean',
+            enum: '',
+            defVal: 'false',
+            list: []
           }
         ]
       },
@@ -1375,7 +1384,7 @@ const apis = [
         list: [
           {
             name: 'selected',
-            desc: '开启左键选中功能',
+            desc: '开启单元格选中功能',
             version: '',
             type: 'Boolean',
             enum: '',

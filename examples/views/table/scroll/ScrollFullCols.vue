@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="tip">
-      虚拟滚动渲染，加载 10 万行 1 万列，左右固定列<br>
+      虚拟滚动渲染，左右固定列<span class="orange">（最大可以支撑 1w 列、20w 行）</span><br>
       大数据不建议使用双向绑定的 <table-api-link name="data"/> 属性（vue 监听会大数据会短暂的卡顿），建议使用 <table-api-link prop="loadData"/>/<table-api-link prop="loadColumn"/> 函数<br>
       对于多选 type=<table-column-api-link prop="checkbox"/> 当数据量海量时应该绑定 <table-api-link prop="checkField"/> 属性渲染速度更快<br>
       <span class="red">(注：如果要启用横向虚拟滚动，不支持分组表头，如果需要支持动态列宽的话，那么需要处理好 <table-api-link name="rSize"/> 参数，内置的列宽算法是无法支持某些场景的，某些场景下必须手动设置)</span>
@@ -19,13 +19,12 @@
       :loading="loading"
       :checkbox-config="{checkField: 'checked', labelField: 'nickname'}">
       <template v-slot:buttons>
-        <vxe-button @click="loadColumnAndData(10000, 30000)">加载1w列3w条</vxe-button>
-        <vxe-button @click="loadColumnAndData(10000, 60000)">加载1w列6w条</vxe-button>
-        <vxe-button @click="loadColumnAndData(10000, 100000)">加载1w列10w条</vxe-button>
-        <vxe-button @click="$refs.xGrid.toggleRowSelection($refs.xGrid.getData(1))">切换第二行选中</vxe-button>
-        <vxe-button @click="$refs.xGrid.setSelection([$refs.xGrid.getData(2), $refs.xGrid.getData(3)], true)">设置第三、四行选中</vxe-button>
-        <vxe-button @click="$refs.xGrid.setAllSelection(true)">设置所有行选中</vxe-button>
-        <vxe-button @click="$refs.xGrid.clearSelection()">清除所有行选中</vxe-button>
+        <vxe-button @click="loadColumnAndData(10000, 10000)">1w列1w条</vxe-button>
+        <vxe-button @click="loadColumnAndData(10000, 30000)">1w列3w条</vxe-button>
+        <vxe-button @click="loadColumnAndData(10000, 60000)">1w列6w条</vxe-button>
+        <vxe-button @click="loadColumnAndData(10000, 100000)">1w列10w条</vxe-button>
+        <vxe-button @click="$refs.xGrid.setAllSelection(true)">所有选中</vxe-button>
+        <vxe-button @click="$refs.xGrid.clearSelection()">清除选中</vxe-button>
         <vxe-button @click="getSelectEvent">获取选中</vxe-button>
       </template>
     </vxe-grid>
@@ -74,13 +73,12 @@ export default {
           :loading="loading"
           :checkbox-config="{checkField: 'checked', labelField: 'nickname'}">
           <template v-slot:buttons>
-            <vxe-button @click="loadColumnAndData(10000, 30000)">加载1w列3w条</vxe-button>
-            <vxe-button @click="loadColumnAndData(10000, 60000)">加载1w列6w条</vxe-button>
-            <vxe-button @click="loadColumnAndData(10000, 100000)">加载1w列10w条</vxe-button>
-            <vxe-button @click="$refs.xGrid.toggleRowSelection($refs.xGrid.getData(1))">切换第二行选中</vxe-button>
-            <vxe-button @click="$refs.xGrid.setSelection([$refs.xGrid.getData(2), $refs.xGrid.getData(3)], true)">设置第三、四行选中</vxe-button>
-            <vxe-button @click="$refs.xGrid.setAllSelection(true)">设置所有行选中</vxe-button>
-            <vxe-button @click="$refs.xGrid.clearSelection()">清除所有行选中</vxe-button>
+            <vxe-button @click="loadColumnAndData(10000, 10000)">1w列1w条</vxe-button>
+            <vxe-button @click="loadColumnAndData(10000, 30000)">1w列3w条</vxe-button>
+            <vxe-button @click="loadColumnAndData(10000, 60000)">1w列6w条</vxe-button>
+            <vxe-button @click="loadColumnAndData(10000, 100000)">1w列10w条</vxe-button>
+            <vxe-button @click="$refs.xGrid.setAllSelection(true)">所有选中</vxe-button>
+            <vxe-button @click="$refs.xGrid.clearSelection()">清除选中</vxe-button>
             <vxe-button @click="getSelectEvent">获取选中</vxe-button>
           </template>
         </vxe-grid>

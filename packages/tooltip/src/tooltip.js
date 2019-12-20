@@ -45,7 +45,7 @@ export default {
     let target
     this.message = content
     this.tipZindex = UtilTools.nextZIndex()
-    Array.from($el.children).forEach((elem, index) => {
+    XEUtils.arrayEach($el.children, (elem, index) => {
       if (index > 1) {
         parentNode.insertBefore(elem, $el)
         if (!target) {

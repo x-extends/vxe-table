@@ -143,7 +143,7 @@ function renderColumn (h, _vm, $table, $seq, seq, rowid, fixedType, rowLevel, ro
     }
   }
   // 按下事件处理
-  if (mouseConfig.checked || mouseConfig.selected) {
+  if (checkboxOpts.range || mouseConfig.checked || mouseConfig.selected) {
     tdOns.mousedown = evnt => {
       $table.triggerCellMousedownEvent(evnt, { $table, $seq, seq, rowid, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn, level: rowLevel, cell: evnt.currentTarget })
     }
@@ -181,10 +181,11 @@ function renderColumn (h, _vm, $table, $seq, seq, rowid, fixedType, rowLevel, ro
   if (!fixedHiddenColumn && editConfig && editConfig.showStatus) {
     isDirty = $table.isUpdateByRow(row, column.property)
   }
+  let type = column.type === 'seq' || column.type === 'index' ? 'seq' : column.type
   return h('td', {
     class: ['vxe-body--column', column.id, {
       [`col--${cellAlign}`]: cellAlign,
-      [`col--${column.type}`]: column.type,
+      [`col--${type}`]: type,
       'col--last': $columnIndex === columns.length - 1,
       'col--tree-node': treeNode,
       'col--edit': editRender,
@@ -301,7 +302,7 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
       h('tr', {
         class: ['vxe-body--row', {
           'row--stripe': stripe && rowIndex > 0 && (rowIndex + 1) % 2 === 0,
-          'row--new': editStore.insertList.includes(row),
+          'row--new': editStore.insertList.indexOf(row) > -1,
           'row--radio': radioOpts.highlight && $table.selectRow === row,
           'row--cheched': checkboxOpts.highlight && $table.isCheckedByRow(row)
         }, rowClassName ? XEUtils.isFunction(rowClassName) ? rowClassName({ $table, $seq, seq, rowid, fixedType, rowLevel, row, rowIndex, $rowIndex }) : rowClassName : ''],
@@ -317,7 +318,7 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
       }))
     )
     // 如果行被展开了
-    if (rowExpandeds.length && rowExpandeds.includes(row)) {
+    if (rowExpandeds.length && rowExpandeds.indexOf(row) > -1) {
       let column = XEUtils.find(tableColumn, column => column.type === 'expand')
       let columnIndex = getColumnIndex(column)
       let cellStyle
@@ -356,7 +357,7 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
     // 如果是树形表格
     if (treeConfig && treeExpandeds.length) {
       let rowChildren = row[treeOpts.children]
-      if (rowChildren && rowChildren.length && treeExpandeds.includes(row)) {
+      if (rowChildren && rowChildren.length && treeExpandeds.indexOf(row) > -1) {
         rows.push.apply(rows, renderRows(h, _vm, $table, $seq ? `${$seq}.${seq}` : `${seq}`, rowLevel + 1, fixedType, rowChildren, tableColumn))
       }
     }

@@ -11,7 +11,7 @@ const installedPlugins = []
 
 function use (Plugin, options) {
   if (Plugin && Plugin.install) {
-    if (!installedPlugins.includes(Plugin)) {
+    if (installedPlugins.indexOf(Plugin) === -1) {
       Plugin.install(VXETable, options)
       installedPlugins.push(Plugin)
     }

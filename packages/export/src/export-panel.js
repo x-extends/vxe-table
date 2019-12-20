@@ -28,7 +28,7 @@ export default {
       return this.size || this.$parent.size || this.$parent.vSize
     },
     showSheet () {
-      return ['html', 'xml', 'xlsx'].includes(this.defaultOptions.type)
+      return ['html', 'xml', 'xlsx'].indexOf(this.defaultOptions.type) > -1
     }
   },
   render (h) {
@@ -279,8 +279,8 @@ export default {
         columns: storeData.columns.filter(column => column.checked)
       }, defaultOptions)
       if (storeData.mode === 'selected') {
-        if (['html', 'pdf'].includes(defaultOptions.type) && comp.treeConfig) {
-          opts.data = XEUtils.searchTree(comp.getTableData().fullData, item => selectRecords.includes(item), comp.getTreeStatus().config)
+        if (['html', 'pdf'].indexOf(defaultOptions.type) > -1 && comp.treeConfig) {
+          opts.data = XEUtils.searchTree(comp.getTableData().fullData, item => selectRecords.indexOf(item) > -1, comp.getTreeStatus().config)
         } else {
           opts.data = selectRecords
         }

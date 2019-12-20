@@ -91,7 +91,7 @@ export default {
       })
       // 如果绑定了多选属性，则更新状态
       if (!property) {
-        XEUtils.remove(selection, row => rows.includes(row))
+        XEUtils.remove(selection, row => rows.indexOf(row) > -1)
       }
       // 从数据源中移除
       if (tableFullData === rows) {
@@ -99,11 +99,11 @@ export default {
         tableFullData.length = 0
         nowData.length = 0
       } else {
-        rest = XEUtils.remove(tableFullData, row => rows.includes(row))
-        XEUtils.remove(nowData, row => rows.includes(row))
+        rest = XEUtils.remove(tableFullData, row => rows.indexOf(row) > -1)
+        XEUtils.remove(nowData, row => rows.indexOf(row) > -1)
       }
       // 从新增中移除已删除的数据
-      XEUtils.remove(insertList, row => rows.includes(row))
+      XEUtils.remove(insertList, row => rows.indexOf(row) > -1)
       this.handleTableData()
       this.updateCache()
       this.checkSelectionStatus()
@@ -174,7 +174,7 @@ export default {
       const insertRecords = []
       if (insertList.length) {
         this.tableFullData.forEach(row => {
-          if (insertList.includes(row)) {
+          if (insertList.indexOf(row) > -1) {
             insertRecords.push(row)
           }
         })
@@ -293,7 +293,7 @@ export default {
     _getActiveRow () {
       let { $el, editStore, afterFullData } = this
       let { args, row } = editStore.actived
-      if (args && afterFullData.includes(row) && $el.querySelectorAll('.vxe-body--column.col--actived').length) {
+      if (args && afterFullData.indexOf(row) > -1 && $el.querySelectorAll('.vxe-body--column.col--actived').length) {
         return Object.assign({}, args)
       }
       return null
@@ -411,7 +411,7 @@ export default {
               if (headerElem) {
                 this.handleHeaderChecked([[headerElem.querySelector(`.${column.id}`)]])
               }
-              this.handleIndexChecked([[cell.parentNode.querySelector('.col--index')]])
+              this.handleIndexChecked([[cell.parentNode.querySelector('.col--seq')]])
             }
           }
         }

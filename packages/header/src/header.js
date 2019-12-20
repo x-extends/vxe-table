@@ -96,7 +96,7 @@ export default {
     elemStore[`${prefix}table`] = $refs.table
     elemStore[`${prefix}colgroup`] = $refs.colgroup
     elemStore[`${prefix}list`] = $refs.thead
-    elemStore[`${prefix}x-space`] = $refs.xSpace
+    elemStore[`${prefix}xSpace`] = $refs.xSpace
     elemStore[`${prefix}repair`] = $refs.repair
   },
   render (h) {
@@ -231,10 +231,11 @@ export default {
             if (mouseConfig.checked) {
               thOns.mousedown = evnt => $table.triggerHeaderCellMousedownEvent(evnt, { $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, cell: evnt.currentTarget })
             }
+            let type = column.type === 'seq' || column.type === 'index' ? 'seq' : column.type
             return h('th', {
               class: ['vxe-header--column', column.id, {
                 [`col--${headAlign}`]: headAlign,
-                [`col--${column.type}`]: column.type,
+                [`col--${type}`]: type,
                 'col--last': $columnIndex === cols.length - 1,
                 'col--fixed': column.fixed,
                 'col--group': isColGroup,
