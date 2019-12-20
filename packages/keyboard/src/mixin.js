@@ -285,7 +285,7 @@ export default {
             // 除了双击其他都没有选中状态
             if (editConfig.trigger === 'dblclick') {
               // 如果不在所有选中的范围之内则重新选中
-              if (!checked.rowNodes || !checked.rowNodes.some(list => XEUtils.includes(list, cell))) {
+              if (!checked.rowNodes || !checked.rowNodes.some(list => list.includes(cell))) {
                 handleSelected(params, evnt)
               }
             }

@@ -302,13 +302,13 @@ export default {
       }
     },
     addMsgQueue () {
-      if (MsgQueue.indexOf(this) === -1) {
+      if (!MsgQueue.includes(this)) {
         MsgQueue.push(this)
       }
       this.updateStyle()
     },
     removeMsgQueue () {
-      if (MsgQueue.indexOf(this) > -1) {
+      if (MsgQueue.includes(this)) {
         XEUtils.remove(MsgQueue, comp => comp === this)
       }
       this.updateStyle()

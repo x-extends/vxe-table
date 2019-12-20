@@ -117,7 +117,7 @@ export const UtilTools = {
     return `[vxe-table] ${XEUtils.template(GlobalConfig.i18n(message), params)}`
   },
   getSize ({ size, $parent }) {
-    return size || ($parent && ['medium', 'small', 'mini'].indexOf($parent.size) > -1 ? $parent.size : null)
+    return size || ($parent && ['medium', 'small', 'mini'].includes($parent.size) ? $parent.size : null)
   },
   getFuncText (content) {
     return XEUtils.isFunction(content) ? content() : (GlobalConfig.translate ? GlobalConfig.translate(content) : content)

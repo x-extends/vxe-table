@@ -439,7 +439,7 @@ const Methods = {
    * @param {Row} row 行对象
    */
   isInsertByRow (row) {
-    return this.editStore.insertList.indexOf(row) > -1
+    return this.editStore.insertList.includes(row)
   },
   // 在 v3.0 中废弃 hasRowChange
   hasRowChange (row, field) {
@@ -546,9 +546,9 @@ const Methods = {
     } else {
       let { selection } = this
       if (treeConfig) {
-        rowList = XEUtils.filterTree(tableFullData, row => selection.indexOf(row) > -1, treeOpts)
+        rowList = XEUtils.filterTree(tableFullData, row => selection.includes(row), treeOpts)
       } else {
-        rowList = tableFullData.filter(row => selection.indexOf(row) > -1)
+        rowList = tableFullData.filter(row => selection.includes(row))
       }
     }
     return rowList
@@ -584,7 +584,7 @@ const Methods = {
             if (!filterMethod && compConf && compConf.renderFilter) {
               filterMethod = compConf.filterMethod
             }
-            return filterMethod ? itemList.some(item => filterMethod({ value: item.value, option: item, row, column })) : valueList.indexOf(XEUtils.get(row, property)) > -1
+            return filterMethod ? itemList.some(item => filterMethod({ value: item.value, option: item, row, column })) : valueList.includes(XEUtils.get(row, property))
           }
           return true
         })
@@ -1626,7 +1626,7 @@ const Methods = {
     if (property) {
       return XEUtils.get(row, property)
     }
-    return this.selection.indexOf(row) > -1
+    return this.selection.includes(row)
   },
   /**
    * 多选，行选中事件
@@ -1655,12 +1655,12 @@ const Methods = {
         if (matchObj && matchObj.parent) {
           let parentStatus
           let vItems = checkMethod ? matchObj.items.filter((item, $rowIndex) => checkMethod({ row: item, $rowIndex })) : matchObj.items
-          let indeterminatesItem = XEUtils.find(matchObj.items, item => treeIndeterminates.indexOf(item) > -1)
+          let indeterminatesItem = XEUtils.find(matchObj.items, item => treeIndeterminates.includes(item))
           if (indeterminatesItem) {
             parentStatus = -1
           } else {
             let selectItems = matchObj.items.filter(item => XEUtils.get(item, property))
-            parentStatus = selectItems.filter(item => vItems.indexOf(item) > -1).length === vItems.length ? true : (selectItems.length || value === -1 ? -1 : false)
+            parentStatus = selectItems.filter(item => vItems.includes(item)).length === vItems.length ? true : (selectItems.length || value === -1 ? -1 : false)
           }
           return this.handleSelectRow({ row: matchObj.parent }, parentStatus)
         }
@@ -1692,18 +1692,18 @@ const Methods = {
         if (matchObj && matchObj.parent) {
           let parentStatus
           let vItems = checkMethod ? matchObj.items.filter((item, $rowIndex) => checkMethod({ row: item, $rowIndex })) : matchObj.items
-          let indeterminatesItem = XEUtils.find(matchObj.items, item => treeIndeterminates.indexOf(item) > -1)
+          let indeterminatesItem = XEUtils.find(matchObj.items, item => treeIndeterminates.includes(item))
           if (indeterminatesItem) {
             parentStatus = -1
           } else {
-            let selectItems = matchObj.items.filter(item => selection.indexOf(item) > -1)
-            parentStatus = selectItems.filter(item => vItems.indexOf(item) > -1).length === vItems.length ? true : (selectItems.length || value === -1 ? -1 : false)
+            let selectItems = matchObj.items.filter(item => selection.includes(item))
+            parentStatus = selectItems.filter(item => vItems.includes(item)).length === vItems.length ? true : (selectItems.length || value === -1 ? -1 : false)
           }
           return this.handleSelectRow({ row: matchObj.parent }, parentStatus)
         }
       } else {
         if (value) {
-          if (selection.indexOf(row) === -1) {
+          if (!selection.includes(row)) {
             selection.push(row)
           }
         } else {
@@ -1718,7 +1718,7 @@ const Methods = {
     let { selection, checkboxOpts } = this
     let { checkField: property } = checkboxOpts
     let { row } = params
-    let value = property ? !XEUtils.get(row, property) : selection.indexOf(row) === -1
+    let value = property ? !XEUtils.get(row, property) : !selection.includes(row)
     if (evnt) {
       this.triggerCheckRowEvent(evnt, params, value)
     } else {
@@ -1756,7 +1756,7 @@ const Methods = {
           }
         }
         let clearValFn = (row, rowIndex) => {
-          if (!checkMethod || (checkMethod({ row, [indexKey]: rowIndex, $rowIndex: rowIndex }) ? 0 : selection.indexOf(row) > -1)) {
+          if (!checkMethod || (checkMethod({ row, [indexKey]: rowIndex, $rowIndex: rowIndex }) ? 0 : selection.includes(row))) {
             XEUtils.set(row, property, value)
           }
         }
@@ -1776,7 +1776,7 @@ const Methods = {
           } else {
             if (checkMethod) {
               XEUtils.eachTree(tableFullData, (row, $rowIndex) => {
-                if (checkMethod({ row, $rowIndex }) ? 0 : selection.indexOf(row) > -1) {
+                if (checkMethod({ row, $rowIndex }) ? 0 : selection.includes(row)) {
                   selectRows.push(row)
                 }
               }, treeOpts)
@@ -1785,13 +1785,13 @@ const Methods = {
         } else {
           if (value) {
             if (checkMethod) {
-              selectRows = tableFullData.filter((row, rowIndex) => selection.indexOf(row) > -1 || checkMethod({ row, rowIndex, $rowIndex: rowIndex }))
+              selectRows = tableFullData.filter((row, rowIndex) => selection.includes(row) || checkMethod({ row, rowIndex, $rowIndex: rowIndex }))
             } else {
               selectRows = tableFullData.slice(0)
             }
           } else {
             if (checkMethod) {
-              selectRows = tableFullData.filter((row, rowIndex) => checkMethod({ row, rowIndex, $rowIndex: rowIndex }) ? 0 : selection.indexOf(row) > -1)
+              selectRows = tableFullData.filter((row, rowIndex) => checkMethod({ row, rowIndex, $rowIndex: rowIndex }) ? 0 : selection.includes(row))
             }
           }
         }
@@ -1830,14 +1830,14 @@ const Methods = {
             ? (row, rowIndex) => !checkMethod({ row, rowIndex, $rowIndex: rowIndex }) || XEUtils.get(row, property)
             : row => XEUtils.get(row, property)
         )
-        this.isIndeterminate = !this.isAllSelected && tableFullData.some(row => XEUtils.get(row, property) || treeIndeterminates.indexOf(row) > -1)
+        this.isIndeterminate = !this.isAllSelected && tableFullData.some(row => XEUtils.get(row, property) || treeIndeterminates.includes(row))
       } else {
         this.isAllSelected = tableFullData.length && tableFullData.every(
           checkMethod
-            ? (row, rowIndex) => !checkMethod({ row, rowIndex, $rowIndex: rowIndex }) || selection.indexOf(row) > -1
-            : row => selection.indexOf(row) > -1
+            ? (row, rowIndex) => !checkMethod({ row, rowIndex, $rowIndex: rowIndex }) || selection.includes(row)
+            : row => selection.includes(row)
         )
-        this.isIndeterminate = !this.isAllSelected && tableFullData.some(row => treeIndeterminates.indexOf(row) > -1 || selection.indexOf(row) > -1)
+        this.isIndeterminate = !this.isAllSelected && tableFullData.some(row => treeIndeterminates.includes(row) || selection.includes(row))
       }
     }
   },
@@ -1854,7 +1854,7 @@ const Methods = {
     }
     if (checkboxOpts.reserve) {
       Object.keys(selectReserveRowMap).forEach(rowid => {
-        if (fullDataRowIdData[rowid] && reserveSelection.indexOf(fullDataRowIdData[rowid].row) === -1) {
+        if (fullDataRowIdData[rowid] && !reserveSelection.includes(fullDataRowIdData[rowid].row)) {
           reserveSelection.push(fullDataRowIdData[rowid].row)
         }
       })
@@ -2297,7 +2297,7 @@ const Methods = {
   reloadExpandContent (row) {
     let { expandOpts, expandLazyLoadeds } = this
     let { lazy } = expandOpts
-    if (lazy && expandLazyLoadeds.indexOf(row) === -1) {
+    if (lazy && !expandLazyLoadeds.includes(row)) {
       this.clearRowExpandLoaded(row)
         .then(() => this.handleAsyncRowExpand(row))
     }
@@ -2310,7 +2310,7 @@ const Methods = {
     let { $listeners, expandOpts, expandLazyLoadeds } = this
     let { row } = params
     let { lazy } = expandOpts
-    if (!lazy || expandLazyLoadeds.indexOf(row) === -1) {
+    if (!lazy || !expandLazyLoadeds.includes(row)) {
       let expanded = !this.isExpandByRow(row)
       this.setRowExpansion(row, expanded)
       if ($listeners['toggle-expand-change']) {
@@ -2392,9 +2392,9 @@ const Methods = {
       }
       if (expanded) {
         rows.forEach(row => {
-          if (rowExpandeds.indexOf(row) === -1) {
+          if (!rowExpandeds.includes(row)) {
             let rest = fullAllDataRowMap.get(row)
-            let isLoad = lazy && !rest.expandLoaded && expandLazyLoadeds.indexOf(row) === -1
+            let isLoad = lazy && !rest.expandLoaded && expandLazyLoadeds.includes(row)
             if (isLoad) {
               result.push(this.handleAsyncRowExpand(row))
             } else {
@@ -2403,7 +2403,7 @@ const Methods = {
           }
         })
       } else {
-        XEUtils.remove(rowExpandeds, row => rows.indexOf(row) > -1)
+        XEUtils.remove(rowExpandeds, row => rows.includes(row))
       }
     }
     this.rowExpandeds = rowExpandeds
@@ -2419,7 +2419,7 @@ const Methods = {
    * @param {Row} row 行对象
    */
   isExpandByRow (row) {
-    return this.rowExpandeds.indexOf(row) > -1
+    return this.rowExpandeds.includes(row)
   },
   /**
    * 手动清空展开行状态，数据会恢复成未展开的状态
@@ -2472,7 +2472,7 @@ const Methods = {
   reloadTreeChilds (row) {
     let { treeOpts, treeLazyLoadeds } = this
     let { lazy, hasChild } = treeOpts
-    if (lazy && row[hasChild] && treeLazyLoadeds.indexOf(row) === -1) {
+    if (lazy && row[hasChild] && !treeLazyLoadeds.includes(row)) {
       this.clearTreeExpandLoaded(row)
         .then(() => this.handleAsyncTreeExpandChilds(row))
     }
@@ -2485,7 +2485,7 @@ const Methods = {
     let { $listeners, treeOpts, treeLazyLoadeds } = this
     let { row } = params
     let { lazy } = treeOpts
-    if (!lazy || treeLazyLoadeds.indexOf(row) === -1) {
+    if (!lazy || !treeLazyLoadeds.includes(row)) {
       let expanded = !this.isTreeExpandByRow(row)
       this.setTreeExpansion(row, expanded)
       if ($listeners['toggle-tree-change']) {
@@ -2539,7 +2539,7 @@ const Methods = {
         if (childs) {
           row[children] = childs
           this.appendTreeCache(row, childs)
-          if (childs.length && treeExpandeds.indexOf(row) === -1) {
+          if (childs.length && !treeExpandeds.includes(row)) {
             treeExpandeds.push(row)
           }
           // 如果当前节点已选中，则展开后子节点也被选中
@@ -2598,13 +2598,13 @@ const Methods = {
           rows = rows.slice(rows.length - 1, rows.length)
           // 同一级只能展开一个
           let matchObj = XEUtils.findTree(tableFullData, item => item === rows[0], treeOpts)
-          XEUtils.remove(treeExpandeds, item => matchObj.items.indexOf(item) > -1)
+          XEUtils.remove(treeExpandeds, item => matchObj.items.includes(item))
         }
         if (expanded) {
           rows.forEach(row => {
-            if (treeExpandeds.indexOf(row) === -1) {
+            if (!treeExpandeds.includes(row)) {
               let rest = fullAllDataRowMap.get(row)
-              let isLoad = lazy && row[hasChild] && !rest.treeLoaded && treeLazyLoadeds.indexOf(row) === -1
+              let isLoad = lazy && row[hasChild] && !rest.treeLoaded && !treeLazyLoadeds.includes(row)
               // 是否使用懒加载
               if (isLoad) {
                 result.push(this.handleAsyncTreeExpandChilds(row))
@@ -2616,7 +2616,7 @@ const Methods = {
             }
           })
         } else {
-          XEUtils.remove(treeExpandeds, row => rows.indexOf(row) > -1)
+          XEUtils.remove(treeExpandeds, row => rows.includes(row))
         }
         return Promise.all(result).then(this.recalculate)
       }
@@ -2633,7 +2633,7 @@ const Methods = {
    * @param {Row} row 行对象
    */
   isTreeExpandByRow (row) {
-    return this.treeExpandeds.indexOf(row) > -1
+    return this.treeExpandeds.includes(row)
   },
   /**
    * 手动清空树形节点的展开状态，数据会恢复成未展开的状态
