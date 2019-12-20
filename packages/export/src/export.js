@@ -284,7 +284,7 @@ function getExportData ($table, opts, fullData, oColumns) {
   if (opts.dataFilterMethod) {
     datas = datas.filter(opts.dataFilterMethod)
   }
-  return { columns, datas: opts.data ? datas : getLabelData($table, columns, datas) }
+  return { columns, datas: getLabelData($table, columns, datas) }
 }
 
 function replaceDoubleQuotation (val) {

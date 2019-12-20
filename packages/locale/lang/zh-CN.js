@@ -40,6 +40,7 @@ export default {
       impSuccess: '导入成功',
       expSuccess: '导出成功',
       expFilename: '导出_{0}',
+      expOriginFilename: '导出_源_{0}',
       expSheetName: 'Sheet1'
     },
     grid: {
@@ -115,7 +116,7 @@ export default {
       expOptFooter: '表尾',
       expFooterTitle: '是否需要导出表尾',
       expOptOriginal: '源数据',
-      expOriginalTitle: '是否需要导出数据源，如果勾上则支持导入到表格中',
+      expOriginalTitle: '是否需要导出源数据，如果勾上则支持导入到表格中',
       expPrint: '打印',
       expConfirm: '导出'
     }

@@ -4946,7 +4946,7 @@ export default {
         footerFilterMethod: null
       }, GlobalConfig.export, options)
       if (!opts.filename) {
-        opts.filename = GlobalConfig.i18n('vxe.table.expFilename', [XEUtils.toDateString(Date.now(), 'yyyyMMddHHmmss')])
+        opts.filename = GlobalConfig.i18n(opts.original ? 'vxe.table.expOriginFilename' : 'vxe.table.expFilename', [XEUtils.toDateString(Date.now(), 'yyyyMMddHHmmss')])
       }
       if (!opts.sheetName) {
         opts.sheetName = GlobalConfig.i18n('vxe.table.expSheetName')
