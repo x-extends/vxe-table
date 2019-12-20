@@ -253,7 +253,7 @@ function getLabelData ($table, columns, datas) {
       }
       columns.forEach((column, columnIndex) => {
         // v3.0 废弃 type=index
-        item[column.id] = XEUtils.toString(['seq', 'index'].includes(column.type) ? getSeq($table, row, rowIndex, column, columnIndex) : XEUtils.get(row, column.property))
+        item[column.id] = XEUtils.toString(['seq', 'index'].indexOf(column.type) > -1 ? getSeq($table, row, rowIndex, column, columnIndex) : XEUtils.get(row, column.property))
       })
       rest.push(Object.assign(item, row))
     }, treeOpts)
@@ -265,7 +265,7 @@ function getLabelData ($table, columns, datas) {
       // 如果是启用虚拟滚动后只允许导出数据源
       if (scrollXLoad || scrollYLoad) {
         // v3.0 废弃 type=index
-        item[column.id] = XEUtils.toString(['seq', 'index'].includes(column.type) ? getSeq($table, row, rowIndex, column, columnIndex) : row[column.property])
+        item[column.id] = XEUtils.toString(['seq', 'index'].indexOf(column.type) > -1 ? getSeq($table, row, rowIndex, column, columnIndex) : row[column.property])
       } else {
         let cell = DomTools.getCell($table, { row, column })
         item[column.id] = cell ? cell.innerText.trim() : ''
@@ -418,7 +418,7 @@ function checkImportData (columns, fields, rows) {
       tableFields.push(field)
     }
   })
-  return tableFields.every(field => fields.includes(field))
+  return tableFields.every(field => fields.indexOf(field) > -1)
 }
 
 export default {

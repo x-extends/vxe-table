@@ -98,9 +98,9 @@ export const Cell = {
       return slots.icon(params, h)
     }
     if (!isHidden) {
-      isAceived = treeExpandeds.includes(row)
+      isAceived = treeExpandeds.indexOf(row) > -1
       if (lazy) {
-        isLazyLoaded = treeLazyLoadeds.includes(row)
+        isLazyLoaded = treeLazyLoadeds.indexOf(row) > -1
         hasLazyChilds = row[hasChild]
       }
     }
@@ -289,10 +289,10 @@ export const Cell = {
         options.attrs.disabled = isDisabled
       }
       if (treeConfig) {
-        indeterminate = treeIndeterminates.includes(row)
+        indeterminate = treeIndeterminates.indexOf(row) > -1
       }
       options.domProps = {
-        checked: $table.selection.includes(row)
+        checked: $table.selection.indexOf(row) > -1
       }
       options.on = {
         change (evnt) {
@@ -343,7 +343,7 @@ export const Cell = {
         options.attrs.disabled = isDisabled
       }
       if (treeConfig) {
-        indeterminate = treeIndeterminates.includes(row)
+        indeterminate = treeIndeterminates.indexOf(row) > -1
       }
       options.domProps = {
         checked: XEUtils.get(row, property)
@@ -390,9 +390,9 @@ export const Cell = {
       return slots.icon(params, h)
     }
     if (!isHidden) {
-      isAceived = rowExpandeds.includes(params.row)
+      isAceived = rowExpandeds.indexOf(params.row) > -1
       if (lazy) {
-        isLazyLoaded = expandLazyLoadeds.includes(row)
+        isLazyLoaded = expandLazyLoadeds.indexOf(row) > -1
       }
     }
     return [

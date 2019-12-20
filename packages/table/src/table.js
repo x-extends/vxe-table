@@ -90,7 +90,7 @@ function renderFixed (h, $table, fixedType) {
   }
   let style = {
     height: `${(customHeight > 0 ? customHeight - headerHeight - footerHeight : tableHeight) + headerHeight + footerHeight - scrollbarHeight * (showFooter ? 2 : 1)}px`,
-    width: `${fixedColumn.reduce((previous, column) => previous + column.renderWidth, isRightFixed ? scrollbarWidth : 0) - (border ? 1 : 0)}px`
+    width: `${fixedColumn.reduce((previous, column) => previous + column.renderWidth, isRightFixed ? scrollbarWidth : 0) - (border === true ? 1 : 0)}px`
   }
   return h('div', {
     class: [`vxe-table--fixed-${fixedType}-wrapper`, {
@@ -824,6 +824,7 @@ export default {
       highlightHoverRow,
       highlightHoverColumn,
       editConfig,
+      checkboxOpts,
       optimizeOpts,
       vaildTipOpts,
       tooltipOpts,
@@ -970,6 +971,13 @@ export default {
         class: `vxe-table${id}-wrapper ${this.$vnode.data.staticClass || ''}`,
         ref: 'tableWrapper'
       }, [
+        /**
+         * 复选框-范围选择
+         */
+        checkboxOpts.range ? h('div', {
+          class: 'vxe-table--checkbox-range',
+          ref: 'checkboxRange'
+        }) : _e(),
         /**
          * 快捷菜单
          */
@@ -1362,7 +1370,7 @@ export default {
       })
       // 如果绑定了复选框属性，则更新状态
       if (!property) {
-        XEUtils.remove(selection, row => rows.includes(row))
+        XEUtils.remove(selection, row => rows.indexOf(row) > -1)
       }
       // 从数据源中移除
       if (tableFullData === rows) {
@@ -1370,11 +1378,11 @@ export default {
         tableFullData.length = 0
         nowData.length = 0
       } else {
-        rest = XEUtils.remove(tableFullData, row => rows.includes(row))
-        XEUtils.remove(nowData, row => rows.includes(row))
+        rest = XEUtils.remove(tableFullData, row => rows.indexOf(row) > -1)
+        XEUtils.remove(nowData, row => rows.indexOf(row) > -1)
       }
       // 从新增中移除已删除的数据
-      XEUtils.remove(insertList, row => rows.includes(row))
+      XEUtils.remove(insertList, row => rows.indexOf(row) > -1)
       this.handleTableData()
       this.updateCache()
       this.checkSelectionStatus()
@@ -1557,7 +1565,7 @@ export default {
       const insertRecords = []
       if (insertList.length) {
         this.tableFullData.forEach(row => {
-          if (insertList.includes(row)) {
+          if (insertList.indexOf(row) > -1) {
             insertRecords.push(row)
           }
         })
@@ -1586,9 +1594,9 @@ export default {
       } else {
         let { selection } = this
         if (treeConfig) {
-          rowList = XEUtils.filterTree(tableFullData, row => selection.includes(row), treeOpts)
+          rowList = XEUtils.filterTree(tableFullData, row => selection.indexOf(row) > -1, treeOpts)
         } else {
-          rowList = tableFullData.filter(row => selection.includes(row))
+          rowList = tableFullData.filter(row => selection.indexOf(row) > -1)
         }
       }
       return rowList
@@ -1636,7 +1644,7 @@ export default {
               if (!filterMethod && compConf && compConf.renderFilter) {
                 filterMethod = compConf.filterMethod
               }
-              return filterMethod ? itemList.some(item => filterMethod({ value: item.value, option: item, row, column })) : valueList.includes(XEUtils.get(row, property))
+              return filterMethod ? itemList.some(item => filterMethod({ value: item.value, option: item, row, column })) : valueList.indexOf(XEUtils.get(row, property) > -1)
             }
             return true
           })
@@ -1900,15 +1908,12 @@ export default {
       let footerElem = tableFooter ? tableFooter.$el : null
       if (bodyElem) {
         let bodyWidth = bodyElem.clientWidth
-        // let tableWidth = this.autoCellWidth(headerElem, bodyElem, footerElem, bodyWidth)
         this.autoCellWidth(headerElem, bodyElem, footerElem, bodyWidth)
         if (refull === true) {
           // 初始化时需要在列计算之后再执行优化运算，达到最优显示效果
           return this.computeScrollLoad().then(() => {
             bodyWidth = bodyElem.clientWidth
-            // if (bodyWidth !== tableWidth) {
             this.autoCellWidth(headerElem, bodyElem, footerElem, bodyWidth)
-            // }
             this.computeScrollLoad()
           })
         }
@@ -2692,7 +2697,7 @@ export default {
       if (rows && !XEUtils.isArray(rows)) {
         rows = [rows]
       }
-      rows.forEach(row => this.handleSelectRow(null, { row }, !!value))
+      rows.forEach(row => this.handleSelectRow({ row }, !!value))
       return this.$nextTick()
     },
     isCheckedByRow (row) {
@@ -2700,13 +2705,13 @@ export default {
       if (property) {
         return XEUtils.get(row, property)
       }
-      return this.selection.includes(row)
+      return this.selection.indexOf(row) > -1
     },
     /**
      * 多选，行选中处理
      * value 选中true 不选false 不确定-1
      */
-    handleSelectRow (evnt, { row }, value) {
+    handleSelectRow ({ row }, value) {
       let { selection, tableFullData, treeConfig, treeOpts, treeIndeterminates, checkboxOpts } = this
       let { checkStrictly, checkMethod } = checkboxOpts
       let property = checkboxOpts.checkField || checkboxOpts.checkProp
@@ -2730,14 +2735,14 @@ export default {
           if (matchObj && matchObj.parent) {
             let parentStatus
             let vItems = checkMethod ? matchObj.items.filter((item, $rowIndex) => checkMethod({ row: item, $rowIndex })) : matchObj.items
-            let indeterminatesItem = XEUtils.find(matchObj.items, item => treeIndeterminates.includes(item))
+            let indeterminatesItem = XEUtils.find(matchObj.items, item => treeIndeterminates.indexOf(item) > -1)
             if (indeterminatesItem) {
               parentStatus = -1
             } else {
               let selectItems = matchObj.items.filter(item => XEUtils.get(item, property))
-              parentStatus = selectItems.filter(item => vItems.includes(item)).length === vItems.length ? true : (selectItems.length || value === -1 ? -1 : false)
+              parentStatus = selectItems.filter(item => vItems.indexOf(item) > -1).length === vItems.length ? true : (selectItems.length || value === -1 ? -1 : false)
             }
-            return this.handleSelectRow(evnt, { row: matchObj.parent }, parentStatus)
+            return this.handleSelectRow({ row: matchObj.parent }, parentStatus)
           }
         } else {
           XEUtils.set(row, property, value)
@@ -2767,18 +2772,18 @@ export default {
           if (matchObj && matchObj.parent) {
             let parentStatus
             let vItems = checkMethod ? matchObj.items.filter((item, $rowIndex) => checkMethod({ row: item, $rowIndex })) : matchObj.items
-            let indeterminatesItem = XEUtils.find(matchObj.items, item => treeIndeterminates.includes(item))
+            let indeterminatesItem = XEUtils.find(matchObj.items, item => treeIndeterminates.indexOf(item) > -1)
             if (indeterminatesItem) {
               parentStatus = -1
             } else {
-              let selectItems = matchObj.items.filter(item => selection.includes(item))
-              parentStatus = selectItems.filter(item => vItems.includes(item)).length === vItems.length ? true : (selectItems.length || value === -1 ? -1 : false)
+              let selectItems = matchObj.items.filter(item => selection.indexOf(item) > -1)
+              parentStatus = selectItems.filter(item => vItems.indexOf(item) > -1).length === vItems.length ? true : (selectItems.length || value === -1 ? -1 : false)
             }
-            return this.handleSelectRow(evnt, { row: matchObj.parent }, parentStatus)
+            return this.handleSelectRow({ row: matchObj.parent }, parentStatus)
           }
         } else {
           if (value) {
-            if (!selection.includes(row)) {
+            if (selection.indexOf(row) === -1) {
               selection.push(row)
             }
           } else {
@@ -2793,17 +2798,17 @@ export default {
       let { selection, checkboxOpts } = this
       let { checkField: property } = checkboxOpts
       let { row } = params
-      let value = property ? !XEUtils.get(row, property) : !selection.includes(row)
+      let value = property ? !XEUtils.get(row, property) : selection.indexOf(row) === -1
       if (evnt) {
         this.triggerCheckRowEvent(evnt, params, value)
       } else {
-        this.handleSelectRow(null, params, value)
+        this.handleSelectRow(params, value)
       }
     },
     triggerCheckRowEvent (evnt, params, value) {
       let { checkMethod } = this.checkboxOpts
       if (!checkMethod || checkMethod({ row: params.row, rowIndex: params.rowIndex, $rowIndex: params.$rowIndex })) {
-        this.handleSelectRow(evnt, params, value)
+        this.handleSelectRow(params, value)
         UtilTools.emitEvent(this, 'select-change', [Object.assign({ selection: this.getSelectRecords(), reserves: this.getSelectReserveRecords(), checked: value, $table: this }, params), evnt])
       }
     },
@@ -2833,7 +2838,7 @@ export default {
             }
           }
           let clearValFn = (row, rowIndex) => {
-            if (!checkMethod || (checkMethod({ row, [indexKey]: rowIndex, $rowIndex: rowIndex }) ? 0 : selection.includes(row))) {
+            if (!checkMethod || (checkMethod({ row, [indexKey]: rowIndex, $rowIndex: rowIndex }) ? 0 : selection.indexOf(row) > -1)) {
               XEUtils.set(row, property, value)
             }
           }
@@ -2853,7 +2858,7 @@ export default {
             } else {
               if (checkMethod) {
                 XEUtils.eachTree(tableFullData, (row, $rowIndex) => {
-                  if (checkMethod({ row, $rowIndex }) ? 0 : selection.includes(row)) {
+                  if (checkMethod({ row, $rowIndex }) ? 0 : selection.indexOf(row) > -1) {
                     selectRows.push(row)
                   }
                 }, treeOpts)
@@ -2862,13 +2867,13 @@ export default {
           } else {
             if (value) {
               if (checkMethod) {
-                selectRows = tableFullData.filter((row, rowIndex) => selection.includes(row) || checkMethod({ row, rowIndex, $rowIndex: rowIndex }))
+                selectRows = tableFullData.filter((row, rowIndex) => selection.indexOf(row) > -1 || checkMethod({ row, rowIndex, $rowIndex: rowIndex }))
               } else {
                 selectRows = tableFullData.slice(0)
               }
             } else {
               if (checkMethod) {
-                selectRows = tableFullData.filter((row, rowIndex) => checkMethod({ row, rowIndex, $rowIndex: rowIndex }) ? 0 : selection.includes(row))
+                selectRows = tableFullData.filter((row, rowIndex) => checkMethod({ row, rowIndex, $rowIndex: rowIndex }) ? 0 : selection.indexOf(row) > -1)
               }
             }
           }
@@ -2908,14 +2913,14 @@ export default {
               ? (row, rowIndex) => !checkMethod({ row, rowIndex, $rowIndex: rowIndex }) || XEUtils.get(row, property)
               : row => XEUtils.get(row, property)
           )
-          this.isIndeterminate = !this.isAllSelected && tableFullData.some(row => XEUtils.get(row, property) || treeIndeterminates.includes(row))
+          this.isIndeterminate = !this.isAllSelected && tableFullData.some(row => XEUtils.get(row, property) || treeIndeterminates.indexOf(row) > -1)
         } else {
           this.isAllSelected = tableFullData.length && tableFullData.every(
             checkMethod
-              ? (row, rowIndex) => !checkMethod({ row, rowIndex, $rowIndex: rowIndex }) || selection.includes(row)
-              : row => selection.includes(row)
+              ? (row, rowIndex) => !checkMethod({ row, rowIndex, $rowIndex: rowIndex }) || selection.indexOf(row) > -1
+              : row => selection.indexOf(row) > -1
           )
-          this.isIndeterminate = !this.isAllSelected && tableFullData.some(row => treeIndeterminates.includes(row) || selection.includes(row))
+          this.isIndeterminate = !this.isAllSelected && tableFullData.some(row => treeIndeterminates.indexOf(row) > -1 || selection.indexOf(row) > -1)
         }
       }
     },
@@ -2932,7 +2937,7 @@ export default {
       }
       if (checkboxOpts.reserve) {
         Object.keys(selectReserveRowMap).forEach(rowid => {
-          if (fullDataRowIdData[rowid] && !reserveSelection.includes(fullDataRowIdData[rowid].row)) {
+          if (fullDataRowIdData[rowid] && reserveSelection.indexOf(fullDataRowIdData[rowid].row) === -1) {
             reserveSelection.push(fullDataRowIdData[rowid].row)
           }
         })
@@ -3093,46 +3098,50 @@ export default {
      * 选中事件
      */
     triggerCellMousedownEvent (evnt, params) {
-      let { $el, tableData, visibleColumn, editStore, editConfig, handleSelected, handleChecked } = this
+      let { $el, tableData, visibleColumn, editStore, checkboxOpts, mouseConfig = {}, editConfig, handleSelected, handleChecked } = this
       let { checked, actived } = editStore
       let { row, column, cell } = params
       let { button } = evnt
       let isLeftBtn = button === 0
       let isRightBtn = button === 2
       if (isLeftBtn || isRightBtn) {
-        if (editConfig && editConfig.trigger === 'dblclick') {
-          if ((editConfig.mode === 'row' && actived.row === row) || (actived.row === row && actived.column === column)) {
-            // 如果已经是激活状态
-          } else {
-            if (isLeftBtn) {
-              evnt.preventDefault()
-              evnt.stopPropagation()
-              this.handleSelected(params, evnt)
-              let domMousemove = document.onmousemove
-              let domMouseup = document.onmouseup
-              let start = DomTools.getCellIndexs(cell)
-              let updateEvent = XEUtils.throttle(function (evnt) {
-                evnt.preventDefault()
-                let { flag, targetElem } = DomTools.getEventTargetNode(evnt, $el, 'vxe-body--column')
-                if (flag) {
-                  handleChecked(start, DomTools.getCellIndexs(targetElem), evnt)
-                }
-              }, browse.msie ? 80 : 40, { leading: true, trailing: true })
-              document.onmousemove = updateEvent
-              document.onmouseup = function (evnt) {
-                document.onmousemove = domMousemove
-                document.onmouseup = domMouseup
-              }
-              this.closeFilter()
-              this.closeMenu()
+        if (mouseConfig.checked) {
+          if (editConfig && editConfig.trigger === 'dblclick') {
+            if ((editConfig.mode === 'row' && actived.row === row) || (actived.row === row && actived.column === column)) {
+              // 如果已经是激活状态
             } else {
-              // 如果不在所有选中的范围之内则重新选中
-              let select = DomTools.getCellIndexs(cell)
-              if (!checked.rows.includes(tableData[select.rowIndex]) || !checked.columns.includes(visibleColumn[select.columnIndex])) {
-                handleSelected(params, evnt)
+              if (isLeftBtn) {
+                evnt.preventDefault()
+                evnt.stopPropagation()
+                this.handleSelected(params, evnt)
+                let domMousemove = document.onmousemove
+                let domMouseup = document.onmouseup
+                let start = DomTools.getCellIndexs(cell)
+                let updateEvent = XEUtils.throttle(function (evnt) {
+                  evnt.preventDefault()
+                  let { flag, targetElem } = DomTools.getEventTargetNode(evnt, $el, 'vxe-body--column')
+                  if (flag) {
+                    handleChecked(start, DomTools.getCellIndexs(targetElem), evnt)
+                  }
+                }, browse.msie ? 80 : 40, { leading: true, trailing: true })
+                document.onmousemove = updateEvent
+                document.onmouseup = function (evnt) {
+                  document.onmousemove = domMousemove
+                  document.onmouseup = domMouseup
+                }
+                this.closeFilter()
+                this.closeMenu()
+              } else {
+                // 如果不在所有选中的范围之内则重新选中
+                let select = DomTools.getCellIndexs(cell)
+                if (checked.rows.indexOf(tableData[select.rowIndex]) === -1 || checked.columns.indexOf(visibleColumn[select.columnIndex]) === -1) {
+                  handleSelected(params, evnt)
+                }
               }
             }
           }
+        } else if (checkboxOpts.range) {
+          this.handleCheckboxRangeEvent(evnt, params)
         }
       }
       this.isActivated = true
@@ -3173,6 +3182,63 @@ export default {
         }
       }
       this.isActivated = true
+    },
+    getRangeResult (targetTrElem, moveRange) {
+      let countHeight = 0
+      let rangeRows = []
+      let siblingProp = moveRange > 0 ? 'next' : 'previous'
+      let moveSize = moveRange > 0 ? moveRange : (Math.abs(moveRange) + targetTrElem.offsetHeight)
+      while (targetTrElem && countHeight < moveSize) {
+        rangeRows.push(this.getRowNode(targetTrElem).item)
+        countHeight += targetTrElem.offsetHeight
+        targetTrElem = targetTrElem[`${siblingProp}ElementSibling`]
+      }
+      return rangeRows
+    },
+    handleCheckboxRangeEvent (evnt, params) {
+      let { column, cell } = params
+      // 在 v3.0 中废弃 type=selection
+      if (['checkbox', 'selection'].indexOf(column.type) > -1) {
+        evnt.preventDefault()
+        evnt.stopPropagation()
+        const disX = evnt.clientX
+        const disY = evnt.clientY
+        const checkboxRangeElem = this.$refs.checkboxRange
+        let domMousemove = document.onmousemove
+        let domMouseup = document.onmouseup
+        let trEleme = cell.parentNode
+        let absPos = DomTools.getAbsolutePos(trEleme)
+        let selectRecords = this.getSelectRecords()
+        let lastRangeRows = []
+        this.updateZindex()
+        document.onmousemove = evnt => {
+          let offsetLeft = evnt.clientX - disX
+          let offsetTop = evnt.clientY - disY
+          let rangeRows = this.getRangeResult(trEleme, evnt.clientY - absPos.top)
+          checkboxRangeElem.style.display = 'block'
+          checkboxRangeElem.style.width = `${Math.abs(offsetLeft)}px`
+          checkboxRangeElem.style.height = `${Math.abs(offsetTop)}px`
+          checkboxRangeElem.style.left = `${disX + (offsetLeft > 0 ? 0 : offsetLeft)}px`
+          checkboxRangeElem.style.top = `${disY + (offsetTop > 0 ? 0 : offsetTop)}px`
+          checkboxRangeElem.style.zIndex = `${this.tZindex}`
+          if (rangeRows.length !== lastRangeRows.length) {
+            lastRangeRows = rangeRows
+            if (evnt.ctrlKey) {
+              rangeRows.forEach(row => {
+                this.handleSelectRow({ row }, selectRecords.indexOf(row) === -1)
+              })
+            } else {
+              this.clearSelection()
+              this.setSelection(rangeRows, true)
+            }
+          }
+        }
+        document.onmouseup = evnt => {
+          checkboxRangeElem.removeAttribute('style')
+          document.onmousemove = domMousemove
+          document.onmouseup = domMouseup
+        }
+      }
     },
     triggerHeaderCellClickEvent (evnt, params) {
       let { _lastResizeTime, sortOpts } = this
@@ -3355,7 +3421,7 @@ export default {
     getActiveRow () {
       let { $el, editStore, afterFullData } = this
       let { args, row } = editStore.actived
-      if (args && afterFullData.includes(row) && $el.querySelectorAll('.vxe-body--column.col--actived').length) {
+      if (args && afterFullData.indexOf(row) > -1 && $el.querySelectorAll('.vxe-body--column.col--actived').length) {
         return Object.assign({}, args)
       }
       return null
@@ -3874,7 +3940,7 @@ export default {
     reloadExpandContent (row) {
       let { expandOpts, expandLazyLoadeds } = this
       let { lazy } = expandOpts
-      if (lazy && !expandLazyLoadeds.includes(row)) {
+      if (lazy && expandLazyLoadeds.indexOf(row) === -1) {
         this.clearRowExpandLoaded(row)
           .then(() => this.handleAsyncRowExpand(row))
       }
@@ -3887,7 +3953,7 @@ export default {
       let { $listeners, expandOpts, expandLazyLoadeds } = this
       let { row } = params
       let { lazy } = expandOpts
-      if (!lazy || !expandLazyLoadeds.includes(row)) {
+      if (!lazy || expandLazyLoadeds.indexOf(row) === -1) {
         let expanded = !this.isExpandByRow(row)
         this.setRowExpansion(row, expanded)
         if ($listeners['toggle-expand-change']) {
@@ -3969,9 +4035,9 @@ export default {
         }
         if (expanded) {
           rows.forEach(row => {
-            if (!rowExpandeds.includes(row)) {
+            if (rowExpandeds.indexOf(row) === -1) {
               let rest = fullAllDataRowMap.get(row)
-              let isLoad = lazy && !rest.expandLoaded && !expandLazyLoadeds.includes(row)
+              let isLoad = lazy && !rest.expandLoaded && expandLazyLoadeds.indexOf(row) === -1
               if (isLoad) {
                 result.push(this.handleAsyncRowExpand(row))
               } else {
@@ -3980,7 +4046,7 @@ export default {
             }
           })
         } else {
-          XEUtils.remove(rowExpandeds, row => rows.includes(row))
+          XEUtils.remove(rowExpandeds, row => rows.indexOf(row) > -1)
         }
       }
       this.rowExpandeds = rowExpandeds
@@ -3996,7 +4062,7 @@ export default {
      * @param {Row} row 行对象
      */
     isExpandByRow (row) {
-      return this.rowExpandeds.includes(row)
+      return this.rowExpandeds.indexOf(row) > -1
     },
     clearRowExpand () {
       const isExists = this.rowExpandeds.length
@@ -4046,7 +4112,7 @@ export default {
     reloadTreeChilds (row) {
       let { treeOpts, treeLazyLoadeds } = this
       let { lazy, hasChild } = treeOpts
-      if (lazy && row[hasChild] && !treeLazyLoadeds.includes(row)) {
+      if (lazy && row[hasChild] && treeLazyLoadeds.indexOf(row) === -1) {
         this.clearTreeExpandLoaded(row)
           .then(() => this.handleAsyncTreeExpandChilds(row))
       }
@@ -4059,7 +4125,7 @@ export default {
       let { $listeners, treeOpts, treeLazyLoadeds } = this
       let { row } = params
       let { lazy } = treeOpts
-      if (!lazy || !treeLazyLoadeds.includes(row)) {
+      if (!lazy || treeLazyLoadeds.indexOf(row) === -1) {
         let expanded = !this.isTreeExpandByRow(row)
         this.setTreeExpansion(row, expanded)
         if ($listeners['toggle-tree-change']) {
@@ -4113,7 +4179,7 @@ export default {
           if (childs) {
             row[children] = childs
             this.appendTreeCache(row, childs)
-            if (childs.length && !treeExpandeds.includes(row)) {
+            if (childs.length && treeExpandeds.indexOf(row) === -1) {
               treeExpandeds.push(row)
             }
             // 如果当前节点已选中，则展开后子节点也被选中
@@ -4172,13 +4238,13 @@ export default {
             rows = rows.slice(rows.length - 1, rows.length)
             // 同一级只能展开一个
             let matchObj = XEUtils.findTree(tableFullData, item => item === rows[0], treeOpts)
-            XEUtils.remove(treeExpandeds, item => matchObj.items.includes(item))
+            XEUtils.remove(treeExpandeds, item => matchObj.items.indexOf(item) > -1)
           }
           if (expanded) {
             rows.forEach(row => {
-              if (!treeExpandeds.includes(row)) {
+              if (treeExpandeds.indexOf(row) === -1) {
                 let rest = fullAllDataRowMap.get(row)
-                let isLoad = lazy && row[hasChild] && !rest.treeLoaded && !treeLazyLoadeds.includes(row)
+                let isLoad = lazy && row[hasChild] && !rest.treeLoaded && treeLazyLoadeds.indexOf(row) === -1
                 // 是否使用懒加载
                 if (isLoad) {
                   result.push(this.handleAsyncTreeExpandChilds(row))
@@ -4190,7 +4256,7 @@ export default {
               }
             })
           } else {
-            XEUtils.remove(treeExpandeds, row => rows.includes(row))
+            XEUtils.remove(treeExpandeds, row => rows.indexOf(row) > -1)
           }
           return Promise.all(result).then(this.recalculate)
         }
@@ -4207,7 +4273,7 @@ export default {
      * @param {Row} row 行对象
      */
     isTreeExpandByRow (row) {
-      return this.treeExpandeds.includes(row)
+      return this.treeExpandeds.indexOf(row) > -1
     },
     clearTreeExpand () {
       const isExists = this.treeExpandeds.length
@@ -4875,7 +4941,7 @@ export default {
         data: null,
         columns: null,
         // 在 v3.0 中废弃 type=selection
-        columnFilterMethod: options.columns ? null : column => ['seq', 'index'].includes(column.type) || column.property,
+        columnFilterMethod: options && options.columns ? null : column => ['seq', 'index'].indexOf(column.type) > -1 || column.property,
         dataFilterMethod: null,
         footerFilterMethod: null
       }, GlobalConfig.export, options)
@@ -4885,7 +4951,7 @@ export default {
       if (!opts.sheetName) {
         opts.sheetName = GlobalConfig.i18n('vxe.table.expSheetName')
       }
-      if (!VXETable.exportTypes.includes(opts.type)) {
+      if (VXETable.exportTypes.indexOf(opts.type) === -1) {
         throw new Error(UtilTools.getLog('vxe.error.notType', [opts.type]))
       }
       return ExportTools.handleExport(this, opts, visibleColumn, tableFullData)
@@ -4901,7 +4967,7 @@ export default {
         const { type, filename } = UtilTools.parseFile(file)
         const options = Object.assign({ mode: 'covering' }, opts, { type, filename })
         const types = options.types || VXETable.importTypes
-        if (types.includes(type)) {
+        if (types.indexOf(type) > -1) {
           this.preventEvent(null, 'event.import', { $table: this, file, options, columns: this.tableFullColumn }, () => {
             const reader = new FileReader()
             reader.onerror = e => {
@@ -4944,7 +5010,7 @@ export default {
       fileInput.accept = `.${types.join(', .')}`
       fileInput.onchange = evnt => {
         const { type } = UtilTools.parseFile(evnt.target.files[0])
-        if (types.includes(type)) {
+        if (types.indexOf(type) > -1) {
           this._fileResolve(evnt)
         } else {
           if (options.message !== false) {

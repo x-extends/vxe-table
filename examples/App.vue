@@ -498,6 +498,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.rangeSelect',
+              locat: {
+                name: 'TableRangeSelect'
+              }
+            },
+            {
               label: 'app.aside.nav.tabs',
               locat: {
                 name: 'TableTabs'

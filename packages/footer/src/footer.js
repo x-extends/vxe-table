@@ -155,10 +155,11 @@ export default {
               attrs.rowspan = rowspan
               attrs.colspan = colspan
             }
+            let type = column.type === 'seq' || column.type === 'index' ? 'seq' : column.type
             return h('td', {
               class: ['vxe-footer--column', column.id, {
                 [`col--${footAlign}`]: footAlign,
-                [`col--${column.type}`]: column.type,
+                [`col--${type}`]: type,
                 'col--last': $columnIndex === tableColumn.length - 1,
                 'fixed--hidden': fixedHiddenColumn,
                 'col--ellipsis': hasEllipsis,

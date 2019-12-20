@@ -225,10 +225,11 @@ export default {
             if (tableListeners['header-cell-dblclick']) {
               thOns.dblclick = evnt => UtilTools.emitEvent($table, 'header-cell-dblclick', [{ $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, cell: evnt.currentTarget }, evnt])
             }
+            let type = column.type === 'seq' || column.type === 'index' ? 'seq' : column.type
             return h('th', {
               class: ['vxe-header--column', column.id, {
                 [`col--${headAlign}`]: headAlign,
-                [`col--${column.type}`]: column.type,
+                [`col--${type}`]: type,
                 'col--last': $columnIndex === cols.length - 1,
                 'col--fixed': column.fixed,
                 'col--group': isColGroup,

@@ -1104,6 +1104,15 @@ const apis = [
             enum: '',
             defVal: 'false',
             list: []
+          },
+          {
+            name: 'range',
+            desc: '开启范围选中功能',
+            version: '1.15.17',
+            type: 'Boolean',
+            enum: '',
+            defVal: 'false',
+            list: []
           }
         ]
       },

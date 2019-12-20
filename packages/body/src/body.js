@@ -141,8 +141,10 @@ function renderColumn (h, _vm, $table, $seq, seq, rowid, fixedType, rowLevel, ro
     }
   }
   // 按下事件处理
-  tdOns.mousedown = evnt => {
-    $table.triggerCellMousedownEvent(evnt, { $table, $seq, seq, rowid, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, level: rowLevel, cell: evnt.currentTarget })
+  if (checkboxOpts.range || isMouseSelected || isMouseChecked) {
+    tdOns.mousedown = evnt => {
+      $table.triggerCellMousedownEvent(evnt, { $table, $seq, seq, rowid, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, level: rowLevel, cell: evnt.currentTarget })
+    }
   }
   // 点击事件处理
   if (highlightCurrentRow ||
@@ -186,10 +188,11 @@ function renderColumn (h, _vm, $table, $seq, seq, rowid, fixedType, rowLevel, ro
       handleLocation(copyedLocat, copyed.rows, copyed.columns, row, column)
     }
   }
+  let type = column.type === 'seq' || column.type === 'index' ? 'seq' : column.type
   return h('td', {
     class: ['vxe-body--column', column.id, {
       [`col--${cellAlign}`]: cellAlign,
-      [`col--${column.type}`]: column.type,
+      [`col--${type}`]: type,
       'col--last': $columnIndex === columns.length - 1,
       'col--tree-node': treeNode,
       'col--edit': editRender,
@@ -350,7 +353,7 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
           'row--stripe': stripe && rowIndex > 0 && (rowIndex + 1) % 2 === 0,
           'row--current': highlightCurrentRow && row === currentRow,
           'row--hover': row === hoverRow,
-          'row--new': editStore.insertList.includes(row),
+          'row--new': editStore.insertList.indexOf(row) > -1,
           'row--radio': radioOpts.highlight && $table.selectRow === row,
           'row--cheched': checkboxOpts.highlight && $table.isCheckedByRow(row)
         }, rowClassName ? XEUtils.isFunction(rowClassName) ? rowClassName({ $table, $seq, seq, rowid, fixedType, rowLevel, row, rowIndex, $rowIndex }) : rowClassName : ''],
@@ -366,7 +369,7 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
       }))
     )
     // 如果行被展开了
-    if (rowExpandeds.length && rowExpandeds.includes(row)) {
+    if (rowExpandeds.length && rowExpandeds.indexOf(row) > -1) {
       let column = XEUtils.find(tableColumn, column => column.type === 'expand')
       let columnIndex = getColumnMapIndex(column)
       let cellStyle
@@ -405,7 +408,7 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
     // 如果是树形表格
     if (treeConfig && treeExpandeds.length) {
       let rowChildren = row[treeOpts.children]
-      if (rowChildren && rowChildren.length && treeExpandeds.includes(row)) {
+      if (rowChildren && rowChildren.length && treeExpandeds.indexOf(row) > -1) {
         rows.push.apply(rows, renderRows(h, _vm, $table, $seq ? `${$seq}.${seq}` : `${seq}`, rowLevel + 1, fixedType, rowChildren, tableColumn))
       }
     }

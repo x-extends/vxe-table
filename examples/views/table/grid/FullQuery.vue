@@ -14,7 +14,7 @@
       :pager-config="{pageSize: 15}"
       :columns="tableColumn"
       :proxy-config="tableProxy"
-      :checkbox-config="{reserve: true}"></vxe-grid>
+      :checkbox-config="{labelField: 'id', reserve: true, highlight: true, range: true}"></vxe-grid>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
@@ -52,9 +52,8 @@ export default {
         }
       },
       tableColumn: [
-        { type: 'checkbox', width: 50, fixed: 'left' },
         { type: 'seq', width: 60, fixed: 'left' },
-        { field: 'id', title: 'ID', width: 100, remoteSort: true },
+        { type: 'checkbox', title: 'ID', width: 120, fixed: 'left' },
         { field: 'name', title: 'Name', width: 300, remoteSort: true },
         { field: 'nickname', title: 'Nickname', remoteSort: true, width: 300 },
         { field: 'age', title: 'Age', remoteSort: true, width: 100 },
@@ -86,7 +85,7 @@ export default {
           :pager-config="{pageSize: 15}"
           :columns="tableColumn"
           :proxy-config="tableProxy"
-          :checkbox-config="{reserve: true}"></vxe-grid>
+          :checkbox-config="{labelField: 'id', reserve: true, highlight: true, range: true}"></vxe-grid>
         `,
         `
         export default {
@@ -113,9 +112,8 @@ export default {
                 }
               },
               tableColumn: [
-                { type: 'checkbox', width: 50, fixed: 'left' },
                 { type: 'seq', width: 60, fixed: 'left' },
-                { field: 'id', title: 'ID', width: 100, remoteSort: true },
+                { type: 'checkbox', title: 'ID', width: 120, fixed: 'left' },
                 { field: 'name', title: 'Name', width: 300, remoteSort: true },
                 { field: 'nickname', title: 'Nickname', remoteSort: true, width: 300 },
                 { field: 'age', title: 'Age', remoteSort: true, width: 100 },

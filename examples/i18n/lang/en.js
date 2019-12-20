@@ -70,6 +70,7 @@ module.exports = {
         search: 'Table search',
         pager: 'Pager',
         pageIcon: 'Pagination + custom icon',
+        rangeSelect: 'The range of the checkbox is checked',
         tabs: 'Switch tabs',
         keepAlives: 'Switch keep-alive',
 
