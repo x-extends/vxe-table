@@ -30,7 +30,7 @@ export default {
                 let inpElem = evnt.target
                 UtilTools.setCellValue(row, column, inpElem.value)
                 if (inpElem.scrollHeight > inpElem.offsetHeight) {
-                  if (uploadRows.indexOf(row) === -1) {
+                  if (!uploadRows.includes(row)) {
                     inpElem.style.width = `${inpElem.offsetWidth + 20}px`
                   } else {
                     inpElem.style.height = `${inpElem.scrollHeight}px`
@@ -39,7 +39,7 @@ export default {
               },
               change (evnt) {
                 UtilTools.setCellValue(row, column, evnt.target.value)
-                if (uploadRows.indexOf(row) === -1) {
+                if (!uploadRows.includes(row)) {
                   uploadRows.push(row)
                 }
               },

@@ -565,7 +565,7 @@ export default {
       const { footerData } = comp.getTableData()
       const selectRecords = comp.getSelectRecords()
       // v3.0 废弃 type=index
-      const exportColumns = fullColumn.filter(column => ['seq', 'index'].indexOf(column.type) > -1 || column.property)
+      const exportColumns = fullColumn.filter(column => ['seq', 'index'].includes(column.type) || column.property)
       const treeStatus = comp.getTreeStatus()
       const isTree = !!treeStatus
       const hasFooter = !!footerData.length

@@ -819,6 +819,15 @@ const apis = [
             list: []
           },
           {
+            name: 'showIcon',
+            desc: '是否显示列头排序图标',
+            version: '1.15.17',
+            type: 'Boolean',
+            enum: '',
+            defVal: 'true',
+            list: []
+          },
+          {
             name: 'iconAsc',
             desc: '自定义升序的图标',
             version: '1.15.15',
@@ -853,6 +862,15 @@ const apis = [
             type: 'Boolean',
             enum: '',
             defVal: '',
+            list: []
+          },
+          {
+            name: 'showIcon',
+            desc: '是否显示列头筛选图标',
+            version: '1.15.17',
+            type: 'Boolean',
+            enum: '',
+            defVal: 'true',
             list: []
           },
           {

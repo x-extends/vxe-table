@@ -350,7 +350,7 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
           'row--stripe': stripe && rowIndex > 0 && (rowIndex + 1) % 2 === 0,
           'row--current': highlightCurrentRow && row === currentRow,
           'row--hover': row === hoverRow,
-          'row--new': editStore.insertList.indexOf(row) > -1,
+          'row--new': editStore.insertList.includes(row),
           'row--radio': radioOpts.highlight && $table.selectRow === row,
           'row--cheched': checkboxOpts.highlight && $table.isCheckedByRow(row)
         }, rowClassName ? XEUtils.isFunction(rowClassName) ? rowClassName({ $table, $seq, seq, rowid, fixedType, rowLevel, row, rowIndex, $rowIndex }) : rowClassName : ''],
@@ -366,7 +366,7 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
       }))
     )
     // 如果行被展开了
-    if (rowExpandeds.length && rowExpandeds.indexOf(row) > -1) {
+    if (rowExpandeds.length && rowExpandeds.includes(row)) {
       let column = XEUtils.find(tableColumn, column => column.type === 'expand')
       let columnIndex = getColumnMapIndex(column)
       let cellStyle
@@ -405,7 +405,7 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
     // 如果是树形表格
     if (treeConfig && treeExpandeds.length) {
       let rowChildren = row[treeOpts.children]
-      if (rowChildren && rowChildren.length && treeExpandeds.indexOf(row) > -1) {
+      if (rowChildren && rowChildren.length && treeExpandeds.includes(row)) {
         rows.push.apply(rows, renderRows(h, _vm, $table, $seq ? `${$seq}.${seq}` : `${seq}`, rowLevel + 1, fixedType, rowChildren, tableColumn))
       }
     }

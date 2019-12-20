@@ -261,7 +261,7 @@ export default {
     },
     handleActiveMethod (params) {
       let activeMethod = this.editConfig.activeMethod
-      return this.pendingRecords.indexOf(params.row) === -1 && (!activeMethod || activeMethod(params))
+      return !this.pendingRecords.includes(params.row) && (!activeMethod || activeMethod(params))
     },
     /**
      * 提交指令，支持 code 或 button
@@ -382,11 +382,11 @@ export default {
             let { insertRecords, removeRecords, updateRecords, pendingRecords } = body
             // 排除掉新增且标记为删除的数据
             if (insertRecords.length) {
-              body.pendingRecords = pendingRecords.filter(row => insertRecords.indexOf(row) === -1)
+              body.pendingRecords = pendingRecords.filter(row => !insertRecords.includes(row))
             }
             // 排除已标记为删除的数据
             if (pendingRecords.length) {
-              body.insertRecords = insertRecords.filter(row => pendingRecords.indexOf(row) === -1)
+              body.insertRecords = insertRecords.filter(row => !pendingRecords.includes(row))
             }
             // 只校验新增和修改的数据
             return new Promise(resolve => {
@@ -473,7 +473,7 @@ export default {
           }
         })
         if (minus.length) {
-          this.pendingRecords = pendingRecords.filter(item => minus.indexOf(item) === -1).concat(plus)
+          this.pendingRecords = pendingRecords.filter(item => !minus.includes(item)).concat(plus)
         } else if (plus.length) {
           this.pendingRecords = pendingRecords.concat(plus)
         }

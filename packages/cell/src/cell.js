@@ -98,9 +98,9 @@ export const Cell = {
       return slots.icon(params, h)
     }
     if (!isHidden) {
-      isAceived = treeExpandeds.indexOf(row) > -1
+      isAceived = treeExpandeds.includes(row)
       if (lazy) {
-        isLazyLoaded = treeLazyLoadeds.indexOf(row) > -1
+        isLazyLoaded = treeLazyLoadeds.includes(row)
         hasLazyChilds = row[hasChild]
       }
     }
@@ -289,10 +289,10 @@ export const Cell = {
         options.attrs.disabled = isDisabled
       }
       if (treeConfig) {
-        indeterminate = treeIndeterminates.indexOf(row) > -1
+        indeterminate = treeIndeterminates.includes(row)
       }
       options.domProps = {
-        checked: $table.selection.indexOf(row) > -1
+        checked: $table.selection.includes(row)
       }
       options.on = {
         change (evnt) {
@@ -343,7 +343,7 @@ export const Cell = {
         options.attrs.disabled = isDisabled
       }
       if (treeConfig) {
-        indeterminate = treeIndeterminates.indexOf(row) > -1
+        indeterminate = treeIndeterminates.includes(row)
       }
       options.domProps = {
         checked: XEUtils.get(row, property)
@@ -390,9 +390,9 @@ export const Cell = {
       return slots.icon(params, h)
     }
     if (!isHidden) {
-      isAceived = rowExpandeds.indexOf(params.row) > -1
+      isAceived = rowExpandeds.includes(params.row)
       if (lazy) {
-        isLazyLoaded = expandLazyLoadeds.indexOf(row) > -1
+        isLazyLoaded = expandLazyLoadeds.includes(row)
       }
     }
     return [
@@ -464,8 +464,8 @@ export const Cell = {
   },
   renderSortIcon (h, params) {
     let { $table, column } = params
-    let { iconAsc, iconDesc } = $table.sortOpts
-    return [
+    let { showIcon, iconAsc, iconDesc } = $table.sortOpts
+    return showIcon === false ? [] : [
       h('span', {
         class: 'vxe-sort-wrapper'
       }, [
@@ -508,8 +508,8 @@ export const Cell = {
   renderFilterIcon (h, params) {
     let { $table, column, hasFilter } = params
     let { filterStore, filterOpts } = $table
-    let { iconNone, iconMatch } = filterOpts
-    return [
+    let { showIcon, iconNone, iconMatch } = filterOpts
+    return showIcon === false ? [] : [
       h('span', {
         class: ['vxe-filter-wrapper', {
           'is--active': filterStore.visible && filterStore.column === column

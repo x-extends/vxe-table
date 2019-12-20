@@ -17,7 +17,7 @@ export const Interceptor = {
   },
   add (type, callback) {
     type = toType(type)
-    if (callback && XEUtils.includes(eventTypes, type)) {
+    if (callback && eventTypes.includes(type)) {
       let eList = _storeMap[type]
       if (!eList) {
         eList = _storeMap[type] = []
