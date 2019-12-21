@@ -132,7 +132,7 @@ export default {
           },
           methods: {
             getTreeExpansionEvent () {
-              let selectRow = this.$refs.xTree.getRadioRow()
+              let selectRow = this.$refs.xTree.getRadioRecord()
               this.$XModal.alert(selectRow ? selectRow.name : 'null')
             },
             getTreeExpansionEvent () {
@@ -254,7 +254,7 @@ export default {
       })
     },
     getTreeRadioEvent () {
-      let selectRow = this.$refs.xTree1.getRadioRow()
+      let selectRow = this.$refs.xTree1.getRadioRecord()
       this.$XModal.alert(selectRow ? selectRow.name : 'null')
     },
     getTreeExpansionEvent () {

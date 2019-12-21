@@ -83,7 +83,7 @@ export default {
             },
             printSelectEvent () {
               this.$refs.xTable.print({
-                data: this.$refs.xTable.getSelectRecords()
+                data: this.$refs.xTable.getCheckboxRecords()
               })
             },
             exportDataEvent () {
@@ -132,7 +132,7 @@ export default {
     },
     printSelectEvent () {
       this.$refs.xTable.print({
-        data: this.$refs.xTable.getSelectRecords()
+        data: this.$refs.xTable.getCheckboxRecords()
       })
     },
     exportDataEvent () {

@@ -79,7 +79,7 @@ export default {
               console.log('行选中事件')
             },
             getCurrentEvent () {
-              this.$XModal.alert(JSON.stringify(this.$refs.xTable.getCurrentRow()))
+              this.$XModal.alert(JSON.stringify(this.$refs.xTable.getCurrentRecord()))
             }
           }
         }
@@ -101,7 +101,7 @@ export default {
       console.log('行选中事件')
     },
     getCurrentEvent () {
-      this.$XModal.alert(JSON.stringify(this.$refs.xTable.getCurrentRow()))
+      this.$XModal.alert(JSON.stringify(this.$refs.xTable.getCurrentRecord()))
     }
   }
 }

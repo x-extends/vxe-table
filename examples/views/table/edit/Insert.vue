@@ -102,7 +102,7 @@ export default {
               this.$XModal.alert(insertRecords.length)
             },
             getSelectionEvent () {
-              let removeRecords = this.$refs.xTable.getSelectRecords()
+              let removeRecords = this.$refs.xTable.getCheckboxRecords()
               this.$XModal.alert(removeRecords.length)
             }
           }
@@ -141,7 +141,7 @@ export default {
       this.$XModal.alert(insertRecords.length)
     },
     getSelectionEvent () {
-      let removeRecords = this.$refs.xTable.getSelectRecords()
+      let removeRecords = this.$refs.xTable.getCheckboxRecords()
       this.$XModal.alert(removeRecords.length)
     }
   }

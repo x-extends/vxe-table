@@ -1026,8 +1026,8 @@ export default {
       this.clearFilter()
       this.clearCurrentRow()
       this.clearCurrentColumn()
-      this.clearSelection()
-      this.clearSelectReserve()
+      this.clearCheckboxRow()
+      this.clearCheckboxReserve()
       this.clearRowExpand()
       this.clearTreeExpand()
       this.clearChecked()
@@ -1398,8 +1398,8 @@ export default {
      * 删除选中数据
      */
     removeSelecteds () {
-      return this.remove(this.getSelectRecords()).then(params => {
-        this.clearSelection()
+      return this.remove(this.getCheckboxRecords()).then(params => {
+        this.clearCheckboxRow()
         return params
       })
     },
@@ -1578,10 +1578,15 @@ export default {
     getRemoveRecords () {
       return this.editStore.removeList
     },
-    /**
-     * 获取选中数据
-     */
+    // 在 v3.0 中废弃 getSelectRecords
     getSelectRecords () {
+      // 待打印废弃日志
+      return this.getCheckboxRecords()
+    },
+    /**
+     * 用于多选行，获取已选中的数据
+     */
+    getCheckboxRecords () {
       let { tableFullData, treeConfig, treeOpts, checkboxOpts } = this
       let { checkField: property } = checkboxOpts
       let rowList = []
@@ -2682,7 +2687,7 @@ export default {
       let { fullDataRowIdData, checkboxOpts } = this
       let { checkAll, checkRowKeys } = checkboxOpts
       if (checkAll) {
-        this.setAllSelection(true)
+        this.setAllCheckboxRow(true)
       } else if (checkRowKeys) {
         let defSelection = []
         checkRowKeys.forEach(rowid => {
@@ -2690,10 +2695,20 @@ export default {
             defSelection.push(fullDataRowIdData[rowid].row)
           }
         })
-        this.setSelection(defSelection, true)
+        this.setCheckboxRow(defSelection, true)
       }
     },
+    // 在 v3.0 中废弃 setSelection
     setSelection (rows, value) {
+      // 待打印废弃日志
+      return this.setCheckboxRow(rows, value)
+    },
+    /**
+     * 用于多选行，设置行为选中状态，第二个参数为选中与否
+     * @param {Array/Row} rows 行数据
+     * @param {Boolean} value 是否选中
+     */
+    setCheckboxRow (rows, value) {
       if (rows && !XEUtils.isArray(rows)) {
         rows = [rows]
       }
@@ -2809,17 +2824,31 @@ export default {
       let { checkMethod } = this.checkboxOpts
       if (!checkMethod || checkMethod({ row: params.row, rowIndex: params.rowIndex, $rowIndex: params.$rowIndex })) {
         this.handleSelectRow(params, value)
-        UtilTools.emitEvent(this, 'select-change', [Object.assign({ selection: this.getSelectRecords(), reserves: this.getSelectReserveRecords(), checked: value, $table: this }, params), evnt])
+        UtilTools.emitEvent(this, 'select-change', [Object.assign({ selection: this.getCheckboxRecords(), reserves: this.getCheckboxReserveRecords(), checked: value, $table: this }, params), evnt])
       }
+    },
+    // 在 v3.0 中废弃 toggleRowSelection
+    toggleRowSelection (row) {
+      // 待打印废弃日志
+      return this.toggleCheckboxRow(row)
     },
     /**
      * 多选，切换某一行的选中状态
      */
-    toggleRowSelection (row) {
+    toggleCheckboxRow (row) {
       this.handleToggleCheckRowEvent({ row })
       return this.$nextTick()
     },
+    // 在 v3.0 中废弃 setAllSelection
     setAllSelection (value) {
+      // 待打印废弃日志
+      return this.setAllCheckboxRow(value)
+    },
+    /**
+     * 用于多选行，设置所有行的选中状态
+     * @param {Boolean} value 是否选中
+     */
+    setAllCheckboxRow (value) {
       let { tableFullData, editStore, treeConfig, treeOpts, selection, selectReserveRowMap, checkboxOpts } = this
       let { reserve, checkStrictly, checkMethod } = checkboxOpts
       let { insertList } = editStore
@@ -2965,10 +2994,15 @@ export default {
         }
       })
     },
+    // 在 v3.0 中废弃 getSelectReserveRecords
+    getSelectReserveRecords () {
+      // 待打印废弃日志
+      return this.getCheckboxReserveRecords()
+    },
     /**
      * 获取保留选中的行
      */
-    getSelectReserveRecords () {
+    getCheckboxReserveRecords () {
       let { fullDataRowIdData, selectReserveRowMap, checkboxOpts } = this
       let reserveSelection = []
       if (checkboxOpts.reserve) {
@@ -2980,8 +3014,14 @@ export default {
       }
       return reserveSelection
     },
+    // 在 v3.0 中废弃 clearSelectReserve
     clearSelectReserve () {
+      // 待打印废弃日志
+      return this.clearCheckboxReserve()
+    },
+    clearCheckboxReserve () {
       this.selectReserveRowMap = {}
+      return this.$nextTick()
     },
     handleSelectReserveRow (row, checked) {
       const { selectReserveRowMap, checkboxOpts } = this
@@ -2999,17 +3039,30 @@ export default {
      * 多选，选中所有事件
      */
     triggerCheckAllEvent (evnt, value) {
-      this.setAllSelection(value)
-      UtilTools.emitEvent(this, 'select-all', [{ selection: this.getSelectRecords(), reserves: this.getSelectReserveRecords(), checked: value, $table: this }, evnt])
+      this.setAllCheckboxRow(value)
+      UtilTools.emitEvent(this, 'select-all', [{ selection: this.getCheckboxRecords(), reserves: this.getCheckboxReserveRecords(), checked: value, $table: this }, evnt])
+    },
+    // 在 v3.0 中废弃 toggleAllSelection
+    toggleAllSelection () {
+      // 待打印废弃日志
+      return this.toggleAllCheckboxRow()
     },
     /**
      * 多选，切换所有行的选中状态
      */
-    toggleAllSelection () {
+    toggleAllCheckboxRow () {
       this.triggerCheckAllEvent(null, !this.isAllSelected)
       return this.$nextTick()
     },
+    // 在 v3.0 中废弃 clearSelection
     clearSelection () {
+      // 待打印废弃日志
+      return this.clearCheckboxRow()
+    },
+    /**
+     * 用于多选行，手动清空用户的选择
+     */
+    clearCheckboxRow () {
       let { tableFullData, treeConfig, treeOpts, checkboxOpts } = this
       let property = checkboxOpts.checkField || checkboxOpts.checkProp
       if (property) {
@@ -3079,10 +3132,26 @@ export default {
       this.selectRow = null
       return this.$nextTick()
     },
+    // 在 v3.0 中废弃 getCurrentRow
     getCurrentRow () {
+      // 待打印废弃日志
+      return this.getCurrentRecord()
+    },
+    /**
+     * 用于当前行，获取当前行的数据
+     */
+    getCurrentRecord () {
       return this.currentRow
     },
+    // 在 v3.0 中废弃 getRadioRow
     getRadioRow () {
+      // 待打印废弃日志
+      return this.getRadioRecord()
+    },
+    /**
+     * 用于单选行，获取当已选中的数据
+     */
+    getRadioRecord () {
       return this.selectRow
     },
     /**
@@ -3208,7 +3277,7 @@ export default {
         let domMouseup = document.onmouseup
         let trEleme = cell.parentNode
         let absPos = DomTools.getAbsolutePos(trEleme)
-        let selectRecords = this.getSelectRecords()
+        let selectRecords = this.getCheckboxRecords()
         let lastRangeRows = []
         this.updateZindex()
         document.onmousemove = evnt => {
@@ -3228,8 +3297,8 @@ export default {
                 this.handleSelectRow({ row }, selectRecords.indexOf(row) === -1)
               })
             } else {
-              this.clearSelection()
-              this.setSelection(rangeRows, true)
+              this.clearCheckboxRow()
+              this.setCheckboxRow(rangeRows, true)
             }
           }
         }
@@ -3418,7 +3487,12 @@ export default {
       actived.column = null
       return this.clearValidate()
     },
+    // 在 v3.0 中废弃 getActiveRow
     getActiveRow () {
+      // 待打印废弃日志
+      return this.getActiveRecord()
+    },
+    getActiveRecord () {
       let { $el, editStore, afterFullData } = this
       let { args, row } = editStore.actived
       if (args && afterFullData.indexOf(row) > -1 && $el.querySelectorAll('.vxe-body--column.col--actived').length) {
@@ -4184,7 +4258,7 @@ export default {
             }
             // 如果当前节点已选中，则展开后子节点也被选中
             if (this.isCheckedByRow(row)) {
-              this.setSelection(childs, true)
+              this.setCheckboxRow(childs, true)
             }
           }
           resolve(this.$nextTick().then(this.recalculate))

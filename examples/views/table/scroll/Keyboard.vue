@@ -261,7 +261,7 @@ export default {
               })
             },
             selectValidEvent () {
-              let selectRecords = this.$refs.xTable.getSelectRecords()
+              let selectRecords = this.$refs.xTable.getCheckboxRecords()
               if (selectRecords.length > 0) {
                 this.$refs.xTable.validate(selectRecords, valid => {
                   if (valid) {
@@ -363,7 +363,7 @@ export default {
       })
     },
     selectValidEvent () {
-      let selectRecords = this.$refs.xTable.getSelectRecords()
+      let selectRecords = this.$refs.xTable.getCheckboxRecords()
       if (selectRecords.length > 0) {
         this.$refs.xTable.validate(selectRecords, valid => {
           if (valid) {

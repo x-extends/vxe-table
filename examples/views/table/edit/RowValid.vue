@@ -141,7 +141,7 @@ export default {
               }
             },
             async selectValidEvent () {
-              let selectRecords = this.$refs.xTable.getSelectRecords()
+              let selectRecords = this.$refs.xTable.getCheckboxRecords()
               if (selectRecords.length > 0) {
                 try {
                   await this.$refs.xTable.validate(selectRecords)
@@ -161,7 +161,7 @@ export default {
               } catch (errMap) {}
             },
             getSelectEvent () {
-              let selectRecords = this.$refs.xTable.getSelectRecords()
+              let selectRecords = this.$refs.xTable.getCheckboxRecords()
               this.$XModal.alert(selectRecords.length)
             },
             getInsertEvent () {
@@ -229,7 +229,7 @@ export default {
       }
     },
     async selectValidEvent () {
-      let selectRecords = this.$refs.xTable.getSelectRecords()
+      let selectRecords = this.$refs.xTable.getCheckboxRecords()
       if (selectRecords.length > 0) {
         try {
           await this.$refs.xTable.validate(selectRecords)
@@ -249,7 +249,7 @@ export default {
       } catch (errMap) {}
     },
     getSelectEvent () {
-      let selectRecords = this.$refs.xTable.getSelectRecords()
+      let selectRecords = this.$refs.xTable.getCheckboxRecords()
       this.$XModal.alert(selectRecords.length)
     },
     getInsertEvent () {

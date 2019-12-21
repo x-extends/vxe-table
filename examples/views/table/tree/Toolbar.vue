@@ -117,7 +117,7 @@ export default {
             },
             removeEvent () {
               let xTree = this.$refs.xTree
-              let removeRecords = xTree.getSelectRecords()
+              let removeRecords = xTree.getCheckboxRecords()
               removeRecords.forEach(row => {
                 let matchObj = this.$utils.findTree(this.tableData, item => item === row, this.treeConfig)
                 if (matchObj) {
@@ -188,7 +188,7 @@ export default {
     },
     removeEvent () {
       let xTree = this.$refs.xTree
-      let removeRecords = xTree.getSelectRecords()
+      let removeRecords = xTree.getCheckboxRecords()
       removeRecords.forEach(row => {
         let matchObj = this.$utils.findTree(this.tableData, item => item === row, this.treeConfig)
         if (matchObj) {

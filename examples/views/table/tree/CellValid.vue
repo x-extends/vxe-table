@@ -142,7 +142,7 @@ export default {
               })
             },
             selectValidEvent () {
-              let selectRecords = this.$refs.xTree.getSelectRecords()
+              let selectRecords = this.$refs.xTree.getCheckboxRecords()
               if (selectRecords.length > 0) {
                 this.$refs.xTree.validate(selectRecords, valid => {
                   if (valid) {
@@ -156,7 +156,7 @@ export default {
               }
             },
             getSelectEvent () {
-              let selectRecords = this.$refs.xTree.getSelectRecords()
+              let selectRecords = this.$refs.xTree.getCheckboxRecords()
               this.$XModal.alert(selectRecords.length)
             },
             getUpdateEvent () {
@@ -221,7 +221,7 @@ export default {
       })
     },
     selectValidEvent () {
-      let selectRecords = this.$refs.xTree.getSelectRecords()
+      let selectRecords = this.$refs.xTree.getCheckboxRecords()
       if (selectRecords.length > 0) {
         this.$refs.xTree.validate(selectRecords, valid => {
           if (valid) {
@@ -235,7 +235,7 @@ export default {
       }
     },
     getSelectEvent () {
-      let selectRecords = this.$refs.xTree.getSelectRecords()
+      let selectRecords = this.$refs.xTree.getCheckboxRecords()
       this.$XModal.alert(selectRecords.length)
     },
     getUpdateEvent () {

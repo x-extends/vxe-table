@@ -2606,8 +2606,18 @@ const apis = [
       },
       {
         name: 'getCurrentRow()',
-        desc: '用于当前行，获取当前行的行数据',
+        disabled: true,
+        desc: '即将废弃，请使用 getCurrentRecord',
         version: '',
+        type: 'Row',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'getCurrentRecord()',
+        desc: '用于 highlight-current-row，获取当前行的行数据',
+        version: '1.15.17',
         type: 'Row',
         enum: '',
         defVal: '',
@@ -2615,7 +2625,8 @@ const apis = [
       },
       {
         name: 'getRadioRow()',
-        desc: '用于单选行，获取当已选中的行数据',
+        disabled: true,
+        desc: '即将废弃，请使用 getRadioRecord',
         version: '',
         type: 'Row',
         enum: '',
@@ -2623,8 +2634,18 @@ const apis = [
         list: []
       },
       {
+        name: 'getRadioRecord()',
+        desc: '用于 type=radio，获取当已选中的行数据',
+        version: '1.15.17',
+        type: 'Row',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'getSelectRecords()',
-        desc: '用于多选行，获取已选中的行数据',
+        disabled: true,
+        desc: '即将废弃，请使用 getCheckboxRecords',
         version: '',
         type: 'Array<Row>',
         enum: '',
@@ -2632,9 +2653,28 @@ const apis = [
         list: []
       },
       {
+        name: 'getCheckboxRecords()',
+        desc: '用于 type=checkbox，获取已选中的行数据',
+        version: '1.15.17',
+        type: 'Array<Row>',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'getSelectReserveRecords()',
-        desc: '用于多选行，获取已保留选中的行数据（只对 checkboxConfig.reserve 启用后有效）',
+        disabled: true,
+        desc: '即将废弃，请使用 getCheckboxReserveRecords',
         version: '1.15.14',
+        type: 'Array<Row>',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'getCheckboxReserveRecords()',
+        desc: '用于 checkbox-config.reserve，获取已保留选中的行数据',
+        version: '1.15.17',
         type: 'Array<Row>',
         enum: '',
         defVal: '',
@@ -2660,7 +2700,8 @@ const apis = [
       },
       {
         name: 'getActiveRow()',
-        desc: '获取已激活的行数据',
+        disabled: true,
+        desc: '即将废弃，请使用 getActiveRecord',
         version: '',
         type: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,cell}',
         enum: '',
@@ -2668,17 +2709,26 @@ const apis = [
         list: []
       },
       {
+        name: 'getActiveRecord()',
+        desc: '用于 edit-config，获取已激活的行数据',
+        version: '1.15.17',
+        type: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,cell}',
+        enum: '',
+        defVal: 'row',
+        list: []
+      },
+      {
         name: 'getMouseSelecteds()',
-        desc: '获取鼠标选中单元格的信息',
-        type: 'Array',
+        desc: '用于 mouse-config.selected，获取鼠标选中的单元格信息',
+        type: '{row,column}',
         enum: '',
         defVal: '',
         list: []
       },
       // {
       //   name: 'getMouseCheckeds()',
-      //   desc: '获取鼠标选中的所有单元格的信息',
-      //   type: 'Array',
+      //   desc: '用于 mouse-config.checked，获取鼠标选中的所有单元格的信息',
+      //   type: 'Array<{rows[], columns[]}>',
       //   enum: '',
       //   defVal: '',
       //   list: []
@@ -2905,7 +2955,8 @@ const apis = [
       },
       {
         name: 'setSelection(rows, checked)',
-        desc: '用于多选行，设置行为选中状态，第二个参数为选中与否',
+        disabled: true,
+        desc: '即将废弃，请使用 setCheckboxRow',
         version: '',
         type: 'Promise',
         enum: '',
@@ -2913,26 +2964,65 @@ const apis = [
         list: []
       },
       {
+        name: 'setCheckboxRow(rows, checked)',
+        desc: '用于 type=checkbox，设置行为选中状态，第二个参数为选中与否',
+        version: '1.15.17',
+        type: 'Promise',
+        enum: '',
+        defVal: 'rows, checked',
+        list: []
+      },
+      {
         name: 'setAllSelection(checked)',
-        desc: '用于多选行，设置所有行的选中状态',
+        disabled: true,
+        desc: '即将废弃，请使用 setAllCheckboxRow',
         version: '',
         type: 'Promise',
         enum: '',
-        defVal: 'checked',
+        defVal: 'checked: boolean',
+        list: []
+      },
+      {
+        name: 'setAllCheckboxRow(checked)',
+        desc: '用于 type=checkbox，设置所有行的选中状态',
+        version: '1.15.17',
+        type: 'Promise',
+        enum: '',
+        defVal: 'checked: boolean',
         list: []
       },
       {
         name: 'toggleRowSelection(row)',
-        desc: '用于多选行，切换某一行的选中状态',
+        disabled: true,
+        desc: '即将废弃，请使用 toggleCheckboxRow',
         version: '',
         type: 'Promise',
         enum: '',
-        defVal: 'row',
+        defVal: 'row: Row',
+        list: []
+      },
+      {
+        name: 'toggleCheckboxRow(row)',
+        desc: '用于 type=checkbox，切换某一行的选中状态',
+        version: '1.15.17',
+        type: 'Promise',
+        enum: '',
+        defVal: 'row: Row',
         list: []
       },
       {
         name: 'toggleAllSelection()',
-        desc: '用于多选行，切换所有行的选中状态',
+        disabled: true,
+        desc: '即将废弃，请使用 toggleAllCheckboxRow',
+        version: '',
+        type: 'Promise',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'toggleAllCheckboxRow()',
+        desc: '用于 type=checkbox，切换所有行的选中状态',
         version: '',
         type: 'Promise',
         enum: '',
@@ -2941,7 +3031,7 @@ const apis = [
       },
       {
         name: 'toggleRowExpansion(row)',
-        desc: '用于可展开表格，切换展开行',
+        desc: '用于 type=expand，切换展开行的状态',
         version: '',
         type: 'Promise',
         enum: '',
@@ -2950,7 +3040,7 @@ const apis = [
       },
       {
         name: 'toggleTreeExpansion(row)',
-        desc: '用于可树形表格，切换展开树形节点',
+        desc: '用于 tree-config，切换展开树形节点的状态',
         version: '',
         type: 'Promise',
         enum: '',
@@ -2986,7 +3076,8 @@ const apis = [
       },
       {
         name: 'clearSelection()',
-        desc: '用于多选行，手动清空用户的选择',
+        disabled: true,
+        desc: '即将废弃，请使用 clearCheckboxRow',
         version: '',
         type: 'Promise',
         enum: '',
@@ -2994,9 +3085,28 @@ const apis = [
         list: []
       },
       {
+        name: 'clearCheckboxRow()',
+        desc: '用于 type=checkbox，手动清空用户的选择',
+        version: '1.15.17',
+        type: 'Promise',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'clearSelectReserve()',
-        desc: '用于多选行，手动清空用户保留选中的行数据',
-        version: '2.6.20',
+        disabled: true,
+        desc: '即将废弃，请使用 clearCheckboxReserve',
+        version: '1.15.14',
+        type: 'Promise',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'clearCheckboxReserve()',
+        desc: '用于 checkbox-config.reserve，手动清空用户保留选中的行数据',
+        version: '1.15.17',
         type: 'Promise',
         enum: '',
         defVal: '',

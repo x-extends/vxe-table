@@ -563,7 +563,7 @@ export default {
       const comp = this.$grid || this.$table
       const { fullColumn } = comp.getTableColumn()
       const { footerData } = comp.getTableData()
-      const selectRecords = comp.getSelectRecords()
+      const selectRecords = comp.getCheckboxRecords()
       // v3.0 废弃 type=index
       const exportColumns = fullColumn.filter(column => ['seq', 'index'].indexOf(column.type) > -1 || column.property)
       const treeStatus = comp.getTreeStatus()

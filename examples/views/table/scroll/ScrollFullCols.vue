@@ -23,8 +23,8 @@
         <vxe-button @click="loadColumnAndData(10000, 30000)">1w列3w条</vxe-button>
         <vxe-button @click="loadColumnAndData(10000, 60000)">1w列6w条</vxe-button>
         <vxe-button @click="loadColumnAndData(10000, 100000)">1w列10w条</vxe-button>
-        <vxe-button @click="$refs.xGrid.setAllSelection(true)">所有选中</vxe-button>
-        <vxe-button @click="$refs.xGrid.clearSelection()">清除选中</vxe-button>
+        <vxe-button @click="$refs.xGrid.setAllCheckboxRow(true)">所有选中</vxe-button>
+        <vxe-button @click="$refs.xGrid.clearCheckboxRow()">清除选中</vxe-button>
         <vxe-button @click="getSelectEvent">获取选中</vxe-button>
       </template>
     </vxe-grid>
@@ -77,8 +77,8 @@ export default {
             <vxe-button @click="loadColumnAndData(10000, 30000)">1w列3w条</vxe-button>
             <vxe-button @click="loadColumnAndData(10000, 60000)">1w列6w条</vxe-button>
             <vxe-button @click="loadColumnAndData(10000, 100000)">1w列10w条</vxe-button>
-            <vxe-button @click="$refs.xGrid.setAllSelection(true)">所有选中</vxe-button>
-            <vxe-button @click="$refs.xGrid.clearSelection()">清除选中</vxe-button>
+            <vxe-button @click="$refs.xGrid.setAllCheckboxRow(true)">所有选中</vxe-button>
+            <vxe-button @click="$refs.xGrid.clearCheckboxRow()">清除选中</vxe-button>
             <vxe-button @click="getSelectEvent">获取选中</vxe-button>
           </template>
         </vxe-grid>
@@ -116,7 +116,7 @@ export default {
               })
             },
             getSelectEvent () {
-              let selectRecords = this.$refs.xGrid.getSelectRecords()
+              let selectRecords = this.$refs.xGrid.getCheckboxRecords()
               this.$XModal.alert(selectRecords.length)
             }
           }
@@ -156,7 +156,7 @@ export default {
       })
     },
     getSelectEvent () {
-      let selectRecords = this.$refs.xGrid.getSelectRecords()
+      let selectRecords = this.$refs.xGrid.getCheckboxRecords()
       this.$XModal.alert(selectRecords.length)
     }
   }
