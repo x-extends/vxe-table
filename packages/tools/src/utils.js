@@ -12,9 +12,9 @@ class ColumnConfig {
       UtilTools.warn('vxe.error.cellEditRender')
     }
     if (_vm.type === 'index') {
-      UtilTools.warn('vxe.error.delProp', ['index', 'seq'])
+      // UtilTools.warn('vxe.error.delProp', ['index', 'seq'])
     } else if (_vm.type === 'selection') {
-      UtilTools.warn('vxe.error.delProp', ['selection', 'checkbox'])
+      // UtilTools.warn('vxe.error.delProp', ['selection', 'checkbox'])
     } else if (_vm.type === 'expand') {
       if ($table.treeConfig && $table.treeOpts.line) {
         UtilTools.error('vxe.error.treeLineExpand')
