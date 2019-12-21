@@ -249,7 +249,7 @@ export default {
               let isDisabled = customOpts.checkMethod ? !customOpts.checkMethod({ column }) : false
               return headerTitle ? h('li', {
                 class: {
-                  'is--active': column.visible,
+                  'is--checked': column.visible,
                   'is--disabled': isDisabled
                 },
                 attrs: {

@@ -2170,16 +2170,16 @@ const Methods = {
     if ((!column.treeNode || !DomTools.getEventTargetNode(evnt, $el, 'vxe-tree-wrapper').flag) && (column.type !== 'expand' || !DomTools.getEventTargetNode(evnt, $el, 'vxe-table--expanded').flag)) {
       // 如果是高亮行
       if (highlightCurrentRow) {
-        if (radioOpts.trigger === 'row' || (!DomTools.getEventTargetNode(evnt, $el, 'vxe-checkbox').flag && !DomTools.getEventTargetNode(evnt, $el, 'vxe-radio').flag)) {
+        if (radioOpts.trigger === 'row' || (!DomTools.getEventTargetNode(evnt, $el, 'vxe-cell--checkbox').flag && !DomTools.getEventTargetNode(evnt, $el, 'vxe-cell--radio').flag)) {
           this.triggerCurrentRowEvent(evnt, params)
         }
       }
       // 如果是单选框
-      if ((radioOpts.trigger === 'row' || (column.type === 'radio' && radioOpts.trigger === 'cell')) && !DomTools.getEventTargetNode(evnt, $el, 'vxe-radio').flag) {
+      if ((radioOpts.trigger === 'row' || (column.type === 'radio' && radioOpts.trigger === 'cell')) && !DomTools.getEventTargetNode(evnt, $el, 'vxe-cell--radio').flag) {
         this.triggerRadioRowEvent(evnt, params)
       }
       // 如果是复选框
-      if ((checkboxOpts.trigger === 'row' || ((column.type === 'checkbox' || column.type === 'selection') && checkboxOpts.trigger === 'cell')) && !DomTools.getEventTargetNode(evnt, params.cell, 'vxe-checkbox').flag) {
+      if ((checkboxOpts.trigger === 'row' || ((column.type === 'checkbox' || column.type === 'selection') && checkboxOpts.trigger === 'cell')) && !DomTools.getEventTargetNode(evnt, params.cell, 'vxe-cell--checkbox').flag) {
         // 在 v3.0 中废弃 type=selection
         this.handleToggleCheckRowEvent(params, evnt)
       }

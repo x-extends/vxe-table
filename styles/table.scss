@@ -28,9 +28,6 @@
   &:not(.col--actived) {
     .vxe-cell {
       @extend %TextEllipsis;
-      & > .vxe-checkbox {
-        @extend %TextEllipsis;
-      }
     }
   }
 }
@@ -414,17 +411,108 @@
     white-space: normal;
     word-break: break-all;
     padding: 0 10px;
-    .vxe-checkbox {
-      vertical-align: bottom;
+  }
+
+  // 单选框和复选框
+  .vxe-cell--radio,
+  .vxe-cell--checkbox {
+    position: relative;
+    padding-left: 1.8em;
+    user-select: none;
+    cursor: pointer;
+    &:before {
+      content: "";
+      position: absolute;
+      height: 1.2em;
+      width: 1.2em;
+      top: 0;
+      left: 0;
+      border: 2px solid $vxe-input-border-color;
+      background-color: #ffffff;
+    }
+    &:not(.is--disabled) {
+      &:hover {
+        &:before {
+          border-color: $vxe-primary-color;
+        }
+      }
+    }
+    &.is--disabled {
+      cursor: not-allowed;
+      color: $vxe-input-disabled-color;
+      &:before {
+        border-color: $vxe-input-disabled-color;
+        background-color: $vxe-input-disabled-background-color;
+      }
     }
   }
-  // &.is--recalculate {
-  //   .vxe-header--column,
-  //   .vxe-body--column,
-  //   .vxe-footer--column {
-  //     @extend %CellEllipsis;
-  //   }
-  // }
+  .vxe-cell--radio {
+    &:before {
+      border-radius: 50%;
+    }
+    &.is--checked {
+      color: $vxe-primary-color;
+      &:before {
+        border-color: $vxe-primary-color;
+        background-color: $vxe-primary-color;
+      }
+      &:after {
+        content: "";
+        position: absolute;
+        height: 0.5em;
+        width: 0.5em;
+        top: 0.35em;
+        left: 0.35em;
+        border-radius: 50%;
+        background-color: #ffffff;
+      }
+    }
+  }
+  .vxe-cell--checkbox {
+    &:before {
+      border-radius: 0.2em;
+    }
+    &.is--checked,
+    &.is--indeterminate {
+      color: $vxe-primary-color;
+      &:before {
+        border-color: $vxe-primary-color;
+        background-color: $vxe-primary-color;
+      }
+      &:after {
+        content: "";
+        position: absolute;
+      }
+    }
+    &.is--checked {
+      &:after {
+        height: 0.7em;
+        width: 0.34em;
+        top: 0.2em;
+        left: 0.44em;
+        border: 2px solid #ffffff;
+        border-left: 0;
+        border-top: 0;
+        transform: rotate(45deg);
+      }
+    }
+    &.is--indeterminate {
+      &:after {
+        top: 0.52em;
+        left: 0.1em;
+        height: 0.18em;
+        width: 1em;
+        background-color: #ffffff;
+        transform: scale(.6);
+      }
+    }
+    &.is--disabled {
+      &:after {
+        border-color: $vxe-input-disabled-color;
+      }
+    }
+  }
+
   .fixed--hidden {
     visibility: hidden;
   }
