@@ -286,7 +286,7 @@ export default {
           ])
         ]) : null
       ]),
-      VXETable._export ? h('vxe-import-panel', {
+      VXETable._export && this.import ? h('vxe-import-panel', {
         props: {
           defaultOptions: importParams,
           storeData: importStore
@@ -295,7 +295,7 @@ export default {
           import: this.confirmImportEvent
         }
       }) : _e(),
-      VXETable._export ? h('vxe-export-panel', {
+      VXETable._export && this.export ? h('vxe-export-panel', {
         props: {
           defaultOptions: exportParams,
           storeData: exportStore
