@@ -1580,7 +1580,7 @@ export default {
     },
     // 在 v3.0 中废弃 getSelectRecords
     getSelectRecords () {
-      // 待打印废弃日志
+      // UtilTools.warn('vxe.error.delFunc', ['getSelectRecords', 'getCheckboxRecords'])
       return this.getCheckboxRecords()
     },
     /**
@@ -2700,7 +2700,7 @@ export default {
     },
     // 在 v3.0 中废弃 setSelection
     setSelection (rows, value) {
-      // 待打印废弃日志
+      // UtilTools.warn('vxe.error.delFunc', ['setSelection', 'setCheckboxRow'])
       return this.setCheckboxRow(rows, value)
     },
     /**
@@ -2829,7 +2829,7 @@ export default {
     },
     // 在 v3.0 中废弃 toggleRowSelection
     toggleRowSelection (row) {
-      // 待打印废弃日志
+      // UtilTools.warn('vxe.error.delFunc', ['toggleRowSelection', 'toggleCheckboxRow'])
       return this.toggleCheckboxRow(row)
     },
     /**
@@ -2841,7 +2841,7 @@ export default {
     },
     // 在 v3.0 中废弃 setAllSelection
     setAllSelection (value) {
-      // 待打印废弃日志
+      // UtilTools.warn('vxe.error.delFunc', ['setAllSelection', 'setAllCheckboxRow'])
       return this.setAllCheckboxRow(value)
     },
     /**
@@ -2996,7 +2996,7 @@ export default {
     },
     // 在 v3.0 中废弃 getSelectReserveRecords
     getSelectReserveRecords () {
-      // 待打印废弃日志
+      // UtilTools.warn('vxe.error.delFunc', ['getSelectReserveRecords', 'getCheckboxReserveRecords'])
       return this.getCheckboxReserveRecords()
     },
     /**
@@ -3016,7 +3016,7 @@ export default {
     },
     // 在 v3.0 中废弃 clearSelectReserve
     clearSelectReserve () {
-      // 待打印废弃日志
+      // UtilTools.warn('vxe.error.delFunc', ['clearSelectReserve', 'clearCheckboxReserve'])
       return this.clearCheckboxReserve()
     },
     clearCheckboxReserve () {
@@ -3044,7 +3044,7 @@ export default {
     },
     // 在 v3.0 中废弃 toggleAllSelection
     toggleAllSelection () {
-      // 待打印废弃日志
+      // UtilTools.warn('vxe.error.delFunc', ['toggleAllSelection', 'toggleAllCheckboxRow'])
       return this.toggleAllCheckboxRow()
     },
     /**
@@ -3056,7 +3056,7 @@ export default {
     },
     // 在 v3.0 中废弃 clearSelection
     clearSelection () {
-      // 待打印废弃日志
+      // UtilTools.warn('vxe.error.delFunc', ['clearSelection', 'clearCheckboxRow'])
       return this.clearCheckboxRow()
     },
     /**
@@ -3134,7 +3134,7 @@ export default {
     },
     // 在 v3.0 中废弃 getCurrentRow
     getCurrentRow () {
-      // 待打印废弃日志
+      // UtilTools.warn('vxe.error.delFunc', ['getCurrentRow', 'getCurrentRecord'])
       return this.getCurrentRecord()
     },
     /**
@@ -3145,7 +3145,7 @@ export default {
     },
     // 在 v3.0 中废弃 getRadioRow
     getRadioRow () {
-      // 待打印废弃日志
+      // UtilTools.warn('vxe.error.delFunc', ['getRadioRow', 'getRadioRecord'])
       return this.getRadioRecord()
     },
     /**
@@ -3489,7 +3489,7 @@ export default {
     },
     // 在 v3.0 中废弃 getActiveRow
     getActiveRow () {
-      // 待打印废弃日志
+      // UtilTools.warn('vxe.error.delFunc', ['getActiveRow', 'getActiveRecord'])
       return this.getActiveRecord()
     },
     getActiveRecord () {
