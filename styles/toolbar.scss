@@ -156,7 +156,8 @@
       border-radius: 0.2em;
       border: 2px solid $vxe-input-border-color;
     }
-    &.is--active {
+    &.is--checked,
+    &.is--indeterminate {
       color: $vxe-primary-color;
       &:before {
         border-color: $vxe-primary-color;
@@ -165,6 +166,10 @@
       &:after {
         content: "";
         position: absolute;
+      }
+    }
+    &.is--checked {
+      &:after {
         height: 0.7em;
         width: 0.34em;
         top: 0.6em;
@@ -172,14 +177,23 @@
         border: 2px solid #ffffff;
         border-left: 0;
         border-top: 0;
-        -webkit-transform: rotate(45deg);
         transform: rotate(45deg);
+      }
+    }
+    &.is--indeterminate {
+      &:after {
+        top: 0.9em;
+        left: 0.65em;
+        height: 0.18em;
+        width: 1em;
+        background-color: #ffffff;
+        transform: scale(.6);
       }
     }
     &.is--disabled {
       cursor: not-allowed;
       color: $vxe-input-disabled-color;
-      &.is--active {
+      &.is--checked {
         &:before {
           border-color: $vxe-input-disabled-color;
           background-color: $vxe-input-disabled-background-color;
@@ -238,16 +252,16 @@
     margin: 3px 0;
     border-radius: 4px;
     user-select: none;
-    & > .vxe-checkbox {
-      padding: 5px 5px 5px 0.6em;
-      display: block;
-      background-color: #f8f8f9;
-    }
     & > ul {
-      max-height: 208px;
       & > li {
         padding: 4px 30px 4px 32px;
       }
+    }
+    .vxe-export--panel-column-header {
+      background-color: #f8f8f9;
+    }
+    .vxe-export--panel-column-body {
+      max-height: 208px;
     }
   }
   .vxe-import-selected--file {

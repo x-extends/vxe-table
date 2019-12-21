@@ -151,26 +151,29 @@ export default {
               h('div', {
                 class: 'vxe-export--panel-column'
               }, [
-                h('vxe-checkbox', {
-                  props: {
-                    indeterminate: isIndeterminate,
-                    title: GlobalConfig.i18n('vxe.table.allTitle')
-                  },
-                  model: {
-                    value: isAll,
-                    callback: (value) => {
-                      this.isAll = value
+                h('ul', {
+                  class: 'vxe-export--panel-column-header'
+                }, [
+                  h('li', {
+                    class: {
+                      'is--checked': isAll,
+                      'is--indeterminate': isIndeterminate
+                    },
+                    attrs: {
+                      title: GlobalConfig.i18n('vxe.table.allTitle')
+                    },
+                    on: {
+                      click: this.allColumnEvent
                     }
-                  },
-                  on: {
-                    change: this.allColumnEvent
-                  }
-                }, GlobalConfig.i18n('vxe.toolbar.expAllColumn')),
-                h('ul', storeData.columns.map(column => {
+                  }, GlobalConfig.i18n('vxe.toolbar.expAllColumn'))
+                ]),
+                h('ul', {
+                  class: 'vxe-export--panel-column-body'
+                }, storeData.columns.map(column => {
                   let headerTitle = column.getTitle()
                   return h('li', {
                     class: {
-                      'is--active': column.checked,
+                      'is--checked': column.checked,
                       'is--disabled': column.disabled
                     },
                     attrs: {
@@ -256,12 +259,13 @@ export default {
       this.isIndeterminate = !this.isAll && columns.some(column => !column.disabled && column.checked)
     },
     allColumnEvent () {
-      let isAll = this.isAll
+      let isAll = !this.isAll
       this.storeData.columns.forEach(column => {
         if (!column.disabled) {
           column.checked = isAll
         }
       })
+      this.isAll = isAll
       this.checkStatus()
     },
     showEvent () {

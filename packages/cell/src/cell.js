@@ -171,50 +171,36 @@ export const Cell = {
     return [UtilTools.formatText(UtilTools.getFuncText(own.title || own.label), 1)]
   },
   renderRadioCell (h, params) {
-    let { $table, column } = params
-    let { vSize, radioOpts } = $table
+    let { $table, column, isHidden } = params
+    let { radioOpts, selectRow } = $table
     let { slots } = column
     let { checkMethod } = radioOpts
-    let isDisabled = !!checkMethod
-    // 在 v2.0 中废弃 labelProp
-    let labelProp = radioOpts.labelField || radioOpts.labelProp
-    let { selectRow } = $table
     let { row } = params
-    let options = {
-      attrs: {
-        type: 'radio',
-        name: `vxe-radio--${$table.id}`
+    // 在 v2.0 中废弃 labelProp
+    let labelField = radioOpts.labelField || radioOpts.labelProp
+    let isChecked = row === selectRow
+    let isDisabled = !!checkMethod
+    let on
+    if (!isHidden) {
+      on = {
+        click (evnt) {
+          if (!isDisabled) {
+            $table.triggerRadioRowEvent(evnt, params)
+          }
+        }
       }
-    }
-    if (!params.isHidden) {
       if (checkMethod) {
         isDisabled = !checkMethod(params)
-        options.attrs.disabled = isDisabled
-      }
-      options.domProps = {
-        checked: row === selectRow
-      }
-      options.on = {
-        change (evnt) {
-          $table.triggerRadioRowEvent(evnt, params)
-        }
       }
     }
     return [
-      h('label', {
-        class: ['vxe-radio', {
-          [`size--${vSize}`]: vSize,
+      h('span', {
+        class: ['vxe-cell--radio', {
+          'is--checked': isChecked,
           'is--disabled': isDisabled
-        }]
-      }, [
-        h('input', options),
-        h('span', {
-          class: 'vxe-radio--icon'
-        }),
-        labelProp ? h('span', {
-          class: 'vxe-radio--label'
-        }, slots && slots.default ? slots.default(params, h) : XEUtils.get(row, labelProp)) : null
-      ])
+        }],
+        on
+      }, labelField ? (slots && slots.default ? slots.default(params, h) : XEUtils.get(row, labelField)) : null)
     ]
   },
   renderTreeRadioCell (h, params) {
@@ -226,96 +212,74 @@ export const Cell = {
    */
   renderSelectionHeader (h, params) {
     let { $table, column, isHidden } = params
-    let { vSize, isIndeterminate, isAllCheckboxDisabled, checkboxOpts } = $table
+    let { isIndeterminate, isAllCheckboxDisabled, checkboxOpts } = $table
     let { slots, own } = column
     let headerTitle = own.title || own.label
-    let options = {
-      attrs: {
-        type: 'checkbox',
-        disabled: isAllCheckboxDisabled
-      }
-    }
+    let isChecked = false
+    let on
     if (checkboxOpts.checkStrictly ? !checkboxOpts.showHeader : checkboxOpts.showHeader === false) {
       return slots && slots.header ? slots.header(params, h) : [UtilTools.getFuncText(headerTitle)]
     }
     if (!isHidden) {
-      options.domProps = {
-        checked: isAllCheckboxDisabled ? false : $table.isAllSelected
-      }
-      options.on = {
-        change (evnt) {
-          $table.triggerCheckAllEvent(evnt, evnt.target.checked)
+      isChecked = isAllCheckboxDisabled ? false : $table.isAllSelected
+      on = {
+        click (evnt) {
+          if (!isAllCheckboxDisabled) {
+            $table.triggerCheckAllEvent(evnt, !isChecked)
+          }
         }
       }
     }
     return [
-      h('label', {
-        class: ['vxe-checkbox', {
-          [`size--${vSize}`]: vSize,
-          'is--disabled': options.attrs.disabled,
+      h('span', {
+        class: ['vxe-cell--checkbox', {
+          'is--checked': isChecked,
+          'is--disabled': isAllCheckboxDisabled,
           'is--indeterminate': isIndeterminate
         }],
         attrs: {
           title: GlobalConfig.i18n('vxe.table.allTitle')
-        }
-      }, [
-        h('input', options),
-        h('span', {
-          class: 'vxe-checkbox--icon'
-        }),
-        headerTitle ? h('span', {
-          class: 'vxe-checkbox--label'
-        }, slots && slots.header ? slots.header(params, h) : UtilTools.getFuncText(headerTitle)) : null
-      ])
+        },
+        on
+      }, headerTitle ? (slots && slots.header ? slots.header(params, h) : UtilTools.getFuncText(headerTitle)) : null)
     ]
   },
   renderSelectionCell (h, params) {
     let { $table, row, column, isHidden } = params
-    let { vSize, treeConfig, treeIndeterminates, checkboxOpts } = $table
+    let { treeConfig, treeIndeterminates, checkboxOpts } = $table
     let { checkMethod } = checkboxOpts
     let { slots } = column
     // 在 v2.0 中废弃 labelProp
-    let labelProp = checkboxOpts.labelField || checkboxOpts.labelProp
+    let labelField = checkboxOpts.labelField || checkboxOpts.labelProp
     let indeterminate = false
+    let isChecked = false
     let isDisabled = !!checkMethod
-    let options = {
-      attrs: {
-        type: 'checkbox'
-      }
-    }
+    let on
     if (!isHidden) {
+      isChecked = $table.selection.indexOf(row) > -1
+      on = {
+        click (evnt) {
+          if (!isDisabled) {
+            $table.triggerCheckRowEvent(evnt, params, !isChecked)
+          }
+        }
+      }
       if (checkMethod) {
         isDisabled = !checkMethod(params)
-        options.attrs.disabled = isDisabled
       }
       if (treeConfig) {
         indeterminate = treeIndeterminates.indexOf(row) > -1
       }
-      options.domProps = {
-        checked: $table.selection.indexOf(row) > -1
-      }
-      options.on = {
-        change (evnt) {
-          $table.triggerCheckRowEvent(evnt, params, evnt.target.checked)
-        }
-      }
     }
     return [
-      h('label', {
-        class: ['vxe-checkbox', {
-          [`size--${vSize}`]: vSize,
-          'is--indeterminate': indeterminate,
-          'is--disabled': isDisabled
-        }]
-      }, [
-        h('input', options),
-        h('span', {
-          class: 'vxe-checkbox--icon'
-        }),
-        labelProp ? h('span', {
-          class: 'vxe-checkbox--label'
-        }, slots && slots.default ? slots.default(params, h) : XEUtils.get(row, labelProp)) : null
-      ])
+      h('span', {
+        class: ['vxe-cell--checkbox', {
+          'is--checked': isChecked,
+          'is--disabled': isDisabled,
+          'is--indeterminate': indeterminate
+        }],
+        on
+      }, labelField ? (slots && slots.default ? slots.default(params, h) : XEUtils.get(row, labelField)) : null)
     ]
   },
   renderTreeSelectionCell (h, params) {
@@ -323,53 +287,42 @@ export const Cell = {
   },
   renderSelectionCellByProp (h, params) {
     let { $table, row, column, isHidden } = params
-    let { vSize, treeConfig, treeIndeterminates, checkboxOpts } = $table
+    let { treeConfig, treeIndeterminates, checkboxOpts } = $table
     let { checkMethod } = checkboxOpts
     let { slots } = column
     // 在 v2.0 中废弃 labelProp
-    let labelProp = checkboxOpts.labelField || checkboxOpts.labelProp
+    let labelField = checkboxOpts.labelField || checkboxOpts.labelProp
     let indeterminate = false
     let isDisabled = !!checkMethod
     // 在 v2.0 中废弃 checkProp
     let property = checkboxOpts.checkField || checkboxOpts.checkProp
-    let options = {
-      attrs: {
-        type: 'checkbox'
-      }
-    }
+    let isChecked = false
+    let on
     if (!isHidden) {
+      isChecked = XEUtils.get(row, property)
+      on = {
+        click (evnt) {
+          if (!isDisabled) {
+            $table.triggerCheckRowEvent(evnt, params, !isChecked)
+          }
+        }
+      }
       if (checkMethod) {
         isDisabled = !checkMethod(params)
-        options.attrs.disabled = isDisabled
       }
       if (treeConfig) {
         indeterminate = treeIndeterminates.indexOf(row) > -1
       }
-      options.domProps = {
-        checked: XEUtils.get(row, property)
-      }
-      options.on = {
-        change (evnt) {
-          $table.triggerCheckRowEvent(evnt, params, evnt.target.checked)
-        }
-      }
     }
     return [
-      h('label', {
-        class: ['vxe-checkbox', {
-          [`size--${vSize}`]: vSize,
-          'is--indeterminate': indeterminate,
-          'is--disabled': isDisabled
-        }]
-      }, [
-        h('input', options),
-        h('span', {
-          class: 'vxe-checkbox--icon'
-        }),
-        labelProp ? h('span', {
-          class: 'vxe-checkbox--label'
-        }, slots && slots.default ? slots.default(params, h) : XEUtils.get(row, labelProp)) : null
-      ])
+      h('span', {
+        class: ['vxe-cell--checkbox', {
+          'is--checked': isChecked,
+          'is--disabled': isDisabled,
+          'is--indeterminate': indeterminate
+        }],
+        on
+      }, labelField ? (slots && slots.default ? slots.default(params, h) : XEUtils.get(row, labelField)) : null)
     ]
   },
   renderTreeSelectionCellByProp (h, params) {
