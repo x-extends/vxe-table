@@ -44,6 +44,7 @@ const TableEmpty = () => import(/* webpackChunkName: "base" */ './views/table/ba
 const TableLoading = () => import(/* webpackChunkName: "base" */ './views/table/base/Loading.vue')
 const TableFormat = () => import(/* webpackChunkName: "base" */ './views/table/base/Format.vue')
 const TableHTML = () => import(/* webpackChunkName: "base" */ './views/table/base/HTML.vue')
+const TableFull = () => import(/* webpackChunkName: "base" */ './views/table/base/Full.vue')
 
 const TableEvent = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Event.vue')
 const TableTemplate = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Template.vue')
@@ -463,6 +464,11 @@ export default new Router({
       path: '/table/base/html',
       name: 'TableHTML',
       component: TableHTML
+    },
+    {
+      path: '/table/base/full',
+      name: 'TableFull',
+      component: TableFull
     },
     {
       path: '/table/advanced/event',

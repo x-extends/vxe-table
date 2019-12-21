@@ -305,6 +305,12 @@ export default {
               locat: {
                 name: 'TableHTML'
               }
+            },
+            {
+              label: 'app.aside.nav.full',
+              locat: {
+                name: 'TableFull'
+              }
             }
           ]
         },
