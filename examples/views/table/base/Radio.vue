@@ -217,7 +217,7 @@ export default {
               this.$refs.xTable1.clearRadioRow()
             },
             getRadioEvent1 () {
-              this.$XModal.alert(JSON.stringify(this.$refs.xTable1.getRadioRow()))
+              this.$XModal.alert(JSON.stringify(this.$refs.xTable1.getRadioRecord()))
             }
           }
         }
@@ -398,7 +398,7 @@ export default {
       this.$refs.xTable1.clearRadioRow()
     },
     getRadioEvent1 () {
-      this.$XModal.alert(JSON.stringify(this.$refs.xTable1.getRadioRow()))
+      this.$XModal.alert(JSON.stringify(this.$refs.xTable1.getRadioRecord()))
     }
   }
 }

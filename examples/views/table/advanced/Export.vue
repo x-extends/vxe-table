@@ -160,7 +160,7 @@ export default {
             },
             exportSelectEvent () {
               this.$refs.xTable1.exportData({
-                data: this.$refs.xTable1.getSelectRecords()
+                data: this.$refs.xTable1.getCheckboxRecords()
               })
             }
           }
@@ -306,7 +306,7 @@ export default {
     },
     exportSelectEvent () {
       this.$refs.xTable1.exportData({
-        data: this.$refs.xTable1.getSelectRecords()
+        data: this.$refs.xTable1.getCheckboxRecords()
       })
     },
     exportDataEvent2 () {

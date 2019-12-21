@@ -132,7 +132,7 @@ export default {
               }
             },
             delSelectedEvent () {
-              let selectRecords = this.$refs.xTable.getSelectRecords()
+              let selectRecords = this.$refs.xTable.getCheckboxRecords()
               this.tableData = this.tableData.filter(row => !selectRecords.includes(row))
             },
             getDataEvent () {
@@ -188,7 +188,7 @@ export default {
       }
     },
     delSelectedEvent () {
-      let selectRecords = this.$refs.xTable.getSelectRecords()
+      let selectRecords = this.$refs.xTable.getCheckboxRecords()
       this.tableData = this.tableData.filter(row => !selectRecords.includes(row))
     },
     getDataEvent () {

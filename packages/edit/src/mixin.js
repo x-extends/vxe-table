@@ -119,8 +119,8 @@ export default {
      * 删除选中数据
      */
     _removeSelecteds () {
-      return this.remove(this.getSelectRecords()).then(params => {
-        this.clearSelection()
+      return this.remove(this.getCheckboxRecords()).then(params => {
+        this.clearCheckboxRow()
         return params
       })
     },
@@ -290,7 +290,12 @@ export default {
       actived.column = null
       return (VXETable._valid ? this.clearValidate() : this.$nextTick()).then(this.recalculate)
     },
+    // 在 v3.0 中废弃 getActiveRow
     _getActiveRow () {
+      // 待打印废弃日志
+      return this.getActiveRecord()
+    },
+    _getActiveRecord () {
       let { $el, editStore, afterFullData } = this
       let { args, row } = editStore.actived
       if (args && afterFullData.indexOf(row) > -1 && $el.querySelectorAll('.vxe-body--column.col--actived').length) {

@@ -354,7 +354,7 @@ export default {
         }
         case 'delete': {
           if (ajax.delete) {
-            let selectRecords = this.getSelectRecords()
+            let selectRecords = this.getCheckboxRecords()
             this.remove(selectRecords).then(() => {
               let removeRecords = this.getRemoveRecords()
               let body = { removeRecords }
@@ -432,7 +432,7 @@ export default {
       return this.$nextTick()
     },
     handleDeleteRow (code, alertKey, callback) {
-      let selectRecords = this.getSelectRecords()
+      let selectRecords = this.getCheckboxRecords()
       if (this.isMsg) {
         if (selectRecords.length) {
           this.$XModal.confirm(GlobalConfig.i18n(alertKey)).then(type => {
@@ -461,7 +461,7 @@ export default {
     },
     triggerPendingEvent (code) {
       let { pendingRecords, isMsg } = this
-      let selectRecords = this.getSelectRecords()
+      let selectRecords = this.getCheckboxRecords()
       if (selectRecords.length) {
         let plus = []
         let minus = []
@@ -477,7 +477,7 @@ export default {
         } else if (plus.length) {
           this.pendingRecords = pendingRecords.concat(plus)
         }
-        this.clearSelection()
+        this.clearCheckboxRow()
       } else {
         if (isMsg) {
           this.$XModal.message({ id: code, message: GlobalConfig.i18n('vxe.grid.selectOneRecord'), status: 'warning' })

@@ -12,8 +12,8 @@
         <vxe-button @click="loadList(30000)">3w条</vxe-button>
         <vxe-button @click="loadList(60000)">6w条</vxe-button>
         <vxe-button @click="loadList(100000)">10w条</vxe-button>
-        <vxe-button @click="$refs.xTable.setAllSelection(true)">所有选中</vxe-button>
-        <vxe-button @click="$refs.xTable.clearSelection()">清除选中</vxe-button>
+        <vxe-button @click="$refs.xTable.setAllCheckboxRow(true)">所有选中</vxe-button>
+        <vxe-button @click="$refs.xTable.clearCheckboxRow()">清除选中</vxe-button>
         <vxe-button @click="getSelectEvent">获取选中</vxe-button>
       </template>
     </vxe-toolbar>
@@ -90,8 +90,8 @@ export default {
             <vxe-button @click="loadList(30000)">3w条</vxe-button>
             <vxe-button @click="loadList(60000)">6w条</vxe-button>
             <vxe-button @click="loadList(100000)">10w条</vxe-button>
-            <vxe-button @click="$refs.xTable.setAllSelection(true)">所有选中</vxe-button>
-            <vxe-button @click="$refs.xTable.clearSelection()">清除选中</vxe-button>
+            <vxe-button @click="$refs.xTable.setAllCheckboxRow(true)">所有选中</vxe-button>
+            <vxe-button @click="$refs.xTable.clearCheckboxRow()">清除选中</vxe-button>
             <vxe-button @click="getSelectEvent">获取选中</vxe-button>
           </template>
         </vxe-toolbar>
@@ -151,7 +151,7 @@ export default {
               })
             },
             getSelectEvent () {
-              let selectRecords = this.$refs.xTable.getSelectRecords()
+              let selectRecords = this.$refs.xTable.getCheckboxRecords()
               this.$XModal.alert(selectRecords.length)
             }
           }
@@ -178,7 +178,7 @@ export default {
       })
     },
     getSelectEvent () {
-      let selectRecords = this.$refs.xTable.getSelectRecords()
+      let selectRecords = this.$refs.xTable.getCheckboxRecords()
       this.$XModal.alert(selectRecords.length)
     }
   }

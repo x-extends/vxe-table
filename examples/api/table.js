@@ -2477,7 +2477,7 @@ const apis = [
       },
       {
         name: 'getInsertRecords()',
-        desc: '获取新增的临时数据',
+        desc: '用于 edit-config，获取新增的临时数据',
         version: '',
         type: 'Array',
         enum: '',
@@ -2495,7 +2495,7 @@ const apis = [
       },
       {
         name: 'getUpdateRecords()',
-        desc: '获取已修改的数据',
+        desc: '用于 edit-config，获取已修改的数据',
         version: '',
         type: 'Array',
         enum: '',
@@ -2504,8 +2504,18 @@ const apis = [
       },
       {
         name: 'getCurrentRow()',
-        desc: '用于当前行，获取当前行的行数据',
+        disabled: true,
+        desc: '即将废弃，请使用 getCurrentRecord',
         version: '',
+        type: 'Row',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'getCurrentRecord()',
+        desc: '用于 highlight-current-row，获取当前行的行数据',
+        version: '2.7.8',
         type: 'Row',
         enum: '',
         defVal: '',
@@ -2513,7 +2523,8 @@ const apis = [
       },
       {
         name: 'getRadioRow()',
-        desc: '用于单选行，获取当已选中的行数据',
+        disabled: true,
+        desc: '即将废弃，请使用 getRadioRecord',
         version: '',
         type: 'Row',
         enum: '',
@@ -2521,8 +2532,18 @@ const apis = [
         list: []
       },
       {
+        name: 'getRadioRecord()',
+        desc: '用于 type=radio，获取当已选中的行数据',
+        version: '2.7.8',
+        type: 'Row',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'getSelectRecords()',
-        desc: '用于多选行，获取已选中的行数据',
+        disabled: true,
+        desc: '即将废弃，请使用 getCheckboxRecords',
         version: '',
         type: 'Array<Row>',
         enum: '',
@@ -2530,8 +2551,18 @@ const apis = [
         list: []
       },
       {
+        name: 'getCheckboxRecords()',
+        desc: '用于 type=checkbox，获取已选中的行数据',
+        version: '2.7.8',
+        type: 'Array<Row>',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'getSelectReserveRecords()',
-        desc: '用于多选行，获取已保留选中的行数据（只对 checkboxConfig.reserve 启用后有效）',
+        disabled: true,
+        desc: '即将废弃，请使用 getCheckboxReserveRecords',
         version: '2.6.20',
         type: 'Array<Row>',
         enum: '',
@@ -2539,8 +2570,17 @@ const apis = [
         list: []
       },
       {
+        name: 'getCheckboxReserveRecords()',
+        desc: '用于 checkbox-config.reserve，获取已保留选中的行数据',
+        version: '2.7.8',
+        type: 'Array<Row>',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'getRowExpandRecords()',
-        desc: '用于展开行，获取已展开的行数据',
+        desc: '用于 expand-config，用于展开行，获取已展开的行数据',
         version: '2.6.19',
         type: 'Array<Row>',
         enum: '',
@@ -2549,7 +2589,7 @@ const apis = [
       },
       {
         name: 'getTreeExpandRecords()',
-        desc: '用于树表格，获取已展开的节点（注意，即使父节点被收起，只要该节点还处于展开状态都能获取到）',
+        desc: '用于 tree-config，用于树表格，获取已展开的节点（注意，即使父节点被收起，只要该节点还处于展开状态都能获取到）',
         version: '2.6.19',
         type: 'Array<Row>',
         enum: '',
@@ -2558,25 +2598,35 @@ const apis = [
       },
       {
         name: 'getActiveRow()',
-        desc: '获取已激活的行数据',
+        disabled: true,
+        desc: '即将废弃，请使用 getActiveRecord',
         version: '',
         type: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,cell}',
         enum: '',
-        defVal: '',
+        defVal: 'row',
+        list: []
+      },
+      {
+        name: 'getActiveRecord()',
+        desc: '用于 edit-config，获取已激活的行数据',
+        version: '2.7.8',
+        type: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,cell}',
+        enum: '',
+        defVal: 'row',
         list: []
       },
       {
         name: 'getMouseSelecteds()',
-        desc: '获取鼠标选中单元格的信息',
-        type: 'Array',
+        desc: '用于 mouse-config.selected，获取鼠标选中的单元格信息',
+        type: '{row,column}',
         enum: '',
         defVal: '',
         list: []
       },
       // {
       //   name: 'getMouseCheckeds()',
-      //   desc: '获取鼠标选中的所有单元格的信息',
-      //   type: 'Array',
+      //   desc: '用于 mouse-config.checked，获取鼠标选中的所有单元格的信息',
+      //   type: 'Array<{rows[], columns[]}>',
       //   enum: '',
       //   defVal: '',
       //   list: []
@@ -2602,7 +2652,7 @@ const apis = [
       },
       {
         name: 'isActiveByRow(row)',
-        desc: '判断行是否为激活编辑状态',
+        desc: '用于 edit-config，判断行是否为激活编辑状态',
         version: '2.6.1',
         type: 'Boolean',
         enum: '',
@@ -2611,7 +2661,7 @@ const apis = [
       },
       {
         name: 'isInsertByRow(row)',
-        desc: '判断行是否为新增的临时数据',
+        desc: '用于 edit-config，判断行是否为新增的临时数据',
         version: '2.6.1',
         type: 'Boolean',
         enum: '',
@@ -2630,7 +2680,7 @@ const apis = [
       },
       {
         name: 'isUpdateByRow(row, field)',
-        desc: '判断行数据是否发生改变',
+        desc: '用于 edit-config，判断行数据是否发生改变',
         version: '2.6.1',
         type: 'Boolean',
         enum: '',
@@ -2639,7 +2689,7 @@ const apis = [
       },
       {
         name: 'isCheckedByRow(row)',
-        desc: '判断复选行数据是否勾选',
+        desc: '用于 type=checkbox，判断复选行数据是否勾选',
         version: '2.7',
         type: 'Boolean',
         enum: '',
@@ -2658,7 +2708,7 @@ const apis = [
       },
       {
         name: 'isExpandByRow(row)',
-        desc: '判断行是否为展开状态',
+        desc: '用于 expand-config，判断行是否为展开状态',
         version: '2.6.1',
         type: 'Boolean',
         enum: '',
@@ -2667,7 +2717,7 @@ const apis = [
       },
       {
         name: 'isRowExpandLoaded(row)',
-        desc: '用于懒加载展开行，判断展开行是否懒加载完成',
+        desc: '用于 expand-config.lazy，用于懒加载展开行，判断展开行是否懒加载完成',
         version: '2.7',
         type: 'Boolean',
         enum: '',
@@ -2686,7 +2736,7 @@ const apis = [
       },
       {
         name: 'isTreeExpandByRow(row)',
-        desc: '判断行是否为树形节点展开状态',
+        desc: '用于 tree-config，判断行是否为树形节点展开状态',
         version: '2.6.1',
         type: 'Boolean',
         enum: '',
@@ -2695,7 +2745,7 @@ const apis = [
       },
       {
         name: 'isTreeExpandLoaded(row)',
-        desc: '用于懒加载树表格，判断树节点是否懒加载完成',
+        desc: '用于 tree-config.lazy，用于懒加载树表格，判断树节点是否懒加载完成',
         version: '2.7',
         type: 'Boolean',
         enum: '',
@@ -2713,7 +2763,7 @@ const apis = [
       },
       {
         name: 'setActiveRow(row)',
-        desc: '激活行编辑，如果是 mode=cell 则默认激活第一个单元格',
+        desc: '用于 edit-config，激活行编辑，如果是 mode=cell 则默认激活第一个单元格',
         version: '',
         type: 'Promise',
         enum: '',
@@ -2722,7 +2772,7 @@ const apis = [
       },
       {
         name: 'setActiveCell(row, field)',
-        desc: '激活单元格编辑',
+        desc: '用于 edit-config，激活单元格编辑',
         version: '',
         type: 'Promise',
         enum: '',
@@ -2731,7 +2781,7 @@ const apis = [
       },
       {
         name: 'setSelectCell(row, field)',
-        desc: '选中某个单元格',
+        desc: '用于 mouse-config.mouse-config，选中某个单元格',
         version: '',
         type: 'Promise',
         enum: '',
@@ -2740,7 +2790,7 @@ const apis = [
       },
       {
         name: 'setRowExpansion(rows, checked)',
-        desc: '设置展开行，二个参数设置这一行展开与否',
+        desc: '用于 expand-config，设置展开行，二个参数设置这一行展开与否',
         version: '',
         type: 'Promise',
         enum: '',
@@ -2749,7 +2799,7 @@ const apis = [
       },
       {
         name: 'setAllRowExpansion(checked)',
-        desc: '设置所有行的展开与否',
+        desc: '用于 expand-config，设置所有行的展开与否',
         version: '',
         type: 'Promise',
         enum: '',
@@ -2758,7 +2808,7 @@ const apis = [
       },
       {
         name: 'setTreeExpansion(rows, checked)',
-        desc: '设置展开树形节点，二个参数设置这一行展开与否',
+        desc: '用于 tree-config，设置展开树形节点，二个参数设置这一行展开与否',
         version: '',
         type: 'Promise',
         enum: '',
@@ -2767,7 +2817,7 @@ const apis = [
       },
       {
         name: 'setAllTreeExpansion(checked)',
-        desc: '设置所有树节点的展开与否',
+        desc: '用于 tree-config，设置所有树节点的展开与否',
         version: '',
         type: 'Promise',
         enum: '',
@@ -2776,7 +2826,7 @@ const apis = [
       },
       {
         name: 'setCurrentRow(row)',
-        desc: '用于当前行，设置某一行为高亮状态',
+        desc: '用于 highlight-current-row，设置某一行为高亮状态',
         version: '',
         type: 'Promise',
         enum: '',
@@ -2785,7 +2835,7 @@ const apis = [
       },
       {
         name: 'setCurrentColumn(column)',
-        desc: '用于当前列，设置某列行为高亮状态',
+        desc: '用于 highlight-current-column，设置某列行为高亮状态',
         version: '',
         type: 'Promise',
         enum: '',
@@ -2794,7 +2844,7 @@ const apis = [
       },
       {
         name: 'setRadioRow(row)',
-        desc: '用于单选行，设置某一行为选中状态',
+        desc: '用于 type=radio，设置某一行为选中状态',
         version: '',
         type: 'Promise',
         enum: '',
@@ -2803,7 +2853,8 @@ const apis = [
       },
       {
         name: 'setSelection(rows, checked)',
-        desc: '用于多选行，设置行为选中状态，第二个参数为选中与否',
+        disabled: true,
+        desc: '即将废弃，请使用 setCheckboxRow',
         version: '',
         type: 'Promise',
         enum: '',
@@ -2811,8 +2862,18 @@ const apis = [
         list: []
       },
       {
+        name: 'setCheckboxRow(rows, checked)',
+        desc: '用于 type=checkbox，设置行为选中状态，第二个参数为选中与否',
+        version: '2.7.8',
+        type: 'Promise',
+        enum: '',
+        defVal: 'rows: Row | Array<Row>, checked: boolean',
+        list: []
+      },
+      {
         name: 'setAllSelection(checked)',
-        desc: '用于多选行，设置所有行的选中状态',
+        disabled: true,
+        desc: '即将废弃，请使用 setAllCheckboxRow',
         version: '',
         type: 'Promise',
         enum: '',
@@ -2820,8 +2881,18 @@ const apis = [
         list: []
       },
       {
+        name: 'setAllCheckboxRow(checked)',
+        desc: '用于 type=checkbox，设置所有行的选中状态',
+        version: '2.7.8',
+        type: 'Promise',
+        enum: '',
+        defVal: 'checked: boolean',
+        list: []
+      },
+      {
         name: 'toggleRowSelection(row)',
-        desc: '用于多选行，切换某一行的选中状态',
+        disabled: true,
+        desc: '即将废弃，请使用 toggleCheckboxRow',
         version: '',
         type: 'Promise',
         enum: '',
@@ -2829,8 +2900,18 @@ const apis = [
         list: []
       },
       {
+        name: 'toggleCheckboxRow(row)',
+        desc: '用于 type=checkbox，切换某一行的选中状态',
+        version: '2.7.8',
+        type: 'Promise',
+        enum: '',
+        defVal: 'row: Row',
+        list: []
+      },
+      {
         name: 'toggleAllSelection()',
-        desc: '用于多选行，切换所有行的选中状态',
+        disabled: true,
+        desc: '即将废弃，请使用 toggleAllCheckboxRow',
         version: '',
         type: 'Promise',
         enum: '',
@@ -2838,8 +2919,17 @@ const apis = [
         list: []
       },
       {
+        name: 'toggleAllCheckboxRow()',
+        desc: '用于 type=checkbox，切换所有行的选中状态',
+        version: '2.7.8',
+        type: 'Promise',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'toggleRowExpansion(row)',
-        desc: '用于可展开表格，切换展开行',
+        desc: '用于 type=expand，切换展开行的状态',
         version: '',
         type: 'Promise',
         enum: '',
@@ -2848,7 +2938,7 @@ const apis = [
       },
       {
         name: 'toggleTreeExpansion(row)',
-        desc: '用于可树形表格，切换展开树形节点',
+        desc: '用于 tree-config，切换展开树形节点的状态',
         version: '',
         type: 'Promise',
         enum: '',
@@ -2857,7 +2947,7 @@ const apis = [
       },
       {
         name: 'clearCurrentRow()',
-        desc: '用于当前行，手动清空当前高亮的状态',
+        desc: '用于 highlight-current-row，手动清空当前高亮的状态',
         version: '',
         type: 'Promise',
         enum: '',
@@ -2866,7 +2956,7 @@ const apis = [
       },
       {
         name: 'clearCurrentColumn()',
-        desc: '用于当前列，手动清空当前高亮的状态',
+        desc: '用于 highlight-current-column，手动清空当前高亮的状态',
         version: '',
         type: 'Promise',
         enum: '',
@@ -2875,7 +2965,7 @@ const apis = [
       },
       {
         name: 'clearRadioRow()',
-        desc: '用于单选行，手动清空用户的选择',
+        desc: '用于 type=radio，手动清空用户的选择',
         version: '',
         type: 'Promise',
         enum: '',
@@ -2884,7 +2974,8 @@ const apis = [
       },
       {
         name: 'clearSelection()',
-        desc: '用于多选行，手动清空用户的选择',
+        disabled: true,
+        desc: '即将废弃，请使用 clearCheckboxRow',
         version: '',
         type: 'Promise',
         enum: '',
@@ -2892,8 +2983,18 @@ const apis = [
         list: []
       },
       {
+        name: 'clearCheckboxRow()',
+        desc: '用于 type=checkbox，手动清空用户的选择',
+        version: '2.7.8',
+        type: 'Promise',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'clearSelectReserve()',
-        desc: '用于多选行，手动清空用户保留选中的行数据',
+        disabled: true,
+        desc: '即将废弃，请使用 clearCheckboxReserve',
         version: '2.6.20',
         type: 'Promise',
         enum: '',
@@ -2901,8 +3002,17 @@ const apis = [
         list: []
       },
       {
+        name: 'clearCheckboxReserve()',
+        desc: '用于 checkbox-config.reserve，手动清空用户保留选中的行数据',
+        version: '2.7.8',
+        type: 'Promise',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'clearRowExpand()',
-        desc: '手动清空展开行状态，数据会恢复成未展开的状态',
+        desc: '用于 type=expand，手动清空展开行状态，数据会恢复成未展开的状态',
         version: '',
         type: 'Promise',
         enum: '',
@@ -2911,7 +3021,7 @@ const apis = [
       },
       {
         name: 'clearRowExpandLoaded()',
-        desc: '手动清空懒加载展开行的状态，数据会恢复成未展开的状态，当再次展开时会重新加载',
+        desc: '用于 expand-config.lazy，手动清空懒加载展开行的状态，数据会恢复成未展开的状态，当再次展开时会重新加载',
         version: '2.7',
         type: 'Promise',
         enum: '',
@@ -2920,7 +3030,7 @@ const apis = [
       },
       {
         name: 'clearTreeExpand()',
-        desc: '手动清空树形节点的展开状态，数据会恢复成未展开的状态',
+        desc: '用于 tree-config，手动清空树形节点的展开状态，数据会恢复成未展开的状态',
         version: '',
         type: 'Promise',
         enum: '',
@@ -2929,7 +3039,7 @@ const apis = [
       },
       {
         name: 'clearTreeExpandLoaded()',
-        desc: '手动清空懒加载树节点的状态，数据会恢复成未展开的状态，当再次展开时会重新加载',
+        desc: '用于 tree-config.lazy，手动清空懒加载树节点的状态，数据会恢复成未展开的状态，当再次展开时会重新加载',
         version: '2.7',
         type: 'Promise',
         enum: '',

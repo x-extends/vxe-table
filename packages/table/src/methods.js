@@ -53,8 +53,8 @@ const Methods = {
     this.clearSort()
     this.clearCurrentRow()
     this.clearCurrentColumn()
-    this.clearSelection()
-    this.clearSelectReserve()
+    this.clearCheckboxRow()
+    this.clearCheckboxReserve()
     this.clearRowExpand()
     this.clearTreeExpand()
     if (VXETable._edit) {
@@ -530,10 +530,15 @@ const Methods = {
     UtilTools.warn('vxe.error.delFunc', ['getAllRecords', 'getRecordset'])
     return this.getRecordset()
   },
+  // 在 v3.0 中废弃 getSelectRecords
+  getSelectRecords () {
+    // 待打印废弃日志
+    return this.getCheckboxRecords()
+  },
   /**
    * 用于多选行，获取已选中的数据
    */
-  getSelectRecords () {
+  getCheckboxRecords () {
     let { tableFullData, treeConfig, treeOpts, checkboxOpts } = this
     let { checkField: property } = checkboxOpts
     let rowList = []
@@ -1595,7 +1600,7 @@ const Methods = {
     let { fullDataRowIdData, checkboxOpts } = this
     let { checkAll, checkRowKeys } = checkboxOpts
     if (checkAll) {
-      this.setAllSelection(true)
+      this.setAllCheckboxRow(true)
     } else if (checkRowKeys) {
       let defSelection = []
       checkRowKeys.forEach(rowid => {
@@ -1603,15 +1608,20 @@ const Methods = {
           defSelection.push(fullDataRowIdData[rowid].row)
         }
       })
-      this.setSelection(defSelection, true)
+      this.setCheckboxRow(defSelection, true)
     }
+  },
+  // 在 v3.0 中废弃 setSelection
+  setSelection (rows, value) {
+    // 待打印废弃日志
+    return this.setCheckboxRow(rows, value)
   },
   /**
    * 用于多选行，设置行为选中状态，第二个参数为选中与否
    * @param {Array/Row} rows 行数据
    * @param {Boolean} value 是否选中
    */
-  setSelection (rows, value) {
+  setCheckboxRow (rows, value) {
     if (rows && !XEUtils.isArray(rows)) {
       rows = [rows]
     }
@@ -1726,21 +1736,31 @@ const Methods = {
     let { checkMethod } = this.checkboxOpts
     if (!checkMethod || checkMethod({ row: params.row, rowIndex: params.rowIndex, $rowIndex: params.$rowIndex })) {
       this.handleSelectRow(params, value)
-      UtilTools.emitEvent(this, 'select-change', [Object.assign({ selection: this.getSelectRecords(), reserves: this.getSelectReserveRecords(), checked: value, $table: this }, params), evnt])
+      UtilTools.emitEvent(this, 'select-change', [Object.assign({ selection: this.getCheckboxRecords(), reserves: this.getCheckboxReserveRecords(), checked: value, $table: this }, params), evnt])
     }
+  },
+  // 在 v3.0 中废弃 toggleRowSelection
+  toggleRowSelection (row) {
+    // 待打印废弃日志
+    return this.toggleCheckboxRow(row)
   },
   /**
    * 多选，切换某一行的选中状态
    */
-  toggleRowSelection (row) {
+  toggleCheckboxRow (row) {
     this.handleToggleCheckRowEvent({ row })
     return this.$nextTick()
+  },
+  // 在 v3.0 中废弃 setAllSelection
+  setAllSelection (value) {
+    // 待打印废弃日志
+    return this.setAllCheckboxRow(value)
   },
   /**
    * 用于多选行，设置所有行的选中状态
    * @param {Boolean} value 是否选中
    */
-  setAllSelection (value) {
+  setAllCheckboxRow (value) {
     let { tableFullData, treeConfig, treeOpts, selection, selectReserveRowMap, checkboxOpts } = this
     let { checkField: property, reserve, checkStrictly, checkMethod } = checkboxOpts
     let selectRows = []
@@ -1879,10 +1899,15 @@ const Methods = {
       }
     })
   },
+  // 在 v3.0 中废弃 getSelectReserveRecords
+  getSelectReserveRecords () {
+    // 待打印废弃日志
+    return this.getCheckboxReserveRecords()
+  },
   /**
    * 获取保留选中的行
    */
-  getSelectReserveRecords () {
+  getCheckboxReserveRecords () {
     let { fullDataRowIdData, selectReserveRowMap, checkboxOpts } = this
     let reserveSelection = []
     if (checkboxOpts.reserve) {
@@ -1894,8 +1919,14 @@ const Methods = {
     }
     return reserveSelection
   },
+  // 在 v3.0 中废弃 clearSelectReserve
   clearSelectReserve () {
+    // 待打印废弃日志
+    return this.clearCheckboxReserve()
+  },
+  clearCheckboxReserve () {
     this.selectReserveRowMap = {}
+    return this.$nextTick()
   },
   handleSelectReserveRow (row, checked) {
     const { selectReserveRowMap, checkboxOpts } = this
@@ -1913,20 +1944,30 @@ const Methods = {
    * 多选，选中所有事件
    */
   triggerCheckAllEvent (evnt, value) {
-    this.setAllSelection(value)
-    UtilTools.emitEvent(this, 'select-all', [{ selection: this.getSelectRecords(), reserves: this.getSelectReserveRecords(), checked: value, $table: this }, evnt])
+    this.setAllCheckboxRow(value)
+    UtilTools.emitEvent(this, 'select-all', [{ selection: this.getCheckboxRecords(), reserves: this.getCheckboxReserveRecords(), checked: value, $table: this }, evnt])
+  },
+  // 在 v3.0 中废弃 toggleAllSelection
+  toggleAllSelection () {
+    // 待打印废弃日志
+    return this.toggleAllCheckboxRow()
   },
   /**
    * 多选，切换所有行的选中状态
    */
-  toggleAllSelection () {
+  toggleAllCheckboxRow () {
     this.triggerCheckAllEvent(null, !this.isAllSelected)
     return this.$nextTick()
+  },
+  // 在 v3.0 中废弃 clearSelection
+  clearSelection () {
+    // 待打印废弃日志
+    return this.clearCheckboxRow()
   },
   /**
    * 用于多选行，手动清空用户的选择
    */
-  clearSelection () {
+  clearCheckboxRow () {
     let { tableFullData, treeConfig, treeOpts, checkboxOpts } = this
     let { checkField: property } = checkboxOpts
     if (property) {
@@ -2013,16 +2054,26 @@ const Methods = {
     this.selectRow = null
     return this.$nextTick()
   },
+  // 在 v3.0 中废弃 getCurrentRow
+  getCurrentRow () {
+    // 待打印废弃日志
+    return this.getCurrentRecord()
+  },
   /**
    * 用于当前行，获取当前行的数据
    */
-  getCurrentRow () {
+  getCurrentRecord () {
     return this.currentRow
+  },
+  // 在 v3.0 中废弃 getRadioRow
+  getRadioRow () {
+    // 待打印废弃日志
+    return this.getRadioRecord()
   },
   /**
    * 用于单选行，获取当已选中的数据
    */
-  getRadioRow () {
+  getRadioRecord () {
     return this.selectRow
   },
   /**
@@ -2541,7 +2592,7 @@ const Methods = {
           }
           // 如果当前节点已选中，则展开后子节点也被选中
           if (this.isCheckedByRow(row)) {
-            this.setSelection(childs, true)
+            this.setCheckboxRow(childs, true)
           }
         }
         resolve(this.$nextTick().then(this.recalculate))
@@ -3063,7 +3114,7 @@ const Methods = {
 }
 
 // Module methods
-const funcs = 'filter,clearFilter,closeMenu,getMouseSelecteds,getMouseCheckeds,clearCopyed,clearChecked,clearHeaderChecked,clearIndexChecked,clearSelected,insert,insertAt,remove,removeSelecteds,revert,revertData,getRecordset,getInsertRecords,getRemoveRecords,getUpdateRecords,clearActived,getActiveRow,hasActiveRow,isActiveByRow,setActiveRow,setActiveCell,setSelectCell,clearValidate,fullValidate,validate,exportCsv,openExport,exportData,openImport,importData,readFile,importByFile,print'.split(',')
+const funcs = 'filter,clearFilter,closeMenu,getMouseSelecteds,getMouseCheckeds,clearCopyed,clearChecked,clearHeaderChecked,clearIndexChecked,clearSelected,insert,insertAt,remove,removeSelecteds,revert,revertData,getRecordset,getInsertRecords,getRemoveRecords,getUpdateRecords,clearActived,getActiveRecord,getActiveRow,hasActiveRow,isActiveByRow,setActiveRow,setActiveCell,setSelectCell,clearValidate,fullValidate,validate,exportCsv,openExport,exportData,openImport,importData,readFile,importByFile,print'.split(',')
 
 funcs.forEach(name => {
   Methods[name] = function () {

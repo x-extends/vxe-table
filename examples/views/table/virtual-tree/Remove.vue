@@ -126,7 +126,7 @@ export default {
               this.$XModal.alert(insertRecords.length)
             },
             getSelectEvent () {
-              let selectRecords = this.$refs.xTree.getSelectRecords()
+              let selectRecords = this.$refs.xTree.getCheckboxRecords()
               this.$XModal.alert(selectRecords.length)
             }
           }
@@ -167,7 +167,7 @@ export default {
       this.$XModal.alert(insertRecords.length)
     },
     getSelectEvent () {
-      let selectRecords = this.$refs.xTree.getSelectRecords()
+      let selectRecords = this.$refs.xTree.getCheckboxRecords()
       this.$XModal.alert(selectRecords.length)
     }
   }

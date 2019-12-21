@@ -370,7 +370,7 @@ export default {
             dropdownMenuEvent (name) {
               switch (name) {
                 case 'remove': {
-                  let selectRecords = this.$refs.xTable.getSelectRecords()
+                  let selectRecords = this.$refs.xTable.getCheckboxRecords()
                   if (selectRecords.length) {
                     this.$refs.xTable.removeSelecteds()
                   } else {
@@ -520,7 +520,7 @@ export default {
     dropdownMenuEvent (name) {
       switch (name) {
         case 'remove': {
-          let selectRecords = this.$refs.xTable.getSelectRecords()
+          let selectRecords = this.$refs.xTable.getCheckboxRecords()
           if (selectRecords.length) {
             this.$refs.xTable.removeSelecteds()
           } else {

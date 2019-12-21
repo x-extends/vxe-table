@@ -358,7 +358,7 @@ export default {
         let domMouseup = document.onmouseup
         let trEleme = cell.parentNode
         let absPos = DomTools.getAbsolutePos(trEleme)
-        let selectRecords = this.getSelectRecords()
+        let selectRecords = this.getCheckboxRecords()
         let lastRangeRows = []
         this.updateZindex()
         document.onmousemove = evnt => {
@@ -378,8 +378,8 @@ export default {
                 this.handleSelectRow({ row }, selectRecords.indexOf(row) === -1)
               })
             } else {
-              this.clearSelection()
-              this.setSelection(rangeRows, true)
+              this.clearCheckboxRow()
+              this.setCheckboxRow(rangeRows, true)
             }
           }
         }

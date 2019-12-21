@@ -422,7 +422,7 @@ const apis = [
             version: '',
             type: 'Object',
             enum: '',
-            defVal: '{ value, label }',
+            defVal: '{ value, label, disabled }',
             list: []
           },
           {
@@ -513,7 +513,7 @@ const apis = [
             version: '',
             type: 'Object',
             enum: '',
-            defVal: '{ value, label }',
+            defVal: '{ value, label, disabled }',
             list: []
           },
           {
