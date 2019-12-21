@@ -65,7 +65,28 @@ export default {
               { code: 'open_export', name: '高级导出' }
             ]
           },
-          { code: 'exportData111', name: '自定义按钮' }
+          { code: 'exportData111', name: '自定义按钮' },
+          {
+            name: '禁用按钮',
+            disabled: false,
+            dropdowns: [
+              {
+                code: 'other1',
+                name: '下拉的按钮1',
+                disabled: false
+              },
+              {
+                code: 'other2',
+                name: '下拉的按钮2',
+                disabled: true
+              },
+              {
+                code: 'other3',
+                name: '下拉的按钮3',
+                disabled: false
+              }
+            ]
+          }
         ],
         refresh: true,
         import: true,
@@ -140,7 +161,28 @@ export default {
                       { code: 'open_export', name: '高级导出' }
                     ]
                   },
-                  { code: 'myBtn', name: '自定义按钮' }
+                  { code: 'myBtn', name: '自定义按钮' },
+                  {
+                    name: '禁用按钮',
+                    disabled: false,
+                    dropdowns: [
+                      {
+                        code: 'other1',
+                        name: '下拉的按钮1',
+                        disabled: false
+                      },
+                      {
+                        code: 'other2',
+                        name: '下拉的按钮2',
+                        disabled: true
+                      },
+                      {
+                        code: 'other3',
+                        name: '下拉的按钮3',
+                        disabled: false
+                      }
+                    ]
+                  }
                 ],
                 refresh: true, // 刷新按钮
                 import: true, // 导入按钮

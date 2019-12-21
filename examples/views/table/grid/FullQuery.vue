@@ -4,7 +4,6 @@
 
     <vxe-grid
       resizable
-      highlight-hover-column
       border="none"
       ref="xGrid"
       height="548"
@@ -12,6 +11,7 @@
       :sort-config="{trigger: 'cell'}"
       :filter-config="{remote: true}"
       :pager-config="{pageSize: 15}"
+      :toolbar="tableToolbar"
       :columns="tableColumn"
       :proxy-config="tableProxy"
       :checkbox-config="{labelField: 'id', reserve: true, highlight: true, range: true}"></vxe-grid>
@@ -51,6 +51,29 @@ export default {
           }
         }
       },
+      tableToolbar: {
+        buttons: [
+          { code: 'reload', name: 'app.body.button.refresh', icon: 'fa fa-refresh', disabled: false },
+          {
+            name: '导入/导出1',
+            dropdowns: [
+              { code: 'import', name: '直接导入', icon: 'fa fa-cloud-upload', disabled: false },
+              { code: 'export', name: '直接导出 CSV', icon: 'fa fa-download', params: { type: 'csv' }, disabled: false },
+              { code: 'export', name: '直接导出 XML', icon: 'fa fa-download', params: { type: 'xml' }, disabled: false },
+              { code: 'export', name: '直接导出 HTML', icon: 'fa fa-download', params: { type: 'html' }, disabled: false },
+              { code: 'export', name: '直接导出 TXT', icon: 'fa fa-download', params: { type: 'txt' }, disabled: false }
+            ]
+          },
+          {
+            name: '导入/导出2',
+            icon: 'fa fa-cloud-download',
+            dropdowns: [
+              { code: 'open_import', name: '高级导入', icon: 'fa fa-cloud-upload', disabled: false },
+              { code: 'open_export', name: '高级导出', icon: 'fa fa-download', disabled: false }
+            ]
+          }
+        ]
+      },
       tableColumn: [
         { type: 'seq', width: 60, fixed: 'left' },
         { type: 'checkbox', title: 'ID', width: 120, fixed: 'left' },
@@ -75,7 +98,6 @@ export default {
         `
         <vxe-grid
           resizable
-          highlight-hover-column
           border="none"
           ref="xGrid"
           height="548"
@@ -83,6 +105,7 @@ export default {
           :sort-config="{trigger: 'cell'}"
           :filter-config="{remote: true}"
           :pager-config="{pageSize: 15}"
+          :toolbar="tableToolbar"
           :columns="tableColumn"
           :proxy-config="tableProxy"
           :checkbox-config="{labelField: 'id', reserve: true, highlight: true, range: true}"></vxe-grid>
@@ -110,6 +133,29 @@ export default {
                     return this.$ajax.get(\`/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`, formData)
                   }
                 }
+              },
+              tableToolbar: {
+                buttons: [
+                  { code: 'reload', name: 'app.body.button.refresh', icon: 'fa fa-refresh', disabled: false },
+                  {
+                    name: '导入/导出1',
+                    dropdowns: [
+                      { code: 'import', name: '直接导入', icon: 'fa fa-cloud-upload', disabled: false },
+                      { code: 'export', name: '直接导出 CSV', icon: 'fa fa-download', params: { type: 'csv' }, disabled: false },
+                      { code: 'export', name: '直接导出 XML', icon: 'fa fa-download', params: { type: 'xml' }, disabled: false },
+                      { code: 'export', name: '直接导出 HTML', icon: 'fa fa-download', params: { type: 'html' }, disabled: false },
+                      { code: 'export', name: '直接导出 TXT', icon: 'fa fa-download', params: { type: 'txt' }, disabled: false }
+                    ]
+                  },
+                  {
+                    name: '导入/导出2',
+                    icon: 'fa fa-cloud-download',
+                    dropdowns: [
+                      { code: 'open_import', name: '高级导入', icon: 'fa fa-cloud-upload', disabled: false },
+                      { code: 'open_export', name: '高级导出', icon: 'fa fa-download', disabled: false }
+                    ]
+                  }
+                ]
               },
               tableColumn: [
                 { type: 'seq', width: 60, fixed: 'left' },

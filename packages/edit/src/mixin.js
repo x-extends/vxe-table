@@ -292,7 +292,7 @@ export default {
     },
     // 在 v3.0 中废弃 getActiveRow
     _getActiveRow () {
-      // 待打印废弃日志
+      // UtilTools.warn('vxe.error.delFunc', ['getActiveRow', 'getActiveRecord'])
       return this.getActiveRecord()
     },
     _getActiveRecord () {
