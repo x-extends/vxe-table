@@ -91,6 +91,7 @@ module.exports = {
         tree: 'Tree table',
         treeNormal: 'Normal tree',
         customIcon: 'Custom icon',
+        treeSearch: 'Search',
         groupSummary: 'Group summary',
         groupSummaryCount: 'Group summary total',
         edit: 'Editable',

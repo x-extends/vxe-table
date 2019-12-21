@@ -740,7 +740,7 @@ export default {
               }
             },
             {
-              label: 'app.aside.nav.filter',
+              label: 'app.aside.nav.treeSearch',
               demoUrl: 'https://jsrun.pro/CDWKp/edit',
               locat: {
                 name: 'TableTreeFilter'
