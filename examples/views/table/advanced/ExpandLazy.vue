@@ -39,6 +39,30 @@
       <code class="xml">{{ demoCodes[0] }}</code>
       <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
+
+    <p class="tip">实现父子表懒加载</p>
+
+    <vxe-table
+      border
+      :data="tableData2"
+      :expand-config="{lazy: true, loadMethod: loadContentMethod2}">
+      <vxe-table-column type="seq" width="60"></vxe-table-column>
+      <vxe-table-column type="expand" width="80">
+        <template v-slot:content="{ row }">
+          <vxe-grid :columns="row.childCols" :data="row.childData"></vxe-grid>
+        </template>
+      </vxe-table-column>
+      <vxe-table-column field="name" title="Name"></vxe-table-column>
+      <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+      <vxe-table-column field="age" title="Age"></vxe-table-column>
+    </vxe-table>
+
+    <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
+
+    <pre>
+      <code class="xml">{{ demoCodes[2] }}</code>
+      <code class="javascript">{{ demoCodes[3] }}</code>
+    </pre>
   </div>
 </template>
 
@@ -53,6 +77,12 @@ export default {
         { name: 'Develop', age: 22, sex: '女', detailList: [] },
         { name: 'Develop', age: 24, sex: '男', detailList: [] },
         { name: 'Develop', age: 26, sex: '女', detailList: [] }
+      ],
+      tableData2: [
+        { name: 'Develop', age: 20, sex: '女', childCols: [], childData: [] },
+        { name: 'Develop', age: 22, sex: '女', childCols: [], childData: [] },
+        { name: 'Develop', age: 24, sex: '男', childCols: [], childData: [] },
+        { name: 'Develop', age: 26, sex: '女', childCols: [], childData: [] }
       ],
       demoCodes: [
         `
@@ -72,35 +102,14 @@ export default {
           :expand-config="{lazy: true, loadMethod: loadContentMethod}">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column type="expand" width="80">
-            <template v-slot:content="{ row, rowIndex }">
-              <template v-if="rowIndex === 1">
-                <vxe-table
-                  border
-                  :data="tableData">
-                  <vxe-table-column field="role" title="Role"></vxe-table-column>
-                  <vxe-table-column field="age" title="Age"></vxe-table-column>
-                </vxe-table>
-              </template>
-              <template v-else>
-                <ul>
-                  <li>
-                    <span>ID：</span>
-                    <span>{{ row.id }}</span>
-                  </li>
-                  <li>
-                    <span>Name：</span>
-                    <span>{{ row.name }}</span>
-                  </li>
-                  <li>
-                    <span>UpdateTime：</span>
-                    <span>{{ row.updateTime }}</span>
-                  </li>
-                  <li>
-                    <span>CreateTime：</span>
-                    <span>{{ row.createTime }}</span>
-                  </li>
-                </ul>
-              </template>
+            <template v-slot:content="{ row }">
+              <ul>
+                <li v-for="(item, index) in row.detailList" :key="index">
+                  <span>Role: {{ item.role }}</span>
+                  <span style="margin-left: 100px"> Age: {{ item.age }}</span>
+                  <span style="margin-left: 100px"> Sex: {{ item.sex }}</span>
+                </li>
+              </ul>
             </template>
           </vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -124,15 +133,71 @@ export default {
             loadContentMethod ({ row }) {
               return new Promise(resolve => {
                 setTimeout(() => {
-                  let detailList = [
+                  let detailList = this.$utils.sample([
                     { role: 'Develop', age: 20, sex: '女' },
                     { role: 'Develop', age: 22, sex: '女' },
                     { role: 'Develop', age: 24, sex: '男' },
                     { role: 'Develop', age: 26, sex: '女' },
                     { role: 'Develop', age: 28, sex: '男' },
                     { role: 'Develop', age: 30, sex: '男' }
-                  ]
+                  ], this.$utils.random(1, 5))
                   row.detailList = detailList
+                  resolve()
+                }, 500)
+              })
+            }
+          }
+        }
+        `,
+        `
+        <vxe-table
+          border
+          :data="tableData"
+          :expand-config="{lazy: true, loadMethod: loadContentMethod}">
+          <vxe-table-column type="seq" width="60"></vxe-table-column>
+          <vxe-table-column type="expand" width="80">
+            <template v-slot:content="{ row }">
+              <vxe-grid :columns="row.childCols" :data="row.childData"></vxe-grid>
+            </template>
+          </vxe-table-column>
+          <vxe-table-column field="name" title="Name"></vxe-table-column>
+          <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+          <vxe-table-column field="age" title="Age"></vxe-table-column>
+        </vxe-table>
+        `,
+        `
+        export default {
+          data () {
+            return {
+              tableData: [
+                { name: 'Develop', age: 20, sex: '女', childCols: [], childData: [] },
+                { name: 'Develop', age: 22, sex: '女', childCols: [], childData: [] },
+                { name: 'Develop', age: 24, sex: '男', childCols: [], childData: [] },
+                { name: 'Develop', age: 26, sex: '女', childCols: [], childData: [] }
+              ]
+            }
+          },
+          methods: {
+            loadContentMethod ({ row }) {
+              return new Promise(resolve => {
+                setTimeout(() => {
+                  let childCols = this.$utils.sample([
+                    { type: 'seq', title: 'Sequence' },
+                    { field: 'name', title: 'Name' },
+                    { field: 'role', title: 'Role' },
+                    { field: 'age', title: 'Age' },
+                    { field: 'sex', title: 'Sex' }
+                  ], this.$utils.random(3, 5))
+                  let childData = this.$utils.sample([
+                    { name: 'TEST1', role: 'Develop', age: 20, sex: '女' },
+                    { name: 'TEST2', role: 'Develop', age: 22, sex: '女' },
+                    { name: 'TEST3', role: 'Develop', age: 24, sex: '男' },
+                    { name: 'TEST4', role: 'Develop', age: 26, sex: '女' },
+                    { name: 'TEST5', role: 'Develop', age: 28, sex: '男' },
+                    { name: 'TEST6', role: 'Develop', age: 30, sex: '男' }
+                  ], this.$utils.random(1, 5))
+                  row.childCols = childCols
+                  row.childData = childData
                   resolve()
                 }, 500)
               })
@@ -152,15 +217,39 @@ export default {
     loadContentMethod ({ row }) {
       return new Promise(resolve => {
         setTimeout(() => {
-          let detailList = [
+          let detailList = this.$utils.sample([
             { role: 'Develop', age: 20, sex: '女' },
             { role: 'Develop', age: 22, sex: '女' },
             { role: 'Develop', age: 24, sex: '男' },
             { role: 'Develop', age: 26, sex: '女' },
             { role: 'Develop', age: 28, sex: '男' },
             { role: 'Develop', age: 30, sex: '男' }
-          ]
+          ], this.$utils.random(1, 5))
           row.detailList = detailList
+          resolve()
+        }, 500)
+      })
+    },
+    loadContentMethod2 ({ row }) {
+      return new Promise(resolve => {
+        setTimeout(() => {
+          let childCols = this.$utils.sample([
+            { type: 'seq', title: 'Sequence' },
+            { field: 'name', title: 'Name' },
+            { field: 'role', title: 'Role' },
+            { field: 'age', title: 'Age' },
+            { field: 'sex', title: 'Sex' }
+          ], this.$utils.random(3, 5))
+          let childData = this.$utils.sample([
+            { name: 'TEST1', role: 'Develop', age: 20, sex: '女' },
+            { name: 'TEST2', role: 'Develop', age: 22, sex: '女' },
+            { name: 'TEST3', role: 'Develop', age: 24, sex: '男' },
+            { name: 'TEST4', role: 'Develop', age: 26, sex: '女' },
+            { name: 'TEST5', role: 'Develop', age: 28, sex: '男' },
+            { name: 'TEST6', role: 'Develop', age: 30, sex: '男' }
+          ], this.$utils.random(1, 5))
+          row.childCols = childCols
+          row.childData = childData
           resolve()
         }, 500)
       })

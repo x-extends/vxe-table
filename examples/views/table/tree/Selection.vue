@@ -6,9 +6,9 @@
       resizable
       :tree-config="{children: 'children'}"
       :data="tableData"
-      :checkbox-config="{highlight: true}"
+      :checkbox-config="{labelField: 'id', highlight: true}"
       @select-change="selectChangeEvent">
-      <vxe-table-column type="checkbox" width="280" tree-node></vxe-table-column>
+      <vxe-table-column type="checkbox" title="ID" width="280" tree-node></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
       <vxe-table-column field="size" title="Size"></vxe-table-column>
       <vxe-table-column field="type" title="Type"></vxe-table-column>
@@ -92,11 +92,11 @@ export default {
         `
         <vxe-table
           resizable
-          :checkbox-config="{highlight: true}"
           :tree-config="{children: 'children'}"
           :data="tableData"
+          :checkbox-config="{labelField: 'id', highlight: true}"
           @select-change="selectChangeEvent">
-          <vxe-table-column type="checkbox" width="280" tree-node></vxe-table-column>
+          <vxe-table-column type="checkbox" title="ID" width="280" tree-node></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
           <vxe-table-column field="size" title="Size"></vxe-table-column>
           <vxe-table-column field="type" title="Type"></vxe-table-column>
