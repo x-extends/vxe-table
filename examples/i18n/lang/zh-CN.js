@@ -91,6 +91,7 @@ module.exports = {
         tree: '树表格',
         treeNormal: '普通树',
         customIcon: '自定义图标',
+        treeSearch: '查找功能',
         groupSummary: '分组汇总',
         groupSummaryCount: '分组汇总合计',
         edit: '可编辑',
