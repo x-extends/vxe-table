@@ -10,7 +10,7 @@
       row-id="id"
       :sort-config="{trigger: 'cell'}"
       :filter-config="{remote: true}"
-      :pager-config="{pageSize: 15}"
+      :pager-config="tablePage"
       :toolbar="tableToolbar"
       :columns="tableColumn"
       :proxy-config="tableProxy"
@@ -31,6 +31,10 @@ import hljs from 'highlight.js'
 export default {
   data () {
     return {
+      tablePage: {
+        pageSize: 15,
+        pageSizes: [5, 10, 20, 50, 100, 200, 500, 1000]
+      },
       tableProxy: {
         index: true, // 启用动态序号代理
         sort: true, // 启用排序代理
@@ -104,7 +108,7 @@ export default {
           row-id="id"
           :sort-config="{trigger: 'cell'}"
           :filter-config="{remote: true}"
-          :pager-config="{pageSize: 15}"
+          :pager-config="tablePage"
           :toolbar="tableToolbar"
           :columns="tableColumn"
           :proxy-config="tableProxy"
@@ -114,6 +118,10 @@ export default {
         export default {
           data () {
             return {
+              tablePage: {
+                pageSize: 15,
+                pageSizes: [5, 10, 20, 50, 100, 200, 500, 1000]
+              },
               tableProxy: {
                 index: true, // 启用动态序号代理
                 sort: true, // 启用排序代理

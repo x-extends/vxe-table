@@ -587,7 +587,7 @@ export default {
   },
   watch: {
     data (value) {
-      this.loadTableData(value, true).then(() => {
+      this.loadTableData(value).then(() => {
         if (!this.inited) {
           this.inited = true
           this.handleDefaults()
@@ -731,7 +731,7 @@ export default {
     this.fullDataRowIdData = {}
     this.fullColumnMap = new Map()
     this.fullColumnIdData = {}
-    this.loadTableData(data, true).then(() => {
+    this.loadTableData(data).then(() => {
       if (checkboxOpts.key) {
         UtilTools.warn('vxe.error.delProp', ['select-config.key', 'row-id'])
       } else if (treeConfig && treeOpts.key) {
@@ -1050,7 +1050,7 @@ export default {
       this.tableData = scrollYLoad ? fullData.slice(scrollYStore.startIndex, scrollYStore.startIndex + scrollYStore.renderSize) : fullData.slice(0)
       return this.$nextTick()
     },
-    loadTableData (datas, notRefresh) {
+    loadTableData (datas) {
       let { height, maxHeight, showOverflow, treeConfig, editStore, optimizeOpts, scrollYStore } = this
       let { scrollY } = optimizeOpts
       let tableFullData = datas ? datas.slice(0) : []
@@ -1073,22 +1073,14 @@ export default {
       if (scrollYLoad && !showOverflow) {
         UtilTools.warn('vxe.error.scrollYReqProp', ['show-header-overflow & show-overflow'])
       }
-      let rest = Promise.resolve()
-      if (scrollYLoad) {
-        rest = this.computeScrollLoad()
-      }
-      return rest.then(() => {
-      // 是否加载了数据
+      this.handleTableData(true)
+      return this.computeScrollLoad().then(() => {
+        // 是否加载了数据
         this.isLoadData = true
         this.computeRowHeight()
-        this.handleTableData(true)
         this.handleReserveStatus()
         this.checkSelectionStatus()
-        rest = this.$nextTick()
-        if (!notRefresh) {
-          rest = rest.then(this.recalculate)
-        }
-        return rest.then(this.refreshScroll)
+        return this.$nextTick().then(this.recalculate).then(this.refreshScroll)
       })
     },
     loadData (datas) {
