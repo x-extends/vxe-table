@@ -99,9 +99,8 @@ const Methods = {
   /**
    * 加载表格数据
    * @param {Array} datas 数据
-   * @param {Boolean} notRefresh 是否不重新运算列宽
    */
-  loadTableData (datas, notRefresh) {
+  loadTableData (datas) {
     let { height, maxHeight, showOverflow, treeConfig, editStore, optimizeOpts, scrollYStore } = this
     let { scrollY } = optimizeOpts
     let tableFullData = datas ? datas.slice(0) : []
@@ -124,22 +123,14 @@ const Methods = {
     if (scrollYLoad && !showOverflow) {
       UtilTools.warn('vxe.error.scrollYReqProp', ['show-header-overflow & show-overflow'])
     }
-    let rest = Promise.resolve()
-    if (scrollYLoad) {
-      rest = this.computeScrollLoad()
-    }
-    return rest.then(() => {
+    this.handleTableData(true)
+    return this.computeScrollLoad().then(() => {
       // 是否加载了数据
       this.isLoadData = true
       this.computeRowHeight()
-      this.handleTableData(true)
       this.handleReserveStatus()
       this.checkSelectionStatus()
-      rest = this.$nextTick()
-      if (!notRefresh) {
-        rest = rest.then(this.recalculate)
-      }
-      return rest.then(this.refreshScroll)
+      return this.$nextTick().then(this.recalculate).then(this.refreshScroll)
     })
   },
   /**

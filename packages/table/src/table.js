@@ -445,7 +445,7 @@ export default {
   },
   watch: {
     data (value) {
-      this.loadTableData(value, true).then(() => {
+      this.loadTableData(value).then(() => {
         if (!this.inited) {
           this.inited = true
           this.handleDefaults()
@@ -605,7 +605,7 @@ export default {
         offsetSize: XEUtils.toNumber(scrollX.oSize)
       })
     }
-    this.loadTableData(data, true).then(() => {
+    this.loadTableData(data).then(() => {
       if (data && data.length) {
         this.inited = true
         this.handleDefaults()
