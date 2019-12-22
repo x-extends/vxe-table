@@ -36,7 +36,7 @@
       :show-header="false"
       :data="tableData"
       :checkbox-config="{labelField: 'name'}"
-      :tree-config="{children: 'children', line: true, iconOpen: 'fa fa-minus-square-o', iconClose: 'fa fa-plus-square-o'}">
+      :tree-config="{children: 'children', line: true, iconOpen: 'fa fa-caret-down', iconClose: 'fa fa-caret-right'}">
       <vxe-table-column type="checkbox" tree-node></vxe-table-column>
     </vxe-table>
 
@@ -149,7 +149,7 @@ export default {
           :show-header="false"
           :data="tableData"
           :checkbox-config="{labelField: 'name'}"
-          :tree-config="{children: 'children', line: true, iconOpen: 'fa fa-minus-square-o', iconClose: 'fa fa-plus-square-o'}">
+          :tree-config="{children: 'children', line: true, iconOpen: 'fa fa-caret-down', iconClose: 'fa fa-caret-right'}">
           <vxe-table-column type="checkbox" tree-node></vxe-table-column>
         </vxe-table>
         `,
