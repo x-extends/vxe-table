@@ -1,9 +1,9 @@
 import Vue from 'vue'
 import XEUtils from 'xe-utils/methods/xe-utils'
 import XEAjax from 'xe-ajax'
-import VXEAjax from 'vxe-ajax'
 
-Vue.use(VXEAjax, XEAjax)
+// 挂载到 vue 实例中
+Vue.prototype.$ajax = XEAjax
 
 /**
  * 生成模拟数据
