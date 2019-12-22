@@ -705,6 +705,9 @@
       position: absolute;
       left: 0;
       top: 50%;
+      width: 1em;
+      height: 1em;
+      text-align: center;
       transform: translateY(-50%);
       z-index: 1;
       background-color: $vxe-table-background-color;
@@ -723,6 +726,10 @@
     padding-right: 0.5em;
     cursor: pointer;
     .vxe-table--expand-btn {
+      width: 1em;
+      height: 1em;
+      text-align: center;
+      user-select: none;
       color: lighten($vxe-font-color, 20%);
       &:hover {
         color: $vxe-font-color;
