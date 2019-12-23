@@ -68,6 +68,18 @@
                 list: null,
                 result: 'result',
                 total: 'page.total'
+              },
+              // 查询
+              beforeQuery ({ options, page, sort, filters }) {
+                return fetch('url', { method: 'GET' }).then(response => response.json())
+              },
+              // 删除
+              beforeDelete ({ options, body }) {
+                return fetch('url', { method: 'DELETE' }).then(response => response.json())
+              },
+              // 保存
+              beforeSave ({ options, body }) {
+                return fetch('url', { method: 'POST', body }).then(response => response.json())
               }
             }
           },
