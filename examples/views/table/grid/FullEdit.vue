@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="tip">
-      查询代理、服务端排序代理、服务端筛选代理、分页代理、增删改查<br>
+      查询代理<a class="link" href="https://github.com/xuliangzhan/vxe-table-demo/tree/master/vxe-table-by-vue-grid-proxy">（配置式代理项目示例）</a>、服务端排序代理、服务端筛选代理、分页代理、增删改查<br>
       对于分页场景下，如果想要保留选中状态，可以通过设置 <table-api-link prop="checkbox-config"/> 的 <table-api-link prop="reserve"/> 属性<br>
       还可以通过 <toolbar-api-link prop="checkMethod"/> 设置个性化列禁止勾选<br>
       由 <grid-api-link name="vxe-grid"/> 代理数据转换，只需要配置好数据源即可；非常简单就可以渲染一个表格，从重复写冗余的代码中解放出来
@@ -23,6 +23,12 @@
       :checkbox-config="{labelField: 'id', reserve: true, highlight: true, range: true}"
       :edit-rules="validRules"
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">
+      <template v-slot:empty>
+        <span style="color: red;">
+          <img src="static/other/img1.gif">
+          <p>莫慌！没数据了而已！</p>
+        </span>
+      </template>
     </vxe-grid>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -114,9 +120,10 @@ export default {
           remoteSort: true,
           width: 200,
           filters: [
-            { label: '前端', value: '前端' },
-            { label: '后端', value: '后端' },
-            { label: '测试', value: '测试' }
+            { label: '前端开发', value: '前端' },
+            { label: '后端开发', value: '后端' },
+            { label: '测试', value: '测试' },
+            { label: '程序员鼓励师', value: '程序员鼓励师' }
           ],
           filterMultiple: false,
           editRender: { name: 'input' }
@@ -141,6 +148,12 @@ export default {
           :checkbox-config="{labelField: 'id', reserve: true, highlight: true, range: true}"
           :edit-rules="validRules"
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">
+          <template v-slot:empty>
+            <span style="color: red;">
+              <img src="static/other/img1.gif">
+              <p>莫慌！没数据了而已！</p>
+            </span>
+          </template>
         </vxe-grid>
         `,
         `
@@ -221,9 +234,10 @@ export default {
                   remoteSort: true,
                   width: 200,
                   filters: [
-                    { label: '前端', value: '前端' },
-                    { label: '后端', value: '后端' },
-                    { label: '测试', value: '测试' }
+                    { label: '前端开发', value: '前端' },
+                    { label: '后端开发', value: '后端' },
+                    { label: '测试', value: '测试' },
+                    { label: '程序员鼓励师', value: '程序员鼓励师' }
                   ],
                   filterMultiple: false,
                   editRender: { name: 'input' }

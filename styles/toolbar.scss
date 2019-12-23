@@ -6,7 +6,9 @@
   flex-direction: row;
   align-items: center;
   height: 52px;
+  font-size: $vxe-font-size;
   color: $vxe-font-color;
+  font-family: $vxe-font-family;
   &:after {
     content: "";
     display: block;
@@ -51,6 +53,7 @@
   }
   .vxe-button--wrapper {
     flex-grow: 1;
+    text-align: left;
   }
   .vxe-tools--wrapper {
     & > .vxe-button {
@@ -103,13 +106,19 @@
     border: 1px solid $vxe-table-border-color;
     border-radius: 2px;
     box-shadow: 3px 3px 4px -2px rgba(0, 0, 0, 0.6);
-    .vxe-custom--option {
+    .vxe-custom--header {
+      padding-top: 0.2em;
+    }
+    .vxe-custom--body {
+      padding-bottom: 0.2em;
+    }
+    .vxe-custom--header,
+    .vxe-custom--body {
       max-height: 240px;
-      padding: 4px 0;
       & > li {
         max-width: 180px;
         min-width: 100px;
-        padding: 4px 8px 4px 32px;
+        padding: 0.25em 0.8em 0.25em 2.2em;
       }
     }
     .vxe-custom--footer {
@@ -135,10 +144,13 @@
   }
 }
 
-.vxe-custom--option-wrapper .vxe-custom--option,
+.vxe-custom--option-wrapper .vxe-custom--header,
+.vxe-custom--option-wrapper .vxe-custom--body,
 .vxe-export--panel-column > ul {
+  list-style-type: none;
   overflow: auto;
   margin: 0;
+  padding: 0;
   user-select: none;
   & > li {
     position: relative;
@@ -188,6 +200,13 @@
         width: 1em;
         background-color: #ffffff;
         transform: scale(.6);
+      }
+    }
+    &:not(.is--disabled) {
+      &:hover {
+        &:before {
+          border-color: $vxe-primary-color;
+        }
       }
     }
     &.is--disabled {

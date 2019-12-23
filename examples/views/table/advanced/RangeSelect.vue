@@ -4,7 +4,7 @@
 
     <vxe-table
       border
-      :checkbox-config="{range: true}"
+      :checkbox-config="{trigger: 'row', highlight: true, range: true}"
       :data="tableData">
       <vxe-table-column type="checkbox" width="80"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
@@ -33,7 +33,7 @@ export default {
         `
         <vxe-table
           border
-          :checkbox-config="{range: true}"
+          :checkbox-config="{trigger: 'row', highlight: true, range: true}"
           :data="tableData">
           <vxe-table-column type="checkbox" width="80"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable></vxe-table-column>

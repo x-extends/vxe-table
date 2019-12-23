@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">数据代理、固定列、服务端排序、服务端筛选、服务端分页，对于分页场景下，如果想要保留选中状态，可以通过设置 <table-api-link prop="checkbox-config"/> 的 <table-api-link prop="reserve"/> 属性</p>
+    <p class="tip">数据代理<a class="link" href="https://github.com/xuliangzhan/vxe-table-demo/tree/master/vxe-table-by-vue-grid-proxy">（配置式代理项目示例）</a>、固定列、服务端排序、服务端筛选、服务端分页，对于分页场景下，如果想要保留选中状态，可以通过设置 <table-api-link prop="checkbox-config"/> 的 <table-api-link prop="reserve"/> 属性</p>
 
     <vxe-grid
       resizable
@@ -14,7 +14,14 @@
       :toolbar="tableToolbar"
       :columns="tableColumn"
       :proxy-config="tableProxy"
-      :checkbox-config="{labelField: 'id', reserve: true, highlight: true, range: true}"></vxe-grid>
+      :checkbox-config="{labelField: 'id', reserve: true, highlight: true, range: true}">
+      <template v-slot:empty>
+        <span style="color: red;">
+          <img src="static/other/img1.gif">
+          <p>没有更多数据了！</p>
+        </span>
+      </template>
+    </vxe-grid>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
@@ -90,9 +97,10 @@ export default {
           remoteSort: true,
           width: 200,
           filters: [
-            { label: '前端', value: '前端' },
-            { label: '后端', value: '后端' },
-            { label: '测试', value: '测试' }
+            { label: '前端开发', value: '前端' },
+            { label: '后端开发', value: '后端' },
+            { label: '测试', value: '测试' },
+            { label: '程序员鼓励师', value: '程序员鼓励师' }
           ],
           filterMultiple: false
         },
@@ -112,7 +120,14 @@ export default {
           :toolbar="tableToolbar"
           :columns="tableColumn"
           :proxy-config="tableProxy"
-          :checkbox-config="{labelField: 'id', reserve: true, highlight: true, range: true}"></vxe-grid>
+          :checkbox-config="{labelField: 'id', reserve: true, highlight: true, range: true}">
+          <template v-slot:empty>
+            <span style="color: red;">
+              <img src="static/other/img1.gif">
+              <p>没有更多数据了！</p>
+            </span>
+          </template>
+        </vxe-grid>
         `,
         `
         export default {
@@ -177,9 +192,10 @@ export default {
                   remoteSort: true,
                   width: 200,
                   filters: [
-                    { label: '前端', value: '前端' },
-                    { label: '后端', value: '后端' },
-                    { label: '测试', value: '测试' }
+                    { label: '前端开发', value: '前端' },
+                    { label: '后端开发', value: '后端' },
+                    { label: '测试', value: '测试' },
+                    { label: '程序员鼓励师', value: '程序员鼓励师' }
                   ],
                   filterMultiple: false
                 },

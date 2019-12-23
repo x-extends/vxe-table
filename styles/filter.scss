@@ -34,12 +34,9 @@
   position: absolute;
   min-width: 100px;
   border-radius: 2px;
-  color: $vxe-font-color;
   background-color: #fff;
   border: 1px solid $vxe-table-popup-border-color;
   box-shadow: 3px 3px 4px -2px rgba(0, 0, 0, 0.6);
-  font-size: 13px;
-  font-family: $vxe-font-family;
   z-index: 10;
   &:not(.is--multiple) {
     text-align: center;
@@ -47,52 +44,107 @@
   &.filter--active {
     display: block;
   }
+  .vxe-table--filter-header,
   .vxe-table--filter-body {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    max-height: 240px;
-    padding: 10px;
-    overflow-x: hidden;
-    overflow-y: auto;
-    .vxe-table--filter-option {
-      margin-bottom: 8px;
-      &:last-child {
-        margin-bottom: 0;
+    & > li {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 360px;
+      padding: 0.25em 0.8em;
+      cursor: pointer;
+      &.is--checked {
+        color: $vxe-primary-color;
       }
       &:hover {
-        .vxe-table--filter-label {
-          color: $vxe-primary-color;
-        }
+        background-color: $vxe-table-row-hover-background-color;
       }
-      &.is--active {
-        .vxe-table--filter-label {
-          font-weight: 700;
-          color: $vxe-primary-color;
+    }
+  }
+  .vxe-table--filter-header {
+    padding-top: 0.2em;
+  }
+  .vxe-table--filter-body {
+    max-height: 240px;
+    padding-bottom: 0.2em;
+  }
+  .vxe-table--filter-template {
+    padding: 0.8em
+  }
+  & > ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    overflow: auto;
+    user-select: none;
+  }
+  &.is--multiple {
+    & > ul {
+      & > li {
+        position: relative;
+        padding: 0.25em 0.8em 0.25em 2.2em;
+        &:before {
+          content: "";
+          position: absolute;
+          height: 1.2em;
+          width: 1.2em;
+          top: 0.4em;
+          left: 0.6em;
+          border-radius: 0.2em;
+          border: 2px solid $vxe-input-border-color;
         }
-      }
-      .vxe-checkbox {
-        display: block;
-        .vxe-checkbox--label {
-          max-width: 360px;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
+        &.is--checked,
+        &.is--indeterminate {
+          &:before {
+            border-color: $vxe-primary-color;
+            background-color: $vxe-primary-color;
+          }
+          &:after {
+            content: "";
+            position: absolute;
+          }
         }
-      }
-      .vxe-table--filter-label {
-        display: block;
-        max-width: 360px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        cursor: pointer;
+        &.is--checked {
+          &:after {
+            height: 0.7em;
+            width: 0.34em;
+            top: 0.6em;
+            left: 1em;
+            border: 2px solid #ffffff;
+            border-left: 0;
+            border-top: 0;
+            transform: rotate(45deg);
+          }
+        }
+        &.is--indeterminate {
+          &:after {
+            top: 0.9em;
+            left: 0.65em;
+            height: 0.18em;
+            width: 1em;
+            background-color: #ffffff;
+            transform: scale(.6);
+          }
+        }
+        &.is--disabled {
+          cursor: not-allowed;
+          color: $vxe-input-disabled-color;
+          &.is--checked {
+            &:before {
+              border-color: $vxe-input-disabled-color;
+              background-color: $vxe-input-disabled-background-color;
+            }
+            &:after {
+              border-color: $vxe-input-disabled-color;
+            }
+          }
+        }
       }
     }
   }
   .vxe-table--filter-footer {
     border-top: 1px solid $vxe-table-popup-border-color;
-    padding: 0.8em;
+    padding: 0.6em;
     user-select: none;
     button {
       background-color: transparent;

@@ -360,7 +360,7 @@ export default {
       return Object.assign({}, GlobalConfig.checkboxConfig, this.checkboxConfig || this.selectConfig)
     },
     tooltipOpts () {
-      return Object.assign({ leaveDelay: 300 }, GlobalConfig.tooltipConfig, this.tooltipConfig)
+      return Object.assign({ size: this.vSize, leaveDelay: 300 }, GlobalConfig.tooltipConfig, this.tooltipConfig)
     },
     vaildTipOpts () {
       return Object.assign({ isArrow: false }, this.tooltipOpts)

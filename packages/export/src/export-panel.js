@@ -155,10 +155,10 @@ export default {
                   class: 'vxe-export--panel-column-header'
                 }, [
                   h('li', {
-                    class: {
+                    class: ['vxe-export--panel-column-option', {
                       'is--checked': isAll,
                       'is--indeterminate': isIndeterminate
-                    },
+                    }],
                     attrs: {
                       title: GlobalConfig.i18n('vxe.table.allTitle')
                     },
@@ -172,10 +172,10 @@ export default {
                 }, storeData.columns.map(column => {
                   let headerTitle = column.getTitle()
                   return h('li', {
-                    class: {
+                    class: ['vxe-export--panel-column-option', {
                       'is--checked': column.checked,
                       'is--disabled': column.disabled
-                    },
+                    }],
                     attrs: {
                       title: headerTitle
                     },

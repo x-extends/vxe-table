@@ -87,6 +87,7 @@ export default {
       zoomIn: 'Maximization',
       zoomOut: 'Downward reduction',
       custom: 'Custom columns',
+      customAll: 'All',
       customConfirm: 'Confirm',
       customReset: 'Reset',
       impTitle: 'Import parameter settings',

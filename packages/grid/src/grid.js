@@ -269,7 +269,7 @@ export default {
      */
     commitProxy (code) {
       const { toolbar, toolbarOpts, proxyOpts, tablePage, pagerConfig, sortData, filterData, isMsg } = this
-      const { ajax = {}, props = {} } = proxyOpts
+      const { beforeQuery, beforeDelete, beforeSave, ajax = {}, props = {} } = proxyOpts
       const args = XEUtils.slice(arguments, 1)
       let button
       if (XEUtils.isString(code)) {
@@ -313,11 +313,14 @@ export default {
           break
         case 'reload':
         case 'query': {
-          if (ajax.query) {
+          let ajaxMethods = ajax.query
+          if (ajaxMethods) {
             let params = {
+              code,
               $grid: this,
               sort: sortData,
-              filters: filterData
+              filters: filterData,
+              options: ajaxMethods
             }
             this.tableLoading = true
             if (pagerConfig) {
@@ -332,7 +335,7 @@ export default {
               this.pendingRecords = []
               this.clearAll()
             }
-            return ajax.query.apply(this, [params].concat(args)).then(rest => {
+            return (beforeQuery || ajaxMethods).apply(this, [params].concat(args)).then(rest => {
               if (rest) {
                 if (pagerConfig) {
                   tablePage.total = XEUtils.get(rest, props.total || 'page.total') || 0
@@ -353,14 +356,15 @@ export default {
           break
         }
         case 'delete': {
-          if (ajax.delete) {
+          let ajaxMethods = ajax.delete
+          if (ajaxMethods) {
             let selectRecords = this.getCheckboxRecords()
             this.remove(selectRecords).then(() => {
               let removeRecords = this.getRemoveRecords()
               let body = { removeRecords }
               if (removeRecords.length) {
                 this.tableLoading = true
-                return ajax.delete.apply(this, [{ $grid: this, body }].concat(args)).then(result => {
+                return (beforeDelete || ajaxMethods).apply(this, [{ $grid: this, code, body, options: ajaxMethods }].concat(args)).then(result => {
                   this.tableLoading = false
                 }).catch(e => {
                   this.tableLoading = false
@@ -377,7 +381,8 @@ export default {
           break
         }
         case 'save': {
-          if (ajax.save) {
+          let ajaxMethods = ajax.save
+          if (ajaxMethods) {
             let body = Object.assign({ pendingRecords: this.pendingRecords }, this.getRecordset())
             let { insertRecords, removeRecords, updateRecords, pendingRecords } = body
             // 排除掉新增且标记为删除的数据
@@ -395,7 +400,7 @@ export default {
                   if (body.insertRecords.length || removeRecords.length || updateRecords.length || body.pendingRecords.length) {
                     this.tableLoading = true
                     resolve(
-                      ajax.save.apply(this, [{ $grid: this, body }].concat(args)).then(() => {
+                      (beforeSave || ajaxMethods).apply(this, [{ $grid: this, code, body, options: ajaxMethods }].concat(args)).then(() => {
                         this.$XModal.message({ id: code, message: GlobalConfig.i18n('vxe.grid.saveSuccess'), status: 'success' })
                         this.tableLoading = false
                       }).catch(e => {

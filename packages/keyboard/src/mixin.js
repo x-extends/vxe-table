@@ -155,8 +155,6 @@ export default {
           if (isIndex) {
             this.handleAllChecked(evnt)
           } else {
-            evnt.preventDefault()
-            evnt.stopPropagation()
             this.clearSelected(evnt)
             this.clearHeaderChecked()
             this.clearIndexChecked()
@@ -164,7 +162,6 @@ export default {
             let domMouseup = document.onmouseup
             let startCell = bodyList[0].querySelector(`.${column.id}`)
             let updateEvent = XEUtils.throttle(function (evnt) {
-              evnt.preventDefault()
               let { flag, targetElem } = DomTools.getEventTargetNode(evnt, $el, 'vxe-header--column')
               if (!flag) {
                 let a = DomTools.getEventTargetNode(evnt, $el, 'vxe-body--column')
@@ -180,7 +177,11 @@ export default {
               }
             }, 80, { leading: true, trailing: true })
             DomTools.addClass($el, 'c--checked')
-            document.onmousemove = updateEvent
+            document.onmousemove = evnt => {
+              evnt.preventDefault()
+              evnt.stopPropagation()
+              updateEvent(evnt)
+            }
             document.onmouseup = function () {
               DomTools.removeClass($el, 'c--checked')
               document.onmousemove = domMousemove
@@ -228,8 +229,6 @@ export default {
       let isLeftBtn = button === 0
       if (isLeftBtn) {
         if (mouseConfig.checked) {
-          evnt.preventDefault()
-          evnt.stopPropagation()
           this.clearHeaderChecked()
           this.clearIndexChecked()
           let domMousemove = document.onmousemove
@@ -244,7 +243,6 @@ export default {
           let colIndex = [].indexOf.call(cell.parentNode.children, cell)
           let headStart = headerList[0].children[colIndex]
           let updateEvent = XEUtils.throttle(function (evnt) {
-            evnt.preventDefault()
             let { flag, targetElem } = DomTools.getEventTargetNode(evnt, $el, 'vxe-body--column')
             if (flag) {
               if (isIndex) {
@@ -261,7 +259,11 @@ export default {
               }
             }
           }, 80, { leading: true, trailing: true })
-          document.onmousemove = updateEvent
+          document.onmousemove = evnt => {
+            evnt.preventDefault()
+            evnt.stopPropagation()
+            updateEvent(evnt)
+          }
           document.onmouseup = function (evnt) {
             document.onmousemove = domMousemove
             document.onmouseup = domMouseup
@@ -349,8 +351,6 @@ export default {
       let { column, cell } = params
       // 在 v3.0 中废弃 type=selection
       if (['checkbox', 'selection'].indexOf(column.type) > -1) {
-        evnt.preventDefault()
-        evnt.stopPropagation()
         const disX = evnt.clientX
         const disY = evnt.clientY
         const checkboxRangeElem = this.$refs.checkboxRange
@@ -362,16 +362,20 @@ export default {
         let lastRangeRows = []
         this.updateZindex()
         document.onmousemove = evnt => {
+          evnt.preventDefault()
+          evnt.stopPropagation()
           let offsetLeft = evnt.clientX - disX
           let offsetTop = evnt.clientY - disY
+          let rangeHeight = Math.abs(offsetTop)
           let rangeRows = this.getRangeResult(trEleme, evnt.clientY - absPos.top)
           checkboxRangeElem.style.display = 'block'
           checkboxRangeElem.style.width = `${Math.abs(offsetLeft)}px`
-          checkboxRangeElem.style.height = `${Math.abs(offsetTop)}px`
+          checkboxRangeElem.style.height = `${rangeHeight}px`
           checkboxRangeElem.style.left = `${disX + (offsetLeft > 0 ? 0 : offsetLeft)}px`
           checkboxRangeElem.style.top = `${disY + (offsetTop > 0 ? 0 : offsetTop)}px`
           checkboxRangeElem.style.zIndex = `${this.tZindex}`
-          if (rangeRows.length !== lastRangeRows.length) {
+          // 至少滑动 10px 才能有效匹配
+          if (rangeHeight > 10 & rangeRows.length !== lastRangeRows.length) {
             lastRangeRows = rangeRows
             if (evnt.ctrlKey) {
               rangeRows.forEach(row => {

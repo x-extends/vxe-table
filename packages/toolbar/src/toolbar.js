@@ -59,6 +59,8 @@ export default {
         isFooter: false
       },
       customStore: {
+        isAll: false,
+        isIndeterminate: false,
         visible: false
       }
     }
@@ -145,7 +147,9 @@ export default {
           },
           props: {
             icon: item.icon,
-            disabled: item.disabled
+            type: item.type,
+            disabled: item.disabled,
+            loading: item.loading
           },
           scopedSlots: item.dropdowns && item.dropdowns.length ? {
             default: () => UtilTools.getFuncText(item.name),
@@ -156,7 +160,9 @@ export default {
                 },
                 props: {
                   icon: child.icon,
-                  disabled: child.disabled
+                  type: child.type,
+                  disabled: child.disabled,
+                  loading: child.loading
                 }
               }, UtilTools.getFuncText(child.name))
             })
@@ -241,17 +247,33 @@ export default {
           h('div', {
             class: 'vxe-custom--option-wrapper'
           }, [
+            h('div', {
+              class: 'vxe-custom--header'
+            }, [
+              h('li', {
+                class: {
+                  'is--checked': customStore.isAll,
+                  'is--indeterminate': customStore.isIndeterminate
+                },
+                attrs: {
+                  title: GlobalConfig.i18n('vxe.table.allTitle')
+                },
+                on: {
+                  click: this.allCustomEvent
+                }
+              }, GlobalConfig.i18n('vxe.toolbar.customAll'))
+            ]),
             h('ul', {
-              class: 'vxe-custom--option',
+              class: 'vxe-custom--body',
               on: customWrapperOns
             }, tableFullColumn.map(column => {
               let headerTitle = column.getTitle()
               let isDisabled = customOpts.checkMethod ? !customOpts.checkMethod({ column }) : false
               return headerTitle ? h('li', {
-                class: {
+                class: ['vxe-custom--option', {
                   'is--checked': column.visible,
                   'is--disabled': isDisabled
-                },
+                }],
                 attrs: {
                   title: headerTitle
                 },
@@ -262,6 +284,7 @@ export default {
                       if ((custom || setting) && customOpts.immediate) {
                         this.handleCustoms()
                       }
+                      this.checkCustomStatus()
                     }
                   }
                 }
@@ -313,8 +336,9 @@ export default {
       let selfIndex = $children.indexOf(this)
       this.$table = XEUtils.find($children, (comp, index) => comp && comp.refreshColumn && index > selfIndex && comp.$vnode.componentOptions.tag === 'vxe-table')
     },
-    openSetting () {
+    openCustom () {
       this.customStore.visible = true
+      this.checkCustomStatus()
     },
     closeCustom () {
       let { custom, setting, customStore } = this
@@ -383,11 +407,12 @@ export default {
     },
     saveColumnHide () {
       let { id, tableFullColumn, customOpts } = this
-      if (customOpts.storage) {
-        let columnHideStorageMap = this.getStorageMap(customOpts.storageKey)
-        let colHides = tableFullColumn.filter(column => column.property && !column.visible)
+      let { checkMethod, storage, storageKey } = customOpts
+      if (storage) {
+        let columnHideStorageMap = this.getStorageMap(storageKey)
+        let colHides = tableFullColumn.filter(column => column.property && !column.visible && (!checkMethod || checkMethod({ column })))
         columnHideStorageMap[id] = colHides.length ? colHides.map(column => column.property).join(',') : undefined
-        localStorage.setItem(customOpts.storageKey, XEUtils.toJSONString(columnHideStorageMap))
+        localStorage.setItem(storageKey, XEUtils.toJSONString(columnHideStorageMap))
       }
       return this.$nextTick()
     },
@@ -429,9 +454,12 @@ export default {
       this.closeCustom()
     },
     resetCustomEvent () {
+      let { checkMethod } = this.customOpts
       this.tableFullColumn.forEach(column => {
-        column.visible = true
-        column.resizeWidth = 0
+        if (!checkMethod || checkMethod({ column })) {
+          column.visible = true
+          column.resizeWidth = 0
+        }
       })
       this.resetCustoms()
       this.resetResizable()
@@ -446,6 +474,23 @@ export default {
     handleCustoms () {
       (this.$grid || this.$table).refreshColumn()
       return this.saveColumnHide()
+    },
+    checkCustomStatus () {
+      let { checkMethod } = this.customOpts
+      let tableFullColumn = this.tableFullColumn
+      this.customStore.isAll = tableFullColumn.every(column => (checkMethod ? !checkMethod({ column }) : false) || column.visible)
+      this.customStore.isIndeterminate = !this.customStore.isAll && tableFullColumn.some(column => (!checkMethod || checkMethod({ column })) && column.visible)
+    },
+    allCustomEvent () {
+      let { checkMethod } = this.customOpts
+      let isAll = !this.customStore.isAll
+      this.tableFullColumn.forEach(column => {
+        if (!checkMethod || checkMethod({ column })) {
+          column.visible = isAll
+        }
+      })
+      this.customStore.isAll = isAll
+      this.checkCustomStatus()
     },
     handleGlobalKeydownEvent (evnt) {
       let isEsc = evnt.keyCode === 27
@@ -463,10 +508,11 @@ export default {
     },
     handleClickSettingEvent (evnt) {
       this.customStore.visible = !this.customStore.visible
+      this.checkCustomStatus()
     },
     handleMouseenterSettingEvent (evnt) {
       this.customStore.activeBtn = true
-      this.openSetting()
+      this.openCustom()
     },
     handleMouseleaveSettingEvent (evnt) {
       let { customStore } = this
@@ -479,7 +525,7 @@ export default {
     },
     handleWrapperMouseenterEvent (evnt) {
       this.customStore.activeWrapper = true
-      this.openSetting()
+      this.openCustom()
     },
     handleWrapperMouseleaveEvent (evnt) {
       let { customStore } = this
