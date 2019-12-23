@@ -502,7 +502,7 @@ export default {
       return Object.assign({}, GlobalConfig.checkboxConfig, this.checkboxConfig || this.selectConfig)
     },
     tooltipOpts () {
-      return Object.assign({ leaveDelay: 300 }, GlobalConfig.tooltipConfig, this.tooltipConfig)
+      return Object.assign({ size: this.vSize, leaveDelay: 300 }, GlobalConfig.tooltipConfig, this.tooltipConfig)
     },
     vaildTipOpts () {
       return Object.assign({ isArrow: false }, this.tooltipOpts)
@@ -3172,20 +3172,21 @@ export default {
               // 如果已经是激活状态
             } else {
               if (isLeftBtn) {
-                evnt.preventDefault()
-                evnt.stopPropagation()
                 this.handleSelected(params, evnt)
                 let domMousemove = document.onmousemove
                 let domMouseup = document.onmouseup
                 let start = DomTools.getCellIndexs(cell)
                 let updateEvent = XEUtils.throttle(function (evnt) {
-                  evnt.preventDefault()
                   let { flag, targetElem } = DomTools.getEventTargetNode(evnt, $el, 'vxe-body--column')
                   if (flag) {
                     handleChecked(start, DomTools.getCellIndexs(targetElem), evnt)
                   }
                 }, browse.msie ? 80 : 40, { leading: true, trailing: true })
-                document.onmousemove = updateEvent
+                document.onmousemove = evnt => {
+                  evnt.preventDefault()
+                  evnt.stopPropagation()
+                  updateEvent(evnt)
+                }
                 document.onmouseup = function (evnt) {
                   document.onmousemove = domMousemove
                   document.onmouseup = domMouseup
@@ -3227,13 +3228,16 @@ export default {
             columnIndex: visibleColumn.indexOf(checked.columns[0])
           }
           let updateEvent = XEUtils.throttle(function (evnt) {
-            evnt.preventDefault()
             let { flag, targetElem } = DomTools.getEventTargetNode(evnt, $el, 'vxe-body--column')
             if (flag) {
               handleTempChecked(start, DomTools.getCellIndexs(targetElem), evnt)
             }
           }, browse.msie ? 80 : 40, { leading: true, trailing: true })
-          document.onmousemove = updateEvent
+          document.onmousemove = evnt => {
+            evnt.preventDefault()
+            evnt.stopPropagation()
+            updateEvent(evnt)
+          }
           document.onmouseup = function (evnt) {
             document.onmousemove = domMousemove
             document.onmouseup = domMouseup
@@ -3260,8 +3264,6 @@ export default {
       let { column, cell } = params
       // 在 v3.0 中废弃 type=selection
       if (['checkbox', 'selection'].indexOf(column.type) > -1) {
-        evnt.preventDefault()
-        evnt.stopPropagation()
         const disX = evnt.clientX
         const disY = evnt.clientY
         const checkboxRangeElem = this.$refs.checkboxRange
@@ -3273,16 +3275,20 @@ export default {
         let lastRangeRows = []
         this.updateZindex()
         document.onmousemove = evnt => {
+          evnt.preventDefault()
+          evnt.stopPropagation()
           let offsetLeft = evnt.clientX - disX
           let offsetTop = evnt.clientY - disY
+          let rangeHeight = Math.abs(offsetTop)
           let rangeRows = this.getRangeResult(trEleme, evnt.clientY - absPos.top)
           checkboxRangeElem.style.display = 'block'
           checkboxRangeElem.style.width = `${Math.abs(offsetLeft)}px`
-          checkboxRangeElem.style.height = `${Math.abs(offsetTop)}px`
+          checkboxRangeElem.style.height = `${rangeHeight}px`
           checkboxRangeElem.style.left = `${disX + (offsetLeft > 0 ? 0 : offsetLeft)}px`
           checkboxRangeElem.style.top = `${disY + (offsetTop > 0 ? 0 : offsetTop)}px`
           checkboxRangeElem.style.zIndex = `${this.tZindex}`
-          if (rangeRows.length !== lastRangeRows.length) {
+          // 至少滑动 10px 才能有效匹配
+          if (rangeHeight > 10 & rangeRows.length !== lastRangeRows.length) {
             lastRangeRows = rangeRows
             if (evnt.ctrlKey) {
               rangeRows.forEach(row => {

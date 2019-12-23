@@ -91,6 +91,7 @@ const GridPage = () => import(/* webpackChunkName: "grid" */ './views/table/grid
 const GridFullQuery = () => import(/* webpackChunkName: "grid" */ './views/table/grid/FullQuery.vue')
 const GridProxy = () => import(/* webpackChunkName: "grid" */ './views/table/grid/Proxy.vue')
 const GridPageProxy = () => import(/* webpackChunkName: "grid" */ './views/table/grid/PageProxy.vue')
+const GridConfigProxy = () => import(/* webpackChunkName: "grid" */ './views/table/grid/ConfigProxy.vue')
 const GridEdit = () => import(/* webpackChunkName: "grid" */ './views/table/grid/Edit.vue')
 const GridCellDisable = () => import(/* webpackChunkName: "grid" */ './views/table/grid/CellDisable.vue')
 const GridRowDisable = () => import(/* webpackChunkName: "grid" */ './views/table/grid/RowDisable.vue')
@@ -885,6 +886,11 @@ export default new Router({
       path: '/table/grid/pageProxy',
       name: 'GridPageProxy',
       component: GridPageProxy
+    },
+    {
+      path: '/table/grid/configProxy',
+      name: 'GridConfigProxy',
+      component: GridConfigProxy
     },
     {
       path: '/table/grid/edit',

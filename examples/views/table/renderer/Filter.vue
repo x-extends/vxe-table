@@ -483,7 +483,7 @@ export default {
         })
         `,
         `
-        .vxe-table--filter-wrapper.myexcel-filter-render .vxe-table--filter-body {
+        .vxe-table--filter-wrapper.myexcel-filter-render .vxe-table--filter-template {
           overflow: initial;
           max-height: initial;
           padding: 0;

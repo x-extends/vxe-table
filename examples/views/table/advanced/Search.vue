@@ -33,6 +33,12 @@
           <span v-html="row.address"></span>
         </template>
       </vxe-table-column>
+      <template v-slot:empty>
+        <span style="color: red;">
+          <img src="static/other/img2.gif">
+          <p>没有更多数据了！</p>
+        </span>
+      </template>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -132,6 +138,12 @@ export default {
               <span v-html="row.address"></span>
             </template>
           </vxe-table-column>
+          <template v-slot:empty>
+            <span style="color: red;">
+              <img src="static/other/img2.gif">
+              <p>没有更多数据了！</p>
+            </span>
+          </template>
         </vxe-table>
         `,
         `

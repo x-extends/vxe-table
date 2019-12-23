@@ -74,10 +74,11 @@ module.exports = {
         tabs: '多页签切换',
         keepAlives: 'keep-alive 切换',
 
-        grid: '配置式表格',
+        grid: '高级表格',
         reverse: '反转表格',
         proxy: '数据代理',
         proxyPage: '数据代理 + 分页',
+        configProxy: '配置式数据代理',
         fullQuery: '完整查询',
         customToolbar: '自定义工具栏',
         toolbarIcon: '自定义工具栏按钮图标',

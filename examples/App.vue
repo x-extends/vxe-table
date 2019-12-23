@@ -582,6 +582,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.configProxy',
+              locat: {
+                name: 'GridConfigProxy'
+              }
+            },
+            {
               label: 'app.aside.nav.fullQuery',
               locat: {
                 name: 'GridFullQuery'

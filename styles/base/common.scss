@@ -9,6 +9,13 @@
   }
 }
 
+body {
+  margin: 0;
+  line-height: 1.5;
+  font-variant: tabular-nums;
+  font-feature-settings: 'tnum';
+}
+
 /*animat*/
 .t--animat {
   .vxe-sort--asc-btn,

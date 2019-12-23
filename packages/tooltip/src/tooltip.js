@@ -6,6 +6,7 @@ export default {
   name: 'VxeTooltip',
   props: {
     value: Boolean,
+    size: String,
     trigger: { type: String, default: () => GlobalConfig.tooltip.trigger },
     theme: { type: String, default: () => GlobalConfig.tooltip.theme },
     content: [String, Function],
@@ -26,6 +27,11 @@ export default {
         placement: '',
         arrowStyle: null
       }
+    }
+  },
+  computed: {
+    vSize () {
+      return this.size || this.$parent.size || this.$parent.vSize
     }
   },
   watch: {
@@ -83,7 +89,7 @@ export default {
     }
   },
   render (h) {
-    let { theme, message, isHover, isArrow, visible, tipStore, enterable } = this
+    let { vSize, theme, message, isHover, isArrow, visible, tipStore, enterable } = this
     let on = null
     if (enterable) {
       on = {
@@ -93,6 +99,7 @@ export default {
     }
     return h('div', {
       class: ['vxe-table--tooltip-wrapper', `theme--${theme}`, `placement--${tipStore.placement}`, {
+        [`size--${vSize}`]: vSize,
         'is--enterable': enterable,
         'is--visible': visible,
         'is--arrow': isArrow,
