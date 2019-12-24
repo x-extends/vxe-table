@@ -1509,6 +1509,15 @@ const apis = [
             list: []
           },
           {
+            name: 'isEnter',
+            desc: '开启回车键功能',
+            version: '',
+            type: 'Boolean',
+            enum: '',
+            defVal: 'false',
+            list: []
+          },
+          {
             name: 'isTab',
             desc: '开启 Tab 键功能',
             version: '',

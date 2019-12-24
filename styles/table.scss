@@ -237,6 +237,11 @@
       text-align: right;
     }
   }
+  .vxe-body--column {
+    &.col--checkbox {
+      user-select: none;
+    }
+  }
   &.t--border {
     .vxe-header--column,
     .vxe-body--column,

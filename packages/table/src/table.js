@@ -2184,7 +2184,7 @@ export default {
             } else {
               this.triggerRadioRowEvent(evnt, selected.args)
             }
-          } else if (isEnter && (keyboardConfig.isArrow || keyboardConfig.isTab) && (selected.row || actived.row || (treeConfig && highlightCurrentRow && currentRow))) {
+          } else if (isEnter && keyboardConfig.isEnter && (selected.row || actived.row || (treeConfig && highlightCurrentRow && currentRow))) {
           // 如果是激活状态，退则出到下一行
             if (selected.row || actived.row) {
               this.moveSelected(selected.row ? selected.args : actived.args, isLeftArrow, isUpArrow, isRightArrow, true, evnt)

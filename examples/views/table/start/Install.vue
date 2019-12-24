@@ -25,10 +25,10 @@
     <pre>
       <code class="xml">
         &lt;!-- 引入样式 --&gt;
-        &lt;link rel="stylesheet" href="https://unpkg.com/vxe-table/lib/index.css"&gt;
+        &lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vxe-table/lib/index.css"&gt;
         &lt;!-- 引入脚本 --&gt;
-        &lt;script src="https://unpkg.com/xe-utils"&gt;&lt;/script&gt;
-        &lt;script src="https://unpkg.com/vxe-table"&gt;&lt;/script&gt;
+        &lt;script src="https://cdn.jsdelivr.net/npm/xe-utils"&gt;&lt;/script&gt;
+        &lt;script src="https://cdn.jsdelivr.net/npm/vxe-table"&gt;&lt;/script&gt;
       </code>
     </pre>
   </div>
