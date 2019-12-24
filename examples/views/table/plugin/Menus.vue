@@ -11,7 +11,7 @@
       :data="tableData"
       :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}, footer: {options: footerMenus}}"
       :mouse-config="{selected: true}"
-      :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true}"
+      :keyboard-config="{isArrow: true, isDel: true, isEnter: true, isTab: true, isEdit: true}"
       :edit-config="{trigger: 'dblclick', mode: 'cell'}">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable :edit-render="{name: 'input'}"></vxe-table-column>
@@ -94,7 +94,7 @@ export default {
           :data="tableData"
           :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}, footer: {options: footerMenus}}"
           :mouse-config="{selected: true}"
-          :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true}"
+          :keyboard-config="{isArrow: true, isDel: true, isEnter: true, isTab: true, isEdit: true}"
           :edit-config="{trigger: 'dblclick', mode: 'cell'}">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable :edit-render="{name: 'input'}"></vxe-table-column>

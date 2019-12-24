@@ -8,7 +8,7 @@
       height="500"
       :data="tableData"
       :mouse-config="{ selected: true, checked: true }"
-      :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true}"
+      :keyboard-config="{isArrow: true, isDel: true, isEnter: true, isTab: true, isEdit: true}"
       :context-menu="{body: {options: bodyMenus}}"
       :edit-config="{trigger: 'dblclick', mode: 'cell'}">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
@@ -122,7 +122,7 @@ export default {
           height="500"
           :data="tableData"
           :mouse-config="{ selected: true, checked: true }"
-          :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true}"
+          :keyboard-config="{isArrow: true, isDel: true, isEnter: true, isTab: true, isEdit: true}"
           :context-menu="{body: {options: bodyMenus}}"
           :edit-config="{trigger: 'dblclick', mode: 'cell'}">
           <vxe-table-column type="seq" width="60"></vxe-table-column>

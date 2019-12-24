@@ -9,7 +9,8 @@
       height="500"
       :data="tableData"
       :mouse-config="{selected: true}"
-      :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true, editMethod}"
+      :checkbox-config="{range: true}"
+      :keyboard-config="{isArrow: true, isDel: true, isEnter: true, isTab: true, isEdit: true, editMethod}"
       :edit-config="{trigger: 'dblclick', mode: 'cell'}">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column type="checkbox" width="60"></vxe-table-column>
@@ -44,7 +45,8 @@ export default {
           height="500"
           :data="tableData"
           :mouse-config="{selected: true}"
-          :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true, editMethod}"
+          :checkbox-config="{range: true}"
+          :keyboard-config="{isArrow: true, isDel: true, isEnter: true, isTab: true, isEdit: true, editMethod}"
           :edit-config="{trigger: 'dblclick', mode: 'cell'}">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column type="checkbox" width="60"></vxe-table-column>
