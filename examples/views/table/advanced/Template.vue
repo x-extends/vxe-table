@@ -28,6 +28,12 @@
       resizable
       :data="tableData">
       <vxe-table-column type="seq" width="100" show-overflow>
+        <template v-slot:header="{ row }">
+          <div class="first-col">
+            <div class="first-col-top">名称</div>
+            <div class="first-col-bottom">序号</div>
+          </div>
+        </template>
         <template v-slot="{ row, seq }">
           <vxe-button @click="showDetailEvent(row)">弹框{{ seq }}</vxe-button>
         </template>
@@ -92,6 +98,7 @@
     <pre>
       <code class="xml">{{ demoCodes[0] }}</code>
       <code class="javascript">{{ demoCodes[1] }}</code>
+      <code class="css">{{ demoCodes[2] }}</code>
     </pre>
   </div>
 </template>
@@ -129,6 +136,12 @@ export default {
           resizable
           :data="tableData">
           <vxe-table-column type="seq" width="100" show-overflow>
+            <template v-slot:header="{ row }">
+              <div class="first-col">
+                <div class="first-col-top">名称</div>
+                <div class="first-col-bottom">序号</div>
+              </div>
+            </template>
             <template v-slot="{ row, seq }">
               <vxe-button @click="showDetailEvent(row)">弹框{{ seq }}</vxe-button>
             </template>
@@ -217,6 +230,32 @@ export default {
             }
           }
         }
+        `,
+        `
+        .first-col {
+          position: relative;
+          height: 20px;
+        }
+        .first-col:before {
+          content: "";
+          position: absolute;
+          left: -15px;
+          top: 10px;
+          width: 110px;
+          height: 1px;
+          transform: rotate(28deg);
+          background-color: #e8eaec;
+        }
+        .first-col .first-col-top {
+          position: absolute;
+          right: 4px;
+          top: -10px;
+        }
+        .first-col .first-col-bottom {
+          position: absolute;
+          left: 4px;
+          bottom: -10px;
+        }
         `
       ]
     }
@@ -247,3 +286,30 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.first-col {
+  position: relative;
+  height: 20px;
+}
+.first-col:before {
+  content: "";
+  position: absolute;
+  left: -15px;
+  top: 10px;
+  width: 110px;
+  height: 1px;
+  transform: rotate(28deg);
+  background-color: #e8eaec;
+}
+.first-col .first-col-top {
+  position: absolute;
+  right: 4px;
+  top: -10px;
+}
+.first-col .first-col-bottom {
+  position: absolute;
+  left: 4px;
+  bottom: -10px;
+}
+</style>

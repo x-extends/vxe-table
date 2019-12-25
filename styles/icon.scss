@@ -314,8 +314,8 @@
   &:before {
     @extend %PseudoClass;
     content: "+";
-    top: 0.01em;
-    left: -0.08em;
+    top: -0.02em;
+    left: -0.12em;
     font-size: 2.4em;
     font-weight: normal;
     transform: rotate(45deg);

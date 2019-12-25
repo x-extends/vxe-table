@@ -46,7 +46,20 @@ export default {
       selectRow: null,
       tableData: [],
       tableColumn: [
-        { type: 'seq', width: 50 },
+        {
+          type: 'seq',
+          width: 100,
+          slots: {
+            header: ({ row }) => {
+              return [
+                <div class="first-col">
+                  <div class="first-col-top">名称</div>
+                  <div class="first-col-bottom">序号</div>
+                </div>
+              ]
+            }
+          }
+        },
         {
           field: 'name',
           title: 'Name',
@@ -177,7 +190,20 @@ export default {
               selectRow: null,
               tableData: [],
               tableColumn: [
-                { type: 'seq', width: 50 },
+                {
+                  type: 'seq',
+                  width: 100,
+                  slots: {
+                    header: ({ row }) => {
+                      return [
+                        <div class="first-col">
+                          <div class="first-col-top">名称</div>
+                          <div class="first-col-bottom">序号</div>
+                        </div>
+                      ]
+                    }
+                  }
+                },
                 {
                   field: 'name',
                   title: 'Name',
@@ -307,6 +333,32 @@ export default {
             }
           }
         }
+        `,
+        `
+        .first-col {
+          position: relative;
+          height: 20px;
+        }
+        .first-col:before {
+          content: "";
+          position: absolute;
+          left: -15px;
+          top: 10px;
+          width: 110px;
+          height: 1px;
+          transform: rotate(28deg);
+          background-color: #e8eaec;
+        }
+        .first-col .first-col-top {
+          position: absolute;
+          right: 4px;
+          top: -10px;
+        }
+        .first-col .first-col-bottom {
+          position: absolute;
+          left: 4px;
+          bottom: -10px;
+        }
         `
       ]
     }
@@ -341,3 +393,30 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.first-col {
+  position: relative;
+  height: 20px;
+}
+.first-col:before {
+  content: "";
+  position: absolute;
+  left: -15px;
+  top: 10px;
+  width: 110px;
+  height: 1px;
+  transform: rotate(28deg);
+  background-color: #e8eaec;
+}
+.first-col .first-col-top {
+  position: absolute;
+  right: 4px;
+  top: -10px;
+}
+.first-col .first-col-bottom {
+  position: absolute;
+  left: 4px;
+  bottom: -10px;
+}
+</style>
