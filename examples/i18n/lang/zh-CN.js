@@ -215,8 +215,8 @@ module.exports = {
     body: {
       button: {
         viewCode: '查看代码',
-        runDemo: '入门示例',
-        showCode: '高级示例',
+        runDemo: '在线运行',
+        showCode: '显示代码',
         refresh: '刷新',
         insert: '新增',
         save: '保存',
