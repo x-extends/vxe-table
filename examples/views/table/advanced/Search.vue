@@ -13,10 +13,10 @@
       height="300"
       :data="list1">
       <vxe-table-column type="seq" width="80"></vxe-table-column>
-      <vxe-table-column type="html" field="name" title="Name"></vxe-table-column>
-      <vxe-table-column type="html" field="role" title="Role"></vxe-table-column>
-      <vxe-table-column type="html" field="age" title="Age"></vxe-table-column>
-      <vxe-table-column type="html" field="address" title="Address"></vxe-table-column>
+      <vxe-table-column field="name" title="Name" type="html"></vxe-table-column>
+      <vxe-table-column field="role" title="Role" type="html"></vxe-table-column>
+      <vxe-table-column field="age" title="Age" type="html"></vxe-table-column>
+      <vxe-table-column field="address" title="Address" type="html"></vxe-table-column>
       <template v-slot:empty>
         <span style="color: red;">
           <img src="static/other/img2.gif">
@@ -47,10 +47,16 @@
       max-height="400"
       :data="list2">
       <vxe-table-column type="seq" width="220" title="序号" tree-node></vxe-table-column>
-      <vxe-table-column type="html" field="name" title="Name"></vxe-table-column>
-      <vxe-table-column type="html" field="size" title="Size"></vxe-table-column>
-      <vxe-table-column type="html" field="type" title="Type"></vxe-table-column>
-      <vxe-table-column type="html" field="date" title="Date"></vxe-table-column>
+      <vxe-table-column field="name" title="Name" type="html"></vxe-table-column>
+      <vxe-table-column field="size" title="Size" type="html"></vxe-table-column>
+      <vxe-table-column field="type" title="Type" type="html"></vxe-table-column>
+      <vxe-table-column field="date" title="Date" type="html"></vxe-table-column>
+      <template v-slot:empty>
+        <span style="color: red;">
+          <img src="static/other/img1.gif">
+          <p>搜索不到数据，可能输入的关键字姿势不对！</p>
+        </span>
+      </template>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -86,10 +92,10 @@ export default {
           height="300"
           :data="list">
           <vxe-table-column type="seq" width="80"></vxe-table-column>
-          <vxe-table-column type="html" field="name" title="Name"></vxe-table-column>
-          <vxe-table-column type="html" field="role" title="Role"></vxe-table-column>
-          <vxe-table-column type="html" field="age" title="Age"></vxe-table-column>
-          <vxe-table-column type="html" field="address" title="Address"></vxe-table-column>
+          <vxe-table-column field="name" title="Name" type="html"></vxe-table-column>
+          <vxe-table-column field="role" title="Role" type="html"></vxe-table-column>
+          <vxe-table-column field="age" title="Age" type="html"></vxe-table-column>
+          <vxe-table-column field="address" title="Address" type="html"></vxe-table-column>
           <template v-slot:empty>
             <span style="color: red;">
               <img src="static/other/img2.gif">
@@ -148,10 +154,16 @@ export default {
           max-height="400"
           :data="list">
           <vxe-table-column type="seq" width="220" title="序号" tree-node></vxe-table-column>
-          <vxe-table-column type="html" field="name" title="Name"></vxe-table-column>
-          <vxe-table-column type="html" field="size" title="Size"></vxe-table-column>
-          <vxe-table-column type="html" field="type" title="Type"></vxe-table-column>
-          <vxe-table-column type="html" field="date" title="Date"></vxe-table-column>
+          <vxe-table-column field="name" title="Name" type="html"></vxe-table-column>
+          <vxe-table-column field="size" title="Size" type="html"></vxe-table-column>
+          <vxe-table-column field="type" title="Type" type="html"></vxe-table-column>
+          <vxe-table-column field="date" title="Date" type="html"></vxe-table-column>
+          <template v-slot:empty>
+            <span style="color: red;">
+              <img src="static/other/img1.gif">
+              <p>搜索不到数据，可能输入的关键字姿势不对！</p>
+            </span>
+          </template>
         </vxe-table>
         `,
         `
