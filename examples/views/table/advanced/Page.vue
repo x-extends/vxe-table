@@ -2,7 +2,7 @@
   <div>
     <p class="tip">
       使用自带的分页 <pager-api-link name="vxe-pager"/><br>
-      如果要支持动态序号，可以通过 <table-api-link prop="start-index"/> 属性设置起始值<br>
+      如果要支持动态序号，可以通过 <table-api-link prop="seq-config"/>={<table-api-link prop="startIndex"/>} 属性设置起始值<br>
       如果要支持保留选中状态，可以通过设置 <table-api-link prop="checkbox-config"/> 的 <table-api-link prop="reserve"/> 属性<br>
       启用 reserve 功能需要有 row-id 唯一主键，可以通过调用 <table-api-link prop="getCheckboxReserveRecords"/> 方法获取获取已保留选中的行数据
     </p>
@@ -127,7 +127,7 @@
       row-id="id"
       size="mini"
       :loading="loading"
-      :start-index="(tablePage.currentPage - 1) * tablePage.pageSize"
+      :seq-config="{startIndex: (tablePage.currentPage - 1) * tablePage.pageSize}"
       :checkbox-config="{reserve: true}"
       :data="tableData">
       <vxe-table-column type="checkbox" width="60"></vxe-table-column>
@@ -372,7 +372,7 @@ export default {
           row-id="id"
           size="mini"
           :loading="loading"
-          :start-index="(tablePage.currentPage - 1) * tablePage.pageSize"
+          :seq-config="{startIndex: (tablePage.currentPage - 1) * tablePage.pageSize}"
           :checkbox-config="{reserve: true}"
           :data="tableData">
           <vxe-table-column type="checkbox" width="60"></vxe-table-column>

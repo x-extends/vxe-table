@@ -33,6 +33,7 @@
     <vxe-table
       show-overflow
       highlight-hover-row
+      row-key
       :show-header="false"
       :data="tableData"
       :checkbox-config="{labelField: 'name'}"
@@ -52,6 +53,7 @@
     <vxe-table
       show-overflow
       highlight-hover-row
+      row-key
       ref="xTree3"
       border="none"
       :show-header="false"
@@ -146,6 +148,7 @@ export default {
         <vxe-table
           show-overflow
           highlight-hover-row
+          row-key
           :show-header="false"
           :data="tableData"
           :checkbox-config="{labelField: 'name'}"
@@ -169,6 +172,7 @@ export default {
         <vxe-table
           show-overflow
           highlight-hover-row
+          row-key
           ref="xTree3"
           border="none"
           :show-header="false"

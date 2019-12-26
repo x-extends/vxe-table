@@ -60,7 +60,7 @@ export default {
         pageSizes: [5, 10, 20, 50, 100, 200, 500, 1000]
       },
       tableProxy: {
-        index: true, // 启用动态序号代理
+        seq: true, // 启用动态序号代理
         sort: true, // 启用排序代理
         filter: true, // 启用筛选代理
         ajax: {
@@ -174,7 +174,7 @@ export default {
                 pageSizes: [5, 10, 20, 50, 100, 200, 500, 1000]
               },
               tableProxy: {
-                index: true, // 启用动态序号代理
+                seq: true, // 启用动态序号代理
                 sort: true, // 启用排序代理
                 filter: true, // 启用筛选代理
                 ajax: {

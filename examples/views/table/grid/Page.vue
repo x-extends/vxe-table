@@ -10,7 +10,7 @@
       resizable
       height="530"
       :loading="loading"
-      :start-index="(tablePage.currentPage - 1) * tablePage.pageSize"
+      :seq-config="{startIndex: (tablePage.currentPage - 1) * tablePage.pageSize}"
       :pager-config="tablePage"
       :columns="tableColumn"
       :data="tableData"
@@ -57,7 +57,7 @@ export default {
           resizable
           height="530"
           :loading="loading"
-          :start-index="(tablePage.currentPage - 1) * tablePage.pageSize"
+          :seq-config="{startIndex: (tablePage.currentPage - 1) * tablePage.pageSize}"
           :pager-config="tablePage"
           :columns="tableColumn"
           :data="tableData"

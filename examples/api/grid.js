@@ -103,8 +103,18 @@ const apis = [
           },
           {
             name: 'index',
-            desc: '存在 type=index 列时有效，是否代理动态序号（根据分页动态变化）',
+            disabled: true,
+            desc: '即将废弃，请使用 seq',
             version: '',
+            type: 'Boolean',
+            enum: '',
+            defVal: 'false',
+            list: []
+          },
+          {
+            name: 'seq',
+            desc: '存在 type=index 列时有效，是否代理动态序号（根据分页动态变化）',
+            version: '2.7.12',
             type: 'Boolean',
             enum: '',
             defVal: 'false',
