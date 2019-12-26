@@ -365,6 +365,9 @@ export default {
     vaildTipOpts () {
       return Object.assign({ isArrow: false }, this.tooltipOpts)
     },
+    editOpts () {
+      return Object.assign({}, GlobalConfig.editConfig, this.editConfig)
+    },
     sortOpts () {
       return Object.assign({}, GlobalConfig.sortConfig, this.sortConfig)
     },

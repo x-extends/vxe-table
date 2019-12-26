@@ -30,6 +30,9 @@ const GlobalConfig = {
   // validConfig: {
   //   message: 'default'
   // },
+  // editConfig: {
+  //   mode: 'cell'
+  // },
   // resizable: false,
   // stripe: false,
   // border: false,
