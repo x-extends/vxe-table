@@ -27,7 +27,11 @@
       @header-cell-context-menu="headerCellContextMenuEvent"
       @cell-context-menu="cellContextMenuEvent"
       @context-menu-click="contextMenuClickEvent">
-      <vxe-table-column field="name" title="app.api.title.prop" type="html" min-width="280" :filters="nameFilters" tree-node></vxe-table-column>
+      <vxe-table-column field="name" title="app.api.title.prop" min-width="280" :filters="nameFilters" tree-node>
+        <template v-slot="{ row }">
+          <span v-html="row.name"></span>
+        </template>
+      </vxe-table-column>
       <vxe-table-column field="desc" title="app.api.title.desc" type="html" min-width="200"></vxe-table-column>
       <vxe-table-column field="type" title="app.api.title.type" type="html" min-width="140"></vxe-table-column>
       <vxe-table-column field="enum" :title="$t('app.api.title.enum')" type="html" min-width="150"></vxe-table-column>
