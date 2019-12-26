@@ -50,6 +50,7 @@ const Methods = {
    * 重置表格的一切数据状态
    */
   clearAll () {
+    this.inited = false
     this.clearSort()
     this.clearCurrentRow()
     this.clearCurrentColumn()
@@ -146,9 +147,11 @@ const Methods = {
    * @param {Array} datas 数据
    */
   reloadData (datas) {
-    this.inited = true
     return this.clearAll()
-      .then(() => this.loadTableData(datas))
+      .then(() => {
+        this.inited = true
+        return this.loadTableData(datas)
+      })
       .then(this.handleDefaults)
   },
   /**

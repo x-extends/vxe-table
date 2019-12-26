@@ -187,26 +187,12 @@ export default {
     }
   },
   mounted () {
-    let { $refs, columns, proxyConfig, proxyOpts } = this
-    let $table = $refs.xTable
-    let defaultSort = $table.sortOpts.defaultSort
+    let { columns, proxyConfig, proxyOpts } = this
     if (columns && columns.length) {
       this.loadColumn(this.columns)
     }
-    // 如果使用默认排序
-    if (defaultSort) {
-      let { field, order } = defaultSort
-      this.sortData = {
-        column: columns.find(column => column.property === field),
-        property: field,
-        field: field,
-        prop: field,
-        order,
-        $table
-      }
-    }
     if (proxyConfig && proxyOpts.autoLoad !== false) {
-      this.commitProxy('query')
+      this.commitProxy('reload')
     }
   },
   render (h) {
@@ -272,8 +258,9 @@ export default {
      * @param {String/Object} code 字符串或对象
      */
     commitProxy (code) {
-      const { toolbar, toolbarOpts, proxyOpts, tablePage, pagerConfig, sortData, filterData, isMsg } = this
+      const { $refs, toolbar, toolbarOpts, proxyOpts, tablePage, pagerConfig, sortData, filterData, isMsg } = this
       const { beforeQuery, beforeDelete, beforeSave, ajax = {}, props = {} } = proxyOpts
+      const $table = $refs.xTable
       const args = XEUtils.slice(arguments, 1)
       let button
       if (XEUtils.isString(code)) {
@@ -331,10 +318,23 @@ export default {
               params.page = tablePage
             }
             if (code === 'reload') {
+              let defaultSort = $table.sortOpts.defaultSort
+              let sortParams = {}
               if (pagerConfig) {
                 tablePage.currentPage = 1
               }
-              this.sortData = params.sort = {}
+              // 如果使用默认排序
+              if (defaultSort) {
+                sortParams = {
+                  property: defaultSort.field,
+                  field: defaultSort.field,
+                  // v3 废弃 prop
+                  prop: defaultSort.field,
+                  order: defaultSort.order,
+                  $table
+                }
+              }
+              this.sortData = params.sort = sortParams
               this.filterData = params.filters = []
               this.pendingRecords = []
               this.clearAll()
@@ -435,7 +435,7 @@ export default {
         default:
           let btnMethod = Buttons.get(code)
           if (btnMethod) {
-            btnMethod.apply(this, [{ code, button, $grid: this, $table: this.$refs.xTable }].concat(args))
+            btnMethod.apply(this, [{ code, button, $grid: this, $table }].concat(args))
           }
       }
       return this.$nextTick()
