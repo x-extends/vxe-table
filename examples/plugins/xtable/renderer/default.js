@@ -1,15 +1,5 @@
 import VXETable from '../../../../packages/v-x-e-table'
 
-// 创建一个超HTML标签渲染器
-VXETable.renderer.add('KeyHTML', {
-  // 默认显示模板
-  renderDefault (h, cellRender, params) {
-    return [
-      <span domPropsInnerHTML={ params.row[params.column.property] || '&#12288;' }></span>
-    ]
-  }
-})
-
 // 创建一个超链接渲染器
 VXETable.renderer.add('MyLink', {
   // 默认显示模板

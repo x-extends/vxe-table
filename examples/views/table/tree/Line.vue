@@ -9,6 +9,7 @@
       resizable
       show-overflow
       highlight-hover-row
+      row-key
       :tree-config="{children: 'children', line: true}"
       :data="tableData">
       <vxe-table-column field="name" title="Name" tree-node></vxe-table-column>
@@ -31,6 +32,7 @@
       show-overflow
       highlight-hover-row
       highlight-current-row
+      row-key
       size="medium"
       :tree-config="{children: 'children', line: true, iconOpen: 'vxe-icon--caret-right rotate45', iconClose: 'vxe-icon--caret-right'}"
       :checkbox-config="{labelField: 'name'}"
@@ -54,6 +56,7 @@
       resizable
       show-overflow
       highlight-hover-row
+      row-key
       size="small"
       :radio-config="{labelField: 'name'}"
       :tree-config="{children: 'children', line: true, iconOpen: 'fa fa-minus-square-o', iconClose: 'fa fa-plus-square-o'}"
@@ -77,6 +80,7 @@
       resizable
       show-overflow
       highlight-hover-row
+      row-key
       ref="xTree"
       size="mini"
       :checkbox-config="{labelField: 'name'}"
@@ -123,6 +127,7 @@ export default {
           resizable
           show-overflow
           highlight-hover-row
+          row-key
           :tree-config="{children: 'children', line: true}"
           :data="tableData">
           <vxe-table-column field="name" title="Name" tree-node></vxe-table-column>
@@ -149,6 +154,7 @@ export default {
           show-overflow
           highlight-hover-row
           highlight-current-row
+          row-key
           size="medium"
           :tree-config="{children: 'children', line: true, iconOpen: 'vxe-icon--caret-right rotate45', iconClose: 'vxe-icon--caret-right'}"
           :checkbox-config="{labelField: 'name'}"
@@ -176,6 +182,7 @@ export default {
           resizable
           show-overflow
           highlight-hover-row
+          row-key
           size="small"
           :radio-config="{labelField: 'name'}"
           :tree-config="{children: 'children', line: true, iconOpen: 'fa fa-minus-square-o', iconClose: 'fa fa-plus-square-o'}"
@@ -203,6 +210,7 @@ export default {
           resizable
           show-overflow
           highlight-hover-row
+          row-key
           ref="xTree"
           size="mini"
           :tree-config="{children: 'children', line: true, iconOpen: 'fa fa-caret-down', iconClose: 'fa fa-caret-right'}"

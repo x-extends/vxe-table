@@ -167,7 +167,7 @@ export const UtilTools = {
     return (filters || []).map(({ label, value, data, checked }) => ({ label, value, data, _data: data, checked: !!checked }))
   },
   formatText (value, placeholder) {
-    return '' + (value === null || value === void 0 ? (placeholder ? GlobalConfig.emptyCell : '') : value)
+    return '' + (value === '' || value === null || value === undefined ? (placeholder ? GlobalConfig.emptyCell : '') : value)
   },
   getCellValue (row, column) {
     return XEUtils.get(row, column.property)
