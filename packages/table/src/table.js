@@ -1022,6 +1022,7 @@ export default {
       return this.$grid ? this.$grid.getExcludeHeight() : 0
     },
     clearAll () {
+      this.inited = false
       this.clearSort()
       this.clearFilter()
       this.clearCurrentRow()
@@ -1088,9 +1089,11 @@ export default {
       return this.loadTableData(datas)
     },
     reloadData (datas) {
-      this.inited = true
       return this.clearAll()
-        .then(() => this.loadTableData(datas))
+        .then(() => {
+          this.inited = true
+          return this.loadTableData(datas)
+        })
         .then(this.handleDefaults)
     },
     reloadRow (row, record, field) {

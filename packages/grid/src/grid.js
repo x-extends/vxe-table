@@ -187,23 +187,9 @@ export default {
     }
   },
   mounted () {
-    let { $refs, columns, proxyConfig, proxyOpts } = this
-    let $table = $refs.xTable
-    let defaultSort = $table.sortOpts.defaultSort
+    let { columns, proxyConfig, proxyOpts } = this
     if (columns && columns.length) {
       this.loadColumn(this.columns)
-    }
-    // 如果使用默认排序
-    if (defaultSort) {
-      let { field, order } = defaultSort
-      this.sortData = {
-        column: columns.find(column => column.property === field),
-        property: field,
-        field: field,
-        prop: field,
-        order,
-        $table
-      }
     }
     if (proxyConfig && proxyOpts.autoLoad !== false) {
       this.commitProxy('query')
@@ -272,8 +258,9 @@ export default {
      * @param {String/Object} code 字符串或对象
      */
     commitProxy (code) {
-      const { toolbar, toolbarOpts, proxyOpts, tablePage, pagerConfig, sortData, filterData, isMsg } = this
-      const { ajax = {}, props = {} } = proxyOpts
+      const { $refs, toolbar, toolbarOpts, proxyOpts, tablePage, pagerConfig, sortData, filterData, isMsg } = this
+      const { beforeQuery, beforeDelete, beforeSave, ajax = {}, props = {} } = proxyOpts
+      const $table = $refs.xTable
       const args = XEUtils.slice(arguments, 1)
       let button
       if (XEUtils.isString(code)) {
@@ -317,26 +304,42 @@ export default {
           break
         case 'reload':
         case 'query': {
-          if (ajax.query) {
+          let ajaxMethods = ajax.query
+          if (ajaxMethods) {
             let params = {
+              code,
               $grid: this,
               sort: sortData,
-              filters: filterData
+              filters: filterData,
+              options: ajaxMethods
             }
             this.tableLoading = true
             if (pagerConfig) {
               params.page = tablePage
             }
             if (code === 'reload') {
+              let defaultSort = $table.sortOpts.defaultSort
+              let sortParams = {}
               if (pagerConfig) {
                 tablePage.currentPage = 1
               }
-              this.sortData = params.sort = {}
+              // 如果使用默认排序
+              if (defaultSort) {
+                sortParams = {
+                  property: defaultSort.field,
+                  field: defaultSort.field,
+                  // v3 废弃 prop
+                  prop: defaultSort.field,
+                  order: defaultSort.order,
+                  $table
+                }
+              }
+              this.sortData = params.sort = sortParams
               this.filterData = params.filters = []
               this.pendingRecords = []
               this.clearAll()
             }
-            return ajax.query.apply(this, [params].concat(args)).then(rest => {
+            return (beforeQuery || ajaxMethods).apply(this, [params].concat(args)).then(rest => {
               if (rest) {
                 if (pagerConfig) {
                   tablePage.total = XEUtils.get(rest, props.total || 'page.total') || 0
@@ -357,14 +360,15 @@ export default {
           break
         }
         case 'delete': {
-          if (ajax.delete) {
+          let ajaxMethods = ajax.delete
+          if (ajaxMethods) {
             let selectRecords = this.getCheckboxRecords()
             this.remove(selectRecords).then(() => {
               let removeRecords = this.getRemoveRecords()
               let body = { removeRecords }
               if (removeRecords.length) {
                 this.tableLoading = true
-                return ajax.delete.apply(this, [{ $grid: this, body }].concat(args)).then(result => {
+                return (beforeDelete || ajaxMethods).apply(this, [{ $grid: this, code, body, options: ajaxMethods }].concat(args)).then(result => {
                   this.tableLoading = false
                 }).catch(e => {
                   this.tableLoading = false
@@ -381,7 +385,8 @@ export default {
           break
         }
         case 'save': {
-          if (ajax.save) {
+          let ajaxMethods = ajax.save
+          if (ajaxMethods) {
             let body = Object.assign({ pendingRecords: this.pendingRecords }, this.getRecordset())
             let { insertRecords, removeRecords, updateRecords, pendingRecords } = body
             // 排除掉新增且标记为删除的数据
@@ -399,7 +404,7 @@ export default {
                   if (body.insertRecords.length || removeRecords.length || updateRecords.length || body.pendingRecords.length) {
                     this.tableLoading = true
                     resolve(
-                      ajax.save.apply(this, [{ $grid: this, body }].concat(args)).then(() => {
+                      (beforeSave || ajaxMethods).apply(this, [{ $grid: this, code, body, options: ajaxMethods }].concat(args)).then(() => {
                         this.$XModal.message({ id: code, message: GlobalConfig.i18n('vxe.grid.saveSuccess'), status: 'success' })
                         this.tableLoading = false
                       }).catch(e => {
@@ -430,7 +435,7 @@ export default {
         default:
           let btnMethod = Buttons.get(code)
           if (btnMethod) {
-            btnMethod.apply(this, [{ code, button, $grid: this, $table: this.$refs.xTable }].concat(args))
+            btnMethod.apply(this, [{ code, button, $grid: this, $table }].concat(args))
           }
       }
       return this.$nextTick()
