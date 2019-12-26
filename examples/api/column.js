@@ -374,7 +374,7 @@ const apis = [
           },
           {
             name: 'attrs',
-            desc: '渲染的属性（请查看目标渲染的 Attrs）',
+            desc: '渲染的属性（请查看目标渲染的 Attribute）',
             version: '',
             type: 'Object',
             enum: '',
@@ -420,7 +420,7 @@ const apis = [
           },
           {
             name: 'attrs',
-            desc: '渲染的属性（请查看目标渲染的 Attrs）',
+            desc: '渲染的属性（请查看目标渲染的 Attribute）',
             version: '',
             type: 'Object',
             enum: '',
@@ -511,7 +511,7 @@ const apis = [
           },
           {
             name: 'attrs',
-            desc: '渲染的属性（请查看目标渲染的 Attrs）',
+            desc: '渲染的属性（请查看目标渲染的 Attribute）',
             version: '',
             type: 'Object',
             enum: '',

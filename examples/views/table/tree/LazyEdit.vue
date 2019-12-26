@@ -17,8 +17,7 @@
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
       :tree-config="{lazy: true, children: 'children', hasChild: 'hasChild', loadMethod: loadChildrenMethod}"
       :data="tableData">
-      <vxe-table-column type="seq" width="260" tree-node></vxe-table-column>
-      <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="name" title="Name" width="260" tree-node :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="size" title="Size" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="type" title="Type" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="date" title="Date" :edit-render="{name: 'input'}"></vxe-table-column>
@@ -59,8 +58,7 @@ export default {
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
           :tree-config="{lazy: true, children: 'children', hasChild: 'hasChild', loadMethod: loadChildrenMethod}"
           :data="tableData">
-          <vxe-table-column type="seq" width="260" tree-node></vxe-table-column>
-          <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column field="name" title="Name" width="260" tree-node :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column field="size" title="Size" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column field="type" title="Type" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column field="date" title="Date" :edit-render="{name: 'input'}"></vxe-table-column>

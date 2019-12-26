@@ -6,7 +6,7 @@ import { UtilTools } from '../../tools'
 export const Cell = {
   createColumn ($table, _vm) {
     let { type, sortable, remoteSort, filters, editRender, treeNode } = _vm
-    let checkboxOpts = $table.checkboxOpts
+    let { editConfig, editOpts, checkboxOpts } = $table
     let renMaps = {
       renderHeader: this.renderHeader,
       renderCell: treeNode ? this.renderTreeCell : this.renderCell
@@ -21,24 +21,23 @@ export const Cell = {
         renMaps.renderHeader = this.renderRadioHeader
         renMaps.renderCell = treeNode ? this.renderTreeRadioCell : this.renderRadioCell
         break
-      // 在 v3.0 中废弃 selection
+      // 在 v3.0 中废弃 type=selection
       case 'checkbox':
       case 'selection':
         renMaps.renderHeader = this.renderSelectionHeader
-        // 在 v2.0 中废弃 checkProp
-        renMaps.renderCell = checkboxOpts.checkField || checkboxOpts.checkProp ? (treeNode ? this.renderTreeSelectionCellByProp : this.renderSelectionCellByProp) : (treeNode ? this.renderTreeSelectionCell : this.renderSelectionCell)
+        renMaps.renderCell = checkboxOpts.checkField ? (treeNode ? this.renderTreeSelectionCellByProp : this.renderSelectionCellByProp) : (treeNode ? this.renderTreeSelectionCell : this.renderSelectionCell)
         break
       case 'expand':
         renMaps.renderCell = this.renderExpandCell
         renMaps.renderData = this.renderExpandData
         break
       case 'html':
-        renMaps.renderCell = this.renderHTMLCell
+        renMaps.renderCell = treeNode ? this.renderTreeHTMLCell : this.renderHTMLCell
         break
       default:
         if (editRender) {
           renMaps.renderHeader = this.renderEditHeader
-          renMaps.renderCell = $table.editConfig && $table.editConfig.mode === 'cell' ? (treeNode ? this.renderTreeCellEdit : this.renderCellEdit) : (treeNode ? this.renderTreeRadioCell : this.renderRowEdit)
+          renMaps.renderCell = editConfig && editOpts.mode === 'cell' ? (treeNode ? this.renderTreeCellEdit : this.renderCellEdit) : (treeNode ? this.renderTreeRowEdit : this.renderRowEdit)
         } else if (filters && filters.length && (sortable || remoteSort)) {
           renMaps.renderHeader = this.renderSortAndFilterHeader
         } else if (sortable || remoteSort) {
@@ -77,13 +76,13 @@ export const Cell = {
     return [UtilTools.formatText(UtilTools.getCellLabel(row, column, params), 1)]
   },
   renderTreeCell (h, params) {
-    return Cell.renderTreeIcon(h, params).concat(Cell.renderCell.call(this, h, params))
+    return Cell.renderTreeIcon(h, params, Cell.renderCell.call(this, h, params))
   },
 
   /**
    * 树节点
    */
-  renderTreeIcon (h, params) {
+  renderTreeIcon (h, params, cellVNodes) {
     let { $table, isHidden } = params
     let { treeOpts, treeExpandeds, treeLazyLoadeds } = $table
     let { row, column, level } = params
@@ -108,26 +107,28 @@ export const Cell = {
       on.click = evnt => $table.triggerTreeExpandEvent(evnt, params)
     }
     return [
-      h('span', {
-        class: 'vxe-tree--indent',
-        style: {
-          width: `${level * (indent || 20)}px`
-        }
-      }),
-      h('span', {
-        class: ['vxe-tree-wrapper', {
+      h('div', {
+        class: ['vxe-cell--tree-none', {
           'is--active': isAceived
         }],
-        on
-      }, (rowChilds && rowChilds.length) || hasLazyChilds ? [
-        h('span', {
-          class: 'vxe-tree--btn-wrapper'
-        }, [
-          h('i', {
-            class: ['vxe-tree--node-btn', isLazyLoaded ? (iconLoaded || GlobalConfig.icon.treeLoaded) : (isAceived ? (iconOpen || GlobalConfig.icon.treeOpen) : (iconClose || GlobalConfig.icon.treeClose))]
-          })
-        ])
-      ] : [])
+        style: {
+          paddingLeft: `${level * indent}px`
+        }
+      }, [
+        (rowChilds && rowChilds.length) || hasLazyChilds ? [
+          h('div', {
+            class: 'vxe-tree--btn-wrapper',
+            on
+          }, [
+            h('i', {
+              class: ['vxe-tree--node-btn', isLazyLoaded ? (iconLoaded || GlobalConfig.icon.treeLoaded) : (isAceived ? (iconOpen || GlobalConfig.icon.treeOpen) : (iconClose || GlobalConfig.icon.treeClose))]
+            })
+          ])
+        ] : null,
+        h('div', {
+          class: 'vxe-tree-cell'
+        }, cellVNodes)
+      ])
     ]
   },
 
@@ -155,7 +156,7 @@ export const Cell = {
     return [UtilTools.formatText(seqMethod ? seqMethod(params) : level ? `${$seq}.${seq}` : (seqOpts.startIndex || startIndex) + seq, 1)]
   },
   renderTreeIndexCell (h, params) {
-    return Cell.renderTreeIcon(h, params).concat(Cell.renderIndexCell(h, params))
+    return Cell.renderTreeIcon(h, params, Cell.renderIndexCell(h, params))
   },
 
   /**
@@ -204,7 +205,7 @@ export const Cell = {
     ]
   },
   renderTreeRadioCell (h, params) {
-    return Cell.renderTreeIcon(h, params).concat(Cell.renderRadioCell(h, params))
+    return Cell.renderTreeIcon(h, params, Cell.renderRadioCell(h, params))
   },
 
   /**
@@ -283,7 +284,7 @@ export const Cell = {
     ]
   },
   renderTreeSelectionCell (h, params) {
-    return Cell.renderTreeIcon(h, params).concat(Cell.renderSelectionCell(h, params))
+    return Cell.renderTreeIcon(h, params, Cell.renderSelectionCell(h, params))
   },
   renderSelectionCellByProp (h, params) {
     let { $table, row, column, isHidden } = params
@@ -326,7 +327,7 @@ export const Cell = {
     ]
   },
   renderTreeSelectionCellByProp (h, params) {
-    return Cell.renderTreeIcon(h, params).concat(Cell.renderSelectionCellByProp(h, params))
+    return Cell.renderTreeIcon(h, params, Cell.renderSelectionCellByProp(h, params))
   },
 
   /**
@@ -398,6 +399,9 @@ export const Cell = {
         }
       })
     ]
+  },
+  renderTreeHTMLCell (h, params) {
+    return Cell.renderTreeIcon(h, params, Cell.renderHTMLCell(h, params))
   },
 
   /**
@@ -515,7 +519,7 @@ export const Cell = {
     return Cell.runRenderer(h, params, this, actived && actived.row === params.row)
   },
   renderTreeRowEdit (h, params) {
-    return Cell.renderTreeIcon(h, params).concat(Cell.renderRowEdit(h, params))
+    return Cell.renderTreeIcon(h, params, Cell.renderRowEdit(h, params))
   },
   // 单元格编辑模式
   renderCellEdit (h, params) {
@@ -524,7 +528,7 @@ export const Cell = {
     return Cell.runRenderer(h, params, this, actived && actived.row === params.row && actived.column === params.column)
   },
   renderTreeCellEdit (h, params) {
-    return Cell.renderTreeIcon(h, params).concat(Cell.renderCellEdit(h, params))
+    return Cell.renderTreeIcon(h, params, Cell.renderCellEdit(h, params))
   },
   runRenderer (h, params, _vm, isEdit) {
     let { $table, row, column } = params

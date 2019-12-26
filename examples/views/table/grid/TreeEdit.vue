@@ -49,12 +49,11 @@ export default {
         custom: true
       },
       tableColumn: [
-        { type: 'seq', title: '序号', width: 180, treeNode: true },
         { type: 'checkbox', title: '全选', width: 120 },
-        { field: 'name', title: '名称', editRender: { name: 'input' } },
+        { field: 'name', title: '名称', width: 220, treeNode: true, editRender: { name: 'input' } },
         { field: 'size', title: '大小', editRender: { name: 'input' } },
-        { field: 'createTime', title: 'app.body.label.createTime', formatter: this.formatterDate },
-        { field: 'updateTime', title: 'app.body.label.updateTime', formatter: this.formatterDate }
+        { field: 'createTime', title: 'app.body.label.createTime', editRender: { name: 'input', attrs: { type: 'date' } }, formatter: this.formatterDate },
+        { field: 'updateTime', title: 'app.body.label.updateTime', editRender: { name: 'input', attrs: { type: 'date' } }, formatter: this.formatterDate }
       ],
       demoCodes: [
         `
@@ -94,12 +93,11 @@ export default {
                 custom: true
               },
               tableColumn: [
-                { type: 'seq', title: '序号', width: 180, treeNode: true },
                 { type: 'checkbox', title: '全选', width: 120 },
-                { field: 'name', title: '名称', editRender: { name: 'input' } },
+                { field: 'name', title: '名称', width: 220, treeNode: true, editRender: { name: 'input' } },
                 { field: 'size', title: '大小', editRender: { name: 'input' } },
-                { field: 'createTime', title: 'app.body.label.createTime', formatter: this.formatterDate },
-                { field: 'updateTime', title: 'app.body.label.updateTime', formatter: this.formatterDate }
+                { field: 'createTime', title: 'app.body.label.createTime', editRender: { name: 'input', attrs: { type: 'date' } }, formatter: this.formatterDate },
+                { field: 'updateTime', title: 'app.body.label.updateTime', editRender: { name: 'input', attrs: { type: 'date' } }, formatter: this.formatterDate }
               ]
             }
           },

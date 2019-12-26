@@ -57,6 +57,9 @@
           validConfig: {
             message: 'default'
           },
+          editConfig: {
+            mode: 'cell'
+          },
           // 版本号（对于某些带 Storage 数据储存的功能有用到，上升版本号可以用于重置 Storage 数据）
           version: 0,
           // 配置式表格的默认参数

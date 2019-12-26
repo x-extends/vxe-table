@@ -507,6 +507,9 @@ export default {
     vaildTipOpts () {
       return Object.assign({ isArrow: false }, this.tooltipOpts)
     },
+    editOpts () {
+      return Object.assign({}, GlobalConfig.editConfig, this.editConfig)
+    },
     sortOpts () {
       return Object.assign({}, GlobalConfig.sortConfig, this.sortConfig)
     },
@@ -2095,7 +2098,7 @@ export default {
               if (editConfig.mode === 'row') {
                 let rowNode = DomTools.getEventTargetNode(evnt, $el, 'vxe-body--row')
                 // row 方式，如果点击了不同行
-                isClear = rowNode.flag ? getRowNode(rowNode.targetElem).item !== getRowNode(actived.args.cell.parentNode).item : 0
+                isClear = !rowNode.flag || getRowNode(rowNode.targetElem).item !== getRowNode(actived.args.cell.parentNode).item
               } else {
               // cell 方式，如果是非编辑列
                 isClear = !DomTools.getEventTargetNode(evnt, $el, 'col--edit').flag
@@ -3354,7 +3357,7 @@ export default {
       if ((treeOpts.trigger === 'row' || (column.treeNode && treeOpts.trigger === 'cell'))) {
         this.triggerTreeExpandEvent(evnt, params)
       }
-      if ((!column.treeNode || !DomTools.getEventTargetNode(evnt, $el, 'vxe-tree-wrapper').flag) && (column.type !== 'expand' || !DomTools.getEventTargetNode(evnt, $el, 'vxe-table--expanded').flag)) {
+      if ((!column.treeNode || !DomTools.getEventTargetNode(evnt, $el, 'vxe-tree--btn-wrapper').flag) && (column.type !== 'expand' || !DomTools.getEventTargetNode(evnt, $el, 'vxe-table--expanded').flag)) {
         // 如果是高亮行
         if (highlightCurrentRow) {
           if (radioOpts.trigger === 'row' || (!DomTools.getEventTargetNode(evnt, $el, 'vxe-cell--checkbox').flag && !DomTools.getEventTargetNode(evnt, $el, 'vxe-cell--radio').flag)) {

@@ -672,10 +672,6 @@
       border-bottom-color: transparent;
     }
   }
-  .vxe-tree--indent {
-    position: relative;
-    display: inline-block;
-  }
   .vxe-tree--line-wrapper {
     position: relative;
     display: block;
@@ -691,31 +687,31 @@
     border-color: $vxe-table-tree-node-line-color;
     pointer-events: none;
   }
-  .vxe-tree-wrapper {
-    display: inline;
-    padding-right: 1.5em;
-    vertical-align: middle;
+  .vxe-cell--tree-none {
     position: relative;
+  }
+  .vxe-tree--btn-wrapper {
+    position: absolute;
+    top: 50%;
+    width: 1em;
+    height: 1em;
+    text-align: center;
+    transform: translateY(-50%);
+    z-index: 1;
+    background-color: $vxe-table-background-color;
     user-select: none;
     cursor: pointer;
-    .vxe-tree--btn-wrapper {
-      position: absolute;
-      left: 0;
-      top: 50%;
-      width: 1em;
-      height: 1em;
-      text-align: center;
-      transform: translateY(-50%);
-      z-index: 1;
-      background-color: $vxe-table-background-color;
+  }
+  .vxe-tree--node-btn {
+    display: block;
+    color: lighten($vxe-font-color, 20%);
+    &:hover {
+      color: $vxe-font-color;
     }
-    .vxe-tree--node-btn {
-      display: block;
-      color: lighten($vxe-font-color, 20%);
-      &:hover {
-        color: $vxe-font-color;
-      }
-    }
+  }
+  .vxe-tree-cell {
+    display: block;
+    padding-left: 1.5em;
   }
 
   /*展开行*/
