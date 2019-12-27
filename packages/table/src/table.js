@@ -278,7 +278,7 @@ export default {
     // 按键配置项
     keyboardConfig: Object,
     // 编辑配置项
-    editConfig: Object,
+    editConfig: [Boolean, Object],
     // 校验配置项
     validConfig: Object,
     // 校验规则配置项
@@ -666,7 +666,7 @@ export default {
     }
   },
   created () {
-    let { data, scrollXStore, scrollYStore, optimizeOpts, ctxMenuOpts, showOverflow, radioOpts, checkboxOpts, treeConfig, treeOpts, editConfig, loading, showAllOverflow, showHeaderAllOverflow } = this
+    let { data, scrollXStore, scrollYStore, optimizeOpts, ctxMenuOpts, showOverflow, radioOpts, checkboxOpts, treeConfig, treeOpts, editConfig, editOpts, loading, showAllOverflow, showHeaderAllOverflow } = this
     let { scrollX, scrollY } = optimizeOpts
     if (loading) {
       this._isLoading = true
@@ -743,7 +743,7 @@ export default {
         UtilTools.warn('vxe.error.delProp', ['select-config.key', 'row-id'])
       } else if (treeConfig && treeOpts.key) {
         UtilTools.warn('vxe.error.delProp', ['tree-config.key', 'row-id'])
-      } else if (editConfig && editConfig.key) {
+      } else if (editConfig && editOpts.key) {
         UtilTools.warn('vxe.error.delProp', ['edit-config.key', 'row-id'])
       }
       if (data && data.length) {
@@ -2075,7 +2075,7 @@ export default {
      * 全局按下事件处理
      */
     handleGlobalMousedownEvent (evnt) {
-      let { $el, $refs, editStore, ctxMenuStore, editConfig = {}, filterStore, getRowNode } = this
+      let { $el, $refs, editStore, ctxMenuStore, editOpts, filterStore, getRowNode } = this
       let { actived } = editStore
       let { filterWrapper, validTip } = $refs
       if (filterWrapper) {
@@ -2089,14 +2089,14 @@ export default {
       }
       // 如果已激活了编辑状态
       if (actived.row) {
-        if (!(editConfig.autoClear === false)) {
+        if (!(editOpts.autoClear === false)) {
           if (validTip && DomTools.getEventTargetNode(evnt, validTip.$el).flag) {
             // 如果是激活状态，且点击了校验提示框
           } else if (!this.lastCallTime || this.lastCallTime + 50 < Date.now()) {
             // 如果手动调用了激活单元格，避免触发源被移除后导致重复关闭
             this.preventEvent(evnt, 'event.clearActived', actived.args, () => {
               let isClear
-              if (editConfig.mode === 'row') {
+              if (editOpts.mode === 'row') {
                 let rowNode = DomTools.getEventTargetNode(evnt, $el, 'vxe-body--row')
                 // row 方式，如果点击了不同行
                 isClear = !rowNode.flag || getRowNode(rowNode.targetElem).item !== getRowNode(actived.args.cell.parentNode).item
@@ -2275,7 +2275,7 @@ export default {
     },
     // 处理 Tab 键移动
     moveTabSelected (args, isLeft, evnt) {
-      let { afterFullData, visibleColumn, editConfig, isSeqColumn } = this
+      let { afterFullData, visibleColumn, editConfig, editOpts, isSeqColumn } = this
       let targetRow
       let targetRowIndex
       let targetColumn
@@ -2338,8 +2338,8 @@ export default {
         params.column = targetColumn
         params.cell = DomTools.getCell(this, params)
         if (editConfig) {
-          if (editConfig.trigger === 'click' || editConfig.trigger === 'dblclick') {
-            if (editConfig.mode === 'row') {
+          if (editOpts.trigger === 'click' || editOpts.trigger === 'dblclick') {
+            if (editOpts.mode === 'row') {
               this.handleActived(params, evnt)
             } else {
               this.handleSelected(params, evnt)
@@ -2646,12 +2646,12 @@ export default {
      * 触发 tooltip 事件
      */
     triggerTooltipEvent (evnt, params) {
-      let { editConfig, editStore, tooltipStore } = this
+      let { editConfig, editOpts, editStore, tooltipStore } = this
       let { actived } = editStore
       let { row, column } = params
       this.handleTargetEnterEvent()
       if (editConfig) {
-        if ((editConfig.mode === 'row' && actived.row === row) || (actived.row === row && actived.column === column)) {
+        if ((editOpts.mode === 'row' && actived.row === row) || (actived.row === row && actived.column === column)) {
           return
         }
       }
@@ -3178,7 +3178,7 @@ export default {
      * 选中事件
      */
     triggerCellMousedownEvent (evnt, params) {
-      let { $el, tableData, visibleColumn, editStore, checkboxOpts, mouseConfig = {}, editConfig, handleSelected, handleChecked } = this
+      let { $el, tableData, visibleColumn, editStore, checkboxOpts, mouseConfig = {}, editConfig, editOpts, handleSelected, handleChecked } = this
       let { checked, actived } = editStore
       let { row, column, cell } = params
       let { button } = evnt
@@ -3186,8 +3186,8 @@ export default {
       let isRightBtn = button === 2
       if (isLeftBtn || isRightBtn) {
         if (mouseConfig.checked) {
-          if (editConfig && editConfig.trigger === 'dblclick') {
-            if ((editConfig.mode === 'row' && actived.row === row) || (actived.row === row && actived.column === column)) {
+          if (editConfig && editOpts.trigger === 'dblclick') {
+            if ((editOpts.mode === 'row' && actived.row === row) || (actived.row === row && actived.column === column)) {
               // 如果已经是激活状态
             } else {
               if (isLeftBtn) {
@@ -3233,13 +3233,13 @@ export default {
     triggerCornerMousedownEvent (params, evnt) {
       evnt.preventDefault()
       evnt.stopPropagation()
-      let { $el, tableData, visibleColumn, editStore, editConfig, handleTempChecked } = this
+      let { $el, tableData, visibleColumn, editStore, editConfig, editOpts, handleTempChecked } = this
       let { checked } = editStore
       let { button } = evnt
       let isLeftBtn = button === 0
       let isRightBtn = button === 2
       if (isLeftBtn || isRightBtn) {
-        if (editConfig && checked.rows.length && editConfig.trigger === 'dblclick') {
+        if (editConfig && checked.rows.length && editOpts.trigger === 'dblclick') {
           let domMousemove = document.onmousemove
           let domMouseup = document.onmouseup
           let start = {
@@ -3354,7 +3354,7 @@ export default {
      * 如果是双击模式，则单击后选中状态
      */
     triggerCellClickEvent (evnt, params) {
-      let { $el, highlightCurrentRow, editStore, radioOpts, expandOpts, treeOpts, editConfig, checkboxOpts } = this
+      let { $el, highlightCurrentRow, editStore, radioOpts, expandOpts, treeOpts, editConfig, editOpts, checkboxOpts } = this
       let { actived } = editStore
       let { column, row } = params
       // 解决 checkbox 重复触发两次问题
@@ -3387,9 +3387,9 @@ export default {
           this.handleToggleCheckRowEvent(params, evnt)
         }
         if (editConfig) {
-          if (editConfig.trigger === 'click') {
+          if (editOpts.trigger === 'click') {
             if (!actived.args || row !== actived.row || column !== actived.column) {
-              if (editConfig.mode === 'row') {
+              if (editOpts.mode === 'row') {
                 this.triggerValidate('blur')
                   .catch(e => e)
                   .then(() => {
@@ -3397,14 +3397,14 @@ export default {
                       .then(() => this.triggerValidate('change'))
                       .catch(e => e)
                   })
-              } else if (editConfig.mode === 'cell') {
+              } else if (editOpts.mode === 'cell') {
                 this.handleActived(params, evnt)
                   .then(() => this.triggerValidate('change'))
                   .catch(e => e)
               }
             }
-          } else if (editConfig.trigger === 'dblclick') {
-            if (editConfig.mode === 'row' && actived.row === row) {
+          } else if (editOpts.trigger === 'dblclick') {
+            if (editOpts.mode === 'row' && actived.row === row) {
               this.triggerValidate('blur')
                 .catch(e => e)
                 .then(() => {
@@ -3425,18 +3425,18 @@ export default {
      * 如果是双击模式，则激活为编辑状态
      */
     triggerCellDBLClickEvent (evnt, params) {
-      let { editStore, editConfig } = this
+      let { editStore, editConfig, editOpts } = this
       let { actived } = editStore
       if (editConfig) {
-        if (editConfig.trigger === 'dblclick') {
+        if (editOpts.trigger === 'dblclick') {
           if (!actived.args || evnt.currentTarget !== actived.args.cell) {
-            if (editConfig.mode === 'row') {
+            if (editOpts.mode === 'row') {
               this.triggerValidate('blur').catch(e => e).then(() => {
                 this.handleActived(params, evnt)
                   .then(() => this.triggerValidate('change'))
                   .catch(e => e)
               })
-            } else if (editConfig.mode === 'cell') {
+            } else if (editOpts.mode === 'cell') {
               this.handleActived(params, evnt)
                 .then(() => this.triggerValidate('change'))
                 .catch(e => e)
@@ -3450,13 +3450,13 @@ export default {
      * 处理激活编辑
      */
     handleActived (params, evnt) {
-      let { editStore, editConfig } = this
-      let { activeMethod } = editConfig
+      let { editStore, editOpts } = this
+      let { mode, activeMethod } = editOpts
       let { actived } = editStore
       let { row, column, cell } = params
       let { editRender } = column
       if (editRender && cell) {
-        if (editConfig.mode === 'row' ? actived.row !== row : (actived.row !== row || actived.column !== column)) {
+        if (mode === 'row' ? actived.row !== row : (actived.row !== row || actived.column !== column)) {
           // 判断是否禁用编辑
           let type = 'edit-disabled'
           if (!activeMethod || activeMethod(params)) {
@@ -3543,12 +3543,12 @@ export default {
      * 处理选中源
      */
     handleSelected (params, evnt) {
-      let { mouseConfig = {}, editConfig, editStore } = this
+      let { mouseConfig = {}, editOpts, editStore } = this
       let { actived, selected } = editStore
       let { row, column } = params
       let selectMethod = () => {
         if ((mouseConfig.selected || mouseConfig.checked) && (selected.row !== row || selected.column !== column)) {
-          if (actived.row !== row || (editConfig.mode === 'cell' ? actived.column !== column : false)) {
+          if (actived.row !== row || (editOpts.mode === 'cell' ? actived.column !== column : false)) {
             this.clearChecked(evnt)
             this.clearActived(evnt)
             selected.args = params
@@ -3763,8 +3763,8 @@ export default {
      * 只对 trigger=dblclick 有效，选中单元格
      */
     setSelectCell (row, field) {
-      let { tableData, editConfig, visibleColumn } = this
-      if (row && field && editConfig.trigger !== 'manual') {
+      let { tableData, editOpts, visibleColumn } = this
+      if (row && field && editOpts.trigger !== 'manual') {
         let column = XEUtils.find(visibleColumn, column => column.property === field)
         let rowIndex = tableData.indexOf(row)
         if (rowIndex > -1 && column) {
@@ -4700,13 +4700,13 @@ export default {
       })
     },
     triggerValidate (type) {
-      let { editConfig, editStore, editRules, validStore } = this
+      let { editOpts, editStore, editRules, validStore } = this
       let { actived } = editStore
       // let type = validStore.visible ? 'all' : 'blur'
       // this.clearValidate()
       if (actived.row && editRules) {
         let { row, column, cell } = actived.args
-        // if (editConfig.mode === 'row') {
+        // if (editOpts.mode === 'row') {
         //   return this.validRowRules(type, row)
         //     .catch(params => {
         //       this.handleValidError(params)
@@ -4715,7 +4715,7 @@ export default {
         // } else {
         if (this.hasCellRules(type, row, column)) {
           return this.validCellRules(type, row, column).then(() => {
-            if (editConfig.mode === 'row') {
+            if (editOpts.mode === 'row') {
               if (validStore.visible && validStore.row === row && validStore.column === column) {
                 this.clearValidate()
               }

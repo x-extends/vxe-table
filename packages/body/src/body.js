@@ -79,6 +79,7 @@ function renderColumn (h, _vm, $table, $seq, seq, rowid, fixedType, rowLevel, ro
     treeOpts,
     mouseConfig,
     editConfig,
+    editOpts,
     editRules,
     validOpts,
     editStore,
@@ -106,7 +107,7 @@ function renderColumn (h, _vm, $table, $seq, seq, rowid, fixedType, rowLevel, ro
   let validError = validStore.row === row && validStore.column === column
   let hasDefaultTip = editRules && (validOpts.message === 'default' ? (height || tableData.length > 1) : validOpts.message === 'inline')
   let attrs = { 'data-colid': column.id }
-  let triggerDblclick = (editRender && editConfig && editConfig.trigger === 'dblclick')
+  let triggerDblclick = (editRender && editConfig && editOpts.trigger === 'dblclick')
   let params = { $table, $seq, seq, rowid, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, level: rowLevel, isHidden: fixedHiddenColumn, data: tableData, items }
   // 虚拟滚动不支持动态高度
   if ((scrollXLoad || scrollYLoad) && !hasEllipsis) {
@@ -175,7 +176,7 @@ function renderColumn (h, _vm, $table, $seq, seq, rowid, fixedType, rowLevel, ro
     attrs.colspan = colspan
   }
   // 如果显示状态
-  if (!fixedHiddenColumn && editConfig && editConfig.showStatus) {
+  if (!fixedHiddenColumn && editConfig && editOpts.showStatus) {
     isDirty = $table.isUpdateByRow(row, column.property)
   }
   // 批量选中处理
@@ -199,7 +200,7 @@ function renderColumn (h, _vm, $table, $seq, seq, rowid, fixedType, rowLevel, ro
       'edit--visible': editRender && editRender.type === 'visible',
       'fixed--hidden': fixedHiddenColumn,
       'col--ellipsis': hasEllipsis,
-      'col--actived': editConfig && editRender && (actived.row === row && (actived.column === column || editConfig.mode === 'row')),
+      'col--actived': editConfig && editRender && (actived.row === row && (actived.column === column || editOpts.mode === 'row')),
       'col--checked': checkedLocat.active,
       'col--checked-top': checkedLocat.top,
       'col--checked-bottom': checkedLocat.bottom,

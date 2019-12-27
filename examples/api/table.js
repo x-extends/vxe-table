@@ -1558,7 +1558,7 @@ const apis = [
         name: 'edit-config',
         descKey: 'app.api.table.desc.editConfig',
         version: '',
-        type: 'Object',
+        type: 'Boolean, Object',
         enum: '',
         defVal: '继承 setup.edit-config',
         list: [
