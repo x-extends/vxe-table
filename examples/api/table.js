@@ -678,7 +678,7 @@ const apis = [
         descKey: 'app.api.table.desc.columnWidth',
         version: '1.13',
         type: 'Number, String',
-        enum: '整数px, 百分比%',
+        enum: 'auto, px, %',
         defVal: '默认均匀分配',
         list: []
       },
@@ -687,7 +687,7 @@ const apis = [
         descKey: 'app.api.table.desc.columnMinWidth',
         version: '1.13',
         type: 'Number, String',
-        enum: '整数px, 百分比%',
+        enum: 'auto, px, %',
         defVal: '',
         list: []
       },
@@ -1560,7 +1560,7 @@ const apis = [
         version: '',
         type: 'Object',
         enum: '',
-        defVal: '',
+        defVal: '继承 setup.edit-config',
         list: [
           {
             name: 'key',
@@ -1771,7 +1771,7 @@ const apis = [
         version: '',
         type: 'Object',
         enum: '',
-        defVal: '',
+        defVal: '继承 setup.optimization',
         list: [
           {
             name: 'animat',

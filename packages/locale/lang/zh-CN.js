@@ -10,7 +10,7 @@ export default {
       scrollXReqProp: '横向虚拟滚动需要设置 "{{0}}"',
       scrollYReqProp: '纵向虚拟滚动需要设置 "{{0}}"',
       unableInsert: '无法插入到指定位置',
-      useErr: '安装 "{{0}}" 模块时发生错误，顺序不正确',
+      useErr: '安装 "{{0}}" 模块时发生错误，可能顺序不正确，依赖的模块需要在 Table 之前安装',
       barUnableLink: '工具栏无法关联表格',
       toolbarId: '工具栏需要设置唯一 "id"',
       expandContent: '展开行的插槽应该是 "content"，请检查是否正确',
