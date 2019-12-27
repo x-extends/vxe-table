@@ -105,8 +105,8 @@ const apis = [
         descKey: 'app.api.tableColumn.desc.width',
         version: '',
         type: 'Number, String',
-        enum: '整数px, 百分比%',
-        defVal: '继承 table 的 column-width',
+        enum: 'auto, px, %',
+        defVal: '继承 table.column-width',
         list: []
       },
       {
@@ -114,8 +114,8 @@ const apis = [
         descKey: 'app.api.tableColumn.desc.minWidth',
         version: '',
         type: 'Number, String',
-        enum: '整数px, 百分比%',
-        defVal: '继承 table 的 column-min-width',
+        enum: 'px, %',
+        defVal: '继承 table.column-min-width',
         list: []
       },
       {
@@ -124,7 +124,7 @@ const apis = [
         version: '',
         type: 'Boolean',
         enum: '',
-        defVal: '继承 table 的 resizable',
+        defVal: '继承 table.resizable',
         list: []
       },
       {
@@ -142,7 +142,7 @@ const apis = [
         version: '',
         type: 'String',
         enum: 'left（左对齐）, center（居中对齐）, right（右对齐）',
-        defVal: '继承 table 的 align',
+        defVal: '继承 table.align',
         list: []
       },
       {
@@ -151,7 +151,7 @@ const apis = [
         version: '',
         type: 'String',
         enum: 'left（左对齐）, center（居中对齐）, right（右对齐）',
-        defVal: '继承 align > 继承 table 的 header-align',
+        defVal: '继承 align > 继承 table.header-align',
         list: []
       },
       {
@@ -160,7 +160,7 @@ const apis = [
         version: '',
         type: 'String',
         enum: 'left（左对齐）, center（居中对齐）, right（右对齐）',
-        defVal: '继承 align > 继承 table 的 footer-align',
+        defVal: '继承 align > 继承 table.footer-align',
         list: []
       },
       {
@@ -169,7 +169,7 @@ const apis = [
         version: '',
         type: 'String,Boolean',
         enum: 'ellipsis（只显示省略号）, title（并且显示为原生 title）, tooltip（并且显示为 tooltip 提示）',
-        defVal: '继承 table 的 show-overflow',
+        defVal: '继承 table.show-overflow',
         list: []
       },
       {
@@ -178,7 +178,7 @@ const apis = [
         version: '',
         type: 'String,Boolean',
         enum: 'ellipsis（只显示省略号）, title（并且显示为原生 title）, tooltip（并且显示为 tooltip 提示）',
-        defVal: '继承 table 的 show-header-overflow',
+        defVal: '继承 table.show-header-overflow',
         list: []
       },
       {
@@ -259,7 +259,7 @@ const apis = [
         version: '',
         type: 'Boolean',
         enum: '',
-        defVal: '继承 table 的 remote-sort',
+        defVal: '继承 table.remote-sort',
         list: []
       },
       {

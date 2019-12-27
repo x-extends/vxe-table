@@ -487,7 +487,7 @@ export const Cell = {
    */
   renderEditHeader (h, params) {
     let { $table, column } = params
-    let { editRules, editConfig } = $table
+    let { editRules, editOpts } = $table
     let { sortable, remoteSort, filters } = column
     let isRequired
     if (editRules) {
@@ -500,8 +500,8 @@ export const Cell = {
       isRequired ? h('i', {
         class: 'vxe-required-icon'
       }) : null,
-      editConfig && editConfig.showIcon === false ? null : h('i', {
-        class: ['vxe-edit-icon', editConfig.icon || GlobalConfig.icon.edit]
+      editOpts.showIcon === false ? null : h('i', {
+        class: ['vxe-edit-icon', editOpts.icon || GlobalConfig.icon.edit]
       })
     ].concat(Cell.renderHeader(h, params))
       .concat(sortable || remoteSort ? Cell.renderSortIcon(h, params) : [])

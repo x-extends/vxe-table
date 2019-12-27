@@ -274,7 +274,7 @@ module.exports = {
         desc: {
           data: 'Table data(note that updating data does not reset the status)',
           columns: 'Column configuration',
-          customs: 'Initializes the bidirectional bound column',
+          customs: 'Used to read the column configuration (may be used in some situations, such as visible to show or hide, and refreshing the column by calling the refreshColumn method after the column information changes)',
           height: 'Table height, supports adaptive or fixed width and height(if you set adaptive, you must ensure that parent nodes exist and no adjacent elements are allowed)',
           maxHeight: 'Maximum height of the table',
           syncResize: 'Auto resizing with a property change (may be used in scenarios where a property is used to control the show/hide toggle)',

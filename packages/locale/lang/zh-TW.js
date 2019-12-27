@@ -10,7 +10,7 @@ export default {
       scrollXReqProp: '橫向虛擬滾動需要設定 "{{0}}"',
       scrollYReqProp: '縱向虛擬滾動需要設定 "{{0}}"',
       unableInsert: '無法插入到指定位置',
-      useErr: '安裝 "{{0}}" 模塊時發生錯誤，順序不正確',
+      useErr: '安裝 "{{0}}" 模塊時發生錯誤，可能順序不正確，依賴的模塊需要在Table之前安裝',
       barUnableLink: '工具欄無法關聯表格',
       toolbarId: '工具欄需要設置唯一 "id"',
       expandContent: '展開行的插槽應該是 “content”，請檢查是否正確',
