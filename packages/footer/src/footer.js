@@ -21,6 +21,7 @@ export default {
     } = this
     let {
       $listeners: tableListeners,
+      id,
       footerRowClassName,
       footerCellClassName,
       footerRowStyle,
@@ -36,7 +37,7 @@ export default {
       cellOffsetWidth,
       showOverflow: allColumnOverflow,
       overflowX,
-      getColumnMapIndex
+      getColumnIndex
     } = $table
     // 如果是使用优化模式
     if (fixedType && allColumnOverflow) {
@@ -50,6 +51,9 @@ export default {
     }
     return h('div', {
       class: ['vxe-table--footer-wrapper', fixedType ? `fixed--${fixedType}-wrapper` : 'footer--wrapper'],
+      attrs: {
+        'data-tid': id
+      },
       style: {
         'margin-top': `${-scrollbarHeight - 1}px`
       },
@@ -66,6 +70,7 @@ export default {
       h('table', {
         class: 'vxe-table--footer',
         attrs: {
+          'data-tid': id,
           cellspacing: 0,
           cellpadding: 0,
           border: 0
@@ -118,7 +123,7 @@ export default {
             let attrs = { 'data-colid': column.id }
             let tfOns = {}
             // 确保任何情况下 columnIndex 都精准指向真实列索引
-            let columnIndex = getColumnMapIndex(column)
+            let columnIndex = getColumnIndex(column)
             let params = { $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType }
             if (showTitle || showTooltip) {
               tfOns.mouseenter = evnt => {

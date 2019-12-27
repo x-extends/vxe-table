@@ -317,7 +317,8 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
     rowExpandeds,
     radioOpts,
     checkboxOpts,
-    getColumnMapIndex
+    expandColumn,
+    getColumnIndex
   } = $table
   let rows = []
   tableData.forEach((row, $rowIndex) => {
@@ -364,21 +365,20 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
         key: rowKey || treeConfig ? rowid : $rowIndex,
         on: trOn
       }, tableColumn.map((column, $columnIndex) => {
-        let columnIndex = getColumnMapIndex(column)
+        let columnIndex = getColumnIndex(column)
         return renderColumn(h, _vm, $table, $seq, seq, rowid, fixedType, rowLevel, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, tableColumn, tableData)
       }))
     )
     // 如果行被展开了
     if (rowExpandeds.length && rowExpandeds.indexOf(row) > -1) {
-      let column = XEUtils.find(tableColumn, column => column.type === 'expand')
-      let columnIndex = getColumnMapIndex(column)
+      let expandColumnIndex = getColumnIndex(expandColumn)
       let cellStyle
       if (treeConfig) {
         cellStyle = {
           paddingLeft: `${(rowLevel * treeOpts.indent) + 30}px`
         }
       }
-      if (column) {
+      if (expandColumn) {
         rows.push(
           h('tr', {
             class: 'vxe-body--expanded-row',
@@ -398,7 +398,7 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
                 }],
                 style: cellStyle
               }, [
-                column.renderData(h, { $table, seq, rowid, row, rowIndex, column, columnIndex, fixed: fixedType, level: rowLevel })
+                expandColumn.renderData(h, { $table, seq, rowid, row, rowIndex, column: expandColumn, columnIndex: expandColumnIndex, fixed: fixedType, level: rowLevel })
               ])
             ])
           ])
@@ -470,6 +470,7 @@ export default {
     let { _e, $parent: $table, fixedColumn, fixedType } = this
     let {
       $scopedSlots,
+      id,
       loading,
       maxHeight,
       height,
@@ -529,6 +530,9 @@ export default {
     }
     return h('div', {
       class: ['vxe-table--body-wrapper', fixedType ? `fixed--${fixedType}-wrapper` : 'body--wrapper'],
+      attrs: {
+        'data-tid': id
+      },
       style
     }, [
       fixedType ? _e() : h('div', {
@@ -546,6 +550,7 @@ export default {
       h('table', {
         class: 'vxe-table--body',
         attrs: {
+          'data-tid': id,
           cellspacing: 0,
           cellpadding: 0,
           border: 0

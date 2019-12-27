@@ -92,6 +92,7 @@ export default {
     let { $parent: $table, fixedType, headerColumn, tableColumn, fixedColumn } = this
     let {
       $listeners: tableListeners,
+      id,
       resizable, border,
       overflowX,
       columnKey,
@@ -111,7 +112,7 @@ export default {
       scrollXStore,
       scrollbarWidth,
       cellOffsetWidth,
-      getColumnMapIndex,
+      getColumnIndex,
       sortOpts
     } = $table
     // v2.0 废弃属性，保留兼容
@@ -124,7 +125,10 @@ export default {
       tableWidth = tableColumn.reduce((previous, column) => previous + column.renderWidth, 0)
     }
     return h('div', {
-      class: ['vxe-table--header-wrapper', fixedType ? `fixed--${fixedType}-wrapper` : 'body--wrapper']
+      class: ['vxe-table--header-wrapper', fixedType ? `fixed--${fixedType}-wrapper` : 'body--wrapper'],
+      attrs: {
+        'data-tid': id
+      }
     }, [
       !fixedType && scrollXLoad ? h('div', {
         class: ['vxe-body--x-space'],
@@ -135,6 +139,7 @@ export default {
       h('table', {
         class: 'vxe-table--header',
         attrs: {
+          'data-tid': id,
           cellspacing: 0,
           cellpadding: 0,
           border: 0
@@ -186,7 +191,7 @@ export default {
             let isFilter = column.filters.length
             let hasFilter = isFilter && column.filters.some(item => item.checked)
             // 确保任何情况下 columnIndex 都精准指向真实列索引
-            let columnIndex = getColumnMapIndex(column)
+            let columnIndex = getColumnIndex(column)
             let params = { $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn, hasFilter }
             // 虚拟滚动不支持动态高度
             if ((scrollXLoad || scrollYLoad) && !hasEllipsis) {

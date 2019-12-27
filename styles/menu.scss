@@ -14,8 +14,13 @@
   user-select: none;
   color: $vxe-font-color;
   font-family: $vxe-font-family;
-  &.show {
+  &.is--show {
     display: block;
+  }
+  &.child-pos--left {
+    .vxe-table--ctxmenu-clild-wrapper {
+      left: -100%;
+    }
   }
   .vxe-ctxmenu--option-wrapper {
     margin: 0;
@@ -49,9 +54,8 @@
     }
     .vxe-ctxmenu--link {
       display: block;
-      padding: 0 30px;
-      min-width: 160px;
-      max-width: 200px;
+      padding: 0 2.5em;
+      width: $vxe-table-menu-item-width;
       line-height: 26px;
       color: $vxe-font-color;
       .vxe-ctxmenu--link-prefix,
@@ -85,8 +89,7 @@
     }
     .vxe-table--ctxmenu-clild-wrapper {
       .vxe-ctxmenu--link {
-        max-width: 180px;
-        padding: 0 20px 0 30px;
+        padding: 0 2em 0 2.5em;
       }
     }
   }
@@ -96,7 +99,7 @@
   display: none;
   top: 0;
   left: 100%;
-  &.show {
+  &.is--show {
     display: block;
   }
 }
