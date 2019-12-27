@@ -102,12 +102,12 @@ function hasEllipsis ($table, column, property, allColumnOverflow) {
   let showEllipsis = headOverflow === 'ellipsis'
   let showTitle = headOverflow === 'title'
   let showTooltip = headOverflow === true || headOverflow === 'tooltip'
-  let hasEllipsis = showTitle || showTooltip || showEllipsis
+  let isEllipsis = showTitle || showTooltip || showEllipsis
   // 虚拟滚动不支持动态高度
-  if (($table.scrollXLoad || $table.scrollYLoad) && !hasEllipsis) {
-    showEllipsis = hasEllipsis = true
+  if (($table.scrollXLoad || $table.scrollYLoad) && !isEllipsis) {
+    isEllipsis = true
   }
-  return hasEllipsis
+  return isEllipsis
 }
 
 function toHtml ($table, opts, columns, datas) {

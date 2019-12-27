@@ -376,7 +376,7 @@ export default {
           checkboxRangeElem.style.top = `${disY + (offsetTop > 0 ? 0 : offsetTop)}px`
           checkboxRangeElem.style.zIndex = `${this.tZindex}`
           // 至少滑动 10px 才能有效匹配
-          if (rangeHeight > 10 & rangeRows.length !== lastRangeRows.length) {
+          if (rangeHeight > 10 && rangeRows.length !== lastRangeRows.length) {
             lastRangeRows = rangeRows
             if (evnt.ctrlKey) {
               rangeRows.forEach(row => {
