@@ -32,6 +32,7 @@ export default {
     } = this
     let {
       $listeners: tableListeners,
+      id,
       footerRowClassName,
       footerCellClassName,
       footerRowStyle,
@@ -55,6 +56,9 @@ export default {
     }
     return h('div', {
       class: ['vxe-table--footer-wrapper', fixedType ? `fixed-${fixedType}--wrapper` : 'body--wrapper'],
+      attrs: {
+        'data-tid': id
+      },
       on: {
         scroll: this.scrollEvent
       }
@@ -66,6 +70,7 @@ export default {
       h('table', {
         class: 'vxe-table--footer',
         attrs: {
+          'data-tid': id,
           cellspacing: 0,
           cellpadding: 0,
           border: 0

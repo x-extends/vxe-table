@@ -110,6 +110,7 @@ export default {
     } = this
     let {
       $listeners: tableListeners,
+      id,
       resizable,
       border,
       columnKey,
@@ -135,7 +136,10 @@ export default {
       }
     }
     return h('div', {
-      class: ['vxe-table--header-wrapper', fixedType ? `fixed-${fixedType}--wrapper` : 'body--wrapper']
+      class: ['vxe-table--header-wrapper', fixedType ? `fixed-${fixedType}--wrapper` : 'body--wrapper'],
+      attrs: {
+        'data-tid': id
+      }
     }, [
       fixedType ? _e() : h('div', {
         class: 'vxe-body--x-space',
@@ -144,6 +148,7 @@ export default {
       h('table', {
         class: 'vxe-table--header',
         attrs: {
+          'data-tid': id,
           cellspacing: 0,
           cellpadding: 0,
           border: 0

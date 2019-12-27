@@ -208,7 +208,7 @@ export default {
   mixins: [],
   data () {
     return {
-      id: XEUtils.uniqueId(),
+      id: `${XEUtils.uniqueId()}`,
       // 列分组配置
       collectColumn: [],
       // 完整所有列
@@ -284,6 +284,7 @@ export default {
         showChild: false,
         selectChild: null,
         list: [],
+        childPos: null,
         style: null
       },
       // 存放可编辑相关信息
@@ -423,6 +424,9 @@ export default {
     },
     cellOffsetWidth () {
       return this.border ? Math.max(2, Math.ceil(this.scrollbarWidth / this.tableColumn.length)) : 1
+    },
+    expandColumn () {
+      return this.tableColumn.find(column => column.type === 'expand')
     },
     /**
      * 判断列全选的复选框是否禁用

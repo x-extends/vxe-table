@@ -112,11 +112,11 @@ export const DomTools = {
   /**
    * 检查触发源是否属于目标节点
    */
-  getEventTargetNode (evnt, container, queryCls) {
+  getEventTargetNode (evnt, container, queryCls, queryMethod) {
     let targetElem
     let target = evnt.target
     while (target && target.nodeType && target !== document) {
-      if (queryCls && DomTools.hasClass(target, queryCls)) {
+      if (queryCls && DomTools.hasClass(target, queryCls) && (!queryMethod || queryMethod(target))) {
         targetElem = target
       } else if (target === container) {
         return { flag: queryCls ? !!targetElem : true, container, targetElem: targetElem }

@@ -11,6 +11,7 @@ export default {
       Object.assign(this.ctxMenuStore, {
         visible: false,
         selected: null,
+        childPos: null,
         selectChild: null,
         showChild: false
       })
@@ -51,7 +52,7 @@ export default {
      * 快捷菜单事件处理
      */
     handleGlobalContextmenuEvent (evnt) {
-      let { isCtxMenu, ctxMenuStore, ctxMenuOpts } = this
+      let { id, isCtxMenu, ctxMenuStore, ctxMenuOpts } = this
       let layoutList = ['header', 'body', 'footer']
       if (isCtxMenu) {
         if (ctxMenuStore.visible) {
@@ -60,9 +61,13 @@ export default {
             return
           }
         }
+        // 分别匹配表尾、内容、表尾的快捷菜单
         for (let index = 0; index < layoutList.length; index++) {
           let layout = layoutList[index]
-          let columnTargetNode = DomTools.getEventTargetNode(evnt, this.$el, `vxe-${layout}--column`)
+          let columnTargetNode = DomTools.getEventTargetNode(evnt, this.$el, `vxe-${layout}--column`, target => {
+            // target=td|th，直接向上找 table 去匹配即可
+            return target.parentNode.parentNode.parentNode.getAttribute('data-tid') === id
+          })
           let params = { type: layout, $table: this, columns: this.visibleColumn.slice(0) }
           if (columnTargetNode.flag) {
             let cell = columnTargetNode.targetElem
@@ -78,7 +83,9 @@ export default {
             this.openContextMenu(evnt, layout, params)
             UtilTools.emitEvent(this, `${typePrefix}cell-context-menu`, [params, evnt])
             return
-          } else if (DomTools.getEventTargetNode(evnt, this.$el, `vxe-table--${layout}-wrapper`).flag) {
+          } else if (DomTools.getEventTargetNode(evnt, this.$el, `vxe-table--${layout}-wrapper`, target => {
+            return target.getAttribute('data-tid') === id
+          }).flag) {
             if (ctxMenuOpts.trigger === 'cell') {
               evnt.preventDefault()
             } else {
@@ -104,7 +111,7 @@ export default {
           evnt.preventDefault()
         } else if (options && options.length) {
           params.options = options
-          this.preventEvent(evnt, 'event.show_menu', params, null, () => {
+          this.preventEvent(evnt, 'event.showMenu', params, null, () => {
             if (!visibleMethod || visibleMethod(params, evnt)) {
               evnt.preventDefault()
               this.updateZindex()
@@ -118,6 +125,7 @@ export default {
                 selected: null,
                 selectChild: null,
                 showChild: false,
+                childPos: null,
                 style: {
                   zIndex: this.tZindex,
                   top: `${top}px`,
@@ -131,10 +139,13 @@ export default {
                 let offsetTop = evnt.clientY + clientHeight - visibleHeight
                 let offsetLeft = evnt.clientX + clientWidth - visibleWidth
                 if (offsetTop > -10) {
-                  ctxMenuStore.style.top = `${top - clientHeight}px`
+                  ctxMenuStore.style.top = `${Math.max(scrollTop + 2, top - clientHeight - 2)}px`
                 }
                 if (offsetLeft > -10) {
-                  ctxMenuStore.style.left = `${left - clientWidth}px`
+                  ctxMenuStore.style.left = `${Math.max(scrollLeft + 2, left - clientWidth - 2)}px`
+                }
+                if (offsetLeft > -220) {
+                  ctxMenuStore.childPos = 'left'
                 }
               })
             } else {

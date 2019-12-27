@@ -1480,6 +1480,7 @@ const Methods = {
     }
   },
   handleGlobalResizeEvent () {
+    this.closeMenu()
     this.recalculate()
   },
   handleTooltipLeaveEvent (evnt) {

@@ -10,7 +10,8 @@ export default {
     let { _e, ctxMenuStore } = this
     return h('div', {
       class: ['vxe-table--ctxmenu-wrapper', {
-        show: ctxMenuStore.visible
+        'is--show': ctxMenuStore.visible,
+        [`child-pos--${ctxMenuStore.childPos}`]: ctxMenuStore.childPos
       }],
       style: ctxMenuStore.style
     }, ctxMenuStore.list.map((options, gIndex) => {
@@ -52,7 +53,7 @@ export default {
           ]),
           hasChildMenus ? h('ul', {
             class: ['vxe-table--ctxmenu-clild-wrapper', {
-              show: item === ctxMenuStore.selected && ctxMenuStore.showChild
+              'is--show': item === ctxMenuStore.selected && ctxMenuStore.showChild
             }]
           }, item.children.map((child, cIndex) => {
             return child.visible === false ? _e() : h('li', {

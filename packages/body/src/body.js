@@ -270,6 +270,7 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
     rowExpandeds,
     radioOpts,
     checkboxOpts,
+    expandColumn,
     getColumnIndex
   } = $table
   let rows = []
@@ -319,15 +320,14 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
     )
     // 如果行被展开了
     if (rowExpandeds.length && rowExpandeds.indexOf(row) > -1) {
-      let column = XEUtils.find(tableColumn, column => column.type === 'expand')
-      let columnIndex = getColumnIndex(column)
+      let expandColumnIndex = getColumnIndex(expandColumn)
       let cellStyle
       if (treeConfig) {
         cellStyle = {
           paddingLeft: `${(rowLevel * treeOpts.indent) + 30}px`
         }
       }
-      if (column) {
+      if (expandColumn) {
         rows.push(
           h('tr', {
             class: 'vxe-body--expanded-row',
@@ -347,7 +347,7 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
                 }],
                 style: cellStyle
               }, [
-                column.renderData(h, { $table, seq, rowid, row, rowIndex, column, columnIndex, fixed: fixedType, level: rowLevel })
+                expandColumn.renderData(h, { $table, seq, rowid, row, rowIndex, column: expandColumn, columnIndex: expandColumnIndex, fixed: fixedType, level: rowLevel })
               ])
             ])
           ])
@@ -433,6 +433,7 @@ export default {
     } = this
     let {
       $scopedSlots,
+      id,
       tableData,
       tableColumn,
       showOverflow: allColumnOverflow,
@@ -449,7 +450,10 @@ export default {
       }
     }
     return h('div', {
-      class: ['vxe-table--body-wrapper', fixedType ? `fixed-${fixedType}--wrapper` : 'body--wrapper']
+      class: ['vxe-table--body-wrapper', fixedType ? `fixed-${fixedType}--wrapper` : 'body--wrapper'],
+      attrs: {
+        'data-tid': id
+      }
     }, [
       fixedType ? _e() : h('div', {
         class: 'vxe-body--x-space',
@@ -462,6 +466,7 @@ export default {
       h('table', {
         class: 'vxe-table--body',
         attrs: {
+          'data-tid': id,
           cellspacing: 0,
           cellpadding: 0,
           border: 0
