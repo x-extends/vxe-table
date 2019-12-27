@@ -185,7 +185,7 @@ export default {
     // 按键配置项
     keyboardConfig: Object,
     // 编辑配置项
-    editConfig: Object,
+    editConfig: [Boolean, Object],
     // 校验配置项
     validConfig: Object,
     // 校验规则配置项

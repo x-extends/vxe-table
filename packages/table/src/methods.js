@@ -1281,7 +1281,7 @@ const Methods = {
    * 全局按下事件处理
    */
   handleGlobalMousedownEvent (evnt) {
-    let { $el, $refs, editStore, ctxMenuStore, editConfig = {}, filterStore, getRowNode } = this
+    let { $el, $refs, editStore, ctxMenuStore, editOpts, filterStore, getRowNode } = this
     let { actived } = editStore
     let { filterWrapper, validTip } = $refs
     if (filterWrapper) {
@@ -1295,14 +1295,14 @@ const Methods = {
     }
     // 如果已激活了编辑状态
     if (actived.row) {
-      if (!(editConfig.autoClear === false)) {
+      if (!(editOpts.autoClear === false)) {
         if (validTip && DomTools.getEventTargetNode(evnt, validTip.$el).flag) {
           // 如果是激活状态，且点击了校验提示框
         } else if (!this.lastCallTime || this.lastCallTime + 50 < Date.now()) {
           // 如果手动调用了激活单元格，避免触发源被移除后导致重复关闭
           this.preventEvent(evnt, 'event.clearActived', actived.args, () => {
             let isClear
-            if (editConfig.mode === 'row') {
+            if (editOpts.mode === 'row') {
               let rowNode = DomTools.getEventTargetNode(evnt, $el, 'vxe-body--row')
               // row 方式，如果点击了不同行
               isClear = !rowNode.flag || getRowNode(rowNode.targetElem).item !== getRowNode(actived.args.cell.parentNode).item
@@ -1536,12 +1536,12 @@ const Methods = {
    * 触发 tooltip 事件
    */
   triggerTooltipEvent (evnt, params) {
-    let { editConfig, editStore, tooltipStore } = this
+    let { editConfig, editOpts, editStore, tooltipStore } = this
     let { actived } = editStore
     let { row, column } = params
     this.handleTargetEnterEvent()
     if (editConfig) {
-      if ((editConfig.mode === 'row' && actived.row === row) || (actived.row === row && actived.column === column)) {
+      if ((editOpts.mode === 'row' && actived.row === row) || (actived.row === row && actived.column === column)) {
         return
       }
     }
@@ -2146,7 +2146,7 @@ const Methods = {
    * 如果是双击模式，则单击后选中状态
    */
   triggerCellClickEvent (evnt, params) {
-    let { $el, highlightCurrentRow, editStore, radioOpts, expandOpts, treeOpts, editConfig, checkboxOpts, mouseConfig = {} } = this
+    let { $el, highlightCurrentRow, editStore, radioOpts, expandOpts, treeOpts, editConfig, editOpts, checkboxOpts, mouseConfig = {} } = this
     let { actived } = editStore
     let { row, column } = params
     // 解决 checkbox 重复触发两次问题
@@ -2181,15 +2181,15 @@ const Methods = {
       // 如果设置了单元格选中功能，则不会使用点击事件去处理（只能支持双击模式）
       if (!mouseConfig.checked) {
         if (editConfig) {
-          if (editConfig.trigger === 'manual') {
+          if (editOpts.trigger === 'manual') {
             if (actived.args && actived.row === row && column !== actived.column) {
               this.handleChangeCell(evnt, params)
             }
           } else if (!actived.args || row !== actived.row || column !== actived.column) {
-            if (editConfig.trigger === 'click') {
+            if (editOpts.trigger === 'click') {
               this.handleChangeCell(evnt, params)
-            } else if (editConfig.trigger === 'dblclick') {
-              if (editConfig.mode === 'row' && actived.row === row) {
+            } else if (editOpts.trigger === 'dblclick') {
+              if (editOpts.mode === 'row' && actived.row === row) {
                 this.handleChangeCell(evnt, params)
               } else {
                 this.handleSelected(params, evnt)
@@ -2206,11 +2206,11 @@ const Methods = {
    * 如果是双击模式，则激活为编辑状态
    */
   triggerCellDBLClickEvent (evnt, params) {
-    let { editStore, editConfig } = this
+    let { editStore, editConfig, editOpts } = this
     let { actived } = editStore
-    if (editConfig && editConfig.trigger === 'dblclick') {
+    if (editConfig && editOpts.trigger === 'dblclick') {
       if (!actived.args || evnt.currentTarget !== actived.args.cell) {
-        if (editConfig.mode === 'row') {
+        if (editOpts.mode === 'row') {
           this.checkValidate('blur')
             .catch(e => e)
             .then(() => {
@@ -2218,7 +2218,7 @@ const Methods = {
                 .then(() => this.checkValidate('change'))
                 .catch(e => e)
             })
-        } else if (editConfig.mode === 'cell') {
+        } else if (editOpts.mode === 'cell') {
           this.handleActived(params, evnt)
             .then(() => this.checkValidate('change'))
             .catch(e => e)

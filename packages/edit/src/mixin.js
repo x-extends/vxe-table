@@ -203,13 +203,13 @@ export default {
      * 处理激活编辑
      */
     handleActived (params, evnt) {
-      let { editStore, editConfig, tableColumn } = this
-      let { activeMethod } = editConfig
+      let { editStore, editOpts, tableColumn } = this
+      let { mode, activeMethod } = editOpts
       let { actived } = editStore
       let { row, column, cell } = params
       let { editRender } = column
       if (editRender && cell) {
-        if (actived.row !== row || (editConfig.mode === 'cell' ? actived.column !== column : false)) {
+        if (actived.row !== row || (mode === 'cell' ? actived.column !== column : false)) {
           // 判断是否禁用编辑
           let type = 'edit-disabled'
           if (!activeMethod || activeMethod(params)) {
@@ -225,7 +225,7 @@ export default {
             actived.args = params
             actived.row = row
             actived.column = column
-            if (editConfig.mode === 'row') {
+            if (mode === 'row') {
               tableColumn.forEach(column => this._getColumnModel(row, column))
             } else {
               this._getColumnModel(row, column)
@@ -273,11 +273,11 @@ export default {
      * 清除激活的编辑
      */
     _clearActived (evnt) {
-      let { tableColumn, editStore, editConfig = {} } = this
+      let { tableColumn, editStore, editOpts } = this
       let { actived } = editStore
       let { args, row, column } = actived
       if (row || column) {
-        if (editConfig.mode === 'row') {
+        if (editOpts.mode === 'row') {
           tableColumn.forEach(column => this._setColumnModel(row, column))
         } else {
           this._setColumnModel(row, column)
@@ -374,8 +374,8 @@ export default {
      * 只对 trigger=dblclick 有效，选中单元格
      */
     _setSelectCell (row, field) {
-      let { tableData, editConfig, visibleColumn } = this
-      if (row && field && editConfig.trigger !== 'manual') {
+      let { tableData, editOpts, visibleColumn } = this
+      if (row && field && editOpts.trigger !== 'manual') {
         let column = XEUtils.find(visibleColumn, column => column.property === field)
         let rowIndex = tableData.indexOf(row)
         if (rowIndex > -1 && column) {
@@ -390,12 +390,12 @@ export default {
      * 处理选中源
      */
     handleSelected (params, evnt) {
-      let { mouseConfig = {}, editConfig, editStore, elemStore } = this
+      let { mouseConfig = {}, editOpts, editStore, elemStore } = this
       let { actived, selected } = editStore
       let { row, column, cell } = params
       let selectMethod = () => {
         if ((mouseConfig.selected || mouseConfig.checked) && (selected.row !== row || selected.column !== column)) {
-          if (actived.row !== row || (editConfig.mode === 'cell' ? actived.column !== column : false)) {
+          if (actived.row !== row || (editOpts.mode === 'cell' ? actived.column !== column : false)) {
             if (this.keyboardConfig) {
               this.clearChecked(evnt)
               this.clearIndexChecked()

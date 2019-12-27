@@ -5,7 +5,7 @@ export default {
   methods: {
     // 处理 Tab 键移动
     moveTabSelected (args, isLeft, evnt) {
-      let { afterFullData, visibleColumn, editConfig, isSeqColumn } = this
+      let { afterFullData, visibleColumn, editConfig, editOpts, isSeqColumn } = this
       let targetRow
       let targetRowIndex
       let targetColumn
@@ -68,8 +68,8 @@ export default {
         params.column = targetColumn
         params.cell = DomTools.getCell(this, params)
         if (editConfig) {
-          if (editConfig.trigger === 'click' || editConfig.trigger === 'dblclick') {
-            if (editConfig.mode === 'row') {
+          if (editOpts.trigger === 'click' || editOpts.trigger === 'dblclick') {
+            if (editOpts.mode === 'row') {
               this.handleActived(params, evnt)
             } else {
               this.scrollToRow(params.row, params.column)
@@ -215,6 +215,7 @@ export default {
         visibleColumn,
         editStore,
         editConfig,
+        editOpts,
         handleSelected,
         checkboxOpts,
         mouseConfig = {},
@@ -290,7 +291,7 @@ export default {
         this.closeMenu()
       } else if (mouseConfig.selected) {
         // 除了双击其他都没有选中状态
-        if (editConfig && editConfig.trigger === 'dblclick') {
+        if (editConfig && editOpts.trigger === 'dblclick') {
           // 如果不在所有选中的范围之内则重新选中
           if (!checked.rowNodes || !checked.rowNodes.some(list => list.indexOf(cell) > -1)) {
             handleSelected(params, evnt)
@@ -305,13 +306,13 @@ export default {
     // triggerCornerMousedownEvent (params, evnt) {
     //   evnt.preventDefault()
     //   evnt.stopPropagation()
-    //   let { $el, tableData, visibleColumn, editStore, editConfig, handleTempChecked } = this
+    //   let { $el, tableData, visibleColumn, editStore, editConfig, editOpts, handleTempChecked } = this
     //   let { checked } = editStore
     //   let { button } = evnt
     //   let isLeftBtn = button === 0
     //   let isRightBtn = button === 2
     //   if (isLeftBtn || isRightBtn) {
-    //     if (editConfig && checked.rows.length && editConfig.trigger === 'dblclick') {
+    //     if (editConfig && checked.rows.length && editOpts.trigger === 'dblclick') {
     //       let domMousemove = document.onmousemove
     //       let domMouseup = document.onmouseup
     //       let start = {

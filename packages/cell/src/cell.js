@@ -35,9 +35,9 @@ export const Cell = {
         renMaps.renderCell = treeNode ? this.renderTreeHTMLCell : this.renderHTMLCell
         break
       default:
-        if (editRender) {
+        if (editConfig && editRender) {
           renMaps.renderHeader = this.renderEditHeader
-          renMaps.renderCell = editConfig && editOpts.mode === 'cell' ? (treeNode ? this.renderTreeCellEdit : this.renderCellEdit) : (treeNode ? this.renderTreeRowEdit : this.renderRowEdit)
+          renMaps.renderCell = editOpts.mode === 'cell' ? (treeNode ? this.renderTreeCellEdit : this.renderCellEdit) : (treeNode ? this.renderTreeRowEdit : this.renderRowEdit)
         } else if (filters && filters.length && (sortable || remoteSort)) {
           renMaps.renderHeader = this.renderSortAndFilterHeader
         } else if (sortable || remoteSort) {
