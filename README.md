@@ -12,7 +12,7 @@
 [![pull requests closed](https://img.shields.io/github/issues-pr-closed/xuliangzhan/vxe-table.svg)](https://github.com/xuliangzhan/vxe-table/pulls?q=is%3Apr+is%3Aclosed)
 [![npm license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/xuliangzhan/vxe-table/blob/master/LICENSE)
 
-一个基于 [vue](https://www.npmjs.com/package/vue) 的表格组件，提供一套 CRUD 表格解决方案
+一个基于 [vue](https://www.npmjs.com/package/vue) 的表格组件，提供一套专业的 CRUD 表格解决方案
 
 * 设计理念
   * 面向现代浏览器（简洁、高效的 API 设计）
