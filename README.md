@@ -12,13 +12,12 @@
 [![pull requests closed](https://img.shields.io/github/issues-pr-closed/xuliangzhan/vxe-table.svg)](https://github.com/xuliangzhan/vxe-table/pulls?q=is%3Apr+is%3Aclosed)
 [![npm license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/xuliangzhan/vxe-table/blob/master/LICENSE)
 
-一个基于 [vue](https://www.npmjs.com/package/vue) 的表格组件，提供一套专业的 CRUD 表格解决方案
+一个基于 [vue](https://www.npmjs.com/package/vue) 的表格组件，提供一套企业级的 CRUD 表格解决方案
 
 * 设计理念
   * 面向现代浏览器（简洁、高效的 API 设计）
   * 模块化表格、插件化扩展（功能模块解耦，支持按需加载）
-  * 强大的功能的同时兼具性能（支持横向、纵向虚拟滚动、灵活的配置项、不污染全局样式及变量）
-  * 为单行编辑表格而设计，支持增删改查及更多扩展项
+  * 为单行编辑表格而设计，支持增删改查及更多扩展，强大的功能的同时兼具性能（支持横向、纵向虚拟滚动、贼灵活的配置项）
 
 * 计划
   * [x] v1 100% 实现表格的一切实用的功能
