@@ -51,6 +51,7 @@
 </template>
 
 <script>
+import XEUtils from 'xe-utils'
 import hljs from 'highlight.js'
 
 export default {
@@ -141,7 +142,7 @@ export default {
             submitSave (row) {
               return new Promise(resolve => {
                 let rest = {
-                  date3: this.$utils.toDateString(new Date())
+                  date3: XEUtils.toDateString(new Date())
                 }
                 if (row.name) {
                   rest.name = row.name
@@ -214,7 +215,7 @@ export default {
     submitSave (row) {
       return new Promise(resolve => {
         let rest = {
-          date3: this.$utils.toDateString(new Date())
+          date3: XEUtils.toDateString(new Date())
         }
         if (row.name) {
           rest.name = row.name

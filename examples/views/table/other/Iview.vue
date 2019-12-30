@@ -92,6 +92,8 @@
 </template>
 
 <script>
+import XEUtils from 'xe-utils'
+import XEAjax from 'xe-ajax'
 import hljs from 'highlight.js'
 
 export default {
@@ -193,10 +195,10 @@ export default {
           },
           methods: {
             formatDate (value, format) {
-              return this.$utils.toDateString(value, format)
+              return XEUtils.toDateString(value, format)
             },
             getSelectLabel (value, list, valueProp = 'value', labelField = 'label') {
-              let item = this.$utils.find(list, item => item[valueProp] === value)
+              let item = XEUtils.find(list, item => item[valueProp] === value)
               return item ? item[labelField] : null
             },
             getCascaderLabel (value, list) {
@@ -226,7 +228,7 @@ export default {
                     return '平均'
                   }
                   if (['age', 'rate'].includes(column.property)) {
-                    return this.$utils.mean(data, column.property)
+                    return XEUtils.mean(data, column.property)
                   }
                   return null
                 }),
@@ -235,7 +237,7 @@ export default {
                     return '和值'
                   }
                   if (['age', 'rate'].includes(column.property)) {
-                    return this.$utils.sum(data, column.property)
+                    return XEUtils.sum(data, column.property)
                   }
                   return null
                 })
@@ -264,22 +266,22 @@ export default {
   },
   methods: {
     findSexList () {
-      return this.$ajax.get('/api/conf/sex/list').then(data => {
+      return XEAjax.get('/api/conf/sex/list').then(data => {
         this.sexList = data
         return data
       })
     },
     findRegionList () {
-      return this.$ajax.get('/api/conf/region/list').then(data => {
+      return XEAjax.get('/api/conf/region/list').then(data => {
         this.regionList = data
         return data
       })
     },
     formatDate (value, format) {
-      return this.$utils.toDateString(value, format)
+      return XEUtils.toDateString(value, format)
     },
     getSelectLabel (value, list, valueProp = 'value', labelField = 'label') {
-      let item = this.$utils.find(list, item => item[valueProp] === value)
+      let item = XEUtils.find(list, item => item[valueProp] === value)
       return item ? item[labelField] : null
     },
     getCascaderLabel (value, list) {
@@ -309,7 +311,7 @@ export default {
             return '平均'
           }
           if (['age', 'rate'].includes(column.property)) {
-            return this.$utils.mean(data, column.property)
+            return XEUtils.mean(data, column.property)
           }
           return null
         }),
@@ -318,7 +320,7 @@ export default {
             return '和值'
           }
           if (['age', 'rate'].includes(column.property)) {
-            return this.$utils.sum(data, column.property)
+            return XEUtils.sum(data, column.property)
           }
           return null
         })

@@ -33,6 +33,7 @@
 </template>
 
 <script>
+import XEAjax from 'xe-ajax'
 import hljs from 'highlight.js'
 
 export default {
@@ -79,13 +80,13 @@ export default {
               })
             },
             loadColumn (size) {
-              return this.$ajax.mockColumns(size).then(columns => {
+              return XEAjax.mockColumns(size).then(columns => {
                 // 使用函数式加载，阻断 vue 对大数组的监听
                 return this.$refs.xGrid.reloadColumn(columns)
               })
             },
             loadList (size) {
-              return this.$ajax.mockList(size).then(data => {
+              return XEAjax.mockList(size).then(data => {
                 // 使用函数式加载，阻断 vue 对大数组的监听
                 return this.$refs.xGrid.reloadData(data)
               })
@@ -115,7 +116,7 @@ export default {
       })
     },
     loadColumn (size) {
-      return this.$ajax.mockColumns(size).then(columns => {
+      return XEAjax.mockColumns(size).then(columns => {
         // 使用函数式加载，阻断 vue 对大数组的监听
         return this.$refs.xGrid.reloadColumn(columns.map(item => {
           item.fixed = null
@@ -124,7 +125,7 @@ export default {
       })
     },
     loadList (size) {
-      return this.$ajax.mockList(size).then(data => {
+      return XEAjax.mockList(size).then(data => {
         // 使用函数式加载，阻断 vue 对大数组的监听
         return this.$refs.xGrid.reloadData(data)
       })

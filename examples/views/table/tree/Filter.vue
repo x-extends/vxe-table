@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import XEUtils from 'xe-utils/methods/xe-utils'
+import XEUtils from 'xe-utils'
 import hljs from 'highlight.js'
 
 export default {
@@ -72,17 +72,17 @@ export default {
             this.loading = true
             setTimeout(() => {
               this.loading = false
-              this.originData = this.$utils.clone(window.MOCK_TREE_DATA_LIST, true)
+              this.originData = XEUtils.clone(window.MOCK_TREE_DATA_LIST, true)
               this.handleSearch()
             }, 300)
           },
           methods: {
             handleSearch () {
-              let filterName = this.$utils.toString(this.filterName).trim()
+              let filterName = XEUtils.toString(this.filterName).trim()
               if (filterName) {
                 let options = { children: 'children' }
                 let searchProps = ['name']
-                this.tableData = this.$utils.searchTree(this.originData, item => searchProps.some(key => this.$utils.toString(item[key]).indexOf(filterName) > -1), options)
+                this.tableData = XEUtils.searchTree(this.originData, item => searchProps.some(key => XEUtils.toString(item[key]).indexOf(filterName) > -1), options)
                 // 搜索之后默认展开所有子节点
                 this.$nextTick(() => {
                   this.$refs.xTree.setAllTreeExpansion(true)
@@ -104,7 +104,7 @@ export default {
     this.loading = true
     setTimeout(() => {
       this.loading = false
-      this.originData = this.$utils.clone(window.MOCK_TREE_DATA_LIST, true)
+      this.originData = XEUtils.clone(window.MOCK_TREE_DATA_LIST, true)
       this.handleSearch()
     }, 300)
   },
@@ -115,11 +115,11 @@ export default {
   },
   methods: {
     handleSearch () {
-      let filterName = this.$utils.toString(this.filterName).trim()
+      let filterName = XEUtils.toString(this.filterName).trim()
       if (filterName) {
         let options = { children: 'children' }
         let searchProps = ['name']
-        this.tableData = this.$utils.searchTree(this.originData, item => searchProps.some(key => this.$utils.toString(item[key]).indexOf(filterName) > -1), options)
+        this.tableData = XEUtils.searchTree(this.originData, item => searchProps.some(key => XEUtils.toString(item[key]).indexOf(filterName) > -1), options)
         // 搜索之后默认展开所有子节点
         this.$nextTick(() => {
           this.$refs.xTree.setAllTreeExpansion(true)

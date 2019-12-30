@@ -34,6 +34,7 @@
 </template>
 
 <script>
+import XEUtils from 'xe-utils'
 import hljs from 'highlight.js'
 
 export default {
@@ -93,7 +94,7 @@ export default {
           },
           methods: {
             addColumn () {
-              const uniqueId = this.$utils.uniqueId()
+              const uniqueId = XEUtils.uniqueId()
               this.tableColumn.push({
                 field: \`new_\${uniqueId}\`,
                 title: \`新列_\${uniqueId}\`,
@@ -149,7 +150,7 @@ export default {
   },
   methods: {
     addColumn () {
-      const uniqueId = this.$utils.uniqueId()
+      const uniqueId = XEUtils.uniqueId()
       this.tableColumn.push({
         field: `new_${uniqueId}`,
         title: `新列_${uniqueId}`,

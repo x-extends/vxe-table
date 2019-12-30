@@ -84,6 +84,7 @@
 </template>
 
 <script>
+import XEAjax from 'xe-ajax'
 import hljs from 'highlight.js'
 
 export default {
@@ -277,7 +278,7 @@ export default {
             findList () {
               // 模拟后台数据
               this.loading = true
-              this.$ajax.get(\`/api/user/page/list/\${this.tablePage.pageSize}/\${this.tablePage.currentPage}\`, this.formData).then(({ page, result }) => {
+              XEAjax.get(\`/api/user/page/list/\${this.tablePage.pageSize}/\${this.tablePage.currentPage}\`, this.formData).then(({ page, result }) => {
                 this.tableData = result
                 this.tablePage.totalResult = page.totalResult
                 this.loading = false
@@ -287,13 +288,13 @@ export default {
               })
             },
             findSexList () {
-              return this.$ajax.get('/api/conf/sex/list').then(data => {
+              return XEAjax.get('/api/conf/sex/list').then(data => {
                 this.sexList = data
                 return data
               })
             },
             findRegionList () {
-              return this.$ajax.get('/api/conf/region/list').then(data => {
+              return XEAjax.get('/api/conf/region/list').then(data => {
                 this.regionList = data
                 return data
               })
@@ -437,7 +438,7 @@ export default {
   methods: {
     findList () {
       this.loading = true
-      this.$ajax.get(`/api/user/page/list/${this.tablePage.pageSize}/${this.tablePage.currentPage}`, this.formData).then(({ page, result }) => {
+      XEAjax.get(`/api/user/page/list/${this.tablePage.pageSize}/${this.tablePage.currentPage}`, this.formData).then(({ page, result }) => {
         this.tableData = result
         this.tablePage.totalResult = page.totalResult
         this.loading = false
@@ -447,13 +448,13 @@ export default {
       })
     },
     findSexList () {
-      return this.$ajax.get('/api/conf/sex/list').then(data => {
+      return XEAjax.get('/api/conf/sex/list').then(data => {
         this.sexList = data
         return data
       })
     },
     findRegionList () {
-      return this.$ajax.get('/api/conf/region/list').then(data => {
+      return XEAjax.get('/api/conf/region/list').then(data => {
         this.regionList = data
         return data
       })

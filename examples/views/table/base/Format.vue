@@ -48,7 +48,7 @@
 
 <script>
 import hljs from 'highlight.js'
-import XEUtils from 'xe-utils/methods/xe-utils'
+import XEUtils from 'xe-utils'
 
 XEUtils.mixin({
   // 自定义全局的格式化处理函数
@@ -110,7 +110,7 @@ export default {
               return item ? item.label : ''
             },
             formatTime ({ cellValue, row, column }) {
-              return this.$utils.toDateString(cellValue, 'yyyy-MM-dd HH:ss:mm')
+              return XEUtils.toDateString(cellValue, 'yyyy-MM-dd HH:ss:mm')
             }
           }
         }
@@ -176,7 +176,7 @@ export default {
       return item ? item.label : ''
     },
     formatTime ({ cellValue, row, column }) {
-      return this.$utils.toDateString(cellValue, 'yyyy-MM-dd HH:ss:mm')
+      return XEUtils.toDateString(cellValue, 'yyyy-MM-dd HH:ss:mm')
     }
   }
 }

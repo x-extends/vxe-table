@@ -31,6 +31,7 @@
 </template>
 
 <script>
+import XEUtils from 'xe-utils'
 import hljs from 'highlight.js'
 
 export default {
@@ -400,7 +401,7 @@ export default {
             let options = { children: 'children' }
             let list = []
             let keyMap = {}
-            this.$utils.eachTree(this.treeData, (item, index, result, paths, parent) => {
+            XEUtils.eachTree(this.treeData, (item, index, result, paths, parent) => {
               keyMap[item.id] = item
               item.keys = parent ? parent.keys.concat([item.id]) : [item.id]
               if (!item.children || !item.children.length) {
@@ -421,15 +422,15 @@ export default {
           // 通用行合并函数（将相同多列数据合并为一行）
           rowspanMethod ({ row, $rowIndex, column, data }) {
             let fields = ['name_1', 'name_2', 'name_3']
-            let cellValue = this.$utils.get(row, column.property)
+            let cellValue = XEUtils.get(row, column.property)
             if (cellValue && fields.includes(column.property)) {
               let prevRow = data[$rowIndex - 1]
               let nextRow = data[$rowIndex + 1]
-              if (prevRow && this.$utils.get(prevRow, column.property) === cellValue) {
+              if (prevRow && XEUtils.get(prevRow, column.property) === cellValue) {
                 return { rowspan: 0, colspan: 0 }
               } else {
                 let countRowspan = 1
-                while (nextRow && this.$utils.get(nextRow, column.property) === cellValue) {
+                while (nextRow && XEUtils.get(nextRow, column.property) === cellValue) {
                   nextRow = data[++countRowspan + $rowIndex]
                 }
                 if (countRowspan > 1) {
@@ -471,7 +472,7 @@ export default {
       let options = { children: 'children' }
       let list = []
       let keyMap = {}
-      this.$utils.eachTree(this.treeData, (item, index, result, paths, parent) => {
+      XEUtils.eachTree(this.treeData, (item, index, result, paths, parent) => {
         keyMap[item.id] = item
         item.keys = parent ? parent.keys.concat([item.id]) : [item.id]
         if (!item.children || !item.children.length) {
@@ -492,15 +493,15 @@ export default {
     // 通用行合并函数（将相同多列数据合并为一行）
     rowspanMethod ({ row, $rowIndex, column, data }) {
       let fields = ['name_1', 'name_2', 'name_3']
-      let cellValue = this.$utils.get(row, column.property)
+      let cellValue = XEUtils.get(row, column.property)
       if (cellValue && fields.includes(column.property)) {
         let prevRow = data[$rowIndex - 1]
         let nextRow = data[$rowIndex + 1]
-        if (prevRow && this.$utils.get(prevRow, column.property) === cellValue) {
+        if (prevRow && XEUtils.get(prevRow, column.property) === cellValue) {
           return { rowspan: 0, colspan: 0 }
         } else {
           let countRowspan = 1
-          while (nextRow && this.$utils.get(nextRow, column.property) === cellValue) {
+          while (nextRow && XEUtils.get(nextRow, column.property) === cellValue) {
             nextRow = data[++countRowspan + $rowIndex]
           }
           if (countRowspan > 1) {

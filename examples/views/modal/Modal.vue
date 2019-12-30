@@ -114,6 +114,7 @@
 </template>
 
 <script>
+import XEAjax from 'xe-ajax'
 import hljs from 'highlight.js'
 
 export default {
@@ -132,7 +133,7 @@ export default {
           total: 'page.total'
         },
         ajax: {
-          query: ({ page }) => this.$ajax.get(`/api/user/page/list/${page.pageSize}/${page.currentPage}`)
+          query: ({ page }) => XEAjax.get(`/api/user/page/list/${page.pageSize}/${page.currentPage}`)
         }
       },
       tableToolbar: {
@@ -283,7 +284,7 @@ export default {
                   total: 'page.total'
                 },
                 ajax: {
-                  query: ({ page }) => this.$ajax.get(\`/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`)
+                  query: ({ page }) => XEAjax.get(\`/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`)
                 }
               },
               tableToolbar: {

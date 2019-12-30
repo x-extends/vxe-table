@@ -70,6 +70,7 @@
 </template>
 
 <script>
+import XEAjax from 'xe-ajax'
 import hljs from 'highlight.js'
 
 export default {
@@ -100,7 +101,7 @@ export default {
             }
           },
           created () {
-            this.$ajax.mockList(600).then(data => {
+            XEAjax.mockList(600).then(data => {
               this.tableData = data
             })
           }
@@ -124,7 +125,7 @@ export default {
         `
         export default {
           created () {
-            this.$ajax.mockList(1000).then(data => {
+            XEAjax.mockList(1000).then(data => {
               this.$refs.xTable.reloadData(data)
             })
           }
@@ -134,10 +135,10 @@ export default {
     }
   },
   created () {
-    this.$ajax.mockList(600).then(data => {
+    XEAjax.mockList(600).then(data => {
       this.tableData = data
     })
-    this.$ajax.mockList(1000).then(data => {
+    XEAjax.mockList(1000).then(data => {
       this.$refs.xTable.reloadData(data)
     })
   },

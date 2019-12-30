@@ -62,9 +62,9 @@ export default {
           total: 'page.total'
         },
         ajax: {
-          query: ({ page }) => this.$ajax.get(`/api/column/page/list/${page.pageSize}/${page.currentPage}`, { sort: 'seq', order: 'asc' }),
-          delete: ({ body }) => this.$ajax.post('/api/column/save', body),
-          save: ({ body }) => this.$ajax.post('/api/column/save', body)
+          query: ({ page }) => XEAjax.get(`/api/column/page/list/${page.pageSize}/${page.currentPage}`, { sort: 'seq', order: 'asc' }),
+          delete: ({ body }) => XEAjax.post('/api/column/save', body),
+          save: ({ body }) => XEAjax.post('/api/column/save', body)
         }
       },
       tableToolbar: {
@@ -104,9 +104,9 @@ export default {
           total: 'page.total'
         },
         ajax: {
-          query: ({ page }) => this.$ajax.get(`/api/user/page/list/${page.pageSize}/${page.currentPage}`),
-          delete: ({ body }) => this.$ajax.post('/api/user/save', body),
-          save: ({ body }) => this.$ajax.post('/api/user/save', body)
+          query: ({ page }) => XEAjax.get(`/api/user/page/list/${page.pageSize}/${page.currentPage}`),
+          delete: ({ body }) => XEAjax.post('/api/user/save', body),
+          save: ({ body }) => XEAjax.post('/api/user/save', body)
         }
       },
       tableToolbar2: {
@@ -150,9 +150,9 @@ export default {
                   total: 'page.total'
                 },
                 ajax: {
-                  query: ({ page }) => this.$ajax.get(\`/api/column/page/list/\${page.pageSize}/\${page.currentPage}\`, { sort: 'seq', order: 'asc' }),
-                  delete: ({ body }) => this.$ajax.post('/api/column/save', body),
-                  save: ({ body }) => this.$ajax.post('/api/column/save', body)
+                  query: ({ page }) => XEAjax.get(\`/api/column/page/list/\${page.pageSize}/\${page.currentPage}\`, { sort: 'seq', order: 'asc' }),
+                  delete: ({ body }) => XEAjax.post('/api/column/save', body),
+                  save: ({ body }) => XEAjax.post('/api/column/save', body)
                 }
               },
               tableToolbar: {
@@ -218,9 +218,9 @@ export default {
                   total: 'page.total'
                 },
                 ajax: {
-                  query: ({ page }) => this.$ajax.get(\`/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`),
-                  delete: ({ body }) => this.$ajax.post('/api/user/save', body),
-                  save: ({ body }) => this.$ajax.post('/api/user/save', body)
+                  query: ({ page }) => XEAjax.get(\`/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`),
+                  delete: ({ body }) => XEAjax.post('/api/user/save', body),
+                  save: ({ body }) => XEAjax.post('/api/user/save', body)
                 }
               },
               tableToolbar: {

@@ -67,6 +67,7 @@
 </template>
 
 <script>
+import XEUtils from 'xe-utils'
 import hljs from 'highlight.js'
 
 export default {
@@ -133,14 +134,14 @@ export default {
             loadContentMethod ({ row }) {
               return new Promise(resolve => {
                 setTimeout(() => {
-                  let detailList = this.$utils.sample([
+                  let detailList = XEUtils.sample([
                     { role: 'Develop', age: 20, sex: '女' },
                     { role: 'Develop', age: 22, sex: '女' },
                     { role: 'Develop', age: 24, sex: '男' },
                     { role: 'Develop', age: 26, sex: '女' },
                     { role: 'Develop', age: 28, sex: '男' },
                     { role: 'Develop', age: 30, sex: '男' }
-                  ], this.$utils.random(1, 5))
+                  ], XEUtils.random(1, 5))
                   row.detailList = detailList
                   resolve()
                 }, 500)
@@ -181,21 +182,21 @@ export default {
             loadContentMethod ({ row }) {
               return new Promise(resolve => {
                 setTimeout(() => {
-                  let childCols = this.$utils.sample([
+                  let childCols = XEUtils.sample([
                     { type: 'seq', title: 'Sequence' },
                     { field: 'name', title: 'Name' },
                     { field: 'role', title: 'Role' },
                     { field: 'age', title: 'Age' },
                     { field: 'sex', title: 'Sex' }
-                  ], this.$utils.random(3, 5))
-                  let childData = this.$utils.sample([
+                  ], XEUtils.random(3, 5))
+                  let childData = XEUtils.sample([
                     { name: 'TEST1', role: 'Develop', age: 20, sex: '女' },
                     { name: 'TEST2', role: 'Develop', age: 22, sex: '女' },
                     { name: 'TEST3', role: 'Develop', age: 24, sex: '男' },
                     { name: 'TEST4', role: 'Develop', age: 26, sex: '女' },
                     { name: 'TEST5', role: 'Develop', age: 28, sex: '男' },
                     { name: 'TEST6', role: 'Develop', age: 30, sex: '男' }
-                  ], this.$utils.random(1, 5))
+                  ], XEUtils.random(1, 5))
                   row.childCols = childCols
                   row.childData = childData
                   resolve()
@@ -217,14 +218,14 @@ export default {
     loadContentMethod ({ row }) {
       return new Promise(resolve => {
         setTimeout(() => {
-          let detailList = this.$utils.sample([
+          let detailList = XEUtils.sample([
             { role: 'Develop', age: 20, sex: '女' },
             { role: 'Develop', age: 22, sex: '女' },
             { role: 'Develop', age: 24, sex: '男' },
             { role: 'Develop', age: 26, sex: '女' },
             { role: 'Develop', age: 28, sex: '男' },
             { role: 'Develop', age: 30, sex: '男' }
-          ], this.$utils.random(1, 5))
+          ], XEUtils.random(1, 5))
           row.detailList = detailList
           resolve()
         }, 500)
@@ -233,21 +234,21 @@ export default {
     loadContentMethod2 ({ row }) {
       return new Promise(resolve => {
         setTimeout(() => {
-          let childCols = this.$utils.sample([
+          let childCols = XEUtils.sample([
             { type: 'seq', title: 'Sequence' },
             { field: 'name', title: 'Name' },
             { field: 'role', title: 'Role' },
             { field: 'age', title: 'Age' },
             { field: 'sex', title: 'Sex' }
-          ], this.$utils.random(3, 5))
-          let childData = this.$utils.sample([
+          ], XEUtils.random(3, 5))
+          let childData = XEUtils.sample([
             { name: 'TEST1', role: 'Develop', age: 20, sex: '女' },
             { name: 'TEST2', role: 'Develop', age: 22, sex: '女' },
             { name: 'TEST3', role: 'Develop', age: 24, sex: '男' },
             { name: 'TEST4', role: 'Develop', age: 26, sex: '女' },
             { name: 'TEST5', role: 'Develop', age: 28, sex: '男' },
             { name: 'TEST6', role: 'Develop', age: 30, sex: '男' }
-          ], this.$utils.random(1, 5))
+          ], XEUtils.random(1, 5))
           row.childCols = childCols
           row.childData = childData
           resolve()

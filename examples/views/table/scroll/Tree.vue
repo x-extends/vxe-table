@@ -30,6 +30,7 @@
 </template>
 
 <script>
+import XEAjax from 'xe-ajax'
 import hljs from 'highlight.js'
 
 export default {
@@ -83,7 +84,7 @@ export default {
           methods: {
             findCityAll () {
               this.loading = true
-              this.$ajax.get('/api/conf/city/all').then(data => {
+              XEAjax.get('/api/conf/city/all').then(data => {
                 this.tableData = data
                 this.loading = false
               })
@@ -105,7 +106,7 @@ export default {
   methods: {
     findCityAll () {
       this.loading = true
-      this.$ajax.get('/api/conf/city/all').then(data => {
+      XEAjax.get('/api/conf/city/all').then(data => {
         this.tableData = data
         this.loading = false
       })

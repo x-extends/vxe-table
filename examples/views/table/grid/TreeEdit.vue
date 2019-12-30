@@ -23,6 +23,8 @@
 </template>
 
 <script>
+import XEUtils from 'xe-utils'
+import XEAjax from 'xe-ajax'
 import hljs from 'highlight.js'
 
 export default {
@@ -30,11 +32,11 @@ export default {
     return {
       tableProxy: {
         ajax: {
-          query: () => this.$ajax.get('/api/file/list').then(data => {
+          query: () => XEAjax.get('/api/file/list').then(data => {
             // 将带层级的列表转成树结构
-            return this.$utils.toArrayTree(data, { key: 'id', parentKey: 'parentId', children: 'children' })
+            return XEUtils.toArrayTree(data, { key: 'id', parentKey: 'parentId', children: 'children' })
           }),
-          save: ({ body }) => this.$ajax.post('/api/file/save', body)
+          save: ({ body }) => XEAjax.post('/api/file/save', body)
         }
       },
       tableToolbar: {
@@ -74,11 +76,11 @@ export default {
             return {
               tableProxy: {
                 ajax: {
-                  query: () => this.$ajax.get('/api/file/list').then(data => {
+                  query: () => XEAjax.get('/api/file/list').then(data => {
                     // 将带层级的列表转成树结构
-                    return this.$utils.toArrayTree(data, { key: 'id', parentKey: 'parentId', children: 'children' })
+                    return XEUtils.toArrayTree(data, { key: 'id', parentKey: 'parentId', children: 'children' })
                   }),
-                  save: ({ body }) => this.$ajax.post('/api/file/save', body)
+                  save: ({ body }) => XEAjax.post('/api/file/save', body)
                 }
               },
               tableToolbar: {
@@ -103,7 +105,7 @@ export default {
           },
           methods: {
             formatterDate ({ cellValue }) {
-              return this.$utils.toDateString(cellValue, 'yyyy-MM-dd HH:mm:ss')
+              return XEUtils.toDateString(cellValue, 'yyyy-MM-dd HH:mm:ss')
             }
           }
         }
@@ -118,7 +120,7 @@ export default {
   },
   methods: {
     formatterDate ({ cellValue }) {
-      return this.$utils.toDateString(cellValue, 'yyyy-MM-dd HH:mm:ss')
+      return XEUtils.toDateString(cellValue, 'yyyy-MM-dd HH:mm:ss')
     }
   }
 }

@@ -28,6 +28,8 @@
 </template>
 
 <script>
+import XEUtils from 'xe-utils'
+import XEAjax from 'xe-ajax'
 import hljs from 'highlight.js'
 
 export default {
@@ -36,7 +38,7 @@ export default {
       tableProxy: {
         ajax: {
           // 查询根节点
-          query: () => this.$ajax.get('/api/file/node/list', { parentId: null })
+          query: () => XEAjax.get('/api/file/node/list', { parentId: null })
         }
       },
       bodyMenus: [
@@ -95,7 +97,7 @@ export default {
               tableProxy: {
                 ajax: {
                   // 查询根节点
-                  query: () => this.$ajax.get('/api/file/node/list', { parentId: null })
+                  query: () => XEAjax.get('/api/file/node/list', { parentId: null })
                 }
               },
               bodyMenus: [
@@ -133,11 +135,11 @@ export default {
           },
           methods: {
             formatterDate ({ cellValue }) {
-              return this.$utils.toDateString(cellValue, 'yyyy-MM-dd HH:mm:ss')
+              return XEUtils.toDateString(cellValue, 'yyyy-MM-dd HH:mm:ss')
             },
             loadChildrenMethod ({ row }) {
               // 异步加载子节点
-              return this.$ajax.get('/api/file/node/list', { parentId: row.id })
+              return XEAjax.get('/api/file/node/list', { parentId: row.id })
             },
             getUpdateEvent () {
               let updateRecords = this.$refs.xGrid.getUpdateRecords()
@@ -193,11 +195,11 @@ export default {
   },
   methods: {
     formatterDate ({ cellValue }) {
-      return this.$utils.toDateString(cellValue, 'yyyy-MM-dd HH:mm:ss')
+      return XEUtils.toDateString(cellValue, 'yyyy-MM-dd HH:mm:ss')
     },
     loadChildrenMethod ({ row }) {
       // 异步加载子节点
-      return this.$ajax.get('/api/file/node/list', { parentId: row.id })
+      return XEAjax.get('/api/file/node/list', { parentId: row.id })
     },
     getUpdateEvent () {
       let updateRecords = this.$refs.xGrid.getUpdateRecords()

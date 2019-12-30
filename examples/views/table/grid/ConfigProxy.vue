@@ -25,6 +25,7 @@
 </template>
 
 <script>
+import XEAjax from 'xe-ajax'
 import hljs from 'highlight.js'
 
 export default {
@@ -57,10 +58,10 @@ export default {
             filters.forEach(({ column, property, values }) => {
               formData[property] = values.join(',')
             })
-            return this.$ajax.get(`/api/user/page/list/${page.pageSize}/${page.currentPage}`, formData)
+            return XEAjax.get(`/api/user/page/list/${page.pageSize}/${page.currentPage}`, formData)
           },
-          delete: ({ body }) => this.$ajax.post('/api/user/save', body),
-          save: ({ body }) => this.$ajax.post('/api/user/save', body)
+          delete: ({ body }) => XEAjax.post('/api/user/save', body),
+          save: ({ body }) => XEAjax.post('/api/user/save', body)
         }
       },
       tableToolbar: {

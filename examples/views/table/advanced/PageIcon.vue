@@ -41,6 +41,7 @@
 </template>
 
 <script>
+import XEAjax from 'xe-ajax'
 import hljs from 'highlight.js'
 
 export default {
@@ -103,7 +104,7 @@ export default {
           methods: {
             findList () {
               this.loading = true
-              this.$ajax.get(\`/api/user/page/list/\${this.tablePage.pageSize}/\${this.tablePage.currentPage}\`, this.formData).then(({ page, result }) => {
+              XEAjax.get(\`/api/user/page/list/\${this.tablePage.pageSize}/\${this.tablePage.currentPage}\`, this.formData).then(({ page, result }) => {
                 this.tableData = result
                 this.tablePage.totalResult = page.totalResult
                 this.loading = false
@@ -133,7 +134,7 @@ export default {
   methods: {
     findList () {
       this.loading = true
-      this.$ajax.get(`/api/user/page/list/${this.tablePage.pageSize}/${this.tablePage.currentPage}`, this.formData).then(({ page, result }) => {
+      XEAjax.get(`/api/user/page/list/${this.tablePage.pageSize}/${this.tablePage.currentPage}`, this.formData).then(({ page, result }) => {
         this.tableData = result
         this.tablePage.totalResult = page.totalResult
         this.loading = false

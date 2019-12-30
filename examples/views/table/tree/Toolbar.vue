@@ -38,6 +38,7 @@
 </template>
 
 <script>
+import XEUtils from 'xe-utils'
 import hljs from 'highlight.js'
 
 export default {
@@ -97,7 +98,7 @@ export default {
               this.loading = true
               return new Promise(resolve => {
                 setTimeout(() => {
-                  this.tableData = this.$utils.clone(window.MOCK_TREE_DATA_LIST, true)
+                  this.tableData = XEUtils.clone(window.MOCK_TREE_DATA_LIST, true)
                   this.loading = false
                   resolve(this.tableData)
                 }, 300)
@@ -107,7 +108,7 @@ export default {
               let xTree = this.$refs.xTree
               xTree.createRow({
                 name: '新数据',
-                date: this.$utils.toDateString(new Date(), 'yyyy-MM-dd'),
+                date: XEUtils.toDateString(new Date(), 'yyyy-MM-dd'),
                 isNew: true
               }).then(newRow => {
                 // 插入到第一行
@@ -119,7 +120,7 @@ export default {
               let xTree = this.$refs.xTree
               let removeRecords = xTree.getCheckboxRecords()
               removeRecords.forEach(row => {
-                let matchObj = this.$utils.findTree(this.tableData, item => item === row, this.treeConfig)
+                let matchObj = XEUtils.findTree(this.tableData, item => item === row, this.treeConfig)
                 if (matchObj) {
                   let { items, index } = matchObj
                   // 从树节点中移除
@@ -138,7 +139,7 @@ export default {
               this.findList()
             },
             getInsertEvent () {
-              let insertRecords = this.$utils.filterTree(this.tableData, item => item.isNew, this.treeConfig)
+              let insertRecords = XEUtils.filterTree(this.tableData, item => item.isNew, this.treeConfig)
               this.$XModal.alert(insertRecords.length)
             },
             getRemoveEvent () {
@@ -168,7 +169,7 @@ export default {
       this.loading = true
       return new Promise(resolve => {
         setTimeout(() => {
-          this.tableData = this.$utils.clone(window.MOCK_TREE_DATA_LIST, true)
+          this.tableData = XEUtils.clone(window.MOCK_TREE_DATA_LIST, true)
           this.loading = false
           resolve(this.tableData)
         }, 300)
@@ -178,7 +179,7 @@ export default {
       let xTree = this.$refs.xTree
       xTree.createRow({
         name: '新数据',
-        date: this.$utils.toDateString(new Date(), 'yyyy-MM-dd'),
+        date: XEUtils.toDateString(new Date(), 'yyyy-MM-dd'),
         isNew: true
       }).then(newRow => {
         // 插入到第一行
@@ -190,7 +191,7 @@ export default {
       let xTree = this.$refs.xTree
       let removeRecords = xTree.getCheckboxRecords()
       removeRecords.forEach(row => {
-        let matchObj = this.$utils.findTree(this.tableData, item => item === row, this.treeConfig)
+        let matchObj = XEUtils.findTree(this.tableData, item => item === row, this.treeConfig)
         if (matchObj) {
           let { items, index } = matchObj
           // 从树节点中移除
@@ -209,7 +210,7 @@ export default {
       this.findList()
     },
     getInsertEvent () {
-      let insertRecords = this.$utils.filterTree(this.tableData, item => item.isNew, this.treeConfig)
+      let insertRecords = XEUtils.filterTree(this.tableData, item => item.isNew, this.treeConfig)
       this.$XModal.alert(insertRecords.length)
     },
     getRemoveEvent () {

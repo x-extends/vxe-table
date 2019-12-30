@@ -33,6 +33,7 @@
 </template>
 
 <script>
+import XEAjax from 'xe-ajax'
 import hljs from 'highlight.js'
 
 export default {
@@ -48,11 +49,11 @@ export default {
         },
         ajax: {
           // page 对象： { pageSize, currentPage }
-          query: ({ page }) => this.$ajax.get(`/api/user/page/list/${page.pageSize}/${page.currentPage}`),
+          query: ({ page }) => XEAjax.get(`/api/user/page/list/${page.pageSize}/${page.currentPage}`),
           // body 对象： { removeRecords }
-          delete: ({ body }) => this.$ajax.post('/api/user/save', body),
+          delete: ({ body }) => XEAjax.post('/api/user/save', body),
           // body 对象： { insertRecords, updateRecords, removeRecords, pendingRecords }
-          save: ({ body }) => this.$ajax.post('/api/user/save', body)
+          save: ({ body }) => XEAjax.post('/api/user/save', body)
         }
       },
       toolbar: {
@@ -108,11 +109,11 @@ export default {
                 },
                 ajax: {
                   // page 对象： { pageSize, currentPage }
-                  query: ({ page }) => this.$ajax.get(\`/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`), // 模拟请求
+                  query: ({ page }) => XEAjax.get(\`/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`), // 模拟请求
                   // body 对象： { removeRecords }
-                  delete: ({ body }) => this.$ajax.post('/api/user/save', body),
+                  delete: ({ body }) => XEAjax.post('/api/user/save', body),
                   // body 对象： { insertRecords, updateRecords, removeRecords, pendingRecords }
-                  save: ({ body }) => this.$ajax.post('/api/user/save', body)
+                  save: ({ body }) => XEAjax.post('/api/user/save', body)
                 }
               },
               toolbar: {
