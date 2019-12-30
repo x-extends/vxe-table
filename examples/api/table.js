@@ -1702,7 +1702,7 @@ const apis = [
           },
           {
             name: 'scrollX',
-            desc: '横向 X 虚拟滚动配置（tree-config 启用后无效）',
+            desc: '横向虚拟滚动配置（tree-config 启用后无效）',
             version: '',
             type: 'Object',
             enum: '',
@@ -1710,16 +1710,16 @@ const apis = [
             list: [
               {
                 name: 'gt',
-                desc: '指定大于多少范围时自动启动虚拟滚动（启用 X 虚拟滚动，必须固定所有列宽，否则无法兼容）',
+                desc: '指定大于指定列时自动启动横向虚拟滚动（注：启用横向虚拟滚动之后将不能支持分组表头）',
                 version: '',
                 type: 'Number',
                 enum: '',
-                defVal: '80',
+                defVal: '60',
                 list: []
               },
               {
                 name: 'oSize',
-                desc: '当剩余数据少于指定范围时触发重新渲染',
+                desc: '当剩余数据少于指定列时触发重新渲染',
                 version: '',
                 type: 'Number',
                 enum: '',
@@ -1748,7 +1748,7 @@ const apis = [
           },
           {
             name: 'scrollY',
-            desc: '纵向 Y 虚拟滚动配置（tree-config 启用后无效）',
+            desc: '纵向虚拟滚动配置（注：当 tree-config 启用后纵向虚拟滚动将无效）',
             version: '',
             type: 'Object',
             enum: '',
@@ -1756,16 +1756,16 @@ const apis = [
             list: [
               {
                 name: 'gt',
-                desc: '指定大于多少范围时自动启动虚拟滚动（启用 Y 虚拟滚动，必须固定所有行高，否则无法兼容）',
+                desc: '指定大于指定行时自动启动纵向虚拟滚动（注：启用纵向虚拟滚动之后将不能支持动态行高）',
                 version: '',
                 type: 'Number',
                 enum: '',
-                defVal: '200',
+                defVal: '100',
                 list: []
               },
               {
                 name: 'oSize',
-                desc: '当剩余数据少于指定范围时触发重新渲染',
+                desc: '当剩余数据少于指定行时触发重新渲染',
                 version: '',
                 type: 'Number',
                 enum: '',
@@ -1812,7 +1812,7 @@ const apis = [
           },
           {
             name: 'rHeights',
-            desc: '重写表格默认高度,必须和 scss 中的变量一致（用于重写表格默认行高的场景，谨慎使用）',
+            desc: '重写表格默认高度,必须和 scss 中的变量一致（用于重写表格默认行高的场景，谨慎使用，99%场景不需要更改）',
             version: '',
             type: 'Object',
             enum: '',
