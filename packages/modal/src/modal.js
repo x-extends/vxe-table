@@ -44,7 +44,7 @@ export default {
       modalTop: 0,
       modalZindex: this.zIndex || UtilTools.nextZIndex(),
       zoomLocat: null,
-      isFirst: true
+      inited: false
     }
   },
   computed: {
@@ -285,17 +285,22 @@ export default {
           setTimeout(this.close, XEUtils.toNumber(duration))
         } else {
           this.$nextTick(() => {
-            let { isFirst, marginSize, fullscreen } = this
-            let modalBoxElem = this.getBox()
-            let clientVisibleWidth = document.documentElement.clientWidth || document.body.clientWidth
-            let clientVisibleHeight = document.documentElement.clientHeight || document.body.clientHeight
-            modalBoxElem.style.left = `${clientVisibleWidth / 2 - modalBoxElem.offsetWidth / 2}px`
-            if (modalBoxElem.offsetHeight + modalBoxElem.offsetTop + marginSize > clientVisibleHeight) {
-              modalBoxElem.style.top = `${marginSize}px`
+            let { inited, marginSize, fullscreen } = this
+            if (!remember || !inited) {
+              let modalBoxElem = this.getBox()
+              let clientVisibleWidth = document.documentElement.clientWidth || document.body.clientWidth
+              let clientVisibleHeight = document.documentElement.clientHeight || document.body.clientHeight
+              modalBoxElem.style.top = ''
+              modalBoxElem.style.left = `${clientVisibleWidth / 2 - modalBoxElem.offsetWidth / 2}px`
+              if (modalBoxElem.offsetHeight + modalBoxElem.offsetTop + marginSize > clientVisibleHeight) {
+                modalBoxElem.style.top = `${marginSize}px`
+              }
             }
-            if (isFirst && fullscreen) {
-              this.isFirst = false
-              this.$nextTick(this.maximize)
+            if (!inited) {
+              this.inited = true
+              if (fullscreen) {
+                this.$nextTick(this.maximize)
+              }
             }
           })
         }
