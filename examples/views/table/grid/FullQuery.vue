@@ -4,6 +4,7 @@
 
     <vxe-grid
       resizable
+      form
       border="none"
       ref="xGrid"
       height="548"
@@ -15,6 +16,35 @@
       :columns="tableColumn"
       :proxy-config="tableProxy"
       :checkbox-config="{labelField: 'id', reserve: true, highlight: true, range: true}">
+
+      <template v-slot:form>
+        <form class="form-row" v-on:submit.prevent="$refs.xGrid.commitProxy('reload')">
+          <div class="form-item">
+            <div class="title">Name:</div>
+            <div class="content">
+              <input name="name" v-model="formData.name" placeholder="Please enter a user name">
+            </div>
+          </div>
+          <div class="form-item">
+            <div class="title">Nickname:</div>
+            <div class="content">
+              <input name="nickname" v-model="formData.nickname" placeholder="Please enter a user nickname">
+            </div>
+          </div>
+          <div class="form-item">
+            <div class="title">Role:</div>
+            <div class="content">
+              <input name="role" v-model="formData.role" placeholder="Please enter a user role">
+            </div>
+          </div>
+          <div class="form-item">
+            <div class="content">
+              <button>查询</button>
+            </div>
+          </div>
+        </form>
+      </template>
+
       <template v-slot:empty>
         <span style="color: red;">
           <img src="static/other/img1.gif">
@@ -28,6 +58,7 @@
     <pre>
       <code class="xml">{{ demoCodes[0] }}</code>
       <code class="javascript">{{ demoCodes[1] }}</code>
+      <code class="css">{{ demoCodes[2] }}</code>
     </pre>
   </div>
 </template>
@@ -38,6 +69,11 @@ import hljs from 'highlight.js'
 export default {
   data () {
     return {
+      formData: {
+        name: '',
+        nickname: '',
+        role: ''
+      },
       tablePage: {
         pageSize: 15,
         pageSizes: [5, 10, 20, 50, 100, 200, 500, 1000]
@@ -50,40 +86,21 @@ export default {
           // 任何支持 Promise API 的库都可以对接（fetch、jquery、axios、xe-ajax）
           query: ({ page, sort, filters }) => {
             // 处理排序条件
-            let formData = {
-              sort: sort.field,
+            let queryParams = Object.assign({
+              sort: sort.property,
               order: sort.order
-            }
+            }, this.formData)
             // 处理筛选条件
             filters.forEach(({ column, field, values }) => {
-              formData[field] = values.join(',')
+              queryParams[field] = values.join(',')
             })
-            return this.$ajax.get(`/api/user/page/list/${page.pageSize}/${page.currentPage}`, formData)
+            return this.$ajax.get(`/api/user/page/list/${page.pageSize}/${page.currentPage}`, queryParams)
           }
         }
       },
       tableToolbar: {
-        buttons: [
-          { code: 'reload', name: 'app.body.button.refresh', icon: 'fa fa-refresh', disabled: false },
-          {
-            name: '导入/导出1',
-            dropdowns: [
-              { code: 'import', name: '直接导入', icon: 'fa fa-cloud-upload', disabled: false },
-              { code: 'export', name: '直接导出 CSV', icon: 'fa fa-download', params: { type: 'csv' }, disabled: false },
-              { code: 'export', name: '直接导出 XML', icon: 'fa fa-download', params: { type: 'xml' }, disabled: false },
-              { code: 'export', name: '直接导出 HTML', icon: 'fa fa-download', params: { type: 'html' }, disabled: false },
-              { code: 'export', name: '直接导出 TXT', icon: 'fa fa-download', params: { type: 'txt' }, disabled: false }
-            ]
-          },
-          {
-            name: '导入/导出2',
-            icon: 'fa fa-cloud-download',
-            dropdowns: [
-              { code: 'open_import', name: '高级导入', icon: 'fa fa-cloud-upload', disabled: false },
-              { code: 'open_export', name: '高级导出', icon: 'fa fa-download', disabled: false }
-            ]
-          }
-        ]
+        export: true,
+        custom: true
       },
       tableColumn: [
         { type: 'seq', width: 60, fixed: 'left' },
@@ -110,6 +127,7 @@ export default {
         `
         <vxe-grid
           resizable
+          form
           border="none"
           ref="xGrid"
           height="548"
@@ -121,6 +139,35 @@ export default {
           :columns="tableColumn"
           :proxy-config="tableProxy"
           :checkbox-config="{labelField: 'id', reserve: true, highlight: true, range: true}">
+
+          <template v-slot:form>
+            <form class="form-row" v-on:submit.prevent="$refs.xGrid.commitProxy('reload')">
+              <div class="form-item">
+                <div class="title">Name:</div>
+                <div class="content">
+                  <input name="name" v-model="formData.name" placeholder="Please enter a user name">
+                </div>
+              </div>
+              <div class="form-item">
+                <div class="title">Nickname:</div>
+                <div class="content">
+                  <input name="nickname" v-model="formData.nickname" placeholder="Please enter a user nickname">
+                </div>
+              </div>
+              <div class="form-item">
+                <div class="title">Role:</div>
+                <div class="content">
+                  <input name="role" v-model="formData.role" placeholder="Please enter a user role">
+                </div>
+              </div>
+              <div class="form-item">
+                <div class="content">
+                  <button>查询</button>
+                </div>
+              </div>
+            </form>
+          </template>
+
           <template v-slot:empty>
             <span style="color: red;">
               <img src="static/other/img1.gif">
@@ -133,6 +180,11 @@ export default {
         export default {
           data () {
             return {
+              formData: {
+                name: '',
+                nickname: '',
+                role: ''
+              },
               tablePage: {
                 pageSize: 15,
                 pageSizes: [5, 10, 20, 50, 100, 200, 500, 1000]
@@ -145,40 +197,21 @@ export default {
                   // 任何支持 Promise API 的库都可以对接（fetch、jquery、axios、xe-ajax）
                   query: ({ page, sort, filters }) => {
                     // 处理排序条件
-                    let formData = {
+                    let queryParams = Object.assign({
                       sort: sort.property,
                       order: sort.order
-                    }
+                    }, this.formData)
                     // 处理筛选条件
                     filters.forEach(({ column, property, values }) => {
-                      formData[property] = values.join(',')
+                      queryParams[property] = values.join(',')
                     })
-                    return this.$ajax.get(\`/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`, formData)
+                    return this.$ajax.get(\`/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`, queryParams)
                   }
                 }
               },
               tableToolbar: {
-                buttons: [
-                  { code: 'reload', name: 'app.body.button.refresh', icon: 'fa fa-refresh', disabled: false },
-                  {
-                    name: '导入/导出1',
-                    dropdowns: [
-                      { code: 'import', name: '直接导入', icon: 'fa fa-cloud-upload', disabled: false },
-                      { code: 'export', name: '直接导出 CSV', icon: 'fa fa-download', params: { type: 'csv' }, disabled: false },
-                      { code: 'export', name: '直接导出 XML', icon: 'fa fa-download', params: { type: 'xml' }, disabled: false },
-                      { code: 'export', name: '直接导出 HTML', icon: 'fa fa-download', params: { type: 'html' }, disabled: false },
-                      { code: 'export', name: '直接导出 TXT', icon: 'fa fa-download', params: { type: 'txt' }, disabled: false }
-                    ]
-                  },
-                  {
-                    name: '导入/导出2',
-                    icon: 'fa fa-cloud-download',
-                    dropdowns: [
-                      { code: 'open_import', name: '高级导入', icon: 'fa fa-cloud-upload', disabled: false },
-                      { code: 'open_export', name: '高级导出', icon: 'fa fa-download', disabled: false }
-                    ]
-                  }
-                ]
+                export: true,
+                custom: true
               },
               tableColumn: [
                 { type: 'seq', width: 60, fixed: 'left' },
@@ -204,6 +237,29 @@ export default {
             }
           }
         }
+        `,
+        `
+        .form-row {
+          display: flex;
+          flex-direction: row;
+        }
+        .form-row .form-item {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          height: 36px;
+          padding-right: 10px;
+        }
+        .form-row .form-item > .title {
+          padding-right: 10px;
+        }
+        .form-row .form-item > .content {
+          width: 200px;
+        }
+        .form-row .form-item > .content input,
+        .form-row .form-item > .content select {
+          width: 100%;
+        }
         `
       ]
     }
@@ -215,3 +271,27 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.form-row {
+  display: flex;
+  flex-direction: row;
+}
+.form-row .form-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 36px;
+  padding-right: 10px;
+}
+.form-row .form-item > .title {
+  padding-right: 10px;
+}
+.form-row .form-item > .content {
+  width: 200px;
+}
+.form-row .form-item > .content input,
+.form-row .form-item > .content select {
+  width: 100%;
+}
+</style>

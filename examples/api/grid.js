@@ -14,6 +14,15 @@ const apis = [
     defVal: '',
     list: [
       {
+        name: 'form',
+        descKey: 'app.api.grid.desc.form',
+        version: '2.7.15',
+        type: 'Boolean, Object',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'toolbar',
         descKey: 'app.api.grid.desc.toolbar',
         version: '',
@@ -225,9 +234,27 @@ const apis = [
     defVal: '',
     list: [
       {
-        name: 'buttons',
-        desc: '只对 toolbar 配置时有效，按钮列表',
+        name: 'form',
+        desc: '只对 form 配置时有效，表单模板',
         version: '',
+        type: '',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'buttons',
+        desc: '只对 toolbar 配置时有效，工具栏按钮列表模板',
+        version: '',
+        type: '',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'tools',
+        desc: '只对 toolbar 配置时有效，工具栏右侧按钮列表',
+        version: '2.7.15',
         type: '',
         enum: '',
         defVal: '',
