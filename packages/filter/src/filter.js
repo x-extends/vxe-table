@@ -1,5 +1,6 @@
 import GlobalConfig from '../../conf'
 import { Renderer } from '../../v-x-e-table'
+import { UtilTools } from '../../tools'
 
 export default {
   name: 'VxeTableFilter',
@@ -73,7 +74,7 @@ export default {
                 this.changeOption(evnt, !item.checked, item)
               }
             }
-          }, item.label)
+          }, UtilTools.formatText(item.label, 1))
         }))
       ]
     },
