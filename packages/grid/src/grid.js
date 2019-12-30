@@ -20,6 +20,7 @@ export default {
     pagerConfig: Object,
     proxyConfig: Object,
     toolbar: [Boolean, Object],
+    form: [Boolean, Object],
     ...Table.props
   },
   provide () {
@@ -201,6 +202,15 @@ export default {
       style: this.renderStyle
     }, [
       /**
+       * 渲染表单
+       */
+      this.form ? h('div', {
+        ref: 'form',
+        class: ['vxe-form', {
+          'is--loading': this.tableLoading
+        }]
+      }, this.$slots.form) : null,
+      /**
        * 渲染工具栏
        */
       this.toolbar ? h('vxe-toolbar', {
@@ -238,8 +248,8 @@ export default {
      * 获取需要排除的高度
      */
     getExcludeHeight () {
-      let { toolbar, pager } = this.$refs
-      return (toolbar && toolbar.$el ? toolbar.$el.offsetHeight : 0) + (pager && pager.$el ? pager.$el.offsetHeight : 0)
+      let { form: formElem, toolbar, pager } = this.$refs
+      return (formElem ? formElem.offsetHeight : 0) + (toolbar && toolbar.$el ? toolbar.$el.offsetHeight : 0) + (pager && pager.$el ? pager.$el.offsetHeight : 0)
     },
     handleRowClassName (params) {
       let rowClassName = this.rowClassName

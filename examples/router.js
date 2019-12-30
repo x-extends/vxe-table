@@ -243,9 +243,6 @@ const TablePluginExportPDF = () => import(/* webpackChunkName: "excel" */ './vie
 const TablePluginRenderer = () => import(/* webpackChunkName: "excel" */ './views/table/plugin/Renderer.vue')
 const TablePluginMenus = () => import(/* webpackChunkName: "excel" */ './views/table/plugin/Menus.vue')
 
-const TableOptimizeScroller = () => import(/* webpackChunkName: "optimize" */ './views/table/optimize/Scroller.vue')
-const TableOptimizeEdit = () => import(/* webpackChunkName: "optimize" */ './views/table/optimize/Edit.vue')
-
 const VXEAPI = () => import(/* webpackChunkName: "api" */ './views/api/API.vue')
 
 Vue.use(Router)
@@ -1402,16 +1399,6 @@ export default new Router({
       path: '/table/plugin/menus',
       name: 'TablePluginMenus',
       component: TablePluginMenus
-    },
-    {
-      path: '/table/optimize/scroller',
-      name: 'TableOptimizeScroller',
-      component: TableOptimizeScroller
-    },
-    {
-      path: '/table/optimize/edit',
-      name: 'TableOptimizeEdit',
-      component: TableOptimizeEdit
     },
     {
       path: '/:name/api',

@@ -11,6 +11,7 @@
       border
       resizable
       highlight-hover-row
+      form
       ref="xGrid"
       height="530"
       row-id="id"
@@ -23,6 +24,43 @@
       :checkbox-config="{labelField: 'id', reserve: true, highlight: true, range: true}"
       :edit-rules="validRules"
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">
+
+      <template v-slot:form>
+        <form class="form-row" v-on:submit.prevent="$refs.xGrid.commitProxy('reload')">
+          <div class="form-item">
+            <div class="title">Name:</div>
+            <div class="content">
+              <input name="name" v-model="formData.name" placeholder="Please enter a user name">
+            </div>
+          </div>
+          <div class="form-item">
+            <div class="title">Nickname:</div>
+            <div class="content">
+              <input name="nickname" v-model="formData.nickname" placeholder="Please enter a user nickname">
+            </div>
+          </div>
+          <div class="form-item">
+            <div class="title">Sex:</div>
+            <div class="content">
+              <select name="sex" v-model="formData.sex">
+                <option v-for="(item, index) in sexList" :key="index" :value="item.value">{{ item.label }}</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-item">
+            <div class="title">Role:</div>
+            <div class="content">
+              <input name="role" v-model="formData.role" placeholder="Please enter a user role">
+            </div>
+          </div>
+          <div class="form-item">
+            <div class="content">
+              <button>查询</button>
+            </div>
+          </div>
+        </form>
+      </template>
+
       <template v-slot:empty>
         <span style="color: red;">
           <img src="static/other/img1.gif">
@@ -36,6 +74,7 @@
     <pre>
       <code class="xml">{{ demoCodes[0] }}</code>
       <code class="javascript">{{ demoCodes[1] }}</code>
+      <code class="css">{{ demoCodes[2] }}</code>
     </pre>
   </div>
 </template>
@@ -46,6 +85,13 @@ import hljs from 'highlight.js'
 export default {
   data () {
     return {
+      sexList: [],
+      formData: {
+        name: '',
+        nickname: '',
+        sex: '',
+        role: ''
+      },
       validRules: {
         name: [
           { required: true, message: '名称必须填写' },
@@ -67,15 +113,15 @@ export default {
           // 任何支持 Promise API 的库都可以对接（fetch、jquery、axios、xe-ajax）
           query: ({ page, sort, filters }) => {
             // 处理排序条件
-            let formData = {
+            let queryParams = Object.assign({
               sort: sort.property,
               order: sort.order
-            }
+            }, this.formData)
             // 处理筛选条件
             filters.forEach(({ column, property, values }) => {
-              formData[property] = values.join(',')
+              queryParams[property] = values.join(',')
             })
-            return this.$ajax.get(`/api/user/page/list/${page.pageSize}/${page.currentPage}`, formData)
+            return this.$ajax.get(`/api/user/page/list/${page.pageSize}/${page.currentPage}`, queryParams)
           },
           delete: ({ body }) => this.$ajax.post('/api/user/save', body),
           save: ({ body }) => this.$ajax.post('/api/user/save', body)
@@ -136,6 +182,7 @@ export default {
           border
           resizable
           highlight-hover-row
+          form
           ref="xGrid"
           height="530"
           row-id="id"
@@ -148,6 +195,43 @@ export default {
           :checkbox-config="{labelField: 'id', reserve: true, highlight: true, range: true}"
           :edit-rules="validRules"
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">
+
+          <template v-slot:form>
+            <form class="form-row" v-on:submit.prevent="$refs.xGrid.commitProxy('reload')">
+              <div class="form-item">
+                <div class="title">Name:</div>
+                <div class="content">
+                  <input name="name" v-model="formData.name" placeholder="Please enter a user name">
+                </div>
+              </div>
+              <div class="form-item">
+                <div class="title">Nickname:</div>
+                <div class="content">
+                  <input name="nickname" v-model="formData.nickname" placeholder="Please enter a user nickname">
+                </div>
+              </div>
+              <div class="form-item">
+                <div class="title">Sex:</div>
+                <div class="content">
+                  <select name="sex" v-model="formData.sex">
+                    <option v-for="(item, index) in sexList" :key="index" :value="item.value">{{ item.label }}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-item">
+                <div class="title">Role:</div>
+                <div class="content">
+                  <input name="role" v-model="formData.role" placeholder="Please enter a user role">
+                </div>
+              </div>
+              <div class="form-item">
+                <div class="content">
+                  <button>查询</button>
+                </div>
+              </div>
+            </form>
+          </template>
+
           <template v-slot:empty>
             <span style="color: red;">
               <img src="static/other/img1.gif">
@@ -160,6 +244,13 @@ export default {
         export default {
           data () {
             return {
+              sexList: [],
+              formData: {
+                name: '',
+                nickname: '',
+                sex: '',
+                role: ''
+              },
               validRules: {
                 name: [
                   { required: true, message: '名称必须填写' },
@@ -181,15 +272,15 @@ export default {
                   // 任何支持 Promise API 的库都可以对接（fetch、jquery、axios、xe-ajax）
                   query: ({ page, sort, filters }) => {
                     // 处理排序条件
-                    let formData = {
+                    let queryParams = Object.assign({
                       sort: sort.property,
                       order: sort.order
-                    }
+                    }, this.formData)
                     // 处理筛选条件
                     filters.forEach(({ column, property, values }) => {
-                      formData[property] = values.join(',')
+                      queryParams[property] = values.join(',')
                     })
-                    return this.$ajax.get(\`/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`, formData)
+                    return this.$ajax.get(\`/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`, queryParams)
                   },
                   delete: ({ body }) => this.$ajax.post('/api/user/save', body),
                   save: ({ body }) => this.$ajax.post('/api/user/save', body)
@@ -255,6 +346,7 @@ export default {
               // 异步更新下拉选项
               let column = this.$refs.xGrid.getColumnByField('sex')
               column.editRender.options = sexList
+              this.sexList = sexList
             },
             checkColumnMethod ({ column }) {
               if (['nickname', 'role'].includes(column.property)) {
@@ -263,6 +355,29 @@ export default {
               return true
             }
           }
+        }
+        `,
+        `
+        .form-row {
+          display: flex;
+          flex-direction: row;
+        }
+        .form-row .form-item {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          height: 36px;
+          padding-right: 10px;
+        }
+        .form-row .form-item > .title {
+          padding-right: 10px;
+        }
+        .form-row .form-item > .content {
+          width: 200px;
+        }
+        .form-row .form-item > .content input,
+        .form-row .form-item > .content select {
+          width: 100%;
         }
         `
       ]
@@ -282,6 +397,7 @@ export default {
       // 异步更新下拉选项
       let column = this.$refs.xGrid.getColumnByField('sex')
       column.editRender.options = sexList
+      this.sexList = sexList
     },
     checkColumnMethod ({ column }) {
       if (['nickname', 'role'].includes(column.property)) {
@@ -292,3 +408,27 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.form-row {
+  display: flex;
+  flex-direction: row;
+}
+.form-row .form-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 36px;
+  padding-right: 10px;
+}
+.form-row .form-item > .title {
+  padding-right: 10px;
+}
+.form-row .form-item > .content {
+  width: 200px;
+}
+.form-row .form-item > .content input,
+.form-row .form-item > .content select {
+  width: 100%;
+}
+</style>
