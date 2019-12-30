@@ -45,6 +45,8 @@
 </template>
 
 <script>
+import XEUtils from 'xe-utils'
+import XEAjax from 'xe-ajax'
 import hljs from 'highlight.js'
 
 export default {
@@ -60,9 +62,9 @@ export default {
           total: 'page.total'
         },
         ajax: {
-          query: ({ page }) => this.$ajax.get(`/api/column/page/list/${page.pageSize}/${page.currentPage}`, { sort: 'seq', order: 'asc' }),
-          delete: ({ body }) => this.$ajax.post('/api/column/save', body),
-          save: ({ body }) => this.$ajax.post('/api/column/save', body)
+          query: ({ page }) => XEAjax.get(`/api/column/page/list/${page.pageSize}/${page.currentPage}`, { sort: 'seq', order: 'asc' }),
+          delete: ({ body }) => XEAjax.post('/api/column/save', body),
+          save: ({ body }) => XEAjax.post('/api/column/save', body)
         }
       },
       tableToolbar: {
@@ -102,9 +104,9 @@ export default {
           total: 'page.total'
         },
         ajax: {
-          query: ({ page }) => this.$ajax.get(`/api/user/page/list/${page.pageSize}/${page.currentPage}`),
-          delete: ({ body }) => this.$ajax.post('/api/user/save', body),
-          save: ({ body }) => this.$ajax.post('/api/user/save', body)
+          query: ({ page }) => XEAjax.get(`/api/user/page/list/${page.pageSize}/${page.currentPage}`),
+          delete: ({ body }) => XEAjax.post('/api/user/save', body),
+          save: ({ body }) => XEAjax.post('/api/user/save', body)
         }
       },
       tableToolbar2: {
@@ -148,9 +150,9 @@ export default {
                   total: 'page.total'
                 },
                 ajax: {
-                  query: ({ page }) => this.$ajax.get(\`/api/column/page/list/\${page.pageSize}/\${page.currentPage}\`, { sort: 'seq', order: 'asc' }),
-                  delete: ({ body }) => this.$ajax.post('/api/column/save', body),
-                  save: ({ body }) => this.$ajax.post('/api/column/save', body)
+                  query: ({ page }) => XEAjax.get(\`/api/column/page/list/\${page.pageSize}/\${page.currentPage}\`, { sort: 'seq', order: 'asc' }),
+                  delete: ({ body }) => XEAjax.post('/api/column/save', body),
+                  save: ({ body }) => XEAjax.post('/api/column/save', body)
                 }
               },
               tableToolbar: {
@@ -184,7 +186,7 @@ export default {
           },
           methods: {
             formatterDate ({ cellValue }) {
-              return this.$utils.toDateString(cellValue, 'yyyy-MM-dd HH:mm:ss')
+              return XEUtils.toDateString(cellValue, 'yyyy-MM-dd HH:mm:ss')
             }
           }
         }
@@ -216,9 +218,9 @@ export default {
                   total: 'page.total'
                 },
                 ajax: {
-                  query: ({ page }) => this.$ajax.get(\`/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`),
-                  delete: ({ body }) => this.$ajax.post('/api/user/save', body),
-                  save: ({ body }) => this.$ajax.post('/api/user/save', body)
+                  query: ({ page }) => XEAjax.get(\`/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`),
+                  delete: ({ body }) => XEAjax.post('/api/user/save', body),
+                  save: ({ body }) => XEAjax.post('/api/user/save', body)
                 }
               },
               tableToolbar: {
@@ -243,7 +245,7 @@ export default {
           methods: {
             findColumn () {
               this.loading = true
-              this.$ajax.get('/api/column/list', { sort: 'seq', order: 'asc' }).then(data => {
+              XEAjax.get('/api/column/list', { sort: 'seq', order: 'asc' }).then(data => {
                 let validRules = {}
                 this.tableColumn2 = data.map(item => {
                   let config = {
@@ -292,7 +294,7 @@ export default {
                 })
             },
             formatterDate ({ cellValue }) {
-              return this.$utils.toDateString(cellValue, 'yyyy-MM-dd HH:mm:ss')
+              return XEUtils.toDateString(cellValue, 'yyyy-MM-dd HH:mm:ss')
             },
             toolbarButtonClickEvent ({ code }, event) {
               switch (code) {
@@ -318,7 +320,7 @@ export default {
   methods: {
     findColumn () {
       this.loading2 = true
-      this.$ajax.get('/api/column/list', { sort: 'seq', order: 'asc' }).then(data => {
+      XEAjax.get('/api/column/list', { sort: 'seq', order: 'asc' }).then(data => {
         let validRules = {}
         this.tableColumn2 = data.map(item => {
           let config = {
@@ -375,7 +377,7 @@ export default {
       })
     },
     formatterDate ({ cellValue }) {
-      return this.$utils.toDateString(cellValue, 'yyyy-MM-dd HH:mm:ss')
+      return XEUtils.toDateString(cellValue, 'yyyy-MM-dd HH:mm:ss')
     },
     toolbarButtonClickEvent ({ code }, event) {
       switch (code) {

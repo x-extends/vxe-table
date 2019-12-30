@@ -30,6 +30,7 @@
 </template>
 
 <script>
+import XEUtils from 'xe-utils'
 import hljs from 'highlight.js'
 
 export default {
@@ -85,7 +86,7 @@ export default {
               let xTree = this.$refs.xTree
               let record = {
                 name: '新数据',
-                date: this.$utils.toDateString(new Date(), 'yyyy-MM-dd')
+                date: XEUtils.toDateString(new Date(), 'yyyy-MM-dd')
               }
               xTree.insert(record).then(({ row }) => xTree.setActiveRow(row))
             },
@@ -93,7 +94,7 @@ export default {
               let xTree = this.$refs.xTree
               let record = {
                 name: '新数据',
-                date: this.$utils.toDateString(new Date(), 'yyyy-MM-dd')
+                date: XEUtils.toDateString(new Date(), 'yyyy-MM-dd')
               }
               // 插入到第 3 行第 2 个子节点位置中
               xTree.insertAt(record, this.tableData[2].children[1]).then(({ row }) => xTree.setActiveRow(row))
@@ -113,7 +114,7 @@ export default {
     }
   },
   created () {
-    this.tableData = this.$utils.clone(window.MOCK_TREE_DATA_LIST, true)
+    this.tableData = XEUtils.clone(window.MOCK_TREE_DATA_LIST, true)
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
@@ -125,7 +126,7 @@ export default {
       let xTree = this.$refs.xTree
       let record = {
         name: '新数据',
-        date: this.$utils.toDateString(new Date(), 'yyyy-MM-dd')
+        date: XEUtils.toDateString(new Date(), 'yyyy-MM-dd')
       }
       xTree.insert(record).then(({ row }) => xTree.setActiveRow(row))
     },
@@ -133,7 +134,7 @@ export default {
       let xTree = this.$refs.xTree
       let record = {
         name: '新数据',
-        date: this.$utils.toDateString(new Date(), 'yyyy-MM-dd')
+        date: XEUtils.toDateString(new Date(), 'yyyy-MM-dd')
       }
       // 插入到第 3 行第 2 个子节点位置中
       xTree.insertAt(record, this.tableData[2].children[1]).then(({ row }) => xTree.setActiveRow(row))

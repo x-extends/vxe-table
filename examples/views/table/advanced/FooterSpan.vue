@@ -53,6 +53,7 @@
 </template>
 
 <script>
+import XEUtils from 'xe-utils'
 import hljs from 'highlight.js'
 
 export default {
@@ -95,7 +96,7 @@ export default {
                   }
                   // 合并为一列显示
                   if (['age', 'rate'].includes(column.property)) {
-                    return this.$utils.mean(data, 'age')
+                    return XEUtils.mean(data, 'age')
                   }
                   return null
                 }),
@@ -105,7 +106,7 @@ export default {
                   }
                   // 合并为一列显示
                   if (['age', 'rate'].includes(column.property)) {
-                    return this.$utils.sum(data, 'age')
+                    return XEUtils.sum(data, 'age')
                   }
                   return null
                 })
@@ -247,7 +248,7 @@ export default {
           }
           // 合并为一列显示
           if (['age', 'rate'].includes(column.property)) {
-            return this.$utils.mean(data, 'age')
+            return XEUtils.mean(data, 'age')
           }
           if (['content'].includes(column.property)) {
             return '合并为一行显示'
@@ -260,7 +261,7 @@ export default {
           }
           // 合并为一列显示
           if (['age', 'rate'].includes(column.property)) {
-            return this.$utils.sum(data, 'age')
+            return XEUtils.sum(data, 'age')
           }
           if (['content'].includes(column.property)) {
             return '合并为一行显示'

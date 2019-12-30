@@ -1,5 +1,5 @@
 import VXETable from '../../../../packages/v-x-e-table'
-import XEUtils from 'xe-utils/methods/xe-utils'
+import XEUtils from 'xe-utils'
 
 // 创建一个支持输入的筛选器（仅用于简单示例，实际开发中应该封装成一个组件，不应该把复杂的渲染逻辑写在渲染器中）
 VXETable.renderer.add('MyFilter', {

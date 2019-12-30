@@ -28,6 +28,7 @@
 </template>
 
 <script>
+import XEAjax from 'xe-ajax'
 import hljs from 'highlight.js'
 
 export default {
@@ -115,14 +116,14 @@ export default {
           methods: {
             findList () {
               this.loading = true
-              this.$ajax.get('/api/file/node/list', { parentId: null }).then(data => {
+              XEAjax.get('/api/file/node/list', { parentId: null }).then(data => {
                 this.tableData = data
                 this.loading = false
               })
             },
             loadChildrenMethod ({ row }) {
               // 异步加载子节点
-              return this.$ajax.get('/api/file/node/list', { parentId: row.id })
+              return XEAjax.get('/api/file/node/list', { parentId: row.id })
             },
             visibleMethod  ({ row, type }) {
               let xTree = this.$refs.xTree
@@ -178,14 +179,14 @@ export default {
   methods: {
     findList () {
       this.loading = true
-      this.$ajax.get('/api/file/node/list', { parentId: null }).then(data => {
+      XEAjax.get('/api/file/node/list', { parentId: null }).then(data => {
         this.tableData = data
         this.loading = false
       })
     },
     loadChildrenMethod ({ row }) {
       // 异步加载子节点
-      return this.$ajax.get('/api/file/node/list', { parentId: row.id })
+      return XEAjax.get('/api/file/node/list', { parentId: row.id })
     },
     visibleMethod  ({ row, type }) {
       let xTree = this.$refs.xTree

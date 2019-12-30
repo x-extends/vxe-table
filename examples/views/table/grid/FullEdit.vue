@@ -80,6 +80,7 @@
 </template>
 
 <script>
+import XEAjax from 'xe-ajax'
 import hljs from 'highlight.js'
 
 export default {
@@ -121,10 +122,10 @@ export default {
             filters.forEach(({ column, property, values }) => {
               queryParams[property] = values.join(',')
             })
-            return this.$ajax.get(`/api/user/page/list/${page.pageSize}/${page.currentPage}`, queryParams)
+            return XEAjax.get(`/api/user/page/list/${page.pageSize}/${page.currentPage}`, queryParams)
           },
-          delete: ({ body }) => this.$ajax.post('/api/user/save', body),
-          save: ({ body }) => this.$ajax.post('/api/user/save', body)
+          delete: ({ body }) => XEAjax.post('/api/user/save', body),
+          save: ({ body }) => XEAjax.post('/api/user/save', body)
         }
       },
       tableToolbar: {
@@ -280,10 +281,10 @@ export default {
                     filters.forEach(({ column, property, values }) => {
                       queryParams[property] = values.join(',')
                     })
-                    return this.$ajax.get(\`/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`, queryParams)
+                    return XEAjax.get(\`/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`, queryParams)
                   },
-                  delete: ({ body }) => this.$ajax.post('/api/user/save', body),
-                  save: ({ body }) => this.$ajax.post('/api/user/save', body)
+                  delete: ({ body }) => XEAjax.post('/api/user/save', body),
+                  save: ({ body }) => XEAjax.post('/api/user/save', body)
                 }
               },
               tableToolbar: {
@@ -342,7 +343,7 @@ export default {
           },
           methods: {
             async findSexList () {
-              const sexList = await this.$ajax.get('/api/conf/sex/list')
+              const sexList = await XEAjax.get('/api/conf/sex/list')
               // 异步更新下拉选项
               let column = this.$refs.xGrid.getColumnByField('sex')
               column.editRender.options = sexList
@@ -393,7 +394,7 @@ export default {
   },
   methods: {
     async findSexList () {
-      const sexList = await this.$ajax.get('/api/conf/sex/list')
+      const sexList = await XEAjax.get('/api/conf/sex/list')
       // 异步更新下拉选项
       let column = this.$refs.xGrid.getColumnByField('sex')
       column.editRender.options = sexList

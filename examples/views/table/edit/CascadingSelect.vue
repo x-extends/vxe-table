@@ -40,6 +40,7 @@
 </template>
 
 <script>
+import XEUtils from 'xe-utils'
 import hljs from 'highlight.js'
 
 export default {
@@ -162,7 +163,7 @@ export default {
                   pnameList = item.pnameList
                 } else {
                   // 模拟后台数据
-                  Array.from(new Array(this.$utils.random(3, 8))).forEach((item, index) => {
+                  Array.from(new Array(XEUtils.random(3, 8))).forEach((item, index) => {
                     pnameList.push({
                       label: \`\${ptype}-名称\${index}\`,
                       value: \`\${ptype}_\${index}\`
@@ -233,7 +234,7 @@ export default {
           pnameList = item.pnameList
         } else {
           // 模拟后台数据
-          Array.from(new Array(this.$utils.random(3, 8))).forEach((item, index) => {
+          Array.from(new Array(XEUtils.random(3, 8))).forEach((item, index) => {
             pnameList.push({
               label: `${ptype}-名称${index}`,
               value: `${ptype}_${index}`

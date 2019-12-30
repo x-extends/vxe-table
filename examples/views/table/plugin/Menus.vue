@@ -30,6 +30,7 @@
 </template>
 
 <script>
+import XEUtils from 'xe-utils'
 import hljs from 'highlight.js'
 
 export default {
@@ -168,7 +169,7 @@ export default {
                     return '和值'
                   }
                   if (['age', 'rate'].includes(column.property)) {
-                    return this.$utils.sum(data, column.property)
+                    return XEUtils.sum(data, column.property)
                   }
                   return null
                 })
@@ -196,7 +197,7 @@ export default {
             return '和值'
           }
           if (['age', 'rate'].includes(column.property)) {
-            return this.$utils.sum(data, column.property)
+            return XEUtils.sum(data, column.property)
           }
           return null
         })

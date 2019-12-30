@@ -32,6 +32,7 @@
 </template>
 
 <script>
+import XEAjax from 'xe-ajax'
 import hljs from 'highlight.js'
 
 export default {
@@ -73,7 +74,7 @@ export default {
           },
           created () {
             this.loading = true
-            this.$ajax.mockList(50).then(data => {
+            XEAjax.mockList(50).then(data => {
               this.tableData = data
               this.loading = false
             })
@@ -85,7 +86,7 @@ export default {
   },
   created () {
     this.loading = true
-    this.$ajax.mockList(50).then(data => {
+    XEAjax.mockList(50).then(data => {
       this.tableData = data
       this.loading = false
     })

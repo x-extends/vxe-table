@@ -30,6 +30,7 @@
 </template>
 
 <script>
+import XEUtils from 'xe-utils'
 import hljs from 'highlight.js'
 
 export default {
@@ -70,7 +71,7 @@ export default {
           },
           methods: {
             countAmount (row) {
-              return this.$utils.toNumber(row.amount) * this.$utils.toNumber(row.number)
+              return XEUtils.toNumber(row.amount) * XEUtils.toNumber(row.number)
             },
             countAllAmount (data) {
               let count = 0
@@ -86,7 +87,7 @@ export default {
                     return '合计'
                   }
                   if (columnIndex === 3) {
-                    return \`\${this.$utils.sum(data, 'number')} 本\`
+                    return \`\${XEUtils.sum(data, 'number')} 本\`
                   } else if (columnIndex === 4) {
                     return \`共 \${this.countAllAmount(data)} 元\`
                   }
@@ -107,7 +108,7 @@ export default {
   },
   methods: {
     countAmount (row) {
-      return this.$utils.toNumber(row.amount) * this.$utils.toNumber(row.number)
+      return XEUtils.toNumber(row.amount) * XEUtils.toNumber(row.number)
     },
     countAllAmount (data) {
       let count = 0
@@ -123,7 +124,7 @@ export default {
             return '合计'
           }
           if (columnIndex === 3) {
-            return `${this.$utils.sum(data, 'number')} 本`
+            return `${XEUtils.sum(data, 'number')} 本`
           } else if (columnIndex === 4) {
             return `共 ${this.countAllAmount(data)} 元`
           }

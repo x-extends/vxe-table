@@ -23,6 +23,7 @@
 </template>
 
 <script>
+import XEUtils from 'xe-utils'
 import hljs from 'highlight.js'
 
 export default {
@@ -169,14 +170,14 @@ export default {
             // 计算逻辑
             handleSummary  (children) {
               return {
-                num: this.$utils.sum(children, 'num'),
-                level: Math.floor(this.$utils.sum(children, 'level')),
-                age: parseInt(this.$utils.mean(children, 'age')),
-                rate: this.$utils.sum(children, 'rate')
+                num: XEUtils.sum(children, 'num'),
+                level: Math.floor(XEUtils.sum(children, 'level')),
+                age: parseInt(XEUtils.mean(children, 'age')),
+                rate: XEUtils.sum(children, 'rate')
               }
             },
             getGroupSummary (data) {
-              this.$utils.eachTree(data, (row, index, items, path, parent, nodes) => {
+              XEUtils.eachTree(data, (row, index, items, path, parent, nodes) => {
                 let children = row.children
                 if (children && children.length) {
                   // 合计子节点
@@ -314,14 +315,14 @@ export default {
     // 计算逻辑
     handleSummary  (children) {
       return {
-        num: this.$utils.sum(children, 'num'),
-        level: Math.floor(this.$utils.sum(children, 'level')),
-        age: parseInt(this.$utils.mean(children, 'age')),
-        rate: this.$utils.sum(children, 'rate')
+        num: XEUtils.sum(children, 'num'),
+        level: Math.floor(XEUtils.sum(children, 'level')),
+        age: parseInt(XEUtils.mean(children, 'age')),
+        rate: XEUtils.sum(children, 'rate')
       }
     },
     getGroupSummary (data) {
-      this.$utils.eachTree(data, (row, index, items, path, parent, nodes) => {
+      XEUtils.eachTree(data, (row, index, items, path, parent, nodes) => {
         let children = row.children
         if (children && children.length) {
           // 合计子节点

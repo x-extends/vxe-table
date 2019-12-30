@@ -42,6 +42,7 @@
 </template>
 
 <script>
+import XEUtils from 'xe-utils'
 import hljs from 'highlight.js'
 
 export default {
@@ -105,7 +106,7 @@ export default {
                   var list = []
                   for (var index = 0; index < size; index++) {
                     list.push({
-                      id: this.$utils.uniqueId(),
+                      id: XEUtils.uniqueId(),
                       name: 'test' + index,
                       role: 'developer',
                       age: 10,
@@ -148,7 +149,7 @@ export default {
           var list = []
           for (var index = 0; index < size; index++) {
             list.push({
-              id: this.$utils.uniqueId(),
+              id: XEUtils.uniqueId(),
               name: 'test' + index,
               role: 'developer',
               age: 10,

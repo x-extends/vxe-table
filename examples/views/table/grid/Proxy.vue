@@ -19,6 +19,7 @@
 </template>
 
 <script>
+import XEAjax from 'xe-ajax'
 import hljs from 'highlight.js'
 
 export default {
@@ -27,7 +28,7 @@ export default {
       tableProxy: {
         ajax: {
           // 任何支持 Promise API 的库都可以对接（fetch、jquery、axios、xe-ajax）
-          query: () => this.$ajax.get('/api/user/list')
+          query: () => XEAjax.get('/api/user/list')
         }
       },
       tableColumn: [
@@ -54,7 +55,7 @@ export default {
               tableProxy: {
                 ajax: {
                   // 任何支持 Promise API 的库都可以对接（fetch、jquery、axios、xe-ajax）
-                  query: () => this.$ajax.get('/api/user/list')
+                  query: () => XEAjax.get('/api/user/list')
                 }
               },
               tableColumn: [

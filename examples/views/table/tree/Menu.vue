@@ -45,6 +45,7 @@
 </template>
 
 <script>
+import XEUtils from 'xe-utils'
 import hljs from 'highlight.js'
 
 export default {
@@ -161,11 +162,11 @@ export default {
               let xTree = this.$refs.xTree
               xTree.createRow({
                 name: '新数据',
-                date: this.$utils.toDateString(new Date(), 'yyyy-MM-dd'),
+                date: XEUtils.toDateString(new Date(), 'yyyy-MM-dd'),
                 isNew: true
               }).then(newRow => {
                 // 插入到指定节点位置中
-                let rowNode = this.$utils.findTree(this.tableData, item => item === row, this.treeConfig)
+                let rowNode = XEUtils.findTree(this.tableData, item => item === row, this.treeConfig)
                 if (rowNode) {
                   rowNode.items.splice(rowNode.index, 0, newRow)
                   xTree.refreshData().then(() => xTree.setActiveCell(newRow, column.property))
@@ -173,7 +174,7 @@ export default {
               })
             },
             getInsertEvent () {
-              let insertRecords = this.$utils.filterTree(this.tableData, item => item.isNew, this.treeConfig)
+              let insertRecords = XEUtils.filterTree(this.tableData, item => item.isNew, this.treeConfig)
               this.$XModal.alert(insertRecords.length)
             },
             visibleMethod  ({ row, type }) {
@@ -219,7 +220,7 @@ export default {
     }
   },
   created () {
-    this.tableData = this.$utils.clone(window.MOCK_TREE_DATA_LIST, true)
+    this.tableData = XEUtils.clone(window.MOCK_TREE_DATA_LIST, true)
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
@@ -231,11 +232,11 @@ export default {
       let xTree = this.$refs.xTree
       xTree.createRow({
         name: '新数据',
-        date: this.$utils.toDateString(new Date(), 'yyyy-MM-dd'),
+        date: XEUtils.toDateString(new Date(), 'yyyy-MM-dd'),
         isNew: true
       }).then(newRow => {
         // 插入到指定节点位置中
-        let rowNode = this.$utils.findTree(this.tableData, item => item === row, this.treeConfig)
+        let rowNode = XEUtils.findTree(this.tableData, item => item === row, this.treeConfig)
         if (rowNode) {
           rowNode.items.splice(rowNode.index, 0, newRow)
           xTree.refreshData().then(() => xTree.setActiveCell(newRow, column.property))
@@ -243,7 +244,7 @@ export default {
       })
     },
     getInsertEvent () {
-      let insertRecords = this.$utils.filterTree(this.tableData, item => item.isNew, this.treeConfig)
+      let insertRecords = XEUtils.filterTree(this.tableData, item => item.isNew, this.treeConfig)
       this.$XModal.alert(insertRecords.length)
     },
     visibleMethod  ({ row, type }) {

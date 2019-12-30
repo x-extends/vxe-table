@@ -64,6 +64,7 @@
 </template>
 
 <script>
+import XEAjax from 'xe-ajax'
 import hljs from 'highlight.js'
 
 export default {
@@ -94,7 +95,7 @@ export default {
             filters.forEach(({ column, field, values }) => {
               queryParams[field] = values.join(',')
             })
-            return this.$ajax.get(`/api/user/page/list/${page.pageSize}/${page.currentPage}`, queryParams)
+            return XEAjax.get(`/api/user/page/list/${page.pageSize}/${page.currentPage}`, queryParams)
           }
         }
       },
@@ -205,7 +206,7 @@ export default {
                     filters.forEach(({ column, property, values }) => {
                       queryParams[property] = values.join(',')
                     })
-                    return this.$ajax.get(\`/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`, queryParams)
+                    return XEAjax.get(\`/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`, queryParams)
                   }
                 }
               },

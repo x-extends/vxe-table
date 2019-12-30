@@ -46,6 +46,7 @@
 </template>
 
 <script>
+import XEUtils from 'xe-utils'
 import hljs from 'highlight.js'
 
 export default {
@@ -100,12 +101,12 @@ export default {
           },
           methods: {
             formatterSize ({ cellValue }) {
-              let size = this.$utils.toNumber(cellValue)
+              let size = XEUtils.toNumber(cellValue)
               if (size > 1024) {
                 if (size > 1048576) {
-                  return \`\${this.$utils.toFixedNumber(size / 1048576, 2)}M\`
+                  return \`\${XEUtils.toFixedNumber(size / 1048576, 2)}M\`
                 }
-                return \`\${this.$utils.toFixedNumber(size / 1024, 2)}KB\`
+                return \`\${XEUtils.toFixedNumber(size / 1024, 2)}KB\`
               }
               return \`\${size}B\`
             },
@@ -122,7 +123,7 @@ export default {
               this.tableData.push({
                 name: file.name,
                 size: file.size,
-                createDate: this.$utils.toDateString(Date.now(), 'yyyy-MM-dd hh:mm:ss')
+                createDate: XEUtils.toDateString(Date.now(), 'yyyy-MM-dd hh:mm:ss')
               })
               this.uploadStatus = 'success'
             },
@@ -156,12 +157,12 @@ export default {
   },
   methods: {
     formatterSize ({ cellValue }) {
-      let size = this.$utils.toNumber(cellValue)
+      let size = XEUtils.toNumber(cellValue)
       if (size > 1024) {
         if (size > 1048576) {
-          return `${this.$utils.toFixedNumber(size / 1048576, 2)}M`
+          return `${XEUtils.toFixedNumber(size / 1048576, 2)}M`
         }
-        return `${this.$utils.toFixedNumber(size / 1024, 2)}KB`
+        return `${XEUtils.toFixedNumber(size / 1024, 2)}KB`
       }
       return `${size}B`
     },
@@ -178,7 +179,7 @@ export default {
       this.tableData.push({
         name: file.name,
         size: file.size,
-        createDate: this.$utils.toDateString(Date.now(), 'yyyy-MM-dd hh:mm:ss')
+        createDate: XEUtils.toDateString(Date.now(), 'yyyy-MM-dd hh:mm:ss')
       })
       this.uploadStatus = 'success'
     },

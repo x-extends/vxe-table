@@ -29,6 +29,7 @@
 </template>
 
 <script>
+import XEAjax from 'xe-ajax'
 import hljs from 'highlight.js'
 
 export default {
@@ -119,13 +120,13 @@ export default {
           },
           methods: {
             findSexList () {
-              return this.$ajax.get('/api/conf/sex/list').then(data => {
+              return XEAjax.get('/api/conf/sex/list').then(data => {
                 this.tableColumn[5].editRender.options = data
                 this.tableColumn[6].editRender.options = data
               })
             },
             findRegionList () {
-              return this.$ajax.get('/api/conf/region/list').then(data => {
+              return XEAjax.get('/api/conf/region/list').then(data => {
                 this.tableColumn[8].editRender.props.options = data
               })
             },
@@ -231,13 +232,13 @@ export default {
   },
   methods: {
     findSexList () {
-      return this.$ajax.get('/api/conf/sex/list').then(data => {
+      return XEAjax.get('/api/conf/sex/list').then(data => {
         this.tableColumn[5].editRender.options = data
         this.tableColumn[6].editRender.options = data
       })
     },
     findRegionList () {
-      return this.$ajax.get('/api/conf/region/list').then(data => {
+      return XEAjax.get('/api/conf/region/list').then(data => {
         this.tableColumn[8].editRender.props.options = data
       })
     },

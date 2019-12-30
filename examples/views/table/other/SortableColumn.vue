@@ -50,6 +50,7 @@
 
 <script>
 import hljs from 'highlight.js'
+import XEUtils from 'xe-utils'
 import Sortable from 'sortablejs'
 
 export default {
@@ -182,7 +183,7 @@ export default {
                     return '平均'
                   }
                   if (['age', 'sex'].includes(column.property)) {
-                    return this.$utils.mean(data, column.property)
+                    return XEUtils.mean(data, column.property)
                   }
                   return null
                 }),
@@ -191,7 +192,7 @@ export default {
                     return '和值'
                   }
                   if (['age', 'sex'].includes(column.property)) {
-                    return this.$utils.sum(data, column.property)
+                    return XEUtils.sum(data, column.property)
                   }
                   return null
                 })
@@ -268,7 +269,7 @@ export default {
             return '平均'
           }
           if (['age', 'sex'].includes(column.property)) {
-            return this.$utils.mean(data, column.property)
+            return XEUtils.mean(data, column.property)
           }
           return null
         }),
@@ -277,7 +278,7 @@ export default {
             return '和值'
           }
           if (['age', 'sex'].includes(column.property)) {
-            return this.$utils.sum(data, column.property)
+            return XEUtils.sum(data, column.property)
           }
           return null
         })

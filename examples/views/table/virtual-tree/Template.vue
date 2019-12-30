@@ -30,6 +30,7 @@
 </template>
 
 <script>
+import XEUtils from 'xe-utils'
 import hljs from 'highlight.js'
 
 export default {
@@ -68,7 +69,7 @@ export default {
           slots: {
             default: ({ row }) => {
               return [
-                <span>{ this.$utils.toDateString(row.date, 'yyyy-MM-dd HH:mm:ss.S') }</span>
+                <span>{ XEUtils.toDateString(row.date, 'yyyy-MM-dd HH:mm:ss.S') }</span>
               ]
             }
           }
@@ -131,7 +132,7 @@ export default {
                   slots: {
                     default: ({ row }) => {
                       return [
-                        <span>{ this.$utils.toDateString(row.date, 'yyyy-MM-dd HH:mm:ss.S') }</span>
+                        <span>{ XEUtils.toDateString(row.date, 'yyyy-MM-dd HH:mm:ss.S') }</span>
                       ]
                     }
                   }
@@ -148,7 +149,7 @@ export default {
     }
   },
   created () {
-    this.tableData = this.$utils.clone(window.MOCK_TREE_DATA_LIST, true)
+    this.tableData = XEUtils.clone(window.MOCK_TREE_DATA_LIST, true)
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {

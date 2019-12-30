@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import XEUtils from 'xe-utils/methods/xe-utils'
+import XEUtils from 'xe-utils'
 import XEAjax from 'xe-ajax'
 
 // 挂载到 vue 实例中

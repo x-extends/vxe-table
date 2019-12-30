@@ -35,6 +35,7 @@
 </template>
 
 <script>
+import XEUtils from 'xe-utils'
 import hljs from 'highlight.js'
 
 export default {
@@ -193,14 +194,14 @@ export default {
             // 计算逻辑
             handleSummary  (children) {
               return {
-                num: this.$utils.sum(children, 'num'),
-                level: Math.floor(this.$utils.sum(children, 'level')),
-                age: parseInt(this.$utils.mean(children, 'age')),
-                rate: this.$utils.sum(children, 'rate')
+                num: XEUtils.sum(children, 'num'),
+                level: Math.floor(XEUtils.sum(children, 'level')),
+                age: parseInt(XEUtils.mean(children, 'age')),
+                rate: XEUtils.sum(children, 'rate')
               }
             },
             getGroupSummary (data) {
-              this.$utils.eachTree(data, (row, index, items, path, parent, nodes) => {
+              XEUtils.eachTree(data, (row, index, items, path, parent, nodes) => {
                 let children = row.children
                 if (children && children.length) {
                   // 合计子节点
@@ -215,7 +216,7 @@ export default {
                   }
                 }
               }, this.tableTreeConfig)
-              this.$utils.eachTree(data, (row) => {
+              XEUtils.eachTree(data, (row) => {
                 let children = row.children
                 if (children && children.length) {
                   // 动态增加一行汇总
@@ -250,15 +251,15 @@ export default {
               return [
                 columns.map((column, columnIndex) => {
                   if (columnIndex === 0) {
-                    return \`合计 (\${this.$utils.sum(data, 'num')}人)\`
+                    return \`合计 (\${XEUtils.sum(data, 'num')}人)\`
                   }
                   switch (column.property) {
                     case 'level':
-                      return \`总共 \${Math.floor(this.$utils.sum(data, 'level'))}\`
+                      return \`总共 \${Math.floor(XEUtils.sum(data, 'level'))}\`
                     case 'age':
-                      return \`平均年龄 \${parseInt(this.$utils.mean(data, 'age'))}\`
+                      return \`平均年龄 \${parseInt(XEUtils.mean(data, 'age'))}\`
                     case 'rate':
-                      return \`总分 \${this.$utils.sum(data, 'rate')}\`
+                      return \`总分 \${XEUtils.sum(data, 'rate')}\`
                   }
                   return '-'
                 })
@@ -385,14 +386,14 @@ export default {
     // 计算逻辑
     handleSummary  (children) {
       return {
-        num: this.$utils.sum(children, 'num'),
-        level: Math.floor(this.$utils.sum(children, 'level')),
-        age: parseInt(this.$utils.mean(children, 'age')),
-        rate: this.$utils.sum(children, 'rate')
+        num: XEUtils.sum(children, 'num'),
+        level: Math.floor(XEUtils.sum(children, 'level')),
+        age: parseInt(XEUtils.mean(children, 'age')),
+        rate: XEUtils.sum(children, 'rate')
       }
     },
     getGroupSummary (data) {
-      this.$utils.eachTree(data, (row, index, items, path, parent, nodes) => {
+      XEUtils.eachTree(data, (row, index, items, path, parent, nodes) => {
         let children = row.children
         if (children && children.length) {
           // 合计子节点
@@ -407,7 +408,7 @@ export default {
           }
         }
       }, this.tableTreeConfig)
-      this.$utils.eachTree(data, (row) => {
+      XEUtils.eachTree(data, (row) => {
         let children = row.children
         if (children && children.length) {
           // 动态增加一行汇总
@@ -442,15 +443,15 @@ export default {
       return [
         columns.map((column, columnIndex) => {
           if (columnIndex === 0) {
-            return `合计 (${this.$utils.sum(data, 'num')}人)`
+            return `合计 (${XEUtils.sum(data, 'num')}人)`
           }
           switch (column.property) {
             case 'level':
-              return `总共 ${Math.floor(this.$utils.sum(data, 'level'))}`
+              return `总共 ${Math.floor(XEUtils.sum(data, 'level'))}`
             case 'age':
-              return `平均年龄 ${parseInt(this.$utils.mean(data, 'age'))}`
+              return `平均年龄 ${parseInt(XEUtils.mean(data, 'age'))}`
             case 'rate':
-              return `总分 ${this.$utils.sum(data, 'rate')}`
+              return `总分 ${XEUtils.sum(data, 'rate')}`
           }
           return '-'
         })

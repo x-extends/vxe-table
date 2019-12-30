@@ -37,6 +37,7 @@
 </template>
 
 <script>
+import XEUtils from 'xe-utils'
 import hljs from 'highlight.js'
 
 export default {
@@ -117,7 +118,7 @@ export default {
                   Object.values(errMap).forEach(errList => {
                     errList.forEach(params => {
                       let { row, column, rules } = params
-                      let matchObj = this.$utils.findTree(this.tableData, item => item === row, this.treeConfig)
+                      let matchObj = XEUtils.findTree(this.tableData, item => item === row, this.treeConfig)
                       let seq = matchObj.path.filter(item => item !== this.treeConfig.children).map(item => Number(item) + 1).join('.')
                       rules.forEach(rule => {
                         msgList.push(\`第 \${seq} 行 \${column.title} 校验错误：\${rule.message}\`)
@@ -170,7 +171,7 @@ export default {
     }
   },
   created () {
-    this.tableData = this.$utils.clone(window.MOCK_TREE_DATA_LIST, true)
+    this.tableData = XEUtils.clone(window.MOCK_TREE_DATA_LIST, true)
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
@@ -196,7 +197,7 @@ export default {
           Object.values(errMap).forEach(errList => {
             errList.forEach(params => {
               let { row, column, rules } = params
-              let matchObj = this.$utils.findTree(this.tableData, item => item === row, this.treeConfig)
+              let matchObj = XEUtils.findTree(this.tableData, item => item === row, this.treeConfig)
               let seq = matchObj.path.filter(item => item !== this.treeConfig.children).map(item => Number(item) + 1).join('.')
               rules.forEach(rule => {
                 msgList.push(`第 ${seq} 行 ${column.title} 校验错误：${rule.message}`)

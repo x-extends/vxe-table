@@ -154,7 +154,7 @@ export default {
                 setTimeout(() => {
                   var list = []
                   for (var index = 0; index < size; index++) {
-                    let key = this.$utils.uniqueId()
+                    let key = this.rowIndex++
                     let item = { id: key, checked: false }
                     // 由于生成数据比较耗时，所以固定生成1000字段
                     Array.from(new Array(1000)).forEach((num, cIndex) => {

@@ -39,6 +39,7 @@
 </template>
 
 <script>
+import XEAjax from 'xe-ajax'
 import hljs from 'highlight.js'
 
 export default {
@@ -88,7 +89,7 @@ export default {
           },
           methods: {
             async findSexList () {
-              this.sexList = await this.$ajax.get('/api/conf/sex/list')
+              this.sexList = await XEAjax.get('/api/conf/sex/list')
             },
             async insertEvent (row) {
               let record = {
@@ -127,7 +128,7 @@ export default {
   },
   methods: {
     async findSexList () {
-      this.sexList = await this.$ajax.get('/api/conf/sex/list')
+      this.sexList = await XEAjax.get('/api/conf/sex/list')
     },
     async insertEvent (row) {
       let record = {

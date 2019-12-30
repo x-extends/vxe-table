@@ -22,6 +22,7 @@
 </template>
 
 <script>
+import XEUtils from 'xe-utils'
 import hljs from 'highlight.js'
 
 export default {
@@ -160,7 +161,7 @@ export default {
                     name: name,
                     size: file.size,
                     type: type,
-                    date: this.$utils.toDateString(new Date())
+                    date: XEUtils.toDateString(new Date())
                   }
                   row.fileList.push(record)
                 })
@@ -200,7 +201,7 @@ export default {
             name: name,
             size: file.size,
             type: type,
-            date: this.$utils.toDateString(new Date())
+            date: XEUtils.toDateString(new Date())
           }
           row.fileList.push(record)
         })

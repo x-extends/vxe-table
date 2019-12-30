@@ -24,6 +24,7 @@
 </template>
 
 <script>
+import XEAjax from 'xe-ajax'
 import hljs from 'highlight.js'
 
 export default {
@@ -89,7 +90,7 @@ export default {
           methods: {
             findList () {
               this.loading = true
-              this.$ajax.get(\`/api/user/page/list/\${this.tablePage.pageSize}/\${this.tablePage.currentPage}\`)then(({ page, result }) => {
+              XEAjax.get(\`/api/user/page/list/\${this.tablePage.pageSize}/\${this.tablePage.currentPage}\`)then(({ page, result }) => {
                 this.tableData = result
                 this.tablePage.total = page.total
                 this.loading = false
@@ -98,7 +99,7 @@ export default {
               })
             },
             findSexList () {
-              return this.$ajax.get('/api/conf/sex/list').then(data => {
+              return XEAjax.get('/api/conf/sex/list').then(data => {
                 // 异步更新下拉选项
                 let column = this.$refs.xGrid.getColumnByField('sex')
                 column.editRender.options = data
@@ -131,7 +132,7 @@ export default {
   methods: {
     findList () {
       this.loading = true
-      this.$ajax.get(`/api/user/page/list/${this.tablePage.pageSize}/${this.tablePage.currentPage}`).then(({ page, result }) => {
+      XEAjax.get(`/api/user/page/list/${this.tablePage.pageSize}/${this.tablePage.currentPage}`).then(({ page, result }) => {
         this.tableData = result
         this.tablePage.total = page.total
         this.loading = false
@@ -140,7 +141,7 @@ export default {
       })
     },
     findSexList () {
-      return this.$ajax.get('/api/conf/sex/list').then(data => {
+      return XEAjax.get('/api/conf/sex/list').then(data => {
         // 异步更新下拉选项
         let column = this.$refs.xGrid.getColumnByField('sex')
         column.editRender.options = data

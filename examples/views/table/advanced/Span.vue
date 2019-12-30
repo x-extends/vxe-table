@@ -58,6 +58,7 @@
 </template>
 
 <script>
+import XEUtils from 'xe-utils'
 import hljs from 'highlight.js'
 
 export default {
@@ -146,15 +147,15 @@ export default {
             // 通用行合并函数（将相同多列数据合并为一行）
             rowspanMethod ({ row, $rowIndex, column, data }) {
               let fields = ['key']
-              let cellValue = this.$utils.get(row, column.property)
+              let cellValue = XEUtils.get(row, column.property)
               if (cellValue && fields.includes(column.property)) {
                 let prevRow = data[$rowIndex - 1]
                 let nextRow = data[$rowIndex + 1]
-                if (prevRow && this.$utils.get(prevRow, column.property) === cellValue) {
+                if (prevRow && XEUtils.get(prevRow, column.property) === cellValue) {
                   return { rowspan: 0, colspan: 0 }
                 } else {
                   let countRowspan = 1
-                  while (nextRow && this.$utils.get(nextRow, column.property) === cellValue) {
+                  while (nextRow && XEUtils.get(nextRow, column.property) === cellValue) {
                     nextRow = data[++countRowspan + $rowIndex]
                   }
                   if (countRowspan > 1) {
@@ -197,15 +198,15 @@ export default {
     // 通用行合并函数（将相同多列数据合并为一行）
     rowspanMethod ({ row, $rowIndex, column, data }) {
       let fields = ['key']
-      let cellValue = this.$utils.get(row, column.property)
+      let cellValue = XEUtils.get(row, column.property)
       if (cellValue && fields.includes(column.property)) {
         let prevRow = data[$rowIndex - 1]
         let nextRow = data[$rowIndex + 1]
-        if (prevRow && this.$utils.get(prevRow, column.property) === cellValue) {
+        if (prevRow && XEUtils.get(prevRow, column.property) === cellValue) {
           return { rowspan: 0, colspan: 0 }
         } else {
           let countRowspan = 1
-          while (nextRow && this.$utils.get(nextRow, column.property) === cellValue) {
+          while (nextRow && XEUtils.get(nextRow, column.property) === cellValue) {
             nextRow = data[++countRowspan + $rowIndex]
           }
           if (countRowspan > 1) {

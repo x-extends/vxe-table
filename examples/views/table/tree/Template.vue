@@ -32,7 +32,7 @@
       </vxe-table-column>
       <vxe-table-column field="date" title="Date">
         <template v-slot="{ row }">
-          <span>{{ $utils.toDateString(row.date, 'yyyy-MM-dd HH:mm:ss.S') }}</span>
+          <span>{{ formatDate(row.date) }}</span>
         </template>
       </vxe-table-column>
     </vxe-table>
@@ -47,6 +47,7 @@
 </template>
 
 <script>
+import XEUtils from 'xe-utils'
 import hljs from 'highlight.js'
 
 export default {
@@ -85,7 +86,7 @@ export default {
           </vxe-table-column>
           <vxe-table-column field="date" title="Date">
             <template v-slot="{ row }">
-              <span>{{ $utils.toDateString(row.date, 'yyyy-MM-dd HH:mm:ss.S') }}</span>
+              <span>{{ formatDate(row.date) }}</span>
             </template>
           </vxe-table-column>
         </vxe-table>
@@ -99,6 +100,11 @@ export default {
           },
           created () {
             this.tableData = window.MOCK_TREE_DATA_LIST.slice(0)
+          },
+          methods: {
+            formatDate (value) {
+              return XEUtils.toDateString(value, 'yyyy-MM-dd HH:mm:ss.S')
+            }
           }
         }
         `
@@ -106,12 +112,17 @@ export default {
     }
   },
   created () {
-    this.tableData = this.$utils.clone(window.MOCK_TREE_DATA_LIST, true)
+    this.tableData = XEUtils.clone(window.MOCK_TREE_DATA_LIST, true)
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
       hljs.highlightBlock(block)
     })
+  },
+  methods: {
+    formatDate (value) {
+      return XEUtils.toDateString(value, 'yyyy-MM-dd HH:mm:ss.S')
+    }
   }
 }
 </script>
