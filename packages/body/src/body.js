@@ -87,7 +87,8 @@ function renderColumn (h, _vm, $table, $seq, seq, rowid, fixedType, rowLevel, ro
     checkboxOpts,
     expandOpts,
     treeOpts,
-    mouseConfig = {},
+    mouseConfig,
+    mouseOpts,
     editConfig,
     editOpts,
     editRules,
@@ -97,6 +98,8 @@ function renderColumn (h, _vm, $table, $seq, seq, rowid, fixedType, rowLevel, ro
   } = $table
   let { editRender, align, showOverflow, className, treeNode } = column
   let { actived } = editStore
+  let isMouseSelected = mouseConfig && mouseOpts.selected
+  let isMouseChecked = mouseConfig && mouseOpts.checked
   let fixedHiddenColumn = fixedType ? column.fixed !== fixedType : column.fixed && overflowX
   let cellOverflow = (XEUtils.isUndefined(showOverflow) || XEUtils.isNull(showOverflow)) ? allColumnOverflow : showOverflow
   let showEllipsis = cellOverflow === 'ellipsis'
@@ -144,7 +147,7 @@ function renderColumn (h, _vm, $table, $seq, seq, rowid, fixedType, rowLevel, ro
     }
   }
   // 按下事件处理
-  if (checkboxOpts.range || mouseConfig.checked || mouseConfig.selected) {
+  if (checkboxOpts.range || isMouseChecked || isMouseSelected) {
     tdOns.mousedown = evnt => {
       $table.triggerCellMousedownEvent(evnt, { $table, $seq, seq, rowid, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn, level: rowLevel, cell: evnt.currentTarget })
     }
@@ -152,7 +155,7 @@ function renderColumn (h, _vm, $table, $seq, seq, rowid, fixedType, rowLevel, ro
   // 点击事件处理
   if (highlightCurrentRow ||
     tableListeners['cell-click'] ||
-    mouseConfig.checked ||
+    isMouseChecked ||
     (editRender && editConfig) ||
     (expandOpts.trigger === 'row' || (expandOpts.trigger === 'cell')) ||
     (radioOpts.trigger === 'row' || (column.type === 'radio' && radioOpts.trigger === 'cell')) ||
@@ -439,7 +442,7 @@ export default {
       tableColumn,
       showOverflow: allColumnOverflow,
       scrollXLoad,
-      mouseConfig = {},
+      mouseOpts,
       keyboardConfig = {}
     } = $table
     // 如果是固定列与设置了超出隐藏
@@ -497,10 +500,10 @@ export default {
       /**
        * 选中边框线
        */
-      !fixedType && (mouseConfig.checked || keyboardConfig.isCut) ? h('div', {
+      !fixedType && (mouseOpts.checked || keyboardConfig.isCut) ? h('div', {
         class: 'vxe-table--borders'
       }, [
-        mouseConfig.checked ? renderBorder(h, 'check') : null,
+        mouseOpts.checked ? renderBorder(h, 'check') : null,
         keyboardConfig.isCut ? renderBorder(h, 'copy') : null
       ]) : null,
       !fixedType ? h('div', {

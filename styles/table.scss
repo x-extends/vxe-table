@@ -658,7 +658,7 @@
       z-index: 1;
     }
     &:before {
-      left: 0;
+      left: -1px;
       border-left: 1px solid $vxe-table-border-color;
     }
     &:after {

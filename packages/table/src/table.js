@@ -375,6 +375,9 @@ export default {
     filterOpts () {
       return Object.assign({}, GlobalConfig.filterConfig, this.filterConfig)
     },
+    mouseOpts () {
+      return Object.assign({}, GlobalConfig.mouseConfig, this.mouseConfig)
+    },
     // 是否使用了分组表头
     isGroup () {
       return this.collectColumn.some(column => UtilTools.hasChildrenList(column))
@@ -685,6 +688,7 @@ export default {
       treeOpts,
       treeConfig,
       mouseConfig,
+      mouseOpts,
       vSize,
       validOpts,
       editRules,
@@ -724,8 +728,8 @@ export default {
         't--animat': optimizeOpts.animat,
         't--stripe': stripe,
         't--border': border,
-        't--selected': mouseConfig && mouseConfig.selected,
-        't--checked': mouseConfig && mouseConfig.checked,
+        't--selected': mouseConfig && mouseOpts.selected,
+        't--checked': mouseConfig && mouseOpts.checked,
         'row--highlight': highlightHoverRow,
         'column--highlight': highlightHoverColumn,
         'is--cover': isCoverBody,

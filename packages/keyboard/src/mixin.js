@@ -142,14 +142,14 @@ export default {
      * 表头按下事件
      */
     triggerHeaderCellMousedownEvent (evnt, params) {
-      let { $el, tableData, mouseConfig = {}, elemStore, handleChecked, handleHeaderChecked } = this
+      let { $el, tableData, mouseConfig, mouseOpts, elemStore, handleChecked, handleHeaderChecked } = this
       let { button } = evnt
       let { column, cell } = params
       let isLeftBtn = button === 0
       // v3.0 废弃 type=index
       let isIndex = column.type === 'seq' || column.type === 'index'
-      if (isLeftBtn) {
-        if (mouseConfig.checked) {
+      if (mouseConfig) {
+        if (mouseOpts.checked) {
           let headerList = elemStore['main-header-list'].children
           let bodyList = elemStore['main-body-list'].children
           if (isIndex) {
@@ -158,34 +158,36 @@ export default {
             this.clearSelected(evnt)
             this.clearHeaderChecked()
             this.clearIndexChecked()
-            let domMousemove = document.onmousemove
-            let domMouseup = document.onmouseup
             let startCell = bodyList[0].querySelector(`.${column.id}`)
-            let updateEvent = XEUtils.throttle(function (evnt) {
-              let { flag, targetElem } = DomTools.getEventTargetNode(evnt, $el, 'vxe-header--column')
-              if (!flag) {
-                let a = DomTools.getEventTargetNode(evnt, $el, 'vxe-body--column')
-                flag = a.flag
-                targetElem = a.targetElem
+            if (isLeftBtn) {
+              let domMousemove = document.onmousemove
+              let domMouseup = document.onmouseup
+              let updateEvent = XEUtils.throttle(function (evnt) {
+                let { flag, targetElem } = DomTools.getEventTargetNode(evnt, $el, 'vxe-header--column')
+                if (!flag) {
+                  let a = DomTools.getEventTargetNode(evnt, $el, 'vxe-body--column')
+                  flag = a.flag
+                  targetElem = a.targetElem
+                }
+                if (flag && !DomTools.hasClass(targetElem, 'col--seq')) {
+                  let colIndex = [].indexOf.call(targetElem.parentNode.children, targetElem)
+                  let endCell = bodyList[bodyList.length - 1].children[colIndex]
+                  let head = headerList[0].children[colIndex]
+                  handleHeaderChecked(DomTools.getRowNodes(headerList, DomTools.getCellNodeIndex(head), DomTools.getCellNodeIndex(cell)))
+                  handleChecked(DomTools.getRowNodes(bodyList, DomTools.getCellNodeIndex(startCell), DomTools.getCellNodeIndex(endCell)))
+                }
+              }, 80, { leading: true, trailing: true })
+              DomTools.addClass($el, 'c--checked')
+              document.onmousemove = evnt => {
+                evnt.preventDefault()
+                evnt.stopPropagation()
+                updateEvent(evnt)
               }
-              if (flag && !DomTools.hasClass(targetElem, 'col--seq')) {
-                let colIndex = [].indexOf.call(targetElem.parentNode.children, targetElem)
-                let endCell = bodyList[bodyList.length - 1].children[colIndex]
-                let head = headerList[0].children[colIndex]
-                handleHeaderChecked(DomTools.getRowNodes(headerList, DomTools.getCellNodeIndex(head), DomTools.getCellNodeIndex(cell)))
-                handleChecked(DomTools.getRowNodes(bodyList, DomTools.getCellNodeIndex(startCell), DomTools.getCellNodeIndex(endCell)))
+              document.onmouseup = function () {
+                DomTools.removeClass($el, 'c--checked')
+                document.onmousemove = domMousemove
+                document.onmouseup = domMouseup
               }
-            }, 80, { leading: true, trailing: true })
-            DomTools.addClass($el, 'c--checked')
-            document.onmousemove = evnt => {
-              evnt.preventDefault()
-              evnt.stopPropagation()
-              updateEvent(evnt)
-            }
-            document.onmouseup = function () {
-              DomTools.removeClass($el, 'c--checked')
-              document.onmousemove = domMousemove
-              document.onmouseup = domMouseup
             }
             handleHeaderChecked([[cell]])
             if (bodyList.length) {
@@ -202,9 +204,9 @@ export default {
             }
           }
         }
-        this.closeMenu()
       }
       this.isActivated = true
+      this.closeMenu()
     },
     /**
      * 单元格按下事件
@@ -218,7 +220,7 @@ export default {
         editOpts,
         handleSelected,
         checkboxOpts,
-        mouseConfig = {},
+        mouseOpts,
         handleChecked,
         handleIndexChecked,
         handleHeaderChecked,
@@ -228,19 +230,19 @@ export default {
       let { column, cell } = params
       let { button } = evnt
       let isLeftBtn = button === 0
-      if (isLeftBtn) {
-        if (mouseConfig.checked) {
-          this.clearHeaderChecked()
-          this.clearIndexChecked()
+      // v3.0 废弃 type=index
+      let isIndex = column.type === 'seq' || column.type === 'index'
+      if (mouseOpts.checked) {
+        this.clearHeaderChecked()
+        this.clearIndexChecked()
+        let bodyList = elemStore['main-body-list'].children
+        let headerList = elemStore['main-header-list'].children
+        let cellLastElementChild = cell.parentNode.lastElementChild
+        let cellFirstElementChild = cell.parentNode.firstElementChild
+        if (isLeftBtn) {
           let domMousemove = document.onmousemove
           let domMouseup = document.onmouseup
           let startCellNode = DomTools.getCellNodeIndex(cell)
-          // v3.0 废弃 type=index
-          let isIndex = column.type === 'seq' || column.type === 'index'
-          let bodyList = elemStore['main-body-list'].children
-          let headerList = elemStore['main-header-list'].children
-          let cellLastElementChild = cell.parentNode.lastElementChild
-          let cellFirstElementChild = cell.parentNode.firstElementChild
           let colIndex = [].indexOf.call(cell.parentNode.children, cell)
           let headStart = headerList[0].children[colIndex]
           let updateEvent = XEUtils.throttle(function (evnt) {
@@ -269,36 +271,46 @@ export default {
             document.onmousemove = domMousemove
             document.onmouseup = domMouseup
           }
-          if (isIndex) {
-            let firstCell = cell.parentNode.firstElementChild
-            params.columnIndex++
-            params.column = visibleColumn[params.columnIndex]
-            params.cell = cell.nextElementSibling
-            handleSelected(params, evnt)
-            handleChecked(DomTools.getRowNodes(bodyList, DomTools.getCellNodeIndex(firstCell.nextElementSibling), DomTools.getCellNodeIndex(cellLastElementChild)))
-            handleHeaderChecked([headerList[0].querySelectorAll('.vxe-header--column:not(.col--seq)')])
-            handleIndexChecked(DomTools.getRowNodes(bodyList, DomTools.getCellNodeIndex(firstCell), DomTools.getCellNodeIndex(cell)))
-          } else {
+        }
+        if (isIndex) {
+          let firstCell = cell.parentNode.firstElementChild
+          params.columnIndex++
+          params.column = visibleColumn[params.columnIndex]
+          params.cell = cell.nextElementSibling
+          handleSelected(params, evnt)
+          handleChecked(DomTools.getRowNodes(bodyList, DomTools.getCellNodeIndex(firstCell.nextElementSibling), DomTools.getCellNodeIndex(cellLastElementChild)))
+          handleHeaderChecked([headerList[0].querySelectorAll('.vxe-header--column:not(.col--seq)')])
+          handleIndexChecked(DomTools.getRowNodes(bodyList, DomTools.getCellNodeIndex(firstCell), DomTools.getCellNodeIndex(cell)))
+        } else {
+          if (isLeftBtn) {
             let firstCell = cell.parentNode.firstElementChild
             handleSelected(params, evnt)
             handleHeaderChecked([[headerList[0].querySelector(`.${column.id}`)]])
             handleIndexChecked([[firstCell]])
+          } else {
+            if (mouseOpts.selected) {
+              // 如果右键单元格不在所有选中的范围之内则重新选中
+              if (!checked.rowNodes || !checked.rowNodes.some(list => list.indexOf(cell) > -1)) {
+                handleSelected(params, evnt)
+              }
+            }
           }
-        } else if (checkboxOpts.range) {
-          this.handleCheckboxRangeEvent(evnt, params)
         }
-        this.closeFilter()
-        this.closeMenu()
-      } else if (mouseConfig.selected) {
-        // 除了双击其他都没有选中状态
-        if (editConfig && editOpts.trigger === 'dblclick') {
-          // 如果不在所有选中的范围之内则重新选中
-          if (!checked.rowNodes || !checked.rowNodes.some(list => list.indexOf(cell) > -1)) {
+      } else {
+        if (checkboxOpts.range) {
+          if (isLeftBtn) {
+            this.handleCheckboxRangeEvent(evnt, params)
+          }
+        }
+        if (mouseOpts.selected) {
+          if (!isIndex && (!editConfig || editOpts.mode === 'cell')) {
             handleSelected(params, evnt)
           }
         }
       }
       this.isActivated = true
+      this.closeFilter()
+      this.closeMenu()
     },
     /**
      * 边角事件
@@ -399,9 +411,9 @@ export default {
      * 清除所有选中状态
      */
     _clearChecked (evnt) {
-      let { $refs, editStore, mouseConfig } = this
+      let { $refs, editStore, mouseConfig, mouseOpts } = this
       let { checked } = editStore
-      if (mouseConfig && mouseConfig.checked) {
+      if (mouseConfig && mouseOpts.checked) {
         let tableBody = $refs.tableBody
         checked.rows = []
         checked.columns = []
@@ -487,8 +499,8 @@ export default {
       checked.rowNodes = rowNodes
     },
     handleAllChecked (evnt) {
-      let { tableData, visibleColumn, mouseConfig = {}, elemStore } = this
-      if (mouseConfig.checked) {
+      let { tableData, visibleColumn, mouseOpts, elemStore } = this
+      if (mouseOpts.checked) {
         evnt.preventDefault()
         let headerListElem = elemStore['main-header-list']
         let headerList = headerListElem.children

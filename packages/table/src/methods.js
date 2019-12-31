@@ -1281,7 +1281,7 @@ const Methods = {
    * 全局按下事件处理
    */
   handleGlobalMousedownEvent (evnt) {
-    let { $el, $refs, editStore, ctxMenuStore, editOpts, filterStore, getRowNode } = this
+    let { $el, $refs, mouseConfig, mouseOpts, editStore, ctxMenuStore, editOpts, filterStore, getRowNode } = this
     let { actived } = editStore
     let { filterWrapper, validTip } = $refs
     if (filterWrapper) {
@@ -1319,6 +1319,15 @@ const Methods = {
             }
           })
         }
+      }
+    } else if (mouseConfig) {
+      if (!DomTools.getEventTargetNode(evnt, $el).flag) {
+        if (mouseOpts.checked) {
+          this.clearIndexChecked()
+          this.clearHeaderChecked()
+          this.clearChecked()
+        }
+        this.clearSelected()
       }
     }
     // 如果配置了快捷菜单且，点击了其他地方则关闭
@@ -2191,8 +2200,6 @@ const Methods = {
             } else if (editOpts.trigger === 'dblclick') {
               if (editOpts.mode === 'row' && actived.row === row) {
                 this.handleChangeCell(evnt, params)
-              } else {
-                this.handleSelected(params, evnt)
               }
             }
           }

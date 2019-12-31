@@ -122,13 +122,16 @@ export default {
       headerAlign: allHeaderAlign,
       align: allAlign,
       highlightCurrentColumn,
-      mouseConfig = {},
+      mouseConfig,
+      mouseOpts,
       scrollXLoad,
       scrollYLoad,
       overflowX,
       getColumnIndex,
       sortOpts
     } = $table
+    let isMouseSelected = mouseConfig && mouseOpts.selected
+    let isMouseChecked = mouseConfig && mouseOpts.checked
     // 横向滚动渲染
     if (scrollXLoad) {
       if (fixedType) {
@@ -226,14 +229,14 @@ export default {
                 }
               }
             }
-            if (highlightCurrentColumn || tableListeners['header-cell-click'] || mouseConfig.checked || sortOpts.trigger === 'cell') {
+            if (highlightCurrentColumn || tableListeners['header-cell-click'] || isMouseChecked || sortOpts.trigger === 'cell') {
               thOns.click = evnt => $table.triggerHeaderCellClickEvent(evnt, { $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, cell: evnt.currentTarget })
             }
             if (tableListeners['header-cell-dblclick']) {
               thOns.dblclick = evnt => UtilTools.emitEvent($table, 'header-cell-dblclick', [{ $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, cell: evnt.currentTarget }, evnt])
             }
             // 按下事件处理
-            if (mouseConfig.checked) {
+            if (isMouseSelected || isMouseChecked) {
               thOns.mousedown = evnt => $table.triggerHeaderCellMousedownEvent(evnt, { $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, cell: evnt.currentTarget })
             }
             let type = column.type === 'seq' || column.type === 'index' ? 'seq' : column.type
