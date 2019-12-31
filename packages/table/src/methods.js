@@ -976,14 +976,14 @@ const Methods = {
     }
     let tableHeight = bodyElem.offsetHeight
     let overflowY = bodyElem.scrollHeight > bodyElem.clientHeight
-    this.scrollbarWidth = overflowY ? bodyElem.offsetWidth - bodyWidth : 0
+    this.scrollbarWidth = overflowY ? bodyElem.offsetWidth - bodyWidth + 1 : 0
     this.overflowY = overflowY
     this.tableWidth = tableWidth
     this.tableHeight = tableHeight
     this.isCoverBody = tableWidth >= bodyWidth - 2
     this.parentHeight = this.getParentHeight()
     if (headerElem) {
-      this.headerHeight = headerElem.clientHeight + 1
+      this.headerHeight = headerElem.clientHeight
       // 检测是否同步滚动
       if (headerElem.scrollLeft !== bodyElem.scrollLeft) {
         headerElem.scrollLeft = bodyElem.scrollLeft
@@ -1260,7 +1260,7 @@ const Methods = {
         DomTools[bodyElem.scrollLeft > 0 ? 'addClass' : 'removeClass'](leftContainer, 'scrolling--middle')
       }
       if (rightContainer) {
-        DomTools[bodyElem.clientWidth < bodyElem.scrollWidth - bodyElem.scrollLeft ? 'addClass' : 'removeClass'](rightContainer, 'scrolling--middle')
+        DomTools[bodyElem.clientWidth < bodyElem.scrollWidth - Math.ceil(bodyElem.scrollLeft) ? 'addClass' : 'removeClass'](rightContainer, 'scrolling--middle')
       }
     }
   },
@@ -1305,10 +1305,13 @@ const Methods = {
             if (editOpts.mode === 'row') {
               let rowNode = DomTools.getEventTargetNode(evnt, $el, 'vxe-body--row')
               // row 方式，如果点击了不同行
-              isClear = !rowNode.flag || getRowNode(rowNode.targetElem).item !== getRowNode(actived.args.cell.parentNode).item
+              isClear = rowNode.flag ? getRowNode(rowNode.targetElem).item !== getRowNode(actived.args.cell.parentNode).item : false
             } else {
               // cell 方式，如果是非编辑列
               isClear = !DomTools.getEventTargetNode(evnt, $el, 'col--edit').flag
+            }
+            if (!isClear) {
+              isClear = DomTools.getEventTargetNode(evnt, $el, 'vxe-header--row').flag
             }
             if (
               isClear ||

@@ -127,6 +127,7 @@ export default {
       scrollXLoad,
       scrollYLoad,
       overflowX,
+      scrollbarWidth,
       getColumnIndex,
       sortOpts
     } = $table
@@ -171,13 +172,13 @@ export default {
             },
             key: columnKey || isColGroup ? column.id : columnIndex
           })
-        }).concat([
+        }).concat(scrollbarWidth ? [
           h('col', {
             attrs: {
               name: 'col_gutter'
             }
           })
-        ])),
+        ] : [])),
         /**
          * 头部
          */
@@ -281,11 +282,11 @@ export default {
                 }
               }) : null
             ])
-          }).concat([
+          }).concat(scrollbarWidth ? [
             h('th', {
               class: 'col--gutter'
             })
-          ]))
+          ] : []))
         }))
       ]),
       /**

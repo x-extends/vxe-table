@@ -44,6 +44,7 @@ export default {
       columnKey,
       showOverflow: allColumnOverflow,
       overflowX,
+      scrollbarWidth,
       getColumnIndex
     } = $table
     // 如果是使用优化模式
@@ -89,13 +90,13 @@ export default {
             },
             key: columnIndex
           })
-        }).concat([
+        }).concat(scrollbarWidth ? [
           h('col', {
             attrs: {
               name: 'col_gutter'
             }
           })
-        ])),
+        ] : [])),
         /**
          * 底部
          */
@@ -174,11 +175,11 @@ export default {
                 class: 'vxe-cell'
               }, UtilTools.formatText(list[$table.tableColumn.indexOf(column)], 1))
             ])
-          }).concat([
+          }).concat(scrollbarWidth ? [
             h('td', {
               class: 'col--gutter'
             })
-          ]))
+          ] : []))
         }))
       ])
     ])
