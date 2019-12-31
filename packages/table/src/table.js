@@ -715,7 +715,7 @@ export default {
     } = this
     let { leftList, rightList } = columnStore
     return h('div', {
-      class: ['vxe-table', vSize ? `size--${vSize}` : '', border && XEUtils.isString(border) ? `b--style-${border}` : '', {
+      class: ['vxe-table', `tid_${id}`, vSize ? `size--${vSize}` : '', border && XEUtils.isString(border) ? `b--style-${border}` : '', {
         'vxe-editable': editConfig,
         'show--head': showHeader,
         'show--foot': showFooter,
