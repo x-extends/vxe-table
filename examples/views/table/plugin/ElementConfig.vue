@@ -160,6 +160,7 @@ export default {
               let record = {
                 role: '',
                 age: 18,
+                sex1: [],
                 region: [],
                 flag: false,
                 rate: 2
@@ -248,6 +249,7 @@ export default {
       let record = {
         role: '',
         age: 18,
+        sex1: [],
         region: [],
         flag: false,
         rate: 2

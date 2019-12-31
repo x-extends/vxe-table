@@ -2296,7 +2296,7 @@ const Methods = {
     return this.handleTableData(true)
   },
   getSortColumn () {
-    return this.visibleColumn.fild(column => column.sortable && column.order)
+    return this.visibleColumn.find(column => column.sortable && column.order)
   },
   /**
    * 关闭筛选
