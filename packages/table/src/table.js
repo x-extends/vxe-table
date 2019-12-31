@@ -517,6 +517,9 @@ export default {
     filterOpts () {
       return Object.assign({}, GlobalConfig.filterConfig, this.filterConfig)
     },
+    mouseOpts () {
+      return Object.assign({}, GlobalConfig.mouseConfig, this.mouseConfig)
+    },
     // 是否使用了分组表头
     isGroup () {
       return this.collectColumn.some(column => UtilTools.hasChildrenList(column))
@@ -818,6 +821,7 @@ export default {
       treeOpts,
       treeConfig,
       mouseConfig,
+      mouseOpts,
       vSize,
       validOpts,
       editRules,
@@ -855,8 +859,8 @@ export default {
         't--animat': optimizeOpts.animat,
         't--stripe': stripe,
         't--border': border,
-        't--selected': mouseConfig && mouseConfig.selected,
-        't--checked': mouseConfig && mouseConfig.checked,
+        't--selected': mouseConfig && mouseOpts.selected,
+        't--checked': mouseConfig && mouseOpts.checked,
         'row--highlight': highlightHoverRow,
         'column--highlight': highlightHoverColumn,
         'is--cover': isCoverBody,
@@ -2075,7 +2079,7 @@ export default {
      * 全局按下事件处理
      */
     handleGlobalMousedownEvent (evnt) {
-      let { $el, $refs, editStore, ctxMenuStore, editOpts, filterStore, getRowNode } = this
+      let { $el, $refs, mouseConfig, mouseOpts, editStore, ctxMenuStore, editOpts, filterStore, getRowNode } = this
       let { actived } = editStore
       let { filterWrapper, validTip } = $refs
       if (filterWrapper) {
@@ -2116,6 +2120,15 @@ export default {
               }
             })
           }
+        }
+      } else if (mouseConfig) {
+        if (!DomTools.getEventTargetNode(evnt, $el).flag) {
+          if (mouseOpts.checked) {
+            this.clearIndexChecked()
+            this.clearHeaderChecked()
+            this.clearChecked()
+          }
+          this.clearSelected()
         }
       }
       // 如果配置了快捷菜单且，点击了其他地方则关闭

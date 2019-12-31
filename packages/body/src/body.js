@@ -78,6 +78,7 @@ function renderColumn (h, _vm, $table, $seq, seq, rowid, fixedType, rowLevel, ro
     checkboxOpts,
     treeOpts,
     mouseConfig,
+    mouseOpts,
     editConfig,
     editOpts,
     editRules,
@@ -89,8 +90,8 @@ function renderColumn (h, _vm, $table, $seq, seq, rowid, fixedType, rowLevel, ro
   let allColumnOverflow = XEUtils.isBoolean(oldShowAllOverflow) ? oldShowAllOverflow : allShowOverflow
   let { editRender, align, showOverflow, renderWidth, columnKey, className, treeNode } = column
   let { checked, selected, actived, copyed } = editStore
-  let isMouseSelected = mouseConfig && mouseConfig.selected
-  let isMouseChecked = mouseConfig && mouseConfig.checked
+  let isMouseSelected = mouseConfig && mouseOpts.selected
+  let isMouseChecked = mouseConfig && mouseOpts.checked
   let isKeyboardCut = keyboardConfig && keyboardConfig.isCut
   let fixedHiddenColumn = fixedType ? column.fixed !== fixedType : column.fixed && overflowX
   let cellOverflow = (XEUtils.isUndefined(showOverflow) || XEUtils.isNull(showOverflow)) ? allColumnOverflow : showOverflow
