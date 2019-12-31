@@ -97,7 +97,7 @@
     left: 0;
     width: 100%;
     height: 0;
-    z-index: 1;
+    z-index: 2;
   }
   &:before {
     top: 0;
@@ -107,16 +107,18 @@
     bottom: 0;
     border-bottom: 1px solid $vxe-table-border-color;
   }
-  table {
+  .vxe-table--header,
+  .vxe-table--body,
+  .vxe-table--footer {
     border: 0;
     border-spacing: 0;
     border-collapse: separate;
+    table-layout: fixed;
   }
   .vxe-table--header-wrapper,
   .vxe-table--footer-wrapper {
     overflow-x: hidden;
     overflow-y: hidden;
-    border-top: 1px solid $vxe-table-border-color;
   }
   &.show--foot {
     &.scroll--x {
@@ -181,9 +183,6 @@
         }
       }
     }
-    .vxe-body--column {
-      border-bottom: 1px solid $vxe-table-border-color;
-    }
   }
   // &.t--stripe {
   //   .vxe-body--row {
@@ -219,6 +218,7 @@
   .vxe-header--column,
   .vxe-body--column,
   .vxe-footer--column {
+    position: relative;
     line-height: $vxe-table-row-line-height;
     text-align: left;
     &:not(.col--ellipsis) {
@@ -242,29 +242,28 @@
       user-select: none;
     }
   }
-  &.t--border {
+  &:not(.t--border) {
     .vxe-header--column,
     .vxe-body--column,
     .vxe-footer--column {
-      border-right: 1px solid $vxe-table-border-color;
+      background: linear-gradient(-180deg, $vxe-table-border-color, $vxe-table-border-color) no-repeat;
+      background-size: 100% 1px;
+      background-position: right bottom;
     }
-    // 只有铺满内容且不带分组表头和未出现纵向滚动条的情况下不需要显示最后一列的边框
-    &.is--cover {
-      &:not(.is--group) {
-        &:not(.scroll--y) {
-          .vxe-header--column,
-          .vxe-body--column,
-          .vxe-footer--column{
-            &.col--last {
-              border-right: transparent;
-            }
-          }
-        }
+  }
+  &.t--border {
+    &:not(.b--style-none) {
+      .vxe-table--footer-wrapper {
+        border-top: 1px solid $vxe-table-border-color;
       }
-    }
-    .vxe-header--column,
-    .vxe-footer--column{
-      border-bottom: 1px solid $vxe-table-border-color;
+      .vxe-header--column,
+      .vxe-body--column,
+      .vxe-footer--column {
+        background: linear-gradient(-90deg, $vxe-table-border-color, $vxe-table-border-color) no-repeat, 
+                    linear-gradient(-180deg, $vxe-table-border-color, $vxe-table-border-color) no-repeat;
+        background-size: 1px 100%, 100% 1px;
+        background-position: right top, right bottom;
+      }
     }
     .vxe-table--fixed-left-wrapper {
       border-right: 1px solid $vxe-table-border-color;
@@ -273,21 +272,19 @@
       }
     }
     &.b--style-none {
+      .vxe-header--column,
+      .vxe-body--column,
+      .vxe-footer--column {
+        background: linear-gradient(-180deg, $vxe-table-border-color, $vxe-table-border-color) no-repeat;
+        background-size: 100% 1px;
+        background-position: right bottom;
+      }
       &:before,
       .vxe-table--border-line {
         display: none;
       }
-      .vxe-table--header-wrapper,
-      .vxe-table--footer-wrapper {
-        border-top-color: transparent;
-      }
       .vxe-table--fixed-left-wrapper {
         border-right: 0;
-      }
-      .vxe-header--column,
-      .vxe-body--column,
-      .vxe-footer--column {
-        border-right-color: transparent;
       }
     }
   }
@@ -548,21 +545,6 @@
       box-shadow: -4px 3px 4px 0px rgba(0, 0, 0, 0.12);
     }
   }
-  &:not(.b--style-none) {
-    .vxe-table--fixed-left-wrapper,
-    .vxe-table--fixed-right-wrapper {
-      &:before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 0;
-        border-top: 1px solid $vxe-table-border-color;
-        z-index: 1;
-      }
-    }
-  }
   .vxe-table--header-wrapper,
   .vxe-table--body-wrapper,
   .vxe-table--footer-wrapper {
@@ -582,8 +564,8 @@
   }
   .vxe-body--x-space {
     width: 100%;
-    height: 0.01em;;
-    margin-bottom: -0.02em;
+    height: 1px;
+    margin-bottom: -1px;
   }
   .vxe-body--y-space {
     width: 0;

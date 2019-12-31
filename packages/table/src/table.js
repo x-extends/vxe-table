@@ -2021,7 +2021,7 @@ export default {
       this.isCoverBody = tableWidth >= bodyWidth - 2
       this.parentHeight = this.getParentHeight()
       if (headerElem) {
-        this.headerHeight = headerElem.clientHeight + 1
+        this.headerHeight = headerElem.clientHeight
       }
       if (footerElem) {
         let footerHeight = footerElem.offsetHeight
@@ -2058,7 +2058,7 @@ export default {
           this.scrollLeftToRight = bodyElem.scrollLeft > 0
         }
         if (rightBody) {
-          this.scrollRightToLeft = bodyElem.clientWidth < bodyElem.scrollWidth - bodyElem.scrollLeft
+          this.scrollRightToLeft = bodyElem.clientWidth < bodyElem.scrollWidth - Math.ceil(bodyElem.scrollLeft)
         }
       }
     },
@@ -2103,10 +2103,13 @@ export default {
               if (editOpts.mode === 'row') {
                 let rowNode = DomTools.getEventTargetNode(evnt, $el, 'vxe-body--row')
                 // row 方式，如果点击了不同行
-                isClear = !rowNode.flag || getRowNode(rowNode.targetElem).item !== getRowNode(actived.args.cell.parentNode).item
+                isClear = rowNode.flag ? getRowNode(rowNode.targetElem).item !== getRowNode(actived.args.cell.parentNode).item : false
               } else {
-              // cell 方式，如果是非编辑列
+                // cell 方式，如果是非编辑列
                 isClear = !DomTools.getEventTargetNode(evnt, $el, 'col--edit').flag
+              }
+              if (!isClear) {
+                isClear = DomTools.getEventTargetNode(evnt, $el, 'vxe-header--row').flag
               }
               if (
                 isClear ||

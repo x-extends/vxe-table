@@ -491,6 +491,7 @@ export default {
       scrollbarWidth,
       scrollXStore,
       scrollXLoad,
+      scrollYLoad,
       scrollYStore
     } = $table
     // v2.0 废弃属性，保留兼容
@@ -540,13 +541,13 @@ export default {
       fixedType ? _e() : h('div', {
         class: 'vxe-body--x-space',
         style: {
-          width: `${$table.tableWidth}px`
+          width: scrollXLoad ? `${$table.tableWidth}px` : ''
         }
       }),
       h('div', {
         class: 'vxe-body--y-space',
         style: {
-          height: `${scrollYStore.ySpaceHeight}px`
+          height: scrollYLoad ? `${scrollYStore.ySpaceHeight}px` : ''
         }
       }),
       h('table', {

@@ -93,7 +93,7 @@ export default {
             },
             key: columnIndex
           })
-        }).concat([
+        }).concat(scrollbarWidth ? [
           h('col', {
             attrs: {
               name: 'col_gutter'
@@ -102,7 +102,7 @@ export default {
               width: `${scrollbarWidth}px`
             }
           })
-        ])),
+        ] : [])),
         /**
          * 底部
          */
@@ -182,14 +182,14 @@ export default {
                 }
               }, UtilTools.formatText(list[$table.tableColumn.indexOf(column)], 1))
             ])
-          }).concat([
+          }).concat(scrollbarWidth ? [
             h('td', {
               class: ['col--gutter'],
               style: {
                 width: `${scrollbarWidth}px`
               }
             })
-          ]))
+          ] : []))
         }))
       ])
     ])

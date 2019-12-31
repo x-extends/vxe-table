@@ -133,7 +133,7 @@ export default {
       !fixedType && scrollXLoad ? h('div', {
         class: ['vxe-body--x-space'],
         style: {
-          width: `${$table.tableWidth + scrollbarWidth}px`
+          width: scrollXLoad ? `${$table.tableWidth + scrollbarWidth}px` : ''
         }
       }) : null,
       h('table', {
@@ -163,13 +163,13 @@ export default {
             },
             key: columnKey || isColGroup ? column.id : columnIndex
           })
-        }).concat([
+        }).concat(scrollbarWidth ? [
           h('col', {
             style: {
               width: `${scrollbarWidth}px`
             }
           })
-        ])),
+        ] : [])),
         /**
          * 头部
          */
