@@ -11,6 +11,8 @@
       border
       resizable
       highlight-hover-row
+      import-config
+      export-config
       form
       ref="xGrid"
       height="530"
@@ -183,6 +185,8 @@ export default {
           border
           resizable
           highlight-hover-row
+          import-config
+          export-config
           form
           ref="xGrid"
           height="530"

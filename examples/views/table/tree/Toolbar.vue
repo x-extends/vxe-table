@@ -15,6 +15,7 @@
 
     <vxe-table
       resizable
+      export-config
       ref="xTree"
       row-id="id"
       :loading="loading"
@@ -65,6 +66,7 @@ export default {
 
         <vxe-table
           resizable
+          export-config
           ref="xTree"
           row-id="id"
           :loading="loading"

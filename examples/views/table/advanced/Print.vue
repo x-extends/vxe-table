@@ -13,6 +13,7 @@
     <vxe-table
       border
       show-footer
+      export-config
       ref="xTable"
       height="500"
       :footer-method="footerMethod"
@@ -56,6 +57,7 @@ export default {
         <vxe-table
           border
           show-footer
+          export-config
           ref="xTable"
           height="500"
           :footer-method="footerMethod"

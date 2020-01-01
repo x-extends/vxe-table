@@ -328,6 +328,9 @@ module.exports = {
           sortConfig: '排序配置项',
           filterConfig: '筛选配置项',
           radioConfig: '单选框配置项',
+          exportConfig: '导出配置项',
+          importConfig: '导入配置项',
+          printConfig: '打印配置项',
           selectConfig: '即将废弃，请使用 checkbox-config',
           checkboxConfig: '复选框配置项',
           tooltipConfig: 'tooltip 配置项',
@@ -441,12 +444,12 @@ module.exports = {
           id: '唯一 ID 标识',
           size: '尺寸',
           loading: '是否加载中',
-          import: '导入按钮配置',
-          export: '导出按钮配置',
+          import: '导入按钮配置（需要设置 "import-config"）',
+          export: '导出按钮配置（需要设置 "export-config"）',
           refresh: '刷新按钮配置',
-          resizable: '列宽拖动配置（需要设置 id）',
+          resizable: '列宽拖动配置（需要设置 "id"）',
           setting: '即将废弃，请使用 custom',
-          custom: '自定义列配置（需要设置 id）'
+          custom: '自定义列配置（需要设置 "id"）'
         }
       },
       pager: {

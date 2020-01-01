@@ -119,10 +119,10 @@ const Methods = {
     this.tableSourceData = XEUtils.clone(tableFullData, true)
     this.scrollYLoad = scrollYLoad
     if (scrollYLoad && !(height || maxHeight)) {
-      UtilTools.error('vxe.error.scrollYReqProp', ['height | max-height'])
+      UtilTools.error('vxe.error.reqProp', ['height | max-height'])
     }
     if (scrollYLoad && !showOverflow) {
-      UtilTools.warn('vxe.error.scrollYReqProp', ['show-overflow'])
+      UtilTools.warn('vxe.error.reqProp', ['show-overflow'])
     }
     this.handleTableData(true)
     return this.computeScrollLoad().then(() => {
@@ -797,7 +797,7 @@ const Methods = {
         UtilTools.warn('vxe.error.scrollXNotGroup')
       }
       if (this.showHeader && !this.showHeaderOverflow) {
-        UtilTools.warn('vxe.error.scrollXReqProp', ['show-header-overflow'])
+        UtilTools.warn('vxe.error.reqProp', ['show-header-overflow'])
       }
       // if (this.resizable || visibleColumn.some(column => column.resizable)) {
       //   UtilTools.warn('vxe.error.scrollXNotResizable')

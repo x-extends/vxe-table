@@ -174,6 +174,12 @@ export default {
     checkboxConfig: Object,
     // tooltip 配置项
     tooltipConfig: Object,
+    // 导出配置项
+    exportConfig: [Boolean, Object],
+    // 导入配置项
+    importConfig: [Boolean, Object],
+    // 打印配置项
+    printConfig: Object,
     // 展开行配置项
     expandConfig: Object,
     // 树形结构配置项
@@ -330,7 +336,38 @@ export default {
         rule: null,
         isArrow: false
       },
-      printUrl: ''
+      // 导入相关信息
+      importStore: {
+        file: null,
+        type: '',
+        filename: '',
+        visible: false
+      },
+      importParams: {
+        mode: '',
+        types: null,
+        message: true
+      },
+      // 导出相关信息
+      exportStore: {
+        name: '',
+        mode: '',
+        columns: [],
+        selectRecords: [],
+        hasFooter: false,
+        visible: false,
+        isTree: false
+      },
+      exportParams: {
+        filename: '',
+        sheetName: '',
+        type: '',
+        types: [],
+        original: false,
+        message: true,
+        isHeader: false,
+        isFooter: false
+      }
     }
   },
   computed: {
@@ -414,6 +451,15 @@ export default {
         })
       })
       return rest
+    },
+    exportOpts () {
+      return Object.assign({}, GlobalConfig.exportConfig, this.exportConfig)
+    },
+    importOpts () {
+      return Object.assign({}, GlobalConfig.importConfig, this.importConfig)
+    },
+    printOpts () {
+      return Object.assign({}, GlobalConfig.printConfig, this.printConfig)
     },
     expandOpts () {
       return Object.assign({}, GlobalConfig.expandConfig, this.expandConfig)
@@ -573,7 +619,7 @@ export default {
       // UtilTools.warn('vxe.error.delProp', ['select-config', 'checkbox-config'])
     }
     if (treeConfig && treeOpts.line && (!this.rowKey || !showOverflow)) {
-      UtilTools.warn('vxe.error.treeLineReqProp', ['row-key | show-overflow'])
+      UtilTools.warn('vxe.error.reqProp', ['row-key | show-overflow'])
     }
     if (this.sortMethod) {
       // UtilTools.warn('vxe.error.delProp', ['sort-method', 'sort-config.sortMethod'])
@@ -844,6 +890,31 @@ export default {
           filterStore
         },
         ref: 'filterWrapper'
+      }) : _e(),
+      /**
+       * 导入
+       */
+      VXETable._export ? h('vxe-import-panel', {
+        props: {
+          defaultOptions: this.importParams,
+          storeData: this.importStore
+        },
+        on: {
+          import: this.confirmImportEvent
+        }
+      }) : _e(),
+      /**
+       * 导出
+       */
+      VXETable._export ? h('vxe-export-panel', {
+        props: {
+          defaultOptions: this.exportParams,
+          storeData: this.exportStore
+        },
+        on: {
+          print: this.confirmPrintEvent,
+          export: this.confirmExportEvent
+        }
       }) : _e(),
       h('div', {
         class: `vxe-table${id}-wrapper ${this.$vnode.data.staticClass || ''}`,

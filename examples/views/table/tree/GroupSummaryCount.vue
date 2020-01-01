@@ -45,6 +45,7 @@ export default {
       tableData: [],
       tableTreeConfig: {
         children: 'children',
+        accordion: true, // 一层只允许展开一个节点
         expandAll: false // 默认是否全部展开
       },
       demoCodes: [
@@ -80,6 +81,7 @@ export default {
               tableData: [],
               tableTreeConfig: {
                 children: 'children',
+                accordion: true, // 一层只允许展开一个节点
                 expandAll: false // 默认是否全部展开
               }
             }

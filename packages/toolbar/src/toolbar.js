@@ -28,36 +28,6 @@ export default {
       $table: null,
       isRefresh: false,
       tableFullColumn: [],
-      importStore: {
-        file: null,
-        type: '',
-        filename: '',
-        visible: false
-      },
-      importParams: {
-        mode: '',
-        types: null,
-        message: true
-      },
-      exportStore: {
-        name: '',
-        mode: '',
-        columns: [],
-        selectRecords: [],
-        hasFooter: false,
-        visible: false,
-        isTree: false
-      },
-      exportParams: {
-        filename: '',
-        sheetName: '',
-        type: '',
-        types: [],
-        original: false,
-        message: true,
-        isHeader: false,
-        isFooter: false
-      },
       customStore: {
         isAll: false,
         isIndeterminate: false,
@@ -113,7 +83,7 @@ export default {
     GlobalEvent.off(this, 'blur')
   },
   render (h) {
-    let { _e, $scopedSlots, $grid, $table, loading, customStore, importOpts, exportOpts, refresh, refreshOpts, zoom, zoomOpts, custom, setting, customOpts, buttons = [], vSize, tableFullColumn, importStore, importParams, exportStore, exportParams } = this
+    let { _e, $scopedSlots, $grid, $table, loading, customStore, importOpts, exportOpts, refresh, refreshOpts, zoom, zoomOpts, custom, setting, customOpts, buttons = [], vSize, tableFullColumn } = this
     let customBtnOns = {}
     let customWrapperOns = {}
     let $buttons = $scopedSlots.buttons
@@ -308,26 +278,7 @@ export default {
             ])
           ])
         ]) : null
-      ]),
-      VXETable._export && this.import ? h('vxe-import-panel', {
-        props: {
-          defaultOptions: importParams,
-          storeData: importStore
-        },
-        on: {
-          import: this.confirmImportEvent
-        }
-      }) : _e(),
-      VXETable._export && this.export ? h('vxe-export-panel', {
-        props: {
-          defaultOptions: exportParams,
-          storeData: exportStore
-        },
-        on: {
-          print: this.confirmPrintEvent,
-          export: this.confirmExportEvent
-        }
-      }) : _e()
+      ])
     ])
   },
   methods: {
@@ -569,93 +520,20 @@ export default {
       }
     },
     importEvent () {
-      if (this.$grid || this.$table) {
-        this.openImport()
+      const comp = this.$grid || this.$table
+      if (comp) {
+        comp.openImport()
       } else {
         throw new Error(UtilTools.getLog('vxe.error.barUnableLink'))
       }
-    },
-    openImport (options) {
-      const comp = this.$grid || this.$table
-      const defOpts = Object.assign({ mode: 'covering', message: true }, options, this.importOpts)
-      const isTree = !!comp.getTreeStatus()
-      if (isTree) {
-        if (defOpts.message) {
-          this.$XModal.message({ message: GlobalConfig.i18n('vxe.error.treeNotImp'), status: 'error' })
-        }
-        return
-      }
-      Object.assign(this.importStore, {
-        file: null,
-        type: '',
-        filename: '',
-        visible: true
-      })
-      Object.assign(this.importParams, defOpts)
-    },
-    confirmImportEvent (options) {
-      const comp = this.$grid || this.$table
-      comp.importByFile(this.importStore.file, options)
     },
     exportEvent () {
-      if (this.$grid || this.$table) {
-        this.openExport()
+      const comp = this.$grid || this.$table
+      if (comp) {
+        comp.openExport(this.customOpts)
       } else {
         throw new Error(UtilTools.getLog('vxe.error.barUnableLink'))
       }
-    },
-    openExport (options) {
-      const customOpts = this.customOpts
-      const comp = this.$grid || this.$table
-      const { fullColumn } = comp.getTableColumn()
-      const { footerData } = comp.getTableData()
-      const selectRecords = comp.getCheckboxRecords()
-      // v3.0 废弃 type=index
-      const exportColumns = fullColumn.filter(column => ['seq', 'index'].indexOf(column.type) > -1 || column.property)
-      const treeStatus = comp.getTreeStatus()
-      const isTree = !!treeStatus
-      const hasFooter = !!footerData.length
-      const defOpts = Object.assign({ message: true }, this.exportOpts, options)
-      const types = defOpts.types || VXETable.exportTypes
-      // 处理类型
-      defOpts.types = types.map(value => {
-        return {
-          value,
-          label: `vxe.types.${value}`
-        }
-      })
-      // 默认全部选中
-      exportColumns.forEach(column => {
-        column.checked = column.visible
-        column.disabled = customOpts.checkMethod ? !customOpts.checkMethod({ column }) : false
-      })
-      // 更新条件
-      Object.assign(this.exportStore, {
-        columns: exportColumns,
-        selectRecords: selectRecords,
-        mode: selectRecords.length ? 'selected' : 'all',
-        hasFooter: hasFooter,
-        visible: true,
-        isTree
-      })
-      // 重置参数
-      Object.assign(this.exportParams, {
-        filename: defOpts.filename || '',
-        sheetName: defOpts.sheetName || '',
-        type: defOpts.type || defOpts.types[0].value,
-        types: defOpts.types,
-        original: defOpts.original,
-        message: defOpts.message,
-        isHeader: true,
-        isFooter: hasFooter
-      })
-      return this.$nextTick()
-    },
-    confirmPrintEvent (options) {
-      (this.$grid || this.$table).print(options)
-    },
-    confirmExportEvent (options) {
-      (this.$grid || this.$table).exportData(options)
     }
   }
 }

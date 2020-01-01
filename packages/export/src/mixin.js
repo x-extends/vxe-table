@@ -486,12 +486,6 @@ export default {
       UtilTools.warn('vxe.error.delFunc', ['exportCsv', 'exportData'])
       return this.exportData(options)
     },
-    _openExport (options) {
-      if (this.$toolbar) {
-        return this.$toolbar.openExport(options)
-      }
-      throw new Error(UtilTools.getLog('vxe.error.barUnableLink'))
-    },
     /**
      * 导出文件，支持 csv/html/xml
      * 如果是树表格，则默认是导出所有节点
@@ -526,12 +520,6 @@ export default {
         throw new Error(UtilTools.getLog('vxe.error.notType', [opts.type]))
       }
       return handleExport(this, opts, visibleColumn, tableFullData)
-    },
-    _openImport (options) {
-      if (this.$toolbar) {
-        return this.$toolbar.openImport(options)
-      }
-      throw new Error(UtilTools.getLog('vxe.error.barUnableLink'))
     },
     _importByFile (file, opts) {
       if (window.FileReader) {
@@ -630,6 +618,82 @@ export default {
           printFrame.src = URL.createObjectURL(blob)
         }
       })
+    },
+    _openImport (options) {
+      const defOpts = Object.assign({ mode: 'covering', message: true }, options, this.importOpts)
+      const isTree = !!this.getTreeStatus()
+      if (isTree) {
+        if (defOpts.message) {
+          this.$XModal.message({ message: GlobalConfig.i18n('vxe.error.treeNotImp'), status: 'error' })
+        }
+        return
+      }
+      if (!this.importConfig) {
+        UtilTools.warn('vxe.error.reqProp', ['import-config'])
+      }
+      Object.assign(this.importStore, {
+        file: null,
+        type: '',
+        filename: '',
+        visible: true
+      })
+      Object.assign(this.importParams, defOpts)
+    },
+    _openExport (options) {
+      const { $toolbar, exportConfig, exportOpts, treeConfig, tableFullColumn, footerData } = this
+      const selectRecords = this.getCheckboxRecords()
+      // v3.0 废弃 type=index
+      const exportColumns = tableFullColumn.filter(column => ['seq', 'index'].indexOf(column.type) > -1 || column.property)
+      const isTree = !!treeConfig
+      const hasFooter = !!footerData.length
+      const defOpts = Object.assign({ message: true, isHeader: true }, exportOpts, options)
+      const types = defOpts.types || VXETable.exportTypes
+      const checkMethod = exportOpts.checkMethod || ($toolbar ? $toolbar.customOpts.checkMethod : null)
+      if (!exportConfig) {
+        UtilTools.warn('vxe.error.reqProp', ['export-config'])
+      }
+      // 处理类型
+      defOpts.types = types.map(value => {
+        return {
+          value,
+          label: `vxe.types.${value}`
+        }
+      })
+      // 默认全部选中
+      exportColumns.forEach(column => {
+        column.checked = column.visible
+        column.disabled = checkMethod ? !checkMethod({ column }) : false
+      })
+      // 更新条件
+      Object.assign(this.exportStore, {
+        columns: exportColumns,
+        selectRecords: selectRecords,
+        mode: selectRecords.length ? 'selected' : 'all',
+        hasFooter: hasFooter,
+        visible: true,
+        isTree
+      })
+      // 重置参数
+      Object.assign(this.exportParams, {
+        filename: defOpts.filename || '',
+        sheetName: defOpts.sheetName || '',
+        type: defOpts.type || defOpts.types[0].value,
+        types: defOpts.types,
+        original: defOpts.original,
+        message: defOpts.message,
+        isHeader: defOpts.isHeader,
+        isFooter: hasFooter
+      })
+      return this.$nextTick()
+    },
+    confirmExportEvent (options) {
+      this.exportData(Object.assign({}, this.exportOpts, options))
+    },
+    confirmImportEvent (options) {
+      this.importByFile(this.importStore.file, Object.assign({}, this.importOpts, options))
+    },
+    confirmPrintEvent (options) {
+      this.print(Object.assign({}, this.printOpts, options))
     }
   }
 }

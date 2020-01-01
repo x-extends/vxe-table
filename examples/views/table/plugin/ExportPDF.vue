@@ -13,6 +13,7 @@
 
     <vxe-table
       border
+      export-config
       ref="xTable"
       height="400"
       :loading="loading"
@@ -59,6 +60,7 @@ export default {
 
         <vxe-table
           border
+          export-config
           ref="xTable"
           height="400"
           :loading="loading"

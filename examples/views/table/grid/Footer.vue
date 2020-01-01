@@ -7,6 +7,7 @@
       stripe
       resizable
       show-footer
+      export-config
       height="500"
       :toolbar="tableToolbar"
       :footer-method="footerMethod"
@@ -48,6 +49,7 @@ export default {
           stripe
           resizable
           show-footer
+          export-config
           height="500"
           :toolbar="tableToolbar"
           :footer-method="footerMethod"
