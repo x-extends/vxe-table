@@ -2111,6 +2111,9 @@ export default {
               if (!isClear) {
                 isClear = DomTools.getEventTargetNode(evnt, $el, 'vxe-header--row').flag
               }
+              if (!isClear) {
+                isClear = DomTools.getEventTargetNode(evnt, $el, 'vxe-footer--row').flag
+              }
               if (
                 isClear ||
                 // 如果点击了当前表格之外
