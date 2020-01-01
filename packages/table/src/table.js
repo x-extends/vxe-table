@@ -567,22 +567,22 @@ export default {
       UtilTools.error('vxe.error.emptyProp', ['row-id'])
     }
     if (this.startIndex) {
-      UtilTools.warn('vxe.error.delProp', ['start-index', 'seq-config.startIndex'])
+      // UtilTools.warn('vxe.error.delProp', ['start-index', 'seq-config.startIndex'])
     }
     if (this.selectConfig) {
-      UtilTools.warn('vxe.error.delProp', ['select-config', 'checkbox-config'])
+      // UtilTools.warn('vxe.error.delProp', ['select-config', 'checkbox-config'])
     }
     if (treeConfig && treeOpts.line && (!this.rowKey || !showOverflow)) {
       UtilTools.warn('vxe.error.treeLineReqProp', ['row-key | show-overflow'])
     }
     if (this.sortMethod) {
-      UtilTools.warn('vxe.error.delProp', ['sort-method', 'sort-config.sortMethod'])
+      // UtilTools.warn('vxe.error.delProp', ['sort-method', 'sort-config.sortMethod'])
     }
     if (this.remoteSort) {
-      UtilTools.warn('vxe.error.delProp', ['remote-sort', 'sort-config.remote'])
+      // UtilTools.warn('vxe.error.delProp', ['remote-sort', 'sort-config.remote'])
     }
     if (this.remoteFilter) {
-      UtilTools.warn('vxe.error.delProp', ['remote-filter', 'filter-config.remote'])
+      // UtilTools.warn('vxe.error.delProp', ['remote-filter', 'filter-config.remote'])
     }
     // 检查是否有安装需要的模块
     let errorModuleName

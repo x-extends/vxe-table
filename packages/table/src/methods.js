@@ -976,7 +976,7 @@ const Methods = {
     }
     let tableHeight = bodyElem.offsetHeight
     let overflowY = bodyElem.scrollHeight > bodyElem.clientHeight
-    this.scrollbarWidth = overflowY ? bodyElem.offsetWidth - bodyWidth + 1 : 0
+    this.scrollbarWidth = overflowY ? bodyElem.offsetWidth - bodyWidth : 0
     this.overflowY = overflowY
     this.tableWidth = tableWidth
     this.tableHeight = tableHeight

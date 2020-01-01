@@ -4,7 +4,7 @@ import VXETable from '../../v-x-e-table'
 import { UtilTools, DomTools } from '../../tools'
 
 // 默认导出或打印的 HTML 样式
-const defaultHtmlStyle = 'body{margin:0}body *{-webkit-box-sizing:border-box;box-sizing:border-box;}table{font-size:14px;text-align:left;border-width:1px 0 0 1px}table,td,th{border-style:solid;border-color:#e8eaec}tfoot,thead{background-color:#f8f8f9}td,th{border-width:0 1px 1px 0}td>div,th>div{padding:.5em .4em;}.col--center{text-align:center}.col--right {text-align:right}.col--ellipsis>div{overflow:hidden;text-overflow:ellipsis;white-space: nowrap;word-break:break-all}.tree-icon-wrapper{position:relative;display:inline-block;vertical-align:middle;width:1.2em}.tree-icon{position:absolute;top:-.3em;left:0;width:0;height:0;border-style:solid;border-width:.5em;border-top-color:#939599;border-right-color:transparent;border-bottom-color:transparent;border-left-color:transparent}.tree-node{text-align:left}.tree-indent{display:inline-block}'
+const defaultHtmlStyle = 'body{margin:0}body *{-webkit-box-sizing:border-box;box-sizing:border-box}table{border:0;border-collapse:separate;table-layout:fixed;text-align:left;font-size:14px;border-spacing:0}table:not(.b--style-none){border-style:solid;border-width:1px 0 0 1px;border-color:#e8eaec}td,thead tr:last-child th{border-bottom:1px solid #e8eaec}table:not(.t--border){border-width:1px}table.t--border:not(.b--style-none) td,table.t--border:not(.b--style-none) th{border-right:1px solid #e8eaec}table:not(.b--style-none) thead{background-color:#f8f8f9}td>div,th>div{padding:.5em .4em}.col--center{text-align:center}.col--right{text-align:right}.col--ellipsis>div{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;word-break:break-all}.tree-icon-wrapper{position:relative;display:inline-block;width:1.2em;vertical-align:middle}.tree-icon{position:absolute;top:-.3em;left:0;width:0;height:0;border-style:solid;border-width:.5em;border-top-color:#939599;border-right-color:transparent;border-bottom-color:transparent;border-left-color:transparent}.tree-node{text-align:left}.tree-indent{display:inline-block}'
 
 // 导入
 const fileForm = document.createElement('form')
@@ -111,10 +111,11 @@ function hasEllipsis ($table, column, property, allColumnOverflow) {
 }
 
 function toHtml ($table, opts, columns, datas) {
-  const { treeConfig, treeOpts, headerAlign: allHeaderAlign, align: allAlign, footerAlign: allFooterAlign, showOverflow: allShowOverflow, showAllOverflow: oldShowAllOverflow, showHeaderOverflow: allHeaderOverflow, showHeaderAllOverflow: oldHeaderOverflow } = $table
+  const { border, treeConfig, treeOpts, headerAlign: allHeaderAlign, align: allAlign, footerAlign: allFooterAlign, showOverflow: allShowOverflow, showAllOverflow: oldShowAllOverflow, showHeaderOverflow: allHeaderOverflow, showHeaderAllOverflow: oldHeaderOverflow } = $table
   // v2.0 废弃属性，保留兼容
   let allColumnOverflow = XEUtils.isBoolean(oldShowAllOverflow) ? oldShowAllOverflow : allShowOverflow
   let allColumnHeaderOverflow = XEUtils.isBoolean(oldHeaderOverflow) ? oldHeaderOverflow : allHeaderOverflow
+  let clss = [border ? `t--border${border === 'none' ? ' b--style-none' : ''}` : '']
   let html = [
     '<html>',
     `<head>`,
@@ -122,7 +123,7 @@ function toHtml ($table, opts, columns, datas) {
     `<style>${opts.style || defaultHtmlStyle}</style>`,
     '</head>',
     '<body>',
-    `<table border="1" cellspacing="0" cellpadding="0">`,
+    `<table border="0" cellspacing="0" cellpadding="0" class="${clss.join('')}">`,
     `<colgroup>${columns.map(column => `<col style="width:${column.renderWidth}px">`).join('')}</colgroup>`
   ].join('')
   if (opts.isHeader) {

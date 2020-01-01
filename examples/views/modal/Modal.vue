@@ -67,7 +67,7 @@
       <vxe-button @click="value3 = !value3">记忆功能的窗口</vxe-button>
       <vxe-modal v-model="value3" title="记忆功能的窗口" width="600" height="400" resize remember>
         <template>
-          <p style="color: red">会记忆最后一次操作的状态，单重新打开后悔还原</p>
+          <p style="color: red">会记忆最后一次操作的状态，单重新打开会还原</p>
           <p style="color: red">按住头部移动！！！！！！！！！！！！！！！</p>
           <p style="color: blue">按住左边距拖动！！！！！！！！！！！！！！！</p>
           <p style="color: red">按住右边距拖动！！！！！！！！！！！！！！！</p>
@@ -244,7 +244,7 @@ export default {
           <vxe-button @click="value3 = !value3">记忆功能的窗口</vxe-button>
           <vxe-modal v-model="value3" title="记忆功能的窗口" width="600" height="400" resize remember>
             <template>
-              <p style="color: red">会记忆最后一次操作的状态，单重新打开后悔还原</p>
+              <p style="color: red">会记忆最后一次操作的状态，单重新打开会还原</p>
               <p style="color: red">按住头部移动！！！！！！！！！！！！！！！</p>
               <p style="color: blue">按住左边距拖动！！！！！！！！！！！！！！！</p>
               <p style="color: red">按住右边距拖动！！！！！！！！！！！！！！！</p>
