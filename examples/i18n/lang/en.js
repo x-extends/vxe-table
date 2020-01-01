@@ -327,6 +327,9 @@ module.exports = {
           sortConfig: 'Sort configuration',
           filterConfig: 'Filter configuration',
           radioConfig: 'Radio configuration',
+          exportConfig: 'Export configuration',
+          importConfig: 'Import configuration',
+          printConfig: 'Print configuration',
           selectConfig: 'Obsolete, please use "checkbox-config"',
           checkboxConfig: 'Checkbox configuration',
           tooltipConfig: 'tooltip configuration',
@@ -440,12 +443,12 @@ module.exports = {
           id: 'Unique ID identification',
           size: 'Size',
           loading: 'Loading',
-          import: 'Import button config',
-          export: 'Export button config',
+          import: 'Import button config("import-config" needs to be set)',
+          export: 'Export button config("export-config" needs to be set)',
           refresh: 'Refresh button config',
-          resizable: 'Column width drag config(id needs to be set)',
+          resizable: 'Column width drag config("id" needs to be set)',
           setting: 'Obsolete, please use "custom"',
-          custom: 'Custom column config(id needs to be set)'
+          custom: 'Custom column config("id" needs to be set)'
         }
       },
       pager: {

@@ -733,7 +733,7 @@ const apis = [
         version: '1.15.15',
         type: 'Object',
         enum: '',
-        defVal: '继承 setup.seq-config',
+        defVal: '继承 setup.seqConfig',
         list: [
           {
             name: 'startIndex',
@@ -761,7 +761,7 @@ const apis = [
         version: '1.11.10',
         type: 'Object',
         enum: '',
-        defVal: '继承 setup.sort-config',
+        defVal: '继承 setup.sortConfig',
         list: [
           {
             name: 'defaultSort',
@@ -853,7 +853,7 @@ const apis = [
         version: '1.15.15',
         type: 'Object',
         enum: '',
-        defVal: '继承 setup.filter-config',
+        defVal: '继承 setup.filterConfig',
         list: [
           {
             name: 'remote',
@@ -899,7 +899,7 @@ const apis = [
         version: '',
         type: 'Object',
         enum: '',
-        defVal: '继承 setup.radio-config',
+        defVal: '继承 setup.radioConfig',
         list: [
           {
             name: 'labelProp',
@@ -959,6 +959,33 @@ const apis = [
         ]
       },
       {
+        name: 'export-config',
+        descKey: 'app.api.table.desc.exportConfig',
+        version: '1.15.18',
+        type: 'Boolean, Object',
+        enum: '',
+        defVal: '继承 setup.exportConfig',
+        list: []
+      },
+      {
+        name: 'import-config',
+        descKey: 'app.api.table.desc.importConfig',
+        version: '1.15.18',
+        type: 'Boolean, Object',
+        enum: '',
+        defVal: '继承 setup.importConfig',
+        list: []
+      },
+      {
+        name: 'print-config',
+        descKey: 'app.api.table.desc.printConfig',
+        version: '1.15.18',
+        type: 'Object',
+        enum: '',
+        defVal: '继承 setup.printConfig',
+        list: []
+      },
+      {
         name: 'select-config',
         descKey: 'app.api.table.desc.selectConfig',
         disabled: true,
@@ -974,7 +1001,7 @@ const apis = [
         version: '1.15.5',
         type: 'Object',
         enum: '',
-        defVal: '继承 setup.checkbox-config',
+        defVal: '继承 setup.checkboxconfig',
         list: [
           {
             name: 'key',
@@ -1122,7 +1149,7 @@ const apis = [
         version: '',
         type: 'Object',
         enum: '',
-        defVal: '继承 setup.tooltip-config',
+        defVal: '继承 setup.tooltipConfig',
         list: [
           {
             name: 'theme',
@@ -1159,7 +1186,7 @@ const apis = [
         version: '',
         type: 'Object',
         enum: '',
-        defVal: '继承 setup.expand-config',
+        defVal: '继承 setup.expandConfig',
         list: [
           {
             name: 'key',
@@ -1269,7 +1296,7 @@ const apis = [
         version: '',
         type: 'Boolean, Object',
         enum: '',
-        defVal: '继承 setup.tree-config',
+        defVal: '继承 setup.treeConfig',
         list: [
           {
             name: 'key',
@@ -1560,7 +1587,7 @@ const apis = [
         version: '',
         type: 'Boolean, Object',
         enum: '',
-        defVal: '继承 setup.edit-config',
+        defVal: '继承 setup.editConfig',
         list: [
           {
             name: 'key',
@@ -3437,7 +3464,7 @@ const apis = [
       },
       {
         name: 'openExport(options)',
-        desc: '打开高级导出（只支持基本数据结构，目前不支持分组、合并等；树结构和虚拟滚动只允许导出数据源）',
+        desc: '打开高级导出（只对 export-config 启用后有效）',
         version: '1.5.12',
         type: 'Promise',
         enum: '',
@@ -3483,7 +3510,7 @@ const apis = [
       },
       {
         name: 'openImport(options)',
-        desc: '打开高级导入',
+        desc: '打开高级导入（只对 import-config 启用后有效）',
         version: '1.15.13',
         type: 'Promise',
         enum: '',

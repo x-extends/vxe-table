@@ -6,6 +6,7 @@
       border
       resizable
       row-key
+      export-config
       ref="xTree"
       max-height="400"
       :toolbar="{export: true, zoom: true}"
@@ -47,6 +48,7 @@ export default {
           border
           resizable
           row-key
+          export-config
           ref="xTree"
           max-height="400"
           :toolbar="{export: true, zoom: true}"

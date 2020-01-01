@@ -267,6 +267,12 @@ export default {
     checkboxConfig: Object,
     // tooltip 配置项
     tooltipConfig: Object,
+    // 导出配置项
+    exportConfig: [Boolean, Object],
+    // 导入配置项
+    importConfig: [Boolean, Object],
+    // 打印配置项
+    printConfig: Object,
     // 展开行配置项
     expandConfig: Object,
     // 树形结构配置项
@@ -469,6 +475,38 @@ export default {
         content: '',
         rule: null,
         isArrow: false
+      },
+      // 导入相关信息
+      importStore: {
+        file: null,
+        type: '',
+        filename: '',
+        visible: false
+      },
+      importParams: {
+        mode: '',
+        types: null,
+        message: true
+      },
+      // 导出相关信息
+      exportStore: {
+        name: '',
+        mode: '',
+        columns: [],
+        selectRecords: [],
+        hasFooter: false,
+        visible: false,
+        isTree: false
+      },
+      exportParams: {
+        filename: '',
+        sheetName: '',
+        type: '',
+        types: [],
+        original: false,
+        message: true,
+        isHeader: false,
+        isFooter: false
       }
     }
   },
@@ -556,6 +594,15 @@ export default {
         })
       })
       return rest
+    },
+    exportOpts () {
+      return Object.assign({}, GlobalConfig.exportConfig, this.exportConfig)
+    },
+    importOpts () {
+      return Object.assign({}, GlobalConfig.importConfig, this.importConfig)
+    },
+    printOpts () {
+      return Object.assign({}, GlobalConfig.printConfig, this.printConfig)
     },
     expandOpts () {
       return Object.assign({}, GlobalConfig.expandConfig, this.expandConfig)
@@ -709,7 +756,7 @@ export default {
       // UtilTools.warn('vxe.error.delProp', ['select-config', 'checkbox-config'])
     }
     if (treeConfig && treeOpts.line && (!this.rowKey || !showOverflow)) {
-      UtilTools.warn('vxe.error.treeLineReqProp', ['row-key | show-overflow'])
+      UtilTools.warn('vxe.error.reqProp', ['row-key | show-overflow'])
     }
     if (checkboxOpts.checkProp) {
       UtilTools.warn('vxe.error.delProp', ['select-config.checkProp', 'select-config.checkField'])
@@ -978,6 +1025,31 @@ export default {
         },
         ref: 'filterWrapper'
       }) : _e(),
+      /**
+       * 导入
+       */
+      VXETable._export ? h('vxe-import-panel', {
+        props: {
+          defaultOptions: this.importParams,
+          storeData: this.importStore
+        },
+        on: {
+          import: this.confirmImportEvent
+        }
+      }) : _e(),
+      /**
+       * 导出
+       */
+      VXETable._export ? h('vxe-export-panel', {
+        props: {
+          defaultOptions: this.exportParams,
+          storeData: this.exportStore
+        },
+        on: {
+          print: this.confirmPrintEvent,
+          export: this.confirmExportEvent
+        }
+      }) : _e(),
       h('div', {
         class: `vxe-table${id}-wrapper ${this.$vnode.data.staticClass || ''}`,
         ref: 'tableWrapper'
@@ -1080,10 +1152,10 @@ export default {
       this.tableSourceData = XEUtils.clone(tableFullData, true)
       this.scrollYLoad = scrollYLoad
       if (scrollYLoad && !(height || maxHeight)) {
-        UtilTools.error('vxe.error.scrollYReqProp', ['height | max-height'])
+        UtilTools.error('vxe.error.reqProp', ['height | max-height'])
       }
       if (scrollYLoad && !showOverflow) {
-        UtilTools.warn('vxe.error.scrollYReqProp', ['show-overflow'])
+        UtilTools.warn('vxe.error.reqProp', ['show-overflow'])
       }
       this.handleTableData(true)
       return this.computeScrollLoad().then(() => {
@@ -1837,7 +1909,7 @@ export default {
           UtilTools.warn('vxe.error.scrollXNotGroup')
         }
         if (this.showHeader && !this.showHeaderOverflow) {
-          UtilTools.warn('vxe.error.scrollXReqProp', ['show-header-overflow'])
+          UtilTools.warn('vxe.error.reqProp', ['show-header-overflow'])
         }
         // if (this.resizable || visibleColumn.some(column => column.resizable)) {
         //   UtilTools.warn('vxe.error.scrollXNotResizable')
@@ -5026,12 +5098,6 @@ export default {
       UtilTools.warn('vxe.error.delFunc', ['exportCsv', 'exportData'])
       return this.exportData(options)
     },
-    openExport (options) {
-      if (this.$toolbar) {
-        return this.$toolbar.openExport(options)
-      }
-      throw new Error(UtilTools.getLog('vxe.error.barUnableLink'))
-    },
     /**
      * 导出 csv 文件
      * 如果是树表格，则默认是导出所有节点
@@ -5065,12 +5131,6 @@ export default {
         throw new Error(UtilTools.getLog('vxe.error.notType', [opts.type]))
       }
       return ExportTools.handleExport(this, opts, visibleColumn, tableFullData)
-    },
-    openImport (options) {
-      if (this.$toolbar) {
-        return this.$toolbar.openImport(options)
-      }
-      throw new Error(UtilTools.getLog('vxe.error.barUnableLink'))
     },
     importByFile (file, opts) {
       if (window.FileReader) {
@@ -5169,6 +5229,82 @@ export default {
           printFrame.src = URL.createObjectURL(blob)
         }
       })
+    },
+    openImport (options) {
+      const defOpts = Object.assign({ mode: 'covering', message: true }, options, this.importOpts)
+      const isTree = !!this.getTreeStatus()
+      if (isTree) {
+        if (defOpts.message) {
+          this.$XModal.message({ message: GlobalConfig.i18n('vxe.error.treeNotImp'), status: 'error' })
+        }
+        return
+      }
+      if (!this.importConfig) {
+        UtilTools.warn('vxe.error.reqProp', ['import-config'])
+      }
+      Object.assign(this.importStore, {
+        file: null,
+        type: '',
+        filename: '',
+        visible: true
+      })
+      Object.assign(this.importParams, defOpts)
+    },
+    openExport (options) {
+      const { $toolbar, exportConfig, exportOpts, treeConfig, tableFullColumn, footerData } = this
+      const selectRecords = this.getCheckboxRecords()
+      // v3.0 废弃 type=index
+      const exportColumns = tableFullColumn.filter(column => ['seq', 'index'].indexOf(column.type) > -1 || column.property)
+      const isTree = !!treeConfig
+      const hasFooter = !!footerData.length
+      const defOpts = Object.assign({ message: true, isHeader: true }, exportOpts, options)
+      const types = defOpts.types || VXETable.exportTypes
+      const checkMethod = exportOpts.checkMethod || ($toolbar ? $toolbar.customOpts.checkMethod : null)
+      if (!exportConfig) {
+        UtilTools.warn('vxe.error.reqProp', ['export-config'])
+      }
+      // 处理类型
+      defOpts.types = types.map(value => {
+        return {
+          value,
+          label: `vxe.types.${value}`
+        }
+      })
+      // 默认全部选中
+      exportColumns.forEach(column => {
+        column.checked = column.visible
+        column.disabled = checkMethod ? !checkMethod({ column }) : false
+      })
+      // 更新条件
+      Object.assign(this.exportStore, {
+        columns: exportColumns,
+        selectRecords: selectRecords,
+        mode: selectRecords.length ? 'selected' : 'all',
+        hasFooter: hasFooter,
+        visible: true,
+        isTree
+      })
+      // 重置参数
+      Object.assign(this.exportParams, {
+        filename: defOpts.filename || '',
+        sheetName: defOpts.sheetName || '',
+        type: defOpts.type || defOpts.types[0].value,
+        types: defOpts.types,
+        original: defOpts.original,
+        message: defOpts.message,
+        isHeader: defOpts.isHeader,
+        isFooter: hasFooter
+      })
+      return this.$nextTick()
+    },
+    confirmExportEvent (options) {
+      this.exportData(Object.assign({}, this.exportOpts, options))
+    },
+    confirmImportEvent (options) {
+      this.importByFile(this.importStore.file, Object.assign({}, this.importOpts, options))
+    },
+    confirmPrintEvent (options) {
+      this.print(Object.assign({}, this.printOpts, options))
     },
     updateZindex () {
       if (this.tZindex < UtilTools.getLastZIndex()) {
