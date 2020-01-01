@@ -4,7 +4,7 @@ import VXETable from '../../v-x-e-table'
 import { UtilTools, DomTools } from '../../tools'
 
 // 默认导出或打印的 HTML 样式
-const defaultHtmlStyle = 'body{margin:0}body *{-webkit-box-sizing:border-box;box-sizing:border-box}table{border:0;border-collapse:separate;table-layout:fixed;text-align:left;font-size:14px;border-spacing:0}table:not(.b--style-none){border-style:solid;border-width:1px 0 0 1px;border-color:#e8eaec}td,thead tr:last-child th{border-bottom:1px solid #e8eaec}table:not(.t--border){border-width:1px}table.t--border:not(.b--style-none) td,table.t--border:not(.b--style-none) th{border-right:1px solid #e8eaec}table:not(.b--style-none) thead{background-color:#f8f8f9}td>div,th>div{padding:.5em .4em}.col--center{text-align:center}.col--right{text-align:right}.col--ellipsis>div{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;word-break:break-all}.tree-icon-wrapper{position:relative;display:inline-block;width:1.2em;vertical-align:middle}.tree-icon{position:absolute;top:-.3em;left:0;width:0;height:0;border-style:solid;border-width:.5em;border-top-color:#939599;border-right-color:transparent;border-bottom-color:transparent;border-left-color:transparent}.tree-node{text-align:left}.tree-indent{display:inline-block}'
+const defaultHtmlStyle = 'body{margin:0}body *{-webkit-box-sizing:border-box;box-sizing:border-box}.vxe-table{border:0;border-collapse:separate;table-layout:fixed;text-align:left;font-size:14px;border-spacing:0}.vxe-table:not(.b--style-none){border-style:solid;border-width:1px 0 0 1px;border-color:#e8eaec}td,thead tr:last-child th{border-bottom:1px solid #e8eaec}.vxe-table:not(.t--border){border-width:1px}.vxe-table.t--border:not(.b--style-none) td,table.t--border:not(.b--style-none) th{border-right:1px solid #e8eaec}.vxe-table:not(.b--style-none) thead{background-color:#f8f8f9}.vxe-table td>div,.vxe-table th>div{padding:.5em .4em}.col--center{text-align:center}.col--right{text-align:right}.col--ellipsis>div{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;word-break:break-all}.vxe-table--tree-node{text-align:left}.vxe-table--tree-node-wrapper{position:relative}.vxe-table--tree-icon-wrapper{position:absolute;top:50%;width:1em;height:1em;text-align:center;-webkit-transform:translateY(-50%);transform:translateY(-50%);-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;cursor:pointer}.vxe-table--tree-icon{position:absolute;left:0;top:.3em;width:0;height:0;border-style:solid;border-width:.5em;border-top-color:#939599;border-right-color:transparent;border-bottom-color:transparent;border-left-color:transparent}.vxe-table--tree-cell{display:block;padding-left:1.5em}'
 
 // 导入
 const fileForm = document.createElement('form')
@@ -123,7 +123,7 @@ function toHtml ($table, opts, columns, datas) {
     `<style>${opts.style || defaultHtmlStyle}</style>`,
     '</head>',
     '<body>',
-    `<table border="0" cellspacing="0" cellpadding="0" class="${clss.join('')}">`,
+    `<table class="vxe-table" border="0" cellspacing="0" cellpadding="0" class="${clss.join('')}">`,
     `<colgroup>${columns.map(column => `<col style="width:${column.renderWidth}px">`).join('')}</colgroup>`
   ].join('')
   if (opts.isHeader) {
@@ -151,10 +151,10 @@ function toHtml ($table, opts, columns, datas) {
           if (column.treeNode) {
             let treeIcon = ''
             if (row._hasChild) {
-              treeIcon = `<i class="tree-icon"></i>`
+              treeIcon = `<i class="vxe-table--tree-icon"></i>`
             }
-            classNames.push('tree-node')
-            return `<td class="${classNames.join(' ')}" title="${cellValue}"><div style="width: ${column.renderWidth}px"><span class="tree-indent" style="width: ${row._level * treeOpts.indent}px"></span><span class="tree-icon-wrapper">${treeIcon}</span>${cellValue}</div></td>`
+            classNames.push('vxe-table--tree-node')
+            return `<td class="${classNames.join(' ')}" title="${cellValue}"><div style="width: ${column.renderWidth}px"><div class="vxe-table--tree-node-wrapper" style="padding-left: ${row._level * treeOpts.indent}px"><div class="vxe-table--tree-icon-wrapper">${treeIcon}</div><div class="vxe-table--tree-cell">${cellValue}</div></div></div></td>`
           }
           return `<td class="${classNames.join(' ')}" title="${cellValue}"><div style="width: ${column.renderWidth}px">${cellValue}</div></td>`
         }).join('') + '</tr>'

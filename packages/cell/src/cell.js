@@ -116,7 +116,7 @@ export const Cell = {
     }
     return [
       h('div', {
-        class: ['vxe-cell--tree-none', {
+        class: ['vxe-cell--tree-node', {
           'is--active': isAceived
         }],
         style: {
