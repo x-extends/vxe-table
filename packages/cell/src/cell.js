@@ -33,6 +33,13 @@ export const Cell = {
         break
       case 'html':
         renMaps.renderCell = treeNode ? this.renderTreeHTMLCell : this.renderHTMLCell
+        if (filters && filters.length && (sortable || remoteSort)) {
+          renMaps.renderHeader = this.renderSortAndFilterHeader
+        } else if (sortable || remoteSort) {
+          renMaps.renderHeader = this.renderSortHeader
+        } else if (filters && filters.length) {
+          renMaps.renderHeader = this.renderFilterHeader
+        }
         break
       default:
         if (editConfig && editRender) {
