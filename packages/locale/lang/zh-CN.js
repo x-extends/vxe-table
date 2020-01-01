@@ -37,8 +37,8 @@ export default {
       filter: '对所选的列启用筛选',
       impSuccess: '导入成功',
       expSuccess: '导出成功',
-      expFilename: '导出_{0}',
-      expOriginFilename: '导出_源_{0}',
+      expFilename: '导出_{{0}}',
+      expOriginFilename: '导出_源_{{0}}',
       expSheetName: 'Sheet1'
     },
     grid: {
