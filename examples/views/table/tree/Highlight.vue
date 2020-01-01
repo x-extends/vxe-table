@@ -1,12 +1,12 @@
 <template>
   <div>
-    <p class="tip">键盘移动高亮行，设置 <table-api-link prop="keyboard-config"/>={isArrow: true} 启用方向键功能</p>
+    <p class="tip">键盘移动高亮行，设置 <table-api-link prop="keyboard-config"/>={isArrow: true, isEnter: true} 启用方向键功能</p>
 
     <vxe-table
       highlight-current-row
       :data="tableData"
       :tree-config="{children: 'children'}"
-      :keyboard-config="{isArrow: true}">
+      :keyboard-config="{isArrow: true, isEnter: true}">
       <vxe-table-column field="name" title="Name" tree-node></vxe-table-column>
       <vxe-table-column field="size" title="Size"></vxe-table-column>
       <vxe-table-column field="type" title="Type"></vxe-table-column>
@@ -46,7 +46,7 @@ export default {
           highlight-current-row
           :data="tableData"
           :tree-config="{children: 'children'}"
-          :keyboard-config="{isArrow: true}">
+          :keyboard-config="{isArrow: true, isEnter: true}">
           <vxe-table-column field="name" title="Name" tree-node></vxe-table-column>
           <vxe-table-column field="size" title="Size"></vxe-table-column>
           <vxe-table-column field="type" title="Type"></vxe-table-column>

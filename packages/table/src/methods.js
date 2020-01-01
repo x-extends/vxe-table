@@ -1388,7 +1388,7 @@ const Methods = {
         let operCtxMenu = isCtxMenu && ctxMenuStore.visible && (isEnter || isSpacebar || operArrow)
         let params
         if (isEsc) {
-        // 如果按下了 Esc 键，关闭快捷菜单、筛选
+          // 如果按下了 Esc 键，关闭快捷菜单、筛选
           this.closeMenu()
           this.closeFilter()
           // 如果是激活编辑状态，则取消编辑
@@ -1401,8 +1401,8 @@ const Methods = {
             }
           }
         } else if (isSpacebar && (keyboardConfig.isArrow || keyboardConfig.isTab) && selected.row && selected.column && (selected.column.type === 'checkbox' || selected.column.type === 'selection' || selected.column.type === 'radio')) {
-        // 在 v3.0 中废弃 type=selection
-        // 空格键支持选中复选列
+          // 在 v3.0 中废弃 type=selection
+          // 空格键支持选中复选列
           evnt.preventDefault()
           // 在 v3.0 中废弃 type=selection
           if (selected.column.type === 'checkbox' || selected.column.type === 'selection') {
@@ -1411,11 +1411,11 @@ const Methods = {
             this.triggerRadioRowEvent(evnt, selected.args)
           }
         } else if (isEnter && keyboardConfig.isEnter && (selected.row || actived.row || (treeConfig && highlightCurrentRow && currentRow))) {
-        // 如果是激活状态，退则出到下一行
+          // 如果是激活状态，退则出到下一行
           if (selected.row || actived.row) {
             this.moveSelected(selected.row ? selected.args : actived.args, isLeftArrow, isUpArrow, isRightArrow, true, evnt)
           } else if (treeConfig && highlightCurrentRow && currentRow) {
-          // 如果是树形表格当前行回车移动到子节点
+            // 如果是树形表格当前行回车移动到子节点
             let childrens = currentRow[treeOpts.children]
             if (childrens && childrens.length) {
               evnt.preventDefault()
@@ -1427,7 +1427,7 @@ const Methods = {
             }
           }
         } else if (operCtxMenu) {
-        // 如果配置了右键菜单; 支持方向键操作、回车
+          // 如果配置了右键菜单; 支持方向键操作、回车
           evnt.preventDefault()
           if (ctxMenuStore.showChild && UtilTools.hasChildrenList(ctxMenuStore.selected)) {
             this.moveCtxMenu(evnt, keyCode, ctxMenuStore, 'selectChild', 37, false, ctxMenuStore.selected.children)
@@ -1435,35 +1435,35 @@ const Methods = {
             this.moveCtxMenu(evnt, keyCode, ctxMenuStore, 'selected', 39, true, this.ctxMenuList)
           }
         } else if (isF2) {
-        // 如果按下了 F2 键
+          // 如果按下了 F2 键
           if (selected.row && selected.column) {
             evnt.preventDefault()
             this.handleActived(selected.args, evnt)
           }
         } else if (operArrow && keyboardConfig.isArrow) {
-        // 如果按下了方向键
+          // 如果按下了方向键
           if (selected.row && selected.column) {
             this.moveSelected(selected.args, isLeftArrow, isUpArrow, isRightArrow, isDwArrow, evnt)
           } else if ((isUpArrow || isDwArrow) && highlightCurrentRow && currentRow) {
-          // 当前行按键上下移动
+            // 当前行按键上下移动
             this.moveCurrentRow(isUpArrow, isDwArrow, evnt)
           }
         } else if (isTab && keyboardConfig.isTab) {
-        // 如果按下了 Tab 键切换
+          // 如果按下了 Tab 键切换
           if (selected.row || selected.column) {
             this.moveTabSelected(selected.args, isShiftKey, evnt)
           } else if (actived.row || actived.column) {
             this.moveTabSelected(actived.args, isShiftKey, evnt)
           }
         } else if (isDel || (treeConfig && highlightCurrentRow && currentRow ? isBack && keyboardConfig.isArrow : isBack)) {
-        // 如果是删除键
+          // 如果是删除键
           if (keyboardConfig.isDel && (selected.row || selected.column)) {
             UtilTools.setCellValue(selected.row, selected.column, null)
             if (isBack) {
               this.handleActived(selected.args, evnt)
             }
           } else if (isBack && keyboardConfig.isArrow && treeConfig && highlightCurrentRow && currentRow) {
-          // 如果树形表格回退键关闭当前行返回父节点
+            // 如果树形表格回退键关闭当前行返回父节点
             let { parent: parentRow } = XEUtils.findTree(this.afterFullData, item => item === currentRow, treeOpts)
             if (parentRow) {
               evnt.preventDefault()
@@ -1474,7 +1474,7 @@ const Methods = {
             }
           }
         } else if (keyboardConfig.isCut && isCtrlKey && (isA || isX || isC || isV)) {
-        // 如果开启复制功能
+          // 如果开启复制功能
           if (isA) {
             this.handleAllChecked(evnt)
           } else if (isX || isC) {
@@ -1483,7 +1483,7 @@ const Methods = {
             this.handlePaste(evnt)
           }
         } else if (keyboardConfig.isEdit && !isCtrlKey && ((keyCode >= 48 && keyCode <= 57) || (keyCode >= 65 && keyCode <= 90) || (keyCode >= 96 && keyCode <= 111) || (keyCode >= 186 && keyCode <= 192) || (keyCode >= 219 && keyCode <= 222) || keyCode === 32)) {
-        // 如果是按下非功能键之外允许直接编辑
+          // 如果是按下非功能键之外允许直接编辑
           if (selected.column && selected.row && selected.column.editRender) {
             if (!keyboardConfig.editMethod || !(keyboardConfig.editMethod(selected.args, evnt) === false)) {
               UtilTools.setCellValue(selected.row, selected.column, null)
