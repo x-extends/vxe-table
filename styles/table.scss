@@ -242,6 +242,9 @@
       user-select: none;
     }
   }
+  .vxe-table--footer-wrapper {
+    border-top: 1px solid $vxe-table-border-color;
+  }
   &:not(.t--border) {
     .vxe-header--column,
     .vxe-body--column,
@@ -253,9 +256,6 @@
   }
   &.t--border {
     &:not(.b--style-none) {
-      .vxe-table--footer-wrapper {
-        border-top: 1px solid $vxe-table-border-color;
-      }
       .vxe-header--column,
       .vxe-body--column,
       .vxe-footer--column {

@@ -14,8 +14,9 @@
     </vxe-toolbar>
 
     <vxe-table
-      ref="xTable1"
       highlight-hover-row
+      border="none"
+      ref="xTable1"
       height="300"
       :data="tableData">
       <vxe-table-column type="checkbox" width="60"></vxe-table-column>
@@ -42,8 +43,8 @@
     </vxe-toolbar>
 
     <vxe-table
-      ref="xTable2"
       highlight-hover-row
+      ref="xTable2"
       height="300"
       :data="tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
@@ -69,9 +70,11 @@
     </vxe-toolbar>
 
     <vxe-table
-      ref="xTable3"
+      show-footer
       highlight-hover-row
       height="300"
+      ref="xTable3"
+      :footer-method="footerMethod"
       :data="tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -96,9 +99,12 @@
     </vxe-toolbar>
 
     <vxe-table
-      ref="xTable4"
+      border
+      show-footer
       highlight-hover-row
+      ref="xTable4"
       height="300"
+      :footer-method="footerMethod"
       :data="tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -134,10 +140,12 @@ export default {
         </vxe-toolbar>
 
         <vxe-table
-          ref="xTable1"
           highlight-hover-row
+          border="none"
+          ref="xTable1"
           height="300"
           :data="tableData">
+          <vxe-table-column type="checkbox" width="60"></vxe-table-column>
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -175,8 +183,8 @@ export default {
         </vxe-toolbar>
 
         <vxe-table
-          ref="xTable2"
           highlight-hover-row
+          ref="xTable2"
           height="300"
           :data="tableData">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
@@ -214,9 +222,11 @@ export default {
         </vxe-toolbar>
 
         <vxe-table
-          ref="xTable3"
+          show-footer
           highlight-hover-row
           height="300"
+          ref="xTable3"
+          :footer-method="footerMethod"
           :data="tableData">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -236,6 +246,20 @@ export default {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 50)
           },
           methods: {
+            footerMethod ({ columns, data }) {
+              const footerData = [
+                columns.map((column, columnIndex) => {
+                  if (columnIndex === 0) {
+                    return '平均'
+                  }
+                  if (['age'].includes(column.property)) {
+                    return XEUtils.mean(data, column.property)
+                  }
+                  return null
+                })
+              ]
+              return footerData
+            },
             exportDataEvent3 () {
               this.$refs.xTable3.exportData({
                 type: 'csv',
@@ -253,9 +277,12 @@ export default {
         </vxe-toolbar>
 
         <vxe-table
-          ref="xTable4"
+          border
+          show-footer
           highlight-hover-row
+          ref="xTable4"
           height="300"
+          :footer-method="footerMethod"
           :data="tableData">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -275,12 +302,26 @@ export default {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 50)
           },
           methods: {
+            footerMethod ({ columns, data }) {
+              const footerData = [
+                columns.map((column, columnIndex) => {
+                  if (columnIndex === 0) {
+                    return '平均'
+                  }
+                  if (['age'].includes(column.property)) {
+                    return XEUtils.mean(data, column.property)
+                  }
+                  return null
+                })
+              ]
+              return footerData
+            },
             exportDataEvent4 () {
-              this.$refs.xTable1.exportData({
+              this.$refs.xTable4.exportData({
                 filename: '自定义文件名',
-                type: 'csv',
-                original: true,
-                isHeader: false,
+                type: 'html',
+                isHeader: true,
+                isFooter: true,
                 data: this.tableData.map(row => {
                   row.date = XEUtils.toDateString(row.date, 'yyyy-MM-dd')
                   return row
@@ -302,6 +343,20 @@ export default {
     })
   },
   methods: {
+    footerMethod ({ columns, data }) {
+      const footerData = [
+        columns.map((column, columnIndex) => {
+          if (columnIndex === 0) {
+            return '平均'
+          }
+          if (['age'].includes(column.property)) {
+            return XEUtils.mean(data, column.property)
+          }
+          return null
+        })
+      ]
+      return footerData
+    },
     exportDataEvent () {
       this.$refs.xTable1.exportData({ type: 'csv' })
     },
@@ -323,11 +378,11 @@ export default {
       })
     },
     exportDataEvent4 () {
-      this.$refs.xTable1.exportData({
+      this.$refs.xTable4.exportData({
         filename: '自定义文件名',
-        type: 'csv',
-        original: true,
-        isHeader: false,
+        type: 'html',
+        isHeader: true,
+        isFooter: true,
         data: this.tableData.map(row => {
           row.date = XEUtils.toDateString(row.date, 'yyyy-MM-dd')
           return row

@@ -694,7 +694,7 @@ export default {
       UtilTools.error('vxe.error.emptyProp', ['row-id'])
     }
     if (this.startIndex) {
-      UtilTools.warn('vxe.error.delProp', ['start-index', 'seq-config.startIndex'])
+      // UtilTools.warn('vxe.error.delProp', ['start-index', 'seq-config.startIndex'])
     }
     if (XEUtils.isBoolean(showAllOverflow)) {
       UtilTools.warn('vxe.error.delProp', ['show-all-overflow', 'show-overflow'])
@@ -706,7 +706,7 @@ export default {
       UtilTools.warn('vxe.error.delProp', ['radio-config.labelProp', 'radio-config.labelField'])
     }
     if (this.selectConfig) {
-      UtilTools.warn('vxe.error.delProp', ['select-config', 'checkbox-config'])
+      // UtilTools.warn('vxe.error.delProp', ['select-config', 'checkbox-config'])
     }
     if (treeConfig && treeOpts.line && (!this.rowKey || !showOverflow)) {
       UtilTools.warn('vxe.error.treeLineReqProp', ['row-key | show-overflow'])
@@ -718,13 +718,13 @@ export default {
       UtilTools.warn('vxe.error.delProp', ['select-config.labelProp', 'select-config.labelField'])
     }
     if (this.sortMethod) {
-      UtilTools.warn('vxe.error.delProp', ['sort-method', 'sort-config.sortMethod'])
+      // UtilTools.warn('vxe.error.delProp', ['sort-method', 'sort-config.sortMethod'])
     }
     if (this.remoteSort) {
-      UtilTools.warn('vxe.error.delProp', ['remote-sort', 'sort-config.remote'])
+      // UtilTools.warn('vxe.error.delProp', ['remote-sort', 'sort-config.remote'])
     }
     if (this.remoteFilter) {
-      UtilTools.warn('vxe.error.delProp', ['remote-filter', 'filter-config.remote'])
+      // UtilTools.warn('vxe.error.delProp', ['remote-filter', 'filter-config.remote'])
     }
     ['header', 'body', 'footer'].forEach(name => {
       if (ctxMenuOpts[name] && ctxMenuOpts[name].visibleMethod) {
