@@ -5202,7 +5202,8 @@ export default {
         original: this.scrollXLoad || this.scrollYLoad
       }, options, {
         type: 'html',
-        download: false
+        download: false,
+        print: true
       })).then(({ content, blob }) => {
         if (DomTools.browse.msie) {
           if (printFrame) {
