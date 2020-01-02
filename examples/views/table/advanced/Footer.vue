@@ -125,7 +125,7 @@ export default {
                     return '平均'
                   }
                   if (['age', 'rate'].includes(column.property)) {
-                    return XEUtils.mean(data, column.property)
+                    return parseInt(XEUtils.mean(data, column.property))
                   }
                   return null
                 }),
@@ -195,7 +195,7 @@ export default {
                     return '平均'
                   }
                   if (['age', 'rate'].includes(column.property)) {
-                    return XEUtils.mean(data, column.property)
+                    return parseInt(XEUtils.mean(data, column.property))
                   }
                   return null
                 }),
@@ -268,7 +268,7 @@ export default {
                     return '平均'
                   }
                   if (['age', 'rate'].includes(column.property)) {
-                    return XEUtils.mean(data, column.property)
+                    return parseInt(XEUtils.mean(data, column.property))
                   }
                   return null
                 }),
@@ -325,7 +325,7 @@ export default {
             return '平均'
           }
           if (['age', 'rate'].includes(column.property)) {
-            return XEUtils.mean(data, column.property)
+            return parseInt(XEUtils.mean(data, column.property))
           }
           return null
         }),
