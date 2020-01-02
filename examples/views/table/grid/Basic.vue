@@ -2,8 +2,8 @@
   <div>
     <p class="tip">
       <grid-api-link name="vxe-grid"/> 高级表格，解决动态数据一切需求（动态列、动态数据、动态个性化...）<br>
-      渲染性能对比：<grid-api-link name="vxe-grid"/>（性能最优，不需要为每一列创建实例） > <table-api-link name="vxe-table"/>（性能略差，需要为每一列创建实例）<br>
-      通过 <grid-api-link prop="columns"/> 动态配置列信息，这非常适用于动态渲染的场景，完全使用数据进行配置
+      渲染性能对比：<grid-api-link name="vxe-grid"/>（性能较优，不需要为每一列创建实例） > <table-api-link name="vxe-table"/>（性能略差，需要为每一列创建实例）<br>
+      通过 <grid-api-link prop="columns"/> 动态配置列信息，这非常适用于动态渲染的场景，完全使用数据进行配置，再配合 <router-link class="link" :to="{name: 'GridConfigProxy'}">数据代理</router-link> ，甚至可以非常简单的用一个 json 数据就能渲染完整表格
     </p>
 
     <vxe-grid
