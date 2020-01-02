@@ -15,7 +15,7 @@
       row-id="id"
       :loading="loading"
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
-      :tree-config="{lazy: true, children: 'children', hasChild: 'hasChild', loadMethod: loadChildrenMethod}"
+      :tree-config="{lazy: true, children: 'children', hasChild: 'hasChild', loadMethod: loadChildrenMethod, accordion: true}"
       :data="tableData">
       <vxe-table-column field="name" title="Name" width="260" tree-node :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="size" title="Size" :edit-render="{name: 'input'}"></vxe-table-column>
@@ -57,7 +57,7 @@ export default {
           row-id="id"
           :loading="loading"
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
-          :tree-config="{lazy: true, children: 'children', hasChild: 'hasChild', loadMethod: loadChildrenMethod}"
+          :tree-config="{lazy: true, children: 'children', hasChild: 'hasChild', loadMethod: loadChildrenMethod, accordion: true}"
           :data="tableData">
           <vxe-table-column field="name" title="Name" width="260" tree-node :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column field="size" title="Size" :edit-render="{name: 'input'}"></vxe-table-column>

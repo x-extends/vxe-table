@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip"><table-api-link name="vxe-table"/> 方式：使用 <a class="link" href="https://www.npmjs.com/package/sortablejs" target="_blank">sortablejs</a> 实现行拖动，由于 sortablejs 操作了 Dom 节点，需要与 Vue 的数据同步，必须设置 <table-api-link prop="row-key"/></p>
+    <p class="tip"><table-api-link name="vxe-table"/> 方式：使用 <a class="link" href="https://www.npmjs.com/package/sortablejs" target="_blank">sortablejs</a> 实现行拖动，由于直接操作了 Dom 节点，需要与 Vue 的数据同步，必须设置 <table-api-link prop="row-key"/></p>
 
     <vxe-table
       border

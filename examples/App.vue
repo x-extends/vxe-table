@@ -1423,12 +1423,6 @@ export default {
               }
             },
             {
-              label: 'app.aside.nav.elementUpload',
-              locat: {
-                name: 'TableOtherElementUpload'
-              }
-            },
-            {
               label: 'app.aside.nav.sortablejsRow',
               locat: {
                 name: 'TableSortableRow'
