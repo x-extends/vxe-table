@@ -34,7 +34,7 @@
       highlight-current-row
       row-key
       size="medium"
-      :tree-config="{children: 'children', line: true, iconOpen: 'vxe-icon--caret-right rotate45', iconClose: 'vxe-icon--caret-right'}"
+      :tree-config="{children: 'children', accordion: true, line: true, iconOpen: 'vxe-icon--caret-right rotate45', iconClose: 'vxe-icon--caret-right'}"
       :checkbox-config="{labelField: 'name'}"
       :data="tableData">
       <vxe-table-column type="checkbox" title="Name" width="280" tree-node></vxe-table-column>
@@ -59,7 +59,7 @@
       row-key
       size="small"
       :radio-config="{labelField: 'name'}"
-      :tree-config="{children: 'children', line: true, iconOpen: 'fa fa-minus-square-o', iconClose: 'fa fa-plus-square-o'}"
+      :tree-config="{children: 'children', accordion: true, line: true, iconOpen: 'fa fa-minus-square-o', iconClose: 'fa fa-plus-square-o'}"
       :data="tableData">
       <vxe-table-column type="radio" title="Name" tree-node></vxe-table-column>
       <vxe-table-column field="size" title="Size"></vxe-table-column>
@@ -157,7 +157,7 @@ export default {
           highlight-current-row
           row-key
           size="medium"
-          :tree-config="{children: 'children', line: true, iconOpen: 'vxe-icon--caret-right rotate45', iconClose: 'vxe-icon--caret-right'}"
+          :tree-config="{children: 'children', accordion: true, line: true, iconOpen: 'vxe-icon--caret-right rotate45', iconClose: 'vxe-icon--caret-right'}"
           :checkbox-config="{labelField: 'name'}"
           :data="tableData">
           <vxe-table-column type="checkbox" title="Name" width="280" tree-node></vxe-table-column>
@@ -186,7 +186,7 @@ export default {
           row-key
           size="small"
           :radio-config="{labelField: 'name'}"
-          :tree-config="{children: 'children', line: true, iconOpen: 'fa fa-minus-square-o', iconClose: 'fa fa-plus-square-o'}"
+          :tree-config="{children: 'children', accordion: true, line: true, iconOpen: 'fa fa-minus-square-o', iconClose: 'fa fa-plus-square-o'}"
           :data="tableData">
           <vxe-table-column type="radio" title="Name" tree-node></vxe-table-column>
           <vxe-table-column field="size" title="Size"></vxe-table-column>

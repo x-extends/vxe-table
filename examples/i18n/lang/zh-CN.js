@@ -156,9 +156,9 @@ module.exports = {
         tooltip: '文字提示',
 
         other: '集成第三方库',
-        elementRender: 'element-ui -> 自定义模板',
-        iviewRender: 'iview -> 自定义模板',
-        antd: 'ant-design-vue -> 自定义模板',
+        elementRender: 'element-ui -> 自定义渲染',
+        iviewRender: 'iview -> 自定义渲染',
+        antd: 'ant-design-vue -> 自定义渲染',
         elementUpload: 'element-ui -> 附件上传',
         sortablejsRow: 'sortablejs -> 行拖拽',
         sortablejsColumn: 'sortablejs -> 列拖拽',

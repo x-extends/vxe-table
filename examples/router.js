@@ -223,7 +223,6 @@ const ModuleToolbar = () => import(/* webpackChunkName: "module" */ './views/too
 const TableOtherElement = () => import(/* webpackChunkName: "other" */ './views/table/other/Element.vue')
 const TableOtherIview = () => import(/* webpackChunkName: "other" */ './views/table/other/Iview.vue')
 const TableOtherAntd = () => import(/* webpackChunkName: "other" */ './views/table/other/Antd.vue')
-const TableOtherElementUpload = () => import(/* webpackChunkName: "other" */ './views/table/other/ElementUpload.vue')
 const TableSortableColumn = () => import(/* webpackChunkName: "other" */ './views/table/other/SortableColumn.vue')
 const TableSortableRow = () => import(/* webpackChunkName: "other" */ './views/table/other/SortableRow.vue')
 const TableXlsx = () => import(/* webpackChunkName: "other" */ './views/table/other/Xlsx.vue')
@@ -1310,11 +1309,6 @@ export default new Router({
       path: '/table/other/antd',
       name: 'TableOtherAntd',
       component: TableOtherAntd
-    },
-    {
-      path: '/table/other/elementUpload',
-      name: 'TableOtherElementUpload',
-      component: TableOtherElementUpload
     },
     {
       path: '/table/other/sortableColumn',
