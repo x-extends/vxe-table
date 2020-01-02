@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="tip">
-      使用自定义模板渲染，通过 <table-column-api-link prop="slots"/> 属性编写 <a class="link" href="https://cn.vuejs.org/v2/guide/render-function.html#JSX" target="_blank">JSX</a> 模板或 <a class="link" href="https://cn.vuejs.org/v2/guide/render-function.html#%E8%99%9A%E6%8B%9F-DOM" target="_blank">VNode</a><br>
+      使用自定义模板渲染，通过 <table-column-api-link prop="slots"/> 属性使用自定义插槽来编写模板或 <a class="link" href="https://cn.vuejs.org/v2/guide/render-function.html#JSX" target="_blank">JSX</a> 渲染函数或 <a class="link" href="https://cn.vuejs.org/v2/guide/render-function.html#%E8%99%9A%E6%8B%9F-DOM" target="_blank">VNode</a><br>
       列：<br>
       <table-column-api-link prop="default"/>：自定义内容模板（提前格式化好数据 > <table-column-api-link prop="formatter"/> > <table-column-api-link prop="slots"/>）<br>
       <table-column-api-link prop="header"/>：自定义表头模板<br>
@@ -19,6 +19,26 @@
       :columns="tableColumn"
       :data="tableData"
       :edit-config="{trigger: 'click', mode: 'cell'}">
+      <template v-slot:buttons>
+        <span>
+          <vxe-input size="small" placeholder="搜索"></vxe-input>
+          <vxe-button>搜索</vxe-button>
+        </span>
+      </template>
+
+      <template v-slot:seq_header="{ row }">
+        <div class="first-col">
+          <div class="first-col-top">名称</div>
+          <div class="first-col-bottom">序号</div>
+        </div>
+      </template>
+
+      <template v-slot:name_default="{ row, column }">
+        <span>
+          <span style="color: red;">{{ row.name }}</span>
+          <button @click="showDetailEvent(row, column)">弹框</button>
+        </span>
+      </template>
     </vxe-grid>
 
     <vxe-modal v-model="showDetails" title="查看详情" width="800" height="400" resize>
@@ -50,26 +70,16 @@ export default {
           type: 'seq',
           width: 100,
           slots: {
-            header: ({ row }) => {
-              return [
-                <div class="first-col">
-                  <div class="first-col-top">名称</div>
-                  <div class="first-col-bottom">序号</div>
-                </div>
-              ]
-            }
+            // 使用自定义插槽名称
+            header: 'seq_header'
           }
         },
         {
           field: 'name',
           title: 'Name',
           slots: {
-            default: ({ row, column }) => {
-              return [
-                <span style="color: red;">{ row.name }</span>,
-                <button onClick={ () => this.showDetailEvent(row, column) }>弹框</button>
-              ]
-            }
+            // 使用自定义插槽名称
+            default: 'name_default'
           }
         },
         {
@@ -80,6 +90,7 @@ export default {
           filterMethod: this.filterSexMethod,
           editRender: { type: 'default' },
           slots: {
+            // 使用 JSX 渲染函数
             default: ({ row, column }) => {
               return [
                 <a class="link" href="https://xuliangzhan.github.io/vxe-table/">我是超链接：{ row.sex }</a>
@@ -110,6 +121,7 @@ export default {
           title: 'Address',
           showOverflow: true,
           slots: {
+            // 使用 JSX 渲染函数
             default: ({ row }, h) => {
               return [
                 h('span', {
@@ -129,6 +141,7 @@ export default {
           title: 'Html片段',
           showOverflow: true,
           slots: {
+            // 使用 JSX 渲染函数
             default: ({ row }, h) => {
               return [
                 <span domPropsInnerHTML={ row.html1 }></span>
@@ -140,6 +153,7 @@ export default {
           field: 'img1',
           title: '图片路径',
           slots: {
+            // 使用 JSX 渲染函数
             default: ({ row }, h) => {
               return [
                 row.img1 ? <img src={ row.img1 } style="width: 100px;"/> : <span>无</span>
@@ -151,12 +165,7 @@ export default {
       tableToolbar: {
         custom: true,
         slots: {
-          buttons: () => {
-            return [
-              <vxe-input size="small" placeholder="搜索"></vxe-input>,
-              <vxe-button>搜索</vxe-button>
-            ]
-          },
+          // 使用 JSX 渲染函数
           tools: () => {
             return [
               <vxe-input size="small" placeholder="搜索"></vxe-input>
@@ -174,13 +183,27 @@ export default {
           :columns="tableColumn"
           :data="tableData"
           :edit-config="{trigger: 'click', mode: 'cell'}">
-        </vxe-grid>
-
-        <vxe-modal v-model="showDetails" title="查看详情" width="800" height="400" resize>
-          <template>
-            <div v-if="selectRow" v-html="selectRow.html3"></div>
+          <template v-slot:buttons>
+            <span>
+              <vxe-input size="small" placeholder="搜索"></vxe-input>
+              <vxe-button>搜索</vxe-button>
+            </span>
           </template>
-        </vxe-modal>
+
+          <template v-slot:seq_header="{ row }">
+            <div class="first-col">
+              <div class="first-col-top">名称</div>
+              <div class="first-col-bottom">序号</div>
+            </div>
+          </template>
+
+          <template v-slot:name_default="{ row, column }">
+            <span>
+              <span style="color: red;">{{ row.name }}</span>
+              <button @click="showDetailEvent(row, column)">弹框</button>
+            </span>
+          </template>
+        </vxe-grid>
         `,
         `
         export default {
@@ -194,26 +217,16 @@ export default {
                   type: 'seq',
                   width: 100,
                   slots: {
-                    header: ({ row }) => {
-                      return [
-                        <div class="first-col">
-                          <div class="first-col-top">名称</div>
-                          <div class="first-col-bottom">序号</div>
-                        </div>
-                      ]
-                    }
+                    // 使用自定义插槽名称
+                    header: 'seq_header'
                   }
                 },
                 {
                   field: 'name',
                   title: 'Name',
                   slots: {
-                    default: ({ row, column }) => {
-                      return [
-                        <span style="color: red;">{ row.name }</span>,
-                        <button onClick={ () => this.showDetailEvent(row, column) }>弹框</button>
-                      ]
-                    }
+                    // 使用自定义插槽名称
+                    default: 'name_default'
                   }
                 },
                 {
@@ -224,6 +237,7 @@ export default {
                   filterMethod: this.filterSexMethod,
                   editRender: { type: 'default' },
                   slots: {
+                    // 使用 JSX 渲染函数
                     default: ({ row, column }) => {
                       return [
                         <a class="link" href="https://xuliangzhan.github.io/vxe-table/">我是超链接：{ row.sex }</a>
@@ -254,6 +268,7 @@ export default {
                   title: 'Address',
                   showOverflow: true,
                   slots: {
+                    // 使用 JSX 渲染函数
                     default: ({ row }, h) => {
                       return [
                         h('span', {
@@ -273,6 +288,7 @@ export default {
                   title: 'Html片段',
                   showOverflow: true,
                   slots: {
+                    // 使用 JSX 渲染函数
                     default: ({ row }, h) => {
                       return [
                         <span domPropsInnerHTML={ row.html1 }></span>
@@ -284,6 +300,7 @@ export default {
                   field: 'img1',
                   title: '图片路径',
                   slots: {
+                    // 使用 JSX 渲染函数
                     default: ({ row }, h) => {
                       return [
                         row.img1 ? <img src={ row.img1 } style="width: 100px;"/> : <span>无</span>
@@ -295,12 +312,7 @@ export default {
               tableToolbar: {
                 custom: true,
                 slots: {
-                  buttons: () => {
-                    return [
-                      <vxe-input size="small" placeholder="搜索"></vxe-input>,
-                      <vxe-button>搜索</vxe-button>,
-                    ]
-                  },
+                  // 使用 JSX 渲染函数
                   tools: () => {
                     return [
                       <vxe-input size="small" placeholder="搜索"></vxe-input>

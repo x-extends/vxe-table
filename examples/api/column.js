@@ -624,7 +624,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,fixed,isHidden}, h',
+        defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex}, h',
         list: []
       },
       {
@@ -633,7 +633,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{column,columnIndex,$columnIndex,fixed,isHidden}, h',
+        defVal: '{column,columnIndex,$columnIndex}, h',
         list: []
       },
       {
@@ -642,7 +642,7 @@ const apis = [
         version: '2.7.0',
         type: '',
         enum: '',
-        defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,fixed,isHidden}, h',
+        defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex}, h',
         list: []
       },
       {
@@ -651,7 +651,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{column,columnIndex,$columnIndex,fixed,isHidden}, h',
+        defVal: '{column,columnIndex,$columnIndex}, h',
         list: []
       },
       {
@@ -660,7 +660,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,fixed,isHidden}, h',
+        defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex}, h',
         list: []
       },
       {
@@ -669,7 +669,7 @@ const apis = [
         version: '2.7.0',
         type: '',
         enum: '',
-        defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,fixed,isHidden}, h',
+        defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex}, h',
         list: []
       }
     ]

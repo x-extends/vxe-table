@@ -4,6 +4,9 @@ import columnAPI from './column'
 import toolbarAPI from './toolbar'
 import pagerAPI from './pager'
 
+const toolbarSlots = XEUtils.clone(toolbarAPI.find(item => item.name === 'Slots'), true)
+toolbarSlots.name = 'slots'
+
 const apis = [
   {
     name: 'Props',
@@ -65,15 +68,7 @@ const apis = [
               list: []
             }
           ]
-        }, {
-          name: 'slots',
-          descKey: 'app.api.title.slots',
-          version: '',
-          type: 'Object',
-          enum: '',
-          defVal: '',
-          list: XEUtils.clone(toolbarAPI.find(item => item.name === 'Slots').list, true)
-        }])
+        }, toolbarSlots])
       },
       {
         name: 'pager-config',
@@ -486,13 +481,30 @@ XEUtils.eachTree(gridAPI, (item, index, obj, paths, parent) => {
   }
 }, { children: 'list' })
 
+const columnSlots = XEUtils.clone(columnAPI.find(item => item.name === 'Slots'), true)
+columnSlots.name = 'slots'
+columnSlots.list.forEach(item => {
+  item.type = 'String, Function'
+})
+
 gridAPI.find(item => item.name === 'Props').list.splice(1, 0, {
   name: 'columns',
   descKey: 'app.api.table.desc.columns',
   type: 'Array',
   enum: '',
   defVal: '',
-  list: XEUtils.mapTree(columnAPI.find(item => item.name === 'Props').list, item => Object.assign({}, item, { name: XEUtils.camelCase(item.name) }))
+  list: XEUtils.mapTree(columnAPI.find(item => item.name === 'Props').list, item => Object.assign({}, item, { name: XEUtils.camelCase(item.name) })).concat([
+    {
+      name: 'children',
+      desc: '表头分组',
+      version: '',
+      type: 'Array<ColumnConfig>',
+      enum: '',
+      defVal: '',
+      list: []
+    },
+    columnSlots
+  ])
 })
 
 export default gridAPI
