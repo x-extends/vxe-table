@@ -13,7 +13,7 @@
       highlight-hover-row
       import-config
       export-config
-      form
+      form-config
       ref="xGrid"
       height="530"
       row-id="id"
@@ -187,7 +187,7 @@ export default {
           highlight-hover-row
           import-config
           export-config
-          form
+          form-config
           ref="xGrid"
           height="530"
           row-id="id"

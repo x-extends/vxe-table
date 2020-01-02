@@ -14,9 +14,9 @@ const apis = [
     defVal: '',
     list: [
       {
-        name: 'form',
-        descKey: 'app.api.grid.desc.form',
-        version: '2.7.15',
+        name: 'form-config',
+        descKey: 'app.api.grid.desc.formConfig',
+        version: '2.7.19',
         type: 'Boolean, Object',
         enum: '',
         defVal: '',
@@ -235,8 +235,17 @@ const apis = [
     list: [
       {
         name: 'form',
-        desc: '只对 form 配置时有效，表单模板',
-        version: '',
+        desc: '只对 form-config 配置时有效，表单模板',
+        version: '2.7.19',
+        type: '',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'pager',
+        desc: '只对 pager-config 配置时有效，分页模板',
+        version: '2.7.19',
         type: '',
         enum: '',
         defVal: '',

@@ -17,10 +17,10 @@ export default {
   name: 'VxeGrid',
   props: {
     columns: Array,
-    pagerConfig: Object,
+    pagerConfig: [Boolean, Object],
     proxyConfig: Object,
     toolbar: [Boolean, Object],
-    form: [Boolean, Object],
+    formConfig: [Boolean, Object],
     ...Table.props
   },
   provide () {
@@ -54,6 +54,9 @@ export default {
     },
     proxyOpts () {
       return Object.assign({}, GlobalConfig.grid.proxyConfig, this.proxyConfig)
+    },
+    pagerOpts () {
+      return Object.assign({}, GlobalConfig.grid.pagerConfig, this.pagerConfig)
     },
     toolbarOpts () {
       return Object.assign({}, GlobalConfig.grid.toolbar, this.toolbar)
@@ -152,7 +155,7 @@ export default {
       return Object.assign({
         size: this.vSize,
         loading: this.loading || this.tableLoading
-      }, this.pagerConfig, this.proxyConfig ? this.tablePage : {})
+      }, this.pagerOpts, this.proxyConfig ? this.tablePage : {})
     }
   },
   watch: {
@@ -167,13 +170,13 @@ export default {
     }
   },
   created () {
-    let { customs, data, proxyConfig, proxyOpts, pagerConfig } = this
+    let { customs, data, proxyConfig, proxyOpts, pagerConfig, pagerOpts } = this
     let { props } = proxyOpts
     if (customs) {
       this.tableCustoms = customs
     }
-    if (pagerConfig && pagerConfig.pageSize) {
-      this.tablePage.pageSize = pagerConfig.pageSize
+    if (pagerConfig && pagerOpts.pageSize) {
+      this.tablePage.pageSize = pagerOpts.pageSize
     }
     if (data && proxyConfig) {
       console.warn('[vxe-grid] There is a conflict between the props proxy-config and data.')
@@ -197,6 +200,7 @@ export default {
     }
   },
   render (h) {
+    const $scopedSlots = this.$scopedSlots
     return h('div', {
       class: this.renderClass,
       style: this.renderStyle
@@ -204,12 +208,12 @@ export default {
       /**
        * 渲染表单
        */
-      this.form ? h('div', {
+      this.formConfig ? h('div', {
         ref: 'form',
         class: ['vxe-form', {
           'is--loading': this.tableLoading
         }]
-      }, this.$slots.form) : null,
+      }, $scopedSlots.form ? $scopedSlots.form.call(this, { $grid: this }, h) : []) : null,
       /**
        * 渲染工具栏
        */
@@ -224,19 +228,19 @@ export default {
       h('vxe-table', {
         props: this.tableProps,
         on: this.tableOns,
-        scopedSlots: this.$scopedSlots,
+        scopedSlots: $scopedSlots,
         ref: 'xTable'
       }, this.$slots.default),
       /**
        * 渲染分页
        */
-      this.pagerConfig ? h('vxe-pager', {
+      this.pagerConfig ? ($scopedSlots.pager ? $scopedSlots.pager.call(this, { $grid: this }, h) : h('vxe-pager', {
         props: this.pagerProps,
         on: {
           'page-change': this.pageChangeEvent
         },
         ref: 'pager'
-      }) : null
+      })) : null
     ])
   },
   methods: {
