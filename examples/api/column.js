@@ -128,6 +128,15 @@ const apis = [
         list: []
       },
       {
+        name: 'visible',
+        descKey: 'app.api.tableColumn.desc.visible',
+        version: '2.7',
+        type: 'Boolean',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'fixed',
         descKey: 'app.api.tableColumn.desc.fixed',
         version: '',

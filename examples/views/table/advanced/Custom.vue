@@ -1,8 +1,7 @@
 <template>
   <div>
     <p class="tip">
-      通过 <table-api-link prop="customs"/> 来双向绑定列配置，通过 <table-column-api-link prop="visible"/> 属性设置默认是否显示<br>
-      也可以通过函数式调用 <table-api-link prop="showColumn"/>、<table-api-link prop="hideColumn"/> 操作列的显示/隐藏<br>
+      通过 <table-column-api-link prop="visible"/> 属性设置默认是否显示，也可以通过函数式调用 <table-api-link prop="showColumn"/>、<table-api-link prop="hideColumn"/> 操作列的显示/隐藏<br>
       还可以通过动态修改列的 visible 属性，可以轻松实现远程读取配置后控制是否显示，最后调用 <table-api-link prop="refreshColumn"/> 刷新列
     </p>
 
@@ -36,8 +35,7 @@
       ref="xTable2"
       height="200"
       :loading="loading"
-      :data="tableData"
-      :customs.sync="columns2">
+      :data="tableData">
       <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
       <vxe-table-column field="role" title="Role"></vxe-table-column>
@@ -66,8 +64,7 @@
       border
       ref="xTable3"
       height="300"
-      :data="tableData"
-      :customs.sync="columns3">
+      :data="tableData">
       <vxe-table-column type="checkbox" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" :visible="false"></vxe-table-column>
       <vxe-table-column field="role" title="Role"></vxe-table-column>
@@ -136,8 +133,7 @@ export default {
           ref="xTable"
           height="200"
           :loading="loading"
-          :data="tableData"
-          :customs.sync="columns">
+          :data="tableData">
           <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
           <vxe-table-column field="role" title="Role"></vxe-table-column>
@@ -154,6 +150,10 @@ export default {
             }
           },
           created () {
+            // 获取所有列配置
+            this.$nextTick(() => {
+              this.columns = this.$refs.xTable.getColumns()
+            })
             this.loading = true
             this.tableData = window.MOCK_DATA_LIST.slice(0, 20)
             setTimeout(() => {
@@ -182,8 +182,7 @@ export default {
           border
           ref="xTable"
           height="300"
-          :data="tableData"
-          :customs.sync="columns">
+          :data="tableData">
           <vxe-table-column type="checkbox" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" :visible="false"></vxe-table-column>
           <vxe-table-column field="role" title="Role"></vxe-table-column>
@@ -206,6 +205,10 @@ export default {
             }
           },
           created () {
+            // 获取所有列配置
+            this.$nextTick(() => {
+              this.columns = this.$refs.xTable.getColumns()
+            })
             this.tableData = window.MOCK_DATA_LIST.slice(0, 20)
           }
         }
@@ -214,6 +217,11 @@ export default {
     }
   },
   created () {
+    // 获取所有列配置
+    this.$nextTick(() => {
+      this.columns2 = this.$refs.xTable2.getColumns()
+      this.columns3 = this.$refs.xTable3.getColumns()
+    })
     this.loading = true
     this.tableData = window.MOCK_DATA_LIST.slice(0, 20)
     setTimeout(() => {

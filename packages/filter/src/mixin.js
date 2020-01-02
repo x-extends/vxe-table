@@ -106,6 +106,7 @@ export default {
       // 如果是服务端筛选，则跳过本地筛选处理
       if (!(filterOpts.remote || remoteFilter)) {
         this.handleTableData(true)
+        this.checkSelectionStatus()
       }
       let filterList = []
       visibleColumn.filter(column => {

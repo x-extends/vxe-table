@@ -227,7 +227,8 @@ export default {
     cellClassNameFunc ({ row, column }) {
       return {
         'api-disabled': row.disabled,
-        'disabled-line-through': row.disabled && column.property === 'name'
+        'api-abandoned': row.abandoned,
+        'disabled-line-through': (row.disabled || row.abandoned) && column.property === 'name'
       }
     },
     checkColumnMethod ({ column }) {
