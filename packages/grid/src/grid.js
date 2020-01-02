@@ -267,6 +267,24 @@ export default {
       let activeMethod = this.editConfig.activeMethod
       return this.pendingRecords.indexOf(params.row) === -1 && (!activeMethod || activeMethod(params))
     },
+    loadColumn (columns) {
+      const $scopedSlots = this.$scopedSlots
+      columns.forEach(column => {
+        if (column.slots) {
+          XEUtils.each(column.slots, (func, name, slots) => {
+            if (!XEUtils.isFunction(func)) {
+              if ($scopedSlots[func]) {
+                slots[name] = $scopedSlots[func]
+              } else {
+                slots[name] = null
+                UtilTools.error('vxe.error.notSlot', [func])
+              }
+            }
+          })
+        }
+      })
+      this.$refs.xTable.loadColumn(columns)
+    },
     /**
      * 提交指令，支持 code 或 button
      * @param {String/Object} code 字符串或对象
