@@ -642,7 +642,7 @@
       z-index: 1;
     }
     &:before {
-      left: -1px;
+      left: 0;
       border-left: 1px solid $vxe-table-border-color;
     }
     &:after {
