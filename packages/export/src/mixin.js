@@ -115,7 +115,7 @@ function toHtml ($table, opts, columns, datas) {
   // v2.0 废弃属性，保留兼容
   let allColumnOverflow = XEUtils.isBoolean(oldShowAllOverflow) ? oldShowAllOverflow : allShowOverflow
   let allColumnHeaderOverflow = XEUtils.isBoolean(oldHeaderOverflow) ? oldHeaderOverflow : allHeaderOverflow
-  let clss = [border ? `t--border${border === 'none' ? ' b--style-none' : ''}` : '']
+  let clss = ['vxe-table', border ? 't--border' : '', border === 'none' ? 'b--style-none' : '']
   let html = [
     '<html>',
     `<head>`,
@@ -123,7 +123,7 @@ function toHtml ($table, opts, columns, datas) {
     `<style>${opts.style || defaultHtmlStyle}</style>`,
     '</head>',
     '<body>',
-    `<table class="vxe-table" border="0" cellspacing="0" cellpadding="0" class="${clss.join('')}">`,
+    `<table class="${clss.join(' ')}" border="0" cellspacing="0" cellpadding="0">`,
     `<colgroup>${columns.map(column => `<col style="width:${column.renderWidth}px">`).join('')}</colgroup>`
   ].join('')
   if (opts.isHeader) {
