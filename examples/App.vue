@@ -1385,12 +1385,12 @@ export default {
                 name: 'ModuleModal'
               }
             },
-            {
-              label: 'app.aside.nav.tooltip',
-              locat: {
-                name: 'ModuleTooltip'
-              }
-            },
+            // {
+            //   label: 'app.aside.nav.tooltip',
+            //   locat: {
+            //     name: 'ModuleTooltip'
+            //   }
+            // },
             {
               label: 'app.aside.nav.toolbar',
               locat: {
@@ -1746,15 +1746,15 @@ export default {
                   name: 'modal'
                 }
               }
-            },
-            {
-              label: 'app.aside.nav.vxeTooltip',
-              locat: {
-                name: 'VXEAPI',
-                params: {
-                  name: 'tooltip'
-                }
-              }
+            // },
+            // {
+            //   label: 'app.aside.nav.vxeTooltip',
+            //   locat: {
+            //     name: 'VXEAPI',
+            //     params: {
+            //       name: 'tooltip'
+            //     }
+            //   }
             }
           ]
         }
