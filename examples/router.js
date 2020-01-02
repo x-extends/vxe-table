@@ -43,6 +43,7 @@ const TableFilter = () => import(/* webpackChunkName: "base" */ './views/table/b
 const TableEmpty = () => import(/* webpackChunkName: "base" */ './views/table/base/Empty.vue')
 const TableLoading = () => import(/* webpackChunkName: "base" */ './views/table/base/Loading.vue')
 const TableFormat = () => import(/* webpackChunkName: "base" */ './views/table/base/Format.vue')
+const TableData = () => import(/* webpackChunkName: "base" */ './views/table/base/Data.vue')
 const TableHTML = () => import(/* webpackChunkName: "base" */ './views/table/base/HTML.vue')
 const TableFull = () => import(/* webpackChunkName: "base" */ './views/table/base/Full.vue')
 
@@ -457,6 +458,11 @@ export default new Router({
       path: '/table/base/format',
       name: 'TableFormat',
       component: TableFormat
+    },
+    {
+      path: '/table/base/data',
+      name: 'TableData',
+      component: TableData
     },
     {
       path: '/table/base/html',

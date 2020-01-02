@@ -6,7 +6,7 @@ function mockData (size) {
   for (var index = 0; index < size; index++) {
     var date = new Date(currTime)
     list.push({
-      id: index,
+      id: 2000000 + index,
       name: nameList[index % 10] + nameList[index % 5] + index,
       nickname: nickList[index % 10] + nickList[index % 5] + index,
       role: index % 2 === 0 ? '前端' : '后端',

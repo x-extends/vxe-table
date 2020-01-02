@@ -165,9 +165,9 @@ export default {
               let updateEvent = XEUtils.throttle(function (evnt) {
                 let { flag, targetElem } = DomTools.getEventTargetNode(evnt, $el, 'vxe-header--column')
                 if (!flag) {
-                  let a = DomTools.getEventTargetNode(evnt, $el, 'vxe-body--column')
-                  flag = a.flag
-                  targetElem = a.targetElem
+                  let nodeRest = DomTools.getEventTargetNode(evnt, $el, 'vxe-body--column')
+                  flag = nodeRest.flag
+                  targetElem = nodeRest.targetElem
                 }
                 if (flag && !DomTools.hasClass(targetElem, 'col--seq')) {
                   let colIndex = [].indexOf.call(targetElem.parentNode.children, targetElem)
