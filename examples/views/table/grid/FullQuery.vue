@@ -4,7 +4,7 @@
 
     <vxe-grid
       resizable
-      form
+      form-config
       export-config
       border="none"
       ref="xGrid"
@@ -129,7 +129,7 @@ export default {
         `
         <vxe-grid
           resizable
-          form
+          form-config
           export-config
           border="none"
           ref="xGrid"

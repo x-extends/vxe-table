@@ -38,11 +38,11 @@
     </vxe-toolbar>
 
     <vxe-table
-      ref="xTable"
       border
       resizable
       show-overflow
       highlight-hover-row
+      ref="xTable"
       class="vxe-table-antd"
       height="460"
       :loading="loading"
@@ -169,11 +169,11 @@ export default {
           </vxe-toolbar>
 
           <vxe-table
-            ref="xTable"
             border
             resizable
             show-overflow
             highlight-hover-row
+            ref="xTable"
             class="vxe-table-antd"
             height="460"
             :loading="loading"

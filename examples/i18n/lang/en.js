@@ -433,7 +433,7 @@ module.exports = {
       },
       grid: {
         desc: {
-          form: 'Form config',
+          formConfig: 'Form config',
           toolbar: 'Toolbar config',
           pagerConfig: 'Pager config',
           proxyConfig: 'Data proxy config'
