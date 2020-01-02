@@ -965,7 +965,7 @@ const apis = [
         type: 'Boolean, Object',
         enum: '',
         defVal: '继承 setup.exportConfig',
-        list: []
+        list: XEUtils.clone(toolbarAPI.find(item => item.name === 'Props').list.find(item => item.name === 'export').list, true)
       },
       {
         name: 'import-config',
@@ -974,7 +974,7 @@ const apis = [
         type: 'Boolean, Object',
         enum: '',
         defVal: '继承 setup.importConfig',
-        list: []
+        list: XEUtils.clone(toolbarAPI.find(item => item.name === 'Props').list.find(item => item.name === 'import').list, true)
       },
       {
         name: 'print-config',
@@ -983,7 +983,7 @@ const apis = [
         type: 'Object',
         enum: '',
         defVal: '继承 setup.printConfig',
-        list: []
+        list: XEUtils.clone(exportDataAPI.filter(item => !['filename', 'sheetName', 'type', 'download', 'message'].includes(item.name)), true)
       },
       {
         name: 'select-config',

@@ -307,6 +307,13 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.data',
+              demoUrl: 'https://jsrun.pro/FjWKp/edit',
+              locat: {
+                name: 'TableData'
+              }
+            },
+            {
               label: 'app.aside.nav.full',
               locat: {
                 name: 'TableFull'

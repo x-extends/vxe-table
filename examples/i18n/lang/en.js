@@ -39,6 +39,7 @@ module.exports = {
         loading: 'Loading',
         format: 'Format content',
         html: 'HTML tag',
+        data: 'Data and fields',
 
         more: 'More',
         events: 'Event',

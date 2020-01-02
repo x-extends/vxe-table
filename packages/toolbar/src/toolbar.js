@@ -64,7 +64,7 @@ export default {
       return UtilTools.error('vxe.error.toolbarId')
     }
     if (setting) {
-      UtilTools.warn('vxe.error.delProp', ['setting', 'custom'])
+      // UtilTools.warn('vxe.error.delProp', ['setting', 'custom'])
     }
     if (!VXETable._export && (this.export || this.import)) {
       UtilTools.error('vxe.error.reqModule', ['Export'])

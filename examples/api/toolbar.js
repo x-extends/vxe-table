@@ -42,33 +42,33 @@ const apis = [
         enum: '',
         defVal: '默认继承 setup.toolbar.import',
         list: [
-          {
-            name: 'mode',
-            desc: '默认导入数据的方式',
-            version: '',
-            type: 'String',
-            enum: 'covering, append',
-            defVal: 'covering',
-            list: []
-          },
-          {
-            name: 'message',
-            desc: '默认显示内置的消息提示',
-            version: '',
-            type: 'Boolean',
-            enum: '',
-            defVal: 'true',
-            list: []
-          },
-          {
-            name: 'types',
-            desc: '导入的文件类型列表',
-            version: '',
-            type: 'Array',
-            enum: 'csv, html, xml, txt',
-            defVal: '支持所有类型',
-            list: []
-          },
+          // {
+          //   name: 'mode',
+          //   desc: '默认导入数据的方式',
+          //   version: '',
+          //   type: 'String',
+          //   enum: 'covering, append',
+          //   defVal: 'covering',
+          //   list: []
+          // },
+          // {
+          //   name: 'message',
+          //   desc: '默认显示内置的消息提示',
+          //   version: '',
+          //   type: 'Boolean',
+          //   enum: '',
+          //   defVal: 'true',
+          //   list: []
+          // },
+          // {
+          //   name: 'types',
+          //   desc: '导入的文件类型列表',
+          //   version: '',
+          //   type: 'Array',
+          //   enum: 'csv, html, xml, txt',
+          //   defVal: '支持所有类型',
+          //   list: []
+          // },
           {
             name: 'icon',
             desc: '自定义图标',
@@ -88,60 +88,60 @@ const apis = [
         enum: '',
         defVal: '默认继承 setup.toolbar.export',
         list: [
-          {
-            name: 'filename',
-            desc: '默认的文件名',
-            version: '',
-            type: 'String',
-            enum: '',
-            defVal: '',
-            list: []
-          },
-          {
-            name: 'sheetName',
-            desc: '默认的表名（只对支持的文档类型有效）',
-            version: '',
-            type: 'String',
-            enum: '',
-            defVal: '',
-            list: []
-          },
-          {
-            name: 'original',
-            desc: '默认是否导出源数据（如果需要支持导入，则必须设置为 true）',
-            version: '',
-            type: 'Boolean',
-            enum: '',
-            defVal: 'true',
-            list: []
-          },
-          {
-            name: 'type',
-            desc: '默认选中的类型',
-            version: '',
-            type: 'String',
-            enum: '',
-            defVal: '默认选中 types 第一个值',
-            list: []
-          },
-          {
-            name: 'types',
-            desc: '导出的文件类型列表',
-            version: '',
-            type: 'Array',
-            enum: 'csv, html, xml, txt',
-            defVal: '',
-            list: []
-          },
-          {
-            name: 'message',
-            desc: '默认显示内置的消息提示',
-            version: '',
-            type: 'Boolean',
-            enum: '',
-            defVal: 'true',
-            list: []
-          },
+          // {
+          //   name: 'filename',
+          //   desc: '默认的文件名',
+          //   version: '',
+          //   type: 'String',
+          //   enum: '',
+          //   defVal: '',
+          //   list: []
+          // },
+          // {
+          //   name: 'sheetName',
+          //   desc: '默认的表名（只对支持的文档类型有效）',
+          //   version: '',
+          //   type: 'String',
+          //   enum: '',
+          //   defVal: '',
+          //   list: []
+          // },
+          // {
+          //   name: 'original',
+          //   desc: '默认是否导出源数据（如果需要支持导入，则必须设置为 true）',
+          //   version: '',
+          //   type: 'Boolean',
+          //   enum: '',
+          //   defVal: 'true',
+          //   list: []
+          // },
+          // {
+          //   name: 'type',
+          //   desc: '默认选中的类型',
+          //   version: '',
+          //   type: 'String',
+          //   enum: '',
+          //   defVal: '默认选中 types 第一个值',
+          //   list: []
+          // },
+          // {
+          //   name: 'types',
+          //   desc: '导出的文件类型列表',
+          //   version: '',
+          //   type: 'Array',
+          //   enum: 'csv, html, xml, txt',
+          //   defVal: '',
+          //   list: []
+          // },
+          // {
+          //   name: 'message',
+          //   desc: '默认显示内置的消息提示',
+          //   version: '',
+          //   type: 'Boolean',
+          //   enum: '',
+          //   defVal: 'true',
+          //   list: []
+          // },
           {
             name: 'icon',
             desc: '自定义图标',

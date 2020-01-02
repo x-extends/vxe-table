@@ -39,6 +39,7 @@ module.exports = {
         loading: '加载中',
         format: '格式化内容',
         html: 'HTML 标签',
+        data: '数据格式与字段',
 
         more: '更多功能',
         events: '事件绑定',
