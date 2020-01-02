@@ -19,6 +19,7 @@
       :columns="tableColumn"
       :data="tableData"
       :edit-config="{trigger: 'click', mode: 'cell'}">
+      <!--使用 buttons 插槽-->
       <template v-slot:buttons>
         <span>
           <vxe-input size="small" placeholder="搜索"></vxe-input>
@@ -26,6 +27,7 @@
         </span>
       </template>
 
+      <!--自定义插槽 seq_header-->
       <template v-slot:seq_header="{ row }">
         <div class="first-col">
           <div class="first-col-top">名称</div>
@@ -33,6 +35,7 @@
         </div>
       </template>
 
+      <!--自定义插槽 name_default-->
       <template v-slot:name_default="{ row, column }">
         <span>
           <span style="color: red;">{{ row.name }}</span>
@@ -70,7 +73,7 @@ export default {
           type: 'seq',
           width: 100,
           slots: {
-            // 使用自定义插槽名称
+            // 对应自定义插槽的名称
             header: 'seq_header'
           }
         },
@@ -78,7 +81,7 @@ export default {
           field: 'name',
           title: 'Name',
           slots: {
-            // 使用自定义插槽名称
+            // 对应自定义插槽的名称
             default: 'name_default'
           }
         },
@@ -183,6 +186,7 @@ export default {
           :columns="tableColumn"
           :data="tableData"
           :edit-config="{trigger: 'click', mode: 'cell'}">
+          <!--使用 buttons 插槽-->
           <template v-slot:buttons>
             <span>
               <vxe-input size="small" placeholder="搜索"></vxe-input>
@@ -190,6 +194,7 @@ export default {
             </span>
           </template>
 
+          <!--自定义插槽 seq_header-->
           <template v-slot:seq_header="{ row }">
             <div class="first-col">
               <div class="first-col-top">名称</div>
@@ -197,6 +202,7 @@ export default {
             </div>
           </template>
 
+          <!--自定义插槽 name_default-->
           <template v-slot:name_default="{ row, column }">
             <span>
               <span style="color: red;">{{ row.name }}</span>
@@ -217,7 +223,7 @@ export default {
                   type: 'seq',
                   width: 100,
                   slots: {
-                    // 使用自定义插槽名称
+                    // 对应自定义插槽的名称
                     header: 'seq_header'
                   }
                 },
@@ -225,7 +231,7 @@ export default {
                   field: 'name',
                   title: 'Name',
                   slots: {
-                    // 使用自定义插槽名称
+                    // 对应自定义插槽的名称
                     default: 'name_default'
                   }
                 },
