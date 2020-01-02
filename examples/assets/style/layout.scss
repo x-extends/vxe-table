@@ -267,8 +267,25 @@ body,
 }
 
 .api-table {
-  .api-disabled {
-    color: #cb2431;
+  .vxe-body--row {
+    .vxe-body--column {
+      &.api-abandoned {
+        cursor: no-drop;
+        color: #70541C;
+        background-color: #FFFBE5;
+        .compatibility {
+          background-color: #70541C;
+        }
+      }
+      &.api-disabled {
+        cursor: no-drop;
+        color: #cb2431;
+        background-color: #fbb1b1;
+        .compatibility {
+          background-color: #cb2431;
+        }
+      }
+    }
   }
   .disabled-line-through {
     text-decoration: line-through;

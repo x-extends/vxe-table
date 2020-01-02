@@ -2951,15 +2951,11 @@ export default {
      * @param {Boolean} value 是否选中
      */
     setAllCheckboxRow (value) {
-      let { tableFullData, editStore, treeConfig, treeOpts, selection, selectReserveRowMap, checkboxOpts } = this
+      let { afterFullData, treeConfig, treeOpts, selection, selectReserveRowMap, checkboxOpts } = this
       let { reserve, checkStrictly, checkMethod } = checkboxOpts
-      let { insertList } = editStore
       let property = checkboxOpts.checkField || checkboxOpts.checkProp
       let selectRows = []
-      // 包含新增的数据
-      if (insertList.length) {
-        tableFullData = tableFullData.concat(insertList)
-      }
+      let beforeSelection = treeConfig ? [] : selection.filter(row => afterFullData.indexOf(row) === -1)
       if (!checkStrictly) {
         if (property) {
           let indexKey = `${treeConfig ? '$' : ''}rowIndex`
@@ -2974,21 +2970,21 @@ export default {
             }
           }
           if (treeConfig) {
-            XEUtils.eachTree(tableFullData, value ? setValFn : clearValFn, treeOpts)
+            XEUtils.eachTree(afterFullData, value ? setValFn : clearValFn, treeOpts)
           } else {
-            tableFullData.forEach(value ? setValFn : clearValFn)
+            afterFullData.forEach(value ? setValFn : clearValFn)
           }
         } else {
           if (treeConfig) {
             if (value) {
-              XEUtils.eachTree(tableFullData, (row, $rowIndex) => {
+              XEUtils.eachTree(afterFullData, (row, $rowIndex) => {
                 if (!checkMethod || checkMethod({ row, $rowIndex })) {
                   selectRows.push(row)
                 }
               }, treeOpts)
             } else {
               if (checkMethod) {
-                XEUtils.eachTree(tableFullData, (row, $rowIndex) => {
+                XEUtils.eachTree(afterFullData, (row, $rowIndex) => {
                   if (checkMethod({ row, $rowIndex }) ? 0 : selection.indexOf(row) > -1) {
                     selectRows.push(row)
                   }
@@ -2998,13 +2994,13 @@ export default {
           } else {
             if (value) {
               if (checkMethod) {
-                selectRows = tableFullData.filter((row, rowIndex) => selection.indexOf(row) > -1 || checkMethod({ row, rowIndex, $rowIndex: rowIndex }))
+                selectRows = afterFullData.filter((row, rowIndex) => selection.indexOf(row) > -1 || checkMethod({ row, rowIndex, $rowIndex: rowIndex }))
               } else {
-                selectRows = tableFullData.slice(0)
+                selectRows = afterFullData.slice(0)
               }
             } else {
               if (checkMethod) {
-                selectRows = tableFullData.filter((row, rowIndex) => checkMethod({ row, rowIndex, $rowIndex: rowIndex }) ? 0 : selection.indexOf(row) > -1)
+                selectRows = afterFullData.filter((row, rowIndex) => checkMethod({ row, rowIndex, $rowIndex: rowIndex }) ? 0 : selection.indexOf(row) > -1)
               }
             }
           }
@@ -3015,7 +3011,7 @@ export default {
               selectReserveRowMap[UtilTools.getRowid(this, row)] = row
             })
           } else {
-            tableFullData.forEach(row => {
+            afterFullData.forEach(row => {
               const rowid = UtilTools.getRowid(this, row)
               if (selectReserveRowMap[rowid]) {
                 delete selectReserveRowMap[rowid]
@@ -3023,35 +3019,30 @@ export default {
             })
           }
         }
-        this.selection = selectRows
+        this.selection = beforeSelection.concat(selectRows)
       }
       this.treeIndeterminates = []
       this.checkSelectionStatus()
     },
     checkSelectionStatus () {
-      let { tableFullData, editStore, selection, treeIndeterminates, checkboxOpts } = this
+      let { afterFullData, selection, treeIndeterminates, checkboxOpts } = this
       let { checkStrictly, checkMethod } = checkboxOpts
       let property = checkboxOpts.checkField || checkboxOpts.checkProp
-      let { insertList } = editStore
-      // 包含新增的数据
-      if (insertList.length) {
-        tableFullData = tableFullData.concat(insertList)
-      }
       if (!checkStrictly) {
         if (property) {
-          this.isAllSelected = tableFullData.length && tableFullData.every(
+          this.isAllSelected = afterFullData.length && afterFullData.every(
             checkMethod
               ? (row, rowIndex) => !checkMethod({ row, rowIndex, $rowIndex: rowIndex }) || XEUtils.get(row, property)
               : row => XEUtils.get(row, property)
           )
-          this.isIndeterminate = !this.isAllSelected && tableFullData.some(row => XEUtils.get(row, property) || treeIndeterminates.indexOf(row) > -1)
+          this.isIndeterminate = !this.isAllSelected && afterFullData.some(row => XEUtils.get(row, property) || treeIndeterminates.indexOf(row) > -1)
         } else {
-          this.isAllSelected = tableFullData.length && tableFullData.every(
+          this.isAllSelected = afterFullData.length && afterFullData.every(
             checkMethod
               ? (row, rowIndex) => !checkMethod({ row, rowIndex, $rowIndex: rowIndex }) || selection.indexOf(row) > -1
               : row => selection.indexOf(row) > -1
           )
-          this.isIndeterminate = !this.isAllSelected && tableFullData.some(row => treeIndeterminates.indexOf(row) > -1 || selection.indexOf(row) > -1)
+          this.isIndeterminate = !this.isAllSelected && afterFullData.some(row => treeIndeterminates.indexOf(row) > -1 || selection.indexOf(row) > -1)
         }
       }
     },
@@ -4012,6 +4003,7 @@ export default {
       // 如果是服务端筛选，则跳过本地筛选处理
       if (!(filterOpts.remote || remoteFilter)) {
         this.handleTableData(true)
+        this.checkSelectionStatus()
       }
       let filterList = []
       visibleColumn.filter(column => {

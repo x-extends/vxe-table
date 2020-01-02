@@ -282,6 +282,7 @@ const apis = [
       },
       {
         name: 'customs',
+        abandoned: true,
         descKey: 'app.api.table.desc.customs',
         version: '',
         type: 'Array<{field, visible}>',
@@ -2334,6 +2335,7 @@ const apis = [
       },
       {
         name: 'reloadCustoms(customs)',
+        abandoned: true,
         desc: '初始化加载显示/隐藏列（对于异步更新的场景下可能会用到）',
         version: '',
         type: 'Promise',
@@ -2523,7 +2525,7 @@ const apis = [
       },
       {
         name: '$getColumnIndex(column)',
-        desc: '根据 column 获取渲染中的索虚拟引',
+        desc: '根据 column 获取渲染中的虚拟索引',
         version: '1.15.15',
         type: 'Number',
         enum: '',
