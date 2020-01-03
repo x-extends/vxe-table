@@ -29,6 +29,7 @@
       <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="role" title="Role" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="age" title="Age" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="date" title="Date" :edit-render="{name: 'input'}"></vxe-table-column>
     </vxe-table>
 
@@ -66,6 +67,9 @@ export default {
         sex: [
           { required: true, message: '性别必须填写' },
           { pattern: /^[0,1]{1}$/, message: '格式不正确' }
+        ],
+        age: [
+          { pattern: '^[0-9]{0,3}$', message: '格式不正确' }
         ]
       },
       demoCodes: [
@@ -96,6 +100,7 @@ export default {
           <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column field="role" title="Role" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column field="age" title="Age" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column field="date" title="Date" :edit-render="{name: 'input'}"></vxe-table-column>
         </vxe-table>
         `,
@@ -122,6 +127,9 @@ export default {
                 sex: [
                   { required: true, message: '性别必须填写' },
                   { pattern: /^[0,1]{1}$/, message: '格式不正确' }
+                ],
+                age: [
+                  { pattern: '^[0-9]{0,3}$', message: '格式不正确' }
                 ]
               }
             }
