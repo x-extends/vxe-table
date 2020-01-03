@@ -1750,7 +1750,7 @@ const apis = [
             name: 'pattern',
             desc: '正则校验',
             version: '',
-            type: 'RegExp',
+            type: 'RegExp, String',
             enum: '',
             defVal: '',
             list: []

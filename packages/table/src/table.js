@@ -5021,8 +5021,8 @@ export default {
                     if (isRequired && isEmpty) {
                       errorRules.push(new Rule(rule))
                     } else if (
-                      (isNumber && isNaN(value)) ||
-                      (XEUtils.isRegExp(rule.pattern) && !rule.pattern.test(value)) ||
+                      (isNumber && isNaN(cellValue)) ||
+                      (rule.pattern && !(rule.pattern.test ? rule.pattern : new RegExp(rule.pattern)).test(cellValue)) ||
                       (XEUtils.isNumber(rule.min) && (isNumber ? restVal < rule.min : len < rule.min)) ||
                       (XEUtils.isNumber(rule.max) && (isNumber ? restVal > rule.max : len > rule.max))
                     ) {
