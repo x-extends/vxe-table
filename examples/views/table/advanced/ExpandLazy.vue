@@ -40,7 +40,7 @@
       <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
 
-    <p class="tip">实现父子表懒加载</p>
+    <p class="tip">实现父子表格懒加载</p>
 
     <vxe-table
       border

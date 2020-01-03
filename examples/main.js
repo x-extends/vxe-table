@@ -105,6 +105,8 @@ window.MOCK_TREE_DATA_LIST = [
     size: '53k',
     type: '',
     date: '2019-10-22',
+    childCols: [],
+    childData: [],
     children: [
       {
         id: '11000',
@@ -112,7 +114,9 @@ window.MOCK_TREE_DATA_LIST = [
         name: '某 11000.avi',
         size: '11k',
         type: 'avi',
-        date: '2019-05-21'
+        date: '2019-05-21',
+        childCols: [],
+        childData: []
       },
       {
         id: '12000',
@@ -121,6 +125,8 @@ window.MOCK_TREE_DATA_LIST = [
         size: '22k',
         type: '',
         date: '2019-08-16',
+        childCols: [],
+        childData: [],
         children: [
           {
             id: '12100',
@@ -129,6 +135,8 @@ window.MOCK_TREE_DATA_LIST = [
             size: '60k',
             type: '',
             date: '2019-08-20',
+            childCols: [],
+            childData: [],
             children: [
               {
                 id: '12110',
@@ -136,7 +144,9 @@ window.MOCK_TREE_DATA_LIST = [
                 name: '某个页面 12110.html',
                 size: '100k',
                 type: 'html',
-                date: '2019-05-19'
+                date: '2019-05-19',
+                childCols: [],
+                childData: []
               }
             ]
           },
@@ -146,7 +156,9 @@ window.MOCK_TREE_DATA_LIST = [
             name: 'xxx 122000.avi',
             size: '80k',
             type: 'avi',
-            date: '2019-04-18'
+            date: '2019-04-18',
+            childCols: [],
+            childData: []
           },
           {
             id: '123000',
@@ -155,20 +167,26 @@ window.MOCK_TREE_DATA_LIST = [
             size: '',
             type: '',
             date: '2019-06-17',
+            childCols: [],
+            childData: [],
             children: [
               {
                 id: '123100',
                 name: 'xxx 123100.avi',
                 size: '105k',
                 type: 'avi',
-                date: '2019-05-16'
+                date: '2019-05-16',
+                childCols: [],
+                childData: []
               },
               {
                 id: '123200',
                 name: '文件 123200',
                 size: '105k',
                 type: 'avi',
-                date: '2019-02-20'
+                date: '2019-02-20',
+                childCols: [],
+                childData: []
               }
             ]
           }
@@ -182,7 +200,9 @@ window.MOCK_TREE_DATA_LIST = [
     name: '图片 20000.png',
     size: '66k',
     type: 'png',
-    date: '2019-08-23'
+    date: '2019-08-23',
+    childCols: [],
+    childData: []
   },
   {
     id: '30000',
@@ -191,6 +211,8 @@ window.MOCK_TREE_DATA_LIST = [
     size: '3k',
     type: '',
     date: '2019-05-14',
+    childCols: [],
+    childData: [],
     children: [
       {
         id: '31000',
@@ -198,20 +220,26 @@ window.MOCK_TREE_DATA_LIST = [
         size: '9k',
         type: '',
         date: '2019-07-24',
+        childCols: [],
+        childData: [],
         children: [
           {
             id: '31100',
             name: '从入门到放弃 31100.js',
             size: '40k',
             type: 'js',
-            date: '2019-05-27'
+            date: '2019-05-27',
+            childCols: [],
+            childData: []
           },
           {
             id: '31200',
             name: '文件 31200',
             size: '224k',
             type: 'java',
-            date: '2019-10-25'
+            date: '2019-10-25',
+            childCols: [],
+            childData: []
           }
         ]
       },
@@ -221,13 +249,17 @@ window.MOCK_TREE_DATA_LIST = [
         size: '33k',
         type: '',
         date: '2019-05-25',
+        childCols: [],
+        childData: [],
         children: [
           {
             id: '32100',
             name: '入门教程 32100.mp4',
             size: '35k',
             type: 'mp4',
-            date: '2019-05-28'
+            date: '2019-05-28',
+            childCols: [],
+            childData: []
           },
           {
             id: '32200',
@@ -235,13 +267,17 @@ window.MOCK_TREE_DATA_LIST = [
             size: '33k',
             type: '',
             date: '2019-02-29',
+            childCols: [],
+            childData: [],
             children: [
               {
                 id: '32210',
                 name: 'vxe-table 从入门到住院 32210.pdf',
                 size: '75k',
                 type: 'pdf',
-                date: '2019-12-13'
+                date: '2019-12-13',
+                childCols: [],
+                childData: []
               },
               {
                 id: '32220',
@@ -249,13 +285,17 @@ window.MOCK_TREE_DATA_LIST = [
                 size: '33k',
                 type: '',
                 date: '2019-08-12',
+                childCols: [],
+                childData: [],
                 children: [
                   {
                     id: '32221',
                     name: 'vxe-table 从入门到放弃 32221.pdf',
                     size: '85k',
                     type: 'pdf',
-                    date: '2019-12-30'
+                    date: '2019-12-30',
+                    childCols: [],
+                    childData: []
                   }
                 ]
               }
@@ -267,13 +307,17 @@ window.MOCK_TREE_DATA_LIST = [
             size: '678k',
             type: '',
             date: '2019-01-10',
+            childCols: [],
+            childData: [],
             children: [
               {
                 id: '32310',
                 name: '某视频 32310.mp4',
                 size: '75k',
                 type: 'mp4',
-                date: '2019-11-09'
+                date: '2019-11-09',
+                childCols: [],
+                childData: []
               },
               {
                 id: '32320',
@@ -281,20 +325,26 @@ window.MOCK_TREE_DATA_LIST = [
                 size: '88k',
                 type: '',
                 date: '2019-08-08',
+                childCols: [],
+                childData: [],
                 children: [
                   {
                     id: '32321',
                     name: '音乐 32321.mp3',
                     size: '5k',
                     type: 'mp3',
-                    date: '2019-03-07'
+                    date: '2019-03-07',
+                    childCols: [],
+                    childData: []
                   },
                   {
                     id: '32322',
                     name: '在线观看 32322.avi',
                     size: '5k',
                     type: 'avi',
-                    date: '2019-09-09'
+                    date: '2019-09-09',
+                    childCols: [],
+                    childData: []
                   }
                 ]
               }
@@ -307,7 +357,9 @@ window.MOCK_TREE_DATA_LIST = [
         name: '在线文档 33000.txt',
         size: '95k',
         type: 'txt',
-        date: '2019-01-05'
+        date: '2019-01-05',
+        childCols: [],
+        childData: []
       }
     ]
   },
@@ -318,6 +370,8 @@ window.MOCK_TREE_DATA_LIST = [
     size: '26k',
     type: 'mp4',
     date: '2019-03-04',
+    childCols: [],
+    childData: [],
     children: [
       {
         id: '41000',
@@ -325,7 +379,9 @@ window.MOCK_TREE_DATA_LIST = [
         name: 'xxx 41000.mp4',
         size: '135k',
         type: 'mp4',
-        date: '2019-02-03'
+        date: '2019-02-03',
+        childCols: [],
+        childData: []
       }
     ]
   }

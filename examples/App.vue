@@ -792,6 +792,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.expandTreeLazy',
+              locat: {
+                name: 'TableTreeExpandLazy'
+              }
+            },
+            {
               label: 'app.aside.nav.crudToolbar',
               locat: {
                 name: 'TableTreeToolbar'

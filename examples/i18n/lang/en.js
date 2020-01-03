@@ -94,6 +94,7 @@ module.exports = {
         tree: 'Tree table',
         treeNormal: 'Normal tree',
         customIcon: 'Custom icon',
+        expandTreeLazy: 'Tree expansion line lazy load',
         treeSearch: 'Search',
         groupSummary: 'Group summary',
         groupSummaryCount: 'Group summary total',
