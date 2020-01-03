@@ -276,7 +276,7 @@ module.exports = {
         desc: {
           data: 'Table data(note that updating data does not reset the status)',
           columns: 'Column configuration',
-          customs: 'For reading column configuration, same effect as calling getColumns method manually, if you want to show hidden columns directly by modifying the visible property of the column (generally not needed)',
+          customs: 'For reading column configuration, same effect as calling getColumns method manually, if you want to show hidden columns directly by modifying the visible property of the column (deprecated apis are not recommended)',
           height: 'Table height, supports adaptive or fixed width and height(if you set adaptive, you must ensure that parent nodes exist and no adjacent elements are allowed)',
           maxHeight: 'Maximum height of the table',
           syncResize: 'Auto resizing with a property change (may be used in scenarios where a property is used to control the show/hide toggle)',

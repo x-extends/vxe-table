@@ -2,7 +2,7 @@
   <div>
     <p class="tip">
       具体兼容请查看 <a class="link" href="https://www.npmjs.com/package/vxe-table-plugin-export-pdf" target="_blank">vxe-table-plugin-export-pdf</a> 插件的 API<br>
-      <span class="red">注：目前无法支持中文字体，会乱码，可自行引入字体库解决</span>
+      <span class="red">（注：默认是不支持中文字体的，会显示成乱码，可自行引入字体库解决）</span>
     </p>
 
     <vxe-toolbar custom :export="tableExport">
