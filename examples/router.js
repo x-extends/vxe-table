@@ -122,6 +122,7 @@ const TableTreeFilter = () => import(/* webpackChunkName: "tree" */ './views/tab
 const TableTreeGroupSummary = () => import(/* webpackChunkName: "tree" */ './views/table/tree/GroupSummary.vue')
 const TableTreeGroupSummaryCount = () => import(/* webpackChunkName: "tree" */ './views/table/tree/GroupSummaryCount.vue')
 const TableTreeExpand = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Expand.vue')
+const TableTreeExpandLazy = () => import(/* webpackChunkName: "tree" */ './views/table/tree/ExpandLazy.vue')
 const TableTreeToolbar = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Toolbar.vue')
 const TableTreeInsert = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Insert.vue')
 const TableTreeMenu = () => import(/* webpackChunkName: "tree" */ './views/table/tree/Menu.vue')
@@ -708,6 +709,11 @@ export default new Router({
       path: '/table/tree/expand',
       name: 'TableTreeExpand',
       component: TableTreeExpand
+    },
+    {
+      path: '/table/tree/expandLazy',
+      name: 'TableTreeExpandLazy',
+      component: TableTreeExpandLazy
     },
     {
       path: '/table/tree/toolbar',
