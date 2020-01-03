@@ -2829,8 +2829,27 @@ const apis = [
       },
       {
         name: 'isCheckedByRow(row)',
-        desc: '判断复选行数据是否勾选',
+        disabled: true,
+        desc: '即将废弃，请使用 isCheckedByCheckboxRow',
         version: '1.15.15',
+        type: 'Boolean',
+        enum: '',
+        defVal: 'row: Row',
+        list: []
+      },
+      {
+        name: 'isCheckedByCheckboxRow(row)',
+        desc: '用于 type=checkbox，判断复选行数据是否勾选',
+        version: '1.15.18',
+        type: 'Boolean',
+        enum: '',
+        defVal: 'row: Row',
+        list: []
+      },
+      {
+        name: 'isCheckedByRadioRow(row)',
+        desc: '用于 type=radio，判断单选行数据是否勾选',
+        version: '1.15.18',
         type: 'Boolean',
         enum: '',
         defVal: 'row: Row',

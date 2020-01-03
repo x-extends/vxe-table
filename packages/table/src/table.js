@@ -2818,6 +2818,10 @@ export default {
       return this.$nextTick()
     },
     isCheckedByRow (row) {
+      UtilTools.warn('vxe.error.delFunc', ['isCheckedByRow', 'isCheckedByCheckboxRow'])
+      return this.isCheckedByCheckboxRow(row)
+    },
+    isCheckedByCheckboxRow (row) {
       let { checkField: property } = this.checkboxOpts
       if (property) {
         return XEUtils.get(row, property)
@@ -3211,6 +3215,9 @@ export default {
         this.currentRow = row
       }
       return this.$nextTick()
+    },
+    isCheckedByRadioRow (row) {
+      return this.selectRow === row
     },
     setRadioRow (row) {
       this.selectRow = row
@@ -4357,7 +4364,7 @@ export default {
               treeExpandeds.push(row)
             }
             // 如果当前节点已选中，则展开后子节点也被选中
-            if (this.isCheckedByRow(row)) {
+            if (this.isCheckedByCheckboxRow(row)) {
               this.setCheckboxRow(childs, true)
             }
           }
@@ -5091,7 +5098,7 @@ export default {
       return this.exportData(options)
     },
     /**
-     * 导出 csv 文件
+     * 导出 csv/html/xml/txt 文件
      * 如果是树表格，则默认是导出所有节点
      * 如果是启用了可视渲染，则只能导出数据源，可以配合 dataFilterMethod 函数自行转换数据
      */
@@ -5190,13 +5197,17 @@ export default {
       })
     },
     print (options) {
-      this.exportData(Object.assign({
-        original: this.scrollXLoad || this.scrollYLoad
+      let opts = Object.assign({
+        original: false
       }, options, {
         type: 'html',
         download: false,
         print: true
-      })).then(({ content, blob }) => {
+      })
+      if (!opts.sheetName) {
+        opts.sheetName = opts.filename
+      }
+      this.exportData(opts).then(({ content, blob }) => {
         if (DomTools.browse.msie) {
           if (printFrame) {
             try {

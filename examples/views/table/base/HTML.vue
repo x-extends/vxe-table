@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">设置 <table-column-api-link prop="type"/>=<table-column-api-link prop="html"/> 显示为 HTML 标签<span class="red">（HTML 列不能和其他的功能列共存）</span></p>
+    <p class="tip">设置 <table-column-api-link prop="type"/>=<table-column-api-link prop="html"/> 显示为 HTML 标签</p>
 
     <vxe-table
       border
