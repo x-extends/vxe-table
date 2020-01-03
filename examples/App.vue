@@ -1084,7 +1084,6 @@ export default {
             },
             {
               label: 'app.aside.nav.big1wRow1wCol',
-              demoUrl: 'https://jsrun.net/ULyKp/edit',
               locat: {
                 name: 'TableScrollCols'
               }
