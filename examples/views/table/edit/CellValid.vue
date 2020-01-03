@@ -27,6 +27,7 @@
       <vxe-table-column type="checkbox" width="60"></vxe-table-column>
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="role" title="Role" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="date" title="Date" :edit-render="{name: 'input'}"></vxe-table-column>
     </vxe-table>
@@ -45,6 +46,13 @@ import hljs from 'highlight.js'
 
 export default {
   data () {
+    const roleValid = (rule, value, callback) => {
+      if (!value || ['前端', '后端', '设计师', '项目经理', '测试'].includes(value)) {
+        callback()
+      } else {
+        callback(new Error('角色输入不正确'))
+      }
+    }
     return {
       tableData: [],
       validRules: {
@@ -52,8 +60,12 @@ export default {
           { required: true, message: 'app.body.valid.rName' },
           { min: 3, max: 50, message: '名称长度在 3 到 50 个字符' }
         ],
+        role: [
+          { validator: roleValid }
+        ],
         sex: [
-          { required: true, message: '性别必须填写' }
+          { required: true, message: '性别必须填写' },
+          { pattern: /^[0,1]{1}$/, message: '格式不正确' }
         ]
       },
       demoCodes: [
@@ -82,6 +94,7 @@ export default {
           <vxe-table-column type="checkbox" width="60"></vxe-table-column>
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column field="role" title="Role" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column field="date" title="Date" :edit-render="{name: 'input'}"></vxe-table-column>
         </vxe-table>
@@ -89,6 +102,13 @@ export default {
         `
         export default {
           data () {
+            const roleValid = (rule, value, callback) => {
+              if (!value || ['前端', '后端', '设计师', '项目经理', '测试'].includes(value)) {
+                callback()
+              } else {
+                callback(new Error('角色输入不正确'))
+              }
+            }
             return {
               tableData: [],
               validRules: {
@@ -96,8 +116,12 @@ export default {
                   { required: true, message: 'app.body.valid.rName' },
                   { min: 3, max: 50, message: '名称长度在 3 到 50 个字符' }
                 ],
+                role: [
+                  { validator: roleValid }
+                ],
                 sex: [
-                  { required: true, message: '性别必须填写' }
+                  { required: true, message: '性别必须填写' },
+                  { pattern: /^[0,1]{1}$/, message: '格式不正确' }
                 ]
               }
             }
