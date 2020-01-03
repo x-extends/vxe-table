@@ -1749,7 +1749,7 @@ const apis = [
           {
             name: 'pattern',
             desc: '正则校验',
-            version: '',
+            version: '1.15.18',
             type: 'RegExp, String',
             enum: '',
             defVal: '',
