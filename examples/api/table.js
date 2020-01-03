@@ -1658,7 +1658,7 @@ const apis = [
           {
             name: 'pattern',
             desc: '正则校验',
-            version: '',
+            version: '2.7.20',
             type: 'RegExp, String',
             enum: '',
             defVal: '',
