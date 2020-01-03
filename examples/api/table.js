@@ -347,7 +347,7 @@ const apis = [
       {
         name: 'border',
         descKey: 'app.api.table.desc.border',
-        version: '',
+        version: 'v2.7',
         type: 'Boolean, String',
         enum: '',
         defVal: 'false',
