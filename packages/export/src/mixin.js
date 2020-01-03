@@ -111,7 +111,7 @@ function hasEllipsis ($table, column, property, allColumnOverflow) {
 }
 
 function toHtml ($table, opts, columns, datas) {
-  const { border, treeConfig, treeOpts, headerAlign: allHeaderAlign, align: allAlign, footerAlign: allFooterAlign, showOverflow: allShowOverflow, showAllOverflow: oldShowAllOverflow, showHeaderOverflow: allHeaderOverflow, showHeaderAllOverflow: oldHeaderOverflow } = $table
+  const { id, border, treeConfig, treeOpts, isAllSelected, headerAlign: allHeaderAlign, align: allAlign, footerAlign: allFooterAlign, showOverflow: allShowOverflow, showAllOverflow: oldShowAllOverflow, showHeaderOverflow: allHeaderOverflow, showHeaderAllOverflow: oldHeaderOverflow } = $table
   // v2.0 废弃属性，保留兼容
   let allColumnOverflow = XEUtils.isBoolean(oldShowAllOverflow) ? oldShowAllOverflow : allShowOverflow
   let allColumnHeaderOverflow = XEUtils.isBoolean(oldHeaderOverflow) ? oldHeaderOverflow : allHeaderOverflow
@@ -140,6 +140,9 @@ function toHtml ($table, opts, columns, datas) {
       if (headAlign) {
         classNames.push(`col--${headAlign}`)
       }
+      if (['selection', 'checkbox'].indexOf(column.type) > -1) {
+        return `<td class="${classNames.join(' ')}"><div style="width: ${column.renderWidth}px"><input type="checkbox" ${isAllSelected ? 'checked' : ''}></div></td>`
+      }
       return `<th class="${classNames.join(' ')}" title="${cellTitle}"><div style="width: ${column.renderWidth}px">${cellTitle}</div></th>`
     }).join('')}</tr></thead>`
   }
@@ -160,7 +163,17 @@ function toHtml ($table, opts, columns, datas) {
               treeIcon = `<i class="vxe-table--tree-icon"></i>`
             }
             classNames.push('vxe-table--tree-node')
+            if (column.type === 'radio') {
+              return `<td class="${classNames.join(' ')}" title="${cellValue}"><div style="width: ${column.renderWidth}px"><div class="vxe-table--tree-node-wrapper" style="padding-left: ${row._level * treeOpts.indent}px"><div class="vxe-table--tree-icon-wrapper">${treeIcon}</div><div class="vxe-table--tree-cell"><input type="radio" name="radio_${id}" ${cellValue === true || cellValue === 'true' ? 'checked' : ''}></div></div></div></td>`
+            } else if (['selection', 'checkbox'].indexOf(column.type) > -1) {
+              return `<td class="${classNames.join(' ')}" title="${cellValue}"><div style="width: ${column.renderWidth}px"><div class="vxe-table--tree-node-wrapper" style="padding-left: ${row._level * treeOpts.indent}px"><div class="vxe-table--tree-icon-wrapper">${treeIcon}</div><div class="vxe-table--tree-cell"><input type="checkbox" ${cellValue === true || cellValue === 'true' ? 'checked' : ''}></div></div></div></td>`
+            }
             return `<td class="${classNames.join(' ')}" title="${cellValue}"><div style="width: ${column.renderWidth}px"><div class="vxe-table--tree-node-wrapper" style="padding-left: ${row._level * treeOpts.indent}px"><div class="vxe-table--tree-icon-wrapper">${treeIcon}</div><div class="vxe-table--tree-cell">${cellValue}</div></div></div></td>`
+          }
+          if (column.type === 'radio') {
+            return `<td class="${classNames.join(' ')}"><div style="width: ${column.renderWidth}px"><input type="radio" name="radio_${id}" ${cellValue === true || cellValue === 'true' ? 'checked' : ''}></div></td>`
+          } else if (['selection', 'checkbox'].indexOf(column.type) > -1) {
+            return `<td class="${classNames.join(' ')}"><div style="width: ${column.renderWidth}px"><input type="checkbox" ${cellValue === true || cellValue === 'true' ? 'checked' : ''}></div></td>`
           }
           return `<td class="${classNames.join(' ')}" title="${cellValue}"><div style="width: ${column.renderWidth}px">${cellValue}</div></td>`
         }).join('') + '</tr>'
@@ -173,6 +186,11 @@ function toHtml ($table, opts, columns, datas) {
           let cellValue = row[column.id]
           if (cellAlign) {
             classNames.push(`col--${cellAlign}`)
+          }
+          if (column.type === 'radio') {
+            return `<td class="${classNames.join(' ')}"><div style="width: ${column.renderWidth}px"><input type="radio" name="radio_${id}" ${cellValue === true || cellValue === 'true' ? 'checked' : ''}></div></td>`
+          } else if (['selection', 'checkbox'].indexOf(column.type) > -1) {
+            return `<td class="${classNames.join(' ')}"><div style="width: ${column.renderWidth}px"><input type="checkbox" ${cellValue === true || cellValue === 'true' ? 'checked' : ''}></div></td>`
           }
           return `<td class="${classNames.join(' ')}" title="${cellValue}"><div style="width: ${column.renderWidth}px">${cellValue}</div></td>`
         }).join('') + '</tr>'
@@ -276,8 +294,25 @@ function getLabelData ($table, columns, datas) {
         _hasChild: hasTreeChildren($table, row)
       }
       columns.forEach((column, columnIndex) => {
-        // v3.0 废弃 type=index
-        item[column.id] = XEUtils.toString(['seq', 'index'].indexOf(column.type) > -1 ? getSeq($table, row, rowIndex, column, columnIndex) : XEUtils.get(row, column.property))
+        let cellValue = ''
+        switch (column.type) {
+          // v3.0 废弃 type=index
+          case 'seq':
+          case 'index':
+            cellValue = getSeq($table, row, rowIndex, column, columnIndex)
+            break
+          // v3.0 废弃 type=selection
+          case 'selection':
+          case 'checkbox':
+            cellValue = $table.isCheckedByCheckboxRow(row)
+            break
+          case 'radio':
+            cellValue = $table.isCheckedByRadioRow(row)
+            break
+          default:
+            cellValue = XEUtils.get(row, column.property)
+        }
+        item[column.id] = XEUtils.toString(cellValue)
       })
       rest.push(Object.assign(item, row))
     }, treeOpts)
@@ -286,14 +321,31 @@ function getLabelData ($table, columns, datas) {
   return datas.map((row, rowIndex) => {
     let item = {}
     columns.forEach((column, columnIndex) => {
-      // 如果是启用虚拟滚动后只允许导出数据源
-      if (scrollXLoad || scrollYLoad) {
+      let cellValue = ''
+      switch (column.type) {
         // v3.0 废弃 type=index
-        item[column.id] = XEUtils.toString(['seq', 'index'].indexOf(column.type) > -1 ? getSeq($table, row, rowIndex, column, columnIndex) : row[column.property])
-      } else {
-        let cell = DomTools.getCell($table, { row, column })
-        item[column.id] = cell ? cell.innerText.trim() : ''
+        case 'seq':
+        case 'index':
+          cellValue = getSeq($table, row, rowIndex, column, columnIndex)
+          break
+        // v3.0 废弃 type=selection
+        case 'selection':
+        case 'checkbox':
+          cellValue = $table.isCheckedByCheckboxRow(row)
+          break
+        case 'radio':
+          cellValue = $table.isCheckedByRadioRow(row)
+          break
+        default:
+          // 如果是启用虚拟滚动后只允许导出数据源
+          if (scrollXLoad || scrollYLoad) {
+            cellValue = row[column.property]
+          } else {
+            let cell = DomTools.getCell($table, { row, column })
+            cellValue = cell ? cell.innerText.trim() : ''
+          }
       }
+      item[column.id] = XEUtils.toString(cellValue)
     })
     return item
   })
@@ -493,7 +545,7 @@ export default {
       return this.exportData(options)
     },
     /**
-     * 导出文件，支持 csv/html/xml
+     * 导出文件，支持 csv/html/xml/txt
      * 如果是树表格，则默认是导出所有节点
      * 如果是启用了虚拟滚动，则只能导出数据源，可以配合 dataFilterMethod 函数自行转换数据
      * @param {Object} options 参数
@@ -593,13 +645,17 @@ export default {
       })
     },
     _print (options) {
-      this.exportData(Object.assign({
+      let opts = Object.assign({
         original: false
       }, options, {
         type: 'html',
         download: false,
         print: true
-      })).then(({ content, blob }) => {
+      })
+      if (!opts.sheetName) {
+        opts.sheetName = opts.filename
+      }
+      this.exportData(opts).then(({ content, blob }) => {
         if (DomTools.browse.msie) {
           if (printFrame) {
             try {

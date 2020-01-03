@@ -1639,6 +1639,10 @@ const Methods = {
     return this.$nextTick()
   },
   isCheckedByRow (row) {
+    UtilTools.warn('vxe.error.delFunc', ['isCheckedByRow', 'isCheckedByCheckboxRow'])
+    return this.isCheckedByCheckboxRow(row)
+  },
+  isCheckedByCheckboxRow (row) {
     let { checkField: property } = this.checkboxOpts
     if (property) {
       return XEUtils.get(row, property)
@@ -2032,6 +2036,9 @@ const Methods = {
       XEUtils.arrayEach(this.$el.querySelectorAll(`[data-rowid="${UtilTools.getRowid(this, row)}"]`), elem => DomTools.addClass(elem, 'row--current'))
     }
     return this.$nextTick()
+  },
+  isCheckedByRadioRow (row) {
+    return this.selectRow === row
   },
   /**
    * 用于单选行，设置某一行为选中状态
@@ -2595,7 +2602,7 @@ const Methods = {
             treeExpandeds.push(row)
           }
           // 如果当前节点已选中，则展开后子节点也被选中
-          if (this.isCheckedByRow(row)) {
+          if (this.isCheckedByCheckboxRow(row)) {
             this.setCheckboxRow(childs, true)
           }
         }
