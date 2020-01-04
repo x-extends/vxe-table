@@ -55,10 +55,8 @@ import 'vxe-table-plugin-charts/dist/style.css'
 
 // 设置默认参数
 VXETable.setup({
-  toolbar: {
-    export: {
-      types: ['csv', 'html', 'xml', 'txt']
-    }
+  exportConfig: {
+    types: ['csv', 'html', 'xml', 'txt']
   },
   translate: key => key && key.indexOf('app.') > -1 ? i18n.t(key) : key, // 自动翻译以 app. 开头的键值
   i18n: (key, value) => i18n.t(key, value)

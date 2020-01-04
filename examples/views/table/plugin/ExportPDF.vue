@@ -5,7 +5,7 @@
       <span class="red">（注：默认是不支持中文字体的，会显示成乱码，可自行引入字体库解决）</span>
     </p>
 
-    <vxe-toolbar custom :export="tableExport">
+    <vxe-toolbar custom export>
       <template v-slot:buttons>
         <vxe-button @click="exportDataEvent">导出数据</vxe-button>
       </template>
@@ -13,10 +13,10 @@
 
     <vxe-table
       border
-      export-config
       ref="xTable"
       height="400"
       :loading="loading"
+      :export-config="tableExport"
       :data="tableData">
       <vxe-table-column type="checkbox" width="60"></vxe-table-column>
       <vxe-table-column type="seq" width="60"></vxe-table-column>
@@ -60,17 +60,17 @@ export default {
 
         <vxe-table
           border
-          export-config
           ref="xTable"
           height="400"
           :loading="loading"
+          :export-config="tableExport"
           :data="tableData">
           <vxe-table-column type="checkbox" width="60"></vxe-table-column>
           <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
+          <vxe-table-column field="name" title="Name"></vxe-table-column>
           <vxe-table-column field="role" title="Role"></vxe-table-column>
-          <vxe-table-column field="sex" title="app.body.label.sex"></vxe-table-column>
-          <vxe-table-column field="age" title="app.body.label.age"></vxe-table-column>
+          <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+          <vxe-table-column field="age" title="Age"></vxe-table-column>
           <vxe-table-column field="rate" title="Rate"></vxe-table-column>
         </vxe-table>
         `,
