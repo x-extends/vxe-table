@@ -43,6 +43,12 @@
           filterConfig: {
             remote: false
           },
+          importConfig: {
+            mode: 'covering'
+          },
+          exportConfig: {
+            types: ['csv', 'html', 'xml', 'txt']
+          },
           expandConfig: {
             trigger: 'default'
           },
@@ -106,12 +112,6 @@
           // 工具栏的全局参数
           toolbar: {
             refresh: false,
-            import: {
-              mode: 'covering'
-            },
-            export: {
-              types: ['csv', 'html', 'xml', 'txt']
-            },
             resizable: {
               storage: false
             },

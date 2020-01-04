@@ -10,10 +10,10 @@
 
     <vxe-table
       border
-      export-config
       ref="xTable"
       height="400"
       :loading="loading"
+      :export-config="tableExport"
       :data="tableData">
       <vxe-table-column type="checkbox" width="60"></vxe-table-column>
       <vxe-table-column type="seq" width="60"></vxe-table-column>
@@ -57,10 +57,10 @@ export default {
 
         <vxe-table
           border
-          export-config
           ref="xTable"
           height="400"
           :loading="loading"
+          :export-config="tableExport"
           :data="tableData">
           <vxe-table-column type="checkbox" width="60"></vxe-table-column>
           <vxe-table-column type="seq" width="60"></vxe-table-column>
