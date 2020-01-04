@@ -764,6 +764,9 @@ export default {
     if (checkboxOpts.labelProp) {
       UtilTools.warn('vxe.error.delProp', ['select-config.labelProp', 'select-config.labelField'])
     }
+    if (this.customs) {
+      // UtilTools.warn('vxe.error.removeProp', ['customs'])
+    }
     if (this.sortMethod) {
       // UtilTools.warn('vxe.error.delProp', ['sort-method', 'sort-config.sortMethod'])
     }
@@ -3926,6 +3929,7 @@ export default {
     },
     // v3 废弃 filter 方法，被 setFilter 取代
     filter (field, callback) {
+      // UtilTools.warn('vxe.error.delFunc', ['filter', 'setFilter'])
       let column = this.getColumnByField(field)
       if (column) {
         let options = column.filters

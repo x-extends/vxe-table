@@ -14,7 +14,7 @@ export default {
         h('div', {
           class: 'vxe-input--wrapper vxe-excel-cell',
           style: {
-            height: `${column.renderHeight - 1}px`
+            height: `${column.renderHeight}px`
           }
         }, [
           h('textarea', {
