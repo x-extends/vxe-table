@@ -2205,8 +2205,6 @@ export default {
       } else if (mouseConfig) {
         if (!DomTools.getEventTargetNode(evnt, $el).flag) {
           if (mouseOpts.checked) {
-            this.clearIndexChecked()
-            this.clearHeaderChecked()
             this.clearChecked()
           }
           this.clearSelected()
