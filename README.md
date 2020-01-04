@@ -24,7 +24,7 @@
   * [x] v2 &nbsp;95% 性能优化，同时兼具功能与性能
   * [ ] v3 &nbsp;&nbsp;0% 实现重构，不再支持 IE，渲染性能提升，基于 Vue3 并使用 typescript 开发
 
-🐬 如果有更好的建议、优化点或 Bug 都欢迎提 [Issues](https://github.com/xuliangzhan/vxe-table/issues)
+🐬 如果有更好的建议、优化点或 Bug 都欢迎提 [Issues](https://github.com/xuliangzhan/vxe-table/issues/390)
 
 ## Browser Support
 
