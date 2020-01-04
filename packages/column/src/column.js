@@ -49,7 +49,7 @@ const props = {
   // 自定义排序方法
   sortMethod: Function,
   // 配置筛选条件数组
-  filters: Array,
+  filters: { type: Array, default: null },
   // 筛选是否允许多选
   filterMultiple: { type: Boolean, default: true },
   // 自定义筛选方法

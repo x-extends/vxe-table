@@ -7,7 +7,8 @@ var columnUniqueId = 0
 
 class ColumnConfig {
   constructor ($table, _vm, { renderHeader, renderCell, renderData } = {}) {
-    const columnOpts = GlobalConfig.column
+    const $grid = $table.$grid
+    const proxyOpts = $grid ? $grid.proxyOpts : null
     const formatter = _vm.formatter
     if (_vm.cellRender && _vm.editRender) {
       UtilTools.warn('vxe.error.cellEditRender')
@@ -91,8 +92,8 @@ class ColumnConfig {
       slots: _vm.slots,
       own: _vm
     })
-    if (columnOpts && columnOpts.beforeCreated) {
-      columnOpts.beforeCreated.apply($table, [{ $table, column: this }])
+    if (proxyOpts && proxyOpts.beforeColumn) {
+      proxyOpts.beforeColumn.apply($table, [{ $grid, column: this }])
     }
   }
   getTitle () {
@@ -164,7 +165,10 @@ export const UtilTools = {
     return property ? XEUtils.isFunction(property) ? property(params) : property : ''
   },
   getFilters (filters) {
-    return (filters || []).map(({ label, value, data, checked }) => ({ label, value, data, _data: data, checked: !!checked }))
+    if (filters && XEUtils.isArray(filters)) {
+      filters.map(({ label, value, data, checked }) => ({ label, value, data, _data: data, checked: !!checked }))
+    }
+    return filters
   },
   formatText (value, placeholder) {
     return '' + (value === '' || value === null || value === undefined ? (placeholder ? GlobalConfig.emptyCell : '') : value)

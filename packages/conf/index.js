@@ -112,13 +112,11 @@ const GlobalConfig = {
         result: 'result',
         total: 'page.total'
       },
+      beforeColumn: null,
       beforeQuery: null,
       beforeDelete: null,
       beforeSave: null
     }
-  },
-  column: {
-    beforeCreated: null
   },
   menu: {},
   tooltip: {

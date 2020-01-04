@@ -160,23 +160,26 @@ export default {
   },
   watch: {
     columns (value) {
-      this.loadColumn(value)
+      this.$nextTick(() => this.loadColumn(value))
     },
     tableCustoms () {
       let { $refs, toolbar } = this
       if (toolbar && $refs.toolbar) {
         $refs.toolbar.loadStorage()
       }
+    },
+    proxyConfig () {
+      this.initProxy()
+    },
+    pagerConfig (value) {
+      this.initPages()
     }
   },
   created () {
-    let { customs, data, proxyConfig, proxyOpts, pagerConfig, pagerOpts } = this
+    let { customs, data, proxyConfig, proxyOpts } = this
     let { props } = proxyOpts
     if (customs) {
       this.tableCustoms = customs
-    }
-    if (pagerConfig && pagerOpts.pageSize) {
-      this.tablePage.pageSize = pagerOpts.pageSize
     }
     if (data && proxyConfig) {
       console.warn('[vxe-grid] There is a conflict between the props proxy-config and data.')
@@ -191,13 +194,11 @@ export default {
     }
   },
   mounted () {
-    let { columns, proxyConfig, proxyOpts } = this
-    if (columns && columns.length) {
+    if (this.columns && this.columns.length) {
       this.loadColumn(this.columns)
     }
-    if (proxyConfig && proxyOpts.autoLoad !== false) {
-      this.commitProxy('reload')
-    }
+    this.initPages()
+    this.initProxy()
   },
   render (h) {
     const $scopedSlots = this.$scopedSlots
@@ -284,6 +285,21 @@ export default {
         }
       })
       this.$refs.xTable.loadColumn(columns)
+    },
+    reloadColumn (columns) {
+      this.clearAll()
+      return this.loadColumn(columns)
+    },
+    initPages () {
+      if (this.pagerConfig && this.pagerOpts.pageSize) {
+        this.tablePage.pageSize = this.pagerOpts.pageSize
+      }
+    },
+    initProxy () {
+      if (!this.proxyInited && this.proxyConfig && this.proxyOpts.autoLoad !== false) {
+        this.proxyInited = true
+        this.$nextTick(() => this.commitProxy('reload'))
+      }
     },
     /**
      * 提交指令，支持 code 或 button

@@ -72,6 +72,8 @@
                 result: 'result',
                 total: 'page.total'
               },
+              // 列初始化之前
+              beforeColumn ({ column }) {},
               // 查询
               beforeQuery ({ options, page, sort, filters }) {
                 return fetch('url', { method: 'GET' }).then(response => response.json())
@@ -85,10 +87,6 @@
                 return fetch('url', { method: 'POST', body }).then(response => response.json())
               }
             }
-          },
-          // 列的全局参数
-          column: {
-            beforeCreated ({ column }) {}
           },
           // 快捷菜单的全局参数
           menu: {},
