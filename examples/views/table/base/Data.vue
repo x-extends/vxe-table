@@ -208,10 +208,10 @@ export default {
           data () {
             return {
               tableData: [
-                ['Test1', '男', 26, '<a href="https://github.com/xuliangzhan/vxe-table">我是链接</a>', '前端'],
-                ['Test2', '男', 28, '<img height="40" src="static/other/img1.gif">', '后端'],
-                ['Test3', '女', 22, '<div><span style="color: red">在线观看.avi</span></div>', '设计师'],
-                ['Test4', '女', 20, '<img height="40" src="static/other/img2.gif">', '程序员鼓励师']
+                [101, 'Test4', '男', 26, '<a href="https://github.com/xuliangzhan/vxe-table">我是链接</a>', '前端'],
+                [102, 'Test2', '男', 28, '<img height="40" src="static/other/img1.gif">', '后端'],
+                [103, 'Test1', '女', 22, '<div><span style="color: red">在线观看.avi</span></div>', '设计师'],
+                [104, 'Test3', '女', 20, '<img height="40" src="static/other/img2.gif">', '程序员鼓励师']
               ]
             }
           },
