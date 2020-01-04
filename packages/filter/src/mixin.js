@@ -12,6 +12,7 @@ export default {
      * @param {Function} callback 重置列表的回调函数，返回新的选项列表
      */
     _filter (field, callback) {
+      // UtilTools.warn('vxe.error.delFunc', ['filter', 'setFilter'])
       let column = this.getColumnByField(field)
       if (column) {
         let options = column.filters

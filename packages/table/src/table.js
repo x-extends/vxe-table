@@ -621,6 +621,9 @@ export default {
     if (treeConfig && treeOpts.line && (!this.rowKey || !showOverflow)) {
       UtilTools.warn('vxe.error.reqProp', ['row-key | show-overflow'])
     }
+    if (this.customs) {
+      // UtilTools.warn('vxe.error.removeProp', ['customs'])
+    }
     if (this.sortMethod) {
       // UtilTools.warn('vxe.error.delProp', ['sort-method', 'sort-config.sortMethod'])
     }
