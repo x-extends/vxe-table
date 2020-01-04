@@ -33,11 +33,11 @@ export const Cell = {
         break
       case 'html':
         renMaps.renderCell = treeNode ? this.renderTreeHTMLCell : this.renderHTMLCell
-        if (filters && filters.length && (sortable || remoteSort)) {
+        if (filters && (sortable || remoteSort)) {
           renMaps.renderHeader = this.renderSortAndFilterHeader
         } else if (sortable || remoteSort) {
           renMaps.renderHeader = this.renderSortHeader
-        } else if (filters && filters.length) {
+        } else if (filters) {
           renMaps.renderHeader = this.renderFilterHeader
         }
         break
@@ -45,11 +45,11 @@ export const Cell = {
         if (editConfig && editRender) {
           renMaps.renderHeader = this.renderEditHeader
           renMaps.renderCell = editOpts.mode === 'cell' ? (treeNode ? this.renderTreeCellEdit : this.renderCellEdit) : (treeNode ? this.renderTreeRowEdit : this.renderRowEdit)
-        } else if (filters && filters.length && (sortable || remoteSort)) {
+        } else if (filters && (sortable || remoteSort)) {
           renMaps.renderHeader = this.renderSortAndFilterHeader
         } else if (sortable || remoteSort) {
           renMaps.renderHeader = this.renderSortHeader
-        } else if (filters && filters.length) {
+        } else if (filters) {
           renMaps.renderHeader = this.renderFilterHeader
         }
     }
@@ -517,7 +517,7 @@ export const Cell = {
       })
     ].concat(Cell.renderHeader(h, params))
       .concat(sortable || remoteSort ? Cell.renderSortIcon(h, params) : [])
-      .concat(filters && filters.length ? Cell.renderFilterIcon(h, params) : [])
+      .concat(filters ? Cell.renderFilterIcon(h, params) : [])
   },
   // 行格编辑模式
   renderRowEdit (h, params) {

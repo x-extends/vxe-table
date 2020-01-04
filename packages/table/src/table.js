@@ -572,7 +572,7 @@ export default {
       return this.resizable || this.tableFullColumn.some(column => column.resizable)
     },
     hasFilter () {
-      return this.tableColumn.some(column => column.filters && column.filters.length)
+      return this.tableColumn.some(column => column.filters)
     },
     headerCtxMenu () {
       return this.ctxMenuOpts.header && this.ctxMenuOpts.header.options ? this.ctxMenuOpts.header.options : []
@@ -3924,17 +3924,29 @@ export default {
     getSortColumn () {
       return this.visibleColumn.find(column => column.sortable && column.order)
     },
+    // v3 废弃 filter 方法，被 setFilter 取代
     filter (field, callback) {
       let column = this.getColumnByField(field)
       if (column) {
-        let filters = column.filters
-        if (callback) {
-          let rest = callback(filters)
+        let options = column.filters
+        if (options && callback) {
+          let rest = callback(options)
           if (XEUtils.isArray(rest)) {
             column.filters = UtilTools.getFilters(rest)
           }
+          return this.$nextTick().then(() => options)
         }
-        return this.$nextTick().then(() => filters)
+      }
+      return this.$nextTick()
+    },
+    /**
+     * 修改筛选条件列表
+     * @param {ColumnConfig} column 列
+     * @param {Array} options 选项
+     */
+    setFilter (column, options) {
+      if (this.fullColumnMap.has(column) && column.filters && options) {
+        column.filters = UtilTools.getFilters(options)
       }
       return this.$nextTick()
     },
@@ -4070,9 +4082,8 @@ export default {
       let column = arguments.length ? this.getColumnByField(field) : null
       let filterStore = this.filterStore
       let handleClear = column => {
-        let { filters } = column
-        if (filters && filters.length) {
-          filters.forEach(item => {
+        if (column.filters) {
+          column.filters.forEach(item => {
             item.checked = false
             item.data = item._data
           })

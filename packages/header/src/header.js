@@ -188,8 +188,7 @@ export default {
             let showTooltip = headOverflow === true || headOverflow === 'tooltip'
             let hasEllipsis = showTitle || showTooltip || showEllipsis
             let thOns = {}
-            let isFilter = column.filters.length
-            let hasFilter = isFilter && column.filters.some(item => item.checked)
+            let hasFilter = column.filters && column.filters.some(item => item.checked)
             // 确保任何情况下 columnIndex 都精准指向真实列索引
             let columnIndex = getColumnIndex(column)
             let params = { $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn, hasFilter }
@@ -241,7 +240,7 @@ export default {
                 'col--ellipsis': hasEllipsis,
                 'fixed--hidden': fixedHiddenColumn,
                 'is--sortable': column.sortable,
-                'is--filter': isFilter,
+                'is--filter': column.filters,
                 'filter--active': hasFilter,
                 'col--current': currentColumn === column
               }, UtilTools.getClass(headerClassName, params), UtilTools.getClass(headerCellClassName, params)],

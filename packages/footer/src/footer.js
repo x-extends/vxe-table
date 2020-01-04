@@ -168,7 +168,7 @@ export default {
                 'col--last': $columnIndex === tableColumn.length - 1,
                 'fixed--hidden': fixedHiddenColumn,
                 'col--ellipsis': hasEllipsis,
-                'filter--active': column.filters.some(item => item.checked)
+                'filter--active': column.filters && column.filters.some(item => item.checked)
               }, UtilTools.getClass(footerClassName, params), UtilTools.getClass(footerCellClassName, params)],
               attrs,
               style: footerCellStyle ? (XEUtils.isFunction(footerCellStyle) ? footerCellStyle({ $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType }) : footerCellStyle) : null,

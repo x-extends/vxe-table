@@ -2921,6 +2921,15 @@ const apis = [
         list: []
       },
       {
+        name: 'setFilter(column, options)',
+        desc: '用于 filters，修改筛选列表（在筛选条件更新之后可以调用 updateData 函数处理表格数据）',
+        version: '1.15.18',
+        type: 'Promise',
+        enum: '',
+        defVal: 'column: Column, options: []',
+        list: []
+      },
+      {
         name: 'setActiveRow(row)',
         desc: '激活行编辑，如果是 mode=cell 则默认激活第一个单元格',
         version: '',
@@ -3421,7 +3430,8 @@ const apis = [
       },
       {
         name: 'filter(field, callback)',
-        desc: '手动对表格进行筛选，还可以通过 callback 返回新的选项列表',
+        abandoned: true,
+        desc: '手动对表格进行筛选，还可以通过 callback 返回新的选项列表（废弃的 API 不建议使用，被 setFilter 方法取代）',
         version: '1.12.5',
         type: 'Promise<options>',
         enum: '',

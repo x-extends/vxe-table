@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="tip">
-      筛选高级用法、动态更改筛选条件、自定义更加复杂的模板事件，通过调用 <table-api-link prop="filter"/> 和 <table-api-link prop="updateData"/> 方法来处理复杂场景的筛选逻辑<br>
+      筛选高级用法、动态更改筛选条件、自定义更加复杂的模板事件，通过调用 <table-api-link prop="setFilter"/> 和 <table-api-link prop="updateData"/> 方法来处理复杂场景的筛选逻辑<br>
       进阶用法：<router-link class="link" :to="{name: 'RendererFilter'}">查看渲染器的使用</router-link><br>
       context 对象:<br>
       &nbsp;&nbsp;<span class="orange">changeOption(event, checked, option) 更新选项的状态</span><br>
@@ -31,7 +31,7 @@
         field="name"
         title="Name"
         sortable
-        :filters="[{ label: 'id大于25', value: 25 }]"
+        :filters="[{ label: '包含 z', value: 'z' }]"
         :filter-method="filterNameMethod"></vxe-table-column>
       <vxe-table-column
         field="role"
@@ -78,6 +78,7 @@
 </template>
 
 <script>
+import XEUtils from 'xe-utils'
 import hljs from 'highlight.js'
 
 export default {
@@ -110,7 +111,7 @@ export default {
             field="name"
             title="Name"
             sortable
-            :filters="[{ label: 'id大于25', value: 25 }]"
+            :filters="[{ label: '包含 z', value: 'z' }]"
             :filter-method="filterNameMethod"></vxe-table-column>
           <vxe-table-column
             field="role"
@@ -170,7 +171,7 @@ export default {
               })
             },
             filterNameMethod ({ value, row, column }) {
-              return row.id >= value
+              return XEUtils.toString(row.name).toLowerCase().indexOf(value) > -1
             },
             filterRoleMethod ({ option, row }) {
               return row.role === option.data
@@ -180,62 +181,36 @@ export default {
             },
             updateNameFilterEvent () {
               let xTable = this.$refs.xTable
-              xTable.filter('name', options => {
-                // 修改筛选列表
-                return [
-                  {
-                    label: 'id大于10',
-                    value: 10
-                  },
-                  {
-                    label: 'id大于20',
-                    value: 20
-                  },
-                  {
-                    label: 'id大于30',
-                    value: 30,
-                    checked: true // 设置为选中状态
-                  },
-                  {
-                    label: 'id大于40',
-                    value: 40
-                  }
-                ]
-              }).then(() => {
-                // 修改条件之后，需要手动调用 updateData 处理表格数据
-                xTable.updateData()
-              })
+              let column = xTable.getColumnByField('name')
+              // 修改筛选列表，并默认设置为选中状态
+              xTable.setFilter(column, [
+                { label: '包含 a', value: 'a' },
+                { label: '包含 b', value: 'b' },
+                { label: '包含 c', value: 'c', checked: true },
+                { label: '包含 h', value: 'h' },
+                { label: '包含 j', value: 'j' }
+              ])
+              // 修改条件之后，需要手动调用 updateData 处理表格数据
+              xTable.updateData()
             },
             filterNameEvent () {
               let xTable = this.$refs.xTable
-              xTable.filter('name')
-                .then(options => {
-                  // 处理条件并设置选中的选项
-                  if (options.length) {
-                    let option = options[1]
-                    option.checked = true
-                  }
-                })
-                .then(() => {
-                  // 修改条件之后，需要手动调用 updateData 处理表格数据
-                  xTable.updateData()
-                })
+              let column = xTable.getColumnByField('name')
+              // 修改第二个选项为勾选状态
+              let option = column.filters[1]
+              option.checked = true
+              // 修改条件之后，需要手动调用 updateData 处理表格数据
+              xTable.updateData()
             },
             filterAgeEvent () {
               let xTable = this.$refs.xTable
-              xTable.filter('age')
-                .then(options => {
-                  // 处理条件并设置选中的选项
-                  if (options.length) {
-                    let option = options[0]
-                    option.data = '26'
-                    option.checked = true
-                  }
-                })
-                .then(() => {
-                  // 修改条件之后，需要手动调用 updateData 处理表格数据
-                  xTable.updateData()
-                })
+              let column = xTable.getColumnByField('age')
+              // 修改第一个选项为勾选状态
+              let option = column.filters[0]
+              option.data = '26'
+              option.checked = true
+              // 修改条件之后，需要手动调用 updateData 处理表格数据
+              xTable.updateData()
             }
           }
         }
@@ -273,7 +248,7 @@ export default {
       })
     },
     filterNameMethod ({ value, row, column }) {
-      return row.id >= value
+      return XEUtils.toString(row.name).toLowerCase().indexOf(value) > -1
     },
     filterRoleMethod ({ option, row }) {
       return row.role === option.data
@@ -283,62 +258,36 @@ export default {
     },
     updateNameFilterEvent () {
       let xTable = this.$refs.xTable
-      xTable.filter('name', options => {
-        // 修改筛选列表
-        return [
-          {
-            label: 'id大于10',
-            value: 10
-          },
-          {
-            label: 'id大于20',
-            value: 20
-          },
-          {
-            label: 'id大于30',
-            value: 30,
-            checked: true // 设置为选中状态
-          },
-          {
-            label: 'id大于40',
-            value: 40
-          }
-        ]
-      }).then(() => {
-        // 修改条件之后，需要手动调用 updateData 处理表格数据
-        xTable.updateData()
-      })
+      let column = xTable.getColumnByField('name')
+      // 修改筛选列表，并默认设置为选中状态
+      xTable.setFilter(column, [
+        { label: '包含 a', value: 'a' },
+        { label: '包含 b', value: 'b' },
+        { label: '包含 c', value: 'c', checked: true },
+        { label: '包含 h', value: 'h' },
+        { label: '包含 j', value: 'j' }
+      ])
+      // 修改条件之后，需要手动调用 updateData 处理表格数据
+      xTable.updateData()
     },
     filterNameEvent () {
       let xTable = this.$refs.xTable
-      xTable.filter('name')
-        .then(options => {
-          // 处理条件并设置选中的选项
-          if (options.length) {
-            let option = options[1]
-            option.checked = true
-          }
-        })
-        .then(() => {
-          // 修改条件之后，需要手动调用 updateData 处理表格数据
-          xTable.updateData()
-        })
+      let column = xTable.getColumnByField('name')
+      // 修改第二个选项为勾选状态
+      let option = column.filters[1]
+      option.checked = true
+      // 修改条件之后，需要手动调用 updateData 处理表格数据
+      xTable.updateData()
     },
     filterAgeEvent () {
       let xTable = this.$refs.xTable
-      xTable.filter('age')
-        .then(options => {
-          // 处理条件并设置选中的选项
-          if (options.length) {
-            let option = options[0]
-            option.data = '26'
-            option.checked = true
-          }
-        })
-        .then(() => {
-          // 修改条件之后，需要手动调用 updateData 处理表格数据
-          xTable.updateData()
-        })
+      let column = xTable.getColumnByField('age')
+      // 修改第一个选项为勾选状态
+      let option = column.filters[0]
+      option.data = '26'
+      option.checked = true
+      // 修改条件之后，需要手动调用 updateData 处理表格数据
+      xTable.updateData()
     }
   }
 }
