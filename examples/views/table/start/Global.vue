@@ -12,7 +12,7 @@
         import VXETable from 'vxe-table'
 
         VXETable.setup({
-          // 默认表格参数
+          // 表格的全局参数
           size: 'small',
           showOverflow: null,
           showHeaderOverflow: null,
@@ -62,7 +62,7 @@
           },
           // 版本号（对于某些带 Storage 数据储存的功能有用到，上升版本号可以用于重置 Storage 数据）
           version: 0,
-          // 配置式表格的默认参数
+          // 高级表格的全局参数
           grid: {
             proxyConfig: {
               autoLoad: true,
@@ -86,14 +86,18 @@
               }
             }
           },
-          // 默认快捷菜单
+          // 列的全局参数
+          column: {
+            beforeCreated ({ column }) {}
+          },
+          // 快捷菜单的全局参数
           menu: {},
           // 默认 tooltip 主题样式
           tooltip: {
             trigger: 'hover',
             theme: 'dark'
           },
-          // 默认分页参数
+          // 分页的全局参数
           pager: {
             perfect: true,
             pageSize: 10,
@@ -101,7 +105,7 @@
             pageSizes: [10, 15, 20, 50, 100],
             layouts: ['PrevJump', 'PrevPage', 'Jump', 'PageCount', 'NextPage', 'NextJump', 'Sizes', 'Total'] // 非常灵活的分页布局，支持任意位置随意换
           },
-          // 默认工具栏参数
+          // 工具栏的全局参数
           toolbar: {
             refresh: false,
             import: {
@@ -119,7 +123,7 @@
             },
             buttons: []
           },
-          // 默认模态窗口参数
+          // 模态窗口的全局参数
           modal: {
             minWidth: 340,
             minHeight: 200,
@@ -131,7 +135,7 @@
             remember: false,
             animat: true
           },
-          // 默认优化配置项
+          // 优化的全局参数
           optimization : {
             animat: true,
             delayHover: 250,

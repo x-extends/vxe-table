@@ -103,7 +103,23 @@ const GlobalConfig = {
     dropdownBottom: 'vxe-icon--arrow-bottom',
     btnLoading: 'vxe-icon--refresh roll'
   },
-  grid: {},
+  grid: {
+    proxyConfig: {
+      autoLoad: true,
+      message: true,
+      props: {
+        list: null,
+        result: 'result',
+        total: 'page.total'
+      },
+      beforeQuery: null,
+      beforeDelete: null,
+      beforeSave: null
+    }
+  },
+  column: {
+    beforeCreated: null
+  },
   menu: {},
   tooltip: {
     trigger: 'hover',
