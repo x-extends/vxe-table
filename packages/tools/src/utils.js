@@ -7,7 +7,8 @@ var columnUniqueId = 0
 
 class ColumnConfig {
   constructor ($table, _vm, { renderHeader, renderCell, renderData } = {}) {
-    let formatter = _vm.formatter
+    const columnOpts = GlobalConfig.column
+    const formatter = _vm.formatter
     if (_vm.cellRender && _vm.editRender) {
       UtilTools.warn('vxe.error.cellEditRender')
     }
@@ -81,6 +82,7 @@ class ColumnConfig {
       renderHeight: 0,
       resizeWidth: 0,
       renderLeft: 0,
+      renderArgs: [], // 渲染参数可用于扩展
       model: {},
       renderHeader: renderHeader || _vm.renderHeader,
       renderCell: renderCell || _vm.renderCell,
@@ -89,6 +91,9 @@ class ColumnConfig {
       slots: _vm.slots,
       own: _vm
     })
+    if (columnOpts && columnOpts.beforeCreated) {
+      columnOpts.beforeCreated.apply($table, [{ $table, column: this }])
+    }
   }
   getTitle () {
     // 在 v3.0 中废弃 label、type=index
