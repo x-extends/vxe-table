@@ -387,7 +387,7 @@ module.exports = {
           checkbox: 'Checkbox',
           radio: 'Radio',
           expand: 'Expansion',
-          html: 'HTML tag',
+          html: 'HTML tag(Rendering arbitrary HTML dynamically is very dangerous and can easily lead to XSS attacks, so make sure the content is trusted)',
           prop: 'Obsolete, please use "field"',
           field: 'Column field name',
           label: 'Obsolete, please use "title"',
