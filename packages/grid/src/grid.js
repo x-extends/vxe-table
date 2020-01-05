@@ -401,6 +401,7 @@ export default {
               this.tableLoading = false
             }).catch(e => {
               this.tableLoading = false
+              console.error(e)
             })
           } else {
             UtilTools.error('vxe.error.notFunc', [code])
@@ -420,6 +421,7 @@ export default {
                   this.tableLoading = false
                 }).catch(e => {
                   this.tableLoading = false
+                  console.error(e)
                 }).then(() => this.commitProxy('reload'))
               } else {
                 if (isMsg && !selectRecords.length) {
@@ -457,6 +459,7 @@ export default {
                         this.tableLoading = false
                       }).catch(e => {
                         this.tableLoading = false
+                        console.error(e)
                       }).then(() => this.commitProxy('reload'))
                     )
                   } else {

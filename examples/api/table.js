@@ -1602,7 +1602,7 @@ const apis = [
           },
           {
             name: 'maxWidth',
-            desc: '所有提示框的最大宽度（对于列比较小的场景下可能会用到）',
+            desc: '校验提示框的最大宽度（对于某些特殊场景可能会用到）',
             version: '',
             type: 'Number',
             enum: '',
