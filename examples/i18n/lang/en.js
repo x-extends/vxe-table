@@ -438,7 +438,7 @@ module.exports = {
           formConfig: 'Form config',
           toolbar: 'Toolbar config',
           pagerConfig: 'Pager config',
-          proxyConfig: 'Data proxy config'
+          proxyConfig: 'Data proxy config(based on the Promise API)'
         }
       },
       toolbar: {
