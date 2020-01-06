@@ -1161,6 +1161,7 @@ export default {
         UtilTools.warn('vxe.error.reqProp', ['show-overflow'])
       }
       this.handleTableData(true)
+      this.updateFooter()
       return this.computeScrollLoad().then(() => {
         // 是否加载了数据
         this.isLoadData = true
@@ -1791,7 +1792,6 @@ export default {
       if (this.treeConfig) {
         this.handleDefaultTreeExpand()
       }
-      this.updateFooter()
       this.$nextTick(this.recalculate)
     },
     /**
@@ -4999,45 +4999,39 @@ export default {
      *  validator=Function(rule, value, callback, {rules, row, column, rowIndex, columnIndex}) 自定义校验
      *  trigger=blur|change 触发方式（除非特殊场景，否则默认为空就行）
      */
-    validCellRules (type, row, column, cellValue) {
-      let { editRules } = this
+    validCellRules (type, row, column, val) {
+      let { editRules, treeConfig } = this
       let { property } = column
       let errorRules = []
       let cellVailds = []
       if (property && editRules) {
         let rules = XEUtils.get(editRules, property)
-        let value = XEUtils.isUndefined(cellValue) ? XEUtils.get(row, property) : cellValue
         if (rules) {
+          let cellValue = XEUtils.isUndefined(val) ? XEUtils.get(row, property) : val
           rules.forEach(rule => {
             cellVailds.push(
               new Promise(resolve => {
-                let isRequired = rule.required === true
                 if (type === 'all' || !rule.trigger || type === rule.trigger) {
                   if (XEUtils.isFunction(rule.validator)) {
-                    rule.validator(rule, value, e => {
+                    rule.validator(rule, cellValue, e => {
                       if (XEUtils.isError(e)) {
-                        let cusRule = { type: 'custom', trigger: rule.trigger, message: e.message, rule }
+                        let cusRule = { type: 'custom', trigger: rule.trigger, message: e.message, rule: new Rule(rule) }
                         errorRules.push(new Rule(cusRule))
                       }
                       return resolve()
-                    }, { rules, row, column, rowIndex: this.getRowIndex(row), columnIndex: this.getColumnIndex(column) })
+                    }, { rules, row, column, [`${treeConfig ? '$' : ''}rowIndex`]: this.getRowIndex(row), columnIndex: this.getColumnIndex(column) })
                   } else {
-                    let len
-                    let restVal = value
                     let isNumber = rule.type === 'number'
-                    let isEmpty = value === null || value === undefined || value === ''
-                    if (isNumber) {
-                      restVal = XEUtils.toNumber(value)
-                    } else {
-                      len = XEUtils.getSize(restVal)
-                    }
-                    if (isRequired && isEmpty) {
-                      errorRules.push(new Rule(rule))
+                    let numVal = isNumber ? XEUtils.toNumber(cellValue) : XEUtils.getSize(cellValue)
+                    if (cellValue === null || cellValue === undefined || cellValue === '') {
+                      if (rule.required) {
+                        errorRules.push(new Rule(rule))
+                      }
                     } else if (
                       (isNumber && isNaN(cellValue)) ||
-                      (rule.pattern && !(rule.pattern.test ? rule.pattern : new RegExp(rule.pattern)).test(cellValue)) ||
-                      (XEUtils.isNumber(rule.min) && (isNumber ? restVal < rule.min : len < rule.min)) ||
-                      (XEUtils.isNumber(rule.max) && (isNumber ? restVal > rule.max : len > rule.max))
+                      (!isNaN(rule.min) && numVal < parseFloat(rule.min)) ||
+                      (!isNaN(rule.max) && numVal > parseFloat(rule.max)) ||
+                      (rule.pattern && !(rule.pattern.test ? rule.pattern : new RegExp(rule.pattern)).test(cellValue))
                     ) {
                       errorRules.push(new Rule(rule))
                     }

@@ -32,6 +32,7 @@ export default {
     marginSize: { type: [Number, String], default: GlobalConfig.modal.marginSize },
     fullscreen: Boolean,
     remember: { type: Boolean, default: () => GlobalConfig.modal.remember },
+    destroyOnClose: Boolean,
     animat: { type: Boolean, default: () => GlobalConfig.modal.animat },
     size: String,
     slots: Object,
@@ -111,7 +112,8 @@ export default {
       lockScroll,
       lockView,
       mask,
-      isMsg
+      isMsg,
+      destroyOnClose
     } = this
     let defaultSlot = $scopedSlots.default || slots.default
     let footerSlot = $scopedSlots.footer || slots.footer
@@ -188,11 +190,11 @@ export default {
           ]) : null,
           h('div', {
             class: 'vxe-modal--content'
-          }, defaultSlot ? defaultSlot.call(this, { $modal: this }, h) : (XEUtils.isFunction(message) ? message.call(this, h) : message))
+          }, destroyOnClose && !visible ? [] : (defaultSlot ? defaultSlot.call(this, { $modal: this }, h) : (XEUtils.isFunction(message) ? message.call(this, h) : message)))
         ]),
         showFooter ? h('div', {
           class: 'vxe-modal--footer'
-        }, footerSlot ? footerSlot.call(this, { $modal: this }, h) : [
+        }, destroyOnClose && !visible ? [] : (footerSlot ? footerSlot.call(this, { $modal: this }, h) : [
           type === 'confirm' ? h('vxe-button', {
             on: {
               click: this.cancelEvent
@@ -206,7 +208,7 @@ export default {
               click: this.confirmEvent
             }
           }, GlobalConfig.i18n('vxe.button.confirm'))
-        ]) : null,
+        ])) : null,
         !isMsg && resize ? h('span', {
           class: 'vxe-modal--resize'
         }, ['wl', 'wr', 'swst', 'sest', 'st', 'swlb', 'selb', 'sb'].map(type => {
