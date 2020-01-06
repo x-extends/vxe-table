@@ -409,8 +409,8 @@ export default {
       this.tableFullColumn.forEach(column => {
         if (!checkMethod || checkMethod({ column })) {
           column.visible = true
-          column.resizeWidth = 0
         }
+        column.resizeWidth = 0
       })
       this.resetCustoms()
       this.resetResizable()

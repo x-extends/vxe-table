@@ -10,6 +10,7 @@ class ColumnConfig {
     const $grid = $table.$grid
     const proxyOpts = $grid ? $grid.proxyOpts : null
     const formatter = _vm.formatter
+    const visible = XEUtils.isBoolean(_vm.visible) ? _vm.visible : true
     if (_vm.cellRender && _vm.editRender) {
       UtilTools.warn('vxe.error.cellEditRender')
     }
@@ -72,7 +73,8 @@ class ColumnConfig {
       // 自定义参数
       params: _vm.params,
       // 渲染属性
-      visible: XEUtils.isBoolean(_vm.visible) ? _vm.visible : true,
+      visible,
+      _visible: visible,
       checked: false,
       disabled: false,
       level: 1,
