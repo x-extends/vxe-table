@@ -12,7 +12,7 @@ var debounceScrollYDuration = browse.msie ? 40 : 20
 // 导入
 const fileForm = document.createElement('form')
 const fileInput = document.createElement('input')
-fileForm.className = 'vxe-table--import-form'
+fileForm.className = 'vxe-table--file-form'
 fileInput.name = 'file'
 fileInput.type = 'file'
 fileForm.appendChild(fileInput)
@@ -1818,8 +1818,8 @@ export default {
       this.$emit('update:customs', this.tableFullColumn)
     },
     resetAll () {
-      this.resetCustoms()
-      this.resetResizable()
+      // UtilTools.warn('vxe.error.delFunc', ['resetAll', 'resetColumn'])
+      this.resetColumn(true)
     },
     hideColumn (column) {
       return this.handleVisibleColumn(column, false)
@@ -1827,8 +1827,24 @@ export default {
     showColumn (column) {
       return this.handleVisibleColumn(column, true)
     },
+    /**
+     * 手动重置列的显示隐藏、列宽拖动的状态；
+     * 如果为 true 则重置所有状态
+     * 如果已关联工具栏，则会同步更新
+     */
+    resetColumn (options) {
+      let opts = Object.assign({ visible: true }, options)
+      if (options === true || opts.resizable) {
+        this.handleResetResizable()
+      }
+      if (opts.visible) {
+        return this.handleVisibleColumn()
+      }
+      return this.$nextTick()
+    },
     resetCustoms () {
-      return this.handleVisibleColumn()
+      // UtilTools.warn('vxe.error.delFunc', ['resetCustoms', 'resetColumn'])
+      return this.resetColumn()
     },
     handleVisibleColumn (column, visible) {
       if (arguments.length) {
@@ -1844,9 +1860,25 @@ export default {
       return this.$nextTick()
     },
     /**
-     * 初始化加载动态列
+     * 手动重置列宽拖动的操作，还原到初始状态
+     * 如果已关联工具栏，则会同步更新
      */
+    handleResetResizable () {
+      this.tableFullColumn.forEach(column => {
+        column.resizeWidth = 0
+      })
+      if (this.$toolbar) {
+        this.$toolbar.resetResizable()
+      }
+      this.analyColumnWidth()
+      return this.recalculate(true)
+    },
+    resetResizable () {
+      // UtilTools.warn('vxe.error.delFunc', ['resetResizable', 'resetColumn'])
+      return this.handleResetResizable()
+    },
     reloadCustoms (customColumns) {
+      // UtilTools.warn('vxe.error.delFunc', ['reloadCustoms', 'column.visible & refreshColumn'])
       return this.$nextTick().then(() => {
         this.mergeCustomColumn(customColumns)
         return this.refreshColumn().then(() => this.tableFullColumn)
@@ -2115,16 +2147,6 @@ export default {
         this.checkScrolling()
       }
       return tableWidth
-    },
-    resetResizable () {
-      this.tableFullColumn.forEach(column => {
-        column.resizeWidth = 0
-      })
-      if (this.$toolbar) {
-        this.$toolbar.resetResizable()
-      }
-      this.analyColumnWidth()
-      return this.recalculate(true)
     },
     /**
      * 处理固定列的显示状态

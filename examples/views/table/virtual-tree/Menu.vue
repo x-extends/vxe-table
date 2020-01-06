@@ -198,7 +198,7 @@ export default {
                   xTree.hideColumn(column)
                   break
                 case 'showAllColumn':
-                  xTree.resetCustoms()
+                  xTree.resetColumn()
                   break
                 case 'insertAt':
                   this.insertAtEvent(row, column)
@@ -264,7 +264,7 @@ export default {
           xTree.hideColumn(column)
           break
         case 'showAllColumn':
-          xTree.resetCustoms()
+          xTree.resetColumn()
           break
         case 'insertAt':
           this.insertAtEvent(row, column)

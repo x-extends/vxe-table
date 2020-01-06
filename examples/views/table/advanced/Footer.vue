@@ -119,35 +119,35 @@ export default {
           },
           methods: {
             footerMethod ({ columns, data }) {
-              return [
-                columns.map((column, columnIndex) => {
-                  if (columnIndex === 0) {
-                    return '平均'
+              const means = []
+              const sums = []
+              const others = []
+              columns.forEach((column, columnIndex) => {
+                if (columnIndex === 0) {
+                  means.push('平均')
+                  sums.push('和值')
+                  others.push('其他')
+                } else {
+                  let meanCell = null
+                  let sumCell = null
+                  let otherCell = '-'
+                  switch (column.property) {
+                    case 'age':
+                    case 'rate':
+                      meanCell = parseInt(XEUtils.mean(data, column.property))
+                      sumCell = XEUtils.sum(data, column.property)
+                      break
+                    case 'sex':
+                      otherCell = '无'
+                      break
                   }
-                  if (['age', 'rate'].includes(column.property)) {
-                    return parseInt(XEUtils.mean(data, column.property))
-                  }
-                  return null
-                }),
-                columns.map((column, columnIndex) => {
-                  if (columnIndex === 0) {
-                    return '和值'
-                  }
-                  if (['age', 'rate'].includes(column.property)) {
-                    return XEUtils.sum(data, column.property)
-                  }
-                  return null
-                }),
-                columns.map((column, columnIndex) => {
-                  if (columnIndex === 0) {
-                    return '其他'
-                  }
-                  if (['age', 'sex', 'name'].includes(column.property)) {
-                    return '无'
-                  }
-                  return '-'
-                })
-              ]
+                  means.push(meanCell)
+                  sums.push(sumCell)
+                  others.push(otherCell)
+                }
+              })
+              // 返回一个二维数组的表尾合计
+              return [ means, sums, others ]
             }
           }
         }
@@ -189,35 +189,35 @@ export default {
               }
             },
             footerMethod ({ columns, data }) {
-              return [
-                columns.map((column, columnIndex) => {
-                  if (columnIndex === 0) {
-                    return '平均'
+              const means = []
+              const sums = []
+              const others = []
+              columns.forEach((column, columnIndex) => {
+                if (columnIndex === 0) {
+                  means.push('平均')
+                  sums.push('和值')
+                  others.push('其他')
+                } else {
+                  let meanCell = null
+                  let sumCell = null
+                  let otherCell = '-'
+                  switch (column.property) {
+                    case 'age':
+                    case 'rate':
+                      meanCell = parseInt(XEUtils.mean(data, column.property))
+                      sumCell = XEUtils.sum(data, column.property)
+                      break
+                    case 'sex':
+                      otherCell = '无'
+                      break
                   }
-                  if (['age', 'rate'].includes(column.property)) {
-                    return parseInt(XEUtils.mean(data, column.property))
-                  }
-                  return null
-                }),
-                columns.map((column, columnIndex) => {
-                  if (columnIndex === 0) {
-                    return '和值'
-                  }
-                  if (['age', 'rate'].includes(column.property)) {
-                    return XEUtils.sum(data, column.property)
-                  }
-                  return null
-                }),
-                columns.map((column, columnIndex) => {
-                  if (columnIndex === 0) {
-                    return '其他'
-                  }
-                  if (['age', 'sex', 'name'].includes(column.property)) {
-                    return '无'
-                  }
-                  return '-'
-                })
-              ]
+                  means.push(meanCell)
+                  sums.push(sumCell)
+                  others.push(otherCell)
+                }
+              })
+              // 返回一个二维数组的表尾合计
+              return [ means, sums, others ]
             }
           }
         }
@@ -262,36 +262,35 @@ export default {
               }
             },
             footerMethod ({ columns, data }) {
-              const footerData = [
-                columns.map((column, columnIndex) => {
-                  if (columnIndex === 0) {
-                    return '平均'
+              const means = []
+              const sums = []
+              const others = []
+              columns.forEach((column, columnIndex) => {
+                if (columnIndex === 0) {
+                  means.push('平均')
+                  sums.push('和值')
+                  others.push('其他')
+                } else {
+                  let meanCell = null
+                  let sumCell = null
+                  let otherCell = '-'
+                  switch (column.property) {
+                    case 'age':
+                    case 'rate':
+                      meanCell = parseInt(XEUtils.mean(data, column.property))
+                      sumCell = XEUtils.sum(data, column.property)
+                      break
+                    case 'sex':
+                      otherCell = '无'
+                      break
                   }
-                  if (['age', 'rate'].includes(column.property)) {
-                    return parseInt(XEUtils.mean(data, column.property))
-                  }
-                  return null
-                }),
-                columns.map((column, columnIndex) => {
-                  if (columnIndex === 0) {
-                    return '和值'
-                  }
-                  if (['age', 'rate'].includes(column.property)) {
-                    return XEUtils.sum(data, column.property)
-                  }
-                  return null
-                }),
-                columns.map((column, columnIndex) => {
-                  if (columnIndex === 0) {
-                    return '其他'
-                  }
-                  if (['age', 'sex', 'name'].includes(column.property)) {
-                    return '无'
-                  }
-                  return '-'
-                })
-              ]
-              return footerData
+                  means.push(meanCell)
+                  sums.push(sumCell)
+                  others.push(otherCell)
+                }
+              })
+              // 返回一个二维数组的表尾合计
+              return [ means, sums, others ]
             }
           }
         }
@@ -319,36 +318,35 @@ export default {
       }
     },
     footerMethod ({ columns, data }) {
-      const footerData = [
-        columns.map((column, columnIndex) => {
-          if (columnIndex === 0) {
-            return '平均'
+      const means = []
+      const sums = []
+      const others = []
+      columns.forEach((column, columnIndex) => {
+        if (columnIndex === 0) {
+          means.push('平均')
+          sums.push('和值')
+          others.push('其他')
+        } else {
+          let meanCell = null
+          let sumCell = null
+          let otherCell = '-'
+          switch (column.property) {
+            case 'age':
+            case 'rate':
+              meanCell = parseInt(XEUtils.mean(data, column.property))
+              sumCell = XEUtils.sum(data, column.property)
+              break
+            case 'sex':
+              otherCell = '无'
+              break
           }
-          if (['age', 'rate'].includes(column.property)) {
-            return parseInt(XEUtils.mean(data, column.property))
-          }
-          return null
-        }),
-        columns.map((column, columnIndex) => {
-          if (columnIndex === 0) {
-            return '和值'
-          }
-          if (['age', 'rate'].includes(column.property)) {
-            return XEUtils.sum(data, column.property)
-          }
-          return null
-        }),
-        columns.map((column, columnIndex) => {
-          if (columnIndex === 0) {
-            return '其他'
-          }
-          if (['age', 'sex', 'name'].includes(column.property)) {
-            return '无'
-          }
-          return '-'
-        })
-      ]
-      return footerData
+          means.push(meanCell)
+          sums.push(sumCell)
+          others.push(otherCell)
+        }
+      })
+      // 返回一个二维数组的表尾合计
+      return [ means, sums, others ]
     }
   }
 }

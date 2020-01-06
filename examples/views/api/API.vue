@@ -250,7 +250,7 @@ export default {
           xTable.hideColumn(column)
           break
         case 'showAllColumn':
-          xTable.resetCustoms()
+          xTable.resetColumn()
           break
         case 'resetColumn':
           xTable.resetAll()

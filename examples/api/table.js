@@ -282,7 +282,7 @@ const apis = [
       },
       {
         name: 'customs',
-        abandoned: true,
+        disabled: true,
         descKey: 'app.api.table.desc.customs',
         version: '',
         type: 'Array<{field, visible}>',
@@ -2335,7 +2335,7 @@ const apis = [
       },
       {
         name: 'reloadCustoms(customs)',
-        abandoned: true,
+        disabled: true,
         desc: '初始化加载显示/隐藏列（对于异步更新的场景下可能会用到）',
         version: '',
         type: 'Promise',
@@ -3295,7 +3295,8 @@ const apis = [
       },
       {
         name: 'resetCustoms()',
-        desc: '手动重置列的显示/隐藏操作，还原到初始状态（如果已关联工具栏，则会同步更新）',
+        disabled: true,
+        desc: '即将废弃，请使用 resetColumn',
         version: '',
         type: 'Promise',
         enum: '',
@@ -3304,7 +3305,8 @@ const apis = [
       },
       {
         name: 'resetResizable()',
-        desc: '手动重置列宽拖动的操作，还原到初始状态（如果已关联工具栏，则会同步更新）',
+        disabled: true,
+        desc: '即将废弃，请使用 resetColumn',
         version: '',
         type: 'Promise',
         enum: '',
@@ -3313,12 +3315,41 @@ const apis = [
       },
       {
         name: 'resetAll()',
-        desc: '手动重置列的所有操作，还原到初始状态（如果已关联工具栏，则会同步更新）',
+        disabled: true,
+        desc: '即将废弃，请使用 resetColumn',
         version: '',
         type: 'Promise',
         enum: '',
         defVal: '',
         list: []
+      },
+      {
+        name: 'resetColumn(options)',
+        desc: '手动重置列的显示隐藏、列宽拖动的状态；如果为 true 则重置所有状态（如果已关联工具栏，则会同步更新）',
+        version: '1.15.18',
+        type: 'Promise',
+        enum: '',
+        defVal: 'options: boolean | object',
+        list: [
+          {
+            name: 'visible',
+            desc: '是否重置显示隐藏状态',
+            version: '',
+            type: 'Boolean',
+            enum: '',
+            defVal: 'true',
+            list: []
+          },
+          {
+            name: 'resizable',
+            desc: '是否重置列宽拖动状态',
+            version: '',
+            type: 'Boolean',
+            enum: '',
+            defVal: 'false',
+            list: []
+          }
+        ]
       },
       {
         name: 'closeFilter()',
