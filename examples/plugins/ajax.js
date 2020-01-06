@@ -11,10 +11,13 @@ Vue.prototype.$ajax = XEAjax
 const columnsWorker = new Worker('static/worker/columns.js')
 const dataWorker = new Worker('static/worker/data.js')
 const callMaps = {}
+const dataMaps = {}
+const colMaps = {}
 
 columnsWorker.onmessage = function (evnt) {
   var rest = evnt.data
   if (rest && callMaps[rest.key]) {
+    colMaps[rest.columns.length] = rest.columns.slice(0)
     callMaps[rest.key](rest.columns)
     delete callMaps[rest.key]
   }
@@ -23,6 +26,7 @@ columnsWorker.onmessage = function (evnt) {
 dataWorker.onmessage = function (evnt) {
   var rest = evnt.data
   if (rest && callMaps[rest.key]) {
+    dataMaps[rest.list.length] = rest.list.slice(0)
     callMaps[rest.key](rest.list)
     delete callMaps[rest.key]
   }
@@ -32,15 +36,27 @@ XEAjax.mixin({
   mockColumns (size) {
     return new Promise(resolve => {
       const key = XEUtils.uniqueId()
-      callMaps[key] = resolve
-      setTimeout(() => columnsWorker.postMessage({ key, size }), 100)
+      setTimeout(() => {
+        if (colMaps[size]) {
+          resolve(colMaps[size])
+        } else {
+          callMaps[key] = resolve
+          columnsWorker.postMessage({ key, size })
+        }
+      }, 100)
     })
   },
   mockList (size) {
     return new Promise(resolve => {
       const key = XEUtils.uniqueId()
-      callMaps[key] = resolve
-      setTimeout(() => dataWorker.postMessage({ key, size }), 100)
+      setTimeout(() => {
+        if (dataMaps[size]) {
+          resolve(dataMaps[size])
+        } else {
+          callMaps[key] = resolve
+          dataWorker.postMessage({ key, size })
+        }
+      }, 100)
     })
   }
 })

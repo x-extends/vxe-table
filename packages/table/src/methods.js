@@ -685,8 +685,8 @@ const Methods = {
    * 如果已关联工具栏，则会同步更新
    */
   resetAll () {
-    this.resetCustoms()
-    this.resetResizable()
+    // UtilTools.warn('vxe.error.delFunc', ['resetAll', 'resetColumn'])
+    this.resetColumn(true)
   },
   /**
    * 隐藏指定列
@@ -703,11 +703,23 @@ const Methods = {
     return this.handleVisibleColumn(column, true)
   },
   /**
-   * 手动重置列的显示/隐藏操作，还原到初始状态
+   * 手动重置列的显示隐藏、列宽拖动的状态；
+   * 如果为 true 则重置所有状态
    * 如果已关联工具栏，则会同步更新
    */
+  resetColumn (options) {
+    let opts = Object.assign({ visible: true }, options)
+    if (options === true || opts.resizable) {
+      this.handleResetResizable()
+    }
+    if (opts.visible) {
+      return this.handleVisibleColumn()
+    }
+    return this.$nextTick()
+  },
   resetCustoms () {
-    return this.handleVisibleColumn()
+    // UtilTools.warn('vxe.error.delFunc', ['resetCustoms', 'resetColumn'])
+    return this.resetColumn()
   },
   handleVisibleColumn (column, visible) {
     if (arguments.length) {
@@ -723,11 +735,30 @@ const Methods = {
     return this.$nextTick()
   },
   /**
+   * 手动重置列宽拖动的操作，还原到初始状态
+   * 如果已关联工具栏，则会同步更新
+   */
+  handleResetResizable () {
+    this.tableFullColumn.forEach(column => {
+      column.resizeWidth = 0
+    })
+    if (this.$toolbar) {
+      this.$toolbar.resetResizable()
+    }
+    this.analyColumnWidth()
+    return this.recalculate(true)
+  },
+  resetResizable () {
+    // UtilTools.warn('vxe.error.delFunc', ['resetResizable', 'resetColumn'])
+    return this.handleResetResizable()
+  },
+  /**
    * 初始化加载显示/隐藏列
    * 对于异步更新的场景下可能会用到
    * @param {Array} customColumns 自定义列数组
    */
   reloadCustoms (customColumns) {
+    // UtilTools.warn('vxe.error.delFunc', ['reloadCustoms', 'column.visible & refreshColumn'])
     return this.$nextTick().then(() => {
       this.mergeCustomColumn(customColumns)
       return this.refreshColumn().then(() => this.tableFullColumn)
@@ -1001,20 +1032,6 @@ const Methods = {
     if (this.overflowX) {
       this.checkScrolling()
     }
-  },
-  /**
-   * 手动重置列宽拖动的操作，还原到初始状态
-   * 如果已关联工具栏，则会同步更新
-   */
-  resetResizable () {
-    this.tableFullColumn.forEach(column => {
-      column.resizeWidth = 0
-    })
-    if (this.$toolbar) {
-      this.$toolbar.resetResizable()
-    }
-    this.analyColumnWidth()
-    return this.recalculate(true)
   },
   /**
    * 放弃 vue 的双向 dom 绑定，使用原生的方式更新 Dom，性能翻倍提升

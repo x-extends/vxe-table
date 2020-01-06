@@ -9,7 +9,7 @@ const defaultHtmlStyle = 'body{margin:0}body *{-webkit-box-sizing:border-box;box
 // 导入
 const fileForm = document.createElement('form')
 const fileInput = document.createElement('input')
-fileForm.className = 'vxe-table--import-form'
+fileForm.className = 'vxe-table--file-form'
 fileInput.name = 'file'
 fileInput.type = 'file'
 fileForm.appendChild(fileInput)

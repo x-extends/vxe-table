@@ -1,9 +1,6 @@
 <template>
   <div>
-    <p class="tip">
-      显示/隐藏列功能，通过设置 <toolbar-api-link prop="id"/> 和 <toolbar-api-link prop="custom"/>={storage: true} 参数开启将列个性化 localStorage 保存功能<br>
-      也可以通过配合 <table-api-link prop="reloadCustoms"/> 函数实现服务端保存
-    </p>
+    <p class="tip">显示/隐藏列功能，通过设置 <toolbar-api-link prop="id"/> 和 <toolbar-api-link prop="custom"/>={storage: true} 参数开启将列个性化 localStorage 保存功能</p>
 
     <vxe-toolbar id="toolbar_demo3" :custom="{storage: true}">
       <template v-slot:buttons>
@@ -75,8 +72,7 @@ export default {
     }
   },
   created () {
-    let list = window.MOCK_DATA_LIST.slice(0, 20)
-    this.tableData = list
+    this.tableData = window.MOCK_DATA_LIST.slice(0, 20)
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {

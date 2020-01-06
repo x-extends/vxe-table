@@ -196,7 +196,7 @@ export default {
                   xTable.hideColumn(column)
                   break
                 case 'showAllColumn':
-                  xTable.resetCustoms()
+                  xTable.resetColumn()
                   break
                 case 'copy':
                   if (XEClipboard.copy(row[column.property])) {
@@ -274,7 +274,7 @@ export default {
           xTable.hideColumn(column)
           break
         case 'showAllColumn':
-          xTable.resetCustoms()
+          xTable.resetColumn()
           break
         case 'copy':
           if (XEClipboard.copy(row[column.property])) {

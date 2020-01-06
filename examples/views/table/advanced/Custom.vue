@@ -50,14 +50,14 @@
       <code class="javascript">{{ demoCodes[3] }}</code>
     </pre>
 
-    <p class="tip">通过 <table-column-api-link prop="visible"/> 属性设置默认是否显示，通过 <table-api-link prop="resetCustoms"/> 函数重置全部列为可视状态</p>
+    <p class="tip">通过 <table-column-api-link prop="visible"/> 属性设置默认是否显示，通过 <table-api-link prop="resetColumn"/> 函数重置全部列为可视状态</p>
 
     <div>
       <template v-for="(column,index) in columns3">
         <vxe-checkbox v-if="column.title" v-model="column.visible" :key="index">{{ column.title }}</vxe-checkbox>
       </template>
       <vxe-button @click="$refs.xTable3.refreshColumn()">刷新列信息</vxe-button>
-      <vxe-button @click="$refs.xTable3.resetCustoms()">重置自定义列</vxe-button>
+      <vxe-button @click="$refs.xTable3.resetColumn()">重置自定义列</vxe-button>
     </div>
 
     <vxe-table
@@ -175,7 +175,7 @@ export default {
             <vxe-checkbox v-if="column.title" v-model="column.visible" :key="index">{{ column.title }}</vxe-checkbox>
           </template>
           <vxe-button @click="$refs.xTable.refreshColumn()">刷新列信息</vxe-button>
-          <vxe-button @click="$refs.xTable.resetCustoms()">重置自定义列</vxe-button>
+          <vxe-button @click="$refs.xTable.resetColumn()">重置自定义列</vxe-button>
         </div>
 
         <vxe-table
