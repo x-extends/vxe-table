@@ -1,6 +1,7 @@
 import XEUtils from 'xe-utils/methods/xe-utils'
 import GlobalConfig from '../../conf'
 import VXETable from '../../v-x-e-table'
+import VxeTableBody from '../../body'
 import { UtilTools, GlobalEvent } from '../../tools'
 import methods from './methods'
 
@@ -200,6 +201,9 @@ export default {
     optimization: Object,
     // 额外的参数
     params: Object
+  },
+  components: {
+    VxeTableBody
   },
   provide () {
     return {
