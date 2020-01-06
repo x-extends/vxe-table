@@ -4,7 +4,6 @@ import i18n from '@/i18n'
 import VXETable from '../../../packages/v-x-e-table'
 import Column from '../../../packages/column'
 import Header from '../../../packages/header'
-import Body from '../../../packages/body'
 import Footer from '../../../packages/footer'
 import Filter from '../../../packages/filter'
 import Loading from '../../../packages/loading'
@@ -52,7 +51,6 @@ VXETable.setup({
 
 Vue.use(Column)
 Vue.use(Header)
-Vue.use(Body)
 Vue.use(Footer)
 Vue.use(Filter)
 Vue.use(Loading)

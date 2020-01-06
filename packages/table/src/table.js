@@ -1,5 +1,6 @@
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../conf'
+import VxeTableBody from '../../body'
 import Cell from '../../cell'
 import VXETable, { Interceptor, Renderer, Menus } from '../../v-x-e-table'
 import { UtilTools, DomTools, ExportTools, GlobalEvent, ResizeEvent } from '../../tools'
@@ -293,6 +294,9 @@ export default {
     optimization: Object,
     // 额外的参数
     params: Object
+  },
+  components: {
+    VxeTableBody
   },
   provide () {
     return {

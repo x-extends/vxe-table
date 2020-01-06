@@ -46,7 +46,6 @@
           Icon,
           Column,
           Header,
-          Body,
           Footer,
           Filter,
           Loading,
@@ -78,7 +77,6 @@
         Vue.use(Icon)
         Vue.use(Column)
         Vue.use(Header)
-        Vue.use(Body)
         Vue.use(Footer)
         Vue.use(Filter)
         Vue.use(Loading)
