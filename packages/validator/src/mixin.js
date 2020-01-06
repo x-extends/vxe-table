@@ -180,12 +180,11 @@ export default {
       let cellVailds = []
       if (property && editRules) {
         let rules = XEUtils.get(editRules, property)
-        let cellValue = XEUtils.isUndefined(val) ? XEUtils.get(row, property) : val
         if (rules) {
+          let cellValue = XEUtils.isUndefined(val) ? XEUtils.get(row, property) : val
           rules.forEach(rule => {
             cellVailds.push(
               new Promise(resolve => {
-                let isRequired = rule.required === true
                 if (type === 'all' || !rule.trigger || type === rule.trigger) {
                   if (XEUtils.isFunction(rule.validator)) {
                     rule.validator(rule, cellValue, e => {
@@ -196,22 +195,17 @@ export default {
                       return resolve()
                     }, { rules, row, column, [`${treeConfig ? '$' : ''}rowIndex`]: this.getRowIndex(row), columnIndex: this.getColumnIndex(column) })
                   } else {
-                    let len
-                    let restVal = cellValue
                     let isNumber = rule.type === 'number'
-                    let isEmpty = cellValue === null || cellValue === undefined || cellValue === ''
-                    if (isNumber) {
-                      restVal = XEUtils.toNumber(cellValue)
-                    } else {
-                      len = XEUtils.getSize(restVal)
-                    }
-                    if (isRequired && isEmpty) {
-                      errorRules.push(new Rule(rule))
+                    let numVal = isNumber ? XEUtils.toNumber(cellValue) : XEUtils.getSize(cellValue)
+                    if (cellValue === null || cellValue === undefined || cellValue === '') {
+                      if (rule.required) {
+                        errorRules.push(new Rule(rule))
+                      }
                     } else if (
                       (isNumber && isNaN(cellValue)) ||
-                      (rule.pattern && !(rule.pattern.test ? rule.pattern : new RegExp(rule.pattern)).test(cellValue)) ||
-                      (XEUtils.isNumber(rule.min) && (isNumber ? restVal < rule.min : len < rule.min)) ||
-                      (XEUtils.isNumber(rule.max) && (isNumber ? restVal > rule.max : len > rule.max))
+                      (!isNaN(rule.min) && numVal < parseFloat(rule.min)) ||
+                      (!isNaN(rule.max) && numVal > parseFloat(rule.max)) ||
+                      (rule.pattern && !(rule.pattern.test ? rule.pattern : new RegExp(rule.pattern)).test(cellValue))
                     ) {
                       errorRules.push(new Rule(rule))
                     }

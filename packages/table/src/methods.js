@@ -125,6 +125,7 @@ const Methods = {
       UtilTools.warn('vxe.error.reqProp', ['show-overflow'])
     }
     this.handleTableData(true)
+    this.updateFooter()
     return this.computeScrollLoad().then(() => {
       // 是否加载了数据
       this.isLoadData = true
@@ -655,7 +656,6 @@ const Methods = {
     if (this.treeConfig) {
       this.handleDefaultTreeExpand()
     }
-    this.updateFooter()
     this.$nextTick(() => setTimeout(this.recalculate))
   },
   /**
