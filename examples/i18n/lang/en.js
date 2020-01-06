@@ -532,7 +532,8 @@ module.exports = {
           zIndex: 'Custom style z-index (may be used for special situations, such as occlusion)',
           fullscreen: 'Default maximized display',
           dblclickZoom: 'It is only valid for type=modal. Is it allowed to enlarge or restore the window by double-clicking the head',
-          remember: 'The memory function will remember the last operation state and restore the window state when the window is opened again'
+          remember: 'The memory function will remember the last operation state and restore the window state when the window is opened again',
+          destroyOnClose: 'Destroy the content when the window closes'
         }
       }
     }

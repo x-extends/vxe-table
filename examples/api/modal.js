@@ -231,6 +231,15 @@ const apis = [
         enum: '',
         defVal: 'false',
         list: []
+      },
+      {
+        name: 'destroy-on-close',
+        descKey: 'app.api.modal.desc.destroyOnClose',
+        version: '2.7.21',
+        type: 'Boolean',
+        enum: '',
+        defVal: 'false',
+        list: []
       }
     ]
   },
