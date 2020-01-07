@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">统计编辑列的表尾合计，数据发生变化时实时统计<br>如果是原生的渲染器，可以设置 <table-column-api-link prop="immediate"/> 属性和相关事件去实时更新</p>
+    <p class="tip">统计编辑列的表尾合计，数据发生变化时实时统计<br>如果是内置的渲染器，可以设置 <table-column-api-link prop="immediate"/> 属性和相关事件去实时更新</p>
 
     <vxe-toolbar>
       <template v-slot:buttons>

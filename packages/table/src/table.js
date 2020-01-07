@@ -767,6 +767,8 @@ export default {
       hasTip
     } = this
     let { leftList, rightList } = columnStore
+    // 在 v3.0 中废弃 mouse-config.checked
+    let isMouseChecked = mouseConfig && (mouseOpts.range || mouseOpts.checked)
     return h('div', {
       class: ['vxe-table', `tid_${id}`, vSize ? `size--${vSize}` : '', border && XEUtils.isString(border) ? `b--style-${border}` : '', {
         'vxe-editable': editConfig,
@@ -782,7 +784,7 @@ export default {
         't--stripe': stripe,
         't--border': border,
         't--selected': mouseConfig && mouseOpts.selected,
-        't--checked': mouseConfig && mouseOpts.checked,
+        't--checked': isMouseChecked,
         'row--highlight': highlightHoverRow,
         'column--highlight': highlightHoverColumn,
         'is--cover': isCoverBody,

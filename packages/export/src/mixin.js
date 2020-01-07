@@ -276,7 +276,7 @@ function downloadFile ($table, opts, content) {
       document.body.removeChild(linkElem)
     }
     if (opts.message !== false) {
-      $table.$XModal.message({ message: GlobalConfig.i18n('vxe.table.expSuccess'), status: 'success' })
+      VXETable.$modal.message({ message: GlobalConfig.i18n('vxe.table.expSuccess'), status: 'success' })
     }
   } else {
     UtilTools.error('vxe.error.notExp')
@@ -342,7 +342,7 @@ function getLabelData ($table, columns, datas) {
             cellValue = row[column.property]
           } else {
             let cell = DomTools.getCell($table, { row, column })
-            cellValue = cell ? cell.innerText.trim() : ''
+            cellValue = cell ? cell.innerText.trim() : row[column.property]
           }
       }
       item[column.id] = XEUtils.toString(cellValue)
@@ -526,10 +526,10 @@ function handleImport ($table, content, opts) {
         }
       })
     if (opts.message !== false) {
-      $table.$XModal.message({ message: GlobalConfig.i18n('vxe.table.impSuccess'), status: 'success' })
+      VXETable.$modal.message({ message: GlobalConfig.i18n('vxe.table.impSuccess'), status: 'success' })
     }
   } else if (opts.message !== false) {
-    $table.$XModal.message({ message: GlobalConfig.i18n('vxe.error.impFields'), status: 'error' })
+    VXETable.$modal.message({ message: GlobalConfig.i18n('vxe.error.impFields'), status: 'error' })
   }
   if (_importResolve) {
     _importResolve(status)
@@ -631,7 +631,7 @@ export default {
           this._fileResolve(evnt)
         } else {
           if (options.message !== false) {
-            this.$XModal.message({ message: XEUtils.template(GlobalConfig.i18n('vxe.error.notType'), [type]), status: 'error' })
+            VXETable.$modal.message({ message: XEUtils.template(GlobalConfig.i18n('vxe.error.notType'), [type]), status: 'error' })
           }
           this._fileReject(evnt)
         }
@@ -687,7 +687,7 @@ export default {
       const isTree = !!this.getTreeStatus()
       if (isTree) {
         if (defOpts.message) {
-          this.$XModal.message({ message: GlobalConfig.i18n('vxe.error.treeNotImp'), status: 'error' })
+          VXETable.$modal.message({ message: GlobalConfig.i18n('vxe.error.treeNotImp'), status: 'error' })
         }
         return
       }

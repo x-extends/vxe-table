@@ -390,11 +390,14 @@ export default {
      * 处理选中源
      */
     handleSelected (params, evnt) {
-      let { mouseConfig = {}, editOpts, editStore, elemStore } = this
+      let { mouseConfig, mouseOpts, editOpts, editStore, elemStore } = this
       let { actived, selected } = editStore
       let { row, column, cell } = params
+      let isMouseSelected = mouseConfig && mouseOpts.selected
+      // 在 v3.0 中废弃 mouse-config.checked
+      let isMouseChecked = mouseConfig && (mouseOpts.range || mouseOpts.checked)
       let selectMethod = () => {
-        if ((mouseConfig.selected || mouseConfig.checked) && (selected.row !== row || selected.column !== column)) {
+        if ((isMouseSelected || isMouseChecked) && (selected.row !== row || selected.column !== column)) {
           if (actived.row !== row || (editOpts.mode === 'cell' ? actived.column !== column : false)) {
             if (this.keyboardConfig) {
               this.clearChecked(evnt)
@@ -406,11 +409,11 @@ export default {
             selected.args = params
             selected.row = row
             selected.column = column
-            if (mouseConfig.selected) {
+            if (isMouseSelected) {
               this.addColSdCls()
             }
             // 如果配置了批量选中功能，则为批量选中状态
-            if (mouseConfig.checked) {
+            if (isMouseChecked) {
               let headerElem = elemStore['main-header-list']
               this.handleChecked([[cell]])
               if (headerElem) {

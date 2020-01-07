@@ -23,7 +23,7 @@ import Export from './export'
 import Keyboard from './keyboard'
 import Validator from './validator'
 import Resize from './resize'
-import zhCNLocat from './locale/lang/zh-CN'
+import zhCN from './locale/lang/zh-CN'
 
 // 按需加载的组件
 export const components = [
@@ -63,7 +63,7 @@ function install (Vue, options) {
 
 // 默认中文
 VXETable.setup({
-  i18n: (key, value) => XEUtils.get(zhCNLocat, key)
+  i18n: key => XEUtils.get(zhCN, key)
 })
 
 if (typeof window !== 'undefined' && window.Vue) {

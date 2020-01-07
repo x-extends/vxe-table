@@ -99,7 +99,8 @@ function renderColumn (h, _vm, $table, $seq, seq, rowid, fixedType, rowLevel, ro
   let { editRender, align, showOverflow, className, treeNode } = column
   let { actived } = editStore
   let isMouseSelected = mouseConfig && mouseOpts.selected
-  let isMouseChecked = mouseConfig && mouseOpts.checked
+  // 在 v3.0 中废弃 mouse-config.checked
+  let isMouseChecked = mouseConfig && (mouseOpts.range || mouseOpts.checked)
   let fixedHiddenColumn = fixedType ? column.fixed !== fixedType : column.fixed && overflowX
   let cellOverflow = (XEUtils.isUndefined(showOverflow) || XEUtils.isNull(showOverflow)) ? allColumnOverflow : showOverflow
   let showEllipsis = cellOverflow === 'ellipsis'
@@ -442,9 +443,12 @@ export default {
       tableColumn,
       showOverflow: allColumnOverflow,
       scrollXLoad,
+      mouseConfig,
       mouseOpts,
       keyboardConfig = {}
     } = $table
+    // 在 v3.0 中废弃 mouse-config.checked
+    let isMouseChecked = mouseConfig && (mouseOpts.range || mouseOpts.checked)
     // 如果是固定列与设置了超出隐藏
     if (fixedType && allColumnOverflow) {
       tableColumn = fixedColumn
@@ -500,10 +504,10 @@ export default {
       /**
        * 选中边框线
        */
-      !fixedType && (mouseOpts.checked || keyboardConfig.isCut) ? h('div', {
+      !fixedType && (isMouseChecked || keyboardConfig.isCut) ? h('div', {
         class: 'vxe-table--borders'
       }, [
-        mouseOpts.checked ? renderBorder(h, 'check') : null,
+        isMouseChecked ? renderBorder(h, 'check') : null,
         keyboardConfig.isCut ? renderBorder(h, 'copy') : null
       ]) : null,
       !fixedType ? h('div', {

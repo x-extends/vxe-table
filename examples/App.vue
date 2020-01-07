@@ -23,8 +23,8 @@
           <span v-if="usedJSHeapSize" class="performance">Memory used: {{ usedJSHeapSize }} MB.</span>
           <span>{{ $t('app.body.label.translations') }}:</span>
           <select class="locale-switch" v-model="$i18n.locale">
-            <option value="zh-CN">中文</option>
-            <option value="en">English</option>
+            <option value="zh_CN">中文</option>
+            <option value="en_US">English</option>
           </select>
           <span>{{ $t('app.body.label.version') }}: </span>
           <select class="version-switch" v-model="version" @change="vChangeEvent">

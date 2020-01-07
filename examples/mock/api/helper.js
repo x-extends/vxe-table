@@ -37,6 +37,33 @@ class Helper {
       return max ? rest.slice(0, max) : rest
     }
   }
+  findAllList (options) {
+    let { list } = this
+    let { sort = ['updateTime'], order = 'desc' } = options || {}
+    return function (request) {
+      let rest = list
+      let params = request.params
+      let sortProp = sort
+      let orderPrpo = order
+      if (params) {
+        let filterProps = XEUtils.keys(params).filter(key => !['sort', 'order'].includes(key) && params[key])
+        if (filterProps) {
+          rest = rest.filter(data => filterProps.every(key => '' + data[key] === '' + params[key]))
+        }
+        if (params.order) {
+          orderPrpo = params.order
+        }
+        if (params.sort) {
+          sortProp = params.sort.split(',')
+        }
+      }
+      rest = XEUtils.sortBy(list, sortProp)
+      if (orderPrpo === 'desc') {
+        rest = rest.reverse()
+      }
+      return rest
+    }
+  }
   // 树形结构 获取节点数据、支持排序
   findTreeNodeList (options) {
     let { list } = this

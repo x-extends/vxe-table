@@ -1,22 +1,28 @@
 import Vue from 'vue'
 import VueI18n from 'vue-i18n'
-import enLocat from './lang/en'
-import zhCNLocat from './lang/zh-CN'
-import tableEn from '../../packages/locale/lang/en'
+
+import tableEnUS from '../../packages/locale/lang/en-US'
 import tableZhCN from '../../packages/locale/lang/zh-CN'
+import elementEn from 'element-ui/lib/locale/lang/en'
+import elementZhCN from 'element-ui/lib/locale/lang/zh-CN'
+
+import myEnUS from './lang/en-US'
+import myZhCN from './lang/zh-CN'
 
 Vue.use(VueI18n)
 
 const i18n = new VueI18n({
-  locale: ['zh-CN', 'zh-TW'].includes(navigator.language) ? 'zh-CN' : 'en',
+  locale: ['zh-CN', 'zh-TW'].includes(navigator.language) ? 'zh_CN' : 'en_US',
   messages: {
-    en: {
-      ...tableEn,
-      ...enLocat
+    en_US: {
+      ...tableEnUS,
+      ...elementEn,
+      ...myEnUS
     },
-    'zh-CN': {
+    zh_CN: {
       ...tableZhCN,
-      ...zhCNLocat
+      ...elementZhCN,
+      ...myZhCN
     }
   }
 })

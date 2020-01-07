@@ -42,6 +42,7 @@
       resizable
       show-overflow
       highlight-hover-row
+      export-config
       ref="xTable"
       class="vxe-table-antd"
       height="460"
@@ -173,6 +174,7 @@ export default {
             resizable
             show-overflow
             highlight-hover-row
+            export-config
             ref="xTable"
             class="vxe-table-antd"
             height="460"

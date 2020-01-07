@@ -1301,6 +1301,8 @@ const Methods = {
     let { $el, $refs, mouseConfig, mouseOpts, editStore, ctxMenuStore, editOpts, filterStore, getRowNode } = this
     let { actived } = editStore
     let { filterWrapper, validTip } = $refs
+    // 在 v3.0 中废弃 mouse-config.checked
+    let isMouseChecked = mouseConfig && (mouseOpts.range || mouseOpts.checked)
     if (filterWrapper) {
       if (DomTools.getEventTargetNode(evnt, $el, 'vxe-filter-wrapper').flag) {
         // 如果点击了筛选按钮
@@ -1345,7 +1347,7 @@ const Methods = {
       }
     } else if (mouseConfig) {
       if (!DomTools.getEventTargetNode(evnt, $el).flag) {
-        if (mouseOpts.checked) {
+        if (isMouseChecked) {
           this.clearIndexChecked()
           this.clearHeaderChecked()
           this.clearChecked()
@@ -2181,9 +2183,11 @@ const Methods = {
    * 如果是双击模式，则单击后选中状态
    */
   triggerCellClickEvent (evnt, params) {
-    let { $el, highlightCurrentRow, editStore, radioOpts, expandOpts, treeOpts, editConfig, editOpts, checkboxOpts, mouseConfig = {} } = this
+    let { $el, highlightCurrentRow, editStore, radioOpts, expandOpts, treeOpts, editConfig, editOpts, checkboxOpts, mouseConfig, mouseOpts } = this
     let { actived } = editStore
     let { row, column } = params
+    // 在 v3.0 中废弃 mouse-config.checked
+    let isMouseChecked = mouseConfig && (mouseOpts.range || mouseOpts.checked)
     // 解决 checkbox 重复触发两次问题
     if (isTargetRadioOrCheckbox(evnt, column, 'radio') || isTargetRadioOrCheckbox(evnt, column, 'checkbox', 'checkbox') || isTargetRadioOrCheckbox(evnt, column, 'selection', 'checkbox')) {
       // 在 v3.0 中废弃 type=selection
@@ -2214,7 +2218,7 @@ const Methods = {
         this.handleToggleCheckRowEvent(params, evnt)
       }
       // 如果设置了单元格选中功能，则不会使用点击事件去处理（只能支持双击模式）
-      if (!mouseConfig.checked) {
+      if (!isMouseChecked) {
         if (editConfig) {
           if (editOpts.trigger === 'manual') {
             if (actived.args && actived.row === row && column !== actived.column) {
@@ -2719,15 +2723,23 @@ const Methods = {
     this.treeExpandeds = []
     return this.$nextTick().then(() => isExists ? this.recalculate() : 0)
   },
-  /**
-   * 获取虚拟滚动状态
-   */
   getVirtualScroller () {
+    // UtilTools.warn('vxe.error.delFunc', ['getVirtualScroller', 'getTableScroll'])
+    return this.getTableScroll()
+  },
+  /**
+   * 获取表格的滚动状态
+   */
+  getTableScroll () {
     let { $refs, scrollXLoad, scrollYLoad } = this
     let bodyElem = $refs.tableBody.$el
     return {
+      // v3 移除 scrollX 属性
       scrollX: scrollXLoad,
+      isX: scrollXLoad,
+      // v3 移除 scrollY 属性
       scrollY: scrollYLoad,
+      isY: scrollYLoad,
       scrollTop: bodyElem.scrollTop,
       scrollLeft: bodyElem.scrollLeft
     }

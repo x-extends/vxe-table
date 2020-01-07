@@ -53,56 +53,27 @@ export default {
       tableData: [],
       headerMenus: [
         [
-          {
-            code: 'exportAll',
-            name: '导出所有.csv',
-            visible: true,
-            disabled: false
-          }
+          { code: 'exportAll', name: '导出所有.csv', visible: true, disabled: false }
         ]
       ],
       bodyMenus: [
         [
-          {
-            code: 'copy',
-            name: 'app.body.label.copy',
-            prefixIcon: 'fa fa-copy',
-            visible: true,
-            disabled: false
-          },
-          {
-            code: 'clear',
-            name: '清除内容',
-            prefixIcon: 'fa fa-copy',
-            visible: true,
-            disabled: false
-          }
+          { code: 'details', name: '查看详情', prefixIcon: 'fa fa-link', visible: true, disabled: false }
         ],
         [
-          {
-            code: 'remove',
-            name: '删除',
-            visible: true,
-            disabled: false
-          },
+          { code: 'copy', name: 'app.body.label.copy', prefixIcon: 'fa fa-copy', visible: true, disabled: false },
+          { code: 'clear', name: '清除内容', prefixIcon: 'fa fa-copy', visible: true, disabled: false }
+        ],
+        [
+          { code: 'remove', name: '删除', visible: true, disabled: false },
           {
             code: 'filter',
             name: 'app.body.label.filter',
             visible: true,
             disabled: false,
             children: [
-              {
-                code: 'clearFilter',
-                name: '清除筛选',
-                visible: true,
-                disabled: false
-              },
-              {
-                code: 'filterSelect',
-                name: '按所选单元格的值筛选',
-                visible: true,
-                disabled: false
-              }
+              { code: 'clearFilter', name: '清除筛选', visible: true, disabled: false },
+              { code: 'filterSelect', name: '按所选单元格的值筛选', visible: true, disabled: false }
             ]
           },
           {
@@ -111,41 +82,17 @@ export default {
             visible: true,
             disabled: false,
             children: [
-              {
-                code: 'clearSort',
-                name: '清除排序',
-                visible: true,
-                disabled: false
-              },
-              {
-                code: 'sortAsc',
-                name: '升序',
-                visible: true,
-                disabled: false
-              },
-              {
-                code: 'sortDesc',
-                name: '倒序',
-                visible: true,
-                disabled: false
-              }
+              { code: 'clearSort', name: '清除排序', visible: true, disabled: false },
+              { code: 'sortAsc', name: '升序', visible: true, disabled: false },
+              { code: 'sortDesc', name: '倒序', visible: true, disabled: false }
             ]
           },
-          {
-            code: 'print',
-            name: '打印',
-            disabled: true
-          }
+          { code: 'print', name: '打印', disabled: true }
         ]
       ],
       footerMenus: [
         [
-          {
-            code: 'clearAll',
-            name: '清空数据',
-            visible: true,
-            disabled: false
-          }
+          { code: 'clearAll', name: '清空数据', visible: true, disabled: false }
         ]
       ],
       demoCodes: [
@@ -176,56 +123,27 @@ export default {
               tableData: [],
               headerMenus: [
                 [
-                  {
-                    code: 'exportAll',
-                    name: '导出所有.csv',
-                    visible: true,
-                    disabled: false
-                  }
+                  { code: 'exportAll', name: '导出所有.csv', visible: true, disabled: false }
                 ]
               ],
               bodyMenus: [
                 [
-                  {
-                    code: 'copy',
-                    name: 'app.body.label.copy',
-                    prefixIcon: 'fa fa-copy',
-                    visible: true,
-                    disabled: false
-                  },
-                  {
-                    code: 'clear',
-                    name: '清除内容',
-                    prefixIcon: 'fa fa-copy',
-                    visible: true,
-                    disabled: false
-                  }
+                  { code: 'details', name: '查看详情', prefixIcon: 'fa fa-link', visible: true, disabled: false }
                 ],
                 [
-                  {
-                    code: 'remove',
-                    name: '删除',
-                    visible: true,
-                    disabled: false
-                  },
+                  { code: 'copy', name: 'app.body.label.copy', prefixIcon: 'fa fa-copy', visible: true, disabled: false },
+                  { code: 'clear', name: '清除内容', prefixIcon: 'fa fa-copy', visible: true, disabled: false }
+                ],
+                [
+                  { code: 'remove', name: '删除', visible: true, disabled: false },
                   {
                     code: 'filter',
                     name: 'app.body.label.filter',
                     visible: true,
                     disabled: false,
                     children: [
-                      {
-                        code: 'clearFilter',
-                        name: '清除筛选',
-                        visible: true,
-                        disabled: false
-                      },
-                      {
-                        code: 'filterSelect',
-                        name: '按所选单元格的值筛选',
-                        visible: true,
-                        disabled: false
-                      }
+                      { code: 'clearFilter', name: '清除筛选', visible: true, disabled: false },
+                      { code: 'filterSelect', name: '按所选单元格的值筛选', visible: true, disabled: false }
                     ]
                   },
                   {
@@ -234,41 +152,17 @@ export default {
                     visible: true,
                     disabled: false,
                     children: [
-                      {
-                        code: 'clearSort',
-                        name: '清除排序',
-                        visible: true,
-                        disabled: false
-                      },
-                      {
-                        code: 'sortAsc',
-                        name: '升序',
-                        visible: true,
-                        disabled: false
-                      },
-                      {
-                        code: 'sortDesc',
-                        name: '倒序',
-                        visible: true,
-                        disabled: false
-                      }
+                      { code: 'clearSort', name: '清除排序', visible: true, disabled: false },
+                      { code: 'sortAsc', name: '升序', visible: true, disabled: false },
+                      { code: 'sortDesc', name: '倒序', visible: true, disabled: false }
                     ]
                   },
-                  {
-                    code: 'print',
-                    name: '打印',
-                    disabled: true
-                  }
+                  { code: 'print', name: '打印', disabled: true }
                 ]
               ],
               footerMenus: [
                 [
-                  {
-                    code: 'clearAll',
-                    name: '清空数据',
-                    visible: true,
-                    disabled: false
-                  }
+                  { code: 'clearAll', name: '清空数据', visible: true, disabled: false }
                 ]
               ]
             }
@@ -293,7 +187,9 @@ export default {
                   if (['copy', 'remove'].includes(item.code)) {
                     item.disabled = isDisabled
                   }
-                  if (['clear', 'filter'].includes(item.code)) {
+                  if (['details'].includes(item.code)) {
+                    item.visible = column.property === 'name'
+                  } else if (['clear', 'filter'].includes(item.code)) {
                     item.visible = isVisible
                   }
                 })
@@ -311,7 +207,7 @@ export default {
                   }
                   break
                 default:
-                  this.$XModal.message(\`点击了 \${menu.name} 选项\`)
+                  this.$XModal.message({ message: \`点击了 "\${menu.name}"\`, status: 'info' })
               }
             },
             footerMethod ({ columns, data }) {
@@ -321,7 +217,7 @@ export default {
                     return '平均'
                   }
                   if (['age', 'rate'].includes(column.property)) {
-                    return XEUtils.mean(data, column.property)
+                    return parseInt(XEUtils.mean(data, column.property))
                   }
                   return null
                 })
@@ -359,7 +255,9 @@ export default {
           if (['copy', 'remove'].includes(item.code)) {
             item.disabled = isDisabled
           }
-          if (['clear', 'filter'].includes(item.code)) {
+          if (['details'].includes(item.code)) {
+            item.visible = column.property === 'name'
+          } else if (['clear', 'filter'].includes(item.code)) {
             item.visible = isVisible
           }
         })
@@ -377,7 +275,7 @@ export default {
           }
           break
         default:
-          this.$XModal.message(`点击了 ${menu.name} 选项`)
+          this.$XModal.message({ message: `点击了 "${menu.name}"`, status: 'info' })
       }
     },
     footerMethod ({ columns, data }) {
@@ -387,7 +285,7 @@ export default {
             return '平均'
           }
           if (['age', 'rate'].includes(column.property)) {
-            return XEUtils.mean(data, column.property)
+            return parseInt(XEUtils.mean(data, column.property))
           }
           return null
         })

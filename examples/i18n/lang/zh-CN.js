@@ -191,7 +191,7 @@ module.exports = {
 
         bottons: '(抽象) 工具栏按钮',
         menus: '(抽象) 快捷菜单',
-        interceptor: '(高级) 事件拦截器',
+        interceptor: '(进阶) 事件拦截器',
 
         optimize: '优化建议',
         optimizeScroller: '虚拟滚动优化',

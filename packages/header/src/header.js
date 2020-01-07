@@ -132,7 +132,8 @@ export default {
       sortOpts
     } = $table
     let isMouseSelected = mouseConfig && mouseOpts.selected
-    let isMouseChecked = mouseConfig && mouseOpts.checked
+    // 在 v3.0 中废弃 mouse-config.checked
+    let isMouseChecked = mouseConfig && (mouseOpts.range || mouseOpts.checked)
     // 横向滚动渲染
     if (scrollXLoad) {
       if (fixedType) {

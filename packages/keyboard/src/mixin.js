@@ -148,8 +148,10 @@ export default {
       let isLeftBtn = button === 0
       // v3.0 废弃 type=index
       let isIndex = column.type === 'seq' || column.type === 'index'
+      // 在 v3.0 中废弃 mouse-config.checked
+      let isMouseChecked = mouseConfig && (mouseOpts.range || mouseOpts.checked)
       if (mouseConfig) {
-        if (mouseOpts.checked) {
+        if (isMouseChecked) {
           let headerList = elemStore['main-header-list'].children
           let bodyList = elemStore['main-body-list'].children
           if (isIndex) {
@@ -220,6 +222,7 @@ export default {
         editOpts,
         handleSelected,
         checkboxOpts,
+        mouseConfig,
         mouseOpts,
         handleChecked,
         handleIndexChecked,
@@ -232,7 +235,9 @@ export default {
       let isLeftBtn = button === 0
       // v3.0 废弃 type=index
       let isIndex = column.type === 'seq' || column.type === 'index'
-      if (mouseOpts.checked) {
+      // 在 v3.0 中废弃 mouse-config.checked
+      let isMouseChecked = mouseConfig && (mouseOpts.range || mouseOpts.checked)
+      if (isMouseChecked) {
         this.clearHeaderChecked()
         this.clearIndexChecked()
         let bodyList = elemStore['main-body-list'].children
@@ -348,7 +353,7 @@ export default {
     //     }
     //   }
     // },
-    getRangeResult (targetTrElem, moveRange) {
+    getCheckboxRangeResult (targetTrElem, moveRange) {
       let countHeight = 0
       let rangeRows = []
       let siblingProp = moveRange > 0 ? 'next' : 'previous'
@@ -380,7 +385,7 @@ export default {
           let offsetLeft = evnt.clientX - disX
           let offsetTop = evnt.clientY - disY
           let rangeHeight = Math.abs(offsetTop)
-          let rangeRows = this.getRangeResult(trEleme, evnt.clientY - absPos.top)
+          let rangeRows = this.getCheckboxRangeResult(trEleme, evnt.clientY - absPos.top)
           checkboxRangeElem.style.display = 'block'
           checkboxRangeElem.style.width = `${Math.abs(offsetLeft)}px`
           checkboxRangeElem.style.height = `${rangeHeight}px`
@@ -413,7 +418,9 @@ export default {
     _clearChecked (evnt) {
       let { $refs, editStore, mouseConfig, mouseOpts } = this
       let { checked } = editStore
-      if (mouseConfig && mouseOpts.checked) {
+      // 在 v3.0 中废弃 mouse-config.checked
+      let isMouseChecked = mouseConfig && (mouseOpts.range || mouseOpts.checked)
+      if (isMouseChecked) {
         let tableBody = $refs.tableBody
         checked.rows = []
         checked.columns = []
@@ -426,13 +433,27 @@ export default {
       return this.$nextTick()
     },
     _getMouseSelecteds () {
+      // UtilTools.warn('vxe.error.delFunc', ['getMouseSelecteds', 'getSelectedCell'])
+      return this.getSelectedCell()
+    },
+    _getMouseCheckeds () {
+      // UtilTools.warn('vxe.error.delFunc', ['getMouseCheckeds', 'getSelectedRanges'])
+      return this.getSelectedRanges()
+    },
+    /**
+     * 获取选中的单元格
+     */
+    getSelectedCell () {
       let { args, column } = this.editStore.selected
       if (args && column) {
         return Object.assign({}, args)
       }
       return null
     },
-    _getMouseCheckeds () {
+    /**
+     * 获取所有选中的单元格
+     */
+    getSelectedRanges () {
       let { checked } = this.editStore
       let { rowNodes = [] } = checked
       let columns = []
@@ -499,8 +520,10 @@ export default {
       checked.rowNodes = rowNodes
     },
     handleAllChecked (evnt) {
-      let { tableData, visibleColumn, mouseOpts, elemStore } = this
-      if (mouseOpts.checked) {
+      let { tableData, visibleColumn, mouseConfig, mouseOpts, elemStore } = this
+      // 在 v3.0 中废弃 mouse-config.checked
+      let isMouseChecked = mouseConfig && (mouseOpts.range || mouseOpts.checked)
+      if (isMouseChecked) {
         evnt.preventDefault()
         let headerListElem = elemStore['main-header-list']
         let headerList = headerListElem.children
