@@ -194,10 +194,10 @@ export const UtilTools = {
         if (!formatData) {
           formatData = fullAllDataRowMap.get(row).formatData = {}
         }
-      }
-      if (rest && formatData[colid]) {
-        if (formatData[colid].value === cellValue) {
-          return formatData[colid].label
+        if (rest && formatData[colid]) {
+          if (formatData[colid].value === cellValue) {
+            return formatData[colid].label
+          }
         }
       }
       if (XEUtils.isString(formatter)) {

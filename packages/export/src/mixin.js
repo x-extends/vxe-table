@@ -310,7 +310,7 @@ function getLabelData ($table, columns, datas) {
             cellValue = $table.isCheckedByRadioRow(row)
             break
           default:
-            cellValue = XEUtils.get(row, column.property)
+            cellValue = UtilTools.getCellLabel(row, column, { $table })
         }
         item[column.id] = XEUtils.toString(cellValue)
       })
@@ -339,10 +339,10 @@ function getLabelData ($table, columns, datas) {
         default:
           // 如果是启用虚拟滚动后只允许导出数据源
           if (scrollXLoad || scrollYLoad) {
-            cellValue = row[column.property]
+            cellValue = UtilTools.getCellLabel(row, column, { $table })
           } else {
             let cell = DomTools.getCell($table, { row, column })
-            cellValue = cell ? cell.innerText.trim() : row[column.property]
+            cellValue = cell ? cell.innerText.trim() : UtilTools.getCellLabel(row, column, { $table })
           }
       }
       item[column.id] = XEUtils.toString(cellValue)
