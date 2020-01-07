@@ -28,7 +28,7 @@
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">
 
       <template v-slot:form>
-        <form class="form-row" v-on:submit.prevent="$refs.xGrid.commitProxy('reload')">
+        <form class="form-row" v-on:submit.prevent="searchEvent">
           <div class="form-item">
             <div class="title">Name:</div>
             <div class="content">
@@ -202,7 +202,7 @@ export default {
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">
 
           <template v-slot:form>
-            <form class="form-row" v-on:submit.prevent="$refs.xGrid.commitProxy('reload')">
+            <form class="form-row" v-on:submit.prevent="searchEvent">
               <div class="form-item">
                 <div class="title">Name:</div>
                 <div class="content">
@@ -358,6 +358,9 @@ export default {
                 return false
               }
               return true
+            },
+            searchEvent () {
+              this.$refs.xGrid.commitProxy('reload')
             }
           }
         }
@@ -409,6 +412,9 @@ export default {
         return false
       }
       return true
+    },
+    searchEvent () {
+      this.$refs.xGrid.commitProxy('reload')
     }
   }
 }

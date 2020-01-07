@@ -78,7 +78,7 @@
       :data="tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+      <vxe-table-column field="sex" title="Sex" :formatter="formatterSex"></vxe-table-column>
       <vxe-table-column field="age" title="Age" sortable></vxe-table-column>
       <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
     </vxe-table>
@@ -94,6 +94,7 @@
 
     <vxe-toolbar>
       <template v-slot:buttons>
+        <vxe-button @click="exportCurrDataEvent4">导出当前页</vxe-button>
         <vxe-button @click="exportDataEvent4">自定义数据导出</vxe-button>
         <vxe-button @click="exportAllDataEvent4">全量导出后台数据</vxe-button>
       </template>
@@ -110,7 +111,7 @@
       :data="tableData4">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+      <vxe-table-column field="sex" title="Sex" :formatter="formatterSex"></vxe-table-column>
       <vxe-table-column field="age" title="Age"></vxe-table-column>
       <vxe-table-column field="role" title="Role"></vxe-table-column>
     </vxe-table>
@@ -249,7 +250,7 @@ export default {
           :data="tableData">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+          <vxe-table-column field="sex" title="Sex" :formatter="formatterSex"></vxe-table-column>
           <vxe-table-column field="age" title="Age" sortable></vxe-table-column>
           <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
         </vxe-table>
@@ -265,6 +266,14 @@ export default {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 50)
           },
           methods: {
+            formatterSex ({ cellValue }) {
+              if (cellValue === '1') {
+                return '男'
+              } else if (cellValue === '0') {
+                return '女'
+              }
+              return cellValue
+            },
             footerMethod ({ columns, data }) {
               const footerData = [
                 columns.map((column, columnIndex) => {
@@ -291,6 +300,7 @@ export default {
         `
         <vxe-toolbar>
           <template v-slot:buttons>
+            <vxe-button @click="exportCurrDataEvent4">导出当前页</vxe-button>
             <vxe-button @click="exportDataEvent4">自定义数据导出</vxe-button>
             <vxe-button @click="exportAllDataEvent4">全量导出后台数据</vxe-button>
           </template>
@@ -307,7 +317,7 @@ export default {
           :data="tableData4">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+          <vxe-table-column field="sex" title="Sex" :formatter="formatterSex"></vxe-table-column>
           <vxe-table-column field="age" title="Age"></vxe-table-column>
           <vxe-table-column field="role" title="Role"></vxe-table-column>
         </vxe-table>
@@ -352,6 +362,14 @@ export default {
               this.tablePage4.pageSize = pageSize
               this.findList()
             },
+            formatterSex ({ cellValue }) {
+              if (cellValue === '1') {
+                return '男'
+              } else if (cellValue === '0') {
+                return '女'
+              }
+              return cellValue
+            },
             footerMethod ({ columns, data }) {
               const footerData = [
                 columns.map((column, columnIndex) => {
@@ -365,6 +383,14 @@ export default {
                 })
               ]
               return footerData
+            },
+            exportCurrDataEvent4 () {
+              this.$refs.xTable4.exportData({
+                filename: '自定义文件名',
+                type: 'html',
+                isHeader: true,
+                isFooter: true
+              })
             },
             exportDataEvent4 () {
               this.$refs.xTable4.exportData({
@@ -427,6 +453,14 @@ export default {
       this.tablePage4.pageSize = pageSize
       this.findList()
     },
+    formatterSex ({ cellValue }) {
+      if (cellValue === '1') {
+        return '男'
+      } else if (cellValue === '0') {
+        return '女'
+      }
+      return cellValue
+    },
     footerMethod ({ columns, data }) {
       const footerData = [
         columns.map((column, columnIndex) => {
@@ -459,6 +493,14 @@ export default {
       this.$refs.xTable3.exportData({
         type: 'csv',
         dataFilterMethod: (row, rowIndex) => rowIndex >= 9 && rowIndex < 20
+      })
+    },
+    exportCurrDataEvent4 () {
+      this.$refs.xTable4.exportData({
+        filename: '自定义文件名',
+        type: 'html',
+        isHeader: true,
+        isFooter: true
       })
     },
     exportDataEvent4 () {

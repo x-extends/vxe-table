@@ -1583,7 +1583,7 @@ const apis = [
           },
           {
             name: 'editMethod',
-            desc: '只对 isEdit=true 有效，用于重写选中编辑处理逻辑，该函数 Function({seq, row, rowIndex, column, columnIndex, cell}) 可以返回 false 来阻止默认行为',
+            desc: '只对 isEdit=true 有效，用于重写选中编辑处理逻辑，该函数 Function({row, rowIndex, column, columnIndex, cell}) 可以返回 false 来阻止默认行为',
             version: '',
             type: 'Function',
             enum: '',

@@ -19,7 +19,7 @@
       :checkbox-config="{labelField: 'id', reserve: true, highlight: true, range: true}">
 
       <template v-slot:form>
-        <form class="form-row" v-on:submit.prevent="$refs.xGrid.commitProxy('reload')">
+        <form class="form-row" v-on:submit.prevent="searchEvent">
           <div class="form-item">
             <div class="title">Name:</div>
             <div class="content">
@@ -144,7 +144,7 @@ export default {
           :checkbox-config="{labelField: 'id', reserve: true, highlight: true, range: true}">
 
           <template v-slot:form>
-            <form class="form-row" v-on:submit.prevent="$refs.xGrid.commitProxy('reload')">
+            <form class="form-row" v-on:submit.prevent="searchEvent">
               <div class="form-item">
                 <div class="title">Name:</div>
                 <div class="content">
@@ -238,6 +238,11 @@ export default {
                 { field: 'describe', title: 'Describe', width: 300, showOverflow: true }
               ]
             }
+          },
+          methods: {
+            searchEvent () {
+              this.$refs.xGrid.commitProxy('reload')
+            }
           }
         }
         `,
@@ -271,6 +276,11 @@ export default {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
       hljs.highlightBlock(block)
     })
+  },
+  methods: {
+    searchEvent () {
+      this.$refs.xGrid.commitProxy('reload')
+    }
   }
 }
 </script>

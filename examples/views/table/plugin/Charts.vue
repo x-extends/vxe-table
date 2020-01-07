@@ -7,7 +7,7 @@
       resizable
       height="500"
       :data="tableData"
-      :mouse-config="{ selected: true, checked: true }"
+      :mouse-config="{ selected: true, range: true }"
       :keyboard-config="{isArrow: true, isDel: true, isEnter: true, isTab: true, isEdit: true}"
       :context-menu="{body: {options: bodyMenus}}"
       :edit-config="{trigger: 'dblclick', mode: 'cell'}">
@@ -121,7 +121,7 @@ export default {
           resizable
           height="500"
           :data="tableData"
-          :mouse-config="{ selected: true, checked: true }"
+          :mouse-config="{ selected: true, range: true }"
           :keyboard-config="{isArrow: true, isDel: true, isEnter: true, isTab: true, isEdit: true}"
           :context-menu="{body: {options: bodyMenus}}"
           :edit-config="{trigger: 'dblclick', mode: 'cell'}">
