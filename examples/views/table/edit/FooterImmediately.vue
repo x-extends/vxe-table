@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">统计编辑列的表尾合计，数据发生变化时实时统计</p>
+    <p class="tip">统计编辑列的表尾合计，数据发生变化时实时统计<br>如果是内置的渲染器，可以设置 <table-column-api-link prop="immediate"/> 属性和相关事件去实时更新</p>
 
     <vxe-toolbar>
       <template v-slot:buttons>
@@ -23,9 +23,9 @@
       :edit-config="{trigger: 'click', mode: 'row'}">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="age1" title="Age" :edit-render="{name: 'input', events: {input: updateFooterEvent}}"></vxe-table-column>
-      <vxe-table-column field="num6" title="Num" :edit-render="{name: 'input', events: {input: updateFooterEvent}}"></vxe-table-column>
-      <vxe-table-column field="rate1" title="Rate" :edit-render="{name: 'input', events: {input: updateFooterEvent}}"></vxe-table-column>
+      <vxe-table-column field="age1" title="Age" :edit-render="{name: 'input', immediate: true, events: {input: updateFooterEvent}}"></vxe-table-column>
+      <vxe-table-column field="num6" title="Num" :edit-render="{name: 'input', immediate: true, events: {input: updateFooterEvent}}"></vxe-table-column>
+      <vxe-table-column field="rate1" title="Rate" :edit-render="{name: 'input', immediate: true, events: {input: updateFooterEvent}}"></vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -68,9 +68,9 @@ export default {
           :edit-config="{trigger: 'click', mode: 'row'}">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="age1" title="Age" :edit-render="{name: 'input', events: {input: updateFooterEvent}}"></vxe-table-column>
-          <vxe-table-column field="num6" title="Num" :edit-render="{name: 'input', events: {input: updateFooterEvent}}"></vxe-table-column>
-          <vxe-table-column field="rate1" title="Rate" :edit-render="{name: 'input', events: {input: updateFooterEvent}}"></vxe-table-column>
+          <vxe-table-column field="age1" title="Age" :edit-render="{name: 'input', immediate: true, events: {input: updateFooterEvent}}"></vxe-table-column>
+          <vxe-table-column field="num6" title="Num" :edit-render="{name: 'input', immediate: true, events: {input: updateFooterEvent}}"></vxe-table-column>
+          <vxe-table-column field="rate1" title="Rate" :edit-render="{name: 'input', immediate: true, events: {input: updateFooterEvent}}"></vxe-table-column>
         </vxe-table>
         `,
         `

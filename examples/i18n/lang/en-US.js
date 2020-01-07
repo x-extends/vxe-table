@@ -185,7 +185,7 @@ module.exports = {
         menusPlugin: 'plugin-menus Context menus',
         excelPlugin: 'plugin-excel A simple excel',
 
-        renderer: '(Abstract) Renderer',
+        renderer: '(Advanced) Renderer',
         rendererFilter: 'Filter renderer',
         rendererDefault: 'Default renderer',
         rendererEdit: 'Edit renderer',

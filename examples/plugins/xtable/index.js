@@ -46,7 +46,7 @@ VXETable.setup({
     }
   },
   translate: key => key && key.indexOf('app.') > -1 ? i18n.t(key) : key, // 自动翻译以 app. 开头的键值
-  i18n: (key, value) => i18n.t(key, value)
+  i18n: key => i18n.t(key)
 })
 
 Vue.use(Column)

@@ -1,6 +1,7 @@
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../conf'
 import { UtilTools, DomTools } from '../../tools'
+import VXETable from '../../v-x-e-table'
 
 // 默认导出或打印的 HTML 样式
 const defaultHtmlStyle = 'body{margin:0}body *{-webkit-box-sizing:border-box;box-sizing:border-box}.vxe-table{border:0;border-collapse:separate;table-layout:fixed;text-align:left;font-size:14px;border-spacing:0}.vxe-table.is--print{width:100%}td,thead tr:last-child th{border-bottom:1px solid #e8eaec}.vxe-table:not(.b--style-none) thead tr:first-child th,.vxe-table:not(.show--head):not(.b--style-none) tbody tr:first-child td{border-top:1px solid #e8eaec}.vxe-table:not(.b--style-none) tr td:first-child,.vxe-table:not(.b--style-none) tr th:first-child{border-left:1px solid #e8eaec}.vxe-table:not(.t--border){border-width:1px}.vxe-table.t--border:not(.b--style-none) td,table.t--border:not(.b--style-none) th{border-right:1px solid #e8eaec}.vxe-table:not(.b--style-none) thead{background-color:#f8f8f9}.vxe-table td>div,.vxe-table th>div{padding:.5em .4em}.col--center{text-align:center}.col--right{text-align:right}.col--ellipsis>div{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;word-break:break-all}.vxe-table--tree-node{text-align:left}.vxe-table--tree-node-wrapper{position:relative}.vxe-table--tree-icon-wrapper{position:absolute;top:50%;width:1em;height:1em;text-align:center;-webkit-transform:translateY(-50%);transform:translateY(-50%);-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;cursor:pointer}.vxe-table--tree-icon{position:absolute;left:0;top:.3em;width:0;height:0;border-style:solid;border-width:.5em;border-top-color:#939599;border-right-color:transparent;border-bottom-color:transparent;border-left-color:transparent}.vxe-table--tree-cell{display:block;padding-left:1.5em}'
@@ -259,7 +260,7 @@ function downloadFile ($table, opts, content) {
       document.body.removeChild(linkElem)
     }
     if (opts.message !== false) {
-      $table.$XModal.message({ message: GlobalConfig.i18n('vxe.table.expSuccess'), status: 'success' })
+      VXETable.$modal.message({ message: GlobalConfig.i18n('vxe.table.expSuccess'), status: 'success' })
     }
   } else {
     UtilTools.error('vxe.error.notExp')
@@ -325,7 +326,7 @@ function getLabelData ($table, columns, datas) {
             cellValue = row[column.property]
           } else {
             let cell = DomTools.getCell($table, { row, column })
-            cellValue = cell ? cell.innerText.trim() : ''
+            cellValue = cell ? cell.innerText.trim() : row[column.property]
           }
       }
       item[column.id] = XEUtils.toString(cellValue)
@@ -516,10 +517,10 @@ export default {
           }
         })
       if (opts.message !== false) {
-        $table.$XModal.message({ message: GlobalConfig.i18n('vxe.table.impSuccess'), status: 'success' })
+        VXETable.$modal.message({ message: GlobalConfig.i18n('vxe.table.impSuccess'), status: 'success' })
       }
     } else if (opts.message !== false) {
-      $table.$XModal.message({ message: GlobalConfig.i18n('vxe.error.impFields'), status: 'error' })
+      VXETable.$modal.message({ message: GlobalConfig.i18n('vxe.error.impFields'), status: 'error' })
     }
     if (_importResolve) {
       _importResolve(status)

@@ -1,8 +1,3 @@
-import Language from './language'
+import enUS from './en-US'
 
-/**
- * English
- */
-declare const en: Language
-
-export default en
+export default enUS

@@ -94,7 +94,8 @@
 
     <vxe-toolbar>
       <template v-slot:buttons>
-        <vxe-button @click="exportDataEvent4">完整配置</vxe-button>
+        <vxe-button @click="exportDataEvent4">自定义数据导出</vxe-button>
+        <vxe-button @click="exportAllDataEvent4">全量导出后台数据</vxe-button>
       </template>
     </vxe-toolbar>
 
@@ -104,14 +105,24 @@
       highlight-hover-row
       ref="xTable4"
       height="300"
+      :loading="loading"
       :footer-method="footerMethod"
-      :data="tableData">
+      :data="tableData4">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-      <vxe-table-column field="age" title="Age" sortable></vxe-table-column>
-      <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+      <vxe-table-column field="age" title="Age"></vxe-table-column>
+      <vxe-table-column field="role" title="Role"></vxe-table-column>
     </vxe-table>
+
+    <vxe-pager
+      :loading="loading"
+      :current-page="tablePage4.currentPage"
+      :page-size="tablePage4.pageSize"
+      :total="tablePage4.totalResult"
+      :layouts="['PrevPage', 'JumpNumber', 'NextPage', 'FullJump', 'Sizes', 'Total']"
+      @page-change="handlePageChange">
+    </vxe-pager>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
@@ -124,12 +135,20 @@
 
 <script>
 import XEUtils from 'xe-utils'
+import XEAjax from 'xe-ajax'
 import hljs from 'highlight.js'
 
 export default {
   data () {
     return {
+      loading: false,
       tableData: [],
+      tableData4: [],
+      tablePage4: {
+        currentPage: 1,
+        pageSize: 10,
+        totalResult: 0
+      },
       demoCodes: [
         `
         <vxe-toolbar>
@@ -272,7 +291,8 @@ export default {
         `
         <vxe-toolbar>
           <template v-slot:buttons>
-            <vxe-button @click="exportDataEvent4">完整配置</vxe-button>
+            <vxe-button @click="exportDataEvent4">自定义数据导出</vxe-button>
+            <vxe-button @click="exportAllDataEvent4">全量导出后台数据</vxe-button>
           </template>
         </vxe-toolbar>
 
@@ -282,26 +302,56 @@ export default {
           highlight-hover-row
           ref="xTable4"
           height="300"
+          :loading="loading"
           :footer-method="footerMethod"
-          :data="tableData">
+          :data="tableData4">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-          <vxe-table-column field="age" title="Age" sortable></vxe-table-column>
-          <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+          <vxe-table-column field="age" title="Age"></vxe-table-column>
+          <vxe-table-column field="role" title="Role"></vxe-table-column>
         </vxe-table>
+
+        <vxe-pager
+          :loading="loading"
+          :current-page="tablePage4.currentPage"
+          :page-size="tablePage4.pageSize"
+          :total="tablePage4.totalResult"
+          :layouts="['PrevPage', 'JumpNumber', 'NextPage', 'FullJump', 'Sizes', 'Total']"
+          @page-change="handlePageChange">
+        </vxe-pager>
         `,
         `
         export default {
           data () {
             return {
-              tableData: []
+              tableData4: [],
+              tablePage4: {
+                currentPage: 1,
+                pageSize: 10,
+                totalResult: 0
+              }
             }
           },
           created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 50)
+            this.findList()
           },
           methods: {
+            findList () {
+              this.loading = true
+              XEAjax.get(\`/api/user/page/list/\${this.tablePage4.pageSize}/\${this.tablePage4.currentPage}\`).then(({ page, result }) => {
+                this.tableData4 = result
+                this.tablePage4.totalResult = page.totalResult
+                this.loading = false
+              }).catch(e => {
+                this.loading = false
+              })
+            },
+            handlePageChange ({ currentPage, pageSize }) {
+              this.tablePage4.currentPage = currentPage
+              this.tablePage4.pageSize = pageSize
+              this.findList()
+            },
             footerMethod ({ columns, data }) {
               const footerData = [
                 columns.map((column, columnIndex) => {
@@ -322,10 +372,28 @@ export default {
                 type: 'html',
                 isHeader: true,
                 isFooter: true,
-                data: this.tableData.map(row => {
-                  row.date = XEUtils.toDateString(row.date, 'yyyy-MM-dd')
-                  return row
+                // 自定义导出的数据源
+                data: [
+                  { name: 'Name1', sex: '男', age: 26, role: '前端' },
+                  { name: 'Name2', sex: '女', age: 20, role: '测试' },
+                  { name: 'Name3', sex: '男', age: 32, role: '后端' },
+                  { name: 'Name4', sex: '女', age: 22, role: '设计师' }
+                ]
+              })
+            },
+            exportAllDataEvent4 () {
+              this.loading = true
+              XEAjax.get('/api/user/full').then(data => {
+                this.$refs.xTable4.exportData({
+                  filename: '自定义文件名',
+                  type: 'csv',
+                  isHeader: true,
+                  isFooter: true,
+                  data
                 })
+                this.loading = false
+              }).catch(e => {
+                this.loading = false
               })
             }
           }
@@ -336,6 +404,7 @@ export default {
   },
   created () {
     this.tableData = window.MOCK_DATA_LIST.slice(0, 50)
+    this.findList()
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
@@ -343,6 +412,21 @@ export default {
     })
   },
   methods: {
+    findList () {
+      this.loading = true
+      XEAjax.get(`/api/user/page/list/${this.tablePage4.pageSize}/${this.tablePage4.currentPage}`).then(({ page, result }) => {
+        this.tableData4 = result
+        this.tablePage4.totalResult = page.totalResult
+        this.loading = false
+      }).catch(e => {
+        this.loading = false
+      })
+    },
+    handlePageChange ({ currentPage, pageSize }) {
+      this.tablePage4.currentPage = currentPage
+      this.tablePage4.pageSize = pageSize
+      this.findList()
+    },
     footerMethod ({ columns, data }) {
       const footerData = [
         columns.map((column, columnIndex) => {
@@ -383,10 +467,28 @@ export default {
         type: 'html',
         isHeader: true,
         isFooter: true,
-        data: this.tableData.map(row => {
-          row.date = XEUtils.toDateString(row.date, 'yyyy-MM-dd')
-          return row
+        // 自定义导出的数据源
+        data: [
+          { name: 'Name1', sex: '男', age: 26, role: '前端' },
+          { name: 'Name2', sex: '女', age: 20, role: '测试' },
+          { name: 'Name3', sex: '男', age: 32, role: '后端' },
+          { name: 'Name4', sex: '女', age: 22, role: '设计师' }
+        ]
+      })
+    },
+    exportAllDataEvent4 () {
+      this.loading = true
+      XEAjax.get('/api/user/full').then(data => {
+        this.$refs.xTable4.exportData({
+          filename: '自定义文件名',
+          type: 'csv',
+          isHeader: true,
+          isFooter: true,
+          data
         })
+        this.loading = false
+      }).catch(e => {
+        this.loading = false
       })
     }
   }

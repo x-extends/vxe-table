@@ -900,6 +900,8 @@ export default {
       hasTip
     } = this
     let { leftList, rightList } = columnStore
+    // 在 v3.0 中废弃 mouse-config.checked
+    let isMouseChecked = mouseConfig && (mouseOpts.range || mouseOpts.checked)
     return h('div', {
       class: ['vxe-table', `tid_${id}`, vSize ? `size--${vSize}` : '', border && XEUtils.isString(border) ? `b--style-${border}` : '', {
         'vxe-editable': editConfig,
@@ -914,7 +916,7 @@ export default {
         't--stripe': stripe,
         't--border': border,
         't--selected': mouseConfig && mouseOpts.selected,
-        't--checked': mouseConfig && mouseOpts.checked,
+        't--checked': isMouseChecked,
         'row--highlight': highlightHoverRow,
         'column--highlight': highlightHoverColumn,
         'is--cover': isCoverBody,
@@ -2183,6 +2185,8 @@ export default {
       let { $el, $refs, mouseConfig, mouseOpts, editStore, ctxMenuStore, editOpts, filterStore, getRowNode } = this
       let { actived } = editStore
       let { filterWrapper, validTip } = $refs
+      // 在 v3.0 中废弃 mouse-config.checked
+      let isMouseChecked = mouseConfig && (mouseOpts.range || mouseOpts.checked)
       if (filterWrapper) {
         if (DomTools.getEventTargetNode(evnt, this.$el, 'vxe-filter-wrapper').flag) {
           // 如果点击了筛选按钮
@@ -2230,7 +2234,7 @@ export default {
         }
       } else if (mouseConfig) {
         if (!DomTools.getEventTargetNode(evnt, $el).flag) {
-          if (mouseOpts.checked) {
+          if (isMouseChecked) {
             this.clearChecked()
           }
           this.clearSelected()
@@ -3294,14 +3298,16 @@ export default {
      * 选中事件
      */
     triggerCellMousedownEvent (evnt, params) {
-      let { $el, tableData, visibleColumn, editStore, checkboxOpts, mouseConfig = {}, editConfig, editOpts, handleSelected, handleChecked } = this
+      let { $el, tableData, visibleColumn, editStore, checkboxOpts, mouseConfig, mouseOpts, editConfig, editOpts, handleSelected, handleChecked } = this
       let { checked, actived } = editStore
       let { row, column, cell } = params
       let { button } = evnt
       let isLeftBtn = button === 0
       let isRightBtn = button === 2
+      // 在 v3.0 中废弃 mouse-config.checked
+      let isMouseChecked = mouseConfig && (mouseOpts.range || mouseOpts.checked)
       if (isLeftBtn || isRightBtn) {
-        if (mouseConfig.checked) {
+        if (isMouseChecked) {
           if (editConfig && editOpts.trigger === 'dblclick') {
             if ((editOpts.mode === 'row' && actived.row === row) || (actived.row === row && actived.column === column)) {
               // 如果已经是激活状态
@@ -3383,7 +3389,7 @@ export default {
       }
       this.isActivated = true
     },
-    getRangeResult (targetTrElem, moveRange) {
+    getCheckboxRangeResult (targetTrElem, moveRange) {
       let countHeight = 0
       let rangeRows = []
       let siblingProp = moveRange > 0 ? 'next' : 'previous'
@@ -3415,7 +3421,7 @@ export default {
           let offsetLeft = evnt.clientX - disX
           let offsetTop = evnt.clientY - disY
           let rangeHeight = Math.abs(offsetTop)
-          let rangeRows = this.getRangeResult(trEleme, evnt.clientY - absPos.top)
+          let rangeRows = this.getCheckboxRangeResult(trEleme, evnt.clientY - absPos.top)
           checkboxRangeElem.style.display = 'block'
           checkboxRangeElem.style.width = `${Math.abs(offsetLeft)}px`
           checkboxRangeElem.style.height = `${rangeHeight}px`
@@ -3659,11 +3665,14 @@ export default {
      * 处理选中源
      */
     handleSelected (params, evnt) {
-      let { mouseConfig = {}, editOpts, editStore } = this
+      let { mouseConfig, mouseOpts, editOpts, editStore } = this
       let { actived, selected } = editStore
       let { row, column } = params
+      let isMouseSelected = mouseConfig && mouseOpts.selected
+      // 在 v3.0 中废弃 mouse-config.checked
+      let isMouseChecked = mouseConfig && (mouseOpts.range || mouseOpts.checked)
       let selectMethod = () => {
-        if ((mouseConfig.selected || mouseConfig.checked) && (selected.row !== row || selected.column !== column)) {
+        if ((isMouseSelected || isMouseChecked) && (selected.row !== row || selected.column !== column)) {
           if (actived.row !== row || (editOpts.mode === 'cell' ? actived.column !== column : false)) {
             this.clearChecked(evnt)
             this.clearActived(evnt)
@@ -3671,7 +3680,7 @@ export default {
             selected.row = row
             selected.column = column
             // 如果配置了批量选中功能，则为批量选中状态
-            if (mouseConfig.checked) {
+            if (isMouseChecked) {
               let select = DomTools.getCellIndexs(params.cell)
               this.handleChecked(select, select, evnt)
             }
@@ -3695,13 +3704,27 @@ export default {
       return this.$nextTick()
     },
     getMouseSelecteds () {
+      // UtilTools.warn('vxe.error.delFunc', ['getMouseSelecteds', 'getSelectedCell'])
+      return this.getSelectedCell()
+    },
+    getMouseCheckeds () {
+      // UtilTools.warn('vxe.error.delFunc', ['getMouseCheckeds', 'getSelectedRanges'])
+      return this.getSelectedRanges()
+    },
+    /**
+     * 获取选中的单元格
+     */
+    getSelectedCell () {
       let { args, column } = this.editStore.selected
       if (args && column) {
         return Object.assign({}, args)
       }
       return null
     },
-    getMouseCheckeds () {
+    /**
+     * 获取所有选中的单元格
+     */
+    getSelectedRanges () {
       let { checked } = this.editStore
       let { rows, columns } = checked
       return {
@@ -4504,25 +4527,33 @@ export default {
      * 是否启用了横向 X 可视渲染
      */
     isScrollXLoad () {
-      UtilTools.warn('vxe.error.delFunc', ['isScrollXLoad', 'getVirtualScroller'])
+      UtilTools.warn('vxe.error.delFunc', ['isScrollXLoad', 'getTableScroll'])
       return this.scrollXLoad
     },
     /**
      * 是否启用了纵向 Y 可视渲染
      */
     isScrollYLoad () {
-      UtilTools.warn('vxe.error.delFunc', ['isScrollYLoad', 'getVirtualScroller'])
+      UtilTools.warn('vxe.error.delFunc', ['isScrollYLoad', 'getTableScroll'])
       return this.scrollYLoad
     },
-    /**
-     * 获取虚拟滚动状态
-     */
     getVirtualScroller () {
+      // UtilTools.warn('vxe.error.delFunc', ['getVirtualScroller', 'getTableScroll'])
+      return this.getTableScroll()
+    },
+    /**
+     * 获取表格的滚动状态
+     */
+    getTableScroll () {
       let { $refs, scrollXLoad, scrollYLoad } = this
       let bodyElem = $refs.tableBody.$el
       return {
+        // v3 移除 scrollX 属性
         scrollX: scrollXLoad,
+        isX: scrollXLoad,
+        // v3 移除 scrollY 属性
         scrollY: scrollYLoad,
+        isY: scrollYLoad,
         scrollTop: bodyElem.scrollTop,
         scrollLeft: bodyElem.scrollLeft
       }
@@ -5216,7 +5247,7 @@ export default {
           this._fileResolve(evnt)
         } else {
           if (options.message !== false) {
-            this.$XModal.message({ message: XEUtils.template(GlobalConfig.i18n('vxe.error.notType'), [type]), status: 'error' })
+            VXETable.$modal.message({ message: XEUtils.template(GlobalConfig.i18n('vxe.error.notType'), [type]), status: 'error' })
           }
           this._fileReject(evnt)
         }
@@ -5272,7 +5303,7 @@ export default {
       const isTree = !!this.getTreeStatus()
       if (isTree) {
         if (defOpts.message) {
-          this.$XModal.message({ message: GlobalConfig.i18n('vxe.error.treeNotImp'), status: 'error' })
+          VXETable.$modal.message({ message: GlobalConfig.i18n('vxe.error.treeNotImp'), status: 'error' })
         }
         return
       }

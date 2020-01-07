@@ -69,6 +69,7 @@ Modal.install = function (Vue) {
   AlertController = Vue.extend(VXEModal)
   Vue.prototype.$XMsg = Modal
   Vue.prototype.$XModal = Modal
+  VXETable.$modal = Modal
 }
 
 export default Modal

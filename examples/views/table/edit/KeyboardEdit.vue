@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">设置 <table-api-link prop="keyboard-config"/>={<table-api-link prop="editMethod"/>} 重写默认的编辑行为，改为追加值得方式</p>
+    <p class="tip">通过 <table-api-link prop="keyboard-config"/>={<table-api-link prop="editMethod"/>} 重写默认的编辑行为，改为追加的方式</p>
 
     <vxe-table
       border

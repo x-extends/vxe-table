@@ -1,8 +1,3 @@
-import Language from './language'
+import jaJP from './ja-JP'
 
-/**
- * ジャパン
- */
-declare const ja: Language
-
-export default ja
+export default jaJP

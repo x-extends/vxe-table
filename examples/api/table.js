@@ -1499,15 +1499,25 @@ const apis = [
             enum: '',
             defVal: 'false',
             list: []
-          }
+          // },
           // {
           //   name: 'checked',
-          //   desc: '开启鼠标移动单元格批量选中功能',
+          //   desc: '即将废弃，请使用 range',
+          //   version: '',
           //   type: 'Boolean',
           //   enum: '',
           //   defVal: 'false',
           //   list: []
-          // }
+          // },
+          // {
+          //   name: 'range',
+          //   desc: '开启鼠标移动单元格批量选中功能',
+          //   version: '1.15.18',
+          //   type: 'Boolean',
+          //   enum: '',
+          //   defVal: 'false',
+          //   list: []
+          }
         ]
       },
       {
@@ -2757,15 +2767,27 @@ const apis = [
       },
       {
         name: 'getMouseSelecteds()',
-        desc: '用于 mouse-config.selected，获取鼠标选中的单元格信息',
+        disabled: true,
+        desc: '即将废弃，请使用 getSelectedCell',
+        version: '',
+        type: '{row,column}',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'getSelectedCell()',
+        desc: '用于 mouse-config.selected，获取选中的单元格信息',
+        version: '1.15.18',
         type: '{row,column}',
         enum: '',
         defVal: '',
         list: []
       },
       // {
-      //   name: 'getMouseCheckeds()',
-      //   desc: '用于 mouse-config.checked，获取鼠标选中的所有单元格的信息',
+      //   name: 'getSelectedRanges()',
+      //   desc: '用于 mouse-config.checked，获取范围选中的所有单元格的信息',
+      //   version: '1.15.18',
       //   type: 'Array<{rows[], columns[]}>',
       //   enum: '',
       //   defVal: '',
@@ -2773,9 +2795,19 @@ const apis = [
       // },
       {
         name: 'getVirtualScroller()',
-        desc: '获取虚拟滚动相关状态',
+        disabled: true,
+        desc: '即将废弃，请使用 getTableScroll',
         version: '',
-        type: '{scrollX, scrollY, scrollTop, scrollLeft}',
+        type: '{isX, isY, scrollTop, scrollLeft}',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'getTableScroll()',
+        desc: '获取表格的滚动状态',
+        version: '1.15.18',
+        type: '{isX, isY, scrollTop, scrollLeft}',
         enum: '',
         defVal: '',
         list: []

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">使用 vxe-excel 渲染 Excel 表格<br><span class="red">（注：完善中）</span></p>
+    <p class="tip">使用 vxe-excel 渲染 Excel 表格<br><span class="red">（注：重构中，不建议使用）</span></p>
 
     <vxe-toolbar>
       <template v-slot:buttons>

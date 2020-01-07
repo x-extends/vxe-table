@@ -14,6 +14,16 @@
       <code class="javascript">{{ demoCodes[1] }}</code>
       <code class="html">{{ demoCodes[2] }}</code>
     </pre>
+    <h2>支持的语言</h2>
+    <p class="tip"><a class="link" href="https://github.com/xuliangzhan/vxe-table/tree/master/packages/locale/lang">添加语言</a></p>
+    <div>
+      <ul class="lang-list">
+        <li>简体中文（zh-CN）</li>
+        <li>繁体中文（zh-TW）</li>
+        <li>英文（en-US）</li>
+        <li>日语（ja-JP）</li>
+      </ul>
+    </div>
   </div>
 </template>
 
@@ -28,15 +38,15 @@ export default {
         import Vue from 'vue'
         import VueI18n from 'vxe-i18n'
         import VXETable from 'vxe-table'
-        import zhCNLocat from 'vxe-table/lib/locale/lang/zh_CN'
-        import enLocat from 'vxe-table/lib/locale/lang/en'
+        import zhCN from 'vxe-table/lib/locale/lang/zh-CN'
+        import enUS from 'vxe-table/lib/locale/lang/en-US'
 
         const messages = {
           zh_CN: {
-            ...zhCNLocat
+            ...zhCN
           },
-          en: {
-            ...enLocat
+          en_US: {
+            ...enUS
           }
         }
 
@@ -47,7 +57,7 @@ export default {
 
         Vue.use(VXETable, {
           // 对组件内置的提示语进行国际化翻译
-          i18n: (key, value) => i18n.t(key, value)
+          i18n: key => i18n.t(key)
         })
 
         new Vue({ i18n }).$mount('#app')
@@ -56,6 +66,13 @@ export default {
         Vue.use(VXETable, {
           // 对参数的内容自动进行国际化翻译（只对支持国际化的有效）
           translate: key => i18n.t(key)
+          // translate (key) {
+          //   // 只翻译 "app." 开头的键值
+          //   if (key && key.indexOf('app.') > -1) {
+          //     return i18n.t(key)
+          //   }
+          //   return key
+          // }
         })
         `,
         `
@@ -78,3 +95,10 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.lang-list {
+  list-style: disc;
+  padding-left: 40px;
+}
+</style>

@@ -16,7 +16,7 @@ import { Checkbox } from './checkbox';
 import { Radio } from './radio';
 import { Input } from './input';
 import { Button } from './button';
-import { Modal } from './modal';
+import { Modal, XModal } from './modal';
 import { Export } from './export';
 import { Resize } from './resize';
 
@@ -116,6 +116,10 @@ export interface VXETableStatic {
    * Tooltip 模块的安装状态
    */
   _tooltip: number;
+  /**
+   * 全局的模态窗口
+   */
+  $modal: XModal;
   /**
    * 版本号
    */

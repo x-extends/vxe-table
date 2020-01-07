@@ -91,7 +91,8 @@ function renderColumn (h, _vm, $table, $seq, seq, rowid, fixedType, rowLevel, ro
   let { editRender, align, showOverflow, renderWidth, columnKey, className, treeNode } = column
   let { checked, selected, actived, copyed } = editStore
   let isMouseSelected = mouseConfig && mouseOpts.selected
-  let isMouseChecked = mouseConfig && mouseOpts.checked
+  // 在 v3.0 中废弃 mouse-config.checked
+  let isMouseChecked = mouseConfig && (mouseOpts.range || mouseOpts.checked)
   let isKeyboardCut = keyboardConfig && keyboardConfig.isCut
   let fixedHiddenColumn = fixedType ? column.fixed !== fixedType : column.fixed && overflowX
   let cellOverflow = (XEUtils.isUndefined(showOverflow) || XEUtils.isNull(showOverflow)) ? allColumnOverflow : showOverflow
