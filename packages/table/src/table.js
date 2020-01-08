@@ -687,6 +687,9 @@ export default {
     if (this.autoResize && VXETable._resize) {
       this.bindResize()
     }
+    if (!this.$grid && this.customs) {
+      UtilTools.warn('vxe.error.removeProp', ['customs'])
+    }
     document.body.appendChild(this.$refs.tableWrapper)
     this.preventEvent(null, 'mounted', { $table: this })
   },
