@@ -177,8 +177,8 @@ function renderColumn (h, _vm, $table, $seq, seq, rowid, fixedType, rowLevel, ro
     attrs.rowspan = rowspan
     attrs.colspan = colspan
   }
-  // 如果显示状态
-  if (!fixedHiddenColumn && editConfig && editOpts.showStatus) {
+  // 如果编辑列开启显示状态
+  if (!fixedHiddenColumn && editRender && editConfig && editOpts.showStatus) {
     isDirty = $table.isUpdateByRow(row, column.property)
   }
   // 批量选中处理
