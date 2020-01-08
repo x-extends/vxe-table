@@ -55,7 +55,7 @@ export default {
         'data-tid': id
       },
       style: {
-        'margin-top': `${-scrollbarHeight - 1}px`
+        'margin-top': `${-scrollbarHeight}px`
       },
       on: {
         scroll: this.scrollEvent

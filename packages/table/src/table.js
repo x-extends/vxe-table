@@ -64,7 +64,6 @@ function renderFixed (h, $table, fixedType) {
     visibleColumn,
     collectColumn,
     isGroup,
-    border,
     height,
     parentHeight,
     vSize,
@@ -91,7 +90,7 @@ function renderFixed (h, $table, fixedType) {
   }
   let style = {
     height: `${(customHeight > 0 ? customHeight - headerHeight - footerHeight : tableHeight) + headerHeight + footerHeight - scrollbarHeight * (showFooter ? 2 : 1)}px`,
-    width: `${fixedColumn.reduce((previous, column) => previous + column.renderWidth, isRightFixed ? scrollbarWidth : 0) - (border === true ? 1 : 0)}px`
+    width: `${fixedColumn.reduce((previous, column) => previous + column.renderWidth, isRightFixed ? scrollbarWidth : 0)}px`
   }
   return h('div', {
     class: [`vxe-table--fixed-${fixedType}-wrapper`, {
@@ -349,8 +348,6 @@ export default {
       scrollLeftToRight: false,
       // 右侧固定列是否向左滚动了
       scrollRightToLeft: false,
-      // 所有列是否覆盖整个表格
-      isCoverBody: false,
       // 行高
       rowHeight: 0,
       // 复选框，是否全选
@@ -859,7 +856,6 @@ export default {
     let {
       _e,
       id,
-      isCoverBody,
       tableData,
       tableColumn,
       visibleColumn,
@@ -922,7 +918,7 @@ export default {
         't--checked': isMouseChecked,
         'row--highlight': highlightHoverRow,
         'column--highlight': highlightHoverColumn,
-        'is--cover': isCoverBody,
+        'is--empty': !loading && !tableData.length,
         'scroll--y': overflowY,
         'scroll--x': overflowX,
         'virtual--x': scrollXLoad,
@@ -992,7 +988,7 @@ export default {
       /**
        * 空数据
        */
-      !loading && !tableData.length ? h('div', {
+      h('div', {
         ref: 'emptyPlaceholder',
         class: 'vxe-table--empty-placeholder',
         style: height ? null : {
@@ -1002,7 +998,13 @@ export default {
         h('div', {
           class: 'vxe-table--empty-content'
         }, this.$scopedSlots.empty ? this.$scopedSlots.empty.call(this, { $table: this }, h) : GlobalConfig.i18n('vxe.table.emptyText'))
-      ]) : _e(),
+      ]),
+      /**
+       * 边框线
+       */
+      h('div', {
+        class: 'vxe-table--border-line'
+      }),
       /**
        * 列宽线
        */
@@ -1013,12 +1015,6 @@ export default {
         } : null,
         ref: 'resizeBar'
       }) : _e(),
-      /**
-       * 边框线
-       */
-      h('div', {
-        class: 'vxe-table--border-line'
-      }),
       /**
        * 加载中
        */
@@ -2134,7 +2130,6 @@ export default {
       this.overflowY = overflowY
       this.tableWidth = tableWidth
       this.tableHeight = tableHeight
-      this.isCoverBody = tableWidth >= bodyWidth - 2
       this.parentHeight = this.getParentHeight()
       if (headerElem) {
         this.headerHeight = headerElem.clientHeight

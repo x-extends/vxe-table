@@ -474,7 +474,6 @@ export default {
     let {
       $scopedSlots,
       id,
-      loading,
       maxHeight,
       height,
       parentHeight,
@@ -581,7 +580,7 @@ export default {
         h('tbody', renderRows(h, this, $table, '', 0, fixedType, tableData, tableColumn))
       ]),
       !fixedType ? h('div', {
-        class: ['vxe-table--empty-block', loading || tableData.length ? '' : 'is--empty'],
+        class: 'vxe-table--empty-block',
         style: {
           width: tableWidth ? `${tableWidth}px` : tableWidth
         }
