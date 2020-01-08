@@ -247,7 +247,8 @@ export default {
             autocomplete: 'off'
           },
           on: {
-            keydown: this.jumpKeydownEvent
+            keydown: this.jumpKeydownEvent,
+            blur: this.triggerJumpEvent
           }
         }),
         isFull ? h('span', {
@@ -373,10 +374,7 @@ export default {
     },
     jumpKeydownEvent (evnt) {
       if (evnt.keyCode === 13) {
-        let value = XEUtils.toNumber(evnt.target.value)
-        let current = value <= 0 ? 1 : value >= this.pageCount ? this.pageCount : value
-        evnt.target.value = current
-        this.jumpPage(current)
+        this.triggerJumpEvent(evnt)
       } else if (evnt.keyCode === 38) {
         evnt.preventDefault()
         this.nextPage()
@@ -384,6 +382,12 @@ export default {
         evnt.preventDefault()
         this.prevPage()
       }
+    },
+    triggerJumpEvent (evnt) {
+      let value = XEUtils.toNumber(evnt.target.value)
+      let current = value <= 0 ? 1 : value >= this.pageCount ? this.pageCount : value
+      evnt.target.value = current
+      this.jumpPage(current)
     },
     emitPageChange (type, pageSize, currentPage) {
       UtilTools.emitEvent(this, 'page-change', [{ type, pageSize, currentPage }])
