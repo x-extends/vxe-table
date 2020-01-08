@@ -766,6 +766,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.treeSort',
+              locat: {
+                name: 'TableTreeSort'
+              }
+            },
+            {
               label: 'app.aside.nav.groupSummary',
               demoUrl: 'https://jsrun.pro/KVWKp/edit',
               locat: {
