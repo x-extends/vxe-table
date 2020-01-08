@@ -1011,7 +1011,6 @@ const Methods = {
     this.overflowY = overflowY
     this.tableWidth = tableWidth
     this.tableHeight = tableHeight
-    this.isCoverBody = tableWidth >= bodyWidth - 2
     this.parentHeight = this.getParentHeight()
     if (headerElem) {
       this.headerHeight = headerElem.clientHeight
@@ -1073,8 +1072,10 @@ const Methods = {
       }
     }
     let emptyPlaceholderElem = $refs.emptyPlaceholder
+    let bodyWrapperElem = elemStore['main-body-wrapper']
     if (emptyPlaceholderElem) {
-      emptyPlaceholderElem.style.top = height ? '' : `${headerHeight}px`
+      emptyPlaceholderElem.style.top = `${headerHeight}px`
+      emptyPlaceholderElem.style.height = bodyWrapperElem ? `${bodyWrapperElem.offsetHeight - scrollbarHeight}px` : ''
     }
     containerList.forEach((name, index) => {
       let fixedType = index > 0 ? name : ''
@@ -1156,7 +1157,7 @@ const Methods = {
             let fixedColumn = columnStore[`${fixedType}List`]
             wrapperElem.style.top = `${headerHeight}px`
             fixedWrapperElem.style.height = `${(customHeight > 0 ? customHeight - headerHeight - footerHeight : tableHeight) + headerHeight + footerHeight - scrollbarHeight * (showFooter ? 2 : 1)}px`
-            fixedWrapperElem.style.width = `${fixedColumn.reduce((previous, column) => previous + column.renderWidth, isRightFixed ? scrollbarWidth : 0) - (border === true ? 1 : 0)}px`
+            fixedWrapperElem.style.width = `${fixedColumn.reduce((previous, column) => previous + column.renderWidth, isRightFixed ? scrollbarWidth : 0)}px`
           }
 
           let tWidth = tableWidth
@@ -1196,7 +1197,7 @@ const Methods = {
             if (fixedWrapperElem) {
               wrapperElem.style.top = `${customHeight > 0 ? customHeight - footerHeight : tableHeight + headerHeight}px`
             }
-            wrapperElem.style.marginTop = `${-scrollbarHeight - 1}px`
+            wrapperElem.style.marginTop = `${-scrollbarHeight}px`
           }
           if (tableElem) {
             tableElem.style.width = tWidth ? `${tWidth + scrollbarWidth}px` : ''

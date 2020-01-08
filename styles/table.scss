@@ -213,10 +213,12 @@
     overflow-x: hidden;
     overflow-y: hidden;
   }
-  &.show--foot {
-    &.scroll--x {
-      .vxe-table--body-wrapper {
-        overflow-x: scroll;
+  &:not(.is--empty) {
+    &.show--foot {
+      &.scroll--x {
+        .vxe-table--body-wrapper {
+          overflow-x: scroll;
+        }
       }
     }
   }
@@ -902,12 +904,9 @@
   .vxe-table--empty-block {
     display: none;
     visibility: hidden;
-    &.is--empty {
-      display: flex;
-    }
   }
   .vxe-table--empty-placeholder {
-    display: flex;
+    display: none;
     position: absolute;
     top: 0;
     z-index: 8;
@@ -917,10 +916,10 @@
     width: 50%;
     pointer-events: auto;
   }
-  &.has--height {
+  &.is--empty {
+    .vxe-table--empty-block,
     .vxe-table--empty-placeholder {
-      top: 50%;
-      transform: translateY(-50%);
+      display: flex;
     }
   }
 

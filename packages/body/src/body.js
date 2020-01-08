@@ -511,7 +511,7 @@ export default {
         keyboardConfig.isCut ? renderBorder(h, 'copy') : null
       ]) : null,
       !fixedType ? h('div', {
-        class: ['vxe-table--empty-block', tableData.length ? '' : 'is--empty'],
+        class: 'vxe-table--empty-block',
         ref: 'emptyBlock'
       }, [
         h('div', {

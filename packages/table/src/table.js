@@ -239,8 +239,6 @@ export default {
       scrollbarWidth: 0,
       // 横向滚动条的高度
       scrollbarHeight: 0,
-      // 所有列是否覆盖整个表格
-      isCoverBody: false,
       // 行高
       rowHeight: 0,
       // 复选框属性，是否全选
@@ -726,7 +724,6 @@ export default {
     let {
       _e,
       id,
-      isCoverBody,
       tableData,
       tableColumn,
       visibleColumn,
@@ -790,8 +787,8 @@ export default {
         't--checked': isMouseChecked,
         'row--highlight': highlightHoverRow,
         'column--highlight': highlightHoverColumn,
-        'is--cover': isCoverBody,
         'is--loading': loading,
+        'is--empty': !loading && !tableData.length,
         'scroll--y': overflowY,
         'scroll--x': overflowX,
         'virtual--x': scrollXLoad,
@@ -861,14 +858,20 @@ export default {
       /**
        * 空数据
        */
-      !loading && !tableData.length ? h('div', {
+      h('div', {
         ref: 'emptyPlaceholder',
         class: 'vxe-table--empty-placeholder'
       }, [
         h('div', {
           class: 'vxe-table--empty-content'
         }, this.$scopedSlots.empty ? this.$scopedSlots.empty.call(this, { $table: this }, h) : GlobalConfig.i18n('vxe.table.emptyText'))
-      ]) : _e(),
+      ]),
+      /**
+       * 边框线
+       */
+      h('div', {
+        class: 'vxe-table--border-line'
+      }),
       /**
        * 列宽线
        */
@@ -879,12 +882,6 @@ export default {
         } : null,
         ref: 'resizeBar'
       }) : _e(),
-      /**
-       * 边框线
-       */
-      h('div', {
-        class: 'vxe-table--border-line'
-      }),
       /**
        * 加载中
        */
