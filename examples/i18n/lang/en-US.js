@@ -139,6 +139,7 @@ module.exports = {
         rowValid: 'Validate row',
         forceCellValid: 'Validate cell + lock',
         forceRowValid: 'Validate row + lock',
+        highlightCell: 'Highlighting the editor',
         keyboard: 'Keyboard navigation',
         keyboardEdit: 'Keyboard navigation + Override the default edit behavior',
         dataCount: 'Data count',

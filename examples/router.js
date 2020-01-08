@@ -189,6 +189,7 @@ const TableEditRevert = () => import(/* webpackChunkName: "edit" */ './views/tab
 const TableEditStatus = () => import(/* webpackChunkName: "edit" */ './views/table/edit/Status.vue')
 const TableEditCellDisable = () => import(/* webpackChunkName: "edit" */ './views/table/edit/CellDisable.vue')
 const TableEditRowDisable = () => import(/* webpackChunkName: "edit" */ './views/table/edit/RowDisable.vue')
+const TableEditHighlightCell = () => import(/* webpackChunkName: "edit" */ './views/table/edit/HighlightCell.vue')
 const TableEditKeyboard = () => import(/* webpackChunkName: "edit" */ './views/table/edit/Keyboard.vue')
 const TableEditKeyboardEdit = () => import(/* webpackChunkName: "edit" */ './views/table/edit/KeyboardEdit.vue')
 const TableEditCellValid = () => import(/* webpackChunkName: "edit" */ './views/table/edit/CellValid.vue')
@@ -1161,6 +1162,11 @@ export default new Router({
       path: '/table/edit/rowDisable',
       name: 'TableEditRowDisable',
       component: TableEditRowDisable
+    },
+    {
+      path: '/table/edit/highlightCell',
+      name: 'TableEditHighlightCell',
+      component: TableEditHighlightCell
     },
     {
       path: '/table/edit/keyboard',

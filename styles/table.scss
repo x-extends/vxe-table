@@ -792,11 +792,10 @@
     padding: 20px;
   }
 
-  /*固定列*/
+  /*设置列高度*/
   &.vxe-editable {
     .vxe-body--column {
       @extend %DefaultColumnHeight;
-      line-height: inherit;
     }
     &.size--medium {
       .vxe-body--column {
@@ -821,14 +820,13 @@
   .vxe-footer--column {
     &.col--ellipsis {
       @extend %CellEllipsis, %DefaultColumnHeight;
-      line-height: inherit;
     }
   }
   &.virtual--x,
   &.virtual--y {
     .col--ellipsis {
       .vxe-cell {
-        max-height: $vxe-table-row-height-default - 1;
+        max-height: $vxe-table-row-height-default;
       }
     }
   }
@@ -844,7 +842,7 @@
     &.virtual--y {
       .col--ellipsis {
         .vxe-cell {
-          max-height: $vxe-table-row-height-medium - 1;
+          max-height: $vxe-table-row-height-medium;
         }
       }
     }
@@ -856,7 +854,7 @@
       &.col--ellipsis {
         @extend %SmallColumnHeight;
         .vxe-cell {
-          max-height: $vxe-table-row-height-small - 1;
+          max-height: $vxe-table-row-height-small;
         }
       }
     }
@@ -864,7 +862,7 @@
     &.virtual--y {
       .col--ellipsis {
         .vxe-cell {
-          max-height: $vxe-table-row-height-small - 1;
+          max-height: $vxe-table-row-height-small;
         }
       }
     }
@@ -876,7 +874,7 @@
       &.col--ellipsis {
         @extend %MiniColumnHeight;
         .vxe-cell {
-          max-height: $vxe-table-row-height-mini - 1;
+          max-height: $vxe-table-row-height-mini;
         }
       }
     }
@@ -884,7 +882,7 @@
     &.virtual--y {
       .col--ellipsis {
         .vxe-cell {
-          max-height: $vxe-table-row-height-mini - 1;
+          max-height: $vxe-table-row-height-mini;
         }
       }
     }
@@ -996,12 +994,14 @@
             .vxe-default-textarea {
               border: 0;
               padding: 0;
+              height: $vxe-table-row-line-height;
             }
             .vxe-input--wrapper {
               .vxe-input,
               .vxe-textarea {
                 border: 0;
                 padding: 0;
+                height: $vxe-table-row-line-height;
               }
             }
           }
