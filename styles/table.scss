@@ -727,11 +727,10 @@
     padding: 20px;
   }
 
-  /*固定列*/
+  /*设置列高度*/
   &.vxe-editable {
     .vxe-body--column {
       @extend %DefaultColumnHeight;
-      line-height: inherit;
     }
     &.size--medium {
       .vxe-body--column {
@@ -756,14 +755,13 @@
   .vxe-footer--column {
     &.col--ellipsis {
       @extend %DefaultColumnHeight;
-      line-height: inherit;
     }
   }
   &.virtual--x,
   &.virtual--y {
     .col--ellipsis {
       .vxe-cell {
-        max-height: $vxe-table-row-height-default - 1;
+        max-height: $vxe-table-row-height-default;
       }
     }
   }
@@ -779,7 +777,7 @@
     &.virtual--y {
       .col--ellipsis {
         .vxe-cell {
-          max-height: $vxe-table-row-height-medium - 1;
+          max-height: $vxe-table-row-height-medium;
         }
       }
     }
@@ -796,7 +794,7 @@
     &.virtual--y {
       .col--ellipsis {
         .vxe-cell {
-          max-height: $vxe-table-row-height-small - 1;
+          max-height: $vxe-table-row-height-small;
         }
       }
     }
@@ -813,7 +811,7 @@
     &.virtual--y {
       .col--ellipsis {
         .vxe-cell {
-          max-height: $vxe-table-row-height-mini - 1;
+          max-height: $vxe-table-row-height-mini;
         }
       }
     }
