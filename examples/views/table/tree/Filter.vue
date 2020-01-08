@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">简单实现树结构查找功能</p>
+    <p class="tip">实现树结构深层查找</p>
 
     <vxe-table
       ref="xTree"

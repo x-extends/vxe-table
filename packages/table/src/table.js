@@ -820,6 +820,9 @@ export default {
     if (this.autoResize) {
       ResizeEvent.on(this, this.getParentElem(), () => this.recalculate(true))
     }
+    if (!this.$grid && this.customs) {
+      UtilTools.warn('vxe.error.removeProp', ['customs'])
+    }
     document.body.appendChild(this.$refs.tableWrapper)
     this.preventEvent(null, 'mounted', { $table: this })
   },

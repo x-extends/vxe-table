@@ -171,7 +171,7 @@ export default {
     proxyConfig () {
       this.initProxy()
     },
-    pagerConfig (value) {
+    pagerConfig () {
       this.initPages()
     }
   },
@@ -179,6 +179,7 @@ export default {
     let { customs, data, proxyConfig, proxyOpts } = this
     let { props } = proxyOpts
     if (customs) {
+      UtilTools.warn('vxe.error.removeProp', ['customs'])
       this.tableCustoms = customs
     }
     if (data && proxyConfig) {

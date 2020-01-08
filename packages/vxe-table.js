@@ -53,7 +53,7 @@ function install (Vue, options) {
   if (XEUtils.isPlainObject(options)) {
     VXETable.setup(options)
   }
-  components.map(component => Vue.use(component))
+  components.map(component => component.install(Vue))
 }
 
 // 默认中文
@@ -61,11 +61,11 @@ VXETable.setup({
   i18n: key => XEUtils.get(zhCN, key)
 })
 
-if (typeof window !== 'undefined' && window.Vue) {
-  install(window.Vue)
-}
-
 VXETable.install = install
+
+if (typeof window !== 'undefined' && window.Vue && window.Vue.use) {
+  window.Vue.use(VXETable)
+}
 
 export * from './table'
 export * from './column'
