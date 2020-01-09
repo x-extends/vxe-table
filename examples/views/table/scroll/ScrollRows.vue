@@ -20,6 +20,7 @@
       border
       resizable
       show-overflow
+      export-config
       ref="xTable"
       height="300"
       :sort-config="{trigger: 'cell'}"
@@ -79,6 +80,7 @@ export default {
           border
           resizable
           show-overflow
+          export-config
           ref="xTable"
           height="300"
           :sort-config="{trigger: 'cell'}"

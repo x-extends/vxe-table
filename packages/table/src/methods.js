@@ -118,11 +118,13 @@ const Methods = {
     this.tableSynchData = datas
     this.tableSourceData = XEUtils.clone(tableFullData, true)
     this.scrollYLoad = scrollYLoad
-    if (scrollYLoad && !(height || maxHeight)) {
-      UtilTools.error('vxe.error.reqProp', ['height | max-height'])
-    }
-    if (scrollYLoad && !showOverflow) {
-      UtilTools.warn('vxe.error.reqProp', ['show-overflow'])
+    if (scrollYLoad) {
+      if (!(height || maxHeight)) {
+        UtilTools.error('vxe.error.reqProp', ['height | max-height'])
+      }
+      if (!showOverflow) {
+        UtilTools.warn('vxe.error.reqProp', ['show-overflow'])
+      }
     }
     this.handleTableData(true)
     this.updateFooter()
@@ -2737,10 +2739,10 @@ const Methods = {
     return {
       // v3 移除 scrollX 属性
       scrollX: scrollXLoad,
-      isX: scrollXLoad,
+      virtualX: scrollXLoad,
       // v3 移除 scrollY 属性
       scrollY: scrollYLoad,
-      isY: scrollYLoad,
+      virtualY: scrollYLoad,
       scrollTop: bodyElem.scrollTop,
       scrollLeft: bodyElem.scrollLeft
     }
@@ -2749,9 +2751,9 @@ const Methods = {
    * 横向 X 可视渲染事件处理
    */
   triggerScrollXEvent (evnt) {
-    this.updateVirtualScrollX()
+    this.loadScrollXData()
   },
-  updateVirtualScrollX (force) {
+  loadScrollXData (force) {
     let { $refs, visibleColumn, scrollXStore } = this
     let { startIndex, renderSize, offsetSize, visibleSize } = scrollXStore
     let scrollBodyElem = $refs.tableBody.$el

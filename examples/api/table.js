@@ -2696,7 +2696,7 @@ const apis = [
         disabled: true,
         desc: '即将废弃，请使用 getTableScroll',
         version: '',
-        type: '{isX, isY, scrollTop, scrollLeft}',
+        type: '{virtualX, virtualY, scrollTop, scrollLeft}',
         enum: '',
         defVal: '',
         list: []
@@ -2705,7 +2705,7 @@ const apis = [
         name: 'getTableScroll()',
         desc: '获取表格的滚动状态',
         version: '2.7.22',
-        type: '{isX, isY, scrollTop, scrollLeft}',
+        type: '{virtualX, virtualY, scrollTop, scrollLeft}',
         enum: '',
         defVal: '',
         list: []

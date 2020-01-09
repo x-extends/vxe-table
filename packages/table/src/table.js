@@ -66,7 +66,7 @@ export default {
     /** 基本属性 */
     // 数据
     data: Array,
-    // 初始化绑定动态列
+    // （v3.0 废弃）
     customs: Array,
     // 表格的高度
     height: [Number, String],
@@ -525,7 +525,7 @@ export default {
       }
       this.refreshColumn().then(() => {
         if (this.scrollXLoad) {
-          this.updateVirtualScrollX(true)
+          this.loadScrollXData(true)
         }
       })
       this.handleTableData(true)

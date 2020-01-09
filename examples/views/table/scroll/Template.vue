@@ -300,7 +300,7 @@ export default {
               this.$XModal.alert('头部点击事件')
             },
             addressClickEvent (row) {
-              this.$XModal.alert(\`address点击事件：\${row.row}\`)
+              this.$XModal.alert(\`address点击事件：\${row.address}\`)
             },
             filterSexMethod ({ option, row }) {
               return row.sex === option.data
@@ -340,7 +340,7 @@ export default {
       this.$XModal.alert('头部点击事件')
     },
     addressClickEvent (row) {
-      this.$XModal.alert(`address点击事件：${row.row}`)
+      this.$XModal.alert(`address点击事件：${row.address}`)
     },
     filterSexMethod ({ option, row }) {
       return row.sex === option.data
