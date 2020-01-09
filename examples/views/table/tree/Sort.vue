@@ -87,7 +87,7 @@ export default {
     }
   },
   created () {
-    this.originData = XEUtils.toTreeArray(window.MOCK_TREE_DATA_LIST)
+    this.originData = XEUtils.toTreeArray(XEUtils.clone(window.MOCK_TREE_DATA_LIST, true))
     this.findList()
   },
   mounted () {

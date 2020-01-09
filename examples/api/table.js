@@ -2317,30 +2317,30 @@ const apis = [
         list: []
       },
       {
-        name: 'reloadRow(row, record, field)',
+        name: 'reloadRow(rows, record, field)',
         desc: '局部加载行数据并恢复到初始状态（对于行数据需要局部更改的场景中可能会用到）',
         version: '1.14.17',
         type: 'Promise',
         enum: '',
-        defVal: 'rows: Row, record: object, field?: string',
+        defVal: 'rows: Row | Row[], record: object, field?: string',
         list: []
       },
       {
-        name: 'reloadExpandContent(row)',
+        name: 'reloadExpandContent(rows)',
         desc: '用于懒加载展开行，重新加载展开行的内容',
         version: '1.15.15',
         type: 'Promise',
         enum: '',
-        defVal: 'rows: Row',
+        defVal: 'rows: Row | Row[]',
         list: []
       },
       {
-        name: 'reloadTreeChilds(row)',
+        name: 'reloadTreeChilds(rows)',
         desc: '用于懒加载树表格，重新加载子节点',
         version: '1.15.15',
         type: 'Promise',
         enum: '',
-        defVal: 'rows: Row',
+        defVal: 'rows: Row | Row[]',
         list: []
       },
       {
