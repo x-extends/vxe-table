@@ -25,6 +25,7 @@
       show-header-overflow
       highlight-hover-row
       highlight-current-row
+      export-config
       ref="xTable"
       height="600"
       :loading="loading"
@@ -104,6 +105,7 @@ export default {
           show-header-overflow
           highlight-hover-row
           highlight-current-row
+          export-config
           ref="xTable"
           height="600"
           :loading="loading"
