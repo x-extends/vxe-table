@@ -122,7 +122,7 @@ export default {
     }
     // 在 v3 中废弃 setting
     if (setting) {
-      // UtilTools.warn('vxe.error.delProp', ['setting', 'custom'])
+      UtilTools.warn('vxe.error.delProp', ['setting', 'custom'])
     }
     if (!VXETable._export && (this.export || this.import)) {
       UtilTools.error('vxe.error.reqModule', ['Export'])

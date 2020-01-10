@@ -529,7 +529,7 @@ const Methods = {
   },
   // 在 v3.0 中废弃 getSelectRecords
   getSelectRecords () {
-    // UtilTools.warn('vxe.error.delFunc', ['getSelectRecords', 'getCheckboxRecords'])
+    UtilTools.warn('vxe.error.delFunc', ['getSelectRecords', 'getCheckboxRecords'])
     return this.getCheckboxRecords()
   },
   /**
@@ -687,7 +687,7 @@ const Methods = {
    * 如果已关联工具栏，则会同步更新
    */
   resetAll () {
-    // UtilTools.warn('vxe.error.delFunc', ['resetAll', 'resetColumn'])
+    UtilTools.warn('vxe.error.delFunc', ['resetAll', 'resetColumn'])
     this.resetColumn(true)
   },
   /**
@@ -720,7 +720,7 @@ const Methods = {
     return this.$nextTick()
   },
   resetCustoms () {
-    // UtilTools.warn('vxe.error.delFunc', ['resetCustoms', 'resetColumn'])
+    UtilTools.warn('vxe.error.delFunc', ['resetCustoms', 'resetColumn'])
     return this.resetColumn()
   },
   handleVisibleColumn (column, visible) {
@@ -751,7 +751,7 @@ const Methods = {
     return this.recalculate(true)
   },
   resetResizable () {
-    // UtilTools.warn('vxe.error.delFunc', ['resetResizable', 'resetColumn'])
+    UtilTools.warn('vxe.error.delFunc', ['resetResizable', 'resetColumn'])
     return this.handleResetResizable()
   },
   /**
@@ -760,7 +760,7 @@ const Methods = {
    * @param {Array} customColumns 自定义列数组
    */
   reloadCustoms (customColumns) {
-    // UtilTools.warn('vxe.error.delFunc', ['reloadCustoms', 'column.visible & refreshColumn'])
+    UtilTools.warn('vxe.error.delFunc', ['reloadCustoms', 'column.visible & refreshColumn'])
     return this.$nextTick().then(() => {
       this.mergeCustomColumn(customColumns)
       return this.refreshColumn().then(() => this.tableFullColumn)
@@ -1645,7 +1645,7 @@ const Methods = {
   },
   // 在 v3.0 中废弃 setSelection
   setSelection (rows, value) {
-    // UtilTools.warn('vxe.error.delFunc', ['setSelection', 'setCheckboxRow'])
+    UtilTools.warn('vxe.error.delFunc', ['setSelection', 'setCheckboxRow'])
     return this.setCheckboxRow(rows, value)
   },
   /**
@@ -1777,7 +1777,7 @@ const Methods = {
   },
   // 在 v3.0 中废弃 toggleRowSelection
   toggleRowSelection (row) {
-    // UtilTools.warn('vxe.error.delFunc', ['toggleRowSelection', 'toggleCheckboxRow'])
+    UtilTools.warn('vxe.error.delFunc', ['toggleRowSelection', 'toggleCheckboxRow'])
     return this.toggleCheckboxRow(row)
   },
   /**
@@ -1789,7 +1789,7 @@ const Methods = {
   },
   // 在 v3.0 中废弃 setAllSelection
   setAllSelection (value) {
-    // UtilTools.warn('vxe.error.delFunc', ['setAllSelection', 'setAllCheckboxRow'])
+    UtilTools.warn('vxe.error.delFunc', ['setAllSelection', 'setAllCheckboxRow'])
     return this.setAllCheckboxRow(value)
   },
   /**
@@ -1933,7 +1933,7 @@ const Methods = {
   },
   // 在 v3.0 中废弃 getSelectReserveRecords
   getSelectReserveRecords () {
-    // UtilTools.warn('vxe.error.delFunc', ['getSelectReserveRecords', 'getCheckboxReserveRecords'])
+    UtilTools.warn('vxe.error.delFunc', ['getSelectReserveRecords', 'getCheckboxReserveRecords'])
     return this.getCheckboxReserveRecords()
   },
   /**
@@ -1953,7 +1953,7 @@ const Methods = {
   },
   // 在 v3.0 中废弃 clearSelectReserve
   clearSelectReserve () {
-    // UtilTools.warn('vxe.error.delFunc', ['clearSelectReserve', 'clearCheckboxReserve'])
+    UtilTools.warn('vxe.error.delFunc', ['clearSelectReserve', 'clearCheckboxReserve'])
     return this.clearCheckboxReserve()
   },
   clearCheckboxReserve () {
@@ -1981,7 +1981,7 @@ const Methods = {
   },
   // 在 v3.0 中废弃 toggleAllSelection
   toggleAllSelection () {
-    // UtilTools.warn('vxe.error.delFunc', ['toggleAllSelection', 'toggleAllCheckboxRow'])
+    UtilTools.warn('vxe.error.delFunc', ['toggleAllSelection', 'toggleAllCheckboxRow'])
     return this.toggleAllCheckboxRow()
   },
   /**
@@ -1993,7 +1993,7 @@ const Methods = {
   },
   // 在 v3.0 中废弃 clearSelection
   clearSelection () {
-    // UtilTools.warn('vxe.error.delFunc', ['clearSelection', 'clearCheckboxRow'])
+    UtilTools.warn('vxe.error.delFunc', ['clearSelection', 'clearCheckboxRow'])
     return this.clearCheckboxRow()
   },
   /**
@@ -2091,7 +2091,7 @@ const Methods = {
   },
   // 在 v3.0 中废弃 getCurrentRow
   getCurrentRow () {
-    // UtilTools.warn('vxe.error.delFunc', ['getCurrentRow', 'getCurrentRecord'])
+    UtilTools.warn('vxe.error.delFunc', ['getCurrentRow', 'getCurrentRecord'])
     return this.getCurrentRecord()
   },
   /**
@@ -2102,7 +2102,7 @@ const Methods = {
   },
   // 在 v3.0 中废弃 getRadioRow
   getRadioRow () {
-    // UtilTools.warn('vxe.error.delFunc', ['getRadioRow', 'getRadioRecord'])
+    UtilTools.warn('vxe.error.delFunc', ['getRadioRow', 'getRadioRecord'])
     return this.getRadioRecord()
   },
   /**
@@ -2727,7 +2727,7 @@ const Methods = {
     return this.$nextTick().then(() => isExists ? this.recalculate() : 0)
   },
   getVirtualScroller () {
-    // UtilTools.warn('vxe.error.delFunc', ['getVirtualScroller', 'getTableScroll'])
+    UtilTools.warn('vxe.error.delFunc', ['getVirtualScroller', 'getTableScroll'])
     return this.getTableScroll()
   },
   /**

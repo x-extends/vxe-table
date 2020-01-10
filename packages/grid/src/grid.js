@@ -188,7 +188,7 @@ export default {
     }
     // v3.0 中废弃 proxy-config.index
     if (proxyOpts.index) {
-      // UtilTools.warn('vxe.error.delProp', ['proxy-config.index', 'proxy-config.seq'])
+      UtilTools.warn('vxe.error.delProp', ['proxy-config.index', 'proxy-config.seq'])
     }
     // （v3.0 中废弃 proxyConfig.props.data）
     if (props && props.data) {

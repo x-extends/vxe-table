@@ -433,7 +433,7 @@ export default {
       return this.$nextTick()
     },
     _getMouseSelecteds () {
-      // UtilTools.warn('vxe.error.delFunc', ['getMouseSelecteds', 'getSelectedCell'])
+      UtilTools.warn('vxe.error.delFunc', ['getMouseSelecteds', 'getSelectedCell'])
       return this.getSelectedCell()
     },
     _getMouseCheckeds () {
