@@ -24,7 +24,7 @@ import VXETable from './v-x-e-table'
 import zhCN from './locale/lang/zh-CN'
 
 // 按需加载的组件
-export const components = [
+const components = [
   Table,
   Column,
   Header,

@@ -41,8 +41,8 @@ class VXEStore {
   }
 }
 
-export const commands = new VXEStore()
-export const menus = new VXEStore()
+const commands = new VXEStore()
+const menus = new VXEStore()
 
 export const VXETable = {
   t: key => GlobalConfig.i18n(key),
@@ -93,6 +93,4 @@ Object.defineProperty(VXETable, 'importTypes', {
   }
 })
 
-export * from './src/interceptor'
-export * from './src/renderer'
 export default VXETable
