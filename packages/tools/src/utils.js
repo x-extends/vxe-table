@@ -41,9 +41,11 @@ class ColumnConfig {
       // 基本属性
       id: `col_${++columnUniqueId}`,
       type: _vm.type,
+      // 在 v3.0 中废弃 prop
       prop: _vm.prop,
       property: _vm.field || _vm.prop,
       title: _vm.title,
+      // 在 v3.0 中废弃 label
       label: _vm.label,
       width: _vm.width,
       minWidth: _vm.minWidth,
@@ -74,7 +76,7 @@ class ColumnConfig {
       params: _vm.params,
       // 渲染属性
       visible,
-      _visible: visible,
+      defaultVisible: visible,
       checked: false,
       disabled: false,
       level: 1,

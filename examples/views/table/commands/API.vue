@@ -1,7 +1,7 @@
 <template>
   <div>
-    <h1>全局工具栏按钮注册器</h1>
-    <p class="tip">你可以很简单的将工具栏中常用的按钮注册成全局可复用的</p>
+    <h1>全局指令注册器</h1>
+    <p class="tip">你可以很简单的将工具栏按钮或数据代理中常用的指令注册成全局可复用</p>
     <vxe-table
       resizable
       highlight-current-row
@@ -90,6 +90,45 @@ export default {
           },
           created () {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
+          }
+        }
+        `,
+        `
+        <button @click="printEvent">打印</button>
+        <vxe-grid
+          border
+          resizable
+          ref="xGrid"
+          height="300"
+          :columns="tableColumn"
+          :data="tableData">
+        </vxe-grid>
+        `,
+        `
+        VXETable.buttons.add('myPrint', (params, event) => {
+          let { $table, code, button } = params
+          $table.print()
+        })
+
+        export default {
+          data () {
+            return {
+              tableData: [],
+              tableColumn: [
+                { type: 'seq', width: 50 },
+                { field: 'name', title: 'Name' },
+                { field: 'sex', title: 'Sex' },
+                { field: 'address', title: 'Address' }
+              ]
+            }
+          },
+          created () {
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
+          },
+          methods: {
+            printEvent () {
+              this.$refs.xGrid.commitProxy('myPrint')
+            }
           }
         }
         `

@@ -4,7 +4,7 @@ import XEUtils from 'xe-utils'
 // 创建一个支持输入的筛选器（仅用于简单示例，实际开发中应该封装成一个组件，不应该把复杂的渲染逻辑写在渲染器中）
 VXETable.renderer.add('MyFilter', {
   // 筛选模板
-  renderFilter (h, filterRender, params, context) {
+  renderFilter (h, renderOpts, params, context) {
     let { column } = params
     return column.filters.map(item => {
       return <input
@@ -31,7 +31,7 @@ VXETable.renderer.add('MyComplexFilter', {
   // 不显示底部按钮，使用自定义的按钮
   isFooter: false,
   // 筛选模板
-  renderFilter (h, filterRender, params, context) {
+  renderFilter (h, renderOpts, params, context) {
     const { column } = params
     return column.filters.map((item, index) => {
       const { data } = item
@@ -86,7 +86,7 @@ VXETable.renderer.add('MyExcelFilter', {
   // 不显示底部按钮，使用自定义的按钮
   isFooter: false,
   // 筛选模板
-  renderFilter (h, filterRender, params, context) {
+  renderFilter (h, renderOpts, params, context) {
     const { $table, column } = params
     const { fullData } = $table.getTableData()
     const colValues = Object.keys(XEUtils.groupBy(fullData, column.property))

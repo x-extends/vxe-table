@@ -302,7 +302,7 @@ const apis = [
           },
           {
             name: 'code',
-            desc: '按钮编码',
+            desc: '指令编码',
             version: '',
             type: 'String',
             enum: '',

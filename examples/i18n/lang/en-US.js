@@ -187,13 +187,15 @@ module.exports = {
         menusPlugin: 'plugin-menus Context menus',
         excelPlugin: 'plugin-excel A simple excel',
 
+        commands: '(Global) Command register',
+        menus: '(Global) Context menu',
+
         renderer: '(Advanced) Renderer',
         rendererFilter: 'Filter renderer',
         rendererDefault: 'Default renderer',
         rendererEdit: 'Edit renderer',
+        rendererToolbar: 'Toolbar renderer',
 
-        bottons: '(Abstract) Toolbar button',
-        menus: '(Abstract) Context menu',
         interceptor: '(Advanced) Event interceptor',
 
         optimize: 'Optimization and suggestion',
@@ -440,7 +442,8 @@ module.exports = {
           formConfig: 'Form config',
           toolbar: 'Toolbar config',
           pagerConfig: 'Pager config',
-          proxyConfig: 'Data proxy config(based on the Promise API)'
+          proxyConfig: 'Data proxy config(based on the Promise API)',
+          toolbarRender: 'Toolbar renderer config'
         }
       },
       toolbar: {

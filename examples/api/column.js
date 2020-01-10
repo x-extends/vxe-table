@@ -581,7 +581,7 @@ const apis = [
           },
           {
             name: 'immediate',
-            desc: '输入值实时同步更新（如果设置为 true，性能将会下降）',
+            desc: '输入值实时同步更新（如果设置为 true，但可编辑时性能将会直线下降）',
             version: '2.6.2',
             type: 'Boolean',
             enum: '',

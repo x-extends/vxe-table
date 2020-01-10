@@ -1,5 +1,5 @@
 import XEUtils from 'xe-utils/methods/xe-utils'
-import VXETable, { Renderer } from '../../v-x-e-table'
+import VXETable from '../../v-x-e-table'
 import { UtilTools, DomTools } from '../../tools'
 
 var browse = DomTools.browse
@@ -322,7 +322,7 @@ export default {
       let { row, column, cell } = params
       let { editRender } = column
       if (editRender) {
-        let compRender = Renderer.get(editRender.name)
+        let compRender = VXETable.renderer.get(editRender.name)
         let { autofocus, autoselect } = editRender
         let inputElem
         // 如果指定了聚焦 class

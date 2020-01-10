@@ -1,8 +1,6 @@
 import XEUtils from 'xe-utils/methods/xe-utils'
 import Interceptor from './src/interceptor'
 import Renderer from './src/renderer'
-import Buttons from './src/buttons'
-import Menus from './src/menus'
 import Setup from './src/setup'
 import GlobalConfig from '../conf'
 import { UtilTools } from '../tools'
@@ -29,6 +27,33 @@ function reg (key) {
   VXETable[`_${key}`] = 1
 }
 
+/**
+ * 创建数据仓库
+ */
+class VXEStore {
+  constructor () {
+    this.store = {}
+  }
+  mixin (map) {
+    Object.assign(this.store, map)
+    return VXEStore
+  }
+  get (type) {
+    return this.store[type]
+  }
+  add (type, render) {
+    this.store[type] = render
+    return VXEStore
+  }
+  delete (type) {
+    delete this.store[type]
+    return VXEStore
+  }
+}
+
+export const commands = new VXEStore()
+export const menus = new VXEStore()
+
 export const VXETable = {
   t: key => GlobalConfig.i18n(key),
   v: 'v2',
@@ -38,9 +63,22 @@ export const VXETable = {
   setup: Setup,
   interceptor: Interceptor,
   renderer: Renderer,
-  buttons: Buttons,
-  menus: Menus
+  commands,
+  menus
 }
+
+// v3.0 中废弃 buttons
+Object.defineProperty(VXETable, 'buttons', {
+  get () {
+    UtilTools.warn('vxe.error.delProp', ['buttons', 'commands'])
+    return commands
+  }
+})
+
+/**
+ * 获取当前的 zIndex
+ */
+Object.defineProperty(VXETable, 'zIndex', { get: UtilTools.getLastZIndex })
 
 /**
  * 获取当前的 zIndex
@@ -78,6 +116,4 @@ Object.defineProperty(VXETable, 'importTypes', {
 
 export * from './src/interceptor'
 export * from './src/renderer'
-export * from './src/menus'
-export * from './src/buttons'
 export default VXETable

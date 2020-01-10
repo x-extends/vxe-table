@@ -7,10 +7,10 @@ function toType (type) {
 const eventTypes = 'created,mounted,activated,beforeDestroy,destroyed,event.clearActived,event.clearFilter,event.showMenu,event.keydown,event.export,event.import'.split(',').map(toType)
 const _storeMap = {}
 
-export const Interceptor = {
+export const interceptorStore = {
   mixin (map) {
-    XEUtils.each(map, (callback, type) => Interceptor.add(type, callback))
-    return Interceptor
+    XEUtils.each(map, (callback, type) => interceptorStore.add(type, callback))
+    return interceptorStore
   },
   get (type) {
     return _storeMap[toType(type)] || []
@@ -24,15 +24,15 @@ export const Interceptor = {
       }
       eList.push(callback)
     }
-    return Interceptor
+    return interceptorStore
   },
   delete (type, callback) {
     let eList = _storeMap[toType(type)]
     if (eList) {
       XEUtils.remove(eList, cb => cb === callback)
     }
-    return Interceptor
+    return interceptorStore
   }
 }
 
-export default Interceptor
+export default interceptorStore

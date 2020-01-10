@@ -1350,7 +1350,7 @@ const apis = [
       {
         name: 'context-menu',
         descKey: 'app.api.table.desc.contextMenu',
-        version: '2 | 2.7.25',
+        version: '2 | 2.8',
         type: 'Boolean, Object',
         enum: '',
         defVal: '继承 setup.contextMenu',

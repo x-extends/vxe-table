@@ -27,7 +27,7 @@
       border
       resizable
       :data="tableData">
-      <vxe-table-column type="seq" width="100" show-overflow>
+      <vxe-table-column type="seq" width="100" :resizable="false" show-overflow>
         <template v-slot:header="{ row }">
           <div class="first-col">
             <div class="first-col-top">名称</div>
@@ -136,7 +136,7 @@ export default {
           border
           resizable
           :data="tableData">
-          <vxe-table-column type="seq" width="100" show-overflow>
+          <vxe-table-column type="seq" width="100" :resizable="false" show-overflow>
             <template v-slot:header="{ row }">
               <div class="first-col">
                 <div class="first-col-top">名称</div>

@@ -1,6 +1,6 @@
 import XEUtils from 'xe-utils/methods/xe-utils'
 import { UtilTools, DomTools } from '../../tools'
-import { Menus } from '../../v-x-e-table'
+import VXETable from '../../v-x-e-table'
 
 export default {
   methods: {
@@ -178,7 +178,7 @@ export default {
      */
     ctxMenuLinkEvent (evnt, menu) {
       if (!menu.disabled && (!menu.children || !menu.children.length)) {
-        let ctxMenuMethod = Menus.get(menu.code)
+        let ctxMenuMethod = VXETable.menus.get(menu.code)
         let params = Object.assign({ menu, $table: this }, this.ctxMenuStore.args)
         if (ctxMenuMethod) {
           ctxMenuMethod.call(this, params, evnt)

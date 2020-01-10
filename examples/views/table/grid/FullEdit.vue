@@ -132,6 +132,7 @@ export default {
       },
       tableToolbar: {
         id: 'full_edit_1',
+        name: 'myToolbar',
         buttons: [
           { code: 'insert_actived', name: '新增', icon: 'fa fa-plus', disabled: false },
           {

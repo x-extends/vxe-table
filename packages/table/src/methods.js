@@ -1,6 +1,6 @@
 import XEUtils from 'xe-utils/methods/xe-utils'
 import Cell from '../../cell'
-import VXETable, { Interceptor, Renderer } from '../../v-x-e-table'
+import VXETable from '../../v-x-e-table'
 import { UtilTools, DomTools } from '../../tools'
 
 var rowUniqueId = 0
@@ -582,7 +582,7 @@ const Methods = {
         return filterColumns.every(({ column, valueList, itemList }) => {
           if (valueList.length && !(filterOpts.remote || remoteFilter)) {
             let { filterRender, property, filterMethod } = column
-            let compConf = filterRender ? Renderer.get(filterRender.name) : null
+            let compConf = filterRender ? VXETable.renderer.get(filterRender.name) : null
             if (!filterMethod && compConf && compConf.renderFilter) {
               filterMethod = compConf.filterMethod
             }
@@ -1285,7 +1285,7 @@ const Methods = {
     }
   },
   preventEvent (evnt, type, args, next, end) {
-    let evntList = Interceptor.get(type)
+    let evntList = VXETable.interceptor.get(type)
     let rest
     if (!evntList.some(func => func(args, evnt, this) === false)) {
       if (next) {

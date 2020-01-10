@@ -3,7 +3,7 @@
     <p class="tip">
       默认的渲染器 <table-column-api-link prop="cell-render"/><br>
       配置参数：<br>
-      renderDefault (h, cellRender, { row, rowIndex, $rowIndex, column, columnIndex, $columnIndex }, context) 渲染函数<br>
+      renderDefault (h, renderOpts, { row, rowIndex, $rowIndex, column, columnIndex, $columnIndex }, context) 渲染函数<br>
       <span class="red">（注：实际开发中应该将业务封装成一个组件，不要把复杂的渲染逻辑写在渲染器中）</span>
     </p>
 
@@ -39,9 +39,9 @@ export default {
         // 创建一个超链接渲染器
         VXETable.renderer.add('MyLink', {
           // 默认显示模板
-          renderDefault (h, cellRender, params) {
+          renderDefault (h, renderOpts, params) {
             let { row, column } = params
-            let { events } = cellRender
+            let { events } = renderOpts
             return [
               <a class="my-link" onClick={ () => events.click(params) }>{row[column.property]}</a>
             ]
