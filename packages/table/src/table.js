@@ -80,7 +80,7 @@ export default {
     border: { type: [Boolean, String], default: () => GlobalConfig.border },
     // 表格的尺寸
     size: { type: String, default: () => GlobalConfig.size },
-    // 列的宽度是否自撑开
+    // 列的宽度是否自撑开（可能会被废弃的参数，不要使用）
     fit: { type: Boolean, default: () => GlobalConfig.fit },
     // 表格是否加载中
     loading: Boolean,
@@ -186,7 +186,7 @@ export default {
     // 树形结构配置项
     treeConfig: [Boolean, Object],
     // 快捷菜单配置项
-    contextMenu: Object,
+    contextMenu: [Boolean, Object],
     // 鼠标配置项
     mouseConfig: Object,
     // 按键配置项
@@ -443,7 +443,7 @@ export default {
       return this.headerCtxMenu.length || this.bodyCtxMenu.length
     },
     ctxMenuOpts () {
-      return Object.assign({}, GlobalConfig.menu, this.contextMenu)
+      return Object.assign({}, GlobalConfig.contextMenu, this.contextMenu)
     },
     ctxMenuList () {
       let rest = []

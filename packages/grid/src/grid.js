@@ -308,7 +308,7 @@ export default {
      */
     commitProxy (code) {
       const { $refs, toolbar, toolbarOpts, proxyOpts, tablePage, pagerConfig, sortData, filterData, isMsg } = this
-      const { beforeQuery, beforeDelete, beforeSave, ajax = {}, props = {} } = proxyOpts
+      const { beforeQuery, beforeDelete, afterDelete, beforeSave, afterSave, ajax = {}, props = {} } = proxyOpts
       const $table = $refs.xTable
       const args = XEUtils.slice(arguments, 1)
       let button
@@ -357,6 +357,7 @@ export default {
           if (ajaxMethods) {
             let params = {
               code,
+              button,
               $grid: this,
               sort: sortData,
               filters: filterData,
@@ -379,8 +380,7 @@ export default {
                   field: defaultSort.field,
                   // v3 废弃 prop
                   prop: defaultSort.field,
-                  order: defaultSort.order,
-                  $table
+                  order: defaultSort.order
                 }
               }
               this.sortData = params.sort = sortParams
@@ -416,14 +416,21 @@ export default {
             this.remove(selectRecords).then(() => {
               let removeRecords = this.getRemoveRecords()
               let body = { removeRecords }
+              let applyArgs = [{ $grid: this, code, button, body, options: ajaxMethods }].concat(args)
               if (removeRecords.length) {
                 this.tableLoading = true
-                return (beforeDelete || ajaxMethods).apply(this, [{ $grid: this, code, body, options: ajaxMethods }].concat(args)).then(result => {
+                return (beforeDelete || ajaxMethods).apply(this, applyArgs).then(result => {
                   this.tableLoading = false
                 }).catch(e => {
                   this.tableLoading = false
                   console.error(e)
-                }).then(() => this.commitProxy('reload'))
+                }).then(() => {
+                  if (afterDelete) {
+                    afterDelete.apply(this, applyArgs)
+                  } else {
+                    this.commitProxy('reload')
+                  }
+                })
               } else {
                 if (isMsg && !selectRecords.length) {
                   VXETable.$modal.message({ id: code, message: GlobalConfig.i18n('vxe.grid.selectOneRecord'), status: 'warning' })
@@ -440,6 +447,7 @@ export default {
           if (ajaxMethods) {
             let body = Object.assign({ pendingRecords: this.pendingRecords }, this.getRecordset())
             let { insertRecords, removeRecords, updateRecords, pendingRecords } = body
+            let applyArgs = [{ $grid: this, code, button, body, options: ajaxMethods }].concat(args)
             // 排除掉新增且标记为删除的数据
             if (insertRecords.length) {
               body.pendingRecords = pendingRecords.filter(row => insertRecords.indexOf(row) === -1)
@@ -455,13 +463,19 @@ export default {
                   if (body.insertRecords.length || removeRecords.length || updateRecords.length || body.pendingRecords.length) {
                     this.tableLoading = true
                     resolve(
-                      (beforeSave || ajaxMethods).apply(this, [{ $grid: this, code, body, options: ajaxMethods }].concat(args)).then(() => {
+                      (beforeSave || ajaxMethods).apply(this, applyArgs).then(() => {
                         VXETable.$modal.message({ id: code, message: GlobalConfig.i18n('vxe.grid.saveSuccess'), status: 'success' })
                         this.tableLoading = false
                       }).catch(e => {
                         this.tableLoading = false
                         console.error(e)
-                      }).then(() => this.commitProxy('reload'))
+                      }).then(() => {
+                        if (afterSave) {
+                          afterSave.apply(this, applyArgs)
+                        } else {
+                          this.commitProxy('reload')
+                        }
+                      })
                     )
                   } else {
                     if (isMsg) {
@@ -566,7 +580,13 @@ export default {
       let isRemote = XEUtils.isBoolean(column.remoteSort) ? column.remoteSort : ($table.sortOpts.remote || remoteSort)
       // 如果是服务端排序
       if (isRemote) {
-        this.sortData = params
+        this.sortData = {
+          property: params.property,
+          field: params.property,
+          // v3 废弃 prop
+          prop: params.property,
+          order: params.order
+        }
         if (proxyConfig) {
           this.commitProxy('query')
         }

@@ -3,6 +3,9 @@ const GlobalConfig = {
   // showHeaderOverflow: null,
   // resizeInterval: 250,
   // size: null,
+  // resizable: false,
+  // stripe: false,
+  // border: false,
   // radioConfig: {
   //   trigger: 'default'
   // },
@@ -33,9 +36,9 @@ const GlobalConfig = {
   // editConfig: {
   //   mode: 'cell'
   // },
-  // resizable: false,
-  // stripe: false,
-  // border: false,
+  // contextMenu: {
+  //   visibleMethod () {}
+  // },
   fit: true,
   emptyCell: '　',
   showHeader: true,
@@ -111,14 +114,15 @@ const GlobalConfig = {
         list: null,
         result: 'result',
         total: 'page.total'
-      },
-      beforeColumn: null,
-      beforeQuery: null,
-      beforeDelete: null,
-      beforeSave: null
+      }
+      // beforeColumn: null,
+      // beforeQuery: null,
+      // beforeDelete: null,
+      // afterDelete: null,
+      // beforeSave: null,
+      // afterSave: null
     }
   },
-  menu: {},
   tooltip: {
     trigger: 'hover',
     theme: 'dark',

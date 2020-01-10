@@ -52,9 +52,9 @@ export default {
      * 快捷菜单事件处理
      */
     handleGlobalContextmenuEvent (evnt) {
-      let { id, isCtxMenu, ctxMenuStore, ctxMenuOpts } = this
+      let { id, contextMenu, isCtxMenu, ctxMenuStore, ctxMenuOpts } = this
       let layoutList = ['header', 'body', 'footer']
-      if (isCtxMenu) {
+      if (contextMenu && isCtxMenu) {
         if (ctxMenuStore.visible) {
           if (ctxMenuStore.visible && this.$refs.ctxWrapper && DomTools.getEventTargetNode(evnt, this.$refs.ctxWrapper.$el).flag) {
             evnt.preventDefault()
