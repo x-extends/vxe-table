@@ -347,7 +347,7 @@ const apis = [
       {
         name: 'border',
         descKey: 'app.api.table.desc.border',
-        version: '1.15.16~',
+        version: '1 | 1.15.16',
         type: 'Boolean, String',
         enum: '',
         defVal: 'false',
@@ -1431,10 +1431,10 @@ const apis = [
       {
         name: 'context-menu',
         descKey: 'app.api.table.desc.contextMenu',
-        version: '',
-        type: 'Object',
+        version: '1 | 1.15.18',
+        type: 'Boolean, Object',
         enum: '',
-        defVal: '',
+        defVal: '继承 setup.contextMenu',
         list: [
           {
             name: 'header',

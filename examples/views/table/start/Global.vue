@@ -66,6 +66,20 @@
           editConfig: {
             mode: 'cell'
           },
+          contextMenu: {
+            // header: {
+            //   options: []
+            // },
+            // body: {
+            //   options: []
+            // },
+            // footer: {
+            //   options: []
+            // },
+            visibleMethod ({ type, options, column }) {
+              return true
+            }
+          },
           // 版本号（对于某些带 Storage 数据储存的功能有用到，上升版本号可以用于重置 Storage 数据）
           version: 0,
           // 高级表格的全局参数
@@ -80,22 +94,36 @@
               },
               // 列初始化之前
               beforeColumn ({ column }) {},
-              // 查询
+              // 查询触发之前
               beforeQuery ({ options, page, sort, filters }) {
+                // page 如果有，读取当前分页的对象
+                // sort 如果有，读取当前排序的条件
+                // filters 如果有，读取当前筛选的条件
                 return fetch('url', { method: 'GET' }).then(response => response.json())
               },
-              // 删除
+              // 删除触发之前
               beforeDelete ({ options, body }) {
+                // body.removeRecords 移除的数据列表
                 return fetch('url', { method: 'DELETE' }).then(response => response.json())
               },
-              // 保存
+              // 删除完成之后
+              afterDelete ({ $grid }) {
+                $grid.commitProxy('reload')
+              },
+              // 保存触发之前
               beforeSave ({ options, body }) {
+                // body.pendingRecords 标记删除的数据列表
+                // body.insertRecords 插入的数据列表
+                // body.removeRecords 移除的数据列表
+                // body.updateRecords 改变的数据列表
                 return fetch('url', { method: 'POST', body }).then(response => response.json())
+              },
+              // 保存完成之后
+              afterSave ({ $grid }) {
+                $grid.commitProxy('reload')
               }
             }
           },
-          // 快捷菜单的全局参数
-          menu: {},
           // 默认 tooltip 主题样式
           tooltip: {
             trigger: 'hover',
