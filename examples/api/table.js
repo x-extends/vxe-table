@@ -1184,7 +1184,7 @@ const apis = [
       {
         name: 'expand-config',
         descKey: 'app.api.table.desc.expandConfig',
-        version: '',
+        version: '1 | 1.15.18',
         type: 'Object',
         enum: '',
         defVal: '继承 setup.expandConfig',
@@ -1294,7 +1294,7 @@ const apis = [
       {
         name: 'tree-config',
         descKey: 'app.api.table.desc.treeConfig',
-        version: '',
+        version: '1 | 1.15.18',
         type: 'Boolean, Object',
         enum: '',
         defVal: '继承 setup.treeConfig',
@@ -1595,7 +1595,7 @@ const apis = [
       {
         name: 'edit-config',
         descKey: 'app.api.table.desc.editConfig',
-        version: '',
+        version: '1 | 1.15.18',
         type: 'Boolean, Object',
         enum: '',
         defVal: '继承 setup.editConfig',
