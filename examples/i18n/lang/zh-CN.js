@@ -186,13 +186,15 @@ module.exports = {
         menusPlugin: 'plugin-menus 快捷菜单集',
         excelPlugin: 'plugin-excel 简单的 Excel',
 
+        commands: '(全局) 指令注册',
+        menus: '(全局) 快捷菜单',
+
         renderer: '(进阶) 渲染器',
         rendererFilter: '筛选渲染器',
         rendererDefault: '默认的渲染器',
         rendererEdit: '可编辑渲染器',
+        rendererToolbar: '工具栏渲染器',
 
-        bottons: '(抽象) 工具栏按钮',
-        menus: '(抽象) 快捷菜单',
         interceptor: '(进阶) 事件拦截器',
 
         optimize: '优化建议',
@@ -441,7 +443,8 @@ module.exports = {
           formConfig: '表单配置项',
           toolbar: '工具栏配置',
           pagerConfig: '分页配置项',
-          proxyConfig: '数据代理配置项（基于 Promise API）'
+          proxyConfig: '数据代理配置项（基于 Promise API）',
+          toolbarRender: '工具栏渲染器配置项'
         }
       },
       toolbar: {

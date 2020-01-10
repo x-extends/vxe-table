@@ -2,7 +2,7 @@ import XEUtils from 'xe-utils'
 import GlobalConfig from '../../conf'
 import VxeTableBody from '../../body'
 import Cell from '../../cell'
-import VXETable, { Interceptor, Renderer, Menus } from '../../v-x-e-table'
+import VXETable from '../../v-x-e-table'
 import { UtilTools, DomTools, ExportTools, GlobalEvent, ResizeEvent } from '../../tools'
 
 var rowUniqueId = 0
@@ -1731,7 +1731,7 @@ export default {
           return filterColumns.every(({ column, valueList, itemList }) => {
             if (valueList.length && !(filterOpts.remote || remoteFilter)) {
               let { filterRender, property, filterMethod } = column
-              let compConf = filterRender ? Renderer.get(filterRender.name) : null
+              let compConf = filterRender ? VXETable.renderer.get(filterRender.name) : null
               if (!filterMethod && compConf && compConf.renderFilter) {
                 filterMethod = compConf.filterMethod
               }
@@ -2166,7 +2166,7 @@ export default {
       }
     },
     preventEvent (evnt, type, args, next, end) {
-      let evntList = Interceptor.get(type)
+      let evntList = VXETable.interceptor.get(type)
       let rest
       if (!evntList.some(func => func(args, evnt, this) === false)) {
         if (next) {
@@ -2707,7 +2707,7 @@ export default {
      */
     ctxMenuLinkEvent (evnt, menu) {
       if (!menu.disabled && (!menu.children || !menu.children.length)) {
-        let ctxMenuMethod = Menus.get(menu.code)
+        let ctxMenuMethod = VXETable.menus.get(menu.code)
         let params = Object.assign({ menu, $table: this }, this.ctxMenuStore.args)
         if (ctxMenuMethod) {
           ctxMenuMethod.call(this, params, evnt)
@@ -3850,7 +3850,7 @@ export default {
       let { row, column, cell } = params
       let { editRender } = column
       if (editRender) {
-        let compRender = Renderer.get(editRender.name)
+        let compRender = VXETable.renderer.get(editRender.name)
         let { autofocus, autoselect } = editRender
         let inputElem
         // 如果指定了聚焦 class

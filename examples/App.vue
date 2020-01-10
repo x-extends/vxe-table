@@ -1566,6 +1566,32 @@ export default {
           ]
         },
         {
+          label: 'app.aside.nav.commands',
+          value: 'commands',
+          expand: false,
+          children: [
+            {
+              label: 'app.aside.nav.api',
+              locat: {
+                name: 'CommandsAPI'
+              }
+            }
+          ]
+        },
+        {
+          label: 'app.aside.nav.menus',
+          value: 'menus',
+          expand: false,
+          children: [
+            {
+              label: 'app.aside.nav.api',
+              locat: {
+                name: 'MenusAPI'
+              }
+            }
+          ]
+        },
+        {
           label: 'app.aside.nav.renderer',
           value: 'renderer',
           expand: false,
@@ -1593,31 +1619,11 @@ export default {
               locat: {
                 name: 'RendererEdit'
               }
-            }
-          ]
-        },
-        {
-          label: 'app.aside.nav.bottons',
-          value: 'bottons',
-          expand: false,
-          children: [
+            },
             {
-              label: 'app.aside.nav.api',
+              label: 'app.aside.nav.rendererToolbar',
               locat: {
-                name: 'BottonsAPI'
-              }
-            }
-          ]
-        },
-        {
-          label: 'app.aside.nav.menus',
-          value: 'menus',
-          expand: false,
-          children: [
-            {
-              label: 'app.aside.nav.api',
-              locat: {
-                name: 'MenusAPI'
+                name: 'RendererToolbar'
               }
             }
           ]

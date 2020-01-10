@@ -1,5 +1,5 @@
 import GlobalConfig from '../../conf'
-import { Renderer } from '../../v-x-e-table'
+import VXETable from '../../v-x-e-table'
 import { UtilTools } from '../../tools'
 
 export default {
@@ -12,7 +12,7 @@ export default {
     let { filterStore, optimizeOpts } = this
     let { column } = filterStore
     let filterRender = column ? column.own.filterRender : null
-    let compConf = filterRender ? Renderer.get(filterRender.name) : null
+    let compConf = filterRender ? VXETable.renderer.get(filterRender.name) : null
     return h('div', {
       class: ['vxe-table--filter-wrapper', 'filter--prevent-default', compConf && compConf.className ? compConf.className : '', {
         't--animat': optimizeOpts.animat,
@@ -82,7 +82,7 @@ export default {
       let { filterStore } = this
       let { column, multiple } = filterStore
       let filterRender = column.own.filterRender
-      let compConf = filterRender ? Renderer.get(filterRender.name) : null
+      let compConf = filterRender ? VXETable.renderer.get(filterRender.name) : null
       return multiple && (!compConf || compConf.isFooter !== false) ? [
         h('div', {
           class: 'vxe-table--filter-footer'

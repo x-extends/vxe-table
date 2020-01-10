@@ -1,7 +1,63 @@
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../conf'
-import VXETable, { Buttons } from '../../v-x-e-table'
+import VXETable from '../../v-x-e-table'
 import { UtilTools, DomTools, GlobalEvent } from '../../tools'
+
+/**
+ * 渲染按钮
+ */
+function renderBtn (h, _vm, compConf) {
+  let { _e, $scopedSlots, $grid, $table, extraSlots, buttons = [] } = _vm
+  if ($scopedSlots.buttons) {
+    return $scopedSlots.buttons.call(_vm, { $grid, $table }, h)
+  }
+  if (compConf && compConf.renderButtons) {
+    return compConf.renderButtons.call(_vm, h, extraSlots, { $grid, $table })
+  }
+  return buttons.map(item => {
+    return item.visible === false ? _e() : h('vxe-button', {
+      on: {
+        click: evnt => _vm.btnEvent(evnt, item)
+      },
+      props: {
+        icon: item.icon,
+        type: item.type,
+        disabled: item.disabled,
+        loading: item.loading
+      },
+      scopedSlots: item.dropdowns && item.dropdowns.length ? {
+        default: () => UtilTools.getFuncText(item.name),
+        dropdowns: () => item.dropdowns.map(child => {
+          return child.visible === false ? _e() : h('vxe-button', {
+            on: {
+              click: evnt => _vm.btnEvent(evnt, child)
+            },
+            props: {
+              icon: child.icon,
+              type: child.type,
+              disabled: child.disabled,
+              loading: child.loading
+            }
+          }, UtilTools.getFuncText(child.name))
+        })
+      } : null
+    }, UtilTools.getFuncText(item.name))
+  })
+}
+
+/**
+ * 渲染右侧工具
+ */
+function renderRightTool (h, _vm, compConf) {
+  let { $scopedSlots, $grid, $table, extraSlots } = _vm
+  if ($scopedSlots.tools) {
+    return $scopedSlots.tools.call(_vm, { $grid, $table }, h)
+  }
+  if (compConf && compConf.renderTools) {
+    return compConf.renderTools.call(_vm, h, extraSlots, { $grid, $table })
+  }
+  return []
+}
 
 export default {
   name: 'VxeToolbar',
@@ -16,7 +72,8 @@ export default {
     setting: [Boolean, Object],
     custom: [Boolean, Object],
     buttons: { type: Array, default: () => GlobalConfig.toolbar.buttons },
-    size: String
+    size: String,
+    extraSlots: Object
   },
   inject: {
     $grid: {
@@ -63,6 +120,7 @@ export default {
     if (customOpts.storage && !id) {
       return UtilTools.error('vxe.error.toolbarId')
     }
+    // 在 v3 中废弃 setting
     if (setting) {
       // UtilTools.warn('vxe.error.delProp', ['setting', 'custom'])
     }
@@ -83,11 +141,10 @@ export default {
     GlobalEvent.off(this, 'blur')
   },
   render (h) {
-    let { _e, $scopedSlots, $grid, $table, loading, customStore, importOpts, exportOpts, refresh, refreshOpts, zoom, zoomOpts, custom, setting, customOpts, buttons = [], vSize, tableFullColumn } = this
+    let { $grid, extraSlots, loading, customStore, importOpts, exportOpts, refresh, refreshOpts, zoom, zoomOpts, custom, setting, customOpts, vSize, tableFullColumn } = this
     let customBtnOns = {}
     let customWrapperOns = {}
-    let $buttons = $scopedSlots.buttons
-    let $tools = $scopedSlots.tools
+    let compConf = extraSlots ? VXETable.renderer.get(extraSlots.name) : null
     if (custom || setting) {
       if (customOpts.trigger === 'manual') {
         // 手动触发
@@ -110,38 +167,10 @@ export default {
     }, [
       h('div', {
         class: 'vxe-button--wrapper'
-      }, $buttons ? $buttons.call(this, { $grid, $table }, h) : buttons.map(item => {
-        return item.visible === false ? _e() : h('vxe-button', {
-          on: {
-            click: evnt => this.btnEvent(evnt, item)
-          },
-          props: {
-            icon: item.icon,
-            type: item.type,
-            disabled: item.disabled,
-            loading: item.loading
-          },
-          scopedSlots: item.dropdowns && item.dropdowns.length ? {
-            default: () => UtilTools.getFuncText(item.name),
-            dropdowns: () => item.dropdowns.map(child => {
-              return child.visible === false ? _e() : h('vxe-button', {
-                on: {
-                  click: evnt => this.btnEvent(evnt, child)
-                },
-                props: {
-                  icon: child.icon,
-                  type: child.type,
-                  disabled: child.disabled,
-                  loading: child.loading
-                }
-              }, UtilTools.getFuncText(child.name))
-            })
-          } : null
-        }, UtilTools.getFuncText(item.name))
-      })),
-      $tools ? h('div', {
+      }, renderBtn(h, this, compConf)),
+      h('div', {
         class: 'vxe-tools--wrapper'
-      }, $tools.call(this, { $grid, $table }, h)) : null,
+      }, renderRightTool(h, this, compConf)),
       h('div', {
         class: 'vxe-tools--operate'
       }, [
@@ -510,10 +539,10 @@ export default {
         if ($grid) {
           $grid.triggerToolbarBtnEvent(item, evnt)
         } else {
-          let btnMethod = Buttons.get(code)
+          let commandMethod = VXETable.commands.get(code)
           let params = { code, button: item, $grid, $table }
-          if (btnMethod) {
-            btnMethod.call(this, params, evnt)
+          if (commandMethod) {
+            commandMethod.call(this, params, evnt)
           }
           UtilTools.emitEvent(this, 'button-click', [params, evnt])
         }

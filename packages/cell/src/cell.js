@@ -1,6 +1,6 @@
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../conf'
-import { Renderer } from '../../v-x-e-table'
+import VXETable from '../../v-x-e-table'
 import { UtilTools } from '../../tools'
 
 export const Cell = {
@@ -75,7 +75,7 @@ export const Cell = {
     }
     if (editRender) {
       let funName = own.editRender ? 'renderCell' : 'renderDefault'
-      let compConf = Renderer.get(editRender.name)
+      let compConf = VXETable.renderer.get(editRender.name)
       if (compConf && compConf[funName]) {
         return compConf[funName].call($table, h, editRender, params, { $type: own.editRender ? 'edit' : 'cell', $grid: $table.$grid, $excel: $table.$parent, $table, $column: column })
       }
@@ -541,7 +541,7 @@ export const Cell = {
     let { $table, row, column } = params
     let { slots, own, formatter } = column
     let editRender = own.editRender
-    let compConf = Renderer.get(editRender.name)
+    let compConf = VXETable.renderer.get(editRender.name)
     if (editRender.type === 'visible' || isEdit) {
       if (slots && slots.edit) {
         return slots.edit(params, h)

@@ -1,6 +1,10 @@
 <template>
   <div>
-    <p class="tip">使用 edit <table-column-api-link prop="slot"/> 自定义渲染任意 Vue 组件</p>
+    <p class="tip">
+      使用 edit <table-column-api-link prop="slot"/> 自定义渲染任意 Vue 组件<br>
+      <span class="red">（注：自定义渲染虽然可以支持任意的 vue 组件，但是并不是所有组件都能直接使用的，所有跨组件之间会存在冲突问题，如果不处理好冲突的情况下是大部分组件是无法使用的；
+      可以通过 <router-link class="link" :to="{name: 'InterceptorAPI'}">事件拦截器</router-link> 来处理冲突）</span>
+    </p>
 
     <vxe-table
       border

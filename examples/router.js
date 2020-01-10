@@ -12,8 +12,9 @@ const RendererAPI = () => import(/* webpackChunkName: "start" */ './views/table/
 const RendererFilter = () => import(/* webpackChunkName: "start" */ './views/table/renderer/Filter.vue')
 const RendererDefault = () => import(/* webpackChunkName: "start" */ './views/table/renderer/Default.vue')
 const RendererEdit = () => import(/* webpackChunkName: "start" */ './views/table/renderer/Edit.vue')
+const RendererToolbar = () => import(/* webpackChunkName: "start" */ './views/table/renderer/Toolbar.vue')
 
-const BottonsAPI = () => import(/* webpackChunkName: "start" */ './views/table/bottons/API.vue')
+const CommandsAPI = () => import(/* webpackChunkName: "start" */ './views/table/commands/API.vue')
 const MenusAPI = () => import(/* webpackChunkName: "start" */ './views/table/menus/API.vue')
 const InterceptorAPI = () => import(/* webpackChunkName: "start" */ './views/table/interceptor/API.vue')
 
@@ -316,9 +317,14 @@ export default new Router({
       component: RendererEdit
     },
     {
-      path: '/table/bottons/api',
-      name: 'BottonsAPI',
-      component: BottonsAPI
+      path: '/table/renderer/toolbar',
+      name: 'RendererToolbar',
+      component: RendererToolbar
+    },
+    {
+      path: '/table/commands/api',
+      name: 'CommandsAPI',
+      component: CommandsAPI
     },
     {
       path: '/table/menus/api',

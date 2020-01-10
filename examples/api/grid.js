@@ -227,6 +227,25 @@ const apis = [
             ]
           }
         ]
+      },
+      {
+        name: 'toolbar-render',
+        descKey: 'app.api.grid.desc.toolbarRender',
+        version: '1.15.18',
+        type: 'Object',
+        enum: '',
+        defVal: '',
+        list: [
+          {
+            name: 'name',
+            desc: '渲染器名称',
+            version: '',
+            type: 'String',
+            enum: '',
+            defVal: '',
+            list: []
+          }
+        ]
       }
     ]
   },
@@ -335,7 +354,7 @@ const apis = [
         desc: '给数据代理提交指令（支持额外的参数，对于很多特殊场景很有用）',
         version: '',
         type: '',
-        enum: 'reload, query, delete, save',
+        enum: '',
         defVal: '',
         list: []
       },

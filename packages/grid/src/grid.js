@@ -2,7 +2,7 @@ import Table from '../../table'
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../conf'
 import { UtilTools, DomTools } from '../../tools'
-import VXETable, { Buttons } from '../../v-x-e-table'
+import VXETable from '../../v-x-e-table'
 
 const methods = {}
 const propKeys = Object.keys(Table.props)
@@ -20,6 +20,7 @@ export default {
     pagerConfig: Object,
     proxyConfig: Object,
     toolbar: [Boolean, Object],
+    toolbarRender: Object,
     formConfig: [Boolean, Object],
     ...Table.props
   },
@@ -59,7 +60,7 @@ export default {
       return Object.assign({}, GlobalConfig.grid.pagerConfig, this.pagerConfig)
     },
     toolbarOpts () {
-      return Object.assign({}, GlobalConfig.grid.toolbar, this.toolbar)
+      return Object.assign({}, GlobalConfig.grid.toolbar, this.toolbar, { extraSlots: this.toolbarRender })
     },
     toolbarSlots () {
       let { $scopedSlots, toolbar, toolbarOpts } = this
@@ -495,7 +496,7 @@ export default {
           break
         }
         default:
-          let btnMethod = Buttons.get(code)
+          let btnMethod = VXETable.commands.get(code)
           if (btnMethod) {
             btnMethod.apply(this, [{ code, button, $grid: this, $table }].concat(args))
           }

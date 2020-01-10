@@ -209,10 +209,10 @@ const renderMap = {
 /**
  * 全局渲染器
  */
-export const Renderer = {
+export const renderStore = {
   mixin (map) {
-    XEUtils.each(map, (options, name) => Renderer.add(name, options))
-    return Renderer
+    XEUtils.each(map, (options, name) => renderStore.add(name, options))
+    return renderStore
   },
   get (name) {
     return renderMap[name] || null
@@ -226,12 +226,12 @@ export const Renderer = {
         renderMap[name] = options
       }
     }
-    return Renderer
+    return renderStore
   },
   delete (name) {
     delete renderMap[name]
-    return Renderer
+    return renderStore
   }
 }
 
-export default Renderer
+export default renderStore
