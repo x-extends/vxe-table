@@ -26,7 +26,7 @@ import Resize from './resize'
 import zhCN from './locale/lang/zh-CN'
 
 // 按需加载的组件
-export const components = [
+const components = [
   // 模块
   Column,
   Header,
