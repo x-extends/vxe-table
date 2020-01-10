@@ -760,7 +760,7 @@ const Methods = {
    * @param {Array} customColumns 自定义列数组
    */
   reloadCustoms (customColumns) {
-    UtilTools.warn('vxe.error.delFunc', ['reloadCustoms', 'column.visible & refreshColumn'])
+    // UtilTools.warn('vxe.error.delFunc', ['reloadCustoms', 'column.visible & refreshColumn'])
     return this.$nextTick().then(() => {
       this.mergeCustomColumn(customColumns)
       return this.refreshColumn().then(() => this.tableFullColumn)
