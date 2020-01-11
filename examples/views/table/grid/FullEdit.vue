@@ -14,6 +14,7 @@
       import-config
       export-config
       form-config
+      keep-source
       ref="xGrid"
       height="530"
       row-id="id"
@@ -188,6 +189,7 @@ export default {
           import-config
           export-config
           form-config
+          keep-source
           ref="xGrid"
           height="530"
           row-id="id"

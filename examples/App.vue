@@ -1083,25 +1083,25 @@ export default {
               }
             },
             {
-              label: 'app.aside.nav.big1wRow',
+              label: 'app.aside.nav.scrollRows',
               locat: {
                 name: 'TableScrollRows'
               }
             },
             {
-              label: 'app.aside.nav.big10wRow',
+              label: 'app.aside.nav.scrollFullRows',
               locat: {
                 name: 'TableScrollFullRows'
               }
             },
             {
-              label: 'app.aside.nav.big1wRow1wCol',
+              label: 'app.aside.nav.scrollCols',
               locat: {
                 name: 'TableScrollCols'
               }
             },
             {
-              label: 'app.aside.nav.big10wRow1wCol',
+              label: 'app.aside.nav.scrollFullCols',
               locat: {
                 name: 'TableScrollFullCols'
               }

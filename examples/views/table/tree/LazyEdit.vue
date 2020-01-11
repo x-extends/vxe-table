@@ -11,6 +11,7 @@
     <vxe-table
       border
       resizable
+      keep-source
       ref="xTree"
       row-id="id"
       :loading="loading"
@@ -53,6 +54,7 @@ export default {
         <vxe-table
           border
           resizable
+          keep-source
           ref="xTree"
           row-id="id"
           :loading="loading"

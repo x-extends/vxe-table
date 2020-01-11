@@ -5,6 +5,7 @@
     <vxe-grid
       border
       resizable
+      keep-source
       height="530"
       :pager-config="tablePage"
       :proxy-config="tableProxy"
@@ -64,6 +65,7 @@ export default {
         <vxe-grid
           border
           resizable
+          keep-source
           height="530"
           :pager-config="tablePage"
           :proxy-config="tableProxy"

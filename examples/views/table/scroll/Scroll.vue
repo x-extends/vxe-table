@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="tip">
-      <span class="orange">虚拟滚动的取舍：牺牲提前编译数据的耗时，用来换取使用时的绝对流畅</span><span class="red">（最大可以支撑 1w 列、20w 行）</span><br>
+      <span class="orange">虚拟滚动的取舍：牺牲提前编译数据的耗时，用来换取使用时的绝对流畅</span><span class="red">（最大可以支撑 5w 列、30w 行）</span><br>
       如果列较多请使用 <grid-api-link name="vxe-grid"/>，使渲染性能达到最优，虚拟滚动只会渲染可视区域的数据，对于海量数据的性能提升非常大<br>
       数据超大情况下必须使用：<table-api-link prop="show-overflow"/>，<table-api-link prop="show-header-overflow"/> 参数<br>
     </p>

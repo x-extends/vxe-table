@@ -5,6 +5,7 @@
     <vxe-grid
       border
       resizable
+      keep-source
       ref="xGrid"
       height="530"
       :loading="loading"
@@ -52,6 +53,7 @@ export default {
         <vxe-grid
           border
           resizable
+          keep-source
           ref="xGrid"
           height="530"
           :loading="loading"

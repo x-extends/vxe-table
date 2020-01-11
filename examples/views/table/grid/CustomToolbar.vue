@@ -5,6 +5,7 @@
     <vxe-grid
       border
       resizable
+      keep-source
       ref="xGrid"
       height="530"
       :pager-config="tablePage"
@@ -76,6 +77,7 @@ export default {
         <vxe-grid
           border
           resizable
+          keep-source
           ref="xGrid"
           height="530"
           :pager-config="tablePage"

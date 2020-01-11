@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="tip">
-      虚拟滚动渲染，左右固定列<span class="orange">（最大可以支撑 1w 列、20w 行）</span><br>
+      虚拟滚动渲染，左右固定列<span class="orange">（最大可以支撑 5w 列、30w 行）</span><br>
       大数据不建议使用双向绑定的 data 属性（vue 监听会大数据会短暂的卡顿），建议使用 <table-api-link prop="loadData"/>/<table-api-link prop="reloadData"/> 函数<br>
       对于多选 type=<table-column-api-link prop="checkbox"/> 当数据量海量时应该绑定 <table-api-link prop="checkField"/> 属性渲染速度更快<br>
       <span class="red">（注：如果要启用纵向虚拟滚动，所有的行高必须一致，否则无法兼容）</span>
@@ -9,9 +9,10 @@
 
     <vxe-toolbar export>
       <template v-slot:buttons>
-        <vxe-button @click="loadList(30000)">3w条</vxe-button>
-        <vxe-button @click="loadList(60000)">6w条</vxe-button>
+        <vxe-button @click="loadList(10000)">1w条</vxe-button>
+        <vxe-button @click="loadList(50000)">5w条</vxe-button>
         <vxe-button @click="loadList(100000)">10w条</vxe-button>
+        <vxe-button @click="loadList(200000)">20w条</vxe-button>
         <vxe-button @click="$refs.xTable.setAllCheckboxRow(true)">所有选中</vxe-button>
         <vxe-button @click="$refs.xTable.clearCheckboxRow()">清除选中</vxe-button>
         <vxe-button @click="getSelectEvent">获取选中</vxe-button>
@@ -89,9 +90,10 @@ export default {
         `
         <vxe-toolbar export>
           <template v-slot:buttons>
-            <vxe-button @click="loadList(30000)">3w条</vxe-button>
-            <vxe-button @click="loadList(60000)">6w条</vxe-button>
+            <vxe-button @click="loadList(10000)">1w条</vxe-button>
+            <vxe-button @click="loadList(50000)">5w条</vxe-button>
             <vxe-button @click="loadList(100000)">10w条</vxe-button>
+            <vxe-button @click="loadList(200000)">20w条</vxe-button>
             <vxe-button @click="$refs.xTable.setAllCheckboxRow(true)">所有选中</vxe-button>
             <vxe-button @click="$refs.xTable.clearCheckboxRow()">清除选中</vxe-button>
             <vxe-button @click="getSelectEvent">获取选中</vxe-button>
@@ -148,9 +150,15 @@ export default {
             loadList (size) {
               this.loading = true
               XEAjax.mockList(size).then(data => {
-                // 使用函数式加载，阻断 vue 对大数组的双向绑定
-                this.$refs.xTable.reloadData(data)
-                this.loading = false
+                // 使用函数式加载，阻断 vue 对大数据的监听
+                const xTable = this.$refs.xTable
+                const startTime = Date.now()
+                if (xTable) {
+                  this.$refs.xTable.reloadData(data).then(() => {
+                    this.$XModal.message({ message: \`渲染 \${size} 行，用时 \${Date.now() - startTime}毫秒\`, status: 'info' })
+                    this.loading = false
+                  })
+                }
               })
             },
             getSelectEvent () {
@@ -175,9 +183,15 @@ export default {
     loadList (size) {
       this.loading = true
       XEAjax.mockList(size).then(data => {
-        // 使用函数式加载，对大数组的监听
-        this.$refs.xTable.reloadData(data)
-        this.loading = false
+        // 使用函数式加载，阻断 vue 对大数据的监听
+        const xTable = this.$refs.xTable
+        const startTime = Date.now()
+        if (xTable) {
+          this.$refs.xTable.reloadData(data).then(() => {
+            this.$XModal.message({ message: `渲染 ${size} 行，用时 ${Date.now() - startTime}毫秒`, status: 'info' })
+            this.loading = false
+          })
+        }
       })
     },
     getSelectEvent () {

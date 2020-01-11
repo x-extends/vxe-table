@@ -13,6 +13,7 @@
 
     <vxe-table
       resizable
+      keep-source
       ref="xTree"
       :tree-config="treeConfig"
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
@@ -57,6 +58,7 @@ export default {
 
         <vxe-table
           resizable
+          keep-source
           ref="xTree"
           :tree-config="treeConfig"
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"

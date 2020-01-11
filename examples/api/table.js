@@ -716,11 +716,20 @@ const apis = [
         version: '',
         type: 'String',
         enum: '',
-        defVal: '_XID',
+        defVal: '默认 _XID，继承 setup.keepSource',
         list: []
       },
       {
-        name: 'zIndex',
+        name: 'keep-source',
+        descKey: 'app.api.table.desc.keepSource',
+        version: '1.15.18',
+        type: 'Boolean',
+        enum: '',
+        defVal: '默认 false，继承 setup.keepSource',
+        list: []
+      },
+      {
+        name: 'z-index',
         descKey: 'app.api.table.desc.zIndex',
         version: '1.15.9',
         type: 'Number',
@@ -1639,8 +1648,8 @@ const apis = [
           },
           {
             name: 'showStatus',
-            desc: '是否显示单元格值的修改状态',
-            version: '',
+            desc: '是否显示单元格值的修改状态（需要设置 keep-source）',
+            version: '1 | 1.15.18',
             type: 'Boolean',
             enum: '',
             defVal: 'false',
@@ -2427,8 +2436,8 @@ const apis = [
       },
       {
         name: 'revertData(rows, field)',
-        desc: '还原更改，还原指定行 row 或者整个表格的数据',
-        version: '1.14',
+        desc: '只对 keep-source 开启有效，还原指定行 row 或者整个表格的数据',
+        version: '1.14 | 1.15.18',
         type: 'Promise',
         enum: '',
         defVal: 'rows?, field?',
@@ -2852,8 +2861,8 @@ const apis = [
       },
       {
         name: 'isUpdateByRow(row, field)',
-        desc: '判断行数据是否发生改变',
-        version: '1.15.7',
+        desc: '只对 keep-source 开启有效，判断行数据是否发生改变',
+        version: '1.15.7 | 1.15.18',
         type: 'Boolean',
         enum: '',
         defVal: 'row: Row, field?: string',

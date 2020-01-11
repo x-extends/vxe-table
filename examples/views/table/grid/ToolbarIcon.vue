@@ -7,6 +7,7 @@
       resizable
       export-config
       import-config
+      keep-source
       height="500"
       :pager-config="tablePage"
       :proxy-config="tableProxy"
@@ -103,6 +104,7 @@ export default {
           resizable
           export-config
           import-config
+          keep-source
           height="500"
           :pager-config="tablePage"
           :proxy-config="tableProxy"

@@ -249,6 +249,7 @@ export default {
     rowKey: [Boolean, String],
     rowId: String,
     zIndex: Number,
+    keepSource: { type: Boolean, default: () => GlobalConfig.keepSource },
     // 是否自动监听父容器变化去更新响应式表格宽高
     autoResize: Boolean,
     // 是否自动根据状态属性去更新响应式表格宽高
@@ -672,7 +673,7 @@ export default {
       })
       this.handleTableData(true)
       if (this.$toolbar) {
-        this.$toolbar.updateColumn(tableFullColumn)
+        this.$toolbar.updateColumns(tableFullColumn)
       }
       // 在 v2.0 中废弃
       if (tableFullColumn.length) {
@@ -752,6 +753,9 @@ export default {
     }
     if (radioOpts.labelProp) {
       UtilTools.warn('vxe.error.delProp', ['radio-config.labelProp', 'radio-config.labelField'])
+    }
+    if (editOpts.showStatus && !this.keepSource) {
+      UtilTools.warn('vxe.error.reqProp', ['keep-source'])
     }
     if (this.selectConfig) {
       // UtilTools.warn('vxe.error.delProp', ['select-config', 'checkbox-config'])
@@ -1143,7 +1147,7 @@ export default {
       return this.$nextTick()
     },
     loadTableData (datas) {
-      let { height, maxHeight, showOverflow, treeConfig, editStore, optimizeOpts, scrollYStore } = this
+      let { keepSource, height, maxHeight, showOverflow, treeConfig, editStore, optimizeOpts, scrollYStore } = this
       let { scrollY } = optimizeOpts
       let tableFullData = datas ? datas.slice(0) : []
       let scrollYLoad = !treeConfig && scrollY && scrollY.gt && scrollY.gt < tableFullData.length
@@ -1157,7 +1161,9 @@ export default {
       this.updateCache(true)
       // 原始数据
       this.tableSynchData = datas
-      this.tableSourceData = XEUtils.clone(tableFullData, true)
+      if (keepSource) {
+        this.tableSourceData = XEUtils.clone(tableFullData, true)
+      }
       this.scrollYLoad = scrollYLoad
       if (scrollYLoad) {
         if (!(height || maxHeight)) {
@@ -1191,24 +1197,28 @@ export default {
         .then(this.handleDefaults)
     },
     reloadRow (row, record, field) {
-      let { tableSourceData, tableData } = this
-      let rowIndex = this.getRowIndex(row)
-      let oRow = tableSourceData[rowIndex]
-      if (oRow && row) {
-        if (field) {
-          XEUtils.set(oRow, field, XEUtils.get(record || row, field))
-        } else {
-          if (record) {
-            tableSourceData[rowIndex] = record
-            XEUtils.clear(row, undefined)
-            Object.assign(row, this.defineField(Object.assign({}, record)))
-            this.updateCache(true)
+      let { keepSource, tableSourceData, tableData } = this
+      if (keepSource) {
+        let rowIndex = this.getRowIndex(row)
+        let oRow = tableSourceData[rowIndex]
+        if (oRow && row) {
+          if (field) {
+            XEUtils.set(oRow, field, XEUtils.get(record || row, field))
           } else {
-            XEUtils.destructuring(oRow, XEUtils.clone(row, true))
+            if (record) {
+              tableSourceData[rowIndex] = record
+              XEUtils.clear(row, undefined)
+              Object.assign(row, this.defineField(Object.assign({}, record)))
+              this.updateCache(true)
+            } else {
+              XEUtils.destructuring(oRow, XEUtils.clone(row, true))
+            }
           }
         }
+        this.tableData = tableData.slice(0)
+      } else {
+        UtilTools.warn('vxe.error.reqProp', ['keep-source'])
       }
-      this.tableData = tableData.slice(0)
       return this.$nextTick()
     },
     loadColumn (columns) {
@@ -1254,11 +1264,14 @@ export default {
       }
     },
     appendTreeCache (row, childs) {
-      let { tableSourceData, treeOpts, fullDataRowIdData, fullDataRowMap, fullAllDataRowMap, fullAllDataRowIdData } = this
+      let { keepSource, tableSourceData, treeOpts, fullDataRowIdData, fullDataRowMap, fullAllDataRowMap, fullAllDataRowIdData } = this
       let { children, hasChild } = treeOpts
       let rowkey = UtilTools.getRowkey(this)
       let rowid = UtilTools.getRowid(this, row)
-      let matchObj = XEUtils.findTree(tableSourceData, item => rowid === UtilTools.getRowid(this, item), treeOpts)
+      let matchObj
+      if (keepSource) {
+        matchObj = XEUtils.findTree(tableSourceData, item => rowid === UtilTools.getRowid(this, item), treeOpts)
+      }
       XEUtils.eachTree(childs, (row, index) => {
         let rowid = UtilTools.getRowid(this, row)
         if (!rowid) {
@@ -1501,25 +1514,28 @@ export default {
      * 如果还额外传了 field 则还原指定单元格
      */
     revertData (rows, field) {
-      let { tableSourceData, tableFullData } = this
-      if (arguments.length) {
-        if (rows && !XEUtils.isArray(rows)) {
-          rows = [rows]
-        }
-        rows.forEach(row => {
-          let rowIndex = tableFullData.indexOf(row)
-          let oRow = tableSourceData[rowIndex]
-          if (oRow && row) {
-            if (field) {
-              XEUtils.set(row, field, XEUtils.clone(XEUtils.get(oRow, field), true))
-            } else {
-              XEUtils.destructuring(row, XEUtils.clone(oRow, true))
-            }
+      let { keepSource, tableSourceData, tableFullData } = this
+      if (keepSource) {
+        if (arguments.length) {
+          if (rows && !XEUtils.isArray(rows)) {
+            rows = [rows]
           }
-        })
-        return this.$nextTick()
+          rows.forEach(row => {
+            let rowIndex = tableFullData.indexOf(row)
+            let oRow = tableSourceData[rowIndex]
+            if (oRow && row) {
+              if (field) {
+                XEUtils.set(row, field, XEUtils.clone(XEUtils.get(oRow, field), true))
+              } else {
+                XEUtils.destructuring(row, XEUtils.clone(oRow, true))
+              }
+            }
+          })
+          return this.$nextTick()
+        }
+        return this.reloadData(tableSourceData)
       }
-      return this.reloadData(tableSourceData)
+      return this.$nextTick()
     },
     /**
      * 清空单元格内容
@@ -1529,9 +1545,9 @@ export default {
      * 如果还额外传了 field 则清空指定单元格内容
      */
     clearData (rows, field) {
-      let { tableSourceData, visibleColumn } = this
+      let { tableFullData, visibleColumn } = this
       if (!arguments.length) {
-        rows = tableSourceData
+        rows = tableFullData
       } else if (rows && !XEUtils.isArray(rows)) {
         rows = [rows]
       }
@@ -1548,12 +1564,12 @@ export default {
       }
       return this.$nextTick()
     },
-    hasInsertByRow (row) {
-      let { treeConfig, treeOpts, tableSourceData } = this
-      if (treeConfig) {
-        return XEUtils.findTree(tableSourceData, item => item === row, treeOpts)
-      }
-      return this.getRowIndex(row) === -1
+    /**
+     * 检查是否为临时行数据
+     * @param {Row} row 行对象
+     */
+    isInsertByRow (row) {
+      return this.editStore.insertList.indexOf(row) > -1
     },
     // 在 v3.0 中废弃 hasRowChange
     hasRowChange (row, field) {
@@ -1561,32 +1577,34 @@ export default {
       return this.isUpdateByRow(row, field)
     },
     isUpdateByRow (row, field) {
-      let oRow, property
-      let { visibleColumn, treeConfig, treeOpts, tableSourceData, fullDataRowIdData } = this
-      let rowid = UtilTools.getRowid(this, row)
-      // 新增的数据不需要检测
-      if (!fullDataRowIdData[rowid]) {
-        return false
-      }
-      if (treeConfig) {
-        let children = treeOpts.children
-        let matchObj = XEUtils.findTree(tableSourceData, item => rowid === UtilTools.getRowid(this, item), treeOpts)
-        row = Object.assign({}, row, { [ children ]: null })
-        if (matchObj) {
-          oRow = Object.assign({}, matchObj.item, { [ children ]: null })
+      let { visibleColumn, keepSource, treeConfig, treeOpts, tableSourceData, fullDataRowIdData } = this
+      if (keepSource) {
+        let oRow, property
+        let rowid = UtilTools.getRowid(this, row)
+        // 新增的数据不需要检测
+        if (!fullDataRowIdData[rowid]) {
+          return false
         }
-      } else {
-        let oRowIndex = fullDataRowIdData[rowid].index
-        oRow = tableSourceData[oRowIndex]
-      }
-      if (oRow) {
-        if (arguments.length > 1) {
-          return !XEUtils.isEqual(XEUtils.get(oRow, field), XEUtils.get(row, field))
+        if (treeConfig) {
+          let children = treeOpts.children
+          let matchObj = XEUtils.findTree(tableSourceData, item => rowid === UtilTools.getRowid(this, item), treeOpts)
+          row = Object.assign({}, row, { [ children ]: null })
+          if (matchObj) {
+            oRow = Object.assign({}, matchObj.item, { [ children ]: null })
+          }
+        } else {
+          let oRowIndex = fullDataRowIdData[rowid].index
+          oRow = tableSourceData[oRowIndex]
         }
-        for (let index = 0, len = visibleColumn.length; index < len; index++) {
-          property = visibleColumn[index].property
-          if (property && !XEUtils.isEqual(XEUtils.get(oRow, property), XEUtils.get(row, property))) {
-            return true
+        if (oRow) {
+          if (arguments.length > 1) {
+            return !XEUtils.isEqual(XEUtils.get(oRow, field), XEUtils.get(row, field))
+          }
+          for (let index = 0, len = visibleColumn.length; index < len; index++) {
+            property = visibleColumn[index].property
+            if (property && !XEUtils.isEqual(XEUtils.get(oRow, property), XEUtils.get(row, property))) {
+              return true
+            }
           }
         }
       }

@@ -5,6 +5,7 @@
     <vxe-table
       border
       resizable
+      keep-source
       ref="xTable"
       :data="tableData"
       :edit-config="{trigger: 'click', mode: 'cell', showStatus: true}"
@@ -40,6 +41,7 @@ export default {
         <vxe-table
           border
           resizable
+          keep-source
           ref="xTable"
           :data="tableData"
           :edit-config="{trigger: 'click', mode: 'cell', showStatus: true}"
