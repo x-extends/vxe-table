@@ -104,9 +104,12 @@ class ColumnConfig {
     // 在 v3.0 中废弃 label、type=index
     return UtilTools.getFuncText(this.own.title || this.own.label || (this.type === 'seq' || this.type === 'index' ? GlobalConfig.i18n('vxe.table.seqTitle') : ''))
   }
+  getKey () {
+    return this.property || (this.type ? `type=${this.type}` : null)
+  }
   update (name, value) {
     // 不支持双向的属性
-    if (['filters'].indexOf(name) === -1) {
+    if (name !== 'filters') {
       this[name] = value
     }
   }

@@ -7,7 +7,7 @@ import 'font-awesome/scss/font-awesome.scss'
 import './assets/style/index.scss'
 import './plugins'
 import './mock'
-import XEUtils from 'xe-utils/methods/xe-utils'
+import XEUtils from 'xe-utils'
 import moment from 'moment'
 
 // 生成模拟数据
@@ -16,7 +16,7 @@ var currTime = Date.now()
 var nameList = XEUtils.shuffle(['a', 'T', 'b', 'v', 'G', 'k', 'r', 'H', 'x', 'z', 'c', 'd', 'e', 'p', 'U', 'f', 's', 'N'])
 var nickList = XEUtils.shuffle(['徐', '李', '雷', '赵', '马', '孙', '钱', '蒋', '老', '蔡', '吕', '项', '徐', '杨', '胡', '杜', '嬴', '叼'])
 function mockData () {
-  for (var index = 0; index < 600; index++) {
+  for (var index = 0; index < 400; index++) {
     currTime += 7200000
     let date = new Date(currTime)
     let mDate = moment(currTime)

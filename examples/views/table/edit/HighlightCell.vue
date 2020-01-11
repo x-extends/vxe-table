@@ -6,6 +6,7 @@
       border
       show-overflow
       highlight-cell
+      keep-source
       max-height="400"
       :data="tableData"
       :mouse-config="{selected: true}"
@@ -42,6 +43,7 @@ export default {
           border
           show-overflow
           highlight-cell
+          keep-source
           max-height="400"
           :data="tableData"
           :mouse-config="{selected: true}"

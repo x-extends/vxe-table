@@ -124,38 +124,6 @@ export default {
         return params
       })
     },
-    _revert () {
-      UtilTools.warn('vxe.error.delFunc', ['revert', 'revertData'])
-      return this.revertData.apply(this, arguments)
-    },
-    /**
-     * 还原数据
-     * 如果不传任何参数，则还原整个表格
-     * 如果传 row 则还原一行
-     * 如果传 rows 则还原多行
-     * 如果还额外传了 field 则还原指定的单元格数据
-     */
-    _revertData (rows, field) {
-      let { tableSourceData, getRowIndex } = this
-      if (arguments.length) {
-        if (rows && !XEUtils.isArray(rows)) {
-          rows = [rows]
-        }
-        rows.forEach(row => {
-          let rowIndex = getRowIndex(row)
-          let oRow = tableSourceData[rowIndex]
-          if (oRow && row) {
-            if (field) {
-              XEUtils.set(row, field, XEUtils.clone(XEUtils.get(oRow, field), true))
-            } else {
-              XEUtils.destructuring(row, XEUtils.clone(oRow, true))
-            }
-          }
-        })
-        return this.$nextTick()
-      }
-      return this.reloadData(tableSourceData)
-    },
     /**
      * 获取表格数据集，包含新增、删除、修改
      */

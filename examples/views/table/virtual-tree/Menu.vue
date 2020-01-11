@@ -5,6 +5,7 @@
     <vxe-virtual-tree
       resizable
       row-key
+      keep-source
       ref="xTree"
       row-id="id"
       :toolbar="{custom: true}"
@@ -94,6 +95,7 @@ export default {
         <vxe-virtual-tree
           resizable
           row-key
+          keep-source
           ref="xTree"
           row-id="id"
           :toolbar="{custom: true}"

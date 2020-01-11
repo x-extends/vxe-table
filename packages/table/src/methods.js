@@ -102,7 +102,7 @@ const Methods = {
    * @param {Array} datas 数据
    */
   loadTableData (datas) {
-    let { height, maxHeight, showOverflow, treeConfig, editStore, optimizeOpts, scrollYStore } = this
+    let { keepSource, height, maxHeight, showOverflow, treeConfig, editStore, optimizeOpts, scrollYStore } = this
     let { scrollY } = optimizeOpts
     let tableFullData = datas ? datas.slice(0) : []
     let scrollYLoad = !treeConfig && scrollY && scrollY.gt && scrollY.gt < tableFullData.length
@@ -116,7 +116,9 @@ const Methods = {
     this.updateCache(true)
     // 原始数据
     this.tableSynchData = datas
-    this.tableSourceData = XEUtils.clone(tableFullData, true)
+    if (keepSource) {
+      this.tableSourceData = XEUtils.clone(tableFullData, true)
+    }
     this.scrollYLoad = scrollYLoad
     if (scrollYLoad) {
       if (!(height || maxHeight)) {
@@ -165,24 +167,28 @@ const Methods = {
    * @param {String} field 字段名
    */
   reloadRow (row, record, field) {
-    let { tableSourceData, tableData } = this
-    let rowIndex = this.getRowIndex(row)
-    let oRow = tableSourceData[rowIndex]
-    if (oRow && row) {
-      if (field) {
-        XEUtils.set(oRow, field, XEUtils.get(record || row, field))
-      } else {
-        if (record) {
-          tableSourceData[rowIndex] = record
-          XEUtils.clear(row, undefined)
-          Object.assign(row, this.defineField(Object.assign({}, record)))
-          this.updateCache(true)
+    let { keepSource, tableSourceData, tableData } = this
+    if (keepSource) {
+      let rowIndex = this.getRowIndex(row)
+      let oRow = tableSourceData[rowIndex]
+      if (oRow && row) {
+        if (field) {
+          XEUtils.set(oRow, field, XEUtils.get(record || row, field))
         } else {
-          XEUtils.destructuring(oRow, XEUtils.clone(row, true))
+          if (record) {
+            tableSourceData[rowIndex] = record
+            XEUtils.clear(row, undefined)
+            Object.assign(row, this.defineField(Object.assign({}, record)))
+            this.updateCache(true)
+          } else {
+            XEUtils.destructuring(oRow, XEUtils.clone(row, true))
+          }
         }
       }
+      this.tableData = tableData.slice(0)
+    } else {
+      UtilTools.warn('vxe.error.reqProp', ['keep-source'])
     }
-    this.tableData = tableData.slice(0)
     return this.$nextTick()
   },
   /**
@@ -241,11 +247,14 @@ const Methods = {
     }
   },
   appendTreeCache (row, childs) {
-    let { tableSourceData, treeOpts, fullDataRowIdData, fullDataRowMap, fullAllDataRowMap, fullAllDataRowIdData } = this
+    let { keepSource, tableSourceData, treeOpts, fullDataRowIdData, fullDataRowMap, fullAllDataRowMap, fullAllDataRowIdData } = this
     let { children, hasChild } = treeOpts
     let rowkey = UtilTools.getRowkey(this)
     let rowid = UtilTools.getRowid(this, row)
-    let matchObj = XEUtils.findTree(tableSourceData, item => rowid === UtilTools.getRowid(this, item), treeOpts)
+    let matchObj
+    if (keepSource) {
+      matchObj = XEUtils.findTree(tableSourceData, item => rowid === UtilTools.getRowid(this, item), treeOpts)
+    }
     XEUtils.eachTree(childs, (row, index) => {
       let rowid = UtilTools.getRowid(this, row)
       if (!rowid) {
@@ -402,6 +411,41 @@ const Methods = {
       return isArr ? rows : rows[0]
     })
   },
+  revert () {
+    UtilTools.warn('vxe.error.delFunc', ['revert', 'revertData'])
+    return this.revertData.apply(this, arguments)
+  },
+  /**
+   * 还原数据
+   * 如果不传任何参数，则还原整个表格
+   * 如果传 row 则还原一行
+   * 如果传 rows 则还原多行
+   * 如果还额外传了 field 则还原指定的单元格数据
+   */
+  revertData (rows, field) {
+    let { keepSource, tableSourceData, tableFullData } = this
+    if (keepSource) {
+      if (arguments.length) {
+        if (rows && !XEUtils.isArray(rows)) {
+          rows = [rows]
+        }
+        rows.forEach(row => {
+          let rowIndex = tableFullData.indexOf(row)
+          let oRow = tableSourceData[rowIndex]
+          if (oRow && row) {
+            if (field) {
+              XEUtils.set(row, field, XEUtils.clone(XEUtils.get(oRow, field), true))
+            } else {
+              XEUtils.destructuring(row, XEUtils.clone(oRow, true))
+            }
+          }
+        })
+        return this.$nextTick()
+      }
+      return this.reloadData(tableSourceData)
+    }
+    return this.$nextTick()
+  },
   /**
    * 清空单元格内容
    * 如果不创参数，则清空整个表格内容
@@ -449,32 +493,34 @@ const Methods = {
    * @param {String} field 字段名
    */
   isUpdateByRow (row, field) {
-    let oRow, property
-    let { visibleColumn, treeConfig, treeOpts, tableSourceData, fullDataRowIdData } = this
-    let rowid = UtilTools.getRowid(this, row)
-    // 新增的数据不需要检测
-    if (!fullDataRowIdData[rowid]) {
-      return false
-    }
-    if (treeConfig) {
-      let children = treeOpts.children
-      let matchObj = XEUtils.findTree(tableSourceData, item => rowid === UtilTools.getRowid(this, item), treeOpts)
-      row = Object.assign({}, row, { [ children ]: null })
-      if (matchObj) {
-        oRow = Object.assign({}, matchObj.item, { [ children ]: null })
+    let { visibleColumn, keepSource, treeConfig, treeOpts, tableSourceData, fullDataRowIdData } = this
+    if (keepSource) {
+      let oRow, property
+      let rowid = UtilTools.getRowid(this, row)
+      // 新增的数据不需要检测
+      if (!fullDataRowIdData[rowid]) {
+        return false
       }
-    } else {
-      let oRowIndex = fullDataRowIdData[rowid].index
-      oRow = tableSourceData[oRowIndex]
-    }
-    if (oRow) {
-      if (arguments.length > 1) {
-        return !XEUtils.isEqual(XEUtils.get(oRow, field), XEUtils.get(row, field))
+      if (treeConfig) {
+        let children = treeOpts.children
+        let matchObj = XEUtils.findTree(tableSourceData, item => rowid === UtilTools.getRowid(this, item), treeOpts)
+        row = Object.assign({}, row, { [ children ]: null })
+        if (matchObj) {
+          oRow = Object.assign({}, matchObj.item, { [ children ]: null })
+        }
+      } else {
+        let oRowIndex = fullDataRowIdData[rowid].index
+        oRow = tableSourceData[oRowIndex]
       }
-      for (let index = 0, len = visibleColumn.length; index < len; index++) {
-        property = visibleColumn[index].property
-        if (property && !XEUtils.isEqual(XEUtils.get(oRow, property), XEUtils.get(row, property))) {
-          return true
+      if (oRow) {
+        if (arguments.length > 1) {
+          return !XEUtils.isEqual(XEUtils.get(oRow, field), XEUtils.get(row, field))
+        }
+        for (let index = 0, len = visibleColumn.length; index < len; index++) {
+          property = visibleColumn[index].property
+          if (property && !XEUtils.isEqual(XEUtils.get(oRow, property), XEUtils.get(row, property))) {
+            return true
+          }
         }
       }
     }
@@ -755,12 +801,10 @@ const Methods = {
     return this.handleResetResizable()
   },
   /**
-   * 初始化加载显示/隐藏列
-   * 对于异步更新的场景下可能会用到
-   * @param {Array} customColumns 自定义列数组
+   * 已废弃的方法
    */
   reloadCustoms (customColumns) {
-    // UtilTools.warn('vxe.error.delFunc', ['reloadCustoms', 'column.visible & refreshColumn'])
+    UtilTools.warn('vxe.error.delFunc', ['reloadCustoms', 'column.visible & refreshColumn'])
     return this.$nextTick().then(() => {
       this.mergeCustomColumn(customColumns)
       return this.refreshColumn().then(() => this.tableFullColumn)
@@ -3157,7 +3201,7 @@ const Methods = {
 }
 
 // Module methods
-const funcs = 'setFilter,filter,clearFilter,closeMenu,getMouseSelecteds,getMouseCheckeds,clearCopyed,clearChecked,clearHeaderChecked,clearIndexChecked,clearSelected,insert,insertAt,remove,removeSelecteds,revert,revertData,getRecordset,getInsertRecords,getRemoveRecords,getUpdateRecords,clearActived,getActiveRecord,getActiveRow,hasActiveRow,isActiveByRow,setActiveRow,setActiveCell,setSelectCell,clearValidate,fullValidate,validate,exportCsv,openExport,exportData,openImport,importData,readFile,importByFile,print'.split(',')
+const funcs = 'setFilter,filter,clearFilter,closeMenu,getMouseSelecteds,getMouseCheckeds,clearCopyed,clearChecked,clearHeaderChecked,clearIndexChecked,clearSelected,insert,insertAt,remove,removeSelecteds,getRecordset,getInsertRecords,getRemoveRecords,getUpdateRecords,clearActived,getActiveRecord,getActiveRow,hasActiveRow,isActiveByRow,setActiveRow,setActiveCell,setSelectCell,clearValidate,fullValidate,validate,exportCsv,openExport,exportData,openImport,importData,readFile,importByFile,print'.split(',')
 
 funcs.forEach(name => {
   Methods[name] = function () {

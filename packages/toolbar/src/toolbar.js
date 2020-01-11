@@ -116,7 +116,7 @@ export default {
     }
   },
   created () {
-    let { customOpts, setting, id } = this
+    let { customOpts, refresh, resizable, custom, setting, id, refreshOpts } = this
     if (customOpts.storage && !id) {
       return UtilTools.error('vxe.error.toolbarId')
     }
@@ -129,7 +129,18 @@ export default {
     }
     this.$nextTick(() => {
       this.updateConf()
-      this.loadStorage()
+      const comp = this.$grid || this.$table
+      if (refresh && !this.$grid && !refreshOpts.query) {
+        UtilTools.warn('vxe.error.notFunc', ['query'])
+      }
+      if (comp) {
+        comp.connect({ toolbar: this })
+      } else {
+        if (resizable || custom || setting) {
+          throw new Error(UtilTools.getLog('vxe.error.barUnableLink'))
+        }
+      }
+      this.restoreCustomStorage()
     })
     GlobalEvent.on(this, 'keydown', this.handleGlobalKeydownEvent)
     GlobalEvent.on(this, 'mousedown', this.handleGlobalMousedownEvent)
@@ -266,15 +277,16 @@ export default {
               class: 'vxe-custom--body',
               on: customWrapperOns
             }, tableFullColumn.map(column => {
-              let headerTitle = column.getTitle()
+              let colTitle = column.getTitle()
+              let colKey = column.getKey()
               let isDisabled = customOpts.checkMethod ? !customOpts.checkMethod({ column }) : false
-              return headerTitle ? h('li', {
+              return colTitle && colKey ? h('li', {
                 class: ['vxe-custom--option', {
                   'is--checked': column.visible,
                   'is--disabled': isDisabled
                 }],
                 attrs: {
-                  title: headerTitle
+                  title: colTitle
                 },
                 on: {
                   click: () => {
@@ -287,7 +299,7 @@ export default {
                     }
                   }
                 }
-              }, headerTitle) : null
+              }, colTitle) : null
             })),
             customOpts.isFooter === false ? null : h('div', {
               class: 'vxe-custom--footer'
@@ -329,22 +341,12 @@ export default {
         }
       }
     },
-    loadStorage () {
-      let { $grid, $table, id, refresh, resizable, custom, setting, refreshOpts, resizableOpts, customOpts } = this
-      if (refresh && !$grid) {
-        if (!refreshOpts.query) {
-          UtilTools.warn('vxe.error.notFunc', ['query'])
-        }
-      }
-      if ($grid || $table) {
-        ($grid || $table).connect({ toolbar: this })
-      } else {
-        if (resizable || custom || setting) {
-          throw new Error(UtilTools.getLog('vxe.error.barUnableLink'))
-        }
-      }
+    restoreCustomStorage () {
+      let { $grid, $table, id, resizable, custom, setting, resizableOpts, customOpts } = this
       if (resizable || custom || setting) {
         let customMap = {}
+        let comp = $grid || $table
+        let { fullColumn } = comp.getTableColumn()
         if (resizableOpts.storage) {
           let columnWidthStorage = this.getStorageMap(resizableOpts.storageKey)[id]
           if (columnWidthStorage) {
@@ -365,20 +367,34 @@ export default {
             })
           }
         }
-        let customList = Object.values(customMap)
-        this.updateCustoms(customList.length ? customList : this.tableFullColumn)
-      }
-    },
-    updateColumn (fullColumn) {
-      this.tableFullColumn = fullColumn
-    },
-    updateCustoms (customs) {
-      let comp = this.$grid || this.$table
-      if (comp) {
-        comp.reloadCustoms(customs).then(fullColumn => {
-          this.tableFullColumn = fullColumn
+        let keyMap = {}
+        fullColumn.forEach(column => {
+          let colKey = column.getKey()
+          if (colKey) {
+            keyMap[colKey] = column
+          }
         })
+        XEUtils.each(customMap, ({ visible, resizeWidth }, field) => {
+          let column = keyMap[field]
+          if (column) {
+            if (XEUtils.isNumber(resizeWidth)) {
+              column.resizeWidth = resizeWidth
+            }
+            if (XEUtils.isBoolean(visible)) {
+              column.visible = visible
+            }
+          }
+        })
+        comp.refreshColumn()
+        this.tableFullColumn = fullColumn
       }
+    },
+    /**
+     * 暴露给 table 调用，用于关联列
+     * @param {Array} fullColumn 所有列
+     */
+    updateColumns (fullColumn) {
+      this.tableFullColumn = fullColumn
     },
     getStorageMap (key) {
       let version = GlobalConfig.version
@@ -390,8 +406,16 @@ export default {
       let { checkMethod, storage, storageKey } = customOpts
       if (storage) {
         let columnHideStorageMap = this.getStorageMap(storageKey)
-        let colHides = tableFullColumn.filter(column => column.property && !column.visible && (!checkMethod || checkMethod({ column })))
-        columnHideStorageMap[id] = colHides.length ? colHides.map(column => column.property).join(',') : undefined
+        let colHides = []
+        tableFullColumn.forEach(column => {
+          if (!column.visible && (!checkMethod || checkMethod({ column }))) {
+            let colKey = column.getKey()
+            if (colKey) {
+              colHides.push(colKey)
+            }
+          }
+        })
+        columnHideStorageMap[id] = colHides.join(',') || undefined
         localStorage.setItem(storageKey, XEUtils.toJSONString(columnHideStorageMap))
       }
       return this.$nextTick()
@@ -403,9 +427,12 @@ export default {
         let columnWidthStorage
         if (!isReset) {
           columnWidthStorage = XEUtils.isPlainObject(columnWidthStorageMap[id]) ? columnWidthStorageMap[id] : {}
-          tableFullColumn.forEach(({ property, resizeWidth, renderWidth }) => {
-            if (property && resizeWidth) {
-              columnWidthStorage[property] = renderWidth
+          tableFullColumn.forEach(column => {
+            if (column.resizeWidth) {
+              let colKey = column.getKey()
+              if (colKey) {
+                columnWidthStorage[colKey] = column.renderWidth
+              }
             }
           })
         }

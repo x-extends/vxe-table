@@ -49,6 +49,7 @@
       border
       resizable
       show-overflow
+      keep-source
       ref="xTable"
       height="300"
       :loading="loading"
@@ -165,6 +166,7 @@ export default {
           border
           resizable
           show-overflow
+          keep-source
           ref="xTable"
           height="300"
           :loading="loading"

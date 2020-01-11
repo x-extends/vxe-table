@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="tip">
-      虚拟滚动渲染<span class="orange">（最大可以支撑 1w 列、20w 行）</span><br>
+      虚拟滚动渲染<span class="orange">（最大可以支撑 5w 列、30w 行）</span><br>
       大数据不建议使用双向绑定的 <table-api-link name="data"/> 属性（vue 监听会大数据会短暂的卡顿），建议使用 <table-api-link prop="loadData"/>/<table-api-link prop="loadColumn"/> 函数<br>
       <span class="red">(注：如果要启用横向虚拟滚动，不支持分组表头，如果需要支持动态列宽的话，那么需要处理好 <table-api-link name="rSize"/> 参数，内置的列宽算法是无法支持某些场景的，某些场景下必须手动设置)</span>
     </p>
@@ -16,10 +16,14 @@
       :loading="loading"
       :checkbox-config="{checkField: 'checked', labelField: 'nickname'}">
       <template v-slot:buttons>
-        <vxe-button @click="loadColumnAndData(1000, 1000)">1k列1k条</vxe-button>
-        <vxe-button @click="loadColumnAndData(3000, 3000)">3k列3k条</vxe-button>
         <vxe-button @click="loadColumnAndData(5000, 5000)">5k列5k条</vxe-button>
         <vxe-button @click="loadColumnAndData(10000, 10000)">1w列1w条</vxe-button>
+        <vxe-button @click="loadColumnAndData(10000, 50000)">1w列5w条</vxe-button>
+        <vxe-button @click="loadColumnAndData(10000, 100000)">1w列10w条</vxe-button>
+        <vxe-button @click="loadColumnAndData(10000, 200000)">1w列20w条</vxe-button>
+        <vxe-button @click="loadColumnAndData(20000, 50000)">2w列5w条</vxe-button>
+        <vxe-button @click="loadColumnAndData(20000, 100000)">2w列10w条</vxe-button>
+        <vxe-button @click="loadColumnAndData(20000, 200000)">2w列20w条</vxe-button>
       </template>
     </vxe-grid>
 
@@ -52,10 +56,14 @@ export default {
           :loading="loading"
           :checkbox-config="{checkField: 'checked', labelField: 'nickname'}">
           <template v-slot:buttons>
-            <vxe-button @click="loadColumnAndData(1000, 1000)">1k列1k条</vxe-button>
-            <vxe-button @click="loadColumnAndData(3000, 3000)">3k列3k条</vxe-button>
             <vxe-button @click="loadColumnAndData(5000, 5000)">5k列5k条</vxe-button>
             <vxe-button @click="loadColumnAndData(10000, 10000)">1w列1w条</vxe-button>
+            <vxe-button @click="loadColumnAndData(10000, 50000)">1w列5w条</vxe-button>
+            <vxe-button @click="loadColumnAndData(10000, 100000)">1w列10w条</vxe-button>
+            <vxe-button @click="loadColumnAndData(10000, 200000)">1w列20w条</vxe-button>
+            <vxe-button @click="loadColumnAndData(20000, 50000)">2w列5w条</vxe-button>
+            <vxe-button @click="loadColumnAndData(20000, 100000)">2w列10w条</vxe-button>
+            <vxe-button @click="loadColumnAndData(20000, 200000)">2w列20w条</vxe-button>
           </template>
         </vxe-grid>
         `,
@@ -67,28 +75,29 @@ export default {
             }
           },
           created () {
-            this.loadColumnAndData(200, 600)
+            this.loadColumnAndData(600, 600)
           },
           methods: {
             loadColumnAndData (colSize, rowSize) {
               this.loading = true
               Promise.all([
-                this.loadColumn(colSize),
-                this.loadList(rowSize)
-              ]).then(() => {
-                this.loading = false
-              })
-            },
-            loadColumn (size) {
-              return XEAjax.mockColumns(size).then(columns => {
-                // 使用函数式加载，阻断 vue 对大数组的监听
-                return this.$refs.xGrid.reloadColumn(columns)
-              })
-            },
-            loadList (size) {
-              return XEAjax.mockList(size).then(data => {
-                // 使用函数式加载，阻断 vue 对大数组的监听
-                return this.$refs.xGrid.reloadData(data)
+                XEAjax.mockColumns(colSize),
+                XEAjax.mockList(rowSize)
+              ]).then(rest => {
+                const columns = rest[0]
+                const data = rest[1]
+                const startTime = Date.now()
+                const xGrid = this.$refs.xGrid
+                // 使用函数式加载，阻断 vue 对大数组的双向绑定
+                if (xGrid) {
+                  Promise.all([
+                    xGrid.reloadColumn(columns),
+                    xGrid.reloadData(data)
+                  ]).then(() => {
+                    this.$XModal.message({ message: \`渲染 \${colSize} 列 \${rowSize} 行，用时 \${Date.now() - startTime}毫秒\`, status: 'info' })
+                    this.loading = false
+                  })
+                }
               })
             }
           }
@@ -98,7 +107,7 @@ export default {
     }
   },
   created () {
-    this.loadColumnAndData(200, 600)
+    this.loadColumnAndData(600, 600)
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
@@ -109,25 +118,23 @@ export default {
     loadColumnAndData (colSize, rowSize) {
       this.loading = true
       Promise.all([
-        this.loadColumn(colSize),
-        this.loadList(rowSize)
-      ]).then(() => {
-        this.loading = false
-      })
-    },
-    loadColumn (size) {
-      return XEAjax.mockColumns(size).then(columns => {
-        // 使用函数式加载，阻断 vue 对大数组的监听
-        return this.$refs.xGrid.reloadColumn(columns.map(item => {
-          item.fixed = null
-          return item
-        }))
-      })
-    },
-    loadList (size) {
-      return XEAjax.mockList(size).then(data => {
-        // 使用函数式加载，阻断 vue 对大数组的监听
-        return this.$refs.xGrid.reloadData(data)
+        XEAjax.mockColumns(colSize),
+        XEAjax.mockList(rowSize)
+      ]).then(rest => {
+        const columns = rest[0]
+        const data = rest[1]
+        const startTime = Date.now()
+        const xGrid = this.$refs.xGrid
+        // 使用函数式加载，阻断 vue 对大数组的双向绑定
+        if (xGrid) {
+          Promise.all([
+            xGrid.reloadColumn(columns),
+            xGrid.reloadData(data)
+          ]).then(() => {
+            this.$XModal.message({ message: `渲染 ${colSize} 列 ${rowSize} 行，用时 ${Date.now() - startTime}毫秒`, status: 'info' })
+            this.loading = false
+          })
+        }
       })
     }
   }

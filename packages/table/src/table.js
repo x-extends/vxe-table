@@ -157,6 +157,7 @@ export default {
     rowKey: Boolean,
     rowId: { type: String, default: () => GlobalConfig.rowId },
     zIndex: Number,
+    keepSource: { type: Boolean, default: () => GlobalConfig.keepSource },
     // 是否自动监听父容器变化去更新响应式表格宽高
     autoResize: Boolean,
     // 是否自动根据状态属性去更新响应式表格宽高
@@ -530,7 +531,7 @@ export default {
       })
       this.handleTableData(true)
       if (this.$toolbar) {
-        this.$toolbar.updateColumn(tableFullColumn)
+        this.$toolbar.updateColumns(tableFullColumn)
       }
       // 在 v3.0 中废弃 prop、label
       if (tableFullColumn.length) {
@@ -569,7 +570,7 @@ export default {
     }
   },
   created () {
-    let { scrollXStore, scrollYStore, optimizeOpts, data, loading, treeOpts, treeConfig, showOverflow } = Object.assign(this, {
+    let { scrollXStore, scrollYStore, optimizeOpts, data, loading, editOpts, treeOpts, treeConfig, showOverflow } = Object.assign(this, {
       tZindex: 0,
       elemStore: {},
       // 存放横向 X 虚拟滚动相关的信息
@@ -615,25 +616,28 @@ export default {
       UtilTools.error('vxe.error.emptyProp', ['row-id'])
     }
     if (this.startIndex) {
-      // UtilTools.warn('vxe.error.delProp', ['start-index', 'seq-config.startIndex'])
+      UtilTools.warn('vxe.error.delProp', ['start-index', 'seq-config.startIndex'])
     }
     if (this.selectConfig) {
-      // UtilTools.warn('vxe.error.delProp', ['select-config', 'checkbox-config'])
+      UtilTools.warn('vxe.error.delProp', ['select-config', 'checkbox-config'])
+    }
+    if (editOpts.showStatus && !this.keepSource) {
+      UtilTools.warn('vxe.error.reqProp', ['keep-source'])
     }
     if (treeConfig && treeOpts.line && (!this.rowKey || !showOverflow)) {
       UtilTools.warn('vxe.error.reqProp', ['row-key | show-overflow'])
     }
     if (this.customs) {
-      // UtilTools.warn('vxe.error.removeProp', ['customs'])
+      UtilTools.warn('vxe.error.removeProp', ['customs'])
     }
     if (this.sortMethod) {
-      // UtilTools.warn('vxe.error.delProp', ['sort-method', 'sort-config.sortMethod'])
+      UtilTools.warn('vxe.error.delProp', ['sort-method', 'sort-config.sortMethod'])
     }
     if (this.remoteSort) {
-      // UtilTools.warn('vxe.error.delProp', ['remote-sort', 'sort-config.remote'])
+      UtilTools.warn('vxe.error.delProp', ['remote-sort', 'sort-config.remote'])
     }
     if (this.remoteFilter) {
-      // UtilTools.warn('vxe.error.delProp', ['remote-filter', 'filter-config.remote'])
+      UtilTools.warn('vxe.error.delProp', ['remote-filter', 'filter-config.remote'])
     }
     // 检查是否有安装需要的模块
     let errorModuleName

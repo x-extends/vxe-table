@@ -6,6 +6,7 @@
       resizable
       row-key
       export-config
+      keep-source
       ref="xTree"
       row-id="id"
       :toolbar="{export: true, zoom: true, custom: true}"
@@ -51,6 +52,7 @@ export default {
           resizable
           row-key
           export-config
+          keep-source
           ref="xTree"
           row-id="id"
           :toolbar="{export: true, zoom: true, custom: true}"

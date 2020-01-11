@@ -1,4 +1,5 @@
 const GlobalConfig = {
+  // keepSource: false,
   // showOverflow: null,
   // showHeaderOverflow: null,
   // resizeInterval: 250,

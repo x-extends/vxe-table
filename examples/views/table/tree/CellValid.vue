@@ -14,6 +14,7 @@
 
     <vxe-table
       resizable
+      keep-source
       ref="xTree"
       :edit-rules="validRules"
       :tree-config="treeConfig"
@@ -67,6 +68,7 @@ export default {
 
         <vxe-table
           resizable
+          keep-source
           ref="xTree"
           :edit-rules="validRules"
           :tree-config="treeConfig"

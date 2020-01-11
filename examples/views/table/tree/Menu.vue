@@ -10,6 +10,7 @@
 
     <vxe-table
       resizable
+      keep-source
       ref="xTree"
       :tree-config="treeConfig"
       :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}, visibleMethod}"
@@ -98,6 +99,7 @@ export default {
 
         <vxe-table
           resizable
+          keep-source
           ref="xTree"
           :tree-config="treeConfig"
           :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}, visibleMethod}"

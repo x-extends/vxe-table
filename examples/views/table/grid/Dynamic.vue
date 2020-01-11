@@ -6,6 +6,7 @@
       border
       resizable
       show-overflow
+      keep-source
       height="306"
       :pager-config="tablePage"
       :proxy-config="tableProxy"
@@ -25,6 +26,7 @@
     <vxe-grid
       border
       show-overflow
+      keep-source
       height="290"
       :loading="loading2"
       :pager-config="tablePage2"
@@ -129,6 +131,7 @@ export default {
           border
           resizable
           show-overflow
+          keep-source
           height="306"
           :pager-config="tablePage"
           :proxy-config="tableProxy"
@@ -195,6 +198,7 @@ export default {
         <vxe-grid
           border
           show-overflow
+          keep-source
           height="530"
           :loading="loading"
           :pager-config="tablePage"

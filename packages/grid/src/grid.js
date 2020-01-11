@@ -34,7 +34,6 @@ export default {
       tableLoading: false,
       maximize: false,
       tableData: [],
-      tableCustoms: [],
       pendingRecords: [],
       filterData: [],
       sortData: {},
@@ -100,7 +99,7 @@ export default {
       return rest
     },
     tableProps () {
-      const { maximize, seqConfig, pagerConfig, loading, toolbar, toolbarOpts, editConfig, proxyConfig, proxyOpts, tableExtendProps, tableLoading, tablePage, tableData, tableCustoms, optimization } = this
+      const { maximize, seqConfig, pagerConfig, loading, editConfig, proxyConfig, proxyOpts, tableExtendProps, tableLoading, tablePage, tableData, optimization } = this
       let props = Object.assign({}, tableExtendProps, {
         optimization: Object.assign({}, GlobalConfig.optimization, optimization)
       })
@@ -121,18 +120,13 @@ export default {
           props.seqConfig = Object.assign({}, seqConfig, { startIndex: (tablePage.currentPage - 1) * tablePage.pageSize })
         }
       }
-      if (toolbar) {
-        if (!(toolbarOpts.setting && toolbarOpts.setting.storage)) {
-          props.customs = tableCustoms
-        }
-      }
       if (editConfig) {
         props.editConfig = Object.assign({}, editConfig, { activeMethod: this.handleActiveMethod })
       }
       return props
     },
     tableOns () {
-      let { $listeners, toolbar, proxyConfig, proxyOpts } = this
+      let { $listeners, proxyConfig, proxyOpts } = this
       let ons = Object.assign({}, $listeners)
       if (proxyConfig) {
         if (proxyOpts.sort) {
@@ -141,9 +135,6 @@ export default {
         if (proxyOpts.filter) {
           ons['filter-change'] = this.filterChangeEvent
         }
-      }
-      if (toolbar) {
-        ons['update:customs'] = this.updateCustomsEent
       }
       return ons
     },
@@ -163,12 +154,6 @@ export default {
     columns (value) {
       this.$nextTick(() => this.loadColumn(value))
     },
-    tableCustoms () {
-      let { $refs, toolbar } = this
-      if (toolbar && $refs.toolbar) {
-        $refs.toolbar.loadStorage()
-      }
-    },
     proxyConfig () {
       this.initProxy()
     },
@@ -181,7 +166,6 @@ export default {
     let { props } = proxyOpts
     if (customs) {
       UtilTools.warn('vxe.error.removeProp', ['customs'])
-      this.tableCustoms = customs
     }
     if (data && proxyConfig) {
       console.warn('[vxe-grid] There is a conflict between the props proxy-config and data.')
@@ -527,9 +511,6 @@ export default {
     },
     getPendingRecords () {
       return this.pendingRecords
-    },
-    updateCustomsEent (value) {
-      this.tableCustoms = value
     },
     triggerToolbarBtnEvent (button, evnt) {
       this.commitProxy(button, evnt)

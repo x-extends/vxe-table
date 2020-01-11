@@ -7,6 +7,7 @@
       highlight-hover-row
       tree-config
       export-config
+      keep-source
       row-id="id"
       :proxy-config="tableProxy"
       :columns="tableColumn"
@@ -65,6 +66,7 @@ export default {
           highlight-hover-row
           tree-config
           export-config
+          keep-source
           row-id="id"
           :proxy-config="tableProxy"
           :columns="tableColumn"

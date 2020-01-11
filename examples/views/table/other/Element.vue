@@ -13,6 +13,7 @@
       border
       show-overflow
       show-footer
+      keep-source
       ref="xTable"
       class="vxe-table-element"
       height="600"
@@ -121,6 +122,7 @@ export default {
           border
           show-overflow
           show-footer
+          keep-source
           ref="xTable"
           class="vxe-table-element"
           height="600"

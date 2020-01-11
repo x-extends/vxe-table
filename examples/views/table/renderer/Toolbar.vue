@@ -11,6 +11,7 @@
     <vxe-grid
       border
       resizable
+      export-config
       ref="xGrid"
       height="300"
       :toolbar="{export: true, custom: true}"
@@ -56,6 +57,7 @@ export default {
         <vxe-grid
           border
           resizable
+          export-config
           ref="xGrid"
           height="300"
           :toolbar="{export: true, custom: true}"

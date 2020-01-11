@@ -6,6 +6,7 @@
       border
       resizable
       toolbar
+      keep-source
       ref="xGrid"
       :proxy-config="tableProxy"
       :columns="tableColumn"
@@ -78,6 +79,7 @@ export default {
           border
           resizable
           toolbar
+          keep-source
           ref="xGrid"
           :proxy-config="tableProxy"
           :columns="tableColumn"

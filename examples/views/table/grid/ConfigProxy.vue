@@ -4,6 +4,7 @@
 
     <vxe-grid
       resizable
+      keep-source
       height="528"
       :filter-config="{remote: true}"
       :toolbar="tableToolbar"

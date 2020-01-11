@@ -19,6 +19,7 @@
     <vxe-table
       border
       show-overflow
+      keep-source
       height="500"
       ref="xTable"
       :data="tableData"
@@ -90,6 +91,7 @@ export default {
         <vxe-table
           border
           show-overflow
+          keep-source
           height="500"
           ref="xTable"
           :data="tableData"
