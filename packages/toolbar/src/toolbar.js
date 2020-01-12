@@ -7,12 +7,13 @@ import { UtilTools, DomTools, GlobalEvent } from '../../tools'
  * 渲染按钮
  */
 function renderBtn (h, _vm, compConf) {
-  let { _e, $scopedSlots, $grid, $table, extraSlots, buttons = [] } = _vm
+  const { _e, $scopedSlots, $grid, $table, extraSlots, buttons = [] } = _vm
+  const comp = $grid || $table
   if ($scopedSlots.buttons) {
     return $scopedSlots.buttons.call(_vm, { $grid, $table }, h)
   }
   if (compConf && compConf.renderButtons) {
-    return compConf.renderButtons.call(_vm, h, extraSlots, { $grid, $table })
+    return compConf.renderButtons.call(_vm, h, extraSlots, comp ? comp.params : null, { $grid, $table })
   }
   return buttons.map(item => {
     return item.visible === false ? _e() : h('vxe-button', {
@@ -50,11 +51,12 @@ function renderBtn (h, _vm, compConf) {
  */
 function renderRightTool (h, _vm, compConf) {
   let { $scopedSlots, $grid, $table, extraSlots } = _vm
+  const comp = $grid || $table
   if ($scopedSlots.tools) {
     return $scopedSlots.tools.call(_vm, { $grid, $table }, h)
   }
   if (compConf && compConf.renderTools) {
-    return compConf.renderTools.call(_vm, h, extraSlots, { $grid, $table })
+    return compConf.renderTools.call(_vm, h, extraSlots, comp ? comp.params : null, { $grid, $table })
   }
   return []
 }

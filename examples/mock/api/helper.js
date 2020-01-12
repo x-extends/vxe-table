@@ -21,7 +21,7 @@ class Helper {
       if (params) {
         let filterProps = XEUtils.keys(params).filter(key => !['sort', 'order'].includes(key) && params[key])
         if (filterProps) {
-          rest = rest.filter(data => filterProps.every(key => '' + data[key] === '' + params[key]))
+          rest = rest.filter(data => filterProps.every(key => XEUtils.toString(data[key]).indexOf(params[key]) > -1))
         }
         if (params.order) {
           orderPrpo = params.order
@@ -30,7 +30,7 @@ class Helper {
           sortProp = params.sort.split(',')
         }
       }
-      rest = XEUtils.sortBy(list, sortProp)
+      rest = XEUtils.sortBy(rest, sortProp)
       if (orderPrpo === 'desc') {
         rest = rest.reverse()
       }
@@ -48,7 +48,7 @@ class Helper {
       if (params) {
         let filterProps = XEUtils.keys(params).filter(key => !['sort', 'order'].includes(key) && params[key])
         if (filterProps) {
-          rest = rest.filter(data => filterProps.every(key => '' + data[key] === '' + params[key]))
+          rest = rest.filter(data => filterProps.every(key => XEUtils.toString(data[key]).indexOf(params[key]) > -1))
         }
         if (params.order) {
           orderPrpo = params.order
@@ -57,7 +57,7 @@ class Helper {
           sortProp = params.sort.split(',')
         }
       }
-      rest = XEUtils.sortBy(list, sortProp)
+      rest = XEUtils.sortBy(rest, sortProp)
       if (orderPrpo === 'desc') {
         rest = rest.reverse()
       }
@@ -76,7 +76,7 @@ class Helper {
       if (params) {
         let filterProps = XEUtils.keys(params).filter(key => !['sort', 'order', parentKey, key].includes(key) && params[key])
         if (filterProps) {
-          rest = rest.filter(data => filterProps.every(key => '' + data[key] === '' + params[key]))
+          rest = rest.filter(data => filterProps.every(key => XEUtils.toString(data[key]).indexOf(params[key]) > -1))
         }
         if (params.order) {
           orderPrpo = params.order
@@ -123,7 +123,7 @@ class Helper {
       if (params) {
         let filterProps = XEUtils.keys(params).filter(key => !['sort', 'order'].includes(key) && params[key])
         if (filterProps) {
-          rest = rest.filter(data => filterProps.every(key => String(data[key] || '').indexOf(params[key]) > -1))
+          rest = rest.filter(data => filterProps.every(key => XEUtils.toString(data[key]).indexOf(params[key]) > -1))
         }
         if (params.order) {
           orderPrpo = params.order

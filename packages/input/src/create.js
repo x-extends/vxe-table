@@ -50,13 +50,13 @@ export default function (compName) {
         attrs.placeholder = UtilTools.getFuncText(placeholder)
       }
       return h('div', {
-        class: ['vxe-input--wrapper', `type--${compName}`, {
+        class: [`vxe-${compName}`, {
           [`size--${vSize}`]: vSize,
           'is--disabled': this.disabled
         }]
       }, [
         h(compName, {
-          class: `vxe-${compName}`,
+          class: `vxe-${compName}--inner`,
           domProps: {
             value
           },

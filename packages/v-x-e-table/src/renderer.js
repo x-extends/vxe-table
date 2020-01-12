@@ -18,10 +18,10 @@ function defaultEditRender (h, renderOpts, params) {
   let attrs = getAttrs(renderOpts)
   return [
     h('div', {
-      class: 'vxe-input--wrapper'
+      class: `vxe-${name}`
     }, [
       h(name, {
-        class: `vxe-${name}`,
+        class: `vxe-${name}--inner`,
         attrs,
         domProps: {
           value: UtilTools.getCellValue(row, column)
@@ -154,14 +154,14 @@ function renderSelectEdit (h, renderOpts, params) {
 
 const renderMap = {
   input: {
-    autofocus: '.vxe-input',
+    autofocus: 'input',
     renderEdit: defaultEditRender,
     renderDefault: defaultEditRender,
     renderFilter: defaultFilterRender,
     filterMethod: defaultFilterMethod
   },
   textarea: {
-    autofocus: '.vxe-textarea',
+    autofocus: 'textarea',
     renderEdit: defaultEditRender,
     renderDefault: defaultEditRender,
     renderFilter: defaultFilterRender,

@@ -60,8 +60,9 @@
       border: 1px solid $vxe-primary-color;
     }
   }
-  .vxe-input--wrapper {
-    .vxe-input {
+  .vxe-input {
+    .vxe-input--inner {
+      height: floor($vxe-table-row-height-default - 8);
       &[type="date"]::-webkit-inner-spin-button {
         margin-top: 6px;
       }
@@ -319,11 +320,11 @@
       }
     }
     .vxe-default-select,
-    .vxe-input--wrapper {
+    .vxe-input {
       height: floor($vxe-table-row-height-medium - 8);
     }
-    .vxe-input--wrapper {
-      .vxe-input {
+    .vxe-input {
+      .vxe-input--inner {
         &[type="date"]::-webkit-inner-spin-button {
           margin-top: 4px;
         }
@@ -346,11 +347,11 @@
       }
     }
     .vxe-default-select,
-    .vxe-input--wrapper {
+    .vxe-input {
       height: floor($vxe-table-row-height-small - 8);
     }
-    .vxe-input--wrapper {
-      .vxe-input {
+    .vxe-input {
+      .vxe-input--inner {
         &[type="date"]::-webkit-inner-spin-button {
           margin-top: 2px;
         }
@@ -373,11 +374,11 @@
       }
     }
     .vxe-default-select,
-    .vxe-input--wrapper {
+    .vxe-input {
       height: floor($vxe-table-row-height-mini - 8);
     }
-    .vxe-input--wrapper {
-      .vxe-input {
+    .vxe-input {
+      .vxe-input--inner {
         &[type="date"]::-webkit-inner-spin-button {
           margin-top: 0;
         }
@@ -501,19 +502,20 @@
       }
     }
   }
-  .vxe-input--wrapper {
+  .vxe-input,
+  .vxe-textarea {
     width: 100%;
     display: block;
-    .vxe-input,
-    .vxe-textarea {
+    .vxe-input--inner,
+    .vxe-textarea--inner {
       padding: 0 2px;
     }
-    .vxe-input {
+    .vxe-input--inner {
       &[type="date"]::-webkit-inner-spin-button {
         margin-top: 6px;
       }
     }
-    .vxe-textarea {
+    .vxe-textarea--inner {
       resize: none;
       vertical-align: middle;
     }
@@ -885,8 +887,8 @@
         }
       }
       .vxe-default-select,
-      .vxe-input--wrapper {
-        > .vxe-input {
+      .vxe-input {
+        > .vxe-input--inner {
           border-color: $vxe-table-validate-error-color;
         }
       }
