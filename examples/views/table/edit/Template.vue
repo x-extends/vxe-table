@@ -12,7 +12,12 @@
       :data="tableData"
       :edit-config="{trigger: 'click', mode: 'cell'}">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}">
+      <vxe-table-column field="role" title="Role" :edit-render="{autofocus: '.vxe-input--inner'}">
+        <template v-slot:edit="{ row }">
+          <vxe-input type="text" v-model="row.role"></vxe-input>
+        </template>
+      </vxe-table-column>
+      <vxe-table-column field="name" title="Name" :edit-render="{autofocus: '.custom-input'}">
         <template v-slot:edit="{ row }">
           <input type="text" v-model="row.name" class="custom-input">
         </template>
@@ -22,7 +27,7 @@
           <input type="number" v-model="row.age" class="custom-input">
         </template>
       </vxe-table-column>
-      <vxe-table-column field="date3" title="Date" :edit-render="{name: 'input'}">
+      <vxe-table-column field="date3" title="Date" :edit-render="{autofocus: '.custom-input'}">
         <template v-slot:edit="{ row }">
           <input type="date" v-model="row.date3" class="custom-input">
         </template>
@@ -54,7 +59,12 @@ export default {
           :data="tableData"
           :edit-config="{trigger: 'click', mode: 'cell'}">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}">
+          <vxe-table-column field="role" title="Role" :edit-render="{autofocus: '.vxe-input--inner'}">
+            <template v-slot:edit="{ row }">
+              <vxe-input type="text" v-model="row.role"></vxe-input>
+            </template>
+          </vxe-table-column>
+          <vxe-table-column field="name" title="Name" :edit-render="{autofocus: '.custom-input'}">
             <template v-slot:edit="{ row }">
               <input type="text" v-model="row.name" class="custom-input">
             </template>
@@ -64,7 +74,7 @@ export default {
               <input type="number" v-model="row.age" class="custom-input">
             </template>
           </vxe-table-column>
-          <vxe-table-column field="date3" title="Date" :edit-render="{name: 'input'}">
+          <vxe-table-column field="date3" title="Date" :edit-render="{autofocus: '.custom-input'}">
             <template v-slot:edit="{ row }">
               <input type="date" v-model="row.date3" class="custom-input">
             </template>

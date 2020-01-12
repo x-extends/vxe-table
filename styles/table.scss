@@ -147,14 +147,16 @@
     resize: none;
     vertical-align: middle;
   }
-  .vxe-input--wrapper {
+  .vxe-input,
+  .vxe-textarea {
     width: 100%;
     display: block;
-    .vxe-input,
-    .vxe-textarea {
+    .vxe-input--inner,
+    .vxe-textarea--inner {
       padding: 0 2px;
+      height: floor($vxe-table-row-height-default - 8);
     }
-    .vxe-textarea {
+    .vxe-textarea--inner {
       resize: none;
     }
   }
@@ -414,7 +416,7 @@
     .vxe-default-input,
     .vxe-default-textarea,
     .vxe-default-select,
-    .vxe-input--wrapper {
+    .vxe-input {
       height: floor($vxe-table-row-height-medium - 8);
     }
     .vxe-default-input {
@@ -441,7 +443,7 @@
     .vxe-default-input,
     .vxe-default-textarea,
     .vxe-default-select,
-    .vxe-input--wrapper {
+    .vxe-input {
       height: floor($vxe-table-row-height-small - 8);
     }
     .vxe-default-input {
@@ -468,7 +470,7 @@
     .vxe-default-input,
     .vxe-default-textarea,
     .vxe-default-select,
-    .vxe-input--wrapper {
+    .vxe-input {
       height: floor($vxe-table-row-height-mini - 8);
     }
     .vxe-default-input {
@@ -962,8 +964,8 @@
       .vxe-default-select {
         border-color: $vxe-table-validate-error-color;
       }
-      .vxe-input--wrapper {
-        > .vxe-input {
+      .vxe-input {
+        > .vxe-input--inner {
           border-color: $vxe-table-validate-error-color;
         }
       }
@@ -995,9 +997,9 @@
               padding: 0;
               height: $vxe-table-row-line-height;
             }
-            .vxe-input--wrapper {
-              .vxe-input,
-              .vxe-textarea {
+            .vxe-input {
+              .vxe-input--inner,
+              .vxe-textarea--inner {
                 border: 0;
                 padding: 0;
                 height: $vxe-table-row-line-height;

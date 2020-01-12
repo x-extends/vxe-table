@@ -1,64 +1,72 @@
 /**Variable**/
 
 /*input*/
-.vxe-input--wrapper {
+.vxe-input,
+.vxe-textarea {
   font-size: $vxe-font-size;
   display: inline-block;
-  &.type--textarea {
-    width: 100%;
+}
+
+.vxe-textarea {
+  width: 100%;
+}
+
+.vxe-input--inner,
+.vxe-textarea--inner {
+  border-radius: 4px;
+  outline: 0;
+  padding: 0 8px;
+  width: 100%;
+  color: $vxe-font-color;
+  border: 1px solid $vxe-input-border-color;
+  background-color: #FFF;
+  &:focus {
+    border: 1px solid $vxe-primary-color;
   }
-  .vxe-input,
-  .vxe-textarea {
-    border-radius: 4px;
-    outline: 0;
-    padding: 0 8px;
-    width: 100%;
-    color: $vxe-font-color;
-    border: 1px solid $vxe-input-border-color;
-    background-color: #FFF;
-    &:focus {
-      border: 1px solid $vxe-primary-color;
-    }
-    &[disabled] {
-      cursor: not-allowed;
-      background-color: $vxe-input-disabled-background-color;
-    }
+  &[disabled] {
+    cursor: not-allowed;
+    background-color: $vxe-input-disabled-background-color;
   }
-  .vxe-input {
-    height: 40px;
-    &[type="date"]::-webkit-inner-spin-button {
-      margin-top: 6px;
-    }
-    &[type="date"]::-webkit-inner-spin-button,
-    &[type="number"]::-webkit-inner-spin-button {
-      height: 24px;
-    }
-    &::placeholder {
-      color: $vxe-input-placeholder-color;
-    }
+}
+
+.vxe-input--inner {
+  height: 32px;
+  &[type="date"]::-webkit-inner-spin-button {
+    margin-top: 6px;
   }
-  .vxe-textarea {
-    height: 100%;
+  &[type="date"]::-webkit-inner-spin-button,
+  &[type="number"]::-webkit-inner-spin-button {
+    height: 24px;
   }
+  &::placeholder {
+    color: $vxe-input-placeholder-color;
+  }
+}
+
+.vxe-textarea--inner {
+  height: 100%;
+}
+
+.vxe-input {
   &.size--medium {
-    .vxe-input {
-      height: 36px;
+    .vxe-input--inner {
+      height: 30px;
       &[type="date"]::-webkit-inner-spin-button {
         margin-top: 4px;
       }
     }
   }
   &.size--small {
-    .vxe-input {
-      height: 32px;
+    .vxe-input--inner {
+      height: 28px;
       &[type="date"]::-webkit-inner-spin-button {
         margin-top: 2px;
       }
     }
   }
   &.size--mini {
-    .vxe-input {
-      height: 28px;
+    .vxe-input--inner {
+      height: 26px;
       &[type="date"]::-webkit-inner-spin-button {
         margin-top: 0;
       }

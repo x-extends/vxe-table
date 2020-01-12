@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import XEUtils from 'xe-utils'
 import XEAjax from 'xe-ajax'
 
 // 挂载到 vue 实例中
@@ -7,12 +8,13 @@ Vue.prototype.$ajax = XEAjax
 /**
  * 生成模拟数据
  */
-const dataMaps = {}
-const colMaps = {}
+var dataCacheList = []
+var colCacheList = []
+var dataIndex = 0
+var colIndex = 0
 
 function mockColumns (size) {
-  var columns = []
-  for (var index = 0; index < size; index++) {
+  for (var index = colIndex; index < size; index++) {
     var colItem = {
       field: index % 2 === 0 ? 'age' : (index % 3 === 0 ? 'rate' : 'name'),
       title: 'col_' + index,
@@ -37,19 +39,18 @@ function mockColumns (size) {
         { label: '= 2000', value: 2000 }
       ]
     }
-    columns.push(colItem)
+    colCacheList.push(colItem)
   }
-  return columns
+  colIndex = index
 }
 
 function mockData (size) {
-  var list = []
   var currTime = Date.now()
-  var nameList = ['a', 'T', 'b', 'v', 'G', 'k', 'r', 'H', 'x', 'z', 'c', 'd', 'e', 'p', 'U', 'f', 's', 'N']
-  var nickList = ['徐', '李', '雷', '赵', '马', '孙', '钱', '蒋', '老', '蔡', '吕', '项', '徐', '杨', '胡', '杜', '嬴', '叼']
-  for (var index = 0; index < size; index++) {
+  var nameList = XEUtils.shuffle(['a', 'T', 'b', 'v', 'G', 'k', 'r', 'H', 'x', 'z', 'c', 'd', 'e', 'p', 'U', 'f', 's', 'N'])
+  var nickList = XEUtils.shuffle(['徐', '李', '雷', '赵', '马', '孙', '钱', '蒋', '老', '蔡', '吕', '项', '徐', '杨', '胡', '杜', '嬴', '叼'])
+  for (var index = dataIndex; index < size; index++) {
     var date = new Date(currTime)
-    list.push({
+    dataCacheList.push({
       id: 2000000 + index,
       name: nameList[index % 10] + nameList[index % 5] + index,
       nickname: nickList[index % 10] + nickList[index % 5] + index,
@@ -124,29 +125,27 @@ function mockData (size) {
       }
     })
   }
-  return list
+  dataIndex = index
 }
 
 XEAjax.mixin({
   mockColumns (size) {
     return new Promise(resolve => {
       setTimeout(() => {
-        if (!colMaps[size]) {
-          let columns = mockColumns(size)
-          colMaps[columns.length] = columns.slice(0)
+        if (colCacheList.length < size) {
+          mockColumns(size)
         }
-        resolve(colMaps[size].slice(0))
+        resolve(colCacheList.slice(0, size))
       }, 100)
     })
   },
   mockList (size) {
     return new Promise(resolve => {
       setTimeout(() => {
-        if (!dataMaps[size]) {
-          let list = mockData(size)
-          dataMaps[list.length] = list.slice(0)
+        if (dataCacheList.length < size) {
+          mockData(size)
         }
-        resolve(dataMaps[size].slice(0))
+        resolve(dataCacheList.slice(0, size))
       }, 100)
     })
   }

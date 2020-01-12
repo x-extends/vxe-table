@@ -3,7 +3,7 @@
     <p class="tip">
       默认的渲染器 <table-column-api-link prop="cell-render"/><br>
       配置参数：<br>
-      renderDefault (h, renderOpts, { row, rowIndex, $rowIndex, column, columnIndex, $columnIndex }, context) 渲染函数<br>
+      renderDefault (h, renderOpts, params, context) 渲染函数<br>
       <span class="red">（注：实际开发中应该将业务封装成一个组件，不要把复杂的渲染逻辑写在渲染器中）</span>
     </p>
 
