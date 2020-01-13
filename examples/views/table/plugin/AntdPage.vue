@@ -131,7 +131,10 @@ export default {
         pageSize: 10,
         totalResult: 0
       },
-      form: this.$form.createForm(this),
+      formData: {
+        name: null,
+        sex: null
+      },
       demoCodes: [
         `
           <vxe-form :data="formData" @submit="searchEvent">
@@ -251,7 +254,10 @@ export default {
                 pageSize: 10,
                 totalResult: 0
               },
-              form: this.$form.createForm(this)
+              formData: {
+                name: null,
+                sex: null
+              }
             }
           },
           created () {
@@ -262,7 +268,7 @@ export default {
           methods: {
             findList () {
               this.loading = true
-              XEAjax.get(\`/api/user/page/list/\${this.tablePage.pageSize}/\${this.tablePage.currentPage}\`, this.form.getFieldsValue()).then(({ page, result }) => {
+              XEAjax.get(\`/api/user/page/list/\${this.tablePage.pageSize}/\${this.tablePage.currentPage}\`, this.formData).then(({ page, result }) => {
                 this.tableData = result
                 this.tablePage.totalResult = page.totalResult
                 this.loading = false
@@ -361,7 +367,7 @@ export default {
   methods: {
     findList () {
       this.loading = true
-      XEAjax.get(`/api/user/page/list/${this.tablePage.pageSize}/${this.tablePage.currentPage}`, this.form.getFieldsValue()).then(({ page, result }) => {
+      XEAjax.get(`/api/user/page/list/${this.tablePage.pageSize}/${this.tablePage.currentPage}`, this.formData).then(({ page, result }) => {
         this.tableData = result
         this.tablePage.totalResult = page.totalResult
         this.loading = false
