@@ -81,7 +81,7 @@ module.exports = {
         proxy: 'Data proxy',
         proxyPage: 'Data proxy + Pager',
         formProxy: 'Data proxy + Form',
-        configProxy: 'Configurable data proxy',
+        configProxy: 'Implement JSON table',
         fullQuery: 'Full query',
         customToolbar: 'Custom toolbar',
         toolbarIcon: 'Custom toolbar button icon',
@@ -514,6 +514,7 @@ module.exports = {
           type: 'Type',
           size: 'Size',
           name: 'To identify this item',
+          status: 'Status',
           disabled: 'Whether to disable',
           loading: 'Loading or not'
         }

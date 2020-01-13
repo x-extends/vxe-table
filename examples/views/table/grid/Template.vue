@@ -25,14 +25,10 @@
       <template v-slot:form>
         <vxe-form :data="formData" @submit="searchEvent">
           <vxe-form-item title="名称" field="name">
-            <template>
-              <vxe-input v-model="formData.name" placeholder="请输入名称"></vxe-input>
-            </template>
+            <vxe-input v-model="formData.name" placeholder="请输入名称"></vxe-input>
           </vxe-form-item>
           <vxe-form-item title="昵称" field="nickname">
-            <template>
-              <vxe-input v-model="formData.nickname" placeholder="请输入昵称"></vxe-input>
-            </template>
+            <vxe-input v-model="formData.nickname" placeholder="请输入昵称"></vxe-input>
           </vxe-form-item>
           <vxe-form-item title="性别" field="sex">
             <select v-model="formData.sex" class="vxe-select">
@@ -42,9 +38,7 @@
             </select>
           </vxe-form-item>
           <vxe-form-item>
-            <template>
-              <vxe-button>查询</vxe-button>
-            </template>
+            <vxe-button>查询</vxe-button>
           </vxe-form-item>
         </vxe-form>
       </template>
@@ -75,9 +69,7 @@
     </vxe-grid>
 
     <vxe-modal v-model="showDetails" title="查看详情" width="800" height="400" resize>
-      <template>
-        <div v-if="selectRow" v-html="selectRow.html3"></div>
-      </template>
+      <div v-if="selectRow" v-html="selectRow.html3"></div>
     </vxe-modal>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -227,14 +219,10 @@ export default {
           <template v-slot:form>
             <vxe-form :data="formData" @submit="searchEvent">
               <vxe-form-item title="名称" field="name">
-                <template>
-                  <vxe-input v-model="formData.name" placeholder="请输入名称"></vxe-input>
-                </template>
+                <vxe-input v-model="formData.name" placeholder="请输入名称"></vxe-input>
               </vxe-form-item>
               <vxe-form-item title="昵称" field="nickname">
-                <template>
-                  <vxe-input v-model="formData.nickname" placeholder="请输入昵称"></vxe-input>
-                </template>
+                <vxe-input v-model="formData.nickname" placeholder="请输入昵称"></vxe-input>
               </vxe-form-item>
               <vxe-form-item title="性别" field="sex">
                 <select v-model="formData.sex" class="vxe-select">
@@ -244,9 +232,7 @@ export default {
                 </select>
               </vxe-form-item>
               <vxe-form-item>
-                <template>
-                  <vxe-button>查询</vxe-button>
-                </template>
+                <vxe-button>查询</vxe-button>
               </vxe-form-item>
             </vxe-form>
           </template>

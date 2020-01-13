@@ -121,7 +121,7 @@ export default {
         }, [
           h('vxe-button', {
             props: {
-              type: 'primary',
+              status: 'primary',
               disabled: !hasFile
             },
             on: {

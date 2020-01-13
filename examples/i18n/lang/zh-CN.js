@@ -80,7 +80,7 @@ module.exports = {
         proxy: '数据代理',
         proxyPage: '数据代理 + 分页',
         formProxy: '数据代理 + 表单',
-        configProxy: '配置式数据代理',
+        configProxy: '实现 JSON 化表格',
         fullQuery: '完整查询',
         customToolbar: '自定义工具栏',
         toolbarIcon: '自定义工具栏按钮图标',
@@ -513,6 +513,7 @@ module.exports = {
           type: '类型',
           size: '尺寸',
           name: '用来标识这一项',
+          status: '状态',
           disabled: '是否禁用',
           loading: '是否加载中'
         }

@@ -68,7 +68,7 @@ export default {
           slots: {
             default: ({ row, column }) => {
               return [
-                <vxe-button type="primary" onClick={ e => this.uploadFileEvent(row) }>添加附件</vxe-button>
+                <vxe-button status="primary" onClick={ e => this.uploadFileEvent(row) }>添加附件</vxe-button>
               ]
             }
           }
@@ -134,7 +134,7 @@ export default {
                   slots: {
                     default: ({ row, column }) => {
                       return [
-                        <vxe-button type="primary" onClick={ e => this.uploadFileEvent(row) }>添加附件</vxe-button>
+                        <vxe-button status="primary" onClick={ e => this.uploadFileEvent(row) }>添加附件</vxe-button>
                       ]
                     }
                   }

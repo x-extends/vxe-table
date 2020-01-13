@@ -2,20 +2,20 @@
   <div>
     <p class="tip">与 <a class="link" href="https://www.npmjs.com/package/element-ui">element-ui</a> 组合渲染 + 使用分页</p>
 
-    <el-form ref="tableform" :model="formData" inline>
-      <el-form-item title="名字" prop="name">
+    <vxe-form :data="formData" @submit="searchEvent">
+      <vxe-form-item field="name" title="名字">
         <el-input v-model="formData.name" placeholder="名字"></el-input>
-      </el-form-item>
-      <el-form-item title="性别" prop="sex">
+      </vxe-form-item>
+      <vxe-form-item field="sex" title="性别">
         <el-select v-model="formData.sex" placeholder="性别">
           <el-option v-for="item in sexList" :key="item.value" :label="item.label" :value="item.value"></el-option>
         </el-select>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="searchEvent">查询</el-button>
-        <el-button @click="$refs.tableform.resetFields()">重置</el-button>
-      </el-form-item>
-    </el-form>
+      </vxe-form-item>
+      <vxe-form-item>
+        <el-button type="primary" native-type="submit">查询</el-button>
+        <el-button native-type="reset">重置</el-button>
+      </vxe-form-item>
+    </vxe-form>
 
     <vxe-toolbar export custom>
       <template v-slot:buttons>
@@ -141,20 +141,20 @@ export default {
       },
       demoCodes: [
         `
-        <el-form ref="tableform" :model="formData" inline>
-          <el-form-item title="名字" prop="name">
+        <vxe-form :data="formData" @submit="searchEvent">
+          <vxe-form-item field="name" title="名字">
             <el-input v-model="formData.name" placeholder="名字"></el-input>
-          </el-form-item>
-          <el-form-item title="性别" prop="sex">
+          </vxe-form-item>
+          <vxe-form-item field="sex" title="性别">
             <el-select v-model="formData.sex" placeholder="性别">
               <el-option v-for="item in sexList" :key="item.value" :label="item.label" :value="item.value"></el-option>
             </el-select>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" @click="searchEvent">查询</el-button>
-            <el-button @click="$refs.tableform.resetFields()">重置</el-button>
-          </el-form-item>
-        </el-form>
+          </vxe-form-item>
+          <vxe-form-item>
+            <el-button type="primary" native-type="submit">查询</el-button>
+            <el-button native-type="reset">重置</el-button>
+          </vxe-form-item>
+        </vxe-form>
 
         <vxe-toolbar export custom>
           <template v-slot:buttons>

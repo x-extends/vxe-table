@@ -14,8 +14,8 @@
       :toolbar="toolbar"
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">
       <template v-slot:buttons>
-        <input type="text"/>
-        <button>搜索</button>
+        <vxe-input></vxe-input>
+        <vxe-button status="primary">搜索</vxe-button>
         <vxe-button @click="$refs.xGrid.commitProxy('reload')">刷新</vxe-button>
         <vxe-button @click="$refs.xGrid.commitProxy('insert_actived')">新增</vxe-button>
         <vxe-button @click="$refs.xGrid.commitProxy('mark_cancel')">标记/取消</vxe-button>
@@ -86,8 +86,8 @@ export default {
           :toolbar="toolbar"
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">
           <template v-slot:buttons>
-            <input type="text"/>
-            <vxe-button>搜索</vxe-button>
+            <vxe-input></vxe-input>
+            <vxe-button status="primary">搜索</vxe-button>
             <vxe-button @click="$refs.xGrid.commitProxy('reload')">刷新</vxe-button>
             <vxe-button @click="$refs.xGrid.commitProxy('insert_actived')">新增</vxe-button>
             <vxe-button @click="$refs.xGrid.commitProxy('mark_cancel')">标记/取消</vxe-button>

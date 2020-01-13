@@ -202,7 +202,7 @@ export default {
           }, GlobalConfig.i18n('vxe.button.cancel')) : null,
           h('vxe-button', {
             props: {
-              type: 'primary'
+              status: 'primary'
             },
             on: {
               click: this.confirmEvent

@@ -6,7 +6,7 @@
       <option v-for="(item, index) in sexList" :key="index" :value="item.value">{{ item.label }}</option>
     </select>
     <vxe-input v-model="params.role" placeholder="请输入角色" clearable></vxe-input>
-    <vxe-button type="primary">搜索</vxe-button>
+    <vxe-button status="primary">搜索</vxe-button>
   </form>
 </template>
 
