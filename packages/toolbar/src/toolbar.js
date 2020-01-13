@@ -550,9 +550,14 @@ export default {
       if (!isRefresh) {
         if (refreshOpts.query) {
           this.isRefresh = true
-          refreshOpts.query().catch(e => e).then(() => {
-            this.isRefresh = false
-          })
+          let qRest = refreshOpts.query()
+          try {
+            qRest.catch(e => e).then(() => {
+              this.isRefresh = false
+            })
+          } catch (e) {
+            UtilTools.error('vxe.error.typeErr', ['refresh.query', 'Promise', typeof qRest])
+          }
         } else if ($grid) {
           this.isRefresh = true
           $grid.commitProxy('reload').catch(e => e).then(() => {

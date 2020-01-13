@@ -25,7 +25,8 @@ export default {
       notType: 'Unsupported file types "{{0}}"',
       notExp: 'The browser does not support import / export.',
       impFields: 'Import failed, please check that the field name and data format are correct.',
-      treeNotImp: 'Tree table does not support import.'
+      treeNotImp: 'Tree table does not support import.',
+      typeErr: 'type error for "{{0}}". Expected {{1}}, got value {{2}}.'
     },
     table: {
       emptyText: 'No Data',
