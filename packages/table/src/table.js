@@ -2979,7 +2979,13 @@ export default {
       let { checkMethod } = this.checkboxOpts
       if (!checkMethod || checkMethod({ row: params.row, rowIndex: params.rowIndex, $rowIndex: params.$rowIndex })) {
         this.handleSelectRow(params, value)
-        UtilTools.emitEvent(this, 'select-change', [Object.assign({ selection: this.getCheckboxRecords(), reserves: this.getCheckboxReserveRecords(), checked: value, $table: this }, params), evnt])
+        // 在 v3.0 中废弃 select-change
+        if (this.$listeners['select-change']) {
+          UtilTools.warn('vxe.error.delEvent', ['select-change', 'checkbox-change'])
+          UtilTools.emitEvent(this, 'select-change', [Object.assign({ selection: this.getCheckboxRecords(), reserves: this.getCheckboxReserveRecords(), checked: value, $table: this }, params), evnt])
+        } else {
+          UtilTools.emitEvent(this, 'checkbox-change', [Object.assign({ selection: this.getCheckboxRecords(), reserves: this.getCheckboxReserveRecords(), checked: value, $table: this }, params), evnt])
+        }
       }
     },
     // 在 v3.0 中废弃 toggleRowSelection
@@ -3186,7 +3192,13 @@ export default {
      */
     triggerCheckAllEvent (evnt, value) {
       this.setAllCheckboxRow(value)
-      UtilTools.emitEvent(this, 'select-all', [{ selection: this.getCheckboxRecords(), reserves: this.getCheckboxReserveRecords(), checked: value, $table: this }, evnt])
+      // 在 v3.0 中废弃 select-all
+      if (this.$listeners['select-all']) {
+        UtilTools.warn('vxe.error.delEvent', ['select-all', 'checkbox-all'])
+        UtilTools.emitEvent(this, 'select-all', [{ selection: this.getCheckboxRecords(), reserves: this.getCheckboxReserveRecords(), checked: value, $table: this }, evnt])
+      } else {
+        UtilTools.emitEvent(this, 'checkbox-all', [{ selection: this.getCheckboxRecords(), reserves: this.getCheckboxReserveRecords(), checked: value, $table: this }, evnt])
+      }
     },
     // 在 v3.0 中废弃 toggleAllSelection
     toggleAllSelection () {
@@ -4217,6 +4229,7 @@ export default {
       if (!lazy || expandLazyLoadeds.indexOf(row) === -1) {
         let expanded = !this.isExpandByRow(row)
         this.setRowExpansion(row, expanded)
+        // 在 v3.0 中废弃 toggle-expand-change
         if ($listeners['toggle-expand-change']) {
           UtilTools.warn('vxe.error.delEvent', ['toggle-expand-change', 'toggle-row-expand'])
           UtilTools.emitEvent(this, 'toggle-expand-change', [{ expanded, row, rowIndex: this.getRowIndex(row), $table: this }, evnt])
@@ -4389,6 +4402,7 @@ export default {
       if (!lazy || treeLazyLoadeds.indexOf(row) === -1) {
         let expanded = !this.isTreeExpandByRow(row)
         this.setTreeExpansion(row, expanded)
+        // 在 v3.0 中废弃 toggle-tree-change
         if ($listeners['toggle-tree-change']) {
           UtilTools.warn('vxe.error.delEvent', ['toggle-tree-change', 'toggle-tree-expand'])
           UtilTools.emitEvent(this, 'toggle-tree-change', [{ expanded, row, rowIndex: this.getRowIndex(row), $table: this }, evnt])

@@ -7,7 +7,7 @@
       :tree-config="{children: 'children'}"
       :data="tableData"
       :checkbox-config="{labelField: 'id', highlight: true}"
-      @select-change="selectChangeEvent">
+      @checkbox-change="selectChangeEvent">
       <vxe-table-column type="checkbox" title="ID" width="280" tree-node></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
       <vxe-table-column field="size" title="Size"></vxe-table-column>
@@ -30,7 +30,7 @@
       :data="tableData"
       :tree-config="{children: 'children'}"
       :checkbox-config="{labelField: 'name', checkRowKeys: ['122000', '20000']}"
-      @select-change="selectChangeEvent">
+      @checkbox-change="selectChangeEvent">
       <vxe-table-column type="checkbox" title="Sex" width="400" tree-node></vxe-table-column>
       <vxe-table-column field="size" title="Size"></vxe-table-column>
       <vxe-table-column field="type" title="Type"></vxe-table-column>
@@ -71,7 +71,7 @@
       :data="tableData"
       :tree-config="{children: 'children'}"
       :checkbox-config="{labelField: 'name', checkMethod}"
-      @select-change="selectChangeEvent">
+      @checkbox-change="selectChangeEvent">
       <vxe-table-column type="checkbox" width="180" title="Sex" tree-node></vxe-table-column>
       <vxe-table-column field="size" title="Size"></vxe-table-column>
       <vxe-table-column field="type" title="Type"></vxe-table-column>
@@ -95,7 +95,7 @@ export default {
           :tree-config="{children: 'children'}"
           :data="tableData"
           :checkbox-config="{labelField: 'id', highlight: true}"
-          @select-change="selectChangeEvent">
+          @checkbox-change="selectChangeEvent">
           <vxe-table-column type="checkbox" title="ID" width="280" tree-node></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
           <vxe-table-column field="size" title="Size"></vxe-table-column>
@@ -127,7 +127,7 @@ export default {
           :data="tableData"
           :tree-config="{children: 'children'}"
           :checkbox-config="{labelField: 'name', checkRowKeys: ['122000', '20000']}"
-          @select-change="selectChangeEvent">
+          @checkbox-change="selectChangeEvent">
           <vxe-table-column type="checkbox" title="Sex" width="400" tree-node></vxe-table-column>
           <vxe-table-column field="size" title="Size"></vxe-table-column>
           <vxe-table-column field="type" title="Type"></vxe-table-column>

@@ -239,7 +239,7 @@ const exportDataAPI = [
     version: '',
     type: 'Function',
     enum: '',
-    defVal: '默认过滤掉 type=index,selection,radio 和 field 为空的列',
+    defVal: '默认过滤掉 type=index,checkbox,radio 和 field 为空的列',
     list: []
   },
   {
@@ -2053,9 +2053,27 @@ const apis = [
         list: []
       },
       {
+        name: 'checkbox-change',
+        descKey: 'app.api.table.desc.checkboxChange',
+        version: '1.15.18',
+        type: '',
+        enum: '',
+        defVal: '{selection,reserves,checked,row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,cell},event',
+        list: []
+      },
+      {
         name: 'select-all',
         descKey: 'app.api.table.desc.selectAll',
         version: '',
+        type: '',
+        enum: '',
+        defVal: '{selection,reserves,checked},event',
+        list: []
+      },
+      {
+        name: 'checkbox-all',
+        descKey: 'app.api.table.desc.checkboxAll',
+        version: '1.15.18',
         type: '',
         enum: '',
         defVal: '{selection,reserves,checked},event',

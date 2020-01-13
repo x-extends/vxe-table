@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">多选表格，用户手动勾选时会触发事件 <table-api-link prop="select-change"/></p>
+    <p class="tip">多选表格，用户手动勾选时会触发事件 <table-api-link prop="checkbox-change"/></p>
 
     <vxe-toolbar>
       <template v-slot:buttons>
@@ -16,9 +16,8 @@
       border
       ref="xTable1"
       :data="tableData"
-      @cell-click="cellClickEvent"
-      @select-all="selectAllEvent"
-      @select-change="selectChangeEvent">
+      @checkbox-all="selectAllEvent"
+      @checkbox-change="selectChangeEvent">
       <vxe-table-column type="checkbox" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -219,9 +218,8 @@ export default {
           border
           ref="xTable1"
           :data="tableData"
-          @cell-click="cellClickEvent"
-          @select-all="selectAllEvent"
-          @select-change="selectChangeEvent">
+          @checkbox-all="selectAllEvent"
+          @checkbox-change="selectChangeEvent">
           <vxe-table-column type="checkbox" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -240,9 +238,6 @@ export default {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 5)
           },
           methods: {
-            cellClickEvent () {
-              console.log('单元格点击事件')
-            },
             selectAllEvent ({ checked }) {
               console.log(checked ? '所有勾选事件' : '所有取消事件')
             },
@@ -457,9 +452,6 @@ export default {
   methods: {
     checkMethod ({ row }) {
       return row.age > 26
-    },
-    cellClickEvent () {
-      console.log('单元格点击事件')
     },
     selectAllEvent ({ checked }) {
       console.log(checked ? '所有勾选事件' : '所有取消事件')
