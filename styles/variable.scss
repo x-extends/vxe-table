@@ -75,9 +75,27 @@ $vxe-excel-primary-color: #217346;
 /*validate*/
 $vxe-table-validate-error-color: #f56c6c;
 
+/*toolbar*/
+$vxe-toolbar-height-default: 52px;
+$vxe-toolbar-height-medium: 50px;
+$vxe-toolbar-height-small: 48px;
+$vxe-toolbar-height-mini: 46px;
+
 /*tooltip*/
 $vxe-tooltip-dark-background-color: #303133;
 $vxe-tooltip-light-background-color: #fff;
 
 /*modal*/
 $vxe-modal-header-background-color: #F8F8F8;
+
+/*button*/
+$vxe-button-height-default: 34px;
+$vxe-button-height-medium: 32px;
+$vxe-button-height-small: 30px;
+$vxe-button-height-mini: 28px;
+
+/*input*/
+$vxe-input-height-default: $vxe-button-height-default;
+$vxe-input-height-medium: $vxe-button-height-medium;
+$vxe-input-height-small: $vxe-button-height-small;
+$vxe-input-height-mini: $vxe-button-height-mini;

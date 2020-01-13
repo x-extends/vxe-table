@@ -7,13 +7,13 @@ import { UtilTools, DomTools, GlobalEvent } from '../../tools'
  * 渲染按钮
  */
 function renderBtn (h, _vm, compConf) {
-  const { _e, $scopedSlots, $grid, $table, extraSlots, buttons = [] } = _vm
+  const { _e, $scopedSlots, $grid, $table, rConfig, buttons = [] } = _vm
   const comp = $grid || $table
   if ($scopedSlots.buttons) {
     return $scopedSlots.buttons.call(_vm, { $grid, $table }, h)
   }
   if (compConf && compConf.renderButtons) {
-    return compConf.renderButtons.call(_vm, h, extraSlots, comp ? comp.params : null, { $grid, $table })
+    return compConf.renderButtons.call(_vm, h, rConfig, comp ? comp.params : null, { $grid, $table })
   }
   return buttons.map(item => {
     return item.visible === false ? _e() : h('vxe-button', {
@@ -50,13 +50,13 @@ function renderBtn (h, _vm, compConf) {
  * 渲染右侧工具
  */
 function renderRightTool (h, _vm, compConf) {
-  let { $scopedSlots, $grid, $table, extraSlots } = _vm
+  let { $scopedSlots, $grid, $table, rConfig } = _vm
   const comp = $grid || $table
   if ($scopedSlots.tools) {
     return $scopedSlots.tools.call(_vm, { $grid, $table }, h)
   }
   if (compConf && compConf.renderTools) {
-    return compConf.renderTools.call(_vm, h, extraSlots, comp ? comp.params : null, { $grid, $table })
+    return compConf.renderTools.call(_vm, h, rConfig, comp ? comp.params : null, { $grid, $table })
   }
   return []
 }
@@ -75,7 +75,7 @@ export default {
     custom: [Boolean, Object],
     buttons: { type: Array, default: () => GlobalConfig.toolbar.buttons },
     size: String,
-    extraSlots: Object
+    rConfig: Object
   },
   inject: {
     $grid: {
@@ -154,10 +154,10 @@ export default {
     GlobalEvent.off(this, 'blur')
   },
   render (h) {
-    let { $grid, extraSlots, loading, customStore, importOpts, exportOpts, refresh, refreshOpts, zoom, zoomOpts, custom, setting, customOpts, vSize, tableFullColumn } = this
+    let { $grid, rConfig, loading, customStore, importOpts, exportOpts, refresh, refreshOpts, zoom, zoomOpts, custom, setting, customOpts, vSize, tableFullColumn } = this
     let customBtnOns = {}
     let customWrapperOns = {}
-    let compConf = extraSlots ? VXETable.renderer.get(extraSlots.name) : null
+    let compConf = rConfig ? VXETable.renderer.get(rConfig.name) : null
     if (custom || setting) {
       if (customOpts.trigger === 'manual') {
         // 手动触发

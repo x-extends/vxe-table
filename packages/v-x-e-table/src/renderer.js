@@ -152,20 +152,84 @@ function renderSelectEdit (h, renderOpts, params) {
   ]
 }
 
+/**
+ * 表单渲染器
+ */
+function defaultFormRender (h, renderOpts, params, context) {
+  let { data, field } = params
+  let { name } = renderOpts
+  let attrs = getAttrs(renderOpts)
+  let cellValue = XEUtils.get(data, field)
+  return [
+    h(name, {
+      class: `vxe-default-${name}`,
+      attrs,
+      domProps: attrs && name === 'input' && (attrs.type === 'submit' || attrs.type === 'reset') ? null : {
+        value: cellValue
+      },
+      on: getFormEvents(renderOpts, params, context)
+    })
+  ]
+}
+
+function getFormEvents (renderOpts, params, context) {
+  let { data, field } = params
+  let { events } = renderOpts
+  let type = name === 'select' ? 'change' : 'input'
+  let on = {
+    [type] (evnt) {
+      XEUtils.set(data, field, evnt.target.value)
+      if (events && events[type]) {
+        events[type](Object.assign({ context }, params), evnt)
+      }
+    }
+  }
+  if (events) {
+    return XEUtils.assign({}, XEUtils.objectMap(events, cb => function () {
+      params = Object.assign({ context }, params)
+      cb.apply(null, [params].concat.apply(params, arguments))
+    }), on)
+  }
+  return on
+}
+
+function renderFormOptions (h, options, renderOpts, params, context) {
+  let { data, field } = params
+  let { optionProps = {} } = renderOpts
+  let labelProp = optionProps.label || 'label'
+  let valueProp = optionProps.value || 'value'
+  let disabledProp = optionProps.disabled || 'disabled'
+  let cellValue = XEUtils.get(data, field)
+  return options.map((item, index) => {
+    return h('option', {
+      attrs: {
+        value: item[valueProp],
+        disabled: item[disabledProp]
+      },
+      domProps: {
+        selected: item[valueProp] === cellValue
+      },
+      key: index
+    }, item[labelProp])
+  })
+}
+
 const renderMap = {
   input: {
     autofocus: 'input',
     renderEdit: defaultEditRender,
     renderDefault: defaultEditRender,
     renderFilter: defaultFilterRender,
-    filterMethod: defaultFilterMethod
+    filterMethod: defaultFilterMethod,
+    renderItem: defaultFormRender
   },
   textarea: {
     autofocus: 'textarea',
     renderEdit: defaultEditRender,
     renderDefault: defaultEditRender,
     renderFilter: defaultFilterRender,
-    filterMethod: defaultFilterMethod
+    filterMethod: defaultFilterMethod,
+    renderItem: defaultFormRender
   },
   select: {
     renderEdit: renderSelectEdit,
@@ -202,7 +266,17 @@ const renderMap = {
         renderOpts.optionGroups ? renderOptgroups(h, renderOpts, params) : renderOptions(h, renderOpts.options, renderOpts, params))
       })
     },
-    filterMethod: defaultFilterMethod
+    filterMethod: defaultFilterMethod,
+    renderItem (h, renderOpts, params, context) {
+      return [
+        h('select', {
+          class: 'vxe-default-select',
+          attrs: getAttrs(renderOpts),
+          on: getFormEvents(renderOpts, params, context)
+        },
+        renderOpts.optionGroups ? renderOptgroups(h, renderOpts, params, context, renderFormOptions) : renderFormOptions(h, renderOpts.options, renderOpts, params, context))
+      ]
+    }
   }
 }
 

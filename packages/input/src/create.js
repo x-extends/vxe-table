@@ -23,28 +23,34 @@ export default function (compName) {
       form
     }
   }
+  const props = {
+    value: [String, Number],
+    name: String,
+    type: { type: String, default: 'text' },
+    readonly: Boolean,
+    disabled: Boolean,
+    placeholder: String,
+    maxlength: [String, Number],
+    size: String
+  }
+  if (isInput) {
+    props.clearable = Boolean
+    props.form = String
+  } else {
+    props.autocomplete = String
+    props.rows = { type: [String, Number], default: 2 }
+  }
   return {
     name: XEUtils.camelCase(`Vxe-${compName}`),
-    props: {
-      value: [String, Number],
-      name: String,
-      type: { type: String, default: 'text' },
-      autocomplete: String,
-      readonly: Boolean,
-      disabled: Boolean,
-      placeholder: String,
-      maxlength: [String, Number],
-      rows: { type: [String, Number], default: 2 },
-      form: String,
-      size: String
-    },
+    props,
     computed: {
       vSize () {
         return this.size || this.$parent.size || this.$parent.vSize
       }
     },
     render (h) {
-      let { $listeners, value, vSize, placeholder } = this
+      let { $listeners, value, type, vSize, placeholder, disabled, clearable } = this
+      let isClearable = clearable && (type === 'text' || type === 'search')
       let attrs = getAttrs(this)
       if (placeholder) {
         attrs.placeholder = UtilTools.getFuncText(placeholder)
@@ -52,7 +58,8 @@ export default function (compName) {
       return h('div', {
         class: [`vxe-${compName}`, {
           [`size--${vSize}`]: vSize,
-          'is--disabled': this.disabled
+          'is--suffix': isClearable,
+          'is--disabled': disabled
         }]
       }, [
         h(compName, {
@@ -66,8 +73,25 @@ export default function (compName) {
             let params = type === 'input' ? value : { value }
             this.$emit(type, params, evnt)
           })
-        })
+        }),
+        isClearable ? h('span', {
+          class: [`vxe-${compName}--suffix`, {
+            'is--active': !(value === '' || XEUtils.eqNull(value))
+          }],
+          on: {
+            click: this.clearValue
+          }
+        }, [
+          h('i', {
+            class: [`vxe-${compName}--suffix-icon`, 'vxe-icon--close']
+          })
+        ]) : null
       ])
+    },
+    methods: {
+      clearValue () {
+        this.$emit('input', '')
+      }
     }
   }
 }

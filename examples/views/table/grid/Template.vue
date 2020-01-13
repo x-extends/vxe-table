@@ -5,24 +5,54 @@
       列：<br>
       <table-column-api-link prop="default"/>：自定义内容模板（提前格式化好数据 > <table-column-api-link prop="formatter"/> > <table-column-api-link prop="slots"/>）<br>
       <table-column-api-link prop="header"/>：自定义表头模板<br>
-      <table-column-api-link prop="filter"/>：自定义筛选模板（建议使用<router-link :to="{name: 'RendererAPI'}">渲染器</router-link>，可以更好的复用）<br>
-      <table-column-api-link prop="edit"/>：自定义可编辑模板（建议使用<router-link :to="{name: 'RendererAPI'}">渲染器</router-link>，可以更好的复用）<br>
+      <table-column-api-link prop="filter"/>：自定义筛选模板（建议使用<router-link class="link" :to="{name: 'RendererFilter'}">渲染器</router-link>，可以更好的复用）<br>
+      <table-column-api-link prop="edit"/>：自定义可编辑模板（建议使用<router-link class="link" :to="{name: 'RendererEdit'}">渲染器</router-link>，可以更好的复用）<br>
       工具栏：<br>
-      <grid-api-link prop="buttons"/>：自定义按钮模板
+      <grid-api-link prop="buttons"/>：自定义按钮模板（建议使用<router-link class="link" :to="{name: 'RendererToolbar'}">渲染器</router-link>，可以更好的复用）<br>
+      <grid-api-link prop="tools"/>：自定义右侧按钮模板（建议使用<router-link class="link" :to="{name: 'RendererToolbar'}">渲染器</router-link>，可以更好的复用）<br>
     </p>
 
     <vxe-grid
       border
       resizable
+      form-config
       height="400"
       :toolbar="tableToolbar"
       :columns="tableColumn"
       :data="tableData"
       :edit-config="{trigger: 'click', mode: 'cell'}">
+      <!--使用 form 插槽-->
+      <template v-slot:form>
+        <vxe-form :data="formData" @submit="searchEvent">
+          <vxe-form-item title="名称" field="name">
+            <template>
+              <vxe-input v-model="formData.name" placeholder="请输入名称"></vxe-input>
+            </template>
+          </vxe-form-item>
+          <vxe-form-item title="昵称" field="nickname">
+            <template>
+              <vxe-input v-model="formData.nickname" placeholder="请输入昵称"></vxe-input>
+            </template>
+          </vxe-form-item>
+          <vxe-form-item title="性别" field="sex">
+            <select v-model="formData.sex" class="vxe-select">
+              <option value="0"></option>
+              <option value="1">女</option>
+              <option value="2">男</option>
+            </select>
+          </vxe-form-item>
+          <vxe-form-item>
+            <template>
+              <vxe-button>查询</vxe-button>
+            </template>
+          </vxe-form-item>
+        </vxe-form>
+      </template>
+
       <!--使用 buttons 插槽-->
       <template v-slot:buttons>
         <span>
-          <vxe-input size="small" placeholder="搜索"></vxe-input>
+          <vxe-input placeholder="搜索"></vxe-input>
           <vxe-button>搜索</vxe-button>
         </span>
       </template>
@@ -67,11 +97,17 @@ export default {
     return {
       showDetails: false,
       selectRow: null,
+      formData: {
+        name: '',
+        nickname: '',
+        sex: ''
+      },
       tableData: [],
       tableColumn: [
         {
           type: 'seq',
           width: 100,
+          resizable: false,
           slots: {
             // 对应自定义插槽的名称
             header: 'seq_header'
@@ -171,7 +207,7 @@ export default {
           // 使用 JSX 渲染函数
           tools: () => {
             return [
-              <vxe-input size="small" placeholder="搜索"></vxe-input>
+              <vxe-input placeholder="搜索"></vxe-input>
             ]
           }
         }
@@ -181,15 +217,44 @@ export default {
         <vxe-grid
           border
           resizable
+          form-config
           height="400"
           :toolbar="tableToolbar"
           :columns="tableColumn"
           :data="tableData"
           :edit-config="{trigger: 'click', mode: 'cell'}">
+          <!--使用 form 插槽-->
+          <template v-slot:form>
+            <vxe-form :data="formData" @submit="searchEvent">
+              <vxe-form-item title="名称" field="name">
+                <template>
+                  <vxe-input v-model="formData.name" placeholder="请输入名称"></vxe-input>
+                </template>
+              </vxe-form-item>
+              <vxe-form-item title="昵称" field="nickname">
+                <template>
+                  <vxe-input v-model="formData.nickname" placeholder="请输入昵称"></vxe-input>
+                </template>
+              </vxe-form-item>
+              <vxe-form-item title="性别" field="sex">
+                <select v-model="formData.sex" class="vxe-select">
+                  <option value="0"></option>
+                  <option value="1">女</option>
+                  <option value="2">男</option>
+                </select>
+              </vxe-form-item>
+              <vxe-form-item>
+                <template>
+                  <vxe-button>查询</vxe-button>
+                </template>
+              </vxe-form-item>
+            </vxe-form>
+          </template>
+
           <!--使用 buttons 插槽-->
           <template v-slot:buttons>
             <span>
-              <vxe-input size="small" placeholder="搜索"></vxe-input>
+              <vxe-input placeholder="搜索"></vxe-input>
               <vxe-button>搜索</vxe-button>
             </span>
           </template>
@@ -217,11 +282,17 @@ export default {
             return {
               showDetails: false,
               selectRow: null,
+              formData: {
+                name: '',
+                nickname: '',
+                sex: ''
+              },
               tableData: [],
               tableColumn: [
                 {
                   type: 'seq',
                   width: 100,
+                  resizable: false,
                   slots: {
                     // 对应自定义插槽的名称
                     header: 'seq_header'
@@ -321,7 +392,7 @@ export default {
                   // 使用 JSX 渲染函数
                   tools: () => {
                     return [
-                      <vxe-input size="small" placeholder="搜索"></vxe-input>
+                      <vxe-input placeholder="搜索"></vxe-input>
                     ]
                   }
                 }
@@ -332,6 +403,9 @@ export default {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 100)
           },
           methods: {
+            searchEvent () {
+              this.$XModal.alert('查询')
+            },
             showDetailEvent (row) {
               this.selectRow = row
               this.showDetails = true
@@ -382,8 +456,7 @@ export default {
     }
   },
   created () {
-    let list = window.MOCK_DATA_LIST.slice(0, 100)
-    this.tableData = list
+    this.tableData = window.MOCK_DATA_LIST.slice(0, 100)
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
@@ -391,6 +464,9 @@ export default {
     })
   },
   methods: {
+    searchEvent () {
+      this.$XModal.alert('查询')
+    },
     showDetailEvent (row) {
       this.selectRow = row
       this.showDetails = true

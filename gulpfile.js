@@ -29,6 +29,7 @@ const components = [
   'button',
   'modal',
   'tooltip',
+  'form',
 
   'export',
   'keyboard',

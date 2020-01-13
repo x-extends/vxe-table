@@ -51,17 +51,19 @@
           Loading,
           Tooltip,
           Grid,
-          Excel,
           Menu,
           Toolbar,
           Pager,
+          Form,
           Checkbox,
           Radio,
           Input,
           Button,
           Modal,
+          Edit,
           Export,
           Keyboard,
+          Validator,
           Resize,
           // 核心
           Table
@@ -82,17 +84,19 @@
         Vue.use(Loading)
         Vue.use(Tooltip)
         Vue.use(Grid)
-        Vue.use(Excel)
         Vue.use(Menu)
         Vue.use(Toolbar)
         Vue.use(Pager)
+        Vue.use(Form)
         Vue.use(Checkbox)
         Vue.use(Radio)
         Vue.use(Input)
         Vue.use(Button)
         Vue.use(Modal)
+        Vue.use(Edit)
         Vue.use(Export)
         Vue.use(Keyboard)
+        Vue.use(Validator)
         Vue.use(Resize)
         // 再安装核心库
         Vue.use(Table)

@@ -7,7 +7,7 @@
       <span class="orange">渲染器：抽象一切可复用的功能（类似组件的概念），实现非常简单的可配置化；</span><br>
       <span class="orange">插槽：自定义程度高，但需要重复写冗余代码，比较繁琐；</span><br>
       <span class="red">建议通过 JSX 实现更加简单，可维护性更好</span><br>
-      <span class="red">（注：实际开发中应该将业务封装成一个组件，不要把复杂的渲染逻辑写在渲染器中）</span>
+      <span class="red">（注：实际开发中应该将业务封装成一个组件，不要把复杂的渲染逻辑写在渲染器中，渲染器只负责表格与自定义组件之间的对接关系）</span>
     </p>
     <vxe-table
       resizable

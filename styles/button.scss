@@ -12,19 +12,6 @@
   border-color: lighten($vxe-primary-color, 4%);
 }
 
-%ButtonInterval {
-  margin-left: 10px;
-  &.size--medium {
-    margin-left: 8px;
-  }
-  &.size--small {
-    margin-left: 6px;
-  }
-  &.size--mini {
-    margin-left: 4px;
-  }
-}
-
 .vxe-button {
   position: relative;
   text-align: center;
@@ -67,10 +54,11 @@
     }
   }
   &.type--button {
-    padding: 0 16px;
-    line-height: 30px;
+    padding: 0 1em;
+    height: $vxe-button-height-default;
+    line-height: $vxe-button-height-default - 2px;
     border: 1px solid $vxe-input-border-color;
-    border-radius: 4px;
+    border-radius: 0.2em;
     &.theme--primary {
       color: #fff;
       .vxe-button--icon {
@@ -108,26 +96,34 @@
         }
       }
     }
-    &.size--medium {
-      padding: 0 14px;
-      line-height: 28px;
-    }
-    &.size--small {
-      padding: 0 12px;
-      line-height: 26px;
-    }
-    &.size--mini {
-      padding: 0 10px;
-      line-height: 24px;
+  }
+  &.size--medium {
+    font-size: $vxe-font-size-medium;
+    &.type--button {
+      height: $vxe-button-height-medium;
+      line-height: $vxe-button-height-medium - 2px;
     }
   }
+  &.size--small {
+    font-size: $vxe-font-size-small;
+    &.type--button {
+      height: $vxe-button-height-small;
+      line-height: $vxe-button-height-small - 2px;
+    }
+  }
+  &.size--mini {
+    font-size: $vxe-font-size-mini;
+    &.type--button {
+      height: $vxe-button-height-mini;
+      line-height: $vxe-button-height-mini - 2px;
+    }
+  }
+}
+.vxe-input,
+.vxe-button {
   &+.vxe-button,
   &+.vxe-button--dropdown {
-    @extend %ButtonInterval;
-  }
-  &.size--small,
-  &.size--mini {
-    font-size: 12px;
+    margin-left: 0.8em;
   }
 }
 .vxe-button--loading-icon,
@@ -142,7 +138,7 @@
   position: relative;
   &+.vxe-button,
   &+.vxe-button--dropdown {
-    @extend %ButtonInterval;
+    margin-left: 0.8em;
   }
   &.is--active {
     & > .vxe-button {

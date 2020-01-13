@@ -68,8 +68,8 @@ export default {
         `,
         `
         <form v-if="params" @submit.prevent="searchEvent">
-          <input v-model="params.name" placeholder="请输入名称">
-          <vxe-button @click="searchEvent">搜索</vxe-button>
+          <vxe-input v-model="params.name" placeholder="请输入名称" clearable></vxe-input>
+          <vxe-button type="primary">搜索</vxe-button>
         </form>
         `,
         `

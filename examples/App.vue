@@ -595,12 +595,6 @@ export default {
               }
             },
             {
-              label: 'app.aside.nav.fullQuery',
-              locat: {
-                name: 'GridFullQuery'
-              }
-            },
-            {
               label: 'app.aside.nav.edit',
               locat: {
                 name: 'GridEdit'
@@ -690,6 +684,12 @@ export default {
               label: 'app.aside.nav.crudTreeToolbar',
               locat: {
                 name: 'GridTreeEdit'
+              }
+            },
+            {
+              label: 'app.aside.nav.fullQuery',
+              locat: {
+                name: 'GridFullQuery'
               }
             },
             {
@@ -1408,6 +1408,12 @@ export default {
               locat: {
                 name: 'ModuleToolbar'
               }
+            },
+            {
+              label: 'app.aside.nav.form',
+              locat: {
+                name: 'ModuleForm'
+              }
             }
           ]
         },
@@ -1620,10 +1626,22 @@ export default {
                 name: 'RendererEdit'
               }
             },
+            // {
+            //   label: 'app.aside.nav.rendererToolbar',
+            //   locat: {
+            //     name: 'RendererToolbar'
+            //   }
+            // },
+            // {
+            //   label: 'app.aside.nav.rendererForm',
+            //   locat: {
+            //     name: 'RendererForm'
+            //   }
+            // },
             {
-              label: 'app.aside.nav.rendererToolbar',
+              label: 'app.aside.nav.rendererItem',
               locat: {
-                name: 'RendererToolbar'
+                name: 'RendererItem'
               }
             }
           ]
@@ -1762,7 +1780,7 @@ export default {
                   name: 'modal'
                 }
               }
-            // },
+            },
             // {
             //   label: 'app.aside.nav.vxeTooltip',
             //   locat: {
@@ -1771,6 +1789,24 @@ export default {
             //       name: 'tooltip'
             //     }
             //   }
+            // },
+            {
+              label: 'app.aside.nav.vxeForm',
+              locat: {
+                name: 'VXEAPI',
+                params: {
+                  name: 'form'
+                }
+              }
+            },
+            {
+              label: 'app.aside.nav.vxeFormItem',
+              locat: {
+                name: 'VXEAPI',
+                params: {
+                  name: 'form-item'
+                }
+              }
             }
           ]
         }

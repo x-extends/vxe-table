@@ -17,6 +17,7 @@ import Input from './input'
 import Button from './button'
 import Modal from './modal'
 import Tooltip from './tooltip'
+import Form from './form'
 
 import Export from './export'
 import Resize from './resize'
@@ -43,6 +44,7 @@ const components = [
   Button,
   Modal,
   Tooltip,
+  Form,
 
   Export,
   Resize
@@ -85,6 +87,7 @@ export * from './input'
 export * from './button'
 export * from './modal'
 export * from './tooltip'
+export * from './form'
 export * from './export'
 export * from './resize'
 export * from './v-x-e-table'

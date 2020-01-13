@@ -30,8 +30,9 @@
       }
     }
   }
-  .vxe-form {
+  .vxe-form--wrapper {
     position: relative;
+    margin-top: 0.5em;
     &.is--loading {
       &:before {
         content: "";

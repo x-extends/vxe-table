@@ -1,0 +1,123 @@
+/**Variable**/
+%ButtonHover {
+  color: lighten($vxe-primary-color, 6%);
+  border-color: lighten($vxe-primary-color, 10%);
+}
+
+.vxe-form--item,
+.vxe-form--item-title,
+.vxe-form--item-content {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.vxe-form--item-title {
+  max-width: 320px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding-right: 0.8em;
+}
+
+.vxe-form--item {
+  margin: 0.5em 0.8em 0.5em 0;
+  .vxe-default-input,
+  .vxe-default-textarea,
+  .vxe-default-select {
+    outline: 0;
+    height: $vxe-button-height-default;
+    border: 1px solid $vxe-input-border-color;
+    border-radius: 0.2em;
+  }
+  .vxe-default-input,
+  .vxe-default-textarea {
+    padding: 0 1em;
+  }
+  .vxe-default-input[type="text"],
+  .vxe-default-input[type="search"],
+  .vxe-default-textarea,
+  .vxe-default-select {
+    color: $vxe-font-color;
+    &:focus {
+      border: 1px solid $vxe-primary-color;
+    }
+    &[disabled] {
+      cursor: not-allowed;
+      background-color: #f3f3f3;
+    }
+  }
+  .vxe-default-input[type="submit"],
+  .vxe-default-input[type="reset"] {
+    line-height: $vxe-button-height-default - 2px;
+    background-color: #fff;
+    cursor: pointer;
+    &:hover {
+      @extend %ButtonHover;
+    }
+    &:active {
+      color: darken($vxe-primary-color, 2%);
+      border-color: darken($vxe-primary-color, 2%);
+    }
+  }
+  .vxe-default-input {
+    &[type="date"]::-webkit-inner-spin-button {
+      margin-top: 6px;
+    }
+    &[type="date"]::-webkit-inner-spin-button,
+    &[type="number"]::-webkit-inner-spin-button {
+      height: 24px;
+    }
+    &::placeholder {
+      color: $vxe-input-placeholder-color;
+    }
+  }
+  .vxe-default-input[type="text"],
+  .vxe-default-input[type="search"],
+  .vxe-default-textarea,
+  .vxe-default-select {
+    width: 180px;
+  }
+  .vxe-default-textarea {
+    resize: none;
+    vertical-align: middle;
+  }
+}
+
+.vxe-form {
+  &.size--medium {
+    font-size: $vxe-font-size-medium;
+    .vxe-default-input[type="submit"],
+    .vxe-default-input[type="reset"] {
+      line-height: $vxe-button-height-medium - 2px;
+    }
+    .vxe-default-input,
+    .vxe-default-input,
+    .vxe-default-select {
+      height: $vxe-button-height-medium;
+    }
+  }
+  &.size--small {
+    font-size: $vxe-font-size-small;
+    .vxe-default-input[type="submit"],
+    .vxe-default-input[type="reset"] {
+      line-height: $vxe-button-height-small - 2px;
+    }
+    .vxe-default-input,
+    .vxe-default-input,
+    .vxe-default-select {
+      height: $vxe-button-height-small;
+    }
+  }
+  &.size--mini {
+    font-size: $vxe-font-size-mini;
+    .vxe-default-input[type="submit"],
+    .vxe-default-input[type="reset"] {
+      line-height: $vxe-button-height-mini - 2px;
+    }
+    .vxe-default-input,
+    .vxe-default-input,
+    .vxe-default-select {
+      height: $vxe-button-height-mini;
+    }
+  }
+}

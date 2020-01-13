@@ -158,6 +158,7 @@ module.exports = {
         input: 'Input',
         modal: 'Modal',
         tooltip: 'Tooltip',
+        form: 'Form',
 
         other: 'Integrating third-party libraries',
         elementRender: 'element-ui -> Custom Templates',
@@ -192,9 +193,11 @@ module.exports = {
 
         renderer: '(Advanced) Renderer',
         rendererFilter: 'Filter renderer',
-        rendererDefault: 'Default renderer',
+        rendererDefault: 'Cell renderer',
         rendererEdit: 'Edit renderer',
         rendererToolbar: 'Toolbar renderer',
+        rendererForm: 'Form renderer',
+        rendererItem: 'Item renderer',
 
         interceptor: '(Advanced) Event interceptor',
 
@@ -216,7 +219,9 @@ module.exports = {
         vxeTextarea: 'vxe-textarea',
         vxeButton: 'vxe-button',
         vxeTooltip: 'vxe-tooltip',
-        vxeModal: 'vxe-modal'
+        vxeModal: 'vxe-modal',
+        vxeForm: 'vxe-form',
+        vxeFormItem: 'vxe-form-item'
       }
     },
     body: {
@@ -262,9 +267,7 @@ module.exports = {
       donationDesc: 'To make the project sustainable, you can support the author through sponsorship 😊'
     },
     api: {
-      form: {
-        apiSearch: 'API Search'
-      },
+      apiSearch: 'API Search',
       title: {
         prop: 'Attribute',
         desc: 'Description',
@@ -286,6 +289,7 @@ module.exports = {
           maxHeight: 'Maximum height of the table',
           syncResize: 'Auto resizing with a property change (may be used in scenarios where a property is used to control the show/hide toggle)',
           autoResize: 'Auto listen parent element response resize (may be used in scenarios where parent element may be dynamically changing)',
+          resizable: 'Resizable',
           stripe: 'Whether with zebra stripes(note that in the editable table scenario, the temporarily inserted data will not have a zebra-like pattern)',
           border: 'Whether there is a border (if true, horizontal border, vertical border and external border are displayed; if false, horizontal border and external border are displayed; if "none", horizontal border is displayed)',
           size: 'Table size',
@@ -393,6 +397,7 @@ module.exports = {
           radio: 'Radio',
           expand: 'Expansion',
           html: 'HTML tag(Rendering arbitrary HTML dynamically is very dangerous and can easily lead to XSS attacks, so make sure the content is trusted)',
+          visible: 'Whether the column is displayed',
           prop: 'Obsolete, please use "field"',
           field: 'Column field',
           label: 'Obsolete, please use "title"',
@@ -540,6 +545,17 @@ module.exports = {
           dblclickZoom: 'It is only valid for type=modal. Is it allowed to enlarge or restore the window by double-clicking the head',
           remember: 'The memory function will remember the last operation state and restore the window state when the window is opened again',
           destroyOnClose: 'Destroy the content when the window closes'
+        }
+      },
+      form: {
+        desc: {
+          data: 'Form data'
+        }
+      },
+      formItem: {
+        desc: {
+          field: 'Field',
+          title: 'Title'
         }
       }
     }
