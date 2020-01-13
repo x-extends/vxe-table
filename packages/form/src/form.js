@@ -30,7 +30,7 @@ export default {
   methods: {
     submitEvent (evnt) {
       evnt.preventDefault()
-      this.$emit('submit')
+      this.$emit('submit', {}, evnt)
     },
     resetEvent (evnt) {
       const data = this.data
@@ -41,7 +41,7 @@ export default {
           }
         })
       }
-      this.$emit('reset')
+      this.$emit('reset', {}, evnt)
     }
   }
 }

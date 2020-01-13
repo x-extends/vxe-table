@@ -76,7 +76,7 @@ export default {
         </vxe-table>
         `,
         `
-        VXETable.buttons.add('exportBtn', (params, event) => {
+        VXETable.commands.add('exportBtn', (params, event) => {
           let { $table, code, button } = params
           $table.exportData()
         })
@@ -110,7 +110,7 @@ export default {
         </vxe-grid>
         `,
         `
-        VXETable.buttons.add('myPrint', (params, event) => {
+        VXETable.commands.add('myPrint', (params, event) => {
           let { $table, code, button } = params
           $table.print()
         })

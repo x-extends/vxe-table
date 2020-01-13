@@ -233,7 +233,7 @@ export default {
       this.formConfig ? h('div', {
         ref: 'form',
         class: ['vxe-form--wrapper', {
-          'is--loading': this.tableLoading
+          'is--loading': this.loading || this.tableLoading
         }]
       }, renderFormContent(h, this)) : null,
       /**
@@ -629,15 +629,15 @@ export default {
       }
       UtilTools.emitEvent(this, 'filter-change', [Object.assign({ $grid: this }, params)])
     },
-    submitEvent () {
+    submitEvent (params, evnt) {
       let { proxyConfig } = this
       if (proxyConfig) {
         this.commitProxy('reload')
       }
-      UtilTools.emitEvent(this, 'form-submit', [{ $grid: this }])
+      UtilTools.emitEvent(this, 'form-submit', [Object.assign({ $grid: this }, params), evnt])
     },
-    resetEvent () {
-      UtilTools.emitEvent(this, 'form-reset', [{ $grid: this }])
+    resetEvent (params, evnt) {
+      UtilTools.emitEvent(this, 'form-reset', [Object.assign({ $grid: this }, params), evnt])
     },
     zoom () {
       this.maximize = !this.maximize

@@ -493,6 +493,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.form',
+              locat: {
+                name: 'TableForm'
+              }
+            },
+            {
               label: 'app.aside.nav.pager',
               locat: {
                 name: 'TablePage'
@@ -575,6 +581,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.form',
+              locat: {
+                name: 'GridForm'
+              }
+            },
+            {
               label: 'app.aside.nav.proxy',
               demoUrl: 'https://jsrun.pro/XwWKp/edit',
               locat: {
@@ -586,6 +598,12 @@ export default {
               demoUrl: 'https://jsrun.pro/ywWKp/edit',
               locat: {
                 name: 'GridPageProxy'
+              }
+            },
+            {
+              label: 'app.aside.nav.formProxy',
+              locat: {
+                name: 'GridFormProxy'
               }
             },
             {
@@ -1268,6 +1286,12 @@ export default {
               label: 'app.aside.nav.span',
               locat: {
                 name: 'TableEditSpan'
+              }
+            },
+            {
+              label: 'app.aside.nav.form',
+              locat: {
+                name: 'TableEditForm'
               }
             },
             {

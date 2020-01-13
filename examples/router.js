@@ -76,6 +76,7 @@ const Toolbar = () => import(/* webpackChunkName: "advanced" */ './views/table/a
 const TableCustom = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Custom.vue')
 const TableCustomStorage = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/CustomStorage.vue')
 const TableCustomlWidthStorage = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/CustomlWidthStorage.vue')
+const TableForm = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Form.vue')
 const TablePage = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Page.vue')
 const TablePageIcon = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/PageIcon.vue')
 const TableHighlight = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Highlight.vue')
@@ -99,6 +100,8 @@ const GridConfigProxy = () => import(/* webpackChunkName: "grid" */ './views/tab
 const GridEdit = () => import(/* webpackChunkName: "grid" */ './views/table/grid/Edit.vue')
 const GridCellDisable = () => import(/* webpackChunkName: "grid" */ './views/table/grid/CellDisable.vue')
 const GridRowDisable = () => import(/* webpackChunkName: "grid" */ './views/table/grid/RowDisable.vue')
+const GridForm = () => import(/* webpackChunkName: "grid" */ './views/table/grid/Form.vue')
+const GridFormProxy = () => import(/* webpackChunkName: "grid" */ './views/table/grid/FormProxy.vue')
 const GridToolbar = () => import(/* webpackChunkName: "grid" */ './views/table/grid/Toolbar.vue')
 const GridCustomToolbar = () => import(/* webpackChunkName: "grid" */ './views/table/grid/CustomToolbar.vue')
 const GridToolbarIcon = () => import(/* webpackChunkName: "grid" */ './views/table/grid/ToolbarIcon.vue')
@@ -202,6 +205,7 @@ const TableEditExpand = () => import(/* webpackChunkName: "edit" */ './views/tab
 const TableEditFooterImmediately = () => import(/* webpackChunkName: "edit" */ './views/table/edit/FooterImmediately.vue')
 const TableEditMenu = () => import(/* webpackChunkName: "edit" */ './views/table/edit/Menu.vue')
 const TableEditSpan = () => import(/* webpackChunkName: "edit" */ './views/table/edit/Span.vue')
+const TableEditForm = () => import(/* webpackChunkName: "edit" */ './views/table/edit/Form.vue')
 const TableEditUpload = () => import(/* webpackChunkName: "edit" */ './views/table/edit/Upload.vue')
 const TableEditRealtimeSave = () => import(/* webpackChunkName: "edit" */ './views/table/edit/RealtimeSave.vue')
 const TableEditDataCount = () => import(/* webpackChunkName: "edit" */ './views/table/edit/DataCount.vue')
@@ -625,6 +629,11 @@ export default new Router({
       component: TableCustomlWidthStorage
     },
     {
+      path: '/table/advanced/form',
+      name: 'TableForm',
+      component: TableForm
+    },
+    {
       path: '/table/advanced/page',
       name: 'TablePage',
       component: TablePage
@@ -941,6 +950,16 @@ export default new Router({
       component: GridRowDisable
     },
     {
+      path: '/table/grid/form',
+      name: 'GridForm',
+      component: GridForm
+    },
+    {
+      path: '/table/grid/formProxy',
+      name: 'GridFormProxy',
+      component: GridFormProxy
+    },
+    {
       path: '/table/grid/toolbar',
       name: 'GridToolbar',
       component: GridToolbar
@@ -1230,6 +1249,11 @@ export default new Router({
       path: '/table/edit/span',
       name: 'TableEditSpan',
       component: TableEditSpan
+    },
+    {
+      path: '/table/edit/form',
+      name: 'TableEditForm',
+      component: TableEditForm
     },
     {
       path: '/table/edit/upload',

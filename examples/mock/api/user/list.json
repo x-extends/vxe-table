@@ -22,6 +22,7 @@
     "seq|number": "{{ $index }}",
     "date": "{{ random.date('2019-01-01 00:00:00','2019-02-20 23:59:59', 'yyyy-MM-ddTHH:mm:ss.000+0800') }}",
     "date1": null,
+    "date2": "{{ random.date('2019-01-01','2019-02-20', 'yyyy-MM-dd') }}",
     "date5": "09:00",
     "date6": "09:00:00",
     "createTime|number": "{{ random.time('2019-01-01 00:00:00','2019-02-20 23:59:59', 'yyyy-MM-dd HH:mm:ss') }}",
