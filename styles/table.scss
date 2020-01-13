@@ -110,6 +110,11 @@
   }
 }
 
+select.vxe-select, 
+.vxe-input{
+  width: 180px;
+}
+
 /*默认的渲染*/
 .vxe-table,
 .vxe-table--filter-wrapper {

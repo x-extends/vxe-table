@@ -7,7 +7,7 @@
       :resizable="{storage: true}"
       :custom="{storage: true, checkMethod: checkColumnMethod}">
       <template v-slot:buttons>
-        <vxe-input class="search-input" v-model="filterName" type="search" :placeholder="`vxe-${apiName} ${$t('app.api.form.apiSearch')}`" @keyup="searchEvent"></vxe-input>
+        <vxe-input class="search-input" v-model="filterName" type="search" :placeholder="`vxe-${apiName} ${$t('app.api.apiSearch')}`" @keyup="searchEvent"></vxe-input>
       </template>
     </vxe-toolbar>
 
@@ -62,6 +62,8 @@ import textareaAPI from '../../api/textarea'
 import buttonAPI from '../../api/button'
 import tooltipAPI from '../../api/tooltip'
 import modalAPI from '../../api/modal'
+import formAPI from '../../api/form'
+import formItemAPI from '../../api/form-item'
 
 export default {
   data () {
@@ -202,6 +204,12 @@ export default {
               break
             case 'modal':
               apis = modalAPI
+              break
+            case 'form':
+              apis = formAPI
+              break
+            case 'form-item':
+              apis = formItemAPI
               break
           }
           // 生成唯一 id

@@ -3,6 +3,7 @@ import tableAPI from './table'
 import columnAPI from './column'
 import toolbarAPI from './toolbar'
 import pagerAPI from './pager'
+import formItemAPI from './form-item'
 
 const toolbarSlots = XEUtils.clone(toolbarAPI.find(item => item.name === 'Slots'), true)
 toolbarSlots.name = 'slots'
@@ -19,11 +20,113 @@ const apis = [
       {
         name: 'form-config',
         descKey: 'app.api.grid.desc.formConfig',
-        version: '2.7.19',
+        version: '2.8',
         type: 'Boolean, Object',
         enum: '',
         defVal: '',
-        list: []
+        list: [
+          {
+            name: 'data',
+            desc: '表单对象',
+            version: '',
+            type: 'Object',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'items',
+            desc: '项配置',
+            version: '',
+            type: 'Array',
+            enum: '',
+            defVal: '',
+            list: XEUtils.clone(formItemAPI.find(item => item.name === 'Props'), true).list.concat([
+              {
+                name: 'item-render',
+                desc: '项渲染器',
+                version: '',
+                type: 'Object',
+                enum: '',
+                defVal: '',
+                list: [
+                  {
+                    name: 'name',
+                    desc: '渲染器名称',
+                    version: '',
+                    type: 'String',
+                    enum: '',
+                    defVal: '',
+                    list: []
+                  },
+                  {
+                    name: 'props',
+                    desc: '渲染的参数（请查看目标渲染的 Props）',
+                    version: '',
+                    type: 'Object',
+                    enum: '',
+                    defVal: '',
+                    list: []
+                  },
+                  {
+                    name: 'attrs',
+                    desc: '渲染的属性（请查看目标渲染的 Attribute）',
+                    version: '',
+                    type: 'Object',
+                    enum: '',
+                    defVal: '',
+                    list: []
+                  },
+                  {
+                    name: 'options',
+                    desc: '只对 name=select 有效，下拉选项列表',
+                    version: '',
+                    type: 'Array',
+                    enum: '',
+                    defVal: '',
+                    list: []
+                  },
+                  {
+                    name: 'optionProps',
+                    desc: '只对 name=select 有效，下拉选项属性参数配置',
+                    version: '',
+                    type: 'Object',
+                    enum: '',
+                    defVal: '{ value, label, disabled }',
+                    list: []
+                  },
+                  {
+                    name: 'optionGroups',
+                    desc: '只对 name=select 有效，下拉分组选项列表',
+                    version: '',
+                    type: 'Array',
+                    enum: '',
+                    defVal: '',
+                    list: []
+                  },
+                  {
+                    name: 'optionGroupProps',
+                    desc: '只对 name=select 有效，下拉分组选项属性参数配置',
+                    version: '',
+                    type: 'Object',
+                    enum: '',
+                    defVal: '{ options, label }',
+                    list: []
+                  },
+                  {
+                    name: 'events',
+                    desc: '渲染组件的事件（请查看目标渲染的 Events）',
+                    version: '',
+                    type: 'Object',
+                    enum: '',
+                    defVal: '{data, property}, ...[目标渲染的 arguments]',
+                    list: []
+                  }
+                ]
+              }
+            ])
+          }
+        ]
       },
       {
         name: 'toolbar',
@@ -70,6 +173,25 @@ const apis = [
           ]
         }, toolbarSlots])
       },
+      // {
+      //   name: 'toolbar-render',
+      //   descKey: 'app.api.grid.desc.toolbarRender',
+      //   version: '2.8',
+      //   type: 'Object',
+      //   enum: '',
+      //   defVal: '',
+      //   list: [
+      //     {
+      //       name: 'name',
+      //       desc: '渲染器名称',
+      //       version: '',
+      //       type: 'String',
+      //       enum: '',
+      //       defVal: '',
+      //       list: []
+      //     }
+      //   ]
+      // },
       {
         name: 'pager-config',
         descKey: 'app.api.grid.desc.pagerConfig',
@@ -215,25 +337,6 @@ const apis = [
                 list: []
               }
             ]
-          }
-        ]
-      },
-      {
-        name: 'toolbar-render',
-        descKey: 'app.api.grid.desc.toolbarRender',
-        version: '2.8',
-        type: 'Object',
-        enum: '',
-        defVal: '',
-        list: [
-          {
-            name: 'name',
-            desc: '渲染器名称',
-            version: '',
-            type: 'String',
-            enum: '',
-            defVal: '',
-            list: []
           }
         ]
       }

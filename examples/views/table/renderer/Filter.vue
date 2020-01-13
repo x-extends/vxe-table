@@ -56,7 +56,6 @@
 
 <script>
 import hljs from 'highlight.js'
-import '@/plugins/xtable/renderer/filter'
 
 export default {
   data  () {

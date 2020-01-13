@@ -13,6 +13,8 @@ const RendererFilter = () => import(/* webpackChunkName: "start" */ './views/tab
 const RendererDefault = () => import(/* webpackChunkName: "start" */ './views/table/renderer/Default.vue')
 const RendererEdit = () => import(/* webpackChunkName: "start" */ './views/table/renderer/Edit.vue')
 const RendererToolbar = () => import(/* webpackChunkName: "start" */ './views/table/renderer/Toolbar.vue')
+const RendererForm = () => import(/* webpackChunkName: "start" */ './views/table/renderer/Form.vue')
+const RendererItem = () => import(/* webpackChunkName: "start" */ './views/table/renderer/Item.vue')
 
 const CommandsAPI = () => import(/* webpackChunkName: "start" */ './views/table/commands/API.vue')
 const MenusAPI = () => import(/* webpackChunkName: "start" */ './views/table/menus/API.vue')
@@ -222,6 +224,7 @@ const ModulePager = () => import(/* webpackChunkName: "module" */ './views/pager
 const ModuleModal = () => import(/* webpackChunkName: "module" */ './views/modal/Modal.vue')
 const ModuleTooltip = () => import(/* webpackChunkName: "module" */ './views/tooltip/Tooltip.vue')
 const ModuleToolbar = () => import(/* webpackChunkName: "module" */ './views/toolbar/Toolbar.vue')
+const ModuleForm = () => import(/* webpackChunkName: "module" */ './views/form/Form.vue')
 
 const TableOtherElement = () => import(/* webpackChunkName: "other" */ './views/table/other/Element.vue')
 const TableOtherIview = () => import(/* webpackChunkName: "other" */ './views/table/other/Iview.vue')
@@ -321,6 +324,16 @@ export default new Router({
       path: '/table/renderer/toolbar',
       name: 'RendererToolbar',
       component: RendererToolbar
+    },
+    {
+      path: '/table/renderer/form',
+      name: 'RendererForm',
+      component: RendererForm
+    },
+    {
+      path: '/table/renderer/item',
+      name: 'RendererItem',
+      component: RendererItem
     },
     {
       path: '/table/commands/api',
@@ -1318,6 +1331,11 @@ export default new Router({
       path: '/table/module/toolbar',
       name: 'ModuleToolbar',
       component: ModuleToolbar
+    },
+    {
+      path: '/table/module/form',
+      name: 'ModuleForm',
+      component: ModuleForm
     },
     {
       path: '/table/other/element',

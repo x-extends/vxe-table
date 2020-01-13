@@ -54,6 +54,7 @@
           Menu,
           Toolbar,
           Pager,
+          Form,
           Checkbox,
           Radio,
           Input,
@@ -86,6 +87,7 @@
         Vue.use(Menu)
         Vue.use(Toolbar)
         Vue.use(Pager)
+        Vue.use(Form)
         Vue.use(Checkbox)
         Vue.use(Radio)
         Vue.use(Input)

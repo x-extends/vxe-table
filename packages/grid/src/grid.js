@@ -1,11 +1,41 @@
 import Table from '../../table'
 import XEUtils from 'xe-utils/methods/xe-utils'
 import GlobalConfig from '../../conf'
-import { UtilTools, DomTools } from '../../tools'
 import VXETable from '../../v-x-e-table'
+import { UtilTools, DomTools } from '../../tools'
 
 const methods = {}
 const propKeys = Object.keys(Table.props)
+
+function renderFormContent (h, _vm) {
+  const { $scopedSlots, proxyConfig, proxyOpts, formData, formConfig, formOpts, formRender } = _vm
+  if ($scopedSlots.form) {
+    return $scopedSlots.form.call(_vm, { $grid: _vm }, h)
+  }
+  const compConf = formRender ? VXETable.renderer.get(formRender.name) : null
+  if (compConf && compConf.renderForm) {
+    return compConf.renderForm.call(_vm, h, formRender, formConfig.data, { $grid: _vm })
+  }
+  if (formOpts.items) {
+    return [
+      h('vxe-form', {
+        props: {
+          data: proxyConfig && proxyOpts.form ? formData : formConfig.data
+        },
+        on: {
+          submit: _vm.submitEvent,
+          reset: _vm.resetEvent
+        },
+        ref: 'form'
+      }, formOpts.items.map(item => {
+        return h('vxe-form-item', {
+          props: item
+        })
+      }))
+    ]
+  }
+  return []
+}
 
 Object.keys(Table.methods).forEach(name => {
   methods[name] = function () {
@@ -22,6 +52,7 @@ export default {
     toolbar: [Boolean, Object],
     toolbarRender: Object,
     formConfig: [Boolean, Object],
+    formRender: Object,
     ...Table.props
   },
   provide () {
@@ -36,6 +67,7 @@ export default {
       tableData: [],
       pendingRecords: [],
       filterData: [],
+      formData: {},
       sortData: {},
       tZindex: 0,
       tablePage: {
@@ -58,8 +90,11 @@ export default {
     pagerOpts () {
       return Object.assign({}, GlobalConfig.grid.pagerConfig, this.pagerConfig)
     },
+    formOpts () {
+      return Object.assign({}, GlobalConfig.grid.formConfig, this.formConfig, { rConfig: this.formRender })
+    },
     toolbarOpts () {
-      return Object.assign({}, GlobalConfig.grid.toolbar, this.toolbar, { extraSlots: this.toolbarRender })
+      return Object.assign({}, GlobalConfig.grid.toolbar, this.toolbar, { rConfig: this.toolbarRender })
     },
     toolbarSlots () {
       let { $scopedSlots, toolbar, toolbarOpts } = this
@@ -197,10 +232,10 @@ export default {
        */
       this.formConfig ? h('div', {
         ref: 'form',
-        class: ['vxe-form', {
+        class: ['vxe-form--wrapper', {
           'is--loading': this.tableLoading
         }]
-      }, $scopedSlots.form ? $scopedSlots.form.call(this, { $grid: this }, h) : []) : null,
+      }, renderFormContent(h, this)) : null,
       /**
        * 渲染工具栏
        */
@@ -282,9 +317,21 @@ export default {
       }
     },
     initProxy () {
-      if (!this.proxyInited && this.proxyConfig && this.proxyOpts.autoLoad !== false) {
-        this.proxyInited = true
-        this.$nextTick(() => this.commitProxy('reload'))
+      const { proxyInited, proxyConfig, proxyOpts, formConfig, formOpts } = this
+      if (proxyConfig) {
+        if (!proxyInited && proxyOpts.autoLoad !== false) {
+          this.proxyInited = true
+          this.$nextTick(() => this.commitProxy('reload'))
+        }
+        if (formConfig && proxyOpts.form && formOpts.items) {
+          const formData = {}
+          formOpts.items.forEach(({ field }) => {
+            if (field) {
+              formData[field] = null
+            }
+          })
+          this.formData = formData
+        }
       }
     },
     /**
@@ -292,7 +339,7 @@ export default {
      * @param {String/Object} code 字符串或对象
      */
     commitProxy (code) {
-      const { $refs, toolbar, toolbarOpts, proxyOpts, tablePage, pagerConfig, sortData, filterData, isMsg } = this
+      const { $refs, toolbar, toolbarOpts, proxyOpts, tablePage, pagerConfig, sortData, filterData, formData, isMsg } = this
       const { beforeQuery, beforeDelete, afterDelete, beforeSave, afterSave, ajax = {}, props = {} } = proxyOpts
       const $table = $refs.xTable
       const args = XEUtils.slice(arguments, 1)
@@ -346,6 +393,7 @@ export default {
               $grid: this,
               sort: sortData,
               filters: filterData,
+              form: formData,
               options: ajaxMethods
             }
             this.tableLoading = true
@@ -584,6 +632,16 @@ export default {
         this.commitProxy('query')
       }
       UtilTools.emitEvent(this, 'filter-change', [Object.assign({ $grid: this }, params)])
+    },
+    submitEvent () {
+      let { proxyConfig } = this
+      if (proxyConfig) {
+        this.commitProxy('reload')
+      }
+      UtilTools.emitEvent(this, 'form-submit', [{ $grid: this }])
+    },
+    resetEvent () {
+      UtilTools.emitEvent(this, 'form-reset', [{ $grid: this }])
     },
     zoom () {
       this.maximize = !this.maximize

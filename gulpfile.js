@@ -28,6 +28,7 @@ const components = [
   'button',
   'modal',
   'tooltip',
+  'form',
 
   'edit',
   'export',

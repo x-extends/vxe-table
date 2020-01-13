@@ -18,32 +18,11 @@
       :proxy-config="tableProxy"
       :checkbox-config="{labelField: 'id', reserve: true, highlight: true, range: true}">
 
-      <template v-slot:form>
-        <form class="form-row" v-on:submit.prevent="searchEvent">
-          <div class="form-item">
-            <div class="title">Name:</div>
-            <div class="content">
-              <input name="name" v-model="formData.name" placeholder="Please enter a user name">
-            </div>
-          </div>
-          <div class="form-item">
-            <div class="title">Nickname:</div>
-            <div class="content">
-              <input name="nickname" v-model="formData.nickname" placeholder="Please enter a user nickname">
-            </div>
-          </div>
-          <div class="form-item">
-            <div class="title">Role:</div>
-            <div class="content">
-              <input name="role" v-model="formData.role" placeholder="Please enter a user role">
-            </div>
-          </div>
-          <div class="form-item">
-            <div class="content">
-              <button>查询</button>
-            </div>
-          </div>
-        </form>
+      <template v-slot:buttons>
+        <vxe-form :data="formData" @submit="searchEvent">
+          <vxe-form-item field="name" :item-render="{name: 'input', attrs: {placeholder: '请输入名称'}}"></vxe-form-item>
+          <vxe-form-item :item-render="{name: 'input', attrs: {type: 'submit', value: '查询'}}"></vxe-form-item>
+        </vxe-form>
       </template>
 
       <template v-slot:empty>
@@ -59,7 +38,6 @@
     <pre>
       <code class="xml">{{ demoCodes[0] }}</code>
       <code class="javascript">{{ demoCodes[1] }}</code>
-      <code class="css">{{ demoCodes[2] }}</code>
     </pre>
   </div>
 </template>
@@ -72,9 +50,7 @@ export default {
   data () {
     return {
       formData: {
-        name: '',
-        nickname: '',
-        role: ''
+        name: ''
       },
       tablePage: {
         pageSize: 15,
@@ -143,32 +119,11 @@ export default {
           :proxy-config="tableProxy"
           :checkbox-config="{labelField: 'id', reserve: true, highlight: true, range: true}">
 
-          <template v-slot:form>
-            <form class="form-row" v-on:submit.prevent="searchEvent">
-              <div class="form-item">
-                <div class="title">Name:</div>
-                <div class="content">
-                  <input name="name" v-model="formData.name" placeholder="Please enter a user name">
-                </div>
-              </div>
-              <div class="form-item">
-                <div class="title">Nickname:</div>
-                <div class="content">
-                  <input name="nickname" v-model="formData.nickname" placeholder="Please enter a user nickname">
-                </div>
-              </div>
-              <div class="form-item">
-                <div class="title">Role:</div>
-                <div class="content">
-                  <input name="role" v-model="formData.role" placeholder="Please enter a user role">
-                </div>
-              </div>
-              <div class="form-item">
-                <div class="content">
-                  <button>查询</button>
-                </div>
-              </div>
-            </form>
+          <template v-slot:buttons>
+            <vxe-form :data="formData" @submit="searchEvent">
+              <vxe-form-item field="name" :item-render="{name: 'input', attrs: {placeholder: '请输入名称'}}"></vxe-form-item>
+              <vxe-form-item :item-render="{name: 'input', attrs: {type: 'submit', value: '查询'}}"></vxe-form-item>
+            </vxe-form>
           </template>
 
           <template v-slot:empty>
@@ -184,9 +139,7 @@ export default {
           data () {
             return {
               formData: {
-                name: '',
-                nickname: '',
-                role: ''
+                name: ''
               },
               tablePage: {
                 pageSize: 15,
@@ -245,29 +198,6 @@ export default {
             }
           }
         }
-        `,
-        `
-        .form-row {
-          display: flex;
-          flex-direction: row;
-        }
-        .form-row .form-item {
-          display: flex;
-          flex-direction: row;
-          align-items: center;
-          height: 36px;
-          padding-right: 10px;
-        }
-        .form-row .form-item > .title {
-          padding-right: 10px;
-        }
-        .form-row .form-item > .content {
-          width: 200px;
-        }
-        .form-row .form-item > .content input,
-        .form-row .form-item > .content select {
-          width: 100%;
-        }
         `
       ]
     }
@@ -284,27 +214,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-.form-row {
-  display: flex;
-  flex-direction: row;
-}
-.form-row .form-item {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  height: 36px;
-  padding-right: 10px;
-}
-.form-row .form-item > .title {
-  padding-right: 10px;
-}
-.form-row .form-item > .content {
-  width: 200px;
-}
-.form-row .form-item > .content input,
-.form-row .form-item > .content select {
-  width: 100%;
-}
-</style>

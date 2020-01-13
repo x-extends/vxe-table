@@ -4,7 +4,7 @@
     <p class="tip">查看 <router-link class="link" :to="{name: 'VXEAPI', params: {name: 'input'}}">API</router-link></p>
 
     <p>
-      <vxe-input v-model="value1" placeholder="请输入内容"></vxe-input>
+      <vxe-input v-model="value1" placeholder="请输入内容" clearable></vxe-input>
     </p>
 
     <p>
@@ -41,7 +41,7 @@ export default {
       demoCodes: [
         `
         <p>
-          <vxe-input v-model="value1" placeholder="请输入内容"></vxe-input>
+          <vxe-input v-model="value1" placeholder="请输入内容" clearable></vxe-input>
         </p>
 
         <p>

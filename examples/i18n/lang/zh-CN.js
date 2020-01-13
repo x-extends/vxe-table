@@ -157,6 +157,7 @@ module.exports = {
         input: '输入框',
         modal: '模态窗口',
         tooltip: '文字提示',
+        form: '表单',
 
         other: '集成第三方库',
         elementRender: 'element-ui -> 自定义渲染',
@@ -191,9 +192,11 @@ module.exports = {
 
         renderer: '(进阶) 渲染器',
         rendererFilter: '筛选渲染器',
-        rendererDefault: '默认的渲染器',
+        rendererDefault: '单元格渲染器',
         rendererEdit: '可编辑渲染器',
         rendererToolbar: '工具栏渲染器',
+        rendererForm: '表单渲染器',
+        rendererItem: '项渲染器',
 
         interceptor: '(进阶) 事件拦截器',
 
@@ -215,7 +218,9 @@ module.exports = {
         vxeTextarea: 'vxe-textarea',
         vxeButton: 'vxe-button',
         vxeTooltip: 'vxe-tooltip',
-        vxeModal: 'vxe-modal'
+        vxeModal: 'vxe-modal',
+        vxeForm: 'vxe-form',
+        vxeFormItem: 'vxe-form-item'
       }
     },
     body: {
@@ -261,9 +266,7 @@ module.exports = {
       donationDesc: '为了使项目能够健康持续的发展下去，您可以通过赞助来支持作者 😊'
     },
     api: {
-      form: {
-        apiSearch: 'API 搜索'
-      },
+      apiSearch: 'API 搜索',
       title: {
         prop: '属性',
         desc: '说明',
@@ -541,6 +544,17 @@ module.exports = {
           dblclickZoom: '只对 type=modal 有效，是否允许通过双击头部放大或还原窗口',
           remember: '记忆功能，会记住最后操作状态，再次打开窗口时还原窗口状态',
           destroyOnClose: '在窗口关闭时销毁内容'
+        }
+      },
+      form: {
+        desc: {
+          data: '表单数据'
+        }
+      },
+      formItem: {
+        desc: {
+          field: '字段名',
+          title: '标题（支持开启国际化）'
         }
       }
     }

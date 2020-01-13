@@ -18,6 +18,7 @@ import Input from '../../../packages/input'
 import Button from '../../../packages/button'
 import Modal from '../../../packages/modal'
 import Tooltip from '../../../packages/tooltip'
+import Form from '../../../packages/form'
 import Edit from '../../../packages/edit'
 import Export from '../../../packages/export'
 import Keyboard from '../../../packages/keyboard'
@@ -77,6 +78,7 @@ Vue.use(Input)
 Vue.use(Button)
 Vue.use(Modal)
 Vue.use(Tooltip)
+Vue.use(Form)
 Vue.use(Edit)
 Vue.use(Export)
 Vue.use(Keyboard)
