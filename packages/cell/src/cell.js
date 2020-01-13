@@ -102,7 +102,7 @@ export const Cell = {
     let isLazyLoaded = false
     let on = {}
     if (slots && slots.icon) {
-      return slots.icon(params, h)
+      return slots.icon(params, h, cellVNodes)
     }
     if (!isHidden) {
       isAceived = treeExpandeds.indexOf(row) > -1

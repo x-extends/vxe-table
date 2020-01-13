@@ -7,7 +7,7 @@
       resizable
       row-key
       toolbar
-      ref="xTree"
+      ref="xVTree"
       row-id="id"
       :tree-config="{children: 'children'}"
       :checkbox-config="{labelField: 'id'}"
@@ -52,7 +52,7 @@ export default {
           resizable
           row-key
           toolbar
-          ref="xTree"
+          ref="xVTree"
           row-id="id"
           :tree-config="{children: 'children'}"
           :checkbox-config="{labelField: 'id'}"

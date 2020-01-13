@@ -7,7 +7,7 @@
       show-overflow
       row-key
       toolbar
-      ref="xTree"
+      ref="xVTree"
       height="500"
       :loading="loading"
       :data="tableData"
@@ -15,8 +15,8 @@
       :tree-config="{children: 'children'}"
       :columns="tableColumn">
       <template v-slot:buttons>
-        <vxe-button @click="$refs.xTree.setAllTreeExpansion(true)">展开所有</vxe-button>
-        <vxe-button @click="$refs.xTree.setAllTreeExpansion(false)">收起所有</vxe-button>
+        <vxe-button @click="$refs.xVTree.setAllTreeExpansion(true)">展开所有</vxe-button>
+        <vxe-button @click="$refs.xVTree.setAllTreeExpansion(false)">收起所有</vxe-button>
       </template>
     </vxe-virtual-tree>
 
@@ -51,7 +51,7 @@ export default {
           show-overflow
           row-key
           toolbar
-          ref="xTree"
+          ref="xVTree"
           height="500"
           :loading="loading"
           :data="tableData"
@@ -59,8 +59,8 @@ export default {
           :tree-config="{children: 'children'}"
           :columns="tableColumn">
           <template v-slot:buttons>
-            <vxe-button @click="$refs.xTree.setAllTreeExpansion(true)">展开所有</vxe-button>
-            <vxe-button @click="$refs.xTree.setAllTreeExpansion(false)">收起所有</vxe-button>
+            <vxe-button @click="$refs.xVTree.setAllTreeExpansion(true)">展开所有</vxe-button>
+            <vxe-button @click="$refs.xVTree.setAllTreeExpansion(false)">收起所有</vxe-button>
           </template>
         </vxe-virtual-tree>
         `,

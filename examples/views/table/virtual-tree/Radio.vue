@@ -160,7 +160,7 @@ export default {
           resizable
           row-key
           highlight-current-row
-          ref="xTree"
+          ref="xVTree"
           row-id="id"
           :tree-config="{children: 'children'}"
           :radio-config="{labelField: 'name', trigger: 'row'}"

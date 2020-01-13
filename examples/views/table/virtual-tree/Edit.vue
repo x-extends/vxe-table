@@ -6,7 +6,7 @@
       resizable
       row-key
       toolbar
-      ref="xTree"
+      ref="xVTree"
       row-id="id"
       :tree-config="{children: 'children'}"
       :edit-config="{trigger: 'click', mode: 'row'}"
@@ -51,7 +51,7 @@ export default {
           resizable
           row-key
           toolbar
-          ref="xTree"
+          ref="xVTree"
           row-id="id"
           :tree-config="{children: 'children'}"
           :edit-config="{trigger: 'click', mode: 'row'}"

@@ -7,7 +7,7 @@
       row-key
       export-config
       keep-source
-      ref="xTree"
+      ref="xVTree"
       row-id="id"
       :toolbar="{export: true, zoom: true, custom: true}"
       :tree-config="{children: 'children'}"
@@ -53,7 +53,7 @@ export default {
           row-key
           export-config
           keep-source
-          ref="xTree"
+          ref="xVTree"
           row-id="id"
           :toolbar="{export: true, zoom: true, custom: true}"
           :tree-config="{children: 'children'}"
