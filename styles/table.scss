@@ -156,14 +156,16 @@ select.vxe-select,
   .vxe-textarea {
     width: 100%;
     display: block;
-    .vxe-input--inner,
-    .vxe-textarea--inner {
-      padding: 0 2px;
-      height: floor($vxe-table-row-height-default - 8);
-    }
-    .vxe-textarea--inner {
-      resize: none;
-    }
+  }
+  .vxe-input--inner {
+    height: floor($vxe-table-row-height-default - 8);
+  }
+  .vxe-input--inner,
+  .vxe-textarea--inner {
+    padding: 0 2px;
+  }
+  .vxe-textarea--inner {
+    resize: none;
   }
 }
 .vxe-table--filter-wrapper {
