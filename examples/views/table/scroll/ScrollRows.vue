@@ -14,6 +14,7 @@
         <vxe-button @click="loadList(50000)">5w条</vxe-button>
         <vxe-button @click="loadList(100000)">10w条</vxe-button>
         <vxe-button @click="loadList(200000)">20w条</vxe-button>
+        <vxe-button @click="loadList(300000)">30w条</vxe-button>
       </template>
     </vxe-toolbar>
 
@@ -75,6 +76,7 @@ export default {
             <vxe-button @click="loadList(50000)">5w条</vxe-button>
             <vxe-button @click="loadList(100000)">10w条</vxe-button>
             <vxe-button @click="loadList(200000)">20w条</vxe-button>
+            <vxe-button @click="loadList(300000)">30w条</vxe-button>
           </template>
         </vxe-toolbar>
 
