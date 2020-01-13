@@ -164,7 +164,8 @@ select.vxe-select,
   .vxe-textarea--inner {
     padding: 0 2px;
   }
-  .vxe-textarea--inner {
+  .vxe-textarea--inner,
+  .vxe-default-textarea {
     resize: none;
   }
 }
