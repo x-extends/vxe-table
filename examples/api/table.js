@@ -1963,6 +1963,7 @@ const apis = [
       },
       {
         name: 'select-change',
+        disabled: true,
         descKey: 'app.api.table.desc.selectChange',
         version: '',
         type: '',
@@ -1981,6 +1982,7 @@ const apis = [
       },
       {
         name: 'select-all',
+        disabled: true,
         descKey: 'app.api.table.desc.selectAll',
         version: '',
         type: '',

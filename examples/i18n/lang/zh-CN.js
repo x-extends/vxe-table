@@ -382,10 +382,10 @@ module.exports = {
           toggleExpandChange: '当行展开或收起时会触发该事件',
           toggleTreeChange: '当树节点展开或收起时会触发该事件',
           contextMenuClick: '只对 context-menu 配置时有效，当点击快捷菜单时会触发该事件',
-          editClosed: '单元格编辑状态下被关闭时会触发该事件',
-          editActived: '单元格被激活编辑时会触发该事件',
-          editDisabled: '当单元格激活时如果是禁用状态时会触发该事件',
-          validError: '当数据校验不通过时会触发该事件',
+          editClosed: '只对 edit-config 配置时有效，单元格编辑状态下被关闭时会触发该事件',
+          editActived: '只对 edit-config 配置时有效，单元格被激活编辑时会触发该事件',
+          editDisabled: '只对 edit-config 配置时有效，当单元格激活时如果是禁用状态时会触发该事件',
+          validError: '只对 edit-rules 配置时有效，当数据校验不通过时会触发该事件',
           scroll: '表格滚动时会触发该事件'
         }
       },
