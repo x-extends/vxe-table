@@ -424,6 +424,24 @@ const apis = [
         list: []
       },
       {
+        name: 'form-submit',
+        desc: '只对 form-config 配置时有效，表单提交时会触发该事件',
+        version: '2.8',
+        type: '',
+        enum: '',
+        defVal: '{}, event',
+        list: []
+      },
+      {
+        name: 'form-reset',
+        desc: '只对 form-config 配置时有效，表单重置时会触发该事件',
+        version: '2.8',
+        type: '',
+        enum: '',
+        defVal: '{}, event',
+        list: []
+      },
+      {
         name: 'toolbar-button-click',
         desc: '只对 toolbar.buttons 配置时有效，当工具栏的按钮被点击时会后触发该事件',
         version: '',

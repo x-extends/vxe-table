@@ -80,6 +80,7 @@ module.exports = {
         reverse: 'Reverse table',
         proxy: 'Data proxy',
         proxyPage: 'Data proxy + Pager',
+        formProxy: 'Data proxy + Form',
         configProxy: 'Configurable data proxy',
         fullQuery: 'Full query',
         customToolbar: 'Custom toolbar',

@@ -79,6 +79,7 @@ module.exports = {
         reverse: '反转表格',
         proxy: '数据代理',
         proxyPage: '数据代理 + 分页',
+        formProxy: '数据代理 + 表单',
         configProxy: '配置式数据代理',
         fullQuery: '完整查询',
         customToolbar: '自定义工具栏',

@@ -34,7 +34,26 @@ const apis = [
     type: '',
     enum: '',
     defVal: '',
-    list: []
+    list: [
+      {
+        name: 'submit',
+        desc: '表单提交时会触发该事件',
+        version: '',
+        type: '',
+        enum: '',
+        defVal: '{}, event',
+        list: []
+      },
+      {
+        name: 'reset',
+        desc: '表单重置时会触发该事件',
+        version: '',
+        type: '',
+        enum: '',
+        defVal: '{}, event',
+        list: []
+      }
+    ]
   },
   {
     name: 'Methods',

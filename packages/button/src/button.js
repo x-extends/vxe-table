@@ -34,6 +34,7 @@ export default {
         }],
         attrs: {
           name,
+          type: type === 'submit' || type === 'reset' ? type : null,
           disabled: disabled || loading
         },
         on: Object.assign({
@@ -62,6 +63,7 @@ export default {
       }],
       attrs: {
         name,
+        type: type === 'submit' || type === 'reset' ? type : null,
         disabled: disabled || loading
       },
       on: XEUtils.objectMap($listeners, (cb, type) => evnt => this.$emit(type, evnt))
