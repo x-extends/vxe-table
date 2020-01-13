@@ -6,7 +6,7 @@
       resizable
       row-key
       keep-source
-      ref="xTree"
+      ref="xVTree"
       row-id="id"
       :toolbar="{custom: true}"
       :tree-config="{children: 'children'}"
@@ -96,7 +96,7 @@ export default {
           resizable
           row-key
           keep-source
-          ref="xTree"
+          ref="xVTree"
           row-id="id"
           :toolbar="{custom: true}"
           :tree-config="{children: 'children'}"

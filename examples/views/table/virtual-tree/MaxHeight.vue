@@ -7,7 +7,7 @@
       resizable
       row-key
       export-config
-      ref="xTree"
+      ref="xVTree"
       max-height="400"
       :toolbar="{export: true, zoom: true}"
       :tree-config="{children: 'children'}"
@@ -49,7 +49,7 @@ export default {
           resizable
           row-key
           export-config
-          ref="xTree"
+          ref="xVTree"
           max-height="400"
           :toolbar="{export: true, zoom: true}"
           :tree-config="{children: 'children'}"

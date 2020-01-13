@@ -69,7 +69,7 @@
     "vxe-table-plugin-menus": "^1.2.0",
     "vxe-table-plugin-renderer": "^1.1.0",
     "vxe-table-plugin-shortcut-key": "^1.1.4",
-    "vxe-table-plugin-virtual-tree": "0.1.0",
+    "vxe-table-plugin-virtual-tree": "0.1.1",
     "webpack-cli": "^3.3.1",
     "xe-ajax": "^4.0.1",
     "xe-ajax-mock": "^1.9.2",

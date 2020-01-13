@@ -136,7 +136,7 @@ export default {
           resizable
           show-overflow
           row-key
-          ref="xTree"
+          ref="xVTree"
           row-id="id"
           :columns="tableColumn"
           :tree-config="{children: 'children', iconOpen: 'fa fa-minus-circle', iconClose: 'fa fa-plus-circle'}"

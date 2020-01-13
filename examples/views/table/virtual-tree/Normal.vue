@@ -197,7 +197,7 @@ export default {
         <vxe-virtual-tree
           show-overflow
           highlight-hover-row
-          ref="xTree"
+          ref="xVTree"
           row-id="id"
           :show-header="false"
           :data="tableData"
