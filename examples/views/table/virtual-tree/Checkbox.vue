@@ -9,7 +9,7 @@
       :tree-config="{children: 'children'}"
       :data="tableData"
       :columns="tableColumn1"
-      @select-change="selectChangeEvent">
+      @checkbox-change="selectChangeEvent">
     </vxe-virtual-tree>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -29,7 +29,7 @@
       :columns="tableColumn2"
       :tree-config="{children: 'children'}"
       :checkbox-config="{labelField: 'name', checkRowKeys: ['122000', '20000']}"
-      @select-change="selectChangeEvent">
+      @checkbox-change="selectChangeEvent">
     </vxe-virtual-tree>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -96,7 +96,7 @@ export default {
           :tree-config="{children: 'children'}"
           :data="tableData"
           :columns="tableColumn"
-          @select-change="selectChangeEvent">
+          @checkbox-change="selectChangeEvent">
         </vxe-virtual-tree>
         `,
         `
@@ -132,7 +132,7 @@ export default {
           :columns="tableColumn"
           :tree-config="{children: 'children'}"
           :checkbox-config="{labelField: 'name', checkRowKeys: ['122000', '20000']}"
-          @select-change="selectChangeEvent">
+          @checkbox-change="selectChangeEvent">
         </vxe-virtual-tree>
         `,
         `

@@ -362,8 +362,10 @@ module.exports = {
 
           currentChange: 'Only valid for highlightCurrentRow, the event that fires when the row is manually selected and the value changes',
           radioChange: 'Only works for type=radio, the event that is triggered when the value is manually checked and changed',
-          selectChange: 'Only works with type=selection, the event that is triggered when the value is manually checked and changed',
-          selectAll: 'Only works with type=selection, which triggers when all is checked manually',
+          selectChange: 'Obsolete, please use "checkbox-change"',
+          checkboxChange: 'Only valid for type=checkbox, events that are triggered when checked manually and the value changes',
+          selectAll: 'Obsolete, please use "checkbox-all"',
+          checkboxAll: 'Only valid for type=checkbox, events that are triggered when all is checked manually',
           cellClick: 'This event is triggered when the cell is click',
           cellDblclick: 'This event is triggered when a cell is dblclick',
           cellContextmenu: 'This event is triggered when the cell is contextmenu',

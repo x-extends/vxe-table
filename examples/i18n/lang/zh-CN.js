@@ -361,8 +361,10 @@ module.exports = {
 
           currentChange: '只对 highlightCurrentRow 有效，当手动选中行并且值发生改变时触发的事件',
           radioChange: '只对 type=radio 有效，当手动勾选并且值发生改变时触发的事件',
-          selectChange: '只对 type=selection 有效，当手动勾选并且值发生改变时触发的事件',
-          selectAll: '只对 type=selection 有效，当手动勾选全选时触发的事件',
+          selectChange: '即将废弃，请使用 checkbox-change',
+          checkboxChange: '只对 type=checkbox 有效，当手动勾选并且值发生改变时触发的事件',
+          selectAll: '即将废弃，请使用 checkbox-all',
+          checkboxAll: '只对 type=checkbox 有效，当手动勾选全选时触发的事件',
           cellClick: '单元格被点击时会触发该事件',
           cellDblclick: '单元格被双击时会触发该事件',
           cellContextmenu: '单元格被鼠标右键点击时触发该事件',
