@@ -4,8 +4,8 @@
 
     <vxe-toolbar>
       <template v-slot:buttons>
-        <vxe-button type="primary" @click="insertEvent()">选择文件</vxe-button>
-        <vxe-button type="primary" @click="insertEvent({ multiple : true })">选择多个</vxe-button>
+        <vxe-button status="primary" @click="insertEvent()">选择文件</vxe-button>
+        <vxe-button status="primary" @click="insertEvent({ multiple : true })">选择多个</vxe-button>
         <vxe-button @click="$refs.xTable.removeSelecteds()">删除选中</vxe-button>
         <vxe-button @click="getInsertEvent">保存</vxe-button>
       </template>
@@ -47,8 +47,8 @@ export default {
         `
         <vxe-toolbar>
           <template v-slot:buttons>
-            <vxe-button type="primary" @click="insertEvent()">选择文件</vxe-button>
-            <vxe-button type="primary" @click="insertEvent({ multiple : true })">选择多个</vxe-button>
+            <vxe-button status="primary" @click="insertEvent()">选择文件</vxe-button>
+            <vxe-button status="primary" @click="insertEvent({ multiple : true })">选择多个</vxe-button>
             <vxe-button @click="$refs.xTable.removeSelecteds()">删除选中</vxe-button>
             <vxe-button @click="getInsertEvent">保存</vxe-button>
           </template>

@@ -7,9 +7,9 @@
          <vxe-input size="small" placeholder="搜索"></vxe-input>
       </template>
       <template v-slot:tools>
-        <vxe-button type="primary">操作1</vxe-button>
-        <vxe-button type="primary">操作2</vxe-button>
-        <vxe-button type="primary">操作3</vxe-button>
+        <vxe-button status="primary">操作1</vxe-button>
+        <vxe-button status="primary">操作2</vxe-button>
+        <vxe-button status="primary">操作3</vxe-button>
       </template>
     </vxe-toolbar>
 
@@ -61,9 +61,9 @@ export default {
             <vxe-input size="small" placeholder="搜索"></vxe-input>
           </template>
           <template v-slot:tools>
-            <vxe-button type="primary">操作1</vxe-button>
-            <vxe-button type="primary">操作2</vxe-button>
-            <vxe-button type="primary">操作3</vxe-button>
+            <vxe-button status="primary">操作1</vxe-button>
+            <vxe-button status="primary">操作2</vxe-button>
+            <vxe-button status="primary">操作3</vxe-button>
           </template>
         </vxe-toolbar>
 

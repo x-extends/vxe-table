@@ -34,8 +34,8 @@
             <div class="first-col-bottom">序号</div>
           </div>
         </template>
-        <template v-slot="{ row, seq }">
-          <vxe-button @click="showDetailEvent(row)">弹框{{ seq }}</vxe-button>
+        <template v-slot="{ row }">
+          <vxe-button @click="showDetailEvent(row)">弹框{{ row.name }}</vxe-button>
         </template>
       </vxe-table-column>
       <vxe-table-column field="name" title="app.body.label.name" sortable>
@@ -143,8 +143,8 @@ export default {
                 <div class="first-col-bottom">序号</div>
               </div>
             </template>
-            <template v-slot="{ row, seq }">
-              <vxe-button @click="showDetailEvent(row)">弹框{{ seq }}</vxe-button>
+            <template v-slot="{ row }">
+              <vxe-button @click="showDetailEvent(row)">弹框{{ row.name }}</vxe-button>
             </template>
           </vxe-table-column>
           <vxe-table-column field="name" title="app.body.label.name" sortable>

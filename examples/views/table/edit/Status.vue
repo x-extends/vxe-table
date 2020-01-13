@@ -38,7 +38,7 @@
             <vxe-button @click="saveEvent(row)" :loading="row.loading">更新行数据</vxe-button>
           </template>
           <template v-else>
-            <vxe-button type="primary" @click="saveEvent(row, 'name')" :loading="row.loading">更新 Name 列</vxe-button>
+            <vxe-button status="primary" @click="saveEvent(row, 'name')" :loading="row.loading">更新 Name 列</vxe-button>
           </template>
         </template>
       </vxe-table-column>
@@ -96,7 +96,7 @@ export default {
                 <vxe-button @click="saveEvent(row)" :loading="row.loading">更新行数据</vxe-button>
               </template>
               <template v-else>
-                <vxe-button type="primary" @click="saveEvent(row, 'name')" :loading="row.loading">更新 Name 列</vxe-button>
+                <vxe-button status="primary" @click="saveEvent(row, 'name')" :loading="row.loading">更新 Name 列</vxe-button>
               </template>
             </template>
           </vxe-table-column>

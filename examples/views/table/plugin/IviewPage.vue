@@ -2,20 +2,20 @@
   <div>
     <p class="tip">与 <a class="link" href="https://www.npmjs.com/package/iview">iview</a> 组合渲染 + 使用分页</p>
 
-    <Form ref="tableform" :model="formData" inline>
-      <FormItem prop="name">
+   <vxe-form :data="formData" @submit="searchEvent">
+      <vxe-form-item field="name" title="名字">
         <Input type="text" v-model="formData.name" placeholder="Username"/>
-      </FormItem>
-      <FormItem prop="password">
+      </vxe-form-item>
+      <vxe-form-item field="sex" title="性别">
         <Select v-model="formData.sex" placeholder="性别">
           <Option v-for="item in sexList" :key="item.value" :label="item.label" :value="item.value"></Option>
         </Select>
-      </FormItem>
-      <FormItem>
-        <Button type="primary" @click="searchEvent">查询</Button>
-        <Button @click="$refs.tableform.resetFields()">重置</Button>
-      </FormItem>
-    </Form>
+      </vxe-form-item>
+      <vxe-form-item>
+        <Button type="primary" html-type="submit">查询</Button>
+        <Button html-type="reset">重置</Button>
+      </vxe-form-item>
+    </vxe-form>
 
     <vxe-toolbar export custom>
       <template v-slot:buttons>
@@ -138,20 +138,20 @@ export default {
       },
       demoCodes: [
         `
-        <Form ref="tableform" :model="formData" inline>
-          <FormItem prop="name">
+        <vxe-form :data="formData" @submit="searchEvent">
+          <vxe-form-item field="name" title="名字">
             <Input type="text" v-model="formData.name" placeholder="Username"/>
-          </FormItem>
-          <FormItem prop="password">
+          </vxe-form-item>
+          <vxe-form-item field="sex" title="性别">
             <Select v-model="formData.sex" placeholder="性别">
               <Option v-for="item in sexList" :key="item.value" :label="item.label" :value="item.value"></Option>
             </Select>
-          </FormItem>
-          <FormItem>
-            <Button type="primary" @click="searchEvent">查询</Button>
-            <Button @click="$refs.tableform.resetFields()">重置</Button>
-          </FormItem>
-        </Form>
+          </vxe-form-item>
+          <vxe-form-item>
+            <Button type="primary" html-type="submit">查询</Button>
+            <Button html-type="reset">重置</Button>
+          </vxe-form-item>
+        </vxe-form>
 
         <vxe-toolbar export custom>
           <template v-slot:buttons>

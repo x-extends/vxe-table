@@ -2,20 +2,20 @@
   <div>
     <p class="tip">与 <a class="link" href="https://www.npmjs.com/package/ant-design-vue">ant-design-vue</a> 组合渲染 + 使用分页</p>
 
-    <a-form :form="form" layout="inline" @submit="searchEvent">
-      <a-form-item title="名字">
-        <a-input v-decorator="['name']" placeholder="名字"></a-input>
-      </a-form-item>
-      <a-form-item title="性别">
-        <a-select v-decorator="['sex']" placeholder="性别">
+    <vxe-form :data="formData" @submit="searchEvent">
+      <vxe-form-item field="name" title="名字">
+        <a-input v-model="formData.name" placeholder="名字"></a-input>
+      </vxe-form-item>
+      <vxe-form-item sex="name" title="性别">
+        <a-select v-model="formData.sex" placeholder="性别">
           <a-select-option v-for="item in sexList" :key="item.value" :value="item.value">{{ item.label }}</a-select-option>
         </a-select>
-      </a-form-item>
-      <a-form-item>
+      </vxe-form-item>
+      <vxe-form-item>
         <a-button type="primary" html-type="submit">查询</a-button>
-        <a-button @click="form.resetFields()">重置</a-button>
-      </a-form-item>
-    </a-form>
+        <a-button html-type="reset">重置</a-button>
+      </vxe-form-item>
+    </vxe-form>
 
     <vxe-toolbar export custom>
       <template v-slot:buttons>
@@ -134,20 +134,20 @@ export default {
       form: this.$form.createForm(this),
       demoCodes: [
         `
-          <a-form :form="form" layout="inline" @submit="searchEvent">
-            <a-form-item title="名字">
-              <a-input v-decorator="['name']" placeholder="名字"></a-input>
-            </a-form-item>
-            <a-form-item title="性别">
-              <a-select v-decorator="['sex']" placeholder="性别">
+          <vxe-form :data="formData" @submit="searchEvent">
+            <vxe-form-item field="name" title="名字">
+              <a-input v-model="formData.name" placeholder="名字"></a-input>
+            </vxe-form-item>
+            <vxe-form-item sex="name" title="性别">
+              <a-select v-model="formData.sex" placeholder="性别">
                 <a-select-option v-for="item in sexList" :key="item.value" :value="item.value">{{ item.label }}</a-select-option>
               </a-select>
-            </a-form-item>
-            <a-form-item>
+            </vxe-form-item>
+            <vxe-form-item>
               <a-button type="primary" html-type="submit">查询</a-button>
-              <a-button @click="form.resetFields()">重置</a-button>
-            </a-form-item>
-          </a-form>
+              <a-button html-type="reset">重置</a-button>
+            </vxe-form-item>
+          </vxe-form>
 
           <vxe-toolbar export custom>
             <template v-slot:buttons>

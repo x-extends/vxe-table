@@ -242,7 +242,7 @@ export default {
           }, GlobalConfig.i18n('vxe.toolbar.expPrint')),
           h('vxe-button', {
             props: {
-              type: 'primary'
+              status: 'primary'
             },
             on: {
               click: this.exportEvent

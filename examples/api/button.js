@@ -10,9 +10,9 @@ const apis = [
       {
         name: 'type',
         descKey: 'app.api.button.desc.type',
-        version: '',
+        version: '2 | 2.8',
         type: '',
-        enum: 'text,primary',
+        enum: 'text,submit,reset',
         defVal: '',
         list: []
       },
@@ -31,6 +31,15 @@ const apis = [
         version: '',
         type: 'String, Number',
         enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'status',
+        descKey: 'app.api.button.desc.status',
+        version: '2.8',
+        type: 'String',
+        enum: 'primary',
         defVal: '',
         list: []
       },

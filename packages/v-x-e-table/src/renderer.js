@@ -160,7 +160,7 @@ function renderSelectEdit (h, renderOpts, params, context) {
 /**
  * 表单渲染器
  */
-function defaultFormRender (h, renderOpts, params, context) {
+function defaultItemRender (h, renderOpts, params, context) {
   let { data, field } = params
   let { name } = renderOpts
   let attrs = getAttrs(renderOpts)
@@ -226,7 +226,7 @@ const renderMap = {
     renderDefault: defaultEditRender,
     renderFilter: defaultFilterRender,
     filterMethod: defaultFilterMethod,
-    renderItem: defaultFormRender
+    renderItem: defaultItemRender
   },
   textarea: {
     autofocus: 'textarea',
@@ -234,7 +234,7 @@ const renderMap = {
     renderDefault: defaultEditRender,
     renderFilter: defaultFilterRender,
     filterMethod: defaultFilterMethod,
-    renderItem: defaultFormRender
+    renderItem: defaultItemRender
   },
   select: {
     renderEdit: renderSelectEdit,

@@ -8,6 +8,7 @@ export default {
     type: String,
     size: String,
     name: [String, Number],
+    status: String,
     icon: String,
     disabled: Boolean,
     loading: Boolean
@@ -15,26 +16,42 @@ export default {
   computed: {
     vSize () {
       return this.size || this.$parent.size || this.$parent.vSize
+    },
+    isText () {
+      return this.type === 'text'
+    },
+    isFormBtn () {
+      return this.type === 'submit' || this.type === 'reset'
+    },
+    btnType () {
+      return this.isText ? this.type : 'button'
+    },
+    btnStatus () {
+      return this.status || (this.type === 'primary' ? this.type : null)
+    }
+  },
+  created () {
+    if (this.type === 'primary') {
+      UtilTools.warn('vxe.error.delProp', ['type=primary', 'status=primary'])
     }
   },
   render (h) {
-    let { $scopedSlots, $listeners, type, vSize, name, disabled, loading } = this
-    let isText = type === 'text'
+    let { $scopedSlots, $listeners, type, isText, isFormBtn, btnStatus, btnType, vSize, name, disabled, loading } = this
     return $scopedSlots.dropdowns ? h('div', {
       class: ['vxe-button--dropdown', {
         [`size--${vSize}`]: vSize
       }]
     }, [
       h('button', {
-        class: ['vxe-button', `type--${isText ? type : 'button'}`, {
+        class: ['vxe-button', `type--${btnType}`, {
           [`size--${vSize}`]: vSize,
-          [`theme--${type}`]: type && !isText,
+          [`theme--${btnStatus}`]: btnStatus && !isText,
           'is--disabled': disabled || loading,
           'is--loading': loading
         }],
         attrs: {
           name,
-          type: type === 'submit' || type === 'reset' ? type : null,
+          type: isFormBtn ? type : null,
           disabled: disabled || loading
         },
         on: Object.assign({
@@ -55,15 +72,15 @@ export default {
         }
       }, $scopedSlots.dropdowns.call(this))
     ]) : h('button', {
-      class: ['vxe-button', `type--${isText ? type : 'button'}`, {
+      class: ['vxe-button', `type--${btnType}`, {
         [`size--${vSize}`]: vSize,
-        [`theme--${type}`]: type && !isText,
+        [`theme--${btnStatus}`]: btnStatus && !isText,
         'is--disabled': disabled || loading,
         'is--loading': loading
       }],
       attrs: {
         name,
-        type: type === 'submit' || type === 'reset' ? type : null,
+        type: isFormBtn ? type : null,
         disabled: disabled || loading
       },
       on: XEUtils.objectMap($listeners, (cb, type) => evnt => this.$emit(type, evnt))

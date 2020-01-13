@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip"><a class="link" href="https://github.com/xuliangzhan/vxe-table-demo/tree/master/vxe-table-by-vue-grid-proxy">查看配置式代理项目使用示例</a>，只需要一个 json 数据就可以非常简单的渲染一个支持 CRUD 功能完整的表格</p>
+    <p class="tip">进阶封装实现，<a class="link" href="https://github.com/xuliangzhan/vxe-table-demo/tree/master/vxe-table-by-vue-grid-proxy">查看配置式代理项目使用示例</a>，只需要一个 json 数据就可以非常简单的渲染一个支持 CRUD 功能完整的表格</p>
 
     <vxe-grid
       resizable
@@ -157,20 +157,7 @@ export default {
                   { field: 'name', title: 'Name', remoteSort: true, editRender: { name: 'input' } },
                   { field: 'nickname', title: 'Nickname', remoteSort: true, editRender: { name: 'input' } },
                   { field: 'age', title: 'Age', remoteSort: true, editRender: { name: 'input' } },
-                  {
-                    field: 'role',
-                    title: 'Role',
-                    remoteSort: true,
-                    width: 200,
-                    filters: [
-                      { label: '前端开发', value: '前端' },
-                      { label: '后端开发', value: '后端' },
-                      { label: '测试', value: '测试' },
-                      { label: '程序员鼓励师', value: '程序员鼓励师' }
-                    ],
-                    filterMultiple: false,
-                    editRender: { name: 'input' }
-                  },
+                  { field: 'role', title: 'Role', remoteSort: true, width: 200, filters: '/api/conf/role/list', filterMultiple: false, editRender: { name: 'input' } },
                   { field: 'describe', title: 'Describe', showOverflow: true, editRender: { name: 'input' } }
                 ]
               }

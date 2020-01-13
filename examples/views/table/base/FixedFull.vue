@@ -43,7 +43,7 @@
       <vxe-table-column field="date" title="Date" width="300"></vxe-table-column>
       <vxe-table-column title="操作" fixed="right" width="200">
         <template>
-          <vxe-button type="primary">按钮1</vxe-button>
+          <vxe-button status="primary">按钮1</vxe-button>
           <vxe-button>按钮2</vxe-button>
         </template>
       </vxe-table-column>
@@ -126,7 +126,7 @@ export default {
           <vxe-table-column field="date" title="Date" width="300"></vxe-table-column>
           <vxe-table-column title="操作" fixed="right" width="200">
             <template>
-              <vxe-button type="primary">按钮1</vxe-button>
+              <vxe-button status="primary">按钮1</vxe-button>
               <vxe-button>按钮2</vxe-button>
             </template>
           </vxe-table-column>

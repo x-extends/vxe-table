@@ -3,10 +3,8 @@
     <p class="tip">表单</p>
 
     <vxe-form :data="formData" @submit="findList">
-      <vxe-form-item title="名称" field="name">
-        <template>
-          <vxe-input v-model="formData.name" placeholder="请输入名称"></vxe-input>
-        </template>
+      <vxe-form-item title="app.body.label.name" field="name">
+        <vxe-input v-model="formData.name" placeholder="请输入名称"></vxe-input>
       </vxe-form-item>
       <vxe-form-item title="性别" field="sex">
         <select v-model="formData.sex" class="vxe-select">
@@ -16,10 +14,8 @@
         </select>
       </vxe-form-item>
       <vxe-form-item>
-        <template>
-          <vxe-button type="submit">查询</vxe-button>
-          <vxe-button type="reset">重置</vxe-button>
-        </template>
+        <vxe-button type="submit" status="primary">查询</vxe-button>
+        <vxe-button type="reset">重置</vxe-button>
       </vxe-form-item>
     </vxe-form>
 
@@ -61,10 +57,8 @@ export default {
       demoCodes: [
         `
         <vxe-form :data="formData" @submit="findList">
-          <vxe-form-item title="名称" field="name">
-            <template>
-              <vxe-input v-model="formData.name" placeholder="请输入名称"></vxe-input>
-            </template>
+          <vxe-form-item title="app.body.label.name" field="name">
+            <vxe-input v-model="formData.name" placeholder="请输入名称"></vxe-input>
           </vxe-form-item>
           <vxe-form-item title="性别" field="sex">
             <select v-model="formData.sex" class="vxe-select">
@@ -74,10 +68,8 @@ export default {
             </select>
           </vxe-form-item>
           <vxe-form-item>
-            <template>
-              <vxe-button type="submit">查询</vxe-button>
-              <vxe-button type="reset">重置</vxe-button>
-            </template>
+            <vxe-button type="submit" status="primary">查询</vxe-button>
+            <vxe-button type="reset">重置</vxe-button>
           </vxe-form-item>
         </vxe-form>
 
