@@ -28,9 +28,10 @@
           </select>
           <span>{{ $t('app.body.label.version') }}: </span>
           <select class="version-switch" v-model="version" @change="vChangeEvent">
-            <option value="1">V1</option>
-            <option value="2">V2</option>
-            <option value="3">V3</option>
+            <option value="1">1.x</option>
+            <option value="2">2.x</option>
+            <option value="3">3.x</option>
+            <option value="4">4.x</option>
           </select>
           <vxe-tooltip :content="$t('app.footer.donationDesc')" enterable>
             <a class="donation" href="https://github.com/xuliangzhan/vxe-table#donation" target="_blank">{{ $t('app.footer.donation') }}☕</a>
@@ -1911,6 +1912,7 @@ export default {
           location.href = '/vxe-table'
           break
         case '3':
+        case '4':
           this.version = '2'
           this.$XModal.message({ message: this.$t('app.body.other.newDevelopment'), status: 'info' })
           break
