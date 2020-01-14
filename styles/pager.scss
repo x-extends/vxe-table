@@ -31,6 +31,13 @@
       background-color: $vxe-loading-background-color;
     }
   }
+  .vxe-pager--prev-btn,
+  .vxe-pager--next-btn,
+  .vxe-pager--num-btn,
+  .vxe-pager--jump-prev,
+  .vxe-pager--jump-next {
+    border: 1px solid transparent;
+  }
   &.p--border,
   &.p--perfect {
     &:not(.p--background) {
@@ -39,7 +46,7 @@
       .vxe-pager--num-btn,
       .vxe-pager--jump-prev,
       .vxe-pager--jump-next {
-        border: 1px solid $vxe-input-border-color;
+        border-color: $vxe-input-border-color;
       }
     }
   }
@@ -48,13 +55,11 @@
     .vxe-pager--prev-btn,
     .vxe-pager--next-btn {
       background-color: #f4f4f5;
-      border-radius: 4px;
     }
     .vxe-pager--jump-prev,
     .vxe-pager--num-btn,
     .vxe-pager--jump-next {
       background-color: #f4f4f5;
-      border-radius: 4px;
       &:hover {
         color: $vxe-primary-color;
       }
@@ -76,6 +81,13 @@
       background-color: #fff;
     }
   }
+  &.p--border {
+    .vxe-pager--num-btn {
+      &.is--active {
+        border-color: $vxe-primary-color;
+      }
+    }
+  }
   &.size--medium {
     font-size: $vxe-font-size-medium;
     height: $vxe-table-row-height-medium;
@@ -87,7 +99,7 @@
     .vxe-pager--num-btn,
     .vxe-pager--jump-next {
       height: 28px;
-      line-height: 28px;
+      line-height: 26px;
     }
     .vxe-pager--sizes {
       .vxe-pager--sizes-arrow {
@@ -109,7 +121,7 @@
     .vxe-pager--num-btn,
     .vxe-pager--jump-next {
       height: 26px;
-      line-height: 26px;
+      line-height: 24px;
     }
     .vxe-pager--sizes {
       .vxe-pager--sizes-arrow {
@@ -131,7 +143,7 @@
     .vxe-pager--num-btn,
     .vxe-pager--jump-next {
       height: 24px;
-      line-height: 24px;
+      line-height: 22px;
     }
     .vxe-pager--sizes {
       .vxe-pager--sizes-arrow {
@@ -173,7 +185,7 @@
   .vxe-pager--num-btn,
   .vxe-pager--jump-next {
     height: 30px;
-    line-height: 30px;
+    line-height: 28px;
     display: inline-block;
   }
   .vxe-pager--btn-wrapper {
@@ -202,6 +214,7 @@
   .vxe-pager--num-btn,
   .vxe-pager--next-btn,
   .vxe-pager--jump-next {
+    border-radius: 4px;
     margin: 0 0.25em;
     &:hover,
     &.is--active {
@@ -224,8 +237,11 @@
     text-align: center;
   }
   .vxe-pager--num-btn {
-    font-weight: 700;
     vertical-align: middle;
+    &.is--active {
+      font-weight: 700;
+      color: $vxe-primary-color;
+    }
   }
   .vxe-pager--btn-icon,
   .vxe-pager--jump-icon {
