@@ -220,8 +220,8 @@ module.exports = {
         vxeButton: 'vxe-button',
         vxeTooltip: 'vxe-tooltip',
         vxeModal: 'vxe-modal',
-        vxeForm: 'vxe-form',
-        vxeFormItem: 'vxe-form-item'
+        vxeForm: 'vxe-form (v2.8)',
+        vxeFormItem: 'vxe-form-item(v2.8)'
       }
     },
     body: {

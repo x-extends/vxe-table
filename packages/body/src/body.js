@@ -227,7 +227,7 @@ function renderColumn (h, _vm, $table, $seq, seq, rowid, fixedType, rowLevel, ro
     attrs,
     style: cellStyle ? (XEUtils.isFunction(cellStyle) ? cellStyle(params) : cellStyle) : null,
     on: tdOns
-  }, allColumnOverflow && fixedHiddenColumn
+  }, allColumnOverflow && fixedHiddenColumn && !spanMethod
     ? [
       h('div', {
         class: ['vxe-cell', {
@@ -483,6 +483,7 @@ export default {
       showFooter,
       showOverflow: allShowOverflow,
       showAllOverflow: oldShowAllOverflow,
+      spanMethod,
       footerHeight,
       tableHeight,
       tableWidth,
@@ -513,11 +514,11 @@ export default {
       }
     }
     // 如果是固定列与设置了超出隐藏
-    if (fixedType && allColumnOverflow) {
+    if (fixedType && allColumnOverflow && !spanMethod) {
       tableColumn = fixedColumn
       tableWidth = tableColumn.reduce((previous, column) => previous + column.renderWidth, 0)
     } else if (scrollXLoad) {
-      if (fixedType) {
+      if (fixedType && !spanMethod) {
         tableColumn = fixedColumn
       }
       tableWidth = tableColumn.reduce((previous, column) => previous + column.renderWidth, 0)

@@ -40,11 +40,11 @@ export default {
       getColumnIndex
     } = $table
     // 如果是使用优化模式
-    if (fixedType && allColumnOverflow) {
+    if (fixedType && allColumnOverflow && !footerSpanMethod) {
       tableColumn = fixedColumn
       tableWidth = tableColumn.reduce((previous, column) => previous + column.renderWidth, 0)
     } else if (scrollXLoad) {
-      if (fixedType) {
+      if (fixedType && !footerSpanMethod) {
         tableColumn = fixedColumn
       }
       tableWidth = tableColumn.reduce((previous, column) => previous + column.renderWidth, 0)
