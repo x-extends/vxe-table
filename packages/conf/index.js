@@ -83,6 +83,8 @@ const GlobalConfig = {
     expandClose: 'vxe-icon--arrow-right',
     refresh: 'vxe-icon--refresh',
     refreshLoading: 'vxe-icon--refresh roll',
+    formFolding: 'vxe-icon--arrow-top rotate180',
+    formUnfolding: 'vxe-icon--arrow-top',
     import: 'vxe-icon--upload',
     importRemove: 'vxe-icon--close',
     export: 'vxe-icon--download',

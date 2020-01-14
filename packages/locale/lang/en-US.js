@@ -81,6 +81,10 @@ export default {
       zoomOut: 'Downward reduction',
       close: 'Close'
     },
+    form: {
+      folding: 'Folding',
+      unfolding: 'Unfolding'
+    },
     toolbar: {
       import: 'Import data',
       export: 'Export data',

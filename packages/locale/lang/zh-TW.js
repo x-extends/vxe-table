@@ -81,6 +81,10 @@ export default {
       zoomOut: '向下還原',
       close: '關閉'
     },
+    form: {
+      folding: '收起',
+      unfolding: '展開'
+    },
     toolbar: {
       import: '導入數據',
       export: '匯出數據',

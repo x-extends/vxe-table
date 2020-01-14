@@ -26,6 +26,15 @@ const apis = [
         list: []
       },
       {
+        name: 'align',
+        descKey: 'app.api.formItem.desc.align',
+        version: '',
+        type: 'String',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'title-align',
         descKey: 'app.api.form.desc.titleAlign',
         version: '',
@@ -89,7 +98,17 @@ const apis = [
     type: '',
     enum: '',
     defVal: '',
-    list: []
+    list: [
+      {
+        name: 'toggleCollapse()',
+        desc: '手动切换折叠状态',
+        version: '',
+        type: 'Promise',
+        enum: '',
+        defVal: '',
+        list: []
+      }
+    ]
   }
 ]
 

@@ -554,6 +554,7 @@ module.exports = {
         desc: {
           data: '表单数据',
           span: '所有项的栅格占据的列数',
+          align: '所有项的内容对齐方式',
           titleAlign: '所有项的标题对齐方式',
           titleWidth: '所有项的标题宽度'
         }
@@ -563,8 +564,11 @@ module.exports = {
           field: '字段名',
           title: '标题（支持开启国际化）',
           span: '栅格占据的列数',
+          align: '内容对齐方式',
           titleAlign: '标题对齐方式',
           titleWidth: '标题宽度',
+          folding: '默认收起',
+          collapseNode: '折叠节点',
           itemRender: '项渲染器配置项'
         }
       }
