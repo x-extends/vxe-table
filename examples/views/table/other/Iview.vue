@@ -23,7 +23,7 @@
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">
       <vxe-table-column type="checkbox" width="60"></vxe-table-column>
       <vxe-table-column type="seq" width="80" >
-        <template v-slot:header="{ column }">
+        <template v-slot:header>
           <span>序号</span>
           <Icon type="md-help-circle" />
         </template>
@@ -38,7 +38,7 @@
           <AutoComplete v-model="row.role" :data="restaurants" :filterMethod="roleFilterMethod"></AutoComplete>
         </template>
       </vxe-table-column>
-      <vxe-table-column field="age" title="InputNumber" width="140" :edit-render="{type: 'default'}">
+      <vxe-table-column field="age" title="InputNumber" width="150" :edit-render="{type: 'default'}">
         <template v-slot:header="{ column }">
           <span>{{ column.title }}</span>
           <Icon type="md-alert" />
@@ -122,7 +122,7 @@ export default {
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">
           <vxe-table-column type="checkbox" width="60"></vxe-table-column>
           <vxe-table-column type="seq" width="80" >
-            <template v-slot:header="{ column }">
+            <template v-slot:header>
               <span>序号</span>
               <Icon type="md-help-circle" />
             </template>
@@ -137,7 +137,7 @@ export default {
               <AutoComplete v-model="row.role" :data="restaurants" :filterMethod="roleFilterMethod"></AutoComplete>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="age" title="InputNumber" width="140" :edit-render="{type: 'default'}">
+          <vxe-table-column field="age" title="InputNumber" width="150" :edit-render="{type: 'default'}">
             <template v-slot:header="{ column }">
               <span>{{ column.title }}</span>
               <Icon type="md-alert" />
