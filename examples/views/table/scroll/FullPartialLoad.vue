@@ -9,14 +9,16 @@
         <vxe-button @click="loadList(20)">+20条</vxe-button>
         <vxe-button @click="loadList(50)">+50条</vxe-button>
         <vxe-button @click="loadList(100)">+100条</vxe-button>
-        <vxe-button @click="loadList(200)">+200条</vxe-button>
         <vxe-button @click="loadList(300)">+300条</vxe-button>
+        <vxe-button @click="removeList(20)">-20条</vxe-button>
+        <vxe-button @click="removeList(50)">-50条</vxe-button>
         <vxe-button @click="loadColumns(10)">+10列</vxe-button>
         <vxe-button @click="loadColumns(30)">+30列</vxe-button>
         <vxe-button @click="loadColumns(50)">+50列</vxe-button>
+        <vxe-button @click="removeColumn(10)">-10列</vxe-button>
+        <vxe-button @click="removeColumn(20)">-20列</vxe-button>
         <vxe-button @click="$refs.xGrid.scrollTo(1000, 2000)">x=1000,y=2000</vxe-button>
-        <vxe-button @click="$refs.xGrid.scrollTo(2000, 6000)">x=2000,y=6000</vxe-button>
-        <vxe-button @click="$refs.xGrid.clearScroll()">清除滚动状态</vxe-button>
+        <vxe-button @click="$refs.xGrid.clearScroll()">清除滚动</vxe-button>
       </template>
     </vxe-toolbar>
 
@@ -56,14 +58,16 @@ export default {
             <vxe-button @click="loadList(20)">+20条</vxe-button>
             <vxe-button @click="loadList(50)">+50条</vxe-button>
             <vxe-button @click="loadList(100)">+100条</vxe-button>
-            <vxe-button @click="loadList(200)">+200条</vxe-button>
             <vxe-button @click="loadList(300)">+300条</vxe-button>
+            <vxe-button @click="removeList(20)">-20条</vxe-button>
+            <vxe-button @click="removeList(50)">-50条</vxe-button>
             <vxe-button @click="loadColumns(10)">+10列</vxe-button>
             <vxe-button @click="loadColumns(30)">+30列</vxe-button>
             <vxe-button @click="loadColumns(50)">+50列</vxe-button>
+            <vxe-button @click="removeColumn(10)">-10列</vxe-button>
+            <vxe-button @click="removeColumn(20)">-20列</vxe-button>
             <vxe-button @click="$refs.xGrid.scrollTo(1000, 2000)">x=1000,y=2000</vxe-button>
-            <vxe-button @click="$refs.xGrid.scrollTo(2000, 6000)">x=2000,y=6000</vxe-button>
-            <vxe-button @click="$refs.xGrid.clearScroll()">清除滚动状态</vxe-button>
+            <vxe-button @click="$refs.xGrid.clearScroll()">清除滚动</vxe-button>
           </template>
         </vxe-toolbar>
 
@@ -109,6 +113,12 @@ export default {
                 this.loading = false
               })
             },
+            removeColumn (size) {
+              if (this.allColumn.length > size) {
+                this.allColumn = this.allColumn.slice(0, this.allColumn.length - size)
+                this.$refs.xGrid.loadColumn(this.allColumn)
+              }
+            },
             loadColumns (size) {
               this.loading = true
               this.findColumnList(size).then(data => {
@@ -116,6 +126,12 @@ export default {
                 this.$refs.xGrid.loadColumn(this.allColumn)
                 this.loading = false
               })
+            },
+            removeList (size) {
+              if (this.allData.length > size) {
+                this.allData = this.allData.slice(0, this.allData.length - size)
+                this.$refs.xGrid.loadData(this.allData)
+              }
             },
             loadList (size) {
               this.loading = true
@@ -199,6 +215,12 @@ export default {
         this.loading = false
       })
     },
+    removeColumn (size) {
+      if (this.allColumn.length > size) {
+        this.allColumn = this.allColumn.slice(0, this.allColumn.length - size)
+        this.$refs.xGrid.loadColumn(this.allColumn)
+      }
+    },
     loadColumns (size) {
       this.loading = true
       this.findColumnList(size).then(data => {
@@ -206,6 +228,12 @@ export default {
         this.$refs.xGrid.loadColumn(this.allColumn)
         this.loading = false
       })
+    },
+    removeList (size) {
+      if (this.allData.length > size) {
+        this.allData = this.allData.slice(0, this.allData.length - size)
+        this.$refs.xGrid.loadData(this.allData)
+      }
     },
     loadList (size) {
       this.loading = true
