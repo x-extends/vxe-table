@@ -15,6 +15,33 @@ const apis = [
         enum: '',
         defVal: '',
         list: []
+      },
+      {
+        name: 'span',
+        descKey: 'app.api.form.desc.span',
+        version: '',
+        type: 'String, Number',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'title-align',
+        descKey: 'app.api.form.desc.titleAlign',
+        version: '',
+        type: 'String',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'title-width',
+        descKey: 'app.api.form.desc.titleWidth',
+        version: '',
+        type: 'String, Number',
+        enum: '',
+        defVal: '',
+        list: []
       }
     ]
   },

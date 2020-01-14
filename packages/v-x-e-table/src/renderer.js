@@ -156,10 +156,10 @@ function renderSelectEdit (h, renderOpts, params) {
  * 表单渲染器
  */
 function defaultItemRender (h, renderOpts, params, context) {
-  let { data, field } = params
+  let { data, property } = params
   let { name } = renderOpts
   let attrs = getAttrs(renderOpts)
-  let cellValue = XEUtils.get(data, field)
+  let cellValue = XEUtils.get(data, property)
   return [
     h(name, {
       class: `vxe-default-${name}`,
@@ -173,12 +173,12 @@ function defaultItemRender (h, renderOpts, params, context) {
 }
 
 function getFormEvents (renderOpts, params, context) {
-  let { data, field } = params
+  let { data, property } = params
   let { events } = renderOpts
   let type = name === 'select' ? 'change' : 'input'
   let on = {
     [type] (evnt) {
-      XEUtils.set(data, field, evnt.target.value)
+      XEUtils.set(data, property, evnt.target.value)
       if (events && events[type]) {
         events[type](Object.assign({ context }, params), evnt)
       }
@@ -194,12 +194,12 @@ function getFormEvents (renderOpts, params, context) {
 }
 
 function renderFormOptions (h, options, renderOpts, params, context) {
-  let { data, field } = params
+  let { data, property } = params
   let { optionProps = {} } = renderOpts
   let labelProp = optionProps.label || 'label'
   let valueProp = optionProps.value || 'value'
   let disabledProp = optionProps.disabled || 'disabled'
-  let cellValue = XEUtils.get(data, field)
+  let cellValue = XEUtils.get(data, property)
   return options.map((item, index) => {
     return h('option', {
       attrs: {

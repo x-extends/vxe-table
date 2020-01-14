@@ -221,8 +221,8 @@ module.exports = {
         vxeButton: 'vxe-button',
         vxeTooltip: 'vxe-tooltip',
         vxeModal: 'vxe-modal',
-        vxeForm: 'vxe-form (v2.8)',
-        vxeFormItem: 'vxe-form-item (v2.8)'
+        vxeForm: 'vxe-form',
+        vxeFormItem: 'vxe-form-item'
       }
     },
     body: {
@@ -553,13 +553,20 @@ module.exports = {
       },
       form: {
         desc: {
-          data: 'Form data'
+          data: 'Form data',
+          span: 'The number of columns occupied by the grid of all items',
+          titleAlign: 'All title align',
+          titleWidth: 'All title width'
         }
       },
       formItem: {
         desc: {
-          field: 'Field',
-          title: 'Title'
+          field: 'Field name ',
+          title: 'Title',
+          span: 'The number of columns a grid occupies',
+          titleAlign: 'Title align',
+          titleWidth: 'Title width',
+          itemRender: 'Form item renderer config'
         }
       }
     }
