@@ -5,6 +5,7 @@
     <vxe-grid
       resizable
       form-config
+      show-overflow
       export-config
       border="none"
       ref="xGrid"
@@ -106,6 +107,7 @@ export default {
         <vxe-grid
           resizable
           form-config
+          show-overflow
           export-config
           border="none"
           ref="xGrid"

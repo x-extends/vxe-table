@@ -41,7 +41,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{}, event',
+        defVal: '{data}, event',
         list: []
       },
       {
@@ -50,7 +50,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{}, event',
+        defVal: '{data}, event',
         list: []
       }
     ]

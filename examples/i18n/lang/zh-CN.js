@@ -355,7 +355,7 @@ module.exports = {
           editRules: '校验规则配置项',
           optimization: '优化配置项',
 
-          params: '额外的参数（自定义一些数据参数，对于某些特殊的场景可能会用到）',
+          params: '额外的参数（可以用来存放一些私有参数）',
 
           empty: '空数据时显示的文本内容',
 
@@ -430,7 +430,7 @@ module.exports = {
           columnKey: '即将废弃，请使用 table.column-key',
           cellRender: '默认的渲染器配置项',
           editRender: '可编辑渲染器配置项',
-          params: '额外的参数（自定义一些数据参数，对于某些特殊的场景可能会用到）'
+          params: '额外的参数（可以用来存放一些私有参数）'
         }
       },
       tooltip: {

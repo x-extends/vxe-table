@@ -3,8 +3,7 @@ import XEUtils from 'xe-utils/methods/xe-utils'
 export default {
   name: 'VxeForm',
   props: {
-    data: Object,
-    titleWidth: [Number, String]
+    data: Object
   },
   provide () {
     return {
@@ -30,7 +29,7 @@ export default {
   methods: {
     submitEvent (evnt) {
       evnt.preventDefault()
-      this.$emit('submit', {}, evnt)
+      this.$emit('submit', { data: this.data }, evnt)
     },
     resetEvent (evnt) {
       const data = this.data
@@ -41,7 +40,7 @@ export default {
           }
         })
       }
-      this.$emit('reset', {}, evnt)
+      this.$emit('reset', { data }, evnt)
     }
   }
 }

@@ -10,6 +10,7 @@
     <vxe-grid
       border
       resizable
+      show-overflow
       highlight-hover-row
       import-config
       export-config
@@ -147,6 +148,7 @@ export default {
         <vxe-grid
           border
           resizable
+          show-overflow
           highlight-hover-row
           import-config
           export-config
