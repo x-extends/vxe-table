@@ -11,10 +11,8 @@
       border
       resizable
       export-config
-      form-config
-      ref="xGrid"
-      height="300"
-      :params="formData"
+      height="400"
+      :form-config="tableForm"
       :form-render="{name: 'FormSimple'}"
       :toolbar="{export: true, custom: true}"
       :proxy-config="tableProxy"
@@ -27,8 +25,6 @@
       <code class="javascript">{{ demoCodes[0] }}</code>
       <code class="xml">{{ demoCodes[1] }}</code>
       <code class="javascript">{{ demoCodes[2] }}</code>
-      <code class="xml">{{ demoCodes[3] }}</code>
-      <code class="javascript">{{ demoCodes[4] }}</code>
     </pre>
   </div>
 </template>
@@ -40,11 +36,13 @@ import hljs from 'highlight.js'
 export default {
   data () {
     return {
-      formData: {
-        name: '',
-        age: '',
-        sex: '',
-        role: ''
+      tableForm: {
+        data: {
+          name: '',
+          age: '',
+          sex: '',
+          role: ''
+        }
       },
       tableColumn: [
         { type: 'seq', width: 50 },
@@ -55,51 +53,29 @@ export default {
       ],
       tableProxy: {
         ajax: {
-          query: () => XEAjax.get('/api/user/list', this.formData)
+          query: () => XEAjax.get('/api/user/list', this.tableForm.data)
         }
       },
       demoCodes: [
         `
         // 创建一个表单（仅用于简单示例，实际开发中应该封装成一个组件，不应该把复杂的渲染逻辑写在渲染器中）
         VXETable.renderer.add('FormSimple', {
-          renderButtons (h, renderOpts, params, context) {
+          renderForm (h, renderOpts, params, context) {
             return [
-              <form-simple params={ params } context={ context }></form-simple>
+              <form-simple formData={ params.data } params={ params } context={ context }></form-simple>
             ]
           }
         })
-        `,
-        `
-        <form v-if="params" @submit.prevent="searchEvent">
-          <vxe-input v-model="params.name" placeholder="请输入名称" clearable></vxe-input>
-          <vxe-button status="primary">搜索</vxe-button>
-        </form>
-        `,
-        `
-        export default {
-          name: 'ToolbarInput',
-          props: {
-            params: Object,
-            context: Object
-          },
-          methods: {
-            searchEvent () {
-              const { $grid } = this.context
-              $grid.commitProxy('reload')
-            }
-          }
-        }
         `,
         `
         <vxe-grid
           border
           resizable
           export-config
-          ref="xGrid"
-          height="300"
-          :params="formData"
+          height="400"
+          :form-config="tableForm"
+          :form-render="{name: 'FormSimple'}"
           :toolbar="{export: true, custom: true}"
-          :toolbar-render="{ name: 'ToolbarInput' }"
           :proxy-config="tableProxy"
           :columns="tableColumn">
         </vxe-grid>
@@ -108,8 +84,13 @@ export default {
         export default {
           data () {
             return {
-              formData: {
-                name: ''
+              tableForm: {
+                data: {
+                  name: '',
+                  age: '',
+                  sex: '',
+                  role: ''
+                }
               },
               tableColumn: [
                 { type: 'seq', width: 50 },
@@ -120,7 +101,7 @@ export default {
               ],
               tableProxy: {
                 ajax: {
-                  query: () => XEAjax.get('/api/user/list', this.formData)
+                  query: () => XEAjax.get('/api/user/list', this.tableForm.data)
                 }
               }
             }

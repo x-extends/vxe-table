@@ -356,7 +356,7 @@ module.exports = {
           editRules: 'Checksum rule configuration entries',
           optimization: 'Optimize configuration',
 
-          params: 'Additional parameters (custom data parameters that may be used for special scenarios)',
+          params: 'Additional parameters (Can be used to store some private parameters)',
 
           empty: 'Text content displayed when empty data',
 
@@ -431,7 +431,7 @@ module.exports = {
           columnKey: 'Obsolete, please use "table.column-key"',
           cellRender: 'Default renderer config',
           editRender: 'Edit renderer config',
-          params: 'Additional parameters (custom data parameters that may be used for special scenarios)'
+          params: 'Additional parameters (Can be used to store some private parameters)'
         }
       },
       tooltip: {

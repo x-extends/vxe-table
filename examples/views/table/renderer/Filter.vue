@@ -56,7 +56,6 @@
 
 <script>
 import hljs from 'highlight.js'
-import '@/plugins/xtable/renderer/filter'
 
 export default {
   data  () {
@@ -129,7 +128,7 @@ export default {
               <vxe-checkbox v-model="option.data.isCase">不区分大小写</vxe-checkbox>
             </div>
             <div class="f-footer">
-              <vxe-button type="primary" @click="confirmEvent">确认</vxe-button>
+              <vxe-button status="primary" @click="confirmEvent">确认</vxe-button>
               <vxe-button @click="resetEvent">重置</vxe-button>
             </div>
           </div>

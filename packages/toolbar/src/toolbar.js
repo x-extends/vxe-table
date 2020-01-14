@@ -7,13 +7,12 @@ import { UtilTools, DomTools, GlobalEvent } from '../../tools'
  * 渲染按钮
  */
 function renderBtn (h, _vm, compConf) {
-  const { _e, $scopedSlots, $grid, $table, rConfig, buttons = [] } = _vm
-  const comp = $grid || $table
+  const { _e, $scopedSlots, $grid, $table, data, rConfig, buttons = [] } = _vm
   if ($scopedSlots.buttons) {
     return $scopedSlots.buttons.call(_vm, { $grid, $table }, h)
   }
   if (compConf && compConf.renderButtons) {
-    return compConf.renderButtons.call(_vm, h, rConfig, comp ? comp.params : null, { $grid, $table })
+    return compConf.renderButtons.call(_vm, h, rConfig, { data }, { $grid, $table })
   }
   return buttons.map(item => {
     return item.visible === false ? _e() : h('vxe-button', {
@@ -75,6 +74,7 @@ export default {
     custom: [Boolean, Object],
     buttons: { type: Array, default: () => GlobalConfig.toolbar.buttons },
     size: String,
+    data: Object,
     rConfig: Object
   },
   inject: {

@@ -9,7 +9,7 @@ Vue.component(FormSimple.name, FormSimple)
 VXETable.renderer.add('FormSimple', {
   renderForm (h, renderOpts, params, context) {
     return [
-      <form-simple params={ params } context={ context }></form-simple>
+      <form-simple formData={ params.data } params={ params } context={ context }></form-simple>
     ]
   }
 })

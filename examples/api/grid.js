@@ -439,7 +439,7 @@ const apis = [
         version: '1.15.18',
         type: '',
         enum: '',
-        defVal: '{}, event',
+        defVal: '{data}, event',
         list: []
       },
       {
@@ -448,7 +448,7 @@ const apis = [
         version: '1.15.18',
         type: '',
         enum: '',
-        defVal: '{}, event',
+        defVal: '{data}, event',
         list: []
       },
       {

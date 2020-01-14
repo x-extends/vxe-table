@@ -14,7 +14,7 @@ function renderFormContent (h, _vm) {
   }
   const compConf = formRender ? VXETable.renderer.get(formRender.name) : null
   if (compConf && compConf.renderForm) {
-    return compConf.renderForm.call(_vm, h, formRender, formConfig.data, { $grid: _vm })
+    return compConf.renderForm.call(_vm, h, formRender, { data: proxyConfig && proxyOpts.form ? formData : formConfig.data }, { $grid: _vm })
   }
   if (formOpts.items) {
     return [
@@ -91,7 +91,7 @@ export default {
       return Object.assign({}, GlobalConfig.grid.pagerConfig, this.pagerConfig)
     },
     formOpts () {
-      return Object.assign({}, GlobalConfig.grid.formConfig, this.formConfig, { rConfig: this.formRender })
+      return Object.assign({}, GlobalConfig.grid.formConfig, this.formConfig)
     },
     toolbarOpts () {
       return Object.assign({}, GlobalConfig.grid.toolbar, this.toolbar, { rConfig: this.toolbarRender })

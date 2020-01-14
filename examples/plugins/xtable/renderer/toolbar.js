@@ -9,7 +9,7 @@ Vue.component(ToolbarInput.name, ToolbarInput)
 VXETable.renderer.add('ToolbarInput', {
   renderButtons (h, renderOpts, params, context) {
     return [
-      <toolbar-input params={ params } context={ context }></toolbar-input>
+      <toolbar-input formData={ params.data } params={ params } context={ context }></toolbar-input>
     ]
   }
 })
