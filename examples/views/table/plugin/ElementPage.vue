@@ -9,9 +9,11 @@
       <vxe-form-item field="sex" title="ElSelect" span="8" :item-render="{name: 'ElSelect', options: sexList}"></vxe-form-item>
       <vxe-form-item field="region" title="ElCascader" span="8" :item-render="{name: 'ElCascader', props: {options: regionList}}"></vxe-form-item>
       <vxe-form-item field="date" title="ElDatePicker" span="8" :item-render="{name: 'ElDatePicker', props: {type: 'date', format: 'yyyy/MM/dd'}}"></vxe-form-item>
-      <vxe-form-item field="date5" title="ElTimeSelect" span="8" :item-render="{name: 'ElTimeSelect', props: {pickerOptions: {start: '08:30', step: '00:15', end: '18:30'}}}"></vxe-form-item>
-      <vxe-form-item field="flag" title="ElSwitch" span="8" :item-render="{name: 'ElSwitch'}"></vxe-form-item>
-      <vxe-form-item span="24" title-align="center">
+      <vxe-form-item field="date5" title="ElTimeSelect" span="8" folding :item-render="{name: 'ElTimeSelect', props: {pickerOptions: {start: '08:30', step: '00:15', end: '18:30'}}}"></vxe-form-item>
+      <vxe-form-item field="flag" title="ElSwitch" span="8" folding :item-render="{name: 'ElSwitch'}"></vxe-form-item>
+      <vxe-form-item field="slider" title="ElSlider" span="8" folding :item-render="{name: 'ElSlider'}"></vxe-form-item>
+      <vxe-form-item field="rate" title="ElRate" span="8" folding :item-render="{name: 'ElRate'}"></vxe-form-item>
+      <vxe-form-item span="24" title-align="center" collapse-node>
         <el-button type="primary" native-type="submit">查询</el-button>
         <el-button native-type="reset">重置</el-button>
       </vxe-form-item>
@@ -143,7 +145,9 @@ export default {
         region: null,
         date: null,
         date5: null,
-        flag: false
+        flag: false,
+        slider: null,
+        rate: null
       },
       demoCodes: [
         `
@@ -154,9 +158,11 @@ export default {
           <vxe-form-item field="sex" title="ElSelect" span="8" :item-render="{name: 'ElSelect', options: sexList}"></vxe-form-item>
           <vxe-form-item field="region" title="ElCascader" span="8" :item-render="{name: 'ElCascader', props: {options: regionList}}"></vxe-form-item>
           <vxe-form-item field="date" title="ElDatePicker" span="8" :item-render="{name: 'ElDatePicker', props: {type: 'date', format: 'yyyy/MM/dd'}}"></vxe-form-item>
-          <vxe-form-item field="date5" title="ElTimeSelect" span="8" :item-render="{name: 'ElTimeSelect', props: {pickerOptions: {start: '08:30', step: '00:15', end: '18:30'}}}"></vxe-form-item>
-          <vxe-form-item field="flag" title="ElSwitch" span="8" :item-render="{name: 'ElSwitch'}"></vxe-form-item>
-          <vxe-form-item span="24" title-align="center">
+          <vxe-form-item field="date5" title="ElTimeSelect" span="8" folding :item-render="{name: 'ElTimeSelect', props: {pickerOptions: {start: '08:30', step: '00:15', end: '18:30'}}}"></vxe-form-item>
+          <vxe-form-item field="flag" title="ElSwitch" span="8" folding :item-render="{name: 'ElSwitch'}"></vxe-form-item>
+          <vxe-form-item field="slider" title="ElSlider" span="8" folding :item-render="{name: 'ElSlider'}"></vxe-form-item>
+          <vxe-form-item field="rate" title="ElRate" span="8" folding :item-render="{name: 'ElRate'}"></vxe-form-item>
+          <vxe-form-item span="24" title-align="center" collapse-node>
             <el-button type="primary" native-type="submit">查询</el-button>
             <el-button native-type="reset">重置</el-button>
           </vxe-form-item>
@@ -270,7 +276,15 @@ export default {
               },
               formData: {
                 name: null,
-                sex: null
+                role: null,
+                sex: null,
+                age: null,
+                region: null,
+                date: null,
+                date5: null,
+                flag: false,
+                slider: null,
+                rate: null
               }
             }
           },

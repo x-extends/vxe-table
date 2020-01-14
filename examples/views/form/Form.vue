@@ -30,7 +30,7 @@
       </vxe-form>
     </p>
 
-    <p>
+    <!-- <p>
       <vxe-form :data="formData2" @submit="searchEvent" @reset="resetEvent">
         <vxe-form-item title="名称" field="name" span="8">
           <template>
@@ -71,7 +71,7 @@
           </template>
         </vxe-form-item>
       </vxe-form>
-    </p>
+    </div> -->
 
     <p>
       <vxe-form :data="formData3" title-align="right" title-width="100" @submit="searchEvent" @reset="resetEvent">
@@ -103,6 +103,61 @@
           </template>
         </vxe-form-item>
         <vxe-form-item align="center" span="24">
+          <template>
+            <vxe-button type="submit" status="primary">查询</vxe-button>
+            <vxe-button type="reset">重置</vxe-button>
+          </template>
+        </vxe-form-item>
+      </vxe-form>
+    </p>
+
+    <p>
+      <vxe-form :data="formData4" title-align="right" title-width="100" @submit="searchEvent" @reset="resetEvent">
+        <vxe-form-item title="名称" field="name" span="8">
+          <template>
+            <vxe-input v-model="formData4.name" placeholder="请输入名称"></vxe-input>
+          </template>
+        </vxe-form-item>
+        <vxe-form-item title="昵称" field="nickname" span="8">
+          <template>
+            <vxe-input v-model="formData4.nickname" placeholder="请输入昵称"></vxe-input>
+          </template>
+        </vxe-form-item>
+        <vxe-form-item title="性别" field="sex" span="8">
+          <select v-model="formData4.sex" class="vxe-select">
+            <option value="0"></option>
+            <option value="1">女</option>
+            <option value="2">男</option>
+          </select>
+        </vxe-form-item>
+        <vxe-form-item title="年龄" field="age" span="8">
+          <template>
+            <vxe-input v-model="formData4.age" type="number" placeholder="请输入年龄"></vxe-input>
+          </template>
+        </vxe-form-item>
+        <vxe-form-item title="区域" field="region" span="8">
+          <template>
+            <vxe-input v-model="formData2.region" placeholder="请输入区域"></vxe-input>
+          </template>
+        </vxe-form-item>
+        <vxe-form-item title="状态" field="status" span="8">
+          <select v-model="formData4.status" class="vxe-select">
+            <option value=""></option>
+            <option value="0">失败</option>
+            <option value="1">成功</option>
+          </select>
+        </vxe-form-item>
+        <vxe-form-item title="身高" field="height" span="8" folding>
+          <vxe-input v-model="formData4.height" placeholder="请输入身高"></vxe-input>
+        </vxe-form-item>
+        <vxe-form-item title="体重" field="weight" span="8" folding>
+          <vxe-input v-model="formData4.weight" placeholder="请输入体重"></vxe-input>
+        </vxe-form-item>
+        <vxe-form-item title="是否单身" field="single" span="8" folding>
+          <vxe-radio v-model="formData4.single" name="single" label="1">是</vxe-radio>
+          <vxe-radio v-model="formData4.single" name="single" label="0">否</vxe-radio>
+        </vxe-form-item>
+        <vxe-form-item align="center" span="24" collapse-node>
           <template>
             <vxe-button type="submit" status="primary">查询</vxe-button>
             <vxe-button type="reset">重置</vxe-button>
@@ -146,6 +201,17 @@ export default {
         age: null,
         address: null
       },
+      formData4: {
+        name: null,
+        nickname: null,
+        sex: null,
+        age: null,
+        status: null,
+        region: null,
+        height: null,
+        weight: null,
+        single: '1'
+      },
       demoCodes: [
         `
         <p>
@@ -170,49 +236,6 @@ export default {
             <vxe-form-item>
               <template>
                 <vxe-button type="submit" status="primary">查询</vxe-button>
-              </template>
-            </vxe-form-item>
-          </vxe-form>
-        </p>
-
-        <p>
-          <vxe-form :data="formData2" @submit="searchEvent" @reset="resetEvent">
-            <vxe-form-item title="名称" field="name" span="8">
-              <template>
-                <vxe-input v-model="formData2.name" placeholder="请输入名称"></vxe-input>
-              </template>
-            </vxe-form-item>
-            <vxe-form-item title="昵称" field="nickname" span="8">
-              <template>
-                <vxe-input v-model="formData2.nickname" placeholder="请输入昵称"></vxe-input>
-              </template>
-            </vxe-form-item>
-            <vxe-form-item title="性别" field="sex" span="8">
-              <select v-model="formData2.sex" class="vxe-select">
-                <option value="0"></option>
-                <option value="1">女</option>
-                <option value="2">男</option>
-              </select>
-            </vxe-form-item>
-            <vxe-form-item title="角色" field="role" span="8">
-              <template>
-                <vxe-input v-model="formData2.role" placeholder="请输入角色"></vxe-input>
-              </template>
-            </vxe-form-item>
-            <vxe-form-item title="年龄" field="age" span="8">
-              <template>
-                <vxe-input v-model="formData2.age" type="number" placeholder="请输入年龄"></vxe-input>
-              </template>
-            </vxe-form-item>
-            <vxe-form-item title="区域" field="region" span="8">
-              <template>
-                <vxe-input v-model="formData2.region" placeholder="请输入区域"></vxe-input>
-              </template>
-            </vxe-form-item>
-            <vxe-form-item align="center" span="24">
-              <template>
-                <vxe-button type="submit" status="primary">查询</vxe-button>
-                <vxe-button type="reset">重置</vxe-button>
               </template>
             </vxe-form-item>
           </vxe-form>
@@ -255,6 +278,61 @@ export default {
             </vxe-form-item>
           </vxe-form>
         </p>
+
+        <p>
+          <vxe-form :data="formData4" title-align="right" title-width="100" @submit="searchEvent" @reset="resetEvent">
+            <vxe-form-item title="名称" field="name" span="8">
+              <template>
+                <vxe-input v-model="formData4.name" placeholder="请输入名称"></vxe-input>
+              </template>
+            </vxe-form-item>
+            <vxe-form-item title="昵称" field="nickname" span="8">
+              <template>
+                <vxe-input v-model="formData4.nickname" placeholder="请输入昵称"></vxe-input>
+              </template>
+            </vxe-form-item>
+            <vxe-form-item title="性别" field="sex" span="8">
+              <select v-model="formData4.sex" class="vxe-select">
+                <option value="0"></option>
+                <option value="1">女</option>
+                <option value="2">男</option>
+              </select>
+            </vxe-form-item>
+            <vxe-form-item title="年龄" field="age" span="8">
+              <template>
+                <vxe-input v-model="formData4.age" type="number" placeholder="请输入年龄"></vxe-input>
+              </template>
+            </vxe-form-item>
+            <vxe-form-item title="区域" field="region" span="8">
+              <template>
+                <vxe-input v-model="formData2.region" placeholder="请输入区域"></vxe-input>
+              </template>
+            </vxe-form-item>
+            <vxe-form-item title="状态" field="status" span="8">
+              <select v-model="formData4.status" class="vxe-select">
+                <option value=""></option>
+                <option value="0">失败</option>
+                <option value="1">成功</option>
+              </select>
+            </vxe-form-item>
+            <vxe-form-item title="身高" field="height" span="8" folding>
+              <vxe-input v-model="formData4.height" placeholder="请输入身高"></vxe-input>
+            </vxe-form-item>
+            <vxe-form-item title="体重" field="weight" span="8" folding>
+              <vxe-input v-model="formData4.weight" placeholder="请输入体重"></vxe-input>
+            </vxe-form-item>
+            <vxe-form-item title="是否单身" field="single" span="8" folding>
+              <vxe-radio v-model="formData4.single" name="single" label="1">是</vxe-radio>
+              <vxe-radio v-model="formData4.single" name="single" label="0">否</vxe-radio>
+            </vxe-form-item>
+            <vxe-form-item align="center" span="24" collapse-node>
+              <template>
+                <vxe-button type="submit" status="primary">查询</vxe-button>
+                <vxe-button type="reset">重置</vxe-button>
+              </template>
+            </vxe-form-item>
+          </vxe-form>
+        </p>
         `,
         `
         export default {
@@ -265,20 +343,23 @@ export default {
                 nickname: null,
                 sex: null
               },
-              formData2: {
-                name: null,
-                nickname: null,
-                sex: null,
-                role: null,
-                age: null,
-                region: null
-              },
               formData3: {
                 name: null,
                 nickname: null,
                 sex: null,
                 age: null,
                 address: null
+              },
+              formData4: {
+                name: null,
+                nickname: null,
+                sex: null,
+                age: null,
+                status: null,
+                region: null,
+                height: null,
+                weight: null,
+                single: '1'
               }
             }
           },

@@ -555,6 +555,7 @@ module.exports = {
         desc: {
           data: 'Form data',
           span: 'The number of columns occupied by the grid of all items',
+          align: 'All content align',
           titleAlign: 'All title align',
           titleWidth: 'All title width'
         }
@@ -564,8 +565,11 @@ module.exports = {
           field: 'Field name ',
           title: 'Title',
           span: 'The number of columns a grid occupies',
+          align: 'Content align',
           titleAlign: 'Title align',
           titleWidth: 'Title width',
+          folding: 'Default folding',
+          collapseNode: 'Collapse node',
           itemRender: 'Form item renderer config'
         }
       }

@@ -5,8 +5,14 @@ export default {
   props: {
     data: Object,
     span: [String, Number],
+    align: String,
     titleAlign: String,
     titleWidth: [String, Number]
+  },
+  data () {
+    return {
+      collapseAll: true
+    }
   },
   provide () {
     return {
@@ -30,6 +36,10 @@ export default {
     }, this.$slots.default)
   },
   methods: {
+    toggleCollapse () {
+      this.collapseAll = !this.collapseAll
+      return this.$nextTick()
+    },
     submitEvent (evnt) {
       evnt.preventDefault()
       this.$emit('submit', { data: this.data }, evnt)

@@ -6,7 +6,8 @@
 
 .vxe-form--item,
 .vxe-form--item-title,
-.vxe-form--item-content {
+.vxe-form--item-content,
+.vxe-form--item-trigger-node {
   display: inline-block;
   vertical-align: middle;
 }
@@ -19,42 +20,23 @@
   padding-right: 0.8em;
 }
 
+.vxe-form--item-trigger-node {
+  font-size: 12px;
+  min-width: 100px;
+  color: #909399;
+  text-align: center;
+  cursor: pointer;
+  .vxe-form--item-trigger-icon {
+    margin: 0 0.2em;
+    transition: all 0.1s;
+  }
+}
+
 .vxe-form--item {
   margin: 0.5em 0;
   padding-right: 0.8em;
-  &.is--title {
-    &.align--center {
-      .vxe-form--item-title {
-        text-align: center;
-      }
-    }
-    &.align--left {
-      .vxe-form--item-title {
-        text-align: left;
-      }
-    }
-    &.align--right {
-      .vxe-form--item-title {
-        text-align: right;
-      }
-    }
-  }
-  &:not(.is--title) {
-    &.align--center {
-      .vxe-form--item-content {
-        text-align: center;
-      }
-    }
-    &.align--left {
-      .vxe-form--item-content {
-        text-align: left;
-      }
-    }
-    &.align--right {
-      .vxe-form--item-content {
-        text-align: right;
-      }
-    }
+  &.is--hidden {
+    display: none;
   }
   &.is--span {
     .vxe-default-input,
@@ -140,6 +122,17 @@
 }
 
 .vxe-form {
+  .vxe-form--item-inner {
+    & > .align--center {
+      text-align: center;
+    }
+    & > .align--left {
+      text-align: left;
+    }
+    & > .align--right {
+      text-align: right;
+    }
+  }
   &.size--medium {
     font-size: $vxe-font-size-medium;
     .vxe-default-input[type="submit"],

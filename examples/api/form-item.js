@@ -35,6 +35,15 @@ const apis = [
         list: []
       },
       {
+        name: 'align',
+        descKey: 'app.api.formItem.desc.align',
+        version: '',
+        type: 'String',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'title-align',
         descKey: 'app.api.formItem.desc.titleAlign',
         version: '',
@@ -50,6 +59,24 @@ const apis = [
         type: 'String, Number',
         enum: '',
         defVal: '',
+        list: []
+      },
+      {
+        name: 'folding',
+        descKey: 'app.api.formItem.desc.folding',
+        version: '',
+        type: 'Boolean',
+        enum: '',
+        defVal: 'false',
+        list: []
+      },
+      {
+        name: 'collapse-node',
+        descKey: 'app.api.formItem.desc.collapseNode',
+        version: '',
+        type: 'Boolean',
+        enum: '',
+        defVal: 'false',
         list: []
       },
       {
