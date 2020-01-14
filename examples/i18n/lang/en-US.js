@@ -198,7 +198,7 @@ module.exports = {
         rendererEdit: 'Edit renderer',
         rendererToolbar: 'Toolbar renderer',
         rendererForm: 'Form renderer',
-        rendererItem: 'Item renderer',
+        rendererItem: 'Form item renderer',
 
         interceptor: '(Advanced) Event interceptor',
 
