@@ -220,8 +220,8 @@ module.exports = {
         vxeButton: 'vxe-button',
         vxeTooltip: 'vxe-tooltip',
         vxeModal: 'vxe-modal',
-        vxeForm: 'vxe-form (v2.8)',
-        vxeFormItem: 'vxe-form-item(v2.8)'
+        vxeForm: 'vxe-form',
+        vxeFormItem: 'vxe-form-item'
       }
     },
     body: {
@@ -552,13 +552,20 @@ module.exports = {
       },
       form: {
         desc: {
-          data: '表单数据'
+          data: '表单数据',
+          span: '所有项的栅格占据的列数',
+          titleAlign: '所有项的标题对齐方式',
+          titleWidth: '所有项的标题宽度'
         }
       },
       formItem: {
         desc: {
           field: '字段名',
-          title: '标题（支持开启国际化）'
+          title: '标题（支持开启国际化）',
+          span: '栅格占据的列数',
+          titleAlign: '标题对齐方式',
+          titleWidth: '标题宽度',
+          itemRender: '项渲染器配置项'
         }
       }
     }
