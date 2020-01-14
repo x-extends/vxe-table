@@ -14,9 +14,9 @@
 select.vxe-select,
 .vxe-input--inner,
 .vxe-textarea--inner {
-  border-radius: 4px;
+  border-radius: 0.25em;
   outline: 0;
-  padding: 0 8px;
+  padding: 0 0.6em;
   color: $vxe-font-color;
   border: 1px solid $vxe-input-border-color;
   background-color: #FFF;
@@ -32,6 +32,9 @@ select.vxe-select,
 .vxe-input--inner,
 .vxe-textarea--inner {
   width: 100%;
+  &::placeholder {
+    color: $vxe-input-placeholder-color;
+  }
 }
 
 select.vxe-select,
@@ -47,13 +50,16 @@ select.vxe-select,
   &[type="number"]::-webkit-inner-spin-button {
     height: 24px;
   }
-  &::placeholder {
-    color: $vxe-input-placeholder-color;
-  }
 }
 
 .vxe-textarea--inner {
+  display: block;
   height: 100%;
+  padding: 0.3em 0.6em;
+}
+
+.vxe-textarea {
+  min-height: $vxe-input-height-default;
 }
 
 .vxe-input {
@@ -85,12 +91,19 @@ select.vxe-select,
       }
     }
   }
+}
+
+.vxe-input,
+.vxe-textarea {
   &.size--medium {
     select.vxe-select,
-    .vxe-input--inner {
+    .vxe-input {
       height: $vxe-input-height-medium;
     }
-    .vxe-input--inner {
+    .vxe-textarea {
+      min-height: $vxe-input-height-medium;
+    }
+    .vxe-input {
       &[type="date"]::-webkit-inner-spin-button {
         margin-top: 4px;
       }
@@ -98,8 +111,11 @@ select.vxe-select,
   }
   &.size--small {
     select.vxe-select,
-    .vxe-input--inner {
+    .vxe-input {
       height: $vxe-input-height-small;
+    }
+    .vxe-textarea {
+      min-height: $vxe-input-height-small;
     }
     .vxe-input--inner {
       &[type="date"]::-webkit-inner-spin-button {
@@ -109,8 +125,11 @@ select.vxe-select,
   }
   &.size--mini {
     select.vxe-select,
-    .vxe-input--inner {
+    .vxe-input {
       height: $vxe-input-height-mini;
+    }
+    .vxe-textarea {
+      min-height: $vxe-input-height-mini;
     }
     .vxe-input--inner {
       &[type="date"]::-webkit-inner-spin-button {

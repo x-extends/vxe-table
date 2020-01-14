@@ -3,7 +3,10 @@ import XEUtils from 'xe-utils/methods/xe-utils'
 export default {
   name: 'VxeForm',
   props: {
-    data: Object
+    data: Object,
+    span: [String, Number],
+    titleAlign: String,
+    titleWidth: [String, Number]
   },
   provide () {
     return {
@@ -17,7 +20,7 @@ export default {
   },
   render (h) {
     return h('form', {
-      class: ['vxe-form', {
+      class: ['vxe-form', 'vxe-row', {
         [`size--${this.vSize}`]: this.vSize
       }],
       on: {

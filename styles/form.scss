@@ -20,14 +20,70 @@
 }
 
 .vxe-form--item {
-  margin: 0.5em 0.8em 0.5em 0;
+  margin: 0.5em 0;
+  padding-right: 0.8em;
+  &.is--title {
+    &.align--center {
+      .vxe-form--item-title {
+        text-align: center;
+      }
+    }
+    &.align--left {
+      .vxe-form--item-title {
+        text-align: left;
+      }
+    }
+    &.align--right {
+      .vxe-form--item-title {
+        text-align: right;
+      }
+    }
+  }
+  &:not(.is--title) {
+    &.align--center {
+      .vxe-form--item-content {
+        text-align: center;
+      }
+    }
+    &.align--left {
+      .vxe-form--item-content {
+        text-align: left;
+      }
+    }
+    &.align--right {
+      .vxe-form--item-content {
+        text-align: right;
+      }
+    }
+  }
+  &.is--span {
+    .vxe-default-input,
+    .vxe-default-textarea,
+    .vxe-default-select,
+    .vxe-input,
+    .vxe-textarea,
+    .vxe-select {
+      width: 100%;
+    }
+  }
+  .vxe-form--item-inner {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    .vxe-form--item-title {
+      flex-shrink: 0;
+    }
+    .vxe-form--item-content {
+      flex-grow: 1;
+    }
+  }
   .vxe-default-input,
   .vxe-default-textarea,
   .vxe-default-select {
     outline: 0;
     height: $vxe-button-height-default;
     border: 1px solid $vxe-input-border-color;
-    border-radius: 0.2em;
+    border-radius: 0.25em;
   }
   .vxe-default-input,
   .vxe-default-textarea {

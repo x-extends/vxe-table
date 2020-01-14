@@ -442,6 +442,7 @@ export default {
       tableData,
       tableColumn,
       showOverflow: allColumnOverflow,
+      spanMethod,
       scrollXLoad,
       mouseConfig,
       mouseOpts,
@@ -450,11 +451,13 @@ export default {
     // 在 v3.0 中废弃 mouse-config.checked
     let isMouseChecked = mouseConfig && (mouseOpts.range || mouseOpts.checked)
     // 如果是固定列与设置了超出隐藏
-    if (fixedType && allColumnOverflow) {
-      tableColumn = fixedColumn
-    } else if (scrollXLoad) {
-      if (fixedType) {
+    if (!spanMethod) {
+      if (fixedType && allColumnOverflow) {
         tableColumn = fixedColumn
+      } else if (scrollXLoad) {
+        if (fixedType) {
+          tableColumn = fixedColumn
+        }
       }
     }
     return h('div', {

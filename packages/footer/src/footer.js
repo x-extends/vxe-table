@@ -48,11 +48,13 @@ export default {
       getColumnIndex
     } = $table
     // 如果是使用优化模式
-    if (fixedType && allColumnOverflow) {
-      tableColumn = fixedColumn
-    } else if (scrollXLoad) {
-      if (fixedType) {
+    if (!footerSpanMethod) {
+      if (fixedType && allColumnOverflow) {
         tableColumn = fixedColumn
+      } else if (scrollXLoad) {
+        if (fixedType) {
+          tableColumn = fixedColumn
+        }
       }
     }
     return h('div', {

@@ -62,7 +62,7 @@
     "vxe-table-plugin-antd": "^1.5.10",
     "vxe-table-plugin-charts": "^1.1.1",
     "vxe-table-plugin-element": "^1.5.14",
-    "vxe-table-plugin-excel": "^1.1.1",
+    "vxe-table-plugin-excel": "^1.2.1",
     "vxe-table-plugin-export-pdf": "^1.2.0",
     "vxe-table-plugin-export-xlsx": "^1.2.0",
     "vxe-table-plugin-iview": "^1.5.10",
