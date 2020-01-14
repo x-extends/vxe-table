@@ -64,6 +64,7 @@
 * [x] Virtual Scroller（虚拟滚动）
 * [x] Expandable row （展开行）
 * [x] Pager（分页）
+* [x] Form（表单）
 * [x] Toolbar（工具栏）
 * [x] Tree table （树形表格)
 * [x] Editable CRUD（增删改查)
