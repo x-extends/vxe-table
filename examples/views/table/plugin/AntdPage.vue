@@ -2,16 +2,16 @@
   <div>
     <p class="tip">与 <a class="link" href="https://www.npmjs.com/package/ant-design-vue">ant-design-vue</a> 组合渲染 + 使用分页</p>
 
-    <vxe-form :data="formData" @submit="searchEvent">
-      <vxe-form-item field="name" title="名字">
-        <a-input v-model="formData.name" placeholder="名字"></a-input>
-      </vxe-form-item>
-      <vxe-form-item sex="name" title="性别">
-        <a-select v-model="formData.sex" placeholder="性别">
-          <a-select-option v-for="item in sexList" :key="item.value" :value="item.value">{{ item.label }}</a-select-option>
-        </a-select>
-      </vxe-form-item>
-      <vxe-form-item>
+    <vxe-form :data="formData" title-width="120" title-align="right" @submit="searchEvent">
+      <vxe-form-item field="name" title="AInput" span="8" :item-render="{name: 'AInput'}"></vxe-form-item>
+      <vxe-form-item field="role" title="AAutoComplete" span="8" :item-render="{name: 'AAutoComplete', props: ACProps, events: {search: roleSearchEvent}}"></vxe-form-item>
+      <vxe-form-item field="age" title="AInputNumber" span="8" :item-render="{name: 'AInputNumber'}"></vxe-form-item>
+      <vxe-form-item field="sex" title="ASelect" span="8" :item-render="{name: 'ASelect', options: sexList}"></vxe-form-item>
+      <vxe-form-item field="region" title="ACascader" span="8" :item-render="{name: 'ACascader', props: {options: regionList}}"></vxe-form-item>
+      <vxe-form-item field="date" title="ADatePicker" span="8" :item-render="{name: 'ADatePicker', props: {type: 'date', format: 'YYYY/MM/DD'}}"></vxe-form-item>
+      <vxe-form-item field="flag" title="ASwitch" span="8" folding :item-render="{name: 'ASwitch'}"></vxe-form-item>
+      <vxe-form-item field="rate" title="ARate" span="8" folding :item-render="{name: 'ARate'}"></vxe-form-item>
+      <vxe-form-item span="24" align="center" collapse-node>
         <a-button type="primary" html-type="submit">查询</a-button>
         <a-button html-type="reset">重置</a-button>
       </vxe-form-item>
@@ -133,20 +133,26 @@ export default {
       },
       formData: {
         name: null,
-        sex: null
+        role: '',
+        sex: null,
+        age: null,
+        region: [],
+        date: null,
+        flag: false,
+        rate: 1
       },
       demoCodes: [
         `
-          <vxe-form :data="formData" @submit="searchEvent">
-            <vxe-form-item field="name" title="名字">
-              <a-input v-model="formData.name" placeholder="名字"></a-input>
-            </vxe-form-item>
-            <vxe-form-item sex="name" title="性别">
-              <a-select v-model="formData.sex" placeholder="性别">
-                <a-select-option v-for="item in sexList" :key="item.value" :value="item.value">{{ item.label }}</a-select-option>
-              </a-select>
-            </vxe-form-item>
-            <vxe-form-item>
+          <vxe-form :data="formData" title-width="120" title-align="right" @submit="searchEvent">
+            <vxe-form-item field="name" title="AInput" span="8" :item-render="{name: 'AInput'}"></vxe-form-item>
+            <vxe-form-item field="role" title="AAutoComplete" span="8" :item-render="{name: 'AAutoComplete', props: ACProps, events: {search: roleSearchEvent}}"></vxe-form-item>
+            <vxe-form-item field="age" title="AInputNumber" span="8" :item-render="{name: 'AInputNumber'}"></vxe-form-item>
+            <vxe-form-item field="sex" title="ASelect" span="8" :item-render="{name: 'ASelect', options: sexList}"></vxe-form-item>
+            <vxe-form-item field="region" title="ACascader" span="8" :item-render="{name: 'ACascader', props: {options: regionList}}"></vxe-form-item>
+            <vxe-form-item field="date" title="ADatePicker" span="8" :item-render="{name: 'ADatePicker', props: {type: 'date', format: 'YYYY/MM/DD'}}"></vxe-form-item>
+            <vxe-form-item field="flag" title="ASwitch" span="8" folding :item-render="{name: 'ASwitch'}"></vxe-form-item>
+            <vxe-form-item field="rate" title="ARate" span="8" folding :item-render="{name: 'ARate'}"></vxe-form-item>
+            <vxe-form-item span="24" align="center" collapse-node>
               <a-button type="primary" html-type="submit">查询</a-button>
               <a-button html-type="reset">重置</a-button>
             </vxe-form-item>
@@ -256,7 +262,13 @@ export default {
               },
               formData: {
                 name: null,
-                sex: null
+                role: '',
+                sex: null,
+                age: null,
+                region: [],
+                date: null,
+                flag: false,
+                rate: 1
               }
             }
           },

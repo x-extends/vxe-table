@@ -300,11 +300,15 @@ export default {
   },
   provide () {
     return {
-      $table: this
+      $table: this,
+      $xetable: this
     }
   },
   inject: {
     $grid: {
+      default: null
+    },
+    $xegrid: {
       default: null
     }
   },
@@ -2251,7 +2255,7 @@ export default {
           }
         }
       } else if (mouseConfig) {
-        if (!DomTools.getEventTargetNode(evnt, $el).flag) {
+        if (!DomTools.getEventTargetNode(evnt, $el).flag && !DomTools.getEventTargetNode(evnt, $refs.tableWrapper).flag) {
           if (isMouseChecked) {
             this.clearChecked()
           }

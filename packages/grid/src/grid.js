@@ -57,7 +57,8 @@ export default {
   },
   provide () {
     return {
-      $grid: this
+      $grid: this,
+      $xegrid: this
     }
   },
   data () {

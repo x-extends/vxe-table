@@ -82,14 +82,21 @@ export default {
   props,
   provide () {
     return {
-      $column: this
+      $column: this,
+      $xecolumn: this
     }
   },
   inject: {
     $table: {
       default: null
     },
+    $xetable: {
+      default: null
+    },
     $column: {
+      default: null
+    },
+    $xecolumn: {
       default: null
     }
   },

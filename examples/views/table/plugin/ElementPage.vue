@@ -142,12 +142,12 @@ export default {
         role: null,
         sex: null,
         age: null,
-        region: null,
+        region: [],
         date: null,
         date5: null,
         flag: false,
-        slider: null,
-        rate: null
+        slider: 1,
+        rate: 1
       },
       demoCodes: [
         `
@@ -279,12 +279,12 @@ export default {
                 role: null,
                 sex: null,
                 age: null,
-                region: null,
+                region: [],
                 date: null,
                 date5: null,
                 flag: false,
-                slider: null,
-                rate: null
+                slider: 1,
+                rate: 1
               }
             }
           },
