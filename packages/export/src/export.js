@@ -267,7 +267,7 @@ function downloadFile ($table, opts, content) {
   }
 }
 
-function getLabelData ($table, columns, datas) {
+function getLabelData ($table, opts, columns, datas) {
   const { treeConfig, treeOpts, scrollXLoad, scrollYLoad } = $table
   if (treeConfig) {
     // 如果是树表格只允许导出数据源
@@ -322,7 +322,7 @@ function getLabelData ($table, columns, datas) {
           break
         default:
           // 如果是启用虚拟滚动后只允许导出数据源
-          if (scrollXLoad || scrollYLoad) {
+          if (opts.original || scrollXLoad || scrollYLoad) {
             cellValue = row[column.property]
           } else {
             let cell = DomTools.getCell($table, { row, column })
@@ -344,7 +344,7 @@ function getExportData ($table, opts, fullData, oColumns) {
   if (opts.dataFilterMethod) {
     datas = datas.filter(opts.dataFilterMethod)
   }
-  return { columns, datas: getLabelData($table, columns, datas) }
+  return { columns, datas: getLabelData($table, opts, columns, datas) }
 }
 
 function replaceDoubleQuotation (val) {
