@@ -8,10 +8,10 @@ function isOperateMouse ($xetable) {
 }
 
 function countTreeExpand (prevRow, params) {
-  const $xetable = params.$xetable
-  const rowChildren = prevRow[$xetable.treeOpts.children]
+  const { $table } = params
+  const rowChildren = prevRow[$table.treeOpts.children]
   let count = 1
-  if ($xetable.isTreeExpandByRow(prevRow)) {
+  if ($table.isTreeExpandByRow(prevRow)) {
     for (let index = 0; index < rowChildren.length; index++) {
       count += countTreeExpand(rowChildren[index], params)
     }
