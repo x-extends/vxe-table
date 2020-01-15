@@ -208,7 +208,11 @@ export const Cell = {
           'is--disabled': isDisabled
         }],
         on
-      }, labelField ? (slots && slots.default ? slots.default(params, h) : XEUtils.get(row, labelField)) : null)
+      }, [
+        h('span', {
+          class: 'vxe-radio--icon'
+        })
+      ].concat(labelField ? (slots && slots.default ? slots.default(params, h) : [XEUtils.get(row, labelField)]) : []))
     ]
   },
   renderTreeRadioCell (h, params) {
@@ -249,7 +253,11 @@ export const Cell = {
           title: GlobalConfig.i18n('vxe.table.allTitle')
         },
         on
-      }, headerTitle ? (slots && slots.header ? slots.header(params, h) : UtilTools.getFuncText(headerTitle)) : null)
+      }, [
+        h('span', {
+          class: 'vxe-checkbox--icon'
+        })
+      ].concat(headerTitle ? (slots && slots.header ? slots.header(params, h) : [UtilTools.getFuncText(headerTitle)]) : []))
     ]
   },
   renderSelectionCell (h, params) {
@@ -287,7 +295,11 @@ export const Cell = {
           'is--indeterminate': indeterminate
         }],
         on
-      }, labelField ? (slots && slots.default ? slots.default(params, h) : XEUtils.get(row, labelField)) : null)
+      }, [
+        h('span', {
+          class: 'vxe-checkbox--icon'
+        })
+      ].concat(labelField ? (slots && slots.default ? slots.default(params, h) : [XEUtils.get(row, labelField)]) : []))
     ]
   },
   renderTreeSelectionCell (h, params) {
@@ -330,7 +342,11 @@ export const Cell = {
           'is--indeterminate': indeterminate
         }],
         on
-      }, labelField ? (slots && slots.default ? slots.default(params, h) : XEUtils.get(row, labelField)) : null)
+      }, [
+        h('span', {
+          class: 'vxe-checkbox--icon'
+        })
+      ].concat(labelField ? (slots && slots.default ? slots.default(params, h) : [XEUtils.get(row, labelField)]) : []))
     ]
   },
   renderTreeSelectionCellByProp (h, params) {

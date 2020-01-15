@@ -88,6 +88,18 @@ $vxe-tooltip-light-background-color: #fff;
 /*modal*/
 $vxe-modal-header-background-color: #F8F8F8;
 
+/*checkbox*/
+$vxe-checkbox-font-size-default: 16px;
+$vxe-checkbox-font-size-medium: 15px;
+$vxe-checkbox-font-size-small: 14px;
+$vxe-checkbox-font-size-mini: 14px;
+
+/*radio*/
+$vxe-radio-font-size-default: $vxe-checkbox-font-size-default;
+$vxe-radio-font-size-medium: $vxe-checkbox-font-size-medium;
+$vxe-radio-font-size-small: $vxe-checkbox-font-size-small;
+$vxe-radio-font-size-mini: $vxe-checkbox-font-size-mini;
+
 /*button*/
 $vxe-button-height-default: 34px;
 $vxe-button-height-medium: 32px;

@@ -19,7 +19,6 @@
       background-color: #fff;
       vertical-align: middle;
       border-radius: 50%;
-      font-size: 1.2em;
     }
     &:checked+.vxe-radio--icon {
       background-color: $vxe-primary-color;
@@ -27,13 +26,10 @@
       &:before {
         content: "";
         position: absolute;
-        border-width: 0.15em;
-        border-style: solid;
-        border-color: #fff;
         background-color: #fff;
         border-radius: 50%;
-        height: 0.3em;
-        width: 0.3em;
+        height: 0.25em;
+        width: 0.25em;
         top: 50%;
         left: 50%;
         transform: translate(-50%,-50%);
@@ -68,6 +64,9 @@
       }
     }
   }
+  .vxe-radio--icon {
+    font-size: $vxe-radio-font-size-default;
+  }
   .vxe-radio--label {
     padding-left: 0.5em;
     vertical-align: middle;
@@ -75,5 +74,20 @@
   }
   &+.vxe-radio {
     margin-left: 10px;
+  }
+  &.size--medium {
+    .vxe-radio--icon {
+      font-size: $vxe-radio-font-size-medium;
+    }
+  }
+  &.size--small {
+    .vxe-radio--icon {
+      font-size: $vxe-radio-font-size-small;
+    }
+  }
+  &.size--mini {
+    .vxe-radio--icon {
+      font-size: $vxe-radio-font-size-mini;
+    }
   }
 }

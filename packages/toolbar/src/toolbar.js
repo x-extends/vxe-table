@@ -585,7 +585,7 @@ export default {
     importEvent () {
       const comp = this.$grid || this.$table
       if (comp) {
-        comp.openImport()
+        comp.openImport(this.importOpts)
       } else {
         throw new Error(UtilTools.getLog('vxe.error.barUnableLink'))
       }
@@ -593,7 +593,7 @@ export default {
     exportEvent () {
       const comp = this.$grid || this.$table
       if (comp) {
-        comp.openExport(this.customOpts)
+        comp.openExport(this.exportOpts)
       } else {
         throw new Error(UtilTools.getLog('vxe.error.barUnableLink'))
       }

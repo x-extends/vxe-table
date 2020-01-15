@@ -19,7 +19,6 @@
       background-color: #fff;
       vertical-align: middle;
       border-radius: 0.2em;
-      font-size: 1.2em;
       &:before {
         content: "";
         position: absolute;
@@ -31,7 +30,7 @@
       &:before {
         height: 0.64em;
         width: 0.32em;
-        left: 0.24em;
+        left: 0.2em;
         bottom: 0.1em;
         border-width: 0.12em;
         border-style: solid;
@@ -91,9 +90,27 @@
       }
     }
   }
+  .vxe-checkbox--icon {
+    font-size: $vxe-checkbox-font-size-default;
+  }
   .vxe-checkbox--label {
     padding-left: 0.5em;
     vertical-align: middle;
     display: inline-block;
+  }
+  &.size--medium {
+    .vxe-checkbox--icon {
+      font-size: $vxe-checkbox-font-size-medium;
+    }
+  }
+  &.size--small {
+    .vxe-checkbox--icon {
+      font-size: $vxe-checkbox-font-size-small;
+    }
+  }
+  &.size--mini {
+    .vxe-checkbox--icon {
+      font-size: $vxe-checkbox-font-size-mini;
+    }
   }
 }

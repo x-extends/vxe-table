@@ -180,8 +180,8 @@
 .vxe-icon--arrow-left {
   @extend .vxe-icon--arrow-top;
   &:before {
-    top: 0.14em;
-    left: 0.4em;
+    top: 0.18em;
+    left: 0.35em;
     transform: rotate(-135deg);
   }
 }
@@ -189,7 +189,7 @@
 .vxe-icon--arrow-right {
   @extend .vxe-icon--arrow-top;
   &:before {
-    top: 0.14em;
+    top: 0.18em;
     left: 0;
     transform: rotate(45deg);
   }
@@ -198,7 +198,7 @@
 .vxe-icon--d-arrow-left {
   @extend %DefaultWidthHeight;
   &:before {
-    left: 0.20em;
+    left: 0.15em;
   }
   &:after {
     left: 0.58em;
@@ -206,7 +206,7 @@
   &:before,
   &:after {
     @extend %PseudoClass;
-    top: 0.14em;
+    top: 0.18em;
     width: 0.7em;
     height: 0.7em;
     border-width: 0.15em;
@@ -226,10 +226,10 @@
     transform: rotate(135deg);
   }
   &:before {
-    left: -0.22em;
+    left: -0.25em;
   }
   &:after {
-    left: 0.16em;
+    left: 0.18em;
   }
 }
 

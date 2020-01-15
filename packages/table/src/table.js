@@ -3242,7 +3242,7 @@ export default {
     handleDefaultRadioChecked () {
       let { radioOpts, fullDataRowIdData } = this
       let { checkRowKey: rowid } = radioOpts
-      if (rowid) {
+      if (rowid && fullDataRowIdData[rowid]) {
         this.setRadioRow(fullDataRowIdData[rowid].row)
       }
     },
