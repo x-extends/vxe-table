@@ -1074,7 +1074,7 @@ const apis = [
           },
           {
             name: 'highlight',
-            desc: '高亮选中行',
+            desc: '高亮勾选行',
             version: '2.7',
             type: 'Boolean',
             enum: '',
@@ -1083,7 +1083,7 @@ const apis = [
           },
           {
             name: 'range',
-            desc: '开启范围选中功能',
+            desc: '开启复选框范围勾选功能（启用后通过鼠标在复选框的列圈选指定行）',
             version: '2.7.7',
             type: 'Boolean',
             enum: '',
