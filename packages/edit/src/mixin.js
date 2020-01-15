@@ -302,8 +302,7 @@ export default {
           inputElem = cell.querySelector(compRender.autofocus)
         }
         if (inputElem) {
-          inputElem.focus()
-          if (autoselect)inputElem.select()
+          inputElem[autoselect ? 'select' : 'focus']()
           if (browse.msie) {
             let textRange = inputElem.createTextRange()
             textRange.collapse(false)
