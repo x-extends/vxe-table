@@ -329,6 +329,7 @@ export default {
       let { $children } = this.$parent
       let selfIndex = $children.indexOf(this)
       this.$table = XEUtils.find($children, (comp, index) => comp && comp.refreshColumn && index > selfIndex && comp.$vnode.componentOptions.tag === 'vxe-table')
+      this.$xetable = this.$table
     },
     openCustom () {
       this.customStore.visible = true
