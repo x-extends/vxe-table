@@ -303,7 +303,7 @@ export default {
         }
         if (inputElem) {
           inputElem.focus()
-          if(autoselect)inputElem.select()
+          if (autoselect)inputElem.select()
           if (browse.msie) {
             let textRange = inputElem.createTextRange()
             textRange.collapse(false)
