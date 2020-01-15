@@ -57,8 +57,11 @@ $vxe-table-range-background-color: rgba(50, 128, 252, 0.2);
 
 /*table checked*/
 $vxe-table-column-checked-border-width: 2px;
-$vxe-table-column-checked-border-color: #D4D4D4;
+$vxe-table-header-column-checked-border-color: #cccfd6;
+$vxe-table-body-seq-column-checked-border-color: $vxe-table-header-column-checked-border-color;
+$vxe-table-body-column-checked-border-color: #D4D4D4;
 $vxe-table-column-header-checked-background-color: #DCDCDC;
+$vxe-table-column-body-seq-checked-background-color: $vxe-table-column-header-checked-background-color;
 $vxe-table-column-checked-background-color: #e6f7ff;
 
 /*table tree*/
@@ -85,6 +88,18 @@ $vxe-tooltip-light-background-color: #fff;
 
 /*modal*/
 $vxe-modal-header-background-color: #F8F8F8;
+
+/*checkbox*/
+$vxe-checkbox-font-size-default: 16px;
+$vxe-checkbox-font-size-medium: 15px;
+$vxe-checkbox-font-size-small: 14px;
+$vxe-checkbox-font-size-mini: 14px;
+
+/*radio*/
+$vxe-radio-font-size-default: $vxe-checkbox-font-size-default;
+$vxe-radio-font-size-medium: $vxe-checkbox-font-size-medium;
+$vxe-radio-font-size-small: $vxe-checkbox-font-size-small;
+$vxe-radio-font-size-mini: $vxe-checkbox-font-size-mini;
 
 /*button*/
 $vxe-button-height-default: 34px;

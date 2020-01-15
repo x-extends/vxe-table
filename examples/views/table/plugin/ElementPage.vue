@@ -13,7 +13,7 @@
       <vxe-form-item field="flag" title="ElSwitch" span="8" folding :item-render="{name: 'ElSwitch'}"></vxe-form-item>
       <vxe-form-item field="slider" title="ElSlider" span="8" folding :item-render="{name: 'ElSlider'}"></vxe-form-item>
       <vxe-form-item field="rate" title="ElRate" span="8" folding :item-render="{name: 'ElRate'}"></vxe-form-item>
-      <vxe-form-item span="24" title-align="center" collapse-node>
+      <vxe-form-item span="24" align="center" collapse-node>
         <el-button type="primary" native-type="submit">查询</el-button>
         <el-button native-type="reset">重置</el-button>
       </vxe-form-item>
@@ -162,7 +162,7 @@ export default {
           <vxe-form-item field="flag" title="ElSwitch" span="8" folding :item-render="{name: 'ElSwitch'}"></vxe-form-item>
           <vxe-form-item field="slider" title="ElSlider" span="8" folding :item-render="{name: 'ElSlider'}"></vxe-form-item>
           <vxe-form-item field="rate" title="ElRate" span="8" folding :item-render="{name: 'ElRate'}"></vxe-form-item>
-          <vxe-form-item span="24" title-align="center" collapse-node>
+          <vxe-form-item span="24" align="center" collapse-node>
             <el-button type="primary" native-type="submit">查询</el-button>
             <el-button native-type="reset">重置</el-button>
           </vxe-form-item>

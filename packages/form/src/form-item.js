@@ -7,6 +7,7 @@ export default {
   props: {
     title: String,
     field: String,
+    size: String,
     span: [String, Number],
     align: String,
     titleAlign: String,
@@ -26,7 +27,7 @@ export default {
     }
   },
   render (h) {
-    const { $vxeform, title, folding, field, collapseNode, itemRender } = this
+    const { $scopedSlots, $vxeform, title, folding, field, collapseNode, itemRender } = this
     const compConf = itemRender ? VXETable.renderer.get(itemRender.name) : null
     const span = this.span || $vxeform.span
     const align = this.align || $vxeform.align
@@ -50,7 +51,7 @@ export default {
         }, UtilTools.getFuncText(title)) : null,
         h('div', {
           class: ['vxe-form--item-content', align ? `align--${align}` : null]
-        }, (compConf && compConf.renderItem ? compConf.renderItem.call(this, h, itemRender, { data: $vxeform.data, field, property: field }, { $form: $vxeform }) : this.$slots.default).concat(
+        }, (compConf && compConf.renderItem ? compConf.renderItem.call(this, h, itemRender, { data: $vxeform.data, field, property: field }, { $form: $vxeform }) : ($scopedSlots.default ? $scopedSlots.default.call(this) : [])).concat(
           collapseNode ? [
             h('div', {
               class: 'vxe-form--item-trigger-node',

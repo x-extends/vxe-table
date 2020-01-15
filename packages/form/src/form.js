@@ -4,6 +4,7 @@ export default {
   name: 'VxeForm',
   props: {
     data: Object,
+    size: String,
     span: [String, Number],
     align: String,
     titleAlign: String,

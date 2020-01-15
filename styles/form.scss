@@ -39,7 +39,7 @@
     display: none;
   }
   &.is--span {
-    .vxe-default-input,
+    .vxe-default-input:not([type="submit"]):not([type="reset"]),
     .vxe-default-textarea,
     .vxe-default-select,
     .vxe-input,

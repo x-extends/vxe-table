@@ -2,7 +2,8 @@
 
 /*input*/
 .vxe-input,
-.vxe-textarea {
+.vxe-textarea,
+select.vxe-select {
   font-size: $vxe-font-size;
   display: inline-block;
 }
@@ -32,13 +33,14 @@ select.vxe-select,
 .vxe-input--inner,
 .vxe-textarea--inner {
   width: 100%;
+  height: 100%;
   &::placeholder {
     color: $vxe-input-placeholder-color;
   }
 }
 
 select.vxe-select,
-.vxe-input--inner {
+.vxe-input {
   height: $vxe-input-height-default;
 }
 
@@ -54,7 +56,6 @@ select.vxe-select,
 
 .vxe-textarea--inner {
   display: block;
-  height: 100%;
   padding: 0.3em 0.6em;
 }
 
@@ -93,48 +94,48 @@ select.vxe-select,
   }
 }
 
-.vxe-input,
-.vxe-textarea {
-  &.size--medium {
-    select.vxe-select,
-    .vxe-input {
-      height: $vxe-input-height-medium;
-    }
-    .vxe-textarea {
-      min-height: $vxe-input-height-medium;
-    }
-    .vxe-input {
-      &[type="date"]::-webkit-inner-spin-button {
-        margin-top: 4px;
-      }
+.size--medium {
+  font-size: $vxe-font-size-medium;
+  select.vxe-select,
+  .vxe-input {
+    height: $vxe-input-height-medium;
+  }
+  .vxe-textarea {
+    min-height: $vxe-input-height-medium;
+  }
+  .vxe-input {
+    &[type="date"]::-webkit-inner-spin-button {
+      margin-top: 4px;
     }
   }
-  &.size--small {
-    select.vxe-select,
-    .vxe-input {
-      height: $vxe-input-height-small;
-    }
-    .vxe-textarea {
-      min-height: $vxe-input-height-small;
-    }
-    .vxe-input--inner {
-      &[type="date"]::-webkit-inner-spin-button {
-        margin-top: 2px;
-      }
+}
+.size--small {
+  font-size: $vxe-font-size-small;
+  select.vxe-select,
+  .vxe-input {
+    height: $vxe-input-height-small;
+  }
+  .vxe-textarea {
+    min-height: $vxe-input-height-small;
+  }
+  .vxe-input--inner {
+    &[type="date"]::-webkit-inner-spin-button {
+      margin-top: 2px;
     }
   }
-  &.size--mini {
-    select.vxe-select,
-    .vxe-input {
-      height: $vxe-input-height-mini;
-    }
-    .vxe-textarea {
-      min-height: $vxe-input-height-mini;
-    }
-    .vxe-input--inner {
-      &[type="date"]::-webkit-inner-spin-button {
-        margin-top: 0;
-      }
+}
+.size--mini {
+  font-size: $vxe-font-size-mini;
+  select.vxe-select,
+  .vxe-input {
+    height: $vxe-input-height-mini;
+  }
+  .vxe-textarea {
+    min-height: $vxe-input-height-mini;
+  }
+  .vxe-input--inner {
+    &[type="date"]::-webkit-inner-spin-button {
+      margin-top: 0;
     }
   }
 }

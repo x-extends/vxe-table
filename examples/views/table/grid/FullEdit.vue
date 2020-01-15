@@ -62,13 +62,17 @@ export default {
         pageSizes: [5, 15, 20, 50, 100, 200, 500, 1000]
       },
       tableForm: {
+        titleWidth: 100,
+        titleAlign: 'right',
         items: [
-          { field: 'name', title: '名称', itemRender: { name: 'input', attrs: { placeholder: '请输入名称' } } },
-          { field: 'nickname', title: '昵称', itemRender: { name: 'input', attrs: { placeholder: '请输入昵称' } } },
-          { field: 'sex', title: '性别', itemRender: { name: 'select', options: [] } },
-          { field: 'role', title: '角色', itemRender: { name: 'input', attrs: { placeholder: '请输入角色' } } },
-          { itemRender: { name: 'input', attrs: { type: 'submit', value: '查询' } } },
-          { itemRender: { name: 'input', attrs: { type: 'reset', value: '重置' } } }
+          { field: 'name', title: '名称', span: 8, itemRender: { name: 'input', attrs: { placeholder: '请输入名称' } } },
+          { field: 'nickname', title: '昵称', span: 8, itemRender: { name: 'input', attrs: { placeholder: '请输入昵称' } } },
+          { field: 'sex', title: '性别', span: 8, itemRender: { name: 'select', options: [] } },
+          { field: 'role', title: '角色', span: 8, folding: true, itemRender: { name: 'input', attrs: { placeholder: '请输入角色' } } },
+          { field: 'age', title: '年龄', span: 8, folding: true, itemRender: { name: 'input', attrs: { type: 'number', placeholder: '请输入年龄' } } },
+          { field: 'describe', title: '描述', span: 8, folding: true, itemRender: { name: 'input', attrs: { placeholder: '请输入描述' } } },
+          { span: 12, align: 'right', itemRender: { name: 'input', attrs: { type: 'submit', value: '查询' } } },
+          { span: 12, Align: 'left', collapseNode: true, itemRender: { name: 'input', attrs: { type: 'reset', value: '重置' } } }
         ]
       },
       tableProxy: {
@@ -128,6 +132,7 @@ export default {
         { field: 'name', title: 'Name', remoteSort: true, editRender: { name: 'input' } },
         { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
         { field: 'sex', title: 'Sex', editRender: { name: 'select', options: [] } },
+        { field: 'age', title: 'Age', editRender: { name: 'input', attrs: { type: 'number' } } },
         {
           field: 'role',
           title: 'Role',
@@ -188,13 +193,17 @@ export default {
                 pageSizes: [5, 15, 20, 50, 100, 200, 500, 1000]
               },
               tableForm: {
+                titleWidth: 100,
+                titleAlign: 'right',
                 items: [
-                  { field: 'name', title: '名称', itemRender: { name: 'input', attrs: { placeholder: '请输入名称' } } },
-                  { field: 'nickname', title: '昵称', itemRender: { name: 'input', attrs: { placeholder: '请输入昵称' } } },
-                  { field: 'sex', title: '性别', itemRender: { name: 'select', options: [] } },
-                  { field: 'role', title: '角色', itemRender: { name: 'input', attrs: { placeholder: '请输入角色' } } },
-                  { itemRender: { name: 'input', attrs: { type: 'submit', value: '查询' } } },
-                  { itemRender: { name: 'input', attrs: { type: 'reset', value: '重置' } } }
+                  { field: 'name', title: '名称', span: 8, itemRender: { name: 'input', attrs: { placeholder: '请输入名称' } } },
+                  { field: 'nickname', title: '昵称', span: 8, itemRender: { name: 'input', attrs: { placeholder: '请输入昵称' } } },
+                  { field: 'sex', title: '性别', span: 8, itemRender: { name: 'select', options: [] } },
+                  { field: 'role', title: '角色', span: 8, folding: true, itemRender: { name: 'input', attrs: { placeholder: '请输入角色' } } },
+                  { field: 'age', title: '年龄', span: 8, folding: true, itemRender: { name: 'input', attrs: { type: 'number', placeholder: '请输入年龄' } } },
+                  { field: 'describe', title: '描述', span: 8, folding: true, itemRender: { name: 'input', attrs: { placeholder: '请输入描述' } } },
+                  { span: 12, align: 'right', itemRender: { name: 'input', attrs: { type: 'submit', value: '查询' } } },
+                  { span: 12, Align: 'left', collapseNode: true, itemRender: { name: 'input', attrs: { type: 'reset', value: '重置' } } }
                 ]
               },
               tableProxy: {
@@ -253,6 +262,7 @@ export default {
                 { field: 'name', title: 'Name', remoteSort: true, editRender: { name: 'input' } },
                 { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
                 { field: 'sex', title: 'Sex', editRender: { name: 'select', options: [] } },
+                { field: 'age', title: 'Age', editRender: { name: 'input', attrs: { type: 'number' } } },
                 {
                   field: 'role',
                   title: 'Role',
