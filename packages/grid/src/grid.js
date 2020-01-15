@@ -57,7 +57,7 @@ export default {
   },
   provide () {
     return {
-      $grid: this
+      $xegrid: this
     }
   },
   data () {
@@ -341,7 +341,7 @@ export default {
     commitProxy (code) {
       const { $refs, toolbar, toolbarOpts, proxyOpts, tablePage, pagerConfig, sortData, filterData, formData, isMsg } = this
       const { beforeQuery, beforeDelete, afterDelete, beforeSave, afterSave, ajax = {}, props = {} } = proxyOpts
-      const $table = $refs.xTable
+      const $xetable = $refs.xTable
       const args = XEUtils.slice(arguments, 1)
       let button
       if (XEUtils.isString(code)) {
@@ -401,7 +401,7 @@ export default {
               params.page = tablePage
             }
             if (code === 'reload') {
-              let defaultSort = $table.sortOpts.defaultSort
+              let defaultSort = $xetable.sortOpts.defaultSort
               let sortParams = {}
               if (pagerConfig) {
                 tablePage.currentPage = 1
@@ -549,7 +549,7 @@ export default {
         default:
           let btnMethod = VXETable.commands.get(code)
           if (btnMethod) {
-            btnMethod.apply(this, [{ code, button, $grid: this, $table }].concat(args))
+            btnMethod.apply(this, [{ code, button, $grid: this, $table: $xetable }].concat(args))
           }
       }
       return this.$nextTick()

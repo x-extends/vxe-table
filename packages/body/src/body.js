@@ -3,15 +3,15 @@ import GlobalConfig from '../../conf'
 import { UtilTools, DomTools } from '../../tools'
 
 // 滚动、拖动过程中不需要触发
-function isOperateMouse ($table) {
-  return $table._isResize || ($table.lastScrollTime && Date.now() < $table.lastScrollTime + $table.optimizeOpts.delayHover)
+function isOperateMouse ($xetable) {
+  return $xetable._isResize || ($xetable.lastScrollTime && Date.now() < $xetable.lastScrollTime + $xetable.optimizeOpts.delayHover)
 }
 
 function countTreeExpand (prevRow, params) {
-  const $table = params.$table
-  const rowChildren = prevRow[$table.treeOpts.children]
+  const $xetable = params.$xetable
+  const rowChildren = prevRow[$xetable.treeOpts.children]
   let count = 1
-  if ($table.isTreeExpandByRow(prevRow)) {
+  if ($xetable.isTreeExpandByRow(prevRow)) {
     for (let index = 0; index < rowChildren.length; index++) {
       count += countTreeExpand(rowChildren[index], params)
     }
@@ -19,8 +19,8 @@ function countTreeExpand (prevRow, params) {
   return count
 }
 
-function getOffsetSize ($table) {
-  switch ($table.vSize) {
+function getOffsetSize ($xetable) {
+  switch ($xetable.vSize) {
     case 'mini':
       return 3
     case 'small':
@@ -67,7 +67,7 @@ function renderBorder (h, type) {
 /**
  * 渲染列
  */
-function renderColumn (h, _vm, $table, $seq, seq, rowid, fixedType, rowLevel, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, columns, items) {
+function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, columns, items) {
   let {
     _e,
     $listeners: tableListeners,
@@ -95,7 +95,7 @@ function renderColumn (h, _vm, $table, $seq, seq, rowid, fixedType, rowLevel, ro
     validOpts,
     editStore,
     validStore
-  } = $table
+  } = $xetable
   let { editRender, align, showOverflow, className, treeNode } = column
   let { actived } = editStore
   let isMouseSelected = mouseConfig && mouseOpts.selected
@@ -114,7 +114,7 @@ function renderColumn (h, _vm, $table, $seq, seq, rowid, fixedType, rowLevel, ro
   let hasDefaultTip = editRules && (validOpts.message === 'default' ? (height || tableData.length > 1) : validOpts.message === 'inline')
   let attrs = { 'data-colid': column.id }
   let triggerDblclick = (editRender && editConfig && editOpts.trigger === 'dblclick')
-  let params = { $table, $seq, seq, rowid, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn, level: rowLevel, data: tableData, items }
+  let params = { $table: $xetable, $seq, seq, rowid, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn, level: rowLevel, data: tableData, items }
   // 虚拟滚动不支持动态高度
   if ((scrollXLoad || scrollYLoad) && !hasEllipsis) {
     showEllipsis = hasEllipsis = true
@@ -122,35 +122,35 @@ function renderColumn (h, _vm, $table, $seq, seq, rowid, fixedType, rowLevel, ro
   // hover 进入事件
   if (showTitle || showTooltip || tableListeners['cell-mouseenter']) {
     tdOns.mouseenter = evnt => {
-      if (isOperateMouse($table)) {
+      if (isOperateMouse($xetable)) {
         return
       }
-      let evntParams = { $table, $seq, seq, rowid, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn, level: rowLevel, cell: evnt.currentTarget }
+      let evntParams = { $table: $xetable, $seq, seq, rowid, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn, level: rowLevel, cell: evnt.currentTarget }
       if (showTitle) {
         DomTools.updateCellTitle(evnt)
       } else if (showTooltip) {
         // 如果配置了显示 tooltip
-        $table.triggerTooltipEvent(evnt, evntParams)
+        $xetable.triggerTooltipEvent(evnt, evntParams)
       }
-      UtilTools.emitEvent($table, 'cell-mouseenter', [evntParams, evnt])
+      UtilTools.emitEvent($xetable, 'cell-mouseenter', [evntParams, evnt])
     }
   }
   // hover 退出事件
   if (showTooltip || tableListeners['cell-mouseleave']) {
     tdOns.mouseleave = evnt => {
-      if (isOperateMouse($table)) {
+      if (isOperateMouse($xetable)) {
         return
       }
       if (showTooltip) {
-        $table.handleTargetLeaveEvent(evnt)
+        $xetable.handleTargetLeaveEvent(evnt)
       }
-      UtilTools.emitEvent($table, 'cell-mouseleave', [{ $table, $seq, seq, rowid, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn, level: rowLevel, cell: evnt.currentTarget }, evnt])
+      UtilTools.emitEvent($xetable, 'cell-mouseleave', [{ $table: $xetable, $seq, seq, rowid, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn, level: rowLevel, cell: evnt.currentTarget }, evnt])
     }
   }
   // 按下事件处理
   if (checkboxOpts.range || isMouseChecked || isMouseSelected) {
     tdOns.mousedown = evnt => {
-      $table.triggerCellMousedownEvent(evnt, { $table, $seq, seq, rowid, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn, level: rowLevel, cell: evnt.currentTarget })
+      $xetable.triggerCellMousedownEvent(evnt, { $table: $xetable, $seq, seq, rowid, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn, level: rowLevel, cell: evnt.currentTarget })
     }
   }
   // 点击事件处理
@@ -164,13 +164,13 @@ function renderColumn (h, _vm, $table, $seq, seq, rowid, fixedType, rowLevel, ro
     (checkboxOpts.trigger === 'row' || ((column.type === 'checkbox' || column.type === 'selection') && checkboxOpts.trigger === 'cell')) ||
     (treeOpts.trigger === 'row' || (column.treeNode && treeOpts.trigger === 'cell'))) {
     tdOns.click = evnt => {
-      $table.triggerCellClickEvent(evnt, { $table, $seq, seq, rowid, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn, level: rowLevel, cell: evnt.currentTarget })
+      $xetable.triggerCellClickEvent(evnt, { $table: $xetable, $seq, seq, rowid, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn, level: rowLevel, cell: evnt.currentTarget })
     }
   }
   // 双击事件处理
   if (triggerDblclick || tableListeners['cell-dblclick']) {
     tdOns.dblclick = evnt => {
-      $table.triggerCellDBLClickEvent(evnt, { $table, $seq, seq, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn, level: rowLevel, cell: evnt.currentTarget })
+      $xetable.triggerCellDBLClickEvent(evnt, { $table: $xetable, $seq, seq, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn, level: rowLevel, cell: evnt.currentTarget })
     }
   }
   // 合并行或列
@@ -184,7 +184,7 @@ function renderColumn (h, _vm, $table, $seq, seq, rowid, fixedType, rowLevel, ro
   }
   // 如果编辑列开启显示状态
   if (!fixedHiddenColumn && editRender && editConfig && editOpts.showStatus) {
-    isDirty = $table.isUpdateByRow(row, column.property)
+    isDirty = $xetable.isUpdateByRow(row, column.property)
   }
   let type = column.type === 'seq' || column.type === 'index' ? 'seq' : column.type
   return h('td', {
@@ -215,7 +215,7 @@ function renderColumn (h, _vm, $table, $seq, seq, rowid, fixedType, rowLevel, ro
         }]
       })
     ]
-    : renderLine(h, _vm, $table, rowLevel, items, params).concat([
+    : renderLine(h, _vm, $xetable, rowLevel, items, params).concat([
       h('div', {
         class: ['vxe-cell', {
           'c--title': showTitle,
@@ -239,11 +239,11 @@ function renderColumn (h, _vm, $table, $seq, seq, rowid, fixedType, rowLevel, ro
     ]))
 }
 
-function renderLine (h, _vm, $table, rowLevel, items, params) {
+function renderLine (h, _vm, $xetable, rowLevel, items, params) {
   const column = params.column
-  const { treeOpts, treeConfig } = $table
+  const { treeOpts, treeConfig } = $xetable
   return column.slots && column.slots.line
-    ? column.slots.line.call($table, params, h)
+    ? column.slots.line.call($xetable, params, h)
     : column.treeNode && treeConfig && treeOpts.line ? [
       h('div', {
         class: 'vxe-tree--line-wrapper'
@@ -252,14 +252,14 @@ function renderLine (h, _vm, $table, rowLevel, items, params) {
           class: 'vxe-tree--line',
           style: {
             height: `${calcTreeLine(params, items)}px`,
-            left: `${(rowLevel * treeOpts.indent) + (rowLevel ? 2 - getOffsetSize($table) : 0) + 16}px`
+            left: `${(rowLevel * treeOpts.indent) + (rowLevel ? 2 - getOffsetSize($xetable) : 0) + 16}px`
           }
         })
       ])
     ] : []
 }
 
-function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, tableColumn) {
+function renderRows (h, _vm, $xetable, $seq, rowLevel, fixedType, tableData, tableColumn) {
   let {
     stripe,
     rowKey,
@@ -277,7 +277,7 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
     checkboxOpts,
     expandColumn,
     getColumnIndex
-  } = $table
+  } = $xetable
   let rows = []
   tableData.forEach((row, $rowIndex) => {
     let trOn = {}
@@ -287,40 +287,40 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
       seq += scrollYStore.startIndex
     }
     // 确保任何情况下 rowIndex 都精准指向真实 data 索引
-    rowIndex = $table.getRowIndex(row)
+    rowIndex = $xetable.getRowIndex(row)
     // 事件绑定
     if (highlightHoverRow) {
       trOn.mouseenter = evnt => {
-        if (isOperateMouse($table)) {
+        if (isOperateMouse($xetable)) {
           return
         }
-        $table.triggerHoverEvent(evnt, { row, rowIndex })
+        $xetable.triggerHoverEvent(evnt, { row, rowIndex })
       }
       trOn.mouseleave = evnt => {
-        if (isOperateMouse($table)) {
+        if (isOperateMouse($xetable)) {
           return
         }
-        $table.clearHoverRow()
+        $xetable.clearHoverRow()
       }
     }
-    let rowid = UtilTools.getRowid($table, row)
+    let rowid = UtilTools.getRowid($xetable, row)
     rows.push(
       h('tr', {
         class: ['vxe-body--row', {
           'row--stripe': stripe && rowIndex > 0 && (rowIndex + 1) % 2 === 0,
           'row--new': editStore.insertList.indexOf(row) > -1,
-          'row--radio': radioOpts.highlight && $table.selectRow === row,
-          'row--cheched': checkboxOpts.highlight && $table.isCheckedByCheckboxRow(row)
-        }, rowClassName ? XEUtils.isFunction(rowClassName) ? rowClassName({ $table, $seq, seq, rowid, fixedType, rowLevel, row, rowIndex, $rowIndex }) : rowClassName : ''],
+          'row--radio': radioOpts.highlight && $xetable.selectRow === row,
+          'row--cheched': checkboxOpts.highlight && $xetable.isCheckedByCheckboxRow(row)
+        }, rowClassName ? XEUtils.isFunction(rowClassName) ? rowClassName({ $table: $xetable, $seq, seq, rowid, fixedType, rowLevel, row, rowIndex, $rowIndex }) : rowClassName : ''],
         attrs: {
           'data-rowid': rowid
         },
-        style: rowStyle ? (XEUtils.isFunction(rowStyle) ? rowStyle({ $table, $seq, seq, rowid, fixedType, rowLevel, row, rowIndex, $rowIndex }) : rowStyle) : null,
+        style: rowStyle ? (XEUtils.isFunction(rowStyle) ? rowStyle({ $table: $xetable, $seq, seq, rowid, fixedType, rowLevel, row, rowIndex, $rowIndex }) : rowStyle) : null,
         key: rowKey || treeConfig ? rowid : $rowIndex,
         on: trOn
       }, tableColumn.map((column, $columnIndex) => {
         let columnIndex = getColumnIndex(column)
-        return renderColumn(h, _vm, $table, $seq, seq, rowid, fixedType, rowLevel, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, tableColumn, tableData)
+        return renderColumn(h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, tableColumn, tableData)
       }))
     )
     // 如果行被展开了
@@ -337,7 +337,7 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
           h('tr', {
             class: 'vxe-body--expanded-row',
             key: `expand_${rowid}`,
-            style: rowStyle ? (XEUtils.isFunction(rowStyle) ? rowStyle({ $table, $seq, seq, rowid, fixedType, rowLevel, row, rowIndex, $rowIndex, isExpanded: true }) : rowStyle) : null,
+            style: rowStyle ? (XEUtils.isFunction(rowStyle) ? rowStyle({ $table: $xetable, $seq, seq, rowid, fixedType, rowLevel, row, rowIndex, $rowIndex, isExpanded: true }) : rowStyle) : null,
             on: trOn
           }, [
             h('td', {
@@ -352,7 +352,7 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
                 }],
                 style: cellStyle
               }, [
-                expandColumn.renderData(h, { $table, seq, rowid, row, rowIndex, column: expandColumn, columnIndex: expandColumnIndex, fixed: fixedType, level: rowLevel })
+                expandColumn.renderData(h, { $table: $xetable, seq, rowid, row, rowIndex, column: expandColumn, columnIndex: expandColumnIndex, fixed: fixedType, level: rowLevel })
               ])
             ])
           ])
@@ -363,7 +363,7 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
     if (treeConfig && treeExpandeds.length) {
       let rowChildren = row[treeOpts.children]
       if (rowChildren && rowChildren.length && treeExpandeds.indexOf(row) > -1) {
-        rows.push.apply(rows, renderRows(h, _vm, $table, $seq ? `${$seq}.${seq}` : `${seq}`, rowLevel + 1, fixedType, rowChildren, tableColumn))
+        rows.push.apply(rows, renderRows(h, _vm, $xetable, $seq ? `${$seq}.${seq}` : `${seq}`, rowLevel + 1, fixedType, rowChildren, tableColumn))
       }
     }
   })
@@ -412,8 +412,8 @@ export default {
     isGroup: Boolean
   },
   mounted () {
-    let { $parent: $table, $el, $refs, fixedType } = this
-    let { elemStore } = $table
+    let { $parent: $xetable, $el, $refs, fixedType } = this
+    let { elemStore } = $xetable
     let prefix = `${fixedType || 'main'}-body-`
     elemStore[`${prefix}wrapper`] = $el
     elemStore[`${prefix}table`] = $refs.table
@@ -432,7 +432,7 @@ export default {
   render (h) {
     let {
       _e,
-      $parent: $table,
+      $parent: $xetable,
       fixedColumn,
       fixedType
     } = this
@@ -447,7 +447,7 @@ export default {
       mouseConfig,
       mouseOpts,
       keyboardConfig = {}
-    } = $table
+    } = $xetable
     // 在 v3.0 中废弃 mouse-config.checked
     let isMouseChecked = mouseConfig && (mouseOpts.range || mouseOpts.checked)
     // 如果是固定列与设置了超出隐藏
@@ -502,7 +502,7 @@ export default {
          */
         h('tbody', {
           ref: 'tbody'
-        }, renderRows(h, this, $table, '', 0, fixedType, tableData, tableColumn))
+        }, renderRows(h, this, $xetable, '', 0, fixedType, tableData, tableColumn))
       ]),
       /**
        * 选中边框线
@@ -519,7 +519,7 @@ export default {
       }, [
         h('div', {
           class: 'vxe-table--empty-content'
-        }, $scopedSlots.empty ? $scopedSlots.empty.call(this, { $table: this }, h) : GlobalConfig.i18n('vxe.table.emptyText'))
+        }, $scopedSlots.empty ? $scopedSlots.empty.call(this, { $table: $xetable }, h) : GlobalConfig.i18n('vxe.table.emptyText'))
       ]) : null
     ])
   },
@@ -530,8 +530,8 @@ export default {
      * 如果存在列固定右侧，同步更新滚动状态
      */
     scrollEvent (evnt) {
-      let { $parent: $table, fixedType } = this
-      let { $refs, highlightHoverRow, scrollXLoad, scrollYLoad, lastScrollTop, lastScrollLeft } = $table
+      let { $parent: $xetable, fixedType } = this
+      let { $refs, highlightHoverRow, scrollXLoad, scrollYLoad, lastScrollTop, lastScrollLeft } = $xetable
       let { tableHeader, tableBody, leftBody, rightBody, tableFooter } = $refs
       let headerElem = tableHeader ? tableHeader.$el : null
       let footerElem = tableFooter ? tableFooter.$el : null
@@ -542,11 +542,11 @@ export default {
       let scrollLeft = bodyElem.scrollLeft
       let isX = scrollLeft !== lastScrollLeft
       let isY = scrollTop !== lastScrollTop
-      $table.lastScrollTop = scrollTop
-      $table.lastScrollLeft = scrollLeft
-      $table.lastScrollTime = Date.now()
+      $xetable.lastScrollTop = scrollTop
+      $xetable.lastScrollLeft = scrollLeft
+      $xetable.lastScrollTime = Date.now()
       if (highlightHoverRow) {
-        $table.clearHoverRow()
+        $xetable.clearHoverRow()
       }
       if (leftElem && fixedType === 'left') {
         scrollTop = leftElem.scrollTop
@@ -564,14 +564,14 @@ export default {
           }
         }
         if (leftElem || rightElem) {
-          $table.checkScrolling()
+          $xetable.checkScrolling()
           if (isY) {
             syncBodyScroll(scrollTop, leftElem, rightElem)
           }
         }
       }
       if (scrollXLoad && isX) {
-        $table.triggerScrollXEvent(evnt)
+        $xetable.triggerScrollXEvent(evnt)
         if (headerElem && scrollLeft + bodyElem.clientWidth >= bodyElem.scrollWidth - 80) {
           // 修复拖动滚动条时可能存在不同步问题
           this.$nextTick(() => {
@@ -582,9 +582,9 @@ export default {
         }
       }
       if (scrollYLoad && isY) {
-        $table.triggerScrollYEvent(evnt)
+        $xetable.triggerScrollYEvent(evnt)
       }
-      UtilTools.emitEvent($table, 'scroll', [{ type: 'body', fixed: fixedType, scrollTop, scrollLeft, isX, isY, $table }, evnt])
+      UtilTools.emitEvent($xetable, 'scroll', [{ type: 'body', fixed: fixedType, scrollTop, scrollLeft, isX, isY, $table: $xetable }, evnt])
     }
   }
 }

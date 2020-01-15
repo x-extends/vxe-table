@@ -24,20 +24,20 @@ export default {
   },
   methods: {
     renderOptions (h, filterRender, compConf) {
-      let { $parent: $table, filterStore } = this
+      let { $parent: $xetable, filterStore } = this
       let { args, column, multiple } = filterStore
       let { slots } = column
       if (slots && slots.filter) {
         return [
           h('div', {
             class: 'vxe-table--filter-template'
-          }, slots.filter.call($table, Object.assign({ $table, context: this }, args), h))
+          }, slots.filter.call($xetable, Object.assign({ $table: $xetable, context: this }, args), h))
         ]
       } else if (compConf && compConf.renderFilter) {
         return [
           h('div', {
             class: 'vxe-table--filter-template'
-          }, compConf.renderFilter.call($table, h, filterRender, args, this))
+          }, compConf.renderFilter.call($xetable, h, filterRender, args, this))
         ]
       }
       return [

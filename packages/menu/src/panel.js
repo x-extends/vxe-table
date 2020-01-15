@@ -6,7 +6,7 @@ export default {
     ctxMenuStore: Object
   },
   render (h) {
-    let $table = this.$parent
+    let $xetable = this.$parent
     let { _e, ctxMenuStore } = this
     return h('div', {
       class: ['vxe-table--ctxmenu-wrapper', {
@@ -31,13 +31,13 @@ export default {
             class: 'vxe-ctxmenu--link',
             on: {
               click (evnt) {
-                $table.ctxMenuLinkEvent(evnt, item)
+                $xetable.ctxMenuLinkEvent(evnt, item)
               },
               mouseover (evnt) {
-                $table.ctxMenuMouseoverEvent(evnt, item)
+                $xetable.ctxMenuMouseoverEvent(evnt, item)
               },
               mouseout (evnt) {
-                $table.ctxMenuMouseoutEvent(evnt, item)
+                $xetable.ctxMenuMouseoutEvent(evnt, item)
               }
             }
           }, [
@@ -67,13 +67,13 @@ export default {
                 class: 'vxe-ctxmenu--link',
                 on: {
                   click (evnt) {
-                    $table.ctxMenuLinkEvent(evnt, child)
+                    $xetable.ctxMenuLinkEvent(evnt, child)
                   },
                   mouseover (evnt) {
-                    $table.ctxMenuMouseoverEvent(evnt, item, child)
+                    $xetable.ctxMenuMouseoverEvent(evnt, item, child)
                   },
                   mouseout (evnt) {
-                    $table.ctxMenuMouseoutEvent(evnt, item, child)
+                    $xetable.ctxMenuMouseoutEvent(evnt, item, child)
                   }
                 }
               }, [

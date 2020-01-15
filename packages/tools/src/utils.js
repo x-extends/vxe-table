@@ -6,9 +6,9 @@ var lastZindex = 0
 var columnUniqueId = 0
 
 class ColumnConfig {
-  constructor ($table, _vm, { renderHeader, renderCell, renderData } = {}) {
-    const $grid = $table.$grid
-    const proxyOpts = $grid ? $grid.proxyOpts : null
+  constructor ($xetable, _vm, { renderHeader, renderCell, renderData } = {}) {
+    const $xegrid = $xetable.$xegrid
+    const proxyOpts = $xegrid ? $xegrid.proxyOpts : null
     const formatter = _vm.formatter
     const visible = XEUtils.isBoolean(_vm.visible) ? _vm.visible : true
     if (_vm.cellRender && _vm.editRender) {
@@ -19,7 +19,7 @@ class ColumnConfig {
     } else if (_vm.type === 'selection') {
       UtilTools.warn('vxe.error.delProp', ['selection', 'checkbox'])
     } else if (_vm.type === 'expand') {
-      if ($table.treeConfig && $table.treeOpts.line) {
+      if ($xetable.treeConfig && $xetable.treeOpts.line) {
         UtilTools.error('vxe.error.treeLineExpand')
       }
       if (_vm.slots && !_vm.slots.content && _vm.slots.default) {
@@ -97,7 +97,7 @@ class ColumnConfig {
       own: _vm
     })
     if (proxyOpts && proxyOpts.beforeColumn) {
-      proxyOpts.beforeColumn.apply($table, [{ $grid, column: this }])
+      proxyOpts.beforeColumn.apply($xetable, [{ $grid: $xegrid, column: this }])
     }
   }
   getTitle () {
@@ -135,9 +135,9 @@ export const UtilTools = {
   getFuncText (content) {
     return XEUtils.isFunction(content) ? content() : (GlobalConfig.translate ? GlobalConfig.translate(content) : content)
   },
-  nextZIndex ($table) {
-    if ($table && $table.zIndex) {
-      return $table.zIndex
+  nextZIndex ($xetable) {
+    if ($xetable && $xetable.zIndex) {
+      return $xetable.zIndex
     }
     lastZindex = GlobalConfig.zIndex + zindexIndex++
     return lastZindex
@@ -146,12 +146,12 @@ export const UtilTools = {
     return lastZindex
   },
   // 行主键 key
-  getRowkey ($table) {
-    return $table.rowId
+  getRowkey ($xetable) {
+    return $xetable.rowId
   },
   // 行主键 value
-  getRowid ($table, row) {
-    let rowId = XEUtils.get(row, UtilTools.getRowkey($table))
+  getRowid ($xetable, row) {
+    let rowId = XEUtils.get(row, UtilTools.getRowkey($xetable))
     return rowId ? encodeURIComponent(rowId) : ''
   },
   // 触发事件
@@ -221,27 +221,27 @@ export const UtilTools = {
   setCellValue (row, column, value) {
     return XEUtils.set(row, column.property, value)
   },
-  getColumnConfig ($table, _vm, options) {
-    return _vm instanceof ColumnConfig ? _vm : new ColumnConfig($table, _vm, options)
+  getColumnConfig ($xetable, _vm, options) {
+    return _vm instanceof ColumnConfig ? _vm : new ColumnConfig($xetable, _vm, options)
   },
   // 组装列配置
   assemColumn (_vm) {
-    let { $table, $column, columnConfig } = _vm
-    let groupConfig = $column ? $column.columnConfig : null
+    let { $xetable, $xecolumn, columnConfig } = _vm
+    let groupConfig = $xecolumn ? $xecolumn.columnConfig : null
     columnConfig.slots = _vm.$scopedSlots
-    if (groupConfig && $column.$children.length > 0) {
+    if (groupConfig && $xecolumn.$children.length > 0) {
       if (!groupConfig.children) {
         groupConfig.children = []
       }
-      groupConfig.children.splice([].indexOf.call($column.$el.children, _vm.$el), 0, columnConfig)
+      groupConfig.children.splice([].indexOf.call($xecolumn.$el.children, _vm.$el), 0, columnConfig)
     } else {
-      $table.collectColumn.splice([].indexOf.call($table.$refs.hideColumn.children, _vm.$el), 0, columnConfig)
+      $xetable.collectColumn.splice([].indexOf.call($xetable.$refs.hideColumn.children, _vm.$el), 0, columnConfig)
     }
   },
   // 销毁列
   destroyColumn (_vm) {
-    let { $table, columnConfig } = _vm
-    let matchObj = XEUtils.findTree($table.collectColumn, column => column === columnConfig)
+    let { $xetable, columnConfig } = _vm
+    let matchObj = XEUtils.findTree($xetable.collectColumn, column => column === columnConfig)
     if (matchObj) {
       matchObj.items.splice(matchObj.index, 1)
     }

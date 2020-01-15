@@ -10,11 +10,11 @@ import methods from './methods'
  * 分别渲染左边固定列和右边固定列
  * 如果宽度足够情况下，则不需要渲染固定列
  * @param {Function} h 创建 VNode 函数
- * @param {Object} $table 表格实例
+ * @param {Object} $xetable 表格实例
  * @param {String} fixedType 固定列类型
  */
-function renderFixed (h, $table, fixedType) {
-  let { tableData, tableColumn, visibleColumn, collectColumn, isGroup, vSize, showHeader, showFooter, columnStore, footerData } = $table
+function renderFixed (h, $xetable, fixedType) {
+  let { tableData, tableColumn, visibleColumn, collectColumn, isGroup, vSize, showHeader, showFooter, columnStore, footerData } = $xetable
   let fixedColumn = columnStore[`${fixedType}List`]
   return h('div', {
     class: `vxe-table--fixed-${fixedType}-wrapper`,
@@ -208,11 +208,11 @@ export default {
   },
   provide () {
     return {
-      $table: this
+      $xetable: this
     }
   },
   inject: {
-    $grid: {
+    $xegrid: {
       default: null
     }
   },
@@ -689,7 +689,7 @@ export default {
     if (this.autoResize && VXETable._resize) {
       this.bindResize()
     }
-    if (!this.$grid && this.customs) {
+    if (!this.$xegrid && this.customs) {
       UtilTools.warn('vxe.error.removeProp', ['customs'])
     }
     document.body.appendChild(this.$refs.tableWrapper)

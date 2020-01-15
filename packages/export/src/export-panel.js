@@ -276,8 +276,8 @@ export default {
     },
     getExportOption () {
       const { storeData, defaultOptions } = this
-      const { $grid, $table } = this.$parent
-      const comp = $grid || $table
+      const { $xegrid, $xetable } = this.$parent
+      const comp = $xegrid || $xetable
       const selectRecords = storeData.selectRecords
       const opts = Object.assign({
         columns: storeData.columns.filter(column => column.checked)
