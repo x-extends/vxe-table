@@ -69,6 +69,13 @@
   }
   .vxe-default-input,
   .vxe-default-textarea {
+    padding: 0 0.8em;
+  }
+  .vxe-default-input[type="number"] {
+    padding-right: 0.2em;
+  }
+  .vxe-default-input[type="text"],
+  .vxe-default-input[type="search"] {
     padding: 0 1em;
   }
   .vxe-default-input[type="text"],
