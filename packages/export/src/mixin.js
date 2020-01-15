@@ -283,7 +283,7 @@ function downloadFile ($xetable, opts, content) {
   }
 }
 
-function getLabelData ($xetable, columns, datas) {
+function getLabelData ($xetable, opts, columns, datas) {
   const { treeConfig, treeOpts, scrollXLoad, scrollYLoad } = $xetable
   if (treeConfig) {
     // 如果是树表格只允许导出数据源
@@ -338,7 +338,7 @@ function getLabelData ($xetable, columns, datas) {
           break
         default:
           // 如果是启用虚拟滚动后只允许导出数据源
-          if (scrollXLoad || scrollYLoad) {
+          if (opts.original || scrollXLoad || scrollYLoad) {
             cellValue = UtilTools.getCellLabel(row, column, { $table: $xetable })
           } else {
             let cell = DomTools.getCell($xetable, { row, column })
@@ -360,7 +360,7 @@ function getExportData ($xetable, opts, fullData, oColumns) {
   if (opts.dataFilterMethod) {
     datas = datas.filter(opts.dataFilterMethod)
   }
-  return { columns, datas: getLabelData($xetable, columns, datas) }
+  return { columns, datas: getLabelData($xetable, opts, columns, datas) }
 }
 
 function replaceDoubleQuotation (val) {
