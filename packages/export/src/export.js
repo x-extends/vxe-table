@@ -321,12 +321,14 @@ function getLabelData ($table, opts, columns, datas) {
           cellValue = $table.isCheckedByRadioRow(row)
           break
         default:
-          // 如果是启用虚拟滚动后只允许导出数据源
-          if (opts.original || scrollXLoad || scrollYLoad) {
-            cellValue = row[column.property]
+          if (opts.original) {
+            cellValue = UtilTools.getCellValue(row, column)
+          } else if (scrollXLoad || scrollYLoad) {
+            // 如果是启用虚拟滚动
+            cellValue = UtilTools.getCellLabel(row, column, { $table })
           } else {
             let cell = DomTools.getCell($table, { row, column })
-            cellValue = cell ? cell.innerText.trim() : row[column.property]
+            cellValue = cell ? cell.innerText.trim() : UtilTools.getCellLabel(row, column, { $table })
           }
       }
       item[column.id] = XEUtils.toString(cellValue)
