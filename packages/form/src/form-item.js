@@ -72,7 +72,8 @@ export default {
     ])
   },
   methods: {
-    toggleCollapseEvent () {
+    toggleCollapseEvent (evnt) {
+      this.$vxeform.$emit('toggle-collapse', { data: this.$vxeform.data }, evnt)
       this.$vxeform.toggleCollapse()
     }
   }

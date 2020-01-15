@@ -24,7 +24,8 @@ function renderFormContent (h, _vm) {
         }),
         on: {
           submit: _vm.submitEvent,
-          reset: _vm.resetEvent
+          reset: _vm.resetEvent,
+          'toggle-collapse': _vm.togglCollapseEvent
         },
         ref: 'form'
       }, formOpts.items.map(item => {
@@ -657,6 +658,9 @@ export default {
     },
     resetEvent (params, evnt) {
       UtilTools.emitEvent(this, 'form-reset', [Object.assign({ $grid: this }, params), evnt])
+    },
+    togglCollapseEvent () {
+      this.recalculate(true)
     },
     zoom () {
       this.maximize = !this.maximize

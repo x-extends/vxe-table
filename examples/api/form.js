@@ -88,6 +88,15 @@ const apis = [
         enum: '',
         defVal: '{data}, event',
         list: []
+      },
+      {
+        name: 'toggle-collapse',
+        desc: '当折叠按钮被手动点击时会触发该事件',
+        version: '',
+        type: '',
+        enum: '',
+        defVal: '{data}, event',
+        list: []
       }
     ]
   },

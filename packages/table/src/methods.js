@@ -36,7 +36,7 @@ const Methods = {
    * 获取父容器的高度
    */
   getParentHeight () {
-    return this.$grxegridid ? this.$xegrid.getParentHeight() : this.getParentElem().clientHeight
+    return this.$xegrid ? this.$xegrid.getParentHeight() : this.getParentElem().clientHeight
   },
   /**
    * 获取需要排除的高度
