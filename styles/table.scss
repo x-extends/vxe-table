@@ -749,8 +749,10 @@ select.vxe-select,
         }
       }
     }
-    .vxe-body--column {
-      background-image: none;
+    .vxe-body--row {
+      .vxe-body--column {
+        background-image: none;
+      }
     }
   }
   .vxe-tree--line-wrapper {
@@ -761,7 +763,7 @@ select.vxe-select,
   .vxe-tree--line {
     content: "";
     position: absolute;
-    bottom: -0.8em;
+    bottom: -0.9em;
     width: 0.8em;
     border-width: 0 0 1px 1px;
     border-style: dotted;
