@@ -39,8 +39,8 @@ export default {
           sex: ''
         },
         items: [
-          { field: 'name', title: 'app.body.label.name', titlePrefix: { message: '帮助信息！！！' }, itemRender: { name: 'input', attrs: { placeholder: '请输入名称' } } },
-          { field: 'sex', title: '性别', itemRender: { name: 'select', options: [] } },
+          { field: 'name', title: 'app.body.label.name', itemRender: { name: 'input', attrs: { placeholder: '请输入名称' } } },
+          { field: 'sex', title: '性别', titlePrefix: { message: '帮助信息！！！', icon: 'fa fa-info-circle' }, itemRender: { name: 'select', options: [] } },
           { itemRender: { name: 'input', attrs: { type: 'submit', value: '查询' } } },
           { itemRender: { name: 'input', attrs: { type: 'reset', value: '重置' } } }
         ]
@@ -85,8 +85,8 @@ export default {
                   sex: ''
                 },
                 items: [
-                  { field: 'name', title: 'app.body.label.name', titlePrefix: { message: '帮助信息！！！' }, itemRender: { name: 'input', attrs: { placeholder: '请输入名称' } } },
-                  { field: 'sex', title: '性别', itemRender: { name: 'select', options: [] } },
+                  { field: 'name', title: 'app.body.label.name', itemRender: { name: 'input', attrs: { placeholder: '请输入名称' } } },
+                  { field: 'sex', title: '性别', titlePrefix: { message: '帮助信息！！！', icon: 'fa fa-info-circle' }, itemRender: { name: 'select', options: [] } },
                   { itemRender: { name: 'input', attrs: { type: 'submit', value: '查询' } } },
                   { itemRender: { name: 'input', attrs: { type: 'reset', value: '重置' } } }
                 ]

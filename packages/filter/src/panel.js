@@ -57,7 +57,12 @@ export default {
                 this.changeAllOption(evnt, !filterStore.isAllSelected)
               }
             }
-          }, GlobalConfig.i18n('vxe.table.allFilter'))
+          }, [
+            h('i', {
+              class: 'vxe-checkbox--icon'
+            }),
+            GlobalConfig.i18n('vxe.table.allFilter')
+          ])
         ]),
         h('ul', {
           class: 'vxe-table--filter-body'
@@ -74,7 +79,12 @@ export default {
                 this.changeOption(evnt, !item.checked, item)
               }
             }
-          }, UtilTools.formatText(item.label, 1))
+          }, [
+            h('i', {
+              class: 'vxe-checkbox--icon'
+            }),
+            UtilTools.formatText(item.label, 1)
+          ])
         }))
       ]
     },

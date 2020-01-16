@@ -274,7 +274,12 @@ export default {
                 on: {
                   click: this.allCustomEvent
                 }
-              }, GlobalConfig.i18n('vxe.toolbar.customAll'))
+              }, [
+                h('i', {
+                  class: 'vxe-checkbox--icon'
+                }),
+                GlobalConfig.i18n('vxe.toolbar.customAll')
+              ])
             ]),
             h('ul', {
               class: 'vxe-custom--body',
@@ -302,7 +307,12 @@ export default {
                     }
                   }
                 }
-              }, colTitle) : null
+              }, [
+                h('i', {
+                  class: 'vxe-checkbox--icon'
+                }),
+                colTitle
+              ]) : null
             })),
             customOpts.isFooter === false ? null : h('div', {
               class: 'vxe-custom--footer'

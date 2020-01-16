@@ -118,7 +118,7 @@
             <vxe-input v-model="formData4.name" placeholder="请输入名称"></vxe-input>
           </template>
         </vxe-form-item>
-        <vxe-form-item title="昵称" field="nickname" span="8">
+        <vxe-form-item title="昵称" field="nickname" span="8" :title-prefix="{ message: '请输入汉字！', icon: 'fa fa-exclamation-circle' }">
           <template>
             <vxe-input v-model="formData4.nickname" placeholder="请输入昵称"></vxe-input>
           </template>
@@ -130,7 +130,7 @@
             <option value="2">男</option>
           </select>
         </vxe-form-item>
-        <vxe-form-item title="年龄" field="age" span="8">
+        <vxe-form-item title="年龄" field="age" span="8" :title-prefix="{ message: '请输入数值！', icon: 'fa fa-info-circle' }">
           <template>
             <vxe-input v-model="formData4.age" type="number" placeholder="请输入年龄"></vxe-input>
           </template>
@@ -286,7 +286,7 @@ export default {
                 <vxe-input v-model="formData4.name" placeholder="请输入名称"></vxe-input>
               </template>
             </vxe-form-item>
-            <vxe-form-item title="昵称" field="nickname" span="8">
+            <vxe-form-item title="昵称" field="nickname" span="8" :title-prefix="{ message: '请输入汉字！', icon: 'fa fa-exclamation-circle' }">
               <template>
                 <vxe-input v-model="formData4.nickname" placeholder="请输入昵称"></vxe-input>
               </template>
@@ -298,7 +298,7 @@ export default {
                 <option value="2">男</option>
               </select>
             </vxe-form-item>
-            <vxe-form-item title="年龄" field="age" span="8">
+            <vxe-form-item title="年龄" field="age" span="8" :title-prefix="{ message: '请输入数值！', icon: 'fa fa-info-circle' }">
               <template>
                 <vxe-input v-model="formData4.age" type="number" placeholder="请输入年龄"></vxe-input>
               </template>

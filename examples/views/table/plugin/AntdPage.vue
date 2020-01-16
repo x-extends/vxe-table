@@ -3,7 +3,7 @@
     <p class="tip">与 <a class="link" href="https://www.npmjs.com/package/ant-design-vue">ant-design-vue</a> 组合渲染 + 使用分页</p>
 
     <vxe-form :data="formData" title-width="120" title-align="right" @submit="searchEvent">
-      <vxe-form-item field="name" title="AInput" span="8" :item-render="{name: 'AInput'}"></vxe-form-item>
+      <vxe-form-item field="name" title="AInput" span="8" :title-prefix="{ message: '帮助信息！！！', icon: 'fa fa-exclamation-circle' }" :item-render="{name: 'AInput'}"></vxe-form-item>
       <vxe-form-item field="role" title="AAutoComplete" span="8" :item-render="{name: 'AAutoComplete', props: ACProps, events: {search: roleSearchEvent}}"></vxe-form-item>
       <vxe-form-item field="age" title="AInputNumber" span="8" :item-render="{name: 'AInputNumber'}"></vxe-form-item>
       <vxe-form-item field="sex" title="ASelect" span="8" :item-render="{name: 'ASelect', options: sexList}"></vxe-form-item>
@@ -144,7 +144,7 @@ export default {
       demoCodes: [
         `
           <vxe-form :data="formData" title-width="120" title-align="right" @submit="searchEvent">
-            <vxe-form-item field="name" title="AInput" span="8" :item-render="{name: 'AInput'}"></vxe-form-item>
+            <vxe-form-item field="name" title="AInput" span="8" :title-prefix="{ message: '帮助信息！！！', icon: 'fa fa-exclamation-circle' }" :item-render="{name: 'AInput'}"></vxe-form-item>
             <vxe-form-item field="role" title="AAutoComplete" span="8" :item-render="{name: 'AAutoComplete', props: ACProps, events: {search: roleSearchEvent}}"></vxe-form-item>
             <vxe-form-item field="age" title="AInputNumber" span="8" :item-render="{name: 'AInputNumber'}"></vxe-form-item>
             <vxe-form-item field="sex" title="ASelect" span="8" :item-render="{name: 'ASelect', options: sexList}"></vxe-form-item>

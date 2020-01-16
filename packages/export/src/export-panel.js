@@ -165,7 +165,12 @@ export default {
                     on: {
                       click: this.allColumnEvent
                     }
-                  }, GlobalConfig.i18n('vxe.toolbar.expAllColumn'))
+                  }, [
+                    h('i', {
+                      class: 'vxe-checkbox--icon'
+                    }),
+                    GlobalConfig.i18n('vxe.toolbar.expAllColumn')
+                  ])
                 ]),
                 h('ul', {
                   class: 'vxe-export--panel-column-body'
@@ -187,7 +192,12 @@ export default {
                         }
                       }
                     }
-                  }, headerTitle)
+                  }, [
+                    h('i', {
+                      class: 'vxe-checkbox--icon'
+                    }),
+                    headerTitle
+                  ])
                 }))
               ])
             ])

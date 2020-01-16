@@ -208,7 +208,7 @@ export const Cell = {
         }],
         on
       }, [
-        h('span', {
+        h('i', {
           class: 'vxe-radio--icon'
         })
       ].concat(labelField ? (slots && slots.default ? slots.default(params, h) : [XEUtils.get(row, labelField)]) : []))
@@ -255,7 +255,7 @@ export const Cell = {
         },
         on
       }, [
-        h('span', {
+        h('i', {
           class: 'vxe-checkbox--icon'
         })
       ].concat(headerTitle ? (slots && slots.header ? slots.header(params, h) : [UtilTools.getFuncText(headerTitle)]) : []))
@@ -295,7 +295,7 @@ export const Cell = {
         }],
         on
       }, [
-        h('span', {
+        h('i', {
           class: 'vxe-checkbox--icon'
         })
       ].concat(labelField ? (slots && slots.default ? slots.default(params, h) : [XEUtils.get(row, labelField)]) : []))
@@ -338,7 +338,7 @@ export const Cell = {
         }],
         on
       }, [
-        h('span', {
+        h('i', {
           class: 'vxe-checkbox--icon'
         })
       ].concat(labelField ? (slots && slots.default ? slots.default(params, h) : [XEUtils.get(row, labelField)]) : []))
