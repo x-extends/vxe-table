@@ -65,7 +65,7 @@ export default {
         titleWidth: 100,
         titleAlign: 'right',
         items: [
-          { field: 'name', title: '名称', span: 8, itemRender: { name: 'input', attrs: { placeholder: '请输入名称' } } },
+          { field: 'name', title: '名称', span: 8, titlePrefix: { message: '帮助信息！！！' }, itemRender: { name: 'input', attrs: { placeholder: '请输入名称' } } },
           { field: 'nickname', title: '昵称', span: 8, itemRender: { name: 'input', attrs: { placeholder: '请输入昵称' } } },
           { field: 'sex', title: '性别', span: 8, itemRender: { name: 'select', options: [] } },
           { field: 'role', title: '角色', span: 8, folding: true, itemRender: { name: 'input', attrs: { placeholder: '请输入角色' } } },
@@ -196,7 +196,7 @@ export default {
                 titleWidth: 100,
                 titleAlign: 'right',
                 items: [
-                  { field: 'name', title: '名称', span: 8, itemRender: { name: 'input', attrs: { placeholder: '请输入名称' } } },
+                  { field: 'name', title: '名称', span: 8, titlePrefix: { message: '帮助信息！！！' }, itemRender: { name: 'input', attrs: { placeholder: '请输入名称' } } },
                   { field: 'nickname', title: '昵称', span: 8, itemRender: { name: 'input', attrs: { placeholder: '请输入昵称' } } },
                   { field: 'sex', title: '性别', span: 8, itemRender: { name: 'select', options: [] } },
                   { field: 'role', title: '角色', span: 8, folding: true, itemRender: { name: 'input', attrs: { placeholder: '请输入角色' } } },

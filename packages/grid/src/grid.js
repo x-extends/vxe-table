@@ -8,13 +8,9 @@ const methods = {}
 const propKeys = Object.keys(Table.props)
 
 function renderFormContent (h, _vm) {
-  const { $scopedSlots, proxyConfig, proxyOpts, formData, formConfig, formOpts, formRender } = _vm
+  const { $scopedSlots, proxyConfig, proxyOpts, formData, formConfig, formOpts } = _vm
   if ($scopedSlots.form) {
     return $scopedSlots.form.call(_vm, { $grid: _vm }, h)
-  }
-  const compConf = formRender ? VXETable.renderer.get(formRender.name) : null
-  if (compConf && compConf.renderForm) {
-    return compConf.renderForm.call(_vm, h, formRender, { data: proxyConfig && proxyOpts.form ? formData : formConfig.data }, { $grid: _vm })
   }
   if (formOpts.items) {
     return [
@@ -51,9 +47,7 @@ export default {
     pagerConfig: [Boolean, Object],
     proxyConfig: Object,
     toolbar: [Boolean, Object],
-    toolbarRender: Object,
     formConfig: [Boolean, Object],
-    formRender: Object,
     ...Table.props
   },
   provide () {
@@ -95,7 +89,7 @@ export default {
       return Object.assign({}, GlobalConfig.grid.formConfig, this.formConfig)
     },
     toolbarOpts () {
-      return Object.assign({}, GlobalConfig.grid.toolbar, this.toolbar, { rConfig: this.toolbarRender })
+      return Object.assign({}, GlobalConfig.grid.toolbar, this.toolbar)
     },
     toolbarSlots () {
       let { $scopedSlots, toolbar, toolbarOpts } = this

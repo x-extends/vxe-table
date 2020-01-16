@@ -6,28 +6,35 @@ import { UtilTools, DomTools, GlobalEvent } from '../../tools'
 /**
  * 渲染按钮
  */
-function renderBtn (h, _vm, compConf) {
-  const { _e, $scopedSlots, $xegrid, $xetable, data, rConfig, buttons = [] } = _vm
+function renderBtns (h, _vm) {
+  const { _e, $scopedSlots, $xegrid, $xetable, buttons = [] } = _vm
   if ($scopedSlots.buttons) {
     return $scopedSlots.buttons.call(_vm, { $grid: $xegrid, $table: $xetable }, h)
   }
-  if (compConf && compConf.renderButtons) {
-    return compConf.renderButtons.call(_vm, h, rConfig, { data }, { $grid: $xegrid, $table: $xetable })
-  }
   return buttons.map(item => {
-    return item.visible === false ? _e() : h('vxe-button', {
+    const { name, visible, icon, type, disabled, loading, dropdowns, buttonRender } = item
+    const compConf = buttonRender ? VXETable.renderer.get(buttonRender.name) : null
+    if (visible === false) {
+      return _e()
+    }
+    if (compConf && compConf.renderButton) {
+      return h('span', {
+        class: 'vxe-button--item'
+      }, compConf.renderButton.call(_vm, h, buttonRender, { button: item }, { $grid: $xegrid, $table: $xetable }))
+    }
+    return h('vxe-button', {
       on: {
         click: evnt => _vm.btnEvent(evnt, item)
       },
       props: {
-        icon: item.icon,
-        type: item.type,
-        disabled: item.disabled,
-        loading: item.loading
+        icon,
+        type,
+        disabled,
+        loading
       },
-      scopedSlots: item.dropdowns && item.dropdowns.length ? {
-        default: () => UtilTools.getFuncText(item.name),
-        dropdowns: () => item.dropdowns.map(child => {
+      scopedSlots: dropdowns && dropdowns.length ? {
+        default: () => UtilTools.getFuncText(name),
+        dropdowns: () => dropdowns.map(child => {
           return child.visible === false ? _e() : h('vxe-button', {
             on: {
               click: evnt => _vm.btnEvent(evnt, child)
@@ -41,21 +48,17 @@ function renderBtn (h, _vm, compConf) {
           }, UtilTools.getFuncText(child.name))
         })
       } : null
-    }, UtilTools.getFuncText(item.name))
+    }, UtilTools.getFuncText(name))
   })
 }
 
 /**
  * 渲染右侧工具
  */
-function renderRightTool (h, _vm, compConf) {
-  let { $scopedSlots, $xegrid, $xetable, rConfig } = _vm
-  const comp = $xegrid || $xetable
+function renderRightTools (h, _vm) {
+  let { $scopedSlots, $xegrid, $xetable } = _vm
   if ($scopedSlots.tools) {
     return $scopedSlots.tools.call(_vm, { $grid: $xegrid, $table: $xetable }, h)
-  }
-  if (compConf && compConf.renderTools) {
-    return compConf.renderTools.call(_vm, h, rConfig, comp ? comp.params : null, { $grid: $xegrid, $table: $xetable })
   }
   return []
 }
@@ -74,8 +77,7 @@ export default {
     custom: [Boolean, Object],
     buttons: { type: Array, default: () => GlobalConfig.toolbar.buttons },
     size: String,
-    data: Object,
-    rConfig: Object
+    data: Object
   },
   inject: {
     $xegrid: {
@@ -154,10 +156,9 @@ export default {
     GlobalEvent.off(this, 'blur')
   },
   render (h) {
-    let { $xegrid, rConfig, loading, customStore, importOpts, exportOpts, refresh, refreshOpts, zoom, zoomOpts, custom, setting, customOpts, vSize, tableFullColumn } = this
+    let { $xegrid, loading, customStore, importOpts, exportOpts, refresh, refreshOpts, zoom, zoomOpts, custom, setting, customOpts, vSize, tableFullColumn } = this
     let customBtnOns = {}
     let customWrapperOns = {}
-    let compConf = rConfig ? VXETable.renderer.get(rConfig.name) : null
     if (custom || setting) {
       if (customOpts.trigger === 'manual') {
         // 手动触发
@@ -180,10 +181,10 @@ export default {
     }, [
       h('div', {
         class: 'vxe-button--wrapper'
-      }, renderBtn(h, this, compConf)),
+      }, renderBtns(h, this)),
       h('div', {
         class: 'vxe-tools--wrapper'
-      }, renderRightTool(h, this, compConf)),
+      }, renderRightTools(h, this)),
       h('div', {
         class: 'vxe-tools--operate'
       }, [

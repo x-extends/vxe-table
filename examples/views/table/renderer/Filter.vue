@@ -8,6 +8,7 @@
       isFooter 是否显示底部按钮<br>
       renderFilter (h, renderOpts, params, context) 渲染函数<br>
       filterMethod ({ option, row, column }) 筛选函数<br>
+      <span class="green">参数说明 params = { column }</span><br>
       <span class="red">（注：实际开发中应该将业务封装成一个组件，不要把复杂的渲染逻辑写在渲染器中）</span>
     </p>
 

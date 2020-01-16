@@ -197,7 +197,6 @@ module.exports = {
         rendererEdit: '可编辑渲染器',
         rendererToolbar: '工具栏渲染器',
         rendererForm: '表单渲染器',
-        rendererItem: '表单项渲染器',
 
         interceptor: '(进阶) 事件拦截器',
 
@@ -569,6 +568,7 @@ module.exports = {
           titleWidth: '标题宽度',
           folding: '默认收起',
           collapseNode: '折叠节点',
+          titlePrefix: '前缀配置项',
           itemRender: '项渲染器配置项'
         }
       }

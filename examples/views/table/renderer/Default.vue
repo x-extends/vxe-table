@@ -4,6 +4,7 @@
       默认的渲染器 <table-column-api-link prop="cell-render"/><br>
       配置参数：<br>
       renderDefault (h, renderOpts, params, context) 渲染函数<br>
+      <span class="green">参数说明 params = { row, column }</span><br>
       <span class="red">（注：实际开发中应该将业务封装成一个组件，不要把复杂的渲染逻辑写在渲染器中）</span>
     </p>
 

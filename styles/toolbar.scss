@@ -55,6 +55,14 @@
   .vxe-button--wrapper {
     flex-grow: 1;
     text-align: left;
+    & > .vxe-button+.vxe-button--item,
+    & > .vxe-button--item+.vxe-button,
+    & > .vxe-button--item+.vxe-button--item {
+      margin-left: 0.8em;
+    }
+    & > .vxe-button--item {
+      display: inline-block;
+    }
   }
   .vxe-tools--wrapper {
     & > .vxe-button {

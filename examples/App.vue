@@ -1661,22 +1661,16 @@ export default {
                 name: 'RendererEdit'
               }
             },
-            // {
-            //   label: 'app.aside.nav.rendererToolbar',
-            //   locat: {
-            //     name: 'RendererToolbar'
-            //   }
-            // },
-            // {
-            //   label: 'app.aside.nav.rendererForm',
-            //   locat: {
-            //     name: 'RendererForm'
-            //   }
-            // },
             {
-              label: 'app.aside.nav.rendererItem',
+              label: 'app.aside.nav.rendererToolbar',
               locat: {
-                name: 'RendererItem'
+                name: 'RendererToolbar'
+              }
+            },
+            {
+              label: 'app.aside.nav.rendererForm',
+              locat: {
+                name: 'RendererForm'
               }
             }
           ]

@@ -90,25 +90,6 @@ const apis = [
           ]
         }, toolbarSlots])
       },
-      // {
-      //   name: 'toolbar-render',
-      //   descKey: 'app.api.grid.desc.toolbarRender',
-      //   version: '2.8',
-      //   type: 'Object',
-      //   enum: '',
-      //   defVal: '',
-      //   list: [
-      //     {
-      //       name: 'name',
-      //       desc: '渲染器名称',
-      //       version: '',
-      //       type: 'String',
-      //       enum: '',
-      //       defVal: '',
-      //       list: []
-      //     }
-      //   ]
-      // },
       {
         name: 'pager-config',
         descKey: 'app.api.grid.desc.pagerConfig',
