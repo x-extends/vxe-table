@@ -19,6 +19,7 @@ const components = [
   'filter',
   'loading',
   'menu',
+  'export',
   'toolbar',
   'grid',
   'excel',
@@ -31,7 +32,6 @@ const components = [
   'tooltip',
   'form',
 
-  'export',
   'keyboard',
   'resize',
   'v-x-e-table'

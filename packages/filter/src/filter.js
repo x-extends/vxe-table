@@ -24,20 +24,20 @@ export default {
   },
   methods: {
     renderOptions (h, filterRender, compConf) {
-      let { $parent: $table, filterStore } = this
+      let { $parent: $xetable, filterStore } = this
       let { args, column, multiple } = filterStore
       let { slots } = column
       if (slots && slots.filter) {
         return [
           h('div', {
             class: 'vxe-table--filter-template'
-          }, slots.filter.call($table, Object.assign({ $table, context: this }, args), h))
+          }, slots.filter.call($xetable, Object.assign({ $table: $xetable, context: this }, args), h))
         ]
       } else if (compConf && compConf.renderFilter) {
         return [
           h('div', {
             class: 'vxe-table--filter-template'
-          }, compConf.renderFilter.call($table, h, filterRender, args, this))
+          }, compConf.renderFilter.call($xetable, h, filterRender, args, this))
         ]
       }
       return [
@@ -57,7 +57,12 @@ export default {
                 this.changeAllOption(evnt, !filterStore.isAllSelected)
               }
             }
-          }, GlobalConfig.i18n('vxe.table.allFilter'))
+          }, [
+            h('i', {
+              class: 'vxe-checkbox--icon'
+            }),
+            GlobalConfig.i18n('vxe.table.allFilter')
+          ])
         ]),
         h('ul', {
           class: 'vxe-table--filter-body'
@@ -74,7 +79,12 @@ export default {
                 this.changeOption(evnt, !item.checked, item)
               }
             }
-          }, UtilTools.formatText(item.label, 1))
+          }, [
+            h('i', {
+              class: 'vxe-checkbox--icon'
+            }),
+            UtilTools.formatText(item.label, 1)
+          ])
         }))
       ]
     },
