@@ -132,7 +132,7 @@ module.exports = {
         insert: '插入数据',
         delete: '删除数据',
         revert: '还原数据',
-        status: '编辑状态',
+        status: '数据更新',
         cellDisable: '禁用编辑 cell',
         rowDisable: '禁用编辑 row',
         cellValid: '数据校验 call',
@@ -553,7 +553,7 @@ module.exports = {
       form: {
         desc: {
           data: '表单数据',
-          span: '所有项的栅格占据的列数',
+          span: '所有项的栅格占据的列数（共 24 分栏）',
           align: '所有项的内容对齐方式',
           titleAlign: '所有项的标题对齐方式',
           titleWidth: '所有项的标题宽度'

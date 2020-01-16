@@ -3896,11 +3896,16 @@ export default {
           inputElem = cell.querySelector(compRender.autofocus)
         }
         if (inputElem) {
-          inputElem[autoselect ? 'select' : 'focus']()
-          if (browse.msie) {
-            let textRange = inputElem.createTextRange()
-            textRange.collapse(false)
-            textRange.select()
+          inputElem.focus()
+          if (autoselect) {
+            inputElem.select()
+          } else {
+            // 保持一致行为，光标移到末端
+            if (browse.msie) {
+              let textRange = inputElem.createTextRange()
+              textRange.collapse(false)
+              textRange.select()
+            }
           }
         } else {
           // 显示到可视区中
@@ -4278,15 +4283,13 @@ export default {
       return this.$nextTick().then(this.recalculate)
     },
     handleAsyncRowExpand (row) {
-      let { fullAllDataRowMap, rowExpandeds, expandLazyLoadeds, expandOpts } = this
-      let { loadMethod } = expandOpts
-      let rest = fullAllDataRowMap.get(row)
+      let rest = this.fullAllDataRowMap.get(row)
       return new Promise(resolve => {
-        expandLazyLoadeds.push(row)
-        loadMethod({ $table: this, row }).catch(e => e).then(() => {
+        this.expandLazyLoadeds.push(row)
+        this.expandOpts.loadMethod({ $table: this, row }).catch(e => e).then(() => {
           rest.expandLoaded = true
-          XEUtils.remove(expandLazyLoadeds, item => item === row)
-          rowExpandeds.push(row)
+          XEUtils.remove(this.expandLazyLoadeds, item => item === row)
+          this.rowExpandeds.push(row)
           resolve(this.$nextTick().then(this.recalculate))
         })
       })

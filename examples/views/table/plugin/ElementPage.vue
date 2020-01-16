@@ -138,16 +138,16 @@ export default {
         totalResult: 0
       },
       formData: {
-        name: null,
-        role: null,
+        name: '',
+        role: '',
         sex: null,
         age: null,
         region: [],
         date: null,
         date5: null,
         flag: false,
-        slider: 1,
-        rate: 1
+        slider: 0,
+        rate: 0
       },
       demoCodes: [
         `
@@ -275,16 +275,16 @@ export default {
                 totalResult: 0
               },
               formData: {
-                name: null,
-                role: null,
+                name: '',
+                role: '',
                 sex: null,
                 age: null,
                 region: [],
                 date: null,
                 date5: null,
                 flag: false,
-                slider: 1,
-                rate: 1
+                slider: 0,
+                rate: 0
               }
             }
           },

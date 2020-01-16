@@ -45,7 +45,7 @@
     <vxe-table
       border
       :data="tableData2"
-      :expand-config="{lazy: true, loadMethod: loadContentMethod2}">
+      :expand-config="{accordion: true, lazy: true, loadMethod: loadContentMethod2}">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column type="expand" width="80">
         <template v-slot:content="{ row }">
@@ -154,7 +154,7 @@ export default {
         <vxe-table
           border
           :data="tableData"
-          :expand-config="{lazy: true, loadMethod: loadContentMethod}">
+          :expand-config="{accordion: true, lazy: true, loadMethod: loadContentMethod}">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column type="expand" width="80">
             <template v-slot:content="{ row }">

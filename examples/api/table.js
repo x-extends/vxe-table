@@ -1237,7 +1237,7 @@ const apis = [
           },
           {
             name: 'accordion',
-            desc: '对于同一级的节点，每次只能展开一个',
+            desc: '每次只能展开一行',
             version: '',
             type: 'Boolean',
             enum: '',

@@ -134,7 +134,7 @@ export default {
         totalResult: 0
       },
       formData: {
-        name: null,
+        name: '',
         role: '',
         sex: null,
         age: null,
@@ -142,7 +142,7 @@ export default {
         date: null,
         date6: null,
         flag: false,
-        rate: 1
+        rate: 0
       },
       demoCodes: [
         `
@@ -266,7 +266,7 @@ export default {
                 totalResult: 0
               },
               formData: {
-                name: null,
+                name: '',
                 role: '',
                 sex: null,
                 age: null,
@@ -274,7 +274,7 @@ export default {
                 date: null,
                 date6: null,
                 flag: false,
-                rate: 1
+                rate: 0
               }
             }
           },

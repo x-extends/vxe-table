@@ -132,14 +132,14 @@ export default {
         totalResult: 0
       },
       formData: {
-        name: null,
+        name: '',
         role: '',
         sex: null,
         age: null,
         region: [],
         date: null,
         flag: false,
-        rate: 1
+        rate: 0
       },
       demoCodes: [
         `
@@ -261,14 +261,14 @@ export default {
                 totalResult: 0
               },
               formData: {
-                name: null,
+                name: '',
                 role: '',
                 sex: null,
                 age: null,
                 region: [],
                 date: null,
                 flag: false,
-                rate: 1
+                rate: 0
               }
             }
           },

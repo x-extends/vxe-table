@@ -323,9 +323,9 @@ export default {
         }
         if (formConfig && proxyOpts.form && formOpts.items) {
           const formData = {}
-          formOpts.items.forEach(({ field }) => {
+          formOpts.items.forEach(({ field, itemRender }) => {
             if (field) {
-              formData[field] = null
+              formData[field] = itemRender && !XEUtils.isUndefined(itemRender.defaultValue) ? itemRender.defaultValue : null
             }
           })
           this.formData = formData
@@ -654,6 +654,10 @@ export default {
       UtilTools.emitEvent(this, 'form-submit', [Object.assign({ $grid: this }, params), evnt])
     },
     resetEvent (params, evnt) {
+      let { proxyConfig } = this
+      if (proxyConfig) {
+        this.commitProxy('reload')
+      }
       UtilTools.emitEvent(this, 'form-reset', [Object.assign({ $grid: this }, params), evnt])
     },
     togglCollapseEvent () {
