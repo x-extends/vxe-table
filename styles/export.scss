@@ -16,8 +16,8 @@
       &:before {
         content: "";
         position: absolute;
-        height: 1.2em;
-        width: 1.2em;
+        height: 1em;
+        width: 1em;
         top: 0.4em;
         left: 0.6em;
         border-radius: 0.2em;
@@ -41,10 +41,10 @@
     &.is--checked {
       .vxe-checkbox--icon {
         &:after {
-          height: 0.7em;
-          width: 0.34em;
-          top: 0.6em;
-          left: 1em;
+          height: 0.64em;
+          width: 0.32em;
+          top: 0.5em;
+          left: 0.95em;
           border: 2px solid #ffffff;
           border-left: 0;
           border-top: 0;
@@ -55,7 +55,7 @@
     &.is--indeterminate {
       .vxe-checkbox--icon {
         &:after {
-          top: 0.9em;
+          top: 0.85em;
           left: 0.65em;
           height: 0.18em;
           width: 1em;
@@ -139,7 +139,7 @@
     user-select: none;
     & > ul {
       & > li {
-        padding: 4px 30px 4px 32px;
+        padding: 0.2em 1em 0.2em 2.25em;
       }
     }
     .vxe-export--panel-column-header {
@@ -186,14 +186,34 @@
   }
   .vxe-export--panel-btns {
     text-align: right;
-    margin-top: 10px;
+    margin-top: 0.25em;
   }
 }
 .vxe-modal--wrapper {
-  &.size--mini,
+  .vxe-export--panel-column-option {
+    & > .vxe-checkbox--icon {
+      font-size: $vxe-checkbox-font-size-default;
+    }
+  }
+  &.size--medium {
+    .vxe-export--panel-column-option {
+      & > .vxe-checkbox--icon {
+        font-size: $vxe-checkbox-font-size-medium;
+      }
+    }
+  }
   &.size--small {
-    .vxe-export--panel {
-      font-size: 12px;
+    .vxe-export--panel-column-option {
+      & > .vxe-checkbox--icon {
+        font-size: $vxe-checkbox-font-size-small;
+      }
+    }
+  }
+  &.size--mini {
+    .vxe-export--panel-column-option {
+      & > .vxe-checkbox--icon {
+        font-size: $vxe-checkbox-font-size-mini;
+      }
     }
   }
 }

@@ -34,6 +34,11 @@
   &.size--medium {
     font-size: $vxe-font-size-medium;
     height: $vxe-toolbar-height-medium;
+    .vxe-custom--option {
+      & > .vxe-checkbox--icon {
+        font-size: $vxe-checkbox-font-size-medium;
+      }
+    }
     .vxe-tools--operate-btn {
       font-size: $vxe-font-size-medium + 4px;
     }
@@ -41,6 +46,11 @@
   &.size--small {
     font-size: $vxe-font-size-small;
     height: $vxe-toolbar-height-small;
+    .vxe-custom--option {
+      & > .vxe-checkbox--icon {
+        font-size: $vxe-checkbox-font-size-small;
+      }
+    }
     .vxe-tools--operate-btn {
       font-size: $vxe-font-size-small + 4px;
     }
@@ -48,6 +58,11 @@
   &.size--mini {
     font-size: $vxe-font-size-mini;
     height: $vxe-toolbar-height-mini;
+    .vxe-custom--option {
+      & > .vxe-checkbox--icon {
+        font-size: $vxe-checkbox-font-size-mini;
+      }
+    }
     .vxe-tools--operate-btn {
       font-size: $vxe-font-size-mini + 4px;
     }
@@ -105,6 +120,11 @@
       display: block;
     }
   }
+  .vxe-custom--option {
+    & > .vxe-checkbox--icon {
+      font-size: $vxe-checkbox-font-size-default;
+    }
+  }
   .vxe-custom--option-wrapper {
     display: none;
     position: absolute;
@@ -128,7 +148,7 @@
       & > li {
         max-width: 180px;
         min-width: 100px;
-        padding: 0.25em 0.8em 0.25em 2.2em;
+        padding: 0.2em 1em 0.2em 2.25em;
       }
     }
     .vxe-custom--footer {
@@ -171,8 +191,8 @@
       &:before {
         content: "";
         position: absolute;
-        height: 1.2em;
-        width: 1.2em;
+        height: 1em;
+        width: 1em;
         top: 0.4em;
         left: 0.6em;
         border-radius: 0.2em;
@@ -196,10 +216,10 @@
     &.is--checked {
       .vxe-checkbox--icon {
         &:after {
-          height: 0.7em;
-          width: 0.34em;
-          top: 0.6em;
-          left: 1em;
+          height: 0.64em;
+          width: 0.32em;
+          top: 0.52em;
+          left: 0.94em;
           border: 2px solid #ffffff;
           border-left: 0;
           border-top: 0;

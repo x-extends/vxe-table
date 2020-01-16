@@ -135,7 +135,7 @@ export default {
         'is--mask': mask,
         'is--maximize': zoomLocat,
         'is--visible': contentVisible,
-        active: visible
+        'is--active': visible
       }],
       style: {
         zIndex: this.modalZindex,
