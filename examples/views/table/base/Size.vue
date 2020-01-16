@@ -29,7 +29,7 @@
       </vxe-form-item>
     </vxe-form>
 
-    <vxe-toolbar>
+    <vxe-toolbar export custom>
       <template v-slot:buttons>
         <vxe-input v-model="formData.name" placeholder="请输入名称" clearable></vxe-input>
         <vxe-button status="primary">查询</vxe-button>
@@ -37,6 +37,7 @@
     </vxe-toolbar>
 
     <vxe-table
+      export-config
       :data="tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column type="radio" width="60"></vxe-table-column>
@@ -90,7 +91,7 @@
       </vxe-form-item>
     </vxe-form>
 
-    <vxe-toolbar size="medium">
+    <vxe-toolbar size="medium" export custom>
       <template v-slot:buttons>
         <vxe-input v-model="formData.name" placeholder="请输入名称" clearable></vxe-input>
         <vxe-button status="primary">查询</vxe-button>
@@ -98,6 +99,7 @@
     </vxe-toolbar>
 
     <vxe-table
+      export-config
       size="medium"
       :data="tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
@@ -153,7 +155,7 @@
       </vxe-form-item>
     </vxe-form>
 
-    <vxe-toolbar size="small">
+    <vxe-toolbar size="small" export custom>
       <template v-slot:buttons>
         <vxe-input v-model="formData.name" placeholder="请输入名称" clearable></vxe-input>
         <vxe-button status="primary">查询</vxe-button>
@@ -161,6 +163,7 @@
     </vxe-toolbar>
 
     <vxe-table
+      export-config
       size="small"
       :data="tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
@@ -216,7 +219,7 @@
       </vxe-form-item>
     </vxe-form>
 
-    <vxe-toolbar size="mini">
+    <vxe-toolbar size="mini" export custom>
       <template v-slot:buttons>
         <vxe-input v-model="formData.name" placeholder="请输入名称" clearable></vxe-input>
         <vxe-button status="primary">查询</vxe-button>
@@ -224,6 +227,7 @@
     </vxe-toolbar>
 
     <vxe-table
+      export-config
       size="mini"
       :data="tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>

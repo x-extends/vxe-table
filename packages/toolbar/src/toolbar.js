@@ -264,10 +264,10 @@ export default {
               class: 'vxe-custom--header'
             }, [
               h('li', {
-                class: {
+                class: ['vxe-custom--option', {
                   'is--checked': customStore.isAll,
                   'is--indeterminate': customStore.isIndeterminate
-                },
+                }],
                 attrs: {
                   title: GlobalConfig.i18n('vxe.table.allTitle')
                 },

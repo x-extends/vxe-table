@@ -12,7 +12,16 @@
   color: $vxe-font-color;
   font-family: $vxe-font-family;
   transition: top .4s;
-  &.active {
+  &.size--medium {
+    font-size: $vxe-font-size-medium;
+  }
+  &.size--small {
+    font-size: $vxe-font-size-small;
+  }
+  &.size--mini {
+    font-size: $vxe-font-size-mini;
+  }
+  &.is--active {
     display: block;
   }
   &.is--visible {
@@ -70,28 +79,6 @@
           @include animatTransition(all, .2s, ease-out);
         }
       }
-    }
-  }
-  &.size--small,
-  &.size--mini {
-    font-size: 12px;
-    .vxe-modal--box {
-      padding: 6px 0;
-    }
-    .vxe-modal--body {
-      padding: 4px 14px 10px 14px;
-    }
-    .vxe-modal--footer {
-      padding: 4px 14px 8px 14px;
-    }
-    .vxe-modal--header {
-      font-size: 14px;
-      padding: 6px 30px 8px 14px;
-    }
-    .vxe-modal--zoom-btn,
-    .vxe-modal--close-btn {
-      font-size: 16px;
-      top: 10px;
     }
   }
   &.type--message,
@@ -169,7 +156,6 @@
     background-color: #fff;
     border-radius: 4px;
     border: 1px solid #ebeef5;
-    font-size: 14px;
     text-align: left;
     pointer-events: auto;
     opacity: 0;
@@ -236,13 +222,13 @@
   .vxe-modal--body {
     display: flex;
     flex-grow: 1;
-    padding: 10px 16px 12px 16px;
+    padding: 0.6em 1em;
   }
   .vxe-modal--header {
     flex-shrink: 0;
-    font-size: 16px;
+    font-size: 1.1em;
     font-weight: 700;
-    padding: 10px 40px 8px 16px;
+    padding: 0.6em 2.8em 0.6em 1em;
     border-bottom: 1px solid #eee;
     background-color: $vxe-modal-header-background-color;
     border-radius: 2px 2px 0 0;
@@ -254,10 +240,9 @@
   }
   .vxe-modal--zoom-btn,
   .vxe-modal--close-btn {
-    font-size: 18px;
     position: absolute;
     right: 14px;
-    top: 12px;
+    top: 0.85em;
     z-index: 1;
     color: $vxe-table-column-icon-border-color;
     cursor: pointer;
@@ -275,7 +260,7 @@
   .vxe-modal--footer {
     flex-shrink: 0;
     text-align: right;
-    padding: 6px 16px 10px 16px;
+    padding: 0.6em 1em;
   }
   &.is--maximize {
     .vxe-modal--box {
