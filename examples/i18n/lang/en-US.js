@@ -198,7 +198,6 @@ module.exports = {
         rendererEdit: 'Edit renderer',
         rendererToolbar: 'Toolbar renderer',
         rendererForm: 'Form renderer',
-        rendererItem: 'Form item renderer',
 
         interceptor: '(Advanced) Event interceptor',
 
@@ -570,6 +569,7 @@ module.exports = {
           titleWidth: 'Title width',
           folding: 'Default folding',
           collapseNode: 'Collapse node',
+          titlePrefix: 'Title prefix config',
           itemRender: 'Form item renderer config'
         }
       }

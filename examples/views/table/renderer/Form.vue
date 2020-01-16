@@ -1,9 +1,10 @@
 <template>
   <div>
     <p class="tip">
-      表单渲染器 <grid-api-link prop="form-render"/><br>
+      表单-项渲染器 <grid-api-link prop="item-render"/><br>
       配置参数：<br>
-      renderForm (h, renderOpts, params, context) 表单<br>
+      renderItem (h, renderOpts, params, context) 项<br>
+      <span class="green">参数说明 params = { data, property }</span><br>
       <span class="red">（注：实际开发中应该将业务封装成一个组件，不要把复杂的渲染逻辑写在渲染器中）</span>
     </p>
 
@@ -12,9 +13,8 @@
       resizable
       export-config
       height="400"
-      :form-config="tableForm"
-      :form-render="{name: 'FormSimple'}"
       :toolbar="{export: true, custom: true}"
+      :form-config="tableForm"
       :proxy-config="tableProxy"
       :columns="tableColumn">
     </vxe-grid>
@@ -36,14 +36,6 @@ import hljs from 'highlight.js'
 export default {
   data () {
     return {
-      tableForm: {
-        data: {
-          name: '',
-          age: '',
-          sex: '',
-          role: ''
-        }
-      },
       tableColumn: [
         { type: 'seq', width: 50 },
         { field: 'name', title: 'Name' },
@@ -51,18 +43,34 @@ export default {
         { field: 'sex', title: 'Sex' },
         { field: 'role', title: 'Role' }
       ],
+      tableForm: {
+        data: {
+          name: '',
+          age: ''
+        },
+        items: [
+          { field: 'name', title: '名称', itemRender: { name: 'FormItemInput', props: { clearable: true, placeholder: '请输入名称' } } },
+          { field: 'age', title: '年龄', itemRender: { name: 'FormItemInput', props: { type: 'number', clearable: true, placeholder: '请输入年龄' } } },
+          { itemRender: { name: 'input', attrs: { type: 'submit', value: '查询' } } },
+          { itemRender: { name: 'input', attrs: { type: 'reset', value: '重置' } } }
+        ]
+      },
       tableProxy: {
+        form: true,
         ajax: {
-          query: () => XEAjax.get('/api/user/list', this.tableForm.data)
+          query: ({ form }) => XEAjax.get('/api/user/list', form)
         }
       },
       demoCodes: [
         `
-        // 创建一个表单（仅用于简单示例，实际开发中应该封装成一个组件，不应该把复杂的渲染逻辑写在渲染器中）
-        VXETable.renderer.add('FormSimple', {
-          renderForm (h, renderOpts, params, context) {
+        // 创建一个表单-项渲染器
+        VXETable.renderer.add('FormItemInput', {
+          // 项显示模板
+          renderItem (h, renderOpts, params, context) {
+            const { data, property } = params
+            const props = renderOpts.props || {}
             return [
-              <form-simple formData={ params.data } params={ params } context={ context }></form-simple>
+              <vxe-input v-model={ data[property] } { ...{ props } }></vxe-input>
             ]
           }
         })
@@ -73,9 +81,8 @@ export default {
           resizable
           export-config
           height="400"
-          :form-config="tableForm"
-          :form-render="{name: 'FormSimple'}"
           :toolbar="{export: true, custom: true}"
+          :form-config="tableForm"
           :proxy-config="tableProxy"
           :columns="tableColumn">
         </vxe-grid>
@@ -84,14 +91,6 @@ export default {
         export default {
           data () {
             return {
-              tableForm: {
-                data: {
-                  name: '',
-                  age: '',
-                  sex: '',
-                  role: ''
-                }
-              },
               tableColumn: [
                 { type: 'seq', width: 50 },
                 { field: 'name', title: 'Name' },
@@ -99,9 +98,22 @@ export default {
                 { field: 'sex', title: 'Sex' },
                 { field: 'role', title: 'Role' }
               ],
+              tableForm: {
+                data: {
+                  name: '',
+                  age: ''
+                },
+                items: [
+                  { field: 'name', title: '名称', itemRender: { name: 'FormItemInput', props: { clearable: true, placeholder: '请输入名称' } } },
+                  { field: 'age', title: '年龄', itemRender: { name: 'FormItemInput', props: { type: 'number', clearable: true, placeholder: '请输入年龄' } } },
+                  { itemRender: { name: 'input', attrs: { type: 'submit', value: '查询' } } },
+                  { itemRender: { name: 'input', attrs: { type: 'reset', value: '重置' } } }
+                ]
+              },
               tableProxy: {
+                form: true,
                 ajax: {
-                  query: () => XEAjax.get('/api/user/list', this.tableForm.data)
+                  query: ({ form }) => XEAjax.get('/api/user/list', form)
                 }
               }
             }

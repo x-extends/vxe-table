@@ -80,6 +80,34 @@ const apis = [
         list: []
       },
       {
+        name: 'title-prefix',
+        descKey: 'app.api.formItem.desc.titlePrefix',
+        version: '',
+        type: 'Object',
+        enum: '',
+        defVal: '',
+        list: [
+          {
+            name: 'message',
+            desc: '提示消息',
+            version: '',
+            type: 'String',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'icon',
+            desc: '自定义图标',
+            version: '',
+            type: 'String',
+            enum: '',
+            defVal: '',
+            list: []
+          }
+        ]
+      },
+      {
         name: 'item-render',
         descKey: 'app.api.formItem.desc.itemRender',
         version: '',

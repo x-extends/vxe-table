@@ -5,7 +5,7 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  height: 52px;
+  height: $vxe-toolbar-height-default;
   font-size: $vxe-font-size;
   color: $vxe-font-color;
   font-family: $vxe-font-family;
@@ -32,29 +32,37 @@
     }
   }
   &.size--medium {
-    height: 50px;
+    font-size: $vxe-font-size-medium;
+    height: $vxe-toolbar-height-medium;
+    .vxe-tools--operate-btn {
+      font-size: $vxe-font-size-medium + 4px;
+    }
   }
   &.size--small {
-    height: 48px;
-    .vxe-custom--option-wrapper {
-      font-size: 13px;
-    }
-  }
-  &.size--mini {
-    height: 46px;
-    .vxe-custom--option-wrapper {
-      font-size: 12px;
-    }
-  }
-  &.size--small,
-  &.size--mini {
+    font-size: $vxe-font-size-small;
+    height: $vxe-toolbar-height-small;
     .vxe-tools--operate-btn {
-      font-size: 15px;
+      font-size: $vxe-font-size-small + 4px;
+    }
+  }
+  &.size--mini {
+    font-size: $vxe-font-size-mini;
+    height: $vxe-toolbar-height-mini;
+    .vxe-tools--operate-btn {
+      font-size: $vxe-font-size-mini + 4px;
     }
   }
   .vxe-button--wrapper {
     flex-grow: 1;
     text-align: left;
+    & > .vxe-button+.vxe-button--item,
+    & > .vxe-button--item+.vxe-button,
+    & > .vxe-button--item+.vxe-button--item {
+      margin-left: 0.8em;
+    }
+    & > .vxe-button--item {
+      display: inline-block;
+    }
   }
   .vxe-tools--wrapper {
     & > .vxe-button {
@@ -83,7 +91,7 @@
   .vxe-tools--operate-btn {
     padding: 8px;
     text-align: center;
-    font-size: 18px;
+    font-size: $vxe-font-size + 4px;
     user-select: none;
     cursor: pointer;
     &:hover {

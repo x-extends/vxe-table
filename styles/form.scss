@@ -18,6 +18,12 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   padding-right: 0.8em;
+  .vxe-form--item-title-prefix {
+    margin-right: 0.25em;
+    & > [class*="vxe-icon--"] {
+      margin-top: -0.2em;
+    }
+  }
 }
 
 .vxe-form--item-trigger-node {
@@ -27,7 +33,7 @@
   text-align: center;
   cursor: pointer;
   .vxe-form--item-trigger-icon {
-    margin: 0 0.2em;
+    margin: 0 0.25em;
     transition: all 0.1s;
   }
 }

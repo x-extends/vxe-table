@@ -7,6 +7,7 @@
       autofocus 自动聚焦的类名<br>
       renderEdit (h, renderOpts, params, context) 编辑的渲染函数<br>
       renderCell (h, renderOpts, params, context) 显示的渲染函数<br>
+      <span class="green">参数说明 params = { row, column }</span><br>
       <span class="red">（注：实际开发中应该将业务封装成一个组件，不要把复杂的渲染逻辑写在渲染器中）</span>
     </p>
 

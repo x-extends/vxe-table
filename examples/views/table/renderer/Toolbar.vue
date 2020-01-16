@@ -1,10 +1,10 @@
 <template>
   <div>
     <p class="tip">
-      工具栏渲染器 <grid-api-link prop="toolbar-render"/><br>
+      工具栏-按钮渲染器 <grid-api-link prop="buttonRender"/><br>
       配置参数：<br>
-      renderButtons (h, renderOpts, params, context) 按钮列表<br>
-      renderTools (h, renderOpts, params, context) 右侧工具列表<br>
+      renderButton (h, renderOpts, params, context) 按钮<br>
+      <span class="green">参数说明 params = { button }</span><br>
       <span class="red">（注：实际开发中应该将业务封装成一个组件，不要把复杂的渲染逻辑写在渲染器中）</span>
     </p>
 
@@ -12,9 +12,9 @@
       border
       resizable
       export-config
+      ref="xGrid"
       height="400"
       :toolbar="tableToolbar"
-      :toolbar-render="{ name: 'ToolbarInput' }"
       :proxy-config="tableProxy"
       :columns="tableColumn">
     </vxe-grid>
@@ -46,22 +46,25 @@ export default {
       tableToolbar: {
         export: true,
         custom: true,
-        data: {
-          name: ''
-        }
+        buttons: [
+          { name: '刷新', code: 'reload', icon: 'fa fa-refresh' },
+          { code: 'query', buttonRender: { name: 'ToolbarButtonRefresh', events: { click: this.btnClickEvent } } }
+        ]
       },
       tableProxy: {
         ajax: {
-          query: () => XEAjax.get('/api/user/list', this.tableToolbar.data)
+          query: () => XEAjax.get('/api/user/list')
         }
       },
       demoCodes: [
         `
-        // 创建一个表单（仅用于简单示例，实际开发中应该封装成一个组件，不应该把复杂的渲染逻辑写在渲染器中）
-        VXETable.renderer.add('FormSimple', {
-          renderForm (h, renderOpts, params, context) {
+        // 创建一个工具栏-按钮渲染器（仅用于简单示例，实际开发中应该封装成一个组件，不应该把复杂的渲染逻辑写在渲染器中）
+        VXETable.renderer.add('ToolbarButtonRefresh', {
+          renderButton (h, renderOpts, params, context) {
+            const { events } = renderOpts
+            const { button } = params
             return [
-              <form-simple formData={ params.data } params={ params } context={ context }></form-simple>
+              <vxe-button onClick={ e => { events.click(button) } }>自定义按钮</vxe-button>
             ]
           }
         })
@@ -71,9 +74,9 @@ export default {
           border
           resizable
           export-config
+          ref="xGrid"
           height="400"
           :toolbar="tableToolbar"
-          :toolbar-render="{ name: 'ToolbarInput' }"
           :proxy-config="tableProxy"
           :columns="tableColumn">
         </vxe-grid>
@@ -92,14 +95,23 @@ export default {
               tableToolbar: {
                 export: true,
                 custom: true,
-                data: {
-                  name: ''
-                }
+                buttons: [
+                  { code: 'query', buttonRender: { name: 'ToolbarButtonRefresh', events: { click: this.btnClickEvent } } }
+                ]
               },
               tableProxy: {
                 ajax: {
-                  query: () => XEAjax.get('/api/user/list', this.tableToolbar.data)
+                  query: () => XEAjax.get('/api/user/list')
                 }
+              }
+            }
+          },
+          methods: {
+            btnClickEvent (button) {
+              switch (button.code) {
+                case 'query':
+                  this.$refs.xGrid.commitProxy(button.code)
+                  break
               }
             }
           }
@@ -112,6 +124,15 @@ export default {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
       hljs.highlightBlock(block)
     })
+  },
+  methods: {
+    btnClickEvent (button) {
+      switch (button.code) {
+        case 'query':
+          this.$refs.xGrid.commitProxy(button.code)
+          break
+      }
+    }
   }
 }
 </script>

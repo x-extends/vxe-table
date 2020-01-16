@@ -6,28 +6,35 @@ import { UtilTools, DomTools, GlobalEvent } from '../../tools'
 /**
  * 渲染按钮
  */
-function renderBtn (h, _vm, compConf) {
-  const { _e, $scopedSlots, $grid, $table, data, rConfig, buttons = [] } = _vm
+function renderBtns (h, _vm) {
+  const { _e, $scopedSlots, $xegrid, $xetable, buttons = [] } = _vm
   if ($scopedSlots.buttons) {
-    return $scopedSlots.buttons.call(_vm, { $grid, $table }, h)
-  }
-  if (compConf && compConf.renderButtons) {
-    return compConf.renderButtons.call(_vm, h, rConfig, { data }, { $grid, $table })
+    return $scopedSlots.buttons.call(_vm, { $grid: $xegrid, $table: $xetable }, h)
   }
   return buttons.map(item => {
-    return item.visible === false ? _e() : h('vxe-button', {
+    const { name, visible, icon, type, disabled, loading, dropdowns, buttonRender } = item
+    const compConf = buttonRender ? VXETable.renderer.get(buttonRender.name) : null
+    if (visible === false) {
+      return _e()
+    }
+    if (compConf && compConf.renderButton) {
+      return h('span', {
+        class: 'vxe-button--item'
+      }, compConf.renderButton.call(_vm, h, buttonRender, { button: item }, { $grid: $xegrid, $table: $xetable }))
+    }
+    return h('vxe-button', {
       on: {
         click: evnt => _vm.btnEvent(evnt, item)
       },
       props: {
-        icon: item.icon,
-        type: item.type,
-        disabled: item.disabled,
-        loading: item.loading
+        icon,
+        type,
+        disabled,
+        loading
       },
-      scopedSlots: item.dropdowns && item.dropdowns.length ? {
-        default: () => UtilTools.getFuncText(item.name),
-        dropdowns: () => item.dropdowns.map(child => {
+      scopedSlots: dropdowns && dropdowns.length ? {
+        default: () => UtilTools.getFuncText(name),
+        dropdowns: () => dropdowns.map(child => {
           return child.visible === false ? _e() : h('vxe-button', {
             on: {
               click: evnt => _vm.btnEvent(evnt, child)
@@ -41,21 +48,17 @@ function renderBtn (h, _vm, compConf) {
           }, UtilTools.getFuncText(child.name))
         })
       } : null
-    }, UtilTools.getFuncText(item.name))
+    }, UtilTools.getFuncText(name))
   })
 }
 
 /**
  * 渲染右侧工具
  */
-function renderRightTool (h, _vm, compConf) {
-  let { $scopedSlots, $grid, $table, rConfig } = _vm
-  const comp = $grid || $table
+function renderRightTools (h, _vm) {
+  let { $scopedSlots, $xegrid, $xetable } = _vm
   if ($scopedSlots.tools) {
-    return $scopedSlots.tools.call(_vm, { $grid, $table }, h)
-  }
-  if (compConf && compConf.renderTools) {
-    return compConf.renderTools.call(_vm, h, rConfig, comp ? comp.params : null, { $grid, $table })
+    return $scopedSlots.tools.call(_vm, { $grid: $xegrid, $table: $xetable }, h)
   }
   return []
 }
@@ -74,17 +77,16 @@ export default {
     custom: [Boolean, Object],
     buttons: { type: Array, default: () => GlobalConfig.toolbar.buttons },
     size: String,
-    data: Object,
-    rConfig: Object
+    data: Object
   },
   inject: {
-    $grid: {
+    $xegrid: {
       default: null
     }
   },
   data () {
     return {
-      $table: null,
+      $xetable: null,
       isRefresh: false,
       tableFullColumn: [],
       customStore: {
@@ -131,8 +133,8 @@ export default {
     }
     this.$nextTick(() => {
       this.updateConf()
-      const comp = this.$grid || this.$table
-      if (refresh && !this.$grid && !refreshOpts.query) {
+      const comp = this.$xegrid || this.$xetable
+      if (refresh && !this.$xegrid && !refreshOpts.query) {
         UtilTools.warn('vxe.error.notFunc', ['query'])
       }
       if (comp) {
@@ -154,10 +156,9 @@ export default {
     GlobalEvent.off(this, 'blur')
   },
   render (h) {
-    let { $grid, rConfig, loading, customStore, importOpts, exportOpts, refresh, refreshOpts, zoom, zoomOpts, custom, setting, customOpts, vSize, tableFullColumn } = this
+    let { $xegrid, loading, customStore, importOpts, exportOpts, refresh, refreshOpts, zoom, zoomOpts, custom, setting, customOpts, vSize, tableFullColumn } = this
     let customBtnOns = {}
     let customWrapperOns = {}
-    let compConf = rConfig ? VXETable.renderer.get(rConfig.name) : null
     if (custom || setting) {
       if (customOpts.trigger === 'manual') {
         // 手动触发
@@ -180,10 +181,10 @@ export default {
     }, [
       h('div', {
         class: 'vxe-button--wrapper'
-      }, renderBtn(h, this, compConf)),
+      }, renderBtns(h, this)),
       h('div', {
         class: 'vxe-tools--wrapper'
-      }, renderRightTool(h, this, compConf)),
+      }, renderRightTools(h, this)),
       h('div', {
         class: 'vxe-tools--operate'
       }, [
@@ -226,17 +227,17 @@ export default {
             class: this.isRefresh ? (refreshOpts.iconLoading || GlobalConfig.icon.refreshLoading) : (refreshOpts.icon || GlobalConfig.icon.refresh)
           })
         ]) : null,
-        zoom && $grid ? h('div', {
+        zoom && $xegrid ? h('div', {
           class: 'vxe-tools--operate-btn',
           attrs: {
-            title: GlobalConfig.i18n(`vxe.toolbar.zoom${$grid.isMaximized() ? 'Out' : 'In'}`)
+            title: GlobalConfig.i18n(`vxe.toolbar.zoom${$xegrid.isMaximized() ? 'Out' : 'In'}`)
           },
           on: {
-            click: () => $grid.zoom()
+            click: () => $xegrid.zoom()
           }
         }, [
           h('i', {
-            class: $grid.isMaximized() ? (zoomOpts.iconOut || GlobalConfig.icon.zoomOut) : (zoomOpts.iconIn || GlobalConfig.icon.zoomIn)
+            class: $xegrid.isMaximized() ? (zoomOpts.iconOut || GlobalConfig.icon.zoomOut) : (zoomOpts.iconIn || GlobalConfig.icon.zoomIn)
           })
         ]) : null,
         custom || setting ? h('div', {
@@ -328,8 +329,7 @@ export default {
     updateConf () {
       let { $children } = this.$parent
       let selfIndex = $children.indexOf(this)
-      this.$table = XEUtils.find($children, (comp, index) => comp && comp.refreshColumn && index > selfIndex && comp.$vnode.componentOptions.tag === 'vxe-table')
-      this.$xetable = this.$table
+      this.$xetable = XEUtils.find($children, (comp, index) => comp && comp.refreshColumn && index > selfIndex && comp.$vnode.componentOptions.tag === 'vxe-table')
     },
     openCustom () {
       this.customStore.visible = true
@@ -345,10 +345,10 @@ export default {
       }
     },
     restoreCustomStorage () {
-      let { $grid, $table, id, resizable, custom, setting, resizableOpts, customOpts } = this
+      let { $xegrid, $xetable, id, resizable, custom, setting, resizableOpts, customOpts } = this
       if (resizable || custom || setting) {
         let customMap = {}
-        let comp = $grid || $table
+        let comp = $xegrid || $xetable
         let { fullColumn } = comp.getTableColumn()
         if (resizableOpts.storage) {
           let columnWidthStorage = this.getStorageMap(resizableOpts.storageKey)[id]
@@ -476,13 +476,14 @@ export default {
       this.closeCustom()
     },
     updateResizable (isReset) {
-      let comp = this.$grid || this.$table
+      let comp = this.$xegrid || this.$xetable
       this.saveColumnWidth(isReset)
       comp.analyColumnWidth()
       return comp.recalculate(true)
     },
     handleCustoms () {
-      (this.$grid || this.$table).refreshColumn()
+      let comp = this.$xegrid || this.$xetable
+      comp.refreshColumn()
       return this.saveColumnHide()
     },
     checkCustomStatus () {
@@ -504,8 +505,8 @@ export default {
     },
     handleGlobalKeydownEvent (evnt) {
       let isEsc = evnt.keyCode === 27
-      if (isEsc && this.$grid && this.$grid.isMaximized() && this.zoomOpts && this.zoomOpts.escRestore !== false) {
-        this.$grid.zoom()
+      if (isEsc && this.$xegrid && this.$xegrid.isMaximized() && this.zoomOpts && this.zoomOpts.escRestore !== false) {
+        this.$xegrid.zoom()
       }
     },
     handleGlobalMousedownEvent (evnt) {
@@ -547,7 +548,7 @@ export default {
       }, 300)
     },
     refreshEvent () {
-      let { $grid, refreshOpts, isRefresh } = this
+      let { $xegrid, refreshOpts, isRefresh } = this
       if (!isRefresh) {
         if (refreshOpts.query) {
           this.isRefresh = true
@@ -559,23 +560,23 @@ export default {
           } catch (e) {
             UtilTools.error('vxe.error.typeErr', ['refresh.query', 'Promise', typeof qRest])
           }
-        } else if ($grid) {
+        } else if ($xegrid) {
           this.isRefresh = true
-          $grid.commitProxy('reload').catch(e => e).then(() => {
+          $xegrid.commitProxy('reload').catch(e => e).then(() => {
             this.isRefresh = false
           })
         }
       }
     },
     btnEvent (evnt, item) {
-      let { $grid, $table } = this
+      let { $xegrid, $xetable } = this
       let { code } = item
       if (code) {
-        if ($grid) {
-          $grid.triggerToolbarBtnEvent(item, evnt)
+        if ($xegrid) {
+          $xegrid.triggerToolbarBtnEvent(item, evnt)
         } else {
           let commandMethod = VXETable.commands.get(code)
-          let params = { code, button: item, $grid, $table }
+          let params = { code, button: item, $xegrid, $table: $xetable }
           if (commandMethod) {
             commandMethod.call(this, params, evnt)
           }
@@ -584,7 +585,7 @@ export default {
       }
     },
     importEvent () {
-      const comp = this.$grid || this.$table
+      const comp = this.$xegrid || this.$xetable
       if (comp) {
         comp.openImport(this.importOpts)
       } else {
@@ -592,7 +593,7 @@ export default {
       }
     },
     exportEvent () {
-      const comp = this.$grid || this.$table
+      const comp = this.$xegrid || this.$xetable
       if (comp) {
         comp.openExport(this.exportOpts)
       } else {
