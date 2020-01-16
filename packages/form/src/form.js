@@ -12,7 +12,8 @@ export default {
   },
   data () {
     return {
-      collapseAll: true
+      collapseAll: true,
+      sourceData: null
     }
   },
   provide () {
@@ -24,6 +25,14 @@ export default {
     vSize () {
       return this.size || this.$parent.size || this.$parent.vSize
     }
+  },
+  watch: {
+    data () {
+      this.loadForm()
+    }
+  },
+  created () {
+    this.loadForm()
   },
   render (h) {
     return h('form', {
@@ -37,6 +46,11 @@ export default {
     }, this.$slots.default)
   },
   methods: {
+    loadForm () {
+      if (this.data) {
+        this.sourceData = XEUtils.clone(this.data, true)
+      }
+    },
     toggleCollapse () {
       this.collapseAll = !this.collapseAll
       return this.$nextTick()
@@ -46,11 +60,12 @@ export default {
       this.$emit('submit', { data: this.data }, evnt)
     },
     resetEvent (evnt) {
-      const data = this.data
+      evnt.preventDefault()
+      const { data, sourceData } = this
       if (data) {
         this.$children.forEach(({ field }) => {
           if (field) {
-            XEUtils.set(data, field, null)
+            XEUtils.set(data, field, XEUtils.get(sourceData, field, null))
           }
         })
       }

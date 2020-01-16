@@ -125,7 +125,6 @@ export default {
       mouseConfig,
       mouseOpts,
       scrollXLoad,
-      scrollYLoad,
       overflowX,
       scrollbarWidth,
       getColumnIndex,
@@ -205,7 +204,7 @@ export default {
             let columnIndex = getColumnIndex(column)
             let params = { $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn, hasFilter }
             // 虚拟滚动不支持动态高度
-            if ((scrollXLoad || scrollYLoad) && !hasEllipsis) {
+            if (scrollXLoad && !hasEllipsis) {
               showEllipsis = hasEllipsis = true
             }
             if (showTitle || showTooltip) {

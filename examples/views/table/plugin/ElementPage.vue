@@ -2,6 +2,13 @@
   <div>
     <p class="tip">与 <a class="link" href="https://www.npmjs.com/package/element-ui">element-ui</a> 组合渲染 + 使用分页</p>
 
+<div>
+  <vxe-tooltip enterable>
+            <span>4353545</span>
+            4353545fff
+          </vxe-tooltip>
+</div>
+
     <vxe-form :data="formData" title-width="120" title-align="right" @submit="searchEvent">
       <vxe-form-item field="name" title="ElInput" span="8" :item-render="{name: 'ElInput'}"></vxe-form-item>
       <vxe-form-item field="role" title="ElAutocomplete" span="8" :item-render="{name: 'ElAutocomplete', props: {fetchSuggestions: roleFetchSuggestions}}"></vxe-form-item>
@@ -138,16 +145,16 @@ export default {
         totalResult: 0
       },
       formData: {
-        name: null,
-        role: null,
+        name: '',
+        role: '',
         sex: null,
         age: null,
         region: [],
         date: null,
         date5: null,
         flag: false,
-        slider: 1,
-        rate: 1
+        slider: 0,
+        rate: 0
       },
       demoCodes: [
         `
@@ -275,16 +282,16 @@ export default {
                 totalResult: 0
               },
               formData: {
-                name: null,
-                role: null,
+                name: '',
+                role: '',
                 sex: null,
                 age: null,
                 region: [],
                 date: null,
                 date5: null,
                 flag: false,
-                slider: 1,
-                rate: 1
+                slider: 0,
+                rate: 0
               }
             }
           },

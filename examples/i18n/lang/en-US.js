@@ -133,7 +133,7 @@ module.exports = {
         insert: 'Insert',
         delete: 'Delete',
         revert: 'Revert',
-        status: 'Status',
+        status: 'Update',
         cellDisable: 'Disable edit cell',
         rowDisable: 'Disable edit row',
         cellValid: 'Validate call',

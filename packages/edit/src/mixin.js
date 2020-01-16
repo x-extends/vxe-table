@@ -303,11 +303,15 @@ export default {
         }
         if (inputElem) {
           inputElem.focus()
-          if (autoselect)inputElem.select()
-          if (browse.msie) {
-            let textRange = inputElem.createTextRange()
-            textRange.collapse(false)
-            textRange.select()
+          if (autoselect) {
+            inputElem.select()
+          } else {
+            // 保持一致行为，光标移到末端
+            if (browse.msie) {
+              let textRange = inputElem.createTextRange()
+              textRange.collapse(false)
+              textRange.select()
+            }
           }
         } else {
           // 显示到可视区中

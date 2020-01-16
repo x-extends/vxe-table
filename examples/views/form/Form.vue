@@ -182,33 +182,33 @@ export default {
   data  () {
     return {
       formData1: {
-        name: null,
-        nickname: null,
-        sex: null
+        name: '',
+        nickname: '',
+        sex: '1'
       },
       formData2: {
-        name: null,
-        nickname: null,
-        sex: null,
-        role: null,
-        age: null,
+        name: '',
+        nickname: '',
+        sex: '0',
+        role: '',
+        age: 22,
         region: null
       },
       formData3: {
-        name: null,
-        nickname: null,
-        sex: null,
-        age: null,
+        name: '',
+        nickname: '',
+        sex: '0',
+        age: 26,
         address: null
       },
       formData4: {
-        name: null,
-        nickname: null,
-        sex: null,
-        age: null,
-        status: null,
+        name: '',
+        nickname: '',
+        sex: '',
+        age: 30,
+        status: '1',
         region: null,
-        height: null,
+        height: '178',
         weight: null,
         single: '1'
       },
@@ -339,28 +339,27 @@ export default {
           data () {
             return {
               formData1: {
-                name: null,
-                nickname: null,
-                sex: null
+                name: '',
+                nickname: '',
+                sex: '1'
               },
               formData3: {
-                name: null,
-                nickname: null,
-                sex: null,
-                age: null,
+                name: '',
+                nickname: '',
+                sex: '0',
+                age: 26,
                 address: null
               },
               formData4: {
-                name: null,
-                nickname: null,
-                sex: null,
-                age: null,
-                status: null,
+                name: '',
+                nickname: '',
+                sex: '',
+                age: 30,
+                status: '1',
                 region: null,
-                height: null,
+                height: '178',
                 weight: null,
                 single: '1'
-              }
             }
           },
           methods: {

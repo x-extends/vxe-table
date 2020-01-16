@@ -158,6 +158,15 @@ const apis = [
             enum: '',
             defVal: '{data, property}, ...[目标渲染的 arguments]',
             list: []
+          },
+          {
+            name: 'defaultValue',
+            desc: '项默认值（当表单被重置时的默认值）',
+            version: '',
+            type: 'Any',
+            enum: '',
+            defVal: 'null',
+            list: []
           }
         ]
       }

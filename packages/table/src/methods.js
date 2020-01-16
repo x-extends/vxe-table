@@ -2497,15 +2497,13 @@ const Methods = {
     return this.$nextTick().then(this.recalculate)
   },
   handleAsyncRowExpand (row) {
-    let { fullAllDataRowMap, rowExpandeds, expandLazyLoadeds, expandOpts } = this
-    let { loadMethod } = expandOpts
-    let rest = fullAllDataRowMap.get(row)
+    let rest = this.fullAllDataRowMap.get(row)
     return new Promise(resolve => {
-      expandLazyLoadeds.push(row)
-      loadMethod({ $table: this, row }).catch(e => e).then(() => {
+      this.expandLazyLoadeds.push(row)
+      this.expandOpts.loadMethod({ $table: this, row }).catch(e => e).then(() => {
         rest.expandLoaded = true
-        XEUtils.remove(expandLazyLoadeds, item => item === row)
-        rowExpandeds.push(row)
+        XEUtils.remove(this.expandLazyLoadeds, item => item === row)
+        this.rowExpandeds.push(row)
         resolve(this.$nextTick().then(this.recalculate))
       })
     })
