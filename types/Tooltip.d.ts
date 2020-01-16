@@ -1,9 +1,9 @@
 import { VXETableModule } from './module';
 
 /**
- * 动态表格
+ * 表单
  */
-export declare class Grid extends VXETableModule {
+export declare class Tooltip extends VXETableModule {
   /**
    * 大小
    * @default 'default'
