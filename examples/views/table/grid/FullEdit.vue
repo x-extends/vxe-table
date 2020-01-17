@@ -297,9 +297,6 @@ export default {
                 return false
               }
               return true
-            },
-            searchEvent () {
-              this.$refs.xGrid.commitProxy('reload')
             }
           }
         }
@@ -328,9 +325,6 @@ export default {
         return false
       }
       return true
-    },
-    searchEvent () {
-      this.$refs.xGrid.commitProxy('reload')
     }
   }
 }
