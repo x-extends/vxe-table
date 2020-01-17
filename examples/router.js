@@ -27,6 +27,7 @@ const TableStripe = () => import(/* webpackChunkName: "base" */ './views/table/b
 const TableBorder = () => import(/* webpackChunkName: "base" */ './views/table/base/Border.vue')
 const TableStyle = () => import(/* webpackChunkName: "base" */ './views/table/base/Style.vue')
 const TableDynamicStyle = () => import(/* webpackChunkName: "base" */ './views/table/base/DynamicStyle.vue')
+const TableScrollStyle = () => import(/* webpackChunkName: "base" */ './views/table/base/ScrollStyle.vue')
 const TableHeader = () => import(/* webpackChunkName: "base" */ './views/table/base/Header.vue')
 const TableHeaderHighlight = () => import(/* webpackChunkName: "base" */ './views/table/base/HeaderHighlight.vue')
 const TableResizable = () => import(/* webpackChunkName: "base" */ './views/table/base/Resizable.vue')
@@ -386,6 +387,11 @@ export default new Router({
       path: '/table/base/style',
       name: 'TableStyle',
       component: TableStyle
+    },
+    {
+      path: '/table/base/scrollStyle',
+      name: 'TableScrollStyle',
+      component: TableScrollStyle
     },
     {
       path: '/table/base/header',
