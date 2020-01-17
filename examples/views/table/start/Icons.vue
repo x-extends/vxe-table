@@ -21,6 +21,7 @@
             expandClose: 'vxe-icon--arrow-right',
             refresh: 'vxe-icon--refresh',
             refreshLoading: 'vxe-icon--refresh roll',
+            formPrefix: 'vxe-icon--question',
             formFolding: 'vxe-icon--arrow-top rotate180',
             formUnfolding: 'vxe-icon--arrow-top',
             import: 'vxe-icon--upload',
