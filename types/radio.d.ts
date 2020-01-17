@@ -5,7 +5,7 @@ import { VXETableModule } from './module';
  */
 export declare class Radio extends VXETableModule {
   /**
-   * 表格的尺寸
+   * 大小
    * @default 'default'
    * @type string
    */

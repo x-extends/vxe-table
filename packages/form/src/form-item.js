@@ -2,6 +2,38 @@ import VXETable from '../../v-x-e-table'
 import { UtilTools } from '../../tools'
 import GlobalConfig from '../../conf'
 
+function renderPrefixIcon (h, titlePrefix) {
+  return h('span', {
+    class: 'vxe-form--item-title-prefix'
+  }, [
+    h('i', {
+      class: titlePrefix.icon || GlobalConfig.icon.formPrefix
+    })
+  ])
+}
+
+function renderTitle (h, _vm) {
+  const { title, titlePrefix } = _vm
+  const titles = []
+  if (titlePrefix) {
+    titles.push(
+      titlePrefix.message
+        ? h('vxe-tooltip', {
+          props: {
+            content: titlePrefix.message
+          }
+        }, [
+          renderPrefixIcon(h, titlePrefix)
+        ])
+        : renderPrefixIcon(h, titlePrefix)
+    )
+  }
+  titles.push(
+    h('span', UtilTools.getFuncText(title))
+  )
+  return titles
+}
+
 export default {
   name: 'VxeFormItem',
   props: {
@@ -12,6 +44,7 @@ export default {
     align: String,
     titleAlign: String,
     titleWidth: [String, Number],
+    titlePrefix: Object,
     folding: Boolean,
     collapseNode: Boolean,
     itemRender: Object
@@ -48,7 +81,7 @@ export default {
           style: titleWidth ? {
             width: isNaN(titleWidth) ? titleWidth : `${titleWidth}px`
           } : null
-        }, UtilTools.getFuncText(title)) : null,
+        }, renderTitle(h, this)) : null,
         h('div', {
           class: ['vxe-form--item-content', align ? `align--${align}` : null]
         }, (compConf && compConf.renderItem ? compConf.renderItem.call(this, h, itemRender, { data: $vxeform.data, field, property: field }, { $form: $vxeform }) : ($scopedSlots.default ? $scopedSlots.default.call(this) : [])).concat(
@@ -72,7 +105,8 @@ export default {
     ])
   },
   methods: {
-    toggleCollapseEvent () {
+    toggleCollapseEvent (evnt) {
+      this.$vxeform.$emit('toggle-collapse', { data: this.$vxeform.data }, evnt)
       this.$vxeform.toggleCollapse()
     }
   }

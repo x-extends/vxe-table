@@ -43,9 +43,9 @@ export const DomTools = {
       cellElem.setAttribute('title', content)
     }
   },
-  rowToVisible ($table, row) {
-    let bodyElem = $table.$refs.tableBody.$el
-    let trElem = bodyElem.querySelector(`[data-rowid="${UtilTools.getRowid($table, row)}"]`)
+  rowToVisible ($xetable, row) {
+    let bodyElem = $xetable.$refs.tableBody.$el
+    let trElem = bodyElem.querySelector(`[data-rowid="${UtilTools.getRowid($xetable, row)}"]`)
     if (trElem) {
       let bodyHeight = bodyElem.clientHeight
       let bodySrcollTop = bodyElem.scrollTop
@@ -54,21 +54,21 @@ export const DomTools = {
       // 检测行是否在可视区中
       if (trOffsetTop < bodySrcollTop || trOffsetTop > bodySrcollTop + bodyHeight) {
         // 向上定位
-        return $table.scrollTo(null, trOffsetTop)
+        return $xetable.scrollTo(null, trOffsetTop)
       } else if (trOffsetTop + trHeight >= bodyHeight + bodySrcollTop) {
         // 向下定位
-        return $table.scrollTo(null, bodySrcollTop + trHeight)
+        return $xetable.scrollTo(null, bodySrcollTop + trHeight)
       }
     } else {
       // 如果是虚拟渲染跨行滚动
-      if ($table.scrollYLoad) {
-        return $table.scrollTo(null, ($table.afterFullData.indexOf(row) - 1) * $table.scrollYStore.rowHeight)
+      if ($xetable.scrollYLoad) {
+        return $xetable.scrollTo(null, ($xetable.afterFullData.indexOf(row) - 1) * $xetable.scrollYStore.rowHeight)
       }
     }
     return Promise.resolve()
   },
-  colToVisible ($table, column) {
-    let bodyElem = $table.$refs.tableBody.$el
+  colToVisible ($xetable, column) {
+    let bodyElem = $xetable.$refs.tableBody.$el
     let tdElem = bodyElem.querySelector(`.${column.id}`)
     if (tdElem) {
       let bodyWidth = bodyElem.clientWidth
@@ -78,15 +78,15 @@ export const DomTools = {
       // 检测行是否在可视区中
       if (tdOffsetLeft < bodySrcollLeft || tdOffsetLeft > bodySrcollLeft + bodyWidth) {
         // 向左定位
-        return $table.scrollTo(tdOffsetLeft)
+        return $xetable.scrollTo(tdOffsetLeft)
       } else if (tdOffsetLeft + tdWidth >= bodyWidth + bodySrcollLeft) {
         // 向右定位
-        return $table.scrollTo(bodySrcollLeft + tdWidth)
+        return $xetable.scrollTo(bodySrcollLeft + tdWidth)
       }
     } else {
       // 如果是虚拟渲染跨行滚动
-      if ($table.scrollXLoad) {
-        let visibleColumn = $table.visibleColumn
+      if ($xetable.scrollXLoad) {
+        let visibleColumn = $xetable.visibleColumn
         let scrollLeft = 0
         for (let index = 0; index < visibleColumn.length; index++) {
           if (visibleColumn[index] === column) {
@@ -94,7 +94,7 @@ export const DomTools = {
           }
           scrollLeft += visibleColumn[index].renderWidth
         }
-        return $table.scrollTo(scrollLeft)
+        return $xetable.scrollTo(scrollLeft)
       }
     }
     return Promise.resolve()
@@ -172,10 +172,10 @@ export const DomTools = {
     let rowIndex = [].indexOf.call(trElem.parentNode.children, trElem)
     return { rowid, rowIndex, columnIndex }
   },
-  getCell ($table, { row, column }) {
-    let rowid = UtilTools.getRowid($table, row)
-    let bodyElem = $table.$refs[`${column.fixed || 'table'}Body`]
-    return (bodyElem || $table.$refs.tableBody).$el.querySelector(`.vxe-body--row[data-rowid="${rowid}"] .${column.id}`)
+  getCell ($xetable, { row, column }) {
+    let rowid = UtilTools.getRowid($xetable, row)
+    let bodyElem = $xetable.$refs[`${column.fixed || 'table'}Body`]
+    return (bodyElem || $xetable.$refs.tableBody).$el.querySelector(`.vxe-body--row[data-rowid="${rowid}"] .${column.id}`)
   },
   toView (elem) {
     let scrollIntoViewIfNeeded = 'scrollIntoViewIfNeeded'

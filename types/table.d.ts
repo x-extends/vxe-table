@@ -33,7 +33,7 @@ export declare class Table extends VXETableModule {
    */
   border?: boolean;
   /**
-   * 表格的尺寸
+   * 大小
    */
   size?: 'medium' | 'small' | 'mini';
   /**

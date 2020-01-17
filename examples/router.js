@@ -14,7 +14,6 @@ const RendererDefault = () => import(/* webpackChunkName: "start" */ './views/ta
 const RendererEdit = () => import(/* webpackChunkName: "start" */ './views/table/renderer/Edit.vue')
 const RendererToolbar = () => import(/* webpackChunkName: "start" */ './views/table/renderer/Toolbar.vue')
 const RendererForm = () => import(/* webpackChunkName: "start" */ './views/table/renderer/Form.vue')
-const RendererItem = () => import(/* webpackChunkName: "start" */ './views/table/renderer/Item.vue')
 
 const CommandsAPI = () => import(/* webpackChunkName: "start" */ './views/table/commands/API.vue')
 const MenusAPI = () => import(/* webpackChunkName: "start" */ './views/table/menus/API.vue')
@@ -333,11 +332,6 @@ export default new Router({
       path: '/table/renderer/form',
       name: 'RendererForm',
       component: RendererForm
-    },
-    {
-      path: '/table/renderer/item',
-      name: 'RendererItem',
-      component: RendererItem
     },
     {
       path: '/table/commands/api',

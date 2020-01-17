@@ -16,6 +16,8 @@ import { Radio } from './radio';
 import { Input } from './input';
 import { Button } from './button';
 import { Modal, XModal } from './modal';
+import { Tooltip } from './tooltip';
+import { Form } from './form';
 import { Edit } from './edit'
 import { Export } from './export';
 import { Keyboard } from './keyboard';
@@ -216,6 +218,8 @@ export {
   Input,
   Button,
   Modal,
+  Tooltip,
+  Form,
   Edit,
   Export,
   Keyboard,

@@ -141,8 +141,8 @@ export default {
       })
     },
     selectFileEvent () {
-      const { $grid, $table } = this.$parent
-      const comp = $grid || $table
+      const { $xegrid, $xetable } = this.$parent
+      const comp = $xegrid || $xetable
       if (comp) {
         comp.readFile(this.defaultOptions).then(evnt => {
           const file = evnt.target.files[0]

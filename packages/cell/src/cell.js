@@ -4,9 +4,9 @@ import VXETable from '../../v-x-e-table'
 import { UtilTools } from '../../tools'
 
 export const Cell = {
-  createColumn ($table, _vm) {
+  createColumn ($xetable, _vm) {
     let { type, sortable, remoteSort, filters, editRender, treeNode } = _vm
-    let { editConfig, editOpts, checkboxOpts } = $table
+    let { editConfig, editOpts, checkboxOpts } = $xetable
     let renMaps = {
       renderHeader: this.renderHeader,
       renderCell: treeNode ? this.renderTreeCell : this.renderCell
@@ -53,7 +53,7 @@ export const Cell = {
           renMaps.renderHeader = this.renderFilterHeader
         }
     }
-    return UtilTools.getColumnConfig($table, _vm, renMaps)
+    return UtilTools.getColumnConfig($xetable, _vm, renMaps)
   },
   /**
    * 单元格
@@ -78,7 +78,7 @@ export const Cell = {
       let funName = own.editRender ? 'renderCell' : 'renderDefault'
       let compConf = VXETable.renderer.get(renderOpts.name)
       if (compConf && compConf[funName]) {
-        return compConf[funName].call($table, h, renderOpts, params, { $type: own.editRender ? 'edit' : 'cell', $grid: $table.$grid, $excel: $table.$parent, $table, $column: column })
+        return compConf[funName].call($table, h, renderOpts, params, { $type: own.editRender ? 'edit' : 'cell', $grid: $table.$xegrid, $excel: $table.$parent, $table })
       }
     }
     return [UtilTools.formatText(UtilTools.getCellLabel(row, column, params), 1)]
@@ -208,7 +208,7 @@ export const Cell = {
         }],
         on
       }, [
-        h('span', {
+        h('i', {
           class: 'vxe-radio--icon'
         })
       ].concat(labelField ? (slots && slots.default ? slots.default(params, h) : [XEUtils.get(row, labelField)]) : []))
@@ -255,7 +255,7 @@ export const Cell = {
         },
         on
       }, [
-        h('span', {
+        h('i', {
           class: 'vxe-checkbox--icon'
         })
       ].concat(headerTitle ? (slots && slots.header ? slots.header(params, h) : [UtilTools.getFuncText(headerTitle)]) : []))
@@ -295,7 +295,7 @@ export const Cell = {
         }],
         on
       }, [
-        h('span', {
+        h('i', {
           class: 'vxe-checkbox--icon'
         })
       ].concat(labelField ? (slots && slots.default ? slots.default(params, h) : [XEUtils.get(row, labelField)]) : []))
@@ -338,7 +338,7 @@ export const Cell = {
         }],
         on
       }, [
-        h('span', {
+        h('i', {
           class: 'vxe-checkbox--icon'
         })
       ].concat(labelField ? (slots && slots.default ? slots.default(params, h) : [XEUtils.get(row, labelField)]) : []))
@@ -557,7 +557,7 @@ export const Cell = {
       if (slots && slots.edit) {
         return slots.edit(params, h)
       }
-      return compConf && compConf.renderEdit ? compConf.renderEdit.call($table, h, editRender, params, { $type: 'edit', $grid: $table.$grid, $excel: $table.$parent, $table, $column: column }) : []
+      return compConf && compConf.renderEdit ? compConf.renderEdit.call($table, h, editRender, params, { $type: 'edit', $grid: $table.$xegrid, $excel: $table.$parent, $table }) : []
     }
     if (slots && slots.default) {
       return slots.default(params, h)

@@ -89,8 +89,8 @@ export default {
     this.uploadColumn()
   },
   mounted () {
-    let { $parent: $table, $el, $refs, fixedType } = this
-    let { elemStore } = $table
+    let { $parent: $xetable, $el, $refs, fixedType } = this
+    let { elemStore } = $xetable
     let prefix = `${fixedType || 'main'}-header-`
     elemStore[`${prefix}wrapper`] = $el
     elemStore[`${prefix}table`] = $refs.table
@@ -102,7 +102,7 @@ export default {
   render (h) {
     let {
       _e,
-      $parent: $table,
+      $parent: $xetable,
       fixedType,
       headerColumn,
       tableColumn,
@@ -125,12 +125,11 @@ export default {
       mouseConfig,
       mouseOpts,
       scrollXLoad,
-      scrollYLoad,
       overflowX,
       scrollbarWidth,
       getColumnIndex,
       sortOpts
-    } = $table
+    } = $xetable
     let isMouseSelected = mouseConfig && mouseOpts.selected
     // 在 v3.0 中废弃 mouse-config.checked
     let isMouseChecked = mouseConfig && (mouseOpts.range || mouseOpts.checked)
@@ -187,8 +186,8 @@ export default {
           ref: 'thead'
         }, headerColumn.map((cols, $rowIndex) => {
           return h('tr', {
-            class: ['vxe-header--row', headerRowClassName ? XEUtils.isFunction(headerRowClassName) ? headerRowClassName({ $table, $rowIndex, fixed: fixedType }) : headerRowClassName : ''],
-            style: headerRowStyle ? (XEUtils.isFunction(headerRowStyle) ? headerRowStyle({ $table, $rowIndex, fixed: fixedType }) : headerRowStyle) : null
+            class: ['vxe-header--row', headerRowClassName ? XEUtils.isFunction(headerRowClassName) ? headerRowClassName({ $table: $xetable, $rowIndex, fixed: fixedType }) : headerRowClassName : ''],
+            style: headerRowStyle ? (XEUtils.isFunction(headerRowStyle) ? headerRowStyle({ $table: $xetable, $rowIndex, fixed: fixedType }) : headerRowStyle) : null
           }, cols.map((column, $columnIndex) => {
             let { showHeaderOverflow, headerAlign, align, headerClassName } = column
             let isColGroup = column.children && column.children.length
@@ -203,42 +202,42 @@ export default {
             let hasFilter = column.filters && column.filters.some(item => item.checked)
             // 确保任何情况下 columnIndex 都精准指向真实列索引
             let columnIndex = getColumnIndex(column)
-            let params = { $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn, hasFilter }
+            let params = { $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn, hasFilter }
             // 虚拟滚动不支持动态高度
-            if ((scrollXLoad || scrollYLoad) && !hasEllipsis) {
+            if (scrollXLoad && !hasEllipsis) {
               showEllipsis = hasEllipsis = true
             }
             if (showTitle || showTooltip) {
               thOns.mouseenter = evnt => {
-                if ($table._isResize) {
+                if ($xetable._isResize) {
                   return
                 }
                 if (showTitle) {
                   DomTools.updateCellTitle(evnt)
                 } else if (showTooltip) {
-                  $table.triggerHeaderTooltipEvent(evnt, { $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType })
+                  $xetable.triggerHeaderTooltipEvent(evnt, { $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType })
                 }
               }
             }
             if (showTooltip) {
               thOns.mouseleave = evnt => {
-                if ($table._isResize) {
+                if ($xetable._isResize) {
                   return
                 }
                 if (showTooltip) {
-                  $table.handleTargetLeaveEvent(evnt)
+                  $xetable.handleTargetLeaveEvent(evnt)
                 }
               }
             }
             if (highlightCurrentColumn || tableListeners['header-cell-click'] || isMouseChecked || sortOpts.trigger === 'cell') {
-              thOns.click = evnt => $table.triggerHeaderCellClickEvent(evnt, { $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, cell: evnt.currentTarget })
+              thOns.click = evnt => $xetable.triggerHeaderCellClickEvent(evnt, { $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, cell: evnt.currentTarget })
             }
             if (tableListeners['header-cell-dblclick']) {
-              thOns.dblclick = evnt => UtilTools.emitEvent($table, 'header-cell-dblclick', [{ $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, cell: evnt.currentTarget }, evnt])
+              thOns.dblclick = evnt => UtilTools.emitEvent($xetable, 'header-cell-dblclick', [{ $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, cell: evnt.currentTarget }, evnt])
             }
             // 按下事件处理
             if (isMouseSelected || isMouseChecked) {
-              thOns.mousedown = evnt => $table.triggerHeaderCellMousedownEvent(evnt, { $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, cell: evnt.currentTarget })
+              thOns.mousedown = evnt => $xetable.triggerHeaderCellMousedownEvent(evnt, { $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, cell: evnt.currentTarget })
             }
             let type = column.type === 'seq' || column.type === 'index' ? 'seq' : column.type
             return h('th', {
@@ -304,8 +303,8 @@ export default {
     },
     resizeMousedown (evnt, params) {
       let { column } = params
-      let { $parent: $table, $el, fixedType } = this
-      let { tableBody, leftContainer, rightContainer, resizeBar: resizeBarElem } = $table.$refs
+      let { $parent: $xetable, $el, fixedType } = this
+      let { tableBody, leftContainer, rightContainer, resizeBar: resizeBarElem } = $xetable.$refs
       let { target: dragBtnElem, clientX: dragClientX } = evnt
       let cell = dragBtnElem.parentNode
       let dragLeft = 0
@@ -356,8 +355,8 @@ export default {
         dragLeft = Math.max(left, dragMinLeft)
         resizeBarElem.style.left = `${dragLeft - scrollLeft}px`
       }
-      $table._isResize = true
-      DomTools.addClass($table.$el, 'c--resize')
+      $xetable._isResize = true
+      DomTools.addClass($xetable.$el, 'c--resize')
       resizeBarElem.style.display = 'block'
       document.onmousemove = updateEvent
       document.onmouseup = function (evnt) {
@@ -365,15 +364,15 @@ export default {
         document.onmouseup = domMouseup
         column.resizeWidth = column.renderWidth + (isRightFixed ? dragPosLeft - dragLeft : dragLeft - dragPosLeft)
         resizeBarElem.style.display = 'none'
-        $table._isResize = false
-        $table._lastResizeTime = Date.now()
-        $table.analyColumnWidth()
-        $table.recalculate(true)
-        DomTools.removeClass($table.$el, 'c--resize')
-        if ($table.$toolbar) {
-          $table.$toolbar.updateResizable()
+        $xetable._isResize = false
+        $xetable._lastResizeTime = Date.now()
+        $xetable.analyColumnWidth()
+        $xetable.recalculate(true)
+        DomTools.removeClass($xetable.$el, 'c--resize')
+        if ($xetable.$toolbar) {
+          $xetable.$toolbar.updateResizable()
         }
-        UtilTools.emitEvent($table, 'resizable-change', [params])
+        UtilTools.emitEvent($xetable, 'resizable-change', [params])
       }
       updateEvent(evnt)
     }

@@ -43,6 +43,7 @@
     border-width: 6px;
     border-style: solid;
     left: 50%;
+    transform: translateX(-6px);
     &:before {
       content: "";
       position: absolute;

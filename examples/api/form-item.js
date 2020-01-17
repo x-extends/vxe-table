@@ -80,6 +80,34 @@ const apis = [
         list: []
       },
       {
+        name: 'title-prefix',
+        descKey: 'app.api.formItem.desc.titlePrefix',
+        version: '',
+        type: 'Object',
+        enum: '',
+        defVal: '',
+        list: [
+          {
+            name: 'message',
+            desc: '提示消息',
+            version: '',
+            type: 'String',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'icon',
+            desc: '自定义图标',
+            version: '',
+            type: 'String',
+            enum: '',
+            defVal: '',
+            list: []
+          }
+        ]
+      },
+      {
         name: 'item-render',
         descKey: 'app.api.formItem.desc.itemRender',
         version: '',
@@ -157,6 +185,15 @@ const apis = [
             type: 'Object',
             enum: '',
             defVal: '{data, property}, ...[目标渲染的 arguments]',
+            list: []
+          },
+          {
+            name: 'defaultValue',
+            desc: '项默认值（当表单被重置时的默认值）',
+            version: '',
+            type: 'Any',
+            enum: '',
+            defVal: 'null',
             list: []
           }
         ]

@@ -400,11 +400,11 @@
   &:after {
     @extend %PseudoClass;
     content: "?";
-    top: 0.06em;
-    left: 0.28em;
-    font-size: 0.8em;
+    top: 0;
+    left: 0.18em;
     font-weight: 700;
     color: #fff;
+    transform: scale(0.8);
   }
 }
 
@@ -416,12 +416,11 @@
   &:after {
     @extend %PseudoClass;
     content: "!";
-    top: -0.02em;
-    left: 0.46em;
-    font-size: 0.8em;
+    top: 0;
+    left: 0.4em;
     font-weight: 700;
     color: #fff;
-    transform: rotate(180deg);
+    transform: rotate(180deg) scale(0.8);
   }
 }
 
@@ -433,11 +432,11 @@
   &:after {
     @extend %PseudoClass;
     content: "!";
-    top: 0.02em;
-    left: 0.4em;
-    font-size: 0.8em;
+    top: 0;
+    left: 0.3em;
     font-weight: 700;
     color: #fff;
+    transform: scale(0.8);
   }
 }
 

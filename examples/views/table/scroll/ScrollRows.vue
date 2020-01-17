@@ -22,6 +22,7 @@
       border
       resizable
       show-overflow
+      show-header-overflow
       export-config
       ref="xTable"
       height="300"
@@ -84,6 +85,7 @@ export default {
           border
           resizable
           show-overflow
+          show-header-overflow
           export-config
           ref="xTable"
           height="300"

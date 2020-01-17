@@ -36,7 +36,7 @@ export default {
     iconJumpMore: String
   },
   inject: {
-    $grid: {
+    $xegrid: {
       default: null
     }
   },

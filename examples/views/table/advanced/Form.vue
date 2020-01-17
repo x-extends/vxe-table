@@ -6,7 +6,7 @@
       <vxe-form-item title="app.body.label.name" field="name">
         <vxe-input v-model="formData.name" placeholder="请输入名称"></vxe-input>
       </vxe-form-item>
-      <vxe-form-item title="性别" field="sex">
+      <vxe-form-item title="性别" field="sex" :title-prefix="{ message: '帮助信息！！！' }">
         <select v-model="formData.sex" class="vxe-select">
           <option value="0"></option>
           <option value="1">女</option>
@@ -60,7 +60,7 @@ export default {
           <vxe-form-item title="app.body.label.name" field="name">
             <vxe-input v-model="formData.name" placeholder="请输入名称"></vxe-input>
           </vxe-form-item>
-          <vxe-form-item title="性别" field="sex">
+          <vxe-form-item title="性别" field="sex" :title-prefix="{ message: '帮助信息！！！' }">
             <select v-model="formData.sex" class="vxe-select">
               <option value="0"></option>
               <option value="1">女</option>

@@ -12,8 +12,8 @@ export default {
     fixedType: String
   },
   mounted () {
-    let { $parent: $table, $el, $refs, fixedType } = this
-    let { elemStore } = $table
+    let { $parent: $xetable, $el, $refs, fixedType } = this
+    let { elemStore } = $xetable
     let prefix = `${fixedType || 'main'}-footer-`
     elemStore[`${prefix}wrapper`] = $el
     elemStore[`${prefix}table`] = $refs.table
@@ -24,7 +24,7 @@ export default {
   render (h) {
     let {
       _e,
-      $parent: $table,
+      $parent: $xetable,
       fixedType,
       fixedColumn,
       tableColumn,
@@ -46,7 +46,7 @@ export default {
       overflowX,
       scrollbarWidth,
       getColumnIndex
-    } = $table
+    } = $xetable
     // 如果是使用优化模式
     if (!footerSpanMethod) {
       if (fixedType && allColumnOverflow) {
@@ -106,8 +106,8 @@ export default {
           ref: 'tfoot'
         }, footerData.map((list, $rowIndex) => {
           return h('tr', {
-            class: ['vxe-footer--row', footerRowClassName ? XEUtils.isFunction(footerRowClassName) ? footerRowClassName({ $table, $rowIndex, fixed: fixedType }) : footerRowClassName : ''],
-            style: footerRowStyle ? (XEUtils.isFunction(footerRowStyle) ? footerRowStyle({ $table, $rowIndex, fixed: fixedType }) : footerRowStyle) : null
+            class: ['vxe-footer--row', footerRowClassName ? XEUtils.isFunction(footerRowClassName) ? footerRowClassName({ $table: $xetable, $rowIndex, fixed: fixedType }) : footerRowClassName : ''],
+            style: footerRowStyle ? (XEUtils.isFunction(footerRowStyle) ? footerRowStyle({ $table: $xetable, $rowIndex, fixed: fixedType }) : footerRowStyle) : null
           }, tableColumn.map((column, $columnIndex) => {
             let { showOverflow, footerAlign, align, footerClassName } = column
             let isColGroup = column.children && column.children.length
@@ -122,36 +122,36 @@ export default {
             let tfOns = {}
             // 确保任何情况下 columnIndex 都精准指向真实列索引
             let columnIndex = getColumnIndex(column)
-            let params = { $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType }
+            let params = { $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType }
             if (showTitle || showTooltip) {
               tfOns.mouseenter = evnt => {
                 if (showTitle) {
                   DomTools.updateCellTitle(evnt)
                 } else if (showTooltip) {
-                  $table.triggerFooterTooltipEvent(evnt, { $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType })
+                  $xetable.triggerFooterTooltipEvent(evnt, { $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType })
                 }
               }
             }
             if (showTooltip) {
               tfOns.mouseleave = evnt => {
                 if (showTooltip) {
-                  $table.handleTargetLeaveEvent(evnt)
+                  $xetable.handleTargetLeaveEvent(evnt)
                 }
               }
             }
             if (tableListeners['header-cell-click']) {
               tfOns.click = evnt => {
-                UtilTools.emitEvent($table, 'header-cell-click', [{ $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, cell: evnt.currentTarget }, evnt])
+                UtilTools.emitEvent($xetable, 'header-cell-click', [{ $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, cell: evnt.currentTarget }, evnt])
               }
             }
             if (tableListeners['header-cell-dblclick']) {
               tfOns.dblclick = evnt => {
-                UtilTools.emitEvent($table, 'header-cell-dblclick', [{ $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, cell: evnt.currentTarget }, evnt])
+                UtilTools.emitEvent($xetable, 'header-cell-dblclick', [{ $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, cell: evnt.currentTarget }, evnt])
               }
             }
             // 合并行或列
             if (footerSpanMethod) {
-              let { rowspan = 1, colspan = 1 } = footerSpanMethod({ $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, data: footerData }) || {}
+              let { rowspan = 1, colspan = 1 } = footerSpanMethod({ $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, data: footerData }) || {}
               if (!rowspan || !colspan) {
                 return null
               }
@@ -169,13 +169,13 @@ export default {
                 'filter--active': column.filters && column.filters.some(item => item.checked)
               }, UtilTools.getClass(footerClassName, params), UtilTools.getClass(footerCellClassName, params)],
               attrs,
-              style: footerCellStyle ? (XEUtils.isFunction(footerCellStyle) ? footerCellStyle({ $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType }) : footerCellStyle) : null,
+              style: footerCellStyle ? (XEUtils.isFunction(footerCellStyle) ? footerCellStyle({ $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType }) : footerCellStyle) : null,
               on: tfOns,
               key: columnKey ? column.id : columnIndex
             }, [
               h('div', {
                 class: 'vxe-cell'
-              }, UtilTools.formatText(list[$table.tableColumn.indexOf(column)], 1))
+              }, UtilTools.formatText(list[$xetable.tableColumn.indexOf(column)], 1))
             ])
           }).concat(scrollbarWidth ? [
             h('td', {
@@ -193,16 +193,16 @@ export default {
      * 如果存在列固定右侧，同步更新滚动状态
      */
     scrollEvent (evnt) {
-      let { $parent: $table, fixedType } = this
-      let { $refs, scrollXLoad, triggerScrollXEvent, lastScrollLeft } = $table
+      let { $parent: $xetable, fixedType } = this
+      let { $refs, scrollXLoad, triggerScrollXEvent, lastScrollLeft } = $xetable
       let tableHeader = $refs.tableHeader
       let headerElem = tableHeader ? tableHeader.$el : null
       let bodyElem = $refs.tableBody.$el
       let footerElem = $refs.tableFooter.$el
       let scrollLeft = footerElem.scrollLeft
       let isX = scrollLeft !== lastScrollLeft
-      $table.lastScrollLeft = scrollLeft
-      $table.lastScrollTime = Date.now()
+      $xetable.lastScrollLeft = scrollLeft
+      $xetable.lastScrollTime = Date.now()
       if (headerElem) {
         headerElem.scrollLeft = scrollLeft
       }
@@ -212,7 +212,7 @@ export default {
       if (scrollXLoad && isX) {
         triggerScrollXEvent(evnt)
       }
-      UtilTools.emitEvent($table, 'scroll', [{ type: 'footer', fixed: fixedType, scrollTop: bodyElem.scrollTop, scrollLeft, isX, isY: false, $table }, evnt])
+      UtilTools.emitEvent($xetable, 'scroll', [{ type: 'footer', fixed: fixedType, scrollTop: bodyElem.scrollTop, scrollLeft, isX, isY: false, $table: $xetable }, evnt])
     }
   }
 }

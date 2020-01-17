@@ -1,1 +1,223 @@
 /**Variable**/
+
+.vxe-export--panel-column > ul {
+  list-style-type: none;
+  overflow: auto;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+  & > li {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+}
+
+.vxe-export--panel {
+  & > table {
+    width: 100%;
+    border: 0;
+    table-layout: fixed;
+    tr {
+      td {
+        padding: 0 10px;
+        &:nth-child(1) {
+          text-align: right;
+          width: 30%;
+          font-weight: 700;
+          padding: 8px 10px;
+        }
+        &:nth-child(2) {
+          width: 70%;
+        }
+        & > input,
+        & > select {
+          outline: 0;
+          width: 80%;
+          padding: 5px 8px;
+          color: $vxe-font-color;
+          border-radius: 4px;
+          border: 1px solid $vxe-input-border-color;
+          &:focus {
+            border: 1px solid $vxe-primary-color;
+          }
+        }
+        & > input {
+          &::placeholder {
+            color: $vxe-input-placeholder-color;
+          }
+        }
+      }
+    }
+  }
+  .vxe-export--panel-column {
+    width: 80%;
+    border: 1px solid $vxe-input-border-color;
+    margin: 3px 0;
+    border-radius: 4px;
+    user-select: none;
+    & > ul {
+      & > li {
+        padding: 0.2em 1em 0.2em 2.25em;
+      }
+    }
+    .vxe-export--panel-column-header {
+      background-color: #f8f8f9;
+      font-weight: 700;
+    }
+    .vxe-export--panel-column-body {
+      max-height: 208px;
+    }
+  }
+  .vxe-import-selected--file {
+    padding-right: 40px;
+    position: relative;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    user-select: none;
+    & > i {
+      display: none;
+      position: absolute;
+      top: 50%;
+      right: 15px;
+      transform: translateY(-50%);
+      font-size: 16px;
+      cursor: pointer;
+    }
+    &:hover {
+      & > i {
+        display: block;
+      }
+      color: $vxe-primary-color;
+    }
+  }
+  .vxe-import-select--file {
+    border: 1px dashed $vxe-input-border-color;
+    padding: 6px 34px;
+    border-radius: 4px;
+    user-select: none;
+    cursor: pointer;
+    &:hover {
+      color: $vxe-primary-color;
+      border-color: $vxe-primary-color;
+    }
+  }
+  .vxe-export--panel-btns {
+    text-align: right;
+    margin-top: 0.25em;
+  }
+}
+
+.vxe-export--panel-column-option {
+  position: relative;
+  .vxe-checkbox--icon {
+    &:before {
+      content: "";
+      position: absolute;
+      height: 1em;
+      width: 1em;
+      top: 0.4em;
+      left: 0.6em;
+      border-radius: 0.2em;
+      border: 2px solid $vxe-input-border-color;
+    }
+  }
+  &.is--checked,
+  &.is--indeterminate {
+    color: $vxe-primary-color;
+    .vxe-checkbox--icon {
+      &:before {
+        border-color: $vxe-primary-color;
+        background-color: $vxe-primary-color;
+      }
+      &:after {
+        content: "";
+        position: absolute;
+      }
+    }
+  }
+  &.is--checked {
+    .vxe-checkbox--icon {
+      &:after {
+        height: 0.64em;
+        width: 0.32em;
+        top: 0.55em;
+        left: 0.95em;
+        border: 2px solid #ffffff;
+        border-left: 0;
+        border-top: 0;
+        transform: rotate(45deg);
+      }
+    }
+  }
+  &.is--indeterminate {
+    .vxe-checkbox--icon {
+      &:after {
+        top: 0.8em;
+        left: 0.6em;
+        height: 0.18em;
+        width: 1em;
+        background-color: #ffffff;
+        transform: scale(.6);
+      }
+    }
+  }
+  &:not(.is--disabled) {
+    &:hover {
+      .vxe-checkbox--icon {
+        &:before {
+          border-color: $vxe-primary-color;
+        }
+      }
+    }
+  }
+  &.is--disabled {
+    cursor: not-allowed;
+    color: $vxe-input-disabled-color;
+    &.is--checked {
+      .vxe-checkbox--icon {
+        &:before {
+          border-color: $vxe-input-disabled-color;
+          background-color: $vxe-input-disabled-background-color;
+        }
+        &:after {
+          border-color: $vxe-input-disabled-color;
+        }
+      }
+    }
+  }
+  &:hover {
+    background-color: $vxe-table-row-hover-background-color;
+  }
+}
+
+.vxe-modal--wrapper {
+  .vxe-export--panel-column-option {
+    & > .vxe-checkbox--icon {
+      font-size: $vxe-checkbox-font-size-default;
+    }
+  }
+  &.size--medium {
+    .vxe-export--panel-column-option {
+      & > .vxe-checkbox--icon {
+        font-size: $vxe-checkbox-font-size-medium;
+      }
+    }
+  }
+  &.size--small {
+    .vxe-export--panel-column-option {
+      & > .vxe-checkbox--icon {
+        font-size: $vxe-checkbox-font-size-small;
+      }
+    }
+  }
+  &.size--mini {
+    .vxe-export--panel-column-option {
+      & > .vxe-checkbox--icon {
+        font-size: $vxe-checkbox-font-size-mini;
+      }
+    }
+  }
+}

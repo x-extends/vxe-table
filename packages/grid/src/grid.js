@@ -8,13 +8,9 @@ const methods = {}
 const propKeys = Object.keys(Table.props)
 
 function renderFormContent (h, _vm) {
-  const { $scopedSlots, proxyConfig, proxyOpts, formData, formConfig, formOpts, formRender } = _vm
+  const { $scopedSlots, proxyConfig, proxyOpts, formData, formConfig, formOpts } = _vm
   if ($scopedSlots.form) {
     return $scopedSlots.form.call(_vm, { $grid: _vm }, h)
-  }
-  const compConf = formRender ? VXETable.renderer.get(formRender.name) : null
-  if (compConf && compConf.renderForm) {
-    return compConf.renderForm.call(_vm, h, formRender, { data: proxyConfig && proxyOpts.form ? formData : formConfig.data }, { $grid: _vm })
   }
   if (formOpts.items) {
     return [
@@ -24,7 +20,8 @@ function renderFormContent (h, _vm) {
         }),
         on: {
           submit: _vm.submitEvent,
-          reset: _vm.resetEvent
+          reset: _vm.resetEvent,
+          'toggle-collapse': _vm.togglCollapseEvent
         },
         ref: 'form'
       }, formOpts.items.map(item => {
@@ -50,14 +47,12 @@ export default {
     pagerConfig: [Boolean, Object],
     proxyConfig: Object,
     toolbar: [Boolean, Object],
-    toolbarRender: Object,
     formConfig: [Boolean, Object],
-    formRender: Object,
     ...Table.props
   },
   provide () {
     return {
-      $grid: this
+      $xegrid: this
     }
   },
   data () {
@@ -94,7 +89,7 @@ export default {
       return Object.assign({}, GlobalConfig.grid.formConfig, this.formConfig)
     },
     toolbarOpts () {
-      return Object.assign({}, GlobalConfig.grid.toolbar, this.toolbar, { rConfig: this.toolbarRender })
+      return Object.assign({}, GlobalConfig.grid.toolbar, this.toolbar)
     },
     toolbarSlots () {
       let { $scopedSlots, toolbar, toolbarOpts } = this
@@ -325,9 +320,9 @@ export default {
         }
         if (formConfig && proxyOpts.form && formOpts.items) {
           const formData = {}
-          formOpts.items.forEach(({ field }) => {
+          formOpts.items.forEach(({ field, itemRender }) => {
             if (field) {
-              formData[field] = null
+              formData[field] = itemRender && !XEUtils.isUndefined(itemRender.defaultValue) ? itemRender.defaultValue : null
             }
           })
           this.formData = formData
@@ -341,7 +336,7 @@ export default {
     commitProxy (code) {
       const { $refs, toolbar, toolbarOpts, proxyOpts, tablePage, pagerConfig, sortData, filterData, formData, isMsg } = this
       const { beforeQuery, beforeDelete, afterDelete, beforeSave, afterSave, ajax = {}, props = {} } = proxyOpts
-      const $table = $refs.xTable
+      const $xetable = $refs.xTable
       const args = XEUtils.slice(arguments, 1)
       let button
       if (XEUtils.isString(code)) {
@@ -401,7 +396,7 @@ export default {
               params.page = tablePage
             }
             if (code === 'reload') {
-              let defaultSort = $table.sortOpts.defaultSort
+              let defaultSort = $xetable.sortOpts.defaultSort
               let sortParams = {}
               if (pagerConfig) {
                 tablePage.currentPage = 1
@@ -549,7 +544,7 @@ export default {
         default:
           let btnMethod = VXETable.commands.get(code)
           if (btnMethod) {
-            btnMethod.apply(this, [{ code, button, $grid: this, $table }].concat(args))
+            btnMethod.apply(this, [{ code, button, $grid: this, $table: $xetable }].concat(args))
           }
       }
       return this.$nextTick()
@@ -656,7 +651,14 @@ export default {
       UtilTools.emitEvent(this, 'form-submit', [Object.assign({ $grid: this }, params), evnt])
     },
     resetEvent (params, evnt) {
+      let { proxyConfig } = this
+      if (proxyConfig) {
+        this.commitProxy('reload')
+      }
       UtilTools.emitEvent(this, 'form-reset', [Object.assign({ $grid: this }, params), evnt])
+    },
+    togglCollapseEvent () {
+      this.recalculate(true)
     },
     zoom () {
       this.maximize = !this.maximize

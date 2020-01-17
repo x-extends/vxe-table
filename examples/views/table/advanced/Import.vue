@@ -2,7 +2,7 @@
   <div>
     <p class="tip">
       导入数据：通过 <table-api-link prop="importData"/> 函数可以直接将数据导入表格中<br>
-      <span class="red">注：附件中的字段名必须和表格一致，数据格式不正确将无法导入</span>
+      <span class="red">（注：附件中的字段名必须和表格一致，数据格式不正确将无法导入）</span>
     </p>
 
     <vxe-toolbar>
@@ -14,8 +14,9 @@
     </vxe-toolbar>
 
     <vxe-table
-      ref="xTable"
+      export-config
       highlight-hover-row
+      ref="xTable"
       height="400"
       :data="tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
@@ -62,8 +63,9 @@ export default {
         </vxe-toolbar>
 
         <vxe-table
-          ref="xTable"
+          export-config
           highlight-hover-row
+          ref="xTable"
           height="400"
           :data="tableData">
           <vxe-table-column type="seq" width="60"></vxe-table-column>

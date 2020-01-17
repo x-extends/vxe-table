@@ -80,20 +80,20 @@ export default {
   props,
   provide () {
     return {
-      $column: this
+      $xecolumn: this
     }
   },
   inject: {
-    $table: {
+    $xetable: {
       default: null
     },
-    $column: {
+    $xecolumn: {
       default: null
     }
   },
   watch,
   created () {
-    this.columnConfig = this.createColumn(this.$table, this)
+    this.columnConfig = this.createColumn(this.$xetable, this)
   },
   mounted () {
     UtilTools.assemColumn(this)

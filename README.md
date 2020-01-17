@@ -22,7 +22,7 @@
 * 计划
   * [x] v1.0 100% 实现表格的一切实用的功能
   * [x] v2.0 &nbsp;95% 性能优化，同时兼具功能与性能
-  * [ ] v3.0 &nbsp;&nbsp;0% 使用 typescript 重构，不再支持 IE，渲染性能提升
+  * [ ] v3.0 &nbsp;&nbsp;0% 内部重构，不再支持 IE，渲染性能提升
   * [ ] v4.0 &nbsp;&nbsp;0% 基于 Vue3 重构
 
 🐬 如果有更好的建议、优化点或 Bug 都欢迎提 [Issues](https://github.com/xuliangzhan/vxe-table/issues/390)
@@ -87,7 +87,7 @@
   * ![Loading](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/loading/src/loading.min.js?compression=gzip&label=Loading)![style](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/loading/style/style.css?compression=gzip&label=style&color=green) （加载中）
   * ![Tooltip](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/tooltip/src/tooltip.min.js?compression=gzip&label=Tooltip)![style](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/tooltip/style/style.css?compression=gzip&label=style&color=green) （提示信息）
   * ![Menu](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/menu/src/mixin.min.js?compression=gzip&label=Menu)![Panel](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/menu/src/panel.min.js?compression=gzip&label=Panel)![style](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/menu/style/style.css?compression=gzip&label=style&color=green) （快捷菜单）
-  * ![Export](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/export/src/mixin.min.js?compression=gzip&label=Export) （导出）
+  * ![Export](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/export/src/mixin.min.js?compression=gzip&label=Export)![style](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/export/style/style.css?compression=gzip&label=style&color=green) （导出）
   * ![Keyboard](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/keyboard/src/mixin.min.js?compression=gzip&label=Keyboard) （按键导航）
   * ![Resize](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/resize/src/resize.min.js?compression=gzip&label=Resize)![Methods](http://img.badgesize.io/https://unpkg.com/vxe-table/lib/resize/src/mixin.min.js?compression=gzip&label=Methods) （响应式）
 * Component （可选组件）

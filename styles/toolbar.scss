@@ -55,6 +55,14 @@
   .vxe-button--wrapper {
     flex-grow: 1;
     text-align: left;
+    & > .vxe-button+.vxe-button--item,
+    & > .vxe-button--item+.vxe-button,
+    & > .vxe-button--item+.vxe-button--item {
+      margin-left: 0.8em;
+    }
+    & > .vxe-button--item {
+      display: inline-block;
+    }
   }
   .vxe-tools--wrapper {
     & > .vxe-button {
@@ -97,6 +105,11 @@
       display: block;
     }
   }
+  .vxe-custom--option {
+    & > .vxe-checkbox--icon {
+      font-size: $vxe-checkbox-font-size-default;
+    }
+  }
   .vxe-custom--option-wrapper {
     display: none;
     position: absolute;
@@ -120,7 +133,7 @@
       & > li {
         max-width: 180px;
         min-width: 100px;
-        padding: 0.25em 0.8em 0.25em 2.2em;
+        padding: 0.2em 1em 0.2em 2.25em;
       }
     }
     .vxe-custom--footer {
@@ -147,32 +160,38 @@
 }
 
 .vxe-custom--option-wrapper .vxe-custom--header,
-.vxe-custom--option-wrapper .vxe-custom--body,
-.vxe-export--panel-column > ul {
+.vxe-custom--option-wrapper .vxe-custom--body {
   list-style-type: none;
   overflow: auto;
   margin: 0;
   padding: 0;
   user-select: none;
   & > li {
-    position: relative;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     cursor: pointer;
+  }
+}
+
+.vxe-custom--option {
+  position: relative;
+  .vxe-checkbox--icon {
     &:before {
       content: "";
       position: absolute;
-      height: 1.2em;
-      width: 1.2em;
+      height: 1em;
+      width: 1em;
       top: 0.4em;
       left: 0.6em;
       border-radius: 0.2em;
       border: 2px solid $vxe-input-border-color;
     }
-    &.is--checked,
-    &.is--indeterminate {
-      color: $vxe-primary-color;
+  }
+  &.is--checked,
+  &.is--indeterminate {
+    color: $vxe-primary-color;
+    .vxe-checkbox--icon {
       &:before {
         border-color: $vxe-primary-color;
         background-color: $vxe-primary-color;
@@ -182,39 +201,47 @@
         position: absolute;
       }
     }
-    &.is--checked {
+  }
+  &.is--checked {
+    .vxe-checkbox--icon {
       &:after {
-        height: 0.7em;
-        width: 0.34em;
-        top: 0.6em;
-        left: 1em;
+        height: 0.64em;
+        width: 0.32em;
+        top: 0.55em;
+        left: 0.95em;
         border: 2px solid #ffffff;
         border-left: 0;
         border-top: 0;
         transform: rotate(45deg);
       }
     }
-    &.is--indeterminate {
+  }
+  &.is--indeterminate {
+    .vxe-checkbox--icon {
       &:after {
-        top: 0.9em;
-        left: 0.65em;
+        top: 0.85em;
+        left: 0.6em;
         height: 0.18em;
         width: 1em;
         background-color: #ffffff;
         transform: scale(.6);
       }
     }
-    &:not(.is--disabled) {
-      &:hover {
+  }
+  &:not(.is--disabled) {
+    &:hover {
+      .vxe-checkbox--icon {
         &:before {
           border-color: $vxe-primary-color;
         }
       }
     }
-    &.is--disabled {
-      cursor: not-allowed;
-      color: $vxe-input-disabled-color;
-      &.is--checked {
+  }
+  &.is--disabled {
+    cursor: not-allowed;
+    color: $vxe-input-disabled-color;
+    &.is--checked {
+      .vxe-checkbox--icon {
         &:before {
           border-color: $vxe-input-disabled-color;
           background-color: $vxe-input-disabled-background-color;
@@ -224,112 +251,37 @@
         }
       }
     }
-    &:hover {
-      background-color: $vxe-table-row-hover-background-color;
-    }
+  }
+  &:hover {
+    background-color: $vxe-table-row-hover-background-color;
   }
 }
 
-.vxe-export--panel {
-  & > table {
-    width: 100%;
-    border: 0;
-    table-layout: fixed;
-    tr {
-      td {
-        padding: 0 10px;
-        &:nth-child(1) {
-          text-align: right;
-          width: 30%;
-          font-weight: 700;
-          padding: 8px 10px;
-        }
-        &:nth-child(2) {
-          width: 70%;
-        }
-        & > input,
-        & > select {
-          outline: 0;
-          width: 80%;
-          padding: 5px 8px;
-          color: $vxe-font-color;
-          border-radius: 4px;
-          border: 1px solid $vxe-input-border-color;
-          &:focus {
-            border: 1px solid $vxe-primary-color;
-          }
-        }
-        & > input {
-          &::placeholder {
-            color: $vxe-input-placeholder-color;
-          }
-        }
+.vxe-toolbar {
+  .vxe-custom--option {
+    & > .vxe-checkbox--icon {
+      font-size: $vxe-checkbox-font-size-default;
+    }
+  }
+  &.size--medium {
+    .vxe-custom--option {
+      & > .vxe-checkbox--icon {
+        font-size: $vxe-checkbox-font-size-medium;
       }
     }
   }
-  .vxe-export--panel-column {
-    width: 80%;
-    border: 1px solid $vxe-input-border-color;
-    margin: 3px 0;
-    border-radius: 4px;
-    user-select: none;
-    & > ul {
-      & > li {
-        padding: 4px 30px 4px 32px;
-      }
-    }
-    .vxe-export--panel-column-header {
-      background-color: #f8f8f9;
-      font-weight: 700;
-    }
-    .vxe-export--panel-column-body {
-      max-height: 208px;
-    }
-  }
-  .vxe-import-selected--file {
-    padding-right: 40px;
-    position: relative;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    user-select: none;
-    & > i {
-      display: none;
-      position: absolute;
-      top: 50%;
-      right: 15px;
-      transform: translateY(-50%);
-      font-size: 16px;
-      cursor: pointer;
-    }
-    &:hover {
-      & > i {
-        display: block;
-      }
-      color: $vxe-primary-color;
-    }
-  }
-  .vxe-import-select--file {
-    border: 1px dashed $vxe-input-border-color;
-    padding: 6px 34px;
-    border-radius: 4px;
-    user-select: none;
-    cursor: pointer;
-    &:hover {
-      color: $vxe-primary-color;
-      border-color: $vxe-primary-color;
-    }
-  }
-  .vxe-export--panel-btns {
-    text-align: right;
-    margin-top: 10px;
-  }
-}
-.vxe-modal--wrapper {
-  &.size--mini,
   &.size--small {
-    .vxe-export--panel {
-      font-size: 12px;
+    .vxe-custom--option {
+      & > .vxe-checkbox--icon {
+        font-size: $vxe-checkbox-font-size-small;
+      }
+    }
+  }
+  &.size--mini {
+    .vxe-custom--option {
+      & > .vxe-checkbox--icon {
+        font-size: $vxe-checkbox-font-size-mini;
+      }
     }
   }
 }

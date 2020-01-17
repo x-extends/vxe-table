@@ -30,13 +30,13 @@ const Methods = {
    * 获取父容器元素
    */
   getParentElem () {
-    return this.$grid ? this.$grid.$el.parentNode : this.$el.parentNode
+    return this.$xegrid ? this.$xegrid.$el.parentNode : this.$el.parentNode
   },
   /**
    * 获取父容器的高度
    */
   getParentHeight () {
-    return this.$grid ? this.$grid.getParentHeight() : this.getParentElem().clientHeight
+    return this.$xegrid ? this.$xegrid.getParentHeight() : this.getParentElem().clientHeight
   },
   /**
    * 获取需要排除的高度
@@ -44,7 +44,7 @@ const Methods = {
    * 如果存在表尾合计滚动条，则需要排除滚动条高度
    */
   getExcludeHeight () {
-    return this.$grid ? this.$grid.getExcludeHeight() : 0
+    return this.$xegrid ? this.$xegrid.getExcludeHeight() : 0
   },
   /**
    * 重置表格的一切数据状态
@@ -1393,7 +1393,7 @@ const Methods = {
         }
       }
     } else if (mouseConfig) {
-      if (!DomTools.getEventTargetNode(evnt, $el).flag) {
+      if (!DomTools.getEventTargetNode(evnt, $el).flag && !DomTools.getEventTargetNode(evnt, $refs.tableWrapper).flag) {
         if (isMouseChecked) {
           this.clearIndexChecked()
           this.clearHeaderChecked()
@@ -1407,7 +1407,7 @@ const Methods = {
       this.closeMenu()
     }
     // 最后激活的表格
-    this.isActivated = DomTools.getEventTargetNode(evnt, (this.$grid || this).$el).flag
+    this.isActivated = DomTools.getEventTargetNode(evnt, (this.$xegrid || this).$el).flag
   },
   /**
    * 窗口失焦事件处理
@@ -2497,15 +2497,13 @@ const Methods = {
     return this.$nextTick().then(this.recalculate)
   },
   handleAsyncRowExpand (row) {
-    let { fullAllDataRowMap, rowExpandeds, expandLazyLoadeds, expandOpts } = this
-    let { loadMethod } = expandOpts
-    let rest = fullAllDataRowMap.get(row)
+    let rest = this.fullAllDataRowMap.get(row)
     return new Promise(resolve => {
-      expandLazyLoadeds.push(row)
-      loadMethod({ $table: this, row }).catch(e => e).then(() => {
+      this.expandLazyLoadeds.push(row)
+      this.expandOpts.loadMethod({ $table: this, row }).catch(e => e).then(() => {
         rest.expandLoaded = true
-        XEUtils.remove(expandLazyLoadeds, item => item === row)
-        rowExpandeds.push(row)
+        XEUtils.remove(this.expandLazyLoadeds, item => item === row)
+        this.rowExpandeds.push(row)
         resolve(this.$nextTick().then(this.recalculate))
       })
     })
