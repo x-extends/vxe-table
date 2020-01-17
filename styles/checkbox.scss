@@ -30,6 +30,7 @@
       &:before {
         height: 0.64em;
         width: 0.32em;
+        top: 0;
         left: 0.2em;
         bottom: 0.1em;
         border-width: 0.12em;
@@ -51,12 +52,13 @@
           background-color: $vxe-primary-color;
           border-color: $vxe-primary-color;
           &:before {
-            top: 50%;
-            height: 0.15em;
-            width: 100%;
-            transform: translateY(-50%) scale(.6);
             border: 0;
-            background-color: #fff;
+            left: -0.15em;
+            top: 0.3em;
+            height: 0.18em;
+            width: 1em;
+            background-color: #ffffff;
+            transform: scale(.6);
           }
         }
       }
@@ -90,13 +92,16 @@
       }
     }
   }
-  .vxe-checkbox--icon {
-    font-size: $vxe-checkbox-font-size-default;
-  }
   .vxe-checkbox--label {
     padding-left: 0.5em;
     vertical-align: middle;
     display: inline-block;
+  }
+}
+
+.vxe-checkbox {
+  .vxe-checkbox--icon {
+    font-size: $vxe-checkbox-font-size-default;
   }
   &.size--medium {
     .vxe-checkbox--icon {

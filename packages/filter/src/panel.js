@@ -58,9 +58,9 @@ export default {
               }
             }
           }, [
-            h('i', {
+            multiple ? h('i', {
               class: 'vxe-checkbox--icon'
-            }),
+            }) : null,
             GlobalConfig.i18n('vxe.table.allFilter')
           ])
         ]),
@@ -80,9 +80,9 @@ export default {
               }
             }
           }, [
-            h('i', {
+            multiple ? h('i', {
               class: 'vxe-checkbox--icon'
-            }),
+            }) : null,
             UtilTools.formatText(item.label, 1)
           ])
         }))

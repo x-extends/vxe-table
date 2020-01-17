@@ -1,8 +1,8 @@
 <template>
   <div>
     <p class="tip">
-      可以设置大小尺寸：<table-api-link prop="medium"/> / <table-api-link prop="small"/> / <table-api-link prop="mini"/><br>
-      默认大小：Table 48px 、Button 34px、Input 34px、Checkbox 16px、Radio 16px，可以通过 scss 变量修改（<a class="link" href="https://github.com/xuliangzhan/vxe-table/blob/master/styles/variable.scss" target="_blank">查看所有变量</a>）
+      可以设置大小尺寸：medium / small / mini<br>
+      默认大小：Table 48px 、Button 34px、Input 34px、Checkbox 16px、Radio 16px，可以通过 scss 变量修改，<a class="link" href="https://github.com/xuliangzhan/vxe-table/blob/master/styles/variable.scss" target="_blank">查看所有变量</a><br><a class="link" href="https://github.com/xuliangzhan/vxe-table-demo/tree/master/vxe-table-by-vue-custom-theme" target="_blank">（项目示例）</a>
     </p>
 
     <vxe-form :data="formData">
@@ -17,7 +17,8 @@
         </select>
       </vxe-form-item>
       <vxe-form-item title="复选框" field="cVal">
-        <vxe-checkbox v-model="formData.cVal" value="1">选项1</vxe-checkbox>
+        <vxe-checkbox v-model="formData.cVal">选项1</vxe-checkbox>
+        <vxe-checkbox :indeterminate="formData.ciVal">半选</vxe-checkbox>
       </vxe-form-item>
       <vxe-form-item title="单选框" field="rVal">
         <vxe-radio v-model="formData.rVal" name="size-radio" label="1">选项1</vxe-radio>
@@ -65,7 +66,7 @@
       <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
 
-    <p class="tip">设置大小为 <table-api-link prop="medium"/>，默认大小：Table 44px 、Button 32px、Input 32px、Checkbox 15px、Radio 15px</p>
+    <p class="tip">设置大小为 medium，默认大小：Table 44px 、Button 32px、Input 32px、Checkbox 15px、Radio 15px</p>
 
     <vxe-form :data="formData" size="medium">
       <vxe-form-item title="输入框" field="iVal">
@@ -79,7 +80,8 @@
         </select>
       </vxe-form-item>
       <vxe-form-item title="复选框" field="cVal">
-        <vxe-checkbox v-model="formData.cVal" value="1">选项1</vxe-checkbox>
+        <vxe-checkbox v-model="formData.cVal">选项1</vxe-checkbox>
+        <vxe-checkbox :indeterminate="formData.ciVal">半选</vxe-checkbox>
       </vxe-form-item>
       <vxe-form-item title="单选框" field="rVal">
         <vxe-radio v-model="formData.rVal" name="size-radio" label="1">选项1</vxe-radio>
@@ -129,7 +131,7 @@
       <code class="javascript">{{ demoCodes[3] }}</code>
     </pre>
 
-    <p class="tip">设置大小为 <table-api-link prop="small"/>，默认大小：Table 40px 、Button 30px、Input 30px、Checkbox 14px、Radio 14px</p>
+    <p class="tip">设置大小为 small，默认大小：Table 40px 、Button 30px、Input 30px、Checkbox 14px、Radio 14px</p>
 
     <vxe-form :data="formData" size="small">
       <vxe-form-item title="输入框" field="iVal">
@@ -143,7 +145,8 @@
         </select>
       </vxe-form-item>
       <vxe-form-item title="复选框" field="cVal">
-        <vxe-checkbox v-model="formData.cVal" value="1">选项1</vxe-checkbox>
+        <vxe-checkbox v-model="formData.cVal">选项1</vxe-checkbox>
+        <vxe-checkbox :indeterminate="formData.ciVal">半选</vxe-checkbox>
       </vxe-form-item>
       <vxe-form-item title="单选框" field="rVal">
         <vxe-radio v-model="formData.rVal" name="size-radio" label="1">选项1</vxe-radio>
@@ -193,7 +196,7 @@
       <code class="javascript">{{ demoCodes[5] }}</code>
     </pre>
 
-    <p class="tip">设置大小为 <table-api-link prop="mini"/>，默认大小：Table 36px 、Button 28px、Input 28px、Checkbox 14px、Radio 14px</p>
+    <p class="tip">设置大小为 mini，默认大小：Table 36px 、Button 28px、Input 28px、Checkbox 14px、Radio 14px</p>
 
     <vxe-form :data="formData" size="mini">
       <vxe-form-item title="输入框" field="iVal">
@@ -207,7 +210,8 @@
         </select>
       </vxe-form-item>
       <vxe-form-item title="复选框" field="cVal">
-        <vxe-checkbox v-model="formData.cVal" value="1">选项1</vxe-checkbox>
+        <vxe-checkbox v-model="formData.cVal">选项1</vxe-checkbox>
+        <vxe-checkbox :indeterminate="formData.ciVal">半选</vxe-checkbox>
       </vxe-form-item>
       <vxe-form-item title="单选框" field="rVal">
         <vxe-radio v-model="formData.rVal" name="size-radio" label="1">选项1</vxe-radio>
@@ -269,6 +273,7 @@ export default {
         iVal: '',
         sVal: '',
         cVal: true,
+        ciVal: true,
         rVal: '1'
       },
       tablePage: {
