@@ -14,14 +14,14 @@
       <code class="javascript">{{ demoCodes[1] }}</code>
       <code class="html">{{ demoCodes[2] }}</code>
     </pre>
-    <h2>支持的语言</h2>
-    <p class="tip"><a class="link" href="https://github.com/xuliangzhan/vxe-table/tree/master/packages/locale/lang">添加语言</a></p>
+    <h2>发现错误？想参与翻译？</h2>
+    <p class="tip">通过 <a class="link" href="https://github.com/xuliangzhan/vxe-table/pulls">Pull requests</a> 贡献翻译 -> <a class="link" href="https://github.com/xuliangzhan/vxe-table/tree/master/packages/locale/lang">添加或修改</a></p>
     <div>
       <ul class="lang-list">
-        <li>简体中文（zh-CN）</li>
-        <li>繁体中文（zh-TW）</li>
-        <li>英文（en-US）</li>
-        <li>日语（ja-JP）</li>
+        <li><a class="link" href="https://github.com/xuliangzhan/vxe-table/blob/master/packages/locale/lang/zh-CN.js" target="_blank">简体中文（zh-CN）</a></li>
+        <li><a class="link" href="https://github.com/xuliangzhan/vxe-table/blob/master/packages/locale/lang/zh-TW.js" target="_blank">繁体中文（zh-TW）</a></li>
+        <li><a class="link" href="https://github.com/xuliangzhan/vxe-table/blob/master/packages/locale/lang/en-US.js" target="_blank">英文（en-US）</a></li>
+        <li><a class="link" href="https://github.com/xuliangzhan/vxe-table/blob/master/packages/locale/lang/ja-JP.js" target="_blank">日语（ja-JP）</a></li>
       </ul>
     </div>
   </div>

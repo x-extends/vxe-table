@@ -186,6 +186,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.scrollStyle',
+              locat: {
+                name: 'TableScrollStyle'
+              }
+            },
+            {
               label: 'app.aside.nav.hideHead',
               demoUrl: 'https://jsrun.net/7mXKp/edit',
               locat: {

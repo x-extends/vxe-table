@@ -1612,6 +1612,7 @@ const apis = [
           },
           {
             name: 'message',
+            abandoned: true,
             desc: '校验提示框的方式',
             version: '',
             type: 'String',

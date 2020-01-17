@@ -20,7 +20,8 @@ function renderTitle (h, _vm) {
       titlePrefix.message
         ? h('vxe-tooltip', {
           props: {
-            content: titlePrefix.message
+            content: titlePrefix.message,
+            enterable: titlePrefix.enterable
           }
         }, [
           renderPrefixIcon(h, titlePrefix)

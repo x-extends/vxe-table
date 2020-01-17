@@ -20,6 +20,7 @@ module.exports = {
         border: 'Border',
         style: 'Cell style',
         dynamicStyle: 'Cell dynamic style',
+        scrollStyle: 'Scrollbar style',
         hideHead: 'Hidden header',
         resizable: 'Resizable',
         fluidHeight: 'Maximum table height',

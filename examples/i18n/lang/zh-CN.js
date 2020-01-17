@@ -20,6 +20,7 @@ module.exports = {
         border: '边框',
         style: '单元格样式',
         dynamicStyle: '单元格动态样式',
+        scrollStyle: '滚动条样式',
         hideHead: '隐藏头部',
         resizable: '列宽拖动',
         fluidHeight: '最大高度',
