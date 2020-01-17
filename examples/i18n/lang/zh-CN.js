@@ -81,7 +81,7 @@ module.exports = {
         proxy: '数据代理',
         proxyPage: '数据代理 + 分页',
         formProxy: '数据代理 + 表单',
-        configProxy: '实现 JSON 化表格',
+        configProxy: '进阶封装',
         fullQuery: '完整查询',
         customToolbar: '自定义工具栏',
         toolbarIcon: '自定义工具栏按钮图标',
