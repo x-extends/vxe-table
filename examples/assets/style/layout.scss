@@ -95,6 +95,10 @@ body,
     & > .content {
       width: 100%;
       text-align: right;
+      & > select,
+      & > input {
+        height: 24px;
+      }
     }
   }
   .performance {
