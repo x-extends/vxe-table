@@ -614,12 +614,6 @@ export default {
               }
             },
             {
-              label: 'app.aside.nav.configProxy',
-              locat: {
-                name: 'GridConfigProxy'
-              }
-            },
-            {
               label: 'app.aside.nav.edit',
               locat: {
                 name: 'GridEdit'
@@ -722,6 +716,12 @@ export default {
               demoUrl: 'https://jsrun.pro/r6WKp/edit',
               locat: {
                 name: 'GridFullEdit'
+              }
+            },
+            {
+              label: 'app.aside.nav.configProxy',
+              locat: {
+                name: 'GridConfigProxy'
               }
             }
           ]

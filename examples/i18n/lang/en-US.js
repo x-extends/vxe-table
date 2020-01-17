@@ -82,7 +82,7 @@ module.exports = {
         proxy: 'Data proxy',
         proxyPage: 'Data proxy + Pager',
         formProxy: 'Data proxy + Form',
-        configProxy: 'Implement JSON table',
+        configProxy: 'Strongest function',
         fullQuery: 'Full query',
         customToolbar: 'Custom toolbar',
         toolbarIcon: 'Custom toolbar button icon',
