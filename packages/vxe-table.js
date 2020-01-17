@@ -3,7 +3,6 @@ import VXETable from './v-x-e-table'
 import Table from './table'
 import Column from './column'
 import Header from './header'
-import Body from './body'
 import Footer from './footer'
 import Filter from './filter'
 import Loading from './loading'
@@ -31,7 +30,6 @@ const components = [
   // 模块
   Column,
   Header,
-  Body,
   Footer,
   Filter,
   Loading,
