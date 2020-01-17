@@ -2,7 +2,6 @@ import XEUtils from 'xe-utils'
 import Table from './table'
 import Column from './column'
 import Header from './header'
-import Body from './body'
 import Footer from './footer'
 import Filter from './filter'
 import Loading from './loading'
@@ -29,7 +28,6 @@ const components = [
   Table,
   Column,
   Header,
-  Body,
   Footer,
   Filter,
   Loading,
