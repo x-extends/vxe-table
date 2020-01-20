@@ -163,6 +163,15 @@ const apis = [
             list: []
           },
           {
+            name: 'form',
+            desc: '是否代理表单',
+            version: '2.8',
+            type: 'Boolean',
+            enum: '',
+            defVal: 'false',
+            list: []
+          },
+          {
             name: 'props',
             desc: '获取的属性配置',
             version: '',
@@ -209,7 +218,7 @@ const apis = [
             list: [
               {
                 name: 'query',
-                desc: '查询方法 Function({ page, sort, filters }, ...arguments)，默认处理的数据结构 {page: {total: 0}, result: []}；如果使用了服务端排序，sort 属性可以获取相关信息；如果使用了服务端过滤，filter 属性可以获取相关信息',
+                desc: '查询方法 Function({ page, sort, filters, form }, ...arguments)，默认处理的数据结构 {page: {total: 0}, result: []}；如果使用了服务端排序，sort 属性可以获取相关信息；如果使用了服务端过滤，filter 属性可以获取相关信息；如果使用了表单，form 属性可以获取相关信息',
                 version: '',
                 type: 'Function / Promise',
                 enum: '',

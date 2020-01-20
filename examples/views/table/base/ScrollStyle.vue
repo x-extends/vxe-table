@@ -81,35 +81,29 @@ export default {
         `,
         `
         /*滚动条整体部分*/
-        .mytable-scrollbar .vxe-table--body-wrapper::-webkit-scrollbar,
-        .mytable-scrollbar .vxe-table--footer-wrapper::-webkit-scrollbar {
+        .mytable-scrollbar div::-webkit-scrollbar {
           width: 10px;
           height: 10px;
         }
         /*滚动条的轨道*/
-        .mytable-scrollbar .vxe-table--body-wrapper::-webkit-scrollbar-track,
-        .mytable-scrollbar .vxe-table--footer-wrapper::-webkit-scrollbar-track {
+        .mytable-scrollbar div::-webkit-scrollbar-track {
           background-color: #FFFFFF;
         }
         /*滚动条里面的小方块，能向上向下移动*/
-        .mytable-scrollbar .vxe-table--body-wrapper::-webkit-scrollbar-thumb,
-        .mytable-scrollbar .vxe-table--footer-wrapper::-webkit-scrollbar-thumb {
+        .mytable-scrollbar div::-webkit-scrollbar-thumb {
           background-color: #bfbfbf;
           border-radius: 5px;
           border: 1px solid #F1F1F1;
           box-shadow: inset 0 0 6px rgba(0,0,0,.3);
         }
-        .mytable-scrollbar .vxe-table--body-wrapper::-webkit-scrollbar-thumb:hover,
-        .mytable-scrollbar .vxe-table--footer-wrapper::-webkit-scrollbar-thumb:hover {
+        .mytable-scrollbar div::-webkit-scrollbar-thumb:hover {
           background-color: #A8A8A8;
         }
-        .mytable-scrollbar .vxe-table--body-wrapper::-webkit-scrollbar-thumb:active,
-        .mytable-scrollbar .vxe-table--footer-wrapper::-webkit-scrollbar-thumb:active {
+        .mytable-scrollbar div::-webkit-scrollbar-thumb:active {
           background-color: #787878;
         }
         /*边角，即两个滚动条的交汇处*/
-        .mytable-scrollbar .vxe-table--body-wrapper::-webkit-scrollbar-corner,
-        .mytable-scrollbar .vxe-table--footer-wrapper::-webkit-scrollbar-corner {
+        .mytable-scrollbar div::-webkit-scrollbar-corner {
           background-color: #FFFFFF;
         }
         `
@@ -144,35 +138,29 @@ export default {
 
 <style>
 /*滚动条整体部分*/
-.mytable-scrollbar .vxe-table--body-wrapper::-webkit-scrollbar,
-.mytable-scrollbar .vxe-table--footer-wrapper::-webkit-scrollbar {
+.mytable-scrollbar div::-webkit-scrollbar {
   width: 10px;
   height: 10px;
 }
 /*滚动条的轨道*/
-.mytable-scrollbar .vxe-table--body-wrapper::-webkit-scrollbar-track,
-.mytable-scrollbar .vxe-table--footer-wrapper::-webkit-scrollbar-track {
+.mytable-scrollbar div::-webkit-scrollbar-track {
   background-color: #FFFFFF;
 }
 /*滚动条里面的小方块，能向上向下移动*/
-.mytable-scrollbar .vxe-table--body-wrapper::-webkit-scrollbar-thumb,
-.mytable-scrollbar .vxe-table--footer-wrapper::-webkit-scrollbar-thumb {
+.mytable-scrollbar div::-webkit-scrollbar-thumb {
   background-color: #bfbfbf;
   border-radius: 5px;
   border: 1px solid #F1F1F1;
   box-shadow: inset 0 0 6px rgba(0,0,0,.3);
 }
-.mytable-scrollbar .vxe-table--body-wrapper::-webkit-scrollbar-thumb:hover,
-.mytable-scrollbar .vxe-table--footer-wrapper::-webkit-scrollbar-thumb:hover {
+.mytable-scrollbar div::-webkit-scrollbar-thumb:hover {
   background-color: #A8A8A8;
 }
-.mytable-scrollbar .vxe-table--body-wrapper::-webkit-scrollbar-thumb:active,
-.mytable-scrollbar .vxe-table--footer-wrapper::-webkit-scrollbar-thumb:active {
+.mytable-scrollbar div::-webkit-scrollbar-thumb:active {
   background-color: #787878;
 }
 /*边角，即两个滚动条的交汇处*/
-.mytable-scrollbar .vxe-table--body-wrapper::-webkit-scrollbar-corner,
-.mytable-scrollbar .vxe-table--footer-wrapper::-webkit-scrollbar-corner {
+.mytable-scrollbar div::-webkit-scrollbar-corner {
   background-color: #FFFFFF;
 }
 </style>

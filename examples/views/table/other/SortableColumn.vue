@@ -9,8 +9,8 @@
       class="sortable-column-demo"
       :data="tableData">
       <vxe-table-column field="name" title="Name"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-      <vxe-table-column field="age" title="Age"></vxe-table-column>
+      <vxe-table-column field="sex" title="Sex" width="150"></vxe-table-column>
+      <vxe-table-column field="age" title="Age" width="250"></vxe-table-column>
       <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
     </vxe-table>
 
@@ -59,9 +59,9 @@ export default {
       tableColumn: [
         { field: 'name', title: 'Name', fixed: 'left', minWidth: 200 },
         { field: 'role', title: 'Role', minWidth: 220 },
-        { field: 'sex', title: 'Sex', minWidth: 220 },
-        { field: 'age', title: 'Age', minWidth: 220 },
-        { field: 'date3', title: 'Date', minWidth: 220 },
+        { field: 'sex', title: 'Sex', minWidth: 100 },
+        { field: 'age', title: 'Age', minWidth: 150 },
+        { field: 'date3', title: 'Date', minWidth: 200 },
         { field: 'address', title: 'Address', minWidth: 300, showOverflow: true }
       ],
       toolbar: {
@@ -77,8 +77,8 @@ export default {
           class="sortable-column-demo"
           :data="tableData">
           <vxe-table-column field="name" title="Name"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-          <vxe-table-column field="age" title="Age"></vxe-table-column>
+          <vxe-table-column field="sex" title="Sex" width="150"></vxe-table-column>
+          <vxe-table-column field="age" title="Age" width="250"></vxe-table-column>
           <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
         </vxe-table>
         `,
@@ -156,9 +156,9 @@ export default {
               tableColumn: [
                 { field: 'name', title: 'Name', fixed: 'left', minWidth: 200 },
                 { field: 'role', title: 'Role', minWidth: 220 },
-                { field: 'sex', title: 'Sex', minWidth: 220 },
-                { field: 'age', title: 'Age', minWidth: 220 },
-                { field: 'date3', title: 'Date', minWidth: 220 },
+                { field: 'sex', title: 'Sex', minWidth: 100 },
+                { field: 'age', title: 'Age', minWidth: 150 },
+                { field: 'date3', title: 'Date', minWidth: 200 },
                 { field: 'address', title: 'Address', minWidth: 300, showOverflow: true }
               ],
               toolbar: {
