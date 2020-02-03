@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2>文字提示</h2>
+    <h2>{{ $t('app.aside.nav.tooltip') }}</h2>
     <p class="tip">查看 <router-link class="link" :to="{name: 'VXEAPI', params: {name: 'tooltip'}}">API</router-link></p>
 
     <p>

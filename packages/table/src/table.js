@@ -702,6 +702,12 @@ export default {
     tableColumn () {
       this.analyColumnWidth()
     },
+    showHeader () {
+      this.$nextTick(() => this.recalculate(true))
+    },
+    showFooter () {
+      this.$nextTick(() => this.recalculate(true))
+    },
     height () {
       this.$nextTick(() => this.recalculate(true))
     },
@@ -2157,6 +2163,8 @@ export default {
       this.parentHeight = this.getParentHeight()
       if (headerElem) {
         this.headerHeight = headerElem.clientHeight
+      } else {
+        this.headerHeight = 0
       }
       if (footerElem) {
         let footerHeight = footerElem.offsetHeight
@@ -2164,6 +2172,7 @@ export default {
         this.overflowX = tableWidth > footerElem.clientWidth
         this.footerHeight = footerHeight
       } else {
+        this.footerHeight = 0
         this.scrollbarHeight = Math.max(tableHeight - bodyElem.clientHeight, 0)
         this.overflowX = tableWidth > bodyWidth
       }
@@ -2590,11 +2599,11 @@ export default {
      * 快捷菜单事件处理
      */
     handleGlobalContextmenuEvent (evnt) {
-      let { id, contextMenu, isCtxMenu, ctxMenuStore, ctxMenuOpts } = this
+      let { $refs, id, contextMenu, isCtxMenu, ctxMenuStore, ctxMenuOpts } = this
       let layoutList = ['header', 'body', 'footer']
       if (contextMenu && isCtxMenu) {
         if (ctxMenuStore.visible) {
-          if (ctxMenuStore.visible && this.$refs.ctxWrapper && DomTools.getEventTargetNode(evnt, this.$refs.ctxWrapper.$el).flag) {
+          if (ctxMenuStore.visible && $refs.ctxWrapper && DomTools.getEventTargetNode(evnt, $refs.ctxWrapper.$el).flag) {
             evnt.preventDefault()
             return
           }
@@ -2633,8 +2642,10 @@ export default {
           }
         }
       }
+      if ($refs.filterWrapper && !DomTools.getEventTargetNode(evnt, $refs.filterWrapper.$el).flag) {
+        this.closeFilter()
+      }
       this.closeMenu()
-      this.closeFilter()
     },
     /**
      * 显示快捷菜单
@@ -4015,7 +4026,7 @@ export default {
     },
     // v3 废弃 filter 方法，被 setFilter 取代
     filter (field, callback) {
-      // UtilTools.warn('vxe.error.delFunc', ['filter', 'setFilter'])
+      UtilTools.warn('vxe.error.delFunc', ['filter', 'setFilter'])
       let column = this.getColumnByField(field)
       if (column) {
         let options = column.filters

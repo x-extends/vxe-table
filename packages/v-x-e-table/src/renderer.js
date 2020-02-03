@@ -152,6 +152,26 @@ function renderSelectEdit (h, renderOpts, params) {
   ]
 }
 
+function getSelectCellValue (renderOpts, { row, column }) {
+  let { options, optionGroups, optionProps = {}, optionGroupProps = {} } = renderOpts
+  let cellValue = XEUtils.get(row, column.property)
+  let selectItem
+  let labelProp = optionProps.label || 'label'
+  let valueProp = optionProps.value || 'value'
+  if (optionGroups) {
+    let groupOptions = optionGroupProps.options || 'options'
+    for (let index = 0; index < optionGroups.length; index++) {
+      selectItem = XEUtils.find(optionGroups[index][groupOptions], item => item[valueProp] === cellValue)
+      if (selectItem) {
+        break
+      }
+    }
+    return selectItem ? selectItem[labelProp] : cellValue
+  }
+  selectItem = XEUtils.find(options, item => item[valueProp] === cellValue)
+  return selectItem ? selectItem[labelProp] : cellValue
+}
+
 /**
  * 表单渲染器
  */
@@ -173,12 +193,14 @@ function defaultItemRender (h, renderOpts, params, context) {
 }
 
 function getFormEvents (renderOpts, params, context) {
-  let { data, property } = params
+  let { $form, data, property } = params
   let { events } = renderOpts
   let type = name === 'select' ? 'change' : 'input'
   let on = {
     [type] (evnt) {
-      XEUtils.set(data, property, evnt.target.value)
+      const itemValue = evnt.target.value
+      XEUtils.set(data, property, itemValue)
+      $form.updateStatus(params, itemValue)
       if (events && events[type]) {
         events[type](Object.assign({ context }, params), evnt)
       }
@@ -214,6 +236,13 @@ function renderFormOptions (h, options, renderOpts, params, context) {
   })
 }
 
+function createExportMethod (valueMethod, isEdit) {
+  const renderProperty = isEdit ? 'editRender' : 'cellRender'
+  return function (params) {
+    return valueMethod(params.column[renderProperty], params)
+  }
+}
+
 const renderMap = {
   input: {
     autofocus: 'input',
@@ -235,25 +264,7 @@ const renderMap = {
     renderEdit: renderSelectEdit,
     renderDefault: renderSelectEdit,
     renderCell (h, renderOpts, params) {
-      let { options, optionGroups, optionProps = {}, optionGroupProps = {} } = renderOpts
-      let { row, column } = params
-      let cellValue = XEUtils.get(row, column.property)
-      let selectItem
-      let labelProp = optionProps.label || 'label'
-      let valueProp = optionProps.value || 'value'
-      if (optionGroups) {
-        let groupOptions = optionGroupProps.options || 'options'
-        for (let index = 0; index < optionGroups.length; index++) {
-          selectItem = XEUtils.find(optionGroups[index][groupOptions], item => item[valueProp] === cellValue)
-          if (selectItem) {
-            break
-          }
-        }
-        return selectItem ? selectItem[labelProp] : cellValue
-      } else {
-        selectItem = XEUtils.find(options, item => item[valueProp] === cellValue)
-        return selectItem ? selectItem[labelProp] : cellValue
-      }
+      getSelectCellValue(renderOpts, params)
     },
     renderFilter (h, renderOpts, params, context) {
       let { column } = params
@@ -276,7 +287,9 @@ const renderMap = {
         },
         renderOpts.optionGroups ? renderOptgroups(h, renderOpts, params, context, renderFormOptions) : renderFormOptions(h, renderOpts.options, renderOpts, params, context))
       ]
-    }
+    },
+    editExportMethod: createExportMethod(getSelectCellValue, true),
+    cellExportMethod: createExportMethod(getSelectCellValue)
   }
 }
 

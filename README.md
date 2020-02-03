@@ -12,18 +12,18 @@
 [![pull requests closed](https://img.shields.io/github/issues-pr-closed/xuliangzhan/vxe-table.svg)](https://github.com/xuliangzhan/vxe-table/pulls?q=is%3Apr+is%3Aclosed)
 [![npm license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/xuliangzhan/vxe-table/blob/master/LICENSE)
 
-一个基于 [vue](https://www.npmjs.com/package/vue) 的表格组件，提供一套企业级的 CRUD 表格解决方案
+一个基于 [vue](https://www.npmjs.com/package/vue) 的表格组件，支持增删改查、虚拟滚动、懒加载、快捷菜单、数据校验、树形结构、自定义模板、贼灵活的配置项等...
 
 * 设计理念
-  * 面向现代浏览器（简洁、高效的 API 设计）
-  * 模块化表格、插件化扩展（功能模块解耦，支持按需加载）
-  * 为单行编辑表格而设计，支持增删改查及更多扩展，强大的功能的同时兼具性能（支持横向、纵向虚拟滚动、贼灵活的配置项）
+  * 面向现代浏览器，高效的简洁 API 设计
+  * 模块化表格、按需加载、插件化扩展
+  * 为单行编辑表格而设计，支持增删改查及更多扩展，强大的功能的同时兼具性能  
 
 * 计划
   * [x] v1.0 100% 实现表格的一切实用的功能
   * [x] v2.0 &nbsp;95% 性能优化，同时兼具功能与性能
   * [ ] v3.0 &nbsp;&nbsp;0% 内部重构，不再支持 IE，渲染性能提升
-  * [ ] v4.0 &nbsp;&nbsp;0% 基于 Vue3 重构
+  * [ ] v4.0 &nbsp;&nbsp;0% 基于 Vue3 重构，渲染性能提升
 
 🐬 如果有更好的建议、优化点或 Bug 都欢迎提 [Issues](https://github.com/xuliangzhan/vxe-table/issues/390)
 

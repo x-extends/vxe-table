@@ -267,15 +267,15 @@ function downloadFile ($table, opts, content) {
   }
 }
 
-function getLabelData ($table, opts, columns, datas) {
-  const { treeConfig, treeOpts, scrollXLoad, scrollYLoad } = $table
+function getLabelData ($xetable, opts, columns, datas) {
+  const { treeConfig, treeOpts, scrollXLoad, scrollYLoad } = $xetable
   if (treeConfig) {
     // 如果是树表格只允许导出数据源
     const rest = []
     XEUtils.eachTree(datas, (row, rowIndex, items, path, parent, nodes) => {
       let item = {
         _level: nodes.length - 1,
-        _hasChild: hasTreeChildren($table, row)
+        _hasChild: hasTreeChildren($xetable, row)
       }
       columns.forEach((column, columnIndex) => {
         let cellValue = ''
@@ -283,18 +283,35 @@ function getLabelData ($table, opts, columns, datas) {
           // v3.0 废弃 type=index
           case 'seq':
           case 'index':
-            cellValue = getSeq($table, row, rowIndex, column, columnIndex)
+            cellValue = getSeq($xetable, row, rowIndex, column, columnIndex)
             break
           // v3.0 废弃 type=selection
           case 'selection':
           case 'checkbox':
-            cellValue = $table.isCheckedByCheckboxRow(row)
+            cellValue = $xetable.isCheckedByCheckboxRow(row)
             break
           case 'radio':
-            cellValue = $table.isCheckedByRadioRow(row)
+            cellValue = $xetable.isCheckedByRadioRow(row)
             break
           default:
-            cellValue = XEUtils.get(row, column.property)
+            if (opts.original) {
+              cellValue = UtilTools.getCellValue(row, column)
+            } else {
+              let { cellRender, editRender } = column
+              let exportMethod
+              if (editRender && editRender.name) {
+                let compConf = VXETable.renderer.get(editRender.name)
+                if (compConf) {
+                  exportMethod = compConf.editExportMethod
+                }
+              } else if (cellRender && cellRender.name) {
+                let compConf = VXETable.renderer.get(cellRender.name)
+                if (compConf) {
+                  exportMethod = compConf.cellExportMethod
+                }
+              }
+              cellValue = exportMethod ? exportMethod({ $table: $xetable, row, column }) : UtilTools.getCellLabel(row, column, { $table: $xetable })
+            }
         }
         item[column.id] = XEUtils.toString(cellValue)
       })
@@ -310,25 +327,38 @@ function getLabelData ($table, opts, columns, datas) {
         // v3.0 废弃 type=index
         case 'seq':
         case 'index':
-          cellValue = getSeq($table, row, rowIndex, column, columnIndex)
+          cellValue = getSeq($xetable, row, rowIndex, column, columnIndex)
           break
         // v3.0 废弃 type=selection
         case 'selection':
         case 'checkbox':
-          cellValue = $table.isCheckedByCheckboxRow(row)
+          cellValue = $xetable.isCheckedByCheckboxRow(row)
           break
         case 'radio':
-          cellValue = $table.isCheckedByRadioRow(row)
+          cellValue = $xetable.isCheckedByRadioRow(row)
           break
         default:
           if (opts.original) {
             cellValue = UtilTools.getCellValue(row, column)
           } else if (scrollXLoad || scrollYLoad) {
-            // 如果是启用虚拟滚动
-            cellValue = UtilTools.getCellLabel(row, column, { $table })
+            // 如果是虚拟滚动
+            let { cellRender, editRender } = column
+            let exportMethod
+            if (editRender && editRender.name) {
+              let compConf = VXETable.renderer.get(editRender.name)
+              if (compConf) {
+                exportMethod = compConf.editExportMethod
+              }
+            } else if (cellRender && cellRender.name) {
+              let compConf = VXETable.renderer.get(cellRender.name)
+              if (compConf) {
+                exportMethod = compConf.cellExportMethod
+              }
+            }
+            cellValue = exportMethod ? exportMethod({ $table: $xetable, row, column }) : UtilTools.getCellLabel(row, column, { $table: $xetable })
           } else {
-            let cell = DomTools.getCell($table, { row, column })
-            cellValue = cell ? cell.innerText.trim() : UtilTools.getCellLabel(row, column, { $table })
+            let cell = DomTools.getCell($xetable, { row, column })
+            cellValue = cell ? cell.innerText.trim() : UtilTools.getCellLabel(row, column, { $table: $xetable })
           }
       }
       item[column.id] = XEUtils.toString(cellValue)

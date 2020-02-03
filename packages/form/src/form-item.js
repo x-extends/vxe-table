@@ -30,7 +30,9 @@ function renderTitle (h, _vm) {
     )
   }
   titles.push(
-    h('span', UtilTools.getFuncText(title))
+    h('span', {
+      class: 'vxe-form--item-title-label'
+    }, UtilTools.getFuncText(title))
   )
   return titles
 }
@@ -55,13 +57,52 @@ export default {
       default: null
     }
   },
+  data () {
+    return {
+      showError: false,
+      showRule: null
+    }
+  },
   computed: {
     vSize () {
       return this.size || this.$parent.size || this.$parent.vSize
+    },
+    isRequired () {
+      const { $vxeform, field } = this
+      if ($vxeform && $vxeform.rules) {
+        const rules = $vxeform.rules[field]
+        if (rules) {
+          return rules.some(rule => rule.required)
+        }
+      }
+      return false
+    },
+    errRule () {
+      const { $vxeform, field } = this
+      if ($vxeform) {
+        return $vxeform.invalids.find(({ property }) => field === property)
+      }
+      return null
+    }
+  },
+  watch: {
+    errRule (value) {
+      clearTimeout(this.showErrTimeout)
+      this.showError = false
+      if (value) {
+        this.showRule = value.rule
+        this.$nextTick(() => {
+          this.showError = true
+        })
+      } else {
+        this.showErrTimeout = setTimeout(() => {
+          this.showRule = null
+        }, 350)
+      }
     }
   },
   render (h) {
-    const { $scopedSlots, $vxeform, title, folding, field, collapseNode, itemRender } = this
+    const { $scopedSlots, $vxeform, title, folding, field, collapseNode, itemRender, isRequired, showError, showRule } = this
     const compConf = itemRender ? VXETable.renderer.get(itemRender.name) : null
     const span = this.span || $vxeform.span
     const align = this.align || $vxeform.align
@@ -71,7 +112,9 @@ export default {
     return h('div', {
       class: ['vxe-form--item', span ? `vxe-col--${span} is--span` : null, {
         'is--title': title,
-        'is--hidden': folding && collapseAll
+        'is--hidden': folding && collapseAll,
+        'is--required': isRequired,
+        'is--error': showError
       }]
     }, [
       h('div', {
@@ -85,9 +128,9 @@ export default {
         }, renderTitle(h, this)) : null,
         h('div', {
           class: ['vxe-form--item-content', align ? `align--${align}` : null]
-        }, (compConf && compConf.renderItem ? compConf.renderItem.call(this, h, itemRender, { data: $vxeform.data, field, property: field }, { $form: $vxeform }) : ($scopedSlots.default ? $scopedSlots.default.call(this) : [])).concat(
-          collapseNode ? [
-            h('div', {
+        }, (compConf && compConf.renderItem ? compConf.renderItem.call(this, h, itemRender, { data: $vxeform.data, property: field, $form: $vxeform }, { $form: $vxeform }) : ($scopedSlots.default ? $scopedSlots.default.call(this) : [])).concat(
+          [
+            collapseNode ? h('div', {
               class: 'vxe-form--item-trigger-node',
               on: {
                 click: this.toggleCollapseEvent
@@ -99,8 +142,14 @@ export default {
               h('i', {
                 class: ['vxe-form--item-trigger-icon', collapseAll ? GlobalConfig.icon.formFolding : GlobalConfig.icon.formUnfolding]
               })
-            ])
-          ] : [])
+            ]) : null,
+            showRule ? h('div', {
+              class: 'vxe-form--item-valid',
+              style: showRule.maxWidth ? {
+                width: `${showRule.maxWidth}px`
+              } : null
+            }, showRule.message) : null
+          ])
         )
       ])
     ])

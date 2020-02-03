@@ -34,7 +34,7 @@
             <option value="4">4.x</option>
           </select>
           <vxe-tooltip :content="$t('app.footer.donationDesc')" enterable>
-            <a class="donation" href="https://github.com/xuliangzhan/vxe-table#donation" target="_blank">{{ $t('app.footer.donation') }}☕</a>
+            <router-link class="donation" :to="{name: 'Donation'}">{{ $t('app.footer.donation') }}☕</router-link>
           </vxe-tooltip>
         </div>
       </div>
@@ -54,7 +54,7 @@
         </ul>
       </div>
       <div class="body">
-        <div class="content" :class="{full: $route.name && $route.name.indexOf('API') > 0}">
+        <div class="content" :class="{full: ['VXEAPI', 'Donation'].includes($route.name)}">
           <template v-if="$route.path.indexOf('/module') === -1 && $route.path.indexOf('/api') === -1">
             <a class="link tosrc" :href="`https://github.com/xuliangzhan/vxe-table/tree/master/examples/views/table/${pageKey}`" target="_blank">{{ $t('app.body.button.viewCode') }}</a>
             <a v-if="demoLink" class="link todemo" :href="demoLink" target="_blank">{{ $t('app.body.button.runDemo') }}</a>
@@ -497,6 +497,18 @@ export default {
               label: 'app.aside.nav.search',
               locat: {
                 name: 'TableSearch'
+              }
+            },
+            {
+              label: 'app.aside.nav.details',
+              locat: {
+                name: 'TableDetails'
+              }
+            },
+            {
+              label: 'app.aside.nav.popupEdit',
+              locat: {
+                name: 'TablePopupEdit'
               }
             },
             {
@@ -1831,6 +1843,12 @@ export default {
                 params: {
                   name: 'form-item'
                 }
+              }
+            },
+            {
+              label: 'app.footer.donation',
+              locat: {
+                name: 'Donation'
               }
             }
           ]

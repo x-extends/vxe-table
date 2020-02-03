@@ -12,8 +12,8 @@ const apis = [
         descKey: 'app.api.button.desc.type',
         version: '1 | 1.15.18',
         type: '',
-        enum: 'text,submit,reset',
-        defVal: '',
+        enum: 'text,submit,reset,button',
+        defVal: 'button',
         list: []
       },
       {

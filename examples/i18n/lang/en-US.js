@@ -71,6 +71,8 @@ module.exports = {
         customStorage: 'Show/hide column + localStorage',
         customlWidthStorage: 'Show/hide & column width + localStorage',
         search: 'Table search',
+        details: 'Popup displays details',
+        popupEdit: 'Popup form edit',
         pager: 'Pager',
         pageIcon: 'Pagination + custom icon',
         rangeSelect: 'The range of the checkbox is checked',
@@ -554,17 +556,18 @@ module.exports = {
       form: {
         desc: {
           data: 'Form data',
-          span: 'The number of columns occupied by the grid of all items',
+          span: 'The number of columns occupied by the grid of all items(24 columns)',
           align: 'All content align',
           titleAlign: 'All title align',
-          titleWidth: 'All title width'
+          titleWidth: 'All title width',
+          rules: 'Checksum rule configuration entries'
         }
       },
       formItem: {
         desc: {
           field: 'Field name ',
           title: 'Title',
-          span: 'The number of columns a grid occupies',
+          span: 'The number of columns a grid occupies(24 columns)',
           align: 'Content align',
           titleAlign: 'Title align',
           titleWidth: 'Title width',

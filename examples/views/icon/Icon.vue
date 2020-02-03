@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2>图标</h2>
+    <h2>{{ $t('app.aside.nav.icon') }}</h2>
     <p class="tip">内置轻量级的 icon 图标，还可以通过修改 <router-link class="link" :to="{name: 'StartIcons'}">icon</router-link> 替换默认的</p>
 
     <ul class="icon-list">

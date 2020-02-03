@@ -27,8 +27,8 @@
       border
       resizable
       :data="tableData">
-      <vxe-table-column type="seq" width="100" :resizable="false" show-overflow>
-        <template v-slot:header="{ row }">
+      <vxe-table-column type="seq" width="160" :resizable="false" show-overflow>
+        <template v-slot:header>
           <div class="first-col">
             <div class="first-col-top">名称</div>
             <div class="first-col-bottom">序号</div>
@@ -44,7 +44,7 @@
         </template>
       </vxe-table-column>
       <vxe-table-column field="sex" title="app.body.label.sex" :filters="[{data: ''}]" :filter-method="filterSexMethod">
-        <template v-slot:header="{ column }">
+        <template v-slot:header>
           <vxe-tooltip v-model="showSexTip" content="这样玩也行？">
             <span style="color: red;" @click="showSexTip = !showSexTip">这样玩也行</span>
           </vxe-tooltip>
@@ -61,7 +61,7 @@
         </template>
       </vxe-table-column>
       <vxe-table-column field="time" title="Time">
-        <template v-slot:header="{ column }">
+        <template v-slot:header>
           <vxe-input placeholder="这样也行" size="mini"></vxe-input>
         </template>
         <template v-slot="{ row }">
@@ -82,7 +82,7 @@
         </template>
       </vxe-table-column>
       <vxe-table-column field="img1" title="图片路径" width="120">
-        <template v-slot="{ row, rowIndex }">
+        <template v-slot="{ row }">
           <img v-if="row.img1" :src="row.img1" style="width: 100px;">
           <span v-else>无</span>
         </template>
@@ -136,8 +136,8 @@ export default {
           border
           resizable
           :data="tableData">
-          <vxe-table-column type="seq" width="100" :resizable="false" show-overflow>
-            <template v-slot:header="{ row }">
+          <vxe-table-column type="seq" width="160" :resizable="false" show-overflow>
+            <template v-slot:header>
               <div class="first-col">
                 <div class="first-col-top">名称</div>
                 <div class="first-col-bottom">序号</div>
@@ -153,7 +153,7 @@ export default {
             </template>
           </vxe-table-column>
           <vxe-table-column field="sex" title="app.body.label.sex" :filters="[{data: ''}]" :filter-method="filterSexMethod">
-            <template v-slot:header="{ column }">
+            <template v-slot:header>
               <vxe-tooltip v-model="showSexTip" content="这样玩也行？">
                 <span style="color: red;" @click="showSexTip = !showSexTip">这样玩也行</span>
               </vxe-tooltip>
@@ -170,7 +170,7 @@ export default {
             </template>
           </vxe-table-column>
           <vxe-table-column field="time" title="Time">
-            <template v-slot:header="{ column }">
+            <template v-slot:header>
               <vxe-input placeholder="这样也行" size="mini"></vxe-input>
             </template>
             <template v-slot="{ row }">
@@ -191,7 +191,7 @@ export default {
             </template>
           </vxe-table-column>
           <vxe-table-column field="img1" title="图片路径" width="120">
-            <template v-slot="{ row, rowIndex }">
+            <template v-slot="{ row }">
               <img v-if="row.img1" :src="row.img1" style="width: 100px;">
               <span v-else>无</span>
             </template>
@@ -242,9 +242,9 @@ export default {
           position: absolute;
           left: -15px;
           top: 10px;
-          width: 110px;
+          width: 170px;
           height: 1px;
-          transform: rotate(28deg);
+          transform: rotate(20deg);
           background-color: #e8eaec;
         }
         .first-col .first-col-top {
@@ -298,9 +298,9 @@ export default {
   position: absolute;
   left: -15px;
   top: 10px;
-  width: 110px;
+  width: 170px;
   height: 1px;
-  transform: rotate(28deg);
+  transform: rotate(20deg);
   background-color: #e8eaec;
 }
 .first-col .first-col-top {

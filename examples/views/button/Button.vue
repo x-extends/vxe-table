@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2>按钮</h2>
+    <h2>{{ $t('app.aside.nav.button') }}</h2>
     <p class="tip">查看 <router-link class="link" :to="{name: 'VXEAPI', params: {name: 'button'}}">API</router-link></p>
 
     <p>

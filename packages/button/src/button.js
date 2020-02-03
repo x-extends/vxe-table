@@ -21,7 +21,7 @@ export default {
       return this.type === 'text'
     },
     isFormBtn () {
-      return this.type === 'submit' || this.type === 'reset'
+      return ['submit', 'reset', 'button'].indexOf(this.type) > -1
     },
     btnType () {
       return this.isText ? this.type : 'button'
@@ -51,7 +51,7 @@ export default {
         }],
         attrs: {
           name,
-          type: isFormBtn ? type : null,
+          type: isFormBtn ? type : 'button',
           disabled: disabled || loading
         },
         on: Object.assign({
@@ -80,7 +80,7 @@ export default {
       }],
       attrs: {
         name,
-        type: isFormBtn ? type : null,
+        type: isFormBtn ? type : 'button',
         disabled: disabled || loading
       },
       on: XEUtils.objectMap($listeners, (cb, type) => evnt => this.$emit(type, evnt))

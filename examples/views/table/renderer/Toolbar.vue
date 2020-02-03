@@ -96,6 +96,7 @@ export default {
                 export: true,
                 custom: true,
                 buttons: [
+                  { name: '刷新', code: 'reload', icon: 'fa fa-refresh' },
                   { code: 'query', buttonRender: { name: 'ToolbarButtonRefresh', events: { click: this.btnClickEvent } } }
                 ]
               },

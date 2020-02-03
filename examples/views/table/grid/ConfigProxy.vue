@@ -78,8 +78,33 @@ export default {
         { type: 'seq', width: 60, fixed: 'left' },
         { type: 'checkbox', title: 'ID', width: 140, fixed: 'left' },
         { field: 'name', title: 'Name', remoteSort: true, editRender: { name: 'input' } },
-        { field: 'nickname', title: 'Nickname', remoteSort: true, editRender: { name: 'input' } },
         { field: 'age', title: 'Age', remoteSort: true, editRender: { name: 'input' } },
+        {
+          field: 'status',
+          title: 'Status',
+          editRender: {
+            name: 'select',
+            options: [
+              { value: '1', label: '红' },
+              { value: '2', label: '黄' },
+              { value: '3', label: '蓝' },
+              { value: '4', label: '绿' },
+              { value: '5', label: '青' }
+            ]
+          }
+        },
+        {
+          field: 'sex',
+          title: 'Sex',
+          editRender: {
+            name: 'select',
+            options: [
+              { value: '', label: '' },
+              { value: '0', label: '女' },
+              { value: '1', label: '男' }
+            ]
+          }
+        },
         {
           field: 'role',
           title: 'Role',
@@ -155,8 +180,12 @@ export default {
                   { type: 'seq', width: 60, fixed: 'left' },
                   { type: 'checkbox', title: 'ID', width: 140, fixed: 'left' },
                   { field: 'name', title: 'Name', remoteSort: true, editRender: { name: 'input' } },
-                  { field: 'nickname', title: 'Nickname', remoteSort: true, editRender: { name: 'input' } },
                   { field: 'age', title: 'Age', remoteSort: true, editRender: { name: 'input' } },
+                  // 单元格渲染，自动读取字典配置
+                  { field: 'status', title: 'Status', editRender: { name: 'select', options: '$COLOR_STATUS' } },
+                  // 单元格渲染，自动请求异步配置
+                  { field: 'sex', title: 'Sex', remoteSort: true, editRender: { name: 'select', options: '/api/conf/sex/list' } },
+                  // 筛选渲染，自动请求异步配置
                   { field: 'role', title: 'Role', remoteSort: true, width: 200, filters: '/api/conf/role/list', filterMultiple: false, editRender: { name: 'input' } },
                   { field: 'describe', title: 'Describe', showOverflow: true, editRender: { name: 'input' } }
                 ]

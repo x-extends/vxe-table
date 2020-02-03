@@ -70,6 +70,8 @@ module.exports = {
         customStorage: '显示/隐藏列 + localStorage',
         customlWidthStorage: '显示/隐藏/列宽 + localStorage',
         search: '全表搜索',
+        details: '弹框显示详情',
+        popupEdit: '弹框表单编辑',
         pager: '分页',
         pageIcon: '分页 + 自定义图标',
         rangeSelect: '复选框的范围选中',
@@ -556,14 +558,15 @@ module.exports = {
           span: '所有项的栅格占据的列数（共 24 分栏）',
           align: '所有项的内容对齐方式',
           titleAlign: '所有项的标题对齐方式',
-          titleWidth: '所有项的标题宽度'
+          titleWidth: '所有项的标题宽度',
+          rules: '校验规则配置项'
         }
       },
       formItem: {
         desc: {
           field: '字段名',
           title: '标题（支持开启国际化）',
-          span: '栅格占据的列数',
+          span: '栅格占据的列数（共 24 分栏）',
           align: '内容对齐方式',
           titleAlign: '标题对齐方式',
           titleWidth: '标题宽度',
