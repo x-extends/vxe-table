@@ -73,6 +73,8 @@ const TableExpandIcon = () => import(/* webpackChunkName: "advanced" */ './views
 const TableExpandLazy = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/ExpandLazy.vue')
 const TableExpandAccordion = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/ExpandAccordion.vue')
 const TableSearch = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Search.vue')
+const TableDetails = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Details.vue')
+const TablePopupEdit = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/PopupEdit.vue')
 const Toolbar = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Toolbar.vue')
 const TableCustom = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Custom.vue')
 const TableCustomStorage = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/CustomStorage.vue')
@@ -255,6 +257,7 @@ const TablePluginMenus = () => import(/* webpackChunkName: "excel" */ './views/t
 const TablePluginExcel = () => import(/* webpackChunkName: "excel" */ './views/table/plugin/Excel.vue')
 
 const VXEAPI = () => import(/* webpackChunkName: "api" */ './views/api/API.vue')
+const Donation = () => import(/* webpackChunkName: "api" */ './views/api/Donation.vue')
 
 Vue.use(Router)
 
@@ -613,6 +616,16 @@ export default new Router({
       path: '/table/advanced/search',
       name: 'TableSearch',
       component: TableSearch
+    },
+    {
+      path: '/table/advanced/details',
+      name: 'TableDetails',
+      component: TableDetails
+    },
+    {
+      path: '/table/advanced/popupEdit',
+      name: 'TablePopupEdit',
+      component: TablePopupEdit
     },
     {
       path: '/table/advanced/toolbar',
@@ -1470,6 +1483,11 @@ export default new Router({
       path: '/table/plugin/excel',
       name: 'TablePluginExcel',
       component: TablePluginExcel
+    },
+    {
+      path: '/donation/api',
+      name: 'Donation',
+      component: Donation
     },
     {
       path: '/:name/api',

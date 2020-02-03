@@ -1064,6 +1064,8 @@ const Methods = {
       if (headerElem.scrollLeft !== bodyElem.scrollLeft) {
         headerElem.scrollLeft = bodyElem.scrollLeft
       }
+    } else {
+      this.headerHeight = 0
     }
     if (footerElem) {
       let footerHeight = footerElem.offsetHeight
@@ -1071,6 +1073,7 @@ const Methods = {
       this.overflowX = tableWidth > footerElem.clientWidth
       this.footerHeight = footerHeight
     } else {
+      this.footerHeight = 0
       this.scrollbarHeight = Math.max(tableHeight - bodyElem.clientHeight, 0)
       this.overflowX = tableWidth > bodyWidth
     }

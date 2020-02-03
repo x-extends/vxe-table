@@ -1624,7 +1624,7 @@ const apis = [
             name: 'maxWidth',
             desc: '校验提示框的最大宽度（对于某些特殊场景可能会用到）',
             version: '',
-            type: 'Number',
+            type: 'String, Number',
             enum: '',
             defVal: '320',
             list: []

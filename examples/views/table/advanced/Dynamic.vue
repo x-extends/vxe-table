@@ -6,7 +6,7 @@
       <template v-slot:buttons>
         <vxe-button @click="addColumn()">最后增加一列</vxe-button>
         <vxe-button @click="removeColumn()">删除最后一列</vxe-button>
-        <vxe-button @click="updateFilter(4)">修改第五列筛选条件</vxe-button>
+        <vxe-button @click="updateSexFilter()">修改sex列筛选条件</vxe-button>
         <vxe-button @click="toggleFixedColumn(0, 'left')">切换第一列固定</vxe-button>
         <vxe-button @click="toggleFixedColumn(1, 'left')">切换第二列固定</vxe-button>
         <vxe-button @click="updateWidthColumn(2, 500)">修改第三列宽度</vxe-button>
@@ -56,6 +56,7 @@ export default {
           <template v-slot:buttons>
             <vxe-button @click="addColumn()">最后增加一列</vxe-button>
             <vxe-button @click="removeColumn()">删除最后一列</vxe-button>
+            <vxe-button @click="updateSexFilter()">修改sex列筛选条件</vxe-button>
             <vxe-button @click="toggleFixedColumn(0, 'left')">切换第一列固定</vxe-button>
             <vxe-button @click="toggleFixedColumn(1, 'left')">切换第二列固定</vxe-button>
             <vxe-button @click="updateWidthColumn(2, 500)">修改第三列宽度</vxe-button>
@@ -104,27 +105,24 @@ export default {
             removeColumn () {
               this.tableColumn.pop()
             },
-            updateFilter (index) {
+            updateSexFilter () {
               let xTable = this.$refs.xTable
-              xTable.filter(this.tableColumn[index].field, options => {
-                // 修改筛选列表，可以通过 checked 属性设置默认勾选
-                return [
-                  { value: '1', label: '男' },
-                  { value: '0', label: '女', checked: true }
-                ]
-              }).then(() => {
-                // 修改条件之后，需要手动调用 updateData 处理表格数据
-                xTable.updateData()
-              })
+              let column = xTable.getColumnByField('sex')
+              // 修改筛选列表，并默认设置为选中状态
+              xTable.setFilter(column, [
+                { value: '1', label: '男' },
+                { value: '0', label: '女', checked: true }
+              ])
+              // 修改条件之后，需要手动调用 updateData 处理表格数据
+              xTable.updateData()
             },
             toggleFixedColumn (index, value) {
               const xTable = this.$refs.xTable
               this.tableColumn[index].fixed = this.tableColumn[index].fixed ? null : value
               // 更改了列属性，需要手动刷新列
               this.$nextTick(() => {
-                xTable.refreshColumn()
-                  // 由于固定列的动态切换是无状态的，所以需要手动刷新滚动位置
-                  .then(() => xTable.refreshScroll())
+                // 由于固定列的动态切换是无状态的，所以需要手动刷新滚动位置
+                xTable.refreshColumn().then(() => xTable.refreshScroll())
               })
             },
             updateWidthColumn (index, value) {
@@ -160,27 +158,24 @@ export default {
     removeColumn () {
       this.tableColumn.pop()
     },
-    updateFilter (index) {
+    updateSexFilter () {
       let xTable = this.$refs.xTable
-      xTable.filter(this.tableColumn[index].field, options => {
-        // 修改筛选列表，可以通过 checked 属性设置默认勾选
-        return [
-          { value: '1', label: '男' },
-          { value: '0', label: '女', checked: true }
-        ]
-      }).then(() => {
-        // 修改条件之后，需要手动调用 updateData 处理表格数据
-        xTable.updateData()
-      })
+      let column = xTable.getColumnByField('sex')
+      // 修改筛选列表，并默认设置为选中状态
+      xTable.setFilter(column, [
+        { value: '1', label: '男' },
+        { value: '0', label: '女', checked: true }
+      ])
+      // 修改条件之后，需要手动调用 updateData 处理表格数据
+      xTable.updateData()
     },
     toggleFixedColumn (index, value) {
       const xTable = this.$refs.xTable
       this.tableColumn[index].fixed = this.tableColumn[index].fixed ? null : value
       // 更改了列属性，需要手动刷新列
       this.$nextTick(() => {
-        xTable.refreshColumn()
-          // 由于固定列的动态切换是无状态的，所以需要手动刷新滚动位置
-          .then(() => xTable.refreshScroll())
+        // 由于固定列的动态切换是无状态的，所以需要手动刷新滚动位置
+        xTable.refreshColumn().then(() => xTable.refreshScroll())
       })
     },
     updateWidthColumn (index, value) {

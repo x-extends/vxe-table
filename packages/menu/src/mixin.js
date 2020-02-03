@@ -52,11 +52,11 @@ export default {
      * 快捷菜单事件处理
      */
     handleGlobalContextmenuEvent (evnt) {
-      let { id, contextMenu, isCtxMenu, ctxMenuStore, ctxMenuOpts } = this
+      let { $refs, id, contextMenu, isCtxMenu, ctxMenuStore, ctxMenuOpts } = this
       let layoutList = ['header', 'body', 'footer']
       if (contextMenu && isCtxMenu) {
         if (ctxMenuStore.visible) {
-          if (ctxMenuStore.visible && this.$refs.ctxWrapper && DomTools.getEventTargetNode(evnt, this.$refs.ctxWrapper.$el).flag) {
+          if (ctxMenuStore.visible && $refs.ctxWrapper && DomTools.getEventTargetNode(evnt, $refs.ctxWrapper.$el).flag) {
             evnt.preventDefault()
             return
           }
@@ -95,8 +95,10 @@ export default {
           }
         }
       }
+      if ($refs.filterWrapper && !DomTools.getEventTargetNode(evnt, $refs.filterWrapper.$el).flag) {
+        this.closeFilter()
+      }
       this.closeMenu()
-      this.closeFilter()
     },
     /**
      * 显示快捷菜单

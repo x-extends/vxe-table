@@ -550,6 +550,12 @@ export default {
     tableColumn () {
       this.analyColumnWidth()
     },
+    showHeader () {
+      this.$nextTick(() => this.recalculate(true))
+    },
+    showFooter () {
+      this.$nextTick(() => this.recalculate(true))
+    },
     height () {
       this.$nextTick(() => this.recalculate(true))
     },

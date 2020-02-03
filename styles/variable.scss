@@ -75,6 +75,7 @@ $vxe-loading-background-color: rgba(0, 0, 0, 0.2);
 
 /*validate*/
 $vxe-table-validate-error-color: #f56c6c;
+$vxe-table-validate-error-background-color: $vxe-table-validate-error-color;
 
 /*toolbar*/
 $vxe-toolbar-height-default: 52px;
@@ -112,3 +113,8 @@ $vxe-input-height-default: $vxe-button-height-default;
 $vxe-input-height-medium: $vxe-button-height-medium;
 $vxe-input-height-small: $vxe-button-height-small;
 $vxe-input-height-mini: $vxe-button-height-mini;
+
+/*form*/
+$vxe-form-background-color: #fff;
+$vxe-form-validate-error-color: $vxe-table-validate-error-color;
+$vxe-form-validate-error-background-color: $vxe-form-background-color;

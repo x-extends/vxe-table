@@ -228,8 +228,8 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
       }, column.renderCell(h, params)),
       hasDefaultTip ? validError ? h('div', {
         class: 'vxe-cell--valid',
-        style: validStore.rule && validStore.rule.width ? {
-          width: `${validStore.rule.width}px`
+        style: validStore.rule && validStore.rule.maxWidth ? {
+          width: `${validStore.rule.maxWidth}px`
         } : null
       }, [
         h('span', {

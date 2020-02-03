@@ -310,7 +310,24 @@ function getLabelData ($xetable, opts, columns, datas) {
             cellValue = $xetable.isCheckedByRadioRow(row)
             break
           default:
-            cellValue = UtilTools.getCellLabel(row, column, { $table: $xetable })
+            if (opts.original) {
+              cellValue = UtilTools.getCellValue(row, column)
+            } else {
+              let { cellRender, editRender } = column
+              let exportMethod
+              if (editRender && editRender.name) {
+                let compConf = VXETable.renderer.get(editRender.name)
+                if (compConf) {
+                  exportMethod = compConf.editExportMethod
+                }
+              } else if (cellRender && cellRender.name) {
+                let compConf = VXETable.renderer.get(cellRender.name)
+                if (compConf) {
+                  exportMethod = compConf.cellExportMethod
+                }
+              }
+              cellValue = exportMethod ? exportMethod({ $table: $xetable, row, column }) : UtilTools.getCellLabel(row, column, { $table: $xetable })
+            }
         }
         item[column.id] = XEUtils.toString(cellValue)
       })
@@ -340,8 +357,21 @@ function getLabelData ($xetable, opts, columns, datas) {
           if (opts.original) {
             cellValue = UtilTools.getCellValue(row, column)
           } else if (scrollXLoad || scrollYLoad) {
-            // 如果是启用虚拟滚动
-            cellValue = UtilTools.getCellLabel(row, column, { $table: $xetable })
+            // 如果是虚拟滚动
+            let { cellRender, editRender } = column
+            let exportMethod
+            if (editRender && editRender.name) {
+              let compConf = VXETable.renderer.get(editRender.name)
+              if (compConf) {
+                exportMethod = compConf.editExportMethod
+              }
+            } else if (cellRender && cellRender.name) {
+              let compConf = VXETable.renderer.get(cellRender.name)
+              if (compConf) {
+                exportMethod = compConf.cellExportMethod
+              }
+            }
+            cellValue = exportMethod ? exportMethod({ $table: $xetable, row, column }) : UtilTools.getCellLabel(row, column, { $table: $xetable })
           } else {
             let cell = DomTools.getCell($xetable, { row, column })
             cellValue = cell ? cell.innerText.trim() : UtilTools.getCellLabel(row, column, { $table: $xetable })

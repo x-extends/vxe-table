@@ -369,8 +369,8 @@ export default {
           this.zoomLocat = {
             top: modalBoxElem.offsetTop,
             left: modalBoxElem.offsetLeft,
-            width: modalBoxElem.clientWidth,
-            height: modalBoxElem.clientHeight
+            width: modalBoxElem.offsetWidth + (modalBoxElem.style.width ? 0 : 1),
+            height: modalBoxElem.offsetHeight + (modalBoxElem.style.height ? 0 : 1)
           }
           Object.assign(modalBoxElem.style, {
             top: `${marginSize}px`,

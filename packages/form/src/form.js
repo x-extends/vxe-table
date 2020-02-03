@@ -1,4 +1,24 @@
 import XEUtils from 'xe-utils/methods/xe-utils'
+import { UtilTools } from '../../tools'
+
+class Rule {
+  constructor (rule) {
+    Object.assign(this, {
+      $options: rule,
+      required: rule.required,
+      min: rule.min,
+      max: rule.min,
+      type: rule.type,
+      pattern: rule.pattern,
+      validator: rule.validator,
+      trigger: rule.trigger,
+      maxWidth: rule.maxWidth
+    })
+  }
+  get message () {
+    return UtilTools.getFuncText(this.$options.message)
+  }
+}
 
 export default {
   name: 'VxeForm',
@@ -8,12 +28,14 @@ export default {
     span: [String, Number],
     align: String,
     titleAlign: String,
-    titleWidth: [String, Number]
+    titleWidth: [String, Number],
+    rules: Object
   },
   data () {
     return {
       collapseAll: true,
-      sourceData: null
+      sourceData: null,
+      invalids: []
     }
   },
   provide () {
@@ -57,7 +79,11 @@ export default {
     },
     submitEvent (evnt) {
       evnt.preventDefault()
-      this.$emit('submit', { data: this.data }, evnt)
+      this.beginValidate().then(() => {
+        this.$emit('submit', { data: this.data, $form: this }, evnt)
+      }).catch(errMap => {
+        this.$emit('submit-invalid', errMap, evnt)
+      })
     },
     resetEvent (evnt) {
       evnt.preventDefault()
@@ -69,7 +95,151 @@ export default {
           }
         })
       }
-      this.$emit('reset', { data }, evnt)
+      this.clearValidate()
+      this.$emit('reset', { data, $form: this }, evnt)
+    },
+    clearValidate (field) {
+      if (field) {
+        XEUtils.remove(this.invalids, ({ property }) => property === field)
+      } else {
+        this.invalids = []
+      }
+      return this.$nextTick()
+    },
+    validate (callback) {
+      return this.beginValidate(callback)
+    },
+    beginValidate (type, callback) {
+      const { data, rules: formRules } = this
+      const validRest = {}
+      const itemValids = []
+      let status = true
+      this.clearValidate()
+      if (data && formRules) {
+        this.$children.forEach(({ field }) => {
+          if (field) {
+            itemValids.push(
+              new Promise((resolve, reject) => {
+                this.validItemRules(type || 'all', field)
+                  .then(resolve)
+                  .catch(({ rule, rules }) => {
+                    const rest = { rule, rules, property: field }
+                    if (!validRest[field]) {
+                      validRest[field] = []
+                    }
+                    validRest[field].push(rest)
+                    this.invalids.push(rest)
+                    return reject(rest)
+                  })
+              })
+            )
+          }
+        })
+        return Promise.all(itemValids).then(() => {
+          if (callback) {
+            callback(status)
+          }
+        }).catch(() => {
+          status = false
+          if (callback) {
+            callback(status, validRest)
+          }
+          return Promise.reject(validRest)
+        })
+      }
+      if (callback) {
+        callback(status)
+      }
+      return Promise.resolve()
+    },
+    /**
+     * 校验数据
+     * 按表格行、列顺序依次校验（同步或异步）
+     * 校验规则根据索引顺序依次校验，如果是异步则会等待校验完成才会继续校验下一列
+     * 如果校验失败则，触发回调或者Promise，结果返回一个 Boolean 值
+     * 如果是传回调方式这返回一个 Boolean 值和校验不通过列的错误消息
+     *
+     * rule 配置：
+     *  required=Boolean 是否必填
+     *  min=Number 最小长度
+     *  max=Number 最大长度
+     *  validator=Function(rule, value, callback, {rules, property}) 自定义校验
+     *  trigger=blur|change 触发方式（除非特殊场景，否则默认为空就行）
+     */
+    validItemRules (type, property, val) {
+      const { data, rules: formRules } = this
+      const errorRules = []
+      const itemVailds = []
+      if (property && formRules) {
+        const rules = XEUtils.get(formRules, property)
+        if (rules) {
+          const itemValue = XEUtils.isUndefined(val) ? XEUtils.get(data, property) : val
+          rules.forEach(rule => {
+            itemVailds.push(
+              new Promise(resolve => {
+                if (type === 'all' || !rule.trigger || type === rule.trigger) {
+                  if (XEUtils.isFunction(rule.validator)) {
+                    rule.validator(rule, itemValue, e => {
+                      if (XEUtils.isError(e)) {
+                        const cusRule = { type: 'custom', trigger: rule.trigger, message: e.message, rule: new Rule(rule) }
+                        errorRules.push(new Rule(cusRule))
+                      }
+                      return resolve()
+                    }, { rules, property })
+                  } else {
+                    const isNumber = rule.type === 'number'
+                    const numVal = isNumber ? XEUtils.toNumber(itemValue) : XEUtils.getSize(itemValue)
+                    if (itemValue === null || itemValue === undefined || itemValue === '') {
+                      if (rule.required) {
+                        errorRules.push(new Rule(rule))
+                      }
+                    } else if (
+                      (isNumber && isNaN(itemValue)) ||
+                      (!isNaN(rule.min) && numVal < parseFloat(rule.min)) ||
+                      (!isNaN(rule.max) && numVal > parseFloat(rule.max)) ||
+                      (rule.pattern && !(rule.pattern.test ? rule.pattern : new RegExp(rule.pattern)).test(itemValue))
+                    ) {
+                      errorRules.push(new Rule(rule))
+                    }
+                    resolve()
+                  }
+                } else {
+                  resolve()
+                }
+              })
+            )
+          })
+        }
+      }
+      return Promise.all(itemVailds).then(() => {
+        if (errorRules.length) {
+          const rest = { rules: errorRules, rule: errorRules[0] }
+          return Promise.reject(rest)
+        }
+      })
+    },
+    /**
+     * 更新项状态
+     * 如果组件值 v-model 发生 change 时，调用改函数用于更新某一项编辑状态
+     * 如果单元格配置了校验规则，则会进行校验
+     */
+    updateStatus (scope, itemValue) {
+      const { property } = scope
+      if (property) {
+        this.validItemRules('change', property, itemValue)
+          .then(() => {
+            this.clearValidate(property)
+          })
+          .catch(({ rule, rules }) => {
+            const rest = this.invalids.find(rest => rest.property === property)
+            if (rest) {
+              rest.rule = rule
+              rest.rules = rules
+            } else {
+              this.invalids.push({ rule, rules, property })
+            }
+          })
+      }
     }
   }
 }

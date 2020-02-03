@@ -38,9 +38,22 @@
   }
 }
 
+.vxe-form--item-valid {
+  position: absolute;
+  width: 100%;
+  font-size: 12px;
+  line-height: 1.2em;
+  color: $vxe-form-validate-error-color;
+  background-color: $vxe-form-validate-error-background-color;
+  z-index: 1;
+  opacity: 0;
+  transform-origin: center top;
+  transform: scaleY(0);
+  transition: all 0.3s ease-in-out;
+}
+
 .vxe-form--item {
-  margin: 0.5em 0;
-  padding-right: 0.8em;
+  padding: 0.5em 0.8em 0.5em 0;
   &.is--hidden {
     display: none;
   }
@@ -54,6 +67,40 @@
       width: 100%;
     }
   }
+  &.is--required {
+    .vxe-form--item-title {
+      &:before {
+        content: "*";
+        color: $vxe-form-validate-error-color;
+        margin-right: 0.2em;
+        font-family: SimSun, sans-serif;
+      }
+    }
+  }
+  &.is--error {
+    .vxe-input>.vxe-input--inner,
+    .vxe-textarea>.vxe-input--textarea,
+    .vxe-select,
+    .vxe-default-input,
+    .vxe-default-textarea,
+    .vxe-default-select {
+      border-color: $vxe-form-validate-error-color;
+    }
+    .vxe-input>.vxe-input--inner,
+    .vxe-textarea>.vxe-input--textarea,
+    .vxe-default-input[type="text"],
+    .vxe-default-input[type="search"],
+    .vxe-default-textarea,
+    .vxe-default-select {
+      &:focus {
+        border-color: $vxe-form-validate-error-color;
+      }
+    }
+    .vxe-form--item-valid {
+      opacity: 1;
+      transform: scaleY(1);
+    }
+  }
   .vxe-form--item-inner {
     display: flex;
     flex-direction: row;
@@ -62,6 +109,7 @@
       flex-shrink: 0;
     }
     .vxe-form--item-content {
+      position: relative;
       flex-grow: 1;
     }
   }
@@ -69,13 +117,18 @@
   .vxe-default-textarea,
   .vxe-default-select {
     outline: 0;
-    height: $vxe-button-height-default;
     border: 1px solid $vxe-input-border-color;
     border-radius: 0.25em;
   }
   .vxe-default-input,
-  .vxe-default-textarea {
+  .vxe-default-select {
+    height: $vxe-button-height-default;
+  }
+  .vxe-default-input {
     padding: 0 0.8em;
+  }
+  .vxe-default-textarea {
+    padding: 0.3em 0.6em;
   }
   .vxe-default-input[type="number"] {
     padding-right: 0.2em;
@@ -131,10 +184,17 @@
   .vxe-default-textarea {
     resize: none;
     vertical-align: middle;
+    &::placeholder {
+      color: $vxe-input-placeholder-color;
+    }
   }
 }
 
 .vxe-form {
+  font-size: $vxe-font-size;
+  color: $vxe-font-color;
+  font-family: $vxe-font-family;
+  background-color: $vxe-form-background-color;
   .vxe-form--item-inner {
     & > .align--center {
       text-align: center;

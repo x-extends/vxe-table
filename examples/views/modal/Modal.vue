@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2>模态窗口</h2>
+    <h2>{{ $t('app.aside.nav.modal') }}</h2>
 
     <p class="tip">查看 <router-link class="link" :to="{name: 'VXEAPI', params: {name: 'modal'}}">API</router-link>，对于某些场景如果需要关闭所有动态的窗口，可以通过 this.$XModal.closeAll()</p>
 
@@ -38,36 +38,49 @@
     <p>
       <vxe-button @click="value1 = !value1">基本窗口</vxe-button>
       <vxe-modal v-model="value1" :lock-scroll="false" show-footer>
-        <template>
-          <vxe-table
-            show-overflow
-            height="auto"
-            :sync-resize="value1"
-            :data="tableData">
-            <vxe-table-column type="seq" width="60"></vxe-table-column>
-            <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
-            <vxe-table-column field="sex" title="app.body.label.sex"></vxe-table-column>
-            <vxe-table-column field="age" title="app.body.label.age"></vxe-table-column>
-          </vxe-table>
-        </template>
+        <vxe-table
+          show-overflow
+          height="auto"
+          :sync-resize="value1"
+          :data="tableData">
+          <vxe-table-column type="seq" width="60"></vxe-table-column>
+          <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
+          <vxe-table-column field="sex" title="app.body.label.sex"></vxe-table-column>
+          <vxe-table-column field="age" title="app.body.label.age"></vxe-table-column>
+        </vxe-table>
       </vxe-modal>
 
       <vxe-button @click="value2 = !value2">拖动窗口调整大小</vxe-button>
       <vxe-modal v-model="value2" resize>
-        <template>
-          <p style="color: red">按住头部移动！！！！！！！！！！！！！！！</p>
-          <p style="color: blue">按住左边距拖动！！！！！！！！！！！！！！！</p>
-          <p style="color: red">按住右边距拖动！！！！！！！！！！！！！！！</p>
-          <p style="color: blue">按住底边距拖动！！！！！！！！！！！！！！！</p>
-          <p style="color: blue">按住左下角拖动 ！！！！！！！！！！！！！！！</p>
-          <p style="color: blue">按住右下角拖动！！！！！！！！！！！！！！！</p>
-        </template>
+        <p style="color: red">按住头部移动！！！！！！！！！！！！！！！</p>
+        <p style="color: blue">按住左边距拖动！！！！！！！！！！！！！！！</p>
+        <p style="color: red">按住右边距拖动！！！！！！！！！！！！！！！</p>
+        <p style="color: blue">按住底边距拖动！！！！！！！！！！！！！！！</p>
+        <p style="color: blue">按住左下角拖动 ！！！！！！！！！！！！！！！</p>
+        <p style="color: blue">按住右下角拖动！！！！！！！！！！！！！！！</p>
       </vxe-modal>
 
       <vxe-button @click="value3 = !value3">记忆功能的窗口</vxe-button>
       <vxe-modal v-model="value3" title="记忆功能的窗口" width="600" height="400" resize remember>
+        <vxe-form :data="formData3" :rules="formRules3" title-align="right" title-width="60">
+          <vxe-form-item title="基本信息" span="24" title-align="left" title-width="200px" :title-prefix="{icon: 'fa fa-address-card-o'}"></vxe-form-item>
+          <vxe-form-item title="名称" field="name" span="12" :item-render="{name: 'input', attrs: {placeholder: '请输入名称'}}"></vxe-form-item>
+          <vxe-form-item title="昵称" field="nickname" span="12" :item-render="{name: 'input', attrs: {placeholder: '请输入昵称'}}"></vxe-form-item>
+          <vxe-form-item title="性别" field="sex" span="12" :item-render="{name: 'select', options: sexList}"></vxe-form-item>
+          <vxe-form-item title="年龄" field="age" span="12" :item-render="{name: 'input', attrs: {type: 'number', placeholder: '请输入年龄'}}"></vxe-form-item>
+          <vxe-form-item title="其他信息" span="24" title-align="left" title-width="200px" :title-prefix="{icon: 'fa fa-info-circle'}"></vxe-form-item>
+          <vxe-form-item title="地址" field="address" span="24" :item-render="{name: 'textarea', attrs: {placeholder: '请输入地址'}}"></vxe-form-item>
+          <vxe-form-item align="center" span="24">
+            <vxe-button type="submit" status="primary">提交</vxe-button>
+            <vxe-button type="reset">重置</vxe-button>
+          </vxe-form-item>
+        </vxe-form>
+      </vxe-modal>
+
+      <vxe-button @click="value4 = !value4">最大化显示</vxe-button>
+      <vxe-modal v-model="value4" title="最大化显示" width="600" height="400" resize remember fullscreen>
         <template>
-          <p style="color: red">会记忆最后一次操作的状态，单重新打开会还原</p>
+          <p style="color: red">默认最大化显示</p>
           <p style="color: red">按住头部移动！！！！！！！！！！！！！！！</p>
           <p style="color: blue">按住左边距拖动！！！！！！！！！！！！！！！</p>
           <p style="color: red">按住右边距拖动！！！！！！！！！！！！！！！</p>
@@ -77,27 +90,25 @@
         </template>
       </vxe-modal>
 
-      <vxe-button @click="value4 = !value4">缩放表格的窗口</vxe-button>
-      <vxe-modal v-model="value4" title="缩放表格的窗口" width="800" height="400" resize>
-        <template>
-          <vxe-table
-            border
-            resizable
-            show-overflow
-            auto-resize
-            height="auto"
-            :sync-resize="value4"
-            :data="tableData">
-            <vxe-table-column type="seq" width="60"></vxe-table-column>
-            <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
-            <vxe-table-column field="sex" title="app.body.label.sex"></vxe-table-column>
-            <vxe-table-column field="age" title="app.body.label.age"></vxe-table-column>
-          </vxe-table>
-        </template>
+      <vxe-button @click="value5 = !value5">缩放表格的窗口</vxe-button>
+      <vxe-modal v-model="value5" title="缩放表格的窗口" width="800" height="400" resize>
+        <vxe-table
+          border
+          resizable
+          show-overflow
+          auto-resize
+          height="auto"
+          :sync-resize="value5"
+          :data="tableData">
+          <vxe-table-column type="seq" width="60"></vxe-table-column>
+          <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
+          <vxe-table-column field="sex" title="app.body.label.sex"></vxe-table-column>
+          <vxe-table-column field="age" title="app.body.label.age"></vxe-table-column>
+        </vxe-table>
       </vxe-modal>
 
-      <vxe-button @click="value5 = !value5">完整功能的窗口</vxe-button>
-      <vxe-modal v-model="value5" width="800" height="400" min-width="400" min-height="320" resize remember>
+      <vxe-button @click="value6 = !value6">完整功能的窗口</vxe-button>
+      <vxe-modal v-model="value6" width="800" height="400" min-width="400" min-height="320" resize remember>
         <template v-slot:title>
           <span style="color: red;">完整功能的窗口</span>
         </template>
@@ -108,7 +119,7 @@
             show-overflow
             auto-resize
             height="auto"
-            :sync-resize="value5"
+            :sync-resize="value6"
             :pager-config="tablePage"
             :proxy-config="tableProxy"
             :columns="tableColumn"
@@ -138,6 +149,31 @@ export default {
       value3: false,
       value4: false,
       value5: false,
+      value6: false,
+      sexList: [
+        { label: '', value: '' },
+        { label: '女', value: '0' },
+        { label: '男', value: '1' }
+      ],
+      formData3: {
+        name: '',
+        nickname: '',
+        sex: '',
+        age: 26,
+        address: null
+      },
+      formRules3: {
+        name: [
+          { required: true, message: '请输入名称' },
+          { min: 3, max: 5, message: '长度在 3 到 5 个字符' }
+        ],
+        nickname: [
+          { required: true, message: '请输入昵称' }
+        ],
+        sex: [
+          { required: true, message: '请选择性别' }
+        ]
+      },
       tablePage: {
         pageSize: 10
       },
@@ -243,8 +279,25 @@ export default {
 
           <vxe-button @click="value3 = !value3">记忆功能的窗口</vxe-button>
           <vxe-modal v-model="value3" title="记忆功能的窗口" width="600" height="400" resize remember>
+            <vxe-form :data="formData3" :rules="formRules3" title-align="right" title-width="60">
+              <vxe-form-item title="基本信息" span="24" title-align="left" title-width="200px" :title-prefix="{icon: 'fa fa-address-card-o'}"></vxe-form-item>
+              <vxe-form-item title="名称" field="name" span="12" :item-render="{name: 'input', attrs: {placeholder: '请输入名称'}}"></vxe-form-item>
+              <vxe-form-item title="昵称" field="nickname" span="12" :item-render="{name: 'input', attrs: {placeholder: '请输入昵称'}}"></vxe-form-item>
+              <vxe-form-item title="性别" field="sex" span="12" :item-render="{name: 'select', options: sexList}"></vxe-form-item>
+              <vxe-form-item title="年龄" field="age" span="12" :item-render="{name: 'input', attrs: {type: 'number', placeholder: '请输入年龄'}}"></vxe-form-item>
+              <vxe-form-item title="其他信息" span="24" title-align="left" title-width="200px" :title-prefix="{icon: 'fa fa-info-circle'}"></vxe-form-item>
+              <vxe-form-item title="地址" field="address" span="24" :item-render="{name: 'textarea', attrs: {placeholder: '请输入地址'}}"></vxe-form-item>
+              <vxe-form-item align="center" span="24">
+                <vxe-button type="submit" status="primary">提交</vxe-button>
+                <vxe-button type="reset">重置</vxe-button>
+              </vxe-form-item>
+            </vxe-form>
+          </vxe-modal>
+
+          <vxe-button @click="value4 = !value4">最大化显示</vxe-button>
+          <vxe-modal v-model="value4" title="最大化显示" width="600" height="400" resize remember fullscreen>
             <template>
-              <p style="color: red">会记忆最后一次操作的状态，单重新打开会还原</p>
+              <p style="color: red">默认最大化显示</p>
               <p style="color: red">按住头部移动！！！！！！！！！！！！！！！</p>
               <p style="color: blue">按住左边距拖动！！！！！！！！！！！！！！！</p>
               <p style="color: red">按住右边距拖动！！！！！！！！！！！！！！！</p>
@@ -254,8 +307,8 @@ export default {
             </template>
           </vxe-modal>
 
-          <vxe-button @click="value4 = !value4">缩放表格的窗口</vxe-button>
-          <vxe-modal v-model="value4" title="缩放表格的窗口" width="800" height="400" resize>
+          <vxe-button @click="value5 = !value5">缩放表格的窗口</vxe-button>
+          <vxe-modal v-model="value5" title="缩放表格的窗口" width="800" height="400" resize>
             <template>
               <vxe-table
                 border
@@ -263,7 +316,7 @@ export default {
                 show-overflow
                 auto-resize
                 height="auto"
-                :sync-resize="value4"
+                :sync-resize="value5"
                 :data="tableData">
                 <vxe-table-column type="seq" width="60"></vxe-table-column>
                 <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
@@ -273,8 +326,8 @@ export default {
             </template>
           </vxe-modal>
 
-          <vxe-button @click="value5 = !value5">完整功能的窗口</vxe-button>
-          <vxe-modal v-model="value5" width="800" height="400" min-width="400" min-height="320" resize remember>
+          <vxe-button @click="value6 = !value6">完整功能的窗口</vxe-button>
+          <vxe-modal v-model="value6" width="800" height="400" min-width="400" min-height="320" resize remember>
             <template v-slot:title>
               <span style="color: red;">完整功能的窗口</span>
             </template>
@@ -285,7 +338,7 @@ export default {
                 show-overflow
                 auto-resize
                 height="auto"
-                :sync-resize="value5"
+                :sync-resize="value6"
                 :pager-config="tablePage"
                 :proxy-config="tableProxy"
                 :columns="tableColumn"
@@ -303,6 +356,31 @@ export default {
               value3: false,
               value4: false,
               value5: false,
+              value6: false,
+              sexList: [
+                { label: '', value: '' },
+                { label: '女', value: '0' },
+                { label: '男', value: '1' }
+              ],
+              formData3: {
+                name: '',
+                nickname: '',
+                sex: '',
+                age: 26,
+                address: null
+              },
+              formRules3: {
+                name: [
+                  { required: true, message: '请输入名称' },
+                  { min: 3, max: 5, message: '长度在 3 到 5 个字符' }
+                ],
+                nickname: [
+                  { required: true, message: '请输入昵称' }
+                ],
+                sex: [
+                  { required: true, message: '请选择性别' }
+                ]
+              },
               tablePage: {
                 pageSize: 10
               },
