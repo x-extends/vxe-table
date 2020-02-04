@@ -117,6 +117,15 @@ const apis = [
         ]
       },
       {
+        name: 'reset-value',
+        descKey: 'app.api.formItem.desc.resetValue',
+        version: '',
+        type: 'Any',
+        enum: '',
+        defVal: 'null',
+        list: []
+      },
+      {
         name: 'item-render',
         descKey: 'app.api.formItem.desc.itemRender',
         version: '',

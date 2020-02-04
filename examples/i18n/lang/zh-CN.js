@@ -573,6 +573,7 @@ module.exports = {
           folding: '默认收起',
           collapseNode: '折叠节点',
           titlePrefix: '前缀配置项',
+          resetValue: '重置时的默认值',
           itemRender: '项渲染器配置项'
         }
       }

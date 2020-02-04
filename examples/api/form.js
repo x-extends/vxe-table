@@ -128,7 +128,7 @@ const apis = [
             desc: '触发校验方式（如果为空，则为常规校验方式； 如果指定触发方式，则只会在匹配情况下进行校验）',
             version: '',
             type: 'String',
-            enum: 'blur,change',
+            enum: 'change',
             defVal: '',
             list: []
           },
