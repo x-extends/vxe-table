@@ -167,10 +167,10 @@
             animat: true,
             delayHover: 250,
             scrollX: {
-              gt: 100
+              gt: 40
             },
             scrollY: {
-              gt: 500
+              gt: 100
             }
           },
           // 集成国际化（将对列头、校验提示..进行自动翻译）
