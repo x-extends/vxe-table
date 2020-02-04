@@ -1,5 +1,6 @@
 import XEUtils from 'xe-utils/methods/xe-utils'
-import { UtilTools } from '../../tools'
+import VXETable from '../../v-x-e-table'
+import { UtilTools, DomTools } from '../../tools'
 
 class Rule {
   constructor (rule) {
@@ -34,7 +35,6 @@ export default {
   data () {
     return {
       collapseAll: true,
-      sourceData: null,
       invalids: []
     }
   },
@@ -48,14 +48,6 @@ export default {
       return this.size || this.$parent.size || this.$parent.vSize
     }
   },
-  watch: {
-    data () {
-      this.loadForm()
-    }
-  },
-  created () {
-    this.loadForm()
-  },
   render (h) {
     return h('form', {
       class: ['vxe-form', 'vxe-row', {
@@ -68,11 +60,6 @@ export default {
     }, this.$slots.default)
   },
   methods: {
-    loadForm () {
-      if (this.data) {
-        this.sourceData = XEUtils.clone(this.data, true)
-      }
-    },
     toggleCollapse () {
       this.collapseAll = !this.collapseAll
       return this.$nextTick()
@@ -87,11 +74,11 @@ export default {
     },
     resetEvent (evnt) {
       evnt.preventDefault()
-      const { data, sourceData } = this
+      const { data } = this
       if (data) {
-        this.$children.forEach(({ field }) => {
+        this.$children.forEach(({ field, resetValue }) => {
           if (field) {
-            XEUtils.set(data, field, XEUtils.get(sourceData, field, null))
+            XEUtils.set(data, field, resetValue)
           }
         })
       }
@@ -112,6 +99,7 @@ export default {
     beginValidate (type, callback) {
       const { data, rules: formRules } = this
       const validRest = {}
+      const validFields = []
       const itemValids = []
       let status = true
       this.clearValidate()
@@ -128,6 +116,7 @@ export default {
                       validRest[field] = []
                     }
                     validRest[field].push(rest)
+                    validFields.push(field)
                     this.invalids.push(rest)
                     return reject(rest)
                   })
@@ -144,6 +133,9 @@ export default {
           if (callback) {
             callback(status, validRest)
           }
+          this.$nextTick(() => {
+            this.handleFocus(validFields)
+          })
           return Promise.reject(validRest)
         })
       }
@@ -215,6 +207,35 @@ export default {
         if (errorRules.length) {
           const rest = { rules: errorRules, rule: errorRules[0] }
           return Promise.reject(rest)
+        }
+      })
+    },
+    handleFocus (fields) {
+      const { $children } = this
+      fields.some(property => {
+        const comp = $children.find(item => item.field === property)
+        if (comp && comp.itemRender) {
+          const { $el, itemRender } = comp
+          const compConf = VXETable.renderer.get(itemRender.name)
+          let inputElem
+          // 如果指定了聚焦 class
+          if (itemRender.autofocus) {
+            inputElem = $el.querySelector(itemRender.autofocus)
+          }
+          // 渲染器的聚焦处理
+          if (!inputElem && compConf && compConf.autofocus) {
+            inputElem = $el.querySelector(compConf.autofocus)
+          }
+          if (inputElem) {
+            inputElem.focus()
+            // 保持一致行为，光标移到末端
+            if (DomTools.browse.msie) {
+              let textRange = inputElem.createTextRange()
+              textRange.collapse(false)
+              textRange.select()
+            }
+            return true
+          }
         }
       })
     },

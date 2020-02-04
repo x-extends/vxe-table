@@ -184,7 +184,7 @@ export default {
 If the project is very helpful to you, you can buy the author a cup of coffee.  
 如果这个项目对您有帮助，请作者喝杯咖啡吧。☕
 
-![pay](https://github.com/xuliangzhan/vxe-table/blob/master/public/donation/pay.jpg?raw=true)
+![pay](https://github.com/xuliangzhan/vxe-table/blob/master/public/static/donation/pay.jpg?raw=true)
 
 ## License
 

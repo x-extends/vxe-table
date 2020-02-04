@@ -2,8 +2,6 @@ import XEUtils from 'xe-utils/methods/xe-utils'
 import VXETable from '../../v-x-e-table'
 import { UtilTools, DomTools } from '../../tools'
 
-var browse = DomTools.browse
-
 export default {
   methods: {
     /**
@@ -307,7 +305,7 @@ export default {
             inputElem.select()
           } else {
             // 保持一致行为，光标移到末端
-            if (browse.msie) {
+            if (DomTools.browse.msie) {
               let textRange = inputElem.createTextRange()
               textRange.collapse(false)
               textRange.select()

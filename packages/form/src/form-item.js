@@ -48,6 +48,7 @@ export default {
     titleAlign: String,
     titleWidth: [String, Number],
     titlePrefix: Object,
+    resetValue: { default: null },
     folding: Boolean,
     collapseNode: Boolean,
     itemRender: Object

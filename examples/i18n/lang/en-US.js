@@ -574,6 +574,7 @@ module.exports = {
           folding: 'Default folding',
           collapseNode: 'Collapse node',
           titlePrefix: 'Title prefix config',
+          resetValue: 'The default value when reset',
           itemRender: 'Form item renderer config'
         }
       }
