@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import i18n from '@/i18n'
-
 import Element from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 
