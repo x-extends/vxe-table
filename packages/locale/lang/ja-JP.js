@@ -94,7 +94,7 @@ export default {
       custom: '自定义列',
       customAll: '全部',
       customConfirm: '确认',
-      customReset: '重置',
+      customReset: '还原',
       impTitle: '导入参数设置',
       impFile: '文件名',
       impSelect: '选择文件',

@@ -8,7 +8,7 @@
       keep-source
       ref="xTable"
       :data="tableData"
-      :edit-config="{trigger: 'click', mode: 'cell', showStatus: true}"
+      :edit-config="{trigger: 'click', mode: 'cell', showStatus: true, icon: 'fa fa-pencil'}"
       @edit-closed="editClosedEvent">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
@@ -44,7 +44,7 @@ export default {
           keep-source
           ref="xTable"
           :data="tableData"
-          :edit-config="{trigger: 'click', mode: 'cell', showStatus: true}"
+          :edit-config="{trigger: 'click', mode: 'cell', showStatus: true, icon: 'fa fa-pencil'}"
           @edit-closed="editClosedEvent">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>

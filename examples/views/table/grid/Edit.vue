@@ -12,7 +12,7 @@
       :pager-config="tablePage"
       :columns="tableColumn"
       :data="tableData"
-      :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
+      :edit-config="{trigger: 'click', mode: 'row', showStatus: true, icon: 'fa fa-file-text-o'}"
       @page-change="handlePageChange"></vxe-grid>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -60,7 +60,7 @@ export default {
           :pager-config="tablePage"
           :columns="tableColumn"
           :data="tableData"
-          :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
+          :edit-config="{trigger: 'click', mode: 'row', showStatus: true, icon: 'fa fa-file-text-o'}"
           @page-change="handlePageChange"></vxe-grid>
         `,
         `

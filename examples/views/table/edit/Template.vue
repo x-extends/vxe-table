@@ -10,7 +10,7 @@
       border
       show-overflow
       :data="tableData"
-      :edit-config="{trigger: 'click', mode: 'cell'}">
+      :edit-config="{trigger: 'click', mode: 'cell', icon: 'fa fa-pencil'}">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="role" title="Role" :edit-render="{autofocus: '.vxe-input--inner'}">
         <template v-slot:edit="{ row }">
@@ -57,7 +57,7 @@ export default {
           border
           show-overflow
           :data="tableData"
-          :edit-config="{trigger: 'click', mode: 'cell'}">
+          :edit-config="{trigger: 'click', mode: 'cell', icon: 'fa fa-pencil'}">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="role" title="Role" :edit-render="{autofocus: '.vxe-input--inner'}">
             <template v-slot:edit="{ row }">

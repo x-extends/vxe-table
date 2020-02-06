@@ -132,7 +132,7 @@ export default {
         { field: 'name', title: 'Name', remoteSort: true, editRender: { name: 'input' } },
         { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
         { field: 'sex', title: 'Sex', editRender: { name: 'select', options: [] } },
-        { field: 'age', title: 'Age', editRender: { name: 'input', attrs: { type: 'number' } } },
+        { field: 'age', title: 'Age', visible: false, editRender: { name: 'input', attrs: { type: 'number' } } },
         {
           field: 'role',
           title: 'Role',
@@ -262,7 +262,7 @@ export default {
                 { field: 'name', title: 'Name', remoteSort: true, editRender: { name: 'input' } },
                 { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
                 { field: 'sex', title: 'Sex', editRender: { name: 'select', options: [] } },
-                { field: 'age', title: 'Age', editRender: { name: 'input', attrs: { type: 'number' } } },
+                { field: 'age', title: 'Age', visible: false, editRender: { name: 'input', attrs: { type: 'number' } } },
                 {
                   field: 'role',
                   title: 'Role',
