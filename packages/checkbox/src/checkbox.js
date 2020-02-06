@@ -6,7 +6,6 @@ export default {
     indeterminate: Boolean,
     title: [String, Number],
     disabled: Boolean,
-    name: String,
     size: String
   },
   inject: {

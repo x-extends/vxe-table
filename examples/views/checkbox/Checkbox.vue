@@ -13,6 +13,16 @@
       <vxe-checkbox>复选3</vxe-checkbox>
     </p>
 
+    <p>
+      <vxe-checkbox-group v-model="value3">
+        <vxe-checkbox label="1">HTML</vxe-checkbox>
+        <vxe-checkbox label="2">CSS</vxe-checkbox>
+        <vxe-checkbox label="3">Javascript</vxe-checkbox>
+        <vxe-checkbox label="4">SASS</vxe-checkbox>
+        <vxe-checkbox label="5">LESS</vxe-checkbox>
+      </vxe-checkbox-group>
+    </p>
+
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
@@ -30,6 +40,7 @@ export default {
     return {
       value1: true,
       value2: true,
+      value3: ['3'],
       demoCodes: [
         `
         <p>
@@ -41,13 +52,24 @@ export default {
           <vxe-checkbox v-model="value2" disabled>复选2</vxe-checkbox>
           <vxe-checkbox>复选3</vxe-checkbox>
         </p>
+
+        <p>
+          <vxe-checkbox-group v-model="value3">
+            <vxe-checkbox label="1">HTML</vxe-checkbox>
+            <vxe-checkbox label="2">CSS</vxe-checkbox>
+            <vxe-checkbox label="3">Javascript</vxe-checkbox>
+            <vxe-checkbox label="4">SASS</vxe-checkbox>
+            <vxe-checkbox label="5">LESS</vxe-checkbox>
+          </vxe-checkbox-group>
+        </p>
         `,
         `
         export default {
           data () {
             return {
               value1: true,
-              value2: true
+              value2: true,
+              value3: ['3']
             }
           }
         }

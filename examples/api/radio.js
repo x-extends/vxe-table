@@ -17,6 +17,15 @@ const apis = [
         list: []
       },
       {
+        name: 'label',
+        descKey: 'app.api.radio.desc.label',
+        version: '',
+        type: 'String',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'size',
         descKey: 'app.api.radio.desc.size',
         version: '',
