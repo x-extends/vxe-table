@@ -477,7 +477,7 @@ export default {
       let { checkMethod } = this.customOpts
       this.tableFullColumn.forEach(column => {
         if (!checkMethod || checkMethod({ column })) {
-          column.visible = true
+          column.visible = column.defaultVisible
         }
         column.resizeWidth = 0
       })

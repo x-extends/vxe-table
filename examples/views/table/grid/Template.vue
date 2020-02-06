@@ -20,7 +20,7 @@
       :toolbar="tableToolbar"
       :columns="tableColumn"
       :data="tableData"
-      :edit-config="{trigger: 'click', mode: 'cell'}">
+      :edit-config="{trigger: 'click', mode: 'cell', icon: 'fa fa-pencil-square-o'}">
       <!--使用 form 插槽-->
       <template v-slot:form>
         <vxe-form :data="formData" @submit="searchEvent">
@@ -52,7 +52,7 @@
       </template>
 
       <!--自定义插槽 seq_header-->
-      <template v-slot:seq_header="{ row }">
+      <template v-slot:seq_header>
         <div class="first-col">
           <div class="first-col-top">名称</div>
           <div class="first-col-bottom">序号</div>
@@ -214,7 +214,7 @@ export default {
           :toolbar="tableToolbar"
           :columns="tableColumn"
           :data="tableData"
-          :edit-config="{trigger: 'click', mode: 'cell'}">
+          :edit-config="{trigger: 'click', mode: 'cell', icon: 'fa fa-pencil-square-o'}">
           <!--使用 form 插槽-->
           <template v-slot:form>
             <vxe-form :data="formData" @submit="searchEvent">
@@ -246,7 +246,7 @@ export default {
           </template>
 
           <!--自定义插槽 seq_header-->
-          <template v-slot:seq_header="{ row }">
+          <template v-slot:seq_header>
             <div class="first-col">
               <div class="first-col-top">名称</div>
               <div class="first-col-bottom">序号</div>

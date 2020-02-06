@@ -86,10 +86,11 @@ export default {
         { type: 'checkbox', title: 'ID', width: 120, fixed: 'left' },
         { field: 'name', title: 'Name', width: 300, remoteSort: true },
         { field: 'nickname', title: 'Nickname', remoteSort: true, width: 300 },
-        { field: 'age', title: 'Age', remoteSort: true, width: 100 },
+        { field: 'age', title: 'Age', visible: false, remoteSort: true, width: 100 },
         {
           field: 'role',
           title: 'Role',
+          visible: false,
           remoteSort: true,
           width: 200,
           filters: [
@@ -176,10 +177,11 @@ export default {
                 { type: 'checkbox', title: 'ID', width: 120, fixed: 'left' },
                 { field: 'name', title: 'Name', width: 300, remoteSort: true },
                 { field: 'nickname', title: 'Nickname', remoteSort: true, width: 300 },
-                { field: 'age', title: 'Age', remoteSort: true, width: 100 },
+                { field: 'age', title: 'Age', visible: false, remoteSort: true, width: 100 },
                 {
                   field: 'role',
                   title: 'Role',
+                  visible: false,
                   remoteSort: true,
                   width: 200,
                   filters: [
