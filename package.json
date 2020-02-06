@@ -1,6 +1,6 @@
 {
   "name": "vxe-table",
-  "version": "2.8.0-beta.4",
+  "version": "2.8.0",
   "description": "vxe-table vue 表格解决方案",
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -49,7 +49,7 @@
     "gulp-sourcemaps": "^2.6.5",
     "gulp-uglify": "^3.0.2",
     "highlight.js": "^9.17.0",
-    "iview": "^3.5.4",
+    "view-design": "^4.1.2",
     "jspdf": "^1.5.3",
     "moment": "^2.24.0",
     "node-sass": "^4.12.0",
@@ -95,7 +95,7 @@
     "vxe-editable",
     "vue table",
     "vue editable",
-    "vue excel"
+    "datatable"
   ],
   "author": {
     "name": "Xu Liangzhan",
