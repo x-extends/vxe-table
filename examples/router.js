@@ -186,6 +186,7 @@ const TableVirtualTreeRemove = () => import(/* webpackChunkName: "virtual-tree" 
 const TableVirtualTreeMenu = () => import(/* webpackChunkName: "virtual-tree" */ './views/table/virtual-tree/Menu.vue')
 const TableVirtualTreeTemplate = () => import(/* webpackChunkName: "virtual-tree" */ './views/table/virtual-tree/Template.vue')
 
+const TableEditPopupForm = () => import(/* webpackChunkName: "edit" */ './views/table/edit/PopupForm.vue')
 const TableEditManual = () => import(/* webpackChunkName: "edit" */ './views/table/edit/Manual.vue')
 const TableEditClick = () => import(/* webpackChunkName: "edit" */ './views/table/edit/Click.vue')
 const TableEditDBLClick = () => import(/* webpackChunkName: "edit" */ './views/table/edit/DBLClick.vue')
@@ -1158,6 +1159,11 @@ export default new Router({
           component: TableScrollKeepAliveTable3
         }
       ]
+    },
+    {
+      path: '/table/edit/popupForm',
+      name: 'TableEditPopupForm',
+      component: TableEditPopupForm
     },
     {
       path: '/table/edit/manual',

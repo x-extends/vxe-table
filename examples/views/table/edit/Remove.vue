@@ -1,11 +1,11 @@
 <template>
   <div>
-    <p class="tip">调用 <table-api-link prop="remove"/> 删除指定行数据</p>
+    <p class="tip">调用 <table-api-link prop="remove"/> 删除指定行数据<br><span class="red">（当移除行元素后由于 vue 缓存造成事件错乱，应该使用 <table-api-link prop="row-key "/>来避免该问题）</span></p>
 
     <vxe-toolbar>
       <template v-slot:buttons>
         <vxe-button @click="insertEvent()">在第1行插入</vxe-button>
-        <vxe-button @click="$refs.xTable.remove(tableData[1])">删除第2行</vxe-button>
+        <vxe-button @click="removeEvent(tableData[1])">删除第2行</vxe-button>
         <vxe-button @click="$refs.xTable.removeSelecteds()">删除选中</vxe-button>
         <vxe-button @click="getRemoveEvent">获取删除</vxe-button>
         <vxe-button @click="getSelectionEvent">获取选中</vxe-button>
@@ -46,7 +46,7 @@ export default {
         <vxe-toolbar>
           <template v-slot:buttons>
             <vxe-button @click="insertEvent()">在第1行插入</vxe-button>
-            <vxe-button @click="$refs.xTable.remove(tableData[1])">删除第2行</vxe-button>
+            <vxe-button @click="removeEvent(tableData[1])">删除第2行</vxe-button>
             <vxe-button @click="$refs.xTable.removeSelecteds()">删除选中</vxe-button>
             <vxe-button @click="getRemoveEvent">获取删除</vxe-button>
             <vxe-button @click="getSelectionEvent">获取选中</vxe-button>
@@ -84,6 +84,13 @@ export default {
               const { row: newRow } = await this.$refs.xTable.insertAt(record, row)
               await this.$refs.xTable.setActiveCell(newRow, 'sex')
             },
+            removeEvent (row) {
+              this.$XModal.confirm('您确定要删除该数据?').then(type => {
+                if (type === 'confirm') {
+                  this.$refs.xTable.remove(row)
+                }
+              })
+            },
             getRemoveEvent () {
               let removeRecords = this.$refs.xTable.getRemoveRecords()
               this.$XModal.alert(removeRecords.length)
@@ -114,6 +121,13 @@ export default {
       }
       const { row: newRow } = await this.$refs.xTable.insertAt(record, row)
       await this.$refs.xTable.setActiveCell(newRow, 'sex')
+    },
+    removeEvent (row) {
+      this.$XModal.confirm('您确定要删除该数据?').then(type => {
+        if (type === 'confirm') {
+          this.$refs.xTable.remove(row)
+        }
+      })
     },
     getRemoveEvent () {
       let removeRecords = this.$refs.xTable.getRemoveRecords()
