@@ -196,6 +196,7 @@
   font-family: $vxe-font-family;
   background-color: $vxe-form-background-color;
   .vxe-form--item-inner {
+    min-height: $vxe-form-item-min-height-default;
     & > .align--center {
       text-align: center;
     }
@@ -208,6 +209,9 @@
   }
   &.size--medium {
     font-size: $vxe-font-size-medium;
+    .vxe-form--item-inner {
+      min-height: $vxe-form-item-min-height-medium;
+    }
     .vxe-default-input[type="submit"],
     .vxe-default-input[type="reset"] {
       line-height: $vxe-button-height-medium - 2px;
@@ -220,6 +224,9 @@
   }
   &.size--small {
     font-size: $vxe-font-size-small;
+    .vxe-form--item-inner {
+      min-height: $vxe-form-item-min-height-small;
+    }
     .vxe-default-input[type="submit"],
     .vxe-default-input[type="reset"] {
       line-height: $vxe-button-height-small - 2px;
@@ -232,6 +239,9 @@
   }
   &.size--mini {
     font-size: $vxe-font-size-mini;
+    .vxe-form--item-inner {
+      min-height: $vxe-form-item-min-height-mini;
+    }
     .vxe-default-input[type="submit"],
     .vxe-default-input[type="reset"] {
       line-height: $vxe-button-height-mini - 2px;

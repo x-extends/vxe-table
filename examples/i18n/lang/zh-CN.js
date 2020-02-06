@@ -494,6 +494,7 @@ module.exports = {
       radio: {
         desc: {
           value: '绑定值',
+          label: '值',
           size: '尺寸',
           disabled: '是否禁用',
           name: '原生 name 属性'
@@ -503,7 +504,10 @@ module.exports = {
         desc: {
           value: '绑定值',
           size: '尺寸',
-          disabled: '是否禁用'
+          disabled: '是否禁用',
+          label: '只对 checkbox-group 有效，值',
+          title: '标题',
+          indeterminate: '是否不确定状态'
         }
       },
       input: {

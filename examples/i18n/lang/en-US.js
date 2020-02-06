@@ -494,7 +494,8 @@ module.exports = {
       },
       radio: {
         desc: {
-          value: 'Binding values',
+          value: 'Binding value',
+          label: 'value',
           size: 'Size',
           disabled: 'Whether to disable',
           name: 'Native name attribute'
@@ -504,7 +505,10 @@ module.exports = {
         desc: {
           value: 'Binding values',
           size: 'Size',
-          disabled: 'Whether to disable'
+          disabled: 'Whether to disable',
+          label: 'For checkbox-group only, value',
+          title: 'Title',
+          indeterminate: 'Whether there is an indeterminate state'
         }
       },
       input: {

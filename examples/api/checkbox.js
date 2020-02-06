@@ -17,6 +17,15 @@ const apis = [
         list: []
       },
       {
+        name: 'label',
+        descKey: 'app.api.checkbox.desc.label',
+        version: '2.8',
+        type: 'String',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'size',
         descKey: 'app.api.checkbox.desc.size',
         version: '',
@@ -28,6 +37,24 @@ const apis = [
       {
         name: 'disabled',
         descKey: 'app.api.checkbox.desc.disabled',
+        version: '',
+        type: 'Boolean',
+        enum: '',
+        defVal: 'false',
+        list: []
+      },
+      {
+        name: 'title',
+        descKey: 'app.api.checkbox.desc.title',
+        version: '',
+        type: 'String',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'indeterminate',
+        descKey: 'app.api.checkbox.desc.indeterminate',
         version: '',
         type: 'Boolean',
         enum: '',
