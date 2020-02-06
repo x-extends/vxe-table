@@ -128,6 +128,7 @@ module.exports = {
         fullPartialLoad: 'Full partial load',
 
         editable: 'Editable',
+        popupForm: 'Popup edit',
         manual: 'Manual trigger',
         click: 'Click trigger',
         dblclick: 'dblclick trigger',

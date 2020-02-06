@@ -1165,6 +1165,12 @@ export default {
           expand: false,
           children: [
             {
+              label: 'app.aside.nav.popupForm',
+              locat: {
+                name: 'TableEditPopupForm'
+              }
+            },
+            {
               label: 'app.aside.nav.manual',
               demoUrl: 'https://jsrun.pro/SWWKp/edit',
               locat: {

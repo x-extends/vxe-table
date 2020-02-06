@@ -2,19 +2,28 @@ export default {
   name: 'VxeCheckbox',
   props: {
     value: Boolean,
+    label: [String, Number],
     indeterminate: Boolean,
     title: [String, Number],
     disabled: Boolean,
     name: String,
     size: String
   },
+  inject: {
+    $vxegroup: {
+      default: null
+    }
+  },
   computed: {
     vSize () {
       return this.size || this.$parent.size || this.$parent.vSize
+    },
+    isGroup () {
+      return this.$vxegroup
     }
   },
   render (h) {
-    let { disabled, title, vSize, indeterminate, value } = this
+    let { $vxegroup, isGroup, disabled, title, vSize, indeterminate, value, label } = this
     let attrs = {}
     if (title) {
       attrs.title = title
@@ -33,14 +42,18 @@ export default {
           disabled
         },
         domProps: {
-          checked: value
+          checked: isGroup && $vxegroup.value ? $vxegroup.value.some(item => item === label) : value
         },
         on: {
           change: evnt => {
             if (!this.disabled) {
               let checked = evnt.target.checked
-              this.$emit('input', checked)
-              this.$emit('change', checked, evnt)
+              if (isGroup) {
+                $vxegroup.handleChecked({ checked, label }, evnt)
+              } else {
+                this.$emit('input', checked)
+                this.$emit('change', checked, evnt)
+              }
             }
           }
         }

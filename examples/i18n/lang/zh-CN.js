@@ -127,6 +127,7 @@ module.exports = {
         fullPartialLoad: '完整的局部加载',
 
         editable: '可编辑表格',
+        popupForm: '弹框编辑',
         manual: '手动触发',
         click: '点击触发',
         dblclick: '双击触发',

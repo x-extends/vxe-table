@@ -185,6 +185,7 @@ const TableScrollKeepAliveTable1 = () => import(/* webpackChunkName: "scroll" */
 const TableScrollKeepAliveTable2 = () => import(/* webpackChunkName: "scroll" */ './views/table/scroll/keepAlives/Table2.vue')
 const TableScrollKeepAliveTable3 = () => import(/* webpackChunkName: "scroll" */ './views/table/scroll/keepAlives/Table3.vue')
 
+const TableEditPopupForm = () => import(/* webpackChunkName: "edit" */ './views/table/edit/PopupForm.vue')
 const TableEditManual = () => import(/* webpackChunkName: "edit" */ './views/table/edit/Manual.vue')
 const TableEditClick = () => import(/* webpackChunkName: "edit" */ './views/table/edit/Click.vue')
 const TableEditDBLClick = () => import(/* webpackChunkName: "edit" */ './views/table/edit/DBLClick.vue')
@@ -1152,6 +1153,11 @@ export default new Router({
           component: TableScrollKeepAliveTable3
         }
       ]
+    },
+    {
+      path: '/table/edit/popupForm',
+      name: 'TableEditPopupForm',
+      component: TableEditPopupForm
     },
     {
       path: '/table/edit/manual',
