@@ -84,8 +84,8 @@ export default {
       tableColumn: [
         { type: 'seq', width: 60, fixed: 'left' },
         { type: 'checkbox', title: 'ID', width: 120, fixed: 'left' },
-        { field: 'name', title: 'Name', width: 300, remoteSort: true },
-        { field: 'nickname', title: 'Nickname', remoteSort: true, width: 300 },
+        { field: 'name', title: 'Name', minWidth: 300, remoteSort: true },
+        { field: 'nickname', title: 'Nickname', remoteSort: true, minWidth: 300 },
         { field: 'age', title: 'Age', visible: false, remoteSort: true, width: 100 },
         {
           field: 'role',
@@ -101,7 +101,7 @@ export default {
           ],
           filterMultiple: false
         },
-        { field: 'describe', title: 'Describe', width: 300, showOverflow: true }
+        { field: 'describe', title: 'Describe', minWidth: 300, showOverflow: true }
       ],
       demoCodes: [
         `
@@ -175,8 +175,8 @@ export default {
               tableColumn: [
                 { type: 'seq', width: 60, fixed: 'left' },
                 { type: 'checkbox', title: 'ID', width: 120, fixed: 'left' },
-                { field: 'name', title: 'Name', width: 300, remoteSort: true },
-                { field: 'nickname', title: 'Nickname', remoteSort: true, width: 300 },
+                { field: 'name', title: 'Name', minWidth: 300, remoteSort: true },
+                { field: 'nickname', title: 'Nickname', remoteSort: true, minWidth: 300 },
                 { field: 'age', title: 'Age', visible: false, remoteSort: true, width: 100 },
                 {
                   field: 'role',
@@ -192,7 +192,7 @@ export default {
                   ],
                   filterMultiple: false
                 },
-                { field: 'describe', title: 'Describe', width: 300, showOverflow: true }
+                { field: 'describe', title: 'Describe', minWidth: 300, showOverflow: true }
               ]
             }
           },
