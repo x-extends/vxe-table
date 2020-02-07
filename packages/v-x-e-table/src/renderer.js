@@ -90,7 +90,8 @@ function renderOptions (h, options, renderOpts, params, context) {
         disabled: item[disabledProp]
       },
       domProps: {
-        selected: item[valueProp] === cellValue
+        /* eslint-disable eqeqeq */
+        selected: item[valueProp] == cellValue
       },
       key: index
     }, item[labelProp])
@@ -166,14 +167,16 @@ function getSelectCellValue (renderOpts, { row, column }) {
   if (optionGroups) {
     let groupOptions = optionGroupProps.options || 'options'
     for (let index = 0; index < optionGroups.length; index++) {
-      selectItem = XEUtils.find(optionGroups[index][groupOptions], item => item[valueProp] === cellValue)
+      /* eslint-disable eqeqeq */
+      selectItem = XEUtils.find(optionGroups[index][groupOptions], item => item[valueProp] == cellValue)
       if (selectItem) {
         break
       }
     }
     return selectItem ? selectItem[labelProp] : cellValue
   }
-  selectItem = XEUtils.find(options, item => item[valueProp] === cellValue)
+  /* eslint-disable eqeqeq */
+  selectItem = XEUtils.find(options, item => item[valueProp] == cellValue)
   return selectItem ? selectItem[labelProp] : cellValue
 }
 
@@ -234,7 +237,8 @@ function renderFormOptions (h, options, renderOpts, params, context) {
         disabled: item[disabledProp]
       },
       domProps: {
-        selected: item[valueProp] === cellValue
+        /* eslint-disable eqeqeq */
+        selected: item[valueProp] == cellValue
       },
       key: index
     }, item[labelProp])

@@ -1,9 +1,6 @@
 <template>
   <div>
-    <p class="tip">
-      设置 <table-api-link prop="edit-config"/>={trigger: 'dblclick', mode: 'cell'} 启用单元格双击编辑的功能<br>
-      <span class="red">（注：原生的 select 必须是字符串的 value）</span>
-    </p>
+    <p class="tip">设置 <table-api-link prop="edit-config"/>={trigger: 'dblclick', mode: 'cell'} 启用单元格双击编辑的功能<br></p>
 
     <vxe-table
       border

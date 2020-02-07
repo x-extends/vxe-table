@@ -21,6 +21,19 @@ class Rule {
   }
 }
 
+function getResetValue (value, resetValue) {
+  if (XEUtils.isString(value)) {
+    resetValue = ''
+  } else if (XEUtils.isNumber(value)) {
+    resetValue = 0
+  } else if (XEUtils.isArray(value)) {
+    resetValue = []
+  } else if (XEUtils.isBoolean(value)) {
+    resetValue = false
+  }
+  return resetValue
+}
+
 export default {
   name: 'VxeForm',
   props: {
@@ -78,7 +91,7 @@ export default {
       if (data) {
         this.$children.forEach(({ field, resetValue }) => {
           if (field) {
-            XEUtils.set(data, field, resetValue)
+            XEUtils.set(data, field, resetValue === null ? getResetValue(XEUtils.get(data, field), resetValue) : resetValue)
           }
         })
       }
