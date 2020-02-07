@@ -9,6 +9,24 @@
       max-height="500"
       :columns="tableColumn"
       :data="tableData">
+      <!--使用自定义模板-->
+      <template v-slot:fileExpand="{ row }">
+        <ul v-if="row.fileList.length" class="file-list">
+          <li v-for="(file, index) in row.fileList" :key="index">
+            <span>{{ file.name }}</span>
+            <span>{{ file.size }}</span>
+            <span>{{ file.type }}</span>
+            <span>{{ file.date }}</span>
+          </li>
+        </ul>
+        <div v-else class="file-empty">暂无附件</div>
+      </template>
+      <template v-slot:cellExpand="{ row }">
+        <span>（{{ row.fileList.length }}）</span>
+      </template>
+      <template v-slot:operation="{ row }">
+        <vxe-button status="primary" @click="uploadFileEvent(row)">添加附件</vxe-button>
+      </template>
     </vxe-grid>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -30,49 +48,10 @@ export default {
     return {
       tableColumn: [
         { type: 'seq', width: 50 },
-        {
-          type: 'expand',
-          width: 120,
-          slots: {
-            content: ({ row, column }) => {
-              return [
-                row.fileList.length
-                  ? <ul class="file-list">
-                    {
-                      row.fileList.map(file => {
-                        return <li>
-                          <span>{ file.name }</span>
-                          <span>{ file.size }</span>
-                          <span>{ file.type }</span>
-                          <span>{ file.date }</span>
-                        </li>
-                      })
-                    }
-                  </ul>
-                  : <div class="file-empty">暂无附件</div>
-              ]
-            },
-            default: ({ row, column }) => {
-              return [
-                <span>（{ row.fileList.length }）</span>
-              ]
-            }
-          }
-        },
+        { type: 'expand', width: 120, slots: { content: 'fileExpand', default: 'cellExpand' } },
         { field: 'name', title: 'app.body.label.name' },
         { field: 'sex', title: 'app.body.label.sex' },
-        {
-          title: '操作',
-          width: 160,
-          showOverflow: true,
-          slots: {
-            default: ({ row, column }) => {
-              return [
-                <vxe-button status="primary" onClick={ e => this.uploadFileEvent(row) }>添加附件</vxe-button>
-              ]
-            }
-          }
-        }
+        { title: '操作', width: 160, showOverflow: true, slots: { default: 'operation' } }
       ],
       tableData: [
         { name: 'name1', sex: '男', age: '26', fileList: [] },
@@ -88,6 +67,24 @@ export default {
           max-height="500"
           :columns="tableColumn"
           :data="tableData">
+          <!--使用自定义模板-->
+          <template v-slot:fileExpand="{ row }">
+            <ul v-if="row.fileList.length" class="file-list">
+              <li v-for="(file, index) in row.fileList" :key="index">
+                <span>{{ file.name }}</span>
+                <span>{{ file.size }}</span>
+                <span>{{ file.type }}</span>
+                <span>{{ file.date }}</span>
+              </li>
+            </ul>
+            <div v-else class="file-empty">暂无附件</div>
+          </template>
+          <template v-slot:cellExpand="{ row }">
+            <span>（{{ row.fileList.length }}）</span>
+          </template>
+          <template v-slot:operation="{ row }">
+            <vxe-button status="primary" @click="uploadFileEvent(row)">添加附件</vxe-button>
+          </template>
         </vxe-grid>
         `,
         `
@@ -96,49 +93,10 @@ export default {
             return {
               tableColumn: [
                 { type: 'seq', width: 50 },
-                {
-                  type: 'expand',
-                  width: 120,
-                  slots: {
-                    content: ({ row, column }) => {
-                      return [
-                        row.fileList.length
-                          ? <ul class="file-list">
-                            {
-                              row.fileList.map(file => {
-                                return <li>
-                                  <span>{ file.name }</span>
-                                  <span>{ file.size }</span>
-                                  <span>{ file.type }</span>
-                                  <span>{ file.date }</span>
-                                </li>
-                              })
-                            }
-                          </ul>
-                          : <div class="file-empty">暂无附件</div>
-                      ]
-                    },
-                    default: ({ row, column }) => {
-                      return [
-                        <span>（{ row.fileList.length }）</span>
-                      ]
-                    }
-                  }
-                },
+                { type: 'expand', width: 120, slots: { content: 'fileExpand', default: 'cellExpand' } },
                 { field: 'name', title: 'app.body.label.name' },
                 { field: 'sex', title: 'app.body.label.sex' },
-                {
-                  title: '操作',
-                  width: 160,
-                  showOverflow: true,
-                  slots: {
-                    default: ({ row, column }) => {
-                      return [
-                        <vxe-button status="primary" onClick={ e => this.uploadFileEvent(row) }>添加附件</vxe-button>
-                      ]
-                    }
-                  }
-                }
+                { title: '操作', width: 160, showOverflow: true, slots: { default: 'operation' } }
               ],
               tableData: [
                 { name: 'name1', sex: '男', age: '26', fileList: [] },
@@ -148,11 +106,13 @@ export default {
             }
           },
           methods: {
+            // 读取附件
             uploadFileEvent (row) {
               this.$refs.xGrid.readFile({
                 multiple: true,
                 types: ['xlsx', 'csv', 'html']
               }).then(evnt => {
+                // 解析数据并显示
                 Array.from(evnt.target.files).forEach(file => {
                   let ns = file.name.split('.')
                   let name = ns.slice(0, ns.length - 1).join('')
@@ -189,10 +149,12 @@ export default {
   },
   methods: {
     uploadFileEvent (row) {
+      // 读取附件
       this.$refs.xGrid.readFile({
         multiple: true,
         types: ['xlsx', 'csv', 'html']
       }).then(evnt => {
+        // 解析数据并显示
         Array.from(evnt.target.files).forEach(file => {
           let ns = file.name.split('.')
           let name = ns.slice(0, ns.length - 1).join('')

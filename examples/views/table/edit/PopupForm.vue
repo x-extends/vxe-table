@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">实现弹框表单编辑功能</p>
+    <p class="tip">实现弹框表单编辑功能，双击行可以弹出编辑框</p>
 
     <vxe-table
       border
@@ -10,7 +10,8 @@
       highlight-current-row
       ref="xTable"
       height="500"
-      :data="tableData">
+      :data="tableData"
+      @cell-dblclick="cellDBLClickEvent">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex" :formatter="formatterSex"></vxe-table-column>
@@ -113,7 +114,8 @@ export default {
           highlight-current-row
           ref="xTable"
           height="500"
-          :data="tableData">
+          :data="tableData"
+          @cell-dblclick="cellDBLClickEvent">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" :formatter="formatterSex"></vxe-table-column>
@@ -205,6 +207,9 @@ export default {
               let item = this.sexList.find(item => item.value === cellValue)
               return item ? item.label : ''
             },
+            cellDBLClickEvent ({ row }) {
+              this.editEvent(row)
+            },
             editEvent (row) {
               this.formData = {
                 name: row.name,
@@ -251,6 +256,9 @@ export default {
     formatterSex ({ cellValue }) {
       let item = this.sexList.find(item => item.value === cellValue)
       return item ? item.label : ''
+    },
+    cellDBLClickEvent ({ row }) {
+      this.editEvent(row)
     },
     editEvent (row) {
       this.formData = {
