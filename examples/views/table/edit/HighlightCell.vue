@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">高亮单元格编辑，通过 <table-api-link prop="highlight-cell"/> 属性设置，指南用于全部单元格都是输入框时</p>
+    <p class="tip">高亮单元格编辑，通过 <table-api-link prop="highlight-cell"/> 属性设置，只有所有单元格都是输入框时可以启用</p>
 
     <vxe-table
       border
