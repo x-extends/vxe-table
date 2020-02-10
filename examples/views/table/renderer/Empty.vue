@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="tip">
-      空内容渲染器 <table-api-link prop="empty-render"/><br>
+      空内容渲染器 <table-api-link prop="empty-render"/>，查看 <a class="link" href="https://github.com/xuliangzhan/vxe-table/tree/master/examples/plugins/xtable/renderer">示例的源码</a><br>
       配置参数：<br>
       renderEmpty (h, renderOpts, params, context) 空内容<br>
       <span class="green">参数说明 params = {}</span><br>

@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="tip">
-      筛选渲染器 <table-column-api-link prop="filter-render"/><br>
+      筛选渲染器 <table-column-api-link prop="filter-render"/>，查看 <a class="link" href="https://github.com/xuliangzhan/vxe-table/tree/master/examples/plugins/xtable/renderer">示例的源码</a><br>
       默认支持原生的：input、textarea、select<br>
       配置参数：<br>
       className 自定义容器的 className<br>
