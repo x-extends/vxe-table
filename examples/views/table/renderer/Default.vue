@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="tip">
-      默认的渲染器 <table-column-api-link prop="cell-render"/><br>
+      默认的渲染器 <table-column-api-link prop="cell-render"/>，查看 <a class="link" href="https://github.com/xuliangzhan/vxe-table/tree/master/examples/plugins/xtable/renderer">示例的源码</a><br>
       配置参数：<br>
       renderDefault (h, renderOpts, params, context) 渲染函数<br>
       cellExportMethod (params) 导出值格式化函数<br>
