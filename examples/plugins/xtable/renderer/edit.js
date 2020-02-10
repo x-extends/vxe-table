@@ -13,9 +13,9 @@ VXETable.renderer.add('MyInput', {
     return [
       <span>{ row[column.property] }</span>
     ]
-  },
-  // 导出格式化值函数
-  editExportMethod ({ row, column }) {
-    return `值为：${row[column.property]}`
+  // },
+  // // 导出格式化值函数
+  // editExportMethod ({ row, column }) {
+  //   return `值为：${row[column.property]}`
   }
 })
