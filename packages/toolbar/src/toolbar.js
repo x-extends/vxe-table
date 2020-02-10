@@ -328,7 +328,7 @@ export default {
                 on: {
                   click: this.resetCustomEvent
                 }
-              }, GlobalConfig.i18n('vxe.toolbar.customReset'))
+              }, GlobalConfig.i18n('vxe.toolbar.customRestore'))
             ])
           ])
         ]) : null

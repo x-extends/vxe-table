@@ -94,7 +94,7 @@ export default {
       custom: 'Custom columns',
       customAll: 'All',
       customConfirm: 'Confirm',
-      customReset: 'Restore',
+      customRestore: 'Restore',
       impTitle: 'Import parameter settings',
       impFile: 'Filename',
       impSelect: 'Select file',
