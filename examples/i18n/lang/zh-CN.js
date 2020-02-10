@@ -201,6 +201,7 @@ module.exports = {
         rendererEdit: '可编辑渲染器',
         rendererToolbar: '工具栏渲染器',
         rendererForm: '表单渲染器',
+        rendererEmpty: '空内容渲染器',
 
         interceptor: '(进阶) 事件拦截器',
 
@@ -356,6 +357,7 @@ module.exports = {
           editConfig: '可编辑配置项',
           validConfig: '校验配置项',
           editRules: '校验规则配置项',
+          emptyRender: '空内容渲染配置项',
           optimization: '优化配置项',
 
           params: '额外的参数（可以用来存放一些私有参数）',
@@ -494,6 +496,7 @@ module.exports = {
       radio: {
         desc: {
           value: '绑定值',
+          label: '值',
           size: '尺寸',
           disabled: '是否禁用',
           name: '原生 name 属性'
@@ -503,7 +506,10 @@ module.exports = {
         desc: {
           value: '绑定值',
           size: '尺寸',
-          disabled: '是否禁用'
+          disabled: '是否禁用',
+          label: '只对 checkbox-group 有效，值',
+          title: '标题',
+          indeterminate: '是否不确定状态'
         }
       },
       input: {

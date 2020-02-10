@@ -1686,6 +1686,12 @@ export default {
               locat: {
                 name: 'RendererForm'
               }
+            },
+            {
+              label: 'app.aside.nav.rendererEmpty',
+              locat: {
+                name: 'RendererEmpty'
+              }
             }
           ]
         },

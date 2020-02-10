@@ -202,6 +202,7 @@ module.exports = {
         rendererEdit: 'Edit renderer',
         rendererToolbar: 'Toolbar renderer',
         rendererForm: 'Form renderer',
+        rendererEmpty: 'Empty renderer',
 
         interceptor: '(Advanced) Event interceptor',
 
@@ -357,6 +358,7 @@ module.exports = {
           editConfig: 'Editable configuration',
           validConfig: 'Validate configuration',
           editRules: 'Checksum rule configuration entries',
+          emptyRender: 'Empty content renderer config',
           optimization: 'Optimize configuration',
 
           params: 'Additional parameters (Can be used to store some private parameters)',
@@ -494,7 +496,8 @@ module.exports = {
       },
       radio: {
         desc: {
-          value: 'Binding values',
+          value: 'Binding value',
+          label: 'value',
           size: 'Size',
           disabled: 'Whether to disable',
           name: 'Native name attribute'
@@ -504,7 +507,10 @@ module.exports = {
         desc: {
           value: 'Binding values',
           size: 'Size',
-          disabled: 'Whether to disable'
+          disabled: 'Whether to disable',
+          label: 'For checkbox-group only, value',
+          title: 'Title',
+          indeterminate: 'Whether there is an indeterminate state'
         }
       },
       input: {

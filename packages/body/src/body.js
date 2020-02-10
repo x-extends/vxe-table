@@ -1,5 +1,6 @@
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../conf'
+import VXETable from '../../v-x-e-table'
 import { UtilTools, DomTools } from '../../tools'
 
 // 处理选中位置
@@ -493,7 +494,9 @@ export default {
       scrollXStore,
       scrollXLoad,
       scrollYLoad,
-      scrollYStore
+      scrollYStore,
+      emptyRender,
+      emptyOpts
     } = $table
     // v2.0 废弃属性，保留兼容
     let allColumnOverflow = XEUtils.isBoolean(oldShowAllOverflow) ? oldShowAllOverflow : allShowOverflow
@@ -531,6 +534,17 @@ export default {
     // 兼容火狐滚动条
     if (overflowY && fixedType && (DomTools.browse['-moz'] || DomTools.browse['safari'])) {
       tableStyle.paddingRight = `${scrollbarWidth}px`
+    }
+    let emptyContent
+    if ($scopedSlots.empty) {
+      emptyContent = $scopedSlots.empty.call(this, { $table: this }, h)
+    } else {
+      const compConf = emptyRender ? VXETable.renderer.get(emptyOpts.name) : null
+      if (compConf) {
+        emptyContent = compConf.renderEmpty(h, emptyOpts, { $table: this }, { $table: this })
+      } else {
+        emptyContent = GlobalConfig.i18n('vxe.table.emptyText')
+      }
     }
     return h('div', {
       class: ['vxe-table--body-wrapper', fixedType ? `fixed--${fixedType}-wrapper` : 'body--wrapper'],
@@ -588,7 +602,7 @@ export default {
       }, [
         h('div', {
           class: 'vxe-table--empty-content'
-        }, $scopedSlots.empty ? $scopedSlots.empty.call(this, { $table: this }, h) : GlobalConfig.i18n('vxe.table.emptyText'))
+        }, emptyContent)
       ]) : null
     ])
   },

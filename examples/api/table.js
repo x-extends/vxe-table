@@ -1814,6 +1814,52 @@ const apis = [
         ]
       },
       {
+        name: 'empty-render',
+        descKey: 'app.api.table.desc.emptyRender',
+        version: '1.15.19',
+        type: 'Boolean, Object',
+        enum: '',
+        defVal: '继承 setup.emptyRender',
+        list: [
+          {
+            name: 'name',
+            desc: '渲染器名称',
+            version: '',
+            type: 'String',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'props',
+            desc: '渲染的参数（请查看目标渲染的 Props）',
+            version: '',
+            type: 'Object',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'attrs',
+            desc: '渲染的属性（请查看目标渲染的 Attribute）',
+            version: '',
+            type: 'Object',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'events',
+            desc: '渲染组件的事件（请查看目标渲染的 Events）',
+            version: '',
+            type: 'Object',
+            enum: '',
+            defVal: '{}, ...[目标渲染的 arguments]',
+            list: []
+          }
+        ]
+      },
+      {
         name: 'optimization',
         descKey: 'app.api.table.desc.optimization',
         version: '',

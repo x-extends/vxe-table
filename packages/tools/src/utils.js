@@ -237,16 +237,16 @@ export const UtilTools = {
   },
   // 组装列配置
   assemColumn (_vm) {
-    let { $table, $column, columnConfig } = _vm
-    let groupConfig = $column ? $column.columnConfig : null
+    let { $el, $table, $xecolumn, columnConfig } = _vm
+    let groupConfig = $xecolumn ? $xecolumn.columnConfig : null
     columnConfig.slots = _vm.$scopedSlots
-    if (groupConfig && $column.$children.length > 0) {
+    if (groupConfig && $xecolumn.$children.length > 0) {
       if (!groupConfig.children) {
         groupConfig.children = []
       }
-      groupConfig.children.splice([].indexOf.call($column.$el.children, _vm.$el), 0, columnConfig)
+      groupConfig.children.splice([].indexOf.call($xecolumn.$el.children, $el), 0, columnConfig)
     } else {
-      $table.collectColumn.splice([].indexOf.call($table.$refs.hideColumn.children, _vm.$el), 0, columnConfig)
+      $table.collectColumn.splice([].indexOf.call($table.$refs.hideColumn.children, $el), 0, columnConfig)
     }
   },
   // 销毁列
