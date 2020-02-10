@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">基础使用</p>
+    <p class="tip">基础使用，可以使用 <router-link class="link" :to="{name: 'RendererEmpty'}">渲染器</router-link> 实现全局复用</p>
 
     <vxe-table
       :data="tableData">
