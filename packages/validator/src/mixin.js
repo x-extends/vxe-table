@@ -7,7 +7,7 @@ class Rule {
       $options: rule,
       required: rule.required,
       min: rule.min,
-      max: rule.min,
+      max: rule.max,
       type: rule.type,
       pattern: rule.pattern,
       validator: rule.validator,

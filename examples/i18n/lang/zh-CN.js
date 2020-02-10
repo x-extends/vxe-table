@@ -201,6 +201,7 @@ module.exports = {
         rendererEdit: '可编辑渲染器',
         rendererToolbar: '工具栏渲染器',
         rendererForm: '表单渲染器',
+        rendererEmpty: '空内容渲染器',
 
         interceptor: '(进阶) 事件拦截器',
 
@@ -356,6 +357,7 @@ module.exports = {
           editConfig: '可编辑配置项',
           validConfig: '校验配置项',
           editRules: '校验规则配置项',
+          emptyRender: '空内容渲染配置项',
           optimization: '优化配置项',
 
           params: '额外的参数（可以用来存放一些私有参数）',

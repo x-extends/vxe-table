@@ -202,6 +202,7 @@ module.exports = {
         rendererEdit: 'Edit renderer',
         rendererToolbar: 'Toolbar renderer',
         rendererForm: 'Form renderer',
+        rendererEmpty: 'Empty renderer',
 
         interceptor: '(Advanced) Event interceptor',
 
@@ -357,6 +358,7 @@ module.exports = {
           editConfig: 'Editable configuration',
           validConfig: 'Validate configuration',
           editRules: 'Checksum rule configuration entries',
+          emptyRender: 'Empty content renderer config',
           optimization: 'Optimize configuration',
 
           params: 'Additional parameters (Can be used to store some private parameters)',

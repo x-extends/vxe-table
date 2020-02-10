@@ -198,6 +198,8 @@ export default {
     validConfig: Object,
     // 校验规则配置项
     editRules: Object,
+    // 空内容渲染配置项
+    emptyRender: [Boolean, Object],
     // 优化配置项
     optimization: Object,
     // 额外的参数
@@ -474,6 +476,9 @@ export default {
         indent: 20
       }, GlobalConfig.treeConfig, this.treeConfig)
     },
+    emptyOpts () {
+      return Object.assign({}, GlobalConfig.emptyRender, this.emptyRender)
+    },
     cellOffsetWidth () {
       return this.border ? Math.max(2, Math.ceil(this.scrollbarWidth / this.tableColumn.length)) : 1
     },
@@ -731,8 +736,9 @@ export default {
     this.preventEvent(null, 'destroyed', { $table: this })
   },
   render (h) {
-    let {
+    const {
       _e,
+      $scopedSlots,
       id,
       tableData,
       tableColumn,
@@ -774,11 +780,24 @@ export default {
       filterStore,
       ctxMenuStore,
       footerData,
-      hasTip
+      hasTip,
+      emptyRender,
+      emptyOpts
     } = this
-    let { leftList, rightList } = columnStore
+    const { leftList, rightList } = columnStore
     // 在 v3.0 中废弃 mouse-config.checked
-    let isMouseChecked = mouseConfig && (mouseOpts.range || mouseOpts.checked)
+    const isMouseChecked = mouseConfig && (mouseOpts.range || mouseOpts.checked)
+    let emptyContent
+    if ($scopedSlots.empty) {
+      emptyContent = $scopedSlots.empty.call(this, { $table: this }, h)
+    } else {
+      const compConf = emptyRender ? VXETable.renderer.get(emptyOpts.name) : null
+      if (compConf) {
+        emptyContent = compConf.renderEmpty(h, emptyOpts, { $table: this }, { $table: this })
+      } else {
+        emptyContent = GlobalConfig.i18n('vxe.table.emptyText')
+      }
+    }
     return h('div', {
       class: ['vxe-table', `tid_${id}`, vSize ? `size--${vSize}` : '', border && XEUtils.isString(border) ? `b--style-${border}` : '', {
         'vxe-editable': editConfig,
@@ -874,7 +893,7 @@ export default {
       }, [
         h('div', {
           class: 'vxe-table--empty-content'
-        }, this.$scopedSlots.empty ? this.$scopedSlots.empty.call(this, { $table: this }, h) : GlobalConfig.i18n('vxe.table.emptyText'))
+        }, emptyContent)
       ]),
       /**
        * 边框线

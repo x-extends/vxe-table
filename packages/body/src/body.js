@@ -1,5 +1,6 @@
 import XEUtils from 'xe-utils/methods/xe-utils'
 import GlobalConfig from '../../conf'
+import VXETable from '../../v-x-e-table'
 import { UtilTools, DomTools } from '../../tools'
 
 // 滚动、拖动过程中不需要触发
@@ -446,6 +447,8 @@ export default {
       scrollXLoad,
       mouseConfig,
       mouseOpts,
+      emptyRender,
+      emptyOpts,
       keyboardConfig = {}
     } = $xetable
     // 在 v3.0 中废弃 mouse-config.checked
@@ -458,6 +461,17 @@ export default {
         if (fixedType) {
           tableColumn = fixedColumn
         }
+      }
+    }
+    let emptyContent
+    if ($scopedSlots.empty) {
+      emptyContent = $scopedSlots.empty.call(this, { $table: this }, h)
+    } else {
+      const compConf = emptyRender ? VXETable.renderer.get(emptyOpts.name) : null
+      if (compConf) {
+        emptyContent = compConf.renderEmpty(h, emptyOpts, { $table: this }, { $table: this })
+      } else {
+        emptyContent = GlobalConfig.i18n('vxe.table.emptyText')
       }
     }
     return h('div', {
@@ -519,7 +533,7 @@ export default {
       }, [
         h('div', {
           class: 'vxe-table--empty-content'
-        }, $scopedSlots.empty ? $scopedSlots.empty.call(this, { $table: $xetable }, h) : GlobalConfig.i18n('vxe.table.emptyText'))
+        }, emptyContent)
       ]) : null
     ])
   },
