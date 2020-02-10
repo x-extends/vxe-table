@@ -32,7 +32,7 @@ export default {
      * @param {Array} options 选项
      */
     _setFilter (column, options) {
-      if (this.fullColumnMap.has(column) && column.filters && options) {
+      if (column.filters && options) {
         column.filters = UtilTools.getFilters(options)
       }
       return this.$nextTick()
