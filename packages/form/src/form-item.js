@@ -92,9 +92,9 @@ export default {
       this.showError = false
       if (value) {
         this.showRule = value.rule
-        this.$nextTick(() => {
+        setTimeout(() => {
           this.showError = true
-        })
+        }, 30)
       } else {
         this.showErrTimeout = setTimeout(() => {
           this.showRule = null
