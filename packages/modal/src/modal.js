@@ -442,7 +442,7 @@ export default {
       })
     },
     mousedownEvent (evnt) {
-      let { storage, marginSize, zoomLocat } = this
+      let { remember, storage, marginSize, zoomLocat } = this
       let modalBoxElem = this.getBox()
       if (!zoomLocat && evnt.button === 0 && !DomTools.getEventTargetNode(evnt, modalBoxElem, 'trigger--btn').flag) {
         evnt.preventDefault()
@@ -482,7 +482,7 @@ export default {
           document.onmouseup = demMouseup
           this.$nextTick(() => {
             modalBoxElem.className = modalBoxElem.className.replace(/\s?is--drag/, '')
-            if (storage) {
+            if (remember && storage) {
               this.savePosStorage()
             }
           })
@@ -491,7 +491,7 @@ export default {
     },
     dragEvent (evnt) {
       evnt.preventDefault()
-      const { $listeners, marginSize, events = {}, storage } = this
+      const { $listeners, marginSize, events = {}, remember, storage } = this
       const { visibleHeight, visibleWidth } = DomTools.getDomNode()
       const type = evnt.target.dataset.type
       const minWidth = XEUtils.toNumber(this.minWidth)
@@ -623,7 +623,7 @@ export default {
             break
         }
         modalBoxElem.className = modalBoxElem.className.replace(/\s?is--drag/, '') + ` is--drag`
-        if (storage) {
+        if (remember && storage) {
           this.savePosStorage()
         }
         if ($listeners.zoom) {
@@ -647,12 +647,12 @@ export default {
       return rest && rest._v === version ? rest : { _v: version }
     },
     hasPosStorage () {
-      const { id, storage, storageKey } = this
-      return !!(storage && this.getStorageMap(storageKey)[id])
+      const { id, remember, storage, storageKey } = this
+      return !!(remember && storage && this.getStorageMap(storageKey)[id])
     },
     restorePosStorage () {
-      const { id, storage, storageKey } = this
-      if (storage) {
+      const { id, remember, storage, storageKey } = this
+      if (remember && storage) {
         let posStorage = this.getStorageMap(storageKey)[id]
         if (posStorage) {
           let modalBoxElem = this.getBox()
@@ -681,8 +681,8 @@ export default {
       }
     },
     savePosStorage () {
-      const { id, storage, storageKey, zoomLocat } = this
-      if (storage) {
+      const { id, remember, storage, storageKey, zoomLocat } = this
+      if (remember && storage) {
         let modalBoxElem = this.getBox()
         let posStorageMap = this.getStorageMap(storageKey)
         posStorageMap[id] = [
