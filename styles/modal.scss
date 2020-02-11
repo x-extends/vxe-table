@@ -253,6 +253,11 @@
     background-color: $vxe-modal-header-background-color;
     border-radius: 2px 2px 0 0;
     user-select: none;
+    &.is--ellipsis {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
   }
   .vxe-modal--zoom-btn,
   .vxe-modal--close-btn {

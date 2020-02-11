@@ -200,7 +200,7 @@ const apis = [
         list: [
           {
             name: 'storage',
-            desc: '是否启用 localStorage 本地保存，会将保存列宽拖动的状态保存到本地（需要设置 id）',
+            desc: '是否启用 localStorage 本地保存，会将列宽拖动的状态保存到本地（需要设置 id）',
             version: '',
             type: 'Boolean',
             enum: '',

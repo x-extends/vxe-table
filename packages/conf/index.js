@@ -163,7 +163,10 @@ const GlobalConfig = {
     duration: 3000,
     marginSize: 8,
     dblclickZoom: true,
-    animat: true
+    showTitleOverflow: true,
+    animat: true,
+    storage: false,
+    storageKey: 'VXE_MODAL_POSITION'
   },
   i18n: key => key
 }
