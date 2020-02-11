@@ -167,11 +167,11 @@ select.vxe-select,
     width: 100%;
     display: block;
   }
-  .vxe-input--inner {
+  .vxe-input {
     height: floor($vxe-table-row-height-default - 8);
   }
-  .vxe-input--inner,
-  .vxe-textarea--inner {
+  .vxe-input > .vxe-input--inner,
+  .vxe-textarea > .vxe-textarea--inner {
     padding: 0 2px;
   }
   .vxe-textarea--inner,
