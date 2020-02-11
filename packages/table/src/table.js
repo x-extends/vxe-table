@@ -83,7 +83,7 @@ export default {
     // 列的宽度是否自撑开（可能会被废弃的参数，不要使用）
     fit: { type: Boolean, default: () => GlobalConfig.fit },
     // 表格是否加载中
-    loading: Boolean,
+    loading: { type: Boolean, default: null },
     // 所有的列对其方式
     align: { type: String, default: () => GlobalConfig.align },
     // 所有的表头列的对齐方式
@@ -266,6 +266,8 @@ export default {
       treeLazyLoadeds: [],
       // 树节点不确定状态的列表
       treeIndeterminates: [],
+      // 是否加载了 Loading 模块
+      isLoading: false,
       // 当前选中的筛选列
       filterStore: {
         isAllSelected: false,
@@ -565,8 +567,8 @@ export default {
       this.$nextTick(() => this.recalculate(true))
     },
     loading () {
-      if (!this._isLoading) {
-        this._isLoading = true
+      if (!this.isLoading) {
+        this.isLoading = true
       }
     },
     syncResize (value) {
@@ -622,7 +624,7 @@ export default {
     })
     let { scrollX, scrollY } = optimizeOpts
     // 是否加载过 Loading 模块
-    this._isLoading = loading
+    this.isLoading = loading
     if (!UtilTools.getRowkey(this)) {
       UtilTools.error('vxe.error.emptyProp', ['row-id'])
     }
@@ -652,7 +654,9 @@ export default {
     }
     // 检查是否有安装需要的模块
     let errorModuleName
-    if (!VXETable._edit && this.editConfig) {
+    if (!VXETable._loading && XEUtils.isBoolean(this.loading)) {
+      errorModuleName = 'Loading'
+    } else if (!VXETable._edit && this.editConfig) {
       errorModuleName = 'Edit'
     } else if (!VXETable._valid && this.editRules) {
       errorModuleName = 'Validator'
@@ -750,7 +754,7 @@ export default {
       isCtxMenu,
       loading,
       stripe,
-      _isLoading,
+      isLoading,
       showHeader,
       height,
       border,
@@ -914,7 +918,7 @@ export default {
       /**
        * 加载中
        */
-      _isLoading ? h('vxe-table-loading', {
+      VXETable._loading && isLoading ? h('vxe-loading', {
         props: {
           visible: loading
         }

@@ -56,7 +56,7 @@
     </div> -->
 
     <p>
-      <vxe-form :data="formData3" title-align="right" title-width="100" @submit="searchEvent" @reset="resetEvent">
+      <vxe-form :data="formData3" :loading="loading3" title-align="right" title-width="100" @submit="submitEvent3" @reset="resetEvent">
         <vxe-form-item title="名称" field="name" span="12">
           <vxe-input v-model="formData3.name" placeholder="请输入名称"></vxe-input>
         </vxe-form-item>
@@ -77,7 +77,7 @@
           <vxe-textarea v-model="formData3.address" placeholder="请输入地址"></vxe-textarea>
         </vxe-form-item>
         <vxe-form-item align="center" span="24">
-          <vxe-button type="submit" status="primary">查询</vxe-button>
+          <vxe-button type="submit" status="primary">提交</vxe-button>
           <vxe-button type="reset">重置</vxe-button>
         </vxe-form-item>
       </vxe-form>
@@ -156,6 +156,7 @@ export default {
         age: 22,
         region: null
       },
+      loading3: false,
       formData3: {
         name: '',
         nickname: '',
@@ -198,7 +199,7 @@ export default {
         </p>
 
         <p>
-          <vxe-form :data="formData3" title-align="right" title-width="100" @submit="searchEvent" @reset="resetEvent">
+          <vxe-form :data="formData3" :loading="loading3" title-align="right" title-width="100" @submit="submitEvent3" @reset="resetEvent">
             <vxe-form-item title="名称" field="name" span="12">
               <vxe-input v-model="formData3.name" placeholder="请输入名称"></vxe-input>
             </vxe-form-item>
@@ -219,7 +220,7 @@ export default {
               <vxe-textarea v-model="formData3.address" placeholder="请输入地址"></vxe-textarea>
             </vxe-form-item>
             <vxe-form-item align="center" span="24">
-              <vxe-button type="submit" status="primary">查询</vxe-button>
+              <vxe-button type="submit" status="primary">提交</vxe-button>
               <vxe-button type="reset">重置</vxe-button>
             </vxe-form-item>
           </vxe-form>
@@ -279,6 +280,7 @@ export default {
                 nickname: '',
                 sex: '1'
               },
+              loading3: false,
               formData3: {
                 name: '',
                 nickname: '',
@@ -299,6 +301,13 @@ export default {
             }
           },
           methods: {
+            submitEvent3 () {
+              this.loading3 = true
+              setTimeout(() => {
+                this.loading3 = false
+                this.$XModal.message({ message: '保存成功', status: 'success' })
+              }, 1000)
+            },
             searchEvent () {
               this.$XModal.message({ message: '查询事件', status: 'info' })
             },
@@ -317,6 +326,13 @@ export default {
     })
   },
   methods: {
+    submitEvent3 () {
+      this.loading3 = true
+      setTimeout(() => {
+        this.loading3 = false
+        this.$XModal.message({ message: '保存成功', status: 'success' })
+      }, 1000)
+    },
     searchEvent () {
       this.$XModal.message({ message: '查询事件', status: 'info' })
     },

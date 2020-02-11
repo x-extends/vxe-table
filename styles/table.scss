@@ -470,12 +470,6 @@ select.vxe-select,
         padding: #{floor(($vxe-table-row-height-medium - $vxe-table-row-line-height) / 2)} 0;
       }
     }
-    .vxe-table--loading {
-      .vxe-table--spinner {
-        width: 50px;
-        height: 50px;
-      }
-    }
     .vxe-default-input,
     .vxe-default-textarea,
     .vxe-default-select,
@@ -497,12 +491,6 @@ select.vxe-select,
         padding: #{floor(($vxe-table-row-height-small - $vxe-table-row-line-height) / 2)} 0;
       }
     }
-    .vxe-table--loading {
-      .vxe-table--spinner {
-        width: 44px;
-        height: 44px;
-      }
-    }
     .vxe-default-input,
     .vxe-default-textarea,
     .vxe-default-select,
@@ -522,12 +510,6 @@ select.vxe-select,
     .vxe-footer--column {
       &:not(.col--ellipsis) {
         padding: #{floor(($vxe-table-row-height-mini - $vxe-table-row-line-height) / 2)} 0;
-      }
-    }
-    .vxe-table--loading {
-      .vxe-table--spinner {
-        width: 38px;
-        height: 38px;
       }
     }
     .vxe-default-input,

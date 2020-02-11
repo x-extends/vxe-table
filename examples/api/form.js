@@ -17,6 +17,15 @@ const apis = [
         list: []
       },
       {
+        name: 'loading',
+        descKey: 'app.api.form.desc.loading',
+        version: '2.8',
+        type: 'Boolean',
+        enum: '',
+        defVal: 'false',
+        list: []
+      },
+      {
         name: 'span',
         descKey: 'app.api.form.desc.span',
         version: '',

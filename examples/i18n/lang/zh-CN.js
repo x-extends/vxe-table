@@ -532,6 +532,7 @@ module.exports = {
       modal: {
         desc: {
           value: '绑定值',
+          loading: '是否加载中',
           id: '只对 type=message 有效，如果不想窗口重复点击，可以设置唯一的 id 防止重复提示',
           title: '窗口的标题（支持开启国际化）',
           type: '窗口类型',
@@ -561,6 +562,7 @@ module.exports = {
       },
       form: {
         desc: {
+          loading: '是否加载中',
           data: '表单数据',
           span: '所有项的栅格占据的列数（共 24 分栏）',
           align: '所有项的内容对齐方式',
