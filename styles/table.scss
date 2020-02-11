@@ -78,8 +78,8 @@ select.vxe-select,
     }
   }
   .vxe-input {
+    height: floor($vxe-table-row-height-default - 8);
     .vxe-input--inner {
-      height: floor($vxe-table-row-height-default - 8);
       &[type="date"]::-webkit-inner-spin-button {
         margin-top: 6px;
       }
