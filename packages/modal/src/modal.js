@@ -1,4 +1,5 @@
 import GlobalConfig from '../../conf'
+import VXETable from '../../v-x-e-table'
 import XEUtils from 'xe-utils'
 import MsgQueue from './queue'
 import { UtilTools, DomTools, GlobalEvent } from '../../tools'
@@ -9,6 +10,7 @@ export default {
     value: Boolean,
     id: String,
     type: { type: String, default: 'modal' },
+    loading: { type: Boolean, default: null },
     status: String,
     iconStatus: String,
     top: { type: [Number, String], default: 15 },
@@ -41,6 +43,7 @@ export default {
   data () {
     return {
       visible: false,
+      isLoading: false,
       contentVisible: false,
       modalTop: 0,
       modalZindex: this.zIndex || UtilTools.nextZIndex(),
@@ -65,6 +68,18 @@ export default {
     },
     value (visible) {
       this[visible ? 'open' : 'close']()
+    },
+    loading () {
+      if (!this.isLoading) {
+        this.isLoading = true
+      }
+    }
+  },
+  created () {
+    // 是否加载过 Loading 模块
+    this.isLoading = this.loading
+    if (!VXETable._loading && XEUtils.isBoolean(this.loading)) {
+      throw new Error(UtilTools.getLog('vxe.error.reqModule', ['Loading']))
     }
   },
   mounted () {
@@ -98,6 +113,8 @@ export default {
       type,
       resize,
       animat,
+      loading,
+      isLoading,
       status,
       iconStatus,
       showHeader,
@@ -135,7 +152,8 @@ export default {
         'is--mask': mask,
         'is--maximize': zoomLocat,
         'is--visible': contentVisible,
-        'is--active': visible
+        'is--active': visible,
+        'is--loading': loading
       }],
       style: {
         zIndex: this.modalZindex,
@@ -190,7 +208,12 @@ export default {
           ]) : null,
           h('div', {
             class: 'vxe-modal--content'
-          }, destroyOnClose && !visible ? [] : (defaultSlot ? defaultSlot.call(this, { $modal: this }, h) : (XEUtils.isFunction(message) ? message.call(this, h) : message)))
+          }, destroyOnClose && !visible ? [] : (defaultSlot ? defaultSlot.call(this, { $modal: this }, h) : (XEUtils.isFunction(message) ? message.call(this, h) : message))),
+          VXETable._loading && isLoading && !isMsg ? h('vxe-loading', {
+            props: {
+              visible: loading
+            }
+          }) : null
         ]),
         showFooter ? h('div', {
           class: 'vxe-modal--footer'

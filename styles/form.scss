@@ -4,6 +4,14 @@
   border-color: lighten($vxe-primary-color, 10%);
 }
 
+.vxe-form {
+  position: relative;
+  font-size: $vxe-font-size;
+  color: $vxe-font-color;
+  font-family: $vxe-font-family;
+  background-color: $vxe-form-background-color;
+}
+
 .vxe-form--item,
 .vxe-form--item-title,
 .vxe-form--item-content,
@@ -31,6 +39,7 @@
   min-width: 100px;
   color: #909399;
   text-align: center;
+  user-select: none;
   cursor: pointer;
   .vxe-form--item-trigger-icon {
     margin: 0 0.25em;
@@ -191,10 +200,6 @@
 }
 
 .vxe-form {
-  font-size: $vxe-font-size;
-  color: $vxe-font-color;
-  font-family: $vxe-font-family;
-  background-color: $vxe-form-background-color;
   .vxe-form--item-inner {
     min-height: $vxe-form-item-min-height-default;
     & > .align--center {

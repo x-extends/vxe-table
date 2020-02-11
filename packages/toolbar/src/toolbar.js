@@ -67,7 +67,7 @@ export default {
   name: 'VxeToolbar',
   props: {
     id: String,
-    loading: false,
+    loading: Boolean,
     resizable: [Boolean, Object],
     refresh: [Boolean, Object],
     import: [Boolean, Object],

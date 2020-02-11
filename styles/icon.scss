@@ -29,6 +29,20 @@
   position: absolute;
 }
 
+.vxe-icon--square {
+  @extend %DefaultWidthHeight;
+  &:before {
+    @extend %PseudoClass;
+    left: 0.05em;
+    top: 0.05em;
+    width: 0.9em;
+    height: 0.9em;
+    border-width: 0.1em;
+    border-style: solid;
+    border-color: inherit;
+  }
+}
+
 .vxe-icon--zoomin {
   @extend %DefaultWidthHeight;
   border-width: 0.1em;
@@ -316,12 +330,11 @@
   @extend %DefaultWidthHeight;
   &:before {
     @extend %PseudoClass;
-    content: "+";
-    top: -0.02em;
-    left: -0.12em;
-    font-size: 2.4em;
+    content: "\D7";
+    top: 0.01em;
+    left: -0.1em;
+    font-size: 2.2em;
     font-weight: normal;
-    transform: rotate(45deg);
   }
 }
 

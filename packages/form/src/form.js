@@ -35,6 +35,7 @@ function getResetValue (value, resetValue) {
 export default {
   name: 'VxeForm',
   props: {
+    loading: Boolean,
     data: Object,
     size: String,
     span: [String, Number],
@@ -46,6 +47,7 @@ export default {
   data () {
     return {
       collapseAll: true,
+      isLoading: false,
       invalids: []
     }
   },
@@ -59,16 +61,42 @@ export default {
       return this.size || this.$parent.size || this.$parent.vSize
     }
   },
+  watch: {
+    loading () {
+      if (!this.isLoading) {
+        this.isLoading = true
+      }
+    }
+  },
+  created () {
+    // 是否加载过 Loading 模块
+    this.isLoading = this.loading
+    if (!VXETable._loading && XEUtils.isBoolean(this.loading)) {
+      throw new Error(UtilTools.getLog('vxe.error.reqModule', ['Loading']))
+    }
+  },
   render (h) {
+    const { loading, isLoading, vSize } = this
+    let itemSlots = [].concat(this.$slots.default)
+    if (VXETable._loading && isLoading) {
+      itemSlots.push(
+        h('vxe-loading', {
+          props: {
+            visible: loading
+          }
+        })
+      )
+    }
     return h('form', {
       class: ['vxe-form', 'vxe-row', {
-        [`size--${this.vSize}`]: this.vSize
+        [`size--${vSize}`]: vSize,
+        'is--loading': loading
       }],
       on: {
         submit: this.submitEvent,
         reset: this.resetEvent
       }
-    }, this.$slots.default)
+    }, itemSlots)
   },
   methods: {
     toggleCollapse () {

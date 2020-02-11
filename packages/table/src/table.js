@@ -384,7 +384,7 @@ export default {
       // 当前 hover 行
       hoverRow: null,
       // 是否加载了 Loading 模块
-      _isLoading: false,
+      isLoading: false,
       // 当前选中的筛选列
       filterStore: {
         isAllSelected: false,
@@ -717,8 +717,8 @@ export default {
       this.$nextTick(() => this.recalculate(true))
     },
     loading () {
-      if (!this._isLoading) {
-        this._isLoading = true
+      if (!this.isLoading) {
+        this.isLoading = true
       }
     },
     syncResize (value) {
@@ -736,7 +736,7 @@ export default {
     let { data, scrollXStore, scrollYStore, optimizeOpts, ctxMenuOpts, showOverflow, radioOpts, checkboxOpts, treeConfig, treeOpts, editConfig, editOpts, loading, showAllOverflow, showHeaderAllOverflow } = this
     let { scrollX, scrollY } = optimizeOpts
     if (loading) {
-      this._isLoading = true
+      this.isLoading = true
     }
     if (scrollY) {
       Object.assign(scrollYStore, {
@@ -886,7 +886,7 @@ export default {
       isCtxMenu,
       loading,
       stripe,
-      _isLoading,
+      isLoading,
       showHeader,
       headerHeight,
       height,
@@ -1051,7 +1051,7 @@ export default {
       /**
        * 加载中
        */
-      _isLoading ? h('vxe-table-loading', {
+      isLoading ? h('vxe-loading', {
         props: {
           visible: loading
         }

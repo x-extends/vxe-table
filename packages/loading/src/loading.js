@@ -1,17 +1,17 @@
 export default {
-  name: 'VxeTableLoading',
+  name: 'VxeLoading',
   props: {
     visible: Boolean
   },
   render (h) {
     return h('div', {
-      class: 'vxe-table--loading',
+      class: 'vxe-loading',
       style: {
         display: this.visible ? 'block' : 'none'
       }
     }, [
       h('div', {
-        class: 'vxe-table--spinner'
+        class: 'vxe-loading--spinner'
       })
     ])
   }

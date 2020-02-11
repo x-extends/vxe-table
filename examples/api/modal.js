@@ -17,6 +17,15 @@ const apis = [
         list: []
       },
       {
+        name: 'loading',
+        descKey: 'app.api.modal.desc.loading',
+        version: '1.15.19',
+        type: 'Boolean',
+        enum: '',
+        defVal: 'false',
+        list: []
+      },
+      {
         name: 'id',
         descKey: 'app.api.modal.desc.id',
         version: '',

@@ -533,6 +533,7 @@ module.exports = {
       modal: {
         desc: {
           value: 'Binding values',
+          loading: 'Loading or not',
           id: 'Only works for type=message. If you don\'t want the window to click repeatedly, you can set a unique id to prevent repeated prompts',
           title: 'Message title (support internationalization)',
           type: 'Message type',
@@ -562,6 +563,7 @@ module.exports = {
       },
       form: {
         desc: {
+          loading: 'Loading or not',
           data: 'Form data',
           span: 'The number of columns occupied by the grid of all items(24 columns)',
           align: 'All content align',

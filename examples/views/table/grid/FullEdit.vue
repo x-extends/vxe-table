@@ -34,8 +34,9 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[0] }}</code>
-      <code class="javascript">{{ demoCodes[1] }}</code>
+      <code class="javascript">{{ demoCodes[0] }}</code>
+      <code class="xml">{{ demoCodes[1] }}</code>
+      <code class="javascript">{{ demoCodes[2] }}</code>
     </pre>
   </div>
 </template>
@@ -71,8 +72,7 @@ export default {
           { field: 'role', title: '角色', span: 8, folding: true, itemRender: { name: 'input', attrs: { placeholder: '请输入角色' } } },
           { field: 'age', title: '年龄', span: 8, folding: true, itemRender: { name: 'input', attrs: { type: 'number', placeholder: '请输入年龄' } } },
           { field: 'describe', title: '描述', span: 8, folding: true, itemRender: { name: 'input', attrs: { placeholder: '请输入描述' } } },
-          { span: 12, align: 'right', itemRender: { name: 'input', attrs: { type: 'submit', value: '查询' } } },
-          { span: 12, Align: 'left', collapseNode: true, itemRender: { name: 'input', attrs: { type: 'reset', value: '重置' } } }
+          { span: 24, align: 'center', collapseNode: true, itemRender: { name: 'FormItemButtonGroup' } }
         ]
       },
       tableProxy: {
@@ -151,6 +151,18 @@ export default {
       ],
       demoCodes: [
         `
+        // 创建一个表单-按钮组渲染器
+        VXETable.renderer.add('FormItemButtonGroup', {
+          // 项显示模板
+          renderItem (h, renderOpts, params, context) {
+            return [
+              <vxe-button type="submit" status="primary">查询</vxe-button>,
+              <vxe-button type="reset">重置</vxe-button>
+            ]
+          }
+        })
+        `,
+        `
         <vxe-grid
           border
           resizable
@@ -202,8 +214,7 @@ export default {
                   { field: 'role', title: '角色', span: 8, folding: true, itemRender: { name: 'input', attrs: { placeholder: '请输入角色' } } },
                   { field: 'age', title: '年龄', span: 8, folding: true, itemRender: { name: 'input', attrs: { type: 'number', placeholder: '请输入年龄' } } },
                   { field: 'describe', title: '描述', span: 8, folding: true, itemRender: { name: 'input', attrs: { placeholder: '请输入描述' } } },
-                  { span: 12, align: 'right', itemRender: { name: 'input', attrs: { type: 'submit', value: '查询' } } },
-                  { span: 12, Align: 'left', collapseNode: true, itemRender: { name: 'input', attrs: { type: 'reset', value: '重置' } } }
+                  { span: 24, align: 'center', collapseNode: true, itemRender: { name: 'FormItemButtonGroup' } }
                 ]
               },
               tableProxy: {

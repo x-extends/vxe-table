@@ -7,7 +7,6 @@
       resizable
       row-key
       highlight-hover-row
-      highlight-current-row
       ref="xTable"
       height="500"
       :data="tableData"
@@ -25,7 +24,7 @@
       </vxe-table-column>
     </vxe-table>
 
-    <vxe-modal ref="xModal" v-model="showEdit" title="编辑&保存" width="800" resize destroy-on-close>
+    <vxe-modal ref="xModal" v-model="showEdit" title="编辑&保存" width="800" :loading="submitLoading" resize destroy-on-close>
       <vxe-form :data="formData" :rules="formRules" title-align="right" title-width="100" @submit="submitEvent">
         <vxe-form-item title="Basic information" span="24" title-align="left" title-width="200px" :title-prefix="{icon: 'fa fa-address-card-o'}"></vxe-form-item>
         <vxe-form-item title="Name" field="name" span="12" :item-render="{name: 'input', attrs: {placeholder: '请输入名称'}}"></vxe-form-item>
@@ -72,6 +71,7 @@ import hljs from 'highlight.js'
 export default {
   data () {
     return {
+      submitLoading: false,
       tableData: [],
       selectRow: null,
       showEdit: false,
@@ -111,7 +111,6 @@ export default {
           resizable
           row-key
           highlight-hover-row
-          highlight-current-row
           ref="xTable"
           height="500"
           :data="tableData"
@@ -129,7 +128,7 @@ export default {
           </vxe-table-column>
         </vxe-table>
 
-        <vxe-modal ref="xModal" v-model="showEdit" title="编辑&保存" width="800" resize destroy-on-close>
+        <vxe-modal ref="xModal" v-model="showEdit" title="编辑&保存" width="800" :loading="submitLoading" resize destroy-on-close>
           <vxe-form :data="formData" :rules="formRules" title-align="right" title-width="100" @submit="submitEvent">
             <vxe-form-item title="Basic information" span="24" title-align="left" title-width="200px" :title-prefix="{icon: 'fa fa-address-card-o'}"></vxe-form-item>
             <vxe-form-item title="Name" field="name" span="12" :item-render="{name: 'input', attrs: {placeholder: '请输入名称'}}"></vxe-form-item>
@@ -165,6 +164,7 @@ export default {
         export default {
           data () {
             return {
+              submitLoading: false,
               tableData: [],
               selectRow: null,
               showEdit: false,
@@ -234,9 +234,13 @@ export default {
               })
             },
             submitEvent () {
-              this.showEdit = false
-              this.$XModal.message({ message: '保存成功', status: 'success' })
-              Object.assign(this.selectRow, this.formData)
+              this.submitLoading = true
+              setTimeout(() => {
+                this.submitLoading = false
+                this.showEdit = false
+                this.$XModal.message({ message: '保存成功', status: 'success' })
+                Object.assign(this.selectRow, this.formData)
+              }, 500)
             }
           }
         }
@@ -284,9 +288,13 @@ export default {
       })
     },
     submitEvent () {
-      this.showEdit = false
-      this.$XModal.message({ message: '保存成功', status: 'success' })
-      Object.assign(this.selectRow, this.formData)
+      this.submitLoading = true
+      setTimeout(() => {
+        this.submitLoading = false
+        this.showEdit = false
+        this.$XModal.message({ message: '保存成功', status: 'success' })
+        Object.assign(this.selectRow, this.formData)
+      }, 500)
     }
   }
 }
