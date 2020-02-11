@@ -5,7 +5,7 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  height: $vxe-toolbar-height-default;
+  min-height: $vxe-toolbar-height-default;
   font-size: $vxe-font-size;
   color: $vxe-font-color;
   font-family: $vxe-font-family;
@@ -33,21 +33,21 @@
   }
   &.size--medium {
     font-size: $vxe-font-size-medium;
-    height: $vxe-toolbar-height-medium;
+    min-height: $vxe-toolbar-height-medium;
     .vxe-tools--operate-btn {
       font-size: $vxe-font-size-medium + 4px;
     }
   }
   &.size--small {
     font-size: $vxe-font-size-small;
-    height: $vxe-toolbar-height-small;
+    min-height: $vxe-toolbar-height-small;
     .vxe-tools--operate-btn {
       font-size: $vxe-font-size-small + 4px;
     }
   }
   &.size--mini {
     font-size: $vxe-font-size-mini;
-    height: $vxe-toolbar-height-mini;
+    min-height: $vxe-toolbar-height-mini;
     .vxe-tools--operate-btn {
       font-size: $vxe-font-size-mini + 4px;
     }

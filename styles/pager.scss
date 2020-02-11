@@ -3,7 +3,7 @@
 
 /*pager*/
 .vxe-pager {
-  height: $vxe-table-row-height-default;
+  min-height: $vxe-table-row-height-default;
   display: flex;
   align-items: center;
   font-size: $vxe-font-size;
@@ -90,7 +90,7 @@
   }
   &.size--medium {
     font-size: $vxe-font-size-medium;
-    height: $vxe-table-row-height-medium;
+    min-height: $vxe-table-row-height-medium;
     .vxe-pager--count,
     .size--content,
     .vxe-pager--prev-btn,
@@ -112,7 +112,7 @@
   }
   &.size--small {
     font-size: $vxe-font-size-small;
-    height: $vxe-table-row-height-small;
+    min-height: $vxe-table-row-height-small;
     .vxe-pager--count,
     .size--content,
     .vxe-pager--prev-btn,
@@ -134,7 +134,7 @@
   }
   &.size--mini {
     font-size: $vxe-font-size-mini;
-    height: $vxe-table-row-height-mini;
+    min-height: $vxe-table-row-height-mini;
     .vxe-pager--count,
     .size--content,
     .vxe-pager--prev-btn,
