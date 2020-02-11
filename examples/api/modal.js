@@ -215,6 +215,15 @@ const apis = [
         list: []
       },
       {
+        name: 'show-title-overflow',
+        descKey: 'app.api.modal.desc.showTitleOverflow',
+        version: '1.15.19',
+        type: 'Boolean',
+        enum: '',
+        defVal: 'true',
+        list: []
+      },
+      {
         name: 'fullscreen',
         descKey: 'app.api.modal.desc.fullscreen',
         version: '1.14.17',
@@ -245,6 +254,15 @@ const apis = [
         name: 'destroy-on-close',
         descKey: 'app.api.modal.desc.destroyOnClose',
         version: '1.15.18',
+        type: 'Boolean',
+        enum: '',
+        defVal: 'false',
+        list: []
+      },
+      {
+        name: 'storage',
+        descKey: 'app.api.modal.desc.storage',
+        version: '1.15.19',
         type: 'Boolean',
         enum: '',
         defVal: 'false',

@@ -35,7 +35,7 @@
             prevPage: 'vxe-icon--arrow-left',
             nextPage: 'vxe-icon--arrow-right',
             jumpMore: 'vxe-icon--more',
-            modalZoomIn: 'vxe-icon--zoomin',
+            modalZoomIn: 'vxe-icon--square',
             modalZoomOut: 'vxe-icon--zoomout',
             modalClose: 'vxe-icon--close',
             modalInfo: 'vxe-icon--info',

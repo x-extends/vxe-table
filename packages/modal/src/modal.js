@@ -35,6 +35,9 @@ export default {
     fullscreen: Boolean,
     remember: { type: Boolean, default: () => GlobalConfig.modal.remember },
     destroyOnClose: Boolean,
+    showTitleOverflow: { type: Boolean, default: () => GlobalConfig.modal.showTitleOverflow },
+    storage: { type: Boolean, default: () => GlobalConfig.modal.storage },
+    storageKey: { type: String, default: () => GlobalConfig.modal.storageKey },
     animat: { type: Boolean, default: () => GlobalConfig.modal.animat },
     size: String,
     slots: Object,
@@ -80,6 +83,9 @@ export default {
     this.isLoading = this.loading
     if (!VXETable._loading && XEUtils.isBoolean(this.loading)) {
       throw new Error(UtilTools.getLog('vxe.error.reqModule', ['Loading']))
+    }
+    if (this.storage && !this.id) {
+      UtilTools.error('vxe.error.reqProp', ['id'])
     }
   },
   mounted () {
@@ -130,6 +136,7 @@ export default {
       lockView,
       mask,
       isMsg,
+      showTitleOverflow,
       destroyOnClose
     } = this
     let defaultSlot = $scopedSlots.default || slots.default
@@ -171,7 +178,7 @@ export default {
         ref: 'modalBox'
       }, [
         showHeader ? h('div', {
-          class: 'vxe-modal--header',
+          class: ['vxe-modal--header', !isMsg && showTitleOverflow ? 'is--ellipsis' : ''],
           on: headerOns
         }, headerSlot ? headerSlot.call(this, { $modal: this }, h) : [
           titleSlot ? titleSlot.call(this, { $modal: this }, h) : h('span', {
@@ -323,7 +330,9 @@ export default {
             }
             if (!inited) {
               this.inited = true
-              if (fullscreen) {
+              if (this.hasPosStorage()) {
+                this.restorePosStorage()
+              } else if (fullscreen) {
                 this.$nextTick(this.maximize)
               }
             }
@@ -401,6 +410,7 @@ export default {
             width: `${visibleWidth - marginSize * 2}px`,
             height: `${visibleHeight - marginSize * 2}px`
           })
+          this.savePosStorage()
         }
       })
     },
@@ -416,6 +426,7 @@ export default {
             width: `${zoomLocat.width}px`,
             height: `${zoomLocat.height}px`
           })
+          this.savePosStorage()
         }
       })
     },
@@ -431,7 +442,7 @@ export default {
       })
     },
     mousedownEvent (evnt) {
-      let { marginSize, zoomLocat } = this
+      let { storage, marginSize, zoomLocat } = this
       let modalBoxElem = this.getBox()
       if (!zoomLocat && evnt.button === 0 && !DomTools.getEventTargetNode(evnt, modalBoxElem, 'trigger--btn').flag) {
         evnt.preventDefault()
@@ -471,13 +482,16 @@ export default {
           document.onmouseup = demMouseup
           this.$nextTick(() => {
             modalBoxElem.className = modalBoxElem.className.replace(/\s?is--drag/, '')
+            if (storage) {
+              this.savePosStorage()
+            }
           })
         }
       }
     },
     dragEvent (evnt) {
       evnt.preventDefault()
-      const { $listeners, marginSize, events = {} } = this
+      const { $listeners, marginSize, events = {}, storage } = this
       const { visibleHeight, visibleWidth } = DomTools.getDomNode()
       const type = evnt.target.dataset.type
       const minWidth = XEUtils.toNumber(this.minWidth)
@@ -609,6 +623,9 @@ export default {
             break
         }
         modalBoxElem.className = modalBoxElem.className.replace(/\s?is--drag/, '') + ` is--drag`
+        if (storage) {
+          this.savePosStorage()
+        }
         if ($listeners.zoom) {
           this.$emit('zoom', params, evnt)
         } else if (events.zoom) {
@@ -622,6 +639,64 @@ export default {
         setTimeout(() => {
           modalBoxElem.className = modalBoxElem.className.replace(/\s?is--drag/, '')
         }, 50)
+      }
+    },
+    getStorageMap (key) {
+      let version = GlobalConfig.version
+      let rest = XEUtils.toStringJSON(localStorage.getItem(key))
+      return rest && rest._v === version ? rest : { _v: version }
+    },
+    hasPosStorage () {
+      const { id, storage, storageKey } = this
+      return !!(storage && this.getStorageMap(storageKey)[id])
+    },
+    restorePosStorage () {
+      const { id, storage, storageKey } = this
+      if (storage) {
+        let posStorage = this.getStorageMap(storageKey)[id]
+        if (posStorage) {
+          let modalBoxElem = this.getBox()
+          let [left, top, width, height, zoomLeft, zoomTop, zoomWidth, zoomHeight] = posStorage.split(',')
+          if (left) {
+            modalBoxElem.style.left = `${left}px`
+          }
+          if (top) {
+            modalBoxElem.style.top = `${top}px`
+          }
+          if (width) {
+            modalBoxElem.style.width = `${width}px`
+          }
+          if (height) {
+            modalBoxElem.style.height = `${height}px`
+          }
+          if (zoomLeft && zoomTop) {
+            this.zoomLocat = {
+              left: zoomLeft,
+              top: zoomTop,
+              width: zoomWidth,
+              height: zoomHeight
+            }
+          }
+        }
+      }
+    },
+    savePosStorage () {
+      const { id, storage, storageKey, zoomLocat } = this
+      if (storage) {
+        let modalBoxElem = this.getBox()
+        let posStorageMap = this.getStorageMap(storageKey)
+        posStorageMap[id] = [
+          modalBoxElem.style.left,
+          modalBoxElem.style.top,
+          modalBoxElem.style.width,
+          modalBoxElem.style.height
+        ].concat(zoomLocat ? [
+          zoomLocat.left,
+          zoomLocat.top,
+          zoomLocat.width,
+          zoomLocat.height
+        ] : []).map(val => val ? XEUtils.toNumber(val) : '').join(',')
+        localStorage.setItem(storageKey, XEUtils.toJSONString(posStorageMap))
       }
     }
   }

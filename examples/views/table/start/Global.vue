@@ -159,8 +159,11 @@
             duration: 3000,
             marginSize: 8,
             dblclickZoom: true,
+            showTitleOverflow: true,
             remember: false,
-            animat: true
+            animat: true,
+            storage: false,
+            storageKey: 'VXE_MODAL_POSITION'
           },
           // 优化的全局参数
           optimization : {

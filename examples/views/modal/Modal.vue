@@ -2,7 +2,7 @@
   <div>
     <h2>{{ $t('app.aside.nav.modal') }}</h2>
 
-    <p class="tip">查看 <router-link class="link" :to="{name: 'VXEAPI', params: {name: 'modal'}}">API</router-link>，对于某些场景如果需要关闭所有动态的窗口，可以通过 this.$XModal.closeAll()</p>
+    <p class="tip">查看 <router-link class="link" :to="{name: 'VXEAPI', params: {name: 'modal'}}">API</router-link>，对于某些场景如果需要关闭所有动态的窗口，可以通过 Modal.closeAll()</p>
 
     <p>
       <vxe-button @click="$XModal.message({ message: '消息提示' })">默认消息框</vxe-button>
@@ -107,10 +107,10 @@
         </vxe-table>
       </vxe-modal>
 
-      <vxe-button @click="value6 = !value6">完整功能的窗口</vxe-button>
-      <vxe-modal v-model="value6" width="800" height="400" min-width="400" min-height="320" resize remember>
+      <vxe-button @click="value6 = !value6">完整功能的窗口（移动、拖动、状态保存）</vxe-button>
+      <vxe-modal v-model="value6" id="myModal6" width="800" height="400" min-width="400" min-height="320" resize remember storage>
         <template v-slot:title>
-          <span style="color: red;">完整功能的窗口</span>
+          <span style="color: red;">完整功能的窗口（移动、拖动、状态保存）</span>
         </template>
         <template>
           <vxe-grid
@@ -326,10 +326,10 @@ export default {
             </template>
           </vxe-modal>
 
-          <vxe-button @click="value6 = !value6">完整功能的窗口</vxe-button>
-          <vxe-modal v-model="value6" width="800" height="400" min-width="400" min-height="320" resize remember>
+          <vxe-button @click="value6 = !value6">完整功能的窗口（移动、拖动、状态保存）</vxe-button>
+          <vxe-modal v-model="value6" id="myModal6" width="800" height="400" min-width="400" min-height="320" resize remember storage>
             <template v-slot:title>
-              <span style="color: red;">完整功能的窗口</span>
+              <span style="color: red;">完整功能的窗口（移动、拖动、状态保存）</span>
             </template>
             <template>
               <vxe-grid

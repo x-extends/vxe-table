@@ -253,9 +253,10 @@
     background-color: $vxe-modal-header-background-color;
     border-radius: 2px 2px 0 0;
     user-select: none;
-    .vxe-icon--zoomin,
-    .vxe-icon--zoomout:after {
-      background-color: $vxe-modal-header-background-color;
+    &.is--ellipsis {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
   }
   .vxe-modal--zoom-btn,
