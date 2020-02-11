@@ -282,23 +282,12 @@
   border-color: inherit;
   &:before {
     @extend %PseudoClass;
-    top: -0.1em;
-    right: -0.1em;
-    width: 0.4em;
-    height: 0.4em;
-    background-color: #fff;
-  }
-  &:after {
-    @extend %PseudoClass;
-    left: 0.15em;
-    top: 0.12em;
-    width: 0.8em;
-    height: 0;
-    border-radius: 0.2em;
-    border-width: 0 0 0.15em 0;
-    border-style: solid;
-    border-color: inherit;
-    transform: rotate(-45deg);
+    content: "\270E";
+    left: 0;
+    bottom: -0.2em;
+    font-size: 1.1em;
+    font-weight: normal;
+    transform: rotate(75deg);
   }
 }
 
@@ -412,12 +401,12 @@
   }
   &:after {
     @extend %PseudoClass;
-    content: "?";
-    top: 0;
-    left: 0.18em;
-    font-weight: 700;
+    content: "\FF1F";
+    left: 0.25em;
+    bottom: -0.05em;
     color: #fff;
-    transform: scale(0.8);
+    font-weight: 700;
+    font-size: 0.8em;
   }
 }
 
@@ -428,12 +417,12 @@
   }
   &:after {
     @extend %PseudoClass;
-    content: "!";
-    top: 0;
-    left: 0.4em;
-    font-weight: 700;
+    content: "\A1";
+    left: 0.45em;
+    bottom: 0.18em;
     color: #fff;
-    transform: rotate(180deg) scale(0.8);
+    font-weight: 700;
+    font-size: 0.8em;
   }
 }
 
@@ -444,12 +433,12 @@
   }
   &:after {
     @extend %PseudoClass;
-    content: "!";
-    top: 0;
-    left: 0.3em;
-    font-weight: 700;
+    content: "\FF01";
+    left: 0.24em;
+    bottom: -0.06em;
     color: #fff;
-    transform: scale(0.8);
+    font-weight: 700;
+    font-size: 0.8em;
   }
 }
 
@@ -460,8 +449,8 @@
   }
   &:after {
     @extend %PseudoClass;
-    height: 0.55em;
-    width: 0.3em;
+    height: 0.6em;
+    width: 0.25em;
     left: 0.35em;
     top: 0.15em;
     border-width: 0.1em;
