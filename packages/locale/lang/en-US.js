@@ -91,7 +91,7 @@ export default {
       refresh: 'Refresh',
       zoomIn: 'Maximization',
       zoomOut: 'Downward reduction',
-      custom: 'Custom columns',
+      custom: 'Column settings',
       customAll: 'All',
       customConfirm: 'Confirm',
       customRestore: 'Restore',

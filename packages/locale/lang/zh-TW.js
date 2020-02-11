@@ -91,7 +91,7 @@ export default {
       refresh: '重繪',
       zoomIn: '最大化',
       zoomOut: '向下還原',
-      custom: '自定義列',
+      custom: '列設定',
       customAll: '全部',
       customConfirm: '确认',
       customRestore: '還原',
