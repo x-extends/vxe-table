@@ -187,7 +187,7 @@ export default {
           resize ? h('i', {
             class: ['vxe-modal--zoom-btn', 'trigger--btn', zoomLocat ? GlobalConfig.icon.modalZoomOut : GlobalConfig.icon.modalZoomIn],
             attrs: {
-              title: GlobalConfig.i18n(`vxe.toolbar.zoom${zoomLocat ? 'Out' : 'In'}`)
+              title: GlobalConfig.i18n(`vxe.modal.zoom${zoomLocat ? 'Out' : 'In'}`)
             },
             on: {
               click: this.toggleZoomEvent
