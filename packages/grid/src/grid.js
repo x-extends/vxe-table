@@ -36,7 +36,7 @@ function renderFormContent (h, _vm) {
 
 Object.keys(Table.methods).forEach(name => {
   methods[name] = function () {
-    return this.$refs.xTable[name].apply(this.$refs.xTable[name], arguments)
+    return this.$refs.xTable && this.$refs.xTable[name].apply(this.$refs.xTable[name], arguments)
   }
 })
 

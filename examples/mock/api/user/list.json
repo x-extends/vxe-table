@@ -21,6 +21,7 @@
     "describe3": "{{ random.repeat('用户信息',6,20) }}",
     "seq|number": "{{ $index }}",
     "status": "{{ random.num(1,4) }}",
+    "type": "{{ random.num(1,3) }}",
     "date": "{{ random.date('2019-01-01 00:00:00','2019-02-20 23:59:59', 'yyyy-MM-ddTHH:mm:ss.000+0800') }}",
     "date1": null,
     "date2": "{{ random.date('2019-01-01','2019-02-20', 'yyyy-MM-dd') }}",
