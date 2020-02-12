@@ -7,6 +7,7 @@
   position: relative;
   direction: ltr;
   font-family: $vxe-font-family;
+  user-select: none;
   &.rotate45 {
     transform: rotate(45deg);
   }
@@ -273,21 +274,32 @@
 }
 
 .vxe-icon--edit-outline {
-  height: 0.88em;
-  width: 0.88em;
-  margin: 0 0.06em 0.12em 0.06em;
+  height: 0.84em;
+  width: 0.84em;
+  margin: 0 0.08em 0.16em 0.08em;
   border-radius: 0.2em;
   border-width: 0.1em;
   border-style: solid;
   border-color: inherit;
   &:before {
     @extend %PseudoClass;
-    content: "\270E";
-    left: 0;
-    bottom: -0.2em;
-    font-size: 1.1em;
-    font-weight: normal;
-    transform: rotate(75deg);
+    top: -0.1em;
+    right: -0.2em;
+    width: 0.35em;
+    height: 0.35em;
+    background-color: #fff;
+  }
+  &:after {
+    @extend %PseudoClass;
+    left: 0.12em;
+    top: 0.12em;
+    width: 0.8em;
+    height: 0;
+    border-radius: 0.2em;
+    border-width: 0 0 0.15em 0;
+    border-style: solid;
+    border-color: inherit;
+    transform: rotate(-45deg);
   }
 }
 

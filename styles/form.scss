@@ -26,11 +26,17 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   padding-right: 0.8em;
-  .vxe-form--item-title-prefix {
-    margin-right: 0.25em;
+  .vxe-form--item-title-prefix,
+  .vxe-form--item-title-suffix {
     & > [class*="vxe-icon--"] {
       margin-top: -0.2em;
     }
+  }
+  .vxe-form--item-title-prefix {
+    margin-right: 0.25em;
+  }
+  .vxe-form--item-title-suffix {
+    margin-left: 0.25em;
   }
 }
 

@@ -117,6 +117,43 @@ const apis = [
         ]
       },
       {
+        name: 'title-suffix',
+        descKey: 'app.api.formItem.desc.titleSuffix',
+        version: '',
+        type: 'Object',
+        enum: '',
+        defVal: '',
+        list: [
+          {
+            name: 'message',
+            desc: '提示消息',
+            version: '',
+            type: 'String',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'enterable',
+            desc: '只对 message 设置后有效，鼠标是否可进入到提示框中',
+            version: '',
+            type: 'Boolean',
+            enum: '',
+            defVal: 'false',
+            list: []
+          },
+          {
+            name: 'icon',
+            desc: '自定义图标',
+            version: '',
+            type: 'String',
+            enum: '',
+            defVal: '',
+            list: []
+          }
+        ]
+      },
+      {
         name: 'reset-value',
         descKey: 'app.api.formItem.desc.resetValue',
         version: '',

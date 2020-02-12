@@ -121,27 +121,30 @@
     border-radius: 2px;
     box-shadow: 3px 3px 4px -2px rgba(0, 0, 0, 0.6);
     .vxe-custom--header {
-      padding-top: 0.2em;
       font-weight: 700;
       border-bottom: 1px solid $vxe-table-popup-border-color;
     }
     .vxe-custom--body {
-      padding-bottom: 0.2em;
+      .vxe-custom--option {
+        &:hover {
+          background-color: $vxe-table-row-hover-background-color;
+        }
+      }
     }
     .vxe-custom--header,
     .vxe-custom--body {
-      max-height: 240px;
+      padding: 0.2em 0;
+      max-height: 17.25em;
       & > li {
         max-width: 180px;
-        min-width: 120px;
-        padding: 0.2em 1em 0.2em 2.25em;
+        min-width: 140px;
+        padding: 0.2em 1em 0.2em 2.5em;
       }
     }
     .vxe-custom--footer {
       border-top: 1px solid $vxe-table-popup-border-color;
       padding: 0.4em;
       text-align: right;
-      min-width: 110px;
       button {
         background-color: transparent;
         width: 50%;
@@ -183,7 +186,7 @@
       position: absolute;
       height: 1em;
       width: 1em;
-      top: 0.4em;
+      top: 0.42em;
       left: 0.6em;
       border-radius: 0.2em;
       border: 2px solid $vxe-input-border-color;
@@ -208,7 +211,7 @@
       &:after {
         height: 0.64em;
         width: 0.32em;
-        top: 0.55em;
+        top: 0.58em;
         left: 0.95em;
         border: 2px solid #ffffff;
         border-left: 0;
@@ -220,7 +223,7 @@
   &.is--indeterminate {
     .vxe-checkbox--icon {
       &:after {
-        top: 0.85em;
+        top: 0.88em;
         left: 0.6em;
         height: 0.18em;
         width: 1em;
@@ -252,9 +255,6 @@
         }
       }
     }
-  }
-  &:hover {
-    background-color: $vxe-table-row-hover-background-color;
   }
 }
 

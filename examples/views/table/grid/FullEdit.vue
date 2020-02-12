@@ -2,7 +2,7 @@
   <div>
     <p class="tip">
       查询代理<a class="link" href="https://github.com/xuliangzhan/vxe-table-demo/tree/master/vxe-table-by-vue-grid-proxy">（配置式代理项目示例）</a>、服务端排序代理、服务端筛选代理、分页代理、增删改查<br>
-      还可以通过配置 <grid-api-link prop="form-config"/> 实现动态表单，还可以通过 <grid-api-link prop="titlePrefix"/> 设置标题提示信息<br>
+      还可以通过配置 <grid-api-link prop="form-config"/> 实现动态表单，还可以通过 <grid-api-link prop="titlePrefix"/> 或 <grid-api-link prop="titleSuffix"/> 设置标题提示信息<br>
       对于分页场景下，如果想要保留选中状态，可以通过设置 <table-api-link prop="checkbox-config"/> 的 <table-api-link prop="reserve"/> 属性<br>
       还可以通过 <toolbar-api-link prop="checkMethod"/> 设置个性化列禁止勾选<br>
       由 <grid-api-link name="vxe-grid"/> 代理数据转换，只需要配置好数据源即可；非常简单就可以渲染一个表格，从重复写冗余的代码中解放出来
@@ -68,7 +68,7 @@ export default {
         items: [
           { field: 'name', title: '名称', span: 8, titlePrefix: { message: '请输入汉字！', icon: 'fa fa-exclamation-circle' }, itemRender: { name: 'input', attrs: { placeholder: '请输入名称' } } },
           { field: 'nickname', title: '昵称', span: 8, itemRender: { name: 'input', attrs: { placeholder: '请输入昵称' } } },
-          { field: 'sex', title: '性别', span: 8, titlePrefix: { message: '请只能选择一个！', icon: 'fa fa-info-circle' }, itemRender: { name: 'select', options: [] } },
+          { field: 'sex', title: '性别', span: 8, titleSuffix: { message: '请只能选择一个！', icon: 'fa fa-info-circle' }, itemRender: { name: 'select', options: [] } },
           { field: 'role', title: '角色', span: 8, folding: true, itemRender: { name: 'input', attrs: { placeholder: '请输入角色' } } },
           { field: 'age', title: '年龄', span: 8, folding: true, itemRender: { name: 'input', attrs: { type: 'number', placeholder: '请输入年龄' } } },
           { field: 'describe', title: '描述', span: 8, folding: true, itemRender: { name: 'input', attrs: { placeholder: '请输入描述' } } },
@@ -210,7 +210,7 @@ export default {
                 items: [
                   { field: 'name', title: '名称', span: 8, titlePrefix: { message: '请输入汉字！', icon: 'fa fa-exclamation-circle' }, itemRender: { name: 'input', attrs: { placeholder: '请输入名称' } } },
                   { field: 'nickname', title: '昵称', span: 8, itemRender: { name: 'input', attrs: { placeholder: '请输入昵称' } } },
-                  { field: 'sex', title: '性别', span: 8, titlePrefix: { message: '请只能选择一个！', icon: 'fa fa-info-circle' }, itemRender: { name: 'select', options: [] } },
+                  { field: 'sex', title: '性别', span: 8, titleSuffix: { message: '请只能选择一个！', icon: 'fa fa-info-circle' }, itemRender: { name: 'select', options: [] } },
                   { field: 'role', title: '角色', span: 8, folding: true, itemRender: { name: 'input', attrs: { placeholder: '请输入角色' } } },
                   { field: 'age', title: '年龄', span: 8, folding: true, itemRender: { name: 'input', attrs: { type: 'number', placeholder: '请输入年龄' } } },
                   { field: 'describe', title: '描述', span: 8, folding: true, itemRender: { name: 'input', attrs: { placeholder: '请输入描述' } } },
