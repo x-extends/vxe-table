@@ -12,8 +12,18 @@ function renderPrefixIcon (h, titlePrefix) {
   ])
 }
 
+function renderSuffixIcon (h, titleSuffix) {
+  return h('span', {
+    class: 'vxe-form--item-title-suffix'
+  }, [
+    h('i', {
+      class: titleSuffix.icon || GlobalConfig.icon.formSuffix
+    })
+  ])
+}
+
 function renderTitle (h, _vm) {
-  const { title, titlePrefix } = _vm
+  const { title, titlePrefix, titleSuffix } = _vm
   const titles = []
   if (titlePrefix) {
     titles.push(
@@ -34,6 +44,20 @@ function renderTitle (h, _vm) {
       class: 'vxe-form--item-title-label'
     }, UtilTools.getFuncText(title))
   )
+  if (titleSuffix) {
+    titles.push(
+      titleSuffix.message
+        ? h('vxe-tooltip', {
+          props: {
+            content: titleSuffix.message,
+            enterable: titleSuffix.enterable
+          }
+        }, [
+          renderSuffixIcon(h, titleSuffix)
+        ])
+        : renderSuffixIcon(h, titleSuffix)
+    )
+  }
   return titles
 }
 
@@ -48,6 +72,7 @@ export default {
     titleAlign: String,
     titleWidth: [String, Number],
     titlePrefix: Object,
+    titleSuffix: Object,
     resetValue: { default: null },
     folding: Boolean,
     collapseNode: Boolean,
