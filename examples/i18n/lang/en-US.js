@@ -292,7 +292,7 @@ module.exports = {
           customs: 'For reading column configuration, same effect as calling getColumns method manually, if you want to show hidden columns directly by modifying the visible property of the column (deprecated apis are not recommended)',
           height: 'Table height, supports adaptive or fixed width and height(if you set adaptive, you must ensure that parent nodes exist and no adjacent elements are allowed)',
           maxHeight: 'Maximum height of the table',
-          syncResize: 'Auto resizing with a property change (may be used in scenarios where a property is used to control the show/hide toggle)',
+          syncResize: 'Automatically resizing a property following a property change has the same effect as calling the recalculate method manually (this may be used in scenarios where a property is used to control the show/hide toggle)',
           autoResize: 'Auto listen parent element response resize (may be used in scenarios where parent element may be dynamically changing)',
           resizable: 'Resizable',
           stripe: 'Whether with zebra stripes(note that in the editable table scenario, the temporarily inserted data will not have a zebra-like pattern)',
