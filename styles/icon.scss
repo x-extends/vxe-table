@@ -401,7 +401,7 @@
   }
   &:after {
     @extend %PseudoClass;
-    content: "\FF1F";
+    content: "\3F";
     left: 0.25em;
     bottom: -0.05em;
     color: #fff;
