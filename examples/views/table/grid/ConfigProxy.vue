@@ -27,6 +27,7 @@
 
 <script>
 import XEAjax from 'xe-ajax'
+import XEUtils from 'xe-utils'
 import hljs from 'highlight.js'
 
 export default {
@@ -79,6 +80,25 @@ export default {
         { type: 'checkbox', title: 'ID', width: 140, fixed: 'left' },
         { field: 'name', title: 'Name', remoteSort: true, editRender: { name: 'input' } },
         { field: 'age', title: 'Age', remoteSort: true, editRender: { name: 'input' } },
+        {
+          field: 'type',
+          title: 'Type',
+          slots: {
+            default (params) {
+              const { row, column } = params
+              const rest = [
+                { value: '1', label: '成功' },
+                { value: '2', label: '失败' },
+                { value: '3', label: '拒接' }
+              ]
+              const cellValue = XEUtils.get(row, column.property)
+              const item = rest.find(item => item.value === cellValue)
+              return [
+                <span style={ `color:${cellValue === '1' ? 'green' : 'red'}` }>{ item ? item.label : '' }</span>
+              ]
+            }
+          }
+        },
         {
           field: 'status',
           title: 'Status',
@@ -162,9 +182,15 @@ export default {
                   sort: true,
                   filter: true,
                   ajax: {
-                    query: '/api/user/page/list/{{page.pageSize}}/{{page.currentPage}}',
-                    delete: '/api/user/save',
-                    save: '/api/user/save'
+                    query: {
+                      url: '/api/user/page/list/{{page.pageSize}}/{{page.currentPage}}'
+                    },
+                    delete: {
+                      url: '/api/user/save'
+                    },
+                    save: {
+                      url: '/api/user/save'
+                    }
                   }
                 },
                 toolbar: {
@@ -182,11 +208,13 @@ export default {
                   { field: 'name', title: 'Name', remoteSort: true, editRender: { name: 'input' } },
                   { field: 'age', title: 'Age', remoteSort: true, editRender: { name: 'input' } },
                   // 单元格渲染，自动读取字典配置
-                  { field: 'status', title: 'Status', editRender: { name: 'select', options: '$COLOR_STATUS' } },
-                  // 单元格渲染，自动请求异步配置
-                  { field: 'sex', title: 'Sex', remoteSort: true, editRender: { name: 'select', options: '/api/conf/sex/list' } },
+                  { field: 'type', title: 'Type', cellRender: { name: 'DICT', props: { code: 'OPERATE_STATUS' } } },
+                  // 单元格编辑渲染，自动读取字典配置
+                  { field: 'status', title: 'Status', editRender: { name: 'select', options: { dict: 'COLOR_STATUS' } } },
+                  // 单元格编辑渲染，自动请求异步配置
+                  { field: 'sex', title: 'Sex', remoteSort: true, editRender: { name: 'select', options: { url: '/api/conf/sex/list' } } },
                   // 筛选渲染，自动请求异步配置
-                  { field: 'role', title: 'Role', remoteSort: true, width: 200, filters: '/api/conf/role/list', filterMultiple: false, editRender: { name: 'input' } },
+                  { field: 'role', title: 'Role', remoteSort: true, width: 200, filters: { url: '/api/conf/role/list' }, filterMultiple: false, editRender: { name: 'input' } },
                   { field: 'describe', title: 'Describe', showOverflow: true, editRender: { name: 'input' } }
                 ]
               }

@@ -59,10 +59,10 @@ export const Cell = {
    * 单元格
    */
   renderHeader (h, params) {
-    let { column } = params
+    let { $table, column } = params
     let { slots, own } = column
     if (slots && slots.header) {
-      return slots.header(params, h)
+      return slots.header.call($table, params, h)
     }
     // 在 v3.0 中废弃 label
     return [UtilTools.formatText(UtilTools.getFuncText(own.title || own.label), 1)]
@@ -72,7 +72,7 @@ export const Cell = {
     let { slots, own } = column
     let renderOpts = own.editRender || own.cellRender
     if (slots && slots.default) {
-      return slots.default(params, h)
+      return slots.default.call($table, params, h)
     }
     if (renderOpts) {
       let funName = own.editRender ? 'renderCell' : 'renderDefault'
@@ -102,7 +102,7 @@ export const Cell = {
     let isLazyLoaded = false
     let on = {}
     if (slots && slots.icon) {
-      return slots.icon(params, h, cellVNodes)
+      return slots.icon.call($table, params, h, cellVNodes)
     }
     if (!isHidden) {
       isAceived = treeExpandeds.indexOf(row) > -1
@@ -144,10 +144,10 @@ export const Cell = {
    * 索引
    */
   renderIndexHeader (h, params) {
-    let { column } = params
+    let { $table, column } = params
     let { slots } = column
     if (slots && slots.header) {
-      return slots.header(params, h)
+      return slots.header.call($table, params, h)
     }
     return [UtilTools.formatText(column.getTitle(), 1)]
   },
@@ -156,7 +156,7 @@ export const Cell = {
     let { seqOpts, startIndex } = $table
     let { slots, indexMethod } = column
     if (slots && slots.default) {
-      return slots.default(params, h)
+      return slots.default.call($table, params, h)
     }
     let { $seq, seq, level } = params
     // 在 v3.0 中废弃 startIndex、indexMethod
@@ -171,10 +171,10 @@ export const Cell = {
    * 单选
    */
   renderRadioHeader (h, params) {
-    let { column } = params
+    let { $table, column } = params
     let { slots, own } = column
     if (slots && slots.header) {
-      return slots.header(params, h)
+      return slots.header.call($table, params, h)
     }
     // 在 v3.0 中废弃 label
     return [UtilTools.formatText(UtilTools.getFuncText(own.title || own.label), 1)]
@@ -211,7 +211,7 @@ export const Cell = {
         h('i', {
           class: 'vxe-radio--icon'
         })
-      ].concat(labelField ? (slots && slots.default ? slots.default(params, h) : [XEUtils.get(row, labelField)]) : []))
+      ].concat(labelField ? (slots && slots.default ? slots.default.call($table, params, h) : [XEUtils.get(row, labelField)]) : []))
     ]
   },
   renderTreeRadioCell (h, params) {
@@ -231,7 +231,7 @@ export const Cell = {
     let isChecked = false
     let on
     if (checkboxOpts.checkStrictly ? !checkboxOpts.showHeader : checkboxOpts.showHeader === false) {
-      return slots && slots.header ? slots.header(params, h) : [UtilTools.getFuncText(headerTitle)]
+      return slots && slots.header ? slots.header.call($table, params, h) : [UtilTools.getFuncText(headerTitle)]
     }
     if (!isHidden) {
       isChecked = isAllCheckboxDisabled ? false : $table.isAllSelected
@@ -258,7 +258,7 @@ export const Cell = {
         h('i', {
           class: 'vxe-checkbox--icon'
         })
-      ].concat(headerTitle ? (slots && slots.header ? slots.header(params, h) : [UtilTools.getFuncText(headerTitle)]) : []))
+      ].concat(headerTitle ? (slots && slots.header ? slots.header.call($table, params, h) : [UtilTools.getFuncText(headerTitle)]) : []))
     ]
   },
   renderSelectionCell (h, params) {
@@ -298,7 +298,7 @@ export const Cell = {
         h('i', {
           class: 'vxe-checkbox--icon'
         })
-      ].concat(labelField ? (slots && slots.default ? slots.default(params, h) : [XEUtils.get(row, labelField)]) : []))
+      ].concat(labelField ? (slots && slots.default ? slots.default.call($table, params, h) : [XEUtils.get(row, labelField)]) : []))
     ]
   },
   renderTreeSelectionCell (h, params) {
@@ -341,7 +341,7 @@ export const Cell = {
         h('i', {
           class: 'vxe-checkbox--icon'
         })
-      ].concat(labelField ? (slots && slots.default ? slots.default(params, h) : [XEUtils.get(row, labelField)]) : []))
+      ].concat(labelField ? (slots && slots.default ? slots.default.call($table, params, h) : [XEUtils.get(row, labelField)]) : []))
     ]
   },
   renderTreeSelectionCellByProp (h, params) {
@@ -359,7 +359,7 @@ export const Cell = {
     let isAceived = false
     let isLazyLoaded = false
     if (slots && slots.icon) {
-      return slots.icon(params, h)
+      return slots.icon.call($table, params, h)
     }
     if (!isHidden) {
       isAceived = rowExpandeds.indexOf(params.row) > -1
@@ -382,19 +382,19 @@ export const Cell = {
           class: ['vxe-table--expand-btn', isLazyLoaded ? (iconLoaded || GlobalConfig.icon.treeLoaded) : (isAceived ? (iconOpen || GlobalConfig.icon.expandOpen) : (iconClose || GlobalConfig.icon.expandClose))]
         })
       ]),
-      slots.content && slots.default ? slots.default(params, h) : (labelField ? XEUtils.get(row, labelField) : null)
+      slots.content && slots.default ? slots.default.call($table, params, h) : (labelField ? XEUtils.get(row, labelField) : null)
     ]
   },
   renderExpandData (h, params) {
-    let { column } = params
+    let { $table, column } = params
     let { slots } = column
     if (slots) {
       if (slots.content) {
-        return slots.content(params, h)
+        return slots.content.call($table, params, h)
       }
       // 在 v3.0 中严格支持 content
       if (slots.default) {
-        return slots.default(params, h)
+        return slots.default.call($table, params, h)
       }
     }
     return []
@@ -404,10 +404,10 @@ export const Cell = {
    * HTML 标签
    */
   renderHTMLCell (h, params) {
-    let { row, column } = params
+    let { $table, row, column } = params
     let { slots } = column
     if (slots && slots.default) {
-      return slots.default(params, h)
+      return slots.default.call($table, params, h)
     }
     return [
       h('span', {
@@ -555,12 +555,12 @@ export const Cell = {
     let compConf = VXETable.renderer.get(editRender.name)
     if (editRender.type === 'visible' || isEdit) {
       if (slots && slots.edit) {
-        return slots.edit(params, h)
+        return slots.edit.call($table, params, h)
       }
       return compConf && compConf.renderEdit ? compConf.renderEdit.call($table, h, editRender, params, { $type: 'edit', $grid: $table.$xegrid, $excel: $table.$parent, $table }) : []
     }
     if (slots && slots.default) {
-      return slots.default(params, h)
+      return slots.default.call($table, params, h)
     }
     if (formatter) {
       return [UtilTools.formatText(UtilTools.getCellLabel(row, column, params), 1)]
