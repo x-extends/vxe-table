@@ -22,7 +22,7 @@
       <template v-slot:buttons>
         <vxe-form :data="formData" @submit="searchEvent">
           <vxe-form-item field="name" :item-render="{name: 'input', attrs: {placeholder: '请输入名称'}}"></vxe-form-item>
-          <vxe-form-item :item-render="{name: 'input', attrs: {type: 'submit', value: '查询'}}"></vxe-form-item>
+          <vxe-form-item :item-render="{name: 'input', attrs: {type: 'submit', value: $t('app.body.label.search')}}"></vxe-form-item>
         </vxe-form>
       </template>
 
@@ -125,7 +125,7 @@ export default {
           <template v-slot:buttons>
             <vxe-form :data="formData" @submit="searchEvent">
               <vxe-form-item field="name" :item-render="{name: 'input', attrs: {placeholder: '请输入名称'}}"></vxe-form-item>
-              <vxe-form-item :item-render="{name: 'input', attrs: {type: 'submit', value: '查询'}}"></vxe-form-item>
+              <vxe-form-item :item-render="{name: 'input', attrs: {type: 'submit', value: $t('app.body.label.search')}}"></vxe-form-item>
             </vxe-form>
           </template>
 

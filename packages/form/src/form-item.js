@@ -30,7 +30,7 @@ function renderTitle (h, _vm) {
       titlePrefix.message
         ? h('vxe-tooltip', {
           props: {
-            content: titlePrefix.message,
+            content: UtilTools.getFuncText(titlePrefix.message),
             enterable: titlePrefix.enterable
           }
         }, [
@@ -49,7 +49,7 @@ function renderTitle (h, _vm) {
       titleSuffix.message
         ? h('vxe-tooltip', {
           props: {
-            content: titleSuffix.message,
+            content: UtilTools.getFuncText(titleSuffix.message),
             enterable: titleSuffix.enterable
           }
         }, [
