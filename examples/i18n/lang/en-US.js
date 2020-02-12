@@ -252,6 +252,8 @@ module.exports = {
         name: 'Name',
         age: 'Age',
         sex: 'Sex',
+        search: 'Search',
+        reset: 'Reset',
         createTime: 'Create Date',
         updateTime: 'Update Date'
       },

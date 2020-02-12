@@ -89,7 +89,7 @@ const apis = [
         list: [
           {
             name: 'message',
-            desc: '提示消息',
+            desc: '提示消息（支持开启国际化）',
             version: '',
             type: 'String',
             enum: '',
@@ -126,7 +126,7 @@ const apis = [
         list: [
           {
             name: 'message',
-            desc: '提示消息',
+            desc: '提示消息（支持开启国际化）',
             version: '',
             type: 'String',
             enum: '',

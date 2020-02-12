@@ -251,6 +251,8 @@ module.exports = {
         name: '名字',
         age: '年龄',
         sex: '性别',
+        search: '查询',
+        reset: '重置',
         createTime: '创建时间',
         updateTime: '更新时间'
       },
