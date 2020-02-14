@@ -41,7 +41,7 @@ export default {
           disabled
         },
         domProps: {
-          checked: isGroup && $vxegroup.value ? $vxegroup.value.some(item => item === label) : value
+          checked: isGroup ? ($vxegroup.value && $vxegroup.value.some(item => item === label)) : value
         },
         on: {
           change: evnt => {

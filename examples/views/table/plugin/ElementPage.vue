@@ -13,6 +13,8 @@
       <vxe-form-item field="flag" title="ElSwitch" span="8" folding :item-render="{name: 'ElSwitch'}"></vxe-form-item>
       <vxe-form-item field="slider" title="ElSlider" span="8" folding :item-render="{name: 'ElSlider'}"></vxe-form-item>
       <vxe-form-item field="rate" title="ElRate" span="8" folding :item-render="{name: 'ElRate'}"></vxe-form-item>
+      <vxe-form-item field="flag1" title="ElRadio" span="8" folding :item-render="{name: 'ElRadio', options: [{label: '是', value: 'Y'}, {label: '否', value: 'N'}]}"></vxe-form-item>
+      <vxe-form-item field="checkedList" title="ElCheckbox" span="8" folding :item-render="{name: 'ElCheckbox', options: [{label: '北京', value: 'beijing'}, {label: '深圳', value: 'shenzhen'}, {label: '上海', value: 'shanghai'}]}" :visible-method="visibleMethod"></vxe-form-item>
       <vxe-form-item span="24" align="center" collapse-node>
         <el-button type="primary" native-type="submit">查询</el-button>
         <el-button native-type="reset">重置</el-button>
@@ -147,7 +149,9 @@ export default {
         date5: null,
         flag: false,
         slider: 0,
-        rate: 0
+        rate: 0,
+        flag1: '',
+        checkedList: []
       },
       demoCodes: [
         `
@@ -162,6 +166,8 @@ export default {
           <vxe-form-item field="flag" title="ElSwitch" span="8" folding :item-render="{name: 'ElSwitch'}"></vxe-form-item>
           <vxe-form-item field="slider" title="ElSlider" span="8" folding :item-render="{name: 'ElSlider'}"></vxe-form-item>
           <vxe-form-item field="rate" title="ElRate" span="8" folding :item-render="{name: 'ElRate'}"></vxe-form-item>
+          <vxe-form-item field="flag1" title="ElRadio" span="8" folding :item-render="{name: 'ElRadio', options: [{label: '是', value: 'Y'}, {label: '否', value: 'N'}]}"></vxe-form-item>
+          <vxe-form-item field="checkedList" title="ElCheckbox" span="8" folding :item-render="{name: 'ElCheckbox', options: [{label: '北京', value: 'beijing'}, {label: '深圳', value: 'shenzhen'}, {label: '上海', value: 'shanghai'}]}" :visible-method="visibleMethod"></vxe-form-item>
           <vxe-form-item span="24" align="center" collapse-node>
             <el-button type="primary" native-type="submit">查询</el-button>
             <el-button native-type="reset">重置</el-button>
@@ -284,7 +290,9 @@ export default {
                 date5: null,
                 flag: false,
                 slider: 0,
-                rate: 0
+                rate: 0,
+                flag1: '',
+                checkedList: []
               }
             }
           },
@@ -298,7 +306,6 @@ export default {
           },
           methods: {
             findList () {
-              // 模拟后台数据
               this.loading = true
               XEAjax.get(\`/api/user/page/list/\${this.tablePage.pageSize}/\${this.tablePage.currentPage}\`, this.formData).then(({ page, result }) => {
                 this.tableData = result
@@ -387,6 +394,15 @@ export default {
                 this.$alert('数据未改动！')
               }
             },
+            vaildEvent () {
+              this.$refs.xTable.validate(valid => {
+                if (valid) {
+                  this.$XModal.message({ status: 'success', message: '校验成功！' })
+                } else {
+                  this.$XModal.message({ status: 'error', message: '校验不通过！' })
+                }
+              })
+            },
             dropdownMenuEvent (name) {
               switch (name) {
                 case 'remove': {
@@ -408,15 +424,6 @@ export default {
               this.tablePage.currentPage = 1
               this.findList()
             },
-            vaildEvent () {
-              this.$refs.xTable.validate(valid => {
-                if (valid) {
-                  this.$XModal.message({ status: 'success', message: '校验成功！' })
-                } else {
-                  this.$XModal.message({ status: 'error', message: '校验不通过！' })
-                }
-              })
-            },
             handleSizeChange (pageSize) {
               this.tablePage.pageSize = pageSize
               this.searchEvent()
@@ -424,6 +431,9 @@ export default {
             handleCurrentChange (currentPage) {
               this.tablePage.currentPage = currentPage
               this.findList()
+            },
+            visibleMethod ({ data }) {
+              return data.flag1 === 'Y'
             },
             roleFetchSuggestions (queryString, cb) {
               var restaurants = this.restaurants
@@ -584,6 +594,9 @@ export default {
     handleCurrentChange (currentPage) {
       this.tablePage.currentPage = currentPage
       this.findList()
+    },
+    visibleMethod ({ data }) {
+      return data.flag1 === 'Y'
     },
     roleFetchSuggestions (queryString, cb) {
       var restaurants = this.restaurants

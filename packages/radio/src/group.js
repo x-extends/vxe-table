@@ -1,0 +1,35 @@
+import XEUtils from 'xe-utils'
+
+export default {
+  name: 'VxeRadioGroup',
+  props: {
+    value: [String, Number],
+    size: String
+  },
+  provide () {
+    return {
+      $vxegroup: this
+    }
+  },
+  computed: {
+    vSize () {
+      return this.size || this.$parent.size || this.$parent.vSize
+    }
+  },
+  data () {
+    return {
+      name: XEUtils.uniqueId('xgroup')
+    }
+  },
+  render (h) {
+    return h('div', {
+      class: 'vxe-radio-group'
+    }, this.$slots.default)
+  },
+  methods: {
+    handleChecked (params, evnt) {
+      this.$emit('input', params.label)
+      this.$emit('change', params, evnt)
+    }
+  }
+}

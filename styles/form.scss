@@ -21,7 +21,6 @@
   }
 }
 
-.vxe-form--item,
 .vxe-form--item-title,
 .vxe-form--item-content,
 .vxe-form--item-trigger-node {
@@ -78,8 +77,11 @@
 
 .vxe-form--item {
   padding: 0.5em 0.8em 0.5em 0;
-  &.is--hidden {
-    display: none;
+  display: none;
+  &.is--active {
+    &:not(.is--hidden) {
+      display: inline-block;
+    }
   }
   &.is--span {
     .vxe-default-input:not([type="submit"]):not([type="reset"]),

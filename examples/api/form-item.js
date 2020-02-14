@@ -62,6 +62,15 @@ const apis = [
         list: []
       },
       {
+        name: 'visible-method',
+        descKey: 'app.api.formItem.desc.visibleMethod',
+        version: '',
+        type: 'Function',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'folding',
         descKey: 'app.api.formItem.desc.folding',
         version: '',

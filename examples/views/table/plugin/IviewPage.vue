@@ -12,6 +12,8 @@
       <vxe-form-item field="date6" title="TimePicker" span="8" folding :item-render="{name: 'TimePicker', props: {type: 'time'}}"></vxe-form-item>
       <vxe-form-item field="flag" title="iSwitch" span="8" folding :item-render="{name: 'iSwitch'}"></vxe-form-item>
       <vxe-form-item field="rate" title="Rate" span="8" folding :item-render="{name: 'Rate'}"></vxe-form-item>
+      <vxe-form-item field="flag1" title="Radio" span="8" folding :item-render="{name: 'Radio', options: [{label: '是', value: 'Y'}, {label: '否', value: 'N'}]}"></vxe-form-item>
+      <vxe-form-item field="checkedList" title="Checkbox" span="8" folding :item-render="{name: 'Checkbox', options: [{label: '北京', value: 'beijing'}, {label: '深圳', value: 'shenzhen'}, {label: '上海', value: 'shanghai'}]}" :visible-method="visibleMethod"></vxe-form-item>
       <vxe-form-item span="24" align="center" collapse-node>
         <Button type="primary" html-type="submit">查询</Button>
         <Button html-type="reset">重置</Button>
@@ -142,7 +144,9 @@ export default {
         date: null,
         date6: null,
         flag: false,
-        rate: 0
+        rate: 0,
+        flag1: '',
+        checkedList: []
       },
       demoCodes: [
         `
@@ -156,6 +160,8 @@ export default {
           <vxe-form-item field="date6" title="TimePicker" span="8" folding :item-render="{name: 'TimePicker', props: {type: 'time'}}"></vxe-form-item>
           <vxe-form-item field="flag" title="iSwitch" span="8" folding :item-render="{name: 'iSwitch'}"></vxe-form-item>
           <vxe-form-item field="rate" title="Rate" span="8" folding :item-render="{name: 'Rate'}"></vxe-form-item>
+          <vxe-form-item field="flag1" title="Radio" span="8" folding :item-render="{name: 'Radio', options: [{label: '是', value: 'Y'}, {label: '否', value: 'N'}]}"></vxe-form-item>
+          <vxe-form-item field="checkedList" title="Checkbox" span="8" folding :item-render="{name: 'Checkbox', options: [{label: '北京', value: 'beijing'}, {label: '深圳', value: 'shenzhen'}, {label: '上海', value: 'shanghai'}]}" :visible-method="visibleMethod"></vxe-form-item>
           <vxe-form-item span="24" align="center" collapse-node>
             <Button type="primary" html-type="submit">查询</Button>
             <Button html-type="reset">重置</Button>
@@ -274,7 +280,9 @@ export default {
                 date: null,
                 date6: null,
                 flag: false,
-                rate: 0
+                rate: 0,
+                flag1: '',
+                checkedList: []
               }
             }
           },
@@ -414,6 +422,9 @@ export default {
             handleCurrentChange (currentPage) {
               this.tablePage.currentPage = currentPage
               this.findList()
+            },
+            visibleMethod ({ data }) {
+              return data.flag1 === 'Y'
             },
             roleFilterMethod  (value, option) {
               return option.toUpperCase().indexOf(value.toUpperCase()) !== -1
@@ -564,6 +575,9 @@ export default {
     handleCurrentChange (currentPage) {
       this.tablePage.currentPage = currentPage
       this.findList()
+    },
+    visibleMethod ({ data }) {
+      return data.flag1 === 'Y'
     },
     roleFilterMethod  (value, option) {
       return option.toUpperCase().indexOf(value.toUpperCase()) !== -1

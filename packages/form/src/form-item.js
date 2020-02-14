@@ -74,6 +74,7 @@ export default {
     titlePrefix: Object,
     titleSuffix: Object,
     resetValue: { default: null },
+    visibleMethod: Function,
     folding: Boolean,
     collapseNode: Boolean,
     itemRender: Object
@@ -128,7 +129,7 @@ export default {
     }
   },
   render (h) {
-    const { $scopedSlots, $vxeform, title, folding, field, collapseNode, itemRender, isRequired, showError, showRule } = this
+    const { $scopedSlots, $vxeform, title, visibleMethod, folding, field, collapseNode, itemRender, isRequired, showError, showRule } = this
     const compConf = itemRender ? VXETable.renderer.get(itemRender.name) : null
     const span = this.span || $vxeform.span
     const align = this.align || $vxeform.align
@@ -138,8 +139,9 @@ export default {
     return h('div', {
       class: ['vxe-form--item', span ? `vxe-col--${span} is--span` : null, {
         'is--title': title,
-        'is--hidden': folding && collapseAll,
         'is--required': isRequired,
+        'is--hidden': folding && collapseAll,
+        'is--active': !visibleMethod || visibleMethod({ data: $vxeform.data, $form: $vxeform }),
         'is--error': showError
       }]
     }, [

@@ -11,6 +11,8 @@
       <vxe-form-item field="date" title="ADatePicker" span="8" :item-render="{name: 'ADatePicker', props: {type: 'date', format: 'YYYY/MM/DD'}}"></vxe-form-item>
       <vxe-form-item field="flag" title="ASwitch" span="8" folding :item-render="{name: 'ASwitch'}"></vxe-form-item>
       <vxe-form-item field="rate" title="ARate" span="8" folding :item-render="{name: 'ARate'}"></vxe-form-item>
+      <vxe-form-item field="flag1" title="ARadio" span="8" folding :item-render="{name: 'ARadio', options: [{label: '是', value: 'Y'}, {label: '否', value: 'N'}]}"></vxe-form-item>
+      <vxe-form-item field="checkedList" title="ACheckbox" span="8" folding :item-render="{name: 'ACheckbox', options: [{label: '北京', value: 'beijing'}, {label: '深圳', value: 'shenzhen'}, {label: '上海', value: 'shanghai'}]}" :visible-method="visibleMethod"></vxe-form-item>
       <vxe-form-item span="24" align="center" collapse-node>
         <a-button type="primary" html-type="submit">查询</a-button>
         <a-button html-type="reset">重置</a-button>
@@ -139,7 +141,9 @@ export default {
         region: [],
         date: null,
         flag: false,
-        rate: 0
+        rate: 0,
+        flag1: '',
+        checkedList: []
       },
       demoCodes: [
         `
@@ -152,6 +156,8 @@ export default {
             <vxe-form-item field="date" title="ADatePicker" span="8" :item-render="{name: 'ADatePicker', props: {type: 'date', format: 'YYYY/MM/DD'}}"></vxe-form-item>
             <vxe-form-item field="flag" title="ASwitch" span="8" folding :item-render="{name: 'ASwitch'}"></vxe-form-item>
             <vxe-form-item field="rate" title="ARate" span="8" folding :item-render="{name: 'ARate'}"></vxe-form-item>
+            <vxe-form-item field="flag1" title="ARadio" span="8" folding :item-render="{name: 'ARadio', options: [{label: '是', value: 'Y'}, {label: '否', value: 'N'}]}"></vxe-form-item>
+            <vxe-form-item field="checkedList" title="ACheckbox" span="8" folding :item-render="{name: 'ACheckbox', options: [{label: '北京', value: 'beijing'}, {label: '深圳', value: 'shenzhen'}, {label: '上海', value: 'shanghai'}]}" :visible-method="visibleMethod"></vxe-form-item>
             <vxe-form-item span="24" align="center" collapse-node>
               <a-button type="primary" html-type="submit">查询</a-button>
               <a-button html-type="reset">重置</a-button>
@@ -268,7 +274,9 @@ export default {
                 region: [],
                 date: null,
                 flag: false,
-                rate: 0
+                rate: 0,
+                flag1: '',
+                checkedList: []
               }
             }
           },
@@ -356,6 +364,9 @@ export default {
             handleCurrentChange (page, pageSize) {
               this.tablePage.currentPage = page
               this.findList()
+            },
+            visibleMethod ({ data }) {
+              return data.flag1 === 'Y'
             },
             roleSearchEvent ({ row }, value) {
               this.ACProps.dataSource = this.restaurants.filter(option => option.toUpperCase().indexOf((value || '').toUpperCase()) !== -1)
@@ -455,6 +466,9 @@ export default {
     handleCurrentChange (page, pageSize) {
       this.tablePage.currentPage = page
       this.findList()
+    },
+    visibleMethod ({ data }) {
+      return data.flag1 === 'Y'
     },
     roleSearchEvent ({ row }, value) {
       this.ACProps.dataSource = this.restaurants.filter(option => option.toUpperCase().indexOf((value || '').toUpperCase()) !== -1)
