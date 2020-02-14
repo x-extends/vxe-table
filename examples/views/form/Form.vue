@@ -84,7 +84,7 @@
     </p>
 
     <p>
-      <vxe-form :data="formData4" title-align="right" title-width="100" @submit="searchEvent" @reset="resetEvent">
+      <vxe-form :data="formData4" title-align="right" title-width="100" @submit="searchEvent" @reset="resetEvent" title-colon>
         <vxe-form-item title="名称" field="name" span="8">
           <vxe-input v-model="formData4.name" placeholder="请输入名称"></vxe-input>
         </vxe-form-item>
@@ -227,7 +227,7 @@ export default {
         </p>
 
         <p>
-          <vxe-form :data="formData4" title-align="right" title-width="100" @submit="searchEvent" @reset="resetEvent">
+          <vxe-form :data="formData4" title-align="right" title-width="100" @submit="searchEvent" @reset="resetEvent" title-colon>
             <vxe-form-item title="名称" field="name" span="8">
               <vxe-input v-model="formData4.name" placeholder="请输入名称"></vxe-input>
             </vxe-form-item>

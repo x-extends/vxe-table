@@ -3,6 +3,7 @@ import tableAPI from './table'
 import columnAPI from './column'
 import toolbarAPI from './toolbar'
 import pagerAPI from './pager'
+import formAPI from './form'
 import formItemAPI from './form-item'
 
 const toolbarSlots = XEUtils.clone(toolbarAPI.find(item => item.name === 'Slots'), true)
@@ -24,26 +25,17 @@ const apis = [
         type: 'Boolean, Object',
         enum: '',
         defVal: '',
-        list: [
-          {
-            name: 'data',
-            desc: '表单对象',
-            version: '',
-            type: 'Object',
-            enum: '',
-            defVal: '',
-            list: []
-          },
+        list: XEUtils.clone(formAPI.find(item => item.name === 'Props'), true).list.map(item => Object.assign({}, item, { name: XEUtils.camelCase(item.name) })).concat([
           {
             name: 'items',
-            desc: '表单配置项',
+            desc: '项配置',
             version: '',
             type: 'Array',
             enum: '',
             defVal: '',
             list: XEUtils.clone(formItemAPI.find(item => item.name === 'Props'), true).list.map(item => Object.assign({}, item, { name: XEUtils.camelCase(item.name) }))
           }
-        ]
+        ])
       },
       {
         name: 'toolbar',
@@ -350,12 +342,30 @@ const apis = [
         list: []
       },
       {
+        name: 'form-submit-invalid',
+        desc: '只对 form-config 配置时有效，表单提交时如果校验不通过会触发该事件',
+        version: '1.15.18',
+        type: '',
+        enum: '',
+        defVal: '{data, errMap}, event',
+        list: []
+      },
+      {
         name: 'form-reset',
         desc: '只对 form-config 配置时有效，表单重置时会触发该事件',
         version: '1.15.18',
         type: '',
         enum: '',
         defVal: '{data}, event',
+        list: []
+      },
+      {
+        name: 'form-toggle-collapse',
+        desc: '只对 form-config 配置时有效，当折叠按钮被手动点击时会触发该事件',
+        version: '1.15.18',
+        type: '',
+        enum: '',
+        defVal: '{collapse, data}, event',
         list: []
       },
       {
