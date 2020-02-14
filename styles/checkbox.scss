@@ -20,10 +20,10 @@
       display: inline-block;
       width: 1em;
       height: 1em;
-      border: 2px solid $vxe-input-border-color;
       background-color: #fff;
       vertical-align: middle;
-      border-radius: 0.2em;
+      border-radius: $vxe-checkbox-border-radius;
+      border: $vxe-checkbox-border-width solid $vxe-input-border-color;
       &:before {
         content: "";
         position: absolute;

@@ -119,8 +119,8 @@
       width: 1em;
       top: 0.35em;
       left: 0.6em;
-      border-radius: 0.2em;
-      border: 2px solid $vxe-input-border-color;
+      border-radius: $vxe-checkbox-border-radius;
+      border: $vxe-checkbox-border-width solid $vxe-input-border-color;
     }
   }
   &.is--checked,
@@ -141,7 +141,7 @@
       &:after {
         height: 0.64em;
         width: 0.32em;
-        top: 0.5em;
+        top: 0.45em;
         left: 0.95em;
         border: 2px solid #ffffff;
         border-left: 0;
