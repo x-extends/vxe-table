@@ -3,6 +3,7 @@
     <p class="tip">使用 <table-column-api-link prop="slot"/> 自定义模板；可以实现自定义任意内容及 html 元素<br>
       <table-column-api-link prop="default"/>：自定义内容模板（提前格式化（最优） > <table-column-api-link prop="formatter"/>（值发生变化时） > <table-column-api-link prop="slots"/>（即时））<br>
       <table-column-api-link prop="header"/>：自定义表头模板<br>
+      <table-column-api-link prop="footer"/>：自定义表尾模板<br>
       <table-column-api-link prop="filter"/>：自定义筛选模板（建议使用<router-link :to="{name: 'RendererAPI'}">渲染器</router-link>，可以更好的复用）<br>
       <table-column-api-link prop="edit"/>：自定义可编辑模板（建议使用<router-link :to="{name: 'RendererAPI'}">渲染器</router-link>，可以更好的复用）
     </p>
@@ -26,6 +27,9 @@
     <vxe-table
       border
       resizable
+      show-footer
+      height="500"
+      :footer-method="footerMethod"
       :data="tableData">
       <vxe-table-column type="seq" width="160" :resizable="false" show-overflow>
         <template v-slot:header>
@@ -48,6 +52,9 @@
           <vxe-tooltip v-model="showSexTip" content="这样玩也行？">
             <span style="color: red;" @click="showSexTip = !showSexTip">这样玩也行</span>
           </vxe-tooltip>
+        </template>
+        <template v-slot:footer="{ cells, cellIndex }">
+          <span style="color: red">累计：{{ cells[cellIndex] }}</span>
         </template>
         <template v-slot:filter="{ column, context }">
           <template v-for="(option, index) in column.filters">
@@ -76,9 +83,14 @@
           <a href="https://github.com/xuliangzhan/vxe-table">{{ row.name }}</a>
         </template>
       </vxe-table-column>
-      <vxe-table-column field="html1" title="Html片段" width="160" show-overflow>
+      <vxe-table-column field="html1" title="Html片段" width="200" show-overflow>
         <template v-slot="{ row }">
           <span v-html="row.html1"></span>
+        </template>
+        <template v-slot:footer>
+          <span>
+            <img src="static/other/img1.gif" style="width: 36px;">就是这么强大<img src="static/other/img2.gif" style="width: 30px;">
+          </span>
         </template>
       </vxe-table-column>
       <vxe-table-column field="img1" title="图片路径" width="120">
@@ -135,6 +147,9 @@ export default {
         <vxe-table
           border
           resizable
+          show-footer
+          height="500"
+          :footer-method="footerMethod"
           :data="tableData">
           <vxe-table-column type="seq" width="160" :resizable="false" show-overflow>
             <template v-slot:header>
@@ -157,6 +172,9 @@ export default {
               <vxe-tooltip v-model="showSexTip" content="这样玩也行？">
                 <span style="color: red;" @click="showSexTip = !showSexTip">这样玩也行</span>
               </vxe-tooltip>
+            </template>
+            <template v-slot:footer="{ cells, cellIndex }">
+              <span style="color: red">累计：{{ cells[cellIndex] }}</span>
             </template>
             <template v-slot:filter="{ column, context }">
               <template v-for="(option, index) in column.filters">
@@ -185,9 +203,14 @@ export default {
               <a href="https://github.com/xuliangzhan/vxe-table">{{ row.name }}</a>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="html1" title="Html片段" width="160" show-overflow>
+          <vxe-table-column field="html1" title="Html片段" width="200" show-overflow>
             <template v-slot="{ row }">
               <span v-html="row.html1"></span>
+            </template>
+            <template v-slot:footer>
+              <span>
+                <img src="static/other/img1.gif" style="width: 36px;">就是这么强大<img src="static/other/img2.gif" style="width: 30px;">
+              </span>
             </template>
           </vxe-table-column>
           <vxe-table-column field="img1" title="图片路径" width="120">
@@ -213,7 +236,7 @@ export default {
             }
           },
           created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 10)
           },
           methods: {
             formatDate (value) {
@@ -228,6 +251,16 @@ export default {
             showDetailEvent (row) {
               this.selectRow = row
               this.showDetails = true
+            },
+            footerMethod ({ columns, data }) {
+              return [
+                columns.map((column, columnIndex) => {
+                  if (['sex', 'num'].includes(column.property)) {
+                    return XEUtils.sum(data, column.property)
+                  }
+                  return null
+                })
+              ]
             }
           }
         }
@@ -262,8 +295,7 @@ export default {
     }
   },
   created () {
-    let list = window.MOCK_DATA_LIST.slice(0, 6)
-    this.tableData = list
+    this.tableData = window.MOCK_DATA_LIST.slice(0, 10)
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
@@ -283,6 +315,16 @@ export default {
     showDetailEvent (row) {
       this.selectRow = row
       this.showDetails = true
+    },
+    footerMethod ({ columns, data }) {
+      return [
+        columns.map((column, columnIndex) => {
+          if (['sex', 'num'].includes(column.property)) {
+            return XEUtils.sum(data, column.property)
+          }
+          return null
+        })
+      ]
     }
   }
 }
