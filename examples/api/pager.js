@@ -13,7 +13,7 @@ const apis = [
         version: '',
         type: 'String',
         enum: 'medium,small,mini',
-        defVal: '',
+        defVal: '继承上下文',
         list: []
       },
       {

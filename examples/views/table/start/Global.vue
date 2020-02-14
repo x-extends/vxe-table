@@ -138,6 +138,10 @@
             pageSizes: [10, 15, 20, 50, 100],
             layouts: ['PrevJump', 'PrevPage', 'Jump', 'PageCount', 'NextPage', 'NextJump', 'Sizes', 'Total'] // 非常灵活的分页布局，支持任意位置随意换
           },
+          // 表单的全局参数
+          form: {
+            colon: false
+          },
           // 工具栏的全局参数
           toolbar: {
             refresh: false,

@@ -36,11 +36,20 @@ const apis = [
       },
       {
         name: 'align',
-        descKey: 'app.api.formItem.desc.align',
+        descKey: 'app.api.form.desc.align',
         version: '',
         type: 'String',
         enum: '',
         defVal: '',
+        list: []
+      },
+      {
+        name: 'size',
+        descKey: 'app.api.form.desc.size',
+        version: '',
+        type: 'String',
+        enum: 'medium, small, mini',
+        defVal: '继承上下文',
         list: []
       },
       {
@@ -59,6 +68,15 @@ const apis = [
         type: 'String, Number',
         enum: '',
         defVal: '',
+        list: []
+      },
+      {
+        name: 'title-colon',
+        descKey: 'app.api.form.desc.titleColon',
+        version: '',
+        type: 'Boolean',
+        enum: '',
+        defVal: '默认 false，继承 setup.form.titleColon',
         list: []
       },
       {
@@ -186,7 +204,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{}, event',
+        defVal: '{data, errMap}, event',
         list: []
       },
       {
@@ -204,7 +222,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{data}, event',
+        defVal: '{collapse,data}, event',
         list: []
       }
     ]

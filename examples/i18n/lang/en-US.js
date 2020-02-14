@@ -447,6 +447,7 @@ module.exports = {
           content: 'Content',
           trigger: 'trigger type',
           theme: 'The theme style',
+          size: 'Size',
           zIndex: 'Custom style z-index (may be used for special situations, such as occlusion)',
           isArrow: 'Show arrow or not',
           enterable: 'Whether the mouse can go into tooltip',
@@ -536,7 +537,7 @@ module.exports = {
         desc: {
           value: 'Binding values',
           loading: 'Loading or not',
-          id: 'Only works for type=message. If you don\'t want the window to click repeatedly, you can set a unique id to prevent repeated prompts',
+          id: 'Set a unique id (may be used in scenarios such as Message preventing repeated pop-ups or Storage drag state saving)',
           title: 'Message title (support internationalization)',
           type: 'Message type',
           status: 'Only valid for type=alert | confirm | message, message status',
@@ -551,6 +552,7 @@ module.exports = {
           escClosable: 'Whether Esc key is allowed to close the modal',
           resize: 'Allow drag to resize modal window',
           duration: 'Only valid for type=message, auto-closed delay',
+          size: 'Size',
           width: 'The width of the modal window',
           height: 'The height of the modal window',
           minWidth: 'The minimum width of the modal window',
@@ -571,8 +573,10 @@ module.exports = {
           data: 'Form data',
           span: 'The number of columns occupied by the grid of all items(24 columns)',
           align: 'All content align',
+          size: 'Size',
           titleAlign: 'All title align',
           titleWidth: 'All title width',
+          titleColon: 'Whether to display the title colon',
           rules: 'Checksum rule configuration entries'
         }
       },

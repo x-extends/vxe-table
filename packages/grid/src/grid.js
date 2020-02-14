@@ -21,6 +21,7 @@ function renderFormContent (h, _vm) {
         on: {
           submit: _vm.submitEvent,
           reset: _vm.resetEvent,
+          'submit-invalid': _vm.submitInvalidEvent,
           'toggle-collapse': _vm.togglCollapseEvent
         },
         ref: 'form'
@@ -657,8 +658,12 @@ export default {
       }
       UtilTools.emitEvent(this, 'form-reset', [Object.assign({ $grid: this }, params), evnt])
     },
-    togglCollapseEvent () {
+    submitInvalidEvent (params, evnt) {
+      UtilTools.emitEvent(this, 'form-submit-invalid', [Object.assign({ $grid: this }, params), evnt])
+    },
+    togglCollapseEvent (params, evnt) {
       this.recalculate(true)
+      UtilTools.emitEvent(this, 'form-toggle-collapse', [Object.assign({ $grid: this }, params), evnt])
     },
     zoom () {
       this.maximize = !this.maximize

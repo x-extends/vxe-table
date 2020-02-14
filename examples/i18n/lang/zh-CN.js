@@ -446,6 +446,7 @@ module.exports = {
           content: '显示内容',
           trigger: '触发方式',
           theme: '主题样式',
+          size: '尺寸',
           zIndex: '自定义堆叠顺序（对于某些特殊场景，比如被遮挡时可能会用到）',
           isArrow: '是否显示箭头',
           enterable: '鼠标是否可进入到 tooltip 中',
@@ -535,7 +536,7 @@ module.exports = {
         desc: {
           value: '绑定值',
           loading: '是否加载中',
-          id: '只对 type=message 有效，如果不想窗口重复点击，可以设置唯一的 id 防止重复提示',
+          id: '设置唯一的 id（对于 Message 防止重复弹出 或 Storage 拖动状态保存等场景可能会用到）',
           title: '窗口的标题（支持开启国际化）',
           type: '窗口类型',
           status: '只对 type=alert | confirm | message 有效，消息状态',
@@ -550,6 +551,7 @@ module.exports = {
           escClosable: '是否允许按 Esc 键关闭窗口',
           resize: '是否允许拖动调整窗口大小',
           duration: '只对 type=message 有效，自动关闭的延时',
+          size: '尺寸',
           width: '窗口的宽度',
           height: '窗口的高度',
           minWidth: '窗口的最小宽度',
@@ -570,8 +572,10 @@ module.exports = {
           data: '表单数据',
           span: '所有项的栅格占据的列数（共 24 分栏）',
           align: '所有项的内容对齐方式',
+          size: '尺寸',
           titleAlign: '所有项的标题对齐方式',
           titleWidth: '所有项的标题宽度',
+          titleColon: '是否显示标题冒号',
           rules: '校验规则配置项'
         }
       },

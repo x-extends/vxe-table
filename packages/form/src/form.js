@@ -1,4 +1,5 @@
 import XEUtils from 'xe-utils/methods/xe-utils'
+import GlobalConfig from '../../conf'
 import VXETable from '../../v-x-e-table'
 import { UtilTools, DomTools } from '../../tools'
 
@@ -42,6 +43,7 @@ export default {
     align: String,
     titleAlign: String,
     titleWidth: [String, Number],
+    titleColon: { type: Boolean, default: () => GlobalConfig.form.titleColon },
     rules: Object
   },
   data () {
@@ -76,7 +78,7 @@ export default {
     }
   },
   render (h) {
-    const { loading, isLoading, vSize } = this
+    const { titleColon, loading, isLoading, vSize } = this
     let itemSlots = [].concat(this.$slots.default)
     if (VXETable._loading && isLoading) {
       itemSlots.push(
@@ -90,6 +92,7 @@ export default {
     return h('form', {
       class: ['vxe-form', 'vxe-row', {
         [`size--${vSize}`]: vSize,
+        'is--colon': titleColon,
         'is--loading': loading
       }],
       on: {
@@ -108,7 +111,7 @@ export default {
       this.beginValidate().then(() => {
         this.$emit('submit', { data: this.data, $form: this }, evnt)
       }).catch(errMap => {
-        this.$emit('submit-invalid', errMap, evnt)
+        this.$emit('submit-invalid', { data: this.data, errMap, $form: this }, evnt)
       })
     },
     resetEvent (evnt) {

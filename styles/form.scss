@@ -10,6 +10,15 @@
   color: $vxe-font-color;
   font-family: $vxe-font-family;
   background-color: $vxe-form-background-color;
+  &.is--colon {
+    .vxe-form--item-title {
+      &:after {
+        content: ":";
+        font-size: 1.2em;
+        font-family: SimSun, sans-serif;
+      }
+    }
+  }
 }
 
 .vxe-form--item,

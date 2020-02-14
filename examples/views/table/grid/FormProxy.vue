@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">表单数据代理，可以通过设置 <table-api-link prop="form-config"/>={items} 渲染表单</p>
+    <p class="tip">表单数据代理，可以通过设置 <grid-api-link prop="form-config"/>={items} 渲染表单</p>
 
     <vxe-grid
       resizable

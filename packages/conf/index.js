@@ -140,6 +140,9 @@ const GlobalConfig = {
     // pageSizes: [10, 15, 20, 50, 100],
     // layouts: ['PrevJump', 'PrevPage', 'Jump', 'PageCount', 'NextPage', 'NextJump', 'Sizes', 'Total']
   },
+  form: {
+    // colon: false
+  },
   toolbar: {
     // import: {
     //   mode: 'covering'
