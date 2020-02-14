@@ -134,10 +134,10 @@
     .vxe-custom--header,
     .vxe-custom--body {
       padding: 0.2em 0;
-      max-height: 17.25em;
+      max-height: 17.6em;
       & > li {
-        max-width: 180px;
-        min-width: 140px;
+        max-width: 12.85em;
+        min-width: 10em;
         padding: 0.2em 1em 0.2em 2.5em;
       }
     }
@@ -188,8 +188,8 @@
       width: 1em;
       top: 0.42em;
       left: 0.6em;
-      border-radius: 0.2em;
-      border: 2px solid $vxe-input-border-color;
+      border-radius: $vxe-checkbox-border-radius;
+      border: $vxe-checkbox-border-width solid $vxe-input-border-color;
     }
   }
   &.is--checked,
@@ -211,7 +211,7 @@
       &:after {
         height: 0.64em;
         width: 0.32em;
-        top: 0.58em;
+        top: 0.55em;
         left: 0.95em;
         border: 2px solid #ffffff;
         border-left: 0;

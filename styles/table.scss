@@ -486,9 +486,9 @@ select.vxe-select,
         width: 1em;
         top: 0;
         left: 0;
-        border: 2px solid $vxe-input-border-color;
         background-color: #ffffff;
-        border-radius: 0.2em;
+        border-radius: $vxe-checkbox-border-radius;
+        border: $vxe-checkbox-border-width solid $vxe-input-border-color;
       }
     }
     &:not(.is--disabled) {

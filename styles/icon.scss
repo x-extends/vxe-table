@@ -107,45 +107,49 @@
   }
 }
 
-.vxe-icon--caret-top {
+%Caret {
   @extend %DefaultWidthHeight;
   &:before {
     @extend %PseudoClass;
-    left: 0;
-    bottom: 0.25em;
-    border-width: 0.5em;
+    border-width: 0.4em;
     border-style: solid;
-    border-top-color: transparent;
-    border-right-color: transparent;
+    border-color: transparent;
+  }
+}
+
+.vxe-icon--caret-top {
+  @extend %Caret;
+  &:before {
+    left: 0.1em;
+    bottom: 0.3em;
     border-bottom-color: inherit;
-    border-left-color: transparent;
   }
 }
 
 .vxe-icon--caret-bottom {
-  @extend .vxe-icon--caret-top;
+  @extend %Caret;
   &:before {
-    left: 0;
-    bottom: -0.25em;
-    transform: rotate(180deg);
+    left: 0.1em;
+    top: 0.3em;
+    border-top-color: inherit;
   }
 }
 
 .vxe-icon--caret-left {
-  @extend .vxe-icon--caret-top;
+  @extend %Caret;
   &:before {
-    left: -0.25em;
-    bottom: 0;
-    transform: rotate(-90deg);
+    right: 0.3em;
+    bottom: 0.1em;
+    border-right-color: inherit;
   }
 }
 
 .vxe-icon--caret-right {
-  @extend .vxe-icon--caret-top;
+  @extend %Caret;
   &:before {
-    left: 0.25em;
-    bottom: 0;
-    transform: rotate(90deg);
+    left: 0.3em;
+    bottom: 0.1em;
+    border-left-color: inherit;
   }
 }
 
