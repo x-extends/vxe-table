@@ -311,13 +311,11 @@
   position: absolute;
   bottom: 0;
   left: 0;
-  width: 200px;
   text-align: center;
   pointer-events: none;
   .vxe-pager-size--select {
     margin: 0;
     padding: 4px 0;
-    min-width: 50px;
     list-style-type: none;
     display: inline-block;
     border-radius: 4px;
@@ -327,6 +325,11 @@
     box-shadow: 0 0 6px 2px rgba(0, 0, 0, 0.1);
     .size--option {
       padding: 0 15px;
+      min-width: 50px;
+      max-width: 100px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
       white-space: nowrap;
       cursor: pointer;
       &:hover {
