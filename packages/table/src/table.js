@@ -3522,7 +3522,7 @@ export default {
         this.triggerSortEvent(evnt, column, column.order === 'desc' ? 'asc' : 'desc')
       }
       UtilTools.emitEvent(this, 'header-cell-click', [Object.assign({ triggerResizable, triggerSort, triggerFilter }, params), evnt])
-      return this.setCurrentColumn(column, true)
+      return this.setCurrentColumn(column)
     },
     setCurrentColumn (column) {
       if (this.highlightCurrentColumn) {
@@ -4510,23 +4510,24 @@ export default {
     setAllTreeExpansion (expanded) {
       let { tableFullData, treeOpts } = this
       let { lazy, children } = treeOpts
+      let expandeds = []
       if (expanded) {
         if (lazy) {
           XEUtils.eachTree(tableFullData, row => {
-            this.setTreeExpansion(row, true)
+            expandeds.push(row)
           }, treeOpts)
+          this.setTreeExpansion(expandeds, true)
         } else {
-          let treeExpandeds = []
           XEUtils.eachTree(tableFullData, row => {
             let rowChildren = row[children]
             if (rowChildren && rowChildren.length) {
-              treeExpandeds.push(row)
+              expandeds.push(row)
             }
           }, treeOpts)
-          this.treeExpandeds = treeExpandeds
+          this.treeExpandeds = expandeds
         }
       } else {
-        this.treeExpandeds = []
+        this.treeExpandeds = expandeds
       }
       return this.$nextTick().then(this.recalculate)
     },

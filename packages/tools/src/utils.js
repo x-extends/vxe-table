@@ -6,7 +6,7 @@ var lastZindex = 0
 var columnUniqueId = 0
 
 class ColumnConfig {
-  constructor ($table, _vm, { renderHeader, renderCell, renderData } = {}) {
+  constructor ($table, _vm, { renderHeader, renderCell, renderFooter, renderData } = {}) {
     const $grid = $table.$grid
     const proxyOpts = $grid ? $grid.proxyOpts : null
     const formatter = _vm.formatter
@@ -91,6 +91,7 @@ class ColumnConfig {
       renderArgs: [], // 渲染参数可用于扩展
       renderHeader: renderHeader || _vm.renderHeader,
       renderCell: renderCell || _vm.renderCell,
+      renderFooter: renderFooter || _vm.renderFooter,
       renderData: renderData,
       // 单元格插槽，只对 grid 有效
       slots: _vm.slots,

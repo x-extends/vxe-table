@@ -36,6 +36,7 @@ export default {
       scrollXStore,
       cellOffsetWidth,
       showOverflow: allColumnOverflow,
+      currentColumn,
       overflowX,
       getColumnIndex
     } = $table
@@ -124,13 +125,14 @@ export default {
             let tfOns = {}
             // 确保任何情况下 columnIndex 都精准指向真实列索引
             let columnIndex = getColumnIndex(column)
-            let params = { $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType }
+            let cellIndex = $table.tableColumn.indexOf(column)
+            let params = { $table, $rowIndex, column, columnIndex, $columnIndex, cellIndex, cells: list, fixed: fixedType, data: footerData }
             if (showTitle || showTooltip) {
               tfOns.mouseenter = evnt => {
                 if (showTitle) {
                   DomTools.updateCellTitle(evnt)
                 } else if (showTooltip) {
-                  $table.triggerFooterTooltipEvent(evnt, { $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType })
+                  $table.triggerFooterTooltipEvent(evnt, { $table, $rowIndex, column, columnIndex, $columnIndex, cellIndex, cells: list, fixed: fixedType, data: footerData, cell: evnt.currentTarget })
                 }
               }
             }
@@ -143,17 +145,17 @@ export default {
             }
             if (tableListeners['header-cell-click']) {
               tfOns.click = evnt => {
-                UtilTools.emitEvent($table, 'header-cell-click', [{ $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, cell: evnt.currentTarget }, evnt])
+                UtilTools.emitEvent($table, 'header-cell-click', [{ $table, $rowIndex, column, columnIndex, $columnIndex, cellIndex, cells: list, fixed: fixedType, data: footerData, cell: evnt.currentTarget }, evnt])
               }
             }
             if (tableListeners['header-cell-dblclick']) {
               tfOns.dblclick = evnt => {
-                UtilTools.emitEvent($table, 'header-cell-dblclick', [{ $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, cell: evnt.currentTarget }, evnt])
+                UtilTools.emitEvent($table, 'header-cell-dblclick', [{ $table, $rowIndex, column, columnIndex, $columnIndex, cellIndex, cells: list, fixed: fixedType, data: footerData, cell: evnt.currentTarget }, evnt])
               }
             }
             // 合并行或列
             if (footerSpanMethod) {
-              let { rowspan = 1, colspan = 1 } = footerSpanMethod({ $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, data: footerData }) || {}
+              let { rowspan = 1, colspan = 1 } = footerSpanMethod(params) || {}
               if (!rowspan || !colspan) {
                 return null
               }
@@ -168,10 +170,11 @@ export default {
                 'col--last': $columnIndex === tableColumn.length - 1,
                 'fixed--hidden': fixedHiddenColumn,
                 'col--ellipsis': hasEllipsis,
-                'filter--active': column.filters && column.filters.some(item => item.checked)
+                'filter--active': column.filters && column.filters.some(item => item.checked),
+                'col--current': currentColumn === column
               }, UtilTools.getClass(footerClassName, params), UtilTools.getClass(footerCellClassName, params)],
               attrs,
-              style: footerCellStyle ? (XEUtils.isFunction(footerCellStyle) ? footerCellStyle({ $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType }) : footerCellStyle) : null,
+              style: footerCellStyle ? (XEUtils.isFunction(footerCellStyle) ? footerCellStyle(params) : footerCellStyle) : null,
               on: tfOns,
               key: columnKey || ($table.columnKey ? column.id : columnIndex)
             }, [
@@ -180,7 +183,7 @@ export default {
                 style: {
                   width: hasEllipsis ? `${renderWidth - cellOffsetWidth}px` : null
                 }
-              }, UtilTools.formatText(list[$table.tableColumn.indexOf(column)], 1))
+              }, column.renderFooter(h, params))
             ])
           }).concat(scrollbarWidth ? [
             h('td', {

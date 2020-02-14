@@ -658,6 +658,15 @@ const apis = [
         list: []
       },
       {
+        name: 'footer',
+        desc: '自定义表尾内容的模板',
+        version: '1.15.19',
+        type: '',
+        enum: '',
+        defVal: '{column,columnIndex,$columnIndex,cells,cellIndex}, h',
+        list: []
+      },
+      {
         name: 'content',
         desc: '只对 type=expand 有效，自定义展开后的内容模板',
         version: '1.15.15',

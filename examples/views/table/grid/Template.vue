@@ -5,6 +5,7 @@
       列：<br>
       <table-column-api-link prop="default"/>：自定义内容模板（提前格式化好数据 > <table-column-api-link prop="formatter"/> > <table-column-api-link prop="slots"/>）<br>
       <table-column-api-link prop="header"/>：自定义表头模板<br>
+      <table-column-api-link prop="footer"/>：自定义表尾模板<br>
       <table-column-api-link prop="filter"/>：自定义筛选模板（建议使用<router-link class="link" :to="{name: 'RendererFilter'}">渲染器</router-link>，可以更好的复用）<br>
       <table-column-api-link prop="edit"/>：自定义可编辑模板（建议使用<router-link class="link" :to="{name: 'RendererEdit'}">渲染器</router-link>，可以更好的复用）<br>
       工具栏：<br>
@@ -16,7 +17,9 @@
       border
       resizable
       form-config
-      height="400"
+      show-footer
+      height="500"
+      :footer-method="footerMethod"
       :toolbar="tableToolbar"
       :columns="tableColumn"
       :data="tableData"
@@ -59,6 +62,11 @@
         </div>
       </template>
 
+      <!--自定义插槽 num_footer-->
+      <template v-slot:num_footer="{ cells, cellIndex }">
+        <span style="color: red">合计：{{ cells[cellIndex] }}</span>
+      </template>
+
       <!--自定义插槽 name_default-->
       <template v-slot:name_default="{ row, column }">
         <span>
@@ -82,6 +90,7 @@
 </template>
 
 <script>
+import XEUtils from 'xe-utils'
 import hljs from 'highlight.js'
 
 export default {
@@ -135,6 +144,11 @@ export default {
                 </span>
               ]
             },
+            footer: ({ cells, cellIndex }) => {
+              return [
+                <span>累计：{ cells[cellIndex] }</span>
+              ]
+            },
             filter: ({ column, context }) => {
               return column.filters.map(option => {
                 return <input type="type" value={ option.data } onInput={ evnt => this.changeFilterEvent(evnt, option, context) }/>
@@ -145,6 +159,14 @@ export default {
                 <input type="text" value={ row.sex } onInput={ evnt => { row.sex = evnt.target.value } }/>
               ]
             }
+          }
+        },
+        {
+          field: 'num',
+          title: 'Number',
+          slots: {
+            // 对应自定义插槽的名称
+            footer: 'num_footer'
           }
         },
         {
@@ -210,7 +232,9 @@ export default {
           border
           resizable
           form-config
-          height="400"
+          show-footer
+          height="500"
+          :footer-method="footerMethod"
           :toolbar="tableToolbar"
           :columns="tableColumn"
           :data="tableData"
@@ -253,6 +277,11 @@ export default {
             </div>
           </template>
 
+          <!--自定义插槽 num_footer-->
+          <template v-slot:num_footer="{ cells, cellIndex }">
+            <span style="color: red">合计：{{ cells[cellIndex] }}</span>
+          </template>
+
           <!--自定义插槽 name_default-->
           <template v-slot:name_default="{ row, column }">
             <span>
@@ -261,6 +290,10 @@ export default {
             </span>
           </template>
         </vxe-grid>
+
+        <vxe-modal v-model="showDetails" title="查看详情" width="800" height="400" resize>
+          <div v-if="selectRow" v-html="selectRow.html3"></div>
+        </vxe-modal>
         `,
         `
         export default {
@@ -314,6 +347,11 @@ export default {
                         </span>
                       ]
                     },
+                    footer: ({ cells, cellIndex }) => {
+                      return [
+                        <span>累计：{ cells[cellIndex] }</span>
+                      ]
+                    },
                     filter: ({ column, context }) => {
                       return column.filters.map(option => {
                         return <input type="type" value={ option.data } onInput={ evnt => this.changeFilterEvent(evnt, option, context) }/>
@@ -324,6 +362,14 @@ export default {
                         <input type="text" value={ row.sex } onInput={ evnt => { row.sex = evnt.target.value } }/>
                       ]
                     }
+                  }
+                },
+                {
+                  field: 'num',
+                  title: 'Number',
+                  slots: {
+                    // 对应自定义插槽的名称
+                    footer: 'num_footer'
                   }
                 },
                 {
@@ -400,7 +446,7 @@ export default {
               this.$XModal.alert('头部点击事件')
             },
             addressClickEvent (row) {
-              this.$XModal.alert(\`address点击事件：\${row.row}\`)
+              this.$XModal.alert(\`address点击事件：\${row.address}\`)
             },
             filterSexMethod ({ option, row }) {
               return row.sex === option.data
@@ -408,6 +454,16 @@ export default {
             changeFilterEvent (evnt, option, context) {
               option.data = evnt.target.value
               context.changeMultipleOption(evnt, !!option.data, option)
+            },
+            footerMethod ({ columns, data }) {
+              return [
+                columns.map((column, columnIndex) => {
+                  if (['sex', 'num'].includes(column.property)) {
+                    return XEUtils.sum(data, column.property)
+                  }
+                  return null
+                })
+              ]
             }
           }
         }
@@ -461,7 +517,7 @@ export default {
       this.$XModal.alert('头部点击事件')
     },
     addressClickEvent (row) {
-      this.$XModal.alert(`address点击事件：${row.row}`)
+      this.$XModal.alert(`address点击事件：${row.address}`)
     },
     filterSexMethod ({ option, row }) {
       return row.sex === option.data
@@ -469,6 +525,16 @@ export default {
     changeFilterEvent (evnt, option, context) {
       option.data = evnt.target.value
       context.changeMultipleOption(evnt, !!option.data, option)
+    },
+    footerMethod ({ columns, data }) {
+      return [
+        columns.map((column, columnIndex) => {
+          if (['sex', 'num'].includes(column.property)) {
+            return XEUtils.sum(data, column.property)
+          }
+          return null
+        })
+      ]
     }
   }
 }
