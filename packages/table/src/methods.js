@@ -2197,7 +2197,7 @@ const Methods = {
     }
     UtilTools.emitEvent(this, 'header-cell-click', [Object.assign({ triggerResizable, triggerSort, triggerFilter }, params), evnt])
     if (this.highlightCurrentColumn) {
-      return this.setCurrentColumn(column, true)
+      return this.setCurrentColumn(column)
     }
     return this.$nextTick()
   },
@@ -2209,7 +2209,6 @@ const Methods = {
     this.clearCurrentRow()
     this.clearCurrentColumn()
     this.currentColumn = column
-    XEUtils.arrayEach(this.$el.querySelectorAll(`.${column.id}`), elem => DomTools.addClass(elem, 'col--current'))
     return this.$nextTick()
   },
   /**
@@ -2217,7 +2216,6 @@ const Methods = {
    */
   clearCurrentColumn () {
     this.currentColumn = null
-    XEUtils.arrayEach(this.$el.querySelectorAll('.col--current'), elem => DomTools.removeClass(elem, 'col--current'))
     return this.$nextTick()
   },
   checkValidate (type) {
@@ -2700,23 +2698,24 @@ const Methods = {
   setAllTreeExpansion (expanded) {
     let { tableFullData, treeOpts } = this
     let { lazy, children } = treeOpts
+    let expandeds = []
     if (expanded) {
       if (lazy) {
         XEUtils.eachTree(tableFullData, row => {
-          this.setTreeExpansion(row, true)
+          expandeds.push(row)
         }, treeOpts)
+        this.setTreeExpansion(expandeds, true)
       } else {
-        let treeExpandeds = []
         XEUtils.eachTree(tableFullData, row => {
           let rowChildren = row[children]
           if (rowChildren && rowChildren.length) {
-            treeExpandeds.push(row)
+            expandeds.push(row)
           }
         }, treeOpts)
-        this.treeExpandeds = treeExpandeds
+        this.treeExpandeds = expandeds
       }
     } else {
-      this.treeExpandeds = []
+      this.treeExpandeds = expandeds
     }
     return this.$nextTick().then(this.recalculate)
   },

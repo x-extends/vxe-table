@@ -122,6 +122,7 @@ export default {
       headerAlign: allHeaderAlign,
       align: allAlign,
       highlightCurrentColumn,
+      currentColumn,
       mouseConfig,
       mouseOpts,
       scrollXLoad,
@@ -251,7 +252,8 @@ export default {
                 'fixed--hidden': fixedHiddenColumn,
                 'is--sortable': column.sortable,
                 'is--filter': column.filters,
-                'filter--active': hasFilter
+                'filter--active': hasFilter,
+                'col--current': currentColumn === column
               }, UtilTools.getClass(headerClassName, params), UtilTools.getClass(headerCellClassName, params)],
               attrs: {
                 'data-colid': column.id,

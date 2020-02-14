@@ -252,6 +252,8 @@ export default {
       selection: [],
       // 当前行
       currentRow: null,
+      // 单选框属性，选中列
+      currentColumn: null,
       // 单选框属性，选中行
       selectRow: null,
       // 表尾合计数据
@@ -602,8 +604,6 @@ export default {
       headerHeight: 0,
       // 表尾高度
       footerHeight: 0,
-      // 单选框属性，选中列
-      // currentColumn: null,
       // 当前 hover 行
       // hoverRow: null,
       // 最后滚动位置

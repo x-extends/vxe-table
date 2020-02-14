@@ -43,6 +43,7 @@ export default {
       scrollXLoad,
       columnKey,
       showOverflow: allColumnOverflow,
+      currentColumn,
       overflowX,
       scrollbarWidth,
       getColumnIndex
@@ -122,13 +123,14 @@ export default {
             let tfOns = {}
             // 确保任何情况下 columnIndex 都精准指向真实列索引
             let columnIndex = getColumnIndex(column)
-            let params = { $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType }
+            let cellIndex = $xetable.tableColumn.indexOf(column)
+            let params = { $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, cellIndex, cells: list, fixed: fixedType, data: footerData }
             if (showTitle || showTooltip) {
               tfOns.mouseenter = evnt => {
                 if (showTitle) {
                   DomTools.updateCellTitle(evnt)
                 } else if (showTooltip) {
-                  $xetable.triggerFooterTooltipEvent(evnt, { $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType })
+                  $xetable.triggerFooterTooltipEvent(evnt, { $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, cellIndex, cells: list, fixed: fixedType, data: footerData, cell: evnt.currentTarget })
                 }
               }
             }
@@ -141,17 +143,17 @@ export default {
             }
             if (tableListeners['header-cell-click']) {
               tfOns.click = evnt => {
-                UtilTools.emitEvent($xetable, 'header-cell-click', [{ $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, cell: evnt.currentTarget }, evnt])
+                UtilTools.emitEvent($xetable, 'header-cell-click', [{ $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, cellIndex, cells: list, fixed: fixedType, data: footerData, cell: evnt.currentTarget }, evnt])
               }
             }
             if (tableListeners['header-cell-dblclick']) {
               tfOns.dblclick = evnt => {
-                UtilTools.emitEvent($xetable, 'header-cell-dblclick', [{ $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, cell: evnt.currentTarget }, evnt])
+                UtilTools.emitEvent($xetable, 'header-cell-dblclick', [{ $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, cellIndex, cells: list, fixed: fixedType, data: footerData, cell: evnt.currentTarget }, evnt])
               }
             }
             // 合并行或列
             if (footerSpanMethod) {
-              let { rowspan = 1, colspan = 1 } = footerSpanMethod({ $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, data: footerData }) || {}
+              let { rowspan = 1, colspan = 1 } = footerSpanMethod(params) || {}
               if (!rowspan || !colspan) {
                 return null
               }
@@ -166,16 +168,17 @@ export default {
                 'col--last': $columnIndex === tableColumn.length - 1,
                 'fixed--hidden': fixedHiddenColumn,
                 'col--ellipsis': hasEllipsis,
-                'filter--active': column.filters && column.filters.some(item => item.checked)
+                'filter--active': column.filters && column.filters.some(item => item.checked),
+                'col--current': currentColumn === column
               }, UtilTools.getClass(footerClassName, params), UtilTools.getClass(footerCellClassName, params)],
               attrs,
-              style: footerCellStyle ? (XEUtils.isFunction(footerCellStyle) ? footerCellStyle({ $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType }) : footerCellStyle) : null,
+              style: footerCellStyle ? (XEUtils.isFunction(footerCellStyle) ? footerCellStyle(params) : footerCellStyle) : null,
               on: tfOns,
               key: columnKey ? column.id : columnIndex
             }, [
               h('div', {
                 class: 'vxe-cell'
-              }, UtilTools.formatText(list[$xetable.tableColumn.indexOf(column)], 1))
+              }, column.renderFooter(h, params))
             ])
           }).concat(scrollbarWidth ? [
             h('td', {

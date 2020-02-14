@@ -8,8 +8,9 @@ export const Cell = {
     let { type, sortable, remoteSort, filters, editRender, treeNode } = _vm
     let { editConfig, editOpts, checkboxOpts } = $xetable
     let renMaps = {
-      renderHeader: this.renderHeader,
-      renderCell: treeNode ? this.renderTreeCell : this.renderCell
+      renderHeader: this.renderDefaultHeader,
+      renderCell: treeNode ? this.renderTreeCell : this.renderDefaultCell,
+      renderFooter: this.renderDefaultFooter
     }
     switch (type) {
       case 'seq':
@@ -58,16 +59,23 @@ export const Cell = {
   /**
    * 单元格
    */
-  renderHeader (h, params) {
+  renderDefaultHeader (h, params) {
     let { $table, column } = params
     let { slots, own } = column
+    let renderOpts = own.editRender || own.cellRender
     if (slots && slots.header) {
       return slots.header.call($table, params, h)
+    }
+    if (renderOpts) {
+      let compConf = VXETable.renderer.get(renderOpts.name)
+      if (compConf && compConf.renderHeader) {
+        return compConf.renderHeader.call($table, h, renderOpts, params, { $grid: $table.$xegrid, $excel: $table.$parent, $table })
+      }
     }
     // 在 v3.0 中废弃 label
     return [UtilTools.formatText(UtilTools.getFuncText(own.title || own.label), 1)]
   },
-  renderCell (h, params) {
+  renderDefaultCell (h, params) {
     let { $table, row, column } = params
     let { slots, own } = column
     let renderOpts = own.editRender || own.cellRender
@@ -84,7 +92,22 @@ export const Cell = {
     return [UtilTools.formatText(UtilTools.getCellLabel(row, column, params), 1)]
   },
   renderTreeCell (h, params) {
-    return Cell.renderTreeIcon(h, params, Cell.renderCell.call(this, h, params))
+    return Cell.renderTreeIcon(h, params, Cell.renderDefaultCell.call(this, h, params))
+  },
+  renderDefaultFooter (h, params) {
+    let { $table, column, cellIndex, cells } = params
+    let { slots, own } = column
+    let renderOpts = own.editRender || own.cellRender
+    if (slots && slots.footer) {
+      return slots.footer.call($table, params, h)
+    }
+    if (renderOpts) {
+      let compConf = VXETable.renderer.get(renderOpts.name)
+      if (compConf && compConf.renderFooter) {
+        return compConf.renderFooter.call($table, h, renderOpts, params, { $grid: $table.$xegrid, $excel: $table.$parent, $table })
+      }
+    }
+    return [UtilTools.formatText(cells[cellIndex], 1)]
   },
 
   /**
@@ -426,7 +449,7 @@ export const Cell = {
    * 排序和筛选
    */
   renderSortAndFilterHeader (h, params) {
-    return Cell.renderHeader(h, params)
+    return Cell.renderDefaultHeader(h, params)
       .concat(Cell.renderSortIcon(h, params))
       .concat(Cell.renderFilterIcon(h, params))
   },
@@ -435,7 +458,7 @@ export const Cell = {
    * 排序
    */
   renderSortHeader (h, params) {
-    return Cell.renderHeader(h, params).concat(Cell.renderSortIcon(h, params))
+    return Cell.renderDefaultHeader(h, params).concat(Cell.renderSortIcon(h, params))
   },
   renderSortIcon (h, params) {
     let { $table, column } = params
@@ -478,7 +501,7 @@ export const Cell = {
    * 筛选
    */
   renderFilterHeader (h, params) {
-    return Cell.renderHeader(h, params).concat(Cell.renderFilterIcon(h, params))
+    return Cell.renderDefaultHeader(h, params).concat(Cell.renderFilterIcon(h, params))
   },
   renderFilterIcon (h, params) {
     let { $table, column, hasFilter } = params
@@ -526,7 +549,7 @@ export const Cell = {
       editOpts.showIcon === false ? null : h('i', {
         class: ['vxe-edit-icon', editOpts.icon || GlobalConfig.icon.edit]
       })
-    ].concat(Cell.renderHeader(h, params))
+    ].concat(Cell.renderDefaultHeader(h, params))
       .concat(sortable || remoteSort ? Cell.renderSortIcon(h, params) : [])
       .concat(filters ? Cell.renderFilterIcon(h, params) : [])
   },
@@ -565,7 +588,7 @@ export const Cell = {
     if (formatter) {
       return [UtilTools.formatText(UtilTools.getCellLabel(row, column, params), 1)]
     }
-    return Cell.renderCell.call(_vm, h, params)
+    return Cell.renderDefaultCell.call(_vm, h, params)
   }
 }
 

@@ -6,7 +6,7 @@ var lastZindex = 0
 var columnUniqueId = 0
 
 class ColumnConfig {
-  constructor ($xetable, _vm, { renderHeader, renderCell, renderData } = {}) {
+  constructor ($xetable, _vm, { renderHeader, renderCell, renderFooter, renderData } = {}) {
     const $xegrid = $xetable.$xegrid
     const proxyOpts = $xegrid ? $xegrid.proxyOpts : null
     const formatter = _vm.formatter
@@ -91,6 +91,7 @@ class ColumnConfig {
       model: {},
       renderHeader: renderHeader || _vm.renderHeader,
       renderCell: renderCell || _vm.renderCell,
+      renderFooter: renderFooter || _vm.renderFooter,
       renderData: renderData,
       // 单元格插槽，只对 grid 有效
       slots: _vm.slots,
