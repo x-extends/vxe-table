@@ -21,8 +21,10 @@
         <vxe-checkbox :indeterminate="formData.ciVal">半选</vxe-checkbox>
       </vxe-form-item>
       <vxe-form-item title="单选框" field="rVal">
-        <vxe-radio v-model="formData.rVal" name="size-radio" label="1">选项1</vxe-radio>
-        <vxe-radio v-model="formData.rVal" name="size-radio" label="2">选项2</vxe-radio>
+        <vxe-radio-group v-model="formData.rVal">
+          <vxe-radio label="1">选项1</vxe-radio>
+          <vxe-radio label="2">选项2</vxe-radio>
+        </vxe-radio-group>
       </vxe-form-item>
       <vxe-form-item>
         <vxe-button type="submit" status="primary">查询</vxe-button>
@@ -84,8 +86,10 @@
         <vxe-checkbox :indeterminate="formData.ciVal">半选</vxe-checkbox>
       </vxe-form-item>
       <vxe-form-item title="单选框" field="rVal">
-        <vxe-radio v-model="formData.rVal" name="size-radio" label="1">选项1</vxe-radio>
-        <vxe-radio v-model="formData.rVal" name="size-radio" label="2">选项2</vxe-radio>
+        <vxe-radio-group v-model="formData.rVal">
+          <vxe-radio label="1">选项1</vxe-radio>
+          <vxe-radio label="2">选项2</vxe-radio>
+        </vxe-radio-group>
       </vxe-form-item>
       <vxe-form-item>
         <vxe-button type="submit" status="primary">查询</vxe-button>
@@ -149,8 +153,10 @@
         <vxe-checkbox :indeterminate="formData.ciVal">半选</vxe-checkbox>
       </vxe-form-item>
       <vxe-form-item title="单选框" field="rVal">
-        <vxe-radio v-model="formData.rVal" name="size-radio" label="1">选项1</vxe-radio>
-        <vxe-radio v-model="formData.rVal" name="size-radio" label="2">选项2</vxe-radio>
+        <vxe-radio-group v-model="formData.rVal">
+          <vxe-radio label="1">选项1</vxe-radio>
+          <vxe-radio label="2">选项2</vxe-radio>
+        </vxe-radio-group>
       </vxe-form-item>
       <vxe-form-item>
         <vxe-button type="submit" status="primary">查询</vxe-button>
@@ -214,8 +220,10 @@
         <vxe-checkbox :indeterminate="formData.ciVal">半选</vxe-checkbox>
       </vxe-form-item>
       <vxe-form-item title="单选框" field="rVal">
-        <vxe-radio v-model="formData.rVal" name="size-radio" label="1">选项1</vxe-radio>
-        <vxe-radio v-model="formData.rVal" name="size-radio" label="2">选项2</vxe-radio>
+        <vxe-radio-group v-model="formData.rVal">
+          <vxe-radio label="1">选项1</vxe-radio>
+          <vxe-radio label="2">选项2</vxe-radio>
+        </vxe-radio-group>
       </vxe-form-item>
       <vxe-form-item>
         <vxe-button type="submit" status="primary">查询</vxe-button>

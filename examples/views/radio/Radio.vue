@@ -15,6 +15,16 @@
       <vxe-radio name="n2" v-model="value2" label="3">单选3</vxe-radio>
     </p>
 
+    <p>
+      <vxe-radio-group v-model="value3">
+        <vxe-radio label="1">HTML</vxe-radio>
+        <vxe-radio label="2">CSS</vxe-radio>
+        <vxe-radio label="3">Javascript</vxe-radio>
+        <vxe-radio label="4">SASS</vxe-radio>
+        <vxe-radio label="5">LESS</vxe-radio>
+      </vxe-radio-group>
+    </p>
+
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
@@ -32,6 +42,7 @@ export default {
     return {
       value1: '1',
       value2: '2',
+      value3: '3',
       demoCodes: [
         `
         <p>
@@ -45,6 +56,16 @@ export default {
           <vxe-radio name="n2" v-model="value2" label="2" disabled>禁用2</vxe-radio>
           <vxe-radio name="n2" v-model="value2" label="3">单选3</vxe-radio>
         </p>
+
+        <p>
+          <vxe-radio-group v-model="value3">
+            <vxe-radio label="1">HTML</vxe-radio>
+            <vxe-radio label="2">CSS</vxe-radio>
+            <vxe-radio label="3">Javascript</vxe-radio>
+            <vxe-radio label="4">SASS</vxe-radio>
+            <vxe-radio label="5">LESS</vxe-radio>
+          </vxe-radio-group>
+        </p>
         `,
         `
         export default {
@@ -52,6 +73,7 @@ export default {
             return {
               value1: '1',
               value2: '2'
+              value3: '3'
             }
           }
         }

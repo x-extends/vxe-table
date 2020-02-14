@@ -87,32 +87,27 @@ export default {
           h('tr', [
             h('td', GlobalConfig.i18n('vxe.toolbar.impOpts')),
             h('td', [
-              h('vxe-radio', {
-                props: {
-                  name: 'mode',
-                  label: 'covering',
-                  title: GlobalConfig.i18n('vxe.toolbar.impCoveringTitle')
-                },
+              h('vxe-radio-group', {
                 model: {
                   value: defaultOptions.mode,
                   callback (value) {
                     defaultOptions.mode = value
                   }
                 }
-              }, GlobalConfig.i18n('vxe.toolbar.impModeCovering')),
-              h('vxe-radio', {
-                props: {
-                  name: 'mode',
-                  label: 'append',
-                  title: GlobalConfig.i18n('vxe.toolbar.impAppendTitle')
-                },
-                model: {
-                  value: defaultOptions.mode,
-                  callback (value) {
-                    defaultOptions.mode = value
+              }, [
+                h('vxe-radio', {
+                  props: {
+                    label: 'covering',
+                    title: GlobalConfig.i18n('vxe.toolbar.impCoveringTitle')
                   }
-                }
-              }, GlobalConfig.i18n('vxe.toolbar.impModeAppend'))
+                }, GlobalConfig.i18n('vxe.toolbar.impModeCovering')),
+                h('vxe-radio', {
+                  props: {
+                    label: 'append',
+                    title: GlobalConfig.i18n('vxe.toolbar.impAppendTitle')
+                  }
+                }, GlobalConfig.i18n('vxe.toolbar.impModeAppend'))
+              ])
             ])
           ])
         ]),

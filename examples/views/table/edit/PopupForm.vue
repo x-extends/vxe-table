@@ -36,7 +36,7 @@
           <vxe-radio v-model="formData.flag1" name="single" label="Y">是</vxe-radio>
           <vxe-radio v-model="formData.flag1" name="single" label="N">否</vxe-radio>
         </vxe-form-item>
-        <vxe-form-item title="可选信息" field="checkedList" span="24">
+        <vxe-form-item title="可选信息" field="checkedList" span="24" :visible-method="visibleMethod">
           <vxe-checkbox-group v-model="formData.checkedList">
             <vxe-checkbox label="1">运动、跑步</vxe-checkbox>
             <vxe-checkbox label="2">听音乐</vxe-checkbox>
@@ -140,7 +140,7 @@ export default {
               <vxe-radio v-model="formData.flag1" name="single" label="Y">是</vxe-radio>
               <vxe-radio v-model="formData.flag1" name="single" label="N">否</vxe-radio>
             </vxe-form-item>
-            <vxe-form-item title="可选信息" field="checkedList" span="24">
+            <vxe-form-item title="可选信息" field="checkedList" span="24" :visible-method="visibleMethod">
               <vxe-checkbox-group v-model="formData.checkedList">
                 <vxe-checkbox label="1">运动、跑步</vxe-checkbox>
                 <vxe-checkbox label="2">听音乐</vxe-checkbox>
@@ -207,6 +207,9 @@ export default {
               let item = this.sexList.find(item => item.value === cellValue)
               return item ? item.label : ''
             },
+            visibleMethod ({ data }) {
+              return data.flag1 === 'Y'
+            },
             cellDBLClickEvent ({ row }) {
               this.editEvent(row)
             },
@@ -260,6 +263,9 @@ export default {
     formatterSex ({ cellValue }) {
       let item = this.sexList.find(item => item.value === cellValue)
       return item ? item.label : ''
+    },
+    visibleMethod ({ data }) {
+      return data.flag1 === 'Y'
     },
     cellDBLClickEvent ({ row }) {
       this.editEvent(row)

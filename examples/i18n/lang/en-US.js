@@ -589,6 +589,7 @@ module.exports = {
           titleAlign: 'Title align',
           titleWidth: 'Title width',
           folding: 'Default folding',
+          visibleMethod: 'The return value of this method Function({data}) determines whether the item is displayed',
           collapseNode: 'Collapse node',
           titlePrefix: 'Title prefix config',
           titleSuffix: 'Title suffix config',

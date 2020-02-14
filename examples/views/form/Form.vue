@@ -118,8 +118,10 @@
           <vxe-input v-model="formData4.weight" placeholder="请输入体重"></vxe-input>
         </vxe-form-item>
         <vxe-form-item title="是否单身" field="single" span="8" folding>
-          <vxe-radio v-model="formData4.single" name="single" label="1">是</vxe-radio>
-          <vxe-radio v-model="formData4.single" name="single" label="0">否</vxe-radio>
+          <vxe-radio-group v-model="formData4.single">
+            <vxe-radio label="1">是</vxe-radio>
+            <vxe-radio label="0">否</vxe-radio>
+          </vxe-radio-group>
         </vxe-form-item>
         <vxe-form-item align="center" span="24" collapse-node>
           <vxe-button type="submit" status="primary">查询</vxe-button>
@@ -261,8 +263,10 @@ export default {
               <vxe-input v-model="formData4.weight" placeholder="请输入体重"></vxe-input>
             </vxe-form-item>
             <vxe-form-item title="是否单身" field="single" span="8" folding>
-              <vxe-radio v-model="formData4.single" name="single" label="1">是</vxe-radio>
-              <vxe-radio v-model="formData4.single" name="single" label="0">否</vxe-radio>
+              <vxe-radio-group v-model="formData4.single">
+                <vxe-radio label="1">是</vxe-radio>
+                <vxe-radio label="0">否</vxe-radio>
+              </vxe-radio-group>
             </vxe-form-item>
             <vxe-form-item align="center" span="24" collapse-node>
               <vxe-button type="submit" status="primary">查询</vxe-button>
