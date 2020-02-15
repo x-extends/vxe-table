@@ -99,7 +99,8 @@
         content: "*";
         color: $vxe-form-validate-error-color;
         margin-right: 0.2em;
-        font-family: SimSun, sans-serif;
+        font-family: $vxe-icon-font-family;
+        font-weight: normal;
       }
     }
   }
