@@ -1,4 +1,4 @@
-import XEUtils from 'xe-utils'
+import XEUtils from 'xe-utils/methods/xe-utils'
 
 export default {
   name: 'VxeRadioGroup',
@@ -18,7 +18,7 @@ export default {
   },
   data () {
     return {
-      name: XEUtils.uniqueId('xgroup')
+      name: XEUtils.uniqueId('xegroup_')
     }
   },
   render (h) {
