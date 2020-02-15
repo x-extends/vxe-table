@@ -7,6 +7,7 @@
   position: relative;
   direction: ltr;
   font-family: $vxe-icon-font-family;
+  font-weight: normal;
   user-select: none;
   &.rotate45 {
     transform: rotate(45deg);
@@ -310,8 +311,8 @@
 .vxe-icon--more {
   @extend %DefaultWidthHeight;
   &:before {
+    @extend %PseudoClass;
     content: "...";
-    position: absolute;
     top: 0;
     left: 0.1em;
     line-height: 0.5em;
@@ -324,10 +325,10 @@
   &:before {
     @extend %PseudoClass;
     content: "+";
-    top: 0.01em;
-    left: -0.08em;
-    font-size: 2em;
-    font-weight: normal;
+    left: -0.05em;
+    bottom: 0;
+    line-height: 0.9em;
+    font-size: 1.4em;
   }
 }
 
@@ -336,10 +337,10 @@
   &:before {
     @extend %PseudoClass;
     content: "\D7";
-    top: 0.01em;
-    left: -0.1em;
-    font-size: 2.2em;
-    font-weight: normal;
+    left: -0.05em;
+    bottom: 0;
+    line-height: 0.8em;
+    font-size: 1.4em;
   }
 }
 
@@ -347,13 +348,13 @@
   @extend %DefaultWidthHeight;
   &:before {
     @extend %PseudoClass;
+    content: "\2500";
     left: 0;
-    top: 0.42em;
-    border-width: 0 0 0.15em 0;
-    border-color: inherit;
-    border-style: solid;
-    height: 0;
+    bottom: 0;
     width: 100%;
+    text-align: center;
+    line-height: 0.9em;
+    font-size: 1.2em;
   }
 }
 
@@ -418,10 +419,12 @@
   &:after {
     @extend %PseudoClass;
     content: "\3F";
-    left: 0.25em;
-    bottom: -0.05em;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    line-height: 1.3em;
     color: #fff;
-    font-weight: 700;
     font-size: 0.8em;
   }
 }
@@ -434,10 +437,12 @@
   &:after {
     @extend %PseudoClass;
     content: "\A1";
-    left: 0.45em;
-    bottom: 0.18em;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    line-height: 1.3em;
     color: #fff;
-    font-weight: 700;
     font-size: 0.8em;
   }
 }
@@ -450,10 +455,11 @@
   &:after {
     @extend %PseudoClass;
     content: "\21";
-    left: 0.38em;
+    left: 0;
     bottom: 0;
+    width: 100%;
+    text-align: center;
     color: #fff;
-    font-weight: 700;
     font-size: 0.8em;
   }
 }
@@ -465,16 +471,11 @@
   }
   &:after {
     @extend %PseudoClass;
-    height: 0.6em;
-    width: 0.25em;
-    left: 0.35em;
-    top: 0.15em;
-    border-width: 0.1em;
-    border-style: solid;
-    border-color: #fff;
-    border-left: 0;
-    border-top: 0;
-    transform: rotate(45deg);
+    content: "\2713";
+    left: 0.25em;
+    bottom: 0;
+    color: #fff;
+    font-size: 0.65em;
   }
 }
 
@@ -486,32 +487,49 @@
   &:after {
     @extend %PseudoClass;
     content: "+";
-    top: 0;
-    left: 0.08em;
-    font-size: 1.22em;
-    font-weight: normal;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
     color: #fff;
+    line-height: 1.4em;
+    font-size: 0.8em;
   }
 }
 
 .vxe-icon--remove {
-  @extend .vxe-icon--circle-plus;
+  @extend %DefaultWidthHeight;
+  &:before {
+    @extend %BeforeSolidRadius;
+  }
   &:after {
-    content: "-";
-    top: 0.38em;
-    left: 0.22em;
-    border-width: 0 0 0.1em 0;
-    border-color: #fff;
-    border-style: solid;
-    height: 0;
-    width: 0.4em;
+    @extend %PseudoClass;
+    content: "\2500";
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    line-height: 1.5em;
+    color: #fff;
+    font-size: 0.7em;
   }
 }
 
 .vxe-icon--error {
-  @extend .vxe-icon--circle-plus;
+  @extend %DefaultWidthHeight;
+  &:before {
+    @extend %BeforeSolidRadius;
+  }
   &:after {
-    transform: rotate(45deg);
+    @extend %PseudoClass;
+    content: "\D7";
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    line-height: 1.4em;
+    text-align: center;
+    color: #fff;
+    font-size: 0.8em;
   }
 }
 
@@ -519,54 +537,44 @@
 .vxe-icon--download {
   @extend %DefaultWidthHeight;
   height: 0.9em;
-  border-width: 0;
-  border-style: solid;
-  border-color: inherit;
+  overflow: hidden;
   &:before {
     @extend %PseudoClass;
-    left: 0.47em;
-    height: 0.6em;
+    left: 0;
+    width: 1em;
     border-width: 0;
     border-style: solid;
     border-color: inherit;
-    border-right-width: 0.1em;
   }
   &:after {
     @extend %PseudoClass;
-    left: 0.23em;
-    bottom: 0.26em;
-    width: 0.6em;
-    height: 0.6em;
-    border-width: 0.1em;
-    border-style: solid;
-    transform: rotate(135deg);
+    width: 100%;
+    text-align: center;
+    font-size: 2em;
   }
 }
 
 .vxe-icon--upload {
-  border-top-width: 0.1em;
   &:before {
-    top: 0.2em;
+    top: 0;
+    border-top-width: 0.1em;
   }
   &:after {
-    top: 0.2em;
-    border-top-color: transparent;
-    border-right-color: transparent;
-    border-bottom-color: inherit;
-    border-left-color: inherit;
+    content: "\2191";
+    left: 0;
+    bottom: -0.15em;
   }
 }
 
 .vxe-icon--download {
-  border-bottom-width: 0.1em;
   &:before {
-    bottom: 0.2em;
+    bottom: 0;
+    border-bottom-width: 0.1em;
   }
   &:after {
-    bottom: 0.2em;
-    border-top-color: inherit;
-    border-right-color: inherit;
-    border-bottom-color: transparent;
-    border-left-color: transparent;
+    content: "\2191";
+    left: 0;
+    bottom: 0.1em;
+    transform: rotate(180deg);
   }
 }
