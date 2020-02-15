@@ -53,8 +53,8 @@
             <span style="color: red;" @click="showSexTip = !showSexTip">这样玩也行</span>
           </vxe-tooltip>
         </template>
-        <template v-slot:footer="{ cells, cellIndex }">
-          <span style="color: red">累计：{{ cells[cellIndex] }}</span>
+        <template v-slot:footer="{ items, itemIndex }">
+          <span style="color: red">累计：{{ items[itemIndex] }}</span>
         </template>
         <template v-slot:filter="{ column, context }">
           <template v-for="(option, index) in column.filters">
@@ -173,8 +173,8 @@ export default {
                 <span style="color: red;" @click="showSexTip = !showSexTip">这样玩也行</span>
               </vxe-tooltip>
             </template>
-            <template v-slot:footer="{ cells, cellIndex }">
-              <span style="color: red">累计：{{ cells[cellIndex] }}</span>
+            <template v-slot:footer="{ items, itemIndex }">
+              <span style="color: red">累计：{{ items[itemIndex] }}</span>
             </template>
             <template v-slot:filter="{ column, context }">
               <template v-for="(option, index) in column.filters">

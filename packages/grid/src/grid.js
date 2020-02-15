@@ -7,6 +7,14 @@ import VXETable from '../../v-x-e-table'
 const methods = {}
 const propKeys = Object.keys(Table.props)
 
+function getOffsetHeight (elem) {
+  return elem ? elem.offsetHeight : 0
+}
+
+function getRefHeight (comp) {
+  return getOffsetHeight(comp ? comp.$el : null)
+}
+
 function renderFormContent (h, _vm) {
   const { $scopedSlots, proxyConfig, proxyOpts, formData, formConfig, formOpts } = _vm
   if ($scopedSlots.form) {
@@ -117,7 +125,8 @@ export default {
       return [ 'vxe-grid', {
         [`size--${vSize}`]: vSize,
         't--animat': tableProps.optimization.animat,
-        'is--maximize': maximize
+        'is--maximize': maximize,
+        'is--loading': this.loading || this.tableLoading
       }]
     },
     renderStyle () {
@@ -170,16 +179,8 @@ export default {
       }
       return ons
     },
-    toolbarProps () {
-      return Object.assign({
-        loading: this.loading || this.tableLoading
-      }, this.toolbarOpts)
-    },
     pagerProps () {
-      return Object.assign({
-        size: this.vSize,
-        loading: this.loading || this.tableLoading
-      }, this.pagerOpts, this.proxyConfig ? this.tablePage : {})
+      return Object.assign({}, this.pagerOpts, this.proxyConfig ? this.tablePage : {})
     }
   },
   watch: {
@@ -229,18 +230,23 @@ export default {
        */
       this.formConfig ? h('div', {
         ref: 'form',
-        class: ['vxe-form--wrapper', {
-          'is--loading': this.loading || this.tableLoading
-        }]
+        class: 'vxe-form--wrapper'
       }, renderFormContent(h, this)) : null,
       /**
        * 渲染工具栏
        */
       this.toolbar ? h('vxe-toolbar', {
         ref: 'toolbar',
-        props: this.toolbarProps,
+        props: this.toolbarOpts,
         scopedSlots: this.toolbarSlots
       }) : null,
+      /**
+       * 渲染表格顶部区域
+       */
+      $scopedSlots.top ? h('div', {
+        ref: 'top',
+        class: 'vxe-top--wrapper'
+      }, $scopedSlots.top.call(this, { $grid: this }, h)) : null,
       /**
        * 渲染表格
        */
@@ -250,6 +256,13 @@ export default {
         scopedSlots: $scopedSlots,
         ref: 'xTable'
       }, this.$slots.default),
+      /**
+       * 渲染表格底部区域
+       */
+      $scopedSlots.bottom ? h('div', {
+        ref: 'bottom',
+        class: 'vxe-bottom--wrapper'
+      }, $scopedSlots.bottom.call(this, { $grid: this }, h)) : null,
       /**
        * 渲染分页
        */
@@ -271,8 +284,11 @@ export default {
      * 获取需要排除的高度
      */
     getExcludeHeight () {
-      let { form: formElem, toolbar, pager } = this.$refs
-      return (formElem ? formElem.offsetHeight : 0) + (toolbar && toolbar.$el ? toolbar.$el.offsetHeight : 0) + (pager && pager.$el ? pager.$el.offsetHeight : 0)
+      let { form: formElem, toolbar, top, bottom, pager } = this.$refs
+      let computedStyle = getComputedStyle(this.$el)
+      let paddingTop = XEUtils.toNumber(computedStyle.paddingTop)
+      let paddingBottom = XEUtils.toNumber(computedStyle.paddingBottom)
+      return paddingTop + paddingBottom + getOffsetHeight(formElem) + getRefHeight(toolbar) + getOffsetHeight(top) + getOffsetHeight(bottom) + getRefHeight(pager)
     },
     handleRowClassName (params) {
       let rowClassName = this.rowClassName

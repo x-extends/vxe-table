@@ -269,6 +269,24 @@ const apis = [
         list: []
       },
       {
+        name: 'top',
+        desc: '表格顶部模板',
+        version: '1.15.19',
+        type: '',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'bottom',
+        desc: '表格底部模板',
+        version: '1.15.19',
+        type: '',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'pager',
         desc: '只对 pager-config 配置时有效，分页模板',
         version: '1.15.18',
@@ -293,6 +311,15 @@ const apis = [
         type: '',
         enum: '',
         defVal: '',
+        list: []
+      },
+      {
+        name: 'empty',
+        desc: '空数据时显示的文本内容',
+        version: '',
+        type: '',
+        enum: '',
+        defVal: '暂无数据',
         list: []
       }
     ]
