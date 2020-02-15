@@ -33,19 +33,18 @@
     vertical-align: middle;
     width: 0.85em;
     height: 1em;
+    line-height: 1em;
     font-family: $vxe-icon-font-family;
     font-weight: normal;
     position: relative;
     &:before {
       content: "*";
       position: absolute;
-      line-height: 1em;
       left: 0;
     }
   }
   .vxe-edit-icon {
     margin-right: 0.2em;
-    vertical-align: middle;
   }
   .vxe-resizable {
     position: absolute;
