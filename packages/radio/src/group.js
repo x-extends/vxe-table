@@ -18,7 +18,7 @@ export default {
   },
   data () {
     return {
-      name: XEUtils.uniqueId('xgroup')
+      name: XEUtils.uniqueId('xegroup_')
     }
   },
   render (h) {

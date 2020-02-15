@@ -33,8 +33,10 @@
         <vxe-form-item title="Sex" field="sex" span="12" :item-render="{name: 'select', options: sexList}"></vxe-form-item>
         <vxe-form-item title="Age" field="age" span="12" :item-render="{name: 'input', attrs: {type: 'number', placeholder: '请输入年龄'}}"></vxe-form-item>
         <vxe-form-item title="是否单身" field="flag1" span="12">
-          <vxe-radio v-model="formData.flag1" name="single" label="Y">是</vxe-radio>
-          <vxe-radio v-model="formData.flag1" name="single" label="N">否</vxe-radio>
+          <vxe-radio-group v-model="formData.flag1">
+            <vxe-radio label="Y">是</vxe-radio>
+            <vxe-radio label="N">否</vxe-radio>
+          </vxe-radio-group>
         </vxe-form-item>
         <vxe-form-item title="可选信息" field="checkedList" span="24" :visible-method="visibleMethod">
           <vxe-checkbox-group v-model="formData.checkedList">
@@ -137,8 +139,10 @@ export default {
             <vxe-form-item title="Sex" field="sex" span="12" :item-render="{name: 'select', options: sexList}"></vxe-form-item>
             <vxe-form-item title="Age" field="age" span="12" :item-render="{name: 'input', attrs: {type: 'number', placeholder: '请输入年龄'}}"></vxe-form-item>
             <vxe-form-item title="是否单身" field="flag1" span="12">
-              <vxe-radio v-model="formData.flag1" name="single" label="Y">是</vxe-radio>
-              <vxe-radio v-model="formData.flag1" name="single" label="N">否</vxe-radio>
+              <vxe-radio-group v-model="formData.flag1">
+                <vxe-radio label="Y">是</vxe-radio>
+                <vxe-radio label="N">否</vxe-radio>
+              </vxe-radio-group>
             </vxe-form-item>
             <vxe-form-item title="可选信息" field="checkedList" span="24" :visible-method="visibleMethod">
               <vxe-checkbox-group v-model="formData.checkedList">
