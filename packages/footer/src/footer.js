@@ -123,14 +123,14 @@ export default {
             let tfOns = {}
             // 确保任何情况下 columnIndex 都精准指向真实列索引
             let columnIndex = getColumnIndex(column)
-            let cellIndex = $xetable.tableColumn.indexOf(column)
-            let params = { $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, cellIndex, cells: list, fixed: fixedType, data: footerData }
+            let itemIndex = $xetable.tableColumn.indexOf(column)
+            let params = { $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, itemIndex, items: list, fixed: fixedType, data: footerData }
             if (showTitle || showTooltip) {
               tfOns.mouseenter = evnt => {
                 if (showTitle) {
                   DomTools.updateCellTitle(evnt)
                 } else if (showTooltip) {
-                  $xetable.triggerFooterTooltipEvent(evnt, { $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, cellIndex, cells: list, fixed: fixedType, data: footerData, cell: evnt.currentTarget })
+                  $xetable.triggerFooterTooltipEvent(evnt, { $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, itemIndex, items: list, fixed: fixedType, data: footerData, cell: evnt.currentTarget })
                 }
               }
             }
@@ -143,12 +143,12 @@ export default {
             }
             if (tableListeners['header-cell-click']) {
               tfOns.click = evnt => {
-                UtilTools.emitEvent($xetable, 'header-cell-click', [{ $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, cellIndex, cells: list, fixed: fixedType, data: footerData, cell: evnt.currentTarget }, evnt])
+                UtilTools.emitEvent($xetable, 'header-cell-click', [{ $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, itemIndex, items: list, fixed: fixedType, data: footerData, cell: evnt.currentTarget }, evnt])
               }
             }
             if (tableListeners['header-cell-dblclick']) {
               tfOns.dblclick = evnt => {
-                UtilTools.emitEvent($xetable, 'header-cell-dblclick', [{ $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, cellIndex, cells: list, fixed: fixedType, data: footerData, cell: evnt.currentTarget }, evnt])
+                UtilTools.emitEvent($xetable, 'header-cell-dblclick', [{ $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, itemIndex, items: list, fixed: fixedType, data: footerData, cell: evnt.currentTarget }, evnt])
               }
             }
             // 合并行或列

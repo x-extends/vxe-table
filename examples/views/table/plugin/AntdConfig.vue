@@ -12,7 +12,12 @@
       :data="tableData"
       :columns="tableColumn"
       :toolbar="tableToolbar"
-      :edit-config="{trigger: 'click', mode: 'row'}">
+      :edit-config="{trigger: 'click', mode: 'row'}"
+      @checkbox-change="checkboxChangeEvent"
+      @checkbox-all="checkboxChangeEvent">
+      <template v-slot:top>
+        <a-alert type="warning" :message="`已选择 ${selectRecords.length} 项`" banner></a-alert>
+      </template>
       <template v-slot:buttons>
         <el-button @click="insertEvent">新增</el-button>
         <el-button @click="saveEvent">保存</el-button>
@@ -37,6 +42,7 @@ export default {
     return {
       loading: false,
       tableData: [],
+      selectRecords: [],
       tableColumn: [
         { type: 'checkbox', width: 60 },
         { type: 'seq', title: 'Number', width: 80 },
@@ -70,7 +76,13 @@ export default {
           :loading="loading"
           :data="tableData"
           :columns="tableColumn"
-          :edit-config="{trigger: 'click', mode: 'row'}">
+          :toolbar="tableToolbar"
+          :edit-config="{trigger: 'click', mode: 'row'}"
+          @checkbox-change="checkboxChangeEvent"
+          @checkbox-all="checkboxChangeEvent">
+          <template v-slot:top>
+            <a-alert type="warning" :message="\`已选择 \${selectRecords.length} 项\`" banner></a-alert>
+          </template>
           <template v-slot:buttons>
             <el-button @click="insertEvent">新增</el-button>
             <el-button @click="saveEvent">保存</el-button>
@@ -83,6 +95,7 @@ export default {
             return {
               loading: false,
               tableData: [],
+              selectRecords: [],
               tableColumn: [
                 { type: 'checkbox', width: 60 },
                 { type: 'seq', title: 'Number', width: 80 },
@@ -208,6 +221,9 @@ export default {
             roleSearchEvent ({ row }, value) {
               let dataSource = this.restaurants.filter(option => option.toUpperCase().indexOf((value || '').toUpperCase()) !== -1)
               this.tableColumn[3].editRender.props.dataSource = dataSource
+            },
+            checkboxChangeEvent () {
+              this.selectRecords = this.$refs.xGrid.getCheckboxRecords()
             }
           }
         }
@@ -321,6 +337,9 @@ export default {
     roleSearchEvent ({ row }, value) {
       let dataSource = this.restaurants.filter(option => option.toUpperCase().indexOf((value || '').toUpperCase()) !== -1)
       this.tableColumn[3].editRender.props.dataSource = dataSource
+    },
+    checkboxChangeEvent () {
+      this.selectRecords = this.$refs.xGrid.getCheckboxRecords()
     }
   }
 }

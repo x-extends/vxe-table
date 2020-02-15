@@ -1,13 +1,31 @@
 /**Variable**/
 
 .vxe-grid {
+  &.is--loading {
+    &:before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 99;
+      user-select: none;
+      background-color: $vxe-loading-background-color;
+    }
+    & > .vxe-table {
+      .vxe-loading {
+        background-color: transparent;
+      }
+    }
+  }
   &.is--maximize {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    padding: 0 1em;
+    padding: 0.5em 1em;
     background-color: #fff;
   }
   .vxe-body--row {
@@ -30,21 +48,15 @@
       }
     }
   }
-  .vxe-form--wrapper {
+  .vxe-form--wrapper,
+  .vxe-top--wrapper,
+  .vxe-bottom--wrapper  {
     position: relative;
-    margin-top: 0.5em;
-    &.is--loading {
-      &:before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: 1;
-        user-select: none;
-        background-color: $vxe-loading-background-color;
-      }
-    }
+  }
+  .vxe-top--wrapper {
+    padding-bottom: 0.8em;
+  }
+  .vxe-bottom--wrapper {
+    padding-top: 0.8em;
   }
 }

@@ -95,7 +95,7 @@ export const Cell = {
     return Cell.renderTreeIcon(h, params, Cell.renderDefaultCell.call(this, h, params))
   },
   renderDefaultFooter (h, params) {
-    let { $table, column, cellIndex, cells } = params
+    let { $table, column, itemIndex, items } = params
     let { slots, own } = column
     let renderOpts = own.editRender || own.cellRender
     if (slots && slots.footer) {
@@ -107,7 +107,7 @@ export const Cell = {
         return compConf.renderFooter.call($table, h, renderOpts, params, { $grid: $table.$xegrid, $excel: $table.$parent, $table })
       }
     }
-    return [UtilTools.formatText(cells[cellIndex], 1)]
+    return [UtilTools.formatText(items[itemIndex], 1)]
   },
 
   /**

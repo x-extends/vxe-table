@@ -12,7 +12,12 @@
       :data="tableData"
       :columns="tableColumn"
       :toolbar="tableToolbar"
-      :edit-config="{trigger: 'click', mode: 'row'}">
+      :edit-config="{trigger: 'click', mode: 'row'}"
+      @checkbox-change="checkboxChangeEvent"
+      @checkbox-all="checkboxChangeEvent">
+      <template v-slot:top>
+        <el-alert type="warning" :title="`已选择 ${selectRecords.length} 项`" :closable="false" show-icon></el-alert>
+      </template>
       <template v-slot:buttons>
         <el-button @click="insertEvent">新增</el-button>
         <el-button @click="saveEvent">保存</el-button>
@@ -37,6 +42,7 @@ export default {
     return {
       loading: false,
       tableData: [],
+      selectRecords: [],
       tableColumn: [
         { type: 'checkbox', width: 60 },
         { type: 'seq', title: 'Number', width: 80 },
@@ -72,7 +78,12 @@ export default {
           :data="tableData"
           :columns="tableColumn"
           :toolbar="tableToolbar"
-          :edit-config="{trigger: 'click', mode: 'row'}">
+          :edit-config="{trigger: 'click', mode: 'row'}"
+          @checkbox-change="checkboxChangeEvent"
+          @checkbox-all="checkboxChangeEvent">
+          <template v-slot:top>
+            <el-alert type="warning" :title="\`已选择 \${selectRecords.length} 项\`" :closable="false" show-icon></el-alert>
+          </template>
           <template v-slot:buttons>
             <el-button @click="insertEvent">新增</el-button>
             <el-button @click="saveEvent">保存</el-button>
@@ -85,6 +96,7 @@ export default {
             return {
               loading: false,
               tableData: [],
+              selectRecords: [],
               tableColumn: [
                 { type: 'checkbox', width: 60 },
                 { type: 'seq', title: 'Number', width: 80 },
@@ -187,6 +199,9 @@ export default {
               return (state) => {
                 return (state.name.toLowerCase().indexOf(queryString.toLowerCase()) === 0)
               }
+            },
+            checkboxChangeEvent () {
+              this.selectRecords = this.$refs.xGrid.getCheckboxRecords()
             }
           }
         }
@@ -276,6 +291,9 @@ export default {
       return (state) => {
         return (state.name.toLowerCase().indexOf(queryString.toLowerCase()) === 0)
       }
+    },
+    checkboxChangeEvent () {
+      this.selectRecords = this.$refs.xGrid.getCheckboxRecords()
     }
   }
 }

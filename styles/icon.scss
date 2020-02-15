@@ -6,7 +6,7 @@
   vertical-align: middle;
   position: relative;
   direction: ltr;
-  font-family: $vxe-font-family;
+  font-family: $vxe-icon-font-family;
   user-select: none;
   &.rotate45 {
     transform: rotate(45deg);
@@ -449,9 +449,9 @@
   }
   &:after {
     @extend %PseudoClass;
-    content: "\FF01";
-    left: 0.24em;
-    bottom: -0.06em;
+    content: "\21";
+    left: 0.38em;
+    bottom: 0;
     color: #fff;
     font-weight: 700;
     font-size: 0.8em;

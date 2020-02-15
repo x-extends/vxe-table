@@ -259,6 +259,24 @@ const apis = [
         list: []
       },
       {
+        name: 'top',
+        desc: '表格顶部模板',
+        version: '2.8',
+        type: '',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'bottom',
+        desc: '表格底部模板',
+        version: '2.8',
+        type: '',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'pager',
         desc: '只对 pager-config 配置时有效，分页模板',
         version: '2.7.19',
@@ -270,7 +288,7 @@ const apis = [
       {
         name: 'buttons',
         desc: '只对 toolbar 配置时有效，工具栏按钮列表模板',
-        version: '',
+        version: '2.7.15',
         type: '',
         enum: '',
         defVal: '',
@@ -283,6 +301,15 @@ const apis = [
         type: '',
         enum: '',
         defVal: '',
+        list: []
+      },
+      {
+        name: 'empty',
+        desc: '空数据时显示的文本内容',
+        version: '',
+        type: '',
+        enum: '',
+        defVal: '暂无数据',
         list: []
       }
     ]
