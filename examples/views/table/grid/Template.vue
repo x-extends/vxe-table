@@ -11,6 +11,10 @@
       工具栏：<br>
       <grid-api-link prop="buttons"/>：自定义按钮模板（建议使用<router-link class="link" :to="{name: 'RendererToolbar'}">渲染器</router-link>，可以更好的复用）<br>
       <grid-api-link prop="tools"/>：自定义右侧按钮模板（建议使用<router-link class="link" :to="{name: 'RendererToolbar'}">渲染器</router-link>，可以更好的复用）<br>
+      顶部：<br>
+      <grid-api-link prop="top"/>：自定义顶部模板<br>
+      底部：<br>
+      <grid-api-link prop="bottom"/>：自定义底部模板<br>
     </p>
 
     <vxe-grid
@@ -44,6 +48,14 @@
             <vxe-button>查询</vxe-button>
           </vxe-form-item>
         </vxe-form>
+      </template>
+
+      <!--使用 top 插槽-->
+      <template v-slot:top>
+        <div class="alert-message">
+          <i class="fa fa-exclamation-circle alert-message-icon"></i>
+          <span>可以在这里自定义顶部模板</span>
+        </div>
       </template>
 
       <!--使用 buttons 插槽-->
@@ -84,7 +96,8 @@
 
     <pre>
       <code class="xml">{{ demoCodes[0] }}</code>
-      <code class="vue">{{ demoCodes[1] }}</code>
+      <code class="javascript">{{ demoCodes[1] }}</code>
+      <code class="css">{{ demoCodes[2] }}</code>
     </pre>
   </div>
 </template>
@@ -259,6 +272,14 @@ export default {
                 <vxe-button>查询</vxe-button>
               </vxe-form-item>
             </vxe-form>
+          </template>
+
+          <!--使用 top 插槽-->
+          <template v-slot:top>
+            <div class="alert-message">
+              <i class="fa fa-exclamation-circle alert-message-icon"></i>
+              <span>可以在这里自定义顶部模板</span>
+            </div>
           </template>
 
           <!--使用 buttons 插槽-->
@@ -469,6 +490,16 @@ export default {
         }
         `,
         `
+        .alert-message {
+          padding: 8px 15px;
+          border-radius: 4px;
+          background-color: #e6f7ff;
+          border: 1px solid #91d5ff;
+        }
+        .alert-message-icon {
+          color: #409eff;
+          margin-right: 8px;
+        }
         .first-col {
           position: relative;
           height: 20px;
@@ -541,6 +572,16 @@ export default {
 </script>
 
 <style scoped>
+.alert-message {
+  padding: 8px 15px;
+  border-radius: 4px;
+  background-color: #e6f7ff;
+  border: 1px solid #91d5ff;
+}
+.alert-message-icon {
+  color: #409eff;
+  margin-right: 8px;
+}
 .first-col {
   position: relative;
   height: 20px;
