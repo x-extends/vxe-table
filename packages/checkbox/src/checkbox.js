@@ -9,7 +9,7 @@ export default {
     size: String
   },
   inject: {
-    $vxegroup: {
+    $xegroup: {
       default: null
     }
   },
@@ -18,11 +18,11 @@ export default {
       return this.size || this.$parent.size || this.$parent.vSize
     },
     isGroup () {
-      return this.$vxegroup
+      return this.$xegroup
     }
   },
   render (h) {
-    let { $vxegroup, isGroup, disabled, title, vSize, indeterminate, value, label } = this
+    let { $xegroup, isGroup, disabled, title, vSize, indeterminate, value, label } = this
     let attrs = {}
     if (title) {
       attrs.title = title
@@ -41,14 +41,14 @@ export default {
           disabled
         },
         domProps: {
-          checked: isGroup ? ($vxegroup.value && $vxegroup.value.some(item => item === label)) : value
+          checked: isGroup ? ($xegroup.value && $xegroup.value.some(item => item === label)) : value
         },
         on: {
           change: evnt => {
             if (!this.disabled) {
               let checked = evnt.target.checked
               if (isGroup) {
-                $vxegroup.handleChecked({ checked, label }, evnt)
+                $xegroup.handleChecked({ checked, label }, evnt)
               } else {
                 this.$emit('input', checked)
                 this.$emit('change', checked, evnt)

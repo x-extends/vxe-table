@@ -8,7 +8,7 @@ export default {
   },
   provide () {
     return {
-      $vxegroup: this
+      $xegroup: this
     }
   },
   computed: {

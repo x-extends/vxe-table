@@ -9,7 +9,7 @@ export default {
     size: String
   },
   inject: {
-    $vxegroup: {
+    $xegroup: {
       default: null
     }
   },
@@ -18,11 +18,11 @@ export default {
       return this.size || this.$parent.size || this.$parent.vSize
     },
     isGroup () {
-      return this.$vxegroup
+      return this.$xegroup
     }
   },
   render (h) {
-    let { $slots, $vxegroup, isGroup, disabled, title, vSize, value, label, name } = this
+    let { $slots, $xegroup, isGroup, disabled, title, vSize, value, label, name } = this
     let attrs = {}
     if (title) {
       attrs.title = title
@@ -37,17 +37,17 @@ export default {
       h('input', {
         attrs: {
           type: 'radio',
-          name: isGroup ? $vxegroup.name : name,
+          name: isGroup ? $xegroup.name : name,
           disabled
         },
         domProps: {
-          checked: isGroup ? $vxegroup.value === label : value === label
+          checked: isGroup ? $xegroup.value === label : value === label
         },
         on: {
           change: evnt => {
             if (!disabled) {
               if (isGroup) {
-                $vxegroup.handleChecked({ label }, evnt)
+                $xegroup.handleChecked({ label }, evnt)
               } else {
                 this.$emit('input', label)
                 this.$emit('change', label, evnt)
