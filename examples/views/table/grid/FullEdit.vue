@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="tip">
-      查询代理<a class="link" href="https://github.com/xuliangzhan/vxe-table-demo/tree/master/vxe-table-by-vue-grid-proxy">（配置式代理项目示例）</a>、服务端排序代理、服务端筛选代理、分页代理、增删改查<br>
+      增删改查代理<a class="link" href="https://github.com/xuliangzhan/vxe-table-demo/tree/master/vxe-table-by-vue-grid-proxy">（配置式代理项目示例）</a>、服务端排序代理、服务端筛选代理、分页代理、增删改查<br>
       还可以通过配置 <grid-api-link prop="form-config"/> 实现动态表单，还可以通过 <grid-api-link prop="titlePrefix"/> 或 <grid-api-link prop="titleSuffix"/> 设置标题提示信息<br>
       对于分页场景下，如果想要保留选中状态，可以通过设置 <table-api-link prop="checkbox-config"/> 的 <table-api-link prop="reserve"/> 属性<br>
       还可以通过 <toolbar-api-link prop="checkMethod"/> 设置个性化列禁止勾选<br>
@@ -17,7 +17,7 @@
       export-config
       keep-source
       ref="xGrid"
-      height="530"
+      height="600"
       row-id="id"
       :sort-config="{trigger: 'cell'}"
       :filter-config="{remote: true}"
@@ -43,6 +43,7 @@
 
 <script>
 import XEAjax from 'xe-ajax'
+import XEUtils from 'xe-utils'
 import hljs from 'highlight.js'
 
 export default {
@@ -59,19 +60,18 @@ export default {
         ]
       },
       tablePage: {
-        pageSize: 15,
-        pageSizes: [5, 15, 20, 50, 100, 200, 500, 1000]
+        pageSize: 10,
+        pageSizes: [5, 10, 15, 20, 50, 100, 200, 500, 1000]
       },
       tableForm: {
         titleWidth: 100,
         titleAlign: 'right',
         items: [
           { field: 'name', title: 'app.body.label.name', span: 8, titlePrefix: { message: 'app.body.valid.rName', icon: 'fa fa-exclamation-circle' }, itemRender: { name: 'input', attrs: { placeholder: '请输入名称' } } },
+          { field: 'role', title: '角色', span: 8, folding: true, itemRender: { name: 'input', attrs: { placeholder: '请输入角色' } } },
           { field: 'nickname', title: '昵称', span: 8, itemRender: { name: 'input', attrs: { placeholder: '请输入昵称' } } },
           { field: 'sex', title: '性别', span: 8, titleSuffix: { message: '注意，必填信息！', icon: 'fa fa-info-circle' }, itemRender: { name: 'select', options: [] } },
-          { field: 'role', title: '角色', span: 8, folding: true, itemRender: { name: 'input', attrs: { placeholder: '请输入角色' } } },
           { field: 'age', title: '年龄', span: 8, folding: true, itemRender: { name: 'input', attrs: { type: 'number', placeholder: '请输入年龄' } } },
-          { field: 'describe', title: '描述', span: 8, folding: true, itemRender: { name: 'input', attrs: { placeholder: '请输入描述' } } },
           { span: 24, align: 'center', collapseNode: true, itemRender: { name: 'FormItemButtonGroup' } }
         ]
       },
@@ -92,28 +92,18 @@ export default {
             filters.forEach(({ column, property, values }) => {
               queryParams[property] = values.join(',')
             })
-            return XEAjax.get(`/api/user/page/list/${page.pageSize}/${page.currentPage}`, queryParams)
+            return XEAjax.get(`https://api.xuliangzhan.com:10443/api/user/page/list/${page.pageSize}/${page.currentPage}`, queryParams)
           },
-          delete: ({ body }) => XEAjax.post('/api/user/save', body),
-          save: ({ body }) => XEAjax.post('/api/user/save', body)
+          delete: ({ body }) => XEAjax.post('https://api.xuliangzhan.com:10443/api/user/save', body),
+          save: ({ body }) => XEAjax.post('https://api.xuliangzhan.com:10443/api/user/save', body)
         }
       },
       tableToolbar: {
         id: 'full_edit_1',
-        name: 'myToolbar',
         buttons: [
-          { code: 'insert_actived', name: '新增', icon: 'fa fa-plus', disabled: false },
-          {
-            code: 'mark_cancel',
-            name: 'app.body.button.markCancel',
-            icon: 'fa fa-bookmark-o',
-            disabled: false,
-            dropdowns: [
-              { code: 'delete_selection', icon: 'fa fa-trash-o', name: 'app.body.button.deleteSelectedRecords', disabled: false },
-              { code: 'remove_selection', icon: 'fa fa-remove', name: '移除数据', disabled: false }
-            ]
-          },
-          { code: 'save', name: 'app.body.button.save', icon: 'fa fa-save', disabled: false }
+          { code: 'insert_actived', name: '新增', icon: 'fa fa-plus' },
+          { code: 'mark_cancel', name: '删除/取消', icon: 'fa fa-trash-o' },
+          { code: 'save', name: 'app.body.button.save', icon: 'fa fa-save' }
         ],
         refresh: true,
         import: true,
@@ -130,14 +120,10 @@ export default {
       tableColumn: [
         { type: 'checkbox', title: 'ID', width: 120 },
         { field: 'name', title: 'Name', remoteSort: true, editRender: { name: 'input' } },
-        { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
-        { field: 'sex', title: 'Sex', editRender: { name: 'select', options: [] } },
-        { field: 'age', title: 'Age', visible: false, editRender: { name: 'input', attrs: { type: 'number' } } },
         {
           field: 'role',
           title: 'Role',
           remoteSort: true,
-          width: 200,
           filters: [
             { label: '前端开发', value: '前端' },
             { label: '后端开发', value: '后端' },
@@ -147,7 +133,11 @@ export default {
           filterMultiple: false,
           editRender: { name: 'input' }
         },
-        { field: 'describe', title: 'Describe', showOverflow: true, editRender: { name: 'input' } }
+        { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
+        { field: 'sex', title: 'Sex', editRender: { name: 'select', options: [] } },
+        { field: 'age', title: 'Age', remoteSort: true, editRender: { name: 'input', attrs: { type: 'number' } } },
+        { field: 'updateDate', title: 'Update Date', width: 160, visible: false, remoteSort: true, formatter: this.formatDate },
+        { field: 'createDate', title: 'Create Date', width: 160, visible: false, remoteSort: true, formatter: this.formatDate }
       ],
       demoCodes: [
         `
@@ -172,7 +162,7 @@ export default {
           export-config
           keep-source
           ref="xGrid"
-          height="530"
+          height="600"
           row-id="id"
           :sort-config="{trigger: 'cell'}"
           :filter-config="{remote: true}"
@@ -201,19 +191,18 @@ export default {
                 ]
               },
               tablePage: {
-                pageSize: 15,
-                pageSizes: [5, 15, 20, 50, 100, 200, 500, 1000]
+                pageSize: 10,
+                pageSizes: [5, 10, 15, 20, 50, 100, 200, 500, 1000]
               },
               tableForm: {
                 titleWidth: 100,
                 titleAlign: 'right',
                 items: [
                   { field: 'name', title: 'app.body.label.name', span: 8, titlePrefix: { message: 'app.body.valid.rName', icon: 'fa fa-exclamation-circle' }, itemRender: { name: 'input', attrs: { placeholder: '请输入名称' } } },
+                  { field: 'role', title: '角色', span: 8, folding: true, itemRender: { name: 'input', attrs: { placeholder: '请输入角色' } } },
                   { field: 'nickname', title: '昵称', span: 8, itemRender: { name: 'input', attrs: { placeholder: '请输入昵称' } } },
                   { field: 'sex', title: '性别', span: 8, titleSuffix: { message: '注意，必填信息！', icon: 'fa fa-info-circle' }, itemRender: { name: 'select', options: [] } },
-                  { field: 'role', title: '角色', span: 8, folding: true, itemRender: { name: 'input', attrs: { placeholder: '请输入角色' } } },
                   { field: 'age', title: '年龄', span: 8, folding: true, itemRender: { name: 'input', attrs: { type: 'number', placeholder: '请输入年龄' } } },
-                  { field: 'describe', title: '描述', span: 8, folding: true, itemRender: { name: 'input', attrs: { placeholder: '请输入描述' } } },
                   { span: 24, align: 'center', collapseNode: true, itemRender: { name: 'FormItemButtonGroup' } }
                 ]
               },
@@ -234,27 +223,18 @@ export default {
                     filters.forEach(({ column, property, values }) => {
                       queryParams[property] = values.join(',')
                     })
-                    return XEAjax.get(\`/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`, queryParams)
+                    return XEAjax.get(\`https://api.xuliangzhan.com:10443/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`, queryParams)
                   },
-                  delete: ({ body }) => XEAjax.post('/api/user/save', body),
-                  save: ({ body }) => XEAjax.post('/api/user/save', body)
+                  delete: ({ body }) => XEAjax.post('https://api.xuliangzhan.com:10443/api/user/save', body),
+                  save: ({ body }) => XEAjax.post('https://api.xuliangzhan.com:10443/api/user/save', body)
                 }
               },
               tableToolbar: {
                 id: 'full_edit_1',
                 buttons: [
-                  { code: 'insert_actived', name: '新增', icon: 'fa fa-plus', disabled: false },
-                  {
-                    code: 'mark_cancel',
-                    name: 'app.body.button.markCancel',
-                    icon: 'fa fa-bookmark-o',
-                    disabled: false,
-                    dropdowns: [
-                      { code: 'delete_selection', icon: 'fa fa-trash-o', name: 'app.body.button.deleteSelectedRecords', disabled: false },
-                      { code: 'remove_selection', icon: 'fa fa-remove', name: '移除数据', disabled: false }
-                    ]
-                  },
-                  { code: 'save', name: 'app.body.button.save', icon: 'fa fa-save', disabled: false }
+                  { code: 'insert_actived', name: '新增', icon: 'fa fa-plus' },
+                  { code: 'mark_cancel', name: '删除/取消', icon: 'fa fa-trash-o' },
+                  { code: 'save', name: 'app.body.button.save', icon: 'fa fa-save' }
                 ],
                 refresh: true,
                 import: true,
@@ -271,14 +251,10 @@ export default {
               tableColumn: [
                 { type: 'checkbox', title: 'ID', width: 120 },
                 { field: 'name', title: 'Name', remoteSort: true, editRender: { name: 'input' } },
-                { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
-                { field: 'sex', title: 'Sex', editRender: { name: 'select', options: [] } },
-                { field: 'age', title: 'Age', visible: false, editRender: { name: 'input', attrs: { type: 'number' } } },
                 {
                   field: 'role',
                   title: 'Role',
                   remoteSort: true,
-                  width: 200,
                   filters: [
                     { label: '前端开发', value: '前端' },
                     { label: '后端开发', value: '后端' },
@@ -288,7 +264,11 @@ export default {
                   filterMultiple: false,
                   editRender: { name: 'input' }
                 },
-                { field: 'describe', title: 'Describe', showOverflow: true, editRender: { name: 'input' } }
+                { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
+                { field: 'sex', title: 'Sex', editRender: { name: 'select', options: [] } },
+                { field: 'age', title: 'Age', remoteSort: true, editRender: { name: 'input', attrs: { type: 'number' } } },
+                { field: 'updateDate', title: 'Update Date', width: 160, visible: false, remoteSort: true, formatter: this.formatDate },
+                { field: 'createDate', title: 'Create Date', width: 160, visible: false, remoteSort: true, formatter: this.formatDate }
               ]
             }
           },
@@ -300,8 +280,11 @@ export default {
               const sexList = await XEAjax.get('/api/conf/sex/list')
               // 异步更新下拉选项
               this.sexList = sexList
-              this.tableColumn[3].editRender.options = sexList
+              this.tableColumn[4].editRender.options = sexList
               this.tableForm.items[2].itemRender.options = sexList
+            },
+            formatDate ({ cellValue }) {
+              return XEUtils.toDateString(cellValue, 'yyyy-MM-dd HH:ss:mm')
             },
             checkColumnMethod ({ column }) {
               if (['nickname', 'role'].includes(column.property)) {
@@ -328,8 +311,11 @@ export default {
       const sexList = await XEAjax.get('/api/conf/sex/list')
       // 异步更新下拉选项
       this.sexList = sexList
-      this.tableColumn[3].editRender.options = sexList
+      this.tableColumn[4].editRender.options = sexList
       this.tableForm.items[2].itemRender.options = sexList
+    },
+    formatDate ({ cellValue }) {
+      return XEUtils.toDateString(cellValue, 'yyyy-MM-dd HH:ss:mm')
     },
     checkColumnMethod ({ column }) {
       if (['nickname', 'role'].includes(column.property)) {

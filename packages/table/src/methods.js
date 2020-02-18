@@ -17,7 +17,7 @@ const headerProps = {
  * 生成行的唯一主键
  */
 function getRowUniqueId () {
-  return `xerow_${++rowUniqueId}`
+  return `row_${++rowUniqueId}`
 }
 
 function isTargetRadioOrCheckbox (evnt, column, colType, targetType) {

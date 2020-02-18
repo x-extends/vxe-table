@@ -116,7 +116,7 @@ export default {
       return Object.assign({}, GlobalConfig.toolbar.zoom, this.zoom)
     },
     customOpts () {
-      return Object.assign({ storageKey: 'VXE_TABLE_CUSTOM_COLUMN_HIDDEN' }, GlobalConfig.toolbar.custom || GlobalConfig.toolbar.setting, this.custom || this.setting)
+      return Object.assign({ storageKey: 'VXE_TABLE_CUSTOM_COLUMN_VISIBLE' }, GlobalConfig.toolbar.custom || GlobalConfig.toolbar.setting, this.custom || this.setting)
     }
   },
   created () {
@@ -369,13 +369,23 @@ export default {
           }
         }
         if (customOpts.storage) {
-          let columnHideStorage = this.getStorageMap(customOpts.storageKey)[id]
-          if (columnHideStorage) {
-            columnHideStorage.split(',').forEach(field => {
+          let columnVisibleStorage = this.getStorageMap(customOpts.storageKey)[id]
+          if (columnVisibleStorage) {
+            const colVisibles = columnVisibleStorage.split('|')
+            const colHides = colVisibles[0] ? colVisibles[0].split(',') : []
+            const colShows = colVisibles[1] ? colVisibles[1].split(',') : []
+            colHides.forEach(field => {
               if (customMap[field]) {
                 customMap[field].visible = false
               } else {
                 customMap[field] = { field, visible: false }
+              }
+            })
+            colShows.forEach(field => {
+              if (customMap[field]) {
+                customMap[field].visible = true
+              } else {
+                customMap[field] = { field, visible: true }
               }
             })
           }
@@ -414,22 +424,30 @@ export default {
       let rest = XEUtils.toStringJSON(localStorage.getItem(key))
       return rest && rest._v === version ? rest : { _v: version }
     },
-    saveColumnHide () {
+    saveColumnVisible () {
       let { id, tableFullColumn, customOpts } = this
       let { checkMethod, storage, storageKey } = customOpts
       if (storage) {
-        let columnHideStorageMap = this.getStorageMap(storageKey)
+        let columnVisibleStorageMap = this.getStorageMap(storageKey)
         let colHides = []
+        let colShows = []
         tableFullColumn.forEach(column => {
-          if (!column.visible && (!checkMethod || checkMethod({ column }))) {
-            let colKey = column.getKey()
-            if (colKey) {
-              colHides.push(colKey)
+          if (!checkMethod || checkMethod({ column })) {
+            if (!column.visible && column.defaultVisible) {
+              let colKey = column.getKey()
+              if (colKey) {
+                colHides.push(colKey)
+              }
+            } else if (column.visible && !column.defaultVisible) {
+              let colKey = column.getKey()
+              if (colKey) {
+                colShows.push(colKey)
+              }
             }
           }
         })
-        columnHideStorageMap[id] = colHides.join(',') || undefined
-        localStorage.setItem(storageKey, XEUtils.toJSONString(columnHideStorageMap))
+        columnVisibleStorageMap[id] = [colHides.join(',')].concat(colShows.length ? [colShows.join(',')] : []).join('|') || undefined
+        localStorage.setItem(storageKey, XEUtils.toJSONString(columnVisibleStorageMap))
       }
       return this.$nextTick()
     },
@@ -494,7 +512,7 @@ export default {
     handleCustoms () {
       let comp = this.$xegrid || this.$xetable
       comp.refreshColumn()
-      return this.saveColumnHide()
+      return this.saveColumnVisible()
     },
     checkCustomStatus () {
       let { checkMethod } = this.customOpts
