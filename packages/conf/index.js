@@ -120,6 +120,7 @@ const GlobalConfig = {
         result: 'result',
         total: 'page.total'
       }
+      // beforeItem: null,
       // beforeColumn: null,
       // beforeQuery: null,
       // beforeDelete: null,
