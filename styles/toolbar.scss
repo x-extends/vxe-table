@@ -26,7 +26,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      z-index: 1;
+      z-index: $vxe-loading-z-index;
       user-select: none;
       background-color: $vxe-loading-background-color;
     }
@@ -143,7 +143,7 @@
     }
     .vxe-custom--footer {
       border-top: 1px solid $vxe-table-popup-border-color;
-      padding: 0.4em;
+      padding: 0.45em 0.4em;
       text-align: right;
       button {
         background-color: transparent;

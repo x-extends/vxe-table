@@ -36,7 +36,7 @@ export default {
     iconJumpMore: String
   },
   inject: {
-    $grid: {
+    $xegrid: {
       default: null
     }
   },
@@ -72,9 +72,11 @@ export default {
   created () {
     this.panelIndex = UtilTools.nextZIndex()
     GlobalEvent.on(this, 'mousedown', this.handleGlobalMousedownEvent)
+    GlobalEvent.on(this, 'keydown', this.handleGlobalKeydownEvent)
   },
   destroyed () {
     GlobalEvent.off(this, 'mousedown')
+    GlobalEvent.off(this, 'keydown')
   },
   render (h) {
     let { vSize, align } = this
@@ -218,7 +220,7 @@ export default {
                 'is--active': num === this.pageSize
               }],
               on: {
-                click: () => this.changePageSize(num)
+                click: () => this.pageSizeEvent(num)
               }
             }, `${num}${GlobalConfig.i18n('vxe.pager.pagesize')}`)
           }))
@@ -337,6 +339,22 @@ export default {
         this.hideSizePanel()
       }
     },
+    handleGlobalKeydownEvent (evnt) {
+      let keyCode = evnt.keyCode
+      let isUpArrow = keyCode === 38
+      let isDwArrow = keyCode === 40
+      if ((isUpArrow || isDwArrow) && this.showSizes) {
+        evnt.preventDefault()
+        let { pageSizes, pageSize } = this
+        let sizeIndex = XEUtils.findIndexOf(pageSizes, num => num === pageSize)
+        if (isUpArrow && sizeIndex > 0) {
+          sizeIndex--
+        } else if (isDwArrow && sizeIndex < pageSizes.length - 1) {
+          sizeIndex++
+        }
+        this.changePageSize(pageSizes[sizeIndex])
+      }
+    },
     prevPage () {
       let currentPage = this.currentPage
       if (currentPage > 1) {
@@ -363,6 +381,10 @@ export default {
         this.emitPageChange(type, this.pageSize, currentPage)
       }
     },
+    pageSizeEvent (pageSize) {
+      this.changePageSize(pageSize)
+      this.hideSizePanel()
+    },
     changePageSize (pageSize) {
       let type = 'size-change'
       if (pageSize !== this.pageSize) {
@@ -370,7 +392,6 @@ export default {
         UtilTools.emitEvent(this, type, [pageSize])
         this.emitPageChange(type, pageSize, Math.min(this.currentPage, this.getPageCount(this.total, pageSize)))
       }
-      this.hideSizePanel()
     },
     jumpKeydownEvent (evnt) {
       if (evnt.keyCode === 13) {
