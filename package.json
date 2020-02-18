@@ -72,7 +72,7 @@
     "vxe-table-plugin-virtual-tree": "0.1.1",
     "webpack-cli": "^3.3.1",
     "xe-ajax": "^4.0.3",
-    "xe-ajax-mock": "^1.9.3",
+    "xe-ajax-mock": "^1.9.4",
     "xe-clipboard": "^1.7.2",
     "xe-utils": "^2.3.1",
     "xlsx": "^0.15.1"
