@@ -1,3 +1,44 @@
+import XEUtils from 'xe-utils'
+
+const titleTooltip = [
+  {
+    name: 'message',
+    desc: '提示消息（支持开启国际化）',
+    version: '',
+    type: 'String',
+    enum: '',
+    defVal: '',
+    list: []
+  },
+  {
+    name: 'enterable',
+    desc: '只对 message 设置后有效，鼠标是否可进入到 tooltip 中',
+    version: '',
+    type: 'Boolean',
+    enum: '',
+    defVal: 'false',
+    list: []
+  },
+  {
+    name: 'theme',
+    desc: '只对 message 设置后有效，设置 tooltip 的主题样式',
+    version: '',
+    type: 'String',
+    enum: 'dark, light',
+    defVal: 'dark',
+    list: []
+  },
+  {
+    name: 'icon',
+    desc: '自定义图标',
+    version: '',
+    type: 'String',
+    enum: '',
+    defVal: '',
+    list: []
+  }
+]
+
 const apis = [
   {
     name: 'Props',
@@ -95,35 +136,7 @@ const apis = [
         type: 'Object',
         enum: '',
         defVal: '',
-        list: [
-          {
-            name: 'message',
-            desc: '提示消息（支持开启国际化）',
-            version: '',
-            type: 'String',
-            enum: '',
-            defVal: '',
-            list: []
-          },
-          {
-            name: 'enterable',
-            desc: '只对 message 设置后有效，鼠标是否可进入到提示框中',
-            version: '',
-            type: 'Boolean',
-            enum: '',
-            defVal: 'false',
-            list: []
-          },
-          {
-            name: 'icon',
-            desc: '自定义图标',
-            version: '',
-            type: 'String',
-            enum: '',
-            defVal: '',
-            list: []
-          }
-        ]
+        list: XEUtils.clone(titleTooltip, true)
       },
       {
         name: 'title-suffix',
@@ -132,35 +145,7 @@ const apis = [
         type: 'Object',
         enum: '',
         defVal: '',
-        list: [
-          {
-            name: 'message',
-            desc: '提示消息（支持开启国际化）',
-            version: '',
-            type: 'String',
-            enum: '',
-            defVal: '',
-            list: []
-          },
-          {
-            name: 'enterable',
-            desc: '只对 message 设置后有效，鼠标是否可进入到提示框中',
-            version: '',
-            type: 'Boolean',
-            enum: '',
-            defVal: 'false',
-            list: []
-          },
-          {
-            name: 'icon',
-            desc: '自定义图标',
-            version: '',
-            type: 'String',
-            enum: '',
-            defVal: '',
-            list: []
-          }
-        ]
+        list: XEUtils.clone(titleTooltip, true)
       },
       {
         name: 'reset-value',
