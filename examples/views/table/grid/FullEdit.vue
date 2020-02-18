@@ -280,7 +280,7 @@ export default {
               const sexList = await XEAjax.get('/api/conf/sex/list')
               // 异步更新下拉选项
               this.sexList = sexList
-              this.tableColumn[2].editRender.options = sexList
+              this.tableColumn[4].editRender.options = sexList
               this.tableForm.items[3].itemRender.options = sexList
             },
             formatDate ({ cellValue }) {
@@ -311,7 +311,7 @@ export default {
       const sexList = await XEAjax.get('/api/conf/sex/list')
       // 异步更新下拉选项
       this.sexList = sexList
-      this.tableColumn[2].editRender.options = sexList
+      this.tableColumn[4].editRender.options = sexList
       this.tableForm.items[3].itemRender.options = sexList
     },
     formatDate ({ cellValue }) {
