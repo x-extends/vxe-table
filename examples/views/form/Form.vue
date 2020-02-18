@@ -56,19 +56,25 @@
     </div> -->
 
     <p>
-      <vxe-form :data="formData3" :loading="loading3" title-align="right" title-width="100" @submit="submitEvent3" @reset="resetEvent">
+      <vxe-form ref="xForm" :data="formData3" :rules="formRules3" :loading="loading3" title-align="right" title-width="100" @submit="submitEvent3" @reset="resetEvent">
         <vxe-form-item title="名称" field="name" span="12">
-          <vxe-input v-model="formData3.name" placeholder="请输入名称"></vxe-input>
+          <template v-slot="scope">
+            <vxe-input v-model="formData3.name" placeholder="请输入名称" @input="$refs.xForm.updateStatus(scope)"></vxe-input>
+          </template>
         </vxe-form-item>
         <vxe-form-item title="昵称" field="nickname" span="12">
-          <vxe-input v-model="formData3.nickname" placeholder="请输入昵称"></vxe-input>
+          <template v-slot="scope">
+            <vxe-input v-model="formData3.nickname" placeholder="请输入昵称" @input="$refs.xForm.updateStatus(scope)"></vxe-input>
+          </template>
         </vxe-form-item>
         <vxe-form-item title="性别" field="sex" span="12">
-          <select v-model="formData3.sex" class="vxe-select">
-            <option value="0"></option>
-            <option value="1">女</option>
-            <option value="2">男</option>
-          </select>
+          <template v-slot="scope">
+            <select v-model="formData3.sex" class="vxe-select" @change="$refs.xForm.updateStatus(scope)">
+              <option value=""></option>
+              <option value="1">女</option>
+              <option value="2">男</option>
+            </select>
+          </template>
         </vxe-form-item>
         <vxe-form-item title="年龄" field="age" span="12">
           <vxe-input v-model="formData3.age" type="number" placeholder="请输入年龄"></vxe-input>
@@ -162,9 +168,21 @@ export default {
       formData3: {
         name: '',
         nickname: '',
-        sex: '0',
+        sex: '',
         age: 26,
         address: null
+      },
+      formRules3: {
+        name: [
+          { required: true, message: '请输入名称' },
+          { min: 3, max: 5, message: '长度在 3 到 5 个字符' }
+        ],
+        nickname: [
+          { required: true, message: '请输入昵称' }
+        ],
+        sex: [
+          { required: true, message: '请选择性别' }
+        ]
       },
       formData4: {
         name: '',
@@ -201,19 +219,25 @@ export default {
         </p>
 
         <p>
-          <vxe-form :data="formData3" :loading="loading3" title-align="right" title-width="100" @submit="submitEvent3" @reset="resetEvent">
+          <vxe-form ref="xForm" :data="formData3" :rules="formRules3" :loading="loading3" title-align="right" title-width="100" @submit="submitEvent3" @reset="resetEvent">
             <vxe-form-item title="名称" field="name" span="12">
-              <vxe-input v-model="formData3.name" placeholder="请输入名称"></vxe-input>
+              <template v-slot="scope">
+                <vxe-input v-model="formData3.name" placeholder="请输入名称" @input="$refs.xForm.updateStatus(scope)"></vxe-input>
+              </template>
             </vxe-form-item>
             <vxe-form-item title="昵称" field="nickname" span="12">
-              <vxe-input v-model="formData3.nickname" placeholder="请输入昵称"></vxe-input>
+              <template v-slot="scope">
+                <vxe-input v-model="formData3.nickname" placeholder="请输入昵称" @input="$refs.xForm.updateStatus(scope)"></vxe-input>
+              </template>
             </vxe-form-item>
             <vxe-form-item title="性别" field="sex" span="12">
-              <select v-model="formData3.sex" class="vxe-select">
-                <option value="0"></option>
-                <option value="1">女</option>
-                <option value="2">男</option>
-              </select>
+              <template v-slot="scope">
+                <select v-model="formData3.sex" class="vxe-select" @change="$refs.xForm.updateStatus(scope)">
+                  <option value=""></option>
+                  <option value="1">女</option>
+                  <option value="2">男</option>
+                </select>
+              </template>
             </vxe-form-item>
             <vxe-form-item title="年龄" field="age" span="12">
               <vxe-input v-model="formData3.age" type="number" placeholder="请输入年龄"></vxe-input>
@@ -288,9 +312,21 @@ export default {
               formData3: {
                 name: '',
                 nickname: '',
-                sex: '0',
+                sex: '',
                 age: 26,
                 address: null
+              },
+              formRules3: {
+                name: [
+                  { required: true, message: '请输入名称' },
+                  { min: 3, max: 5, message: '长度在 3 到 5 个字符' }
+                ],
+                nickname: [
+                  { required: true, message: '请输入昵称' }
+                ],
+                sex: [
+                  { required: true, message: '请选择性别' }
+                ]
               },
               formData4: {
                 name: '',
