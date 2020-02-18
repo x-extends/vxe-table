@@ -68,9 +68,9 @@ export default {
         titleAlign: 'right',
         items: [
           { field: 'name', title: 'app.body.label.name', span: 8, titlePrefix: { message: 'app.body.valid.rName', icon: 'fa fa-exclamation-circle' }, itemRender: { name: 'input', attrs: { placeholder: '请输入名称' } } },
-          { field: 'role', title: '角色', span: 8, folding: true, itemRender: { name: 'input', attrs: { placeholder: '请输入角色' } } },
+          { field: 'role', title: '角色', span: 8, itemRender: { name: 'input', attrs: { placeholder: '请输入角色' } } },
           { field: 'nickname', title: '昵称', span: 8, itemRender: { name: 'input', attrs: { placeholder: '请输入昵称' } } },
-          { field: 'sex', title: '性别', span: 8, titleSuffix: { message: '注意，必填信息！', icon: 'fa fa-info-circle' }, itemRender: { name: 'select', options: [] } },
+          { field: 'sex', title: '性别', span: 8, folding: true, titleSuffix: { message: '注意，必填信息！', icon: 'fa fa-info-circle' }, itemRender: { name: 'select', options: [] } },
           { field: 'age', title: '年龄', span: 8, folding: true, itemRender: { name: 'input', attrs: { type: 'number', placeholder: '请输入年龄' } } },
           { span: 24, align: 'center', collapseNode: true, itemRender: { name: 'FormItemButtonGroup' } }
         ]
@@ -199,9 +199,9 @@ export default {
                 titleAlign: 'right',
                 items: [
                   { field: 'name', title: 'app.body.label.name', span: 8, titlePrefix: { message: 'app.body.valid.rName', icon: 'fa fa-exclamation-circle' }, itemRender: { name: 'input', attrs: { placeholder: '请输入名称' } } },
-                  { field: 'role', title: '角色', span: 8, folding: true, itemRender: { name: 'input', attrs: { placeholder: '请输入角色' } } },
+                  { field: 'role', title: '角色', span: 8, itemRender: { name: 'input', attrs: { placeholder: '请输入角色' } } },
                   { field: 'nickname', title: '昵称', span: 8, itemRender: { name: 'input', attrs: { placeholder: '请输入昵称' } } },
-                  { field: 'sex', title: '性别', span: 8, titleSuffix: { message: '注意，必填信息！', icon: 'fa fa-info-circle' }, itemRender: { name: 'select', options: [] } },
+                  { field: 'sex', title: '性别', span: 8, folding: true, titleSuffix: { message: '注意，必填信息！', icon: 'fa fa-info-circle' }, itemRender: { name: 'select', options: [] } },
                   { field: 'age', title: '年龄', span: 8, folding: true, itemRender: { name: 'input', attrs: { type: 'number', placeholder: '请输入年龄' } } },
                   { span: 24, align: 'center', collapseNode: true, itemRender: { name: 'FormItemButtonGroup' } }
                 ]
@@ -280,8 +280,8 @@ export default {
               const sexList = await XEAjax.get('/api/conf/sex/list')
               // 异步更新下拉选项
               this.sexList = sexList
-              this.tableColumn[4].editRender.options = sexList
-              this.tableForm.items[2].itemRender.options = sexList
+              this.tableColumn[2].editRender.options = sexList
+              this.tableForm.items[3].itemRender.options = sexList
             },
             formatDate ({ cellValue }) {
               return XEUtils.toDateString(cellValue, 'yyyy-MM-dd HH:ss:mm')
@@ -311,8 +311,8 @@ export default {
       const sexList = await XEAjax.get('/api/conf/sex/list')
       // 异步更新下拉选项
       this.sexList = sexList
-      this.tableColumn[4].editRender.options = sexList
-      this.tableForm.items[2].itemRender.options = sexList
+      this.tableColumn[2].editRender.options = sexList
+      this.tableForm.items[3].itemRender.options = sexList
     },
     formatDate ({ cellValue }) {
       return XEUtils.toDateString(cellValue, 'yyyy-MM-dd HH:ss:mm')
