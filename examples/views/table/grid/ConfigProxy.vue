@@ -10,6 +10,7 @@
       :toolbar="tableToolbar"
       :pager-config="tablePage"
       :columns="tableColumn"
+      :form-config="tableForm"
       :proxy-config="tableProxy"
       :checkbox-config="{labelField: 'id', highlight: true, range: true}"
       :edit-rules="validRules"
@@ -74,6 +75,31 @@ export default {
         ],
         refresh: true,
         custom: true
+      },
+      tableForm: {
+        titleWidth: 100,
+        titleAlign: 'right',
+        items: [
+          { field: 'name', title: '名称', span: 8, itemRender: { name: 'input', attrs: { placeholder: '请输入名称' } } },
+          { field: 'role', title: '角色', span: 8, itemRender: { name: 'input', attrs: { placeholder: '请输入角色' } } },
+          { field: 'nickname', title: '昵称', span: 8, itemRender: { name: 'input', attrs: { placeholder: '请输入昵称' } } },
+          {
+            field: 'sex',
+            title: '性别',
+            span: 8,
+            folding: true,
+            itemRender: {
+              name: 'select',
+              options: [
+                { value: '', label: '' },
+                { value: '0', label: '女' },
+                { value: '1', label: '男' }
+              ]
+            }
+          },
+          { field: 'age', title: '年龄', span: 8, folding: true, itemRender: { name: 'input', attrs: { type: 'number', placeholder: '请输入年龄' } } },
+          { span: 24, align: 'center', collapseNode: true, itemRender: { name: 'FormItemButtonGroup' } }
+        ]
       },
       tableColumn: [
         { type: 'seq', width: 60, fixed: 'left' },
@@ -201,6 +227,19 @@ export default {
                   ],
                   refresh: true,
                   custom: true
+                },
+                formConfig: {
+                  titleWidth: 100,
+                  titleAlign: 'right',
+                  items: [
+                    { field: 'name', title: '名称', span: 8, itemRender: { name: 'input', attrs: { placeholder: '请输入名称' } } },
+                    { field: 'role', title: '角色', span: 8, itemRender: { name: 'input', attrs: { placeholder: '请输入角色' } } },
+                    { field: 'nickname', title: '昵称', span: 8, itemRender: { name: 'input', attrs: { placeholder: '请输入昵称' } } },
+                    // 表单项渲染，自动读取字典配置
+                    { field: 'sex', title: '性别', span: 8, folding: true, itemRender: { name: 'select', options: { dict: 'SEX_ALL_LIST' } } },
+                    { field: 'age', title: '年龄', span: 8, folding: true, itemRender: { name: 'input', attrs: { type: 'number', placeholder: '请输入年龄' } } },
+                    { span: 24, align: 'center', collapseNode: true, itemRender: { name: 'FormItemButtonGroup' } }
+                  ]
                 },
                 columns: [
                   { type: 'seq', width: 60, fixed: 'left' },

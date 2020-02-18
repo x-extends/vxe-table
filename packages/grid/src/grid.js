@@ -20,7 +20,15 @@ function renderFormContent (h, _vm) {
   if ($scopedSlots.form) {
     return $scopedSlots.form.call(_vm, { $grid: _vm }, h)
   }
-  if (formOpts.items) {
+  if (formOpts.items.length) {
+    if (!formOpts.inited) {
+      formOpts.inited = true
+      if (proxyOpts && proxyOpts.beforeItem) {
+        formOpts.items.forEach(item => {
+          proxyOpts.beforeItem.apply(_vm, [{ $grid: _vm, item }])
+        })
+      }
+    }
     return [
       h('vxe-form', {
         props: Object.assign({}, formOpts, {
