@@ -503,7 +503,7 @@ export default {
     let customHeight = 0
     let style = {}
     if (height) {
-      customHeight = height === 'auto' ? parentHeight : (DomTools.isScale(height) ? Math.floor(parseInt(height) / 100 * parentHeight) : XEUtils.toNumber(height))
+      customHeight = height === 'auto' ? parentHeight : ((DomTools.isScale(height) ? Math.floor(parseInt(height) / 100 * parentHeight) : XEUtils.toNumber(height)) - $table.getExcludeHeight())
       if (showFooter) {
         customHeight += scrollbarHeight + 1
       }

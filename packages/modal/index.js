@@ -17,7 +17,7 @@ export function Modal (options) {
           if (events.hide) {
             events.hide.call(this, params)
           }
-          $modal.$destroy()
+          setTimeout(() => $modal.$destroy(), $modal.isMsg ? 500 : 100)
           XEUtils.remove(AllActivedModal, item => item === $modal)
           resolve(params.type)
         }

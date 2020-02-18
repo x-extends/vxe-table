@@ -11,7 +11,7 @@
   font-size: $vxe-font-size;
   color: $vxe-font-color;
   font-family: $vxe-font-family;
-  transition: top .4s;
+  transition: top .4s ease-in-out;
   &.size--medium {
     font-size: $vxe-font-size-medium;
   }
@@ -32,6 +32,7 @@
     }
     &.type--message {
       .vxe-modal--box {
+        opacity: 1;
         transform: translateY(0);
       }
     }
@@ -60,11 +61,13 @@
   &:not(.lock--view) {
     pointer-events: none;
   }
-  &.lock--scroll {
-    overflow: hidden;
-  }
-  &:not(.lock--scroll) {
-    overflow: auto;
+  &:not(.type--message) {
+    &.lock--scroll {
+      overflow: hidden;
+    }
+    &:not(.lock--scroll) {
+      overflow: auto;
+    }
   }
   &.lock--view,
   &.is--mask {
@@ -93,7 +96,7 @@
     &.type--message {
       .vxe-modal--box {
         &:not(.is--drag) {
-          @include animatTransition(all, .2s, ease-out);
+          @include animatTransition(all, .4s, ease-out);
         }
       }
     }
@@ -114,7 +117,8 @@
       margin-top: 0;
       width: auto;
       box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.1);
-      transform: translateY(-10%);
+      opacity: 0;
+      transform: translateY(-100%);
       .vxe-modal--body {
         &:after {
           content: '';

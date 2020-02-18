@@ -27,7 +27,7 @@ function createFrame () {
 }
 
 function getRowUniqueId () {
-  return `xerow_${++rowUniqueId}`
+  return `row_${++rowUniqueId}`
 }
 
 function isTargetRadioOrCheckbox (evnt, column, colType, targetType) {

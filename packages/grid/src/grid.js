@@ -284,10 +284,15 @@ export default {
      * 获取需要排除的高度
      */
     getExcludeHeight () {
-      let { form: formElem, toolbar, top, bottom, pager } = this.$refs
-      let computedStyle = getComputedStyle(this.$el)
-      let paddingTop = XEUtils.toNumber(computedStyle.paddingTop)
-      let paddingBottom = XEUtils.toNumber(computedStyle.paddingBottom)
+      const { $refs, $el } = this
+      const { form: formElem, toolbar, top, bottom, pager } = $refs
+      let paddingTop = 0
+      let paddingBottom = 0
+      if ($el) {
+        let computedStyle = getComputedStyle($el)
+        paddingTop = XEUtils.toNumber(computedStyle.paddingTop)
+        paddingBottom = XEUtils.toNumber(computedStyle.paddingBottom)
+      }
       return paddingTop + paddingBottom + getOffsetHeight(formElem) + getRefHeight(toolbar) + getOffsetHeight(top) + getOffsetHeight(bottom) + getRefHeight(pager)
     },
     handleRowClassName (params) {
@@ -477,7 +482,7 @@ export default {
                     if (afterDelete) {
                       afterDelete.apply(this, applyArgs)
                     } else {
-                      this.commitProxy('reload')
+                      this.commitProxy('query')
                     }
                   })
                 } catch (e) {
@@ -527,7 +532,7 @@ export default {
                           if (afterSave) {
                             afterSave.apply(this, applyArgs)
                           } else {
-                            this.commitProxy('reload')
+                            this.commitProxy('query')
                           }
                         })
                       )

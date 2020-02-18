@@ -39,7 +39,7 @@ class ColumnConfig {
     }
     Object.assign(this, {
       // 基本属性
-      id: `xecol_${++columnUniqueId}`,
+      id: `col_${++columnUniqueId}`,
       type: _vm.type,
       // 在 v3.0 中废弃 prop
       prop: _vm.prop,

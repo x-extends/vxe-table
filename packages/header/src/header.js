@@ -144,7 +144,7 @@ export default {
           border: 0
         },
         style: {
-          width: tableWidth === null ? tableWidth : `${tableWidth + scrollbarWidth}px`,
+          width: tableWidth ? `${tableWidth + scrollbarWidth}px` : null,
           'margin-left': fixedType ? null : `${scrollXStore.leftSpaceWidth}px`
         }
       }, [
@@ -158,7 +158,7 @@ export default {
               name: column.id
             },
             style: {
-              width: `${column.renderWidth}px`
+              width: column.renderWidth ? `${column.renderWidth}px` : null
             },
             key: columnKey || isColGroup ? column.id : columnIndex
           })
