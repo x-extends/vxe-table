@@ -31,7 +31,8 @@ function renderTitle (h, _vm) {
         ? h('vxe-tooltip', {
           props: {
             content: UtilTools.getFuncText(titlePrefix.message),
-            enterable: titlePrefix.enterable
+            enterable: titlePrefix.enterable,
+            theme: titlePrefix.theme
           }
         }, [
           renderPrefixIcon(h, titlePrefix)
@@ -50,7 +51,8 @@ function renderTitle (h, _vm) {
         ? h('vxe-tooltip', {
           props: {
             content: UtilTools.getFuncText(titleSuffix.message),
-            enterable: titleSuffix.enterable
+            enterable: titleSuffix.enterable,
+            theme: titleSuffix.theme
           }
         }, [
           renderSuffixIcon(h, titleSuffix)

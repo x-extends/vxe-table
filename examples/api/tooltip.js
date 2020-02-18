@@ -39,7 +39,7 @@ const apis = [
         descKey: 'app.api.tooltip.desc.theme',
         version: '',
         type: 'String',
-        enum: 'dark,light',
+        enum: 'dark, light',
         defVal: 'dark',
         list: []
       },
