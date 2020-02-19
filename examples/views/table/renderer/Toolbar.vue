@@ -4,7 +4,6 @@
       工具栏-按钮渲染器 <grid-api-link prop="buttonRender"/>，查看 <a class="link" href="https://github.com/xuliangzhan/vxe-table/tree/master/examples/plugins/xtable/renderer">示例的源码</a><br>
       配置参数：<br>
       renderButton (h, renderOpts, <vxe-tooltip content="{ button }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params, context) 按钮<br>
-      <span class="red">（注：实际开发中应该将业务封装成一个组件，不要把复杂的渲染逻辑写在渲染器中）</span>
     </p>
 
     <vxe-grid

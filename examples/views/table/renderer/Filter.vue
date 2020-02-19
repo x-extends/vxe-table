@@ -8,7 +8,6 @@
       isFooter 是否显示底部按钮<br>
       renderFilter (h, renderOpts, <vxe-tooltip content="{ column }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params, context) 内容<br>
       filterMethod (<vxe-tooltip content="{ option, row, column }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params) 筛选函数<br>
-      <span class="red">（注：实际开发中应该将业务封装成一个组件，不要把复杂的渲染逻辑写在渲染器中）</span>
     </p>
 
     <vxe-table border :data="tableData">

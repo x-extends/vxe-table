@@ -131,19 +131,23 @@ export default {
     }
   },
   render (h) {
-    const { $scopedSlots, $vxeform, title, visibleMethod, folding, field, collapseNode, itemRender, isRequired, showError, showRule } = this
+    const { $scopedSlots, $vxeform, title, folding, visibleMethod, field, collapseNode, itemRender, isRequired, showError, showRule } = this
     const compConf = itemRender ? VXETable.renderer.get(itemRender.name) : null
     const span = this.span || $vxeform.span
     const align = this.align || $vxeform.align
     const titleAlign = this.titleAlign || $vxeform.titleAlign
     const titleWidth = this.titleWidth || $vxeform.titleWidth
     const collapseAll = $vxeform.collapseAll
+    let itemVisibleMethod = visibleMethod
+    if (!itemVisibleMethod && compConf && compConf.itemVisibleMethod) {
+      itemVisibleMethod = compConf.itemVisibleMethod
+    }
     return h('div', {
       class: ['vxe-form--item', span ? `vxe-col--${span} is--span` : null, {
         'is--title': title,
         'is--required': isRequired,
         'is--hidden': folding && collapseAll,
-        'is--active': !visibleMethod || visibleMethod({ data: $vxeform.data, $form: $vxeform }),
+        'is--active': !itemVisibleMethod || itemVisibleMethod({ data: $vxeform.data, property: field, $form: $vxeform }),
         'is--error': showError
       }]
     }, [
