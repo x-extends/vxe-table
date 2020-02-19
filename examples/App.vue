@@ -41,6 +41,16 @@
     </header>
     <div class="page-container">
       <div class="aside">
+        <div class="version-list">
+          <span class="title">稳定版</span>
+          <select>
+            <option v-for="(pack, index) in stableVersionList" :key="index">{{ pack.version }}</option>
+          </select>
+          <!-- <span class="title">最新版</span>
+          <select>
+            <option v-for="(pack, index) in betaVersionList" :key="index">{{ pack.version }}</option>
+          </select> -->
+        </div>
         <ul class="nav-menu">
           <li v-for="(item, index) in tableList" :key="index" :class="{expand: item.expand}">
             <a class="nav-link" @click="linkEvent(item)" :title="$t(item.disabled ? 'app.body.other.newFunc' : item.label)" :class="{disabled: item.disabled, active: pageKey === item.value}"><i class="vxe-icon--arrow-right nav-link-icon"></i>{{ $t(item.label) }}</a>
@@ -68,11 +78,14 @@
 
 <script>
 import XEUtils from 'xe-utils'
+import XEAjax from 'xe-ajax'
 
 export default {
   data () {
     return {
       selected: null,
+      betaVersionList: [],
+      stableVersionList: [],
       version: '1',
       usedJSHeapSize: 0,
       tableList: [
@@ -1898,6 +1911,7 @@ export default {
       }, 3000)
     }
     this.init()
+    this.getVersion()
   },
   methods: {
     init () {
@@ -1908,6 +1922,25 @@ export default {
       if (group) {
         group.expand = true
       }
+    },
+    getVersion () {
+      XEAjax.get('https://registry.npm.taobao.org/vxe-table').then(data => {
+        const stableVersionList = []
+        const betaVersionList = []
+        Object.values(data.versions).forEach(pack => {
+          if (/^1.\d{1,3}.\d{1,3}$/.test(pack.version)) {
+            stableVersionList.push({
+              version: pack.version
+            })
+          } else if (/^1.\d{1,3}.\d{1,3}-beta.\d{1,3}$/.test(pack.version)) {
+            betaVersionList.push({
+              version: pack.version
+            })
+          }
+        })
+        this.stableVersionList = stableVersionList
+        this.betaVersionList = betaVersionList
+      })
     },
     clickEvent (evnt) {
       let pElem = evnt.target

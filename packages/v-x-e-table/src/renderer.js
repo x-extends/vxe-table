@@ -292,7 +292,7 @@ const renderMap = {
         renderOpts.optionGroups ? renderOptgroups(h, renderOpts, params, context, renderFormOptions) : renderFormOptions(h, renderOpts.options, renderOpts, params, context))
       ]
     },
-    editExportMethod: createExportMethod(getSelectCellValue, true),
+    editCellExportMethod: createExportMethod(getSelectCellValue, true),
     cellExportMethod: createExportMethod(getSelectCellValue)
   }
 }

@@ -14,8 +14,12 @@ VXETable.renderer.add('MyInput', {
       <span>{ row[column.property] }</span>
     ]
   // },
-  // // 导出格式化值函数
-  // editExportMethod ({ row, column }) {
+  // // 单元格导出函数
+  // editCellExportMethod ({ row, column }) {
   //   return `值为：${row[column.property]}`
+  // },
+  // // 表尾单元格导出函数
+  // footerCellExportMethod ({ items, itemIndex, column }) {
+  //   return `合计为：${items[itemIndex]}`
   }
 })

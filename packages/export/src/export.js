@@ -9,42 +9,61 @@ const defaultHtmlStyle = 'body{margin:0}body *{-webkit-box-sizing:border-box;box
 // 导入
 const fileForm = document.createElement('form')
 const fileInput = document.createElement('input')
-fileForm.className = 'vxe-table--import-form'
+fileForm.className = 'vxe-table--file-form'
 fileInput.name = 'file'
 fileInput.type = 'file'
 fileForm.appendChild(fileInput)
 
-function hasTreeChildren ($table, row) {
-  const treeOpts = $table.treeOpts
+function hasTreeChildren ($xetable, row) {
+  const treeOpts = $xetable.treeOpts
   return row[treeOpts.children] && row[treeOpts.children].length
 }
 
-function getContent ($table, opts, columns, datas) {
+function getContent ($xetable, opts, columns, datas) {
   switch (opts.type) {
     case 'csv':
-      return toCsv($table, opts, columns, datas)
+      return toCsv($xetable, opts, columns, datas)
     case 'txt':
-      return toTxt($table, opts, columns, datas)
+      return toTxt($xetable, opts, columns, datas)
     case 'html':
-      return toHtml($table, opts, columns, datas)
+      return toHtml($xetable, opts, columns, datas)
     case 'xml':
-      return toXML($table, opts, columns, datas)
+      return toXML($xetable, opts, columns, datas)
   }
   return ''
 }
 
-function getSeq ($table, row, rowIndex, column, columnIndex) {
+function getSeq ($xetable, row, rowIndex, column, columnIndex) {
   // 在 v3.0 中废弃 startIndex、indexMethod
-  let seqOpts = $table.seqOpts
+  let seqOpts = $xetable.seqOpts
   let seqMethod = seqOpts.seqMethod || column.indexMethod
-  return seqMethod ? seqMethod({ row, rowIndex, column, columnIndex }) : ((seqOpts.startIndex || $table.startIndex) + rowIndex + 1)
+  return seqMethod ? seqMethod({ row, rowIndex, column, columnIndex }) : ((seqOpts.startIndex || $xetable.startIndex) + rowIndex + 1)
 }
 
 function getHeaderTitle (opts, column) {
   return (opts.original ? column.property : column.getTitle()) || ''
 }
 
-function toCsv ($table, opts, columns, datas) {
+function getFooterCellValue ($xetable, opts, items, column) {
+  let { cellRender, editRender } = column
+  let exportMethod
+  if (editRender && editRender.name) {
+    let compConf = VXETable.renderer.get(editRender.name)
+    if (compConf) {
+      exportMethod = compConf.footerCellExportMethod
+    }
+  } else if (cellRender && cellRender.name) {
+    let compConf = VXETable.renderer.get(cellRender.name)
+    if (compConf) {
+      exportMethod = compConf.footerCellExportMethod
+    }
+  }
+  let itemIndex = $xetable.$getColumnIndex(column)
+  let cellValue = exportMethod ? exportMethod({ $table: $xetable, items, itemIndex, column }) : XEUtils.toString(items[itemIndex])
+  return cellValue
+}
+
+function toCsv ($xetable, opts, columns, datas) {
   let content = '\ufeff'
   if (opts.isHeader) {
     content += columns.map(column => `"${getHeaderTitle(opts, column)}"`).join(',') + '\n'
@@ -53,16 +72,16 @@ function toCsv ($table, opts, columns, datas) {
     content += columns.map(column => `"${row[column.id]}"`).join(',') + '\n'
   })
   if (opts.isFooter) {
-    const footerData = $table.footerData
+    const footerData = $xetable.footerData
     const footers = opts.footerFilterMethod ? footerData.filter(opts.footerFilterMethod) : footerData
     footers.forEach(rows => {
-      content += columns.map(column => `"${rows[$table.$getColumnIndex(column)] || ''}"`).join(',') + '\n'
+      content += columns.map(column => `"${getFooterCellValue($xetable, opts, rows, column)}"`).join(',') + '\n'
     })
   }
   return content
 }
 
-function toTxt ($table, opts, columns, datas) {
+function toTxt ($xetable, opts, columns, datas) {
   let content = ''
   if (opts.isHeader) {
     content += columns.map(column => `${getHeaderTitle(opts, column)}`).join('\t') + '\n'
@@ -71,16 +90,16 @@ function toTxt ($table, opts, columns, datas) {
     content += columns.map(column => `${row[column.id]}`).join('\t') + '\n'
   })
   if (opts.isFooter) {
-    const footerData = $table.footerData
+    const footerData = $xetable.footerData
     const footers = opts.footerFilterMethod ? footerData.filter(opts.footerFilterMethod) : footerData
     footers.forEach(rows => {
-      content += columns.map(column => `${rows[$table.$getColumnIndex(column)] || ''}`).join(',') + '\n'
+      content += columns.map(column => `${getFooterCellValue($xetable, opts, rows, column)}`).join(',') + '\n'
     })
   }
   return content
 }
 
-function hasEllipsis ($table, column, property, allColumnOverflow) {
+function hasEllipsis ($xetable, column, property, allColumnOverflow) {
   let columnOverflow = column[property]
   let headOverflow = XEUtils.isUndefined(columnOverflow) || XEUtils.isNull(columnOverflow) ? allColumnOverflow : columnOverflow
   let showEllipsis = headOverflow === 'ellipsis'
@@ -88,14 +107,14 @@ function hasEllipsis ($table, column, property, allColumnOverflow) {
   let showTooltip = headOverflow === true || headOverflow === 'tooltip'
   let isEllipsis = showTitle || showTooltip || showEllipsis
   // 虚拟滚动不支持动态高度
-  if (($table.scrollXLoad || $table.scrollYLoad) && !isEllipsis) {
+  if (($xetable.scrollXLoad || $xetable.scrollYLoad) && !isEllipsis) {
     isEllipsis = true
   }
   return isEllipsis
 }
 
-function toHtml ($table, opts, columns, datas) {
-  const { id, border, treeConfig, treeOpts, isAllSelected, headerAlign: allHeaderAlign, align: allAlign, footerAlign: allFooterAlign, showOverflow: allShowOverflow, showAllOverflow: oldShowAllOverflow, showHeaderOverflow: allHeaderOverflow, showHeaderAllOverflow: oldHeaderOverflow } = $table
+function toHtml ($xetable, opts, columns, datas) {
+  const { id, border, treeConfig, treeOpts, isAllSelected, headerAlign: allHeaderAlign, align: allAlign, footerAlign: allFooterAlign, showOverflow: allShowOverflow, showAllOverflow: oldShowAllOverflow, showHeaderOverflow: allHeaderOverflow, showHeaderAllOverflow: oldHeaderOverflow } = $xetable
   // v2.0 废弃属性，保留兼容
   let allColumnOverflow = XEUtils.isBoolean(oldShowAllOverflow) ? oldShowAllOverflow : allShowOverflow
   let allColumnHeaderOverflow = XEUtils.isBoolean(oldHeaderOverflow) ? oldHeaderOverflow : allHeaderOverflow
@@ -119,7 +138,7 @@ function toHtml ($table, opts, columns, datas) {
   if (opts.isHeader) {
     html += `<thead><tr>${columns.map(column => {
       let headAlign = column.headerAlign || column.align || allHeaderAlign || allAlign
-      let classNames = hasEllipsis($table, column, 'showHeaderOverflow', allColumnHeaderOverflow) ? ['col--ellipsis'] : []
+      let classNames = hasEllipsis($xetable, column, 'showHeaderOverflow', allColumnHeaderOverflow) ? ['col--ellipsis'] : []
       let cellTitle = getHeaderTitle(opts, column)
       if (headAlign) {
         classNames.push(`col--${headAlign}`)
@@ -136,7 +155,7 @@ function toHtml ($table, opts, columns, datas) {
       datas.forEach(row => {
         html += '<tr>' + columns.map(column => {
           let cellAlign = column.align || allAlign
-          let classNames = hasEllipsis($table, column, 'showOverflow', allColumnOverflow) ? ['col--ellipsis'] : []
+          let classNames = hasEllipsis($xetable, column, 'showOverflow', allColumnOverflow) ? ['col--ellipsis'] : []
           let cellValue = row[column.id]
           if (cellAlign) {
             classNames.push(`col--${cellAlign}`)
@@ -166,7 +185,7 @@ function toHtml ($table, opts, columns, datas) {
       datas.forEach(row => {
         html += '<tr>' + columns.map(column => {
           let cellAlign = column.align || allAlign
-          let classNames = hasEllipsis($table, column, 'showOverflow', allColumnOverflow) ? ['col--ellipsis'] : []
+          let classNames = hasEllipsis($xetable, column, 'showOverflow', allColumnOverflow) ? ['col--ellipsis'] : []
           let cellValue = row[column.id]
           if (cellAlign) {
             classNames.push(`col--${cellAlign}`)
@@ -183,15 +202,15 @@ function toHtml ($table, opts, columns, datas) {
     html += '</tbody>'
   }
   if (opts.isFooter) {
-    const footerData = $table.footerData
+    const footerData = $xetable.footerData
     const footers = opts.footerFilterMethod ? footerData.filter(opts.footerFilterMethod) : footerData
     if (footers.length) {
       html += '<tfoot>'
       footers.forEach(rows => {
         html += `<tr>${columns.map(column => {
           let footAlign = column.footerAlign || column.align || allFooterAlign || allAlign
-          let classNames = hasEllipsis($table, column, 'showOverflow', allColumnOverflow) ? ['col--ellipsis'] : []
-          let cellValue = XEUtils.toString(rows[$table.$getColumnIndex(column)])
+          let classNames = hasEllipsis($xetable, column, 'showOverflow', allColumnOverflow) ? ['col--ellipsis'] : []
+          let cellValue = getFooterCellValue($xetable, opts, rows, column)
           if (footAlign) {
             classNames.push(`col--${footAlign}`)
           }
@@ -204,7 +223,7 @@ function toHtml ($table, opts, columns, datas) {
   return html + '</table></body></html>'
 }
 
-function toXML ($table, opts, columns, datas) {
+function toXML ($xetable, opts, columns, datas) {
   let xml = [
     '<?xml version="1.0"?>',
     '<?mso-application progid="Excel.Sheet"?>',
@@ -231,16 +250,16 @@ function toXML ($table, opts, columns, datas) {
     xml += '<Row>' + columns.map(column => `<Cell><Data ss:Type="String">${row[column.id]}</Data></Cell>`).join('') + '</Row>'
   })
   if (opts.isFooter) {
-    const footerData = $table.footerData
+    const footerData = $xetable.footerData
     const footers = opts.footerFilterMethod ? footerData.filter(opts.footerFilterMethod) : footerData
     footers.forEach(rows => {
-      xml += `<Row>${columns.map(column => `<Cell><Data ss:Type="String">${rows[$table.$getColumnIndex(column) || '']}</Data></Cell>`).join('')}</Row>`
+      xml += `<Row>${columns.map(column => `<Cell><Data ss:Type="String">${getFooterCellValue($xetable, opts, rows, column)}</Data></Cell>`).join('')}</Row>`
     })
   }
   return `${xml}</Table></Worksheet></Workbook>`
 }
 
-function downloadFile ($table, opts, content) {
+function downloadFile ($xetable, opts, content) {
   const { filename, type, download } = opts
   const name = `${filename}.${type}`
   if (window.Blob) {
@@ -302,7 +321,7 @@ function getLabelData ($xetable, opts, columns, datas) {
               if (editRender && editRender.name) {
                 let compConf = VXETable.renderer.get(editRender.name)
                 if (compConf) {
-                  exportMethod = compConf.editExportMethod
+                  exportMethod = compConf.editCellExportMethod
                 }
               } else if (cellRender && cellRender.name) {
                 let compConf = VXETable.renderer.get(cellRender.name)
@@ -347,7 +366,7 @@ function getLabelData ($xetable, opts, columns, datas) {
             if (editRender && editRender.name) {
               let compConf = VXETable.renderer.get(editRender.name)
               if (compConf) {
-                exportMethod = compConf.editExportMethod
+                exportMethod = compConf.editCellExportMethod
               }
             } else if (cellRender && cellRender.name) {
               let compConf = VXETable.renderer.get(cellRender.name)
@@ -367,7 +386,7 @@ function getLabelData ($xetable, opts, columns, datas) {
   })
 }
 
-function getExportData ($table, opts, fullData, oColumns) {
+function getExportData ($xetable, opts, fullData, oColumns) {
   let columns = opts.columns ? opts.columns : oColumns
   let datas = opts.data || fullData
   if (opts.columnFilterMethod) {
@@ -376,7 +395,7 @@ function getExportData ($table, opts, fullData, oColumns) {
   if (opts.dataFilterMethod) {
     datas = datas.filter(opts.dataFilterMethod)
   }
-  return { columns, datas: getLabelData($table, opts, columns, datas) }
+  return { columns, datas: getLabelData($xetable, opts, columns, datas) }
 }
 
 function replaceDoubleQuotation (val) {
@@ -514,14 +533,14 @@ function checkImportData (columns, fields, rows) {
 }
 
 export default {
-  handleExport ($table, opts, oColumns, fullData) {
-    const { columns, datas } = getExportData($table, opts, fullData, oColumns)
-    return $table.preventEvent(null, 'event.export', { $table, options: opts, columns, datas }, () => {
-      return downloadFile($table, opts, getContent($table, opts, columns, datas))
+  handleExport ($xetable, opts, oColumns, fullData) {
+    const { columns, datas } = getExportData($xetable, opts, fullData, oColumns)
+    return $xetable.preventEvent(null, 'event.export', { $table: $xetable, options: opts, columns, datas }, () => {
+      return downloadFile($xetable, opts, getContent($xetable, opts, columns, datas))
     })
   },
-  handleImport ($table, content, opts) {
-    const { tableFullColumn, _importResolve } = $table
+  handleImport ($xetable, content, opts) {
+    const { tableFullColumn, _importResolve } = $xetable
     let rest = { fields: [], rows: [] }
     switch (opts.type) {
       case 'csv':
@@ -540,12 +559,12 @@ export default {
     const { fields, rows } = rest
     const status = checkImportData(tableFullColumn, fields, rows)
     if (status) {
-      $table.createData(rows)
+      $xetable.createData(rows)
         .then(data => {
           if (opts.mode === 'append') {
-            $table.insertAt(data, -1)
+            $xetable.insertAt(data, -1)
           } else {
-            $table.reloadData(data)
+            $xetable.reloadData(data)
           }
         })
       if (opts.message !== false) {
@@ -556,7 +575,7 @@ export default {
     }
     if (_importResolve) {
       _importResolve(status)
-      $table._importResolve = null
+      $xetable._importResolve = null
     }
   }
 }
