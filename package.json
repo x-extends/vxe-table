@@ -12,9 +12,7 @@
   },
   "files": [
     "lib",
-    "types",
-    "packages",
-    "styles"
+    "types"
   ],
   "main": "lib/vxe-table.js",
   "style": "lib/index.css",
