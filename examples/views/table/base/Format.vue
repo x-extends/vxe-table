@@ -28,12 +28,13 @@
       border
       :data="tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="date" title="转日期" width="180" formatter="toDateString"></vxe-table-column>
-      <vxe-table-column field="time" title="转日期格式" width="140" :formatter="['toDateString', 'yyyy-MM-dd']"></vxe-table-column>
-      <vxe-table-column field="amount" title="格式化金额" formatter="commafy"></vxe-table-column>
-      <vxe-table-column field="bankCard" title="银行卡" width="180" :formatter="['commafy', {spaceNumber: 4, separator: ' '}]"></vxe-table-column>
-      <vxe-table-column field="num" title="转整数" formatter="toInteger"></vxe-table-column>
-      <vxe-table-column field="num" title="截取两位小数" :formatter="['toFixedString', 2]"></vxe-table-column>
+      <vxe-table-column field="date" title="转日期" width="180" formatter="formatDate"></vxe-table-column>
+      <vxe-table-column field="time" title="转日期格式" width="140" :formatter="['formatDate', 'yyyy-MM-dd']"></vxe-table-column>
+      <vxe-table-column field="amount" title="格式化金额" formatter="formatAmount"></vxe-table-column>
+      <vxe-table-column field="bankCard" title="银行卡" width="180" formatter="formatBankcard"></vxe-table-column>
+      <vxe-table-column field="num7" title="数值"></vxe-table-column>
+      <vxe-table-column field="num7" title="截取2位数" formatter="formatCutFixed"></vxe-table-column>
+      <vxe-table-column field="num7" title="四舍五入2位数" formatter="formatFixed"></vxe-table-column>
       <vxe-table-column field="sex" title="格式化性别" :formatter="['formatSelect', sexList]"></vxe-table-column>
     </vxe-table>
 
@@ -50,11 +51,32 @@
 import hljs from 'highlight.js'
 import XEUtils from 'xe-utils'
 
+// 自定义全局的格式化处理函数
 XEUtils.mixin({
-  // 自定义全局的格式化处理函数
+  // 格式化下拉选项
   formatSelect (cellValue, list) {
     let item = list.find(item => item.value === cellValue)
     return item ? item.label : ''
+  },
+  // 格式化日期，默认 yyyy-MM-dd HH:mm:ss
+  formatDate (cellValue, format) {
+    return XEUtils.toDateString(cellValue, format || 'yyyy-MM-dd HH:mm:ss')
+  },
+  // 格式金额，默认2位数
+  formatAmount (cellValue, digits) {
+    return XEUtils.commafy(cellValue, { digits: digits || 2 })
+  },
+  // 格式化银行卡，默认每4位隔开
+  formatBankcard (cellValue) {
+    return XEUtils.commafy(cellValue, { spaceNumber: 4, separator: ' ' })
+  },
+  // 四舍五入,默认两位数
+  formatFixed (cellValue, digits) {
+    return XEUtils.toNumber(cellValue).toFixed(digits || 2)
+  },
+  // 截取小数,默认两位数
+  formatCutFixed (cellValue, digits) {
+    return XEUtils.toFixedString(cellValue, digits || 2)
   }
 })
 
@@ -78,10 +100,14 @@ export default {
           border
           :data="tableData">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex" :formatter="formatterSex"></vxe-table-column>
-          <vxe-table-column field="time" title="Time" :formatter="formatTime"></vxe-table-column>
-          <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+          <vxe-table-column field="date" title="转日期" width="180" formatter="formatDate"></vxe-table-column>
+          <vxe-table-column field="time" title="转日期格式" width="140" :formatter="['formatDate', 'yyyy-MM-dd']"></vxe-table-column>
+          <vxe-table-column field="amount" title="格式化金额" formatter="formatAmount"></vxe-table-column>
+          <vxe-table-column field="bankCard" title="银行卡" width="180" formatter="formatBankcard"></vxe-table-column>
+          <vxe-table-column field="num7" title="数值"></vxe-table-column>
+          <vxe-table-column field="num7" title="截取2位数" :formatter="['toFixedString', 2]"></vxe-table-column>
+          <vxe-table-column field="num7" title="四舍五入2位数" formatter="formatFixed"></vxe-table-column>
+          <vxe-table-column field="sex" title="格式化性别" :formatter="['formatSelect', sexList]"></vxe-table-column>
         </vxe-table>
         `,
         `
@@ -120,21 +146,42 @@ export default {
           border
           :data="tableData">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="date" title="转日期" width="180" formatter="toDateString"></vxe-table-column>
-          <vxe-table-column field="time" title="转日期格式" width="140" :formatter="['toDateString', 'yyyy-MM-dd']"></vxe-table-column>
-          <vxe-table-column field="amount" title="格式化金额" formatter="commafy"></vxe-table-column>
-          <vxe-table-column field="bankCard" title="银行卡" width="180" :formatter="['commafy', {spaceNumber: 4, separator: ' '}]"></vxe-table-column>
-          <vxe-table-column field="num" title="转整数" formatter="toInteger"></vxe-table-column>
-          <vxe-table-column field="num" title="截取两位小数" :formatter="['toFixedString', 2]"></vxe-table-column>
+          <vxe-table-column field="date" title="转日期" width="180" formatter="formatDate"></vxe-table-column>
+          <vxe-table-column field="time" title="转日期格式" width="140" :formatter="['formatDate', 'yyyy-MM-dd']"></vxe-table-column>
+          <vxe-table-column field="amount" title="格式化金额" formatter="formatAmount"></vxe-table-column>
+          <vxe-table-column field="bankCard" title="银行卡" width="180" formatter="formatBankcard"></vxe-table-column>
+          <vxe-table-column field="num7" title="截取2位数" formatter="formatCutFixed"></vxe-table-column>
+          <vxe-table-column field="num7" title="四舍五入2位数" formatter="formatFixed"></vxe-table-column>
           <vxe-table-column field="sex" title="格式化性别" :formatter="['formatSelect', sexList]"></vxe-table-column>
         </vxe-table>
         `,
         `
+        // 自定义全局的格式化处理函数
         XEUtils.mixin({
-          // 自定义全局的格式化处理函数
+          // 格式化下拉选项
           formatSelect (cellValue, list) {
             let item = list.find(item => item.value === cellValue)
             return item ? item.label : ''
+          },
+          // 格式化日期，默认 yyyy-MM-dd HH:mm:ss
+          formatDate (cellValue, format) {
+            return XEUtils.toDateString(cellValue, format || 'yyyy-MM-dd HH:mm:ss')
+          },
+          // 格式金额，默认2位数
+          formatAmount (cellValue, digits) {
+            return XEUtils.commafy(cellValue, { digits: digits || 2 })
+          },
+          // 格式化银行卡，默认每4位隔开
+          formatBankcard (cellValue) {
+            return XEUtils.commafy(cellValue, { spaceNumber: 4, separator: ' ' })
+          },
+          // 四舍五入,默认两位数
+          formatFixed (cellValue, digits) {
+            return XEUtils.toNumber(cellValue).toFixed(digits || 2)
+          },
+          // 截取小数,默认两位数
+          formatCutFixed (cellValue, digits) {
+            return XEUtils.toFixedString(cellValue, digits || 2)
           }
         })
 

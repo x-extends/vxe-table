@@ -41,29 +41,37 @@
     </header>
     <div class="page-container">
       <div class="aside">
-        <div v-if="stableVersionList.length" class="version-list">
-          <span class="title">稳定版</span>
-          <select>
-            <option v-for="(pack, index) in stableVersionList" :key="index">{{ pack.version }}</option>
-          </select>
-          <template v-if="showBetaVetsion">
-            <span class="title">最新版</span>
+        <div class="header">
+          <div v-if="stableVersionList.length" class="version-list">
+            <span class="title">稳定版</span>
             <select>
-              <option v-for="(pack, index) in newBetsVersionList" :key="index">{{ pack.version }}</option>
+              <option v-for="(pack, index) in stableVersionList" :key="index">{{ pack.version }}</option>
             </select>
-          </template>
+            <template v-if="showBetaVetsion">
+              <span class="title">最新版</span>
+              <select>
+                <option v-for="(pack, index) in newBetsVersionList" :key="index">{{ pack.version }}</option>
+              </select>
+            </template>
+          </div>
+          <vxe-input clearable v-model="filterName" class="search-input" placeholder="文档搜索" @keyup="searchEvent" @clear="searchEvent"></vxe-input>
         </div>
-        <ul class="nav-menu">
-          <li v-for="(item, index) in tableList" :key="index" :class="{expand: item.expand}">
-            <a class="nav-link" @click="linkEvent(item)" :title="$t(item.disabled ? 'app.body.other.newFunc' : item.label)" :class="{disabled: item.disabled, active: pageKey === item.value}"><i class="vxe-icon--arrow-right nav-link-icon"></i>{{ $t(item.label) }}</a>
-            <ul v-if="item.children" v-show="item.expand" class="nav-child-menu">
-              <li v-for="(child, cIndex) in item.children" :key="cIndex">
-                <a class="nav-link disabled" v-if="child.disabled" :title="$t('app.body.other.newFunc')">{{ $t(child.label) }}</a>
-                <router-link v-else class="nav-link" :to="child.locat" :title="$t(child.label)">{{ $t(child.label) }}</router-link>
-              </li>
-            </ul>
-          </li>
-        </ul>
+        <div class="body">
+          <ul class="nav-menu">
+            <li v-for="(item, index) in apiList" :key="index" :class="{expand: item.expand}">
+              <a class="nav-link" @click="linkEvent(item)" :title="item.disabled ? $t('app.body.other.newFunc') : item.label" :class="{disabled: item.disabled, active: pageKey === item.value}">
+                <i class="vxe-icon--arrow-right nav-link-icon"></i>
+                <span v-html="item.label"></span>
+              </a>
+              <ul v-if="item.children" v-show="item.expand" class="nav-child-menu">
+                <li v-for="(child, cIndex) in item.children" :key="cIndex">
+                  <a class="nav-link disabled" v-if="child.disabled" :title="$t('app.body.other.newFunc')" v-html="child.label"></a>
+                  <router-link v-else class="nav-link" :to="child.locat" :title="child.label" v-html="child.label"></router-link>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
       </div>
       <div class="body">
         <div class="content" :class="{full: ['VXEAPI', 'Donation'].includes($route.name)}">
@@ -86,6 +94,9 @@ export default {
   data () {
     return {
       selected: null,
+      filterName: '',
+      apiList: [],
+      tableData: [],
       betaVersionList: [],
       stableVersionList: [],
       version: '2',
@@ -1952,11 +1963,6 @@ export default {
       return this.$route.path.split('/')[2]
     }
   },
-  watch: {
-    pageKey () {
-      this.init()
-    }
-  },
   created () {
     if (process.env.NODE_ENV === 'development') {
       setInterval(() => {
@@ -1967,17 +1973,24 @@ export default {
       }, 3000)
     }
     this.init()
-    this.getVersion()
   },
   methods: {
     init () {
-      this.tableList.forEach(item => {
-        item.expand = false
+      this.getVersion()
+      this.loadList()
+      setTimeout(() => {
+        let group = this.apiList.find(item => item.value === this.pageKey)
+        if (group) {
+          group.expand = true
+        }
+      }, 1000)
+    },
+    loadList () {
+      this.tableData = XEUtils.clone(this.tableList, true)
+      XEUtils.eachTree(this.tableData, item => {
+        item.label = this.$t(item.label)
       })
-      let group = this.tableList.find(item => item.value === this.pageKey)
-      if (group) {
-        group.expand = true
-      }
+      this.handleSearch()
     },
     getVersion () {
       XEAjax.get('https://registry.npm.taobao.org/vxe-table').then(data => {
@@ -1998,6 +2011,26 @@ export default {
         this.betaVersionList = betaVersionList
       })
     },
+    // 调用频率间隔 500 毫秒
+    searchEvent: XEUtils.debounce(function () {
+      this.handleSearch()
+    }, 500, { leading: false, trailing: true }),
+    handleSearch () {
+      let filterName = XEUtils.toString(this.filterName).trim().toLowerCase()
+      if (filterName) {
+        let filterRE = new RegExp(filterName, 'gi')
+        let rest = XEUtils.searchTree(this.tableData, item => item.label.toLowerCase().indexOf(filterName) > -1)
+        XEUtils.eachTree(rest, item => {
+          item.label = item.label.replace(filterRE, match => `<span class="keyword-lighten">${match}</span>`)
+        })
+        this.apiList = rest
+        this.apiList.forEach(group => {
+          group.expand = true
+        })
+      } else {
+        this.apiList = this.tableData
+      }
+    },
     clickEvent (evnt) {
       let pElem = evnt.target
       if (pElem && pElem.className === 'demo-code') {
@@ -2013,11 +2046,6 @@ export default {
     },
     linkEvent (item) {
       if (!item.disabled) {
-        this.tableList.forEach(group => {
-          if (item !== group) {
-            group.expand = false
-          }
-        })
         item.expand = !item.expand
       }
     },

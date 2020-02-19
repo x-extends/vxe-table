@@ -89,8 +89,9 @@ export default function (compName) {
       ])
     },
     methods: {
-      clearValue () {
+      clearValue (evnt) {
         this.$emit('input', '')
+        this.$emit('clear', {}, evnt)
       }
     }
   }

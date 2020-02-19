@@ -44,6 +44,24 @@ const apis = [
         list: []
       },
       {
+        name: 'form',
+        desc: '原生 form 属性',
+        version: '',
+        type: 'String',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'clearable',
+        desc: '当有值时，是否在右侧显示清除按钮',
+        version: '',
+        type: 'Boolean',
+        enum: 'false',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'placeholder',
         desc: '原生 placeholder 属性',
         version: '',
@@ -114,6 +132,15 @@ const apis = [
         type: '',
         enum: '',
         defVal: '{ value }, event',
+        list: []
+      },
+      {
+        name: 'clear',
+        desc: '在点击右侧清除按钮时触发该事件',
+        version: '2.8',
+        type: '',
+        enum: '',
+        defVal: '{}, event',
         list: []
       }
     ]

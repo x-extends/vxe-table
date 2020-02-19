@@ -81,10 +81,31 @@ body,
   .left {
     font-size: 22px;
     padding: 5px 0;
+    flex-shrink: 0;
     a {
       color: #409eff;
       text-decoration: none;
       cursor: pointer;
+    }
+  }
+  .main {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    padding: 0 100px;
+    .api-search {
+      position: relative;
+    }
+    .search-list {
+      position: absolute;
+      top: 40px;
+      left: 0;
+      width: 400px;
+      z-index: 99;
+      padding: 10px;
+      border-radius: 4px;
+      border: 1px solid #444;
+      background-color: #fff;
     }
   }
   .right {
@@ -125,25 +146,41 @@ body,
   border-bottom: 1px solid #dcdfe6;
   overflow: hidden;
   > .aside {
+    display: flex;
+    flex-direction: column;
     width: 300px;
     flex-shrink: 0;
     user-select: none;
-    padding: 15px 0 25px 20px;
+    padding-top: 10px;
     border-right: 1px solid #dcdfe6;
-    overflow-y: scroll;
-    overflow-x: hidden;
-    .version-list {
-      font-size: 12px;
-      padding-bottom: 10px;
-      & > .title {
-        font-weight: 700;
-        margin: 0 6px;
+    & > .header {
+      flex-shrink: 0;
+      text-align: center;
+      .version-list {
+        font-size: 12px;
+        margin-bottom: 10px;
+        & > .title {
+          font-weight: 700;
+          margin: 0 6px;
+        }
       }
+      .search-input {
+        height: 34px;
+        margin-bottom: 10px;
+      }
+    }
+    & > .body {
+      flex-grow: 1;
+      overflow-y: scroll;
+      overflow-x: hidden;
+      padding: 0 0 15px 20px;
     }
     .nav-menu {
       color: #333;
       text-decoration: none;
       font-size: 17px;
+      margin: 0;
+      padding: 0;
       .nav-link {
         display: block;
         height: 40px;

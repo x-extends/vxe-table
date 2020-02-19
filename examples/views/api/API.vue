@@ -7,7 +7,7 @@
       :resizable="{storage: true}"
       :custom="{storage: true, checkMethod: checkColumnMethod}">
       <template v-slot:buttons>
-        <vxe-input class="search-input" v-model="filterName" type="search" :placeholder="`vxe-${apiName} ${$t('app.api.apiSearch')}`" @keyup="searchEvent"></vxe-input>
+        <vxe-input clearable class="search-input" v-model="filterName" type="search" :placeholder="`vxe-${apiName} ${$t('app.api.apiSearch')}`" @keyup="searchEvent" @clear="searchEvent"></vxe-input>
       </template>
     </vxe-toolbar>
 
@@ -328,7 +328,7 @@ export default {
         })
       }
     },
-    // 创建一个防反跳策略函数，调用频率间隔 500 毫秒
+    // 调用频率间隔 500 毫秒
     searchEvent: XEUtils.debounce(function () {
       this.handleSearch()
     }, 500, { leading: false, trailing: true })
