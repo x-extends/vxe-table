@@ -2,6 +2,7 @@ export default {
   vxe: {
     error: {
       groupFixed: 'If grouping headers are used, fixed columns must be on the left and right sides.',
+      groupMouseRange: 'Grouping headers and "{{0}}" cannot be used at the same time, which may cause errors.',
       cellEditRender: 'The renderer "cell-render" and "edit-render" cannot be used together.',
       treeFixedExpand: 'The fixed column of the tree structure conflicts with the expanded row.',
       treeLineExpand: 'The node line of tree structure conflicts with the expanded line.',
@@ -14,7 +15,7 @@ export default {
       reqModule: 'require "{{0}}" module.',
       reqProp: 'Missing the necessary "{{0}}" parameter, which can cause error.',
       emptyProp: 'The property "{{0}}" is not allowed to be empty.',
-      errProp: 'Props "{{0}}" type error.',
+      errProp: 'Unsupported parameter "{{0}}", possibly "{{1}}".',
       notFunc: 'method "{{0}}" not exist.',
       notSlot: 'slot "{{0}}" does not exist',
       noTree: 'The tree structure does not support "{{0}}".',

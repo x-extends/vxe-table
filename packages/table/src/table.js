@@ -555,6 +555,9 @@ export default {
       if (this.treeConfig && tableFullColumn.some(column => column.fixed) && tableFullColumn.some(column => column.type === 'expand')) {
         UtilTools.warn('vxe.error.treeFixedExpand')
       }
+      if (this.isGroup && this.mouseConfig && (this.mouseOpts.range || this.mouseOpts.checked)) {
+        UtilTools.error('vxe.error.groupMouseRange', ['mouse-config.range'])
+      }
     },
     tableColumn () {
       this.analyColumnWidth()
@@ -585,7 +588,7 @@ export default {
     }
   },
   created () {
-    let { scrollXStore, scrollYStore, optimizeOpts, data, loading, editOpts, treeOpts, treeConfig, showOverflow } = Object.assign(this, {
+    let { scrollXStore, scrollYStore, optimizeOpts, mouseConfig, mouseOpts, data, loading, editConfig, editOpts, treeOpts, treeConfig, showOverflow } = Object.assign(this, {
       tZindex: 0,
       elemStore: {},
       // 存放横向 X 虚拟滚动相关的信息
@@ -651,6 +654,9 @@ export default {
     }
     if (this.remoteFilter) {
       UtilTools.warn('vxe.error.delProp', ['remote-filter', 'filter-config.remote'])
+    }
+    if (editConfig && mouseConfig && (mouseOpts.range || mouseOpts.checked) && editOpts.trigger !== 'dblclick') {
+      UtilTools.error('vxe.error.errProp', ['edit-config.trigger', 'dblclick'])
     }
     // 检查是否有安装需要的模块
     let errorModuleName

@@ -2,6 +2,7 @@ export default {
   vxe: {
     error: {
       groupFixed: '如果使用分组表頭，固定列必须在左右兩側',
+      groupMouseRange: '分组表頭与 "{{0}}" 不能同時使用，这可能會出現錯誤',
       cellEditRender: '渲染器 "cell-render" 和 "edit-render" 不能同時使用',
       treeFixedExpand: '樹結構的固定列與展開行有衝突',
       treeLineExpand: '樹結構的節點線與展開行有衝突',
@@ -14,7 +15,7 @@ export default {
       reqModule: '缺少 "{{0}}" 模塊',
       reqProp: '缺少必要的 "{{0}}" 參數，可能會導致出現錯誤',
       emptyProp: '參數 "{{0}}" 不允許為空',
-      errProp: '參數 "{{0}}" 類型錯誤',
+      errProp: '不支持的參數 "{{0}}"，可能為 "{{1}}"',
       notFunc: '方法 "{{0}}" 不存在',
       notSlot: '插槽 "{{0}}" 不存在',
       noTree: '樹狀結構不支援 {{0}}',
