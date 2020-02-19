@@ -703,6 +703,9 @@ export default {
       if (this.treeConfig && tableFullColumn.some(column => column.fixed) && tableFullColumn.some(column => column.type === 'expand')) {
         UtilTools.warn('vxe.error.treeFixedExpand')
       }
+      if (this.isGroup && this.mouseConfig && (this.mouseOpts.range || this.mouseOpts.checked)) {
+        UtilTools.error('vxe.error.groupMouseRange', ['mouse-config.range'])
+      }
     },
     tableColumn () {
       this.analyColumnWidth()
@@ -733,7 +736,7 @@ export default {
     }
   },
   created () {
-    let { data, scrollXStore, scrollYStore, optimizeOpts, ctxMenuOpts, showOverflow, radioOpts, checkboxOpts, treeConfig, treeOpts, editConfig, editOpts, loading, showAllOverflow, showHeaderAllOverflow } = this
+    let { data, scrollXStore, scrollYStore, optimizeOpts, ctxMenuOpts, showOverflow, radioOpts, checkboxOpts, treeConfig, treeOpts, editConfig, editOpts, mouseConfig, mouseOpts, loading, showAllOverflow, showHeaderAllOverflow } = this
     let { scrollX, scrollY } = optimizeOpts
     if (loading) {
       this.isLoading = true
@@ -795,6 +798,9 @@ export default {
     }
     if (this.remoteFilter) {
       // UtilTools.warn('vxe.error.delProp', ['remote-filter', 'filter-config.remote'])
+    }
+    if (editConfig && mouseConfig && (mouseOpts.range || mouseOpts.checked) && editOpts.trigger !== 'dblclick') {
+      UtilTools.error('vxe.error.errProp', ['edit-config.trigger', 'dblclick'])
     }
     ['header', 'body', 'footer'].forEach(name => {
       if (ctxMenuOpts[name] && ctxMenuOpts[name].visibleMethod) {
