@@ -132,6 +132,14 @@ body,
     border-right: 1px solid #dcdfe6;
     overflow-y: scroll;
     overflow-x: hidden;
+    .version-list {
+      font-size: 12px;
+      padding-bottom: 10px;
+      & > .title {
+        font-weight: 700;
+        margin: 0 6px;
+      }
+    }
     .nav-menu {
       color: #333;
       text-decoration: none;

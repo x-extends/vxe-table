@@ -60,6 +60,25 @@ function getHeaderTitle (opts, column) {
   return (opts.original ? column.property : column.getTitle()) || ''
 }
 
+function getFooterCellValue ($xetable, opts, items, column) {
+  let { cellRender, editRender } = column
+  let exportMethod
+  if (editRender && editRender.name) {
+    let compConf = VXETable.renderer.get(editRender.name)
+    if (compConf) {
+      exportMethod = compConf.footerCellExportMethod
+    }
+  } else if (cellRender && cellRender.name) {
+    let compConf = VXETable.renderer.get(cellRender.name)
+    if (compConf) {
+      exportMethod = compConf.footerCellExportMethod
+    }
+  }
+  let itemIndex = $xetable.$getColumnIndex(column)
+  let cellValue = exportMethod ? exportMethod({ $table: $xetable, items, itemIndex, column }) : XEUtils.toString(items[itemIndex])
+  return cellValue
+}
+
 function toCsv ($xetable, opts, columns, datas) {
   let content = '\ufeff'
   if (opts.isHeader) {
@@ -72,7 +91,7 @@ function toCsv ($xetable, opts, columns, datas) {
     const footerData = $xetable.footerData
     const footers = opts.footerFilterMethod ? footerData.filter(opts.footerFilterMethod) : footerData
     footers.forEach(rows => {
-      content += columns.map(column => `"${rows[$xetable.$getColumnIndex(column)] || ''}"`).join(',') + '\n'
+      content += columns.map(column => `"${getFooterCellValue($xetable, opts, rows, column)}"`).join(',') + '\n'
     })
   }
   return content
@@ -90,7 +109,7 @@ function toTxt ($xetable, opts, columns, datas) {
     const footerData = $xetable.footerData
     const footers = opts.footerFilterMethod ? footerData.filter(opts.footerFilterMethod) : footerData
     footers.forEach(rows => {
-      content += columns.map(column => `${rows[$xetable.$getColumnIndex(column)] || ''}`).join(',') + '\n'
+      content += columns.map(column => `${getFooterCellValue($xetable, opts, rows, column)}`).join(',') + '\n'
     })
   }
   return content
@@ -207,7 +226,7 @@ function toHtml ($xetable, opts, columns, datas) {
         html += `<tr>${columns.map(column => {
           let footAlign = column.footerAlign || column.align || allFooterAlign || allAlign
           let classNames = hasEllipsis($xetable, column, 'showOverflow', allColumnOverflow) ? ['col--ellipsis'] : []
-          let cellValue = XEUtils.toString(rows[$xetable.$getColumnIndex(column)])
+          let cellValue = getFooterCellValue($xetable, opts, rows, column)
           if (footAlign) {
             classNames.push(`col--${footAlign}`)
           }
@@ -250,7 +269,7 @@ function toXML ($xetable, opts, columns, datas) {
     const footerData = $xetable.footerData
     const footers = opts.footerFilterMethod ? footerData.filter(opts.footerFilterMethod) : footerData
     footers.forEach(rows => {
-      xml += `<Row>${columns.map(column => `<Cell><Data ss:Type="String">${rows[$xetable.$getColumnIndex(column) || '']}</Data></Cell>`).join('')}</Row>`
+      xml += `<Row>${columns.map(column => `<Cell><Data ss:Type="String">${getFooterCellValue($xetable, opts, rows, column)}</Data></Cell>`).join('')}</Row>`
     })
   }
   return `${xml}</Table></Worksheet></Workbook>`
@@ -318,7 +337,7 @@ function getLabelData ($xetable, opts, columns, datas) {
               if (editRender && editRender.name) {
                 let compConf = VXETable.renderer.get(editRender.name)
                 if (compConf) {
-                  exportMethod = compConf.editExportMethod
+                  exportMethod = compConf.editCellExportMethod
                 }
               } else if (cellRender && cellRender.name) {
                 let compConf = VXETable.renderer.get(cellRender.name)
@@ -363,7 +382,7 @@ function getLabelData ($xetable, opts, columns, datas) {
             if (editRender && editRender.name) {
               let compConf = VXETable.renderer.get(editRender.name)
               if (compConf) {
-                exportMethod = compConf.editExportMethod
+                exportMethod = compConf.editCellExportMethod
               }
             } else if (cellRender && cellRender.name) {
               let compConf = VXETable.renderer.get(cellRender.name)
@@ -693,7 +712,7 @@ export default {
             try {
               printFrame.contentDocument.write('')
               printFrame.contentDocument.clear()
-            } catch (e) {}
+            } catch (e) { }
             document.body.removeChild(printFrame)
           }
           printFrame = createFrame()

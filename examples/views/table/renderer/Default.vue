@@ -6,7 +6,8 @@
       renderHeader (h, renderOpts, <vxe-tooltip content="{ column, columnIndex }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params, context) 表头<br>
       renderDefault (h, renderOpts, <vxe-tooltip content="{ row, rowIndex, column, columnIndex }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params, context) 表内容<br>
       renderFooter (h, renderOpts, <vxe-tooltip content="{ column, columnIndex, items, itemIndex }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params, context) 表尾<br>
-      cellExportMethod (<vxe-tooltip content="{ row, column }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params) 导出值格式化函数<br>
+      cellExportMethod (<vxe-tooltip content="{ row, column }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params) 单元格导出函数<br>
+      footerCellExportMethod (<vxe-tooltip content="{ items, itemIndex }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params) 表尾单元格导出函数<br>
       <span class="red">（注：实际开发中应该将业务封装成一个组件，不要把复杂的渲染逻辑写在渲染器中）</span>
     </p>
 
