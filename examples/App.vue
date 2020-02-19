@@ -41,15 +41,17 @@
     </header>
     <div class="page-container">
       <div class="aside">
-        <div class="version-list">
+        <div v-if="stableVersionList.length" class="version-list">
           <span class="title">稳定版</span>
           <select>
             <option v-for="(pack, index) in stableVersionList" :key="index">{{ pack.version }}</option>
           </select>
-          <span class="title">最新版</span>
-          <select>
-            <option v-for="(pack, index) in betaVersionList" :key="index">{{ pack.version }}</option>
-          </select>
+          <template v-if="showBetaVetsion">
+            <span class="title">最新版</span>
+            <select>
+              <option v-for="(pack, index) in betaVersionList" :key="index">{{ pack.version }}</option>
+            </select>
+          </template>
         </div>
         <ul class="nav-menu">
           <li v-for="(item, index) in tableList" :key="index" :class="{expand: item.expand}">
@@ -1892,6 +1894,25 @@ export default {
         }
       }
       return null
+    },
+    showBetaVetsion () {
+      const { betaVersionList, stableVersionList } = this
+      if (betaVersionList.length && stableVersionList.length) {
+        const [stable1, stable2, stable3] = stableVersionList[1].version.split('-')[0].split('.')
+        const [beta1, beta2, beta3] = betaVersionList[0].version.split('-')[0].split('.')
+        if (beta1 > stable1) {
+          return true
+        } else if (beta1 === stable1) {
+          if (beta2 > stable2) {
+            return true
+          } else if (beta2 === stable2) {
+            if (beta3 > stable3) {
+              return true
+            }
+          }
+        }
+      }
+      return false
     },
     pageKey () {
       return this.$route.path.split('/')[2]
