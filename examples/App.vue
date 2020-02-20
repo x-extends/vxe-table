@@ -1972,6 +1972,9 @@ export default {
     '$i18n.locale' () {
       this.loadList()
       this.defaultExpand()
+    },
+    pageKey () {
+      this.defaultExpand()
     }
   },
   created () {
@@ -2000,9 +2003,18 @@ export default {
     },
     defaultExpand () {
       let group = this.apiList.find(item => item.value === this.pageKey)
-      console.log(group)
       if (group) {
         group.expand = true
+        this.$nextTick(() => {
+          const navElem = document.querySelector('.nav-link.router-link-active')
+          if (navElem) {
+            if (navElem.scrollIntoViewIfNeeded) {
+              navElem.scrollIntoViewIfNeeded()
+            } else if (navElem.scrollIntoView) {
+              navElem.scrollIntoView()
+            }
+          }
+        })
       }
     },
     getVersion () {
