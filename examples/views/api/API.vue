@@ -149,7 +149,6 @@ export default {
       this.loadList()
     },
     '$i18n.locale' () {
-      // 由于使用 v-html 无法自动翻译，需要重新加载
       this.loadList()
     }
   },

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">通过 <table-column-api-link prop="events"/> 自定义目标组件的事件<br><span class="red">（注：只有目标组件支持的事件才有效）</span></p>
+    <p class="tip">通过 <table-column-api-link prop="events"/> 自定义目标组件的事件<br><span class="red">（注：具体请查看目标组件所支持的事件API）</span></p>
 
     <vxe-table
       border
@@ -8,14 +8,14 @@
       :data="tableData"
       :edit-config="{trigger: 'click', mode: 'cell'}">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" :edit-render="{name: 'input', events: {keydown: keydownEvent}}"></vxe-table-column>
+      <vxe-table-column field="name" title="Name" :edit-render="{name: 'input', events: {input: nameChangeEvent}}"></vxe-table-column>
       <vxe-table-column
         field="role"
         title="Role"
         :filters="[{ data: '' }]"
         :filter-render="{name: 'input', attrs: {placeholder: '按回车确认筛选'}, events: {keyup: enterFilterEvent}}"
-        :edit-render="{name: 'input', events: {focus: focusEvent}}"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'select', options: sexList, events: {change: changeEvent}}"></vxe-table-column>
+        :edit-render="{name: 'input', events: {focus: roleFocusEvent}}"></vxe-table-column>
+      <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'select', options: sexList, events: {change: sexChangeEvent}}"></vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -44,14 +44,14 @@ export default {
           :data="tableData"
           :edit-config="{trigger: 'click', mode: 'cell'}">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" :edit-render="{name: 'input', events: {keydown: keydownEvent}}"></vxe-table-column>
+          <vxe-table-column field="name" title="Name" :edit-render="{name: 'input', events: {input: nameChangeEvent}}"></vxe-table-column>
           <vxe-table-column
             field="role"
             title="Role"
             :filters="[{ data: '' }]"
             :filter-render="{name: 'input', attrs: {placeholder: '按回车确认筛选'}, events: {keyup: enterFilterEvent}}"
-            :edit-render="{name: 'input', events: {focus: focusEvent}}"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'select', options: sexList, events: {change: changeEvent}}"></vxe-table-column>
+            :edit-render="{name: 'input', events: {focus: roleFocusEvent}}"></vxe-table-column>
+          <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'select', options: sexList, events: {change: sexChangeEvent}}"></vxe-table-column>
         </vxe-table>
         `,
         `
@@ -74,17 +74,18 @@ export default {
             },
             enterFilterEvent ({ context, column }, event) {
               if (event.keyCode === 13) {
+                console.log('筛选回车事件')
                 context.confirmFilter()
               }
             },
-            keydownEvent ({ column }, event) {
-              console.log(\`\${column.title} 触发 keydown 事件\`)
+            nameChangeEvent ({ column }, event) {
+              console.log(\`\${column.title} 触发 change 事件 value=\${event.target.value}\`)
             },
-            focusEvent ({ column }, event) {
-              console.log(\`\${column.title} 触发 focus 事件\`)
+            roleFocusEvent ({ column }, event) {
+              console.log(\`\${column.title} 触发 focus 事件 value=\${event.target.value}\`)
             },
-            changeEvent ({ column }, event) {
-              console.log(\`\${column.title} 触发 change 事件\`)
+            sexChangeEvent ({ column }, event) {
+              console.log(\`\${column.title} 触发 change 事件 value=\${event.target.value}\`)
             }
           }
         }
@@ -109,17 +110,18 @@ export default {
     },
     enterFilterEvent ({ context, column }, event) {
       if (event.keyCode === 13) {
+        console.log('筛选回车事件')
         context.confirmFilter()
       }
     },
-    keydownEvent ({ column }, event) {
-      console.log(`${column.title} 触发 keydown 事件`)
+    nameChangeEvent ({ column }, event) {
+      console.log(`${column.title} 触发 change 事件 value=${event.target.value}`)
     },
-    focusEvent ({ column }, event) {
-      console.log(`${column.title} 触发 focus 事件`)
+    roleFocusEvent ({ column }, event) {
+      console.log(`${column.title} 触发 focus 事件 value=${event.target.value}`)
     },
-    changeEvent ({ column }, event) {
-      console.log(`${column.title} 触发 change 事件`)
+    sexChangeEvent ({ column }, event) {
+      console.log(`${column.title} 触发 change 事件 value=${event.target.value}`)
     }
   }
 }
