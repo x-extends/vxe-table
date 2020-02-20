@@ -89,23 +89,22 @@ function renderOptions (h, options, renderOpts, params) {
   })
 }
 
-function getFilterEvents (item, renderOpts, params, context) {
+function getFilterEvents (item, renderOpts, params) {
   let { column } = params
   let { events } = renderOpts
   let type = name === 'select' ? 'change' : 'input'
   let on = {
     [type] (evnt) {
       item.data = evnt.target.value
-      handleConfirmFilter(context, column, !!item.data, item)
+      handleConfirmFilter(params, column, !!item.data, item)
       if (events && events[type]) {
-        events[type](Object.assign({ context }, params), evnt)
+        events[type](params, evnt)
       }
     }
   }
   if (events) {
     return XEUtils.assign({}, XEUtils.objectMap(events, cb => function () {
-      params = Object.assign({ context }, params)
-      cb.apply(null, [params].concat.apply(params, arguments))
+      cb.apply(null, [params].concat(arguments))
     }), on)
   }
   return on
@@ -125,14 +124,15 @@ function defaultFilterRender (h, renderOpts, params, context) {
         domProps: {
           value: item.data
         },
-        on: getFilterEvents(item, renderOpts, params, context)
+        on: getFilterEvents(item, renderOpts, params)
       })
     ])
   })
 }
 
-function handleConfirmFilter (context, column, checked, item) {
-  context[column.filterMultiple ? 'changeMultipleOption' : 'changeRadioOption']({}, checked, item)
+function handleConfirmFilter (params, column, checked, item) {
+  const { $panel } = params
+  $panel[column.filterMultiple ? 'changeMultipleOption' : 'changeRadioOption']({}, checked, item)
 }
 
 function defaultFilterMethod ({ option, row, column }) {
@@ -190,12 +190,12 @@ function defaultItemRender (h, renderOpts, params, context) {
       domProps: attrs && name === 'input' && (attrs.type === 'submit' || attrs.type === 'reset') ? null : {
         value: cellValue
       },
-      on: getFormEvents(renderOpts, params, context)
+      on: getFormEvents(renderOpts, params)
     })
   ]
 }
 
-function getFormEvents (renderOpts, params, context) {
+function getFormEvents (renderOpts, params) {
   let { $form, data, property } = params
   let { events } = renderOpts
   let type = name === 'select' ? 'change' : 'input'
@@ -205,20 +205,19 @@ function getFormEvents (renderOpts, params, context) {
       XEUtils.set(data, property, itemValue)
       $form.updateStatus(params, itemValue)
       if (events && events[type]) {
-        events[type](Object.assign({ context }, params), evnt)
+        events[type](params, evnt)
       }
     }
   }
   if (events) {
     return XEUtils.assign({}, XEUtils.objectMap(events, cb => function () {
-      params = Object.assign({ context }, params)
-      cb.apply(null, [params].concat.apply(params, arguments))
+      cb.apply(null, [params].concat(arguments))
     }), on)
   }
   return on
 }
 
-function renderFormOptions (h, options, renderOpts, params, context) {
+function renderFormOptions (h, options, renderOpts, params) {
   let { data, property } = params
   let { optionProps = {} } = renderOpts
   let labelProp = optionProps.label || 'label'
@@ -276,7 +275,7 @@ const renderMap = {
         return h('select', {
           class: 'vxe-default-select',
           attrs: getAttrs(renderOpts),
-          on: getFilterEvents(item, renderOpts, params, context)
+          on: getFilterEvents(item, renderOpts, params)
         },
         renderOpts.optionGroups ? renderOptgroups(h, renderOpts, params) : renderOptions(h, renderOpts.options, renderOpts, params))
       })
@@ -287,9 +286,9 @@ const renderMap = {
         h('select', {
           class: 'vxe-default-select',
           attrs: getAttrs(renderOpts),
-          on: getFormEvents(renderOpts, params, context)
+          on: getFormEvents(renderOpts, params)
         },
-        renderOpts.optionGroups ? renderOptgroups(h, renderOpts, params, context, renderFormOptions) : renderFormOptions(h, renderOpts.options, renderOpts, params, context))
+        renderOpts.optionGroups ? renderOptgroups(h, renderOpts, params, renderFormOptions) : renderFormOptions(h, renderOpts.options, renderOpts, params))
       ]
     },
     editCellExportMethod: createExportMethod(getSelectCellValue, true),

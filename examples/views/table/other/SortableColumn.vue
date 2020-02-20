@@ -62,7 +62,7 @@ export default {
         { field: 'sex', title: 'Sex', minWidth: 100 },
         { field: 'age', title: 'Age', minWidth: 150 },
         { field: 'date3', title: 'Date', minWidth: 200 },
-        { field: 'address', title: 'Address', minWidth: 300, showOverflow: true }
+        { field: 'address', title: 'Address', minWidth: 200, showOverflow: true }
       ],
       toolbar: {
         custom: true
@@ -159,7 +159,7 @@ export default {
                 { field: 'sex', title: 'Sex', minWidth: 100 },
                 { field: 'age', title: 'Age', minWidth: 150 },
                 { field: 'date3', title: 'Date', minWidth: 200 },
-                { field: 'address', title: 'Address', minWidth: 300, showOverflow: true }
+                { field: 'address', title: 'Address', minWidth: 200, showOverflow: true }
               ],
               toolbar: {
                 custom: true

@@ -10,12 +10,8 @@ var browse = DomTools.browse
 var debounceScrollYDuration = browse.msie ? 40 : 20
 
 // 导入
-const fileForm = document.createElement('form')
-const fileInput = document.createElement('input')
-fileForm.className = 'vxe-table--file-form'
-fileInput.name = 'file'
-fileInput.type = 'file'
-fileForm.appendChild(fileInput)
+var fileForm
+var fileInput
 
 // 打印
 var printFrame
@@ -2224,7 +2220,7 @@ export default {
     preventEvent (evnt, type, args, next, end) {
       let evntList = VXETable.interceptor.get(type)
       let rest
-      if (!evntList.some(func => func(args, evnt, this) === false)) {
+      if (!evntList.some(func => func(Object.assign({ $table: this }, args), evnt, this) === false)) {
         if (next) {
           rest = next()
         }
@@ -5309,7 +5305,13 @@ export default {
       return rest
     },
     readFile (options = {}) {
-      if (!fileForm.parentNode) {
+      if (!fileForm) {
+        fileForm = document.createElement('form')
+        fileInput = document.createElement('input')
+        fileForm.className = 'vxe-table--file-form'
+        fileInput.name = 'file'
+        fileInput.type = 'file'
+        fileForm.appendChild(fileInput)
         document.body.appendChild(fileForm)
       }
       const types = options.types || VXETable.importTypes

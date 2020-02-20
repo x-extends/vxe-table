@@ -64,8 +64,7 @@ import XEUtils from 'xe-utils'
 export default {
   name: 'FilterExcel',
   props: {
-    params: Object,
-    context: Object
+    params: Object
   },
   data () {
     return {
@@ -157,22 +156,21 @@ export default {
       }
     },
     confirmFilterEvent () {
-      const { option } = this
+      const { params, option } = this
       const { data } = option
-      const { context } = this
+      const { $panel } = params
       data.f1 = ''
       data.f2 = ''
       option.checked = true
-      context.confirmFilter()
+      $panel.confirmFilter()
     },
     resetFilterEvent () {
-      const { context } = this
-      context.resetFilter()
+      const { $panel } = this.params
+      $panel.resetFilter()
     },
     childMenuClickEvent (cItem) {
-      const { $table } = this.params
-      const { context, allCaseList } = this
-      const { option } = this
+      const { $table, $panel } = this.params
+      const { option, allCaseList } = this
       const { data } = option
       this.selectCMenuItem = cItem
       data.fMode = 'and'
@@ -254,7 +252,7 @@ export default {
                     data.fMenu = cItem.value
                     option.checked = true
                     $modal.close()
-                    context.confirmFilter()
+                    $panel.confirmFilter()
                   } }>确认</button>
                   <button onClick={ e => { $modal.close() } }>取消</button>
                 </div>

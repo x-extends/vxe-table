@@ -31,13 +31,13 @@ export default {
         return [
           h('div', {
             class: 'vxe-table--filter-template'
-          }, slots.filter.call($xetable, Object.assign({ $table: $xetable, context: this }, args), h))
+          }, slots.filter.call($xetable, Object.assign({ $panel: this, context: this }, args), h))
         ]
       } else if (compConf && compConf.renderFilter) {
         return [
           h('div', {
             class: 'vxe-table--filter-template'
-          }, compConf.renderFilter.call($xetable, h, filterRender, args, this))
+          }, compConf.renderFilter.call($xetable, h, filterRender, Object.assign({ $panel: this, context: this }, args), this))
         ]
       }
       return [

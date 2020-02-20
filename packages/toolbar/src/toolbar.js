@@ -20,7 +20,7 @@ function renderBtns (h, _vm) {
     if (compConf && compConf.renderButton) {
       return h('span', {
         class: 'vxe-button--item'
-      }, compConf.renderButton.call(_vm, h, buttonRender, { button: item }, { $grid: $xegrid, $table: $xetable }))
+      }, compConf.renderButton.call(_vm, h, buttonRender, { $grid: $xegrid, $table: $xetable, button: item }, { $grid: $xegrid, $table: $xetable }))
     }
     return h('vxe-button', {
       on: {
