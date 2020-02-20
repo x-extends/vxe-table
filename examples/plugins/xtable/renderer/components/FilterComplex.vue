@@ -25,8 +25,7 @@
 export default {
   name: 'FilterComplex',
   props: {
-    params: Object,
-    context: Object
+    params: Object
   },
   data () {
     return {
@@ -43,15 +42,18 @@ export default {
   },
   methods: {
     changeOptionEvent () {
-      const { option } = this
+      const { params, option } = this
+      const { $panel } = params
       const checked = !!option.data.name
-      this.context.changeOption(null, checked, option)
+      $panel.changeOption(null, checked, option)
     },
     confirmEvent () {
-      this.context.confirmFilter()
+      const { $panel } = this.params
+      $panel.confirmFilter()
     },
     resetEvent () {
-      this.context.resetFilter()
+      const { $panel } = this.params
+      $panel.resetFilter()
     }
   }
 }

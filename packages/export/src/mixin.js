@@ -7,12 +7,8 @@ import { UtilTools, DomTools } from '../../tools'
 const defaultHtmlStyle = 'body{margin:0}body *{-webkit-box-sizing:border-box;box-sizing:border-box}.vxe-table{border:0;border-collapse:separate;table-layout:fixed;text-align:left;font-size:14px;border-spacing:0}.vxe-table.is--print{width:100%}td,thead tr:last-child th{border-bottom:1px solid #e8eaec}.vxe-table:not(.b--style-none) thead tr:first-child th,.vxe-table:not(.show--head):not(.b--style-none) tbody tr:first-child td{border-top:1px solid #e8eaec}.vxe-table:not(.b--style-none) tr td:first-child,.vxe-table:not(.b--style-none) tr th:first-child{border-left:1px solid #e8eaec}.vxe-table:not(.t--border){border-width:1px}.vxe-table.t--border:not(.b--style-none) td,table.t--border:not(.b--style-none) th{border-right:1px solid #e8eaec}.vxe-table:not(.b--style-none) thead{background-color:#f8f8f9}.vxe-table td>div,.vxe-table th>div{padding:.5em .4em}.col--center{text-align:center}.col--right{text-align:right}.col--ellipsis>div{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;word-break:break-all}.vxe-table--tree-node{text-align:left}.vxe-table--tree-node-wrapper{position:relative}.vxe-table--tree-icon-wrapper{position:absolute;top:50%;width:1em;height:1em;text-align:center;-webkit-transform:translateY(-50%);transform:translateY(-50%);-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;cursor:pointer}.vxe-table--tree-icon{position:absolute;left:0;top:.3em;width:0;height:0;border-style:solid;border-width:.5em;border-top-color:#939599;border-right-color:transparent;border-bottom-color:transparent;border-left-color:transparent}.vxe-table--tree-cell{display:block;padding-left:1.5em}'
 
 // 导入
-const fileForm = document.createElement('form')
-const fileInput = document.createElement('input')
-fileForm.className = 'vxe-table--file-form'
-fileInput.name = 'file'
-fileInput.type = 'file'
-fileForm.appendChild(fileInput)
+var fileForm
+var fileInput
 
 // 打印
 var printFrame
@@ -668,7 +664,13 @@ export default {
       return rest
     },
     _readFile (options = {}) {
-      if (!fileForm.parentNode) {
+      if (!fileForm) {
+        fileForm = document.createElement('form')
+        fileInput = document.createElement('input')
+        fileForm.className = 'vxe-table--file-form'
+        fileInput.name = 'file'
+        fileInput.type = 'file'
+        fileForm.appendChild(fileInput)
         document.body.appendChild(fileForm)
       }
       const types = options.types || VXETable.importTypes

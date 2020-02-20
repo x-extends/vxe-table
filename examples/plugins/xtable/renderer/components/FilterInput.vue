@@ -8,8 +8,7 @@
 export default {
   name: 'FilterInput',
   props: {
-    params: Object,
-    context: Object
+    params: Object
   },
   data () {
     return {
@@ -26,9 +25,10 @@ export default {
   },
   methods: {
     changeOptionEvent () {
-      const { option } = this
+      const { params, option } = this
+      const { $panel } = params
       const checked = !!option.data
-      this.context.changeOption(null, checked, option)
+      $panel.changeOption(null, checked, option)
     }
   }
 }

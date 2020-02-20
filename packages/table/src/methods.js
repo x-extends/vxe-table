@@ -1334,7 +1334,7 @@ const Methods = {
   preventEvent (evnt, type, args, next, end) {
     let evntList = VXETable.interceptor.get(type)
     let rest
-    if (!evntList.some(func => func(args, evnt, this) === false)) {
+    if (!evntList.some(func => func(Object.assign({ $table: this }, args), evnt, this) === false)) {
       if (next) {
         rest = next()
       }

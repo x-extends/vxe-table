@@ -2,7 +2,7 @@
   <div>
     <p class="tip">与 <a class="link" href="https://www.npmjs.com/package/element-ui">element-ui</a> 组合渲染 + 使用分页</p>
 
-    <vxe-form :data="formData" title-width="120" title-align="right" @submit="searchEvent">
+    <vxe-form :data="formData" title-width="120" title-align="right" @submit="searchEvent" @reset="searchEvent">
       <vxe-form-item field="name" title="ElInput" span="8" :title-prefix="{ message: '帮助信息！！！', icon: 'fa fa-exclamation-circle' }" :item-render="{name: 'ElInput'}"></vxe-form-item>
       <vxe-form-item field="role" title="ElAutocomplete" span="8" :item-render="{name: 'ElAutocomplete', props: {fetchSuggestions: roleFetchSuggestions}}"></vxe-form-item>
       <vxe-form-item field="age" title="ElInputNumber" span="8" :item-render="{name: 'ElInputNumber'}"></vxe-form-item>
@@ -155,7 +155,7 @@ export default {
       },
       demoCodes: [
         `
-        <vxe-form :data="formData" title-width="120" title-align="right" @submit="searchEvent">
+        <vxe-form :data="formData" title-width="120" title-align="right" @submit="searchEvent" @reset="searchEvent">
           <vxe-form-item field="name" title="ElInput" span="8" :title-prefix="{ message: '帮助信息！！！', icon: 'fa fa-exclamation-circle' }" :item-render="{name: 'ElInput'}"></vxe-form-item>
           <vxe-form-item field="role" title="ElAutocomplete" span="8" :item-render="{name: 'ElAutocomplete', props: {fetchSuggestions: roleFetchSuggestions}}"></vxe-form-item>
           <vxe-form-item field="age" title="ElInputNumber" span="8" :item-render="{name: 'ElInputNumber'}"></vxe-form-item>

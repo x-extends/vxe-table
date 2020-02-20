@@ -1971,6 +1971,7 @@ export default {
   watch: {
     '$i18n.locale' () {
       this.loadList()
+      this.defaultExpand()
     }
   },
   created () {
@@ -1988,6 +1989,7 @@ export default {
     init () {
       this.getVersion()
       this.loadList()
+      setTimeout(() => this.defaultExpand(), 1500)
     },
     loadList () {
       this.tableData = XEUtils.clone(this.tableList, true)
@@ -1995,12 +1997,13 @@ export default {
         item.label = this.$t(item.label)
       })
       this.handleSearch()
-      setTimeout(() => {
-        let group = this.apiList.find(item => item.value === this.pageKey)
-        if (group) {
-          group.expand = true
-        }
-      }, 500)
+    },
+    defaultExpand () {
+      let group = this.apiList.find(item => item.value === this.pageKey)
+      console.log(group)
+      if (group) {
+        group.expand = true
+      }
     },
     getVersion () {
       XEAjax.get('https://registry.npm.taobao.org/vxe-table').then(data => {

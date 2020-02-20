@@ -15,7 +15,7 @@ VXETable.renderer.add('FilterInput', {
   // 筛选模板
   renderFilter (h, renderOpts, params, context) {
     return [
-      <filter-input params={ params } context={ context }></filter-input>
+      <filter-input params={ params }></filter-input>
     ]
   },
   // 筛选方法
@@ -34,7 +34,7 @@ VXETable.renderer.add('FilterComplex', {
   // 筛选模板
   renderFilter (h, renderOpts, params, context) {
     return [
-      <filter-complex params={ params } context={ context }></filter-complex>
+      <filter-complex params={ params }></filter-complex>
     ]
   },
   // 筛选方法
@@ -70,7 +70,7 @@ VXETable.renderer.add('FilterExcel', {
   // 筛选模板
   renderFilter (h, renderOpts, params, context) {
     return [
-      <filter-excel params={ params } context={ context }></filter-excel>
+      <filter-excel params={ params }></filter-excel>
     ]
   },
   // 筛选方法

@@ -86,7 +86,7 @@ export const Cell = {
       let funName = own.editRender ? 'renderCell' : 'renderDefault'
       let compConf = VXETable.renderer.get(renderOpts.name)
       if (compConf && compConf[funName]) {
-        return compConf[funName].call($table, h, renderOpts, params, { $type: own.editRender ? 'edit' : 'cell', $grid: $table.$xegrid, $excel: $table.$parent, $table })
+        return compConf[funName].call($table, h, renderOpts, Object.assign({ isEdit: !!own.editRender }, params), { $type: own.editRender ? 'edit' : 'cell', $grid: $table.$xegrid, $excel: $table.$parent, $table })
       }
     }
     return [UtilTools.formatText(UtilTools.getCellLabel(row, column, params), 1)]
@@ -580,7 +580,7 @@ export const Cell = {
       if (slots && slots.edit) {
         return slots.edit.call($table, params, h)
       }
-      return compConf && compConf.renderEdit ? compConf.renderEdit.call($table, h, editRender, params, { $type: 'edit', $grid: $table.$xegrid, $excel: $table.$parent, $table }) : []
+      return compConf && compConf.renderEdit ? compConf.renderEdit.call($table, h, editRender, Object.assign({ isEdit: true }, params), { $type: 'edit', $grid: $table.$xegrid, $excel: $table.$parent, $table }) : []
     }
     if (slots && slots.default) {
       return slots.default.call($table, params, h)

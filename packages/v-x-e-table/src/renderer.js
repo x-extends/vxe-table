@@ -8,8 +8,8 @@ function getAttrs ({ name, attrs }) {
   return attrs
 }
 
-function isSyncCell (renderOpts, params, context) {
-  return renderOpts.immediate || renderOpts.type === 'visible' || context.$type === 'cell'
+function isSyncCell (renderOpts, params) {
+  return renderOpts.immediate || renderOpts.type === 'visible' || params.isEdit
 }
 
 /**
@@ -20,7 +20,7 @@ function defaultEditRender (h, renderOpts, params, context) {
   let { row, column } = params
   let { name } = renderOpts
   let attrs = getAttrs(renderOpts)
-  let cellValue = isSyncCell(renderOpts, params, context) ? UtilTools.getCellValue(row, column) : column.model.value
+  let cellValue = isSyncCell(renderOpts, params) ? UtilTools.getCellValue(row, column) : column.model.value
   return [
     h(name, {
       class: `vxe-default-${name}`,
@@ -28,12 +28,12 @@ function defaultEditRender (h, renderOpts, params, context) {
       domProps: {
         value: cellValue
       },
-      on: getEvents(renderOpts, params, context)
+      on: getEvents(renderOpts, params)
     })
   ]
 }
 
-function getEvents (renderOpts, params, context) {
+function getEvents (renderOpts, params) {
   let { name, events } = renderOpts
   let { $table, row, column } = params
   let { model } = column
@@ -42,7 +42,7 @@ function getEvents (renderOpts, params, context) {
   let on = {
     [type] (evnt) {
       let cellValue = evnt.target.value
-      if (isSyncCell(renderOpts, params, context)) {
+      if (isSyncCell(renderOpts, params)) {
         UtilTools.setCellValue(row, column, cellValue)
       } else {
         model.update = true
@@ -62,7 +62,7 @@ function getEvents (renderOpts, params, context) {
   return on
 }
 
-function renderOptgroups (h, renderOpts, params, context, renderOptionsMethods) {
+function renderOptgroups (h, renderOpts, params, renderOptionsMethods) {
   let { optionGroups, optionGroupProps = {} } = renderOpts
   let groupOptions = optionGroupProps.options || 'options'
   let groupLabel = optionGroupProps.label || 'label'
@@ -72,17 +72,17 @@ function renderOptgroups (h, renderOpts, params, context, renderOptionsMethods) 
         label: group[groupLabel]
       },
       key: gIndex
-    }, renderOptionsMethods(h, group[groupOptions], renderOpts, params, context))
+    }, renderOptionsMethods(h, group[groupOptions], renderOpts, params))
   })
 }
 
-function renderOptions (h, options, renderOpts, params, context) {
+function renderOptions (h, options, renderOpts, params) {
   let { optionProps = {} } = renderOpts
   let { row, column } = params
   let labelProp = optionProps.label || 'label'
   let valueProp = optionProps.value || 'value'
   let disabledProp = optionProps.disabled || 'disabled'
-  let cellValue = isSyncCell(renderOpts, params, context) ? UtilTools.getCellValue(row, column) : column.model.value
+  let cellValue = isSyncCell(renderOpts, params) ? UtilTools.getCellValue(row, column) : column.model.value
   return options.map((item, index) => {
     return h('option', {
       attrs: {
@@ -98,23 +98,22 @@ function renderOptions (h, options, renderOpts, params, context) {
   })
 }
 
-function getFilterEvents (item, renderOpts, params, context) {
+function getFilterEvents (item, renderOpts, params) {
   let { column } = params
   let { events } = renderOpts
   let type = name === 'select' ? 'change' : 'input'
   let on = {
     [type] (evnt) {
       item.data = evnt.target.value
-      handleConfirmFilter(context, column, !!item.data, item)
+      handleConfirmFilter(params, column, !!item.data, item)
       if (events && events[type]) {
-        events[type](Object.assign({ context }, params), evnt)
+        events[type](params, evnt)
       }
     }
   }
   if (events) {
     return XEUtils.assign({}, XEUtils.objectMap(events, cb => function () {
-      params = Object.assign({ context }, params)
-      cb.apply(null, [params].concat.apply(params, arguments))
+      cb.apply(null, [params].concat(arguments))
     }), on)
   }
   return on
@@ -131,13 +130,14 @@ function defaultFilterRender (h, renderOpts, params, context) {
       domProps: {
         value: item.data
       },
-      on: getFilterEvents(item, renderOpts, params, context)
+      on: getFilterEvents(item, renderOpts, params)
     })
   })
 }
 
-function handleConfirmFilter (context, column, checked, item) {
-  context[column.filterMultiple ? 'changeMultipleOption' : 'changeRadioOption']({}, checked, item)
+function handleConfirmFilter (params, column, checked, item) {
+  const { $panel } = params
+  $panel[column.filterMultiple ? 'changeMultipleOption' : 'changeRadioOption']({}, checked, item)
 }
 
 function defaultFilterMethod ({ option, row, column }) {
@@ -152,9 +152,9 @@ function renderSelectEdit (h, renderOpts, params, context) {
     h('select', {
       class: 'vxe-default-select',
       attrs: getAttrs(renderOpts),
-      on: getEvents(renderOpts, params, context)
+      on: getEvents(renderOpts, params)
     },
-    renderOpts.optionGroups ? renderOptgroups(h, renderOpts, params, context, renderOptions) : renderOptions(h, renderOpts.options, renderOpts, params, context))
+    renderOpts.optionGroups ? renderOptgroups(h, renderOpts, params, renderOptions) : renderOptions(h, renderOpts.options, renderOpts, params))
   ]
 }
 
@@ -195,12 +195,12 @@ function defaultItemRender (h, renderOpts, params, context) {
       domProps: attrs && name === 'input' && (attrs.type === 'submit' || attrs.type === 'reset') ? null : {
         value: itemValue
       },
-      on: getFormEvents(renderOpts, params, context)
+      on: getFormEvents(renderOpts, params)
     })
   ]
 }
 
-function getFormEvents (renderOpts, params, context) {
+function getFormEvents (renderOpts, params) {
   let { $form, data, property } = params
   let { events } = renderOpts
   let type = name === 'select' ? 'change' : 'input'
@@ -210,20 +210,19 @@ function getFormEvents (renderOpts, params, context) {
       XEUtils.set(data, property, itemValue)
       $form.updateStatus(params, itemValue)
       if (events && events[type]) {
-        events[type](Object.assign({ context }, params), evnt)
+        events[type](params, evnt)
       }
     }
   }
   if (events) {
     return XEUtils.assign({}, XEUtils.objectMap(events, cb => function () {
-      params = Object.assign({ context }, params)
-      cb.apply(null, [params].concat.apply(params, arguments))
+      cb.apply(null, [params].concat(arguments))
     }), on)
   }
   return on
 }
 
-function renderFormOptions (h, options, renderOpts, params, context) {
+function renderFormOptions (h, options, renderOpts, params) {
   let { data, property } = params
   let { optionProps = {} } = renderOpts
   let labelProp = optionProps.label || 'label'
@@ -281,9 +280,9 @@ const renderMap = {
         return h('select', {
           class: 'vxe-default-select',
           attrs: getAttrs(renderOpts),
-          on: getFilterEvents(item, renderOpts, params, context)
+          on: getFilterEvents(item, renderOpts, params)
         },
-        renderOpts.optionGroups ? renderOptgroups(h, renderOpts, params, context, renderOptions) : renderOptions(h, renderOpts.options, renderOpts, params, context))
+        renderOpts.optionGroups ? renderOptgroups(h, renderOpts, params, renderOptions) : renderOptions(h, renderOpts.options, renderOpts, params))
       })
     },
     filterMethod: defaultFilterMethod,
@@ -292,9 +291,9 @@ const renderMap = {
         h('select', {
           class: 'vxe-default-select',
           attrs: getAttrs(renderOpts),
-          on: getFormEvents(renderOpts, params, context)
+          on: getFormEvents(renderOpts, params)
         },
-        renderOpts.optionGroups ? renderOptgroups(h, renderOpts, params, context, renderFormOptions) : renderFormOptions(h, renderOpts.options, renderOpts, params, context))
+        renderOpts.optionGroups ? renderOptgroups(h, renderOpts, params, renderFormOptions) : renderFormOptions(h, renderOpts.options, renderOpts, params))
       ]
     },
     editCellExportMethod: createExportMethod(getSelectCellValue, true),
