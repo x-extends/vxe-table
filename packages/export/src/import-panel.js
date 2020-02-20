@@ -56,59 +56,63 @@ export default {
             border: 0
           }
         }, [
-          h('tr', [
-            h('td', GlobalConfig.i18n('vxe.toolbar.impFile')),
-            h('td', [
-              hasFile ? h('div', {
-                class: 'vxe-import-selected--file',
-                attrs: {
-                  title: selectName
-                }
-              }, [
-                h('span', selectName),
-                h('i', {
-                  class: GlobalConfig.icon.importRemove,
-                  on: {
-                    click: this.clearFileEvent
-                  }
-                })
-              ]) : h('span', {
-                class: 'vxe-import-select--file',
-                on: {
-                  click: this.selectFileEvent
-                }
-              }, GlobalConfig.i18n('vxe.toolbar.impSelect'))
-            ])
-          ]),
-          h('tr', [
-            h('td', GlobalConfig.i18n('vxe.toolbar.impType')),
-            h('td', parseTypeLabel)
-          ]),
-          h('tr', [
-            h('td', GlobalConfig.i18n('vxe.toolbar.impOpts')),
-            h('td', [
-              h('vxe-radio-group', {
-                model: {
-                  value: defaultOptions.mode,
-                  callback (value) {
-                    defaultOptions.mode = value
-                  }
-                }
-              }, [
-                h('vxe-radio', {
-                  props: {
-                    label: 'covering',
-                    title: GlobalConfig.i18n('vxe.toolbar.impCoveringTitle')
-                  }
-                }, GlobalConfig.i18n('vxe.toolbar.impModeCovering')),
-                h('vxe-radio', {
-                  props: {
-                    label: 'append',
-                    title: GlobalConfig.i18n('vxe.toolbar.impAppendTitle')
-                  }
-                }, GlobalConfig.i18n('vxe.toolbar.impModeAppend'))
+          h('tbody', [
+            [
+              h('tr', [
+                h('td', GlobalConfig.i18n('vxe.toolbar.impFile')),
+                h('td', [
+                  hasFile ? h('div', {
+                    class: 'vxe-import-selected--file',
+                    attrs: {
+                      title: selectName
+                    }
+                  }, [
+                    h('span', selectName),
+                    h('i', {
+                      class: GlobalConfig.icon.importRemove,
+                      on: {
+                        click: this.clearFileEvent
+                      }
+                    })
+                  ]) : h('span', {
+                    class: 'vxe-import-select--file',
+                    on: {
+                      click: this.selectFileEvent
+                    }
+                  }, GlobalConfig.i18n('vxe.toolbar.impSelect'))
+                ])
+              ]),
+              h('tr', [
+                h('td', GlobalConfig.i18n('vxe.toolbar.impType')),
+                h('td', parseTypeLabel)
+              ]),
+              h('tr', [
+                h('td', GlobalConfig.i18n('vxe.toolbar.impOpts')),
+                h('td', [
+                  h('vxe-radio-group', {
+                    model: {
+                      value: defaultOptions.mode,
+                      callback (value) {
+                        defaultOptions.mode = value
+                      }
+                    }
+                  }, [
+                    h('vxe-radio', {
+                      props: {
+                        label: 'covering',
+                        title: GlobalConfig.i18n('vxe.toolbar.impCoveringTitle')
+                      }
+                    }, GlobalConfig.i18n('vxe.toolbar.impModeCovering')),
+                    h('vxe-radio', {
+                      props: {
+                        label: 'append',
+                        title: GlobalConfig.i18n('vxe.toolbar.impAppendTitle')
+                      }
+                    }, GlobalConfig.i18n('vxe.toolbar.impModeAppend'))
+                  ])
+                ])
               ])
-            ])
+            ]
           ])
         ]),
         h('div', {
