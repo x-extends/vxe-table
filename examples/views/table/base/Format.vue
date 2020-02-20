@@ -1,6 +1,9 @@
 <template>
   <div>
-    <p class="tip">局部自定义 <table-column-api-link prop="formatter"/> 格式化内容，<table-column-api-link prop="formatter"/> 会确保在指定的 <table-column-api-link prop="field"/> 值发生改变时调用，如果想要多字段关联变化请使用<router-link class="nav-link" :to="{name: 'TableTemplate'}">自定义模板</router-link></p>
+    <p class="tip">
+      局部自定义 <table-column-api-link prop="formatter"/> 格式化内容<br>
+      <span class="red">（注：<table-column-api-link prop="formatter"/> 只会在指定的 <table-column-api-link prop="field"/> 值发生改变时触发格式化，如果想要多字段关联变化请使用<router-link class="nav-link" :to="{name: 'TableTemplate'}">自定义模板</router-link>）</span>
+    </p>
 
     <vxe-table
       border
@@ -20,8 +23,8 @@
     </pre>
 
     <p class="tip">
-      全局格式化内容，会在需要的时候自动调用对应 <a class="link" href="https://xuliangzhan.github.io/xe-utils/#/" target="_blank">xe-utils</a> 函数库的方法进行数据处理<br>
-      可以通过自定义函数实现统一的格式化处理，这对于很多场景非常有用，减少很多不必要的重复代码
+      全局格式化内容，基于 <a class="link" href="https://xuliangzhan.github.io/xe-utils/#/" target="_blank">xe-utils</a> 函数库挂载方法进行数据处理，会在渲染的时候自动调用<br>
+      <span class="green">（用于实现业务中统一的格式化处理，这对于很多场景非常有用，减少很多不必要的重复代码）</span>
     </p>
 
     <vxe-table
