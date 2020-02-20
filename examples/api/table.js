@@ -56,7 +56,16 @@ const contextMenuAPI = [
         list: []
       },
       {
-        name: 'visible ',
+        name: 'className',
+        desc: '菜单项的 className',
+        version: '1.15.21',
+        type: 'String',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'visible',
         desc: '是否可视',
         version: '1.12.2',
         type: 'Boolean',
@@ -65,7 +74,7 @@ const contextMenuAPI = [
         list: []
       },
       {
-        name: 'disabled ',
+        name: 'disabled',
         desc: '是否禁用',
         version: '',
         type: 'Boolean',
@@ -74,7 +83,7 @@ const contextMenuAPI = [
         list: []
       },
       {
-        name: 'children ',
+        name: 'children',
         desc: '二级菜单（最多只允许有二级）',
         version: '',
         type: 'Array',

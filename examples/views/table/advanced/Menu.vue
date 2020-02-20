@@ -38,6 +38,7 @@
     <pre>
       <code class="xml">{{ demoCodes[0] }}</code>
       <code class="javascript">{{ demoCodes[1] }}</code>
+      <code class="css">{{ demoCodes[2] }}</code>
     </pre>
   </div>
 </template>
@@ -53,70 +54,39 @@ export default {
       tableData: [],
       headerMenus: [
         [
-          {
-            code: 'exportAll',
-            name: '导出所有.csv'
-          }
+          { code: 'exportAll', name: '导出所有.csv' }
         ]
       ],
       bodyMenus: [
         [
-          {
-            code: 'copy',
-            name: 'app.body.label.copy',
-            prefixIcon: 'fa fa-copy'
-          }
+          { code: 'copy', name: 'app.body.label.copy', prefixIcon: 'fa fa-copy', className: 'my-copy' }
         ],
         [
-          {
-            code: 'remove',
-            name: '删除'
-          },
+          { code: 'remove', name: '删除', prefixIcon: 'fa fa-trash-o color-red' },
           {
             code: 'filter',
             name: 'app.body.label.filter',
             children: [
-              {
-                code: 'clearFilter',
-                name: '清除筛选'
-              },
-              {
-                code: 'filterSelect',
-                name: '按所选单元格的值筛选'
-              }
+              { code: 'clearFilter', name: '清除筛选' },
+              { code: 'filterSelect', name: '按所选单元格的值筛选' }
             ]
           },
           {
             code: 'sort',
             name: 'app.body.label.sort',
+            prefixIcon: 'fa fa-sort color-blue',
             children: [
-              {
-                code: 'clearSort',
-                name: '清除排序'
-              },
-              {
-                code: 'sortAsc',
-                name: '升序'
-              },
-              {
-                code: 'sortDesc',
-                name: '倒序'
-              }
+              { code: 'clearSort', name: '清除排序' },
+              { code: 'sortAsc', name: '升序', prefixIcon: 'fa fa-sort-alpha-asc color-orange' },
+              { code: 'sortDesc', name: '倒序', prefixIcon: 'fa fa-sort-alpha-desc color-orange' }
             ]
           },
-          {
-            code: 'print',
-            name: '打印',
-            disabled: true
-          }
+          { code: 'print', name: '打印', disabled: true }
         ]
       ],
       footerMenus: [
         [
-          {
-            code: 'clearAll',
-            name: '清空数据'
-          }
+          { code: 'clearAll', name: '清空数据' }
         ]
       ],
       demoCodes: [
@@ -147,70 +117,39 @@ export default {
               tableData: [],
               headerMenus: [
                 [
-                  {
-                    code: 'exportAll',
-                    name: '导出所有.csv'
-                  }
+                  { code: 'exportAll', name: '导出所有.csv' }
                 ]
               ],
               bodyMenus: [
                 [
-                  {
-                    code: 'copy',
-                    name: 'app.body.label.copy',
-                    prefixIcon: 'fa fa-copy'
-                  }
+                  { code: 'copy', name: 'app.body.label.copy', prefixIcon: 'fa fa-copy', className: 'my-copy' }
                 ],
                 [
-                  {
-                    code: 'remove',
-                    name: '删除'
-                  },
+                  { code: 'remove', name: '删除', prefixIcon: 'fa fa-trash-o color-red' },
                   {
                     code: 'filter',
                     name: 'app.body.label.filter',
                     children: [
-                      {
-                        code: 'clearFilter',
-                        name: '清除筛选'
-                      },
-                      {
-                        code: 'filterSelect',
-                        name: '按所选单元格的值筛选'
-                      }
+                      { code: 'clearFilter', name: '清除筛选' },
+                      { code: 'filterSelect', name: '按所选单元格的值筛选' }
                     ]
                   },
                   {
                     code: 'sort',
                     name: 'app.body.label.sort',
+                    prefixIcon: 'fa fa-sort color-blue',
                     children: [
-                      {
-                        code: 'clearSort',
-                        name: '清除排序'
-                      },
-                      {
-                        code: 'sortAsc',
-                        name: '升序'
-                      },
-                      {
-                        code: 'sortDesc',
-                        name: '倒序'
-                      }
+                      { code: 'clearSort', name: '清除排序' },
+                      { code: 'sortAsc', name: '升序', prefixIcon: 'fa fa-sort-alpha-asc color-orange' },
+                      { code: 'sortDesc', name: '倒序', prefixIcon: 'fa fa-sort-alpha-desc color-orange' }
                     ]
                   },
-                  {
-                    code: 'print',
-                    name: '打印',
-                    disabled: true
-                  }
+                  { code: 'print', name: '打印', disabled: true }
                 ]
               ],
               footerMenus: [
                 [
-                  {
-                    code: 'clearAll',
-                    name: '清空数据'
-                  }
+                  { code: 'clearAll', name: '清空数据' }
                 ]
               ]
             }
@@ -253,6 +192,20 @@ export default {
               ]
             }
           }
+        }
+        `,
+        `
+        .my-copy .vxe-ctxmenu--link {
+          color: orange;
+        }
+        .color-red {
+          color: red;
+        }
+        .color-blue {
+          color: blue;
+        }
+        .color-orange {
+          color: orange;
         }
         `
       ]
@@ -304,3 +257,18 @@ export default {
   }
 }
 </script>
+
+<style>
+.my-copy .vxe-ctxmenu--link {
+  color: orange;
+}
+.color-red {
+  color: red;
+}
+.color-blue {
+  color: blue;
+}
+.color-orange {
+  color: orange;
+}
+</style>
