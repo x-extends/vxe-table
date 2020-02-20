@@ -254,7 +254,9 @@ module.exports = {
         search: '查询',
         reset: '重置',
         createTime: '创建时间',
-        updateTime: '更新时间'
+        updateTime: '更新时间',
+        stableVersion: '稳定版',
+        latestVersion: '最新版'
       },
       valid: {
         rName: '名称必须填写'
@@ -266,6 +268,11 @@ module.exports = {
       other: {
         newFunc: '由于作者比较忙，后续有时间可能会支持该功能！',
         newDevelopment: '由于作者比较忙，该版本正在重构中，敬请期待！'
+      },
+      search: {
+        searchPlaceholder: '文档搜索',
+        noDataPrefix: '找不到与 “',
+        noDataSuffix: '” 相关的结果！'
       }
     },
     footer: {

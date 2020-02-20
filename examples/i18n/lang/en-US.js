@@ -255,7 +255,9 @@ module.exports = {
         search: 'Search',
         reset: 'Reset',
         createTime: 'Create Date',
-        updateTime: 'Update Date'
+        updateTime: 'Update Date',
+        stableVersion: 'Stable',
+        latestVersion: 'Latest'
       },
       valid: {
         rName: 'The name of the required.'
@@ -267,6 +269,11 @@ module.exports = {
       other: {
         newFunc: 'Since the author is busy, there may be time to support this function later!',
         newDevelopment: 'Due to the author\'s busy schedule, this release is being refactored. Stay tuned!'
+      },
+      search: {
+        searchPlaceholder: 'Document search',
+        noDataPrefix: 'No results related to "',
+        noDataSuffix: '" can be found!'
       }
     },
     footer: {

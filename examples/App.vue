@@ -43,34 +43,39 @@
       <div class="aside">
         <div class="header">
           <div v-if="stableVersionList.length" class="version-list">
-            <span class="title">稳定版</span>
+            <span class="title">{{  $t('app.body.label.stableVersion')}}</span>
             <select>
               <option v-for="(pack, index) in stableVersionList" :key="index">{{ pack.version }}</option>
             </select>
             <template v-if="showBetaVetsion">
-              <span class="title">最新版</span>
+              <span class="title">{{  $t('app.body.label.latestVersion')}}</span>
               <select>
                 <option v-for="(pack, index) in newBetsVersionList" :key="index">{{ pack.version }}</option>
               </select>
             </template>
           </div>
-          <vxe-input clearable v-model="filterName" class="search-input" placeholder="文档搜索" @keyup="searchEvent" @clear="searchEvent"></vxe-input>
+          <vxe-input clearable v-model="filterName" class="search-input" :placeholder="$t('app.body.search.searchPlaceholder')" @keyup="searchEvent" @clear="searchEvent"></vxe-input>
         </div>
         <div class="body">
-          <ul class="nav-menu">
-            <li v-for="(item, index) in apiList" :key="index" :class="{expand: item.expand}">
-              <a class="nav-link" @click="linkEvent(item)" :title="item.disabled ? $t('app.body.other.newFunc') : item.label" :class="{disabled: item.disabled, active: pageKey === item.value}">
-                <i class="vxe-icon--arrow-right nav-link-icon"></i>
-                <span v-html="item.label"></span>
-              </a>
-              <ul v-if="item.children" v-show="item.expand" class="nav-child-menu">
-                <li v-for="(child, cIndex) in item.children" :key="cIndex">
-                  <a class="nav-link disabled" v-if="child.disabled" :title="$t('app.body.other.newFunc')" v-html="child.label"></a>
-                  <router-link v-else class="nav-link" :to="child.locat" :title="child.label" v-html="child.label"></router-link>
-                </li>
-              </ul>
-            </li>
-          </ul>
+          <template v-if="apiList.length">
+            <ul class="nav-menu">
+              <li v-for="(item, index) in apiList" :key="index" :class="{expand: item.expand}">
+                <a class="nav-link" @click="linkEvent(item)" :title="item.disabled ? $t('app.body.other.newFunc') : item.label" :class="{disabled: item.disabled, active: pageKey === item.value}">
+                  <i class="vxe-icon--arrow-right nav-link-icon"></i>
+                  <span v-html="item.label"></span>
+                </a>
+                <ul v-if="item.children" v-show="item.expand" class="nav-child-menu">
+                  <li v-for="(child, cIndex) in item.children" :key="cIndex">
+                    <a class="nav-link disabled" v-if="child.disabled" :title="$t('app.body.other.newFunc')" v-html="child.label"></a>
+                    <router-link v-else class="nav-link" :to="child.locat" :title="child.label" v-html="child.label"></router-link>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </template>
+          <template v-else>
+            <div class="search-nodata">{{ $t('app.body.search.noDataPrefix') }}<span class="keyword-lighten">{{ filterName }}</span>{{ $t('app.body.search.noDataSuffix') }}</div>
+          </template>
         </div>
       </div>
       <div class="body">
@@ -1962,6 +1967,11 @@ export default {
       return this.$route.path.split('/')[2]
     }
   },
+  watch: {
+    '$i18n.locale' () {
+      this.loadList()
+    }
+  },
   created () {
     if (process.env.NODE_ENV === 'development') {
       setInterval(() => {
@@ -1977,12 +1987,6 @@ export default {
     init () {
       this.getVersion()
       this.loadList()
-      setTimeout(() => {
-        let group = this.apiList.find(item => item.value === this.pageKey)
-        if (group) {
-          group.expand = true
-        }
-      }, 1000)
     },
     loadList () {
       this.tableData = XEUtils.clone(this.tableList, true)
@@ -1990,6 +1994,12 @@ export default {
         item.label = this.$t(item.label)
       })
       this.handleSearch()
+      setTimeout(() => {
+        let group = this.apiList.find(item => item.value === this.pageKey)
+        if (group) {
+          group.expand = true
+        }
+      }, 500)
     },
     getVersion () {
       XEAjax.get('https://registry.npm.taobao.org/vxe-table').then(data => {
