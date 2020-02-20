@@ -1914,7 +1914,7 @@ export default {
     newBetsVersionList () {
       const { betaVersionList, stableVersionList } = this
       if (betaVersionList.length && stableVersionList.length) {
-        const stableNums = stableVersionList[1].version.split('-')[0].split('.')
+        const stableNums = stableVersionList[0].version.split('-')[0].split('.')
         const stable1 = XEUtils.toNumber(stableNums[0])
         const stable2 = XEUtils.toNumber(stableNums[1])
         const stable3 = XEUtils.toNumber(stableNums[2])
@@ -1942,7 +1942,7 @@ export default {
     showBetaVetsion () {
       const { betaVersionList, stableVersionList } = this
       if (betaVersionList.length && stableVersionList.length) {
-        const stableNums = stableVersionList[1].version.split('-')[0].split('.')
+        const stableNums = stableVersionList[0].version.split('-')[0].split('.')
         const stable1 = XEUtils.toNumber(stableNums[0])
         const stable2 = XEUtils.toNumber(stableNums[1])
         const stable3 = XEUtils.toNumber(stableNums[2])
