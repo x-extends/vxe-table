@@ -1,6 +1,9 @@
 <template>
   <div>
-    <p class="tip">使用 vxe-excel 渲染 Excel 表格<br><span class="red">（注：重构中，不建议使用）</span></p>
+    <p class="tip">
+      具体兼容请查看 <a class="link" href="https://www.npmjs.com/package/vxe-table-plugin-excel" target="_blank">vxe-table-plugin-excel</a> 插件的 API<br>
+      <span class="red">（注：重构中）</span>
+    </p>
 
     <vxe-toolbar>
       <template v-slot:buttons>
@@ -55,13 +58,12 @@ import XLSX from 'xlsx'
 
 export default {
   data () {
-    const columns = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P']
+    const columns = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N']
     return {
       columns: [
         {
           type: 'seq',
           width: 50,
-          fixed: 'left',
           align: 'center',
           headerAlign: 'center'
         }
@@ -69,15 +71,20 @@ export default {
         return {
           field: name,
           title: name,
-          width: 76,
+          minWidth: 76,
           headerAlign: 'center',
+          sortable: true,
           editRender: {
             name: 'cell'
+          },
+          filters: [{ data: '' }],
+          filterRender: {
+            name: 'input'
           }
         }
       })),
-      tableData: Array.from(new Array(20)).map((num, index) => {
-        const item = { id: index }
+      tableData: Array.from(new Array(20)).map(() => {
+        const item = {}
         columns.forEach(name => {
           item[name] = ''
         })
@@ -102,7 +109,7 @@ export default {
         `
         export default {
           data () {
-            let columns = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P']
+            let columns = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N']
             return {
               columns: [
                 {
@@ -115,14 +122,19 @@ export default {
                 return {
                   field: name,
                   title: name,
-                  width: 76,
+                  minWidth: 76,
                   headerAlign: 'center',
+                  sortable: true,
                   editRender: {
                     name: 'cell'
+                  },
+                  filters: [{ data: '' }],
+                  filterRender: {
+                    name: 'input'
                   }
                 }
               })),
-              tableData: Array.from(new Array(20)).map(() => {
+              tableData: Array.from(new Array(20)).map((num, index) => {
                 let item = {}
                 columns.forEach(name => {
                   item[name] = ''
@@ -150,7 +162,7 @@ export default {
               this.$XModal.alert(updateRecords.length)
             },
             exportDataEvent () {
-              this.$refs.xExcel.exportData()
+              this.$refs.xExcel.exportData({ isHeader: false })
             },
             fileChangeEvent (evnt) {
               let files = evnt.target.files
@@ -160,7 +172,7 @@ export default {
                 let workbook = XLSX.read(data, { type: 'binary' })
                 let keys = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
                 let csvData = XLSX.utils.sheet_to_csv(workbook.Sheets.Sheet1)
-                let tableData = csvData.split('\\n').map(vRow => {
+                let tableData = csvData.split('\n').map((vRow, rIndex) => {
                   let vCols = vRow.split(',')
                   let item = {}
                   vCols.forEach((val, cIndex) => {
@@ -210,7 +222,7 @@ export default {
       this.$XModal.alert(updateRecords.length)
     },
     exportDataEvent () {
-      this.$refs.xExcel.exportData()
+      this.$refs.xExcel.exportData({ isHeader: false })
     },
     fileChangeEvent (evnt) {
       const files = evnt.target.files
@@ -220,11 +232,9 @@ export default {
         const workbook = XLSX.read(data, { type: 'binary' })
         const keys = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
         const csvData = XLSX.utils.sheet_to_csv(workbook.Sheets.Sheet1)
-        const tableData = csvData.split('\n').map((vRow, rIndex) => {
+        const tableData = csvData.split('\n').map((vRow) => {
           const vCols = vRow.split(',')
-          const item = {
-            id: rIndex
-          }
+          const item = {}
           vCols.forEach((val, cIndex) => {
             const kIndex = Math.floor(cIndex / 26)
             const lIndex = cIndex % 26

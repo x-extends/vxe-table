@@ -203,9 +203,9 @@ export default {
   methods: {
     // 反转函数
     reverseTable () {
-      let tableData = this.tableData
+      const tableData = this.tableData
       this.tableData = this.tableColumn.map(column => {
-        let item = { 0: column.title }
+        const item = { 0: column.title }
         tableData.forEach((row, rowIndex) => {
           item[rowIndex + 1] = row[column.field]
         })
@@ -223,9 +223,9 @@ export default {
       }))
     },
     reverseTable2 () {
-      let tableData = this.tableData2
+      const tableData = this.tableData2
       this.tableData2 = this.tableColumn2.map(column => {
-        let item = { 0: column.title }
+        const item = { 0: column.title }
         tableData.forEach((row, rowIndex) => {
           item[rowIndex + 1] = row[column.field]
         })

@@ -91,7 +91,7 @@ export default {
     }
   },
   created () {
-    let list = window.MOCK_DATA_LIST.slice(0, 6)
+    const list = window.MOCK_DATA_LIST.slice(0, 6)
     this.tableData = list
   },
   mounted () {

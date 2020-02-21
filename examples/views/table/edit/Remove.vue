@@ -106,8 +106,7 @@ export default {
     }
   },
   created () {
-    let list = window.MOCK_DATA_LIST.slice(0, 6)
-    this.tableData = list
+    this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
@@ -116,7 +115,7 @@ export default {
   },
   methods: {
     async insertEvent (row) {
-      let record = {
+      const record = {
         sex: '1'
       }
       const { row: newRow } = await this.$refs.xTable.insertAt(record, row)
@@ -130,11 +129,11 @@ export default {
       })
     },
     getRemoveEvent () {
-      let removeRecords = this.$refs.xTable.getRemoveRecords()
+      const removeRecords = this.$refs.xTable.getRemoveRecords()
       this.$XModal.alert(removeRecords.length)
     },
     getSelectionEvent () {
-      let removeRecords = this.$refs.xTable.getCheckboxRecords()
+      const removeRecords = this.$refs.xTable.getCheckboxRecords()
       this.$XModal.alert(removeRecords.length)
     }
   }

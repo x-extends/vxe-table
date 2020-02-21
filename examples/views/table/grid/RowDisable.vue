@@ -161,29 +161,29 @@ export default {
     })
   },
   methods: {
-    activeRowMethod ({ row, rowIndex }) {
+    activeRowMethod ({ rowIndex }) {
       if (rowIndex === 1) {
         return false
       }
       return true
     },
     editActivedEvent ({ row }) {
-      let xGrid = this.$refs.xGrid
-      let nameColumn = xGrid.getColumnByField('name')
-      let ageColumn = xGrid.getColumnByField('age')
-      let sexColumn = xGrid.getColumnByField('sex')
+      const xGrid = this.$refs.xGrid
+      const nameColumn = xGrid.getColumnByField('name')
+      const ageColumn = xGrid.getColumnByField('age')
+      const sexColumn = xGrid.getColumnByField('sex')
       // name 为 'x' 开头的列禁止编辑
-      let isNameDisabled = (row.name || '').indexOf('x') === 0
+      const isNameDisabled = (row.name || '').indexOf('x') === 0
       // age 小于 27 的列禁止编辑
-      let isAgeDisabled = row.age < 27
+      const isAgeDisabled = row.age < 27
       // sex 值编辑为 1 的列禁止编辑
-      let isSexDisabled = row.sex === '1'
+      const isSexDisabled = row.sex === '1'
 
       nameColumn.editRender.attrs.disabled = isNameDisabled
       ageColumn.editRender.attrs.disabled = isAgeDisabled
       sexColumn.editRender.attrs.disabled = isSexDisabled
     },
-    editDisabledEvent ({ row, column }) {
+    editDisabledEvent () {
       this.$XModal.alert('禁止编辑')
     }
   }

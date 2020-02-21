@@ -5,7 +5,7 @@
       <span class="red">（注：默认是不支持中文字体的，会显示成乱码，可自行引入字体库解决）</span>
     </p>
 
-    <vxe-toolbar custom :export="tableExport">
+    <vxe-toolbar custom export>
       <template v-slot:buttons>
         <vxe-button @click="exportDataEvent">导出数据</vxe-button>
       </template>

@@ -286,14 +286,14 @@ export default {
     },
     columnDrop1 () {
       this.$nextTick(() => {
-        let xTable = this.$refs.xTable1
+        const xTable = this.$refs.xTable1
         this.sortable1 = Sortable.create(xTable.$el.querySelector('.body--wrapper>.vxe-table--header .vxe-header--row'), {
           handle: '.vxe-header--column:not(.col--fixed)',
           onEnd: ({ item, newIndex, oldIndex }) => {
-            let { fullColumn, tableColumn } = xTable.getTableColumn()
-            let targetThElem = item
-            let wrapperElem = targetThElem.parentNode
-            let newColumn = fullColumn[newIndex]
+            const { fullColumn, tableColumn } = xTable.getTableColumn()
+            const targetThElem = item
+            const wrapperElem = targetThElem.parentNode
+            const newColumn = fullColumn[newIndex]
             if (newColumn.fixed) {
               // 错误的移动
               if (newIndex > oldIndex) {
@@ -304,10 +304,10 @@ export default {
               return this.$XModal.message({ message: '固定列不允许拖动！', status: 'error' })
             }
             // 转换真实索引
-            let oldColumnIndex = xTable.getColumnIndex(tableColumn[oldIndex])
-            let newColumnIndex = xTable.getColumnIndex(tableColumn[newIndex])
+            const oldColumnIndex = xTable.getColumnIndex(tableColumn[oldIndex])
+            const newColumnIndex = xTable.getColumnIndex(tableColumn[newIndex])
             // 移动到目标列
-            let currRow = fullColumn.splice(oldColumnIndex, 1)[0]
+            const currRow = fullColumn.splice(oldColumnIndex, 1)[0]
             fullColumn.splice(newColumnIndex, 0, currRow)
             xTable.loadColumn(fullColumn)
           }
@@ -316,14 +316,14 @@ export default {
     },
     columnDrop2 () {
       this.$nextTick(() => {
-        let xTable = this.$refs.xTable2
+        const xTable = this.$refs.xTable2
         this.sortable2 = Sortable.create(xTable.$el.querySelector('.body--wrapper>.vxe-table--header .vxe-header--row'), {
           handle: '.vxe-header--column:not(.col--fixed)',
           onEnd: ({ item, newIndex, oldIndex }) => {
-            let { fullColumn, tableColumn } = xTable.getTableColumn()
-            let targetThElem = item
-            let wrapperElem = targetThElem.parentNode
-            let newColumn = fullColumn[newIndex]
+            const { fullColumn, tableColumn } = xTable.getTableColumn()
+            const targetThElem = item
+            const wrapperElem = targetThElem.parentNode
+            const newColumn = fullColumn[newIndex]
             if (newColumn.fixed) {
               // 错误的移动
               if (newIndex > oldIndex) {
@@ -334,10 +334,10 @@ export default {
               return this.$XModal.message({ message: '固定列不允许拖动！', status: 'error' })
             }
             // 转换真实索引
-            let oldColumnIndex = xTable.getColumnIndex(tableColumn[oldIndex])
-            let newColumnIndex = xTable.getColumnIndex(tableColumn[newIndex])
+            const oldColumnIndex = xTable.getColumnIndex(tableColumn[oldIndex])
+            const newColumnIndex = xTable.getColumnIndex(tableColumn[newIndex])
             // 移动到目标列
-            let currRow = fullColumn.splice(oldColumnIndex, 1)[0]
+            const currRow = fullColumn.splice(oldColumnIndex, 1)[0]
             fullColumn.splice(newColumnIndex, 0, currRow)
             xTable.loadColumn(fullColumn)
           }

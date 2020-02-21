@@ -456,11 +456,11 @@ export default {
     selectAllEvent ({ checked }) {
       console.log(checked ? '所有勾选事件' : '所有取消事件')
     },
-    selectChangeEvent ({ checked, row }) {
+    selectChangeEvent ({ checked }) {
       console.log(checked ? '勾选事件' : '取消事件')
     },
     getSelectEvent1 () {
-      let selectRecords = this.$refs.xTable1.getCheckboxRecords()
+      const selectRecords = this.$refs.xTable1.getCheckboxRecords()
       this.$XModal.alert(selectRecords.length)
     }
   }

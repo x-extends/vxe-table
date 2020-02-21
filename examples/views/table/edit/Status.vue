@@ -196,10 +196,10 @@ export default {
         .then(({ row }) => this.$refs.xTable.setActiveCell(row, 'name'))
     },
     saveEvent (row, field) {
-      let xTable = this.$refs.xTable
+      const xTable = this.$refs.xTable
       if (xTable.isUpdateByRow(row)) {
         row.loading = true
-        this.submitSave(row).then(data => {
+        this.submitSave(row).then(() => {
           // 局部保存，并将行数据恢复到初始状态（如果 record 为空则不改动行数据，只恢复状态）
           xTable.reloadRow(row, null, field)
           this.$XModal.message({ message: '保存成功！', status: 'success' })
@@ -210,7 +210,7 @@ export default {
       }
     },
     saveEvent2 (row, field) {
-      let xTable = this.$refs.xTable
+      const xTable = this.$refs.xTable
       if (xTable.isUpdateByRow(row)) {
         row.loading = true
         this.submitSave(row).then(data => {
@@ -225,7 +225,7 @@ export default {
     },
     submitSave (row) {
       return new Promise(resolve => {
-        let rest = {
+        const rest = {
           date3: XEUtils.toDateString(new Date())
         }
         if (row.name) {
@@ -238,15 +238,15 @@ export default {
       })
     },
     getInsertEvent () {
-      let insertRecords = this.$refs.xTable.getInsertRecords()
+      const insertRecords = this.$refs.xTable.getInsertRecords()
       this.$XModal.alert(insertRecords.length)
     },
     getRemoveEvent () {
-      let removeRecords = this.$refs.xTable.getRemoveRecords()
+      const removeRecords = this.$refs.xTable.getRemoveRecords()
       this.$XModal.alert(removeRecords.length)
     },
     getUpdateEvent () {
-      let updateRecords = this.$refs.xTable.getUpdateRecords()
+      const updateRecords = this.$refs.xTable.getUpdateRecords()
       this.$XModal.alert(updateRecords.length)
     }
   }

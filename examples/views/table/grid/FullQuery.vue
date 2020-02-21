@@ -65,12 +65,12 @@ export default {
           // 任何支持 Promise API 的库都可以对接（fetch、jquery、axios、xe-ajax）
           query: ({ page, sort, filters }) => {
             // 处理排序条件
-            let queryParams = Object.assign({
+            const queryParams = Object.assign({
               sort: sort.property,
               order: sort.order
             }, this.formData)
             // 处理筛选条件
-            filters.forEach(({ column, field, values }) => {
+            filters.forEach(({ field, values }) => {
               queryParams[field] = values.join(',')
             })
             return XEAjax.get(`/api/user/page/list/${page.pageSize}/${page.currentPage}`, queryParams)

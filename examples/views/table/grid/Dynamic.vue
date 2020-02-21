@@ -249,7 +249,7 @@ export default {
           methods: {
             findColumn () {
               this.loading = true
-              XEAjax.getJSON('/api/column/list', { sort: 'seq', order: 'asc' }).then(data => {
+              XEAjax.get('/api/column/list', { sort: 'seq', order: 'asc' }).then(data => {
                 let validRules = {}
                 this.tableColumn2 = data.map(item => {
                   let config = {
@@ -324,10 +324,10 @@ export default {
   methods: {
     findColumn () {
       this.loading2 = true
-      XEAjax.getJSON('/api/column/list', { sort: 'seq', order: 'asc' }).then(data => {
-        let validRules = {}
+      XEAjax.get('/api/column/list', { sort: 'seq', order: 'asc' }).then(data => {
+        const validRules = {}
         this.tableColumn2 = data.map(item => {
-          let config = {
+          const config = {
             title: item.name,
             width: item.width
           }
@@ -383,7 +383,7 @@ export default {
     formatterDate ({ cellValue }) {
       return XEUtils.toDateString(cellValue, 'yyyy-MM-dd HH:mm:ss')
     },
-    toolbarButtonClickEvent ({ code }, event) {
+    toolbarButtonClickEvent ({ code }) {
       switch (code) {
         case 'reloadColumn':
           this.findColumn()

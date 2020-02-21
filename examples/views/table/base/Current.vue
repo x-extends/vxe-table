@@ -96,8 +96,8 @@ export default {
     this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
   },
   methods: {
-    currentChangeEvent ({ row }) {
-      console.log('行选中事件')
+    currentChangeEvent ({ rowIndex }) {
+      console.log(`行选中事件 ${rowIndex}`)
     },
     getCurrentEvent () {
       this.$XModal.alert(JSON.stringify(this.$refs.xTable.getCurrentRecord()))

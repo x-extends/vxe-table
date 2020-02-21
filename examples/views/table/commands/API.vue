@@ -14,15 +14,10 @@
       <vxe-table-column field="enum" title="app.api.title.enum" min-width="150"></vxe-table-column>
       <vxe-table-column field="defVal" title="app.api.title.defVal" min-width="160"></vxe-table-column>
     </vxe-table>
-    <h2>示例1</h2>
+    <h2>示例</h2>
     <pre>
       <code class="javascript">{{ demoCodes[0] }}</code>
       <code class="html">{{ demoCodes[1] }}</code>
-    </pre>
-    <h2>示例2</h2>
-    <pre>
-      <code class="javascript">{{ demoCodes[2] }}</code>
-      <code class="html">{{ demoCodes[3] }}</code>
     </pre>
   </div>
 </template>

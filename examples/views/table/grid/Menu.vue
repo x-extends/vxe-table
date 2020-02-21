@@ -194,11 +194,11 @@ export default {
     })
   },
   methods: {
-    visibleMethod ({ type, options, column }) {
+    visibleMethod ({ options, column }) {
       // 示例：只有 name 列允许操作，清除按钮只能在 age 才显示
       // 显示之前处理按钮的操作权限
-      let isDisabled = !column || column.property !== 'name'
-      let isVisible = column && column.property === 'age'
+      const isDisabled = !column || column.property !== 'name'
+      const isVisible = column && column.property === 'age'
       options.forEach(list => {
         list.forEach(item => {
           if (['copy'].includes(item.code)) {
@@ -215,7 +215,7 @@ export default {
       this.$refs.xGrid.setCurrentRow(row)
     },
     contextMenuClickEvent ({ menu, row, column }) {
-      let xGrid = this.$refs.xGrid
+      const xGrid = this.$refs.xGrid
       switch (menu.code) {
         case 'copy':
           if (row && column) {

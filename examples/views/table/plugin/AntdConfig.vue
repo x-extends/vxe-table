@@ -260,7 +260,7 @@ export default {
       })
     },
     findSexGroupList () {
-      let sexGroupList = [
+      const sexGroupList = [
         {
           label: '分组1',
           options: [
@@ -283,7 +283,7 @@ export default {
       this.tableColumn[7].editRender.optionGroups = sexGroupList
     },
     findTreeSelectList () {
-      let treeData = [{
+      const treeData = [{
         title: 'Node1',
         value: '0-0',
         key: '0-0',
@@ -315,8 +315,8 @@ export default {
       this.tableColumn[15].editRender.props.treeData = treeData
     },
     insertEvent () {
-      let xGrid = this.$refs.xGrid
-      let record = {
+      const xGrid = this.$refs.xGrid
+      const record = {
         role: '',
         age: 18,
         sex1: [],
@@ -327,15 +327,15 @@ export default {
       xGrid.insert(record).then(({ row }) => xGrid.setActiveRow(row))
     },
     saveEvent () {
-      let { insertRecords, removeRecords, updateRecords } = this.$refs.xGrid.getRecordset()
+      const { insertRecords, removeRecords, updateRecords } = this.$refs.xGrid.getRecordset()
       if (insertRecords.length || removeRecords.length || updateRecords.length) {
         this.$alert(`insertRecords=${insertRecords.length}; removeRecords=${removeRecords.length}; updateRecords=${updateRecords.length}`)
       } else {
         this.$alert('数据未改动！')
       }
     },
-    roleSearchEvent ({ row }, value) {
-      let dataSource = this.restaurants.filter(option => option.toUpperCase().indexOf((value || '').toUpperCase()) !== -1)
+    roleSearchEvent (params, value) {
+      const dataSource = this.restaurants.filter(option => option.toUpperCase().indexOf((value || '').toUpperCase()) !== -1)
       this.tableColumn[3].editRender.props.dataSource = dataSource
     },
     checkboxChangeEvent () {

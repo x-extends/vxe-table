@@ -237,7 +237,7 @@ export default {
       })
     },
     findSexGroupList () {
-      let sexGroupList = [
+      const sexGroupList = [
         {
           label: '分组1',
           options: [
@@ -260,8 +260,8 @@ export default {
       this.tableColumn[7].editRender.optionGroups = sexGroupList
     },
     insertEvent () {
-      let xGrid = this.$refs.xGrid
-      let record = {
+      const xGrid = this.$refs.xGrid
+      const record = {
         role: '',
         age: 18,
         sex1: [],
@@ -272,7 +272,7 @@ export default {
       xGrid.insert(record).then(({ row }) => xGrid.setActiveRow(row))
     },
     saveEvent () {
-      let { insertRecords, removeRecords, updateRecords } = this.$refs.xGrid.getRecordset()
+      const { insertRecords, removeRecords, updateRecords } = this.$refs.xGrid.getRecordset()
       if (insertRecords.length || removeRecords.length || updateRecords.length) {
         this.$alert(`insertRecords=${insertRecords.length}; removeRecords=${removeRecords.length}; updateRecords=${updateRecords.length}`)
       } else {
@@ -280,8 +280,8 @@ export default {
       }
     },
     roleFetchSuggestions (queryString, cb) {
-      var restaurants = this.restaurants
-      var results = queryString ? restaurants.filter(this.createStateFilter(queryString)) : restaurants
+      const restaurants = this.restaurants
+      const results = queryString ? restaurants.filter(this.createStateFilter(queryString)) : restaurants
       clearTimeout(this.timeout)
       this.timeout = setTimeout(() => {
         cb(results)

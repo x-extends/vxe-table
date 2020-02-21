@@ -228,9 +228,9 @@ export default {
     })
   },
   methods: {
-    insertAtEvent (row, column) {
-      let xTree = this.$refs.xTree
-      let record = {
+    insertAtEvent (row) {
+      const xTree = this.$refs.xTree
+      const record = {
         name: '新数据',
         date: XEUtils.toDateString(new Date(), 'yyyy-MM-dd')
       }
@@ -238,17 +238,17 @@ export default {
       xTree.insertAt(record, row).then(({ row }) => xTree.setActiveRow(row))
     },
     getInsertEvent () {
-      let insertRecords = this.$refs.xTree.getInsertRecords()
+      const insertRecords = this.$refs.xTree.getInsertRecords()
       this.$XModal.alert(insertRecords.length)
     },
     visibleMethod  ({ row, type }) {
-      let xTree = this.$refs.xTree
+      const xTree = this.$refs.xTree
       if (type === 'body') {
         this.bodyMenus.forEach(list => {
           list.forEach(item => {
             if (['expand', 'contract'].includes(item.code)) {
               if (row.children && row.children.length) {
-                let isExpand = xTree.isTreeExpandByRow(row)
+                const isExpand = xTree.isTreeExpandByRow(row)
                 item.disabled = ['expand'].includes(item.code) ? isExpand : !isExpand
               } else {
                 item.disabled = true
@@ -260,7 +260,7 @@ export default {
       return true
     },
     contextMenuClickEvent ({ menu, row, column }) {
-      let xTree = this.$refs.xTree
+      const xTree = this.$refs.xTree
       switch (menu.code) {
         case 'hideColumn':
           xTree.hideColumn(column)

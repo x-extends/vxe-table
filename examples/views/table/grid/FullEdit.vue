@@ -84,12 +84,12 @@ export default {
           // 任何支持 Promise API 的库都可以对接（fetch、jquery、axios、xe-ajax）
           query: ({ page, sort, filters, form }) => {
             // 处理排序条件
-            let queryParams = Object.assign({
+            const queryParams = Object.assign({
               sort: sort.property,
               order: sort.order
             }, form)
             // 处理筛选条件
-            filters.forEach(({ column, property, values }) => {
+            filters.forEach(({ property, values }) => {
               queryParams[property] = values.join(',')
             })
             return XEAjax.get(`https://api.xuliangzhan.com:10443/api/user/page/list/${page.pageSize}/${page.currentPage}`, queryParams)
@@ -280,7 +280,7 @@ export default {
               const sexList = await XEAjax.get('/api/conf/sex/list')
               // 异步更新下拉选项
               this.sexList = sexList
-              this.tableColumn[2].editRender.options = sexList
+              this.tableColumn[4].editRender.options = sexList
               this.tableForm.items[3].itemRender.options = sexList
             },
             formatDate ({ cellValue }) {
@@ -311,7 +311,7 @@ export default {
       const sexList = await XEAjax.get('/api/conf/sex/list')
       // 异步更新下拉选项
       this.sexList = sexList
-      this.tableColumn[2].editRender.options = sexList
+      this.tableColumn[4].editRender.options = sexList
       this.tableForm.items[3].itemRender.options = sexList
     },
     formatDate ({ cellValue }) {

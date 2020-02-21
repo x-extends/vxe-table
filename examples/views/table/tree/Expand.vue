@@ -9,7 +9,7 @@
       :data="tableData">
       <vxe-table-column field="name" title="Name" tree-node></vxe-table-column>
       <vxe-table-column type="expand" title="Details" width="80">
-        <template v-slot:content="{ row, rowIndex }">
+        <template v-slot:content="{ row }">
           <ul>
             <li>
               <span>ID：</span>
@@ -41,8 +41,8 @@
 </template>
 
 <script>
-import hljs from 'highlight.js'
 import XEUtils from 'xe-utils'
+import hljs from 'highlight.js'
 
 export default {
   data () {

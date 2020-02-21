@@ -168,7 +168,7 @@ export default {
   },
   methods: {
     getTreeExpansionEvent () {
-      let treeExpandRecords = this.$refs.xTree1.getTreeExpandRecords()
+      const treeExpandRecords = this.$refs.xTree1.getTreeExpandRecords()
       this.$XModal.alert(treeExpandRecords.length)
     }
   }

@@ -1,11 +1,24 @@
 import { DELETE, POST, GET } from 'xe-ajax-mock'
 import Helper from './helper'
 
-GET('/api/conf/region/list', require('./conf/region.json'))
-GET('/api/conf/sex/list', require('./conf/sex.json'))
-GET('/api/conf/columns/list', require('./conf/columns.json'))
-GET('/api/conf/languages/list', require('./conf/languages.json'))
-GET('/api/conf/city/all', require('./city/all.json'))
+import regionConf from './conf/region.json'
+import sexConf from './conf/sex.json'
+import columnsConf from './conf/columns.json'
+import languagesConf from './conf/languages.json'
+
+import cityAll from './city/all.json'
+
+import roleList from './role/list.json'
+import userList from './user/list.json'
+import fileList from './file/list.json'
+import columnList from './column/list.json'
+import i18nList from './i18n/list.json'
+
+GET('/api/conf/region/list', regionConf)
+GET('/api/conf/sex/list', sexConf)
+GET('/api/conf/columns/list', columnsConf)
+GET('/api/conf/languages/list', languagesConf)
+GET('/api/conf/city/all', cityAll)
 
 class RoleVO {
   constructor (data) {
@@ -16,7 +29,7 @@ class RoleVO {
     this.updateTime = data.updateTime
   }
 }
-const roleHelper = new Helper(require('./role/list.json'), RoleVO)
+const roleHelper = new Helper(roleList, RoleVO)
 DELETE('/api/role/delete/{id}', roleHelper.deleteByPathVariable())
 POST('/api/role/add', roleHelper.insertByBody())
 POST('/api/role/update', roleHelper.updateByBody())
@@ -51,7 +64,7 @@ class UserVO {
     this.updateTime = data.updateTime
   }
 }
-const userHelper = new Helper(require('./user/list.json'), UserVO)
+const userHelper = new Helper(userList, UserVO)
 DELETE('/api/user/delete/{id}', userHelper.deleteByPathVariable())
 POST('/api/user/add', userHelper.insertByBody())
 POST('/api/user/update', userHelper.updateByBody())
@@ -71,7 +84,7 @@ class FileVO {
     this.updateTime = data.updateTime
   }
 }
-const fileHelper = new Helper(require('./file/list.json'), FileVO)
+const fileHelper = new Helper(fileList, FileVO)
 DELETE('/api/file/delete/{id}', fileHelper.deleteByPathVariable())
 POST('/api/file/add', fileHelper.insertByBody())
 POST('/api/file/update', fileHelper.updateByBody())
@@ -99,7 +112,7 @@ class ColumnVO {
     this.updateTime = data.updateTime
   }
 }
-const columnHelper = new Helper(require('./column/list.json'), ColumnVO)
+const columnHelper = new Helper(columnList, ColumnVO)
 DELETE('/api/column/delete/{id}', columnHelper.deleteByPathVariable())
 POST('/api/column/add', columnHelper.insertByBody())
 POST('/api/column/update', columnHelper.updateByBody())
@@ -108,7 +121,7 @@ GET('/api/column/list', columnHelper.findList())
 GET('/api/column/full', columnHelper.findAllList())
 GET('/api/column/page/list/{pageSize}/{currentPage}', columnHelper.findPageList())
 
-class i18nVO {
+class I18nVO {
   constructor (data) {
     this.id = data.id
     this.key = data.key
@@ -118,7 +131,7 @@ class i18nVO {
     this.updateTime = data.updateTime
   }
 }
-const i18nHelper = new Helper(require('./i18n/list.json'), i18nVO)
+const i18nHelper = new Helper(i18nList, I18nVO)
 DELETE('/api/i18n/delete/{id}', i18nHelper.deleteByPathVariable())
 POST('/api/i18n/add', i18nHelper.insertByBody())
 POST('/api/i18n/update', i18nHelper.updateByBody())

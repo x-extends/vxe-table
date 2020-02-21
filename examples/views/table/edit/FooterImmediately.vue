@@ -138,8 +138,7 @@ export default {
     }
   },
   created () {
-    let list = window.MOCK_DATA_LIST.slice(0, 20)
-    this.tableData = list
+    this.tableData = window.MOCK_DATA_LIST.slice(0, 20)
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
@@ -147,7 +146,7 @@ export default {
     })
   },
   methods: {
-    footerCellClassName ({ $rowIndex, column, columnIndex }) {
+    footerCellClassName ({ $rowIndex, columnIndex }) {
       if (columnIndex === 0) {
         if ($rowIndex === 0) {
           return 'col-blue'
@@ -157,8 +156,8 @@ export default {
       }
     },
     // 在值发生改变时更新表尾合计
-    updateFooterEvent (params) {
-      let xTable = this.$refs.xTable
+    updateFooterEvent () {
+      const xTable = this.$refs.xTable
       xTable.updateFooter()
     },
     footerMethod ({ columns, data }) {
@@ -184,14 +183,14 @@ export default {
       ]
     },
     insertEvent () {
-      let record = {
+      const record = {
         name: 'New name'
       }
       this.$refs.xTable.insert(record)
         .then(({ row }) => this.$refs.xTable.setActiveCell(row, 'age'))
     },
     getInsertEvent () {
-      let insertRecords = this.$refs.xTable.getInsertRecords()
+      const insertRecords = this.$refs.xTable.getInsertRecords()
       this.$XModal.alert(insertRecords.length)
     }
   }

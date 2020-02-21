@@ -24,8 +24,8 @@
 </template>
 
 <script>
-import hljs from 'highlight.js'
 import XEUtils from 'xe-utils'
+import hljs from 'highlight.js'
 
 export default {
   data () {

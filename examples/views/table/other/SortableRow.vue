@@ -298,11 +298,11 @@ export default {
   methods: {
     rowDrop () {
       this.$nextTick(() => {
-        let xTable = this.$refs.xTable1
+        const xTable = this.$refs.xTable1
         this.sortable1 = Sortable.create(xTable.$el.querySelector('.body--wrapper>.vxe-table--body tbody'), {
           handle: '.drag-btn',
           onEnd: ({ newIndex, oldIndex }) => {
-            let currRow = this.tableData.splice(oldIndex, 1)[0]
+            const currRow = this.tableData.splice(oldIndex, 1)[0]
             this.tableData.splice(newIndex, 0, currRow)
           }
         })
@@ -310,28 +310,28 @@ export default {
     },
     treeDrop () {
       this.$nextTick(() => {
-        let xTable = this.$refs.xTable2
+        const xTable = this.$refs.xTable2
         this.sortable2 = Sortable.create(xTable.$el.querySelector('.body--wrapper>.vxe-table--body tbody'), {
           handle: '.drag-btn',
           onEnd: ({ item, oldIndex }) => {
-            let options = { children: 'children' }
-            let targetTrElem = item
-            let wrapperElem = targetTrElem.parentNode
-            let prevTrElem = targetTrElem.previousElementSibling
-            let tableTreeData = this.tableTreeData
-            let selfRow = xTable.getRowNode(targetTrElem).item
-            let selfNode = XEUtils.findTree(tableTreeData, row => row === selfRow, options)
+            const options = { children: 'children' }
+            const targetTrElem = item
+            const wrapperElem = targetTrElem.parentNode
+            const prevTrElem = targetTrElem.previousElementSibling
+            const tableTreeData = this.tableTreeData
+            const selfRow = xTable.getRowNode(targetTrElem).item
+            const selfNode = XEUtils.findTree(tableTreeData, row => row === selfRow, options)
             if (prevTrElem) {
               // 移动到节点
-              let prevRow = xTable.getRowNode(prevTrElem).item
-              let prevNode = XEUtils.findTree(tableTreeData, row => row === prevRow, options)
+              const prevRow = xTable.getRowNode(prevTrElem).item
+              const prevNode = XEUtils.findTree(tableTreeData, row => row === prevRow, options)
               if (XEUtils.findTree(selfRow[options.children], row => prevRow === row, options)) {
                 // 错误的移动
-                let oldTrElem = wrapperElem.children[oldIndex]
+                const oldTrElem = wrapperElem.children[oldIndex]
                 wrapperElem.insertBefore(targetTrElem, oldTrElem)
                 return this.$XModal.message({ message: '不允许自己给自己拖动！', status: 'error' })
               }
-              let currRow = selfNode.items.splice(selfNode.index, 1)[0]
+              const currRow = selfNode.items.splice(selfNode.index, 1)[0]
               if (xTable.isTreeExpandByRow(prevRow)) {
                 // 移动到当前的子节点
                 prevRow[options.children].splice(0, 0, currRow)
@@ -341,7 +341,7 @@ export default {
               }
             } else {
               // 移动到第一行
-              var currRow = selfNode.items.splice(selfNode.index, 1)[0]
+              const currRow = selfNode.items.splice(selfNode.index, 1)[0]
               tableTreeData.unshift(currRow)
             }
             // 如果变动了树层级，需要刷新数据

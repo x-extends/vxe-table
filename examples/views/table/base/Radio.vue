@@ -376,8 +376,7 @@ export default {
     })
   },
   created () {
-    let list = window.MOCK_DATA_LIST.slice(0, 6)
-    this.tableData = list
+    this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
   },
   methods: {
     checkMethod ({ row }) {
@@ -386,8 +385,8 @@ export default {
     cellClickEvent () {
       console.log('单元格点击事件')
     },
-    currentChangeEvent ({ row }) {
-      console.log('行选中事件')
+    currentChangeEvent ({ rowIndex }) {
+      console.log(`行选中事件 ${rowIndex}`)
     },
     radioChangeEvent ({ row }) {
       this.selectRow = row

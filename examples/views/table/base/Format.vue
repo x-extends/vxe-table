@@ -58,7 +58,7 @@ import XEUtils from 'xe-utils'
 XEUtils.mixin({
   // 格式化下拉选项
   formatSelect (cellValue, list) {
-    let item = list.find(item => item.value === cellValue)
+    const item = list.find(item => item.value === cellValue)
     return item ? item.label : ''
   },
   // 格式化日期，默认 yyyy-MM-dd HH:mm:ss
@@ -222,10 +222,10 @@ export default {
   },
   methods: {
     formatterSex ({ cellValue }) {
-      let item = this.sexList.find(item => item.value === cellValue)
+      const item = this.sexList.find(item => item.value === cellValue)
       return item ? item.label : ''
     },
-    formatTime ({ cellValue, row, column }) {
+    formatTime ({ cellValue }) {
       return XEUtils.toDateString(cellValue, 'yyyy-MM-dd HH:ss:mm')
     }
   }

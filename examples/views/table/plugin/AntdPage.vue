@@ -394,7 +394,7 @@ export default {
         this.tableData = result
         this.tablePage.totalResult = page.totalResult
         this.loading = false
-      }).catch(e => {
+      }).catch(() => {
         this.loading = false
       })
     },
@@ -411,7 +411,7 @@ export default {
       })
     },
     insertEvent () {
-      let record = {
+      const record = {
         role: '',
         age: 18,
         region: [],
@@ -421,7 +421,7 @@ export default {
       this.$refs.xTable.insert(record).then(({ row }) => this.$refs.xTable.setActiveRow(row))
     },
     saveEvent () {
-      let { insertRecords, removeRecords, updateRecords } = this.$refs.xTable.getRecordset()
+      const { insertRecords, removeRecords, updateRecords } = this.$refs.xTable.getRecordset()
       if (insertRecords.length || removeRecords.length || updateRecords.length) {
         this.$message.success('保存成功！')
         this.searchEvent()
@@ -441,7 +441,7 @@ export default {
     dropdownMenuEvent (name) {
       switch (name) {
         case 'remove': {
-          let selectRecords = this.$refs.xTable.getCheckboxRecords()
+          const selectRecords = this.$refs.xTable.getCheckboxRecords()
           if (selectRecords.length) {
             this.$refs.xTable.removeSelecteds()
           } else {
@@ -463,14 +463,14 @@ export default {
       this.tablePage.pageSize = size
       this.searchEvent()
     },
-    handleCurrentChange (page, pageSize) {
-      this.tablePage.currentPage = page
+    handleCurrentChange (currentPage) {
+      this.tablePage.currentPage = currentPage
       this.findList()
     },
     visibleMethod ({ data }) {
       return data.flag1 === 'Y'
     },
-    roleSearchEvent ({ row }, value) {
+    roleSearchEvent (params, value) {
       this.ACProps.dataSource = this.restaurants.filter(option => option.toUpperCase().indexOf((value || '').toUpperCase()) !== -1)
     }
   }

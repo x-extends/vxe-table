@@ -180,7 +180,7 @@ export default {
       })
     },
     insertEvent () {
-      let xTree = this.$refs.xTree
+      const xTree = this.$refs.xTree
       xTree.createRow({
         name: '新数据',
         date: XEUtils.toDateString(new Date(), 'yyyy-MM-dd'),
@@ -192,14 +192,14 @@ export default {
       })
     },
     removeEvent () {
-      let xTree = this.$refs.xTree
-      let removeRecords = xTree.getCheckboxRecords()
+      const xTree = this.$refs.xTree
+      const removeRecords = xTree.getCheckboxRecords()
       removeRecords.forEach(row => {
-        let matchObj = XEUtils.findTree(this.tableData, item => item === row, this.treeConfig)
+        const matchObj = XEUtils.findTree(this.tableData, item => item === row, this.treeConfig)
         if (matchObj) {
-          let { items, index } = matchObj
+          const { items, index } = matchObj
           // 从树节点中移除
-          let restRow = items.splice(index, 1)[0]
+          const restRow = items.splice(index, 1)[0]
           this.removeList.push(restRow)
         }
       })
@@ -214,15 +214,15 @@ export default {
       this.findList()
     },
     getInsertEvent () {
-      let insertRecords = XEUtils.filterTree(this.tableData, item => item.isNew, this.treeConfig)
+      const insertRecords = XEUtils.filterTree(this.tableData, item => item.isNew, this.treeConfig)
       this.$XModal.alert(insertRecords.length)
     },
     getRemoveEvent () {
-      let removeRecords = this.removeList
+      const removeRecords = this.removeList
       this.$XModal.alert(removeRecords.length)
     },
     getUpdateEvent () {
-      let updateRecords = this.$refs.xTree.getUpdateRecords()
+      const updateRecords = this.$refs.xTree.getUpdateRecords()
       this.$XModal.alert(updateRecords.length)
     }
   }

@@ -204,11 +204,11 @@ export default {
       return XEAjax.get('/api/file/node/list', { parentId: row.id })
     },
     getUpdateEvent () {
-      let updateRecords = this.$refs.xGrid.getUpdateRecords()
+      const updateRecords = this.$refs.xGrid.getUpdateRecords()
       this.$XModal.alert(updateRecords.length)
     },
     visibleMethod  ({ row, type }) {
-      let xGrid = this.$refs.xGrid
+      const xGrid = this.$refs.xGrid
       if (type === 'body') {
         this.bodyMenus.forEach(list => {
           list.forEach(item => {
@@ -216,7 +216,7 @@ export default {
               item.disabled = !row.hasChild || !xGrid.isTreeExpandLoaded(row)
             } else if (['expand', 'contract'].includes(item.code)) {
               if (row.hasChild) {
-                let isExpand = xGrid.isTreeExpandByRow(row)
+                const isExpand = xGrid.isTreeExpandByRow(row)
                 item.disabled = ['expand'].includes(item.code) ? isExpand : !isExpand
               } else {
                 item.disabled = true
@@ -227,8 +227,8 @@ export default {
       }
       return true
     },
-    contextMenuClickEvent ({ menu, row, column }) {
-      let xGrid = this.$refs.xGrid
+    contextMenuClickEvent ({ menu, row }) {
+      const xGrid = this.$refs.xGrid
       switch (menu.code) {
         case 'clearLoaded':
           xGrid.clearTreeExpandLoaded(row)

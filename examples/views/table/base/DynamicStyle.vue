@@ -107,7 +107,7 @@ export default {
     })
   },
   methods: {
-    headerCellStyle ({ column, columnIndex }) {
+    headerCellStyle ({ column }) {
       if (column.property === 'name') {
         return {
           backgroundColor: '#f60',
@@ -115,7 +115,7 @@ export default {
         }
       }
     },
-    rowStyle ({ row, rowIndex }) {
+    rowStyle ({ rowIndex }) {
       if ([2, 3, 5].includes(rowIndex)) {
         return {
           backgroundColor: 'red',
@@ -123,7 +123,7 @@ export default {
         }
       }
     },
-    cellStyle ({ row, rowIndex, column, columnIndex }) {
+    cellStyle ({ row, column }) {
       if (column.property === 'sex') {
         if (row.sex >= '1') {
           return {

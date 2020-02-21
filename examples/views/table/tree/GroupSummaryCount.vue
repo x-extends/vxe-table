@@ -289,7 +289,7 @@ export default {
     findList () {
       return new Promise(resolve => {
         setTimeout(() => {
-          let list = [
+          const list = [
             {
               name: '一班',
               level: '',
@@ -396,7 +396,7 @@ export default {
     },
     getGroupSummary (data) {
       XEUtils.eachTree(data, (row, index, items, path, parent, nodes) => {
-        let children = row.children
+        const children = row.children
         if (children && children.length) {
           // 合计子节点
           Object.assign(row, this.handleSummary(children))
@@ -411,7 +411,7 @@ export default {
         }
       }, this.tableTreeConfig)
       XEUtils.eachTree(data, (row) => {
-        let children = row.children
+        const children = row.children
         if (children && children.length) {
           // 动态增加一行汇总
           children.push({
@@ -426,7 +426,7 @@ export default {
     },
     colspanMethod ({ row, column }) {
       // 当行被展开时将行合并
-      let xTree = this.$refs.xTree
+      const xTree = this.$refs.xTree
       if (row.children && row.children.length && xTree && xTree.isTreeExpandByRow(row)) {
         if (column.treeNode) {
           return {

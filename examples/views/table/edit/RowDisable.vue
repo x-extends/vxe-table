@@ -170,23 +170,23 @@ export default {
         this.sexList = data
       })
     },
-    activeRowMethod ({ row, rowIndex }) {
+    activeRowMethod ({ rowIndex }) {
       return rowIndex !== 1
     },
-    editDisabledEvent ({ row, column }) {
+    editDisabledEvent () {
       this.$XModal.alert('禁止编辑')
     },
     editActivedEvent ({ row }) {
-      let xTable = this.$refs.xTable
-      let nameColumn = xTable.getColumnByField('name')
-      let ageColumn = xTable.getColumnByField('age')
-      let sexColumn = xTable.getColumnByField('sex')
+      const xTable = this.$refs.xTable
+      const nameColumn = xTable.getColumnByField('name')
+      const ageColumn = xTable.getColumnByField('age')
+      const sexColumn = xTable.getColumnByField('sex')
       // name 为 'x' 开头的列禁止编辑
-      let isNameDisabled = (row.name || '').indexOf('x') === 0
+      const isNameDisabled = (row.name || '').indexOf('x') === 0
       // age 小于 27 的列禁止编辑
-      let isAgeDisabled = row.age < 27
+      const isAgeDisabled = row.age < 27
       // sex 值编辑为 1 的列禁止编辑
-      let isSexDisabled = row.sex === '1'
+      const isSexDisabled = row.sex === '1'
 
       nameColumn.editRender.attrs.disabled = isNameDisabled
       ageColumn.editRender.attrs.disabled = isAgeDisabled

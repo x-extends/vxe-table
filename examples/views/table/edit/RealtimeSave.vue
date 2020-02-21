@@ -110,9 +110,9 @@ export default {
       })
     },
     editClosedEvent ({ row, column }) {
-      let xTable = this.$refs.xTable
-      let field = column.property
-      let cellValue = row[field]
+      const xTable = this.$refs.xTable
+      const field = column.property
+      const cellValue = row[field]
       // 判断单元格值是否被修改
       if (xTable.isUpdateByRow(row, field)) {
         setTimeout(() => {

@@ -6,6 +6,7 @@
       resizable
       highlight-hover-row
       tree-config
+      export-config
       keep-source
       row-id="id"
       :proxy-config="tableProxy"
@@ -64,6 +65,7 @@ export default {
           resizable
           highlight-hover-row
           tree-config
+          export-config
           keep-source
           row-id="id"
           :proxy-config="tableProxy"

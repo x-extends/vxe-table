@@ -166,7 +166,7 @@ export default {
     })
   },
   methods: {
-    filterNameMethod ({ value, row, column }) {
+    filterNameMethod ({ value, row }) {
       return row.id >= value
     },
     filterAgeMethod ({ option, row }) {

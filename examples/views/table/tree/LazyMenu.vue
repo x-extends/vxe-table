@@ -189,7 +189,7 @@ export default {
       return XEAjax.get('/api/file/node/list', { parentId: row.id })
     },
     visibleMethod  ({ row, type }) {
-      let xTree = this.$refs.xTree
+      const xTree = this.$refs.xTree
       if (type === 'body') {
         this.bodyMenus.forEach(list => {
           list.forEach(item => {
@@ -197,7 +197,7 @@ export default {
               item.disabled = !row.hasChild || !xTree.isTreeExpandLoaded(row)
             } else if (['expand', 'contract'].includes(item.code)) {
               if (row.hasChild) {
-                let isExpand = xTree.isTreeExpandByRow(row)
+                const isExpand = xTree.isTreeExpandByRow(row)
                 item.disabled = ['expand'].includes(item.code) ? isExpand : !isExpand
               } else {
                 item.disabled = true
@@ -208,8 +208,8 @@ export default {
       }
       return true
     },
-    contextMenuClickEvent ({ menu, row, column }) {
-      let xTree = this.$refs.xTree
+    contextMenuClickEvent ({ menu, row }) {
+      const xTree = this.$refs.xTree
       switch (menu.code) {
         case 'clearLoaded':
           xTree.clearTreeExpandLoaded(row)

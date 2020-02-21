@@ -23,7 +23,7 @@
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">
       <vxe-table-column type="checkbox" width="60"></vxe-table-column>
       <vxe-table-column type="seq" width="80">
-        <template v-slot:header="{ column }">
+        <template v-slot:header>
           <span>序号</span>
           <i class="el-icon-question"></i>
         </template>
@@ -290,8 +290,7 @@ export default {
   created () {
     this.loading = true
     setTimeout(() => {
-      let list = window.MOCK_DATA_LIST.slice(0, 10)
-      this.tableData = list
+      this.tableData = window.MOCK_DATA_LIST.slice(0, 10)
       this.loading = false
     }, 500)
     this.findSexList()
@@ -319,14 +318,14 @@ export default {
       return XEUtils.toDateString(value, format)
     },
     getSelectLabel (value, list, valueProp = 'value', labelField = 'label') {
-      let item = XEUtils.find(list, item => item[valueProp] === value)
+      const item = XEUtils.find(list, item => item[valueProp] === value)
       return item ? item[labelField] : null
     },
     getCascaderLabel (value, list) {
-      let values = value || []
-      let labels = []
-      let matchCascaderData = function (index, list) {
-        let val = values[index]
+      const values = value || []
+      const labels = []
+      const matchCascaderData = function (index, list) {
+        const val = values[index]
         if (list && values.length > index) {
           list.forEach(item => {
             if (item.value === val) {
@@ -340,8 +339,8 @@ export default {
       return labels.join(' / ')
     },
     roleFetchSuggestions (queryString, cb) {
-      var restaurants = this.restaurants
-      var results = queryString ? restaurants.filter(this.createStateFilter(queryString)) : restaurants
+      const restaurants = this.restaurants
+      const results = queryString ? restaurants.filter(this.createStateFilter(queryString)) : restaurants
       clearTimeout(this.timeout)
       this.timeout = setTimeout(() => {
         cb(results)

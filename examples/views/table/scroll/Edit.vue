@@ -193,10 +193,9 @@ export default {
       this.loading = true
       return new Promise(resolve => {
         setTimeout(() => {
-          let tableData = window.MOCK_DATA_LIST.slice(0, 600)
           // 阻断 vue 对大数组的监听，避免 vue 绑定大数据造成短暂的卡顿
           if (this.$refs.xTable) {
-            this.$refs.xTable.loadData(tableData)
+            this.$refs.xTable.loadData(window.MOCK_DATA_LIST.slice(0, 600))
           }
           resolve()
           this.loading = false
@@ -204,22 +203,22 @@ export default {
       })
     },
     insertEvent (row) {
-      let xTable = this.$refs.xTable
-      let record = {}
+      const xTable = this.$refs.xTable
+      const record = {}
       xTable.insertAt(record, row).then(({ row }) => {
         xTable.setActiveRow(row)
       })
     },
     getInsertEvent () {
-      let insertRecords = this.$refs.xTable.getInsertRecords()
+      const insertRecords = this.$refs.xTable.getInsertRecords()
       this.$XModal.alert(insertRecords.length)
     },
     getRemoveEvent () {
-      let removeRecords = this.$refs.xTable.getRemoveRecords()
+      const removeRecords = this.$refs.xTable.getRemoveRecords()
       this.$XModal.alert(removeRecords.length)
     },
     getUpdateEvent () {
-      let updateRecords = this.$refs.xTable.getUpdateRecords()
+      const updateRecords = this.$refs.xTable.getUpdateRecords()
       this.$XModal.alert(updateRecords.length)
     }
   }

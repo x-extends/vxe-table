@@ -262,11 +262,11 @@ export default {
   methods: {
     sortNameMethod (a, b) {
       // 例如：名称不区分大小写的排序
-      var v1 = (a.name || '').toLowerCase()
-      var v2 = (b.name || '').toLowerCase()
+      const v1 = (a.name || '').toLowerCase()
+      const v2 = (b.name || '').toLowerCase()
       return v1 < v2 ? -1 : v1 > v2 ? 1 : 0
     },
-    sortChangeEvent ({ column, property, order }) {
+    sortChangeEvent ({ property, order }) {
       console.info(property, order)
     }
   }

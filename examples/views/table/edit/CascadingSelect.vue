@@ -202,17 +202,17 @@ export default {
   },
   methods: {
     insertEvent () {
-      let record = {
+      const record = {
 
       }
       this.$refs.xTable.insert(record)
     },
     // 格式化显示名称
     formatPanmeLabel ({ cellValue, row }) {
-      let ptype = row.attr3
-      let ptypeItem = this.cachePnameList.find(item => item.ptype === ptype)
+      const ptype = row.attr3
+      const ptypeItem = this.cachePnameList.find(item => item.ptype === ptype)
       if (ptypeItem && ptypeItem.pnameList) {
-        let pnameItem = ptypeItem.pnameList.find(item => item.value === cellValue)
+        const pnameItem = ptypeItem.pnameList.find(item => item.value === cellValue)
         if (pnameItem) {
           return pnameItem.label
         }
@@ -221,7 +221,7 @@ export default {
     },
     // 更新级联选项列表
     updatePnameList (row) {
-      let ptype = row.attr3
+      const ptype = row.attr3
       let pnameList = [
         {
           label: '',
@@ -229,7 +229,7 @@ export default {
         }
       ]
       if (ptype) {
-        let item = this.cachePnameList.find(item => item.ptype === ptype)
+        const item = this.cachePnameList.find(item => item.ptype === ptype)
         if (item) {
           pnameList = item.pnameList
         } else {

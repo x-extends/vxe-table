@@ -53,12 +53,12 @@ export default {
         ajax: {
           query: ({ page, sort, filters }) => {
             // 处理排序条件
-            let formData = {
+            const formData = {
               sort: sort.property,
               order: sort.order
             }
             // 处理筛选条件
-            filters.forEach(({ column, property, values }) => {
+            filters.forEach(({ property, values }) => {
               formData[property] = values.join(',')
             })
             return XEAjax.get(`/api/user/page/list/${page.pageSize}/${page.currentPage}`, formData)

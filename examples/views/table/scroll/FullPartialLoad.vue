@@ -246,10 +246,10 @@ export default {
     findColumnList (size) {
       return new Promise(resolve => {
         setTimeout(() => {
-          var columns = []
-          for (var index = 0; index < size; index++) {
-            let key = this.colIndex++
-            let config = {
+          const columns = []
+          for (let index = 0; index < size; index++) {
+            const key = this.colIndex++
+            const config = {
               field: key ? `col_${key}` : 'id',
               title: key ? `标题_${key}` : 'ID',
               width: 140
@@ -269,10 +269,10 @@ export default {
     findDataList (size) {
       return new Promise(resolve => {
         setTimeout(() => {
-          var list = []
-          for (var index = 0; index < size; index++) {
-            let key = this.rowIndex++
-            let item = { id: key, checked: false }
+          const list = []
+          for (let index = 0; index < size; index++) {
+            const key = this.rowIndex++
+            const item = { id: key, checked: false }
             // 由于生成数据比较耗时，所以固定生成1000字段
             Array.from(new Array(1000)).forEach((num, cIndex) => {
               item[`col_${cIndex}`] = `内容_${cIndex}_${index}`
