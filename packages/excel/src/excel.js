@@ -103,7 +103,7 @@ function buildColumns (h, columns) {
 }
 
 function buildProps (h, _vm, props = {}) {
-  let { editConfig, contextMenu } = props
+  const { editConfig, contextMenu } = props
   return Object.assign({}, props, {
     border: true,
     resizable: true,
@@ -118,8 +118,8 @@ function buildProps (h, _vm, props = {}) {
 }
 
 Object.keys(Table.methods).forEach(name => {
-  methods[name] = function () {
-    return this.$refs.xTable[name].apply(this.$refs.xTable[name], arguments)
+  methods[name] = function (...args) {
+    return this.$refs.xTable && this.$refs.xTable[name](...args)
   }
 })
 
@@ -152,17 +152,17 @@ export default {
   methods: {
     ...methods,
     handleHeaderCellClassName ({ column, columnIndex, $table }) {
-      let { editStore } = $table
-      let { selected, actived } = editStore
+      const { editStore } = $table
+      const { selected, actived } = editStore
       if (columnIndex > 0) {
         if (selected.column === column || actived.column === column) {
           return 'vxe-excel--column-selected'
         }
       }
     },
-    handleCellClassName ({ row, column, columnIndex, $table }) {
-      let { editStore } = $table
-      let { selected, actived } = editStore
+    handleCellClassName ({ row, columnIndex, $table }) {
+      const { editStore } = $table
+      const { selected, actived } = editStore
       if (columnIndex === 0) {
         if (selected.row === row || actived.row === row) {
           return 'vxe-excel--index-selected'
@@ -170,36 +170,36 @@ export default {
       }
     },
     cellClickEvent ({ row, rowIndex, columnIndex, $table }, evnt) {
-      let { $refs, visibleColumn, handleSelected, handleChecked } = $table
+      const { $refs, visibleColumn, handleSelected, handleChecked } = $table
       if (columnIndex === 0) {
         columnIndex += 1
-        let tableBodyElem = $refs.tableBody.$el
-        let column = visibleColumn[columnIndex]
-        let trElemList = tableBodyElem.querySelectorAll('.vxe-body--row')
-        let trElem = trElemList[rowIndex]
-        let cell = trElem.querySelector(`.${column.id}`)
+        const tableBodyElem = $refs.tableBody.$el
+        const column = visibleColumn[columnIndex]
+        const trElemList = tableBodyElem.querySelectorAll('.vxe-body--row')
+        const trElem = trElemList[rowIndex]
+        const cell = trElem.querySelector(`.${column.id}`)
         handleSelected({ row, rowIndex, column, columnIndex, cell, $table }, evnt).then(() => {
           handleChecked({ rowIndex, columnIndex }, { rowIndex, columnIndex: visibleColumn.length - 1 }, evnt)
         })
       }
     },
     headerCellClickEvent ({ column, columnIndex, $table }, evnt) {
-      let { $refs, tableData, handleSelected, handleChecked } = $table
+      const { $refs, tableData, handleSelected, handleChecked } = $table
       if (tableData.length) {
-        let tableBodyElem = $refs.tableBody.$el
-        let rowIndex = 0
-        let row = tableData[rowIndex]
-        let trElemList = tableBodyElem.querySelectorAll('.vxe-body--row')
-        let trElem = trElemList[rowIndex]
-        let cell = trElem.querySelector(`.${column.id}`)
+        const tableBodyElem = $refs.tableBody.$el
+        const rowIndex = 0
+        const row = tableData[rowIndex]
+        const trElemList = tableBodyElem.querySelectorAll('.vxe-body--row')
+        const trElem = trElemList[rowIndex]
+        const cell = trElem.querySelector(`.${column.id}`)
         handleSelected({ row, rowIndex, column, columnIndex, cell, $table }, evnt).then(() => {
           handleChecked({ rowIndex, columnIndex }, { rowIndex: tableData.length - 1, columnIndex }, evnt)
         })
       }
     },
     contextMenuClickEvent ({ menu, row, column }, evnt) {
-      let $table = this.$refs.xTable
-      let { property } = column
+      const $table = this.$refs.xTable
+      const { property } = column
       switch (menu.code) {
         case 'clip':
           $table.handleCopyed(true, evnt)

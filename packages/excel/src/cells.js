@@ -7,9 +7,9 @@ export default {
   cell: {
     autofocus: '.vxe-textarea',
     renderEdit (h, editRender, params, { $excel }) {
-      let { excelStore } = $excel
-      let { uploadRows } = excelStore
-      let { row, column } = params
+      const { excelStore } = $excel
+      const { uploadRows } = excelStore
+      const { row, column } = params
       return [
         h('div', {
           class: 'vxe-input--wrapper vxe-excel-cell',
@@ -27,7 +27,7 @@ export default {
             },
             on: {
               input (evnt) {
-                let inpElem = evnt.target
+                const inpElem = evnt.target
                 UtilTools.setCellValue(row, column, inpElem.value)
                 if (inpElem.scrollHeight > inpElem.offsetHeight) {
                   if (uploadRows.indexOf(row) === -1) {
@@ -44,11 +44,11 @@ export default {
                 }
               },
               keydown (evnt) {
-                let inpElem = evnt.target
+                const inpElem = evnt.target
                 if (evnt.altKey && evnt.keyCode === 13) {
                   evnt.preventDefault()
                   evnt.stopPropagation()
-                  let rangeData = DomTools.getCursorPosition(inpElem)
+                  const rangeData = DomTools.getCursorPosition(inpElem)
                   let pos = rangeData.end
                   let cellValue = inpElem.value
                   cellValue = `${cellValue.slice(0, pos)}\n${cellValue.slice(pos, cellValue.length)}`
@@ -67,7 +67,7 @@ export default {
       ]
     },
     renderCell (h, editRender, params) {
-      let { row, column } = params
+      const { row, column } = params
       return [
         h('span', {
           domProps: {
