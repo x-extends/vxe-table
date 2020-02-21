@@ -61,10 +61,10 @@
       <vxe-table-column field="time" title="Time" sortable></vxe-table-column>
       <vxe-table-column
         field="nickname"
-        title="渲染器（实现复杂的筛选）"
-        width="240"
+        title="实现复杂的筛选"
         :filters="[{data: {type: 'has', isCase: true, name: ''}}]"
-        :filter-render="{name: 'MyComplexFilter'}"></vxe-table-column>
+        :filter-render="{name: 'FilterComplex'}">
+      </vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -141,10 +141,10 @@ export default {
           <vxe-table-column field="time" title="Time" sortable></vxe-table-column>
           <vxe-table-column
             field="nickname"
-            title="渲染器（实现复杂的筛选）"
-            width="240"
+            title="实现复杂的筛选"
             :filters="[{data: {type: 'has', isCase: true, name: ''}}]"
-            :filter-render="{name: 'MyComplexFilter'}"></vxe-table-column>
+            :filter-render="{name: 'FilterComplex'}">
+          </vxe-table-column>
         </vxe-table>
         `,
         `

@@ -2,6 +2,12 @@
   <div>
     <p class="tip">实现弹框表单编辑功能，双击行可以弹出编辑框</p>
 
+    <vxe-toolbar>
+      <template v-slot:buttons>
+        <vxe-button icon="fa fa-plus" @click="insertEvent()">新增</vxe-button>
+      </template>
+    </vxe-toolbar>
+
     <vxe-table
       border
       resizable
@@ -24,7 +30,7 @@
       </vxe-table-column>
     </vxe-table>
 
-    <vxe-modal ref="xModal" v-model="showEdit" title="编辑&保存" width="800" :loading="submitLoading" resize destroy-on-close>
+    <vxe-modal ref="xModal" v-model="showEdit" :title="selectRow ? '编辑&保存' : '新增&保存'" width="800" :loading="submitLoading" resize destroy-on-close>
       <vxe-form :data="formData" :rules="formRules" title-align="right" title-width="100" @submit="submitEvent">
         <vxe-form-item title="Basic information" span="24" title-align="left" title-width="200px" :title-prefix="{icon: 'fa fa-address-card-o'}"></vxe-form-item>
         <vxe-form-item title="Name" field="name" span="12" :item-render="{name: 'input', attrs: {placeholder: '请输入名称'}}"></vxe-form-item>
@@ -108,6 +114,12 @@ export default {
       },
       demoCodes: [
         `
+        <vxe-toolbar>
+          <template v-slot:buttons>
+            <vxe-button icon="fa fa-plus" @click="insertEvent()">新增</vxe-button>
+          </template>
+        </vxe-toolbar>
+
         <vxe-table
           border
           resizable
@@ -130,7 +142,7 @@ export default {
           </vxe-table-column>
         </vxe-table>
 
-        <vxe-modal ref="xModal" v-model="showEdit" title="编辑&保存" width="800" :loading="submitLoading" resize destroy-on-close>
+        <vxe-modal ref="xModal" v-model="showEdit" :title="selectRow ? '编辑&保存' : '新增&保存'" width="800" :loading="submitLoading" resize destroy-on-close>
           <vxe-form :data="formData" :rules="formRules" title-align="right" title-width="100" @submit="submitEvent">
             <vxe-form-item title="Basic information" span="24" title-align="left" title-width="200px" :title-prefix="{icon: 'fa fa-address-card-o'}"></vxe-form-item>
             <vxe-form-item title="Name" field="name" span="12" :item-render="{name: 'input', attrs: {placeholder: '请输入名称'}}"></vxe-form-item>
@@ -217,6 +229,22 @@ export default {
             cellDBLClickEvent ({ row }) {
               this.editEvent(row)
             },
+            insertEvent () {
+              this.formData = {
+                name: '',
+                nickname: '',
+                role: '',
+                sex: '',
+                age: '',
+                num: '',
+                checkedList: [],
+                flag1: '',
+                date3: '',
+                address: ''
+              }
+              this.selectRow = null
+              this.showEdit = true
+            },
             editEvent (row) {
               this.formData = {
                 name: row.name,
@@ -245,8 +273,13 @@ export default {
               setTimeout(() => {
                 this.submitLoading = false
                 this.showEdit = false
-                this.$XModal.message({ message: '保存成功', status: 'success' })
-                Object.assign(this.selectRow, this.formData)
+                if (this.selectRow) {
+                  this.$XModal.message({ message: '保存成功', status: 'success' })
+                  Object.assign(this.selectRow, this.formData)
+                } else {
+                  this.$XModal.message({ message: '新增成功', status: 'success' })
+                  this.$refs.xTable.insert(this.formData)
+                }
               }, 500)
             }
           }
@@ -273,6 +306,22 @@ export default {
     },
     cellDBLClickEvent ({ row }) {
       this.editEvent(row)
+    },
+    insertEvent () {
+      this.formData = {
+        name: '',
+        nickname: '',
+        role: '',
+        sex: '',
+        age: '',
+        num: '',
+        checkedList: [],
+        flag1: '',
+        date3: '',
+        address: ''
+      }
+      this.selectRow = null
+      this.showEdit = true
     },
     editEvent (row) {
       this.formData = {
@@ -302,8 +351,13 @@ export default {
       setTimeout(() => {
         this.submitLoading = false
         this.showEdit = false
-        this.$XModal.message({ message: '保存成功', status: 'success' })
-        Object.assign(this.selectRow, this.formData)
+        if (this.selectRow) {
+          this.$XModal.message({ message: '保存成功', status: 'success' })
+          Object.assign(this.selectRow, this.formData)
+        } else {
+          this.$XModal.message({ message: '新增成功', status: 'success' })
+          this.$refs.xTable.insert(this.formData)
+        }
       }, 500)
     }
   }
