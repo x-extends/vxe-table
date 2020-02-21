@@ -20,7 +20,7 @@ export default {
     // 处理菜单的移动
     moveCtxMenu (evnt, keyCode, ctxMenuStore, property, operKey, operRest, menuList) {
       let selectItem
-      let selectIndex = XEUtils.findIndexOf(menuList, item => ctxMenuStore[property] === item)
+      const selectIndex = XEUtils.findIndexOf(menuList, item => ctxMenuStore[property] === item)
       if (keyCode === operKey) {
         if (operRest && UtilTools.hasChildrenList(ctxMenuStore.selected)) {
           ctxMenuStore.showChild = true
@@ -52,8 +52,8 @@ export default {
      * 快捷菜单事件处理
      */
     handleGlobalContextmenuEvent (evnt) {
-      let { $refs, id, contextMenu, isCtxMenu, ctxMenuStore, ctxMenuOpts } = this
-      let layoutList = ['header', 'body', 'footer']
+      const { $refs, id, contextMenu, isCtxMenu, ctxMenuStore, ctxMenuOpts } = this
+      const layoutList = ['header', 'body', 'footer']
       if (contextMenu && isCtxMenu) {
         if (ctxMenuStore.visible) {
           if (ctxMenuStore.visible && $refs.ctxWrapper && DomTools.getEventTargetNode(evnt, $refs.ctxWrapper.$el).flag) {
@@ -63,19 +63,19 @@ export default {
         }
         // 分别匹配表尾、内容、表尾的快捷菜单
         for (let index = 0; index < layoutList.length; index++) {
-          let layout = layoutList[index]
-          let columnTargetNode = DomTools.getEventTargetNode(evnt, this.$el, `vxe-${layout}--column`, target => {
+          const layout = layoutList[index]
+          const columnTargetNode = DomTools.getEventTargetNode(evnt, this.$el, `vxe-${layout}--column`, target => {
             // target=td|th，直接向上找 table 去匹配即可
             return target.parentNode.parentNode.parentNode.getAttribute('data-tid') === id
           })
-          let params = { type: layout, $table: this, columns: this.visibleColumn.slice(0) }
+          const params = { type: layout, $table: this, columns: this.visibleColumn.slice(0) }
           if (columnTargetNode.flag) {
-            let cell = columnTargetNode.targetElem
-            let column = this.getColumnNode(cell).item
+            const cell = columnTargetNode.targetElem
+            const column = this.getColumnNode(cell).item
             let typePrefix = `${layout}-`
             Object.assign(params, { column, columnIndex: this.getColumnIndex(column), cell })
             if (layout === 'body') {
-              let row = this.getRowNode(cell.parentNode).item
+              const row = this.getRowNode(cell.parentNode).item
               typePrefix = ''
               params.row = row
               params.rowIndex = this.getRowIndex(row)
@@ -104,11 +104,11 @@ export default {
      * 显示快捷菜单
      */
     openContextMenu (evnt, type, params) {
-      let { ctxMenuStore, ctxMenuOpts } = this
-      let config = ctxMenuOpts[type]
-      let visibleMethod = ctxMenuOpts.visibleMethod
+      const { ctxMenuStore, ctxMenuOpts } = this
+      const config = ctxMenuOpts[type]
+      const visibleMethod = ctxMenuOpts.visibleMethod
       if (config) {
-        let { options, disabled } = config
+        const { options, disabled } = config
         if (disabled) {
           evnt.preventDefault()
         } else if (options && options.length) {
@@ -117,9 +117,9 @@ export default {
             if (!visibleMethod || visibleMethod(params, evnt)) {
               evnt.preventDefault()
               this.updateZindex()
-              let { scrollTop, scrollLeft, visibleHeight, visibleWidth } = DomTools.getDomNode()
-              let top = evnt.clientY + scrollTop
-              let left = evnt.clientX + scrollLeft
+              const { scrollTop, scrollLeft, visibleHeight, visibleWidth } = DomTools.getDomNode()
+              const top = evnt.clientY + scrollTop
+              const left = evnt.clientX + scrollLeft
               Object.assign(ctxMenuStore, {
                 args: params,
                 visible: true,
@@ -135,11 +135,11 @@ export default {
                 }
               })
               this.$nextTick(() => {
-                let ctxElem = this.$refs.ctxWrapper.$el
-                let clientHeight = ctxElem.clientHeight
-                let clientWidth = ctxElem.clientWidth
-                let offsetTop = evnt.clientY + clientHeight - visibleHeight
-                let offsetLeft = evnt.clientX + clientWidth - visibleWidth
+                const ctxElem = this.$refs.ctxWrapper.$el
+                const clientHeight = ctxElem.clientHeight
+                const clientWidth = ctxElem.clientWidth
+                const offsetTop = evnt.clientY + clientHeight - visibleHeight
+                const offsetLeft = evnt.clientX + clientWidth - visibleWidth
                 if (offsetTop > -10) {
                   ctxMenuStore.style.top = `${Math.max(scrollTop + 2, top - clientHeight - 2)}px`
                 }
@@ -159,7 +159,7 @@ export default {
       this.closeFilter()
     },
     ctxMenuMouseoverEvent (evnt, item, child) {
-      let ctxMenuStore = this.ctxMenuStore
+      const ctxMenuStore = this.ctxMenuStore
       evnt.preventDefault()
       evnt.stopPropagation()
       ctxMenuStore.selected = item
@@ -168,8 +168,8 @@ export default {
         ctxMenuStore.showChild = UtilTools.hasChildrenList(item)
       }
     },
-    ctxMenuMouseoutEvent (evnt, item, child) {
-      let ctxMenuStore = this.ctxMenuStore
+    ctxMenuMouseoutEvent (evnt, item) {
+      const ctxMenuStore = this.ctxMenuStore
       if (!item.children) {
         ctxMenuStore.selected = null
       }
@@ -180,8 +180,8 @@ export default {
      */
     ctxMenuLinkEvent (evnt, menu) {
       if (!menu.disabled && (!menu.children || !menu.children.length)) {
-        let ctxMenuMethod = VXETable.menus.get(menu.code)
-        let params = Object.assign({ menu, $table: this }, this.ctxMenuStore.args)
+        const ctxMenuMethod = VXETable.menus.get(menu.code)
+        const params = Object.assign({ menu, $table: this }, this.ctxMenuStore.args)
         if (ctxMenuMethod) {
           ctxMenuMethod.call(this, params, evnt)
         }

@@ -146,8 +146,8 @@ export default {
     findList (size) {
       return new Promise(resolve => {
         setTimeout(() => {
-          var list = []
-          for (var index = 0; index < size; index++) {
+          const list = []
+          for (let index = 0; index < size; index++) {
             list.push({
               id: XEUtils.uniqueId(),
               name: 'test' + index,

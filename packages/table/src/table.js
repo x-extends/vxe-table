@@ -14,8 +14,8 @@ import methods from './methods'
  * @param {String} fixedType 固定列类型
  */
 function renderFixed (h, $xetable, fixedType) {
-  let { tableData, tableColumn, visibleColumn, collectColumn, isGroup, vSize, showHeader, showFooter, columnStore, footerData } = $xetable
-  let fixedColumn = columnStore[`${fixedType}List`]
+  const { tableData, tableColumn, visibleColumn, collectColumn, isGroup, vSize, showHeader, showFooter, columnStore, footerData } = $xetable
+  const fixedColumn = columnStore[`${fixedType}List`]
   return h('div', {
     class: `vxe-table--fixed-${fixedType}-wrapper`,
     ref: `${fixedType}Container`
@@ -453,7 +453,7 @@ export default {
       return Object.assign({}, GlobalConfig.contextMenu, this.contextMenu)
     },
     ctxMenuList () {
-      let rest = []
+      const rest = []
       this.ctxMenuStore.list.forEach(list => {
         list.forEach(item => {
           rest.push(item)
@@ -493,8 +493,8 @@ export default {
      * 判断列全选的复选框是否禁用
      */
     isAllCheckboxDisabled () {
-      let { tableFullData, treeConfig, checkboxOpts } = this
-      let { strict, checkMethod } = checkboxOpts
+      const { tableFullData, treeConfig, checkboxOpts } = this
+      const { strict, checkMethod } = checkboxOpts
       if (strict) {
         if (tableFullData.length) {
           if (checkMethod) {
@@ -527,7 +527,7 @@ export default {
       this.isUpdateCustoms = false
     },
     collectColumn (value) {
-      let tableFullColumn = UtilTools.getColumnList(value)
+      const tableFullColumn = UtilTools.getColumnList(value)
       this.tableFullColumn = tableFullColumn
       this.cacheColumnMap()
       if (this.customs) {
@@ -544,7 +544,7 @@ export default {
       }
       // 在 v3.0 中废弃 prop、label
       if (tableFullColumn.length) {
-        let cIndex = Math.floor((tableFullColumn.length - 1) / 2)
+        const cIndex = Math.floor((tableFullColumn.length - 1) / 2)
         if (tableFullColumn[cIndex].prop) {
           UtilTools.warn('vxe.error.delProp', ['prop', 'field'])
         }
@@ -588,7 +588,7 @@ export default {
     }
   },
   created () {
-    let { scrollXStore, scrollYStore, optimizeOpts, mouseConfig, mouseOpts, data, loading, editConfig, editOpts, treeOpts, treeConfig, showOverflow } = Object.assign(this, {
+    const { scrollXStore, scrollYStore, optimizeOpts, mouseConfig, mouseOpts, data, loading, editConfig, editOpts, treeOpts, treeConfig, showOverflow } = Object.assign(this, {
       tZindex: 0,
       elemStore: {},
       // 存放横向 X 虚拟滚动相关的信息
@@ -625,7 +625,7 @@ export default {
       fullColumnMap: new Map(),
       fullColumnIdData: {}
     })
-    let { scrollX, scrollY } = optimizeOpts
+    const { scrollX, scrollY } = optimizeOpts
     // 是否加载过 Loading 模块
     this.isLoading = loading
     if (!UtilTools.getRowkey(this)) {
@@ -724,7 +724,7 @@ export default {
     this.preventEvent(null, 'deactivated', { $table: this })
   },
   beforeDestroy () {
-    let tableWrapper = this.$refs.tableWrapper
+    const tableWrapper = this.$refs.tableWrapper
     if (tableWrapper && tableWrapper.parentNode) {
       tableWrapper.parentNode.removeChild(tableWrapper)
     }

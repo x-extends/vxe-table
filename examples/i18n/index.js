@@ -12,6 +12,7 @@ import myZhCN from './lang/zh-CN'
 Vue.use(VueI18n)
 
 const i18n = new VueI18n({
+  /* eslint-disable @typescript-eslint/camelcase */
   locale: ['zh-CN', 'zh-TW'].includes(navigator.language) ? 'zh_CN' : 'en_US',
   messages: {
     en_US: {
