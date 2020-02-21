@@ -144,7 +144,7 @@ export default {
           editRender: { type: 'default' },
           slots: {
             // 使用 JSX 渲染函数
-            default: ({ row, column }) => {
+            default: ({ row }) => {
               return [
                 <a class="link" href="https://xuliangzhan.github.io/vxe-table/">我是超链接：{ row.sex }</a>
               ]
@@ -162,9 +162,9 @@ export default {
                 <span>累计：{ items[itemIndex] }</span>
               ]
             },
-            filter: ({ column, context }) => {
+            filter: ({ column, $panel }) => {
               return column.filters.map(option => {
-                return <input type="type" value={ option.data } onInput={ evnt => this.changeFilterEvent(evnt, option, context) }/>
+                return <input type="type" value={ option.data } onInput={ evnt => this.changeFilterEvent(evnt, option, $panel) }/>
               })
             },
             edit: ({ row }) => {
@@ -208,7 +208,7 @@ export default {
           showOverflow: true,
           slots: {
             // 使用 JSX 渲染函数
-            default: ({ row }, h) => {
+            default: ({ row }) => {
               return [
                 <span domPropsInnerHTML={ row.html1 }></span>
               ]
@@ -220,7 +220,7 @@ export default {
           title: '图片路径',
           slots: {
             // 使用 JSX 渲染函数
-            default: ({ row }, h) => {
+            default: ({ row }) => {
               return [
                 row.img1 ? <img src={ row.img1 } style="width: 100px;"/> : <span>无</span>
               ]
@@ -373,9 +373,9 @@ export default {
                         <span>累计：{ items[itemIndex] }</span>
                       ]
                     },
-                    filter: ({ column, context }) => {
+                    filter: ({ column, $panel }) => {
                       return column.filters.map(option => {
-                        return <input type="type" value={ option.data } onInput={ evnt => this.changeFilterEvent(evnt, option, context) }/>
+                        return <input type="type" value={ option.data } onInput={ evnt => this.changeFilterEvent(evnt, option, $panel) }/>
                       })
                     },
                     edit: ({ row }) => {
@@ -472,9 +472,9 @@ export default {
             filterSexMethod ({ option, row }) {
               return row.sex === option.data
             },
-            changeFilterEvent (evnt, option, context) {
+            changeFilterEvent (evnt, option, $panel) {
               option.data = evnt.target.value
-              context.changeMultipleOption(evnt, !!option.data, option)
+              $panel.changeMultipleOption(evnt, !!option.data, option)
             },
             footerMethod ({ columns, data }) {
               return [
@@ -544,7 +544,7 @@ export default {
       this.selectRow = row
       this.showDetails = true
     },
-    headerClickEvent (evnt) {
+    headerClickEvent () {
       this.$XModal.alert('头部点击事件')
     },
     addressClickEvent (row) {
@@ -553,13 +553,13 @@ export default {
     filterSexMethod ({ option, row }) {
       return row.sex === option.data
     },
-    changeFilterEvent (evnt, option, context) {
+    changeFilterEvent (evnt, option, $panel) {
       option.data = evnt.target.value
-      context.changeMultipleOption(evnt, !!option.data, option)
+      $panel.changeMultipleOption(evnt, !!option.data, option)
     },
     footerMethod ({ columns, data }) {
       return [
-        columns.map((column, columnIndex) => {
+        columns.map((column) => {
           if (['sex', 'num'].includes(column.property)) {
             return XEUtils.sum(data, column.property)
           }

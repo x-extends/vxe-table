@@ -121,7 +121,7 @@ export default {
     formatterSexs ({ cellValue }) {
       return cellValue ? cellValue.map(value => value === '1' ? '男' : value === '0' ? '女' : '').join(';') : ''
     },
-    roleSearchEvent ({ row }, value) {
+    roleSearchEvent (params, value) {
       this.ACProps.dataSource = this.restaurants.filter(option => option.toUpperCase().indexOf((value || '').toUpperCase()) !== -1)
     }
   }
