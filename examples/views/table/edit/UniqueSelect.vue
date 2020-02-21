@@ -183,14 +183,14 @@ export default {
   },
   methods: {
     insertEvent () {
-      let record = {
+      const record = {
 
       }
       this.$refs.xTable.insert(record)
     },
     updateRoleList () {
       // 获取表格中的全量数据
-      let { fullData } = this.$refs.xTable.getTableData()
+      const { fullData } = this.$refs.xTable.getTableData()
       this.roleList.forEach(item => {
         if (item.value) {
           // 如果当前选项已经被选过，则禁用
@@ -203,7 +203,7 @@ export default {
       row.role1 = evnt.target.value
       this.updateRoleList()
     },
-    editActivedEvent ({ row }) {
+    editActivedEvent () {
       // 激活编辑时检查剩余选项是否可选择
       this.updateRoleList()
     }

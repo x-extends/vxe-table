@@ -9,7 +9,7 @@
       :data="tableData"
       :tree-config="{children: 'children'}">
       <vxe-table-column field="name" title="名称" tree-node>
-        <template v-slot:header="{ row }">
+        <template v-slot:header>
           <div>名称</div>
           <input v-model="filterName" type="type" placeholder="Filter" @keyup="searchEvent">
         </template>
@@ -115,10 +115,10 @@ export default {
   },
   methods: {
     handleSearch () {
-      let filterName = XEUtils.toString(this.filterName).trim()
+      const filterName = XEUtils.toString(this.filterName).trim()
       if (filterName) {
-        let options = { children: 'children' }
-        let searchProps = ['name']
+        const options = { children: 'children' }
+        const searchProps = ['name']
         this.tableData = XEUtils.searchTree(this.originData, item => searchProps.some(key => XEUtils.toString(item[key]).indexOf(filterName) > -1), options)
         // 搜索之后默认展开所有子节点
         this.$nextTick(() => {

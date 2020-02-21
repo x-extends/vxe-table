@@ -212,20 +212,20 @@ export default {
   },
   methods: {
     impotEvent (evnt) {
-      let files = evnt.target.files
-      let fileReader = new FileReader()
+      const files = evnt.target.files
+      const fileReader = new FileReader()
       fileReader.onload = (ev) => {
-        let data = ev.target.result
-        let workbook = XLSX.read(data, { type: 'binary' })
-        let csvData = XLSX.utils.sheet_to_csv(workbook.Sheets.Sheet1)
-        let tableData = []
+        const data = ev.target.result
+        const workbook = XLSX.read(data, { type: 'binary' })
+        const csvData = XLSX.utils.sheet_to_csv(workbook.Sheets.Sheet1)
+        const tableData = []
         // 解析数据
-        csvData.split('\n').forEach((vRow, rIndex) => {
+        csvData.split('\n').forEach((vRow) => {
           if (vRow) {
-            let vCols = vRow.split(',')
-            let item = {}
+            const vCols = vRow.split(',')
+            const item = {}
             vCols.forEach((val, cIndex) => {
-              let column = this.tableColumn[cIndex]
+              const column = this.tableColumn[cIndex]
               if (column.field) {
                 item[column.field] = val
               }
@@ -239,10 +239,10 @@ export default {
     },
     // 通用行合并函数（将相同多列数据合并为一行）
     rowspanMethod ({ row, $rowIndex, column, data }) {
-      let fields = ['sex']
-      let cellValue = row[column.property]
+      const fields = ['sex']
+      const cellValue = row[column.property]
       if (cellValue && fields.includes(column.property)) {
-        let prevRow = data[$rowIndex - 1]
+        const prevRow = data[$rowIndex - 1]
         let nextRow = data[$rowIndex + 1]
         if (prevRow && prevRow[column.property] === cellValue) {
           return { rowspan: 0, colspan: 0 }
@@ -258,19 +258,19 @@ export default {
       }
     },
     toBuffer (wbout) {
-      let buf = new ArrayBuffer(wbout.length)
-      let view = new Uint8Array(buf)
+      const buf = new ArrayBuffer(wbout.length)
+      const view = new Uint8Array(buf)
       for (let index = 0; index !== wbout.length; ++index) view[index] = wbout.charCodeAt(index) & 0xFF
       return buf
     },
     exportEvent () {
       // 转换数据
-      let table = this.$refs.xGrid2.$el.querySelector('.body--wrapper>.vxe-table--body')
-      let book = XLSX.utils.book_new()
-      let sheet = XLSX.utils.table_to_sheet(table)
+      const table = this.$refs.xGrid2.$el.querySelector('.body--wrapper>.vxe-table--body')
+      const book = XLSX.utils.book_new()
+      const sheet = XLSX.utils.table_to_sheet(table)
       XLSX.utils.book_append_sheet(book, sheet)
-      let wbout = XLSX.write(book, { bookType: 'xlsx', bookSST: false, type: 'binary' })
-      let blob = new Blob([this.toBuffer(wbout)], { type: 'application/octet-stream' })
+      const wbout = XLSX.write(book, { bookType: 'xlsx', bookSST: false, type: 'binary' })
+      const blob = new Blob([this.toBuffer(wbout)], { type: 'application/octet-stream' })
       // 保存导出
       FileSaver.saveAs(blob, '数据导出.xlsx')
     }

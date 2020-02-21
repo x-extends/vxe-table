@@ -156,10 +156,10 @@ export default {
       }).then(evnt => {
         // 解析数据并显示
         Array.from(evnt.target.files).forEach(file => {
-          let ns = file.name.split('.')
-          let name = ns.slice(0, ns.length - 1).join('')
-          let type = ns[ns.length - 1]
-          let record = {
+          const ns = file.name.split('.')
+          const name = ns.slice(0, ns.length - 1).join('')
+          const type = ns[ns.length - 1]
+          const record = {
             name: name,
             size: file.size,
             type: type,

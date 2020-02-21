@@ -165,7 +165,7 @@ export default {
       })
     },
     getSelectEvent () {
-      let selectRecords = this.$refs.xGrid.getCheckboxRecords()
+      const selectRecords = this.$refs.xGrid.getCheckboxRecords()
       this.$XModal.alert(selectRecords.length)
     }
   }

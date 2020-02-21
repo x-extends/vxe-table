@@ -197,11 +197,11 @@ export default {
     })
   },
   methods: {
-    toggleExpandChangeEvent ({ row, expanded }) {
+    toggleExpandChangeEvent ({ expanded }) {
       console.log('节点展开事件' + expanded)
     },
     getTreeExpansionEvent () {
-      let treeExpandRecords = this.$refs.xTree.getTreeExpandRecords()
+      const treeExpandRecords = this.$refs.xTree.getTreeExpandRecords()
       this.$XModal.alert(treeExpandRecords.length)
     }
   }

@@ -475,7 +475,7 @@ export default {
         this.tablePage.totalResult = page.totalResult
         this.loading = false
         this.updateStateList()
-      }).catch(e => {
+      }).catch(() => {
         this.loading = false
       })
     },
@@ -508,7 +508,7 @@ export default {
     // 模拟后台查当前页出远程下拉值
     updateStateList () {
       setTimeout(() => {
-        let defaultStateList = []
+        const defaultStateList = []
         this.tableData.forEach(row => {
           if (row.state && !defaultStateList.some(item => item.value === row.state)) {
             defaultStateList.push({
@@ -539,7 +539,7 @@ export default {
       row._stateOptions = this.stateOptions
     },
     insertEvent () {
-      let record = {
+      const record = {
         role: '',
         age: 18,
         region: [],
@@ -549,7 +549,7 @@ export default {
       this.$refs.xTable.insert(record).then(({ row }) => this.$refs.xTable.setActiveRow(row))
     },
     saveEvent () {
-      let { insertRecords, removeRecords, updateRecords } = this.$refs.xTable.getRecordset()
+      const { insertRecords, removeRecords, updateRecords } = this.$refs.xTable.getRecordset()
       if (insertRecords.length || removeRecords.length || updateRecords.length) {
         this.$alert('保存成功！')
         this.searchEvent()
@@ -569,7 +569,7 @@ export default {
     dropdownMenuEvent (name) {
       switch (name) {
         case 'remove': {
-          let selectRecords = this.$refs.xTable.getCheckboxRecords()
+          const selectRecords = this.$refs.xTable.getCheckboxRecords()
           if (selectRecords.length) {
             this.$refs.xTable.removeSelecteds()
           } else {
@@ -599,8 +599,8 @@ export default {
       return data.flag1 === 'Y'
     },
     roleFetchSuggestions (queryString, cb) {
-      var restaurants = this.restaurants
-      var results = queryString ? restaurants.filter(this.createStateFilter(queryString)) : restaurants
+      const restaurants = this.restaurants
+      const results = queryString ? restaurants.filter(this.createStateFilter(queryString)) : restaurants
       clearTimeout(this.timeout)
       this.timeout = setTimeout(() => {
         cb(results)

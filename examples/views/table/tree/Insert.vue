@@ -135,7 +135,7 @@ export default {
   },
   methods: {
     insertEvent () {
-      let xTree = this.$refs.xTree
+      const xTree = this.$refs.xTree
       xTree.createRow({
         name: '新数据',
         date: XEUtils.toDateString(new Date(), 'yyyy-MM-dd'),
@@ -147,14 +147,14 @@ export default {
       })
     },
     insertAtEvent () {
-      let xTree = this.$refs.xTree
+      const xTree = this.$refs.xTree
       xTree.createRow({
         name: '新数据',
         date: XEUtils.toDateString(new Date(), 'yyyy-MM-dd'),
         isNew: true
       }).then(newRow => {
         // 插入到 id 为 11000 的节点位置中
-        let rowNode = XEUtils.findTree(this.tableData, item => item.id === '11000', this.treeConfig)
+        const rowNode = XEUtils.findTree(this.tableData, item => item.id === '11000', this.treeConfig)
         if (rowNode) {
           rowNode.items.splice(rowNode.index, 0, newRow)
           xTree.refreshData().then(() => xTree.setActiveRow(newRow))
@@ -162,11 +162,11 @@ export default {
       })
     },
     getInsertEvent () {
-      let insertRecords = XEUtils.filterTree(this.tableData, item => item.isNew, this.treeConfig)
+      const insertRecords = XEUtils.filterTree(this.tableData, item => item.isNew, this.treeConfig)
       this.$XModal.alert(insertRecords.length)
     },
     getSelectEvent () {
-      let selectRecords = this.$refs.xTree.getCheckboxRecords()
+      const selectRecords = this.$refs.xTree.getCheckboxRecords()
       this.$XModal.alert(selectRecords.length)
     }
   }

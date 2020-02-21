@@ -203,17 +203,17 @@ export default {
     })
   },
   methods: {
-    headerCellClassName ({ column, columnIndex }) {
+    headerCellClassName ({ column }) {
       if (column.property === 'name') {
         return 'col-blue'
       }
     },
-    rowClassName ({ row, rowIndex }) {
+    rowClassName ({ rowIndex }) {
       if ([2, 3, 5].includes(rowIndex)) {
         return 'row-green'
       }
     },
-    cellClassName ({ row, rowIndex, column, columnIndex }) {
+    cellClassName ({ row, column }) {
       if (column.property === 'sex') {
         if (row.sex >= '1') {
           return 'col-red'

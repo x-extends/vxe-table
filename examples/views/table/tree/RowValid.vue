@@ -195,12 +195,12 @@ export default {
         if (valid) {
           this.$XModal.message({ status: 'success', message: '校验成功！' })
         } else {
-          let msgList = []
+          const msgList = []
           Object.values(errMap).forEach(errList => {
             errList.forEach(params => {
-              let { row, column, rules } = params
-              let matchObj = XEUtils.findTree(this.tableData, item => item === row, this.treeConfig)
-              let seq = matchObj.path.filter(item => item !== this.treeConfig.children).map(item => Number(item) + 1).join('.')
+              const { row, column, rules } = params
+              const matchObj = XEUtils.findTree(this.tableData, item => item === row, this.treeConfig)
+              const seq = matchObj.path.filter(item => item !== this.treeConfig.children).map(item => Number(item) + 1).join('.')
               rules.forEach(rule => {
                 msgList.push(`第 ${seq} 行 ${column.title} 校验错误：${rule.message}`)
               })
@@ -224,7 +224,7 @@ export default {
       })
     },
     selectValidEvent () {
-      let selectRecords = this.$refs.xTree.getCheckboxRecords()
+      const selectRecords = this.$refs.xTree.getCheckboxRecords()
       if (selectRecords.length > 0) {
         this.$refs.xTree.validate(selectRecords, valid => {
           if (valid) {
@@ -238,11 +238,11 @@ export default {
       }
     },
     getSelectEvent () {
-      let selectRecords = this.$refs.xTree.getCheckboxRecords()
+      const selectRecords = this.$refs.xTree.getCheckboxRecords()
       this.$XModal.alert(selectRecords.length)
     },
     getUpdateEvent () {
-      let updateRecords = this.$refs.xTree.getUpdateRecords()
+      const updateRecords = this.$refs.xTree.getUpdateRecords()
       this.$XModal.alert(updateRecords.length)
     }
   }

@@ -70,7 +70,7 @@ export default {
           filterMethod: this.filterSexMethod,
           editRender: { type: 'default' },
           slots: {
-            default: ({ row, column }) => {
+            default: ({ row }) => {
               return [
                 <a class="link" href="https://xuliangzhan.github.io/vxe-table/">我是超链接：{ row.sex }</a>
               ]
@@ -117,7 +117,7 @@ export default {
           field: 'html2',
           title: 'Html片段',
           slots: {
-            default: ({ row }, h) => {
+            default: ({ row }) => {
               return [
                 <span domPropsInnerHTML={ row.html2 }></span>
               ]
@@ -128,7 +128,7 @@ export default {
           field: 'img1',
           title: '图片路径',
           slots: {
-            default: ({ row }, h) => {
+            default: ({ row }) => {
               return [
                 row.img1 ? <img src={ row.img1 } style="height: 40px;"/> : <span>无</span>
               ]
@@ -318,10 +318,9 @@ export default {
   created () {
     this.loading = true
     setTimeout(() => {
-      let tableData = window.MOCK_DATA_LIST.slice(0, 600)
       // 使用函数式加载，阻断 vue 对大数组的监听
       if (this.$refs.xGrid) {
-        this.$refs.xGrid.loadData(tableData)
+        this.$refs.xGrid.loadData(window.MOCK_DATA_LIST.slice(0, 600))
       }
       this.loading = false
     }, 500)
@@ -336,7 +335,7 @@ export default {
       this.selectRow = row
       this.showDetails = true
     },
-    headerClickEvent (evnt) {
+    headerClickEvent () {
       this.$XModal.alert('头部点击事件')
     },
     addressClickEvent (row) {

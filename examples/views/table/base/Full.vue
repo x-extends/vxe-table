@@ -128,10 +128,10 @@ export default {
   },
   methods: {
     formatterSex ({ cellValue }) {
-      let item = this.sexList.find(item => item.value === cellValue)
+      const item = this.sexList.find(item => item.value === cellValue)
       return item ? item.label : ''
     },
-    filterAgeMethod ({ value, row, column }) {
+    filterAgeMethod ({ value, row }) {
       return row.age >= value
     }
   }

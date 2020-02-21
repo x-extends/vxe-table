@@ -117,7 +117,7 @@ export default {
       return XEAjax.get('/api/file/node/list', { parentId: row.id })
     },
     getUpdateEvent () {
-      let updateRecords = this.$refs.xTree.getUpdateRecords()
+      const updateRecords = this.$refs.xTree.getUpdateRecords()
       this.$XModal.alert(updateRecords.length)
     }
   }

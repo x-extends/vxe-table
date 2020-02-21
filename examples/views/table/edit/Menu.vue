@@ -256,12 +256,12 @@ export default {
       }, 500)
     },
     insertEvent (row, column) {
-      let xTable = this.$refs.xTable
+      const xTable = this.$refs.xTable
       xTable.insertAt(null, row || -1)
         .then(({ row }) => xTable.setActiveCell(row, column ? column.property : 'name'))
     },
     visibleMethod ({ options, column }) {
-      let isDisabled = !column
+      const isDisabled = !column
       options.forEach(list => {
         list.forEach(item => {
           item.disabled = isDisabled
@@ -270,7 +270,7 @@ export default {
       return true
     },
     contextMenuClickEvent ({ menu, row, column }) {
-      let xTable = this.$refs.xTable
+      const xTable = this.$refs.xTable
       switch (menu.code) {
         case 'hideColumn':
           xTable.hideColumn(column)
@@ -299,15 +299,15 @@ export default {
       }
     },
     getInsertEvent () {
-      let insertRecords = this.$refs.xTable.getInsertRecords()
+      const insertRecords = this.$refs.xTable.getInsertRecords()
       this.$XModal.alert(insertRecords.length)
     },
     getRemoveEvent () {
-      let removeRecords = this.$refs.xTable.getRemoveRecords()
+      const removeRecords = this.$refs.xTable.getRemoveRecords()
       this.$XModal.alert(removeRecords.length)
     },
     getUpdateEvent () {
-      let updateRecords = this.$refs.xTable.getUpdateRecords()
+      const updateRecords = this.$refs.xTable.getUpdateRecords()
       this.$XModal.alert(updateRecords.length)
     }
   }

@@ -104,11 +104,11 @@ export default {
     },
     sortDescribeMethod (a, b) {
       // 由于 HTML 是无法排序的，使用自定义排序
-      var v1 = a.describe
-      var v2 = b.describe
+      const v1 = a.describe
+      const v2 = b.describe
       return v1 < v2 ? -1 : v1 > v2 ? 1 : 0
     },
-    filterDescribeMethod ({ value, row, column }) {
+    filterDescribeMethod ({ value, row }) {
       return XEUtils.toString(row.html1).indexOf(value) > -1
     }
   }

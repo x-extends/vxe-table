@@ -195,7 +195,7 @@ export default {
       })
     },
     getSelectEvent () {
-      let selectRecords = this.$refs.xTable.getCheckboxRecords()
+      const selectRecords = this.$refs.xTable.getCheckboxRecords()
       this.$XModal.alert(selectRecords.length)
     }
   }

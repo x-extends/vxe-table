@@ -218,7 +218,7 @@ export default {
     findList () {
       return new Promise(resolve => {
         setTimeout(() => {
-          let list = [
+          const list = [
             {
               name: '一班',
               level: '',
@@ -325,7 +325,7 @@ export default {
     },
     getGroupSummary (data) {
       XEUtils.eachTree(data, (row, index, items, path, parent, nodes) => {
-        let children = row.children
+        const children = row.children
         if (children && children.length) {
           // 合计子节点
           Object.assign(row, this.handleSummary(children))

@@ -111,10 +111,10 @@ export default {
   methods: {
     insertEvent (opts) {
       this.$refs.xTable.readFile(opts).then(evnt => {
-        let records = Array.from(evnt.target.files).map(file => {
-          let ns = file.name.split('.')
-          let name = ns.slice(0, ns.length - 1).join('')
-          let type = ns[ns.length - 1]
+        const records = Array.from(evnt.target.files).map(file => {
+          const ns = file.name.split('.')
+          const name = ns.slice(0, ns.length - 1).join('')
+          const type = ns[ns.length - 1]
           return {
             name: name,
             size: file.size,
@@ -126,7 +126,7 @@ export default {
       })
     },
     getInsertEvent () {
-      let insertRecords = this.$refs.xTable.getInsertRecords()
+      const insertRecords = this.$refs.xTable.getInsertRecords()
       this.$XModal.alert(insertRecords.length)
     }
   }

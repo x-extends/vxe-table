@@ -173,7 +173,7 @@ export default {
       this.loading = true
       return new Promise(resolve => {
         setTimeout(() => {
-          let tableData = window.MOCK_DATA_LIST.slice(0, 3)
+          const tableData = window.MOCK_DATA_LIST.slice(0, 3)
           // 阻断 vue 对大数组的监听，避免 vue 绑定大数据造成短暂的卡顿
           if (this.$refs.xTable1) {
             this.$refs.xTable1.loadData(tableData)
@@ -187,7 +187,7 @@ export default {
       this.loading = true
       return new Promise(resolve => {
         setTimeout(() => {
-          let tableData = window.MOCK_DATA_LIST.slice(0, 600)
+          const tableData = window.MOCK_DATA_LIST.slice(0, 600)
           // 阻断 vue 对大数组的监听，避免 vue 绑定大数据造成短暂的卡顿
           if (this.$refs.xTable2) {
             this.$refs.xTable2.loadData(tableData)

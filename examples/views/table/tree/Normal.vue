@@ -250,7 +250,7 @@ export default {
     removeRowEvent (row) {
       this.$XModal.confirm('您确定要删除吗？').then(type => {
         if (type === 'confirm') {
-          let matchObj = XEUtils.findTree(this.tableData3, item => item === row, this.treeConfig)
+          const matchObj = XEUtils.findTree(this.tableData3, item => item === row, this.treeConfig)
           if (matchObj) {
             // 从树节点中移除
             matchObj.items.splice(matchObj.index, 1)
@@ -259,11 +259,11 @@ export default {
       })
     },
     getTreeRadioEvent () {
-      let selectRow = this.$refs.xTree1.getRadioRecord()
+      const selectRow = this.$refs.xTree1.getRadioRecord()
       this.$XModal.alert(selectRow ? selectRow.name : 'null')
     },
     getTreeExpansionEvent () {
-      let treeExpandRecords = this.$refs.xTree1.getTreeExpandRecords()
+      const treeExpandRecords = this.$refs.xTree1.getTreeExpandRecords()
       this.$XModal.alert(treeExpandRecords.length)
     }
   }

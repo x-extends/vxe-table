@@ -23,7 +23,7 @@
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">
       <vxe-table-column type="checkbox" width="60"></vxe-table-column>
       <vxe-table-column type="seq" width="80">
-        <template v-slot:header="{ column }">
+        <template v-slot:header>
           <span>序号</span>
           <a-icon type="question" />
         </template>
@@ -312,14 +312,14 @@ export default {
       return value ? value.format(format) : null
     },
     getSelectLabel (value, list, valueProp = 'value', labelField = 'label') {
-      let item = XEUtils.find(list, item => item[valueProp] === value)
+      const item = XEUtils.find(list, item => item[valueProp] === value)
       return item ? item[labelField] : null
     },
     getCascaderLabel (value, list) {
-      let values = value || []
-      let labels = []
-      let matchCascaderData = function (index, list) {
-        let val = values[index]
+      const values = value || []
+      const labels = []
+      const matchCascaderData = function (index, list) {
+        const val = values[index]
         if (list && values.length > index) {
           list.forEach(item => {
             if (item.value === val) {

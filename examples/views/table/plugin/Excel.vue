@@ -58,7 +58,7 @@ import XLSX from 'xlsx'
 
 export default {
   data () {
-    let columns = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N']
+    const columns = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N']
     return {
       columns: [
         {
@@ -83,8 +83,8 @@ export default {
           }
         }
       })),
-      tableData: Array.from(new Array(20)).map((num, index) => {
-        let item = {}
+      tableData: Array.from(new Array(20)).map(() => {
+        const item = {}
         columns.forEach(name => {
           item[name] = ''
         })
@@ -205,39 +205,39 @@ export default {
   },
   methods: {
     getValidEvent () {
-      let fields = this.$refs.xExcel.getColumns().map(item => item.property).filter(key => key)
-      let validRecords = this.tableData.filter(item => fields.some(key => item[key]))
+      const fields = this.$refs.xExcel.getColumns().map(item => item.property).filter(key => key)
+      const validRecords = this.tableData.filter(item => fields.some(key => item[key]))
       this.$XModal.alert(validRecords.length)
     },
     getInsertEvent () {
-      let insertRecords = this.$refs.xExcel.getInsertRecords()
+      const insertRecords = this.$refs.xExcel.getInsertRecords()
       this.$XModal.alert(insertRecords.length)
     },
     getRemoveEvent () {
-      let removeRecords = this.$refs.xExcel.getRemoveRecords()
+      const removeRecords = this.$refs.xExcel.getRemoveRecords()
       this.$XModal.alert(removeRecords.length)
     },
     getUpdateEvent () {
-      let updateRecords = this.$refs.xExcel.getUpdateRecords()
+      const updateRecords = this.$refs.xExcel.getUpdateRecords()
       this.$XModal.alert(updateRecords.length)
     },
     exportDataEvent () {
       this.$refs.xExcel.exportData({ isHeader: false })
     },
     fileChangeEvent (evnt) {
-      let files = evnt.target.files
-      let fileReader = new FileReader()
+      const files = evnt.target.files
+      const fileReader = new FileReader()
       fileReader.onload = (ev) => {
-        let data = ev.target.result
-        let workbook = XLSX.read(data, { type: 'binary' })
-        let keys = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
-        let csvData = XLSX.utils.sheet_to_csv(workbook.Sheets.Sheet1)
-        let tableData = csvData.split('\n').map((vRow, rIndex) => {
-          let vCols = vRow.split(',')
-          let item = {}
+        const data = ev.target.result
+        const workbook = XLSX.read(data, { type: 'binary' })
+        const keys = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+        const csvData = XLSX.utils.sheet_to_csv(workbook.Sheets.Sheet1)
+        const tableData = csvData.split('\n').map((vRow) => {
+          const vCols = vRow.split(',')
+          const item = {}
           vCols.forEach((val, cIndex) => {
-            let kIndex = Math.floor(cIndex / 26)
-            let lIndex = cIndex % 26
+            const kIndex = Math.floor(cIndex / 26)
+            const lIndex = cIndex % 26
             let key
             if (kIndex) {
               key = `${keys[kIndex]}${keys[lIndex]}`

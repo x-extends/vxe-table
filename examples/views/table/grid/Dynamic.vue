@@ -325,9 +325,9 @@ export default {
     findColumn () {
       this.loading2 = true
       XEAjax.get('/api/column/list', { sort: 'seq', order: 'asc' }).then(data => {
-        let validRules = {}
+        const validRules = {}
         this.tableColumn2 = data.map(item => {
-          let config = {
+          const config = {
             title: item.name,
             width: item.width
           }
@@ -383,7 +383,7 @@ export default {
     formatterDate ({ cellValue }) {
       return XEUtils.toDateString(cellValue, 'yyyy-MM-dd HH:mm:ss')
     },
-    toolbarButtonClickEvent ({ code }, event) {
+    toolbarButtonClickEvent ({ code }) {
       switch (code) {
         case 'reloadColumn':
           this.findColumn()

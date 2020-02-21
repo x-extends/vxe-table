@@ -9,7 +9,7 @@
       :edit-config="{trigger: 'click', mode: 'cell'}">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column type="expand" width="60">
-        <template v-slot:content="{ row, rowIndex }">
+        <template v-slot:content="{ row }">
           <ul class="expand-form">
             <li>
               <span class="title">Name：</span>

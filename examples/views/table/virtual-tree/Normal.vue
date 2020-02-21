@@ -109,7 +109,7 @@ export default {
           title: '操作',
           width: 140,
           slots: {
-            default: ({ row }) => {
+            default: () => {
               return [
                 <vxe-button type="text" icon="fa fa-eye"></vxe-button>,
                 <vxe-button type="text" icon="fa fa-edit"></vxe-button>,
@@ -271,11 +271,11 @@ export default {
   },
   methods: {
     getTreeRadioEvent () {
-      let selectRow = this.$refs.xTree1.getRadioRecord()
+      const selectRow = this.$refs.xTree1.getRadioRecord()
       this.$XModal.alert(selectRow ? selectRow.name : 'null')
     },
     getTreeExpansionEvent () {
-      let treeExpandRecords = this.$refs.xTree1.getTreeExpandRecords()
+      const treeExpandRecords = this.$refs.xTree1.getTreeExpandRecords()
       this.$XModal.alert(treeExpandRecords.length)
     }
   }

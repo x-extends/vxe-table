@@ -138,14 +138,14 @@ export default {
         this.tableData = result
         this.tablePage.total = page.total
         this.loading = false
-      }).catch(e => {
+      }).catch(() => {
         this.loading = false
       })
     },
     findSexList () {
       return XEAjax.get('/api/conf/sex/list').then(data => {
         // 异步更新下拉选项
-        let column = this.$refs.xGrid.getColumnByField('sex')
+        const column = this.$refs.xGrid.getColumnByField('sex')
         column.editRender.options = data
       })
     },

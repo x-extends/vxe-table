@@ -125,13 +125,13 @@ export default {
     editRowEvent (row) {
       this.$refs.xTable.setActiveRow(row)
     },
-    saveRowEvent (row) {
+    saveRowEvent () {
       this.$refs.xTable.clearActived().then(() => {
         this.$XModal.alert('success')
       })
     },
     cancelRowEvent (row) {
-      let xTable = this.$refs.xTable
+      const xTable = this.$refs.xTable
       xTable.clearActived()
         .then(() => xTable.revertData(row))
     }

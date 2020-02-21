@@ -220,8 +220,7 @@ export default {
     }
   },
   created () {
-    let list = window.MOCK_DATA_LIST.slice(0, 6)
-    this.tableData = list
+    this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
@@ -240,10 +239,10 @@ export default {
     async fullValidEvent () {
       const errMap = await this.$refs.xTable.fullValidate().catch(errMap => errMap)
       if (errMap) {
-        let msgList = []
+        const msgList = []
         Object.values(errMap).forEach(errList => {
           errList.forEach(params => {
-            let { rowIndex, column, rules } = params
+            const { rowIndex, column, rules } = params
             rules.forEach(rule => {
               msgList.push(`第 ${rowIndex} 行 ${column.title} 校验错误：${rule.message}`)
             })
@@ -266,7 +265,7 @@ export default {
       }
     },
     async selectValidEvent () {
-      let selectRecords = this.$refs.xTable.getCheckboxRecords()
+      const selectRecords = this.$refs.xTable.getCheckboxRecords()
       if (selectRecords.length > 0) {
         const errMap = await this.$refs.xTable.validate(selectRecords).catch(errMap => errMap)
         if (errMap) {
@@ -287,19 +286,19 @@ export default {
       }
     },
     getSelectEvent () {
-      let selectRecords = this.$refs.xTable.getCheckboxRecords()
+      const selectRecords = this.$refs.xTable.getCheckboxRecords()
       this.$XModal.alert(selectRecords.length)
     },
     getInsertEvent () {
-      let insertRecords = this.$refs.xTable.getInsertRecords()
+      const insertRecords = this.$refs.xTable.getInsertRecords()
       this.$XModal.alert(insertRecords.length)
     },
     getRemoveEvent () {
-      let removeRecords = this.$refs.xTable.getRemoveRecords()
+      const removeRecords = this.$refs.xTable.getRemoveRecords()
       this.$XModal.alert(removeRecords.length)
     },
     getUpdateEvent () {
-      let updateRecords = this.$refs.xTable.getUpdateRecords()
+      const updateRecords = this.$refs.xTable.getUpdateRecords()
       this.$XModal.alert(updateRecords.length)
     }
   }

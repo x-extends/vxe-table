@@ -51,7 +51,7 @@ export default {
           slots: {
             default: ({ row }) => {
               return [
-                <vxe-button onClick={ e => this.removeRowEvent(row) }>删除</vxe-button>
+                <vxe-button onClick={ () => this.removeRowEvent(row) }>删除</vxe-button>
               ]
             }
           }
@@ -150,8 +150,8 @@ export default {
   },
   methods: {
     insertEvent () {
-      let xTree = this.$refs.xTree
-      let record = {
+      const xTree = this.$refs.xTree
+      const record = {
         name: '新数据',
         date: XEUtils.toDateString(new Date(), 'yyyy-MM-dd')
       }
@@ -164,15 +164,15 @@ export default {
       this.$refs.xTree.remove(row)
     },
     getRemoveEvent () {
-      let removeRecords = this.$refs.xTree.getRemoveRecords()
+      const removeRecords = this.$refs.xTree.getRemoveRecords()
       this.$XModal.alert(removeRecords.length)
     },
     getInsertEvent () {
-      let insertRecords = this.$refs.xTree.getInsertRecords()
+      const insertRecords = this.$refs.xTree.getInsertRecords()
       this.$XModal.alert(insertRecords.length)
     },
     getSelectEvent () {
-      let selectRecords = this.$refs.xTree.getCheckboxRecords()
+      const selectRecords = this.$refs.xTree.getCheckboxRecords()
       this.$XModal.alert(selectRecords.length)
     }
   }

@@ -131,18 +131,18 @@ export default {
       this.sexList = await XEAjax.get('/api/conf/sex/list')
     },
     async insertEvent (row) {
-      let record = {
+      const record = {
         sex: '1'
       }
-      let { row: newRow } = await this.$refs.xTable.insertAt(record, row)
+      const { row: newRow } = await this.$refs.xTable.insertAt(record, row)
       await this.$refs.xTable.setActiveCell(newRow, 'sex')
     },
     getInsertEvent () {
-      let insertRecords = this.$refs.xTable.getInsertRecords()
+      const insertRecords = this.$refs.xTable.getInsertRecords()
       this.$XModal.alert(insertRecords.length)
     },
     getSelectionEvent () {
-      let removeRecords = this.$refs.xTable.getCheckboxRecords()
+      const removeRecords = this.$refs.xTable.getCheckboxRecords()
       this.$XModal.alert(removeRecords.length)
     }
   }
