@@ -15,6 +15,7 @@ class Rule {
       maxWidth: rule.maxWidth
     })
   }
+
   get message () {
     return UtilTools.getFuncText(this.$options.message)
   }
@@ -53,9 +54,9 @@ export default {
      * 返回 Promise 对象，或者使用回调方式
      */
     beginValidate (rows, cb, isAll) {
-      let validRest = {}
+      const validRest = {}
       let status = true
-      let { editRules, afterFullData, treeConfig, treeOpts } = this
+      const { editRules, afterFullData, treeConfig, treeOpts } = this
       let vaildDatas = afterFullData
       if (rows) {
         if (XEUtils.isFunction(rows)) {
@@ -64,13 +65,13 @@ export default {
           vaildDatas = XEUtils.isArray(rows) ? rows : [rows]
         }
       }
-      let rowValids = []
+      const rowValids = []
       this.lastCallTime = Date.now()
       this.clearValidate()
       if (editRules) {
-        let columns = this.getColumns()
-        let handleVaild = row => {
-          let colVailds = []
+        const columns = this.getColumns()
+        const handleVaild = row => {
+          const colVailds = []
           columns.forEach((column, columnIndex) => {
             if (XEUtils.has(editRules, column.property)) {
               colVailds.push(
@@ -78,7 +79,7 @@ export default {
                   this.validCellRules('all', row, column)
                     .then(resolve)
                     .catch(({ rule, rules }) => {
-                      let rest = { rule, rules, [`${treeConfig ? '$' : ''}rowIndex`]: this.getRowIndex(row), row, columnIndex, column, $table: this }
+                      const rest = { rule, rules, [`${treeConfig ? '$' : ''}rowIndex`]: this.getRowIndex(row), row, columnIndex, column, $table: this }
                       if (isAll) {
                         if (!validRest[column.property]) {
                           validRest[column.property] = []
@@ -100,7 +101,7 @@ export default {
           vaildDatas.forEach(handleVaild)
         }
         return Promise.all(rowValids).then(() => {
-          let ruleProps = Object.keys(validRest)
+          const ruleProps = Object.keys(validRest)
           if (ruleProps.length) {
             return Promise.reject(validRest[ruleProps[0]][0])
           }
@@ -151,10 +152,10 @@ export default {
       return Promise.resolve()
     },
     hasCellRules (type, row, column) {
-      let { editRules } = this
-      let { property } = column
+      const { editRules } = this
+      const { property } = column
       if (property && editRules) {
-        let rules = XEUtils.get(editRules, property)
+        const rules = XEUtils.get(editRules, property)
         return rules && XEUtils.find(rules, rule => type === 'all' || !rule.trigger || type === rule.trigger)
       }
       return false
@@ -174,14 +175,14 @@ export default {
      *  trigger=blur|change 触发方式（除非特殊场景，否则默认为空就行）
      */
     validCellRules (type, row, column, val) {
-      let { editRules, treeConfig } = this
-      let { property } = column
-      let errorRules = []
-      let cellVailds = []
+      const { editRules, treeConfig } = this
+      const { property } = column
+      const errorRules = []
+      const cellVailds = []
       if (property && editRules) {
-        let rules = XEUtils.get(editRules, property)
+        const rules = XEUtils.get(editRules, property)
         if (rules) {
-          let cellValue = XEUtils.isUndefined(val) ? XEUtils.get(row, property) : val
+          const cellValue = XEUtils.isUndefined(val) ? XEUtils.get(row, property) : val
           rules.forEach(rule => {
             cellVailds.push(
               new Promise(resolve => {
@@ -189,14 +190,14 @@ export default {
                   if (XEUtils.isFunction(rule.validator)) {
                     rule.validator(rule, cellValue, e => {
                       if (XEUtils.isError(e)) {
-                        let cusRule = { type: 'custom', trigger: rule.trigger, message: e.message, rule: new Rule(rule) }
+                        const cusRule = { type: 'custom', trigger: rule.trigger, message: e.message, rule: new Rule(rule) }
                         errorRules.push(new Rule(cusRule))
                       }
                       return resolve()
                     }, { rules, row, column, [`${treeConfig ? '$' : ''}rowIndex`]: this.getRowIndex(row), columnIndex: this.getColumnIndex(column) })
                   } else {
-                    let isNumber = rule.type === 'number'
-                    let numVal = isNumber ? XEUtils.toNumber(cellValue) : XEUtils.getSize(cellValue)
+                    const isNumber = rule.type === 'number'
+                    const numVal = isNumber ? XEUtils.toNumber(cellValue) : XEUtils.getSize(cellValue)
                     if (cellValue === null || cellValue === undefined || cellValue === '') {
                       if (rule.required) {
                         errorRules.push(new Rule(rule))
@@ -221,13 +222,13 @@ export default {
       }
       return Promise.all(cellVailds).then(() => {
         if (errorRules.length) {
-          let rest = { rules: errorRules, rule: errorRules[0] }
+          const rest = { rules: errorRules, rule: errorRules[0] }
           return Promise.reject(rest)
         }
       })
     },
     _clearValidate () {
-      let validTip = this.$refs.validTip
+      const validTip = this.$refs.validTip
       Object.assign(this.validStore, {
         visible: false,
         row: null,
@@ -244,10 +245,10 @@ export default {
      * 触发校验
      */
     triggerValidate (type) {
-      let { editConfig, editStore, editRules, validStore } = this
-      let { actived } = editStore
+      const { editConfig, editStore, editRules, validStore } = this
+      const { actived } = editStore
       if (actived.row && editRules) {
-        let { row, column, cell } = actived.args
+        const { row, column, cell } = actived.args
         if (this.hasCellRules(type, row, column)) {
           return this.validCellRules(type, row, column).then(() => {
             if (editConfig.mode === 'row') {
@@ -258,7 +259,7 @@ export default {
           }).catch(({ rule }) => {
             // 如果校验不通过与触发方式一致，则聚焦提示错误，否则跳过并不作任何处理
             if (!rule.trigger || type === rule.trigger) {
-              let rest = { rule, row, column, cell }
+              const rest = { rule, row, column, cell }
               this.showValidTooltip(rest)
               return Promise.reject(rest)
             }
@@ -272,10 +273,10 @@ export default {
      * 弹出校验错误提示
      */
     showValidTooltip (params) {
-      let { $refs, height, tableData, validOpts } = this
-      let { rule, row, column, cell } = params
-      let validTip = $refs.validTip
-      let content = rule.message
+      const { $refs, height, tableData, validOpts } = this
+      const { rule, row, column, cell } = params
+      const validTip = $refs.validTip
+      const content = rule.message
       this.$nextTick(() => {
         Object.assign(this.validStore, {
           row,

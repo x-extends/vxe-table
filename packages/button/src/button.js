@@ -36,7 +36,7 @@ export default {
     }
   },
   render (h) {
-    let { $scopedSlots, $listeners, type, isText, isFormBtn, btnStatus, btnType, vSize, name, disabled, loading } = this
+    const { $scopedSlots, $listeners, type, isText, isFormBtn, btnStatus, btnType, vSize, name, disabled, loading } = this
     return $scopedSlots.dropdowns ? h('div', {
       class: ['vxe-button--dropdown', {
         [`size--${vSize}`]: vSize
@@ -88,8 +88,8 @@ export default {
   },
   methods: {
     renderContent (h) {
-      let { $scopedSlots, icon, loading } = this
-      let contents = []
+      const { $scopedSlots, icon, loading } = this
+      const contents = []
       if (loading) {
         contents.push(
           h('i', {
@@ -111,9 +111,9 @@ export default {
       return contents
     },
     clickDropdownEvent (evnt) {
-      let dropdownElem = evnt.currentTarget
-      let wrapperElem = dropdownElem.parentNode
-      let { flag, targetElem } = DomTools.getEventTargetNode(evnt, dropdownElem, 'vxe-button')
+      const dropdownElem = evnt.currentTarget
+      const wrapperElem = dropdownElem.parentNode
+      const { flag, targetElem } = DomTools.getEventTargetNode(evnt, dropdownElem, 'vxe-button')
       if (flag) {
         wrapperElem.dataset.active = 'N'
         DomTools.removeClass(wrapperElem, 'is--active')
@@ -121,14 +121,14 @@ export default {
       }
     },
     mouseenterEvent (evnt) {
-      let dropdownElem = evnt.currentTarget
-      let wrapperElem = dropdownElem.parentNode
+      const dropdownElem = evnt.currentTarget
+      const wrapperElem = dropdownElem.parentNode
       wrapperElem.dataset.active = 'Y'
       DomTools.addClass(wrapperElem, 'is--active')
     },
     mouseleaveEvent (evnt) {
-      let dropdownElem = evnt.currentTarget
-      let wrapperElem = dropdownElem.parentNode
+      const dropdownElem = evnt.currentTarget
+      const wrapperElem = dropdownElem.parentNode
       wrapperElem.dataset.active = 'N'
       setTimeout(() => {
         if (wrapperElem.dataset.active !== 'Y') {

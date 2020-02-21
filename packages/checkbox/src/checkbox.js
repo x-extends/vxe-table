@@ -22,8 +22,8 @@ export default {
     }
   },
   render (h) {
-    let { $xegroup, isGroup, disabled, title, vSize, indeterminate, value, label } = this
-    let attrs = {}
+    const { $xegroup, isGroup, disabled, title, vSize, indeterminate, value, label } = this
+    const attrs = {}
     if (title) {
       attrs.title = title
     }
@@ -46,7 +46,7 @@ export default {
         on: {
           change: evnt => {
             if (!this.disabled) {
-              let checked = evnt.target.checked
+              const checked = evnt.target.checked
               if (isGroup) {
                 $xegroup.handleChecked({ checked, label }, evnt)
               } else {

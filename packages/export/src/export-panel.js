@@ -177,7 +177,7 @@ export default {
                     h('ul', {
                       class: 'vxe-export--panel-column-body'
                     }, storeData.columns.map(column => {
-                      let headerTitle = column.getTitle()
+                      const headerTitle = column.getTitle()
                       return h('li', {
                         class: ['vxe-export--panel-column-option', {
                           'is--checked': column.checked,
@@ -268,12 +268,12 @@ export default {
   },
   methods: {
     checkStatus () {
-      let columns = this.storeData.columns
+      const columns = this.storeData.columns
       this.isAll = this.storeData.columns.every(column => column.disabled || column.checked)
       this.isIndeterminate = !this.isAll && columns.some(column => !column.disabled && column.checked)
     },
     allColumnEvent () {
-      let isAll = !this.isAll
+      const isAll = !this.isAll
       this.storeData.columns.forEach(column => {
         if (!column.disabled) {
           column.checked = isAll

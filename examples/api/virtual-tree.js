@@ -311,7 +311,7 @@ const apis = [
 ]
 
 const gridAPI = XEUtils.clone(tableAPI, true).map(item => {
-  let rest = apis.find(obj => obj.name === item.name)
+  const rest = apis.find(obj => obj.name === item.name)
   rest.list = item.list.concat(rest.list)
   return rest
 })

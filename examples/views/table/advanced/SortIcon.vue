@@ -61,7 +61,7 @@ export default {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 50)
           },
           methods: {
-            filterNameMethod ({ value, row, column }) {
+            filterNameMethod ({ value, row }) {
               return row.id >= value
             }
           }
@@ -79,7 +79,7 @@ export default {
     })
   },
   methods: {
-    filterNameMethod ({ value, row, column }) {
+    filterNameMethod ({ value, row }) {
       return row.id >= value
     }
   }

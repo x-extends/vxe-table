@@ -21,29 +21,29 @@ export default {
      * @param {Row} row 指定行
      */
     _insertAt (records, row) {
-      let { afterFullData, editStore, scrollYLoad, tableFullData, treeConfig } = this
+      const { afterFullData, editStore, scrollYLoad, tableFullData, treeConfig } = this
       if (treeConfig) {
         throw new Error(UtilTools.getLog('vxe.error.noTree', ['insert']))
       }
       if (!XEUtils.isArray(records)) {
         records = [records]
       }
-      let nowData = afterFullData
-      let newRecords = records.map(record => this.defineField(Object.assign({}, record)))
+      const nowData = afterFullData
+      const newRecords = records.map(record => this.defineField(Object.assign({}, record)))
       if (!row) {
-        nowData.unshift.apply(nowData, newRecords)
-        tableFullData.unshift.apply(tableFullData, newRecords)
+        nowData.unshift(...newRecords)
+        tableFullData.unshift(...newRecords)
       } else {
         if (row === -1) {
-          nowData.push.apply(nowData, newRecords)
-          tableFullData.push.apply(tableFullData, newRecords)
+          nowData.push(...newRecords)
+          tableFullData.push(...newRecords)
         } else {
-          let targetIndex = nowData.indexOf(row)
+          const targetIndex = nowData.indexOf(row)
           if (targetIndex === -1) {
             throw new Error(UtilTools.error('vxe.error.unableInsert'))
           }
-          nowData.splice.apply(nowData, [targetIndex, 0].concat(newRecords))
-          tableFullData.splice.apply(tableFullData, [tableFullData.indexOf(row), 0].concat(newRecords))
+          nowData.splice(...([targetIndex, 0].concat(newRecords)))
+          tableFullData.splice(...([tableFullData.indexOf(row), 0].concat(newRecords)))
         }
       }
       [].unshift.apply(editStore.insertList, newRecords)
@@ -68,11 +68,11 @@ export default {
      * 如果为空则删除所有
      */
     _remove (rows) {
-      let { afterFullData, tableFullData, editStore, treeConfig, checkboxOpts, selection, isInsertByRow, scrollYLoad } = this
-      let { removeList, insertList } = editStore
-      let { checkField: property } = checkboxOpts
+      const { afterFullData, tableFullData, editStore, treeConfig, checkboxOpts, selection, isInsertByRow, scrollYLoad } = this
+      const { removeList, insertList } = editStore
+      const { checkField: property } = checkboxOpts
       let rest = []
-      let nowData = afterFullData
+      const nowData = afterFullData
       if (treeConfig) {
         throw new Error(UtilTools.getLog('vxe.error.noTree', ['remove']))
       }
@@ -159,7 +159,7 @@ export default {
      * 如果是树表格，子节点更改状态不会影响父节点的更新状态
      */
     _getUpdateRecords () {
-      let { tableFullData, isUpdateByRow, treeConfig, treeOpts } = this
+      const { tableFullData, isUpdateByRow, treeConfig, treeOpts } = this
       if (treeConfig) {
         return XEUtils.filterTree(tableFullData, row => isUpdateByRow(row), treeOpts)
       }
@@ -169,11 +169,11 @@ export default {
      * 处理激活编辑
      */
     handleActived (params, evnt) {
-      let { editStore, editOpts, tableColumn } = this
-      let { mode, activeMethod } = editOpts
-      let { actived } = editStore
-      let { row, column, cell } = params
-      let { editRender } = column
+      const { editStore, editOpts, tableColumn } = this
+      const { mode, activeMethod } = editOpts
+      const { actived } = editStore
+      const { row, column, cell } = params
+      const { editRender } = column
       if (editRender && cell) {
         if (actived.row !== row || (mode === 'cell' ? actived.column !== column : false)) {
           // 判断是否禁用编辑
@@ -202,9 +202,9 @@ export default {
           }
           UtilTools.emitEvent(this, type, [params, evnt])
         } else {
-          let { column: oldColumn } = actived
+          const { column: oldColumn } = actived
           if (oldColumn !== column) {
-            let { model: oldModel } = oldColumn
+            const { model: oldModel } = oldColumn
             if (oldModel.update) {
               UtilTools.setCellValue(row, oldColumn, oldModel.value)
             }
@@ -221,14 +221,14 @@ export default {
       return this.$nextTick()
     },
     _getColumnModel (row, column) {
-      let { model, editRender } = column
+      const { model, editRender } = column
       if (editRender) {
         model.value = UtilTools.getCellValue(row, column)
         model.update = false
       }
     },
     _setColumnModel (row, column) {
-      let { model, editRender } = column
+      const { model, editRender } = column
       if (editRender && model.update) {
         UtilTools.setCellValue(row, column, model.value)
         model.update = false
@@ -239,9 +239,9 @@ export default {
      * 清除激活的编辑
      */
     _clearActived (evnt) {
-      let { tableColumn, editStore, editOpts } = this
-      let { actived } = editStore
-      let { args, row, column } = actived
+      const { tableColumn, editStore, editOpts } = this
+      const { actived } = editStore
+      const { args, row, column } = actived
       if (row || column) {
         if (editOpts.mode === 'row') {
           tableColumn.forEach(column => this._setColumnModel(row, column))
@@ -262,8 +262,8 @@ export default {
       return this.getActiveRecord()
     },
     _getActiveRecord () {
-      let { $el, editStore, afterFullData } = this
-      let { args, row } = editStore.actived
+      const { $el, editStore, afterFullData } = this
+      const { args, row } = editStore.actived
       if (args && afterFullData.indexOf(row) > -1 && $el.querySelectorAll('.vxe-body--column.col--actived').length) {
         return Object.assign({}, args)
       }
@@ -284,12 +284,12 @@ export default {
     /**
      * 处理聚焦
      */
-    handleFocus (params, evnt) {
-      let { row, column, cell } = params
-      let { editRender } = column
+    handleFocus (params) {
+      const { row, column, cell } = params
+      const { editRender } = column
       if (editRender) {
-        let compRender = VXETable.renderer.get(editRender.name)
-        let { autofocus, autoselect } = editRender
+        const compRender = VXETable.renderer.get(editRender.name)
+        const { autofocus, autoselect } = editRender
         let inputElem
         // 如果指定了聚焦 class
         if (autofocus) {
@@ -306,7 +306,7 @@ export default {
           } else {
             // 保持一致行为，光标移到末端
             if (DomTools.browse.msie) {
-              let textRange = inputElem.createTextRange()
+              const textRange = inputElem.createTextRange()
               textRange.collapse(false)
               textRange.select()
             }
@@ -329,9 +329,9 @@ export default {
     _setActiveCell (row, field) {
       return this.scrollToRow(row, true).then(() => {
         if (row && field) {
-          let column = XEUtils.find(this.visibleColumn, column => column.property === field)
+          const column = XEUtils.find(this.visibleColumn, column => column.property === field)
           if (column && column.editRender) {
-            let cell = DomTools.getCell(this, { row, column })
+            const cell = DomTools.getCell(this, { row, column })
             if (cell) {
               this.handleActived({ row, rowIndex: this.getRowIndex(row), column, columnIndex: this.getColumnIndex(column), cell, $table: this })
               this.lastCallTime = Date.now()
@@ -345,13 +345,13 @@ export default {
      * 只对 trigger=dblclick 有效，选中单元格
      */
     _setSelectCell (row, field) {
-      let { tableData, editOpts, visibleColumn } = this
+      const { tableData, editOpts, visibleColumn } = this
       if (row && field && editOpts.trigger !== 'manual') {
-        let column = XEUtils.find(visibleColumn, column => column.property === field)
-        let rowIndex = tableData.indexOf(row)
+        const column = XEUtils.find(visibleColumn, column => column.property === field)
+        const rowIndex = tableData.indexOf(row)
         if (rowIndex > -1 && column) {
-          let cell = DomTools.getCell(this, { row, rowIndex, column })
-          let params = { row, rowIndex, column, columnIndex: visibleColumn.indexOf(column), cell }
+          const cell = DomTools.getCell(this, { row, rowIndex, column })
+          const params = { row, rowIndex, column, columnIndex: visibleColumn.indexOf(column), cell }
           this.handleSelected(params, {})
         }
       }
@@ -361,13 +361,13 @@ export default {
      * 处理选中源
      */
     handleSelected (params, evnt) {
-      let { mouseConfig, mouseOpts, editOpts, editStore, elemStore } = this
-      let { actived, selected } = editStore
-      let { row, column, cell } = params
-      let isMouseSelected = mouseConfig && mouseOpts.selected
+      const { mouseConfig, mouseOpts, editOpts, editStore, elemStore } = this
+      const { actived, selected } = editStore
+      const { row, column, cell } = params
+      const isMouseSelected = mouseConfig && mouseOpts.selected
       // 在 v3.0 中废弃 mouse-config.checked
-      let isMouseChecked = mouseConfig && (mouseOpts.range || mouseOpts.checked)
-      let selectMethod = () => {
+      const isMouseChecked = mouseConfig && (mouseOpts.range || mouseOpts.checked)
+      const selectMethod = () => {
         if ((isMouseSelected || isMouseChecked) && (selected.row !== row || selected.column !== column)) {
           if (actived.row !== row || (editOpts.mode === 'cell' ? actived.column !== column : false)) {
             if (this.keyboardConfig) {
@@ -385,7 +385,7 @@ export default {
             }
             // 如果配置了批量选中功能，则为批量选中状态
             if (isMouseChecked) {
-              let headerElem = elemStore['main-header-list']
+              const headerElem = elemStore['main-header-list']
               this.handleChecked([[cell]])
               if (headerElem) {
                 this.handleHeaderChecked([[headerElem.querySelector(`.${column.id}`)]])
@@ -401,8 +401,8 @@ export default {
     /**
      * 清除所选中源状态
      */
-    _clearSelected (evnt) {
-      let { selected } = this.editStore
+    _clearSelected () {
+      const { selected } = this.editStore
       selected.row = null
       selected.column = null
       this.reColTitleSdCls()
@@ -410,23 +410,23 @@ export default {
       return this.$nextTick()
     },
     reColTitleSdCls () {
-      let headerElem = this.elemStore['main-header-list']
+      const headerElem = this.elemStore['main-header-list']
       if (headerElem) {
         XEUtils.arrayEach(headerElem.querySelectorAll('.col--title-selected'), elem => DomTools.removeClass(elem, 'col--title-selected'))
       }
     },
     reColSdCls () {
-      let cell = this.$el.querySelector('.col--selected')
+      const cell = this.$el.querySelector('.col--selected')
       if (cell) {
         DomTools.removeClass(cell, 'col--selected')
       }
     },
     addColSdCls () {
-      let { selected } = this.editStore
-      let { row, column } = selected
+      const { selected } = this.editStore
+      const { row, column } = selected
       this.reColSdCls()
       if (row && column) {
-        let cell = DomTools.getCell(this, { row, column })
+        const cell = DomTools.getCell(this, { row, column })
         if (cell) {
           DomTools.addClass(cell, 'col--selected')
         }

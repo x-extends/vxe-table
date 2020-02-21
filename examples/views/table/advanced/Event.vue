@@ -75,23 +75,26 @@ export default {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 20)
           },
           methods: {
-            headerCellClickEvent ({ row, rowIndex, column, columnIndex }, event) {
+            headerCellClickEvent ({ column }) {
               console.log(\`表头单元格点击\${column.title}\`)
             },
-            headerCellDBLClickEvent ({ row, rowIndex, column, columnIndex }, event) {
+            headerCellDBLClickEvent ({ column }) {
               console.log(\`表头单元格双击\${column.title}\`)
             },
-            cellClickEvent ({ row, rowIndex, column, columnIndex }, event) {
+            cellClickEvent ({ column }) {
               console.log(\`单元格点击\${column.title}\`)
             },
-            cellDBLClickEvent ({ row, rowIndex, column, columnIndex }, event) {
+            cellDBLClickEvent ({ column }) {
               console.log(\`单元格双击\${column.title}\`)
             },
-            cellMouseenterEvent ({ row, rowIndex, column, columnIndex }, event) {
+            cellMouseenterEvent ({ column }) {
               console.log(\`鼠标进入单元格\${column.title}\`)
             },
-            cellMouseleaveEvent ({ row, rowIndex, column, columnIndex }, event) {
+            cellMouseleaveEvent ({ column }) {
               console.log(\`鼠标离开单元格\${column.title}\`)
+            },
+            bodyScrollEvent ({ scrollTop, scrollLeft }) {
+              console.log(\`滚动事件scrollTop=\${scrollTop} scrollLeft=\${scrollLeft}\`)
             }
           }
         }
@@ -105,29 +108,28 @@ export default {
     })
   },
   created () {
-    let list = window.MOCK_DATA_LIST.slice(0, 20)
-    this.tableData = list
+    this.tableData = window.MOCK_DATA_LIST.slice(0, 20)
   },
   methods: {
-    headerCellClickEvent ({ row, rowIndex, column, columnIndex }, event) {
+    headerCellClickEvent ({ column }) {
       console.log(`表头单元格点击${column.title}`)
     },
-    headerCellDBLClickEvent ({ row, rowIndex, column, columnIndex }, event) {
+    headerCellDBLClickEvent ({ column }) {
       console.log(`表头单元格双击${column.title}`)
     },
-    cellClickEvent ({ row, rowIndex, column, columnIndex }, event) {
+    cellClickEvent ({ column }) {
       console.log(`单元格点击${column.title}`)
     },
-    cellDBLClickEvent ({ row, rowIndex, column, columnIndex }, event) {
+    cellDBLClickEvent ({ column }) {
       console.log(`单元格双击${column.title}`)
     },
-    cellMouseenterEvent ({ row, rowIndex, column, columnIndex }, event) {
+    cellMouseenterEvent ({ column }) {
       console.log(`鼠标进入单元格${column.title}`)
     },
-    cellMouseleaveEvent ({ row, rowIndex, column, columnIndex }, event) {
+    cellMouseleaveEvent ({ column }) {
       console.log(`鼠标离开单元格${column.title}`)
     },
-    bodyScrollEvent ({ scrollTop, scrollLeft }, event) {
+    bodyScrollEvent ({ scrollTop, scrollLeft }) {
       console.log(`滚动事件scrollTop=${scrollTop} scrollLeft=${scrollLeft}`)
     }
   }

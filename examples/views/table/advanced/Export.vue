@@ -444,7 +444,7 @@ export default {
         this.tableData4 = result
         this.tablePage4.totalResult = page.totalResult
         this.loading = false
-      }).catch(e => {
+      }).catch(() => {
         this.loading = false
       })
     },
@@ -529,7 +529,7 @@ export default {
           data
         })
         this.loading = false
-      }).catch(e => {
+      }).catch(() => {
         this.loading = false
       })
     }

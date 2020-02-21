@@ -52,8 +52,8 @@ function renderFormContent (h, _vm) {
 }
 
 Object.keys(Table.methods).forEach(name => {
-  methods[name] = function () {
-    return this.$refs.xTable && this.$refs.xTable[name].apply(this.$refs.xTable[name], arguments)
+  methods[name] = function (...args) {
+    return this.$refs.xTable && this.$refs.xTable[name](...args)
   }
 })
 
@@ -109,10 +109,10 @@ export default {
       return Object.assign({}, GlobalConfig.grid.toolbar, this.toolbar)
     },
     toolbarSlots () {
-      let { $scopedSlots, toolbar, toolbarOpts } = this
+      const { $scopedSlots, toolbar, toolbarOpts } = this
       let $buttons = $scopedSlots.buttons
       let $tools = $scopedSlots.tools
-      let slots = {}
+      const slots = {}
       if (toolbar) {
         if (toolbarOpts.slots) {
           $buttons = toolbarOpts.slots.buttons || $buttons
@@ -129,7 +129,7 @@ export default {
     },
     renderClass () {
       const { tableProps, vSize, maximize } = this
-      return [ 'vxe-grid', {
+      return ['vxe-grid', {
         [`size--${vSize}`]: vSize,
         't--animat': tableProps.optimization.animat,
         'is--maximize': maximize,
@@ -140,7 +140,7 @@ export default {
       return this.maximize ? { zIndex: this.tZindex } : null
     },
     tableExtendProps () {
-      let rest = {}
+      const rest = {}
       propKeys.forEach(key => {
         rest[key] = this[key]
       })
@@ -148,7 +148,7 @@ export default {
     },
     tableProps () {
       const { maximize, seqConfig, pagerConfig, loading, editConfig, proxyConfig, proxyOpts, tableExtendProps, tableLoading, tablePage, tableData, optimization } = this
-      let props = Object.assign({}, tableExtendProps, {
+      const props = Object.assign({}, tableExtendProps, {
         optimization: Object.assign({}, GlobalConfig.optimization, optimization)
       })
       if (maximize) {
@@ -174,8 +174,8 @@ export default {
       return props
     },
     tableOns () {
-      let { $listeners, proxyConfig, proxyOpts } = this
-      let ons = Object.assign({}, $listeners)
+      const { $listeners, proxyConfig, proxyOpts } = this
+      const ons = Object.assign({}, $listeners)
       if (proxyConfig) {
         if (proxyOpts.sort) {
           ons['sort-change'] = this.sortChangeEvent
@@ -202,8 +202,8 @@ export default {
     }
   },
   created () {
-    let { customs, data, proxyConfig, proxyOpts } = this
-    let { props } = proxyOpts
+    const { customs, data, proxyConfig, proxyOpts } = this
+    const { props } = proxyOpts
     if (customs) {
       UtilTools.warn('vxe.error.removeProp', ['customs'])
     }
@@ -296,22 +296,22 @@ export default {
       let paddingTop = 0
       let paddingBottom = 0
       if ($el) {
-        let computedStyle = getComputedStyle($el)
+        const computedStyle = getComputedStyle($el)
         paddingTop = XEUtils.toNumber(computedStyle.paddingTop)
         paddingBottom = XEUtils.toNumber(computedStyle.paddingBottom)
       }
       return paddingTop + paddingBottom + getOffsetHeight(formElem) + getRefHeight(toolbar) + getOffsetHeight(top) + getOffsetHeight(bottom) + getRefHeight(pager)
     },
     handleRowClassName (params) {
-      let rowClassName = this.rowClassName
-      let clss = []
+      const rowClassName = this.rowClassName
+      const clss = []
       if (this.pendingRecords.some(item => item === params.row)) {
         clss.push('row--pending')
       }
       return clss.concat(rowClassName ? rowClassName(params) : [])
     },
     handleActiveMethod (params) {
-      let activeMethod = this.editConfig.activeMethod
+      const activeMethod = this.editConfig.activeMethod
       return this.pendingRecords.indexOf(params.row) === -1 && (!activeMethod || activeMethod(params))
     },
     loadColumn (columns) {
@@ -363,11 +363,10 @@ export default {
      * 提交指令，支持 code 或 button
      * @param {String/Object} code 字符串或对象
      */
-    commitProxy (code) {
+    commitProxy (code, ...args) {
       const { $refs, toolbar, toolbarOpts, proxyOpts, tablePage, pagerConfig, sortData, filterData, formData, isMsg } = this
       const { beforeQuery, beforeDelete, afterDelete, beforeSave, afterSave, ajax = {}, props = {} } = proxyOpts
       const $xetable = $refs.xTable
-      const args = XEUtils.slice(arguments, 1)
       let button
       if (XEUtils.isString(code)) {
         const matchObj = toolbar ? XEUtils.findTree(toolbarOpts.buttons, item => item.code === code, { children: 'dropdowns' }) : null
@@ -388,7 +387,7 @@ export default {
           this.triggerPendingEvent(code)
           break
         case 'delete_selection':
-          this.handleDeleteRow(code, 'vxe.grid.deleteSelectRecord', () => this.commitProxy.apply(this, ['delete'].concat(args)))
+          this.handleDeleteRow(code, 'vxe.grid.deleteSelectRecord', () => this.commitProxy(...(['delete'].concat(args))))
           break
         case 'remove_selection':
           this.handleDeleteRow(code, 'vxe.grid.removeSelectRecord', () => this.removeSelecteds())
@@ -410,9 +409,9 @@ export default {
           break
         case 'reload':
         case 'query': {
-          let ajaxMethods = ajax.query
+          const ajaxMethods = ajax.query
           if (ajaxMethods) {
-            let params = {
+            const params = {
               code,
               button,
               $grid: this,
@@ -426,7 +425,7 @@ export default {
               params.page = tablePage
             }
             if (code === 'reload') {
-              let defaultSort = $xetable.sortOpts.defaultSort
+              const defaultSort = $xetable.sortOpts.defaultSort
               let sortParams = {}
               if (pagerConfig) {
                 tablePage.currentPage = 1
@@ -446,7 +445,7 @@ export default {
               this.pendingRecords = []
               this.clearAll()
             }
-            let qRest = (beforeQuery || ajaxMethods).apply(this, [params].concat(args))
+            const qRest = (beforeQuery || ajaxMethods).apply(this, [params].concat(args))
             try {
               return qRest.then(rest => {
                 if (rest) {
@@ -473,18 +472,18 @@ export default {
           break
         }
         case 'delete': {
-          let ajaxMethods = ajax.delete
+          const ajaxMethods = ajax.delete
           if (ajaxMethods) {
-            let selectRecords = this.getCheckboxRecords()
+            const selectRecords = this.getCheckboxRecords()
             this.remove(selectRecords).then(() => {
-              let removeRecords = this.getRemoveRecords()
-              let body = { removeRecords }
-              let applyArgs = [{ $grid: this, code, button, body, options: ajaxMethods }].concat(args)
+              const removeRecords = this.getRemoveRecords()
+              const body = { removeRecords }
+              const applyArgs = [{ $grid: this, code, button, body, options: ajaxMethods }].concat(args)
               if (removeRecords.length) {
                 this.tableLoading = true
-                let dRest = (beforeDelete || ajaxMethods).apply(this, applyArgs)
+                const dRest = (beforeDelete || ajaxMethods).apply(this, applyArgs)
                 try {
-                  return dRest.then(result => {
+                  return dRest.then(() => {
                     this.tableLoading = false
                   }).catch(e => {
                     this.tableLoading = false
@@ -511,11 +510,11 @@ export default {
           break
         }
         case 'save': {
-          let ajaxMethods = ajax.save
+          const ajaxMethods = ajax.save
           if (ajaxMethods) {
-            let body = Object.assign({ pendingRecords: this.pendingRecords }, this.getRecordset())
-            let { insertRecords, removeRecords, updateRecords, pendingRecords } = body
-            let applyArgs = [{ $grid: this, code, button, body, options: ajaxMethods }].concat(args)
+            const body = Object.assign({ pendingRecords: this.pendingRecords }, this.getRecordset())
+            const { insertRecords, removeRecords, updateRecords, pendingRecords } = body
+            const applyArgs = [{ $grid: this, code, button, body, options: ajaxMethods }].concat(args)
             // 排除掉新增且标记为删除的数据
             if (insertRecords.length) {
               body.pendingRecords = pendingRecords.filter(row => insertRecords.indexOf(row) === -1)
@@ -530,7 +529,7 @@ export default {
                 if (vaild) {
                   if (body.insertRecords.length || removeRecords.length || updateRecords.length || body.pendingRecords.length) {
                     this.tableLoading = true
-                    let sRest = (beforeSave || ajaxMethods).apply(this, applyArgs)
+                    const sRest = (beforeSave || ajaxMethods).apply(this, applyArgs)
                     try {
                       resolve(
                         sRest.then(() => {
@@ -571,16 +570,17 @@ export default {
           }
           break
         }
-        default:
-          let btnMethod = VXETable.commands.get(code)
+        default: {
+          const btnMethod = VXETable.commands.get(code)
           if (btnMethod) {
             btnMethod.apply(this, [{ code, button, $grid: this, $table: $xetable }].concat(args))
           }
+        }
       }
       return this.$nextTick()
     },
     handleDeleteRow (code, alertKey, callback) {
-      let selectRecords = this.getCheckboxRecords()
+      const selectRecords = this.getCheckboxRecords()
       if (this.isMsg) {
         if (selectRecords.length) {
           VXETable.$modal.confirm(GlobalConfig.i18n(alertKey)).then(type => {
@@ -605,11 +605,11 @@ export default {
       UtilTools.emitEvent(this, 'toolbar-button-click', [{ code: button.code, button, $grid: this }, evnt])
     },
     triggerPendingEvent (code) {
-      let { pendingRecords, isMsg } = this
-      let selectRecords = this.getCheckboxRecords()
+      const { pendingRecords, isMsg } = this
+      const selectRecords = this.getCheckboxRecords()
       if (selectRecords.length) {
-        let plus = []
-        let minus = []
+        const plus = []
+        const minus = []
         selectRecords.forEach(data => {
           if (pendingRecords.some(item => data === item)) {
             minus.push(data)
@@ -630,8 +630,8 @@ export default {
       }
     },
     pageChangeEvent (params) {
-      let { proxyConfig, tablePage } = this
-      let { currentPage, pageSize } = params
+      const { proxyConfig, tablePage } = this
+      const { currentPage, pageSize } = params
       tablePage.currentPage = currentPage
       tablePage.pageSize = pageSize
       if (params.type === 'current-change') {
@@ -645,9 +645,9 @@ export default {
       }
     },
     sortChangeEvent (params) {
-      let { proxyConfig, remoteSort } = this
-      let { $table, column } = params
-      let isRemote = XEUtils.isBoolean(column.remoteSort) ? column.remoteSort : ($table.sortOpts.remote || remoteSort)
+      const { proxyConfig, remoteSort } = this
+      const { $table, column } = params
+      const isRemote = XEUtils.isBoolean(column.remoteSort) ? column.remoteSort : ($table.sortOpts.remote || remoteSort)
       // 如果是服务端排序
       if (isRemote) {
         this.sortData = {
@@ -664,8 +664,8 @@ export default {
       UtilTools.emitEvent(this, 'sort-change', [Object.assign({ $grid: this }, params)])
     },
     filterChangeEvent (params) {
-      let { remoteFilter } = this
-      let { $table, filters } = params
+      const { remoteFilter } = this
+      const { $table, filters } = params
       // 如果是服务端过滤
       if ($table.filterOpts.remote || remoteFilter) {
         this.filterData = filters
@@ -674,14 +674,14 @@ export default {
       UtilTools.emitEvent(this, 'filter-change', [Object.assign({ $grid: this }, params)])
     },
     submitEvent (params, evnt) {
-      let { proxyConfig } = this
+      const { proxyConfig } = this
       if (proxyConfig) {
         this.commitProxy('reload')
       }
       UtilTools.emitEvent(this, 'form-submit', [Object.assign({ $grid: this }, params), evnt])
     },
     resetEvent (params, evnt) {
-      let { proxyConfig } = this
+      const { proxyConfig } = this
       if (proxyConfig) {
         this.commitProxy('reload')
       }

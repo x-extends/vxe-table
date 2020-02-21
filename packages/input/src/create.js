@@ -49,9 +49,9 @@ export default function (compName) {
       }
     },
     render (h) {
-      let { $listeners, value, type, vSize, placeholder, disabled, clearable } = this
-      let isClearable = clearable && (type === 'text' || type === 'search')
-      let attrs = getAttrs(this)
+      const { $listeners, value, type, vSize, placeholder, disabled, clearable } = this
+      const isClearable = clearable && (type === 'text' || type === 'search')
+      const attrs = getAttrs(this)
       if (placeholder) {
         attrs.placeholder = UtilTools.getFuncText(placeholder)
       }
@@ -69,8 +69,8 @@ export default function (compName) {
           },
           attrs,
           on: XEUtils.objectMap($listeners, (cb, type) => evnt => {
-            let value = evnt.target.value
-            let params = type === 'input' ? value : { value }
+            const value = evnt.target.value
+            const params = type === 'input' ? value : { value }
             this.$emit(type, params, evnt)
           })
         }),

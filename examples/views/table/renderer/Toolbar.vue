@@ -3,7 +3,7 @@
     <p class="tip">
       工具栏-按钮渲染器 <grid-api-link prop="buttonRender"/>，查看 <a class="link" href="https://github.com/xuliangzhan/vxe-table/tree/master/examples/plugins/xtable/renderer">示例的源码</a><br>
       配置参数：<br>
-      renderButton (h, renderOpts, <vxe-tooltip content="{ button, $table }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params, context) 按钮<br>
+      renderButton (h, renderOpts, <vxe-tooltip content="{ button, $table }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params) 按钮<br>
     </p>
 
     <vxe-grid
@@ -58,7 +58,7 @@ export default {
         `
         // 创建一个工具栏-按钮渲染器（仅用于简单示例，实际开发中应该封装成一个组件，不应该把复杂的渲染逻辑写在渲染器中）
         VXETable.renderer.add('ToolbarButtonRefresh', {
-          renderButton (h, renderOpts, params, context) {
+          renderButton (h, renderOpts, params) {
             const { events } = renderOpts
             const { button } = params
             return [

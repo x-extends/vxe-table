@@ -4,6 +4,7 @@ import UtilTools from './utils'
 const browse = XEUtils.browse()
 const htmlElem = browse.isDoc ? document.querySelector('html') : 0
 const bodyElem = browse.isDoc ? document.body : 0
+const reClsMap = {}
 
 function getClsRE (cls) {
   if (!reClsMap[cls]) {
@@ -12,7 +13,21 @@ function getClsRE (cls) {
   return reClsMap[cls]
 }
 
-const reClsMap = {}
+function getNodeOffset (elem, container, rest) {
+  if (elem) {
+    const parentElem = elem.parentNode
+    rest.top += elem.offsetTop
+    rest.left += elem.offsetLeft
+    if (parentElem && parentElem !== htmlElem && parentElem !== bodyElem) {
+      rest.top -= parentElem.scrollTop
+      rest.left -= parentElem.scrollLeft
+    }
+    if (container && (elem === container || elem.offsetParent === container) ? 0 : elem.offsetParent) {
+      return getNodeOffset(elem.offsetParent, container, rest)
+    }
+  }
+  return rest
+}
 
 export const DomTools = {
   browse,
@@ -37,20 +52,20 @@ export const DomTools = {
     }
   },
   updateCellTitle (evnt) {
-    let cellElem = evnt.currentTarget.querySelector('.vxe-cell')
-    let content = cellElem.innerText
+    const cellElem = evnt.currentTarget.querySelector('.vxe-cell')
+    const content = cellElem.innerText
     if (cellElem.getAttribute('title') !== content) {
       cellElem.setAttribute('title', content)
     }
   },
   rowToVisible ($xetable, row) {
-    let bodyElem = $xetable.$refs.tableBody.$el
-    let trElem = bodyElem.querySelector(`[data-rowid="${UtilTools.getRowid($xetable, row)}"]`)
+    const bodyElem = $xetable.$refs.tableBody.$el
+    const trElem = bodyElem.querySelector(`[data-rowid="${UtilTools.getRowid($xetable, row)}"]`)
     if (trElem) {
-      let bodyHeight = bodyElem.clientHeight
-      let bodySrcollTop = bodyElem.scrollTop
-      let trOffsetTop = trElem.offsetTop + (trElem.offsetParent ? trElem.offsetParent.offsetTop : 0)
-      let trHeight = trElem.clientHeight
+      const bodyHeight = bodyElem.clientHeight
+      const bodySrcollTop = bodyElem.scrollTop
+      const trOffsetTop = trElem.offsetTop + (trElem.offsetParent ? trElem.offsetParent.offsetTop : 0)
+      const trHeight = trElem.clientHeight
       // 检测行是否在可视区中
       if (trOffsetTop < bodySrcollTop || trOffsetTop > bodySrcollTop + bodyHeight) {
         // 向上定位
@@ -68,13 +83,13 @@ export const DomTools = {
     return Promise.resolve()
   },
   colToVisible ($xetable, column) {
-    let bodyElem = $xetable.$refs.tableBody.$el
-    let tdElem = bodyElem.querySelector(`.${column.id}`)
+    const bodyElem = $xetable.$refs.tableBody.$el
+    const tdElem = bodyElem.querySelector(`.${column.id}`)
     if (tdElem) {
-      let bodyWidth = bodyElem.clientWidth
-      let bodySrcollLeft = bodyElem.scrollLeft
-      let tdOffsetLeft = tdElem.offsetLeft + (tdElem.offsetParent ? tdElem.offsetParent.offsetLeft : 0)
-      let tdWidth = tdElem.clientWidth
+      const bodyWidth = bodyElem.clientWidth
+      const bodySrcollLeft = bodyElem.scrollLeft
+      const tdOffsetLeft = tdElem.offsetLeft + (tdElem.offsetParent ? tdElem.offsetParent.offsetLeft : 0)
+      const tdWidth = tdElem.clientWidth
       // 检测行是否在可视区中
       if (tdOffsetLeft < bodySrcollLeft || tdOffsetLeft > bodySrcollLeft + bodyWidth) {
         // 向左定位
@@ -86,7 +101,7 @@ export const DomTools = {
     } else {
       // 如果是虚拟渲染跨行滚动
       if ($xetable.scrollXLoad) {
-        let visibleColumn = $xetable.visibleColumn
+        const visibleColumn = $xetable.visibleColumn
         let scrollLeft = 0
         for (let index = 0; index < visibleColumn.length; index++) {
           if (visibleColumn[index] === column) {
@@ -100,8 +115,8 @@ export const DomTools = {
     return Promise.resolve()
   },
   getDomNode () {
-    let documentElement = document.documentElement
-    let bodyElem = document.body
+    const documentElement = document.documentElement
+    const bodyElem = document.body
     return {
       scrollTop: documentElement.scrollTop || bodyElem.scrollTop,
       scrollLeft: documentElement.scrollLeft || bodyElem.scrollLeft,
@@ -132,33 +147,33 @@ export const DomTools = {
     return getNodeOffset(elem, container, { left: 0, top: 0 })
   },
   getAbsolutePos (elem) {
-    let bounding = elem.getBoundingClientRect()
-    let { scrollTop, scrollLeft } = DomTools.getDomNode()
+    const bounding = elem.getBoundingClientRect()
+    const { scrollTop, scrollLeft } = DomTools.getDomNode()
     return { top: scrollTop + bounding.top, left: scrollLeft + bounding.left }
   },
   /**
    * 获取单元格节点索引
    */
   getCellNodeIndex (cell) {
-    let trElem = cell.parentNode
-    let columnIndex = XEUtils.arrayIndexOf(trElem.children, cell)
-    let rowIndex = XEUtils.arrayIndexOf(trElem.parentNode.children, trElem)
+    const trElem = cell.parentNode
+    const columnIndex = XEUtils.arrayIndexOf(trElem.children, cell)
+    const rowIndex = XEUtils.arrayIndexOf(trElem.parentNode.children, trElem)
     return { columnIndex, rowIndex }
   },
   /**
    * 获取选中单元格矩阵范围
    */
   getRowNodes (trList, cellNode, targetCellNode) {
-    let startColIndex = cellNode.columnIndex
-    let startRowIndex = cellNode.rowIndex
-    let targetColIndex = targetCellNode.columnIndex
-    let targetRowIndex = targetCellNode.rowIndex
-    let rows = []
+    const startColIndex = cellNode.columnIndex
+    const startRowIndex = cellNode.rowIndex
+    const targetColIndex = targetCellNode.columnIndex
+    const targetRowIndex = targetCellNode.rowIndex
+    const rows = []
     for (let rowIndex = Math.min(startRowIndex, targetRowIndex), rowLen = Math.max(startRowIndex, targetRowIndex); rowIndex <= rowLen; rowIndex++) {
-      let cells = []
-      let trElem = trList[rowIndex]
+      const cells = []
+      const trElem = trList[rowIndex]
       for (let colIndex = Math.min(startColIndex, targetColIndex), colLen = Math.max(startColIndex, targetColIndex); colIndex <= colLen; colIndex++) {
-        let tdElem = trElem.children[colIndex]
+        const tdElem = trElem.children[colIndex]
         cells.push(tdElem)
       }
       rows.push(cells)
@@ -166,20 +181,20 @@ export const DomTools = {
     return rows
   },
   getCellIndexs (cell) {
-    let trElem = cell.parentNode
-    let rowid = trElem.getAttribute('data-rowid')
-    let columnIndex = [].indexOf.call(trElem.children, cell)
-    let rowIndex = [].indexOf.call(trElem.parentNode.children, trElem)
+    const trElem = cell.parentNode
+    const rowid = trElem.getAttribute('data-rowid')
+    const columnIndex = [].indexOf.call(trElem.children, cell)
+    const rowIndex = [].indexOf.call(trElem.parentNode.children, trElem)
     return { rowid, rowIndex, columnIndex }
   },
   getCell ($xetable, { row, column }) {
-    let rowid = UtilTools.getRowid($xetable, row)
-    let bodyElem = $xetable.$refs[`${column.fixed || 'table'}Body`]
+    const rowid = UtilTools.getRowid($xetable, row)
+    const bodyElem = $xetable.$refs[`${column.fixed || 'table'}Body`]
     return (bodyElem || $xetable.$refs.tableBody).$el.querySelector(`.vxe-body--row[data-rowid="${rowid}"] .${column.id}`)
   },
   toView (elem) {
-    let scrollIntoViewIfNeeded = 'scrollIntoViewIfNeeded'
-    let scrollIntoView = 'scrollIntoView'
+    const scrollIntoViewIfNeeded = 'scrollIntoViewIfNeeded'
+    const scrollIntoView = 'scrollIntoView'
     if (elem) {
       if (elem[scrollIntoViewIfNeeded]) {
         elem[scrollIntoViewIfNeeded]()
@@ -188,22 +203,6 @@ export const DomTools = {
       }
     }
   }
-}
-
-function getNodeOffset (elem, container, rest) {
-  if (elem) {
-    let parentElem = elem.parentNode
-    rest.top += elem.offsetTop
-    rest.left += elem.offsetLeft
-    if (parentElem && parentElem !== htmlElem && parentElem !== bodyElem) {
-      rest.top -= parentElem.scrollTop
-      rest.left -= parentElem.scrollLeft
-    }
-    if (container && (elem === container || elem.offsetParent === container) ? 0 : elem.offsetParent) {
-      return getNodeOffset(elem.offsetParent, container, rest)
-    }
-  }
-  return rest
 }
 
 export default DomTools

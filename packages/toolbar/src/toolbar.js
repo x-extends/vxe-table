@@ -56,7 +56,7 @@ function renderBtns (h, _vm) {
  * 渲染右侧工具
  */
 function renderRightTools (h, _vm) {
-  let { $scopedSlots, $xegrid, $xetable } = _vm
+  const { $scopedSlots, $xegrid, $xetable } = _vm
   if ($scopedSlots.tools) {
     return $scopedSlots.tools.call(_vm, { $grid: $xegrid, $table: $xetable }, h)
   }
@@ -120,7 +120,7 @@ export default {
     }
   },
   created () {
-    let { customOpts, refresh, resizable, custom, setting, id, refreshOpts } = this
+    const { customOpts, refresh, resizable, custom, setting, id, refreshOpts } = this
     if (customOpts.storage && !id) {
       return UtilTools.error('vxe.error.toolbarId')
     }
@@ -156,9 +156,9 @@ export default {
     GlobalEvent.off(this, 'blur')
   },
   render (h) {
-    let { $xegrid, loading, customStore, importOpts, exportOpts, refresh, refreshOpts, zoom, zoomOpts, custom, setting, customOpts, vSize, tableFullColumn } = this
-    let customBtnOns = {}
-    let customWrapperOns = {}
+    const { $xegrid, loading, customStore, importOpts, exportOpts, refresh, refreshOpts, zoom, zoomOpts, custom, setting, customOpts, vSize, tableFullColumn } = this
+    const customBtnOns = {}
+    const customWrapperOns = {}
     if (custom || setting) {
       if (customOpts.trigger === 'manual') {
         // 手动触发
@@ -285,9 +285,9 @@ export default {
               class: 'vxe-custom--body',
               on: customWrapperOns
             }, tableFullColumn.map(column => {
-              let colTitle = column.getTitle()
-              let colKey = column.getKey()
-              let isDisabled = customOpts.checkMethod ? !customOpts.checkMethod({ column }) : false
+              const colTitle = column.getTitle()
+              const colKey = column.getKey()
+              const isDisabled = customOpts.checkMethod ? !customOpts.checkMethod({ column }) : false
               return colTitle && colKey ? h('li', {
                 class: ['vxe-custom--option', {
                   'is--checked': column.visible,
@@ -337,8 +337,8 @@ export default {
   },
   methods: {
     updateConf () {
-      let { $children } = this.$parent
-      let selfIndex = $children.indexOf(this)
+      const { $children } = this.$parent
+      const selfIndex = $children.indexOf(this)
       this.$xetable = XEUtils.find($children, (comp, index) => comp && comp.refreshColumn && index > selfIndex && comp.$vnode.componentOptions.tag === 'vxe-table')
     },
     openCustom () {
@@ -346,7 +346,7 @@ export default {
       this.checkCustomStatus()
     },
     closeCustom () {
-      let { custom, setting, customStore } = this
+      const { custom, setting, customStore } = this
       if (customStore.visible) {
         customStore.visible = false
         if ((custom || setting) && !customStore.immediate) {
@@ -355,13 +355,13 @@ export default {
       }
     },
     restoreCustomStorage () {
-      let { $xegrid, $xetable, id, resizable, custom, setting, resizableOpts, customOpts } = this
+      const { $xegrid, $xetable, id, resizable, custom, setting, resizableOpts, customOpts } = this
       if (resizable || custom || setting) {
-        let customMap = {}
-        let comp = $xegrid || $xetable
-        let { fullColumn } = comp.getTableColumn()
+        const customMap = {}
+        const comp = $xegrid || $xetable
+        const { fullColumn } = comp.getTableColumn()
         if (resizableOpts.storage) {
-          let columnWidthStorage = this.getStorageMap(resizableOpts.storageKey)[id]
+          const columnWidthStorage = this.getStorageMap(resizableOpts.storageKey)[id]
           if (columnWidthStorage) {
             XEUtils.each(columnWidthStorage, (resizeWidth, field) => {
               customMap[field] = { field, resizeWidth }
@@ -369,7 +369,7 @@ export default {
           }
         }
         if (customOpts.storage) {
-          let columnVisibleStorage = this.getStorageMap(customOpts.storageKey)[id]
+          const columnVisibleStorage = this.getStorageMap(customOpts.storageKey)[id]
           if (columnVisibleStorage) {
             const colVisibles = columnVisibleStorage.split('|')
             const colHides = colVisibles[0] ? colVisibles[0].split(',') : []
@@ -390,15 +390,15 @@ export default {
             })
           }
         }
-        let keyMap = {}
+        const keyMap = {}
         fullColumn.forEach(column => {
-          let colKey = column.getKey()
+          const colKey = column.getKey()
           if (colKey) {
             keyMap[colKey] = column
           }
         })
         XEUtils.each(customMap, ({ visible, resizeWidth }, field) => {
-          let column = keyMap[field]
+          const column = keyMap[field]
           if (column) {
             if (XEUtils.isNumber(resizeWidth)) {
               column.resizeWidth = resizeWidth
@@ -420,26 +420,26 @@ export default {
       this.tableFullColumn = fullColumn
     },
     getStorageMap (key) {
-      let version = GlobalConfig.version
-      let rest = XEUtils.toStringJSON(localStorage.getItem(key))
+      const version = GlobalConfig.version
+      const rest = XEUtils.toStringJSON(localStorage.getItem(key))
       return rest && rest._v === version ? rest : { _v: version }
     },
     saveColumnVisible () {
-      let { id, tableFullColumn, customOpts } = this
-      let { checkMethod, storage, storageKey } = customOpts
+      const { id, tableFullColumn, customOpts } = this
+      const { checkMethod, storage, storageKey } = customOpts
       if (storage) {
-        let columnVisibleStorageMap = this.getStorageMap(storageKey)
-        let colHides = []
-        let colShows = []
+        const columnVisibleStorageMap = this.getStorageMap(storageKey)
+        const colHides = []
+        const colShows = []
         tableFullColumn.forEach(column => {
           if (!checkMethod || checkMethod({ column })) {
             if (!column.visible && column.defaultVisible) {
-              let colKey = column.getKey()
+              const colKey = column.getKey()
               if (colKey) {
                 colHides.push(colKey)
               }
             } else if (column.visible && !column.defaultVisible) {
-              let colKey = column.getKey()
+              const colKey = column.getKey()
               if (colKey) {
                 colShows.push(colKey)
               }
@@ -452,15 +452,15 @@ export default {
       return this.$nextTick()
     },
     saveColumnWidth (isReset) {
-      let { id, tableFullColumn, resizableOpts } = this
+      const { id, tableFullColumn, resizableOpts } = this
       if (resizableOpts.storage) {
-        let columnWidthStorageMap = this.getStorageMap(resizableOpts.storageKey)
+        const columnWidthStorageMap = this.getStorageMap(resizableOpts.storageKey)
         let columnWidthStorage
         if (!isReset) {
           columnWidthStorage = XEUtils.isPlainObject(columnWidthStorageMap[id]) ? columnWidthStorageMap[id] : {}
           tableFullColumn.forEach(column => {
             if (column.resizeWidth) {
-              let colKey = column.getKey()
+              const colKey = column.getKey()
               if (colKey) {
                 columnWidthStorage[colKey] = column.renderWidth
               }
@@ -492,7 +492,7 @@ export default {
       this.closeCustom()
     },
     resetCustomEvent () {
-      let { checkMethod } = this.customOpts
+      const { checkMethod } = this.customOpts
       this.tableFullColumn.forEach(column => {
         if (!checkMethod || checkMethod({ column })) {
           column.visible = column.defaultVisible
@@ -504,25 +504,25 @@ export default {
       this.closeCustom()
     },
     updateResizable (isReset) {
-      let comp = this.$xegrid || this.$xetable
+      const comp = this.$xegrid || this.$xetable
       this.saveColumnWidth(isReset)
       comp.analyColumnWidth()
       return comp.recalculate(true)
     },
     handleCustoms () {
-      let comp = this.$xegrid || this.$xetable
+      const comp = this.$xegrid || this.$xetable
       comp.refreshColumn()
       return this.saveColumnVisible()
     },
     checkCustomStatus () {
-      let { checkMethod } = this.customOpts
-      let tableFullColumn = this.tableFullColumn
+      const { checkMethod } = this.customOpts
+      const tableFullColumn = this.tableFullColumn
       this.customStore.isAll = tableFullColumn.every(column => (checkMethod ? !checkMethod({ column }) : false) || column.visible)
       this.customStore.isIndeterminate = !this.customStore.isAll && tableFullColumn.some(column => (!checkMethod || checkMethod({ column })) && column.visible)
     },
     allCustomEvent () {
-      let { checkMethod } = this.customOpts
-      let isAll = !this.customStore.isAll
+      const { checkMethod } = this.customOpts
+      const isAll = !this.customStore.isAll
       this.tableFullColumn.forEach(column => {
         if (!checkMethod || checkMethod({ column })) {
           column.visible = isAll
@@ -532,7 +532,7 @@ export default {
       this.checkCustomStatus()
     },
     handleGlobalKeydownEvent (evnt) {
-      let isEsc = evnt.keyCode === 27
+      const isEsc = evnt.keyCode === 27
       if (isEsc && this.$xegrid && this.$xegrid.isMaximized() && this.zoomOpts && this.zoomOpts.escRestore !== false) {
         this.$xegrid.zoom()
       }
@@ -542,19 +542,19 @@ export default {
         this.closeCustom()
       }
     },
-    handleGlobalBlurEvent (evnt) {
+    handleGlobalBlurEvent () {
       this.closeCustom()
     },
-    handleClickSettingEvent (evnt) {
+    handleClickSettingEvent () {
       this.customStore.visible = !this.customStore.visible
       this.checkCustomStatus()
     },
-    handleMouseenterSettingEvent (evnt) {
+    handleMouseenterSettingEvent () {
       this.customStore.activeBtn = true
       this.openCustom()
     },
-    handleMouseleaveSettingEvent (evnt) {
-      let { customStore } = this
+    handleMouseleaveSettingEvent () {
+      const { customStore } = this
       customStore.activeBtn = false
       setTimeout(() => {
         if (!customStore.activeBtn && !customStore.activeWrapper) {
@@ -562,12 +562,12 @@ export default {
         }
       }, 300)
     },
-    handleWrapperMouseenterEvent (evnt) {
+    handleWrapperMouseenterEvent () {
       this.customStore.activeWrapper = true
       this.openCustom()
     },
-    handleWrapperMouseleaveEvent (evnt) {
-      let { customStore } = this
+    handleWrapperMouseleaveEvent () {
+      const { customStore } = this
       customStore.activeWrapper = false
       setTimeout(() => {
         if (!customStore.activeBtn && !customStore.activeWrapper) {
@@ -576,11 +576,11 @@ export default {
       }, 300)
     },
     refreshEvent () {
-      let { $xegrid, refreshOpts, isRefresh } = this
+      const { $xegrid, refreshOpts, isRefresh } = this
       if (!isRefresh) {
         if (refreshOpts.query) {
           this.isRefresh = true
-          let qRest = refreshOpts.query()
+          const qRest = refreshOpts.query()
           try {
             qRest.catch(e => e).then(() => {
               this.isRefresh = false
@@ -597,14 +597,14 @@ export default {
       }
     },
     btnEvent (evnt, item) {
-      let { $xegrid, $xetable } = this
-      let { code } = item
+      const { $xegrid, $xetable } = this
+      const { code } = item
       if (code) {
         if ($xegrid) {
           $xegrid.triggerToolbarBtnEvent(item, evnt)
         } else {
-          let commandMethod = VXETable.commands.get(code)
-          let params = { code, button: item, $xegrid, $table: $xetable }
+          const commandMethod = VXETable.commands.get(code)
+          const params = { code, button: item, $xegrid, $table: $xetable }
           if (commandMethod) {
             commandMethod.call(this, params, evnt)
           }

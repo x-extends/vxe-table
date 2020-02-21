@@ -7,7 +7,7 @@ const getAllColumns = (columns) => {
     if (column.visible) {
       if (column.children && column.children.length && column.children.some(column => column.visible)) {
         result.push(column)
-        result.push.apply(result, getAllColumns(column.children))
+        result.push(...getAllColumns(column.children))
       } else {
         result.push(column)
       }
@@ -89,9 +89,9 @@ export default {
     this.uploadColumn()
   },
   mounted () {
-    let { $parent: $xetable, $el, $refs, fixedType } = this
-    let { elemStore } = $xetable
-    let prefix = `${fixedType || 'main'}-header-`
+    const { $parent: $xetable, $el, $refs, fixedType } = this
+    const { elemStore } = $xetable
+    const prefix = `${fixedType || 'main'}-header-`
     elemStore[`${prefix}wrapper`] = $el
     elemStore[`${prefix}table`] = $refs.table
     elemStore[`${prefix}colgroup`] = $refs.colgroup
@@ -100,15 +100,9 @@ export default {
     elemStore[`${prefix}repair`] = $refs.repair
   },
   render (h) {
-    let {
-      _e,
-      $parent: $xetable,
-      fixedType,
-      headerColumn,
-      tableColumn,
-      fixedColumn
-    } = this
-    let {
+    const { _e, $parent: $xetable, fixedType, headerColumn, fixedColumn } = this
+    let { tableColumn } = this
+    const {
       $listeners: tableListeners,
       id,
       resizable,
@@ -131,9 +125,9 @@ export default {
       getColumnIndex,
       sortOpts
     } = $xetable
-    let isMouseSelected = mouseConfig && mouseOpts.selected
+    const isMouseSelected = mouseConfig && mouseOpts.selected
     // 在 v3.0 中废弃 mouse-config.checked
-    let isMouseChecked = mouseConfig && (mouseOpts.range || mouseOpts.checked)
+    const isMouseChecked = mouseConfig && (mouseOpts.range || mouseOpts.checked)
     // 横向滚动渲染
     if (scrollXLoad) {
       if (fixedType) {
@@ -166,7 +160,7 @@ export default {
         h('colgroup', {
           ref: 'colgroup'
         }, tableColumn.map((column, columnIndex) => {
-          let isColGroup = column.children && column.children.length
+          const isColGroup = column.children && column.children.length
           return h('col', {
             attrs: {
               name: column.id
@@ -190,20 +184,20 @@ export default {
             class: ['vxe-header--row', headerRowClassName ? XEUtils.isFunction(headerRowClassName) ? headerRowClassName({ $table: $xetable, $rowIndex, fixed: fixedType }) : headerRowClassName : ''],
             style: headerRowStyle ? (XEUtils.isFunction(headerRowStyle) ? headerRowStyle({ $table: $xetable, $rowIndex, fixed: fixedType }) : headerRowStyle) : null
           }, cols.map((column, $columnIndex) => {
-            let { showHeaderOverflow, headerAlign, align, headerClassName } = column
-            let isColGroup = column.children && column.children.length
-            let fixedHiddenColumn = fixedType ? column.fixed !== fixedType && !isColGroup : column.fixed && overflowX
-            let headOverflow = XEUtils.isUndefined(showHeaderOverflow) || XEUtils.isNull(showHeaderOverflow) ? allColumnHeaderOverflow : showHeaderOverflow
-            let headAlign = headerAlign || align || allHeaderAlign || allAlign
+            const { showHeaderOverflow, headerAlign, align, headerClassName } = column
+            const isColGroup = column.children && column.children.length
+            const fixedHiddenColumn = fixedType ? column.fixed !== fixedType && !isColGroup : column.fixed && overflowX
+            const headOverflow = XEUtils.isUndefined(showHeaderOverflow) || XEUtils.isNull(showHeaderOverflow) ? allColumnHeaderOverflow : showHeaderOverflow
+            const headAlign = headerAlign || align || allHeaderAlign || allAlign
             let showEllipsis = headOverflow === 'ellipsis'
-            let showTitle = headOverflow === 'title'
-            let showTooltip = headOverflow === true || headOverflow === 'tooltip'
+            const showTitle = headOverflow === 'title'
+            const showTooltip = headOverflow === true || headOverflow === 'tooltip'
             let hasEllipsis = showTitle || showTooltip || showEllipsis
-            let thOns = {}
-            let hasFilter = column.filters && column.filters.some(item => item.checked)
+            const thOns = {}
+            const hasFilter = column.filters && column.filters.some(item => item.checked)
             // 确保任何情况下 columnIndex 都精准指向真实列索引
-            let columnIndex = getColumnIndex(column)
-            let params = { $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn, hasFilter }
+            const columnIndex = getColumnIndex(column)
+            const params = { $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn, hasFilter }
             // 虚拟滚动不支持动态高度
             if (scrollXLoad && !hasEllipsis) {
               showEllipsis = hasEllipsis = true
@@ -240,7 +234,7 @@ export default {
             if (isMouseSelected || isMouseChecked) {
               thOns.mousedown = evnt => $xetable.triggerHeaderCellMousedownEvent(evnt, { $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, cell: evnt.currentTarget })
             }
-            let type = column.type === 'seq' || column.type === 'index' ? 'seq' : column.type
+            const type = column.type === 'seq' || column.type === 'index' ? 'seq' : column.type
             return h('th', {
               class: ['vxe-header--column', column.id, {
                 [`col--${headAlign}`]: headAlign,
@@ -304,27 +298,27 @@ export default {
       this.headerColumn = this.isGroup ? convertToRows(this.collectColumn) : [this.$parent.scrollXLoad && this.fixedType ? this.fixedColumn : this.tableColumn]
     },
     resizeMousedown (evnt, params) {
-      let { column } = params
-      let { $parent: $xetable, $el, fixedType } = this
-      let { tableBody, leftContainer, rightContainer, resizeBar: resizeBarElem } = $xetable.$refs
-      let { target: dragBtnElem, clientX: dragClientX } = evnt
-      let cell = dragBtnElem.parentNode
+      const { column } = params
+      const { $parent: $xetable, $el, fixedType } = this
+      const { tableBody, leftContainer, rightContainer, resizeBar: resizeBarElem } = $xetable.$refs
+      const { target: dragBtnElem, clientX: dragClientX } = evnt
+      const cell = dragBtnElem.parentNode
       let dragLeft = 0
-      let minInterval = 36 // 列之间的最小间距
-      let tableBodyElem = tableBody.$el
-      let pos = DomTools.getOffsetPos(dragBtnElem, $el)
-      let dragBtnWidth = dragBtnElem.clientWidth
+      const minInterval = 36 // 列之间的最小间距
+      const tableBodyElem = tableBody.$el
+      const pos = DomTools.getOffsetPos(dragBtnElem, $el)
+      const dragBtnWidth = dragBtnElem.clientWidth
       let dragMinLeft = pos.left - cell.clientWidth + dragBtnWidth + minInterval
       let dragPosLeft = pos.left + Math.floor(dragBtnWidth / 2)
-      let domMousemove = document.onmousemove
-      let domMouseup = document.onmouseup
-      let isLeftFixed = fixedType === 'left'
-      let isRightFixed = fixedType === 'right'
+      const domMousemove = document.onmousemove
+      const domMouseup = document.onmouseup
+      const isLeftFixed = fixedType === 'left'
+      const isRightFixed = fixedType === 'right'
 
       // 计算左右侧固定列偏移量
       let fixedOffsetWidth = 0
       if (isLeftFixed || isRightFixed) {
-        let siblingProp = isLeftFixed ? 'nextElementSibling' : 'previousElementSibling'
+        const siblingProp = isLeftFixed ? 'nextElementSibling' : 'previousElementSibling'
         let tempCellElem = cell[siblingProp]
         while (tempCellElem) {
           if (DomTools.hasClass(tempCellElem, 'fixed--hidden')) {
@@ -340,12 +334,12 @@ export default {
       }
 
       // 处理拖动事件
-      let updateEvent = function (evnt) {
+      const updateEvent = function (evnt) {
         evnt.stopPropagation()
         evnt.preventDefault()
-        let offsetX = evnt.clientX - dragClientX
+        const offsetX = evnt.clientX - dragClientX
         let left = dragPosLeft + offsetX
-        let scrollLeft = fixedType ? 0 : tableBodyElem.scrollLeft
+        const scrollLeft = fixedType ? 0 : tableBodyElem.scrollLeft
         if (isLeftFixed) {
           // 左固定列（不允许超过右侧固定列、不允许超过右边距）
           left = Math.min(left, (rightContainer ? rightContainer.offsetLeft : tableBodyElem.clientWidth) - fixedOffsetWidth - minInterval)
@@ -361,7 +355,7 @@ export default {
       DomTools.addClass($xetable.$el, 'c--resize')
       resizeBarElem.style.display = 'block'
       document.onmousemove = updateEvent
-      document.onmouseup = function (evnt) {
+      document.onmouseup = function () {
         document.onmousemove = domMousemove
         document.onmouseup = domMouseup
         column.resizeWidth = column.renderWidth + (isRightFixed ? dragPosLeft - dragLeft : dragLeft - dragPosLeft)

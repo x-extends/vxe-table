@@ -1902,9 +1902,9 @@ export default {
   },
   computed: {
     demoLink () {
-      let group = this.tableList.find(item => item.expand)
+      const group = this.tableList.find(item => item.expand)
       if (group && group.children) {
-        let selected = group.children.find(item => item.locat && item.locat.name === this.$route.name)
+        const selected = group.children.find(item => item.locat && item.locat.name === this.$route.name)
         if (selected) {
           return selected.demoUrl
         }
@@ -1980,7 +1980,7 @@ export default {
   created () {
     if (process.env.NODE_ENV === 'development') {
       setInterval(() => {
-        let performance = window.performance || window.webkitPerformance
+        const performance = window.performance || window.webkitPerformance
         if (performance && performance.memory) {
           this.usedJSHeapSize = XEUtils.toFixedNumber(performance.memory.usedJSHeapSize / 1048576, 2)
         }
@@ -2002,7 +2002,7 @@ export default {
       this.handleSearch()
     },
     defaultExpand () {
-      let group = this.apiList.find(item => item.value === this.pageKey)
+      const group = this.apiList.find(item => item.value === this.pageKey)
       if (group) {
         group.expand = true
         this.$nextTick(() => {
@@ -2041,10 +2041,10 @@ export default {
       this.handleSearch()
     }, 500, { leading: false, trailing: true }),
     handleSearch () {
-      let filterName = XEUtils.toString(this.filterName).trim().toLowerCase()
+      const filterName = XEUtils.toString(this.filterName).trim().toLowerCase()
       if (filterName) {
-        let filterRE = new RegExp(filterName, 'gi')
-        let rest = XEUtils.searchTree(this.tableData, item => item.label.toLowerCase().indexOf(filterName) > -1)
+        const filterRE = new RegExp(filterName, 'gi')
+        const rest = XEUtils.searchTree(this.tableData, item => item.label.toLowerCase().indexOf(filterName) > -1)
         XEUtils.eachTree(rest, item => {
           item.label = item.label.replace(filterRE, match => `<span class="keyword-lighten">${match}</span>`)
         })
@@ -2057,9 +2057,9 @@ export default {
       }
     },
     clickEvent (evnt) {
-      let pElem = evnt.target
+      const pElem = evnt.target
       if (pElem && pElem.className === 'demo-code') {
-        let nextElem = pElem.nextSibling
+        const nextElem = pElem.nextSibling
         if (nextElem && nextElem.tagName.toLowerCase() === 'pre') {
           if (nextElem.className.indexOf('is-show') > -1) {
             nextElem.className = ''

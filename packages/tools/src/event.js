@@ -5,6 +5,7 @@ import DomTools from './dom'
 const browse = DomTools.browse
 const wheelName = browse.isDoc && /Firefox/i.test(navigator.userAgent) ? 'DOMMouseScroll' : 'mousewheel'
 const eventStore = []
+
 export const GlobalEvent = {
   on (comp, type, cb) {
     if (cb) {

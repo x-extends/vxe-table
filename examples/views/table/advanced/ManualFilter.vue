@@ -180,8 +180,8 @@ export default {
               return row.age === Number(option.data)
             },
             updateNameFilterEvent () {
-              let xTable = this.$refs.xTable
-              let column = xTable.getColumnByField('name')
+              const xTable = this.$refs.xTable
+              const column = xTable.getColumnByField('name')
               // 修改筛选列表，并默认设置为选中状态
               xTable.setFilter(column, [
                 { label: '包含 a', value: 'a' },
@@ -194,19 +194,19 @@ export default {
               xTable.updateData()
             },
             filterNameEvent () {
-              let xTable = this.$refs.xTable
-              let column = xTable.getColumnByField('name')
+              const xTable = this.$refs.xTable
+              const column = xTable.getColumnByField('name')
               // 修改第二个选项为勾选状态
-              let option = column.filters[1]
+              const option = column.filters[1]
               option.checked = true
               // 修改条件之后，需要手动调用 updateData 处理表格数据
               xTable.updateData()
             },
             filterAgeEvent () {
-              let xTable = this.$refs.xTable
-              let column = xTable.getColumnByField('age')
+              const xTable = this.$refs.xTable
+              const column = xTable.getColumnByField('age')
               // 修改第一个选项为勾选状态
-              let option = column.filters[0]
+              const option = column.filters[0]
               option.data = '26'
               option.checked = true
               // 修改条件之后，需要手动调用 updateData 处理表格数据
@@ -247,7 +247,7 @@ export default {
         }, 300)
       })
     },
-    filterNameMethod ({ value, row, column }) {
+    filterNameMethod ({ value, row }) {
       return XEUtils.toString(row.name).toLowerCase().indexOf(value) > -1
     },
     filterRoleMethod ({ option, row }) {
@@ -257,8 +257,8 @@ export default {
       return row.age === Number(option.data)
     },
     updateNameFilterEvent () {
-      let xTable = this.$refs.xTable
-      let column = xTable.getColumnByField('name')
+      const xTable = this.$refs.xTable
+      const column = xTable.getColumnByField('name')
       // 修改筛选列表，并默认设置为选中状态
       xTable.setFilter(column, [
         { label: '包含 a', value: 'a' },
@@ -271,19 +271,19 @@ export default {
       xTable.updateData()
     },
     filterNameEvent () {
-      let xTable = this.$refs.xTable
-      let column = xTable.getColumnByField('name')
+      const xTable = this.$refs.xTable
+      const column = xTable.getColumnByField('name')
       // 修改第二个选项为勾选状态
-      let option = column.filters[1]
+      const option = column.filters[1]
       option.checked = true
       // 修改条件之后，需要手动调用 updateData 处理表格数据
       xTable.updateData()
     },
     filterAgeEvent () {
-      let xTable = this.$refs.xTable
-      let column = xTable.getColumnByField('age')
+      const xTable = this.$refs.xTable
+      const column = xTable.getColumnByField('age')
       // 修改第一个选项为勾选状态
-      let option = column.filters[0]
+      const option = column.filters[0]
       option.data = '26'
       option.checked = true
       // 修改条件之后，需要手动调用 updateData 处理表格数据

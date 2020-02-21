@@ -418,7 +418,7 @@ export default {
                 this.tableData = result
                 this.tablePage.totalResult = page.totalResult
                 this.loading = false
-              }).catch(e => {
+              }).catch(() => {
                 this.loading = false
               })
             },
@@ -428,7 +428,7 @@ export default {
               this.findList()
             },
             getSelectReserveEvent () {
-              let selectReserveRecords = this.$refs.xTable.getCheckboxReserveRecords()
+              const selectReserveRecords = this.$refs.xTable.getCheckboxReserveRecords()
               this.$XModal.alert(selectReserveRecords.length)
             }
           }
@@ -452,7 +452,7 @@ export default {
         this.tableData = result
         this.tablePage.totalResult = page.totalResult
         this.loading = false
-      }).catch(e => {
+      }).catch(() => {
         this.loading = false
       })
     },
@@ -462,7 +462,7 @@ export default {
       this.findList()
     },
     getSelectReserveEvent () {
-      let selectReserveRecords = this.$refs.xTable.getCheckboxReserveRecords()
+      const selectReserveRecords = this.$refs.xTable.getCheckboxReserveRecords()
       this.$XModal.alert(selectReserveRecords.length)
     }
   }

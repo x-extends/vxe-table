@@ -4,8 +4,8 @@ import VXETable from '../../../../packages/v-x-e-table'
 VXETable.renderer.add('MyLink', {
   // 默认显示模板
   renderDefault (h, renderOpts, params) {
-    let { row, column } = params
-    let { events } = renderOpts
+    const { row, column } = params
+    const { events } = renderOpts
     return [
       <a class="link" onClick={ () => events.click(params) }>{row[column.property]}</a>
     ]

@@ -5,9 +5,9 @@ import { UtilTools } from '../../tools'
 
 export const Cell = {
   createColumn ($xetable, _vm) {
-    let { type, sortable, remoteSort, filters, editRender, treeNode } = _vm
-    let { editConfig, editOpts, checkboxOpts } = $xetable
-    let renMaps = {
+    const { type, sortable, remoteSort, filters, editRender, treeNode } = _vm
+    const { editConfig, editOpts, checkboxOpts } = $xetable
+    const renMaps = {
       renderHeader: this.renderDefaultHeader,
       renderCell: treeNode ? this.renderTreeCell : this.renderDefaultCell,
       renderFooter: this.renderDefaultFooter
@@ -60,14 +60,14 @@ export const Cell = {
    * 单元格
    */
   renderDefaultHeader (h, params) {
-    let { $table, column } = params
-    let { slots, own } = column
-    let renderOpts = own.editRender || own.cellRender
+    const { $table, column } = params
+    const { slots, own } = column
+    const renderOpts = own.editRender || own.cellRender
     if (slots && slots.header) {
       return slots.header.call($table, params, h)
     }
     if (renderOpts) {
-      let compConf = VXETable.renderer.get(renderOpts.name)
+      const compConf = VXETable.renderer.get(renderOpts.name)
       if (compConf && compConf.renderHeader) {
         return compConf.renderHeader.call($table, h, renderOpts, params, { $grid: $table.$xegrid, $excel: $table.$parent, $table })
       }
@@ -76,15 +76,15 @@ export const Cell = {
     return [UtilTools.formatText(UtilTools.getFuncText(own.title || own.label), 1)]
   },
   renderDefaultCell (h, params) {
-    let { $table, row, column } = params
-    let { slots, own } = column
-    let renderOpts = own.editRender || own.cellRender
+    const { $table, row, column } = params
+    const { slots, own } = column
+    const renderOpts = own.editRender || own.cellRender
     if (slots && slots.default) {
       return slots.default.call($table, params, h)
     }
     if (renderOpts) {
-      let funName = own.editRender ? 'renderCell' : 'renderDefault'
-      let compConf = VXETable.renderer.get(renderOpts.name)
+      const funName = own.editRender ? 'renderCell' : 'renderDefault'
+      const compConf = VXETable.renderer.get(renderOpts.name)
       if (compConf && compConf[funName]) {
         return compConf[funName].call($table, h, renderOpts, Object.assign({ isEdit: !!own.editRender }, params), { $type: own.editRender ? 'edit' : 'cell', $grid: $table.$xegrid, $excel: $table.$parent, $table })
       }
@@ -95,14 +95,14 @@ export const Cell = {
     return Cell.renderTreeIcon(h, params, Cell.renderDefaultCell.call(this, h, params))
   },
   renderDefaultFooter (h, params) {
-    let { $table, column, itemIndex, items } = params
-    let { slots, own } = column
-    let renderOpts = own.editRender || own.cellRender
+    const { $table, column, itemIndex, items } = params
+    const { slots, own } = column
+    const renderOpts = own.editRender || own.cellRender
     if (slots && slots.footer) {
       return slots.footer.call($table, params, h)
     }
     if (renderOpts) {
-      let compConf = VXETable.renderer.get(renderOpts.name)
+      const compConf = VXETable.renderer.get(renderOpts.name)
       if (compConf && compConf.renderFooter) {
         return compConf.renderFooter.call($table, h, renderOpts, params, { $grid: $table.$xegrid, $excel: $table.$parent, $table })
       }
@@ -114,16 +114,16 @@ export const Cell = {
    * 树节点
    */
   renderTreeIcon (h, params, cellVNodes) {
-    let { $table, isHidden } = params
-    let { treeOpts, treeExpandeds, treeLazyLoadeds } = $table
-    let { row, column, level } = params
-    let { slots } = column
-    let { children, hasChild, indent, lazy, trigger, iconLoaded, iconOpen, iconClose } = treeOpts
-    let rowChilds = row[children]
+    const { $table, isHidden } = params
+    const { treeOpts, treeExpandeds, treeLazyLoadeds } = $table
+    const { row, column, level } = params
+    const { slots } = column
+    const { children, hasChild, indent, lazy, trigger, iconLoaded, iconOpen, iconClose } = treeOpts
+    const rowChilds = row[children]
     let hasLazyChilds = false
     let isAceived = false
     let isLazyLoaded = false
-    let on = {}
+    const on = {}
     if (slots && slots.icon) {
       return slots.icon.call($table, params, h, cellVNodes)
     }
@@ -167,23 +167,23 @@ export const Cell = {
    * 索引
    */
   renderIndexHeader (h, params) {
-    let { $table, column } = params
-    let { slots } = column
+    const { $table, column } = params
+    const { slots } = column
     if (slots && slots.header) {
       return slots.header.call($table, params, h)
     }
     return [UtilTools.formatText(column.getTitle(), 1)]
   },
   renderIndexCell (h, params) {
-    let { $table, column } = params
-    let { seqOpts, startIndex } = $table
-    let { slots, indexMethod } = column
+    const { $table, column } = params
+    const { seqOpts, startIndex } = $table
+    const { slots, indexMethod } = column
     if (slots && slots.default) {
       return slots.default.call($table, params, h)
     }
-    let { $seq, seq, level } = params
+    const { $seq, seq, level } = params
     // 在 v3.0 中废弃 startIndex、indexMethod
-    let seqMethod = seqOpts.seqMethod || indexMethod
+    const seqMethod = seqOpts.seqMethod || indexMethod
     return [UtilTools.formatText(seqMethod ? seqMethod(params) : level ? `${$seq}.${seq}` : (seqOpts.startIndex || startIndex) + seq, 1)]
   },
   renderTreeIndexCell (h, params) {
@@ -194,8 +194,8 @@ export const Cell = {
    * 单选
    */
   renderRadioHeader (h, params) {
-    let { $table, column } = params
-    let { slots, own } = column
+    const { $table, column } = params
+    const { slots, own } = column
     if (slots && slots.header) {
       return slots.header.call($table, params, h)
     }
@@ -203,12 +203,12 @@ export const Cell = {
     return [UtilTools.formatText(UtilTools.getFuncText(own.title || own.label), 1)]
   },
   renderRadioCell (h, params) {
-    let { $table, column, isHidden } = params
-    let { radioOpts, selectRow } = $table
-    let { slots } = column
-    let { labelField, checkMethod } = radioOpts
-    let { row } = params
-    let isChecked = row === selectRow
+    const { $table, column, isHidden } = params
+    const { radioOpts, selectRow } = $table
+    const { slots } = column
+    const { labelField, checkMethod } = radioOpts
+    const { row } = params
+    const isChecked = row === selectRow
     let isDisabled = !!checkMethod
     let on
     if (!isHidden) {
@@ -245,12 +245,12 @@ export const Cell = {
    * 多选
    */
   renderSelectionHeader (h, params) {
-    let { $table, column, isHidden } = params
-    let { isIndeterminate, isAllCheckboxDisabled } = $table
-    let { slots, own } = column
-    let checkboxOpts = $table.checkboxOpts
+    const { $table, column, isHidden } = params
+    const { isIndeterminate, isAllCheckboxDisabled } = $table
+    const { slots, own } = column
+    const checkboxOpts = $table.checkboxOpts
     // 在 v3.0 中废弃 label
-    let headerTitle = own.title || own.label
+    const headerTitle = own.title || own.label
     let isChecked = false
     let on
     if (checkboxOpts.checkStrictly ? !checkboxOpts.showHeader : checkboxOpts.showHeader === false) {
@@ -285,10 +285,10 @@ export const Cell = {
     ]
   },
   renderSelectionCell (h, params) {
-    let { $table, row, column, isHidden } = params
-    let { treeConfig, treeIndeterminates } = $table
-    let { labelField, checkMethod } = $table.checkboxOpts
-    let { slots } = column
+    const { $table, row, column, isHidden } = params
+    const { treeConfig, treeIndeterminates } = $table
+    const { labelField, checkMethod } = $table.checkboxOpts
+    const { slots } = column
     let indeterminate = false
     let isChecked = false
     let isDisabled = !!checkMethod
@@ -328,10 +328,10 @@ export const Cell = {
     return Cell.renderTreeIcon(h, params, Cell.renderSelectionCell(h, params))
   },
   renderSelectionCellByProp (h, params) {
-    let { $table, row, column, isHidden } = params
-    let { treeConfig, treeIndeterminates } = $table
-    let { labelField, checkField: property, checkMethod } = $table.checkboxOpts
-    let { slots } = column
+    const { $table, row, column, isHidden } = params
+    const { treeConfig, treeIndeterminates } = $table
+    const { labelField, checkField: property, checkMethod } = $table.checkboxOpts
+    const { slots } = column
     let indeterminate = false
     let isChecked = false
     let isDisabled = !!checkMethod
@@ -375,10 +375,10 @@ export const Cell = {
    * 展开行
    */
   renderExpandCell (h, params) {
-    let { $table, isHidden, row, column } = params
-    let { expandOpts, rowExpandeds, expandLazyLoadeds } = $table
-    let { lazy, labelField, iconLoaded, iconOpen, iconClose } = expandOpts
-    let { slots } = column
+    const { $table, isHidden, row, column } = params
+    const { expandOpts, rowExpandeds, expandLazyLoadeds } = $table
+    const { lazy, labelField, iconLoaded, iconOpen, iconClose } = expandOpts
+    const { slots } = column
     let isAceived = false
     let isLazyLoaded = false
     if (slots && slots.icon) {
@@ -409,8 +409,8 @@ export const Cell = {
     ]
   },
   renderExpandData (h, params) {
-    let { $table, column } = params
-    let { slots } = column
+    const { $table, column } = params
+    const { slots } = column
     if (slots) {
       if (slots.content) {
         return slots.content.call($table, params, h)
@@ -427,8 +427,8 @@ export const Cell = {
    * HTML 标签
    */
   renderHTMLCell (h, params) {
-    let { $table, row, column } = params
-    let { slots } = column
+    const { $table, row, column } = params
+    const { slots } = column
     if (slots && slots.default) {
       return slots.default.call($table, params, h)
     }
@@ -461,8 +461,8 @@ export const Cell = {
     return Cell.renderDefaultHeader(h, params).concat(Cell.renderSortIcon(h, params))
   },
   renderSortIcon (h, params) {
-    let { $table, column } = params
-    let { showIcon, iconAsc, iconDesc } = $table.sortOpts
+    const { $table, column } = params
+    const { showIcon, iconAsc, iconDesc } = $table.sortOpts
     return showIcon === false ? [] : [
       h('span', {
         class: 'vxe-sort-wrapper'
@@ -504,9 +504,9 @@ export const Cell = {
     return Cell.renderDefaultHeader(h, params).concat(Cell.renderFilterIcon(h, params))
   },
   renderFilterIcon (h, params) {
-    let { $table, column, hasFilter } = params
-    let { filterStore, filterOpts } = $table
-    let { showIcon, iconNone, iconMatch } = filterOpts
+    const { $table, column, hasFilter } = params
+    const { filterStore, filterOpts } = $table
+    const { showIcon, iconNone, iconMatch } = filterOpts
     return showIcon === false ? [] : [
       h('span', {
         class: ['vxe-filter-wrapper', {
@@ -532,12 +532,12 @@ export const Cell = {
    * 可编辑
    */
   renderEditHeader (h, params) {
-    let { $table, column } = params
-    let { editRules, editOpts } = $table
-    let { sortable, remoteSort, filters } = column
+    const { $table, column } = params
+    const { editRules, editOpts } = $table
+    const { sortable, remoteSort, filters } = column
     let isRequired
     if (editRules) {
-      let columnRules = XEUtils.get(editRules, params.column.property)
+      const columnRules = XEUtils.get(editRules, params.column.property)
       if (columnRules) {
         isRequired = columnRules.some(rule => rule.required)
       }
@@ -555,8 +555,8 @@ export const Cell = {
   },
   // 行格编辑模式
   renderRowEdit (h, params) {
-    let { $table } = params
-    let { actived } = $table.editStore
+    const { $table } = params
+    const { actived } = $table.editStore
     return Cell.runRenderer(h, params, this, actived && actived.row === params.row)
   },
   renderTreeRowEdit (h, params) {
@@ -564,18 +564,18 @@ export const Cell = {
   },
   // 单元格编辑模式
   renderCellEdit (h, params) {
-    let { $table } = params
-    let { actived } = $table.editStore
+    const { $table } = params
+    const { actived } = $table.editStore
     return Cell.runRenderer(h, params, this, actived && actived.row === params.row && actived.column === params.column)
   },
   renderTreeCellEdit (h, params) {
     return Cell.renderTreeIcon(h, params, Cell.renderCellEdit(h, params))
   },
   runRenderer (h, params, _vm, isEdit) {
-    let { $table, row, column } = params
-    let { slots, own, formatter } = column
-    let editRender = own.editRender
-    let compConf = VXETable.renderer.get(editRender.name)
+    const { $table, row, column } = params
+    const { slots, own, formatter } = column
+    const editRender = own.editRender
+    const compConf = VXETable.renderer.get(editRender.name)
     if (editRender.type === 'visible' || isEdit) {
       if (slots && slots.edit) {
         return slots.edit.call($table, params, h)

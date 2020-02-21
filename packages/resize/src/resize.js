@@ -10,11 +10,38 @@ let resizeTimeout
 const eventStore = []
 const defaultInterval = 250
 
+function eventHandle () {
+  if (eventStore.length) {
+    eventStore.forEach(item => {
+      item.tarList.forEach(observer => {
+        const { target, width, heighe } = observer
+        const clientWidth = target.clientWidth
+        const clientHeight = target.clientHeight
+        const rWidth = clientWidth && width !== clientWidth
+        const rHeight = clientHeight && heighe !== clientHeight
+        if (rWidth || rHeight) {
+          observer.width = clientWidth
+          observer.heighe = clientHeight
+          requestAnimationFrame(item.callback)
+        }
+      })
+    })
+    /* eslint-disable @typescript-eslint/no-use-before-define */
+    eventListener()
+  }
+}
+
+function eventListener () {
+  clearTimeout(resizeTimeout)
+  resizeTimeout = setTimeout(eventHandle, GlobalConfig.resizeInterval || defaultInterval)
+}
+
 class ResizeObserverPolyfill {
   constructor (callback) {
     this.tarList = []
     this.callback = callback
   }
+
   observe (target) {
     if (target) {
       if (this.tarList.indexOf(target) === -1) {
@@ -32,39 +59,16 @@ class ResizeObserverPolyfill {
       }
     }
   }
+
   unobserve (target) {
     XEUtils.remove(eventStore, item => item.tarList.indexOf(target) > -1)
   }
+
   disconnect () {
     XEUtils.remove(eventStore, item => item === this)
   }
 }
 
 const Resize = DomTools.browse.isDoc ? (window.ResizeObserver || ResizeObserverPolyfill) : ResizeObserverPolyfill
-
-function eventListener () {
-  clearTimeout(resizeTimeout)
-  resizeTimeout = setTimeout(eventHandle, GlobalConfig.resizeInterval || defaultInterval)
-}
-
-function eventHandle () {
-  if (eventStore.length) {
-    eventStore.forEach(item => {
-      item.tarList.forEach(observer => {
-        const { target, width, heighe } = observer
-        const clientWidth = target.clientWidth
-        const clientHeight = target.clientHeight
-        const rWidth = clientWidth && width !== clientWidth
-        const rHeight = clientHeight && heighe !== clientHeight
-        if (rWidth || rHeight) {
-          observer.width = clientWidth
-          observer.heighe = clientHeight
-          requestAnimationFrame(item.callback)
-        }
-      })
-    })
-    eventListener()
-  }
-}
 
 export default Resize

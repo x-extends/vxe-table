@@ -21,9 +21,9 @@ export default {
   },
   methods: {
     handleChecked (params, evnt) {
-      let { checked, label } = params
-      let checklist = this.value || []
-      let checkIndex = checklist.indexOf(label)
+      const { checked, label } = params
+      const checklist = this.value || []
+      const checkIndex = checklist.indexOf(label)
       if (checked) {
         if (checkIndex === -1) {
           checklist.push(label)

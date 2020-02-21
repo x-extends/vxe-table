@@ -7,16 +7,16 @@
       height="600"
       :span-method="rowspanMethod"
       :data="tableData">
-      <vxe-table-column field="name_1" title="功能模块"></vxe-table-column>
-      <vxe-table-column field="name_2" title="详细功能"></vxe-table-column>
-      <vxe-table-column field="name_3" title="权限类型">
+      <vxe-table-column field="name1" title="功能模块"></vxe-table-column>
+      <vxe-table-column field="name2" title="详细功能"></vxe-table-column>
+      <vxe-table-column field="name3" title="权限类型">
         <template v-slot="{ row }">
-          <vxe-checkbox v-model="row.check_3" @change="check3ChangeEvent(row)">{{ row.name_3 }}</vxe-checkbox>
+          <vxe-checkbox v-model="row.check3" @change="check3ChangeEvent(row)">{{ row.name3 }}</vxe-checkbox>
         </template>
       </vxe-table-column>
-      <vxe-table-column field="name_4" title="权限列表">
+      <vxe-table-column field="name4" title="权限列表">
         <template v-slot="{ row }">
-          <vxe-checkbox v-model="row.check_4" @change="check4ChangeEvent(row)">{{ row.name_4 }}</vxe-checkbox>
+          <vxe-checkbox v-model="row.check4" @change="check4ChangeEvent(row)">{{ row.name4 }}</vxe-checkbox>
         </template>
       </vxe-table-column>
     </vxe-table>
@@ -201,16 +201,16 @@ export default {
           height="600"
           :span-method="rowspanMethod"
           :data="tableData">
-          <vxe-table-column field="name_1" title="功能模块"></vxe-table-column>
-          <vxe-table-column field="name_2" title="详细功能"></vxe-table-column>
-          <vxe-table-column field="name_3" title="权限类型">
+          <vxe-table-column field="name1" title="功能模块"></vxe-table-column>
+          <vxe-table-column field="name2" title="详细功能"></vxe-table-column>
+          <vxe-table-column field="name3" title="权限类型">
             <template v-slot="{ row }">
-              <vxe-checkbox v-model="row.check_3" @change="check3ChangeEvent(row)">{{ row.name_3 }}</vxe-checkbox>
+              <vxe-checkbox v-model="row.check3" @change="check3ChangeEvent(row)">{{ row.name3 }}</vxe-checkbox>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="name_4" title="权限列表">
+          <vxe-table-column field="name4" title="权限列表">
             <template v-slot="{ row }">
-              <vxe-checkbox v-model="row.check_4" @change="check4ChangeEvent(row)">{{ row.name_4 }}</vxe-checkbox>
+              <vxe-checkbox v-model="row.check4" @change="check4ChangeEvent(row)">{{ row.name4 }}</vxe-checkbox>
             </template>
           </vxe-table-column>
         </vxe-table>
@@ -383,35 +383,35 @@ export default {
           },
           methods: {
             check3ChangeEvent (row) {
-            let checked = row.check_3
-            let levelList = this.tableData.filter(item => item.id_3 === row.id_3)
+            const checked = row.check3
+            const levelList = this.tableData.filter(item => item.id3 === row.id3)
             levelList.forEach(item => {
-              item.check_4 = checked
+              item.check4 = checked
             })
           },
           check4ChangeEvent (row) {
-            let levelList = this.tableData.filter(item => item.id_3 === row.id_3)
-            let checked = levelList.every(item => item.check_4)
+            const levelList = this.tableData.filter(item => item.id3 === row.id3)
+            const checked = levelList.every(item => item.check4)
             levelList.forEach(item => {
-              item.check_3 = checked
+              item.check3 = checked
             })
           },
           // 转换横向树结构
           toColTreeData () {
-            let options = { children: 'children' }
-            let list = []
-            let keyMap = {}
+            const options = { children: 'children' }
+            const list = []
+            const keyMap = {}
             XEUtils.eachTree(this.treeData, (item, index, result, paths, parent) => {
               keyMap[item.id] = item
               item.keys = parent ? parent.keys.concat([item.id]) : [item.id]
               if (!item.children || !item.children.length) {
-                let row = { }
+                const row = { }
                 item.keys.forEach((key, index) => {
-                  let level = index + 1
-                  let obj = keyMap[key]
-                  row[\`check_\${level}\`] = false
-                  row[\`id_\${level}\`] = obj.id
-                  row[\`name_\${level}\`] = obj.name
+                  const level = index + 1
+                  const obj = keyMap[key]
+                  row[\`check\${level}\`] = false
+                  row[\`id\${level}\`] = obj.id
+                  row[\`name\${level}\`] = obj.name
                 })
                 list.push(row)
               }
@@ -421,10 +421,10 @@ export default {
           },
           // 通用行合并函数（将相同多列数据合并为一行）
           rowspanMethod ({ row, $rowIndex, column, data }) {
-            let fields = ['name_1', 'name_2', 'name_3']
-            let cellValue = XEUtils.get(row, column.property)
+            const fields = ['name1', 'name2', 'name3']
+            const cellValue = XEUtils.get(row, column.property)
             if (cellValue && fields.includes(column.property)) {
-              let prevRow = data[$rowIndex - 1]
+              const prevRow = data[$rowIndex - 1]
               let nextRow = data[$rowIndex + 1]
               if (prevRow && XEUtils.get(prevRow, column.property) === cellValue) {
                 return { rowspan: 0, colspan: 0 }
@@ -454,35 +454,35 @@ export default {
   },
   methods: {
     check3ChangeEvent (row) {
-      let checked = row.check_3
-      let levelList = this.tableData.filter(item => item.id_3 === row.id_3)
+      const checked = row.check3
+      const levelList = this.tableData.filter(item => item.id3 === row.id3)
       levelList.forEach(item => {
-        item.check_4 = checked
+        item.check4 = checked
       })
     },
     check4ChangeEvent (row) {
-      let levelList = this.tableData.filter(item => item.id_3 === row.id_3)
-      let checked = levelList.every(item => item.check_4)
+      const levelList = this.tableData.filter(item => item.id3 === row.id3)
+      const checked = levelList.every(item => item.check4)
       levelList.forEach(item => {
-        item.check_3 = checked
+        item.check3 = checked
       })
     },
     // 转换横向树结构
     toColTreeData () {
-      let options = { children: 'children' }
-      let list = []
-      let keyMap = {}
+      const options = { children: 'children' }
+      const list = []
+      const keyMap = {}
       XEUtils.eachTree(this.treeData, (item, index, result, paths, parent) => {
         keyMap[item.id] = item
         item.keys = parent ? parent.keys.concat([item.id]) : [item.id]
         if (!item.children || !item.children.length) {
-          let row = { }
+          const row = { }
           item.keys.forEach((key, index) => {
-            let level = index + 1
-            let obj = keyMap[key]
-            row[`check_${level}`] = false
-            row[`id_${level}`] = obj.id
-            row[`name_${level}`] = obj.name
+            const level = index + 1
+            const obj = keyMap[key]
+            row[`check${level}`] = false
+            row[`id${level}`] = obj.id
+            row[`name${level}`] = obj.name
           })
           list.push(row)
         }
@@ -492,10 +492,10 @@ export default {
     },
     // 通用行合并函数（将相同多列数据合并为一行）
     rowspanMethod ({ row, $rowIndex, column, data }) {
-      let fields = ['name_1', 'name_2', 'name_3']
-      let cellValue = XEUtils.get(row, column.property)
+      const fields = ['name1', 'name2', 'name3']
+      const cellValue = XEUtils.get(row, column.property)
       if (cellValue && fields.includes(column.property)) {
-        let prevRow = data[$rowIndex - 1]
+        const prevRow = data[$rowIndex - 1]
         let nextRow = data[$rowIndex + 1]
         if (prevRow && XEUtils.get(prevRow, column.property) === cellValue) {
           return { rowspan: 0, colspan: 0 }

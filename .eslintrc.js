@@ -4,14 +4,15 @@ module.exports = {
     node: true
   },
   'extends': [
-    'plugin:vue/essential',
-    'standard'
+    "plugin:vue/essential",
+      "@vue/standard",
+      "@vue/typescript/recommended"
   ],
   rules: {
     'no-console': 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'
   },
   parserOptions: {
-    parser: 'babel-eslint'
+    "ecmaVersion": 2020
   }
 }

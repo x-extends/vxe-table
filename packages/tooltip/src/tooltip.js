@@ -46,8 +46,8 @@ export default {
     }
   },
   mounted () {
-    let { $el, trigger, content, value } = this
-    let parentNode = $el.parentNode
+    const { $el, trigger, content, value } = this
+    const parentNode = $el.parentNode
     let target
     this.message = content
     this.tipZindex = UtilTools.nextZIndex()
@@ -74,8 +74,8 @@ export default {
     }
   },
   beforeDestroy () {
-    let { $el, target, trigger } = this
-    let parentNode = $el.parentNode
+    const { $el, target, trigger } = this
+    const parentNode = $el.parentNode
     if (parentNode) {
       parentNode.removeChild($el)
     }
@@ -89,8 +89,8 @@ export default {
     }
   },
   render (h) {
-    let { vSize, theme, message, isHover, isArrow, visible, tipStore, enterable } = this
-    let on = null
+    const { vSize, theme, message, isHover, isArrow, visible, tipStore, enterable } = this
+    let on
     if (enterable) {
       on = {
         mouseenter: this.wrapperMouseenterEvent,
@@ -148,10 +148,10 @@ export default {
     toVisible (target, message) {
       this.targetActive = true
       if (target) {
-        let { $el, tipStore, zIndex } = this
-        let { top, left } = DomTools.getAbsolutePos(target)
-        let { scrollTop, scrollLeft, visibleWidth } = DomTools.getDomNode()
-        let parentNode = $el.parentNode
+        const { $el, tipStore, zIndex } = this
+        const { top, left } = DomTools.getAbsolutePos(target)
+        const { scrollTop, scrollLeft, visibleWidth } = DomTools.getDomNode()
+        const parentNode = $el.parentNode
         let tipLeft = left
         tipStore.placement = 'top'
         tipStore.style = { width: 'auto' }
@@ -165,10 +165,10 @@ export default {
         this.update(true)
         this.updateZindex()
         return this.$nextTick().then(() => {
-          let wrapperElem = $el
+          const wrapperElem = $el
           if (wrapperElem) {
-            let clientHeight = wrapperElem.clientHeight
-            let clientWidth = XEUtils.toNumber(getComputedStyle(wrapperElem).width)
+            const clientHeight = wrapperElem.clientHeight
+            const clientWidth = XEUtils.toNumber(getComputedStyle(wrapperElem).width)
             tipLeft = left + Math.floor((target.offsetWidth - clientWidth) / 2)
             tipStore.style = {
               zIndex: zIndex || this.tipZindex,
@@ -179,10 +179,10 @@ export default {
             return this.$nextTick()
           }
         }).then(() => {
-          let wrapperElem = $el
+          const wrapperElem = $el
           if (wrapperElem) {
-            let clientHeight = wrapperElem.clientHeight
-            let clientWidth = wrapperElem.clientWidth
+            const clientHeight = wrapperElem.clientHeight
+            const clientWidth = wrapperElem.clientWidth
             Object.assign(tipStore.style, {
               top: `${top - clientHeight - 6}px`,
               left: `${tipLeft}px`
@@ -207,13 +207,13 @@ export default {
       }
       return this.$nextTick()
     },
-    clickEvent (event) {
+    clickEvent () {
       this[this.visible ? 'close' : 'show']()
     },
-    targetMouseenterEvent (evnt) {
+    targetMouseenterEvent () {
       this.show()
     },
-    targetMouseleaveEvent (evnt) {
+    targetMouseleaveEvent () {
       const { trigger, enterable, leaveDelay } = this
       this.targetActive = false
       if (enterable && trigger === 'hover') {
@@ -226,7 +226,7 @@ export default {
         this.close()
       }
     },
-    wrapperMouseenterEvent (evnt) {
+    wrapperMouseenterEvent () {
       this.isHover = true
     },
     wrapperMouseleaveEvent (evnt) {

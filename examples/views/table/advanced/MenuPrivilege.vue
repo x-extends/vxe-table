@@ -177,11 +177,11 @@ export default {
             cellContextMenuEvent ({ row }) {
               this.$refs.xTable.setCurrentRow(row)
             },
-            visibleMethod ({ type, options, column }) {
+            visibleMethod ({ options, column }) {
               // 示例：只有 name 列允许操作，清除按钮只能在 age 才显示
               // 显示之前处理按钮的操作权限
-              let isDisabled = !column || column.property !== 'name'
-              let isVisible = column && column.property === 'age'
+              const isDisabled = !column || column.property !== 'name'
+              const isVisible = column && column.property === 'age'
               options.forEach(list => {
                 list.forEach(item => {
                   if (['copy', 'remove'].includes(item.code)) {
@@ -230,8 +230,7 @@ export default {
     }
   },
   created () {
-    let list = window.MOCK_DATA_LIST.slice(0, 6)
-    this.tableData = list
+    this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
@@ -245,11 +244,11 @@ export default {
     cellContextMenuEvent ({ row }) {
       this.$refs.xTable.setCurrentRow(row)
     },
-    visibleMethod ({ type, options, column }) {
+    visibleMethod ({ options, column }) {
       // 示例：只有 name 列允许操作，清除按钮只能在 age 才显示
       // 显示之前处理按钮的操作权限
-      let isDisabled = !column || column.property !== 'name'
-      let isVisible = column && column.property === 'age'
+      const isDisabled = !column || column.property !== 'name'
+      const isVisible = column && column.property === 'age'
       options.forEach(list => {
         list.forEach(item => {
           if (['copy', 'remove'].includes(item.code)) {

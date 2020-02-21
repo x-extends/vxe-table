@@ -134,7 +134,7 @@ export default {
             loadContentMethod ({ row }) {
               return new Promise(resolve => {
                 setTimeout(() => {
-                  let detailList = XEUtils.sample([
+                  const detailList = XEUtils.sample([
                     { role: 'Develop', age: 20, sex: '女' },
                     { role: 'Develop', age: 22, sex: '女' },
                     { role: 'Develop', age: 24, sex: '男' },
@@ -182,14 +182,14 @@ export default {
             loadContentMethod ({ row }) {
               return new Promise(resolve => {
                 setTimeout(() => {
-                  let childCols = XEUtils.sample([
+                  const childCols = XEUtils.sample([
                     { type: 'seq', title: 'Sequence' },
                     { field: 'name', title: 'Name' },
                     { field: 'role', title: 'Role' },
                     { field: 'age', title: 'Age' },
                     { field: 'sex', title: 'Sex' }
                   ], XEUtils.random(3, 5))
-                  let childData = XEUtils.sample([
+                  const childData = XEUtils.sample([
                     { name: 'TEST1', role: 'Develop', age: 20, sex: '女' },
                     { name: 'TEST2', role: 'Develop', age: 22, sex: '女' },
                     { name: 'TEST3', role: 'Develop', age: 24, sex: '男' },
@@ -218,7 +218,7 @@ export default {
     loadContentMethod ({ row }) {
       return new Promise(resolve => {
         setTimeout(() => {
-          let detailList = XEUtils.sample([
+          const detailList = XEUtils.sample([
             { role: 'Develop', age: 20, sex: '女' },
             { role: 'Develop', age: 22, sex: '女' },
             { role: 'Develop', age: 24, sex: '男' },
@@ -234,14 +234,14 @@ export default {
     loadContentMethod2 ({ row }) {
       return new Promise(resolve => {
         setTimeout(() => {
-          let childCols = XEUtils.sample([
+          const childCols = XEUtils.sample([
             { type: 'seq', title: 'Sequence' },
             { field: 'name', title: 'Name' },
             { field: 'role', title: 'Role' },
             { field: 'age', title: 'Age' },
             { field: 'sex', title: 'Sex' }
           ], XEUtils.random(3, 5))
-          let childData = XEUtils.sample([
+          const childData = XEUtils.sample([
             { name: 'TEST1', role: 'Develop', age: 20, sex: '女' },
             { name: 'TEST2', role: 'Develop', age: 22, sex: '女' },
             { name: 'TEST3', role: 'Develop', age: 24, sex: '男' },

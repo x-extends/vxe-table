@@ -17,6 +17,7 @@ class Rule {
       maxWidth: rule.maxWidth
     })
   }
+
   get message () {
     return UtilTools.getFuncText(this.$options.message)
   }
@@ -79,7 +80,7 @@ export default {
   },
   render (h) {
     const { titleColon, loading, isLoading, vSize } = this
-    let itemSlots = [].concat(this.$slots.default)
+    const itemSlots = [].concat(this.$slots.default)
     if (VXETable._loading && isLoading) {
       itemSlots.push(
         h('vxe-loading', {
@@ -272,7 +273,7 @@ export default {
             inputElem.focus()
             // 保持一致行为，光标移到末端
             if (DomTools.browse.msie) {
-              let textRange = inputElem.createTextRange()
+              const textRange = inputElem.createTextRange()
               textRange.collapse(false)
               textRange.select()
             }

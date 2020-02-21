@@ -5,14 +5,14 @@ export default {
   methods: {
     // 处理 Tab 键移动
     moveTabSelected (args, isLeft, evnt) {
-      let { afterFullData, visibleColumn, editConfig, editOpts, isSeqColumn } = this
+      const { afterFullData, visibleColumn, editConfig, editOpts, isSeqColumn } = this
       let targetRow
       let targetRowIndex
       let targetColumn
       let targetColumnIndex
-      let params = Object.assign({}, args)
-      let rowIndex = afterFullData.indexOf(params.row)
-      let columnIndex = visibleColumn.indexOf(params.column)
+      const params = Object.assign({}, args)
+      const rowIndex = afterFullData.indexOf(params.row)
+      const columnIndex = visibleColumn.indexOf(params.column)
       evnt.preventDefault()
       if (isLeft) {
         // 向左
@@ -81,18 +81,18 @@ export default {
     },
     // 处理当前行方向键移动
     moveCurrentRow (isUpArrow, isDwArrow, evnt) {
-      let { currentRow, treeConfig, treeOpts, afterFullData } = this
+      const { currentRow, treeConfig, treeOpts, afterFullData } = this
       let targetRow
       evnt.preventDefault()
       if (treeConfig) {
-        let { index, items } = XEUtils.findTree(afterFullData, item => item === currentRow, treeOpts)
+        const { index, items } = XEUtils.findTree(afterFullData, item => item === currentRow, treeOpts)
         if (isUpArrow && index > 0) {
           targetRow = items[index - 1]
         } else if (isDwArrow && index < items.length - 1) {
           targetRow = items[index + 1]
         }
       } else {
-        let rowIndex = afterFullData.indexOf(currentRow)
+        const rowIndex = afterFullData.indexOf(currentRow)
         if (isUpArrow && rowIndex > 0) {
           targetRow = afterFullData[rowIndex - 1]
         } else if (isDwArrow && rowIndex < afterFullData.length - 1) {
@@ -100,15 +100,15 @@ export default {
         }
       }
       if (targetRow) {
-        let params = { $table: this, row: targetRow }
+        const params = { $table: this, row: targetRow }
         this.scrollToRow(targetRow)
           .then(() => this.triggerCurrentRowEvent(evnt, params))
       }
     },
     // 处理可编辑方向键移动
     moveSelected (args, isLeftArrow, isUpArrow, isRightArrow, isDwArrow, evnt) {
-      let { afterFullData, visibleColumn, isSeqColumn } = this
-      let params = Object.assign({}, args)
+      const { afterFullData, visibleColumn, isSeqColumn } = this
+      const params = Object.assign({}, args)
       evnt.preventDefault()
       if (isUpArrow && params.rowIndex) {
         params.rowIndex -= 1
@@ -142,39 +142,39 @@ export default {
      * 表头按下事件
      */
     triggerHeaderCellMousedownEvent (evnt, params) {
-      let { $el, tableData, mouseConfig, mouseOpts, elemStore, handleChecked, handleHeaderChecked } = this
-      let { button } = evnt
-      let { column, cell } = params
-      let isLeftBtn = button === 0
+      const { $el, tableData, mouseConfig, mouseOpts, elemStore, handleChecked, handleHeaderChecked } = this
+      const { button } = evnt
+      const { column, cell } = params
+      const isLeftBtn = button === 0
       // v3.0 废弃 type=index
-      let isIndex = column.type === 'seq' || column.type === 'index'
+      const isIndex = column.type === 'seq' || column.type === 'index'
       // 在 v3.0 中废弃 mouse-config.checked
-      let isMouseChecked = mouseConfig && (mouseOpts.range || mouseOpts.checked)
+      const isMouseChecked = mouseConfig && (mouseOpts.range || mouseOpts.checked)
       if (mouseConfig) {
         if (isMouseChecked) {
-          let headerList = elemStore['main-header-list'].children
-          let bodyList = elemStore['main-body-list'].children
+          const headerList = elemStore['main-header-list'].children
+          const bodyList = elemStore['main-body-list'].children
           if (isIndex) {
             this.handleAllChecked(evnt)
           } else {
             this.clearSelected(evnt)
             this.clearHeaderChecked()
             this.clearIndexChecked()
-            let startCell = bodyList[0].querySelector(`.${column.id}`)
+            const startCell = bodyList[0].querySelector(`.${column.id}`)
             if (isLeftBtn) {
-              let domMousemove = document.onmousemove
-              let domMouseup = document.onmouseup
-              let updateEvent = XEUtils.throttle(function (evnt) {
+              const domMousemove = document.onmousemove
+              const domMouseup = document.onmouseup
+              const updateEvent = XEUtils.throttle(function (evnt) {
                 let { flag, targetElem } = DomTools.getEventTargetNode(evnt, $el, 'vxe-header--column')
                 if (!flag) {
-                  let nodeRest = DomTools.getEventTargetNode(evnt, $el, 'vxe-body--column')
+                  const nodeRest = DomTools.getEventTargetNode(evnt, $el, 'vxe-body--column')
                   flag = nodeRest.flag
                   targetElem = nodeRest.targetElem
                 }
                 if (flag && !DomTools.hasClass(targetElem, 'col--seq')) {
-                  let colIndex = [].indexOf.call(targetElem.parentNode.children, targetElem)
-                  let endCell = bodyList[bodyList.length - 1].children[colIndex]
-                  let head = headerList[0].children[colIndex]
+                  const colIndex = [].indexOf.call(targetElem.parentNode.children, targetElem)
+                  const endCell = bodyList[bodyList.length - 1].children[colIndex]
+                  const head = headerList[0].children[colIndex]
                   handleHeaderChecked(DomTools.getRowNodes(headerList, DomTools.getCellNodeIndex(head), DomTools.getCellNodeIndex(cell)))
                   handleChecked(DomTools.getRowNodes(bodyList, DomTools.getCellNodeIndex(startCell), DomTools.getCellNodeIndex(endCell)))
                 }
@@ -193,15 +193,15 @@ export default {
             }
             handleHeaderChecked([[cell]])
             if (bodyList.length) {
-              let endCell = bodyList[bodyList.length - 1].querySelector(`.${column.id}`)
-              let firstTrElem = bodyList[0]
-              let lastTrElem = bodyList[bodyList.length - 1]
-              let firstCell = firstTrElem.querySelector(`.col--seq`)
+              const endCell = bodyList[bodyList.length - 1].querySelector(`.${column.id}`)
+              const firstTrElem = bodyList[0]
+              const lastTrElem = bodyList[bodyList.length - 1]
+              const firstCell = firstTrElem.querySelector('.col--seq')
               params.rowIndex = 0
               params.row = tableData[0]
               params.cell = DomTools.getCell(this, params)
               this.handleSelected(params, evnt)
-              this.handleIndexChecked(DomTools.getRowNodes(bodyList, DomTools.getCellNodeIndex(firstCell), DomTools.getCellNodeIndex(lastTrElem.querySelector(`.col--seq`))))
+              this.handleIndexChecked(DomTools.getRowNodes(bodyList, DomTools.getCellNodeIndex(firstCell), DomTools.getCellNodeIndex(lastTrElem.querySelector('.col--seq'))))
               this.handleChecked(DomTools.getRowNodes(bodyList, DomTools.getCellNodeIndex(startCell), DomTools.getCellNodeIndex(endCell)))
             }
           }
@@ -214,7 +214,7 @@ export default {
      * 单元格按下事件
      */
     triggerCellMousedownEvent (evnt, params) {
-      let {
+      const {
         $el,
         visibleColumn,
         editStore,
@@ -229,38 +229,38 @@ export default {
         handleHeaderChecked,
         elemStore
       } = this
-      let { checked } = editStore
-      let { column, cell } = params
-      let { button } = evnt
-      let isLeftBtn = button === 0
+      const { checked } = editStore
+      const { column, cell } = params
+      const { button } = evnt
+      const isLeftBtn = button === 0
       // v3.0 废弃 type=index
-      let isIndex = column.type === 'seq' || column.type === 'index'
+      const isIndex = column.type === 'seq' || column.type === 'index'
       // 在 v3.0 中废弃 mouse-config.checked
-      let isMouseChecked = mouseConfig && (mouseOpts.range || mouseOpts.checked)
+      const isMouseChecked = mouseConfig && (mouseOpts.range || mouseOpts.checked)
       if (isMouseChecked) {
         this.clearHeaderChecked()
         this.clearIndexChecked()
-        let bodyList = elemStore['main-body-list'].children
-        let headerList = elemStore['main-header-list'].children
-        let cellLastElementChild = cell.parentNode.lastElementChild
-        let cellFirstElementChild = cell.parentNode.firstElementChild
+        const bodyList = elemStore['main-body-list'].children
+        const headerList = elemStore['main-header-list'].children
+        const cellLastElementChild = cell.parentNode.lastElementChild
+        const cellFirstElementChild = cell.parentNode.firstElementChild
         if (isLeftBtn) {
-          let domMousemove = document.onmousemove
-          let domMouseup = document.onmouseup
-          let startCellNode = DomTools.getCellNodeIndex(cell)
-          let colIndex = [].indexOf.call(cell.parentNode.children, cell)
-          let headStart = headerList[0].children[colIndex]
-          let updateEvent = XEUtils.throttle(function (evnt) {
-            let { flag, targetElem } = DomTools.getEventTargetNode(evnt, $el, 'vxe-body--column')
+          const domMousemove = document.onmousemove
+          const domMouseup = document.onmouseup
+          const startCellNode = DomTools.getCellNodeIndex(cell)
+          const colIndex = [].indexOf.call(cell.parentNode.children, cell)
+          const headStart = headerList[0].children[colIndex]
+          const updateEvent = XEUtils.throttle(function (evnt) {
+            const { flag, targetElem } = DomTools.getEventTargetNode(evnt, $el, 'vxe-body--column')
             if (flag) {
               if (isIndex) {
-                let firstCell = targetElem.parentNode.firstElementChild
+                const firstCell = targetElem.parentNode.firstElementChild
                 handleChecked(DomTools.getRowNodes(bodyList, DomTools.getCellNodeIndex(firstCell.nextElementSibling), DomTools.getCellNodeIndex(cellLastElementChild)))
                 handleIndexChecked(DomTools.getRowNodes(bodyList, DomTools.getCellNodeIndex(firstCell), DomTools.getCellNodeIndex(cell)))
               } else if (!DomTools.hasClass(targetElem, 'col--seq')) {
-                let firstCell = targetElem.parentNode.firstElementChild
-                let colIndex = [].indexOf.call(targetElem.parentNode.children, targetElem)
-                let head = headerList[0].children[colIndex]
+                const firstCell = targetElem.parentNode.firstElementChild
+                const colIndex = [].indexOf.call(targetElem.parentNode.children, targetElem)
+                const head = headerList[0].children[colIndex]
                 handleHeaderChecked(DomTools.getRowNodes(headerList, DomTools.getCellNodeIndex(head), DomTools.getCellNodeIndex(headStart)))
                 handleIndexChecked(DomTools.getRowNodes(bodyList, DomTools.getCellNodeIndex(firstCell), DomTools.getCellNodeIndex(cellFirstElementChild)))
                 handleChecked(DomTools.getRowNodes(bodyList, startCellNode, DomTools.getCellNodeIndex(targetElem)))
@@ -272,13 +272,13 @@ export default {
             evnt.stopPropagation()
             updateEvent(evnt)
           }
-          document.onmouseup = function (evnt) {
+          document.onmouseup = function () {
             document.onmousemove = domMousemove
             document.onmouseup = domMouseup
           }
         }
         if (isIndex) {
-          let firstCell = cell.parentNode.firstElementChild
+          const firstCell = cell.parentNode.firstElementChild
           params.columnIndex++
           params.column = visibleColumn[params.columnIndex]
           params.cell = cell.nextElementSibling
@@ -288,7 +288,7 @@ export default {
           handleIndexChecked(DomTools.getRowNodes(bodyList, DomTools.getCellNodeIndex(firstCell), DomTools.getCellNodeIndex(cell)))
         } else {
           if (isLeftBtn) {
-            let firstCell = cell.parentNode.firstElementChild
+            const firstCell = cell.parentNode.firstElementChild
             handleSelected(params, evnt)
             handleHeaderChecked([[headerList[0].querySelector(`.${column.id}`)]])
             handleIndexChecked([[firstCell]])
@@ -323,22 +323,22 @@ export default {
     // triggerCornerMousedownEvent (params, evnt) {
     //   evnt.preventDefault()
     //   evnt.stopPropagation()
-    //   let { $el, tableData, visibleColumn, editStore, editConfig, editOpts, handleTempChecked } = this
-    //   let { checked } = editStore
-    //   let { button } = evnt
-    //   let isLeftBtn = button === 0
-    //   let isRightBtn = button === 2
+    //   const { $el, tableData, visibleColumn, editStore, editConfig, editOpts, handleTempChecked } = this
+    //   const { checked } = editStore
+    //   const { button } = evnt
+    //   const isLeftBtn = button === 0
+    //   const isRightBtn = button === 2
     //   if (isLeftBtn || isRightBtn) {
     //     if (editConfig && checked.rows.length && editOpts.trigger === 'dblclick') {
-    //       let domMousemove = document.onmousemove
-    //       let domMouseup = document.onmouseup
-    //       let start = {
+    //       const domMousemove = document.onmousemove
+    //       const domMouseup = document.onmouseup
+    //       const start = {
     //         rowIndex: tableData.indexOf(checked.rows[0]),
     //         columnIndex: visibleColumn.indexOf(checked.columns[0])
     //       }
-    //       let updateEvent = XEUtils.throttle(function (evnt) {
+    //       const updateEvent = XEUtils.throttle(function (evnt) {
     //         evnt.preventDefault()
-    //         let { flag, targetElem } = DomTools.getEventTargetNode(evnt, $el, 'vxe-body--column')
+    //         const { flag, targetElem } = DomTools.getEventTargetNode(evnt, $el, 'vxe-body--column')
     //         if (flag) {
     //           handleTempChecked(start, DomTools.getCellIndexs(targetElem), evnt)
     //         }
@@ -355,9 +355,9 @@ export default {
     // },
     getCheckboxRangeResult (targetTrElem, moveRange) {
       let countHeight = 0
-      let rangeRows = []
-      let siblingProp = moveRange > 0 ? 'next' : 'previous'
-      let moveSize = moveRange > 0 ? moveRange : (Math.abs(moveRange) + targetTrElem.offsetHeight)
+      const rangeRows = []
+      const siblingProp = moveRange > 0 ? 'next' : 'previous'
+      const moveSize = moveRange > 0 ? moveRange : (Math.abs(moveRange) + targetTrElem.offsetHeight)
       while (targetTrElem && countHeight < moveSize) {
         rangeRows.push(this.getRowNode(targetTrElem).item)
         countHeight += targetTrElem.offsetHeight
@@ -366,26 +366,26 @@ export default {
       return rangeRows
     },
     handleCheckboxRangeEvent (evnt, params) {
-      let { column, cell } = params
+      const { column, cell } = params
       // 在 v3.0 中废弃 type=selection
       if (['checkbox', 'selection'].indexOf(column.type) > -1) {
         const disX = evnt.clientX
         const disY = evnt.clientY
         const checkboxRangeElem = this.$refs.checkboxRange
-        let domMousemove = document.onmousemove
-        let domMouseup = document.onmouseup
-        let trEleme = cell.parentNode
-        let absPos = DomTools.getAbsolutePos(trEleme)
-        let selectRecords = this.getCheckboxRecords()
+        const domMousemove = document.onmousemove
+        const domMouseup = document.onmouseup
+        const trEleme = cell.parentNode
+        const absPos = DomTools.getAbsolutePos(trEleme)
+        const selectRecords = this.getCheckboxRecords()
         let lastRangeRows = []
         this.updateZindex()
         document.onmousemove = evnt => {
           evnt.preventDefault()
           evnt.stopPropagation()
-          let offsetLeft = evnt.clientX - disX
-          let offsetTop = evnt.clientY - disY
-          let rangeHeight = Math.abs(offsetTop)
-          let rangeRows = this.getCheckboxRangeResult(trEleme, evnt.clientY - absPos.top)
+          const offsetLeft = evnt.clientX - disX
+          const offsetTop = evnt.clientY - disY
+          const rangeHeight = Math.abs(offsetTop)
+          const rangeRows = this.getCheckboxRangeResult(trEleme, evnt.clientY - absPos.top)
           checkboxRangeElem.style.display = 'block'
           checkboxRangeElem.style.width = `${Math.abs(offsetLeft)}px`
           checkboxRangeElem.style.height = `${rangeHeight}px`
@@ -405,7 +405,7 @@ export default {
             }
           }
         }
-        document.onmouseup = evnt => {
+        document.onmouseup = () => {
           checkboxRangeElem.removeAttribute('style')
           document.onmousemove = domMousemove
           document.onmouseup = domMouseup
@@ -415,18 +415,18 @@ export default {
     /**
      * 清除所有选中状态
      */
-    _clearChecked (evnt) {
-      let { $refs, editStore, mouseConfig, mouseOpts } = this
-      let { checked } = editStore
+    _clearChecked () {
+      const { $refs, editStore, mouseConfig, mouseOpts } = this
+      const { checked } = editStore
       // 在 v3.0 中废弃 mouse-config.checked
-      let isMouseChecked = mouseConfig && (mouseOpts.range || mouseOpts.checked)
+      const isMouseChecked = mouseConfig && (mouseOpts.range || mouseOpts.checked)
       if (isMouseChecked) {
-        let tableBody = $refs.tableBody
+        const tableBody = $refs.tableBody
         checked.rows = []
         checked.columns = []
         checked.tRows = []
         checked.tColumns = []
-        let { checkBorders } = tableBody.$refs
+        const { checkBorders } = tableBody.$refs
         checkBorders.style.display = 'none'
         XEUtils.arrayEach(tableBody.$el.querySelectorAll('.col--checked'), elem => DomTools.removeClass(elem, 'col--checked'))
       }
@@ -444,7 +444,7 @@ export default {
      * 获取选中的单元格
      */
     getSelectedCell () {
-      let { args, column } = this.editStore.selected
+      const { args, column } = this.editStore.selected
       if (args && column) {
         return Object.assign({}, args)
       }
@@ -454,8 +454,8 @@ export default {
      * 获取所有选中的单元格
      */
     getSelectedRanges () {
-      let { checked } = this.editStore
-      let { rowNodes = [] } = checked
+      const { checked } = this.editStore
+      const { rowNodes = [] } = checked
       let columns = []
       let rows = []
       if (rowNodes && rowNodes.length) {
@@ -472,16 +472,16 @@ export default {
      * 处理所有选中
      */
     handleChecked (rowNodes) {
-      let { checked } = this.editStore
+      const { checked } = this.editStore
       this.clearChecked()
       let cWidth = -2
       let cHeight = -2
       let offsetTop = 0
       let offsetLeft = 0
       XEUtils.arrayEach(rowNodes, (rows, rowIndex) => {
-        let isTop = rowIndex === 0
+        const isTop = rowIndex === 0
         XEUtils.arrayEach(rows, (elem, colIndex) => {
-          let isLeft = colIndex === 0
+          const isLeft = colIndex === 0
           if (isLeft && isTop) {
             offsetTop = elem.offsetTop
             offsetLeft = elem.offsetLeft
@@ -495,7 +495,7 @@ export default {
           DomTools.addClass(elem, 'col--checked')
         })
       })
-      let { checkBorders, checkTop, checkRight, checkBottom, checkLeft } = this.$refs.tableBody.$refs
+      const { checkBorders, checkTop, checkRight, checkBottom, checkLeft } = this.$refs.tableBody.$refs
       checkBorders.style.display = 'block'
       Object.assign(checkTop.style, {
         top: `${offsetTop}px`,
@@ -520,21 +520,21 @@ export default {
       checked.rowNodes = rowNodes
     },
     handleAllChecked (evnt) {
-      let { tableData, visibleColumn, mouseConfig, mouseOpts, elemStore } = this
+      const { tableData, visibleColumn, mouseConfig, mouseOpts, elemStore } = this
       // 在 v3.0 中废弃 mouse-config.checked
-      let isMouseChecked = mouseConfig && (mouseOpts.range || mouseOpts.checked)
+      const isMouseChecked = mouseConfig && (mouseOpts.range || mouseOpts.checked)
       if (isMouseChecked) {
         evnt.preventDefault()
-        let headerListElem = elemStore['main-header-list']
-        let headerList = headerListElem.children
-        let bodyList = elemStore['main-body-list'].children
+        const headerListElem = elemStore['main-header-list']
+        const headerList = headerListElem.children
+        const bodyList = elemStore['main-body-list'].children
         // v3.0 废弃 type=index
-        let column = XEUtils.find(visibleColumn, column => column.type === 'seq' || column.type === 'index') || visibleColumn[0]
-        let cell = headerListElem.querySelector(`.${column.id}`)
-        let firstTrElem = bodyList[0]
-        let lastTrElem = bodyList[bodyList.length - 1]
-        let firstCell = firstTrElem.querySelector(`.${column.id}`)
-        let params = {
+        const column = XEUtils.find(visibleColumn, column => column.type === 'seq' || column.type === 'index') || visibleColumn[0]
+        const cell = headerListElem.querySelector(`.${column.id}`)
+        const firstTrElem = bodyList[0]
+        const lastTrElem = bodyList[bodyList.length - 1]
+        const firstCell = firstTrElem.querySelector(`.${column.id}`)
+        const params = {
           $table: this,
           rowIndex: 0,
           row: tableData[0],
@@ -549,7 +549,7 @@ export default {
       }
     },
     handleIndexChecked (rowNodes) {
-      let { indexs } = this.editStore
+      const { indexs } = this.editStore
       this.clearIndexChecked()
       XEUtils.arrayEach(rowNodes, rows => {
         XEUtils.arrayEach(rows, elem => {
@@ -559,13 +559,13 @@ export default {
       indexs.rowNodes = rowNodes
     },
     _clearIndexChecked () {
-      let { elemStore } = this
-      let bodyElem = elemStore['main-body-list']
+      const { elemStore } = this
+      const bodyElem = elemStore['main-body-list']
       XEUtils.arrayEach(bodyElem.querySelectorAll('.col--seq-checked'), elem => DomTools.removeClass(elem, 'col--seq-checked'))
       return this.$nextTick()
     },
     handleHeaderChecked (rowNodes) {
-      let { titles } = this.editStore
+      const { titles } = this.editStore
       this.clearHeaderChecked()
       XEUtils.arrayEach(rowNodes, rows => {
         XEUtils.arrayEach(rows, elem => {
@@ -575,8 +575,8 @@ export default {
       titles.rowNodes = rowNodes
     },
     _clearHeaderChecked () {
-      let { elemStore } = this
-      let headerElem = elemStore['main-header-list']
+      const { elemStore } = this
+      const headerElem = elemStore['main-header-list']
       if (headerElem) {
         XEUtils.arrayEach(headerElem.querySelectorAll('.col--title-checked'), elem => DomTools.removeClass(elem, 'col--title-checked'))
       }
@@ -586,11 +586,11 @@ export default {
      * 处理所有选中的临时选中
      */
     // handleTempChecked (start, end, evnt) {
-    //   let { tableData, visibleColumn, editStore } = this
-    //   let { checked } = editStore
-    //   let { rows, tRows, columns, tColumns } = checked
-    //   let { rowIndex: sRowIndex, columnIndex: sColumnIndex } = start
-    //   let { rowIndex: eRowIndex, columnIndex: eColumnIndex } = end
+    //   const { tableData, visibleColumn, editStore } = this
+    //   const { checked } = editStore
+    //   const { rows, tRows, columns, tColumns } = checked
+    //   const { rowIndex: sRowIndex, columnIndex: sColumnIndex } = start
+    //   const { rowIndex: eRowIndex, columnIndex: eColumnIndex } = end
     //   if (tRows.length > rows.length) {
     //     eColumnIndex = visibleColumn.indexOf(columns[columns.length - 1])
     //   } else if (tColumns.length > columns.length) {
@@ -617,11 +617,11 @@ export default {
      * 清空已复制的内容
      */
     _clearCopyed () {
-      let { $refs, editStore, keyboardConfig } = this
-      let { copyed } = editStore
+      const { $refs, editStore, keyboardConfig } = this
+      const { copyed } = editStore
       if (keyboardConfig && keyboardConfig.isCut) {
-        let tableBody = $refs.tableBody
-        let { copyBorders } = $refs.tableBody.$refs
+        const tableBody = $refs.tableBody
+        const { copyBorders } = $refs.tableBody.$refs
         copyed.cut = false
         copyed.rows = []
         copyed.columns = []
@@ -633,10 +633,10 @@ export default {
     /**
      * 处理复制
      */
-    handleCopyed (cut, evnt) {
-      let { tableData, tableColumn, editStore } = this
-      let { copyed, checked } = editStore
-      let rowNodes = checked.rowNodes
+    handleCopyed (cut) {
+      const { tableData, tableColumn, editStore } = this
+      const { copyed, checked } = editStore
+      const rowNodes = checked.rowNodes
       this.clearCopyed()
       let cWidth = -3
       let cHeight = -3
@@ -645,15 +645,15 @@ export default {
       let columns = []
       let rows = []
       if (rowNodes.length) {
-        let firstRows = rowNodes[0]
-        let { rowIndex, columnIndex } = DomTools.getCellNodeIndex(firstRows[0])
+        const firstRows = rowNodes[0]
+        const { rowIndex, columnIndex } = DomTools.getCellNodeIndex(firstRows[0])
         columns = tableColumn.slice(columnIndex, columnIndex + firstRows.length)
         rows = tableData.slice(rowIndex, rowIndex + rowNodes.length)
       }
       XEUtils.arrayEach(rowNodes, (rows, rowIndex) => {
-        let isTop = rowIndex === 0
+        const isTop = rowIndex === 0
         XEUtils.arrayEach(rows, (elem, colIndex) => {
-          let isLeft = colIndex === 0
+          const isLeft = colIndex === 0
           if (isLeft && isTop) {
             offsetTop = elem.offsetTop
             offsetLeft = elem.offsetLeft
@@ -667,7 +667,7 @@ export default {
           DomTools.addClass(elem, 'col--copyed')
         })
       })
-      let { copyBorders, copyTop, copyRight, copyBottom, copyLeft } = this.$refs.tableBody.$refs
+      const { copyBorders, copyTop, copyRight, copyBottom, copyLeft } = this.$refs.tableBody.$refs
       copyBorders.style.display = 'block'
       Object.assign(copyTop.style, {
         top: `${offsetTop}px`,
@@ -697,17 +697,17 @@ export default {
     /**
      * 处理粘贴
      */
-    handlePaste (evnt) {
-      let { tableData, visibleColumn, editStore, elemStore } = this
-      let { copyed, selected } = editStore
-      let { cut, rows, columns } = copyed
+    handlePaste () {
+      const { tableData, visibleColumn, editStore, elemStore } = this
+      const { copyed, selected } = editStore
+      const { cut, rows, columns } = copyed
       if (rows.length && columns.length && selected.row && selected.column) {
-        let { rowIndex, columnIndex } = selected.args
+        const { rowIndex, columnIndex } = selected.args
         XEUtils.arrayEach(rows, (row, rIndex) => {
-          let offsetRow = tableData[rowIndex + rIndex]
+          const offsetRow = tableData[rowIndex + rIndex]
           if (offsetRow) {
             XEUtils.arrayEach(columns, (column, cIndex) => {
-              let offsetColumn = visibleColumn[columnIndex + cIndex]
+              const offsetColumn = visibleColumn[columnIndex + cIndex]
               if (offsetColumn) {
                 UtilTools.setCellValue(offsetRow, offsetColumn, UtilTools.getCellValue(row, column))
               }
@@ -720,13 +720,13 @@ export default {
         if (cut) {
           this.clearCopyed()
         }
-        let bodyList = elemStore['main-body-list'].children
-        let cell = selected.args.cell
-        let trElem = cell.parentNode
-        let colIndex = XEUtils.arrayIndexOf(trElem.children, cell)
-        let rIndex = XEUtils.arrayIndexOf(bodyList, trElem)
-        let targetTrElem = bodyList[rIndex + rows.length - 1]
-        let targetCell = targetTrElem.children[colIndex + columns.length - 1]
+        const bodyList = elemStore['main-body-list'].children
+        const cell = selected.args.cell
+        const trElem = cell.parentNode
+        const colIndex = XEUtils.arrayIndexOf(trElem.children, cell)
+        const rIndex = XEUtils.arrayIndexOf(bodyList, trElem)
+        const targetTrElem = bodyList[rIndex + rows.length - 1]
+        const targetCell = targetTrElem.children[colIndex + columns.length - 1]
         this.handleChecked(DomTools.getRowNodes(bodyList, DomTools.getCellNodeIndex(cell), DomTools.getCellNodeIndex(targetCell)))
       }
     }

@@ -12,9 +12,9 @@ export default {
     fixedType: String
   },
   mounted () {
-    let { $parent: $xetable, $el, $refs, fixedType } = this
-    let { elemStore } = $xetable
-    let prefix = `${fixedType || 'main'}-footer-`
+    const { $parent: $xetable, $el, $refs, fixedType } = this
+    const { elemStore } = $xetable
+    const prefix = `${fixedType || 'main'}-footer-`
     elemStore[`${prefix}wrapper`] = $el
     elemStore[`${prefix}table`] = $refs.table
     elemStore[`${prefix}colgroup`] = $refs.colgroup
@@ -22,15 +22,8 @@ export default {
     elemStore[`${prefix}xSpace`] = $refs.xSpace
   },
   render (h) {
-    let {
-      _e,
-      $parent: $xetable,
-      fixedType,
-      fixedColumn,
-      tableColumn,
-      footerData
-    } = this
-    let {
+    let { _e, $parent: $xetable, fixedType, fixedColumn, tableColumn, footerData } = this
+    const {
       $listeners: tableListeners,
       id,
       footerRowClassName,
@@ -110,21 +103,21 @@ export default {
             class: ['vxe-footer--row', footerRowClassName ? XEUtils.isFunction(footerRowClassName) ? footerRowClassName({ $table: $xetable, $rowIndex, fixed: fixedType }) : footerRowClassName : ''],
             style: footerRowStyle ? (XEUtils.isFunction(footerRowStyle) ? footerRowStyle({ $table: $xetable, $rowIndex, fixed: fixedType }) : footerRowStyle) : null
           }, tableColumn.map((column, $columnIndex) => {
-            let { showOverflow, footerAlign, align, footerClassName } = column
-            let isColGroup = column.children && column.children.length
-            let fixedHiddenColumn = fixedType ? column.fixed !== fixedType && !isColGroup : column.fixed && overflowX
-            let cellOverflow = (XEUtils.isUndefined(showOverflow) || XEUtils.isNull(showOverflow)) ? allColumnOverflow : showOverflow
-            let footAlign = footerAlign || align || allFooterAlign || allAlign
-            let showEllipsis = cellOverflow === 'ellipsis'
-            let showTitle = cellOverflow === 'title'
-            let showTooltip = cellOverflow === true || cellOverflow === 'tooltip'
-            let hasEllipsis = showTitle || showTooltip || showEllipsis
-            let attrs = { 'data-colid': column.id }
-            let tfOns = {}
+            const { showOverflow, footerAlign, align, footerClassName } = column
+            const isColGroup = column.children && column.children.length
+            const fixedHiddenColumn = fixedType ? column.fixed !== fixedType && !isColGroup : column.fixed && overflowX
+            const cellOverflow = (XEUtils.isUndefined(showOverflow) || XEUtils.isNull(showOverflow)) ? allColumnOverflow : showOverflow
+            const footAlign = footerAlign || align || allFooterAlign || allAlign
+            const showEllipsis = cellOverflow === 'ellipsis'
+            const showTitle = cellOverflow === 'title'
+            const showTooltip = cellOverflow === true || cellOverflow === 'tooltip'
+            const hasEllipsis = showTitle || showTooltip || showEllipsis
+            const attrs = { 'data-colid': column.id }
+            const tfOns = {}
             // 确保任何情况下 columnIndex 都精准指向真实列索引
-            let columnIndex = getColumnIndex(column)
-            let itemIndex = $xetable.tableColumn.indexOf(column)
-            let params = { $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, itemIndex, items: list, fixed: fixedType, data: footerData }
+            const columnIndex = getColumnIndex(column)
+            const itemIndex = $xetable.tableColumn.indexOf(column)
+            const params = { $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, itemIndex, items: list, fixed: fixedType, data: footerData }
             if (showTitle || showTooltip) {
               tfOns.mouseenter = evnt => {
                 if (showTitle) {
@@ -153,14 +146,14 @@ export default {
             }
             // 合并行或列
             if (footerSpanMethod) {
-              let { rowspan = 1, colspan = 1 } = footerSpanMethod(params) || {}
+              const { rowspan = 1, colspan = 1 } = footerSpanMethod(params) || {}
               if (!rowspan || !colspan) {
                 return null
               }
               attrs.rowspan = rowspan
               attrs.colspan = colspan
             }
-            let type = column.type === 'seq' || column.type === 'index' ? 'seq' : column.type
+            const type = column.type === 'seq' || column.type === 'index' ? 'seq' : column.type
             return h('td', {
               class: ['vxe-footer--column', column.id, {
                 [`col--${footAlign}`]: footAlign,
@@ -196,14 +189,14 @@ export default {
      * 如果存在列固定右侧，同步更新滚动状态
      */
     scrollEvent (evnt) {
-      let { $parent: $xetable, fixedType } = this
-      let { $refs, scrollXLoad, triggerScrollXEvent, lastScrollLeft } = $xetable
-      let tableHeader = $refs.tableHeader
-      let headerElem = tableHeader ? tableHeader.$el : null
-      let bodyElem = $refs.tableBody.$el
-      let footerElem = $refs.tableFooter.$el
-      let scrollLeft = footerElem.scrollLeft
-      let isX = scrollLeft !== lastScrollLeft
+      const { $parent: $xetable, fixedType } = this
+      const { $refs, scrollXLoad, triggerScrollXEvent, lastScrollLeft } = $xetable
+      const tableHeader = $refs.tableHeader
+      const headerElem = tableHeader ? tableHeader.$el : null
+      const bodyElem = $refs.tableBody.$el
+      const footerElem = $refs.tableFooter.$el
+      const scrollLeft = footerElem.scrollLeft
+      const isX = scrollLeft !== lastScrollLeft
       $xetable.lastScrollLeft = scrollLeft
       $xetable.lastScrollTime = Date.now()
       if (headerElem) {

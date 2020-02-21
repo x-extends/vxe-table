@@ -13,11 +13,11 @@ export default {
      */
     _filter (field, callback) {
       UtilTools.warn('vxe.error.delFunc', ['filter', 'setFilter'])
-      let column = this.getColumnByField(field)
+      const column = this.getColumnByField(field)
       if (column) {
-        let options = column.filters
+        const options = column.filters
         if (options && callback) {
-          let rest = callback(options)
+          const rest = callback(options)
           if (XEUtils.isArray(rest)) {
             column.filters = UtilTools.getFilters(rest)
           }
@@ -47,14 +47,14 @@ export default {
      * @param {Object} params 参数
      */
     triggerFilterEvent (evnt, column, params) {
-      let { $refs, filterStore } = this
+      const { $refs, filterStore } = this
       if (filterStore.column === column && filterStore.visible) {
         filterStore.visible = false
       } else {
-        let filterWrapper = $refs.filterWrapper
-        let bodyElem = $refs.tableBody.$el
-        let { target: targetElem, pageX } = evnt
-        let { visibleWidth } = DomTools.getDomNode()
+        const filterWrapper = $refs.filterWrapper
+        const bodyElem = $refs.tableBody.$el
+        const { target: targetElem, pageX } = evnt
+        const { visibleWidth } = DomTools.getDomNode()
         Object.assign(filterStore, {
           args: params,
           multiple: column.filterMultiple,
@@ -66,12 +66,12 @@ export default {
         filterStore.isAllSelected = filterStore.options.every(item => item.checked)
         filterStore.isIndeterminate = !filterStore.isAllSelected && filterStore.options.some(item => item.checked)
         this.$nextTick(() => {
-          let filterWrapperElem = filterWrapper.$el
-          let filterWidth = filterWrapperElem.offsetWidth
-          let centerWidth = filterWidth / 2
-          let minMargin = 32
+          const filterWrapperElem = filterWrapper.$el
+          const filterWidth = filterWrapperElem.offsetWidth
+          const centerWidth = filterWidth / 2
+          const minMargin = 32
           let left, right
-          let style = {
+          const style = {
             top: `${targetElem.offsetTop + targetElem.offsetParent.offsetTop + targetElem.offsetHeight + 8}px`
           }
           if (column.fixed === 'left') {
@@ -82,13 +82,13 @@ export default {
             left = targetElem.offsetLeft + targetElem.offsetParent.offsetLeft - centerWidth - bodyElem.scrollLeft
           }
           if (left) {
-            let overflowWidth = (pageX + filterWidth - centerWidth + minMargin) - visibleWidth
+            const overflowWidth = (pageX + filterWidth - centerWidth + minMargin) - visibleWidth
             if (overflowWidth > 0) {
               left -= overflowWidth
             }
             style.left = `${Math.max(minMargin, left)}px`
           } else if (right) {
-            let overflowWidth = (pageX + filterWidth - centerWidth + minMargin) - visibleWidth
+            const overflowWidth = (pageX + filterWidth - centerWidth + minMargin) - visibleWidth
             if (overflowWidth > 0) {
               right += overflowWidth
             }
@@ -103,12 +103,12 @@ export default {
      * 当筛选面板中的确定按钮被按下时触发
      * @param {Event} evnt 事件
      */
-    confirmFilterEvent (evnt) {
-      let { visibleColumn, filterStore, remoteFilter, filterOpts, scrollXLoad, scrollYLoad } = this
-      let { column } = filterStore
-      let { property } = column
-      let values = []
-      let datas = []
+    confirmFilterEvent () {
+      const { visibleColumn, filterStore, remoteFilter, filterOpts, scrollXLoad, scrollYLoad } = this
+      const { column } = filterStore
+      const { property } = column
+      const values = []
+      const datas = []
       column.filters.forEach(item => {
         if (item.checked) {
           values.push(item.value)
@@ -121,11 +121,11 @@ export default {
         this.handleTableData(true)
         this.checkSelectionStatus()
       }
-      let filterList = []
+      const filterList = []
       visibleColumn.filter(column => {
-        let { property, filters } = column
-        let valueList = []
-        let dataList = []
+        const { property, filters } = column
+        const valueList = []
+        const dataList = []
         if (filters && filters.length) {
           filters.forEach(item => {
             if (item.checked) {
@@ -167,9 +167,9 @@ export default {
      * @param {String} field 字段名
      */
     _clearFilter (field) {
-      let column = arguments.length ? this.getColumnByField(field) : null
-      let filterStore = this.filterStore
-      let handleClear = column => {
+      const column = arguments.length ? this.getColumnByField(field) : null
+      const filterStore = this.filterStore
+      const handleClear = column => {
         if (column.filters) {
           column.filters.forEach(item => {
             item.checked = false
