@@ -216,7 +216,7 @@ export default {
         title: '自定义自动筛选方式',
         width: 600,
         slots: {
-          default: ({ $modal }, h) => {
+          default: ({ $modal }) => {
             return [
               <div class="me-popup">
                 <div class="me-popup-title">显示行</div>
@@ -248,13 +248,13 @@ export default {
                   <span>可用 ? 代表单个字符<br/>用 * 代表任意多个字符</span>
                 </div>
                 <div class="me-popup-footer">
-                  <button onClick={ e => {
+                  <button onClick={ () => {
                     data.fMenu = cItem.value
                     option.checked = true
                     $modal.close()
                     $panel.confirmFilter()
                   } }>确认</button>
-                  <button onClick={ e => { $modal.close() } }>取消</button>
+                  <button onClick={ () => { $modal.close() } }>取消</button>
                 </div>
               </div>
             ]

@@ -152,19 +152,19 @@ export default {
     })
   },
   methods: {
-    activeCellMethod ({ column, columnIndex }) {
+    activeCellMethod ({ columnIndex }) {
       if (columnIndex === 1) {
         return false
       }
       return true
     },
-    activeRowMethod ({ row, rowIndex }) {
+    activeRowMethod ({ rowIndex }) {
       if (rowIndex === 1) {
         return false
       }
       return true
     },
-    editDisabledEvent ({ row, column }) {
+    editDisabledEvent () {
       this.$XModal.alert('禁止编辑')
     }
   }
