@@ -139,8 +139,8 @@ export default {
       return cellValue ? cellValue.map(value => value === '1' ? '男' : value === '0' ? '女' : '').join(';') : ''
     },
     roleFetchSuggestions (queryString, cb) {
-      var restaurants = this.restaurants
-      var results = queryString ? restaurants.filter(this.createStateFilter(queryString)) : restaurants
+      const restaurants = this.restaurants
+      const results = queryString ? restaurants.filter(this.createStateFilter(queryString)) : restaurants
       clearTimeout(this.timeout)
       this.timeout = setTimeout(() => {
         cb(results)
