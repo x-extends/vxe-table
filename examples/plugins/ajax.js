@@ -8,16 +8,17 @@ Vue.prototype.$ajax = XEAjax
 /**
  * 生成模拟数据
  */
-var dataCacheList = []
-var colCacheList = []
-var treeCacheList = []
-var dataIndex = 0
-var colIndex = 0
-var dataID = 2000000
+const dataCacheList = []
+const colCacheList = []
+const treeCacheList = []
+let dataIndex = 0
+let colIndex = 0
+let dataID = 2000000
 
 function mockColumns (size) {
-  for (var index = colIndex; index < size; index++) {
-    var colItem = {
+  let index = colIndex
+  for (; index < size; index++) {
+    const colItem = {
       field: index % 2 === 0 ? 'age' : (index % 3 === 0 ? 'rate' : 'name'),
       title: 'col_' + index,
       width: index % 6 === 0 ? 340 : index % 4 === 0 ? 260 : index % 3 === 0 ? 120 : 160,
@@ -47,10 +48,10 @@ function mockColumns (size) {
 }
 
 function mockChildData (size, hasChild) {
-  var rest = []
-  for (var index = 0; index < size; index++) {
+  const rest = []
+  for (let index = 0; index < size; index++) {
     dataID++
-    var item = {
+    const item = {
       id: dataID,
       name: 'Name - ' + dataID,
       nickname: 'Nickname - ' + dataID,
@@ -65,13 +66,14 @@ function mockChildData (size, hasChild) {
 }
 
 function mockData (size, hasChild) {
-  var currTime = Date.now()
-  var nameList = XEUtils.shuffle(['a', 'T', 'b', 'v', 'G', 'k', 'r', 'H', 'x', 'z', 'c', 'd', 'e', 'p', 'U', 'f', 's', 'N'])
-  var nickList = XEUtils.shuffle(['徐', '李', '雷', '赵', '马', '孙', '钱', '蒋', '老', '蔡', '吕', '项', '徐', '杨', '胡', '杜', '嬴', '叼'])
-  for (var index = dataIndex; index < size; index++) {
-    var date = new Date(currTime)
-    var item
+  const currTime = Date.now()
+  const nameList = XEUtils.shuffle(['a', 'T', 'b', 'v', 'G', 'k', 'r', 'H', 'x', 'z', 'c', 'd', 'e', 'p', 'U', 'f', 's', 'N'])
+  const nickList = XEUtils.shuffle(['徐', '李', '雷', '赵', '马', '孙', '钱', '蒋', '老', '蔡', '吕', '项', '徐', '杨', '胡', '杜', '嬴', '叼'])
+  let index = dataIndex
+  for (; index < size; index++) {
     dataID++
+    const date = new Date(currTime)
+    let item
     if (hasChild) {
       item = {
         id: dataID,

@@ -3,26 +3,27 @@ import VXEModal from './src/modal'
 import queue from './src/queue'
 import VXETable from '../v-x-e-table'
 
-var AlertController = null
-var AllActivedModal = []
+let AlertController = null
+const AllActivedModal = []
 
 export function Modal (options) {
   return new Promise(resolve => {
     if (options && options.id && queue.some(comp => comp.id === options.id)) {
       resolve('exist')
     } else {
-      let events = options.events || {}
+      const events = options.events || {}
       options.events = Object.assign({}, events, {
         hide (params) {
           if (events.hide) {
             events.hide.call(this, params)
           }
+          /* eslint-disable @typescript-eslint/no-use-before-define */
           setTimeout(() => $modal.$destroy(), $modal.isMsg ? 500 : 100)
           XEUtils.remove(AllActivedModal, item => item === $modal)
           resolve(params.type)
         }
       })
-      let $modal = new AlertController({
+      const $modal = new AlertController({
         el: document.createElement('div'),
         propsData: options
       })
@@ -33,7 +34,7 @@ export function Modal (options) {
 }
 
 ['alert', 'confirm', 'message'].forEach((type, index) => {
-  let defOpts = index === 2 ? {
+  const defOpts = index === 2 ? {
     mask: false,
     lockView: false,
     showHeader: false

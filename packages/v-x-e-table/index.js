@@ -8,6 +8,7 @@ import { UtilTools } from '../tools'
 const installedPlugins = []
 
 function use (Plugin, options) {
+  /* eslint-disable @typescript-eslint/no-use-before-define */
   if (Plugin && Plugin.install) {
     if (installedPlugins.indexOf(Plugin) === -1) {
       Plugin.install(VXETable, options)
@@ -24,17 +25,21 @@ class VXEStore {
   constructor () {
     this.store = {}
   }
+
   mixin (map) {
     Object.assign(this.store, map)
     return VXEStore
   }
+
   get (type) {
     return this.store[type]
   }
+
   add (type, callback) {
     this.store[type] = callback
     return VXEStore
   }
+
   delete (type) {
     delete this.store[type]
     return VXEStore

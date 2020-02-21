@@ -55,20 +55,6 @@ function defaultEditRender (h, renderOpts, params) {
   ]
 }
 
-function renderOptgroups (h, renderOpts, params) {
-  const { optionGroups, optionGroupProps = {} } = renderOpts
-  const groupOptions = optionGroupProps.options || 'options'
-  const groupLabel = optionGroupProps.label || 'label'
-  return optionGroups.map((group, gIndex) => {
-    return h('optgroup', {
-      domProps: {
-        label: group[groupLabel]
-      },
-      key: gIndex
-    }, renderOptions(h, group[groupOptions], renderOpts, params))
-  })
-}
-
 function renderOptions (h, options, renderOpts, params) {
   const { optionProps = {} } = renderOpts
   const { row, column } = params
@@ -88,6 +74,25 @@ function renderOptions (h, options, renderOpts, params) {
       key: index
     }, item[labelProp])
   })
+}
+
+function renderOptgroups (h, renderOpts, params) {
+  const { optionGroups, optionGroupProps = {} } = renderOpts
+  const groupOptions = optionGroupProps.options || 'options'
+  const groupLabel = optionGroupProps.label || 'label'
+  return optionGroups.map((group, gIndex) => {
+    return h('optgroup', {
+      domProps: {
+        label: group[groupLabel]
+      },
+      key: gIndex
+    }, renderOptions(h, group[groupOptions], renderOpts, params))
+  })
+}
+
+function handleConfirmFilter (params, column, checked, item) {
+  const { $panel } = params
+  $panel[column.filterMultiple ? 'changeMultipleOption' : 'changeRadioOption']({}, checked, item)
 }
 
 function getFilterEvents (item, renderOpts, params) {
@@ -132,11 +137,6 @@ function defaultFilterRender (h, renderOpts, params) {
   })
 }
 
-function handleConfirmFilter (params, column, checked, item) {
-  const { $panel } = params
-  $panel[column.filterMultiple ? 'changeMultipleOption' : 'changeRadioOption']({}, checked, item)
-}
-
 function defaultFilterMethod ({ option, row, column }) {
   const { data } = option
   const cellValue = XEUtils.get(row, column.property)
@@ -177,26 +177,6 @@ function getSelectCellValue (renderOpts, { row, column }) {
   return selectItem ? selectItem[labelProp] : cellValue
 }
 
-/**
- * 表单渲染器
- */
-function defaultItemRender (h, renderOpts, params) {
-  const { data, property } = params
-  const { name } = renderOpts
-  const attrs = getAttrs(renderOpts)
-  const cellValue = XEUtils.get(data, property)
-  return [
-    h(name, {
-      class: `vxe-default-${name}`,
-      attrs,
-      domProps: attrs && name === 'input' && (attrs.type === 'submit' || attrs.type === 'reset') ? null : {
-        value: cellValue
-      },
-      on: getFormEvents(renderOpts, params)
-    })
-  ]
-}
-
 function getFormEvents (renderOpts, params) {
   const { $form, data, property } = params
   const { events } = renderOpts
@@ -218,6 +198,26 @@ function getFormEvents (renderOpts, params) {
     }), on)
   }
   return on
+}
+
+/**
+ * 表单渲染器
+ */
+function defaultItemRender (h, renderOpts, params) {
+  const { data, property } = params
+  const { name } = renderOpts
+  const attrs = getAttrs(renderOpts)
+  const cellValue = XEUtils.get(data, property)
+  return [
+    h(name, {
+      class: `vxe-default-${name}`,
+      attrs,
+      domProps: attrs && name === 'input' && (attrs.type === 'submit' || attrs.type === 'reset') ? null : {
+        value: cellValue
+      },
+      on: getFormEvents(renderOpts, params)
+    })
+  ]
 }
 
 function renderFormOptions (h, options, renderOpts, params) {
