@@ -39,8 +39,8 @@
         sortable
         :filters="[{ data: '' }]"
         :filter-method="filterRoleMethod">
-        <template v-slot:filter="{ column, context }">
-          <select class="my-select" v-model="option.data" v-for="(option, index) in column.filters" :key="index" @change="context.changeOption($event, !!option.data, option)">
+        <template v-slot:filter="{ $panel, column }">
+          <select class="my-select" v-model="option.data" v-for="(option, index) in column.filters" :key="index" @change="$panel.changeOption($event, !!option.data, option)">
             <option v-for="(label, cIndex) in roleList" :key="cIndex" :value="label">{{ label }}</option>
           </select>
         </template>
@@ -52,9 +52,9 @@
         :filter-multiple="false"
         :filters="[{label: 'Man', value: '1'}, {label: 'Woman', value: '0'}]"></vxe-table-column>
       <vxe-table-column field="age" title="Age" :filters="[{ data: '' }]" :filter-method="filterAgeMethod">
-        <template v-slot:filter="{ column, context }">
+        <template v-slot:filter="{ $panel, column }">
           <template v-for="(option, index) in column.filters">
-            <input class="my-input" type="type" :key="index" v-model="option.data" @input="context.changeOption($event, !!option.data, option)" @keyup.enter="context.confirmFilter()" placeholder="按回车确认筛选">
+            <input class="my-input" type="type" :key="index" v-model="option.data" @input="$panel.changeOption($event, !!option.data, option)" @keyup.enter="$panel.confirmFilter()" placeholder="按回车确认筛选">
           </template>
         </template>
       </vxe-table-column>
@@ -119,8 +119,8 @@ export default {
             sortable
             :filters="[{ data: '' }]"
             :filter-method="filterRoleMethod">
-            <template v-slot:filter="{ column, context }">
-              <select class="my-select" v-model="option.data" v-for="(option, index) in column.filters" :key="index" @change="context.changeOption($event, !!option.data, option)">
+            <template v-slot:filter="{ $panel, column }">
+              <select class="my-select" v-model="option.data" v-for="(option, index) in column.filters" :key="index" @change="$panel.changeOption($event, !!option.data, option)">
                 <option v-for="(label, cIndex) in roleList" :key="cIndex" :value="label">{{ label }}</option>
               </select>
             </template>
@@ -132,9 +132,9 @@ export default {
             :filter-multiple="false"
             :filters="[{label: 'Man', value: '1'}, {label: 'Woman', value: '0'}]"></vxe-table-column>
           <vxe-table-column field="age" title="Age" :filters="[{ data: '' }]" :filter-method="filterAgeMethod">
-            <template v-slot:filter="{ column, context }">
+            <template v-slot:filter="{ $panel, column }">
               <template v-for="(option, index) in column.filters">
-                <input class="my-input" type="type" :key="index" v-model="option.data" @input="context.changeOption($event, !!option.data, option)" @keyup.enter="context.confirmFilter()" placeholder="按回车确认筛选">
+                <input class="my-input" type="type" :key="index" v-model="option.data" @input="$panel.changeOption($event, !!option.data, option)" @keyup.enter="$panel.confirmFilter()" placeholder="按回车确认筛选">
               </template>
             </template>
           </vxe-table-column>

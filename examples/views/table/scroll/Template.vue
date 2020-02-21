@@ -83,9 +83,9 @@ export default {
                 </span>
               ]
             },
-            filter: ({ column, context }) => {
+            filter: ({ column, $panel }) => {
               return column.filters.map(option => {
-                return <input type="type" value={ option.data } onInput={ evnt => this.changeFilterEvent(evnt, option, context) }/>
+                return <input type="type" value={ option.data } onInput={ evnt => this.changeFilterEvent(evnt, option, $panel) }/>
               })
             },
             edit: ({ row }) => {
@@ -211,9 +211,9 @@ export default {
                         </span>
                       ]
                     },
-                    filter: ({ column, context }) => {
+                    filter: ({ column, $panel }) => {
                       return column.filters.map(option => {
-                        return <input type="type" value={ option.data } onInput={ evnt => this.changeFilterEvent(evnt, option, context) }/>
+                        return <input type="type" value={ option.data } onInput={ evnt => this.changeFilterEvent(evnt, option, $panel) }/>
                       })
                     },
                     edit: ({ row }) => {
@@ -305,9 +305,9 @@ export default {
             filterSexMethod ({ option, row }) {
               return row.sex === option.data
             },
-            changeFilterEvent (evnt, option, context) {
+            changeFilterEvent (evnt, option, $panel) {
               option.data = evnt.target.value
-              context.changeMultipleOption(evnt, !!option.data, option)
+              $panel.changeMultipleOption(evnt, !!option.data, option)
             }
           }
         }
@@ -344,9 +344,9 @@ export default {
     filterSexMethod ({ option, row }) {
       return row.sex === option.data
     },
-    changeFilterEvent (evnt, option, context) {
+    changeFilterEvent (evnt, option, $panel) {
       option.data = evnt.target.value
-      context.changeMultipleOption(evnt, !!option.data, option)
+      $panel.changeMultipleOption(evnt, !!option.data, option)
     }
   }
 }

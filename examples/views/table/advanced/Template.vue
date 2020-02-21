@@ -56,9 +56,9 @@
         <template v-slot:footer="{ items, itemIndex }">
           <span style="color: red">累计：{{ items[itemIndex] }}</span>
         </template>
-        <template v-slot:filter="{ column, context }">
+        <template v-slot:filter="{ $panel, column }">
           <template v-for="(option, index) in column.filters">
-            <input type="type" v-model="option.data" :key="index" @input="changeFilterEvent($event, option, context)">
+            <input type="type" v-model="option.data" :key="index" @input="changeFilterEvent($event, option, $panel)">
           </template>
         </template>
         <template v-slot="{ row }">
@@ -245,8 +245,8 @@ export default {
             filterSexMethod ({ option, row }) {
               return row.sex === option.data
             },
-            changeFilterEvent (evnt, option, context) {
-              context.changeMultipleOption(evnt, !!option.data, option)
+            changeFilterEvent (evnt, option, $panel) {
+              $panel.changeMultipleOption(evnt, !!option.data, option)
             },
             showDetailEvent (row) {
               this.selectRow = row
@@ -309,8 +309,8 @@ export default {
     filterSexMethod ({ option, row }) {
       return row.sex === option.data
     },
-    changeFilterEvent (evnt, option, context) {
-      context.changeMultipleOption(evnt, !!option.data, option)
+    changeFilterEvent (evnt, option, $panel) {
+      $panel.changeMultipleOption(evnt, !!option.data, option)
     },
     showDetailEvent (row) {
       this.selectRow = row
