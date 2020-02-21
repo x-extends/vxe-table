@@ -170,9 +170,10 @@ export default {
           },
           methods: {
             changeOptionEvent () {
-              const { option } = this
+              const { params, option } = this
+              const { $panel } = params
               const checked = !!option.data
-              this.context.changeOption(null, checked, option)
+              $panel.changeOption(null, checked, option)
             }
           }
         }

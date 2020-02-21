@@ -19,8 +19,8 @@
       <vxe-table-column field="name" title="Name" sortable :filters="[{label: 'id大于10', value: 10}, {label: 'id大于40', value: 40}]" :filter-method="filterNameMethod"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex" sortable :filters="[{label: 'Man', value: '1'}, {label: 'Woman', value: '0'}]" :filter-multiple="false"></vxe-table-column>
       <vxe-table-column field="age" title="Age" :filters="[{ data: '' }]" :filter-method="filterAgeMethod">
-        <template v-slot:filter="{ column, context }">
-          <input type="type" v-for="(option, index) in column.filters" :key="index" v-model="option.data" @input="context.changeOption($event, !!option.data, option)">
+        <template v-slot:filter="{ $panel, column }">
+          <input type="type" v-for="(option, index) in column.filters" :key="index" v-model="option.data" @input="$panel.changeOption($event, !!option.data, option)">
         </template>
       </vxe-table-column>
       <vxe-table-column field="time" title="Time" sortable :filters="[{label: '本周', value: '1'}, {label: '上周', value: '2'}]"></vxe-table-column>
@@ -48,8 +48,8 @@
       <vxe-table-column title="其他">
         <vxe-table-column title="详细信息">
           <vxe-table-column field="age" title="Age" :filters="[{ data: '30', checked: true }]" :filter-method="filterAgeMethod">
-            <template v-slot:filter="{ column, context }">
-              <input type="type" v-for="(option, index) in column.filters" :key="index" v-model="option.data" @input="context.changeOption($event, !!option.data, option)">
+            <template v-slot:filter="{ $panel, column }">
+              <input type="type" v-for="(option, index) in column.filters" :key="index" v-model="option.data" @input="$panel.changeOption($event, !!option.data, option)">
             </template>
           </vxe-table-column>
         </vxe-table-column>
@@ -84,8 +84,8 @@ export default {
           <vxe-table-column field="name" title="Name" sortable :filters="[{label: 'id大于10', value: 10}, {label: 'id大于40', value: 40}]" :filter-method="filterNameMethod"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" sortable :filters="[{label: 'Man', value: '1'}, {label: 'Woman', value: '0'}]" :filter-multiple="false"></vxe-table-column>
           <vxe-table-column field="age" title="Age" :filters="[{ data: '' }]" :filter-method="filterAgeMethod">
-            <template v-slot:filter="{ column, context }">
-              <input type="type" v-for="(option, index) in column.filters" :key="index" v-model="option.data" @input="context.changeOption($event, !!option.data, option)">
+            <template v-slot:filter="{ $panel, column }">
+              <input type="type" v-for="(option, index) in column.filters" :key="index" v-model="option.data" @input="$panel.changeOption($event, !!option.data, option)">
             </template>
           </vxe-table-column>
           <vxe-table-column field="time" title="Time" sortable :filters="[{label: '本周', value: '1'}, {label: '上周', value: '2'}]"></vxe-table-column>
@@ -125,8 +125,8 @@ export default {
           <vxe-table-column title="其他">
             <vxe-table-column title="详细信息">
               <vxe-table-column field="age" title="Age" :filters="[{ data: '30', checked: true }]" :filter-method="filterAgeMethod">
-                <template v-slot:filter="{ column, context }">
-                  <input type="type" v-for="(option, index) in column.filters" :key="index" v-model="option.data" @input="context.changeOption($event, !!option.data, option)">
+                <template v-slot:filter="{ $panel, column }">
+                  <input type="type" v-for="(option, index) in column.filters" :key="index" v-model="option.data" @input="$panel.changeOption($event, !!option.data, option)">
                 </template>
               </vxe-table-column>
             </vxe-table-column>

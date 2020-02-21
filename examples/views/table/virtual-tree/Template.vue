@@ -56,7 +56,7 @@ export default {
           title: 'Image',
           treeNode: true,
           slots: {
-            default: ({ row }) => {
+            default: () => {
               return [
                 <img src="static/other/img1.gif" height="50"/>
               ]

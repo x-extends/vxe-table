@@ -135,7 +135,7 @@ export default {
         this.tableData = result
         this.tablePage.total = page.total
         this.loading = false
-      }).catch(e => {
+      }).catch(() => {
         this.loading = false
       })
     },
