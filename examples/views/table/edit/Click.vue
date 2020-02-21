@@ -158,10 +158,10 @@ export default {
         this.sexList = data
       })
     },
-    editActivedEvent ({ row, column }, event) {
+    editActivedEvent ({ column }) {
       console.log(`打开 ${column.title} 列编辑`)
     },
-    editClosedEvent ({ row, column }, event) {
+    editClosedEvent ({ column }) {
       console.log(`关闭 ${column.title} 列编辑`)
     }
   }

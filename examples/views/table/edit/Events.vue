@@ -108,10 +108,10 @@ export default {
         this.sexList = data
       })
     },
-    enterFilterEvent ({ context, column }, event) {
+    enterFilterEvent ({ $panel }, event) {
       if (event.keyCode === 13) {
         console.log('筛选回车事件')
-        context.confirmFilter()
+        $panel.confirmFilter()
       }
     },
     nameChangeEvent ({ column }, event) {
