@@ -21,8 +21,8 @@
 
 * 计划
   * [x] v1.0 100% 实现表格的一切实用的功能
-  * [x] v2.0 &nbsp;95% 性能优化，同时兼具功能与性能
-  * [ ] v3.0 &nbsp;&nbsp;0% 内部重构，不再支持 IE，渲染性能提升
+  * [x] v2.0 &nbsp;100% 性能优化，同时兼具功能与性能
+  * [x] v3.0 &nbsp;&nbsp;50% 内部重构，不再支持 IE，渲染性能提升
   * [ ] v4.0 &nbsp;&nbsp;0% 基于 Vue3 重构，渲染性能提升
 
 🐬 如果有更好的建议、优化点或 Bug 都欢迎提 [Issues](https://github.com/xuliangzhan/vxe-table/issues/390)
