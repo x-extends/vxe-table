@@ -142,10 +142,10 @@ export default {
     })
   },
   methods: {
-    cellMouseenterEvent ({ row, column, cell }) {
+    cellMouseenterEvent ({ cell }) {
       this.$refs.xTip.toVisible(cell, `自定义提示内容：${cell.innerText}`)
     },
-    cellMouseleaveEvent ({ row, column, cell }) {
+    cellMouseleaveEvent () {
       this.$refs.xTip.close()
     }
   }

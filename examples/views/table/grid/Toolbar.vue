@@ -234,7 +234,7 @@ export default {
     })
   },
   methods: {
-    toolbarButtonClickEvent ({ code }, event) {
+    toolbarButtonClickEvent ({ code }) {
       switch (code) {
         case 'myBtn':
           this.$XModal.alert(code)

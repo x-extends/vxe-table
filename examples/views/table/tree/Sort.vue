@@ -111,7 +111,7 @@ export default {
         }
       }, 300)
     },
-    sortChangeEvent ({ column, property, order }) {
+    sortChangeEvent ({ order }) {
       this.findList(order)
     }
   }
