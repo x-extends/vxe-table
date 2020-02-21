@@ -8,6 +8,7 @@ import { UtilTools } from '../tools'
 const installedPlugins = []
 
 function use (Plugin, options) {
+  /* eslint-disable @typescript-eslint/no-use-before-define */
   if (Plugin && Plugin.install) {
     if (installedPlugins.indexOf(Plugin) === -1) {
       Plugin.install(VXETable, options)
@@ -21,6 +22,7 @@ function use (Plugin, options) {
  * 检测模块的安装顺序是否正确
  */
 function reg (key) {
+  /* eslint-disable @typescript-eslint/no-use-before-define */
   if (VXETable.Table) {
     UtilTools.error('vxe.error.useErr', [key])
   }
@@ -34,17 +36,21 @@ class VXEStore {
   constructor () {
     this.store = {}
   }
+
   mixin (map) {
     Object.assign(this.store, map)
     return VXEStore
   }
+
   get (type) {
     return this.store[type]
   }
+
   add (type, render) {
     this.store[type] = render
     return VXEStore
   }
+
   delete (type) {
     delete this.store[type]
     return VXEStore
